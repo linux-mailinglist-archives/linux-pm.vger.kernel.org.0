@@ -1,168 +1,153 @@
-Return-Path: <linux-pm+bounces-28770-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29CA1ADA6F1
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 05:46:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F182ADA6F4
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 05:47:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E9B5188FF2A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 03:47:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85C49189091B
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 03:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FAA3594C;
-	Mon, 16 Jun 2025 03:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C0314F104;
+	Mon, 16 Jun 2025 03:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="F8OPrjJ1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E5063CB;
-	Mon, 16 Jun 2025 03:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8055D5103F
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 03:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750045615; cv=none; b=nmI2KXtfwPibJkg/7QnM2Pg3hKcVqyP4UoTqga9v9s+PfVtrcvYCIyXLrx7GyR3A5o1akh/r31O6cnpbWDpFi/hLbii0KdeKMuagyp50IqvKydPrVOMewjhNQDHJM3JJQ+uQGb9esU5/ur1SuE0c9/UuTSvMchwFTZfAeFx7Y6o=
+	t=1750045655; cv=none; b=Ii3/tdDKX2kLTA4xvPQBp4grM3hUlIHeuB5u1I09bly28Cf8OaecTnc/qzduUzEjW1UQ1AfZ13zEb8gwtVRSVAUOFNJZOHwxGT2viu4/pY8I8369Hy6Aj+60eEInfDiVID5Q3P/orTnBxU0JifmKrEEWyctM8PNUiKSqceaLqu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750045615; c=relaxed/simple;
-	bh=LDtNMiH8SuKNPezVBkxwDxKKq8DGchl8pwBx2uQky6E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K+qTRGGk6PlHg28MqqhEnDvdJcdZIq76JwZlNT4HK0rP8ysr5bwIjmvkTJcNkNKUKPu2xLGsLtH74+yVj4vs0cps7vlKErkUNLEYVwSpwX29N2YeRaGMsG1wge5wN2uhafN6nXW4shjBLKyAiKDggkH6OvRptrGIB6A7MjuMLeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 845e65da4a6411f0b29709d653e92f7d-20250616
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:c53be892-6c29-4028-8e9f-2ddfdc43491b,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:3830bdf148845bb9a5025001a0e6403e,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 845e65da4a6411f0b29709d653e92f7d-20250616
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1857386657; Mon, 16 Jun 2025 11:46:42 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 4684FE00891C;
-	Mon, 16 Jun 2025 11:46:42 +0800 (CST)
-X-ns-mid: postfix-684F93A2-171212898
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 04533E008900;
-	Mon, 16 Jun 2025 11:46:34 +0800 (CST)
-Message-ID: <ee1de994-e59f-4c6c-96f3-66056b002889@kylinos.cn>
-Date: Mon, 16 Jun 2025 11:46:34 +0800
+	s=arc-20240116; t=1750045655; c=relaxed/simple;
+	bh=oAPyorFVGnQcUaYRbcaf+X+aO7UokUBQs9yAd751ZT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZl1kwL43EW0u+8cCP3hPNlmElB+C4HImbLOaRIqf0jtmYfdn5SEtI+66fGhpQHYdt/9LJZQrfBt7TKEjw+3oagFbtiqPmmINKkoaLE/93h+nkuh9PjKung0XXosXGIW0uSRHrIreCPn3t3e0Frmkm2MGVANb6EDGFTQxPOXFrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=F8OPrjJ1; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2350b1b9129so27188535ad.0
+        for <linux-pm@vger.kernel.org>; Sun, 15 Jun 2025 20:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wbinvd.org; s=wbinvd; t=1750045652; x=1750650452; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yvQ7KncdCkryYhQ6UYHiV8AcfEt99sLfw37M+fTpmcE=;
+        b=F8OPrjJ1S1whsTxc8AIpcvsQAkiuo/RBI80JpibZygVyJ4QQPV8gG2YzJI8wUce3CA
+         zQTCIoB2fE281IB6oFh8NQ5uTsLfowtGWGy3motGTDqkLWp/KEKhrP5D1KpxFf+BFVnE
+         pJpKdLF6ibivU33NTckd+61XeSsvyni7lFKtDJIa6JHd+3TjgjnnfLStaykPy9Spr9oO
+         OvW6DI56v5aCAkG1m10IbE/V/b58XbclToHnW5xFffarJrftLrSbKmlJOWu/WcMZh9Ca
+         kQmCJbkx0yVzSynOp0dMV5xVONGJcmRgAdp9Hp83++CqnWppRcpSclh8ew/PPOVE/Tvr
+         I0Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750045652; x=1750650452;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yvQ7KncdCkryYhQ6UYHiV8AcfEt99sLfw37M+fTpmcE=;
+        b=wI+qVsPKdXKCxjKfskmu3DKn3ZW0vRL2xFk8qcAwl4YJOjKvQAJUxy2FnJfzZuPScl
+         ELU0JL1bgyjfDWDP2fTQl6nH8B1cq62k7QBeFCu7iER1ZGoEq1AOyngoxV/2w5zLGrI+
+         iWur3fuZ4I5DR1M693tlDrJQyZUcmMG1E8CXnom3LkRMRGyDwaF/54WCA5hed2mK1Gf+
+         N0uMWG3VuoFBZvV1alZ/Uy57WbvYn8KZZqizZWZCsZA5vhjl/f8oLl8Hi3zuOFrZy822
+         wN7vsWVXicDwD7vnzUUkNUmjqpnCttwJ+M8UvTTl33H8S7aWmIPr9JPMOb/zanbjMqJz
+         +4gg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXOIG1Y2NK2ZtMBXNQ2nMYSr5PaTQCfIQsPYyHZEONegjfV826+QhmMrPYCq5DNUBUb+6BNnRgUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkKwog1e16tVOIFZGY8Wy8j3W89qDpszl34qf9W4dIzykleBeu
+	jQwuBFFzBQe/3YLeD5G6F3THHJPyIY3EcmyH/NOmno+Bt1KsWsKovRR40wfq9B8K1zg=
+X-Gm-Gg: ASbGncv8+e8n/ERjxB5Cwcks4yR3KFD+vWFfPQVyZeI+yA1+tOJfolMQ9CSCByy0PJf
+	t/DI4vgQjqz4z7krkSSy2HEn5IZVLYwIoX9lkfO3XF1SvAZOT+OxUqJQFfQOBWZh4INME0AlzuY
+	7tljSonoZ8JQCIo1PxJxbB5/TPKoPc3lDXJ+yi4M0eOAY+IsZvbNINM0aO0PuPVcP6wlVfvwJlf
+	j2xzIyPgqq5mkU1PFclR1+x8ZSW1wLMHjCqK1qkzwL/RFouY3z1dxvPTGWKUeSU0W0/v4ebaRpV
+	DaGrygR+EnkdMbLACro+WtpEnc17wWlyWfsAllX4TpxS5/lHTU0dzvAcA5710NjyJSdqmWFO1+e
+	tY32Rxa587AAfh4QSbsN5wAnFc9u/ZYc=
+X-Google-Smtp-Source: AGHT+IHYu/FwcX7YLaKOx5VReMxqHPp8iD/ta3wBGnoP/HCC6DuKvKSDmh33M+/gwPrD4abjPDdP9Q==
+X-Received: by 2002:a17:902:e747:b0:234:d292:be8f with SMTP id d9443c01a7336-2366b32e55bmr121483435ad.1.1750045652463;
+        Sun, 15 Jun 2025 20:47:32 -0700 (PDT)
+Received: from mozart.vkv.me (192-184-162-253.fiber.dynamic.sonic.net. [192.184.162.253])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365dea8ff7sm51388655ad.171.2025.06.15.20.47.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jun 2025 20:47:31 -0700 (PDT)
+Date: Sun, 15 Jun 2025 20:47:29 -0700
+From: Calvin Owens <calvin@wbinvd.org>
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "dedekind1@gmail.com" <dedekind1@gmail.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>
+Subject: Re: [PATCH] tools/power turbostat: Fix build with musl
+Message-ID: <aE-T0cZsdoCZOD_Y@mozart.vkv.me>
+References: <7edd4c688111a697cfe913c73d074738b3d1dffb.1749833196.git.calvin@wbinvd.org>
+ <17f85f0bfa5446b86188616349b17d02fe207c22.camel@gmail.com>
+ <7325c49d7d2c407f7391ed30e3a7e0c8898bf5cb.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] PM: Optionally block user fork during freeze to
- improve performance
-To: Michal Hocko <mhocko@suse.com>
-Cc: David Hildenbrand <david@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, rafael@kernel.org,
- len.brown@intel.com, pavel@kernel.org, kees@kernel.org, mingo@redhat.com,
- juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
- rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
- vschneid@redhat.com, akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20250606062502.19607-1-zhangzihuan@kylinos.cn>
- <20250606082244.GL30486@noisy.programming.kicks-ass.net>
- <83513599-e007-4d07-ac28-386bc5c7552d@kylinos.cn>
- <cd548b13-620e-4df5-9901-1702f904d470@redhat.com>
- <a4370ebc-b1ce-46ba-b3a4-cb628125d7d0@kylinos.cn>
- <aEvNqY5piB02l20T@tiehlicka>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <aEvNqY5piB02l20T@tiehlicka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7325c49d7d2c407f7391ed30e3a7e0c8898bf5cb.camel@intel.com>
 
-Hi=C2=A0=C2=A0Michal,
+On Monday 06/16 at 01:31 +0000, Zhang, Rui wrote:
+> On Fri, 2025-06-13 at 20:45 +0300, Artem Bityutskiy wrote:
+> > On Fri, 2025-06-13 at 09:54 -0700, Calvin Owens wrote:
+> > >     turbostat.c: In function 'parse_int_file':
+> > >     turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in
+> > > this function)
+> > >      5567 |         char path[PATH_MAX];
+> > >           |                   ^~~~~~~~
+> > > 
+> > >     turbostat.c: In function 'probe_graphics':
+> > >     turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in
+> > > this function)
+> > >      6787 |         char path[PATH_MAX];
+> > >           |                   ^~~~~~~~
+> > > 
+> > > Signed-off-by: Calvin Owens <calvin@wbinvd.org>
+> > Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> > 
+> May I know how to reproduce this?
 
-Thanks for the question.
+Hi Rui,
 
-=E5=9C=A8 2025/6/13 15:05, Michal Hocko =E5=86=99=E9=81=93:
-> On Fri 13-06-25 10:37:42, Zihuan Zhang wrote:
->> Hi David,
->> Thanks for your advice!
->>
->> =E5=9C=A8 2025/6/10 18:50, David Hildenbrand =E5=86=99=E9=81=93:
->>> =E3=80=80=E3=80=80=E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80=E3=80=80 =E3=
-=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=
-=80 =E3=80=80 =E3=80=80=E3=80=80
->>> Can't this problem be mitigated by simply not scheduling the new fork=
-'ed
->>> process while the system is frozen?
->>>
->>> Or what exact scenario are you worried about?
->> Let me revisit the core issue for clarity. Under normal conditions, mo=
-st
->> processes in the system are in a sleep state, and only a few are runna=
-ble.
->> So even with thousands of processes, the freezer generally works relia=
-bly
->> and completes within a reasonable time
-> How do you define reasonable time?
->
+Just build turbostat with musl as libc, here's a quick chroot repro that
+works on my Debian laptop:
 
-To clarify: freezing a process typically takes only a few dozen=20
-microseconds. In our tests, the freezer includes a usleep_range() delay=20
-between retries, which is about 1ms in the first round and doubles in=20
-subsequent rounds. Despite this delay, we observed that around 10% of=20
-the processes were not frozen during the first pass and had to be retried=
-.
+    wget https://gentoo.osuosl.org/releases/amd64/autobuilds/current-stage3-amd64-musl/stage3-amd64-musl-20250601T163943Z.tar.xz
+    mkdir tmp
+    sudo tar xf stage3-amd64-musl-20250601T163943Z.tar.xz -C ./tmp
+    wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.15.2.tar.xz
+    sudo mv linux-6.15.2.tar.xz tmp
+    sudo chroot tmp /bin/bash
+    gentoo / # tar xf linux-6.15.2.tar.xz
+    gentoo / # cd linux-6.15.2/tools/power/x86/turbostat/
+    gentoo /linux-6.15.2/tools/power/x86/turbostat # make
+    gcc -O2 -Wall -Wextra -I../../../include -DMSRHEADER='"../../../../arch/x86/include/asm/msr-index.h"' -DINTEL_FAMILY_HEADER='"../../../../arch/x86/include/asm/intel-family.h"' -DBUILD_BUG_HEADER='"../../../../include/linux/build_bug.h"' -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 turbostat.c -o /root/linux-6.15.2/tools/power/x86/turbostat/turbostat  -lcap -lrt
+    turbostat.c: In function 'parse_int_file':
+    turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in this function)
+     5567 |         char path[PATH_MAX];
+          |                   ^~~~~~~~
+    turbostat.c:5567:19: note: each undeclared identifier is reported only once for each function it appears in
+    turbostat.c:5567:14: warning: unused variable 'path' [-Wunused-variable]
+     5567 |         char path[PATH_MAX];
+          |              ^~~~
+    turbostat.c: In function 'probe_graphics':
+    turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in this function)
+     6787 |         char path[PATH_MAX];
+          |                   ^~~~~~~~
+    turbostat.c:6787:14: warning: unused variable 'path' [-Wunused-variable]
+     6787 |         char path[PATH_MAX];
+          |              ^~~~
+    make: *** [Makefile:23: turbostat] Error 1
 
-This suggests that even with a reasonably sufficient delay, some newly=20
-forked processes do not get frozen in time during the first iteration,=20
-simply due to timing. The freeze latency itself remains small, but not=20
-all processes are caught on the first try.
->> However, in our fork-based test scenario, we observed repeated freeze
->> retries.
-> Does this represent any real life scenario that happens on your system?
-> In other words how often do you miss your "reasonable time" treshold
-> while running a regular workload. Does the freezer ever fail?
->
-> [...]
-In our test scenario, although new processes can indeed be created=20
-during the usleep_range() intervals between freeze iterations, it=E2=80=99=
-s=20
-actually difficult to make the freezer fail outright. This is because=20
-user processes are forcibly frozen: when they return to user space and=20
-check for pending signals, they enter try_to_freeze() and transition=20
-into the refrigerator.
-
-However, since the scheduler is fair by design, it gives both newly=20
-forked tasks and yet-to-be-frozen tasks a chance to run. This=20
-competition for CPU time can slightly delay the overall freeze process.=20
-While this typically doesn=E2=80=99t lead to failure, it does cause more =
-retries=20
-than necessary, especially under CPU pressure.
-
-Given that freezing is a clearly defined and semantically critical state=20
-transition, we believe it makes sense to prioritize the execution of=20
-tasks that are pending freezing over newly forked ones=E2=80=94particular=
-ly in=20
-resource-constrained environments
->> You=E2=80=99re right =E2=80=94 blocking fork() is quite intrusive, so =
-it=E2=80=99s worth exploring
->> alternatives. We=E2=80=99ll try implementing your idea of preventing t=
-he newly
->> forked process from being scheduled while the system is freezing, rath=
-er
->> than failing the fork() call outright.
-> Just curious, are you interested in global freezer only or is the cgrou=
-p
-> freezer involved as well?
->
-At this stage, our focus is mainly on the global freezer during system=20
-suspend and hibernate (S3/S4). However, the patch itself is based on the=20
-generic freezing() and freeze_task() logic, so it should also work with=20
-the cgroup freezer as well.
+Thanks,
+Calvin
 
