@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-28920-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28921-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F6E0ADDC75
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 21:36:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C288EADDC79
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 21:36:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0BCA4A1915
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 19:36:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A461C402AB1
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 19:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2032E175B;
-	Tue, 17 Jun 2025 19:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C179D2EBB8B;
+	Tue, 17 Jun 2025 19:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qz8sWiB+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIjl7q3a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B186628D8C2;
-	Tue, 17 Jun 2025 19:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C81F28981A;
+	Tue, 17 Jun 2025 19:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750188966; cv=none; b=JE7OS/pPsIS0esqJ1cuH1tlY1/P2BIX5AEIM1CIoyCJCutpuFvSAjMlOjkMHRstQmY8PKYBUMTTJYsZJsDpMvZ/ZfSuOsYaJBn9q0/qoth3u2TFyCd21VPcO7vLf1e1OY0lR2VINmVeSjA7+gBnuBksgqtVNfEeWzeYD2U4GsPc=
+	t=1750188971; cv=none; b=G46SX9ZoBFliSuQpfaNNsRHVqpN4P6ISxZEXtzaZy/9HbDS/RQr1vrp29qZDezPm4bRudVeOGYRo4IOd8w+PmFxZFeSrvlyJ0wCjRiQeinHQ2XCKK+32BcFJYXJGdAMh/oMQ8jR7X8O+62NXtyCymjvHph9CrPDlMgeqqkmNbq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750188966; c=relaxed/simple;
-	bh=OYtfVADC3YbaOkP37R0UIhy3l79PKRTWkTBXrHQnV+4=;
+	s=arc-20240116; t=1750188971; c=relaxed/simple;
+	bh=KpSwTl4wyM18BdoPd4qTfDpifdr5k6KgAwhnWNQ3dRQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=isYX5qoHDNE/adsrmPLjWXEU17cSm59nUh+Oavab5xXkEnmpK93/TQ4altEd57Zr51V1FAOrTW0eYZlftGrlHDKgfL5VAKfzM4/XpTgjmRC9In8uo4A202Q3G+Yl/IRCGZgauTMaa/CR/0FLahhSZj58yglppzJB8MTzB/07kxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qz8sWiB+; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=R+eO8r2oLRUc6HMID9OZRHLxuLiiQ8KQG8Xr83aSfhto4ZPDXSb2s/RjcCGiJsrRN1Os+kDCuo8BFBB6/mBbJXjCRm8hLKgcpA2tHftShmlwOa//o9GaUxOdtxgSlnnAso8eCLUB1LlKSyCFbw35JO/1a2TLPIUkpRkUllXdnuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIjl7q3a; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7487d2b524eso3197691b3a.0;
-        Tue, 17 Jun 2025 12:36:04 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b1fd59851baso4027669a12.0;
+        Tue, 17 Jun 2025 12:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750188964; x=1750793764; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750188968; x=1750793768; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9+Jp9u/wRva4rrnrWzobzjZRnSw87IvFwB/n0IWH6u8=;
-        b=Qz8sWiB+DD9HYnX+T22+hQ81OfQd3iCDqkhueh4j/JAmRSKQ5/Yb7T5F96I6asAFfu
-         7d1+7XWLo487lMPXfSGRefKXXsKpvAInAoW1Ryjzmv1Xy1iebocHqKMfi+n13P+wheUI
-         lKIeq1KlWjv8BbVDBALocA7+EjR9YU+abdk4XkNVn92dzLpJ20JjFJOWRLX2728bWzu1
-         XYhXrdI3RsbMj+uxSKtQ93V5fWLvGmL9B9EJebQzJP3W1VGtvaQaWAS1LqlQ3UMy9Uuj
-         VJulKE/gFd9ChOuJZ/bdswxhscyp1MXNWjLBWGlWLH5a1bNIqfMyx0eScpHt/i+pQo8R
-         g9Rw==
+        bh=1scGrWmFNF+u0XSYuCytdGqLKRqsOgk+ZZqdhXd5JD8=;
+        b=TIjl7q3aYrB/R6zlIVf3mev+jBZSzD5VDtEk6VV867pQIXwadyOIV0ir3+XDQGAery
+         FZWeFlsfL/TQDLR3fNAmEJb1IynRNAf8iJlibKPF09G41xC0z2Fz98WfcpxRRbL+ZxgJ
+         l0xMHIZG9xVqiEcCGlxs1nMAdp25pRFodgdhQcRaBtZWQpshyJfnzeQ963yt1e1jXlSp
+         vYZw2QzGvNOmPRGEtmdsj/kr8fgpzZfeXuuqxXoMGMctEcQ3rcQKgQyPkEzDLQ4rNnBK
+         JM9V28H7dCz4yO0lMCFpmjXnAk7zfPfkH0laZ49W0ys0waIKP1xdqPcx4LFQIkARVu53
+         2bEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750188964; x=1750793764;
+        d=1e100.net; s=20230601; t=1750188968; x=1750793768;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9+Jp9u/wRva4rrnrWzobzjZRnSw87IvFwB/n0IWH6u8=;
-        b=dsum1LyMjbkdHOQD13JXBIDWqd+u1AGNBzTzHm2+vLNrYX31D347ew8X76mNEeTE7p
-         cbXXgIudBQoGU3FQd97ywsEJ0s7IDuGAA05eLHr4WJQ1Uiq5ozeaM/21+gGeNzgH8Wzs
-         vAAUfBoUReYlD6x+09GIZXHDpQitCs/bxzFfPJg5YYfjal7zSxERFkyQb0LqRfsNnZn7
-         5b9LU31eVLlW2dzzT03OVU12tLNWApiZ8MU7v1wIr+c2CMIBm5W8pcjn+XpQQm8oEQwX
-         b5Sp6lcnTTv2f+Q0BijaVDQitruP6cWroHWfbttXX8i4KD4q2s0hVhZ+pkX4HWWWq6w2
-         fKug==
-X-Forwarded-Encrypted: i=1; AJvYcCUwbFEB4b5n5Afgb0f8gtE1XBdopbMuv/MhMWPW/x3r7kG1vYBlQh4ojCH5YsblrhOi20ASIdQMCIn+dLIPs8mlBg==@vger.kernel.org, AJvYcCVJjNi/HEkQ8ARtkpdcmR8vpXfZcaZKm2uO3dH7WTvpFvy+Zu1dI0jGKYe/S3is0ws/9+bebHmiXK8=@vger.kernel.org, AJvYcCWmS9OXaqllhJIQEENI5BP+0Qka1DTArQ1ZlBIjdemTAZaMQ5cN0HeknK8hjPpu7UPHQQ8p7U7sD9U/jRI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg5ZgI38d+8gbyFi8zdayOPe1tQiygDDxlj+SvTvv+HOTWfDgv
-	5AS0iqjvGO6NMqkIt8jePlh63VXijAJG7oUSxdqvJAy7OL6IP4h25c8H
-X-Gm-Gg: ASbGncvOjYhb1XMEz4UmhHtdBmWNahJWxVmCERZEy9ddDqEzY2lCr4g1ZQOCMP6ce5E
-	ouL7hMHbt2QIRM7YssFyiQJpz+8UcTSgv6nQGzoCdJ2y/wIiREoWmp83U3Ezbk3lgaesfGPNdCs
-	6suwRYXHQ6PgAq3HGfNV1rmdacTUF6Sg3KnhkeZLTIrE7988S9+6cOvPg0XMhrnxtufz5GICxt+
-	FwPLLn6I34fVo45Mzc1u42z30MN2jwf493D1oEUyxA9apc2oY6gykSOR60UEfClHAy5FgtTNM0Z
-	ci1C3JUrFg5gI80QMvel+vvU8LBfuZIzzZ4E4VIshACQ456x8VMKqniFFTGE7/faPvdC9tl9aTj
-	kiBEoKsHbVNZxPVWJCHo=
-X-Google-Smtp-Source: AGHT+IGcDSspfVbPpwb0f/ablI94JBqFeuuwuuxpXOVNcm2A90uM3TKWTA7DXqp9K6lERbNZaC1dhg==
-X-Received: by 2002:a05:6a00:2d06:b0:736:5725:59b4 with SMTP id d2e1a72fcca58-7489cf62aa3mr20044531b3a.3.1750188963855;
-        Tue, 17 Jun 2025 12:36:03 -0700 (PDT)
+        bh=1scGrWmFNF+u0XSYuCytdGqLKRqsOgk+ZZqdhXd5JD8=;
+        b=Xi6VcqLnHX7sfzcvrBicjl8Ms9HGRgHYf0cmxUnxRm1R6qtvSoQsN5puCj0kJTGxPv
+         NRP3emHE6QRJ+Xa8S+yXllqM2e5knVJFQNP6/sgUrhm8e+0RjklSSWvFodDO/M1O4RY6
+         6J4dlRG3GtXUqWCszs3yTzEKK+movGO6Af97D+i3avsW3jpIuni1eCWD6pSrG+iK9mga
+         zgSx790GQJd0UsyUVgSwj23lDjRtDLCZid3GMOCndrbaiPgcgaxmYpWugErRqCOcq2eC
+         tJEydhqRDdJ0z6qIZ1lhNScqMzb6Mbh/EExIE5r7VDazuSGGrCBazHlHfQ57cXDU9nBu
+         JADg==
+X-Forwarded-Encrypted: i=1; AJvYcCURkus/KFEv/rnhupFMJEBuMpBoImqBb+iOAUWKvjiaVdYiIo60NJh8CJ5gjgNHVqemybm+c9SgCFok/vg=@vger.kernel.org, AJvYcCWql3L1Lh9kk/7DOOZybnJ77y4Sf/TO5UqReFxoyuf8Nhr5KA1HJvuXt5gO5On1uimNtldgmYvTLXs=@vger.kernel.org, AJvYcCXwJwVsqkcKnES9FTsm0HfXae/VMYDFY+6zDSTu9Ow2nPkUxs7+08v81sBKtRf8Xo2uvLUsBbmex6e0F7GswYh2Cg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbKZa/zKl5I2R8WcVLve9f4PbyaSDS1IMj3CuH8dwUl77xinly
+	K3z36Lh+9+angmYcZu14v0R958zHKEuqCr9m3Bw5uCQpxX24nhfKHfrc
+X-Gm-Gg: ASbGncsLRfZ0M+0toXWwaebRJHETBtDwKD3svo3wbpBqexm7Uzk5/u/GkK7QN0j3tPm
+	d3glFCe7CRylZpLLjNLOlPb7L+e3zoYFCiSqBa3xm6GsKL/nDC/efDBNX5l3P6TlqhLc5kOd9tG
+	ymoSxj1yX6wAix5N10Ot/LiNLg7PciXWnZIAuRokIQQDocBofI4GF3visqyErs/zEFU5RNXY5+B
+	YaoZcIUPg1RQ3ZETEwcea1mMIA4AJiaNuer5DRWls/4L6L6LRYqVtOPybXcFPwLLAx1tWQuqhDx
+	DMmd9jZbrC1NnqpwI+Y/AYchpodWFdwExfIiwIRA4rSFpU12E3WzCGOJonOCY7x0OZ6cEnHCKa+
+	b6tHa0+lF
+X-Google-Smtp-Source: AGHT+IF/rndT3pqVzap/b+BUcpqjMIETJYig28EKMkQ28U1cw4wJ+jDydO+2ebPcgPtnZZvK5fdPAg==
+X-Received: by 2002:a05:6a20:2591:b0:1f5:769a:a4be with SMTP id adf61e73a8af0-21fbd59fb65mr24359112637.36.1750188968258;
+        Tue, 17 Jun 2025 12:36:08 -0700 (PDT)
 Received: from hiagof-nb.corp.toradex.com ([67.159.246.222])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d7340sm9648582b3a.179.2025.06.17.12.35.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d7340sm9648582b3a.179.2025.06.17.12.36.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 12:36:03 -0700 (PDT)
+        Tue, 17 Jun 2025 12:36:07 -0700 (PDT)
 From: Hiago De Franco <hiagofranco@gmail.com>
 To: Mathieu Poirier <mathieu.poirier@linaro.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
@@ -88,10 +88,11 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	Peng Fan <peng.fan@oss.nxp.com>,
 	daniel.baluta@nxp.com,
 	iuliana.prodan@oss.nxp.com,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Subject: [PATCH v5 1/3] pmdomain: core: introduce dev_pm_genpd_is_on()
-Date: Tue, 17 Jun 2025 16:34:48 -0300
-Message-Id: <20250617193450.183889-2-hiagofranco@gmail.com>
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH v5 2/3] remoteproc: imx_rproc: skip clock enable when M-core is managed by the SCU
+Date: Tue, 17 Jun 2025 16:34:49 -0300
+Message-Id: <20250617193450.183889-3-hiagofranco@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250617193450.183889-1-hiagofranco@gmail.com>
 References: <20250617193450.183889-1-hiagofranco@gmail.com>
@@ -105,97 +106,51 @@ Content-Transfer-Encoding: 8bit
 
 From: Hiago De Franco <hiago.franco@toradex.com>
 
-This helper function returns the current power status of a given generic
-power domain.
+For the i.MX8X and i.MX8 family SoCs, when the M-core is powered up
+by the bootloader, M-core and Linux are in same SCFW (System Controller
+Firmware) partition, so linux has permission to control M-core.
 
-As example, remoteproc/imx_rproc.c can now use this function to check
-the power status of the remote core to properly set "attached" or
-"offline" modes.
+But when M-core is started, the SCFW will automatically enable the clock
+and configure the rate, and any users that want to enable the clock will
+get error 'LOCKED' from SCFW. So current imx_rproc.c probe function
+fails because clk_prepare_enable also fails. With that, the M-core power
+domain is powered off when it is still running, causing a SCU (System
+Controller Unit) fault reset, and the system restarts.
 
-Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+To address the issue, ignore handling the clk for i.MX8X and i.MX8 M-core,
+because SCFW will automatically enable and configure the clock.
+
+Suggested-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
 ---
 v4 -> v5:
-- s/dev_pm_genpd_is_on/dev_pm_genpd_is_on()/ in function description.
-- Updated function description to be explicit the function reflects the
-  current power status and that this might change after the function
-  returns, especially if the genpd is shared.
-
+ - Unchanged.
 v3 -> v4:
-- New patch.
+ - Unchanged.
+v2 -> v3:
+ - Unchanged.
+v1 -> v2:
+ - Commit description updated, as suggested. Fixed Peng Fan email.
 ---
- drivers/pmdomain/core.c   | 33 +++++++++++++++++++++++++++++++++
- include/linux/pm_domain.h |  6 ++++++
- 2 files changed, 39 insertions(+)
+ drivers/remoteproc/imx_rproc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index ff5c7f2b69ce..2f387e15cb75 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -758,6 +758,39 @@ int dev_pm_genpd_rpm_always_on(struct device *dev, bool on)
- }
- EXPORT_SYMBOL_GPL(dev_pm_genpd_rpm_always_on);
+diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+index 74299af1d7f1..627e57a88db2 100644
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -1029,8 +1029,8 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv)
+ 	struct device *dev = priv->dev;
+ 	int ret;
  
-+/**
-+ * dev_pm_genpd_is_on() - Get device's current power domain status
-+ *
-+ * @dev: Device to get the current power status
-+ *
-+ * This function checks whether the generic power domain associated with the
-+ * given device is on or not by verifying if genpd_status_on equals
-+ * GENPD_STATE_ON.
-+ *
-+ * Note: this function returns the power status of the genpd at the time of the
-+ * call. The power status may change after due to activity from other devices
-+ * sharing the same genpd. Therefore, this information should not be relied for
-+ * long-term decisions about the device power state.
-+ *
-+ * Return: 'true' if the device's power domain is on, 'false' otherwise.
-+ */
-+bool dev_pm_genpd_is_on(struct device *dev)
-+{
-+	struct generic_pm_domain *genpd;
-+	bool is_on;
-+
-+	genpd = dev_to_genpd_safe(dev);
-+	if (!genpd)
-+		return false;
-+
-+	genpd_lock(genpd);
-+	is_on = genpd_status_on(genpd);
-+	genpd_unlock(genpd);
-+
-+	return is_on;
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_genpd_is_on);
-+
- /**
-  * pm_genpd_inc_rejected() - Adjust the rejected/usage counts for an idle-state.
-  *
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 0b18160901a2..c12580b6579b 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -301,6 +301,7 @@ void dev_pm_genpd_synced_poweroff(struct device *dev);
- int dev_pm_genpd_set_hwmode(struct device *dev, bool enable);
- bool dev_pm_genpd_get_hwmode(struct device *dev);
- int dev_pm_genpd_rpm_always_on(struct device *dev, bool on);
-+bool dev_pm_genpd_is_on(struct device *dev);
+-	/* Remote core is not under control of Linux */
+-	if (dcfg->method == IMX_RPROC_NONE)
++	/* Remote core is not under control of Linux or it is managed by SCU API */
++	if (dcfg->method == IMX_RPROC_NONE || dcfg->method == IMX_RPROC_SCU_API)
+ 		return 0;
  
- extern struct dev_power_governor simple_qos_governor;
- extern struct dev_power_governor pm_domain_always_on_gov;
-@@ -393,6 +394,11 @@ static inline int dev_pm_genpd_rpm_always_on(struct device *dev, bool on)
- 	return -EOPNOTSUPP;
- }
- 
-+static inline bool dev_pm_genpd_is_on(struct device *dev)
-+{
-+	return false;
-+}
-+
- #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
- #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
- #endif
+ 	priv->clk = devm_clk_get(dev, NULL);
 -- 
 2.39.5
 
