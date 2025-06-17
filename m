@@ -1,174 +1,164 @@
-Return-Path: <linux-pm+bounces-28918-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28919-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50CC0ADDC3C
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 21:23:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807FBADDC73
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 21:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C8591940A4A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 19:23:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ADB04A12B4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 19:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECEE2EAB63;
-	Tue, 17 Jun 2025 19:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3FD274FC8;
+	Tue, 17 Jun 2025 19:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="E5rz0Dk7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ng0kFYrl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B455825487E
-	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 19:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D7823B61C;
+	Tue, 17 Jun 2025 19:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750188192; cv=none; b=XzGC7+mZOcty/6zkOWVpENtFnjYbM8G39cMBBIWtRSjSrqcbCB2igtXN89CztHrzsjECZRZXqdnq7xJy6BXNlzUS5yb83PusgvXwxalENwWi3sXKYmvxrjhFEJJWt5RLHN9SKnFGHFQqQwV2GYavdF+6OQTbAHM+X2lKqahMDRo=
+	t=1750188962; cv=none; b=gklraFLDp8RgTxfj48TN1lAzmi0h5aLcBSHka8qPQ5E/RwLA3bkWM80m4tFmtlk4aVFItnwPsLMMvWfbmztad+VwTRxJScJjSE6gFaSAGQZbBOPVW+gYoQD/0ccUw3qQB0VIYNBM1/a6evPzOPkSnDHdQ99CID9F6UlWRNoSqmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750188192; c=relaxed/simple;
-	bh=MognockFkcOcnIkzl6aBSdw4zvGQ2TZZ9c6TgXrj9X0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TTfikbfuCPLsO+Ffwn1lia9QLxaMfJ2meStl1nYSv4gyJsv6Dsh1rCjvAIlJWSfYGStqBtGVcLve7+v5ALxAS6SSwg+c6+IE1nvjf/NWb+RdtlTJei0WrmrtM2zBmrRTCT78lmpcZfo7bzkGDTEON3ekPU8aOpdFys3BtDehyWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=E5rz0Dk7; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55HFPg6P027326
-	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 19:23:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LdzPHGOIKz6OedKEjfrT+dQssvLIdj/9tY0eYX+UX7A=; b=E5rz0Dk7OSeCVzLx
-	h5/deRqpIuEEeowUpsWk9y+bYSYSnmr5N4AWBVRLez8WLzBe4g1T/sG8xo4F2v+6
-	uSQxI8t8Dl1bD6Tsw+tBhZokQmYdgu04WUavzNUAJIBrdXQsCMJ4To7TlW9/nrSR
-	tllmnvY//GLJIjcGB1IJtdTcqLqPbzsk8zOqjSQ3Xv5azlk9mPP6FzEsDJ9tPbig
-	eJBVCiJTY24SX2f569sxTXA2iR4oYT1eroSsoWmTFl2HcM3ZR+0xlhD0FvG/nh1w
-	fbIy1C0gdztrLOVrrGDfWQt3/dRvxq7woVaPa0G7eeCiJfIA4F0jUX8iHxuhXVrX
-	040Bvw==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4791crsc9h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 19:23:09 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c5ad42d6bcso151708285a.2
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 12:23:09 -0700 (PDT)
+	s=arc-20240116; t=1750188962; c=relaxed/simple;
+	bh=1uEeGF9p7kz9UCL3FmlVdwCP0lAngpPAygjFaSOXfyM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BQqO+JJ2z7nJq1YR2XkJLlC1FA0Y8NAg3ntaWJnTBzHuYmXKIb796XmxRbRtXuPto/Gub+yIUwqdwjXKVeMW6jeXpAYcT6R82ZmCT6ZrRiocLuGqo+zMIY6nPkI1Rgbqd4ulO+btxDoBF+4tcJslGYsTMerAigEndzuhdj3rxRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ng0kFYrl; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7399a2dc13fso6566568b3a.2;
+        Tue, 17 Jun 2025 12:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750188960; x=1750793760; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ticf1f4PmQmZwFcANzazYxHsrbux47xCzbGTbFHeNUw=;
+        b=ng0kFYrlmN6D5tQn55FtzTIqC7Dp0+q68c16oN3DJTYfsspEJaEl82aF9kY6oGBnkN
+         gCikSVXbXtFTHPQhGXmVWAyEWWDcBn3IAC0wHc00AwfHoW0lzCQvjqZlCGkf39/8gIwU
+         yvrVyYvgQI8hzyY1w7S5v9VZXxAdKFxQTxjKUnoaAR5pL3pBnknjZ8YaEPUJ2hC52r8h
+         PXJIJMQkBzIJWM+fOERhi2/Akuk6PykuGakhW2hP8GbhbK2Q7A2QZY1C4+C3sHBR3O5J
+         E2ElfUHKrPJQsb8XRze548CKoCFd+UQViZsh5Ayqs+T2IY6LLOlDP1iKhw+FQVo7zKXp
+         shZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750188189; x=1750792989;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LdzPHGOIKz6OedKEjfrT+dQssvLIdj/9tY0eYX+UX7A=;
-        b=X+LqOFSUi3VIRh8aeYARX7DzLM1k1zMmNNK91YEK5ftqYKF0lZO9OCFFdazl6ULis2
-         EVz1nsvYuAEFSwvxIrhvgV5BSScAsGKyZIr0T0WmCe8dwFu8Ee8SA3oqwbbbvJ5/42Px
-         vbn3AoUHNlUA2/527L56p/Z2CgtoBUZzFdGgJbDS9G70/WDx5YOG+72PtW6cGyz68Ebp
-         qZQjGqdPm+xb5XkYyTURd/IGOGnh0AqzMmJGKWy8sgCttaQ9pZS1eXkVZoeUPPf9EiE6
-         mZFgJWUEignWGjBq27/P1t0vSslsM5vBnSF8IVpNKZFq9YZTqNM/GdRmzpOExTROJVP2
-         8FMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVGZnyi4+dj3Sm4Y7AdKZrkkl469mDCfGGqejzMwQyByNYNC+vWR0mecr8KLzujTDhXbT0v502zTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/d1W0zZXbOCcWFtBEQo0CGvgXFk5jZThqomNC07m9EPoYWZVS
-	As6GHq/NtCfESCTMsokVtRAPxd7cw9ZFFsZ2g51DuHnXIsx2jOX8SxPxWS/j2zEJwgjGSoTzYT7
-	HNYvlEnarNmpwRNZIhHwpJv0/Vtl4SzIOW7/5NW7UyqqcZ1+5jOLxK+iywRzlCg==
-X-Gm-Gg: ASbGncv+oWHb13mIdkiwGDFXfcVqPqEGjk9lABSOEg0QxN8jlNHq4AEXnh0OsJm2Lgk
-	lmQtU4o+fkxRgyWdOBQO8AWT2kO0mg01akjQAT0HVO2ba3WmgYR30nMAmB47GegDUAvbAQ2SJsM
-	ZtPuhhxxuDB9ruawn/bRVC2kMXP/i+usRS/YOB2U7eJ1OizUXVC0OemhpwCE9z0G9+y4XBoLbu8
-	++q/0YUpXxl0W9/UF5/NtB/4WnSbJvnEFGZR2uBkwi2cGXsYSeuP0Rk9xFJHnmtI+QbQpPGqCdq
-	zXz22KFgd/kTg4MveERvVo7vJvIueEQM8KkrjUtNTtrbZ8SmsmgRuHhnfMzZFZhEvVVhjWSh4ex
-	wnEc=
-X-Received: by 2002:a05:620a:1727:b0:7c7:9d87:9e2 with SMTP id af79cd13be357-7d3ddfc335fmr269470685a.12.1750188188608;
-        Tue, 17 Jun 2025 12:23:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH0yvPjKPU38lsTFY4yNQOSMkrjfXE9YWA0WVDxHRlxx4vA+NZcrpEX0zx8IWsyvawWlt53nQ==
-X-Received: by 2002:a05:620a:1727:b0:7c7:9d87:9e2 with SMTP id af79cd13be357-7d3ddfc335fmr269468285a.12.1750188188108;
-        Tue, 17 Jun 2025 12:23:08 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec88feb23sm914603466b.96.2025.06.17.12.23.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jun 2025 12:23:07 -0700 (PDT)
-Message-ID: <d23b8cf0-1ba0-45f6-b06b-f7a862bae457@oss.qualcomm.com>
-Date: Tue, 17 Jun 2025 21:23:05 +0200
+        d=1e100.net; s=20230601; t=1750188960; x=1750793760;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ticf1f4PmQmZwFcANzazYxHsrbux47xCzbGTbFHeNUw=;
+        b=Qj2miSYTYpxzrat7Iyq+Ek8ZNMJp2EaTC7b747QYyi/FGE5a5u5leO03tI5OxhjoKE
+         XLB6oJ9EONAKhfS51dwVcWLYMR3nybqR6DRwE2HrZXDVFnoXnnmwWwnBx/b//YdlWyPn
+         5il9rSGk/ECl60whOmQpcdWNGPHZQooezWD80nD1ZW677ezrd6pHZ6smrrc0TqiIdv6F
+         CjmVXehrI5WkJJlou27w9uZ1CkXXd6EaueWVGiU1oOrYKOb8BG9FWGEJzsO7c4sTyEoA
+         SnpEtL/i2Iw9/LKfx4VqUtwXyX2co9T23K5PEwY5wK8MZQS2pXEOwIkMMH0mXe5BbrT+
+         aPxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVTb66yU8QLMSTbiY+39c89WnX7Jm5PFDyFWdeQlB3tEmgwQ3QEmB2LAVS7GI2RAOpf0m2EcgjNNf0=@vger.kernel.org, AJvYcCVucujthUnmsvCL39DhsNB+cjdche4FlNwgK5XhhbnBCj78lAE+VGvhT7GrtxzXdEDXDhtmiWAUJSkScC3j2g8MZw==@vger.kernel.org, AJvYcCWtLdbgKohE/iCUHqI4z1ZUtHRTk+l3TiBG2a60X0O8Bkt/gz0e85zaqpvWXQ1YDFrHMiZnKZ4wUvUUl8c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDPcHmumA1URpFNGNStP7h6wY8Dtn6aom9Kq4XJfsZ+HzRgRem
+	cdBmJ0mketrL+zP//8vI+7zoQFuBMvhBjP+Dgc2Qxj7ta29uSJExw3WS
+X-Gm-Gg: ASbGnctUOoKHFDgxMYV9c/UC94FkF8HnNv7ZC7S4NtcT+Nj8bndnLu72utQWMQuvONq
+	8H9ne8v2HSoAnA/FeNx1v9hp5iky418tQuuiGVNialZqeedrLxN0FjFoXcnX/FLTqkC4Hp8Dhc5
+	7uPW9YYF9k5hp4zI4AEdc0v/hfrkqBN09fj7dbtvraaZhzVWX/3rVbs7LorvQ8JniwZ7BfsKsiM
+	dOJxOo3oDKJEMQK1LF/OFdyrJgBS6HXevSn7TLwm7IHlrOKMvmYgzFvlqeoG1ZLxeIfjA8EzRgL
+	CSMAPDtzup/Mj8ehsbU7a1yYGxSVrE1+x9Pz+qtmfNkbUcmB/hCYAbxfzjV8Q8IRY+g+jBNYXy+
+	UnKDGIJrQ
+X-Google-Smtp-Source: AGHT+IFusaGvuCb7ZR1Ws5Y5oPYYDpHSdWxbRb5ZmiLNV78bJUEaevAuOwvHQpQaXM6A0+dTKeJfPQ==
+X-Received: by 2002:a05:6a00:23ce:b0:748:de24:1ade with SMTP id d2e1a72fcca58-748de241b57mr2814970b3a.7.1750188959655;
+        Tue, 17 Jun 2025 12:35:59 -0700 (PDT)
+Received: from hiagof-nb.corp.toradex.com ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d7340sm9648582b3a.179.2025.06.17.12.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 12:35:59 -0700 (PDT)
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@oss.nxp.com>,
+	daniel.baluta@nxp.com,
+	iuliana.prodan@oss.nxp.com,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Subject: [PATCH v5 0/3] remoteproc: imx_rproc: allow attaching to running core kicked by the bootloader
+Date: Tue, 17 Jun 2025 16:34:47 -0300
+Message-Id: <20250617193450.183889-1-hiagofranco@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: qcs8300: Add EPSS l3 interconnect
- provider node
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Mike Tiption <mdtipton@quicinc.com>, Sibi Sankar
- <quic_sibis@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250617090651.55-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250617090651.55-4-raviteja.laggyshetty@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250617090651.55-4-raviteja.laggyshetty@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: 2cn0U-JZZTVH9S3dMY95cKvIlmu2D6s5
-X-Authority-Analysis: v=2.4 cv=BoedwZX5 c=1 sm=1 tr=0 ts=6851c09d cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=LJL_6YULmAKA-UV3y8AA:9
- a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-GUID: 2cn0U-JZZTVH9S3dMY95cKvIlmu2D6s5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE3MDE1NSBTYWx0ZWRfXyp6989It5uHV
- WBHMGbFo7laD1JkQ3Oi7oqD+pIdbrjWuzOwfGFgMuaREl9QNfDbdfNGPFlhE2NKHSatOVUyj5kp
- FV3WqCIZ2qaaFhwWXJ7uteBHovDaJ6v+Enr+dHqe7d6yPjM7QAkDNySXNtuGUo0VKfznw+v0DS6
- vwhxlWiWuzZSruLMLLI8YrDVOJPcxqWVlEZwtSQR+9gEjHAfL51KPRbH3CFhJrjBb6Rj/xgoNG1
- 85zJb2fAKXsAvP0q4uTLKDHs6Fq0F5kleC6NzWjibdCdUsTQwj7DSBwtj2Q4f9zX4c8tPlyPk13
- Y4I9TgOFSlkJIOfIHjJOx6E2kWxzaTMi5oMBjsBajKnWoCoUI0/zH2V0NJzqrUhKNrr7/us8ac1
- 3dCP/UHfxA1Fed0gGlTyHLs7jnp6XulZnARC39MHY9HK410o0Q/68L7YpTwLgf8Z7lFCwIc3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-17_08,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 mlxscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 malwarescore=0 priorityscore=1501 clxscore=1015
- spamscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506170155
+Content-Transfer-Encoding: 8bit
 
-On 6/17/25 11:06 AM, Raviteja Laggyshetty wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider node for QCS8300 SoC.
-> 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/qcs8300.dtsi | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-> index 7ada029c32c1..e056b3af21d5 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-> @@ -12,6 +12,7 @@
->  #include <dt-bindings/dma/qcom-gpi.h>
->  #include <dt-bindings/firmware/qcom,scm.h>
->  #include <dt-bindings/interconnect/qcom,icc.h>
-> +#include <dt-bindings/interconnect/qcom,osm-l3.h>
->  #include <dt-bindings/interconnect/qcom,qcs8300-rpmh.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/mailbox/qcom-ipcc.h>
-> @@ -5433,6 +5434,14 @@ rpmhpd_opp_turbo_l1: opp-9 {
->  			};
->  		};
->  
-> +		epss_l3_cl0: interconnect@18590000 {
-> +			compatible = "qcom,qcs8300-epss-l3", "qcom,epss-l3";
-> +				reg = <0x0 0x18590000 0x0 0x1000>;
-> +				clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-> +				clock-names = "xo", "alternate";
+From: Hiago De Franco <hiago.franco@toradex.com>
 
-Very odd indentation
+This patch series depends on Ulf's patches that are currently under
+review, "pmdomain: Add generic ->sync_state() support to genpd" [1].
+Without them, this series is not going to work.
 
-You should also immediately bind these providers to something,
-otherwise sync_state will happily take them to whatever minimum
-rate the hardware allows, making things worse
+For the i.MX8X and i.MX8 family SoCs, currently when the remotecore is
+started by the bootloader and the M core and A core are in the same
+partition, the driver is not capable to detect the remote core and
+report the correct state of it.
 
-Konrad
+This patch series implement a new function, dev_pm_genpd_is_on(), which
+returns the power status of a given power domain (M core power domains
+IMX_SC_R_M4_0_PID0 and IMX_SC_R_M4_0_MU_1A in this case). If it is
+already powered on, the driver will attach to it.
+
+Finally, the imx_rproc_clk_enable() function was also changed to make it
+return before dev_clk_get() is called, as it currently generates an SCU
+fault reset if the remote core is already running and the kernel tries
+to enable the clock again. These changes are a follow up from a v1 sent
+to imx_rproc [2] and from a reported regression [3].
+
+[1] https://lore.kernel.org/all/20250523134025.75130-1-ulf.hansson@linaro.org/
+[2] https://lore.kernel.org/lkml/20250423155131.101473-1-hiagofranco@gmail.com/
+[3] https://lore.kernel.org/lkml/20250404141713.ac2ntcsjsf7epdfa@hiago-nb/
+
+v5:
+- pm_runtime_get_sync() removed in favor of pm_runtime_resume_and_get(),
+  checking the return value of it.
+- Added pm_runtime_disable() and pm_runtime_put() to imx_rproc_remove().
+- Fixed missing "()" in dev_pm_genpd_is_on description.
+- Updated dev_pm_genpd_is_on() function description to be explicit the
+  function reflects the current power status of the device and that this
+  might change after the function returns, especially if the genpd is
+  shared.
+
+v4:
+- https://lore.kernel.org/lkml/20250602131906.25751-1-hiagofranco@gmail.com/
+
+v3:
+- https://lore.kernel.org/all/20250519171514.61974-1-hiagofranco@gmail.com/
+
+v2:
+- https://lore.kernel.org/lkml/20250507160056.11876-1-hiagofranco@gmail.com/
+
+v1:
+- https://lore.kernel.org/lkml/20250505154849.64889-1-hiagofranco@gmail.com/
+
+Hiago De Franco (3):
+  pmdomain: core: introduce dev_pm_genpd_is_on()
+  remoteproc: imx_rproc: skip clock enable when M-core is managed by the
+    SCU
+  remoteproc: imx_rproc: detect and attach to pre-booted remote cores
+
+ drivers/pmdomain/core.c        | 33 +++++++++++++++++++++++++++
+ drivers/remoteproc/imx_rproc.c | 41 ++++++++++++++++++++++++++++------
+ include/linux/pm_domain.h      |  6 +++++
+ 3 files changed, 73 insertions(+), 7 deletions(-)
+
+-- 
+2.39.5
 
 
