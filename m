@@ -1,134 +1,354 @@
-Return-Path: <linux-pm+bounces-28903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E08ADCC13
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:57:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADBFADCDA7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 15:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E5A53A6B92
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 12:56:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A405C16ED51
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 13:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8E02E3389;
-	Tue, 17 Jun 2025 12:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BEF12DE20F;
+	Tue, 17 Jun 2025 13:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a06enZpK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13CFE2E2EF1;
-	Tue, 17 Jun 2025 12:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F62290098
+	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 13:41:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750165003; cv=none; b=Aqctyq9K63I8uyKHxhqMx9LJ68/RncCECc2ZUn/ExJz6c5nS8KRWCI7odhTriOPPryLKuGHbGt6CEdYRtrLOyS7wnrHRGFHJLHoImQP2YHTHr6pTwPx9mB/OmMkKdG3sezoWmDRevG+b3H0UdeQAe98dsCXvVTFy4YP4MHHlIWg=
+	t=1750167704; cv=none; b=E/0NE+qaEMDW8bltLajKgbPfhz3C3xAtxGKd5sGGqF12G90L9ZpfkrF+pAmIZgoe87LagUkukBBpbM7r8YWivgONiOMQt3JuHaL7RBXni/hMiOjN//EZH296gJzs40l1YSU2JylcL1FgSAyq1nTTP3Xc9QTyK0x3F1qVC7LZ/Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750165003; c=relaxed/simple;
-	bh=1bfgQo9mR1ETUyRu4Bf4IbeGVR6ggw/u+CitXdXSyeY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jDMmqg3AIcKuT1TrxSC1ndHDE+d/bL9MICK+ClxJ3OvO4ThXRBODN1i1AD4rTjGatzMiE+X+4CPKh+mYkCoq8To7YFJJwrkSQlVeDFHLnTRSvT/n+Kr0O5pXWChMVftheXxVpcL8BRPdY3MrLanKXSDOx5LIm4krmCXGJQskXB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B6BD1595;
-	Tue, 17 Jun 2025 05:56:20 -0700 (PDT)
-Received: from [10.1.196.50] (e121345-lin.cambridge.arm.com [10.1.196.50])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 85B123F673;
-	Tue, 17 Jun 2025 05:56:40 -0700 (PDT)
-Message-ID: <9710acf3-9ffd-4b29-a51a-21d91cbbdf5e@arm.com>
-Date: Tue, 17 Jun 2025 13:56:38 +0100
+	s=arc-20240116; t=1750167704; c=relaxed/simple;
+	bh=DIj2AAVzh6RaeVINK/st+G1b4AbHWzLgB0oXZPusTYI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DxULYmsL0Ig0Pb+Xz8IkTvtW2yxRheJcNWcj8mLLbqsevuDuySLkc7nhqhQPBJlhBsQbyFxxV4AgzNcLXM9Syj7WU+fhmUWObY2iGSgjlDZe7qz+bfMjFIXzQ5CYVCSrdxpowPhsGgvaPWWkJF4Uxl/HSE5C8ttQAaXsSDcSLyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a06enZpK; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e819ebc3144so5075840276.0
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 06:41:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750167700; x=1750772500; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xxcq6pPXEwCF0M4vqqWx/eKlyr9nt8+hn5/vEDrp5ZE=;
+        b=a06enZpKrOmpMf6c01IqKZmE++CpytYFteq+FrYNKJxOM4hJGH4HfK9mmacIME27Gj
+         qLV9tBaj8NReG7zBsmhhOfDRyIZFzCh3Y59l0dqEz1zL3VGdZftZxX4eeSfozJDuMGZj
+         fd1FgpppgUAX1v/Any2tQh4ipUKJRFxDBvwuBefOFmjbYwR/b1a8U9tzBiB+M/hcp8Xp
+         Lq0H4iN8GeGh7Gir1VE+PSUyrrJ0nJ478QT4EbC4VBI7eAxR/X5jVPOl4U3EE3oCFlNM
+         cfgfEua+YN6fXZ/ROvuZ9iWFimU8trHKCkgEmprY8P8VSfM9xZuI/6ymW5/bYUAMbwQI
+         6ckg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750167700; x=1750772500;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xxcq6pPXEwCF0M4vqqWx/eKlyr9nt8+hn5/vEDrp5ZE=;
+        b=KUe7y6HOZkHb+pipFf4VlFBC7RW51zZpuw2/WJRy9FJNR6585SaUDO2udukjYho/jb
+         knsCl6RAfgjObAzqp7DEVvhgYsAmB17cIp846oYxqg/NMsEi1+k83Jj3UJNOQxHRsRxQ
+         g7Y/JucoFiOVc1W1xFSUYseY/3ZC6EeO5Bfe4N/UqWoAamYb78fZn+C9WJ+IkdCJ7n/O
+         ZU1Cm98BLB/IoWrmBWCTQl+fwB1JaHsX945wFACJ7FYhKHu4Vqevp8JRt7dLpGWVLkLS
+         P1l5Rzi3CbA0194BkF6pn2LKzK6ryWfKrwW1JdcOmip+otIApIEhr2fxo+FoQERvCucX
+         0UWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUk0v/ibUmbHeBB+vG/2ONFPd8AkSmlkIz6UKocDYradW5VYiBQewvXc52nh18HTU4WsBe+0YMd9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3h3kRguIA43gYuChLxjRaoFERV8phRBWAh3j25b0RKVT13FjX
+	NUIxGjJC2MpVkvLOPfQwcWxZVMJGahX+muTsAnfSartQlgzs8HPx15QJG7zO9X9lP7VIcy4KHTk
+	+U9IhhcNjzixUWFxVkiFO8HEvaotq4PlY9PZASGZ96g==
+X-Gm-Gg: ASbGncvf7ICyG/Xle8spHVDYky56SlROsz/HLDSRQR2C6HLKv61ZQqlBr/CvW4aOnQF
+	JWis7ZC5H8UqaJ3W9GQVk4nZIHSD9UEG4Go4QJqkLbu4ohjlq9VsvIW5tqr6CfEZgv+X3Xtw4K5
+	ALf5XSTXU78OhKbFWeTG5IXMLWdLDitsfL4FdsakcVrwGU
+X-Google-Smtp-Source: AGHT+IFXNh3dt4XqMM5937nY2BjWuw0VFS4BzyKrSjRkgDANTu7g5lS3hr0/pxLXWwKfRV56n2YHg6bm2vUH93us37E=
+X-Received: by 2002:a05:6902:2743:b0:e81:4e9d:9e79 with SMTP id
+ 3f1490d57ef6-e822aceb465mr17195548276.40.1750167700195; Tue, 17 Jun 2025
+ 06:41:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: Fix initialization with disabled boost
-To: Christian Loehle <christian.loehle@arm.com>,
- "zhenglifeng (A)" <zhenglifeng1@huawei.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- linux-pm <linux-pm@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-References: <3cc5b83b-f81c-4bd7-b7ff-4d02db4e25d8@arm.com>
- <34651625-08eb-46df-8075-4c5a08d15c18@arm.com>
- <4b551b8c-6572-4fd1-9bd8-6669aaf69271@huawei.com>
- <e9fc6154-7199-4709-b428-3f848f1597e8@arm.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <e9fc6154-7199-4709-b428-3f848f1597e8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
+ <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
+ <CAPDyKFrO9rb0eDb2qO+EGaVjOFG=7emgca8511XACDhWY=dt5g@mail.gmail.com> <7hsejzp4xg.fsf@baylibre.com>
+In-Reply-To: <7hsejzp4xg.fsf@baylibre.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 17 Jun 2025 15:41:04 +0200
+X-Gm-Features: AX0GCFsc4IXNTkQXClE9iVnzm8TR1gvwHeQEjnwyXUG_JQBGZNwT5Ix8opwgWIs
+Message-ID: <CAPDyKFo-iPBPgkM43q+5cGR2sptkLk4E6TAERCQbCu24o1RfFQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 2/2] pmdomain: core: add support for subdomains
+ using power-domain-map
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
+	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 17/06/2025 9:20 am, Christian Loehle wrote:
-> On 6/17/25 03:14, zhenglifeng (A) wrote:
->> On 2025/6/17 3:10, Robin Murphy wrote:
->>> On 2025-06-16 6:25 pm, Christian Loehle wrote:
->>>> The boost_enabled early return in policy_set_boost() caused
->>>> the boost disabled at initialization to not actually set the
->>>> initial policy->max, therefore effectively enabling boost while
->>>> it should have been enabled.
->>>>
->>>> Fixes: 27241c8b63bd ("cpufreq: Introduce policy_set_boost()")
->>>
->>> I think it's a bit older than that - I noticed this with 6.15 stable, prior to that refactoring, and from a poke through the history the underlying logic appears to date back to dd016f379ebc ("cpufreq: Introduce a more generic way to set default per-policy boost flag"). Hopefully someone can figure out the appropriate stable backport.
->>>
->>> I can at least confirm that equivalently hacking out the "&& policy->boost_enabled != cpufreq_boost_enabled()" condition previously here does have the desired effect for me of initialising scaling_max_freq correctly at boot, but I'm not sure that's entirely correct on its own...
->>>
->>> Thanks,
->>> Robin.
->>>
->>>> Reported-by: Robin Murphy <robin.murphy@arm.com>
->>>> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
->>>> ---
->>>>    drivers/cpufreq/cpufreq.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>>> index d7426e1d8bdd..e85139bd0436 100644
->>>> --- a/drivers/cpufreq/cpufreq.c
->>>> +++ b/drivers/cpufreq/cpufreq.c
->>>> @@ -1630,7 +1630,7 @@ static int cpufreq_online(unsigned int cpu)
->>>>         */
->>>>        if (cpufreq_driver->set_boost && policy->boost_supported &&
->>>>            (new_policy || !cpufreq_boost_enabled())) {
->>>> -        ret = policy_set_boost(policy, cpufreq_boost_enabled());
->>>> +        ret = cpufreq_driver->set_boost(policy, cpufreq_boost_enabled());
->>>>            if (ret) {
->>>>                /* If the set_boost fails, the online operation is not affected */
->>>>                pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
->>>
->>>
->>
->> I don't quite understand what problem you've met. It semms like you guys
->> propose that set_boost() should be called no matter what
->> policy->boost_enabled is. Having more details would help to clarify things,
->> such as which driver you use and what you expect but not be achieved.
->>
-> 
-> so calling policy_set_boost(policy, enable) is a noop here if
-> policy->boost_enabled == cpufreq_boost_enabled():
-> 
-> 	if (policy->boost_enabled == enable)
-> 		return 0;
-> 
-> We have policy->boost_enabled == false on boot, thus never actually
-> setting policy->max up ever, which leads to the following:
+On Tue, 17 Jun 2025 at 02:50, Kevin Hilman <khilman@baylibre.com> wrote:
+>
+> Ulf Hansson <ulf.hansson@linaro.org> writes:
+> --text follows this line--
+> > On Sat, 14 Jun 2025 at 00:39, Kevin Hilman <khilman@baylibre.com> wrote:
+> >>
+> >> Currently, PM domains can only support hierarchy for simple
+> >> providers (e.g. ones with #power-domain-cells = 0).
+> >>
+> >> Add more generic support for hierarchy by using nexus node
+> >> maps (c.f. section 2.5.1 of the DT spec.)
+> >>
+> >> For example, we could describe SCMI PM domains with multiple parents
+> >> domains (MAIN_PD and WKUP_PD) like this:
+> >>
+> >>     scmi_pds: protocol@11 {
+> >>         reg = <0x11>;
+> >>         #power-domain-cells = <1>;
+> >>
+> >>         power-domain-map = <15 &MAIN_PD>,
+> >>                            <19 &WKUP_PD>;
+> >>     };
+> >>
+> >> which should mean that <&scmi_pds 15> is a subdomain of MAIN_PD and
+> >> <&scmi_pds 19> is a subdomain of WKUP_PD.
+> >>
+> >> IOW, given an SCMI device which uses SCMI PM domains:
+> >>
+> >>    main_timer0: timer@2400000 {
+> >>       power-domains = <&scmi_pds 15>;
+> >>    };
+> >>
+> >> it already implies that main_timer0 is PM domain <&scmi_pds 15>
+> >>
+> >> With the new map, this *also* now implies <&scmi_pds 15> is a
+> >> subdomain of MAIN_PD.
+> >>
+> >> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> >> ---
+> >>  drivers/pmdomain/core.c | 24 ++++++++++++++++++++++--
+> >>  1 file changed, 22 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> >> index d6c1ddb807b2..adf022b45d95 100644
+> >> --- a/drivers/pmdomain/core.c
+> >> +++ b/drivers/pmdomain/core.c
+> >> @@ -2998,8 +2998,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >>                                  unsigned int index, unsigned int num_domains,
+> >>                                  bool power_on)
+> >>  {
+> >> -       struct of_phandle_args pd_args;
+> >> -       struct generic_pm_domain *pd;
+> >> +       struct of_phandle_args pd_args, parent_args;
+> >> +       struct generic_pm_domain *pd, *parent_pd = NULL;
+> >>         int ret;
+> >>
+> >>         ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
+> >> @@ -3039,6 +3039,22 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >>                         goto err;
+> >>         }
+> >>
+> >> +       /*
+> >> +        * Check for power-domain-map, which implies the primary
+> >> +        * power-doamin is a subdomain of the parent found in the map.
+> >> +        */
+> >> +       ret = of_parse_phandle_with_args_map(dev->of_node, "power-domains",
+> >> +                                            "power-domain", index, &parent_args);
+> >> +       if (!ret && (pd_args.np != parent_args.np)) {
+> >> +               parent_pd = genpd_get_from_provider(&parent_args);
+> >> +               of_node_put(parent_args.np);
+> >> +
+> >> +               ret = pm_genpd_add_subdomain(parent_pd, pd);
+> >> +               if (!ret)
+> >> +                       dev_dbg(dev, "adding PM domain %s as subdomain of %s\n",
+> >> +                               pd->name, parent_pd->name);
+> >> +       }
+> >
+> > Please move the above new code to a separate shared genpd helper
+> > function, that genpd providers can call build the topology. This, to
+> > be consistent with the current way for how we usually add
+> > parent/child-domains in genpd (see of_genpd_add_subdomain).
+>
+> Yeah, you had the same comment on v2, and I'm not ignoring you.  But I
+> thought that moving this code to when devices are attatched to domains
+> (instead of when providers are created) would solve that problem.  IOW,
+> in this approach, `power-domain-map` is handled at the same time as a
+> devices `power-domains = ` property.
 
-And for clarity, this is with the cpufreq_dt driver (at least in my case).
+Even if this may work for your particular use case, in general it does not.
 
-Thanks,
-Robin.
+We simply can't defer to build the topology (parent/child-domains)
+until there is a device getting attached to some part of it.
 
-> # cat /sys/devices/system/cpu/cpufreq/policy4/scaling_boost_frequencies
-> 2016000
-> # cat /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
-> 2016000
-> # cat /sys/devices/system/cpu/cpufreq/boost
-> 0
-> # echo 1 > /sys/devices/system/cpu/cpufreq/boost
-> # echo 0 > /sys/devices/system/cpu/cpufreq/boost
-> # cat /sys/devices/system/cpu/cpufreq/policy4/scaling_boost_frequencies
-> 1800000
-> 
-> Anyway I'll bisect some more to find the actual first bad commit and
-> resend.
+>
+> So, while I don't really understand the reason that every PM domain
+> provider has to handle this individually, I've given that a try (see
+> below.)
+>
+
+See above.
+
+> > Moreover, we also need a corresponding "cleanup" helper function to
+> > remove the child-domain (subdomain) correctly, similar to
+> > of_genpd_remove_subdomain().
+>
+> Yes, I'll handle that better once I get through this RFC phase to make
+> sure I'm on th right path.
+
+Okay.
+
+>
+> OK, so below[1] is a shot at just adding helpers to the PM domain core.  I
+> will then uses these from the SCMI PM domains ->attach_dev() and
+> ->detatch_dev callbacks.
+
+No, not during ->attach|detach_dev(), but during ->probe() of the SCMI
+PM domain, immediately after the genpd OF providers has been added.
+
+See more comments below.
+
+>
+> If you think this is better, I'll send a v4 tomorrow.
+>
+> Kevin
+>
+> [1] NOTE: this is based on v6.12 because that's where I have a functioning BSP
+> for this SoC.  If you're OK with this, I'll rebase to v6.15 and submit upstream.
+>
+> From 12a3e5669dc18f4a9fdf9f25398cba4245135a43 Mon Sep 17 00:00:00 2001
+> From: Kevin Hilman <khilman@baylibre.com>
+> Date: Fri, 13 Jun 2025 13:49:45 -0700
+> Subject: [PATCH 2/3] pmdomain: core: add support for subdomains via
+>  power-domain-map
+>
+> ---
+>  drivers/pmdomain/core.c   | 60 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_domain.h | 11 +++++++
+>  2 files changed, 71 insertions(+)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 88819659df83..a0dc60d4160d 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -3100,6 +3100,66 @@ struct device *genpd_dev_pm_attach_by_name(struct device *dev, const char *name)
+>         return genpd_dev_pm_attach_by_id(dev, index);
+>  }
+>
+> +/**
+> + * genpd_dev_pm_attach_subdomain - Associate a PM domain with its parent domain
+> + * @domain: The PM domain to lookup whether it has any parent
+> + * @dev: The device being attached to the PM domain.
+> + *
+> + * Check if @domain has a power-domain-map.  If present, use that map
+> + * to determine the parent PM domain, and attach @domain as a
+> + * subdomain to the parent PM domain.
+> + *
+> + * Intended to called from a PM domain provider's ->attach_dev()
+> + * callback, where &gpd_list_lock will already be held by the genpd
+> + * add_device() path.
+> + */
+> +struct generic_pm_domain *
+> +genpd_dev_pm_attach_subdomain(struct generic_pm_domain *domain,
+> +                             struct device *dev)
+
+A couple of comments below:
+
+*) I think the function-name should have a prefix "of_genpd_*, to be
+consistent with other names. Maye "of_genpd_add_subdomain_by_map"
+would be a better name?
+
+*) We need to decide if we want to add one child-domain (subdomain)
+per function call - or whether we should walk the entire nexus-map and
+hook up all child-domains to its parent in one go. I tend to like the
+second one better, but I'm not really sure what would work best here.
+
+No matter what, I think the in-parameters to the function should be of
+type "struct of_phandle_args * or maybe struct device_node *", similar
+to how of_genpd_add_subdomain() works.
+
+> +{
+> +       struct of_phandle_args parent_args;
+> +       struct generic_pm_domain *parent_pd = NULL;
+> +       int ret;
+> +
+> +       /*
+> +        * Check for power-domain-map, which implies the primary
+> +        * power-doamin is a subdomain of the parent found in the map.
+> +        */
+> +       ret = of_parse_phandle_with_args_map(dev->of_node, "power-domains",
+> +                                            "power-domain", 0, &parent_args);
+> +       if (!ret && parent_args.np) {
+> +               parent_pd = genpd_get_from_provider(&parent_args);
+> +               of_node_put(parent_args.np);
+> +
+> +               ret = genpd_add_subdomain(parent_pd, domain);
+> +               if (!ret) {
+> +                       dev_dbg(dev, "adding PM domain %s as subdomain of %s\n",
+> +                               domain->name, parent_pd->name);
+> +                       return parent_pd;
+> +               }
+> +       }
+> +
+> +       return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(genpd_dev_pm_attach_subdomain);
+> +
+> +/**
+> + * genpd_dev_pm_detach_subdomain - Detatch a PM domain from its parent domain
+> + * @domain: The PM subdomain to detach
+> + * @parent: The parent PM domain
+> + * @dev: The device being attached to the PM subdomain.
+> + *
+> + * Remove @domain from @parent.
+> + * Intended to cleanup after genpd_dev_pm_attach_subdomain()
+> + */
+> +int genpd_dev_pm_detach_subdomain(struct generic_pm_domain *domain,
+> +                                 struct generic_pm_domain *parent,
+> +                                 struct device *dev)
+> +{
+> +       return pm_genpd_remove_subdomain(parent, domain);
+> +}
+> +EXPORT_SYMBOL_GPL(genpd_dev_pm_detach_subdomain);
+> +
+>  static const struct of_device_id idle_state_match[] = {
+>         { .compatible = "domain-idle-state", },
+>         { }
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index cf4b11be3709..5d7eb3ae59dd 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -410,6 +410,11 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
+>                                          unsigned int index);
+>  struct device *genpd_dev_pm_attach_by_name(struct device *dev,
+>                                            const char *name);
+> +struct generic_pm_domain *genpd_dev_pm_attach_subdomain(struct generic_pm_domain *domain,
+> +                                                       struct device *dev);
+> +int genpd_dev_pm_detach_subdomain(struct generic_pm_domain *domain,
+> +                                 struct generic_pm_domain *parent,
+> +                                 struct device *dev);
+>  #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
+>  static inline int of_genpd_add_provider_simple(struct device_node *np,
+>                                         struct generic_pm_domain *genpd)
+> @@ -466,6 +471,12 @@ static inline struct device *genpd_dev_pm_attach_by_name(struct device *dev,
+>         return NULL;
+>  }
+>
+> +static inline
+> +struct generic_pm_domain *genpd_dev_pm_attach_subdomain(struct generic_pm_domain *domain,
+> +                                                       struct device *dev)
+> +{
+> +       return NULL;
+> +}
+>  static inline
+>  struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+>  {
+> --
+> 2.49.0
+>
+>
+
+Kind regards
+Uffe
 
