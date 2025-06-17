@@ -1,354 +1,239 @@
-Return-Path: <linux-pm+bounces-28904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28905-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADBFADCDA7
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 15:41:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17E0FADCDC0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 15:43:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A405C16ED51
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 13:41:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05AE13AD5D7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 13:41:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BEF12DE20F;
-	Tue, 17 Jun 2025 13:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a06enZpK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446442E2654;
+	Tue, 17 Jun 2025 13:41:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F62290098
-	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 13:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7236A2E265C;
+	Tue, 17 Jun 2025 13:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750167704; cv=none; b=E/0NE+qaEMDW8bltLajKgbPfhz3C3xAtxGKd5sGGqF12G90L9ZpfkrF+pAmIZgoe87LagUkukBBpbM7r8YWivgONiOMQt3JuHaL7RBXni/hMiOjN//EZH296gJzs40l1YSU2JylcL1FgSAyq1nTTP3Xc9QTyK0x3F1qVC7LZ/Hg=
+	t=1750167710; cv=none; b=korjglrSxcJ2+DOGxq6618w9Bgagrt9jIgjf90QXfe6pDwT4VtXPwEPEhpdPRQrxmEHuqrvE09XOEiw5/9Gofg2RLtDETb/YgUrPvUdcO/+/CQoEAzvQdIzWArfpJ/7sv+3tAEaEARAWCTY6H3BY8R0lLeHTQ9awkbVN4KXC0qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750167704; c=relaxed/simple;
-	bh=DIj2AAVzh6RaeVINK/st+G1b4AbHWzLgB0oXZPusTYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DxULYmsL0Ig0Pb+Xz8IkTvtW2yxRheJcNWcj8mLLbqsevuDuySLkc7nhqhQPBJlhBsQbyFxxV4AgzNcLXM9Syj7WU+fhmUWObY2iGSgjlDZe7qz+bfMjFIXzQ5CYVCSrdxpowPhsGgvaPWWkJF4Uxl/HSE5C8ttQAaXsSDcSLyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a06enZpK; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e819ebc3144so5075840276.0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 06:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750167700; x=1750772500; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xxcq6pPXEwCF0M4vqqWx/eKlyr9nt8+hn5/vEDrp5ZE=;
-        b=a06enZpKrOmpMf6c01IqKZmE++CpytYFteq+FrYNKJxOM4hJGH4HfK9mmacIME27Gj
-         qLV9tBaj8NReG7zBsmhhOfDRyIZFzCh3Y59l0dqEz1zL3VGdZftZxX4eeSfozJDuMGZj
-         fd1FgpppgUAX1v/Any2tQh4ipUKJRFxDBvwuBefOFmjbYwR/b1a8U9tzBiB+M/hcp8Xp
-         Lq0H4iN8GeGh7Gir1VE+PSUyrrJ0nJ478QT4EbC4VBI7eAxR/X5jVPOl4U3EE3oCFlNM
-         cfgfEua+YN6fXZ/ROvuZ9iWFimU8trHKCkgEmprY8P8VSfM9xZuI/6ymW5/bYUAMbwQI
-         6ckg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750167700; x=1750772500;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xxcq6pPXEwCF0M4vqqWx/eKlyr9nt8+hn5/vEDrp5ZE=;
-        b=KUe7y6HOZkHb+pipFf4VlFBC7RW51zZpuw2/WJRy9FJNR6585SaUDO2udukjYho/jb
-         knsCl6RAfgjObAzqp7DEVvhgYsAmB17cIp846oYxqg/NMsEi1+k83Jj3UJNOQxHRsRxQ
-         g7Y/JucoFiOVc1W1xFSUYseY/3ZC6EeO5Bfe4N/UqWoAamYb78fZn+C9WJ+IkdCJ7n/O
-         ZU1Cm98BLB/IoWrmBWCTQl+fwB1JaHsX945wFACJ7FYhKHu4Vqevp8JRt7dLpGWVLkLS
-         P1l5Rzi3CbA0194BkF6pn2LKzK6ryWfKrwW1JdcOmip+otIApIEhr2fxo+FoQERvCucX
-         0UWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUk0v/ibUmbHeBB+vG/2ONFPd8AkSmlkIz6UKocDYradW5VYiBQewvXc52nh18HTU4WsBe+0YMd9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3h3kRguIA43gYuChLxjRaoFERV8phRBWAh3j25b0RKVT13FjX
-	NUIxGjJC2MpVkvLOPfQwcWxZVMJGahX+muTsAnfSartQlgzs8HPx15QJG7zO9X9lP7VIcy4KHTk
-	+U9IhhcNjzixUWFxVkiFO8HEvaotq4PlY9PZASGZ96g==
-X-Gm-Gg: ASbGncvf7ICyG/Xle8spHVDYky56SlROsz/HLDSRQR2C6HLKv61ZQqlBr/CvW4aOnQF
-	JWis7ZC5H8UqaJ3W9GQVk4nZIHSD9UEG4Go4QJqkLbu4ohjlq9VsvIW5tqr6CfEZgv+X3Xtw4K5
-	ALf5XSTXU78OhKbFWeTG5IXMLWdLDitsfL4FdsakcVrwGU
-X-Google-Smtp-Source: AGHT+IFXNh3dt4XqMM5937nY2BjWuw0VFS4BzyKrSjRkgDANTu7g5lS3hr0/pxLXWwKfRV56n2YHg6bm2vUH93us37E=
-X-Received: by 2002:a05:6902:2743:b0:e81:4e9d:9e79 with SMTP id
- 3f1490d57ef6-e822aceb465mr17195548276.40.1750167700195; Tue, 17 Jun 2025
- 06:41:40 -0700 (PDT)
+	s=arc-20240116; t=1750167710; c=relaxed/simple;
+	bh=bhIM8WfhdoU/esl/3sd94kF+RRM1YkYE851Q+t8svZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QwnrRy05zTh1HuBIpWieK5mboTVXfMhZ49xdkG5DzD2HWh1moZjVLI77tIvUU8tGFHiGkOkopY1SJfVvuDHHV3O0HkF6cj/W1c4gp9ddldMg5E6Th5WlL0Gzr7Zr27iwElQPraZnhyx/sx2gyVuihR0DOrutz4zDQv+9jDJpsrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 185CE150C;
+	Tue, 17 Jun 2025 06:41:27 -0700 (PDT)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CACFB3F673;
+	Tue, 17 Jun 2025 06:41:46 -0700 (PDT)
+Date: Tue, 17 Jun 2025 14:41:44 +0100
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Peng Fan <peng.fan@oss.nxp.com>
+Cc: Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 0/3] firmware: arm_scmi: perf/cpufreq: Enable
+ notification only if supported by platform
+Message-ID: <aFFwmBTPKr_evCnY@pluto>
+References: <20250611-scmi-perf-v1-0-df2b548ba77c@nxp.com>
+ <20250611-cherubic-solemn-toucanet-aac5af@sudeepholla>
+ <aEmFnJVG8lXTDNmO@pluto>
+ <20250612034351.GA7552@nxa18884-linux>
+ <aEqsZWSlq9wKv10a@pluto>
+ <20250613095059.GA10033@nxa18884-linux>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
- <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
- <CAPDyKFrO9rb0eDb2qO+EGaVjOFG=7emgca8511XACDhWY=dt5g@mail.gmail.com> <7hsejzp4xg.fsf@baylibre.com>
-In-Reply-To: <7hsejzp4xg.fsf@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 17 Jun 2025 15:41:04 +0200
-X-Gm-Features: AX0GCFsc4IXNTkQXClE9iVnzm8TR1gvwHeQEjnwyXUG_JQBGZNwT5Ix8opwgWIs
-Message-ID: <CAPDyKFo-iPBPgkM43q+5cGR2sptkLk4E6TAERCQbCu24o1RfFQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 2/2] pmdomain: core: add support for subdomains
- using power-domain-map
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613095059.GA10033@nxa18884-linux>
 
-On Tue, 17 Jun 2025 at 02:50, Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Ulf Hansson <ulf.hansson@linaro.org> writes:
-> --text follows this line--
-> > On Sat, 14 Jun 2025 at 00:39, Kevin Hilman <khilman@baylibre.com> wrote:
-> >>
-> >> Currently, PM domains can only support hierarchy for simple
-> >> providers (e.g. ones with #power-domain-cells = 0).
-> >>
-> >> Add more generic support for hierarchy by using nexus node
-> >> maps (c.f. section 2.5.1 of the DT spec.)
-> >>
-> >> For example, we could describe SCMI PM domains with multiple parents
-> >> domains (MAIN_PD and WKUP_PD) like this:
-> >>
-> >>     scmi_pds: protocol@11 {
-> >>         reg = <0x11>;
-> >>         #power-domain-cells = <1>;
-> >>
-> >>         power-domain-map = <15 &MAIN_PD>,
-> >>                            <19 &WKUP_PD>;
-> >>     };
-> >>
-> >> which should mean that <&scmi_pds 15> is a subdomain of MAIN_PD and
-> >> <&scmi_pds 19> is a subdomain of WKUP_PD.
-> >>
-> >> IOW, given an SCMI device which uses SCMI PM domains:
-> >>
-> >>    main_timer0: timer@2400000 {
-> >>       power-domains = <&scmi_pds 15>;
-> >>    };
-> >>
-> >> it already implies that main_timer0 is PM domain <&scmi_pds 15>
-> >>
-> >> With the new map, this *also* now implies <&scmi_pds 15> is a
-> >> subdomain of MAIN_PD.
-> >>
-> >> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> >> ---
-> >>  drivers/pmdomain/core.c | 24 ++++++++++++++++++++++--
-> >>  1 file changed, 22 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> >> index d6c1ddb807b2..adf022b45d95 100644
-> >> --- a/drivers/pmdomain/core.c
-> >> +++ b/drivers/pmdomain/core.c
-> >> @@ -2998,8 +2998,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >>                                  unsigned int index, unsigned int num_domains,
-> >>                                  bool power_on)
-> >>  {
-> >> -       struct of_phandle_args pd_args;
-> >> -       struct generic_pm_domain *pd;
-> >> +       struct of_phandle_args pd_args, parent_args;
-> >> +       struct generic_pm_domain *pd, *parent_pd = NULL;
-> >>         int ret;
-> >>
-> >>         ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
-> >> @@ -3039,6 +3039,22 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >>                         goto err;
-> >>         }
-> >>
-> >> +       /*
-> >> +        * Check for power-domain-map, which implies the primary
-> >> +        * power-doamin is a subdomain of the parent found in the map.
-> >> +        */
-> >> +       ret = of_parse_phandle_with_args_map(dev->of_node, "power-domains",
-> >> +                                            "power-domain", index, &parent_args);
-> >> +       if (!ret && (pd_args.np != parent_args.np)) {
-> >> +               parent_pd = genpd_get_from_provider(&parent_args);
-> >> +               of_node_put(parent_args.np);
-> >> +
-> >> +               ret = pm_genpd_add_subdomain(parent_pd, pd);
-> >> +               if (!ret)
-> >> +                       dev_dbg(dev, "adding PM domain %s as subdomain of %s\n",
-> >> +                               pd->name, parent_pd->name);
-> >> +       }
+On Fri, Jun 13, 2025 at 05:50:59PM +0800, Peng Fan wrote:
+> Hi Cristian,
+> 
+> On Thu, Jun 12, 2025 at 11:31:01AM +0100, Cristian Marussi wrote:
+> >On Thu, Jun 12, 2025 at 11:43:52AM +0800, Peng Fan wrote:
+> >> On Wed, Jun 11, 2025 at 02:33:37PM +0100, Cristian Marussi wrote:
+> >> >On Wed, Jun 11, 2025 at 01:17:11PM +0100, Sudeep Holla wrote:
+> >> >> On Wed, Jun 11, 2025 at 03:52:42PM +0800, Peng Fan (OSS) wrote:
+> >> >> > PERFORMANCE_NOTIFY_LIMITS and PERFORMANCE_NOTIFY_LEVEL are optional
+> >> >> > commands. If use these commands on platforms that not support the two,
+> >> >> > there is error log:
+> >> >> >   SCMI Notifications - Failed to ENABLE events for key:13000008 !
+> >> >> >   scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
+> >> >> > 
+> >> >> 
+> >> >
+> >> >Hi,
+> >> >
+
+Hi,
+
+> >> >I had a quick look/refresh to this stuff from years ago...
+> >> >
+> >> >...wont be so short to explain :P
+> >> >
+> >> >In general when you register a notifier_block for some SCMI events,
+> >> >the assumption was that a driver using proto_X_ops could want to register
+> >> >NOT only for proto_X events BUT also for other protos...in such a case you
+> >> >are NOT guaranteed that such other proto_Y was initialized when your
+> >> >driver probes and tries to register the notifier...indeed it could be
+> >> >that such proto_Y could be a module that has still to be loaded !
+> >> >
+> >> >...in this scenario you can end-up quickly in a hell of probe-dependency
+> >> >if you write a driver asking for SCMI events that can or cannot be still
+> >> >readily available when the driver probes...
+> >> >
+> >> >....so the decision was to simply place such notifier registration requests
+> >> >on hold on a pending list...whenever the needed missing protocol is
+> >> >loaded/inialized the notifier registration is completed...if the proto_Y
+> >> >never arrives nothing happens...and your driver caller can probe
+> >> >successfully anyway...
+> >> >
+> >> >This means in such a corner-case the notifier registration is sort of
+> >> >asynchonous and eventual errors detected later, when the protocol is
+> >> >finally initialized and notifiers finalized, cannot be easily reported
+> >> >(BUT I think we could improve on this ... thinking about this...)
+> >> >
+> >> >...BUT....
+> >> >
+> >> >....this is NOT our case NOR the most common case...the usual scenario,
+> >> >like cpufreq, is that a driver using proto_X_ops tries to register for
+> >> >that same proto_X events and in such a case we can detect that such
+> >> >domain is unsupported and fail while avoiding to send any message indeed....
+> >> >
+> >> >....so....:P...while I was going through this rabbit-hole....this issues
+> >> >started to feel familiar...O_o....
+> >> >
+> >> >... indeed I realized that the function that you (Peng) now invoke to
+> >> >set the per-domain perf_limit_notify flag was introduced just for these
+> >> >reasons to check and avoid such situation for all protocols in the core:
+> >> >
+> >> >
+> >> >commit 8733e86a80f5a7abb7b4b6ca3f417b32c3eb68e3
+> >> >Author: Cristian Marussi <cristian.marussi@arm.com>
+> >> >Date:   Mon Feb 12 12:32:23 2024 +0000
+> >> >
+> >> >    firmware: arm_scmi: Check for notification support
+> >> >    
+> >> >    When registering protocol events, use the optional .is_notify_supported
+> >> >    callback provided by the protocol to check if that specific notification
+> >> >    type is available for that particular resource on the running system,
+> >> >    marking it as unsupported otherwise.
+> >> >    
+> >> >    Then, when a notification enable request is received, return an error if
+> >> >    it was previously marked as unsuppported, so avoiding to send a needless
+> >> >    notification enable command and check the returned value for failure.
+> >> >    
+> >> >    Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> >> >    Link: https://lore.kernel.org/r/20240212123233.1230090-2-cristian.marussi@arm.com
+> >> >    Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> >> >
+> >> >
+> >> >...so my suspect is that we are ALREADY avoiding to send unneeded
+> >> >messages when a domain does NOT support notifications for ALL
+> >> >protocols...it is just that we are a bit too noisy...
+> >> >
+> >> >@Peng do you observe the message being sent instead ? (so maybe the
+> >> >above has a bug...) or it is just the message ?
+> >> 
+> >> Just the message.
+> >> 
+> >> arm-scmi arm-scmi.0.auto: SCMI Notifications - Notification NOT supported - proto_id:19  evt_id:0  src_id:8
+> >> SCMI Notifications - Failed to ENABLE events for key:13000008 !
+> >> scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
+> >> 
+> >> It just make user has a feeling that there must be something wrong, especially
+> >> those not know the internals.
 > >
-> > Please move the above new code to a separate shared genpd helper
-> > function, that genpd providers can call build the topology. This, to
-> > be consistent with the current way for how we usually add
-> > parent/child-domains in genpd (see of_genpd_add_subdomain).
->
-> Yeah, you had the same comment on v2, and I'm not ignoring you.  But I
-> thought that moving this code to when devices are attatched to domains
-> (instead of when providers are created) would solve that problem.  IOW,
-> in this approach, `power-domain-map` is handled at the same time as a
-> devices `power-domains = ` property.
+> >Yes indeed it is too much noisy...
+> >
+> >> 
+> >> And from the error message, "Failed to ENABLE events for key..", we not
+> >> know which protocol, and whether notification supported.
+> >> 
+> >> I was thinking to propogate the error value, but __scmi_enable_evt
+> >> always use -EINVAL if not success.
+> >> 
+> >
+> >I suppose, if you want also to save cycles that you could mark internally a
+> >protocol, at init time, as NOT suporting notifs (if you can detect that no domain
+> >is supported OR the related notfs commands are NOT available) and then
+> >bailing out early with -ENOTOPSUPP when trying to register a new
+> >notifier (amd muting all the errs to dbgs....) so that the caller can
+> >warn if wanted or not...
+> 
+> Since you have more expertise in this area, do you have plan to improve here?
+> 
+> If no, I will give a look and see what I could do, but surely needs your
+> suggestion.
 
-Even if this may work for your particular use case, in general it does not.
+... (would be) Happy to help but I dont have so much bandwidth as of now...I will
+send you in reply to this an half-baked/UNTESTED patch to express what I
+meant....
 
-We simply can't defer to build the topology (parent/child-domains)
-until there is a device getting attached to some part of it.
-
->
-> So, while I don't really understand the reason that every PM domain
-> provider has to handle this individually, I've given that a try (see
-> below.)
->
-
-See above.
-
-> > Moreover, we also need a corresponding "cleanup" helper function to
-> > remove the child-domain (subdomain) correctly, similar to
-> > of_genpd_remove_subdomain().
->
-> Yes, I'll handle that better once I get through this RFC phase to make
-> sure I'm on th right path.
-
-Okay.
-
->
-> OK, so below[1] is a shot at just adding helpers to the PM domain core.  I
-> will then uses these from the SCMI PM domains ->attach_dev() and
-> ->detatch_dev callbacks.
-
-No, not during ->attach|detach_dev(), but during ->probe() of the SCMI
-PM domain, immediately after the genpd OF providers has been added.
-
-See more comments below.
-
->
-> If you think this is better, I'll send a v4 tomorrow.
->
-> Kevin
->
-> [1] NOTE: this is based on v6.12 because that's where I have a functioning BSP
-> for this SoC.  If you're OK with this, I'll rebase to v6.15 and submit upstream.
->
-> From 12a3e5669dc18f4a9fdf9f25398cba4245135a43 Mon Sep 17 00:00:00 2001
-> From: Kevin Hilman <khilman@baylibre.com>
-> Date: Fri, 13 Jun 2025 13:49:45 -0700
-> Subject: [PATCH 2/3] pmdomain: core: add support for subdomains via
->  power-domain-map
->
-> ---
->  drivers/pmdomain/core.c   | 60 +++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h | 11 +++++++
->  2 files changed, 71 insertions(+)
->
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 88819659df83..a0dc60d4160d 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -3100,6 +3100,66 @@ struct device *genpd_dev_pm_attach_by_name(struct device *dev, const char *name)
->         return genpd_dev_pm_attach_by_id(dev, index);
->  }
->
-> +/**
-> + * genpd_dev_pm_attach_subdomain - Associate a PM domain with its parent domain
-> + * @domain: The PM domain to lookup whether it has any parent
-> + * @dev: The device being attached to the PM domain.
-> + *
-> + * Check if @domain has a power-domain-map.  If present, use that map
-> + * to determine the parent PM domain, and attach @domain as a
-> + * subdomain to the parent PM domain.
-> + *
-> + * Intended to called from a PM domain provider's ->attach_dev()
-> + * callback, where &gpd_list_lock will already be held by the genpd
-> + * add_device() path.
-> + */
-> +struct generic_pm_domain *
-> +genpd_dev_pm_attach_subdomain(struct generic_pm_domain *domain,
-> +                             struct device *dev)
-
-A couple of comments below:
-
-*) I think the function-name should have a prefix "of_genpd_*, to be
-consistent with other names. Maye "of_genpd_add_subdomain_by_map"
-would be a better name?
-
-*) We need to decide if we want to add one child-domain (subdomain)
-per function call - or whether we should walk the entire nexus-map and
-hook up all child-domains to its parent in one go. I tend to like the
-second one better, but I'm not really sure what would work best here.
-
-No matter what, I think the in-parameters to the function should be of
-type "struct of_phandle_args * or maybe struct device_node *", similar
-to how of_genpd_add_subdomain() works.
-
-> +{
-> +       struct of_phandle_args parent_args;
-> +       struct generic_pm_domain *parent_pd = NULL;
-> +       int ret;
-> +
-> +       /*
-> +        * Check for power-domain-map, which implies the primary
-> +        * power-doamin is a subdomain of the parent found in the map.
-> +        */
-> +       ret = of_parse_phandle_with_args_map(dev->of_node, "power-domains",
-> +                                            "power-domain", 0, &parent_args);
-> +       if (!ret && parent_args.np) {
-> +               parent_pd = genpd_get_from_provider(&parent_args);
-> +               of_node_put(parent_args.np);
-> +
-> +               ret = genpd_add_subdomain(parent_pd, domain);
-> +               if (!ret) {
-> +                       dev_dbg(dev, "adding PM domain %s as subdomain of %s\n",
-> +                               domain->name, parent_pd->name);
-> +                       return parent_pd;
-> +               }
-> +       }
-> +
-> +       return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(genpd_dev_pm_attach_subdomain);
-> +
-> +/**
-> + * genpd_dev_pm_detach_subdomain - Detatch a PM domain from its parent domain
-> + * @domain: The PM subdomain to detach
-> + * @parent: The parent PM domain
-> + * @dev: The device being attached to the PM subdomain.
-> + *
-> + * Remove @domain from @parent.
-> + * Intended to cleanup after genpd_dev_pm_attach_subdomain()
-> + */
-> +int genpd_dev_pm_detach_subdomain(struct generic_pm_domain *domain,
-> +                                 struct generic_pm_domain *parent,
-> +                                 struct device *dev)
-> +{
-> +       return pm_genpd_remove_subdomain(parent, domain);
-> +}
-> +EXPORT_SYMBOL_GPL(genpd_dev_pm_detach_subdomain);
-> +
->  static const struct of_device_id idle_state_match[] = {
->         { .compatible = "domain-idle-state", },
->         { }
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index cf4b11be3709..5d7eb3ae59dd 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -410,6 +410,11 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
->                                          unsigned int index);
->  struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->                                            const char *name);
-> +struct generic_pm_domain *genpd_dev_pm_attach_subdomain(struct generic_pm_domain *domain,
-> +                                                       struct device *dev);
-> +int genpd_dev_pm_detach_subdomain(struct generic_pm_domain *domain,
-> +                                 struct generic_pm_domain *parent,
-> +                                 struct device *dev);
->  #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
->  static inline int of_genpd_add_provider_simple(struct device_node *np,
->                                         struct generic_pm_domain *genpd)
-> @@ -466,6 +471,12 @@ static inline struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->         return NULL;
->  }
->
-> +static inline
-> +struct generic_pm_domain *genpd_dev_pm_attach_subdomain(struct generic_pm_domain *domain,
-> +                                                       struct device *dev)
-> +{
-> +       return NULL;
-> +}
->  static inline
->  struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+> 
+> >
+> >> >
+> >> >> I wonder if it makes sense to quiesce the warnings from the core if the
+> >> >> platform doesn't support notifications.
+> >> 
+> >> If not quiesce, we might need to make it clear from the error message,
+> >> saying whether X events are supported for Y protocols or not, not just
+> >> a "Failed to ENABLE events for key.."
+> >> 
+> >
+> >Yes that was a very early and primitve errors message of mine...my bad :D
+> 
+> How about this?
+> -------------------------------
+> diff --git a/drivers/firmware/arm_scmi/notify.c b/drivers/firmware/arm_scmi/notify.c
+> index e160ecb22948..1e5a34dc36ab 100644
+> --- a/drivers/firmware/arm_scmi/notify.c
+> +++ b/drivers/firmware/arm_scmi/notify.c
+> @@ -1184,6 +1184,11 @@ static inline int __scmi_enable_evt(struct scmi_registered_event *r_evt,
+>  							 src_id);
+>  				if (!ret)
+>  					refcount_set(sid, 1);
+> +				else
+> +					dev_err(r_evt->proto->ph->dev,
+> +						"Enable Notification failed - proto_id:%d  evt_id:%d  src_id:%d, %pe",
+> +						r_evt->proto->id, r_evt->evt->id,
+> +						src_id, ret);
+>  			} else {
+>  				refcount_inc(sid);
+>  			}
+> @@ -1313,12 +1318,7 @@ static void scmi_put_active_handler(struct scmi_notify_instance *ni,
+>   */
+>  static int scmi_event_handler_enable_events(struct scmi_event_handler *hndl)
 >  {
-> --
-> 2.49.0
->
->
+> -	if (scmi_enable_events(hndl)) {
+> -		pr_err("Failed to ENABLE events for key:%X !\n", hndl->key);
+> -		return -EINVAL;
+> -	}
+> -
+> -	return 0;
+> +	return scmi_enable_events(hndl)
+>  }
 
-Kind regards
-Uffe
+I was thinking more about something to cut way before the notifier
+registration process...
+
+I'll send you something I played with last week..
+
+Thanks,
+Cristian
 
