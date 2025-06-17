@@ -1,83 +1,167 @@
-Return-Path: <linux-pm+bounces-28864-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28865-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0493ADBF3B
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 04:33:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54A4EADBF5C
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 04:50:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE8CF3ADA3C
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 02:32:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B38F1893A08
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 02:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04372356C0;
-	Tue, 17 Jun 2025 02:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BE61FECAB;
+	Tue, 17 Jun 2025 02:49:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA34335C7;
-	Tue, 17 Jun 2025 02:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1CD238166
+	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 02:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750127590; cv=none; b=S3k9qQLqeT8zOLFJiAuWApAluoo2B/qUIushiZ+3QoimxEBgOQ6hy6hiMqtyRsuOut0ex4YpNiL4dUjEZ38voEVGLlXG0nYQXooM7nLTDjXr/Z4BfemQ7TFEBgw2eEd5It8ljhq4o+aYvqJw9QPFKI1UMI5Hm90IUP+MxoNJ5u4=
+	t=1750128593; cv=none; b=FRYilctz01TYl0AGERbQ4sSTYaXY4QkREFhvIzkpiV9KPR9BNY9xPcbpx0NNkmRwytAb7VfRaZwCzfjSnFrXCumUTohysVI8s1G2uqmmrwOR0lS0J64eUS+HSt7Ps062xR72Z+J5z9Pas7R6jhlCsAKr6T/Lw3T+b/oUkfV+BNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750127590; c=relaxed/simple;
-	bh=icJQ57/lLtsIkqFlgrS3T4na4ZU3WMX2Sk5sOLAXQZg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Sb/Ay5tbYS0Y2nSNI0vmXhNOVygDvepFBq6mXnhGK51Fk0EAxCtxSXXcMSiKT/+qAnU2QZKusgERyH7vrx7GPzu+ToNIz23yuXLKzZn8RAnF8I/JCFwbj6EeogOnbytnBen7NgnbCWox8YOaiOWdNxofo7jWZbmXjoXC4l88+tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4bLrXj37CKz2QVKM;
-	Tue, 17 Jun 2025 10:33:57 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id BDBC914011F;
-	Tue, 17 Jun 2025 10:33:03 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 17 Jun
- 2025 10:33:03 +0800
-Message-ID: <9c82abca-0772-444c-8122-59a953c83984@huawei.com>
-Date: Tue, 17 Jun 2025 10:33:02 +0800
+	s=arc-20240116; t=1750128593; c=relaxed/simple;
+	bh=K9lXokcDIidIfU2X9TvzGwhPT0QxzSuQxY/oq7FOCY8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=J3w7uG+q8MO7z08ZvF6nTzVGnO6z6lvAJJGFPWjXBQJu+AtspcTE2V7HuP6DbgagtG98LWMajQC1tEy0dAyH4PY85ep9mI2dEp5HDcMv22cCxPRQDfGCQNR7dlNgFdErD2QZ2V4FYICHN59w9Uc5aVLdAmiS6WFrM0+0g8UpCW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn; spf=pass smtp.mailfrom=phytium.com.cn; arc=none smtp.client-ip=129.150.39.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytium.com.cn
+Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
+	by hzbj-icmmx-7 (Coremail) with SMTP id AQAAfwCnrra+11Bo81s1Aw--.459S2;
+	Tue, 17 Jun 2025 10:49:34 +0800 (CST)
+Received: from huangshaobo2075$phytium.com.cn ( [218.76.62.144] ) by
+ ajax-webmail-mail (Coremail) ; Tue, 17 Jun 2025 10:49:13 +0800 (GMT+08:00)
+Date: Tue, 17 Jun 2025 10:49:13 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: =?UTF-8?B?6buE5bCR5rOi?= <huangshaobo2075@phytium.com.cn>
+To: linux-pm@vger.kernel.org
+Cc: rafael@kernel.org, lenb@kernel.org, deepthi@linux.vnet.ibm.com,
+	khilman@kernel.org
+Subject: Re: Subject: [cpuidle] Limitation: cannot model asymmetric C-state
+ latencies on big.LITTLE SoCs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
+ 20250327(ab59d9cc) Copyright (c) 2002-2025 www.mailtech.cn
+ mispb-8dfce572-2f24-404d-b59d-0dd2e304114c-icoremail.cn
+In-Reply-To: <CAJZ5v0ix-QWgpq_FhnKhSWN5BtBmU_fSWSMJFkr8H1OUm6qJKw@mail.gmail.com>
+References: <5d7534c.5492.1977796c43a.Coremail.huangshaobo2075@phytium.com.cn>
+ <CAJZ5v0ix-QWgpq_FhnKhSWN5BtBmU_fSWSMJFkr8H1OUm6qJKw@mail.gmail.com>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: I/78z2Zvb3Rlcl90eHQ9NDc0MjozODM=
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] cpufreq: CPPC: Some optimizations for cppc_cpufreq.c.
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <robert.moore@intel.com>,
-	<lenb@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>
-References: <20250526113057.3086513-1-zhenglifeng1@huawei.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20250526113057.3086513-1-zhenglifeng1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Message-ID: <7205f65a.55ff.1977bca6dcd.Coremail.huangshaobo2075@phytium.com.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:AQAAfwCnPCaq11BoSftVAA--.4663W
+X-CM-SenderInfo: xkxd0wpvkd0uzrsqlko6sk53xlxphulrpou0/1tbiAQAECmhQdIYB
+	WwABse
+Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=huangshaob
+	o2075@phytium.com.cn;
+X-Coremail-Antispam: 1Uk129KBjvJXoW3KFW3Cr1rJFWfJw4kWw4fGrg_yoWkZFyDp3
+	WxJ348Aw1UK3W7X3yfWw18Zry5C3yUGr47Jw1xt3yqywnxJrn0grnxKFWxJ3WjgFy5trWD
+	t3W7Z390qr1jqrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+	DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
+	UUUUU
 
-Gentle ping.
-
-On 2025/5/26 19:30, Lifeng Zheng wrote:
-> This patch series makes some minor optimizations for cppc_cpufreq.c to
-> makes codes cleaner.
-> 
-> Lifeng Zheng (3):
->   cpufreq: CPPC: Remove cpu_data_list
->   cpufreq: CPPC: Return void in populate_efficiency_class()
->   cpufreq: CPPC: Remove forward declaration of
->     cppc_cpufreq_register_em()
-> 
->  drivers/cpufreq/cppc_cpufreq.c | 59 +++++++++-------------------------
->  include/acpi/cppc_acpi.h       |  1 -
->  2 files changed, 15 insertions(+), 45 deletions(-)
-> 
+PiBPbiBNb24sIEp1biAxNiwgMjAyNSBhdCA5OjE04oCvQU0g6buE5bCR5rOiIDxodWFuZ3NoYW9i
+bzIwNzVAcGh5dGl1bS5jb20uY24+IHdyb3RlOgo+ID4KPiA+IEZyb206IGh1YW5nc2hhb2JvMjA3
+NUBwaHl0aXVtLmNvbS5jbgo+ID4gVG86IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZwo+ID4gQ2M6
+IHJhZmFlbEBrZXJuZWwub3JnLCBsZW5iQGtlcm5lbC5vcmcsIGRlZXB0aGlAbGludXgudm5ldC5p
+Ym0uY29tLCBraGlsbWFuQGtlcm5lbC5vcmcKPiA+IFN1YmplY3Q6IFtjcHVpZGxlXSBMaW1pdGF0
+aW9uOiBjYW5ub3QgbW9kZWwgYXN5bW1ldHJpYyBDLXN0YXRlIGxhdGVuY2llcyBvbiBiaWcuTElU
+VExFIFNvQ3MKPiA+Cj4gPiBIaSwKPiA+Cj4gPiBJJ20gd29ya2luZyBvbiBhbiBBUk02NCBwbGF0
+Zm9ybSB3aXRoIGEgYmlnLkxJVFRMRSBDUFUgdG9wb2xvZ3kuIFdoaWxlIHBhcnNpbmcgdGhlIEFD
+UEkgdGFibGVzLAo+ID4gSSBub3RpY2VkIHRoYXQgdGhlIEMtc3RhdGUgbGF0ZW5jeSBhbmQgcmVz
+aWRlbmN5IHZhbHVlcyBkaWZmZXIgYmV0d2VlbiB0aGUgYmlnIGFuZCBMSVRUTEUgY29yZXMsCj4g
+PiBhcyBleHBlY3RlZC4KPiA+Cj4gPiBIb3dldmVyLCBJIGZvdW5kIHRoYXQgdGhlIGN1cnJlbnQg
+Y3B1aWRsZSBmcmFtZXdvcmsgb25seSBhbGxvd3MgYSBzaW5nbGUgZ2xvYmFsIGBjcHVpZGxlX2Ry
+aXZlcmAsCj4gPiBhbmQgYWxsIENQVXMgc2hhcmUgdGhlIHNhbWUgYGNwdWlkbGVfZHJpdmVyLT5z
+dGF0ZXNbXWAgYXJyYXkuCj4gCj4gTm90IHJlYWxseSwgc2VlIGJsX2lkbGVfaW5pdCgpIGluIHBh
+cnRpY3VsYXIuCj4gCj4gSG93ZXZlciwgb24gc3lzdGVtcyB3aXRoIEFDUEkgb24gd2hpY2ggX0NT
+VCBpcyB1c2VkIGZvciBpZGxlIHN0YXRlCj4gZGVzY3JpcHRpb24sIHRoZXJlJ3Mgb25seSBvbmUg
+Y3B1aWRsZSBkcml2ZXIgYW5kIG9uZSB0YWJsZSBvZiBpZGxlCj4gc3RhdGVzIGZvciBhbGwgQ1BV
+cy4KPiAKPiA+IEFzIGEgcmVzdWx0LCBvbmx5IHRoZSBmaXJzdCBjb3JlIHRvCj4gPiBpbml0aWFs
+aXplICh1c3VhbGx5IGEgTElUVExFIGNvcmUpIHNldHMgdXAgdGhlIEMtc3RhdGVzLCBhbmQgdGhl
+IHNhbWUgdmFsdWVzIGFyZSBhcHBsaWVkIHRvIGFsbCBjb3JlcywKPiA+IGluY2x1ZGluZyB0aGUg
+YmlnIG9uZXMuIFRoaXMgbGVhZHMgdG8gaW5jb3JyZWN0IGlkbGUgYmVoYXZpb3Igb24gYXN5bW1l
+dHJpYyBwbGF0Zm9ybXMuCj4gPgo+ID4gSSBiZWxpZXZlIHRoaXMgYmVoYXZpb3Igd2FzIGludHJv
+ZHVjZWQgYnkgY29tbWl0IDQ2YmNmYWQ3YTgxOQo+ID4gKCJjcHVpZGxlOiBTaW5nbGUvR2xvYmFs
+IHJlZ2lzdHJhdGlvbiBvZiBpZGxlIHN0YXRlcyIpLgo+ID4KPiA+IEkgdW5kZXJzdGFuZCB0aGlz
+IGRlc2lnbiB3YXMgaW50cm9kdWNlZCBpbiAyMDExIHRvIHNpbXBsaWZ5IGNwdWlkbGUgYW5kIHJl
+ZHVjZSBtZW1vcnkgdXNhZ2U6Cj4gPiBodHRwczovL2xrbWwub3JnL2xrbWwvMjAxMS80LzI1Lzgz
+Cj4gPgo+ID4gSG93ZXZlciwgb24gdG9kYXkncyBoZXRlcm9nZW5lb3VzIFNvQ3MsIHRoaXMgZ2xv
+YmFsIG1vZGVsIG5vIGxvbmdlciBzdWZmaWNlcy4gRm9yIHByb3BlciBtb2RlbGluZywKPiA+IHdl
+IG5lZWQgc3VwcG9ydCBmb3IgcGVyLWNsdXN0ZXIgb3IgcGVyLWNvcmUgY3B1aWRsZSBkcml2ZXJz
+LCBvciBhdCBsZWFzdCBzb21lIG1lY2hhbmlzbSB0byBhbGxvdwo+ID4gZGlmZmVyZW50IGlkbGUg
+c3RhdGUgcGFyYW1ldGVycyBwZXIgQ1BVLgo+ID4KPiA+IEhhcyB0aGVyZSBiZWVuIGFueSBkaXNj
+dXNzaW9uIG9yIHdvcmsgdG93YXJkIGxpZnRpbmcgdGhpcyBsaW1pdGF0aW9uPwo+IAo+IE5vLCB0
+aGVyZSdzIG5vdCBiZWVuIGFueSBkaXNjdXNzaW9uIG9uIHRoaXMgc28gZmFyLCBidXQgd2h5IGRv
+ZXMgdGhlCj4gcGxhdGZvcm0gZmlybXdhcmUgb24gdGhpcyBzeXN0ZW0gdXNlIF9DU1QgZm9yIGlk
+bGUgc3RhdGUgZGVzY3JpcHRpb24/Cj4gX0xQSSB3b3VsZCBiZSBhIGJldHRlciBvcHRpb24gQUZB
+SUNTLgoKRnJvbTogaHVhbmdzaGFvYm8yMDc1QHBoeXRpdW0uY29tLmNuClRvOiBsaW51eC1wbUB2
+Z2VyLmtlcm5lbC5vcmcKQ2M6IHJhZmFlbEBrZXJuZWwub3JnLCBsZW5iQGtlcm5lbC5vcmcsIGRl
+ZXB0aGlAbGludXgudm5ldC5pYm0uY29tLCBraGlsbWFuQGtlcm5lbC5vcmcKU3ViamVjdDogW2Nw
+dWlkbGVdW2ZvbGxvdy11cF0gX0xQSSBwYXRoIGFsc28gYXNzdW1lcyBzaGFyZWQgY3B1aWRsZV9k
+cml2ZXIsIGJyZWFrcyBvbiBiaWcuTElUVExFCgpIaSBhbGwsCgpUaGFua3MgUmFmYWVsIGZvciB0
+aGUgcXVpY2sgZmVlZGJhY2sgb24gbXkgZWFybGllciBxdWVzdGlvbiByZWdhcmRpbmcgYXN5bW1l
+dHJpYyBpZGxlIHN0YXRlcyBvbiBiaWcuTElUVExFIFNvQ3MuCgpBcyBhIGZvbGxvdy11cCwgYWZ0
+ZXIgcmV2aWV3aW5nIHRoZSBpbXBsZW1lbnRhdGlvbiBmdXJ0aGVyLCBJIG5vdGljZWQgdGhhdCBg
+YWNwaV9wcm9jZXNzb3Jfc2V0dXBfbHBpX3N0YXRlcygpYCBpcyBvbmx5IGNhbGxlZCBmcm9tIHdp
+dGhpbgpgYWNwaV9wcm9jZXNzb3Jfc2V0dXBfY3B1aWRsZV9zdGF0ZXMoKWAsIHdoaWNoIGlzIGl0
+c2VsZiBvbmx5IGludm9rZWQgb25jZSDigJQgZHVyaW5nIGluaXRpYWxpemF0aW9uIG9mIHRoZSBm
+aXJzdCBDUFUuCgpTcGVjaWZpY2FsbHk6CgotIFRoZSBrZXJuZWwgdXNlcyBhIHNoYXJlZCBnbG9i
+YWwgY3B1aWRsZV9kcml2ZXIgaW5zdGFuY2UgKGBhY3BpX2lkbGVfZHJpdmVyYCksIHdoaWNoIGlz
+IG9ubHkgaW5pdGlhbGl6ZWQgb25jZSBpbiBgYWNwaV9wcm9jZXNzb3JfcG93ZXJfaW5pdCgpYDoK
+CiAgc3RhdGljIGludCBhY3BpX3Byb2Nlc3Nvcl9yZWdpc3RlcmVkOwogIC4uLgogIGlmICghYWNw
+aV9wcm9jZXNzb3JfcmVnaXN0ZXJlZCkgewogICAgICBhY3BpX3Byb2Nlc3Nvcl9zZXR1cF9jcHVp
+ZGxlX3N0YXRlcyhwcik7CiAgICAgIGNwdWlkbGVfcmVnaXN0ZXJfZHJpdmVyKCZhY3BpX2lkbGVf
+ZHJpdmVyKTsKICB9CgotIFN1YnNlcXVlbnQgQ1BVcyBvbmx5IHJlZ2lzdGVyIHRoZWlyIGNwdWlk
+bGVfZGV2aWNlIHdpdGhvdXQgdXBkYXRpbmcgdGhlIHNoYXJlZCBkcml2ZXIncyBzdGF0ZXNbXSBh
+cnJheS4KCi0gRXZlbiBpbiBgYWNwaV9wcm9jZXNzb3JfcG93ZXJfc3RhdGVfaGFzX2NoYW5nZWQo
+KWAsIG9ubHkgYHByLT5pZCA9PSAwYCB0cmlnZ2VycyBgYWNwaV9wcm9jZXNzb3Jfc2V0dXBfY3B1
+aWRsZV9zdGF0ZXMoKWAsIG1lYW5pbmcgdGhlIGdsb2JhbAogIHN0YXRlIGFycmF5IGlzIHBvcHVs
+YXRlZCBiYXNlZCBvbmx5IG9uIENQVSAwLgoKICAgIGludCBhY3BpX3Byb2Nlc3Nvcl9wb3dlcl9z
+dGF0ZV9oYXNfY2hhbmdlZChzdHJ1Y3QgYWNwaV9wcm9jZXNzb3IgKnByKSB7CiAgICAgICAgLi4u
+CiAgICAgICAgaWYgKHByLT5pZCA9PSAwICYmIGNwdWlkbGVfZ2V0X2RyaXZlcigpID09ICZhY3Bp
+X2lkbGVfZHJpdmVyKSB7CiAgICAgICAgICAgIC4uLgogICAgICAgICAgICBhY3BpX3Byb2Nlc3Nv
+cl9zZXR1cF9jcHVpZGxlX3N0YXRlcyhwcik7CiAgICAgICAgICAgIC4uLgogICAgICAgIH0KICAg
+IH0KClRoZSBBQ1BJIF9MUEkgc3BlY2lmaWNhdGlvbiBhbGxvd3MgZmlybXdhcmUgdG8gZGVzY3Jp
+YmUgcGVyLUNQVSBvciBwZXItY2x1c3RlciBpZGxlIHN0YXRlIGNoYXJhY3RlcmlzdGljcyAobGF0
+ZW5jeSwgcmVzaWRlbmN5LCBldGMuKS4gSG93ZXZlciwKdGhlIGN1cnJlbnQgaW1wbGVtZW50YXRp
+b24gZWZmZWN0aXZlbHkgaWdub3JlcyB0aGlzIGZsZXhpYmlsaXR5IGFuZCBhcHBsaWVzIHRoZSBm
+aXJzdCBDUFXigJlzIHN0YXRlcyBnbG9iYWxseS4KClRoaXMgYXBwZWFycyB0byBiZSBhIGRlc2ln
+biBsaW1pdGF0aW9uIHRoYXQgcHJldmVudHMgYWNjdXJhdGUgbW9kZWxpbmcgb2YgYXN5bW1ldHJp
+YyBDUFUgdG9wb2xvZ2llcyBsaWtlIGJpZy5MSVRUTEUuIEFzIGEgcmVzdWx0LCBpZGxlIHN0YXRl
+cyBtYXkKbm90IHJlZmxlY3QgdGhlIGNvcnJlY3QgY2hhcmFjdGVyaXN0aWNzIGZvciBhbGwgY29y
+ZXMsIGxlYWRpbmcgdG8gc3Vib3B0aW1hbCBiZWhhdmlvci4KCkNvdWxkIHlvdSBwbGVhc2UgY29u
+ZmlybSB3aGV0aGVyIHRoaXMgYmVoYXZpb3IgaXMgYW4gaW50ZW50aW9uYWwgY2Fycnktb3ZlciBm
+cm9tIHRoZSBsZWdhY3kgX0NTVC1iYXNlZCBpbXBsZW1lbnRhdGlvbiwgb3Igc2ltcGx5IGFuIGFy
+ZWEgdGhhdCBoYXNuJ3QKYmVlbiBmdWxseSBleHRlbmRlZCB0byBzdXBwb3J0IF9MUEkncyBwZXIt
+Q1BVIGZsZXhpYmlsaXR5PwoKV2UgYXJlIGFjdGl2ZWx5IHVzaW5nIHRoZSBBQ1BJLWJhc2VkIF9M
+UEkgbWV0aG9kIG9uIGFzeW1tZXRyaWMgQVJNNjQgcGxhdGZvcm1zLCBzbyB0aGlzIGJlaGF2aW9y
+IGlzIGRpcmVjdGx5IGltcGFjdGluZyB1cy4gSeKAmWQgYmUgaGFwcHkgdG8gaGVscCBpbnZlc3Rp
+Z2F0ZQphIGZpeCBpZiB0aGUgY3VycmVudCBkZXNpZ24gaXMgbm90IGludGVudGlvbmFsLgoKQWRk
+aXRpb25hbGx5LCBJ4oCZdmUgcmV2aWV3ZWQgdGhlIGBibF9pZGxlX2luaXQoKWAgaW1wbGVtZW50
+YXRpb24gaW4gdGhlIGJpZy5MSVRUTEUgZGV2aWNlLXRyZWUtYmFzZWQgZHJpdmVyIGFuZCBjb25m
+aXJtZWQgaXQgZG9lcyBub3Qgc3VwcG9ydCBBQ1BJLgpTaW5jZSBvdXIgcGxhdGZvcm0gcmVsaWVz
+IG9uIF9MUEkgdmlhIEFDUEksIHRoaXMgbGltaXRhdGlvbiBpcyBwYXJ0aWN1bGFybHkgcmVsZXZh
+bnQgaW4gb3VyIHVzZSBjYXNlLgoKVGhhbmtzIGZvciB5b3VyIHRpbWUgYW5kIGluc2lnaHRzIQoK
+QmVzdCByZWdhcmRzLApTaGFvYm8gSHVhbmcKDQoNCuS/oeaBr+WuieWFqOWjsOaYju+8muacrOmC
+ruS7tuWMheWQq+S/oeaBr+W9kuWPkeS7tuS6uuaJgOWcqOe7hOe7h+aJgOaciSzlj5Hku7bkurrm
+iYDlnKjnu4Tnu4flr7nor6Xpgq7ku7bmi6XmnInmiYDmnInmnYPliKnjgILor7fmjqXmlLbogIXm
+s6jmhI/kv53lr4Ys5pyq57uP5Y+R5Lu25Lq65Lmm6Z2i6K645Y+vLOS4jeW+l+WQkeS7u+S9lees
+rOS4ieaWuee7hOe7h+WSjOS4quS6uumAj+mcsuacrOmCruS7tuaJgOWQq+S/oeaBr+OAgg0KSW5m
+b3JtYXRpb24gU2VjdXJpdHkgTm90aWNlOiBUaGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGluIHRo
+aXMgbWFpbCBpcyBzb2xlbHkgcHJvcGVydHkgb2YgdGhlIHNlbmRlcidzIG9yZ2FuaXphdGlvbi5U
+aGlzIG1haWwgY29tbXVuaWNhdGlvbiBpcyBjb25maWRlbnRpYWwuUmVjaXBpZW50cyBuYW1lZCBh
+Ym92ZSBhcmUgb2JsaWdhdGVkIHRvIG1haW50YWluIHNlY3JlY3kgYW5kIGFyZSBub3QgcGVybWl0
+dGVkIHRvIGRpc2Nsb3NlIHRoZSBjb250ZW50cyBvZiB0aGlzIGNvbW11bmljYXRpb24gdG8gb3Ro
+ZXJzLg==
 
 
