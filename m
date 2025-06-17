@@ -1,230 +1,117 @@
-Return-Path: <linux-pm+bounces-28900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28901-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0DCADCAF2
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:21:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 808A1ADCBE2
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EDF83B10A1
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 12:20:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B07EB18980CB
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 12:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED61A2DBF50;
-	Tue, 17 Jun 2025 12:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761042DF3E4;
+	Tue, 17 Jun 2025 12:49:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="irJWvnN0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FL70Voxa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814E92D9EF7;
-	Tue, 17 Jun 2025 12:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998AF2E06CF;
+	Tue, 17 Jun 2025 12:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750162830; cv=none; b=Kpk5JauR3da4ewLS69Hx6ZIUcs64TbfAfVVM3uQZ8LbfZR3xPcGhwzhiumMHpUY/Os0G3EolIVPtuudTVDASr8UgwZ/SHR5CG2qE+se4dTCtpd5hDlpXA14Sae13H+clIQJKBLKbSCOUlcUKFwtEgh2sEQp8V4Jwl8swb8Su7pc=
+	t=1750164557; cv=none; b=HsCQnPm0shSrixCkuVB2gYKQoR1qxMsxPe/QRcBZg8dZy4R/k4bgnyN/w8lI2gJ4TIrhYpE3VIUm+sXWPFE7Kp8ES7Z8e3330vkbI+45SFz/PYxpVQdAyN2q2/54rl9zQXa5zzhgYrN8Yf9GAsDN+TE6sYPoB3Y+k5hgByrMZsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750162830; c=relaxed/simple;
-	bh=wtWiIp2XSEFt4Lr9zWcy+XIyllCRlcFGp9anAk7KBfY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NumDdlMMbdAA8jg71MkhM8n6KL8DUcM8XdWQXx/35waLVtAqwhrKXXbBp/BFiLGzmLxc7GT58gL/xjd+UBf/NtnCQRgGfDLIMrT99JlPluvSMMlKfUh+9N8YvIsW9nWmLXljlMU1cXDm/XytSkkNPXtonf903lk2eEsAXSCW+s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=irJWvnN0; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1750164557; c=relaxed/simple;
+	bh=U98R0X6/8fnK9rCzgloNwlJHN8hx6yL/+Cb0wkk0l20=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BUN+/Gr+e2AgvDGHs7T2Q2TSuJJDlrDK2/mpIOXV47+dQDfmq1PW8jj5PJKIkdnJeB6VftWRPDIiSUnZUhUMKGpwMGTyO+Y39SVgAuxTrLBZ70NWE8KKGqVhQ/rm6BYXuL2gWDISSzenyY4jYRNy/kOZx4YaILufamHQ/t5xCUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FL70Voxa; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750162829; x=1781698829;
-  h=date:from:to:cc:subject:message-id;
-  bh=wtWiIp2XSEFt4Lr9zWcy+XIyllCRlcFGp9anAk7KBfY=;
-  b=irJWvnN0KgcvZEeyx7rZ4r+rj44adpBaDU7biFi6M0WpizpLbU11jdAt
-   ACti1j/eSrvWcTO1kMOINGbW7Kj08BvtOB6u8MZK22s17DUMu7tWdGGYP
-   vJrxANS7zB7BQxmJGLg9wAlhUy5pfyLhg+vqTCGTclskf12f+Qk1U3cfu
-   aV8dWHEyxfY+F8gFDxOsPl8au9HbdYh7LhJ6IiTKMXBzIEABxXvdgDWst
-   IlJgk4cVXUJWuGSh6Uiah0TgbgKkji4k6U3FmdolHsjRx46HVckOsIlWF
-   v2BRJtqcot+xv326Bog1zRTCZUGV+5PBh0Twt+dher89H0mfdQQj4+HZg
+  t=1750164555; x=1781700555;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=U98R0X6/8fnK9rCzgloNwlJHN8hx6yL/+Cb0wkk0l20=;
+  b=FL70Voxa/AyjhcIohx79RAgggRl1J46iNAp/95s9zYq+RL9aFo9ALBOg
+   y0CiDqTWhtbnxJ39BxBm5WLVL6mPYu6ydmEamElSe3NLlt5ygPztYf6OP
+   RYe9Z18KMAkDt7LgF8yPSXVykIKMLf/zJgvJTjckYhxMByyMCZ5i3yRf5
+   cYuEYaaZEDyAkxuCKBNvPU1V2EiaJQNg24hfTWfprgN/CYxRXaUrekT6t
+   y7sstZvA+W83ZSIKXcEqTiROhqu65289cEWh5hhUr3lrgcyIioP33B1UN
+   xqmYumwvxfoqO7cHANXtYfoZcrustpS5mnfuiIIl6ynytpsXxSg9oHai0
    Q==;
-X-CSE-ConnectionGUID: vIizJRtnQFCpDjtlI15jLA==
-X-CSE-MsgGUID: RcEjOyBgQW2/N6kuciZepg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11467"; a="52431183"
+X-CSE-ConnectionGUID: fIqSIYSqQqizraJ63ppehA==
+X-CSE-MsgGUID: Qtx4LbBXS+q6GPNwSTuzvQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11467"; a="52254986"
 X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
-   d="scan'208";a="52431183"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 05:20:28 -0700
-X-CSE-ConnectionGUID: gNmvtlRYQeOSshhf1eRxrQ==
-X-CSE-MsgGUID: 96sR2obfTge6Xuie+oLklg==
+   d="scan'208";a="52254986"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 05:49:06 -0700
+X-CSE-ConnectionGUID: oWDfXEy6SmOiFsj81lim1g==
+X-CSE-MsgGUID: HKltE5ioQEaY/VjTQyX9IA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
-   d="scan'208";a="148750700"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 17 Jun 2025 05:20:26 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uRVId-000FxD-2N;
-	Tue, 17 Jun 2025 12:20:23 +0000
-Date: Tue, 17 Jun 2025 20:19:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 238bc315167568e06d1cc19ef17b9d611ba7859f
-Message-ID: <202506172025.J81Zppig-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="153661271"
+Received: from anmitta2-mobl4.gar.corp.intel.com (HELO rzhang1-mobl7.intel.com) ([10.247.119.11])
+  by fmviesa005.fm.intel.com with ESMTP; 17 Jun 2025 05:49:03 -0700
+From: Zhang Rui <rui.zhang@intel.com>
+To: rafael.j.wysocki@intel.com,
+	lenb@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH 1/2] tools/power turbostat: Fix bogus SysWatt for forked program
+Date: Tue, 17 Jun 2025 20:48:59 +0800
+Message-ID: <20250617124900.186591-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 238bc315167568e06d1cc19ef17b9d611ba7859f  Merge branch 'thermal-intel' into bleeding-edge
+Similar to delta_cpu(), delta_platform() is called in turbostat main
+loop. This ensures accurate SysWatt readings in periodic monitoring mode
+$ sudo turbostat -S -q --show power -i 1
+CoreTmp	PkgTmp	PkgWatt	CorWatt	GFXWatt	RAMWatt	PKG_%	RAM_%	SysWatt
+60	61	6.21	1.13	0.16	0.00	0.00	0.00	13.07
+58	61	6.00	1.07	0.18	0.00	0.00	0.00	12.75
+58	61	5.74	1.05	0.17	0.00	0.00	0.00	12.22
+58	60	6.27	1.11	0.24	0.00	0.00	0.00	13.55
 
-elapsed time: 1379m
+However, delta_platform() is missing for forked program and causes bogus
+SysWatt reporting,
+$ sudo turbostat -S -q --show power sleep 1
+1.004736 sec
+CoreTmp	PkgTmp	PkgWatt	CorWatt	GFXWatt	RAMWatt	PKG_%	RAM_%	SysWatt
+57	58	6.05	1.02	0.16	0.00	0.00	0.00	0.03
 
-configs tested: 136
-configs skipped: 6
+Add missing delta_platform() for forked program.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fixes: e5f687b89bc2 ("tools/power turbostat: Add RAPL psys as a built-in counter")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20250616    gcc-15.1.0
-arc                   randconfig-002-20250616    gcc-15.1.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-15.1.0
-arm                         at91_dt_defconfig    clang-21
-arm                                 defconfig    clang-21
-arm                          gemini_defconfig    clang-20
-arm                          ixp4xx_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250616    gcc-12.4.0
-arm                   randconfig-002-20250616    gcc-15.1.0
-arm                   randconfig-003-20250616    clang-21
-arm                   randconfig-004-20250616    clang-21
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20250616    gcc-8.5.0
-arm64                 randconfig-002-20250616    gcc-15.1.0
-arm64                 randconfig-003-20250616    clang-19
-arm64                 randconfig-004-20250616    gcc-8.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20250616    gcc-13.3.0
-csky                  randconfig-002-20250616    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon                             defconfig    clang-21
-hexagon               randconfig-001-20250616    clang-21
-hexagon               randconfig-002-20250616    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250616    gcc-12
-i386        buildonly-randconfig-002-20250616    gcc-11
-i386        buildonly-randconfig-003-20250616    clang-20
-i386        buildonly-randconfig-004-20250616    gcc-12
-i386        buildonly-randconfig-005-20250616    gcc-12
-i386        buildonly-randconfig-006-20250616    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-15.1.0
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch             randconfig-001-20250616    gcc-15.1.0
-loongarch             randconfig-002-20250616    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                          rb532_defconfig    clang-18
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250616    gcc-8.5.0
-nios2                 randconfig-002-20250616    gcc-10.5.0
-openrisc                         alldefconfig    gcc-15.1.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250616    gcc-8.5.0
-parisc                randconfig-002-20250616    gcc-9.3.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-21
-powerpc                        cell_defconfig    gcc-15.1.0
-powerpc                 linkstation_defconfig    clang-20
-powerpc                      mgcoge_defconfig    clang-21
-powerpc                  mpc866_ads_defconfig    clang-21
-powerpc                      pasemi_defconfig    clang-21
-powerpc               randconfig-001-20250616    clang-21
-powerpc               randconfig-002-20250616    clang-21
-powerpc               randconfig-003-20250616    clang-21
-powerpc64             randconfig-001-20250616    gcc-8.5.0
-powerpc64             randconfig-002-20250616    clang-21
-powerpc64             randconfig-003-20250616    clang-21
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-21
-riscv                 randconfig-001-20250616    clang-19
-riscv                 randconfig-002-20250616    clang-21
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-21
-s390                  randconfig-001-20250616    gcc-11.5.0
-s390                  randconfig-002-20250616    gcc-10.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                             espt_defconfig    gcc-15.1.0
-sh                    randconfig-001-20250616    gcc-12.4.0
-sh                    randconfig-002-20250616    gcc-12.4.0
-sh                      rts7751r2d1_defconfig    gcc-15.1.0
-sh                           se7619_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20250616    gcc-13.3.0
-sparc                 randconfig-002-20250616    gcc-8.5.0
-sparc64                             defconfig    gcc-15.1.0
-sparc64               randconfig-001-20250616    gcc-13.3.0
-sparc64               randconfig-002-20250616    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-21
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250616    clang-20
-um                    randconfig-002-20250616    clang-21
-um                           x86_64_defconfig    clang-21
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250616    clang-20
-x86_64      buildonly-randconfig-002-20250616    clang-20
-x86_64      buildonly-randconfig-003-20250616    clang-20
-x86_64      buildonly-randconfig-004-20250616    clang-20
-x86_64      buildonly-randconfig-005-20250616    gcc-12
-x86_64      buildonly-randconfig-006-20250616    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-18
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250616    gcc-13.3.0
-xtensa                randconfig-002-20250616    gcc-8.5.0
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 5230e072e414..5f8ab899b552 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -9817,6 +9817,7 @@ int fork_it(char **argv)
+ 	timersub(&tv_odd, &tv_even, &tv_delta);
+ 	if (for_all_cpus_2(delta_cpu, ODD_COUNTERS, EVEN_COUNTERS))
+ 		fprintf(outf, "%s: Counter reset detected\n", progname);
++	delta_platform(&platform_counters_odd, &platform_counters_even);
+ 
+ 	compute_average(EVEN_COUNTERS);
+ 	format_all_counters(EVEN_COUNTERS);
+-- 
+2.43.0
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
