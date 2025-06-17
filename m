@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28910-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28911-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 296F7ADD0A5
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 16:56:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B04B0ADD0AF
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 16:57:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A9E63A1DB4
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:49:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D45C240220A
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B89219A9E;
-	Tue, 17 Jun 2025 14:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396022DBF5F;
+	Tue, 17 Jun 2025 14:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BmRAGVko"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AI0Dlj13"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFD62EF64A;
-	Tue, 17 Jun 2025 14:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C3425B69B;
+	Tue, 17 Jun 2025 14:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750171798; cv=none; b=Yob7j6wIaD8+wXBV19Cw7U0LcdjhhO2SxPXrUXIvfO234TOuU7LvCVL+1HFZKv1p8dmMxfsOUGD3WaV7famxZawYNhS097+BFU93+SCJv0m4ZfLWs6hjfDTcK9pxRFJsxtljIdTozMUn4mWdQ0kevVnHwzLi5NaucUjgE9SrmcY=
+	t=1750171853; cv=none; b=WdUHf7qawQQwACDGYOGEOsLX9neUVVKxxeFjkHN0wPsc8/4fqEzVDqNeFDPfYFf+6ql9W1EcBp4MxAlXyN1nEC8W3jBY096YHWbZ2Y523oGIJD88i9U56TWpEXL01c7n8euXOO7A+qvvSJMOyjZToqUpqA5IWh1MyQMc8O2sxts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750171798; c=relaxed/simple;
-	bh=9d/eKqJbvSbCTMRKwfIqT2JuTHqHyDQgAznjnm6LmFE=;
+	s=arc-20240116; t=1750171853; c=relaxed/simple;
+	bh=IihBz1FuXqYR5rPry8PeB099ePDxYFeOzUimwqiYYsY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i5jAFElQuhU7ohtN5oTYUDmHHo7kZSXL4jlVUYunALm8AA7gX62TL70GYRpipXuKs3DN0NUoS+GId1gnsqm1Uun7Tisj1DqXaVDq3i9BtWvjFq/IgJvJJ96zAcIjeXi1KUmgcHQxE9if6izwJdxRc+A4Rfq7nHjc/lRtaW3J1H0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BmRAGVko; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54666C4CEE3;
-	Tue, 17 Jun 2025 14:49:52 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=KtX+ak6ewFG2nRbcX/9sBlWwMAFvChYpFpTqB36PFvn0S+eiePpv1V3cFfvPIjIrQReE2iSNIEYnt//PT5RHEjjDes3DytEaVc69t2m1FtwEUSZSOy9Ja+A85YCgQHIylDzZI7DCfG+Zf+kjPeZqI7cv1KtMR06uN79aBbtUnro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AI0Dlj13; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26412C4CEE3;
+	Tue, 17 Jun 2025 14:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750171797;
-	bh=9d/eKqJbvSbCTMRKwfIqT2JuTHqHyDQgAznjnm6LmFE=;
+	s=k20201202; t=1750171852;
+	bh=IihBz1FuXqYR5rPry8PeB099ePDxYFeOzUimwqiYYsY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BmRAGVkomcjlIQGXpEs6x2wvHQWbKdVU6W5QtmRYPgJdI9olb3VVHPi1KXcu7MpJ9
-	 bkaQ2lKyeSdqGzJwcjJPexa7NByPKWynsVxyld2Y8S/rN73JWs0lroAAE2N8uZQbKs
-	 vW4/WPgvmeuvaWI5G7S4kIunt64SlpEjCe+PGn4bMEOdWXmqo5cdZtN1+ypmXgZz/3
-	 4RmRjHVAjZBWkqt1l6FKAOMjl/bWQBSq5j3McMdASR3ZyvKXuRPezwywxYsyjB4I7E
-	 1qkEFolDG+eL9GtMITa4/4TiJit2BH9hlgbJA8As8F2l+pRqeuU8XNF+Rd/keWOTL9
-	 OEzzuoHnxocmw==
-Message-ID: <cf07ac73-9908-4d96-bf44-1f40186df189@kernel.org>
-Date: Tue, 17 Jun 2025 16:49:50 +0200
+	b=AI0Dlj13to7Lvf7jsNYxN11vJmGaPQticTiPmfqB0FWesPinp64qmQKpAVkpJ6zwt
+	 Px04YA2WgXJ27SXtbR7WBPTdZsXhty+H3u4jfPy8Pu1QSzDRCl0zzzj+sewYWmdWC4
+	 LCNFZ9Cr2zKs5TS58PpaLOOqEg5MB88QCsz0rLrW2bpqjJLe918eeaeTfsSHOnkqV5
+	 itQzwr8e5yhXbzcd1l26y7uqVjOAbx1Od1lpqnSWRAFBS6RtkwTXJVhXEAOulCLcxB
+	 WBfmyr6qUpt6pH9PuexFPG2gFvCwJl2pULFvuAmXxzDeyo16YnBAQowPqzUcnL3YG5
+	 JRANgFx1duOjg==
+Message-ID: <8281dbfc-6294-43de-ac0c-1e97b5cb4871@kernel.org>
+Date: Tue, 17 Jun 2025 16:50:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/8] arm64: defconfig: Build NSS clock controller driver
- for IPQ5424
+Subject: Re: [PATCH 6/8] clk: qcom: Add NSS clock controller driver for
+ IPQ5424
 To: Luo Jie <quic_luoj@quicinc.com>, Georgi Djakov <djakov@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -68,7 +68,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  quic_linchen@quicinc.com, quic_leiwei@quicinc.com,
  quic_suruchia@quicinc.com, quic_pavir@quicinc.com
 References: <20250617-qcom_ipq5424_nsscc-v1-0-4dc2d6b3cdfc@quicinc.com>
- <20250617-qcom_ipq5424_nsscc-v1-8-4dc2d6b3cdfc@quicinc.com>
+ <20250617-qcom_ipq5424_nsscc-v1-6-4dc2d6b3cdfc@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,18 +114,39 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250617-qcom_ipq5424_nsscc-v1-8-4dc2d6b3cdfc@quicinc.com>
+In-Reply-To: <20250617-qcom_ipq5424_nsscc-v1-6-4dc2d6b3cdfc@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/06/2025 14:06, Luo Jie wrote:
-> NSS clock controller is needed for supplying clocks and resets
-> to the networking blocks for the Ethernet functions on the
-> IPQ5424 platforms.
+> NSS (Network Subsystem) clock controller provides the clocks and
+> resets to the networking hardware blocks of the IPQ5424 SoC.
+> 
+> The icc-clk framework is used to enable NoC related clocks to
+> create paths so that the networking blocks can connect to these
+> NoCs.
+> 
+> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
+> ---
+>  drivers/clk/qcom/Kconfig         |   11 +
+>  drivers/clk/qcom/Makefile        |    1 +
+>  drivers/clk/qcom/nsscc-ipq5424.c | 1340 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 1352 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 7d5dac26b244..fc4755f18b84 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -281,6 +281,17 @@ config IPQ_GCC_9574
+>  	  i2c, USB, SD/eMMC, etc. Select this for the root clock
+>  	  of ipq9574.
+>  
+> +config IPQ_NSSCC_5424
+> +	tristate "IPQ5424 NSS Clock Controller"
+> +        depends on ARM64 || COMPILE_TEST
+> +        depends on IPQ_GCC_5424
 
-Which boards need it?
-
-Also here not really proper wrapping.
+Messed up indentation.
 
 Best regards,
 Krzysztof
