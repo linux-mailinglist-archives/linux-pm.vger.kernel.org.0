@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22EAFADC646
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 11:27:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBC8FADC66B
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 11:31:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1698170A8F
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 09:27:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 799AF3BD9E0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 09:29:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAE5293B53;
-	Tue, 17 Jun 2025 09:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A652951A7;
+	Tue, 17 Jun 2025 09:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/6pn/bf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8NsJx4Q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE4728C5CE;
-	Tue, 17 Jun 2025 09:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2631C7017;
+	Tue, 17 Jun 2025 09:28:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750152410; cv=none; b=Cnh6yM35g1WDJO51Fl0VbfgJZ1q80Npcv1KcmeFCdcr569HrxbMoflvWXHOI72fAo64XP1lCO14MChJZ9PSvIxBaj0PD9hoxD2a8VQzwvTKp7yvgaNtBnbqSlYNomT39z6NQg5FPkTeG06YH/QbCEIc1S/3DQZ/H3ECr4lbvu/8=
+	t=1750152527; cv=none; b=Z0vSjeebFzSdPSTEmBpstJu68YEju373i7YqVc11fXY2AM9r3kgsA5EscOv5/qn5dKYWgDA/gHn9eEtKEGA7ra3j1anEU51Q+uKF8z25WPq0Z+N5WFJ/9AkmvwHGdagmuCsOkZ7n0jKx5ueTSbHeTMgruy3af0iYdWCTQicBPhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750152410; c=relaxed/simple;
-	bh=YY8Hzu1eEss1jbim/pEE9OWpA6ai/lOZioWyM7q3zb8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U5euhSxkZc5NfBtC9vwIEQV88AnLxdP4ddZG6jft5i6JhzGxGBVeEpk4fh03j2jidLUORYQLwKGlZ7WBnYl4dJ5J2fnkf6Bj3l+AAbu+YRRIz4Ege+ZQg1g5hFK6NOlMDy7mBLq2Az0/o+meG6AxPYvEoX8kN38gwQNgGZGNBgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/6pn/bf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1CAC4CEE3;
-	Tue, 17 Jun 2025 09:26:45 +0000 (UTC)
+	s=arc-20240116; t=1750152527; c=relaxed/simple;
+	bh=WTVP0Rab5ilAEjYf4Q5ZrDQrhbyk3NNPzpYO7kOetJg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=rHhBRuge5quRv+QZUO4FIkZFAyKmmQmtMijPrY9D+LP8u24VJF4OichsqMt11HMKv4Xcn1hCOIggS6CMcyFrvQsQn8vfrGK/LnAmY7nL4n1ihf6TuQg9TZidcrEvWrvJN48bD6QOykQkPav2GxVUtd2BZsK7Bg/teIeziMpnQ0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8NsJx4Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF0D2C4CEF0;
+	Tue, 17 Jun 2025 09:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750152409;
-	bh=YY8Hzu1eEss1jbim/pEE9OWpA6ai/lOZioWyM7q3zb8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=A/6pn/bfYNc+xHj/vWpOVRxyoCSkX145yr6dIh/ljfM4FNZpvCRUoTOh/wLB5i1op
-	 cSBFumSsuq8OWaa16GWj96dxSivE3EXk/wmhUqxkqRf3eaU77fAZx0e1qlf4BH31YN
-	 QSyOAvD6hyGYm4lWgUVvOyk51blzz58ATCNH9VIexV2a5hBpBHIUqYP6ZIkgSpLrGU
-	 za0WWapFrf6i3xkNG4sdx2p+zefHxB8BMrIF3keB4GbqJ1Pr2cLmWP1y6oz1mlsZtM
-	 6t76Z7fCnvhQXC/gU3GCY6qmNz4/PNKnIDefNiR8S+AyZSLSdp52e9pLD92mBADQw0
-	 Ky85OuuQvVFSA==
-Message-ID: <43ebe623-8822-4437-92cc-9d24e97295d7@kernel.org>
-Date: Tue, 17 Jun 2025 11:26:44 +0200
+	s=k20201202; t=1750152526;
+	bh=WTVP0Rab5ilAEjYf4Q5ZrDQrhbyk3NNPzpYO7kOetJg=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=O8NsJx4QwoWNmqgUsDtVjMxjf7l6mEgmRKNme7Ecggcq2QUgkHoQSrKrli9zoAaIY
+	 hSDG7yAd+TykXow34mGBM6pu9yVG72XDoaxoWV0fW1ZS2w1cKvuWS+hIcBn6M3MKlQ
+	 ezGluD8khR/C235e++Xr3z9oWxxyFkKmSq5JTBddHtlPB1oPWuIyeaCSb2v2wK8VfN
+	 BvNGG8Bgztu04qvO056EUw2+on5+ymb6Tfv5dX5uIFztCoz0SYqRjIP0VWfwKv+jL/
+	 1GUfo2LNfnag22tdWCb9ZhaSzpDtrYFJcKj//9+9jaonbPVZJDQRDgd9R5QaR1Zd2Z
+	 8Kwx5lwKbotvg==
+Message-ID: <492f86ed-d5f1-4ddb-b820-d3e8f162fb8b@kernel.org>
+Date: Tue, 17 Jun 2025 11:28:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,6 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/3] interconnect: qcom: Add EPSS L3 support on QCS8300
  SoC
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -63,7 +64,7 @@ Cc: Mike Tiption <mdtipton@quicinc.com>, Sibi Sankar
  linux-kernel@vger.kernel.org
 References: <20250617090651.55-1-raviteja.laggyshetty@oss.qualcomm.com>
  <20250617090651.55-3-raviteja.laggyshetty@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <43ebe623-8822-4437-92cc-9d24e97295d7@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -108,32 +109,38 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250617090651.55-3-raviteja.laggyshetty@oss.qualcomm.com>
+In-Reply-To: <43ebe623-8822-4437-92cc-9d24e97295d7@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/06/2025 11:06, Raviteja Laggyshetty wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
-> QCS8300 SoC.
+On 17/06/2025 11:26, Krzysztof Kozlowski wrote:
+> On 17/06/2025 11:06, Raviteja Laggyshetty wrote:
+>> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
+>> QCS8300 SoC.
+>>
+>> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+>> ---
+>>  drivers/interconnect/qcom/osm-l3.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+>> index baecbf2533f7..d8f1e0a4617b 100644
+>> --- a/drivers/interconnect/qcom/osm-l3.c
+>> +++ b/drivers/interconnect/qcom/osm-l3.c
+>> @@ -270,6 +270,7 @@ static const struct of_device_id osm_l3_of_match[] = {
+>>  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
+>>  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
+>>  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
+>> +	{ .compatible = "qcom,qcs8300-epss-l3", .data = &epss_l3_perf_state },
+> Heh, the same as some time ago. We discussed this.
 > 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> ---
->  drivers/interconnect/qcom/osm-l3.c | 1 +
->  1 file changed, 1 insertion(+)
+> No, stop adding more redundant entries. For explanation look at previous
+> discussions.
 > 
-> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-> index baecbf2533f7..d8f1e0a4617b 100644
-> --- a/drivers/interconnect/qcom/osm-l3.c
-> +++ b/drivers/interconnect/qcom/osm-l3.c
-> @@ -270,6 +270,7 @@ static const struct of_device_id osm_l3_of_match[] = {
->  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
->  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
->  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
-> +	{ .compatible = "qcom,qcs8300-epss-l3", .data = &epss_l3_perf_state },
-Heh, the same as some time ago. We discussed this.
+You already received exactly the same comments.
 
-No, stop adding more redundant entries. For explanation look at previous
-discussions.
+https://lore.kernel.org/all/51653aac-76e0-4da2-aea8-16d62b570155@kernel.org/
+
 
 Best regards,
 Krzysztof
