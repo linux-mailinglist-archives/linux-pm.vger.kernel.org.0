@@ -1,153 +1,178 @@
-Return-Path: <linux-pm+bounces-28911-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B04B0ADD0AF
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 16:57:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F511ADD123
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 17:14:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D45C240220A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:50:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B03C3A4BD0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 15:13:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396022DBF5F;
-	Tue, 17 Jun 2025 14:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33D32E92DE;
+	Tue, 17 Jun 2025 15:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AI0Dlj13"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h56s71rz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C3425B69B;
-	Tue, 17 Jun 2025 14:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800B12E54A9;
+	Tue, 17 Jun 2025 15:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750171853; cv=none; b=WdUHf7qawQQwACDGYOGEOsLX9neUVVKxxeFjkHN0wPsc8/4fqEzVDqNeFDPfYFf+6ql9W1EcBp4MxAlXyN1nEC8W3jBY096YHWbZ2Y523oGIJD88i9U56TWpEXL01c7n8euXOO7A+qvvSJMOyjZToqUpqA5IWh1MyQMc8O2sxts=
+	t=1750173241; cv=none; b=doUDiv6qBudSHHGN4/idXrVH37XtKFzIpp+oA/CIUT+fq+AZOT6vhO/ql1k65T8+3eedzptpeVzoWkJq3QRGmSjDnGmaqLlnbwKQAq9JXZGNyb+UnR8kYJ3NP5+RjZmXIT2vVuWdLDy//TI3SmXmd1u1v8zHkMGyi9TZEnW9sI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750171853; c=relaxed/simple;
-	bh=IihBz1FuXqYR5rPry8PeB099ePDxYFeOzUimwqiYYsY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KtX+ak6ewFG2nRbcX/9sBlWwMAFvChYpFpTqB36PFvn0S+eiePpv1V3cFfvPIjIrQReE2iSNIEYnt//PT5RHEjjDes3DytEaVc69t2m1FtwEUSZSOy9Ja+A85YCgQHIylDzZI7DCfG+Zf+kjPeZqI7cv1KtMR06uN79aBbtUnro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AI0Dlj13; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26412C4CEE3;
-	Tue, 17 Jun 2025 14:50:46 +0000 (UTC)
+	s=arc-20240116; t=1750173241; c=relaxed/simple;
+	bh=VzacSK8CHt4963WLrZki0L0yVFovLxHcIRT7RHBkl5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rGe6CBaLr6Kvn71rrNUnkK3K1k0QggwnqstIUfgn0Y+8G0SUojVK5+HR95IE2wxx91ee4GhG6UZclp2lK4wuwuIRljEqSM836tQWwIf/ylYuKBAEq2qwAS4mOCDxwEc7faJ7+4Zjxe9jyyLvSS8nq3jtvsxTzkbvY58xEWqYWh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h56s71rz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F4EC4CEE7;
+	Tue, 17 Jun 2025 15:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750171852;
-	bh=IihBz1FuXqYR5rPry8PeB099ePDxYFeOzUimwqiYYsY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AI0Dlj13to7Lvf7jsNYxN11vJmGaPQticTiPmfqB0FWesPinp64qmQKpAVkpJ6zwt
-	 Px04YA2WgXJ27SXtbR7WBPTdZsXhty+H3u4jfPy8Pu1QSzDRCl0zzzj+sewYWmdWC4
-	 LCNFZ9Cr2zKs5TS58PpaLOOqEg5MB88QCsz0rLrW2bpqjJLe918eeaeTfsSHOnkqV5
-	 itQzwr8e5yhXbzcd1l26y7uqVjOAbx1Od1lpqnSWRAFBS6RtkwTXJVhXEAOulCLcxB
-	 WBfmyr6qUpt6pH9PuexFPG2gFvCwJl2pULFvuAmXxzDeyo16YnBAQowPqzUcnL3YG5
-	 JRANgFx1duOjg==
-Message-ID: <8281dbfc-6294-43de-ac0c-1e97b5cb4871@kernel.org>
-Date: Tue, 17 Jun 2025 16:50:45 +0200
+	s=k20201202; t=1750173240;
+	bh=VzacSK8CHt4963WLrZki0L0yVFovLxHcIRT7RHBkl5g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h56s71rzs/udGDVL1EShezKp0igc+0Rne8OItAUMPt/V+imFOpByZva5b6rNSPCPz
+	 x10s7tra/R4mERRgf1U6LZdeQuS0OjGghdedHAzChpkjI4cmakcBFle+SkXx+xKxO3
+	 fQEQ6CsdJ0QtyeRFsfnzAkg34fORkchNKKRSmoBWH6E1VgFnVavZK75gAUYGoE0sms
+	 KN0t3zoB/6qZ2Qm+4xkeFhn8DBLPh4Y5NLk0NUNI2c5YktuwVjsmUFIaAoxRA9pFKF
+	 WMuWczHQy+H+fLL+0dnlFXqnt0zphLrMZa092gk7WuVwIhvxN7cNTHhHH/0/fPX3Xd
+	 jtgAQcoYn0Yhg==
+Date: Tue, 17 Jun 2025 10:13:54 -0500
+From: Rob Herring <robh@kernel.org>
+To: Frank Wunderlich <linux@fw-web.de>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Frank Wunderlich <frank-w@public-files.de>,
+	Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+	Johnson Wang <johnson.wang@mediatek.com>,
+	=?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+	Landen Chao <Landen.Chao@mediatek.com>,
+	DENG Qingfang <dqfext@gmail.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Daniel Golle <daniel@makrotopia.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 01/13] dt-bindings: net: mediatek,net: update for
+ mt7988
+Message-ID: <20250617151354.GA2392458-robh@kernel.org>
+References: <20250616095828.160900-1-linux@fw-web.de>
+ <20250616095828.160900-2-linux@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] clk: qcom: Add NSS clock controller driver for
- IPQ5424
-To: Luo Jie <quic_luoj@quicinc.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Anusha Rao <quic_anusha@quicinc.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, quic_kkumarcs@quicinc.com,
- quic_linchen@quicinc.com, quic_leiwei@quicinc.com,
- quic_suruchia@quicinc.com, quic_pavir@quicinc.com
-References: <20250617-qcom_ipq5424_nsscc-v1-0-4dc2d6b3cdfc@quicinc.com>
- <20250617-qcom_ipq5424_nsscc-v1-6-4dc2d6b3cdfc@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250617-qcom_ipq5424_nsscc-v1-6-4dc2d6b3cdfc@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250616095828.160900-2-linux@fw-web.de>
 
-On 17/06/2025 14:06, Luo Jie wrote:
-> NSS (Network Subsystem) clock controller provides the clocks and
-> resets to the networking hardware blocks of the IPQ5424 SoC.
+On Mon, Jun 16, 2025 at 11:58:11AM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> The icc-clk framework is used to enable NoC related clocks to
-> create paths so that the networking blocks can connect to these
-> NoCs.
+> Update binding for mt7988 which has 3 gmac and 2 reg items.
 > 
-> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
+> With RSS-IRQs the interrupt max-items is now 6. Add interrupt-names
+> to make them accessible by name.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  drivers/clk/qcom/Kconfig         |   11 +
->  drivers/clk/qcom/Makefile        |    1 +
->  drivers/clk/qcom/nsscc-ipq5424.c | 1340 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 1352 insertions(+)
+> v4:
+> - increase max interrupts to 8 because of RSS/LRO interrupts
+
+But the schema says 6?
+
+> - dropped Robs RB due to this change
+> - allow interrupt names
+> - add interrupt-names without reserved IRQs on mt7988
+>   this requires mtk driver patch:
+>   https://patchwork.kernel.org/project/netdevbpf/patch/20250616080738.117993-2-linux@fw-web.de/
 > 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 7d5dac26b244..fc4755f18b84 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -281,6 +281,17 @@ config IPQ_GCC_9574
->  	  i2c, USB, SD/eMMC, etc. Select this for the root clock
->  	  of ipq9574.
+> v2:
+> - change reg to list of items
+> ---
+>  .../devicetree/bindings/net/mediatek,net.yaml | 28 ++++++++++++++++---
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
+> index 9e02fd80af83..f8025f73b1cb 100644
+> --- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
+> +++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
+> @@ -28,7 +28,10 @@ properties:
+>        - ralink,rt5350-eth
 >  
-> +config IPQ_NSSCC_5424
-> +	tristate "IPQ5424 NSS Clock Controller"
-> +        depends on ARM64 || COMPILE_TEST
-> +        depends on IPQ_GCC_5424
-
-Messed up indentation.
-
-Best regards,
-Krzysztof
+>    reg:
+> -    maxItems: 1
+> +    items:
+> +      - description: Register for accessing the MACs.
+> +      - description: SoC internal SRAM used for DMA operations.
+> +    minItems: 1
+>  
+>    clocks:
+>      minItems: 2
+> @@ -40,7 +43,11 @@ properties:
+>  
+>    interrupts:
+>      minItems: 1
+> -    maxItems: 4
+> +    maxItems: 6
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 6
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -348,7 +355,17 @@ allOf:
+>      then:
+>        properties:
+>          interrupts:
+> -          minItems: 4
+> +          minItems: 2
+> +
+> +        interrupt-names:
+> +          minItems: 2
+> +          items:
+> +            - const: tx
+> +            - const: rx
+> +            - const: rx-ring0
+> +            - const: rx-ring1
+> +            - const: rx-ring2
+> +            - const: rx-ring3
+>  
+>          clocks:
+>            minItems: 24
+> @@ -381,8 +398,11 @@ allOf:
+>              - const: xgp2
+>              - const: xgp3
+>  
+> +        reg:
+> +          minItems: 2
+> +
+>  patternProperties:
+> -  "^mac@[0-1]$":
+> +  "^mac@[0-2]$":
+>      type: object
+>      unevaluatedProperties: false
+>      allOf:
+> -- 
+> 2.43.0
+> 
 
