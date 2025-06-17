@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28909-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28910-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 970E4ADD0A2
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 16:55:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 296F7ADD0A5
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 16:56:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEDB718831C8
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:49:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A9E63A1DB4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 14:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48B22116E7;
-	Tue, 17 Jun 2025 14:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B89219A9E;
+	Tue, 17 Jun 2025 14:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5ObIMYQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BmRAGVko"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91D22EF67F;
-	Tue, 17 Jun 2025 14:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFD62EF64A;
+	Tue, 17 Jun 2025 14:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750171753; cv=none; b=TSpgm/AOOeB0CXRnoT7pwdrTh4KAxyhsH5VOOh1Y/ejTvQdTtOxUbpeyXqRdj50oHZtHu9l7Vy2pm0tW4h6i2PIEj1brYEF/Ro7vQvIIFtG7I+frkEL2JpD8oMIZxmJI9Epxf2V4iDrT3GZk0ArLkG6V0aCTU9yVZgDCgORPq5Q=
+	t=1750171798; cv=none; b=Yob7j6wIaD8+wXBV19Cw7U0LcdjhhO2SxPXrUXIvfO234TOuU7LvCVL+1HFZKv1p8dmMxfsOUGD3WaV7famxZawYNhS097+BFU93+SCJv0m4ZfLWs6hjfDTcK9pxRFJsxtljIdTozMUn4mWdQ0kevVnHwzLi5NaucUjgE9SrmcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750171753; c=relaxed/simple;
-	bh=yjfeWd+qMjJg4DXW0gYXbgQDgaHC4orhH4SkwKt42Qk=;
+	s=arc-20240116; t=1750171798; c=relaxed/simple;
+	bh=9d/eKqJbvSbCTMRKwfIqT2JuTHqHyDQgAznjnm6LmFE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cVrV1MqpvVp5QfGNiD2dOs1xWDzT6dirzCDj41FM2Gch4uE62ethTwMvGFPqILNYOuU4kFfu/xdp8iD5yL5jeCY5HGy6nWT2Mni3O0Y1sZmNoozx2CYTaTSxYWYuefO19Pvd+QsPHJzok6xArp18/PhtJlwbim2hYIhu87qG0JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5ObIMYQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6150AC4CEE7;
-	Tue, 17 Jun 2025 14:49:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=i5jAFElQuhU7ohtN5oTYUDmHHo7kZSXL4jlVUYunALm8AA7gX62TL70GYRpipXuKs3DN0NUoS+GId1gnsqm1Uun7Tisj1DqXaVDq3i9BtWvjFq/IgJvJJ96zAcIjeXi1KUmgcHQxE9if6izwJdxRc+A4Rfq7nHjc/lRtaW3J1H0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BmRAGVko; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54666C4CEE3;
+	Tue, 17 Jun 2025 14:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750171753;
-	bh=yjfeWd+qMjJg4DXW0gYXbgQDgaHC4orhH4SkwKt42Qk=;
+	s=k20201202; t=1750171797;
+	bh=9d/eKqJbvSbCTMRKwfIqT2JuTHqHyDQgAznjnm6LmFE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=a5ObIMYQ7s0FIoj0USZ4e4Ld4Jy4XRa4PEIbuudixRcKRsPzBnxx87xznDxmMVoOA
-	 IfEf3v36Srg1cceWQ55ag6ElgrLli+4qlDvQlsTyUdziY21J0hOZyk58TlFxWLFlK1
-	 1SEc6i2J6habr3wDMg6T084IWvQrHjcz0jy429NjipZxtHd8X5byTmJBbFXIvZ04QZ
-	 VQo04f4g3rlef6XtejtHxy3H9MTZjvlaW9v0Fq0e6WXA0LIyJUK5BZnv7SjXafwjjX
-	 20kaxu4CEbwjjvUV/w2lLS20S1zGiU2i2/BzQW9tmL5RXbCGEH2DRhgj52MCB1HS0p
-	 evHhovKdTZVZg==
-Message-ID: <b628b85b-75c4-4c85-b340-d26b1eb6d83e@kernel.org>
-Date: Tue, 17 Jun 2025 16:49:05 +0200
+	b=BmRAGVkomcjlIQGXpEs6x2wvHQWbKdVU6W5QtmRYPgJdI9olb3VVHPi1KXcu7MpJ9
+	 bkaQ2lKyeSdqGzJwcjJPexa7NByPKWynsVxyld2Y8S/rN73JWs0lroAAE2N8uZQbKs
+	 vW4/WPgvmeuvaWI5G7S4kIunt64SlpEjCe+PGn4bMEOdWXmqo5cdZtN1+ypmXgZz/3
+	 4RmRjHVAjZBWkqt1l6FKAOMjl/bWQBSq5j3McMdASR3ZyvKXuRPezwywxYsyjB4I7E
+	 1qkEFolDG+eL9GtMITa4/4TiJit2BH9hlgbJA8As8F2l+pRqeuU8XNF+Rd/keWOTL9
+	 OEzzuoHnxocmw==
+Message-ID: <cf07ac73-9908-4d96-bf44-1f40186df189@kernel.org>
+Date: Tue, 17 Jun 2025 16:49:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/8] dt-bindings: clock: qcom: Add NSS clock controller
- for IPQ5424 SoC
+Subject: Re: [PATCH 8/8] arm64: defconfig: Build NSS clock controller driver
+ for IPQ5424
 To: Luo Jie <quic_luoj@quicinc.com>, Georgi Djakov <djakov@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -68,7 +68,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  quic_linchen@quicinc.com, quic_leiwei@quicinc.com,
  quic_suruchia@quicinc.com, quic_pavir@quicinc.com
 References: <20250617-qcom_ipq5424_nsscc-v1-0-4dc2d6b3cdfc@quicinc.com>
- <20250617-qcom_ipq5424_nsscc-v1-5-4dc2d6b3cdfc@quicinc.com>
+ <20250617-qcom_ipq5424_nsscc-v1-8-4dc2d6b3cdfc@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,81 +114,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250617-qcom_ipq5424_nsscc-v1-5-4dc2d6b3cdfc@quicinc.com>
+In-Reply-To: <20250617-qcom_ipq5424_nsscc-v1-8-4dc2d6b3cdfc@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/06/2025 14:06, Luo Jie wrote:
-> NSS clock controller provides the clocks and resets to the
-> networking blocks such as PPE (Packet Process Engine) and
-> UNIPHY (PCS) on IPQ5424 devices.
+> NSS clock controller is needed for supplying clocks and resets
+> to the networking blocks for the Ethernet functions on the
+> IPQ5424 platforms.
 
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+Which boards need it?
 
-> 
-> Add the compatible "qcom,ipq5424-nsscc" support based on the
-> current IPQ9574 NSS clock controller DT binding file.
-> ICC clocks are always provided by the NSS clock controller
-> of IPQ9574 and IPQ5424, so add interconnect-cells as required
-> DT property.
-> 
-> Also add master/slave ids for IPQ5424 networking interfaces,
-> which is used by nss-ipq5424 driver for providing interconnect
-> services using icc-clk framework.
-> 
-> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
-> ---
->  .../bindings/clock/qcom,ipq9574-nsscc.yaml         | 66 +++++++++++++++++++---
->  include/dt-bindings/clock/qcom,ipq5424-nsscc.h     | 65 +++++++++++++++++++++
->  include/dt-bindings/interconnect/qcom,ipq5424.h    | 13 +++++
->  include/dt-bindings/reset/qcom,ipq5424-nsscc.h     | 46 +++++++++++++++
->  4 files changed, 182 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-> index 17252b6ea3be..5bc2fe049b26 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/clock/qcom,ipq9574-nsscc.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574
-> +title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574 and IPQ5424
->  
->  maintainers:
->    - Bjorn Andersson <andersson@kernel.org>
-> @@ -12,21 +12,25 @@ maintainers:
->  
->  description: |
->    Qualcomm networking sub system clock control module provides the clocks,
-> -  resets on IPQ9574
-> +  resets on IPQ9574 and IPQ5424
->  
-> -  See also::
-> +  See also:
-> +    include/dt-bindings/clock/qcom,ipq5424-nsscc.h
->      include/dt-bindings/clock/qcom,ipq9574-nsscc.h
-> +    include/dt-bindings/reset/qcom,ipq5424-nsscc.h
->      include/dt-bindings/reset/qcom,ipq9574-nsscc.h
->  
->  properties:
->    compatible:
-> -    const: qcom,ipq9574-nsscc
-> +    enum:
-> +      - qcom,ipq5424-nsscc
-> +      - qcom,ipq9574-nsscc
->  
->    clocks:
->      items:
->        - description: Board XO source
-> -      - description: CMN_PLL NSS 1200MHz (Bias PLL cc) clock source
-> -      - description: CMN_PLL PPE 353MHz (Bias PLL ubi nc) clock source
-> +      - description: CMN_PLL NSS 1200 MHz or 300 MHZ (Bias PLL cc) clock source
-> +      - description: CMN_PLL PPE 353 MHz  or 375 MHZ (Bias PLL ubi nc) clock source
-
-This change means devices are different. Just ocme with your own schema.
+Also here not really proper wrapping.
 
 Best regards,
 Krzysztof
