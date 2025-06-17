@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CC27ADC640
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 11:26:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22EAFADC646
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 11:27:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 531397A98EA
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 09:25:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1698170A8F
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 09:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F9F293C49;
-	Tue, 17 Jun 2025 09:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAE5293B53;
+	Tue, 17 Jun 2025 09:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGmA42M0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/6pn/bf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A550BA53;
-	Tue, 17 Jun 2025 09:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE4728C5CE;
+	Tue, 17 Jun 2025 09:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750152377; cv=none; b=UgqdR9SiUiqXTlVbmpE9mQAULl/WaAZyr7ABR8Cune6Q7PUgy26BhB8pRkoMkLUb1fZPR84nMGI5i7hkYVPOXlozrHKuG2psca/1xGUKQrvvE+tsprOnuWKEAPv+oF4gvZfPf4ef3A0m9mcfEm31LdoptWK1ziYvc7i7lzAkJd0=
+	t=1750152410; cv=none; b=Cnh6yM35g1WDJO51Fl0VbfgJZ1q80Npcv1KcmeFCdcr569HrxbMoflvWXHOI72fAo64XP1lCO14MChJZ9PSvIxBaj0PD9hoxD2a8VQzwvTKp7yvgaNtBnbqSlYNomT39z6NQg5FPkTeG06YH/QbCEIc1S/3DQZ/H3ECr4lbvu/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750152377; c=relaxed/simple;
-	bh=nUJx5FDnH2sD4TErjmPiEN41GB7XRa0QMp9vPPWz2Mc=;
+	s=arc-20240116; t=1750152410; c=relaxed/simple;
+	bh=YY8Hzu1eEss1jbim/pEE9OWpA6ai/lOZioWyM7q3zb8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OD33GU1qZzI+S84qmamY/al3UDeyMVyusKcd7Hu9PfYSUju5BZu5RGrENysWevvVYsVJ/Mg1e6FoonaoE7m3vlAGgJrjln3gbSrYC/3+WumR97SkH89tys7bG9Q1p1qjV2ZishQDXeqQXUv3jM8xffD7LIzfOwj4QoXHrGmgP+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGmA42M0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBE5C4CEE3;
-	Tue, 17 Jun 2025 09:26:13 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U5euhSxkZc5NfBtC9vwIEQV88AnLxdP4ddZG6jft5i6JhzGxGBVeEpk4fh03j2jidLUORYQLwKGlZ7WBnYl4dJ5J2fnkf6Bj3l+AAbu+YRRIz4Ege+ZQg1g5hFK6NOlMDy7mBLq2Az0/o+meG6AxPYvEoX8kN38gwQNgGZGNBgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/6pn/bf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1CAC4CEE3;
+	Tue, 17 Jun 2025 09:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750152376;
-	bh=nUJx5FDnH2sD4TErjmPiEN41GB7XRa0QMp9vPPWz2Mc=;
+	s=k20201202; t=1750152409;
+	bh=YY8Hzu1eEss1jbim/pEE9OWpA6ai/lOZioWyM7q3zb8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KGmA42M0eke2tzE4BhOsey97ZgVF8iztYjsoalYkyaGUxI0UIFO3h8WEpMeaGHV9U
-	 FhOckt1YL0z9LMNhNiM3af1bwS9w1PS/KrnLMoksfaA3M9l+Btk3ZDloZXYR/vGXRv
-	 Swe6NisSSyfbzXvFO+zOhlTu77ziXk6XIIfjNcXhWYqmleb5E332Sw7s5MUJrqJeyQ
-	 uz+OKhEh59gh8AGfLjGO3Je0LuM5ruOqVp9WTi4b12iXUninaaNh1ZML/01Chr+nNy
-	 Cp/ATQe77G8lXiXNQDy8MClZnMFutJD9jSebt7uFQati+lTxA4d1jqCtOyzcrFTodp
-	 0Ck6CWqMuztmA==
-Message-ID: <2f96d485-a398-43c7-ac87-5cc0982c811c@kernel.org>
-Date: Tue, 17 Jun 2025 11:26:11 +0200
+	b=A/6pn/bfYNc+xHj/vWpOVRxyoCSkX145yr6dIh/ljfM4FNZpvCRUoTOh/wLB5i1op
+	 cSBFumSsuq8OWaa16GWj96dxSivE3EXk/wmhUqxkqRf3eaU77fAZx0e1qlf4BH31YN
+	 QSyOAvD6hyGYm4lWgUVvOyk51blzz58ATCNH9VIexV2a5hBpBHIUqYP6ZIkgSpLrGU
+	 za0WWapFrf6i3xkNG4sdx2p+zefHxB8BMrIF3keB4GbqJ1Pr2cLmWP1y6oz1mlsZtM
+	 6t76Z7fCnvhQXC/gU3GCY6qmNz4/PNKnIDefNiR8S+AyZSLSdp52e9pLD92mBADQw0
+	 Ky85OuuQvVFSA==
+Message-ID: <43ebe623-8822-4437-92cc-9d24e97295d7@kernel.org>
+Date: Tue, 17 Jun 2025 11:26:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: Add EPSS L3 compatible for
- QCS8300 SoC
+Subject: Re: [PATCH 2/3] interconnect: qcom: Add EPSS L3 support on QCS8300
+ SoC
 To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -62,7 +62,7 @@ Cc: Mike Tiption <mdtipton@quicinc.com>, Sibi Sankar
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250617090651.55-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250617090651.55-2-raviteja.laggyshetty@oss.qualcomm.com>
+ <20250617090651.55-3-raviteja.laggyshetty@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,34 +108,32 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250617090651.55-2-raviteja.laggyshetty@oss.qualcomm.com>
+In-Reply-To: <20250617090651.55-3-raviteja.laggyshetty@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/06/2025 11:06, Raviteja Laggyshetty wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider binding for
+> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
 > QCS8300 SoC.
 > 
 > Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
 > ---
->  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+>  drivers/interconnect/qcom/osm-l3.c | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> index cd4bb912e0dc..64ad3898abb6 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> @@ -35,6 +35,7 @@ properties:
->                - qcom,sm8250-epss-l3
->                - qcom,sm8350-epss-l3
->                - qcom,sm8650-epss-l3
-> +              - qcom,qcs8300-epss-l3
+> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+> index baecbf2533f7..d8f1e0a4617b 100644
+> --- a/drivers/interconnect/qcom/osm-l3.c
+> +++ b/drivers/interconnect/qcom/osm-l3.c
+> @@ -270,6 +270,7 @@ static const struct of_device_id osm_l3_of_match[] = {
+>  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
+>  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
+>  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
+> +	{ .compatible = "qcom,qcs8300-epss-l3", .data = &epss_l3_perf_state },
+Heh, the same as some time ago. We discussed this.
 
-Keep order, don't just stuff to the end of the lists.
-
-Isn't this already on your internal checklist/guide?
-
-
+No, stop adding more redundant entries. For explanation look at previous
+discussions.
 
 Best regards,
 Krzysztof
