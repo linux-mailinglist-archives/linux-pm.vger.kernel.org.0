@@ -1,177 +1,181 @@
-Return-Path: <linux-pm+bounces-28924-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28925-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A29ADDE00
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 23:32:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51F32ADDE90
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 00:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9A1417DE23
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 21:32:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 241843AA16B
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 22:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855CE2F271B;
-	Tue, 17 Jun 2025 21:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBAC293C5C;
+	Tue, 17 Jun 2025 22:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YmarUdqc"
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="x/EYJP9/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E272F30CC;
-	Tue, 17 Jun 2025 21:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DABC291C15
+	for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 22:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750195903; cv=none; b=YyXbgnKGU5fBBnG/viMoxabLCi3Oi3x5KdGDZDPqdovyFh2d4pQhPg0tAwIu0psdWQvCdzngwhPfs8FfK+aElKZCwH914IEtvbv4pctSFyOP3+2HpYZaq2twYhSmBYB4yW58RyTCAldb/qBJIKuQXEWHicI/Mz1A3RMy49dru9c=
+	t=1750198452; cv=none; b=LSFxqF2rEQg+tkFoj/DBsDergLyrQzGMRYdCPD7ysMgmtvzDjoP6lrm5j8342gaupWyQ+NrT3ndX01xPb5HjiCBSe6XdMGDvFISE5pw3sbcd4wkRk+BkrejSRNIkaqCELVwrRtDZi/hA31X0qcWNsO6wCpaR63Q8uUI82tKjjfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750195903; c=relaxed/simple;
-	bh=1YfwZW+S936XwdA8SGfJ1ZJvlipD9uTXygNO4srMawo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BWrl/fwZcbwWBEcKxMkQFCJPUAghwLr4ETQ3G0/zqBGUnvzaVwO+umBbCrqaHe9Wt2xY1m0b6lkI/Jp7FrJr2E00mA8gPxcCrk3hPGMaKqW877GTFTqBfep3XdCaFEKktQZnkAFa+SxNOGWu57oLURUcQOEumwlHExYURyd/FKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YmarUdqc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEBBFC4CEF1;
-	Tue, 17 Jun 2025 21:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750195902;
-	bh=1YfwZW+S936XwdA8SGfJ1ZJvlipD9uTXygNO4srMawo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YmarUdqcOEke0FSqL0Xg4J8Lsf3Wt1uxrnUTrBql9tooIzqRSqrJXRb/RthUG96tM
-	 UhmIuCJamZ3RxGpHFDGNgVGHqRgU1HHltdd03/dUDd3yZXgKOp1z4NJsBzWdqKZRoT
-	 Nhpr9RanMRtnDUygTTyNdDrv/EZ+9j1PkN20sbSIICvlIom/jxXKO7Iy/l/5DOxHrK
-	 Bbs/ObfLHkXDYrqiBgMagOsKvqyvb6JzIr1I9Liskj/HU2yXXiA0ZapCnbVd5Mg2Kc
-	 jqYO7cFto/25mDOQtAHCbJcXHeN3ftaqa2xSE6M8SFyV/zeuKzmBhVcfLIJFp6Mr6z
-	 Mn6XCuVHjg8Yw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>,
+	s=arc-20240116; t=1750198452; c=relaxed/simple;
+	bh=kwbbyB0B0QuRG9hwjbKdJ2CGL2BZQWPKXY9uBhNi+fo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iv/IrJqEuu/7fp5uffBN15VWfupNyU6iKS+AlQOHsWXCWVad0B5ZrEhMgj4EiZ3+gnnsJ0pfyuWPOnF6X86whJtmtmo2w6I1TW3y7nUZ0Hcg7H807wM328T6NNrFQm2zhZGLMMkP4Dcgc8yIAT56ukbNbJ5dWkbagdH5E7MWKY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=x/EYJP9/; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3141b84bf65so2378240a91.1
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jun 2025 15:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1750198451; x=1750803251; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rht1pWqTVlNemlSkA4kJuYwRKU6KD6oE4FAwP7gkVd8=;
+        b=x/EYJP9/iefEds7XCAbKnSIQAYRU1H20zSxIscVIbDQJgscWpLVdS4lUT0BN3CHkOj
+         l3lbdmwh0FKmNMiPkohEqrShdqPfVXGqtm6lxpC5wcxR0h6hT7sV76M5Y9SgL3x60ZG0
+         KrcG3JnF5Eti4X7c12CXlZ8Jd9Rn4aXKkVs+xQ4jkPO5b4d9EKuHrzYznV2FDRZRDFeq
+         xqBLyC0VCY3T0iU9TEP2G/Owa6VuemXofod939Dm925L2UtS+y7U+oXvp2u15wpnRmpJ
+         DteB8t4iPbL1H42HifdHmi6626Cvczmy9Pyfpa0SiYAlMkrEkUToRkCX5YuK3ZtCrorf
+         Y/nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750198451; x=1750803251;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rht1pWqTVlNemlSkA4kJuYwRKU6KD6oE4FAwP7gkVd8=;
+        b=VFsAysB6QfRqXkmlmcrHAlgic8YKkUQQx9OoUrV49CPX94JLZvOkVNwAcCikE9uV3D
+         +OKTOr7kfpCAFDxe/Bzm3B3MaKmU2M4n+0qtuEx8hZgWhabd+IGbMSgoFjSNotAWDMiv
+         USG70HE9T14i9sgXz0JxajDexbOqckWmqQ9Z4/Y6UUG9cgihXnf56nkFUm9r788+SGQL
+         Qgvg5tdTUgR+VK+5bqbCPe4BJfkuQol7UpYQGNx3JndYyp2DwWWHb6FpDX6R1r0FPXqR
+         rhFL9OuR4lb8V7ujE54jItdXQVYfNMgUlOgcASEoIFm2758TvSGZ6gIoPSFGG2CEny0N
+         lkFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXw7BbG1zesVSAlBnbuoZbvwTZaWJ57s3SxpBpEaO7uzvazkdZ7t9rs2F4No1XjRtQgNEVfq8zFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcTTNAX154nZDP4RkjHCEKy3fymwZJ35ayQFY1QhZcItbhV+mT
+	jDX9mDb4qx4G4UQ4lcHRL13oy1h2dLFAoqaf/5fiYzDZMghdFt1xd0NQkLzkhGCu8jo=
+X-Gm-Gg: ASbGnct5ykiwASs/B+JBGMNIQx96UAw7CRwKPEJffqpdUmNB0xyggfYZbifD3PLumQB
+	wcSqH97uM8nFOWuz/eyXkXXj4NK4IbyZCJcT5qvX9GzjCw4gjjdDuhyvyMOMqwmOP+i85gqKhhT
+	+A6Whm0AR6iFXUD3kYl2kc6CjjtIvylRY/YUZmaOz8uR6WMbDP0xbSloTQ6UP10+EinJn6bqwx3
+	NwTK8MrlQGcFWRUWa/dHICb4G0l3JqTza06y8LB0H1WCRYs8FU6romO+C5c/xvba2wAO6EgPPBc
+	kwgA5qav0+CmyqpT/U8Kz51v/inPBHKdK2vuVc3NV75H5qyznp/s8HCh4AG9LPBMvdnDRC4=
+X-Google-Smtp-Source: AGHT+IGjtDH8+7Qdmc6DGmjSJpavFXI06zS+xsVxnGKMVqLF3EoMugjqqf5A/sV2C5cZ3H3jbI/Tpg==
+X-Received: by 2002:a17:90a:dfc8:b0:311:f05b:86a5 with SMTP id 98e67ed59e1d1-313f19d2977mr26267870a91.0.1750198450546;
+        Tue, 17 Jun 2025 15:14:10 -0700 (PDT)
+Received: from x1 (97-120-250-80.ptld.qwest.net. [97.120.250.80])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365deb0fabsm85895565ad.181.2025.06.17.15.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 15:14:10 -0700 (PDT)
+Date: Tue, 17 Jun 2025 15:14:08 -0700
+From: Drew Fustini <drew@pdp7.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-	Lee Jones <lee@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alex Elder <elder@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Andy Gross <agross@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Georgi Djakov <djakov@kernel.org>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Frank Binns <frank.binns@imgtec.com>,
+	Matt Coster <matt.coster@imgtec.com>,
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	David Wronek <david@mainlining.org>,
-	Jens Reidel <adrian@mainlining.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Danila Tikhonov <danila@jiaxyga.com>
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	iommu@lists.linux.dev,
-	linux-remoteproc@vger.kernel.org,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	dri-devel@lists.freedesktop.org,
-	linux-hardening@vger.kernel.org,
-	linux@mainlining.org,
-	~postmarketos/upstreaming@lists.sr.ht,
-	Connor Mitchell <c.dog29@hotmail.com>
-Subject: Re: (subset) [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and Google Pixel 4a
-Date: Tue, 17 Jun 2025 16:31:26 -0500
-Message-ID: <175019588888.714929.17490930593303808143.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
-References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 0/8] Add TH1520 GPU support with power sequencing
+Message-ID: <aFHosEvn35Fr3LFv@x1>
+References: <CGME20250614180906eucas1p116f8a13a4013edd3bbedfd2e4a8b0aa3@eucas1p1.samsung.com>
+ <20250614-apr_14_for_sending-v4-0-8e3945c819cd@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250614-apr_14_for_sending-v4-0-8e3945c819cd@samsung.com>
 
-
-On Tue, 22 Apr 2025 23:17:01 +0300, Danila Tikhonov wrote:
-> This patch series adds support for the Qualcomm Snapdragon 730/730G/732G
-> (SM7150) platform along with the Google Pixel 4a (sunfish) device. Since
-> the most critical drivers were submitted and applied in separate patch
-> series, this series is largely composed of DT bindings and device‑trees.
+On Sat, Jun 14, 2025 at 08:06:06PM +0200, Michal Wilczynski wrote:
+> This patch series introduces support for the Imagination IMG BXM-4-64
+> GPU found on the T-HEAD TH1520 SoC. A key aspect of this support is
+> managing the GPU's complex power-up and power-down sequence, which
+> involves multiple clocks and resets.
 > 
-> To date, we’ve tested SM7150 support on the following eleven devices:
-> - Google Pixel 4a (sunfish)
-> - Samsung Galaxy A71 (a715f)
-> - Lenovo Tab P11 Pro (j706f)
-> - Xiaomi POCO X2 (phoenix)
-> - Xiaomi POCO X3 (karna) / POCO X3 NFC (surya)
-> - Xiaomi Redmi Note 10 Pro (sweet)
-> - Xiaomi Redmi Note 12 Pro (sweet_k6a)
-> - Xiaomi Mi 9T / Redmi K20 (davinci)
-> - Xiaomi Mi Note 10 Lite (toco)
-> - Xiaomi Mi Note 10 (CC9 Pro) & Mi Note 10 Pro (CC9 Pro Premium) (tucana)
-> - Xiaomi Mi 11 Lite 4G (courbet)
+> The TH1520 GPU requires a specific sequence to be followed for its
+> clocks and resets to ensure correct operation. Initial discussions and
+> an earlier version of this series explored managing this via the generic
+> power domain (genpd) framework. However, following further discussions
+> with kernel maintainers [1], the approach has been reworked to utilize
+> the dedicated power sequencing (pwrseq) framework.
 > 
-> [...]
+> This revised series now employs a new pwrseq provider driver
+> (pwrseq-thead-gpu.c) specifically for the TH1520 GPU. This driver
+> encapsulates the SoC specific power sequence details. The Imagination
+> GPU driver (pvr_device.c) is updated to act as a consumer of this power
+> sequencer, requesting the "gpu-power" target. The sequencer driver,
+> during its match phase with the GPU device, acquires the necessary clock
+> and reset handles from the GPU device node to perform the full sequence.
+> 
+> This approach aligns with the goal of abstracting SoC specific power
+> management details away from generic device drivers and leverages the
+> pwrseq framework as recommended.
+> 
+> The series is structured as follows:
+> 
+> Patch 1: Introduces the pwrseq-thead-gpu auxiliary driver to manage the
+>          GPU's power-on/off sequence.
+> Patch 2: Adds device tree bindings for the gpu-clkgen reset to the
+>          existing thead,th1520-aon binding.
+> Patch 3: Extends the pm-domains driver to detect the gpu-clkgen reset
+>          and spawn the pwrseq-thead-gpu auxiliary driver.
+> Patch 4: Updates the Imagination DRM driver to utilize the pwrseq
+>          framework for TH1520 GPU power management.
+> Patch 5: Adds the thead,th1520-gpu compatible string to the PowerVR GPU
+>          device tree bindings.
+> Patch 6: Adds the gpu-clkgen reset property to the aon node in the
+>          TH1520 device tree source.
+> Patch 7: Adds the device tree node for the IMG BXM-4-64 GPU and its
+>          required fixed-clock.
+> Patch 8: Enables compilation of the Imagination PowerVR driver on the
+>          RISC-V architecture.
+> 
+> This patchset finishes the work started in bigger series [2] by adding
+> all remaining GPU power sequencing piece. After this patchset the GPU
+> probes correctly.
+> 
+> This series supersedes the previous genpd based approach. Testing on
+> T-HEAD TH1520 SoC indicates the new pwrseq based solution works
+> correctly.
+> 
+> An open point in Patch 7/8 concerns the GPU memory clock (gpu_mem_clk),
+> defined as a fixed-clock. The specific hardware frequency for this clock
+> on the TH1520 could not be determined from available public
+> documentation. Consequently, clock-frequency = <0>; has been used as a
+> placeholder to enable driver functionality.
+> 
 
-Applied, thanks!
+I don't have any more information that what is in the public PDFs [1],
+so I think it is okay to have a placeholder frequency.
 
-[01/33] dt-bindings: arm: cpus: Add Kryo 470 CPUs
-        commit: 7b768d1235dbd98ef7268596995d86df31afce21
+Is it the case that the frequency doesn't really matter from the
+perspective of the driver?
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Thanks,
+Drew
+
+[1] https://git.beagleboard.org/beaglev-ahead/beaglev-ahead/-/tree/main/docs
 
