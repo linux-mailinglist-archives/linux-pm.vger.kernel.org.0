@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-28879-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28880-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31BDBADC6CC
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 11:40:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FAB1ADC6C6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 11:39:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F3173B1473
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 09:37:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F85616301D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jun 2025 09:39:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F27294A0B;
-	Tue, 17 Jun 2025 09:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDBCA291C0C;
+	Tue, 17 Jun 2025 09:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QAtND0ue"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ioGDpTmB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B0E2957CE;
-	Tue, 17 Jun 2025 09:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D0228F508;
+	Tue, 17 Jun 2025 09:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750153071; cv=none; b=QNwkrRmZnzNR8E1taKcv80ueSoyz882djUyTQQC1FyBGB7SSsFQ36NYR1x2kv8m2ailwaAzGYRGDUcRPskkyQWe0Fkk4o6Muhuau0+tIhrsPdz2TKMw4+5llZYKfPeual+jAWSIb5ryHuN46a5+FVh5QAbNHHNv8rBLq1BKA6jg=
+	t=1750153171; cv=none; b=FcZwOtZZpf95YcdNFrP7wsHxhdwsFtXC3Er1SjNQkIVfaGI9ekNh4bC+a5B4sJnza/jsc36fAY4ywpR2Ff+E9bCNGw0P9OQCgKuq0j3bKt6lxhs7WfWKxQ533ohJI5AssItScqXT6TqlVcfnk0gcjklZzM5RY0S5LJcCvS4zq5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750153071; c=relaxed/simple;
-	bh=7Dj/4q2+SzkJuI0upo6NCWxX5mXnK8+1vY21MFOfkBI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=N+PVUzTBxIxRhdWlLbupUlsTQ9N7/S2jo4ytS0BM+22or/Cllxc02C8mKrMYKzpcqbMHQu+e2ltsK4dFbZJCc8d84LOvDokO25hw/vrKvnAliSVw+1Vlc1AE4teALc9kdwj7xiCPB816rKxCVxgAU1fp1EelilQBkmksmcasbtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QAtND0ue; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1750153171; c=relaxed/simple;
+	bh=ALPfteM2sI6qkygcPjjEXTiyrC/AOqj4SM3BsqguFuc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=lBNBsil07si7fQAx3n1jDZbE1YZw0+X4j66wWv5fNAl5ejBH4sTJk9ptBCfnYsjRTtZzV8KIWph7f9JrrPnpEbLb0pqFAH9XSbG369pjpxOAH+2uB9t3zOJxaw7IEWgNGfRHb3OFMb43n3+2CdR9kWZMeWGw4ri3RnSDxZCqEbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ioGDpTmB; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-74800b81f1bso4572382b3a.1;
-        Tue, 17 Jun 2025 02:37:49 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-748a42f718aso2190817b3a.2;
+        Tue, 17 Jun 2025 02:39:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750153068; x=1750757868; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750153168; x=1750757968; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=pk/KjrXad8AJ372A0wPol7okXwJXpgftfjs+qk61xOo=;
-        b=QAtND0ueQrNOH6lDAK/eIPPjc061xnrwRkxX7zUqubO8HIOYO0VcegfRF2YqJ4EkCT
-         oiwcvdTYIFZpFFVNbKA6NcohD2KwoZGO4Zk4pl1Gk0ZSc/BKZ2Uwfg+dC+te6xQcN5xf
-         XeA23425brVtalFD6dLsEotkkPybmXHxArUI/pX+VdVh9xAoIBUxf/tNvZtbxR554VB1
-         HoAxXuxDzR77UhOn6jt7mk7IHXR2ArlI616pB7M025ZJDl8pQH/EA2gbdcFJXwiqpmea
-         zChlM3ZKVXkPAZeQrkmpuajlRmWo/PGTV/DT6cU+2qw8o71+qh3cazUEeb8o0C4/hLmV
-         2FBQ==
+        bh=bCi28GTNHbga6kqAx7KASUyzSOkqGAZ0y285DLnHdxE=;
+        b=ioGDpTmBGPJKMGjkk5hGBHmko2rBcNI+3YzFp5+ERALJZPqXhD8S5pya/XlNupwNNt
+         J6zfKdqDmYZJEj9SOrvV0D98NIjyjyEWTPUEjbXqXjg0EU65nE1fbnHTUx3Ei0BUZjfe
+         rNTIru7VWSDI0J0ChelWuuMYnVNRpciU3sL+oCPzcCTXYoFTCwXKcRgGowx6/gleyEhI
+         k509N7C//jB0rmH2woakOEiyt7ST3Z0Uiz8F7jC5V7r+9HuIIoUOY+sAAQspHoP/BaNY
+         04Gxo/5TnVNbG4tDnyB7Cs8lhzoxtEJcI6b8lY3JJjyZDccGNsyWQAZNeIquKv75ZbKx
+         2FKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750153068; x=1750757868;
+        d=1e100.net; s=20230601; t=1750153168; x=1750757968;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pk/KjrXad8AJ372A0wPol7okXwJXpgftfjs+qk61xOo=;
-        b=CyZ5NGl0mbNuIz3mkXJxRqMJyYejeoaqP73fMaFGCRoRs8deMg4tqBjnhfXLH4a/NJ
-         jYNGyrftupqLvd1qDYDrYfDX/9xU0TENIheOL6v2zQONQ8vZ1vZsoxButmMTtei0oLIP
-         An1C+rxOJogAR3DviT4PGPNzZbRI/+kBYQrEWxXsPb+ZGb5iTfnCS5bwR/vwE7iwxgF8
-         AcMJruDh//smj/hMJl6xsZUwpqQ0terHDY88JxpZrY1KcEF6BEk7fkbPCwMaXW2J0hWu
-         DSif4hhZK90yMH9GbZwYjFQFEEIsAQMDdgHTZ9Nbx80oJeQSYIaJpi4ZHVW5hlbOcL2g
-         WHxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVf4wrQMiv4t/f9qys3VIREkA9KSwRGWSVSlujcv5C62k7A44vIV1WiZ8vTOEOhyPHg98phAR3D4TM=@vger.kernel.org, AJvYcCX6PiUt74Q4eQkih02iroWG/nsZ17+WuflM8xUAMKAyH0f2NiyQCARTj5IA4gXR9VtstbCcYqISg3Dqv5E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXWaW4mEqTNN3rm0Y5/68RiqEDzRtV0tinukuv+89GUiLrVDmi
-	SvjMTgvNqJgiF79R+l4tiQOfo3izZYb5QTRfogsjNM529K9qO5fj7luT+npU9lQH1CraNlKrcKZ
-	ke4aMOW/DfLNKof8I95AargyAZ1gkvR0=
-X-Gm-Gg: ASbGncuUdP2HvcswlloZGkCdjJ9njoMrQ5I98yzFcbX/ydpFtMhhmX0Xe0Lb0hq/MB5
-	7pIbABgEoQ3jUXfd29vqfuEPekq4eEpxl2olAbujyeG6VFAgfOtvpb6yklPXH6vTGsNCvCpv8qj
-	IPHxZH/SqkJ6hHT8BXo2ztYkj6sKwcLKGkBp2uZiUV
-X-Google-Smtp-Source: AGHT+IGLP2QooVl65HrzbAeK0g/q/fOhof8lk9ZBihBVYgDelqg5X1cgEJU8Y5JKovUXaFeSZrTA5tFzCK3kV/DFpNY=
-X-Received: by 2002:a05:6a00:398b:b0:730:9946:5973 with SMTP id
- d2e1a72fcca58-7489ce012bdmr16179951b3a.5.1750153068542; Tue, 17 Jun 2025
- 02:37:48 -0700 (PDT)
+        bh=bCi28GTNHbga6kqAx7KASUyzSOkqGAZ0y285DLnHdxE=;
+        b=WSakTmN3IeBwn3H9RhvORJZStygYsOpwO855a3DmVKelXcodR6UuS2jTZqDqJHQtDd
+         oa6PEdFeEaGdfOLTBSXSaAp3OGv1N4NNrK/jS2W0GhkOXmt8Fmg13TaVqpTx3j0rQBZt
+         L2mahiAwOnz2FWGCqt4GqQSN1nAzs3vKgBonaWukX49U2B8bBjlitS1zFjP+jv6QyBKw
+         mH1rByMPoY221L9GXCsxEgx1a44Vb9ARhH89qOdGXnSMTUw4LviiZVgQZ4I+meCVnTgs
+         G42B8Ec64pc1NDHLMLC9B1hjLZDCYRt/GiqUmGKJIncN7bSkPJL3Y0RsHD+0Zj8yLPKt
+         u4Gw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0NRradaEyK1uBtPB4edAdjwvgwJG2WALcj1awT71D3H85zHUNAh1pBXpOsxEfB/fZolXVVdWKwDNBhF4=@vger.kernel.org, AJvYcCXE+D6+3S3HZ+Z0HbWk3vUiMWhRy4KpUN7Lo+4uNFLzrw1+OC3ZDSkq9ArbAWjqQAiRBTeKrnjybX8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpNvQGGbKKzrmXD+PgTmU4iJvLhIFFV+1vR2+8vH2979sH6uya
+	MUYqcTX3lr7ViH5Gqnw0zz+0J1UfvbJywJvKLpwtdtjJYivKU0iN658JUDIVhbPyChW8p1xcYEh
+	EUWi13NlHlB5U4kgNf9kBKJIBWSYJCJ0=
+X-Gm-Gg: ASbGncvDQkDWnV8pIviU1J4VkXboUnB2cC/iL3P8v6ZwJ53jAstSg10uef+23gG0ntd
+	3eLcTQAFL1KE4WuztD2FPoif3RJOGPi/HhSs0gWiM0rvw+65vZfAwaAwB032uAjiV0c6cUg90+8
+	pH0Oseyw+Mg1Ke7bdQkYono7lxsmCMdN+aQnZ48Hif
+X-Google-Smtp-Source: AGHT+IFArcYdOitHFM4wFrWORIUrcQuJCPPzPdO/YzRB+kUNia06/wK20e7znFsRpnRBS0a38QNIcVPNPc9OnAvTwqg=
+X-Received: by 2002:a05:6a00:b4b:b0:742:a91d:b2f5 with SMTP id
+ d2e1a72fcca58-7489cffc1d9mr16064799b3a.13.1750153168502; Tue, 17 Jun 2025
+ 02:39:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,17 +72,17 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: =?UTF-8?B?0JTQsNC90LjQu9C+INCg0YPRgdC40L0=?= <rusindanilo@gmail.com>
-Date: Tue, 17 Jun 2025 12:37:37 +0300
-X-Gm-Features: AX0GCFs3mBghoMRK3MrF0tpzNBtxiI5PU_dkmSiR89mxcseDc4bJKj4-APy65y4
-Message-ID: <CAOU0UxY3XYohdHjgLh6W+qA5eK8SKtYT8WAfZB3ESOQTvgcTDw@mail.gmail.com>
+Date: Tue, 17 Jun 2025 12:39:16 +0300
+X-Gm-Features: AX0GCFsBFsa1Syei79aSTAMqrSA53CoCy44T5KWY2Z1YXIGY1HxuQoZsiM4Mqz8
+Message-ID: <CAOU0Uxb86ETTt4RhZ-CRqAY+=ohErikeiyY3-d9tEzVZi-BwPw@mail.gmail.com>
 Subject: [PATCH 0/1] x86/power: Enhanced hibernation support with integrity checking
-To: pavel@kernel.org
+To: rafael@kernel.org
 Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
 	dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org, 
 	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000f418d00637c143ba"
+Content-Type: multipart/mixed; boundary="000000000000e960650637c1498e"
 
---000000000000f418d00637c143ba
+--000000000000e960650637c1498e
 Content-Type: text/plain; charset="UTF-8"
 
 From 93c34aff2919db119b3eb13d4b87bea2c36bac13 Mon Sep 17 00:00:00 2001
@@ -136,14 +136,14 @@ arch/x86/power/hibernate.c | 700 ++++++++++++++++++++++++++++++++++++-
 
 Signed-off-by: VoltagedDebunked <rusindanilo@gmail.com>
 
---000000000000f418d00637c143ba
+--000000000000e960650637c1498e
 Content-Type: text/x-patch; charset="US-ASCII"; 
 	name="0001-x86-power-Enhanced-hibernation-support-with-integrit.patch"
 Content-Disposition: attachment; 
 	filename="0001-x86-power-Enhanced-hibernation-support-with-integrit.patch"
 Content-Transfer-Encoding: base64
-Content-ID: <f_mc0bxvcr0>
-X-Attachment-Id: f_mc0bxvcr0
+Content-ID: <f_mc0c00es0>
+X-Attachment-Id: f_mc0c00es0
 
 RnJvbSAwZDA2ZmRkZWQ0ZDVhYTJiYWExMjdlNWU1ZjkxMmQ0MTg3OWM4ZjkwIE1vbiBTZXAgMTcg
 MDA6MDA6MDAgMjAwMQpGcm9tOiBWb2x0YWdlZERlYnVua2VkIDxydXNpbmRhbmlsb0BnbWFpbC5j
@@ -624,5 +624,5 @@ dm9pZCkKK3sKKwloaWJlcm5hdGlvbl9wbGF0Zm9ybV9jbGVhbnVwKCk7CisJcHJfaW5mbygiSGli
 ZXJuYXRpb24gc3VwcG9ydCBjbGVhbmVkIHVwXG4iKTsKK30KKworbW9kdWxlX2luaXQoYXJjaF9o
 aWJlcm5hdGlvbl9pbml0KTsKK21vZHVsZV9leGl0KGFyY2hfaGliZXJuYXRpb25fZXhpdCk7Ci0t
 IAoyLjQ5LjAKCg==
---000000000000f418d00637c143ba--
+--000000000000e960650637c1498e--
 
