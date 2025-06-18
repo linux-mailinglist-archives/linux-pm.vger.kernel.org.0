@@ -1,113 +1,116 @@
-Return-Path: <linux-pm+bounces-28997-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28998-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10187ADF405
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 19:38:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD9BBADF40A
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 19:38:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EB9C401513
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 17:37:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78C7D1BC18C9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 17:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4686D2F3C33;
-	Wed, 18 Jun 2025 17:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683802F4A14;
+	Wed, 18 Jun 2025 17:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMjYJJMN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gy4wyw7Y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32CC2F2C62;
-	Wed, 18 Jun 2025 17:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390922F2C6B;
+	Wed, 18 Jun 2025 17:38:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750268287; cv=none; b=Otz5XlWJbIxMS4vx2WHAdaNpcDpeSX7qRl503nh+bpLVAXB29AtUjkHcjuU/RGWFglnABk2AwhOYZQpVBT6hgcQvtIVsbRyIoSADj9p0sG0XB5owXuUpfWWWndTm8u3vRrE0EY5GIMsZZ8eQaYX9uVD97q/GWDDS/XVS0HCcQbo=
+	t=1750268289; cv=none; b=PfWS3plkmZCI9ynFfGu2ipBU+gDdOJZY3xqGCruOJjjwUd0KatXwiN/AMt0GFpYot/WbuU2DAzNXefZAi2z/Y8UwKYq17ev5WmAlR/yQaFfNXjfK3hdsL/sk5HJhv7+RaRrlyRxoizDRvi2BYKiQ9lWYNuyqIuCBiixeVslJQ8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750268287; c=relaxed/simple;
-	bh=iW9LufXJIvbvUBrzExqn4UB+Dl7RTb6MInZzRTsd/gE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X/6NPn+So6Ak7wFfyPiRJ2fsgh2/7ybAlv1UaJINCjxvqZ7OE/eU++NqaBQDyKjxUjnnsew/qzHdSnFAbFplaWz+7jpDq7ZylRI/eZRifwfKOeh8y3Li7roUQN7PxRu6sDrXHaxhZ/+JyDJyIMlyxMyHzLAou6vggIWoJufWl/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMjYJJMN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2905C4CEF0;
-	Wed, 18 Jun 2025 17:37:56 +0000 (UTC)
+	s=arc-20240116; t=1750268289; c=relaxed/simple;
+	bh=i76VuE3Aq3hkZ2sq2815FwgqFtHsSev/sM8xJboxVA0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EEfeSozqAdK9S5cJwVTm260y4yqXOtKuiDeX2YLaNwwBa/q+//IvHM8sXKJH0YKxbYOIa4P2DdI7cbzaR+YoNfxTFFpX/ngK0n/kt8amSt5v3XkXlvrd3KDjCcM1sI6UVeaRL5NsA0sqETQF+2hM5byVs7p28DlkTv0ST6ii2lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gy4wyw7Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640D9C4CEEF;
+	Wed, 18 Jun 2025 17:38:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750268286;
-	bh=iW9LufXJIvbvUBrzExqn4UB+Dl7RTb6MInZzRTsd/gE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tMjYJJMNrwSXJJKi8YsQ2JJzCWZzP3aUZRw8z5zFfnRs1PXkskRU1Uy/yMHhyjNDZ
-	 aYyZvuF39WCJ0xfMW8VeWBs9XfgsxQPF+pfQhST331PYbTu5SMofDob0J6zFVIuQiD
-	 xSNdKxYMYh7U71x0eBK5yeKhMdcB9wxpVvFZ3qE1TB+ZhJbwwiFeANK7gl5OpRQQfV
-	 HSlnFlW678e57cd/6TC7LCfpEXAcYmojJXL5MBRF9yft0mAOs/z5mLjzxKGeOOJg26
-	 w8zV/ffBD4jrvfjL7VmhG/U0wMlv2WpMERp1XRhsOUdVpC+tBSoJP0eHtbj0yJFIBz
-	 Dl2uipre8dPhQ==
-Message-ID: <de30bc80-3dc9-4fac-afe8-bf6b0df42ea9@kernel.org>
-Date: Wed, 18 Jun 2025 19:37:54 +0200
+	s=k20201202; t=1750268288;
+	bh=i76VuE3Aq3hkZ2sq2815FwgqFtHsSev/sM8xJboxVA0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Gy4wyw7Y974jROrWoiVVP96W7MZfhfIw26Rom0+USF/ynDOVUyhqKUnvQnPHJRnJX
+	 h9hkcAVWDmBqr6TbFW9u5tuscOsfQGmBfBsVzL3higBrMyKjGt4XMyyI2/HKnAMOHl
+	 HyKkYg3mn+1yv778lVizhJZGsODXA/gPUMhgeuWn+xFUeoczWAn7rFYBH277UjiM2e
+	 jq8XzslfshPrL7m4JM+Al4ry31QX0n5EJW+S/5YiGxlmv0eqtE1uY75IQQEgUwHqxc
+	 y/qhRviqh/RTh26cf7OpNuWbhs0k0kihiHk9N/je41BR7VYiNzFaY4zwfoY8MM9vU4
+	 NwSVJi031yZBw==
+Date: Wed, 18 Jun 2025 12:38:07 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Frank Wunderlich <linux@fw-web.de>
+Cc: DENG Qingfang <dqfext@gmail.com>,
+	Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Landen Chao <Landen.Chao@mediatek.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>, devicetree@vger.kernel.org,
+	Frank Wunderlich <frank-w@public-files.de>,
+	Georgi Djakov <djakov@kernel.org>, linux-kernel@vger.kernel.org,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	linux-arm-kernel@lists.infradead.org,
+	=?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Felix Fietkau <nbd@nbd.name>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, netdev@vger.kernel.org,
+	Daniel Golle <daniel@makrotopia.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Johnson Wang <johnson.wang@mediatek.com>
+Subject: Re: [PATCH v4 01/13] dt-bindings: net: mediatek,net: update for
+ mt7988
+Message-ID: <175026826312.2322513.8876769837630455596.robh@kernel.org>
+References: <20250616095828.160900-1-linux@fw-web.de>
+ <20250616095828.160900-2-linux@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 4/6] rust: enable `clippy::as_underscore` lint
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
- Saravana Kannan <saravanak@google.com>,
- Abdiel Janulgue <abdiel.janulgue@gmail.com>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Robin Murphy <robin.murphy@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Benno Lossin <lossin@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Breno Leitao
- <leitao@debian.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
- linux-block@vger.kernel.org, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, linux-mm@kvack.org,
- linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org
-References: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
- <20250615-ptr-as-ptr-v12-4-f43b024581e8@gmail.com>
-From: Danilo Krummrich <dakr@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20250615-ptr-as-ptr-v12-4-f43b024581e8@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250616095828.160900-2-linux@fw-web.de>
 
 
-On 6/15/25 10:55 PM, Tamir Duberstein wrote:
-> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-> index afcb00cb6a75..fd7a8b759437 100644
-> --- a/rust/kernel/error.rs
-> +++ b/rust/kernel/error.rs
-> @@ -153,7 +153,7 @@ pub(crate) fn to_blk_status(self) -> bindings::blk_status_t {
->       /// Returns the error encoded as a pointer.
->       pub fn to_ptr<T>(self) -> *mut T {
->           // SAFETY: `self.0` is a valid error due to its invariant.
-> -        unsafe { bindings::ERR_PTR(self.0.get() as _).cast() }
-> +        unsafe { bindings::ERR_PTR(self.0.get() as isize).cast() }
+On Mon, 16 Jun 2025 11:58:11 +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Update binding for mt7988 which has 3 gmac and 2 reg items.
+> 
+> With RSS-IRQs the interrupt max-items is now 6. Add interrupt-names
+> to make them accessible by name.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> v4:
+> - increase max interrupts to 8 because of RSS/LRO interrupts
+> - dropped Robs RB due to this change
+> - allow interrupt names
+> - add interrupt-names without reserved IRQs on mt7988
+>   this requires mtk driver patch:
+>   https://patchwork.kernel.org/project/netdevbpf/patch/20250616080738.117993-2-linux@fw-web.de/
+> 
+> v2:
+> - change reg to list of items
+> ---
+>  .../devicetree/bindings/net/mediatek,net.yaml | 28 ++++++++++++++++---
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+> 
 
-Shouldn't this be `c_long`?
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+
 
