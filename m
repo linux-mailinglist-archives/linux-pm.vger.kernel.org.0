@@ -1,156 +1,96 @@
-Return-Path: <linux-pm+bounces-28933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B1B0ADE1B0
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 05:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3CBAADE229
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 06:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D617B189AA42
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 03:35:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 246B41898FFD
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 04:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5183E1A238C;
-	Wed, 18 Jun 2025 03:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2251621ABD4;
+	Wed, 18 Jun 2025 04:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pRqXO5Vo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C908C28E7
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 03:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB9D21ABAE;
+	Wed, 18 Jun 2025 04:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750217687; cv=none; b=AxcPsR8ZmwbJmblNCa2qVetcwvmZDhlW8NTEE1gXBC9jCqMhYN2BXpVcAHMjh6mNJw+XQlafGY3YmsmMmjvIATcZHhUmYCI3bv4SUt4t9o/u9ykofBwDwmVfB9/ScY62OgX5FzgR4mcOSA+R5SAk3EFHQxWZHoktK43+aJ/0IGo=
+	t=1750219785; cv=none; b=eA3L6wzLRsS1u2EJw8JFVKEr8xZe5lPklRBZ4PKfq79FeIA2sbAGRMBv+o5vQYYTgzTZNZEDPtYv7eDbq+wMFzfxsPEGbg7NNb1Q3W2/9eQKHfHVaA8PWaIn81zShrADpP8ORxmSpvgLbJh/b8N3QTvwdg2snGKC2w3mnEicAT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750217687; c=relaxed/simple;
-	bh=L4q+BxKG8kfMxTwhzI+FhB/4ZTcnsXGrsQrONwcVNLE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=SKhn2sLg03M1U5ZDzHDH9rAozrYlGrUNItxUBGcfsCVcrW4uxF52CdRRnhOPASDSih6+3HU1zTy8AGTHYgXG9mJ7JeDFY9P2gD50T26FqWLtqY8OX0GG0dZuvA6P7yuuCMco/LXAJ6K+yswZlEonzkwY37nhYoTaiAIAuGMn59o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn; spf=pass smtp.mailfrom=phytium.com.cn; arc=none smtp.client-ip=129.150.39.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytium.com.cn
-Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
-	by hzbj-icmmx-7 (Coremail) with SMTP id AQAAfwC3v3_DM1Jo0HtaAw--.1123S2;
-	Wed, 18 Jun 2025 11:34:27 +0800 (CST)
-Received: from huangshaobo2075$phytium.com.cn ( [218.76.62.144] ) by
- ajax-webmail-mail (Coremail) ; Wed, 18 Jun 2025 11:34:24 +0800 (GMT+08:00)
-Date: Wed, 18 Jun 2025 11:34:24 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: =?UTF-8?B?6buE5bCR5rOi?= <huangshaobo2075@phytium.com.cn>
-To: "Pierre Gondois" <pierre.gondois@arm.com>, linux-pm@vger.kernel.org
-Cc: rafael@kernel.org, lenb@kernel.org, khilman@kernel.org,
-	"Christian Loehle" <christian.loehle@arm.com>,
-	"Sudeep Holla" <Sudeep.Holla@arm.com>
-Subject: Re: Subject: [cpuidle] Limitation: cannot model asymmetric C-state
- latencies on big.LITTLE SoCs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
- 20250327(ab59d9cc) Copyright (c) 2002-2025 www.mailtech.cn
- mispb-8dfce572-2f24-404d-b59d-0dd2e304114c-icoremail.cn
-In-Reply-To: <97e8bc72-e44b-487a-91ba-206732094955@arm.com>
-References: <5d7534c.5492.1977796c43a.Coremail.huangshaobo2075@phytium.com.cn>
- <97e8bc72-e44b-487a-91ba-206732094955@arm.com>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: 08TqVGZvb3Rlcl90eHQ9MzkyMDozODM=
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1750219785; c=relaxed/simple;
+	bh=R1SVW+ip9jM+Lh5A9v+hTwsf8Xs9Pj+YKS4SvGsvKTA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f1ReOqfhOrIIQWBnE6XDNNZZcAsH7DwbLOwcuzTAuwt0jI9UHNTd9gcUaUDSWgj2Vl2sdmxuaimgHiBpx304NwPFHWsoVg4kP/ZRBY5FJ536NJiIL24FSTvjF9QJLhfKFkhQDDrj2l52TSMzAkCRO4nWh6rCPFZO9nnf8b8A5tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pRqXO5Vo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363D9C4CEF2;
+	Wed, 18 Jun 2025 04:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750219784;
+	bh=R1SVW+ip9jM+Lh5A9v+hTwsf8Xs9Pj+YKS4SvGsvKTA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=pRqXO5VoKGAmykg5T7jjDtSc8dVDa+Ugo1/HsWDYR5ezA2L6u0bMN781GE7bN0UbY
+	 gLWuzB/+mwdQHCIgjIFYwayVUi4NBuZkmaPZ70bQbu6r9wXidp3IZd4EWlXD3oNYMb
+	 5DNKtVoibHWBrKqpcIUIBJG8Sc61fD4Kwo18RNTRuZGzIwM/ORnY7Vc92eQEAS9MZp
+	 Gq8Gs2+aBeA9OgKonOQOkUd4HHHa08yYBbDZsTy7y7TRXnEfrYM+EXQAYqU4WIOZHn
+	 zceAQqFMpxPaOWf2CcAQh4bVcL8aq2MHQo5aS8aVY+EC6ZRefgtSyd3/uakhX0zGRe
+	 nRZXlSF35quHA==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Georgi Djakov <djakov@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Odelu Kukatla <quic_okukatla@quicinc.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Mike Tipton <mdtipton@quicinc.com>,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH V11 0/7] Add EPSS L3 provider support on SA8775P SoC
+Date: Tue, 17 Jun 2025 23:09:26 -0500
+Message-ID: <175021976637.732077.15150240059038030494.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250415095343.32125-1-quic_rlaggysh@quicinc.com>
+References: <20250415095343.32125-1-quic_rlaggysh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <9cbbbf.586c.197811a26d3.Coremail.huangshaobo2075@phytium.com.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:AQAAfwBn_CXAM1JoGeVWAA--.9938W
-X-CM-SenderInfo: xkxd0wpvkd0uzrsqlko6sk53xlxphulrpou0/1tbiAQAFCmhRxgsC
-	TgAAs2
-Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=huangshaob
-	o2075@phytium.com.cn;
-X-Coremail-Antispam: 1Uk129KBjvJXoW3Gr1UCFWxAr43ZFWrWFykZrb_yoWDXr4Up3
-	W8J3W8Aw1UGa12q3yS9w18AryUG3yUGr17Jw18t3yqywsxJrn0qrnxKFWxJ3WjgFW5tr4D
-	t3W3X390qr1UtrUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-	DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
-	UUUUU
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-PiBIZWxsbyBTaGFvYm8sCj4gCj4gT24gNi8xNi8yNSAwOToxNCwg6buE5bCR5rOiIHdyb3RlOgo+
-ID4gRnJvbTogaHVhbmdzaGFvYm8yMDc1QHBoeXRpdW0uY29tLmNuCj4gPiBUbzogbGludXgtcG1A
-dmdlci5rZXJuZWwub3JnCj4gPiBDYzogcmFmYWVsQGtlcm5lbC5vcmcsIGxlbmJAa2VybmVsLm9y
-ZywgZGVlcHRoaUBsaW51eC52bmV0LmlibS5jb20sIGtoaWxtYW5Aa2VybmVsLm9yZwo+ID4gU3Vi
-amVjdDogW2NwdWlkbGVdIExpbWl0YXRpb246IGNhbm5vdCBtb2RlbCBhc3ltbWV0cmljIEMtc3Rh
-dGUgbGF0ZW5jaWVzIG9uIGJpZy5MSVRUTEUgU29Dcwo+ID4KPiA+IEhpLAo+ID4KPiA+IEknbSB3
-b3JraW5nIG9uIGFuIEFSTTY0IHBsYXRmb3JtIHdpdGggYSBiaWcuTElUVExFIENQVSB0b3BvbG9n
-eS4gV2hpbGUgcGFyc2luZyB0aGUgQUNQSSB0YWJsZXMsCj4gPiBJIG5vdGljZWQgdGhhdCB0aGUg
-Qy1zdGF0ZSBsYXRlbmN5IGFuZCByZXNpZGVuY3kgdmFsdWVzIGRpZmZlciBiZXR3ZWVuIHRoZSBi
-aWcgYW5kIExJVFRMRSBjb3JlcywKPiA+IGFzIGV4cGVjdGVkLgo+ID4KPiA+IEhvd2V2ZXIsIEkg
-Zm91bmQgdGhhdCB0aGUgY3VycmVudCBjcHVpZGxlIGZyYW1ld29yayBvbmx5IGFsbG93cyBhIHNp
-bmdsZSBnbG9iYWwgYGNwdWlkbGVfZHJpdmVyYCwKPiA+IGFuZCBhbGwgQ1BVcyBzaGFyZSB0aGUg
-c2FtZSBgY3B1aWRsZV9kcml2ZXItPnN0YXRlc1tdYCBhcnJheS4gQXMgYSByZXN1bHQsIG9ubHkg
-dGhlIGZpcnN0IGNvcmUgdG8KPiA+IGluaXRpYWxpemUgKHVzdWFsbHkgYSBMSVRUTEUgY29yZSkg
-c2V0cyB1cCB0aGUgQy1zdGF0ZXMsIGFuZCB0aGUgc2FtZSB2YWx1ZXMgYXJlIGFwcGxpZWQgdG8g
-YWxsIGNvcmVzLAo+ID4gaW5jbHVkaW5nIHRoZSBiaWcgb25lcy4gVGhpcyBsZWFkcyB0byBpbmNv
-cnJlY3QgaWRsZSBiZWhhdmlvciBvbiBhc3ltbWV0cmljIHBsYXRmb3Jtcy4KPiA+Cj4gPiBJIGJl
-bGlldmUgdGhpcyBiZWhhdmlvciB3YXMgaW50cm9kdWNlZCBieSBjb21taXQgNDZiY2ZhZDdhODE5
-Cj4gPiAoImNwdWlkbGU6IFNpbmdsZS9HbG9iYWwgcmVnaXN0cmF0aW9uIG9mIGlkbGUgc3RhdGVz
-IikuCj4gPgo+ID4gSSB1bmRlcnN0YW5kIHRoaXMgZGVzaWduIHdhcyBpbnRyb2R1Y2VkIGluIDIw
-MTEgdG8gc2ltcGxpZnkgY3B1aWRsZSBhbmQgcmVkdWNlIG1lbW9yeSB1c2FnZToKPiA+IGh0dHBz
-Oi8vbGttbC5vcmcvbGttbC8yMDExLzQvMjUvODMKPiA+Cj4gPiBIb3dldmVyLCBvbiB0b2RheSdz
-IGhldGVyb2dlbmVvdXMgU29DcywgdGhpcyBnbG9iYWwgbW9kZWwgbm8gbG9uZ2VyIHN1ZmZpY2Vz
-LiBGb3IgcHJvcGVyIG1vZGVsaW5nLAo+ID4gd2UgbmVlZCBzdXBwb3J0IGZvciBwZXItY2x1c3Rl
-ciBvciBwZXItY29yZSBjcHVpZGxlIGRyaXZlcnMsIG9yIGF0IGxlYXN0IHNvbWUgbWVjaGFuaXNt
-IHRvIGFsbG93Cj4gPiBkaWZmZXJlbnQgaWRsZSBzdGF0ZSBwYXJhbWV0ZXJzIHBlciBDUFUuCj4g
-Pgo+ID4gSGFzIHRoZXJlIGJlZW4gYW55IGRpc2N1c3Npb24gb3Igd29yayB0b3dhcmQgbGlmdGlu
-ZyB0aGlzIGxpbWl0YXRpb24/Cj4gPgo+ID4gVGhhbmtzLAo+ID4KPiA+IFNoYW9ibyBIdWFuZwo+
-ID4KPiA+Cj4gPiDkv6Hmga/lronlhajlo7DmmI7vvJrmnKzpgq7ku7bljIXlkKvkv6Hmga/lvZLl
-j5Hku7bkurrmiYDlnKjnu4Tnu4fmiYDmnIks5Y+R5Lu25Lq65omA5Zyo57uE57uH5a+56K+l6YKu
-5Lu25oul5pyJ5omA5pyJ5p2D5Yip44CC6K+35o6l5pS26ICF5rOo5oSP5L+d5a+GLOacque7j+WP
-keS7tuS6uuS5pumdouiuuOWPryzkuI3lvpflkJHku7vkvZXnrKzkuInmlrnnu4Tnu4flkozkuKrk
-urrpgI/pnLLmnKzpgq7ku7bmiYDlkKvkv6Hmga/jgIIKPiA+IEluZm9ybWF0aW9uIFNlY3VyaXR5
-IE5vdGljZTogVGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBpbiB0aGlzIG1haWwgaXMgc29sZWx5
-IHByb3BlcnR5IG9mIHRoZSBzZW5kZXIncyBvcmdhbml6YXRpb24uVGhpcyBtYWlsIGNvbW11bmlj
-YXRpb24gaXMgY29uZmlkZW50aWFsLlJlY2lwaWVudHMgbmFtZWQgYWJvdmUgYXJlIG9ibGlnYXRl
-ZCB0byBtYWludGFpbiBzZWNyZWN5IGFuZCBhcmUgbm90IHBlcm1pdHRlZCB0byBkaXNjbG9zZSB0
-aGUgY29udGVudHMgb2YgdGhpcyBjb21tdW5pY2F0aW9uIHRvIG90aGVycy4KPiAKPiBKdXN0IHRv
-IGNvbmZpcm0gdGhhdCBJIGNhbiByZXByb2R1Y2UgdGhpcy4KPiAKPiBTdWRlZXAgd2lsbCBiZSBi
-YWNrIGluIGEgZmV3IGRheXMsIGluIGNhc2UgaGUgaGFzIG1vcmUgYmFja2dyb3VuZCBvcgo+IGFu
-b3RoZXIgdmlldyBvbiB0aGUgdG9waWMsCj4gYnV0IEkgYWdyZWUgYXN5bW1ldHJpYyBfTFBJIHN0
-YXRlcyBzaG91bGQgaWRlYWxseSBiZSB2aXNpYmxlIHRvIHRoZSBrZXJuZWwuCj4gCj4gSSBhbSBo
-YXZpbmcgYSBsb29rIGF0IHRoZSBjb2RlIGFzd2VsbC4gSW4gY2FzZSB5b3UgaGF2ZSBhbgo+IGlt
-cGxlbWVudGF0aW9uLCBJIGNhbiBwcm92aWRlIGFkZGl0aW9uYWwgdGVzdGluZy4KPiAKPiBSZWdh
-cmRzLAo+IAo+IFBpZXJyZQo+IAo+IElNUE9SVEFOVCBOT1RJQ0U6IFRoZSBjb250ZW50cyBvZiB0
-aGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgYXJlIGNvbmZpZGVudGlhbCBhbmQgbWF5IGFs
-c28gYmUgcHJpdmlsZWdlZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCwg
-cGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBkbyBub3QgZGlzY2xvc2Ug
-dGhlIGNvbnRlbnRzIHRvIGFueSBvdGhlciBwZXJzb24sIHVzZSBpdCBmb3IgYW55IHB1cnBvc2Us
-IG9yIHN0b3JlIG9yIGNvcHkgdGhlIGluZm9ybWF0aW9uIGluIGFueSBtZWRpdW0uIFRoYW5rIHlv
-dS4KCgpGcm9tOiBodWFuZ3NoYW9ibzIwNzVAcGh5dGl1bS5jb20uY24KVG86IHBpZXJyZS5nb25k
-b2lzQGFybS5jb20sIGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZwpDYzogcmFmYWVsQGtlcm5lbC5v
-cmcsIGxlbmJAa2VybmVsLm9yZywga2hpbG1hbkBrZXJuZWwub3JnLCBjaHJpc3RpYW4ubG9laGxl
-QGFybS5jb20sIFN1ZGVlcC5Ib2xsYUBhcm0uY29tClN1YmplY3Q6IFtjcHVpZGxlXSBIYW5kbGlu
-ZyBhc3ltbWV0cmljIF9MUEkgc3RhdGVzIGluIGNwdWlkbGUKCkhpIFBpZXJyZSwKClRoYW5rcyBm
-b3IgY29uZmlybWluZyB0aGUgaXNzdWUgYW5kIGxvb2tpbmcgaW50byB0aGUgY29kZS4KCkkgaGF2
-ZW7igJl0IHN0YXJ0ZWQgaW1wbGVtZW50aW5nIHlldCwgYnV0IEnigJl2ZSBiZWVuIHRoaW5raW5n
-IGFib3V0IGhvdyB0byByZXByZXNlbnQgdGhlIGFzeW1tZXRyeSBwcm9wZXJseS4KCkluaXRpYWxs
-eSwgSSBjb25zaWRlcmVkIGdyb3VwaW5nIENQVXMgYnkgY2x1c3Rlciwgc28gdGhhdCBjb3JlcyBp
-biB0aGUgc2FtZSBjbHVzdGVyIHdvdWxkIHNoYXJlIGEgYGNwdWlkbGVfZHJpdmVyYC4KQnV0IEkg
-cmVhbGl6ZWQgdGhhdCB0aGlzIGFzc3VtcHRpb24gZG9lc27igJl0IGFsd2F5cyBob2xkLCBlc3Bl
-Y2lhbGx5IG9uIHN5c3RlbXMgd2hlcmUgYSBjbHVzdGVyIG1heSBjb250YWluIGhldGVyb2dlbmVv
-dXMKQ1BVcyAoZS5nLiBiaWcuTElUVExFIGRlc2lnbnMgd2l0aCBzaGFyZWQgcG93ZXIgZG9tYWlu
-cykuCgpTbyBub3cgSeKAmW0gbGVhbmluZyB0b3dhcmRzIGdyb3VwaW5nIENQVXMgdGhhdCBoYXZl
-IHRoZSBzYW1lIHNldCBvZiBfTFBJIHN0YXRlcyDigJQgcmVnYXJkbGVzcyBvZiB0aGVpciB0b3Bv
-bG9neSDigJQgYW5kIGFzc2lnbmluZwpvbmUgY3B1aWRsZV9kcml2ZXIgcGVyIHN1Y2ggZ3JvdXAu
-IFRoaXMgYXZvaWRzIHVzaW5nIGEgc2luZ2xlIGdsb2JhbCBkcml2ZXIsIGFuZCBhbHNvIGF2b2lk
-cyB0aGUgb3ZlcmhlYWQgb2YgcGVyLUNQVSBkcml2ZXJzCndoZW4gbm90IG5lY2Vzc2FyeS4KClRo
-aXMgaXMganVzdCBhbiBpbml0aWFsIGlkZWEsIGFuZCBJ4oCZbSBzdGlsbCBleHBsb3JpbmcgcG9z
-c2libGUgYXBwcm9hY2hlcy4gSWYgeW91IGhhdmUgYW55IHN1Z2dlc3Rpb25zIG9yIGFsdGVybmF0
-aXZlIGlkZWFzLApJ4oCZZCBiZSBoYXBweSB0byBkaXNjdXNzIGZ1cnRoZXIgb3IgZXZlbiBjb2xs
-YWJvcmF0ZSBvbiBhbiBpbXBsZW1lbnRhdGlvbi4KCkJlc3QgcmVnYXJkcywgIApTaGFvYm8gSHVh
-bmcNCg0K5L+h5oGv5a6J5YWo5aOw5piO77ya5pys6YKu5Lu25YyF5ZCr5L+h5oGv5b2S5Y+R5Lu2
-5Lq65omA5Zyo57uE57uH5omA5pyJLOWPkeS7tuS6uuaJgOWcqOe7hOe7h+WvueivpemCruS7tuaL
-peacieaJgOacieadg+WIqeOAguivt+aOpeaUtuiAheazqOaEj+S/neWvhizmnKrnu4/lj5Hku7bk
-urrkuabpnaLorrjlj68s5LiN5b6X5ZCR5Lu75L2V56ys5LiJ5pa557uE57uH5ZKM5Liq5Lq66YCP
-6Zyy5pys6YKu5Lu25omA5ZCr5L+h5oGv44CCDQpJbmZvcm1hdGlvbiBTZWN1cml0eSBOb3RpY2U6
-IFRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaW4gdGhpcyBtYWlsIGlzIHNvbGVseSBwcm9wZXJ0
-eSBvZiB0aGUgc2VuZGVyJ3Mgb3JnYW5pemF0aW9uLlRoaXMgbWFpbCBjb21tdW5pY2F0aW9uIGlz
-IGNvbmZpZGVudGlhbC5SZWNpcGllbnRzIG5hbWVkIGFib3ZlIGFyZSBvYmxpZ2F0ZWQgdG8gbWFp
-bnRhaW4gc2VjcmVjeSBhbmQgYXJlIG5vdCBwZXJtaXR0ZWQgdG8gZGlzY2xvc2UgdGhlIGNvbnRl
-bnRzIG9mIHRoaXMgY29tbXVuaWNhdGlvbiB0byBvdGhlcnMu
 
+On Tue, 15 Apr 2025 09:53:36 +0000, Raviteja Laggyshetty wrote:
+> Add Epoch Subsystem (EPSS) L3 provider support on SA8775P SoCs.
+> 
+> Current interconnect framework is based on static IDs for creating node
+> and registering with framework. This becomes a limitation for topologies
+> where there are multiple instances of same interconnect provider.
+> Modified interconnect framework APIs to create and link icc node with
+> dynamic IDs, this will help to overcome the dependency on static IDs.
+> 
+> [...]
+
+Applied, thanks!
+
+[6/7] arm64: dts: qcom: sa8775p: add EPSS l3 interconnect provider
+      commit: 6531b4b095dacc3067c91a802e1518f3faad72b4
+[7/7] arm64: dts: qcom: sa8775p: Add CPU OPP tables to scale DDR/L3
+      commit: 985237d49c4cf0254810b4b8078d240ba9bfc2ec
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
