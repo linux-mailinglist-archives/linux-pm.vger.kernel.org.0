@@ -1,124 +1,185 @@
-Return-Path: <linux-pm+bounces-29018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86899ADF98E
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 00:45:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0BF0ADF9A1
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 00:55:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CB355A01DA
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 22:44:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38289178753
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 22:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB6C27E069;
-	Wed, 18 Jun 2025 22:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F61627FB14;
+	Wed, 18 Jun 2025 22:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DyLDCb/I"
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="nGd+6EMy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37FE27EFF2
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 22:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F3F16B3B7
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 22:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750286700; cv=none; b=icRxrXzL/GflTzT/vSLYr8Qo8lSZ/5oWk2h4VNFNfOITR3SO8OqCZpwPFkEjbckuVECs1AiWnCvH7b7CmVVhSrsXqjN21peTR3Y5KY/3/Wnr0gfm0k7Lm7kJi9EmiXmr+QVegPqPcyUQNqRviO7os3w+js7qVg2xzRCUGmda29w=
+	t=1750287303; cv=none; b=NDF7TD9kQOO1BDje3+PULiEkbK4fIT5/8J/Ad0lxW8nCkZufo4RdHkIgTwKKtyM1iJNV80Y2uI7gRH6P+zPDPr4qCWysGe40W9VS56Zev1thj5StfhR3pm2kKGy78p68coImTtZ/FxFNfTpkBofnl4khyjWYnxVU6Mb147IpmFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750286700; c=relaxed/simple;
-	bh=0ED5HZjv3WSWzpJDL2MNE3DxJKC3CPCwd3eAHubf36Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QZ912DZefT1PSwJkbRpirlK6uCb47g6cfBjKy9eWlk79SilOgMfLPRfmtz66ZblMFvEEp/kjwsxgnhTF6dC7fwycZnDfA7B5R/YQ3CWuHgN+1wwIX5+2A0olH8TWDarup6rqmbxZItzFpa7sKhiICnLsle3jYsxxLr88W7A2ssw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DyLDCb/I; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-8760d31bd35so4113439f.2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 15:44:58 -0700 (PDT)
+	s=arc-20240116; t=1750287303; c=relaxed/simple;
+	bh=MVcOFZqeSZ2MqvQCc0Mh/4bkk3iDu1m9HAf/e2F974M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jL/QXh7a8Jfstc3ZTZMR5EDW4SqLBe9+b91YiF6QNXX9LX0rBIT7p1K16e0wrt5L99gaxC458g68GYIvuD4ckD6xV6r9FUc632JPiFP89Rxm2gnFJLfcNFEZJP82oX7rRKkZOfaIh9U/Qx+e7nBbRivh6Nj5HELnS1JMNeZR3Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=nGd+6EMy; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-234bfe37cccso3454555ad.0
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 15:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1750286698; x=1750891498; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2n2SQNFGQmtENFVzE8cjN4n7LHc1Thph1pphR4bfrBo=;
-        b=DyLDCb/IX7UnllW+r/78Jb4q3P+abine8Ont+KUC9P/QKLC5qMg3bgX4yJXh8FRCAg
-         U/BLPSTeFUfky+VoucW2+VNdnZY7/MDqGqoj3ksqp+ngiiz0biNGn8NATUoOLL5Oz5gd
-         5KTqPdsZcn7oTCwkp+gLPYLw8B5wzih91h+Y8=
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1750287300; x=1750892100; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/5NwaPDyOETWv2pDddwa/aKZNaAck4pdMU751257ncI=;
+        b=nGd+6EMyXEm/f7XPhD9F6aIWMRMN444fLJ0ryS73mz3Bfekd82NCX6zqFQ7hYXZ+tM
+         pNQqM+/d97aZJqY34tRIYVfxXvFTNE3PmZlop+ejrjvsEDnnxbICJ47e4vkQsuXlSbmV
+         kXtBnaHGifK56qrJTCTeDiM7Bp7YgaVlzz7vbHsr9dzeS1ZsGfX0supdSSsqNvbROnzW
+         MfI5ELI2r6wR+kI22FH/TAQq9Z0aYkrWEA3+NJrR2Ncq186IOq+BJNpkGT/jQ2Etgzyz
+         L06Of1ifi2jQZY8gsxZbXVJvTZuoSyrfbXiXcXYfJuXf88U+j613wO8b2NZyDr9Pcqec
+         fPQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750286698; x=1750891498;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n2SQNFGQmtENFVzE8cjN4n7LHc1Thph1pphR4bfrBo=;
-        b=PgOpnsfbBjHRuRj9VpPAov1AeIYo/6LHmFUv7VAhbKSNvFcZ+GR+0MB5RJwDWm/e28
-         p9PwQbZzh+3ne8qtoiFPEYe4gIzdWdQdChfUvnuTgLvx6uvpxhkvN2YIh1A3H9v/Pl/K
-         oNyF5/uht35Io+tm6Qql9Slx6IUUz3cNb8m3paZ6pPpH14mgICy/zDUddkOxTTSWdqBi
-         WQB4R2MmDMld8U7CFOifgapOVaEaVbrS0wmrRNInMIbRt6w9N+QAkZg5se6Fz9IMSuF8
-         Cq4Ny9C1ATq+AUrWmUFqA7OdmWsWyrbDTDMaNvNxofRcdQiAfFiGqEFNJXl9jU6O8rLQ
-         471A==
-X-Gm-Message-State: AOJu0YxNqvtlq/oXMbzN7zjiMLyul2fNdu4BhJFDybwBV5qY43AyX9j2
-	D+VwFxFcdyHBLmUrI3fmPz5tH2fSa0pn3wjnXSCFKzhzGDW8Jub+EDgvgwlOlIO0afQ=
-X-Gm-Gg: ASbGnctevHAVOs2tAW5+Eqo+f/zQknfguwJF7OwQT2HxD4gehY66xu4dHZAq88mM9I2
-	6zBbWd/1P8jTXjNp9w1KzYDdbo1LgDP8h3v0zu8MxkIE+ehGMViczKdh5h9bl6fmwGb7QsDr/yr
-	lymxZlpsmt0jWBm5HKYIqGwcxTiq3YGVfwbdCEH2TwVQpqvUud4Jms2i4/+cYfYf37tmsmUGPK4
-	k0d40gnUS2YmBQ9lEARt0wtnPUiHV5+Da8zqj10JrdlmLDPoJWdowPXXUuioSDUNYvwU0AIyG8w
-	7HMm0+S4/JNDk1hApBYaCzjCONc29EZXSfCteCGIM0HMwGcnkDMMFc/hKjlmCu92WBrRy+lRqg=
-	=
-X-Google-Smtp-Source: AGHT+IHXsSSQld9y7WIQoRaIUbFW+s42HR4KGpA2t3mpOt2Rr+gELKUrlxZAvg3wyi0Rm3o7nfKxfA==
-X-Received: by 2002:a05:6602:1612:b0:861:6f49:626 with SMTP id ca18e2360f4ac-875ded13886mr2568261539f.6.1750286695900;
-        Wed, 18 Jun 2025 15:44:55 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-875d57ff0fesm281953239f.26.2025.06.18.15.44.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 15:44:55 -0700 (PDT)
-Message-ID: <6e1fe001-dd21-43fd-ba7b-aae6df819fdd@linuxfoundation.org>
-Date: Wed, 18 Jun 2025 16:44:54 -0600
+        d=1e100.net; s=20230601; t=1750287300; x=1750892100;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/5NwaPDyOETWv2pDddwa/aKZNaAck4pdMU751257ncI=;
+        b=KeldwboCcqXyP/fZ6ttRrH4Gplu3XqvkrUKeMmbKKyQ+4lBRO1x1/Iak6lHYT5+LFg
+         yX2G9VvOv1FX0pkqUes5RjIHz48uweQklEw6YDk6JvkPKNFPH+rwbvcQbV8dVBnc4n8K
+         gvLhTu2/Ow7wOQ4SG7Wvc6KFYk+qA4KAxshHlZ4Zr31YP9WpilPbPTVQ2Nf8rdcbNgQA
+         LXSufN9H/i3WDkUuiQsRcGSRF58YPnbyaQsv0mXTVFtIazejODKA/7/oIKGNWMl1ubaX
+         OpY5kPb1v0ASoIYrCBHOfzVRniktIDDy73P0VkDgJsHQHq7RUQMWsIWBPGZMy76LpCJH
+         g8Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3ofE7tTgEfkPXLDyiDpM2KSqvymc9Tvu98VxdGoTyNGedPtQGZXo9cFQfhaVIg3ASf8Wl7LizDw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFd93xwJkctW2XanNH59UeAcufIHm8M31XPWxhUfoJpcrH68Zi
+	tbvl95Qk1R/CwD6gnRa+4EHwyFR1LolDTCsxDOVYktCt5jhgk8ZhR/29HuZDIF3ugM4=
+X-Gm-Gg: ASbGncuFVarcwQvEH7wp6HwDArNouD9mPb5kTkaUXx4q1oaXDXLJ7ODBIN2U7NkrhiS
+	rHDb3/97Hm2CQEK+1oNv8MLjwq9YCeqQ25W3qEQy44dRqgdrNe5Ok/47iLYZ0k+YBPGuTy6ngHL
+	gzUZpz6zcq8sRma49ERHtC5Xneb1m5XmwcJSn6Sd4ERs2CSluyG5T9qmcfCt0RoB09D2+apOGD1
+	B51Ylf+l0DQvFupVwjQbN1wn4XqHGhSbfKQ+DL8exUa4NaV+e1OS+NAe01CVGBp1BiAA4JtDeYx
+	ipsL0SepAkQaI6XkCOuh+fiuxEaxtQju8xtt8e1Ng9y9WCoUc7EHKtlU67L23ZBSkrn7N6/zs0T
+	28bzzJQ==
+X-Google-Smtp-Source: AGHT+IHgVrtzzhpW+oJLMdXuYbVuOtesVP9Nvp/NylotZPQenDpgvWchZUgnqqSWky9m7BlwSjYVnw==
+X-Received: by 2002:a17:90a:dfcb:b0:313:d346:f347 with SMTP id 98e67ed59e1d1-313f1e27e38mr28887847a91.35.1750287300056;
+        Wed, 18 Jun 2025 15:55:00 -0700 (PDT)
+Received: from x1 (97-120-250-80.ptld.qwest.net. [97.120.250.80])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3158a24be89sm591076a91.23.2025.06.18.15.54.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 15:54:59 -0700 (PDT)
+Date: Wed, 18 Jun 2025 15:54:57 -0700
+From: Drew Fustini <drew@pdp7.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Frank Binns <frank.binns@imgtec.com>,
+	Matt Coster <matt.coster@imgtec.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v5 1/8] power: sequencing: Add T-HEAD TH1520 GPU power
+ sequencer driver
+Message-ID: <aFNDwcK5+ZuHBdrw@x1>
+References: <20250618-apr_14_for_sending-v5-0-27ed33ea5c6f@samsung.com>
+ <CGME20250618102226eucas1p112dacf9670f68b4a8581aa1a8b5ced9d@eucas1p1.samsung.com>
+ <20250618-apr_14_for_sending-v5-1-27ed33ea5c6f@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: Add cpu_start()/cpu_stop() callbacks for
- monitors
-To: Rohan Lambture <rohanlambture13@gmail.com>, trenn@suse.com,
- shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <94c3faee898b5436cc0b837c6778011a060b8468.1749480264.git.rohanlambture13@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <94c3faee898b5436cc0b837c6778011a060b8468.1749480264.git.rohanlambture13@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250618-apr_14_for_sending-v5-1-27ed33ea5c6f@samsung.com>
 
-On 6/9/25 08:49, Rohan Lambture wrote:
-> Move per-CPU logic from inside individual monitors to the main
-> monitoring framework by adding cpu_start() and cpu_stop() callback
-> functions to the cpuidle_monitor structure.
+On Wed, Jun 18, 2025 at 12:22:07PM +0200, Michal Wilczynski wrote:
+> Introduce the pwrseq-thead-gpu driver, a power sequencer provider for
+> the Imagination BXM-4-64 GPU on the T-HEAD TH1520 SoC. This driver
+> controls an auxiliary device instantiated by the AON power domain.
 > 
-> This refactoring allows the framework to handle per-CPU scheduling
-> and gives higher priority to fork_it operations as mentioned in
-> the TODO. Individual monitors now only need to implement per-CPU
-> initialization and cleanup logic without managing the CPU iteration
-> themselves.
+> The TH1520 GPU requires a specific sequence to correctly initialize and
+> power down its resources:
+>  - Enable GPU clocks (core and sys).
+>  - De-assert the GPU clock generator reset (clkgen_reset).
+>  - Introduce a short hardware-required delay.
+>  - De-assert the GPU core reset. The power-down sequence performs these
+>    steps in reverse.
 > 
-> Changes made:
-> - Add cpu_start()/cpu_stop() function pointers to cpuidle_monitor struct
-> - Update monitoring framework to call per-CPU callbacks for each CPU
-> - Refactor cpuidle_sysfs and mperf monitors to use new callback pattern
-> - Maintain backward compatibility for monitors without per-CPU callbacks
+> Implement this sequence via the pwrseq_power_on and pwrseq_power_off
+> callbacks.
 > 
-> This addresses the TODO item: "Add cpu_start()/cpu_stop() callbacks
-> for monitor -> This is to move the per_cpu logic from inside the
-> monitor to outside it."
-
-Please share details on how this changes has been tested.
-Also run checkpatch - there are a few warnings.
-
+> Crucially, the driver's match function is called when a consumer (the
+> Imagination GPU driver) requests the "gpu-power" target. During this
+> match, the sequencer uses clk_bulk_get() and
+> reset_control_get_exclusive() on the consumer's device to obtain handles
+> to the GPU's "core" and "sys" clocks, and the GPU core reset.  These,
+> along with clkgen_reset obtained from parent aon node, allow it to
+> perform the complete sequence.
 > 
-> Signed-off-by: Rohan Lambture <rohanlambture13@gmail.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
+>  MAINTAINERS                                 |   1 +
+>  drivers/power/sequencing/Kconfig            |   8 +
+>  drivers/power/sequencing/Makefile           |   1 +
+>  drivers/power/sequencing/pwrseq-thead-gpu.c | 231 ++++++++++++++++++++++++++++
+>  4 files changed, 241 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0183c028fa18c397d30ec82fd419894f1f50a448..3283ff592215249bcf702dbb4ab710477243477e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21395,6 +21395,7 @@ F:	drivers/mailbox/mailbox-th1520.c
+>  F:	drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c
+>  F:	drivers/pinctrl/pinctrl-th1520.c
+>  F:	drivers/pmdomain/thead/
+> +F:	drivers/power/sequencing/pwrseq-thead-gpu.c
+>  F:	drivers/reset/reset-th1520.c
+>  F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
+>  F:	include/dt-bindings/power/thead,th1520-power.h
+> diff --git a/drivers/power/sequencing/Kconfig b/drivers/power/sequencing/Kconfig
+> index ddcc42a984921c55667c46ac586d259625e1f1a7..7fa912c9af2479cdce909467c29fe335788f0bd7 100644
+> --- a/drivers/power/sequencing/Kconfig
+> +++ b/drivers/power/sequencing/Kconfig
+> @@ -27,4 +27,12 @@ config POWER_SEQUENCING_QCOM_WCN
+>  	  this driver is needed for correct power control or else we'd risk not
+>  	  respecting the required delays between enabling Bluetooth and WLAN.
+>  
+> +config POWER_SEQUENCING_THEAD_GPU
+> +	tristate "T-HEAD TH1520 GPU power sequencing driver"
+> +	depends on ARCH_THEAD && AUXILIARY_BUS
+> +	help
+> +	  Say Y here to enable the power sequencing driver for the TH1520 SoC
+> +	  GPU. This driver handles the complex clock and reset sequence
+> +	  required to power on the Imagination BXM GPU on this platform.
 
-thanks,
--- Shuah
+This is a minor nit but maybe this should be POWER_SEQUENCING_TH1520_GPU?
+
+I often grep for TH1520 to make sure I have all the options enabled and
+it took me a second to realize it was 'THEAD' instead of 'TH1520'.
+
+In retrospect, I probably should have have used CONFIG_DWMAC_TH1520 for
+the ethernet driver instead of CONFIG_DWMAC_THEAD.
+
+Thanks,
+Drew
 
