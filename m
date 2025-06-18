@@ -1,143 +1,129 @@
-Return-Path: <linux-pm+bounces-28990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C057DADF35B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 19:04:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34430ADF35F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 19:04:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4E04189FE74
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 17:04:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E89A23A4A0E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 17:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCBEF2E8E0B;
-	Wed, 18 Jun 2025 17:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A2B2F198E;
+	Wed, 18 Jun 2025 17:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pmPUEkiS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AEh0qImt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A23B285CAC;
-	Wed, 18 Jun 2025 17:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C652F003C;
+	Wed, 18 Jun 2025 17:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750266263; cv=none; b=RQDuzTW8X7D0eWRzMJyqqb2oUOAp+y+Ur9mrPCoiHbSja2NG/UaINMTllXUMM02fK5qmoUAxqiWodU3Pociu2zb6PCHgJxg7YTPfKj6WK7QFUjyvyHMKA7CTd4Il5yNHXXihs2gWwiTlbDCeV09jkau3xM3NCNSseYSx8/Saudk=
+	t=1750266267; cv=none; b=Ux1gUt0heK6apYVbS2RKh+fD5zFMjo1PJ4bzks4PesHMvUZYvuLhxpp4Gxvz9Y1sRy7FjV2eH1CjDLWkVSA3Xp+hxGxqw1XnzDSJGQ5gef7pqHfNiXA9S/Ma5eGA0opxRznXWU0cZa5+5jw38G4e4/gXH83B7TvZhA1RYrTWJDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750266263; c=relaxed/simple;
-	bh=Ypa9nVjCfR8sFxcmmQL7ktbIc+Kj3T4zssOI+MEeCKw=;
+	s=arc-20240116; t=1750266267; c=relaxed/simple;
+	bh=bzVpmXFF+T69S76tPY21hKIVM7O6QGPZHJ4LN2Hdnks=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KFNQRVquyVwndz2b3jHJvlVkXPfcjPDPi3JQuFq7I5knfYgw9VxNabjOmOJf+p7X8fuUrLNmVroSeoiSySpk5EYhNvITaz89qNtl6peApsUHGst38jFkagNvniLL6DjAJy0X8S6TGIflHx7bCDNAzlWYN8Sha+tkX7t8yG4qDzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pmPUEkiS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3293FC4CEE7;
-	Wed, 18 Jun 2025 17:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750266263;
-	bh=Ypa9nVjCfR8sFxcmmQL7ktbIc+Kj3T4zssOI+MEeCKw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pmPUEkiS0zzUQ4vB90YERSrSlA8aXa/7N9mvpbOrgmu8p3KxaWBKr0be4yh1RXqd/
-	 OPtmUb2bp/Rut9ZbE204gDZlBkwPYhdj1pq/12QR+9Pz430tPLu7tiG7XvIMVNptIH
-	 JB8j59E9BXFdnUAstjLDkXRM2wejwpwb9mnIHVyY7ueSt3A1XArY8Ht4+lSYM2r8md
-	 ZjK1fmL00NFGhBn+wm0+7XNewl13u+L1gan4Pw2bc9ui9c6stO/43r3z1DVYINVdbL
-	 XJwIhehGdPzvM01NigFzBNNtciidHJRkyz07yzBMovN52A7GR8HDNJxh6tlRChhPOT
-	 bMUTNeusgwwDg==
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-404a5f4cdedso1855586b6e.0;
-        Wed, 18 Jun 2025 10:04:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVsliSpJZ52Z3iq6Lg7c7zbugfy0BR2RObQZKvPlGIM0M5K+VfBa0apsx1jR7p+yoKLwh1VXfeL79E=@vger.kernel.org, AJvYcCW8odEs4GpybgugjY6hIirFTLWbT2icW7ZcIZwjy/gnbTmsWzQ35fNkKWb6NDhn8lGtnuZ/VhpoXg3ogAk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZEF33ZpABOXkES4PQ4vTIBuRsu2a+NWP05Y+8ot4on/RSBGSN
-	wHGPBqg+uMihFUCU+YPLIHUl+eb+EqyOiH8UXNMJbDp1Nwvq51NlyUfqdER53HrveNZvCeh7wkx
-	XNjS/S4l9OCk0ZXVgPFCiv89R2DRCejI=
-X-Google-Smtp-Source: AGHT+IE12ZLGrHLWweS0eNyUCqVVO1yNtfh2NFQQPVPSHgxx4DFygcG82d5jk4gcHao0pqFoS6PwMuJfaiEHvzOgpV8=
-X-Received: by 2002:a05:6808:11c7:b0:40a:557e:cd8 with SMTP id
- 5614622812f47-40a7c18bf8amr10317748b6e.33.1750266261646; Wed, 18 Jun 2025
- 10:04:21 -0700 (PDT)
+	 To:Cc:Content-Type; b=YsIZeffCnuSxPzbPDxQOYZmtpN4VcQDmOgRpG46tdF8v/SkWc45xJL6MHYTBsAPbRvFq2duvHCj3w157biAcBTCnoVjzMoXhcwbxtE62VSgYJdCy4hSjVatrIBBeWdWgECMsnuWAnwIj6yWYkikaIkc4FfoNndR331ojaWiA0Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AEh0qImt; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313bcf6e565so1206660a91.0;
+        Wed, 18 Jun 2025 10:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750266265; x=1750871065; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bzVpmXFF+T69S76tPY21hKIVM7O6QGPZHJ4LN2Hdnks=;
+        b=AEh0qImtdpSfkESC8oA+ZCstXPfxnWHg0WoqOuhZXvyIJjmTWSiolayt+EL6hsLuUK
+         1p6USlyPCb8k/jezbDPc0dtjZDNpamE4zfDunCchnir1yFQh1XKyBfPi+hNE9KcQND88
+         bx6S34+RKWMDsxNoccd3bid9Jc0IQd9VzmcgxcmS0HL2cCkdqo8rR+7nuxqJCGl75tSx
+         CJHnGFKb08XNWV7IC64uUBlD1naHHXs25sgs6yJaCOG99oL6Sg/Ovv2qHuBsdvKlwTZG
+         yGfEq5Clr4FUT2z93MqMJFI/UNi3IvzClUbrCX7N4CBipHJfp4cCuj3x2gkh1Vz4lFuM
+         f3GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750266265; x=1750871065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bzVpmXFF+T69S76tPY21hKIVM7O6QGPZHJ4LN2Hdnks=;
+        b=OpSP7UDeBlRYqfyajB24nO1Ik5jP13pBGhkTA2KZHRdOQPDJ+06cIuW5HAGFVQ0i3L
+         rTHk7vew/v/boUsaIKl+mKEkYvNjNcg44cB/7wxGjFmrpwGwfIK9NGGhF9ncretw1K2P
+         Hy+LsfDjpeafb2/UqRhaVF9XBa20cYuYRwg2dXrPHWjD1XQmg5hSh961LzCjlMEzuGGa
+         +ssZN6F8GcY4PRCcVWIyKHfyQquvQyzpueCp/TvLI8tizMKmVnwR4YhYNuRjiD+Erdt2
+         Zc0MbRUfrPbRufBIi1HXFaCry0VtaEYA8FmEG/dQPQ3IXIJwzKIv36xwO+YWTSrWlNpZ
+         Tcgw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3/edkqy8ierCgiOjXlir2A0NMjbefLEiZOUiapo2SVgfRsAVo6NMA8Omuj2PawbhHiMtIDVpPdHapoOFMjm0=@vger.kernel.org, AJvYcCURghL3pi+U7jQIqAFV5gDStOmv7xWfGEhK2faYblXfWWYgqOOvi4duyHmu2KZHbJezTA63YiWY@vger.kernel.org, AJvYcCVALGLI+nDIAtqfL16wyWjzxaPUnAVZRQ+btxPfUzko1ZwVdk0YVPtvbccxAhyBbz7b3KQpmSE+nZzWJeKy@vger.kernel.org, AJvYcCVXoOYu4v28HYmPgojy5P7XHxZwIUJ40tatBQo8cj8Slvs//g+1afdiYpN/v1VvmHQaL/BTaWAuKQI=@vger.kernel.org, AJvYcCVlXLd61+d2cF39opuT1cYOaLhnVytylDF9VACUdFfsqxnscCzDoDuUrOSisiXoMqtY9BMYifJHWFEyjAY=@vger.kernel.org, AJvYcCVr3bj8BOlXmQuenW0kFmz2jHuHca69uLvfxEwXbikzKMWZNQHYNhUL/LLqTypsnZdkMYQLbI5W7Kgl@vger.kernel.org, AJvYcCVrJp1ATnR4x+V3vquvCiHZWXUgogGEhc22x27vEkhnjwAJJXZZvtfMErxvyMpQyDZ/3zwggoICs8oL@vger.kernel.org, AJvYcCVu7EounMLxyTZCFbEjN66ZgURr06tWUF6fp1L1M5t/+UZBjieSKCTE2I4CP6FErZ2O2BymbhoDqOr7LWTqTfI+@vger.kernel.org, AJvYcCX0U2Yh4fVsInrUHHTNF3cgEipA0+/mWzeXNgina7gvJXxEUzON4Qmy8gfnnKTHB42A1/xDTTHFWrw3iOSb@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCXBif5VwQpt/011aQ/BNFhw8ayBUqQMLkZyWimlnYJ4UFMxhy
+	PnAUoGZXpHNWEdhOG0sTEsPbyjiMQtVsPt2LHV53ijFrqFUa0qnnliaTTKumHsXY1etR9ErFn+d
+	ECEq1RrpayTN0N+cGnDhV8JE8tZ43WME=
+X-Gm-Gg: ASbGncs9yUJJa1Pejiop1kuN8/XW3cofiBxO1rdjVAfYs5pwTnTIdNd0ST44Ga7eUAL
+	zPHX/Nk/YTZ9xFnkjBx8KHgK7Wt3XLsVsiEYu99Y+Bg/W+JQklUhJwivujp/YRIWwLyzAyTTcqz
+	j3OU1ko5TEN1KAVpIW+J236pSMAzatca4uDm78vUkyjKs=
+X-Google-Smtp-Source: AGHT+IGLPSVFYPhvf1j/K9i5Ol5itQWfSDa0TfKsaOdtXXSM6IGI5PpH0AQX2y0lYKJIABjfvnv4mQ4chj2kWgpmo4Q=
+X-Received: by 2002:a17:90b:4d12:b0:310:8d79:dfe4 with SMTP id
+ 98e67ed59e1d1-31425ae54f4mr4444282a91.4.1750266265350; Wed, 18 Jun 2025
+ 10:04:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250618030330.279410-1-rui.zhang@intel.com>
-In-Reply-To: <20250618030330.279410-1-rui.zhang@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 18 Jun 2025 19:04:10 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gY7Rp8C8AFzgRzMs+Gq-1rcgKmrG4+nJWB=bGpcKkU2A@mail.gmail.com>
-X-Gm-Features: AX0GCFsH011RolEPzGDwyRcryBdBS2AIzPybZjn9NhYa19DB14Z0OmFDrscKWKM
-Message-ID: <CAJZ5v0gY7Rp8C8AFzgRzMs+Gq-1rcgKmrG4+nJWB=bGpcKkU2A@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Do not change CLAMPING bit if
- ENABLE bit cannot be changed
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+References: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
+ <20250615-ptr-as-ptr-v12-4-f43b024581e8@gmail.com> <CAJ-ks9k0vAw9UHx-s9uD9u0LufvgnojtrFoG=AH40Gp9HnxEDg@mail.gmail.com>
+In-Reply-To: <CAJ-ks9k0vAw9UHx-s9uD9u0LufvgnojtrFoG=AH40Gp9HnxEDg@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 18 Jun 2025 19:04:11 +0200
+X-Gm-Features: Ac12FXzqpoYx_1GdDyAZ3UU1L_A1NGXd58Gt0NSR1KeeHmAk1xTtSvY9Na-qvaw
+Message-ID: <CANiq72n4rr-S5NtFECxpd8FzkZvE8mg++p0qWDLK7+C0ru1Tew@mail.gmail.com>
+Subject: Re: [PATCH v12 4/6] rust: enable `clippy::as_underscore` lint
+To: Tamir Duberstein <tamird@gmail.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg KH <gregkh@linuxfoundation.org>, Tejun Heo <tj@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Robin Murphy <robin.murphy@arm.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Benno Lossin <lossin@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Breno Leitao <leitao@debian.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, 
+	linux-block@vger.kernel.org, devicetree@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 18, 2025 at 5:03=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wro=
-te:
+On Wed, Jun 18, 2025 at 3:51=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
 >
-> PL1 cannot be disabled on some platforms. The ENABLE bit is still set
-> after software clears it. This behavior leads to a scenario where, upon
-> user request to disable the Power Limit through the powercap sysfs, the
-> ENABLE bit remains set while the CLAMPING bit is inadvertently cleared.
->
-> According to the Intel Software Developer's Manual, the CLAMPING bit,
-> "When set, allows the processor to go below the OS requested P states in
-> order to maintain the power below specified Platform Power Limit value."
->
-> Thus this means the system may operate at higher power levels than
-> intended on such platforms.
->
-> Enhance the code to check ENABLE bit after writing to it, and stop
-> further processing if ENABLE bit cannot be changed.
->
-> Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> @Danilo Krummrich could you please have a look for nova?
 
-If this is a fix, I would appreciate a Fixes: tag.
+Alice, Christian, Danilo, Greg, Tejun: it would also be nice to get
+Acked-by's for your (other) bits.
 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/powercap/intel_rapl_common.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/inte=
-l_rapl_common.c
-> index e3be40adc0d7..602f540cbe15 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -341,12 +341,27 @@ static int set_domain_enable(struct powercap_zone *=
-power_zone, bool mode)
->  {
->         struct rapl_domain *rd =3D power_zone_to_rapl_domain(power_zone);
->         struct rapl_defaults *defaults =3D get_defaults(rd->rp);
-> +       u64 val;
->         int ret;
->
->         cpus_read_lock();
->         ret =3D rapl_write_pl_data(rd, POWER_LIMIT1, PL_ENABLE, mode);
-> -       if (!ret && defaults->set_floor_freq)
-> +       if (ret)
-> +               goto end;
-> +
-> +       ret =3D rapl_read_pl_data(rd, POWER_LIMIT1, PL_ENABLE, false, &va=
-l);
-> +       if (ret)
-> +               goto end;
-> +
-> +       if (mode !=3D val) {
-> +               pr_debug("%s cannot be %s\n", power_zone->name, mode ? "e=
-nabled" : "disabled");
-> +               goto end;
-> +       }
-> +
-> +       if (defaults->set_floor_freq)
->                 defaults->set_floor_freq(rd, mode);
-> +
-> +end:
->         cpus_read_unlock();
->
->         return ret;
-> --
-> 2.43.0
->
->
+Thanks!
+
+Cheers,
+Miguel
 
