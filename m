@@ -1,411 +1,227 @@
-Return-Path: <linux-pm+bounces-28952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A22FADEB56
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:07:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37812ADEB91
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:17:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67CCD4A2692
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:04:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE6DA3A2095
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580AF2E3AFB;
-	Wed, 18 Jun 2025 12:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087DC2BD022;
+	Wed, 18 Jun 2025 12:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PS7QpX9j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90D72DE215
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA20293C78
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750248195; cv=none; b=jf9mxX0qAiIOTFLTcLjxELmMjzhpUN30SvS1gT385uRcSb0WpBAiIOOI+iXgMpwtfnDIdRxZB/JSUgSc+qjdAwEfnKjeZd7BaSIktFRVgGp2Yu1TcHrenXZy3UJPjxkjEMGnF9gMZOKt2v044dgrqTVy3A15V39dze934BRpNmg=
+	t=1750248792; cv=none; b=LfLkl+rjfr0a8vrP6wOnQp92IUiCNCHRCJPdwGlTbGOV95iXEXpJEwDphMwgxDFazcM+bISexYCz8sc/HLNJgRjuJ1c2psRNm0ySOeXUWOw/AYQQa1sb5kTfTMzVthkt7yv/SqLu1bNYr90iCUJV4kN0ABWooykwQaxThEupvgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750248195; c=relaxed/simple;
-	bh=IUqdUNekHx5Op13q9+NocfuobfQom6jZt8Bq6U04qhU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z0mNxRMi0RpOgt6bqQlLW4eB5dEsxFYXvPxAwZK5rtTI3Xo95aw1+9pXoXgiXaAvfTmR10tT4n7VftsnBHCcHojCuYRcfW3W1XSMk3pbUWtcgmyLIXVdiqVP/jzn2MKr3zZlMJLMr8QVhENMW44TMU7DBEnHTk5dQ+UVPLS/AEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uRrVJ-0007Eb-Fo; Wed, 18 Jun 2025 14:02:57 +0200
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uRrVI-0048CP-1p;
-	Wed, 18 Jun 2025 14:02:56 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uRrVI-00DBMh-1M;
-	Wed, 18 Jun 2025 14:02:56 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>,
-	Guenter Roeck <groeck@chromium.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	chrome-platform@lists.linux.dev
-Subject: [PATCH v11 6/7] power: reset: add PSCR NVMEM Driver for Recording Power State Change Reasons
-Date: Wed, 18 Jun 2025 14:02:54 +0200
-Message-Id: <20250618120255.3141862-7-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250618120255.3141862-1-o.rempel@pengutronix.de>
-References: <20250618120255.3141862-1-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1750248792; c=relaxed/simple;
+	bh=S+Z1yIM9Z7AMg6puDBieh0UvRmQ1svKpeSk5WrhTYRI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O0M+qajhD/kf7igiQ3Bf9ODtRnxhLl7zZP8OjI1D/SQInLdrxbEzg5fC8eZUe2Fw4ERY7zNTKofHRG3C9sxxzkzeJa8SZizEQM1bay97tjMK/IcJFENJRhD3gPAmgWgRWzFNARS41qwzbkGw2T+Q898QQuwf4xbXQz5pL7N/C9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PS7QpX9j; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-adfb562266cso650974266b.0
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750248789; x=1750853589; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bKGxDPrsrGFp0Bze86vZksL2+DNrY5eWcc4p55uZfLg=;
+        b=PS7QpX9jMPQvzX6sjDOFk1szG0lEk5c7rjgLVAuJwXtzlY6vEyyRUzXguADzoyQ4SB
+         m6/bF3TJYKJoOmWygsQxIvHxXdUfS5B6tmZXK2V6Us5YU+fVDUXsgmOPFVoYgGhfOP0M
+         n3QJTx0Y0LiGBjXOpcJTfM4ISpnPspoPeBqm1YCzPP8Vk7FHqrNir2jbzQsN9GiijjqC
+         j4h3tnLRGeJFnL74BniE57h4mB4Z1CoN9t0YcCu8y7MGxXqRGmQQVcltuPiaXXaWo6vY
+         d0+y44N0lUfMCItGFvsbkGYezUAkQdbNCBZ9qGliEUmk/pFoiFXkwz+d6+knE8pFXj50
+         B2pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750248789; x=1750853589;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bKGxDPrsrGFp0Bze86vZksL2+DNrY5eWcc4p55uZfLg=;
+        b=J8AaMvsxi5dyfmu3rDx3Nf3S5jPL01eoxZ3PDqz8xweVDOnXLLflfwJttvIV22IIYK
+         p0dfuBTcBdmh6llsSE3Lb8b85wu9tpS0kOKGcXYuQ9K6voMcLjCv8L5pyVxwl8tG2SMS
+         m/zAc82ijnnA6gpIruM6q2fPUQRWZ8o4/P+bKR+jzniBqbfyAeu9AedjFT8LtQbOw3ik
+         iuaNVVGXgf66Ew2yPjlaPLAwM/Bgk5dIm4h+8EYzTC4JnUxoaZq13FFMxzP8b0HmXkmK
+         vtHJti0TPaEJFzgTg35vzMXlNZD04+Lda7QOAKMSmAAEN4CrJa+3xo5hX+/7IrDUw1ri
+         Qy2w==
+X-Forwarded-Encrypted: i=1; AJvYcCXE9uM+IFNOBFn9vCXiXz7WuB45fUllOYfWmrzVIW0qF8Rt7hAiFQ0CtkIzEhctslw/bwF36BzCrw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/+ooGAksAFOU5ppYNzl4ka+6P9JmVKnK5UaZTrFyXQVWKHw9h
+	+MnZ6sryzloCmBqKoRCAnQl8JqSBUdnNYTzJj8YcsDov++/fMQlbKWBEWAnBdLgQY7gpWO0RPIP
+	7WeJIqpvCn65M34oPQTl8yai9Y/KHXsaNOQi5br1JvQ==
+X-Gm-Gg: ASbGnct1Gaz16I94GmYTmj3cjz5qRI20lUNI5V6qk9yEstVTOyy7yQ/BmMm10L4Adwm
+	r/LUsY2LrVbdylLJJgoM+RsVjZZXT4InaEv7/ZqQ/ec+sYkre+oRWYTyR8sDtQZJ+Em/K9lEDUu
+	V8smzw6yiEl7zlaB0xuOwhEUHu+65Ocr/OISEopXEs/ec=
+X-Google-Smtp-Source: AGHT+IGTSzjogHCi/geFRfkS1k64vxCFzHGvVMOvmRTwVeChVfJIOBt9QznhX1/YRhdAVy4BHCTh3ig3roxkOz/SlaA=
+X-Received: by 2002:a17:907:fd18:b0:add:fa4e:8a7e with SMTP id
+ a640c23a62f3a-adfad4104cemr1503686066b.32.1750248789286; Wed, 18 Jun 2025
+ 05:13:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+References: <20250617193450.183889-1-hiagofranco@gmail.com> <20250617193450.183889-4-hiagofranco@gmail.com>
+In-Reply-To: <20250617193450.183889-4-hiagofranco@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 18 Jun 2025 14:12:31 +0200
+X-Gm-Features: AX0GCFv-WhPn_WVjSMi4ptgdlE0BOC7_hZaPLP8zfqr856nDVAxKNS58yS5OlAM
+Message-ID: <CAPDyKFq0EswFPF2nabJfQQ52D3Usy8AOUEH1WJWKsEhvOhO60w@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] remoteproc: imx_rproc: detect and attach to
+ pre-booted remote cores
+To: Hiago De Franco <hiagofranco@gmail.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-This driver utilizes the Power State Change Reasons Recording (PSCRR)
-framework to store specific power state change information, such as
-shutdown or reboot reasons, into a designated non-volatile memory
-(NVMEM) cell.
+On Tue, 17 Jun 2025 at 21:36, Hiago De Franco <hiagofranco@gmail.com> wrote:
+>
+> From: Hiago De Franco <hiago.franco@toradex.com>
+>
+> When the remote core is started before Linux boots (e.g., by the
+> bootloader), the driver currently is not able to attach because it only
+> checks for cores running in different partitions. If the core was kicked
+> by the bootloader, it is in the same partition as Linux and it is
+> already up and running.
+>
+> This adds power mode verification through dev_pm_genpd_is_on(), enabling
+> the driver to detect when the remote core is already running and
+> properly attach to it if all the power domain devices are on.
+>
+> To accomplish this, we need to avoid passing any attach_data or flags to
+> dev_pm_domain_attach_list(), letting the platform device become a
+> consumer of the power domain provider. With that the current power state
+> of the genpds will not change, allowing the detection of the remote core
+> power state.
+>
+> We enable and sync the device runtime PM during probe to make sure the
+> power domains are correctly managed when the core is controlled by the
+> kernel.
+>
+> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v6:
-- rename pscr_reason to psc_reason
-changes v5:
-- avoid a build against NVMEM=m
-changes v4:
-- remove devicetree dependencies
----
- drivers/power/reset/Kconfig       |  22 +++
- drivers/power/reset/Makefile      |   1 +
- drivers/power/reset/pscrr-nvmem.c | 254 ++++++++++++++++++++++++++++++
- 3 files changed, 277 insertions(+)
- create mode 100644 drivers/power/reset/pscrr-nvmem.c
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 69e038e20731..3affef932e4d 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -354,3 +354,25 @@ menuconfig PSCRR
- 	  be recorded unless hardware provides the reset cause.
- 
- 	  If unsure, say N.
-+
-+if PSCRR
-+
-+config PSCRR_NVMEM
-+	tristate "Generic NVMEM-based Power State Change Reason Recorder"
-+	depends on NVMEM || !NVMEM
-+	help
-+	  This option enables support for storing power state change reasons
-+	  (such as shutdown, reboot, or power failure events) into a designated
-+	  NVMEM (Non-Volatile Memory) cell.
-+
-+	  This feature allows embedded systems to retain power transition
-+	  history even after a full system restart or power loss. It is useful
-+	  for post-mortem debugging, automated recovery strategies, and
-+	  improving system reliability.
-+
-+	  The NVMEM cell used for storing these reasons can be dynamically
-+	  configured via module parameters.
-+
-+	  If unsure, say N.
-+
-+endif
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index 025da19cb335..cc9008c8bb02 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -34,6 +34,7 @@ obj-$(CONFIG_POWER_RESET_SYSCON) += syscon-reboot.o
- obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
- obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
- obj-$(CONFIG_PSCRR) += pscrr.o
-+obj-$(CONFIG_PSCRR_NVMEM) += pscrr-nvmem.o
- obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
- obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
- obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
-diff --git a/drivers/power/reset/pscrr-nvmem.c b/drivers/power/reset/pscrr-nvmem.c
-new file mode 100644
-index 000000000000..7d02d989893f
---- /dev/null
-+++ b/drivers/power/reset/pscrr-nvmem.c
-@@ -0,0 +1,254 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * pscrr_nvmem.c - PSCRR backend for storing shutdown reasons in small NVMEM
-+ *		   cells
-+ *
-+ * This backend provides a way to persist power state change reasons in a
-+ * non-volatile memory (NVMEM) cell, ensuring that reboot causes can be
-+ * analyzed post-mortem. Unlike traditional logging to eMMC or NAND, which
-+ * may be unreliable during power failures, this approach allows storing
-+ * reboot reasons in small, fast-access storage like RTC scratchpads, EEPROM,
-+ * or FRAM.
-+ *
-+ * The module allows dynamic configuration of the NVMEM device and cell
-+ * via module parameters:
-+ *
-+ * Example usage:
-+ *   modprobe pscrr-nvmem nvmem_name=pcf85063_nvram0 cell_name=pscr@0,0
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
-+#include <linux/pscrr.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * Module parameters:
-+ *   nvmem_name: Name of the NVMEM device (e.g. "pcf85063_nvram0").
-+ *   cell_name : Sysfs name of the cell on that device (e.g. "pscr@0,0").
-+ */
-+static char *nvmem_name;
-+module_param(nvmem_name, charp, 0444);
-+MODULE_PARM_DESC(nvmem_name, "Name of the NVMEM device (e.g. pcf85063_nvram0)");
-+
-+static char *cell_name;
-+module_param(cell_name, charp, 0444);
-+MODULE_PARM_DESC(cell_name, "Sysfs name of the NVMEM cell (e.g. pscr@0,0)");
-+
-+struct pscrr_nvmem_priv {
-+	struct nvmem_device *nvmem;
-+	struct nvmem_cell *cell;
-+
-+	size_t total_bits;
-+	size_t max_val;
-+};
-+
-+static struct pscrr_nvmem_priv *priv;
-+
-+static int pscrr_nvmem_write_reason(enum psc_reason reason)
-+{
-+	size_t required_bytes;
-+	u32 val;
-+	int ret;
-+
-+	if (!priv || !priv->cell)
-+		return -ENODEV;
-+
-+	/* Ensure reason fits in the available storage */
-+	if (reason > priv->max_val) {
-+		pr_err("PSCRR-nvmem: Reason %d exceeds max storable value %zu for %zu-bit cell\n",
-+		       reason, priv->max_val, priv->total_bits);
-+		return -ERANGE;
-+	}
-+
-+	val = reason;
-+
-+	/* Determine required bytes for storing total_bits */
-+	required_bytes = (priv->total_bits + 7) / 8;
-+
-+	/* Write the reason to the NVMEM cell */
-+	ret = nvmem_cell_write(priv->cell, &val, required_bytes);
-+	if (ret < 0) {
-+		pr_err("PSCRR-nvmem: Failed to write reason %d, err=%d (%pe)\n",
-+		       reason, ret, ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	pr_debug("PSCRR-nvmem: Successfully wrote reason %d\n", reason);
-+
-+	return 0;
-+}
-+
-+static int pscrr_nvmem_read_reason(enum psc_reason *reason)
-+{
-+	size_t required_bytes, len;
-+	unsigned int val;
-+	int ret = 0;
-+	void *buf;
-+
-+	if (!priv || !priv->cell)
-+		return -ENODEV;
-+
-+	buf = nvmem_cell_read(priv->cell, &len);
-+	if (IS_ERR(buf)) {
-+		ret = PTR_ERR(buf);
-+		pr_err("PSCRR-nvmem: Failed to read cell, err=%d (%pe)\n", ret,
-+		       ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	/* Calculate the required number of bytes */
-+	required_bytes = (priv->total_bits + 7) / 8;
-+
-+	/* Validate that the returned length is large enough */
-+	if (len < required_bytes) {
-+		pr_err("PSCRR-nvmem: Read length %zu is too small (need at least %zu bytes)\n",
-+		       len, required_bytes);
-+		kfree(buf);
-+		return -EIO;
-+	}
-+
-+	/* Extract value safely with proper memory alignment handling */
-+	val = 0;
-+	memcpy(&val, buf, required_bytes);
-+
-+	/* Mask only the necessary bits to avoid garbage data */
-+	val &= (1U << priv->total_bits) - 1;
-+
-+	kfree(buf);
-+
-+	*reason = (enum psc_reason)val;
-+
-+	pr_debug("PSCRR-nvmem: Read reason => %d (from %zu bytes, %zu bits used)\n",
-+		 *reason, len, priv->total_bits);
-+
-+	return 0;
-+}
-+
-+static const struct pscrr_backend_ops pscrr_nvmem_ops = {
-+	.write_reason = pscrr_nvmem_write_reason,
-+	.read_reason  = pscrr_nvmem_read_reason,
-+};
-+
-+static int __init pscrr_nvmem_init(void)
-+{
-+	size_t bytes, bits;
-+	int ret;
-+
-+	if (!nvmem_name || !cell_name) {
-+		pr_err("PSCRR-nvmem: Must specify both nvmem_name and cell_name.\n");
-+		return -EINVAL;
-+	}
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->nvmem = nvmem_device_get_by_name(nvmem_name);
-+	if (IS_ERR(priv->nvmem)) {
-+		ret = PTR_ERR(priv->nvmem);
-+		pr_err("PSCRR-nvmem: nvmem_device_get_by_name(%s) failed: %d\n",
-+		       nvmem_name, ret);
-+		priv->nvmem = NULL;
-+		goto err_free;
-+	}
-+
-+	priv->cell = nvmem_cell_get_by_sysfs_name(priv->nvmem, cell_name);
-+	if (IS_ERR(priv->cell)) {
-+		ret = PTR_ERR(priv->cell);
-+		pr_err("PSCRR-nvmem: nvmem_cell_get_by_sysfs_name(%s) failed, err=%pe\n",
-+		       cell_name, ERR_PTR(ret));
-+		priv->cell = NULL;
-+		goto err_dev_put;
-+	}
-+
-+	ret = nvmem_cell_get_size(priv->cell, &bytes, &bits);
-+	if (ret < 0) {
-+		pr_err("PSCRR-nvmem: Failed to get cell size, err=%pe\n",
-+		       ERR_PTR(ret));
-+		goto err_cell_put;
-+	}
-+
-+	if (bits)
-+		priv->total_bits = bits;
-+	else
-+		priv->total_bits = bytes * 8;
-+
-+	if (priv->total_bits > 31) {
-+		pr_err("PSCRR-nvmem: total_bits=%zu is too large (max 31 allowed)\n",
-+		       priv->total_bits);
-+		return -EOVERFLOW;
-+	}
-+
-+	priv->max_val = (1 << priv->total_bits) - 1;
-+	pr_debug("PSCRR-nvmem: Cell size: %zu bytes + %zu bits => total_bits=%zu\n",
-+		 bytes, bits, priv->total_bits);
-+
-+	/*
-+	 * If we store reasons 0..PSCR_MAX_REASON, the largest needed is
-+	 * 'PSCR_MAX_REASON'. That must fit within total_bits.
-+	 * So the max storable integer is (1 << total_bits) - 1.
-+	 */
-+	if (priv->max_val < PSCR_MAX_REASON) {
-+		pr_err("PSCRR-nvmem: Not enough bits (%zu) to store up to reason=%d\n",
-+		       priv->total_bits, PSCR_MAX_REASON);
-+		ret = -ENOSPC;
-+		goto err_cell_put;
-+	}
-+
-+	/* 4. Register with pscrr_core. */
-+	ret = pscrr_core_init(&pscrr_nvmem_ops);
-+	if (ret) {
-+		pr_err("PSCRR-nvmem: pscrr_core_init() failed: %d\n", ret);
-+		goto err_cell_put;
-+	}
-+
-+	pr_info("PSCRR-nvmem: Loaded (nvmem=%s, cell=%s), can store 0..%zu\n",
-+		nvmem_name, cell_name, priv->max_val);
-+	return 0;
-+
-+err_cell_put:
-+	if (priv->cell) {
-+		nvmem_cell_put(priv->cell);
-+		priv->cell = NULL;
-+	}
-+err_dev_put:
-+	if (priv->nvmem) {
-+		nvmem_device_put(priv->nvmem);
-+		priv->nvmem = NULL;
-+	}
-+err_free:
-+	kfree(priv);
-+	priv = NULL;
-+	return ret;
-+}
-+
-+static void __exit pscrr_nvmem_exit(void)
-+{
-+	pscrr_core_exit();
-+
-+	if (priv) {
-+		if (priv->cell) {
-+			nvmem_cell_put(priv->cell);
-+			priv->cell = NULL;
-+		}
-+		if (priv->nvmem) {
-+			nvmem_device_put(priv->nvmem);
-+			priv->nvmem = NULL;
-+		}
-+		kfree(priv);
-+		priv = NULL;
-+	}
-+
-+	pr_info("pscrr-nvmem: Unloaded\n");
-+}
-+
-+module_init(pscrr_nvmem_init);
-+module_exit(pscrr_nvmem_exit);
-+
-+MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
-+MODULE_DESCRIPTION("PSCRR backend for storing reason code in NVMEM");
-+MODULE_LICENSE("GPL");
--- 
-2.39.5
+Kind regards
+Uffe
 
+> ---
+> v4 -> v5:
+>  - pm_runtime_get_sync() removed in favor of
+>    pm_runtime_resume_and_get(). Now it also checks the return value of
+>    this function.
+>  - Added pm_runtime_disable() and pm_runtime_put() to imx_rproc_remove()
+>    function.
+> v3 -> v4:
+>  - Changed to use the new dev_pm_genpd_is_on() function instead, as
+>    suggested by Ulf. This will now get the power status of the two
+>    remote cores power domains to decided if imx_rpoc needs to attach or
+>    not. In order to do that, pm_runtime_enable() and
+>    pm_runtime_get_sync() were introduced and pd_data was removed.
+> v2 -> v3:
+>  - Unchanged.
+> v1 -> v2:
+>  - Dropped unecessary include. Removed the imx_rproc_is_on function, as
+>    suggested.
+> ---
+>  drivers/remoteproc/imx_rproc.c | 37 +++++++++++++++++++++++++++++-----
+>  1 file changed, 32 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 627e57a88db2..b53083f2553e 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/reboot.h>
+>  #include <linux/regmap.h>
+>  #include <linux/remoteproc.h>
+> @@ -890,10 +891,8 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
+>  static int imx_rproc_attach_pd(struct imx_rproc *priv)
+>  {
+>         struct device *dev = priv->dev;
+> -       int ret;
+> -       struct dev_pm_domain_attach_data pd_data = {
+> -               .pd_flags = PD_FLAG_DEV_LINK_ON,
+> -       };
+> +       int ret, i;
+> +       bool detached = true;
+>
+>         /*
+>          * If there is only one power-domain entry, the platform driver framework
+> @@ -902,7 +901,22 @@ static int imx_rproc_attach_pd(struct imx_rproc *priv)
+>         if (dev->pm_domain)
+>                 return 0;
+>
+> -       ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
+> +       ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
+> +       /*
+> +        * If all the power domain devices are already turned on, the remote
+> +        * core is already up when the kernel booted (e.g. kicked by the
+> +        * bootloader). In this case attach to it.
+> +        */
+> +       for (i = 0; i < ret; i++) {
+> +               if (!dev_pm_genpd_is_on(priv->pd_list->pd_devs[i])) {
+> +                       detached = false;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       if (detached)
+> +               priv->rproc->state = RPROC_DETACHED;
+> +
+>         return ret < 0 ? ret : 0;
+>  }
+>
+> @@ -1146,6 +1160,15 @@ static int imx_rproc_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       if (dcfg->method == IMX_RPROC_SCU_API) {
+> +               pm_runtime_enable(dev);
+> +               ret = pm_runtime_resume_and_get(dev);
+> +               if (ret) {
+> +                       dev_err(dev, "pm_runtime get failed: %d\n", ret);
+> +                       goto err_put_clk;
+> +               }
+> +       }
+> +
+>         ret = rproc_add(rproc);
+>         if (ret) {
+>                 dev_err(dev, "rproc_add failed\n");
+> @@ -1171,6 +1194,10 @@ static void imx_rproc_remove(struct platform_device *pdev)
+>         struct rproc *rproc = platform_get_drvdata(pdev);
+>         struct imx_rproc *priv = rproc->priv;
+>
+> +       if (priv->dcfg->method == IMX_RPROC_SCU_API) {
+> +               pm_runtime_disable(priv->dev);
+> +               pm_runtime_put(priv->dev);
+> +       }
+>         clk_disable_unprepare(priv->clk);
+>         rproc_del(rproc);
+>         imx_rproc_put_scu(rproc);
+> --
+> 2.39.5
+>
 
