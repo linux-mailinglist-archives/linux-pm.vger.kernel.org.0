@@ -1,77 +1,100 @@
-Return-Path: <linux-pm+bounces-28982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 037C3ADF013
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 16:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 568F0ADF08D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 16:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F6BB1885D31
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:48:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 744F91884782
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1984418FDA5;
-	Wed, 18 Jun 2025 14:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tz3whW+6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A2E72EF2A9;
+	Wed, 18 Jun 2025 14:57:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4370F9CB;
-	Wed, 18 Jun 2025 14:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9412EF2A2;
+	Wed, 18 Jun 2025 14:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750258103; cv=none; b=qP7zyQ3TSr3/h1OrY02/7ZhlLs9gCz0rokF2/LLeU9wcb/+CVGa+JeX81jGETLyJ2H8u5zPQOoD0oXynGulqelfAfnbvrXEarcZDw+JyGfsvRMwFzVdiP6WY1Vo/ezdKiBNdnDf054993w9sP5UhzTCE/4E5DIGNT89xVXlJePo=
+	t=1750258642; cv=none; b=NyXSaX/++2uQvs6gsAy8x/bfGPugVD5S38y5BgIRrjOA3OO6Gf8USWdrmaSgjqIEvHzBJl1znI36WdfYIiiM3Jg2QXPCAE/7B8+4kkOgmFAron2U0Gjw5tapBsKD45/N8ootdxg1exnldFSwAYTsahsOFW6vfIEXwCE0wOl81xU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750258103; c=relaxed/simple;
-	bh=P5bDzDbpwAt4NzAkEKVnGnsXVMLfR/Knkyugf6sSzUk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eOslyFqabZu1Bo3LIvi67sDoCCff+LC9HMCWQLCrT74VMpvCm2etCumA6AoDrU8E04PzkUjE0zfyvZ/oAXOX/oGfKlUv58DgXwCgern4fMGp/Wh7pJlw1Rc4TnbTfFo6Tyye2qvAQpW4ia5Kf/uyJbusHyWSDYIpypC+2VyjXN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tz3whW+6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2902C4CEF0;
-	Wed, 18 Jun 2025 14:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750258102;
-	bh=P5bDzDbpwAt4NzAkEKVnGnsXVMLfR/Knkyugf6sSzUk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tz3whW+6QWiJ1KF9nqwxYCZml2dELY+HbVIgDwSRAwQVgZDs1wNYsgnZwArfF2DUb
-	 ItTWSBKoaMHVOkzoh0c//E7Z2keXKaL0xepf58AYGZEh7VIc1qxDY7i49wpiuXbbDG
-	 na+tnd6DP3yidiOYxnffIUZFDGlwEnQZYeddwhcpCd3UDfJNJys/HbfsrfN41j2/z0
-	 ouI7b3yHZHf9Z8yofnf+c1uKX5fZ/Kha5ssDxoBi6EqBJZK9gGSQvFaEEl++UtOXoX
-	 fr+bpW5M1O15dRZWc2kynVjqlC3AzIQjkC7ktDAVe7VF8hMAethOiB4426sbu4fwiB
-	 uOIX76D5mKepg==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-2e999729ccbso4045738fac.2;
-        Wed, 18 Jun 2025 07:48:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUlfA9ZYeGVOH07ZYzbBd6NdhmWR0Lwikx1u8B1NcnZf/+OgB5SamaX4s8PZqjyMwBi8avOLUtS3SEwRBU=@vger.kernel.org, AJvYcCWUGeDbVxlkm5slFQqiIdQlQwjF7QKZGrKEdnkuwEOrIeGQ5tgI4EDYjBM70aBAd4wBxkhcuhP8Q2s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfmb3ybcrHr1JU81iOJJKSDq8XAC7ODcYPPaBcUIGPS90cjCCm
-	PjXmjKtYkqI+0SCSiOTjAu1T2/R//plFFwJWCXGZVS9ZW3qelHciyKze5yJlzZWcYY0+JWq3jmB
-	dQlCLc+L89CYhQZzwkJIA1uwqC1nl+1w=
-X-Google-Smtp-Source: AGHT+IE3rpy1Y6yu5od9ejR7TUmfvXpd+b6apOxzi0RcxvZTM1RGxX+Gax8nFq4/lfgvDDez5ceoLIuwHvRtESe7p1s=
-X-Received: by 2002:a05:6871:2009:b0:29e:65ed:5c70 with SMTP id
- 586e51a60fabf-2eaf0b2beebmr9965617fac.30.1750258102238; Wed, 18 Jun 2025
- 07:48:22 -0700 (PDT)
+	s=arc-20240116; t=1750258642; c=relaxed/simple;
+	bh=MyH+iNLN68kJuVQh2e9J8E7zeuT3U91XuHIwrgcbNus=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AIrl35FCBFBjL8COml2tu68mOc4ngcazF8A6Wi6pytkUBNbAebevJgjtTuEwwR2ZWqofaP4FzBYNENoLH72jlVRvKjGGH2FSAcwnKQnDucKdxU+Yoah6URpxVg9J+EgXFGTbaF3V4os0b+9785lyCkQWFsnntpP/6OSdIDCOD6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4781B1D31;
+	Wed, 18 Jun 2025 07:56:57 -0700 (PDT)
+Received: from [10.1.35.75] (e127648.arm.com [10.1.35.75])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D58473F58B;
+	Wed, 18 Jun 2025 07:57:16 -0700 (PDT)
+Message-ID: <1458e4f8-bd76-4d75-acb9-87f7064ea40c@arm.com>
+Date: Wed, 18 Jun 2025 15:57:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250617124900.186591-1-rui.zhang@intel.com> <20250617124900.186591-2-rui.zhang@intel.com>
-In-Reply-To: <20250617124900.186591-2-rui.zhang@intel.com>
-From: Len Brown <lenb@kernel.org>
-Date: Wed, 18 Jun 2025 10:48:10 -0400
-X-Gmail-Original-Message-ID: <CAJvTdKn6fA6abridTf1CJrr1xMT6XU9wt3R8v4LETzMRu0a_ZQ@mail.gmail.com>
-X-Gm-Features: AX0GCFt9jRWP-v3yY_dQ0tGXqsUM87OrKNyMs2liqcScx9buDl8IR3SAWOuoCXE
-Message-ID: <CAJvTdKn6fA6abridTf1CJrr1xMT6XU9wt3R8v4LETzMRu0a_ZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tools/power turbostat: Enhance legacy uncore detection
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: Fix initialization with disabled boost
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm <linux-pm@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Robin Murphy <robin.murphy@arm.com>, zhenglifeng1@huawei.com
+References: <3cc5b83b-f81c-4bd7-b7ff-4d02db4e25d8@arm.com>
+ <CAJZ5v0heNSqHKZsmzu8N_hNKXeg_BZ0g4p0=dQtkDxBFHN+=4w@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0heNSqHKZsmzu8N_hNKXeg_BZ0g4p0=dQtkDxBFHN+=4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Applied
+On 6/18/25 15:32, Rafael J. Wysocki wrote:
+> On Mon, Jun 16, 2025 at 7:25 PM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> The boost_enabled early return in policy_set_boost() caused
+>> the boost disabled at initialization to not actually set the
+>> initial policy->max, therefore effectively enabling boost while
+>> it should have been enabled.
+> 
+> Did you mean "disabled"?
 
-thanks!
--Len
+Yup, the latter 'enabled' should be disabled.
+
+> 
+> It would be good to mention the failure scenario here too.
+> 
+
+Absolutely, let me respin this in a series that provides some context, too.
+
+>> Fixes: 27241c8b63bd ("cpufreq: Introduce policy_set_boost()")
+>> Reported-by: Robin Murphy <robin.murphy@arm.com>
+>> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+>> ---
+>>  drivers/cpufreq/cpufreq.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index d7426e1d8bdd..e85139bd0436 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -1630,7 +1630,7 @@ static int cpufreq_online(unsigned int cpu)
+>>          */
+>>         if (cpufreq_driver->set_boost && policy->boost_supported &&
+>>             (new_policy || !cpufreq_boost_enabled())) {
+>> -               ret = policy_set_boost(policy, cpufreq_boost_enabled());
+>> +               ret = cpufreq_driver->set_boost(policy, cpufreq_boost_enabled());
+>>                 if (ret) {
+>>                         /* If the set_boost fails, the online operation is not affected */
+>>                         pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
+>> --
+>> 2.34.1
+
 
