@@ -1,110 +1,104 @@
-Return-Path: <linux-pm+bounces-28962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06E51ADED1A
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:57:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2B8FADED1D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:57:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C53E13BD530
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:57:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A61716C2C8
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCF72E54C7;
-	Wed, 18 Jun 2025 12:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB9D28640B;
+	Wed, 18 Jun 2025 12:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vooGQp+c"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b7H9MyIT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8462E54CD
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7818C2E8DE0
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750251430; cv=none; b=sXBVZVa4PcJtdfL5KOdORrpKGupcdaPKndSwM/MfIfiMMMZUX5HVfjhd5wBjBa/MN3D/bYkIT+x3sJpJ16E2BLBgvX8pzPtFTka3zNULFLXC3SlY4zqhB7BYbI6myckPZAuh+mgr0xoHJ0tdC+qqDFNbQ+rO3nsf4ZOdiFWkg14=
+	t=1750251435; cv=none; b=MqLHnFxctWEbj2IKUQ0UJO3IB5LOiGnAWogW6Iq14M/s0+wXit8wJojEU8vMWKtoenO7KMoih7rY3xzuZDe9u8pTzpVo0B9afeJ8s6jsItWzUwCiYIEYX851yM43ci7isiI7uxGnEuMNu151WSQIUafJu3QcVhrWGIT46OxPQC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750251430; c=relaxed/simple;
-	bh=chU3ZzgX8ixQ80XuNsDpy9w595hkOFK6g+6/L8GwJwM=;
+	s=arc-20240116; t=1750251435; c=relaxed/simple;
+	bh=3FYqq38fif/LxKqKHUHq3crgrlGF8y09qgJq5ooSqws=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ep5f+7FGEclyvXxtfIGGFzGMcQ1fRn1KaqIJZjO141Xo441Q5fMK8I5xgyko7VZ1Mwzrz4EBa+YpNuUHCtG2lf0uoP6rdZHt0d+zNKTnWZJIYoij5UcaqlojkGHKsQhWLNYMP84QETLoB27356+LAmGrx49xRIm1R2c3tuVBdIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vooGQp+c; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=ddxyT4ElYzpGUJpxCEjAX/ibUTZ1LaBau6sBeb4GOx2SeymZq/55loxynjfPQ/dHV/ZMQGGRDL18rRLY97hukPr5kWQFF1oDGwy59tUv34YONcUqeXLeNul4/9P1SF0vISf7O6ssGTlUDQEin4p0plyi4PAG97tfX2FXxwK0yv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b7H9MyIT; arc=none smtp.client-ip=209.85.219.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e7d9d480e6cso5201256276.2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:57:07 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e81f8679957so6165613276.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750251427; x=1750856227; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750251431; x=1750856231; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2X2h53UoNZQhDXBsMhRcUUHtA/t5wbotkmy7UVTkX7E=;
-        b=vooGQp+cXA7Bl9EdDFb5l+L/SbQXuI4V5FZ0RzgjuAXNy2/KAcAyg2o0IWDzripkkE
-         tBcO61mGf6On7hilM9Kk8BA7p/r54kdadUGCT7+RjJWLFtKtD49Ey3xovothllGuoj/4
-         cxXsMsagUqhtNDY9xe3IgmmjXPfqYXJqlV92vCEkihxdk3DWBzTR13Wc9w9peHStJI3V
-         2RGg4jkTHOtGpN/1nexrUJ0QdBXUzSHI/I18yISa6Mx4qaxv6QSZzxrY1VkWUzOfo/r6
-         IL7vbyCJIta0JWgxjWOjrHPMkACNqcs8A1MbsIp1o40U5q2UIjPOipsV3G9Vi/CcrE/r
-         7Gug==
+        bh=ImV2tWTmsy2q/yEr+1DaD06Foo/cyEMhoVGfzs5E01c=;
+        b=b7H9MyITUwy7yCriEiLoOO2l5RI7y6VMfnXqPYBZAxRaJfkOCg2GY//y9VFsQB0V6O
+         0vPcYb5Jy3ALKPNu9iPhZMPrv601Hd0//ZVH/TkU4GKxhPymQyTOFLagRCw1w6XlWSop
+         Y0S8b3dtAo9uMx9P4mn/uMWWNrF+/7CCocwr/UOY8ozpqBwnDusriN/rZIexYv8bZtWF
+         /kKRk3kcxJq9rkaiV/9s6W2ZyIxDeU3vjSk2H0L78iJnjDIXplks6z5ISWxqsW+IevC0
+         qTaE6AdQGpPMVxVmumNTkz3DBjPdV4XZaQWbyhDT62+zUdceA4MiTgcxaHWjUbTvpSpg
+         sq1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750251427; x=1750856227;
+        d=1e100.net; s=20230601; t=1750251431; x=1750856231;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2X2h53UoNZQhDXBsMhRcUUHtA/t5wbotkmy7UVTkX7E=;
-        b=oYFEQi+jmQERM8LpXLz0oSb5WyEfMKGcKO5UBe55z8tsvUCSB4VpJq0gZmEu5H8cVN
-         FBQ5mZQRDBvbarYBaAvEr+GarpxvPO1iSNoj0Fkcu2N3o6VhvRge/XRRc2C57UgLjMxS
-         Da97KDglJpa9eftRY7z9RFv1YNV5ca/77sIPZkm39m9IRYjbumcW/qvemYgJ6YHVPSPS
-         yau08hopf/BUzybkv7mCi1F2GaLon9/bHyktGT3fVgsEYdIITh8TsU+bLoRTfXDLU2TZ
-         9H1OrOo39ZjAp17mrfmaBLxxUVkY+q3QqdaIOmvnjyweEoBmP1+uwiClpdpmNi1VBcAG
-         ziog==
-X-Forwarded-Encrypted: i=1; AJvYcCVO2gjkxnk+7QcsvqwnTIo+7Nhm5V+eB1Byw4q/ah2juAx4iXF5p2hgKpYm5d7+N5EDUVInGeazTQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUKAZHZIZAYUFApOhGVUOiX4qrrxq73kalL5DZj/wNu+x/GzBc
-	FSgYWPEdOFvK41gECZZu/z5Z9P4OBo9v8nkkK5EWBQy7qZKMYrDuNPID2n7Rprfzn0TUITOm0lC
-	Lq+nXz1HsPq7dMBlq5hf9T3B+LNKRKCrD3maKycTqyg==
-X-Gm-Gg: ASbGncuEkcm14Q7wCyImYaoFeRtWWXa0kOE6N0NqqRFuNUsArpwxV2wJFkYZ7mH9XT2
-	q6hIJvjdCS4BJ5XkCkCQICNL+1EWFCoGlho9Z35yyPZ4SHRliyENdKn1TJrw0bsqTJDIObRsMn3
-	G21Rasi3tmKZeaJS9O3fvnordbU/h1UHjp/Cg8M6iLi0k=
-X-Google-Smtp-Source: AGHT+IEZlf2SkQ6pDtcOhhdvV3LmUw3iR0H22QpguHg1V4liWBddtmQy97+4HMMAxIbIevgaVnIrB0SHGsEYRyBVYzQ=
-X-Received: by 2002:a05:6902:6303:b0:e82:2b85:ea3a with SMTP id
- 3f1490d57ef6-e822b85ee43mr16723424276.32.1750251426746; Wed, 18 Jun 2025
- 05:57:06 -0700 (PDT)
+        bh=ImV2tWTmsy2q/yEr+1DaD06Foo/cyEMhoVGfzs5E01c=;
+        b=b6iEWMDxa47Ys2ba8oQncquOOdtbwMRANUmqO6CIYUhLVZFdnXjYk3VrWJoVmw3XpZ
+         GSyPp+RUCk67wbIZCEkgpXT/W+Q6F1j90FFz5tIegA2kNs3vF/Wh+0Cz9HjgsoMN9qzR
+         ppRcurLjrN2OxyrDvJDsyEVafoSU8QpcUc2uqEyLD+7AtGwtUntX3kjBl5PhmEESkQFX
+         7HNV1pGgZ1WutPeaDUZRRRWj1XshLfqPTrylcBsiYMdADtP+430gBB7zma+wWSJuG0B4
+         yZhoUP8B1jm8qFXOPRhG5jKi1gcy+B3l2Ppiu2P9g1f9EsuqFtHobcWAj4Tt0K86OL20
+         0ZvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2W8adW6ay/2ttnN8KDVOZTYJ9eSeIy7oZIw0l1QroI7MwPa9lEfcSjY1ORwlJhpuL31PSyqnUqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYdTrrkrRwQSmVLeAxEwykA9WqOpkxXrrjKiFjJPHIwq/bXTDK
+	zSNQXd5GIaTfjKAyhBiREyIKwrCqYxETgzEJfroMCnrB78ynNHKueSfC3bhMsHlOxMdHsbK7hQh
+	OGYXZnKO0rqua9gm5Z3FLw3fj8ZPLC1A7MbzthjFkdw==
+X-Gm-Gg: ASbGnct0ulLU41IfJ6hnVwFXpsAM36fH795ooaf9gMpuwTJk4k7jEMHsvxGxhYboV8p
+	TMeSaNRuRhK0wCFG9o86EwtnSMDEdo9ChEcb395TEAOnIZZsGaJo7PJfaLNyAqTHHhPgF06hMnn
+	efYRJca4BcCecKDBcN7+RbNOgu7edQ4C99WmKJBzmnvRELIcWJRu1vUw==
+X-Google-Smtp-Source: AGHT+IEyQuheTBiE1KNn6YZq2gnYBnep5nmoSzdbAY5+FjuWnU41fcajc0wk6HzHKqHouIVNOHfqKE34E1wAn8AbOSo=
+X-Received: by 2002:a05:6902:108e:b0:e75:c2d7:53d6 with SMTP id
+ 3f1490d57ef6-e822ac5c6e6mr24203748276.13.1750251431566; Wed, 18 Jun 2025
+ 05:57:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org> <20250612-apple-kconfig-defconfig-v1-1-0e6f9cb512c1@kernel.org>
-In-Reply-To: <20250612-apple-kconfig-defconfig-v1-1-0e6f9cb512c1@kernel.org>
+References: <20250606090802.597504-1-lukas.bulwahn@redhat.com>
+In-Reply-To: <20250606090802.597504-1-lukas.bulwahn@redhat.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 18 Jun 2025 14:56:30 +0200
-X-Gm-Features: AX0GCFsnEI_9cu3U9fY7I_D0EnrNerJPcmhYfg39LAqv66uN774UfRLbAU6VCkM
-Message-ID: <CAPDyKFrQ3Uj+coa0WCG00_pyaxu-yEnH26qmS6tevZ_772oZVg@mail.gmail.com>
-Subject: Re: [PATCH 01/11] pmdomain: apple: Drop default ARCH_APPLE in Kconfig
-To: Sven Peter <sven@kernel.org>
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Srinivas Kandagatla <srini@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
-	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, iommu@lists.linux.dev, linux-input@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org
+Date: Wed, 18 Jun 2025 14:56:34 +0200
+X-Gm-Features: AX0GCFtmn4waDQnDGcBuyuBWKSA5kWVg6aNQw87L31M-o6t6ciEMxOkcF-FE8sw
+Message-ID: <CAPDyKFoPdqfz-3+XAMpg23VzaLUZ6xXJvmknQH7pjNZLPq6eAg@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: arm: scmi_pm_domain: remove code clutter
+To: Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, 
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, Javier Martinez Canillas <javierm@redhat.com>, 
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 12 Jun 2025 at 23:12, Sven Peter <sven@kernel.org> wrote:
+On Fri, 6 Jun 2025 at 11:08, Lukas Bulwahn <lbulwahn@redhat.com> wrote:
 >
-> When the first driver for Apple Silicon was upstreamed we accidentally
-> included `default ARCH_APPLE` in its Kconfig which then spread to almost
-> every subsequent driver. As soon as ARCH_APPLE is set to y this will
-> pull in many drivers as built-ins which is not what we want.
-> Thus, drop `default ARCH_APPLE` from Kconfig.
+> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 >
-> Signed-off-by: Sven Peter <sven@kernel.org>
+> There is no need to introduce the boolean power_on to select the constant
+> value for state. Simply pass the value for state as argument. Just remove
+> this code clutter.
+>
+> No functional change.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
 Applied for next, thanks!
 
@@ -113,24 +107,45 @@ Uffe
 
 
 > ---
->  drivers/pmdomain/apple/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/pmdomain/arm/scmi_pm_domain.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
 >
-> diff --git a/drivers/pmdomain/apple/Kconfig b/drivers/pmdomain/apple/Kconfig
-> index 12237cbcfaa983083367bad70b1b54ded9ac9824..a8973f8057fba74cd3e8c7d15cd2972081c6697d 100644
-> --- a/drivers/pmdomain/apple/Kconfig
-> +++ b/drivers/pmdomain/apple/Kconfig
-> @@ -9,7 +9,6 @@ config APPLE_PMGR_PWRSTATE
->         select MFD_SYSCON
->         select PM_GENERIC_DOMAINS
->         select RESET_CONTROLLER
-> -       default ARCH_APPLE
->         help
->           The PMGR block in Apple SoCs provides high-level power state
->           controls for SoC devices. This driver manages them through the
+> diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+> index 2a213c218126..8fe1c0a501c9 100644
+> --- a/drivers/pmdomain/arm/scmi_pm_domain.c
+> +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+> @@ -22,27 +22,21 @@ struct scmi_pm_domain {
 >
+>  #define to_scmi_pd(gpd) container_of(gpd, struct scmi_pm_domain, genpd)
+>
+> -static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+> +static int scmi_pd_power(struct generic_pm_domain *domain, u32 state)
+>  {
+> -       u32 state;
+>         struct scmi_pm_domain *pd = to_scmi_pd(domain);
+>
+> -       if (power_on)
+> -               state = SCMI_POWER_STATE_GENERIC_ON;
+> -       else
+> -               state = SCMI_POWER_STATE_GENERIC_OFF;
+> -
+>         return power_ops->state_set(pd->ph, pd->domain, state);
+>  }
+>
+>  static int scmi_pd_power_on(struct generic_pm_domain *domain)
+>  {
+> -       return scmi_pd_power(domain, true);
+> +       return scmi_pd_power(domain, SCMI_POWER_STATE_GENERIC_ON);
+>  }
+>
+>  static int scmi_pd_power_off(struct generic_pm_domain *domain)
+>  {
+> -       return scmi_pd_power(domain, false);
+> +       return scmi_pd_power(domain, SCMI_POWER_STATE_GENERIC_OFF);
+>  }
+>
+>  static int scmi_pm_domain_probe(struct scmi_device *sdev)
 > --
-> 2.34.1
->
+> 2.49.0
 >
 
