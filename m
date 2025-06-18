@@ -1,48 +1,57 @@
-Return-Path: <linux-pm+bounces-28935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28936-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA37CADE65C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 11:13:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67F9DADE815
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:09:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A48318979F4
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 09:14:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4E5816654E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 10:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A2B27FD55;
-	Wed, 18 Jun 2025 09:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4110928A1C8;
+	Wed, 18 Jun 2025 10:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFt967AU"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GC3BPgKI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEA7126C1E;
-	Wed, 18 Jun 2025 09:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CEDB28937D
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 10:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750238022; cv=none; b=aKXRANUIiWX+Jy0ISotMCnYCV+V2xA1JeEFeJJXzNhbumrq7x9EZDZVqRrWjK7HphhbnO+B3pawq87RoQPiwQ6PXkVy/37VqdtLzfjLtnfhr+My+p0nisZHZjd9tpxGx8osmBVs76mYojZzBT0zks/I8al6HtNGgf5nEzNXo5K0=
+	t=1750240938; cv=none; b=HlGLf1exCO/b+guGMFyDRiWC21BWHkjDiWPuRy09HoHwz38H2ec+joMLRz3xIK8SoEoMnehlY2eY43DV7H03REUlIA5olhbSQ0AfQ7c8aCprN0Gen9RyjPWrESCtBAb0tbBLjr8toRZtnNU4T/DAuSa7ydQIfPtV9phZNOUlM4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750238022; c=relaxed/simple;
-	bh=0xWF4UxVnOl6CBWPAc7gc0LvHTEwy77liqQmp5KcYYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CLEM49+OBlZlgQnQ/yvWiVkTA+vkBGLJkXL/LHAXHiCrCum+cafmPbEkgLec7VDBlSwoaobKWmwjZo830RklHCE16wDnxJHOyUjUrw+ZEg0bALl4jN5oqRMuvHQbgtWH0bUTZ4QKc1Q1hBzQAGsn8P7KOCeVsMybZu/dk5SSWN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFt967AU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B79C4CEE7;
-	Wed, 18 Jun 2025 09:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750238022;
-	bh=0xWF4UxVnOl6CBWPAc7gc0LvHTEwy77liqQmp5KcYYM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cFt967AUmVOLCSLWVDiTBXO+fe+XjT+vfwL1vClXcJsVcZoanmj++rVPtTfgU3Ejf
-	 S2HYzRJ/VsXWGJosrBw1mLCL1Ik/eiEimLZmqbVN+TszFY3YpNSGFEIoivdUNA11km
-	 I7MhmF03+A9oGYoBqE07I8eXZ5m03uf4JzE0Turaq3mClE8bdj80zifigEi0rys0eY
-	 nr0uHHhUSbLsiDWTLX53fB36cMP0x3DPHGmI6O0OoPS1UPf8ZfL/sBtnBT9xzLZsu6
-	 gMgpeVBfc5/OhVKjMBJGQoq7x7XKOEmgvFHKHarU6VgW2xVCQsoex5+RdF/HepPB2G
-	 keb2wStJR6LDQ==
-Message-ID: <ea77c51d-6fad-4bd1-a608-987642f77aba@kernel.org>
-Date: Wed, 18 Jun 2025 11:13:37 +0200
+	s=arc-20240116; t=1750240938; c=relaxed/simple;
+	bh=8i91py5Nf+YYJ+DDJ/UaSDJZPm1uvhaXzGn/NS5Cc60=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=TTFGRXbY1kaU137H4mat3pD7Dc0EGuZarvRzzEi6/RM14OsOd3pVA6j6Wt3d6hCUZlyBvnf7hQuYh/iL/P6TfYDuXtO6CIqfOYLxxfAaRYPdM+4hlbJP3Doe4/ni99+XAGQ+JY4ga3O7KwfJPFDcJrfZ+WUUAgfXQCutTz72vJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GC3BPgKI; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250618100214euoutp0196b5a228a6033c93abba6d42b1827152~KGttWpxI82890228902euoutp01K
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 10:02:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250618100214euoutp0196b5a228a6033c93abba6d42b1827152~KGttWpxI82890228902euoutp01K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1750240934;
+	bh=mnBVL+TiGzXcC6y2voLdZWspxbuthkDVJJY2G1jD6rI=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=GC3BPgKISPlo40xYj6LKCbLn1TG1GuRBIKI9k6RDE0adYjbjWW3V+CNPIUK9POa+G
+	 rg5JrO6X8a5L6Cb9k6vfyFay+hzBb0YwAiYLKJJETW4/vcj5VXxJiUG4KTiBXAVNCG
+	 6dlS2WNdMZmzVtCi5Co7nZdwml43AG3hXU3q4lFQ=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250618100213eucas1p10ead7541682e1c8b8985121bf634c83a~KGts1_7dl0901009010eucas1p1v;
+	Wed, 18 Jun 2025 10:02:13 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250618100212eusmtip23b29d2b5e5877af3f8f5b7582a97d35d~KGtr0JUpH2681926819eusmtip2Q;
+	Wed, 18 Jun 2025 10:02:12 +0000 (GMT)
+Message-ID: <4772bf3d-c7d7-4108-8bc6-ee28953c89c1@samsung.com>
+Date: Wed, 18 Jun 2025 12:02:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,111 +59,116 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/3] drivers: clk: tegra: add DFLL support for Tegra 4
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Svyatoslav Ryhel <clamor95@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Peter De Schrijver <pdeschrijver@nvidia.com>,
- Prashant Gaikwad <pgaikwad@nvidia.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250321095556.91425-1-clamor95@gmail.com>
- <20250321095556.91425-3-clamor95@gmail.com>
- <aef4574b-8167-4af3-a29c-8c962b396496@kernel.org>
- <g7kegtso3opafpwocvibhm3rym35oikxoyq2wmphqy3wjenzpa@m7extntwahau>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v4 0/8] Add TH1520 GPU support with power sequencing
+To: Drew Fustini <drew@pdp7.com>
+Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel
+	<p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, Matt Coster
+	<matt.coster@imgtec.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>, Marek
+	Szyprowski <m.szyprowski@samsung.com>, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org, Krzysztof
+	Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <g7kegtso3opafpwocvibhm3rym35oikxoyq2wmphqy3wjenzpa@m7extntwahau>
-Content-Type: text/plain; charset=UTF-8
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <aFHosEvn35Fr3LFv@x1>
 Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250618100213eucas1p10ead7541682e1c8b8985121bf634c83a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250614180906eucas1p116f8a13a4013edd3bbedfd2e4a8b0aa3
+X-EPHeader: CA
+X-CMS-RootMailID: 20250614180906eucas1p116f8a13a4013edd3bbedfd2e4a8b0aa3
+References: <CGME20250614180906eucas1p116f8a13a4013edd3bbedfd2e4a8b0aa3@eucas1p1.samsung.com>
+	<20250614-apr_14_for_sending-v4-0-8e3945c819cd@samsung.com>
+	<aFHosEvn35Fr3LFv@x1>
 
-On 10/06/2025 13:07, Thierry Reding wrote:
->>
->>> @@ -0,0 +1,13 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
->>> +/*
->>> + * This header provides Tegra114-specific constants for binding
->>> + * nvidia,tegra114-car.
->>> + */
->>> +
->>> +#ifndef _DT_BINDINGS_RESET_TEGRA114_CAR_H
->>> +#define _DT_BINDINGS_RESET_TEGRA114_CAR_H
->>> +
->>> +#define TEGRA114_RESET(x)		(5 * 32 + (x))
->>
->>
->> Does not look like a binding, but some sort of register. Binding IDs
->> start from 0 (or 1) and are incremented by 1.
-> 
-> I'll try and clear up some of the confusion around this. The way that
-> resets are handled on these Tegra devices is that there is a set of
-> peripheral clocks & resets which are paired up. This is because they
-> are laid out in banks within the CAR (clock and reset) controller. In
-> most cases we're referring to those resets, so you'll often see a clock
-> ID used in conjection with the same reset ID for a given IP block.
-> 
-> In addition to those peripheral resets, there are a number of extra
-> resets that don't have a corresponding clock and which are exposed in
-> registers outside of the peripheral banks, but still part of the CAR.
-> To support those "special" registers, the TEGRA*_RESET() is used to
-> denote resets outside of the regular peripheral resets. Essentially it
-> defines the offset within the CAR at which special resets start. In the
-> above case, Tegra114 has 5 banks with 32 peripheral resets each. The
-> first special reset, TEGRA114_RESET(0), therefore gets ID 5 * 32 + 0.
-> 
-> So to summarize: We cannot start enumerating these at 0 because that
-> would fall into the range of peripheral reset IDs.
 
-So these are hardware values, not bindings. Drop the header or move it
-outside of bindings like other headers for hardware constants.
+
+On 6/18/25 00:14, Drew Fustini wrote:
+> On Sat, Jun 14, 2025 at 08:06:06PM +0200, Michal Wilczynski wrote:
+>> This patch series introduces support for the Imagination IMG BXM-4-64
+>> GPU found on the T-HEAD TH1520 SoC. A key aspect of this support is
+>> managing the GPU's complex power-up and power-down sequence, which
+>> involves multiple clocks and resets.
+>>
+>> The TH1520 GPU requires a specific sequence to be followed for its
+>> clocks and resets to ensure correct operation. Initial discussions and
+>> an earlier version of this series explored managing this via the generic
+>> power domain (genpd) framework. However, following further discussions
+>> with kernel maintainers [1], the approach has been reworked to utilize
+>> the dedicated power sequencing (pwrseq) framework.
+>>
+>> This revised series now employs a new pwrseq provider driver
+>> (pwrseq-thead-gpu.c) specifically for the TH1520 GPU. This driver
+>> encapsulates the SoC specific power sequence details. The Imagination
+>> GPU driver (pvr_device.c) is updated to act as a consumer of this power
+>> sequencer, requesting the "gpu-power" target. The sequencer driver,
+>> during its match phase with the GPU device, acquires the necessary clock
+>> and reset handles from the GPU device node to perform the full sequence.
+>>
+>> This approach aligns with the goal of abstracting SoC specific power
+>> management details away from generic device drivers and leverages the
+>> pwrseq framework as recommended.
+>>
+>> The series is structured as follows:
+>>
+>> Patch 1: Introduces the pwrseq-thead-gpu auxiliary driver to manage the
+>>          GPU's power-on/off sequence.
+>> Patch 2: Adds device tree bindings for the gpu-clkgen reset to the
+>>          existing thead,th1520-aon binding.
+>> Patch 3: Extends the pm-domains driver to detect the gpu-clkgen reset
+>>          and spawn the pwrseq-thead-gpu auxiliary driver.
+>> Patch 4: Updates the Imagination DRM driver to utilize the pwrseq
+>>          framework for TH1520 GPU power management.
+>> Patch 5: Adds the thead,th1520-gpu compatible string to the PowerVR GPU
+>>          device tree bindings.
+>> Patch 6: Adds the gpu-clkgen reset property to the aon node in the
+>>          TH1520 device tree source.
+>> Patch 7: Adds the device tree node for the IMG BXM-4-64 GPU and its
+>>          required fixed-clock.
+>> Patch 8: Enables compilation of the Imagination PowerVR driver on the
+>>          RISC-V architecture.
+>>
+>> This patchset finishes the work started in bigger series [2] by adding
+>> all remaining GPU power sequencing piece. After this patchset the GPU
+>> probes correctly.
+>>
+>> This series supersedes the previous genpd based approach. Testing on
+>> T-HEAD TH1520 SoC indicates the new pwrseq based solution works
+>> correctly.
+>>
+>> An open point in Patch 7/8 concerns the GPU memory clock (gpu_mem_clk),
+>> defined as a fixed-clock. The specific hardware frequency for this clock
+>> on the TH1520 could not be determined from available public
+>> documentation. Consequently, clock-frequency = <0>; has been used as a
+>> placeholder to enable driver functionality.
+>>
+> 
+> I don't have any more information that what is in the public PDFs [1],
+> so I think it is okay to have a placeholder frequency.
+> 
+> Is it the case that the frequency doesn't really matter from the
+> perspective of the driver?
+
+Yeah it doesn't matter, I asked simply because it would be better in the
+DT to accurately describe the HW. I would omit the 'clock-frequency'
+altogether, but doing that makes the driver probe fail.
+
+> 
+> Thanks,
+> Drew
+> 
+> [1] https://protect2.fireeye.com/v1/url?k=260051e8-477bfb60-2601daa7-74fe4860018a-782a548f971ff58f&q=1&e=7e973bd1-ed36-4a12-af1c-1cf44bea2e5c&u=https%3A%2F%2Fgit.beagleboard.org%2Fbeaglev-ahead%2Fbeaglev-ahead%2F-%2Ftree%2Fmain%2Fdocs
+> 
 
 Best regards,
-Krzysztof
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
 
