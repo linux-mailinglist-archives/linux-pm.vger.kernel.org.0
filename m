@@ -1,227 +1,142 @@
-Return-Path: <linux-pm+bounces-28957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37812ADEB91
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:17:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 063EDADECE7
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:45:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE6DA3A2095
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:12:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C803162094
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087DC2BD022;
-	Wed, 18 Jun 2025 12:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36AF0286D64;
+	Wed, 18 Jun 2025 12:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PS7QpX9j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oYMRDVH0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA20293C78
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9801DDA24;
+	Wed, 18 Jun 2025 12:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750248792; cv=none; b=LfLkl+rjfr0a8vrP6wOnQp92IUiCNCHRCJPdwGlTbGOV95iXEXpJEwDphMwgxDFazcM+bISexYCz8sc/HLNJgRjuJ1c2psRNm0ySOeXUWOw/AYQQa1sb5kTfTMzVthkt7yv/SqLu1bNYr90iCUJV4kN0ABWooykwQaxThEupvgw=
+	t=1750250604; cv=none; b=GBlkff9BPlJPro+VLj70nfS2QtQ+kHqe6SIgw/KXmgJGfbS2iy6xb8PZCvUIuGfyB9eiwKLY4Weq9IQREUhpJIkWDVAdElbxuBqO8Nj0tHc8OV1MZVr5nT6Qi+7DDfYHiZ68mpsr9EUzLMlYTFWjz4/xJ9UtUBaUODuBa+lZb9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750248792; c=relaxed/simple;
-	bh=S+Z1yIM9Z7AMg6puDBieh0UvRmQ1svKpeSk5WrhTYRI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O0M+qajhD/kf7igiQ3Bf9ODtRnxhLl7zZP8OjI1D/SQInLdrxbEzg5fC8eZUe2Fw4ERY7zNTKofHRG3C9sxxzkzeJa8SZizEQM1bay97tjMK/IcJFENJRhD3gPAmgWgRWzFNARS41qwzbkGw2T+Q898QQuwf4xbXQz5pL7N/C9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PS7QpX9j; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-adfb562266cso650974266b.0
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750248789; x=1750853589; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bKGxDPrsrGFp0Bze86vZksL2+DNrY5eWcc4p55uZfLg=;
-        b=PS7QpX9jMPQvzX6sjDOFk1szG0lEk5c7rjgLVAuJwXtzlY6vEyyRUzXguADzoyQ4SB
-         m6/bF3TJYKJoOmWygsQxIvHxXdUfS5B6tmZXK2V6Us5YU+fVDUXsgmOPFVoYgGhfOP0M
-         n3QJTx0Y0LiGBjXOpcJTfM4ISpnPspoPeBqm1YCzPP8Vk7FHqrNir2jbzQsN9GiijjqC
-         j4h3tnLRGeJFnL74BniE57h4mB4Z1CoN9t0YcCu8y7MGxXqRGmQQVcltuPiaXXaWo6vY
-         d0+y44N0lUfMCItGFvsbkGYezUAkQdbNCBZ9qGliEUmk/pFoiFXkwz+d6+knE8pFXj50
-         B2pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750248789; x=1750853589;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bKGxDPrsrGFp0Bze86vZksL2+DNrY5eWcc4p55uZfLg=;
-        b=J8AaMvsxi5dyfmu3rDx3Nf3S5jPL01eoxZ3PDqz8xweVDOnXLLflfwJttvIV22IIYK
-         p0dfuBTcBdmh6llsSE3Lb8b85wu9tpS0kOKGcXYuQ9K6voMcLjCv8L5pyVxwl8tG2SMS
-         m/zAc82ijnnA6gpIruM6q2fPUQRWZ8o4/P+bKR+jzniBqbfyAeu9AedjFT8LtQbOw3ik
-         iuaNVVGXgf66Ew2yPjlaPLAwM/Bgk5dIm4h+8EYzTC4JnUxoaZq13FFMxzP8b0HmXkmK
-         vtHJti0TPaEJFzgTg35vzMXlNZD04+Lda7QOAKMSmAAEN4CrJa+3xo5hX+/7IrDUw1ri
-         Qy2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXE9uM+IFNOBFn9vCXiXz7WuB45fUllOYfWmrzVIW0qF8Rt7hAiFQ0CtkIzEhctslw/bwF36BzCrw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/+ooGAksAFOU5ppYNzl4ka+6P9JmVKnK5UaZTrFyXQVWKHw9h
-	+MnZ6sryzloCmBqKoRCAnQl8JqSBUdnNYTzJj8YcsDov++/fMQlbKWBEWAnBdLgQY7gpWO0RPIP
-	7WeJIqpvCn65M34oPQTl8yai9Y/KHXsaNOQi5br1JvQ==
-X-Gm-Gg: ASbGnct1Gaz16I94GmYTmj3cjz5qRI20lUNI5V6qk9yEstVTOyy7yQ/BmMm10L4Adwm
-	r/LUsY2LrVbdylLJJgoM+RsVjZZXT4InaEv7/ZqQ/ec+sYkre+oRWYTyR8sDtQZJ+Em/K9lEDUu
-	V8smzw6yiEl7zlaB0xuOwhEUHu+65Ocr/OISEopXEs/ec=
-X-Google-Smtp-Source: AGHT+IGTSzjogHCi/geFRfkS1k64vxCFzHGvVMOvmRTwVeChVfJIOBt9QznhX1/YRhdAVy4BHCTh3ig3roxkOz/SlaA=
-X-Received: by 2002:a17:907:fd18:b0:add:fa4e:8a7e with SMTP id
- a640c23a62f3a-adfad4104cemr1503686066b.32.1750248789286; Wed, 18 Jun 2025
- 05:13:09 -0700 (PDT)
+	s=arc-20240116; t=1750250604; c=relaxed/simple;
+	bh=QciY19UJ2P7XWWxP+JOrADAPN8SHguNnRsyvc6zjqsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iH7617MsjeOKA8XFbaTulAJh4iWw+5VPTYzuup8SunhhVNAOsZSQ3p7Ee06H07EVL/fxwzlwfKpHMMal7XYfzbI5XCeMEDwiCFY/TSHyMgy0KrdD+3FA4vD5bwe2nlSBJ4VVL730qA7Fxbz1gK2cKiAUXUYvaq87eOO0pCX2eQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oYMRDVH0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8967CC4CEE7;
+	Wed, 18 Jun 2025 12:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750250603;
+	bh=QciY19UJ2P7XWWxP+JOrADAPN8SHguNnRsyvc6zjqsM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oYMRDVH0nCysQPSpZdUUboSTRJ/FqoBKZGhCxls02NOnsNR3PspaKlwItH6xYGf00
+	 KDKFopJTihOOo+Evq6GKjtKtBDIvXiOZleKRdqWj62EOHLvcP25oicGb1BiuXJ8iXb
+	 fxkA4oDCfK9MnXvXYouvJiBwVE7yUj9gd0rRqQHI4Xfl8kC1lDI21tXXAF/CdZf/kj
+	 Fg4pMb5okyJFqQQR1b1QRpxHcqEuBESh0wExuncx3PhMRfrWTzkaXfHQaeIW3GR5Hp
+	 R7yZXL+PqWwTZz61Fx3Gqmh85Q++w/ySEG2us5a/NHZanq7ilDrGAZdMW4FOTAtCCF
+	 0AtOmM3nT78pg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uRs8R-000000002Ld-03xU;
+	Wed, 18 Jun 2025 14:43:23 +0200
+Date: Wed, 18 Jun 2025 14:43:23 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Gabor Juhos <j4g8y7@gmail.com>, Georgi Djakov <djakov@kernel.org>
+Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] interconnect: avoid memory allocation when 'icc_bw_lock'
+ is held
+Message-ID: <aFK0a8AIOl704DpP@hovoldconsulting.com>
+References: <20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250617193450.183889-1-hiagofranco@gmail.com> <20250617193450.183889-4-hiagofranco@gmail.com>
-In-Reply-To: <20250617193450.183889-4-hiagofranco@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 18 Jun 2025 14:12:31 +0200
-X-Gm-Features: AX0GCFv-WhPn_WVjSMi4ptgdlE0BOC7_hZaPLP8zfqr856nDVAxKNS58yS5OlAM
-Message-ID: <CAPDyKFq0EswFPF2nabJfQQ52D3Usy8AOUEH1WJWKsEhvOhO60w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] remoteproc: imx_rproc: detect and attach to
- pre-booted remote cores
-To: Hiago De Franco <hiagofranco@gmail.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com>
 
-On Tue, 17 Jun 2025 at 21:36, Hiago De Franco <hiagofranco@gmail.com> wrote:
->
-> From: Hiago De Franco <hiago.franco@toradex.com>
->
-> When the remote core is started before Linux boots (e.g., by the
-> bootloader), the driver currently is not able to attach because it only
-> checks for cores running in different partitions. If the core was kicked
-> by the bootloader, it is in the same partition as Linux and it is
-> already up and running.
->
-> This adds power mode verification through dev_pm_genpd_is_on(), enabling
-> the driver to detect when the remote core is already running and
-> properly attach to it if all the power domain devices are on.
->
-> To accomplish this, we need to avoid passing any attach_data or flags to
-> dev_pm_domain_attach_list(), letting the platform device become a
-> consumer of the power domain provider. With that the current power state
-> of the genpds will not change, allowing the detection of the remote core
-> power state.
->
-> We enable and sync the device runtime PM during probe to make sure the
-> power domains are correctly managed when the core is controlled by the
-> kernel.
->
-> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+On Thu, May 29, 2025 at 04:46:22PM +0200, Gabor Juhos wrote:
+> The 'icc_bw_lock' mutex is introduced in commit af42269c3523
+> ("interconnect: Fix locking for runpm vs reclaim") in order
+> to decouple serialization of bw aggregation from codepaths
+> that require memory allocation.
+> 
+> However commit d30f83d278a9 ("interconnect: core: Add dynamic
+> id allocation support") added a devm_kasprintf() call into a
+> path protected by the 'icc_bw_lock' which causes this lockdep
+> warning (at least on the IPQ9574 platform):
+> 
+>     ======================================================
+>     WARNING: possible circular locking dependency detected
+>     6.15.0-next-20250529 #0 Not tainted
+>     ------------------------------------------------------
+>     swapper/0/1 is trying to acquire lock:
+>     ffffffc081df57d8 (icc_bw_lock){+.+.}-{4:4}, at: icc_init+0x8/0x108
+> 
+>     but task is already holding lock:
+>     ffffffc081d7db10 (fs_reclaim){+.+.}-{0:0}, at: icc_init+0x28/0x108
+> 
+>     which lock already depends on the new lock.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Thanks for fixing this. I get a similar splat with sc8280xp and the
+icc_ism_l3 driver since 6.16-rc1.
 
-Kind regards
-Uffe
+Georgi, this is a regression that prevents lockdep from being used on a
+bunch of Qualcomm platforms and should be fixed in mainline ASAP (e.g.
+to avoid further locking issues from being introduced).
 
+> Move the memory allocation part of the code outside of the protected
+> path to eliminate the warning. Also add a note about why it is moved
+> to there,
+> 
+> Fixes: d30f83d278a9 ("interconnect: core: Add dynamic id allocation support")
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 > ---
-> v4 -> v5:
->  - pm_runtime_get_sync() removed in favor of
->    pm_runtime_resume_and_get(). Now it also checks the return value of
->    this function.
->  - Added pm_runtime_disable() and pm_runtime_put() to imx_rproc_remove()
->    function.
-> v3 -> v4:
->  - Changed to use the new dev_pm_genpd_is_on() function instead, as
->    suggested by Ulf. This will now get the power status of the two
->    remote cores power domains to decided if imx_rpoc needs to attach or
->    not. In order to do that, pm_runtime_enable() and
->    pm_runtime_get_sync() were introduced and pd_data was removed.
-> v2 -> v3:
->  - Unchanged.
-> v1 -> v2:
->  - Dropped unecessary include. Removed the imx_rproc_is_on function, as
->    suggested.
-> ---
->  drivers/remoteproc/imx_rproc.c | 37 +++++++++++++++++++++++++++++-----
->  1 file changed, 32 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 627e57a88db2..b53083f2553e 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -18,6 +18,7 @@
->  #include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/reboot.h>
->  #include <linux/regmap.h>
->  #include <linux/remoteproc.h>
-> @@ -890,10 +891,8 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
->  static int imx_rproc_attach_pd(struct imx_rproc *priv)
->  {
->         struct device *dev = priv->dev;
-> -       int ret;
-> -       struct dev_pm_domain_attach_data pd_data = {
-> -               .pd_flags = PD_FLAG_DEV_LINK_ON,
-> -       };
-> +       int ret, i;
-> +       bool detached = true;
->
->         /*
->          * If there is only one power-domain entry, the platform driver framework
-> @@ -902,7 +901,22 @@ static int imx_rproc_attach_pd(struct imx_rproc *priv)
->         if (dev->pm_domain)
->                 return 0;
->
-> -       ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
-> +       ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
-> +       /*
-> +        * If all the power domain devices are already turned on, the remote
-> +        * core is already up when the kernel booted (e.g. kicked by the
-> +        * bootloader). In this case attach to it.
-> +        */
-> +       for (i = 0; i < ret; i++) {
-> +               if (!dev_pm_genpd_is_on(priv->pd_list->pd_devs[i])) {
-> +                       detached = false;
-> +                       break;
-> +               }
-> +       }
+>  drivers/interconnect/core.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 1a41e59c77f85a811f78986e98401625f4cadfa3..acdb3b8f1e54942dbb1b71ec2b170b08ad709e6b 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -1023,6 +1023,16 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+>  		return;
+>  
+>  	mutex_lock(&icc_lock);
 > +
-> +       if (detached)
-> +               priv->rproc->state = RPROC_DETACHED;
+> +	if (node->id >= ICC_DYN_ID_START) {
+> +		/*
+> +		 * Memory allocation must be done outside of codepaths
+> +		 * protected by icc_bw_lock.
+> +		 */
+> +		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
+> +					    node->name, dev_name(provider->dev));
+> +	}
+
+The node name has already been set by the caller and the node has not
+been added yet, so I think you should move this before taking the
+icc_lock.
+
 > +
->         return ret < 0 ? ret : 0;
->  }
->
-> @@ -1146,6 +1160,15 @@ static int imx_rproc_probe(struct platform_device *pdev)
->                 }
->         }
->
-> +       if (dcfg->method == IMX_RPROC_SCU_API) {
-> +               pm_runtime_enable(dev);
-> +               ret = pm_runtime_resume_and_get(dev);
-> +               if (ret) {
-> +                       dev_err(dev, "pm_runtime get failed: %d\n", ret);
-> +                       goto err_put_clk;
-> +               }
-> +       }
-> +
->         ret = rproc_add(rproc);
->         if (ret) {
->                 dev_err(dev, "rproc_add failed\n");
-> @@ -1171,6 +1194,10 @@ static void imx_rproc_remove(struct platform_device *pdev)
->         struct rproc *rproc = platform_get_drvdata(pdev);
->         struct imx_rproc *priv = rproc->priv;
->
-> +       if (priv->dcfg->method == IMX_RPROC_SCU_API) {
-> +               pm_runtime_disable(priv->dev);
-> +               pm_runtime_put(priv->dev);
-> +       }
->         clk_disable_unprepare(priv->clk);
->         rproc_del(rproc);
->         imx_rproc_put_scu(rproc);
-> --
-> 2.39.5
->
+>  	mutex_lock(&icc_bw_lock);
+>  
+>  	node->provider = provider;
+
+With that addressed, feel free to add my:
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
+
+Johan
 
