@@ -1,159 +1,145 @@
-Return-Path: <linux-pm+bounces-28960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 028FBADED15
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:57:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34A47ADED13
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:57:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E7CB18912A2
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:57:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B27B816BF26
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4E02E3AE7;
-	Wed, 18 Jun 2025 12:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA542E54A5;
+	Wed, 18 Jun 2025 12:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YsXxY8NY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aNhu4IIY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE032E2651
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D512E3B10
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750251419; cv=none; b=KgFxh0ImH3vO7l/jqf66eY0vgQeK0RLAb25VNsZY1/M1YNX5/zqm5XRuh1HvupLRRlPjxqtrBbCJlStW/jLhUPxG+Am02pfKDF1Me75n6qCuzOWPsVS0REcDAaQ8AiHOlJEh7qTbuJ84vBybHvhiR1EgN+ndXYPJC1P9kvnpm2U=
+	t=1750251425; cv=none; b=VWpdb+1dulINAMw2xr5/E+8PD42U7mrr34PoYFAXiLZd801cRyk/a+iHI0ZwJLHhf8AjUPwdYboDq0Aaz/Xu48UrmczmQ+znQu7AjGOTTnsUxxLv3oKxOj/PR6m/2b4QstoEorssZBnj7nXAddqGgcU2t3ijleJB6eC0cfOnHsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750251419; c=relaxed/simple;
-	bh=0wBAwwU35T2EdCWcWHBQveoDRg+cQ5ZJBxvRBpS8XqA=;
+	s=arc-20240116; t=1750251425; c=relaxed/simple;
+	bh=NjVYGChQDbdYIHe4Sr86or+FiSbuf0vYfumtIy7G6CA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xde9YzVGSWUpQvqIP7wZPDSw1HEAKvpScgoObps3/BuXmnwmv/O2N393Ex3qpm42spR2y2b+Y8LKB4MHGA4QZHlqXIlBGVR1YpV+UEWscxD7JcGf1B4tvLPZeG6X9fkRXbkMzGpIi0j1FyYrTkIUFYl7f87G4njmIMF4DBGJb58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YsXxY8NY; arc=none smtp.client-ip=209.85.219.176
+	 To:Cc:Content-Type; b=ix2NIhjmw8sB2ZTPZ84Mwz/qiyPpUkezUgsZ+IPCpyhssNjoNl5FvdJ1vRR4HEq3IUDC0adjpoA9uF/Eg1kuDYM56Ii7DMtgHGuuEaoEeo3dx7cZPsleCBWs99omKXcMQCscFaVPp4dXdkCGeAVY7q/t5uQRomxcxh6enX4Me8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aNhu4IIY; arc=none smtp.client-ip=209.85.219.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e819aa98e7aso6189051276.2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:56:57 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e8273504c67so1857851276.0
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750251417; x=1750856217; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Jfv7W89jcyNI5g8maM5e0NmglDrqdzJne5yo5vZPXg=;
-        b=YsXxY8NYzQoxZBRRqVNivh364fzheZLSJPL1iF2h8we2FJ8feKWiAKj6fIJCAen8Aw
-         Q9YS8U4gUb5Ni50asVbfdiJ/q3AQdphjISts1bfPWBVBMeU+sYOiR3URsmhtcUkMXqkV
-         9hi1z8nvl3KXcRMuDFXG/m+/9t81mjbFuR8v2LTZeRdF2lp+JYOp4HGGZxtqVLLiwLzC
-         tNMG6ynqSdI2dRgtiWE/Povfe7HL9Fi4C/tb7SWtGdkXgGs/Wbl2e9jxF4KdQLTcTzUj
-         sGRtN7G7n2FNmKQduoj7pgxJncgYYbOmh8gMQrdCwRYMNkEK24H8H3LDm+JDarRE1pSU
-         CKdA==
+        d=linaro.org; s=google; t=1750251422; x=1750856222; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/0yNglyrMOZ78JyNR9Sp0rHahct09b8RGeUMHfCfYXs=;
+        b=aNhu4IIYC7J5516GOhCztiHgcRHX0bX4gsr6bSisGGewTaf0t2244FyScdcooFgn4M
+         yEP8LTseQP1F2TOCwgbbURqCs/X6o3tWIA6EP1eaUtk93uUOQ6y1sRRj/4Ca6VkLTTto
+         J/enl7/Eo/Oco9/SHDmPE6cUmXre/76Z6v7xk6swpd2MUNZiaUptTHogR34khVeO2iWY
+         4pXv9eRRqCmZcmJDpeQaxLUqvRnCrPRt1iWdvo6pHobbj/q8AeAq2oT20C6UL0AvEyoq
+         SCJ/Y7QGj3teUNiIHFid2sZMLC2ipmFrVPqALShDw//pWfMTeUPwC5vhm84KVbWBa2Za
+         9lmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750251417; x=1750856217;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Jfv7W89jcyNI5g8maM5e0NmglDrqdzJne5yo5vZPXg=;
-        b=YVI8W1i0FsGJ0QYGsBCLT5KVxCn2VYuYGpr0gPSaWrpDO+lifgmtHkESz9Opcv5p8y
-         kQ+Yr0jjLP+BZV6+dvSwg6RjDUW9vWpJ2T3KoCPWfaRFDam/s+Gfhnq16vzCiE/MDEbv
-         WZQ02zKMYdP53RKNWzclNwRr3otA6ZEot3EbsxkBv7z68iSdUxqzDq6TOmSegwWUtEN4
-         vf94TYwOpBw5AUBwxKHXpIs1zsdfkrw3nukDq8PyfkWKig3y0acMHoVlK0xqggds/rcC
-         I6uUU3bmiLpzVqS5VJQwhaBvKrv1FO33VKwSQ8LW0q27VGwCSc4zrjqGluGC7iSVPH3x
-         FqmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUk3eu2yS4itbEF4ZAo93dV4JzKafIX/h85Bnxjptr5T6p0ZM1Hc+wgrrRLJHj76iXRz4WUo1T3Gw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfqG+XTW+8zsAoAuaptVRm5woT0muulPW8/Wm3DJ9uj8m9ngWK
-	ZQ8w00cJBuVX6j04DIsaZoaGmjIHLMskR3yMTxKGdqJNm8nqAk9SnLDaWO4SyR0zY092Tbkg3WQ
-	TCwCBx5bUDAAS952+kboEeMa2mihbWtLej+0PscTx5g==
-X-Gm-Gg: ASbGncuL/NjhhtWHfSvA7ms2mi6BG/mR78Svg6SlTYOzGlRxIsv8o9H1LN4c5NRqE93
-	4jRIt44lD2OTAPUCDZeKnZ3fvCKM8fM4uyPp5xzEJEqVeFtCbvm5f0E1QGutcLOQ/WiPx+LPcFC
-	srS4RGXJYdMfKh7vGSajQs+X4pve8cSdUbqaKEMM7nhho=
-X-Google-Smtp-Source: AGHT+IEF7aSd2gChdpDkWFgFxP4fyCJRIi/0rOPMDF7EBy8fifK6rpldismzyPaU5FnMtFjQSC8V5hmVyzcxyRjq81Y=
-X-Received: by 2002:a05:6902:a06:b0:e81:2740:2d96 with SMTP id
- 3f1490d57ef6-e822acc6cc8mr22162870276.17.1750251416986; Wed, 18 Jun 2025
- 05:56:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750251422; x=1750856222;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/0yNglyrMOZ78JyNR9Sp0rHahct09b8RGeUMHfCfYXs=;
+        b=MJ3hrxXyiPnRLLD2VeSqSJkv3lbvqNJ+iAXHnnprThNPK4OmS1guZu/gjaRyvZPpoQ
+         fWhA4QqHmb/NrhDOYAc3Us5bWmGGEQvyxKvfDhNHNnvyjW53gkGvqybvxBlfYOdyxJjU
+         vEJU2mC0fYVWhTTqnzaZerlNbBi+khPDhZGWrjiDIWS8RGyf1DQ2Ck4I+Sj3OpCWtbaj
+         hU9U0DGwyshkFaEvgIJXWkdiFp0WkGiPdaHGsiVzsweFoWyOV1QtHGWhvmZTm7Ws0DHg
+         TSv4UznIq+XgqdngIjtf7OzCJk/6aN4hyIdTNK3d1htw6Mf+PBZUMK0GFFdTOoTKUxIN
+         GKCA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5q87rC2Q9LYyTlnR8rywCl67EnisDMLUfAeRqfoPEkfziv9LQGPYLmRTDDY6QQ1pLeBdh4Oyjig==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYcGJZ6J0VcQG1iJHNrz5JHdhT/zxHQq1XZAlaIQ5JDlOm1f39
+	uzAGN27TSk8/oEEo3L241MHuqb87+/AzkY/4/bc7W8wkj5ft/UyHkkUFfF0pUsfjmzdIzFnYwtY
+	x2qzejbhxPQ0zdMO+g067z2iU1qP/eK26MueOST6NDg==
+X-Gm-Gg: ASbGncvoH4d3KStg3CYiCtm8ab302sfQLQ+GFGvvd59aGRAw23KvIF5lrsbwWFPugvU
+	GH5qPSDwxzAG38DDlZAVB1FHUzn1UeGVCfjLOaOlJ23Cq6/MOITepsEV9ZAHpkdHBEeojTZV4uv
+	nL46xL+GJ8rBPhIzdHcccRZqJvfLRrk4UpNGfOArJ2Lys=
+X-Google-Smtp-Source: AGHT+IGKJ/9nezM0CjL8LTlmXkuqqs1XvYRULfznlZkJ00Zas9fy/8SeNVFH78QNFQr9m4QBfV7T9IMSOGKFGfTViCA=
+X-Received: by 2002:a05:6902:100d:b0:e81:9aa9:88cd with SMTP id
+ 3f1490d57ef6-e822abe0669mr22502028276.8.1750251421799; Wed, 18 Jun 2025
+ 05:57:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250518220707.669515-1-jonas@kwiboo.se>
-In-Reply-To: <20250518220707.669515-1-jonas@kwiboo.se>
+References: <m3ldr69lsw.fsf@t19.piap.pl>
+In-Reply-To: <m3ldr69lsw.fsf@t19.piap.pl>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 18 Jun 2025 14:56:21 +0200
-X-Gm-Features: AX0GCFurdlTWKY938doCIooXAEmUu9ZI2vYDArR38Vi5OuNwlGZr8B4vigPCwUY
-Message-ID: <CAPDyKFrtp7MHMuXhhYm7c8TY9u5DoGV89x4d__gYLQSNU48voA@mail.gmail.com>
-Subject: Re: [PATCH 0/9] rockchip: Add power controller support for RK3528
-To: Jonas Karlman <jonas@kwiboo.se>
-Cc: Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Yao Zi <ziyao@disroot.org>, 
-	Chukun Pan <amadeus@jmu.edu.cn>, linux-rockchip@lists.infradead.org, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
+Date: Wed, 18 Jun 2025 14:56:26 +0200
+X-Gm-Features: AX0GCFt2trdH5lvp26KlouAeiTYZ2alEevH8lFXOfNjGnwSoGAScAqPAkE83GxQ
+Message-ID: <CAPDyKFo_oTWWX-PNNA_Dpq0fjbmhzoLCgd77NfDO=Q_JZ8hZ-g@mail.gmail.com>
+Subject: Re: [PATCH] imx8m-blk-ctrl: set ISI panic write hurry level
+To: =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>, 
+	linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 19 May 2025 at 00:07, Jonas Karlman <jonas@kwiboo.se> wrote:
+On Fri, 9 May 2025 at 11:26, Krzysztof Ha=C5=82asa <khalasa@piap.pl> wrote:
 >
-> The Rockchip RK3528 support multiple power domains, one PD_GPU that can
-> fully be powered down, and other that can be idle requested.
+> Apparently, ISI needs cache settings similar to LCDIF.
+> Otherwise we get artefacts in the image.
+> Tested on i.MX8MP.
 >
-> Vendor kernel flag all power domains on RK3528 as always-on, this takes
-> a different route and instead tries to describe all devices power-domain
-> in the device tree, even for controllers with unsupported runtime status.
->
-> The PD_RKVDEC is used by RKVDEC and DDRPHY CRU, and is kept disabled to
-> prevent a full system reset when trying to read current rate of the
-> SCMI_CLK_DDR clock.
->
-> Patch 1-4 prepares and makes it possible to use the PD_GPU power domain
-> for a separate "Add GPU support for RK3528" series.
->
-> Patch 7-9 updates dt-bindings for controllers not supporting use of the
-> power-domains prop and enables the PD_RKVENC, PD_VO and PD_VPU domains.
->
-> pm_genpd_summary on a Radxa E20C after this:
->
->   domain                          status          children        performance
->       /device                         runtime status                  managed by
->   ------------------------------------------------------------------------------
->   vpu                             on                              0
->       ffaf0000.gpio                   unsupported                 0           SW
->       ffb10000.gpio                   unsupported                 0           SW
->       ffbe0000.ethernet               active                      0           SW
->       ffae0000.adc                    unsupported                 0           SW
->       ffbf0000.mmc                    suspended                   0           SW
->   vo                              on                              0
->       ffb00000.gpio                   unsupported                 0           SW
->       ffc30000.mmc                    suspended                   0           SW
->   venc                            on                              0
->       ffb20000.gpio                   unsupported                 0           SW
->       ffa58000.i2c                    unsupported                 0           SW
->   gpu                             off-0                           0
->       ff700000.gpu                    suspended                   0           SW
->
-> Jonas Karlman (9):
->   dt-bindings: power: rockchip: Add support for RK3528
->   pmdomain: rockchip: Add support for RK3528
->   dt-bindings: rockchip: pmu: Add compatible for RK3528
->   arm64: dts: rockchip: Add power controller for RK3528
->   dt-bindings: mmc: sdhci-of-dwcmhsc: Allow use of a power-domain
->   dt-bindings: gpio: rockchip: Allow use of a power-domain
->   dt-bindings: i2c: i2c-rk3x: Allow use of a power-domain
->   dt-bindings: iio: adc: rockchip-saradc: Allow use of a power-domain
->   arm64: dts: rockchip: Enable more power domains for RK3528
->
->  .../devicetree/bindings/arm/rockchip/pmu.yaml |  2 +
->  .../bindings/gpio/rockchip,gpio-bank.yaml     |  3 +
->  .../devicetree/bindings/i2c/i2c-rk3x.yaml     |  3 +
->  .../bindings/iio/adc/rockchip-saradc.yaml     |  3 +
->  .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |  4 -
->  .../power/rockchip,power-controller.yaml      |  1 +
->  arch/arm64/boot/dts/rockchip/rk3528.dtsi      | 87 +++++++++++++++++++
->  drivers/pmdomain/rockchip/pm-domains.c        | 27 ++++++
->  .../dt-bindings/power/rockchip,rk3528-power.h | 19 ++++
->  9 files changed, 145 insertions(+), 4 deletions(-)
->  create mode 100644 include/dt-bindings/power/rockchip,rk3528-power.h
->
+> Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
 
-Patch 1->3 applied for next, thanks! Note that patch1 and patch 3 are
-also available on the immutable dt branch.
+Applied for next, thanks!
 
 Kind regards
 Uffe
+
+
+>
+> diff --git a/drivers/pmdomain/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx=
+/imx8m-blk-ctrl.c
+> index 912802b5215b..5c83e5599f1e 100644
+> --- a/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+> +++ b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+> @@ -665,6 +665,11 @@ static const struct imx8m_blk_ctrl_data imx8mn_disp_=
+blk_ctl_dev_data =3D {
+>  #define  LCDIF_1_RD_HURRY      GENMASK(15, 13)
+>  #define  LCDIF_0_RD_HURRY      GENMASK(12, 10)
+>
+> +#define ISI_CACHE_CTRL         0x50
+> +#define  ISI_V_WR_HURRY                GENMASK(28, 26)
+> +#define  ISI_U_WR_HURRY                GENMASK(25, 23)
+> +#define  ISI_Y_WR_HURRY                GENMASK(22, 20)
+> +
+>  static int imx8mp_media_power_notifier(struct notifier_block *nb,
+>                                 unsigned long action, void *data)
+>  {
+> @@ -694,6 +699,11 @@ static int imx8mp_media_power_notifier(struct notifi=
+er_block *nb,
+>                 regmap_set_bits(bc->regmap, LCDIF_ARCACHE_CTRL,
+>                                 FIELD_PREP(LCDIF_1_RD_HURRY, 7) |
+>                                 FIELD_PREP(LCDIF_0_RD_HURRY, 7));
+> +               /* Same here for ISI */
+> +               regmap_set_bits(bc->regmap, ISI_CACHE_CTRL,
+> +                               FIELD_PREP(ISI_V_WR_HURRY, 7) |
+> +                               FIELD_PREP(ISI_U_WR_HURRY, 7) |
+> +                               FIELD_PREP(ISI_Y_WR_HURRY, 7));
+>         }
+>
+>         return NOTIFY_OK;
+>
+> --
+> Krzysztof "Chris" Ha=C5=82asa
+>
+> Sie=C4=87 Badawcza =C5=81ukasiewicz
+> Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+> Al. Jerozolimskie 202, 02-486 Warszawa
 
