@@ -1,188 +1,159 @@
-Return-Path: <linux-pm+bounces-28959-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28960-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B27ADED04
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:50:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028FBADED15
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 14:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6514116454B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:50:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E7CB18912A2
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 12:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45E42E06FC;
-	Wed, 18 Jun 2025 12:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4E02E3AE7;
+	Wed, 18 Jun 2025 12:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJ8E1Hv5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YsXxY8NY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8869A2BF013;
-	Wed, 18 Jun 2025 12:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE032E2651
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 12:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750251052; cv=none; b=GRKh7aQ1givEabDAJDn5BCygtsdb/xs5rAYgPYrgyjxvPT7JlLD3aC0x1StI5mYQK2toTu3kE5fYyQ0uau78vCHuSh8F0GQmDTYKstSmCAhd/NcHBiYRLT2bFDtxFfs6KFq/IMwx17Bpd9VeUBfTQDgtuUFG/OwhyfsSu7SqdAw=
+	t=1750251419; cv=none; b=KgFxh0ImH3vO7l/jqf66eY0vgQeK0RLAb25VNsZY1/M1YNX5/zqm5XRuh1HvupLRRlPjxqtrBbCJlStW/jLhUPxG+Am02pfKDF1Me75n6qCuzOWPsVS0REcDAaQ8AiHOlJEh7qTbuJ84vBybHvhiR1EgN+ndXYPJC1P9kvnpm2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750251052; c=relaxed/simple;
-	bh=ZSj/R+8J8mVMWAp2q9IOUy7kGCsK8aMkmayHlgXuTVc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rlz9lUg24L2jLE0tNxWjtSoM2QxvmVmFiKt29qOR7PI3UOvcbhNL+DGr18MUH67+nEAe4hPGxXUDh0hMyqccS25nYuUj+NpcD2/kpPN2BNNlZtCbkSizOaXgUBVO3ShHBTySPg4oBjk5uxPO1XUK2LjI0fqIUmWijHrpqsxK4c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJ8E1Hv5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FF8C4CEE7;
-	Wed, 18 Jun 2025 12:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750251052;
-	bh=ZSj/R+8J8mVMWAp2q9IOUy7kGCsK8aMkmayHlgXuTVc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GJ8E1Hv5F2GJ3Fl04RIvng2/6uT131VeCqskRFOop+D/1W+M9QmguFt1Ae8jJnK5y
-	 FZr+NZAIOBKrkut6LeGGrWa/EYvkXqQ6/evWVZSFT2n8rVzJyGs3BqUPZYPjM2ya8e
-	 ZASqEcT7q/0quA90fnWNkAhyA+s0eN1fNBnNgOxOCcuuLZtSm0k07vt+5zSyr00/4/
-	 le4genhxBKoNV3EVHXXXvPNXfwFamvf+JbPNuziusBasIwPlDNjKt7d4QXJTAeoDUb
-	 G2Exb7o0A6HwtLXCqqNoDwFnaXd2zHPOViUnM74dapk3DV1xc4Wcy2ffGeiDDmFw2E
-	 Q26dwp89nSlbw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uRsFe-000000002SW-2uxe;
-	Wed, 18 Jun 2025 14:50:51 +0200
-Date: Wed, 18 Jun 2025 14:50:50 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bryan O'Donoghue <bod.linux@nxsw.ie>,
-	Rob Clark <rob.clark@oss.qualcomm.com>
-Cc: Gabor Juhos <j4g8y7@gmail.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Georgi Djakov <djakov@kernel.org>,
-	Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: avoid memory allocation when 'icc_bw_lock'
- is held
-Message-ID: <aFK2Kl2I46dTYBI1@hovoldconsulting.com>
-References: <TIkPOGVjPeCjPzjVtlSb6V5CIcpaXf2-6WG6HjAyaOW59Hj01-9VK7Z8DKadakOKr6fJeQICi6h0Z8mft9DQyg==@protonmail.internalid>
- <20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com>
- <ca9f7308-4b92-4d23-bfe7-f8d18d20de10@linaro.org>
- <75a46897-040f-4608-88f5-22c99c8bed97@gmail.com>
- <04ab699e-b344-4ba1-9ca1-04b6e50beefe@nxsw.ie>
+	s=arc-20240116; t=1750251419; c=relaxed/simple;
+	bh=0wBAwwU35T2EdCWcWHBQveoDRg+cQ5ZJBxvRBpS8XqA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xde9YzVGSWUpQvqIP7wZPDSw1HEAKvpScgoObps3/BuXmnwmv/O2N393Ex3qpm42spR2y2b+Y8LKB4MHGA4QZHlqXIlBGVR1YpV+UEWscxD7JcGf1B4tvLPZeG6X9fkRXbkMzGpIi0j1FyYrTkIUFYl7f87G4njmIMF4DBGJb58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YsXxY8NY; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e819aa98e7aso6189051276.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 05:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750251417; x=1750856217; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Jfv7W89jcyNI5g8maM5e0NmglDrqdzJne5yo5vZPXg=;
+        b=YsXxY8NYzQoxZBRRqVNivh364fzheZLSJPL1iF2h8we2FJ8feKWiAKj6fIJCAen8Aw
+         Q9YS8U4gUb5Ni50asVbfdiJ/q3AQdphjISts1bfPWBVBMeU+sYOiR3URsmhtcUkMXqkV
+         9hi1z8nvl3KXcRMuDFXG/m+/9t81mjbFuR8v2LTZeRdF2lp+JYOp4HGGZxtqVLLiwLzC
+         tNMG6ynqSdI2dRgtiWE/Povfe7HL9Fi4C/tb7SWtGdkXgGs/Wbl2e9jxF4KdQLTcTzUj
+         sGRtN7G7n2FNmKQduoj7pgxJncgYYbOmh8gMQrdCwRYMNkEK24H8H3LDm+JDarRE1pSU
+         CKdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750251417; x=1750856217;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Jfv7W89jcyNI5g8maM5e0NmglDrqdzJne5yo5vZPXg=;
+        b=YVI8W1i0FsGJ0QYGsBCLT5KVxCn2VYuYGpr0gPSaWrpDO+lifgmtHkESz9Opcv5p8y
+         kQ+Yr0jjLP+BZV6+dvSwg6RjDUW9vWpJ2T3KoCPWfaRFDam/s+Gfhnq16vzCiE/MDEbv
+         WZQ02zKMYdP53RKNWzclNwRr3otA6ZEot3EbsxkBv7z68iSdUxqzDq6TOmSegwWUtEN4
+         vf94TYwOpBw5AUBwxKHXpIs1zsdfkrw3nukDq8PyfkWKig3y0acMHoVlK0xqggds/rcC
+         I6uUU3bmiLpzVqS5VJQwhaBvKrv1FO33VKwSQ8LW0q27VGwCSc4zrjqGluGC7iSVPH3x
+         FqmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUk3eu2yS4itbEF4ZAo93dV4JzKafIX/h85Bnxjptr5T6p0ZM1Hc+wgrrRLJHj76iXRz4WUo1T3Gw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfqG+XTW+8zsAoAuaptVRm5woT0muulPW8/Wm3DJ9uj8m9ngWK
+	ZQ8w00cJBuVX6j04DIsaZoaGmjIHLMskR3yMTxKGdqJNm8nqAk9SnLDaWO4SyR0zY092Tbkg3WQ
+	TCwCBx5bUDAAS952+kboEeMa2mihbWtLej+0PscTx5g==
+X-Gm-Gg: ASbGncuL/NjhhtWHfSvA7ms2mi6BG/mR78Svg6SlTYOzGlRxIsv8o9H1LN4c5NRqE93
+	4jRIt44lD2OTAPUCDZeKnZ3fvCKM8fM4uyPp5xzEJEqVeFtCbvm5f0E1QGutcLOQ/WiPx+LPcFC
+	srS4RGXJYdMfKh7vGSajQs+X4pve8cSdUbqaKEMM7nhho=
+X-Google-Smtp-Source: AGHT+IEF7aSd2gChdpDkWFgFxP4fyCJRIi/0rOPMDF7EBy8fifK6rpldismzyPaU5FnMtFjQSC8V5hmVyzcxyRjq81Y=
+X-Received: by 2002:a05:6902:a06:b0:e81:2740:2d96 with SMTP id
+ 3f1490d57ef6-e822acc6cc8mr22162870276.17.1750251416986; Wed, 18 Jun 2025
+ 05:56:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <04ab699e-b344-4ba1-9ca1-04b6e50beefe@nxsw.ie>
+References: <20250518220707.669515-1-jonas@kwiboo.se>
+In-Reply-To: <20250518220707.669515-1-jonas@kwiboo.se>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 18 Jun 2025 14:56:21 +0200
+X-Gm-Features: AX0GCFurdlTWKY938doCIooXAEmUu9ZI2vYDArR38Vi5OuNwlGZr8B4vigPCwUY
+Message-ID: <CAPDyKFrtp7MHMuXhhYm7c8TY9u5DoGV89x4d__gYLQSNU48voA@mail.gmail.com>
+Subject: Re: [PATCH 0/9] rockchip: Add power controller support for RK3528
+To: Jonas Karlman <jonas@kwiboo.se>
+Cc: Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Yao Zi <ziyao@disroot.org>, 
+	Chukun Pan <amadeus@jmu.edu.cn>, linux-rockchip@lists.infradead.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-[ +CC: Rob ]
+On Mon, 19 May 2025 at 00:07, Jonas Karlman <jonas@kwiboo.se> wrote:
+>
+> The Rockchip RK3528 support multiple power domains, one PD_GPU that can
+> fully be powered down, and other that can be idle requested.
+>
+> Vendor kernel flag all power domains on RK3528 as always-on, this takes
+> a different route and instead tries to describe all devices power-domain
+> in the device tree, even for controllers with unsupported runtime status.
+>
+> The PD_RKVDEC is used by RKVDEC and DDRPHY CRU, and is kept disabled to
+> prevent a full system reset when trying to read current rate of the
+> SCMI_CLK_DDR clock.
+>
+> Patch 1-4 prepares and makes it possible to use the PD_GPU power domain
+> for a separate "Add GPU support for RK3528" series.
+>
+> Patch 7-9 updates dt-bindings for controllers not supporting use of the
+> power-domains prop and enables the PD_RKVENC, PD_VO and PD_VPU domains.
+>
+> pm_genpd_summary on a Radxa E20C after this:
+>
+>   domain                          status          children        performance
+>       /device                         runtime status                  managed by
+>   ------------------------------------------------------------------------------
+>   vpu                             on                              0
+>       ffaf0000.gpio                   unsupported                 0           SW
+>       ffb10000.gpio                   unsupported                 0           SW
+>       ffbe0000.ethernet               active                      0           SW
+>       ffae0000.adc                    unsupported                 0           SW
+>       ffbf0000.mmc                    suspended                   0           SW
+>   vo                              on                              0
+>       ffb00000.gpio                   unsupported                 0           SW
+>       ffc30000.mmc                    suspended                   0           SW
+>   venc                            on                              0
+>       ffb20000.gpio                   unsupported                 0           SW
+>       ffa58000.i2c                    unsupported                 0           SW
+>   gpu                             off-0                           0
+>       ff700000.gpu                    suspended                   0           SW
+>
+> Jonas Karlman (9):
+>   dt-bindings: power: rockchip: Add support for RK3528
+>   pmdomain: rockchip: Add support for RK3528
+>   dt-bindings: rockchip: pmu: Add compatible for RK3528
+>   arm64: dts: rockchip: Add power controller for RK3528
+>   dt-bindings: mmc: sdhci-of-dwcmhsc: Allow use of a power-domain
+>   dt-bindings: gpio: rockchip: Allow use of a power-domain
+>   dt-bindings: i2c: i2c-rk3x: Allow use of a power-domain
+>   dt-bindings: iio: adc: rockchip-saradc: Allow use of a power-domain
+>   arm64: dts: rockchip: Enable more power domains for RK3528
+>
+>  .../devicetree/bindings/arm/rockchip/pmu.yaml |  2 +
+>  .../bindings/gpio/rockchip,gpio-bank.yaml     |  3 +
+>  .../devicetree/bindings/i2c/i2c-rk3x.yaml     |  3 +
+>  .../bindings/iio/adc/rockchip-saradc.yaml     |  3 +
+>  .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |  4 -
+>  .../power/rockchip,power-controller.yaml      |  1 +
+>  arch/arm64/boot/dts/rockchip/rk3528.dtsi      | 87 +++++++++++++++++++
+>  drivers/pmdomain/rockchip/pm-domains.c        | 27 ++++++
+>  .../dt-bindings/power/rockchip,rk3528-power.h | 19 ++++
+>  9 files changed, 145 insertions(+), 4 deletions(-)
+>  create mode 100644 include/dt-bindings/power/rockchip,rk3528-power.h
+>
 
-On Tue, Jun 03, 2025 at 10:01:31AM +0000, Bryan O'Donoghue wrote:
-> On 03/06/2025 10:15, Gabor Juhos wrote:
+Patch 1->3 applied for next, thanks! Note that patch1 and patch 3 are
+also available on the immutable dt branch.
 
-> > 2025. 05. 30. 11:16 keltezéssel, Bryan O'Donoghue írta:
-> >> On 29/05/2025 15:46, Gabor Juhos wrote:
-> >>> The 'icc_bw_lock' mutex is introduced in commit af42269c3523
-> >>> ("interconnect: Fix locking for runpm vs reclaim") in order
-> >>> to decouple serialization of bw aggregation from codepaths
-> >>> that require memory allocation.
-> >>>
-> >>> However commit d30f83d278a9 ("interconnect: core: Add dynamic
-> >>> id allocation support") added a devm_kasprintf() call into a
-> >>> path protected by the 'icc_bw_lock' which causes this lockdep
-> >>> warning (at least on the IPQ9574 platform):
-
-> >>> Move the memory allocation part of the code outside of the protected
-> >>> path to eliminate the warning. Also add a note about why it is moved
-> >>> to there,
-
-> >>> @@ -1023,6 +1023,16 @@ void icc_node_add(struct icc_node *node, struct
-> >>> icc_provider *provider)
-> >>>            return;
-> >>>
-> >>>        mutex_lock(&icc_lock);
-> >>> +
-> >>> +    if (node->id >= ICC_DYN_ID_START) {
-> >>> +        /*
-> >>> +         * Memory allocation must be done outside of codepaths
-> >>> +         * protected by icc_bw_lock.
-> >>> +         */
-> >>> +        node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
-> >>> +                        node->name, dev_name(provider->dev));
-> >>> +    }
-> >>> +
-> >>>        mutex_lock(&icc_bw_lock);
-> >>>
-> >>>        node->provider = provider;
-> >>> @@ -1038,10 +1048,6 @@ void icc_node_add(struct icc_node *node, struct
-> >>> icc_provider *provider)
-> >>>        node->avg_bw = node->init_avg;
-> >>>        node->peak_bw = node->init_peak;
-> >>>
-> >>> -    if (node->id >= ICC_DYN_ID_START)
-> >>> -        node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
-> >>> -                        node->name, dev_name(provider->dev));
-> >>> -
-> >>>        if (node->avg_bw || node->peak_bw) {
-> >>>            if (provider->pre_aggregate)
-> >>>                provider->pre_aggregate(node);
-
-> >> The locking in this code is a mess.
-> >>
-> >> Which data-structures does icc_lock protect node* pointers I think and which
-> >> data-structures does icc_bw_lock protect - "bw" data structures ?
-> >>
-> >> Hmm.
-> >>
-> >> Looking at this code I'm not sure at all what icc_lock was introduced to do.
-> > 
-> > Initially, only the 'icc_lock' mutex was here, and that protected 'everything'.
-> > The 'icc_bw_lock' has been introduced later by commit af42269c3523
-> > ("interconnect: Fix locking for runpm vs reclaim") as part of the
-> > "drm/msm+PM+icc: Make job_run() reclaim-safe" series [1].
-> > 
-> > Here is the reason copied from the original commit message:
-> > 
-> >      "For cases where icc_bw_set() can be called in callbaths that could
-> >      deadlock against shrinker/reclaim, such as runpm resume, we need to
-> >      decouple the icc locking.  Introduce a new icc_bw_lock for cases where
-> >      we need to serialize bw aggregation and update to decouple that from
-> >      paths that require memory allocation such as node/link creation/
-> >      destruction."
-> 
-> Right but reading this code.
-> 
-> icc_set_bw();
-> icc_lock_bw - protects struct icc_node *
-> 
-> icc_put();
-> icc_lock - locks
-> icc_lock_bw -locks directly after protects struct icc_node *
-> 
-> icc_node_add current:
-> icc_lock - locks
-> icc_lock_bw - locks
->      node->name = devm_kasprintf();
-> 
-> After your change
-> 
-> icc_node_add current:
-> icc_lock - locks
->      node->name = devm_kasprintf();
-> icc_lock_bw - locks
->      owns node->provider - or whatever
-> 
-> And this is what is prompting my question. Which locks own which data here ?
-> 
-> I think we should sort that out, either by removing one of the locks or 
-> by at the very least documenting beside the mutex declarations which 
-> locks protect what.
-
-Feel free to discuss that with Rob who added the icc_lock_bw, but it's
-unrelated to the regression at hand (and should not block fixing it).
-
-Allocations cannot be done while holding the icc_lock_bw, and this fix
-is correct in moving the allocation (also note that the node has not
-been added yet).
-
-Johan
+Kind regards
+Uffe
 
