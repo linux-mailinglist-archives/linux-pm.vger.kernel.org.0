@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-29017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99D00ADF98A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 00:43:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86899ADF98E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 00:45:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03CD97A4180
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 22:42:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CB355A01DA
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 22:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE6127FB2E;
-	Wed, 18 Jun 2025 22:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB6C27E069;
+	Wed, 18 Jun 2025 22:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NTD9eQn1"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DyLDCb/I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5110A27E04D
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 22:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37FE27EFF2
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 22:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750286629; cv=none; b=DYcTVCz/eGr4OvHUUJthMoPe59SHFKQn+JI5Vwcw2MZNv1NYKHUZtNoj9yHYHgVD+PKNLIdMj4ELcp7uesgyAPz9ecd3OaTKIENX8mAiu/rocU7XBLtTaHcKL6vC4+S3SSaHzknkpQL4CnU+9nLRnA7HN3EYBETlGNUhZltj1ko=
+	t=1750286700; cv=none; b=icRxrXzL/GflTzT/vSLYr8Qo8lSZ/5oWk2h4VNFNfOITR3SO8OqCZpwPFkEjbckuVECs1AiWnCvH7b7CmVVhSrsXqjN21peTR3Y5KY/3/Wnr0gfm0k7Lm7kJi9EmiXmr+QVegPqPcyUQNqRviO7os3w+js7qVg2xzRCUGmda29w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750286629; c=relaxed/simple;
-	bh=7C29pda3Os4hXi9P50dJ+HkdgVgdm4Pec7nJ3piopZw=;
+	s=arc-20240116; t=1750286700; c=relaxed/simple;
+	bh=0ED5HZjv3WSWzpJDL2MNE3DxJKC3CPCwd3eAHubf36Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qob2nzpBvo91jYgH6QQdHdDYLrOkG6FqFsKJH9hwpwUj5+IoeKox7iZogL7dg/EMzJVhB5MQJmRYD5gBXn1lTH5TKMy2ngEVQ/Wyh51a4mwpt+TsOw9THoq/7DXtLOaGCD6TVruQdaLZQeEH51OOXLRTgAmtRHKVu71F0V6bDLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NTD9eQn1; arc=none smtp.client-ip=209.85.166.171
+	 In-Reply-To:Content-Type; b=QZ912DZefT1PSwJkbRpirlK6uCb47g6cfBjKy9eWlk79SilOgMfLPRfmtz66ZblMFvEEp/kjwsxgnhTF6dC7fwycZnDfA7B5R/YQ3CWuHgN+1wwIX5+2A0olH8TWDarup6rqmbxZItzFpa7sKhiICnLsle3jYsxxLr88W7A2ssw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DyLDCb/I; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3dddbe5f8aaso621675ab.0
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 15:43:47 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-8760d31bd35so4113439f.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 15:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1750286626; x=1750891426; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1750286698; x=1750891498; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G3vMQgaSAr8pHAxdoofscIYDx1FiHrooeZ+m1KEAAQI=;
-        b=NTD9eQn1N8AlJ6nXia8gu+neLP6b4QruLMJ2hCZRPPyS0jB/jpFlSU8Vv0JeavkBgA
-         4DqC0fLD3728bF2ZuNcH5CSzrDQkqK1/MTUZMaKhp6KdwUQXp1eJzvmuCuCLV1a5OakV
-         j8qpF5V5sSgyjS/ND4ylSff+eEE26v6aHyfpE=
+        bh=2n2SQNFGQmtENFVzE8cjN4n7LHc1Thph1pphR4bfrBo=;
+        b=DyLDCb/IX7UnllW+r/78Jb4q3P+abine8Ont+KUC9P/QKLC5qMg3bgX4yJXh8FRCAg
+         U/BLPSTeFUfky+VoucW2+VNdnZY7/MDqGqoj3ksqp+ngiiz0biNGn8NATUoOLL5Oz5gd
+         5KTqPdsZcn7oTCwkp+gLPYLw8B5wzih91h+Y8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750286626; x=1750891426;
+        d=1e100.net; s=20230601; t=1750286698; x=1750891498;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G3vMQgaSAr8pHAxdoofscIYDx1FiHrooeZ+m1KEAAQI=;
-        b=tukBonrBXu6S2YyzGNaWjPJ+EtylDcBLz0WSV3u2ti5L1cJOJOnNK8fcPBHAtJe1CO
-         /a64jWB9ROZa0iuJsuUYss7viXUhuK96P6yrCYFfY6nLmubc46jqqefyiBAMLNutiWB1
-         sy9Liu8CqR2ONg3KbW2D9iACsYDFwI3ae9WbbICsMtJuzQDtHn++eBz8H1N9CSmPOLfM
-         1GyxR9tXTSW02Prcgc/C8bTAVIU6fqsLYp5K7iohaERqA528WZdW7FGtf1cQT5ZQ8emZ
-         3t4tjsQ0A2XpNIhvoxTIYV9zNx8hCorbPqsT/QZxYPL3IDtk7czlaRDZO+8iw+si88WT
-         aCvw==
-X-Gm-Message-State: AOJu0YzO+Pz/LeE8UQ9AgkFYXW25Z9u7e9+kAQIVKRmhsz8Q13COn40K
-	40ACKdvg/Qm0BfYYJi19RSRbQfkRqDh2SPvcJiLlaZ8/YbtWRVr3veQ3obaZVqU7+Vs=
-X-Gm-Gg: ASbGncsHm9kIubR6i1/vwU6JNooYFaOYCVt2EWTI9Lk1hiECG9EMSYyatxdBGgMaSHU
-	PuUms/jIHjfGS244P8/jNiN630apW+UcHoJNfPMz1U6c0PPMmUnVLK43OCYarFecBiQ5v6IWNWs
-	zIYZfGj4ZlX7tmBG7HCT5W6167GSe57MNaKZSq/Hlmzu3dLNhWXbjEK2dZeG4ziudeUEdLbm3Ji
-	8vJ22dLZZkDJgW7Sj59eVHswr8fuo+ittOF4Tn43I1fYuAFqp5xVnjSDJcwZeJUFVMyjqqKJ9Cd
-	fjcAeh9DS9+vCPqLKIDq3drk8WtPrF6UvSvrrLxjnkRriR3Em3aAUiXKF39fy4gtQUbR4ViwiA=
+        bh=2n2SQNFGQmtENFVzE8cjN4n7LHc1Thph1pphR4bfrBo=;
+        b=PgOpnsfbBjHRuRj9VpPAov1AeIYo/6LHmFUv7VAhbKSNvFcZ+GR+0MB5RJwDWm/e28
+         p9PwQbZzh+3ne8qtoiFPEYe4gIzdWdQdChfUvnuTgLvx6uvpxhkvN2YIh1A3H9v/Pl/K
+         oNyF5/uht35Io+tm6Qql9Slx6IUUz3cNb8m3paZ6pPpH14mgICy/zDUddkOxTTSWdqBi
+         WQB4R2MmDMld8U7CFOifgapOVaEaVbrS0wmrRNInMIbRt6w9N+QAkZg5se6Fz9IMSuF8
+         Cq4Ny9C1ATq+AUrWmUFqA7OdmWsWyrbDTDMaNvNxofRcdQiAfFiGqEFNJXl9jU6O8rLQ
+         471A==
+X-Gm-Message-State: AOJu0YxNqvtlq/oXMbzN7zjiMLyul2fNdu4BhJFDybwBV5qY43AyX9j2
+	D+VwFxFcdyHBLmUrI3fmPz5tH2fSa0pn3wjnXSCFKzhzGDW8Jub+EDgvgwlOlIO0afQ=
+X-Gm-Gg: ASbGnctevHAVOs2tAW5+Eqo+f/zQknfguwJF7OwQT2HxD4gehY66xu4dHZAq88mM9I2
+	6zBbWd/1P8jTXjNp9w1KzYDdbo1LgDP8h3v0zu8MxkIE+ehGMViczKdh5h9bl6fmwGb7QsDr/yr
+	lymxZlpsmt0jWBm5HKYIqGwcxTiq3YGVfwbdCEH2TwVQpqvUud4Jms2i4/+cYfYf37tmsmUGPK4
+	k0d40gnUS2YmBQ9lEARt0wtnPUiHV5+Da8zqj10JrdlmLDPoJWdowPXXUuioSDUNYvwU0AIyG8w
+	7HMm0+S4/JNDk1hApBYaCzjCONc29EZXSfCteCGIM0HMwGcnkDMMFc/hKjlmCu92WBrRy+lRqg=
 	=
-X-Google-Smtp-Source: AGHT+IEMut0sjA/9CDO/vrij1jeyFo8AI2L7cAgeng3Ed7laLSRLtq3UWRU1AmzOiPi0tBvNRQ9u6g==
-X-Received: by 2002:a05:6e02:2784:b0:3dc:879b:be95 with SMTP id e9e14a558f8ab-3de301f83f4mr16768425ab.5.1750286626342;
-        Wed, 18 Jun 2025 15:43:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHXsSSQld9y7WIQoRaIUbFW+s42HR4KGpA2t3mpOt2Rr+gELKUrlxZAvg3wyi0Rm3o7nfKxfA==
+X-Received: by 2002:a05:6602:1612:b0:861:6f49:626 with SMTP id ca18e2360f4ac-875ded13886mr2568261539f.6.1750286695900;
+        Wed, 18 Jun 2025 15:44:55 -0700 (PDT)
 Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3de019c6411sm34321835ab.21.2025.06.18.15.43.45
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-875d57ff0fesm281953239f.26.2025.06.18.15.44.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 15:43:45 -0700 (PDT)
-Message-ID: <d3e1b43a-48f6-46eb-be53-4731e5eb5681@linuxfoundation.org>
-Date: Wed, 18 Jun 2025 16:43:44 -0600
+        Wed, 18 Jun 2025 15:44:55 -0700 (PDT)
+Message-ID: <6e1fe001-dd21-43fd-ba7b-aae6df819fdd@linuxfoundation.org>
+Date: Wed, 18 Jun 2025 16:44:54 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,42 +78,46 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] pm: cpupower: Couple of fixes to the cpupower monitor
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B . Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
+Subject: Re: [PATCH] cpupower: Add cpu_start()/cpu_stop() callbacks for
+ monitors
+To: Rohan Lambture <rohanlambture13@gmail.com>, trenn@suse.com,
+ shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20250612122355.19629-1-gautham.shenoy@amd.com>
+References: <94c3faee898b5436cc0b837c6778011a060b8468.1749480264.git.rohanlambture13@gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250612122355.19629-1-gautham.shenoy@amd.com>
+In-Reply-To: <94c3faee898b5436cc0b837c6778011a060b8468.1749480264.git.rohanlambture13@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/12/25 06:23, Gautham R. Shenoy wrote:
-> Hello!
+On 6/9/25 08:49, Rohan Lambture wrote:
+> Move per-CPU logic from inside individual monitors to the main
+> monitoring framework by adding cpu_start() and cpu_stop() callback
+> functions to the cpuidle_monitor structure.
 > 
-> This patch-series contains a couple of fixes to the cpupower monitor.
+> This refactoring allows the framework to handle per-CPU scheduling
+> and gives higher priority to fork_it operations as mentioned in
+> the TODO. Individual monitors now only need to implement per-CPU
+> initialization and cleanup logic without managing the CPU iteration
+> themselves.
 > 
-> * The first patch ensures that the C0% printed by the mperf-monitor is
->    100% when the core is fully busy.
+> Changes made:
+> - Add cpu_start()/cpu_stop() function pointers to cpuidle_monitor struct
+> - Update monitoring framework to call per-CPU callbacks for each CPU
+> - Refactor cpuidle_sysfs and mperf monitors to use new callback pattern
+> - Maintain backward compatibility for monitors without per-CPU callbacks
 > 
-> * The second patch ensure that the CORE and CPU fields are printed in
->    the cpupower-monitor output for multi-socket systems. This has been
->    broken since 6.15.
-> 
-> Gautham R. Shenoy (2):
->    pm: cpupower: Fix the snapshot-order of tsc,mperf, clock in mperf_stop()
->    pm: cpupower: Fix printing of CORE, CPU fields in cpupower-monitor
-> 
->   tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 4 ----
->   tools/power/cpupower/utils/idle_monitor/mperf_monitor.c    | 4 ++--
->   2 files changed, 2 insertions(+), 6 deletions(-)
-> 
+> This addresses the TODO item: "Add cpu_start()/cpu_stop() callbacks
+> for monitor -> This is to move the per_cpu logic from inside the
+> monitor to outside it."
 
-Applied - will include in my fixes PR to Rafael
-https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/?h=cpupower
+Please share details on how this changes has been tested.
+Also run checkpatch - there are a few warnings.
+
+> 
+> Signed-off-by: Rohan Lambture <rohanlambture13@gmail.com>
+> ---
 
 thanks,
 -- Shuah
