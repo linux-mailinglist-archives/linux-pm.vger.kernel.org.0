@@ -1,114 +1,205 @@
-Return-Path: <linux-pm+bounces-28966-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28967-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5794BADEDCC
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 15:28:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67688ADEE0E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 15:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4F2618882D9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 13:28:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0C567AAAC8
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jun 2025 13:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F37E2E974C;
-	Wed, 18 Jun 2025 13:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32212E9EB4;
+	Wed, 18 Jun 2025 13:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K3Rd4B5a"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="KNXt1BLK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEB52E974A
-	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 13:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2622E92CF
+	for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 13:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750253289; cv=none; b=YnHO5+zdQjoK3/vDIG9ocnJYzzymsjpWIrxlSPURCfDlWD+1kcD6mA5z5IqZ9uMVCEhf5AQm3HkzD48sNjn+r3dPxXuSr+0B861XKJa6IAze4K3KjNz0syNar80xF/7hxe5FvC/n3i30LHNNNJeFbz9lCTBEG0Ul8LGcRHMZUII=
+	t=1750254019; cv=none; b=shwOig5oiiGdC9DXH8y3pEzJ1mGMm/lYKEEp08kMRg/7QIjsTihatVG6l9dC2YXEL3o9uZAsuVxpRhv73mpVuEhST/4spWB6LsAqM1i3shmqEJ9XywLpwbbFWGI2d5lrkLULD8eCm2rrDDFkxxG+tfD1lG1FInsI5uxS6JMX9Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750253289; c=relaxed/simple;
-	bh=CQWYf5240z2KPgUiqlRF9wP/4RTd2ZVb2iMhFh38Ahk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GjIqBGZoWhs3ilS58mYec83h3ytj053hUR/usHqOo65lg2dAMXtgcrUjQPrrH9Eki/pW5Wc+sJXsk2OA+ME4+mEFKpDeAWNBlEnfQfqUYdjRL7H/93DSCAzzVntaTpPZNFYA9mgeeurZtWfAulR8/rEsj9NzFD7gXDwU4BqHTGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K3Rd4B5a; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-453398e90e9so39710005e9.1
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 06:28:07 -0700 (PDT)
+	s=arc-20240116; t=1750254019; c=relaxed/simple;
+	bh=bmDghLFg8ZJsphJJZXo1mQNw9t8W1huDMi5X5ELk+9I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AtnrYCUHYz+4pHl93XAv31kmm3RTZuAB6nz+uRn4aCegWZ8TFyDiEslUc7JRngAgESJ4VBQ4ZDHnNnWEiO4SjOShKyvxbPmRLn2BL5eKRvWAmQOdw/n5w1nLUDtS130sMUKRy6HdJ75l9nz75u98AlYAmxZubBAWO4GJ2/P5nPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=KNXt1BLK; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-553c31542b1so3428341e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 06:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750253285; x=1750858085; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CQWYf5240z2KPgUiqlRF9wP/4RTd2ZVb2iMhFh38Ahk=;
-        b=K3Rd4B5a0O/vYISxLM3S9R0Lns2i/o83cAKPOZuPiBUQ2y8rBvSPlBN+7nPsjrSxlF
-         dUAh7PZVyztBqzet+0LqZR/dXIv6KeNd6P5WpHZ2Dz0vrHBd3ydL2B0dESJrpmeyzxJY
-         FbRMWjwzkrHyA/N0nZ4PTppUq+Jd+GyS+gicWIr6rziApzgq4sHZbCZKvhbRWfddbYzO
-         IhuF5XeT2MWJMpyhts4KLO0QdzmMl7MSWPwM1qmMiXKowD0TItqiQfCSW2mlnKTlBqNR
-         TavoQF2ArdABrMzWumXNu9up5Za3M6MRPeoQQ43rWX40hkIGzkicO8F42oT6HKZQUTrn
-         NU+w==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750254016; x=1750858816; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=crYKm76o7xrNY+G6KV9/tF3PVZHJnWgwFllJxx/P2sc=;
+        b=KNXt1BLKLuYXyF2X80TZdh9D9LFFnMLG8jmbvoE/MsLhHTCO8rbHuKBG8PSyNXRsH7
+         krTpY4B7v8Z35HdXu6JtDSA5WzZedX1knAl0iuqPd+H3OEjdELGtM81W6P9BDBOgZuhA
+         2eod1FoW6oTs9AxNCAal6wq1cJpemY8DUnQpQe7avPzoydQ54uxVzVZzB25VwAKbHrl/
+         Y/wNCATLAYxQ4h7AIdlIPU0MSjuWEM3kUa8Ko3BCqB5rOgkgyv3Nh+ins2sK2sUzXMkI
+         Qh62xMwuHgbTRU1KpR+98preLpppPbuZ9wlxaS5NQjeOK+jmkLejJN2aiJY8lRicVJyr
+         IaIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750253285; x=1750858085;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CQWYf5240z2KPgUiqlRF9wP/4RTd2ZVb2iMhFh38Ahk=;
-        b=lii4ZXaFYklX028AFuOJzJ741hHIc60+7VSpeMWX2Al2EUHFadOH6bEGSmG7ZsSVFo
-         Yrs+gR5GhsY/+l529lOvU2P6cuaNe0m8tb0kfV+taw2WdqfhGfKE8/75v4qnqo0q8khz
-         xIupNxM16gONjEinmc5Zv/tKTmQO6k+7YHFEZ3zIrm8USeB7zVgB5u29rQPp8JBFd5HE
-         0rnwNt88s2DoT/AHrrxhKZhvQhvS7b/65Ho7F3PyVdFz4VjNR71jeTxDsSWOj0AOTC0K
-         G7tTrxEeecQCmsh+GrDaKTR/1cjIFRGUIs6MpOK61XWH5DlzFKAhlNbo3HXWd5IImods
-         nwZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOxaO8O2CJUye6EqGehcny8JpYMM1ojUSKKygwGpb3LE8B2DhGiYCA64fv+2ONv118vdMgFkh6BQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj+FD0gQ0btnVuW/jsOy95sg21S5mQ2TGqNu+ZWYJIXoRThPly
-	b8jCCpOQ8BbrL2jqrp/c/W0inYSjBDjcoM/XeXr2gFx6qo7ELptjulU0Hd+mDpFgtqU=
-X-Gm-Gg: ASbGnctrP1rC8kgrLmYuiwRaOlPt9ec2biQbrAnztZLAPW8ol8E5TAcM8/25Z08/+dd
-	HFyi6uThD1qOGzf3MZ2vih7MPs6W49Tr+PHfwr/4iLfLwtdois1KQlSqRhGgAehGO4jxYZ0ZxpS
-	3LNjayfyTcj/EHzHNQRsQITYNHhDWUf63T9MRJFUL+NF4nuEcJYr3kjT6JyALafbX0TrtZeKaf1
-	PzOsR4q9Tly990UHbEjJvjYSRQBofZA8aw/6Fe3b/KdGIwXinFUR93ykUn8fNqTyaRkzfONcsCE
-	95Xp/ZMEkKmhWTj7uT/i8cdOL/6DqkZePOIYiBYXS/ZbsCzKyeekxatcyVc/HRv8ZbhYWfJjwQB
-	6RtVNHShm8wdqLKiPI2ZHnpjsuIgmRY5xNAFzrQ==
-X-Google-Smtp-Source: AGHT+IHsYnHdB0JOFwGUBbfz/Nz+oX7/Nt70Eian/OZWF7OabodaY5ap19RQq+MRP53eF3NO5RcWyg==
-X-Received: by 2002:a05:600c:1c28:b0:440:6a79:6df0 with SMTP id 5b1f17b1804b1-4533cb4bc8fmr134287185e9.22.1750253285546;
-        Wed, 18 Jun 2025 06:28:05 -0700 (PDT)
-Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568a633ddsm16799417f8f.26.2025.06.18.06.28.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 06:28:05 -0700 (PDT)
-Message-ID: <ca3c6d72-2fc0-4e04-ac61-486ad75257b8@linaro.org>
-Date: Wed, 18 Jun 2025 14:28:03 +0100
+        d=1e100.net; s=20230601; t=1750254016; x=1750858816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=crYKm76o7xrNY+G6KV9/tF3PVZHJnWgwFllJxx/P2sc=;
+        b=RuKxT8uAAFTRyhlnbzzOumZs8hMAZ+5RtOt9Rsm7nykztoSL7hqj6J6Vde65kHxh3H
+         PiP5R+Cf3iq4m6NjlZ+gvBncud18xPj80h7CO9awG+/xi1k+zSyIEKQz4m0wh1UqpInI
+         prq0XXEL8ljI7vsFedNxbfsd6KCpmvt+rRZEebqWdRvgjyxlk+Haxp/t44Cq9CgD34oF
+         tJps82O1t5SO3nLxJ8/Yqz2VvFKBj/7hOk6e1zNlTEuQz3n2qvGp9O27lDJK4ZPPpwSn
+         PqwUmeYSaVYYQoBbue3t8uXbNB3BwloxXfPEzFpPyOqnDn35SoSlA38G3n9NIn6d/WOZ
+         C3Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCVThpi6WmI4TitUILnqo+Oj9WuPi51cvStJtWNMUjuT6q/DSeX1LIxpEOaKYP/XEG6VXiPhBwUwTA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNHhJNylq7h5ZI4gv4Al/xkHYyNR28DuoweA9m+ex1F5MCMmmU
+	hl/3vVuQN0gMXwr20i316FTNag+p5ezYVJNN34LOlpnH/VwfemO59MqUSf5LUQAUa6Dyxn/AeeE
+	252MDp61nn+qKFFBLj5GIo57jxAVKhTJfS4r4XGmpPA==
+X-Gm-Gg: ASbGncukw9YWhnJ/BRzZ2iluLEiqH3ER56XDGk7kTzLCXNyJ8jQHsQ6ZIlc7jnWFZjo
+	myXGWE0Rg1fQqT6jUrx5/sYHA9Mf1DtT4PupT+BJn2629FWrXGYXVKWx2RnfsvqZbAeDrz1zOee
+	4n512vTtLRd6uKVOQ/UJSa5jNz2UawWvpYcYhYHtIMQqId6hcf1s//je5XRnaOF+GDMTfIt8kya
+	w==
+X-Google-Smtp-Source: AGHT+IFad5ToM6J1+d0O4ioF2H0SvuVc8QUlMms8kkOXzKAtFkNQ7udNNIL4/h4trNzifK85LwmlcE1SddV80i2GLLM=
+X-Received: by 2002:a05:6512:23a7:b0:540:2fd2:6c87 with SMTP id
+ 2adb3069b0e04-553b6e74f1bmr5037069e87.16.1750254015903; Wed, 18 Jun 2025
+ 06:40:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect: avoid memory allocation when 'icc_bw_lock'
- is held
-To: Johan Hovold <johan@kernel.org>, Bryan O'Donoghue <bod.linux@nxsw.ie>,
- Rob Clark <rob.clark@oss.qualcomm.com>
-Cc: Gabor Juhos <j4g8y7@gmail.com>, Georgi Djakov <djakov@kernel.org>,
- Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, linux-pm@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <TIkPOGVjPeCjPzjVtlSb6V5CIcpaXf2-6WG6HjAyaOW59Hj01-9VK7Z8DKadakOKr6fJeQICi6h0Z8mft9DQyg==@protonmail.internalid>
- <20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com>
- <ca9f7308-4b92-4d23-bfe7-f8d18d20de10@linaro.org>
- <75a46897-040f-4608-88f5-22c99c8bed97@gmail.com>
- <04ab699e-b344-4ba1-9ca1-04b6e50beefe@nxsw.ie>
- <aFK2Kl2I46dTYBI1@hovoldconsulting.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <aFK2Kl2I46dTYBI1@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CGME20250618102226eucas1p112dacf9670f68b4a8581aa1a8b5ced9d@eucas1p1.samsung.com>
+ <20250618-apr_14_for_sending-v5-0-27ed33ea5c6f@samsung.com> <20250618-apr_14_for_sending-v5-1-27ed33ea5c6f@samsung.com>
+In-Reply-To: <20250618-apr_14_for_sending-v5-1-27ed33ea5c6f@samsung.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 18 Jun 2025 15:40:04 +0200
+X-Gm-Features: AX0GCFtjm4Gei3EGyvZSnf2L-ltMUqIESaL5jfPbh7xGonqWZX6d4yY2Lh7mu5E
+Message-ID: <CAMRc=MfQFc=MvGHpu1M4HO1-2RJh34UAXXCvVBZ2jU0rFDANJQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/8] power: sequencing: Add T-HEAD TH1520 GPU power
+ sequencer driver
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
+	Matt Coster <matt.coster@imgtec.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 18/06/2025 13:50, Johan Hovold wrote:
->> I think we should sort that out, either by removing one of the locks or
->> by at the very least documenting beside the mutex declarations which
->> locks protect what.
-> Feel free to discuss that with Rob who added the icc_lock_bw, but it's
-> unrelated to the regression at hand (and should not block fixing it).
+On Wed, Jun 18, 2025 at 12:22=E2=80=AFPM Michal Wilczynski
+<m.wilczynski@samsung.com> wrote:
+>
+> Introduce the pwrseq-thead-gpu driver, a power sequencer provider for
+> the Imagination BXM-4-64 GPU on the T-HEAD TH1520 SoC. This driver
+> controls an auxiliary device instantiated by the AON power domain.
+>
+> The TH1520 GPU requires a specific sequence to correctly initialize and
+> power down its resources:
+>  - Enable GPU clocks (core and sys).
+>  - De-assert the GPU clock generator reset (clkgen_reset).
+>  - Introduce a short hardware-required delay.
+>  - De-assert the GPU core reset. The power-down sequence performs these
+>    steps in reverse.
+>
+> Implement this sequence via the pwrseq_power_on and pwrseq_power_off
+> callbacks.
+>
+> Crucially, the driver's match function is called when a consumer (the
+> Imagination GPU driver) requests the "gpu-power" target. During this
+> match, the sequencer uses clk_bulk_get() and
+> reset_control_get_exclusive() on the consumer's device to obtain handles
+> to the GPU's "core" and "sys" clocks, and the GPU core reset.  These,
+> along with clkgen_reset obtained from parent aon node, allow it to
+> perform the complete sequence.
+>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
 
-True.
+Thanks, this looks much better now.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+[snip]
+
+> +
+> +static int pwrseq_thead_gpu_disable(struct pwrseq_device *pwrseq)
+> +{
+> +       struct pwrseq_thead_gpu_ctx *ctx =3D pwrseq_device_get_drvdata(pw=
+rseq);
+> +
+> +       if (!ctx->clks || !ctx->gpu_reset)
+> +               return -ENODEV;
+> +
+> +       reset_control_assert(ctx->gpu_reset);
+> +       reset_control_assert(ctx->clkgen_reset);
+
+These can still fail, I suggest checking and propagating the return values.
+
+> +       clk_bulk_disable_unprepare(ctx->num_clks, ctx->clks);
+> +
+> +       return 0;
+> +}
+> +
+
+[snip]
+
+> +
+> +static int pwrseq_thead_gpu_match(struct pwrseq_device *pwrseq,
+> +                                 struct device *dev)
+> +{
+> +       struct pwrseq_thead_gpu_ctx *ctx =3D pwrseq_device_get_drvdata(pw=
+rseq);
+> +       static const char *const clk_names[] =3D { "core", "sys" };
+> +       struct of_phandle_args pwr_spec;
+> +       int i, ret;
+> +
+> +       /* We only match the specific T-HEAD TH1520 GPU compatible */
+> +       if (!of_device_is_compatible(dev->of_node, "thead,th1520-gpu"))
+> +               return 0;
+> +
+> +       ret =3D of_parse_phandle_with_args(dev->of_node, "power-domains",
+> +                                        "#power-domain-cells", 0, &pwr_s=
+pec);
+> +       if (ret)
+> +               return 0;
+> +
+> +       /* Additionally verify consumer device has AON as power-domain */
+> +       if (pwr_spec.np !=3D ctx->aon_node || pwr_spec.args[0] !=3D TH152=
+0_GPU_PD) {
+> +               of_node_put(pwr_spec.np);
+> +               return 0;
+> +       }
+> +
+> +       of_node_put(pwr_spec.np);
+> +
+> +       if (ctx->gpu_reset || ctx->clks)
+> +               return 1;
+> +
+
+One thing that bothers me is that this is still a fragile construct. I
+know this cannot happen in this particular design but in theory, this
+would not work if there were multiple simultaneous consumers of the
+AON power domain. Maybe just to be sure: store the address of the
+of_node of the consumer (preferably bumping its reference count) and
+check it to make sure that once a consumer associated with this node
+is connected, we no longer allow any other nodes? This way you could
+also just drop this if replacing it with checking the existence of the
+of_node.
+
+[snip]
+
+Bartosz
 
