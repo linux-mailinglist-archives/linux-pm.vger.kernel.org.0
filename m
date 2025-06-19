@@ -1,90 +1,127 @@
-Return-Path: <linux-pm+bounces-29045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E80FADFD2B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 07:48:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA3D9ADFD51
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 07:54:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB4B71716EC
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 05:48:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1ECD918860A7
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 05:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329E7242D8D;
-	Thu, 19 Jun 2025 05:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C739242D9F;
+	Thu, 19 Jun 2025 05:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u11Km7ns"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aKIcXuCO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F206E374D1
-	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 05:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC434242D8C
+	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 05:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750312083; cv=none; b=Uprf7MOJn9DRkqll1b6Q0EhC1WontCDoV0WeC/4AMlJFZ9s7yYt1L/HWLrM82psjvIBVHe/iiMcIaR0rkKzfo6K+okZI3yJH/KoB1iMCC8xvcCHG9E2JOjjGEvgwBB9d0gPvZPIfs8F511xlo9R3yOCWymhMZRXAWC4q5BS33bQ=
+	t=1750312457; cv=none; b=ieOc28QXGS2/3jyobpr9SyBWQvyGVvJKhFj1v70Y8PEGsc7opuIpAl8N3s9Iz8Za4SHpWgnNRV1dVmFxLfjFDLK+HIvQ0aniQFa03JVwLgh4OSgCvT6mrm0zij/sde1KjZC+xiEuAtrqFJupojoBXu7JDQ3aqhj3db6m8+zFbII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750312083; c=relaxed/simple;
-	bh=G1pBc79YHeOc8teFMiWj0r25pQg23ExTkVNwbJHUxeI=;
+	s=arc-20240116; t=1750312457; c=relaxed/simple;
+	bh=fkIz5c3VvVkstShK1H66lgQuGsJWH2TH8Np1JEM/A24=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pZPB3pQbae/AXEBr9gIZT4SWtEqyPA45twt9yefwEq4Mx35AIuUCiE1kLfqqYoa7/KjwVTZOAFdXgt3zbNoRozcQTcoVl31PU+Ckz1wvFcdmqCvWlGMBIbd3+0vzILJWo8DvEi6e7OTxCmlBAmz6q1KobKZe1Tqc1a/XaldIybw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u11Km7ns; arc=none smtp.client-ip=209.85.214.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=VztQZpLGrc6kQzez82dnAuT81a3P2xqQHh4HOGaLykMsGEMTA5U20SBGLHMsxFBpgAsvowGC4wcV5rC55Uqva3QVqfXQtZpGgy+enGRIAjL8lgU0a7wj81zqNp34jvGQqGPZ0qDLTBLqjKDLAQvapDkLc2HknboPNXxBBPTbvDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aKIcXuCO; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-23636167b30so4212495ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 22:48:00 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-748fe69a7baso167601b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 22:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750312080; x=1750916880; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750312455; x=1750917255; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=w06pRHUxpM/QQNGaUX6TLUa1ZCwsg87mdzg1cVqYuMY=;
-        b=u11Km7nsRaFeAjr6NcA2cCOpcGPPe4gPB6F60BFTa2SDqFGAo/kEDOERtAErFJ7OZT
-         wqfPAFeif9DFvTX+y+awgweW1sf3x9kePNlLY7bXKapDEaGctVBYMJzrWr6uq5/WniSy
-         qEgLXfYR6pJrKhoXIr8mb+CzbIs+WI+sU4t0NdRJRQMzrQfUCSqwl1T8kWVtSZzwJUmI
-         44sQH5wDEqWGDTOIbx0Mi4GhGPCcCvKI/1iSiwCnAdXPnwiNVzT6kzxBiZ3wc+Rs9nnl
-         mBaY8iisvG2UCZMREpb2Nb1JgzHG4p76lc/k/1ApqGPj48K25lM3BWaPqyBspvvWaN+j
-         n4Lg==
+        bh=mNX8x8v1rA4gsmPSGKn+LRzfhgT9AcyvzOiTf8D9D0s=;
+        b=aKIcXuCOlkRKptm+3jS28zkHggMih4vYtkCEOExinKKMeSclcQzdyROq65tyxsKaXS
+         Ax4oXlekiXh6RpFMB4rkhiv7t3KMeTrWrk+e6ewEFxc6ndT9sBxv8ZIoFOoqNabbItJJ
+         wTZcWpQE0n4sgHO0OBwU0a/HKGsDRgdMMlmbBlt8ttfAgJARjQFr1BBVQM5n0sKzdh7K
+         j7ZK6ROIvMiNl9uX1JDqqAZSU887fi6JUmuUsbuZKG0Ebv3LJDIz+pvdusK0betcuEz3
+         GfLk3CAN2m92AlnVg4QhdCGkCAQE87e55lLCegf9ygtvPH5Ezriq6DNNJtj+7zz5Vej2
+         L2Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750312080; x=1750916880;
+        d=1e100.net; s=20230601; t=1750312455; x=1750917255;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w06pRHUxpM/QQNGaUX6TLUa1ZCwsg87mdzg1cVqYuMY=;
-        b=paknFwb2FV5cCFObXlNAPFlgA5u3H7EpRGhZAHQDBTOz0pv2+HfMtCsCTc++ifSrwW
-         uouowntulZjggTgAX/evV5Tyz1ew+zc+B2Cguh3z00eU+jHiIgZADrGJZ3S5HXjoFmwW
-         zUC5V/Z86Ms5G+juv4UDu7gwqYp1QBgj5p89HEAPgWzOXf1vC/t49CCyDIzFMwRxWDS3
-         YAv4mQsWnZ1073UtNS7+6T8sSBdEcnmI7rM9oel8gBkMYQnTatrRS6R2CTqQAD0fbG9u
-         FzBYe1rTX8KsjLlbIxv0rZ4mGWeFg8faMyWe/W1IY/ue9jdIwsrcv0RwMSosAcH45O5z
-         Xfaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWYsssToOaB9NyXFfE8wzCuVW2p2tW+y0o8GOOkv30kgzDrMb2V5pKtLldQXJJR/NOgsH4JllUvBw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa9AvA7cF2CrIi5TTpHXU2cYqz3wi+nzYrnw0+PLg8ARnDVFBQ
-	R/6PtPfibjBkUVTxCoYgZNKD7vptcOZ1CHGkv9XlvL+17H6h042TVU+cpN7xk5aHnDs=
-X-Gm-Gg: ASbGncvrhD74K+5ZUWypdRI2QksFHu6aZVxvKVIYGDWFUZ4rvh41l3p0Zc+NC5q5aeX
-	2ZywxKaQxLhvnuhlrXEs2DWsH0tLgc70u9nLENTMiQAc6Mm1CMmC6ZfLbY10ZdmiGtPxRgpE2tH
-	fYvuvFIDcnDnJ7WUJQNVukpK3mf/hQuMggmI+LUQQ59vVY18SYIdTHXUoIGi8a/TKHCbke62Pso
-	/dffsMYkNzPtmeqz59C4lQLIjWMDFz7Ur4HoeGjBX7vuSuB1oj2du85IN3McyafXyG/LlC6zHQP
-	njJ6WcVVaVohr3MaDSMyVmjo9zWyWGoGYscyfr4MeReQqclkoRqfjwpK+6LnL9M=
-X-Google-Smtp-Source: AGHT+IF25Vmp36Sdt4Pjj6dvxhJMSBF+fxUEb8+u1l4GZz3Fuz0LFMidJsQ+FCmOU1nj7dvp8f6VIw==
-X-Received: by 2002:a17:902:e788:b0:235:2375:7e94 with SMTP id d9443c01a7336-2366b3c5b99mr313228455ad.24.1750312080362;
-        Wed, 18 Jun 2025 22:48:00 -0700 (PDT)
+        bh=mNX8x8v1rA4gsmPSGKn+LRzfhgT9AcyvzOiTf8D9D0s=;
+        b=aRZ0UsKTr5VojEKtAprGy7nGKPu3p3+U1GgVJlI2h5RCCqbfSCerzZ8jS0FJNlnuzb
+         NSpydH8kaa+Ow/PgdSKnZrdR7St8B9w+U+bDzw+EDmGdS0yJ0SMysDsA2Hhv/3RC+zk9
+         qg8h+xbXy31sn6D/6xZt70XS62UBOfl89LO32d5g5EU1JsDxKjoeQGg29Mv/PcrtOdrs
+         cRy9/ag8jLjOJu+Sjzi0xFewxLXj7/DOwn5Nt81bcUqTf9pLQxVk7vDP092txo30hZP2
+         aS+GCKNlM1pwr0hAMhfyg4JcpxresZJH2NaC6rvttWKgCDhuyZINSZ/eknIDmvGbt0Sm
+         pEYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSbuwjbsjWDGTn6UxP2AoMwlgflcb7FINRqyvTkFYdlYaFceoohG6bGelRUfyE6AX0YLHw2F848A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyc+Xn40XZt0Knz9ewwamuo8K7gBIfIA8/UPg1l9SoN/yNWuCQM
+	lvuoX23xhXu7qJLBOwD0YkOaAIJ89YRE+RTdfJt2JcLUa7N1IajhFZQ/pU0196O6qfU=
+X-Gm-Gg: ASbGncvYePWFAyFviKXSvdIH0tnlQWmIUCXDK6z15trBrW0bu1Aoy3EAWBzva9JLE61
+	jL1lrgXjojfnRnz5yWD5EpEuUIUpz89bOKamTUumKmose4Q5CsTXVgVsd2OgF3IpZuuQ4Gxn1hh
+	oSFzeAHkdVG4DDrqfFKja7RsiaLEd1JGHky/DqcXmz1g67xis8Uhdc2xdfiU8nT5YK8t+A/4FA3
+	Hy97w6eK8m+zSJxQ+0XCIvpcRK631qYIcasBAKKvk6e4zgXjUF4fmH4B20LpnC7qpTojbphDRdR
+	FUridrnA7ZepjCOqsFd9/im3Q8tIQ8t3jAaJq7i0VvXG2rXKTB+aL1ACMdka4aw=
+X-Google-Smtp-Source: AGHT+IHpBy809k4j/mgtJ3pLZAei1vSVsYHbL1LodLYl1qhBrEB6gEr4Vdl8NOXI+5UF/UVojJEPMQ==
+X-Received: by 2002:a05:6a21:8dc3:b0:21a:ede2:2ea3 with SMTP id adf61e73a8af0-21fbd4d2985mr27026444637.17.1750312442235;
+        Wed, 18 Jun 2025 22:54:02 -0700 (PDT)
 Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1680c54sm12206227a12.47.2025.06.18.22.47.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900b04e4sm12287505b3a.121.2025.06.18.22.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 22:47:59 -0700 (PDT)
-Date: Thu, 19 Jun 2025 11:17:57 +0530
+        Wed, 18 Jun 2025 22:54:01 -0700 (PDT)
+Date: Thu, 19 Jun 2025 11:23:59 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "zhenglifeng (A)" <zhenglifeng1@huawei.com>, robert.moore@intel.com,
-	lenb@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linuxarm@huawei.com, jonathan.cameron@huawei.com,
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com
-Subject: Re: [PATCH 0/3] cpufreq: CPPC: Some optimizations for cppc_cpufreq.c.
-Message-ID: <20250619054757.5nxaeckvmaiji5gn@vireshk-i7>
-References: <20250526113057.3086513-1-zhenglifeng1@huawei.com>
- <9c82abca-0772-444c-8122-59a953c83984@huawei.com>
- <CAJZ5v0hyMANsOwskEUi1c3XB+heE6z0_-Dk1nqnw-SbZ0dM3zA@mail.gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Tamir Duberstein <tamird@gmail.com>, Viresh Kumar <vireshk@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Lyude Paul <lyude@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Benno Lossin <lossin@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Breno Leitao <leitao@debian.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org,
+	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, linux-mm@kvack.org,
+	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org
+Subject: Re: [PATCH v12 1/6] rust: enable `clippy::ptr_as_ptr` lint
+Message-ID: <20250619055359.tormmysgxxcper6q@vireshk-i7>
+References: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
+ <20250615-ptr-as-ptr-v12-1-f43b024581e8@gmail.com>
+ <CANiq72mfjzXj0f4PKPKg7QgbOrhay4CF_+TBgScecKWO6acmyQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,34 +131,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hyMANsOwskEUi1c3XB+heE6z0_-Dk1nqnw-SbZ0dM3zA@mail.gmail.com>
+In-Reply-To: <CANiq72mfjzXj0f4PKPKg7QgbOrhay4CF_+TBgScecKWO6acmyQ@mail.gmail.com>
 
-On 18-06-25, 21:06, Rafael J. Wysocki wrote:
-> On Tue, Jun 17, 2025 at 4:33 AM zhenglifeng (A) <zhenglifeng1@huawei.com> wrote:
+On 18-06-25, 18:48, Miguel Ojeda wrote:
+> On Sun, Jun 15, 2025 at 10:55 PM Tamir Duberstein <tamird@gmail.com> wrote:
 > >
-> > Gentle ping.
-> >
-> > On 2025/5/26 19:30, Lifeng Zheng wrote:
-> > > This patch series makes some minor optimizations for cppc_cpufreq.c to
-> > > makes codes cleaner.
-> > >
-> > > Lifeng Zheng (3):
-> > >   cpufreq: CPPC: Remove cpu_data_list
-> > >   cpufreq: CPPC: Return void in populate_efficiency_class()
-> > >   cpufreq: CPPC: Remove forward declaration of
-> > >     cppc_cpufreq_register_em()
-> > >
-> > >  drivers/cpufreq/cppc_cpufreq.c | 59 +++++++++-------------------------
-> > >  include/acpi/cppc_acpi.h       |  1 -
-> > >  2 files changed, 15 insertions(+), 45 deletions(-)
+> > Apply these changes and enable the lint -- no functional change
+> > intended.
 > 
-> I've started to process this because it has been sent to linux-acpi
-> and then I realized that Viresh should take it, but since I've applied
-> it already, I may as well queue it up for 6.17.
-> 
-> Viresh, please let me know if you have any concerns about it.
+> We need one more for `opp` [1] -- Viresh: I can do it on apply, unless
+> you disagree.
 
-I applied this before I saw your email.. Please keep it, I will drop it. Thanks.
+Please do. Thanks.
+
+> diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
+> index a566fc3e7dcb..bc82a85ca883 100644
+> --- a/rust/kernel/opp.rs
+> +++ b/rust/kernel/opp.rs
+> @@ -92,7 +92,7 @@ fn to_c_str_array(names: &[CString]) ->
+> Result<KVec<*const u8>> {
+>      let mut list = KVec::with_capacity(names.len() + 1, GFP_KERNEL)?;
+> 
+>      for name in names.iter() {
+> -        list.push(name.as_ptr() as _, GFP_KERNEL)?;
+> +        list.push(name.as_ptr().cast(), GFP_KERNEL)?;
+>      }
+> 
+>      list.push(ptr::null(), GFP_KERNEL)?;
+
+For cpufreq/opp:
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
