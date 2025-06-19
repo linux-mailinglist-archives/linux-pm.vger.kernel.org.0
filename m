@@ -1,82 +1,81 @@
-Return-Path: <linux-pm+bounces-29086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6ACEAE097E
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 17:00:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 114FEAE096E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 16:59:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C9C83A8B8F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 14:56:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B841A189A614
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 14:57:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4456D28D85D;
-	Thu, 19 Jun 2025 14:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CFC28DB4A;
+	Thu, 19 Jun 2025 14:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MKQwnBo5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n5NbvsIW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F8A28C5DF
-	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 14:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A168428CF47
+	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 14:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750344930; cv=none; b=hfVLIZRt0PQqEAo7+2lKodD2oViEC4r7miYNgpG4ScwePBe+a52SbiEUJRr/JZ/mpnhy2O+laohsiRIeTYGi360DH4uSWR7DydQjC0qCNSNkFdN9wU9PG75XwSlqTXRsVXp2G/42R/uDS11iJeNDnhNbPeq8JqxdZpSjnxGPp6g=
+	t=1750344931; cv=none; b=d75bXzv/EEp/d20VW3jq6iZgwf29pPBCFfpBYZ/sO3cDlqTTppzTmrJBFhMgFJ6P4xqBTqHHoSEC6xqcgSUl3k6bLLK5I5A6/ATZlY5epDJiPi/JX8QwokJ1+xWNDyeMEFyQ7SaHBGvn0WFlb3DxlgyznKWAUReXxwZS0MvlvOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750344930; c=relaxed/simple;
-	bh=JemuwVrf8yUubUQ04X5WC7YM6uXAXUdph7sXz3IArE8=;
+	s=arc-20240116; t=1750344931; c=relaxed/simple;
+	bh=4C4/BzYVvqykLCWqBbtexksZlDrp0KmcIoZ0MxhlLow=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EeTtJpZeevkugCj1lW/vbSqrqp1ND8EQtnMsiFWa0KGxu8e0lll/MoVZB4TeYRJ/qR5fyDHM19xHCf4uHX0qkfp8v+mWn/f6e1hd2McVNPLcocNRwnyZ1GHwdfO6Gvf1vtuSLy+WtspcgWz1N1ErFfscRhYkv3ajZJHrm/gnFa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MKQwnBo5; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:To:Cc; b=aC/btg0ncIRa+PG1QsJHNOVszY9nLwM1L3gndG11UdGESlPBpQfm5rGutZOSHevr28r1XsvESaNdTRxdbh7Ro1K6Ylci0/PNnUl3dBb2wQEyztgYz/D7GwDZqdZCJxI8ziBRRJSxtc5C/bEp01gX/s8/wGrNkpmRfbksffVa3Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n5NbvsIW; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-441ab63a415so10622825e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 07:55:26 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a589d99963so903105f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 07:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750344925; x=1750949725; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750344927; x=1750949727; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=V5fVBNslUv5VUBRyFZmw0sYPamOw5qzhbaF7o6iXTDM=;
-        b=MKQwnBo5ycoQ/UXxhYlQBsU9BNuXvxuvbtIza5uFsskVzgo/g5NUZTb0wFpwjL/vrr
-         DBbsTtYB22W29rDm8yoJXhTw4sP+yXQz1037p97ZYXPEfWLKxrBYItKDWzIekuc5Xtcr
-         Y1oidYG4RHkF3h79svdqoDjtr50NeDG1yUGq+vhWUptFOIXU8dvTiarbQcm6Yu9vOoVz
-         QHufH5OrcdelBqgsl6/p7Tql2VhUPqm9S5UTxDuJTgokZJ3Cw4sJtfpBU+RF6BXrCZJW
-         ieF9j1Aty6+dFx28iZHz4BRhRhhdDSIE20bDrl4vC6727fvafqX8XtNr9P5obdOcVydP
-         np8w==
+        bh=uiY+DVkF0Tx7wXnhclKSYzhcL2ot81tRcGxMxTU/GtI=;
+        b=n5NbvsIWZM5mNmIcMxSGObHD4oh/+gSoVWheGopgdWuJXJM8a8YG9YCISaLYypmqYo
+         NmBMjnWFzU6LfSv2R5f65UljTyLoqEHddG2CFmaj+iXt9oSQW4Cdi54l599H8GIP9Pe0
+         b0gJNvI5ANTlTZvClbXjzKfpcnGUNEq/zepfHDSWKkajV9v9UXouc3yfHTUL4A66aT7w
+         Gs7DY5c+JNtqSVVgTsJlhFmk0RblKTFAQC1R6jMEL76tIZ6d0UAxslSj2U44xqd3j3BT
+         /ycPkxWGFN3Fd9MjsodMRG9L/Bb4lxOQ7rXk/mYGIB8TLSwr7QMKrkawqImOo3oId/ib
+         hQbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750344925; x=1750949725;
+        d=1e100.net; s=20230601; t=1750344927; x=1750949727;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V5fVBNslUv5VUBRyFZmw0sYPamOw5qzhbaF7o6iXTDM=;
-        b=wwgKegbia4pnDmxWFBrHQdNY0zoy/W1JUnzHRj5WcV+XpEIpGHlgEqDKdSrKm9xjfA
-         D8QQ0zYdu9ElIuFOylWhnA+i/+aiAYgYWDEhGDGynK8Szrpvd8HO0d51Z2Tb7kEqGMf9
-         kS+X4j9KFMJDzozsYb+VQ15sOXmCU8VEfT8JiIHkdd9aE0CAKoYU6k2D0TTyZC1ZmEDS
-         IjrcaAUPCxAn+pa90hstC92V4wpMp+fA4xHbynxcbbaX3X05UMpNLWJDlPfUqxqWjeAh
-         q4dBqIKN8WVBjTlGt35wXkMnMdIsP7jmKtMWa+5AJ1UnAbiEylCQ8GihB0hWOOKjEGGw
-         xuWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVFvEMoYHiX5Fdc/VYF7DchmTlk5x7zLT/3670IRFoe6I1vbaQMaBTei9Wi+OHfsm2W0hC10qQjGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5danj7VN+2/3eyUlmv+BP0F99hpEhW9LCkv0qy8VH3hM4cEOD
-	N/Nm6zNERVUmNELszvm/7kRQ1WYtGgcjGyGyosz+ggy27LZP2AVo7kgERC2lqBOrO6Y=
-X-Gm-Gg: ASbGncvJmw3SUDRdzm6gctL0Ny3SPC/14f5S2Fu33OW37U+R/3Dcbvg/84LnwX3h0Ww
-	xSVM1/qnXG5yWbZBAlemmmQ+Nd5t9WXdyKL5Z9filoa/ViztPoRnHFC9+Z0AN1tJbbZZEYaiHUW
-	RAMiQuBKP+U/8K8kQuBozs69X4cj3+4yvVYzm/mzNwZ6ryADfZGiDInV1sMbocJT1opVtowNnlK
-	W6AxQpxeGvr40fKAVrPLsaY48ijIPUQJaEdd0XSiZulNQ4xA/g7MDcL90YeYJzy/oVGsonDpMe6
-	qhV9HwPmz+3nRq3tAQXZtubA59JmfTNcQVmd70PWVP0ADVrBvYVtgfmCAlXBiI7voSkpBWFmG1n
-	GeQ+Q1yyTQx9cEbdEwY31GA==
-X-Google-Smtp-Source: AGHT+IGtKHGGVTcveyhymsAylUd1eIhqDyS+/H63/Vk/2Z2lAu24ERgJx0a95RwSPxwt7eNSWAKzyg==
-X-Received: by 2002:a05:600c:8b65:b0:44b:eb56:1d45 with SMTP id 5b1f17b1804b1-4533ca6e6a8mr234107125e9.15.1750344925237;
-        Thu, 19 Jun 2025 07:55:25 -0700 (PDT)
+        bh=uiY+DVkF0Tx7wXnhclKSYzhcL2ot81tRcGxMxTU/GtI=;
+        b=DrrkNdcpdMhf+yhgDrfHJW//bfQm7EykG7mNLMlm5jiJItbO/igNRAx4U0+OjWE4v2
+         RU4Fq5dU78rcaTZTkGBbeEMnTFF5rvmxh5txrueWOgQ2WGESPsxEYPkMU6lbbkA+Cll6
+         mEJoYGtG6/1ueF4C+jwYhPK8OwTMpQCjijZyXOxmGaKjGsoB3Cd5GaeuoGzNlDMGdaoS
+         VGE2aaFxtxHi5WaLCgfPnj9FUw8eDKurxExulISYIiWKxLnAVmcC1Bb9n708cAASZYfz
+         ktOfDDmRNHtTdTt9b7HzRBdofI+iUJJjZJIoSLTSgx4KmZTa56q1OyKl6dtcmWUbWzRv
+         wFZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVnT2ZC9Mb9vNmi8BZ1y0zgH8DrjdSd/2l1vjFib5ye3JEG9q4RN/Mwm4t41SlgzFWHVOzxZriW1w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMGOG8AeZfEk0akweV7kUXuxPMkHl9ek4lnn1bTjeYr8PQJr9Y
+	WUx12slXhbjovpH5Eb1jdppCgOEt3sht9+8fuGv+T4Dy+07YQjzm7bOBq1IFONnY7Rs=
+X-Gm-Gg: ASbGncutvivhgqK9/XddU1f5hfSLzaSYM0SI5qY2aec8q8VjReJivGh2BqnIGAVSgrJ
+	QvuwknyEVLBZe7ysgwM0LgYgTyVKu1JI4Ggntm/SFqWAY2oTdse7zyHDdQFeeoDWCp1uRpT9E5A
+	hmWuPl9uODM+0zFb25q+sxuA3GP+qZ06J9y+W8lzk/k1qLKy5Im2SVaBWym+hId4zaqzTu1Mta+
+	Kl3GN7lTt3Gx8bDQF4lwQXVpBKCJbswBww30fEYZQxI41CZmpsyeiTHk2XUeGnZAiRTODj/fOlQ
+	S7cLtecDuDbbmFGwpddl2s03q+MGuWTpOhqy7axcfSRYFuSZTQYAOhDqOwbjStqe5OjufDsPBqe
+	+S2jJPIPXqy0=
+X-Google-Smtp-Source: AGHT+IGgc5GkhPO/vj3LU4YDmcm6Dit5qWlLwjFG7XrsUFfqD8cTmVzqG/+/ie6nUOAJEDHqELYGwQ==
+X-Received: by 2002:a05:6000:2c13:b0:3a4:ef36:1f4d with SMTP id ffacd0b85a97d-3a5723a4c09mr18760617f8f.38.1750344926745;
+        Thu, 19 Jun 2025 07:55:26 -0700 (PDT)
 Received: from toyger.tail248178.ts.net ([2a0e:c5c1:0:100:b058:b8f5:b561:423c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535ebced8asm31343715e9.40.2025.06.19.07.55.23
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535ebced8asm31343715e9.40.2025.06.19.07.55.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 07:55:24 -0700 (PDT)
+        Thu, 19 Jun 2025 07:55:26 -0700 (PDT)
 From: Casey Connolly <casey.connolly@linaro.org>
-Date: Thu, 19 Jun 2025 16:55:14 +0200
-Subject: [PATCH 06/11] power: supply: qcom_smbx: respect battery
- charge-term-current-microamp
+Date: Thu, 19 Jun 2025 16:55:15 +0200
+Subject: [PATCH 07/11] power: supply: qcom_smbx: bump up the max current
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250619-smb2-smb5-support-v1-6-ac5dec51b6e1@linaro.org>
+Message-Id: <20250619-smb2-smb5-support-v1-7-ac5dec51b6e1@linaro.org>
 References: <20250619-smb2-smb5-support-v1-0-ac5dec51b6e1@linaro.org>
 In-Reply-To: <20250619-smb2-smb5-support-v1-0-ac5dec51b6e1@linaro.org>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -98,59 +97,82 @@ Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  Sebastian Reichel <sebastian.reichel@collabora.com>, 
  linux-hardening@vger.kernel.org, Casey Connolly <casey.connolly@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1515;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2386;
  i=casey.connolly@linaro.org; h=from:subject:message-id;
- bh=JemuwVrf8yUubUQ04X5WC7YM6uXAXUdph7sXz3IArE8=;
- b=owEBbQKS/ZANAwAKAQWDMSsZX2S2AcsmYgBoVCTRT9U4Qg9OJkb0pSzAf9sdjAQKdeIlP+DEF
- qNb2vf0iUSJAjMEAAEKAB0WIQS2UaFGPGq+0GkMVc0FgzErGV9ktgUCaFQk0QAKCRAFgzErGV9k
- trkoD/9uMDtivCbMTOrgggGTlyDa6eGLdCUlIPlMr/C7iumj9T0+pX9tt94ykFnWvge1K153/Ic
- TFvf4k+NVmqWQqnDGZw8RvUT1B1uv58Av1/6G7HsTOxkWERwnOosXXYUk+OznOcVeAI8zFd0cg4
- K9on/a6vvkYan6qqINynhXA/Gth3JlCwe/iImk2cx0xqioduRDFfzxcMYhQbUPqAHyvRWS9MHpM
- Imr/3fhnenlaX13mjqfddKkhAQUeM1dE6Lq3Kc8yNXed6rBRSPnJXj82zh3ZYg8/dkzue0TLt0T
- 8E5ydS/cMnzR0bIwT3tsuczQmDi2+E381QgV58rsVTu1joDTuVwgD6sVykud5TTOpgOJBGXjTE4
- XlmtoBs1m5k5YkqqsLySsxPuNhm2wPq0BVj7xkUsqn8zErx73u1pPo1pCS6TEfphB8i9jJ2BKwh
- kQ6SAoZsLK7GkQH+A/peNERM42glBRPQiFtzALsI9lumBkZ2IOcgZ9mTD3mHThukOw8yn3bTLFy
- zc40iGbihYhOlY4NxbaCx1YF82AQjKAXO+m66co3u1cyy6E35kfuRuL/DrtIk/TUFoOl3r50LgK
- iHWqEcym98u6mv7isjQHGUN6L8hZKRkVm/mqPOAh/wyT3HvG7coz33+0qPiYK1IZKiGCxsu+Z4F
- lS5agEn1VU+xBsQ==
+ bh=4C4/BzYVvqykLCWqBbtexksZlDrp0KmcIoZ0MxhlLow=;
+ b=owEBbQKS/ZANAwAKAQWDMSsZX2S2AcsmYgBoVCTR74CQMAmQ7VTKPiBk6x+W6w8QNhr/qM/SB
+ 9TbzQLsqpeJAjMEAAEKAB0WIQS2UaFGPGq+0GkMVc0FgzErGV9ktgUCaFQk0QAKCRAFgzErGV9k
+ tjg4D/49MaTCqWbRpdaxNKlfjLtTNMq6C9Bn1so6q9lsEIryZcn2Ooc0TMkBNln+4horde0iNNJ
+ X2/ofIrJou53ToJo3p8nVgcm3F1V7K1kiEJhuaoAWV0huFC0R4EOn5MGZq4Ezs9o9uz5XiP6kQx
+ 30i6f1fp0lsK1b9qFAP1JZGD3T2NYJOxNc8XhC5EOk03Rc/dHZZSgP+R8MLtTMo6kMCH4HevBg0
+ QJZICJVFDAZcDJ+bDGgRLEf9ra7byCHf0xJpavDa0tGQzbCJ41HvLZBRe75gm23DF3vNEtrRcXh
+ 1RGcDK4tSecPLWogN9JP5uhg+791eX4EO3JatzB3IMRdqoBRqvuaTH0PHhUfDcdhxF32Jo7hBvU
+ O59D+1xqoZZXiuu0HNJvYeAj7uqXIMzrvyRcTLBsw+49l63f6CAoj9tQ6l7TE+poi3X54VfrrVo
+ 50EIra7sk997D/cIaGfbrwA6DFvQfCCqDiufIl9ZIN43wPHH9I6Zbc9RhoWaiUaOZ4yZsFkrWoJ
+ fs5cytgISNmqKCoPkcbYPTr5vNxwNc3YbNmO3dm9bWtiBVWof9hhTZWSwuPYIde2Gnhd3C9Fp3c
+ 8miD0OTi7H6GIaYNv6++MWsbUn3bHavXZ2wKR7kw8Es65a6jPDAgFo2eKcfWYeLDPiP9LF0SPT3
+ U0dZAP3PMslLCNQ==
 X-Developer-Key: i=casey.connolly@linaro.org; a=openpgp;
  fpr=83B24DA7FE145076BC38BB250CD904EB673A7C47
 
-Respect the max current limit set on the battery node, one some devices
-this is set conservatively to avoid overheating since they only have a
-single charger IC (instead of two in parallel).
+I set a super conservative current limit since we lack many of the
+safety features (thermal monitoring, etc) that these drivers really
+need. However now we have a better understanding of the hardware, it's
+fine to bump this limit up a bit, devices can additionally set the max
+current via devicetree instead.
+
+Since this is common to smb2 and smb5, move this write out of the init
+sequence and into probe proper.
 
 Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
 ---
- drivers/power/supply/qcom_smbx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/power/supply/qcom_smbx.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/power/supply/qcom_smbx.c b/drivers/power/supply/qcom_smbx.c
-index fc2a8e20435639a9da4d966c43271beaeb57a03f..7fc232fa7260a7422ac12a48686cd7d396edd9a4 100644
+index 7fc232fa7260a7422ac12a48686cd7d396edd9a4..d1607674d291d6ef5762d35acd3330e2116f41a3 100644
 --- a/drivers/power/supply/qcom_smbx.c
 +++ b/drivers/power/supply/qcom_smbx.c
-@@ -583,9 +583,9 @@ static void smb_status_change_work(struct work_struct *work)
- 	case POWER_SUPPLY_USB_TYPE_CDP:
- 		current_ua = CDP_CURRENT_UA;
- 		break;
- 	case POWER_SUPPLY_USB_TYPE_DCP:
--		current_ua = DCP_CURRENT_UA;
-+		current_ua = chip->batt_info->constant_charge_current_max_ua;
- 		break;
- 	case POWER_SUPPLY_USB_TYPE_SDP:
- 	default:
- 		current_ua = SDP_CURRENT_UA;
-@@ -989,8 +989,10 @@ static int smb_probe(struct platform_device *pdev)
- 	rc = power_supply_get_battery_info(chip->chg_psy, &chip->batt_info);
- 	if (rc)
- 		return dev_err_probe(chip->dev, rc,
- 				     "Failed to get battery info\n");
-+	if (chip->batt_info->constant_charge_current_max_ua == -EINVAL)
-+		chip->batt_info->constant_charge_current_max_ua = DCP_CURRENT_UA;
+@@ -875,16 +875,8 @@ static const struct smb_init_register smb_init_seq[] = {
+ 	 */
+ 	{ .addr = PRE_CHARGE_CURRENT_CFG,
+ 	  .mask = PRE_CHARGE_CURRENT_SETTING_MASK,
+ 	  .val = 500000 / CURRENT_SCALE_FACTOR },
+-	/*
+-	 * This overrides all of the current limit options exposed to userspace
+-	 * and prevents the device from pulling more than ~1A. This is done
+-	 * to minimise potential fire hazard risks.
+-	 */
+-	{ .addr = FAST_CHARGE_CURRENT_CFG,
+-	  .mask = FAST_CHARGE_CURRENT_SETTING_MASK,
+-	  .val = 1000000 / CURRENT_SCALE_FACTOR },
+ };
  
- 	rc = devm_delayed_work_autocancel(chip->dev, &chip->status_change_work,
- 					  smb_status_change_work);
- 	if (rc)
+ static int smb_init_hw(struct smb_chip *chip)
+ {
+@@ -1029,8 +1021,22 @@ static int smb_probe(struct platform_device *pdev)
+ 		return dev_err_probe(chip->dev, rc, "Couldn't set wake irq\n");
+ 
+ 	platform_set_drvdata(pdev, chip);
+ 
++	/*
++	 * This overrides all of the other current limits and is expected
++	 * to be used for setting limits based on temperature. We set some
++	 * relatively safe default value while still allowing a comfortably
++	 * fast charging rate. Once temperature monitoring is hooked up we
++	 * would expect this to be changed dynamically based on temperature
++	 * reporting.
++	 */
++	rc = regmap_write(chip->regmap, chip->base + FAST_CHARGE_CURRENT_CFG,
++			  1950000 / CURRENT_SCALE_FACTOR);
++	if (rc < 0)
++		return dev_err_probe(chip->dev, rc,
++				     "Couldn't write fast charge current cfg");
++
+ 	/* Initialise charger state */
+ 	schedule_delayed_work(&chip->status_change_work, 0);
+ 
+ 	return 0;
 
 -- 
 2.49.0
