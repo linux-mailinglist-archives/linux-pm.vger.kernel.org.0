@@ -1,140 +1,217 @@
-Return-Path: <linux-pm+bounces-29050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0901ADFE35
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 08:59:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3379ADFE4C
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 09:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 880EE1883D64
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 06:57:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40E2A163BFA
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 06:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F6024889B;
-	Thu, 19 Jun 2025 06:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 662DC2472B8;
+	Thu, 19 Jun 2025 06:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a+iB4PHa"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="alG2FtT3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABF121B8F5
-	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 06:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA3321B8F5;
+	Thu, 19 Jun 2025 06:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750316237; cv=none; b=cKws7ndURX5ubyztNXeApVfYjWa0Yu0V66NV7hkMTuwfv8fXxBWrWYeP6OcJ8iNXlEsN98rZJvjYwE7HvXj9PlSbZP/UDyan9UTxLJuUxvDCcX5i2hoVeJ7/PCM7U0dN6HUsJ6j4XPHLBmN28bptrWxEgKX0u9i/V6bncgnOD/w=
+	t=1750316308; cv=none; b=ov+pFTuP45faX14lsFD3TXOH2+fi5HFQH3bY1jStFFPjOOY2EdVw584qiA110QH1RQzJFhdVTtLPg3RLgm17BwgIzvj27K3kGfd1pkKqjNTP5dke26X54KqQy+ReVqa3sIWooG18qiuJplox33WepEYYkx7SZs5CV/K9J9dYN2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750316237; c=relaxed/simple;
-	bh=ZpxBiFvNTV24CakR+gqDkbfEBqa7hfmTQr9mkfpyNqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cbV5yJCS8k5Wd1LjIizAIk6XS4RGz49eFnSpUO5ZO18OD7xEgow44ne2zPsKVIPppz+0nXkHYbYFylSoCgPpMceK3lRL/07l0GZGmizqdaT0oKq9MvLkt7ivQ8+I32Oq6T0S/RxiwBwYMtAY8gdmHDAL2aRiEi4y2iY1t/JU1SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a+iB4PHa; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-748da522e79so240778b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jun 2025 23:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750316235; x=1750921035; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3wXDhrb5gMp7gMf4JCS4TNzFLsoHKLLOownJ0Qkmwik=;
-        b=a+iB4PHanVN5l90XLRyePv56zs7x0oatjruNiR0U97qR/EKHqQYihxWfQ5D9kX38AT
-         jX/dkTGQGp+0hOZLu/rl2FPD6DUTr3ztK7uSU07PPNeZAwi5FKVrGkJyS41q3bxQut/y
-         LFiB6CI5B3EM1YZIC2KiNuIRQZPCDy4jDBxHZBDPR/4NtuxQ7u6KKMVtzknTiuxAR1ts
-         8JupLugUd0VRRtt8m0g3CWS99Abc5VWD8o+9Gympq6XKbsn2/F/4ywi9r7OCawo8LBDh
-         ZZdTF2gX7nnJw2WzmtaDVdFcdqHqwqyZALgQXHb5EZj69Bm/2LF02BLNL8bobUXJ2KpZ
-         NI0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750316235; x=1750921035;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3wXDhrb5gMp7gMf4JCS4TNzFLsoHKLLOownJ0Qkmwik=;
-        b=opBOlMFp+D9AafK73Y17XNuv1NKpGveYZ3/JOt6xScj3XzcmHDIJabP9ryTnCLbFV2
-         93PCjoIVAUIdZ73AVGuKrWZG7mbc1S6OOvW/BEdRjgrs4DTQMIc0KiCpfdyqN8ZxTtWa
-         LUJKV2DSrCSzDtAXMSTFTMAhO3Qv/8wfkuqCev5jDKE+BwtB9QUds8XFO8JZMu4GnokO
-         aTAuoTVXWFQfu3wUXJIIlUZSNebVm0KbF3m8yCFKzjoJrbhR9WV0LHItZxD5rwy9VQ35
-         LLFRlEQUJBry1yrdugkdC7IaHomJ219XtJ3N1p2n/0DSbiDBjQsDZ99C0hGs3eWwoPia
-         ZV8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVfwqBdI/ExHnh6fQukMPxZ6T9B2EZZ900z3Z4psTbeO2uInmd3nCzaIw3T3slLjudTkRMV09WpgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhLaghK5DH9BrSOmQQS6nvr2ofQG869iWyDj2vaqMu0uZG9N2Y
-	059q17ojy1aYlORiSdIFpGUDTrTeoQdA6mV/82Jydb2EfAf5C0DFotbA85RzRAg1tXg=
-X-Gm-Gg: ASbGncteywdhHoTCq9EKxKLDdPmNoBHK7OApCMrSljZA/4LJHw/rXtmamEQTJehn9ZD
-	Jt9+irPG6kJSTsnysIzLtr4GmMqh7dansvH4yjdGyVZx9TbNf8CwAsFmEmzKs1qhTgS28PO/UpQ
-	u9ugR6kPFg8magkkK/QBH8cAnGW5zNW3ibTPwGUw8wcIvnFA/ct/xY3X38XcFUbDz8hbtOYv67T
-	u5zDZ6dnng+zek+86V0r6QYACp6/8WN/1lz7fEAx0IK/L22GyABziL2nukLwVoyv1N0zOADGLum
-	2y3wjEtTnGc16FI55BmvlxyiH7ywONnRHo4H0qLb3CFO9BCbGGVEvymxbwtlHGk=
-X-Google-Smtp-Source: AGHT+IGlUdbrNrLWErrn0rW+WYn9rsrB56pXxkDz0+uZxdgPmgRSJkVrVTE8T9ZZyrn/M1TvSJEAvw==
-X-Received: by 2002:a05:6a00:3c89:b0:736:450c:fa54 with SMTP id d2e1a72fcca58-7489cf8b19amr26442033b3a.6.1750316235484;
-        Wed, 18 Jun 2025 23:57:15 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe163a199sm10414785a12.5.2025.06.18.23.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 23:57:14 -0700 (PDT)
-Date: Thu, 19 Jun 2025 12:27:13 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Abhinav Ananthu <abhinav.ogl@gmail.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] rust: cpufreq: Ensure C ABI compatibility in all
- unsafe
-Message-ID: <20250619065713.hm5ye2uhikaei2xo@vireshk-i7>
-References: <20250613101815.18092-1-abhinav.ogl@gmail.com>
+	s=arc-20240116; t=1750316308; c=relaxed/simple;
+	bh=tL14BD8Yh5kWnpy+bfzqyRdCOXWQ8nMEwYBpreKExhI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=bEqc+XBo1SRL1tQeEFnYxkB32W6S1r2Ty3s+jGrho0i4goVBGdhpF8jUHCLLOnY/ZNoApIVKZA/y99eVdZvHPKx7VQ8xim6gs176uFEQhjZRN7L2TgcrDzBjoagsOdUc+xtKh5IsnUwVa/5gBjqH1bBJvG1ysCIsnwx9lmBkW54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=alG2FtT3; arc=none smtp.client-ip=134.0.28.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
+	by mxout2.routing.net (Postfix) with ESMTP id 50A125FB6C;
+	Thu, 19 Jun 2025 06:58:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1750316302;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=njQ31qrrY9HaE80KOkYp3xG43496qOQx+zhSn6xjDeA=;
+	b=alG2FtT3L898ztBmhlM2pSNVcjIkFUk7/1xSwM2dgG9YK2I3a0t48c4zf1DP18CV4lZJhI
+	cqhxtGUORlrTEY7zuo0CEIIN+s8RdFddsgQkMegRs9RelFqdh9G11AtkR7FfHwhbCUqP+M
+	xZWy4Bx1lY8WMMg4m782Pb82ISFh3ck=
+Received: from [127.0.0.1] (fttx-pool-80.245.76.73.bambit.de [80.245.76.73])
+	by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 72C3D808E4;
+	Thu, 19 Jun 2025 06:58:20 +0000 (UTC)
+Date: Thu, 19 Jun 2025 08:58:20 +0200
+From: Frank Wunderlich <linux@fw-web.de>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>
+CC: Frank Wunderlich <frank-w@public-files.de>,
+ Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+ Johnson Wang <johnson.wang@mediatek.com>,
+ =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+ Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>,
+ Sean Wang <sean.wang@mediatek.com>, Daniel Golle <daniel@makrotopia.org>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 00/13] further mt7988 devicetree work
+User-Agent: K-9 Mail for Android
+In-Reply-To: <9cdf0624-f9bb-4b11-973e-9480fd655136@collabora.com>
+References: <20250616095828.160900-1-linux@fw-web.de> <9cdf0624-f9bb-4b11-973e-9480fd655136@collabora.com>
+Message-ID: <40C42E40-25C3-4FB2-8EB4-E7FCB677E415@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613101815.18092-1-abhinav.ogl@gmail.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mail-ID: 376531bd-c831-454f-b55f-f96f05563171
 
-On 13-06-25, 15:48, Abhinav Ananthu wrote:
-> Update all `unsafe extern "C"` callback functions in the cpufreq module to
-> use `kernel::ffi` types (`c_int`, `c_uint`, etc.) instead of Rust-native
-> types like `i32`, `u32`, or `usize`.
-> 
-> This change ensures that all Rust callbacks have signatures that are
-> ABI-compatible with their corresponding C counterparts, which is critical
-> for FFI correctness and safety.
-> 
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Link: https://github.com/Rust-for-Linux/linux/issues/1170
-> Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
-> ---
->  rust/kernel/cpufreq.rs | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
-> index 11b03e9d7e89..481a6d2dc362 100644
-> --- a/rust/kernel/cpufreq.rs
-> +++ b/rust/kernel/cpufreq.rs
-> @@ -1207,8 +1207,8 @@ impl<T: Driver> Registration<T> {
->      /// - The pointer arguments must be valid pointers.
->      unsafe extern "C" fn target_callback(
->          ptr: *mut bindings::cpufreq_policy,
-> -        target_freq: u32,
-> -        relation: u32,
-> +        target_freq: c_uint,
-> +        relation: c_uint,
+Am 19=2E Juni 2025 07:57:09 MESZ schrieb AngeloGioacchino Del Regno <angelo=
+gioacchino=2Edelregno@collabora=2Ecom>:
+>Il 16/06/25 11:58, Frank Wunderlich ha scritto:
+>> From: Frank Wunderlich <frank-w@public-files=2Ede>
+>>=20
+>
+>I think that this series is ready to be applied; however, I need someone =
+to take
+>the bindings before I can apply the devicetree part to the MediaTek trees=
+=2E
 
-I think the one in prelude points to core::ffi::* instead, while we
-want to use kernel::ffi::* ?
+Please wait a bit for the eth part=2E=2E=2Eseems like reserved irqs are no=
+t unusable as i thought=2E=2E=2Ei think we should upstream them too and may=
+be with different names=2E=2E=2Eas they are not fixed to function in hardwa=
+re=2E
 
-Miguel ?
+>Cheers,
+>Angelo
+>
+>
+>> This series continues mt7988 devicetree work
+>>=20
+>> - Extend cpu frequency scaling with CCI
+>> - GPIO leds
+>> - Basic network-support (ethernet controller + builtin switch + SFP Cag=
+es)
+>>=20
+>> depencies (i hope this list is complete and latest patches/series linke=
+d):
+>>=20
+>> support interrupt-names because reserved IRQs are now dropped, so index=
+ based access is now wrong
+>> https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/20250616080738=
+=2E117993-2-linux@fw-web=2Ede/
+>>=20
+>> for SFP-Function (macs currently disabled):
+>>=20
+>> PCS clearance which is a 1=2E5 year discussion currently ongoing
+>>=20
+>> e=2Eg=2E something like this (one of):
+>> * https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/202506102331=
+34=2E3588011-4-sean=2Eanderson@linux=2Edev/ (v6)
+>> * https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/202505112012=
+50=2E3789083-4-ansuelsmth@gmail=2Ecom/ (v4)
+>> * https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/ba4e359584a6=
+b3bc4b3470822c42186d5b0856f9=2E1721910728=2Egit=2Edaniel@makrotopia=2Eorg/
+>>=20
+>> full usxgmii driver:
+>> https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/07845ec900ba41=
+ff992875dce12c622277592c32=2E1702352117=2Egit=2Edaniel@makrotopia=2Eorg/
+>>=20
+>> first PCS-discussion is here:
+>> https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/8aa905080bdb67=
+60875d62cb3b2b41258837f80e=2E1702352117=2Egit=2Edaniel@makrotopia=2Eorg/
+>>=20
+>> and then dts nodes for sgmiisys+usxgmii+2g5 firmware
+>>=20
+>> when above depencies are solved the mac1/2 can be enabled and 2=2E5G ph=
+y/SFP slots will work=2E
+>>=20
+>> changes:
+>> v4:
+>>    net-binding:
+>>      - allow interrupt names and increase max interrupts to 6 because o=
+f RSS/LRO interrupts
+>>        (dropped Robs RB due to this change)
+>>=20
+>>    dts-patches:
+>>    - add interrupts for RSS/LRO and interrupt-names for ethernet node
+>>    - eth-reg and clock whitespace-fix
+>>    - comment for fixed-link on gmac0
+>>    - drop phy-mode properties as suggested by andrew
+>>    - drop phy-connection-type on 2g5 board
+>>    - reorder some properties
+>>    - update 2g5 phy node
+>>      - unit-name dec instead of hex to match reg property
+>>      - move compatible before reg
+>>      - drop phy-mode
+>>=20
+>> v3:
+>>    - dropped patches already applied (SPI+thermal)
+>>    - added soc specific cci compatible (new binding patch + changed dts=
+)
+>>    - enable 2g5 phy because driver is now merged
+>>    - add patch for cleaning up unnecessary pins
+>>    - add patch for gpio-leds
+>>    - add patch for adding ethernet aliases
+>>=20
+>> v2:
+>>    - change reg to list of items in eth binding
+>>    - changed mt7530 binding:
+>>      - unevaluatedProperties=3Dfalse
+>>      - mediatek,pio subproperty
+>>      - from patternProperty to property
+>>    - board specific properties like led function and labels moved to bp=
+i-r4 dtsi
+>>=20
+>>=20
+>> Frank Wunderlich (13):
+>>    dt-bindings: net: mediatek,net: update for mt7988
+>>    dt-bindings: net: dsa: mediatek,mt7530: add dsa-port definition for
+>>      mt7988
+>>    dt-bindings: net: dsa: mediatek,mt7530: add internal mdio bus
+>>    dt-bindings: interconnect: add mt7988-cci compatible
+>>    arm64: dts: mediatek: mt7988: add cci node
+>>    arm64: dts: mediatek: mt7988: add basic ethernet-nodes
+>>    arm64: dts: mediatek: mt7988: add switch node
+>>    arm64: dts: mediatek: mt7988a-bpi-r4: add proc-supply for cci
+>>    arm64: dts: mediatek: mt7988a-bpi-r4: drop unused pins
+>>    arm64: dts: mediatek: mt7988a-bpi-r4: add gpio leds
+>>    arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for ethernet
+>>    arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and link to gmac
+>>    arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phys and leds
+>>=20
+>>   =2E=2E=2E/bindings/interconnect/mediatek,cci=2Eyaml   |  11 +-
+>>   =2E=2E=2E/bindings/net/dsa/mediatek,mt7530=2Eyaml     |  24 +-
+>>   =2E=2E=2E/devicetree/bindings/net/mediatek,net=2Eyaml |  28 +-
+>>   =2E=2E=2E/mediatek/mt7988a-bananapi-bpi-r4-2g5=2Edts  |  11 +
+>>   =2E=2E=2E/dts/mediatek/mt7988a-bananapi-bpi-r4=2Edts  |  19 ++
+>>   =2E=2E=2E/dts/mediatek/mt7988a-bananapi-bpi-r4=2Edtsi | 198 ++++++---=
+--
+>>   arch/arm64/boot/dts/mediatek/mt7988a=2Edtsi     | 307 +++++++++++++++=
+++-
+>>   7 files changed, 498 insertions(+), 100 deletions(-)
+>>=20
+>
+>
 
-Also why does prelude use ::ffi::* instead of kernel::ffi::* ? I was always a
-bit confused about it.
 
--- 
-viresh
+regards Frank
 
