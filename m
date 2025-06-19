@@ -1,517 +1,886 @@
-Return-Path: <linux-pm+bounces-29074-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29075-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A83AE0612
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 14:37:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28092AE0677
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 15:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 438451BC3152
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 12:37:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CDD17A40FF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 13:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5498D23D282;
-	Thu, 19 Jun 2025 12:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF16A23D2A0;
+	Thu, 19 Jun 2025 13:03:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XWIGFbJr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYakz2Am"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129F2235055;
-	Thu, 19 Jun 2025 12:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DA814F9F7;
+	Thu, 19 Jun 2025 13:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750336603; cv=none; b=Qf5o3FUJpKRweDKuNuXosNzsqyRtJYZwnNDKGCSLskUeIYzxKC77QtFTmjj3E++1E/Es8bUNR+hy846iqpNOtMTZE+1j2w3HpGqtKIvY+BMXkpo4++154vZUYI5x/rIG9LIhKIPZXnsQuUb4K9FIxIFG6e7WIeAY6B5vmEN72wk=
+	t=1750338224; cv=none; b=MtebiG4jSoMbCRWc391BEumcpUSaN6pmIeM64GpIKEsOKjkZmubrt9xJKHBazUreV5uocZ1v/5/mcHsgvvEg/LvbyStsjvu2HpfLHiLnBpUVKV1IqqEnaPSCUI7TB1zAtzjzklJ9JIXmouurFBCLyuTp1EubXQVkVhlO6rGE7j0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750336603; c=relaxed/simple;
-	bh=Q0NETaTu9XGYnmirVBIKt7HrCi/8KzvdxI1X7qaMj4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=KXXZqfKOsLNj7HknR+OgXuqIK3kWp6Dj+deaHjwpTX2d4ZtlQZv3uNmEUUrlW110zBIXnG4ou1UK1AuAiFP4jmw6ZAZIExEaaTCXuvQ0MuyKb0qdN4Yp/GShw1j808Dbf3Qaxm8PK+bxu4OQjOoizwpjm1k3Hy0eJ7xDQLJ+hWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XWIGFbJr; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55J61mmq022895;
-	Thu, 19 Jun 2025 12:32:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wYXpEXL/9K6bHEkIfYTVq7HMezdzcddmxydPyKNHj70=; b=XWIGFbJrfcN6qubx
-	Om5cFqgIXFYMvlLy6wPnBoVOfp0JA1PO0FMWIuKXtm3+zZ2ER1tTe2vAXCTV0FV8
-	VzDCLgr0SitXeBMKPbtfJprJXYY7EUVkr1XzsD6zVlfeSdYM+KAfup2Ecg0LK7kv
-	YXErRt6/1n3r5Rka7ChYixb0kKnl+LRvEI3Ru6XazI9PmXEOvpxJtBwyFiGks3AO
-	3I+l6MZA74kOZVK/rSiCnEsPns0YXlECD+qdSAisnuaACVrhMKFav5M66qH7Al0P
-	8u32M+U4hyxluLcuu/hT6sPERhwgvS3M93fcP+Td981q0oaT9R9CSJfmddlqNylS
-	7o6XlQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4791hd81f6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Jun 2025 12:32:19 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55JCWIU0003353
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Jun 2025 12:32:18 GMT
-Received: from [10.219.56.108] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 19 Jun
- 2025 05:32:09 -0700
-Message-ID: <c0cbfdc2-4ec9-db81-422f-bc686c8de4d3@quicinc.com>
-Date: Thu, 19 Jun 2025 18:02:06 +0530
+	s=arc-20240116; t=1750338224; c=relaxed/simple;
+	bh=o73okyeKGv4cknbRDSiEhTuS4XLRJSPdO3wNwYZ4pJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JUYi1Jt8nPzoKWVVr8210ol7voVnY/GcnXIKzlPeijUDtUptL5FnqDbdqKJwr6Klke79e12pAHJywYuLv5bWhv2NKemzBjFKnrFLZHRZ4Y926ft0CbV0hjfqaZHwFIITEpJ6tss1oD7myHmdVZEDX/Vt8O9yZotzeIHwNRmCvCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYakz2Am; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5477AC4CEEA;
+	Thu, 19 Jun 2025 13:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750338224;
+	bh=o73okyeKGv4cknbRDSiEhTuS4XLRJSPdO3wNwYZ4pJI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hYakz2AmeKl0w+twxFasvEhKQ2EAHccHFHUJJ5jSVoKHXIWbCdNB8jnmkXqqXVdPE
+	 SbXqoaXxGIQVbQyxoeIyiibMCsIKjWNutbxM0fWcJtzqBo1INndDNP5wdA6qc2nKql
+	 yRXq6a3tzw54k9Q+DP93SqXjbb63T6ovl3Oueo5fJJNIR4GhYxe4YORDleV814+eYM
+	 NIDyufAlVmHD+4OJomVtLvNRS9veOGkHDOr2uoxJ2hkAsqUKq0iRNX9gk19MPIzjfy
+	 yfxQtqbmhjoSKzPA1ilxvFukjbZvaBl1LHsh0hfPynSMNu2Eu0XONejSv1dVT14D7t
+	 IT/3iY1cvl3/w==
+Date: Thu, 19 Jun 2025 14:03:37 +0100
+From: Lee Jones <lee@kernel.org>
+To: samuel.kayode@savoirfairelinux.com
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>,
+	imx@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
+	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
+	Robin Gong <yibin.gong@nxp.com>,
+	Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH v7 2/6] mfd: pf1550: add core mfd driver
+Message-ID: <20250619130337.GA795775@google.com>
+References: <20250612-pf1550-v7-0-0e393b0f45d7@savoirfairelinux.com>
+ <20250612-pf1550-v7-2-0e393b0f45d7@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v9 2/5] firmware: psci: Read and use vendor reset types
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-CC: Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mukesh Ojha
-	<mukesh.ojha@oss.qualcomm.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Vinod Koul
-	<vkoul@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland
-	<mark.rutland@arm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "Catalin
- Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <cros-qcom-dts-watchers@chromium.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        "Srinivas
- Kandagatla" <srinivas.kandagatla@linaro.org>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        Stephen Boyd <swboyd@chromium.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, Elliot Berman
-	<elliotb317@gmail.com>,
-        <quic_spratap@qucinc.com>, <quic_kaushalk@qucinc.com>
-References: <20250303-arm-psci-system_reset2-vendor-reboots-v9-0-b2cf4a20feda@oss.qualcomm.com>
- <20250303-arm-psci-system_reset2-vendor-reboots-v9-2-b2cf4a20feda@oss.qualcomm.com>
- <Z9QQw6BcE7IXzu+r@lpieralisi> <Z+K3uNjTNbq3pUis@hu-mojha-hyd.qualcomm.com>
- <Z/U95G+2GsoLD6Mi@lpieralisi>
- <973eaca7-0632-53d8-f892-fe4d859ebbac@quicinc.com>
- <Z/+dGLAGXpf9bX7G@lpieralisi>
- <e96e315c-69fb-bc7e-5d07-06909344ff65@quicinc.com>
- <rz7tnl5gg73gtyij3kmwk6hubikfsvu3krekjkpoofpdio6cwe@innio7qvotye>
- <d3e4417a-66cd-4e6e-590f-7a0e2bcfc0e6@quicinc.com>
- <775e4f46-32c2-406f-a47d-8c2b1f607e1a@oss.qualcomm.com>
-Content-Language: en-US
-From: Shivendra Pratap <quic_spratap@quicinc.com>
-In-Reply-To: <775e4f46-32c2-406f-a47d-8c2b1f607e1a@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE5MDEwNCBTYWx0ZWRfX/jHQOFLGleGU
- 03W6GOzi3QhcUfLAkHYr58kREOQVKZfzhAmW1nfsC8gv48a850oP7BFPOn0XqJe5YROUVn6rCXC
- LSHivlHX4j7RQQxORoA8TEHKADDldJVxcvx6mGVuQIHUXMzHJEfSAi8WOjkISgOUmu5sqpLsSD9
- c+h94YlL3piVWd8UpzSus5CRMbdjJVSuuPxLhLKNRRxEgSwggFRe39cV3r5GKuVdnkb8T9ik+Pa
- u9dPdPuZUMTtiT8UJiu/q4AtaQo8gvwpduxW94aSXEoWlBdXPtv5RoxZmsaiAiT3sFmwBmKRamH
- AIqQqL4p3WVxXt83w/r2krzxDov+ym7R8BmlSIGK4IKtLK1LxEzorHTA7ySJ01JQevT4tABUR+z
- lP8EW4aar99AMHe3f9gc0uQ67J0ffSv4Vk3pIFb3j6gNicEylv9eS7L6PPP/Bm4cbSusFUDk
-X-Authority-Analysis: v=2.4 cv=PtaTbxM3 c=1 sm=1 tr=0 ts=68540353 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=GcyzOjIWAAAA:8
- a=EUspDBNiAAAA:8 a=_gVU0GfObynYrB2nai0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=dtxw0mqMjrQA:10 a=hQL3dl6oAZ8NdCsdz28n:22
-X-Proofpoint-ORIG-GUID: pNciAvbpWaNmQ-smPr62J0V0-eEIe_Cm
-X-Proofpoint-GUID: pNciAvbpWaNmQ-smPr62J0V0-eEIe_Cm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-19_04,2025-06-18_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 clxscore=1015 mlxlogscore=999 suspectscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506190104
+In-Reply-To: <20250612-pf1550-v7-2-0e393b0f45d7@savoirfairelinux.com>
 
+Remove mention of MFD from the subject.
 
+Consider renaming for something like "core driver" or use whatever this
+driver really is.  MFD isn't a real thing - we made it up.
 
-On 6/19/2025 4:34 PM, Dmitry Baryshkov wrote:
-> On 19/06/2025 12:00, Shivendra Pratap wrote:
->>
->>
->> On 6/18/2025 6:44 PM, Dmitry Baryshkov wrote:
->>> On Tue, May 06, 2025 at 11:03:55PM +0530, Shivendra Pratap wrote:
->>>>
->>>>
->>>> On 4/16/2025 5:35 PM, Lorenzo Pieralisi wrote:
->>>>> On Wed, Apr 09, 2025 at 11:48:24PM +0530, Shivendra Pratap wrote:
->>>>>>
->>>>>>
->>>>>> On 4/8/2025 8:46 PM, Lorenzo Pieralisi wrote:
->>>>>>> On Tue, Mar 25, 2025 at 07:33:36PM +0530, Mukesh Ojha wrote:
->>>>>>>> On Fri, Mar 14, 2025 at 12:19:31PM +0100, Lorenzo Pieralisi wrote:
->>>>>>>>> On Mon, Mar 03, 2025 at 01:08:31PM -0800, Elliot Berman wrote:
->>>>>>>>>> From: Elliot Berman <elliot.berman@oss.qualcomm.com>
->>>>>>>>>>
->>>>>>>>>> SoC vendors have different types of resets and are controlled through
->>>>>>>>>> various registers. For instance, Qualcomm chipsets can reboot to a
->>>>>>>>>> "download mode" that allows a RAM dump to be collected. Another example
->>>>>>>>>> is they also support writing a cookie that can be read by bootloader
->>>>>>>>>> during next boot. PSCI offers a mechanism, SYSTEM_RESET2, for these
->>>>>>>>>> vendor reset types to be implemented without requiring drivers for every
->>>>>>>>>> register/cookie.
->>>>>>>>>>
->>>>>>>>>> Add support in PSCI to statically map reboot mode commands from
->>>>>>>>>> userspace to a vendor reset and cookie value using the device tree.
->>>>>>>>>
->>>>>>>>> I have managed to discuss a little bit this patchset over the last
->>>>>>>>> few days and I think we have defined a plan going forward.
->>>>>>>>>
->>>>>>>>> A point that was raised is:
->>>>>>>>>
->>>>>>>>> https://man7.org/linux/man-pages/man2/reboot.2.html
->>>>>>>>>
->>>>>>>>> LINUX_REBOOT_CMD_RESTART2 *arg command, what is it supposed to
->>>>>>>>> represent ?
->>>>>>>>>
->>>>>>>>> Is it the mode the system should reboot into OR it is the
->>>>>>>>> actual command to be issued (which is what this patchset
->>>>>>>>> implements) ?
->>>>>>>>>
->>>>>>>>> LINUX_REBOOT_CMD_RESTART "..a default restart..."
->>>>>>>>>
->>>>>>>>> It is unclear what "default" means. We wonder whether the
->>>>>>>>> reboot_mode variable was introduced to _define_ that "default".
->>>>>>>>>
->>>>>>>>> So, in short, my aim is trying to decouple reboot_mode from the
->>>>>>>>> LINUX_REBOOT_CMD_RESTART2 *arg command.
->>>>>>>>>
->>>>>>>>> I believe that adding a sysfs interface to reboot-mode driver
->>>>>>>>> infrastructure would be useful, so that the commands would
->>>>>>>>> be exposed to userspace and userspace can set the *arg command
->>>>>>>>> specifically to issue a given reset/mode.
->>>>>>>>>
->>>>>>>>> I wonder why this is not already in place for eg syscon-reboot-mode
->>>>>>>>> resets, how does user space issue a command in those systems if the
->>>>>>>>> available commands aren't exposed to userspace ?
->>>>>>>>>
->>>>>>>>> Is there a kernel entity exposing those "modes" to userspace, somehow ?
->>>>>>>>>
->>>>>>>>>> A separate initcall is needed to parse the devicetree, instead of using
->>>>>>>>>> psci_dt_init because mm isn't sufficiently set up to allocate memory.
->>>>>>>>>>
->>>>>>>>>> Reboot mode framework is close but doesn't quite fit with the
->>>>>>>>>> design and requirements for PSCI SYSTEM_RESET2. Some of these issues can
->>>>>>>>>> be solved but doesn't seem reasonable in sum:
->>>>>>>>>>   1. reboot mode registers against the reboot_notifier_list, which is too
->>>>>>>>>>      early to call SYSTEM_RESET2. PSCI would need to remember the reset
->>>>>>>>>>      type from the reboot-mode framework callback and use it
->>>>>>>>>>      psci_sys_reset.
->>>>>>>>>>   2. reboot mode assumes only one cookie/parameter is described in the
->>>>>>>>>>      device tree. SYSTEM_RESET2 uses 2: one for the type and one for
->>>>>>>>>>      cookie.
->>>>>>>>>
->>>>>>>>> This can be changed and I think it should, so that the reboot modes
->>>>>>>>> are exposed to user space and PSCI can use that.
->>>>>>>>>
->>>>>>>> In the case of a regular reboot or panic, the reboot/panic notifiers run
->>>>>>>> first, followed by the restart notifiers. The PSCI reset/reset2 should
->>>>>>>> be the last call from Linux, and ideally, this call should not fail.
->>>>>>>>
->>>>>>>> Reboot mode notifiers => restart notifiers or Panic notifiers => restart
->>>>>>>> notifiers
->>>>>>>>
->>>>>>>> So, if I understand correctly, you mean that we can change the reboot
->>>>>>>> mode framework to expose the arguments available to user space. We can
->>>>>>>> extend it to accept magic and cookies, save them in the reboot
->>>>>>>> framework, and retrieve them via a call from PSCI during a regular
->>>>>>>> reboot or panic based on the current arguments. Is this leading towards
->>>>>>>> writing an ARM-specific PSCI-reboot-mode driver, which in its reboot
->>>>>>>> notifier callback saves the magic and cookies, and these magic and
->>>>>>>> cookies will be used during psci_sys_reset2()? Or is there something
->>>>>>>> wrong with my understanding?
->>>>>>>
->>>>>>> No, you got it right (apologies for the delay in replying) - if the
->>>>>>> case for making reboot mode available to user space is accepted.
->>>>>>>
->>>> While moving this into reboot-mode framework, one more query came up.
->>>> The "ARM-specific PSCI-reboot-mode driver" that we are going to write needs
->>>> to be a Platform device driver for using reboot-mode framework.
->>>
->>> No, it doesn't. It rqeuires struct device, but there is no requirement
->>> for struct platform_device at any place.
->> yes, it can be struct device so may be create a virtual device
->> using reset-type node?
+On Thu, 12 Jun 2025, Samuel Kayode via B4 Relay wrote:
+
+> From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 > 
-> It can be created, but I don't see a strong need for it.
+> Add the core mfd driver for pf1550 PMIC. There are 3 subdevices for
+
+Same here.
+
+> which the drivers will be added in subsequent patches.
 > 
->>>
->>>> As psci is not a platform device driver, a subdevice under it may not probe as a
->>>> platform driver. Is it ok to implement the "PSCI-reboot-mode driver" as a
->>>> early_initcall("psci_xyz") and then create a platform device something as
->>>> below or any other suggestions for this?
->>>
->>> Change struct reboot_mode_driver to pass corresponding of_node (or
->>> better fwnode) directly.  Corresponding device is used only in the
->>> reboot_mode_register() and only to access of-node or to print error
->>> messages.
->> struct reboot_mode_driver can be changed just to pass of_node. But then the other
->> suggestion was to expose sysfs from reboot-mode to show available commands.
->> For that we need a device. Any suggestion? A virtual device with reset-types node
->> passed to reboot-mode framework looks fine?
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> ---
+> v7:
+>  - Address Frank's feedback:
+>    - Ensure reverse christmas tree order for local variable definitions
+>    - Drop unnecessary driver data definition in id table
+> v6:
+>  - Address Frank's feedback:
+>    - Ensure lowercase when defining register addresses
+>    - Use GENMASK macro for masking
+>    - Hardcode IRQ flags in pf1550_add_child_device
+>    - Add dvs_enb variable for SW2 regulator
+>    - Drop chip type variable
+> v5:
+>  - Use top level interrupt to manage interrupts for the sub-drivers as
+>    recommended by Mark Brown. The regmap_irq_sub_irq_map would have been used
+>    if not for the irregular charger irq address. For all children, the mask
+>    register is directly after the irq register (i.e., 0x08, 0x09) except
+>    for the charger: 0x80, 0x82. Meaning .mask_base would be applicable
+>    for all but the charger
+>  - Fix bad offset for temperature interrupts of regulator
+> v4:
+>  - Use struct resource to define irq so platform_get_irq can be used in
+>    children as suggested by Dmitry
+>  - Let mfd_add_devices create the mappings for the interrupts
+>  - ack_base and init_ack_masked defined for charger and regulator irq
+>    chips
+>  - No need to define driver_data in table id
+> v3:
+>  - Address Dmitry's feedback:
+>    - Place Table IDs next to each other
+>    - Drop of_match_ptr
+>    - Replace dev_err with dev_err_probe in probe method
+>    - Drop useless log in probe
+>  - Map all irqs instead of doing it in the sub-devices as recommended by
+>    Dmitry.
+> v2:
+>  - Address feedback from Enric Balletbo Serra
+> ---
+>  drivers/mfd/Kconfig        |  14 ++
+>  drivers/mfd/Makefile       |   2 +
+>  drivers/mfd/pf1550.c       | 339 +++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/pf1550.h | 254 +++++++++++++++++++++++++++++++++
+>  4 files changed, 609 insertions(+)
 > 
-> You still don't need it. You'll create a new device, belonging to the new 'reboot' or 'reset' class to hold corresponding attributes.
-just understand this - So the reboot-mode framework will create a new class
-and a device and expose the supported commands?
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 96992af22565205716d72db0494c7bf2567b045e..de3fc9c5e88b5c2a2c7325e2ceeb8f9c3ca057de 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -558,6 +558,20 @@ config MFD_MX25_TSADC
+>  	  i.MX25 processors. They consist of a conversion queue for general
+>  	  purpose ADC and a queue for Touchscreens.
+>  
+> +config MFD_PF1550
+> +	tristate "NXP PF1550 PMIC Support"
+> +	depends on I2C=y && OF
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	select REGMAP_IRQ
+> +	help
+> +	  Say yes here to add support for NXP PF1550.
+
+No need for the early line break.  It harms readability.
+
+> +	  This is a companion Power Management IC with regulators, onkey,
+> +	  and charger control on chip.
+
+As above.
+
+> +	  This driver provides common support for accessing the device;
+> +	  additional drivers must be enabled in order to use the functionality
+> +	  of the device.
+
+What is the module called?
+
+> +
+>  config MFD_HI6421_PMIC
+>  	tristate "HiSilicon Hi6421 PMU/Codec IC"
+>  	depends on OF
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 5e5cc279af6036a6b3ea1f1f0feeddf45b85f15c..7391d1b81d1ee499507b4ac24ff00eb2e344d60b 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+>  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+>  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+>  
+> +obj-$(CONFIG_MFD_PF1550)	+= pf1550.o
+> +
+>  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
+>  
+>  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
+> diff --git a/drivers/mfd/pf1550.c b/drivers/mfd/pf1550.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..f42c35b6f3c7ce63d615545e85fb2a143fccb488
+> --- /dev/null
+> +++ b/drivers/mfd/pf1550.c
+> @@ -0,0 +1,339 @@
+> +// SPDX-License-Identifier: GPL-2.0
+
+This is the only line that should use C++ style comments.
+
+> +//
+> +// pf1550.c - mfd core driver for the PF1550
+
+Remove filenames - they have a tendency to rot.
+
+It's not an MFD anything.
+
+> +//
+> +// Copyright (C) 2016 Freescale Semiconductor, Inc.
+> +// Robin Gong <yibin.gong@freescale.com>
+> +//
+> +// Portions Copyright (c) 2025 Savoir-faire Linux Inc.
+> +// Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> +//
+> +// This driver is based on max77693.c
+
+Drop this line.
+
+> +//
+
+Drop empty comments.
+
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/pf1550.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+
+Alphabetical.
+
+> +static const struct regmap_config pf1550_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = PF1550_PMIC_REG_END,
+> +};
+> +
+> +static const struct regmap_irq pf1550_irqs[] = {
+> +	REGMAP_IRQ_REG(PF1550_IRQ_CHG,		 0, IRQ_CHG),
+> +	REGMAP_IRQ_REG(PF1550_IRQ_REGULATOR,     0, IRQ_REGULATOR),
+> +	REGMAP_IRQ_REG(PF1550_IRQ_ONKEY,	 0, IRQ_ONKEY),
+> +};
+
+Not sure this or subsequent tabbing helps in any way.
+
+> +
+> +static const struct regmap_irq_chip pf1550_irq_chip = {
+> +	.name			= "pf1550",
+> +	.status_base		= PF1550_PMIC_REG_INT_CATEGORY,
+> +	.init_ack_masked	= 1,
+> +	.num_regs		= 1,
+> +	.irqs			= pf1550_irqs,
+> +	.num_irqs		= ARRAY_SIZE(pf1550_irqs),
+> +};
+> +
+> +static const struct regmap_irq pf1550_regulator_irqs[] = {
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW1_LS,         0, PMIC_IRQ_SW1_LS),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW2_LS,         0, PMIC_IRQ_SW2_LS),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW3_LS,         0, PMIC_IRQ_SW3_LS),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW1_HS,         3, PMIC_IRQ_SW1_HS),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW2_HS,         3, PMIC_IRQ_SW2_HS),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW3_HS,         3, PMIC_IRQ_SW3_HS),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_LDO1_FAULT,    16, PMIC_IRQ_LDO1_FAULT),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_LDO2_FAULT,    16, PMIC_IRQ_LDO2_FAULT),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_LDO3_FAULT,    16, PMIC_IRQ_LDO3_FAULT),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_TEMP_110,      24, PMIC_IRQ_TEMP_110),
+> +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_TEMP_125,      24, PMIC_IRQ_TEMP_125),
+> +};
+> +
+> +static const struct regmap_irq_chip pf1550_regulator_irq_chip = {
+> +	.name			= "pf1550-regulator",
+> +	.status_base		= PF1550_PMIC_REG_SW_INT_STAT0,
+> +	.ack_base		= PF1550_PMIC_REG_SW_INT_STAT0,
+> +	.mask_base		= PF1550_PMIC_REG_SW_INT_MASK0,
+> +	.use_ack                = 1,
+> +	.init_ack_masked	= 1,
+> +	.num_regs		= 25,
+> +	.irqs			= pf1550_regulator_irqs,
+> +	.num_irqs		= ARRAY_SIZE(pf1550_regulator_irqs),
+> +};
+> +
+> +static const struct resource regulator_resources[] = {
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW1_LS),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW2_LS),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW3_LS),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW1_HS),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW2_HS),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW3_HS),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_LDO1_FAULT),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_LDO2_FAULT),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_LDO3_FAULT),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_TEMP_110),
+> +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_TEMP_125),
+> +};
+> +
+> +static const struct regmap_irq pf1550_onkey_irqs[] = {
+> +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_PUSHI,  0, ONKEY_IRQ_PUSHI),
+> +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_1SI,    0, ONKEY_IRQ_1SI),
+> +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_2SI,    0, ONKEY_IRQ_2SI),
+> +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_3SI,    0, ONKEY_IRQ_3SI),
+> +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_4SI,    0, ONKEY_IRQ_4SI),
+> +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_8SI,    0, ONKEY_IRQ_8SI),
+> +};
+> +
+> +static const struct regmap_irq_chip pf1550_onkey_irq_chip = {
+> +	.name			= "pf1550-onkey",
+> +	.status_base		= PF1550_PMIC_REG_ONKEY_INT_STAT0,
+> +	.ack_base		= PF1550_PMIC_REG_ONKEY_INT_STAT0,
+> +	.mask_base		= PF1550_PMIC_REG_ONKEY_INT_MASK0,
+> +	.use_ack                = 1,
+> +	.init_ack_masked	= 1,
+> +	.num_regs		= 1,
+> +	.irqs			= pf1550_onkey_irqs,
+> +	.num_irqs		= ARRAY_SIZE(pf1550_onkey_irqs),
+> +};
+> +
+> +static const struct resource onkey_resources[] = {
+> +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_PUSHI),
+> +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_1SI),
+> +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_2SI),
+> +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_3SI),
+> +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_4SI),
+> +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_8SI),
+> +};
+> +
+> +static const struct regmap_irq pf1550_charger_irqs[] = {
+> +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_BAT2SOCI,	0, CHARG_IRQ_BAT2SOCI),
+> +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_BATI,           0, CHARG_IRQ_BATI),
+> +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_CHGI,           0, CHARG_IRQ_CHGI),
+> +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_VBUSI,          0, CHARG_IRQ_VBUSI),
+> +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_THMI,           0, CHARG_IRQ_THMI),
+> +};
+> +
+> +static const struct regmap_irq_chip pf1550_charger_irq_chip = {
+> +	.name			= "pf1550-charger",
+> +	.status_base		= PF1550_CHARG_REG_CHG_INT,
+> +	.ack_base		= PF1550_CHARG_REG_CHG_INT,
+> +	.mask_base		= PF1550_CHARG_REG_CHG_INT_MASK,
+> +	.use_ack                = 1,
+> +	.init_ack_masked	= 1,
+> +	.num_regs		= 1,
+> +	.irqs			= pf1550_charger_irqs,
+> +	.num_irqs		= ARRAY_SIZE(pf1550_charger_irqs),
+> +};
+> +
+> +static const struct resource charger_resources[] = {
+> +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_BAT2SOCI),
+> +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_BATI),
+> +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_CHGI),
+> +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_VBUSI),
+> +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_THMI),
+> +};
+> +
+> +static const struct mfd_cell pf1550_regulator_cell = {
+> +	.name = "pf1550-regulator",
+> +	.num_resources = ARRAY_SIZE(regulator_resources),
+> +	.resources = regulator_resources,
+> +};
+> +
+> +static const struct mfd_cell pf1550_onkey_cell = {
+> +	.name = "pf1550-onkey",
+> +	.num_resources = ARRAY_SIZE(onkey_resources),
+> +	.resources = onkey_resources,
+> +};
+> +
+> +static const struct mfd_cell pf1550_charger_cell = {
+> +	.name = "pf1550-charger",
+> +	.num_resources = ARRAY_SIZE(charger_resources),
+> +	.resources = charger_resources,
+> +};
+> +
+> +static int pf1550_read_otp(const struct pf1550_dev *pf1550, unsigned int index,
+
+What does OTP mean?
+
+Why do you have to write to 4 registers first?
+
+This should all be made clear in some way or another.
+
+> +			   unsigned int *val)
+> +{
+> +	int ret = 0;
+> +
+> +	ret = regmap_write(pf1550->regmap, PF1550_PMIC_REG_KEY, 0x15);
+
+No magic numbers.  These should all be defined.
+
+> +	if (ret)
+> +		goto read_err;
+> +	ret = regmap_write(pf1550->regmap, PF1550_CHARG_REG_CHGR_KEY2, 0x50);
+> +	if (ret)
+> +		goto read_err;
+> +	ret = regmap_write(pf1550->regmap, PF1550_TEST_REG_KEY3, 0xab);
+> +	if (ret)
+> +		goto read_err;
+> +	ret = regmap_write(pf1550->regmap, PF1550_TEST_REG_FMRADDR, index);
+> +	if (ret)
+> +		goto read_err;
+> +	ret = regmap_read(pf1550->regmap, PF1550_TEST_REG_FMRDATA, val);
+> +	if (ret)
+> +		goto read_err;
+> +
+> +	return 0;
+> +
+> +read_err:
+> +	dev_err_probe(pf1550->dev, ret, "read otp reg %x found!\n", index);
+
+This doesn't look like a fail message?
+
+Besides, it should be on the 'return' line, or else what's the point?
+
+> +	return ret;
+> +}
+> +
+> +static int pf1550_add_child_device(struct pf1550_dev *pmic,
+> +				   const struct mfd_cell *cell,
+> +				   struct regmap_irq_chip_data *pdata,
+
+This is not pdata.
+
+> +				   int pirq,
+> +				   const struct regmap_irq_chip *chip,
+> +				   struct regmap_irq_chip_data **data)
+> +{
+> +	struct device *dev = pmic->dev;
+> +	struct irq_domain *domain;
+> +	int irq, ret;
+> +
+> +	irq = regmap_irq_get_virq(pdata, pirq);
+> +	if (irq < 0)
+> +		return dev_err_probe(dev, irq,
+> +				     "Failed to get parent vIRQ(%d) for chip %s\n",
+> +				     pirq, chip->name);
+> +
+> +	ret = devm_regmap_add_irq_chip(dev, pmic->regmap, irq,
+> +				       IRQF_ONESHOT | IRQF_SHARED |
+> +				       IRQF_TRIGGER_FALLING, 0, chip, data);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Failed to add %s IRQ chip\n",
+> +				     chip->name);
+> +
+> +	domain = regmap_irq_get_domain(*data);
+> +
+> +	return devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, cell, 1,
+> +				    NULL, 0, domain);
+
+Why can't all 3 devices be registered in one call?
+
+> +}
+
+To be honest, the premise around this function is a bit of a mess.
+
+Please move all of this into .probe().
+
+> +static int pf1550_i2c_probe(struct i2c_client *i2c)
+> +{
+> +	const struct mfd_cell *regulator = &pf1550_regulator_cell;
+> +	const struct mfd_cell *charger = &pf1550_charger_cell;
+> +	const struct mfd_cell *onkey = &pf1550_onkey_cell;
+> +	unsigned int reg_data = 0, otp_data = 0;
+> +	struct pf1550_dev *pf1550;
+> +	int ret = 0;
+> +
+> +	pf1550 = devm_kzalloc(&i2c->dev, sizeof(*pf1550), GFP_KERNEL);
+> +	if (!pf1550)
+> +		return -ENOMEM;
+> +
+> +	i2c_set_clientdata(i2c, pf1550);
+> +	pf1550->dev = &i2c->dev;
+> +	pf1550->i2c = i2c;
+
+What are you storing i2c for?
+
+Either store dev and irq OR i2c.  You don't need all three.
+
+> +	pf1550->irq = i2c->irq;
+> +	pf1550->dvs_enb = false;
+
+This is already false.
+
+> +	pf1550->regmap = devm_regmap_init_i2c(i2c, &pf1550_regmap_config);
+> +	if (IS_ERR(pf1550->regmap))
+> +		return dev_err_probe(pf1550->dev, PTR_ERR(pf1550->regmap),
+> +				     "failed to allocate register map\n");
+> +
+> +	ret = regmap_read(pf1550->regmap, PF1550_PMIC_REG_DEVICE_ID, &reg_data);
+> +	if (ret < 0 || reg_data != PF1550_DEVICE_ID)
+> +		return dev_err_probe(pf1550->dev, ret ?: -EINVAL,
+> +				     "device not found!\n");
+
+Are you sure?  What if the wrong device was found?
+
+Also, no device should return -ENODEV.
+
+> +
+> +	/* regulator DVS */
+
+All comments should start with an uppercase char.
+
+> +	ret = pf1550_read_otp(pf1550, 0x1f, &otp_data);
+
+No magic numbers.  Define them please.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (otp_data & BIT(3))
+> +		pf1550->dvs_enb = true;
+
+Gibberish.  More defines and/or comments please.
+
+> +	/* add top level interrupts */
+> +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, pf1550->irq,
+> +				       IRQF_ONESHOT | IRQF_SHARED |
+> +				       IRQF_TRIGGER_FALLING,
+> +				       0, &pf1550_irq_chip,
+> +				       &pf1550->irq_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pf1550_add_child_device(pf1550, regulator, pf1550->irq_data,
+> +				      PF1550_IRQ_REGULATOR,
+> +				      &pf1550_regulator_irq_chip,
+> +				      &pf1550->irq_data_regulator);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pf1550_add_child_device(pf1550, onkey, pf1550->irq_data,
+> +				      PF1550_IRQ_ONKEY,
+> +				      &pf1550_onkey_irq_chip,
+> +				      &pf1550->irq_data_onkey);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pf1550_add_child_device(pf1550, charger, pf1550->irq_data,
+> +				      PF1550_IRQ_CHG,
+> +				      &pf1550_charger_irq_chip,
+> +				      &pf1550->irq_data_charger);
+> +	return ret;
+> +}
+> +
+> +static int pf1550_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *i2c = container_of(dev, struct i2c_client, dev);
+> +	struct pf1550_dev *pf1550 = i2c_get_clientdata(i2c);
+
+You can swap all of this for:
+
+	struct pf1550_dev *pf1550 = dev_get_drvdata(dev).
+
+> +
+> +	if (device_may_wakeup(dev)) {
+> +		enable_irq_wake(pf1550->irq);
+> +		disable_irq(pf1550->irq);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pf1550_resume(struct device *dev)
+> +{
+> +	struct i2c_client *i2c = container_of(dev, struct i2c_client, dev);
+> +	struct pf1550_dev *pf1550 = i2c_get_clientdata(i2c);
+
+As above.
+
+> +
+> +	if (device_may_wakeup(dev)) {
+> +		disable_irq_wake(pf1550->irq);
+> +		enable_irq(pf1550->irq);
+
+I would normally expect these to be around the opposite way to the ones
+in .suspend().
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+Remove this line.
+
+> +static DEFINE_SIMPLE_DEV_PM_OPS(pf1550_pm, pf1550_suspend, pf1550_resume);
+> +
+> +static const struct i2c_device_id pf1550_i2c_id[] = {
+> +	{ "pf1550" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, pf1550_i2c_id);
+> +
+> +static const struct of_device_id pf1550_dt_match[] = {
+> +	{ .compatible = "nxp,pf1550" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, pf1550_dt_match);
+> +
+> +static struct i2c_driver pf1550_i2c_driver = {
+> +	.driver = {
+> +		   .name = "pf1550",
+> +		   .pm = pm_sleep_ptr(&pf1550_pm),
+> +		   .of_match_table = pf1550_dt_match,
+> +	},
+> +	.probe = pf1550_i2c_probe,
+> +	.id_table = pf1550_i2c_id,
+> +};
+> +module_i2c_driver(pf1550_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("NXP PF1550 multi-function core driver");
+
+Reword please.
+
+> +MODULE_AUTHOR("Robin Gong <yibin.gong@freescale.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/pf1550.h b/include/linux/mfd/pf1550.h
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..64ff475215cced21a5ebc24f799f48315a51d260
+> --- /dev/null
+> +++ b/include/linux/mfd/pf1550.h
+> @@ -0,0 +1,254 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * pf1550.h - mfd head file for PF1550
+
+As above.
+
+> + *
+> + * Copyright (C) 2016 Freescale Semiconductor, Inc.
+> + * Robin Gong <yibin.gong@freescale.com>
+> + *
+> + * Portions Copyright (c) 2025 Savoir-faire Linux Inc.
+> + * Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> + */
+> +
+> +#ifndef __LINUX_MFD_PF1550_H
+> +#define __LINUX_MFD_PF1550_H
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/regmap.h>
+> +
+> +enum pf1550_pmic_reg {
+> +	/* PMIC regulator part */
+> +	PF1550_PMIC_REG_DEVICE_ID		= 0x00,
+> +	PF1550_PMIC_REG_OTP_FLAVOR		= 0x01,
+> +	PF1550_PMIC_REG_SILICON_REV		= 0x02,
+> +
+> +	PF1550_PMIC_REG_INT_CATEGORY		= 0x06,
+> +	PF1550_PMIC_REG_SW_INT_STAT0		= 0x08,
+> +	PF1550_PMIC_REG_SW_INT_MASK0		= 0x09,
+> +	PF1550_PMIC_REG_SW_INT_SENSE0		= 0x0a,
+> +	PF1550_PMIC_REG_SW_INT_STAT1		= 0x0b,
+> +	PF1550_PMIC_REG_SW_INT_MASK1		= 0x0c,
+> +	PF1550_PMIC_REG_SW_INT_SENSE1		= 0x0d,
+> +	PF1550_PMIC_REG_SW_INT_STAT2		= 0x0e,
+> +	PF1550_PMIC_REG_SW_INT_MASK2		= 0x0f,
+> +	PF1550_PMIC_REG_SW_INT_SENSE2		= 0x10,
+> +	PF1550_PMIC_REG_LDO_INT_STAT0		= 0x18,
+> +	PF1550_PMIC_REG_LDO_INT_MASK0		= 0x19,
+> +	PF1550_PMIC_REG_LDO_INT_SENSE0		= 0x1a,
+> +	PF1550_PMIC_REG_TEMP_INT_STAT0		= 0x20,
+> +	PF1550_PMIC_REG_TEMP_INT_MASK0		= 0x21,
+> +	PF1550_PMIC_REG_TEMP_INT_SENSE0		= 0x22,
+> +	PF1550_PMIC_REG_ONKEY_INT_STAT0		= 0x24,
+> +	PF1550_PMIC_REG_ONKEY_INT_MASK0		= 0x25,
+> +	PF1550_PMIC_REG_ONKEY_INT_SENSE0	= 0x26,
+> +	PF1550_PMIC_REG_MISC_INT_STAT0		= 0x28,
+> +	PF1550_PMIC_REG_MISC_INT_MASK0		= 0x29,
+> +	PF1550_PMIC_REG_MISC_INT_SENSE0		= 0x2a,
+> +
+> +	PF1550_PMIC_REG_COINCELL_CONTROL	= 0x30,
+> +
+> +	PF1550_PMIC_REG_SW1_VOLT		= 0x32,
+> +	PF1550_PMIC_REG_SW1_STBY_VOLT		= 0x33,
+> +	PF1550_PMIC_REG_SW1_SLP_VOLT		= 0x34,
+> +	PF1550_PMIC_REG_SW1_CTRL		= 0x35,
+> +	PF1550_PMIC_REG_SW1_CTRL1		= 0x36,
+> +	PF1550_PMIC_REG_SW2_VOLT		= 0x38,
+> +	PF1550_PMIC_REG_SW2_STBY_VOLT		= 0x39,
+> +	PF1550_PMIC_REG_SW2_SLP_VOLT		= 0x3a,
+> +	PF1550_PMIC_REG_SW2_CTRL		= 0x3b,
+> +	PF1550_PMIC_REG_SW2_CTRL1		= 0x3c,
+> +	PF1550_PMIC_REG_SW3_VOLT		= 0x3e,
+> +	PF1550_PMIC_REG_SW3_STBY_VOLT		= 0x3f,
+> +	PF1550_PMIC_REG_SW3_SLP_VOLT		= 0x40,
+> +	PF1550_PMIC_REG_SW3_CTRL		= 0x41,
+> +	PF1550_PMIC_REG_SW3_CTRL1		= 0x42,
+> +	PF1550_PMIC_REG_VSNVS_CTRL		= 0x48,
+> +	PF1550_PMIC_REG_VREFDDR_CTRL		= 0x4a,
+> +	PF1550_PMIC_REG_LDO1_VOLT		= 0x4c,
+> +	PF1550_PMIC_REG_LDO1_CTRL		= 0x4d,
+> +	PF1550_PMIC_REG_LDO2_VOLT		= 0x4f,
+> +	PF1550_PMIC_REG_LDO2_CTRL		= 0x50,
+> +	PF1550_PMIC_REG_LDO3_VOLT		= 0x52,
+> +	PF1550_PMIC_REG_LDO3_CTRL		= 0x53,
+> +	PF1550_PMIC_REG_PWRCTRL0		= 0x58,
+> +	PF1550_PMIC_REG_PWRCTRL1		= 0x59,
+> +	PF1550_PMIC_REG_PWRCTRL2		= 0x5a,
+> +	PF1550_PMIC_REG_PWRCTRL3		= 0x5b,
+> +	PF1550_PMIC_REG_SW1_PWRDN_SEQ		= 0x5f,
+> +	PF1550_PMIC_REG_SW2_PWRDN_SEQ		= 0x60,
+> +	PF1550_PMIC_REG_SW3_PWRDN_SEQ		= 0x61,
+> +	PF1550_PMIC_REG_LDO1_PWRDN_SEQ		= 0x62,
+> +	PF1550_PMIC_REG_LDO2_PWRDN_SEQ		= 0x63,
+> +	PF1550_PMIC_REG_LDO3_PWRDN_SEQ		= 0x64,
+> +	PF1550_PMIC_REG_VREFDDR_PWRDN_SEQ	= 0x65,
+> +
+> +	PF1550_PMIC_REG_STATE_INFO		= 0x67,
+> +	PF1550_PMIC_REG_I2C_ADDR		= 0x68,
+> +	PF1550_PMIC_REG_IO_DRV0			= 0x69,
+> +	PF1550_PMIC_REG_IO_DRV1			= 0x6a,
+> +	PF1550_PMIC_REG_RC_16MHZ		= 0x6b,
+> +	PF1550_PMIC_REG_KEY			= 0x6f,
+> +
+> +	/* charger part */
+> +	PF1550_CHARG_REG_CHG_INT		= 0x80,
+> +	PF1550_CHARG_REG_CHG_INT_MASK		= 0x82,
+> +	PF1550_CHARG_REG_CHG_INT_OK		= 0x84,
+> +	PF1550_CHARG_REG_VBUS_SNS		= 0x86,
+> +	PF1550_CHARG_REG_CHG_SNS		= 0x87,
+> +	PF1550_CHARG_REG_BATT_SNS		= 0x88,
+> +	PF1550_CHARG_REG_CHG_OPER		= 0x89,
+> +	PF1550_CHARG_REG_CHG_TMR		= 0x8a,
+> +	PF1550_CHARG_REG_CHG_EOC_CNFG		= 0x8d,
+> +	PF1550_CHARG_REG_CHG_CURR_CNFG		= 0x8e,
+> +	PF1550_CHARG_REG_BATT_REG		= 0x8f,
+> +	PF1550_CHARG_REG_BATFET_CNFG		= 0x91,
+> +	PF1550_CHARG_REG_THM_REG_CNFG		= 0x92,
+> +	PF1550_CHARG_REG_VBUS_INLIM_CNFG	= 0x94,
+> +	PF1550_CHARG_REG_VBUS_LIN_DPM		= 0x95,
+> +	PF1550_CHARG_REG_USB_PHY_LDO_CNFG	= 0x96,
+> +	PF1550_CHARG_REG_DBNC_DELAY_TIME	= 0x98,
+> +	PF1550_CHARG_REG_CHG_INT_CNFG		= 0x99,
+> +	PF1550_CHARG_REG_THM_ADJ_SETTING	= 0x9a,
+> +	PF1550_CHARG_REG_VBUS2SYS_CNFG		= 0x9b,
+> +	PF1550_CHARG_REG_LED_PWM		= 0x9c,
+> +	PF1550_CHARG_REG_FAULT_BATFET_CNFG	= 0x9d,
+> +	PF1550_CHARG_REG_LED_CNFG		= 0x9e,
+> +	PF1550_CHARG_REG_CHGR_KEY2		= 0x9f,
+> +
+> +	PF1550_TEST_REG_FMRADDR			= 0xc4,
+> +	PF1550_TEST_REG_FMRDATA			= 0xc5,
+> +	PF1550_TEST_REG_KEY3			= 0xdf,
+> +
+> +	PF1550_PMIC_REG_END			= 0xff,
+> +};
+> +
+> +#define PF1550_DEVICE_ID		0x7c
+> +
+> +#define PF1550_CHG_TURNON		0x2
+> +
+> +#define PF1550_CHG_PRECHARGE		0
+> +#define PF1550_CHG_CONSTANT_CURRENT	1
+> +#define PF1550_CHG_CONSTANT_VOL		2
+> +#define PF1550_CHG_EOC			3
+> +#define PF1550_CHG_DONE			4
+> +#define PF1550_CHG_TIMER_FAULT		6
+> +#define PF1550_CHG_SUSPEND		7
+> +#define PF1550_CHG_OFF_INV		8
+> +#define PF1550_CHG_BAT_OVER		9
+> +#define PF1550_CHG_OFF_TEMP		10
+> +#define PF1550_CHG_LINEAR_ONLY		12
+> +#define PF1550_CHG_SNS_MASK		0xf
+> +#define PF1550_CHG_INT_MASK             0x51
+> +
+> +#define PF1550_BAT_NO_VBUS		0
+> +#define PF1550_BAT_LOW_THAN_PRECHARG	1
+> +#define PF1550_BAT_CHARG_FAIL		2
+> +#define PF1550_BAT_HIGH_THAN_PRECHARG	4
+> +#define PF1550_BAT_OVER_VOL		5
+> +#define	PF1550_BAT_NO_DETECT		6
+> +#define PF1550_BAT_SNS_MASK		0x7
+> +
+> +#define PF1550_VBUS_UVLO		BIT(2)
+> +#define PF1550_VBUS_IN2SYS		BIT(3)
+> +#define PF1550_VBUS_OVLO		BIT(4)
+> +#define PF1550_VBUS_VALID		BIT(5)
+> +
+> +#define PF1550_CHARG_REG_BATT_REG_CHGCV_MASK		0x3f
+> +#define PF1550_CHARG_REG_BATT_REG_VMINSYS_SHIFT		6
+> +#define PF1550_CHARG_REG_BATT_REG_VMINSYS_MASK		GENMASK(7, 6)
+> +#define PF1550_CHARG_REG_THM_REG_CNFG_REGTEMP_SHIFT	2
+> +#define PF1550_CHARG_REG_THM_REG_CNFG_REGTEMP_MASK	GENMASK(3, 2)
+> +
+> +/* top level interrupt masks */
+> +#define IRQ_REGULATOR		(BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(6))
+> +#define IRQ_ONKEY		BIT(5)
+> +#define IRQ_CHG			BIT(0)
+> +
+> +/* regulator interrupt masks */
+> +#define PMIC_IRQ_SW1_LS		BIT(0)
+> +#define PMIC_IRQ_SW2_LS		BIT(1)
+> +#define PMIC_IRQ_SW3_LS		BIT(2)
+> +#define PMIC_IRQ_SW1_HS		BIT(0)
+> +#define PMIC_IRQ_SW2_HS		BIT(1)
+> +#define PMIC_IRQ_SW3_HS		BIT(2)
+> +#define PMIC_IRQ_LDO1_FAULT	BIT(0)
+> +#define PMIC_IRQ_LDO2_FAULT	BIT(1)
+> +#define PMIC_IRQ_LDO3_FAULT	BIT(2)
+> +#define PMIC_IRQ_TEMP_110	BIT(0)
+> +#define PMIC_IRQ_TEMP_125	BIT(1)
+> +
+> +/* onkey interrupt masks */
+> +#define ONKEY_IRQ_PUSHI		BIT(0)
+> +#define ONKEY_IRQ_1SI		BIT(1)
+> +#define ONKEY_IRQ_2SI		BIT(2)
+> +#define ONKEY_IRQ_3SI		BIT(3)
+> +#define ONKEY_IRQ_4SI		BIT(4)
+> +#define ONKEY_IRQ_8SI		BIT(5)
+> +
+> +/* charger interrupt masks */
+> +#define CHARG_IRQ_BAT2SOCI	BIT(1)
+> +#define CHARG_IRQ_BATI		BIT(2)
+> +#define CHARG_IRQ_CHGI		BIT(3)
+> +#define CHARG_IRQ_VBUSI		BIT(5)
+> +#define CHARG_IRQ_DPMI		BIT(6)
+> +#define CHARG_IRQ_THMI		BIT(7)
+> +
+> +enum pf1550_irq {
+> +	PF1550_IRQ_CHG,
+> +	PF1550_IRQ_REGULATOR,
+> +	PF1550_IRQ_ONKEY,
+> +};
+> +
+> +enum pf1550_pmic_irq {
+> +	PF1550_PMIC_IRQ_SW1_LS,
+> +	PF1550_PMIC_IRQ_SW2_LS,
+> +	PF1550_PMIC_IRQ_SW3_LS,
+> +	PF1550_PMIC_IRQ_SW1_HS,
+> +	PF1550_PMIC_IRQ_SW2_HS,
+> +	PF1550_PMIC_IRQ_SW3_HS,
+> +	PF1550_PMIC_IRQ_LDO1_FAULT,
+> +	PF1550_PMIC_IRQ_LDO2_FAULT,
+> +	PF1550_PMIC_IRQ_LDO3_FAULT,
+> +	PF1550_PMIC_IRQ_TEMP_110,
+> +	PF1550_PMIC_IRQ_TEMP_125,
+> +};
+> +
+> +enum pf1550_onkey_irq {
+> +	PF1550_ONKEY_IRQ_PUSHI,
+> +	PF1550_ONKEY_IRQ_1SI,
+> +	PF1550_ONKEY_IRQ_2SI,
+> +	PF1550_ONKEY_IRQ_3SI,
+> +	PF1550_ONKEY_IRQ_4SI,
+> +	PF1550_ONKEY_IRQ_8SI,
+> +};
+> +
+> +enum pf1550_charg_irq {
+> +	PF1550_CHARG_IRQ_BAT2SOCI,
+> +	PF1550_CHARG_IRQ_BATI,
+> +	PF1550_CHARG_IRQ_CHGI,
+> +	PF1550_CHARG_IRQ_VBUSI,
+> +	PF1550_CHARG_IRQ_THMI,
+> +};
+> +
+> +enum pf1550_regulators {
+> +	PF1550_SW1,
+> +	PF1550_SW2,
+> +	PF1550_SW3,
+> +	PF1550_VREFDDR,
+> +	PF1550_LDO1,
+> +	PF1550_LDO2,
+> +	PF1550_LDO3,
+> +};
+> +
+> +struct pf1550_dev {
+
+pf1550_ddata
+
+> +	bool dvs_enb;
+> +	struct device *dev;
+> +	struct i2c_client *i2c;
+
+One or the other.  You don't need both.
+
+> +	struct regmap *regmap;
+> +	struct regmap_irq_chip_data *irq_data_regulator;
+> +	struct regmap_irq_chip_data *irq_data_onkey;
+> +	struct regmap_irq_chip_data *irq_data_charger;
+> +	struct regmap_irq_chip_data *irq_data;
+> +	int irq;
+> +};
+> +
+> +#endif /* __LINUX_MFD_PF1550_H */
 > 
->>>
->>>>
->>>> power:reset:<psci-vendor-reset-driver>:
->>>> -----
->>>> static int __init psci_vendor_reset_init(void) {
->>>> ..
->>>> ..
->>>>     np = of_find_node_by_name(NULL, "psci-vendor-reset");
->>>>     if(!np)
->>>>         return -ENODEV;
->>>>     pdev = of_platform_device_create(np, "psci-vendor-reset", NULL);
->>>> ..
->>>> ..
->>>> }
->>>> -------
->>>>
->>>> the sysfs we will expose from reboot-mode may show like below in above
->>>> implementation:
->>>>
->>>> ######
->>>> / # cat ./sys/devices/platform/psci-vendor-reset/available_modes
->>>> bootloader edl
->>>> ######
->>>>
->>>> thanks,
->>>> Shivendra
->>>>
->>>>>>
->>>>>> Agree that the available modes should be exposed to usespace via sysfs interface
->>>>>> and we should implement it. Also #1 and #2 can be handled via some
->>>>>> changes in the design as mentioned in above discussion.
->>>>>>
->>>>>> I have one doubt though when we implement this via reboot-mode framework.
->>>>>> The current patch implements PSCI ARM PSCI SYSTEM RESET2 vendor reset types.
->>>>>> psci driver is initialized very early at boot but potential ARM psci reboot-mode
->>>>>> driver will not probe at that stage and the ARM PSCI SYSTEM RESET2 vendor reset
->>>>>> types functionality will not be available in psci reset path until the reboot-mode
->>>>>> driver probes. Will this cause any limitation on usage of ARM's PSCI vendor-reset
->>>>>> types for early device resets?
->>>>>>
->>>>>> One use-case may be an early device crash or a early reset where a vendor
->>>>>> wants to use PSCI SYSTEM RESET2 vendor reset type to a reset the device to a
->>>>>> specific state but may not be able to use this driver.
->>>>>> (eg: a kernel panic at early boot where a vendor wants to reset device
->>>>>> to a specific state using vendor reset. Currently panic passes a NULL
->>>>>> (*arg command) while device reset but it may be explored for vendor specific
->>>>>> reset).
->>>>>
->>>>> As you said, that would not be a PSCI only issue - *if* we wanted to
->>>>> plug in this use case we should find a way to do it at reboot mode
->>>>> driver level.
->>>>>
->>>>> As a matter of fact, this is not a mainline issue AFAICS.
->>>>>
->>>>> Even if we did not design this as a reboot mode driver there would be a
->>>>> time window where you would not be able to use vendor resets on panic.
->>>>>
->>>>> I don't see it as a major roadblock at the moment.
->>>> Got it.
->>>>>
->>>>> Thanks,
->>>>> Lorenzo
->>>>>
->>>>>>
->>>>>> - Shivendra
->>>>>>
->>>>>>>> P.S. We appreciate Elliot for his work and follow-up on this while being
->>>>>>>> employed at Qualcomm.
->>>>>>>
->>>>>>> Yes I sincerely do for his patience, thank you.
->>>>>>>
->>>>>>> Lorenzo
->>>>>>>
->>>>>>>>>>   3. psci cpuidle driver already registers a driver against the
->>>>>>>>>>      arm,psci-1.0 compatible. Refactoring would be needed to have both a
->>>>>>>>>>      cpuidle and reboot-mode driver.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Elliot Berman <elliot.berman@oss.qualcomm.com>
->>>>>>>>>> ---
->>>>>>>>>>   drivers/firmware/psci/psci.c | 105 +++++++++++++++++++++++++++++++++++++++++++
->>>>>>>>>>   1 file changed, 105 insertions(+)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
->>>>>>>>>> index a1ebbe9b73b136218e9d9f9b8daa7756b3ab2fbe..6f8c47deaec0225f26704e1f3bcad52603127a85 100644
->>>>>>>>>> --- a/drivers/firmware/psci/psci.c
->>>>>>>>>> +++ b/drivers/firmware/psci/psci.c
->>>>>>>>>> @@ -80,6 +80,14 @@ static u32 psci_cpu_suspend_feature;
->>>>>>>>>>   static bool psci_system_reset2_supported;
->>>>>>>>>>   static bool psci_system_off2_hibernate_supported;
->>>>>>>>>>   +struct psci_reset_param {
->>>>>>>>>> +    const char *mode;
->>>>>>>>>> +    u32 reset_type;
->>>>>>>>>> +    u32 cookie;
->>>>>>>>>> +};
->>>>>>>>>> +static struct psci_reset_param *psci_reset_params __ro_after_init;
->>>>>>>>>> +static size_t num_psci_reset_params __ro_after_init;
->>>>>>>>>> +
->>>>>>>>>>   static inline bool psci_has_ext_power_state(void)
->>>>>>>>>>   {
->>>>>>>>>>       return psci_cpu_suspend_feature &
->>>>>>>>>> @@ -306,9 +314,39 @@ static int get_set_conduit_method(const struct device_node *np)
->>>>>>>>>>       return 0;
->>>>>>>>>>   }
->>>>>>>>>>   +static int psci_vendor_system_reset2(const char *cmd)
->>>>>>>>>> +{
->>>>>>>>>> +    unsigned long ret;
->>>>>>>>>> +    size_t i;
->>>>>>>>>> +
->>>>>>>>>> +    for (i = 0; i < num_psci_reset_params; i++) {
->>>>>>>>>> +        if (!strcmp(psci_reset_params[i].mode, cmd)) {
->>>>>>>>>> +            ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
->>>>>>>>>> +                         psci_reset_params[i].reset_type,
->>>>>>>>>> +                         psci_reset_params[i].cookie, 0);
->>>>>>>>>> +            /*
->>>>>>>>>> +             * if vendor reset fails, log it and fall back to
->>>>>>>>>> +             * architecture reset types
->>>>>>>>>
->>>>>>>>> That's not what the code does.
->>>>>>>>>
->>>>>>>> Ack.
->>>>>>>>
->>>>>>>> -Mukesh
->>>>>>>>
->>>>>>>>>> +             */
->>>>>>>>>> +            pr_err("failed to perform reset \"%s\": %ld\n", cmd,
->>>>>>>>>> +                   (long)ret);
->>>>>>>>>> +            return 0;
->>>>>>>>>> +        }
->>>>>>>>>> +    }
->>>>>>>>>> +
->>>>>>>>>> +    return -ENOENT;
->>>>>>>>>> +}
->>>>>>>>>> +
->>>>>>>>>>   static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
->>>>>>>>>>                 void *data)
->>>>>>>>>>   {
->>>>>>>>>> +    /*
->>>>>>>>>> +     * try to do the vendor system_reset2
->>>>>>>>>> +     * If there wasn't a matching command, fall back to architectural resets
->>>>>>>>>> +     */
->>>>>>>>>> +    if (data && !psci_vendor_system_reset2(data))
->>>>>>>>>> +        return NOTIFY_DONE;
->>>>>>>>>> +
->>>>>>>>>>       if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
->>>>>>>>>>           psci_system_reset2_supported) {
->>>>>>>>>>           /*
->>>>>>>>>> @@ -795,6 +833,73 @@ static const struct of_device_id psci_of_match[] __initconst = {
->>>>>>>>>>       {},
->>>>>>>>>>   };
->>>>>>>>>>   +#define REBOOT_PREFIX "mode-"
->>>>>>>>>> +
->>>>>>>>>> +static int __init psci_init_system_reset2_modes(void)
->>>>>>>>>> +{
->>>>>>>>>> +    const size_t len = strlen(REBOOT_PREFIX);
->>>>>>>>>> +    struct psci_reset_param *param;
->>>>>>>>>> +    struct device_node *psci_np __free(device_node) = NULL;
->>>>>>>>>> +    struct device_node *np __free(device_node) = NULL;
->>>>>>>>>> +    struct property *prop;
->>>>>>>>>> +    size_t count = 0;
->>>>>>>>>> +    u32 magic[2];
->>>>>>>>>> +    int num;
->>>>>>>>>> +
->>>>>>>>>> +    if (!psci_system_reset2_supported)
->>>>>>>>>> +        return 0;
->>>>>>>>>> +
->>>>>>>>>> +    psci_np = of_find_matching_node(NULL, psci_of_match);
->>>>>>>>>> +    if (!psci_np)
->>>>>>>>>> +        return 0;
->>>>>>>>>> +
->>>>>>>>>> +    np = of_find_node_by_name(psci_np, "reset-types");
->>>>>>>>>> +    if (!np)
->>>>>>>>>> +        return 0;
->>>>>>>>>
->>>>>>>>> Related to my initial question above. If LINUX_REBOOT_CMD_RESTART2 *arg command,
->>>>>>>>> is the actual reset to be issued, should we add a default mode "cold"
->>>>>>>>> and, if SYSTEM_RESET2 is supported, a "warm" reset mode too ?
->>>>>>>>>
->>>>>>>>> It all boils down to what *arg represents - adding "cold" and "warm"
->>>>>>>>> modes would remove the dependency on reboot_mode for resets issued
->>>>>>>>> through LINUX_REBOOT_CMD_RESTART2, the question is whether this
->>>>>>>>> is the correct thing to do.
->>>>>>>>>
->>>>>>>>> Comments very welcome.
->>>>>>>>>
->>>>>>>>> Thanks,
->>>>>>>>> Lorenzo
->>>>>>>>>
->>>>>>>>>> +
->>>>>>>>>> +    for_each_property_of_node(np, prop) {
->>>>>>>>>> +        if (strncmp(prop->name, REBOOT_PREFIX, len))
->>>>>>>>>> +            continue;
->>>>>>>>>> +        num = of_property_count_u32_elems(np, prop->name);
->>>>>>>>>> +        if (num != 1 && num != 2)
->>>>>>>>>> +            continue;
->>>>>>>>>> +
->>>>>>>>>> +        count++;
->>>>>>>>>> +    }
->>>>>>>>>> +
->>>>>>>>>> +    param = psci_reset_params =
->>>>>>>>>> +        kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
->>>>>>>>>> +    if (!psci_reset_params)
->>>>>>>>>> +        return -ENOMEM;
->>>>>>>>>> +
->>>>>>>>>> +    for_each_property_of_node(np, prop) {
->>>>>>>>>> +        if (strncmp(prop->name, REBOOT_PREFIX, len))
->>>>>>>>>> +            continue;
->>>>>>>>>> +
->>>>>>>>>> +        num = of_property_read_variable_u32_array(np, prop->name, magic,
->>>>>>>>>> +                              1, ARRAY_SIZE(magic));
->>>>>>>>>> +        if (num < 0) {
->>>>>>>>>> +            pr_warn("Failed to parse vendor reboot mode %s\n",
->>>>>>>>>> +                param->mode);
->>>>>>>>>> +            kfree_const(param->mode);
->>>>>>>>>> +            continue;
->>>>>>>>>> +        }
->>>>>>>>>> +
->>>>>>>>>> +        param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
->>>>>>>>>> +        if (!param->mode)
->>>>>>>>>> +            continue;
->>>>>>>>>> +
->>>>>>>>>> +        /* Force reset type to be in vendor space */
->>>>>>>>>> +        param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
->>>>>>>>>> +        param->cookie = num > 1 ? magic[1] : 0;
->>>>>>>>>> +        param++;
->>>>>>>>>> +        num_psci_reset_params++;
->>>>>>>>>> +    }
->>>>>>>>>> +
->>>>>>>>>> +    return 0;
->>>>>>>>>> +}
->>>>>>>>>> +arch_initcall(psci_init_system_reset2_modes);
->>>>>>>>>> +
->>>>>>>>>>   int __init psci_dt_init(void)
->>>>>>>>>>   {
->>>>>>>>>>       struct device_node *np;
->>>>>>>>>>
->>>>>>>>>> -- 
->>>>>>>>>> 2.34.1
->>>>>>>>>>
->>>
+> -- 
+> 2.49.0
 > 
 > 
+
+-- 
+Lee Jones [李琼斯]
 
