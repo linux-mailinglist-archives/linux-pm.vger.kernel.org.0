@@ -1,140 +1,318 @@
-Return-Path: <linux-pm+bounces-29033-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF97FADFC0C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 05:55:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF129ADFC05
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 05:54:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BC1B17F8A9
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 03:55:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29462189F0C1
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 03:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719EB23D2BA;
-	Thu, 19 Jun 2025 03:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="JQWzOCku"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F99239E7D;
+	Thu, 19 Jun 2025 03:54:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503B623AE95;
-	Thu, 19 Jun 2025 03:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C42C288A8;
+	Thu, 19 Jun 2025 03:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750305299; cv=none; b=ZFKnfpk7PeTFOKf3zCtlOMEa8LSfq6aSrgDz7D8YTMJ93SyaVag2YmHM/AAuMXSJ/grPNOcEVnCR6Idf5WP0kKP9LMnvwYLJJEZ4ny4peIFtwJzOZclGw2P8yp2uemvPedOuyCywOhFIFnxQrWCgZgtKRdMCdk90GRdWD3W0zFU=
+	t=1750305270; cv=none; b=TM3112E1zy6APTqOiRc51r9YodFlwfsCNyMWuu+ASj/eGQFxUWItBwRr6mXUGWnMGG5/y68g+6yZdJdBp452r1EyTfkuVQltGZuI4ccN3OZbhkV/zZpZ89qxnlWYGREL+QyWLnp1HnBdFOI5lGh6l5PF7ba/p9XAC+GzA1J/EUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750305299; c=relaxed/simple;
-	bh=BCPMpqnDn2wbyYGPx8ElTfYG9DphOADxFf4DuivLiH4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XIbNG6yLu6eBHH/scm3PVeG1OJa+qhynn6nioCjQg7FdV8RAK10Hg6kYteIDFx5WwDD6HZjNYF9kua24bekFqmLlGkS7H9dHa/srvvA3wc/xaNz6bCcvgOGEezyJ7bL4aPJZyzw4FKYZo/o1+wsX9v2hYb+46qa4vblyJuULV+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=JQWzOCku; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 55J3rkEo1834636
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 18 Jun 2025 20:53:47 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 55J3rkEo1834636
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025052101; t=1750305230;
-	bh=v1mq7aHRfg1mrH2A7KOCOZnCq6csJSQELwopfpOfU2Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JQWzOCku9YVvZhclZcnN0j1kePzQTnefn8R0gA0zTFCbc6iQOVJqix8Vd1ommk/gl
-	 u7x2RU1Cjaaby+aZN/WKoDoj4p7jUNdLBjePB7pBzt1fccA9jTtUw0GchBRI+JjIli
-	 3SWBc52eFxfHPhjq27k7/GQBkdLtlUFXS/mXZusWgQdfGpb0vzRiep2T79QlN+U3hc
-	 UbsEPONNch+iVp4wAKLQyw/MkPmi4GZginWutb/YLicRJfIEqVKnqNvdnJKFMWS/s4
-	 tYIkMVp33s738hK/tEE9Uhb25dtCbZ0z3dFLZXNsHPtIekBP8DR3YRUIMYdoGL9vdt
-	 O2bH0oJIIqDmQ==
-Message-ID: <0862970c-ab84-4b08-b9e6-e5d04bfd13e7@zytor.com>
-Date: Wed, 18 Jun 2025 20:53:45 -0700
+	s=arc-20240116; t=1750305270; c=relaxed/simple;
+	bh=IFX+3v+vUS9YCIeKiKTjDAaKXNEZMuRRJOChFHrQovk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=si+u/c6MbWouryokLkSCGiTns59koG1Y45LAijbEq0Q9U8F8iCZGzlvWkEz3MLUxJA8Vk1Ivr8aWCcKFuKMDzGJZtKhyZL+GXOMvVHlp2pM8aydeap47eqR4yw5Rm9/TpUJbQ+rm1OiouLKXHeGlnIRB4NQmfgZ0vMI4HtIbHr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 141b5b664cc111f0b29709d653e92f7d-20250619
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:c2a26077-7b1e-40b0-b404-faf2d230091b,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:6493067,CLOUDID:ff7e6dd868d25dd7e522693d27707afc,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:1,IP:nil,URL
+	:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SP
+	R:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 141b5b664cc111f0b29709d653e92f7d-20250619
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 401056050; Thu, 19 Jun 2025 11:54:19 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 9EAF2E00891C;
+	Thu, 19 Jun 2025 11:54:19 +0800 (CST)
+X-ns-mid: postfix-685389EB-2938696
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id E482BE008900;
+	Thu, 19 Jun 2025 11:53:58 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	len.brown@intel.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH v2 0/4] PM: freezer: Add retry stats and D-state task logging for debugging
+Date: Thu, 19 Jun 2025 11:53:51 +0800
+Message-Id: <20250619035355.33402-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 01/10] x86/fred: Provide separate IRQ vs. NMI wrappers
- for entry from KVM
-To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jacob Pan <jacob.pan@linux.microsoft.com>,
-        Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-        Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20250612214849.3950094-1-sohil.mehta@intel.com>
- <20250612214849.3950094-2-sohil.mehta@intel.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <20250612214849.3950094-2-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On 6/12/2025 2:48 PM, Sohil Mehta wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Provide separate wrappers for forwarding IRQs vs NMIs from KVM in
-> anticipation of adding support for NMI source reporting, which will add
-> an NMI-only parameter, i.e. will further pollute the current API with a
-> param that is a hardcoded for one of the two call sites.
-> 
-> Opportunistically tag the non-FRED NMI wrapper __always_inline, as the
-> compiler could theoretically generate a function call and trigger and a
-                                                                     ^
-Nit, looks to me that this is an extra "and".
+In our internal testing of system suspend and process freezing behavior,
+we observed that the time taken to freeze userspace processes is often
+non-deterministic. On certain systems (e.g. desktop with Xorg), the freez=
+er
+frequently requires 5 to 6 retry iterations before all tasks are frozen.
+Upon investigation, we found that this instability is primarily caused by
+user processes entering D-state (TASK_UNINTERRUPTIBLE) during the freeze
+window. Since such tasks cannot be frozen and are not killable by signals=
+,
+they cause the freezer to repeatedly sleep and retry, resulting in:
+- Increased system suspend latency (from hundreds of milliseconds up to s=
+everal milliseconds)
+- Elevated CPU usage due to repeated full task list scans
+- In worst cases, freezer may fail
+This patchset introduces two debugging aids to help analyze and mitigate
+this issue:
 
-> (completely benign) "leaving noinstr" warning.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+- Patch 1: Add retry counter and report how many rounds freezing took
+- Patch 2: Log all D-state tasks in each freeze iteration
+- Patch 3: ensures pm_pr_dbg() works properly
+- Patch 4: simplifies state check
 
-Reviewed-by: Xin Li (Intel) <xin@zytor.com>
+These tools make it easier to identify problematic tasks and evaluate
+the impact of uninterruptible waits on suspend/resume stability.
+Tested on systems where D-state tasks (e.g. from Xorg or poll-heavy
+drivers) regularly delay suspend.
+
+With our patch:
+dmesg | grep -E 'elap|round'
+[   63.227193] freeze round: 0, task to freeze: 681
+[   63.228110] freeze round: 1, task to freeze: 1
+[   63.230248] freeze round: 2, task to freeze: 1
+[   63.234247] freeze round: 3, task to freeze: 1
+[   63.242270] freeze round: 4, task to freeze: 1
+[   63.250272] freeze round: 5, task to freeze: 1
+[   63.258516] freeze round: 6, task to freeze: 1
+[   63.266478] freeze round: 7, task to freeze: 0
+[   63.266481] Freezing user space processes completed (elapsed 0.039 sec=
+onds)
+[   63.266641] freeze round: 0, task to freeze: 4
+[   63.267347] freeze round: 1, task to freeze: 0
+[   63.267349] Freezing remaining freezable tasks completed (elapsed 0.00=
+0 seconds)
+[   74.452100] freeze round: 0, task to freeze: 686
+[   74.452781] freeze round: 1, task to freeze: 1
+[   74.454915] freeze round: 2, task to freeze: 1
+[   74.458947] freeze round: 3, task to freeze: 1
+[   74.466938] freeze round: 4, task to freeze: 1
+[   74.474950] freeze round: 5, task to freeze: 1
+[   74.482954] freeze round: 6, task to freeze: 1
+[   74.491320] freeze round: 7, task to freeze: 0
+[   74.491324] Freezing user space processes completed (elapsed 0.039 sec=
+onds)
+[   74.491485] freeze round: 0, task to freeze: 4
+[   74.492748] freeze round: 1, task to freeze: 0
+[   74.492750] Freezing remaining freezable tasks completed (elapsed 0.00=
+1 seconds)
+[   85.642102] freeze round: 0, task to freeze: 685
+[   85.642841] freeze round: 1, task to freeze: 1
+[   85.644974] freeze round: 2, task to freeze: 1
+[   85.648978] freeze round: 3, task to freeze: 1
+[   85.656972] freeze round: 4, task to freeze: 1
+[   85.665231] freeze round: 5, task to freeze: 1
+[   85.673492] freeze round: 6, task to freeze: 1
+[   85.682035] freeze round: 7, task to freeze: 0
+[   85.682039] Freezing user space processes completed (elapsed 0.040 sec=
+onds)
+[   85.682198] freeze round: 0, task to freeze: 4
+[   85.682972] freeze round: 1, task to freeze: 0
+[   85.682974] Freezing remaining freezable tasks completed (elapsed 0.00=
+0 seconds)
+[   96.863597] freeze round: 0, task to freeze: 678
+[   96.864298] freeze round: 1, task to freeze: 1
+[   96.866430] freeze round: 2, task to freeze: 1
+[   96.870477] freeze round: 3, task to freeze: 1
+[   96.878486] freeze round: 4, task to freeze: 1
+[   96.886463] freeze round: 5, task to freeze: 1
+[   96.894745] freeze round: 6, task to freeze: 1
+[   96.903120] freeze round: 7, task to freeze: 0
+[   96.903124] Freezing user space processes completed (elapsed 0.040 sec=
+onds)
+[   96.903288] freeze round: 0, task to freeze: 4
+[   96.904480] freeze round: 1, task to freeze: 0
+[   96.904482] Freezing remaining freezable tasks completed (elapsed 0.00=
+1 seconds)
+[  108.026657] freeze round: 0, task to freeze: 678
+[  108.027363] freeze round: 1, task to freeze: 1
+[  108.029476] freeze round: 2, task to freeze: 1
+[  108.033527] freeze round: 3, task to freeze: 1
+[  108.041510] freeze round: 4, task to freeze: 1
+[  108.049774] freeze round: 5, task to freeze: 1
+[  108.057485] freeze round: 6, task to freeze: 0
+[  108.057487] Freezing user space processes completed (elapsed 0.031 sec=
+onds)
+[  108.057604] freeze round: 0, task to freeze: 4
+[  108.058474] freeze round: 1, task to freeze: 0
+[  108.058476] Freezing remaining freezable tasks completed (elapsed 0.00=
+0 seconds)
+[  119.171536] freeze round: 0, task to freeze: 678
+[  119.172301] freeze round: 1, task to freeze: 1
+[  119.174402] freeze round: 2, task to freeze: 1
+[  119.178445] freeze round: 3, task to freeze: 1
+[  119.186442] freeze round: 4, task to freeze: 1
+[  119.194445] freeze round: 5, task to freeze: 1
+[  119.202425] freeze round: 6, task to freeze: 1
+[  119.210572] freeze round: 7, task to freeze: 0
+[  119.210576] Freezing user space processes completed (elapsed 0.039 sec=
+onds)
+[  119.210733] freeze round: 0, task to freeze: 4
+[  119.211435] freeze round: 1, task to freeze: 0
+[  119.211437] Freezing remaining freezable tasks completed (elapsed 0.00=
+0 seconds)
+[  130.577681] freeze round: 0, task to freeze: 688
+[  130.578819] freeze round: 1, task to freeze: 3
+[  130.580489] freeze round: 2, task to freeze: 3
+[  130.584525] freeze round: 3, task to freeze: 3
+[  130.592511] freeze round: 4, task to freeze: 3
+[  130.600496] freeze round: 5, task to freeze: 3
+[  130.608495] freeze round: 6, task to freeze: 3
+[  130.616642] freeze round: 7, task to freeze: 2
+[  130.624597] freeze round: 8, task to freeze: 1
+[  130.632868] freeze round: 9, task to freeze: 1
+[  130.640430] freeze round: 10, task to freeze: 0
+[  130.640434] Freezing user space processes completed (elapsed 0.063 sec=
+onds)
+[  130.640592] freeze round: 0, task to freeze: 4
+[  130.641397] freeze round: 1, task to freeze: 0
+[  130.641399] Freezing remaining freezable tasks completed (elapsed 0.00=
+0 seconds)
+[  142.024896] freeze round: 0, task to freeze: 687
+[  142.025680] freeze round: 1, task to freeze: 3
+[  142.027855] freeze round: 2, task to freeze: 3
+[  142.031872] freeze round: 3, task to freeze: 3
+[  142.039876] freeze round: 4, task to freeze: 3
+[  142.048215] freeze round: 5, task to freeze: 3
+[  142.055875] freeze round: 6, task to freeze: 3
+[  142.063839] freeze round: 7, task to freeze: 2
+[  142.071957] freeze round: 8, task to freeze: 2
+[  142.080048] freeze round: 9, task to freeze: 2
+[  142.088052] freeze round: 10, task to freeze: 2
+[  142.096595] freeze round: 11, task to freeze: 2
+[  142.104908] freeze round: 12, task to freeze: 1
+[  142.112904] freeze round: 13, task to freeze: 1
+[  142.121407] freeze round: 14, task to freeze: 0
+[  142.121411] Freezing user space processes completed (elapsed 0.097 sec=
+onds)
+[  142.121573] freeze round: 0, task to freeze: 4
+[  142.122944] freeze round: 1, task to freeze: 0
+[  142.122948] Freezing remaining freezable tasks completed (elapsed 0.00=
+1 seconds)
+[  153.374096] freeze round: 0, task to freeze: 687
+[  153.374840] freeze round: 1, task to freeze: 3
+[  153.377042] freeze round: 2, task to freeze: 3
+[  153.381074] freeze round: 3, task to freeze: 3
+[  153.389017] freeze round: 4, task to freeze: 2
+[  153.397331] freeze round: 5, task to freeze: 2
+[  153.405600] freeze round: 6, task to freeze: 1
+[  153.413910] freeze round: 7, task to freeze: 0
+[  153.413913] Freezing user space processes completed (elapsed 0.040 sec=
+onds)
+[  153.414073] freeze round: 0, task to freeze: 4
+[  153.414974] freeze round: 1, task to freeze: 0
+[  153.414976] Freezing remaining freezable tasks completed (elapsed 0.00=
+1 seconds)
+[  164.640178] freeze round: 0, task to freeze: 687
+[  164.640865] freeze round: 1, task to freeze: 3
+[  164.643050] freeze round: 2, task to freeze: 3
+[  164.647084] freeze round: 3, task to freeze: 3
+[  164.655014] freeze round: 4, task to freeze: 2
+[  164.663304] freeze round: 5, task to freeze: 2
+[  164.671018] freeze round: 6, task to freeze: 2
+[  164.679274] freeze round: 7, task to freeze: 1
+[  164.687812] freeze round: 8, task to freeze: 0
+[  164.687815] Freezing user space processes completed (elapsed 0.048 sec=
+onds)
+[  164.687971] freeze round: 0, task to freeze: 4
+[  164.688969] freeze round: 1, task to freeze: 0
+[  164.688971] Freezing remaining freezable tasks completed (elapsed 0.00=
+1 seconds)
+
+
+With our patch:
+[   62.880497] PM: suspend entry (deep)
+[   63.130639] Filesystems sync: 0.249 seconds
+[   63.130643] PM: Preparing system for sleep (deep)
+[   63.226398] Freezing user space processes
+[   63.227193] freeze round: 0, task to freeze: 681
+[   63.228110] freeze round: 1, task to freeze: 1
+[   63.230064] task:Xorg            state:D stack:0     pid:1404  tgid:14=
+04  ppid:1348   task_flags:0x400100 flags:0x00004004
+[   63.230068] Call Trace:
+[   63.230069]  <TASK>
+[   63.230071]  __schedule+0x52e/0xea0
+[   63.230077]  schedule+0x27/0x80
+[   63.230079]  schedule_timeout+0xf2/0x100
+[   63.230082]  wait_for_completion+0x85/0x130
+[   63.230085]  __flush_work+0x21f/0x310
+[   63.230087]  ? __pfx_wq_barrier_func+0x10/0x10
+[   63.230091]  drm_mode_rmfb+0x138/0x1b0
+[   63.230093]  ? __pfx_drm_mode_rmfb_work_fn+0x10/0x10
+[   63.230095]  ? __pfx_drm_mode_rmfb_ioctl+0x10/0x10
+[   63.230097]  drm_ioctl_kernel+0xa5/0x100
+[   63.230099]  drm_ioctl+0x270/0x4b0
+[   63.230101]  ? __pfx_drm_mode_rmfb_ioctl+0x10/0x10
+[   63.230104]  ? syscall_exit_work+0x108/0x140
+[   63.230107]  radeon_drm_ioctl+0x4a/0x80 [radeon]
+[   63.230141]  __x64_sys_ioctl+0x93/0xe0
+[   63.230144]  ? syscall_trace_enter+0xfa/0x1c0
+[   63.230146]  do_syscall_64+0x7d/0x2c0
+[   63.230148]  ? do_syscall_64+0x1f3/0x2c0
+[   63.230150]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   63.230153] RIP: 0033:0x7f1aa132550b
+[   63.230154] RSP: 002b:00007ffebab69678 EFLAGS: 00000246 ORIG_RAX: 0000=
+000000000010
+[   63.230156] RAX: ffffffffffffffda RBX: 00007ffebab696bc RCX: 00007f1aa=
+132550b
+[   63.230158] RDX: 00007ffebab696bc RSI: 00000000c00464af RDI: 000000000=
+000000e
+[   63.230159] RBP: 00000000c00464af R08: 00007f1aa0c41220 R09: 000055a71=
+ce32310
+[   63.230160] R10: 0000000000000087 R11: 0000000000000246 R12: 000055a71=
+b813660
+[   63.230161] R13: 000000000000000e R14: 0000000003a8f5cd R15: 000055a71=
+b6bbfb0
+[   63.230164]  </TASK>
+[   63.230248] freeze round: 2, task to freeze: 1
+
+Changes in v2:
+- Add retry count statistics and print D-state process=20
+
+Zihuan Zhang (4):
+  PM: freezer: Add retry count statistics for freeze pass iterations
+  PM: freezer: Print tasks stuck in D-state during freeze
+  PM: suspend: Assign pm_suspend_target_state earlier for valid debug
+    logs
+  PM: suspend: Simplify state check using sleep_state_supported()
+
+ kernel/power/process.c |  7 +++++++
+ kernel/power/suspend.c | 17 +++++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
+
+--=20
+2.25.1
+
 
