@@ -1,144 +1,108 @@
-Return-Path: <linux-pm+bounces-29068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29069-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4D8AE0427
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 13:43:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28F07AE0453
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 13:50:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 701F11885B74
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 11:41:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0931918890BE
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 11:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5752264DD;
-	Thu, 19 Jun 2025 11:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D93230278;
+	Thu, 19 Jun 2025 11:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FeJazXEM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJBUADiP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EE622539D
-	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 11:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824A7221704;
+	Thu, 19 Jun 2025 11:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750333296; cv=none; b=Z+J9Nybgxm7Jc9ju2MfIFPEeOS+GvsORn2weSC92M7yM5k0zgFSp/Hnjo/+mzQFX6wOybH8JI0fLIdljZ0BdLpLA/g/ThPsrB4vCMVwkBUdwzlpdp/Z6h4tK9v6uyIPYtnXKe5eTCx6GyBOi1RPcSN1FNb9d5yZrs1wxJsUq6Ms=
+	t=1750333805; cv=none; b=IA/eBxlT3Bh10/IlZcH7n2gYe/SmzHhuXGqjsafqtnKxrPpZ4szfwjYWYvOxCAsNPrh9UD9G2MAyaWMuDvlTJZEOh9k2JmOd0nWzqXRv9AOMvJBKO0pXAeE5g7NIzy5821ZTWmzn4sTWy6pt+Jn/SCWRhAVLyzi7cxZJpIVqeiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750333296; c=relaxed/simple;
-	bh=FNkRJbjUbXtGGE6vjhHrYlnt1hp6guFu6M6ANMABhwU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oBzJweDM9GWAGXQlHtc0jAt0h/Ium47tTAzCoj51orsQkxg0W6pQNFwFiK6DA+ZQCOLRT2ntmOpR0GNPe09+arYgwhXMmUTpTUlRc/YEXp9MJ7jo0SEK6qf5wuOPIBFtFcYKMOIXjOFm94kQhwHX4VCkXNYfezpZwEZPjDMVeNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FeJazXEM; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e82596e88c4so652703276.1
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 04:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750333294; x=1750938094; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Gg7ntijtB80tv+b2enRtRMmTEicRNdW1NiQNVbSDNo=;
-        b=FeJazXEMOjHde4QHNCFjVSVDnhPcE6Xy0G5YeyvdEcbZ8YEaokBq+Ys4zrqtht0bdR
-         5TLVJQvgAjU7sKdEdpz2j4e0JtpV0eScMMbx3TU02Csu072OndkAQyvVCPOsuxDGNWJM
-         r7ujWsdP7Ick8ifhdGDIF0NDBpGQ1Y/jWzT6rPAcn8cI5nC5+fqizuHgIGKY2AbpbV+w
-         mVB5qoRSBMGugRh1RlaUovWtwgmSmyvvXr2yloHc0Q8rc+9u48IQa89nnaCCaIT73VO1
-         5l7wR7bnZhLx9eyvpmsdnlIi5nLVS2vkt5ahMEfIMqoe637wU1NZFEY+LyDLxj2IK5hx
-         BeWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750333294; x=1750938094;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Gg7ntijtB80tv+b2enRtRMmTEicRNdW1NiQNVbSDNo=;
-        b=ki7aipEMMbBp5on2O4CG+UmCgKU/vlHiwQKp8pHVHM1sLAEksGOlySF6TbOOaM38J4
-         mplvWP9XRIEpx1X0yDTgjP2W+uG/+PeIlW11oavNGv8Wy3G2T3OzVpEXCdyJhzYRNvaX
-         BaXt9F07ImGv2ffEgHd8+NemdQVIxDkJ3LodAp3v/Z1DXpWonv5DmilkNzaqFFvvauIl
-         DsjY35EvzaMKPfOy4mlXAXMYaWX+Xtrt45TkIfi0gImhxfjB8g5olRgzHyrwNnl5T0nf
-         KFpPUqrsmyQHoouabc+1DHHYmFpW8kJeyZzXeBiZINEZs6PUu4H7CZZrm9OuNrLu6CYn
-         pOKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUUY81QMPJQRUMDoYxZPYAWQnF44A6bhFdpH1nyCpWria+khzd9TMhcmRvmJnKmht1qMG83i5msAQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyieR8vJp3pNc75dt6VXgzpuWUOx9njj8GT3g7U+c0O/pxITqB2
-	yAxu28WBZekNaV43+YVnqiYToG0c0d8ztQHR3qIBC65pG2db+uk7BPSsVrblrBTOPfqJUhsjTLC
-	9PGmHDA/YvAgPqZNpsa+ysYRQ2eFjkPMfzQC5ZvFZoA==
-X-Gm-Gg: ASbGncvdEjNyY3idDImFtlPKE4+viRUwytzdY+jO90B/sCT3hGjXbFUw8o7LKLnuAkR
-	hEj2kFOJPg8japxuewmbtGytTFOq1QKYnYgswbXfwF8frHSqmqK/GxW6FdKBkwzNJkcLwqurK3k
-	xriCYc95OxRVOwIhch2WPezhRCeTCFK+pIm7VscU1LlpDh
-X-Google-Smtp-Source: AGHT+IESytQv1SK+Cd0PiaLJS4H3+JL25iRqvMAyP4xLxjP0vD5U9p3Ec+J/uOKogngm7hlSby5T2PNl/VdbIi6REWE=
-X-Received: by 2002:a05:6902:1b8e:b0:e81:9d60:93a4 with SMTP id
- 3f1490d57ef6-e822acac581mr30264102276.10.1750333293696; Thu, 19 Jun 2025
- 04:41:33 -0700 (PDT)
+	s=arc-20240116; t=1750333805; c=relaxed/simple;
+	bh=xcXMxMStMR8/rb3GKA1jioXnMSxQsU2Ozqjqe/yF1w4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cYyh2maadk7gA6pk2/oD9AbS4sVsxNvk8N+7bsHs/ltZJgHeBULH4JsHNFk3m5ZhxTgSWUlK8a6sUPSsngEVLqLH3/yn/XU8ZoQiLXvU36B6zdn3qq1ppAFH/Tc80kjo+KpTNTDlsUypmlCc3zTeYguQ+0pTOeNhn4vyOxTCyiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJBUADiP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B52C4CEEA;
+	Thu, 19 Jun 2025 11:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750333805;
+	bh=xcXMxMStMR8/rb3GKA1jioXnMSxQsU2Ozqjqe/yF1w4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iJBUADiP0/X9+azGm/g0vceCBNhs6nGkYRctOjZ0QujbBcVw07QEuw90FiyNinK/F
+	 NfZ37rkV0sUP/G0oblx/GVCfEyXj/nhORcmp5qDKSX0KH3ot5K7K59vws1ab9u98Lq
+	 EJoWZgGz25N5q51nkLZxnbG4upiC8/EdjQ/1y/YDTUhEIrC8aEDgvYIxCJ8RpieFcI
+	 rVHrJS0yuA3ss51VZzsJ4cSoJHpoOVA5SxIfiC93NY9Py8Y8VzT/lpbSGO9BzGefL0
+	 Vz9D/grzsbiLENfOJmkZpKpjPCCVMTxRsZEVtE/ahvL6O4duPDOE61p95G5saaxSRZ
+	 FiFGUqm7XKKiQ==
+Date: Thu, 19 Jun 2025 12:49:58 +0100
+From: Lee Jones <lee@kernel.org>
+To: Sven Peter <sven@kernel.org>
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 05/10] mfd: Add Apple Silicon System Management
+ Controller
+Message-ID: <20250619114958.GJ587864@google.com>
+References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
+ <20250610-smc-6-15-v7-5-556cafd771d3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523134025.75130-1-ulf.hansson@linaro.org> <fd4cfe7a-e29b-4237-b82f-48354deead3b@ideasonboard.com>
-In-Reply-To: <fd4cfe7a-e29b-4237-b82f-48354deead3b@ideasonboard.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 19 Jun 2025 13:40:57 +0200
-X-Gm-Features: AX0GCFuFeZwy4zEBgov1_20jiDIxj_2DarP8G86PtCbzf_bxqvHrj-WuuKyOtBY
-Message-ID: <CAPDyKFpprO=HGuiHX3MQ_+m1YRnaWG=XwCx8-fSdXak8VBDUbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/21] pmdomain: Add generic ->sync_state() support to genpd
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Johan Hovold <johan@kernel.org>, Maulik Shah <maulik.shah@oss.qualcomm.com>, 
-	Michal Simek <michal.simek@amd.com>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250610-smc-6-15-v7-5-556cafd771d3@kernel.org>
 
-On Fri, 13 Jun 2025 at 12:33, Tomi Valkeinen
-<tomi.valkeinen@ideasonboard.com> wrote:
->
-> Hi Ulf,
->
-> On 23/05/2025 16:39, Ulf Hansson wrote:
-> > Changes in v2:
-> >       - Well, quite a lot as I discovered various problems when doing
-> >       additional testing of corner-case. I suggest re-review from scratch,
-> >       even if I decided to keep some reviewed-by tags.
-> >       - Added patches to allow some drivers that needs to align or opt-out
-> >       from the new common behaviour in genpd.
-> >
-> > If a PM domain (genpd) is powered-on during boot, there is probably a good
-> > reason for it. Therefore it's known to be a bad idea to allow such genpd to be
-> > powered-off before all of its consumer devices have been probed. This series
-> > intends to fix this problem.
-> >
-> > We have been discussing these issues at LKML and at various Linux-conferences
-> > in the past. I have therefore tried to include the people I can recall being
-> > involved, but I may have forgotten some (my apologies), feel free to loop them
-> > in.
-> >
-> > I have tested this with QEMU with a bunch of local test-drivers and DT nodes.
-> > Let me know if you want me to share this code too.
-> >
-> > Please help review and test!
->
-> I tested this Renesas white-hawk board, and it hangs at boot. With
-> earlycon, I captured with/without boot logs, attached.
->
-> The hang case doesn't look very healthy with all these: "kobject:
-> '(null)' ((____ptrval____)): is not initialized, yet kobject_get() is
-> being called."
+On Tue, 10 Jun 2025, Sven Peter wrote:
 
-Tomi, thanks a lot for helping out with testing!
+> The System Management Controller (SMC) on Apple Silicon machines is a
+> piece of hardware that exposes various functionalities such as
+> temperature sensors, voltage/power meters, shutdown/reboot handling,
+> GPIOs and more.
+> 
+> Communication happens via a shared mailbox using the RTKit protocol
+> which is also used for other co-processors. The SMC protocol then allows
+> reading and writing many different keys which implement the various
+> features. The MFD core device handles this protocol and exposes it
+> to the sub-devices.
+> 
+> Some of the sub-devices are potentially also useful on pre-M1 Apple
+> machines and support for SMCs on these machines can be added at a later
+> time.
+> 
+> Co-developed-by: Hector Martin <marcan@marcan.st>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Signed-off-by: Sven Peter <sven@kernel.org>
+> ---
+>  MAINTAINERS                |   2 +
+>  drivers/mfd/Kconfig        |  18 ++
+>  drivers/mfd/Makefile       |   1 +
+>  drivers/mfd/macsmc.c       | 498 +++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/macsmc.h | 279 +++++++++++++++++++++++++
+>  5 files changed, 798 insertions(+)
 
-rcar_gen4_sysc_pd_init() calls pm_genpd_init() and
-of_genpd_add_provider_onecell().
+This is ready.  Let me know when you have all of the other driver/* Acks.
 
-rcar_gen4_sysc_pd_init() is an early_initcall, which I guess is the
-reason for these problems, as the genpd_provider_bus has not been
-registered that early (it's done at core_initcall)
-
-Do you think it would be possible to move rcar_gen4_sysc_pd_init() to
-a postcore/arch_initcall?
-
-Kind regards
-Uffe
+-- 
+Lee Jones [李琼斯]
 
