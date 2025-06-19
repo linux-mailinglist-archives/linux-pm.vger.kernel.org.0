@@ -1,217 +1,111 @@
-Return-Path: <linux-pm+bounces-29051-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29052-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3379ADFE4C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 09:04:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 149BDADFE60
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 09:08:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40E2A163BFA
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 06:58:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DD793A1D01
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 07:06:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 662DC2472B8;
-	Thu, 19 Jun 2025 06:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C05246790;
+	Thu, 19 Jun 2025 07:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="alG2FtT3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jITB6Yxw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA3321B8F5;
-	Thu, 19 Jun 2025 06:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF04242D8C
+	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 07:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750316308; cv=none; b=ov+pFTuP45faX14lsFD3TXOH2+fi5HFQH3bY1jStFFPjOOY2EdVw584qiA110QH1RQzJFhdVTtLPg3RLgm17BwgIzvj27K3kGfd1pkKqjNTP5dke26X54KqQy+ReVqa3sIWooG18qiuJplox33WepEYYkx7SZs5CV/K9J9dYN2c=
+	t=1750316823; cv=none; b=b0ftzq67Q4HzBV1JZ8wZ0nJtoRq+xxRQihFTDj9hQPtanZxZ9KVKs94R8hSOAddLB7eN7ktD1Jx3D0T+vXgUdy30heC10oEUWVtWorLxjHeRkv2xjk8tVndJEAuIuQG6A4yRu8waf6TNtg0Wth/LzLCFiRAkAU3gP6U2dRqpctI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750316308; c=relaxed/simple;
-	bh=tL14BD8Yh5kWnpy+bfzqyRdCOXWQ8nMEwYBpreKExhI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=bEqc+XBo1SRL1tQeEFnYxkB32W6S1r2Ty3s+jGrho0i4goVBGdhpF8jUHCLLOnY/ZNoApIVKZA/y99eVdZvHPKx7VQ8xim6gs176uFEQhjZRN7L2TgcrDzBjoagsOdUc+xtKh5IsnUwVa/5gBjqH1bBJvG1ysCIsnwx9lmBkW54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=alG2FtT3; arc=none smtp.client-ip=134.0.28.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-	by mxout2.routing.net (Postfix) with ESMTP id 50A125FB6C;
-	Thu, 19 Jun 2025 06:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1750316302;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=njQ31qrrY9HaE80KOkYp3xG43496qOQx+zhSn6xjDeA=;
-	b=alG2FtT3L898ztBmhlM2pSNVcjIkFUk7/1xSwM2dgG9YK2I3a0t48c4zf1DP18CV4lZJhI
-	cqhxtGUORlrTEY7zuo0CEIIN+s8RdFddsgQkMegRs9RelFqdh9G11AtkR7FfHwhbCUqP+M
-	xZWy4Bx1lY8WMMg4m782Pb82ISFh3ck=
-Received: from [127.0.0.1] (fttx-pool-80.245.76.73.bambit.de [80.245.76.73])
-	by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 72C3D808E4;
-	Thu, 19 Jun 2025 06:58:20 +0000 (UTC)
-Date: Thu, 19 Jun 2025 08:58:20 +0200
-From: Frank Wunderlich <linux@fw-web.de>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>
-CC: Frank Wunderlich <frank-w@public-files.de>,
- Jia-Wei Chang <jia-wei.chang@mediatek.com>,
- Johnson Wang <johnson.wang@mediatek.com>,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>,
- Sean Wang <sean.wang@mediatek.com>, Daniel Golle <daniel@makrotopia.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v4 00/13] further mt7988 devicetree work
-User-Agent: K-9 Mail for Android
-In-Reply-To: <9cdf0624-f9bb-4b11-973e-9480fd655136@collabora.com>
-References: <20250616095828.160900-1-linux@fw-web.de> <9cdf0624-f9bb-4b11-973e-9480fd655136@collabora.com>
-Message-ID: <40C42E40-25C3-4FB2-8EB4-E7FCB677E415@fw-web.de>
+	s=arc-20240116; t=1750316823; c=relaxed/simple;
+	bh=gIrndrxqEQYIbQKwOcS4Mln3+RBHF7hskkcp5VOAKaQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aihpgPBE84/hY8z9UzUFn7rzw9k0I91LJ7GBJdFsfoQr3Ijlywk4SvqdL8PYaydzK/BgFsAlCxxiAXd7OjpUa+cW/HPq4jtFSSuNs33ijvTVgUbXYCMjXVvbMqd9ju4d/DgD96PtKgvb0ivq2EqQJ3dPvtoygt7bhs7peu1xDC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jITB6Yxw; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-af6a315b491so467536a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 00:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750316821; x=1750921621; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IymuwWFz5efXWH2kgyyNSxlRPSBhBIlq8B6srm/Era0=;
+        b=jITB6YxwNdiziytTZMmOunSrMJYwnfFJlf59FgIG1M1zfjzHw1YCXXr1cL3RxvSt9g
+         pPfWHXi/GNu71l2fiKMDAD72d9CJ3Y9UoIV/RsDOorBaVU3gOBolh+p8n5rfDQRzibJ7
+         TwTnQKtw0DDJmlBWvmz0kjxdyTtr26oBtIGcjGMdiAxz8IY+WfbJ7QJTYsG1DRpmxAvm
+         06Rh09Bq0BurbrmGwM0b0/oKXjAsZuiyEg9rXqfaE+LlAFBq9JT6ZH8aHeIlg+yxjH4X
+         uFpnAKJ9eCSPTjVWwOg/a8LLN7UT89MEkyFa3m6rQgjEWpV2uqHy1QcfXVeWOXZ+3zx2
+         Og4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750316821; x=1750921621;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IymuwWFz5efXWH2kgyyNSxlRPSBhBIlq8B6srm/Era0=;
+        b=QZAtquPTlXIQIFTeA+CYSJbeA00Zb+tBTVefxUF4hf9RWbyu/kG8xWZftG81mH9XYe
+         XrrMwfur47ncSmZnvBTHYFD64vNXnfXJJ1BznI782ihMPDSV40kAvhhCeV8hXu9w7lW4
+         WmYt+u+jL3xyNiio0vfCvUbPfVqWknjsyoaDF6v8RytqT/V1eG2IXPOt4hqnalKeTs5K
+         UrQbplVlU5N3rBWS5jiu3fYEZe1IP9CXMLl04lKLt8AZua6hS8jSNYLpT6Xa8TZ8n/Cq
+         Thjvx1kafZglimYCyTTI/ywDhTI+hPQ9h/iIJ/VvMdES0X1kztDnPyfnRtf4/MQ8rLn0
+         lUpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWi0dIYiytD7uE3rTuGflfFKza0kbvbtFRIgMAlLMBWLxolah5xTtoOglG1zmf/VMW06SP/F132Vw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLEv1qHbz8UcAvRwLsUW2hp8CaQ9a8x8Mg8MpuXcNvSaLwL1F+
+	CZzuaB8ZBF7xM73NrmwWIVtDrwL7F00Gv2aBZ7+cEKawfdj2FwPoz0AvQTUZpf+lYR0=
+X-Gm-Gg: ASbGncuqwT0ZY1Cw+kkb8hbpRXCmemnPnNSaC/OSLiYvqfTCivH8HLlsQtRY0rDq6LN
+	RFeHi91qgKj7b8JNVbf2GP+bkKOsh5OD/y1VPiNKGWfzb5GfptApxjuIqXLA9AdOPK2ilszEBrC
+	cK+HqpBX82KDbgMi3zSlG94Z7GpNizT6qPVMmRhHP4Cpa2+dx2DjK5gdnN71KbWL+NNeIGUy/5T
+	mhXk5QNevTqychnsSMCstNRd83MIwM9miJvjmcdG5pwzCj5iCe3KupGx3lGKZClzFOqjZpQGX+j
+	ebl6r3+WKnitVHaGID2K3jSejRoT+tMSZkThsuqIUMHqx7M/bU9jehOX4eHej3I=
+X-Google-Smtp-Source: AGHT+IGyYaOKIL36CbVXP5wK2R0Ni0YKSM2IJpGDucT9Et2S+y0DrU3AlyTGX8LLr5798o70TnJH/A==
+X-Received: by 2002:a17:90b:380c:b0:311:baa0:89ce with SMTP id 98e67ed59e1d1-313f1c06bf5mr36604358a91.12.1750316820675;
+        Thu, 19 Jun 2025 00:07:00 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3158a23e627sm1365892a91.18.2025.06.19.00.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 00:07:00 -0700 (PDT)
+Date: Thu, 19 Jun 2025 12:36:57 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: brcmstb-avs: Fully open-code compatible for
+ grepping
+Message-ID: <20250619070657.dshqwhulzadxpyz3@vireshk-i7>
+References: <20250613071643.46754-2-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: 376531bd-c831-454f-b55f-f96f05563171
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613071643.46754-2-krzysztof.kozlowski@linaro.org>
 
-Am 19=2E Juni 2025 07:57:09 MESZ schrieb AngeloGioacchino Del Regno <angelo=
-gioacchino=2Edelregno@collabora=2Ecom>:
->Il 16/06/25 11:58, Frank Wunderlich ha scritto:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->
->I think that this series is ready to be applied; however, I need someone =
-to take
->the bindings before I can apply the devicetree part to the MediaTek trees=
-=2E
+On 13-06-25, 09:16, Krzysztof Kozlowski wrote:
+> It is very useful to find driver implementing compatibles with `git grep
+> compatible`, so driver should not use defines for that string, even if
+> this means string will be effectively duplicated.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/cpufreq/brcmstb-avs-cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please wait a bit for the eth part=2E=2E=2Eseems like reserved irqs are no=
-t unusable as i thought=2E=2E=2Ei think we should upstream them too and may=
-be with different names=2E=2E=2Eas they are not fixed to function in hardwa=
-re=2E
+Applied. Thanks.
 
->Cheers,
->Angelo
->
->
->> This series continues mt7988 devicetree work
->>=20
->> - Extend cpu frequency scaling with CCI
->> - GPIO leds
->> - Basic network-support (ethernet controller + builtin switch + SFP Cag=
-es)
->>=20
->> depencies (i hope this list is complete and latest patches/series linke=
-d):
->>=20
->> support interrupt-names because reserved IRQs are now dropped, so index=
- based access is now wrong
->> https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/20250616080738=
-=2E117993-2-linux@fw-web=2Ede/
->>=20
->> for SFP-Function (macs currently disabled):
->>=20
->> PCS clearance which is a 1=2E5 year discussion currently ongoing
->>=20
->> e=2Eg=2E something like this (one of):
->> * https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/202506102331=
-34=2E3588011-4-sean=2Eanderson@linux=2Edev/ (v6)
->> * https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/202505112012=
-50=2E3789083-4-ansuelsmth@gmail=2Ecom/ (v4)
->> * https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/ba4e359584a6=
-b3bc4b3470822c42186d5b0856f9=2E1721910728=2Egit=2Edaniel@makrotopia=2Eorg/
->>=20
->> full usxgmii driver:
->> https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/07845ec900ba41=
-ff992875dce12c622277592c32=2E1702352117=2Egit=2Edaniel@makrotopia=2Eorg/
->>=20
->> first PCS-discussion is here:
->> https://patchwork=2Ekernel=2Eorg/project/netdevbpf/patch/8aa905080bdb67=
-60875d62cb3b2b41258837f80e=2E1702352117=2Egit=2Edaniel@makrotopia=2Eorg/
->>=20
->> and then dts nodes for sgmiisys+usxgmii+2g5 firmware
->>=20
->> when above depencies are solved the mac1/2 can be enabled and 2=2E5G ph=
-y/SFP slots will work=2E
->>=20
->> changes:
->> v4:
->>    net-binding:
->>      - allow interrupt names and increase max interrupts to 6 because o=
-f RSS/LRO interrupts
->>        (dropped Robs RB due to this change)
->>=20
->>    dts-patches:
->>    - add interrupts for RSS/LRO and interrupt-names for ethernet node
->>    - eth-reg and clock whitespace-fix
->>    - comment for fixed-link on gmac0
->>    - drop phy-mode properties as suggested by andrew
->>    - drop phy-connection-type on 2g5 board
->>    - reorder some properties
->>    - update 2g5 phy node
->>      - unit-name dec instead of hex to match reg property
->>      - move compatible before reg
->>      - drop phy-mode
->>=20
->> v3:
->>    - dropped patches already applied (SPI+thermal)
->>    - added soc specific cci compatible (new binding patch + changed dts=
-)
->>    - enable 2g5 phy because driver is now merged
->>    - add patch for cleaning up unnecessary pins
->>    - add patch for gpio-leds
->>    - add patch for adding ethernet aliases
->>=20
->> v2:
->>    - change reg to list of items in eth binding
->>    - changed mt7530 binding:
->>      - unevaluatedProperties=3Dfalse
->>      - mediatek,pio subproperty
->>      - from patternProperty to property
->>    - board specific properties like led function and labels moved to bp=
-i-r4 dtsi
->>=20
->>=20
->> Frank Wunderlich (13):
->>    dt-bindings: net: mediatek,net: update for mt7988
->>    dt-bindings: net: dsa: mediatek,mt7530: add dsa-port definition for
->>      mt7988
->>    dt-bindings: net: dsa: mediatek,mt7530: add internal mdio bus
->>    dt-bindings: interconnect: add mt7988-cci compatible
->>    arm64: dts: mediatek: mt7988: add cci node
->>    arm64: dts: mediatek: mt7988: add basic ethernet-nodes
->>    arm64: dts: mediatek: mt7988: add switch node
->>    arm64: dts: mediatek: mt7988a-bpi-r4: add proc-supply for cci
->>    arm64: dts: mediatek: mt7988a-bpi-r4: drop unused pins
->>    arm64: dts: mediatek: mt7988a-bpi-r4: add gpio leds
->>    arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for ethernet
->>    arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and link to gmac
->>    arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phys and leds
->>=20
->>   =2E=2E=2E/bindings/interconnect/mediatek,cci=2Eyaml   |  11 +-
->>   =2E=2E=2E/bindings/net/dsa/mediatek,mt7530=2Eyaml     |  24 +-
->>   =2E=2E=2E/devicetree/bindings/net/mediatek,net=2Eyaml |  28 +-
->>   =2E=2E=2E/mediatek/mt7988a-bananapi-bpi-r4-2g5=2Edts  |  11 +
->>   =2E=2E=2E/dts/mediatek/mt7988a-bananapi-bpi-r4=2Edts  |  19 ++
->>   =2E=2E=2E/dts/mediatek/mt7988a-bananapi-bpi-r4=2Edtsi | 198 ++++++---=
---
->>   arch/arm64/boot/dts/mediatek/mt7988a=2Edtsi     | 307 +++++++++++++++=
-++-
->>   7 files changed, 498 insertions(+), 100 deletions(-)
->>=20
->
->
-
-
-regards Frank
+-- 
+viresh
 
