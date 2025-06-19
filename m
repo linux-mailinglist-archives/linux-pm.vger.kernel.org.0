@@ -1,813 +1,530 @@
-Return-Path: <linux-pm+bounces-29101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B474AE0A5E
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 17:27:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CE81AE0AC5
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 17:43:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2872518821C6
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 15:22:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E50BF1883578
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 15:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A385221C188;
-	Thu, 19 Jun 2025 15:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD9B23AB95;
+	Thu, 19 Jun 2025 15:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Slj00ywT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05251B3923
-	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 15:22:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D87231858;
+	Thu, 19 Jun 2025 15:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750346543; cv=none; b=qUlPXNPSQbBqD1ZxhjVkv/Gcfyq6KV6lN6Fh2WFYEj55dO9kx+yBWkOzZjusDWiOQUAp1nWohO3Aa+olGOp3/G1MmcXIxa9RUErIqv9AyqhGcHPrTBdRPsepR7dLSdidVae22KDdSckYRmS1aKXopWFx2sjxMjpFiPbs71CJk44=
+	t=1750347730; cv=none; b=e9oBnlMLN+7NQnFlEtxe8ivibEUI0vWeNBW0lsyQBWNiZVtx1Lk5qhTjMi2DruJ06HFxldpJFCy9cgqrGsw+TUzx7NtcNZAHrmisLINzi8AB1wAiEy1S3kziaJvhnKFdGK9JWWZoPpmvyWboC1KQGL1hj/lKh7IMgx9+wI6bNyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750346543; c=relaxed/simple;
-	bh=6Bc4LZUcYXAF7opw9yT3fjt+PiaPgFdxlJls+QGdvOI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XTrYP1mMIzy4fJPEkkP+J8axd4dozcFvYY8ADiQZO1kPPVFNAkRZ4FmGYA3XYgKQPWXqn8+NVN0mJZSAFXhooZVEOaFiPhoO+cGgR4F9mAWGSKc7VFgzSFAnOFXERW+/6XqC5ALbX4ofuOaGv+qpe8gVbqRG/H6b400d0TryOUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4bNPRl52jTzvZCp;
-	Thu, 19 Jun 2025 23:20:03 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id DC4B41400D9;
-	Thu, 19 Jun 2025 23:22:16 +0800 (CST)
-Received: from localhost.localdomain (10.90.31.46) by
- kwepemo100006.china.huawei.com (7.202.195.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 19 Jun 2025 23:22:10 +0800
-From: Jie Zhan <zhanjie9@hisilicon.com>
-To: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
-	<kyungmin.park@samsung.com>, <jonathan.cameron@huawei.com>
-CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linuxarm@huawei.com>, <zhanjie9@hisilicon.com>, <alireza.sanaee@huawei.com>,
-	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<liwei728@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: [PATCH v5 2/2] PM / devfreq: Add HiSilicon uncore frequency scaling driver
-Date: Thu, 19 Jun 2025 23:14:56 +0800
-Message-ID: <20250619151456.3328624-3-zhanjie9@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20250619151456.3328624-1-zhanjie9@hisilicon.com>
-References: <20250619151456.3328624-1-zhanjie9@hisilicon.com>
+	s=arc-20240116; t=1750347730; c=relaxed/simple;
+	bh=oG2p1LhL/4bTJWFudY+RFWpGiCZCFCYaS0k1lXLmIHs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hs0Tqjz4VAo419H3IgpnSaoSrftmA19hfFREdxRhLX2AZNQz5qF+LqnGn6v4vA0YpeY0K7kBsisOmG5mBBZ2ldyqoOrJ9hubg3o2i3quVhEGICC8dAwNGIPQVRHKeskdKQ8CSD02hFKiT79mvOz2GWm0xpPuJg4ubMKVAG0Alik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Slj00ywT; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55JAbTwY009463;
+	Thu, 19 Jun 2025 15:37:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Iwn5EktbtkDuo5hAtUuchqFzuCRRgZeGBQOBDNAhu0Y=; b=Slj00ywTftsR2bfG
+	sW3tZabU3Qs/RUqQZrK1VW/vUNIeqisqFtmqNm62DGyebW7BpQPwq30YGBr7mLrO
+	HVAVcgZK0MFEKwIURPBGk3tqtAnbu3FcroWjFa3eInFcOfu6U9bpt7aw/UtAcYPq
+	t4vKw0z3md0+nOI0VsmrRmV4fKXAxNX8YsFINPNf0/orZMb+mzLKKPEexelHdUQ3
+	XuHDT3DQD6RQtv9AgUB+lKj61nki6JNjB2mOhCoMSO2mA+8BDUjFABWL4c/ph8J0
+	YReYGnj2MZ2QgcqWKt7j3F8LNdauwu+bbQWJQ4HJAOpdB7vGWH/zEjT+vvaE3//5
+	svy2nA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ag23cf3f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Jun 2025 15:37:47 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55JFbabH030408
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Jun 2025 15:37:36 GMT
+Received: from [10.216.44.69] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 19 Jun
+ 2025 08:37:25 -0700
+Message-ID: <41b485ed-66cf-a220-01aa-392cc315d8a7@quicinc.com>
+Date: Thu, 19 Jun 2025 21:07:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v9 2/5] firmware: psci: Read and use vendor reset types
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+CC: Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mukesh Ojha
+	<mukesh.ojha@oss.qualcomm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan
+	<andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Bartosz
+ Golaszewski" <bartosz.golaszewski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <cros-qcom-dts-watchers@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Srinivas Kandagatla
+	<srinivas.kandagatla@linaro.org>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        Stephen Boyd <swboyd@chromium.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, Elliot Berman
+	<elliotb317@gmail.com>,
+        <quic_spratap@qucinc.com>, <quic_kaushalk@qucinc.com>
+References: <20250303-arm-psci-system_reset2-vendor-reboots-v9-0-b2cf4a20feda@oss.qualcomm.com>
+ <20250303-arm-psci-system_reset2-vendor-reboots-v9-2-b2cf4a20feda@oss.qualcomm.com>
+ <Z9QQw6BcE7IXzu+r@lpieralisi> <Z+K3uNjTNbq3pUis@hu-mojha-hyd.qualcomm.com>
+ <Z/U95G+2GsoLD6Mi@lpieralisi>
+ <973eaca7-0632-53d8-f892-fe4d859ebbac@quicinc.com>
+ <Z/+dGLAGXpf9bX7G@lpieralisi>
+ <e96e315c-69fb-bc7e-5d07-06909344ff65@quicinc.com>
+ <rz7tnl5gg73gtyij3kmwk6hubikfsvu3krekjkpoofpdio6cwe@innio7qvotye>
+ <d3e4417a-66cd-4e6e-590f-7a0e2bcfc0e6@quicinc.com>
+ <775e4f46-32c2-406f-a47d-8c2b1f607e1a@oss.qualcomm.com>
+ <c0cbfdc2-4ec9-db81-422f-bc686c8de4d3@quicinc.com>
+ <CAO9ioeVOwjpSJ37Z-mMUn2tsc9b6J=OEMhrK74OMf-BpriB8-g@mail.gmail.com>
+Content-Language: en-US
+From: Shivendra Pratap <quic_spratap@quicinc.com>
+In-Reply-To: <CAO9ioeVOwjpSJ37Z-mMUn2tsc9b6J=OEMhrK74OMf-BpriB8-g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _fmYP29i-F2DKb-bN1TsKbZmiDk-MdZ1
+X-Authority-Analysis: v=2.4 cv=edY9f6EH c=1 sm=1 tr=0 ts=68542ecc cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=GcyzOjIWAAAA:8
+ a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=kpUrTMeWBs2LY39yed4A:9 a=QEXdDO2ut3YA:10
+ a=dtxw0mqMjrQA:10 a=hQL3dl6oAZ8NdCsdz28n:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE5MDEyOSBTYWx0ZWRfX7Ir853DEW0Fj
+ 1OV87HDe8WQRzZpCrrZCKf04dpHVpC5rwJOFeDKmsmphftXRCCdrxydMaoollDTIPCu7gm4PJQu
+ 1P9KB55XDd+LiRWiHR2svqtYl/Mzq7IZf3g2Cjrb3AoG4Dyj5FPv7PI0ANxGTyBgmPf8hqXZEOc
+ bsFpywv6wL8hnEblYnNOM5uZsvGzWbCT9PkKTBVx1wB2kAks3uNBcUurC9A92lp53fJsWq6laC7
+ Eb68E8BfRV5TMH8zPLo2mDxVd21+pnpMC6Xy07xTUHEpszK9v7dPY/6zKUrBnfeok0rMtIwUDul
+ F5hGZbGPRG256Uo/ekv2xFDD8hIOF06aK3u0Hwh1sU4mhNwgXyrM5sVvkCXcHEiWONTrm5wktYt
+ VhAx/Sum92M9un8+NOvXLEuu+V+A+xjKeICZNQQMJ5rECGfpbUhHV76CyXr/6dbeego2FjuH
+X-Proofpoint-GUID: _fmYP29i-F2DKb-bN1TsKbZmiDk-MdZ1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-19_06,2025-06-18_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0
+ phishscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506190129
 
-Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
-the devfreq framework.  The uncore domain contains shared computing
-resources, including system interconnects and L3 cache.  The uncore
-frequency significantly impacts the system-wide performance as well as
-power consumption.  This driver adds support for runtime management of
-uncore frequency from kernel and userspace.  The main function includes
-setting and getting frequencies, changing frequency scaling policies, and
-querying the list of CPUs whose performance is significantly related to
-this uncore frequency domain, etc.  The driver communicates with a platform
-controller through an ACPI PCC mailbox to take the actual actions of
-frequency scaling.
 
-Co-developed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
----
- Documentation/ABI/testing/sysfs-class-devfreq |   9 +
- drivers/devfreq/Kconfig                       |  11 +
- drivers/devfreq/Makefile                      |   1 +
- drivers/devfreq/hisi_uncore_freq.c            | 664 ++++++++++++++++++
- 4 files changed, 685 insertions(+)
- create mode 100644 drivers/devfreq/hisi_uncore_freq.c
 
-diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
-index 1e7e0bb4c14e..df8ba88b9f6a 100644
---- a/Documentation/ABI/testing/sysfs-class-devfreq
-+++ b/Documentation/ABI/testing/sysfs-class-devfreq
-@@ -132,3 +132,12 @@ Description:
- 
- 		A list of governors that support the node:
- 		- simple_ondemand
-+
-+What:		/sys/class/devfreq/.../related_cpus
-+Date:		June 2025
-+Contact:	Linux power management list <linux-pm@vger.kernel.org>
-+Description:	The list of CPUs whose performance is closely related to the
-+		frequency of this devfreq domain.
-+
-+		This file is only present if a specific devfreq device is
-+		closely associated with a subset of CPUs.
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 3c4862a752b5..c999c4a1e567 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -90,6 +90,17 @@ config ARM_EXYNOS_BUS_DEVFREQ
- 	  and adjusts the operating frequencies and voltages with OPP support.
- 	  This does not yet operate with optimal voltages.
- 
-+config ARM_HISI_UNCORE_DEVFREQ
-+	tristate "HiSilicon uncore DEVFREQ Driver"
-+	depends on ACPI && ACPI_PPTT && PCC
-+	select DEVFREQ_GOV_PERFORMANCE
-+	select DEVFREQ_GOV_USERSPACE
-+	help
-+	  This adds a DEVFREQ driver that manages uncore frequency scaling for
-+	  HiSilicon Kunpeng SoCs. This enables runtime management of uncore
-+	  frequency scaling from kernel and userspace. The uncore domain
-+	  contains system interconnects and L3 cache.
-+
- config ARM_IMX_BUS_DEVFREQ
- 	tristate "i.MX Generic Bus DEVFREQ Driver"
- 	depends on ARCH_MXC || COMPILE_TEST
-diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-index bf40d04928d0..404179d79a9d 100644
---- a/drivers/devfreq/Makefile
-+++ b/drivers/devfreq/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
- 
- # DEVFREQ Drivers
- obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
-+obj-$(CONFIG_ARM_HISI_UNCORE_DEVFREQ)	+= hisi_uncore_freq.o
- obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
- obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
- obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)	+= mtk-cci-devfreq.o
-diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_uncore_freq.c
-new file mode 100644
-index 000000000000..e19678692c16
---- /dev/null
-+++ b/drivers/devfreq/hisi_uncore_freq.c
-@@ -0,0 +1,664 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * HiSilicon uncore frequency scaling driver
-+ *
-+ * Copyright (c) 2025 HiSilicon Co., Ltd
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/bits.h>
-+#include <linux/cleanup.h>
-+#include <linux/devfreq.h>
-+#include <linux/device.h>
-+#include <linux/dev_printk.h>
-+#include <linux/errno.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/ktime.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/property.h>
-+#include <linux/topology.h>
-+#include <linux/units.h>
-+#include <acpi/pcc.h>
-+
-+#include "governor.h"
-+
-+struct hisi_uncore_pcc_data {
-+	u16 status;
-+	u16 resv;
-+	u32 data;
-+};
-+
-+struct hisi_uncore_pcc_shmem {
-+	struct acpi_pcct_shared_memory head;
-+	struct hisi_uncore_pcc_data pcc_data;
-+};
-+
-+enum hisi_uncore_pcc_cmd_type {
-+	HUCF_PCC_CMD_GET_CAP = 0,
-+	HUCF_PCC_CMD_GET_FREQ,
-+	HUCF_PCC_CMD_SET_FREQ,
-+	HUCF_PCC_CMD_GET_MODE,
-+	HUCF_PCC_CMD_SET_MODE,
-+	HUCF_PCC_CMD_GET_PLAT_FREQ_NUM,
-+	HUCF_PCC_CMD_GET_PLAT_FREQ_BY_IDX,
-+	HUCF_PCC_CMD_MAX = 256
-+};
-+
-+static int hisi_platform_gov_usage;
-+static DEFINE_MUTEX(hisi_platform_gov_usage_lock);
-+
-+enum hisi_uncore_freq_mode {
-+	HUCF_MODE_PLATFORM = 0,
-+	HUCF_MODE_OS,
-+	HUCF_MODE_MAX
-+};
-+
-+#define HUCF_CAP_PLATFORM_CTRL	BIT(0)
-+
-+/**
-+ * struct hisi_uncore_freq - hisi uncore frequency scaling device data
-+ * @dev:		device of this frequency scaling driver
-+ * @cl:			mailbox client object
-+ * @pchan:		PCC mailbox channel
-+ * @chan_id:		PCC channel ID
-+ * @last_cmd_cmpl_time:	timestamp of the last completed PCC command
-+ * @pcc_lock:		PCC channel lock
-+ * @devfreq:		devfreq data of this hisi_uncore_freq device
-+ * @related_cpus:	CPUs whose performance is majorly affected by this
-+ *			uncore frequency domain
-+ * @cap:		capability flag
-+ */
-+struct hisi_uncore_freq {
-+	struct device *dev;
-+	struct mbox_client cl;
-+	struct pcc_mbox_chan *pchan;
-+	int chan_id;
-+	ktime_t last_cmd_cmpl_time;
-+	struct mutex pcc_lock;
-+	struct devfreq *devfreq;
-+	struct cpumask related_cpus;
-+	u32 cap;
-+};
-+
-+/* PCC channel timeout = PCC nominal latency * NUM */
-+#define HUCF_PCC_POLL_TIMEOUT_NUM	1000
-+#define HUCF_PCC_POLL_INTERVAL_US	5
-+
-+/* Default polling interval in ms for devfreq governors*/
-+#define HUCF_DEFAULT_POLLING_MS 100
-+
-+static int hisi_uncore_request_pcc_chan(struct hisi_uncore_freq *uncore)
-+{
-+	struct device *dev = uncore->dev;
-+	struct pcc_mbox_chan *pcc_chan;
-+	int rc;
-+
-+	uncore->cl = (struct mbox_client) {
-+		.dev = dev,
-+		.tx_block = false,
-+		.knows_txdone = true,
-+	};
-+
-+	pcc_chan = pcc_mbox_request_channel(&uncore->cl, uncore->chan_id);
-+	if (IS_ERR(pcc_chan))
-+		return dev_err_probe(dev, PTR_ERR(pcc_chan),
-+			"Failed to request PCC channel %u\n", uncore->chan_id);
-+
-+	if (!pcc_chan->shmem_base_addr) {
-+		pcc_mbox_free_channel(pcc_chan);
-+		return dev_err_probe(dev, -EINVAL,
-+			"Invalid PCC shared memory address\n");
-+	}
-+
-+	if (pcc_chan->shmem_size < sizeof(struct hisi_uncore_pcc_shmem)) {
-+		pcc_mbox_free_channel(pcc_chan);
-+		return dev_err_probe(dev, -EINVAL,
-+			"Invalid PCC shared memory size (%lluB)\n",
-+			pcc_chan->shmem_size);
-+	}
-+
-+	rc = devm_mutex_init(dev, &uncore->pcc_lock);
-+	if (rc) {
-+		pcc_mbox_free_channel(pcc_chan);
-+		return rc;
-+	}
-+
-+	uncore->pchan = pcc_chan;
-+
-+	return 0;
-+}
-+
-+static void hisi_uncore_free_pcc_chan(struct hisi_uncore_freq *uncore)
-+{
-+	guard(mutex)(&uncore->pcc_lock);
-+	pcc_mbox_free_channel(uncore->pchan);
-+	uncore->pchan = NULL;
-+}
-+
-+static void devm_hisi_uncore_free_pcc_chan(void *data)
-+{
-+	hisi_uncore_free_pcc_chan(data);
-+}
-+
-+static acpi_status hisi_uncore_pcc_reg_scan(struct acpi_resource *res,
-+					    void *ctx)
-+{
-+	struct acpi_resource_generic_register *reg;
-+	struct hisi_uncore_freq *uncore;
-+
-+	if (!res || res->type != ACPI_RESOURCE_TYPE_GENERIC_REGISTER)
-+		return AE_OK;
-+
-+	reg = &res->data.generic_reg;
-+	if (reg->space_id != ACPI_ADR_SPACE_PLATFORM_COMM)
-+		return AE_OK;
-+
-+	if (!ctx)
-+		return AE_ERROR;
-+
-+	uncore = ctx;
-+	/* PCC subspace ID stored in Access Size */
-+	uncore->chan_id = reg->access_size;
-+
-+	return AE_CTRL_TERMINATE;
-+}
-+
-+static int hisi_uncore_init_pcc_chan(struct hisi_uncore_freq *uncore)
-+{
-+	acpi_handle handle = ACPI_HANDLE(uncore->dev);
-+	acpi_status status;
-+	int rc;
-+
-+	uncore->chan_id = -1;
-+	status = acpi_walk_resources(handle, METHOD_NAME__CRS,
-+				     hisi_uncore_pcc_reg_scan, uncore);
-+	if (ACPI_FAILURE(status) || uncore->chan_id < 0)
-+		return dev_err_probe(uncore->dev, -ENODEV,
-+			"Failed to get a PCC channel\n");
-+
-+	rc = hisi_uncore_request_pcc_chan(uncore);
-+	if (rc)
-+		return rc;
-+
-+	return devm_add_action_or_reset(uncore->dev,
-+					devm_hisi_uncore_free_pcc_chan,
-+					uncore);
-+}
-+
-+static int hisi_uncore_cmd_send(struct hisi_uncore_freq *uncore,
-+				u8 cmd, u32 *data)
-+{
-+	struct hisi_uncore_pcc_shmem __iomem *addr;
-+	struct hisi_uncore_pcc_shmem shmem;
-+	struct pcc_mbox_chan *pchan;
-+	unsigned int mrtt;
-+	s64 time_delta;
-+	u16 status;
-+	int rc;
-+
-+	guard(mutex)(&uncore->pcc_lock);
-+
-+	pchan = uncore->pchan;
-+	if (!pchan)
-+		return -ENODEV;
-+
-+	addr = (struct hisi_uncore_pcc_shmem __iomem *)pchan->shmem;
-+	if (!addr)
-+		return -EINVAL;
-+
-+	/* Handle the Minimum Request Turnaround Time (MRTT) */
-+	mrtt = pchan->min_turnaround_time;
-+	time_delta = ktime_us_delta(ktime_get(), uncore->last_cmd_cmpl_time);
-+	if (mrtt > time_delta)
-+		udelay(mrtt - time_delta);
-+
-+	/* Copy data */
-+	shmem.head = (struct acpi_pcct_shared_memory) {
-+		.signature = PCC_SIGNATURE | uncore->chan_id,
-+		.command = cmd,
-+	};
-+	shmem.pcc_data.data = *data;
-+	memcpy_toio(addr, &shmem, sizeof(shmem));
-+
-+	/* Ring doorbell */
-+	rc = mbox_send_message(pchan->mchan, &cmd);
-+	if (rc < 0) {
-+		dev_err(uncore->dev, "Failed to send mbox message, %d\n", rc);
-+		return rc;
-+	}
-+
-+	/* Wait status */
-+	rc = readw_poll_timeout(&addr->head.status, status,
-+				status & (PCC_STATUS_CMD_COMPLETE |
-+					  PCC_STATUS_ERROR),
-+				HUCF_PCC_POLL_INTERVAL_US,
-+				pchan->latency * HUCF_PCC_POLL_TIMEOUT_NUM);
-+	if (rc) {
-+		dev_err(uncore->dev, "PCC channel response timeout, cmd=%u\n", cmd);
-+	} else if (status & PCC_STATUS_ERROR) {
-+		dev_err(uncore->dev, "PCC cmd error, cmd=%u\n", cmd);
-+		rc = -EIO;
-+	}
-+
-+	uncore->last_cmd_cmpl_time = ktime_get();
-+
-+	/* Copy data back */
-+	memcpy_fromio(data, &addr->pcc_data.data, sizeof(*data));
-+
-+	/* Clear mailbox active req */
-+	mbox_client_txdone(pchan->mchan, rc);
-+
-+	return rc;
-+}
-+
-+static int hisi_uncore_target(struct device *dev, unsigned long *freq,
-+			      u32 flags)
-+{
-+	struct hisi_uncore_freq *uncore = dev_get_drvdata(dev);
-+	struct dev_pm_opp *opp;
-+	u32 data;
-+
-+	if (WARN_ON(!uncore || !uncore->pchan))
-+		return -ENODEV;
-+
-+	opp = devfreq_recommended_opp(dev, freq, flags);
-+	if (IS_ERR(opp)) {
-+		dev_err(dev, "Failed to get opp for freq %lu hz\n", *freq);
-+		return PTR_ERR(opp);
-+	}
-+	dev_pm_opp_put(opp);
-+
-+	data = (u32)(dev_pm_opp_get_freq(opp) / HZ_PER_MHZ);
-+
-+	return hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_FREQ, &data);
-+}
-+
-+static int hisi_uncore_get_dev_status(struct device *dev,
-+				      struct devfreq_dev_status *stat)
-+{
-+	/* Not used */
-+	return 0;
-+}
-+
-+static int hisi_uncore_get_cur_freq(struct device *dev, unsigned long *freq)
-+{
-+	struct hisi_uncore_freq *uncore = dev_get_drvdata(dev);
-+	u32 data = 0;
-+	int rc;
-+
-+	if (WARN_ON(!uncore || !uncore->pchan))
-+		return -ENODEV;
-+
-+	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_FREQ, &data);
-+
-+	/*
-+	 * Upon a failure, 'data' remains 0 and 'freq' is set to 0 rather than a
-+	 * random value.  devfreq shouldn't use 'freq' in that case though.
-+	 */
-+	*freq = data * HZ_PER_MHZ;
-+
-+	return rc;
-+}
-+
-+static void devm_hisi_uncore_remove_opp(void *data)
-+{
-+	struct hisi_uncore_freq *uncore = data;
-+
-+	dev_pm_opp_remove_all_dynamic(uncore->dev);
-+}
-+
-+static int hisi_uncore_init_opp(struct hisi_uncore_freq *uncore)
-+{
-+	struct device *dev = uncore->dev;
-+	unsigned long freq_mhz;
-+	u32 num, index;
-+	u32 data = 0;
-+	int rc;
-+
-+	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_PLAT_FREQ_NUM,
-+				  &data);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to get plat freq num\n");
-+
-+	num = data;
-+
-+	for (index = 0; index < num; index++) {
-+		data = index;
-+		rc = hisi_uncore_cmd_send(uncore,
-+					  HUCF_PCC_CMD_GET_PLAT_FREQ_BY_IDX,
-+					  &data);
-+		if (rc) {
-+			dev_pm_opp_remove_all_dynamic(dev);
-+			return dev_err_probe(dev, rc,
-+				"Failed to get plat freq at index %u\n", index);
-+		}
-+		freq_mhz = data;
-+
-+		/* Don't care OPP voltage, take 1V as default */
-+		rc = dev_pm_opp_add(dev, freq_mhz * HZ_PER_MHZ, 1000000);
-+		if (rc) {
-+			dev_pm_opp_remove_all_dynamic(dev);
-+			return dev_err_probe(dev, rc,
-+				"Add OPP %lu failed\n", freq_mhz);
-+		}
-+	}
-+
-+	return devm_add_action_or_reset(dev, devm_hisi_uncore_remove_opp, uncore);
-+}
-+
-+static int hisi_platform_gov_func(struct devfreq *df, unsigned long *freq)
-+{
-+	/*
-+	 * Platform-controlled mode doesn't care the frequency issued from
-+	 * devfreq, so just pick the max freq.
-+	 */
-+	*freq = DEVFREQ_MAX_FREQ;
-+
-+	return 0;
-+}
-+
-+static int hisi_platform_gov_handler(struct devfreq *df, unsigned int event,
-+				     void *val)
-+{
-+	struct hisi_uncore_freq *uncore = dev_get_drvdata(df->dev.parent);
-+	int rc = 0;
-+	u32 data;
-+
-+	if (WARN_ON(!uncore || !uncore->pchan))
-+		return -ENODEV;
-+
-+	switch (event) {
-+	case DEVFREQ_GOV_START:
-+		data = HUCF_MODE_PLATFORM;
-+		rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
-+		if (rc)
-+			dev_err(uncore->dev, "Failed to set platform mode (%d)\n", rc);
-+		break;
-+	case DEVFREQ_GOV_STOP:
-+		data = HUCF_MODE_OS;
-+		rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
-+		if (rc)
-+			dev_err(uncore->dev, "Failed to set os mode (%d)\n", rc);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return rc;
-+}
-+
-+/*
-+ * In the platform-controlled mode, the platform decides the uncore frequency
-+ * and ignores the frequency issued from the driver.
-+ * Thus, create a pseudo 'hisi_platform' governor that stops devfreq monitor
-+ * from working so as to save meaningless overhead.
-+ */
-+static struct devfreq_governor hisi_platform_governor = {
-+	.name = "hisi_platform",
-+	/*
-+	 * Set interrupt_driven to skip the devfreq monitor mechanism, though
-+	 * this governor is not interrupt-driven.
-+	 */
-+	.flags = DEVFREQ_GOV_FLAG_IRQ_DRIVEN,
-+	.get_target_freq = hisi_platform_gov_func,
-+	.event_handler = hisi_platform_gov_handler,
-+};
-+
-+static void hisi_uncore_remove_platform_gov(struct hisi_uncore_freq *uncore)
-+{
-+	u32 data = HUCF_MODE_PLATFORM;
-+	int rc;
-+
-+	if (!(uncore->cap & HUCF_CAP_PLATFORM_CTRL))
-+		return;
-+
-+	guard(mutex)(&hisi_platform_gov_usage_lock);
-+
-+	if (--hisi_platform_gov_usage == 0) {
-+		rc = devfreq_remove_governor(&hisi_platform_governor);
-+		if (rc)
-+			dev_err(uncore->dev, "Failed to remove hisi_platform gov (%d)\n", rc);
-+	}
-+
-+	/*
-+	 * Set to the platform-controlled mode on exit if supported, so as to
-+	 * have a certain behaviour when the driver is detached.
-+	 */
-+	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
-+	if (rc)
-+		dev_err(uncore->dev, "Failed to set platform mode on exit (%d)\n", rc);
-+}
-+
-+static void devm_hisi_uncore_remove_platform_gov(void *data)
-+{
-+	hisi_uncore_remove_platform_gov(data);
-+}
-+
-+static int hisi_uncore_add_platform_gov(struct hisi_uncore_freq *uncore)
-+{
-+	if (!(uncore->cap & HUCF_CAP_PLATFORM_CTRL))
-+		return 0;
-+
-+	guard(mutex)(&hisi_platform_gov_usage_lock);
-+
-+	if (hisi_platform_gov_usage == 0) {
-+		int rc = devfreq_add_governor(&hisi_platform_governor);
-+		if (rc)
-+			return rc;
-+	}
-+	hisi_platform_gov_usage++;
-+
-+	return devm_add_action_or_reset(uncore->dev,
-+					devm_hisi_uncore_remove_platform_gov,
-+					uncore);
-+}
-+
-+/*
-+ * Returns:
-+ * 0 if success, uncore->related_cpus is set.
-+ * -EINVAL if property not found, or property found but without elements in it,
-+ * or invalid arguments received in any of the subroutine.
-+ * Other error codes if it goes wrong.
-+ */
-+static int hisi_uncore_mark_related_cpus(struct hisi_uncore_freq *uncore,
-+				 char *property, int (*get_topo_id)(int cpu),
-+				 const struct cpumask *(*get_cpumask)(int cpu))
-+{
-+	unsigned int i, cpu;
-+	size_t len;
-+	int rc;
-+
-+	rc = device_property_count_u32(uncore->dev, property);
-+	if (rc < 0)
-+		return rc;
-+	if (rc == 0)
-+		return -EINVAL;
-+
-+	len = rc;
-+	u32 *num __free(kfree) = kcalloc(len, sizeof(*num), GFP_KERNEL);
-+	if (!num)
-+		return -ENOMEM;
-+
-+	rc = device_property_read_u32_array(uncore->dev, property, num, len);
-+	if (rc)
-+		return rc;
-+
-+	for (i = 0; i < len; i++) {
-+		for_each_possible_cpu(cpu) {
-+			if (get_topo_id(cpu) != num[i])
-+				continue;
-+
-+			cpumask_or(&uncore->related_cpus,
-+				   &uncore->related_cpus, get_cpumask(cpu));
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int get_package_id(int cpu)
-+{
-+	return topology_physical_package_id(cpu);
-+}
-+
-+static const struct cpumask *get_package_cpumask(int cpu)
-+{
-+	return topology_core_cpumask(cpu);
-+}
-+
-+static int get_cluster_id(int cpu)
-+{
-+	return topology_cluster_id(cpu);
-+}
-+
-+static const struct cpumask *get_cluster_cpumask(int cpu)
-+{
-+	return topology_cluster_cpumask(cpu);
-+}
-+
-+static int hisi_uncore_mark_related_cpus_wrap(struct hisi_uncore_freq *uncore)
-+{
-+	int rc;
-+
-+	cpumask_clear(&uncore->related_cpus);
-+
-+	rc = hisi_uncore_mark_related_cpus(uncore, "related-package",
-+					   get_package_id,
-+					   get_package_cpumask);
-+	/* Success, or firmware probably broken */
-+	if (!rc || rc != -EINVAL)
-+		return rc;
-+
-+	/* Try another property name if rc == -EINVAL */
-+	return hisi_uncore_mark_related_cpus(uncore, "related-cluster",
-+					     get_cluster_id,
-+					     get_cluster_cpumask);
-+}
-+
-+static ssize_t related_cpus_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct hisi_uncore_freq *uncore = dev_get_drvdata(dev->parent);
-+
-+	return cpumap_print_to_pagebuf(true, buf, &uncore->related_cpus);
-+}
-+
-+static DEVICE_ATTR_RO(related_cpus);
-+
-+static struct attribute *hisi_uncore_freq_attrs[] = {
-+	&dev_attr_related_cpus.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(hisi_uncore_freq);
-+
-+static int hisi_uncore_devfreq_register(struct hisi_uncore_freq *uncore)
-+{
-+	struct devfreq_dev_profile *profile;
-+	struct device *dev = uncore->dev;
-+	unsigned long freq;
-+	u32 data;
-+	int rc;
-+
-+	rc = hisi_uncore_get_cur_freq(dev, &freq);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to get plat init freq\n");
-+
-+	profile = devm_kzalloc(dev, sizeof(*profile), GFP_KERNEL);
-+	if (!profile)
-+		return -ENOMEM;
-+
-+	*profile = (struct devfreq_dev_profile) {
-+		.initial_freq = freq,
-+		.polling_ms = HUCF_DEFAULT_POLLING_MS,
-+		.timer = DEVFREQ_TIMER_DELAYED,
-+		.target = hisi_uncore_target,
-+		.get_dev_status = hisi_uncore_get_dev_status,
-+		.get_cur_freq = hisi_uncore_get_cur_freq,
-+		.dev_groups = hisi_uncore_freq_groups,
-+	};
-+
-+	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_MODE, &data);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to get operate mode\n");
-+
-+	if (data == HUCF_MODE_PLATFORM)
-+		uncore->devfreq = devm_devfreq_add_device(dev, profile,
-+					  hisi_platform_governor.name, NULL);
-+	else
-+		uncore->devfreq = devm_devfreq_add_device(dev, profile,
-+					  DEVFREQ_GOV_PERFORMANCE, NULL);
-+	if (IS_ERR(uncore->devfreq))
-+		return dev_err_probe(dev, PTR_ERR(uncore->devfreq),
-+			"Failed to add devfreq device\n");
-+
-+	return 0;
-+}
-+
-+static int hisi_uncore_freq_probe(struct platform_device *pdev)
-+{
-+	struct hisi_uncore_freq *uncore;
-+	struct device *dev = &pdev->dev;
-+	u32 cap;
-+	int rc;
-+
-+	uncore = devm_kzalloc(dev, sizeof(*uncore), GFP_KERNEL);
-+	if (!uncore)
-+		return -ENOMEM;
-+
-+	uncore->dev = dev;
-+	platform_set_drvdata(pdev, uncore);
-+
-+	rc = hisi_uncore_init_pcc_chan(uncore);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to init PCC channel\n");
-+
-+	rc = hisi_uncore_init_opp(uncore);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to init OPP\n");
-+
-+	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_CAP, &cap);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to get capability\n");
-+
-+	uncore->cap = cap;
-+
-+	rc = hisi_uncore_add_platform_gov(uncore);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to add hisi_platform governor\n");
-+
-+	rc = hisi_uncore_mark_related_cpus_wrap(uncore);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to mark related cpus\n");
-+
-+	rc = hisi_uncore_devfreq_register(uncore);
-+	if (rc)
-+		return dev_err_probe(dev, rc, "Failed to register devfreq\n");
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id hisi_uncore_freq_acpi_match[] = {
-+	{ "HISI04F1", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, hisi_uncore_freq_acpi_match);
-+
-+static struct platform_driver hisi_uncore_freq_drv = {
-+	.probe	= hisi_uncore_freq_probe,
-+	.driver = {
-+		.name = "hisi_uncore_freq",
-+		.acpi_match_table = hisi_uncore_freq_acpi_match,
-+	},
-+};
-+module_platform_driver(hisi_uncore_freq_drv);
-+
-+MODULE_DESCRIPTION("HiSilicon uncore frequency scaling driver");
-+MODULE_AUTHOR("Jie Zhan <zhanjie9@hisilicon.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.33.0
-
+On 6/19/2025 7:46 PM, Dmitry Baryshkov wrote:
+> On Thu, 19 Jun 2025 at 15:32, Shivendra Pratap <quic_spratap@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 6/19/2025 4:34 PM, Dmitry Baryshkov wrote:
+>>> On 19/06/2025 12:00, Shivendra Pratap wrote:
+>>>>
+>>>>
+>>>> On 6/18/2025 6:44 PM, Dmitry Baryshkov wrote:
+>>>>> On Tue, May 06, 2025 at 11:03:55PM +0530, Shivendra Pratap wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 4/16/2025 5:35 PM, Lorenzo Pieralisi wrote:
+>>>>>>> On Wed, Apr 09, 2025 at 11:48:24PM +0530, Shivendra Pratap wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 4/8/2025 8:46 PM, Lorenzo Pieralisi wrote:
+>>>>>>>>> On Tue, Mar 25, 2025 at 07:33:36PM +0530, Mukesh Ojha wrote:
+>>>>>>>>>> On Fri, Mar 14, 2025 at 12:19:31PM +0100, Lorenzo Pieralisi wrote:
+>>>>>>>>>>> On Mon, Mar 03, 2025 at 01:08:31PM -0800, Elliot Berman wrote:
+>>>>>>>>>>>> From: Elliot Berman <elliot.berman@oss.qualcomm.com>
+>>>>>>>>>>>>
+>>>>>>>>>>>> SoC vendors have different types of resets and are controlled through
+>>>>>>>>>>>> various registers. For instance, Qualcomm chipsets can reboot to a
+>>>>>>>>>>>> "download mode" that allows a RAM dump to be collected. Another example
+>>>>>>>>>>>> is they also support writing a cookie that can be read by bootloader
+>>>>>>>>>>>> during next boot. PSCI offers a mechanism, SYSTEM_RESET2, for these
+>>>>>>>>>>>> vendor reset types to be implemented without requiring drivers for every
+>>>>>>>>>>>> register/cookie.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Add support in PSCI to statically map reboot mode commands from
+>>>>>>>>>>>> userspace to a vendor reset and cookie value using the device tree.
+>>>>>>>>>>>
+>>>>>>>>>>> I have managed to discuss a little bit this patchset over the last
+>>>>>>>>>>> few days and I think we have defined a plan going forward.
+>>>>>>>>>>>
+>>>>>>>>>>> A point that was raised is:
+>>>>>>>>>>>
+>>>>>>>>>>> https://man7.org/linux/man-pages/man2/reboot.2.html
+>>>>>>>>>>>
+>>>>>>>>>>> LINUX_REBOOT_CMD_RESTART2 *arg command, what is it supposed to
+>>>>>>>>>>> represent ?
+>>>>>>>>>>>
+>>>>>>>>>>> Is it the mode the system should reboot into OR it is the
+>>>>>>>>>>> actual command to be issued (which is what this patchset
+>>>>>>>>>>> implements) ?
+>>>>>>>>>>>
+>>>>>>>>>>> LINUX_REBOOT_CMD_RESTART "..a default restart..."
+>>>>>>>>>>>
+>>>>>>>>>>> It is unclear what "default" means. We wonder whether the
+>>>>>>>>>>> reboot_mode variable was introduced to _define_ that "default".
+>>>>>>>>>>>
+>>>>>>>>>>> So, in short, my aim is trying to decouple reboot_mode from the
+>>>>>>>>>>> LINUX_REBOOT_CMD_RESTART2 *arg command.
+>>>>>>>>>>>
+>>>>>>>>>>> I believe that adding a sysfs interface to reboot-mode driver
+>>>>>>>>>>> infrastructure would be useful, so that the commands would
+>>>>>>>>>>> be exposed to userspace and userspace can set the *arg command
+>>>>>>>>>>> specifically to issue a given reset/mode.
+>>>>>>>>>>>
+>>>>>>>>>>> I wonder why this is not already in place for eg syscon-reboot-mode
+>>>>>>>>>>> resets, how does user space issue a command in those systems if the
+>>>>>>>>>>> available commands aren't exposed to userspace ?
+>>>>>>>>>>>
+>>>>>>>>>>> Is there a kernel entity exposing those "modes" to userspace, somehow ?
+>>>>>>>>>>>
+>>>>>>>>>>>> A separate initcall is needed to parse the devicetree, instead of using
+>>>>>>>>>>>> psci_dt_init because mm isn't sufficiently set up to allocate memory.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Reboot mode framework is close but doesn't quite fit with the
+>>>>>>>>>>>> design and requirements for PSCI SYSTEM_RESET2. Some of these issues can
+>>>>>>>>>>>> be solved but doesn't seem reasonable in sum:
+>>>>>>>>>>>>   1. reboot mode registers against the reboot_notifier_list, which is too
+>>>>>>>>>>>>      early to call SYSTEM_RESET2. PSCI would need to remember the reset
+>>>>>>>>>>>>      type from the reboot-mode framework callback and use it
+>>>>>>>>>>>>      psci_sys_reset.
+>>>>>>>>>>>>   2. reboot mode assumes only one cookie/parameter is described in the
+>>>>>>>>>>>>      device tree. SYSTEM_RESET2 uses 2: one for the type and one for
+>>>>>>>>>>>>      cookie.
+>>>>>>>>>>>
+>>>>>>>>>>> This can be changed and I think it should, so that the reboot modes
+>>>>>>>>>>> are exposed to user space and PSCI can use that.
+>>>>>>>>>>>
+>>>>>>>>>> In the case of a regular reboot or panic, the reboot/panic notifiers run
+>>>>>>>>>> first, followed by the restart notifiers. The PSCI reset/reset2 should
+>>>>>>>>>> be the last call from Linux, and ideally, this call should not fail.
+>>>>>>>>>>
+>>>>>>>>>> Reboot mode notifiers => restart notifiers or Panic notifiers => restart
+>>>>>>>>>> notifiers
+>>>>>>>>>>
+>>>>>>>>>> So, if I understand correctly, you mean that we can change the reboot
+>>>>>>>>>> mode framework to expose the arguments available to user space. We can
+>>>>>>>>>> extend it to accept magic and cookies, save them in the reboot
+>>>>>>>>>> framework, and retrieve them via a call from PSCI during a regular
+>>>>>>>>>> reboot or panic based on the current arguments. Is this leading towards
+>>>>>>>>>> writing an ARM-specific PSCI-reboot-mode driver, which in its reboot
+>>>>>>>>>> notifier callback saves the magic and cookies, and these magic and
+>>>>>>>>>> cookies will be used during psci_sys_reset2()? Or is there something
+>>>>>>>>>> wrong with my understanding?
+>>>>>>>>>
+>>>>>>>>> No, you got it right (apologies for the delay in replying) - if the
+>>>>>>>>> case for making reboot mode available to user space is accepted.
+>>>>>>>>>
+>>>>>> While moving this into reboot-mode framework, one more query came up.
+>>>>>> The "ARM-specific PSCI-reboot-mode driver" that we are going to write needs
+>>>>>> to be a Platform device driver for using reboot-mode framework.
+>>>>>
+>>>>> No, it doesn't. It rqeuires struct device, but there is no requirement
+>>>>> for struct platform_device at any place.
+>>>> yes, it can be struct device so may be create a virtual device
+>>>> using reset-type node?
+>>>
+>>> It can be created, but I don't see a strong need for it.
+>>>
+>>>>>
+>>>>>> As psci is not a platform device driver, a subdevice under it may not probe as a
+>>>>>> platform driver. Is it ok to implement the "PSCI-reboot-mode driver" as a
+>>>>>> early_initcall("psci_xyz") and then create a platform device something as
+>>>>>> below or any other suggestions for this?
+>>>>>
+>>>>> Change struct reboot_mode_driver to pass corresponding of_node (or
+>>>>> better fwnode) directly.  Corresponding device is used only in the
+>>>>> reboot_mode_register() and only to access of-node or to print error
+>>>>> messages.
+>>>> struct reboot_mode_driver can be changed just to pass of_node. But then the other
+>>>> suggestion was to expose sysfs from reboot-mode to show available commands.
+>>>> For that we need a device. Any suggestion? A virtual device with reset-types node
+>>>> passed to reboot-mode framework looks fine?
+>>>
+>>> You still don't need it. You'll create a new device, belonging to the new 'reboot' or 'reset' class to hold corresponding attributes.
+>> just understand this - So the reboot-mode framework will create a new class
+>> and a device and expose the supported commands?
+> 
+> Yes. Otherwise how would you create a vendor-independent userspace API?
+Ack. thanks.
+> 
+>>>
+>>>>>
+>>>>>>
+>>>>>> power:reset:<psci-vendor-reset-driver>:
+>>>>>> -----
+>>>>>> static int __init psci_vendor_reset_init(void) {
+>>>>>> ..
+>>>>>> ..
+>>>>>>     np = of_find_node_by_name(NULL, "psci-vendor-reset");
+>>>>>>     if(!np)
+>>>>>>         return -ENODEV;
+>>>>>>     pdev = of_platform_device_create(np, "psci-vendor-reset", NULL);
+>>>>>> ..
+>>>>>> ..
+>>>>>> }
+>>>>>> -------
+>>>>>>
+>>>>>> the sysfs we will expose from reboot-mode may show like below in above
+>>>>>> implementation:
+>>>>>>
+>>>>>> ######
+>>>>>> / # cat ./sys/devices/platform/psci-vendor-reset/available_modes
+>>>>>> bootloader edl
+>>>>>> ######
+>>>>>>
+>>>>>> thanks,
+>>>>>> Shivendra
+>>>>>>
+>>>>>>>>
+>>>>>>>> Agree that the available modes should be exposed to usespace via sysfs interface
+>>>>>>>> and we should implement it. Also #1 and #2 can be handled via some
+>>>>>>>> changes in the design as mentioned in above discussion.
+>>>>>>>>
+>>>>>>>> I have one doubt though when we implement this via reboot-mode framework.
+>>>>>>>> The current patch implements PSCI ARM PSCI SYSTEM RESET2 vendor reset types.
+>>>>>>>> psci driver is initialized very early at boot but potential ARM psci reboot-mode
+>>>>>>>> driver will not probe at that stage and the ARM PSCI SYSTEM RESET2 vendor reset
+>>>>>>>> types functionality will not be available in psci reset path until the reboot-mode
+>>>>>>>> driver probes. Will this cause any limitation on usage of ARM's PSCI vendor-reset
+>>>>>>>> types for early device resets?
+>>>>>>>>
+>>>>>>>> One use-case may be an early device crash or a early reset where a vendor
+>>>>>>>> wants to use PSCI SYSTEM RESET2 vendor reset type to a reset the device to a
+>>>>>>>> specific state but may not be able to use this driver.
+>>>>>>>> (eg: a kernel panic at early boot where a vendor wants to reset device
+>>>>>>>> to a specific state using vendor reset. Currently panic passes a NULL
+>>>>>>>> (*arg command) while device reset but it may be explored for vendor specific
+>>>>>>>> reset).
+>>>>>>>
+>>>>>>> As you said, that would not be a PSCI only issue - *if* we wanted to
+>>>>>>> plug in this use case we should find a way to do it at reboot mode
+>>>>>>> driver level.
+>>>>>>>
+>>>>>>> As a matter of fact, this is not a mainline issue AFAICS.
+>>>>>>>
+>>>>>>> Even if we did not design this as a reboot mode driver there would be a
+>>>>>>> time window where you would not be able to use vendor resets on panic.
+>>>>>>>
+>>>>>>> I don't see it as a major roadblock at the moment.
+>>>>>> Got it.
+>>>>>>>
+>>>>>>> Thanks,
+>>>>>>> Lorenzo
+>>>>>>>
+>>>>>>>>
+>>>>>>>> - Shivendra
+>>>>>>>>
+>>>>>>>>>> P.S. We appreciate Elliot for his work and follow-up on this while being
+>>>>>>>>>> employed at Qualcomm.
+>>>>>>>>>
+>>>>>>>>> Yes I sincerely do for his patience, thank you.
+>>>>>>>>>
+>>>>>>>>> Lorenzo
+>>>>>>>>>
+>>>>>>>>>>>>   3. psci cpuidle driver already registers a driver against the
+>>>>>>>>>>>>      arm,psci-1.0 compatible. Refactoring would be needed to have both a
+>>>>>>>>>>>>      cpuidle and reboot-mode driver.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Elliot Berman <elliot.berman@oss.qualcomm.com>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>   drivers/firmware/psci/psci.c | 105 +++++++++++++++++++++++++++++++++++++++++++
+>>>>>>>>>>>>   1 file changed, 105 insertions(+)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+>>>>>>>>>>>> index a1ebbe9b73b136218e9d9f9b8daa7756b3ab2fbe..6f8c47deaec0225f26704e1f3bcad52603127a85 100644
+>>>>>>>>>>>> --- a/drivers/firmware/psci/psci.c
+>>>>>>>>>>>> +++ b/drivers/firmware/psci/psci.c
+>>>>>>>>>>>> @@ -80,6 +80,14 @@ static u32 psci_cpu_suspend_feature;
+>>>>>>>>>>>>   static bool psci_system_reset2_supported;
+>>>>>>>>>>>>   static bool psci_system_off2_hibernate_supported;
+>>>>>>>>>>>>   +struct psci_reset_param {
+>>>>>>>>>>>> +    const char *mode;
+>>>>>>>>>>>> +    u32 reset_type;
+>>>>>>>>>>>> +    u32 cookie;
+>>>>>>>>>>>> +};
+>>>>>>>>>>>> +static struct psci_reset_param *psci_reset_params __ro_after_init;
+>>>>>>>>>>>> +static size_t num_psci_reset_params __ro_after_init;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>   static inline bool psci_has_ext_power_state(void)
+>>>>>>>>>>>>   {
+>>>>>>>>>>>>       return psci_cpu_suspend_feature &
+>>>>>>>>>>>> @@ -306,9 +314,39 @@ static int get_set_conduit_method(const struct device_node *np)
+>>>>>>>>>>>>       return 0;
+>>>>>>>>>>>>   }
+>>>>>>>>>>>>   +static int psci_vendor_system_reset2(const char *cmd)
+>>>>>>>>>>>> +{
+>>>>>>>>>>>> +    unsigned long ret;
+>>>>>>>>>>>> +    size_t i;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    for (i = 0; i < num_psci_reset_params; i++) {
+>>>>>>>>>>>> +        if (!strcmp(psci_reset_params[i].mode, cmd)) {
+>>>>>>>>>>>> +            ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+>>>>>>>>>>>> +                         psci_reset_params[i].reset_type,
+>>>>>>>>>>>> +                         psci_reset_params[i].cookie, 0);
+>>>>>>>>>>>> +            /*
+>>>>>>>>>>>> +             * if vendor reset fails, log it and fall back to
+>>>>>>>>>>>> +             * architecture reset types
+>>>>>>>>>>>
+>>>>>>>>>>> That's not what the code does.
+>>>>>>>>>>>
+>>>>>>>>>> Ack.
+>>>>>>>>>>
+>>>>>>>>>> -Mukesh
+>>>>>>>>>>
+>>>>>>>>>>>> +             */
+>>>>>>>>>>>> +            pr_err("failed to perform reset \"%s\": %ld\n", cmd,
+>>>>>>>>>>>> +                   (long)ret);
+>>>>>>>>>>>> +            return 0;
+>>>>>>>>>>>> +        }
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    return -ENOENT;
+>>>>>>>>>>>> +}
+>>>>>>>>>>>> +
+>>>>>>>>>>>>   static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+>>>>>>>>>>>>                 void *data)
+>>>>>>>>>>>>   {
+>>>>>>>>>>>> +    /*
+>>>>>>>>>>>> +     * try to do the vendor system_reset2
+>>>>>>>>>>>> +     * If there wasn't a matching command, fall back to architectural resets
+>>>>>>>>>>>> +     */
+>>>>>>>>>>>> +    if (data && !psci_vendor_system_reset2(data))
+>>>>>>>>>>>> +        return NOTIFY_DONE;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>       if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+>>>>>>>>>>>>           psci_system_reset2_supported) {
+>>>>>>>>>>>>           /*
+>>>>>>>>>>>> @@ -795,6 +833,73 @@ static const struct of_device_id psci_of_match[] __initconst = {
+>>>>>>>>>>>>       {},
+>>>>>>>>>>>>   };
+>>>>>>>>>>>>   +#define REBOOT_PREFIX "mode-"
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +static int __init psci_init_system_reset2_modes(void)
+>>>>>>>>>>>> +{
+>>>>>>>>>>>> +    const size_t len = strlen(REBOOT_PREFIX);
+>>>>>>>>>>>> +    struct psci_reset_param *param;
+>>>>>>>>>>>> +    struct device_node *psci_np __free(device_node) = NULL;
+>>>>>>>>>>>> +    struct device_node *np __free(device_node) = NULL;
+>>>>>>>>>>>> +    struct property *prop;
+>>>>>>>>>>>> +    size_t count = 0;
+>>>>>>>>>>>> +    u32 magic[2];
+>>>>>>>>>>>> +    int num;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    if (!psci_system_reset2_supported)
+>>>>>>>>>>>> +        return 0;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    psci_np = of_find_matching_node(NULL, psci_of_match);
+>>>>>>>>>>>> +    if (!psci_np)
+>>>>>>>>>>>> +        return 0;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    np = of_find_node_by_name(psci_np, "reset-types");
+>>>>>>>>>>>> +    if (!np)
+>>>>>>>>>>>> +        return 0;
+>>>>>>>>>>>
+>>>>>>>>>>> Related to my initial question above. If LINUX_REBOOT_CMD_RESTART2 *arg command,
+>>>>>>>>>>> is the actual reset to be issued, should we add a default mode "cold"
+>>>>>>>>>>> and, if SYSTEM_RESET2 is supported, a "warm" reset mode too ?
+>>>>>>>>>>>
+>>>>>>>>>>> It all boils down to what *arg represents - adding "cold" and "warm"
+>>>>>>>>>>> modes would remove the dependency on reboot_mode for resets issued
+>>>>>>>>>>> through LINUX_REBOOT_CMD_RESTART2, the question is whether this
+>>>>>>>>>>> is the correct thing to do.
+>>>>>>>>>>>
+>>>>>>>>>>> Comments very welcome.
+>>>>>>>>>>>
+>>>>>>>>>>> Thanks,
+>>>>>>>>>>> Lorenzo
+>>>>>>>>>>>
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    for_each_property_of_node(np, prop) {
+>>>>>>>>>>>> +        if (strncmp(prop->name, REBOOT_PREFIX, len))
+>>>>>>>>>>>> +            continue;
+>>>>>>>>>>>> +        num = of_property_count_u32_elems(np, prop->name);
+>>>>>>>>>>>> +        if (num != 1 && num != 2)
+>>>>>>>>>>>> +            continue;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        count++;
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    param = psci_reset_params =
+>>>>>>>>>>>> +        kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
+>>>>>>>>>>>> +    if (!psci_reset_params)
+>>>>>>>>>>>> +        return -ENOMEM;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    for_each_property_of_node(np, prop) {
+>>>>>>>>>>>> +        if (strncmp(prop->name, REBOOT_PREFIX, len))
+>>>>>>>>>>>> +            continue;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        num = of_property_read_variable_u32_array(np, prop->name, magic,
+>>>>>>>>>>>> +                              1, ARRAY_SIZE(magic));
+>>>>>>>>>>>> +        if (num < 0) {
+>>>>>>>>>>>> +            pr_warn("Failed to parse vendor reboot mode %s\n",
+>>>>>>>>>>>> +                param->mode);
+>>>>>>>>>>>> +            kfree_const(param->mode);
+>>>>>>>>>>>> +            continue;
+>>>>>>>>>>>> +        }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+>>>>>>>>>>>> +        if (!param->mode)
+>>>>>>>>>>>> +            continue;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        /* Force reset type to be in vendor space */
+>>>>>>>>>>>> +        param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
+>>>>>>>>>>>> +        param->cookie = num > 1 ? magic[1] : 0;
+>>>>>>>>>>>> +        param++;
+>>>>>>>>>>>> +        num_psci_reset_params++;
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    return 0;
+>>>>>>>>>>>> +}
+>>>>>>>>>>>> +arch_initcall(psci_init_system_reset2_modes);
+>>>>>>>>>>>> +
+>>>>>>>>>>>>   int __init psci_dt_init(void)
+>>>>>>>>>>>>   {
+>>>>>>>>>>>>       struct device_node *np;
+>>>>>>>>>>>>
+>>>>>>>>>>>> --
+>>>>>>>>>>>> 2.34.1
+>>>>>>>>>>>>
+>>>>>
+>>>
+>>>
+> 
+> 
+> 
 
