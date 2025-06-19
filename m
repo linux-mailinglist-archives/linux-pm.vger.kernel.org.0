@@ -1,111 +1,141 @@
-Return-Path: <linux-pm+bounces-29052-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29053-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 149BDADFE60
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 09:08:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5E6CADFE6F
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 09:13:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DD793A1D01
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 07:06:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 260321895CBB
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jun 2025 07:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C05246790;
-	Thu, 19 Jun 2025 07:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3852248F7B;
+	Thu, 19 Jun 2025 07:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jITB6Yxw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hjAAM/U0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF04242D8C
-	for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 07:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FE924889F;
+	Thu, 19 Jun 2025 07:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750316823; cv=none; b=b0ftzq67Q4HzBV1JZ8wZ0nJtoRq+xxRQihFTDj9hQPtanZxZ9KVKs94R8hSOAddLB7eN7ktD1Jx3D0T+vXgUdy30heC10oEUWVtWorLxjHeRkv2xjk8tVndJEAuIuQG6A4yRu8waf6TNtg0Wth/LzLCFiRAkAU3gP6U2dRqpctI=
+	t=1750317225; cv=none; b=Pd8vfpS4B/OLaiUoli1cNat04MTGqv1NlcmUnC34ScnN+1mRG4lH+vCXhdDtBPavj9IKbxPsna78xrU8sjvf3cic3thHkRB+SVwA1UnF3TU23+474VO4QZewrgTj9PQljYT0h6Sshz9j+qqXQATqWKhabzUx9itUq/F40Li8DZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750316823; c=relaxed/simple;
-	bh=gIrndrxqEQYIbQKwOcS4Mln3+RBHF7hskkcp5VOAKaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aihpgPBE84/hY8z9UzUFn7rzw9k0I91LJ7GBJdFsfoQr3Ijlywk4SvqdL8PYaydzK/BgFsAlCxxiAXd7OjpUa+cW/HPq4jtFSSuNs33ijvTVgUbXYCMjXVvbMqd9ju4d/DgD96PtKgvb0ivq2EqQJ3dPvtoygt7bhs7peu1xDC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jITB6Yxw; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-af6a315b491so467536a12.1
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jun 2025 00:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750316821; x=1750921621; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IymuwWFz5efXWH2kgyyNSxlRPSBhBIlq8B6srm/Era0=;
-        b=jITB6YxwNdiziytTZMmOunSrMJYwnfFJlf59FgIG1M1zfjzHw1YCXXr1cL3RxvSt9g
-         pPfWHXi/GNu71l2fiKMDAD72d9CJ3Y9UoIV/RsDOorBaVU3gOBolh+p8n5rfDQRzibJ7
-         TwTnQKtw0DDJmlBWvmz0kjxdyTtr26oBtIGcjGMdiAxz8IY+WfbJ7QJTYsG1DRpmxAvm
-         06Rh09Bq0BurbrmGwM0b0/oKXjAsZuiyEg9rXqfaE+LlAFBq9JT6ZH8aHeIlg+yxjH4X
-         uFpnAKJ9eCSPTjVWwOg/a8LLN7UT89MEkyFa3m6rQgjEWpV2uqHy1QcfXVeWOXZ+3zx2
-         Og4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750316821; x=1750921621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IymuwWFz5efXWH2kgyyNSxlRPSBhBIlq8B6srm/Era0=;
-        b=QZAtquPTlXIQIFTeA+CYSJbeA00Zb+tBTVefxUF4hf9RWbyu/kG8xWZftG81mH9XYe
-         XrrMwfur47ncSmZnvBTHYFD64vNXnfXJJ1BznI782ihMPDSV40kAvhhCeV8hXu9w7lW4
-         WmYt+u+jL3xyNiio0vfCvUbPfVqWknjsyoaDF6v8RytqT/V1eG2IXPOt4hqnalKeTs5K
-         UrQbplVlU5N3rBWS5jiu3fYEZe1IP9CXMLl04lKLt8AZua6hS8jSNYLpT6Xa8TZ8n/Cq
-         Thjvx1kafZglimYCyTTI/ywDhTI+hPQ9h/iIJ/VvMdES0X1kztDnPyfnRtf4/MQ8rLn0
-         lUpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWi0dIYiytD7uE3rTuGflfFKza0kbvbtFRIgMAlLMBWLxolah5xTtoOglG1zmf/VMW06SP/F132Vw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLEv1qHbz8UcAvRwLsUW2hp8CaQ9a8x8Mg8MpuXcNvSaLwL1F+
-	CZzuaB8ZBF7xM73NrmwWIVtDrwL7F00Gv2aBZ7+cEKawfdj2FwPoz0AvQTUZpf+lYR0=
-X-Gm-Gg: ASbGncuqwT0ZY1Cw+kkb8hbpRXCmemnPnNSaC/OSLiYvqfTCivH8HLlsQtRY0rDq6LN
-	RFeHi91qgKj7b8JNVbf2GP+bkKOsh5OD/y1VPiNKGWfzb5GfptApxjuIqXLA9AdOPK2ilszEBrC
-	cK+HqpBX82KDbgMi3zSlG94Z7GpNizT6qPVMmRhHP4Cpa2+dx2DjK5gdnN71KbWL+NNeIGUy/5T
-	mhXk5QNevTqychnsSMCstNRd83MIwM9miJvjmcdG5pwzCj5iCe3KupGx3lGKZClzFOqjZpQGX+j
-	ebl6r3+WKnitVHaGID2K3jSejRoT+tMSZkThsuqIUMHqx7M/bU9jehOX4eHej3I=
-X-Google-Smtp-Source: AGHT+IGyYaOKIL36CbVXP5wK2R0Ni0YKSM2IJpGDucT9Et2S+y0DrU3AlyTGX8LLr5798o70TnJH/A==
-X-Received: by 2002:a17:90b:380c:b0:311:baa0:89ce with SMTP id 98e67ed59e1d1-313f1c06bf5mr36604358a91.12.1750316820675;
-        Thu, 19 Jun 2025 00:07:00 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3158a23e627sm1365892a91.18.2025.06.19.00.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 00:07:00 -0700 (PDT)
-Date: Thu, 19 Jun 2025 12:36:57 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Markus Mayer <mmayer@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: brcmstb-avs: Fully open-code compatible for
- grepping
-Message-ID: <20250619070657.dshqwhulzadxpyz3@vireshk-i7>
-References: <20250613071643.46754-2-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1750317225; c=relaxed/simple;
+	bh=4xA0RoGRvB2kw00QVEj11UUfC0eS3ezt7ZAVTF3rcY8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SosEgI60CFHF/YH7/4YChzMRnJrYOV5BVgLyAJ4UCpO+WDZlNt9i+5nxAd1QZ1TmCRM89OXdm4egB/SCDexSCnCwoLoBJ3V76b7JB/A+fgqgTN60gSrkcb+ylkPN8WPWPndXfR4eVymrPf+BhiWHQIWcOVYxpUvheKigCR6YmIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hjAAM/U0; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750317224; x=1781853224;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4xA0RoGRvB2kw00QVEj11UUfC0eS3ezt7ZAVTF3rcY8=;
+  b=hjAAM/U0eWwEJPzH7lzZiweRqWTxQNwiww4kM6UYjaoYXkkWSg+oU+Nt
+   FUFUxwfb4fhWAW+1N5BoGEC0EeCJco1mh3OyQLEfnxLPCrjzdm6iNB90M
+   LH/VUr7zuWJyiIBVs18Q9B1Kek6R3Wj/XgnpultnF6IqYTMiwU5HMW1zf
+   7/sJae0yhM3LO1bNE5dEaXuZL8As46C8/9zvJTvavTuwUH/az4vnrsKFP
+   GYgLlKeifG3lXkT0G+GLfnLOpKIjYzkrE+KOek1t9n7O/TqcmfN68fTaZ
+   WE2lQ8BdiWRqMRPrYWALKT8OAHOguKcgH37HdJUuaVhJ6vZ9YYmaHatIM
+   g==;
+X-CSE-ConnectionGUID: qk3I7cokRxCxtoisy6mZRg==
+X-CSE-MsgGUID: 5GlpS0+DSPure8HiQ0BtHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="51793791"
+X-IronPort-AV: E=Sophos;i="6.16,247,1744095600"; 
+   d="scan'208";a="51793791"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 00:13:44 -0700
+X-CSE-ConnectionGUID: 9HG0g9j6SrKNmYm3Fo3D5A==
+X-CSE-MsgGUID: ZHxfMLB+QoKPcsVd/Gf7aw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,247,1744095600"; 
+   d="scan'208";a="155123323"
+Received: from rzhang1-mobl7.sh.intel.com ([10.238.6.124])
+  by orviesa004.jf.intel.com with ESMTP; 19 Jun 2025 00:13:41 -0700
+From: Zhang Rui <rui.zhang@intel.com>
+To: rafael.j.wysocki@intel.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	stable@vger.kernel.org,
+	srinivas.pandruvada@linux.intel.com
+Subject: [PATCH V2] powercap: intel_rapl: Do not change CLAMPING bit if ENABLE bit cannot be changed
+Date: Thu, 19 Jun 2025 15:13:40 +0800
+Message-ID: <20250619071340.384782-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613071643.46754-2-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On 13-06-25, 09:16, Krzysztof Kozlowski wrote:
-> It is very useful to find driver implementing compatibles with `git grep
-> compatible`, so driver should not use defines for that string, even if
-> this means string will be effectively duplicated.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/cpufreq/brcmstb-avs-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+PL1 cannot be disabled on some platforms. The ENABLE bit is still set
+after software clears it. This behavior leads to a scenario where, upon
+user request to disable the Power Limit through the powercap sysfs, the
+ENABLE bit remains set while the CLAMPING bit is inadvertently cleared.
 
-Applied. Thanks.
+According to the Intel Software Developer's Manual, the CLAMPING bit,
+"When set, allows the processor to go below the OS requested P states in
+order to maintain the power below specified Platform Power Limit value."
 
+Thus this means the system may operate at higher power levels than
+intended on such platforms.
+
+Enhance the code to check ENABLE bit after writing to it, and stop
+further processing if ENABLE bit cannot be changed.
+
+Cc: stable@vger.kernel.org
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Fixes: 2d281d8196e3 ("PowerCap: Introduce Intel RAPL power capping driver")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+Changes since V1:
+- Add Fixes tag
+- CC stable kernel
+---
+ drivers/powercap/intel_rapl_common.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index e3be40adc0d7..602f540cbe15 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -341,12 +341,27 @@ static int set_domain_enable(struct powercap_zone *power_zone, bool mode)
+ {
+ 	struct rapl_domain *rd = power_zone_to_rapl_domain(power_zone);
+ 	struct rapl_defaults *defaults = get_defaults(rd->rp);
++	u64 val;
+ 	int ret;
+ 
+ 	cpus_read_lock();
+ 	ret = rapl_write_pl_data(rd, POWER_LIMIT1, PL_ENABLE, mode);
+-	if (!ret && defaults->set_floor_freq)
++	if (ret)
++		goto end;
++
++	ret = rapl_read_pl_data(rd, POWER_LIMIT1, PL_ENABLE, false, &val);
++	if (ret)
++		goto end;
++
++	if (mode != val) {
++		pr_debug("%s cannot be %s\n", power_zone->name, mode ? "enabled" : "disabled");
++		goto end;
++	}
++
++	if (defaults->set_floor_freq)
+ 		defaults->set_floor_freq(rd, mode);
++
++end:
+ 	cpus_read_unlock();
+ 
+ 	return ret;
 -- 
-viresh
+2.43.0
+
 
