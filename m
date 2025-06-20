@@ -1,204 +1,165 @@
-Return-Path: <linux-pm+bounces-29122-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29123-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9039AAE11DC
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 05:33:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E627AE11F5
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 05:53:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25B424A1E8C
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 03:33:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 987273BB9A1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 03:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B75EA1E376E;
-	Fri, 20 Jun 2025 03:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b7p+CGN3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6CF1E285A;
+	Fri, 20 Jun 2025 03:53:56 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E795E1E0083;
-	Fri, 20 Jun 2025 03:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1EB1E2607;
+	Fri, 20 Jun 2025 03:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750390408; cv=none; b=Th4MR7X9k+uqRH9vbB/px+6GaC7JuabQCuzz1aS6NEWlQemQYRhPE81e+TotpfqZtqg3nfJL5x3xWuWwQIZ077m4tqTVLCHHoFx5HK+Iy1dwnj0vQ9x4cK63VPnAl6fQJXXrUc4MoYCAFzwPhh1OiiNbNo3p7r3EkBmX3T2Xq3Q=
+	t=1750391636; cv=none; b=rb+jqH1Iro7Yr5ZvtmpszYOlUkp6lZ0hm3JM2zujF1k9/RgsdSgLNeZtYuN+X4SyMRVcJBe+34aIonam500j8Wi2tcUfk/y4mzg9ZxCBnSc/2CiVH7zj+l8H4jF3WKYuLCvBT+uFaYoR8k0DFZ1OlxyGNgy/JUqj0yOGohe43Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750390408; c=relaxed/simple;
-	bh=7b4Zgn39nbR0MuT55dc6lDAmtx2/UCmMGXfe6j+aHDM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lDMzZSsP9mmep/+ZmiqgckpqyUttWURRV/Nr1fQIlaeZO1SA7xZHK49lK5Vfsl+HQWO5m7HOUwQGaz48Chsa3BB1SLbhuTEK+M+/ZLXQTe20lmBMmpD9JIfXgcx4QCWWYk3YsfngvObR/l6/O1WmcmnWyCZTDWo+53WEe28kxSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b7p+CGN3; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750390407; x=1781926407;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7b4Zgn39nbR0MuT55dc6lDAmtx2/UCmMGXfe6j+aHDM=;
-  b=b7p+CGN3iZaohOfCj0jSyx5BmVs0qUlVWt74ZfAf4rsTplvghF6j00OI
-   GpW+qSCNdFauqBBKxVueNCc7NWx2E/BIpfwpBZEE9bRbZqGw97vJzNaaW
-   N7Dxj9d1ibKkb9E3ya8T47nrCCcXbtIx0TiJxWZjuX4IG+N+uZa8AllvB
-   p8qIP0vSrOcAXC1am0LiOVE8kSDqkmz90OyizTfvuUZDRzNqr5gZdgNay
-   HDgpbYC5NUMhH4nv+Sn0Nxg1R7VugFCexlllCA1DQgUKu2/zKtVs0uH8j
-   DDSS8CkJMps1CAqRql3WQVXAPTapBMN4xKaqG1jcf6oBAyF+ptWl8dodb
-   w==;
-X-CSE-ConnectionGUID: PGxJWrsqQPGaCPwXiRs5ng==
-X-CSE-MsgGUID: o46eXinqTou3R6l/IkgOPQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="63692003"
-X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
-   d="scan'208";a="63692003"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 20:33:26 -0700
-X-CSE-ConnectionGUID: LwfHEg8eS0iD8pPsmJpIWA==
-X-CSE-MsgGUID: j7YO7yV7TuCOk+Ncl9X9mg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
-   d="scan'208";a="151105039"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 19 Jun 2025 20:33:20 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uSSVB-000LLC-31;
-	Fri, 20 Jun 2025 03:33:17 +0000
-Date: Fri, 20 Jun 2025 11:32:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michal Wilczynski <m.wilczynski@samsung.com>,
-	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v5 8/8] drm/imagination: Enable PowerVR driver for RISC-V
-Message-ID: <202506201103.GX6DA9Gx-lkp@intel.com>
-References: <20250618-apr_14_for_sending-v5-8-27ed33ea5c6f@samsung.com>
+	s=arc-20240116; t=1750391636; c=relaxed/simple;
+	bh=ZbMmurYJaKY5lkw0VcwClw93/1JlV36rPOejef/6RLI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:CC:From:
+	 In-Reply-To:Content-Type; b=GEioNvHMpuvPezEEbwAMgTpVhey11+SVFDSIOShKmWmTRMbt6HVaCFgs6sTWmZX1kj1yA0lJNjEc7r7JW2IbfdZoX5eKkSLYysx0k0hUxVjtuc7/5gyUBc+YpBvEfbI4O88smCBzXRn8pQyAuo7V95JDqJKPtQ6R4FFIutwsAWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4bNk7k2SW8z2BdWC;
+	Fri, 20 Jun 2025 11:52:18 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6C2B1140294;
+	Fri, 20 Jun 2025 11:53:48 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
+ (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 20 Jun
+ 2025 11:53:47 +0800
+Message-ID: <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com>
+Date: Fri, 20 Jun 2025 11:53:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250618-apr_14_for_sending-v5-8-27ed33ea5c6f@samsung.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+To: Prashant Malani <pmalani@google.com>
+References: <20250619000925.415528-1-pmalani@google.com>
+ <20250619000925.415528-3-pmalani@google.com>
+CC: Ben Segall <bsegall@google.com>, Dietmar Eggemann
+	<dietmar.eggemann@arm.com>, Ingo Molnar <mingo@redhat.com>, Juri Lelli
+	<juri.lelli@redhat.com>, open list <linux-kernel@vger.kernel.org>, "open
+ list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman
+	<mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Valentin Schneider
+	<vschneid@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, Viresh
+ Kumar <viresh.kumar@linaro.org>, Ionela Voinescu <ionela.voinescu@arm.com>,
+	Beata Michalska <beata.michalska@arm.com>, z00813676
+	<zhenglifeng1@huawei.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20250619000925.415528-3-pmalani@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
-Hi Michal,
+Hi Prashant,
 
-kernel test robot noticed the following build warnings:
+Thanks for spotting this.
+Cc'd a few more developers.
 
-[auto build test WARNING on 4774cfe3543abb8ee98089f535e28ebfd45b975a]
+Jie
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Wilczynski/power-sequencing-Add-T-HEAD-TH1520-GPU-power-sequencer-driver/20250618-182429
-base:   4774cfe3543abb8ee98089f535e28ebfd45b975a
-patch link:    https://lore.kernel.org/r/20250618-apr_14_for_sending-v5-8-27ed33ea5c6f%40samsung.com
-patch subject: [PATCH v5 8/8] drm/imagination: Enable PowerVR driver for RISC-V
-config: sparc64-randconfig-r121-20250620 (https://download.01.org/0day-ci/archive/20250620/202506201103.GX6DA9Gx-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 8.5.0
-reproduce: (https://download.01.org/0day-ci/archive/20250620/202506201103.GX6DA9Gx-lkp@intel.com/reproduce)
+On 19/06/2025 08:09, Prashant Malani wrote:
+> AMU performance counters tend to be inaccurate when measured on idle CPUs.
+> On an idle CPU which is programmed to 3.4 GHz (verified through firmware),
+> here is a measurement and calculation of operating frequency:
+> 
+> t0: ref=899127636, del=3012458473
+> t1: ref=899129626, del=3012466509
+> perf=40
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506201103.GX6DA9Gx-lkp@intel.com/
+In this case, the target cpu is mostly idle but not fully idle during the
+sampling window since the counter grows a little bit.
+Perhaps some interrupts happen to run on the cpu shortly.
 
-All warnings (new ones prefixed by >>):
+Thus, the actual issue is the accuracy of frequency sampling becomes poor
+when the delta of counters are too small to obtain a reliable accuracy.
 
-   drivers/gpu/drm/imagination/pvr_mmu.c:57:3: error: #error Unsupported device page size PVR_DEVICE_PAGE_SIZE
-    # error Unsupported device page size PVR_DEVICE_PAGE_SIZE
-      ^~~~~
-   In file included from ./arch/sparc/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:390,
-                    from include/linux/dev_printk.h:14,
-                    from include/linux/device.h:15,
-                    from include/linux/node.h:18,
-                    from include/linux/memory.h:19,
-                    from drivers/gpu/drm/imagination/pvr_mmu.h:7,
-                    from drivers/gpu/drm/imagination/pvr_mmu.c:4:
-   drivers/gpu/drm/imagination/pvr_mmu.c: In function 'pvr_page_table_l1_entry_raw_set':
-   drivers/gpu/drm/imagination/pvr_mmu.c:577:50: error: 'ROGUE_MMUCTRL_PAGE_SIZE_X' undeclared (first use in this function); did you mean 'ROGUE_MMUCTRL_PAGE_SIZE_1MB'?
-         PVR_PAGE_TABLE_FIELD_PREP(1, PD, PAGE_SIZE, ROGUE_MMUCTRL_PAGE_SIZE_X) |
-                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:55:33: note: in definition of macro '__WRITE_ONCE'
-     *(volatile typeof(x) *)&(x) = (val);    \
-                                    ^~~
-   drivers/gpu/drm/imagination/pvr_mmu.c:574:2: note: in expansion of macro 'WRITE_ONCE'
-     WRITE_ONCE(entry->val,
-     ^~~~~~~~~~
-   drivers/gpu/drm/imagination/pvr_mmu.c:577:6: note: in expansion of macro 'PVR_PAGE_TABLE_FIELD_PREP'
-         PVR_PAGE_TABLE_FIELD_PREP(1, PD, PAGE_SIZE, ROGUE_MMUCTRL_PAGE_SIZE_X) |
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/imagination/pvr_mmu.c:577:50: note: each undeclared identifier is reported only once for each function it appears in
-         PVR_PAGE_TABLE_FIELD_PREP(1, PD, PAGE_SIZE, ROGUE_MMUCTRL_PAGE_SIZE_X) |
-                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:55:33: note: in definition of macro '__WRITE_ONCE'
-     *(volatile typeof(x) *)&(x) = (val);    \
-                                    ^~~
-   drivers/gpu/drm/imagination/pvr_mmu.c:574:2: note: in expansion of macro 'WRITE_ONCE'
-     WRITE_ONCE(entry->val,
-     ^~~~~~~~~~
-   drivers/gpu/drm/imagination/pvr_mmu.c:577:6: note: in expansion of macro 'PVR_PAGE_TABLE_FIELD_PREP'
-         PVR_PAGE_TABLE_FIELD_PREP(1, PD, PAGE_SIZE, ROGUE_MMUCTRL_PAGE_SIZE_X) |
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/imagination/pvr_mmu.c: In function 'pvr_page_table_l0_entry_raw_set':
-   drivers/gpu/drm/imagination/pvr_mmu.c:741:24: error: 'ROGUE_MMUCTRL_PAGE_X_RANGE_CLRMSK' undeclared (first use in this function); did you mean 'ROGUE_MMUCTRL_PAGE_1MB_RANGE_CLRMSK'?
-              (dma_addr & ~ROGUE_MMUCTRL_PAGE_X_RANGE_CLRMSK) |
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:55:33: note: in definition of macro '__WRITE_ONCE'
-     *(volatile typeof(x) *)&(x) = (val);    \
-                                    ^~~
-   drivers/gpu/drm/imagination/pvr_mmu.c:739:2: note: in expansion of macro 'WRITE_ONCE'
-     WRITE_ONCE(entry->val, PVR_PAGE_TABLE_FIELD_PREP(0, PT, VALID, true) |
-     ^~~~~~~~~~
-   drivers/gpu/drm/imagination/pvr_mmu.c: In function 'pvr_page_table_l0_idx':
-   drivers/gpu/drm/imagination/pvr_mmu.c:1713:9: error: 'ROGUE_MMUCTRL_PAGE_X_RANGE_SHIFT' undeclared (first use in this function); did you mean 'ROGUE_MMUCTRL_PAGE_4KB_RANGE_SHIFT'?
-            ROGUE_MMUCTRL_PAGE_X_RANGE_SHIFT;
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ROGUE_MMUCTRL_PAGE_4KB_RANGE_SHIFT
->> drivers/gpu/drm/imagination/pvr_mmu.c:1714:1: warning: control reaches end of non-void function [-Wreturn-type]
-    }
-    ^
+Would it be more sensible to put a minimum threshold of the delta of
+counters when sampling the frequency?
 
+If the threshold is not met, we can go to the existing out_invalid_counters
+path.  Then we don't have to export idle_cpu() either, and BTW, that ABI
+doesn't seem to be synchronous at all, i.e. the cpu might be busy when we
+check and then become idle when sampling.
 
-vim +1714 drivers/gpu/drm/imagination/pvr_mmu.c
-
-ff5f643de0bf27 Donald Robson 2023-11-22  1696  
-ff5f643de0bf27 Donald Robson 2023-11-22  1697  /**
-ff5f643de0bf27 Donald Robson 2023-11-22  1698   * pvr_page_table_l0_idx() - Calculate the level 0 page table index for a
-ff5f643de0bf27 Donald Robson 2023-11-22  1699   *                           device-virtual address.
-ff5f643de0bf27 Donald Robson 2023-11-22  1700   * @device_addr: Target device-virtual address.
-ff5f643de0bf27 Donald Robson 2023-11-22  1701   *
-ff5f643de0bf27 Donald Robson 2023-11-22  1702   * This function does not perform any bounds checking - it is the caller's
-ff5f643de0bf27 Donald Robson 2023-11-22  1703   * responsibility to ensure that @device_addr is valid before interpreting
-ff5f643de0bf27 Donald Robson 2023-11-22  1704   * the result.
-ff5f643de0bf27 Donald Robson 2023-11-22  1705   *
-ff5f643de0bf27 Donald Robson 2023-11-22  1706   * Return:
-ff5f643de0bf27 Donald Robson 2023-11-22  1707   * The index into a level 0 page table corresponding to @device_addr.
-ff5f643de0bf27 Donald Robson 2023-11-22  1708   */
-ff5f643de0bf27 Donald Robson 2023-11-22  1709  static u16
-ff5f643de0bf27 Donald Robson 2023-11-22  1710  pvr_page_table_l0_idx(u64 device_addr)
-ff5f643de0bf27 Donald Robson 2023-11-22  1711  {
-ff5f643de0bf27 Donald Robson 2023-11-22  1712  	return (device_addr & ~ROGUE_MMUCTRL_VADDR_PT_INDEX_CLRMSK) >>
-ff5f643de0bf27 Donald Robson 2023-11-22  1713  	       ROGUE_MMUCTRL_PAGE_X_RANGE_SHIFT;
-ff5f643de0bf27 Donald Robson 2023-11-22 @1714  }
-ff5f643de0bf27 Donald Robson 2023-11-22  1715  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> For reference, when we measure the same CPU with stress-ng running, we have
+> a more accurate result:
+> t0: ref=30751756418, del=104490567689
+> t1: ref=30751760628, del=104490582296
+> perf=34
+> 
+> (t0 and t1 are 2 microseconds apart)
+> 
+> In the above, the prescribed method[1] of calculating frequency from CPPC
+> counters was used.
+> 
+> The follow-on effect is that the inaccurate frequency is stashed in the
+> cpufreq policy struct when the CPU is brought online. Since CPUs are mostly
+> idle when they are brought online, this means cpufreq has an inaccurate
+> view of the programmed clock rate.
+> 
+> Consequently, if userspace tries to actually set the frequency to the
+> previously erroneous rate (4 GHz in the above example), cpufreq returns
+> early without calling in to the CPPC driver to send the relevant PCC
+> command; it thinks the CPU is already at that frequency.
+> 
+> Update the CPPC get_rate() code to skip sampling counters if we know a CPU
+> is idle, and go directly to the fallback response of returning the
+> “desired” frequency. The code intends to do that anyway if the counters
+> happen to return an “idle” reading.
+> 
+> [1] https://docs.kernel.org/admin-guide/acpi/cppc_sysfs.html#computing-average-delivered-performance
+> 
+> Signed-off-by: Prashant Malani <pmalani@google.com>
+> ---
+> 
+> Changes in v2:
+> - Add sched.h header for usage when compiled as module.
+> 
+>  drivers/cpufreq/cppc_cpufreq.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index b7c688a5659c..5ed04774e569 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/cpufreq.h>
+>  #include <linux/irq_work.h>
+>  #include <linux/kthread.h>
+> +#include <linux/sched.h>
+>  #include <linux/time.h>
+>  #include <linux/vmalloc.h>
+>  #include <uapi/linux/sched/types.h>
+> @@ -753,6 +754,10 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>  
+>  	cpufreq_cpu_put(policy);
+>  
+> +	/* Idle CPUs have unreliable counters, so skip to the end. */
+> +	if (idle_cpu(cpu))
+> +		goto out_invalid_counters;
+> +
+>  	ret = cppc_get_perf_ctrs_sample(cpu, &fb_ctrs_t0, &fb_ctrs_t1);
+>  	if (ret) {
+>  		if (ret == -EFAULT)
 
