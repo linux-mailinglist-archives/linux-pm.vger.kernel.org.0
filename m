@@ -1,134 +1,179 @@
-Return-Path: <linux-pm+bounces-29171-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29172-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42804AE20E7
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 19:28:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D9FAE21FA
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 20:16:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 757E816F49D
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 17:27:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 004E57B0E67
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 18:14:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7622ECD14;
-	Fri, 20 Jun 2025 17:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9215A284662;
+	Fri, 20 Jun 2025 18:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ARKDxy6a"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b="n4GjbPnC";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=valla.it header.i=@valla.it header.b="Ai0PM/MS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from delivery.antispam.mailspamprotection.com (delivery.antispam.mailspamprotection.com [185.56.87.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAD028C84B
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 17:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750440400; cv=none; b=mMxq3Cp8BhL5gQIFpB78uVMv/QKWNX36KHbhcKRKrbfbuE6iAXABmckeJU3iNjG+pPSrCC+K4Y5vSW+k1qCtRPWdDu+SezjCp552p81BV7beDl9NxPjMpJwsFZlKQ7LDpvC38YMD4InU3HI/diuiCsZn7+svQlxHNTpSYQraJ4w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750440400; c=relaxed/simple;
-	bh=OMbvB3+Bgh7ZH/dGCkrpzdqRe/AVt/TYCz0eQJ4uPEM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OtQ2XtxIDUes0DyHLhWM4viw0THpRBl6D4p6fbtpgWA1x7DBNSD2yJNFJgdZR+CuWDC2Yvz7z+hRqK7n7YHgalG3bjjS/CkhfYO1DuqapEjheltG/NT6WZbxAMC+YSV6U+qo5PqXwr9RQPy+02atrJxCAb0WHTfTwDx953qVuIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ARKDxy6a; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750440397;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oW1wB1FdrUHROAIYbkZS8OO3BReKXHOvb71P4QLKK10=;
-	b=ARKDxy6aK0lpbNgCFyx5Gx47s324lLAPs/jft63blKuYSjYojDV4uD+bYCU/+ewOiH8Xc7
-	j46LFqTS+lGP/GJB1N7j+t95joEhvlnWOssK03SYj1g6HffGx1mb4ciME8GoJtwVf/A045
-	RbKlazY7AvmLrwmEQy6x/2pIRSmJEqw=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-299-IZZuHIkhNSi7ygn-2cPFHA-1; Fri, 20 Jun 2025 13:26:36 -0400
-X-MC-Unique: IZZuHIkhNSi7ygn-2cPFHA-1
-X-Mimecast-MFC-AGG-ID: IZZuHIkhNSi7ygn-2cPFHA_1750440396
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7ceb5b5140eso315083485a.2
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 10:26:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750440396; x=1751045196;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oW1wB1FdrUHROAIYbkZS8OO3BReKXHOvb71P4QLKK10=;
-        b=WUbLJN0lXf5OLikS/kqpzSlsZ92hqibYd4Yy1s3qmsop2P3tHA4h+YNDAvzsPU+9mr
-         zfd3lQhKdYyiRsJM2wYmqFVcg60nEnnAQNUwWFCJFbWhHPxlHerjgK/AqTK94Rcyz1K3
-         0eetvayVmyDA8LV+rddRR3VlPDKUy+TrkVNyjPEUbAIyHBmXezdIt/iUAygrTowqYmiZ
-         YPzJq+3zTpdymfkkf7Mi55fqwa1L5L8JwH+duckrxFPyyySFL9Qdp06Ubru274RIxuwa
-         O5UdpE853iCa1adpGOXMEoK52F+vny5s7QH0SXVFlSbWRCT7uoqr9zrRt4cXWvyfGLg7
-         Dh4A==
-X-Forwarded-Encrypted: i=1; AJvYcCV+lMNrJonue3Iwy8t4rP26Vl7y/1RMAflu+QA7GD4hIU8s3kk/beRuaDVBihS2zanPZHYqErR5oA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF0pTgYnazhuF6eM/i9MCxy3VEW2vTWlcHkSlB14KOIRjkRD9d
-	NPRlQAHNgyLULyvzrfzAFGCZeypT/nZpDh40nPQTv9Zk1+MIdOIk2MGFALoQluLNzgb80Z1C40P
-	IAM65J97DiA3NGBQ0jhMtCXFqrtewKyFzOKD3HSL/KfApiKU8uDIfHP0PT38y
-X-Gm-Gg: ASbGnct4dw8yX0iO2fwqrycXRpb3h4rSf4K6HGXpF4N5KCvdgWqJYEYEQcgFmvOP1R0
-	NSbLmcgBwsXC4ItuNF+FZTu11AfSWAvnHcJR2fq3C9+L+m7pS6j1QyQypPP7EcF2AZn5Y7pOCtu
-	MH4tJMIzooTZHUO4DIYOhrXAvkwaq1L4l0viA9395BMLXviPx+CtRRBt8qMzXCrCJrxEUSHWG1t
-	uEm3kgIYnpZoF3DoaxLjIFtzwyfCXgku5lAbpTFoIKaLMx43JbSDrMgSj/tRgqvB5LLsKU6vpQ3
-	WSScgOVncYrm34GWO4c=
-X-Received: by 2002:a05:620a:4508:b0:7ca:f2cf:eb8b with SMTP id af79cd13be357-7d3f9923e6bmr440263885a.34.1750440395704;
-        Fri, 20 Jun 2025 10:26:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFwn0FOYZdQIgzW0lIgog7qT3m0aCTEHJnIBNGa4hMVm/8ZQQ5oeBJdA+DeqKv13eQnIHQcNA==
-X-Received: by 2002:a05:620a:4508:b0:7ca:f2cf:eb8b with SMTP id af79cd13be357-7d3f9923e6bmr440257685a.34.1750440394942;
-        Fri, 20 Jun 2025 10:26:34 -0700 (PDT)
-Received: from thinkpad2024 ([71.217.79.154])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3f999c1b6sm114174185a.6.2025.06.20.10.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jun 2025 10:26:34 -0700 (PDT)
-Date: Fri, 20 Jun 2025 13:26:32 -0400
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: "Shinji Nomoto (Fujitsu)" <fj5851bi@fujitsu.com>,
-	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-	John Kacur <jkacur@redhat.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] cpupower: Allow control of boost feature on non-x86
- based systems with boost support.
-Message-ID: <aFWZyPs4eBwGcKPu@thinkpad2024>
-References: <20250522061122.2149188-1-fj5851bi@fujitsu.com>
- <aDhJdTWzDihchywc@thinkpad2024>
- <OS9PR01MB14003E72236096AD987D2D4CED96DA@OS9PR01MB14003.jpnprd01.prod.outlook.com>
- <0053926a-7b0a-4e49-9acf-fcb1d73134cc@linuxfoundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51EF21516E;
+	Fri, 20 Jun 2025 18:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.56.87.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750443366; cv=pass; b=dBvqu8kcHuWjzuQ9CjXfdVl4xVcKAzNwdeLVBUwANKNzBXgECydcC24arPLXtpOAduZpoRubbUUkA9+sfFjEO4bAtTGZu9dm2Mi2qaDssyEPR7q2/XFEtco1l5mSspRoccNU7H9D2Q9NuqNfrTk35absP5gK85ufutk6tqQT3bQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750443366; c=relaxed/simple;
+	bh=5xnwn57hToUPm8QF6wQM7Wxtz/nSB0bNz8XLEqhjj0o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CcgMDchsYXBTd2L8fxSDXDggm9eVtlJFr9bFR/QVt2mlplpcj6w4w3UYTK9RY1l8W2P4KXkTabkf40QeUzinBP+2l/0ikr3GE5icY/sAm7wCyI8hyFOWs8W85HnAU9IAupff+trzKLW6i5AlOeR//Co13eii2z+VloDIv+Z6g4A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it; spf=pass smtp.mailfrom=valla.it; dkim=pass (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b=n4GjbPnC; dkim=pass (1024-bit key) header.d=valla.it header.i=@valla.it header.b=Ai0PM/MS; arc=pass smtp.client-ip=185.56.87.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valla.it
+ARC-Seal: i=1; cv=none; a=rsa-sha256; d=instance-europe-west4-srw8.prod.antispam.mailspamprotection.com; s=arckey; t=1750443363;
+	 b=KeT/n9feh9wPIC40j49ZpdG6Nnp3UH0voYtAFPOeWprKWu3SYhgprSzz+XFA4bk/4iq+NJ0Qli
+	  q0HDf843vvKwTYa4SCag90guUGetZ1lQchQ8V3nDVf2mlJbVUCPh4vArYPQUJ/80H/CHjXcgsl
+	  +Yq/237vc292pC2/8dKUFqD45TTkopYeKgllpx4KzYNoeYU4YgPbfE0dZW5vnh7D3llAIw2Kf9
+	  khdGRvA3VaK5IEVEeZXH3eYwJxovRoGoAz3IpnQQ1awtVYvgHcMKWgia7uwcLxv52R5xelhLai
+	  VKv67uIXbGx+Y11pMoFCWl5TDgmX9GHMZm8bAF4hmm9vVQ==;
+ARC-Authentication-Results: i=1; instance-europe-west4-srw8.prod.antispam.mailspamprotection.com; smtp.remote-ip=35.214.173.214;
+	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
+	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
+	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
+	arc=none
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=instance-europe-west4-srw8.prod.antispam.mailspamprotection.com; s=arckey; t=1750443363;
+	bh=5xnwn57hToUPm8QF6wQM7Wxtz/nSB0bNz8XLEqhjj0o=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	  Message-ID:Date:Subject:Cc:To:From:DKIM-Signature:DKIM-Signature;
+	b=Z0qoFNAr1t1IdGLay//CKw5YKYNwmF4Hd2CvJTOO/ne0Ni0XQV6YnZJ5b8umt+mKx3nEDTY+ul
+	  2gh1Rpb8k2BUxOviCvyf76ZvKmcVi2VkrtW49MOrs8dX/BL/ybbTWk+tLKoGU6d0N7z+F2XtbA
+	  N55FQ1N5EhK6iHoLtsiIXaIlUFXEEuWjXeH4XFMESnjRYGqFUp2/k2XErPqPrVGkF/eo6MJmS5
+	  e1na/WvFtrVc+dXOvaQXs5qzPiRROWPHhP0FSR6fB6ARY2NDZfsgtDkDRg4/8VwvTF57BNDWp8
+	  1S/V7Nxz8ky3yid1jCOmkg+9KbT/Bvth5BX4aSImRYWwsQ==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=antispam.mailspamprotection.com; s=default; h=CFBL-Feedback-ID:CFBL-Address
+	:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Reply-To:List-Unsubscribe;
+	bh=3LVEzoRSold9GVypbu5ltp+xX0GVkhV3+mynLXoiQZA=; b=n4GjbPnCloUpXz4rNw7cWhCIP7
+	Gv5+coj9Veu7Ymm4XagwPo/SBLCu/KUBjHBQk5AkkHunVKdpI3HSTBg/jBvMdL27O9apzm/wiSbI1
+	gvCAB+mi03u14W6XBeh9ZAme+Z6l9rmivf8Ex0M/h/qRCnBHSmOb0mRBQUq+K3CrDktI=;
+Received: from 214.173.214.35.bc.googleusercontent.com ([35.214.173.214] helo=esm19.siteground.biz)
+	by instance-europe-west4-s8d9.prod.antispam.mailspamprotection.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <francesco@valla.it>)
+	id 1uSe6B-00000008F2G-1mcI;
+	Fri, 20 Jun 2025 15:56:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=valla.it;
+	s=default; h=Date:Subject:Cc:To:From:list-help:list-unsubscribe:
+	list-subscribe:list-post:list-owner:list-archive;
+	bh=3LVEzoRSold9GVypbu5ltp+xX0GVkhV3+mynLXoiQZA=; b=Ai0PM/MSA3RrtHq/pVxozvFBb1
+	eYVoaJKyULwWR+OuPDhBoQCzgNUu84c0SH9K0+RYSSZOUheO9JMqU/Ajm6YFQeJGKiVD7OFwd+sSb
+	ImY9RfmBPzb730BHd6NwTaOM6tWfPejdC2ZQfMLBmdJhiPvYQs6j0qO+q2GmeZE/q8Kk=;
+Received: from [82.60.196.243] (port=62607 helo=fedora-2.fritz.box)
+	by esm19.siteground.biz with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <francesco@valla.it>)
+	id 1uSe5y-00000000DoG-1ZGg;
+	Fri, 20 Jun 2025 15:56:02 +0000
+From: Francesco Valla <francesco@valla.it>
+To: Sebastian Reichel <sre@kernel.org>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+ linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ linux-pm@vger.kernel.org, =?UTF-8?B?U8O4cmVu?= Andersen <san@skov.dk>,
+ Guenter Roeck <groeck@chromium.org>,
+ Matti Vaittinen <mazziesaccount@gmail.com>,
+ Ahmad Fatoum <a.fatoum@pengutronix.de>,
+ Andrew Morton <akpm@linux-foundation.org>, chrome-platform@lists.linux.dev
+Subject:
+ Re: [PATCH v11 6/7] power: reset: add PSCR NVMEM Driver for Recording Power
+ State Change Reasons
+Date: Fri, 20 Jun 2025 17:56:01 +0200
+Message-ID: <3135893.lGaqSPkdTl@fedora-2.fritz.box>
+In-Reply-To: <20250618120255.3141862-7-o.rempel@pengutronix.de>
+References:
+ <20250618120255.3141862-1-o.rempel@pengutronix.de>
+ <20250618120255.3141862-7-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0053926a-7b0a-4e49-9acf-fcb1d73134cc@linuxfoundation.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - esm19.siteground.biz
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - valla.it
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-SGantispam-id: 2ae7087a56985d2acc2a7b87f96cc4c3
+AntiSpam-DLS: false
+AntiSpam-DLSP: 
+AntiSpam-DLSRS: 
+AntiSpam-TS: 1.0
+CFBL-Address: feedback@antispam.mailspamprotection.com; report=arf
+CFBL-Feedback-ID: 1uSe6B-00000008F2G-1mcI-feedback@antispam.mailspamprotection.com
+Authentication-Results: instance-europe-west4-srw8.prod.antispam.mailspamprotection.com;
+	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
+	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
+	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
+	arc=none
 
-On Wed, Jun 18, 2025 at 03:54:56PM -0600, Shuah Khan wrote:
-> On 6/3/25 01:16, Shinji Nomoto (Fujitsu) wrote:
-> > John Wyatt wrote:
-> > > Did you test this on non-x86 systems? If so, would you please provide details on those architectures and systems?
-> > 
-> > Hello,
-> > 
-> > This patch has been tested on Arm-based systems.
-> > 
-> > * It was tested on our internal simulator based on QEMU which supports boost.
-> > * It was tested on the Nvidia grace system (which does not support boost).
-> > * The cppc_cpufreq driver is working on both of the above systems.
-> > 
-> > We have also confirmed that it continues to work as expected on AMD systems.
-> > 
+Hi Oleksij,
+
+On Wednesday, 18 June 2025 at 14:02:54 Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> This driver utilizes the Power State Change Reasons Recording (PSCRR)
+> framework to store specific power state change information, such as
+> shutdown or reboot reasons, into a designated non-volatile memory
+> (NVMEM) cell.
 > 
-> John,
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+> changes v6:
+> - rename pscr_reason to psc_reason
+> changes v5:
+> - avoid a build against NVMEM=m
+> changes v4:
+> - remove devicetree dependencies
+> ---
+>  drivers/power/reset/Kconfig       |  22 +++
+>  drivers/power/reset/Makefile      |   1 +
+>  drivers/power/reset/pscrr-nvmem.c | 254 ++++++++++++++++++++++++++++++
+>  3 files changed, 277 insertions(+)
+>  create mode 100644 drivers/power/reset/pscrr-nvmem.c
 > 
-> Let me know if you are good with this testing details.
 
-I have not tested it, but I the testing details are fine.
+Tested-by: Francesco Valla <francesco@valla.it>
 
--- 
-Sincerely,
-John Wyatt
-Software Engineer, Core Kernel
-Red Hat
+I tested this on a i.MX93 FRDM using the on-board EEPROM as storage and
+a single-byte cell. Unfortunately, the on-board RTC does not have a
+scratchpad.
+
+PSCR was set in two different ways during subsequent tests:
+
+ - manually from userspace
+ - simulating a over-temperature condition through the emul_temp sysfs
+
+In both cases, it was re-read correctly after reboot.
+
+This will be very useful to detect and debug anomalous shutdowns or
+reboots on the field.
+
+Thank you!
+
+Regards,
+Francesco
+
 
 
