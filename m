@@ -1,109 +1,114 @@
-Return-Path: <linux-pm+bounces-29151-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29152-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C229BAE1760
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 11:20:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 091F7AE1813
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 11:46:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF7161BC0FEB
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 09:21:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A669016E6C6
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 09:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF68280336;
-	Fri, 20 Jun 2025 09:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23CE283FEC;
+	Fri, 20 Jun 2025 09:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X7M/J3Um"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kaenU0K5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFE7280CCF
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 09:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B82C283CA2
+	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 09:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750411234; cv=none; b=RHZ8Kqn03KG7PFA3rQOyecz1bynkoP0pusfk8FRwbq3PL+6euJwPa7LTZqmOzPosDAdSMsOBGbYaZjbAPHnzIN2uD1mev+7noshEUFcr62+M628c13vHwNYE9F2y/TxJCUQPNc2Qb8u1RGCaxmFGyJRIUN7gj8BYmc6lndxnfSg=
+	t=1750412614; cv=none; b=ApGlgH+evgHuTiSzg3mNMwPvUsHj2g+vauQSgWfLAYM+wIdCjHdtftMKTXeyU15PMts8UYwTY3u5SCEc/h0n481o4Fanlx0y1xEeoRgCg3kePDbvjJpl86n4krpjjOLPiVJAAzsjL65mINYEnClDHhtvxz3hdinfdgMJyH5HWBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750411234; c=relaxed/simple;
-	bh=mZ5vhEEnS31cSdEN8193qbJmhpsPbTggj6HeS32WJVU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GlElDfk0+ui6xD80cwAuleaOJ17Sc9cnNNnkqs04jaDo9zsdRMSX5CYBE39DXICgTTPZE4o5mJPAOgbEUgsKYEfjEjFlIZKmWtDixdbmjbl0RQgeTccY20g5vaa8DAzFGxU8l+I/dRwW8rXHR0t/IaEUIGbbrt0wXXvXJ/5DDRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X7M/J3Um; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a582e09144so1057283f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 02:20:22 -0700 (PDT)
+	s=arc-20240116; t=1750412614; c=relaxed/simple;
+	bh=CUC8O2VwMALRnRhIMKIyIO0HIrPO1m4KYTOieiWxaKg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O9/QmZ57q0Da+c5LoVpcaE5PhuotDa2YCpYpYtAuwjA5iHP+Ar+p+/8jTk86E6dg8p8VNG7tqe4evFHy5t9ExWln1Mgyk/ftSSeMVThU27HxylcLW2Qd6MTDcXFKgsXI3NxFITmb/ySmmWcgeSpMT+00o3SdB9+7s3NdMhkux3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kaenU0K5; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2363e973db1so11225155ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 02:43:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750411221; x=1751016021; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mZ5vhEEnS31cSdEN8193qbJmhpsPbTggj6HeS32WJVU=;
-        b=X7M/J3UmmjlvgncqVfIVgg/xzZ6W0Q8RvB+kCtrzmk9UEe3z9PSc9svd/7JTsMq3K1
-         tDrc17g8bKSOw1WC1xHKOhGYSthMwAG+OcN1YN4Hq2BIm6simLJY8+8okc3joacD2p2X
-         BOy0ilKtiPcxQHW73dNKdOQfIt1MJPEDcpsbiTEfJXm6F8t3f7WgrswFNiGpK9mWEPv2
-         jMXlV54WBfqGV6yPV1/lszdm+QNOQ24AG2m9XHRfoZsTS7e8PlbG4PSRiqpn3iLcfCKk
-         DYO2KvKNa9y3BGHBp9Zw20YsuRAb0FlvfKpHhNbY1kzKltc8dzR9LjTlPF9z7VjzSs0X
-         OtPQ==
+        d=linaro.org; s=google; t=1750412612; x=1751017412; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wE7pUg075HF0iK/42gsiTO9zjRo3RhObajlGQz8mgyY=;
+        b=kaenU0K5xwreuuRH9D1/lqNy1Tdbx6jkH5EMXMmIm9A7s4LBp/4URb8+2AZ0ZIoiD1
+         XJupMph/R78jG53xs5I1ClWkm50WqmnyGqRidkCFQMYBJbVkQj0+OOp5l1xtjMRWX0JF
+         6PTowu8kd3YXoxalE5wPZtOTTkD0DFEtsjNJ/ZueuXhrB7Oov1F7RiHZKRu0viJswSWS
+         HGCPkN5wJJ9v416Lb26UCXeLyEJvUwHDpBBAXNCcQXtKXAxQoWeX8vURILK8yq/JbkCa
+         lyWimYG4wgtGN20+wRcjm2utXV4tl0FJKc/jrdteOaa5JypA0BZc3biQPGzu1LY34Dhf
+         MOXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750411221; x=1751016021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mZ5vhEEnS31cSdEN8193qbJmhpsPbTggj6HeS32WJVU=;
-        b=OJS3O296ZOfKvileQXlAH94CB9JYRAqx3+ueuFVSi6a9z1AnXQKE7cCO9bVC4jeddd
-         mIGo2qXsEWg+KF4xJ1XMi6XigQtzoJLuj3WNwVf27ul/U5g5g5r/WYBKprHJdluRLxSA
-         JlDIIuP+MwDBLXHstPrnxk5qrzGQs5aFjB4ysi3pOTUK0DaxOhYA1fTW46Lx2RqA4dfp
-         VtkDxFZMOB3NKkx4j/OzBrYIimF4NtBkXne8cHsE004UH1TFNQqDlJ95bIm4JpIknXM7
-         sBSzoW6cJKoCguURsjEVaYVSFIjJV9a9vMDPzWttyvXCKZgE3c/bX72N7hKt75TqiXCl
-         CUbA==
-X-Forwarded-Encrypted: i=1; AJvYcCXfeZCVi9QNJcYYjeirWr9QG3mvlPwK0ipGutRyqoC8c+jyW4hrBPPFWBi/Mh7qvoILLeQ5Nefc7Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz16xLBeqWquSucFbjLCoJhk0V9lps3RoB1BqQQfrSbg2gtoADG
-	vZGQAyJQOOiUOQ6o+cOmUwdS20RjlEH8PoBg+UAJz1XqH8AISQmieormvtJvArb0pFp2ppu/Qiv
-	LHfFNRYc2rPn1SZn3u6YA+BI1aKJqXudfXT4otRAl
-X-Gm-Gg: ASbGncu3ApHUuLdSzPY7sIFwpEtYWd7tUUvgpJNtBGdYQefeEGQ5Dx9dEDt2VBrBphC
-	fYq+66G1qBZvVG1PE0eP4ntM5Ua/tRU9UEGvyulNU7BypAKpkXcD8PCQESyu8GvoYxOYEujASOU
-	KkIXXrZRx2folT03PIFETcQq/lwobMFUlD83Jj3KB64eXsQsem/7OvSAm18naogotTBUorEFrFQ
-	w==
-X-Google-Smtp-Source: AGHT+IGOxu/JyT8LKL4rOBc+Bsq5zNd0RaoYbcY7WBLcAPcbTS+9Tu0MnTso5BqDG5xDYUQ4UIo3GUoxMrDuhykIYPE=
-X-Received: by 2002:a5d:5f8c:0:b0:3a4:eda1:6c39 with SMTP id
- ffacd0b85a97d-3a6d12db6dbmr1837913f8f.13.1750411221085; Fri, 20 Jun 2025
- 02:20:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750412612; x=1751017412;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wE7pUg075HF0iK/42gsiTO9zjRo3RhObajlGQz8mgyY=;
+        b=VVpzOheAkOeMeOGmgoSskHC7P92mAMYhug4RsFcTRVM/LBW/c9RwFU+0I10W+Qk6P1
+         3Bmh7ZcWWcES4HPZUSqtd8aO52r2t+ogyU6jZ/F0X0Loi91H338aHSe79T5VyaGVBYe0
+         WBpFoYdhSkheIbUr0Wo9CBDO1kHtp/szgZJZGw8lBnISQOaxzlyKNulrEoL0E7D+drbr
+         7JUEIMXdBQPqw2UGUCeoqQxnyRuBkZ4jp9vmy4gwXC5We+yf5NW1ZULyE1JWZjKc9SBl
+         GYxzSwo8qaty/zqeA8D8PGPvo9OUFATJLQLjy2oZJcKRXYlo6Lzu9TIkUGHe1E2mpsFA
+         VTZw==
+X-Forwarded-Encrypted: i=1; AJvYcCVLk1ii6gYAPFKy0Wr17S+yZU9t3UdCoTCv1MOcx3FFUtJlzLRNCkATWcNyuJHweC95zmOMoJqOcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxh5XN8PLH65ZEcauCl2bgVraPEplhFNdEKglsj8VBRNERlj/WZ
+	H2dmE8Jqgho2v7ZeIuwe26wZWs6EPrx/9VanqCzGxAFYO1WSq5dhFVLTg5V/rglfy78=
+X-Gm-Gg: ASbGncvjhwadaw57nh53OImNAjzMtn+idswn2jFabpRe1xnmYRb3toYT+TINkxS/GkN
+	vvCd4WfO6tdJqcASqGomJ41dkFEm4WH0c4TQuIMZCpvmURfEkjsJL9kRBzcKW5LOcuUax05KFeX
+	QRxJ4013o2mPcl+p3U20q5aEGP8DuZmeen9+nqpglXV5+9ok4UQ8warT6moEMxvckHy7ohgBOA4
+	AtiX7yi1wlk7nfgPd/qNgPOkHOGV4s4HE2USb1Nckk+9ItsscnyqEa/Y/X/v93k6hrB2p+3LGIy
+	RWz1DHbI/Bx4fIyJSUwg1ZFLokAp1hoWX6O1WaOWIQpzVJpCwXjDbhtBUdtViGfLq8CA1zWY8Q=
+	=
+X-Google-Smtp-Source: AGHT+IGYtaGOuL8gI+YuufgD5d5TBG2eLVkJT8YBCXNPrn8oqs8NULxbod37t1rWLg/LGuPoK+SXRQ==
+X-Received: by 2002:a17:903:19cb:b0:231:ad5a:fe9c with SMTP id d9443c01a7336-237db06e6e4mr28537095ad.15.1750412612490;
+        Fri, 20 Jun 2025 02:43:32 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d869c5a1sm13860205ad.192.2025.06.20.02.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jun 2025 02:43:32 -0700 (PDT)
+Date: Fri, 20 Jun 2025 15:13:30 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Abhinav Ananthu <abhinav.ogl@gmail.com>
+Cc: rafael@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com,
+	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
+	tmgross@umich.edu, dakr@kernel.org, linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: cpufreq: use c_ types from kernel prelude
+Message-ID: <20250620094330.m3batzq7oknwk4lz@vireshk-i7>
+References: <20250620085229.18250-1-abhinav.ogl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250620085229.18250-1-abhinav.ogl@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20250620085229.18250-1-abhinav.ogl@gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Fri, 20 Jun 2025 11:20:08 +0200
-X-Gm-Features: Ac12FXy-s6NWQAaZ_bmMiAF99B9M2tvOKWO1ll0w8OfTgwH-nexB-TDc0pyPKqU
-Message-ID: <CAH5fLgi-QG2KRt6mAiU3P-tyVG_xevPzB6VK_W=is2B+7=63kQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: cpufreq: use c_ types from kernel prelude
-To: Abhinav Ananthu <abhinav.ogl@gmail.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, ojeda@kernel.org, 
-	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	tmgross@umich.edu, dakr@kernel.org, linux-pm@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 20, 2025 at 10:55=E2=80=AFAM Abhinav Ananthu <abhinav.ogl@gmail=
-.com> wrote:
->
-> Update cpufreq FFI callback signatures to use `c_int` from the `kernel::p=
-relude`,
+On 20-06-25, 14:22, Abhinav Ananthu wrote:
+> Update cpufreq FFI callback signatures to use `c_int` from the `kernel::prelude`,
 > rather than accessing it explicitly through `kernel::ffi::c_int`.
->
+> 
 > Although these types are defined in the `ffi` crate, they are re-exported
 > via `kernel::prelude`. This aligns with the Rust-for-Linux coding
 > guidelines and ensures proper C ABI compatibility across platforms.
->
+> 
 > Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
 > Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  rust/kernel/cpufreq.rs | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Applied. Thanks.
+
+-- 
+viresh
 
