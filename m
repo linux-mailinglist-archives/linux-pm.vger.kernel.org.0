@@ -1,117 +1,111 @@
-Return-Path: <linux-pm+bounces-29159-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29160-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666A6AE193B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 12:47:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3BC6AE19CD
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 13:15:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1C101BC76C1
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:47:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6914A3B543E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 11:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796E2266571;
-	Fri, 20 Jun 2025 10:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB6828A419;
+	Fri, 20 Jun 2025 11:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uGab8+3s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67B62AF07
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 10:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52ACA28A409;
+	Fri, 20 Jun 2025 11:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750416421; cv=none; b=XUV1j3W1Z/UPZvs7rhrL05PC0thaV+/NYGHVGiiEMJWZJpAjpt04T3UU9A7KWVLumLGMqI/QBtkGEgNKByibAwX9Dtl8fT3fV7/UcNZStlD8aFo3vZ5ZUj+g7ex7z9TqknZ96V9YbxghmwKckDydWTrVffvwL304PY4e/vmKCFQ=
+	t=1750418104; cv=none; b=qy6KCgL9JbKUxZkfmwLAJalt9oTF2iIpsToLLNIl6DdKGb/xvhtguu7toj/zlZnFP+sbFVelDHzp87grvqSVrbiy+KYHGDexM8G00jUqOVViqrRCfSBf1VurlgqMcT3ErE1mk7iVwTEqQbd55mGpmVFAF/8PGXcdSpVbCNwB6M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750416421; c=relaxed/simple;
-	bh=8K+lKwckWfuWutfmZ63/z6hrsco7XbS2G0aXpnrRaW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aYSha77MsjQgZTMDiA6CqSqgw6nr05fFWLtCW5NiFtNQhNF7Hz6wS8KPhrp9oVJasf43icDkwdGF6Oi/06tCDyJJOeFNQrdTOhRqzNT1cYtem3VfOqu5JPCKjEx3hKRBzJtTG7kZ9qWDcBKG8GVkI7iAqckX+AKGAlS8Ywnk6Y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 869CC176A;
-	Fri, 20 Jun 2025 03:46:39 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA4DA3F58B;
-	Fri, 20 Jun 2025 03:46:57 -0700 (PDT)
-Date: Fri, 20 Jun 2025 11:46:54 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: =?utf-8?B?6buE5bCR5rOi?= <huangshaobo2075@phytium.com.cn>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	lenb@kernel.org, deepthi@linux.vnet.ibm.com, khilman@kernel.org,
-	Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: Subject: [cpuidle] Limitation: cannot model asymmetric C-state
- latencies on big.LITTLE SoCs
-Message-ID: <20250620-premium-curious-bison-9df0d4@sudeepholla>
-References: <5d7534c.5492.1977796c43a.Coremail.huangshaobo2075@phytium.com.cn>
- <CAJZ5v0ix-QWgpq_FhnKhSWN5BtBmU_fSWSMJFkr8H1OUm6qJKw@mail.gmail.com>
+	s=arc-20240116; t=1750418104; c=relaxed/simple;
+	bh=fHGPT6U5lkOL40pG3L6uGrMxMnoD5rKHLmnMjGJM4HY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hkX5sgu3geEGQGkKjKw+irTizaX02IMjz7Z7HsaQ2qq4aS567urX49KIORy9NfvZlVQuvbou6aVF16NmFyWqVTYHUksaGt2fn2sTGENLfoyLeAYWLYH37rGFewbVYG2eu0T148wuz2A5hKeJEQfChkjC4x9LP9qUKxtAZ3siaHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uGab8+3s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B40FC4CEE3;
+	Fri, 20 Jun 2025 11:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750418103;
+	bh=fHGPT6U5lkOL40pG3L6uGrMxMnoD5rKHLmnMjGJM4HY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uGab8+3sBVTk65V/vppELrITzxhLlKqt/PCYK2f5nMEGtMUyW+WIkJqwPgnLVFOyD
+	 0fOKKPXlQl2KqwX26lksY/qNWuHp64d58okXUTeKO05KvGbmxfxtujqIg7djsQItzi
+	 X/UCt4M8DmP71vRTg/TgUNm3J0KZ/Ha5+XWyfIdRrErxW4igRLUx073rB392UUO+Q7
+	 BqLkXJWXWW8bkrS+QlHFwcj25XZECy2qpTtzvpB8exo60fWc736uctEizzutPd5tvj
+	 DNmipNK8nm9LkGqS4yzR1xjYBgdOqe4pWSX9mdNFpOYuTbW/3q2qerphMxmEB3CxcZ
+	 khkyzLPXi98Ew==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: armada-8k: make both cpu masks static
+Date: Fri, 20 Jun 2025 13:14:53 +0200
+Message-Id: <20250620111459.3366195-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ix-QWgpq_FhnKhSWN5BtBmU_fSWSMJFkr8H1OUm6qJKw@mail.gmail.com>
 
-On Mon, Jun 16, 2025 at 01:29:15PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Jun 16, 2025 at 9:14 AM 黄少波 <huangshaobo2075@phytium.com.cn> wrote:
-> >
-> > From: huangshaobo2075@phytium.com.cn
-> > To: linux-pm@vger.kernel.org
-> > Cc: rafael@kernel.org, lenb@kernel.org, deepthi@linux.vnet.ibm.com, khilman@kernel.org
-> > Subject: [cpuidle] Limitation: cannot model asymmetric C-state latencies on big.LITTLE SoCs
-> >
-> > Hi,
-> >
-> > I'm working on an ARM64 platform with a big.LITTLE CPU topology. While parsing the ACPI tables,
-> > I noticed that the C-state latency and residency values differ between the big and LITTLE cores,
-> > as expected.
-> >
-> > However, I found that the current cpuidle framework only allows a single global `cpuidle_driver`,
-> > and all CPUs share the same `cpuidle_driver->states[]` array.
-> 
-> Not really, see bl_idle_init() in particular.
-> 
-> However, on systems with ACPI on which _CST is used for idle state
-> description, there's only one cpuidle driver and one table of idle
-> states for all CPUs.
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-Indeed.
+An earlier patch marked one of the two CPU masks as 'static' to reduce stack
+usage, but if CONFIG_NR_CPUS is large enough, the function still produces
+a warning for compile testing:
 
-> > As a result, only the first core to
-> > initialize (usually a LITTLE core) sets up the C-states, and the same values are applied to all cores,
-> > including the big ones. This leads to incorrect idle behavior on asymmetric platforms.
-> >
-> > I believe this behavior was introduced by commit 46bcfad7a819
-> > ("cpuidle: Single/Global registration of idle states").
-> >
-> > I understand this design was introduced in 2011 to simplify cpuidle and reduce memory usage:
-> > https://lkml.org/lkml/2011/4/25/83
-> >
-> > However, on today's heterogeneous SoCs, this global model no longer suffices. For proper modeling,
-> > we need support for per-cluster or per-core cpuidle drivers, or at least some mechanism to allow
-> > different idle state parameters per CPU.
-> >
-> > Has there been any discussion or work toward lifting this limitation?
-> 
-> No, there's not been any discussion on this so far, but why does the
-> platform firmware on this system use _CST for idle state description?
-> _LPI would be a better option AFAICS.
-> 
+drivers/cpufreq/armada-8k-cpufreq.c: In function 'armada_8k_cpufreq_init':
+drivers/cpufreq/armada-8k-cpufreq.c:203:1: error: the frame size of 1416 bytes is larger than 1408 bytes [-Werror=frame-larger-than=]
 
-Absolutely _LPI is better and I believe _LPI is used in this case. However
-at the time I added _LPI support, the expectation was to use ACPI on SMP
-systems without such variations in the idle states. So even with _LPIs,
-only one cpuidle driver and hence only one table of idle states for all CPUs
-was added. We can enhance the support for HMP systems with different set of
-idle states if required. All we need is to allocate the driver instead of
-using acpi_idle_driver IIRC. The initialisation of the states is already done
-per cpu.
+Normally this should be done using alloc_cpumask_var(), but since the
+driver already has a static mask and the probe function is not called
+concurrently, use the same trick for both.
 
+Fixes: 1ffec650d07f ("cpufreq: armada-8k: Avoid excessive stack usage")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/cpufreq/armada-8k-cpufreq.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/armada-8k-cpufreq.c b/drivers/cpufreq/armada-8k-cpufreq.c
+index 5a3545bd0d8d..006f4c554dd7 100644
+--- a/drivers/cpufreq/armada-8k-cpufreq.c
++++ b/drivers/cpufreq/armada-8k-cpufreq.c
+@@ -132,7 +132,7 @@ static int __init armada_8k_cpufreq_init(void)
+ 	int ret = 0, opps_index = 0, cpu, nb_cpus;
+ 	struct freq_table *freq_tables;
+ 	struct device_node *node;
+-	static struct cpumask cpus;
++	static struct cpumask cpus, shared_cpus;
+ 
+ 	node = of_find_matching_node_and_match(NULL, armada_8k_cpufreq_of_match,
+ 					       NULL);
+@@ -154,7 +154,6 @@ static int __init armada_8k_cpufreq_init(void)
+ 	 * divisions of it).
+ 	 */
+ 	for_each_cpu(cpu, &cpus) {
+-		struct cpumask shared_cpus;
+ 		struct device *cpu_dev;
+ 		struct clk *clk;
+ 
 -- 
-Regards,
-Sudeep
+2.39.5
+
 
