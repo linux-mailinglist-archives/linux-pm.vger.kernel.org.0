@@ -1,174 +1,157 @@
-Return-Path: <linux-pm+bounces-29162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75D4EAE1BCD
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 15:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A48AE1DD7
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 16:53:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C50B177503
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 13:13:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27CE71608E0
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 14:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D610F28C84B;
-	Fri, 20 Jun 2025 13:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2123E2BD587;
+	Fri, 20 Jun 2025 14:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZAJtHpAg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFAC236442
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 13:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E4D86334
+	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 14:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750425029; cv=none; b=FTAPNSBoh1ZfxPMuXFiRYGNIDcJebidbaZBQvfVXkQnZoesuddKlKv+COpYzKofkjxQS5KtxjlpwJTOyYz6bdJf6Ekbp42iSOKI/b0yfXKiLx5CpVZwich6quKgtIAFStA3G8It7mk+D84RZXP3pHpEK7rU4J4ED2uOs3DcMZP0=
+	t=1750431165; cv=none; b=ue1dKj32AAwJVTYjfANy3CzxdfVg4cTPiNeIh6J1rbk6LdTvTtpo9tqpigkTW8nJUpFA+zqouDDycHA8dlfsMsdiN2F5Lc1xctmzvdi8QUQyPA6LswevdXARvle6AP6vRxmR9PfVQaEFAgDr/WmMCdG/Z1buLE4tStDe8Yd60gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750425029; c=relaxed/simple;
-	bh=jE9Tjnkryi0urDdqacx0JAJfwZMllit1Msubfg7zZp4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ll70QyBwDXNDNTolYyklSDETUlBGSZYqFEx/6uq6pTTX0nuGmzG+E0FJnJOHqEbit65oyE0Le2KHuPZMef+DHfJFYFewZ+uYTJoRsZ6PexRdzxCx42/WQn1HPDftekQeJYwkGCatnrUV1CKvA9KBZ94iE8vOhxWBVf2jGx3Hb+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bNyQB0GHCz6L6NZ;
-	Fri, 20 Jun 2025 21:05:38 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8D72914027A;
-	Fri, 20 Jun 2025 21:10:24 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 20 Jun
- 2025 15:10:23 +0200
-Date: Fri, 20 Jun 2025 14:10:21 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Jie Zhan <zhanjie9@hisilicon.com>
-CC: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
-	<kyungmin.park@samsung.com>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<alireza.sanaee@huawei.com>, <zhenglifeng1@huawei.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <liwei728@huawei.com>,
-	<prime.zeng@hisilicon.com>
-Subject: Re: [PATCH v5 2/2] PM / devfreq: Add HiSilicon uncore frequency
- scaling driver
-Message-ID: <20250620141021.0000694c@huawei.com>
-In-Reply-To: <20250619151456.3328624-3-zhanjie9@hisilicon.com>
-References: <20250619151456.3328624-1-zhanjie9@hisilicon.com>
-	<20250619151456.3328624-3-zhanjie9@hisilicon.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1750431165; c=relaxed/simple;
+	bh=+81yvo31v7QMHWZeaNt1CEAELQelIHwFryFAymk9iSY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aymW7pWbpgo0VGnrCAeYmq/46q6xWDTZOc07o2L/zT/3Qbn7Ys1Y7Y8sCttIWpP6ET8hsQQd9ULaI0ZjlT7fM4McI3WI1NJsVvHjEMO5zZ5zV4sK/TmolZELTD/JlnQhYuxBVLXn+ALgD5Hw0C2cR4gt9oxIMbshoaL+dxatyjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZAJtHpAg; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55K7HhVV010669
+	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 14:52:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	bAvY378g9pdTybx5+IbpDJkH/ia0/TW9evSfILpWJuo=; b=ZAJtHpAg5TytFv3W
+	kvuEP7MlYXk08pMf7BPEgfge3rI6e1pJiKr99ASdea9Wguhu2WqaLVwo/hjsVtL6
+	3dgUGZpz/CmqkHIg007vyaJ7HlUJ6R/Bo/Df7i0zzmZgjH2LHc8yzNCo+GdNTkny
+	mn0iLXTk5buYeTmE5nZpfKBmadFdmNILbOOEp8XNX3eEEd1w64JjX5vndaZrlLlV
+	UQInlFPbKPV1t+Nc2WT+3Dz7TAjHCoiZpzHzR1tTtT0xetNlcDAPOxVuQG2iJGyk
+	RzcHwfFAGdEqnujpE0OrkBPgJQkxfSCd49PTSZwf0l6ZaXuDRJXwaqGntp6tRXIy
+	igOgSw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47d34017ea-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 14:52:42 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7d094e04aa4so55704485a.1
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 07:52:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750431161; x=1751035961;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bAvY378g9pdTybx5+IbpDJkH/ia0/TW9evSfILpWJuo=;
+        b=ffOSG1DjHmcY1lkPeKpcb55ZeoeqONqRcIPDYCTPpMaPlzsfzbG9PA7r54a2w0f18G
+         EYRe5mrhCkBzWNEuWK9fmmyMea51R5mPENhmGVZgpN9Qp4PahXRvgAr/HNu8SadDpmhL
+         s3j9Tii1P57QKb26E5hvH/3FJ2Olxm1Cd4VjOxF4LGwx7TQRRbrTVAmg3toXQ1NDOu45
+         DGsRl/rlE3ZwilSISDxzvYTqibUbEWWqezWooVEbf7t5BAgUTYmjTP8dhVGVjz3mL/ST
+         /YNd3pWCKJgsFAOBvdEM6tkR1zYBb7QVW4WzOyr1Y/+XnakrcsQHt5/WAfvdupQYlUzK
+         E/uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV9wNc27huLDQH54OEiIqdydf4wLMrOP8koTUWu/3KYFeG8kEAK/LZQxZ16ckGTCx66etpPzzNhog==@vger.kernel.org
+X-Gm-Message-State: AOJu0YysCIq6JFDUuPummFm3YmrN/oD/rFLTUhV4vSTd4XDrzDK/Gaiw
+	5IsYkBfvSyoH+IPhq61MVogz6AlEvdxnRxbz+gBVSmuf1iNSDBmwDPqnELhLfeL5i3u1+0/Z53L
+	Wx6sTqg2VCusioF+s7XIMWBeBVeSNmXHdkUxFm1tspYoiRWCnFEAwH9edkRgplw==
+X-Gm-Gg: ASbGncsD5XQOLasBXBde9BN+5w3ty8dksg1Q5P47/LsDjXdOcs1MSale8CTrXHLjdr1
+	Vo+iGCKHcLlkWJY0+nsLphmuGg1SUbc24wnkGB2gxawu8KdpCg1ZSD60jIJAElRAHSh8X9HIOEy
+	DBWbGxcR1fXyvtMj2IYQ9201/b8VijKQekuj/EabFt8L5b5Cg9gCw+qCMJNVtxaDn2v4AD9oeQe
+	XRrStIzcH03/h53E0xh+Qr255sbXWIPH9q1O+sOr+zuE/TRuFB+1/vpFtFTOE0VdvtTLjUKpxaP
+	aHUoRbWhb3ytTd34Ih51IQpnOI/bC7wRcPbAbnlJd28oQ87Aka+X45PzhcAMWI6fmG5Hsy/qzlD
+	e/gA=
+X-Received: by 2002:a05:620a:448a:b0:7d0:aafd:fb7a with SMTP id af79cd13be357-7d3f98d9073mr155711985a.4.1750431161598;
+        Fri, 20 Jun 2025 07:52:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEWSbj3zLVYKtfz8K+lKDPK0MngK/y7uQ3TDDGuLOc5VoymNZIeGKtQmf1ZbkgF7OimM7IZMA==
+X-Received: by 2002:a05:620a:448a:b0:7d0:aafd:fb7a with SMTP id af79cd13be357-7d3f98d9073mr155710185a.4.1750431161098;
+        Fri, 20 Jun 2025 07:52:41 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae053ee4ccbsm173800966b.70.2025.06.20.07.52.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jun 2025 07:52:40 -0700 (PDT)
+Message-ID: <e1b552c1-de9e-4c6d-9340-232427442620@oss.qualcomm.com>
+Date: Fri, 20 Jun 2025 16:52:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: Add GPU support to X1P42100 SoC
+To: Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+References: <20250620-x1p-adreno-v3-0-56398c078c15@oss.qualcomm.com>
+ <20250620-x1p-adreno-v3-4-56398c078c15@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250620-x1p-adreno-v3-4-56398c078c15@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
- frapeml500008.china.huawei.com (7.182.85.71)
+X-Proofpoint-ORIG-GUID: HOTQoyItmpIAcGCem-Fofn9tSBsPTQaR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDEwNCBTYWx0ZWRfX4jVxBVQrIVnX
+ Jagft6PTXERFGjobSuKPqTE9ZjPRRUAdP719lvq4Pzzb4KbNscCSm7TABZPtnAtSF4Ny+PA63mx
+ oVKxeg56nqdEwppJDqS6KhLr7v8+ZFG+KwYzrZ3AnzBWvC6oVIs2jR59QIvT3+z4xTGLMGKr3mv
+ mLSx3XSr9o2RTfsshENSneIr/B6/+tRTylzhV/Lr3bUCc0pA+A8voDSZqYS02ifnZYBEFfsWtQT
+ cIu88Yeye34lv8DxqChesQvNx8vSR+onB4k7YyyehYKiIv57Im5cxHstS1xNoXEdkeCW23pvClG
+ HzEZA9GwJDSesT7UznuQZLw0BE17txbzQemvGuXn9Xh/dR6yJYhY9Y2ATjxUmUuZBCrqAAUlHZP
+ z1UmMlCS77/xdXbPNDZcOzk55Wtzni+zBCkam3uecZ1B6GdTnwKpaufQ/kj6pJD9nbL3jj+a
+X-Authority-Analysis: v=2.4 cv=JLE7s9Kb c=1 sm=1 tr=0 ts=685575ba cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=gxl3bz0cAAAA:8 a=EUspDBNiAAAA:8
+ a=5RVeKMBEKdVlAG-YRsMA:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+ a=kiRiLd-pWN9FGgpmzFdl:22
+X-Proofpoint-GUID: HOTQoyItmpIAcGCem-Fofn9tSBsPTQaR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-20_05,2025-06-20_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 mlxlogscore=819 adultscore=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ spamscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506200104
 
-On Thu, 19 Jun 2025 23:14:56 +0800
-Jie Zhan <zhanjie9@hisilicon.com> wrote:
-
-> Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
-> the devfreq framework.  The uncore domain contains shared computing
-> resources, including system interconnects and L3 cache.  The uncore
-> frequency significantly impacts the system-wide performance as well as
-> power consumption.  This driver adds support for runtime management of
-> uncore frequency from kernel and userspace.  The main function includes
-> setting and getting frequencies, changing frequency scaling policies, and
-> querying the list of CPUs whose performance is significantly related to
-> this uncore frequency domain, etc.  The driver communicates with a platform
-> controller through an ACPI PCC mailbox to take the actual actions of
-> frequency scaling.
+On 6/20/25 8:54 AM, Akhil P Oommen wrote:
+> X1P42100 SoC has a new GPU called Adreno X1-45 which is a smaller
+> version of Adreno X1-85 GPU. Describe this new GPU and also add
+> the secure gpu firmware path that should used for X1P42100 CRD.
 > 
-> Co-developed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> Signed-off-by: Akhil P Oommen <akhilpo@oss.qualcomm.com>
+> ---
 
-Hi zhanjie,
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-A few more things inline that I missed in earlier review.
-
-The devm_mutex one is a definite thing to fix as having it
-where it is will make it far to easy to add bugs.
-
-The other stuff is a nice to have.
-
-So with at least the devm_mutex() call moved
-
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-
-
-> diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_uncore_freq.c
-> new file mode 100644
-> index 000000000000..e19678692c16
-> --- /dev/null
-> +++ b/drivers/devfreq/hisi_uncore_freq.c
-> @@ -0,0 +1,664 @@
-
-> +static int hisi_uncore_request_pcc_chan(struct hisi_uncore_freq *uncore)
-> +{
-> +	struct device *dev = uncore->dev;
-> +	struct pcc_mbox_chan *pcc_chan;
-> +	int rc;
-> +
-> +	uncore->cl = (struct mbox_client) {
-> +		.dev = dev,
-> +		.tx_block = false,
-> +		.knows_txdone = true,
-> +	};
-> +
-> +	pcc_chan = pcc_mbox_request_channel(&uncore->cl, uncore->chan_id);
-
-I'm not particularly keen on the repeats of pcc_mbox_free_channel() in each of
-the error paths.  Either use a goto and clean it up at the end or
-DEFINE_FREE(pcc_mbox_chan, struct pcc_mbox_chan *, if (_T) pcc_mbox_free_channel(_T));
-
-then here
-	struct pcc_mbox_chan __free(pcc_mbox_chan) *pcc_chan =
-		pcc_mbox_request_channel(&uncore->cl, uncore->chan_id);
-
-remembering to do 
-	uncor->chan = no_free_ptr(pcc_chan);
-where you currently set it below.
-
-The DEFINE_FREE() might prove useful in other drivers.  kunpeng_hccs
-for instance could be simplified with this.  Various other candidates
-though not sure how keen on cleanup.h magic those areas of the kernel are.
-
-
-> +	if (IS_ERR(pcc_chan))
-> +		return dev_err_probe(dev, PTR_ERR(pcc_chan),
-> +			"Failed to request PCC channel %u\n", uncore->chan_id);
-> +
-> +	if (!pcc_chan->shmem_base_addr) {
-> +		pcc_mbox_free_channel(pcc_chan);
-> +		return dev_err_probe(dev, -EINVAL,
-> +			"Invalid PCC shared memory address\n");
-> +	}
-> +
-> +	if (pcc_chan->shmem_size < sizeof(struct hisi_uncore_pcc_shmem)) {
-> +		pcc_mbox_free_channel(pcc_chan);
-> +		return dev_err_probe(dev, -EINVAL,
-> +			"Invalid PCC shared memory size (%lluB)\n",
-> +			pcc_chan->shmem_size);
-> +	}
-> +
-> +	rc = devm_mutex_init(dev, &uncore->pcc_lock);
-
-This is oddly placed.  Drop this out of this function and do it at least one layer
-up.
-
-Having it here leaves the risk of future error cases being added after this
-where the devm cleanup will happen out of order as a result.
-
-> +	if (rc) {
-> +		pcc_mbox_free_channel(pcc_chan);
-> +		return rc;
-> +	}
-> +
-> +	uncore->pchan = pcc_chan;
-> +
-> +	return 0;
-> +}
+Konrad
 
