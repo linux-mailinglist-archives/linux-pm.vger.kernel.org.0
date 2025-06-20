@@ -1,148 +1,112 @@
-Return-Path: <linux-pm+bounces-29153-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29154-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0424AE186B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 12:00:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFC00AE18A1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 12:14:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29DD51898D40
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:01:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 730461BC5B8C
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57928284662;
-	Fri, 20 Jun 2025 10:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637A228368A;
+	Fri, 20 Jun 2025 10:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3MWFsKl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P44K86L3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6721FBEB9;
-	Fri, 20 Jun 2025 10:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16BA1FBEB9;
+	Fri, 20 Jun 2025 10:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750413626; cv=none; b=jhH5lycAFB7eKSJgEpjovFsnGjuMxgyQoST4IywoRcKJJ7mb7ba7kFabT8bJdIPKcCQMzi1dD4fOgaguCt6V8tRkDf6x3rB3jH4d9b3TdKkRUKX0YJ3rPCBFmHPsbKLrqvPZyvFOJEVfKZvwhewIYXHuqbJzihrkgcIR1lH1Ek4=
+	t=1750414491; cv=none; b=uUaWSb06yTe4auTyqII/i7CcIAqA6G1M95v4UxvwtoTTErkE6dFELB7DPwCNaqp/dS3LRJYA7Qjyimh58nb/CVmr/NLM0Z6l5udSCqd9oXGZqTPrFvqixuD1akA2B08ewOcO06a5I4W0T1icmVT6A3/sYBoRV2Pt+BR8uUli++o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750413626; c=relaxed/simple;
-	bh=olKXWgZQjhsUkuz2YNRyJhyf9whoZXlTfn3ASsScarA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=er72mKFquHahbbHc5/i4Y7bjuUo6jTZL2oTciFRu8i7iyFku4/CQfRiKp+ZUn0PgM+C39A0MbHRLVVbWOeGO0NhQHHYRxuqhipYEtNZvLTfyyF3J0VEJHDxaj3aedlEdu08m5Hl07HfeFGjILELYVlRgvxPRxwgimDm22ZIXj9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3MWFsKl; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1750414491; c=relaxed/simple;
+	bh=0/NydzBglUSC3hLY6MPcT/TYFF4UUzGCsloUfeL5Veo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bqgnIhQfXy0RHjis8qdbWt4/CkHcndtlYVLnVI0UquCxG7S4SDnDfO8dPdaW9qWNJYD2QIrh6g48Lg8+M2M1SwuUiXCUzCf6GCM7oORPmPpb5vspfDYB1CLEGig2+uV7RBUnPxwL13p0o3iRwob301BvwCsMzFd58W/t/ynpwrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P44K86L3; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7424ccbef4eso1188957b3a.2;
-        Fri, 20 Jun 2025 03:00:23 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313290ea247so294411a91.3;
+        Fri, 20 Jun 2025 03:14:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750413622; x=1751018422; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m3/m6Ii9CNtXvzHeVzuWLYEX2B8FFoJZCUGYI3grWJM=;
-        b=G3MWFsKlL2oGnQ5eYszfiWwzfkiG+DecwoIUb79Q9CDvdexONmV4PakVHmZCoaUdGE
-         /Tjv3JrUOW6gzWkibUMUWtXrfLx6/TaDWxdUUaBFwWXWZtNB+XH26dn6J1fb8ifpqz05
-         xfXAjviZLDPGtKK/jKzC8GAbM8iZ8nBKJ5TViS+GuNdoaKJDNqtXLR7V72xU5qPFe2l4
-         99cgp5pmLvEut4a3LBDLOadnX3t/bgNFkkvs/XcRksga1Bz8suQCt6nKmVXTHPI6wOQr
-         tgF7ANDcsWQ2TQFtKDS3vjBd9U6iycRsoJG770n0geFONeUs2SbdiTHLqVBBckpdULYB
-         Zq8w==
+        d=gmail.com; s=20230601; t=1750414489; x=1751019289; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/NydzBglUSC3hLY6MPcT/TYFF4UUzGCsloUfeL5Veo=;
+        b=P44K86L3YNKZ/8R1kajnRJrDslwxwCvTTaMKy+RQRQanzLqnJVCw9VUEAmtAF9BNfW
+         AlntpnBxWBXjdNAO6ftNSBNHWx/dtgz1VBsuwM85wC6MZUjmmaYnCch1UyvCvgtqpNti
+         sgWoKIDkJKLpFOJni4HeuBGkGCNb+u8P1DagcKY4twimGdbVt65rTwRA/rUqJo+xNwdR
+         GuT/7QTRgSNojvVWPXJanUDLchgfbo2davAneWJWP2zYgjG4YJ5NoDtADMamvCYZcZjT
+         5WGNqRxFhFZSq3oSuaNiISEuBy6TUjVP+fhDzhoaa8sCMyRVpHrAp7vaRpuKi8Uk0LK3
+         HE6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750413622; x=1751018422;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m3/m6Ii9CNtXvzHeVzuWLYEX2B8FFoJZCUGYI3grWJM=;
-        b=hDlklehS81qMOQ9galhypSS2rOk+Iz+fIuo3M2IRYPFJOvavZK9gKqgrKpTxvfacYW
-         CaLkL16Tmynthj/zKm9e5q+NOLBFWHzD9k+2OGgRaKlmOmAsmE3pe/FNYls8GLzAEFkv
-         ykZAw7FNNx6WwSeaRq2SNzxSV6MPASraaovv2N41Q0ZizmX56LUv86X3LAo2sss7k70j
-         ht8Yp+Ol5sjMpv/1aDKfh1YrRk7xLHJfHqqAdG0HD64sgdG2uePvfaaL/OwBm2pglRvl
-         Gtn16froDhXYELLMoawoMS1f2r1sas8VtGBhekABLypXA3ByaEtpJv7JLVJelUCc6bvJ
-         x60Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVFIPuEuD5qBMwy9ED4wDK4uw6zY7at3wpIgcVZ0BAXcxP9+JlP1CK1X19w1P0JrUICpZN3jwEwR/hUZMs=@vger.kernel.org, AJvYcCXSrxhMWk2TnE23w/enEMpyyV7oVkvu99CHaoc30IVHTNYzG2t0btRbS3+tTw6zUczSAfdFAQykmk4=@vger.kernel.org, AJvYcCXijxDFMNcnsQcp/biHdMcMXT5JGqDenX9JFmpEv0OI8cFDDvqemLxM+MZcqXu3QxIdWqsPLSoExB4k2TPslAs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAk7+/oIpvCLIQs3VqhaG4H3dgWDgawZpnYpSak+DvxUUxFyJA
-	mJHj2iznlllVrUbgMONdfD16b4Y1+5JbbOa9RTwOtfWj/vv0/AKqUW8e
-X-Gm-Gg: ASbGncvquFmLzhNpFAUMTuTZwpZKKWIE644AVvgwfydoFob3WUSg0vkeldmjSdfMbEi
-	A2znOIOszBUy/eNbe72NJRCeTOnpfCqPcmFK8w1LqNjoaQIYPaun6Jai/cav3DLBrDgt6HBGlDc
-	rBNzw8pd43U+8NUyD1U7xyHW6N8+mZjjj6DoNckDWBepGmOL39n0qzCghrboH1uJLUTfwTssmhC
-	sT6DSIZG+TT+bblb9KY2JEW35qoBVhEaCW09T8qjetJQWTu6W5zT7ZRfPaKZo+c0YI0hx9Kq5vL
-	FZ+JDY5HCO9OeE5LE3bJpOCheVTULqgTFtv9osLPr2Ma8ytpy63rUjkFkEGk
-X-Google-Smtp-Source: AGHT+IEmqSX4AKlleCPKAgbXutcHO2f/Xpc08haGuQzz05YQ9otNxjDLec2RllEvNRSBiZPw0ATUDA==
-X-Received: by 2002:a05:6a00:238c:b0:746:2a0b:3dc8 with SMTP id d2e1a72fcca58-7490dac586emr3067302b3a.17.1750413622064;
-        Fri, 20 Jun 2025 03:00:22 -0700 (PDT)
-Received: from pop-os.. ([103.21.124.79])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7490a4ac6b2sm1701768b3a.69.2025.06.20.03.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jun 2025 03:00:21 -0700 (PDT)
-From: Abhinav Ananthu <abhinav.ogl@gmail.com>
-To: vireshk@kernel.org,
-	nm@ti.com,
-	sboyd@kernel.org
-Cc: ojeda@kernel.org,
-	alex.gaynor@gmail.com,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	dakr@kernel.org,
-	linux-pm@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Abhinav Ananthu <abhinav.ogl@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Subject: [PATCH] rust: opp: use c_* types via kernel prelude
-Date: Fri, 20 Jun 2025 15:29:21 +0530
-Message-Id: <20250620095920.20765-1-abhinav.ogl@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1750414489; x=1751019289;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0/NydzBglUSC3hLY6MPcT/TYFF4UUzGCsloUfeL5Veo=;
+        b=st6AGtiNYwoe6BxxPLjU1iemuYXVbF6CYsvHrd5/agASx7Pi/ApRQUh8VC4Id6oXJo
+         Y+7J0GsHkDYJP6nzm5aai9iltEe495Kj5d+/YBY4RoBqwMJs/ToZ+5XLsVbv0qtzRmlY
+         QBtBFT9GaVAciSP2WoF7xmnKczUMZucrPxLsE04BpShtL28cVQXgI0zl+3+tolHwkUfA
+         zynVKihqGswPe/rrX+sKCkU1GESrPqwh2BUkwcImBZEUsCxGbQ/QAars/QDlKVtFENXf
+         Nirjpfj+iqyALMUgmBB13PukyJZGSd6YRxaFOp1oKrYULBZQPxGA/wqSzncgS/jFGlJm
+         Qq1w==
+X-Forwarded-Encrypted: i=1; AJvYcCW9nnauwb18KF9qtKF6GIJgKKu4Fb5w6e/dI0IJnZmaJ8ZARA1uItmR7XrjX7enXZJjl/PuSbLqrP8=@vger.kernel.org, AJvYcCWFQlcd/xEXVynVkP1CGZe7OVJHv7Rw7EU9abrnqnA/upb2z048RmZ0NIw3jBklljmrZ/iE+5iKiKgqLkg=@vger.kernel.org, AJvYcCXLxEsh5zLsdwubPH1jyqIgYdavQnSfNsy/u4cBsfo2SAHfOdmCbu1FzimQXz2nd+AcNo6uS86mfDwCkEB+mFg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxugeo51A17+IhSqaBqmjBh68eyfz4nFLuL5k7JdEIDe4OkFhRG
+	aIwD2esxyAmLc14LGpXovEZriVFgsv2wB7WtKQRp9u5BdFlTuTbcd8p8FQw9iMHlD0u1qMzZzd7
+	48G36IMnBkejYsKDKpWNHWHcWo8hdPc0=
+X-Gm-Gg: ASbGnctiEoULDrcp/f2zDzpa+TTVmvU0IHBEoN1FYSDeqEOmrI7FTFoYEm01Fud7oTj
+	V2LZGwqpZnDUro2L9AQfdO7Y1nONOYQp93b3XfEM5APja0DrJ93WREVtOa+RTi5egiiuNhg+yMN
+	97rK6TS+zQAc2mrHtjiWtMsbcZGEyH0VKI9Rkv3dxAOYRGfUOyX7t5
+X-Google-Smtp-Source: AGHT+IGLbG03uIdIKjDmZb3/x7pPUaTgeFpfxlRzklJ39io1r9KXnw5eU12ARqN276HzeEn9SJ07vWuNIzIeJzcnrm8=
+X-Received: by 2002:a17:90b:5105:b0:312:1d2d:18f8 with SMTP id
+ 98e67ed59e1d1-3159d8facf9mr1331919a91.7.1750414489032; Fri, 20 Jun 2025
+ 03:14:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250620095920.20765-1-abhinav.ogl@gmail.com>
+In-Reply-To: <20250620095920.20765-1-abhinav.ogl@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 20 Jun 2025 12:14:36 +0200
+X-Gm-Features: Ac12FXw9NrQ7Z20VT84HWGtqBjMjNPitnvcngGJyK7jRgUS5odM-7SJJbs0OFNU
+Message-ID: <CANiq72=OdGRRkxdvSd5bLPkQcfXXFUj4_8LLjVONzpWx5--shw@mail.gmail.com>
+Subject: Re: [PATCH] rust: opp: use c_* types via kernel prelude
+To: Abhinav Ananthu <abhinav.ogl@gmail.com>
+Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, ojeda@kernel.org, 
+	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
+	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, 
+	linux-pm@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Update OPP FFI callback signatures to use `c_int` from the `kernel::prelude`,
-instead of accessing it via `kernel::ffi::c_int`.
+On Fri, Jun 20, 2025 at 12:00=E2=80=AFPM Abhinav Ananthu <abhinav.ogl@gmail=
+.com> wrote:
+>
+> Although these types are defined in a crate named `ffi`, they are re-expo=
+rted
+> via the `kernel::prelude` and should be used from there. This aligns with=
+ the
+> Rust-for-Linux coding guidelines and ensures ABI correctness when interfa=
+cing
+> with C code.
 
-Although these types are defined in a crate named `ffi`, they are re-exported
-via the `kernel::prelude` and should be used from there. This aligns with the
-Rust-for-Linux coding guidelines and ensures ABI correctness when interfacing
-with C code.
+By the way, thanks for sending these, and please feel free to clean up
+the rest -- we have a bunch of instances of this in the tree :)
 
-Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
-Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- rust/kernel/opp.rs | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Happy to create an issue about it.
 
-diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
-index a566fc3e7dcb..846583da9a2f 100644
---- a/rust/kernel/opp.rs
-+++ b/rust/kernel/opp.rs
-@@ -514,9 +514,9 @@ extern "C" fn config_clks(
-         dev: *mut bindings::device,
-         opp_table: *mut bindings::opp_table,
-         opp: *mut bindings::dev_pm_opp,
--        _data: *mut kernel::ffi::c_void,
-+        _data: *mut c_void,
-         scaling_down: bool,
--    ) -> kernel::ffi::c_int {
-+    ) -> c_int {
-         from_result(|| {
-             // SAFETY: 'dev' is guaranteed by the C code to be valid.
-             let dev = unsafe { Device::get_device(dev) };
-@@ -540,8 +540,8 @@ extern "C" fn config_regulators(
-         old_opp: *mut bindings::dev_pm_opp,
-         new_opp: *mut bindings::dev_pm_opp,
-         regulators: *mut *mut bindings::regulator,
--        count: kernel::ffi::c_uint,
--    ) -> kernel::ffi::c_int {
-+        count: c_uint,
-+    ) -> c_int {
-         from_result(|| {
-             // SAFETY: 'dev' is guaranteed by the C code to be valid.
-             let dev = unsafe { Device::get_device(dev) };
--- 
-2.34.1
-
+Cheers,
+Miguel
 
