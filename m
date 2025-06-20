@@ -1,88 +1,47 @@
-Return-Path: <linux-pm+bounces-29163-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29164-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A48AE1DD7
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 16:53:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8618DAE1F92
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 17:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27CE71608E0
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 14:52:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DC24189E1B0
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 15:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2123E2BD587;
-	Fri, 20 Jun 2025 14:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810B02D3A7A;
+	Fri, 20 Jun 2025 15:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZAJtHpAg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGZJz9U9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E4D86334
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 14:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5326128B3E2;
+	Fri, 20 Jun 2025 15:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750431165; cv=none; b=ue1dKj32AAwJVTYjfANy3CzxdfVg4cTPiNeIh6J1rbk6LdTvTtpo9tqpigkTW8nJUpFA+zqouDDycHA8dlfsMsdiN2F5Lc1xctmzvdi8QUQyPA6LswevdXARvle6AP6vRxmR9PfVQaEFAgDr/WmMCdG/Z1buLE4tStDe8Yd60gU=
+	t=1750435016; cv=none; b=N8IaYbljmHq/Rr/xSDP4SfNubCFP+dJZH5/pel+ouYvMQK6QpTv9rpOOn+ZGuxgLUVr9mD7p7o3DVGukU5LbN1iNvmfZE5CBusvskiWK3f9QpaPnVYlA68Hjdg3HCmV/CqOgLYpqnTt64m1YK/2rxEp6df3WE/k6tLQ0Uu91nho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750431165; c=relaxed/simple;
-	bh=+81yvo31v7QMHWZeaNt1CEAELQelIHwFryFAymk9iSY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aymW7pWbpgo0VGnrCAeYmq/46q6xWDTZOc07o2L/zT/3Qbn7Ys1Y7Y8sCttIWpP6ET8hsQQd9ULaI0ZjlT7fM4McI3WI1NJsVvHjEMO5zZ5zV4sK/TmolZELTD/JlnQhYuxBVLXn+ALgD5Hw0C2cR4gt9oxIMbshoaL+dxatyjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZAJtHpAg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55K7HhVV010669
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 14:52:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	bAvY378g9pdTybx5+IbpDJkH/ia0/TW9evSfILpWJuo=; b=ZAJtHpAg5TytFv3W
-	kvuEP7MlYXk08pMf7BPEgfge3rI6e1pJiKr99ASdea9Wguhu2WqaLVwo/hjsVtL6
-	3dgUGZpz/CmqkHIg007vyaJ7HlUJ6R/Bo/Df7i0zzmZgjH2LHc8yzNCo+GdNTkny
-	mn0iLXTk5buYeTmE5nZpfKBmadFdmNILbOOEp8XNX3eEEd1w64JjX5vndaZrlLlV
-	UQInlFPbKPV1t+Nc2WT+3Dz7TAjHCoiZpzHzR1tTtT0xetNlcDAPOxVuQG2iJGyk
-	RzcHwfFAGdEqnujpE0OrkBPgJQkxfSCd49PTSZwf0l6ZaXuDRJXwaqGntp6tRXIy
-	igOgSw==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47d34017ea-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 14:52:42 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7d094e04aa4so55704485a.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 07:52:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750431161; x=1751035961;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bAvY378g9pdTybx5+IbpDJkH/ia0/TW9evSfILpWJuo=;
-        b=ffOSG1DjHmcY1lkPeKpcb55ZeoeqONqRcIPDYCTPpMaPlzsfzbG9PA7r54a2w0f18G
-         EYRe5mrhCkBzWNEuWK9fmmyMea51R5mPENhmGVZgpN9Qp4PahXRvgAr/HNu8SadDpmhL
-         s3j9Tii1P57QKb26E5hvH/3FJ2Olxm1Cd4VjOxF4LGwx7TQRRbrTVAmg3toXQ1NDOu45
-         DGsRl/rlE3ZwilSISDxzvYTqibUbEWWqezWooVEbf7t5BAgUTYmjTP8dhVGVjz3mL/ST
-         /YNd3pWCKJgsFAOBvdEM6tkR1zYBb7QVW4WzOyr1Y/+XnakrcsQHt5/WAfvdupQYlUzK
-         E/uQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV9wNc27huLDQH54OEiIqdydf4wLMrOP8koTUWu/3KYFeG8kEAK/LZQxZ16ckGTCx66etpPzzNhog==@vger.kernel.org
-X-Gm-Message-State: AOJu0YysCIq6JFDUuPummFm3YmrN/oD/rFLTUhV4vSTd4XDrzDK/Gaiw
-	5IsYkBfvSyoH+IPhq61MVogz6AlEvdxnRxbz+gBVSmuf1iNSDBmwDPqnELhLfeL5i3u1+0/Z53L
-	Wx6sTqg2VCusioF+s7XIMWBeBVeSNmXHdkUxFm1tspYoiRWCnFEAwH9edkRgplw==
-X-Gm-Gg: ASbGncsD5XQOLasBXBde9BN+5w3ty8dksg1Q5P47/LsDjXdOcs1MSale8CTrXHLjdr1
-	Vo+iGCKHcLlkWJY0+nsLphmuGg1SUbc24wnkGB2gxawu8KdpCg1ZSD60jIJAElRAHSh8X9HIOEy
-	DBWbGxcR1fXyvtMj2IYQ9201/b8VijKQekuj/EabFt8L5b5Cg9gCw+qCMJNVtxaDn2v4AD9oeQe
-	XRrStIzcH03/h53E0xh+Qr255sbXWIPH9q1O+sOr+zuE/TRuFB+1/vpFtFTOE0VdvtTLjUKpxaP
-	aHUoRbWhb3ytTd34Ih51IQpnOI/bC7wRcPbAbnlJd28oQ87Aka+X45PzhcAMWI6fmG5Hsy/qzlD
-	e/gA=
-X-Received: by 2002:a05:620a:448a:b0:7d0:aafd:fb7a with SMTP id af79cd13be357-7d3f98d9073mr155711985a.4.1750431161598;
-        Fri, 20 Jun 2025 07:52:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEWSbj3zLVYKtfz8K+lKDPK0MngK/y7uQ3TDDGuLOc5VoymNZIeGKtQmf1ZbkgF7OimM7IZMA==
-X-Received: by 2002:a05:620a:448a:b0:7d0:aafd:fb7a with SMTP id af79cd13be357-7d3f98d9073mr155710185a.4.1750431161098;
-        Fri, 20 Jun 2025 07:52:41 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae053ee4ccbsm173800966b.70.2025.06.20.07.52.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jun 2025 07:52:40 -0700 (PDT)
-Message-ID: <e1b552c1-de9e-4c6d-9340-232427442620@oss.qualcomm.com>
-Date: Fri, 20 Jun 2025 16:52:37 +0200
+	s=arc-20240116; t=1750435016; c=relaxed/simple;
+	bh=N8WwDnl3pZ51GjycAjgK8S3vmC+4jFGasDU9CnD2Hf8=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=XB6JfpY68CGJ/ly3j9W5B4xEwdrfPn77HAmgBZ2aSroF4yKkySn4AIr6QOKlGL7AjQ0DtzTE6voZyn8xfdNNgF058Fp+7ckuGA6YBLJgw7S+ZspKDaM9ZFpbaozqgFTBTB5MT77K8vdiwmMqng67b3cdnF6J6I31GC48kDUyzqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGZJz9U9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 693DCC4CEE3;
+	Fri, 20 Jun 2025 15:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750435015;
+	bh=N8WwDnl3pZ51GjycAjgK8S3vmC+4jFGasDU9CnD2Hf8=;
+	h=Date:To:Cc:From:Subject:From;
+	b=XGZJz9U9HXpNyk0k7xr5/F5VYE2wam805FF4qfRjRU8ugbjjN/A6KATWQgQMzEE2i
+	 rvlcQoTcgLcZiq1rDfeYbR8X+Untxz22oBqexqubvzgv4twF6V65PcfXMyAnC0Ivkd
+	 GKC+HsJ0eWCPYMSfSKSXN5bAS9YM7P0dVgbLbvy376o72oj2BrZ6chIOGIcbilNfdl
+	 kjiG/zP7S+l3JDGkqz/hJ3kGBpN9bkldXgrXdhP2nSFzdtDNlJNC9WjHAGd79wNl3E
+	 +j/2hor48Xh2deEToDP+ra/BM4Pm3VytLbZ2zmHQoVLxQo/h6r7p3r///uz2FjIRVi
+	 BTR4JbXs3YXMw==
+Message-ID: <e9d7ef79-6a24-4515-aa35-d1f2357da798@kernel.org>
+Date: Fri, 20 Jun 2025 17:56:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,68 +49,203 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: Add GPU support to X1P42100 SoC
-To: Akhil P Oommen <akhilpo@oss.qualcomm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-References: <20250620-x1p-adreno-v3-0-56398c078c15@oss.qualcomm.com>
- <20250620-x1p-adreno-v3-4-56398c078c15@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250620-x1p-adreno-v3-4-56398c078c15@oss.qualcomm.com>
+Content-Language: en-US, nl
+To: Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-wireless <linux-wireless@vger.kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+From: Hans de Goede <hansg@kernel.org>
+Subject: 6.16-rc2+ lockdep circular locking between iwlwifi and thermal_zone
+ code
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: HOTQoyItmpIAcGCem-Fofn9tSBsPTQaR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDEwNCBTYWx0ZWRfX4jVxBVQrIVnX
- Jagft6PTXERFGjobSuKPqTE9ZjPRRUAdP719lvq4Pzzb4KbNscCSm7TABZPtnAtSF4Ny+PA63mx
- oVKxeg56nqdEwppJDqS6KhLr7v8+ZFG+KwYzrZ3AnzBWvC6oVIs2jR59QIvT3+z4xTGLMGKr3mv
- mLSx3XSr9o2RTfsshENSneIr/B6/+tRTylzhV/Lr3bUCc0pA+A8voDSZqYS02ifnZYBEFfsWtQT
- cIu88Yeye34lv8DxqChesQvNx8vSR+onB4k7YyyehYKiIv57Im5cxHstS1xNoXEdkeCW23pvClG
- HzEZA9GwJDSesT7UznuQZLw0BE17txbzQemvGuXn9Xh/dR6yJYhY9Y2ATjxUmUuZBCrqAAUlHZP
- z1UmMlCS77/xdXbPNDZcOzk55Wtzni+zBCkam3uecZ1B6GdTnwKpaufQ/kj6pJD9nbL3jj+a
-X-Authority-Analysis: v=2.4 cv=JLE7s9Kb c=1 sm=1 tr=0 ts=685575ba cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=gxl3bz0cAAAA:8 a=EUspDBNiAAAA:8
- a=5RVeKMBEKdVlAG-YRsMA:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
- a=kiRiLd-pWN9FGgpmzFdl:22
-X-Proofpoint-GUID: HOTQoyItmpIAcGCem-Fofn9tSBsPTQaR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-20_05,2025-06-20_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 mlxlogscore=819 adultscore=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506200104
 
-On 6/20/25 8:54 AM, Akhil P Oommen wrote:
-> X1P42100 SoC has a new GPU called Adreno X1-45 which is a smaller
-> version of Adreno X1-85 GPU. Describe this new GPU and also add
-> the secure gpu firmware path that should used for X1P42100 CRD.
-> 
-> Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> Signed-off-by: Akhil P Oommen <akhilpo@oss.qualcomm.com>
-> ---
+Hi All,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+While testing 6.16-rc2+ on a Dell XPS 9640 I got the following lockdep report:
 
-Konrad
+(Note this was a build without debuginfo, so I did not run decode_stacktrace.sh)
+
+[   19.690210] ======================================================
+[   19.690212] WARNING: possible circular locking dependency detected
+[   19.690214] 6.16.0-rc2+ #3 Tainted: G            E      
+[   19.690217] ------------------------------------------------------
+[   19.690218] modprobe/906 is trying to acquire lock:
+[   19.690220] ffff89da8e948768 (&rdev->wiphy.mtx){+.+.}-{4:4}, at: iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.690269] 
+               but task is already holding lock:
+[   19.690270] ffff89da41ac2708 (&tz->lock){+.+.}-{4:4}, at: thermal_zone_device_set_mode+0x20/0xa0
+[   19.690284] 
+               which lock already depends on the new lock.
+
+[   19.690285] 
+               the existing dependency chain (in reverse order) is:
+[   19.690287] 
+               -> #4 (&tz->lock){+.+.}-{4:4}:
+[   19.690291]        __mutex_lock+0x9f/0xed0
+[   19.690299]        thermal_zone_device_set_mode+0x20/0xa0
+[   19.690302]        pkg_thermal_cpu_online+0x2ad/0x330 [x86_pkg_temp_thermal]
+[   19.690308]        cpuhp_invoke_callback+0x1ab/0x660
+[   19.690315]        cpuhp_thread_fun+0x187/0x270
+[   19.690318]        smpboot_thread_fn+0x12a/0x2e0
+[   19.690323]        kthread+0x108/0x240
+[   19.690328]        ret_from_fork+0x232/0x2a0
+[   19.690334]        ret_from_fork_asm+0x1a/0x30
+[   19.690340] 
+               -> #3 (cpuhp_state-up){+.+.}-{0:0}:
+[   19.690344]        cpuhp_thread_fun+0x99/0x270
+[   19.690348]        smpboot_thread_fn+0x12a/0x2e0
+[   19.690351]        kthread+0x108/0x240
+[   19.690355]        ret_from_fork+0x232/0x2a0
+[   19.690358]        ret_from_fork_asm+0x1a/0x30
+[   19.690361] 
+               -> #2 (cpu_hotplug_lock){++++}-{0:0}:
+[   19.690364]        cpus_read_lock+0x3c/0xe0
+[   19.690368]        static_key_slow_inc+0x12/0x30
+[   19.690375]        __nf_register_net_hook+0xb7/0x210
+[   19.690382]        nf_register_net_hook+0x2d/0x90
+[   19.690385]        nf_tables_addchain.constprop.0+0x2dd/0x6f0 [nf_tables]
+[   19.690410]        nf_tables_newchain+0x78f/0xb10 [nf_tables]
+[   19.690424]        nfnetlink_rcv_batch+0x7a5/0xc50 [nfnetlink]
+[   19.690430]        nfnetlink_rcv+0x12d/0x150 [nfnetlink]
+[   19.690432]        netlink_unicast+0x1bf/0x2b0
+[   19.690436]        netlink_sendmsg+0x211/0x430
+[   19.690438]        ____sys_sendmsg+0x373/0x3b0
+[   19.690444]        ___sys_sendmsg+0x7d/0xc0
+[   19.690447]        __sys_sendmsg+0x5e/0xb0
+[   19.690449]        do_syscall_64+0x94/0x3d0
+[   19.690454]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   19.690458] 
+               -> #1 (&nft_net->commit_mutex){+.+.}-{4:4}:
+[   19.690462]        __mutex_lock+0x9f/0xed0
+[   19.690464]        nf_tables_netdev_event+0x59/0xc0 [nf_tables]
+[   19.690480]        notifier_call_chain+0x3d/0x100
+[   19.690485]        register_netdevice+0x731/0x8f0
+[   19.690489]        cfg80211_register_netdevice+0x4c/0xf0 [cfg80211]
+[   19.690587]        ieee80211_if_add+0x475/0x740 [mac80211]
+[   19.690721]        ieee80211_register_hw+0xd6b/0xdb0 [mac80211]
+[   19.690796]        iwl_op_mode_mld_start+0x438/0x4b0 [iwlmld]
+[   19.690827]        _iwl_op_mode_start+0x67/0x100 [iwlwifi]
+[   19.690856]        iwl_opmode_register+0x6b/0xc0 [iwlwifi]
+[   19.690874]        iwl_mld_init+0x19/0xff0 [iwlmld]
+[   19.690906]        do_one_initcall+0x54/0x390
+[   19.690912]        do_init_module+0x62/0x240
+[   19.690917]        __do_sys_init_module+0x164/0x190
+[   19.690920]        do_syscall_64+0x94/0x3d0
+[   19.690926]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   19.690928] 
+               -> #0 (&rdev->wiphy.mtx){+.+.}-{4:4}:
+[   19.690933]        __lock_acquire+0x1481/0x2270
+[   19.690939]        lock_acquire+0xc9/0x2c0
+[   19.690942]        __mutex_lock+0x9f/0xed0
+[   19.690947]        iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.690968]        __thermal_zone_get_temp+0x29/0x90
+[   19.690973]        __thermal_zone_device_update+0x69/0x480
+[   19.690977]        thermal_zone_device_set_mode+0x52/0xa0
+[   19.690981]        iwl_mld_thermal_zone_register+0x144/0x1d0 [iwlmld]
+[   19.690994]        iwl_op_mode_mld_start+0x460/0x4b0 [iwlmld]
+[   19.691009]        _iwl_op_mode_start+0x67/0x100 [iwlwifi]
+[   19.691029]        iwl_opmode_register+0x6b/0xc0 [iwlwifi]
+[   19.691044]        iwl_mld_init+0x19/0xff0 [iwlmld]
+[   19.691062]        do_one_initcall+0x54/0x390
+[   19.691064]        do_init_module+0x62/0x240
+[   19.691067]        __do_sys_init_module+0x164/0x190
+[   19.691069]        do_syscall_64+0x94/0x3d0
+[   19.691071]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   19.691074] 
+               other info that might help us debug this:
+
+[   19.691075] Chain exists of:
+                 &rdev->wiphy.mtx --> cpuhp_state-up --> &tz->lock
+
+[   19.691080]  Possible unsafe locking scenario:
+
+[   19.691082]        CPU0                    CPU1
+[   19.691083]        ----                    ----
+[   19.691085]   lock(&tz->lock);
+[   19.691087]                                lock(cpuhp_state-up);
+[   19.691089]                                lock(&tz->lock);
+[   19.691091]   lock(&rdev->wiphy.mtx);
+[   19.691094] 
+                *** DEADLOCK ***
+
+[   19.691095] 2 locks held by modprobe/906:
+[   19.691097]  #0: ffffffffc156dc68 (iwlwifi_opmode_table_mtx){+.+.}-{4:4}, at: iwl_opmode_register+0x21/0xc0 [iwlwifi]
+[   19.691117]  #1: ffff89da41ac2708 (&tz->lock){+.+.}-{4:4}, at: thermal_zone_device_set_mode+0x20/0xa0
+[   19.691124] 
+               stack backtrace:
+[   19.691127] CPU: 17 UID: 0 PID: 906 Comm: modprobe Tainted: G            E       6.16.0-rc2+ #3 PREEMPT(lazy) 
+[   19.691131] Tainted: [E]=UNSIGNED_MODULE
+[   19.691132] Hardware name: Dell Inc. XPS 16 9640/09CK4V, BIOS 1.12.0 02/10/2025
+[   19.691134] Call Trace:
+[   19.691137]  <TASK>
+[   19.691138]  dump_stack_lvl+0x68/0x90
+[   19.691144]  print_circular_bug.cold+0x185/0x1d0
+[   19.691150]  check_noncircular+0x10f/0x130
+[   19.691154]  ? __kernel_text_address+0xe/0x30
+[   19.691158]  ? unwind_get_return_address+0x26/0x50
+[   19.691165]  __lock_acquire+0x1481/0x2270
+[   19.691171]  lock_acquire+0xc9/0x2c0
+[   19.691174]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.691190]  __mutex_lock+0x9f/0xed0
+[   19.691194]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.691207]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.691218]  ? lock_acquire+0xc9/0x2c0
+[   19.691221]  ? thermal_zone_device_set_mode+0x20/0xa0
+[   19.691225]  ? lock_acquire+0xd9/0x2c0
+[   19.691229]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.691240]  iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+[   19.691253]  ? lock_is_held_type+0xd5/0x140
+[   19.691258]  __thermal_zone_get_temp+0x29/0x90
+[   19.691261]  __thermal_zone_device_update+0x69/0x480
+[   19.691266]  thermal_zone_device_set_mode+0x52/0xa0
+[   19.691270]  iwl_mld_thermal_zone_register+0x144/0x1d0 [iwlmld]
+[   19.691287]  iwl_op_mode_mld_start+0x460/0x4b0 [iwlmld]
+[   19.691304]  _iwl_op_mode_start+0x67/0x100 [iwlwifi]
+[   19.691322]  iwl_opmode_register+0x6b/0xc0 [iwlwifi]
+[   19.691338]  ? __pfx_iwl_mld_init+0x10/0x10 [iwlmld]
+[   19.691353]  iwl_mld_init+0x19/0xff0 [iwlmld]
+[   19.691366]  do_one_initcall+0x54/0x390
+[   19.691372]  do_init_module+0x62/0x240
+[   19.691375]  ? __do_sys_init_module+0x164/0x190
+[   19.691377]  __do_sys_init_module+0x164/0x190
+[   19.691383]  do_syscall_64+0x94/0x3d0
+[   19.691387]  ? lock_acquire+0xc9/0x2c0
+[   19.691390]  ? __folio_batch_add_and_move+0x8f/0x2f0
+[   19.691395]  ? lock_acquire+0xd9/0x2c0
+[   19.691397]  ? find_held_lock+0x2b/0x80
+[   19.691401]  ? find_held_lock+0x2b/0x80
+[   19.691402]  ? find_held_lock+0x2b/0x80
+[   19.691405]  ? rcu_read_unlock+0x17/0x60
+[   19.691411]  ? lock_release+0x1a0/0x2d0
+[   19.691416]  ? __lock_acquire+0x45f/0x2270
+[   19.691420]  ? __handle_mm_fault+0xaf4/0xe20
+[   19.691426]  ? lock_acquire+0xc9/0x2c0
+[   19.691429]  ? find_held_lock+0x2b/0x80
+[   19.691431]  ? rcu_read_unlock+0x17/0x60
+[   19.691433]  ? lock_release+0x1a0/0x2d0
+[   19.691436]  ? find_held_lock+0x2b/0x80
+[   19.691439]  ? exc_page_fault+0x8c/0x240
+[   19.691441]  ? lock_release+0x1a0/0x2d0
+[   19.691445]  ? do_user_addr_fault+0x370/0x6b0
+[   19.691450]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   19.691453] RIP: 0033:0x7f111e502bae
+[   19.691457] Code: 48 8b 0d 5d 32 0f 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 af 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 2a 32 0f 00 f7 d8 64 89 01 48
+[   19.691460] RSP: 002b:00007ffd319c0df8 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
+[   19.691463] RAX: ffffffffffffffda RBX: 0000558224041e60 RCX: 00007f111e502bae
+[   19.691465] RDX: 00005581ee14b5ee RSI: 00000000000cbf71 RDI: 0000558224bf0cd0
+[   19.691466] RBP: 00007ffd319c0eb0 R08: 0000558224041d40 R09: 00007f111e5f6ac0
+[   19.691467] R10: 0000558224041010 R11: 0000000000000246 R12: 0000000000040000
+[   19.691468] R13: 0000558224041dc0 R14: 00005581ee14b5ee R15: 0000000000000000
+[   19.691472]  </TASK>
+
+I'll glady test any potential fixes.
+
+Regards,
+
+Hans
+
+
 
