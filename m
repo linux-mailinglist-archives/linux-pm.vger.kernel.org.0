@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-29133-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29134-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9FABAE1642
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:36:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6417AE1644
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:36:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55AAB18960FC
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 08:36:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 657BF16D081
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 08:36:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B26238C3D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822D2239E9D;
 	Fri, 20 Jun 2025 08:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="UGKf91Pi"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="vHJk45JX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
+Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAD322A4CC;
-	Fri, 20 Jun 2025 08:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A74A70825;
+	Fri, 20 Jun 2025 08:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750408576; cv=none; b=YihpwKEHc/NKfPIoXeFewBZZtVuLoN3u3XlocBF+4tuh/Lml4mYn4/FsBpSIaksTBlRpiOYvd8ncNEbqc/5MuOQjD77wRQvCkg7+hWp7BNOLPayX/HDSKaAbbEx6AZjDBBwIDSs1N416ER/oPX9WqiAQWfPEmy1bEB6T0fcZdjc=
+	t=1750408576; cv=none; b=thBRcnWVU9vp7K+9Aaopvj9mAkuvbSbUJtwPV1roV5DXf8sh6QFITTvP5QpWdxYN++k4gerdE8htYqJYcaCKBZXfjFIx+W6i3NCJ8junPXYBKviRO5zk6r5iEoGODWGVzn/m+1SIS/IEwn8ZBjwTKHEjFNZcZqzAKm3Od/dxdzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750408576; c=relaxed/simple;
-	bh=cyWdCCwdTOm6awHacCn+5KtDkL7jycH2KOpN1v9QDIg=;
+	bh=rIzQgXvIc1jagNXrbYabNFxX6IODxdkK9ASrLqltX4Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nU8Oxne593VHkf56RIZxjZ+490DHkiiU2rvMqRH/C4Gmq4yizu64AOmorGse6Ii+gn/kLspTZsu+auuWyHB1qtpkvZrDFalAbjd9SUYETGQqxUfed8TSVnO6IFDPBWVIcsrSlwEdFDUqhO2BrwhsAeeVdEa3O/8CZJluerL2TfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=UGKf91Pi; arc=none smtp.client-ip=134.0.28.12
+	 MIME-Version; b=Co6u5qy26+MEk07VNCMwju9o651Q7T6tF4YQ6uoNeoOvCAM25PBX2cWGuU5RklaW+lQnRUWYyYVZAXEUGO8o0LkkIou5SsZZ67OhxSfhWNCIXEN606vd5QkiZmnhxbZoBnkgquWh+wzhbxCNpWaUtsvTtLv5W5+6sTLerYV3+Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=vHJk45JX; arc=none smtp.client-ip=134.0.28.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout2.routing.net (Postfix) with ESMTP id BD2C860057;
-	Fri, 20 Jun 2025 08:36:11 +0000 (UTC)
+	by mxout4.routing.net (Postfix) with ESMTP id 2CBFB1007B3;
+	Fri, 20 Jun 2025 08:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1750408571;
+	s=20200217; t=1750408572;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YWGa+NZ5Jq1T+ZAcsp9vpV8h57UNEkpbrj+QyOwJwlI=;
-	b=UGKf91Pi1UU8LyGOsZOAWdABmDpEn9uGAjFokPeiIhYuJsrgEGrPZGLs271VBJ1v14FF+i
-	F9lqJh8AZxoD9ZUOPttMjP0+FHrnwyFRv3yRrYRYMz5yWDc2tjY+xcU5OpSZNAlLrC517J
-	kxwTBJnUOQ1ByKMYudkVavWrjnSP7hw=
+	bh=1f4fkmPwrhUDTuJaJTH9o5ndndBg0Bz3rlvov4MAAmY=;
+	b=vHJk45JXhMFiPPsLUV4YBBaSOlAXBQUka9Km7kst0LlxbW82PNEPUwFxtxreZDfpMBBx5x
+	aw3WZlw7mAU1Z9L2Z2X+tHZv8miJzto7h4/1artpHLodXoJ0eN51sH9nlztiEKYVnCheK7
+	11VEvjENSTPj+IsbtJJqFpBPT3PIjpY=
 Received: from frank-u24.. (fttx-pool-157.180.225.81.bambit.de [157.180.225.81])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 64661122700;
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id C2C671226F1;
 	Fri, 20 Jun 2025 08:36:11 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -79,9 +79,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v5 03/13] dt-bindings: net: dsa: mediatek,mt7530: add internal mdio bus
-Date: Fri, 20 Jun 2025 10:35:34 +0200
-Message-ID: <20250620083555.6886-4-linux@fw-web.de>
+Subject: [PATCH v5 04/13] dt-bindings: interconnect: add mt7988-cci compatible
+Date: Fri, 20 Jun 2025 10:35:35 +0200
+Message-ID: <20250620083555.6886-5-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250620083555.6886-1-linux@fw-web.de>
 References: <20250620083555.6886-1-linux@fw-web.de>
@@ -95,40 +95,42 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Mt7988 buildin switch has own mdio bus where ge-phys are connected.
-Add related property for this.
+Add compatible for Mediatek MT7988 SoC with mediatek,mt8183-cci fallback
+which is taken by driver.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
 v2:
-- change from patternproperty to property
-- add unevaluatedProperties and mediatek,pio subproperty
+- no RFC
+- drop "items" as sugested by conor
 ---
- .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml   | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../bindings/interconnect/mediatek,cci.yaml           | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-index 9b983fdbf3c7..815a90808901 100644
---- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-@@ -136,6 +136,16 @@ properties:
-       See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
-       details for the regulator setup on these boards.
+diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+index 58611ba2a0f4..4d72525f407e 100644
+--- a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
++++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+@@ -17,9 +17,14 @@ description: |
  
-+  mdio:
-+    $ref: /schemas/net/mdio.yaml#
-+    unevaluatedProperties: false
-+
-+    properties:
-+      mediatek,pio:
-+        $ref: /schemas/types.yaml#/definitions/phandle
-+        description:
-+          Phandle pointing to the mediatek pinctrl node.
-+
-   mediatek,mcm:
-     type: boolean
-     description:
+ properties:
+   compatible:
+-    enum:
+-      - mediatek,mt8183-cci
+-      - mediatek,mt8186-cci
++    oneOf:
++      - enum:
++          - mediatek,mt8183-cci
++          - mediatek,mt8186-cci
++      - items:
++          - enum:
++              - mediatek,mt7988-cci
++          - const: mediatek,mt8183-cci
+ 
+   clocks:
+     items:
 -- 
 2.43.0
 
