@@ -1,150 +1,117 @@
-Return-Path: <linux-pm+bounces-29158-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29159-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B11F8AE1928
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 12:41:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 666A6AE193B
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 12:47:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 597DC1629F0
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:41:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1C101BC76C1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 10:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC768260589;
-	Fri, 20 Jun 2025 10:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mOGYRu+B"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796E2266571;
+	Fri, 20 Jun 2025 10:47:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11298236442
-	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 10:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67B62AF07
+	for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 10:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750416112; cv=none; b=ol06NhUKsgugtoc+ZSVmK3ByHcOI8NXGrty6HGZVwbsrfMRUKYUsUHgS5s14asTH4Qy5feGnxIRU+SlbatYLWF4dk/Z89Fg9dg/atbO42jBUE9r6JhgpsZSMHRLehEyP+SuZTDJjPkuBmtL35qSt9fP//hhQvgenh3CAPCcx4nY=
+	t=1750416421; cv=none; b=XUV1j3W1Z/UPZvs7rhrL05PC0thaV+/NYGHVGiiEMJWZJpAjpt04T3UU9A7KWVLumLGMqI/QBtkGEgNKByibAwX9Dtl8fT3fV7/UcNZStlD8aFo3vZ5ZUj+g7ex7z9TqknZ96V9YbxghmwKckDydWTrVffvwL304PY4e/vmKCFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750416112; c=relaxed/simple;
-	bh=q7jUaZeCrfpBs43z9Hy7QBXglV4bT2WecERgxgwdQc8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JwK+4HI6DeyjQvYWgA2nIvKXqkW5JCSQrwFrqzkzlsg+ED/Qj8wBojBRyX0SDoS6GikOXikOplGABiRbzhq5WQskd478/YEQlagqD6cc9+JHzb5XSYaSYPWNdWqrltouRpM8d5Faxyt2wnG9Pl+vTKC+RhNJXeGjyDOvRrhPTqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mOGYRu+B; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-23508d30142so22801365ad.0
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jun 2025 03:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1750416109; x=1751020909; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lfBsCz2FCCDcQNBUcihjSy0xTy3M608ho2jYmxxH2PE=;
-        b=mOGYRu+BL9MOqtNolhYvfz9FPpJnt9lK/ETlVNm2UO8Sl9MWlVsfHyZHOzZxc/iNfx
-         KYbz5yx17wr9DZ1O1Q50wJ359EMZT4nScuptntpqO8vLKFtKcsh1d2PEcZAixj5XkmMv
-         daHUCHwKFZqZuIHQT/tDmTjJpD4B+UsFvWhjg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750416109; x=1751020909;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lfBsCz2FCCDcQNBUcihjSy0xTy3M608ho2jYmxxH2PE=;
-        b=HgB4ydMZVnL0TlaVrjgqU+VjetwfCE5BjjQfxd4TT+Hpa0s//10r5B1mmEGbwBTXMP
-         ZRFk9wRUlmoDfJrAISLjn6u6TQc8PiuJ7WKS6ryKyaHDkUrjtUNyL6MjjKc+hwTPcpcR
-         IiNCdhZN4TQirWbmjjBwjZujdJlmgPgY0PBoLg6K+o+GH1FoCbtLxfZWS9gaU1+fSEEj
-         w7bgrXGwVEv97V0KKsbcbZyJ5PWNc7QozXo+mNPbtXT5rEzK0Mcctlhax14H3AlKdFBi
-         4loNhv7wNWBn4zQp75hXGpSCo6keRxtfviGy7XiIKfGwFcfXGcq9/poDieWD0RX/5soQ
-         nD1A==
-X-Gm-Message-State: AOJu0YyAsAyOnJMFjnrkTnmyqCN3fJMYDU+aQ9Fdep833SGvdEPPUiRC
-	IzrQx49KWuSMY7EySI0bj2iT+BKOk8TVEFAAxHct7B6eXL3E9cv//jkXqoup44KBGg==
-X-Gm-Gg: ASbGncsXP6Xmi+9Wl1ygOXqiuYWWXaWEHRCUfTr9EzfWoX+iugdIqQ1D2mr63qyHttP
-	fbTXI5XVeuk3B21F691l1AgiYbbZw9SouhPJv9fQF5KJdygjVxFxlJznrf5WE6PnR3ULPvrcIDl
-	WojENoUR+zck3/pPhSuYggej3Ubx1Osdxh9LM/Z8fJjLscgns2Af6hqQDQm7/U1AjsbpbQyfKNj
-	jV7VMFBzlq48QZjvCC89ew7k3aQFHmMclxowJ5zGHpDrryYYfzZW3xO+2y1Fy9lqBUUDmymuIJZ
-	pK/zWkF5W6KGYTngLRvc1zJ2hmBe81L5f0icwDyzv1H1qYrr42K5uWBuaIHsQN9A8s3tw00qQfD
-	LxB0yhb47yaUtzpjJ6lZB+R1/Q9FB2R8LhBCbnbQnShWcAV3fAx1zlRTPs+e/
-X-Google-Smtp-Source: AGHT+IGnMQSZOCLVg5rJlh2wQDEMq63wQi1fyNPC8G0fdeVlnF1TnRsHCW3F6Zyk5iZTU+Ts1fj2OQ==
-X-Received: by 2002:a17:902:d581:b0:235:2403:77b6 with SMTP id d9443c01a7336-237d9ad2891mr28004285ad.37.1750416109370;
-        Fri, 20 Jun 2025 03:41:49 -0700 (PDT)
-Received: from yuanhsinte.c.googlers.com (243.106.81.34.bc.googleusercontent.com. [34.81.106.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d83936c8sm15444775ad.7.2025.06.20.03.41.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jun 2025 03:41:48 -0700 (PDT)
-From: Hsin-Te Yuan <yuanhsinte@chromium.org>
-Date: Fri, 20 Jun 2025 10:41:43 +0000
-Subject: [PATCH v3] thermal: sysfs: Return ENODATA instead of EAGAIN for
- reads
+	s=arc-20240116; t=1750416421; c=relaxed/simple;
+	bh=8K+lKwckWfuWutfmZ63/z6hrsco7XbS2G0aXpnrRaW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aYSha77MsjQgZTMDiA6CqSqgw6nr05fFWLtCW5NiFtNQhNF7Hz6wS8KPhrp9oVJasf43icDkwdGF6Oi/06tCDyJJOeFNQrdTOhRqzNT1cYtem3VfOqu5JPCKjEx3hKRBzJtTG7kZ9qWDcBKG8GVkI7iAqckX+AKGAlS8Ywnk6Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 869CC176A;
+	Fri, 20 Jun 2025 03:46:39 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA4DA3F58B;
+	Fri, 20 Jun 2025 03:46:57 -0700 (PDT)
+Date: Fri, 20 Jun 2025 11:46:54 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: =?utf-8?B?6buE5bCR5rOi?= <huangshaobo2075@phytium.com.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	lenb@kernel.org, deepthi@linux.vnet.ibm.com, khilman@kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: Subject: [cpuidle] Limitation: cannot model asymmetric C-state
+ latencies on big.LITTLE SoCs
+Message-ID: <20250620-premium-curious-bison-9df0d4@sudeepholla>
+References: <5d7534c.5492.1977796c43a.Coremail.huangshaobo2075@phytium.com.cn>
+ <CAJZ5v0ix-QWgpq_FhnKhSWN5BtBmU_fSWSMJFkr8H1OUm6qJKw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250620-temp-v3-1-6becc6aeb66c@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAOY6VWgC/12MQQqDMBBFryKzbkoSjWhXvUfpIjqjzkIjiQ0t4
- t0bpVBw+T7/vRUCeaYAt2wFT5EDuylBfsmgHezUk2BMDFpqIwtZi4XGWZTUoMotSmwQ0nX21PH
- 7yDyeiQcOi/OfoxrVvp4CUQklapvXCqu2lB3e28G7kV/j1fke9kbUf88o/fN08mRRNWQqstaak
- 7dt2xeFbZ/R0wAAAA==
-X-Change-ID: 20250409-temp-6ebd13ad0dbd
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Hsin-Te Yuan <yuanhsinte@chromium.org>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0ix-QWgpq_FhnKhSWN5BtBmU_fSWSMJFkr8H1OUm6qJKw@mail.gmail.com>
 
-According to POSIX spec, EAGAIN returned by read with O_NONBLOCK set
-means the read would block. Hence, the common implementation in
-nonblocking model will poll the file when the nonblocking read returns
-EAGAIN. However, when the target file is thermal zone, this mechanism
-will totally malfunction because thermal zone doesn't implement sysfs
-notification and thus the poll will never return.
+On Mon, Jun 16, 2025 at 01:29:15PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Jun 16, 2025 at 9:14 AM 黄少波 <huangshaobo2075@phytium.com.cn> wrote:
+> >
+> > From: huangshaobo2075@phytium.com.cn
+> > To: linux-pm@vger.kernel.org
+> > Cc: rafael@kernel.org, lenb@kernel.org, deepthi@linux.vnet.ibm.com, khilman@kernel.org
+> > Subject: [cpuidle] Limitation: cannot model asymmetric C-state latencies on big.LITTLE SoCs
+> >
+> > Hi,
+> >
+> > I'm working on an ARM64 platform with a big.LITTLE CPU topology. While parsing the ACPI tables,
+> > I noticed that the C-state latency and residency values differ between the big and LITTLE cores,
+> > as expected.
+> >
+> > However, I found that the current cpuidle framework only allows a single global `cpuidle_driver`,
+> > and all CPUs share the same `cpuidle_driver->states[]` array.
+> 
+> Not really, see bl_idle_init() in particular.
+> 
+> However, on systems with ACPI on which _CST is used for idle state
+> description, there's only one cpuidle driver and one table of idle
+> states for all CPUs.
+> 
 
-For example, the read in Golang implemnts such method and sometimes
-hangs at reading some thermal zones via sysfs.
+Indeed.
 
-Change to throw ENODATA instead of EAGAIN to userspace.
+> > As a result, only the first core to
+> > initialize (usually a LITTLE core) sets up the C-states, and the same values are applied to all cores,
+> > including the big ones. This leads to incorrect idle behavior on asymmetric platforms.
+> >
+> > I believe this behavior was introduced by commit 46bcfad7a819
+> > ("cpuidle: Single/Global registration of idle states").
+> >
+> > I understand this design was introduced in 2011 to simplify cpuidle and reduce memory usage:
+> > https://lkml.org/lkml/2011/4/25/83
+> >
+> > However, on today's heterogeneous SoCs, this global model no longer suffices. For proper modeling,
+> > we need support for per-cluster or per-core cpuidle drivers, or at least some mechanism to allow
+> > different idle state parameters per CPU.
+> >
+> > Has there been any discussion or work toward lifting this limitation?
+> 
+> No, there's not been any discussion on this so far, but why does the
+> platform firmware on this system use _CST for idle state description?
+> _LPI would be a better option AFAICS.
+> 
 
-Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
----
-Changes in v3:
-- Refine the control flow and optimize the success case.
-- Link to v2: https://lore.kernel.org/r/20250512-temp-v2-1-048be58eaaa5@chromium.org
+Absolutely _LPI is better and I believe _LPI is used in this case. However
+at the time I added _LPI support, the expectation was to use ACPI on SMP
+systems without such variations in the idle states. So even with _LPIs,
+only one cpuidle driver and hence only one table of idle states for all CPUs
+was added. We can enhance the support for HMP systems with different set of
+idle states if required. All we need is to allocate the driver instead of
+using acpi_idle_driver IIRC. The initialisation of the states is already done
+per cpu.
 
-Changes in v2:
-- Modify commit message to make it clear
-- Link to v1: https://lore.kernel.org/r/20250409-temp-v1-1-9a391d8c60fd@chromium.org
----
- drivers/thermal/thermal_sysfs.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 24b9055a0b6c515b865e0d7e2db1d0de176ff767..d80612506a334ab739e7545cdfe984ab4dffab7c 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -40,10 +40,13 @@ temp_show(struct device *dev, struct device_attribute *attr, char *buf)
- 
- 	ret = thermal_zone_get_temp(tz, &temperature);
- 
--	if (ret)
--		return ret;
-+	if (!ret)
-+		return sprintf(buf, "%d\n", temperature);
- 
--	return sprintf(buf, "%d\n", temperature);
-+	if (ret == -EAGAIN)
-+		return -ENODATA;
-+
-+	return ret;
- }
- 
- static ssize_t
-
----
-base-commit: 75f5f23f8787c5e184fcb2fbcd02d8e9317dc5e7
-change-id: 20250409-temp-6ebd13ad0dbd
-
-Best regards,
 -- 
-Hsin-Te Yuan <yuanhsinte@chromium.org>
-
+Regards,
+Sudeep
 
