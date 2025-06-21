@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-29196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91C2BAE2AF8
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 20:04:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55BD9AE2AFA
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 20:04:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29160176AA4
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 18:04:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E623A6C54
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 18:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9510626FA56;
-	Sat, 21 Jun 2025 18:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270BC26F476;
+	Sat, 21 Jun 2025 18:03:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQiZ7Nwg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdf6Hobk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA81D1F4CBD;
-	Sat, 21 Jun 2025 18:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8C0254AE1;
+	Sat, 21 Jun 2025 18:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750529033; cv=none; b=Tb3rYbwmX/8Cvt3L1aEHhDgGomvizfN93gWHU32Vctzc7dWMGcK/8FRFHwaAGo+JZw0Gh3foZd1SP/jnOVmPGeQyK0p1M6sra9nMZbKq7ExTC8Wz2OSUcTYnUxTHSeIvwVZGwX9dFPNPayTG3QmwWILUDDnaSFTGQgXEC+Xh2tM=
+	t=1750529034; cv=none; b=nASAkAfW45bFohLL4HKUzQzRjXNQA189otlsEEmq4SFySuEZjeCZUAXU0YKOPDjRrwGn+HS3jVGtreG1NPDoeskK1cH/6c4v5HJvBgEGWDu2Bd/eZRlH5F1cYNR/Kpu5dwP/DRPGAvbS/5BHwxrMwzD4vI4iuhOIYTmYwzcDiJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750529033; c=relaxed/simple;
-	bh=da718sl1vUz2C4+wTLLfB2uqm7b2AE2eQKawh0Kx0Dk=;
+	s=arc-20240116; t=1750529034; c=relaxed/simple;
+	bh=RkkZ1rVcIjjaIuIUTMKQMdxZMeQhhhILKOa4cee/qmo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OHgvioXw5M5EkRpDy9ceRG39qLxVAZ+q/+Ce2E6e03VRmfuwtnHkZn06AL9maH1B7dQI1ZgUT/DQEu9Zr9ClukdzopaBCLg4JdMB3pPBsRC8GJRGNaZZ5I5i3wtQJGmfUyM3YlmUNraGc7YNzfeP5+F7HEo+heY25oyP7QT9ysE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KQiZ7Nwg; arc=none smtp.client-ip=209.85.160.52
+	 MIME-Version; b=PEt56Goxj5BYtkJvc4Jcbwx3eU4nqD333KeKLw7xgw63UXFed+9mdbYqPUgGo5cYfG4rPvuF7MgcKv0Fm2rdCxq9VBbXL1J6q3g+teMpNjWDkSawmo30ROMZ5w4YRUPbTjIRpc6s7KKb5XErBBVE4/ExQD7Hz3w/biSu+ONdcFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jdf6Hobk; arc=none smtp.client-ip=209.85.210.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2eb6c422828so1689996fac.1;
-        Sat, 21 Jun 2025 11:03:51 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7382a999970so1944406a34.3;
+        Sat, 21 Jun 2025 11:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1750529031; x=1751133831; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nFXGuCqWGUFbMDDrH8jIeiPmxbIbWQy83xQryzkPSkQ=;
-        b=KQiZ7Nwg6IcxZon9kpVHcWqSxC9bfVpOUztHJl/zH6r6yzhQXyi1LHliye9OBrXmJP
-         edHbr0r/j6r426RQAPXcHLa2uEBNJ3E25z37GWaqToR7hdvmnJ+dYlZdZUY5eJfKN1tI
-         +8qhhdOnHkHAwOSrjoATe1WfDf6GSWw+B4tyawql0sy+rYppCM5yk3yXSkVKmFpgpKFQ
-         7moE83ZxhG9pcMEfaWU/mWpyuLoZSL+Ujt9eHwvzUUIwK3nHrz1A7wWCMlD0yvPtjbbg
-         yTDbEG7i62FHEku/lmBF1VdsdGyIY1t2eAC8yi1zgM3GkgfOKYzK3Xh/zw5MbsQ4VYr6
-         y/eQ==
+        bh=3VWQ/3f6uGRHlfE4j0BNsaq/8Sj/J2vStE5CIqW2jYY=;
+        b=jdf6HobkJ9BvUdLetkH2PFAmBDPI6b2UphCDRyhyMC7EFxXwRZpY9Jopv9yIlabZLX
+         HLmXLimxdBkFN27utH+6F/taeb1nfsnjYUHoZNuoU1Hjpjh5/9X2VIdvOvHbXnTyXoHK
+         XjTGwwcLOsmAbTvuNgvHhGhsMI2D/IndC/ZZ9JfviJJWkve3VyKOyk7ykf8GKY2EVgIC
+         fDKtYomI0XMUTt+zQGsipUdw4Bcl1U7D8/3+z7UFQo5cAOvHeiAp05B0fft1d7nDmp0s
+         KrgcvPs2h/ftKe7mKbq5nNi+NaHO/7+lN2DH2uw0/QxRO6fNX3ma2W6jEse80ar9P227
+         yglQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1750529031; x=1751133831;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nFXGuCqWGUFbMDDrH8jIeiPmxbIbWQy83xQryzkPSkQ=;
-        b=CIJTGAq1M+qWqJ2V3eo2JMQ25Nvj8/QcdOqCHFdltEfJjIPuyQAYQQDtq7OH8fDZD9
-         qKeOpy5NmCTD5GmUsLWWn6dNLHBXX/V9hbp5oj/JgjYcCwrgFze9YH0eQBRv/9PDNKHB
-         Jly4aOXESEoDhXotFXEX5nXs6P1B1NCLRa0yNlAiwuqHWhGiJ+wcad1Y10bMwCv/MLBU
-         L8/D37nzgzEtlMycIRiHYSyUxAvhMwztcYha9y6KKm1b5lm3kJJ1SFmoVPiToUX+fe9w
-         VpvFcaqIykSwwZmsHbkupTpMaB/AXlLExZ5iP7t2Rp376M+YTErI7e1zd7I2CflpIp7D
-         PFGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUaE3w5avCNTLa/OI4yzvR7HTB1y9InhB7apjiT6JW1yeA4MAftMUStOaJvRx84lW/MwIog3KUNI/CJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw9M1k5eAlhyLDN4NFm05164ftshCJJ/FZrl/Ep6vXnuLSoQLM
-	TQhoQk1x528blrg5dwS7zUV3V2m5cWedcBhnD4ddWtwQZyfNX9UjrGSJAazYig==
-X-Gm-Gg: ASbGncthL6D2RhOfPBDANLT9hJiQRb5RST0ojrZ7k9J5AyNGwdJOI69wlBJtaxq5zYN
-	JpBvqji8vfXNA5dCnmp2iDeTKF3DnVB12T6YUsOUK6tR9okpMHBiFFjZIqJPj2YhlI9em9pV3bk
-	0NLVIbn2NfUAsb45cEguqms1wGuhQHUOl2QXzlYm+O8tZT4w3lpfcTpxo0JYXDPPaCoTFrQnMUM
-	AS/tzqfjKgqvbMO7qK9Uod5BdUy7KLQzNFnXTTotgaHApKVIJc1VNpaBneHz0g/lvLHfWSHTzdx
-	8dMoycxOFMtfKSVdUokuH0oOsQL/xmv6yljvJgU+d5su1/fC9C//mPUl82CZ
-X-Google-Smtp-Source: AGHT+IEf5oWx5jcRrW+RdIsWR/2VWRduViJY0Q3bquwatVcXturaZZ/eacAvbiEu6AQ7Bv+NHmaDBw==
-X-Received: by 2002:a05:6870:d38f:b0:2b8:608d:5dd1 with SMTP id 586e51a60fabf-2ef2aa679d2mr4552890fac.18.1750529030625;
-        Sat, 21 Jun 2025 11:03:50 -0700 (PDT)
+        bh=3VWQ/3f6uGRHlfE4j0BNsaq/8Sj/J2vStE5CIqW2jYY=;
+        b=utN+SodT0iAMZDVMSn1GLj3oz2JDov6pQymXhih7tPP8V0pri0d1CzJlyeby5MS/Zi
+         37huzOvPNbP0bK6dNQuU5+vC7VS81IYEsWgWMX6hre2CkG6Z5lVW4sUOD6eov0FuuL/l
+         tFY5uE7WRpBedn1aUaYVtFiV2JHEmInA43d/9SEvqekecynrYk0D65tyYO0opp9sN0oZ
+         VE3LVGcn6jYlQTeZcDcFe/2uIj/HSPX0fG4SjXPoqjVwHYUydou9HyXgjvl6Cgtvmwnc
+         fzUHvoQ6y3agkgHYMnm0Hj7eH1aWRny+OUPBzn5SBEjAZaXK9mGoFAPxx1FO1gF7g9af
+         632w==
+X-Forwarded-Encrypted: i=1; AJvYcCVbGDn2es9Yyx667wvmIJRe749lO4KbrOodTsXflhYzxTqNyfoDDqI7nsI+0MmSISXYMLQdy2mz1kxf@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRKyfIe5tbtlgpFYhRexOZFgk9zy3tOxly/HkbssjjkrXnz6er
+	TVvinPcvVj7VBMoNr7XGJW+39kBzqnw4LB2XFPRVGaOPF0DsyvCm8S7k9xlYUA==
+X-Gm-Gg: ASbGnctnPW5whbivTSZDN6vSl6dejbJ4NFlCEVLvTECAAenkAp+JHX114her1PSUzUi
+	N5AOXSAjqgl6R8pQ7SYQjtXYNs5nV0I5LpETBtBeFCb6vARtZaj5k+DOPtKCwSgjaOz9mEXrDmN
+	vnU0JVXmd4UKiM7Pc6w2ANA2zSNjXuT4mSkfsk7xYkyKSOPnO5J4Fe2LkWAQYy7eAPVCXN4u3FL
+	ko+dU0Zenu2XVtT3ZVeiPC+PUqsh4DoHiDFmF9x1GP9doYaf2TUtXvVFDXUUQImqiXIn/y75dla
+	np71YL2sIsr+6YshOM8C4oog1/hAmtw1ZAh6dHWd0UQGWgqfPWxdzLLkh8fk
+X-Google-Smtp-Source: AGHT+IFiLXYIned3w/8jpGd43WO8zO95ib2QVaU/sdAM/cAhlQwDADtJv0SrvwE6/jrq4UNJ8sGUxw==
+X-Received: by 2002:a05:6830:6607:b0:72b:93c9:41a6 with SMTP id 46e09a7af769-73a91fbf66amr5329313a34.20.1750529031452;
+        Sat, 21 Jun 2025 11:03:51 -0700 (PDT)
 Received: from localhost.localdomain ([2600:1700:fb0:1bc0::54])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73a90ca8707sm782895a34.46.2025.06.21.11.03.49
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73a90ca8707sm782895a34.46.2025.06.21.11.03.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jun 2025 11:03:50 -0700 (PDT)
+        Sat, 21 Jun 2025 11:03:51 -0700 (PDT)
 From: Chris Morgan <macroalpha82@gmail.com>
 To: linux-pm@vger.kernel.org
 Cc: linux-rockchip@lists.infradead.org,
@@ -85,9 +85,9 @@ Cc: linux-rockchip@lists.infradead.org,
 	robh@kernel.org,
 	lee@kernel.org,
 	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH V2 4/5] regulator: bq257xx: Add bq257xx boost regulator driver
-Date: Sat, 21 Jun 2025 13:01:18 -0500
-Message-ID: <20250621180119.163423-5-macroalpha82@gmail.com>
+Subject: [PATCH V2 5/5] arm64: dts: rockchip: Add USB and charger to Gameforce Ace
+Date: Sat, 21 Jun 2025 13:01:19 -0500
+Message-ID: <20250621180119.163423-6-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250621180119.163423-1-macroalpha82@gmail.com>
 References: <20250621180119.163423-1-macroalpha82@gmail.com>
@@ -101,243 +101,168 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Add support for the boost regulator found in the Texas Instruments
-BQ25703. The boost regulator is capable of outputting between 4.48
-and 20.8 volts and between 0 and 6.35 amps.
+Add support for the BQ25703A charger manager and boost regulator to
+the Gameforce Ace. Add the USB-C port and PHY as well as they all
+depend on each other for operation.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
- drivers/regulator/Kconfig             |   8 ++
- drivers/regulator/Makefile            |   1 +
- drivers/regulator/bq257xx-regulator.c | 188 ++++++++++++++++++++++++++
- 3 files changed, 197 insertions(+)
- create mode 100644 drivers/regulator/bq257xx-regulator.c
+ .../dts/rockchip/rk3588s-gameforce-ace.dts    | 122 ++++++++++++++++++
+ 1 file changed, 122 insertions(+)
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 6d8988387da4..53cd33afe6d5 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -297,6 +297,14 @@ config REGULATOR_BD96801
- 	  This driver can also be built as a module. If so, the module
- 	  will be called bd96801-regulator.
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
+index 873a2bd6a6de..c74a4e0fa238 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
+@@ -575,6 +575,56 @@ &i2c6 {
+ 	pinctrl-0 = <&i2c6m3_xfer>;
+ 	status = "okay";
  
-+config REGULATOR_BQ257XX
-+	tristate "TI BQ257XX regulator family"
-+	depends on MFD_BQ257XX
-+	depends on GPIOLIB || COMPILE_TEST
-+	help
-+	  Say Y to enable support for the boost regulator function of
-+	  the BQ257XX family of charger circuits.
++	fusb302: typec@22 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-0 = <&usbc0_int>;
++		pinctrl-names = "default";
++		vbus-supply = <&usb_otg_vbus>;
 +
- config REGULATOR_CPCAP
- 	tristate "Motorola CPCAP regulator"
- 	depends on MFD_CPCAP
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index c0bc7a0f4e67..d6024189a248 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -38,6 +38,7 @@ obj-$(CONFIG_REGULATOR_BD71828) += bd71828-regulator.o
- obj-$(CONFIG_REGULATOR_BD718XX) += bd718x7-regulator.o
- obj-$(CONFIG_REGULATOR_BD9571MWV) += bd9571mwv-regulator.o
- obj-$(CONFIG_REGULATOR_BD957XMUF) += bd9576-regulator.o
-+obj-$(CONFIG_REGULATOR_BQ257XX) += bq257xx-regulator.o
- obj-$(CONFIG_REGULATOR_DA903X)	+= da903x-regulator.o
- obj-$(CONFIG_REGULATOR_BD96801) += bd96801-regulator.o
- obj-$(CONFIG_REGULATOR_DA9052)	+= da9052-regulator.o
-diff --git a/drivers/regulator/bq257xx-regulator.c b/drivers/regulator/bq257xx-regulator.c
-new file mode 100644
-index 000000000000..63bb61cb16a8
---- /dev/null
-+++ b/drivers/regulator/bq257xx-regulator.c
-@@ -0,0 +1,188 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* BQ257XX Battery Charger Driver
-+ * Copyright (C) 2024 Chris Morgan <macromorgan@hotmail.com>
-+ * Based off of BQ256XX Battery Charger driver and
-+ * RK808 Regulator driver.
-+ */
++		connector {
++			compatible = "usb-c-connector";
++			data-role = "dual";
++			label = "USB-C";
++			op-sink-microwatt = <1000000>;
++			power-role = "dual";
++			self-powered;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++				     PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM)
++				     PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM)>;
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			try-power-role = "sink";
 +
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/mfd/bq257xx.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/of_regulator.h>
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
 +
-+struct bq257xx_reg_data {
-+	struct bq257xx_device *bq;
-+	struct regulator_dev *bq257xx_reg;
-+	struct gpio_desc *otg_en_gpio;
-+	struct regulator_desc desc;
++				port@0 {
++					reg = <0>;
++					usbc0_orien_sw: endpoint {
++						remote-endpoint = <&usbdp_phy0_orientation_switch>;
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++					usbc0_role_sw: endpoint {
++						remote-endpoint = <&dwc3_0_role_switch>;
++					};
++				};
++
++				port@2 {
++					reg = <2>;
++					dp_altmode_mux: endpoint {
++						remote-endpoint = <&usbdp_phy0_dp_altmode_mux>;
++					};
++				};
++			};
++		};
++	};
++
+ 	rtc_hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+@@ -603,8 +653,34 @@ battery@62 {
+ 			 0x2F 0x00 0x64 0xA5 0xB5 0x1C 0xF0 0x49>;
+ 		cellwise,monitor-interval-ms = <5000>;
+ 		monitored-battery = <&battery>;
++		power-supplies = <&bq25703>;
+ 		status = "okay";
+ 	};
++
++	bq25703: charger@6b {
++		compatible = "ti,bq25703a";
++		reg = <0x6b>;
++		input-current-limit-microamp = <5000000>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <RK_PD5 IRQ_TYPE_LEVEL_LOW>;
++		monitored-battery = <&battery>;
++		pinctrl-0 = <&charger_int_h>;
++		pinctrl-names = "default";
++		power-supplies = <&fusb302>;
++
++		regulators {
++			usb_otg_vbus: usb-otg-vbus {
++				enable-gpios = <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>;
++				pinctrl-0 = <&boost_enable_h>;
++				pinctrl-names = "default";
++				regulator-max-microamp = <960000>;
++				regulator-max-microvolt = <5088000>;
++				regulator-min-microamp = <512000>;
++				regulator-min-microvolt = <4992000>;
++				regulator-name = "usb_otg_vbus";
++			};
++		};
++	};
+ };
+ 
+ &i2c7 {
+@@ -807,6 +883,12 @@ usbc0_int: usbc0-int {
+ 			rockchip,pins =
+ 				<0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>;
+ 		};
++
++		usbc_sbu_dc: usbc-sbu-dc {
++			rockchip,pins =
++				<4 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>,
++				<4 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
+ 	};
+ 
+ 	vcc3v3-lcd {
+@@ -1239,3 +1321,43 @@ bluetooth {
+ 		shutdown-gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_HIGH>;
+ 	};
+ };
++
++&usb_host0_xhci {
++	usb-role-switch;
++	status = "okay";
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		dwc3_0_role_switch: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&usbc0_role_sw>;
++		};
++	};
 +};
 +
-+static int bq25703_vbus_get_cur_limit(struct regulator_dev *rdev)
-+{
-+	struct bq257xx_reg_data *pdata = rdev_get_drvdata(rdev);
-+	int ret;
-+	unsigned int reg;
++&usbdp_phy0 {
++	mode-switch;
++	orientation-switch;
++	pinctrl-0 = <&usbc_sbu_dc>;
++	pinctrl-names = "default";
++	sbu1-dc-gpios = <&gpio4 RK_PA0 GPIO_ACTIVE_HIGH>;
++	sbu2-dc-gpios = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
++	rockchip,dp-lane-mux = <2 3>;
++	status = "okay";
 +
-+	ret = regmap_read(pdata->bq->regmap, BQ25703_OTG_CURRENT, &reg);
-+	if (ret)
-+		return ret;
-+	return FIELD_GET(BQ25703_OTG_CUR_MASK, reg) * BQ25703_OTG_CUR_STEP_UA;
-+}
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+/*
-+ * Check if the minimum current and maximum current requested are
-+ * sane values, then set the register accordingly.
-+ */
-+static int bq25703_vbus_set_cur_limit(struct regulator_dev *rdev,
-+				      int min_uA, int max_uA)
-+{
-+	struct bq257xx_reg_data *pdata = rdev_get_drvdata(rdev);
-+	unsigned int reg;
++		usbdp_phy0_orientation_switch: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&usbc0_orien_sw>;
++		};
 +
-+	if ((min_uA > BQ25703_OTG_CUR_MAX_UA) || (max_uA < 0))
-+		return -EINVAL;
-+
-+	reg = (max_uA / BQ25703_OTG_CUR_STEP_UA);
-+
-+	/* Catch rounding errors since our step is 50000uA. */
-+	if ((reg * BQ25703_OTG_CUR_STEP_UA) < min_uA)
-+		return -EINVAL;
-+
-+	return regmap_write(pdata->bq->regmap, BQ25703_OTG_CURRENT,
-+			    FIELD_PREP(BQ25703_OTG_CUR_MASK, reg));
-+}
-+
-+static int bq25703_vbus_enable(struct regulator_dev *rdev)
-+{
-+	struct bq257xx_reg_data *pdata = rdev_get_drvdata(rdev);
-+
-+	if (pdata->otg_en_gpio)
-+		gpiod_set_value_cansleep(pdata->otg_en_gpio, 1);
-+	return regulator_enable_regmap(rdev);
-+}
-+
-+static int bq25703_vbus_disable(struct regulator_dev *rdev)
-+{
-+	struct bq257xx_reg_data *pdata = rdev_get_drvdata(rdev);
-+
-+	if (pdata->otg_en_gpio)
-+		gpiod_set_value_cansleep(pdata->otg_en_gpio, 0);
-+	return regulator_disable_regmap(rdev);
-+}
-+
-+static const struct regulator_ops bq25703_vbus_ops = {
-+	.enable = bq25703_vbus_enable,
-+	.disable = bq25703_vbus_disable,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.list_voltage = regulator_list_voltage_linear,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_current_limit = bq25703_vbus_get_cur_limit,
-+	.set_current_limit = bq25703_vbus_set_cur_limit,
++		usbdp_phy0_dp_altmode_mux: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&dp_altmode_mux>;
++		};
++	};
 +};
-+
-+static const struct regulator_desc bq25703_vbus_desc = {
-+	.name = "usb_otg_vbus",
-+	.of_match = of_match_ptr("usb-otg-vbus"),
-+	.regulators_node = of_match_ptr("regulators"),
-+	.type = REGULATOR_VOLTAGE,
-+	.owner = THIS_MODULE,
-+	.ops = &bq25703_vbus_ops,
-+	.min_uV = BQ25703_OTG_VOLT_MIN_UV,
-+	.uV_step = BQ25703_OTG_VOLT_STEP_UV,
-+	.n_voltages = BQ25703_OTG_VOLT_NUM_VOLT,
-+	.enable_mask = BQ25703_EN_OTG_MASK,
-+	.enable_reg = BQ25703_CHARGE_OPTION_3,
-+	.enable_val = BQ25703_EN_OTG_MASK,
-+	.disable_val = 0,
-+	.vsel_reg = BQ25703_OTG_VOLT,
-+	.vsel_mask = BQ25703_OTG_VOLT_MASK,
-+};
-+
-+/* Get optional GPIO for OTG regulator enable. */
-+static void bq257xx_reg_dt_parse_gpio(struct platform_device *pdev)
-+{
-+	struct device_node *child, *subchild;
-+	struct bq257xx_reg_data *pdata = platform_get_drvdata(pdev);
-+
-+	child = of_get_child_by_name(pdev->dev.of_node,
-+				     pdata->desc.regulators_node);
-+	if (!child)
-+		return;
-+
-+	subchild = of_get_child_by_name(child, pdata->desc.of_match);
-+	if (!subchild)
-+		return;
-+
-+	of_node_put(child);
-+
-+	pdata->otg_en_gpio = devm_fwnode_gpiod_get_index(&pdev->dev,
-+							 of_fwnode_handle(subchild),
-+							 "enable", 0,
-+							 GPIOD_OUT_LOW,
-+							 pdata->desc.of_match);
-+
-+	of_node_put(subchild);
-+
-+	if (IS_ERR_OR_NULL(pdata->otg_en_gpio)) {
-+		dev_err(&pdev->dev, "Error getting enable gpio: %ld\n",
-+			PTR_ERR(pdata->otg_en_gpio));
-+		return;
-+	}
-+}
-+
-+static int bq257xx_regulator_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct bq257xx_device *bq = dev_get_drvdata(pdev->dev.parent);
-+	struct bq257xx_reg_data *pdata;
-+	struct device_node *np = dev->of_node;
-+	struct regulator_init_data *init_data;
-+	struct regulator_config cfg = {};
-+
-+	pdev->dev.of_node = pdev->dev.parent->of_node;
-+	pdev->dev.of_node_reused = true;
-+
-+	pdata = devm_kzalloc(&pdev->dev, sizeof(struct bq257xx_reg_data), GFP_KERNEL);
-+	if (!pdata)
-+		return -ENOMEM;
-+
-+	pdata->bq = bq;
-+	pdata->desc = bq25703_vbus_desc;
-+
-+	platform_set_drvdata(pdev, pdata);
-+	bq257xx_reg_dt_parse_gpio(pdev);
-+
-+	cfg.dev = &pdev->dev;
-+	cfg.init_data = init_data;
-+	cfg.driver_data = pdata;
-+	cfg.of_node = np;
-+	cfg.regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!cfg.regmap)
-+		return -ENODEV;
-+
-+	pdata->bq257xx_reg = devm_regulator_register(dev, &pdata->desc, &cfg);
-+	if (IS_ERR(pdata->bq257xx_reg)) {
-+		return dev_err_probe(&pdev->dev, PTR_ERR(pdata->bq257xx_reg),
-+				     "error registering bq257xx regulator");
-+	}
-+
-+	return 0;
-+}
-+
-+static struct platform_driver bq257xx_reg_driver = {
-+	.driver = {
-+		.name = "bq257xx-regulator",
-+	},
-+	.probe = bq257xx_regulator_probe,
-+};
-+
-+module_platform_driver(bq257xx_reg_driver);
-+
-+MODULE_DESCRIPTION("bq257xx regulator driver");
-+MODULE_AUTHOR("Chris Morgan <macromorgan@hotmail.com>");
-+MODULE_LICENSE("GPL");
 -- 
 2.43.0
 
