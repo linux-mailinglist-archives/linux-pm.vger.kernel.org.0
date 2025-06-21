@@ -1,113 +1,117 @@
-Return-Path: <linux-pm+bounces-29179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51DB6AE2674
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 01:25:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D5FFAE277A
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 07:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FC5C7ADA04
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jun 2025 23:24:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D61721BC13A8
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 05:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE450247299;
-	Fri, 20 Jun 2025 23:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65651143C69;
+	Sat, 21 Jun 2025 05:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="DOv8lFdE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWP8OLt6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFD9241676;
-	Fri, 20 Jun 2025 23:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE952AF1C;
+	Sat, 21 Jun 2025 05:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750461775; cv=none; b=vFK7HgixUvwCU66vccN2+YQdjOc4g0hJDQQWepFXECXJzQ3rUlMoqrcZ9o7BWcS3kJSPXQaHfwTxOYrg67uP1V59wPq8qOysHljZtRylFAxiK7+a9Izxj7NTIFYs86ukm14/1okEhBLmfYqgUYPQJ1u5bOrGEUY0hnSrBciPito=
+	t=1750483038; cv=none; b=klkaxUrAIc05mi+AWNYEH+SDcW7K5g9WCGwN++TXJp/hfBDltFcrfVbTQe1WA1ZrXkcaBSMa0Av0lWoZGbXuhivI/twkcAux/dG2P93E3oFWhUQ4uP338AArbkk71/pPIAhd3R0sQLEMXgjKFPgHMadbjKuBaHUx9pzSQg/rbeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750461775; c=relaxed/simple;
-	bh=2jaVYD+t6InVcVg2bje4Rfzz2VXV7ZItheYO/UDcAQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zpw3pO5Vp9XRppth9M8na5lyjdCYJClVxKegiWl4ESXa5PN0bZ0KWTSD6Dg/nWzJ//krjYldTJQ43/eNbTF7zUIx9bETdgA9VBAalub/UX2EKqL6Vm5nPPJeLFKOdvqszF/l5iAUPgXepqSGRSQF2PBQe5BrnZ/TISbkfSJXLT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=DOv8lFdE; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [IPV6:2601:646:8081:9482:8e69:eb66:369f:ca04] ([IPv6:2601:646:8081:9482:8e69:eb66:369f:ca04])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 55KNMHP32678734
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 20 Jun 2025 16:22:17 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 55KNMHP32678734
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025052101; t=1750461739;
-	bh=Bwvs4LdK4yiSst8Y6xUmdgkiTVl+DzPbS+vbPnH+Nac=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DOv8lFdEADhqHc2isr7NooqRuwUIAHzC5HnXKiQ4/LX6i1Fa14ohkvHba3xzjain4
-	 6VTXg9VZMs3JfT/vq06+6fy1r1SQamBwolaHApY/+3YUg/zPVi3OqRdGMugWTEHT/9
-	 R/wloIBzPuqxn8DBa5rsR5SMpngbYQw4+EqD43yRhBFVyO0hCmQJx82WBKilMwRpjR
-	 p7f0yY2pMIr5R9SX9PNJwhB6zR6BkcKzdkHViqwS3wZtx7ktKCe6QCIXQoXOPyWD1b
-	 7zazjnOVu9av19a3ApIREOGC3qSFxFm6mVbXWTJ5vC9EqaRFN1E/3FcQCavKP0mwJ2
-	 MzZiMFfuX2GoQ==
-Message-ID: <1713a225-44e0-4018-bf5f-64ffd7746167@zytor.com>
-Date: Fri, 20 Jun 2025 16:22:12 -0700
+	s=arc-20240116; t=1750483038; c=relaxed/simple;
+	bh=JGREnTYwd30zKWM6FI91tmbFDRIqVUVqQJZjy5Nmx08=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=czYqlhgd0GtLh3OX2dOaTKxd89vkwJLYSYMQ+jIm72Hg0TJZA9H5qByraHlTV0N1lIEB8PFRDHOFqFrNFoVMGVp+eZ37smTimbEbfQF3ab4prVhhi8TUVJq/+UKFkL0P3EJipdtIfSm8NFFn9ujMHBuGQAA8MR/GZV7jBWuLWB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWP8OLt6; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22c33677183so23408225ad.2;
+        Fri, 20 Jun 2025 22:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750483036; x=1751087836; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9atXAmiHbi4hBHsesyVbDQEP15xagV4i5usV6TG32g=;
+        b=OWP8OLt6gBGAVtesQvm92gLWcHeza6PYUHNSP7yP12A+ypGKTM1dHrs18cTo2jY6I3
+         3WFGBhq4KZi+5ZT5d6XBlDPcBE9YIJGvYc9trFw69Q5XnplrOeEJViEXqIF5q51A4Wu7
+         EWzMumVLqxZSOStPDdGAR0mX5LcpAawI3z1A2TyXpx2wAEvkawkuSIvaKizjpkPLd9vm
+         GYKcQvh6Fwh5yFyqV4RN6JnFlC06hu2+w/eKFahR39R6080meKGzRFlF9SmEXbIEWIN4
+         TD1ZuK7fSNu1/H03mA9kDySuQFhAnkK6U1fOYYbQDk5lJ4UtCtEeTfXynuVHKRRnmdj3
+         31ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750483036; x=1751087836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H9atXAmiHbi4hBHsesyVbDQEP15xagV4i5usV6TG32g=;
+        b=Of61xtfFgg92qgVN3pwtkqwWwRjACS09As9z+LaMdyDUyiffy4yp3yL127zq21/2re
+         a/p/R4+enWrWDaSmONxcV0MPRmcX209/y2qeg+Vd2CrX04/1mfboE+PDRgQKCdlMDUTy
+         rNLtDFIDmmUnkAuZ9cH5O2shQ9adky7o8D7g2lNEYBaIS1+6+iLa8UyVqs+V7BY+Tzqu
+         rjgv8+euhwXVfMVeb9aaX5ZFv5be+mB/Rmu2YCI/7tz9cTM460tcj/wMFAREXDohdL1V
+         4ol4sEpUDpNWZeBun0sRwXIQ8K1N0bIgRdNOwGQUeP0cI4zHrF8ShCczOWq7nVmHyNp6
+         45cg==
+X-Forwarded-Encrypted: i=1; AJvYcCVP099wZEglq7Xez/Mrr+0TfrGchOApleLseVr8itDKNyZdPP73TlHG4nhPiXLPwdmljApUuqDRI800@vger.kernel.org, AJvYcCWP3XpmJ1YVgNGksJAD/NCAwa1y/qxd8e2ZkVFQniIvtSvv8h2LYXz4UlxMdbZi9MrJTGdcFz5e0a0=@vger.kernel.org, AJvYcCWdfVuyJaTgzvQ8BuylrqPjaxs6qeKvRzMdEc5scrgINr6NPWKl72LlqB4z1aJIg9FB+fZ+Y+TXtnWEMMf5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYSamqrqlQEBOaw9FLrx/fC3Ba8Z70zcejH595wQfMyJimTwX9
+	uNd4Qaa+ANFyjCjFjKU3xjAny6j0nkK8FjlXgkbfL1e9yxvWfaTlpFeA
+X-Gm-Gg: ASbGncuaD/y8vtAOZ7OuAOZior1cxIE4odPjhO0i/5bMwNWVn8KLdS8tAaJkshQ2k7q
+	x0zVekc8SbEhQbMI5/zdCblmqVkvQGOLUqvcmGEr5svThjZORMXU3u0mqKYfcTkU/nzzhcvM0Uf
+	3I6pcgh0YLBE30nkS77YYDFe8UjQv4brwtaKCP4B7e3zun8ttxynHp965WJk3SEWg8jSbIOpxxY
+	XcAsFWmFK7buvY0KhaMATWGC5ApI1pfJIRj8crTqtRWvfk4zGloptKLh6O51y5SJ0knqysZzd6H
+	3fzLtZFyaAnxwL6S+utjZK4hkeKCWHWjMv8YmkWkIKOP4dE5UZEVjp+hPHt4R8bea49yq99nDlc
+	h
+X-Google-Smtp-Source: AGHT+IFJUwDOBzPPWhUnmRwphnn19d11ykLptUH4P8ntKAO6t71fbRgUbCzJASM53zm3I6Iis7dHsg==
+X-Received: by 2002:a17:903:2345:b0:224:1eab:97b2 with SMTP id d9443c01a7336-237d9b08563mr87342105ad.53.1750483036065;
+        Fri, 20 Jun 2025 22:17:16 -0700 (PDT)
+Received: from gmail.com ([2402:e280:3e9b:22f:6693:85c6:43d0:2b6e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d860a8a8sm31149265ad.132.2025.06.20.22.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jun 2025 22:17:15 -0700 (PDT)
+From: Sumeet Pawnikar <sumeet4linux@gmail.com>
+To: rafael@kernel.org,
+	linux-acpi@vger.kernel.org
+Cc: lenb@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	sumeet4linux@gmail.com
+Subject: [PATCH] ACPI: FAN: Update fps count debug print
+Date: Sat, 21 Jun 2025 10:47:04 +0530
+Message-ID: <20250621051704.12050-1-sumeet4linux@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 02/10] x86/fred: Pass event data to the NMI entry point
- from KVM
-To: Sean Christopherson <seanjc@google.com>
-Cc: Sohil Mehta <sohil.mehta@intel.com>, Xin Li <xin@zytor.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jacob Pan <jacob.pan@linux.microsoft.com>,
-        Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-        Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20250612214849.3950094-1-sohil.mehta@intel.com>
- <20250612214849.3950094-3-sohil.mehta@intel.com>
- <7525af7f-a817-47d5-91f7-d7702380c85f@zytor.com>
- <3281866f-2593-464d-a77e-5893b5e7014f@intel.com>
- <36374100-0587-47f1-9319-6333f6dfe4db@zytor.com>
- <39987c98-1f63-4a47-b15e-8c78f632da4e@intel.com>
- <7acedeba-9c90-403c-8985-0247981bf2b5@zytor.com>
- <aFXsPVIKi6wFUB6x@google.com>
-Content-Language: en-US
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <aFXsPVIKi6wFUB6x@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2025-06-20 16:18, Sean Christopherson wrote:
->>
->> So I was thinking about this, and wonder: how expensive is it to get the
->> event data exit information out of VMX? If it is not very expensive, it
->> would arguably be a good thing to future-proof by fetching that information,
->> even if it is currently always zero.
-> 
-> It's trivially easy to do in KVM, and the cost of the VMREAD should be less than
-> 20 cycles.  So quite cheap in the grand scheme.  If VMREAD is more costly than
-> that, then we have bigger problems :-)
-> 
+Update invalid value returned debug print with fps_count
+instead of control value for checking fan fps count condition.
 
-LOL. Since it is up to you, Paulo, etc. to decide how to do the 
-tradeoffs formaintainability, debuggability and performance in KVM I am 
-guessing this is a vote in favor? (You can always take it out if it is a 
-performance problem, until such time that the kernel itself starts 
-consuming this information for reasons currently unknown.)
+Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
+---
+ drivers/acpi/fan_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	-hpa
+diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
+index 8ad12ad3aaaf..9f2696a1928c 100644
+--- a/drivers/acpi/fan_core.c
++++ b/drivers/acpi/fan_core.c
+@@ -102,7 +102,7 @@ static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
+ 			break;
+ 	}
+ 	if (i == fan->fps_count) {
+-		dev_dbg(&device->dev, "Invalid control value returned\n");
++		dev_dbg(&device->dev, "Invalid fps_count value returned\n");
+ 		return -EINVAL;
+ 	}
+ 
+-- 
+2.43.0
 
 
