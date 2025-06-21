@@ -1,165 +1,77 @@
-Return-Path: <linux-pm+bounces-29206-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29207-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B883AE2C86
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 23:06:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29377AE2C99
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 23:17:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9848B3BB7A6
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 21:06:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C269D178664
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 21:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3DB2741D1;
-	Sat, 21 Jun 2025 21:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879CA1EA7E4;
+	Sat, 21 Jun 2025 21:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kc3WlPrY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXNthaeC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7F2273D7F;
-	Sat, 21 Jun 2025 21:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310B5A55;
+	Sat, 21 Jun 2025 21:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750539944; cv=none; b=KJgTK1DVl0gf3hIhVmKdnq+bm6H9aWUUWpCV+IZwPhwsf55n0UuPOCoUzLUDi7InslV8/anlkh2LXK5kgrraB5pFlnaxZqnEJF1Om0ja0XjY1vMy3eYu2fNrabe1dfbD5iONtKLj4/fgcZK1no6WddIuqWu/Z3/CeOwzJQi49zA=
+	t=1750540631; cv=none; b=XtMIU/Y0ITFfJwWn2pUMtCvZ8JBNoVcQyJmXm0stQMjTMRpQdTmRZF8MBOYgYo6pg2V2LpoUmsttUIlSGqOHSjyFR73BZP4TlR6gyHohnBTs5WIxJMGNTy5bt+BgkDwFQ6fhy9sh0IzHwthAhXg6Svfe5Ab7C3swT6r1eubcxYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750539944; c=relaxed/simple;
-	bh=SMiK8R4rvJPitqeDKcJiQw7hgXniGdGbaSll/QfassA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qEP9V/D/rBJsMG3QMyBSPPXrfvyhK9t/cw60F0llJ7n6wyyLwOJwgqr/xNf98dR7xdjSlrqk528LSKR4rkZKD2FNlTfQtkjw9y6peIrBHN5Mo3A/B/RN97VgVOuKfWNzmf1MgSCuhCyMk2ZkKYmVAWgpd/T6x40wQCFNNBo3CRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kc3WlPrY; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750539944; x=1782075944;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=SMiK8R4rvJPitqeDKcJiQw7hgXniGdGbaSll/QfassA=;
-  b=Kc3WlPrYRDodOvYwCix9g9qjrjIccScDNrM+JElYmCKb2yvPiXNR1dM3
-   zcjEyDQR7p/Pxby35ERcl/9tqfcDRzDWn+fadAXhI4H/IAvvU/LiUd9KL
-   S7U2FQuqbFcwEHUYvup0bK7XgF7OCgBNvAyBM0dN0naccmb/1PVn7eK4w
-   VwQaZPa8OKJ+fsKxPrJ3cliIzKaHlBjDDV+DY+x508kzee6+KkZHhCl7X
-   LBmJ4JIZxuLSGyvx52GC8zrg5WeGZLUwSiVxOFTLVnKBThD3VyKc4vzs9
-   1sWstv7S8pkKfYjISVlq4sDpoDP+ZfmaC1md5evIeUk39zdLhp2D6pS2x
-   Q==;
-X-CSE-ConnectionGUID: 6gDswicOSkGJpbNUPo8mGA==
-X-CSE-MsgGUID: xfXqSYAyTiyVkRpNjEB9+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11470"; a="63826263"
-X-IronPort-AV: E=Sophos;i="6.16,254,1744095600"; 
-   d="scan'208";a="63826263"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2025 14:05:43 -0700
-X-CSE-ConnectionGUID: tC0UU2EmRqqfqw525sJZHg==
-X-CSE-MsgGUID: KTnUx5w6QIeXuFN7eQvtiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,254,1744095600"; 
-   d="scan'208";a="155775328"
-Received: from mdroper-mobl2.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.124.222.74])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2025 14:05:41 -0700
-From: Xi Pardee <xi.pardee@linux.intel.com>
-To: xi.pardee@linux.intel.com,
-	irenic.rajneesh@gmail.com,
-	david.e.box@linux.intel.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v1 5/5] platform/x86:intel/pmc: Enable SSRAM support for Panther Lake
-Date: Sat, 21 Jun 2025 14:05:25 -0700
-Message-ID: <20250621210529.237964-6-xi.pardee@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250621210529.237964-1-xi.pardee@linux.intel.com>
-References: <20250621210529.237964-1-xi.pardee@linux.intel.com>
+	s=arc-20240116; t=1750540631; c=relaxed/simple;
+	bh=ZmTQYCTt6FpeXJobXvGHGrkckGX2zkqbJORyKVTdPZ8=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=f0pGZywPEGO40gIJ2AD131ms6UdOjCgyXuTyHqy5ilbL+NONPuSXSJ4qgVd6g6CBOCswYVUolBNOkVyh8zVZIEuup/jc81X+e9vhXjSBtmJDfS+3qt0LteR0Jm2p79PHnncVnoL3Iix7lRTUvgSoNsPiSjdvBmQmVAfQE2CdNDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXNthaeC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF4DC4CEE7;
+	Sat, 21 Jun 2025 21:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750540629;
+	bh=ZmTQYCTt6FpeXJobXvGHGrkckGX2zkqbJORyKVTdPZ8=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=jXNthaeCkH8WUGPQKoQGzy2fRj9hCnJcYGtWtzRFpZuDba0pqwmDxhCwgGnIuzzA1
+	 c15Dv1Qi1qtqqC8qI/P0vIS1/OMORDzmteZ9xIajZbOb/b+5eQf4BwOVVSeyNdjKxS
+	 ZQbuAYfjkXAvA8vGsQv8FsSm836IvTGTPDcgPtpG9wWbVkydvEgPBbIfztmIfqq04a
+	 cuLZHgVHmgyr6xjFb2llW7fp0PUsgdNuLJyMGQ2d5sUFi/quLKPFi9sLlUxSpZ9HKX
+	 37ejW0Od87/cdirzu4bxTNYVO8OYMRQPxn0lO8rADA8ffHYpkG9U26Vs8ZgebFBEdL
+	 y8fF7nT/yAwww==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250619-cstr-core-v12-4-80c9c7b45900@gmail.com>
+References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com> <20250619-cstr-core-v12-4-80c9c7b45900@gmail.com>
+Subject: Re: [PATCH v12 4/5] rust: replace `kernel::c_str!` with C-Strings
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, linux-block@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
+To: Alex Gaynor <alex.gaynor@gmail.com>, Alice Ryhl <aliceryhl@google.com>, Andreas Hindborg <a.hindborg@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, Benno Lossin <lossin@kernel.org>, Bill Wendling <morbo@google.com>, Bjorn Helgaas <bhelgaas@google.com>, =?utf-8?q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Boqun Feng <boqun.feng@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, Breno Leitao <leitao@debian.org>, Danilo Krummrich <dakr@kernel.org>, Dave Ertman <david.m.ertman@intel.com>, David Airlie <airlied@gmail.com>, David Gow <davidgow@google.com>, David S. Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Gary Guo <gary@garyguo.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heiner Kallweit <hkallweit1@gmail.com>, Ingo Molnar <mingo@redhat.com>, Ira Weiny <ira.weiny@intel.com>, Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@kernel.dk>, Justin Stitt <justinstitt@goo
+ gle.com>, Krzysztof =?utf-8?q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Leon Romanovsky <leon@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Rae Moar <rmoar@google.com>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Russ Weight <russ.weight@linux.dev>, Russell King <linux@armlinux.org.uk>, Saravana Kannan <saravanak@google.com>, Simona Vetter <simona@ffwll.ch>, Tamir Duberstein <tamird@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, Trevor Gross <tmgross@umich.edu>, Viresh Kumar <viresh.kumar@linaro.org>, Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Date: Sat, 21 Jun 2025 14:17:08 -0700
+Message-ID: <175054062889.4372.13449788582456522444@lazor>
+User-Agent: alot/0.11
 
-Enable Panther Lake platforms to achieve PMC information from
-Intel PMC SSRAM Telemetry driver and substate requirements data
-from telemetry region.
+Quoting Tamir Duberstein (2025-06-19 08:06:28)
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible and rename
+> `kernel::c_str!` to `str_to_cstr!` to clarify its intended use.
+>=20
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
 
-Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/core.h |  2 ++
- drivers/platform/x86/intel/pmc/ptl.c  | 30 +++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+For clk part
 
-diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index d8c7b28493055..cdb32f2203cff 100644
---- a/drivers/platform/x86/intel/pmc/core.h
-+++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -301,6 +301,8 @@ enum ppfear_regs {
- #define PTL_PMC_LTR_CUR_ASLT			0x1C28
- #define PTL_PMC_LTR_CUR_PLT			0x1C2C
- #define PTL_PCD_PMC_MMIO_REG_LEN		0x31A8
-+#define PTL_NUM_S0IX_BLOCKER			106
-+#define PTL_BLK_REQ_OFFSET			55
- 
- /* SSRAM PMC Device ID */
- /* LNL */
-diff --git a/drivers/platform/x86/intel/pmc/ptl.c b/drivers/platform/x86/intel/pmc/ptl.c
-index 394515af60d60..48be79b4e769f 100644
---- a/drivers/platform/x86/intel/pmc/ptl.c
-+++ b/drivers/platform/x86/intel/pmc/ptl.c
-@@ -10,6 +10,17 @@
- 
- #include "core.h"
- 
-+/* PMC SSRAM PMT Telemetry GUIDS */
-+#define PCDP_LPM_REQ_GUID 0x47179370
-+
-+/*
-+ * Die Mapping to Product.
-+ * Product PCDDie
-+ * PTL-H   PCD-H
-+ * PTL-P   PCD-P
-+ * PTL-U   PCD-P
-+ */
-+
- static const struct pmc_bit_map ptl_pcdp_pfear_map[] = {
- 	{"PMC_0",               BIT(0)},
- 	{"FUSE_OSSE",           BIT(1)},
-@@ -515,6 +526,22 @@ static const struct pmc_reg_map ptl_pcdp_reg_map = {
- 	.lpm_live_status_offset = MTL_LPM_LIVE_STATUS_OFFSET,
- 	.s0ix_blocker_maps = ptl_pcdp_blk_maps,
- 	.s0ix_blocker_offset = LNL_S0IX_BLOCKER_OFFSET,
-+	.num_s0ix_blocker = PTL_NUM_S0IX_BLOCKER,
-+	.blocker_req_offset = PTL_BLK_REQ_OFFSET,
-+};
-+
-+static struct pmc_info ptl_pmc_info_list[] = {
-+	{
-+		.guid	= PCDP_LPM_REQ_GUID,
-+		.devid	= PMC_DEVID_PTL_PCDH,
-+		.map	= &ptl_pcdp_reg_map,
-+	},
-+	{
-+		.guid   = PCDP_LPM_REQ_GUID,
-+		.devid  = PMC_DEVID_PTL_PCDP,
-+		.map    = &ptl_pcdp_reg_map,
-+	},
-+	{}
- };
- 
- #define PTL_NPU_PCI_DEV                0xb03e
-@@ -543,6 +570,9 @@ static int ptl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_in
- }
- 
- struct pmc_dev_info ptl_pmc_dev = {
-+	.pci_func = 2,
-+	.telem_info = SUB_REQ_BLK,
-+	.regmap_list = ptl_pmc_info_list,
- 	.map = &ptl_pcdp_reg_map,
- 	.suspend = cnl_suspend,
- 	.resume = ptl_resume,
--- 
-2.43.0
+>  rust/kernel/clk.rs                    |  6 ++----
 
+Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
 
