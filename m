@@ -1,143 +1,143 @@
-Return-Path: <linux-pm+bounces-29191-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29192-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68697AE2A12
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 18:01:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E443AE2AF0
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 20:03:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74AC87AB2AF
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 16:00:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1292D176989
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 18:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAB621CA14;
-	Sat, 21 Jun 2025 16:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C92269880;
+	Sat, 21 Jun 2025 18:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uDwXevel"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPUiHCTu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51193134CF;
-	Sat, 21 Jun 2025 16:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD75A1CAB3;
+	Sat, 21 Jun 2025 18:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750521703; cv=none; b=Km6J8Vt3A4mZ5EuXrinObRvwKiCPhPmOB9kpcO1ZrQRJDISTM6/XeTPrtNia16NcYe0ipGiMNj6nsrwnmM/qSSuVuJuesiytxJcJgvETf7WW5DF8tvN6XRLBEPYY5P8F8hkpkQJ880OlWNRGKMRZ6utt1xe8qJWibZJluI8LyTg=
+	t=1750529030; cv=none; b=Hm5s2UjOxx3j9euQ/KRc9itbn4StVjVB2Mz/CILKFRPjRjnW/hzwKByTHoicwcgmejqfjgi9EGCvze7j9XvUtm/x3h1vqOhFoFNVthIiF0Xq82kxWypTyLczy0s3EkD5noCK6yooKcFy4h5NM96aXNA1k82aKN71Z/sPqNaVqcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750521703; c=relaxed/simple;
-	bh=7z06BI2WfCKHgocG5mZp+KFS5XZpvyaukvIGuVj/RlU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F9FTd7ICjmVh1PnwdvbZLUw2TwCOGk/CSfVT7resyUV9W7rUOFgM5OPUaQ/beboDwo5j6orFxcCPpckjuDmvXYOq2MPu+7fLQzcIj62zuKiZuwWOJc9PaAKveVeNx3b9vIObzk+bPy4xPTXMRQ/XELjTL/CYwsqsvzzQXxcOFxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uDwXevel; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3502C4CEE7;
-	Sat, 21 Jun 2025 16:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750521701;
-	bh=7z06BI2WfCKHgocG5mZp+KFS5XZpvyaukvIGuVj/RlU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uDwXevel3/1jiq4Sl2EDKgEHARqYuu8Bl7nrJLZ8lUCzHpBkeoumIp6jzt/ZP4Nsl
-	 wqLBEHqbQv7BeGHwV/DPP5ckgANF6VbYI5AyU+Yd7Skc57x9V4PhZEjE744+ExYRFr
-	 AkERmpzc03BtzkqT5tG8hywtOyMFB4oMbjoTgSssty33EMxdWKqHIONBBQ3NX56YP1
-	 1s66LaJ7sUP5cIPW3qhTCIyNXnqk1AvoKqeUz+bq+RtWlN5ktVenNOvVQfcXtnbR0P
-	 yISLwmztKCaQ6JNWVfJn38zjoEhxBT4pRdcGegeMhL6zVqHpjw3aesU2v9O/kMhLww
-	 W9a4U4D46RlpQ==
-Message-ID: <d5a616f3-67a3-4504-904e-6cec503ab157@kernel.org>
-Date: Sat, 21 Jun 2025 18:01:33 +0200
+	s=arc-20240116; t=1750529030; c=relaxed/simple;
+	bh=zB/7QlHpIPmoheG3tIr1zNvJglXGxWEsHi8Mcd+ZN28=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ra4S71h7id+RNvM+oCBeZc9QfonVp+IVzjSatRWUpNCAFxzMUqSvbBDxaiL4finbdc1oFDkMKVQtVac8yIOMqt6/PYjTJP31MfIqUC97Vo8FYVQ8JAu9amArS33F1aLHlDH4ekrcH62W0d+VBPHT1qB9BKHwuOLsQ5GcGqjG8Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPUiHCTu; arc=none smtp.client-ip=209.85.210.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-73a5c3e1b7aso2048834a34.3;
+        Sat, 21 Jun 2025 11:03:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750529027; x=1751133827; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H0KfXV/NBkTDKDWD/tI/EX8MZ/lbEEpoIni8SgACMHs=;
+        b=HPUiHCTuGe8b8W2lCWtJZxR8lDJ0sxp8+pwVFqTqNAoJt2OgQlExPNiz99z5FOavKm
+         7uwEWP4/Fs3v2OOaQ8gdBTTt/LPlm8NOh0YlcBX4JdEHbG1y26az8vEuludzjD9zYlDZ
+         S5628yN6HA+MMslTBxEw6AZz7i5a4YeMMDUIH23F9xNzeronz6Hsew+KYluzNuZ+JSv8
+         a6nmUgZgK0UwIHQRYOHixXOMFOcwKnQlTY6/HvZtR4WHhp0g9HlRB6R5vktsDnwZP49t
+         33StBoKhxnZIQolQDDhE7VUfb3mIC+yVlwBG0e64QrJ8MQ9HpnCigWkyQvklfESnaOvK
+         Qq+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750529027; x=1751133827;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H0KfXV/NBkTDKDWD/tI/EX8MZ/lbEEpoIni8SgACMHs=;
+        b=lnmTnelfvm4Wtrqpe9I/df/+RCe8GUBX4JFidZfXz0cuE17LMUNDTKvzSIAFnNH/IL
+         EYMyRSoVo22tjIxQN+OECocczKkEwFvAI0zHCL+BKrziHLt5CIqBB/Jx1v63HPcrfNXO
+         xIoXumjI2EejkQRcXCMD66qxyRsP6tIHj+z7L8KaKBJW9PHCtcZ3Mw4//VNsCr8AhuRy
+         PPhfrcC1c/5TVnX5B6lguPAZ2kAUQ/CjzOVw1jej1ZjzEdkUhtIXEVbZ1MNq7ESvfh3y
+         jr7zBMbDw3zJQfBXpqOoJQL/vmhaAAS4gBoe569CRMb0lUC45vsYl8yt9lDjiFNbFTP7
+         ckeA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJe2dAP+TiIY4PZ23MSZRAUXUcE/bRZeFKE7T5+w9ZFzc0gnNj/5sc3TxKSPkRv2Zz6mUyh6W4vk8e@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3szSNhCULepCE7eWf3sXiLFIDfFdAcjMEJ88+1oArUjRXMDlu
+	BahwlIp+lh3p49s9xL/h1Nz//r7ksL1O9GOZAv6lKX39R7jPt+sEORp07NkK/w==
+X-Gm-Gg: ASbGncvIbSicJmzq0aOyrDVaT9UFSv29189eHJ5mWecZZDMITjg64HfdukcC4FGl/D6
+	A/tiDwdr7s+X6uqu5jd213kx4X6ttBqIH/5DA3lX4CnRVQYUDp+aKvL+n0xjV3UyKnroa8Vype4
+	fhBaawZJTwMmkV/R5xkBoTNxauKgwYN8stcXgh08RDoIoJqQRp0GPfNNWihMpwSiImzXNWkh90J
+	FsGa7lOLH3r0VMLwG5Dq1Rma6Kr+2cAVqfmahXCRMerD8Je8cQQio1zMHI2BTIcXONixaLV8gwV
+	2TcSoMC7vcTEDSdahnk4VU6x1KdisMOs42+6fOItB+SnBGFRg5E08Jt1aq6k9VdkfRd/+4E=
+X-Google-Smtp-Source: AGHT+IEpLQefJADPG3T9ukhtS1GxjWsZURA3VRvt3Yp99VT5aqi6GnzI066BJQk1hduPPv/oDf+1Mw==
+X-Received: by 2002:a05:6830:2d84:b0:72b:87bd:ad5b with SMTP id 46e09a7af769-73a91a78267mr3701418a34.4.1750529027551;
+        Sat, 21 Jun 2025 11:03:47 -0700 (PDT)
+Received: from localhost.localdomain ([2600:1700:fb0:1bc0::54])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73a90ca8707sm782895a34.46.2025.06.21.11.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Jun 2025 11:03:47 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	broonie@kernel.org,
+	lgirdwood@gmail.com,
+	sre@kernel.org,
+	heiko@sntech.de,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	lee@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH V2 0/5] Add Texas Instruments BQ25703A Charger
+Date: Sat, 21 Jun 2025 13:01:14 -0500
+Message-ID: <20250621180119.163423-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/11] arm64: defconfig: Enable Apple Silicon drivers
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: asahi@lists.linux.dev, Stephen Boyd <sboyd@kernel.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Janne Grunau <j@jannau.net>,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- Srinivas Kandagatla <srini@kernel.org>, linux-kernel@vger.kernel.org,
- Viresh Kumar <viresh.kumar@linaro.org>, Neal Gompa <neal@gompa.dev>,
- linux-clk@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-i2c@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
- Liam Girdwood <lgirdwood@gmail.com>, =?UTF-8?Q?Martin_Povi=C5=A1er?=
- <povik+lin@cutebit.org>, Joerg Roedel <joro@8bytes.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Mark Brown <broonie@kernel.org>, iommu@lists.linux.dev,
- linux-input@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-sound@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Andi Shyti <andi.shyti@kernel.org>, Will Deacon <will@kernel.org>
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
- <20250612-apple-kconfig-defconfig-v1-11-0e6f9cb512c1@kernel.org>
- <2e022f4e-4c87-4da1-9d02-f7a3ae7c5798@arm.com>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <2e022f4e-4c87-4da1-9d02-f7a3ae7c5798@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 13.06.25 18:50, Robin Murphy wrote:
-> On 2025-06-12 10:11 pm, Sven Peter wrote:
->> Enable drivers for hardware present on Apple Silicon machines.
->> The power domain and interrupt driver should be built-it since these are
->> critical for the system to boot, the rest can be build as modules.
-> 
-> Nit: I'd be tempted to put this patch first, just in case anyone 
-> bisecting with "make defconfig" in their process lands in the middle and 
-> suddenly loses some drivers (although arguably them going from "=y" to 
-> "=m" could still be a surprise, but at least a bit less so).
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Ah, that's a good point that I hadn't even thought about.
-Now that most of these have already been merged into different trees 
-that ship has sailed though.
+Add support for the Texas Instruments BQ25703A charger manager. The
+device integrates a boost converter with the charger manager. This
+series adds the device as an MFD with separate regulator and power
+supply drivers. This allows us to manage a circular dependency with
+a type-c port manager which depends on the regulator for usb-otg
+but supplies power to the BQ25703A charger.
 
-> 
-> [...]
->> @@ -1504,6 +1520,7 @@ CONFIG_ARCH_TEGRA_194_SOC=y
->>   CONFIG_ARCH_TEGRA_234_SOC=y
->>   CONFIG_TI_PRUSS=m
->>   CONFIG_OWL_PM_DOMAINS=y
->> +CONFIG_APPLE_PMGR_PWRSTATE=y
-> 
-> If this is critical for any Apple platform to work then it would 
-> probably make sense to explicitly select it from ARCH_APPLE, as is done 
-> for APPLE_AIC...
+---
+Changes since RFC
+ - Corrected some minor issues with code and device-tree labels.
+ - Replaced most of the manufacturer specific device-tree properties
+   with monitored-battery properties.
+---
 
+Chris Morgan (5):
+  dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A Charger
+  mfd: bq257xx: Add support for BQ25703A core driver
+  power: supply: bq257xx: Add support for BQ257XX charger manager
+  regulator: bq257xx: Add bq257xx boost regulator driver
+  arm64: dts: rockchip: Add USB and charger to Gameforce Ace
 
-Documentation/kbuild/kconfig-language.rst:
+ .../devicetree/bindings/mfd/ti,bq25703a.yaml  | 123 +++
+ .../dts/rockchip/rk3588s-gameforce-ace.dts    | 122 +++
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/bq257xx.c                         | 104 +++
+ drivers/power/supply/Kconfig                  |   7 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/bq257xx_charger.c        | 754 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   8 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/bq257xx-regulator.c         | 188 +++++
+ include/linux/mfd/bq257xx.h                   | 108 +++
+ 12 files changed, 1428 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
+ create mode 100644 drivers/mfd/bq257xx.c
+ create mode 100644 drivers/power/supply/bq257xx_charger.c
+ create mode 100644 drivers/regulator/bq257xx-regulator.c
+ create mode 100644 include/linux/mfd/bq257xx.h
 
-   select should be used with care. select will force a symbol to a value
-   without visiting the dependencies. By abusing select you are able to
-   select a symbol FOO even if FOO depends on BAR that is not set. In
-   general use select only for non-visible symbols (no prompts anywhere)
-   and for symbols with no dependencies. That will limit the usefulness
-   but on the other hand avoid the illegal configurations all over.
-
-
-That's probably fine for APPLE_AIC which only depends on ARM64 (and 
-ARCH_APPLE) which is guaranteed to be set when ARCH_APPLE is set anyway.
-APPLE_PMGR_PWRSTATE also has an additional dependency on PM so it should 
-probably remain in defconfig and not use select.
-
-
->>   CONFIG_RASPBERRYPI_POWER=y
->>   CONFIG_IMX_SCU_PD=y
->>   CONFIG_QCOM_CPR=y
->> @@ -1567,6 +1584,7 @@ CONFIG_QCOM_PDC=y
->>   CONFIG_QCOM_MPM=y
->>   CONFIG_TI_SCI_INTR_IRQCHIP=y
->>   CONFIG_TI_SCI_INTA_IRQCHIP=y
->> +CONFIG_APPLE_AIC=y
-> 
-> ...which I think means this would already be redundant.
-
-Yup, this can be dropped.
-
-
-Thanks,
-
-Sven
+-- 
+2.43.0
 
 
