@@ -1,237 +1,345 @@
-Return-Path: <linux-pm+bounces-29187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29188-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ED5EAE287D
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 12:09:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00291AE28BB
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 13:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D1A117CA28
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 10:09:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82430176423
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 11:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3050E1F76A5;
-	Sat, 21 Jun 2025 10:09:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 199DA1F4616;
+	Sat, 21 Jun 2025 11:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ekkBzQ1+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TC9pDlRG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7111230E848
-	for <linux-pm@vger.kernel.org>; Sat, 21 Jun 2025 10:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D782642AB4;
+	Sat, 21 Jun 2025 11:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750500591; cv=none; b=tpT9pYVAJh7LBON5/hqTtLp7B2w56sO8Vn/MmzRfnYXgfe1k2iCIRDzU8PlIUraXWA2YWD/9Zb1wfE05rl2XPWAux2za67rPieumruhKAYGmY8pTVIfSbjwOKGpdqQxZgiu5yZ2fbHSi8qg2qMoizG2/EDCFvam6IHugRo9M+dg=
+	t=1750504562; cv=none; b=TF8XGgHqVYKMvURdTOmgKI8euPG1Y9sogO6/qgv4Io8z4bVc8oLTGpnVi5RV7bEJ7cCom+mgO3AbPn+LA277GYSXOOLpKIqRxzb/BCr6mZ/wW1jsFEhdwkY2YgUhIw0KKClscZdP0cIbQV5PFz3QhhyjKwpe1ob4gdzHthDSEjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750500591; c=relaxed/simple;
-	bh=fhmuuk4oxkPAjOucmLsQQYL6pZBtL6KZT3sq2lRWRrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=urUAh1dbdt8XQxLpQiAUC7fJDi6lTj0TWWPT8QYGNacza9liFc1Nc7B0sscQe12I/FAzhevdbeLGNnT83ZBw50s/ouRpYOIb8LZjCjwk0KiL+XILi0SD7Ka7SL3s37XejxxBDshsx4gpO0Sc/okpBBL8m5t6Q5FIOmVh1cDapcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ekkBzQ1+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55L5KUUg019399
-	for <linux-pm@vger.kernel.org>; Sat, 21 Jun 2025 10:09:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	W8nrgve/sfE4i/DQEMAHREmTS62webINUascpRsXO6s=; b=ekkBzQ1+VaNQiJnI
-	d2q8G7lnu2RO6d2omQX8MaE85UXn/KEpTWVqL8lyqmYw2OJQqLXqdmfFOcStliNZ
-	U/mhUotLw1HQa8ra9mb9z56u+qK1QtGvvEU78TKTeqcqmIz10oB9CSAgMUSXKX+T
-	bKR+btMff0tUur8XaP31s+fztfe1MVzO7Na13E3JqRcVK0Vd0Od14DMV4MA/wEPP
-	6T6FMVDzhkFS39rJ/GclUQwKr/OUomXst9p1cqZV0SdEsBjPu7/wgK3VkyqNUEU6
-	qFDort8e6jMb1MFMSri6+JSLNWKmUDm7x3FMFfAKx7xHum7T691YVQbTKvCMod+y
-	JtHNyg==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47dpg20b6e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sat, 21 Jun 2025 10:09:48 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c5af539464so71480585a.0
-        for <linux-pm@vger.kernel.org>; Sat, 21 Jun 2025 03:09:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750500587; x=1751105387;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W8nrgve/sfE4i/DQEMAHREmTS62webINUascpRsXO6s=;
-        b=halmsxU/IynCq4EnW+vz59D/uxSyJO1TWje63Itfhu/SI97C960cTvZ2+nMmAHM3R3
-         jvEH5fUgMV0UJ2kghLp1v66nAtOcyD0RWetiMijosgiTYohmOrs/hcYQW3RDvnS998+0
-         pEdpUoeFPmEg4Thpu3KdA2sXJ1ZRsnmhYKa98cn5BpqlgjConM5oS6ZML+u61QK1gJhk
-         xZmqhG7sFMCJfKZO1tfkwdgMRJZGzKw7rROl2/6hJqmGBQ5oVRWlazGjkNgteCLcIMRU
-         U6oWHZjWWjP+bC1QS6bKdkjOnVrOWIGNx5GUJoYhe4Ku+15rmVQS7yTiQn7iER8ZpgEq
-         gj2g==
-X-Forwarded-Encrypted: i=1; AJvYcCXLftbXSbPYWdbwEdDkzHNahlHsOyPYc60vivx5KzDH1pqioRjorMMRCDPZizjr5fvS7iq3CXDt3w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0KKviN/IsrwlouVL4/P2XtzZjjrKQdikENTDekmib4uLEtZAD
-	thzbJvMWAuVnCw6e6kTLWUvDwEHZW8FAcwjYTFqQPtS+cTPvxmuar63jtEzx+8TWN2G2DySRfDJ
-	KZpsB80cDoKNakijBRYklx5DcEbgX6yq9kstFcUzg5mpIWM/66vq3addQu8JwWA==
-X-Gm-Gg: ASbGncsmkc5tE0L0PDm/QibiyrYvZFUQvn7iIrIDVi1FruoAqRWQ9/olzK9vvGcaVAG
-	eioW/uZaKkaVoq0IEeDx5zL0i9Q9HZL9CyPkCODxI769a5zp1tEepTR+puTQnYhbtaNZwipKRVI
-	ZZ/zye+f7jhhodPRGYBdifjKsrN1666nTD19Sf41u+JwLflisGMdnCyQFlRVgbBT3SCMldwWcA7
-	244OsQYeJh5vQIWpnC0ff8GaneeKymUAjYXbH/DWIIRNQ/hSA73xmk9QZU/vk9X/znEDxzCPC59
-	POoXFDcgWBC43LarXDvs3SZl/1Gh8YViyPoz3FQX1bg+MdnydNue1ZC3HJ+MtI3MtkfjLj0mXA8
-	p3Sc=
-X-Received: by 2002:a05:620a:2903:b0:7cd:4a08:ea12 with SMTP id af79cd13be357-7d3f98234f9mr305386485a.0.1750500587431;
-        Sat, 21 Jun 2025 03:09:47 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFEkHqdZ+avToFSA0VJxfQsaNZ+3I7zEzzowA07Hg+ReuS+AxPXnZPkGqYAlly0AM+Nl6q6wg==
-X-Received: by 2002:a05:620a:2903:b0:7cd:4a08:ea12 with SMTP id af79cd13be357-7d3f98234f9mr305385085a.0.1750500586953;
-        Sat, 21 Jun 2025 03:09:46 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae053edc0e9sm341317366b.54.2025.06.21.03.09.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Jun 2025 03:09:46 -0700 (PDT)
-Message-ID: <78f0e4b5-19f6-45a0-b4dc-a1b519645567@oss.qualcomm.com>
-Date: Sat, 21 Jun 2025 12:09:42 +0200
+	s=arc-20240116; t=1750504562; c=relaxed/simple;
+	bh=AglLGwocXb7aYtZZ84ovAUyXmvMiTYg9wjTzyeUCXEM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f49fQ92mNgGfDgZpC50qqEWcthK2KR+stB1HZoJJuqqv8B4ijU40rDnNhR6MWr4pD9++vpgeQUWRRcrzYWL4E/azkLqajGJvi/wFG2Xz/yc9Qt90j3Hb1hyGs1ZA97nkXjwD6aJSyO75oECUqi/6DRrGs12Ud67Vi8CbGzWijq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TC9pDlRG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 585FBC4CEEF;
+	Sat, 21 Jun 2025 11:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750504561;
+	bh=AglLGwocXb7aYtZZ84ovAUyXmvMiTYg9wjTzyeUCXEM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TC9pDlRGvXMO3W1b7lZBugdA7ZJ7Ubj7gFCB6UhpvJ5FtLuKbaFRmEbgSxzd/YM24
+	 uaHc5XUvl1KsW1VANmRUdwdU4y2xLvoPn/rdSczYAk/9pHe49xCaFD80SFzE6Xja16
+	 RtkSGjSOlUlhZ9jV6QsHaurMbMS8j75Yim+1ue2TsFTdyHKt2T300xbJVwNNrmUL6S
+	 vZrncN2zgTBinBnylJ8RMKzcjQxyyqZgkLC+PBP9iBkSYxEPrDOBj2TRcdDFAI5D9+
+	 HIWzF5XHdPsPQSU6/vVPcSNL7TBt7bcM088N9XImVAo+qOx8Z5Mq0Xko5o/10OErYh
+	 7F2Dmfhg4acoQ==
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-40aa391ce1aso689578b6e.2;
+        Sat, 21 Jun 2025 04:16:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGgSI6I972xeiIP77tsWjt2YwJoAwfKjQIpxRdb1u4nYKOeTb4X6rBa9R+rfVTqeLq/Ukunhj2zKZj9QZC4o9BhbQ=@vger.kernel.org, AJvYcCUu/g2Hmf9kYU6l5h5FVL+bbww9FyBMl9eFumaUEfxgHZOLyyD116G3SiX4P2R0e0ZihPBDik5Aavjfj+Xu@vger.kernel.org, AJvYcCW8HfCQ2kNswvFoVrYbdxcCCx2kmlEDoh/K67bfPVox77xFyiK2C/jX89ESMHh6YwkFPyjt2jajkOA=@vger.kernel.org, AJvYcCWPnt5+pkRiTS4whqIdt5Eps7Fg8MG+SpH5lhUioaX82cBLpx2H9+u2Y/2Fcmqp8XuatxjcEyizZdM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxODi5s/dPYcyxVgESG2YMa+6J7s3bTttqDMLe4dOdAbwbp45SR
+	NstW+GyUX8PkH9vXXbwKEhpxaaf3mgrev/pp8VP8OG5yVwoaTy0g3wm3+YNmpL1/mhR9cl6v62h
+	ryWmOgt4v4+HYgj7CVBWbORwskOdJYL8=
+X-Google-Smtp-Source: AGHT+IFGueWEojM0Zq5uPTqJZRx+6Q38CSHBAAndFQkQXqugs5N7VGTk2OIYJ+3bbjPqEMxxrjyzt3bDH+zW6yF9EMA=
+X-Received: by 2002:a05:6870:a54d:b0:2c1:62e9:584b with SMTP id
+ 586e51a60fabf-2eeee65ae81mr3508649fac.39.1750504560571; Sat, 21 Jun 2025
+ 04:16:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/8] dt-bindings: clock: qcom: Add NSS clock controller
- for IPQ5424 SoC
-To: Luo Jie <quic_luoj@quicinc.com>, Krzysztof Kozlowski <krzk@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
- <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Anusha Rao <quic_anusha@quicinc.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, quic_kkumarcs@quicinc.com,
-        quic_linchen@quicinc.com, quic_leiwei@quicinc.com,
-        quic_suruchia@quicinc.com, quic_pavir@quicinc.com
-References: <20250617-qcom_ipq5424_nsscc-v1-0-4dc2d6b3cdfc@quicinc.com>
- <20250617-qcom_ipq5424_nsscc-v1-5-4dc2d6b3cdfc@quicinc.com>
- <b628b85b-75c4-4c85-b340-d26b1eb6d83e@kernel.org>
- <512e3355-a110-4e7c-ab43-04f714950971@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <512e3355-a110-4e7c-ab43-04f714950971@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIxMDA1OSBTYWx0ZWRfX5QcwgngvgQi2
- hVE774uqxoGjsoltsfbMDHHJTkUJuRBzbYw9QMP6OpaG1+iz/+Mkflu6gINaGZyXbbT9xBgdfnz
- HWo13uMfyjhXoU8EDL5D66rcdL9ET3VMNtCMk0IC2wXBjLDzGBaqx/nlC4ytjWF4bkhgQr1UDgX
- DdwZhddyVwdcdljeSmw2fyb3dgx7fWukf0kqNAJjCDgtL2eXw5AAuS4GfsTUD07lV3Kr+LJVOY8
- fqDbtkMrDQfFGU9gzSLtLNG2XLzeONDfqq3ySknmiKQS+wT8JX4nhMaYzZB6MWSDC1zSFoT3E5C
- RZIR/JaLLng2DXJhaP6YpBX1+JdeDwFFQcYYE7qFtRMyk/0jc5wjfHskxkYUJuD71WTSdUGV1Rv
- 05/RzGyzf4nO9iR59yY1D3cPJjec3S/YjRAjbXXbGDeJteBskQ7H2s36xgxC8m6YaPhcC/g5
-X-Proofpoint-GUID: Cd3XO_vrOx7xksZOw7pwurGs2Ud41pNl
-X-Authority-Analysis: v=2.4 cv=fb6ty1QF c=1 sm=1 tr=0 ts=685684ec cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=P-IC7800AAAA:8 a=gEfo2CItAAAA:8
- a=COk6AnOGAAAA:8 a=VwQbUJbxAAAA:8 a=LVulUOl5olkk-nN9es8A:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=d3PnA9EDa4IxuAV0gXij:22
- a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: Cd3XO_vrOx7xksZOw7pwurGs2Ud41pNl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-21_02,2025-06-20_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 bulkscore=0 adultscore=0
- impostorscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506210059
+References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+ <zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv>
+ <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
+ <20250607140600.76e87ea5@jic23-huawei> <CAJZ5v0jqZ6gYKb85dpR-X5RwFeUBcbbcJ_b-AOe+JypBXod-MA@mail.gmail.com>
+ <486a1110-5336-42fd-82b8-a7b1452bad65@tuxon.dev> <CAJZ5v0hqBm4L2V9aUjB0tmW67eRRCnM7FScgdJQ=ihnpAZuMfA@mail.gmail.com>
+ <4360ee7a-d85a-4fa0-a1d6-d09a3b9d57c0@tuxon.dev> <CAJZ5v0jUGf9QO6h6bcBcTX+nUbDeD0XMhWj1Qb-0qAtZ8EbVsA@mail.gmail.com>
+ <1b83c587-76c2-4fa1-aef8-f94575a3627a@tuxon.dev> <CAJZ5v0jZNX+FCmu_FeRPS47F37AmyAN25+7LJvzbqRdvs-aGcQ@mail.gmail.com>
+ <CAPDyKFq9at+aA+OG__ZHvhc3AELfUOyOakH7a=MGHrbAjzL8OA@mail.gmail.com>
+In-Reply-To: <CAPDyKFq9at+aA+OG__ZHvhc3AELfUOyOakH7a=MGHrbAjzL8OA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sat, 21 Jun 2025 13:15:45 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hi2N9iFy-Dh0mkN3zDBytMFXqxosujbPGO5JxnWhBxmg@mail.gmail.com>
+X-Gm-Features: AX0GCFvoJozWLVAwBLoX9Vrp18nN2uNK09JD8vUmh6r6GiFPTGTEkUEj71DQfGc
+Message-ID: <CAJZ5v0hi2N9iFy-Dh0mkN3zDBytMFXqxosujbPGO5JxnWhBxmg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for dev_pm_domain_attach()
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Jonathan Cameron <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, gregkh@linuxfoundation.org, 
+	dakr@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
+	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	fabrizio.castro.jz@renesas.com, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/18/25 5:58 PM, Luo Jie wrote:
-> 
-> 
-> On 6/17/2025 10:49 PM, Krzysztof Kozlowski wrote:
->> On 17/06/2025 14:06, Luo Jie wrote:
->>> NSS clock controller provides the clocks and resets to the
->>> networking blocks such as PPE (Packet Process Engine) and
->>> UNIPHY (PCS) on IPQ5424 devices.
->>
->> Please wrap commit message according to Linux coding style / submission
->> process (neither too early nor over the limit):
->> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
->>
-> 
-> OK.
-> 
->>>
->>> Add the compatible "qcom,ipq5424-nsscc" support based on the
->>> current IPQ9574 NSS clock controller DT binding file.
->>> ICC clocks are always provided by the NSS clock controller
->>> of IPQ9574 and IPQ5424, so add interconnect-cells as required
->>> DT property.
->>>
->>> Also add master/slave ids for IPQ5424 networking interfaces,
->>> which is used by nss-ipq5424 driver for providing interconnect
->>> services using icc-clk framework.
->>>
->>> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
->>> ---
->>>   .../bindings/clock/qcom,ipq9574-nsscc.yaml         | 66 +++++++++++++++++++---
->>>   include/dt-bindings/clock/qcom,ipq5424-nsscc.h     | 65 +++++++++++++++++++++
->>>   include/dt-bindings/interconnect/qcom,ipq5424.h    | 13 +++++
->>>   include/dt-bindings/reset/qcom,ipq5424-nsscc.h     | 46 +++++++++++++++
->>>   4 files changed, 182 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->>> index 17252b6ea3be..5bc2fe049b26 100644
->>> --- a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->>> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->>> @@ -4,7 +4,7 @@
->>>   $id: http://devicetree.org/schemas/clock/qcom,ipq9574-nsscc.yaml#
->>>   $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>   -title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574
->>> +title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574 and IPQ5424
->>>     maintainers:
->>>     - Bjorn Andersson <andersson@kernel.org>
->>> @@ -12,21 +12,25 @@ maintainers:
->>>     description: |
->>>     Qualcomm networking sub system clock control module provides the clocks,
->>> -  resets on IPQ9574
->>> +  resets on IPQ9574 and IPQ5424
->>>   -  See also::
->>> +  See also:
->>> +    include/dt-bindings/clock/qcom,ipq5424-nsscc.h
->>>       include/dt-bindings/clock/qcom,ipq9574-nsscc.h
->>> +    include/dt-bindings/reset/qcom,ipq5424-nsscc.h
->>>       include/dt-bindings/reset/qcom,ipq9574-nsscc.h
->>>     properties:
->>>     compatible:
->>> -    const: qcom,ipq9574-nsscc
->>> +    enum:
->>> +      - qcom,ipq5424-nsscc
->>> +      - qcom,ipq9574-nsscc
->>>       clocks:
->>>       items:
->>>         - description: Board XO source
->>> -      - description: CMN_PLL NSS 1200MHz (Bias PLL cc) clock source
->>> -      - description: CMN_PLL PPE 353MHz (Bias PLL ubi nc) clock source
->>> +      - description: CMN_PLL NSS 1200 MHz or 300 MHZ (Bias PLL cc) clock source
->>> +      - description: CMN_PLL PPE 353 MHz  or 375 MHZ (Bias PLL ubi nc) clock source
->>
->> This change means devices are different. Just ocme with your own schema.
-> 
-> The NSS clock controller hardware block on the IPQ5424 SoC is identical
-> in design to that of the IPQ9574 SoC. The main difference is in the
-> clock rates for its two parent clocks sourced from the CMN PLL block.
-> 
-> Given this, would it be acceptable to update the clock name and its
-> description to use a more generic clock name, such as "nss" and "ppe"
-> instead of the current "nss_1200" and "ppe_353"?
+On Thu, Jun 19, 2025 at 2:21=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> On Mon, 16 Jun 2025 at 13:47, Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+> >
+> > On Mon, Jun 16, 2025 at 1:37=E2=80=AFPM Claudiu Beznea <claudiu.beznea@=
+tuxon.dev> wrote:
+> > >
+> > >
+> > >
+> > > On 16.06.2025 14:18, Rafael J. Wysocki wrote:
+> > > > On Mon, Jun 16, 2025 at 11:37=E2=80=AFAM Claudiu Beznea
+> > > > <claudiu.beznea@tuxon.dev> wrote:
+> > > >>
+> > > >> Hi, Rafael,
+> > > >>
+> > > >> On 13.06.2025 13:02, Rafael J. Wysocki wrote:
+> > > >>> On Fri, Jun 13, 2025 at 9:39=E2=80=AFAM Claudiu Beznea <claudiu.b=
+eznea@tuxon.dev> wrote:
+> > > >>>>
+> > > >>>> Hi, Rafael,
+> > > >>>>
+> > > >>>> On 09.06.2025 22:59, Rafael J. Wysocki wrote:
+> > > >>>>> On Sat, Jun 7, 2025 at 3:06=E2=80=AFPM Jonathan Cameron <jic23@=
+kernel.org> wrote:
+> > > >>>>>>
+> > > >>>>>> On Fri, 6 Jun 2025 22:01:52 +0200
+> > > >>>>>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > >>>>>>
+> > > >>>>>> Hi Rafael,
+> > > >>>>>>
+> > > >>>>>>> On Fri, Jun 6, 2025 at 8:55=E2=80=AFPM Dmitry Torokhov
+> > > >>>>>>> <dmitry.torokhov@gmail.com> wrote:
+> > > >>>>>>>>
+> > > >>>>>>>> On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki =
+wrote:
+> > > >>>>>>>>> On Fri, Jun 6, 2025 at 1:18=E2=80=AFPM Claudiu <claudiu.bez=
+nea@tuxon.dev> wrote:
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> The dev_pm_domain_attach() function is typically used in b=
+us code alongside
+> > > >>>>>>>>>> dev_pm_domain_detach(), often following patterns like:
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> static int bus_probe(struct device *_dev)
+> > > >>>>>>>>>> {
+> > > >>>>>>>>>>     struct bus_driver *drv =3D to_bus_driver(dev->driver);
+> > > >>>>>>>>>>     struct bus_device *dev =3D to_bus_device(_dev);
+> > > >>>>>>>>>>     int ret;
+> > > >>>>>>>>>>
+> > > >>>>>>>>>>     // ...
+> > > >>>>>>>>>>
+> > > >>>>>>>>>>     ret =3D dev_pm_domain_attach(_dev, true);
+> > > >>>>>>>>>>     if (ret)
+> > > >>>>>>>>>>         return ret;
+> > > >>>>>>>>>>
+> > > >>>>>>>>>>     if (drv->probe)
+> > > >>>>>>>>>>         ret =3D drv->probe(dev);
+> > > >>>>>>>>>>
+> > > >>>>>>>>>>     // ...
+> > > >>>>>>>>>> }
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> static void bus_remove(struct device *_dev)
+> > > >>>>>>>>>> {
+> > > >>>>>>>>>>     struct bus_driver *drv =3D to_bus_driver(dev->driver);
+> > > >>>>>>>>>>     struct bus_device *dev =3D to_bus_device(_dev);
+> > > >>>>>>>>>>
+> > > >>>>>>>>>>     if (drv->remove)
+> > > >>>>>>>>>>         drv->remove(dev);
+> > > >>>>>>>>>>     dev_pm_domain_detach(_dev);
+> > > >>>>>>>>>> }
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> When the driver's probe function uses devres-managed resou=
+rces that depend
+> > > >>>>>>>>>> on the power domain state, those resources are released la=
+ter during
+> > > >>>>>>>>>> device_unbind_cleanup().
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> Releasing devres-managed resources that depend on the powe=
+r domain state
+> > > >>>>>>>>>> after detaching the device from its PM domain can cause fa=
+ilures.
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> For example, if the driver uses devm_pm_runtime_enable() i=
+n its probe
+> > > >>>>>>>>>> function, and the device's clocks are managed by the PM do=
+main, then
+> > > >>>>>>>>>> during removal the runtime PM is disabled in device_unbind=
+_cleanup() after
+> > > >>>>>>>>>> the clocks have been removed from the PM domain. It may ha=
+ppen that the
+> > > >>>>>>>>>> devm_pm_runtime_enable() action causes the device to be ru=
+ntime-resumed.
+> > > >>>>>>>>>
+> > > >>>>>>>>> Don't use devm_pm_runtime_enable() then.
+> > > >>>>>>>>
+> > > >>>>>>>> What about other devm_ APIs? Are you suggesting that platfor=
+m drivers
+> > > >>>>>>>> should not be using devm_clk*(), devm_regulator_*(),
+> > > >>>>>>>> devm_request_*_irq() and devm_add_action_or_reset()? Because=
+ again,
+> > > >>>>>>>> dev_pm_domain_detach() that is called by platform bus_remove=
+() may shut
+> > > >>>>>>>> off the device too early, before cleanup code has a chance t=
+o execute
+> > > >>>>>>>> proper cleanup.
+> > > >>>>>>>>
+> > > >>>>>>>> The issue is not limited to runtime PM.
+> > > >>>>>>>>
+> > > >>>>>>>>>
+> > > >>>>>>>>>> If the driver specific runtime PM APIs access registers di=
+rectly, this
+> > > >>>>>>>>>> will lead to accessing device registers without clocks bei=
+ng enabled.
+> > > >>>>>>>>>> Similar issues may occur with other devres actions that ac=
+cess device
+> > > >>>>>>>>>> registers.
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> Add devm_pm_domain_attach(). When replacing the dev_pm_dom=
+ain_attach() and
+> > > >>>>>>>>>> dev_pm_domain_detach() in bus probe and bus remove, it ens=
+ures that the
+> > > >>>>>>>>>> device is detached from its PM domain in device_unbind_cle=
+anup(), only
+> > > >>>>>>>>>> after all driver's devres-managed resources have been rele=
+ase.
+> > > >>>>>>>>>>
+> > > >>>>>>>>>> For flexibility, the implemented devm_pm_domain_attach() h=
+as 2 state
+> > > >>>>>>>>>> arguments, one for the domain state on attach, one for the=
+ domain state on
+> > > >>>>>>>>>> detach.
+> > > >>>>>>>>>
+> > > >>>>>>>>> dev_pm_domain_attach() is not part driver API and I'm not c=
+onvinced at
+> > > >>>>>>>>
+> > > >>>>>>>> Is the concern that devm_pm_domain_attach() will be [ab]used=
+ by drivers?
+> > > >>>>>>>
+> > > >>>>>>> Yes, among other things.
+> > > >>>>>>
+> > > >>>>>> Maybe naming could make abuse at least obvious to spot? e.g.
+> > > >>>>>> pm_domain_attach_with_devm_release()
+> > > >>>>>
+> > > >>>>> If I'm not mistaken, it is not even necessary to use devres for=
+ this.
+> > > >>>>>
+> > > >>>>> You might as well add a dev_pm_domain_detach() call to
+> > > >>>>> device_unbind_cleanup() after devres_release_all().  There is a=
+ slight
+> > > >>>>> complication related to the second argument of it, but I suppos=
+e that
+> > > >>>>> this can be determined at the attach time and stored in a new d=
+evice
+> > > >>>>> PM flag, or similar.
+> > > >>>>>
+> > > >>>>
+> > > >>>> I looked into this solution. I've tested it for all my failure c=
+ases and
+> > > >>>> went good.
+> > > >>>
+> > > >>> OK
+> > > >>>
+> > > >>>>> Note that dev->pm_domain is expected to be cleared by ->detach(=
+), so
+> > > >>>>> this should not cause the domain to be detached twice in a row =
+from
+> > > >>>>> the same device, but that needs to be double-checked.
+> > > >>>>
+> > > >>>> The genpd_dev_pm_detach() calls genpd_remove_device() ->
+> > > >>>> dev_pm_domain_set(dev, NULL) which sets the dev->pm_domain =3D N=
+ULL. I can't
+> > > >>>> find any other detach function in the current code base.
+> > > >>>
+> > > >>> There is also acpi_dev_pm_detach() which can be somewhat hard to =
+find,
+> > > >>> but it calls dev_pm_domain_set(dev, NULL) either.
+> > > >>>
+> > > >>>> The code I've tested for this solution is this one:
+> > > >>>>
+> > > >>>> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> > > >>>> index b526e0e0f52d..5e9750d007b4 100644
+> > > >>>> --- a/drivers/base/dd.c
+> > > >>>> +++ b/drivers/base/dd.c
+> > > >>>> @@ -25,6 +25,7 @@
+> > > >>>>  #include <linux/kthread.h>
+> > > >>>>  #include <linux/wait.h>
+> > > >>>>  #include <linux/async.h>
+> > > >>>> +#include <linux/pm_domain.h>
+> > > >>>>  #include <linux/pm_runtime.h>
+> > > >>>>  #include <linux/pinctrl/devinfo.h>
+> > > >>>>  #include <linux/slab.h>
+> > > >>>> @@ -552,8 +553,11 @@ static void device_unbind_cleanup(struct de=
+vice *dev)
+> > > >>>>         dev->dma_range_map =3D NULL;
+> > > >>>>         device_set_driver(dev, NULL);
+> > > >>>>         dev_set_drvdata(dev, NULL);
+> > > >>>> -       if (dev->pm_domain && dev->pm_domain->dismiss)
+> > > >>>> -               dev->pm_domain->dismiss(dev);
+> > > >>>> +       if (dev->pm_domain) {
+> > > >>>> +               if (dev->pm_domain->dismiss)
+> > > >>>> +                       dev->pm_domain->dismiss(dev);
+> > > >>>> +               dev_pm_domain_detach(dev, dev->pm_domain->detach=
+_power_off);
+> > > >>>
+> > > >>> I would do the "detach" before the "dismiss" to retain the curren=
+t ordering.
+> > > >>
+> > > >> I applied on my local development branch all your suggestions exce=
+pt this
+> > > >> one because genpd_dev_pm_detach() as well as acpi_dev_pm_detach() =
+set
+> > > >> dev->pm_domain =3D NULL.
+> > > >>
+> > > >> Due to this I would call first ->dismiss() then ->detach(), as ini=
+tially
+> > > >> proposed. Please let me know if you consider it otherwise.
+> > > >
+> > > > This is a matter of adding one more dev->pm_domain check AFAICS, bu=
+t OK.
+> > >
+> > > I don't know all the subtleties around this, my concern with adding o=
+ne
+> > > more check on dev->pm_domain was that the
+> > > dev->pm_domain->dismiss() will never be called if the ->detach() func=
+tion
+> > > will be called before ->dismiss() and it will set dev->pm_domain =3D =
+NULL (as
+> > > it does today (though genpd_dev_pm_detach() and acpi_dev_pm_detach())=
+).
+> > >
+> > > For platform drivers that used to call dev_pm_domain_detach() in plat=
+form
+> > > bus remove function, if I'm not wrong, the dev->pm_domain->dismiss() =
+was
+> > > never called previously. If that is a valid scenario, the code propos=
+ed in
+> > > this thread will change the behavior for devices that have ->dismiss(=
+)
+> > > implemented.
+> >
+> > ->dismiss() and ->detach() are supposed to be mutually exclusive, so
+> > this should not be a problem either way and in practice so far the
+> > only user of ->dismiss() has been acpi_lpss_pm_domain which doesn't do
+> > ->detach() at all.
+>
+> May I ask if you know if there remains any real good reasons to keep
+> the ->dismiss() callback around?
+>
+> Can't acpi_lpss_pm_domain() convert to use the ->detach() callback
+> instead? Just thinking that it would be easier, but maybe it doesn't
+> work.
 
-Because you used those clock_names in the existing ipq9574, you can't
-change them now. You could introduce a separate set of clock_names
-for the new ipq5424 though, but I think it could be useful to drop the
-rate suffix for new additions
-
-Konrad
+It will, but let's just not make too many changes in one go.
 
