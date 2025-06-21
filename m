@@ -1,88 +1,88 @@
-Return-Path: <linux-pm+bounces-29181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29182-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABA99AE27B4
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 09:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D1FAE27B7
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 09:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 159BA3AE2EE
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 07:16:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA1DE3B5F0C
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jun 2025 07:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160DC1BD9CE;
-	Sat, 21 Jun 2025 07:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745841C8629;
+	Sat, 21 Jun 2025 07:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M7F5kWa+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BV90p3g0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38517196C7C;
-	Sat, 21 Jun 2025 07:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81AB1C861E;
+	Sat, 21 Jun 2025 07:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750490235; cv=none; b=RY6TY5TdlEezJMW5E9wtUDIEtR4Ql4gNpEkVrrTDQ33FXirV/ye3ViTvZXxofziLGNLPrFon70E3JkpFxPc5kbdbXI9gHrTdOMM1Jgeim6yjRxCfntq3auUUGuJNJaz7WqrybiwIs+zFXAu4Ntk0lHIJW1MBIHnpOfCKIobvYn0=
+	t=1750490259; cv=none; b=poz4e6k4lCzwbLwGw2fLzFnnNo+B4WQRqZ+v0zPz4UWW70YdGD+L0wCb0qHyjW4FfmSbsa7oV2E7J2stGM81g2I4Dl9pt9NpPPerTXufvUrmU2iofFDLAS1rb1BnNHrgbmILNXK/TP9qx9g3ehzheBbZn4uX8iPMYpakP0/hibc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750490235; c=relaxed/simple;
-	bh=qCNENRpPK/5E6apfanAOWQrNPEygDkh+O7IA2Km3UOM=;
+	s=arc-20240116; t=1750490259; c=relaxed/simple;
+	bh=/YBYo23/zqVG/K6r+hmtEQmTWmEBC+Kjo6+ZSVqz07o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i2XYimS0zOjSM6myduw7imAORoT+o9Fvb/pzFGM0C5Icp7oNGuGKbuLn1fWqjFSBuFKdT75OSxTkeitPvhGEX3/DBvkNTWuGFTAWdW43/R78KuSTOYyZwwOlJculK0Yftysg9C3KSyMZgIQY/xW0TQViGUjN/GNEEXXiWXK1F+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M7F5kWa+; arc=none smtp.client-ip=209.85.208.46
+	 To:Cc:Content-Type; b=hhiY4xCZsR1iJlkDQvzSEAkVPi5nBJ+pFIdNU/SYX0Z/F5LufrUpHgja49JdyZUlCKuwyEq5i2IM5po017BKMiSnuVUzOtjyYt3NnNrJRWc0rIXTb9OtlM1ruzMBCCaKwYaH5JbON1NLHKz1baJL4TjYkH5+6OsR5s84QS7lh98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BV90p3g0; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-607cf70b00aso4514244a12.2;
-        Sat, 21 Jun 2025 00:17:12 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-addda47ebeaso526466966b.1;
+        Sat, 21 Jun 2025 00:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750490231; x=1751095031; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750490256; x=1751095056; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/bcaFXfQWjofieOOSzrQZuk2N3r45IQ/D1htHwwGLOY=;
-        b=M7F5kWa+u/tSy1gZv1MuXB2OUNqE58vVcnakfZNmmvUu9Syy5qnpuDNA4RB+2GDSlO
-         n9yXy1zTkGvrp5Idmu2DPkQmZk3eRN1qdBdNWKS8t/zJfcTn5WvdMn8Dov+hrhBo26AT
-         xHUAyBMcgQAdqNncIYhNILFlXCLRGzfDI58lYR7jzUYP1XTJRT9d1r3bWhFss3PPxkpe
-         wU89bP5Gg2YvvG63226thoq9EIoCX/QIwZGSYw6Ny/aBrx4j4GxHsvGawTzWzpExJO7w
-         aeuTIqyACHB4pZatNUyiXC7my9ku1a+Wjai/Ms6dsEmurwE4PWsadVYGchpucSLGyLke
-         KfpA==
+        bh=Bo59aSl355A+wShZW/KV0Ru3ekeBmk5oXEnZ7H/l/wg=;
+        b=BV90p3g0hABJpNGDwiV7k/T4Lj6X5APxBtLC2hY8fmFpWghN7GiyRhxXK3/b0vQDxf
+         Hk3Df3AXakIC1bIOS3S/ANIdoSFU+MTa4UOl8bc3PiN8UsqnU8dAPSNoBLLFlHBKu0AV
+         6LRI1SryYP53+JfsHNmFHJuMnsOc73QCTvn1VHx2I4g1ap7iBjzNMr41Csx+3mZUDdJ0
+         TppPDSVOjrl/luqNKR8eOB0OVgZgAY4iBQCo4H4IF1bgyHm5NVlgo3TCE04sy+b++dK5
+         42crN0+FnwipvgIhLoTAi5xq/C4RuAd5voYJjLh9/5SttHJIAT6X5KD7z5xevTQtz48R
+         PoBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750490231; x=1751095031;
+        d=1e100.net; s=20230601; t=1750490256; x=1751095056;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/bcaFXfQWjofieOOSzrQZuk2N3r45IQ/D1htHwwGLOY=;
-        b=dSU/LzATuezE/ewLoYJ/eb6XPWWgOu7DxOxd8OTpXl+jwbHuXMEbLuiSopFxGK1/Y2
-         VTVMIMTC6yQ3SdkSsOpxelECTWvRo1vU0qgTeqgHSnbN9fdZ44apt31Xjf/X5C2MWJk9
-         SW239ixL3tPoX6MEjgg2WgzL2xeGzfJaJ+Kwbo8BHVm86IBQtlm6ZoikJMgW3Sh/lwC8
-         Tu9fLd3pMl+2uc1Tv/6nZGlGZfOusVzKPwX0HGyWg/ZEPLeK1MAintngZki2ZBPZkFJi
-         Vu2WJUcTdCYGHEtfwxojdUhx3ohXbkTA7Q0kUKAMdmdFGJiWiK7bgfUwQ7IYlZH+TfZG
-         zeiA==
-X-Forwarded-Encrypted: i=1; AJvYcCWXAYALwtryshxZhl5p+qXWOEL9sKjothDFcUC7+OOr7owpGBELNcZw3WsyQ8tjVhdpd4FdPYRE5FDm+38=@vger.kernel.org, AJvYcCXG2VMpnYZIaPuxdPnIP1lb9iPC4Tz5z/JYvM+vG/AllIT4MzkBum3fcdJ8uBomfK/Zg6HMJCtl9Bo=@vger.kernel.org, AJvYcCXp5OK43wytdrQuzQVQ9ha/WuTP+tvLN4IP0f7eFiO9qLLmrBQOSlAuYTC7GFc0PSEZO/N6+p4AN8aKyAm712cGghc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAJxG66d7j8NAhFphpAd4bloKrz44PzZC+aMyTm7PDECHuVlTR
-	Pe/YHtrdUjRDhCFktKAd/7Sdhzi3cv1X6ST1idg5WDDINQyC1GHQB+WJhwNF3frRz9UioGVuJxN
-	DJKb0T8uRKV+9NnFB7F0xzSbIvlAG/l4=
-X-Gm-Gg: ASbGnctJ0vGyRUSHX+UmMS1q+Ia6kbOxtjCSj6qVf6+DMJkdRY+4UUJOG+m3yQnoH8j
-	i909ziqkiNX4DI/74WAtu7FO3ku+qs/7c9rPyszAx+qeEYHzu/Lxq6W3aB71gfaxcOmLuzczRnu
-	tJUXOnlKSca8YZuDpdWmZv9bru4P+OjFkJLj/jP7F4DA==
-X-Google-Smtp-Source: AGHT+IH66doWMpGtWOMFqbeLqscHl6eWKJT3vUmx953SEzxCv+zBCKw7VBGa8S2Rn8h7FbOcfjnLkvGiGRemhUti3i0=
-X-Received: by 2002:a17:906:30cb:b0:ad2:4da6:f58c with SMTP id
- a640c23a62f3a-ae057bdea98mr459148666b.46.1750490231238; Sat, 21 Jun 2025
- 00:17:11 -0700 (PDT)
+        bh=Bo59aSl355A+wShZW/KV0Ru3ekeBmk5oXEnZ7H/l/wg=;
+        b=SpteDRHZZ13AE4qjYjrVvkiJTG+XxHVtdIL/9fIbslAxCU1kB+1ZWy+jxJCHxAD2yg
+         BOcfoCrGz7F5W10G3bfJ9SuuDS4AX1Y6Cg7yDl6N0H48WZlhDGYLY7CTkhb776KK0zi1
+         vcFVQ2/8Pxi8B91Bcog129Gtfyo1RjLfXT+GiFRyUHafse9lr/94qhbk72iITk3hDHrF
+         J+xoZMGU3O3bTBccBIyFWLWLTZnbTIt1mPL++pfunhb5tmf65Zjbwk1KsxmOFiCH1o3p
+         vU6XBCDQBoXujGsdWm+j16AwE0Q/Eb6/4YXQcstDqXiXw2e5w/QUsaPLhfZQ1D4p06KZ
+         ExAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUtbLv64YxGAVzHRUin/IhpL4vFnWvqkMRUPF26SttXYot9EsROhhZucIGhevZ/zosbY/AOdQlYFZbzHCQ=@vger.kernel.org, AJvYcCWDmGewBOlyLa8FagjULFJzLfKV7ARXmc8OumcwKtLBr+vybQCyKs4qf6BC54VxGM0rEg1wU3y58Vk=@vger.kernel.org, AJvYcCWvqBsQcqndUNuGVcTgcp/aI/4Po/cXVK/yrLSXk6Yvho6+EccjiyboWPgEW9jEvvf5oM2SV+NEU/0C0UQFZ2DKdhA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylY6bQp5MOuvkGM28+jsfuqSy+dIO/Chi6wg8UwvRPpKkKWGmG
+	cbBYlH2wFuuibSmUK+Ib7T47OwDhp9chUV8O66flZ1lQSj1t7mTJgOZrjB1PdqeVJnVfrp2wxE0
+	qZsrHgZg5AgP7LFsCKOhmrXWKs6d5bNU=
+X-Gm-Gg: ASbGncujG+u2+75ghP29hT8SrCifML6XKJYazFHYkpkGN+/vkxO+d8dzQSpzeKA3bYJ
+	f0EZU1UJrz0cxIlHvLf7dPetcM5SRKdw1zAGYTVqy59BMFb5SXClgU+R0fGYiwOEZBHFBdpgxrw
+	i440bGi/KYDpRKn9UVWELM9dQBkxdk86q6ESjMDFVMaQ==
+X-Google-Smtp-Source: AGHT+IFJDhovq12Hf4eA4SNosqcCft5uT2vIt6ARrg45/n4N8HVFpkpi6/xoPTExRyFmBOJk7i7Y6xznFo8rDhMVMXI=
+X-Received: by 2002:a17:907:3d86:b0:ad5:8412:1c9 with SMTP id
+ a640c23a62f3a-ae057c709afmr512391466b.59.1750490255672; Sat, 21 Jun 2025
+ 00:17:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250618115220eucas1p2b9d37e8cdd1997fa010f51cecdea5e4f@eucas1p2.samsung.com>
- <20250616163831.8138-3-linux.amoon@gmail.com> <20250618115211.2239335-1-m.majewski2@samsung.com>
- <CANAwSgRV=JT+qdAN=M46CZdWaSZnjazdw66fQETw7HeEcLSx8A@mail.gmail.com>
-In-Reply-To: <CANAwSgRV=JT+qdAN=M46CZdWaSZnjazdw66fQETw7HeEcLSx8A@mail.gmail.com>
+References: <CGME20250618125812eucas1p11a1ab5210d4efa95a51b3bc7c4f0924d@eucas1p1.samsung.com>
+ <20250616163831.8138-2-linux.amoon@gmail.com> <20250618125806.2260184-1-m.majewski2@samsung.com>
+ <CANAwSgQ-NFBtUareFmRzNVuKTSC8Vp7HTA0psBqYu2r=aqAGxg@mail.gmail.com>
+In-Reply-To: <CANAwSgQ-NFBtUareFmRzNVuKTSC8Vp7HTA0psBqYu2r=aqAGxg@mail.gmail.com>
 From: Anand Moon <linux.amoon@gmail.com>
-Date: Sat, 21 Jun 2025 12:46:53 +0530
-X-Gm-Features: Ac12FXyDzDmafHO30O7tOj_g1UTTGVYFB7ldEiK1JVaf1dtCf3kj-sESMmUqQko
-Message-ID: <CANAwSgQ=G1yJXOg1LdeEf-J56epyNiohCSdNYUvs2AHNv90Hkg@mail.gmail.com>
-Subject: Re: [RRC v1 2/3] thermal/drivers/exynos: Handle temperature threshold
- interrupts and clear corresponding IRQs
+Date: Sat, 21 Jun 2025 12:47:17 +0530
+X-Gm-Features: Ac12FXx6b9_Iy6FveNsY4BBaQRZfx2OrqYMft6MDANpLfMD2oPkqTyGtIAq5PSo
+Message-ID: <CANAwSgTBzpL+XMJGhG=38A7GOzeayZaG_2LTvsaE2=mF-pn5mg@mail.gmail.com>
+Subject: Re: [RRC v1 1/3] thermal/drivers/exynos: Remove unused base_second
+ mapping and references
 To: Mateusz Majewski <m.majewski2@samsung.com>
 Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org, 
 	krzk@kernel.org, linux-arm-kernel@lists.infradead.org, 
@@ -91,113 +91,75 @@ Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org,
 	rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Mateusz,
+Hi Mateusz
 
 On Thu, 19 Jun 2025 at 11:15, Anand Moon <linux.amoon@gmail.com> wrote:
 >
 > Hi Mateusz,
 >
-> On Wed, 18 Jun 2025 at 17:22, Mateusz Majewski <m.majewski2@samsung.com> wrote:
+> On Wed, 18 Jun 2025 at 18:28, Mateusz Majewski <m.majewski2@samsung.com> wrote:
 > >
-> > Hello :)
+> > >       /* On exynos5420 the triminfo register is in the shared space */
+> > > -     if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO)
+> > > -             trim_info = readl(data->base_second + EXYNOS_TMU_REG_TRIMINFO);
+> > > -     else
+> > > +     if (data->soc == SOC_ARCH_EXYNOS5420 ||
+> > > +                     data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
+> > >               trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
+> > > -
+> > > -     sanitize_temp_error(data, trim_info);
+> > > +             sanitize_temp_error(data, trim_info);
+> > > +     }
 > >
-> > > +#define INTSTAT_FALL2        BIT(24)
-> > > +#define INTSTAT_FALL1        BIT(20)
-> > > +#define INTSTAT_FALL0        BIT(16)
-> > > +#define INTSTAT_RISE2        BIT(8)
-> > > +#define INTSTAT_RISE1        BIT(4)
-> > > +#define INTSTAT_RISE0        BIT(0)
-> > > +
-> > > +#define INTCLEAR_FALL2       BIT(24)
-> > > +#define INTCLEAR_FALL1       BIT(20)
-> > > +#define INTCLEAR_FALL0       BIT(16)
-> > > +#define INTCLEAR_RISE2       BIT(8)
-> > > +#define INTCLEAR_RISE1       BIT(4)
-> > > +#define INTCLEAR_RISE0       BIT(0)
+> > If I understand correctly, this means that the triminfo will no longer
+> > be read on other SoCs calling this function (3250, 4412, 5250, 5260). Is
+> > this intended?
 > >
-> > > +     /* Map INTSTAT bits to INTCLEAR bits */
-> > > +     if (val_irq & INTSTAT_FALL2)
-> > > +             clearirq |= INTCLEAR_FALL2;
-> > > +     else if (val_irq & INTSTAT_FALL1)
-> > > +             clearirq |= INTCLEAR_FALL1;
-> > > +     else if (val_irq & INTSTAT_FALL0)
-> > > +             clearirq |= INTCLEAR_FALL0;
-> > > +     else if (val_irq & INTSTAT_RISE2)
-> > > +             clearirq |= INTCLEAR_RISE2;
-> > > +     else if (val_irq & INTSTAT_RISE1)
-> > > +             clearirq |= INTCLEAR_RISE1;
-> > > +     else if (val_irq & INTSTAT_RISE0)
-> > > +             clearirq |= INTCLEAR_RISE0;
-> >
-> > This implies that only these 6 bits are used. Is this true for all SoCs
-> > supported by this driver? My understanding is that Exynos 5433 in particular
-> > uses bits 7:0 for rise interrupts and 23:16 for fall interrupts. When I tested
-> > this patch (both alone and the whole series) on 5433 by running some CPU load,
-> > the interrupt seemed to not fire consistently:
-> > /sys/class/thermal/cooling_device1/cur_state would never go above 1 (which is
-> > consistent with the interrupt firing once, not getting cleared and never firing
-> > again; without this patch, it consistently went up to 6) and I got a quick
-> > reboot every time.
-> >
-> Thanks for the feedback,
->
-> As per the user manual Exynos4412
-> INTSTAT and INTCLEAR have a clear mapping with bits
-> falling 20, 16, 12 and rising 8 4 0
->
-> whereas Exyno5422 has
-> INTSTAT and INTCLEAR have a clear mapping with bits
-> falling 24, 20, 16, and rising 8 4 0
->
-> Yes, it could differ for all the SoCs,
-> I don't have the user manual or TRM for these SoCs
-> to configure correctly.
->
-> I tried to configure this, referring to the comment in the driver
->         /*
->          * Clear the interrupts.  Please note that the documentation for
->          * Exynos3250, Exynos4412, Exynos5250 and Exynos5260 incorrectly
->          * states that INTCLEAR register has a different placing of bits
->          * responsible for FALL IRQs than INTSTAT register.  Exynos5420
->          * and Exynos5440 documentation is correct (Exynos4210 doesn't
->          * support FALL IRQs at all).
->          */
->
-> By the way, I don't see Exynos5433 and Exynos7 support
-> INTSTAT and INTCLEAR registers. We are using TMU_REG_INTPEND
->  to read and update the same register.
->
->         if (data->soc == SOC_ARCH_EXYNOS5260) {
->                 tmu_intstat = EXYNOS5260_TMU_REG_INTSTAT;
->                 tmu_intclear = EXYNOS5260_TMU_REG_INTCLEAR;
->         } else if (data->soc == SOC_ARCH_EXYNOS7) {
->                 tmu_intstat = EXYNOS7_TMU_REG_INTPEND;
->                 tmu_intclear = EXYNOS7_TMU_REG_INTPEND;
->         } else if (data->soc == SOC_ARCH_EXYNOS5433) {
->                 tmu_intstat = EXYNOS5433_TMU_REG_INTPEND;
->                 tmu_intclear = EXYNOS5433_TMU_REG_INTPEND;
->         } else {
->                 tmu_intstat = EXYNOS_TMU_REG_INTSTAT;
->                 tmu_intclear = EXYNOS_TMU_REG_INTCLEAR;
->         }
->
-I don't have Exynos  Arm64 boards to test on
+> Thanks for your feedback.
+> I will remove the data->soc check for Exynos5420 in the next patch.
 
-I believe the Exynos5433 and Exynos7 also use the same
-register addresses for INTSTAT and INTCLEAR.
+Can you check with with following changes
 
-[1] https://github.com/universal5433/android_kernel_samsung_universal5433/blob/lineage-18.1/drivers/thermal/exynos_thermal.c#L854-L892
-[2] https://github.com/enesuzun2002/android_kernel_samsung_exynos7420/blob/nx-9.0/drivers/thermal/cal_tmu7420.c#L14-L221
+diff --git a/drivers/thermal/samsung/exynos_tmu.c
+b/drivers/thermal/samsung/exynos_tmu.c
+index 9fc085f4ea1a..0776801fafea 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -469,14 +469,11 @@ static void exynos4412_tmu_initialize(struct
+platform_device *pdev)
+                ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON2);
+                ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
+                writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON2);
++               return;
+        }
 
-If you have details on how INTSTAT and INTCLEAR are used
-particularly regarding the update bits, please share them.
-Specifically, I'm interested in how bits [7:0] correspond to rising edge
-interrupts and bits [23:16] to falling edge interrupts
-I feel it's the same as Exynos54222.
-
-Can you test with these changes? If you have any suggestions,
-please feel free to share them
+-       /* On exynos5420 the triminfo register is in the shared space */
+-       if (data->soc == SOC_ARCH_EXYNOS5420 ||
+-                       data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
+-               trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
+-               sanitize_temp_error(data, trim_info);
+-       }
++       trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
++       sanitize_temp_error(data, trim_info);
+ }
+>
+> > By the way, are we sure that data->base_second really is unnecessary?
+> > According to the bindings documentation (in
+> > Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml),
+> > the different address is necessary because the triminfo registers are
+> > misplaced on 5420.
+>
+> As per my Exynos5422 user manual and DTS mapping
+> thermal-sensor tmu@10060000 is mapped to CPU0 with tmu_apbif clock
+> thermal-sensor tmu@10064000 is mapped to CPU1 with tmu_apbif clock
+> thermal-sensor tmu@10068000 is mapped to CPU2 with tmu_apbif clock
+> thermal-sensor tmu@1006c000 is mapped to CPU3 with tmu_apbif clock
+> thermal-sensor tmu@100a0000 is mapped to GPU with tmu_triminfo_apbif clock.
+>
+> Well, we are using tmu_triminfo_apbif to configure clk_sec, which is
+> using the data->base to enable the clk.
+> So, data->base_second is not used any further in the code after we set triminfo
 
 Thanks
--Anand
+Anand
 
