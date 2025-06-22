@@ -1,283 +1,122 @@
-Return-Path: <linux-pm+bounces-29224-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29225-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC0EBAE2F9E
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 13:45:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33808AE3008
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 15:00:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A74816BE9D
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 11:45:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75F013B13AE
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 13:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84751DED42;
-	Sun, 22 Jun 2025 11:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36301E0DDC;
+	Sun, 22 Jun 2025 13:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="kFkDrSko"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="emD1FToN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F040F18C03F;
-	Sun, 22 Jun 2025 11:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0414EED7;
+	Sun, 22 Jun 2025 13:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750592753; cv=none; b=NzZKgX11FA2SuDUNxctyu53YujnlyH/Tl01dFycjGimQsCfuG3UEBDUnQNWElyKUMW/9BdNa2o3rPxOfzSfznUbhkwsS7heWtIOu7lFYts8xudUxULCckvTvBIadJl8kkfhIxrRNCpEOsP4R1c+CjiNIW4pAVoAKxXlkUF5hfLw=
+	t=1750597249; cv=none; b=WIJ3zpOmpLjtt2gbe5SCeEZXVSabt94/KiuDvF1VPLX+0f51YzmaTZJvTlVt/y2TXnH4ikMUdhZFwl92HER6G6B4TLkA+tSS2ZJmSX/Fj1sK9YRwsslp+TkFwHU+rRq+KmlZc0hCWZI2eeFKY4+DgtSUocmxzlN8lI/AeJJMwgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750592753; c=relaxed/simple;
-	bh=NTnfvI0ef/rqaTY63+Tjx+p92niOfjjbvILdaXFdx9E=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=NW/2iwVRZWebzcssNZ9mmGRlEvHFiOn/J2vHKNRKz3ILaJzsNk54EE/iTxvQ5bj+mUJHewe/n9JyTO08+GwuoFNuPwyGDNsalnyJmtctsH44sMIBRId9B5FWh0upyH9eCI0ClY2gKDrD5Tutu3Xso6BRE8pRKhIk9KVbyPrM8C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=kFkDrSko; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
-	s=s31663417; t=1750592706; x=1751197506; i=frank-w@public-files.de;
-	bh=V5PqOs3/xKFezUmd6NAwv3w8UOkeGu5C9tM8XmOfbSQ=;
-	h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
-	 References:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=kFkDrSkoN5p2YldLIl98CfwrfIcyhOqULm+WmcdIHZXHnkIaXc3sLhDUJbiJx0Qc
-	 eMN80zsvd8WtD83oIOopeXQnX9YKcjZ3Imtrl7CKJvz1uA4mEU0XEyyzV1nLswmzG
-	 1tH7qQ7ceUKc9z5dBI5Ew9ndZVD1Mr6hW/fn+R/F8T/cLO5vY3y5ozQ5/B6A3mz+p
-	 f8IIF5vPPbXc3QCFoxqP1c295l3rKtXa6xrypS+Sh9Odwfli3gk7WErOOy5GgZ4Wl
-	 C3cOm7wkR0R6m1S6Z/INbzztFbqPtcNx9KtLgZIyUEoRgoVvFNJh9jW6lZ6KnmFdm
-	 SX/YT3unxu14P5ek5w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([157.180.225.81]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mk0JM-1vDK8Y0sie-00cVd7; Sun, 22
- Jun 2025 13:45:06 +0200
-Date: Sun, 22 Jun 2025 13:44:52 +0200
-From: Frank Wunderlich <frank-w@public-files.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Frank Wunderlich <linux@fw-web.de>
-CC: MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Jia-Wei Chang <jia-wei.chang@mediatek.com>,
- Johnson Wang <johnson.wang@mediatek.com>,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>,
- Sean Wang <sean.wang@mediatek.com>, Daniel Golle <daniel@makrotopia.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_01/13=5D_dt-bindings=3A_n?=
- =?US-ASCII?Q?et=3A_mediatek=2Cnet=3A_update_for_mt7988?=
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <jnrlk7lwob2qel453wy2igaravxt4lqgkzfl4hctybwk7qvmwm@pciwvmzkxatd>
-References: <20250620083555.6886-1-linux@fw-web.de> <20250620083555.6886-2-linux@fw-web.de> <jnrlk7lwob2qel453wy2igaravxt4lqgkzfl4hctybwk7qvmwm@pciwvmzkxatd>
-Message-ID: <100D79A2-12A9-478D-81F7-F2E5229C4269@public-files.de>
+	s=arc-20240116; t=1750597249; c=relaxed/simple;
+	bh=zNPOMtqGCx67vztEqPzV5AkEy4ztrcs70oBFsyO1dzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=emQweOhssfK2V82UuH/mDXKliUKi6BYrFiXz/7QlR3rLSRTf3ZOzHI8X85oESuPXFWrmQKYBvVksGhJ2D/n5fEE2WNittzEQ6AAuskq3m1uyOh5nYR4whokPjLqoeoY/qKouO7pC10y3rnA1vYJKX9/4YAkr9oFOM8rge0kwa1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=emD1FToN; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750597248; x=1782133248;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zNPOMtqGCx67vztEqPzV5AkEy4ztrcs70oBFsyO1dzc=;
+  b=emD1FToNOAtRd0i0WZ8dRZHHZ6R/RjPF2f/Tohfq3VorykadcCRntN3l
+   9+tn2LY3cmcXHU1CPFdczn/3ho8Se12obpm8d2vMukldpQTVsHq0KOdaz
+   b9Kw35VK7LtLM0IqxylZibH0BpUL3vLwl2JoxkiOFygieJjqL2v6uKFoX
+   rSsGxpNEi1Hv5/v/Shcr55oMeVWNQ5/W1+Pbg9uHcrGjSV5uMqoJJltn+
+   xcZH+eZ2NexqUeA5lKcJVlyVORECP+Hzv4vTSDf46KujJjm32Y4IB9wh6
+   obQJy/8/wqwjvojs79jIgE+lnn26JycnFgoD53P/OwROvVQ1NfL1Wzktx
+   A==;
+X-CSE-ConnectionGUID: 79gm+NCnQ2G3Qt3urrOt1g==
+X-CSE-MsgGUID: ou0MAh/LSu6L/0jDkMWsfQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="52953263"
+X-IronPort-AV: E=Sophos;i="6.16,256,1744095600"; 
+   d="scan'208";a="52953263"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 06:00:47 -0700
+X-CSE-ConnectionGUID: oMyt4YPqRLeA3T1qvwZGfg==
+X-CSE-MsgGUID: qEZK4XatTrS/qFyA3rmx9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,256,1744095600"; 
+   d="scan'208";a="182374667"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 22 Jun 2025 06:00:44 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uTKJN-000NHW-2y;
+	Sun, 22 Jun 2025 13:00:41 +0000
+Date: Sun, 22 Jun 2025 20:59:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Morgan <macroalpha82@gmail.com>, linux-pm@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com,
+	sre@kernel.org, heiko@sntech.de, conor+dt@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org, lee@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH V2 3/5] power: supply: bq257xx: Add support for BQ257XX
+ charger manager
+Message-ID: <202506222057.1Q77TY6Y-lkp@intel.com>
+References: <20250621180119.163423-4-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+r1sBgNM7c57oZwI1X1Lex+Vk+TlgKFmXGGKMZI21F/aRb9y7qQ
- upSptjxfZBqLpOGruu5mXs/Ondcwe7HU2HwpsFNQb0HhlqXLcHOCZcasJNByAOoDrHQ2SC+
- EXGC5inY7x3PdD+gGZj8DTEuBXQL33tO6CYv2VU+eLM3GUAyxGwQ5YtDzj9eZPt1UQRVnt/
- Rxzk1lhyjApnX034rNTNg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:bWFyMbVZYnw=;lif7dhqLi3iNLh4tsO2z2HnMbx0
- zZVDAUGhRPGCrAtjXDhlRVRxQlh6gNw9vbuMlY/wJHlw/8Nginca2wqCxHBTbLWL8mEVtHYc8
- Ccb0MwDa/YMXZJmo/ozrXaMNb6AWiP3VzIatPWv6oHF6nxOedQHsKzT7c1UW+ev1xYZaSl0RQ
- K8pyv/hRaX3ew5VoQCKBuRw7sCcQMD2HVJH6XdEjhNFyggJ5rnR7ZHLKT1Vr+tp8D6cDmn9Iv
- ihVbVHiMVLe89OYyl2MRfDsmhe+8Tt6oVu8BD5Nzf95VOliW+gu10NRM7VZfMXCC74Lrcyt1Q
- 3peD+u414k0CkdOsmk0W3IwSeKRqz8l6lZd9owAguFlyK5GvqXod6L+lCJRAWQRXzWYdhArS/
- lQIl69cRgznDkeVoPmFsI+cp3seDdfh+HKViY1dD1otJ4DFwSUYKl1SxV0k68pyc4V5PFVuVA
- ZXkS37wTGP6M/NzRdWTsMXWjvFjuuIml4eU7Gf6JCHI7IMWTL6HKNONW2uefktaRLciu10TdN
- VYXNfFdptHG5PvaEaWk0rURGgRe77VQbrq9BevbpYlcOmQCdH1OEaQGurGgPjw+B3V6UeBiyE
- PiPCtq9EAXHczWzOHMSJxaiYgEQw8zYfvhXtoafy7DFlPnQkcByvZL4X1yk7iX8lWf0yzoXC5
- 2wxzGv3QtmATaCQzjUSqFZVBMqFmVisXlbL197h6zm5w3F80oMj/l9jXh/RRT7evD9u8u6YsL
- FDz3JAViXhAMZytDhN8dZs3YSTs+be8xGSQSp3PKyvZ+srjagKmMdHlKV1zzOqm9nC3XmjEfA
- i2/rnnin6n4xl1xXKp+GxvBVT2kQ/SVgWjazGi/HaZe+WnYqVjfI4pGU/Cdv/6HdIzOqeRfNK
- g+FcB8BTVI4FlI83DBWNLEtOqsAcTX6arM1TpCi6IPlzQh0mM6X79Fedxfcg7D1OOLFHHffkK
- IdBOSUzZLuafQkI4rg0bd1KNN4zOHDbJtdoCBZ+EI20PfpVnd0aZx40wazIbzCEw4mULsCp3f
- GG9lGHmQRN5MDDOKGfEFas33KRm6UzvQmoUgtGy3Ze8GZe4pVHmdjlMBlYU36Nc7OQz/izYiG
- 74SgzfBWYtqObQ6o4fsapOdlahZRrv4WLyrwZRRQ6SIu2kuLPVQYGMWK5XUTRd0lzcM6aiu0p
- Njym5cPHhxgxqjH+g0P4ZFZ0giZB0qciQPx2trmGnpZo0k8fAg1viX+/5+9YThbLpjcTSqh77
- q3hiUNEOfrH7al3jygJZZ0V2JLfeKSPKJ7Q+CQLdROR18vdNm0KC2zYAjeMKMM5JsI7IsUDTB
- V7RxCxBuj/2JIweRQjDjJaCoAG1QjMawQdyOKwII4UA/wgwqds5qGsoim/zcFcF3evePvcjb5
- RfEmYWzHVBsRhP/BrcpHEbnRqC7lO3MqW7pQOPLLLt/9yYnz8EYnl9rRevDBdtlbbEayV6iQp
- G8QpDonO/yId9izk2yQ2WJXlWtyKABN5TvtrfTGxrH0s6OoOoojtiGvy36zUPHtt/Ht/nDe1G
- d+oLm2XzhQphzhzMVlI1ALoyxCtP6L9xlEjKgp7c+DDe3EH0aoaNFpIHMiusGd8MBiv6Dp+m4
- byoUrsmYt/fNAlhwamVE3BSqtek1QM0ctVe3f6RwzTfCWefVDMdTUBwbsdQJPaxWLug3Yq92H
- f5siI6ZAQ0AB/vZreEHCSmXK56M8jBBOnpxtz5VsW1j+3xRWsSkqKtFSUt3G6jhx3ZK6XUAvg
- ZVg2y/v38K3/TuWFoAgDbSlaR8mLtiT8j7qLJmX/ppyvRp9dlf1j55rT8iFo0DgNcMYojtU1u
- 6IJviN9uWtZutVIeOgzKgqIzrbsqHcl8Z8zDC3wWNwlqWO1eQDE455Go7c4sp1fjf49FiQ1zL
- W5HkMDED2pD2xA7/8B5VaxJhhLzpJDK1/0L41lEkwbibotXOxp1uYD9v3PCOYoW2TfCmTKy/B
- 1ZOra82afsN7kzjrPolfdwnHL8DE96Q7ejRmvF0ymjm+Z3k+jyxa2SKSLFXXc2sKBIL+scuEB
- XXgwMATwfZMbVH8L65R8dErLR6cWF3vqz1xFRqVp3P9LVBKpiM2kYejG/JB7eodWStzIgf6ZC
- V+xu+k+Z30LUrBwAOXhoLaKVYFL8OHOf6grRvpAVaOuti/PoESmu5g+i+wgCXAt4yMH8ix4yn
- gk3cDg3dzbqwKMsZc70DlAAYTHjgikUkng3mmhzCEphWZj8G6Hl/NciHH4HOzdFGTyrQnsupX
- oNoAd42JivxgFWHed2Bp5UCa1sb1borJb2TK7n9mgc8zEo7lXskautiDtyU9vcpGSFBH+8WDi
- pagURoaJjRuDmtOQDXbYBGOZP34vG6/AIAvIhsmmbl5pXz0JDH89qIBI7CQJWvVcpJdo9PrBW
- xrl848NkPMwG5l5uuOadbbZcRZVGTfMPvL0O3XUtesEnRn8QFx8HK3WdtNf20SJiXfqEhe2qT
- /UqYa3e/1LQPozknykVr838RmIXZTTowMOD/UYoi5WcscDr6/3Ulv5FL2KIEKETIYnSK1Swgw
- mvGPZSsNbeekuKQVSXW9MvYhxJUe/czFLu3DBAm20DX2EYYr0xGSd9y/nb5x65Jznilbj13yH
- w5io8l7XA1F1EtPCv3/TR2zYwdGcln1+hOZZLLvKhUAhozdZT9K39eJmPZfmh2e0tH2VWEjjx
- atNVCCnb6DpVIkIh5Ph3GL1Yf4Wei/irEZVM85hOITg7ISbV0rLlvOb56rsMSC7Lb5gB0Jgay
- zswsVBj9xzchkwQPtov6I27gJGL+gVPRqN7sy0avccFxRMFR9E7o2nONla7uWkRnuo/VT//Cc
- ak11UZMvFhx7mNjptRT/WdNTzoQAdtFjcHG8Ti69bTZBig1seTRuG9cmlGgMpy8N6ZAXHW41G
- tO89RBXNQ5ZVt2Hgqp6PGlGJASuXPEimex2U6dvnX1ERCukdJ/atcmI74qi8Dtu09wi9nB6DB
- PoEhX1e6JhNbzwDchnd+wtI3KEpT/k28IRpaOWsSv+5MKJ7vcFA3eO+pv90XQjiesd94Q2/vn
- bYkXq05B/ondxEHSQ54jH5oOms5AvXl5hvRxWPzU0rC/+CNEMnE9hwMIg5hA+vfsT3CzGVXAA
- P5Gt3/Gz1I+BJm2AMepvG5BCL7nzrGHyG8cgRTdbZT6h2Afa+kT3Ga0vS5Pu4JP43YAMiHnmn
- JEdlohq0g6OFDbPc01Kqw6fGgLJgO5oBV1VjHEdcwqGOpbNgoSU3muNGqQBWo+6Y1gD4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250621180119.163423-4-macroalpha82@gmail.com>
 
-Hi,
+Hi Chris,
 
-Thank you for review=2E
+kernel test robot noticed the following build warnings:
 
-Am 22=2E Juni 2025 13:10:31 MESZ schrieb Krzysztof Kozlowski <krzk@kernel=
-=2Eorg>:
->On Fri, Jun 20, 2025 at 10:35:32AM +0200, Frank Wunderlich wrote:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->> Update binding for mt7988 which has 3 gmac and 2 reg items=2E
->
->Why?
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on lee-mfd/for-mfd-fixes broonie-regulator/for-next sre-power-supply/for-next linus/master v6.16-rc2 next-20250620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I guess this is for reg? Socs toll mt7986 afair
- get the SRAM register by offset to the MAC
- register=2E
-On mt7988 we started defining it directly=2E
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/dt-bindings-mfd-ti-bq25703a-Add-TI-BQ25703A-Charger/20250622-020443
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250621180119.163423-4-macroalpha82%40gmail.com
+patch subject: [PATCH V2 3/5] power: supply: bq257xx: Add support for BQ257XX charger manager
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250622/202506222057.1Q77TY6Y-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250622/202506222057.1Q77TY6Y-lkp@intel.com/reproduce)
 
->> MT7988 has 4 FE IRQs (currently only 2 are used) and the 4 IRQs for
->> use with RSS/LRO later=2E
->>=20
->> Add interrupt-names to make them accessible by name=2E
->>=20
-=2E=2E=2E
->>    reg:
->> -    maxItems: 1
->> +    items:
->> +      - description: Register for accessing the MACs=2E
->> +      - description: SoC internal SRAM used for DMA operations=2E
->
->SRAM like mmio-sram?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506222057.1Q77TY6Y-lkp@intel.com/
 
-Not sure,but as far as i understand the driver
- the sram is used to handle tx packets directly
- on the soc (less dram operations)=2E
+All warnings (new ones prefixed by >>):
 
-As mt7988 is the first 10Gbit/s capable SoC
- there are some changes=2E But do we really need=20
- a new binding? We also thing abour adding
- RSS/LRO to mt7986 too,so we come into
- similar situation regarding the Interrupts/ =20
- -names=2E
+>> Warning: drivers/power/supply/bq257xx_charger.c:72 struct member 'chip' not described in 'bq257xx_chg'
+>> Warning: drivers/power/supply/bq257xx_charger.c:72 struct member 'bq' not described in 'bq257xx_chg'
+>> Warning: drivers/power/supply/bq257xx_charger.c:72 Excess struct member 'bq257xx_chip_info' description in 'bq257xx_chg'
+>> Warning: drivers/power/supply/bq257xx_charger.c:72 Excess struct member 'bq257xx_device' description in 'bq257xx_chg'
+>> Warning: drivers/power/supply/bq257xx_charger.c:139 function parameter 'vsys' not described in 'bq25703_set_min_vsys'
+>> Warning: drivers/power/supply/bq257xx_charger.c:139 Excess function parameter 'ichg' description in 'bq25703_set_min_vsys'
 
->> +    minItems: 1
->> =20
->>    clocks:
->>      minItems: 2
->> @@ -40,7 +43,11 @@ properties:
->> =20
->>    interrupts:
->>      minItems: 1
->> -    maxItems: 4
->> +    maxItems: 8
->> +
->> +  interrupt-names:
->> +    minItems: 1
->> +    maxItems: 8
->
->So now all variants get unspecified names? You need to define it=2E Or
->just drop=2E
-
-Most socs using the Fe-irqs like mt7988,some
- specify only 3 and 2 soc (mt762[18]) have only
- 1 shared irq=2E But existing dts not yet using the
- irq-names=2E
-Thats why i leave it undefined here and
- defining it only for mt7988 below=2E But leaving it
- open to add irq names to other socs like filogic
- socs (mt798x) where we are considering
- adding rss/lro support too=2E
-
->> =20
->>    power-domains:
->>      maxItems: 1
->> @@ -348,7 +355,19 @@ allOf:
->>      then:
->>        properties:
->>          interrupts:
->> -          minItems: 4
->> +          minItems: 2
->
->Why? Didn't you say it has 4?
-
-Sorry missed to change it after adding the 2
- reserved fe irqs back again (i tried adding only used irqs - rx+tx,but go=
-t info that all irqs can be used - for future functions - so added all avai=
-lable)=2E
-
->> +
->> +        interrupt-names:
->> +          minItems: 2
->> +          items:
->> +            - const: fe0
->> +            - const: fe1
->> +            - const: fe2
->> +            - const: fe3
->> +            - const: pdma0
->> +            - const: pdma1
->> +            - const: pdma2
->> +            - const: pdma3
->> =20
->>          clocks:
->>            minItems: 24
->> @@ -381,8 +400,11 @@ allOf:
->>              - const: xgp2
->>              - const: xgp3
->> =20
->> +        reg:
->> +          minItems: 2
->
->
->And all else? Why they got 2 reg and 8 interrupts now? All variants are
->now affected/changed=2E We have been here: you need to write specific
->bindings=2E
-
-Mt7988 is more powerful and we wanted to add
- all irqs available to have less problems when
- adding rss support later=2E E=2Eg=2E mt7986 also have
- the pdma irqs,but they are not part of
- binding+dts yet=2E Thats 1 reason why
- introducing irq-names now=2E And this block is
- for mt7988 only=2E=2E=2Ethe other still have a regcount of 1 (min-items)=
-=2E
-
-But of course i can limit the reg/ irqs/
- irq-names for each compatible=2E
-
->https://elixir=2Ebootlin=2Ecom/linux/v6=2E11-rc6/source/Documentation/dev=
-icetree/bindings/ufs/qcom,ufs=2Eyaml#L127
->
->https://elixir=2Ebootlin=2Ecom/linux/v6=2E11-rc6/source/Documentation/dev=
-icetree/bindings/ufs/samsung,exynos-ufs=2Eyaml#L39
-
-I take a look into it,but allowing irq names for all matching compatibles =
-does not require it for them=2E Or am i wrong here?
-
->Best regards,
->Krzysztof
-
-
-
-regards Frank
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
