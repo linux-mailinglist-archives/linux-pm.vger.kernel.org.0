@@ -1,127 +1,114 @@
-Return-Path: <linux-pm+bounces-29221-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29222-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D4E9AE2E60
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 06:43:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5D46AE2EF9
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 11:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC826173FCA
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 04:43:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F9891892A0C
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 09:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B823B433B1;
-	Sun, 22 Jun 2025 04:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E991B3939;
+	Sun, 22 Jun 2025 09:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sUG2TJzd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378B32260C;
-	Sun, 22 Jun 2025 04:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC7318C03F;
+	Sun, 22 Jun 2025 09:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750567424; cv=none; b=urFIvyXeESZ1IxAlvqn8XFZr4vqxN4TFU/FUBx7fWk7jftiZjxITB4F+E/27Rq0/XXeUgxoI3KY1iFp0+BgKVPiWO9sdKmASZuzd2LRc/pHo2gM1ACMDePFcRUBwGhQmLfcjGrufwSBzNNcDVjwYUL6wL/5xXHSJTr1ZowX/OSA=
+	t=1750583656; cv=none; b=Fo71aa2nSDZ7IPchaKwTYOjRNjbTAZVM0hhM2ag5uIurMq/dVDtv9guHGRW5YhKqGOzK4RTTTM0vBSLG9WMpXgEJNG1r4c5ib5t6LbGzUS4oiOCbG8uEZO/1EuoMwXScbRwF5aAUCKCMRx/uRGLiAyAKLVD8c5B8rV9eFe3MFJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750567424; c=relaxed/simple;
-	bh=KLLyLEQjm23ZIz/fQWFb/8mCekceppLu6KDxT/WM8vQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lrDtxCLlQQkRWARucd7+N17AWCiyoBDIwIWzdZYeGCEJqYB+bm1A2FjvtBYo/XVzo1Zxs6cfGGN411vWPCHV440ZU1PKa7/ZuAkYwJoKBx+sUzcXKbYxiHGZzfGASZhHZrMBJjGxXBGUqSCZHbI2+KNmIRyktFjP9pQjRjgQMVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id D0C0F2C051D9;
-	Sun, 22 Jun 2025 06:43:31 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id B72ED34F192; Sun, 22 Jun 2025 06:43:31 +0200 (CEST)
-Date: Sun, 22 Jun 2025 06:43:31 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v3 2/2] PCI: Fix runtime PM usage count underflow on
- device unplug
-Message-ID: <aFeJ83O9PRUrM2Ir@wunner.de>
-References: <20250620025535.3425049-1-superm1@kernel.org>
- <20250620025535.3425049-3-superm1@kernel.org>
- <aFcCaw_IZr-JuUYY@wunner.de>
- <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
+	s=arc-20240116; t=1750583656; c=relaxed/simple;
+	bh=FR0kk1ZyP4ATa4YOUOaLsb7MR+jvx6ZZw5j0miDtcgM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f0tJM1GcP2pBHJ1xrkbGkgBkQx0b1bP4ZXEeGz32HwidR34StckRV2Jw37f/4CGgpgTSNiHdXovZKrP0gKD/4bphUHhIaCsmY82lOQhxRxIdHPu8sd1rhJspa2Ruqv764dqZnWUyBHG0PVzqk20UrjM+gznK+YYkhd47ovSh7qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sUG2TJzd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90C6C4CEE3;
+	Sun, 22 Jun 2025 09:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750583655;
+	bh=FR0kk1ZyP4ATa4YOUOaLsb7MR+jvx6ZZw5j0miDtcgM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sUG2TJzdERrgA1aUMcnNuFM/6Qlm/KqJZq20pmR2XvNqiOZxo41fyBzgYecB8NmGi
+	 00nX4LvGveW7uZ7cIslW//6k5zfg/Iqwj89eytcAxkf8JkbGkpDZNOrsYSv/GRSnKz
+	 kYmio20WPm2fmsA5ka972FkEPkgcxZIf2SjoqknRu76WPPc2Jkw1FJq95w/rT9OgAB
+	 paAdmX2NoloQyHEAobczyCdWtntL5ZfZKhdxDiABT59xhJ+hk23EJngelVRLIr17aw
+	 aKmaraDnxDg5UT+u03Ry0TsOBPcfitx40+1VhZ6e2pV4sIei1+qg8GYOGRNc958D6U
+	 t/hH1Crz5y+dA==
+From: Sven Peter <sven@kernel.org>
+To: Sven Peter <sven@kernel.org>
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-input@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	=?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: (subset) [PATCH 00/11] Drop default ARCH_APPLE from Kconfig and use defconfig instead
+Date: Sun, 22 Jun 2025 11:13:55 +0200
+Message-Id: <175058357351.73238.16083953894785363103.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jun 21, 2025 at 02:56:08PM -0500, Mario Limonciello wrote:
-> On 6/21/25 2:05 PM, Lukas Wunner wrote:
-> > In the dmesg output attached to...
-> > 
-> > https://bugzilla.kernel.org/show_bug.cgi?id=220216
-> > 
-> > ... the device exhibiting the refcount underflow is a PCIe port.
-> > Are you also seeing this on a PCIe port or is it a different device?
+On Thu, 12 Jun 2025 21:11:24 +0000, Sven Peter wrote:
+> When support for Apple Silicon was originally upstreamed we somehow
+> started using `default ARCH_APPLE` for most drivers. arm64 defconfig
+> also contains ARCH_APPLE=y such that this will turn into `default y`
+> there by default which is neither what we want nor how this is usually
+> done.
+> Let's fix all that by dropping the default everywhere and adding the
+> drivers to defconfig as modules instead of built-ins.
+> None of these patches depend on each other so we can just take them all
+> independently through the respective subsystem trees.
 > 
-> The device with the underflow is the disconnected PCIe bridge.
-> 
-> In my case it was this bridge that was downstream.
+> [...]
 
-Okay, in both cases the refcount underflow occurs on a PCIe port.
-So it seems likely the gratuitous refcount decrement is in portdrv.c
-or one of the port services drivers.
+Applied to git@github.com:AsahiLinux/linux.git (asahi-soc/drivers-6.17), thanks!
 
-Your patch changes the code path for *all* PCI devices.
-Not just PCIe ports.  Hence it's likely not the right fix.
+[02/11] soc: apple: Drop default ARCH_APPLE in Kconfig
+        https://github.com/AsahiLinux/linux/commit/65293c3276de
 
-It may fix the issue on this particular PCIe port but
-I strongly suspect it'll leak a runtime PM ref on all other devices.
+Best regards,
+-- 
+Sven Peter <sven@kernel.org>
 
-
-> > So the refcount decrement happens in pcie_portdrv_probe() and
-> > the refcount increment happens in pcie_portdrv_remove().
-> > Both times it's conditional on pci_bridge_d3_possible().
-> > Does that return a different value on probe versus remove?
-
-Could you please answer this?
-
-
-> > Does any of the port service drivers decrement the refcount
-> > once too often?  I've just looked through pciehp but cannot
-> > find anything out of the ordinary.
-> > 
-> > Looking through recent changes, 002bf2fbc00e and bca84a7b93fd
-> > look like potential candidates causing a regression, but the
-> > former is for AER (which isn't used in the dmesg attached to
-> > the bugzilla) and the latter touches suspend on system sleep,
-> > not runtime suspend.
-> > 
-> > Can you maybe instrument the pm_runtime_{get,put}*() functions
-> > with a printk() and/or dump_stack() to see where a gratuitous
-> > refcount decrement occurs?
-> 
-> That's exactly what I did to conclude this call was an extra one.
-> 
-> Here's the drop to 0:
-
-The drop to 0 is uninteresting.  You need to record *all*
-refcount increments/decrements so that we can see where the
-gratuitous one occurs.  It happens earlier than the drop to 0.
-
-However, please first check whether the pci_bridge_d3_possible()
-return value changes on probe versus remove of the PCIe port
-in question.  If it does, then that's the root cause and there's
-no need to look any further.
-
-Thanks,
-
-Lukas
 
