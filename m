@@ -1,237 +1,183 @@
-Return-Path: <linux-pm+bounces-29236-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29237-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69FA4AE3222
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 22:59:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 687C7AE3255
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 23:26:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F07D416F617
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 20:59:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9FAA16F232
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 21:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FF621507C;
-	Sun, 22 Jun 2025 20:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8601EBA09;
+	Sun, 22 Jun 2025 21:26:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfkmzOou"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="iJUViihH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4CE4409;
-	Sun, 22 Jun 2025 20:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750625974; cv=none; b=HMu0q19OKnY2yuZl1812ch/gVKb45gIwE3GmWLkND3MldWXuIis9Bzf3EvhdK7KSG4IbUe3yCE7fmf93AJJiyp/a2TU1KYgWA6/5ANNbjCZQkPR5bbFUhMMKnRTMpGflZYGVcNXga8cLaVmxDjrrvWl4183GI7aXoacyPjfluOk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750625974; c=relaxed/simple;
-	bh=8YMK4lPlyBFWPRybG/UDVbwX/HzVAlNCWxUJvE/HP6w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H5AvKalJcbuu485w1N2OzD2vaNM9aIb9K2E5aIRxpMMjsFtBxdWXpppFLTTRkHSjTWxZlK7hoXOKwVom174gh2t7sKbbE70CvFElMCdH/u3uxdmlbqBh1Ily+U6K5jzuNts9rJ1ela5YVEarGvjNCvvHiu2J/p9nJMIXpSZuwb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfkmzOou; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78D0C4CEE3;
-	Sun, 22 Jun 2025 20:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750625974;
-	bh=8YMK4lPlyBFWPRybG/UDVbwX/HzVAlNCWxUJvE/HP6w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MfkmzOouKrwq5EkGi039PmDyCPGcgMosT6K7xlPlapB9X+jAJ9f07GxBbOEkUUC/3
-	 wydx/m+BjwGKfbJtcb7FACvS2McFN42YCH5/IGcktgIiQv5ABSH/MkOBIB6gTarU7s
-	 kmg5iqoJftPPJaO0kH1VpvmVsg4sM9vOhBtyKMneUkP/2lLKHR+kZVcN2MWyWOkqmk
-	 k18gfUsIpeiAYUCpFgEGb5AMRCQ7BMwgKIxQ7QEuzI/zXyzkfQ4dx0qZXMyvK46cXr
-	 QQNtKXq8EJ7G8CQbSUniOIhhz6/dMblFzVgVlQDJcw4Fm/PpSUwlk229FPWxiVEYVr
-	 /Nlnfyhj5bLYQ==
-Message-ID: <b46dcef3-2893-4b94-81ef-a495e6a0e7ca@kernel.org>
-Date: Sun, 22 Jun 2025 22:59:30 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578E8EAC6;
+	Sun, 22 Jun 2025 21:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750627586; cv=pass; b=KBYPZwajrPtF4s/2rb43jmxhKxmY+geT9wCvEwnFetctUhHb6FUGHo4NrGMHqQr4IOn/QmMbVTjeHRLuoBhAJiA+hKtWNWe1e6qgZ71u9ApQXngIVFbQugVCE5KTdAIiZ1E+xglmvcO0oLeYMKNy46W1XCa5ISWFcWx9xO73f0I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750627586; c=relaxed/simple;
+	bh=3qI1vB59KDHTXXseTyclwBXRlKJR2L8wddHki2G0w4o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PKX0orizD/t+cwhKiP4rFPuoDwvh3//3yhBFqyojAPx2gO8xc2zatb6oUTLRaB9WchInJcJHeTKMC2ONiOFuY8rOUl/UcC983TugQrz3+stOwfbyHMYYBt4IIS3Kvt0T9hFw1++GEkTaqmRxks0WHhSs4Zg9aDyKgJ5z2TKtFuE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=iJUViihH; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1750627568; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=J8awfYP+dAADLyOGNe0XrnTwqwf4Fx9cDswv9VC3aciGetXBJ8qEnVtJV2qmW9DwjZSoJ7k0iZB2pBGPyBf2sviR/qsUm0TxjHwzn5N3NywEe7pVie9wi4kNFzki9S9Y88paZklzmSSOj219tdkR0f5lxbTxQy0j8IAramk4jKM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1750627568; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=x6QYFg9MZSJaPba+bOOJAjvKweuKxu9aNrA+7HlGnWA=; 
+	b=SiYwLc1Po94YTarK/yMFSGCtwjgNLvYbgblPhBC1Pxgh+7j6BCXP+n+fJUI0aCliv0BUuFUJXQcQCj4lxLnvvcpgubzbI6QU2EXj+sQz07nUrIj6QvoEaWroT09/xRB0HKro1ypb+uOATmhpc3Z/gZp3inDQjMmL8XMMWp1cpvM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750627568;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=x6QYFg9MZSJaPba+bOOJAjvKweuKxu9aNrA+7HlGnWA=;
+	b=iJUViihHNXpXsTjxi70EDTSmnFYmOpdjGnH6to6ZLrituZOKCJNEFAhO0NmXp2ea
+	o0Uysj9wgCxUPkvuuuGUae6SRxupTMaTVgDtcYeNZcW66+lAdxzEuckzBFEmsfm1nKL
+	GlNdkIsLmJ+jD6gCvqK5a80JVpZ9Cvc51Qh7A7W8=
+Received: by mx.zohomail.com with SMTPS id 1750627566650272.8188357692733;
+	Sun, 22 Jun 2025 14:26:06 -0700 (PDT)
+Received: by venus (Postfix, from userid 1000)
+	id 8B069180957; Sun, 22 Jun 2025 23:26:01 +0200 (CEST)
+Date: Sun, 22 Jun 2025 23:26:01 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: t.antoine@uclouvain.be
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
+	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] power: supply: add support for max77759 fuel gauge
+Message-ID: <4cahu6dog7ly4ww6xyjmjigjfxs4m55mrnym2bjmzskscfvk34@guazy6wxbzfh>
+References: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be>
+ <20250523-b4-gs101_max77759_fg-v4-2-b49904e35a34@uclouvain.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/x86: dell-ddv: Fix taking the
- psy->extensions_sem lock twice
-To: Armin Wolf <W_Armin@gmx.de>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Andy Shevchenko <andy@kernel.org>,
- Sebastian Reichel <sre@kernel.org>
-Cc: platform-driver-x86@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-References: <20250620175807.418300-1-hansg@kernel.org>
- <3bfea893-fd3e-48b6-8a34-9ab36108efe2@gmx.de>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <3bfea893-fd3e-48b6-8a34-9ab36108efe2@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-+ Cc sre, whom I should have Cc-ed from the beginning.
-
-Hi Armin,
-
-On 22-Jun-25 8:41 PM, Armin Wolf wrote:
-> Am 20.06.25 um 19:58 schrieb Hans de Goede:
-> 
->> dell_wmi_ddv_get_property() gets called with psy->extensions_sem
->> read-locked, it calls dell_wmi_ddv_battery_translate() which calls
->> power_supply_get_property() on the same psy which again read-locks
->> psy->extensions_sem.
->>
->> Lockdep rightfully complains about this:
->>
->>   ============================================
->>   WARNING: possible recursive locking detected
->> ...
->>   kworker/16:3/1230 is trying to acquire lock:
->>   ffff8c3143417658 (&psy->extensions_sem){++++}-{4:4},
->>    at: power_supply_get_property.part.0+0x23/0x160
->>   but task is already holding lock:
->>   ffff8c3143417658 (&psy->extensions_sem){++++}-{4:4},
->>    at: power_supply_get_property.part.0+0x23/0x160
->> ...
->>    Possible unsafe locking scenario:
->>
->>          CPU0
->>          ----
->>     lock(&psy->extensions_sem);
->>     lock(&psy->extensions_sem);
->>
->>    *** DEADLOCK ***
->> ...
->>   Call Trace:
->>    <TASK>
->>    ...
->>    down_read+0x3e/0x180
->>    ? power_supply_get_property.part.0+0x23/0x160
->>    power_supply_get_property.part.0+0x23/0x160
->>    dell_wmi_ddv_battery_translate+0x68/0x1d0 [dell_wmi_ddv]
->>    ? lock_acquire+0xd9/0x2c0
->>    dell_wmi_ddv_get_property+0x25/0x240 [dell_wmi_ddv]
->>    power_supply_get_property.part.0+0x87/0x160
->>    power_supply_format_property+0xc4/0x3d0
->>    add_prop_uevent+0x26/0x90
->>    power_supply_uevent+0xb9/0xf0
->>
->> This usually works fine, because read-locking can be done multiple times
->> but if someone tries to write-lock between the 2 read-lock calls then
->> the second read-lock will block on the write-lock and the write-lock will
->> be blocked on the first read-lock leading to a deadlock.
->>
->> The serial is part of the main psy device, not of an extension. Directly
->> call psy->desc->get_property() in dell_wmi_ddv_battery_translate() to fix
->> the double-lock issue.
->>
->> Note this also influences eppid_show() which is called directly rather
->> then through power_supply_get_property(). This is ok since the ACPI
->> battery is fully ready to be used when the battery hook's add_battery
->> callback is called.
-> 
-> Thank you very much for finding this issue, but i think that simply calling battery->desc->get_property()
-> is not the right solution for this:
-> 
-> 1. We should still call psy_desc_has_property() to determine if the power supply actually support
->    POWER_SUPPLY_PROP_SERIAL_NUMBER.
-
-Although it is currently not enforced in power_supply_core.c it seems
-reasonable to assume that any powersupply must have a get_property
-callback in their desc (the core also unconditionally calls this).
-
-And most (all?) psy drivers I've seen have a default which returns -EINVAL
-in their get_property() implementation which works just as well as
-calling has_prop ...
-
-My bigger worry is the lack of the:
-
->     if (atomic_read(&psy->use_cnt) <= 0) {
->         if (!psy->initialized)
->             return -EAGAIN;
->         return -ENODEV;
->     }
-
-Check TBH.
-
-> 2. At least another power supply extension user (the uniwill-laptop driver currently being under review)
->    suffers from a similar problem, so a more generic solution is needed.
-> 
-> Maybe we could introduce a new function for reading power supply properties that ignores any
-> power supply extensions? This way future extension could use this function too.
-> 
-> I envision something like this:
->     
-> int power_supply_get_property_direct(struct power_supply *psy,
->                 enum power_supply_property psp,
->                 union power_supply_propval *val)
-> {
->     if (atomic_read(&psy->use_cnt) <= 0) {
->         if (!psy->initialized)
->             return -EAGAIN;
->         return -ENODEV;
->     }
-> 
->     if (psy_desc_has_property(psy->desc, psp))
->         return psy->desc->get_property(psy, psp, val);
->     else if (power_supply_battery_info_has_prop(psy->battery_info, psp))
->         return power_supply_battery_info_get_prop(psy->battery_info, psp, val);
->     else
->         return -EINVAL;
-> }
-> EXPORT_SYMBOL_GPL(power_supply_get_property_direct);
-> 
-> It basically is power_supply_get_property() without the extension logic.
-
-While working on this fix I was thinking that something like this would be useful,
-so +1 for this.
-
-Maybe first do a prep patch where the extension handling in
-power_supply_get_property() is moved last, then power_supply_get_property()
-can just wrap this new helprr and on -EINVAL check the extensions.
-
-Actually if you move the extensions check to last then the whole doublelock
-issue goes away because the serial-number will be found before checking
-extensions.
-
-Or if you want to keep checking the extensions first change
-the current power_supply_get_property() into a new
-__power_supply_get_property() with a "bool check_extensions"
-argument and make power_supply_get_property() wrap it pasing true
-for check_extensions. Or some such, whatever you do try to avoid code
-duplication but you already know this ...
-
-> I can also write some
-> documentation on how to implement power supply extensions in general.
-
-That would also be good to have.
-
-Regards,
-
-Hans
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oe6ecr6a3aggzpmd"
+Content-Disposition: inline
+In-Reply-To: <20250523-b4-gs101_max77759_fg-v4-2-b49904e35a34@uclouvain.be>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.3/250.624.82
+X-ZohoMailClient: External
 
 
+--oe6ecr6a3aggzpmd
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 2/5] power: supply: add support for max77759 fuel gauge
+MIME-Version: 1.0
 
+Hi,
 
+On Fri, May 23, 2025 at 02:51:45PM +0200, Thomas Antoine via B4 Relay wrote:
+> From: Thomas Antoine <t.antoine@uclouvain.be>
+>=20
+> The interface of the Maxim MAX77759 fuel gauge has a lot of common with t=
+he
+> Maxim MAX1720x. A major difference is the lack of non-volatile memory
+> slave address. No slave is available at address 0xb of the i2c bus, which
+> is coherent with the following driver from google: line 5836 disables
+> non-volatile memory for m5 gauge.
+>=20
+> Link: https://android.googlesource.com/kernel/google-modules/bms/+/1a68c3=
+6bef474573cc8629cc1d121eb6a81ab68c/max1720x_battery.c
+>=20
+> Other differences include the lack of V_BATT register to read the battery
+> level. The voltage must instead be read from V_CELL, the lowest voltage of
+> all cells. The mask to identify the chip is different. The computation of
+> the charge must also be changed to take into account TASKPERIOD, which
+> can add a factor 2 to the result.
+>=20
+> Add support for the MAX77759 by taking into account all of those
+> differences based on chip type.
+>=20
+> Do not advertise temp probes using the non-volatile memory as those are
+> not available.
+>=20
+> The regmap was proposed by Andr=E9 Draszik in
+>=20
+> Link: https://lore.kernel.org/all/d1bade77b5281c1de6b2ddcb4dbbd033e455a11=
+6.camel@linaro.org/
+>=20
+> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+> ---
+>  drivers/power/supply/max1720x_battery.c | 265 ++++++++++++++++++++++++++=
+++----
+>  1 file changed, 238 insertions(+), 27 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supp=
+ly/max1720x_battery.c
+> index 68b5314ecf3a234f906ec8fe400e586855b69cd9..c9ad452ada9d0a2a51f37d04f=
+d8c3260be522405 100644
+> --- a/drivers/power/supply/max1720x_battery.c
+> +++ b/drivers/power/supply/max1720x_battery.c
+> @@ -37,6 +37,7 @@
+>  #define MAX172XX_REPCAP			0x05	/* Average capacity */
+>  #define MAX172XX_REPSOC			0x06	/* Percentage of charge */
+>  #define MAX172XX_TEMP			0x08	/* Temperature */
+> +#define MAX172XX_VCELL			0x09	/* Lowest cell voltage */
+[...]
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+[...]
+> +			ret =3D regmap_read(info->regmap, MAX172XX_VCELL, &reg_val);
+> +			val->intval =3D max172xx_cell_voltage_to_ps(reg_val);
 
+I haven't reviewed this fully due to all the feedback you already
+got from Peter Griffin and the DT binding being broken, but something
+that catched my eye:
 
->> Fixes: 058de163a376 ("platform/x86: dell-ddv: Implement the battery matching algorithm")
->> Signed-off-by: Hans de Goede <hansg@kernel.org>
->> ---
->>   drivers/platform/x86/dell/dell-wmi-ddv.c | 8 +++++---
->>   1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
->> index 67f3d7158403..95cc3139f271 100644
->> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
->> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
->> @@ -689,9 +689,11 @@ static int dell_wmi_ddv_battery_translate(struct dell_wmi_ddv_data *data,
->>         dev_dbg(&data->wdev->dev, "Translation cache miss\n");
->>   -    /* Perform a translation between a ACPI battery and a battery index */
->> -
->> -    ret = power_supply_get_property(battery, POWER_SUPPLY_PROP_SERIAL_NUMBER, &val);
->> +    /*
->> +     * Perform a translation between a ACPI battery and a battery index. Directly call
->> +     * desc->get_property() to avoid locking battery->extensions_sem a second time.
->> +     */
->> +    ret = battery->desc->get_property(battery, POWER_SUPPLY_PROP_SERIAL_NUMBER, &val);
->>       if (ret < 0)
->>           return ret;
->>   
+POWER_SUPPLY_PROP_VOLTAGE_NOW provides the voltage of the whole
+battery and not of a single cell. E.g. a typical Li-Ion battery
+with two serial cells has a nominal voltage of roughly 7.4V while
+each cell has just 3.7V.
 
+Greetings,
+
+-- Sebastian
+
+--oe6ecr6a3aggzpmd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhYdOIACgkQ2O7X88g7
++pqIpQ//aah0Ve9/wmkexuWeuXsLJcLZfrr/02nM1RWHE9+xqx9amUZmJmRHiw4E
+43m7GZdks18Da8+Uqc7YI9ukBpOoabCt31kevyHGN3h5QqJjK9MuN8UQKnAkxYra
+k2Unu1pmXMnfrQOACQxlkjqal4vmFvQBjNsbmM3D+ucTVyUhYZrikzclRCHgpl+L
+f1mDGGPKbl5vxBp3Ij/b8uVJ0zZqrnZ0uirhxtqAZxVW0TY5uLv6BtS48eXkCcoI
+9Ia1XkzJTM/ym7isTN76/fYFpSaJpou8iGF01+X+Jij4A4JY3Frqw1gOsFCfPk1o
+XT6b2Vzh0fq8o0RVyw8IMgXZJsS5RWuY+HIyRAY60EJZ1uO1VSUCCZnEB9HMnxin
+SfO/qmJ5uRQGzlowAiIJLaiPxAPPVc6MFBMC+NV3R1xstdZS7+DVGHroEz0Bhyqi
+oOBrVfEW0d0lkaj4qZz/KQMICEniCN6qKfRboh2bRzP85j/dkGbGDbzjNC+7T9UN
+A0DJdpawEUyTv3FXkkm0ehoFWkRc9EKwkEh1cug0zbhflXONXsfyjol/Gy9ecgsZ
+b9wyJu1CHEahpyPq9dOa4WGZH4D2etuBeuLEPq93FAk/WJBtk2eFQgmaKXJDIDcD
+esMPKU0zXu5ZKjhsNJbDag5vwLtfUDrL+1/KcHgnKhZfjA3xevs=
+=sQmb
+-----END PGP SIGNATURE-----
+
+--oe6ecr6a3aggzpmd--
 
