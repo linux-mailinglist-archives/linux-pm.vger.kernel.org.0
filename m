@@ -1,278 +1,143 @@
-Return-Path: <linux-pm+bounces-29241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9755BAE32DE
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 00:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12F30AE32EA
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 00:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C38D83B0728
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 22:47:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EE353B086F
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 22:50:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7B919CC2E;
-	Sun, 22 Jun 2025 22:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D2720CCCC;
+	Sun, 22 Jun 2025 22:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="RQd+iyQE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z24MCgov"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131FA3C26;
-	Sun, 22 Jun 2025 22:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750632468; cv=pass; b=e90V8/ZTF8tYvSgi7O71A+t3wTyyIm/zRFICnClfH4aYXyPCH6/GkDOi2XQzw2rX7VRD/TGyD8JJu9hiwMxKPzmB1ssP1cVU0/AXgBo6TeETuHr7+ao0nYzrk2vi0ShrTevc4VIBFRYvBn4+T0dR//rj9YmBIiF1J+YmscdZ+uw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750632468; c=relaxed/simple;
-	bh=Jhyma76nXbMl4LhGdIXUz9h80MfvpQ/PX2yLcljS5SE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B5Jr9mAP7SOYTsjwNmz4iI/zIEH5Ea0VMGi0//cQbnbdLD06xtZ/Lj2FBUiyvbAyvkXROpuzTfKmyL8uMisCCEMflvzSWFGx4ysNPIn3SXx6vusSRAHPOZ13I314SG9OIwfmdlLJeKU3BDzHCsZ4mRBOg1GiWdrPX6vg555yryw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=RQd+iyQE; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1750632453; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=aSNmAaBWGqwYm5ifpqxKARKFH+sOltOQq30OC8NKHmR1nLAzptQBx3/R98ov+ao4W6zDQfzdUoAX5TYz53FmpQFW3Uh7MO6OZAsdaNKNkQnJgF3Bbacg4UsvNrilbnznuBlMwbKBxDIU4wZzz9pKajNt0HEp4mdTV0BmanXiIIo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750632453; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=FLTDefBRu7uvHjg2VxiCdIswI1ScktAYB8JH2A31wgk=; 
-	b=b7oabcZzw6M17kbEzgmfW4y2D97rm55cVEH83xUGV5GPhjJVwGJyPQJb5cwaoX0iQ6u54/ePy+JRDjtKOEcnnqVgXZBwhSnoaKbccCNZ5R+wMymFSpP8DDW5F2z1qw42t/+I14zU4j7QARAbgOsWz8VYhp9bCsA27OwRFjMqxwI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750632453;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=FLTDefBRu7uvHjg2VxiCdIswI1ScktAYB8JH2A31wgk=;
-	b=RQd+iyQEYfvrCkIu6E+Df53JBVIvOAw88bgsqt6TSpQgEFTk0D2pFBL/6kxfNW3R
-	7rD7WNYn6kZ/YBpT1voidYP1eCMR5C1xq7QfpWBpWfDJwGkFnVoRt/dAilkhH0ZSO8Z
-	dpmwt7Bq8FMB5l99Beq/X00Fha5JqvCn3yAsYFQ0=
-Received: by mx.zohomail.com with SMTPS id 1750632450810618.0680305123891;
-	Sun, 22 Jun 2025 15:47:30 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id B8606180956; Mon, 23 Jun 2025 00:47:26 +0200 (CEST)
-Date: Mon, 23 Jun 2025 00:47:26 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com, heiko@sntech.de, 
-	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lee@kernel.org, 
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V2 1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A
- Charger
-Message-ID: <hfpcsyaaywtqk6j74pjquqw5zbgiy4msqf4uzvp5zk4d2ndko3@ogjl6w5queeh>
-References: <20250621180119.163423-1-macroalpha82@gmail.com>
- <20250621180119.163423-2-macroalpha82@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4489C1A23AD;
+	Sun, 22 Jun 2025 22:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750632648; cv=none; b=M0Arz5Bbp6imEMdsUYbXnn6sz+S+q36Uy8U9leyy+ZCJ1aaWXVEZERiwovc7R1CNErCGRmQ6Gaf4LRZ4vRwLdS3CSfg/S6XNI71/mB3JYZC8M7zqg3YZNcj+KUiuQw+TfCVmISIh5e7mCL1ae3s6iWxomgwdSDian13GqExD1CQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750632648; c=relaxed/simple;
+	bh=wHATzHUwOUqRKn8FAzkIwW1jHvvvptGIND35VrXnmho=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P72Any4WIK4YBuExuB5gNVk43vGc4O3aKCqi0XbzJC+EYY3KjAzq/ZRqp3aXsyPFhYE2Ro8AWa9/2rNfdaXksG9JNiSFq3i2WOk1zBIs+8QpYHTZtXFu4JqOd2e5XL0DBuGNwoTtqsx/4EUYqi97gE9Bx5irUHuAPBPAKZkyPt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z24MCgov; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-313fab41fd5so362917a91.1;
+        Sun, 22 Jun 2025 15:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750632645; x=1751237445; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2XyaOPS+SVDJS2nuVakOU+h3pEZcqv0KxHASicqOHR0=;
+        b=Z24MCgovbvwdu5n6jAqRkIfOw5jJCQh+oGKuaMUqMdBngf2wlsnuQWeLU66LmYDq2z
+         6hw7k23vBiA2Y9WuCa2LHytHLhd9AjZCjDBYpLw/RNAwXGL5c2mSoHy9TiL+VM9waIWQ
+         hDDjsBKeKgFNJCIAXkEATw409Ao0BZSGqcsTo+fFphI/QG5t+2oSD8pDGNin+K932gqC
+         z/P5x7yi/CqYodSlDqqF2yruBkSdWLEqHmnkxIilqRicDH6SNM/tjvQEKaPEUmceIY6i
+         fPISg5bChuNKbTM72LhZXi8DT/WNv8XICieRk96EMqb7/V5PU5R7oeMc5ckw1tm8No+q
+         Ll+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750632645; x=1751237445;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2XyaOPS+SVDJS2nuVakOU+h3pEZcqv0KxHASicqOHR0=;
+        b=Yg7/oxQXPUcbQiJO0o35CqnlRRn8etlZslogx2PoB6trsSH9on4vh6dgHXtBiq6vbY
+         Xj1IuRtczyoB7hPH9LYgRvGUw0jjj5vxPzily6IyQQT5F8DEc23nXXx3JNcij5InQP9B
+         e5GwQQj6ZIu95g6vzlbZqaHFr4UX5FUNZ/mL6ObMimUpuGRZbZUU0Xy8ygQnVBjwKNZP
+         g1Bk/9VyfUlkEdUeUjg7yWYj1EoODnYtF+ZG51v4l2DOqMX4Ke2OUYt3E33g8N8T1qsY
+         4/Q/GhaeMC12g0BA7t52iB1T7N3EQnwuhzLSwRtOFQ3goroO+L60CDwrIxFr+AsWW2+h
+         iiZg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/3qW77tmh1yrHZyZWo2xoTl1aKWR0X3VUOXrNNvD7MQ3UBWva+GjfOvgrN8q083j5J6XZam38U3Yq@vger.kernel.org, AJvYcCU9/aLQ6N3XtilWzy42Hl2kDaZfewDBjkBRXcUv6h/6K3U3K6cVUodVaxwkYel5zxmsirk4VDBjKkJBOjQ=@vger.kernel.org, AJvYcCUXkjfTbBqigvhBjPWJAyVoJeZL4CoZI/CzPkssHcgfMGObinklldaldxAkDcHVNbVWuW98Mk8Es4kWBgN9@vger.kernel.org, AJvYcCV6qWXGP9zRMjakK++6HjOOKcEW9Dk8BYH8Hj9kY0DHw3IMnLMAJZVJSybYfGRc3NVbQ92JIsJYVX6pMu/sTu/1@vger.kernel.org, AJvYcCVWwFnqkXP1G9F6rX5trqeDXF6UwKUTouONx9hHwoSQ1wW4wNtZ6BPoGURjFs6JvAj8GDiSWA50iWIkb/Es@vger.kernel.org, AJvYcCW2umB5Sr62u6StURP0ZDgjAr5gkVfvDh2IjIIIRuKj/ZTnk7FpQujXt2cw5GyDqpDeeNeYqFUyqfDU2b2xSJc=@vger.kernel.org, AJvYcCWdRCugot5CvTHpnyoUm7lIWYhVQeQfHiKvhtyjnfNM+wpLU46FqIExHB1rYi/QgIBMkhgt9nYViqw=@vger.kernel.org, AJvYcCWsn6WJszPgG5oopu5HeV9Uo43Gs/6uFI2WqmJkkpozh5BEa61aowbV0ZgsogMpcHoC8fvxIa2j@vger.kernel.org, AJvYcCWuflZVxkRW8bJKLega5V/K9Nk9Tx9mMfJHEa18k0ZQVPPxuI6Luef+K5nwxvU/cRtKYyf7GrowUOuK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0by8/QbRy/n6Foebc+H8e7D18JjyY4F4w8bfu3VyYgFeNZTyq
+	g72Oy0OvHD1cPzoy2igZbkt+l7iyFfiX1gIw17wwLcnEMzQ7JqruhEJSX6GO8H5nAhLtD1S01wj
+	Pg8CSRgriwy14+OD6BCCSi7fO6aH6KHk=
+X-Gm-Gg: ASbGnctKm2hQIZtlwxmlnN/lid4QSFMRQAdE/ddYLmW2Ky1GY5PaGYX6pji4qnzgXys
+	kKCuDCpwvDBPfXMyrMtMCTcZgIOkGYsEaAae8jzSb7v4S/HBntsFwFY7NrCtXBxlc5fMvmYhn7I
+	hvxOsKUqA3gvzn1VGky9UKhiPS68PZttkCQ65fYQ6s3Iwo0llWTk3Qdw==
+X-Google-Smtp-Source: AGHT+IHkK5VxbDTzDH+78CGWNybiQ0lflBEpMpSVRH6uwkYDUKXtQuR/kJbEABJn7CeEMEkyXPjXtmArCfcPAjxsRNU=
+X-Received: by 2002:a17:90b:3a43:b0:311:fde5:c4ae with SMTP id
+ 98e67ed59e1d1-3159d8e2be9mr5684021a91.6.1750632645432; Sun, 22 Jun 2025
+ 15:50:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4rnet4dgd5gakwez"
-Content-Disposition: inline
-In-Reply-To: <20250621180119.163423-2-macroalpha82@gmail.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/250.624.82
-X-ZohoMailClient: External
-
-
---4rnet4dgd5gakwez
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
+In-Reply-To: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 23 Jun 2025 00:50:31 +0200
+X-Gm-Features: Ac12FXzAp4qUKl_aNT741tylL3I37tb5s--GlJccgcY1EV1oeXS1Teju6Ztan0w
+Message-ID: <CANiq72=xmyHuBYEGbCMi=Um_NvNbf5TfMmJB5YPpVp41FcPdJA@mail.gmail.com>
+Subject: Re: [PATCH v12 0/6] rust: reduce `as` casts, enable related lints
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Robin Murphy <robin.murphy@arm.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Benno Lossin <lossin@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Breno Leitao <leitao@debian.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, 
+	linux-block@vger.kernel.org, devicetree@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH V2 1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A
- Charger
-MIME-Version: 1.0
 
-Hi,
+On Sun, Jun 15, 2025 at 10:55=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
+> wrote:
+>
+> This started with a patch that enabled `clippy::ptr_as_ptr`. Benno
+> Lossin suggested I also look into `clippy::ptr_cast_constness` and I
+> discovered `clippy::as_ptr_cast_mut`. This series now enables all 3
+> lints. It also enables `clippy::as_underscore` which ensures other
+> pointer casts weren't missed.
+>
+> As a later addition, `clippy::cast_lossless` and `clippy::ref_as_ptr`
+> are also enabled.
+>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-On Sat, Jun 21, 2025 at 01:01:15PM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
->=20
-> Document the Texas instruments BQ25703A series of charger managers/
-> buck/boost regulators.
->=20
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  .../devicetree/bindings/mfd/ti,bq25703a.yaml  | 123 ++++++++++++++++++
->  1 file changed, 123 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml b/Doc=
-umentation/devicetree/bindings/mfd/ti,bq25703a.yaml
-> new file mode 100644
-> index 000000000000..baaeadc2a3ab
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
-> @@ -0,0 +1,123 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ti,bq25703a.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: BQ25703A Charger Manager/Buck/Boost Converter
-> +
-> +maintainers:
-> +  - Chris Morgan <macromorgan@hotmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,bq25703a
-> +
-> +  reg:
-> +    const: 0x6b
-> +    description: I2C slave address
+Applied to `rust-next` -- thanks everyone!
 
-You can drop the description here.
+    [ Added `.cast()` for `opp`. - Miguel ]
 
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-supplies:
-> +    description:
-> +      The phandle for a power supply that provides input power.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
+    [ Changed `isize` to `c_long`. - Miguel ]
 
-allOf:
-  - $ref: /schemas/power/supply/power-supply.yaml#
+It would still be nice to get the couple remaining Acked-bys (happy to
+rebase to apply them), but I feel we are in good shape, and it is a
+good time to put it into linux-next so that people see the lint before
+they start applying new code into their branches.
 
-power-supplies: true
-
-> +  monitored-battery:
-> +    description:
-> +      The phandle for a simple-battery connected to this gauge.
-> +      A minimum of constant-charge-current-max-microamp,
-> +      constant-charge-voltage-max-microvolt, and
-> +      voltage-min-design-microvolt are required.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-
-Drop the $ref here, once power-supply.yaml is referenced.
-
-> +  input-current-limit-microamp:
-> +    description:
-> +      Maximum total input current allowed used for both charging and
-> +      powering the device.
-> +    minimum: 50000
-> +    maximum: 6400000
-> +    default: 3250000
-> +
-> +  regulators:
-> +    type: object
-> +    additionalProperties: false
-> +    description:
-> +      Boost converter regulator output of bq257xx.
-> +
-> +    properties:
-> +      "usb-otg-vbus":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml
-> +
-> +        properties:
-> +          regulator-name: true
-> +          regulator-min-microamp:
-> +            minimum: 0
-> +            maximum: 6350000
-> +          regulator-max-microamp:
-> +            minimum: 0
-> +            maximum: 6350000
-> +          regulator-min-microvolt:
-> +            minimum: 4480000
-> +            maximum: 20800000
-> +          regulator-max-microvolt:
-> +            minimum: 4480000
-> +            maximum: 20800000
-> +          enable-gpios:
-> +            description:
-> +              The BQ25703 may require both a register write and a GPIO
-> +              toggle to enable the boost regulator.
-> +
-> +        additionalProperties: false
-> +
-> +        required:
-> +          - regulator-name
-> +          - regulator-min-microamp
-> +          - regulator-max-microamp
-> +          - regulator-min-microvolt
-> +          - regulator-max-microvolt
-> +
-> +additionalProperties: false
-
-You need to use "unevaluatedProperties: false" instead once the
-power-supply.yaml is referenced.
-
-Greetings,
-
--- Sebastian
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - input-current-limit-microamp
-> +  - monitored-battery
-> +  - power-supplies
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/pinctrl/rockchip.h>
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        bq25703: charger@6b {
-> +            compatible =3D "ti,bq25703a";
-> +            reg =3D <0x6b>;
-> +            input-current-limit-microamp =3D <5000000>;
-> +            interrupt-parent =3D <&gpio0>;
-> +            interrupts =3D <RK_PD5 IRQ_TYPE_LEVEL_LOW>;
-> +            monitored-battery =3D <&battery>;
-> +            power-supplies =3D <&fusb302>;
-> +
-> +            regulators {
-> +                usb_otg_vbus: usb-otg-vbus {
-> +                    enable-gpios =3D <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>;
-> +                    regulator-max-microamp =3D <960000>;
-> +                    regulator-max-microvolt =3D <5088000>;
-> +                    regulator-min-microamp =3D <512000>;
-> +                    regulator-min-microvolt =3D <4992000>;
-> +                    regulator-name =3D "usb_otg_vbus";
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> --=20
-> 2.43.0
->=20
-
---4rnet4dgd5gakwez
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhYh/4ACgkQ2O7X88g7
-+prdJw//fzLDc4jjhLjYmLF04He7wbFHMpnbSMSY1oy8fIsi6cW5KdjP+cMFpLNl
-t/hBEl13gAPdzyy0WbRURG1StcoInXOD7wrFEgEivby5WuO7QxcgeWlEqJ9k6O/i
-TqdsZCxleByn/KRgP2NdXfsF463Ss2wKj6pe3VoxZpogzmal9NXG2fYHUtr2k69k
-pas+hMPq2sj9L5X4R7eGNVVr/kNAPosOHSNp023Fwjsoymckgw87m4FwUwY2N00+
-J+UwOYNEehnXjMqotz48W6pmyqUatXSKTzWo9y2cxYo6sYB3QRcmCvQQ+z+znIzJ
-g1ofNo+WK72StrPs4j8583sXloOaBvTHtKQMeW2F/DPlLABZFOwJUtTDyKNA7Mag
-/MfUNJozgc5Np722xJYSiHriIgwcXc6JP8hX6aVwISMSYMKXgI3RX9ywJS1kGGxo
-nfr9jCdlI7CUmf3J9DxU8tg/YX6lLJ7OPacs1KxEAhjT7Fg2ADydVRRsobS90uPZ
-opyy3sNvYQ9JPJxcEEDrm7OyLXRXd+o343D2AGeNaFy0YxS/zsYtFhi0BhqVynOU
-gFjjuodRQXLmbiGp9eb71Lab5mtfrnwQVZND1Cdv+kfvdX/ZxO/KjTiUPmDsyNoK
-4Tnal0ENwadPWOhYOD40aeuqfRiJMaODs8UavVENzF97KakmhwM=
-=qteQ
------END PGP SIGNATURE-----
-
---4rnet4dgd5gakwez--
+Cheers,
+Miguel
 
