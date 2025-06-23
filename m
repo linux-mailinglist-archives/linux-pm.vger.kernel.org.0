@@ -1,130 +1,75 @@
-Return-Path: <linux-pm+bounces-29251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29252-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF85BAE35A4
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:22:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD76AE35BC
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:32:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32BED1700F3
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:22:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8554416E12D
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:32:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08E11E5B7A;
-	Mon, 23 Jun 2025 06:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557F7136348;
+	Mon, 23 Jun 2025 06:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u+oJqfox"
+	dkim=pass (2048-bit key) header.d=7pot.org header.i=@7pot.org header.b="utSAW2vt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lalande.gnome.eu.org (gnome.eu.org [95.216.32.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE6C1DED4A
-	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 06:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750659736; cv=none; b=rlTRJIzZHWFJE9vkQkWdh0aocz4Me3a8blz8GBPZXxJraIjXV148nvnvWl9f8ljXa7QwMNeBH6nFDYqb/d3og/R7Bu0xc+4Pyar552fH7IgdnuRFMd74DMPEn1B3J20qqZK7DQirUTPTaDd8Uf6cNeDt3Rzpu9q8tTQoAU6HqkQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750659736; c=relaxed/simple;
-	bh=0GviJ4C43LDU6PSrh2071vRUi2rtBfBORn6lykbuEsE=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6763CBA33
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 06:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=95.216.32.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750660349; cv=pass; b=Nl5og35SstsyA+c/PlAgRWzFnrtx+WR0589I+jakj5bibuv43Q5EhwKtSWd9ZhMHm7O+JNH+N/P7bITlLjEoHNSgBjLLOkWMCek9Zyo8sDpmpgleKx1hLM9mQgkdOA4qTwwYKViuMp5OnKzwFjj7UErv5gtQnkYnn4wSdU4vg0k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750660349; c=relaxed/simple;
+	bh=3i2Uv1Y3z2papHvCGhrL9ZVJnsIV+y1RWJFgcWMXDSA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TvFnMGl+dAca73KiAspENyWGpvH2TqK0T19ZbzUC025P7vnvxXKs/TUUmPBExaZCSsFZDR3ZzYjKSAIcp1kY3OMC5fsxYt/jvJa4cwEK1hxZDiLkYHusnYfn3/lcm/MHHkP9zo+DqQ3e+0Q/U959mytcm/CMAttyCFIN7B8DuyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u+oJqfox; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3137c20213cso3796483a91.3
-        for <linux-pm@vger.kernel.org>; Sun, 22 Jun 2025 23:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750659733; x=1751264533; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZjaVo7z5thcmzA/Idtk2W4NhEJVEWcJtCaNKpGwgS2c=;
-        b=u+oJqfoxE1BDc1eJwUUis1/T12Yqa9kCGnmN2ISJ6NGL4Y90YTjNpLcrHWi2vC7sRN
-         V7k7BJyQhMSUMtHnH7VwPrTi0ApD257hQSBDPWlbwRnnmV8VWzNUqcZH8U11ZKU+pE6D
-         hW1qhi+Kr7GNBRRFQi35gamyh6WI7ysOV4gxCoI2xvX0CiY24IsIjPSklaXOQyTBaDYC
-         knHRmrkvJebx7VBrgNq6a2PDzN/2Bx/t52idVdQU1St5ukmK1HArRMG54H3zBrnzHQV4
-         QECnIgveaWKpT8qVfotGB5w3LBcIoVxWX+EHnrjCPB5r7gRk42Uw1BMb7mGARpZN5WKx
-         mqAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750659733; x=1751264533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZjaVo7z5thcmzA/Idtk2W4NhEJVEWcJtCaNKpGwgS2c=;
-        b=W971SSFI8iG3wYEZSEW+icGDefcjKeTZh0dgSVG/ya2IdQnZn/IXLRkl8PqocOW3b8
-         92f/6woEXRr9/f4GQYTatvxKBqWS9IQcp5yuJXM8LPqvfTmeHeBpRt2TTU7pDYuZQZFe
-         saTgdC1+COo2KGoTWOO5aeDdlijdfqrPtcSpVlruGDuN0+f4cM3/gDNakThhGiKsPWFx
-         ISA9EV0VLMcr+8R3tgiLlcfoV2yRngtK5nmMe5lVdkHRCWiIDu6ZbmmyWDPLYej6dXUx
-         PWhRG4esKz1Zmkm0NymWl7ldC6gQB01q6ljDNP4snEOgsCmVlWZEpqKr8M35Es1u97L/
-         TJrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVo92hsL6c9Vy67MeLTd5aQNKCHJ33ZTMFu9DCnlfEZxEr/LGppxUViwayC5Hhsw1XBIxz6BBwuVg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLrhpPSK0FNedU+sXepcUuMko+f4pulY7fYbsU6dwy79Vg67ZD
-	LaobyriqTUjxJ9Rs2KyS04RbceHTCbTTadDgpPNEb+00KAyWzCQrcVgB62LLt4KO4ls=
-X-Gm-Gg: ASbGncufCDPKt4e0af9fVPPXnMhQ4gCr0fDanYj9RG3qm4zYM/kZpTUMK5CZ6qJPe+t
-	Rh7WRS59i7+RK7lqEKBRh6eHLTqL+6rS3t7dVuxlFfAx4Y7EigQA3y8zG5ICP++z3tRsidA/fP2
-	EtZ6l305FKZB3tqr3fvu7w499kNAm9+tK9k+fTW7pgTCIbUfSlvoJJ1PtR58tBMtpTHFUqen/5g
-	/14emdbiPjYk5lr3pUkqT3xZPyIObETUdK772Rv88IMIIcQAZQOVmCkv73vlvp4xMQVZbjpyfB0
-	1g2FlXAJqI+U5X+KDs7EuYIN2tetCta6iX4pa115elYR6DCQt+3wRGoQUCQCgtE=
-X-Google-Smtp-Source: AGHT+IHTC8DDc643Bby1AguMJbpjpU8RoaZSO7asfpNMZjv5HFpnG7zervZfVFZEkHAcEV/Plpb2eg==
-X-Received: by 2002:a17:90b:1fcc:b0:311:b0ec:135b with SMTP id 98e67ed59e1d1-3159d8d6282mr19886141a91.24.1750659733212;
-        Sun, 22 Jun 2025 23:22:13 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d860a3c9sm75875175ad.95.2025.06.22.23.22.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jun 2025 23:22:12 -0700 (PDT)
-Date: Mon, 23 Jun 2025 11:52:10 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v12 4/5] rust: replace `kernel::c_str!` with C-Strings
-Message-ID: <20250623062210.she33z5hfouu5jgj@vireshk-i7>
-References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
- <20250619-cstr-core-v12-4-80c9c7b45900@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Za9PX/AsvVHnSUNQJDZQzDOpV3vq6IL9jReP6jFPjzaRVtTNUEr2mh9MxFDVQPQPG1sF5dcMh94xsGCNj4fuglhRq1chI9e/e9XAfeNQLV9Red1EuAx/p88iz2QICuLMGq2E3xLMHMrYPbWf9Of+auQU0u7/CKTgvph1xLKNh84=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=7pot.org; spf=pass smtp.mailfrom=7pot.org; dkim=pass (2048-bit key) header.d=7pot.org header.i=@7pot.org header.b=utSAW2vt; arc=pass smtp.client-ip=95.216.32.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=7pot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=7pot.org
+ARC-Seal: i=1; d=gnome.eu.org; s=myselector; a=rsa-sha256; cv=none;
+	t=1750659937;
+	b=laZklOtGP/l2nhKfW4eZG6Fc0fJGYsQEFKDWKHPAZep0wzBcbE07QaQ5b2xt7Gg6mfch
+	 PqUap797j+KgzlCdz0q6MNhvMp+7vNF5HegvYXizCvG7OzbZtttdXda5OltHM18oq/d+O
+	 D6bhSnsxzIKGz/gBuW+RKkfRjYbsu2IfG8=
+ARC-Message-Signature: i=1; d=gnome.eu.org; s=myselector; a=rsa-sha256;
+	c=relaxed/simple; t=1750659937;
+	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version;
+	bh=3i2Uv1Y3z2papHvCGhrL9ZVJnsIV+y1RWJFgcWMXDSA=;
+	b=wIAo7W20GpTREiHQS0WZTW4qMamZf2zlkwhBDem9RVtxn3nMSrVEl2SnR56XwulwHEjN
+	 y7PaoZn0Q5WntnazsvwHjFBqVtfK7vai/+iJETJwsquoV7sEarbgigYwBlzQ+ZOBl1m60
+	 tknxlibJRnocxsIE/Ci0BEzYTs3EZd6n+E=
+ARC-Authentication-Results: i=1; gnome.eu.org; arc=none smtp.remote-ip=82.65.226.101
+Received: from leto.ms.local (val50.gnome.eu.org [82.65.226.101])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lalande.gnome.eu.org (Postfix) with ESMTPSA id 50D007B2565F;
+	Mon, 23 Jun 2025 08:25:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=7pot.org; s=mail;
+	t=1750659937; bh=amTgSERN3utDvqCGxTJd0cMQf/6LQr4T4DXQKPu/7OE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=utSAW2vtalgYTldcp+4+rJEGp3n0SaHJAHpZzIh6pHZZVvV4VKRl0C9XlL3aBq/ga
+	 zv4uyJYMTlpfw1k4O76P/VfE3DHphMpHieOz0BeumQx3hsnvAtan3H/LSg/hPmB4w2
+	 DTZzovfMYa06QuIK6t8V6WL1s8dXq7l6wwM4PQr2p3jhDNU6y4ohJV/U238dKF6lkO
+	 cvTgydSRQudOOU+75KYM2ceKGVKbhskJj/Ww5HNaW5IPcDYJma3y9ElQjqfXbl/tfi
+	 cI7IS+I5+LMRC46+CIJi6Jl4zmqjEhmetUp7mr1U4qATcobLK4nIIWQa5Z5EHF9bxa
+	 myQRu+5ayU6rA==
+Date: Mon, 23 Jun 2025 08:25:23 +0200
+From: Lucian Langa <lucilanga@7pot.org>
+To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com, 
+	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
+	bhe@redhat.com
+Cc: christian.koenig@amd.com, linux-pm@vger.kernel.org, 
+	kexec@lists.infradead.org
+Subject: Re: [PATCH] PM: Restrict swap use to later in the suspend sequence
+Message-ID: <dn6yc4swdyek4gz3bv7g4y5e6xzmo6vm5gkqqhmhbdhomnglbt@nsepw42i6hwz>
+References: <20250613214413.4127087-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -133,15 +78,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250619-cstr-core-v12-4-80c9c7b45900@gmail.com>
+In-Reply-To: <20250613214413.4127087-1-superm1@kernel.org>
 
-On 19-06-25, 11:06, Tamir Duberstein wrote:
->  drivers/cpufreq/rcpufreq_dt.rs        |  5 ++---
->  rust/kernel/clk.rs                    |  6 ++----
->  rust/kernel/cpufreq.rs                |  3 +--
+On 13.06.2025 16:43, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> Currently swap is restricted before drivers have had a chance to do their
+> prepare() PM callbacks. Restricting swap this early means that if a driver
+> needs to evict some content from memory into sawp in it's prepare callback
+> it won't be able to.
+> 
+> On AMD dGPUs this can lead to failed suspends under memory pressure
+> situations as all VRAM must be evicted to system memory or swap.
+> 
+> Move the swap restriction to right after all devices have had a chance to
+> do the prepare() callback.  If there is any problem with the sequence,
+> restore swap in the appropriate dpm resume callbacks or error handling
+> paths.
+> 
+> Closes: https://github.com/ROCm/ROCK-Kernel-Driver/issues/174
+> Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/2362
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Tested this against 6.15.3 and 6.16-rc3.
+Adding my tag.
 
--- 
-viresh
+Tested-by: Lucian Langa <lucilanga@7pot.org>
+
 
