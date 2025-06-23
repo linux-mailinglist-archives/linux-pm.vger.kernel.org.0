@@ -1,111 +1,88 @@
-Return-Path: <linux-pm+bounces-29254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1F08AE363F
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:51:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0FEBAE3654
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:53:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97097171134
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:51:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 465841713C6
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA2F1F1301;
-	Mon, 23 Jun 2025 06:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALGH3HmN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 521381EB1AA;
+	Mon, 23 Jun 2025 06:53:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA2A45948;
-	Mon, 23 Jun 2025 06:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A966B45948;
+	Mon, 23 Jun 2025 06:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750661456; cv=none; b=dXBZg243lzsVxJJttu9lQgOpuPY3J3xTCudafiqca9SE9fFwhdRZ6ZFRLfToPKHNhHXv2IwJ8U/Sgl7a949kwyU1hbmevSFfxORmleGesCyfvPc9psp+CpAtQZ8Dh/iDKNnfh3L7AnQZ19IKjpE6TR4LPzWFud92KdvhHLTVBoQ=
+	t=1750661606; cv=none; b=dpmJOU39e1FQ16DdQL49q17P9RH/5Df6DOboZl2wH/j9E/JXS4QMWpNUbmolX+MUoMIFYHoQSnxtNptQUtKo0Q7LUPD2dJ57F785Opk54wLw4c9cUmR3YYo1aL9t2yyZwbUL21fVpwr85lsA4gC9beYhR2TCSW4x5g1soKN27OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750661456; c=relaxed/simple;
-	bh=nQ1JuUUKyoScy4KhmyGScBxvfx/khrlGlUUW/Zu56QM=;
+	s=arc-20240116; t=1750661606; c=relaxed/simple;
+	bh=rQjLc31C3d45UrSCDZ/vtO7SV3kPk8gR9r+g1qGuSBY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j4+1kpf0fUYlG7A9Bdo+MR0WcFWQ/9+vwaZm3i8Jl6aDOBH6L/6hRj/456p6MPEUR8Ymu8bsAjHXuNdBMbaHt77IzrhbKDCMJ0vcR7BxlWxKXRWyTwPYeZ1b96+naev2gUUgBrVnFw5LZI4SItdWQSPqCZhWQyO1+47CvHofTwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALGH3HmN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA174C4CEED;
-	Mon, 23 Jun 2025 06:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750661455;
-	bh=nQ1JuUUKyoScy4KhmyGScBxvfx/khrlGlUUW/Zu56QM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ALGH3HmNsHc5+68o0/oJQL0XZT2UvhxN2g/SzFDo9Go7pOC0YYUAksEFb3VwoV1Hw
-	 hzAB2fl1Qd+Lwe+4eSpVX6sGVpHK6HcDUJNWKTE+HIjI8KfLQebA7r81HhfBG0eC1c
-	 HVfr0sfKsTLV0bu7Dk66p0FHZxlfLNokQxr9CSjpDi1zGDF2ySYtKWuGvnRZXYi9ke
-	 dCcMbd8AQpwvTRkFij+PbcdMOo8sjrgyT+mAnBDgPJSvtEyKLd5u+CbcL6FjEKmhKp
-	 1vrYHbnm6p9KqmXAw6vW3KF4+1NWV6fwJPCgXIYJHLgEKXGnirsjKB67DIWkXJZRIt
-	 3CqEtAhUqcbcA==
-Date: Mon, 23 Jun 2025 08:50:52 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Akhil P Oommen <akhilpo@oss.qualcomm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Rob Clark <robin.clark@oss.qualcomm.com>, 
-	Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Dmitry Baryshkov <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>, 
-	Jessica Zhang <jessica.zhang@oss.qualcomm.com>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Subject: Re: [PATCH v3 1/4] dt-bindings: opp: adreno: Update regex of OPP
- entry
-Message-ID: <xexpnsi6bzks4dqzlfwtcwfknmmzrd3cinolu5wbm3pw4b7ysx@pukutwlb53jm>
-References: <20250620-x1p-adreno-v3-0-56398c078c15@oss.qualcomm.com>
- <20250620-x1p-adreno-v3-1-56398c078c15@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qXrRDCx5kof7DOLTcukI0RQR7wqCibIxcV9kSuucyyJlM2ffgoFMvKqTN7iywm+0TZPdCZw0/R24hSX0XlN7pbQxcuqcnpXNA3uNnkEBpgszJiuW1lC1mFZ3QDEEbDdG9kAXKL4CWaRJLfEDWX59hGPgivn1Tr2suY30afNFt4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 7FE792C000BF;
+	Mon, 23 Jun 2025 08:53:21 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 4ECFB359BF3; Mon, 23 Jun 2025 08:53:21 +0200 (CEST)
+Date: Mon, 23 Jun 2025 08:53:21 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 2/2] PCI: Fix runtime PM usage count underflow on
+ device unplug
+Message-ID: <aFj54TvKfQNLyOm9@wunner.de>
+References: <20250620025535.3425049-1-superm1@kernel.org>
+ <20250620025535.3425049-3-superm1@kernel.org>
+ <aFcCaw_IZr-JuUYY@wunner.de>
+ <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
+ <aFeJ83O9PRUrM2Ir@wunner.de>
+ <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
+ <c5950427-8a65-4659-96d1-5bb013955090@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250620-x1p-adreno-v3-1-56398c078c15@oss.qualcomm.com>
+In-Reply-To: <c5950427-8a65-4659-96d1-5bb013955090@kernel.org>
 
-On Fri, Jun 20, 2025 at 12:24:28PM +0530, Akhil P Oommen wrote:
-> In some cases, an OPP may have multiple varients to describe the
-> differences in the resources between SKUs. As an example, we may
-> want to vote different peak bandwidths in different SKUs for the
-> same frequency and the OPP node names can have an additional
-> integer suffix to denote this difference like below:
+On Sun, Jun 22, 2025 at 08:47:03PM -0500, Mario Limonciello wrote:
+> Actually I came up with the idea to forbid runtime PM on the service when it
+> doesn't allow d3 at probe which I believe means no need to check again on
+> remove.
 > 
->  opp-666000000-0 {
->          opp-hz = /bits/ 64 <666000000>;
->          opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
->          opp-peak-kBps = <8171875>;
->          qcom,opp-acd-level = <0xa82d5ffd>;
->          opp-supported-hw = <0xf>;
->  };
-> 
->  /* Only applicable for SKUs which has 666Mhz as Fmax */
->  opp-666000000-1 {
->          opp-hz = /bits/ 64 <666000000>;
->          opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
->          opp-peak-kBps = <16500000>;
->          qcom,opp-acd-level = <0xa82d5ffd>;
->          opp-supported-hw = <0x10>;
->  };
-> 
-> Update the regex to allow this usecase.
-> 
-> Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> Signed-off-by: Akhil P Oommen <akhilpo@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This works cleanly for me.  LMK what you think of this.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+User space can override the allow/forbid setting through the
+sysfs "control" attribute, hence this doesn't seem like a
+suitable way to somehow cache the return value of
+pci_bridge_d3_possible() and thus avoid its re-execution
+on remove.
 
-Best regards,
-Krzysztof
+However we shouldn't have to cache the return value anyway
+as the underlying assumption is that the function always
+returns the same value.
 
+Thanks,
+
+Lukas
 
