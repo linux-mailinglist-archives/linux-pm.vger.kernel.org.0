@@ -1,125 +1,87 @@
-Return-Path: <linux-pm+bounces-29414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4724AE57B8
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 01:14:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C53B3AE5806
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 01:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DB13189BD3D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 23:14:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 661474C604B
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 23:30:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA3F22A7E4;
-	Mon, 23 Jun 2025 23:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AABB1624C5;
+	Mon, 23 Jun 2025 23:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1Zb9RGP"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="TVwvL7+C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33716229B15;
-	Mon, 23 Jun 2025 23:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5AEA95C
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 23:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750720441; cv=none; b=OeVokEWwaJlCj+m1qfoGgrqFr40GhSHc+t+SHEM8UyjrO2Tap4uu5cDAoR8tJkTz6SF2rWMVVjUWVySXPW4JFbYvQ2Q1Z5xd8lk1lFGehmNQ2Yja6Y+ohXg6TvFWFLlHzxr+iYMmPqoP7JF1mraO7tAlwPnJUWHT+CiJzMIUu4w=
+	t=1750721430; cv=none; b=OYgYV5a0yClrz+OOCQZhmnkx/cyuhSVBirUbKmnogT9WJkBpl+z71Sao0oBa284ZywsVzieoDIJ6JTlCyWVM88W6rnMz1UCYwubD92cPPleyqFmZdWjDkHLiUVsh4R4nszA1AqopOz635UE/Nash2O81xemzIbf9KuXNmWTLw/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750720441; c=relaxed/simple;
-	bh=ZtQ2Qt4f7OMEWIrCp3AR0s+GaEutTrsUFzG/PxY8FzM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YdJQ7jIzJwNVGe567bvK9yILt0mfDGPGcnnE3pkJWcrrx2MOFmBegRR9StE4VUUU7HQh9JdMWg9tvAMSBRuWKlGKRMv3MHY4ogZuWJ50kfgOfskg159hmfcCVm2jEXMJVv8qnzbpU128Yd6Sq6mu07mmI9yvroLJHpXyw2JQ8nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1Zb9RGP; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b2eeada3df1so265933a12.1;
-        Mon, 23 Jun 2025 16:13:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750720438; x=1751325238; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZtQ2Qt4f7OMEWIrCp3AR0s+GaEutTrsUFzG/PxY8FzM=;
-        b=k1Zb9RGPdjjfFKQ1vmipn0GJQOyWo3eHucp8lirLYVYuOuqmgEevk/5G+Zs+iYWJSl
-         0so0IV20X3hOgaY9axzzaBtl5XgkW3cOAMDmM5eW3GDkzrVy1aRG7o4d9QmiORz62fwu
-         cMBC4YigWsXxLs/ajZcXIsGvIGEceL5C3pkfMqPgxFUOsXSAwsmkL4kg0j7ljpuTXx+K
-         7gm/i1PIsbH+IcId1Hq9yhRYzcJOetfE8BptVhdhqhLhLJj8gd5hL92v5wblMo81ZrKk
-         xAgoFzKG1wFcVOur3sA+bKZMUtruD9ocbtW3IDVtHCJeo9YQ+vksX6fCzXBfMYNfvpwt
-         dXUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750720438; x=1751325238;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZtQ2Qt4f7OMEWIrCp3AR0s+GaEutTrsUFzG/PxY8FzM=;
-        b=toksJvoKBp8u3gsg5vSyVaLvwZHUr6h+x+w9jQHUTSyqQw5tBHP8Y0suSh/+tLT5x7
-         KeRxinExNzaZV+or5Ly8ZT+wuIG5hC0vU7Ajr+OfSugWp+fOIEUJ3tGpfxVLAgPAG99l
-         r7ZQc6mDU/NdylotqBnPQbkrqZN/6fYj0bwG5W81x3VE8t6+M5RCTaGJWGxrYI7AAOSW
-         spf1/mszgQwLKNZTqsLQugyZLnfN8BoMS4Pqoffm4D8VtDIHlCDaV0ORUApdVxBzKRaI
-         N+6Qi7f0KXbIr6fCR6YbffNWFnyJ18tSZRFj5HXW7VV6G7tRhRqFHPCqVHXKMBNk4uFy
-         8lTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+EN7VULX7u/QqiDCJaPeYoZzVnL0C0efQFvucM95pB6qI805vjC8YVuXhuQwRbK5HDVU0UzH+wAsLgA==@vger.kernel.org, AJvYcCUHXMzFJPD/S1T3OLjd0Zb1Z5F7rp1kar9DuF8Gowz0dkdIJqF4kHtmc04bUtPaNqLQcNaMke16NRo59a9b@vger.kernel.org, AJvYcCW5upNZlvghOYx+sDWv6goBGGWhZwgj/IG/yE16xUrSkaUJQ/QUCfp2ffE66j44xfbSc6pBQ9Z9QwrL@vger.kernel.org, AJvYcCWs/34aZrUHKQOw6CMd9P93lHDG2NGzQ88VDmIbJnfyyYr7LFdXRHf4GjsSDNiFTywNli6XUC0j6G4=@vger.kernel.org, AJvYcCWs1Qa5SkNvHicPoHOYc/e++g7mDIyNmRmIuvQ5T4Dit+s+Gu1AyxfUVFlhXeF7oxegBgxi5YetwI5P@vger.kernel.org, AJvYcCX6js9Qs2H7VkNDLY/C+LeIGUb0yzL76dZ2lKvViqISAc/yUnBRNu0gVgVvbL9rYaLMmq2WvoOSE923YX0iPQg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5lhNL8cTlakLT2ypLTQMt0H5xVCEZzC97E+dM07b4Sp6SagfK
-	ge/FKEBfbCa6YR7j61ev6CTGxoZohaNgMwad8rXB4au72n6b1InFvh9e27Mlfof7SdTzgDCl3CK
-	yVwIwrXisydZPCzap4MB0eHa1f3neVHaMh8A9xsg=
-X-Gm-Gg: ASbGncsBpyLv6Hy7zMIu9BbOdK6JsEV1oH0tzn6WY23xL9XTCUD96oOqW+3eoUYCp8A
-	iLKIDeBgN7L+9TPH6yAcV6egRyoLJqmo5aDR5RrC9QTdBwJp+GV84aeImSm8IZQDjDEFagh5JWI
-	GgjDBypKyiHfGCkReARqHqo5AvnvMOoiY7KSXCvmF+vm4=
-X-Google-Smtp-Source: AGHT+IEsWii+V5p50ha11PTkF7dtQH4Lp+DAN/BWRuicAVRBL1LKwMw8G12V8WuF/myxhsVW+VQkOs7i/rj5crF+YW4=
-X-Received: by 2002:a17:90b:57ee:b0:314:2d38:3e4d with SMTP id
- 98e67ed59e1d1-3159d8c5e70mr7719800a91.3.1750720438379; Mon, 23 Jun 2025
- 16:13:58 -0700 (PDT)
+	s=arc-20240116; t=1750721430; c=relaxed/simple;
+	bh=+pzksmTU21a14H+AoU855eBMzjvNfwKGmzqegPCUfz0=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=rlC4LooBs3ipvfzLW/1huqQ3UZmt6+74Fk7aziaKe03Mf1RpdToWVpW2TDFgj7dqLA5laiLzuH1ibTHfBSd3JqTJk4QPTlgwXe/WnnkaDuu4MibhR1eZitSRGAFMcpPwtR1rQI3OjMF0tWU3eD7S8t4mXLlvxF3kmUhe60mnRQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=TVwvL7+C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B876C4CEEA;
+	Mon, 23 Jun 2025 23:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1750721429;
+	bh=+pzksmTU21a14H+AoU855eBMzjvNfwKGmzqegPCUfz0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TVwvL7+CH+emFOPEcbSmexDp/bxZo2WpXF5IM4MfNkGpXDwP605gweI/1ro7UCa1c
+	 t/pom6YA4zRP6ewjo5XoW4mwESp6bzj9oABc5VQsNe0EaH5chClFNnipA0F/fNs+/L
+	 DDZfxz+HnvEKeEq+ndtaRhHGHPXXO2JcQiq5uPyk=
+Date: Mon, 23 Jun 2025 16:30:28 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Yicong Yang <yangyicong@huawei.com>
+Cc: <catalin.marinas@arm.com>, <will@kernel.org>, <dianders@chromium.org>,
+ <sumit.garg@linaro.org>, <kernelfans@gmail.com>,
+ <lecopzer.chen@mediatek.com>, <tglx@linutronix.de>, <song@kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <jonathan.cameron@huawei.com>,
+ <zhanjie9@hisilicon.com>, <prime.zeng@hisilicon.com>,
+ <yangyicong@hisilicon.com>, <linuxarm@huawei.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ linux-pm@vger.kernel.org
+Subject: Re: [RESEND PATCH v2 0/2] Update the watchdog period according to
+ real CPU frequency
+Message-Id: <20250623163028.1914d7ec909eb9bfc1daa666@linux-foundation.org>
+In-Reply-To: <20250619114805.16968-1-yangyicong@huawei.com>
+References: <20250619114805.16968-1-yangyicong@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <ddd5ce0ac20c99a72a4f1e4322d3de3911056922.1749545815.git.viresh.kumar@linaro.org>
-In-Reply-To: <ddd5ce0ac20c99a72a4f1e4322d3de3911056922.1749545815.git.viresh.kumar@linaro.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 24 Jun 2025 01:13:46 +0200
-X-Gm-Features: Ac12FXyx0oigTMFFaBp0d8IysYfhBRX_G8OKWklWXPpi1hgSkQf15JDHjf6iluE
-Message-ID: <CANiq72k9_bzjV7YbFL1NZTESjFYRiiLgYaGHYv_m9hNa+p9zmA@mail.gmail.com>
-Subject: Re: [PATCH V2] rust: Use consistent "# Examples" heading style in rustdoc
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Russ Weight <russ.weight@linux.dev>, Nishanth Menon <nm@ti.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, linux-block@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 10, 2025 at 11:03=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
->
-> Use a consistent `# Examples` heading in rustdoc across the codebase.
->
-> Some modules previously used `## Examples` (even when they should be
-> available as top-level headers), while others used `# Example`, which
-> deviates from the preferred `# Examples` style.
->
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Acked-by: Benno Lossin <lossin@kernel.org>
+On Thu, 19 Jun 2025 19:48:03 +0800 Yicong Yang <yangyicong@huawei.com> wrote:
 
-Applied to `rust-next` -- thanks everyone!
+> watchdog perf needs architecture to provide method for converting the watchdog
+> thresh to counter period. For arm64 we're using the max CPU frequency for
+> doing the conversion which is from cpufreq driver. But some cpufreq driver
+> are registered lately, for example cppc_cpufreq will be registered at late
+> initcall which is after the initialization of watchdog perf (initialized in
+> armv8_pmuv3 of device initcall). In such case the period of watchdog will not
+> be accurate enough. Fix this by registering a cpufreq notifier and update the
+> watchdog period once the cpufreq driver is initialized.
 
-This is a trivial change that shouldn't be able to break anything
-anywhere, and I haven't heard any complaints, so I will go ahead and
-take it.
+Great, thanks.  I'll add these to mm.git for testing.
 
-If someone wants to give Acked-by's, I can still take them.
+> arch/arm64/kernel/watchdog_hld.c | 58 ++++++++++++++++++++++++++++++++
+> include/linux/nmi.h              |  2 ++
+> kernel/watchdog_perf.c           | 23 +++++++++++++
 
-Cheers,
-Miguel
+This is not exactly my comfort zone so additional review would be
+appreciated, please.  Even though it doesn't touch drivers/cpufreq,
+perhaps the developers over there could take a look?
 
