@@ -1,612 +1,238 @@
-Return-Path: <linux-pm+bounces-29302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60A10AE408C
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:37:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D056DAE4088
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9998188569C
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:35:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3668F176EEA
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5C49248898;
-	Mon, 23 Jun 2025 12:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C9B13C9D4;
+	Mon, 23 Jun 2025 12:33:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="O3nDv+n6"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="HbXu+JUm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012011.outbound.protection.outlook.com [40.107.75.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BD3248F5A;
-	Mon, 23 Jun 2025 12:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750682021; cv=none; b=YwkSBqcrx9HmPOtpX8465D7rri+0LC7aZAoOwDNBIHkVzxYKwTRb91WXNduZ7Bsco52aQ1qTANhGY2NGXmurEL2py2q+t9imUapTAPIgQsvkVhjkJz9sGJVD5R78BrY9hGnrnvFyFuxBW7aDwHxGTry/AZFV0Z34XSyivj/WEnQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750682021; c=relaxed/simple;
-	bh=qQGxvBNHU2dXYiGooG6KN3o2r2CrqViRIjzV889alLE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aic9UdhzCdSEY/ZKR38CeirWZXFBchdzOWDAJSfvbgsZVklpwxQ5Rb3z9MlkPuwqPiWe7n9wOnYgOc+6v8rgEXwcEtpFoQPzOrmGxe6Di2WBbLCYeaO6IbRUxNWvQnvkEHCdtyc5GzE1LKUuewrQKQHTl/5WuJV8HkQSkQ4I5PY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=O3nDv+n6; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 6B6CD20F94;
-	Mon, 23 Jun 2025 14:33:36 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KQVU2dmlLTXP; Mon, 23 Jun 2025 14:33:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1750682013; bh=qQGxvBNHU2dXYiGooG6KN3o2r2CrqViRIjzV889alLE=;
-	h=From:To:Cc:Subject:Date;
-	b=O3nDv+n6lZs5uITbGm773Kcb6xRXfjZ4DL7lH/qOwPcN63Bv7LZFstAnHhS6vWnP1
-	 O99YibXA9S1fkZwK9mkwG+mmO+wIXYK4cyBDJYwOUParZ4+2XBX5sHUmcFjtxVTaH/
-	 nvG1gSEDsgFJmKfpqhvezNOJ2O+7jnkM3I9MlJbY2p1snij8jbyCqZB561I8virwPO
-	 cDke10AQ/QjMFelicUcEWb6CQswwAuWzewSJdFbq/7Spi5JUpwggnaqHvzziGtuwBI
-	 YhS95U4WS7ZGgUZabMBUVXrEb1epjemNxmlvxlCEEFSTxAxNpONpHwuZgRN6XAZCMN
-	 Uzyqj7MsddKcA==
-From: Yao Zi <ziyao@disroot.org>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866621E485;
+	Mon, 23 Jun 2025 12:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750682030; cv=fail; b=mpicVsyLTC1iNzh5As+sJZF7kW/nFPxqI32/ysmyHrSzmjL5tta1yK1wQLIPmWA+s7SW2GFvMsyd5HeQ4PbnOV7pdntyPtz/U2yxZjmEduRFv/Hd5eLKWE0nGdjDtUFS7Cp0VFHeVF738JB5YvPZKsSqyRWoYV26Fc+cR3k+DhY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750682030; c=relaxed/simple;
+	bh=Vn3bqdk0D/j9g6jp7kzggFwyMpC0ceI3T2mc/NZE3VY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=tw9owxh/jVAviIH3+5jrIDJwtSJfnAGSMuN1Edd1VyeTjcmN638TFMGA2a6CcGucFfACPw4iTLkll1B1gym6kzMPj17EQL32tp00bPdrWVZscy0+C2EuJhLQncXQsN0ItGRZ1uTs+htp8Zd9dBb+Bylxl7eg8WxlNf6MuIA3Pq8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=HbXu+JUm; arc=fail smtp.client-ip=40.107.75.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z4tomiHNj2x/oyQynA91H6cRcZJJuKpOqL6oWZ5MXTdDET11RGbbEX52UN1FKlKFtTnPgeFqJHeV3n0qW5OVNjoiCMaYv4ArgljUpzPjuAaBAtB8hlgf1+IfClkhYvvtLAXqZ/8wsS7dIA/OuCNT5p9ezusP7SjZp+49z/uLxzAp/xFuy1rP1o2R0IEOEyu4Fi1TV0Gy+VLo1FZDtaLLe92RynBAJo3umqE4TGwyjwAkNxHrdRJpI7AjBWEY4gs9frclsQplofYEyCVIXN+1fNqiZ6n6hpPjso+gIwsm7Dp2r+PABL+qtpFs7bfv6p1QTUulvt9xoff/+R8o3Z5wLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9O12I20UkBFxfBJucpc9E5+BkI6diKvISUmKOHDr1dQ=;
+ b=rE+yMzDLSzlQjJp+svhmbTPVwI2zXybb+/YD+WD95KeVygHbtMMO3MgEmWE+rRyuPjqzZd7zrTegb4TvbX9Z5CjIIEn2N6ZT8uPeQoKgdCY/JUZ3/P1fabfhMQVn3QJ5lS2k/WgU/LhzGP1X73nxZT25e7t7dI9/Lhs4kWMXkW1e44+p039yCvUp7cJ47ZG9pV9rXAWiRDpAs3ng3+hKefwa0T00Yg71p0AEVSB9OnbA5zlDg7GEuzOX8a2bo3oDWNak5I6gxFKPyIJciLuwox2Gh0P5C/4F5id9o/GIY4fMrLxE51gT2TmuiuQphD0+DbBA9mBU4HuCtWifMPto7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9O12I20UkBFxfBJucpc9E5+BkI6diKvISUmKOHDr1dQ=;
+ b=HbXu+JUmXSSCzyXKKaLGHarB0v9/qFXRAYWoUK3eJyhDwa4v1r0wTAyfHefdBvDyBuj/iAUnzE9mN44CQIPo2gftZl3josraSZM24FvgFsiEfDImuZRnFhWA91Bder8VSK+E5GGX3wo0DM50seMTmJRv7Xt5V4kO8Pj5eW8ceUlxM/B4108BGgsV14IxEKygL+1W/9S6sJLARQCkBFmPbJeKLi7mxX/kXamqDuGXk9WwhZjx52JLjxr5lXsF+a6Ht4CpskyFwibPBhIqGsSpQs9iqZHCRKhdArPF66x5ORt31CTZ0LeYC5ENDUQDsDszk1b2pyX9jtIfpGBqxgtHww==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from OS8PR06MB7663.apcprd06.prod.outlook.com (2603:1096:604:2ac::8)
+ by TY0PR06MB5185.apcprd06.prod.outlook.com (2603:1096:400:21f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.26; Mon, 23 Jun
+ 2025 12:33:45 +0000
+Received: from OS8PR06MB7663.apcprd06.prod.outlook.com
+ ([fe80::46a5:9b06:416e:1e49]) by OS8PR06MB7663.apcprd06.prod.outlook.com
+ ([fe80::46a5:9b06:416e:1e49%3]) with mapi id 15.20.8857.026; Mon, 23 Jun 2025
+ 12:33:45 +0000
+From: Pan Chuang <panchuang@vivo.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Mingcong Bai <jeffbai@aosc.io>,
-	Kexy Biscuit <kexybiscuit@aosc.io>,
-	loongarch@lists.linux.dev,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yao Zi <ziyao@disroot.org>
-Subject: [PATCH] cpufreq: loongson3: Support older SMC firmware
-Date: Mon, 23 Jun 2025 12:33:21 +0000
-Message-ID: <20250623123321.5622-1-ziyao@disroot.org>
+	linux-kernel@vger.kernel.org
+Cc: Yangtao Li <frank.li@vivo.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Pan Chuang <panchuang@vivo.com>
+Subject: [PATCH v6 03/24] thermal/drivers/armada: convert to use devm_request*_irq_probe()
+Date: Mon, 23 Jun 2025 20:33:36 +0800
+Message-Id: <20250623123336.472598-1-panchuang@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TYCPR01CA0175.jpnprd01.prod.outlook.com
+ (2603:1096:400:2b2::15) To OS8PR06MB7663.apcprd06.prod.outlook.com
+ (2603:1096:604:2ac::8)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS8PR06MB7663:EE_|TY0PR06MB5185:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91da6121-d6dd-47af-62e5-08ddb2523225
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|7416014|376014|366016|1800799024|7053199007|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?QVVWOE55YkQxbG5ab0c3RlNGNzduaFNWUzgxOVZDb2tSMmZDNmVCMHowaGt4?=
+ =?utf-8?B?TG1kWm1SSDBLSVdrdkNKS0s0TFhySXVxUEhKS0kwNWs0YjRkZ01RYzMzZVF6?=
+ =?utf-8?B?UGIwMGxpTTlRMkNlQWRQeFNxb1RZTWgzdDNTbFJVbWVUZkI2bm9zYnEwT2dU?=
+ =?utf-8?B?c2RYRjI5UjV3MzdRT1B2RXU1ZkZCd1FoTTZSNkxtSW9FVm5BTTdrZnl1Mmd5?=
+ =?utf-8?B?bVE4a3hIa0ltY05ja3ZCWXVGSG9CS2t4cGpIUysxaWRJbk1jMkFJQW43eVZO?=
+ =?utf-8?B?YWpyNDlCSFdqZzlqMmI2T3FKbzgySWtHQmpXTnJyd2dETzFvbW5GcEU2VTM0?=
+ =?utf-8?B?VWZTcEl4THF5ck9lSnlDYW0zcFRJdzBibG9vbDhiODVjQjdJUVVmUUFFemZ1?=
+ =?utf-8?B?cTNUMFRLM0Izb0hKalJ2cnpxUmordklqc2lCeDZqUXlGcnVINm84OHFUM0dv?=
+ =?utf-8?B?RFg5QWVoMjJUT2wyT3NRc0xyb09CbmNicFpzMU0wWk0yZFdPSFQwSW1yZ29W?=
+ =?utf-8?B?SnA4M3FXelJYMFV3bGdldGJFQ0Y3MWM5elNPWC8rMzlxRDhkbldvekgzeVNj?=
+ =?utf-8?B?N2ZFalV3MGYvS1A0WS85YUNjaU84Q1ErT2FPRGJMdm01Y29ZSnV3QjhhWkho?=
+ =?utf-8?B?ZGpMRzdVdEZJQURlb2Z1ZXZrMDFLTEtBemFMS2pJdHZVblVGV3VoZ2Q3SXVa?=
+ =?utf-8?B?VjZZWDdROVJSNi8yS3d1NlNqUWpJWnpPZGRMUE9XMW51VEVFY2tzYmJSRnJS?=
+ =?utf-8?B?QjNOdmV5YlJESnRYb3ZWenhPRWNyeGdrMlQ2b2dyT2JwdTJpaU1kcHVSM0hY?=
+ =?utf-8?B?aWMreDFRc3owRkJaNVZDRGdZdjVRNTFUOGpyVGlEU0MwWmVjSW9hZG15Wjhv?=
+ =?utf-8?B?OEc1ODIxUklTZzJUVkZ4cEtuM0hqeFUyekdRSVVmcDVFb1ViSTVZRUt3N0ly?=
+ =?utf-8?B?VUxOallrdnBJU0tNOTBGbVV3QmY2ZWJhZWs3V216V0kwcXlFTkxpeXZaRFRT?=
+ =?utf-8?B?L2srbURMSXEybngyZGtCWmFqcVA4czlIUWUvWTBZd2pSdDJEdmJzeHBaY3Jm?=
+ =?utf-8?B?c2UyWTVkUllOWHByV0ViZld1a3AvbjZGWUM4MGRHVlZlNlV4TS9NVXdIQU9P?=
+ =?utf-8?B?RkM3MGtJVlg5M3daQVJtNklMb0dyM2lSdStNZlNLK292VXdIK1Nra0dGWGpR?=
+ =?utf-8?B?TjNlbFlyenBic1FySXc0clFBVllpL2lpZFlkUnJiRG8xUkVvK3JISlMrdnBw?=
+ =?utf-8?B?YzZBbGE4T1ZiczB6cDM4dWVyTndYeFgwYkFEV09Dbm8vRGQvY2JUNWxla3Vr?=
+ =?utf-8?B?ekcwclc0OWVWTUpMMldEbVNjNEtpUlJyQ2Z0VEhrVmEwZ2ZOc0greXFJUERX?=
+ =?utf-8?B?Z20wcGIrUmViNGdzeEw4TFlQcFZ1ZGVQTFFBR0g3dzdYUStaZ1EyREllelFL?=
+ =?utf-8?B?OGJxM3dPb1UrNHdSeDVRTkVhNHZTeGdUZWVGL1RieHIyem9oMmltOGdjV0lX?=
+ =?utf-8?B?WXBqZlNLcWRmM0xRRy83NnJ2S2EzNEt3MFVCeWFBVGVhT0EzSmhnV1ZPNWo3?=
+ =?utf-8?B?eGJFNDd2T1NDakovTE0zM3lPWFIwUXJWRTZJd2lOcUsrUWJxbmhoSUR5NEI4?=
+ =?utf-8?B?Q0lLTUV2a2U3K2RrUk1JN0hkUE40NEo4dEpVUW55emMydnQ0Q1N6YW5qS3NC?=
+ =?utf-8?B?VytEMHIyQWU2NlA4ektNVHllblpTV1BwODNoUFNyemJHUCtuYzRETFhPMFB5?=
+ =?utf-8?B?elR0eURqSnBGOVBONjdxd25FbVEyWGMyTUtQNDZXcVU0dmR0dURCMlZieFhH?=
+ =?utf-8?B?bXhqbDdGRGhoZVJxenJjWEM5UXEvOXdPYzFPb2hJM3NybjhsSUsrYTVPMmoy?=
+ =?utf-8?B?c3hyVDZMOG8wUEtGdEhIUHVHTUhnbW5SOVJLWHB5ZWtkS0dobUhZMFlkUEdY?=
+ =?utf-8?B?M0l3TlEvVGgwdnR1MTUzZDRIN091Ylo0RDNadFZKZ1ZweklLN2hBeUVRcGFK?=
+ =?utf-8?B?cXlURWQwOGtBPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7663.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(376014)(366016)(1800799024)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MTJvekROV0YxQjNCM0U2eHBHWVdqZVBaWFVEWlpOb25PSzNqZ3ZTWXlyb25M?=
+ =?utf-8?B?dnR3bGFNODRYdW9MMmdPQXY3ajdITFZnUEFOdjNIMVVRbi84SXUxL01iWFNn?=
+ =?utf-8?B?cEppcXpNcGgxY2ZRRG1BMGZneFJHcW9Fc2pQdHpENjI0c1J0aVVMcHVOdUtO?=
+ =?utf-8?B?ckFORUFuN3FEcWFIMXhpR3VYaUVYaTU0cC9GMWxrR3hBc3NVRDBCQzRRMHU3?=
+ =?utf-8?B?SzZleFZhRS8veWNiTDF0cEt6Q2VDaXdQcjRBOFBUcU85SFA5Wk9KSkNXUVoy?=
+ =?utf-8?B?K3BDd2hqMWFwL1BYUXRxWG5ZcU5XWVJWaEFvRDZjMmpWbUNHSmZLMFNRanFZ?=
+ =?utf-8?B?Y1BSazRjajl5eEV3NUo3eklRUFplUjJtOHNaZVU5ZjdRWDRUMzhlOEo3OVMv?=
+ =?utf-8?B?STU4RWEyRXFaZURMOXNzSDNpQkJkbU1DOUJ6L2dMM2xPVmdIdFYzUzdGd0Ez?=
+ =?utf-8?B?VkJOWGd2SlU4cnFUelhkVGpGdWl3NldmM1lmYkVJa1hDRDNVNkRtWHpYOElo?=
+ =?utf-8?B?UU5icGtnODRjRDMvcWNHTHdFTnpSUFhEUkU5dFFEalpvOWExMnIrZkdvN0RM?=
+ =?utf-8?B?dEZUZ1dsM3VKZm83OTBiSjNBcXhRdE9ZY2l0YmtLblFUM3daMVJSMWNVWDZ5?=
+ =?utf-8?B?YjVXVlZEaUpPbEcrR3R0ZWprUkNMUmQ4SUp3eHNmVEl4YU52bkJWN2tYT3N4?=
+ =?utf-8?B?cFlad3BaU1hVQWhHZTFiS3l1dkM2TUNjVHQ3bC9IMkJqblZ1TnhJcVRwNW5l?=
+ =?utf-8?B?aGI1NHA1QkhkbFpHcFhDSHBoaUt0c2N2ZXdxUGtxTnUvMmc0M3ZDZ0g5aXpD?=
+ =?utf-8?B?N0t2MkdTbzVzSEcwaGd6ZmFvczFGSHdvUHJocnZnVG83ZlE4QVRpUkd2YWdv?=
+ =?utf-8?B?TjRzTjZhWWFpN1ZaQ1ZJdmlVU3pjN0JuSG1aeklsUVRXeXN3L1RFZEYrcmRz?=
+ =?utf-8?B?elp0bG5lTnFpRmFJS3g2Z3ZIdlEwUWwvM21KZWJXdGRST3gwd2d3NjZNOUpp?=
+ =?utf-8?B?Q0RlVGlVVEUzWTE4dllRWXNLMkY1RjNtZkZzQlozT05wdGNyWFQ0dmlHZG9N?=
+ =?utf-8?B?aGFlZHN1VmU5UTNXN0ExelNoUXZGRlVvWXRTT1hHTVVhcFlmZ2tNWFdPZTlQ?=
+ =?utf-8?B?bC9JTEhBRk9idlBhNTBTcXBVZGhyMkJqa3ZwTGZoNTZycWdZRFptT2NtNEZo?=
+ =?utf-8?B?MGZydmdWM3RwYTdCNG95ajU5VXpwZU81RlhoTzlPV2hlQjhZeVNOTDJYV25n?=
+ =?utf-8?B?WEJLVC9QTGw5NXpUM2x3SlZYMmFGV3E3UDlrZmp5WW5pdjFlMmRvdXF0QkJQ?=
+ =?utf-8?B?QkZnSlVHL2ZyKzN5MTU5TnNBbk54bTZ0VEVkKzBuaUg2c0NidGpJT2E0UDV6?=
+ =?utf-8?B?d0dLN1h0ZEhsM3F6MmF1MU1CTndpNTZ3UzJQNitvV3VVaUI5czFGOUlGY2Jn?=
+ =?utf-8?B?N092NHRUdGVPamxkRzN6SUJUYzcwR0dkTTJOZWorS0FRakJjajFnSDFSczdN?=
+ =?utf-8?B?K2V2anl1cHU4dGVmTFo5Z2ltYVhKakhqa05OeFpqTHEvVmZYWU04eDgxdm9x?=
+ =?utf-8?B?YlllNktUWVZoNVd4Ulg0d1QwMEFtbjE3OEVmODJGd2xkSFRySUJETDhKQUFE?=
+ =?utf-8?B?dGR3Q2FMZFZPMWQzaFhZN2d1Z1RrMUNNQlhwa01QZWZxWm0zQitxR2U0YmQ3?=
+ =?utf-8?B?aXBGcytDcU9IQUV0czYrTGFHMFhHYTJEQzZobFZ3M3lHZWdSd2FiQlY0bzFU?=
+ =?utf-8?B?U0tsSXhXNDVUYWNYa29IWXhQZ3BFWFZ6UGErS3N0L0U0Vy9LSlhZVDJCM3FP?=
+ =?utf-8?B?SWtjM21NbGp2Ujh1TkdaOGJOWm5na1FGcHFtSzQrRW1EUmFCYmVQUjg1SEtr?=
+ =?utf-8?B?RnNmNGc4SFBheXY3Wi9lSzVyZG1xTTFuS0FKT0tZbEpCSmYwbGd4cGVkYTV0?=
+ =?utf-8?B?SW5QdWN5eGhkUzdBdjFiRVRSNytKSDhJTXFJNUsxTDA2a0dpeFAzdVUyZVk4?=
+ =?utf-8?B?ZmVDeHdRVjZxR002dUdzY00xT1U1TnRXYXAwZlRnSzlwNUVjREgzTnJxb0hH?=
+ =?utf-8?B?QjFQUEZTb050d3NEYlF5Z1A5cUhoZVNnSDNYV2hkRXVybnFkYUNST3EwSVJ2?=
+ =?utf-8?Q?ijIWynLNbj8gJbGuKyD0zKV8t?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91da6121-d6dd-47af-62e5-08ddb2523225
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7663.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2025 12:33:45.6997
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OP7XfAsB9qgwPHOxc8EZzioCknezbG1IzpiacUDtSk5P9udBU/cjLkorL+4Jh5PMSf3Z6BlF6o15XRDF+ef14Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5185
 
-SMC firmware found on many on-market LoongArch devices implement a
-different ABI than what has been implemented in the current upstream
-driver. They significantly differ in the following ways:
+From: Yangtao Li <frank.li@vivo.com>
 
-- CMD_GET_VERSION returns 0.
-- There is no known SMC call to obtain corresponding frequencies for
-  each frequency level. The frequency table must therefore be calculated
-  with CPU clock frequency from scratch.
-- There is no known SMC call to obtain the current frequency level.
-- The main processor must determine the set of cores able to run at
-  boost frequency and enable boosting manually.
-- SMC call response format may vary between commands.
+The new devm_request_*irq_probe API prints an error message by default
+when the request fails, and consumers can provide custom error messages.
 
-This patch adds support for the SMC firmware found on these devices,
-which I denoted as "SMC-0" in the driver. Boost support is omitted,
-since determination of cores able to boost requires the driver to couple
-tightly with micro-architecture details.
+Converting drivers to use this API has the following benefits:
 
-For coexistence, I prefixed all SMC-call constants with their SMC
-versions, and introduced "SMC-0"-specific initialization and
-frequency-level-setup rountines.
+  1.More than 2,000 lines of code can be saved by removing redundant error
+  messages in drivers.
 
-Signed-off-by: Yao Zi <ziyao@disroot.org>
+  2.Upper-layer functions can directly return error codes without missing
+  debugging information.
+
+  3.Having proper and consistent information about why the device cannot
+  be used is useful.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Signed-off-by: Pan Chuang <panchuang@vivo.com>
 ---
- drivers/cpufreq/loongson3_cpufreq.c | 287 ++++++++++++++++++++--------
- 1 file changed, 211 insertions(+), 76 deletions(-)
+ drivers/thermal/armada_thermal.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loongson3_cpufreq.c
-index 1e8715ea1b77..b61b2e712694 100644
---- a/drivers/cpufreq/loongson3_cpufreq.c
-+++ b/drivers/cpufreq/loongson3_cpufreq.c
-@@ -16,10 +16,13 @@
- #include <asm/idle.h>
- #include <asm/loongarch.h>
- #include <asm/loongson.h>
-+#include <asm/time.h>
+diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+index 9bff21068721..c8a4f9765dca 100644
+--- a/drivers/thermal/armada_thermal.c
++++ b/drivers/thermal/armada_thermal.c
+@@ -909,15 +909,12 @@ static int armada_thermal_probe(struct platform_device *pdev)
  
- /* Message */
- union smc_message {
- 	u32 value;
-+
-+	/* Generic message type */
- 	struct {
- 		u32 id		: 4;
- 		u32 info	: 4;
-@@ -28,6 +31,15 @@ union smc_message {
- 		u32 extra	: 1;
- 		u32 complete	: 1;
- 	};
-+
-+	/* Returned by SMC0_GET_DVFS_INFO */
-+	struct {
-+		u32 min_level		: 4;
-+		u32 max_level		: 4;
-+		u32 boost_freq		: 16;
-+		u32 normal_core_limit	: 4;
-+		u32 boost_cores		: 4;
-+	};
- };
- 
- /* Command return values */
-@@ -44,136 +56,153 @@ union smc_message {
-  */
- #define CMD_GET_VERSION			0x1
- 
-+/* SMC version 0 service calls */
-+/*
-+ * SMC0_CMD_SET_FREQ_LEVEL - Set frequency level
-+ * Input: CPU ID, level ID
-+ * Output: none
-+ */
-+#define SMC0_CMD_SET_FREQ_LEVEL		0x21
-+
-+/*
-+ * SMC0_CMD_GET_DVFS_INFO - Get DVFS information
-+ * Input: CPU ID
-+ * Output: DVFS Information
-+ */
-+#define SMC0_CMD_GET_DVFS_INFO		0x22
-+
-+/* SMC version 1 service calls */
- /* Feature commands */
- /*
-- * CMD_GET_FEATURE - Get feature state
-+ * SMC1_CMD_GET_FEATURE - Get feature state
-  * Input: feature ID
-  * Output: feature flag
-  */
--#define CMD_GET_FEATURE			0x2
-+#define SMC1_CMD_GET_FEATURE		0x2
- 
- /*
-- * CMD_SET_FEATURE - Set feature state
-+ * SMC1_CMD_SET_FEATURE - Set feature state
-  * Input: feature ID, feature flag
-  * output: none
-  */
--#define CMD_SET_FEATURE			0x3
-+#define SMC1_CMD_SET_FEATURE		0x3
- 
- /* Feature IDs */
--#define FEATURE_SENSOR			0
--#define FEATURE_FAN			1
--#define FEATURE_DVFS			2
-+#define SMC1_FEATURE_SENSOR		0
-+#define SMC1_FEATURE_FAN		1
-+#define SMC1_FEATURE_DVFS		2
- 
- /* Sensor feature flags */
--#define FEATURE_SENSOR_ENABLE		BIT(0)
--#define FEATURE_SENSOR_SAMPLE		BIT(1)
-+#define SMC1_FEATURE_SENSOR_ENABLE	BIT(0)
-+#define SMC1_FEATURE_SENSOR_SAMPLE	BIT(1)
- 
- /* Fan feature flags */
--#define FEATURE_FAN_ENABLE		BIT(0)
--#define FEATURE_FAN_AUTO		BIT(1)
-+#define SMC1_FEATURE_FAN_ENABLE		BIT(0)
-+#define SMC1_FEATURE_FAN_AUTO		BIT(1)
- 
- /* DVFS feature flags */
--#define FEATURE_DVFS_ENABLE		BIT(0)
--#define FEATURE_DVFS_BOOST		BIT(1)
--#define FEATURE_DVFS_AUTO		BIT(2)
--#define FEATURE_DVFS_SINGLE_BOOST	BIT(3)
-+#define SMC1_FEATURE_DVFS_ENABLE	BIT(0)
-+#define SMC1_FEATURE_DVFS_BOOST		BIT(1)
-+#define SMC1_FEATURE_DVFS_AUTO		BIT(2)
-+#define SMC1_FEATURE_DVFS_SINGLE_BOOST	BIT(3)
- 
- /* Sensor commands */
- /*
-- * CMD_GET_SENSOR_NUM - Get number of sensors
-+ * SMC1_CMD_GET_SENSOR_NUM - Get number of sensors
-  * Input: none
-  * Output: number
-  */
--#define CMD_GET_SENSOR_NUM		0x4
-+#define SMC1_CMD_GET_SENSOR_NUM		0x4
- 
- /*
-- * CMD_GET_SENSOR_STATUS - Get sensor status
-+ * SMC1_CMD_GET_SENSOR_STATUS - Get sensor status
-  * Input: sensor ID, type
-  * Output: sensor status
-  */
--#define CMD_GET_SENSOR_STATUS		0x5
-+#define SMC1_CMD_GET_SENSOR_STATUS	0x5
- 
- /* Sensor types */
--#define SENSOR_INFO_TYPE		0
--#define SENSOR_INFO_TYPE_TEMP		1
-+#define SMC1_SENSOR_INFO_TYPE		0
-+#define SMC1_SENSOR_INFO_TYPE_TEMP	1
- 
- /* Fan commands */
- /*
-- * CMD_GET_FAN_NUM - Get number of fans
-+ * SMC1_CMD_GET_FAN_NUM - Get number of fans
-  * Input: none
-  * Output: number
-  */
--#define CMD_GET_FAN_NUM			0x6
-+#define SMC1_CMD_GET_FAN_NUM		0x6
- 
- /*
-- * CMD_GET_FAN_INFO - Get fan status
-+ * SMC1_CMD_GET_FAN_INFO - Get fan status
-  * Input: fan ID, type
-  * Output: fan info
-  */
--#define CMD_GET_FAN_INFO		0x7
-+#define SMC1_CMD_GET_FAN_INFO		0x7
- 
- /*
-- * CMD_SET_FAN_INFO - Set fan status
-+ * SMC1_CMD_SET_FAN_INFO - Set fan status
-  * Input: fan ID, type, value
-  * Output: none
-  */
--#define CMD_SET_FAN_INFO		0x8
-+#define SMC1_CMD_SET_FAN_INFO		0x8
- 
- /* Fan types */
--#define FAN_INFO_TYPE_LEVEL		0
-+#define SMC1_FAN_INFO_TYPE_LEVEL	0
- 
- /* DVFS commands */
- /*
-- * CMD_GET_FREQ_LEVEL_NUM - Get number of freq levels
-+ * SMC1_CMD_GET_FREQ_LEVEL_NUM - Get number of freq levels
-  * Input: CPU ID
-  * Output: number
-  */
--#define CMD_GET_FREQ_LEVEL_NUM		0x9
-+#define SMC1_CMD_GET_FREQ_LEVEL_NUM	0x9
- 
- /*
-- * CMD_GET_FREQ_BOOST_LEVEL - Get the first boost level
-+ * SMC1_CMD_GET_FREQ_BOOST_LEVEL - Get the first boost level
-  * Input: CPU ID
-  * Output: number
-  */
--#define CMD_GET_FREQ_BOOST_LEVEL	0x10
-+#define SMC1_CMD_GET_FREQ_BOOST_LEVEL	0x10
- 
- /*
-- * CMD_GET_FREQ_LEVEL_INFO - Get freq level info
-+ * SMC1_CMD_GET_FREQ_LEVEL_INFO - Get freq level info
-  * Input: CPU ID, level ID
-  * Output: level info
-  */
--#define CMD_GET_FREQ_LEVEL_INFO		0x11
-+#define SMC1_CMD_GET_FREQ_LEVEL_INFO	0x11
- 
- /*
-- * CMD_GET_FREQ_INFO - Get freq info
-+ * SMC1_CMD_GET_FREQ_INFO - Get freq info
-  * Input: CPU ID, type
-  * Output: freq info
-  */
--#define CMD_GET_FREQ_INFO		0x12
-+#define SMC1_CMD_GET_FREQ_INFO		0x12
- 
- /*
-- * CMD_SET_FREQ_INFO - Set freq info
-+ * SMC1_CMD_SET_FREQ_INFO - Set freq info
-  * Input: CPU ID, type, value
-  * Output: none
-  */
--#define CMD_SET_FREQ_INFO		0x13
-+#define SMC1_CMD_SET_FREQ_INFO		0x13
- 
- /* Freq types */
--#define FREQ_INFO_TYPE_FREQ		0
--#define FREQ_INFO_TYPE_LEVEL		1
-+#define SMC1_FREQ_INFO_TYPE_FREQ	0
-+#define SMC1_FREQ_INFO_TYPE_LEVEL	1
- 
--#define FREQ_MAX_LEVEL			16
-+#define SMC1_FREQ_MAX_LEVEL		16
- 
- struct loongson3_freq_data {
--	unsigned int def_freq_level;
-+	unsigned int min_freq_level, def_freq_level;
- 	struct cpufreq_frequency_table table[];
- };
- 
- static struct mutex cpufreq_mutex[MAX_PACKAGES];
--static struct cpufreq_driver loongson3_cpufreq_driver;
-+static struct cpufreq_driver *loongson3_cpufreq_current_driver;
- static DEFINE_PER_CPU(struct loongson3_freq_data *, freq_data);
- 
--static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 extra)
-+static inline int do_service_request_raw(u32 id, u32 info, u32 cmd, u32 val,
-+					 u32 extra, union smc_message *raw)
- {
- 	int retries;
- 	unsigned int cpu = raw_smp_processor_id();
-@@ -214,29 +243,90 @@ static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 ext
- 
- 	mutex_unlock(&cpufreq_mutex[package]);
- 
-+	if (raw)
-+		*raw = msg;
-+
- 	return msg.val;
- }
- 
--static unsigned int loongson3_cpufreq_get(unsigned int cpu)
-+#define do_service_request(id, info, cmd, val, extra) \
-+	do_service_request_raw(id, info, cmd, val, extra, NULL)
-+
-+static unsigned int loongson3_cpufreq_smc1_get(unsigned int cpu)
- {
- 	int ret;
- 
--	ret = do_service_request(cpu, FREQ_INFO_TYPE_FREQ, CMD_GET_FREQ_INFO, 0, 0);
-+	ret = do_service_request(cpu, SMC1_FREQ_INFO_TYPE_FREQ,
-+				 SMC1_CMD_GET_FREQ_INFO, 0, 0);
- 
- 	return ret * KILO;
- }
- 
--static int loongson3_cpufreq_target(struct cpufreq_policy *policy, unsigned int index)
-+static int loongson3_cpufreq_smc0_target(struct cpufreq_policy *policy, unsigned int index)
-+{
-+	unsigned int cpu = policy->cpu;
-+	int ret;
-+
-+	index += per_cpu(freq_data, cpu)->min_freq_level;
-+
-+	ret = do_service_request(cpu_data[cpu].core, index, SMC0_CMD_SET_FREQ_LEVEL,
-+				 0, 0);
-+
-+	return (ret >= 0) ? 0 : ret;
-+}
-+
-+static int loongson3_cpufreq_smc1_target(struct cpufreq_policy *policy, unsigned int index)
- {
- 	int ret;
- 
- 	ret = do_service_request(cpu_data[policy->cpu].core,
--				 FREQ_INFO_TYPE_LEVEL, CMD_SET_FREQ_INFO, index, 0);
-+				 SMC1_FREQ_INFO_TYPE_LEVEL, SMC1_CMD_SET_FREQ_INFO, index, 0);
- 
- 	return (ret >= 0) ? 0 : ret;
- }
- 
--static int configure_freq_table(int cpu)
-+static int configure_smc0_freq_table(int cpu)
-+{
-+	struct platform_device *pdev = cpufreq_get_driver_data();
-+	struct loongson3_freq_data *data;
-+	int ret, freq_level, i;
-+	union smc_message msg;
-+
-+	if (per_cpu(freq_data, cpu))
-+		return 0;
-+
-+	ret = do_service_request_raw(cpu, 0, SMC0_CMD_GET_DVFS_INFO, 0, 0, &msg);
-+	if (ret < 0)
-+		return ret;
-+
-+	freq_level = msg.max_level - msg.min_level + 1;
-+	data = devm_kzalloc(&pdev->dev, struct_size(data, table, freq_level + 1),
-+			    GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->def_freq_level = 0;
-+	data->min_freq_level = msg.min_level;
-+
-+	for (i = 0; i < freq_level; i++) {
-+		unsigned long frequency;
-+
-+		frequency = cpu_clock_freq / KILO;
-+		frequency = frequency * (freq_level - i) / freq_level;
-+
-+		data->table[i].frequency = frequency;
-+		data->table[i].flags = 0;
-+	}
-+
-+	data->table[freq_level].frequency = CPUFREQ_TABLE_END;
-+	data->table[freq_level].flags = 0;
-+
-+	per_cpu(freq_data, cpu) = data;
-+
-+	return 0;
-+}
-+
-+static int configure_smc1_freq_table(int cpu)
- {
- 	int i, ret, boost_level, max_level, freq_level;
- 	struct platform_device *pdev = cpufreq_get_driver_data();
-@@ -245,17 +335,17 @@ static int configure_freq_table(int cpu)
- 	if (per_cpu(freq_data, cpu))
- 		return 0;
- 
--	ret = do_service_request(cpu, 0, CMD_GET_FREQ_LEVEL_NUM, 0, 0);
-+	ret = do_service_request(cpu, 0, SMC1_CMD_GET_FREQ_LEVEL_NUM, 0, 0);
- 	if (ret < 0)
- 		return ret;
- 	max_level = ret;
- 
--	ret = do_service_request(cpu, 0, CMD_GET_FREQ_BOOST_LEVEL, 0, 0);
-+	ret = do_service_request(cpu, 0, SMC1_CMD_GET_FREQ_BOOST_LEVEL, 0, 0);
- 	if (ret < 0)
- 		return ret;
- 	boost_level = ret;
- 
--	freq_level = min(max_level, FREQ_MAX_LEVEL);
-+	freq_level = min(max_level, SMC1_FREQ_MAX_LEVEL);
- 	data = devm_kzalloc(&pdev->dev, struct_size(data, table, freq_level + 1), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
-@@ -263,7 +353,8 @@ static int configure_freq_table(int cpu)
- 	data->def_freq_level = boost_level - 1;
- 
- 	for (i = 0; i < freq_level; i++) {
--		ret = do_service_request(cpu, FREQ_INFO_TYPE_FREQ, CMD_GET_FREQ_LEVEL_INFO, i, 0);
-+		ret = do_service_request(cpu, SMC1_FREQ_INFO_TYPE_FREQ,
-+					 SMC1_CMD_GET_FREQ_LEVEL_INFO, i, 0);
- 		if (ret < 0) {
- 			devm_kfree(&pdev->dev, data);
+ 	/* The overheat interrupt feature is not mandatory */
+ 	if (irq > 0) {
+-		ret = devm_request_threaded_irq(&pdev->dev, irq,
+-						armada_overheat_isr,
+-						armada_overheat_isr_thread,
+-						0, NULL, priv);
+-		if (ret) {
+-			dev_err(&pdev->dev, "Cannot request threaded IRQ %d\n",
+-				irq);
++		ret = devm_request_threaded_irq_probe(&pdev->dev, irq,
++						      armada_overheat_isr,
++						      armada_overheat_isr_thread,
++						      0, NULL, priv, NULL);
++		if (ret)
  			return ret;
-@@ -281,32 +372,56 @@ static int configure_freq_table(int cpu)
- 	return 0;
- }
- 
--static int loongson3_cpufreq_cpu_init(struct cpufreq_policy *policy)
-+static void loongson3_cpufreq_init_data(struct cpufreq_policy *policy)
- {
--	int i, ret, cpu = policy->cpu;
--
--	ret = configure_freq_table(cpu);
--	if (ret < 0)
--		return ret;
-+	struct loongson3_freq_data *data;
-+	int i, cpu = policy->cpu;
- 
-+	data = per_cpu(freq_data, cpu);
- 	policy->cpuinfo.transition_latency = 10000;
--	policy->freq_table = per_cpu(freq_data, cpu)->table;
--	policy->suspend_freq = policy->freq_table[per_cpu(freq_data, cpu)->def_freq_level].frequency;
-+	policy->freq_table = data->table;
-+	policy->suspend_freq = data->table[data->def_freq_level].frequency;
- 	cpumask_copy(policy->cpus, topology_sibling_cpumask(cpu));
- 
- 	for_each_cpu(i, policy->cpus) {
- 		if (i != cpu)
- 			per_cpu(freq_data, i) = per_cpu(freq_data, cpu);
- 	}
-+}
-+
-+static int loongson3_cpufreq_cpu_smc0_init(struct cpufreq_policy *policy)
-+{
-+	int ret, cpu = policy->cpu;
-+
-+	ret = configure_smc0_freq_table(cpu);
-+	if (ret < 0)
-+		return ret;
-+
-+	loongson3_cpufreq_init_data(policy);
-+
-+	return 0;
-+}
-+
-+static int loongson3_cpufreq_cpu_smc1_init(struct cpufreq_policy *policy)
-+{
-+	int ret, cpu = policy->cpu;
-+
-+	ret = configure_smc1_freq_table(cpu);
-+	if (ret < 0)
-+		return ret;
-+
-+	loongson3_cpufreq_init_data(policy);
- 
- 	return 0;
- }
- 
- static void loongson3_cpufreq_cpu_exit(struct cpufreq_policy *policy)
- {
-+	unsigned int def_freq_level;
- 	int cpu = policy->cpu;
- 
--	loongson3_cpufreq_target(policy, per_cpu(freq_data, cpu)->def_freq_level);
-+	def_freq_level = per_cpu(freq_data, cpu)->def_freq_level;
-+	loongson3_cpufreq_current_driver->target_index(policy, def_freq_level);
- }
- 
- static int loongson3_cpufreq_cpu_online(struct cpufreq_policy *policy)
-@@ -319,15 +434,27 @@ static int loongson3_cpufreq_cpu_offline(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static struct cpufreq_driver loongson3_cpufreq_driver = {
-+static struct cpufreq_driver loongson3_cpufreq_smc0_driver = {
- 	.name = "loongson3",
- 	.flags = CPUFREQ_CONST_LOOPS,
--	.init = loongson3_cpufreq_cpu_init,
-+	.init = loongson3_cpufreq_cpu_smc0_init,
- 	.exit = loongson3_cpufreq_cpu_exit,
- 	.online = loongson3_cpufreq_cpu_online,
- 	.offline = loongson3_cpufreq_cpu_offline,
--	.get = loongson3_cpufreq_get,
--	.target_index = loongson3_cpufreq_target,
-+	.target_index = loongson3_cpufreq_smc0_target,
-+	.verify = cpufreq_generic_frequency_table_verify,
-+	.suspend = cpufreq_generic_suspend,
-+};
-+
-+static struct cpufreq_driver loongson3_cpufreq_smc1_driver = {
-+	.name = "loongson3",
-+	.flags = CPUFREQ_CONST_LOOPS,
-+	.init = loongson3_cpufreq_cpu_smc1_init,
-+	.exit = loongson3_cpufreq_cpu_exit,
-+	.online = loongson3_cpufreq_cpu_online,
-+	.offline = loongson3_cpufreq_cpu_offline,
-+	.get = loongson3_cpufreq_smc1_get,
-+	.target_index = loongson3_cpufreq_smc1_target,
- 	.verify = cpufreq_generic_frequency_table_verify,
- 	.set_boost = cpufreq_boost_set_sw,
- 	.suspend = cpufreq_generic_suspend,
-@@ -335,7 +462,7 @@ static struct cpufreq_driver loongson3_cpufreq_driver = {
- 
- static int loongson3_cpufreq_probe(struct platform_device *pdev)
- {
--	int i, ret;
-+	int i, ret, version;
- 
- 	for (i = 0; i < MAX_PACKAGES; i++) {
- 		ret = devm_mutex_init(&pdev->dev, &cpufreq_mutex[i]);
-@@ -343,18 +470,26 @@ static int loongson3_cpufreq_probe(struct platform_device *pdev)
- 			return ret;
+-		}
  	}
  
--	ret = do_service_request(0, 0, CMD_GET_VERSION, 0, 0);
--	if (ret <= 0)
-+	version = do_service_request(0, 0, CMD_GET_VERSION, 0, 0);
-+	if (version < 0)
- 		return -EPERM;
- 
--	ret = do_service_request(FEATURE_DVFS, 0, CMD_SET_FEATURE,
--				 FEATURE_DVFS_ENABLE | FEATURE_DVFS_BOOST, 0);
--	if (ret < 0)
--		return -EPERM;
-+	pr_info("loongson3_cpufreq: firmware version %d\n", version);
-+
-+	if (version == 0) {
-+		loongson3_cpufreq_current_driver = &loongson3_cpufreq_smc0_driver;
-+	} else {
-+		ret = do_service_request(SMC1_FEATURE_DVFS, 0, SMC1_CMD_SET_FEATURE,
-+					 SMC1_FEATURE_DVFS_ENABLE | SMC1_FEATURE_DVFS_BOOST, 0);
-+		if (ret < 0)
-+			return -EPERM;
-+
-+		loongson3_cpufreq_current_driver = &loongson3_cpufreq_smc1_driver;
-+	}
- 
--	loongson3_cpufreq_driver.driver_data = pdev;
-+	loongson3_cpufreq_current_driver->driver_data = pdev;
- 
--	ret = cpufreq_register_driver(&loongson3_cpufreq_driver);
-+	ret = cpufreq_register_driver(loongson3_cpufreq_current_driver);
- 	if (ret)
- 		return ret;
- 
-@@ -365,7 +500,7 @@ static int loongson3_cpufreq_probe(struct platform_device *pdev)
- 
- static void loongson3_cpufreq_remove(struct platform_device *pdev)
- {
--	cpufreq_unregister_driver(&loongson3_cpufreq_driver);
-+	cpufreq_unregister_driver(loongson3_cpufreq_current_driver);
- }
- 
- static struct platform_device_id cpufreq_id_table[] = {
+ 	/*
 -- 
-2.49.0
+2.39.0
 
 
