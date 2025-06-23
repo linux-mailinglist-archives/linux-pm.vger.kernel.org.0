@@ -1,367 +1,99 @@
-Return-Path: <linux-pm+bounces-29297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29298-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89BCAAE3F7D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:16:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 230A4AE3FE8
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:25:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06A3E3A2F69
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:11:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E13B189592D
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7422526A08E;
-	Mon, 23 Jun 2025 12:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dqaQ63Oe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13AC4248F5A;
+	Mon, 23 Jun 2025 12:19:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4975F267B74;
-	Mon, 23 Jun 2025 12:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F1E248F40;
+	Mon, 23 Jun 2025 12:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750680135; cv=none; b=DkGtErDNN8BpIGYLoiRA1e+MPB6Kj+Uu+uaatJLn6kNev51SMc1XyLdFXskrWhdL579wCm6nRKmty860nN0pRA5RHUMyGr+DdYUeQSamRIQozvAFBk8UjESWzCbtAJcBQ4MT82odEYHxr7pekH+3AOjE1CONtbGPqpsxv1nXx8M=
+	t=1750681162; cv=none; b=bFUS/ePCG7wwvmNTh7yZAzRF07iq2CVUekQVZgtqRE0dl02lyWj+4LG6Z6VrTQzlPZkXTgUIvCt6tO0DsSn6p1gUv2HeN8SyoO1Zk3eMklyfJ/QXg0bbJhnPIxwd0XhzkDD9V5LCygctMGYZgGhKF5YKZilFYYhqIjVAYjhWd6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750680135; c=relaxed/simple;
-	bh=PHnrPrLPZrEAkmVxB1XCxlvMbcWS8VMEtIIdU8TdwDY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jGSs/z96T0GgRb7/WBOso4HbXeXNGscqpCgi5+mQ3rdNfc9OuFQlJmOM0lr6HG7zKAVkYQFisNq93XdXMytkxszyYWPvYquqUHzjehC0iVHYPwBvt7N+Id2nBlX9RCN23NUO9CUa1pAea9ftc2UsGbF+UJX8FXJkjDTwHpzganw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dqaQ63Oe; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1750680131;
-	bh=PHnrPrLPZrEAkmVxB1XCxlvMbcWS8VMEtIIdU8TdwDY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dqaQ63OeW15GeUeHSetEPOuh7EAifyIRSD0MTjW7pg/eDc8AE2aaquyumN4RJnJSa
-	 GKzcyRaEP8VfS9kEjBdyOxeGG/5dxupZ5F8OWeWhzFWBgYDgBPIRn/wTwD5AC69eQc
-	 K95hnZuIF/v8c8dYlkyqTGk3/yDw08W1KVgALUzYT24x71lalb1LakIUEYMZqNBM+y
-	 huOZO3mJsC23Q0HTeUCa53+G6XnDKZtx6hbFNsBRqdaV7CoyUyNalVOKQn1jUPBAFx
-	 y9NlzBI5rNkIBN8kobU76Qd6EDFDXHyvQTjsFRNbE/fX0bqfurSk/EcexpGjl4EPGK
-	 QMAnuCygfliAA==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	s=arc-20240116; t=1750681162; c=relaxed/simple;
+	bh=shpeglIn36FKeBIw85IotOo/0D7/oiy7H7OZihX18HQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FCawbq99nzL2V+86H8M5QncpUBeOTMfqagSmF3OC3RU9ppl5IWGtd2+cqlnhExU1cQhYcG8WAkUA44wq9/fx/grXUaN6B3QoQhnyOQ/dOwioN2Sfq7Pu4XllfZlyGSPOHS63LZs6cHMQ8u2/rw/F9YHa2uaigFkxW+InHljqzEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id E04AD17E3659;
-	Mon, 23 Jun 2025 14:02:10 +0200 (CEST)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: linux-mediatek@lists.infradead.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	ulf.hansson@linaro.org,
-	y.oudjana@protonmail.com,
-	fshao@chromium.org,
-	wenst@chromium.org,
-	lihongbo22@huawei.com,
-	mandyjh.liu@mediatek.com,
-	mbrugger@suse.com,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	kernel@collabora.com
-Subject: [PATCH v1 13/13] pmdomain: mediatek: Add support for MT8196 HFRPSYS power domains
-Date: Mon, 23 Jun 2025 14:01:54 +0200
-Message-ID: <20250623120154.109429-14-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250623120154.109429-1-angelogioacchino.delregno@collabora.com>
-References: <20250623120154.109429-1-angelogioacchino.delregno@collabora.com>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 933EE2C06663;
+	Mon, 23 Jun 2025 14:19:09 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 8120B40FCC; Mon, 23 Jun 2025 14:19:09 +0200 (CEST)
+Date: Mon, 23 Jun 2025 14:19:09 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 2/2] PCI: Fix runtime PM usage count underflow on
+ device unplug
+Message-ID: <aFlGPaITSa3IAB8s@wunner.de>
+References: <20250620025535.3425049-3-superm1@kernel.org>
+ <aFcCaw_IZr-JuUYY@wunner.de>
+ <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
+ <aFeJ83O9PRUrM2Ir@wunner.de>
+ <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
+ <aFj3jUAM42lSyfpe@wunner.de>
+ <aFkEI2jXg7YiwL7b@wunner.de>
+ <aFkm8njX-NEIiTcv@wunner.de>
+ <CAJZ5v0jfuAjhskbwG1XHByGpdgP1pSHwVSMnz3jcOy7VDyjnRQ@mail.gmail.com>
+ <7dde3873-4239-4be8-801a-dcf37472664d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7dde3873-4239-4be8-801a-dcf37472664d@kernel.org>
 
-Add support for the HFRPSYS Multimedia power domains found in the
-MediaTek MT8196 Chromebook SoC.
-Those power domains are all managed by the Hardware Voter MCU.
+On Mon, Jun 23, 2025 at 06:37:33AM -0500, Mario Limonciello wrote:
+> On 6/23/25 5:11 AM, Rafael J. Wysocki wrote:
+> > On Mon, Jun 23, 2025 at 12:05???PM Lukas Wunner <lukas@wunner.de> wrote:
+> > > On Mon, Jun 23, 2025 at 09:37:07AM +0200, Lukas Wunner wrote:
+> > > > On Mon, Jun 23, 2025 at 08:43:25AM +0200, Lukas Wunner wrote:
+> > > > > On Sun, Jun 22, 2025 at 01:39:26PM -0500, Mario Limonciello wrote:
+> > > > > > I did this check and yes specifically on this PCIe port with
+> > > > > > the underflow the d3 possible lookup returns false during
+> > > > > > pcie_portdrv_remove().  It returns true during
+> > > > > > pcie_portdrv_probe().
+> > > > > 
+> > > > > That's not supposed to happen.  The expectation is that
+> > > > > pci_bridge_d3_possible() always returns the same value.
+> > > > 
+> > > > I'm wondering if the patch below fixes the issue?
+> 
+> Yes this works, thanks!
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/pmdomain/mediatek/mt8196-pm-domains.h | 239 ++++++++++++++++++
- drivers/pmdomain/mediatek/mtk-pm-domains.c    |   4 +
- 2 files changed, 243 insertions(+)
+Could you still check what the value read from the Slot Capabilities
+register is in pciehp_is_native() (if the patch is not applied)?
 
-diff --git a/drivers/pmdomain/mediatek/mt8196-pm-domains.h b/drivers/pmdomain/mediatek/mt8196-pm-domains.h
-index ce8d594c46f8..2e4b28720659 100644
---- a/drivers/pmdomain/mediatek/mt8196-pm-domains.h
-+++ b/drivers/pmdomain/mediatek/mt8196-pm-domains.h
-@@ -369,6 +369,239 @@ static const struct scpsys_hwv_domain_data scpsys_hwv_domain_data_mt8196[] = {
- 	},
- };
- 
-+static const struct scpsys_hwv_domain_data hfrpsys_hwv_domain_data_mt8196[] = {
-+	[MT8196_POWER_DOMAIN_VDE0] = {
-+		.name = "vde0",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 7,
-+	},
-+	[MT8196_POWER_DOMAIN_VDE1] = {
-+		.name = "vde1",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 8,
-+	},
-+	[MT8196_POWER_DOMAIN_VDE_VCORE0] = {
-+		.name = "vde-vcore0",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 9,
-+	},
-+	[MT8196_POWER_DOMAIN_VEN0] = {
-+		.name = "ven0",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 10,
-+	},
-+	[MT8196_POWER_DOMAIN_VEN1] = {
-+		.name = "ven1",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 11,
-+	},
-+	[MT8196_POWER_DOMAIN_VEN2] = {
-+		.name = "ven2",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 12,
-+	},
-+	[MT8196_POWER_DOMAIN_DISP_VCORE] = {
-+		.name = "disp-vcore",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 24,
-+	},
-+	[MT8196_POWER_DOMAIN_DIS0_DORMANT] = {
-+		.name = "dis0-dormant",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 25,
-+	},
-+	[MT8196_POWER_DOMAIN_DIS1_DORMANT] = {
-+		.name = "dis1-dormant",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 26,
-+	},
-+	[MT8196_POWER_DOMAIN_OVL0_DORMANT] = {
-+		.name = "ovl0-dormant",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 27,
-+	},
-+	[MT8196_POWER_DOMAIN_OVL1_DORMANT] = {
-+		.name = "ovl1-dormant",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 28,
-+	},
-+	[MT8196_POWER_DOMAIN_DISP_EDPTX_DORMANT] = {
-+		.name = "disp-edptx-dormant",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 29,
-+	},
-+	[MT8196_POWER_DOMAIN_DISP_DPTX_DORMANT] = {
-+		.name = "disp-dptx-dormant",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 30,
-+	},
-+	[MT8196_POWER_DOMAIN_MML0_SHUTDOWN] = {
-+		.name = "mml0-shutdown",
-+		.set = 0x0218,
-+		.clr = 0x021C,
-+		.done = 0x141C,
-+		.en = 0x1410,
-+		.set_sta = 0x146C,
-+		.clr_sta = 0x1470,
-+		.setclr_bit = 31,
-+	},
-+	[MT8196_POWER_DOMAIN_MML1_SHUTDOWN] = {
-+		.name = "mml1-shutdown",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 0,
-+	},
-+	[MT8196_POWER_DOMAIN_MM_INFRA0] = {
-+		.name = "mm-infra0",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 1,
-+	},
-+	[MT8196_POWER_DOMAIN_MM_INFRA1] = {
-+		.name = "mm-infra1",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 2,
-+	},
-+	[MT8196_POWER_DOMAIN_MM_INFRA_AO] = {
-+		.name = "mm-infra-ao",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 3,
-+	},
-+	[MT8196_POWER_DOMAIN_CSI_BS_RX] = {
-+		.name = "csi-bs-rx",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 5,
-+	},
-+	[MT8196_POWER_DOMAIN_CSI_LS_RX] = {
-+		.name = "csi-ls-rx",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 6,
-+	},
-+	[MT8196_POWER_DOMAIN_DSI_PHY0] = {
-+		.name = "dsi-phy0",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 7,
-+	},
-+	[MT8196_POWER_DOMAIN_DSI_PHY1] = {
-+		.name = "dsi-phy1",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 8,
-+	},
-+	[MT8196_POWER_DOMAIN_DSI_PHY2] = {
-+		.name = "dsi-phy2",
-+		.set = 0x0220,
-+		.clr = 0x0224,
-+		.done = 0x142C,
-+		.en = 0x1420,
-+		.set_sta = 0x1474,
-+		.clr_sta = 0x1478,
-+		.setclr_bit = 9,
-+	},
-+};
-+
- static const struct scpsys_soc_data mt8196_scpsys_data = {
- 	.domains_data = scpsys_domain_data_mt8196,
- 	.num_domains = ARRAY_SIZE(scpsys_domain_data_mt8196),
-@@ -383,4 +616,10 @@ static const struct scpsys_soc_data mt8196_scpsys_hwv_data = {
- 	.type = SCPSYS_MTCMOS_TYPE_HW_VOTER,
- };
- 
-+static const struct scpsys_soc_data mt8196_hfrpsys_hwv_data = {
-+	.hwv_domains_data = hfrpsys_hwv_domain_data_mt8196,
-+	.num_hwv_domains = ARRAY_SIZE(hfrpsys_hwv_domain_data_mt8196),
-+	.type = SCPSYS_MTCMOS_TYPE_HW_VOTER,
-+};
-+
- #endif /* __SOC_MEDIATEK_MT8196_PM_DOMAINS_H */
-diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-index bff78775baf7..6b807fc6ee72 100644
---- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-+++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-@@ -1158,6 +1158,10 @@ static const struct of_device_id scpsys_of_match[] = {
- 		.compatible = "mediatek,mt8196-power-controller",
- 		.data = &mt8196_scpsys_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt8196-hwv-hfrp-power-controller",
-+		.data = &mt8196_hfrpsys_hwv_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8196-hwv-scp-power-controller",
- 		.data = &mt8196_scpsys_hwv_data,
--- 
-2.49.0
+I guess it must be something else than "all ones" and I'd like to
+understand why.
 
+Thanks,
+
+Lukas
 
