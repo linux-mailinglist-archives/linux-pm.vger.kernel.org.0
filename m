@@ -1,81 +1,80 @@
-Return-Path: <linux-pm+bounces-29395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29396-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 664F8AE4AFE
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 18:32:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0919AE4B2D
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 18:41:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43C1D164E59
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 16:31:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EC7F1885995
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 16:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99CCE299931;
-	Mon, 23 Jun 2025 16:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD58E28EBF1;
+	Mon, 23 Jun 2025 16:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qHnlrAH6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PZutgFjj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4914266EE7
-	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 16:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2E7275B0E
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 16:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750696297; cv=none; b=Tyf6z2hWyTK7H1IAg1jPHCjOkOCDQJBHkUFj2w/tmme8UTQ3Q2yP3XabdhZry3pbOLHrmbkWTcwnXCoZwXKae6hKZ07b6m1PGBHYJvHn6VH0qC1vORBWHvlKAcA5JiTFEI+gxRv+ocPczhIRqu6C1uzd0dCoV80TyWS4TClJ+jE=
+	t=1750696424; cv=none; b=aTwd1+kJ3WjKRb4aIxbg4SqUkHtxLEPNvJJHJV/G7WW8XCv49lnv0o/t4EFjlPxgJgLIMtt2g0dwjo6xACfS5zQs9PdPy/K8MgJCBDe8cXocmSU3L7Z2fYdMpxx2nhuRDOhECGy04vB+YMvXUUH666Ig56N3/rUNZNLUaSfT6BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750696297; c=relaxed/simple;
-	bh=8KsekKS5aRcVIvVUBtntQtfWkhVyoUlhEiE174K9srA=;
+	s=arc-20240116; t=1750696424; c=relaxed/simple;
+	bh=bUrESiPRUdiT3aZBD/7m90ntrZOEQs+uNbXB0hfmyLE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DX7BujLE0u0NlnGGTDxjQbLDFrhsyrzyAJZeV2AVDFofsPP40h7/jT5LYh6oxovPZqgsQsDBTSBgOrDS9K+yvDUd619UNtEP+l+ze1Mb8HUUh49Cw3RhhGxGCXH8CqleLHp00aFqMQ9yipsIk7e3FmSzoJeDWROeUtlAdf/RxYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qHnlrAH6; arc=none smtp.client-ip=209.85.221.47
+	 In-Reply-To:Content-Type; b=sAUjyqyjNspdyErAeB5qOAzEbJ1hTGl093tuI2CJT4qH3UAe38NsTQnG1TOSZJZ2sXq/bvYO4D48ZVgsaXNb65HdHEhoVxk2k/gyWODwS7uJtpMH9J2NPnkvJQ2RggaZgUY9fJAgwtwf7wLkfiSj+fJo74GYzxDrVQ022CCYYD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PZutgFjj; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso2471563f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 09:31:35 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-607ec30df2bso8848741a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 09:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750696294; x=1751301094; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750696421; x=1751301221; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0j8AmL2vgCPrh67szF4XCY9cmGpFOza5ajW2zlzTb44=;
-        b=qHnlrAH65AWvyLf+ffRGDHFQlQ8UXXXXodW7rITXKEKgsBWRUUJ01Pt101tLfNdNgz
-         druRmSX5U+bCqNoLkySpbRnNjBEvGhtqWEA6sZgE3faNVC1MOopFIt7aJgpedENnbgA+
-         vLhT/oF+iV4NNJl7ZENbUwAqvYWH3iddwhnanR5l4wIgKj8vv6iI+GCZR6dQ89GS88lQ
-         4HUQJcYLu1l64TswOFIPMbymXvof9EgYaCIw8NBp8I3/Eqx4VOXqXjnURJXJZOFsUk3g
-         05y1QuuzYM81dH5UL1YrQufYoHDEwKgH0zffz4y/y13dXfC9GgNjUFU4R5cTo53tNQSx
-         Q+yw==
+        bh=XXbXOUYB6IBOkueWjAb33r4P7mb75EnqewGXePwUiUc=;
+        b=PZutgFjjE1wzaRvF4ETc7QoGsoTEEUDKTVkzYNkXkoYszUGKlGsHGUSRk0enpvArNS
+         lTBA5d1Lu3ZQzGDN40009BUpWDw6RkspNHAGO6JqtGIm18QjpVY+3TtjQNNvkgVphkSG
+         H7jDfH0fdHjyXxjwmBa+N14Ox3L3AiNgJtP7sYxJ4qNdTmAXRuGIb7/S64sQNPzergW/
+         Yfftagh5OSoY8a3EdnW5XBg9uu6wVZ7W3hD78jqK0iHYkiypuEKEvVN38u9uJqkiUe6/
+         2uoTIFnPBTDwdaYuYC7XLc3qbw5mEbrVHDS35AOxNiIdsuSW9N2593UYBiXv8630J4Ai
+         WB7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750696294; x=1751301094;
+        d=1e100.net; s=20230601; t=1750696421; x=1751301221;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0j8AmL2vgCPrh67szF4XCY9cmGpFOza5ajW2zlzTb44=;
-        b=mfPyBXRCuXFhDHlmZw7uDe7CYv2zcuveUn5J4iymVkp1svQrTuj01SD/xK+WnbM+M1
-         YWfrq5d/smFxAh3htSyUx3U1y/BHbNT3qXg2uQTEZOyLjF8n6U3n2UObYojJRjcT5nFM
-         matqaUC9EDfGfhLFmkDgFLNlaCk0I1CPHjD4LndL3sVWD/Uq7LCYR23K060iPui+hplv
-         6v6zki/JnH+hGYTh5A44+RkHWPKEDBSR9itbeXu+1+ZcgI8kJ2r+EXVxBGav4JXGlBy7
-         F2E4kkh5BEzv5Z2SyuXo9mU0ow1scmwAlLqHVT8Yo/zrxeZXIu8BweImd+bmqtfzDOkO
-         illw==
-X-Forwarded-Encrypted: i=1; AJvYcCVr0Xo6NNlh5AhK0C0QYSjC5qoJV1GZwKFJerVi1npnxw2O1/uC6lC2BRaH6eXQnJwjjUlVztkudQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGz9eRswPjUHJeg5LvLCNYENzAhjcLCc0SGf3b7X4mFpckHnZP
-	muMQAJWP2nJ0E3jCKfnwnKPrOLTGrED3fsmKznncZeMHKzcM/d/n9ydRYoyqYN04swxJJJ7k86W
-	EUwPs
-X-Gm-Gg: ASbGncsr/C0tFvoFOP+GYPKT266SjbffAKVM38t42S9agSxpoXO/glcbSs33gGaKLya
-	0Qj8rhy9YDxleGTsA0v5xP/MGm5wRlUQpPxh33QyJ5xAlYz7aVIatq3XHefiWldx31cLsbnVASb
-	0IMHvqejHqk/fuZ6+P5ihkxKRVh9zKWGKv7cVujTMQ3kaE0OuCVesRb74shhZtAHkkket7hAc/q
-	tRJ9ky1lcj+cUojMb9SDfRhzKn+RDDenPi2XZn3tpw8CSN/+6PrMt8GtK5ullFcD5HofjSjVCQT
-	wxByAAp6hE+q8Mm0B/JaIEdlBo5+MQ2gaR8IEtUc/c0wpfQnkNfVB7AZfYGibLOQsg2SV4RGQQk
-	=
-X-Google-Smtp-Source: AGHT+IFtp9SY06hL7tr/NWr3bIhdcZjACNg+h+Rg5V3jKzfHdcvWGYIa/oooWJLbVLfw9PBe9ecQTg==
-X-Received: by 2002:adf:9dc8:0:b0:3a3:63d3:369a with SMTP id ffacd0b85a97d-3a6d130ace1mr9778129f8f.25.1750696293870;
-        Mon, 23 Jun 2025 09:31:33 -0700 (PDT)
+        bh=XXbXOUYB6IBOkueWjAb33r4P7mb75EnqewGXePwUiUc=;
+        b=qNI9nQFnJL2unz5tUtQgKe6kQ6HVq9jslviUwO7qqFaSjSQq2oF8oj2MbjJmcQzwpC
+         ZzWzQxDUnvMQ6ku9aWrvgaHZRvQai+o2JnlvgdoS3C+8x+Ci5XHSPogTWGMHzC2TmPRS
+         XJNv4H9zWQgkl213syI2ZE0aBsX0viOl4HmHpJxv7TMamfpxmP8QeFHGl3xq7nm7iy/K
+         ozlOcT2yduZXpJtWw/NhtKgorEl/iUVCFaIEQXb6DQ7lV20lDVReAncssaNKoyb9ertP
+         KsyMHSBJXYi2M0qsn45WxAQAqhnu28rxFF2c6wR2O81kFfrePFSxJFXrFVPcSR7ReiRx
+         Qs5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX8UMxeVt7QIyBk2nN9qpLwLW/gPIMV3NvEluCLAj4Sppphtys2b/8QmvkLFnnROJxfat3JwlZ3/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvH6N0wDPDylHbSZcMhqEC3c5SMzHqvZ1ORHkgchmkH+9aWk88
+	o2iEesmm5TloxccMbKY1VF24segiYImMA1bgRLcBgH9tB4QDFzqup3HY9+9u6OKaBuQ=
+X-Gm-Gg: ASbGnctwW5eGGwldGSdIsGSLTegNfEs5BAYSqkcmIxhGpJ71+5xjKe9QRPyNKQFu5Zu
+	f8VbJ6wx1JT9Why35PS1vy7kaAY7WwGQNYM0Gjd5D3/4KgEQ1VRU8WOfJVkkWloRxam3jnp77Mj
+	bS6usT/Oq1cuzf14XEtVy9Lsgh0OWcboW4qYhfrW7CqFmCIiAHy0NdFE9RiF2De+J2J5nG6X7Ip
+	dBCYApMbhzfA2wfmfGQy3Sdg1so44hwO5FJ0MeQTrh+pPMdNETdXq5tZiAPj9RPYchi8M2StWvN
+	oXKVbo8zQEYFb1Tne2hNF9C6LsREHR7mx9qQ09oDJkaqM/vdYqjk3opseL4bvbapXz18TnEgEMm
+	+gC8wVpn6uA==
+X-Google-Smtp-Source: AGHT+IExPgFei+2P+PVJukxiS3aE9U+PHRfpSN5B4qb4zFW+/87BEDL9btqRL9zzd7hz7A0oT7z89A==
+X-Received: by 2002:a17:906:2c1b:b0:ad5:23e3:48b6 with SMTP id a640c23a62f3a-ae057bd6e23mr1051197566b.45.1750696421104;
+        Mon, 23 Jun 2025 09:33:41 -0700 (PDT)
 Received: from [192.168.1.159] ([213.240.182.16])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6d1187cf0sm9786922f8f.71.2025.06.23.09.31.32
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae054209349sm734281666b.152.2025.06.23.09.33.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jun 2025 09:31:33 -0700 (PDT)
-Message-ID: <48c87af4-7d42-4283-b407-697b78d5b913@linaro.org>
-Date: Mon, 23 Jun 2025 18:31:32 +0200
+        Mon, 23 Jun 2025 09:33:40 -0700 (PDT)
+Message-ID: <613f2812-3c60-41fe-bdd3-fbe8ea7eeb69@linaro.org>
+Date: Mon, 23 Jun 2025 18:33:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,60 +82,63 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: rectify file entry in QUALCOMM SMB CHARGER
- DRIVER
-To: Lukas Bulwahn <lbulwahn@redhat.com>,
+Subject: Re: [PATCH 11/11] power: supply: qcom_smbx: program aicl rerun time
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  Sebastian Reichel <sebastian.reichel@collabora.com>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
- Lukas Bulwahn <lukas.bulwahn@redhat.com>
-References: <20250623081240.149446-1-lukas.bulwahn@redhat.com>
+ linux-hardening@vger.kernel.org
+References: <20250619-smb2-smb5-support-v1-0-ac5dec51b6e1@linaro.org>
+ <20250619-smb2-smb5-support-v1-11-ac5dec51b6e1@linaro.org>
+ <2d3ff07d-1cd8-4eb6-8b3b-2d0d6f64445f@oss.qualcomm.com>
 Content-Language: en-US
 From: Casey Connolly <casey.connolly@linaro.org>
-In-Reply-To: <20250623081240.149446-1-lukas.bulwahn@redhat.com>
+In-Reply-To: <2d3ff07d-1cd8-4eb6-8b3b-2d0d6f64445f@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 6/23/25 10:12, Lukas Bulwahn wrote:
-> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+On 6/20/25 19:00, Konrad Dybcio wrote:
+> On 6/19/25 4:55 PM, Casey Connolly wrote:
+>> We don't know what the bootloader programmed here, but we want to have a
+>> consistent value. Program the automatic input current limit detection to
+>> re-run every 3 seconds. This seems to be necessary at least for smb5.
+>>
+>> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
+>> ---
+>>   drivers/power/supply/qcom_smbx.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/power/supply/qcom_smbx.c b/drivers/power/supply/qcom_smbx.c
+>> index d902f3f43548191d3d0310ce90e699918ed0f16f..b723dba5b86daefb238ee6aae19b1b7e5236fce3 100644
+>> --- a/drivers/power/supply/qcom_smbx.c
+>> +++ b/drivers/power/supply/qcom_smbx.c
+>> @@ -1091,8 +1091,14 @@ static int smb_probe(struct platform_device *pdev)
+>>   	if (rc < 0)
+>>   		return dev_err_probe(chip->dev, rc,
+>>   				     "Couldn't write fast charge current cfg");
+>>   
+>> +	rc = regmap_write_bits(chip->regmap, chip->base + AICL_RERUN_TIME_CFG,
+>> +			       AICL_RERUN_TIME_MASK, AIC_RERUN_TIME_3_SECS);
 > 
-> Commit 4deeea4b0741  ("MAINTAINERS: add myself as smbx charger driver
-> maintainer") adds the section QUALCOMM SMB CHARGER DRIVER in MAINTAINERS,
-> including a file entry pointing to qcom_smbx_charger.c. Within the same
-> patch series, the commit 5ec53bcc7fce ("power: supply: pmi8998_charger:
-> rename to qcom_smbx") renames qcom_pmi8998_charger.c to qcom_smbx.c and not
-> to qcom_smbx_charger.c, though. Note that the commit message clearly
-> indicates the intentional removal of the "_charger" suffix.
-> 
-> Refer to the intended file.
+> FWIW a random downstream clone I have sets 0x01 which is claimed to
+> mean "every 12s" instead
 
-oh dear, thanks for catching this!
+hmm I saw that too, I think more documentation would be needed to 
+understand this properly (I'm not exactly clear on what this actually 
+means, when the AICL would re-run, etc).
+
+I have reports that this works ok, so I'd just leave it unless we have 
+info to suggest otherwise.
 
 > 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-
-Acked-by: Casey connolly <casey.connolly@linaro.org>
-
-> ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 41f13ccef4c8..c76ea415c56f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20612,7 +20612,7 @@ M:	Casey Connolly <casey.connolly@linaro.org>
->   L:	linux-arm-msm@vger.kernel.org
->   S:	Maintained
->   F:	Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-> -F:	drivers/power/supply/qcom_smbx_charger.c
-> +F:	drivers/power/supply/qcom_smbx.c
->   
->   QUALCOMM QSEECOM DRIVER
->   M:	Maximilian Luz <luzmaximilian@gmail.com>
-
+> Konrad
 -- 
 Casey (she/they)
 
