@@ -1,132 +1,78 @@
-Return-Path: <linux-pm+bounces-29271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDE37AE3C4E
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE459AE3D82
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:57:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 670C0174EAB
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 10:29:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3A06162B19
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 10:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C468E23ABBB;
-	Mon, 23 Jun 2025 10:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SYaBP2lk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3CD123AB81;
+	Mon, 23 Jun 2025 10:56:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from baidu.com (mx22.baidu.com [220.181.50.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928B5238C21;
-	Mon, 23 Jun 2025 10:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DF01F2BAD;
+	Mon, 23 Jun 2025 10:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.181.50.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750674570; cv=none; b=WCjhRK7TVX4yoqFoetvLO8QlVUnqEnLpDx++iPtZH6AMcEZHN38Up3hNDOhG+woGMxerlfpQgFCipEusRdylo2gkNQ9ynnX7ejahG8IvGa9gibWyPwRi8fERskphKp+hKY1zd2mpLITnAGq/PEI5pFKFfyU1ov9OUrIAlZ2l0jk=
+	t=1750676217; cv=none; b=flhzL0RWNQI0iY7joe+dESepByOw/kgxfDKFvoRuao1kN6rIF7iXvGMlQnwWGBGssJItZz2Am2XuTag2OaxjnvkjzgddWz1oq6brp3UVuvgMGn7mLizEWc+Z890fEC81lTdA+nU2DBzApi3kElkqYCfnhPOcfahFn/Pfs26ZW9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750674570; c=relaxed/simple;
-	bh=E/V1S8fsQv28bkCAhEQ4ycEwjcFe4GGI4EAwIkH482Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pi7fo1AjHxyd92tU6K+j8x3cdTHgxVvPvjtqt/XSPD553/8Ex5Foyo/vK/taqdDD2J/S0Cq2sREnO9GVDK1TWZLWZYLx55uNDL8vTp/Q+3J3Em9LJxLgTIlrStOK8ttrSxvt2UA3r4EHIerv06ZzWQRAON5j+oZ+l68OZAc3pTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SYaBP2lk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C3DC4CEF0;
-	Mon, 23 Jun 2025 10:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750674570;
-	bh=E/V1S8fsQv28bkCAhEQ4ycEwjcFe4GGI4EAwIkH482Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SYaBP2lk0MdWtqUfv/93HDoI9bgXyLZ1tLGUoFvVQn3m/gqL2pzfO8H4ej/tMuOpo
-	 IXbbs9NfCHZpJMK0JIbPK/vuggsuzrNRQJBulX9F4h0vF0THpre66D/rUBsy7scHzk
-	 QX50s5saUijGk5oN6fRLOScqEUc6zqKa4/zfL2n9JgdYg81DsDyzEtJHiOsL7HFN+R
-	 vTqdIAWvpLpm/my4bGLRZp7TV0NO8xnMoqV/nxj2tsq2xkZpHLA3PAmboH6yFxF10J
-	 /gau00wQxz5avfk7CdHNGiNOQnlDl9jAqoe2CJjATH80ADl1hqH21K/kcGJhM9PlBl
-	 8rZa7P40gbD/w==
-Message-ID: <1d622833-d509-4f5b-ba19-b1f30c592d3b@kernel.org>
-Date: Mon, 23 Jun 2025 13:29:10 +0300
+	s=arc-20240116; t=1750676217; c=relaxed/simple;
+	bh=P6NKvTcVlSSY3r3Sj7VJerrLXakYKLSnm6s/5mq+PK0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ru07n6t1KcWx2xwgH1uKOArxOK1nfYavAWi9Niv/fwXWKVYWV7hdV2RIHx5jfFM9nGNNuXXYRgSuN4DKazC1yZ1IfmYcsjEMSdlnzmdS/PJVEiN5NCbPRKugiIelxgj5r6+Bclgt/3sGHOfXEdSWb4tkUhQMFH4mOCpYEtsDFvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=220.181.50.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
+From: lirongqing <lirongqing@baidu.com>
+To: <srinivas.pandruvada@linux.intel.com>, <lenb@kernel.org>,
+	<rafael@kernel.org>, <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Li RongQing <lirongqing@baidu.com>
+Subject: [PATCH] cpufreq: intel_pstate: Add Granite Rapids support in no-HWP mode
+Date: Mon, 23 Jun 2025 18:56:01 +0800
+Message-ID: <20250623105601.3924-1-lirongqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 04/13] dt-bindings: interconnect: add mt7988-cci
- compatible
-To: Frank Wunderlich <linux@fw-web.de>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Frank Wunderlich <frank-w@public-files.de>,
- Jia-Wei Chang <jia-wei.chang@mediatek.com>,
- Johnson Wang <johnson.wang@mediatek.com>, =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?=
- <arinc.unal@arinc9.com>, Landen Chao <Landen.Chao@mediatek.com>,
- DENG Qingfang <dqfext@gmail.com>, Sean Wang <sean.wang@mediatek.com>,
- Daniel Golle <daniel@makrotopia.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Felix Fietkau <nbd@nbd.name>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-References: <20250620083555.6886-1-linux@fw-web.de>
- <20250620083555.6886-5-linux@fw-web.de>
-Content-Language: en-US
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20250620083555.6886-5-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: bjhj-exc7.internal.baidu.com (172.31.3.17) To
+ bjkjy-exc3.internal.baidu.com (172.31.50.47)
+X-FEAS-Client-IP: 172.31.50.42
+X-FE-Policy-ID: 52:10:53:SYSTEM
 
-On 20.06.25 11:35, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add compatible for Mediatek MT7988 SoC with mediatek,mt8183-cci fallback
-> which is taken by driver.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Li RongQing <lirongqing@baidu.com>
 
-Acked-by: Georgi Djakov <djakov@kernel.org>
+Users may disable HWP in firmware, in which case intel_pstate
+wouldn't load unless the CPU model is explicitly supported.
 
-This can go with the rest of the patches or please let me know if i should apply it.
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+---
+ drivers/cpufreq/intel_pstate.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-BR,
-Georgi
-
-> ---
-> v2:
-> - no RFC
-> - drop "items" as sugested by conor
-> ---
->   .../bindings/interconnect/mediatek,cci.yaml           | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> index 58611ba2a0f4..4d72525f407e 100644
-> --- a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> @@ -17,9 +17,14 @@ description: |
->   
->   properties:
->     compatible:
-> -    enum:
-> -      - mediatek,mt8183-cci
-> -      - mediatek,mt8186-cci
-> +    oneOf:
-> +      - enum:
-> +          - mediatek,mt8183-cci
-> +          - mediatek,mt8186-cci
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7988-cci
-> +          - const: mediatek,mt8183-cci
->   
->     clocks:
->       items:
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 64587d3..1782b29 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2775,6 +2775,8 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
+ 	X86_MATCH(INTEL_TIGERLAKE,		core_funcs),
+ 	X86_MATCH(INTEL_SAPPHIRERAPIDS_X,	core_funcs),
+ 	X86_MATCH(INTEL_EMERALDRAPIDS_X,	core_funcs),
++	X86_MATCH(INTEL_GRANITERAPIDS_D,	core_funcs),
++	X86_MATCH(INTEL_GRANITERAPIDS_X,	core_funcs),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+-- 
+2.9.4
 
 
