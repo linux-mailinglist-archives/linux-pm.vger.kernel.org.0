@@ -1,123 +1,271 @@
-Return-Path: <linux-pm+bounces-29249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBE0CAE34B9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 07:23:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0303AE354A
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:09:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60783165B5D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 05:23:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36ACB18903E4
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA781BD035;
-	Mon, 23 Jun 2025 05:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6151DDA34;
+	Mon, 23 Jun 2025 06:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DMT0+4m7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bvccnq/H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0866187FEC
-	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 05:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5D2A94A;
+	Mon, 23 Jun 2025 06:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750656221; cv=none; b=c2u4kMyJpyq8pgIfdjyHqgd39vKqTvsuZsGaPnlH2UYMYmOMn8zMdX/U3IMVSJX+MvirfEAwa8DTCh1XRqAWRp5FXTFHWG0N9u4ZGWFQk0KbP0eznxG5KQ6Uu/sB4M0kz06kQhlqy/bEZzo+dr81daNTZs98+l60Tu/U/AF7e5s=
+	t=1750658970; cv=none; b=XdXTW4gyOA/m8Ov6zC19+N2g3CULfftzfAhoA1onCyumCcGfXRiSt9AdZuMOYjGmC2tq8k2bhxVkef+D25rqztG3EXOGWEZRHbr6+gUMcUtUuQAPVS+tq9v4TlENkAP0i8aQC+x3Zp/CGXo+QMWzKoVDeQm6Ht5K1zJgs3xZ/fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750656221; c=relaxed/simple;
-	bh=be5NMSBf8yses5ej7pxibO8UVq3Zclz8Z04ww4Jagnw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hQcZudaIVb3fNquJbNKSWwmFfZwfSS59pqxwWtlF8JIrRCMzaWUJ55l+Idm8l7lcYkkdYWyRBzynutoiKGhW5/8KX2UIoXM/et6w1DyQ+mW8LrXbv1Y+YM+ombIAO27Eug3b9Fel5163UVd2C1PwEWgMUpuih/AwYdreRpgXMDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DMT0+4m7; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-23649faf69fso36678685ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 22 Jun 2025 22:23:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750656219; x=1751261019; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xQwgugPucFRFD249QbpKhz291C8PnULHkQRIiUmqth0=;
-        b=DMT0+4m7xZMAQ+QnXY9Jw0XsdKGYrHe0ZlYSjZV5PMr/A7cr5LSldEb5CLNCjCu/o8
-         jp+3wsoezTDXhvTfNPhwB2jo1/6YtUuWN29MEhy17DPLIPy247GnUXfOSaxjo5hhXYJ8
-         RUbg2l8RI7F7ZJJGyfBPxCylv4xo3JsVYSIf44ucDb+dgeUpZ2RuD2e+fV7mpDtMDFCb
-         VNwKokxlxkcjJK0hmwg799YWsAiYU8A+p17Z44xXsOHmTetjSMvH8r4sgtD1CsmAwj8B
-         IImL6qUDk4RlyjA0psKf0CgnvgPPf3QwoUsNQY7Gf0NXsFchH4E6dJUiLVs4cTfUJ1nF
-         2lyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750656219; x=1751261019;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xQwgugPucFRFD249QbpKhz291C8PnULHkQRIiUmqth0=;
-        b=e83O7SOS0Ps2OCMJyM4dP9U6cGx3rKJdOrtgOTliYOZ8ChkP6nFsKtyn4Zchw9xRwk
-         6pYoGrXzO3pcn2a64ryXUfUv1NuH60hctawO+qrVrKAILIpeQKnhBls1Q7u8qKliothG
-         QCrCwk/+558wJXaosWmbEHnLGXn8k7i67f6CimlWcgPCytePwHDfq00+VwREb2VctBb2
-         t2CaakC51rmlbECmiqjjQu+BIk1VNl02pZnbETwRVIL23g7EfsAgcCoic0qO4kroEBbR
-         dV1EH71y7iHm7CmcHPh5t5RyP1fzXmD0qio16k95xypx9Z1A2oHCt5aOEyI8l9wrcnC7
-         u4hg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXhRZv5MZArMlVlVI/ifLskGUU1LEceMFiJqdvTux04DKtGuoeLHZe4T4PzdKbVrR3Hg6FmP91Qg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLYAGScYQsD42i/6qp6ATq24qj1tLZAAkPzlYnGuVDLu96z1Xy
-	5toG59w7aVbdRIH1u7RRuwPSGqIKhQIFPqGBJHmlg7r9cNUANftQ2tBARMJFsLfZL8k=
-X-Gm-Gg: ASbGncvK7wYthNIPsEJs6aHPjxoWrVXgedb7iznXVTuwkmy97kqNJteztfCEGjPuMce
-	fmSMMZQkfUwew9pDs6IM4i+qWivmLnR9xE0EFpN1U9cNfbjeMx9KpAm19G6GGAS8Brc6kWPj/8x
-	rqXNXTUkDKOJDVr0f3WPttizr18EOT9wolv8+TLwXKPL7eMsI3Z/GT2G77c/43qc/1JU1GP+OCI
-	pFrVOOhyY0nJKs0NWDqVNPkh+jRjRjUt7KXoiqNsAYAdTDK40MnbJtp5jJFEOp2QvdaJD5qCHhA
-	XY8zPYxsz2GRcg925u+WU3wX+hkrEnfuC1hmInZKpa211hDGK6+RJSmYCQHPDws=
-X-Google-Smtp-Source: AGHT+IEH9c5WyKk0QMC2mHqfjueodPhOXf2kHZH/3FnWS532QpnCQvmpx+97zKTnLNJSNxf0AWaT2A==
-X-Received: by 2002:a17:903:2285:b0:235:eb71:a386 with SMTP id d9443c01a7336-237d9b8e9d5mr159749225ad.50.1750656219135;
-        Sun, 22 Jun 2025 22:23:39 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d873e6f1sm73016605ad.247.2025.06.22.22.23.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jun 2025 22:23:38 -0700 (PDT)
-Date: Mon, 23 Jun 2025 10:53:36 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Jacky Bai <ping.bai@nxp.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: armada-8k: make both cpu masks static
-Message-ID: <20250623052336.d7lllm64yfyjfqu7@vireshk-i7>
-References: <20250620111459.3366195-1-arnd@kernel.org>
+	s=arc-20240116; t=1750658970; c=relaxed/simple;
+	bh=PNHYsFG5NwLTdXL4ZX15juhfF+vA0FSIDNnfrT5LYJ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pGpSQjRSlOiew/YlDP09pWEA98Un3q8sYEsvJ+bB9blHiRnsFEAfq1Aqqyy3MR8rIYhKQ5FhMDuB0y7xwL7CpFKsYn8/fC4AazoN1AO1bfBng0S4Dx4P7oO8HeEGRZ/R00sJSNq6yoRfJt+mLTlu9YQABWHOoS251T/9cMfcpyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bvccnq/H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E59C4CEED;
+	Mon, 23 Jun 2025 06:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750658969;
+	bh=PNHYsFG5NwLTdXL4ZX15juhfF+vA0FSIDNnfrT5LYJ8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Bvccnq/HXIbUblT5RrRtuAtCGHJuyMSm1Z/UMMJtou3oboBKjzaJShWzRGacGss13
+	 mVw6eUVJUEFvn573v2h9O1Sg9EwFqebJ2E4AEYntQxQGtSXeVlu7nfGo84TRnh4yCL
+	 RhdYeT1Vd+sBT7jh7vOc7BkKT+P9nkdNEQcwqmZFqmvcU8IaOnVE939FUGlMhL/ghc
+	 FlnS72275/iEu6OAwcV49oCsgqpogcJcHctjQAqy1/sngt/aO2EqIza0XcC8FkQ6xq
+	 ocnyJWPOe7NRrbts4g7jOV7z+EpbIgs+rod7dElCbvrbKiAzmRzNw1BbBWXYsmElyI
+	 KfXU9HAlZSyLw==
+Message-ID: <ab698ba0-6c6e-4d52-bef8-a6843aaa6cbf@kernel.org>
+Date: Mon, 23 Jun 2025 08:09:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620111459.3366195-1-arnd@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 01/13] dt-bindings: net: mediatek,net: update for
+ mt7988
+To: frank-w@public-files.de, Frank Wunderlich <linux@fw-web.de>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+ Johnson Wang <johnson.wang@mediatek.com>, =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?=
+ <arinc.unal@arinc9.com>, Landen Chao <Landen.Chao@mediatek.com>,
+ DENG Qingfang <dqfext@gmail.com>, Sean Wang <sean.wang@mediatek.com>,
+ Daniel Golle <daniel@makrotopia.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+ Felix Fietkau <nbd@nbd.name>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+References: <20250620083555.6886-1-linux@fw-web.de>
+ <20250620083555.6886-2-linux@fw-web.de>
+ <jnrlk7lwob2qel453wy2igaravxt4lqgkzfl4hctybwk7qvmwm@pciwvmzkxatd>
+ <100D79A2-12A9-478D-81F7-F2E5229C4269@public-files.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <100D79A2-12A9-478D-81F7-F2E5229C4269@public-files.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 20-06-25, 13:14, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 22/06/2025 13:44, Frank Wunderlich wrote:
+> Hi,
 > 
-> An earlier patch marked one of the two CPU masks as 'static' to reduce stack
-> usage, but if CONFIG_NR_CPUS is large enough, the function still produces
-> a warning for compile testing:
+> Thank you for review.
 > 
-> drivers/cpufreq/armada-8k-cpufreq.c: In function 'armada_8k_cpufreq_init':
-> drivers/cpufreq/armada-8k-cpufreq.c:203:1: error: the frame size of 1416 bytes is larger than 1408 bytes [-Werror=frame-larger-than=]
+> Am 22. Juni 2025 13:10:31 MESZ schrieb Krzysztof Kozlowski <krzk@kernel.org>:
+>> On Fri, Jun 20, 2025 at 10:35:32AM +0200, Frank Wunderlich wrote:
+>>> From: Frank Wunderlich <frank-w@public-files.de>
+>>>
+>>> Update binding for mt7988 which has 3 gmac and 2 reg items.
+>>
+>> Why?
 > 
-> Normally this should be done using alloc_cpumask_var(), but since the
-> driver already has a static mask and the probe function is not called
-> concurrently, use the same trick for both.
-> 
-> Fixes: 1ffec650d07f ("cpufreq: armada-8k: Avoid excessive stack usage")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/cpufreq/armada-8k-cpufreq.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> I guess this is for reg? Socs toll mt7986 afair
+>  get the SRAM register by offset to the MAC
+>  register.
+> On mt7988 we started defining it directly.
 
-Applied. Thanks.
+This should be explained in commit msg. Why are you doing the changes...
 
--- 
-viresh
+> 
+>>> MT7988 has 4 FE IRQs (currently only 2 are used) and the 4 IRQs for
+>>> use with RSS/LRO later.
+>>>
+>>> Add interrupt-names to make them accessible by name.
+>>>
+> ...
+>>>    reg:
+>>> -    maxItems: 1
+>>> +    items:
+>>> +      - description: Register for accessing the MACs.
+>>> +      - description: SoC internal SRAM used for DMA operations.
+>>
+>> SRAM like mmio-sram?
+> 
+> Not sure,but as far as i understand the driver
+>  the sram is used to handle tx packets directly
+>  on the soc (less dram operations).
+> 
+> As mt7988 is the first 10Gbit/s capable SoC
+>  there are some changes. But do we really need 
+>  a new binding? We also thing abour adding
+>  RSS/LRO to mt7986 too,so we come into
+>  similar situation regarding the Interrupts/  
+>  -names.
+
+If it is mmio-sram, then it is definitely not reg property.
+
+Anyway
+wrap emails
+according to list
+discussion rules.
+
+> 
+>>> +    minItems: 1
+>>>  
+>>>    clocks:
+>>>      minItems: 2
+>>> @@ -40,7 +43,11 @@ properties:
+>>>  
+>>>    interrupts:
+>>>      minItems: 1
+>>> -    maxItems: 4
+>>> +    maxItems: 8
+>>> +
+>>> +  interrupt-names:
+>>> +    minItems: 1
+>>> +    maxItems: 8
+>>
+>> So now all variants get unspecified names? You need to define it. Or
+>> just drop.
+> 
+> Most socs using the Fe-irqs like mt7988,some
+>  specify only 3 and 2 soc (mt762[18]) have only
+>  1 shared irq. But existing dts not yet using the
+>  irq-names.
+> Thats why i leave it undefined here and
+>  defining it only for mt7988 below. But leaving it
+>  open to add irq names to other socs like filogic
+>  socs (mt798x) where we are considering
+>  adding rss/lro support too.
+> 
+
+I explained this is wrong. Your binding must be specific, not flexible.
+
+>>>  
+>>>    power-domains:
+>>>      maxItems: 1
+>>> @@ -348,7 +355,19 @@ allOf:
+>>>      then:
+>>>        properties:
+>>>          interrupts:
+>>> -          minItems: 4
+>>> +          minItems: 2
+>>
+>> Why? Didn't you say it has 4?
+> 
+> Sorry missed to change it after adding the 2
+>  reserved fe irqs back again (i tried adding only used irqs - rx+tx,but got info that all irqs can be used - for future functions - so added all available).
+> 
+>>> +
+>>> +        interrupt-names:
+>>> +          minItems: 2
+>>> +          items:
+>>> +            - const: fe0
+>>> +            - const: fe1
+>>> +            - const: fe2
+>>> +            - const: fe3
+>>> +            - const: pdma0
+>>> +            - const: pdma1
+>>> +            - const: pdma2
+>>> +            - const: pdma3
+>>>  
+>>>          clocks:
+>>>            minItems: 24
+>>> @@ -381,8 +400,11 @@ allOf:
+>>>              - const: xgp2
+>>>              - const: xgp3
+>>>  
+>>> +        reg:
+>>> +          minItems: 2
+>>
+>>
+>> And all else? Why they got 2 reg and 8 interrupts now? All variants are
+>> now affected/changed. We have been here: you need to write specific
+>> bindings.
+> 
+> Mt7988 is more powerful and we wanted to add
+>  all irqs available to have less problems when
+>  adding rss support later. E.g. mt7986 also have
+>  the pdma irqs,but they are not part of
+>  binding+dts yet. Thats 1 reason why
+>  introducing irq-names now. And this block is
+>  for mt7988 only...the other still have a regcount of 1 (min-items).
+
+This explains me nothing. Why do you change other hardware? Why when
+doing something for MT7988 you also state that other SoCs have different
+number of interrupts?
+
+
+
+Best regards,
+Krzysztof
 
