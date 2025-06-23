@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-29362-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DC29AE48B4
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 17:33:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A2ADAE48EE
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 17:41:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16A8C4A0987
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 15:31:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D5E31B608AA
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 15:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A8F25C71A;
-	Mon, 23 Jun 2025 15:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DCD2571BE;
+	Mon, 23 Jun 2025 15:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFN2jnyo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEOEjuuW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2978415B971;
-	Mon, 23 Jun 2025 15:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B64246BCD;
+	Mon, 23 Jun 2025 15:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750692656; cv=none; b=T6Hw5xMS2Vnt/oP/SYlfsWjdDMISCIq1i7HGFZnBVMLmjuopAkH+YsoQFpUo/P+YVD9iMXOE4nNV2upcj3pvH3Dto9MLc71ew06ubrW7ishv3Hco/wmsjEufxehWSfOBo1JNIrXtpVHaYGVzdvB+kQHkXDTP0J9iJd/DmC3esqA=
+	t=1750692725; cv=none; b=VAc/QW/yN4E5ZW3Dpw+QOsWrXk+IhV/tAaNJXJLogycL5zYE/NFI5ql+RfK0uxebK8lmmHsBaZCUiVWni+o9Qt729tjWj5prBam3Iazarz7Ivr0jV/crVAGjDJQAfgkFdecqmW0+nBI0oYJHhMwKFxESrtjLj2Ji+ajDXCqRsDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750692656; c=relaxed/simple;
-	bh=w8Dnt4rNYB2Yfj0F9id0Q9CQfAhyf767XNDo1qH05a0=;
+	s=arc-20240116; t=1750692725; c=relaxed/simple;
+	bh=xcSk7RYCIiHJkq9DU8Urzcplo6nl1Q/e6R4jl/xdA18=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C76eI8xErhzh20LJ6lUmqxYP+Lzm2BZbTyFbNrkyDDKvBhd6uXlRqWRG4SpiDyeBMjgIEawsVVTqeoJ1SS3pkU22qw+G/tmmcpBqVN2gb4pE01usEwxyT+UuL3u8Hat6TcvFeyCm9OqEqV6VPsTYzUYRppJIF3EwLPmooNGEEYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFN2jnyo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A599FC4CEEF;
-	Mon, 23 Jun 2025 15:30:55 +0000 (UTC)
+	 To:Cc:Content-Type; b=lAp/sqBf3HfCO7+3ZNbKl/DfiK4zJtp1TowokCiWIqjd6Lf7gTAOqcvib7YQcCR8cQqYA6x0DF5Wh7Gkl1sEAz5iZcirF8KdawHKL9sNzTBiMX6O7wr8GjlUI3zRfScunSKsQfEDMXK82BIvDou64Uo4tKnPTF86Tu1YIgkx49Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEOEjuuW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D036C4CEF1;
+	Mon, 23 Jun 2025 15:32:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750692655;
-	bh=w8Dnt4rNYB2Yfj0F9id0Q9CQfAhyf767XNDo1qH05a0=;
+	s=k20201202; t=1750692725;
+	bh=xcSk7RYCIiHJkq9DU8Urzcplo6nl1Q/e6R4jl/xdA18=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iFN2jnyo2iWV86J3mtgzb7la+zYVWuxoz4u0LahMnyxCBN4aqLVwemmnirLGvmMd6
-	 EQK5OV7HJUgDnegVPEhUi8+XHL4tCPe7lYsbvlAwHm4MudlQmJRIKRIT7XenUTq1Qp
-	 FXKmsYKjgseKixSCZpoTzaEzYSPxGhtQtPUwq1XtUaVkhWNqHf63y3iU4TkawFMS14
-	 Zk88clTRoXsuO4nxH8KiWEgKy2R4XaobGEtXNmF0m/gkiDvbG3PmnnKBF2xbNhLIXh
-	 BJkKL+0djYa5wzbzeKVvH6xzjU3NKqHIOj0lVfXTLUwGmLmHcvqXjrVIl7FNo+AoqV
-	 WigeaZsvPCyVw==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-611827bd683so506390eaf.0;
-        Mon, 23 Jun 2025 08:30:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU4LH+bxOng9brOJ7ohTc7orfJr042yJ0y5qmcpfufpwfWqsg412Ko/KWzF1f5ztTocyEpnC5x/T4hLZpQ=@vger.kernel.org, AJvYcCVTlNadCAbumhdxPGUcqg30Tmk9iGfFrNPQ2rbZ09AjU3dL07LbagQmnlLbvd8UU5++Y6sK+bn6kcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymU6MWt+oyLvExLv+uDElRjQoLkk+kaF9Q91ot9zlKFXcB6fVF
-	iRqwpAVBrBgZ7y9yWE1H74/vq4p1j+f3l+/kNHn60JXXAl+oEgZjePaIO1X/JEy4n9clUz6gnTh
-	rn28xH331OS8W9vthrWTgY960b8XnZcE=
-X-Google-Smtp-Source: AGHT+IFEHjPNXmsLMf1CmtMBMZpf8gObthk5wQojfBRJKHMRuCLkNe+gFtJKljeN0HNEiPl860loD6+zYjcfY82g7oU=
-X-Received: by 2002:a05:6820:f48:b0:611:5a3b:9ce9 with SMTP id
- 006d021491bc7-6115bb0e72emr9008941eaf.7.1750692654990; Mon, 23 Jun 2025
- 08:30:54 -0700 (PDT)
+	b=YEOEjuuWRq2YQHQNvFI5L+VrXCrYuXHtlom1w066Nhfc6aGNAyOTJOzwymgzVO4ck
+	 /NYeDpPzr2Xht6x+sWiDm9UtWOO00kFhAGhVoTvbGnVlFJAqSVYa84wScIzKuzpBbA
+	 mG5TMU0I+mCLBY/dJonLh+tam6DMfVG73uHDE5OFOXbcX3zWQNqTvKPiLHWc+B0I6h
+	 G29X2Y43rgJ2zYuXhx/1DxKxqVVVVYm5mrB78YgkCgi+odfkbCs0gU+hLP1+t25pcP
+	 sv+TSV3KgfR33/F3BXhIIPfLnWOAqrnEv/UgqSAbxg9UEj7aMpfSx8LBBSL5AW2ZKH
+	 EGp1tExF0ATNA==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-60ef6bf2336so3045987eaf.0;
+        Mon, 23 Jun 2025 08:32:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVRJcskOaFM9OLxtjEmWcXxb2s+6l11BdrWWgh0UUAqN9uo3l29kSF2SCgo4Mi7/lPkEoRmVy0i3hqsnQI=@vger.kernel.org, AJvYcCVqkLOcUDkD7oouGH4/ud7M+s4T8WCBdYAigoTYHPf4cFRdyAbK2y56F9u3Mp7A7al+LlG1qwfIAQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3G0IF7sitAkwfUAcwxQQ6hP6mrPfTh36YtkcXNXf8Lsp1kzwW
+	qvQGsEwNkbFlwR6zfkma0lG5ViC/kVD/U9/U82iZw/O+7o0lgxjavUurB/FSixcfbxjgBB4DAo5
+	m+ZZnOxt/YfEau6kijOBhupHJXpCyeOc=
+X-Google-Smtp-Source: AGHT+IEwbD6khw4wUsAVrr0ScWF5lRIpkaOyLCOiJpCf3Tl0xFfVlj3n6xpOJ67FTBWmAMlFxQ6G3zmzH2AriA/NuEY=
+X-Received: by 2002:a05:6820:308a:b0:610:ee96:eca9 with SMTP id
+ 006d021491bc7-6115ba821c9mr7571417eaf.8.1750692724382; Mon, 23 Jun 2025
+ 08:32:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250623133402.3120230-1-zhenglifeng1@huawei.com> <20250623133402.3120230-4-zhenglifeng1@huawei.com>
-In-Reply-To: <20250623133402.3120230-4-zhenglifeng1@huawei.com>
+References: <20250623133402.3120230-1-zhenglifeng1@huawei.com> <20250623133402.3120230-5-zhenglifeng1@huawei.com>
+In-Reply-To: <20250623133402.3120230-5-zhenglifeng1@huawei.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 23 Jun 2025 17:30:44 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jvdttYihgNcTF=VVnd2K5QsC+W9XJJanqy4F_PXw+u2g@mail.gmail.com>
-X-Gm-Features: AX0GCFvbSFdejTwNWkx-8BFU2U2H8vGGfyobrhK6VbLomE2gnlzhGj2xV51V9Mg
-Message-ID: <CAJZ5v0jvdttYihgNcTF=VVnd2K5QsC+W9XJJanqy4F_PXw+u2g@mail.gmail.com>
-Subject: Re: [PATCH 3/7] cpufreq: Contain scaling_cur_freq.attr in cpufreq_attrs
+Date: Mon, 23 Jun 2025 17:31:52 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hgP3PKLqiHsw9bADvxRGsBqQ__DVVKzEmgb6stTmi+cQ@mail.gmail.com>
+X-Gm-Features: AX0GCFur4NTs0QrPRXkjh7Z4TNi5EhcL2IDgNfmEDS9ZPG-Net6nXxLLV2dratI
+Message-ID: <CAJZ5v0hgP3PKLqiHsw9bADvxRGsBqQ__DVVKzEmgb6stTmi+cQ@mail.gmail.com>
+Subject: Re: [PATCH 4/7] cpufreq: Remove duplicate check in __cpufreq_offline()
 To: Lifeng Zheng <zhenglifeng1@huawei.com>
 Cc: rafael@kernel.org, viresh.kumar@linaro.org, ionela.voinescu@arm.com, 
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com, 
@@ -76,45 +76,42 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 23, 2025 at 3:34=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei.c=
 om> wrote:
 >
-> After commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file f=
-or
-> set_policy() drivers"), the file scaling_cur_freq is exposed to all
-> drivers. No need to create this file separately. It's better to be
-> contained in cpufreq_attrs.
-
-Fair enough.
-
+> The has_target() checks in __cpufreq_offline() are duplicate. Remove one =
+of
+> them and put the operations of exiting governor together with storing las=
+t
+> governor's name.
+>
 > Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  drivers/cpufreq/cpufreq.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 >
 > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index efc1f4ac85cb..2303890de0ba 100644
+> index 2303890de0ba..c4891bf5dc84 100644
 > --- a/drivers/cpufreq/cpufreq.c
 > +++ b/drivers/cpufreq/cpufreq.c
-> @@ -967,6 +967,7 @@ static struct attribute *cpufreq_attrs[] =3D {
->         &cpuinfo_min_freq.attr,
->         &cpuinfo_max_freq.attr,
->         &cpuinfo_transition_latency.attr,
-> +       &scaling_cur_freq.attr,
->         &scaling_min_freq.attr,
->         &scaling_max_freq.attr,
->         &affected_cpus.attr,
-> @@ -1095,10 +1096,6 @@ static int cpufreq_add_dev_interface(struct cpufre=
-q_policy *policy)
->                         return ret;
+> @@ -1692,14 +1692,13 @@ static void __cpufreq_offline(unsigned int cpu, s=
+truct cpufreq_policy *policy)
+>                 return;
 >         }
 >
-> -       ret =3D sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
-> -       if (ret)
-> -               return ret;
+> -       if (has_target())
+> +       if (has_target()) {
+>                 strscpy(policy->last_governor, policy->governor->name,
+>                         CPUFREQ_NAME_LEN);
+> -       else
+> -               policy->last_policy =3D policy->policy;
 > -
->         if (cpufreq_driver->bios_limit) {
->                 ret =3D sysfs_create_file(&policy->kobj, &bios_limit.attr=
-);
->                 if (ret)
-> --
-> 2.33.0
+> -       if (has_target())
+>                 cpufreq_exit_governor(policy);
+> +       } else {
+> +               policy->last_policy =3D policy->policy;
+> +       }
 >
+>         /*
+>          * Perform the ->offline() during light-weight tear-down, as
+> --
+
+This is fine by me, thanks!
 
