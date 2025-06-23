@@ -1,159 +1,140 @@
-Return-Path: <linux-pm+bounces-29347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29350-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9BB1AE4714
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 16:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A487FAE4744
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 16:46:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E35E1656CC
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:33:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2530163D1C
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A183525D200;
-	Mon, 23 Jun 2025 14:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VAIC1AEG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18B41267729;
+	Mon, 23 Jun 2025 14:41:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0B225D1E0
-	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 14:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB17182BC
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 14:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750689188; cv=none; b=tywX5F+OGtedLk7uYylDeQfac/D+UGD+ncRTTQOAoJH/km87hCVO+5Z5AuF5bI+jxUWwkse8EIjJXNuaEVqOYlKOM4VWDPYICFRoZvko5Eb1wUBz/GkMaGL9yCBC9HVvSrazNKnHjLlelINsux92wutE6Vag0BSGTRqUHnD3YQk=
+	t=1750689664; cv=none; b=oMV1Yobgv28fv3dFdTeHnZKEl7nwuc7UiHH9c/PYWlYhyKjRX5TGS3s9QzokKAYIsnDLRNaYIFeOncEd4hGacf3XXHzLQETrdxvi1YHZwYlmfTD6sVTdF17R30Yba4zHQaRz41K7m/ifJsvocd6AJGO9oVf4mTwFRJQSd65gQJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750689188; c=relaxed/simple;
-	bh=x5KqFZXgElR9++LB0VjgJyofXv4fHihwvsOF6Nt7N04=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lWf6W0UCxBJlHPBF4pAgv45sWJc5L9aSyTcpyQKK3taltEOPuDo89BDUaIHGtqvnLl3JHdOkz0v8O4wHzpGvwkzcvVVB+FsQZSMMBTGorWfHQ94RwF1OZB9/2j9UyGcToP+UsE04T1AMsvfhubUnQdU6FDLnMFGSrnAZoGlc0Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VAIC1AEG; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-553d2eb03a0so5869317e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 07:33:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750689185; x=1751293985; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9kmviqp5IY6ttItDCr2Op9/HvBDwWl4i3kTfEm4FXc=;
-        b=VAIC1AEG8pF4R3esDtb+tbTYQEDx6E7lmH3uOjhL/oZibdgk45ASnQu5loRGzGghL9
-         bZ296/ard/dE1dGCopcnZ+G2TPUdkRBw5ALMUOQAygGXcYzYpELG3rdFKRQcdomi9heR
-         uGePPDXaXWWX36xKs/sEG80LZh0QTPVuwOX4+7ZIBmgvMdO6ZCGAUiRpFy36/V7T48nU
-         VSFewVyDmuFZUFoLtPK77AfqZGmYccB2clGYz9OEkekoV1arIOgn6g/x+Xs5Q1wmbKCJ
-         cSVSHwt3gUDwMuHFA5lVvuGyim0cE0FiNSbe47PtHOniwzHJv6x3uQNyKc5wD2l1QWtr
-         8UYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750689185; x=1751293985;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f9kmviqp5IY6ttItDCr2Op9/HvBDwWl4i3kTfEm4FXc=;
-        b=joqXMaQFfwfUUT/0HVap7jqreVq6yVtonFEaYwD9zmTzHJ4iS6tt/D4gwxgINqYl5M
-         yCYSVux3FhGtySZWAOcz05FjlOSqNTTO0aq5d7aDdVdt7oyKJcBx/Bu6lJu+XZ+4VBDS
-         vdZg0vJFzdplKyEz2Sx1at74t4JdqN8HJF7K+xXNFX0x9lBETFHblLxE3WG0v4dnyvT3
-         dpaqJc0sg4RRbKYlx5ft9IlkMCQq3OHQChFAVY7nmEKBDprymfsS+07EZE6tgkig+1pC
-         ObEHf2rGNHL3lot5E49EyDsKB5oJyXfieeNwj2Z6I1VlBNoRNCLpd/LBWmIoIUNAF7Vq
-         rMdA==
-X-Forwarded-Encrypted: i=1; AJvYcCVd55TnHWDWGPb5eIpXr9BkJUyYjzUsNUzLVimRRdUP+98U4d3ZkMwcQ1eOZScipxUI+9KfbCbBGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcxhhRfB9ahv1EWZ2XTigqAgCQaMlquQnDE57jgPerZGsT1qVI
-	G2hEXnODEgKIU/tszYxJKgtk+LQBqjfUIXZGMyAyGNNjKwfPyG9KT3NO/mdul65I3SpnzxmYeH1
-	Y+lG9fVH5/lb++vYPaAjNMoAt6+4QjwTbTatltUHI+Q==
-X-Gm-Gg: ASbGnctzfbQsIlY90fdagGl3ZLBjtXJa5MyE6H5fdZNqpix4lFtUQ3m5/3zKXDvJK+9
-	i119gD/tpPi5RF2J0b9NyxuzukQsUnHC2bpc5xrlEkEmo29+bGzEL0qqlvLyJnrjCgWdAfA46B5
-	fZW77j+4lrXep6dIO2gj5aWt3cR/6kCfs2SCcQqJflmoFjg3AZdSnwi0KeomIwW3DM1DdvpEeyp
-	g==
-X-Google-Smtp-Source: AGHT+IHy7lPbB51UgKZbeAiEHWJjzs4pV8mJk0NbuirPhDOStHcXQ3Z+f7X+tD5fIjGZbRD5DTCBFLexuzsXjZ0eBBQ=
-X-Received: by 2002:a05:6512:3b25:b0:549:8ff1:e0f3 with SMTP id
- 2adb3069b0e04-553e4fdf72dmr3670967e87.5.1750689183720; Mon, 23 Jun 2025
- 07:33:03 -0700 (PDT)
+	s=arc-20240116; t=1750689664; c=relaxed/simple;
+	bh=VsxOMIGaXs1JMl4P1We2SYf66K+K1BXyMLPhPr+wPbo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h23r5Sp3/0I8gbUqtdX7i47vtj2ONZZsE1hNscrydQCeuggPN1pQ7zDF4h9RVatqVA/wewjqyQgUkNHr7Vh0q90HRn6uOlVI5I7SpUx6nFFxK/b8iNgmcEzQzkYJzP/TYt/BXgi4hBUXNpWLXKKMjUcYK32V5l4SY+vaht0gAqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4bQrPr0Tj7z2QTxc;
+	Mon, 23 Jun 2025 22:41:52 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id 396F2140276;
+	Mon, 23 Jun 2025 22:40:57 +0800 (CST)
+Received: from localhost.localdomain (10.90.31.46) by
+ kwepemo100006.china.huawei.com (7.202.195.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 23 Jun 2025 22:40:56 +0800
+From: Jie Zhan <zhanjie9@hisilicon.com>
+To: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
+	<kyungmin.park@samsung.com>, <jonathan.cameron@huawei.com>
+CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linuxarm@huawei.com>, <zhanjie9@hisilicon.com>, <alireza.sanaee@huawei.com>,
+	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
+	<liwei728@huawei.com>, <prime.zeng@hisilicon.com>
+Subject: [PATCH v6 0/2] PM / devfreq: Add HiSilicon uncore frequency scaling driver
+Date: Mon, 23 Jun 2025 22:33:59 +0800
+Message-ID: <20250623143401.4095045-1-zhanjie9@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250623114430eucas1p2a5bb2bbc0049186ff25e1b3e1a131ca2@eucas1p2.samsung.com>
- <20250623-apr_14_for_sending-v6-0-6583ce0f6c25@samsung.com> <20250623-apr_14_for_sending-v6-1-6583ce0f6c25@samsung.com>
-In-Reply-To: <20250623-apr_14_for_sending-v6-1-6583ce0f6c25@samsung.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 23 Jun 2025 16:32:52 +0200
-X-Gm-Features: AX0GCFtTbdiml00OQLqQ03QSeuySTknlMk23hbdQ1cT1QnS7KP2eYmI1IjWfLlA
-Message-ID: <CAMRc=MfPLZ7oMVjLv+_GMoC8X+O=k+mMrQKxELho0=+Z7=HApQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] power: sequencing: Add T-HEAD TH1520 GPU power
- sequencer driver
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
-	Matt Coster <matt.coster@imgtec.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
-On Mon, Jun 23, 2025 at 1:44=E2=80=AFPM Michal Wilczynski
-<m.wilczynski@samsung.com> wrote:
->
-> Introduce the pwrseq-thead-gpu driver, a power sequencer provider for
-> the Imagination BXM-4-64 GPU on the T-HEAD TH1520 SoC. This driver
-> controls an auxiliary device instantiated by the AON power domain.
->
-> The TH1520 GPU requires a specific sequence to correctly initialize and
-> power down its resources:
->  - Enable GPU clocks (core and sys).
->  - De-assert the GPU clock generator reset (clkgen_reset).
->  - Introduce a short hardware-required delay.
->  - De-assert the GPU core reset. The power-down sequence performs these
->    steps in reverse.
->
-> Implement this sequence via the pwrseq_power_on and pwrseq_power_off
-> callbacks.
->
-> Crucially, the driver's match function is called when a consumer (the
-> Imagination GPU driver) requests the "gpu-power" target. During this
-> match, the sequencer uses clk_bulk_get() and
-> reset_control_get_exclusive() on the consumer's device to obtain handles
-> to the GPU's "core" and "sys" clocks, and the GPU core reset.  These,
-> along with clkgen_reset obtained from parent aon node, allow it to
-> perform the complete sequence.
->
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
+Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
+the devfreq framework.  The uncore domain contains shared computing
+resources, including system interconnects and L3 cache.  The uncore
+frequency significantly impacts the system-wide performance as well as
+power consumption.  This driver adds support for runtime management of
+uncore frequency from kernel and userspace.  The main function includes
+setting and getting frequencies, changing frequency scaling policies, and
+querying the list of CPUs whose performance is significantly related to
+this uncore frequency domain, etc.  The driver communicates with a platform
+controller through an ACPI PCC mailbox to take the actual actions of
+frequency scaling.
 
-[snip]
+Changelog:
 
-> +
-> +       /* Additionally verify consumer device has AON as power-domain */
-> +       if (pwr_spec.np !=3D ctx->aon_node || pwr_spec.args[0] !=3D TH152=
-0_GPU_PD) {
-> +               of_node_put(pwr_spec.np);
-> +               return 0;
-> +       }
-> +
-> +       of_node_put(pwr_spec.np);
-> +
-> +       /* If a consumer is already bound, only allow a re-match from it =
-*/
-> +       if (ctx->consumer_node)
-> +               return ctx->consumer_node =3D=3D dev->of_node;
-> +
+v6:
+Consolidate hisi_uncore_init_pcc_chan() related stuff:
+- Move devm_mutex_init() to hisi_uncore_init_pcc_chan()
+- Move devm_add_action_or_reset() into hisi_uncore_request_pcc_chan()
 
-That should be `!!(ctx->consumer_node =3D=3D dev->of_node)` or preferably
-`ctx->consumer_node =3D=3D dev->of_node ? 1 : 0`. I can amend it when
-applying if you have no objections. The rest looks good to me and I'd
-like to pick it up into pwrseq/for-next in the next two days.
+v5:
+https://lore.kernel.org/all/20250619151456.3328624-1-zhanjie9@hisilicon.com/
+- Comment more on error code related stuff about
+  hisi_uncore_mark_related_cpus(), and return failure early on errors
+  except for -EINVAL, which indicates possibly broken firmware.
+- Separate error prints apart for two cases in hisi_platform_gov_handler()
+- Make the 'related_cpus' sysfs ABI description more generic
+- Some coding style cleanups and typo fixes
 
-Bart
+v4:
+https://lore.kernel.org/linux-pm/20250530081722.280776-1-zhanjie9@hisilicon.com/
+- Allow devfreq core to accept device-specific sysfs ABIs
+- Replace custom sysfs attrs with dev_groups and let the devfreq core
+  manage it
+- Update 'related_cpus' description in the devfreq ABI doc
+- Remove COMPILE_TEST in Kconfig as the mailbox_client.h doesn't support
+  this yet
+- Replace dev_err() with dev_err_probe() during drv->probe()
+- Replace mutex_init() with devm_mutex_init() to warn on UAF
+- Replace uncore->dev with dev in some places to make code a bit shorter
+- Remove redundant uncore->pchan check in hisi_uncore_free_pcc_chan()
+- Use __free() to let compiler release temporary memory
+- Clean up the error handling and redundant 'status = 0' in
+  hisi_uncore_send_cmd()
+- Some coding style cleanup
 
-[snip]
+v3:
+https://lore.kernel.org/linux-pm/20250522031701.1912458-1-zhanjie9@hisilicon.com/
+- Remove redundant resource freeing processes when drv->probe() fails as
+  they're already handled by devm
+
+v2:
+https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/
+- Make devm manage the release sequence, remove drv->remove()
+- Warn on !uncore or !uncore->pchan as they're no longer expected
+- Remove ioremap of pcc shared memory because it's done by the pcc driver
+- Fix compiler warning of discarding 'const'
+- Minor trivial coding style changes
+
+v1:
+https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/
+
+Jie Zhan (2):
+  PM / devfreq: Allow devfreq driver to add custom sysfs ABIs
+  PM / devfreq: Add HiSilicon uncore frequency scaling driver
+
+ Documentation/ABI/testing/sysfs-class-devfreq |   9 +
+ drivers/devfreq/Kconfig                       |  11 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/devfreq.c                     |   1 +
+ drivers/devfreq/hisi_uncore_freq.c            | 658 ++++++++++++++++++
+ include/linux/devfreq.h                       |   4 +
+ 6 files changed, 684 insertions(+)
+ create mode 100644 drivers/devfreq/hisi_uncore_freq.c
+
+-- 
+2.33.0
+
 
