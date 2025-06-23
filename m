@@ -1,145 +1,139 @@
-Return-Path: <linux-pm+bounces-29268-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29269-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 866C7AE3B40
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 11:55:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D089AE3BAF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:07:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD2C03A430B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 09:55:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AEC61769A9
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 10:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF51202C2D;
-	Mon, 23 Jun 2025 09:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="JYoydXgp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E65239E8A;
+	Mon, 23 Jun 2025 10:05:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEA61A3168;
-	Mon, 23 Jun 2025 09:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CE623A9BD;
+	Mon, 23 Jun 2025 10:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750672535; cv=none; b=L5cZAcgD4DGyIv9eEy6N3jksgqpHp9E7Y5AQctoYEWIQ9vAFIyjd6Yqrn7h3jZyer1EKMXIxcRK79de2QkaaPluAZpmpbPZRUqn+0d/hfiPfPr9dQbPaOGNRobdPXwS3dcrHfrXpjSAGU+VGl6/jZxq5OeA3LB8evuUc828mKws=
+	t=1750673142; cv=none; b=dFgjXuKPL//iEgDP4X7trs8RCkDKtzuUYHKXCosKHloFP3KeBpFYBi1b0LMPvvR9XgmW5cx+hasTGQELz0gpNFSpiIQSymzKxYZ9CE+LqzLNViiF5jn1KQJxjLlGyrlBFo4xjrSyuoWXLSZqnodpQ4RF6XuQTuRW5FRJdWDuuvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750672535; c=relaxed/simple;
-	bh=OEDsOsbmBWlSCJexaT7tuU8s+GVAmb4vdTnegemyQIY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=L53ywB98k5yLEjB1ixygG87CEd1/T/+4pl+3kykzZTU4rygsmXhARHh4wlsluLLLajm5v4Nxc3JrwpJm5OBvcb/s8fIW5BOeGquLShLrOp2n8+XmrulW5vYxvp0rJtuqByF1KJf4tQUTqr9RHXZoXblyamSWlRcwZ8siFG9mJrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=JYoydXgp; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=5JC8N6waXzbkMsJ2s1DGUOkVB2uBD2HJQeuuu3PQE4w=;
-	t=1750672533; x=1751882133; b=JYoydXgpIAbbe3Urr4micMGUJODHvF12x3woeOVX50wbiWd
-	QCy5s8MG4+3lhjhsro8gG6KC/N2WNSDlCEGOIJV3tc/i8gi0AeEqjyC2E8XoBLaDn/Yyql3ele1SW
-	uKLJV46XXZLtChNAX1u45iAeSmjQ1v2RJPVJrQtX+9tC2C+zvJPK52TRXtFizkzypc3FB7QxY48TJ
-	F9KT4v88xICoH2SSrc0jEbMyWWoEdjQ6i6Jv1/vZkVQQkUS7BUpLetaqDCSRr1yHotfb7Ff/yknDz
-	3yNZn3s5pnfHQCxryynqYGgPUagyii7q2935IWheusQp2+Z/Cqg95tbvjEyfhghA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uTdtX-00000007blh-3eQd;
-	Mon, 23 Jun 2025 11:55:20 +0200
-Message-ID: <3a9f8d73ecd8fc1f6994b58d69014aa064d6cd60.camel@sipsolutions.net>
-Subject: Re: 6.16-rc2+ lockdep circular locking between iwlwifi and
- thermal_zone code
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Hans de Goede <hansg@kernel.org>, Miri Korenblit	
- <miriam.rachel.korenblit@intel.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>,  Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
- <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-wireless <linux-wireless@vger.kernel.org>, Linux PM
-	 <linux-pm@vger.kernel.org>
-Date: Mon, 23 Jun 2025 11:55:17 +0200
-In-Reply-To: <e9d7ef79-6a24-4515-aa35-d1f2357da798@kernel.org>
-References: <e9d7ef79-6a24-4515-aa35-d1f2357da798@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1750673142; c=relaxed/simple;
+	bh=+kTCOP1WhjuszCcIK+r3LNOvbWb67HPONHc5xMq0s3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n3gxgwQSokOt0IAAr38pzsrpu+UJ+UxQks0hgPkfnbjAuMspZ1lyPAbbJtmrtjdWe40cYQueedfeXvaDYitYGPLlbHUS5Ca/r1D7Ub6oQk80UhbTT2PABSi+MGQEf6JUVDt/CH7VKniUQYJRJLkuHnAU14wOnMgd+mQ6U4Sqonc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4F5432C000BF;
+	Mon, 23 Jun 2025 12:05:38 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 1CE943AA69A; Mon, 23 Jun 2025 12:05:38 +0200 (CEST)
+Date: Mon, 23 Jun 2025 12:05:38 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 2/2] PCI: Fix runtime PM usage count underflow on
+ device unplug
+Message-ID: <aFkm8njX-NEIiTcv@wunner.de>
+References: <20250620025535.3425049-1-superm1@kernel.org>
+ <20250620025535.3425049-3-superm1@kernel.org>
+ <aFcCaw_IZr-JuUYY@wunner.de>
+ <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
+ <aFeJ83O9PRUrM2Ir@wunner.de>
+ <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
+ <aFj3jUAM42lSyfpe@wunner.de>
+ <aFkEI2jXg7YiwL7b@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aFkEI2jXg7YiwL7b@wunner.de>
 
-Hi Hans,
+On Mon, Jun 23, 2025 at 09:37:07AM +0200, Lukas Wunner wrote:
+> On Mon, Jun 23, 2025 at 08:43:25AM +0200, Lukas Wunner wrote:
+> > On Sun, Jun 22, 2025 at 01:39:26PM -0500, Mario Limonciello wrote:
+> > > > > On 6/21/25 2:05 PM, Lukas Wunner wrote:
+> > > > > > So the refcount decrement happens in pcie_portdrv_probe() and
+> > > > > > the refcount increment happens in pcie_portdrv_remove().
+> > > > > > Both times it's conditional on pci_bridge_d3_possible().
+> > > > > > Does that return a different value on probe versus remove?
+> > > 
+> > > I did this check and yes specifically on this PCIe port with the underflow
+> > > the d3 possible lookup returns false during pcie_portdrv_remove().  It
+> > > returns true during pcie_portdrv_probe().
+> > 
+> > That's not supposed to happen.  The expectation is that
+> > pci_bridge_d3_possible() always returns the same value.
+> 
+> I'm wondering if the patch below fixes the issue?
 
+Refined patch below with proper commit message,
+also avoids a compiler warning caused by an unused variable.
 
-On Fri, 2025-06-20 at 17:56 +0200, Hans de Goede wrote:
-> While testing 6.16-rc2+ on a Dell XPS 9640 I got the following lockdep re=
-port:
->=20
-> (Note this was a build without debuginfo, so I did not run decode_stacktr=
-ace.sh)
->=20
-> [=C2=A0=C2=A0 19.690210] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [=C2=A0=C2=A0 19.690212] WARNING: possible circular locking dependency de=
-tected
-> [=C2=A0=C2=A0 19.690214] 6.16.0-rc2+ #3 Tainted: G=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 E=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=20
-> [=C2=A0=C2=A0 19.690217] ------------------------------------------------=
-------
-> [=C2=A0=C2=A0 19.690218] modprobe/906 is trying to acquire lock:
-> [=C2=A0=C2=A0 19.690220] ffff89da8e948768 (&rdev->wiphy.mtx){+.+.}-{4:4},=
- at: iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
-> [=C2=A0=C2=A0 19.690269]=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 but task is already holding lock:
-> [=C2=A0=C2=A0 19.690270] ffff89da41ac2708 (&tz->lock){+.+.}-{4:4}, at: th=
-ermal_zone_device_set_mode+0x20/0xa0
-> [=C2=A0=C2=A0 19.690284]=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 which lock already depends on the new lock.
-> [SNIP]
+-- >8 --
 
-I am thinking that this is a false-positive and the
+From: Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH] PCI/ACPI: Fix runtime PM ref imbalance on hot-plug capable
+ ports
 
-    lock(cpuhp_state-up);
-    lock(&tz->lock);
+pcie_portdrv_probe() and pcie_portdrv_remove() both call
+pci_bridge_d3_possible() to determine whether to use runtime power
+management.  The underlying assumption is that pci_bridge_d3_possible()
+always returns the same value because otherwise a runtime PM reference
+imbalance occurs.
 
-chain is happening on a different type of thermal device. A solution
-might be to create a separate lock class for every thermal_zone_device.
-Something like the below, I suspect.
+That assumption falls apart if the device is inaccessible on ->remove()
+due to hot-unplug:  pci_bridge_d3_possible() calls pciehp_is_native(),
+which accesses Config Space to determine whether the device is Hot-Plug
+Capable.   An inaccessible device generally returns "all ones" for such
+Config Read Requests.  Hence the device may seem Hot-Plug Capable on
+->remove() even though it wasn't on ->probe().
 
-Benjamin
+Use the cached copy of the Hot-Plug Capable bit to avoid the Config Space
+access and the resulting runtime PM ref imbalance.
 
-diff --git a/drivers/thermal/thermal_core.c
-b/drivers/thermal/thermal_core.c
-index 17ca5c082643..fcb060898733 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1556,6 +1556,7 @@ thermal_zone_device_register_with_trips(const
-char *type,
- 	INIT_LIST_HEAD(&tz->trips_invalid);
- 	ida_init(&tz->ida);
- 	mutex_init(&tz->lock);
-+	lockdep_set_class(&tz->lock, &tz->lock_class);
- 	init_completion(&tz->removal);
- 	init_completion(&tz->resume);
- 	id =3D ida_alloc(&thermal_tz_ida, GFP_KERNEL);
-diff --git a/drivers/thermal/thermal_core.h
-b/drivers/thermal/thermal_core.h
-index bdadd141aa24..9ad5c37620f3 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -141,6 +141,7 @@ struct thermal_zone_device {
- 	void *governor_data;
- 	struct ida ida;
- 	struct mutex lock;
-+	struct lock_class_key lock_class;
- 	struct list_head node;
- 	struct delayed_work poll_queue;
- 	enum thermal_notify_event notify_event;
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+---
+ drivers/pci/pci-acpi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+index b78e0e4..8859cce 100644
+--- a/drivers/pci/pci-acpi.c
++++ b/drivers/pci/pci-acpi.c
+@@ -816,13 +816,11 @@ int pci_acpi_program_hp_params(struct pci_dev *dev)
+ bool pciehp_is_native(struct pci_dev *bridge)
+ {
+ 	const struct pci_host_bridge *host;
+-	u32 slot_cap;
+ 
+ 	if (!IS_ENABLED(CONFIG_HOTPLUG_PCI_PCIE))
+ 		return false;
+ 
+-	pcie_capability_read_dword(bridge, PCI_EXP_SLTCAP, &slot_cap);
+-	if (!(slot_cap & PCI_EXP_SLTCAP_HPC))
++	if (!bridge->is_hotplug_bridge)
+ 		return false;
+ 
+ 	if (pcie_ports_native)
+-- 
+2.47.2
 
 
