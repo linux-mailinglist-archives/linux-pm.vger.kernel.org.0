@@ -1,143 +1,229 @@
-Return-Path: <linux-pm+bounces-29242-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29243-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F30AE32EA
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 00:50:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AED3CAE334A
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 03:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EE353B086F
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jun 2025 22:50:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34A00188D8A0
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 01:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D2720CCCC;
-	Sun, 22 Jun 2025 22:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79527BA2D;
+	Mon, 23 Jun 2025 01:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z24MCgov"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ve2rRox4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4489C1A23AD;
-	Sun, 22 Jun 2025 22:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5322253BE
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 01:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750632648; cv=none; b=M0Arz5Bbp6imEMdsUYbXnn6sz+S+q36Uy8U9leyy+ZCJ1aaWXVEZERiwovc7R1CNErCGRmQ6Gaf4LRZ4vRwLdS3CSfg/S6XNI71/mB3JYZC8M7zqg3YZNcj+KUiuQw+TfCVmISIh5e7mCL1ae3s6iWxomgwdSDian13GqExD1CQ=
+	t=1750642201; cv=none; b=KJ2l9sE0K+/42P6wsHIuX+Ht2yFILZIJPFUusSwzL7bKTRfHuPp0iac4vdUwEcKZB2XGNhQaWZEnaC1L5/UNAly+5NGg3n6yqzu9KBOgQuiult14webq2hhg3p72LJdbZ9DYAGPF05Njrd0HSPIZzSOtYULcXUp4mKkDTUZA+zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750632648; c=relaxed/simple;
-	bh=wHATzHUwOUqRKn8FAzkIwW1jHvvvptGIND35VrXnmho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P72Any4WIK4YBuExuB5gNVk43vGc4O3aKCqi0XbzJC+EYY3KjAzq/ZRqp3aXsyPFhYE2Ro8AWa9/2rNfdaXksG9JNiSFq3i2WOk1zBIs+8QpYHTZtXFu4JqOd2e5XL0DBuGNwoTtqsx/4EUYqi97gE9Bx5irUHuAPBPAKZkyPt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z24MCgov; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-313fab41fd5so362917a91.1;
-        Sun, 22 Jun 2025 15:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750632645; x=1751237445; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2XyaOPS+SVDJS2nuVakOU+h3pEZcqv0KxHASicqOHR0=;
-        b=Z24MCgovbvwdu5n6jAqRkIfOw5jJCQh+oGKuaMUqMdBngf2wlsnuQWeLU66LmYDq2z
-         6hw7k23vBiA2Y9WuCa2LHytHLhd9AjZCjDBYpLw/RNAwXGL5c2mSoHy9TiL+VM9waIWQ
-         hDDjsBKeKgFNJCIAXkEATw409Ao0BZSGqcsTo+fFphI/QG5t+2oSD8pDGNin+K932gqC
-         z/P5x7yi/CqYodSlDqqF2yruBkSdWLEqHmnkxIilqRicDH6SNM/tjvQEKaPEUmceIY6i
-         fPISg5bChuNKbTM72LhZXi8DT/WNv8XICieRk96EMqb7/V5PU5R7oeMc5ckw1tm8No+q
-         Ll+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750632645; x=1751237445;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2XyaOPS+SVDJS2nuVakOU+h3pEZcqv0KxHASicqOHR0=;
-        b=Yg7/oxQXPUcbQiJO0o35CqnlRRn8etlZslogx2PoB6trsSH9on4vh6dgHXtBiq6vbY
-         Xj1IuRtczyoB7hPH9LYgRvGUw0jjj5vxPzily6IyQQT5F8DEc23nXXx3JNcij5InQP9B
-         e5GwQQj6ZIu95g6vzlbZqaHFr4UX5FUNZ/mL6ObMimUpuGRZbZUU0Xy8ygQnVBjwKNZP
-         g1Bk/9VyfUlkEdUeUjg7yWYj1EoODnYtF+ZG51v4l2DOqMX4Ke2OUYt3E33g8N8T1qsY
-         4/Q/GhaeMC12g0BA7t52iB1T7N3EQnwuhzLSwRtOFQ3goroO+L60CDwrIxFr+AsWW2+h
-         iiZg==
-X-Forwarded-Encrypted: i=1; AJvYcCU/3qW77tmh1yrHZyZWo2xoTl1aKWR0X3VUOXrNNvD7MQ3UBWva+GjfOvgrN8q083j5J6XZam38U3Yq@vger.kernel.org, AJvYcCU9/aLQ6N3XtilWzy42Hl2kDaZfewDBjkBRXcUv6h/6K3U3K6cVUodVaxwkYel5zxmsirk4VDBjKkJBOjQ=@vger.kernel.org, AJvYcCUXkjfTbBqigvhBjPWJAyVoJeZL4CoZI/CzPkssHcgfMGObinklldaldxAkDcHVNbVWuW98Mk8Es4kWBgN9@vger.kernel.org, AJvYcCV6qWXGP9zRMjakK++6HjOOKcEW9Dk8BYH8Hj9kY0DHw3IMnLMAJZVJSybYfGRc3NVbQ92JIsJYVX6pMu/sTu/1@vger.kernel.org, AJvYcCVWwFnqkXP1G9F6rX5trqeDXF6UwKUTouONx9hHwoSQ1wW4wNtZ6BPoGURjFs6JvAj8GDiSWA50iWIkb/Es@vger.kernel.org, AJvYcCW2umB5Sr62u6StURP0ZDgjAr5gkVfvDh2IjIIIRuKj/ZTnk7FpQujXt2cw5GyDqpDeeNeYqFUyqfDU2b2xSJc=@vger.kernel.org, AJvYcCWdRCugot5CvTHpnyoUm7lIWYhVQeQfHiKvhtyjnfNM+wpLU46FqIExHB1rYi/QgIBMkhgt9nYViqw=@vger.kernel.org, AJvYcCWsn6WJszPgG5oopu5HeV9Uo43Gs/6uFI2WqmJkkpozh5BEa61aowbV0ZgsogMpcHoC8fvxIa2j@vger.kernel.org, AJvYcCWuflZVxkRW8bJKLega5V/K9Nk9Tx9mMfJHEa18k0ZQVPPxuI6Luef+K5nwxvU/cRtKYyf7GrowUOuK@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0by8/QbRy/n6Foebc+H8e7D18JjyY4F4w8bfu3VyYgFeNZTyq
-	g72Oy0OvHD1cPzoy2igZbkt+l7iyFfiX1gIw17wwLcnEMzQ7JqruhEJSX6GO8H5nAhLtD1S01wj
-	Pg8CSRgriwy14+OD6BCCSi7fO6aH6KHk=
-X-Gm-Gg: ASbGnctKm2hQIZtlwxmlnN/lid4QSFMRQAdE/ddYLmW2Ky1GY5PaGYX6pji4qnzgXys
-	kKCuDCpwvDBPfXMyrMtMCTcZgIOkGYsEaAae8jzSb7v4S/HBntsFwFY7NrCtXBxlc5fMvmYhn7I
-	hvxOsKUqA3gvzn1VGky9UKhiPS68PZttkCQ65fYQ6s3Iwo0llWTk3Qdw==
-X-Google-Smtp-Source: AGHT+IHkK5VxbDTzDH+78CGWNybiQ0lflBEpMpSVRH6uwkYDUKXtQuR/kJbEABJn7CeEMEkyXPjXtmArCfcPAjxsRNU=
-X-Received: by 2002:a17:90b:3a43:b0:311:fde5:c4ae with SMTP id
- 98e67ed59e1d1-3159d8e2be9mr5684021a91.6.1750632645432; Sun, 22 Jun 2025
- 15:50:45 -0700 (PDT)
+	s=arc-20240116; t=1750642201; c=relaxed/simple;
+	bh=LRQSDYr0p5pMRrDYup4vj91KVnPumrzHAzoJieUvEBY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=nhnGetWw0MknuY/sTwX/JEU1Ecv2fzKm9fqD2N6GweMkQb3avTlM+bmDccYK/SGwIhUgytbFn5nhcc6T99b2DeiyEJGFYDscb/cxrf4lDX4VKVOpAUP+fOnEv+Om8fT0raYGPnI23U7nyOSZbIc3BnZ3lBN8qmnyNrcSbaKmuC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ve2rRox4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D07C4CEE3;
+	Mon, 23 Jun 2025 01:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750642200;
+	bh=LRQSDYr0p5pMRrDYup4vj91KVnPumrzHAzoJieUvEBY=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=Ve2rRox4TfzuSGXH9s5FhD6kT7N0eGc2GMHOrG3/Oq5l0npt5NORuhxvwsKGUUbYs
+	 ZVjEOFqm+11aG7XVsplFoOT4JJiWveHza4ULTtDWA52kG+Ce0T2Q7A7VaQUVqiuH5b
+	 IeRoq7fJgR6w+RLmCzdBBA9MZWvnYl2EBcS5Xos0BjJhC8BnCa57cPSed9m/ucZlmA
+	 J1L8MqdWFCGih2V9srAU31lxdvWdA0hh+iN/Pp5Y6uKpuv+NX5cn3hfbJAe+6L5QX4
+	 TK2cNSzxofLRU5/CC8N6Xj3QTLAv++KAtAQ04IES5gTY3o43Jh1sMSByhZUl6FiQWR
+	 WhF7m3irvc5iw==
+Message-ID: <60e5d67a-fc32-459b-93a8-95f54636026c@kernel.org>
+Date: Sun, 22 Jun 2025 20:29:58 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
-In-Reply-To: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 23 Jun 2025 00:50:31 +0200
-X-Gm-Features: Ac12FXzAp4qUKl_aNT741tylL3I37tb5s--GlJccgcY1EV1oeXS1Teju6Ztan0w
-Message-ID: <CANiq72=xmyHuBYEGbCMi=Um_NvNbf5TfMmJB5YPpVp41FcPdJA@mail.gmail.com>
-Subject: Re: [PATCH v12 0/6] rust: reduce `as` casts, enable related lints
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Robin Murphy <robin.murphy@arm.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Benno Lossin <lossin@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Breno Leitao <leitao@debian.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, 
-	linux-block@vger.kernel.org, devicetree@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: Restrict swap use to later in the suspend sequence
+From: Mario Limonciello <superm1@kernel.org>
+To: mario.limonciello@amd.com, rafael@kernel.org, len.brown@intel.com,
+ pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
+ Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com
+Cc: christian.koenig@amd.com, linux-pm@vger.kernel.org,
+ kexec@lists.infradead.org, Nat Wittstock <nat@fardog.io>
+References: <20250613214413.4127087-1-superm1@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20250613214413.4127087-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jun 15, 2025 at 10:55=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
-> wrote:
->
-> This started with a patch that enabled `clippy::ptr_as_ptr`. Benno
-> Lossin suggested I also look into `clippy::ptr_cast_constness` and I
-> discovered `clippy::as_ptr_cast_mut`. This series now enables all 3
-> lints. It also enables `clippy::as_underscore` which ensures other
-> pointer casts weren't missed.
->
-> As a later addition, `clippy::cast_lossless` and `clippy::ref_as_ptr`
-> are also enabled.
->
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Applied to `rust-next` -- thanks everyone!
 
-    [ Added `.cast()` for `opp`. - Miguel ]
+On 6/13/25 4:43 PM, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> Currently swap is restricted before drivers have had a chance to do their
+> prepare() PM callbacks. Restricting swap this early means that if a driver
+> needs to evict some content from memory into sawp in it's prepare callback
+> it won't be able to.
+> 
+> On AMD dGPUs this can lead to failed suspends under memory pressure
+> situations as all VRAM must be evicted to system memory or swap.
+> 
+> Move the swap restriction to right after all devices have had a chance to
+> do the prepare() callback.  If there is any problem with the sequence,
+> restore swap in the appropriate dpm resume callbacks or error handling
+> paths.
+> 
+> Closes: https://github.com/ROCm/ROCK-Kernel-Driver/issues/174
+> Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/2362
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-    [ Changed `isize` to `c_long`. - Miguel ]
+Besides my testing for this, on the bugs two people have tested it helps 
+this issue.  One of them had a hard time replying to the lore post, so 
+I'll proxy the tag for them.
 
-It would still be nice to get the couple remaining Acked-bys (happy to
-rebase to apply them), but I feel we are in good shape, and it is a
-good time to put it into linux-next so that people see the lint before
-they start applying new code into their branches.
+Tested-by: Nat Wittstock <nat@fardog.io>
 
-Cheers,
-Miguel
+> ---
+>   drivers/base/power/main.c | 5 ++++-
+>   include/linux/suspend.h   | 5 +++++
+>   kernel/kexec_core.c       | 1 +
+>   kernel/power/hibernate.c  | 3 ---
+>   kernel/power/power.h      | 5 -----
+>   kernel/power/suspend.c    | 3 +--
+>   6 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 0215b20c5e2c8..4970a804afb6d 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1241,6 +1241,7 @@ void dpm_complete(pm_message_t state)
+>    */
+>   void dpm_resume_end(pm_message_t state)
+>   {
+> +	pm_restore_gfp_mask();
+>   	dpm_resume(state);
+>   	dpm_complete(state);
+>   }
+> @@ -2183,8 +2184,10 @@ int dpm_suspend_start(pm_message_t state)
+>   	error = dpm_prepare(state);
+>   	if (error)
+>   		dpm_save_failed_step(SUSPEND_PREPARE);
+> -	else
+> +	else {
+> +		pm_restrict_gfp_mask();
+>   		error = dpm_suspend(state);
+> +	}
+>   
+>   	dpm_show_time(starttime, state, error, "start");
+>   	return error;
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index b1c76c8f2c822..6a3f920988720 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -446,6 +446,8 @@ extern int unregister_pm_notifier(struct notifier_block *nb);
+>   extern void ksys_sync_helper(void);
+>   extern void pm_report_hw_sleep_time(u64 t);
+>   extern void pm_report_max_hw_sleep(u64 t);
+> +void pm_restrict_gfp_mask(void);
+> +void pm_restore_gfp_mask(void);
+>   
+>   #define pm_notifier(fn, pri) {				\
+>   	static struct notifier_block fn##_nb =			\
+> @@ -492,6 +494,9 @@ static inline int unregister_pm_notifier(struct notifier_block *nb)
+>   static inline void pm_report_hw_sleep_time(u64 t) {};
+>   static inline void pm_report_max_hw_sleep(u64 t) {};
+>   
+> +static inline void pm_restrict_gfp_mask(void) {}
+> +static inline void pm_restore_gfp_mask(void) {}
+> +
+>   static inline void ksys_sync_helper(void) {}
+>   
+>   #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 9c59fa480b0b6..3a9a9f240dbc9 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1136,6 +1136,7 @@ int kernel_kexec(void)
+>    Resume_devices:
+>   		dpm_resume_end(PMSG_RESTORE);
+>    Resume_console:
+> +		pm_restore_gfp_mask();
+>   		console_resume_all();
+>   		thaw_processes();
+>    Restore_console:
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 519fb09de5e0c..9216e3b91d3b3 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -423,7 +423,6 @@ int hibernation_snapshot(int platform_mode)
+>   	}
+>   
+>   	console_suspend_all();
+> -	pm_restrict_gfp_mask();
+>   
+>   	error = dpm_suspend(PMSG_FREEZE);
+>   
+> @@ -559,7 +558,6 @@ int hibernation_restore(int platform_mode)
+>   
+>   	pm_prepare_console();
+>   	console_suspend_all();
+> -	pm_restrict_gfp_mask();
+>   	error = dpm_suspend_start(PMSG_QUIESCE);
+>   	if (!error) {
+>   		error = resume_target_kernel(platform_mode);
+> @@ -571,7 +569,6 @@ int hibernation_restore(int platform_mode)
+>   		BUG_ON(!error);
+>   	}
+>   	dpm_resume_end(PMSG_RECOVER);
+> -	pm_restore_gfp_mask();
+>   	console_resume_all();
+>   	pm_restore_console();
+>   	return error;
+> diff --git a/kernel/power/power.h b/kernel/power/power.h
+> index cb1d715620020..7ccd709af93f5 100644
+> --- a/kernel/power/power.h
+> +++ b/kernel/power/power.h
+> @@ -239,11 +239,6 @@ static inline void suspend_test_finish(const char *label) {}
+>   /* kernel/power/main.c */
+>   extern int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long val_down);
+>   extern int pm_notifier_call_chain(unsigned long val);
+> -void pm_restrict_gfp_mask(void);
+> -void pm_restore_gfp_mask(void);
+> -#else
+> -static inline void pm_restrict_gfp_mask(void) {}
+> -static inline void pm_restore_gfp_mask(void) {}
+>   #endif
+>   
+>   #ifdef CONFIG_HIGHMEM
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 76b141b9aac01..bb608b68fb301 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -540,6 +540,7 @@ int suspend_devices_and_enter(suspend_state_t state)
+>   	return error;
+>   
+>    Recover_platform:
+> +	pm_restore_gfp_mask();
+>   	platform_recover(state);
+>   	goto Resume_devices;
+>   }
+> @@ -606,9 +607,7 @@ static int enter_state(suspend_state_t state)
+>   
+>   	trace_suspend_resume(TPS("suspend_enter"), state, false);
+>   	pm_pr_dbg("Suspending system (%s)\n", mem_sleep_labels[state]);
+> -	pm_restrict_gfp_mask();
+>   	error = suspend_devices_and_enter(state);
+> -	pm_restore_gfp_mask();
+>   
+>    Finish:
+>   	events_check_enabled = false;
+
 
