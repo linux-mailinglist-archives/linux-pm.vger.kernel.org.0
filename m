@@ -1,177 +1,167 @@
-Return-Path: <linux-pm+bounces-29326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF83AE413B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:56:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7B3AE42BF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 15:24:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB989165F1D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:56:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28823189D970
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 13:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38AFB24C060;
-	Mon, 23 Jun 2025 12:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0437255E2F;
+	Mon, 23 Jun 2025 13:19:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ZYFNfqii"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CZZWC2DM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF52B246BAC;
-	Mon, 23 Jun 2025 12:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7CD248895;
+	Mon, 23 Jun 2025 13:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750683361; cv=none; b=NFSI+6W/X3yOJRA5hKejKGT2927c09nevk8KkiDlLC+0l+/mtZ4QvobHlkw5lJxF44VSI1TuCLdnW0CeTPfAnPx0zO7GE/UigfATdfVHMZXaR7sWYIC6jaNnNJR9zojyx+HeysxhVtmapGzHuifEFY19t853awtQbLRSQD5MC2o=
+	t=1750684794; cv=none; b=W5FOtt3fp6TdQ72ZylGUGJVUQOVjSOGC2kdZqnmEDSzwuvFyS1U//EFaD9im7JXdDkds2av7YLLJkWVR1i9iGPmjtE0mIcA5fTwzqtIwjrhop7dfDJSA/bsytBR8yEqJcz9nyuoYgCe1QSp28R3BfkTpXo4fiDXaOcm/UxediaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750683361; c=relaxed/simple;
-	bh=V4Q+QmBN8f/u1avjxFazjPy4gpKWukS/z0vO/9apM/0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t7384Uzq1vUByV6/8bQry2wfcmB4tVU86myt/yCRYEvIocFrUJQGhQrWClvFshx+LZJ4tm6k6NSvlct2VzZRleRmn6RPwsXhZfYVGwUK+SyOJ4kOpkUwzXG98BXA5O6sSxpTDqfJTX8PIdd7gzM0P+iH1ZZ7dccGIBd23HULnec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ZYFNfqii; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from kreacher.localnet (unknown [5.63.189.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 4E41B66E251;
-	Mon, 23 Jun 2025 14:55:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1750683350;
-	bh=V4Q+QmBN8f/u1avjxFazjPy4gpKWukS/z0vO/9apM/0=;
-	h=From:Subject:Date;
-	b=ZYFNfqiihwniBQS/NP4CR2kJjxTAndH5aWuQNy1u0gYkFpKhoMNnMtOvWxz/MX1gn
-	 JDsIey/tTn8gUztai0pcS9jTfCzCocr4/NByvUROUMNHjVJIvPR+GxQuZNMXHRlTUZ
-	 csU47/kdDFyM/F2hTuuqInxd490095Z+/pmp1DoiawaUikb5ZL9OXOevjA6WYpQHeC
-	 KlgZMec/fHuAHvEGwLkybs94QgYtWtJ1dCXn1OQCYMxjOnPInSRZBblCCoE6wKUHmo
-	 LwSAedliNdBYUCMV0Tonlk58tx32ZuUQ9aOvLN2qYShxtwqtuXk6ICdylD9qbsq8EN
-	 MNErQUq5aT/Mg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Chris Bainbridge <chris.bainbridge@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Saravana Kannan <saravanak@google.com>,
- Sudeep Holla <sudeep.holla@arm.com>
-Subject:
- [RFT][PATCH v4 2/2] PM: sleep: Make async suspend handle suppliers like
- parents
-Date: Mon, 23 Jun 2025 14:55:05 +0200
-Message-ID: <3384525.44csPzL39Z@rjwysocki.net>
-In-Reply-To: <5011988.GXAFRqVoOG@rjwysocki.net>
-References: <5011988.GXAFRqVoOG@rjwysocki.net>
+	s=arc-20240116; t=1750684794; c=relaxed/simple;
+	bh=WFr1mvAqWknTLQCXHSHPXHDsjQ1dBOGlTBZcHkDnwYQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=sQqWLH68qsWCSMmzkU8Ts0ZEwGZwsy2nL5FeYDlWgh7T+8HlLfNAyfWVzqMio1v1RYhgb/DUuRtvK1Sw9AyA+IKb1MsIcgpY8WHBXxu94SlZ52OzOgb3tApifM+S2WjOalc3Ovsx9GJOnx2JPEWB1Z4L1w7kEyh4B2W4hpqgsEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CZZWC2DM; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55NBliSL031297;
+	Mon, 23 Jun 2025 13:19:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	FgLrm/JXRlgdhk4Y0Tj9EAffwhDfvyBigTfDl8obe1Q=; b=CZZWC2DMQvTZJnaa
+	q/PSoNtQ1V08REd0Rjxqzi/QnNHYSYsjTXca2u1jGXxR/lz4hfOOyO8ozA/0hTPP
+	N1JiuYCl82n52c980w07eoA6bgO1bxuGCMeNB36NXncQj+ABR4aS9ZuAI5SVaabN
+	WogsxmJrXP3CKPvfkoWq7tPA/C/3iNXEsehSN+T5V4WJS//TWJ5RLBzjSRxc9gH8
+	NRz83AFL//+x10niX6FiuGrXYVfQRrId9eMcHyrlw8VkFrlndPt4FjTOhximDqH8
+	EjOvOc5ViEJEHi7LOBm33bJl0PzobzMgxFbaXZzTZAwlLhH2KOccLLLa6HonX0R8
+	P3H+uQ==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ey7k1hjg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Jun 2025 13:19:40 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55NDJd5X008821
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Jun 2025 13:19:39 GMT
+Received: from [10.253.38.60] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 23 Jun
+ 2025 06:19:32 -0700
+Message-ID: <cf9dd904-c24a-4ea3-9689-087efab99d95@quicinc.com>
+Date: Mon, 23 Jun 2025 21:19:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 5.63.189.50
-X-CLIENT-HOSTNAME: 5.63.189.50
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: dmFkZTGbsflNZg5WlL1okd/rknFH3L9TOvw1i1+BFVQgEjWPACFv7scvKhz9Lxr8KFtFY1/6oLlmNLGKeOm6MiwNWEiDb2QqV30VfAg39R9JTe6j4le2ApJYOuj7glc2VGRiXJjVqORc7lqRIRGBoDDSMffnRX6Jo05mAodd6PSkis+iuUYcebzak/RQKaE9dZC9q5Joz9Z5qFETF/XfZ/sg1H3WtrMe+sDRi0dujNVP0mv8kRxi9pi5Avrg5/T2dhxFe8BzwTug8heoDwNIJ012V85iKjqq7snsgqEfidxfEif7MuFGW3WvnrhmGnKSJsgAZS38L9g4Roltro/4goJ5Gd/bTuAR2gStEFlbODicBv1Pz0GRpzGq3G3uZZSUv/ScqTcOP/jFu4mO+FKxS98t9kunPZsHQxV1yj5K28jo0WzezbuHQikvWfLgEQHPKq4K3xETU3iXp8nGsFSzH3jt9UG1Fdixq45nGTqemuek7dWOeBXLfaXFPSgkrn1UdL3rI9NnUcg+OBq2p+HdoLjH+5qRfHIoING9nT4Kg34tqyWkm5IlnV//aYVmB1wTJLmiXMjgLvhJXgRTDguVV3VR4m5/G2aDL9LZfrB/SABIOxhsm6i/7z3O2i8krNRUgzMgfZBN1kiOJEDdA5RkFHl2FRcxmYIyKF0k316GB5+UgrDUgg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Avoid starting "async" suspend processing upfront for devices that have
-consumers and start "async" suspend processing for a device's suppliers
-right after suspending the device itself.
-
-Suggested-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v3 -> v4: Rebase and update the changelog.
-
----
- drivers/base/power/main.c |   37 +++++++++++++++++++++++++++++++------
- 1 file changed, 31 insertions(+), 6 deletions(-)
-
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1257,10 +1257,15 @@
- 		return false;
- 	}
- 
--	return true;
-+	/*
-+	 * Since this function is required to run under dpm_list_mtx, the
-+	 * list_empty() below will only return true if the device's list of
-+	 * consumers is actually empty before calling it.
-+	 */
-+	return list_empty(&dev->links.consumers);
- }
- 
--static void dpm_async_suspend_parent(struct device *dev, async_func_t func)
-+static bool dpm_async_suspend_parent(struct device *dev, async_func_t func)
- {
- 	guard(mutex)(&dpm_list_mtx);
- 
-@@ -1272,11 +1277,31 @@
- 	 * deleted before it.
- 	 */
- 	if (!device_pm_initialized(dev))
--		return;
-+		return false;
- 
- 	/* Start processing the device's parent if it is "async". */
- 	if (dev->parent)
- 		dpm_async_with_cleanup(dev->parent, func);
-+
-+	return true;
-+}
-+
-+static void dpm_async_suspend_superior(struct device *dev, async_func_t func)
-+{
-+	struct device_link *link;
-+	int idx;
-+
-+	if (!dpm_async_suspend_parent(dev, func))
-+		return;
-+
-+	idx = device_links_read_lock();
-+
-+	/* Start processing the device's "async" suppliers. */
-+	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
-+		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
-+			dpm_async_with_cleanup(link->supplier, func);
-+
-+	device_links_read_unlock(idx);
- }
- 
- /**
-@@ -1400,7 +1425,7 @@
- 	if (error || async_error)
- 		return error;
- 
--	dpm_async_suspend_parent(dev, async_suspend_noirq);
-+	dpm_async_suspend_superior(dev, async_suspend_noirq);
- 
- 	return 0;
- }
-@@ -1596,7 +1621,7 @@
- 	if (error || async_error)
- 		return error;
- 
--	dpm_async_suspend_parent(dev, async_suspend_late);
-+	dpm_async_suspend_superior(dev, async_suspend_late);
- 
- 	return 0;
- }
-@@ -1887,7 +1912,7 @@
- 	if (error || async_error)
- 		return error;
- 
--	dpm_async_suspend_parent(dev, async_suspend);
-+	dpm_async_suspend_superior(dev, async_suspend);
- 
- 	return 0;
- }
+User-Agent: Mozilla Thunderbird
+From: Luo Jie <quic_luoj@quicinc.com>
+Subject: Re: [PATCH 5/8] dt-bindings: clock: qcom: Add NSS clock controller
+ for IPQ5424 SoC
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Krzysztof Kozlowski
+	<krzk@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Michael
+ Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Anusha Rao
+	<quic_anusha@quicinc.com>,
+        "Richard Cochran" <richardcochran@gmail.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <quic_kkumarcs@quicinc.com>,
+        <quic_linchen@quicinc.com>, <quic_leiwei@quicinc.com>,
+        <quic_suruchia@quicinc.com>, <quic_pavir@quicinc.com>
+References: <20250617-qcom_ipq5424_nsscc-v1-0-4dc2d6b3cdfc@quicinc.com>
+ <20250617-qcom_ipq5424_nsscc-v1-5-4dc2d6b3cdfc@quicinc.com>
+ <b628b85b-75c4-4c85-b340-d26b1eb6d83e@kernel.org>
+ <512e3355-a110-4e7c-ab43-04f714950971@quicinc.com>
+ <78f0e4b5-19f6-45a0-b4dc-a1b519645567@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <78f0e4b5-19f6-45a0-b4dc-a1b519645567@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=YoEPR5YX c=1 sm=1 tr=0 ts=6859546c cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10
+ a=FoU6f1ENpVpzdq5mMe4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: M54owwdi18GAqCN7_LHpIe6F1rX28ZbZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIzMDA3OSBTYWx0ZWRfX+C7VxCurTRif
+ w0TRlVSeVJZEJ+Qek9ML8hifYpHSXHhAqXMUbW3JQV2VxyL9lImiR1nJArs6y6HTm7xDCf5pmWN
+ OQWOpPPebeRXVL0OwCPwQwPVFGvDAE+w9H1DCycp/WH6BC59hE8TQLnmLFqUuY3WIlIM6oZtVZ7
+ 6W1sXIae6l+jfLhKjKafStOVsYA3/EQWgKXqI1SuQd5QCs1N5HnhyGPWwDiwkTPrcnP4MyI/ITC
+ NZqBoMmlTM5Wb48krsf/s0t9nIuZFP3lEUmDQSQmMRlu6H9bHkw/EovD4VoJfQalspkCiwR3Otv
+ LFN23jXAsoDLeRaMZdPdhx3c7g/yUzE6i/NgG3Z+DLUDyl2L5Qgf8TaybKo05tV6TmD3JE2GFpm
+ Mz4PKarvYjKxpI4DbfQnIgIslwARgTRKmyTKSQdmdE1aoBtCQZ2rZp2lSrPSo8BYvOhMLTfm
+X-Proofpoint-GUID: M54owwdi18GAqCN7_LHpIe6F1rX28ZbZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-23_03,2025-06-23_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 mlxscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 mlxlogscore=999 spamscore=0 bulkscore=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506230079
 
 
+
+On 6/21/2025 6:09 PM, Konrad Dybcio wrote:
+>>>>      compatible:
+>>>> -    const: qcom,ipq9574-nsscc
+>>>> +    enum:
+>>>> +      - qcom,ipq5424-nsscc
+>>>> +      - qcom,ipq9574-nsscc
+>>>>        clocks:
+>>>>        items:
+>>>>          - description: Board XO source
+>>>> -      - description: CMN_PLL NSS 1200MHz (Bias PLL cc) clock source
+>>>> -      - description: CMN_PLL PPE 353MHz (Bias PLL ubi nc) clock source
+>>>> +      - description: CMN_PLL NSS 1200 MHz or 300 MHZ (Bias PLL cc) clock source
+>>>> +      - description: CMN_PLL PPE 353 MHz  or 375 MHZ (Bias PLL ubi nc) clock source
+>>> This change means devices are different. Just ocme with your own schema.
+>> The NSS clock controller hardware block on the IPQ5424 SoC is identical
+>> in design to that of the IPQ9574 SoC. The main difference is in the
+>> clock rates for its two parent clocks sourced from the CMN PLL block.
+>>
+>> Given this, would it be acceptable to update the clock name and its
+>> description to use a more generic clock name, such as "nss" and "ppe"
+>> instead of the current "nss_1200" and "ppe_353"?
+> Because you used those clock_names in the existing ipq9574, you can't
+> change them now. You could introduce a separate set of clock_names
+> for the new ipq5424 though, but I think it could be useful to drop the
+> rate suffix for new additions
+> 
+> Konrad
+
+OK, Understand, I will add the new separate clock names "nss" and "ppe"
+for supporting IPQ5424 SoC and further SoCs with similar design.
+Thanks for confirmation.
 
 
