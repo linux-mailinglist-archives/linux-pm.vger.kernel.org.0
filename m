@@ -1,148 +1,145 @@
-Return-Path: <linux-pm+bounces-29261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9EE3AE38D1
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 10:45:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CA96AE3928
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 10:58:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 739F3172174
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:45:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43B6F188CDDA
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:58:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC32217660;
-	Mon, 23 Jun 2025 08:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E5E22F769;
+	Mon, 23 Jun 2025 08:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3diSoL0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EC52A1D8
-	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 08:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6516679F2;
+	Mon, 23 Jun 2025 08:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750668337; cv=none; b=tCLhPEKeOk0tAePp0aFPO7v5ODS6pixFkTbe5bNi0Sm1NUJ66JJnd1hV/6z0xBL2HX01Hcpn2bPP6+1BCvWXu7JA8uAooKRW0/DL7F4GaPyA70Ip0y169yGt0CoQVTDqrQzwvw/Y6C174Dheu4aNLpRunNXqKERhpYLhbcIWw6Y=
+	t=1750669088; cv=none; b=tYtdVOsIMJkl7Fum95VO30/DI1hDmg21/kqRJWBPZCBsDSTEyvwZtZI26uXTY5ioBaSOI32f1OsV6yAcCwrt1go6VVaBdJknfQZWcuf5y7Gi0p5A1jCyzNRLIS/lHSVnPSYIIfQY0rhcvbX6aIsNZ5F5rNFus0HdTTnrKotl9qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750668337; c=relaxed/simple;
-	bh=8LzrUZpO7Nu5m/AopRbqdpcppf7Fj9oO71RyUkhfrdk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=FC4CuNT51FIT5zOdOTKQhO2lHMyV+BpeTb/DFOBavFKY1Rw5H5Qw99KRU1MRtXklJLt6gym4iU3+kdS5gZ/LaxmtVjT8BW2Pnau2mfh+SfseGoKWXWiHyFv9BsSOAbMgli05qtxncNaSLBynb+0XUv7SZiO9+/KDs5v1rQgGl84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4bQhRr2l9Dz28fQJ;
-	Mon, 23 Jun 2025 16:43:04 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 55DD2140276;
-	Mon, 23 Jun 2025 16:45:31 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
- (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 23 Jun
- 2025 16:45:30 +0800
-Message-ID: <c7222b9c-316a-d6a9-efd0-49de136f2fbd@hisilicon.com>
-Date: Mon, 23 Jun 2025 16:45:30 +0800
+	s=arc-20240116; t=1750669088; c=relaxed/simple;
+	bh=GKBcbdFXtelcJamN7yeYxZa6oeTkseBIbNXavrEE34M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mZSre6WUTzA1jc8Gdb3sa5HK8kETe+45Gn+8mclUm2xqB+895gNk+hCwRKxaBqmuAio4u1H/vAkIDYObxvi1vJlcbyc3SrBJqWYK6j50l+1tTlvnTd+Mk8f7uwH8x4K6wGkASLMDMNZgJAT1aLgXpY9gbxj4SCoZU4+my2vZMz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3diSoL0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D800CC4CEEA;
+	Mon, 23 Jun 2025 08:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750669087;
+	bh=GKBcbdFXtelcJamN7yeYxZa6oeTkseBIbNXavrEE34M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g3diSoL03mA8/7AfLCg64ovP09oup6HXb7nuUmKai18/zBrUSiE0DSLb1sBBXJ/V3
+	 T3CkT3FNadp8o+kHx3JT3GZyxzMLvvMiG525fVSJxo7p0P84+FCzFfPoFi4rNwlIka
+	 Gn+7ZcD0NtXA0xKPG5sQetAJ/c43U+Am8tbkjctYCnr3h9tXOdNhoXCpg90nK6iPYr
+	 puM+4fr76nPPOPxxNPqGAhD3c4TE4esJK+s55fsJ4Ca5imQmc4ewZ6LwBmZiFutqsJ
+	 Jczbg36RnhP9SdGed7YHHl1oKHUrxm0vlwrKwo+gME1bNCUCEhOn4dBlPc8wHfAazI
+	 Va5T9gv+Cdokw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uTd05-0000000009p-2vHQ;
+	Mon, 23 Jun 2025 10:58:02 +0200
+Date: Mon, 23 Jun 2025 10:58:01 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: Georgi Djakov <djakov@kernel.org>,
+	Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v2] interconnect: avoid memory allocation when
+ 'icc_bw_lock' is held
+Message-ID: <aFkXGUgM9R_MmcB0@hovoldconsulting.com>
+References: <20250618-icc-bw-lockdep-v2-1-3223da346765@gmail.com>
+ <aFPhdWoZDOrdrbQz@hovoldconsulting.com>
+ <90bfae80-f3d3-4c1e-9a5c-9f8205bf90b9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v5 0/2] PM / devfreq: Add HiSilicon uncore frequency
- scaling driver
-To: "lihuisong (C)" <lihuisong@huawei.com>, <cw00.choi@samsung.com>,
-	<myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-	<jonathan.cameron@huawei.com>
-CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linuxarm@huawei.com>, <alireza.sanaee@huawei.com>,
-	<zhenglifeng1@huawei.com>, <yubowen8@huawei.com>, <liwei728@huawei.com>,
-	<prime.zeng@hisilicon.com>
-References: <20250619151456.3328624-1-zhanjie9@hisilicon.com>
- <508bdca6-eab8-4661-a8e8-560b1ef0a325@huawei.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <508bdca6-eab8-4661-a8e8-560b1ef0a325@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+In-Reply-To: <90bfae80-f3d3-4c1e-9a5c-9f8205bf90b9@gmail.com>
 
+[ +CC: Bjorn ]
 
-
-On 23/06/2025 11:39, lihuisong (C) wrote:
-> LGTM, for series,
-> Reviewed-by: lihuisong@huawei.com
+On Thu, Jun 19, 2025 at 03:03:50PM +0200, Gabor Juhos wrote:
+> 2025. 06. 19. 12:07 keltezéssel, Johan Hovold írta:
+> > On Wed, Jun 18, 2025 at 09:58:31PM +0200, Gabor Juhos wrote:
+> >> The 'icc_bw_lock' mutex is introduced in commit af42269c3523
+> >> ("interconnect: Fix locking for runpm vs reclaim") in order
+> >> to decouple serialization of bw aggregation from codepaths
+> >> that require memory allocation.
+> >>
+> >> However commit d30f83d278a9 ("interconnect: core: Add dynamic
+> >> id allocation support") added a devm_kasprintf() call into a
+> >> path protected by the 'icc_bw_lock' which causes this lockdep
+> >> warning (at least on the IPQ9574 platform):
+> >>
+> >>     ======================================================
+> >>     WARNING: possible circular locking dependency detected
+> >>     6.15.0-next-20250529 #0 Not tainted
+> > 
+> >> Move the memory allocation part of the code outside of the protected
+> >> path to eliminate the warning, and add a note about why it is moved
+> >> to there. Also add memory allocation failure handling, while we are
+> >> at it.
+> >>
+> >> Fixes: d30f83d278a9 ("interconnect: core: Add dynamic id allocation support")
+> >> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> >> ---
+> >> Changes in v2:
+> >>   - move memory allocation outside of icc_lock
+> >>   - issue a warning and return without modifying the node name in case of
+> >>     memory allocation failure, and adjust the commit description
+> >>   - remove offered tags from Johan and Bryan
+> >>     Note: since I was not sure that that the added WARN_ON() is a substantial
+> >>     change or not, I have removed the offered tags intentionally to be on the
+> >>     safe side
+> > 
+> > Bah, what a mess (thanks for dropping the tags).
+> > 
+> > This dynamic id feature looks like a very ad-hoc and badly designed
+> > interface.
+> > 
+> > icc_node_add() should not be allocating memory in the first place as it
+> > is not designed to ever fail (e.g. does not return errors).
+> > 
+> > Generating the name could have been done as part of of
+> > icc_node_create_dyn() or yet another helper for the caller could have
+> > been added for that. In any case, it should be done before calling
+> > icc_node_add().
+> > 
+> > Perhaps the best minimal fix of the regression is to move the allocation
+> > into the two users of this interface. They already handle both dynamic
+> > and non-dynamic node allocation explicitly.
 > 
+> Ok, I will change the patch. Just to be clear, do you mean the
+> qcom_icc_rpmh_probe() and qcom_osm_l3_probe() functions, right?
 
-Huisong, thanks for reviewing!
-> 
-> 在 2025/6/19 23:14, Jie Zhan 写道:
->> Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
->> the devfreq framework.  The uncore domain contains shared computing
->> resources, including system interconnects and L3 cache.  The uncore
->> frequency significantly impacts the system-wide performance as well as
->> power consumption.  This driver adds support for runtime management of
->> uncore frequency from kernel and userspace.  The main function includes
->> setting and getting frequencies, changing frequency scaling policies, and
->> querying the list of CPUs whose performance is significantly related to
->> this uncore frequency domain, etc.  The driver communicates with a platform
->> controller through an ACPI PCC mailbox to take the actual actions of
->> frequency scaling.
->>
->> Changelog:
->>
->> v5:
->> - Comment more on error code related stuff about
->>    hisi_uncore_mark_related_cpus(), and return failure early on errors
->>    except for -EINVAL, which indicates possibly broken firmware.
->> - Separate error prints apart for two cases in hisi_platform_gov_handler()
->> - Make the 'related_cpus' sysfs ABI description more generic
->> - Some coding style cleanups and typo fixes
->>
->> v4:
->> https://lore.kernel.org/linux-pm/20250530081722.280776-1-zhanjie9@hisilicon.com/
->> - Allow devfreq core to accept device-specific sysfs ABIs
->> - Replace custom sysfs attrs with dev_groups and let the devfreq core
->>    manage it
->> - Update 'related_cpus' description in the devfreq ABI doc
->> - Remove COMPILE_TEST in Kconfig as the mailbox_client.h doesn't support
->>    this yet
->> - Replace dev_err() with dev_err_probe() during drv->probe()
->> - Replace mutex_init() with devm_mutex_init() to warn on UAF
->> - Replace uncore->dev with dev in some places to make code a bit shorter
->> - Remove redundant uncore->pchan check in hisi_uncore_free_pcc_chan()
->> - Use __free() to let compiler release temporary memory
->> - Clean up the error handling and redundant 'status = 0' in
->>    hisi_uncore_send_cmd()
->> - Some coding style cleanup
->>
->> v3:
->> https://lore.kernel.org/linux-pm/20250522031701.1912458-1-zhanjie9@hisilicon.com/
->> - Remove redundant resource freeing processes when drv->probe() fails as
->>    they're already handled by devm
->>
->> v2:
->> https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/
->> - Make devm manage the release sequence, remove drv->remove()
->> - Warn on !uncore or !uncore->pchan as they're no longer expected
->> - Remove ioremap of pcc shared memory because it's done by the pcc driver
->> - Fix compiler warning of discarding 'const'
->> - Minor trivial coding style changes
->>
->> v1:
->> https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/
->>
->> Jie Zhan (2):
->>    PM / devfreq: Allow devfreq driver to add custom sysfs ABIs
->>    PM / devfreq: Add HiSilicon uncore frequency scaling driver
->>
->>   Documentation/ABI/testing/sysfs-class-devfreq |   9 +
->>   drivers/devfreq/Kconfig                       |  11 +
->>   drivers/devfreq/Makefile                      |   1 +
->>   drivers/devfreq/devfreq.c                     |   1 +
->>   drivers/devfreq/hisi_uncore_freq.c            | 664 ++++++++++++++++++
->>   include/linux/devfreq.h                       |   4 +
->>   6 files changed, 690 insertions(+)
->>   create mode 100644 drivers/devfreq/hisi_uncore_freq.c
->>
+Yes, indeed.
+
+Apparently this is how it was done in the first six iterations of the
+series adding this and then the author was asked to generalise the name
+generation. That can still be done as a follow up (by the Qualcomm
+folks) after fixing the immediate issues:
+
+	https://lore.kernel.org/all/lm6gvcrnd2pcphex4pugxie7m47qlvrgvsvuf75w4uumwoouew@qcuvxeb3u72s
+
+> > Then whoever cares about this code can come up with a common interface
+> > for allocating the name (e.g. move it into icc_node_create_dyn() or add
+> > a new icc_node_init() helper or similar).
+
+Johan
 
