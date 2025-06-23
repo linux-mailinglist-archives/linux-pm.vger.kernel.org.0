@@ -1,270 +1,143 @@
-Return-Path: <linux-pm+bounces-29394-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29395-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDFCBAE4AF3
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 18:31:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 664F8AE4AFE
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 18:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3351C3B501D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 16:27:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43C1D164E59
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 16:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585642BE7BB;
-	Mon, 23 Jun 2025 16:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99CCE299931;
+	Mon, 23 Jun 2025 16:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZK2XNVP7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qHnlrAH6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8638726E175;
-	Mon, 23 Jun 2025 16:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4914266EE7
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 16:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750695901; cv=none; b=R0HuOUDe//hEoAPbOQ2xa9ineSF0gF5PlOP8Vm+yLFmHJoUFtlXvsm0lh4X8Rv/X+IRSIaHh03CXfqOZSIEhuG1ybr8sahYNttOG7jsZguoOuAqb0LsRBk1E1iZw9mUFWeXcMQJvONy09IF79eD9L2ixeI6Vc4Y1Thkfc15Et1E=
+	t=1750696297; cv=none; b=Tyf6z2hWyTK7H1IAg1jPHCjOkOCDQJBHkUFj2w/tmme8UTQ3Q2yP3XabdhZry3pbOLHrmbkWTcwnXCoZwXKae6hKZ07b6m1PGBHYJvHn6VH0qC1vORBWHvlKAcA5JiTFEI+gxRv+ocPczhIRqu6C1uzd0dCoV80TyWS4TClJ+jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750695901; c=relaxed/simple;
-	bh=RkkZ1rVcIjjaIuIUTMKQMdxZMeQhhhILKOa4cee/qmo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hCbEOX80lc/S2xo5l+B/2Ybe6wvN1PQBomiQLitOWMpMJ48pDg+DluAXo/hv7fLyL2gFqimRR4NP326gcincUVg7YpcP8YDpTZ0HvFGyoTJbHQMCq9u340U/tjjxXwMwmHPlBM2a0ZXJn9EsX3R6ilsxPasno83v7KMgsyepnO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZK2XNVP7; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-40aa971550aso2877163b6e.3;
-        Mon, 23 Jun 2025 09:24:58 -0700 (PDT)
+	s=arc-20240116; t=1750696297; c=relaxed/simple;
+	bh=8KsekKS5aRcVIvVUBtntQtfWkhVyoUlhEiE174K9srA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DX7BujLE0u0NlnGGTDxjQbLDFrhsyrzyAJZeV2AVDFofsPP40h7/jT5LYh6oxovPZqgsQsDBTSBgOrDS9K+yvDUd619UNtEP+l+ze1Mb8HUUh49Cw3RhhGxGCXH8CqleLHp00aFqMQ9yipsIk7e3FmSzoJeDWROeUtlAdf/RxYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qHnlrAH6; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso2471563f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 09:31:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750695897; x=1751300697; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3VWQ/3f6uGRHlfE4j0BNsaq/8Sj/J2vStE5CIqW2jYY=;
-        b=ZK2XNVP7i7ziywdF0Ls+yPLQa4xYpHCo/WL62bz8h+VgndchPyXD8KLWpOATCFFSeB
-         PyFQX0wMqxMylOqFEbx1t4LZ4vlFVikVufxdPubpUaNKGPD0cVyz+5vPDTBMXOB9Mycu
-         k7UjgZdgUW2RZOoYlgXfFKsT3xwbBEQqzQ6WKVTS6KL0kem3xcjWr09omSwKntw4Jcfo
-         ecltfCcK00ByMs0pZWj190b37qvuOaLwJXrTncz9ClYNe0mbp8v5l4r9C7Td+BhWQCv9
-         FhMVZB1YEFFYarjnAFvf19EofuiwdtUNV8fUKXdpgTHA0G4KYcs2i77f1dlauQQDIG/A
-         JTXA==
+        d=linaro.org; s=google; t=1750696294; x=1751301094; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0j8AmL2vgCPrh67szF4XCY9cmGpFOza5ajW2zlzTb44=;
+        b=qHnlrAH65AWvyLf+ffRGDHFQlQ8UXXXXodW7rITXKEKgsBWRUUJ01Pt101tLfNdNgz
+         druRmSX5U+bCqNoLkySpbRnNjBEvGhtqWEA6sZgE3faNVC1MOopFIt7aJgpedENnbgA+
+         vLhT/oF+iV4NNJl7ZENbUwAqvYWH3iddwhnanR5l4wIgKj8vv6iI+GCZR6dQ89GS88lQ
+         4HUQJcYLu1l64TswOFIPMbymXvof9EgYaCIw8NBp8I3/Eqx4VOXqXjnURJXJZOFsUk3g
+         05y1QuuzYM81dH5UL1YrQufYoHDEwKgH0zffz4y/y13dXfC9GgNjUFU4R5cTo53tNQSx
+         Q+yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750695897; x=1751300697;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3VWQ/3f6uGRHlfE4j0BNsaq/8Sj/J2vStE5CIqW2jYY=;
-        b=IMn/PwuA4RKkpNS7j1OuJAtD94R7cPE7T7LarGR9XSVNCaOudXTP+wPhuYmdAOfcbS
-         Z7NhONBALHxyMVL+TUkHHoMOIdRtMYoL1BA6/BSCf5RW/NQpZKo85WW0x3D/j0e/ZU7w
-         ZHiOdRkkDblT0XeUbLm8tYriHQRDmOQasJT1AZjGR0oUHB9cxhUOiSQIPSbJBTyn47qb
-         RthfstIo1+knCqqv5ehMv3qWo2XTnXw2pTZ3cTXzFHzNsPnilkQ98mskCvKmnAbA8qrV
-         2/gar+nbwIRTCd0UNTfpB6VpMas+bv/o+RcUrA4X0oKZ1l09Y2RDK9tFeOf56MgJ6j5q
-         uCmg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFzTsfWk82QtQySrOm6u/q775LeZCWv/nrB8bWbPgPz/TmlOTmWnMuFaS682bHu0jvSOdUMvHoWdVE@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDoemS+DUMjc1/zR509CSwum+89fNzZfr968eCWFOBVBroctW+
-	l55T6DBEAGJujmt7mRxwMiHLt9Mnn1+DMnyjGhCiljrX+brngjH18jkBvBY9RA==
-X-Gm-Gg: ASbGncsznsTeAeN+HBuzUhvxWc/0rh2egdO392WuqX2wV9PwEuQt4dSvp0Eb+l7Ylz4
-	/id8qCK+JtH4bhW+rVQ00LcP7JpufPdqv3zVT8U9nAcO45+62byZHur0NdLjSZs5T0WsYtnvlA9
-	ZFRprvTFLtPjqbiaaBZ4VdwGo3EKTslJW8PyEuHG7kVEbpsLeH6mqYJy6kpM53Lwy5ibSENTGar
-	X19E/82ythKUJSCdRd2o/deKBxlfqOTDqx1UByQxxH+IcrE6ZC2zWZ+lhokcpuChwHlXTOKJ7UC
-	hX9KgN3SaPj1nu/OB1ZsRsKvXwuGUHKGqRVJhj8Vpva3VIOnNByV3cTc5bl1GJiJgC+PMY/S4Qz
-	XILNH1w==
-X-Google-Smtp-Source: AGHT+IEG6Bs+8/vgnN6uLWTEKDv4PXruPRD0LnhaF/zwmLkI61Lhi04Ucp0qj7I+ePqCr/pYfrtLEw==
-X-Received: by 2002:a05:6808:1383:b0:406:67b7:8b62 with SMTP id 5614622812f47-40ac6fe65f9mr8820873b6e.38.1750695897359;
-        Mon, 23 Jun 2025 09:24:57 -0700 (PDT)
-Received: from localhost.localdomain ([2600:1700:fb0:1bc0:61a2:e42d:d809:3616])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-40ac6ced44esm1427308b6e.24.2025.06.23.09.24.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jun 2025 09:24:57 -0700 (PDT)
-From: Chris Morgan <macroalpha82@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	broonie@kernel.org,
-	lgirdwood@gmail.com,
-	sre@kernel.org,
-	heiko@sntech.de,
-	conor+dt@kernel.org,
-	krzk+dt@kernel.org,
-	robh@kernel.org,
-	lee@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH V3 5/5] arm64: dts: rockchip: Add USB and charger to Gameforce Ace
-Date: Mon, 23 Jun 2025 11:22:23 -0500
-Message-ID: <20250623162223.184304-6-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250623162223.184304-1-macroalpha82@gmail.com>
-References: <20250623162223.184304-1-macroalpha82@gmail.com>
+        d=1e100.net; s=20230601; t=1750696294; x=1751301094;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0j8AmL2vgCPrh67szF4XCY9cmGpFOza5ajW2zlzTb44=;
+        b=mfPyBXRCuXFhDHlmZw7uDe7CYv2zcuveUn5J4iymVkp1svQrTuj01SD/xK+WnbM+M1
+         YWfrq5d/smFxAh3htSyUx3U1y/BHbNT3qXg2uQTEZOyLjF8n6U3n2UObYojJRjcT5nFM
+         matqaUC9EDfGfhLFmkDgFLNlaCk0I1CPHjD4LndL3sVWD/Uq7LCYR23K060iPui+hplv
+         6v6zki/JnH+hGYTh5A44+RkHWPKEDBSR9itbeXu+1+ZcgI8kJ2r+EXVxBGav4JXGlBy7
+         F2E4kkh5BEzv5Z2SyuXo9mU0ow1scmwAlLqHVT8Yo/zrxeZXIu8BweImd+bmqtfzDOkO
+         illw==
+X-Forwarded-Encrypted: i=1; AJvYcCVr0Xo6NNlh5AhK0C0QYSjC5qoJV1GZwKFJerVi1npnxw2O1/uC6lC2BRaH6eXQnJwjjUlVztkudQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGz9eRswPjUHJeg5LvLCNYENzAhjcLCc0SGf3b7X4mFpckHnZP
+	muMQAJWP2nJ0E3jCKfnwnKPrOLTGrED3fsmKznncZeMHKzcM/d/n9ydRYoyqYN04swxJJJ7k86W
+	EUwPs
+X-Gm-Gg: ASbGncsr/C0tFvoFOP+GYPKT266SjbffAKVM38t42S9agSxpoXO/glcbSs33gGaKLya
+	0Qj8rhy9YDxleGTsA0v5xP/MGm5wRlUQpPxh33QyJ5xAlYz7aVIatq3XHefiWldx31cLsbnVASb
+	0IMHvqejHqk/fuZ6+P5ihkxKRVh9zKWGKv7cVujTMQ3kaE0OuCVesRb74shhZtAHkkket7hAc/q
+	tRJ9ky1lcj+cUojMb9SDfRhzKn+RDDenPi2XZn3tpw8CSN/+6PrMt8GtK5ullFcD5HofjSjVCQT
+	wxByAAp6hE+q8Mm0B/JaIEdlBo5+MQ2gaR8IEtUc/c0wpfQnkNfVB7AZfYGibLOQsg2SV4RGQQk
+	=
+X-Google-Smtp-Source: AGHT+IFtp9SY06hL7tr/NWr3bIhdcZjACNg+h+Rg5V3jKzfHdcvWGYIa/oooWJLbVLfw9PBe9ecQTg==
+X-Received: by 2002:adf:9dc8:0:b0:3a3:63d3:369a with SMTP id ffacd0b85a97d-3a6d130ace1mr9778129f8f.25.1750696293870;
+        Mon, 23 Jun 2025 09:31:33 -0700 (PDT)
+Received: from [192.168.1.159] ([213.240.182.16])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6d1187cf0sm9786922f8f.71.2025.06.23.09.31.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jun 2025 09:31:33 -0700 (PDT)
+Message-ID: <48c87af4-7d42-4283-b407-697b78d5b913@linaro.org>
+Date: Mon, 23 Jun 2025 18:31:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: rectify file entry in QUALCOMM SMB CHARGER
+ DRIVER
+To: Lukas Bulwahn <lbulwahn@redhat.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Lukas Bulwahn <lukas.bulwahn@redhat.com>
+References: <20250623081240.149446-1-lukas.bulwahn@redhat.com>
+Content-Language: en-US
+From: Casey Connolly <casey.connolly@linaro.org>
+In-Reply-To: <20250623081240.149446-1-lukas.bulwahn@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Chris Morgan <macromorgan@hotmail.com>
 
-Add support for the BQ25703A charger manager and boost regulator to
-the Gameforce Ace. Add the USB-C port and PHY as well as they all
-depend on each other for operation.
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
----
- .../dts/rockchip/rk3588s-gameforce-ace.dts    | 122 ++++++++++++++++++
- 1 file changed, 122 insertions(+)
+On 6/23/25 10:12, Lukas Bulwahn wrote:
+> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+> 
+> Commit 4deeea4b0741  ("MAINTAINERS: add myself as smbx charger driver
+> maintainer") adds the section QUALCOMM SMB CHARGER DRIVER in MAINTAINERS,
+> including a file entry pointing to qcom_smbx_charger.c. Within the same
+> patch series, the commit 5ec53bcc7fce ("power: supply: pmi8998_charger:
+> rename to qcom_smbx") renames qcom_pmi8998_charger.c to qcom_smbx.c and not
+> to qcom_smbx_charger.c, though. Note that the commit message clearly
+> indicates the intentional removal of the "_charger" suffix.
+> 
+> Refer to the intended file.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-index 873a2bd6a6de..c74a4e0fa238 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-@@ -575,6 +575,56 @@ &i2c6 {
- 	pinctrl-0 = <&i2c6m3_xfer>;
- 	status = "okay";
- 
-+	fusb302: typec@22 {
-+		compatible = "fcs,fusb302";
-+		reg = <0x22>;
-+		interrupt-parent = <&gpio0>;
-+		interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-0 = <&usbc0_int>;
-+		pinctrl-names = "default";
-+		vbus-supply = <&usb_otg_vbus>;
-+
-+		connector {
-+			compatible = "usb-c-connector";
-+			data-role = "dual";
-+			label = "USB-C";
-+			op-sink-microwatt = <1000000>;
-+			power-role = "dual";
-+			self-powered;
-+			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
-+				     PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM)
-+				     PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM)>;
-+			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-+			try-power-role = "sink";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					usbc0_orien_sw: endpoint {
-+						remote-endpoint = <&usbdp_phy0_orientation_switch>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					usbc0_role_sw: endpoint {
-+						remote-endpoint = <&dwc3_0_role_switch>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					dp_altmode_mux: endpoint {
-+						remote-endpoint = <&usbdp_phy0_dp_altmode_mux>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- 	rtc_hym8563: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
-@@ -603,8 +653,34 @@ battery@62 {
- 			 0x2F 0x00 0x64 0xA5 0xB5 0x1C 0xF0 0x49>;
- 		cellwise,monitor-interval-ms = <5000>;
- 		monitored-battery = <&battery>;
-+		power-supplies = <&bq25703>;
- 		status = "okay";
- 	};
-+
-+	bq25703: charger@6b {
-+		compatible = "ti,bq25703a";
-+		reg = <0x6b>;
-+		input-current-limit-microamp = <5000000>;
-+		interrupt-parent = <&gpio0>;
-+		interrupts = <RK_PD5 IRQ_TYPE_LEVEL_LOW>;
-+		monitored-battery = <&battery>;
-+		pinctrl-0 = <&charger_int_h>;
-+		pinctrl-names = "default";
-+		power-supplies = <&fusb302>;
-+
-+		regulators {
-+			usb_otg_vbus: usb-otg-vbus {
-+				enable-gpios = <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>;
-+				pinctrl-0 = <&boost_enable_h>;
-+				pinctrl-names = "default";
-+				regulator-max-microamp = <960000>;
-+				regulator-max-microvolt = <5088000>;
-+				regulator-min-microamp = <512000>;
-+				regulator-min-microvolt = <4992000>;
-+				regulator-name = "usb_otg_vbus";
-+			};
-+		};
-+	};
- };
- 
- &i2c7 {
-@@ -807,6 +883,12 @@ usbc0_int: usbc0-int {
- 			rockchip,pins =
- 				<0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>;
- 		};
-+
-+		usbc_sbu_dc: usbc-sbu-dc {
-+			rockchip,pins =
-+				<4 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>,
-+				<4 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
- 	};
- 
- 	vcc3v3-lcd {
-@@ -1239,3 +1321,43 @@ bluetooth {
- 		shutdown-gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_HIGH>;
- 	};
- };
-+
-+&usb_host0_xhci {
-+	usb-role-switch;
-+	status = "okay";
-+
-+	port {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		dwc3_0_role_switch: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&usbc0_role_sw>;
-+		};
-+	};
-+};
-+
-+&usbdp_phy0 {
-+	mode-switch;
-+	orientation-switch;
-+	pinctrl-0 = <&usbc_sbu_dc>;
-+	pinctrl-names = "default";
-+	sbu1-dc-gpios = <&gpio4 RK_PA0 GPIO_ACTIVE_HIGH>;
-+	sbu2-dc-gpios = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
-+	rockchip,dp-lane-mux = <2 3>;
-+	status = "okay";
-+
-+	port {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		usbdp_phy0_orientation_switch: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&usbc0_orien_sw>;
-+		};
-+
-+		usbdp_phy0_dp_altmode_mux: endpoint@1 {
-+			reg = <1>;
-+			remote-endpoint = <&dp_altmode_mux>;
-+		};
-+	};
-+};
+oh dear, thanks for catching this!
+
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+
+Acked-by: Casey connolly <casey.connolly@linaro.org>
+
+> ---
+>   MAINTAINERS | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 41f13ccef4c8..c76ea415c56f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20612,7 +20612,7 @@ M:	Casey Connolly <casey.connolly@linaro.org>
+>   L:	linux-arm-msm@vger.kernel.org
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+> -F:	drivers/power/supply/qcom_smbx_charger.c
+> +F:	drivers/power/supply/qcom_smbx.c
+>   
+>   QUALCOMM QSEECOM DRIVER
+>   M:	Maximilian Luz <luzmaximilian@gmail.com>
+
 -- 
-2.43.0
+Casey (she/they)
 
 
