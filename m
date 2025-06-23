@@ -1,121 +1,124 @@
-Return-Path: <linux-pm+bounces-29413-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29414-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FBB2AE57B3
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 01:13:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4724AE57B8
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 01:14:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFD68444801
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 23:13:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DB13189BD3D
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 23:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8F6229B15;
-	Mon, 23 Jun 2025 23:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA3F22A7E4;
+	Mon, 23 Jun 2025 23:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/blIkzM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1Zb9RGP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773DE3FB1B;
-	Mon, 23 Jun 2025 23:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33716229B15;
+	Mon, 23 Jun 2025 23:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750720418; cv=none; b=K9c7aHnMQNTwfIXjxnhEPbR6MPLiuCoitseQKlWefbCsEvTosWYrClAgMwTgVYM5k2zxc9qjFat25kCazvOntUJlNx0N+qNjroRD/4PQWGzvxMJpB/0DHjpK5SsoKUVxPq6jFUS3i0+n2cvlGcVukkjVSKUqvfvhZ0uVCjAwGJA=
+	t=1750720441; cv=none; b=OeVokEWwaJlCj+m1qfoGgrqFr40GhSHc+t+SHEM8UyjrO2Tap4uu5cDAoR8tJkTz6SF2rWMVVjUWVySXPW4JFbYvQ2Q1Z5xd8lk1lFGehmNQ2Yja6Y+ohXg6TvFWFLlHzxr+iYMmPqoP7JF1mraO7tAlwPnJUWHT+CiJzMIUu4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750720418; c=relaxed/simple;
-	bh=2S55zo5R3v9w31WkGH9DNMBkgGInmx6hHHs4AgTfmXw=;
+	s=arc-20240116; t=1750720441; c=relaxed/simple;
+	bh=ZtQ2Qt4f7OMEWIrCp3AR0s+GaEutTrsUFzG/PxY8FzM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=spJSDbsh1mp6uLQybyk65GYAm7Ef3isaLDZWzOnPohnnpvQBLbQlDzUBCdVNExrfN+kpbUt1ToLFEEe/8KnVSouauh65BSH8+jDpQkhXZofOS7XNmnVn34Bx7bm9v0tYoWbIDp8I1q+aFzDYYMSG54hB8zcyJwk2l8q2J8d6kMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/blIkzM; arc=none smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=YdJQ7jIzJwNVGe567bvK9yILt0mfDGPGcnnE3pkJWcrrx2MOFmBegRR9StE4VUUU7HQh9JdMWg9tvAMSBRuWKlGKRMv3MHY4ogZuWJ50kfgOfskg159hmfcCVm2jEXMJVv8qnzbpU128Yd6Sq6mu07mmI9yvroLJHpXyw2JQ8nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1Zb9RGP; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-313dc7be67aso721999a91.0;
-        Mon, 23 Jun 2025 16:13:36 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b2eeada3df1so265933a12.1;
+        Mon, 23 Jun 2025 16:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750720416; x=1751325216; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750720438; x=1751325238; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2HXruGsRkrnO4T0LtQG3CCRxkdrPRNW2kXRz195ROg8=;
-        b=C/blIkzM/MUBBN80ra1mWtk0gyA0uns7T5FCl9EePmqEAFOPcBYwAkpdbTpmooCeUM
-         VQoXQoBX2VhqUIhLweaehYgGg0Rj9teKesLzgqvSidh9hteJitH9MctZQw5frMtZBfRe
-         8xX6pnyll1czxWUjv0jMG8XPWHiHgiLYuTCfROJvHvUCeanzpJUAhOLQcxOLDyXfbNGh
-         JLPx+8Kj4+PyYhgU3QerFnADWhRBfOBujSQmYodmkF6vj8WCAnP2UrHvETVbtbKEfXvq
-         pX/Gi45uBAq7YqzblXQTEoBasrDTRsFMleioWVskWa1sq3idHgYSQhBxOWfkjKQUwOKp
-         q9dw==
+        bh=ZtQ2Qt4f7OMEWIrCp3AR0s+GaEutTrsUFzG/PxY8FzM=;
+        b=k1Zb9RGPdjjfFKQ1vmipn0GJQOyWo3eHucp8lirLYVYuOuqmgEevk/5G+Zs+iYWJSl
+         0so0IV20X3hOgaY9axzzaBtl5XgkW3cOAMDmM5eW3GDkzrVy1aRG7o4d9QmiORz62fwu
+         cMBC4YigWsXxLs/ajZcXIsGvIGEceL5C3pkfMqPgxFUOsXSAwsmkL4kg0j7ljpuTXx+K
+         7gm/i1PIsbH+IcId1Hq9yhRYzcJOetfE8BptVhdhqhLhLJj8gd5hL92v5wblMo81ZrKk
+         xAgoFzKG1wFcVOur3sA+bKZMUtruD9ocbtW3IDVtHCJeo9YQ+vksX6fCzXBfMYNfvpwt
+         dXUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750720416; x=1751325216;
+        d=1e100.net; s=20230601; t=1750720438; x=1751325238;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2HXruGsRkrnO4T0LtQG3CCRxkdrPRNW2kXRz195ROg8=;
-        b=HLpK2VTNNo5SEdZuJCljLWCWP9KURAAhMS6do1/1e6p71Gex9BG6rSKoFj760qvAcI
-         GVT8Km6xr6r91ZI5Uq2UfHdmvdJUN3/2q0egJB76XG3oCbiSayedpbH67g1GvHk/8yhY
-         8pdNbGYygQCCc8vg7Y1mElerz2eIe5tveuWCrfVKkN1/XgTZrMqL6/ippRIKMBb5sagT
-         gg4UME66vgk1ETbRiIMMOXsANLKerP1vg9rWEX8Moo6u+uSJniShFqtRK93Dx8lPaKyo
-         q/FuJH/3EgwOe2XmX0TygMXFTEoqUnQruuQ/z8c5enWAntB/BCKDZNeTMqdm4NiNe8LK
-         05pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUi6L9Qaw7yeolXEDhJpNcSQCJFPFIXuFLzvlV1SOmGHqIb4bdNvbfQUFye8VUldfLvjmOrlQm4dUnGWZfug1E=@vger.kernel.org, AJvYcCVTpr+PSdMMbMsplnf4G4aTDIVe/X54i9UrTqU7cbkFIWt5Fox/E2yUDTZnR+5huelPr07F/2XLSRU=@vger.kernel.org, AJvYcCX/srR6j/VBXbfrRrmdzo/G527bpDMa0/mWDRUL+KG8B5hO9tN0wgKX8zuNXKg/j939jvatKAeYQ9aS9rA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVsiXNyRJIiiIhT2JNcKJXE2KHdKT9W+KDt9kkH2aZge6dbYS5
-	aYyM8t6UWRGn274SquE036bI9RfnpXAWKfzx9MtXQ3RknlGZX+IaF7SrXVC77uxv/wr8Snn+O5T
-	ZPVasGEsE8PG8Vk2n9rn37nkXEAYzvDU=
-X-Gm-Gg: ASbGncuczq0dsfHRvZ6omQ+kaQc9ocG0mxyprN1x8VgVbub48rtsmhogxAgMlmlq0pz
-	LEIuIAHQkwj//FLKL7OI69pU45UOiLy85JpA/Gw4HaUx7tSsFcgvDT/WOHL0G/n2W6iyUc4Q/Mm
-	FgEJpEZYvjYet4izq3lw3LmmNSitFg5c+YuQXyV5C7b2g=
-X-Google-Smtp-Source: AGHT+IH7XVvohyW/cz0YuCPytHgywdDr9SzijVJMsGTdwBGX+kM/pF+FLLchYSGNnYqk9nn2La4vwv67m+JjzET5PAE=
-X-Received: by 2002:a17:90a:d64f:b0:312:1ae9:1537 with SMTP id
- 98e67ed59e1d1-3159d577d0cmr6882432a91.0.1750720415660; Mon, 23 Jun 2025
- 16:13:35 -0700 (PDT)
+        bh=ZtQ2Qt4f7OMEWIrCp3AR0s+GaEutTrsUFzG/PxY8FzM=;
+        b=toksJvoKBp8u3gsg5vSyVaLvwZHUr6h+x+w9jQHUTSyqQw5tBHP8Y0suSh/+tLT5x7
+         KeRxinExNzaZV+or5Ly8ZT+wuIG5hC0vU7Ajr+OfSugWp+fOIEUJ3tGpfxVLAgPAG99l
+         r7ZQc6mDU/NdylotqBnPQbkrqZN/6fYj0bwG5W81x3VE8t6+M5RCTaGJWGxrYI7AAOSW
+         spf1/mszgQwLKNZTqsLQugyZLnfN8BoMS4Pqoffm4D8VtDIHlCDaV0ORUApdVxBzKRaI
+         N+6Qi7f0KXbIr6fCR6YbffNWFnyJ18tSZRFj5HXW7VV6G7tRhRqFHPCqVHXKMBNk4uFy
+         8lTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+EN7VULX7u/QqiDCJaPeYoZzVnL0C0efQFvucM95pB6qI805vjC8YVuXhuQwRbK5HDVU0UzH+wAsLgA==@vger.kernel.org, AJvYcCUHXMzFJPD/S1T3OLjd0Zb1Z5F7rp1kar9DuF8Gowz0dkdIJqF4kHtmc04bUtPaNqLQcNaMke16NRo59a9b@vger.kernel.org, AJvYcCW5upNZlvghOYx+sDWv6goBGGWhZwgj/IG/yE16xUrSkaUJQ/QUCfp2ffE66j44xfbSc6pBQ9Z9QwrL@vger.kernel.org, AJvYcCWs/34aZrUHKQOw6CMd9P93lHDG2NGzQ88VDmIbJnfyyYr7LFdXRHf4GjsSDNiFTywNli6XUC0j6G4=@vger.kernel.org, AJvYcCWs1Qa5SkNvHicPoHOYc/e++g7mDIyNmRmIuvQ5T4Dit+s+Gu1AyxfUVFlhXeF7oxegBgxi5YetwI5P@vger.kernel.org, AJvYcCX6js9Qs2H7VkNDLY/C+LeIGUb0yzL76dZ2lKvViqISAc/yUnBRNu0gVgVvbL9rYaLMmq2WvoOSE923YX0iPQg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5lhNL8cTlakLT2ypLTQMt0H5xVCEZzC97E+dM07b4Sp6SagfK
+	ge/FKEBfbCa6YR7j61ev6CTGxoZohaNgMwad8rXB4au72n6b1InFvh9e27Mlfof7SdTzgDCl3CK
+	yVwIwrXisydZPCzap4MB0eHa1f3neVHaMh8A9xsg=
+X-Gm-Gg: ASbGncsBpyLv6Hy7zMIu9BbOdK6JsEV1oH0tzn6WY23xL9XTCUD96oOqW+3eoUYCp8A
+	iLKIDeBgN7L+9TPH6yAcV6egRyoLJqmo5aDR5RrC9QTdBwJp+GV84aeImSm8IZQDjDEFagh5JWI
+	GgjDBypKyiHfGCkReARqHqo5AvnvMOoiY7KSXCvmF+vm4=
+X-Google-Smtp-Source: AGHT+IEsWii+V5p50ha11PTkF7dtQH4Lp+DAN/BWRuicAVRBL1LKwMw8G12V8WuF/myxhsVW+VQkOs7i/rj5crF+YW4=
+X-Received: by 2002:a17:90b:57ee:b0:314:2d38:3e4d with SMTP id
+ 98e67ed59e1d1-3159d8c5e70mr7719800a91.3.1750720438379; Mon, 23 Jun 2025
+ 16:13:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250609122200.179307-1-trintaeoitogc@gmail.com>
-In-Reply-To: <20250609122200.179307-1-trintaeoitogc@gmail.com>
+References: <ddd5ce0ac20c99a72a4f1e4322d3de3911056922.1749545815.git.viresh.kumar@linaro.org>
+In-Reply-To: <ddd5ce0ac20c99a72a4f1e4322d3de3911056922.1749545815.git.viresh.kumar@linaro.org>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 24 Jun 2025 01:13:22 +0200
-X-Gm-Features: Ac12FXzn7V6XJa8kRyU5bxAVt4CroqqcMGg3veONxVG0AI0fCukO93xidJUyyDo
-Message-ID: <CANiq72=5XhSd5qbWV5PTWQk18-roFKCs=kqF0iEbcn99tKhOoA@mail.gmail.com>
-Subject: Re: [PATCH] rust: module: remove deprecated author key
-To: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, dakr@kernel.org, 
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, 
-	airlied@gmail.com, simona@ffwll.ch, mcgrof@kernel.org, russ.weight@linux.dev, 
-	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-	leitao@debian.org, gregkh@linuxfoundation.org, david.m.ertman@intel.com, 
-	ira.weiny@intel.com, leon@kernel.org, fujita.tomonori@gmail.com, 
-	tamird@gmail.com, igor.korotin.linux@gmail.com, walmeida@microsoft.com, 
-	anisse@astier.eu, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	rust-for-linux@vger.kernel.org
+Date: Tue, 24 Jun 2025 01:13:46 +0200
+X-Gm-Features: Ac12FXyx0oigTMFFaBp0d8IysYfhBRX_G8OKWklWXPpi1hgSkQf15JDHjf6iluE
+Message-ID: <CANiq72k9_bzjV7YbFL1NZTESjFYRiiLgYaGHYv_m9hNa+p9zmA@mail.gmail.com>
+Subject: Re: [PATCH V2] rust: Use consistent "# Examples" heading style in rustdoc
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Nishanth Menon <nm@ti.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, linux-block@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 9, 2025 at 2:22=E2=80=AFPM Guilherme Giacomo Simoes
-<trintaeoitogc@gmail.com> wrote:
+On Tue, Jun 10, 2025 at 11:03=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
 >
-> Commit 38559da6afb2 ("rust: module: introduce `authors` key") introduced
-> a new `authors` key to support multiple module authors, while keeping
-> the old `author` key for backward compatibility.
+> Use a consistent `# Examples` heading in rustdoc across the codebase.
 >
-> Now that all in-tree modules have migrated to `authors`, remove:
-> 1. The deprecated `author` key support from the module macro
-> 2. Legacy `author` entries from remaining modules
+> Some modules previously used `## Examples` (even when they should be
+> available as top-level headers), while others used `# Example`, which
+> deviates from the preferred `# Examples` style.
 >
-> Signed-off-by: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
+> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Acked-by: Benno Lossin <lossin@kernel.org>
 
 Applied to `rust-next` -- thanks everyone!
 
-    [ Reworded slightly. - Miguel ]
+This is a trivial change that shouldn't be able to break anything
+anywhere, and I haven't heard any complaints, so I will go ahead and
+take it.
 
-I don't see any new/missing ones in -next, so this should be clean. Let's s=
-ee...
+If someone wants to give Acked-by's, I can still take them.
 
 Cheers,
 Miguel
