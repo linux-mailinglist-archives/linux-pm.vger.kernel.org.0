@@ -1,234 +1,126 @@
-Return-Path: <linux-pm+bounces-29244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D626AE3366
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 03:47:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4FFEAE33F0
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 05:24:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E14B3A8FE0
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 01:46:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C72D16C7AF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 03:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BE942065;
-	Mon, 23 Jun 2025 01:47:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F0C4CE08;
+	Mon, 23 Jun 2025 03:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ovBpB65l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bc+DCLkA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75AD249EB;
-	Mon, 23 Jun 2025 01:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1EE4C83
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 03:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750643225; cv=none; b=SzZTNEO6/DTuI+tHS09haUKpFXFMLxTQlNfNyu16++ntZ9E277KUrBS+iHBM14DoNSN0nJrqDXlCNQODvcMri+qng5Y1UrheUXrwUb6M/mgJsBofbKW6n4/ZThKYtZXL/L1bO4keOHmpRhJA6RL2rLUwLUG8APBVe09Rdg3KUyM=
+	t=1750649043; cv=none; b=lGyg1osXW/AF2H+kQY0I4gsRaAbVYQbRDhZxBOgwdWlYXhaOZThT3svejs+7RIQoEVUG5LLwd7/VcErAeh8rlkFhV+tub2Ss8E3obv0geJaNNfK+K4Qxak8yPsAbCSpJgJ3khj0+z/D05Q3jDiMrJoPCAOQJralWYu6sftm/VLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750643225; c=relaxed/simple;
-	bh=9K/JNnFHU/bRcV1bPmo9xcwEo+QxFRz0+qWwMxVyvcU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pIZKLxC3LqeIT0xhdK1BPMVsURnoIXq/ZsVHlQNPhtvfbXb7KV+Iux+ONDbFEPu0ZhAN1OSXbyZ8mL1H+vjnhhyKmQA+x1EoSY7Z8x0Fi0EjePst7DxE5kSA/XJiIDUpd7fbUhf19K754sp6/cfIhRSyQpG5+sMS10Jq3mgBi98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ovBpB65l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A58C4CEE3;
-	Mon, 23 Jun 2025 01:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750643225;
-	bh=9K/JNnFHU/bRcV1bPmo9xcwEo+QxFRz0+qWwMxVyvcU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=ovBpB65lGd6q18BTSYHYs0FfMkaowoGWczDuAuAxGgXglrSWf2dz9sdcNWj838Zk1
-	 qaKfRARrFZghBxYGqQplUBndapEGkjfcgIC6NG/IBl7QZ5ZNS0Px3cEnJguyyTmPov
-	 cImR4g/ucjhSBeWeVlcjvh2XspwGfpTgMXifbMtk3gltSvwRGXG1sNbjg3eQBe1zQg
-	 2KE+Chw3Xhx4UudmZs9+FO303fh6hi6SzbZkropsuqShZrEQOBonhtk+r9g+emD7ad
-	 dS9A3HVJs8Jaxo/qd6nGxVYKAMGT8oMnUR62BkxitkP6he9sYM05re8ivNJ5hzZHJU
-	 l+FU7hbDsUepw==
-Message-ID: <c5950427-8a65-4659-96d1-5bb013955090@kernel.org>
-Date: Sun, 22 Jun 2025 20:47:03 -0500
+	s=arc-20240116; t=1750649043; c=relaxed/simple;
+	bh=YkFrTXRe6ZtAHBQw43PlXvc14q9FZUmxADkj+Fj5cCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5KhUuz1pO3hLziTpqh08AmBW4MO0yovqRbD0VeBqULxRFafYS3uKSEJQsk8OuSo+exuWjkhkqIpPRGxapBtedY5GbCeWqXZbEzWYT0xpiAhDUMMZ18mYKoGdTeEXd6kLL6Z/0AAiqASHPLjQH93YDYATrEmOf+abGOKAxt9yRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bc+DCLkA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750649040;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mdx3+MXJ0hBfpTTv/vnHBu5EMqZQrUbHtYh1yI/4LFo=;
+	b=bc+DCLkAziOlskulf3oRvohlrasGb9NO16AycmhNIk83z2Bm84nOluRshF6XDpGkgl+j++
+	EydWJpphgIBs8oOo5t5sYfgZ1OheOqrgiihhRFwOQcHjtoi/p8rIQCWBzZnOoxK8gvTliH
+	Hp9CHP3sfiXUiPfAYco2r8XhzKvabgk=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-461-c-10POc5Mv6maAX83CVjaQ-1; Sun,
+ 22 Jun 2025 23:23:54 -0400
+X-MC-Unique: c-10POc5Mv6maAX83CVjaQ-1
+X-Mimecast-MFC-AGG-ID: c-10POc5Mv6maAX83CVjaQ_1750649032
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BDF7119560B5;
+	Mon, 23 Jun 2025 03:23:50 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.21])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1748319560B1;
+	Mon, 23 Jun 2025 03:23:48 +0000 (UTC)
+Date: Mon, 23 Jun 2025 11:23:43 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Mario Limonciello <superm1@kernel.org>, dwmw2@infradead.org
+Cc: mario.limonciello@amd.com, rafael@kernel.org, len.brown@intel.com,
+	pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>, christian.koenig@amd.com,
+	linux-pm@vger.kernel.org, kexec@lists.infradead.org
+Subject: Re: [PATCH] PM: Restrict swap use to later in the suspend sequence
+Message-ID: <aFjIv5OqUyiSNrRi@MiWiFi-R3L-srv>
+References: <20250613214413.4127087-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] PCI: Fix runtime PM usage count underflow on
- device unplug
-From: Mario Limonciello <superm1@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250620025535.3425049-1-superm1@kernel.org>
- <20250620025535.3425049-3-superm1@kernel.org> <aFcCaw_IZr-JuUYY@wunner.de>
- <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
- <aFeJ83O9PRUrM2Ir@wunner.de>
- <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
-Content-Language: en-US
-In-Reply-To: <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613214413.4127087-1-superm1@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-
-
-On 6/22/25 1:39 PM, Mario Limonciello wrote:
-> On 6/21/2025 11:43 PM, Lukas Wunner wrote:
->> On Sat, Jun 21, 2025 at 02:56:08PM -0500, Mario Limonciello wrote:
->>> On 6/21/25 2:05 PM, Lukas Wunner wrote:
->>>> In the dmesg output attached to...
->>>>
->>>> https://bugzilla.kernel.org/show_bug.cgi?id=220216
->>>>
->>>> ... the device exhibiting the refcount underflow is a PCIe port.
->>>> Are you also seeing this on a PCIe port or is it a different device?
->>>
->>> The device with the underflow is the disconnected PCIe bridge.
->>>
->>> In my case it was this bridge that was downstream.
->>
->> Okay, in both cases the refcount underflow occurs on a PCIe port.
->> So it seems likely the gratuitous refcount decrement is in portdrv.c
->> or one of the port services drivers.
->>
->> Your patch changes the code path for *all* PCI devices.
->> Not just PCIe ports.  Hence it's likely not the right fix.
->>
->> It may fix the issue on this particular PCIe port but
->> I strongly suspect it'll leak a runtime PM ref on all other devices.
->>
+On 06/13/25 at 04:43pm, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> Thanks, I see your point.
+> Currently swap is restricted before drivers have had a chance to do their
+> prepare() PM callbacks. Restricting swap this early means that if a driver
+> needs to evict some content from memory into sawp in it's prepare callback
+> it won't be able to.
 > 
->>
->>>> So the refcount decrement happens in pcie_portdrv_probe() and
->>>> the refcount increment happens in pcie_portdrv_remove().
->>>> Both times it's conditional on pci_bridge_d3_possible().
->>>> Does that return a different value on probe versus remove?
->>
->> Could you please answer this?
+> On AMD dGPUs this can lead to failed suspends under memory pressure
+> situations as all VRAM must be evicted to system memory or swap.
 > 
-> I did this check and yes specifically on this PCIe port with the 
-> underflow the d3 possible lookup returns false during 
-> pcie_portdrv_remove().  It returns true during pcie_portdrv_probe().
+> Move the swap restriction to right after all devices have had a chance to
+> do the prepare() callback.  If there is any problem with the sequence,
+> restore swap in the appropriate dpm resume callbacks or error handling
+> paths.
 > 
->>
->>
->>>> Does any of the port service drivers decrement the refcount
->>>> once too often?  I've just looked through pciehp but cannot
->>>> find anything out of the ordinary.
->>>>
->>>> Looking through recent changes, 002bf2fbc00e and bca84a7b93fd
->>>> look like potential candidates causing a regression, but the
->>>> former is for AER (which isn't used in the dmesg attached to
->>>> the bugzilla) and the latter touches suspend on system sleep,
->>>> not runtime suspend.
->>>>
->>>> Can you maybe instrument the pm_runtime_{get,put}*() functions
->>>> with a printk() and/or dump_stack() to see where a gratuitous
->>>> refcount decrement occurs?
->>>
->>> That's exactly what I did to conclude this call was an extra one.
->>>
->>> Here's the drop to 0:
->>
->> The drop to 0 is uninteresting.  You need to record *all*
->> refcount increments/decrements so that we can see where the
->> gratuitous one occurs.  It happens earlier than the drop to 0.
->>
->> However, please first check whether the pci_bridge_d3_possible()
->> return value changes on probe versus remove of the PCIe port
->> in question.  If it does, then that's the root cause and there's
->> no need to look any further.
->>
+> Closes: https://github.com/ROCm/ROCK-Kernel-Driver/issues/174
+> Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/2362
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/base/power/main.c | 5 ++++-
+>  include/linux/suspend.h   | 5 +++++
+>  kernel/kexec_core.c       | 1 +
+>  kernel/power/hibernate.c  | 3 ---
+>  kernel/power/power.h      | 5 -----
+>  kernel/power/suspend.c    | 3 +--
+>  6 files changed, 11 insertions(+), 11 deletions(-)
 > 
-> That was a great hypothesis that's spot on.
-> 
-> Just for posterity this was all the increment/decrement calls that I saw 
-> happen.
-> 
-> pci 0000:02:04.0: inc usage cnt from 0, caller: pci_pm_init+0x84/0x2d0
-> pci 0000:02:04.0: inc usage cnt from 1, caller: 
-> pci_scan_bridge_extend+0x6d/0x710
-> pci 0000:02:04.0: dec usage cnt from 2, caller: 
-> pci_scan_bridge_extend+0x19e/0x710
-> pci 0000:02:04.0: inc usage cnt from 1, caller: 
-> pci_scan_bridge_extend+0x6d/0x710
-> pci 0000:02:04.0: dec usage cnt from 2, caller: 
-> pci_scan_bridge_extend+0x19e/0x710
-> pcieport 0000:02:04.0: inc usage cnt from 1, caller: 
-> local_pci_probe+0x2d/0xa0
-> pcieport 0000:02:04.0: inc usage cnt from 2, caller: 
-> __device_attach+0x9c/0x1b0
-> pcieport 0000:02:04.0: inc usage cnt from 3, caller: 
-> __driver_probe_device+0x5c/0x150
-> pcieport 0000:02:04.0: dec usage cnt from 4, caller: 
-> __driver_probe_device+0x9a/0x150
-> pcieport 0000:02:04.0: dec usage cnt from 3, caller: 
-> __device_attach+0x145/0x1b0
-> pcieport 0000:02:04.0: dec usage cnt from 2, caller: 
-> pcie_portdrv_probe+0x19d/0x6d0
-> pcieport 0000:02:04.0: dec usage cnt from 1, caller: 
-> pcie_portdrv_probe+0x1a5/0x6d0
-> pcieport 0000:02:04.0: inc usage cnt from 0, caller: 
-> device_release_driver_internal+0xac/0x200
-> pcieport 0000:02:04.0: dec usage cnt from 1, caller: 
-> device_release_driver_internal+0x197/0x200
-> pcieport 0000:02:04.0: inc usage cnt from 0, caller: 
-> pci_device_remove+0x2d/0xb0
-> pcieport 0000:02:04.0: dec usage cnt from 0, caller: 
-> pci_device_remove+0x7e/0xb0
-> pcieport 0000:02:04.0: Runtime PM usage cnt underflow!
-> 
-> What's your suggestion on what to actually do here then?
-> 
-> 
+......snip...
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 9c59fa480b0b6..3a9a9f240dbc9 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1136,6 +1136,7 @@ int kernel_kexec(void)
+>   Resume_devices:
+>  		dpm_resume_end(PMSG_RESTORE);
+>   Resume_console:
+> +		pm_restore_gfp_mask();
+>  		console_resume_all();
+>  		thaw_processes();
+>   Restore_console:
 
-Actually I came up with the idea to forbid runtime PM on the service 
-when it doesn't allow d3 at probe which I believe means no need to check 
-again on remove.
+This change is inside KEXEC_JUMP scope, let David know this because he
+ever tested and made change for KEXEC_JUMP.
+......
 
-This works cleanly for me.  LMK what you think of this.
-
-diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-index e8318fd5f6ed5..a85cd7412cf4d 100644
---- a/drivers/pci/pcie/portdrv.c
-+++ b/drivers/pci/pcie/portdrv.c
-@@ -717,6 +717,8 @@ static int pcie_portdrv_probe(struct pci_dev *dev,
-                 pm_runtime_mark_last_busy(&dev->dev);
-                 pm_runtime_put_autosuspend(&dev->dev);
-                 pm_runtime_allow(&dev->dev);
-+       } else {
-+               pm_runtime_forbid(&dev->dev);
-         }
-
-         return 0;
-@@ -724,11 +726,9 @@ static int pcie_portdrv_probe(struct pci_dev *dev,
-
-  static void pcie_portdrv_remove(struct pci_dev *dev)
-  {
--       if (pci_bridge_d3_possible(dev)) {
--               pm_runtime_forbid(&dev->dev);
--               pm_runtime_get_noresume(&dev->dev);
--               pm_runtime_dont_use_autosuspend(&dev->dev);
--       }
-+       pm_runtime_forbid(&dev->dev);
-+       pm_runtime_get_noresume(&dev->dev);
-+       pm_runtime_dont_use_autosuspend(&dev->dev);
-
-         pcie_port_device_remove(dev);
-
-@@ -737,11 +737,9 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
-
-  static void pcie_portdrv_shutdown(struct pci_dev *dev)
-  {
--       if (pci_bridge_d3_possible(dev)) {
--               pm_runtime_forbid(&dev->dev);
--               pm_runtime_get_noresume(&dev->dev);
--               pm_runtime_dont_use_autosuspend(&dev->dev);
--       }
-+       pm_runtime_forbid(&dev->dev);
-+       pm_runtime_get_noresume(&dev->dev);
-+       pm_runtime_dont_use_autosuspend(&dev->dev);
-
-         pcie_port_device_remove(dev);
-  }
 
