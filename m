@@ -1,132 +1,126 @@
-Return-Path: <linux-pm+bounces-29365-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29366-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF671AE48FC
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 17:43:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 665CDAE48ED
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 17:40:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C22FD1B61863
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 15:36:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 966CA16ED45
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 15:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA96279DDF;
-	Mon, 23 Jun 2025 15:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F9529C33A;
+	Mon, 23 Jun 2025 15:39:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BqaEEl5q"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ESr4kiMi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F1726D4E5;
-	Mon, 23 Jun 2025 15:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3778629AB13
+	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 15:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750692936; cv=none; b=kvxKt3W4vBsSIAhJec7UBLcHRAHkuRFJQDBjxa0eswu2OzP679cDUDIuAjgmQcajX3pb9upxFOGViww+GdhTiDIv1gNr8MRuIn9bHoUegAnwCopXZbbtX0OgeHGOD3jp2s7icNZwl4arc7Kx5sd/e6UCbqsBCh4mf+I2aZRjy9g=
+	t=1750693186; cv=none; b=US4cN+2oaATMEPUk2el53PUjZ/ZZIxxQPAK2RAlvyXtezx9+L0iwoqtX9YyHS0Sgz0d29UHcB0kS4eRuE/aWeqDCEXITWGG7o8XbqaxZFoqadvLKf5x1D4Bsnp6uUIoHTsdQh0SNSCXa3jZzL7xJG8383dhMauzCPiK+gUn96qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750692936; c=relaxed/simple;
-	bh=myI9JGxkwnLWg5XpI+ttHaw7kFElG+eXHPzNOROEDek=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JCff5lP2Ggo6jLb4/LEd9izX4wo9Uf2342gtoLGT+e6sXNw7HsXgcn+JaYhzPTNE4pNRlmfSH/+gq9gvC8SLDhF28GbjldXEV3Vi6zJhVTsGeCViKl3YsdXN/nY6FBmVwLOt6YcNfPUj/bDrlEes/KyhqTj0ewMHe8kadZmYU9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BqaEEl5q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B1BEC4CEEA;
-	Mon, 23 Jun 2025 15:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750692936;
-	bh=myI9JGxkwnLWg5XpI+ttHaw7kFElG+eXHPzNOROEDek=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BqaEEl5qPjSIXkS+eULS1mwdfWQ9Zg3VOAoQgBbop1curxqErpjaUVlSaXCy/vt7E
-	 8VLzM5vkni+Tw80KUE7q7xCN1fhszeGChKBqO/6mi003vRIuQO1QmQamWLSqPKdEA3
-	 NJLs4rgBwVQEtMtstWegA6JlwXQV2opp32MKLW+2eoNPr3zR+ldha1dBrrVc0limsP
-	 DibnSQH2rx66F3r8FY9/SLriFuPwgwr/fwNyodViQWyOWLmyGdZJo0cmVDcecIxIfA
-	 /ZaNNG/CUftl0mv+p8FgBzcpNjT4YG5IM3V3kagO6F8iDaw2OQerN3gkjFKRoQlvxe
-	 csU3HlSg9NE1g==
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-40aa391ce1aso981039b6e.2;
-        Mon, 23 Jun 2025 08:35:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVE3/9xq+gA4LyexiRTaAqzI+6uSEnD9mrE3sGzc19lTnc5ApV2dl1feWhL0opaTAVA7kV9SH+l8V8aoec=@vger.kernel.org, AJvYcCXulMb/FquLH276HBaTmfivjUS2kDASM6vn7P5LWcOFBZFLiEvYXmYxb1pAo1eol1+jS57D7zXZJis=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwR4bMwDZEByT8UmlkvtI5+kXuISsZZHhzpEyHjUvAYgd9H6tPe
-	DMMpd1EXmm/pAY4BoLGMcGmOqnChZlMBmAoh0fJYLpHAjsD7xLY0lEy96I9QZdsE6hyMSaOerqg
-	U1BK3bcAECf9q1uMHsUdC4PvJkQDzUf0=
-X-Google-Smtp-Source: AGHT+IGCY55dEZ+EurAs1KUcKmjSaacHpI+q78BU9Xm6LdDSuXAGo6Eiz6Li3+bt+Z0r06nSeI5gpRngwZc+meRehU8=
-X-Received: by 2002:a05:6808:1512:b0:407:9d24:af06 with SMTP id
- 5614622812f47-40ac6f6db0bmr9972532b6e.33.1750692935330; Mon, 23 Jun 2025
- 08:35:35 -0700 (PDT)
+	s=arc-20240116; t=1750693186; c=relaxed/simple;
+	bh=hzweejx2tV391E/xHsALnrKjfTLLQ1qXqDpwudaH8wY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=NrQEAWzZmnK9nLDOgL6FFoeT9kyQEddZ2jSCset4HZxmDpIAGCdWm0GIzCR+zPXefmSiu15QLfIxwOXqErOo2cb1erF2dhVsMnqg1devoiBPQDC77dCRvin+cV/ehu/m/GgYttJqRiiZ1pz1kC9/umEEOsy2z0ePH+LAg8BStbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ESr4kiMi; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7398d70abbfso5798592b3a.2
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 08:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750693183; x=1751297983; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mohC5VFo2Khyq7uJVLtUEQiLH3jaozZVPkYc2uzJvvA=;
+        b=ESr4kiMifBbwCFUjQmmN6/s/2xF3LHDxBNye0yGKEE42uI1wxSgzgXukjKxeNEIS2w
+         u6idNOj3CErYWfNyKPx42xIj2BrafdNq8QgCzqDorQ34ICZk/Pbpu1sLIakqy/IBIcwS
+         gJlLrX731SmHqRxaawl0MEGS8C89SNrtqFPSO/pLa7c730lH8Km2Nsy60EhDNBiOPdJe
+         gKksP/RzW+KKyowTT9IIJEy80fTK3rwfPxX06Zt2XrTo2VUErKHMa8712Vb10CBmyodA
+         Kf2F9v/qSDhA0YW5JaByzMDhmFggTfDFqTDbHRvq9G2V+THs//ApWgZFy6xVKMPVFVBR
+         ubuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750693183; x=1751297983;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mohC5VFo2Khyq7uJVLtUEQiLH3jaozZVPkYc2uzJvvA=;
+        b=e+FgMhFYadZbEaAjDDRiNkyGbfuQgH6yzk3jYi8mmJ3UKKReAxVjaOkrRDSLt5ol1B
+         neDjuFrf8HbTQpA/X6190EgAEwvHKZakZq8OCjkpyhj7DpKRTkHVv4vvrXuuJizNHnyn
+         iCVM9uTk+e2UqKzro2gMRh5/Rv+mtYEgT30faHbxLrLttQWPxNxnywYpMZ0Ai/pUAJ/r
+         SyPSEx+PLf+PG2JFJaU5WldpIH6SbEUMJS3Rbp4egsafP+PgPgctbvjVSW+MQ2eIR8DN
+         ygTWqHJw5pDqUa/zQp9F20dH3hTG4V5M+xvN7FDcgfDRc2cNlglENIDyKQJP1XrAIpH/
+         7Z5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWGYjcl9e1B2mhwPTlcMqHlNDQ8wLikpkw4efWxkBMvrm5OhRh5WfJKKugQdsHxyEVrHAX5sVBqng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPQdrXyT3jlNxTZMJn5gEHeB7d7E6ZNBd0TR4avT7j+khQQl+X
+	hAfyYI9/BxryQU0ta7nnkqvehHweXr5/tg94sVo+pNPoyo8YE3ThxfWz65PnVg+OCM5tXP5pQ52
+	FWICwgw==
+X-Google-Smtp-Source: AGHT+IEtzfUGiXMebcgTMM/d+ycTT8KreG0zM+7jUxln2kINdcl11Cpifn/EmOu0VDMQqH0ZnY2khiJd4sw=
+X-Received: from pfblm18.prod.google.com ([2002:a05:6a00:3c92:b0:748:f16c:14c5])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1a8c:b0:749:9c2:e154
+ with SMTP id d2e1a72fcca58-7490d4788d9mr18371573b3a.4.1750693183347; Mon, 23
+ Jun 2025 08:39:43 -0700 (PDT)
+Date: Mon, 23 Jun 2025 08:39:41 -0700
+In-Reply-To: <1713a225-44e0-4018-bf5f-64ffd7746167@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250623133402.3120230-1-zhenglifeng1@huawei.com> <20250623133402.3120230-6-zhenglifeng1@huawei.com>
-In-Reply-To: <20250623133402.3120230-6-zhenglifeng1@huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 23 Jun 2025 17:35:24 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jz9Bc82AnpcuGLyiu4zC4J6CzHVj7YRmaqhz71S4NEYg@mail.gmail.com>
-X-Gm-Features: AX0GCFuE1g6UkSCXAnRPJyJHLehsKyEzNsYzhE62PqAbiAST5usw32-FimrLyBY
-Message-ID: <CAJZ5v0jz9Bc82AnpcuGLyiu4zC4J6CzHVj7YRmaqhz71S4NEYg@mail.gmail.com>
-Subject: Re: [PATCH 5/7] cpufreq: Move the check of cpufreq_driver->get into cpufreq_verify_current_freq()
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, ionela.voinescu@arm.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com, 
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, lihuisong@huawei.com, 
-	yubowen8@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20250612214849.3950094-1-sohil.mehta@intel.com>
+ <20250612214849.3950094-3-sohil.mehta@intel.com> <7525af7f-a817-47d5-91f7-d7702380c85f@zytor.com>
+ <3281866f-2593-464d-a77e-5893b5e7014f@intel.com> <36374100-0587-47f1-9319-6333f6dfe4db@zytor.com>
+ <39987c98-1f63-4a47-b15e-8c78f632da4e@intel.com> <7acedeba-9c90-403c-8985-0247981bf2b5@zytor.com>
+ <aFXsPVIKi6wFUB6x@google.com> <1713a225-44e0-4018-bf5f-64ffd7746167@zytor.com>
+Message-ID: <aFl1PcnVuYuELvRQ@google.com>
+Subject: Re: [PATCH v7 02/10] x86/fred: Pass event data to the NMI entry point
+ from KVM
+From: Sean Christopherson <seanjc@google.com>
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Sohil Mehta <sohil.mehta@intel.com>, Xin Li <xin@zytor.com>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
+	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
+	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Jun 23, 2025 at 3:34=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei.c=
-om> wrote:
->
-> Move the check of cpufreq_driver->get into cpufreq_verify_current_freq() =
-in
-> case of calling it without check.
->
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index c4891bf5dc84..9b2578b905a5 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1800,6 +1800,9 @@ static unsigned int cpufreq_verify_current_freq(str=
-uct cpufreq_policy *policy, b
->  {
->         unsigned int new_freq;
->
-> +       if (!cpufreq_driver->get)
-> +               return 0;
-> +
+On Fri, Jun 20, 2025, H. Peter Anvin wrote:
+> On 2025-06-20 16:18, Sean Christopherson wrote:
+> > > 
+> > > So I was thinking about this, and wonder: how expensive is it to get the
+> > > event data exit information out of VMX? If it is not very expensive, it
+> > > would arguably be a good thing to future-proof by fetching that information,
+> > > even if it is currently always zero.
+> > 
+> > It's trivially easy to do in KVM, and the cost of the VMREAD should be less than
+> > 20 cycles.  So quite cheap in the grand scheme.  If VMREAD is more costly than
+> > that, then we have bigger problems :-)
+> > 
+> 
+> LOL. Since it is up to you, Paulo, etc. to decide how to do the tradeoffs
+> formaintainability, debuggability and performance in KVM I am guessing this
+> is a vote in favor? (You can always take it out if it is a performance
+> problem, until such time that the kernel itself starts consuming this
+> information for reasons currently unknown.)
 
-This will duplicate the check in cpufreq_policy_refresh(), won't it?
+Unless you can pinky swear that vmcs.EXIT_QUALIFICATION will provide event data
+for IRQ exits, then I'd prefer to pass '0' unconditionally.  '0' will always be
+safe, if potentially suboptimal.  But passing what could in theory be something
+other than FRED-formatted event data could lead to buggy behavior.  Per the FRED
+spec, Revision 7.0, exit-qualification doesn't hold event data for IRQ exits.
 
->         new_freq =3D cpufreq_driver->get(policy->cpu);
->         if (!new_freq)
->                 return 0;
-> @@ -1922,10 +1925,7 @@ unsigned int cpufreq_get(unsigned int cpu)
->
->         guard(cpufreq_policy_read)(policy);
->
-> -       if (cpufreq_driver->get)
-> -               return __cpufreq_get(policy);
-> -
-> -       return 0;
-> +       return __cpufreq_get(policy);
->  }
->  EXPORT_SYMBOL(cpufreq_get);
->
-> @@ -2479,8 +2479,7 @@ int cpufreq_start_governor(struct cpufreq_policy *p=
-olicy)
->
->         pr_debug("%s: for CPU %u\n", __func__, policy->cpu);
->
-> -       if (cpufreq_driver->get)
-> -               cpufreq_verify_current_freq(policy, false);
-> +       cpufreq_verify_current_freq(policy, false);
->
->         if (policy->governor->start) {
->                 ret =3D policy->governor->start(policy);
-> --
-> 2.33.0
->
+  For some events for which event data is defined (see Section 5.2.1), the event
+  data is saved in the exit-qualification field. (This is done for #DB, #PF, and NMI.)
 
