@@ -1,75 +1,59 @@
-Return-Path: <linux-pm+bounces-29252-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECD76AE35BC
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:32:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C38AAE35F9
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 08:43:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8554416E12D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:32:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6A5E3A248F
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 06:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557F7136348;
-	Mon, 23 Jun 2025 06:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=7pot.org header.i=@7pot.org header.b="utSAW2vt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 635051BD4F7;
+	Mon, 23 Jun 2025 06:43:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lalande.gnome.eu.org (gnome.eu.org [95.216.32.17])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6763CBA33
-	for <linux-pm@vger.kernel.org>; Mon, 23 Jun 2025 06:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=95.216.32.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750660349; cv=pass; b=Nl5og35SstsyA+c/PlAgRWzFnrtx+WR0589I+jakj5bibuv43Q5EhwKtSWd9ZhMHm7O+JNH+N/P7bITlLjEoHNSgBjLLOkWMCek9Zyo8sDpmpgleKx1hLM9mQgkdOA4qTwwYKViuMp5OnKzwFjj7UErv5gtQnkYnn4wSdU4vg0k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750660349; c=relaxed/simple;
-	bh=3i2Uv1Y3z2papHvCGhrL9ZVJnsIV+y1RWJFgcWMXDSA=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100D3155CBD;
+	Mon, 23 Jun 2025 06:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750661018; cv=none; b=pW8rnZ3sgG96e/oIkeH9DfNn2CkqIVgoyaFG2ywdqnZjEcsMSHNiG7X2lcgG3Exz7pXNsp3nJK4YjfyexQOD0iXJxjWCUk9UwID4HBu4oO9K3TrvLHxCpb+ggFYsBSQ4Ws35XfTbj1kDfA4IG2AMTtXaUXHbNW1jmp5IB1OQWB8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750661018; c=relaxed/simple;
+	bh=9PdGgbGKKUnTTw/LJl5rGRpxzu/5LUDwbLFp/xtn7b8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Za9PX/AsvVHnSUNQJDZQzDOpV3vq6IL9jReP6jFPjzaRVtTNUEr2mh9MxFDVQPQPG1sF5dcMh94xsGCNj4fuglhRq1chI9e/e9XAfeNQLV9Red1EuAx/p88iz2QICuLMGq2E3xLMHMrYPbWf9Of+auQU0u7/CKTgvph1xLKNh84=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=7pot.org; spf=pass smtp.mailfrom=7pot.org; dkim=pass (2048-bit key) header.d=7pot.org header.i=@7pot.org header.b=utSAW2vt; arc=pass smtp.client-ip=95.216.32.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=7pot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=7pot.org
-ARC-Seal: i=1; d=gnome.eu.org; s=myselector; a=rsa-sha256; cv=none;
-	t=1750659937;
-	b=laZklOtGP/l2nhKfW4eZG6Fc0fJGYsQEFKDWKHPAZep0wzBcbE07QaQ5b2xt7Gg6mfch
-	 PqUap797j+KgzlCdz0q6MNhvMp+7vNF5HegvYXizCvG7OzbZtttdXda5OltHM18oq/d+O
-	 D6bhSnsxzIKGz/gBuW+RKkfRjYbsu2IfG8=
-ARC-Message-Signature: i=1; d=gnome.eu.org; s=myselector; a=rsa-sha256;
-	c=relaxed/simple; t=1750659937;
-	h=DKIM-Signature:Date:From:To:Subject:Message-ID:MIME-Version;
-	bh=3i2Uv1Y3z2papHvCGhrL9ZVJnsIV+y1RWJFgcWMXDSA=;
-	b=wIAo7W20GpTREiHQS0WZTW4qMamZf2zlkwhBDem9RVtxn3nMSrVEl2SnR56XwulwHEjN
-	 y7PaoZn0Q5WntnazsvwHjFBqVtfK7vai/+iJETJwsquoV7sEarbgigYwBlzQ+ZOBl1m60
-	 tknxlibJRnocxsIE/Ci0BEzYTs3EZd6n+E=
-ARC-Authentication-Results: i=1; gnome.eu.org; arc=none smtp.remote-ip=82.65.226.101
-Received: from leto.ms.local (val50.gnome.eu.org [82.65.226.101])
+	 Content-Type:Content-Disposition:In-Reply-To; b=TmdmpsY4tY/mYjcvSktotDA7cQAFUEb5mpsQV0sLFQUtuorBzTumhQfQ8GdEjXnfz3VeIugvHQDH3/YT1M94xuVqdJ7+0lJdnwC5dv805xQzkBf5NsOnGa+cozZL2HfqBOFhOCwVmxQOarRSX8M8zcZevXA88q4U6fOEdi9ZUsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lalande.gnome.eu.org (Postfix) with ESMTPSA id 50D007B2565F;
-	Mon, 23 Jun 2025 08:25:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=7pot.org; s=mail;
-	t=1750659937; bh=amTgSERN3utDvqCGxTJd0cMQf/6LQr4T4DXQKPu/7OE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=utSAW2vtalgYTldcp+4+rJEGp3n0SaHJAHpZzIh6pHZZVvV4VKRl0C9XlL3aBq/ga
-	 zv4uyJYMTlpfw1k4O76P/VfE3DHphMpHieOz0BeumQx3hsnvAtan3H/LSg/hPmB4w2
-	 DTZzovfMYa06QuIK6t8V6WL1s8dXq7l6wwM4PQr2p3jhDNU6y4ohJV/U238dKF6lkO
-	 cvTgydSRQudOOU+75KYM2ceKGVKbhskJj/Ww5HNaW5IPcDYJma3y9ElQjqfXbl/tfi
-	 cI7IS+I5+LMRC46+CIJi6Jl4zmqjEhmetUp7mr1U4qATcobLK4nIIWQa5Z5EHF9bxa
-	 myQRu+5ayU6rA==
-Date: Mon, 23 Jun 2025 08:25:23 +0200
-From: Lucian Langa <lucilanga@7pot.org>
-To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com, 
-	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
-	gregkh@linuxfoundation.org, dakr@kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	bhe@redhat.com
-Cc: christian.koenig@amd.com, linux-pm@vger.kernel.org, 
-	kexec@lists.infradead.org
-Subject: Re: [PATCH] PM: Restrict swap use to later in the suspend sequence
-Message-ID: <dn6yc4swdyek4gz3bv7g4y5e6xzmo6vm5gkqqhmhbdhomnglbt@nsepw42i6hwz>
-References: <20250613214413.4127087-1-superm1@kernel.org>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 053E62C00093;
+	Mon, 23 Jun 2025 08:43:26 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id D8717100451; Mon, 23 Jun 2025 08:43:25 +0200 (CEST)
+Date: Mon, 23 Jun 2025 08:43:25 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 2/2] PCI: Fix runtime PM usage count underflow on
+ device unplug
+Message-ID: <aFj3jUAM42lSyfpe@wunner.de>
+References: <20250620025535.3425049-1-superm1@kernel.org>
+ <20250620025535.3425049-3-superm1@kernel.org>
+ <aFcCaw_IZr-JuUYY@wunner.de>
+ <8d4d98b6-fec5-466f-bd2c-059d702c7860@kernel.org>
+ <aFeJ83O9PRUrM2Ir@wunner.de>
+ <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,31 +62,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613214413.4127087-1-superm1@kernel.org>
+In-Reply-To: <295bf182-7fed-4ffd-93a4-fb5ddf5f1bb4@kernel.org>
 
-On 13.06.2025 16:43, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
+On Sun, Jun 22, 2025 at 01:39:26PM -0500, Mario Limonciello wrote:
+> > > On 6/21/25 2:05 PM, Lukas Wunner wrote:
+> > > > So the refcount decrement happens in pcie_portdrv_probe() and
+> > > > the refcount increment happens in pcie_portdrv_remove().
+> > > > Both times it's conditional on pci_bridge_d3_possible().
+> > > > Does that return a different value on probe versus remove?
 > 
-> Currently swap is restricted before drivers have had a chance to do their
-> prepare() PM callbacks. Restricting swap this early means that if a driver
-> needs to evict some content from memory into sawp in it's prepare callback
-> it won't be able to.
-> 
-> On AMD dGPUs this can lead to failed suspends under memory pressure
-> situations as all VRAM must be evicted to system memory or swap.
-> 
-> Move the swap restriction to right after all devices have had a chance to
-> do the prepare() callback.  If there is any problem with the sequence,
-> restore swap in the appropriate dpm resume callbacks or error handling
-> paths.
-> 
-> Closes: https://github.com/ROCm/ROCK-Kernel-Driver/issues/174
-> Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/2362
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> I did this check and yes specifically on this PCIe port with the underflow
+> the d3 possible lookup returns false during pcie_portdrv_remove().  It
+> returns true during pcie_portdrv_probe().
 
-Tested this against 6.15.3 and 6.16-rc3.
-Adding my tag.
+That's not supposed to happen.  The expectation is that
+pci_bridge_d3_possible() always returns the same value.
 
-Tested-by: Lucian Langa <lucilanga@7pot.org>
+For this reason the return value on ->probe() isn't cached.
 
+So which of the conditions changes in pci_bridge_d3_possible()
+on probe versus remove?  Could you instrument each with a printk()
+so that we can understand what's going wrong there?
+
+Thanks,
+
+Lukas
 
