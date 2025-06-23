@@ -1,60 +1,61 @@
-Return-Path: <linux-pm+bounces-29299-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29300-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA9B3AE4063
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:33:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FFD3AE4079
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 14:35:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE013188368D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:32:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BDE5166E11
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jun 2025 12:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526A9248F7B;
-	Mon, 23 Jun 2025 12:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E07A2475C8;
+	Mon, 23 Jun 2025 12:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="GrlxxR9p"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Q+xc1/8k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012029.outbound.protection.outlook.com [52.101.126.29])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013055.outbound.protection.outlook.com [52.101.127.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DAB246BA5;
-	Mon, 23 Jun 2025 12:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F65212C499;
+	Mon, 23 Jun 2025 12:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.55
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750681903; cv=fail; b=Chx55+EwsGQkR1gwlJ+32ptmtZYtHLC2z7eP8pQrp5Y6RSPHsdBDqnOMRZpZn9pyw/IgTNqLOlfOyv7ntaohl2A4LOhSPojthKJwhFsnf0OchOZmN9KFeMiacFnTALWLs3fSX9gIa0isTVERuLFMLNDyCYEikUqWyWcA0XrHlOU=
+	t=1750681933; cv=fail; b=IlS0mRMZ1LMyQgSCTlZtvFYAHeCn4HA//jX1IKS4XjwPdw4O6GujnhjzhDa1ATBFNrFgBqcygfHDjdrmdMIwXPDWq+UvzdvhkSIH361xRptKEi1F8BpOuCPNZ99fChgdDJhfV1iYUPbRU7XvjRJHNBLHzpguhOh+JQEy8gKr1sw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750681903; c=relaxed/simple;
-	bh=pj8U/OFxZ1RzWVBWXAsuTUH8PoXqXWUjpcXCH8LDWVg=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=betivXpay5DjbCw6MBMJoauT88yUcm8JwtyzgCu1KNhQUWwg+tX8P354LgKH36l1TaSZLR+R0/vGecny/8g5gBWEs455yOczjPnHxRar7wIapSyLdd7OJYEUL292M1nNDtm3EOE6/1A47dsOlJ2OkCJEEhpwUNbawTeuky2bqOs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=GrlxxR9p; arc=fail smtp.client-ip=52.101.126.29
+	s=arc-20240116; t=1750681933; c=relaxed/simple;
+	bh=Tpfwy7lTMgV42NFEkAN5PiSCjy7Zcq7FKF8xwXsU+No=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FGjtNGQ7PjMsJI/UAOVebDqlh1RtTLUsm7Ja54AKAyO0GHo20FzJEo6cUqzOZiIzQ185ocGH/Dy6KGYcwMWC7mzQ8LKzhveMT1bGiU3xtqVKOp6wGUkoSDQWbpxA7MkY2R8FvdfYR11NBGN1asJS0d5BWa+om69Di39EqS+Iv4o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Q+xc1/8k; arc=fail smtp.client-ip=52.101.127.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ClYzKlUakW87iLc80/AqnywHo4cJKw8X7VFuq7BkqOcDgeBgAa3LBNWJmjEtPo0QiFXT8S74nGl/lFHKemwk4SQ8qAkoDCimPlMzMrI55Ba0nSjFHZ27d3XYDbzs4MRQEzUR4oMKZks6Ry2KGAhUrlkZ+jmqLaGjBWjUQAzIiVRQoK9qz48Ur10gzdEI3tlj5qZ1EtZ8wq4T0p2RjqjiQAHoaVA824wNf4AXfl2PsOYiiDCU/i7pj/YwaM5aXkytpRqEiCQlQG1b6aJ0Yf9iuhcjgLfON5PWIoFODuyHwLj8Qoekh55VDIWE0wojoWwGLhA99JMm2E3T5RSFomDkhQ==
+ b=LabcuhEI7R0OHPDl6CGYqLYHr25DLNeSHKGqMPr4MfdhX4awHYAPAmAi/eeeQEPseWETC+yyre1zu99BG0riVszYD6/N67ns4bPopLPXSQnkcxbZF0itwQTjAA+CkmAro6VMxzLG75wo43Rzkn2BGRJq/Dj2g8WrWr26yHNTaboJ6NFCGsprYtQ2gfkNbtA0FMOOAc3JIp4gK2T6YSqQg1Mv2LUkIdYXqZF5h+2JAtwR0grQd8XODViNAcXWzkTlf2YhBu5E2R2+yAQ3lqSQq03XJmb23B64ppOh/gXRBMQpd/jNmiYxWF5eZSx3R8izm+yqfVxBAEnyc1oyYCg2bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DDBV6B31uO1pa022sfof1l2E+pfWOIJ2LDwkRo+GA18=;
- b=cHxM2Y/ZE4R7JnJuJgiIvCuFBxhgQ1pvAOG5dArAaIiVH28D85KBWEK4wHW/5q7/ZFTrG8sgnpmZMLWwPTCG3iJugZnyhfJagtbm9hupjsNl5TSt+HQceT1NjrUDzFhjzff/kAVU0S4bRPdlvjOMYFo88nMbJQKWiBpIhj0LxvBUUoiVxbUWA9ULejFBk0+6Qa06BI77hW1wvNKY91z1ZIDFINNO98k83UnVq4Hjhz+epPuiBTvNpMhPesZr/jw+qq5cIlxXWyV73KmNrJekSdf3tHhBqAHK0TfdsK1Bid1Uvw0q9KQex/1Q1GqWZm1W5rSAApJ7AfPHiF2FCIUKbQ==
+ bh=vocg3RzS4BO05UD+5EdoWPqN5uUHyMEOG0x3xH7h0Q4=;
+ b=dz8+M5m+mmzBazqnVCC7L7DvavNn7/+kSpg7rYTuQ2p6w2zXVHqmGKtITs579/D1w7zTXWSAj8kNl5B4lalgeGkLHNcH2NWbtBHZb1yDp1TSwkHBVonA/CdkHzugH6SaaPotJ0LAoV88GGXa+g3bMbhM7bCIfvc3LzPYlsHQKnsxhSrB6U5RrjIwDVb3GloRZwPCOF/1mkuX7sKu4172F77qF4XLU085UTT4mQz1yu0Dggnkvj7Qq4mBMZQVUVudS2GW5yLTJ8xTWnFsu9zlDhKjr6AZWhfvDeMGQX/ZUChcWZOslGUM/e33x94XM/YDHUOuHsN1eyvxB+R5ASSptQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DDBV6B31uO1pa022sfof1l2E+pfWOIJ2LDwkRo+GA18=;
- b=GrlxxR9pZmTnxf2exnJEJmlVYGHCP5ebIefH8BArKRCP5d9qpYFPdT+bMs5iauTiDr4kMpbAO2K5F3OGbxR4tbaNpiU4NV5v9rTS6yCggwx2UtLxljqgg4xZALp6wVq+SSju/Yt8O0GZ1HQ7+ayB3/hf06Y83sJ71+Ay4+leodbIqBpIuPWXBdzQGCmoNB76H9BZk3BKQAGvIiDqGiFAhfWQKLu7Ck3/0u4mSW1LT8b5uIEn5IJe0+KqZqp/grZJPYqLb7L2T5X8jXyEeqdrWozs575VbeO7LwasJusIzc2JRmIiZZdmdEv2UjvxHwtHv6JLcQ8mBnuWowbRH7iTSA==
+ bh=vocg3RzS4BO05UD+5EdoWPqN5uUHyMEOG0x3xH7h0Q4=;
+ b=Q+xc1/8kKmI1r2CZ+jreb/MupjlqPrTomkN+wUhfEIHAroHfoJtx8uZJ2DJKCY6Bj8V7SWVZomsR4oiwsFyma3lzWU4TkyTJaGu9pjgN0vvdgIeUaI+SxnOjmzOruoomkIeL8EJz2lWuAw4RPmbrjHySSHlCcn3fosNPjgK6oxeYELjVKsjVMp3668rj9PI41U7dxuFKNn9NxW4mNpKfzZP7xH2evs9eqiXweQoTl8hYDWu7zHo9nZf1LfJ2NgKuFKcgeDazHKunGi7FFvlWmyKVzih5gIrtBgOX7UWzypyBjqpP+E5tHeKbNVrqRabdpsw9lQ73uqrJeOfJk+ZUcg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from OS8PR06MB7663.apcprd06.prod.outlook.com (2603:1096:604:2ac::8)
  by TY0PR06MB5185.apcprd06.prod.outlook.com (2603:1096:400:21f::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.26; Mon, 23 Jun
- 2025 12:31:35 +0000
+ 2025 12:32:08 +0000
 Received: from OS8PR06MB7663.apcprd06.prod.outlook.com
  ([fe80::46a5:9b06:416e:1e49]) by OS8PR06MB7663.apcprd06.prod.outlook.com
  ([fe80::46a5:9b06:416e:1e49%3]) with mapi id 15.20.8857.026; Mon, 23 Jun 2025
- 12:31:35 +0000
+ 12:32:08 +0000
 From: Pan Chuang <panchuang@vivo.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -94,22 +95,24 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
 	Greg KH <gregkh@linuxfoundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
 	Julien Panis <jpanis@baylibre.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
 	Raphael Gallais-Pou <rgallaispou@gmail.com>,
 	Patrice Chotard <patrice.chotard@foss.st.com>,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Cheng-Yang Chou <yphbchou0911@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Costa Shulyupin <costa.shul@redhat.com>,
-	Caleb Sander Mateos <csander@purestorage.com>,
 	Yury Norov <yury.norov@gmail.com>,
+	Cheng-Yang Chou <yphbchou0911@gmail.com>,
+	Caleb Sander Mateos <csander@purestorage.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
@@ -122,11 +125,16 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	linux-sunxi@lists.linux.dev,
 	linux-tegra@vger.kernel.org,
 	linux-mediatek@lists.infradead.org
-Cc: Pan Chuang <panchuang@vivo.com>
-Subject: [PATCH v6 00/24] Convert to use devm_request*_irq_probe()
-Date: Mon, 23 Jun 2025 20:30:33 +0800
-Message-Id: <20250623123054.472216-1-panchuang@vivo.com>
+Cc: Yangtao Li <frank.li@vivo.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+	Pan Chuang <panchuang@vivo.com>
+Subject: [PATCH v6 01/24] genirq/devres: Add devm_request_threaded_irq_probe() and devm_request_irq_probe()
+Date: Mon, 23 Jun 2025 20:30:34 +0800
+Message-Id: <20250623123054.472216-2-panchuang@vivo.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250623123054.472216-1-panchuang@vivo.com>
+References: <20250623123054.472216-1-panchuang@vivo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
@@ -140,97 +148,99 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: OS8PR06MB7663:EE_|TY0PR06MB5185:EE_
-X-MS-Office365-Filtering-Correlation-Id: f1c08ef5-d1e0-41dc-26e1-08ddb251e3f7
+X-MS-Office365-Filtering-Correlation-Id: c61aa7dd-385e-48db-7762-08ddb251f7eb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|52116014|7416014|376014|366016|1800799024|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TFphQUQxbjVrWHhDelVvK1RaZGFjNnU5bE5jREo2SDhzV0oraUgrSjBEanor?=
- =?utf-8?B?cThWR1YyMGxZNTdkUmtWRGREVVFXM0JYbVliQ2hvMk9PYzdYRXdPZzhoQzli?=
- =?utf-8?B?VkNzS09XcTJBN3B0V0JmS2VVTEZmQTdSOGFxVnlGMWo3bkEzYTNYWlZKdUtm?=
- =?utf-8?B?R0pnNjFjN0o5cUJ5WDBVQkJydlU5QVRvZEJMam1lQVVVVW16NzRvVEZ4Uko3?=
- =?utf-8?B?OWNUSS9RS01JVzJ5ejAxaytyYk5uelFscG5ZejFtTVBqL3hHWXlpbk5QNlRE?=
- =?utf-8?B?Y2R4Z1VaLzhUeEtRZFBYanc0YzRVWWRPelpRMkRlYlltT3BQUldmL1QxUHBO?=
- =?utf-8?B?K0UyS29TWE5reXJGbTVnQUZYY3N4M2tmYWVvRHdTaGdLVlVFbzdMSWxIUmRq?=
- =?utf-8?B?TnY1VzEwNVVhU0svV3RGZUxLeC8zWnFKRE9RU2w4Yjh3Q3RBTnQ1bENTMGIw?=
- =?utf-8?B?aGxaVzR3Q0JDZVdNTG9jYnFpWHQ5azZZSm05OFoyM0p1ek1NdE95RzlhckhU?=
- =?utf-8?B?cW5nYWdQaysxZHY0V210NVltOVpTSld0NUdIRWFSbi9sMHRINTV4WENQTWZH?=
- =?utf-8?B?V2syaVpubC8xSGtTOVVWb2kwR1dNWk9iaGFwY0lmTmlEMnJoNE15QTc3Vmh5?=
- =?utf-8?B?bm53RXJNZkkxb3BvZDRYUDZ3dXVBRDB6dVNqVmV0eUlQbmtCcEVMOXpKdVky?=
- =?utf-8?B?WjUrNFBScFlhVUt6WEEvbGRxYWlmZGU2YjlQamlpcGNHeEdHdzdBdlVQMGRj?=
- =?utf-8?B?VXl0STM4KzVVMHNONXZNc0VNcGpKaGZvWkZHQXN0cy9VMmcwVjZuM0tPQ0Iv?=
- =?utf-8?B?a1laOWJhV2JzWFFEMm9HajVxdmZXWWpreUFaSisrRlZJdTVERWpSeVpKbEJM?=
- =?utf-8?B?SkQ3Z0x0WmxMYUI1V2RRaUdkVGZPL01Zd2ZJVExIWHBIazVRUmpNOWhoNXVo?=
- =?utf-8?B?YkRRckxvSEwyeU9hbnFyVTlxQ0ZrelJtQjVza0VHUlBUWWk3bU55NktIM0J5?=
- =?utf-8?B?VGdMaHYzWHQwQUVrMW1hYTdBSmpUYTBIckdNNGRHN3laeXJlQlBIeGREMWxh?=
- =?utf-8?B?b0V4dklsV1lRcW1XUlBPTmhrUGorWGwzbWJXU05pTHBsa01FNGgxK1IwMzZh?=
- =?utf-8?B?N09DVTR4Q3l4YUU2Mjh5QXEwcDNsWTFlc1VudmVwbEN3WUNQemNLVUpGa09p?=
- =?utf-8?B?Zk54YjdHcDNiZGtKb3I4UjZXRStSTzJEMnBwdFZoWDNocTgzQWtCRWdiMEVH?=
- =?utf-8?B?dmtVSndLRW1CY0hmV0tKL1EyNDI2cExFeDhDRUJkMFhUNkU1WDBYcmlkbFpa?=
- =?utf-8?B?MWRqeUwwUEhrM2haTlBDS2JtRFF2MmxyaVEzWmNoazlHNlhhTkJweVdrQjVs?=
- =?utf-8?B?L0VwdElFLzJlSjZ1bUtmb1A4ZGd0aHdpZFdSOG52dVBkZXEvZXBqMjRvSVRX?=
- =?utf-8?B?R094ZGliNkEwRmVKSXNiZXlmeE9PcDdkMVZZdlpwWFNDaUhOMlMxRCt5a1Vv?=
- =?utf-8?B?c2ZSMkdMQmJzK3NITUVCd1huVWh1UFg4RnJrTjFmbmFvT1I2UGltY21RZ3kx?=
- =?utf-8?B?UFlWazJ0dnNINmdSV2U3d29hOW1yUWNPK0s1QXM2UXJsbUk4NVZNUkllMHND?=
- =?utf-8?B?WnlWbTdEVVhwOExmcWtMNWlkNTNuMHh4LzJ1TnZVVHljaWpMNG5IaUNxdk5u?=
- =?utf-8?B?SFgrVHVLUEh5MGUwcmNucVlTcGF5aGoremc5b3J3YnFoUm01L1Z1bEJmUHZI?=
- =?utf-8?B?L0F5ZmJVQ1BLUmZOYkgvUUpDSnhtWWpvcVk4bVFGYy9oSWJHOEtNVUJKWGoz?=
- =?utf-8?B?eVRQSzRTNE9qdVdVNFBlbkZUWlhMZTlDSjA5Q282ZEhxWms5c3JqdXBlSDhk?=
- =?utf-8?B?ODVyQVBUeG0vcjY2TmdHVTRWSVFkdk1DUmIvZXBFNDhwRVA0NWYxV2hFNS9k?=
- =?utf-8?B?ZmpPZHlFWXYzSzVrSk5taTJMcGU5ejAvaTUyVFRreFlhNzVBcSt3NTNwMjZG?=
- =?utf-8?Q?2g6nbIXDHkuDJdVqhd0d6aiIc4xEPs=3D?=
+	=?utf-8?B?QnJxcVRJM01VNHBES0FKVkpFaDh3NnJxbXF5N1RPVkRhdG52Tk1pWEV0WnND?=
+ =?utf-8?B?bTFTbE1kdUZJQ1JqZXM2WnVTYU1XWFBTWGtpQ3BzQ1ByaUE2U203RVh0RTZU?=
+ =?utf-8?B?UlJROCtqWWhxTGlZMkQyenZqRWJnYkgveHNpSncyNGNyaEw1MXBGb016S0s4?=
+ =?utf-8?B?VGtlTjZyemk0K0FLOVJ4VXM5MnMwaTBZL2ExdGl4Lzcxb1Q0QnhsdmtqUGJw?=
+ =?utf-8?B?L0hUbG40WCs0Rk9WcEwwSXZENkRTQnZiVlhvckRhQ2JDYlhMRHFMZ01SaFFK?=
+ =?utf-8?B?TkV4Y3phYTlnbDdxL0RnZk9UcVFWbXEybTFuVTVUYmcxaitIUjhUQXAvMGVW?=
+ =?utf-8?B?NHNaZzNyUkI2em1UVjBUV3JyTGtVWjdVMmU5N2ZnRmczVFFvenZ3K29ZMkJw?=
+ =?utf-8?B?ZXlHWTF2bTVnWVEyem5MZTkyZjRPWFEvNDcyekJ3dHdENS9McGFnajZHR2tj?=
+ =?utf-8?B?WGY0M2hzNzA5T1VxWnJ1QzhmVFpJVm9ubGpsTVl5N3BlK25zeUtiTzFlQktT?=
+ =?utf-8?B?UENHeTlrdHEvN1hYNXNhWDhUZS91NjdVTGF1Vk5pcjV1dXFKMU9iK1R5VDJX?=
+ =?utf-8?B?R1licFByczFwdWlkcGZQMnJZdmxoWVpTR1R6dFU0akJRN3FRZHJIbFd6RWhZ?=
+ =?utf-8?B?bTNUUzNLNjJQSlhsYU1BSzBBWnppL0dnUkxPU0EwZ081OFdJZFUyV2tGd1Nq?=
+ =?utf-8?B?dlBBeEF3L2xpc2o3WkpnMTFsczdKbXNpblVYVStXa0NCdjhEUWxqRm5LK1FK?=
+ =?utf-8?B?T0poM05BbnlUaEJwOER4QnFnc2FKSUVER0lGaTVscysvM0FlcWJRYS9mWVlF?=
+ =?utf-8?B?UXdsSXoyVlI4NFBSM21nZkVudUJXWUdCdGhFTWJ5U2h0S0hKS0ZaQ3BMYS9Y?=
+ =?utf-8?B?WTFJNTJydmFGRjJ5ME1yQ2RMSUttejVnZWQ5QzlXZmk1cVVGWU5NeThVTzdZ?=
+ =?utf-8?B?L0lod05BMEJ5bDZIdlpsRXpyWURHZGtzWWI0WlRpd0Z0bGsrcDU5ak8rMGg4?=
+ =?utf-8?B?N1MrUEROZXdoZTZxSkZDdmIzSVVFek1MNXhtTjF4M3ZZWWUzRHJhcHZ5Zzc3?=
+ =?utf-8?B?VVFtcUN6ODR5c3I3UDFJVSs3T2NTY3praUxSM2R3UCtpVjRlUVZQUlhCTDBv?=
+ =?utf-8?B?Snp6V3h2eG5BdVpaMUdldy84aFFzME0wdTMxL3JIK25CYkcyMWhjSmZqd2ZJ?=
+ =?utf-8?B?bFU0QlpxUzdoajRHNFdaeFRhRXF5UmcyWkxtVUhJcFlyRlVwUW5ZZHJMdWdN?=
+ =?utf-8?B?RGlXNDFtYWx4Q1hJZFkyK2tiUm50eURhbXdrTHJ3bFlRWWRKb2pPalJZUkJE?=
+ =?utf-8?B?UGVDaHJuSEhYMzd3K2lIOTVWem1jMkY0b3NTemo3Q3JJOWRyQkJiWU96Z3E1?=
+ =?utf-8?B?ZXJsZkpQbGRSMGpNWHM2aEJ6cThNb21FSWxnYVVJazhscDl2ZlhGQ3Y3eWxE?=
+ =?utf-8?B?TG1hbm5ObXZXM0xBeEJQQnpkK0VVQzJOY3I0SkRRQ2N2TTh2R25lZnFSVDV4?=
+ =?utf-8?B?Tm5sZlY0YmEvZHhHa0VUWXBwNGxCNTlXMU5lQTZWdjlGREl4Rm82YmZ4RVJy?=
+ =?utf-8?B?VFFNVHNMQ0V2WTFXR3BGU2lnUnpXT20xNE90TGpscVlTN0I2NHdYWXVZN0Vv?=
+ =?utf-8?B?bEswQXpXdVlUUithTnExWWxSYUtjcTA1THQ2KzQzWkFudWNja0RWT09yNncx?=
+ =?utf-8?B?TldNQmxIbzNQYmtMazRSUjV6c3luVktMZVI4ZGpaN3gvWExheFEwQ2k1YnZu?=
+ =?utf-8?B?VFBlWlZ5WXpsVkVxT2ZCUllobkR3aEZMWlUweEFiSEFYUmV4bzBnQyt3Zkh1?=
+ =?utf-8?B?cmFqeXlRbHNuYlZJWGVzRm56T2k4WEE5SUcxaC8xeWhRdlNXbFJCYlhTZmUz?=
+ =?utf-8?B?Z2pMK3pmUEF1TXpjV0NrU211c0dtU3BWN2ovSkIzYllPMmxiTWxmRlNPWktK?=
+ =?utf-8?B?MGZpNFZMdlRkeDdGbGlkVCtkQjAwdCt3MmNDYktJcTJLMUF0emRzWExnYzBV?=
+ =?utf-8?Q?vGbVMGJiVqd+Xuj82qbiunZZjucegU=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7663.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(376014)(366016)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aFRGK1ZnV0FLazN0Y09mQVV0RUdUUzFFSzhHV3hwc0hZUEpjQ2RKOExXeWNF?=
- =?utf-8?B?U0YwMUlOc2V5R3J0eU9tNHp2Y3pzUGpIUU1EUFZXQURrdGYwZGNvd3pRQmF2?=
- =?utf-8?B?RTJlblBYNkhvODQrRGt5TjFVb001VHdVcHJWcXlVRk5NRnhhdXJZYUFyemRa?=
- =?utf-8?B?YTYyeXJJMnE4eHFtYktGN2xVTGlFRlFwb1N1c2RQUDUwc2hBWGZJWWhOUWJz?=
- =?utf-8?B?dU54YUJEYTFLKzhFSnZaNWo0bHg5ZVVhelptWUxIRU1FV1BaKzVIbm8vbUND?=
- =?utf-8?B?MndSRFdjK1JYbmxSaW9lNngrMFNYSXB3amlQWTRTN1lyT0FENjcvMFcxSWlU?=
- =?utf-8?B?QnJHamk5dDlsWW9sNC94Rk5VSm56MXFMYWtvalFUUUIyWVFwenlBZjNmcFNK?=
- =?utf-8?B?a00xWmNXRmZDQW05cGU4dHlIRE1zUHdxQkxqWFUxWDUzbEQ3aUloR3dacjRo?=
- =?utf-8?B?Z05hOGVndDVKUkNiV2s0aWdhYzM4Y3BCSFV6cGpkZE03YUtkcHEzQmxBYVpF?=
- =?utf-8?B?MUR2T1dnZ0JyaWJnMi9zV0xxNzErUDRwdlJJTFdBbzFLTWRabHZsaHozVTZB?=
- =?utf-8?B?RjdmNlhxUEZoclNWUjJoMW0wZnp0NjRVaDA4dEh4enJQM2RGWnJ6R3NBNVRP?=
- =?utf-8?B?NVBnNG5mbC8va2lFY1lLRzN3N0d5elV1Y1IrOTk5OTY5UjErTm5HRzFFT2VV?=
- =?utf-8?B?T1RjYmFaUE9tK1U2d0RyTGF3eWl0bVNOSit1cFVGblBwY0pIaEQwdTE4UlRN?=
- =?utf-8?B?bHZLeDRMTG9Cd3BJeTF1M292OFZOL1JGVTQ4ZmZFclVianhtVjAwZ1h2M0Ji?=
- =?utf-8?B?V2J5NVBzWEdoREl6RlFCaDhrMU9FZVB2UGMxbDhOTUxxdk1Ma2pnZUtJbFNR?=
- =?utf-8?B?Y3laZ1AwajJFbVVCdElKZXJ0MFFMYWtrYjV5WU5aRVFUNDVxWkVzQWEvMExI?=
- =?utf-8?B?VWVYNDZaRVZNQUwwOTUxeG1kdjU0dUJmdGkvK2Uxd0RZK1o1Z2t1dnBNR2lB?=
- =?utf-8?B?QTdWMkRpNWFkNTk0VVdzT3BTU2dhV21LMTR0eE10VzdDaUpoYlE3djdHaWFQ?=
- =?utf-8?B?YXpwM1ZraW11emVUZmZ4RW5VY3R5aXRJYk11L0puT2FOcWhKT2xiMjk1Lyto?=
- =?utf-8?B?TGJMVzNvNDFoTXJXdDhjYXFlOWJvR1F3dXV0OGFZbkNzbHVyN2ZLcUNtOTZs?=
- =?utf-8?B?YUdNaXpDWXZPcG4yZmpScjNzMW5yYkRBY0crTDA1ZERRdlVWYzVnbXNjRDB2?=
- =?utf-8?B?aER3SWZKSjlFeEtPME5va2NYb2hzTHJLZCtxR1J2MER6RThEV3FiU24zS1pM?=
- =?utf-8?B?SUZZbkRHZmdyREFVTEI2UGdEcHVjNmRsZVpUZFBoR1ZPRG9HYnA4RVJHU0Jz?=
- =?utf-8?B?aTVjT2xjbVFYdDRNVGw2ejAzbUl4VGJCbkRqd0F5NnFrZUJkUk00WFBOVEFP?=
- =?utf-8?B?TDN4eTQ0QXgxTmg1dXlIZXZHODZaVFBWb2NVREFtVkJrUi8yclVrcnVJdVFh?=
- =?utf-8?B?d3QycGEvZDRTVGZqTGJPYnU0RjdvdSs0NWs3MWVwMTZaVDVmK25DTFM5Y0xD?=
- =?utf-8?B?M0JHSlgzemo1cFJib0gyRGNtZXNQMGNJZVZSbTRpdDZqdUlsSmo2em04Mi81?=
- =?utf-8?B?NDAxMTBRdkhuM3VDQ3ZhbUNhK011akhNdTNNTTlScVVPWWszeEZlRnh0Sy9O?=
- =?utf-8?B?R293ak55ZmVQV1ZYWVk2a0JoU3d2NjlBbjNxc0h2NUhYUU1XUTdwSm9VemJy?=
- =?utf-8?B?RjN4dE92cFlKc3Q3c1c1NEZDKzRpUDRBL0F4dGttODZncC9UL2sxVTg3SGJY?=
- =?utf-8?B?aHhhY1hqRlI3K3ltcFNiOHViSFBUbXVEbjlCOTgxamlwTVVNT2VqQzFtTFBJ?=
- =?utf-8?B?OWxlQjIyZmhwdXFVZ01RTEJ1MEJ4cDg4VUlrWi84a0ZRZFhyYlIreFl1NER5?=
- =?utf-8?B?SHRQUk5mRndtS3NONHF3ZVRFVjg3dU1EU0RFQlRWUkg1UU9mV1lMSzFCNTda?=
- =?utf-8?B?ZkZvUXloMVgzQituVElScUN6NU84Zm5ibDBzdHNaYzFmYjFzSDdmcUZWeWYv?=
- =?utf-8?B?azFYaytMZmpPeU4xV3hjTXdqMXcvcTV0b0xPNWY4UzZub2dwcEw5K0k0eFQy?=
- =?utf-8?Q?yZaQi34CdSMe5EbJv7LZDGYyU?=
+	=?utf-8?B?ekxlN21nczh1ZzVhTi9CbzN3bWMzZXRMTjlBL2xURUpwYUwrTktVanFnWU0x?=
+ =?utf-8?B?Q0dQa3pmNzRQcDdBbjNkS3hFNFB6aHMxOGZObzRGTzU1eExjT0dlOFlubXRs?=
+ =?utf-8?B?aFJaM3lieDlHb1RiTGxkYTVobmRTNUhnZ0hONDRkdzhuanFxb3dRSWlPSkVR?=
+ =?utf-8?B?WEpSNWtaYUN3Q3NreDd5OCszSDBDemk2cC9WRXNnc3UvOEtQV3BhMjhscGc0?=
+ =?utf-8?B?Nk9hUTJvZFhSUmFqZnJ0VzVkMHFMZ0tkeHl1b3JXdE50NmhjV0krQm1hMllj?=
+ =?utf-8?B?VDZNZGs5UVQ3KytRUm5LMktRR0tJV0FuMFdsQUQzRUlIMnZpQkNXVVN0a2d6?=
+ =?utf-8?B?am9XZzlrY24zUUN2cFMrWVRCVWlJa01ML0ZLVllrOUw5TlB6WjFjSHo0T3N1?=
+ =?utf-8?B?SHkxWVFpaEZIc2pQU24zR1h5RW1ObnUxYXdETWVDNTQvNVo5T2VabEdSZFpw?=
+ =?utf-8?B?ak1tTzBwTyt2d09WUko3WjhTQ29Ib0ZDR0hleS9NYnZMVjZ4cTNHTjdoNmo4?=
+ =?utf-8?B?YjMwdm10U3FvNFNUMUlKUi8rUVdsL0hWMEJGSjRPeWFBeDh5bFhMM3Z0TUJC?=
+ =?utf-8?B?MDQ3TmF4MW0yeTdRN2JIMnRKN09BSjB6VW5FdTNqRUZhUDlUdjdPVHFwZnR0?=
+ =?utf-8?B?TmdYNy9ud1FSSVRPMU91cHNyQTBHbHJaTnNYL2tHWW1mRk82cElrTHRiTE96?=
+ =?utf-8?B?VHVyUTNuTkhFRTZ0Y2JBdDhsWDc2ck1XWE9yMDVpZk5QT3RGL0l5Y0IyTFJm?=
+ =?utf-8?B?SGFpSFU2KzdIMXJnVWJmRlNPdGxpdlFZVWhWYzBBQ05ESncrYUw1Ny83Tmt1?=
+ =?utf-8?B?RHBqaE5KdUx6Z2FnSHkrQThJN1NwcnNDVkhpTVo4akhKVEcvd1RUa2RpbXZF?=
+ =?utf-8?B?REZZU292Z0U4N0JHVXd3WU1HZlRKRzNIRVM2UmdEWXNqU0Z1TlVCWTNZK0Nj?=
+ =?utf-8?B?bElXcmZaU2F2RTlHTGZvczUwZGNWVm1VOTBWZ1hEMEQ3MXdGNXcrb21pT3Ru?=
+ =?utf-8?B?VXFMVjIxV09qTkdZOUhxdGFRWWd0QUlVQlBVUm9PaS9wQ2dVN0dxa3ZsUEkx?=
+ =?utf-8?B?YVUyMWZLdmFvRkZPbHBJOXFNSTZEejFneWNHUUt1dm9MUE5tdWJKdUwxcGIz?=
+ =?utf-8?B?TjBGcmJJcnZvTzFMV3A1WWVpTHNYVzNmWFZXVGZ4c3JNMk11aSt1NEJudHRt?=
+ =?utf-8?B?ZHdCZ3A1TkJySUd3ZGFCZnhNejJCVHZ3Z2lnWTFSZm5IbHE3MzBnQmtnR2hF?=
+ =?utf-8?B?Z29aMHZkRS9JR2tvcXlsT2R6UjJRck55ZWJYa0xzUXRRQmJaY0pialJtZkNp?=
+ =?utf-8?B?Zm5HOHY0S0xhRWROcjErTytOVWlUSDhkM0F3bmF3cURFVXVib3p1OFNRS2lT?=
+ =?utf-8?B?OHhSMTFsQXkxYVJ6ZkpvVm1BRkRXYU9DcnRsQi9wRGJ3M1hTaG1Eak5SQks1?=
+ =?utf-8?B?TUhtSWsyZkxDNmQ3ZTRmcUorajgrK1hkcUFPdG8rNzVubFc4N1R6UnZ3Q25u?=
+ =?utf-8?B?NjY0S2ZiMmdVbk1sTEFPN0pOVkVPaDZPQXh4ZS9Bd2pqMFJKQjVFeXdzelpS?=
+ =?utf-8?B?ZUl5NGVVYkNYTmNPN2J4VHZ6K251NUJYN0RJZlNFNWZUUTlQZDBtV0ZDTXJ0?=
+ =?utf-8?B?TFZ1aGpmWUo3ZXVFUGRsRndPV3lpc0VmMjVWd0VBamVkaWFNSHF1VFZnUWVv?=
+ =?utf-8?B?N2IrekJ1anhPaDJLc3dzbTFDVHF5MitrYWhBcm1mTytiSUFhdDFkcjEyVGt0?=
+ =?utf-8?B?bVJJTVRJR2tBS0wrUzlqWDVRZGRlOTBubFE1Z29vY3AwT0YySGd6NVRtK0lx?=
+ =?utf-8?B?YmVvTld0Qk0vS3NtRTd3ZDNoU3dRLzU2YWs3d3lSbUEveHpKbHVoK3VGajUx?=
+ =?utf-8?B?dE1GbkZvU0pkQkhqemtXOFF5MFhJZFpGc2lNS25EbjRrMkpMS3BnU0h4Z1hF?=
+ =?utf-8?B?SUQvWUliUFpIL2JZdFdIZWxlZTdTYklFdXBIamh6UWV2dFlCNVBXUDR5Mi9w?=
+ =?utf-8?B?RllWV0Zsa2NiQ0pzaU8yRnNEbmRWKzBPOUxOZURIdE1HMjd2NTRVUVlFUE1s?=
+ =?utf-8?B?a29RTHpMSGR1UGZZMVFuUzM2MGtLQyt3bTNhVTFYOVBOUHAwUDBtU0k2TE9O?=
+ =?utf-8?Q?iMKdvg6GuIQuRKhYwwKmP7xAH?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1c08ef5-d1e0-41dc-26e1-08ddb251e3f7
+X-MS-Exchange-CrossTenant-Network-Message-Id: c61aa7dd-385e-48db-7762-08ddb251f7eb
 X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7663.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2025 12:31:35.0341
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2025 12:32:08.1159
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V4SvOuCrRE1NxOi+Aw4BCbHhy0oqH1NBLm2bc7zNz+GWjnEDXrD3JLvTNrUThBQuSMuAnpq+qyXBWtDnMdvcEw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: T8TrhS4vQSuLAO+GIir2a6VCIS0vwqh+lw53pF3RgoxHJvQjWInSiMN/Rr3pbfTx8t/tHesWblORkRrIeMwyaA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5185
+
+From: Yangtao Li <frank.li@vivo.com>
 
 There are more than 700 calls to devm_request_threaded_irq method and
 more than 1000 calls to devm_request_irq method. Most drivers only
@@ -272,77 +282,100 @@ In this way, when this function fails, the upper-layer functions can
 directly return an error code without missing debugging information.
 Otherwise, the error message will be printed redundantly or missing.
 
-Hi tglx and Rafael,
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Pan Chuang <panchuang@vivo.com>
+---
+ include/linux/interrupt.h | 15 ++++++++++++++
+ kernel/irq/devres.c       | 43 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
 
-Could you please consider merging the entire series into your branch? 
-To be honest, I don't know whether merging into the irq repository or
-the pm repository is the right approach.
-
-Pan Chuang (2):
-  thermal/drivers/loongson2: convert to use devm_request*_irq_probe()
-  thermal/drivers/airoha: convert to use devm_request*_irq_probe()
-
-Yangtao Li (22):
-  genirq/devres: Add devm_request_threaded_irq_probe() and
-    devm_request_irq_probe()
-  thermal/drivers/sun8i: convert to use devm_request*_irq_probe()
-  thermal/drivers/armada: convert to use devm_request*_irq_probe()
-  thermal/drivers/broadcom: convert to use devm_request*_irq_probe()
-  thermal/drivers/tegra: convert to use devm_request*_irq_probe()
-  thermal/drivers/qcom/lmh: convert to use devm_request*_irq_probe()
-  thermal/drivers/db8500: convert to use devm_request*_irq_probe()
-  thermal/drivers/renesas/rcar: convert to use devm_request*_irq_probe()
-  thermal/drivers/qcom/temp-alarm: convert to use
-    devm_request*_irq_probe()
-  thermal: intel: int340x: processor_thermal: convert to use
-    devm_request*_irq_probe()
-  thermal/drivers/exynos: convert to use devm_request*_irq_probe()
-  thermal/drivers/hisi: convert to use devm_request*_irq_probe()
-  thermal/drivers/rockchip: convert to use devm_request*_irq_probe()
-  thermal/drivers/renesas/rcar_gen3: convert to use
-    devm_request*_irq_probe()
-  thermal/drivers/mediatek/lvts_thermal: convert to use
-    devm_request*_irq_probe()
-  thermal/drivers/max77620: convert to use devm_request*_irq_probe()
-  thermal/drivers/intel/bxt_pmic: convert to use
-    devm_request*_irq_probe()
-  thermal/drivers/stm: convert to use devm_request*_irq_probe()
-  thermal/drivers/qcom/tsens-v0_1: convert to use
-    devm_request*_irq_probe()
-  thermal/drivers/qcom/spmi-adc-tm5: convert to use
-    devm_request*_irq_probe()
-  thermal/drivers/uniphier: convert to use devm_request*_irq_probe()
-  thermal/drivers/imx: convert to use devm_request*_irq_probe()
-
- drivers/thermal/airoha_thermal.c              | 10 ++---
- drivers/thermal/armada_thermal.c              | 13 +++---
- drivers/thermal/broadcom/brcmstb_thermal.c    | 11 +++--
- drivers/thermal/db8500_thermal.c              | 16 +++----
- drivers/thermal/hisi_thermal.c                | 12 +++---
- drivers/thermal/imx_thermal.c                 | 11 +++--
- .../processor_thermal_device_pci.c            | 24 +++++------
- .../thermal/intel/intel_bxt_pmic_thermal.c    | 11 ++---
- drivers/thermal/loongson2_thermal.c           |  8 ++--
- drivers/thermal/max77620_thermal.c            | 24 +++++------
- drivers/thermal/mediatek/lvts_thermal.c       |  6 +--
- drivers/thermal/qcom/lmh.c                    |  7 ++-
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |  5 ++-
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  4 +-
- drivers/thermal/qcom/tsens.c                  | 23 +++++-----
- drivers/thermal/renesas/rcar_gen3_thermal.c   |  7 +--
- drivers/thermal/renesas/rcar_thermal.c        |  9 ++--
- drivers/thermal/rockchip_thermal.c            | 12 +++---
- drivers/thermal/samsung/exynos_tmu.c          | 12 +++---
- drivers/thermal/st/st_thermal_memmap.c        | 12 +++---
- drivers/thermal/st/stm_thermal.c              | 14 +++---
- drivers/thermal/sun8i_thermal.c               |  6 +--
- drivers/thermal/tegra/soctherm.c              | 38 ++++++++--------
- drivers/thermal/tegra/tegra30-tsensor.c       |  9 ++--
- drivers/thermal/uniphier_thermal.c            |  6 +--
- include/linux/interrupt.h                     | 15 +++++++
- kernel/irq/devres.c                           | 43 +++++++++++++++++++
- 27 files changed, 197 insertions(+), 171 deletions(-)
-
+diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
+index 51b6484c0493..5c39ff7f030c 100644
+--- a/include/linux/interrupt.h
++++ b/include/linux/interrupt.h
+@@ -205,6 +205,21 @@ extern void free_percpu_nmi(unsigned int irq, void __percpu *percpu_dev_id);
+ 
+ struct device;
+ 
++extern int __must_check
++devm_request_threaded_irq_probe(struct device *dev, unsigned int irq,
++			      irq_handler_t handler, irq_handler_t thread_fn,
++			      unsigned long irqflags, const char *devname,
++			      void *dev_id, const char *info);
++
++static inline int __must_check
++devm_request_irq_probe(struct device *dev, unsigned int irq,
++		       irq_handler_t handler, unsigned long irqflags,
++		       const char *devname, void *dev_id, const char *info)
++{
++	return devm_request_threaded_irq_probe(dev, irq, handler, NULL, irqflags,
++					       devname, dev_id, info);
++}
++
+ extern int __must_check
+ devm_request_threaded_irq(struct device *dev, unsigned int irq,
+ 			  irq_handler_t handler, irq_handler_t thread_fn,
+diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+index eb16a58e0322..40e3862b0e80 100644
+--- a/kernel/irq/devres.c
++++ b/kernel/irq/devres.c
+@@ -80,6 +80,49 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+ }
+ EXPORT_SYMBOL(devm_request_threaded_irq);
+ 
++/**
++ * devm_request_threaded_irq_probe - request irq for a managed device with error msg (recommended in probe)
++ * @dev:	Device to request interrupt for
++ * @irq:	Interrupt line to allocate
++ * @handler:	Function to be called when the IRQ occurs
++ * @thread_fn:	Function to be called in a threaded interrupt context. NULL
++ *		for devices which handle everything in @handler
++ * @irqflags:	Interrupt type flags
++ * @devname:	An ascii name for the claiming device, dev_name(dev) if NULL
++ * @dev_id:	A cookie passed back to the handler function
++ * @info:	Optional additional error log
++ *
++ * This is a variant of the devm_request_threaded_irq function.
++ * It will print an error message by default when the request fails,
++ * and the consumer can add a special error msg.
++ *
++ * Except for the extra @info argument, this function takes the
++ * same arguments and performs the same function as
++ * devm_request_threaded_irq(). IRQs requested with this function will be
++ * automatically freed on driver detach.
++ *
++ * If an IRQ allocated with this function needs to be freed
++ * separately, devm_free_irq() must be used.
++ *
++ * Return: 0 on success or a negative error number.
++ */
++int devm_request_threaded_irq_probe(struct device *dev, unsigned int irq,
++				    irq_handler_t handler, irq_handler_t thread_fn,
++				    unsigned long irqflags, const char *devname,
++				    void *dev_id, const char *info)
++{
++	int rc;
++
++	rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags, devname, dev_id);
++	if (rc) {
++		return dev_err_probe(dev, rc, "Failed to request %sinterrupt %u %s %s\n",
++				     thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
++				     info ? : "");
++	}
++	return 0;
++}
++EXPORT_SYMBOL_GPL(devm_request_threaded_irq_probe);
++
+ /**
+  *	devm_request_any_context_irq - allocate an interrupt line for a managed device
+  *	@dev: device to request interrupt for
 -- 
 2.39.0
 
