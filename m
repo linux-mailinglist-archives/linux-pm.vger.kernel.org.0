@@ -1,188 +1,165 @@
-Return-Path: <linux-pm+bounces-29426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F0D6AE6552
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 14:46:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96571AE665C
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 15:28:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DC813A3A4B
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 12:46:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B404016FF3B
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 13:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014E0227EA7;
-	Tue, 24 Jun 2025 12:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEDB29994E;
+	Tue, 24 Jun 2025 13:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nXUpl1bp"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="N7pwSC/O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191A24400
-	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 12:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F52D2BEC24
+	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 13:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750769180; cv=none; b=cvvu+KZMzk0yw8Vou2xOj67YMo9PdJdy1GL//IuSxEuWFVK0MPwJUsdwDL8gZ2XugYfdpfn6Nxy1un+g82Bh6Ebo3mCaTVUB+ig4L1aYUuL9b8e++vglY91Wz58ay0lMTmOlt51F0wvYhN1xHHPruncp+0OffRiZj8qmQ0w2uYA=
+	t=1750771480; cv=none; b=u8LyVAFrWKZ1ndYfhEPZdhs3b+bzx22aM4rzU0C9f5QynK9YPRosL0UiEEeO5i+e1GIF0S8Gm8mXPxft+pDp7OFMn1Vb/YlKMnLWrpQIzv6L6OVBsC6XcyHTuaIVtN1/QdFSI5EkOYV04uY0fg3oYLT7fwyHhYjlcnUv2KtkP4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750769180; c=relaxed/simple;
-	bh=BDYGa+m6K+LmXDWazJkL10WSFSQVLqwK6TRasS5lWhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jWwJLOb14PkeKKC5sMsAL0J1M97IlvNxYsAlR02Quo0TnkzyeOhp2zha3i5WEaXNRxcaedNUUIJaEKXlLLv0h9+MHi5QNK+KLZJEhj+kym2VadKJiW29A408Qpiud0Zg9RRjuVAEprtAbK8oNIYfsdWHEUQvXAyuMfrfN6IFrQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nXUpl1bp; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750769179; x=1782305179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BDYGa+m6K+LmXDWazJkL10WSFSQVLqwK6TRasS5lWhk=;
-  b=nXUpl1bpc81w76eQq13qsXkuZmx4rOtocMq4sWd49Q8ZuCfC33KjSzSO
-   jmK++ptYYC2WvaWjDZKRW35sYyd48yCMI52OMFlsZxYtYFMWYi7TKRZ/c
-   v+cDRSyd+TjnQ4L8A5nVUmxtulkRKkaJoRE5k/zu/ldQfdZWwIBvqQIrd
-   Mnw0aiG3K0dL2nFO7zatKFuzhrcvm6Cq291yh9qOR/ncQa0r9tCYxVuus
-   ZJaPFJZ+rPa0/udLQA+Ro62oWadEmypzRyGLq9zp41rcJC1GX3rx6MybO
-   u/DFCJ9WB2zV99yGLQVSaqTgCpCpZNSAaZoqwKwmQTZnmOmNUdDwPuMmI
-   Q==;
-X-CSE-ConnectionGUID: 39iAEXqhSjWOSjaMUG9q8g==
-X-CSE-MsgGUID: 43UK2tRLQsu8zyN6Fpv1WA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="64433880"
-X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="64433880"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 05:46:19 -0700
-X-CSE-ConnectionGUID: bXEP/w2kRyu/GbGwa/F6Zg==
-X-CSE-MsgGUID: JYeL8FHPR5KD2ghtfKWQSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="157402348"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 24 Jun 2025 05:46:17 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uU32U-000S7u-34;
-	Tue, 24 Jun 2025 12:46:14 +0000
-Date: Tue, 24 Jun 2025 20:45:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Berg <benjamin@sipsolutions.net>, linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Zhang Rui <rui.zhang@intel.com>,
+	s=arc-20240116; t=1750771480; c=relaxed/simple;
+	bh=7kCRqllTb/FGpaNg90Pj937+g19NQCsDq5Cg8MUzwIg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M+GuIro52Rnt4KbjqdcCw3qMC2tkbDO/tFt93+zAWuo5kZPuOoPgYeK4S/EiGK9tat38J2QNwzcWTz4IHHLF93ZYURl5URWHwDVl6PNbGp2Oak8Dd7DIuXgXl82DQfL4pc1kCGr8r3PSDiEaq/4SXBMqEytHNwaEbbnXjawzlVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=N7pwSC/O; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
+	Resent-Message-ID:In-Reply-To:References;
+	bh=O9/uArJCSbWFklG/BkaREY2/55E+T8Cj4Lckvkogrp4=; t=1750771479; x=1751981079; 
+	b=N7pwSC/ORdAC4l6Iz/HCyctV6C0e/dKVzQgz1rNFRpB1xFxCENbiGp893lEtptZRntslvQOkPJs
+	64WBni/LR0g84OuCe/GUa9kBcVUe5/u9PBFCps2TpKAToZFEfb4SErLzQpvHy6ulGudIHGQ4OwdSd
+	+G4FD1+eVIGo5wtClI41NUDEcyVh+7uhvB+Evlg3xJJy3dq69qmFhAQjtHPtP5yYPVtbJzVNZmM0w
+	hAiIOzPShahPfZFvUvPvMV3Xwu3nB5BmBU/5J5/PJsI8YJ/MjOTOPVVNbdDZ2WD3wfPmEpP9AXhac
+	4Rn0ucLWKPlY+M3uYhVh4WhcGltUVtRcLEUw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1uU3db-00000008rdG-0I5Y;
+	Tue, 24 Jun 2025 15:24:35 +0200
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: linux-pm@vger.kernel.org
+Cc: Zhang Rui <rui.zhang@intel.com>,
 	Benjamin Berg <benjamin.berg@intel.com>,
 	Hans de Goede <hansg@kernel.org>
-Subject: Re: [PATCH] thermal: use a custom lock class for intel x86_pkg_temp
-Message-ID: <202506242034.nhZNCW5t-lkp@intel.com>
-References: <20250624093001.1359961-1-benjamin@sipsolutions.net>
+Subject: [PATCH v2] thermal: use a custom lock class for intel x86_pkg_temp
+Date: Tue, 24 Jun 2025 15:24:06 +0200
+Message-ID: <20250624132406.1485407-1-benjamin@sipsolutions.net>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250624093001.1359961-1-benjamin@sipsolutions.net>
+Content-Transfer-Encoding: 8bit
 
-Hi Benjamin,
+From: Benjamin Berg <benjamin.berg@intel.com>
 
-kernel test robot noticed the following build errors:
+The intel driver has code paths that will take the tz->lock while the
+cpuhp_state-up lock is held. As the cpuhp_state-up lock is used in other
+code paths, it may happen that lockdep detects possible deadlocks
+through unrelated thermal zone devices.
 
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v6.16-rc3 next-20250623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fix these false positives by using a separate lockdep class for the
+x86_pkg_temp thermal device.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/thermal-use-a-custom-lock-class-for-intel-x86_pkg_temp/20250624-173220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20250624093001.1359961-1-benjamin%40sipsolutions.net
-patch subject: [PATCH] thermal: use a custom lock class for intel x86_pkg_temp
-config: i386-buildonly-randconfig-006-20250624 (https://download.01.org/0day-ci/archive/20250624/202506242034.nhZNCW5t-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506242034.nhZNCW5t-lkp@intel.com/reproduce)
+Reported-by: Hans de Goede <hansg@kernel.org>
+Closes: https://lore.kernel.org/linux-pm/e9d7ef79-6a24-4515-aa35-d1f2357da798@kernel.org/
+Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506242034.nhZNCW5t-lkp@intel.com/
+---
 
-All errors (new ones prefixed by >>):
+Hi,
 
-   drivers/thermal/intel/x86_pkg_temp_thermal.c: In function 'pkg_temp_thermal_device_add':
->> drivers/thermal/intel/x86_pkg_temp_thermal.c:351:9: error: implicit declaration of function 'thermal_zone_device_set_lock_class'; did you mean 'thermal_zone_set_lock_class'? [-Werror=implicit-function-declaration]
-     351 |         thermal_zone_device_set_lock_class(zonedev->tzone, &x86_pkg_temp_class);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |         thermal_zone_set_lock_class
-   cc1: some warnings being treated as errors
+I believe that this should solve the lockdep warning that Hans was
+seeing. That said, I have not tested it much.
 
+v2:
+- Fix function name
+- Mark lock class variable static
 
-vim +351 drivers/thermal/intel/x86_pkg_temp_thermal.c
+Benjamin
+---
+ drivers/thermal/intel/x86_pkg_temp_thermal.c | 2 ++
+ drivers/thermal/thermal_core.c               | 7 +++++++
+ include/linux/thermal.h                      | 8 ++++++++
+ 3 files changed, 17 insertions(+)
 
-   309	
-   310	static int pkg_temp_thermal_device_add(unsigned int cpu)
-   311	{
-   312		struct lock_class_key x86_pkg_temp_class;
-   313		struct thermal_trip trips[MAX_NUMBER_OF_TRIPS] = { 0 };
-   314		int id = topology_logical_die_id(cpu);
-   315		u32 eax, ebx, ecx, edx;
-   316		struct zone_device *zonedev;
-   317		int thres_count, err;
-   318		int tj_max;
-   319	
-   320		if (id >= max_id)
-   321			return -ENOMEM;
-   322	
-   323		cpuid(6, &eax, &ebx, &ecx, &edx);
-   324		thres_count = ebx & 0x07;
-   325		if (!thres_count)
-   326			return -ENODEV;
-   327	
-   328		thres_count = clamp_val(thres_count, 0, MAX_NUMBER_OF_TRIPS);
-   329	
-   330		tj_max = intel_tcc_get_tjmax(cpu);
-   331		if (tj_max < 0)
-   332			return tj_max;
-   333	
-   334		zonedev = kzalloc(sizeof(*zonedev), GFP_KERNEL);
-   335		if (!zonedev)
-   336			return -ENOMEM;
-   337	
-   338		err = pkg_temp_thermal_trips_init(cpu, tj_max, trips, thres_count);
-   339		if (err)
-   340			goto out_kfree_zonedev;
-   341	
-   342		INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
-   343		zonedev->cpu = cpu;
-   344		zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
-   345				trips, thres_count,
-   346				zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
-   347		if (IS_ERR(zonedev->tzone)) {
-   348			err = PTR_ERR(zonedev->tzone);
-   349			goto out_kfree_zonedev;
-   350		}
- > 351		thermal_zone_device_set_lock_class(zonedev->tzone, &x86_pkg_temp_class);
-   352		err = thermal_zone_device_enable(zonedev->tzone);
-   353		if (err)
-   354			goto out_unregister_tz;
-   355	
-   356		/* Store MSR value for package thermal interrupt, to restore at exit */
-   357		rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
-   358		      zonedev->msr_pkg_therm_high);
-   359	
-   360		cpumask_set_cpu(cpu, &zonedev->cpumask);
-   361		raw_spin_lock_irq(&pkg_temp_lock);
-   362		zones[id] = zonedev;
-   363		raw_spin_unlock_irq(&pkg_temp_lock);
-   364	
-   365		return 0;
-   366	
-   367	out_unregister_tz:
-   368		thermal_zone_device_unregister(zonedev->tzone);
-   369	out_kfree_zonedev:
-   370		kfree(zonedev);
-   371		return err;
-   372	}
-   373	
-
+diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+index 3fc679b6f11b..15d3c904eaa3 100644
+--- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
++++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+@@ -310,6 +310,7 @@ static int pkg_temp_thermal_trips_init(int cpu, int tj_max,
+ 
+ static int pkg_temp_thermal_device_add(unsigned int cpu)
+ {
++	static struct lock_class_key x86_pkg_temp_class;
+ 	struct thermal_trip trips[MAX_NUMBER_OF_TRIPS] = { 0 };
+ 	int id = topology_logical_die_id(cpu);
+ 	u32 eax, ebx, ecx, edx;
+@@ -349,6 +350,7 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
+ 		err = PTR_ERR(zonedev->tzone);
+ 		goto out_kfree_zonedev;
+ 	}
++	thermal_zone_device_set_lock_class(zonedev->tzone, &x86_pkg_temp_class);
+ 	err = thermal_zone_device_enable(zonedev->tzone);
+ 	if (err)
+ 		goto out_unregister_tz;
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 17ca5c082643..ff5c2e01904a 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1657,6 +1657,13 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
+ }
+ EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
+ 
++void thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
++					struct lock_class_key *lock_class)
++{
++	lockdep_set_class_and_name(&tz->lock, lock_class, tz->type);
++}
++EXPORT_SYMBOL_GPL(thermal_zone_device_set_lock_class);
++
+ void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
+ {
+ 	return tzd->devdata;
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 0b5ed6821080..3cb4cf60b66d 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -240,6 +240,9 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
+ 					const struct thermal_zone_device_ops *ops,
+ 					const struct thermal_zone_params *tzp);
+ 
++void thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
++					struct lock_class_key *lock_class);
++
+ void thermal_zone_device_unregister(struct thermal_zone_device *tz);
+ 
+ void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+@@ -290,6 +293,11 @@ static inline struct thermal_zone_device *thermal_tripless_zone_device_register(
+ 					const struct thermal_zone_params *tzp)
+ { return ERR_PTR(-ENODEV); }
+ 
++static inline void
++thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
++				   struct lock_class_key *lock_class)
++{ }
++
+ static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ { }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.0
+
 
