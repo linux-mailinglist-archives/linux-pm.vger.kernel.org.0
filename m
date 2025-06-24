@@ -1,150 +1,146 @@
-Return-Path: <linux-pm+bounces-29452-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29453-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9888DAE70F8
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 22:41:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3967BAE7120
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 22:56:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6462D3A51C0
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 20:41:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F13D1794E8
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 20:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A8BB2E8895;
-	Tue, 24 Jun 2025 20:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794982E62A1;
+	Tue, 24 Jun 2025 20:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QD7PKNOi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lEwiR0ix"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F18729B218
-	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 20:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD4A2512C8;
+	Tue, 24 Jun 2025 20:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750797681; cv=none; b=cZ7JufWrH3pYN862J3CFlPzfHveqnP02w66RtFbHIDb8cfjaq4yf3dksgCO/GUAV1iswY0K8ZRxm3waBgIyOksHBQd1TLbY1MIWCy3xCzYaadYelvZEfj/sCcZn4BUT9dGUifRysBxAzYnWuL37RjFp8S9G3I5nt2cLUnvVl2ss=
+	t=1750798569; cv=none; b=lqmUJNCvPR1cBSNIFo2cvyqRp0WhaMsgT3Jo1X1igrP6awC8WhLOtZ+OvsAqea62E6tkX9qGESVC/8ocoYeqY4Xhi9+fg+HKQtf37qGJJ4iUqWC000BZ10eGG/e6m0vvWv8hg9vym7FJSeBbmoFnsiGjBUenh7USZv950RK4wLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750797681; c=relaxed/simple;
-	bh=k+9iPVrz6CfZoG58QyvK5uEAxAws5zdb8ym5cHLYUH4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IqTxV/zWMaVcvoqsLspvcSvD/SoPVV5VrzamjpvSltW+AmMTvMIElSazd1urFxxlNkmiI2vr4+EyROPKk5zzOb0+HDPT4uEu1k6uP15Xt5sXeTDR2bRHHj5hE1lM8Z1s+n4xUvCyfaKOoes1sxUvECni2FVA3Yx54S1Q8LbAMdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QD7PKNOi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750797678;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9wY3aAgcrJnnreOkNCbnB1YfCEDsO/C9hUi3tU5Px0g=;
-	b=QD7PKNOigGecKCA03C+/7N3hNHWOfCw3ouCafSN6bSOCOszcKjM63OjqkktjRv0JUUPqPM
-	h+rETI6QmOxiUCsKUMbqxX3h1IAtV6LFxv8M4dmLnava2n++x/3ZRB4EzeHduvqDaXsRJ1
-	nmooYREzVoxMX4wRy1R1BVa7JMCJzBI=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-564-bhoSvTtTNaCTT93K89WaGQ-1; Tue, 24 Jun 2025 16:41:17 -0400
-X-MC-Unique: bhoSvTtTNaCTT93K89WaGQ-1
-X-Mimecast-MFC-AGG-ID: bhoSvTtTNaCTT93K89WaGQ_1750797677
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6fafc5092daso4034986d6.1
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 13:41:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750797677; x=1751402477;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9wY3aAgcrJnnreOkNCbnB1YfCEDsO/C9hUi3tU5Px0g=;
-        b=N+5CAQjmD5KjrRVlaqFk2fp79BcosuaFWfcDkylKx0T8xNi3kDA5EuMdm+BttER8vt
-         gmpfauCpNx6/yqmVS03XwUGzLSo/z5mU8hzWrQ8HCclGJBYPF88/NAa88EWbWrWK60ZE
-         wx4Ofz3wABjbgpQ6CADkI4IB3gq/oYVKCzcNLLsWRyqXmtTBFrBURZi4PJSdmwqBY3pO
-         VSmdhF1y12RxZl3zvQ979eFuXmSW93r5paLXNAKP6kU2Ayr6PFu+7H2edWRk1O568HGh
-         Qrpd14ARPgQUq09QhCLittTYjYmAI4rPzvhR/R82iIKSUwePRZWKWGd4efHIZc8AeFTL
-         f3Og==
-X-Forwarded-Encrypted: i=1; AJvYcCW+uWmrGFczzO8tM2zVzaRVQXqugyjhjr/l7ETvRrpUjjgRUCbNcBmqEjLG7xeu1lTQfqVmJfxggg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcZkWBl46WJOZmOqZV4LbXA2DYM07+otwJWMdJxHl7p2vRQ5LN
-	gienzk35VXoIVcFiNasZeVg7QBbsHOqmL9/BT/2REnp3iMma73pTY2Js88QMiRX5s68Vyl0d+g2
-	bcvCOIePhFgA5+1F6ISXtANF/3xQMOfoW/mp2ZNUcwuA+yCvu9PX8w365PSbG
-X-Gm-Gg: ASbGncsl8mAFzZDlHwneIT2vmCFcCoouJLMuaksjfxuIDiHl/PpRVP43klkFT+CYwOO
-	ChvF/M0n+2VzGZq9egRAIDEfWQec9pgOVDdbtPn2HBon0ac+t2365PAAXVaZpcmfzfofNs4K9OH
-	9ygtIiCu62CwS1rzZa5e/jXLJieWvWO2uF14JVT+yrhphTdL54sBtgcj9at+PeaCKvx7hUkjh7Z
-	NaiA4DpwgrkENgXoA7R0mEcNyaRN2TyNxlS3cD7RslJFe+EAbPT35Q97Eepn5E1X36srjbMJXZ1
-	v9QPWqnXcIGPx21PcbTMcLr2Xc3+LMkyig==
-X-Received: by 2002:a05:6214:554a:b0:6fb:6129:d6f5 with SMTP id 6a1803df08f44-6fd3887da67mr72486356d6.16.1750797676776;
-        Tue, 24 Jun 2025 13:41:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF5S9LIIzK9+mA9lXLYWbYKd/trucZBeWJrars1+wS2MF8l6jyFMgEhWMuXKpGrcN17UGrc7Q==
-X-Received: by 2002:a05:6214:554a:b0:6fb:6129:d6f5 with SMTP id 6a1803df08f44-6fd3887da67mr72485996d6.16.1750797676378;
-        Tue, 24 Jun 2025 13:41:16 -0700 (PDT)
-Received: from thinkpad2024.redhat.com ([71.217.37.158])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd0957f69bsm60875306d6.96.2025.06.24.13.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 13:41:15 -0700 (PDT)
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Renninger <trenn@suse.com>
-Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	John Kacur <jkacur@redhat.com>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>,
-	"Thorsten Leemhuis" <linux@leemhuis.info>
-Subject: [PATCH] cpupower: Improve Python binding's Makefile
-Date: Tue, 24 Jun 2025 16:41:04 -0400
-Message-ID: <20250624204105.457971-1-jwyatt@redhat.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1750798569; c=relaxed/simple;
+	bh=d64+DaWb+tdPST9nu/yS3Xo2gDHDw/JM2uwUbEEhyl8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PNI4pJ/eW4D2Upz2aLOhaROYpN3kqteoWW7H/7+YejQgpIGaormNQAHoBDv7AcAcyiHDnWI3SIK1nhE+/ThwmEkq6Hh6tPY9zrj5Fw0UJqsrzS76q4QHOkgtYpC5VRb5fLuL7jqihyq0d3sekGz0V0obEMdAZqX8hKQBrtwroK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lEwiR0ix; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750798568; x=1782334568;
+  h=date:from:to:cc:subject:message-id;
+  bh=d64+DaWb+tdPST9nu/yS3Xo2gDHDw/JM2uwUbEEhyl8=;
+  b=lEwiR0ixmQikeG5cCePi6+0C0myA1G93HcMoVSNscrnSjwUENAv3MU9N
+   3v7YPRusGWfjMR1CKUEsH2KPGS5IimLHGpnsoN/VB2fFAjYd43UAxGUIl
+   KiRFDcbE0QQCHxlRDim4kd18f7iluTZT4LcPh9LD3NS7AWETWPuRAw+Qa
+   djg1TTwlzPFbHfFRwcYSYU2k70GNN/ki5/FIbIN/9mbVkMfSTLXlELmF4
+   3X6G91Mc5qQxiHCs+eVkLJFOBe3W1kgZRXPa5vkreO2ci0eF2EpDHx7i8
+   BoGDonjhgbTv4YMwN5NG7TNzq3r0ZLh3sijy+HI50/MPgPXmrpw4CpXe7
+   A==;
+X-CSE-ConnectionGUID: J1WDfIcIT/Ov0BRx65dlkw==
+X-CSE-MsgGUID: AR+mmRl0SIKQHnXjj69TNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="64487854"
+X-IronPort-AV: E=Sophos;i="6.16,263,1744095600"; 
+   d="scan'208";a="64487854"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 13:56:07 -0700
+X-CSE-ConnectionGUID: T5rMI44QQL2tVqCk7vFUxg==
+X-CSE-MsgGUID: o4hlWKvHTJ+dvgMwgaIqjg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,263,1744095600"; 
+   d="scan'208";a="189213061"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 24 Jun 2025 13:56:06 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uUAgV-000SVc-2S;
+	Tue, 24 Jun 2025 20:56:03 +0000
+Date: Wed, 25 Jun 2025 04:55:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 214e5f60b0342a6bea4a3e761883c3f154b31bd9
+Message-ID: <202506250411.rAhN6hM3-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add a few build variables to make it easier for distributions to
-package the bindings. Allow current variables to be overwritten by
-environment variables that are passed to make.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 214e5f60b0342a6bea4a3e761883c3f154b31bd9  Merge branch 'pm-sleep-testing' into bleeding-edge
 
-CCing Thorsten Leemhuis <linux@leemhuis.info>.
+elapsed time: 1454m
 
-Signed-off-by: John B. Wyatt IV <jwyatt@redhat.com>
-Signed-off-by: John B. Wyatt IV <sageofredondo@gmail.com>
----
- tools/power/cpupower/bindings/python/Makefile | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+configs tested: 52
+configs skipped: 1
 
-diff --git a/tools/power/cpupower/bindings/python/Makefile b/tools/power/cpupower/bindings/python/Makefile
-index 81db39a03efb..4527cd732b42 100644
---- a/tools/power/cpupower/bindings/python/Makefile
-+++ b/tools/power/cpupower/bindings/python/Makefile
-@@ -4,20 +4,22 @@
- # This Makefile expects you have already run `make install-lib` in the lib
- # directory for the bindings to be created.
- 
--CC := gcc
-+CC ?= gcc
-+# CFLAGS ?=
-+LDFLAGS ?= -lcpupower
- HAVE_SWIG := $(shell if which swig >/dev/null 2>&1; then echo 1; else echo 0; fi)
- HAVE_PYCONFIG := $(shell if which python-config >/dev/null 2>&1; then echo 1; else echo 0; fi)
- 
--PY_INCLUDE = $(firstword $(shell python-config --includes))
--INSTALL_DIR = $(shell python3 -c "import site; print(site.getsitepackages()[0])")
-+PY_INCLUDE ?= $(firstword $(shell python-config --includes))
-+INSTALL_DIR ?= $(shell python3 -c "import site; print(site.getsitepackages()[0])")
- 
- all: _raw_pylibcpupower.so
- 
- _raw_pylibcpupower.so: raw_pylibcpupower_wrap.o
--	$(CC) -shared -lcpupower raw_pylibcpupower_wrap.o -o _raw_pylibcpupower.so
-+	$(CC) -shared $(LDFLAGS) raw_pylibcpupower_wrap.o -o _raw_pylibcpupower.so
- 
- raw_pylibcpupower_wrap.o: raw_pylibcpupower_wrap.c
--	$(CC) -fPIC -c raw_pylibcpupower_wrap.c $(PY_INCLUDE)
-+	$(CC) $(CFLAGS) $(PY_INCLUDE) -fPIC -c raw_pylibcpupower_wrap.c
- 
- raw_pylibcpupower_wrap.c: raw_pylibcpupower.swg
- ifeq ($(HAVE_SWIG),0)
--- 
-2.49.0
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                   randconfig-001-20250624    gcc-12.4.0
+arc                   randconfig-002-20250624    gcc-8.5.0
+arm                               allnoconfig    clang-21
+arm                   randconfig-001-20250624    gcc-13.3.0
+arm                   randconfig-002-20250624    gcc-8.5.0
+arm                   randconfig-003-20250624    gcc-12.4.0
+arm                   randconfig-004-20250624    clang-17
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250624    clang-21
+arm64                 randconfig-002-20250624    gcc-10.5.0
+arm64                 randconfig-003-20250624    clang-21
+arm64                 randconfig-004-20250624    clang-21
+csky                              allnoconfig    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+i386        buildonly-randconfig-001-20250624    clang-20
+i386        buildonly-randconfig-002-20250624    gcc-12
+i386        buildonly-randconfig-003-20250624    clang-20
+i386        buildonly-randconfig-004-20250624    clang-20
+i386        buildonly-randconfig-005-20250624    clang-20
+i386        buildonly-randconfig-006-20250624    gcc-12
+loongarch                         allnoconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-14.2.0
+openrisc                          allnoconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+riscv                             allnoconfig    gcc-15.1.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+x86_64      buildonly-randconfig-001-20250624    clang-20
+x86_64      buildonly-randconfig-002-20250624    gcc-12
+x86_64      buildonly-randconfig-003-20250624    clang-20
+x86_64      buildonly-randconfig-004-20250624    clang-20
+x86_64      buildonly-randconfig-005-20250624    clang-20
+x86_64      buildonly-randconfig-006-20250624    gcc-12
+xtensa                            allnoconfig    gcc-15.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
