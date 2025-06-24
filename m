@@ -1,165 +1,194 @@
-Return-Path: <linux-pm+bounces-29427-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29428-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96571AE665C
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 15:28:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 637E3AE6699
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 15:33:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B404016FF3B
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 13:24:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5EE817C490
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jun 2025 13:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEDB29994E;
-	Tue, 24 Jun 2025 13:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AE52C159A;
+	Tue, 24 Jun 2025 13:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="N7pwSC/O"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="AqAMrige"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F52D2BEC24
-	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 13:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01C523A58B
+	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 13:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750771480; cv=none; b=u8LyVAFrWKZ1ndYfhEPZdhs3b+bzx22aM4rzU0C9f5QynK9YPRosL0UiEEeO5i+e1GIF0S8Gm8mXPxft+pDp7OFMn1Vb/YlKMnLWrpQIzv6L6OVBsC6XcyHTuaIVtN1/QdFSI5EkOYV04uY0fg3oYLT7fwyHhYjlcnUv2KtkP4c=
+	t=1750771703; cv=none; b=aXNm7L5voJOtG0Lj6EnBFN7wIsVXSpjs6JwbP4o9j4BmwdTbg5KUhEGAbRFK1xBfyRoBS+mihRESPBObvh4vMrEa7esNjjSMwgBvscTiezgiS6I/a0zIj3Nc1phBLv7uMHcK3NNAbHP+jEACJ3YPvv/KVXfBnZY+EdZsmFuWBDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750771480; c=relaxed/simple;
-	bh=7kCRqllTb/FGpaNg90Pj937+g19NQCsDq5Cg8MUzwIg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M+GuIro52Rnt4KbjqdcCw3qMC2tkbDO/tFt93+zAWuo5kZPuOoPgYeK4S/EiGK9tat38J2QNwzcWTz4IHHLF93ZYURl5URWHwDVl6PNbGp2Oak8Dd7DIuXgXl82DQfL4pc1kCGr8r3PSDiEaq/4SXBMqEytHNwaEbbnXjawzlVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=N7pwSC/O; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
-	Resent-Message-ID:In-Reply-To:References;
-	bh=O9/uArJCSbWFklG/BkaREY2/55E+T8Cj4Lckvkogrp4=; t=1750771479; x=1751981079; 
-	b=N7pwSC/ORdAC4l6Iz/HCyctV6C0e/dKVzQgz1rNFRpB1xFxCENbiGp893lEtptZRntslvQOkPJs
-	64WBni/LR0g84OuCe/GUa9kBcVUe5/u9PBFCps2TpKAToZFEfb4SErLzQpvHy6ulGudIHGQ4OwdSd
-	+G4FD1+eVIGo5wtClI41NUDEcyVh+7uhvB+Evlg3xJJy3dq69qmFhAQjtHPtP5yYPVtbJzVNZmM0w
-	hAiIOzPShahPfZFvUvPvMV3Xwu3nB5BmBU/5J5/PJsI8YJ/MjOTOPVVNbdDZ2WD3wfPmEpP9AXhac
-	4Rn0ucLWKPlY+M3uYhVh4WhcGltUVtRcLEUw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uU3db-00000008rdG-0I5Y;
-	Tue, 24 Jun 2025 15:24:35 +0200
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: linux-pm@vger.kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Hans de Goede <hansg@kernel.org>
-Subject: [PATCH v2] thermal: use a custom lock class for intel x86_pkg_temp
-Date: Tue, 24 Jun 2025 15:24:06 +0200
-Message-ID: <20250624132406.1485407-1-benjamin@sipsolutions.net>
-X-Mailer: git-send-email 2.50.0
+	s=arc-20240116; t=1750771703; c=relaxed/simple;
+	bh=lasfdr/TaGl7iQzxXsOYnVe4ZWgSTCOhymdRSnVVl4w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HLCsbc49kxQrTN2wQf1LG8GX1jyMNcdEQ1wWhvxlQtp9ZZS5VqcOUXdBM+TcXpHTVR73I2yjl23CHIr9bu7vxm3O1xNC7+oWiaYze9+NjUlHATGwF4cfTWKLh3J0nhBV8fr/XsF2hTokqbPdqKA5SrprMUbwDz2YfYfPRyAsoQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=AqAMrige; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55O8rFoP015342
+	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 13:28:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	1xHRBt7S0QkIA0FEcCi54MhIM2gOS2cQRRBECPdtA7s=; b=AqAMrigeblmVfCoT
+	kN8W6W+otX543cHItr3bjmHFVsVSHtXCDJyad9/KThtNRIKUK5pDTu1gguqFgnKs
+	0lycQRdRxm0ydG8ysuZynBq8LkKdLz7Uapzu/V4IAyiQE34KUOov6oOzVA+9eUZO
+	uQtJuzTfFrQ0hfEsbh9q3ZQakhi5Qbx3V1U9hvA4zPKEobkca3j0Vs2NhYlR41+K
+	SedpIlwyeKvid+p9Z6YyAbnTVIx79TQExIxCObbUODJ2Zr0SgAxS6ds+83t36hzl
+	DJaex7bbfvnMjogaKmbi7YLIdyNfeP336VNMBAz+cWA0hdmux4LjUaJssx3pvR+Q
+	1QAIuA==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47fbhqjqkp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 13:28:20 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b3216490a11so2715107a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jun 2025 06:28:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750771699; x=1751376499;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xHRBt7S0QkIA0FEcCi54MhIM2gOS2cQRRBECPdtA7s=;
+        b=MIPEs1tl9DW/ylQQvkG+0Q8jATzYFcA/TrrCqioZZDnB6HGBK7HmquW6Vt1ejfuIQo
+         dWLCLwIJ2LWtWC/pHOaLJTaFPx/cQFsosSV4r7IYpOjU10HYpPwyvnYH1oxscpiCxS4A
+         ZfQKP9aZQKjtMRZ6KaDt01nEtscvsEi/bMwVcSbCif9s01rrVwB0HaKshKjY8BTvMP5g
+         njf+pDeCNgBAjK0hPawdXmD2ic9Y1O2bTh4NMWCzW7L7g3na4bO9QtSJ6wqfMEY64n9Z
+         GmChXHiRpcqCqm8vF6VnaoXlNC9ZclAD2flH96quN2l5AyBSdRqai5BmoNQyIO+vWG2W
+         cTNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGFInjQJhLX2r4Ox5wIB3TtwEK6IJn/mBxt5Fv0xtkIRx6TZjeHQiD1BNTj0A9Ydfe68UnNwrXrw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDXCwriEhwDgmuqB1dij62q7duoMN5D3j3/9q3nv/Pfx73OmTl
+	LgnGmOophCE2Z0hCo0th+PfR+PsmWVnEi5/VB3QxFCF3nV8xz574ze9fC+cMnGaC0oAfrIWmO1c
+	ltJRaBBLlCMHHDmMzTEIYMiEiLO4xou+VxNdHH6JJ2Y3+EkC7YwqyTJT6VCjVSQ==
+X-Gm-Gg: ASbGncvR5ORHGlPje+Yj3ojdQeBLJfTX6vxaqY0ZA534aXsBuljpA4UEm5LIoKsqWK1
+	D7RB/c9EoSJEHYMvesj7kflg/zTV1VAe+8QoPcPRHrX2v2Pz0wqdFJI9vVPeFpOvkdqvZ2jdQR9
+	1LHvVwkLrcL8sCqDLej+kW+Vr7kccuv0NpPUqROxvtrG+hEiAKo6zEtNSLEIlsdkGJYuDE7/AUI
+	vNmzgi4l0LDKnV+oAKtt75rxlwlCZt9PRDrZsJesP0UvMywcG24mKw8B29JC5Zlot1VM/4c9ZKh
+	YAOTgXWDTcosgCjiuaPPI6pswUQTgB6Y1FTg+sODoFuiEZmtiQQ=
+X-Received: by 2002:a05:6a00:3e0b:b0:747:bd28:1ca1 with SMTP id d2e1a72fcca58-7490d663700mr28575616b3a.3.1750771699593;
+        Tue, 24 Jun 2025 06:28:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHhSkFmD+5UXG4jGrsUbcWVvnGV+HYRoYvsylLGuSpLZ0cZAFjd7dWnoz7KErNAGSRJxIUwtQ==
+X-Received: by 2002:a05:6a00:3e0b:b0:747:bd28:1ca1 with SMTP id d2e1a72fcca58-7490d663700mr28575577b3a.3.1750771699195;
+        Tue, 24 Jun 2025 06:28:19 -0700 (PDT)
+Received: from [10.217.217.28] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-749c882f5b8sm1961515b3a.95.2025.06.24.06.28.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jun 2025 06:28:18 -0700 (PDT)
+Message-ID: <c7361a7e-a1e6-4327-ac7c-243fd8846f7d@oss.qualcomm.com>
+Date: Tue, 24 Jun 2025 18:58:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V6 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+To: Neil Armstrong <neil.armstrong@linaro.org>, jic23@kernel.org,
+        robh@kernel.org, krzysztof.kozlowski@linaro.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+        konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
+        rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
+        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+        quic_kamalw@quicinc.com
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org, quic_skakitap@quicinc.com,
+        stephan.gerhold@linaro.org
+References: <20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com>
+ <20250509110959.3384306-4-jishnu.prakash@oss.qualcomm.com>
+ <8736dea0-2a5b-49d8-8445-239e5d11174e@linaro.org>
+Content-Language: en-US
+From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+In-Reply-To: <8736dea0-2a5b-49d8-8445-239e5d11174e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: iLf4nEAioAeArkD0cN7uCma6qHtPLg82
+X-Authority-Analysis: v=2.4 cv=Id+HWXqa c=1 sm=1 tr=0 ts=685aa7f4 cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
+ a=Bk9QF8R_Bm2aD44dtyUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=x9snwWr2DeNwDh03kgHS:22 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: iLf4nEAioAeArkD0cN7uCma6qHtPLg82
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI0MDExMyBTYWx0ZWRfX5wWfJ3k86WJS
+ Ml3oAVs7SIR2v1uyRCagwyvLolhgnFyy4/9Mlt0fLROQvPjnBaYhEup0FrcYpXysgJXFRJkn2KX
+ ooYGTvEhz6dB77k0byNMJLboQ12pbNUEiNvkGZLpbYbg7JUvQRLjAvSsEAkVuPYf+NPmNIXqxeT
+ 5RAycX+cees7uS7MThNMfpftNg7XRs9GeVTLb6wcf8AeWHPJYI3vh03tk2pRMnMypRFeWGKDb0H
+ AwdX+Lu6+DOE88s9m9PKFqpRp9UekuwuDb/iX6fapYz+f40YDnkFsqmwUvKpAmoZ2/pTky5yEJT
+ 09yVsu/u5c4Pnj9ONlGUnwZF+vquHhqYzM9u0ipa5Fj4wxrwN6JKKCqexfcsaZyJMWjjzpxPEz8
+ 3JfCDlZa2IJeU0MBTBCE3M2w7f7XJNMO9TwpMzxydUfff2zB10BjOSo6r/pEVFOcr1jTjpUK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-24_05,2025-06-23_07,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0 bulkscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506240113
 
-From: Benjamin Berg <benjamin.berg@intel.com>
+Hi Neil,
 
-The intel driver has code paths that will take the tz->lock while the
-cpuhp_state-up lock is held. As the cpuhp_state-up lock is used in other
-code paths, it may happen that lockdep detects possible deadlocks
-through unrelated thermal zone devices.
+On 5/9/2025 8:05 PM, neil.armstrong@linaro.org wrote:
+> 
+> Hi,
+> On 09/05/2025 13:09, Jishnu Prakash wrote:
+>> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
+>> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
+>>
+>> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
+>> going through PBS(Programmable Boot Sequence) firmware through a single
+>> register interface. This interface is implemented on SDAM (Shared
+>> Direct Access Memory) peripherals on the master PMIC PMK8550 rather
+>> than a dedicated ADC peripheral.
+>>
+>> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
+>> channels and virtual channels (combination of ADC channel number and
+>> PMIC SID number) per PMIC, to be used by clients of this device.
+> 
+> The following is missing to allow it to be a qcom,spmi-pmic subnode:
+> 
+> =========================><================================================
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> index 11da55644262..b97f0e7b269e 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> @@ -127,6 +127,7 @@ patternProperties:
+>    "^adc@[0-9a-f]+$":
+>      type: object
+>      oneOf:
+> +      - $ref: /schemas/iio/adc/qcom,spmi-adc5-gen3.yaml#
+>        - $ref: /schemas/iio/adc/qcom,spmi-iadc.yaml#
+>        - $ref: /schemas/iio/adc/qcom,spmi-rradc.yaml#
+>        - $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
+> =========================><================================================
+> 
+> Thanks,
+> Neil
+> 
 
-Fix these false positives by using a separate lockdep class for the
-x86_pkg_temp thermal device.
+Thanks for catching this, I'll add a patch for this in my next patch series.
+Although I tried running full dt_binding_check and dtbs_check in my local
+workspace with my three binding patches applied, I could not see any error
+related to this, I'm not sure why.
 
-Reported-by: Hans de Goede <hansg@kernel.org>
-Closes: https://lore.kernel.org/linux-pm/e9d7ef79-6a24-4515-aa35-d1f2357da798@kernel.org/
-Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+Thanks,
+Jishnu
 
----
 
-Hi,
-
-I believe that this should solve the lockdep warning that Hans was
-seeing. That said, I have not tested it much.
-
-v2:
-- Fix function name
-- Mark lock class variable static
-
-Benjamin
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 2 ++
- drivers/thermal/thermal_core.c               | 7 +++++++
- include/linux/thermal.h                      | 8 ++++++++
- 3 files changed, 17 insertions(+)
-
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 3fc679b6f11b..15d3c904eaa3 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -310,6 +310,7 @@ static int pkg_temp_thermal_trips_init(int cpu, int tj_max,
- 
- static int pkg_temp_thermal_device_add(unsigned int cpu)
- {
-+	static struct lock_class_key x86_pkg_temp_class;
- 	struct thermal_trip trips[MAX_NUMBER_OF_TRIPS] = { 0 };
- 	int id = topology_logical_die_id(cpu);
- 	u32 eax, ebx, ecx, edx;
-@@ -349,6 +350,7 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 		err = PTR_ERR(zonedev->tzone);
- 		goto out_kfree_zonedev;
- 	}
-+	thermal_zone_device_set_lock_class(zonedev->tzone, &x86_pkg_temp_class);
- 	err = thermal_zone_device_enable(zonedev->tzone);
- 	if (err)
- 		goto out_unregister_tz;
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 17ca5c082643..ff5c2e01904a 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1657,6 +1657,13 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
- }
- EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
- 
-+void thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
-+					struct lock_class_key *lock_class)
-+{
-+	lockdep_set_class_and_name(&tz->lock, lock_class, tz->type);
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device_set_lock_class);
-+
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
- {
- 	return tzd->devdata;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 0b5ed6821080..3cb4cf60b66d 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -240,6 +240,9 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
- 					const struct thermal_zone_device_ops *ops,
- 					const struct thermal_zone_params *tzp);
- 
-+void thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
-+					struct lock_class_key *lock_class);
-+
- void thermal_zone_device_unregister(struct thermal_zone_device *tz);
- 
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
-@@ -290,6 +293,11 @@ static inline struct thermal_zone_device *thermal_tripless_zone_device_register(
- 					const struct thermal_zone_params *tzp)
- { return ERR_PTR(-ENODEV); }
- 
-+static inline void
-+thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
-+				   struct lock_class_key *lock_class)
-+{ }
-+
- static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- { }
- 
--- 
-2.50.0
+>>
+>> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+>> ---
+>> Changes since v5:
 
 
