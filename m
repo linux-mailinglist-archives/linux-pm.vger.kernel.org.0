@@ -1,159 +1,249 @@
-Return-Path: <linux-pm+bounces-29472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F52AE7C94
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:25:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56893AE7D1A
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:34:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2562D7B577F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 09:23:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CF72188BD70
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 09:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164762E612D;
-	Wed, 25 Jun 2025 09:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D1E2DF3EF;
+	Wed, 25 Jun 2025 09:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+VgBATg"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="VYivzD61"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5DA2BEFEE
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 09:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B68A26E6EF
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 09:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750842943; cv=none; b=A+cObmjY3m52XPA4OcDvrirJP+HYN2EUkSTOo8or+l+DDhkyuryuncXWbk7mbEog7uVK+G3nrBjS7zbL5MJUw73FZ/XWgZWOoWbYHI09BGiYPNSrgZR4QU321HtTTwrhwoInRUqtNSzIynEcrig/HqaZX90shGBxEtXBj3ASu+o=
+	t=1750843392; cv=none; b=fDAcQH/Bawdvw97jHAhdtmR4hQ/TilbChkarwyTqqFJngIcKaYpfKtymOUNlYn5DNWi4grKXCruGDR26cRvLRUD5juco9EbgTNV0TZB1GYFW8UFhRLN70FpHT/0GG7KFOl6TPCpbsKAStBCudoz3b+4/ZufhsFgw0p/V7PHHglw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750842943; c=relaxed/simple;
-	bh=iqOA4PT0ikDwgBLflatMHnrD6+ts87+3OmzVy9B9WLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iFmPvJdtf/N69nGuX8ojGPFXPX5rJwWdK3b02NPiqO9PZEd9EtyL/G3C+oTpL/plLn2+SwD+OgVEIZlS+bnbablxYMKeBtiV01rNZtIVY9cn+e9zcDmWP7ItWIIwu6qgvaKurfdtn10Mrp7EMDhXBtFsQ2aGTkJGD3ckT+QZ3+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+VgBATg; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750842940; x=1782378940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=iqOA4PT0ikDwgBLflatMHnrD6+ts87+3OmzVy9B9WLQ=;
-  b=C+VgBATg8tq2Dg0L9P0cK/XKiTQ5auVPvsvdkSpbdRf5yBHXM/QblYW5
-   YTdNWjXhHFpY4RjgKnoa19jyKaNumc7mCi5BAPvnfuCEbaOkUG4pyfXzf
-   QJFPc78xe4m7cTjZwXhV+i9/gyEmZMJqwOJzaQetnIx/czN8UQ5kE7wVG
-   /839b5P+QSFsBlqF2uo9Vv4XXqUS6dm34yOIKmgffbfsH/wHO6IZnst9J
-   9q2BNImZ4qv7+/GdvWmB3xffsWHB1HSUfq6spEUpxQUzPtQ5ZbTB/QZ5u
-   msLTDzA/kuYRixsQSosOyAmGOwVRfwfeJ/EC0GiXzYygKyGiKEsNmNS6p
-   g==;
-X-CSE-ConnectionGUID: w7tkufGmTh2ZTE3PiObMxA==
-X-CSE-MsgGUID: e0nIxvo9QVKb97AhzqzGpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="75641588"
-X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="75641588"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 02:15:37 -0700
-X-CSE-ConnectionGUID: /jyt3jsTT6OoeryfWdTkpg==
-X-CSE-MsgGUID: 5QhQcS3yRumg2bPKh7loRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="183199740"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.155])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 02:15:36 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id C256F11F742;
-	Wed, 25 Jun 2025 12:15:32 +0300 (EEST)
-Date: Wed, 25 Jun 2025 09:15:32 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [PATCH v2 0/6] Update last busy timestamp in Runtime PM
- autosuspend callbacks
-Message-ID: <aFu-NJc6-Li3Bnan@kekkonen.localdomain>
-References: <20250616061212.2286741-1-sakari.ailus@linux.intel.com>
- <CAJZ5v0hEJ+XVdXGghLiF+KSvHCA=HorZXVR0vXkDaB_zxaM1WA@mail.gmail.com>
- <aFBudUgU2TWyDgn8@kekkonen.localdomain>
- <CAJZ5v0iPBT6_zMRUW+=RGfp-baA5nXnj+2z+zWSdRj5SC5C4iA@mail.gmail.com>
+	s=arc-20240116; t=1750843392; c=relaxed/simple;
+	bh=X3UlS9d7TlY6Pd12RdYn75CPVuzcGSmzvT+aXKx0h9I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BCQ2Eb9nZlptjXpmNguThh52tdhmXNPcwtCsq7ygFoQtf0r1Kwlq9/WXUEaqLL3LO1LbLd0QloIA+nTxt4nWxD+9fwUI7XnFAsulJBwuN1mHjUA0r4LBD0J+qKkTcsjTIVxbC9mQ1htzQ7Otaa0qa5VeTTx2zqklPdluz57qxIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=VYivzD61; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-addcea380eeso1032998666b.0
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 02:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1750843388; x=1751448188; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hV7WOWtVzsWUafxQtaP9Rv4gkIegzwV0WCsPbafI4b0=;
+        b=VYivzD61f0Rr0FMLvDIF7n1SFPyZ+mQIOotBER9uqhTJi/ugKwTqFcH8fUTX7hmSFL
+         epWoSVaO+thetchX2LtWM/Hu5LhPt2E0eGTzeGibEjLlScaoYUB/+S0NyALD+c+N7g1F
+         kzAEQUA6rdJZfk6idAA09BphWvXoEl+uBds0MK50jeP0DGX/c5/QVihDezDIU6ci0h9J
+         PLKHF9MWFf2qFvfPJOrve7z3hjG5UG2OUxATKAEheqt8yiWFR8V0Xu9qzxeEwkrWhhlQ
+         ruumSzuYAAx7BMs5jnFpYfuxrRRLD/L6bTRS7fHD1e2s48zv/6JMnEcKzZuIZf/r59c3
+         SLDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750843388; x=1751448188;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hV7WOWtVzsWUafxQtaP9Rv4gkIegzwV0WCsPbafI4b0=;
+        b=Np8rhG6cXEV6jgGDLhRzuoxgrhMhHAqTITcpGodY4bPDmkojxzZYUzCBa28oGcOzQf
+         dsKG4xHBs16wP8izjSH5nvO+R5YZklzOenE/W7HCZ8rOFizhdBCqVmQVGB0hs5Fgy8wa
+         VcwtUa7KSpBv3SMS57K2Lt1H2oi5sebKvhI/0tfA/ifunHVMv/7WHj4o4ip2H/FLJxee
+         U/fzvY+ChXcLZooms/uy/pq0nBRA6DwXqr4rSM7ksVPfUc5f9Ixmq2h3PAJY8b4u8po4
+         22eHrg73stuyCHgb19j89lBkZpeSfI5n/L9O20XhXpDq82X/Li6A/alHnU/4c5xbZJUL
+         hExw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuwgTfHilraXRtUQeBNXSFa6x6zgG6AFE0tlUe/Nva5/Ek4q+9TOQVCf+jErpwoqfJBjccaO8vKQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHJDXWYDZE/ZFfzWSKtnfjF8X2uf2uY/sJar8m14/4ZUMAPcrX
+	mMRwhVZWf9Om+NwgP2qR5rUzt/Ux4oyz2oofWAOT0WyM1RX+dtfgasV1vcYVIM5ySkE=
+X-Gm-Gg: ASbGncvXyELt5E3cgtZYaYoam5bsupFb+9RB7ROROMnd1SiyRQAzTgWWnaDihHJMeLc
+	6gdNuYc7vD+fP1HxjOXbHkbFDjXOMk1qXI0+CCArAV7Pf05E+hoMulMKb1xuB7wmlUiqJ+yctsl
+	DTvDgsxmyCQG2Iuv0BE1Q4HTMi1Jfbx8grRecFX1C9WcGLn1bt/6bSg/VKJhmUVHu+4zHuDeVp8
+	OUVvC/wCJAuIMLtEYwRkm4VKOprGk782wuaWdas0rx9TtFe7aoxyghbKiZplP7d0kVpP3vUX+SB
+	7pOd2TiF/js4QcjDPOpbV95kD5VEVNFWh6TF286pwA9GWWvGmtQWVuKvuSUn24VzpX6GeVx0R8X
+	XjSAaZtHYALJB1WtNlGs7YAkJA4nh1M1+
+X-Google-Smtp-Source: AGHT+IGBfPWLF14udRjA4rTQL7Xmj57jJQlVSw3nSt80zUa+Z8byzZivAhETKB7aMXe+Sl/ni3qeIw==
+X-Received: by 2002:a17:907:3e0e:b0:ae0:c7b4:b797 with SMTP id a640c23a62f3a-ae0c7b4b8e3mr103550666b.45.1750843388241;
+        Wed, 25 Jun 2025 02:23:08 -0700 (PDT)
+Received: from otso.local (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0aaa0a854sm270277766b.68.2025.06.25.02.23.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jun 2025 02:23:07 -0700 (PDT)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH 00/14] Various dt-bindings for SM7635 and The Fairphone
+ (Gen. 6) addition
+Date: Wed, 25 Jun 2025 11:22:55 +0200
+Message-Id: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iPBT6_zMRUW+=RGfp-baA5nXnj+2z+zWSdRj5SC5C4iA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPG/W2gC/42TzW7bMBCEX0VQr92CP+KfXqXIgVwubaKWxJKyk
+ CLIu0exkaSXQD4RQ/Ab7M6AL32jmqn1Y/fSV9pyy8u8C/6z6/Hs5xNBjrvuBROKaSGhTUZLBal
+ oyHNes78AVzSwRElJjP0OlkopP99Mfz/ddaW/1917vV9+WY/d3ZhroGsLAioV8itVWK9znk+Ql
+ JaSow48+XET/f9zfcIGWp7KhSDWCVKAjAjWDZqjUs5x+R0o2Mc6bcE8pwUsaiIbrUAXx413P7q
+ lrHsk/nJgUPKMa72ASySj1U4OOuwGBxReFvzTwGjnopQ2ojQPQ1NuCCxJ5Xy0kpE/JmuZziVCx
+ KAiMq2RxDH0HiYNThEjrTlzx8R7k1DO/yDK4IMeLMbEH8Q++2fR2KSUEY6lBzajaVmp1AUb8MF
+ Frwdmh2CPyTLljXE2gBy8Ns5JE2/VH2LPVQjJgEgpb7W3KL4vXO7vjVJsP6qRKtya2Ic+NWCaW
+ UMqSO8+og2+EeAyTXkdu03/2j9HRd4/vb6+AXIeQHavAwAA
+X-Change-ID: 20250623-sm7635-fp6-initial-15e40fef53cd
+To: Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Joerg Roedel <joro@8bytes.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Robert Marko <robimarko@gmail.com>, 
+ Das Srinagesh <quic_gurus@quicinc.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750843387; l=7315;
+ i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
+ bh=X3UlS9d7TlY6Pd12RdYn75CPVuzcGSmzvT+aXKx0h9I=;
+ b=PhYFkq1F/db914X03xPoQB5gZpwOk1nGvWuuwEpN40VtD7TEu3y6t9uK9TA7paxOaRoimK4Gk
+ /NuLWry4HChDv0DC0NE795vB+PtWL7GdDfNCJ4mvxYQEKrdHOXw/hQF
+X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
+ pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
 
-Hi Rafael,
+Document various bits of the SM7635 SoC in the dt-bindings, which don't
+really need any other changes.
 
-On Wed, Jun 18, 2025 at 09:43:25PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Jun 16, 2025 at 9:20 PM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Mon, Jun 16, 2025 at 01:21:02PM +0200, Rafael J. Wysocki wrote:
-> > > On Mon, Jun 16, 2025 at 8:12 AM Sakari Ailus
-> > > <sakari.ailus@linux.intel.com> wrote:
-> > > >
-> > > > Folks,
-> > > >
-> > > > The original plan for adding pm_runtime_mark_last_busy() calls to
-> > > > functions dealing with Runtime PM autosuspend originally included a few
-> > > > intermediate steps of driver conversion, including the use of recently
-> > > > added __pm_runtime_put_autosuspend(). The review of the set converting the
-> > > > users first to __pm_runtime_put_autosuspend() concluded this wasn't
-> > > > necessary. See
-> > > > <URL:https://lore.kernel.org/all/20241004094101.113349-1-sakari.ailus@linux.intel.com/>.
-> > > >
-> > > > This set extends the inclusion of the pm_runtime_mark_last_busy() call to
-> > > > the _autosuspend() variants of the Runtime PM functions dealing with
-> > > > suspending devices, i.e. pm_runtime_put_autosuspend(),
-> > > > pm_runtime_put_sync_autosuspend(), pm_runtime_autosuspend() and
-> > > > pm_request_autosuspend(). This will introduce, for a brief amount of time,
-> > > > unnecessary calls to pm_runtime_mark_last_busy() but this wasn't seen as
-> > > > an issue. Also, all users of these functions, including those that did not
-> > > > call pm_runtime_mark_last_busy(), will now include that call. Presumably
-> > > > in the vast majority of the cases a missing call would have been a bug.
-> > > >
-> > > > Once this set is merged, I'll post further patches to remove the extra
-> > > > pm_runtime_mark_last_busy() calls. The current set of these patches is
-> > > > here
-> > > > <URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.git/log/?h=pm-direct-on-next>.
-> > > >
-> > > > It'd be best to have all merged within the same cycle.
-> > > >
-> > > > Rafael: any thoughts on the merging?
-> > >
-> > > I'm going to queue this up for 6.17.
-> >
-> > Thank you! :-)
-> 
-> Now applied.
-> 
-> > >
-> > > > Would an immutable branch on top of rc1 be an option?
-> > >
-> > > I think so, but does anyone need it?
-> >
-> > I guess it's not mandatory but we'll have now a lot of redundant calls to
-> > the pm_runtime_mark_last_busy(). It just doesn't look very elegant. In the
-> > end it's all up to what the maintainers prefer.
-> 
-> I'll let you know when the branch is ready to pull from.
+Then we can add the dtsi for the SM7635 SoC and finally add a dts for
+the newly announced The Fairphone (Gen. 6) smartphone.
 
-The branch is here
-<URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux.git/log/?h=pm-mark-last-busy-v6.16-rc1>,
-I guess you can use:
+Dependencies:
+* The dt-bindings should not have any dependencies on any other patches.
+* The qcom dts bits depend on most other SM7635 patchsets I have sent in
+  conjuction with this one. The exact ones are specified in the b4 deps.
 
-	ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sailus/linux.git	pm-mark-last-busy-v6.16-rc1
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Luca Weiss (14):
+      dt-bindings: arm-smmu: document the support on SM7635
+      dt-bindings: cpufreq: qcom-hw: document SM7635 CPUFREQ Hardware
+      dt-bindings: crypto: qcom,prng: document SM7635
+      dt-bindings: firmware: qcom,scm: document SM7635 SCM Firmware Interface
+      dt-bindings: qcom,pdc: document the SM7635 Power Domain Controller
+      dt-bindings: mailbox: qcom-ipcc: document the SM7635 Inter-Processor Communication Controller
+      dt-bindings: soc: qcom,aoss-qmp: document the SM7635 Always-On Subsystem side channel
+      dt-bindings: thermal: qcom-tsens: document the SM7635 Temperature Sensor
+      dt-bindings: dma: qcom,gpi: document the SM7635 GPI DMA Engine
+      dt-bindings: mmc: sdhci-msm: document the SM7635 SDHCI Controller
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM7635 compatible
+      dt-bindings: arm: qcom: Add SM7635 and The Fairphone (Gen. 6)
+      arm64: dts: qcom: Add initial SM7635 dtsi
+      arm64: dts: qcom: Add The Fairphone (Gen. 6)
 
-Let me know when you have pulled from there, I'll then post the updated set.
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    6 +
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |    2 +
+ .../devicetree/bindings/crypto/qcom,prng.yaml      |    1 +
+ .../devicetree/bindings/dma/qcom,gpi.yaml          |    1 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |    2 +
+ .../bindings/interrupt-controller/qcom,pdc.yaml    |    1 +
+ .../devicetree/bindings/iommu/arm,smmu.yaml        |    3 +
+ .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |    1 +
+ .../devicetree/bindings/mmc/sdhci-msm.yaml         |    1 +
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |    1 +
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         |    1 +
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/sm7635-fairphone-fp6.dts  |  837 ++++++
+ arch/arm64/boot/dts/qcom/sm7635.dtsi               | 2806 ++++++++++++++++++++
+ 15 files changed, 3665 insertions(+)
+---
+base-commit: d9946fe286439c2aeaa7953b8c316efe5b83d515
+change-id: 20250623-sm7635-fp6-initial-15e40fef53cd
+prerequisite-change-id: 20250616-eusb2-repeater-tuning-f56331c6b1fa:v2
+prerequisite-patch-id: 5c504d171a4d1acd9ec376e01e0dd0fddbad92b8
+prerequisite-patch-id: 0c97dcf5472fbed8ef4cffbd482f3169fe1e972d
+prerequisite-change-id: 20250617-simple-drm-fb-icc-89461c559913:v2
+prerequisite-patch-id: 1ce32150adbe39ad43d9a702623b55937d92a17c
+prerequisite-patch-id: 3562d9a85381bee745402619a7acba9b951f145c
+prerequisite-patch-id: f8447266657b779a546ecbbbc2e38bd61c422f08
+prerequisite-patch-id: cb9d07c82e73ab3691e0ace9604bfa69cdd6bb64
+prerequisite-patch-id: 18ab6ca6a024e5b8ea8138111064db593d72da35
+prerequisite-change-id: 20250620-sm7635-socinfo-8c6ee8d82c9d:v1 # optional
+prerequisite-patch-id: f1b2e11df96c271c9e3d010084809f361ee4249c
+prerequisite-patch-id: 1471abf17230db340c67a84b5a9009f1f2ea6e0e
+prerequisite-patch-id: 57bff00c4fedce1b78615375f12517b955dd1d16
+prerequisite-change-id: 20250620-sm7635-pinctrl-9fe3d869346b:v1
+prerequisite-patch-id: 43b88c44c6fc5b72a490cd3acc5d2585206e81f2
+prerequisite-patch-id: b3b6ebd4a288bd4abf227c939a1a92eafb2cf2c8
+prerequisite-change-id: 20250620-sm7635-clocks-7699d338dc37:v1
+prerequisite-patch-id: 48485e0e7e8a992695af1690f8cd2c09c227a4bf
+prerequisite-patch-id: 4685ceba3f900ad6d1d2ae35116d37f64a171d5d
+prerequisite-patch-id: 80f71dad0c0a77da98e5e66b592f38db6d81b4b1
+prerequisite-patch-id: 49a2fa1a14931d9143da232969e7487061466930
+prerequisite-patch-id: f5d1794f61488235644f78ffc28e3dacdab215d1
+prerequisite-patch-id: ab257573067ff09c94270e1fa6ad4de1480c06b9
+prerequisite-patch-id: 6608bd3f2e198a0780736aebcea3b47ee03df9ef
+prerequisite-patch-id: c463d0d2d84c8786ed9a09016f43b4657cbc231e
+prerequisite-patch-id: e113e76af37f01befaf4059ee3063cb45b27fd6b
+prerequisite-patch-id: 40f8b8acd07a9ff7da8683b1be6a58872250e849
+prerequisite-change-id: 20250620-sm7635-clocks-misc-0f359ad830ea:v1
+prerequisite-patch-id: 127f332296fced39a2fd2f9a1f446ba30ec28ceb
+prerequisite-patch-id: d21a0c8ceb06523c9f3f4ce569d28714878b3f84
+prerequisite-patch-id: 87029a8844ef174ab3e0f953a1d16957fe6c13cc
+prerequisite-patch-id: 095c767d7b7aa67d47026589c926636e57349ca6
+prerequisite-change-id: 20250620-sm7635-rpmhpd-dcb5dc066ce2:v1
+prerequisite-patch-id: d71fe15334032610c05cb55aeb28bfaa44e3530c
+prerequisite-patch-id: 729544e856b8046f7a311b719d9495f8b33c1e1f
+prerequisite-change-id: 20250620-sm7635-icc-e495e0e66109:v1
+prerequisite-patch-id: b387217215d6f83cbd50c380171b159a2f1406d8
+prerequisite-patch-id: bffd82274c35f6d520f524aa2a9c1c4bef7e047e
+prerequisite-change-id: 20250620-sm7635-eusb-phy-d3bab648cdf1:v1
+prerequisite-patch-id: c242c9b099d738214def29d2e464b64be5f14e62
+prerequisite-patch-id: 8c1eb426c08bc1ec9462e77139b3b64d5e1453e9
+prerequisite-patch-id: cdbc469ab33002c6bf697c033755b598dd1a621e
+prerequisite-patch-id: 6bb2900bb530880091622ef47d141fe1f5756a52
+prerequisite-change-id: 20250620-sm7635-eusb-repeater-0d78f557290f:v1
+prerequisite-patch-id: 5c504d171a4d1acd9ec376e01e0dd0fddbad92b8
+prerequisite-patch-id: 0c97dcf5472fbed8ef4cffbd482f3169fe1e972d
+prerequisite-patch-id: a618abb349c3de5b49f79b4b0f86d9ab502ad500
+prerequisite-patch-id: 09f91ff3a25c16a0375bdfec80604a64eab0b4fb
+prerequisite-patch-id: 8fca8b09d70409c5c78f9f1b77d0a4c75bce38cf
+prerequisite-patch-id: f5c2c24d2baefcd7ff91718529ab2f2c264ab99f
+prerequisite-change-id: 20250620-sm7635-remoteprocs-149da64084b8:v1
+prerequisite-patch-id: 3c95a20dd456dfee100f2833de4e9931a2073c7d
+prerequisite-patch-id: 5292d77663ea9c44346b8da86bda36e0cce3fe56
+prerequisite-patch-id: 015edcb2a69b5e837dc7edfbc7adc22145ba611b
+prerequisite-change-id: 20250620-sm7635-pmiv0104-34a679937d9d:v1
+prerequisite-patch-id: 8fca8b09d70409c5c78f9f1b77d0a4c75bce38cf
+prerequisite-patch-id: f5c2c24d2baefcd7ff91718529ab2f2c264ab99f
+prerequisite-patch-id: d7a06ece910e7844c60b910fe8eed30ad2458f34
+prerequisite-patch-id: e91b741c9cfc80aa149bfd8e43cae90ca58e17f2
+prerequisite-patch-id: 5ba4a49c3792cb208ee064a6ba13545e40cb70ac
+prerequisite-patch-id: 5bdfcbdd226f7223c04a65c1a3cdcc3ecad38858
+prerequisite-change-id: 20250620-sm7635-pmxr2230-ee55a86a8c2b:v1
+prerequisite-patch-id: f0bd6e083324f954b988647bb42d4e2be179fbda
+prerequisite-patch-id: 8fe1c0fc544e8bcb35522c5eba0b36e83bfd0c19
+prerequisite-patch-id: 525c9eb0087025024bb0aaec1ed1d7d2c0bc8f03
+prerequisite-change-id: 20250623-pm7550-pmr735b-rpmh-regs-06087e5b3a99:v1
+prerequisite-patch-id: 7360606a06f8fba3ea9a8f84b4ecfb8209e91ab0
+prerequisite-patch-id: 7a06a346abdb7f7386912b92f2b84af87e7439a9
+prerequisite-patch-id: 1e1a6eb9c5421812c07421f9fa7e3f16b26a42da
+prerequisite-patch-id: 224df3e4068bee3a17bde32e16cd9366c55b5faf
 
+Best regards,
 -- 
-Kind regards,
+Luca Weiss <luca.weiss@fairphone.com>
 
-Sakari Ailus
 
