@@ -1,277 +1,317 @@
-Return-Path: <linux-pm+bounces-29495-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29496-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322C1AE80A0
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 13:10:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47180AE8100
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 13:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C599A3A9D08
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:10:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8D831C22B46
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877B22BD58A;
-	Wed, 25 Jun 2025 11:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED162DA76C;
+	Wed, 25 Jun 2025 11:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="dQmPgMH3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VLtwbBhy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9Jy0X5c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E571E1C3F;
-	Wed, 25 Jun 2025 11:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6202DA740;
+	Wed, 25 Jun 2025 11:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750849831; cv=none; b=hICqJ1scXYJChvNRhFvnpw9vCp/DrMdOv6bfC2rlIcKWs+6Q+C8VtffxrlJIaIGROuzQJQ6Ol59+Hm7C7oN48Zq3nAKNNf11sZmCSFTs3QYJBp+FfaUITJcjcsvYZLoKJb3qAg4ciFTvGyL70wINdfVOe3qFVg32yPiB3DOjKeQ=
+	t=1750850715; cv=none; b=fy0+jUjiQx67a/y595lFdI71MAfDdDkoBpKZ9rm6e5E7jAcnN6sGxKK88lwCCoC7cyLWouZ83Iw6yxiTZ9Uh+9j6uo/K0MUU5Tq0KA+Kcky1/oJPDtYe8Asf0Yk5vMV8lMuJKGzBXqrqTwfp5OtlQ+8uQ2Yvj/gsS0/6OMkzm2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750849831; c=relaxed/simple;
-	bh=XT+EwPD4OgKIgCidfsqog4gzyYrb031nl7652LHFA+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FbAarGURno4Ubr07DCjm91M+gmxQrhzA1qVgYQEYd+yWqBxIC5oq9UkFRbGiGtEXEO/HL96DvbCOZzENLVPOhS7mMqR+TT2dKhHNm/z/7zMt3EhZh45C2eynpzIAjea2+1gEaprrq+zUXFIwSrEohmbywH+29lDGd2Wtqse8EcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=dQmPgMH3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VLtwbBhy; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id 45B4BEC0292;
-	Wed, 25 Jun 2025 07:10:27 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Wed, 25 Jun 2025 07:10:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1750849827;
-	 x=1750936227; bh=pfz7ME3gmVUD4gHhu/odMLYpeYC9QIWk3tsj5/f8bRE=; b=
-	dQmPgMH3SQYrbOnd4o9OEI2mbO0FBWMlwDmH4pearvPMsLxrXNP0fIlHZl03Qdlh
-	v20nmE61iXP+9ZV2E2LrYcAnUHCwZArQSlKVoFb1wCSlmf7TtFIQ2cyrfFWZBh0L
-	MRY5SHykz1tp/jCVgQm50Mn8yvv69gCS6xqUw1+LupWedZVJYr7PyGeRB2yanQpc
-	KnPygzNNLX8wSZuwkyvNWeWva05t5IObOMU9MOkGg1Ybm2c+5zZl8o1GNExI62bA
-	RG0ybaqo3SktS1kb2gGA42OoW/Xxzo0/RZT6GeQvVeaCzMiUKQbw9a3op8bjEEH3
-	6z/oe88sL4mxNIE+bmK1QQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1750849827; x=
-	1750936227; bh=pfz7ME3gmVUD4gHhu/odMLYpeYC9QIWk3tsj5/f8bRE=; b=V
-	LtwbBhyFep8zGcZ/H3hDNt7qhtSwvR1rOW7Tbzh+m9gV7wfFb6R0D6G1oXkpJ87A
-	LPX7LWfqYisSdkwxzZ8NklT6ybgwR2sEmiNJIre6fGt4xi7ZSVQedAkfeT1rAERZ
-	ZQ/54cyMwW1bPW8xa0FD/ps84N8QekbN5xSKzA+RoH3QtY0yG2IfXMoZylRkIwKZ
-	uOkDrxDdFbhrZqo6UsvtYKgRPntEVHH2iNhL9Lesnrxu+vslGRCEvaPNi5aoYEYJ
-	FyojSBQ/cqzYnrNsESWTYcdFiOk/F6NZ46tVgVm+NI8fZ0IgJ8ifB9X4CvDmCUE5
-	wYImr62d+kRFjl2w0nHjg==
-X-ME-Sender: <xms:ItlbaG8K6_ljU3apPcYci3q-kwXdVQEhO0G8PREQsoK3Jy4aSuIoLA>
-    <xme:ItlbaGtHvbwxXnA94rvzxe7D0UGxCI1nzBoQ0u55scxchX1LuvuxO7TkkQuYHzOO9
-    CmBLx_d1QjCisMiiUY>
-X-ME-Received: <xmr:ItlbaMDixQKsceSZPuutL6PpVsPvL9S3YVnkwxt34mkht4rGcwiZyvkijIZtRgBLW-b49evRDtoCR94A1-BrWzriIMo9EVcVng>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdeiudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheppfhikhhlrghs
-    ucfunpguvghrlhhunhguuceonhhikhhlrghsrdhsohguvghrlhhunhgusehrrghgnhgrth
-    gvtghhrdhsvgeqnecuggftrfgrthhtvghrnhepveetgedtvddvhfdtkeeghfeffeehteeh
-    keekgeefjeduieduueelgedtheekkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepnhhikhhlrghsrdhsohguvghrlhhunhgusehrrghgnhgr
-    thgvtghhrdhsvgdpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhhtpdhrtg
-    hpthhtohepmhgrrhgvkhdrvhgrshhuthdorhgvnhgvshgrshesmhgrihhlsghogidrohhr
-    ghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhi
-    vghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehgvggvrhhtod
-    hrvghnvghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtoheplhhukhgrshiirdhluhgs
-    rgesrghrmhdrtghomhdprhgtphhtthhopehmrghgnhhushdruggrmhhmsehgmhgrihhlrd
-    gtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphht
-    thhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorh
-    hg
-X-ME-Proxy: <xmx:ItlbaOd33cVm7FM2GAEKt1LxbzFKmRNcK-aU4zgQGYoewesAFTHMFA>
-    <xmx:ItlbaLNbPVAVzcVy74QajidDLQq9QAXvi4Of7WvIdUucOWpnvnObLg>
-    <xmx:ItlbaIl5bY4-8WIw9UMsf22uXx3z9xW-T6zvfT-7DnaQJftSEpOCKw>
-    <xmx:ItlbaNtmt0oBFIWosiJ38HEo0XSt4WjTJTTQ-8LWs9SvW9gWmQptBw>
-    <xmx:I9lbaLcnin9YYA1hOIo0B0PF7MH8bcsg1MtjwKUg5pIVTUV3W3yXcKpu>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jun 2025 07:10:26 -0400 (EDT)
-Date: Wed, 25 Jun 2025 13:10:24 +0200
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: rcar_gen3: Add support for per-SoC default
- trim values
-Message-ID: <20250625111024.GA854038@ragnatech.se>
-References: <20250625100116.7538-1-marek.vasut+renesas@mailbox.org>
+	s=arc-20240116; t=1750850715; c=relaxed/simple;
+	bh=Sj5tdg3WN3OUfbAEd9VRq4imt6Z4ASAMrzQsxj8b3OU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BDxAJ9vy5nGJrJ+hZs2da7FDold+mBAZ0uj0gkLiZNa+zBRGhveS2DWPSF1ojQrP+IcAskPvdiR5OcP0CBq2pmdX/6FaBpFNp+lZkx3Q0M9h/HSKlrLKketZ7x2I2TM3EUV6D6j7f5DUpTRrXGSEzg8zhdl3RgaPBcobzW6qr1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9Jy0X5c; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-451d54214adso10310185e9.3;
+        Wed, 25 Jun 2025 04:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750850712; x=1751455512; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cIFXHNMMz/rnn3fp04SvsZG+L3Mgm1adSAVXhKCv578=;
+        b=W9Jy0X5cIEUPGkL1g754Zyst9lUcnRsB/0mWfHiq+EXFUl3qyGr/CxWE7N/8ikDChc
+         vSNrSwfQpdrAZHgQrGcwcr7ms4EaxIAj5TpaVCbfYnSlI70BoYgWaS6ZjO9Vddr1g3TK
+         QqdMuMaPPBDRZSisdtaB8ZHiArJcMlWjvOY5RxSzNqhuTUHamUm/atGIymcVZCQtXCLn
+         r3tRfaiVMr4stoaddqjb9KOtQbU5hoLHEGySXk05J8pL3b/e4tCKRK7sq//8zxiVYIfV
+         Co4qZ6DQR2aWyD+LOmU5F9qjiDNOLzepjWYE0Bng8FhM7WB+SgAPQ9YVZc1WCUL/GX8p
+         vq3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750850712; x=1751455512;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cIFXHNMMz/rnn3fp04SvsZG+L3Mgm1adSAVXhKCv578=;
+        b=KDUA2mm0OdjczDV/RI0N4hfDbaHMjWkRb6hXudcEKZy65s6fwGDKTy0eehgUzaHLct
+         DbRs6j5YV4CX58Fy85zaA/wn68xqilqGx9WJ+0IGaoIpwypJwtq7RtwbK0opfVwxWk+A
+         T55dOrunK+Vs8yD/PZM0Sm760Fz9X+XZikBModn0ajXzXJw/ha7g7r4LEszibiDeSn8t
+         Vtp/IyRKKOei8JbYbsbZTuZiTkGHyZOKM8eTTRrI5SIhfy6SX8fEuGlX1HtK4kGiVh/C
+         Bi0RNQUaif3pXirLOAQO2I2pURHr/M63sGLurMP0toX8zj3/5vt+92/f27X8IZM/XS/r
+         YY4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUW/xIrPU6XL1rRgpkZFjwwg/J9NXVcaCwVDMuDrtHYfs8UQZLyjMtJd2y4FGfPDHFtgq/PBGwI8yzfN2lG@vger.kernel.org, AJvYcCV52hloHLqTM627qyFJ/DqRZTKIz0TPXnLRssoVbCJ6u302zHqcbfP/xnAYFVusskAOdEhxva+OUdFMVnj5@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUfOCjeGxsjeAke9VNwgU4RhFeSbbWn8kbBdfykYaA3HkqcgKa
+	cwxbM/yqGdJsvSj51liwk+9NDXf9kcjT1ANisKIkRtskrFBVz2gVZRZWQmxLDg==
+X-Gm-Gg: ASbGncv+mrBYq//1j4I9sh3YanbyWeJfInw/R9L2Y5VKCZ9ekCM8eKcxBUyHpdXt+za
+	KWGwASiHUGauXVd5mRkIstO3TD6qjiRe7xdqWFDWMcJE+AYM+cUluIKKPtNopTGrO8woiiEypSO
+	js/MdIbzHohs8oHgTn1shg0/CjMoFTzXdpeoY0+YaOnDfMIcYjVsKhEzXH/gY8BgOiFVdPyCRkD
+	ElE3nPdSiVFS24LDy4Gu/bSQ7boPq6yrzPtqzKszKQv+qtTtaceLA6YnZD8d85YXTPcuUoapqBq
+	K87RFDaX2ypGBAEWhiuYS3HIqKKo0XnVOCPcr54JHnPApYPV3vbH/x95OqR3QkFsAsBYDGjV9/S
+	Z4yd0IjZ6PuIBwzQ=
+X-Google-Smtp-Source: AGHT+IF/l2TTEwk7mY0FbHtJZWfy+l5zfhEIGiynhEEsNVF/kg3NtLIcHyU0wbAYZN6bOw1uR3Q5TQ==
+X-Received: by 2002:a05:6000:2910:b0:3a5:1f2:68f3 with SMTP id ffacd0b85a97d-3a6ed66e655mr1844816f8f.46.1750850712019;
+        Wed, 25 Jun 2025 04:25:12 -0700 (PDT)
+Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a6e81106b8sm4428642f8f.91.2025.06.25.04.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jun 2025 04:25:11 -0700 (PDT)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Date: Wed, 25 Jun 2025 13:25:04 +0200
+Subject: [PATCH v3] interconnect: avoid memory allocation when
+ 'icc_bw_lock' is held
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250625100116.7538-1-marek.vasut+renesas@mailbox.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAI/cW2gC/3XM0Q6CIBiG4VtpHEeDH0XpqPtoHSCQ/kvFQaOa8
+ 95DT2prHX7f9rwziS6gi+S4m0lwCSP6MQ+x3xHT6bF1FG3eBBiUrARF0RjaPGjvzc26iTrLBLO
+ 1As0VyWgK7orPLXi+5N1hvPvw2vqJr+/fVOKUU2ErXjRSK1EVp3bQ2B+MH8iaSvDhktc/HFYOI
+ KwWhaxk+c2XZXkDLT9IT+sAAAA=
+X-Change-ID: 20250529-icc-bw-lockdep-ed030d892a19
+To: Georgi Djakov <djakov@kernel.org>, 
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, 
+ Johan Hovold <johan+linaro@kernel.org>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Gabor Juhos <j4g8y7@gmail.com>
+X-Mailer: b4 0.14.2
 
-Hi Marek,
+The 'icc_bw_lock' mutex is introduced in commit af42269c3523
+("interconnect: Fix locking for runpm vs reclaim") in order
+to decouple serialization of bw aggregation from codepaths
+that require memory allocation.
 
-Thanks for your work!
+However commit d30f83d278a9 ("interconnect: core: Add dynamic
+id allocation support") added a devm_kasprintf() call into a
+path protected by the 'icc_bw_lock' which causes this lockdep
+warning (at least on the IPQ9574 platform):
 
-On 2025-06-25 11:59:58 +0200, Marek Vasut wrote:
-> The Working Sample R-Car SoCs may not yet have thermal sensor trimming
-> values programmed into fuses, those fuses are blank instead. For such
-> SoCs, the driver includes fallback trimming values. Those values are
-> currently applied to all SoCs which use this driver.
-> 
-> Introduce support for per-SoC fallback trimming values in preparation
-> for SoCs which do not use these current trimming values. No functional
-> change is intended here.
+    ======================================================
+    WARNING: possible circular locking dependency detected
+    6.15.0-next-20250529 #0 Not tainted
+    ------------------------------------------------------
+    swapper/0/1 is trying to acquire lock:
+    ffffffc081df57d8 (icc_bw_lock){+.+.}-{4:4}, at: icc_init+0x8/0x108
 
-I like the change, only have one bikeshedding comment about naming.
+    but task is already holding lock:
+    ffffffc081d7db10 (fs_reclaim){+.+.}-{0:0}, at: icc_init+0x28/0x108
 
-> 
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
-> ---
-> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Magnus Damm <magnus.damm@gmail.com>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> ---
->  drivers/thermal/renesas/rcar_gen3_thermal.c | 42 ++++++++++++++-------
->  1 file changed, 28 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
-> index 24a702ee4c1f..a388bd3135e4 100644
-> --- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-> @@ -73,11 +73,17 @@ struct rcar_gen3_thermal_fuse_info {
->  	u32 mask;
->  };
->  
-> +struct rcar_gen3_thermal_fuse_default_info {
+    which lock already depends on the new lock.
 
-Maybe call this 'rcar_gen3_thermal_fuse_default' to reduce the symbol 
-length. In retrospect picking the preifx 'rcar_gen3_thermal_' was a 
-really bad idea on my part...
+    the existing dependency chain (in reverse order) is:
 
-> +	u32 ptat[3];
-> +	u32 thcodes[TSC_MAX_NUM][3];
-> +};
-> +
->  struct rcar_thermal_info {
->  	int scale;
->  	int adj_below;
->  	int adj_above;
->  	const struct rcar_gen3_thermal_fuse_info *fuses;
-> +	const struct rcar_gen3_thermal_fuse_default_info *fuse_defaults;
->  };
->  
->  struct equation_set_coef {
-> @@ -289,6 +295,7 @@ static void rcar_gen3_thermal_fetch_fuses(struct rcar_gen3_thermal_priv *priv)
->  
->  static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
->  {
-> +	const struct rcar_gen3_thermal_fuse_default_info *fuse_defaults = priv->info->fuse_defaults;
->  	unsigned int i;
->  	u32 thscp;
->  
-> @@ -297,24 +304,16 @@ static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
->  	if (!priv->info->fuses ||
->  	    (thscp & THSCP_COR_PARA_VLD) != THSCP_COR_PARA_VLD) {
->  		/* Default THCODE values in case FUSEs are not set. */
-> -		static const int thcodes[TSC_MAX_NUM][3] = {
-> -			{ 3397, 2800, 2221 },
-> -			{ 3393, 2795, 2216 },
-> -			{ 3389, 2805, 2237 },
-> -			{ 3415, 2694, 2195 },
-> -			{ 3356, 2724, 2244 },
-> -		};
-> -
-> -		priv->ptat[0] = 2631;
-> -		priv->ptat[1] = 1509;
-> -		priv->ptat[2] = 435;
-> +		priv->ptat[0] = fuse_defaults->ptat[0];
-> +		priv->ptat[1] = fuse_defaults->ptat[1];
-> +		priv->ptat[2] = fuse_defaults->ptat[2];
->  
->  		for (i = 0; i < priv->num_tscs; i++) {
->  			struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
->  
-> -			tsc->thcode[0] = thcodes[i][0];
-> -			tsc->thcode[1] = thcodes[i][1];
-> -			tsc->thcode[2] = thcodes[i][2];
-> +			tsc->thcode[0] = fuse_defaults->thcodes[i][0];
-> +			tsc->thcode[1] = fuse_defaults->thcodes[i][1];
-> +			tsc->thcode[2] = fuse_defaults->thcodes[i][2];
->  		}
->  
->  		return false;
-> @@ -361,11 +360,24 @@ static const struct rcar_gen3_thermal_fuse_info rcar_gen3_thermal_fuse_info_gen4
->  	.mask = GEN4_FUSE_MASK,
->  };
->  
-> +static const struct rcar_gen3_thermal_fuse_default_info
-> +	rcar_gen3_thermal_fuse_default_info_gen3 = {
+    -> #1 (fs_reclaim){+.+.}-{0:0}:
+           fs_reclaim_acquire+0x7c/0xb8
+           slab_alloc_node.isra.0+0x48/0x188
+           __kmalloc_node_track_caller_noprof+0xa4/0x2b8
+           devm_kmalloc+0x5c/0x138
+           devm_kvasprintf+0x6c/0xb8
+           devm_kasprintf+0x50/0x68
+           icc_node_add+0xbc/0x160
+           icc_clk_register+0x15c/0x230
+           devm_icc_clk_register+0x20/0x90
+           qcom_cc_really_probe+0x320/0x338
+           nss_cc_ipq9574_probe+0xac/0x1e8
+           platform_probe+0x70/0xd0
+           really_probe+0xdc/0x3b8
+           __driver_probe_device+0x94/0x178
+           driver_probe_device+0x48/0xf0
+           __driver_attach+0x13c/0x208
+           bus_for_each_dev+0x6c/0xb8
+           driver_attach+0x2c/0x40
+           bus_add_driver+0x100/0x250
+           driver_register+0x68/0x138
+           __platform_driver_register+0x2c/0x40
+           nss_cc_ipq9574_driver_init+0x24/0x38
+           do_one_initcall+0x88/0x340
+           kernel_init_freeable+0x2ac/0x4f8
+           kernel_init+0x28/0x1e8
+           ret_from_fork+0x10/0x20
 
-With the names adjusted above this could be
+    -> #0 (icc_bw_lock){+.+.}-{4:4}:
+           __lock_acquire+0x1348/0x2090
+           lock_acquire+0x108/0x2d8
+           icc_init+0x50/0x108
+           do_one_initcall+0x88/0x340
+           kernel_init_freeable+0x2ac/0x4f8
+           kernel_init+0x28/0x1e8
+           ret_from_fork+0x10/0x20
 
-static const struct rcar_gen3_thermal_fuse_default rcar_gen3_thermal_fuses_default_gen3 = {
+    other info that might help us debug this:
 
-And that would fit the 100 char limit. We have lines that are 100 chars 
-long already in the file, so this is fine IMHO. Again having such a long 
-prefix string was a bad idea, sorry about that.
+     Possible unsafe locking scenario:
 
-With this addressed,
+           CPU0                    CPU1
+           ----                    ----
+      lock(fs_reclaim);
+                                   lock(icc_bw_lock);
+                                   lock(fs_reclaim);
+      lock(icc_bw_lock);
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+     *** DEADLOCK ***
 
-> +	.ptat = { 2631, 1509, 435 },
-> +	.thcodes = {
-> +		{ 3397, 2800, 2221 },
-> +		{ 3393, 2795, 2216 },
-> +		{ 3389, 2805, 2237 },
-> +		{ 3415, 2694, 2195 },
-> +		{ 3356, 2724, 2244 },
-> +	},
-> +};
-> +
->  static const struct rcar_thermal_info rcar_m3w_thermal_info = {
->  	.scale = 157,
->  	.adj_below = -41,
->  	.adj_above = 116,
->  	.fuses = &rcar_gen3_thermal_fuse_info_gen3,
-> +	.fuse_defaults = &rcar_gen3_thermal_fuse_default_info_gen3,
->  };
->  
->  static const struct rcar_thermal_info rcar_gen3_thermal_info = {
-> @@ -373,6 +385,7 @@ static const struct rcar_thermal_info rcar_gen3_thermal_info = {
->  	.adj_below = -41,
->  	.adj_above = 126,
->  	.fuses = &rcar_gen3_thermal_fuse_info_gen3,
-> +	.fuse_defaults = &rcar_gen3_thermal_fuse_default_info_gen3,
->  };
->  
->  static const struct rcar_thermal_info rcar_gen4_thermal_info = {
-> @@ -380,6 +393,7 @@ static const struct rcar_thermal_info rcar_gen4_thermal_info = {
->  	.adj_below = -41,
->  	.adj_above = 126,
->  	.fuses = &rcar_gen3_thermal_fuse_info_gen4,
-> +	.fuse_defaults = &rcar_gen3_thermal_fuse_default_info_gen3,
->  };
->  
->  static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
-> -- 
-> 2.47.2
-> 
+    1 lock held by swapper/0/1:
+     #0: ffffffc081d7db10 (fs_reclaim){+.+.}-{0:0}, at: icc_init+0x28/0x108
 
+    stack backtrace:
+    CPU: 3 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.15.0-next-20250529 #0 NONE
+    Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
+    Call trace:
+     show_stack+0x20/0x38 (C)
+     dump_stack_lvl+0x90/0xd0
+     dump_stack+0x18/0x28
+     print_circular_bug+0x334/0x448
+     check_noncircular+0x12c/0x140
+     __lock_acquire+0x1348/0x2090
+     lock_acquire+0x108/0x2d8
+     icc_init+0x50/0x108
+     do_one_initcall+0x88/0x340
+     kernel_init_freeable+0x2ac/0x4f8
+     kernel_init+0x28/0x1e8
+     ret_from_fork+0x10/0x20
+
+The icc_node_add() functions is not designed to fail, and as such it
+should not do any memory allocation. In order to avoid this, move the
+name generation directly into the functions which are using the dynamic
+id feature.
+
+The change in the icc core has been tested on the IPQ9574 platform,
+where it eliminates the lockdep splat indicated above. The changes in
+the 'icc-rpmh' and 'osm-l3' drivers are compile tested only due to lack
+of suitable hardware.
+
+Fixes: d30f83d278a9 ("interconnect: core: Add dynamic id allocation support")
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+Changes in v3:
+  - move memory allocation out from the icc_node_add() function directly into
+    the users of the dynamic id feature
+  - adjust commit description according to the changes
+  - Link to v2: https://lore.kernel.org/r/20250618-icc-bw-lockdep-v2-1-3223da346765@gmail.com
+
+Changes in v2:
+  - move memory allocation outside of icc_lock
+  - issue a warning and return without modifying the node name in case of
+    memory allocation failure, and adjust the commit description
+  - remove offered tags from Johan and Bryan
+    Note: since I was not sure that that the added WARN_ON() is a substantial
+    change or not, I have removed the offered tags intentionally to be on the
+    safe side
+  - Link to v1: https://lore.kernel.org/r/20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com
+---
+ drivers/interconnect/core.c          |  4 ----
+ drivers/interconnect/qcom/icc-rpmh.c | 20 ++++++++++++++++++--
+ drivers/interconnect/qcom/osm-l3.c   | 10 +++++++++-
+ 3 files changed, 27 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 1a41e59c77f85a811f78986e98401625f4cadfa3..f0bdcdcf222af133fcb0a346fa347c5a829e62e6 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -1038,10 +1038,6 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	node->avg_bw = node->init_avg;
+ 	node->peak_bw = node->init_peak;
+ 
+-	if (node->id >= ICC_DYN_ID_START)
+-		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
+-					    node->name, dev_name(provider->dev));
+-
+ 	if (node->avg_bw || node->peak_bw) {
+ 		if (provider->pre_aggregate)
+ 			provider->pre_aggregate(node);
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index 41bfc6e7ee1d53d34b919dd8afa97698bc69d79c..fa4ef78678eff10e83557035ba572010b51ff50c 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -276,13 +276,17 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 		qcom_icc_bcm_init(qp->bcms[i], dev);
+ 
+ 	for (i = 0; i < num_nodes; i++) {
++		bool is_dyn_node = false;
++
+ 		qn = qnodes[i];
+ 		if (!qn)
+ 			continue;
+ 
+ 		if (desc->alloc_dyn_id) {
+-			if (!qn->node)
++			if (!qn->node) {
+ 				qn->node = icc_node_create_dyn();
++				is_dyn_node = true;
++			}
+ 			node = qn->node;
+ 		} else {
+ 			node = icc_node_create(qn->id);
+@@ -293,7 +297,19 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 			goto err_remove_nodes;
+ 		}
+ 
+-		node->name = qn->name;
++		if (is_dyn_node) {
++			node->name = devm_kasprintf(provider->dev, GFP_KERNEL,
++						    "%s@%s", qn->name,
++						    dev_name(provider->dev));
++			if (!node->name) {
++				icc_node_destroy(node->id);
++				ret = -ENOMEM;
++				goto err_remove_nodes;
++			}
++		} else {
++			node->name = qn->name;
++		}
++
+ 		node->data = qn;
+ 		icc_node_add(node, provider);
+ 
+diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+index baecbf2533f76cbf92bb2451979c4db57f8e4a2b..ed59fa73f0d70a5dfdb658ff606ef82977f04bcb 100644
+--- a/drivers/interconnect/qcom/osm-l3.c
++++ b/drivers/interconnect/qcom/osm-l3.c
+@@ -236,7 +236,15 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+ 			goto err;
+ 		}
+ 
+-		node->name = qnodes[i]->name;
++		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
++					    qnodes[i]->name,
++					    dev_name(provider->dev));
++		if (!node->name) {
++			icc_node_destroy(node->id);
++			ret = -ENOMEM;
++			goto err;
++		}
++
+ 		/* Cast away const and add it back in qcom_osm_l3_set() */
+ 		node->data = (void *)qnodes[i];
+ 		icc_node_add(node, provider);
+
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250529-icc-bw-lockdep-ed030d892a19
+
+Best regards,
 -- 
-Kind Regards,
-Niklas Söderlund
+Gabor Juhos <j4g8y7@gmail.com>
+
 
