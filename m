@@ -1,317 +1,410 @@
-Return-Path: <linux-pm+bounces-29496-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29497-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47180AE8100
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 13:27:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 088CDAE8175
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 13:37:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8D831C22B46
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:27:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B3BB4A66AF
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED162DA76C;
-	Wed, 25 Jun 2025 11:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1344625D529;
+	Wed, 25 Jun 2025 11:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9Jy0X5c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TVQUV1N8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6202DA740;
-	Wed, 25 Jun 2025 11:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E5625C83D
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750850715; cv=none; b=fy0+jUjiQx67a/y595lFdI71MAfDdDkoBpKZ9rm6e5E7jAcnN6sGxKK88lwCCoC7cyLWouZ83Iw6yxiTZ9Uh+9j6uo/K0MUU5Tq0KA+Kcky1/oJPDtYe8Asf0Yk5vMV8lMuJKGzBXqrqTwfp5OtlQ+8uQ2Yvj/gsS0/6OMkzm2A=
+	t=1750851275; cv=none; b=jiYB5CJdc9QdueTPSRdqZE+Fu6Uqxde1Gv4YsHJjX9PEw57wef50cOer+2NQSP8mCUI3il+3MY57L0Nfr7ACJiuQO5URrUCbb+L3SGWyr8VH15ymq0oFsJ5YYhsQK2RGGwDpVd8KEbB8ggdF3PVfQyzMjc5IcVhosB/PUPU6V/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750850715; c=relaxed/simple;
-	bh=Sj5tdg3WN3OUfbAEd9VRq4imt6Z4ASAMrzQsxj8b3OU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BDxAJ9vy5nGJrJ+hZs2da7FDold+mBAZ0uj0gkLiZNa+zBRGhveS2DWPSF1ojQrP+IcAskPvdiR5OcP0CBq2pmdX/6FaBpFNp+lZkx3Q0M9h/HSKlrLKketZ7x2I2TM3EUV6D6j7f5DUpTRrXGSEzg8zhdl3RgaPBcobzW6qr1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9Jy0X5c; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-451d54214adso10310185e9.3;
-        Wed, 25 Jun 2025 04:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750850712; x=1751455512; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cIFXHNMMz/rnn3fp04SvsZG+L3Mgm1adSAVXhKCv578=;
-        b=W9Jy0X5cIEUPGkL1g754Zyst9lUcnRsB/0mWfHiq+EXFUl3qyGr/CxWE7N/8ikDChc
-         vSNrSwfQpdrAZHgQrGcwcr7ms4EaxIAj5TpaVCbfYnSlI70BoYgWaS6ZjO9Vddr1g3TK
-         QqdMuMaPPBDRZSisdtaB8ZHiArJcMlWjvOY5RxSzNqhuTUHamUm/atGIymcVZCQtXCLn
-         r3tRfaiVMr4stoaddqjb9KOtQbU5hoLHEGySXk05J8pL3b/e4tCKRK7sq//8zxiVYIfV
-         Co4qZ6DQR2aWyD+LOmU5F9qjiDNOLzepjWYE0Bng8FhM7WB+SgAPQ9YVZc1WCUL/GX8p
-         vq3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750850712; x=1751455512;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cIFXHNMMz/rnn3fp04SvsZG+L3Mgm1adSAVXhKCv578=;
-        b=KDUA2mm0OdjczDV/RI0N4hfDbaHMjWkRb6hXudcEKZy65s6fwGDKTy0eehgUzaHLct
-         DbRs6j5YV4CX58Fy85zaA/wn68xqilqGx9WJ+0IGaoIpwypJwtq7RtwbK0opfVwxWk+A
-         T55dOrunK+Vs8yD/PZM0Sm760Fz9X+XZikBModn0ajXzXJw/ha7g7r4LEszibiDeSn8t
-         Vtp/IyRKKOei8JbYbsbZTuZiTkGHyZOKM8eTTRrI5SIhfy6SX8fEuGlX1HtK4kGiVh/C
-         Bi0RNQUaif3pXirLOAQO2I2pURHr/M63sGLurMP0toX8zj3/5vt+92/f27X8IZM/XS/r
-         YY4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUW/xIrPU6XL1rRgpkZFjwwg/J9NXVcaCwVDMuDrtHYfs8UQZLyjMtJd2y4FGfPDHFtgq/PBGwI8yzfN2lG@vger.kernel.org, AJvYcCV52hloHLqTM627qyFJ/DqRZTKIz0TPXnLRssoVbCJ6u302zHqcbfP/xnAYFVusskAOdEhxva+OUdFMVnj5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUfOCjeGxsjeAke9VNwgU4RhFeSbbWn8kbBdfykYaA3HkqcgKa
-	cwxbM/yqGdJsvSj51liwk+9NDXf9kcjT1ANisKIkRtskrFBVz2gVZRZWQmxLDg==
-X-Gm-Gg: ASbGncv+mrBYq//1j4I9sh3YanbyWeJfInw/R9L2Y5VKCZ9ekCM8eKcxBUyHpdXt+za
-	KWGwASiHUGauXVd5mRkIstO3TD6qjiRe7xdqWFDWMcJE+AYM+cUluIKKPtNopTGrO8woiiEypSO
-	js/MdIbzHohs8oHgTn1shg0/CjMoFTzXdpeoY0+YaOnDfMIcYjVsKhEzXH/gY8BgOiFVdPyCRkD
-	ElE3nPdSiVFS24LDy4Gu/bSQ7boPq6yrzPtqzKszKQv+qtTtaceLA6YnZD8d85YXTPcuUoapqBq
-	K87RFDaX2ypGBAEWhiuYS3HIqKKo0XnVOCPcr54JHnPApYPV3vbH/x95OqR3QkFsAsBYDGjV9/S
-	Z4yd0IjZ6PuIBwzQ=
-X-Google-Smtp-Source: AGHT+IF/l2TTEwk7mY0FbHtJZWfy+l5zfhEIGiynhEEsNVF/kg3NtLIcHyU0wbAYZN6bOw1uR3Q5TQ==
-X-Received: by 2002:a05:6000:2910:b0:3a5:1f2:68f3 with SMTP id ffacd0b85a97d-3a6ed66e655mr1844816f8f.46.1750850712019;
-        Wed, 25 Jun 2025 04:25:12 -0700 (PDT)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a6e81106b8sm4428642f8f.91.2025.06.25.04.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 04:25:11 -0700 (PDT)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Wed, 25 Jun 2025 13:25:04 +0200
-Subject: [PATCH v3] interconnect: avoid memory allocation when
- 'icc_bw_lock' is held
+	s=arc-20240116; t=1750851275; c=relaxed/simple;
+	bh=7Z004ejQ5Cm+iq4SPitc8HSKWLa2lMKExCsz7Dvkqck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jvmBc7QKrw/88ftkerjEjQJ0nNDPOgfmk7w7Xt7zqzxPldDtkzbwkF2BOgw/AYc/FJ3D57H6OndV1FikgZ3g70d5O5TBx3vT/IIpJXAwydkgSMHmj7i0YpWSsimYkxHh076UfGuGMrhdpnK+Ztq8ZwERGm5QzhDFsRcCtRjSjpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TVQUV1N8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C5EC4CEEA;
+	Wed, 25 Jun 2025 11:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750851274;
+	bh=7Z004ejQ5Cm+iq4SPitc8HSKWLa2lMKExCsz7Dvkqck=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TVQUV1N8lqgl10P/RC0wWVggHi4Y1ERDv+nRH7Dfcu7FCog7U4rHQYbWXQgqPC0D6
+	 eazNvaKYwri+ttOmgdh9ZjL8v+efKM3CZ4DgE785oLzEi5gBFhYBhJMbs1Hf4w34OX
+	 +ICWTKmr6rXE+F5SJpHtGzJYYMDz1PwN0is4p3TlxmxcRrrrfLbzeI2anRC0fd5KLi
+	 RvJUC0meymL22Q5JElTjNvEJHQSLKz3kT3nT7TPqAPKVnwklflxgcUMs0a3RKjMmjq
+	 1IAA758cQr1udSmEeNJDSc9PnKIRWklETtXmWqvBCduvaTYZ1TyQDUXWJeHvnpqMwC
+	 KngIKrhh2i5YA==
+Message-ID: <3a6e4c07-4d91-4b1a-8e25-e4bf1c1b96ee@kernel.org>
+Date: Wed, 25 Jun 2025 13:34:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAI/cW2gC/3XM0Q6CIBiG4VtpHEeDH0XpqPtoHSCQ/kvFQaOa8
- 95DT2prHX7f9rwziS6gi+S4m0lwCSP6MQ+x3xHT6bF1FG3eBBiUrARF0RjaPGjvzc26iTrLBLO
- 1As0VyWgK7orPLXi+5N1hvPvw2vqJr+/fVOKUU2ErXjRSK1EVp3bQ2B+MH8iaSvDhktc/HFYOI
- KwWhaxk+c2XZXkDLT9IT+sAAAA=
-X-Change-ID: 20250529-icc-bw-lockdep-ed030d892a19
-To: Georgi Djakov <djakov@kernel.org>, 
- Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, 
- Johan Hovold <johan+linaro@kernel.org>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal: use a custom lock class for intel
+ x86_pkg_temp
+To: "Berg, Benjamin" <benjamin.berg@intel.com>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc: "Zhang, Rui" <rui.zhang@intel.com>
+References: <20250624132406.1485407-1-benjamin@sipsolutions.net>
+ <4225e2d2-4fd8-49ee-b0e2-97cd5737423b@kernel.org>
+ <55e9d6c524da8ea17f9853099b92adfa08ae74da.camel@intel.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <55e9d6c524da8ea17f9853099b92adfa08ae74da.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The 'icc_bw_lock' mutex is introduced in commit af42269c3523
-("interconnect: Fix locking for runpm vs reclaim") in order
-to decouple serialization of bw aggregation from codepaths
-that require memory allocation.
+Hi Benjamin,
 
-However commit d30f83d278a9 ("interconnect: core: Add dynamic
-id allocation support") added a devm_kasprintf() call into a
-path protected by the 'icc_bw_lock' which causes this lockdep
-warning (at least on the IPQ9574 platform):
+On 25-Jun-25 12:15 PM, Berg, Benjamin wrote:
+> On Wed, 2025-06-25 at 11:44 +0200, Hans de Goede wrote:
+>> Hi Benjamin,
+>>
+>> On 24-Jun-25 3:24 PM, Benjamin Berg wrote:
+>>> From: Benjamin Berg <benjamin.berg@intel.com>
+>>>
+>>> The intel driver has code paths that will take the tz->lock while the
+>>> cpuhp_state-up lock is held. As the cpuhp_state-up lock is used in other
+>>> code paths, it may happen that lockdep detects possible deadlocks
+>>> through unrelated thermal zone devices.
+>>>
+>>> Fix these false positives by using a separate lockdep class for the
+>>> x86_pkg_temp thermal device.
+>>>
+>>> Reported-by: Hans de Goede <hansg@kernel.org>
+>>> Closes: https://lore.kernel.org/linux-pm/e9d7ef79-6a24-4515-aa35-d1f2357da798@kernel.org/
+>>> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+>>
+>> Thank you for trying to fix this, the fix does get rid of cpuhp_state-up
+>> in the lockdep report, only for it to be replaced with the thermal_list_lock
+>> unfortunately (full lockdep report below).
+>>
+>> It seems that the real issue is trying to lock wiphy.mtx while holding
+>> tz->lock.
+>>
+>> Or maybe we need this patch + a patch to not hold wiphy.mtx while
+>> registering the thermalzone ?
+> 
+> I think my patch simply did not work, because
+> thermal_zone_device_register_with_trips is already taking &tz->lock
+> before the lock class is changed.
+> 
+> What might work is to instead pass the lock class in when registering
+> the thermal zone device. i.e. just add a new helper with an additional
+> argument for the lock class and set it right after the mutex_init call
+> for &tz->lock.
 
-    ======================================================
-    WARNING: possible circular locking dependency detected
-    6.15.0-next-20250529 #0 Not tainted
-    ------------------------------------------------------
-    swapper/0/1 is trying to acquire lock:
-    ffffffc081df57d8 (icc_bw_lock){+.+.}-{4:4}, at: icc_init+0x8/0x108
+Ok, I'll give this a try.
 
-    but task is already holding lock:
-    ffffffc081d7db10 (fs_reclaim){+.+.}-{0:0}, at: icc_init+0x28/0x108
+Regards,
 
-    which lock already depends on the new lock.
+Hans
 
-    the existing dependency chain (in reverse order) is:
 
-    -> #1 (fs_reclaim){+.+.}-{0:0}:
-           fs_reclaim_acquire+0x7c/0xb8
-           slab_alloc_node.isra.0+0x48/0x188
-           __kmalloc_node_track_caller_noprof+0xa4/0x2b8
-           devm_kmalloc+0x5c/0x138
-           devm_kvasprintf+0x6c/0xb8
-           devm_kasprintf+0x50/0x68
-           icc_node_add+0xbc/0x160
-           icc_clk_register+0x15c/0x230
-           devm_icc_clk_register+0x20/0x90
-           qcom_cc_really_probe+0x320/0x338
-           nss_cc_ipq9574_probe+0xac/0x1e8
-           platform_probe+0x70/0xd0
-           really_probe+0xdc/0x3b8
-           __driver_probe_device+0x94/0x178
-           driver_probe_device+0x48/0xf0
-           __driver_attach+0x13c/0x208
-           bus_for_each_dev+0x6c/0xb8
-           driver_attach+0x2c/0x40
-           bus_add_driver+0x100/0x250
-           driver_register+0x68/0x138
-           __platform_driver_register+0x2c/0x40
-           nss_cc_ipq9574_driver_init+0x24/0x38
-           do_one_initcall+0x88/0x340
-           kernel_init_freeable+0x2ac/0x4f8
-           kernel_init+0x28/0x1e8
-           ret_from_fork+0x10/0x20
 
-    -> #0 (icc_bw_lock){+.+.}-{4:4}:
-           __lock_acquire+0x1348/0x2090
-           lock_acquire+0x108/0x2d8
-           icc_init+0x50/0x108
-           do_one_initcall+0x88/0x340
-           kernel_init_freeable+0x2ac/0x4f8
-           kernel_init+0x28/0x1e8
-           ret_from_fork+0x10/0x20
 
-    other info that might help us debug this:
-
-     Possible unsafe locking scenario:
-
-           CPU0                    CPU1
-           ----                    ----
-      lock(fs_reclaim);
-                                   lock(icc_bw_lock);
-                                   lock(fs_reclaim);
-      lock(icc_bw_lock);
-
-     *** DEADLOCK ***
-
-    1 lock held by swapper/0/1:
-     #0: ffffffc081d7db10 (fs_reclaim){+.+.}-{0:0}, at: icc_init+0x28/0x108
-
-    stack backtrace:
-    CPU: 3 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.15.0-next-20250529 #0 NONE
-    Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
-    Call trace:
-     show_stack+0x20/0x38 (C)
-     dump_stack_lvl+0x90/0xd0
-     dump_stack+0x18/0x28
-     print_circular_bug+0x334/0x448
-     check_noncircular+0x12c/0x140
-     __lock_acquire+0x1348/0x2090
-     lock_acquire+0x108/0x2d8
-     icc_init+0x50/0x108
-     do_one_initcall+0x88/0x340
-     kernel_init_freeable+0x2ac/0x4f8
-     kernel_init+0x28/0x1e8
-     ret_from_fork+0x10/0x20
-
-The icc_node_add() functions is not designed to fail, and as such it
-should not do any memory allocation. In order to avoid this, move the
-name generation directly into the functions which are using the dynamic
-id feature.
-
-The change in the icc core has been tested on the IPQ9574 platform,
-where it eliminates the lockdep splat indicated above. The changes in
-the 'icc-rpmh' and 'osm-l3' drivers are compile tested only due to lack
-of suitable hardware.
-
-Fixes: d30f83d278a9 ("interconnect: core: Add dynamic id allocation support")
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
-Changes in v3:
-  - move memory allocation out from the icc_node_add() function directly into
-    the users of the dynamic id feature
-  - adjust commit description according to the changes
-  - Link to v2: https://lore.kernel.org/r/20250618-icc-bw-lockdep-v2-1-3223da346765@gmail.com
-
-Changes in v2:
-  - move memory allocation outside of icc_lock
-  - issue a warning and return without modifying the node name in case of
-    memory allocation failure, and adjust the commit description
-  - remove offered tags from Johan and Bryan
-    Note: since I was not sure that that the added WARN_ON() is a substantial
-    change or not, I have removed the offered tags intentionally to be on the
-    safe side
-  - Link to v1: https://lore.kernel.org/r/20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com
----
- drivers/interconnect/core.c          |  4 ----
- drivers/interconnect/qcom/icc-rpmh.c | 20 ++++++++++++++++++--
- drivers/interconnect/qcom/osm-l3.c   | 10 +++++++++-
- 3 files changed, 27 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 1a41e59c77f85a811f78986e98401625f4cadfa3..f0bdcdcf222af133fcb0a346fa347c5a829e62e6 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -1038,10 +1038,6 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
- 	node->avg_bw = node->init_avg;
- 	node->peak_bw = node->init_peak;
- 
--	if (node->id >= ICC_DYN_ID_START)
--		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
--					    node->name, dev_name(provider->dev));
--
- 	if (node->avg_bw || node->peak_bw) {
- 		if (provider->pre_aggregate)
- 			provider->pre_aggregate(node);
-diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-index 41bfc6e7ee1d53d34b919dd8afa97698bc69d79c..fa4ef78678eff10e83557035ba572010b51ff50c 100644
---- a/drivers/interconnect/qcom/icc-rpmh.c
-+++ b/drivers/interconnect/qcom/icc-rpmh.c
-@@ -276,13 +276,17 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
- 		qcom_icc_bcm_init(qp->bcms[i], dev);
- 
- 	for (i = 0; i < num_nodes; i++) {
-+		bool is_dyn_node = false;
-+
- 		qn = qnodes[i];
- 		if (!qn)
- 			continue;
- 
- 		if (desc->alloc_dyn_id) {
--			if (!qn->node)
-+			if (!qn->node) {
- 				qn->node = icc_node_create_dyn();
-+				is_dyn_node = true;
-+			}
- 			node = qn->node;
- 		} else {
- 			node = icc_node_create(qn->id);
-@@ -293,7 +297,19 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
- 			goto err_remove_nodes;
- 		}
- 
--		node->name = qn->name;
-+		if (is_dyn_node) {
-+			node->name = devm_kasprintf(provider->dev, GFP_KERNEL,
-+						    "%s@%s", qn->name,
-+						    dev_name(provider->dev));
-+			if (!node->name) {
-+				icc_node_destroy(node->id);
-+				ret = -ENOMEM;
-+				goto err_remove_nodes;
-+			}
-+		} else {
-+			node->name = qn->name;
-+		}
-+
- 		node->data = qn;
- 		icc_node_add(node, provider);
- 
-diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-index baecbf2533f76cbf92bb2451979c4db57f8e4a2b..ed59fa73f0d70a5dfdb658ff606ef82977f04bcb 100644
---- a/drivers/interconnect/qcom/osm-l3.c
-+++ b/drivers/interconnect/qcom/osm-l3.c
-@@ -236,7 +236,15 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
- 			goto err;
- 		}
- 
--		node->name = qnodes[i]->name;
-+		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
-+					    qnodes[i]->name,
-+					    dev_name(provider->dev));
-+		if (!node->name) {
-+			icc_node_destroy(node->id);
-+			ret = -ENOMEM;
-+			goto err;
-+		}
-+
- 		/* Cast away const and add it back in qcom_osm_l3_set() */
- 		node->data = (void *)qnodes[i];
- 		icc_node_add(node, provider);
-
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250529-icc-bw-lockdep-ed030d892a19
-
-Best regards,
--- 
-Gabor Juhos <j4g8y7@gmail.com>
+>> [   19.759432] ======================================================
+>> [   19.759434] WARNING: possible circular locking dependency detected
+>> [   19.759436] 6.16.0-rc3+ #11 Not tainted
+>> [   19.759439] ------------------------------------------------------
+>> [   19.759440] modprobe/881 is trying to acquire lock:
+>> [   19.759442] ffff897b4c940768 (&rdev->wiphy.mtx){+.+.}-{4:4}, at: iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.759485] 
+>>                but task is already holding lock:
+>> [   19.759486] ffff897b0204e708 (&tz->lock){+.+.}-{4:4}, at: thermal_zone_device_set_mode+0x20/0xa0
+>> [   19.759498] 
+>>                which lock already depends on the new lock.
+>>
+>> [   19.759500] 
+>>                the existing dependency chain (in reverse order) is:
+>> [   19.759501] 
+>>                -> #5 (&tz->lock){+.+.}-{4:4}:
+>> [   19.759506]        __mutex_lock+0x9f/0xed0
+>> [   19.759513]        thermal_zone_device_register_with_trips+0x573/0x640
+>> [   19.759517]        thermal_tripless_zone_device_register+0x1b/0x30
+>> [   19.759521]        int3400_thermal_probe+0x21d/0x4f0 [int3400_thermal]
+>> [   19.759526]        platform_probe+0x3f/0xa0
+>> [   19.759531]        really_probe+0xdb/0x340
+>> [   19.759535]        __driver_probe_device+0x78/0x140
+>> [   19.759539]        driver_probe_device+0x1f/0xa0
+>> [   19.759542]        __driver_attach+0xcb/0x1e0
+>> [   19.759546]        bus_for_each_dev+0x63/0xa0
+>> [   19.759549]        bus_add_driver+0x10a/0x1f0
+>> [   19.759552]        driver_register+0x71/0xe0
+>> [   19.759556]        do_one_initcall+0x54/0x390
+>> [   19.759561]        do_init_module+0x62/0x240
+>> [   19.759565]        __do_sys_init_module+0x164/0x190
+>> [   19.759568]        do_syscall_64+0x94/0x3d0
+>> [   19.759571]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [   19.759574] 
+>>                -> #4 (thermal_list_lock){+.+.}-{4:4}:
+>> [   19.759578]        __mutex_lock+0x9f/0xed0
+>> [   19.759581]        __thermal_cooling_device_register.part.0+0x16e/0x2a0
+>> [   19.759585]        acpi_processor_thermal_init+0x24/0xb0
+>> [   19.759591]        acpi_soft_cpu_online+0xa7/0x140
+>> [   19.759593]        cpuhp_invoke_callback+0x1ab/0x660
+>> [   19.759599]        cpuhp_thread_fun+0x187/0x270
+>> [   19.759602]        smpboot_thread_fn+0x12a/0x2e0
+>> [   19.759607]        kthread+0x108/0x240
+>> [   19.759612]        ret_from_fork+0x232/0x2a0
+>> [   19.759617]        ret_from_fork_asm+0x1a/0x30
+>> [   19.759621] 
+>>                -> #3 (cpuhp_state-up){+.+.}-{0:0}:
+>> [   19.759625]        cpuhp_thread_fun+0x99/0x270
+>> [   19.759628]        smpboot_thread_fn+0x12a/0x2e0
+>> [   19.759631]        kthread+0x108/0x240
+>> [   19.759635]        ret_from_fork+0x232/0x2a0
+>> [   19.759638]        ret_from_fork_asm+0x1a/0x30
+>> [   19.759642] 
+>>                -> #2 (cpu_hotplug_lock){++++}-{0:0}:
+>> [   19.759645]        cpus_read_lock+0x3c/0xe0
+>> [   19.759649]        static_key_slow_inc+0x12/0x30
+>> [   19.759656]        __nf_register_net_hook+0xb7/0x210
+>> [   19.759662]        nf_register_net_hook+0x2d/0x90
+>> [   19.759665]        nf_tables_addchain.constprop.0+0x2dd/0x6f0 [nf_tables]
+>> [   19.759686]        nf_tables_newchain+0x78f/0xb10 [nf_tables]
+>> [   19.759701]        nfnetlink_rcv_batch+0x7a5/0xc50 [nfnetlink]
+>> [   19.759705]        nfnetlink_rcv+0x12d/0x150 [nfnetlink]
+>> [   19.759708]        netlink_unicast+0x1bf/0x2b0
+>> [   19.759712]        netlink_sendmsg+0x211/0x430
+>> [   19.759714]        ____sys_sendmsg+0x373/0x3b0
+>> [   19.759719]        ___sys_sendmsg+0x7d/0xc0
+>> [   19.759722]        __sys_sendmsg+0x5e/0xb0
+>> [   19.759724]        do_syscall_64+0x94/0x3d0
+>> [   19.759727]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [   19.759729] 
+>>                -> #1 (&nft_net->commit_mutex){+.+.}-{4:4}:
+>> [   19.759733]        __mutex_lock+0x9f/0xed0
+>> [   19.759735]        nf_tables_netdev_event+0x59/0xc0 [nf_tables]
+>> [   19.759751]        notifier_call_chain+0x3d/0x100
+>> [   19.759755]        register_netdevice+0x731/0x8f0
+>> [   19.759759]        cfg80211_register_netdevice+0x4c/0xf0 [cfg80211]
+>> [   19.759828]        ieee80211_if_add+0x475/0x740 [mac80211]
+>> [   19.759921]        ieee80211_register_hw+0xd6b/0xdb0 [mac80211]
+>> [   19.759967]        iwl_op_mode_mld_start+0x438/0x4b0 [iwlmld]
+>> [   19.759989]        _iwl_op_mode_start+0x67/0x100 [iwlwifi]
+>> [   19.760012]        iwl_opmode_register+0x6b/0xc0 [iwlwifi]
+>> [   19.760028]        iwl_mld_init+0x19/0xff0 [iwlmld]
+>> [   19.760043]        do_one_initcall+0x54/0x390
+>> [   19.760046]        do_init_module+0x62/0x240
+>> [   19.760049]        __do_sys_init_module+0x164/0x190
+>> [   19.760052]        do_syscall_64+0x94/0x3d0
+>> [   19.760055]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [   19.760057] 
+>>                -> #0 (&rdev->wiphy.mtx){+.+.}-{4:4}:
+>> [   19.760061]        __lock_acquire+0x1481/0x2270
+>> [   19.760067]        lock_acquire+0xc9/0x2c0
+>> [   19.760070]        __mutex_lock+0x9f/0xed0
+>> [   19.760074]        iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.760098]        __thermal_zone_get_temp+0x29/0x90
+>> [   19.760102]        __thermal_zone_device_update+0x69/0x480
+>> [   19.760106]        thermal_zone_device_set_mode+0x52/0xa0
+>> [   19.760110]        iwl_mld_thermal_zone_register+0x144/0x1d0 [iwlmld]
+>> [   19.760126]        iwl_op_mode_mld_start+0x460/0x4b0 [iwlmld]
+>> [   19.760140]        _iwl_op_mode_start+0x67/0x100 [iwlwifi]
+>> [   19.760157]        iwl_opmode_register+0x6b/0xc0 [iwlwifi]
+>> [   19.760173]        iwl_mld_init+0x19/0xff0 [iwlmld]
+>> [   19.760187]        do_one_initcall+0x54/0x390
+>> [   19.760190]        do_init_module+0x62/0x240
+>> [   19.760193]        __do_sys_init_module+0x164/0x190
+>> [   19.760196]        do_syscall_64+0x94/0x3d0
+>> [   19.760198]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [   19.760201] 
+>>                other info that might help us debug this:
+>>
+>> [   19.760202] Chain exists of:
+>>                  &rdev->wiphy.mtx --> thermal_list_lock --> &tz->lock
+>>
+>> [   19.760208]  Possible unsafe locking scenario:
+>>
+>> [   19.760209]        CPU0                    CPU1
+>> [   19.760211]        ----                    ----
+>> [   19.760212]   lock(&tz->lock);
+>> [   19.760215]                                lock(thermal_list_lock);
+>> [   19.760218]                                lock(&tz->lock);
+>> [   19.760220]   lock(&rdev->wiphy.mtx);
+>> [   19.760223] 
+>>                 *** DEADLOCK ***
+>>
+>> [   19.760224] 2 locks held by modprobe/881:
+>> [   19.760227]  #0: ffffffffc1914c68 (iwlwifi_opmode_table_mtx){+.+.}-{4:4}, at: iwl_opmode_register+0x21/0xc0 [iwlwifi]
+>> [   19.760247]  #1: ffff897b0204e708 (&tz->lock){+.+.}-{4:4}, at: thermal_zone_device_set_mode+0x20/0xa0
+>> [   19.760255] 
+>>                stack backtrace:
+>> [   19.760259] CPU: 11 UID: 0 PID: 881 Comm: modprobe Not tainted 6.16.0-rc3+ #11 PREEMPT(lazy) 
+>> [   19.760262] Hardware name: Dell Inc. XPS 16 9640/09CK4V, BIOS 1.12.0 02/10/2025
+>> [   19.760264] Call Trace:
+>> [   19.760266]  <TASK>
+>> [   19.760267]  dump_stack_lvl+0x68/0x90
+>> [   19.760271]  print_circular_bug.cold+0x185/0x1d0
+>> [   19.760276]  check_noncircular+0x10f/0x130
+>> [   19.760279]  ? __kernel_text_address+0xe/0x30
+>> [   19.760282]  ? unwind_get_return_address+0x26/0x50
+>> [   19.760287]  __lock_acquire+0x1481/0x2270
+>> [   19.760293]  lock_acquire+0xc9/0x2c0
+>> [   19.760296]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.760314]  __mutex_lock+0x9f/0xed0
+>> [   19.760317]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.760332]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.760345]  ? lock_acquire+0xc9/0x2c0
+>> [   19.760348]  ? thermal_zone_device_set_mode+0x20/0xa0
+>> [   19.760352]  ? lock_acquire+0xd9/0x2c0
+>> [   19.760356]  ? iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.760368]  iwl_mld_tzone_get_temp+0x2f/0x1d0 [iwlmld]
+>> [   19.760382]  ? lock_is_held_type+0xd5/0x140
+>> [   19.760386]  __thermal_zone_get_temp+0x29/0x90
+>> [   19.760389]  __thermal_zone_device_update+0x69/0x480
+>> [   19.760395]  thermal_zone_device_set_mode+0x52/0xa0
+>> [   19.760399]  iwl_mld_thermal_zone_register+0x144/0x1d0 [iwlmld]
+>> [   19.760416]  iwl_op_mode_mld_start+0x460/0x4b0 [iwlmld]
+>> [   19.760435]  _iwl_op_mode_start+0x67/0x100 [iwlwifi]
+>> [   19.760453]  iwl_opmode_register+0x6b/0xc0 [iwlwifi]
+>> [   19.760468]  ? __pfx_iwl_mld_init+0x10/0x10 [iwlmld]
+>> [   19.760482]  iwl_mld_init+0x19/0xff0 [iwlmld]
+>> [   19.760495]  do_one_initcall+0x54/0x390
+>> [   19.760499]  do_init_module+0x62/0x240
+>> [   19.760502]  ? __do_sys_init_module+0x164/0x190
+>> [   19.760504]  __do_sys_init_module+0x164/0x190
+>> [   19.760510]  do_syscall_64+0x94/0x3d0
+>> [   19.760513]  ? lock_acquire+0xc9/0x2c0
+>> [   19.760516]  ? __folio_batch_add_and_move+0x8f/0x2f0
+>> [   19.760519]  ? lock_acquire+0xd9/0x2c0
+>> [   19.760522]  ? find_held_lock+0x2b/0x80
+>> [   19.760524]  ? find_held_lock+0x2b/0x80
+>> [   19.760526]  ? find_held_lock+0x2b/0x80
+>> [   19.760529]  ? rcu_read_unlock+0x17/0x60
+>> [   19.760533]  ? lock_release+0x1a0/0x2d0
+>> [   19.760537]  ? __lock_acquire+0x45f/0x2270
+>> [   19.760541]  ? __handle_mm_fault+0xaf4/0xe20
+>> [   19.760545]  ? lock_acquire+0xc9/0x2c0
+>> [   19.760549]  ? find_held_lock+0x2b/0x80
+>> [   19.760551]  ? rcu_read_unlock+0x17/0x60
+>> [   19.760553]  ? lock_release+0x1a0/0x2d0
+>> [   19.760556]  ? find_held_lock+0x2b/0x80
+>> [   19.760559]  ? exc_page_fault+0x8c/0x240
+>> [   19.760561]  ? lock_release+0x1a0/0x2d0
+>> [   19.760564]  ? do_user_addr_fault+0x370/0x6b0
+>> [   19.760568]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [   19.760571] RIP: 0033:0x7f531b702bae
+>> [   19.760574] Code: 48 8b 0d 5d 32 0f 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 af 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 2a 32 0f 00 f7 d8 64 89 01 48
+>> [   19.760576] RSP: 002b:00007ffe4c645798 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
+>> [   19.760580] RAX: ffffffffffffffda RBX: 00005600c715be60 RCX: 00007f531b702bae
+>> [   19.760581] RDX: 00005600a44015ee RSI: 00000000000cbf71 RDI: 00005600c7d0acd0
+>> [   19.760583] RBP: 00007ffe4c645850 R08: 00005600c715bd40 R09: 00007f531b7f6ac0
+>> [   19.760584] R10: 00005600c715b010 R11: 0000000000000246 R12: 0000000000040000
+>> [   19.760585] R13: 00005600c715bdc0 R14: 00005600a44015ee R15: 0000000000000000
+>> [   19.760590]  </TASK>
+>> [   19.760846] iwlwifi 0000:03:00.0: Registered PHC clock: iwlwifi-PTP, with index: 0
+>>
+>>
+>> Regards,
+>>
+>> Hans
+>>
+>>
+>>
+>>
+>>>
+>>> ---
+>>>
+>>> Hi,
+>>>
+>>> I believe that this should solve the lockdep warning that Hans was
+>>> seeing. That said, I have not tested it much.
+>>>
+>>> v2:
+>>> - Fix function name
+>>> - Mark lock class variable static
+>>>
+>>> Benjamin
+>>> ---
+>>>  drivers/thermal/intel/x86_pkg_temp_thermal.c | 2 ++
+>>>  drivers/thermal/thermal_core.c               | 7 +++++++
+>>>  include/linux/thermal.h                      | 8 ++++++++
+>>>  3 files changed, 17 insertions(+)
+>>>
+>>> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+>>> index 3fc679b6f11b..15d3c904eaa3 100644
+>>> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+>>> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+>>> @@ -310,6 +310,7 @@ static int pkg_temp_thermal_trips_init(int cpu, int tj_max,
+>>>  
+>>>  static int pkg_temp_thermal_device_add(unsigned int cpu)
+>>>  {
+>>> +	static struct lock_class_key x86_pkg_temp_class;
+>>>  	struct thermal_trip trips[MAX_NUMBER_OF_TRIPS] = { 0 };
+>>>  	int id = topology_logical_die_id(cpu);
+>>>  	u32 eax, ebx, ecx, edx;
+>>> @@ -349,6 +350,7 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
+>>>  		err = PTR_ERR(zonedev->tzone);
+>>>  		goto out_kfree_zonedev;
+>>>  	}
+>>> +	thermal_zone_device_set_lock_class(zonedev->tzone, &x86_pkg_temp_class);
+>>>  	err = thermal_zone_device_enable(zonedev->tzone);
+>>>  	if (err)
+>>>  		goto out_unregister_tz;
+>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>>> index 17ca5c082643..ff5c2e01904a 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -1657,6 +1657,13 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
+>>>  
+>>> +void thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
+>>> +					struct lock_class_key *lock_class)
+>>> +{
+>>> +	lockdep_set_class_and_name(&tz->lock, lock_class, tz->type);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(thermal_zone_device_set_lock_class);
+>>> +
+>>>  void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
+>>>  {
+>>>  	return tzd->devdata;
+>>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+>>> index 0b5ed6821080..3cb4cf60b66d 100644
+>>> --- a/include/linux/thermal.h
+>>> +++ b/include/linux/thermal.h
+>>> @@ -240,6 +240,9 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
+>>>  					const struct thermal_zone_device_ops *ops,
+>>>  					const struct thermal_zone_params *tzp);
+>>>  
+>>> +void thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
+>>> +					struct lock_class_key *lock_class);
+>>> +
+>>>  void thermal_zone_device_unregister(struct thermal_zone_device *tz);
+>>>  
+>>>  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>>> @@ -290,6 +293,11 @@ static inline struct thermal_zone_device *thermal_tripless_zone_device_register(
+>>>  					const struct thermal_zone_params *tzp)
+>>>  { return ERR_PTR(-ENODEV); }
+>>>  
+>>> +static inline void
+>>> +thermal_zone_device_set_lock_class(struct thermal_zone_device *tz,
+>>> +				   struct lock_class_key *lock_class)
+>>> +{ }
+>>> +
+>>>  static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+>>>  { }
+>>>  
+>>
+> 
+> Intel Deutschland GmbH
+> Registered Address: Am Campeon 10, 85579 Neubiberg, Germany
+> Tel: +49 89 99 8853-0, www.intel.de
+> Managing Directors: Sean Fennelly, Jeffrey Schneiderman, Tiffany Doon Silva
+> Chairperson of the Supervisory Board: Nicole Lau
+> Registered Office: Munich
+> Commercial Register: Amtsgericht Muenchen HRB 186928
 
 
