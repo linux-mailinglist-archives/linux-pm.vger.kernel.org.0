@@ -1,206 +1,174 @@
-Return-Path: <linux-pm+bounces-29498-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29499-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E54FCAE81BA
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 13:42:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94300AE8240
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 14:00:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B92D1648A2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:42:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A1E1680026
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:58:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F9A25E46A;
-	Wed, 25 Jun 2025 11:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB7E260584;
+	Wed, 25 Jun 2025 11:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="dHYN2eaq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lLUqKskn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gcAy36CW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5195925C82F;
-	Wed, 25 Jun 2025 11:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A3625FA06
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750851658; cv=none; b=WQRfvCFdHnoHR0SENGFSNRNi8E+UZAcj/r3Sd6GcqaCNBVBKgjc89gEDsNkhtptvPmrzNxPvOBqpAmUvOHgOWVpxuQ29+Ry8EptgBfeN1lqiGUlQaYxfeTn8I/niD38MF6ft57L/gE4iJF88uYMCOqnh2jnsQRtGr8rzNaQj9uU=
+	t=1750852616; cv=none; b=ZCiH2Zt7hEkFMdySW0U4NWn79tCoa6gdYxnzL41mHoYlQAPOA0/DSeaW1LfEz7BUoCQto7gCbNqWYnQ6d4GxdL9JhhWTCF3B7CrTMm+tlq+N0c8MNV9to/6Y97FGxlIUT3NRh6PaHH6H6twmnFRA4MR+3kZ1EtVaLLsO0ZtJ2ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750851658; c=relaxed/simple;
-	bh=fCe8dAEl1qm2WUnVfXy0vMiDTlxn0gSlX41YLsl98Ew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WdOvccaTli/aGUa/HFoEYRuzvu4ph+4+ck14x+meZQAsizDsZIbCQtoJyMUUMBTx4TkGkRyPgSkCoy5xRiI/yu3qD+5+aWuHeGteV6Lrx9m+ZeIv4eI66mmPRC4fY0hsPBvlVrviOJvZnD1e8vENcn9o6Xu9v+ScbciPSYOmZy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=dHYN2eaq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lLUqKskn; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6EE64EC02AE;
-	Wed, 25 Jun 2025 07:40:55 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Wed, 25 Jun 2025 07:40:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1750851655;
-	 x=1750938055; bh=hkEEicwpbjhtLOtMYFCG+ZO9bls8DtRS6RWHYNVwAao=; b=
-	dHYN2eaqpUbCsQBvdskvlBzPyzOGMQrmj4qalof8N2ltIX8LroO2NIulms5KHy1p
-	42x09yz7BVk4JaeKmzGW8KJRz2gFhR94cbAXoX58c9/+gyxlPYG4aaG+zbxghESk
-	Y4MbIZBLLdQ/2C3BalDReUdbjdBV0pTw8wU8tu6B8SJhFoVwN446mhSA43ajT5nL
-	p8qut/xIztc6FDSj6Xp4QcjmrCrG6TFcs8WaeZuo6JpA18Y+GpuHqQayTzRbXeGg
-	d9Yhkrtsz+xaNE6c/JAyUOmkxY1YRdySBHxezVE+llPFjINVLTOYie4f6CNzL4Kn
-	bW/M1YMsIe/dXhx8UdxaZQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1750851655; x=
-	1750938055; bh=hkEEicwpbjhtLOtMYFCG+ZO9bls8DtRS6RWHYNVwAao=; b=l
-	LUqKskn/T8AqN74zd7wugTCUlD2Jf0VbtSkEzC+uGMoJLcP2pn9CZSonC+Kxw5Oi
-	CoNit2iwVxSin/icpdoR0AsDQqyhynD482OmwJ0vNZ1CCiu4ikf05b4xmXwwz/LR
-	5B/eit4FQxvR/i+Ayk9ndec3jUpThRSUEzfB4LiIw+vKwLCq24X+3ozwZOhJ1pL0
-	QUrGqxXZ9n3+5M/RyyKBhrcD4t0dQVpEu7F2kcXACHUzA1ODgSWhFtAvziTUh+U+
-	P9wrWPnvPmZWAHb4ypqhKwxp0r1EwNu15Yk9ezUSP2fKZakEtUKJWTKz8NR9Gkpm
-	I7xmRsJvNNYzgcna24Lew==
-X-ME-Sender: <xms:RuBbaFwDqsgtIgn5b8l-qITtIITnrIuQwI1Y0kutVpXaPdbJ4sossg>
-    <xme:RuBbaFQyLljwWrfyYLuN4R79OdGlWFwSUdwVZdE4uEpH2wk546Lv1SQpAQUzaeOL7
-    rmr5nhw6ncJz5WVrBQ>
-X-ME-Received: <xmr:RuBbaPU9s0F1fiGtvrjNEbOffARih_t7NVqPEN4RlGRaIqU04mgdlX88ybBa63HCsWfYiHCpCBLWMmCaq-jeaos5c4cIjc8b9Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdeijecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheppfhikhhlrghs
-    ucfunpguvghrlhhunhguuceonhhikhhlrghsrdhsohguvghrlhhunhgusehrrghgnhgrth
-    gvtghhrdhsvgeqnecuggftrfgrthhtvghrnhepveetgedtvddvhfdtkeeghfeffeehteeh
-    keekgeefjeduieduueelgedtheekkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepnhhikhhlrghsrdhsohguvghrlhhunhgusehrrghgnhgr
-    thgvtghhrdhsvgdpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhhtpdhrtg
-    hpthhtohepmhgrrhgvkhdrvhgrshhuthdorhgvnhgvshgrshesmhgrihhlsghogidrohhr
-    ghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhi
-    vghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehgvggvrhhtod
-    hrvghnvghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtoheplhhukhgrshiirdhluhgs
-    rgesrghrmhdrtghomhdprhgtphhtthhopehmrghgnhhushdruggrmhhmsehgmhgrihhlrd
-    gtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphht
-    thhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorh
-    hg
-X-ME-Proxy: <xmx:RuBbaHjrutuNxDznWmawTOtOBL1o11Tk0e4mXdl3Gp3iuhbdEPX1QQ>
-    <xmx:RuBbaHDWB90u6h9JvECeAgaqVe21D8QwxsYd9X9Ud_MHCyojNCFapg>
-    <xmx:RuBbaAKKJXfyVlpAP6xXUNCSzR_hjqusMlyTSOU3D8yPxBxpivS5WA>
-    <xmx:RuBbaGAgb91dEZRUARRj46Qd4K5PgAROxS_qiAI1XPVo_AD1ZYYHsw>
-    <xmx:R-BbaGjnhMfd2ypEJoXVEj9wyJwuP_R93VIhaVzPF5BM32mfSHgSY4Gn>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jun 2025 07:40:54 -0400 (EDT)
-Date: Wed, 25 Jun 2025 13:40:53 +0200
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 2/2] thermal: rcar_gen3: Add support for R-Car V4H
- default trim values
-Message-ID: <20250625114053.GB854038@ragnatech.se>
-References: <20250625100116.7538-1-marek.vasut+renesas@mailbox.org>
- <20250625100116.7538-2-marek.vasut+renesas@mailbox.org>
+	s=arc-20240116; t=1750852616; c=relaxed/simple;
+	bh=BVCdK3npxOuJY1EA2b0sv4BUq030Q9+u3iWzgAMxjkg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FtAxWRGrKrRYD//s+XHtXNmOPRKu+A6tUvcnGnZeJ4M6OpAWKmFuFYnHK/kxOVEpYFG3mkcg3hftQvivBJOOiqVCvMBh1wIqfq5vK0zA3ufMAzPU3S8tWHwAYiLN4r9X4FrS0hYr0jAmmwsih7vOqq6B8+hfe9z58dCoLCicCPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gcAy36CW; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55PAfCva001125
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:56:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	qtf2LIek4hpLZ54vWooJjQr0lr5Bw40aXqP1yVThXvQ=; b=gcAy36CWTbjZXPo4
+	LTSwKhbDedrFZlz2r+vLYTqGQbV/ntVaxiyCSbTWhGgbB4wiL4cFf4RcpxTeukyW
+	Z0lUSg7KCMvc5YZyB20FRHLHELnUuDX76MW+Ff5cAnAtskiBNIMufa1fhKxduvjW
+	gHpIWW9JY4YOBptfCCSpG9K90osox1ZM/Rb66n+jwJ+O8q2kAZwvwE0hdKiM8oL/
+	VGI6Ao8ka2NnGxon+VNonHGnDYpVqFSwKr68tZ6/5EK1kwAgXj8RxJdBKOJdo+gt
+	OfsE4gxhBaJrm38QaywRixi3s9AUIk36u4Y/mgV3Q8tLahgjHdQcgtNZuTHthVAz
+	pnNLrQ==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47g7td9kre-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:56:53 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d09b74dc4bso158829685a.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 04:56:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750852612; x=1751457412;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtf2LIek4hpLZ54vWooJjQr0lr5Bw40aXqP1yVThXvQ=;
+        b=mBwE30rsmdgjFACK8XOja3NjjPdZu11mFdf3X1mQsBcWV8DQioCQKId6skgibhXOEH
+         QPznIBluqaT81Ql5sPkLabxQ+TdDX+iKeTJMvTkgI0etCyBd83SVGBjHsxCF0edvOYVN
+         lo31jexWOkukfdWfLXQ60o+FPjElAzpml8nuLsvonA5HG90bEqZhBnGrPE88+jlVMo9f
+         iKt8BTCOf7XmG7y1voYyc6LMSwuAKtVtEBNlhGvhn6L1ipV2KP+dC+Ox7C9UnzuuXIWw
+         lpey4/Y7HU8YkzNBn3kASY1SLjjoUjgWiss+T7dFLqqv0yQaKTuAmUBf0Q2gOo3XQ76P
+         cEnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVEz3JHnbtZ+B+/rT/KZ9Xs/XcmtwojIr9lX4VYB8G9RxXbHs4WE8oIDgQixBG9RRfsPIIO00m7+A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEKPD87ZYkqgskR1gdoQBPMsnrZu1IbD+gEY3GzUKtENwWHXCi
+	eu1IMeYgNG4JyytLDNtAO/CqTbn1gmaOB4o9xB1ch4EJ6sJ26ZwHx1uW45fkiJesJvzZgvdht6T
+	4lll9RKYO9heh3zNyle9MSH2G47kdTE6gu6F7h25SiUoEODUX0M/I1q3lpZWm8Q==
+X-Gm-Gg: ASbGncukYWrwnsaQ4ZqS4itBWUhnEzefOqHdypoanO0LUiVcSbE+mfg3i272VFd63gp
+	7yd+rI4ouc213lMUXHzziZIRowF0cxL/hMd9DgKG008tZdkTR30y2XYXh8XCzn8fxbowXHAKDsj
+	79dvV7FRwEVIuwXFqovWPydwIo2Dtw3TCwzfHkY/TL8SWO9GKBSDe9Ueu30ZaAfM1Sx5yetUzyO
+	p+0j2GgLmX9oCc7pguFNtoUn5O0Q22OmrXS+qdZIR+Mp0our9lsD7HPRsYP181AKOvrt/ZnhDox
+	8BN1xBfW/OIKe6DfqiXnI+h2PjsuO9IGVelpKhkwQrpq07GxT/jg9OJEKBWLtBeKIDf1yPN/nLS
+	muR0=
+X-Received: by 2002:a05:620a:2949:b0:7cd:4bd2:6d5a with SMTP id af79cd13be357-7d4296db1e0mr156158585a.5.1750852611673;
+        Wed, 25 Jun 2025 04:56:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFbNAdmHcL/ohxdpxrFhw+P+cQf12Kd+1+opwn8szOOQKrMRERAl3ZBXjt2J5pp3lvClg9lMA==
+X-Received: by 2002:a05:620a:2949:b0:7cd:4bd2:6d5a with SMTP id af79cd13be357-7d4296db1e0mr156154785a.5.1750852611039;
+        Wed, 25 Jun 2025 04:56:51 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f4842e9sm2431839a12.61.2025.06.25.04.56.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jun 2025 04:56:50 -0700 (PDT)
+Message-ID: <b98d305b-247f-415b-8675-50d073452feb@oss.qualcomm.com>
+Date: Wed, 25 Jun 2025 13:56:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250625100116.7538-2-marek.vasut+renesas@mailbox.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/14] Various dt-bindings for SM7635 and The Fairphone
+ (Gen. 6) addition
+To: Luca Weiss <luca.weiss@fairphone.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Thomas Gleixner
+ <tglx@linutronix.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+References: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=CPYqXQrD c=1 sm=1 tr=0 ts=685be405 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=6H0WHjuAAAAA:8 a=PtzdWR5wS_Xl21Jse7IA:9
+ a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10 a=zZCYzV9kfG8A:10
+ a=IoWCM6iH3mJn3m4BftBB:22 a=Soq9LBFxuPC4vsCAQt-j:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI1MDA4OCBTYWx0ZWRfX36aA1jt61xe3
+ fvHSUp7z6JBzTjrGYN2CAdFe/dylZV9rUxHKdvripSgKhX18qUjkyUs5Y0klybL0OP48+a4p/WJ
+ FFlPLpAe0cZSega7IX4ZfQQWiyynEMtLblGIhJndz6DUXDdvD8/qCv2FxVJPmMpbu07WMVjKRQ2
+ azCqwMw7tHQp1RnOrhpko/Xbnt213GCVL6rJuHd4iHA21DmSamM71wBoaDlLPybTk29ci+71OB4
+ POXkw4hZqoiD+BvJ8jCXJFio86c65ejoCTde+VDNGQD3mEeCVK184pMxx5Di+WR1irRvmxdNN69
+ pWucan0E5HqKljws6Lz/Z6X0clqWFUeAxBRYw9Gulb4RWCVRgNLzVrvwBtOhCfH7JNueuGb7MIU
+ kRb3lfdUME5VYet6EuwJqrGeSnulSaaIhiao750vO3Y5UQvVimOD0aQo+O56/sWp6TsJ+1Rn
+X-Proofpoint-GUID: 6aDthqpsSnw566kDyuMM28KS400uaUvG
+X-Proofpoint-ORIG-GUID: 6aDthqpsSnw566kDyuMM28KS400uaUvG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-25_03,2025-06-25_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 spamscore=0 priorityscore=1501
+ adultscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506250088
 
-Hi Marek,
-
-Thanks for your patch.
-
-On 2025-06-25 11:59:59 +0200, Marek Vasut wrote:
-> Add default trimming values for the four temperature sensors located
-> in Renesas R-Car V4H Working Sample SoC. The trimming values are
-> identical for all four THS temperature sensors.
+On 6/25/25 11:22 AM, Luca Weiss wrote:
+> Document various bits of the SM7635 SoC in the dt-bindings, which don't
+> really need any other changes.
 > 
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+> Then we can add the dtsi for the SM7635 SoC and finally add a dts for
+> the newly announced The Fairphone (Gen. 6) smartphone.
+> 
+> Dependencies:
+> * The dt-bindings should not have any dependencies on any other patches.
+> * The qcom dts bits depend on most other SM7635 patchsets I have sent in
+>   conjuction with this one. The exact ones are specified in the b4 deps.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
-> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Magnus Damm <magnus.damm@gmail.com>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> ---
->  drivers/thermal/renesas/rcar_gen3_thermal.c | 21 ++++++++++++++++++++-
->  1 file changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
-> index a388bd3135e4..f361991e9651 100644
-> --- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-> @@ -372,6 +372,17 @@ static const struct rcar_gen3_thermal_fuse_default_info
->  	},
->  };
->  
-> +static const struct rcar_gen3_thermal_fuse_default_info
-> +	rcar_gen3_thermal_fuse_default_info_v4h = {
 
-This could fit on one line (even without the symbol rename suggested in 
-1/2).
+DT/subsystem maintainers, please hold off a day or two with picking up
+these dt-bindings oneliners, we're having some internal naming discussions
+and want to avoid potential big revert-redo patch sprees, I'll try to
+post a decision whether we're good to go with these ASAP
 
-> +	.ptat = { 3274, 2164, 985 },
-> +	.thcodes = { /* All four THS units share the same trimming */
-> +		{ 3218, 2617, 1980 },
-> +		{ 3218, 2617, 1980 },
-> +		{ 3218, 2617, 1980 },
-> +		{ 3218, 2617, 1980 },
-> +	}
-> +};
-> +
-
-I can't review the values themself, but testing on V4H the readout looks 
-good! With the line length nit-pick comment above fixed,
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
->  static const struct rcar_thermal_info rcar_m3w_thermal_info = {
->  	.scale = 157,
->  	.adj_below = -41,
-> @@ -396,6 +407,14 @@ static const struct rcar_thermal_info rcar_gen4_thermal_info = {
->  	.fuse_defaults = &rcar_gen3_thermal_fuse_default_info_gen3,
->  };
->  
-> +static const struct rcar_thermal_info rcar_v4h_thermal_info = {
-> +	.scale = 167,
-> +	.adj_below = -41,
-> +	.adj_above = 126,
-> +	.fuses = &rcar_gen3_thermal_fuse_info_gen4,
-> +	.fuse_defaults = &rcar_gen3_thermal_fuse_default_info_v4h,
-> +};
-> +
->  static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
->  	{
->  		.compatible = "renesas,r8a774a1-thermal",
-> @@ -439,7 +458,7 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
->  	},
->  	{
->  		.compatible = "renesas,r8a779g0-thermal",
-> -		.data = &rcar_gen4_thermal_info,
-> +		.data = &rcar_v4h_thermal_info,
->  	},
->  	{
->  		.compatible = "renesas,r8a779h0-thermal",
-> -- 
-> 2.47.2
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+Konrad
 
