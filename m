@@ -1,174 +1,273 @@
-Return-Path: <linux-pm+bounces-29499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94300AE8240
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 14:00:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FEE7AE8262
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 14:11:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A1E1680026
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 11:58:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79CAE188B29B
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 12:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB7E260584;
-	Wed, 25 Jun 2025 11:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D35A25CC7B;
+	Wed, 25 Jun 2025 12:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gcAy36CW"
+	dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b="OlF9Ijr6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023112.outbound.protection.outlook.com [40.107.162.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A3625FA06
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750852616; cv=none; b=ZCiH2Zt7hEkFMdySW0U4NWn79tCoa6gdYxnzL41mHoYlQAPOA0/DSeaW1LfEz7BUoCQto7gCbNqWYnQ6d4GxdL9JhhWTCF3B7CrTMm+tlq+N0c8MNV9to/6Y97FGxlIUT3NRh6PaHH6H6twmnFRA4MR+3kZ1EtVaLLsO0ZtJ2ns=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750852616; c=relaxed/simple;
-	bh=BVCdK3npxOuJY1EA2b0sv4BUq030Q9+u3iWzgAMxjkg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FtAxWRGrKrRYD//s+XHtXNmOPRKu+A6tUvcnGnZeJ4M6OpAWKmFuFYnHK/kxOVEpYFG3mkcg3hftQvivBJOOiqVCvMBh1wIqfq5vK0zA3ufMAzPU3S8tWHwAYiLN4r9X4FrS0hYr0jAmmwsih7vOqq6B8+hfe9z58dCoLCicCPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gcAy36CW; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55PAfCva001125
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:56:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	qtf2LIek4hpLZ54vWooJjQr0lr5Bw40aXqP1yVThXvQ=; b=gcAy36CWTbjZXPo4
-	LTSwKhbDedrFZlz2r+vLYTqGQbV/ntVaxiyCSbTWhGgbB4wiL4cFf4RcpxTeukyW
-	Z0lUSg7KCMvc5YZyB20FRHLHELnUuDX76MW+Ff5cAnAtskiBNIMufa1fhKxduvjW
-	gHpIWW9JY4YOBptfCCSpG9K90osox1ZM/Rb66n+jwJ+O8q2kAZwvwE0hdKiM8oL/
-	VGI6Ao8ka2NnGxon+VNonHGnDYpVqFSwKr68tZ6/5EK1kwAgXj8RxJdBKOJdo+gt
-	OfsE4gxhBaJrm38QaywRixi3s9AUIk36u4Y/mgV3Q8tLahgjHdQcgtNZuTHthVAz
-	pnNLrQ==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47g7td9kre-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 11:56:53 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d09b74dc4bso158829685a.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 04:56:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750852612; x=1751457412;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qtf2LIek4hpLZ54vWooJjQr0lr5Bw40aXqP1yVThXvQ=;
-        b=mBwE30rsmdgjFACK8XOja3NjjPdZu11mFdf3X1mQsBcWV8DQioCQKId6skgibhXOEH
-         QPznIBluqaT81Ql5sPkLabxQ+TdDX+iKeTJMvTkgI0etCyBd83SVGBjHsxCF0edvOYVN
-         lo31jexWOkukfdWfLXQ60o+FPjElAzpml8nuLsvonA5HG90bEqZhBnGrPE88+jlVMo9f
-         iKt8BTCOf7XmG7y1voYyc6LMSwuAKtVtEBNlhGvhn6L1ipV2KP+dC+Ox7C9UnzuuXIWw
-         lpey4/Y7HU8YkzNBn3kASY1SLjjoUjgWiss+T7dFLqqv0yQaKTuAmUBf0Q2gOo3XQ76P
-         cEnw==
-X-Forwarded-Encrypted: i=1; AJvYcCVEz3JHnbtZ+B+/rT/KZ9Xs/XcmtwojIr9lX4VYB8G9RxXbHs4WE8oIDgQixBG9RRfsPIIO00m7+A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEKPD87ZYkqgskR1gdoQBPMsnrZu1IbD+gEY3GzUKtENwWHXCi
-	eu1IMeYgNG4JyytLDNtAO/CqTbn1gmaOB4o9xB1ch4EJ6sJ26ZwHx1uW45fkiJesJvzZgvdht6T
-	4lll9RKYO9heh3zNyle9MSH2G47kdTE6gu6F7h25SiUoEODUX0M/I1q3lpZWm8Q==
-X-Gm-Gg: ASbGncukYWrwnsaQ4ZqS4itBWUhnEzefOqHdypoanO0LUiVcSbE+mfg3i272VFd63gp
-	7yd+rI4ouc213lMUXHzziZIRowF0cxL/hMd9DgKG008tZdkTR30y2XYXh8XCzn8fxbowXHAKDsj
-	79dvV7FRwEVIuwXFqovWPydwIo2Dtw3TCwzfHkY/TL8SWO9GKBSDe9Ueu30ZaAfM1Sx5yetUzyO
-	p+0j2GgLmX9oCc7pguFNtoUn5O0Q22OmrXS+qdZIR+Mp0our9lsD7HPRsYP181AKOvrt/ZnhDox
-	8BN1xBfW/OIKe6DfqiXnI+h2PjsuO9IGVelpKhkwQrpq07GxT/jg9OJEKBWLtBeKIDf1yPN/nLS
-	muR0=
-X-Received: by 2002:a05:620a:2949:b0:7cd:4bd2:6d5a with SMTP id af79cd13be357-7d4296db1e0mr156158585a.5.1750852611673;
-        Wed, 25 Jun 2025 04:56:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFbNAdmHcL/ohxdpxrFhw+P+cQf12Kd+1+opwn8szOOQKrMRERAl3ZBXjt2J5pp3lvClg9lMA==
-X-Received: by 2002:a05:620a:2949:b0:7cd:4bd2:6d5a with SMTP id af79cd13be357-7d4296db1e0mr156154785a.5.1750852611039;
-        Wed, 25 Jun 2025 04:56:51 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f4842e9sm2431839a12.61.2025.06.25.04.56.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jun 2025 04:56:50 -0700 (PDT)
-Message-ID: <b98d305b-247f-415b-8675-50d073452feb@oss.qualcomm.com>
-Date: Wed, 25 Jun 2025 13:56:46 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1AB93074B7;
+	Wed, 25 Jun 2025 12:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750853484; cv=fail; b=VbIXod82Vkm0xIOziNLi7OIO6nTUd1WELTJGzGGZ6G3xANzIiFK3mR2/DG560sJRLC9Ny9juO57c0444g0w/zpFX9J1hwwuF7a7E7vT8ECM8+4wkrW3t98ITldQRBYNuVd47jsR2IdDYnDdkQtgtuutgDKN/RnbjN2T6gH6ZTTc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750853484; c=relaxed/simple;
+	bh=RXlXl9LtCCYsfPz3J/5T2Q0QVUKFuMEpGjyEwbb0Dzs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=H/l1e2DXzkr4tP7zEiF3F6Q4hKB0CIchT4bkY2PWelvhj8LcdDb2oPtQ+cMgSpwgft7zs0JiPxqxGCMlfgawHDpx4JunrsRKFy06o4Jc81wreXgnSHfHkW26cmzOrU5M0NpR1W941lBQaMoe/FfFoox0bHTvpUEMPRrnIfEedgE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be; spf=pass smtp.mailfrom=uclouvain.be; dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b=OlF9Ijr6; arc=fail smtp.client-ip=40.107.162.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uclouvain.be
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tF/OFdTU0A2Fsz8nPGRf5uC4Oj0v9Z7WOlZgrC7ebsV4v8RIbZK3jtYreCJ275dsaLBaIauDaMpDbzUsrOXGINpBOzd7GA7RKVa/gKTaz1WjMUHF4GpQaw9I5VDZ+PfTdvL5MisyyzYTsKsfdh4O+v7Uo8vn8QfvQ2ofKULyVowAH2PNJZIsrKUniJPcm0wA+qz9LY9Q9TviPrnnqs0kUdRofNGb+D2odk5wm9OC/LPUTYKrTuQFk0PzJpb51lNMGlMh5kHYr51/6/brrlEyOyQDvPUvEQNn+74ArFQDBMNrSJFVLeNAvbv/x2DGSfhF8OA2eIJBeR396kwaC2uYhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UCkCv5bH3L+Nz8/iiLF/0bpRHI0Sl0NhSmISL/9+jYI=;
+ b=HR0M2BOtvJGwgjOKNLLuhtGlw3HHmQPsrsc8ehy+Nqj7v9ph4+vnCHoMyVV6ioEsW82l8iDDCLuSfxYiVoxahi3jLWxvPwYO7h4IEFylRpx+CTpwY9dU61WNtD5X7/wf6Pt7LZqLOOUTOnDLBrY4l4vor8PzBThTGZW4KeicLru6STFMWCCJrCf9ai9Q3yS3bSJQRuRh0vKZAwNfO7SoL+b5YMRFxiWoxrT9f7q6sBpn3gqxcTwIRwLZFSvK5L/CEB6YPRIl1Nj1P2QqUQUvh4lay8jiujjpkZq5HelvTbLdFrcansXCFrHQMfbB8F9+g0wGv20mm+bKetBr/pPryg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=uclouvain.be; dmarc=pass action=none header.from=uclouvain.be;
+ dkim=pass header.d=uclouvain.be; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uclouvain.be;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UCkCv5bH3L+Nz8/iiLF/0bpRHI0Sl0NhSmISL/9+jYI=;
+ b=OlF9Ijr6NRXkljmeEQtJVtIYc3Q0qiLKUHVcyMR6m9+6PNayyuAnpp+a1nvnuzAeE9UF2MGC1MNv0ybCrKQtDqT2c+PpIBZiO+kiPMDEvzd07f4VT1SjRRs2eqdBvupD4DHVn15a2EdJgPToQv6AcmjZ7/lWViUsINldD2mU4sltyNIivlMrIbD8IPpzQb+37Q1Le4GW+SCxOLsaKqW8lk83tOxfrjY2js1qicSvYeH7ka8kx/JdeilzGA/crrCeFCOD40h4xFcb5QCq9ic8tewE/4c4u9TCxGk9mxr+p4upwqWcV2cKdB0XsyszbismJld9ZsIw6WPPuFri9zYD7A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=uclouvain.be;
+Received: from AS8PR03MB9047.eurprd03.prod.outlook.com (2603:10a6:20b:5b6::13)
+ by DU0PR03MB8853.eurprd03.prod.outlook.com (2603:10a6:10:40f::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.28; Wed, 25 Jun
+ 2025 12:11:17 +0000
+Received: from AS8PR03MB9047.eurprd03.prod.outlook.com
+ ([fe80::c90e:deef:6dcf:538c]) by AS8PR03MB9047.eurprd03.prod.outlook.com
+ ([fe80::c90e:deef:6dcf:538c%4]) with mapi id 15.20.8835.027; Wed, 25 Jun 2025
+ 12:11:17 +0000
+Message-ID: <793c02e4-fa7a-4c13-bfc3-bb058e211b5f@uclouvain.be>
+Date: Wed, 25 Jun 2025 14:12:21 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/5] power: supply: add support for max77759 fuel gauge
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
+References: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be>
+ <20250523-b4-gs101_max77759_fg-v4-2-b49904e35a34@uclouvain.be>
+ <4cahu6dog7ly4ww6xyjmjigjfxs4m55mrnym2bjmzskscfvk34@guazy6wxbzfh>
+Content-Language: en-US
+From: Thomas Antoine <t.antoine@uclouvain.be>
+In-Reply-To: <4cahu6dog7ly4ww6xyjmjigjfxs4m55mrnym2bjmzskscfvk34@guazy6wxbzfh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR04CA0086.eurprd04.prod.outlook.com
+ (2603:10a6:208:be::27) To AS8PR03MB9047.eurprd03.prod.outlook.com
+ (2603:10a6:20b:5b6::13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/14] Various dt-bindings for SM7635 and The Fairphone
- (Gen. 6) addition
-To: Luca Weiss <luca.weiss@fairphone.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        Thomas Gleixner
- <tglx@linutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-References: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=CPYqXQrD c=1 sm=1 tr=0 ts=685be405 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=6H0WHjuAAAAA:8 a=PtzdWR5wS_Xl21Jse7IA:9
- a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10 a=zZCYzV9kfG8A:10
- a=IoWCM6iH3mJn3m4BftBB:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI1MDA4OCBTYWx0ZWRfX36aA1jt61xe3
- fvHSUp7z6JBzTjrGYN2CAdFe/dylZV9rUxHKdvripSgKhX18qUjkyUs5Y0klybL0OP48+a4p/WJ
- FFlPLpAe0cZSega7IX4ZfQQWiyynEMtLblGIhJndz6DUXDdvD8/qCv2FxVJPmMpbu07WMVjKRQ2
- azCqwMw7tHQp1RnOrhpko/Xbnt213GCVL6rJuHd4iHA21DmSamM71wBoaDlLPybTk29ci+71OB4
- POXkw4hZqoiD+BvJ8jCXJFio86c65ejoCTde+VDNGQD3mEeCVK184pMxx5Di+WR1irRvmxdNN69
- pWucan0E5HqKljws6Lz/Z6X0clqWFUeAxBRYw9Gulb4RWCVRgNLzVrvwBtOhCfH7JNueuGb7MIU
- kRb3lfdUME5VYet6EuwJqrGeSnulSaaIhiao750vO3Y5UQvVimOD0aQo+O56/sWp6TsJ+1Rn
-X-Proofpoint-GUID: 6aDthqpsSnw566kDyuMM28KS400uaUvG
-X-Proofpoint-ORIG-GUID: 6aDthqpsSnw566kDyuMM28KS400uaUvG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-25_03,2025-06-25_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- impostorscore=0 suspectscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- adultscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506250088
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR03MB9047:EE_|DU0PR03MB8853:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08d06885-7c90-4801-e3f1-08ddb3e16339
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dWFNQWhBblAwcVExcnFtZ25MSUc5V2NoTU1RbDd5bzYwZHIzb2dZOWJETFlB?=
+ =?utf-8?B?M3c4dm5DZVA0aU5Uc3lPM21ZOVp6b21lNEZsRU9UWEtyejNjOW1kS1RuK09m?=
+ =?utf-8?B?WmR1NGlhOERzU0k1cWZsN3FLSUhuQUs5RkFPYXhxT2txUzREK256MHpSNUFq?=
+ =?utf-8?B?Szd6b2dWRjh2TW52c0tabWFtNm9QQWhyU2xheVM4NzgrSC9rZEJ4emYwNUpM?=
+ =?utf-8?B?ZWZud2M0UWM1ZzdWUVNzai9ZSWN4ZFBMMnhWZE5PekVrck1udktIUCtYdlZB?=
+ =?utf-8?B?aTBpdzZUak04RHFIek95RzVtd0JRNXVnSjJsTTA5cmZ0YkNjVng3c2VUS2c2?=
+ =?utf-8?B?dTJaL1J2Y0FrQzh3SXFPd01zRmN5SVVuVnRZaTZhRE1tSThjMXBUUWwxREpP?=
+ =?utf-8?B?UkkrWVpVQ21Ycng3eGVFblF3eE5IYWd6TmNYZmdRemo0SDNhTlIwWmduZmRQ?=
+ =?utf-8?B?bm9OMHE3aWpzR1JycVQvVnN5eUEvSmw1endKa2VvTjY1SkVpVU9JUlRvdlpL?=
+ =?utf-8?B?bFkyZ3h1eHlaRlRNcXQzOFhlb2ZYWENydFRJWUtGS2VTNnpzdkdKNmdza091?=
+ =?utf-8?B?bTZYb2VaTGtJM3cxVlQ0T3NiZFVkRXlMd3YvRE85TG91TGNCcjBTUVF6Vlhq?=
+ =?utf-8?B?N0UzZGJpWmhiZ0d3VHJ6NUlNNVZybzR5OEdrRElibTlEckV5Mk5heHNSNzVB?=
+ =?utf-8?B?bmMwSWVzdGdRTTNRdDJuaUp0dUozb1crM1ZQaUQrQy9mZUY0WlRCQXlRZ1J6?=
+ =?utf-8?B?QjdVTVFZMU5HaHhRVDM4dDFPWTNiUmtHclhhVGdiVVdnOEdsN1k0WVRoYkpw?=
+ =?utf-8?B?U0xyRWFxSGNLTmtUcVgwaDlGOUlKR3BpZzZiMnkrMitKWi81ZG9LQWZIcmE2?=
+ =?utf-8?B?b3RkYjZHYjdQaEhMZXUxMmJCeU1SVjlSWG43WEg0S0h1dWNkTU9YckZtWGtK?=
+ =?utf-8?B?STlIWmRUYzlreWhhN1puOWo4THNHbTBHUHRSYzV1ZGVJdEVITVdBbGh0N3JN?=
+ =?utf-8?B?YS9JTXZRRStUdGtpQm9sVnM2QW5zRHZvYkhHUXNHMTdGYWM1a3Awb2p3aW8x?=
+ =?utf-8?B?WFoxTDNzbDNuRUpXQVg0OCtHbDVIVVBWem9QMTAycDVRbGlnay9ydXlwdWF5?=
+ =?utf-8?B?aXJqc01wRUxNQXN6WjRjQkFqV2RwSSswUnpRYW1McmQzR0s4V1BUb0RNS0dK?=
+ =?utf-8?B?WllWSW9GQnluUk44Q3pxM21Kb3dGaDlLYkIxcVNTdkxNZk1QZ1EyOFpyWWpU?=
+ =?utf-8?B?NHhHTmVxemlLL2dZZVc2cGJSYlo2RXA1UTU1RUVQUTNVbkVZbEs2bU1NU3Rk?=
+ =?utf-8?B?SHMrVFFGMlY4aGsrUld1Uy9zK1Z2VnJ3M0NZSlRadWJQaFdydGtvT0N1NlFu?=
+ =?utf-8?B?bndtZ0FKNXJvWXhNL01NSlVMWXE5ZzBYczgrSkNBVEdORVh5YUgvTDhHSEpC?=
+ =?utf-8?B?bFRKT1RFVnlYbHJHejFQSmtHMXE1QmZEM1FlOThhSmduWXJMT2lwaTlkZHFm?=
+ =?utf-8?B?V1VLelNKUHJQcUNkaTBpdTRJVkJURUY2bG9KR3ZRVTdhWjBDRVFJU1FRK2pG?=
+ =?utf-8?B?NUVQUjVHR29xcGZPN0RPM291R3Q1ZXQ4WDBiN2pwRDQ3OGk2VkhPOTMzeFpC?=
+ =?utf-8?B?VjdHYWc2WFhzVTBkL3lDd0NvdWdSWWhaRTRuK3hpTU0xbm1oRkg5azcyd1Rk?=
+ =?utf-8?B?cGR4S0MvY1B0OXAyZkljVjV4S0hEVlFPZXpiWEhlVGdOaGtrc01QdzM2STU3?=
+ =?utf-8?B?QThxaldQU2tKMzlyaFk2VkkxVkpNczMyM2hrZTBQRmdaSzFaMmRCVm56aGU0?=
+ =?utf-8?Q?XRx6tfcF5i16iLDPIIaUcTEo06FtqOK5oYsTM=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB9047.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OEEwZ0VyWCtZdG1tMXlNdDE0OTN2aDFYTWU5M0gySnJyTkRjSkFrR2tweGlL?=
+ =?utf-8?B?djZ1MkxCbWptUWJ3eE5ab1ByZm8xV05zYVZMVWtQUUQ5YS9GcmI0bzdmeWJV?=
+ =?utf-8?B?a0xOSi9OZTlmblpIQ2RuOStaOFNWZFNxeGdIOU4wUFhzQmFEWFB0Y3hVa010?=
+ =?utf-8?B?M0VFKy9IOWlHallLMXpIdjI0eURBdnFrdGVDemwwT3JNdlI3SGFkdks5SW5W?=
+ =?utf-8?B?Qi92MUtSSm9wYVZxS0VmV21xbldxTG14bkdWZFlZdG1DS1JRTW9Rdm5ObHRB?=
+ =?utf-8?B?ZVpNYUlGMEVyZGFyZDlaL0sxMHFXRE9DM051SFpvYWc2WXp2MklVeHc2cTBj?=
+ =?utf-8?B?eTEwd3pXUEovVEVsRTF6RUNGeXBPaGtrZEV4VGhSVFlMSC9YRndaWXV2QUFh?=
+ =?utf-8?B?V3pCbGg0VlIwcWQrbHlCcDVRSG9HK01iOFZzTHJaUXVSWEg5YWJVcStWMkEv?=
+ =?utf-8?B?Q2U1R1JueVdQN0x4NnVROWlRYm81TEN1UlJBVHdNMEpoSE1RekltZko2aWF0?=
+ =?utf-8?B?OFFaeUNYcXhiRHZESC9YRmMyekNWc0dxaDhNRXRmY2FKRHR0Qy80QU1Gc3VG?=
+ =?utf-8?B?eDhEanZaT2pTRjYrU0ZtQ2dxSVkyQ2ZYb2t0UFNkN2JCbEZwcThUaExKd296?=
+ =?utf-8?B?QjJQR3JZVDBlMmFhenVPUTNkdStZQ1BPQnFvbFk0akZ2ek9wQm43NDFBNTlQ?=
+ =?utf-8?B?Q3haSzVmK3JDa1Mrckl6U3ZBV0V5ZisreFdXYUQ4aGNzQlY5S1AwWkpTSzNN?=
+ =?utf-8?B?bHVIbzZsY0FDMEYxMXdjV1ZPS1VKUWkyVzVVQStRTG9QalFjeUFyRy94Y0JU?=
+ =?utf-8?B?MXFNN21yeHJHcFpIT0RxZTgyOGpRNzBsd3RXQkpydXVhODlVQk9tZzNyTlJQ?=
+ =?utf-8?B?Nlg4TWJmKzFPcld0c2NpN09PYVF4R2JPdSt4ekdvRW9ucDBCbjVZNVhaaGFF?=
+ =?utf-8?B?djA5QWJjdGIrYys5NWd1eHpFcGdkODBnZHFyL0pyNm9PMkxUMFNjbCtTa09k?=
+ =?utf-8?B?cGJkOVFwL0l5OFFudjRPYjFjZTdENzlWcFdQWVBHTXRDOGluN2RvRk5yaVhB?=
+ =?utf-8?B?cE05bnd5UnFFcDlWb0tkVVBzU2g5dkVNc01xbWxXTXlsQnU2YVNaRFVMak9I?=
+ =?utf-8?B?VTh4VEFKZkYyNUhoU3Y2Si9RUWFIdlBnM0NmNFovOWFxamNqcUVlNkRza2Qr?=
+ =?utf-8?B?Y0RBNzUyd3h2NjJEaS8yZ01KalNIMkpLd1VtdDdxempIK1lmb0VMSFFYYlJG?=
+ =?utf-8?B?OGJOREg0SHBraW1aa3dGUkxqLzA3MGFDb2Qrc2NtTmdFQ2JMdVZ0c1FxbDJV?=
+ =?utf-8?B?OWZpOUs0d1BRWWx2cVJ1M3N5V0hoc205ZnZrUkZBMG1JRG1STlFDT2FQeXVo?=
+ =?utf-8?B?N3FlT1BaTTJQd08wd0NoUEVTVC9XUmtnUk5lYmJRZndMMUp0cVpXV2NsMHA5?=
+ =?utf-8?B?T0hCT0JWMlhRQm1uU1g3Zjhrb3ROTExvbGJOckNnak4wSjU0YVFrYUxDVFE0?=
+ =?utf-8?B?d0hmT293R1ZwT3FkU2thL1FzcE1ZWlZObkx1K3R6d1NLbTJDcWRZMnRUZ2tR?=
+ =?utf-8?B?am10TUNlcThPTjdKcWxtb2t0bDQrMVlTcy9CaU5mWjN4QkdIcWtUYXluaGNr?=
+ =?utf-8?B?VDBHNWNjRnNGc3BVdzVkRFdYNmhTbDB1QTJISko2bzhIU1lsd0hGMG9pSkl0?=
+ =?utf-8?B?MlhiTWFhaG9PMkxRSWhYK1BLWVVjbUZ4bEREcnRXaEJ6dVVibW54cHNrL3hN?=
+ =?utf-8?B?dXBHYW0rR2M5QU05NGVOYk5HUXFFelJZZzMwbVFTSkFVeVRzZ2ZWNFFLckNN?=
+ =?utf-8?B?bDYwVmEvYk9sWG9HaXZpL1lXcXdFaUMvL0RaQ2hKQWpmWGVtVXhJeTFKc2FM?=
+ =?utf-8?B?QWFFNVlHS2JpZDZ6eDkzV21kT3RFR2lRaFg0SXF1dk5pNjRraE1kdTFkZU1K?=
+ =?utf-8?B?Qi9ET1Z6USszRmdTbWZiK1dJUVJKSTIzUHJ4cWk1M0NiTUNPVndHYmlsY1Jz?=
+ =?utf-8?B?Q0s5aU1uRGR2MTRFc01hZFZ6R3BIQ0tFSWRybjZZMEdEbUpCdXpIWDN6a1NX?=
+ =?utf-8?B?Uk9kUTdGczlRZ0hkTlNvY1pWSjFOWDFjcnpaY0hWYUpqZllWd05IcTdOUm4w?=
+ =?utf-8?B?MzNDMmFaeXVpNUpSUkFCL1BoYmltNE80LzI4WjBkWGh1bk5EUkd4dHk5ZHk4?=
+ =?utf-8?B?NEpTYWcxRllSNmgrY0hkVlNxbkdOUFgwZ3UxRVFHSG1abVMzcy9sM01Sd04v?=
+ =?utf-8?B?UHBDQWt5NVdRcHJMOTFrQnlvQ1pBPT0=?=
+X-OriginatorOrg: uclouvain.be
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08d06885-7c90-4801-e3f1-08ddb3e16339
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB9047.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2025 12:11:17.2142
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ukYP/x7JwgDsgLUQNlzQxVWxjdhF2MsIh/Ko6FhZenfPqYQ/V95sFKJZBo5sgho3tI+Z0hlgvP5BYb0o4CyUpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB8853
 
-On 6/25/25 11:22 AM, Luca Weiss wrote:
-> Document various bits of the SM7635 SoC in the dt-bindings, which don't
-> really need any other changes.
-> 
-> Then we can add the dtsi for the SM7635 SoC and finally add a dts for
-> the newly announced The Fairphone (Gen. 6) smartphone.
-> 
-> Dependencies:
-> * The dt-bindings should not have any dependencies on any other patches.
-> * The qcom dts bits depend on most other SM7635 patchsets I have sent in
->   conjuction with this one. The exact ones are specified in the b4 deps.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
+Hi,
 
-DT/subsystem maintainers, please hold off a day or two with picking up
-these dt-bindings oneliners, we're having some internal naming discussions
-and want to avoid potential big revert-redo patch sprees, I'll try to
-post a decision whether we're good to go with these ASAP
+On 6/22/25 11:26 PM, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Fri, May 23, 2025 at 02:51:45PM +0200, Thomas Antoine via B4 Relay wrote:
+>> From: Thomas Antoine <t.antoine@uclouvain.be>
+>>
+>> The interface of the Maxim MAX77759 fuel gauge has a lot of common with the
+>> Maxim MAX1720x. A major difference is the lack of non-volatile memory
+>> slave address. No slave is available at address 0xb of the i2c bus, which
+>> is coherent with the following driver from google: line 5836 disables
+>> non-volatile memory for m5 gauge.
+>>
+>> Link: https://android.googlesource.com/kernel/google-modules/bms/+/1a68c36bef474573cc8629cc1d121eb6a81ab68c/max1720x_battery.c
+>>
+>> Other differences include the lack of V_BATT register to read the battery
+>> level. The voltage must instead be read from V_CELL, the lowest voltage of
+>> all cells. The mask to identify the chip is different. The computation of
+>> the charge must also be changed to take into account TASKPERIOD, which
+>> can add a factor 2 to the result.
+>>
+>> Add support for the MAX77759 by taking into account all of those
+>> differences based on chip type.
+>>
+>> Do not advertise temp probes using the non-volatile memory as those are
+>> not available.
+>>
+>> The regmap was proposed by André Draszik in
+>>
+>> Link: https://lore.kernel.org/all/d1bade77b5281c1de6b2ddcb4dbbd033e455a116.camel@linaro.org/
+>>
+>> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+>> ---
+>>  drivers/power/supply/max1720x_battery.c | 265 ++++++++++++++++++++++++++++----
+>>  1 file changed, 238 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
+>> index 68b5314ecf3a234f906ec8fe400e586855b69cd9..c9ad452ada9d0a2a51f37d04fd8c3260be522405 100644
+>> --- a/drivers/power/supply/max1720x_battery.c
+>> +++ b/drivers/power/supply/max1720x_battery.c
+>> @@ -37,6 +37,7 @@
+>>  #define MAX172XX_REPCAP			0x05	/* Average capacity */
+>>  #define MAX172XX_REPSOC			0x06	/* Percentage of charge */
+>>  #define MAX172XX_TEMP			0x08	/* Temperature */
+>> +#define MAX172XX_VCELL			0x09	/* Lowest cell voltage */
+> [...]
+>>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> [...]
+>> +			ret = regmap_read(info->regmap, MAX172XX_VCELL, &reg_val);
+>> +			val->intval = max172xx_cell_voltage_to_ps(reg_val);
+> 
+> I haven't reviewed this fully due to all the feedback you already
+> got from Peter Griffin and the DT binding being broken, but something
+> that catched my eye:
+> 
+> POWER_SUPPLY_PROP_VOLTAGE_NOW provides the voltage of the whole
+> battery and not of a single cell. E.g. a typical Li-Ion battery
+> with two serial cells has a nominal voltage of roughly 7.4V while
+> each cell has just 3.7V.
+> 
+> Greetings,
+> 
+> -- Sebastian
 
-Konrad
+Downstream just reports this value which is usually a bit over 4V when I
+record it.
+
+Also from what I saw online, it seems that the battery does output
+voltages around 3.86V as it is written on the battery:
+https://cdn.shopify.com/s/files/1/0092/8133/9443/files/QeqxTLOL6eAp6OpZ.jpg?v=1728588266&width=2048
+
+So I guess that there could only be a single cell in the battery? Which
+would explain why they only report the lowest one.
+
+It thus should be ok if we consider only the Google Pixel 6 (Pro). If we
+need to take into account the possibility that the chip would be
+used with other batteries, we could take from the devicetree the number
+of cells and only provide the voltage if the number of cells is 1. Would
+this be a good solution?
+
+There is also a VSYS register (0xb1) but I couldn't find anything about it.
+Taking a LSB of 156uV (twice the one of VCell), I see a clear correlation
+with VCell, except for it being very slightly lower.
+As it is mostly guesswork, I don't think it would be a good idea to use this
+without any confirmation it is correct.
+
+Best regards,
+Thomas
 
