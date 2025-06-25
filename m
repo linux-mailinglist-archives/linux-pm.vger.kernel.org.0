@@ -1,195 +1,108 @@
-Return-Path: <linux-pm+bounces-29526-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C756FAE884B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 17:36:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35C9BAE88E4
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 17:56:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03E317183D
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:35:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 166233B2D27
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553032877DC;
-	Wed, 25 Jun 2025 15:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9589029B8FB;
+	Wed, 25 Jun 2025 15:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQfl/deX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEBD4hb/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C80267721;
-	Wed, 25 Jun 2025 15:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3FB1C5489;
+	Wed, 25 Jun 2025 15:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750865712; cv=none; b=NdoT5z5rYxpoQCwBs99S1HW5GSIQcHUaETyy8DgGBtBMlVPrSG6atd68QzlB3gs1HdVSSfQSQR7MrtztZISOL8Kn6RJoOmzhSxdfEl3/CPn/XThaqcqCp3pLQawd+RZVyJkGbbBM35+3EskGD+qeWWN0hyEtXQLChyl1YU4+Gs8=
+	t=1750866950; cv=none; b=BLRmAPfaPBmudffIvv0HafYrAH+jk6V33x7a75Bhh3LT0Z8mJwOgLZPg9DugQEefVrSO2Ri4yGWErC2098kGLS+zU2EUYH9mdY/xcC+FaF6meRloZM8IKjN7V3ff/3946YuTDeViBtPPtMOWu5HJQSnTRcmfiZiyLAcc0MBttsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750865712; c=relaxed/simple;
-	bh=SLnSxdMzd49CyJZwsXNyR3humeDN79RoQxLvBq8LQ2E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=efXiq4Qe0cr77aCUr716hOD0CC0f+7tzJjoDf9RKrAVueaHu7RsBQ7sDfYzqjKE/qsR/3++2yu3+NxcxKeDMWW8FBfcPltX2tzeYj5Eijr3uGUJpOZhzMe7s4xnWjuQDfclJFI5dIvVhVUw0jSIFNW9F6Mkpv96OlkUpNLXHyUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQfl/deX; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a50fc7ac4dso1170424f8f.0;
-        Wed, 25 Jun 2025 08:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750865708; x=1751470508; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qAN3bI/nam6BzXmhzco2pYTH1ZOriVDoBYCaiNU5Q5g=;
-        b=MQfl/deXSrjqEaLrR5t7fj2RMFuc3WaEArHoi3stTSQMiVk8gijV7K5xW8VgcGW4Vu
-         djnca8dP7EyanjcM2k4sAMfFrlLyidxMPVmchuIbadjA1f+SK98y7xfHNXmlmeEKSEbM
-         5sGr6oPjoahYFLTpjz8usLbIIMMFvqGSeXeJoyyzTzb+gR03P4SC/dfXA+zJPWF003Mb
-         whgHR/xMII5ULwuedngzj7NhT7ZvAWdi0fV15xe0kVypSK3gLIx0B/lMiEwvC92rqLT9
-         WU66p6anw+xT3XloM+tznZejA2tRSsOEOjo0X+TNqcOnoxpJwVDypfJABuGdV/JvwYLm
-         YdDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750865708; x=1751470508;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qAN3bI/nam6BzXmhzco2pYTH1ZOriVDoBYCaiNU5Q5g=;
-        b=d0WFnCNwD1iBW8eGyVRoONe9zo+GqdQUmjBmt9x31zy/3UQ1m9dhSmUcR7Cp7eiF/G
-         RIxbKEuQ00ixPP9s7ZSRdSPE9TJC8FJtPjrzfNztQH9DeSNOXK3L5t2qU30dgT/zWamQ
-         YX5MizF8WgL0uVwhmgdLuoDrkQBmDvRGKG7ec6Vq16soS+fc7bWuQzFYSgkEoC+JSK9+
-         CYbdGFXxEcOqv5zezwGs6iqXBMR97M8UIPUvZStDj4U/3iB+Ct/plKuOYaL3T08mu5i4
-         yPGIJZJVFoWKvUILPkr4VPbLKtc8c5Qevz8qGhxpU7nS1GzbtuN1DObmWz+BYjsFYFcE
-         CSlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVy11kpLOAZLemiwDMPrdJr0yXBDlIMbWc3zLjmDAA8xE+ncg0zmMfyIoL+VskjlXuVZrXdzmkbOuCXt7yn@vger.kernel.org, AJvYcCWIYWwE/I46OlSDoWw8jlk6NX5vjSAoxJYLpL/186OaNPQ74hlisBUfZMVWCAYiAEj/y0D2f//FaYM=@vger.kernel.org, AJvYcCWaKX2Ij86/xkIwBGzrvn+5ByyyymZJoFbs1F4fiWV8yTnkb3GoQGXlDYB8mS2XNA0tYx/cByt+aUviOseE@vger.kernel.org
-X-Gm-Message-State: AOJu0YwB8jM3KljP3YOxp40QumdL6UAIy5NoWw6EpLRBtfQ+vGbTjhA1
-	Lxv+EHR1YpFV+PxUXqnpZlzGLR3uUEkSS46Yj3O1pUWU61cCwYmvZ2dslSJZIA==
-X-Gm-Gg: ASbGncualWOiPmgOvWzbly2Mbo7umysG6TJh+iI2gYTBwJ+LsLd56BcUl7EeXiu5QmG
-	KYrPZqlvfTl1xxAbxrXUhFe0YCBRO+9VMZnqBqWaYwfFcnvAIg+FeWMc0DYvSu9I+MENxNgOwDE
-	nlXQ5iwg+EqPRyQbwWtps7w0DipqX0SepOupl41y1qfj8gh2VdifIv93H9zLRZdeAFdN+Y9YlUV
-	ZqvafLRHkmfMQtV6Q2XBg+4ccBo53w2gKEOVUEMH38//ktj4OCbvNGOJ/JW5eeqIvH6h5g4dP+z
-	oESY0r2gbrmu/FqaPWR8bKANfAF84xs5C+1xsUHoG680Su0Mzk8nZhn4HHHNg9w2rmTSPH40Hwp
-	3Y44L5vJcbcGRAWv9GzhqVOBIM3Y=
-X-Google-Smtp-Source: AGHT+IHR6Q4kuNfzivi7gk/SqdDnJ4iePjEkphL6vUUKC52dSMwy2Js3+Cwst/JU0qjvPRKcNdNiPg==
-X-Received: by 2002:a05:6000:2006:b0:3a5:3b14:1ba3 with SMTP id ffacd0b85a97d-3a6ed66eaedmr2636093f8f.49.1750865707405;
-        Wed, 25 Jun 2025 08:35:07 -0700 (PDT)
-Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453823c42e1sm23251785e9.37.2025.06.25.08.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jun 2025 08:35:06 -0700 (PDT)
-Message-ID: <ac5ba192-b538-457e-acc4-c2d358b1fd0e@gmail.com>
-Date: Wed, 25 Jun 2025 17:35:07 +0200
+	s=arc-20240116; t=1750866950; c=relaxed/simple;
+	bh=0j0akyBk6oQld4bN9tG/Rx9YD8D+rRhxa5mPhKSc6H0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RO/d3FTyr6oGxqsfRxresgiZtRBekyOvFDArqgf1ehEF+C/zuzSGuPt6xeGSsGGKnIaDGpkQJCDxLQLPRD8xFgI9uN9CmeG+rwW+Vvc4FxyfIXAe3Zn0lUmMHOVxl0HvJYrP5kUbFD3vL5+SLstjAy99jAb2ze1KFP4GLi3qm5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEBD4hb/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65274C4AF09;
+	Wed, 25 Jun 2025 15:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750866949;
+	bh=0j0akyBk6oQld4bN9tG/Rx9YD8D+rRhxa5mPhKSc6H0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=BEBD4hb/5OWP7R/2N6ogA3Vtbfktn1v98YFG/Ur/IjltKG9UddZqBBrWsFcqIqh/V
+	 /oRPYzCkoIvUVR8VvRNYklYE4mPfDNTwO9UCGS28sH86uRzwHcB/1oGPZ06vJeRAvD
+	 bQtOvLEAvh2INsMj9zbo1FZOZbcPyIDoR3DPLAOeUkzeHOp+09QkuVAm6lMq7L2LDx
+	 xAh9Vrbs/xdBLs2FeZJZ8Ysi/3m8j3jSRt95OI2vId3DkUyvzuF57y6n8TDVLhkMe3
+	 fNzLzsVFGBUyPHK3Kb/Ia4ZSyQnLozu3iqZmpT1AXacjUJis1eznk36Mw1bQIcVeqc
+	 mJ6uL14oS77Cg==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Date: Wed, 25 Jun 2025 17:55:43 +0200
+Subject: [PATCH] power: sequencing: qcom-wcn: Fix bluetooth-wifi copypasta
+ for WCN6855
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] interconnect: avoid memory allocation when
- 'icc_bw_lock' is held
-To: Johan Hovold <johan@kernel.org>
-Cc: Georgi Djakov <djakov@kernel.org>,
- Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
- Johan Hovold <johan+linaro@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-pm@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
- <aFvr1zSkf4KmIcMT@hovoldconsulting.com>
- <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
- <84b94649-a248-46b0-a401-772aeb8777a2@gmail.com>
- <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
-Content-Language: hu
-From: Gabor Juhos <j4g8y7@gmail.com>
-In-Reply-To: <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250625-topic-wcn6855_pwrseq-v1-1-cfb96d599ff8@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAP4bXGgC/x3MQQqAIBBA0avErBNM0aKrRETZVLMxGyOD6O5Jy
+ 7f4/4GITBihLR5gvCjS7jOqsgC3jX5FQXM2KKmMtMqIcw/kRHLeNsYMIXHEQ8i6lnbRk3ZzAzk
+ NjAvd/7br3/cDNLolemYAAAA=
+X-Change-ID: 20250625-topic-wcn6855_pwrseq-07706f3b3cd8
+To: Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Dmitry Baryshkov <lumag@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750866948; l=1175;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=u/0JVYWkgvI137HLdQQO/HO3teeewn/2ooWhSaU/+Bw=;
+ b=XJ7PcsaNxOpJhh+h+vkT/0EQI4i/FftTvFFBYvaFbjq41OAl0wkaeTAQgG3s7uo99xSrxlMXr
+ DOtD9hBeex1ACg/54aYe8hcPbjbG70I2U9OrlNEHwSLec3/wMWu46MO
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-2025. 06. 25. 16:02 keltezéssel, Johan Hovold írta:
-> On Wed, Jun 25, 2025 at 03:15:53PM +0200, Gabor Juhos wrote:
->> 2025. 06. 25. 14:41 keltezéssel, Johan Hovold írta:
->>> On Wed, Jun 25, 2025 at 02:30:15PM +0200, Johan Hovold wrote:
->>>> On Wed, Jun 25, 2025 at 01:25:04PM +0200, Gabor Juhos wrote:
->>>
->>>>> @@ -276,13 +276,17 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
->>>>>  		qcom_icc_bcm_init(qp->bcms[i], dev);
->>>>>  
->>>>>  	for (i = 0; i < num_nodes; i++) {
->>>>> +		bool is_dyn_node = false;
->>>>> +
->>>>>  		qn = qnodes[i];
->>>>>  		if (!qn)
->>>>>  			continue;
->>>>>  
->>>>>  		if (desc->alloc_dyn_id) {
->>>>> -			if (!qn->node)
->>>>> +			if (!qn->node) {
->>>>
->>>> AFAICS, qn->node will currently never be set here and I'm not sure why
->>>> commit 7f9560a3bebe ("interconnect: qcom: icc-rpmh: Add dynamic icc node
->>>> id support") added this check, or even the node field to struct
->>>> qcom_icc_desc for that matter.
->>>>
->>>> But if there's some future use case for this, then you may or may not
->>>> need to make sure that a name is allocated also in that case.
->>>
->>> Ok, I see what's going on. The qn->node may have been (pre-) allocated
->>> in icc_link_nodes() dynamically, which means you need to make sure to
->>> generate a name also in that case.
->>>
->>>> And that could be done by simply checking if node->id >=
->>>> ICC_DYN_ID_START instead of using a boolean flag below. That may be
->>>> preferred either way.
->>>
->>> So you should probably use node->id to determine this.
->>
->> You are right. The problem is that ICC_DYN_ID_START is only visible from the
->> core code. Either we have to move that into the 'interconnect-provider.h' header
->> or we have to add an icc_node_is_dynamic() helper or something similar.
->>
->> Which is the preferred solution?
-> 
-> I think adding a helper like icc_node_is_dynamic() in a separate
-> preparatory patch is best here.
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Ok, although i don't see why it should be done in a separate patch.
+Prevent a name conflict (which is surprisingly not caught by the
+framework).
 
-> If it wasn't for nodes now being created also in icc_link_nodes() we
-> could otherwise perhaps just as well have moved the name generation into
-> icc_node_create_dyn().
+Fixes: bd4c8bafcf50 ("power: sequencing: qcom-wcn: improve support for wcn6855")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+ drivers/power/sequencing/pwrseq-qcom-wcn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I already have tried to add the name allocation to the icc_node_create_dyn()
-function, but I was not satisfied with the result. B
+diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+index e8f5030f2639a69254ad5efe0a313d2f3d10fa1d..7d8d6b3407495c28a780d5bb0668b2b35837b48a 100644
+--- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
++++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+@@ -155,7 +155,7 @@ static const struct pwrseq_unit_data pwrseq_qcom_wcn_bt_unit_data = {
+ };
+ 
+ static const struct pwrseq_unit_data pwrseq_qcom_wcn6855_bt_unit_data = {
+-	.name = "wlan-enable",
++	.name = "bluetooth-enable",
+ 	.deps = pwrseq_qcom_wcn6855_unit_deps,
+ 	.enable = pwrseq_qcom_wcn_bt_enable,
+ 	.disable = pwrseq_qcom_wcn_bt_disable,
 
+---
+base-commit: 2ae2aaafb21454f4781c30734959cf223ab486ef
+change-id: 20250625-topic-wcn6855_pwrseq-07706f3b3cd8
 
-> Now it seems we'd need a new helper to set the
-> name (or add error handling for every icc_node_add()), but we've already
-> spent way too much time trying to clean up this mess...
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-True, and the patch is getting more and more complicated with each iteration. :)
-
-Nevertheless, I think that we can have a simpler solution. We can create a
-wrapper around icc_node_add(), and allocate the name from there. I mean
-something like this:
-
-int icc_node_add_dyn(struct icc_node *node, struct icc_provider *provider)
-{
-	if (node->id >= ICC_DYN_ID_START) {
-		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
-					    node->name, dev_name(provider->dev));
-		if (!node->name)
-			return -ENOMEM;
-	}
-
-	icc_node_add(node, provider);
-	return 0;
-}
-
-Then we can change the qcom_icc_rpmh_probe() and qcom_osm_l3_probe() to use the
-wrapper instead of the plain version. Since the wrapper can return an error
-code, it can be handled in the callers. And as a bonus, we don't have to touch
-other users of icc_node_add() at all.
-
-Of course we can still continue the previous approach.
-
-What do you think?
-
-Regards,
-Gabor
 
