@@ -1,249 +1,195 @@
-Return-Path: <linux-pm+bounces-29525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29526-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF71AE881B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 17:29:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C756FAE884B
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 17:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEA846818A4
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:29:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03E317183D
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22C126B76B;
-	Wed, 25 Jun 2025 15:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553032877DC;
+	Wed, 25 Jun 2025 15:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WhsV+4MU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQfl/deX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1491E3772;
-	Wed, 25 Jun 2025 15:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C80267721;
+	Wed, 25 Jun 2025 15:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750865374; cv=none; b=XpRaGWdNOnt1W7EV6DVmEpme1VOqv84I0qrn9kcH5/4RCgZ3mKAU71Y5pzMuow7H/yC48DJbazTyKYVhaylVH1tH1JtSj5MxZTRFjSCNgBOtN7TGJfnLbT/b9y973rrNDKsCopZAAAa0Kn3YabYZWqfM9sxHcZuwjbEFH6jsOtM=
+	t=1750865712; cv=none; b=NdoT5z5rYxpoQCwBs99S1HW5GSIQcHUaETyy8DgGBtBMlVPrSG6atd68QzlB3gs1HdVSSfQSQR7MrtztZISOL8Kn6RJoOmzhSxdfEl3/CPn/XThaqcqCp3pLQawd+RZVyJkGbbBM35+3EskGD+qeWWN0hyEtXQLChyl1YU4+Gs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750865374; c=relaxed/simple;
-	bh=7Nva2+gS8Wqv4UQiN4BmS+skEo3e1+v7eDoMcNNWbak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2V2hAXRuHrRlTEaexva4gSXdeoo+X05BwFt9gj5xi154XAH8wfxk83xMg4KexvPihbZuhrdAkAgP9f7rADYFKRaMUcEgISSELF404EgNrYfMADxjMpQRlEZ8NFocKRBtdNselbJS19EMmiA7I+w82CIUTrXyEYo6PYz58fTtww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WhsV+4MU; arc=none smtp.client-ip=209.85.160.48
+	s=arc-20240116; t=1750865712; c=relaxed/simple;
+	bh=SLnSxdMzd49CyJZwsXNyR3humeDN79RoQxLvBq8LQ2E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=efXiq4Qe0cr77aCUr716hOD0CC0f+7tzJjoDf9RKrAVueaHu7RsBQ7sDfYzqjKE/qsR/3++2yu3+NxcxKeDMWW8FBfcPltX2tzeYj5Eijr3uGUJpOZhzMe7s4xnWjuQDfclJFI5dIvVhVUw0jSIFNW9F6Mkpv96OlkUpNLXHyUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQfl/deX; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2d09d495c6cso10814fac.3;
-        Wed, 25 Jun 2025 08:29:32 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a50fc7ac4dso1170424f8f.0;
+        Wed, 25 Jun 2025 08:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750865372; x=1751470172; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2iLRZWU9mr0yxqJABvEamfRCguJhr8FEzZR2ailCaPI=;
-        b=WhsV+4MU7qaSwVxrWwFlZTHccS0cmlsTDx9abuaKxNbX6spOA8kNohLqkhBsWZwd7b
-         +0DrJTm9E8HDdySGaIqzLK/4f5pdgfZiywJvUQMEhEpHwbjMWnX7jqHBvh4PznevTCx9
-         Kds42q6UOR98qL8FSYl/9ckL1yAn6Wv0zBrAUDYOEgLw2kANkonCvuAHRnYOH0tiR3qR
-         5SXGaclNPaS2wQz9qXL5HX+B2yFUv3jRdiCppx7GslJ9Ov/m4eGakLYmcA/5dmQNDVBN
-         HtaaZA/TSFn+Jb8tr2ox+IAYc6z0EK0q7uzGbMCFsmPgVYwF+62HFgku3f4dvpKdl7z1
-         TG5A==
+        d=gmail.com; s=20230601; t=1750865708; x=1751470508; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qAN3bI/nam6BzXmhzco2pYTH1ZOriVDoBYCaiNU5Q5g=;
+        b=MQfl/deXSrjqEaLrR5t7fj2RMFuc3WaEArHoi3stTSQMiVk8gijV7K5xW8VgcGW4Vu
+         djnca8dP7EyanjcM2k4sAMfFrlLyidxMPVmchuIbadjA1f+SK98y7xfHNXmlmeEKSEbM
+         5sGr6oPjoahYFLTpjz8usLbIIMMFvqGSeXeJoyyzTzb+gR03P4SC/dfXA+zJPWF003Mb
+         whgHR/xMII5ULwuedngzj7NhT7ZvAWdi0fV15xe0kVypSK3gLIx0B/lMiEwvC92rqLT9
+         WU66p6anw+xT3XloM+tznZejA2tRSsOEOjo0X+TNqcOnoxpJwVDypfJABuGdV/JvwYLm
+         YdDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750865372; x=1751470172;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2iLRZWU9mr0yxqJABvEamfRCguJhr8FEzZR2ailCaPI=;
-        b=GlB7WTcrm7Am59ocnM8Hix3kaUf3pVd0ydEDBH+IcY9w09w/1z6sUlXGOYRYyB7UJR
-         sD1Rml0xmR9pbPillsNPwLFcjP2SsCJt9nb1Oh0UANxHaMV5XH90bmNfec/T+4eMAiJg
-         Ae+WSpwlq2tuNC/OONU3d9dMVCjWeqx82U5hegmcp9EevZa4N4sxnsK1AIhnilCFJDuE
-         azzBxLMa2XG4bzUBkLdr/YuqdbYHtXIFJg8d5+c+T3+mkcvYTMxQ3ny4YKeqEpyUZYyU
-         uwdMZy6HfFhZ+VYAKpGDP6TDKVAQIpYFe7YdOXDQYs6vrX8yir2hm5VKo/N83NdxwdJX
-         LcCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXi6CJI0BX9RSv6qGFSyxK2QFQ4GbZ8iTojpbPp/Dfk/Bx+PVRELdJHVHMk+ix9dztVW+Or6KswOXnv@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGjhgKPYZdfBwug7SBtXENCu8jrt15IwrZUnt/qZZJNHPQCn6p
-	llLlB4mLnDjGH/hZeX1jappZF+NlaKaBuG/9a9gcronEwsKvO1O5PjN6
-X-Gm-Gg: ASbGncuhbbm5Qy+RTbkk9gdVXnQAa9Vycs0iYynZT46IWxJrAzPFFkjnlR5SINfkdEt
-	luSHvox/seosMEDPND2XwbuXoO8H9tGjyVnk+og5KijoCoRQAfD3+8LIVPZEHRSsMqIEemPeOzj
-	dTgo9Rb854Y3M/5DDYuMhMFGLLWYBo9MNgTWsv7/B3vlFrPKl0ZyxKdUBa251SxtnG6iSqEopkD
-	NQ3eaiOj99PyswSViHIIULMm3qcw3bn5t+LuuF8EV9cNerxIXGSml6UaNLP3Z/AC6mKrXpWqWaB
-	MME7uXQf9SwTmvs7AO4dLjFnTZoUKgr51xg5DRUMeUUUQvPsDeDtAQo9s03MmwARguL8EGXvB3a
-	agY3yEYl3lqb8ppwMv4s=
-X-Google-Smtp-Source: AGHT+IGi8VRBTkcie2M82z62av9T1Lo0xgSLRRW+ViiR/xkeT8MTD0vEHx52CiLPrSexevn2OM8fgA==
-X-Received: by 2002:a05:6870:9488:b0:2d5:230f:b34a with SMTP id 586e51a60fabf-2efb26d1599mr2456383fac.9.1750865371705;
-        Wed, 25 Jun 2025 08:29:31 -0700 (PDT)
-Received: from neuromancer.localdomain ([2600:1700:fb0:1bc0:d84e:5284:c7b2:e237])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2ee8a8ea8a4sm2624297fac.24.2025.06.25.08.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 08:29:31 -0700 (PDT)
-Date: Wed, 25 Jun 2025 10:29:29 -0500
-From: Chris Morgan <macroalpha82@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com,
-	sre@kernel.org, heiko@sntech.de, conor+dt@kernel.org,
-	krzk+dt@kernel.org, robh@kernel.org, lee@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V3 1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A
- Charger
-Message-ID: <aFwV2Xxyjhi6KQkw@neuromancer.localdomain>
-References: <20250623162223.184304-1-macroalpha82@gmail.com>
- <20250623162223.184304-2-macroalpha82@gmail.com>
- <5qeo2xqjprozcjd553qmozzrmbciuf66gic65tzw7jspoub5n4@5wzkqasisgcz>
+        d=1e100.net; s=20230601; t=1750865708; x=1751470508;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qAN3bI/nam6BzXmhzco2pYTH1ZOriVDoBYCaiNU5Q5g=;
+        b=d0WFnCNwD1iBW8eGyVRoONe9zo+GqdQUmjBmt9x31zy/3UQ1m9dhSmUcR7Cp7eiF/G
+         RIxbKEuQ00ixPP9s7ZSRdSPE9TJC8FJtPjrzfNztQH9DeSNOXK3L5t2qU30dgT/zWamQ
+         YX5MizF8WgL0uVwhmgdLuoDrkQBmDvRGKG7ec6Vq16soS+fc7bWuQzFYSgkEoC+JSK9+
+         CYbdGFXxEcOqv5zezwGs6iqXBMR97M8UIPUvZStDj4U/3iB+Ct/plKuOYaL3T08mu5i4
+         yPGIJZJVFoWKvUILPkr4VPbLKtc8c5Qevz8qGhxpU7nS1GzbtuN1DObmWz+BYjsFYFcE
+         CSlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVy11kpLOAZLemiwDMPrdJr0yXBDlIMbWc3zLjmDAA8xE+ncg0zmMfyIoL+VskjlXuVZrXdzmkbOuCXt7yn@vger.kernel.org, AJvYcCWIYWwE/I46OlSDoWw8jlk6NX5vjSAoxJYLpL/186OaNPQ74hlisBUfZMVWCAYiAEj/y0D2f//FaYM=@vger.kernel.org, AJvYcCWaKX2Ij86/xkIwBGzrvn+5ByyyymZJoFbs1F4fiWV8yTnkb3GoQGXlDYB8mS2XNA0tYx/cByt+aUviOseE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB8jM3KljP3YOxp40QumdL6UAIy5NoWw6EpLRBtfQ+vGbTjhA1
+	Lxv+EHR1YpFV+PxUXqnpZlzGLR3uUEkSS46Yj3O1pUWU61cCwYmvZ2dslSJZIA==
+X-Gm-Gg: ASbGncualWOiPmgOvWzbly2Mbo7umysG6TJh+iI2gYTBwJ+LsLd56BcUl7EeXiu5QmG
+	KYrPZqlvfTl1xxAbxrXUhFe0YCBRO+9VMZnqBqWaYwfFcnvAIg+FeWMc0DYvSu9I+MENxNgOwDE
+	nlXQ5iwg+EqPRyQbwWtps7w0DipqX0SepOupl41y1qfj8gh2VdifIv93H9zLRZdeAFdN+Y9YlUV
+	ZqvafLRHkmfMQtV6Q2XBg+4ccBo53w2gKEOVUEMH38//ktj4OCbvNGOJ/JW5eeqIvH6h5g4dP+z
+	oESY0r2gbrmu/FqaPWR8bKANfAF84xs5C+1xsUHoG680Su0Mzk8nZhn4HHHNg9w2rmTSPH40Hwp
+	3Y44L5vJcbcGRAWv9GzhqVOBIM3Y=
+X-Google-Smtp-Source: AGHT+IHR6Q4kuNfzivi7gk/SqdDnJ4iePjEkphL6vUUKC52dSMwy2Js3+Cwst/JU0qjvPRKcNdNiPg==
+X-Received: by 2002:a05:6000:2006:b0:3a5:3b14:1ba3 with SMTP id ffacd0b85a97d-3a6ed66eaedmr2636093f8f.49.1750865707405;
+        Wed, 25 Jun 2025 08:35:07 -0700 (PDT)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453823c42e1sm23251785e9.37.2025.06.25.08.35.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jun 2025 08:35:06 -0700 (PDT)
+Message-ID: <ac5ba192-b538-457e-acc4-c2d358b1fd0e@gmail.com>
+Date: Wed, 25 Jun 2025 17:35:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5qeo2xqjprozcjd553qmozzrmbciuf66gic65tzw7jspoub5n4@5wzkqasisgcz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] interconnect: avoid memory allocation when
+ 'icc_bw_lock' is held
+To: Johan Hovold <johan@kernel.org>
+Cc: Georgi Djakov <djakov@kernel.org>,
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Johan Hovold <johan+linaro@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
+ <aFvr1zSkf4KmIcMT@hovoldconsulting.com>
+ <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
+ <84b94649-a248-46b0-a401-772aeb8777a2@gmail.com>
+ <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
+Content-Language: hu
+From: Gabor Juhos <j4g8y7@gmail.com>
+In-Reply-To: <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 25, 2025 at 09:48:30AM +0200, Krzysztof Kozlowski wrote:
-> On Mon, Jun 23, 2025 at 11:22:19AM -0500, Chris Morgan wrote:
-> > From: Chris Morgan <macromorgan@hotmail.com>
-> > 
-> > Document the Texas instruments BQ25703A series of charger managers/
-> > buck/boost regulators.
-> > 
-> > Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> > ---
-> >  .../devicetree/bindings/mfd/ti,bq25703a.yaml  | 121 ++++++++++++++++++
-> >  1 file changed, 121 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml b/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
-> > new file mode 100644
-> > index 000000000000..0727f24b8e54
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
-> > @@ -0,0 +1,121 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mfd/ti,bq25703a.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: BQ25703A Charger Manager/Buck/Boost Converter
-> > +
-> > +maintainers:
-> > +  - Chris Morgan <macromorgan@hotmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/power/supply/power-supply.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: ti,bq25703a
-> > +
-> > +  reg:
-> > +    const: 0x6b
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  power-supplies: true
+2025. 06. 25. 16:02 keltezéssel, Johan Hovold írta:
+> On Wed, Jun 25, 2025 at 03:15:53PM +0200, Gabor Juhos wrote:
+>> 2025. 06. 25. 14:41 keltezéssel, Johan Hovold írta:
+>>> On Wed, Jun 25, 2025 at 02:30:15PM +0200, Johan Hovold wrote:
+>>>> On Wed, Jun 25, 2025 at 01:25:04PM +0200, Gabor Juhos wrote:
+>>>
+>>>>> @@ -276,13 +276,17 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>>>>>  		qcom_icc_bcm_init(qp->bcms[i], dev);
+>>>>>  
+>>>>>  	for (i = 0; i < num_nodes; i++) {
+>>>>> +		bool is_dyn_node = false;
+>>>>> +
+>>>>>  		qn = qnodes[i];
+>>>>>  		if (!qn)
+>>>>>  			continue;
+>>>>>  
+>>>>>  		if (desc->alloc_dyn_id) {
+>>>>> -			if (!qn->node)
+>>>>> +			if (!qn->node) {
+>>>>
+>>>> AFAICS, qn->node will currently never be set here and I'm not sure why
+>>>> commit 7f9560a3bebe ("interconnect: qcom: icc-rpmh: Add dynamic icc node
+>>>> id support") added this check, or even the node field to struct
+>>>> qcom_icc_desc for that matter.
+>>>>
+>>>> But if there's some future use case for this, then you may or may not
+>>>> need to make sure that a name is allocated also in that case.
+>>>
+>>> Ok, I see what's going on. The qn->node may have been (pre-) allocated
+>>> in icc_link_nodes() dynamically, which means you need to make sure to
+>>> generate a name also in that case.
+>>>
+>>>> And that could be done by simply checking if node->id >=
+>>>> ICC_DYN_ID_START instead of using a boolean flag below. That may be
+>>>> preferred either way.
+>>>
+>>> So you should probably use node->id to determine this.
+>>
+>> You are right. The problem is that ICC_DYN_ID_START is only visible from the
+>> core code. Either we have to move that into the 'interconnect-provider.h' header
+>> or we have to add an icc_node_is_dynamic() helper or something similar.
+>>
+>> Which is the preferred solution?
 > 
-> Drop, redundant.
+> I think adding a helper like icc_node_is_dynamic() in a separate
+> preparatory patch is best here.
 
-Acknowledged.
+Ok, although i don't see why it should be done in a separate patch.
 
-> 
-> > +
-> > +  monitored-battery:
-> > +    description:
-> > +      The phandle for a simple-battery connected to this gauge.
-> 
-> This part is redundant. It cannot be anything else, according to
-> power-supply.yaml
-> 
+> If it wasn't for nodes now being created also in icc_link_nodes() we
+> could otherwise perhaps just as well have moved the name generation into
+> icc_node_create_dyn().
 
-Acknowleged.
+I already have tried to add the name allocation to the icc_node_create_dyn()
+function, but I was not satisfied with the result. B
 
-> > +      A minimum of constant-charge-current-max-microamp,
-> > +      constant-charge-voltage-max-microvolt, and
-> > +      voltage-min-design-microvolt are required.
-> 
-> This is fine.
-> 
-> > +
-> > +  input-current-limit-microamp:
-> > +    description:
-> > +      Maximum total input current allowed used for both charging and
-> > +      powering the device.
-> > +    minimum: 50000
-> > +    maximum: 6400000
-> > +    default: 3250000
-> > +
-> > +  regulators:
-> > +    type: object
-> > +    additionalProperties: false
-> > +    description:
-> > +      Boost converter regulator output of bq257xx.
-> > +
-> > +    properties:
-> > +      "usb-otg-vbus":
-> 
-> Drop quotes. Is this the name of regulator called in datasheet? To which
-> pin this corresponds to? I cannot find anything on usb-otg or usb_otg.
-> 
 
-This corresponds to the VBUS pin. VBUS is an input usually but becomes
-an output when OTG output voltage and OTG output current are set; OTG
-enable is set, and a GPIO connected to EN_OTG is set high (per section
-8.3.3 of the bq25703a technical docs).
+> Now it seems we'd need a new helper to set the
+> name (or add error handling for every icc_node_add()), but we've already
+> spent way too much time trying to clean up this mess...
 
-> 
-> > +        type: object
-> > +        $ref: /schemas/regulator/regulator.yaml
-> > +
-> > +        properties:
-> > +          regulator-name: true
-> > +          regulator-min-microamp:
-> > +            minimum: 0
-> > +            maximum: 6350000
-> > +          regulator-max-microamp:
-> > +            minimum: 0
-> > +            maximum: 6350000
-> > +          regulator-min-microvolt:
-> > +            minimum: 4480000
-> > +            maximum: 20800000
-> > +          regulator-max-microvolt:
-> > +            minimum: 4480000
-> > +            maximum: 20800000
-> > +          enable-gpios:
-> > +            description:
-> > +              The BQ25703 may require both a register write and a GPIO
-> > +              toggle to enable the boost regulator.
-> > +
-> > +        additionalProperties: false
-> 
-> Please place it after $ref.
-> 
-> > +
-> > +        required:
-> > +          - regulator-name
-> > +          - regulator-min-microamp
-> > +          - regulator-max-microamp
-> > +          - regulator-min-microvolt
-> > +          - regulator-max-microvolt
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - input-current-limit-microamp
-> > +  - monitored-battery
-> > +  - power-supplies
-> 
-> Keep the same order as in properties.
-> 
-> Best regards,
-> Krzysztof
-> 
+True, and the patch is getting more and more complicated with each iteration. :)
 
-Let me know if you have more questions about the VBUS, otherwise I'll
-make the requested changes and resubmit.
+Nevertheless, I think that we can have a simpler solution. We can create a
+wrapper around icc_node_add(), and allocate the name from there. I mean
+something like this:
 
-Thank you.
+int icc_node_add_dyn(struct icc_node *node, struct icc_provider *provider)
+{
+	if (node->id >= ICC_DYN_ID_START) {
+		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
+					    node->name, dev_name(provider->dev));
+		if (!node->name)
+			return -ENOMEM;
+	}
 
--Chris
+	icc_node_add(node, provider);
+	return 0;
+}
+
+Then we can change the qcom_icc_rpmh_probe() and qcom_osm_l3_probe() to use the
+wrapper instead of the plain version. Since the wrapper can return an error
+code, it can be handled in the callers. And as a bonus, we don't have to touch
+other users of icc_node_add() at all.
+
+Of course we can still continue the previous approach.
+
+What do you think?
+
+Regards,
+Gabor
 
