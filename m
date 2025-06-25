@@ -1,111 +1,121 @@
-Return-Path: <linux-pm+bounces-29457-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29458-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FA9EAE7587
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 05:48:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AAA9AE7703
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 08:32:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29B231BC1B17
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 03:48:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4D1B3BFDA2
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 06:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E371BD9C9;
-	Wed, 25 Jun 2025 03:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22AB1DE4D2;
+	Wed, 25 Jun 2025 06:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="Vu66G7A1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqUmnTYS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7271917F4;
-	Wed, 25 Jun 2025 03:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9956037160;
+	Wed, 25 Jun 2025 06:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750823296; cv=none; b=jlT4Ov/fcOv7fB2FnYUs6/2zFaOUurJN6Gpn/H606jYu7hd6lP2V6DMv9xDd138Hubc85YXtJoiJhn9R5Ib+w2xRPpOYsVN6MLL9Mhm751KURLOICYHprGC74z7unGr997A5CjGjEDbaXucRVFy0ZnPfkB3MSjcVZO947xkZeR4=
+	t=1750833110; cv=none; b=T/Pyu7hJl7wNaYAwjeXIPKfSLhWey/SUyzuPJpO7naK/NmpHHq9e9IVzLHwEUq65FLocb+AY7pi4AlF6YrCFByPPCur66L2MlaQZK2j85A9SRocUqgo9mAl9pl3gx3+eKdJPdaQjTSlwYiIL7+junrUEFoMbxz/xQJiognZx13s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750823296; c=relaxed/simple;
-	bh=Otk52K2UkGgNNbsfo3Tw+wT8D1C0VqHYBREnFKHZXdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X2jjZQgQ9qV+Rgu75d38VUc6DHfy6ZyW3mxV988wxrGFeEGCRr8kfHtR+rnHZhQGvTs6wdpFQAqF384o3nrMle4vYGNnrkjQEL/o1SsjyNujExHxXTJtxMXW6Bd9fCq2WiPjqT78RSMLUHVyImCEl+oSrC4pUqrK1/gK9t9xWeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=Vu66G7A1; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 48398206BD;
-	Wed, 25 Jun 2025 05:48:05 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b7gxHv5344jB; Wed, 25 Jun 2025 05:48:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1750823283; bh=Otk52K2UkGgNNbsfo3Tw+wT8D1C0VqHYBREnFKHZXdY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Vu66G7A1MauCIThE3FLEUGylkmIO/BxPgVEv36LVLfofHUhmW7DKcv9OMGJvYf3kA
-	 90phhj8O7Y/sMbINhNjl2LkRVK8EOmAgdoDzvh2OwuwVDwVqOe9LHnw4y25j4tJFX9
-	 Se1YQiArrVaJBtqQbIz/9IWoLJ22ODbFvmqRlfCLv/lVee6g+1xHsnU3IfbHEYTGfo
-	 iapSQyYzCAOamera+WXhhwZX2I16jUHMTA5hS/TJZWReOO5q1wLLJ5ErEbMr5xgsVs
-	 HEG9BCoUPLqcQQNH9K8KuWtC3Fl1et/V3GMe1hsI9GHliYTJBVP8jLnzhBHN3k5yX7
-	 uDrxzZp91z5xA==
-Date: Wed, 25 Jun 2025 03:47:47 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Mingcong Bai <jeffbai@aosc.io>,
-	Kexy Biscuit <kexybiscuit@aosc.io>, loongarch@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: loongson3: Support older SMC firmware
-Message-ID: <aFtxYwgZDbYy_EMb@pie>
-References: <20250623123321.5622-1-ziyao@disroot.org>
+	s=arc-20240116; t=1750833110; c=relaxed/simple;
+	bh=NLfLMLy3D0pv0BPkZUDbfHWUooD/CY1z9LjKKOFctvQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=p5vmYyMnk8DlbnsbUp6veVVV+UpeB/xZaS8dCr0n2e/VNPXvJiohTm3JVw+7WsB5fqIAxNsepqw7yc2ocyZY66nqPtbl5loLp85958FU74UAjR38HrmN+uPbH9qtmNgVc2OF5qfY3buj9TWtrGD3RRQA0ZoP3V+6HxXWfDjnJMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqUmnTYS; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750833109; x=1782369109;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NLfLMLy3D0pv0BPkZUDbfHWUooD/CY1z9LjKKOFctvQ=;
+  b=hqUmnTYS4kTt+0jxKwFI8s1T9YVwWgYENL54p4NHDXh4CRK768SIo80M
+   dgcoacQA/cPqQvu9a5FVQ7qatFKnfXgcbIf8N9uCVI5EEYn4CtH5KORO7
+   2AOVfZiMLI5G3F1iAcgapIijyvBpwTYLvmFISU6eUjSNfeef6THi55UcX
+   +xZD83IfR4FjuVXm2JKqodLMAae1cm4cKwUkACfrSKza5sR6BOF1qp/Ow
+   b4G16iuHtWfLC2SDX77jGyFk7TMuweFiur5k/XXgHfOKNThZXXmDBgUCa
+   cKFICEdM0xqEqmHJKDueOCJoflgzENPMOcd8dCfn8FWNMqzdYfTvm3Lva
+   w==;
+X-CSE-ConnectionGUID: bNu/ji6eRz6eHHyTUfDeQA==
+X-CSE-MsgGUID: RsqF7fn5TSmXvKbgPt1QwA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="53187455"
+X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
+   d="scan'208";a="53187455"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 23:31:49 -0700
+X-CSE-ConnectionGUID: J8aDqBT8RCKV/hsH+1WzOQ==
+X-CSE-MsgGUID: X8O02w/OSkWGOt4qXoL2Ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
+   d="scan'208";a="152257571"
+Received: from daliomra-mobl3.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.124.223.140])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 23:31:47 -0700
+From: Xi Pardee <xi.pardee@linux.intel.com>
+To: xi.pardee@linux.intel.com,
+	irenic.rajneesh@gmail.com,
+	david.e.box@linux.intel.com,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/5] Enable SSRAM support in PTL and LNL
+Date: Tue, 24 Jun 2025 23:31:37 -0700
+Message-ID: <20250625063145.624585-1-xi.pardee@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250623123321.5622-1-ziyao@disroot.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 23, 2025 at 12:33:21PM +0000, Yao Zi wrote:
-> SMC firmware found on many on-market LoongArch devices implement a
-> different ABI than what has been implemented in the current upstream
-> driver. They significantly differ in the following ways:
-> 
-> - CMD_GET_VERSION returns 0.
-> - There is no known SMC call to obtain corresponding frequencies for
->   each frequency level. The frequency table must therefore be calculated
->   with CPU clock frequency from scratch.
-> - There is no known SMC call to obtain the current frequency level.
-> - The main processor must determine the set of cores able to run at
->   boost frequency and enable boosting manually.
-> - SMC call response format may vary between commands.
-> 
-> This patch adds support for the SMC firmware found on these devices,
-> which I denoted as "SMC-0" in the driver. Boost support is omitted,
-> since determination of cores able to boost requires the driver to couple
-> tightly with micro-architecture details.
-> 
-> For coexistence, I prefixed all SMC-call constants with their SMC
-> versions, and introduced "SMC-0"-specific initialization and
-> frequency-level-setup rountines.
-> 
-> Signed-off-by: Yao Zi <ziyao@disroot.org>
+This series enables SSRAM support, including achieving PMC information
+and low power mode substate requirements from telemetry region, in Lunar
+Lake and Panther Lake platforms for Intel PMC Core driver.
 
-While self-testing the patch on a 3A5000 workstation, I observed the
-processor cannot run stably at the low frequency levels, it's required
-to keep it above half of the maximum frequency for stability.
+The first patch enables SSRAM support for Lunar Lake. The next three
+patches introduces a new table in telemetry region to get substate
+requirement information for platforms starting from Panther Lake. The
+last patch enables SSRAM support for Panther Lake.
 
-This type of instability seems to depend on the silicon or firmware
-revision, my 3A5000 laptop, Tongfang L860-T2, could run stably at any
-frequency level allowed by the SMC firmware. And with the driver it
-gains extra 30 minutes of battery life when idle, which looks valuable
-to me.
+---
 
-To avoid breaking existing users, I'll disable SMCv0 frequency scaling
-by default and add a module parameter to enable it in v2.
+v2->v1:
+- Change to only check ret variable value when getting substate data in
+  pmc_core_get_telem_info().
+- Return immediately when devm_kcalloc() fails.
+- Return 0 instead of ret when succeeding in
+  pmc_core_pmt_get_blk_sub_req().
+- Replace devm_kzalloc() with devm_kcalloc().
+- Add telem_info field of arl_pmc_dev variable.
 
-Regards,
-Yao Zi
+---
+
+Xi Pardee (5):
+  platform/x86:intel/pmc: Enable SSRAM support for Lunar Lake
+  platform/x86:intel/pmc: Move telemetry endpoint register handling
+  platform/x86:intel/pmc: Improve function to show substate header
+  platform/x86:intel/pmc: Show substate requirement for S0ix blockers
+  platform/x86:intel/pmc: Enable SSRAM support for Panther Lake
+
+ drivers/platform/x86/intel/pmc/arl.c  |   2 +
+ drivers/platform/x86/intel/pmc/core.c | 169 ++++++++++++++++++++------
+ drivers/platform/x86/intel/pmc/core.h |  14 +++
+ drivers/platform/x86/intel/pmc/lnl.c  |  17 +++
+ drivers/platform/x86/intel/pmc/mtl.c  |   1 +
+ drivers/platform/x86/intel/pmc/ptl.c  |  30 +++++
+ 6 files changed, 199 insertions(+), 34 deletions(-)
+
+-- 
+2.43.0
+
 
