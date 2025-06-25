@@ -1,121 +1,196 @@
-Return-Path: <linux-pm+bounces-29464-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29465-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46DE1AE77A4
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 09:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBDA0AE7903
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 09:48:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06D2F163AA3
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 07:00:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35C1F17A4E3
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 07:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9D91F4C8B;
-	Wed, 25 Jun 2025 06:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B581FBEB0;
+	Wed, 25 Jun 2025 07:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DPC7SwqZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eosilbo1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655A81A3A8A
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 06:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE5186338;
+	Wed, 25 Jun 2025 07:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750834798; cv=none; b=MjuSH4G4wfBrFt92YzBvwJfb7+NFkviA1yYjOW9mw0pRz8jA2fHRb7TfOoBPzhDgPMbyAhOLNMhBktOndJuRTA7cFA7aosudklJg94yYa/416VT4ccGCx97zmViX6X3C2q09HIajEhjyQUmwT/+b6MllQYDVBjti/xYEWoemYWQ=
+	t=1750837713; cv=none; b=FN6ssvfoVsiazgQP/2o5oPYLEQlfRtOkuDptJSrZC9tL90VYVs0WzMzgFpHP4siI4oTLJ3Letaa+y65CmQBCuEQ3+PRSPyeq8VbZb82PPG+CohAznwY2eNf5+kbImgm7aavE3sG7DKgyIrT2LT7vRJITE7+0RKIK1RD3UwMShcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750834798; c=relaxed/simple;
-	bh=tPCXmqs2gokC/P6J7As2O+LeHBfUXGl9J2Pzz83/foQ=;
+	s=arc-20240116; t=1750837713; c=relaxed/simple;
+	bh=wcxbDOO23BZSK9SuEAS8HrjXgynk1/RQtyt2aVRPI9g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BXh71Cgasx4FtSG1JsiLsqI1gUYTHqGfT3OnsDDrEmn1BS99Az6NgWWT1xHM2UEW8vR/COSQPwfbCi8jVrHcsbHKNPET2fOcbYby2AvEfAXuxySO0rTsl+gytGeuIaZh5xLke3HchBnwH4qcGbM8+AkBjqF/rPnwI3ZbtGmpwS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DPC7SwqZ; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750834796; x=1782370796;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tPCXmqs2gokC/P6J7As2O+LeHBfUXGl9J2Pzz83/foQ=;
-  b=DPC7SwqZzUN8CGmtNNj21op40Ocx2Pv7hZaPhTaQgT9A4r+iPAgCdofk
-   nMmHVx1ds89JBU0A1IsBZjlXKxTxhXr1tQJaSZ0HLA8RTj6Yj+Ax3BKiM
-   WfbWXHBmiadX27iEl18KVEUxuh5VQ2guGB+VRqJYO2PssvWZcpK4LMOdZ
-   YkEt8mNxMpob0yyRjKJ4/t0p2Qa4a0i4PWzrt4eWA7n6ZWfJOInelpgay
-   CN92k8zJjFJ4zc4fXpNlgZNGH8K9r9RqpDRIvmKN4uZ+LbKoCsCdyb8q/
-   Ge49BzwUkpIY2AmZR67u2YtYVBTVFPo7+70uy71H31HQ+iUkbo9coR79M
-   Q==;
-X-CSE-ConnectionGUID: yvhOExqGSGmZEbyHn6Ug7A==
-X-CSE-MsgGUID: u4XT7xOoR6u+cxmNsGsw9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="53226878"
-X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="53226878"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 23:59:56 -0700
-X-CSE-ConnectionGUID: /hggyb17SMetQAYzbkgp9A==
-X-CSE-MsgGUID: +Llqw73gSfiSvyKTrLQpvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="183168078"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.155])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 23:59:54 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 36DE311FB5F;
-	Wed, 25 Jun 2025 09:59:51 +0300 (EEST)
-Date: Wed, 25 Jun 2025 06:59:51 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [PATCH v2 0/6] Update last busy timestamp in Runtime PM
- autosuspend callbacks
-Message-ID: <aFueZ_xfnbrQO0Wx@kekkonen.localdomain>
-References: <20250616061212.2286741-1-sakari.ailus@linux.intel.com>
- <4433c6e5-44d4-49e7-a034-aefb9a0ff538@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFoTQbLyvN03EhKUHhfpvExEy8Cgx+Gxcpk9164wF6FIBlhyXQtjL22YaFLvU4ECbzn+w+Y+gkhyb40jHj7M59nZ7LmndD2HQm68OnGPPepkyIYOiUYIHjaIgBKBTYxAUF6DrlKHBKc0PwYOogOVsGB/bXbBoHxRd4dEFNZWjSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eosilbo1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88541C4CEEA;
+	Wed, 25 Jun 2025 07:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750837713;
+	bh=wcxbDOO23BZSK9SuEAS8HrjXgynk1/RQtyt2aVRPI9g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Eosilbo1a2u7ZIOph35J9pAazHEt04/+SO+151EwKwNke744IyH4NyXjCLNf60pBS
+	 cwvDeXlnq6rLavGYUmVZt1m8j3lpPhrUEx4XSr2wjnwBGntgWaojhZBAd5XROkxjxf
+	 ozkxp4dSh5YLUGGTsYAf4noiL1Z38howiQReahs4TWooTvpyRu0EEnR5xiJou9e2mz
+	 nefeMarc1jT9Sb9UrYzj6wgR27gvON90TUz4n2Q6TYAysQT2BA9hBBHZGAIpR9Hj8j
+	 0grxp/QMPTJDnuaPDJNz/6hDk99NzcxxEHfFbDgmQmP2K94Ejp9jOGuxi/A/3qkxR4
+	 4ZidlxkWJc77w==
+Date: Wed, 25 Jun 2025 09:48:30 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com, sre@kernel.org, 
+	heiko@sntech.de, conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, 
+	lee@kernel.org, Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH V3 1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A
+ Charger
+Message-ID: <5qeo2xqjprozcjd553qmozzrmbciuf66gic65tzw7jspoub5n4@5wzkqasisgcz>
+References: <20250623162223.184304-1-macroalpha82@gmail.com>
+ <20250623162223.184304-2-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4433c6e5-44d4-49e7-a034-aefb9a0ff538@suse.com>
+In-Reply-To: <20250623162223.184304-2-macroalpha82@gmail.com>
 
-Hi Oliver,
-
-On Mon, Jun 23, 2025 at 03:28:45PM +0200, Oliver Neukum wrote:
-> On 16.06.25 08:12, Sakari Ailus wrote:
-> > Folks,
+On Mon, Jun 23, 2025 at 11:22:19AM -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
 > 
-> Hi,
-> > This set extends the inclusion of the pm_runtime_mark_last_busy() call to
-> > the _autosuspend() variants of the Runtime PM functions dealing with
-> > suspending devices, i.e. pm_runtime_put_autosuspend(),
-> > pm_runtime_put_sync_autosuspend(), pm_runtime_autosuspend() and
-> > pm_request_autosuspend(). This will introduce, for a brief amount of time,
-> > unnecessary calls to pm_runtime_mark_last_busy() but this wasn't seen as
-> > an issue. Also, all users of these functions, including those that did not
-> > call pm_runtime_mark_last_busy(), will now include that call. Presumably
-> > in the vast majority of the cases a missing call would have been a bug.
+> Document the Texas instruments BQ25703A series of charger managers/
+> buck/boost regulators.
 > 
-> Now that I think about this, I am not sure of the logic behind this.
-> It seems to me that you are making marking a device busy and dropping
-> the reference synonymous.
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> ---
+>  .../devicetree/bindings/mfd/ti,bq25703a.yaml  | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
 > 
-> Is the time you use to derive the likelihood determined by the start
-> of IO or the end of IO?
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml b/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
+> new file mode 100644
+> index 000000000000..0727f24b8e54
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
+> @@ -0,0 +1,121 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ti,bq25703a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: BQ25703A Charger Manager/Buck/Boost Converter
+> +
+> +maintainers:
+> +  - Chris Morgan <macromorgan@hotmail.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/power/supply/power-supply.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,bq25703a
+> +
+> +  reg:
+> +    const: 0x6b
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-supplies: true
 
-The purpose of autosuspend is to delay device suspend in case it might be
-used again soon after the point of dropping Runtime PM usage_count. Are
-there cases you're aware of where pm_runtime_mark_last_busy() isn't
-directly followed pm_runtime_put_autosuspend() or one of its variants and
-it is desirable? Just stamping the last busy timestamp is a trivial
-operation so one or two extra in a few places isn't really a problem.
+Drop, redundant.
 
--- 
-Kind regards,
+> +
+> +  monitored-battery:
+> +    description:
+> +      The phandle for a simple-battery connected to this gauge.
 
-Sakari Ailus
+This part is redundant. It cannot be anything else, according to
+power-supply.yaml
+
+> +      A minimum of constant-charge-current-max-microamp,
+> +      constant-charge-voltage-max-microvolt, and
+> +      voltage-min-design-microvolt are required.
+
+This is fine.
+
+> +
+> +  input-current-limit-microamp:
+> +    description:
+> +      Maximum total input current allowed used for both charging and
+> +      powering the device.
+> +    minimum: 50000
+> +    maximum: 6400000
+> +    default: 3250000
+> +
+> +  regulators:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      Boost converter regulator output of bq257xx.
+> +
+> +    properties:
+> +      "usb-otg-vbus":
+
+Drop quotes. Is this the name of regulator called in datasheet? To which
+pin this corresponds to? I cannot find anything on usb-otg or usb_otg.
+
+
+> +        type: object
+> +        $ref: /schemas/regulator/regulator.yaml
+> +
+> +        properties:
+> +          regulator-name: true
+> +          regulator-min-microamp:
+> +            minimum: 0
+> +            maximum: 6350000
+> +          regulator-max-microamp:
+> +            minimum: 0
+> +            maximum: 6350000
+> +          regulator-min-microvolt:
+> +            minimum: 4480000
+> +            maximum: 20800000
+> +          regulator-max-microvolt:
+> +            minimum: 4480000
+> +            maximum: 20800000
+> +          enable-gpios:
+> +            description:
+> +              The BQ25703 may require both a register write and a GPIO
+> +              toggle to enable the boost regulator.
+> +
+> +        additionalProperties: false
+
+Please place it after $ref.
+
+> +
+> +        required:
+> +          - regulator-name
+> +          - regulator-min-microamp
+> +          - regulator-max-microamp
+> +          - regulator-min-microvolt
+> +          - regulator-max-microvolt
+> +
+> +unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - input-current-limit-microamp
+> +  - monitored-battery
+> +  - power-supplies
+
+Keep the same order as in properties.
+
+Best regards,
+Krzysztof
+
 
