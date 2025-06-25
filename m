@@ -1,57 +1,80 @@
-Return-Path: <linux-pm+bounces-29506-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29507-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF380AE8378
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 14:58:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FEFEAE8442
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:19:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA8E03A9E54
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 12:56:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 556FD1BC5F7F
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 13:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DCE264A7C;
-	Wed, 25 Jun 2025 12:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBAF62652AC;
+	Wed, 25 Jun 2025 13:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MqvdsWfu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hi/sTCLH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F86264A74
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 12:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DBD264A7C;
+	Wed, 25 Jun 2025 13:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750856035; cv=none; b=jL+p/XCatLmaxH6L8L9c+ZvkuQJeH4iottm8Q/0hPCTICDsI1CKUt2Mre5r1/5zq2R5QduVIVDKxGvdNsBF59Yp3y6AusWcolkt/uhhs/po2kZ9wC5Yx22ryhdcgZPXBApdxobeJjwITHl6uAN3nHjDWOY+mguG5qKQmJc80ceU=
+	t=1750857357; cv=none; b=GHB0ROSNNFKYArRq1eLqJRnYaHjkYJpQVlKeLynhU1Sxboi2M8IEz0qDZGRPaKgkFkWWTCN1RBEsh268trC9ykt0bve2VNmUMxJiQK7WPVFgdiw+O2ga8rAzLtMea4f4EuiDTvLmPb+OmO7ClTVj869s394s44lIzg8TM/WTyZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750856035; c=relaxed/simple;
-	bh=V5vRw37irrlS8OlidSqX3//zwRh1Kiq+TQw+3YvYvnA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=L+STnRDwbfuN5NqmDHO2hVwgapZCU/L8eGjHFsPTWOD3+xfma7/jPYSYln+VtsU2GYS2p2Zm3/1PL5y1y6uaKo6KTSwQv2mVbCfCtLnmWJQP9e7WYELduZaB/60llo9iGGrxAVq5zqKwUJw5ZRqxeq6nX/gNVNyxr7jNiF7EGAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MqvdsWfu; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250625125350euoutp017718741717ee1a77c4cffef4f0026809~MSkiUUgu41768917689euoutp01d
-	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 12:53:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250625125350euoutp017718741717ee1a77c4cffef4f0026809~MSkiUUgu41768917689euoutp01d
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1750856030;
-	bh=aHXPUrYiaWgQA8BN5Zf+BoDPK1tGYC0F+73wV5XjTXY=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=MqvdsWfuDOMUFFdpZ++uCNDRxIxCYkqgAv84879K/bIrv/0/5F8bSGtujVlCGo0Mi
-	 2TWRc/cy9lNQA6MawjAhJV+EChId0q2Qo+ybYx2viknaXnZ5ZFh++pV8cpExALdK+e
-	 AnqE2vKquHMcYIQjfNAMwsCUKOQJY7GIO+5WumIA=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250625125350eucas1p1dad14e84a8cc44516174ecc9053727b1~MSkhvbtf41252112521eucas1p14;
-	Wed, 25 Jun 2025 12:53:50 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250625125349eusmtip10a4e23d9061b04dad7c3aa6ff3064088~MSkgtbupw0720807208eusmtip1C;
-	Wed, 25 Jun 2025 12:53:48 +0000 (GMT)
-Message-ID: <0b3d2deb-7f27-4390-b43e-353d4ba17bd7@samsung.com>
-Date: Wed, 25 Jun 2025 14:53:48 +0200
+	s=arc-20240116; t=1750857357; c=relaxed/simple;
+	bh=1Ew8prqLY6S9T/f6MB6W2DVISyi22iiN0qriMIihJcU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HIYSTpIC05huOWaZugngYgYbK5cTpShHdWQ/TCwHaAvvd0Ks4Ikb3QDQuoZiGMtG/NPADpK++1SYuGhAYLVYTL0BDVOg+OWYzN+qVIuDuUIABXcFGLOPqNYeo0FRx46MXpffeWdMBYh9jTj7gfn60hpFx+qFYlmrMMVhUErpw8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hi/sTCLH; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-450ce671a08so41965915e9.3;
+        Wed, 25 Jun 2025 06:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750857354; x=1751462154; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=myFzD7QWLL6mVi6x4ybFyj0pD8esGFOCmQhIz9MBaqQ=;
+        b=Hi/sTCLHFZcUVlrTf3cCRcmg0TUEtWHHx5UkFHCgNecYD/FpeLTgUZjv9YNXGMwqBs
+         Bw2idU4IkZMMwPqkYouvsQmYTkxRJBLx/qtjh4Jaf6JF52zIiubJenjQi8nq2ntP1nGp
+         afAblklFnTjGoea9lk2RiZsaN47aR32nOYHEnfD2QUxEKtvwj790+LsXxT3qizq9nM+p
+         3/psnVWVtHXnGAESWeseHuHhcgl7mG84zEi5zsfVFvzjbqREK2VikrAk+Rwl8pOVL5yP
+         PF/duCkTJpI8obwzgkqwVnBDjXc8e4WGd0v+Mjd7RCszthMmDMsYpOsbb3V79+vi/Meg
+         ew/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750857354; x=1751462154;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=myFzD7QWLL6mVi6x4ybFyj0pD8esGFOCmQhIz9MBaqQ=;
+        b=UsiW0vgZa/5iWEh9Zm6mK+GAIdDAGqcQ9gWSaJM5xq4NN6A44T4cpu7D4qjhNs99rk
+         Y3bwaLwdsyDIjvJ+Q9lvQw3mkAhmlnlLjqFuGEV+dHqfO/bkc8DKIGrXXKKtP68VwsbZ
+         MOke0Bu/F4Szaq3Kv2e3KKAO56xG7pxUmIc/H0tILhfpQ7EJI/Uwhg9Mf9000WrZh7ge
+         OvSdP9tr//39EI+9BznwEITV4FKHkPMMtAZfkJbM4ZhAoJbzUlicayTuj1WCBHXFn7f4
+         Aw4YAzdZswrdFUDm1nCEKsHc9Vv5dnCE3+89ec4ZrkCJ6cC39AQbBNHRkCcbyMr729rR
+         RP+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW0g30Z5ZbhoTYeNIj6oMBMx7k5CzS8bTbvT+bCmAVzccpOp2VeHQjqKgTavIzCd567tW9fbaLlO48=@vger.kernel.org, AJvYcCXdOAY80h64QwmQ+iCSeYYlbl2rZTXSSg6Hd0NWPYWfUDeijjbSJXz1akHKeltBZnlEdEehOFvLnv1I2Lk5@vger.kernel.org, AJvYcCXiJDR6gSlZeFUEeUAwza48/x2fKxAX17zKhdLm+aV6UBFpPNP1Ns79i99vEatL0LEXdVTRgaEnOl9YgL6t@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgMkRMDAP8VWdI3Zopm3EajkdRwDESg/Axv2IxbwrgnokgO5Do
+	l/8/CBnSVpJA7KxjUSswDTGWlVpa+Elxgp/JsUM4RwRpoZNcHpq3LUNN
+X-Gm-Gg: ASbGncu8wXVuWc5dvExTw4J5tcdLTUVo5N2X3LyQek09bW2JGarHGcdV/+po9fq3Yld
+	xZTtTcx9vj6Nn0z7Ps7bSC0qll4gGejsLPqhpYhlNHeXpMfkoV8ZHUlAD9L84zsiIQTAojzp0qM
+	5FZLll5obgpnl+epZfgcquPfDvjLWzG+KSRhiuv4FYrRmUkfWYLgyEWY+vY32/C/a1QeElML+7f
+	lICi3MdRKR33h+Oz4oDD2XGwXRFR83vKRQuCVU0gZXTulJ0AvJ/tMia95TWwTNHCdaY/ReFVxGM
+	Rut5EsTMjkQF3kQOUZbJ1Atd3KdSaKnF1dvjz5xa88qxNw+Q76AdBsrCD/uhduOVbp/LWGi5Ul5
+	IfLjx7CNZrVxEG+ZS7x86iVONzWk=
+X-Google-Smtp-Source: AGHT+IHqyiRVjvoB8YSLe3HZosm1kBlsHb8xxS6UoEjuMcGWiykX94tFxvLlVox0eEJcWTFkCAve6Q==
+X-Received: by 2002:a05:6000:4014:b0:3a5:8a68:b839 with SMTP id ffacd0b85a97d-3a6ed67507amr2459464f8f.45.1750857353988;
+        Wed, 25 Jun 2025 06:15:53 -0700 (PDT)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453823ad1adsm19989575e9.24.2025.06.25.06.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jun 2025 06:15:53 -0700 (PDT)
+Message-ID: <84b94649-a248-46b0-a401-772aeb8777a2@gmail.com>
+Date: Wed, 25 Jun 2025 15:15:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,134 +82,66 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 8/8] drm/imagination: Enable PowerVR driver for
- RISC-V
-To: Matt Coster <Matt.Coster@imgtec.com>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei
-	<wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Bartosz
-	Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>, Frank
-	Binns <Frank.Binns@imgtec.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>, Marek
-	Szyprowski <m.szyprowski@samsung.com>, Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <ff96ee1f-23ad-4e7f-9ac1-11f410e459e3@imgtec.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20250625125350eucas1p1dad14e84a8cc44516174ecc9053727b1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250623114439eucas1p17e4405b95a5693a972bf40a3b3ecdc11
-X-EPHeader: CA
-X-CMS-RootMailID: 20250623114439eucas1p17e4405b95a5693a972bf40a3b3ecdc11
-References: <20250623-apr_14_for_sending-v6-0-6583ce0f6c25@samsung.com>
-	<CGME20250623114439eucas1p17e4405b95a5693a972bf40a3b3ecdc11@eucas1p1.samsung.com>
-	<20250623-apr_14_for_sending-v6-8-6583ce0f6c25@samsung.com>
-	<ff96ee1f-23ad-4e7f-9ac1-11f410e459e3@imgtec.com>
+Subject: Re: [PATCH v3] interconnect: avoid memory allocation when
+ 'icc_bw_lock' is held
+To: Johan Hovold <johan@kernel.org>
+Cc: Georgi Djakov <djakov@kernel.org>,
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Johan Hovold <johan+linaro@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
+ <aFvr1zSkf4KmIcMT@hovoldconsulting.com>
+ <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
+Content-Language: hu
+From: Gabor Juhos <j4g8y7@gmail.com>
+In-Reply-To: <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-
-
-On 6/24/25 15:54, Matt Coster wrote:
-> On 23/06/2025 12:42, Michal Wilczynski wrote:
->> Several RISC-V boards feature Imagination GPUs that are compatible with
->> the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
->> 4A board. This commit adjusts the driver's Kconfig dependencies to allow
->> the PowerVR driver to be compiled on the RISC-V architecture.
+2025. 06. 25. 14:41 keltezéssel, Johan Hovold írta:
+> On Wed, Jun 25, 2025 at 02:30:15PM +0200, Johan Hovold wrote:
+>> On Wed, Jun 25, 2025 at 01:25:04PM +0200, Gabor Juhos wrote:
+> 
+>>> @@ -276,13 +276,17 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>>>  		qcom_icc_bcm_init(qp->bcms[i], dev);
+>>>  
+>>>  	for (i = 0; i < num_nodes; i++) {
+>>> +		bool is_dyn_node = false;
+>>> +
+>>>  		qn = qnodes[i];
+>>>  		if (!qn)
+>>>  			continue;
+>>>  
+>>>  		if (desc->alloc_dyn_id) {
+>>> -			if (!qn->node)
+>>> +			if (!qn->node) {
 >>
->> By enabling compilation on RISC-V, we expand support for these GPUs,
->> providing graphics acceleration capabilities and enhancing hardware
->> compatibility on RISC-V platforms.
+>> AFAICS, qn->node will currently never be set here and I'm not sure why
+>> commit 7f9560a3bebe ("interconnect: qcom: icc-rpmh: Add dynamic icc node
+>> id support") added this check, or even the node field to struct
+>> qcom_icc_desc for that matter.
 >>
->> Add a dependency on MMU to fix a build warning on RISC-V configurations
->> without an MMU.
->>
->> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->> ---
->>  drivers/gpu/drm/imagination/Kconfig | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
->> index 5f9fff43d6baadc42ebf48d91729bfbf27e06caa..a7da858a5b301e8f088e3e22f5641feb2e078681 100644
->> --- a/drivers/gpu/drm/imagination/Kconfig
->> +++ b/drivers/gpu/drm/imagination/Kconfig
->> @@ -3,9 +3,10 @@
->>  
->>  config DRM_POWERVR
->>  	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
->> -	depends on ARM64
->> +	depends on (ARM64 || RISCV)
+>> But if there's some future use case for this, then you may or may not
+>> need to make sure that a name is allocated also in that case.
 > 
-> There were two issues you encountered when enabling COMPILE_TEST in v5,
-> both of which are somewhat simple to workaround but expose underlying
-> assumptions we made during early development.
+> Ok, I see what's going on. The qn->node may have been (pre-) allocated
+> in icc_link_nodes() dynamically, which means you need to make sure to
+> generate a name also in that case.
 > 
-> The first [1] is due to us assuming a 64-bit platform, which was never a
-> problem with the ARM64 dependency, but may actually be a problem with
-> RISCV given this allows for 32-bit as well. You should probably make
-> this (RISCV && 64BIT) until the implicit 64-bit dependency can be worked
-> out.
+>> And that could be done by simply checking if node->id >=
+>> ICC_DYN_ID_START instead of using a boolean flag below. That may be
+>> preferred either way.
+> 
+> So you should probably use node->id to determine this.
 
-Yeah will incude that in next revision.
+You are right. The problem is that ICC_DYN_ID_START is only visible from the
+core code. Either we have to move that into the 'interconnect-provider.h' header
+or we have to add an icc_node_is_dynamic() helper or something similar.
 
-> 
-> Somewhat related, we also assume a little-endian host. Technically ARM64
-> can also be big-endian, you just don't encounter that in the wild too
-> often so it's never been a "real" issue. I do wonder if swapping out
-> (ARM64 || RISCV) for (64BIT && CPU_LITTLE_ENDIAN) entirely would be a
-> reasonable change, perhaps for another day though...
-> 
-> The other [2] is slightly more subtle. To keep things straightforward,
-> we currently map CPU pages to GPU pages 1:1, meaning we use the CPU page
-> size to define the GPU page size. That GPU page size is configurable,
-> but does not support every possible size the CPU could support on any
-> architecture. The failing test there was sparc64 with an 8K page size
-> causing no GPU page size to be defined. See the #if/#elif ladder at the
-> top of pvr_mmu.c for the supported sizes and the doc comment above
-> PVR_DEVICE_PAGE_SIZE in pvr_mmu.h for the acknowledgement of the page
-> size restrictions.
-> 
-> The "proper" fix here would be for us to make these two sizes
-> independent, but that's not a trivial change. The "quick" fix I suppose
-> would be to depend on one of the supported page sizes, so maybe
-> (PAGE_SIZE_4KB || PAGE_SIZE_16KB || PAGE_SIZE_64KB || PAGE_SIZE_256KB)
-> since the larger page sizes appear unsupported (probably for good
-> reason).
+Which is the preferred solution?
 
-Thanks for a great explanation !
+Regards,
+Gabor
 
-> 
->>  	depends on DRM
->>  	depends on PM
->> +	depends on MMU
-> 
-> Nit: can you keep this alphabetical?
-> 
-> Cheers,
-> Matt
-> 
-> [1]: https://lore.kernel.org/r/202506191323.zD1fszQb-lkp@intel.com/
-> [2]: https://lore.kernel.org/r/202506201103.GX6DA9Gx-lkp@intel.com/
-> 
->>  	select DRM_EXEC
->>  	select DRM_GEM_SHMEM_HELPER
->>  	select DRM_SCHED
->>
-> 
-> 
-
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
 
