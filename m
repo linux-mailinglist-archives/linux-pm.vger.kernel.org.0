@@ -1,374 +1,226 @@
-Return-Path: <linux-pm+bounces-29520-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29521-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B04F5AE8763
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 17:05:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F566AE87D1
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 17:21:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1FF95A1DCF
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:04:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 516521885F6D
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 15:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC31526981C;
-	Wed, 25 Jun 2025 15:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A41145355;
+	Wed, 25 Jun 2025 15:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ilt9IW1p"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KwW1jK/m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2049.outbound.protection.outlook.com [40.107.102.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECE1267721;
-	Wed, 25 Jun 2025 15:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750863899; cv=none; b=th1nNhiGg5UU3VXB37M1dewGc2NGbEWczmaUtd4VJNy9k8XyAk7zbmWjjR2N+kKTef1R9CjlWAYHRRBBoUzGTTjUi1EXh8EF+XNZjQSO/XX3aSqE+2AptOxacbcP1Fnh5jxT/dI3zcjaMLWJh43ADpeXqVWB4QKSkvzJ5cAX8TA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750863899; c=relaxed/simple;
-	bh=erqKyzYZBkC2k4jwO0YfXfbBhRrSe/HEWA1WEpcGpwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YtYpZYUWo3Yb+bpltM6LD87SC3J4/BbFjWBvx8MWKo/QaWTut2AKjeHW80hp8dPyKM+hOhjzN+rW1KQxEzG0Yq7TL/06iIkCnfogYsBKGwuQJusWO5LrrOIL5HV4X5PG8T8/TApRoNYhBPG54MT3SJ9mW2wmentJFgDQxqBdsS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ilt9IW1p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07472C4CEEA;
-	Wed, 25 Jun 2025 15:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750863899;
-	bh=erqKyzYZBkC2k4jwO0YfXfbBhRrSe/HEWA1WEpcGpwM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ilt9IW1p43qOtF86yrHozBkPoikkh6GVyBrbaergaF2iXcLrAOYTD3+LPKC+vv0Qq
-	 X3bHbe6tvBpUIEIRi0pKWLz8CXCr/0S4U3RGp7dJlp64uX4drHdpq3wxYcHf7rUtVW
-	 +taCZTQlBcnEYCxumMfVJ13ezSLCOxqbvXEfRBoELjMeFN7Yr9tKkd/QbC2fD+ezz1
-	 h4EFTGur9ptIe9t3pmLJ9TZTjBW+mqZXTMhnSFN2ojQyuWdgoVFXjlcFozFCQOgOO+
-	 /R3+QfPYJv4nGA5anXmniGw7Qraupk9oQqID+c4WYSDEopkqATXLKVkbRLyw+sT0gO
-	 +k0MLUKuU10FQ==
-Date: Wed, 25 Jun 2025 10:04:58 -0500
-From: Rob Herring <robh@kernel.org>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Georgi Djakov <djakov@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: document the RPMh
- Network-On-Chip Interconnect in Qualcomm SM7635 SoC
-Message-ID: <20250625150458.GA1182597-robh@kernel.org>
-References: <20250625-sm7635-icc-v1-0-8b49200416b0@fairphone.com>
- <20250625-sm7635-icc-v1-1-8b49200416b0@fairphone.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C548266580;
+	Wed, 25 Jun 2025 15:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750864860; cv=fail; b=OQMDsgvfVcmopeWGKIWybL5mbiUQ5pGNQ+q0+wacQZiptU6pzX6uiA/qAcAv/U+W5aOmuappds6ssYdj4X3EeErfDKFU1KNHGpzxAO7cNqFQl5z5Qi76uZdpnKoQBnW3pDDDs9nuqKhB5Mz7jpJMdQZ2NnlVCPYKKHfr5of9QWw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750864860; c=relaxed/simple;
+	bh=GTZt+vfe2xA1FTbg426rpelcHPiTAj9B2Udu1VgLHl0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=DoXM8YripDRZ1YuQoQnfMUOAeYcGsJ/cuc7ziSisrK6JXGJJS/qvuPndVTv6/6EERjelGauKW+0qsW9wz3iHE+kRXmCWSIZohzRM7ekquWABveKT3Qqp8fPuubi3yIiENx/9RJyK6aiu2CL1PjevldeePDY1DpcZpEye+yMUkME=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KwW1jK/m; arc=fail smtp.client-ip=40.107.102.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HtsIvoFvII8SZ4r9xje4cojfPT0Vvi5c++wA57dR7VUEXjcZglruQOzlmT2d2K1Ifq1RepfEr/xPWYDJRM2yB+vKeaUZZib3Z3KSVAaW1jBcTcE80jmrTrMvfFNjlAJrC5IjbMzbjj5uvEbIDjlrRTUiilB3T6LWsxcrl0d8qKkD3MPBoWoUGInMPo5odL6/Wa/Ffz4IfrN3VOlxSVEJGSBe0y8+o4iGfsIaRNbRrJoU/5SyiALE3tbE/fLvrnySIEKQq+s8INIhkPoP9e3kRbeQhleo4iS/7CQqFwFfHhcC39nDoijFgx9hBI4XkU4cvX+C8v87AAszXMHBrNj0Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EWOLM5oB0iwMv5JUCEuCI/sr1yZD0RBTyU4QABO0cH8=;
+ b=XuVDVIcVBPuvp7CT8cfZOKXbUW6zFSXIQegDePBPxd3pioIsr4KUViYm4Z3cmZ97AOMYZzumChupNaUvdcycSz1S2vnjNlmfr2nEYbktq6S4sv0YFsMT5A1yC/y2Inkzh6pSya4eEwJh6JASzoVDylLHvdD02Uc7FEXI+9PvUX5dWrTlsSKFip1LMRClW8gcEDkA56jFctJAZvqiBDPXYUqaijX3c6glGf8W1aLJp9GX3sDI6Rq4GyjFgFil80M3v83p0r5bj6gvBt7l7RrxF0R+gh/5S7BTYljWuKcnll5vkaHOP7BW04oDSpR9jAArNtQ86cBfvvTNo5P6BA/B/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EWOLM5oB0iwMv5JUCEuCI/sr1yZD0RBTyU4QABO0cH8=;
+ b=KwW1jK/mT+FVHOp3BbQ5rHzVRiUOeILCzzP5ly8RLO6Z1P2k8PyEPZ6TuVbppaF5ek9/fD5nJDOh9udHjzfQwzcEmn0c+pr0udo8548tywMRWTQVaC+qePOJRxNrO86gDw/yddexCAmgBzjTlXQXNYuRUfiwodZ4r/ZkR775qJo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CYYPR12MB8750.namprd12.prod.outlook.com (2603:10b6:930:be::18)
+ by CY1PR12MB9625.namprd12.prod.outlook.com (2603:10b6:930:106::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.19; Wed, 25 Jun
+ 2025 15:20:56 +0000
+Received: from CYYPR12MB8750.namprd12.prod.outlook.com
+ ([fe80::b965:1501:b970:e60a]) by CYYPR12MB8750.namprd12.prod.outlook.com
+ ([fe80::b965:1501:b970:e60a%6]) with mapi id 15.20.8857.022; Wed, 25 Jun 2025
+ 15:20:56 +0000
+Date: Wed, 25 Jun 2025 17:20:40 +0200
+From: Robert Richter <rrichter@amd.com>
+To: "Koralahalli Channabasappa, Smita" <Smita.KoralahalliChannabasappa@amd.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
+	Li Ming <ming.li@zohomail.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Ying Huang <huang.ying.caritas@gmail.com>,
+	Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>,
+	Benjamin Cheatham <benjamin.cheatham@amd.com>,
+	PradeepVineshReddy Kodamati <PradeepVineshReddy.Kodamati@amd.com>,
+	Zhijian Li <lizhijian@fujitsu.com>
+Subject: Re: [PATCH v4 5/7] cxl/region: Introduce SOFT RESERVED resource
+ removal on region teardown
+Message-ID: <aFwTyJO8EuKQOOio@rric.localdomain>
+References: <20250603221949.53272-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20250603221949.53272-6-Smita.KoralahalliChannabasappa@amd.com>
+ <20250609135444.0000703f@huawei.com>
+ <f157ff2c-0849-4446-9870-19d4df9d29c5@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f157ff2c-0849-4446-9870-19d4df9d29c5@amd.com>
+X-ClientProxiedBy: FR4P281CA0023.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c9::9) To CYYPR12MB8750.namprd12.prod.outlook.com
+ (2603:10b6:930:be::18)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250625-sm7635-icc-v1-1-8b49200416b0@fairphone.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CYYPR12MB8750:EE_|CY1PR12MB9625:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39a7a896-3e38-4057-6f8d-08ddb3fbe183
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?yNzztIuqlIyoqKUXxh2rBDV6vii3W5uziAR73zCGi6bkzjrcQ9ff/PQSqRQF?=
+ =?us-ascii?Q?mCCgQj+T3Un+lqKB2xL7foWJX4hn20jPnm1n2CzrHQWIkMgOl6ogR6jhrbR/?=
+ =?us-ascii?Q?h8hWsR35klf9ehnx3mbcR0C0exg+JXmdY2IZVW1Jv7OYXlgQ0haJKwYkGNOh?=
+ =?us-ascii?Q?+qDONnt4wT0qazl5OD8SEztG0J66oO1eou/vkIwLJgQSIAG99hpabWbEs13p?=
+ =?us-ascii?Q?K24xJsGyfNZTFzvOro8UpZZcxWOcUm3cPBZGLCzD6jy46gHjafB7IqdYPxMc?=
+ =?us-ascii?Q?yiqjCorfbOhJwzl1QhE8M6eKok2sJ/Hz/OFJ4MHJ8kdbRS+VNa89OrLhOgfy?=
+ =?us-ascii?Q?EFY/mzZzqRIzHtebqyQVxZC+T/42uA0aQoaUnCI6C98S7UDTilgzXUbDKfnS?=
+ =?us-ascii?Q?9oacsrPdK+JEEW2N7QeRcRFxFRy7aJX1Ya+QWMtHFDZ59Y261yoSgo6+chMr?=
+ =?us-ascii?Q?MalBf4BBwUS39QZ/yqTKorOxqig5hSVjW+U7AqzUlk/DlhMb6LfJ43b2JA+Z?=
+ =?us-ascii?Q?c5Q4UwQMCWgTAj5lmiSEGdd2upVWKH3IIdrOndmN7MJJ21/QMRhHzsU1gRMD?=
+ =?us-ascii?Q?IkOgMZg5gXNs7iMI1M4RHa4dtXesnaWcRc4XE7QTxyPW+VMxoUY3IEc2DIu0?=
+ =?us-ascii?Q?g75dgmd4DPOlFZzNqiXyJJfSfHAqVTv1RqKDVfpGt9FfTiQ3UVutGwBMMtsb?=
+ =?us-ascii?Q?H3Ww8NIdCIujTVE2kEJfRcv1krdRgPRgSdWqiNDsNapL1UA0Zc+TeJxWG+OZ?=
+ =?us-ascii?Q?DdzDry8CbkkzuQE5dR9+jX7wqfzHHHVCtltS71omhn7/doUuOoIJQgBYlZpd?=
+ =?us-ascii?Q?YGbp89KmCERnjv4DiPKiqBOyAGD/CsE1dw5gNSIXmLcMeymy4+B4xo1f3UhA?=
+ =?us-ascii?Q?RpzYojyK4vG8RQkMIBLf9V0o1z5Kwa9Zgi17Amw13PhpgrcerZbGqSP2ykRQ?=
+ =?us-ascii?Q?d9QIUdAAlbePQ4OcuqF47/Ox5DeranA6lZRvorueP655HDcdGjKQwNRDQYPA?=
+ =?us-ascii?Q?XfmrOgqX1F/M6EWAkvfeIQVk4LTlXhsuZp2dKeXh2kP7HP+4PF1j4lv9rJsW?=
+ =?us-ascii?Q?tRn1TG41oCA/nlaM+beujxTzV0WJ72v1hbv3L0R5Ts0wwgqfcHizx+DcM1fT?=
+ =?us-ascii?Q?rrF41l4y5JdZhUiTvaYsbvaGFgWzhwxLmbjk+gZ1MJ8r0CkooH+V3t/GroHw?=
+ =?us-ascii?Q?9qdAAHXR7ok4aUYx7pAGirSUd8eI/sR0Hn9z1/qiS03l8XG7nvXcXCyQjshL?=
+ =?us-ascii?Q?908GOPH5Ub1GuSRbntcxznu3krKo7UJuZvXgcw3WxyNmFMd1A24AasFOtwY+?=
+ =?us-ascii?Q?H5/x0QzTRYd9MIeZIwb7rs2PWaj4c4yIjH/AqLFuMBv8y95am9OY90THRiJe?=
+ =?us-ascii?Q?Ac9aSD7i145LWIs7Y+ufYo0yJ6fNUwmNKHBhfva1eFa1EJr2U5flTuC914se?=
+ =?us-ascii?Q?pXVENP4MC+4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8750.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?5r93GSa+ImPUjMLWl6uPg8IeVlHPdDLZLM4VlFMVFPZfh7rjZRqTiAZxR/PC?=
+ =?us-ascii?Q?AENQvaeoinCMcNpzlVQ/k3Hwqqa8tCpRvtwFqTUZu1RKgUpZDxUWfG96/CAx?=
+ =?us-ascii?Q?uDKT9+bdUf1bDnvv7+0lzyhc3to5NJ1gWLWJRhNyv4MyNc78xXL370gId/f3?=
+ =?us-ascii?Q?fokkXf/vTDiuP2fPSaT1SZAndJNilGMpyuDvc/VDwqQ9nAJxFJJZr7zDoP42?=
+ =?us-ascii?Q?JBqRiIRs6t73Wsa9om0IpCCt/V6LZCh+uAEYQwsUHXt/oLICe9GSIgGjIspZ?=
+ =?us-ascii?Q?ToYIN5sV6/CoiYZpLPkNdoOmfAi2eH3BgjxgBCOxIDOmdP7iHTNW0fptL6Dx?=
+ =?us-ascii?Q?oatPocDbHmutB2V1aGp/nDQwoAEGLmw5a5gTEKzTYVGTqp0Yg46arDYWbfdQ?=
+ =?us-ascii?Q?cXzMW7CCNbK7FNZUEgNBDnj40Jig4AKDKXMfIUYJ6ZkVafPsjjPxufBLTg5R?=
+ =?us-ascii?Q?A9o09Fd1N8PMqLG8XhB+dwhvGUQk5W2gW7j3X3VhlgkNMlVriqDDX9F0Lzj2?=
+ =?us-ascii?Q?YhLciAtMOqDIcFVqJeZH31KoEbpu2jkfotbx7j+E1vTcAyza9oz+m6WZVlnI?=
+ =?us-ascii?Q?ULx2IupMpGq6PCs4BnUA+3aZXQkfSCArd6l7XvVYqm4J81E6fHSjISBAKSS/?=
+ =?us-ascii?Q?UgReBOHgUOAGqSkKD8ofyT1lcCF7mXN5OncJ7/2oP7lUiLzfaYyU3PFq5wt+?=
+ =?us-ascii?Q?NJ18IJ47s+NKmJMMR9kEeexEOUd6v46uDwlLKG2XY+D30gtmU6S9RAMuGjop?=
+ =?us-ascii?Q?ujLcnN6MDXMgNNhDrn8HJHDOIa21vCueoGQq0yu4DeO/raPRGQcnCtYF50Rj?=
+ =?us-ascii?Q?nnGBzr5WelwvwTSCXXtecAE836clwL/otga0pArQ1PvTQ1yCVQK41yzVKzOR?=
+ =?us-ascii?Q?7YPedAdjeQg8jiqRYvGU+Pdh9/CfkC8ztVoSY6NpgxAQXHT19mr84DPzzc15?=
+ =?us-ascii?Q?EzfIKPInPG+uMeu50O9FAKpHKG3N0veBrYfOafEBF7pjCK+JyAp6wks9ea6k?=
+ =?us-ascii?Q?rbJmm2HLqvJvACM7ApddmCm3tNycHdIjLpvC8qMWRj2jUXZ6E4l4/0WwMHpN?=
+ =?us-ascii?Q?rB0OLaHscvk/3VoOxxaZk3NzlZI0FM/BIJnhiwFGB6mGIyQk+Xelt8q8sLmJ?=
+ =?us-ascii?Q?8tNfXX26AT/yVy3fcn8eVUhiYwyaCfbGFFc38kkhbms/KVAAzFMfv92Yidzp?=
+ =?us-ascii?Q?OqYYLZH2OSV6xaUgn17oYRquBQQ47zwjEUqHQLuJK3E4ovNHdVACO2/Ms7Wv?=
+ =?us-ascii?Q?rbLwmohvN7cUCVYsP3p0hSpA+WeLqTahuj24gJbj9Nov8piJ1MyLqTWnYGrL?=
+ =?us-ascii?Q?upeB19z1YVtS5E2i3rbWYJYjLG7dibXvw+aBNAMQIN8hXM/S2L8lpyc1JYJR?=
+ =?us-ascii?Q?4j28lyDAD9AK4x0j/S5CmCaUOKDb1BxesDXwR17A5x/RASPny/1+2VWJZyEk?=
+ =?us-ascii?Q?tbF81DmwxfRnuPvlbaaRHqkubdJdNbOGJ2/QhOX8b58oe4evEqWEO7w7KNgq?=
+ =?us-ascii?Q?R8kF/FJ9vgXUYUeUOK3/C8lMDaUNUxnM/e/W7ZIVrTldlUR1vgiTwmvfE0Pz?=
+ =?us-ascii?Q?CxMCSNuLluR7m9AbR6BkIr2T+/xJp4JthknrJjW8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39a7a896-3e38-4057-6f8d-08ddb3fbe183
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8750.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2025 15:20:56.1019
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9RXPUEGX/oI6VbmphW4t9hHKpweCeaOnXhjEBCBy42Rqok5gglf7aRfpwMyDtbglNah/zGP56GYm+79SqBAnaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR12MB9625
 
-On Wed, Jun 25, 2025 at 11:13:47AM +0200, Luca Weiss wrote:
-> Document the RPMh Network-On-Chip Interconnect of the SM7635 platform.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  .../bindings/interconnect/qcom,sm7635-rpmh.yaml    | 136 ++++++++++++++++++++
->  .../dt-bindings/interconnect/qcom,sm7635-rpmh.h    | 141 +++++++++++++++++++++
->  2 files changed, 277 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm7635-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm7635-rpmh.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..6373399542d5728b4a4097876d2c4dffc4482038
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm7635-rpmh.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm7635-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM7635
-> +
-> +maintainers:
-> +  - Luca Weiss <luca.weiss@fairphone.com>
-> +
-> +description: |
-> +  RPMh interconnect providers support system bandwidth requirements through
-> +  RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
-> +  able to communicate with the BCM through the Resource State Coordinator (RSC)
-> +  associated with each execution environment. Provider nodes must point to at
-> +  least one RPMh device child node pertaining to their RSC and each provider
-> +  can map to multiple RPMh resources.
-> +
-> +  See also:: include/dt-bindings/interconnect/qcom,sm7635-rpmh.h
+On 09.06.25 18:25:23, Koralahalli Channabasappa, Smita wrote:
+> On 6/9/2025 5:54 AM, Jonathan Cameron wrote:
+> > On Tue, 3 Jun 2025 22:19:47 +0000
+> > Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
 
-Don't need double colon. Please fix whatever you blindly copied this 
-from.
+> > > +static int __cxl_region_softreserv_update(struct resource *soft,
+> > > +					  void *_cxlr)
+> > > +{
+> > > +	struct cxl_region *cxlr = _cxlr;
+> > > +	struct resource *res = cxlr->params.res;
+> > > +
+> > > +	/* Skip non-intersecting soft-reserved regions */
+> > > +	if (soft->end < res->start || soft->start > res->end)
+> > > +		return 0;
+> > > +
+> > > +	soft = normalize_resource(soft);
+> > > +	if (!soft)
+> > > +		return -EINVAL;
+> > > +
+> > > +	remove_soft_reserved(cxlr, soft, res->start, res->end);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +int cxl_region_softreserv_update(void)
+> > > +{
+> > > +	struct device *dev = NULL;
+> > > +
+> > > +	while ((dev = bus_find_next_device(&cxl_bus_type, dev))) {
+> > > +		struct device *put_dev __free(put_device) = dev;
+> > This free is a little bit outside of the constructor and destructor
+> > together rules.
+> > 
+> > I wonder if bus_for_each_dev() is cleaner here or is there a reason
+> > we have to have released the subsystem lock + grabbed the device
+> > one before calling __cxl_region_softreserv_update?
+> 
+> Thanks for the suggestion. I will replace the bus_find_next_device() with
+> bus_for_each_dev(). I think bus_for_each_dev() simplifies the flow as
+> there's also no need to call put_device() explicitly.
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm7635-aggre1-noc
-> +      - qcom,sm7635-aggre2-noc
-> +      - qcom,sm7635-clk-virt
-> +      - qcom,sm7635-cnoc-cfg
-> +      - qcom,sm7635-cnoc-main
-> +      - qcom,sm7635-gem-noc
-> +      - qcom,sm7635-lpass-ag-noc
-> +      - qcom,sm7635-mc-virt
-> +      - qcom,sm7635-mmss-noc
-> +      - qcom,sm7635-nsp-noc
-> +      - qcom,sm7635-pcie-anoc
-> +      - qcom,sm7635-system-noc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm7635-clk-virt
-> +              - qcom,sm7635-mc-virt
-> +    then:
-> +      properties:
-> +        reg: false
-> +    else:
-> +      required:
-> +        - reg
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm7635-pcie-anoc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: aggre-NOC PCIe AXI clock
-> +            - description: cfg-NOC PCIe a-NOC AHB clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm7635-aggre1-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: aggre USB3 PRIM AXI clock
-> +            - description: aggre UFS PHY AXI clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm7635-aggre2-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: RPMH CC IPA clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm7635-aggre1-noc
-> +              - qcom,sm7635-aggre2-noc
-> +              - qcom,sm7635-pcie-anoc
-> +    then:
-> +      required:
-> +        - clocks
-> +    else:
-> +      properties:
-> +        clocks: false
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,sm7635-gcc.h>
-> +
-> +    interconnect-0 {
-> +        compatible = "qcom,sm7635-clk-virt";
-> +        #interconnect-cells = <2>;
-> +        qcom,bcm-voters = <&apps_bcm_voter>;
-> +    };
-> +
-> +    interconnect@16e0000 {
-> +        compatible = "qcom,sm7635-aggre1-noc";
-> +        reg = <0x016e0000 0x16400>;
-> +        #interconnect-cells = <2>;
-> +        clocks = <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +                 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>;
-> +        qcom,bcm-voters = <&apps_bcm_voter>;
-> +    };
-> diff --git a/include/dt-bindings/interconnect/qcom,sm7635-rpmh.h b/include/dt-bindings/interconnect/qcom,sm7635-rpmh.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..d963780ddb540825672bc411eb106a298003b09f
-> --- /dev/null
-> +++ b/include/dt-bindings/interconnect/qcom,sm7635-rpmh.h
-> @@ -0,0 +1,141 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2023-2024, Qualcomm Innovation Center, Inc. All rights reserved.
-> + * Copyright (c) 2025, Luca Weiss <luca.weiss@fairphone.com>
-> + */
-> +
-> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM7635_H
-> +#define __DT_BINDINGS_INTERCONNECT_QCOM_SM7635_H
-> +
-> +#define MASTER_QUP_1				0
-> +#define MASTER_UFS_MEM				1
-> +#define MASTER_USB3_0				2
-> +#define SLAVE_A1NOC_SNOC			3
-> +
-> +#define MASTER_QDSS_BAM				0
-> +#define MASTER_QSPI_0				1
-> +#define MASTER_QUP_0				2
-> +#define MASTER_CRYPTO				3
-> +#define MASTER_IPA				4
-> +#define MASTER_QDSS_ETR				5
-> +#define MASTER_QDSS_ETR_1			6
-> +#define MASTER_SDCC_1				7
-> +#define MASTER_SDCC_2				8
-> +#define SLAVE_A2NOC_SNOC			9
-> +
-> +#define MASTER_QUP_CORE_0			0
-> +#define MASTER_QUP_CORE_1			1
-> +#define SLAVE_QUP_CORE_0			2
-> +#define SLAVE_QUP_CORE_1			3
-> +
-> +#define MASTER_CNOC_CFG				0
-> +#define SLAVE_AHB2PHY_SOUTH			1
-> +#define SLAVE_AHB2PHY_NORTH			2
-> +#define SLAVE_CAMERA_CFG			3
-> +#define SLAVE_CLK_CTL				4
-> +#define SLAVE_RBCPR_CX_CFG			5
-> +#define SLAVE_RBCPR_MXA_CFG			6
-> +#define SLAVE_CRYPTO_0_CFG			7
-> +#define SLAVE_CX_RDPM				8
-> +#define SLAVE_GFX3D_CFG				9
-> +#define SLAVE_IMEM_CFG				10
-> +#define SLAVE_CNOC_MSS				11
-> +#define SLAVE_MX_2_RDPM				12
-> +#define SLAVE_MX_RDPM				13
-> +#define SLAVE_PDM				14
-> +#define SLAVE_QDSS_CFG				15
-> +#define SLAVE_QSPI_0				16
-> +#define SLAVE_QUP_0				17
-> +#define SLAVE_QUP_1				18
-> +#define SLAVE_SDC1				19
-> +#define SLAVE_SDCC_2				20
-> +#define SLAVE_TCSR				21
-> +#define SLAVE_TLMM				22
-> +#define SLAVE_UFS_MEM_CFG			23
-> +#define SLAVE_USB3_0				24
-> +#define SLAVE_VENUS_CFG				25
-> +#define SLAVE_VSENSE_CTRL_CFG			26
-> +#define SLAVE_WLAN				27
-> +#define SLAVE_CNOC_MNOC_HF_CFG			28
-> +#define SLAVE_CNOC_MNOC_SF_CFG			29
-> +#define SLAVE_NSP_QTB_CFG			30
-> +#define SLAVE_PCIE_ANOC_CFG			31
-> +#define SLAVE_WLAN_Q6_THROTTLE_CFG		32
-> +#define SLAVE_SERVICE_CNOC_CFG			33
-> +#define SLAVE_QDSS_STM				34
-> +#define SLAVE_TCU				35
-> +
-> +#define MASTER_GEM_NOC_CNOC			0
-> +#define MASTER_GEM_NOC_PCIE_SNOC		1
-> +#define SLAVE_AOSS				2
-> +#define SLAVE_DISPLAY_CFG			3
-> +#define SLAVE_IPA_CFG				4
-> +#define SLAVE_IPC_ROUTER_CFG			5
-> +#define SLAVE_PCIE_0_CFG			6
-> +#define SLAVE_PCIE_1_CFG			7
-> +#define SLAVE_PRNG				8
-> +#define SLAVE_TME_CFG				9
-> +#define SLAVE_APPSS				10
-> +#define SLAVE_CNOC_CFG				11
-> +#define SLAVE_DDRSS_CFG				12
-> +#define SLAVE_IMEM				13
-> +#define SLAVE_PIMEM				14
-> +#define SLAVE_SERVICE_CNOC			15
-> +#define SLAVE_PCIE_0				16
-> +#define SLAVE_PCIE_1				17
-> +
-> +#define MASTER_GPU_TCU				0
-> +#define MASTER_SYS_TCU				1
-> +#define MASTER_APPSS_PROC			2
-> +#define MASTER_GFX3D				3
-> +#define MASTER_LPASS_GEM_NOC			4
-> +#define MASTER_MSS_PROC				5
-> +#define MASTER_MNOC_HF_MEM_NOC			6
-> +#define MASTER_MNOC_SF_MEM_NOC			7
-> +#define MASTER_COMPUTE_NOC			8
-> +#define MASTER_ANOC_PCIE_GEM_NOC		9
-> +#define MASTER_SNOC_GC_MEM_NOC			10
-> +#define MASTER_SNOC_SF_MEM_NOC			11
-> +#define MASTER_WLAN_Q6				12
-> +#define SLAVE_GEM_NOC_CNOC			13
-> +#define SLAVE_LLCC				14
-> +#define SLAVE_MEM_NOC_PCIE_SNOC			15
-> +
-> +#define MASTER_LPASS_PROC			0
-> +#define SLAVE_LPASS_GEM_NOC			1
-> +
-> +#define MASTER_LLCC				0
-> +#define SLAVE_EBI1				1
-> +
-> +#define MASTER_CAMNOC_HF			0
-> +#define MASTER_CAMNOC_ICP			1
-> +#define MASTER_CAMNOC_SF			2
-> +#define MASTER_MDP				3
-> +#define MASTER_VIDEO				4
-> +#define MASTER_CNOC_MNOC_HF_CFG			5
-> +#define MASTER_CNOC_MNOC_SF_CFG			6
-> +#define SLAVE_MNOC_HF_MEM_NOC			7
-> +#define SLAVE_MNOC_SF_MEM_NOC			8
-> +#define SLAVE_SERVICE_MNOC_HF			9
-> +#define SLAVE_SERVICE_MNOC_SF			10
-> +
-> +#define MASTER_CDSP_PROC			0
-> +#define SLAVE_CDSP_MEM_NOC			1
-> +
-> +#define MASTER_PCIE_ANOC_CFG			0
-> +#define MASTER_PCIE_0				1
-> +#define MASTER_PCIE_1				2
-> +#define SLAVE_ANOC_PCIE_GEM_NOC			3
-> +#define SLAVE_SERVICE_PCIE_ANOC			4
-> +
-> +#define MASTER_A1NOC_SNOC			0
-> +#define MASTER_A2NOC_SNOC			1
-> +#define MASTER_APSS_NOC				2
-> +#define MASTER_CNOC_SNOC			3
-> +#define MASTER_PIMEM				4
-> +#define MASTER_GIC				5
-> +#define SLAVE_SNOC_GEM_NOC_GC			6
-> +#define SLAVE_SNOC_GEM_NOC_SF			7
-> +
-> +
-> +#endif
-> 
-> -- 
-> 2.50.0
-> 
+That change makes path #1 obsolete (see comments there too). I would
+prefer to remove it.
+
+Thanks,
+
+-Robert
 
