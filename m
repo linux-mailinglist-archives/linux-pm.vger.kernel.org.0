@@ -1,100 +1,192 @@
-Return-Path: <linux-pm+bounces-29505-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29506-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B84DAAE8315
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 14:46:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF380AE8378
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 14:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE5761C230DD
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 12:46:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA8E03A9E54
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 12:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF0A262D0C;
-	Wed, 25 Jun 2025 12:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DCE264A7C;
+	Wed, 25 Jun 2025 12:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ci3Vkzq0"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MqvdsWfu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF772620CA;
-	Wed, 25 Jun 2025 12:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F86264A74
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 12:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750855558; cv=none; b=FQypVWddUvZkFdJOWrL/LlE+IG7mrtPTaP96kQ+mNaaeHuSMA9rf3GJHS7gO4Gt0s1aZh76aSJxK4V6Iqbzlyjvqkisrr5pTVLQPuqIk70ATU4l+AOAEkds1kMc8hfZOH+/Yw0eFvkji3GbwlnLOioiLZBswico3gSs5+gIlISk=
+	t=1750856035; cv=none; b=jL+p/XCatLmaxH6L8L9c+ZvkuQJeH4iottm8Q/0hPCTICDsI1CKUt2Mre5r1/5zq2R5QduVIVDKxGvdNsBF59Yp3y6AusWcolkt/uhhs/po2kZ9wC5Yx22ryhdcgZPXBApdxobeJjwITHl6uAN3nHjDWOY+mguG5qKQmJc80ceU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750855558; c=relaxed/simple;
-	bh=MxSwS/c3MkpoOIQEtE7TxBLZiOkUfz/dz5gbPMFBRss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lvvuh2GCBPPjN0bpV6H+R9OUmeQ1Qlb7T6CEmR7G6sPhV87WqoCt/y1fvD7IyOb8hoJ80+AKGSTI92cw2p9UwcUqCS7GOOSg/QSf9uxU6yi6AV+4j+HfDljS+2UNvc0uTkBBiPWhAyqL3Pb5SrrGFJi0B/q0yd7IRkfTW0wncNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ci3Vkzq0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC7DC4CEEA;
-	Wed, 25 Jun 2025 12:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750855558;
-	bh=MxSwS/c3MkpoOIQEtE7TxBLZiOkUfz/dz5gbPMFBRss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ci3Vkzq0CO/B5RaEvCVERNHN2k8J15szNfNrx/Jz2ujCSJhooPBnw1WOOukIYPY9g
-	 3XBwQaAUNNYHZEgXEMOwedAmTYNoPNdgzY/VyQJ0lcNWI/+CRGL2/w4tL30wW9b3Bz
-	 bemwwwf4UZaXZd0YXQ+0bL3NAhBWQJkbgcH8qhZzxyaduRF0dFriBmoMuGIAwObRvE
-	 nk0fq+h9jErAMT6szw37AYFWO7Sn+C6zz+fwfG5yZqMag39CMA7b37LlrG00RD3fO+
-	 LL6N+r9o3sta8a7X24ORYMCVHPvk0jn9221AJkctZFW/a/gGAZHgCFH+CHsAgGIzun
-	 ANOlVo8fLCt5A==
-Date: Wed, 25 Jun 2025 13:45:53 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org, lgirdwood@gmail.com, sre@kernel.org,
-	heiko@sntech.de, conor+dt@kernel.org, krzk+dt@kernel.org,
-	robh@kernel.org, lee@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V3 4/5] regulator: bq257xx: Add bq257xx boost regulator
- driver
-Message-ID: <92fc643b-3ef4-40f5-93e4-cc7c16e461fb@sirena.org.uk>
-References: <20250623162223.184304-1-macroalpha82@gmail.com>
- <20250623162223.184304-5-macroalpha82@gmail.com>
+	s=arc-20240116; t=1750856035; c=relaxed/simple;
+	bh=V5vRw37irrlS8OlidSqX3//zwRh1Kiq+TQw+3YvYvnA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=L+STnRDwbfuN5NqmDHO2hVwgapZCU/L8eGjHFsPTWOD3+xfma7/jPYSYln+VtsU2GYS2p2Zm3/1PL5y1y6uaKo6KTSwQv2mVbCfCtLnmWJQP9e7WYELduZaB/60llo9iGGrxAVq5zqKwUJw5ZRqxeq6nX/gNVNyxr7jNiF7EGAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MqvdsWfu; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250625125350euoutp017718741717ee1a77c4cffef4f0026809~MSkiUUgu41768917689euoutp01d
+	for <linux-pm@vger.kernel.org>; Wed, 25 Jun 2025 12:53:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250625125350euoutp017718741717ee1a77c4cffef4f0026809~MSkiUUgu41768917689euoutp01d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1750856030;
+	bh=aHXPUrYiaWgQA8BN5Zf+BoDPK1tGYC0F+73wV5XjTXY=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=MqvdsWfuDOMUFFdpZ++uCNDRxIxCYkqgAv84879K/bIrv/0/5F8bSGtujVlCGo0Mi
+	 2TWRc/cy9lNQA6MawjAhJV+EChId0q2Qo+ybYx2viknaXnZ5ZFh++pV8cpExALdK+e
+	 AnqE2vKquHMcYIQjfNAMwsCUKOQJY7GIO+5WumIA=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250625125350eucas1p1dad14e84a8cc44516174ecc9053727b1~MSkhvbtf41252112521eucas1p14;
+	Wed, 25 Jun 2025 12:53:50 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250625125349eusmtip10a4e23d9061b04dad7c3aa6ff3064088~MSkgtbupw0720807208eusmtip1C;
+	Wed, 25 Jun 2025 12:53:48 +0000 (GMT)
+Message-ID: <0b3d2deb-7f27-4390-b43e-353d4ba17bd7@samsung.com>
+Date: Wed, 25 Jun 2025 14:53:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XfbLf5ezv7/iStxc"
-Content-Disposition: inline
-In-Reply-To: <20250623162223.184304-5-macroalpha82@gmail.com>
-X-Cookie: He who hates vices hates mankind.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 8/8] drm/imagination: Enable PowerVR driver for
+ RISC-V
+To: Matt Coster <Matt.Coster@imgtec.com>
+Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei
+	<wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Bartosz
+	Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>, Frank
+	Binns <Frank.Binns@imgtec.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>, Marek
+	Szyprowski <m.szyprowski@samsung.com>, Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <ff96ee1f-23ad-4e7f-9ac1-11f410e459e3@imgtec.com>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250625125350eucas1p1dad14e84a8cc44516174ecc9053727b1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250623114439eucas1p17e4405b95a5693a972bf40a3b3ecdc11
+X-EPHeader: CA
+X-CMS-RootMailID: 20250623114439eucas1p17e4405b95a5693a972bf40a3b3ecdc11
+References: <20250623-apr_14_for_sending-v6-0-6583ce0f6c25@samsung.com>
+	<CGME20250623114439eucas1p17e4405b95a5693a972bf40a3b3ecdc11@eucas1p1.samsung.com>
+	<20250623-apr_14_for_sending-v6-8-6583ce0f6c25@samsung.com>
+	<ff96ee1f-23ad-4e7f-9ac1-11f410e459e3@imgtec.com>
 
 
---XfbLf5ezv7/iStxc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 23, 2025 at 11:22:22AM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
->=20
-> Add support for the boost regulator found in the Texas Instruments
-> BQ25703. The boost regulator is capable of outputting between 4.48
-> and 20.8 volts and between 0 and 6.35 amps.
+On 6/24/25 15:54, Matt Coster wrote:
+> On 23/06/2025 12:42, Michal Wilczynski wrote:
+>> Several RISC-V boards feature Imagination GPUs that are compatible with
+>> the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
+>> 4A board. This commit adjusts the driver's Kconfig dependencies to allow
+>> the PowerVR driver to be compiled on the RISC-V architecture.
+>>
+>> By enabling compilation on RISC-V, we expand support for these GPUs,
+>> providing graphics acceleration capabilities and enhancing hardware
+>> compatibility on RISC-V platforms.
+>>
+>> Add a dependency on MMU to fix a build warning on RISC-V configurations
+>> without an MMU.
+>>
+>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+>> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+>> ---
+>>  drivers/gpu/drm/imagination/Kconfig | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
+>> index 5f9fff43d6baadc42ebf48d91729bfbf27e06caa..a7da858a5b301e8f088e3e22f5641feb2e078681 100644
+>> --- a/drivers/gpu/drm/imagination/Kconfig
+>> +++ b/drivers/gpu/drm/imagination/Kconfig
+>> @@ -3,9 +3,10 @@
+>>  
+>>  config DRM_POWERVR
+>>  	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
+>> -	depends on ARM64
+>> +	depends on (ARM64 || RISCV)
+> 
+> There were two issues you encountered when enabling COMPILE_TEST in v5,
+> both of which are somewhat simple to workaround but expose underlying
+> assumptions we made during early development.
+> 
+> The first [1] is due to us assuming a 64-bit platform, which was never a
+> problem with the ARM64 dependency, but may actually be a problem with
+> RISCV given this allows for 32-bit as well. You should probably make
+> this (RISCV && 64BIT) until the implicit 64-bit dependency can be worked
+> out.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Yeah will incude that in next revision.
 
---XfbLf5ezv7/iStxc
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Somewhat related, we also assume a little-endian host. Technically ARM64
+> can also be big-endian, you just don't encounter that in the wild too
+> often so it's never been a "real" issue. I do wonder if swapping out
+> (ARM64 || RISCV) for (64BIT && CPU_LITTLE_ENDIAN) entirely would be a
+> reasonable change, perhaps for another day though...
+> 
+> The other [2] is slightly more subtle. To keep things straightforward,
+> we currently map CPU pages to GPU pages 1:1, meaning we use the CPU page
+> size to define the GPU page size. That GPU page size is configurable,
+> but does not support every possible size the CPU could support on any
+> architecture. The failing test there was sparc64 with an 8K page size
+> causing no GPU page size to be defined. See the #if/#elif ladder at the
+> top of pvr_mmu.c for the supported sizes and the doc comment above
+> PVR_DEVICE_PAGE_SIZE in pvr_mmu.h for the acknowledgement of the page
+> size restrictions.
+> 
+> The "proper" fix here would be for us to make these two sizes
+> independent, but that's not a trivial change. The "quick" fix I suppose
+> would be to depend on one of the supported page sizes, so maybe
+> (PAGE_SIZE_4KB || PAGE_SIZE_16KB || PAGE_SIZE_64KB || PAGE_SIZE_256KB)
+> since the larger page sizes appear unsupported (probably for good
+> reason).
 
------BEGIN PGP SIGNATURE-----
+Thanks for a great explanation !
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhb74AACgkQJNaLcl1U
-h9C9yQf/UDpz47ltA1sKs2voaIQHw0rC3X6BnaMmd4FZypOTbU0om42KvCrdnXDJ
-GHVARVAWEMDJ3Nd6AyGE3z3mqkg3ojjiVFYOVCR3OpvaFIU27Qr/lPN0+JrChNgD
-DSsib9j7vIv3s00zqtsafqdxDZqZ491/i4KhGKWg9Ss6KxBBGrMnMV/MpSgq2u+c
-BmNRa9nbYOONjWV3SfytuLGVZ3DkbPlfrNHZwyx1+ZjFZrie78ZwvaXfmy8j9kMV
-9mHs7/LUBj4UlnWNal28u19IlI8eJX3Pzae+TYdKkIi0ahBms8CBgEzN7lF8rG7p
-xB850eF10a7ySgMa0L2apcoNkzryDQ==
-=M2Wi
------END PGP SIGNATURE-----
+> 
+>>  	depends on DRM
+>>  	depends on PM
+>> +	depends on MMU
+> 
+> Nit: can you keep this alphabetical?
+> 
+> Cheers,
+> Matt
+> 
+> [1]: https://lore.kernel.org/r/202506191323.zD1fszQb-lkp@intel.com/
+> [2]: https://lore.kernel.org/r/202506201103.GX6DA9Gx-lkp@intel.com/
+> 
+>>  	select DRM_EXEC
+>>  	select DRM_GEM_SHMEM_HELPER
+>>  	select DRM_SCHED
+>>
+> 
+> 
 
---XfbLf5ezv7/iStxc--
+Best regards,
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
 
