@@ -1,139 +1,152 @@
-Return-Path: <linux-pm+bounces-29556-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29560-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16481AE91E9
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 01:15:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8C08AE983C
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:26:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E95A16A3515
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jun 2025 23:15:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1329B1C21648
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 08:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 870A82FD881;
-	Wed, 25 Jun 2025 23:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397B0289812;
+	Thu, 26 Jun 2025 08:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="vDS0zxQ3"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="vxnKb/Za"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991742FA622;
-	Wed, 25 Jun 2025 23:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3850128935A
+	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 08:25:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750893200; cv=none; b=m53hebLhVJRJ/bWaipav31BviBrG/FDH4kF+sMBihJ776b1kRjfYl4Zhg7dQwwZKPjOHrActsvjy3heAwXgkvnlJrkmibCDICLcdPKya8Va51/8O/gzRjXwwzkrgjPcz3ZgXLqYxk2qkBCpvv4S5fbMHlN8dbCI+dzYr3K6jPeE=
+	t=1750926339; cv=none; b=QUdEMLSCEfbQOIGIDJIgcFiS1eYcz4LhMNmxqaL14KFmZ1Sj6c7Sbn+h6Wpr5s3Gdt3S7ftXmxObIjuyolmjdSouqn5Dc0ABC3DxDMnSDKePJtEXHZpELQoSHIij7l9mKreE95m6MM5mYK6kscEWOJzupWp+sKlX4MeyOntmJvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750893200; c=relaxed/simple;
-	bh=qh6e2Biw2maAV/F+E7c145v0o7b/d5cfpu9qQV/HZTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PsCK/08ivwDMC3XIuciqmR0FCF+FtUuTbDnIMc6jif6fM133QHYWgoBDsuejtuogUKAhh2v1nh8wHLe2rwPUpYa9ys8/ggIksccubIKpx0CjRnpy06fIcHfnEK01cO+mQhndQ2uQ573uDOZ3d05gkhtGf5/2wZkhx2p5sVJC4gE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=vDS0zxQ3; arc=none smtp.client-ip=192.19.144.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 50141C003AD4;
-	Wed, 25 Jun 2025 16:13:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 50141C003AD4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1750893194;
-	bh=qh6e2Biw2maAV/F+E7c145v0o7b/d5cfpu9qQV/HZTs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vDS0zxQ3vRlPv9pB+nKxiJ30rqUxh4hltdcXpbKIuo5r5CnI4NtrDe/EbKkhRlItw
-	 p+Gq2rufI+6i3pGprnVeU4OY2DHtHmEPk42prRO/rL+MpDQBCPoqtOWBoQLCz4rp9U
-	 QRFWUFInjmoj4fx7fQp7+ISW8J5j4EIWBwIGyyU0=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id B8AF118000530;
-	Wed, 25 Jun 2025 16:13:13 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: linux-kernel@vger.kernel.org
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Etienne Buira <etienne.buira@free.fr>,
-	Antonio Quartulli <antonio@mandelbit.com>,
-	Illia Ostapyshyn <illia@yshyn.com>,
-	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
-	linux-mm@kvack.org (open list:PER-CPU MEMORY ALLOCATOR),
-	linux-pm@vger.kernel.org (open list:GENERIC PM DOMAINS),
-	kasan-dev@googlegroups.com (open list:KASAN),
-	maple-tree@lists.infradead.org (open list:MAPLE TREE),
-	linux-modules@vger.kernel.org (open list:MODULE SUPPORT),
-	linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM)
-Subject: [PATCH 16/16] MAINTAINERS: Include vfs.py under FILESYSTEMS entry
-Date: Wed, 25 Jun 2025 16:10:53 -0700
-Message-ID: <20250625231053.1134589-17-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
-References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
+	s=arc-20240116; t=1750926339; c=relaxed/simple;
+	bh=tcbJ4dMHWa+h9imojMEcUHTRNC8LuPrUj/4HSqv1epI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SI7UWrjncOgpPNxkkO6cXnwQo0ciWMVGBps65r6x6/KwVaUvdlf+h3Un5AUAqkKuEx7hIbw/JG/ADMg7rKJoUBmT4fGb1iwkQI2NWWYEwhbi0CHK4Pqhua+lSEyZvilojKVxMAO3vDEAgIIwj0jNtUwRajO7K3/JE8VBFhle/3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=vxnKb/Za; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-553b165c80cso693470e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 01:25:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750926335; x=1751531135; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+KiWcI/ZEWKnAMfwKiluqNNZ9TMq7+QkURM7ieGMhCI=;
+        b=vxnKb/ZaUgxtnVa1WM2x2l6fxPib1MEdwgMostPsDxQV9aNZZ37OwVFkCIzCnMjaPm
+         iRzUvTNnM9Roh4wIK41jbK+b2h85ZtQr9iymbVuQ60Cq6wXDc++8GULEa35gtzjD7okJ
+         q+sbMMCqhSdn5DbXZUkO3AGBPrm1KnOfUHGU3EKTs5EidA2mBjrTEunnJs8uIRQ2hnif
+         F4eXuSFJ7sWZQN8eP2d+BK1CojcEJ+odw3l46WO/0uokHNnMDimoVG0eb8bMgwtSJpzH
+         4DXT10WM9Tir0+bO4uh36WLT9ACJIYziG6/iWoAumKV5T9mo0fVO1mFzlCgb/eUoyJNs
+         HgeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750926335; x=1751531135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+KiWcI/ZEWKnAMfwKiluqNNZ9TMq7+QkURM7ieGMhCI=;
+        b=DvQcTcsnp/Ru7dHGBEO8ICJ74V4i72bujgGe+F9wk4ldMUUb+6WLvy5Bp/pZPhVmmJ
+         JOUQdpEFQJTMEFqs1NexSMhC0vs3are/XR2BxS5HfMfoedydexbemBYKfdlubf15bckf
+         hJ/LmG/RioORLDrfK3KYxEkSl4IwdP+KjqYBAG9QJfRk1GBcj7gJZrGRqQm0pnEunD5W
+         enLg5tuMyZrVSlqxO0Zq9Y6nRKZv64Keye1MTKjMlVlwVcBXvOVL0lAWtaf9aKXP3B6t
+         pMUINaqAgxSjTGAEjFCtdxRpZdYZnB0E36Kkvx408DLABXJT1NXfDfZIkLDVnzo9uRYb
+         9nVg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3JBi1umKYNmrYyX/B4LnelY/VLvcC3NPzQUJWN4G4eOnuoZ9pcX00eGw6ZchXeCbOzVAlo7Lw0A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFATNaKTqs7ywiYJUXYIEmYmp1i7QoacKveEEHk9TYsjkw7qtk
+	9LRygmWJx+RZq8ONdxoaDZnOMVRQS3uKQs0sTAnbBryxPa7pR39G581Ey9Ps7TOIFdLZR1OYkpv
+	E4RZzrTY4F9YXf3UQaRxPknDCJ4kkaoklLCBC8NeG1w==
+X-Gm-Gg: ASbGncuMv2MbU6BECjiapjWe/BGQmE1eYdb11AT/ExeLpS0gS8Ba4kDF/qbmnkI+/i9
+	IUsLlHorDY51OKVnoj8uGQofhsJdmeGRNPaMQJYv7BGn3AWggF/Mt+lA4G7abjo5ee2E2S438MB
+	+mxV8r6of0rYDj4pW193ey1j7PexzeXoovcksHFb8DyexD2g+9rjqJrj+b8cWw+G2UWu9V9dURD
+	w==
+X-Google-Smtp-Source: AGHT+IHiqTRhc98U7J30Q+L+jrTc1jmBUQy5Vyfvw1Z//zKbgr/TNUKjoi9hEvxXZFQA5uGpKkHKIMlulcDni5LExCA=
+X-Received: by 2002:a05:6512:2399:b0:553:35c4:db08 with SMTP id
+ 2adb3069b0e04-555029e70d5mr987473e87.30.1750926334687; Thu, 26 Jun 2025
+ 01:25:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250625-icc-clk-memleak-fix-v1-1-4151484cd24f@gmail.com>
+In-Reply-To: <20250625-icc-clk-memleak-fix-v1-1-4151484cd24f@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 26 Jun 2025 10:25:23 +0200
+X-Gm-Features: Ac12FXycIznnP1tC18vY9u2XdsRu_8gKuTWQBbtsSoPJ6qYsnL72hgxsDeWsTrU
+Message-ID: <CAMRc=Md5+pSxx3kxhrYpt_oMUOCUkzxeWEy=YXnhY_4053gqRA@mail.gmail.com>
+Subject: Re: [PATCH] interconnect: icc-clk: destroy nodes in case of memory
+ allocation failures
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Dmitry Baryshkov <lumag@kernel.org>, linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Include the GDB scripts file under scripts/gdb/linux/vfs.py under the
-FILESYSTEMS (VFS and infrastructure) subsystem since it parses internal
-data structures that depend upon that subsystem.
+On Wed, Jun 25, 2025 at 7:32=E2=80=AFPM Gabor Juhos <j4g8y7@gmail.com> wrot=
+e:
+>
+> When memory allocation fails during creating the name of the nodes in
+> icc_clk_register(), the code continues on the error path and it calls
+> icc_nodes_remove() to destroy the already created nodes. However that
+> function only destroys the nodes which were already added to the provider
+> and the newly created nodes are never destroyed in case of error.
+>
+> In order to avoid a memory leaks, change the code to destroy the newly
+> created nodes explicitly in case of memory allocation failures.
+>
+> Fixes: 44c5aa73ccd1 ("interconnect: icc-clk: check return values of devm_=
+kasprintf()")
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> ---
+>  drivers/interconnect/icc-clk.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-cl=
+k.c
+> index 88f311c110207757f0609e5cec7d377a91133c6d..93c030608d3e0aad7d9c1ed81=
+a51dcde0d3f85ab 100644
+> --- a/drivers/interconnect/icc-clk.c
+> +++ b/drivers/interconnect/icc-clk.c
+> @@ -117,6 +117,7 @@ struct icc_provider *icc_clk_register(struct device *=
+dev,
+>
+>                 node->name =3D devm_kasprintf(dev, GFP_KERNEL, "%s_master=
+", data[i].name);
+>                 if (!node->name) {
+> +                       icc_node_destroy(node->id);
+>                         ret =3D -ENOMEM;
+>                         goto err;
+>                 }
+> @@ -135,6 +136,7 @@ struct icc_provider *icc_clk_register(struct device *=
+dev,
+>
+>                 node->name =3D devm_kasprintf(dev, GFP_KERNEL, "%s_slave"=
+, data[i].name);
+>                 if (!node->name) {
+> +                       icc_node_destroy(node->id);
+>                         ret =3D -ENOMEM;
+>                         goto err;
+>                 }
+>
+> ---
+> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+> change-id: 20250625-icc-clk-memleak-fix-4462b5153970
+>
+> Best regards,
+> --
+> Gabor Juhos <j4g8y7@gmail.com>
+>
+>
 
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for catching this.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a90d926c90a0..a292012a3ff1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9290,6 +9290,7 @@ F:	include/uapi/linux/openat2.h
- F:	Documentation/driver-api/early-userspace/buffer-format.rst
- F:	init/do_mounts*
- F:	init/*initramfs*
-+F:	scripts/gdb/linux/vfs.py
- 
- FILESYSTEMS [EXPORTFS]
- M:	Chuck Lever <chuck.lever@oracle.com>
--- 
-2.43.0
-
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
