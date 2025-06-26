@@ -1,84 +1,85 @@
-Return-Path: <linux-pm+bounces-29585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6796EAE9B46
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DEEAAE9B99
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 154596A3886
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:28:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA9783AEDF7
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CBD26C38E;
-	Thu, 26 Jun 2025 10:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E6F258CD9;
+	Thu, 26 Jun 2025 10:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HPszLtAX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W1hIo8mD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC7C26B77C
-	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 10:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1239121771B
+	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 10:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750933632; cv=none; b=m2LPHTVCH30xFcoIvGhDUTKFAu28qxH003EhaftcZfMqZozPfE4MJzxaZwyMVcZnUIikjywPdLodfQ+sE22T6Z/pSFwdvCaz6mozlv0Y3GIjbIKj2MTEDek3YowHWavtqt1skPoLbglMqWaACXtvCqZxou8VxXpwBHFpaP6JSfQ=
+	t=1750933883; cv=none; b=bMp9bDHgJfz069iezmX3iWyd8GlTrYOy/yOC+vHyylNdetRWRK9wAyXllbIYl5jN2arJSFuikXDno+TRI16MCKKOylubU42IHV6MOcHrGS55A0wMAJcDV6B0ZiIGeScYRtnt/bkJJ/QW0RlugbPck6XChgEL4YnlngQIbAFTc8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750933632; c=relaxed/simple;
-	bh=wXor+Iu4ZqX+8KR5rS7jShl7KiOg0hIycr4pUXG2LA0=;
+	s=arc-20240116; t=1750933883; c=relaxed/simple;
+	bh=Z+HMGmRN117Ts5fbev7DVAdsIy/tyxpazqxI06YJMls=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T2324lXMePV8AdUw6gA4qu9YPPdr6xqBI1Ttejjh4fC889SCk1ag6VZwRF1j1CGWDg1eP4xAzhrGfbVUVU2VBtU0QdWrFFuddbPbvJz6ssl9WfLbsEnQppQZhJgWVU1lDJ8tflJnfprsZCFOxK9bsSNFUiXE8TBhGX4vjtUJG8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HPszLtAX; arc=none smtp.client-ip=209.85.219.170
+	 To:Cc:Content-Type; b=PTagVI82qD57qqdgjDG3uA+3vM1dsVElwfMuE1watbZgKtZORl8/kvump2lhHX2kyab9FBXeY1juB9o3yzC+mN/i2Y+o5SG9Sy1HX3zib5pQjZ/hQWOxoj+rBPIFrirw+odRh2gt1j/p/5Pzc7szsyH7sVk54oaQSMBb1CtXXb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W1hIo8mD; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e7387d4a336so652277276.2
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 03:27:10 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e81749142b3so586731276.3
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 03:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750933630; x=1751538430; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750933881; x=1751538681; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tC4oe5CceAg11SZ/GxR4A1Su4YWoGCi7TQKuNigj2uY=;
-        b=HPszLtAXKaje4cfy1nx706etbFV2RTzx7eiMr6G1wM00CrpXIBb0glfzTlxUTD0TAH
-         AIl9F1h+AS7DVFfrc2tFWW7JiKWKnwdqVkXzY+mbmD8Pco8lEhtfrAiapatv21iJXC/c
-         8R9sIqHv13M8lphEskFCMh54QGsWMWBYnyVkdxHjysA8h26etKrhVKGmVpQ3mRj6NABK
-         hz1qSqsMXsw1V9rTkwK/mRanRoBE0NNmbdgJ9qWg+zTHxbxODmpfwwGbOwMbeqpT+PU5
-         1sKx3dYMXpmXwSLWzMQAn2+nSL8PbUgZ8ppSp3AcgjrvZdsygLZN1udpW1bifsempTm0
-         gpkw==
+        bh=otDF7N1FhmMaIK9N2KC0Z8gh+57rBjHJAOPDBBdmpSg=;
+        b=W1hIo8mDxjc4XL8RaKGRZkJ6cuFSVemaDKyeCUxqjY1uLH40BkyXLAcrJqwlFTi7oL
+         YM4jeQHzHxzITESFipykSOhGAb2GgA6EE8vBxD6I3b5x29ipTqEj4cSVGJ1cukPLFGws
+         8qN9qrvP/Xp4z9ncEHpmaytdBZjdNCNkYwLfjeDPUdiFzVwpzkXp4RTPE35m0CLh72pY
+         AYg75X4vWKqLV+DjPb8pDonHhpHR2elnZjL/UqOcIOwldU4D+JH8nGjnsEKUVp4MZ1LV
+         rz3l9XjBcJ7tKtAUwn9ToIL2qfNMtQjHkKPbNLO8+RANBy0gGvkSLQpP96PvfSS+WXMW
+         5uZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750933630; x=1751538430;
+        d=1e100.net; s=20230601; t=1750933881; x=1751538681;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tC4oe5CceAg11SZ/GxR4A1Su4YWoGCi7TQKuNigj2uY=;
-        b=UaLuTLC43gd0VDPgIsZsqIYRj+15cUxrMRgZwvwfUMrSnWE4nsfBIsxsTPy3JUFkTu
-         uCpUaypIheSERPgvumxF0G25ZVjhO1Egy3qQv1IXcYveyeG2UNRqU54wYeInvZbKUP2p
-         ykkVHMXqAibXamldHcv22KeYlWpOwTq9dNC0FBBt3IjgPKou9arTLr3OkGPDV5Z9Q0V0
-         8y22M6Y58jO8jJ/qaMDDk4fQW4WlRzJ2stKQ/izq2HJ58YiayheWJjj45OZXnCiVl34t
-         OBfTWwl88J/KRWRsKczQ+NYCR4gZdSk3bXfJJSaL+PuRXK3P5ahnwK6+q22ncZGqTplM
-         0eCA==
-X-Gm-Message-State: AOJu0YxNAASWD5+4p/S+KWzLMYr1yw7VBjdLT57CTG225Y325/aBO8FH
-	wEMgLIRuF5GGIoXnzdtnzohuww7+jvq7P5ER6kjtBxJ/N24MvjgjtbgU//CwhRblpYc2sVkSXdL
-	t9ahKzInsH3YJJboMxW55JcTbYrhzAgWpV4e3cWzKTA==
-X-Gm-Gg: ASbGnct2ptJBE+Ab0Ynsza/saul4iNKw7Hga/OR8JO5H/Qup5iISR9JgIBUCTFL8y1F
-	uWrKOUnhEBMmNMI2JOwmVskEgsNq0pXzKqpzQNwbcvtn48FfwT6AoYoGtzcWM/dKXNpUgD12ehJ
-	feOZ4Y3JKk60WXHFb5A9T6VF8Y3tglT4D7zTpsDg89Mti/
-X-Google-Smtp-Source: AGHT+IGxNrLa6fzp3dATT8WqE5Ge3MnCPt0sfiGJHFrcqs/3wlCuQT2HFWBcurUCyGXwJjSYlm1Efl+nkkyoah0fDOA=
-X-Received: by 2002:a05:6902:1106:b0:e7d:ca03:4474 with SMTP id
- 3f1490d57ef6-e860177d4cfmr8481272276.36.1750933629782; Thu, 26 Jun 2025
- 03:27:09 -0700 (PDT)
+        bh=otDF7N1FhmMaIK9N2KC0Z8gh+57rBjHJAOPDBBdmpSg=;
+        b=uZ45SwX0kAgTztI03DAnPytlhb4d3Vxj7CIEkoJ9R21KVP40nnBvNUNwgCLEzuY/c5
+         7W4HJEZv7L/0J3yj1M8f0eGM+WOX51vq0B6PoWOQaZJk7tkhnkGknqBEaVLkhJKVQc7n
+         2U3dQl2OneiyQ+i9V3YvJJYKmDOokD5S0wBbhg/WJV7mGI2783fYuvHkGww5gJ/SBgui
+         yXxKeN7U5vm/jJTUvIYaFWaz8AeR9XyKb5K15AKeKqMaYFVtKoWJwpTd3ex0GYNM0rBa
+         Edl+391VnO/7e9F6Bi9sOKZ5zKzqttBG/B0gvXHT17s7Cd7j8Nhf6BXt1RQlDML5UdUp
+         NHIA==
+X-Gm-Message-State: AOJu0Yw0zmyoHjlTWaYNCj2ARxQiAz/Fg0eJyc0icudO0xIbVAzfcOQg
+	48ij933ymyj7K1K1J1XQvH6liQgd1h3Dmk+2kq65O2M/y/A+veobJ4faiUlOHU0o/GGRX86zqMk
+	2y+J98rZ3poYd/bvI7Jk1PjePUXh3mXUrWQwuvHaN+g==
+X-Gm-Gg: ASbGncsGYkBbmOBu9/bDJH8jo4WuHv5NBF0eec7QdZnBegTzhbncqNG54G+gik6eWPl
+	lvAvUyyQvEjK85I+4n/v8Nvu3dD3Y+j0tHQE1niBL6rU9/UKe1cRTinAugvCXUvnqeRLvARJRcx
+	LTcULB1Qd3WtjNhzf9gIIyMhmd/wY7qW6L1XyHy7vwrx5J
+X-Google-Smtp-Source: AGHT+IEJFJjQjgoF4JDK6/h8YGM8Hnkr8ICuxu9rc5onoooA/kJOCVLg4G5+xe4NPd23fJBgWQaeIr163WvTav7Ioko=
+X-Received: by 2002:a05:6902:138c:b0:e84:2160:8d71 with SMTP id
+ 3f1490d57ef6-e86017c4ad4mr8521092276.40.1750933881094; Thu, 26 Jun 2025
+ 03:31:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <22759968.EfDdHjke4D@rjwysocki.net> <1847016.VLH7GnMWUR@rjwysocki.net>
-In-Reply-To: <1847016.VLH7GnMWUR@rjwysocki.net>
+References: <22759968.EfDdHjke4D@rjwysocki.net>
+In-Reply-To: <22759968.EfDdHjke4D@rjwysocki.net>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 26 Jun 2025 12:26:34 +0200
-X-Gm-Features: Ac12FXw4MkHlXtc5UB46tZcXfZhtWkugMv31joFE6m6KalHIU0zcpnVSriOLTD8
-Message-ID: <CAPDyKFr8LpkR+DK2suNzGaBzuQ+gohYML4TC-FS+oCUWr6TTzA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] PM: Make pm_runtime_force_resume() work with DPM_FLAG_SMART_SUSPEND
+Date: Thu, 26 Jun 2025 12:30:45 +0200
+X-Gm-Features: Ac12FXyTZUBODRjJn3UboKy92_g08xem5gzj1b0KboifHaz0N5A-9Sd_QQGZ6zw
+Message-ID: <CAPDyKFpZVdf2EnZE_u1xDKB7=Nd98a_ajYimQhLBu6jYwJhJFA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] PM: Reconcile different driver options for runtime
+ PM integration with system sleep
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
 	Linux ACPI <linux-acpi@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
@@ -87,118 +88,53 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 25 Jun 2025 at 21:25, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Hi Everyone,
 >
-> Curently, drivers using pm_runtime_force_suspend/resume() cannot set
-> DPM_FLAG_SMART_SUSPEND because the devices with that flag set may need
-> to be resumed during system-wide resume regardless of whether or not
-> they have power.needs_force_resume set.  That can happen due to a
-> dependency resolved at the beginning of a system-wide resume transition
-> (for instance, a bus type or PM domain has decided to resume a
-> subordinate device with DPM_FLAG_SMART_SUSPEND and its parent and
-> suppliers also need to be resumed).
+> This series addresses a couple of issues related to the integration of runtime
+> PM with system sleep I was talking about at the OSMP-summit 2025:
 >
-> To overcome this limitation, modify pm_runtime_force_resume() to check
-> the device's power.smart_suspend flag (which is set for devices with
-> DPM_FLAG_SMART_SUSPEND set that meet some additional requirements) and
-> the device's runtime PM status in addition to power.needs_force_resume.
-> Also change it to clear power.smart_suspend to ensure that it will not
-> handle the same device twice during one transition.
+> https://lwn.net/Articles/1021332/
 >
-> The underlying observation is that there are two cases in which the
-> device needs to be resumed by pm_runtime_force_resume().  One of them
-> is when the device has power.needs_force_resume set, which means that
-> pm_runtime_force_suspend() has suspended it and decided that it should
-> be resumed during the subsequent system resume.  The other one is when
-> power.smart_suspend is set and the device's runtume PM status is
-> RPM_ACTIVE.
+> Most importantly, DPM_FLAG_SMART_SUSPEND cannot be used along with
+> pm_runtime_force_suspend/resume() due to some conflicting expectations
+> about the handling of device runtime PM status between these functions
+> and the PM core.
 >
-> Update kerneldoc comments in accordance with the code changes.
+> Also pm_runtime_force_suspend/resume() currently cannot be used in PCI
+> drivers and in drivers that collaborate with the general ACPI PM domain
+> because they both don't expect their mid-layer runtime PM callbacks to
+> be invoked during system-wide suspend and resume.
 >
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Patch [1/9] is a preparatory cleanup changing the code to use 'true' and
+> 'false' as needs_force_resume flag values for consistency.
+>
+> Patch [2/9] makes pm_runtime_force_suspend() check needs_force_resume along
+> with the device's runtime PM status upfront, and bail out if it is set,
+> which allows runtime PM status updates to be eliminated from both that function
+> and pm_runtime_force_resume().
+>
+> Patch [3/9] causes the smart_suspend flag to be taken into account by
+> pm_runtime_force_resume() which allows it to resume devices with smart_suspend
+> set whose runtime PM status has been changed to RPM_ACTIVE by the PM core at
+> the beginning of system resume.  After this patch, drivers that use
+> pm_runtime_force_suspend/resume() can also set DPM_FLAG_SMART_SUSPEND which
+> may be useful, for example, if devices handled by them are involved in
+> dependency chains with other devices setting DPM_FLAG_SMART_SUSPEND.
+>
+> The next two patches, [4-5/9], put pm_runtime_force_suspend/resume()
+> and needs_force_resume under CONFIG_PM_SLEEP for consistency and also
+> because using them outside system-wide PM transitions really doesn't make
+> sense.
+>
+> Patch [6/9] makes the code for getting a runtime PM callback for a device
+> a bit more straightforward in preparation for the subsequent changes.
 
-Looks good to me!
+I can't find this one. Seems like you did not submit it.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Perhaps make a resend and fixup the patch-numbering too?
+
+[...]
 
 Kind regards
 Uffe
-
-> ---
->  drivers/base/power/runtime.c |   38 +++++++++++++++++++++++++++-----------
->  1 file changed, 27 insertions(+), 11 deletions(-)
->
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1964,10 +1964,6 @@
->   * sure the device is put into low power state and it should only be used during
->   * system-wide PM transitions to sleep states.  It assumes that the analogous
->   * pm_runtime_force_resume() will be used to resume the device.
-> - *
-> - * Do not use with DPM_FLAG_SMART_SUSPEND as this can lead to an inconsistent
-> - * state where this function has called the ->runtime_suspend callback but the
-> - * PM core marks the driver as runtime active.
->   */
->  int pm_runtime_force_suspend(struct device *dev)
->  {
-> @@ -2014,20 +2010,28 @@
->   * pm_runtime_force_resume - Force a device into resume state if needed.
->   * @dev: Device to resume.
->   *
-> - * Prior invoking this function we expect the user to have brought the device
-> - * into low power state by a call to pm_runtime_force_suspend(). Here we reverse
-> - * those actions and bring the device into full power, if it is expected to be
-> - * used on system resume.  In the other case, we defer the resume to be managed
-> - * via runtime PM.
-> + * This function expects that either pm_runtime_force_suspend() has put the
-> + * device into a low-power state prior to calling it, or the device had been
-> + * runtime-suspended before the preceding system-wide suspend transition and it
-> + * was left in suspend during that transition.
-> + *
-> + * The actions carried out by pm_runtime_force_suspend(), or by a runtime
-> + * suspend in general, are reversed and the device is brought back into full
-> + * power if it is expected to be used on system resume, which is the case when
-> + * its needs_force_resume flag is set or when its smart_suspend flag is set and
-> + * its runtime PM status is "active".
-> + *
-> + * In other cases, the resume is deferred to be managed via runtime PM.
->   *
-> - * Typically this function may be invoked from a system resume callback.
-> + * Typically, this function may be invoked from a system resume callback.
->   */
->  int pm_runtime_force_resume(struct device *dev)
->  {
->         int (*callback)(struct device *);
->         int ret = 0;
->
-> -       if (!dev->power.needs_force_resume)
-> +       if (!dev->power.needs_force_resume && (!dev_pm_smart_suspend(dev) ||
-> +           pm_runtime_status_suspended(dev)))
->                 goto out;
->
->         callback = RPM_GET_CALLBACK(dev, runtime_resume);
-> @@ -2041,8 +2045,20 @@
->         }
->
->         pm_runtime_mark_last_busy(dev);
-> +
->  out:
-> +       /*
-> +        * The smart_suspend flag can be cleared here because it is not going
-> +        * to be necessary until the next system-wide suspend transition that
-> +        * will update it again.
-> +        */
-> +       dev->power.smart_suspend = false;
-> +       /*
-> +        * Also clear needs_force_resume to make this function skip devices that
-> +        * have been seen by it once.
-> +        */
->         dev->power.needs_force_resume = false;
-> +
->         pm_runtime_enable(dev);
->         return ret;
->  }
->
->
->
 
