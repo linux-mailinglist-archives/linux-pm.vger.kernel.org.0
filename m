@@ -1,183 +1,117 @@
-Return-Path: <linux-pm+bounces-29573-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29574-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02399AE9A58
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 11:42:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2703AE9A61
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 11:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8507A3A8CA7
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 09:41:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FC533B1C28
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 09:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4FD52C15BD;
-	Thu, 26 Jun 2025 09:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE36215F5C;
+	Thu, 26 Jun 2025 09:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScBbOi07"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fGBv9h7C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B6415539A;
-	Thu, 26 Jun 2025 09:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37E018035
+	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 09:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750930887; cv=none; b=mUiTUONG+Hu3SZhEGIYCo99jLkjHuWjZT/sujJuSA2PV0Xn1ybhXu22RiW1BHEQuyxsWzAN01V6Ygw81aDxrMu2PAdo0hSUxvL63cb3IAK36V3yYfuBrt9Q2xSIhsYHAFL+u2g0FMsaTsZiLpwpgYijm/A5M9O2CCcZgOAv4sKg=
+	t=1750931236; cv=none; b=Jf+1FjDprviWSGE0dFFxdssc453cwxwgW6q51YKSpzHDu7ERuJ8EEB4kCLb2/lUv1SkefD15+/5DUaNHYc0Q5MTciYTu+dHfIOp9fzOUQVVKV/k3uK6RqFBM8+/+vgKVHiq3W20ddkWw2GdsDc6Rp4V6Kfj9AgoFG9v//AVNsOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750930887; c=relaxed/simple;
-	bh=kXlWtFJHYGZXpfxU2XTeWX5St19iKLmVxqcz6yj4hsI=;
+	s=arc-20240116; t=1750931236; c=relaxed/simple;
+	bh=VMtWGZQmlxRjsBfICY6WknhUm1dc+SAzCwKYbEHznNU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eB4qGHjMVmBhMXrQhYOMASgxPVI7wL1Lu6r//cIc1s8nbQDbGx7bq1T85y7nreTfbpkIZQ/izwtuxIzFLb9/Q8y/OpKO1DFl8ZWkPDDXNTNr43Ef/sRjzsKDONViDF+iLBNmMax1+/0NfCPGKKcE2GiLLrbCWATQIRujfDqbaT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScBbOi07; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B32AC4CEF4;
-	Thu, 26 Jun 2025 09:41:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750930887;
-	bh=kXlWtFJHYGZXpfxU2XTeWX5St19iKLmVxqcz6yj4hsI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ScBbOi07yuPICS41cWr23Z8x2Dj6pCzsY3pt4nv7xT5ANvkI/acXnHtiY+7hQGpXy
-	 DOBY0yVLXK7EIyR+Nl2j4tFeG/azHDbmgSDDSxqjctSEh3TQjTO4ix81yX4SSAFmR8
-	 YqaEejf66EIH2my6g0Hg5n23aGExiRYHLE9Fq4udNfCuR7RKI+vrnyaI5vugjrdg81
-	 NbctxnOxn97CxC1xPM3VIbGkknseMAVMTq/xKhyTfFv4rSMIY/yixJUSkCTTYr2QZe
-	 CZI5kh6vFcWDRO2sO2iz7vTkGBnBgWsESpZVMVNJBBBJiHqbCHHFPMX9ajqzwRmkFg
-	 QI/jxC941Nmsg==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-611998766c0so441024eaf.1;
-        Thu, 26 Jun 2025 02:41:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU0aVubtXBluevkUkXfhG/FCNHWmBpY9UhQKoQrA0XvGD+O9dOvEmBfWjZ9UmWE8zGviY2K19yQsJHZ@vger.kernel.org, AJvYcCUbC4Z2E/6qJCJReW2ZqKgqj22qSQVp6K/sk7A2ziKHN6Nw/ops524+zR4Awn7UiGcfR0NP3/35uxk=@vger.kernel.org, AJvYcCVFSl/W1OOcfjbzb35OQIXCHqlWMWTL/U3FO9jri/PF73CG2dQwnUT1XV5WDEcovU2Zo+gnEHDXI13nXENI@vger.kernel.org, AJvYcCWeGMsPTEPZpLtlkRBHHwdt+TY2XqYnuSuUXmvuDTpobaw8vj+4cpUjDgnGvtobKn9IZuW787Xmk88t@vger.kernel.org
-X-Gm-Message-State: AOJu0YyST7/uH6ZVsazOhAOfyMoZa+YtaJvaC89+DRWFqTNVwPUKbSq0
-	peiP9p/xSk4CwrOzJM1l7yCGAzn2ibnk20+nWeH3eC9BON38/S+ob0VKoH3ALgVl/VE3TImaNzH
-	1eYm/r54ub62V8Vf6AxAwPff28dm4eMI=
-X-Google-Smtp-Source: AGHT+IFFwcMnbazn9ld0BJf02w2SGzFl4BsPLD6/WVI+cKUPMvArB0HpKkLKr9h1POnuYo1bzegPrS6Er7Okr8detwA=
-X-Received: by 2002:a05:6820:907:b0:611:b1b0:2adf with SMTP id
- 006d021491bc7-611b1b02e35mr448886eaf.1.1750930886224; Thu, 26 Jun 2025
- 02:41:26 -0700 (PDT)
+	 To:Cc:Content-Type; b=HgtpXpwBGW/6jP71yAHIWKtYqihYSO2IC6sy+gEmQBv7kjJPkNW6Liw53YmHLJPMe2sFf1QWNqcNdSByyPQ6SGCVTmFxjul15Dq9ofLAkn4l2p189JxfMP1XpFdlBNrxqJB9zO166FQqPZ/BBbI4FaMY3kFUuvSBqvIIg+KC6xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fGBv9h7C; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e740a09eae0so674143276.1
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 02:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750931234; x=1751536034; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fj2QHa6OnGmzpYNyiPz5gZAKWryswlaFrYyygxh/pJQ=;
+        b=fGBv9h7CXiGSscqe+y7pRZblpGDx/6tflIHILwTB7AWm2O1yjKSEfQi+S57cClKZyF
+         HnaRczzacEiEHMWegPCwu8MS4T8njsN8HkucPxOfIVGnxS1mbQ+U5TBlEG4vh0nxlfVh
+         2s1ocqR/hADjmY5ihkj2wUkZ56QXO3+jbO+ZCUThHF9v3r0bBv5xVMsGLHdvat6kNJEv
+         UbenpHgs7NTg1JcUOlT7ITUIyRrQFLDb9NIJNSzXBf38RGtpZTA6UCOq/E9k88JL8CSX
+         YeVFyGWEInpwWJimbiiv0anm4pFc45rntyfyfe3Or+mKkbPd+hm6h0XFQMoug6s57HeF
+         ct1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750931234; x=1751536034;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fj2QHa6OnGmzpYNyiPz5gZAKWryswlaFrYyygxh/pJQ=;
+        b=ASoQZf5ZOG5y6HeX26ll5BrqAjfpr9+TlWgc0kYwntdSSyVxJicHtV9hiIWeXw8dCz
+         78mgLatQ+Ah95pOknDYYP6jjARArf229XZqt3H3kT+7ot7T7lI54kxwq87a7btfYd4c6
+         vXwq/rJjDU5IC/9/IeLSUKLKq3GFreohxRQBMY3oBZzkKjDgihK+D+68KhNXaXW6flcw
+         JFmxqIR58C9W8w3fCltIdR90jxcLB8ArkaXN6ngDoWujWo3s6dMFI2A2v09jdwFiSujZ
+         2Zrm6F1R48k2PzTbQ3JG1KyjG5FVIUaimpmXAfstapA8bS4T9Y+V4suI/7z6rkLCnlcg
+         jgbw==
+X-Gm-Message-State: AOJu0Yxtk5ukUaYmueTyU746W5CvGXMcX3udP+USsU+3h56PP2qyMbRB
+	q7CH+wCVyBN3gC4YTxzmMyACletqdbktmqp9jGkBrxnawJhBxwciZg7oRt2eu332HKCYBgrF9Tb
+	sDXFtrITAuLHz5yhfbUfcvjULsaZsyUfKRrUaEGczeA==
+X-Gm-Gg: ASbGncuzoTZv3xhBiNruDFstEPUH1uvTfvOYEEpDU7AMZqudRs1GhPJLfHn/oIXSBRG
+	OELDimtsVOBkZKtLclCSWS3ritmvWAYEVt/r+Migi71Dw1Q1UHdkIsRf8NtFAeN4mjlteWhYa+z
+	kb8VB1q6R2mn7aBRsEI6vnE0RK0KHgzhjsFOIDg2ONplcx
+X-Google-Smtp-Source: AGHT+IEHwERgRwCBzB6vbsL1sIE76j7GbjeXErZ4zJp9hup79xC50wEIXLcWf5xeAXwh2fM3WvRP1rlkAgqjvq3ixUI=
+X-Received: by 2002:a05:6902:2b91:b0:e84:2cec:1c9d with SMTP id
+ 3f1490d57ef6-e860177f71bmr7997438276.41.1750931233869; Thu, 26 Jun 2025
+ 02:47:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <22759968.EfDdHjke4D@rjwysocki.net> <2045419.usQuhbGJ8B@rjwysocki.net>
- <CAPDyKFq8ea+YogkAExUOBc2TEqi1z9WZswqgP29bLbursFUApg@mail.gmail.com>
-In-Reply-To: <CAPDyKFq8ea+YogkAExUOBc2TEqi1z9WZswqgP29bLbursFUApg@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 26 Jun 2025 11:41:14 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h-9UnvhrQ7YaaYPG5CktwV-i+ZeqAri8OhJQb4TVp82w@mail.gmail.com>
-X-Gm-Features: Ac12FXx4t9s1OQAcDGkW25YSbl2lqTUdJSGgwNxO3wpv-ubVObtrt96eUGaNFYE
-Message-ID: <CAJZ5v0h-9UnvhrQ7YaaYPG5CktwV-i+ZeqAri8OhJQb4TVp82w@mail.gmail.com>
-Subject: Re: [PATCH v1 4/9] PM: Move pm_runtime_force_suspend/resume() under CONFIG_PM_SLEEP
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <5011988.GXAFRqVoOG@rjwysocki.net>
+In-Reply-To: <5011988.GXAFRqVoOG@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 26 Jun 2025 11:46:37 +0200
+X-Gm-Features: Ac12FXyIi7-z5quv_0KDUCEzalPBWfhqotEQ2Vp_aGtEe5qy39ECa_ySIUN3UIo
+Message-ID: <CAPDyKFpBTz0M8DmWHLLm7x4c8G5PpQNv0Zj7mrZ9BewTBi1skg@mail.gmail.com>
+Subject: Re: [RFT][PATCH v4 0/2] PM: sleep: Handle async suppliers like
+ parents and async consumers like children
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Chris Bainbridge <chris.bainbridge@gmail.com>, 
+	Saravana Kannan <saravanak@google.com>, Sudeep Holla <sudeep.holla@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 26, 2025 at 11:38=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
+On Mon, 23 Jun 2025 at 14:55, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> On Wed, 25 Jun 2025 at 21:25, Rafael J. Wysocki <rjw@rjwysocki.net> wrote=
-:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Since pm_runtime_force_suspend/resume() and pm_runtime_need_not_resume(=
-)
-> > are only used during system-wide PM transitions, there is no reason to
-> > compile them in if CONFIG_PM_SLEEP is unset.
-> >
-> > Accordingly, move them all under CONFIG_PM_SLEEP and make the static
-> > inline stubs for pm_runtime_force_suspend/resume() return an error
-> > to indicate that they should not be used outside CONFIG_PM_SLEEP.
-> >
+> Hi Everyone,
 >
-> Just realized that there seems to be some drivers that actually make
-> use of pm_runtime_force_suspend() from their ->remove() callbacks.
+> These two patches complement the recently made PM core changes related to
+> the async suspend and resume of devices.  They should apply on top of
+> 6.16-rc3.
 >
-> To not break them, we probably need to leave this code to stay under CONF=
-IG_PM.
+> They were sent along with the other changes mentioned above:
+>
+> https://lore.kernel.org/linux-pm/2229735.Mh6RI2rZIc@rjwysocki.net/
+> https://lore.kernel.org/linux-pm/2651185.Lt9SDvczpP@rjwysocki.net/
+>
+> (and this is v4 because they have been rebased in the meantime), but they don't
+> make any difference on my test-bed x86 systems, so I'd appreciate a confirmation
+> that they are actually needed on ARM (or another architecture using DT).
+>
+> Thanks!
 
-OK, pm_runtime_force_suspend() need not be under CONFIG_PM_SLEEP.
-That's not the case for the other two functions though AFAICS.
+Hi Rafael,
 
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/base/power/runtime.c |    4 ++++
-> >  include/linux/pm_runtime.h   |   20 ++++++++++++++------
-> >  2 files changed, 18 insertions(+), 6 deletions(-)
-> >
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -1941,6 +1941,8 @@
-> >         pm_request_idle(link->supplier);
-> >  }
-> >
-> > +#ifdef CONFIG_PM_SLEEP
-> > +
-> >  bool pm_runtime_need_not_resume(struct device *dev)
-> >  {
-> >         return atomic_read(&dev->power.usage_count) <=3D 1 &&
-> > @@ -2063,3 +2065,5 @@
-> >         return ret;
-> >  }
-> >  EXPORT_SYMBOL_GPL(pm_runtime_force_resume);
-> > +
-> > +#endif /* CONFIG_PM_SLEEP */
-> > --- a/include/linux/pm_runtime.h
-> > +++ b/include/linux/pm_runtime.h
-> > @@ -66,9 +66,6 @@
-> >
-> >  extern int pm_generic_runtime_suspend(struct device *dev);
-> >  extern int pm_generic_runtime_resume(struct device *dev);
-> > -extern bool pm_runtime_need_not_resume(struct device *dev);
-> > -extern int pm_runtime_force_suspend(struct device *dev);
-> > -extern int pm_runtime_force_resume(struct device *dev);
-> >
-> >  extern int __pm_runtime_idle(struct device *dev, int rpmflags);
-> >  extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
-> > @@ -257,9 +254,6 @@
-> >
-> >  static inline int pm_generic_runtime_suspend(struct device *dev) { ret=
-urn 0; }
-> >  static inline int pm_generic_runtime_resume(struct device *dev) { retu=
-rn 0; }
-> > -static inline bool pm_runtime_need_not_resume(struct device *dev) {ret=
-urn true; }
-> > -static inline int pm_runtime_force_suspend(struct device *dev) { retur=
-n 0; }
-> > -static inline int pm_runtime_force_resume(struct device *dev) { return=
- 0; }
-> >
-> >  static inline int __pm_runtime_idle(struct device *dev, int rpmflags)
-> >  {
-> > @@ -330,6 +324,20 @@
-> >
-> >  #endif /* !CONFIG_PM */
-> >
-> > +#ifdef CONFIG_PM_SLEEP
-> > +
-> > +extern bool pm_runtime_need_not_resume(struct device *dev);
-> > +extern int pm_runtime_force_suspend(struct device *dev);
-> > +extern int pm_runtime_force_resume(struct device *dev);
-> > +
-> > +#else /* !CONFIG_PM_SLEEP */
-> > +
-> > +static inline bool pm_runtime_need_not_resume(struct device *dev) {ret=
-urn true; }
-> > +static inline int pm_runtime_force_suspend(struct device *dev) { retur=
-n -ENXIO; }
-> > +static inline int pm_runtime_force_resume(struct device *dev) { return=
- -ENXIO; }
-> > +
-> > +#endif /* CONFIG_PM_SLEEP */
-> > +
-> >  /**
-> >   * pm_runtime_idle - Conditionally set up autosuspend of a device or s=
-uspend it.
-> >   * @dev: Target device.
-> >
-> >
-> >
->
+I haven't yet got the time to test these, but the code looks good to
+me, so feel free to add for the series:
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
 
