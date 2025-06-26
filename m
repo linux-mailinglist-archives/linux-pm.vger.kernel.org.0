@@ -1,165 +1,119 @@
-Return-Path: <linux-pm+bounces-29589-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29590-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBE33AE9C08
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:59:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 822E4AE9CD1
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 13:50:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D12F4A37FD
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:59:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09F655A73D5
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 11:50:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C959272815;
-	Thu, 26 Jun 2025 10:59:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8EF4C81;
+	Thu, 26 Jun 2025 11:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rO3ISG0o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCpuq5cp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490472727FE;
-	Thu, 26 Jun 2025 10:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F37710E0;
+	Thu, 26 Jun 2025 11:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750935577; cv=none; b=JcQ2pMVo6D67YYIfauzGBbNMXggHy4RSMDa9MvL7nTIJLEZJkhzvO8Ckvg7q22tite7AkERDKj6UHzEj+zden/AZLOS9wwzFMVGlD83u57FXWMT1zOApWEvOoheJgCMP5C/f0Tij6NM0k2sZk8WQfKEhsNK36VcAhID4uIp1XhQ=
+	t=1750938627; cv=none; b=c/KtXwMaLp/utrOt4fdtHhLVGrTZVQT7wVE4FanFnUjLxKnTAEvz1NfUA/SUTL4OVJdQtLIgQVwHazmyZy+Hs1kYFFWshJxVQKybrp/ASF/CLPkGsvvEXj0wV8UKV4e0XTDl81yrJxkbN12ChovxBha1m9TlfGYCr8un65NiRdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750935577; c=relaxed/simple;
-	bh=+dnfNjkqjX5KLN7SnWD0Dst7Xn0aAkIyOGApXAie9OY=;
+	s=arc-20240116; t=1750938627; c=relaxed/simple;
+	bh=47DwLxZ5ThOmC2ZCeEvtDYoVmJKiQ13yJRlQWHsuxRE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KsOQqchaKKKBaKSGaVP1+N1CW+s/8BXRkk8fuTYk9BS/tvOkC1tTAbp8Rjk49fJSZUa3mQA5hH3q/tRq0r9HMvkTu6KzyH7FU/eVRyUeGYoDSS/GemxaVC9JILEVq/hN46AenQqrpEQQ54+bT/oXAVqBHJ/zG+csLE3SMYnID8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rO3ISG0o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1976C4CEEE;
-	Thu, 26 Jun 2025 10:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750935576;
-	bh=+dnfNjkqjX5KLN7SnWD0Dst7Xn0aAkIyOGApXAie9OY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rO3ISG0ofqV5TlQR3rZYDgcoTr2D+SCneBfkiURALzk9ixerSy6WZSHgkd/nwvozp
-	 leotQl/rSx5I7ZzvCaxg2UBpDcy4d5/0YWgWz9oZObB2K45XZA+AG5YSf2LxGXNhCg
-	 J3nc18lXBNBwE+Az8t29w6BgDfGu0PKjJ+NymeGnejkwOJYyqFqjbfgPtoX65hjTmc
-	 S43EBevSDlJqdkwKCpZPmeG+b13z54ab1Q6ncY1FF8AP1DtDgFkYezR6Q0gZexGlVA
-	 5qz+YZYwkvyNe39I4JRpcUo+UkWVQCU6b/drPZPcmD3I3KXvoXBuC3wiySuLEijJ4O
-	 25oNYChpDmpKg==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-60bd30dd387so434356eaf.3;
-        Thu, 26 Jun 2025 03:59:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUJo1hR+bUdc3/KwvI0GxWNBY4LkgyLYXYjnclcVfLiZ15woZK/ZUz5OIv22Oewxo6j7y4Y+eorO4/l@vger.kernel.org, AJvYcCWCqHgDDcQSu0Y0chmZg0K44iG3lklJw1gHDOTFUC1OnyuEC4wzAWou6eZKCijDgTIEffeqdMogeWQ=@vger.kernel.org, AJvYcCWV9hr52pldXRMD56zfKPdxILihNgW8sBg9mHlSDzBbT5Wy4FdV1zxMbvHfJ+rj31049IMakicEt0fk/gY7@vger.kernel.org, AJvYcCWwoA01QirdIepucLeo+e7TX9F64ps9m349yJE1pHwZiNXT5pRhiWUJ9gdf7IiqCet1Y0pClAnxqEBX@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy53ASr5HYfSAa4h3CoN7/SIV57X9dEfxcR3EAn9Ol6569oFBCv
-	Oq2zLMOa0gXdM2pz6z7a6tzyZYL3gLTsMAIGT4hxxmdSamUs2bJUJjfY7/dABHN0tp5w1FUL/uh
-	smtIGjwjhDL4KslruK42eW2n7wGdaCrM=
-X-Google-Smtp-Source: AGHT+IFlHK0qqu+LJQSDSOqsz2M0dO3rmVztJx4oRIo33VonBpawvIFL8ydYaYNmO/FgSVPMw29dHyBQ2yKsGcxIF9c=
-X-Received: by 2002:a05:6820:4b95:b0:611:a799:cb65 with SMTP id
- 006d021491bc7-611a799cd7amr2629973eaf.2.1750935576092; Thu, 26 Jun 2025
- 03:59:36 -0700 (PDT)
+	 To:Cc:Content-Type; b=HDvExK4QslpmTXECfK5AEQ/5M1PkyrcApet8k0MD8tftB7JlbDfRycdjBJYnhbZ7b+QCEObb03F/Hlef7YWTP5kpQrvPHV9WLVhoVcG00rM+jof0HB2d66EqhBxpnFCzhPlnNpbkGJgZzwOgtuFop9IP+dKBBoulqBukP9fqiJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCpuq5cp; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-313862d48e7so137115a91.1;
+        Thu, 26 Jun 2025 04:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750938625; x=1751543425; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l9XKIcAVinRyEVth7piavPqwL9ln4+s7PL+WLMnmvUU=;
+        b=YCpuq5cpzk5b/44brhIzH+tWmDveDCSdIX7UE7Ata4IKEuOVdL2gAomJjlFnUIVLPQ
+         9kqJPJr/ntZT8RGz3FYarsyOcOL8dLLwBjOOXK/WWBffNzx0l340bQAcVpdBs+Xy1wso
+         UUL7IFr/1Kj/5wLCY5DMSl+5+ETKuILspgaE1d9UuC3ycBZsI49fpGou03tMxdD5npby
+         +DsvMONz+JGEW8Y2WX3R+HZEsun6ipdusBDhCFd91hZpvo2Tn0fPmqX5WNMsSXE4q2eN
+         3Sd3B/XbxT7jwvHdfMCjeCIDTEpNkg5O+ijVtwjeZW5DAzDkLGgCkGjriAUEovjqY3Ed
+         c1RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750938625; x=1751543425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l9XKIcAVinRyEVth7piavPqwL9ln4+s7PL+WLMnmvUU=;
+        b=csXnIv/FFV2va5UMYfxadBSWJvkEV6lYlCQURJsMZZQcjm+FYSSzVDcm8qjdI/UIFy
+         eRj+jdqQCtCyxvVnfadpfj5vJ8M0nYBWOCzP8noPqBLE0JGj6c0CAXHYY/nQ1gqtVBUG
+         yigSqoBTtOY69J0q9ByEF1/tKtR2PKo0Py8LEKGzaIb/XiG2QCxNwCV4ZxQNKWjVy/4H
+         e9Ko+opzPz/6j9qHaHUKowQexlusHPdRVe706s/liXjb5BPOL448y0M8VgRMNiFNe2ds
+         JRcEx2/wbbg8R1zsc+kLYK2tOK+tqwXGtR1WpNrr0DYSu+iprXTWJPjsZjg7/dTl2aFj
+         quFA==
+X-Forwarded-Encrypted: i=1; AJvYcCWG8+h3xFjYTnUwZNCPLEhD5LQ8bg0MCydVtu+NSrPSS6bKRFW5QecNQH8jcAZrVkE3RzIWf8W80UU=@vger.kernel.org, AJvYcCWPqXjUMXoE/iZ6urKdggq4FKCG/ggWdo+GUUW36Lwlc8IfpIWG2jnPc1mlBYlWsuCwSlucYs+JB2RNEk0RqxA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLbHk8B9AAf51X1SC0sasYAOZOwrxcUpIVGgQwnrqbqX9hJ7Kf
+	0pkI/GtDif1RRUY9CF5KxXWC/rRPwBfHLDl3b0Nyw4/5wgY9d1AcaspC8w4uw54Jner9xx8oURF
+	2BA5/RBXsx1fSDG3PCjEN5cvIiunb8+Y=
+X-Gm-Gg: ASbGncvvv6rF6p8uQJXcewmmr+DFQxQn6M6Xz/zuDt91khcJQI6hD8H1zV9JMXY7OuG
+	gHnFLtJUwMx8WVlg0Wg2M1lcGVe2BP/S9riUpOYyyJKBn3M05K+NUWkUlNs1OF6+ZYhkzN4OHIz
+	GUZmZ2G8mc3QCnqKEdSppjbrr2IyUTaCtiwEHRMiv0sPs=
+X-Google-Smtp-Source: AGHT+IEDAfqrKdcOT2s3DZHiC9RhHcJN9UbcrQCS6mv6OcB4dOUdlDT1p3KWKRr/Jh/jPOgSwAknZPYNmBynDnS0svE=
+X-Received: by 2002:a17:90b:2e50:b0:313:2bfc:94c with SMTP id
+ 98e67ed59e1d1-315f26ae116mr3685087a91.8.1750938625522; Thu, 26 Jun 2025
+ 04:50:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <22759968.EfDdHjke4D@rjwysocki.net> <CAPDyKFpZVdf2EnZE_u1xDKB7=Nd98a_ajYimQhLBu6jYwJhJFA@mail.gmail.com>
- <CAJZ5v0irk8n0MzRm=u8k=+Mtq84r7JsazS10DsvHO4ktgW=AMQ@mail.gmail.com> <CAPDyKFq7gydO0uioA53LqXk-N+Bjp4bwkaRRzMeWv+F=zpy2Jw@mail.gmail.com>
-In-Reply-To: <CAPDyKFq7gydO0uioA53LqXk-N+Bjp4bwkaRRzMeWv+F=zpy2Jw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 26 Jun 2025 12:59:25 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g4Q+cqMKNnBDaFsnj4zSH_iKV+EDz9BnfF23cATkczYA@mail.gmail.com>
-X-Gm-Features: Ac12FXy7ca52AM2RImFpx6abJFvTiPZiAAJMqD4JzF_OcnCrx84Phr2euW0aKIA
-Message-ID: <CAJZ5v0g4Q+cqMKNnBDaFsnj4zSH_iKV+EDz9BnfF23cATkczYA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/9] PM: Reconcile different driver options for runtime
- PM integration with system sleep
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux ACPI <linux-acpi@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20250626100448.27921-1-work@onurozkan.dev> <20250626100448.27921-3-work@onurozkan.dev>
+In-Reply-To: <20250626100448.27921-3-work@onurozkan.dev>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 26 Jun 2025 13:50:12 +0200
+X-Gm-Features: Ac12FXxu4fukAl2NZsF-4Rlpnor3wUHjieWYL8rynr6tvoB0DmTBZvvc9TN3CrU
+Message-ID: <CANiq72mSoq=bVxSsg7_-X+EimVZiuN89fFZSYs8rKSaLmEm5gw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] rust: drop unnecessary lints caught by `#[expect(...)]`
+To: =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	airlied@gmail.com, simona@ffwll.ch, ojeda@kernel.org, alex.gaynor@gmail.com, 
+	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, rafael@kernel.org, viresh.kumar@linaro.org, 
+	gregkh@linuxfoundation.org, maarten.lankhorst@linux.intel.com, 
+	mripard@kernel.org, tzimmermann@suse.de, davidgow@google.com, nm@ti.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 26, 2025 at 12:41=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
+On Thu, Jun 26, 2025 at 12:06=E2=80=AFPM Onur =C3=96zkan <work@onurozkan.de=
+v> wrote:
 >
-> On Thu, 26 Jun 2025 at 12:34, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Thu, Jun 26, 2025 at 12:31=E2=80=AFPM Ulf Hansson <ulf.hansson@linar=
-o.org> wrote:
-> > >
-> > > On Wed, 25 Jun 2025 at 21:25, Rafael J. Wysocki <rjw@rjwysocki.net> w=
-rote:
-> > > >
-> > > > Hi Everyone,
-> > > >
-> > > > This series addresses a couple of issues related to the integration=
- of runtime
-> > > > PM with system sleep I was talking about at the OSMP-summit 2025:
-> > > >
-> > > > https://lwn.net/Articles/1021332/
-> > > >
-> > > > Most importantly, DPM_FLAG_SMART_SUSPEND cannot be used along with
-> > > > pm_runtime_force_suspend/resume() due to some conflicting expectati=
-ons
-> > > > about the handling of device runtime PM status between these functi=
-ons
-> > > > and the PM core.
-> > > >
-> > > > Also pm_runtime_force_suspend/resume() currently cannot be used in =
-PCI
-> > > > drivers and in drivers that collaborate with the general ACPI PM do=
-main
-> > > > because they both don't expect their mid-layer runtime PM callbacks=
- to
-> > > > be invoked during system-wide suspend and resume.
-> > > >
-> > > > Patch [1/9] is a preparatory cleanup changing the code to use 'true=
-' and
-> > > > 'false' as needs_force_resume flag values for consistency.
-> > > >
-> > > > Patch [2/9] makes pm_runtime_force_suspend() check needs_force_resu=
-me along
-> > > > with the device's runtime PM status upfront, and bail out if it is =
-set,
-> > > > which allows runtime PM status updates to be eliminated from both t=
-hat function
-> > > > and pm_runtime_force_resume().
-> > > >
-> > > > Patch [3/9] causes the smart_suspend flag to be taken into account =
-by
-> > > > pm_runtime_force_resume() which allows it to resume devices with sm=
-art_suspend
-> > > > set whose runtime PM status has been changed to RPM_ACTIVE by the P=
-M core at
-> > > > the beginning of system resume.  After this patch, drivers that use
-> > > > pm_runtime_force_suspend/resume() can also set DPM_FLAG_SMART_SUSPE=
-ND which
-> > > > may be useful, for example, if devices handled by them are involved=
- in
-> > > > dependency chains with other devices setting DPM_FLAG_SMART_SUSPEND=
-.
-> > > >
-> > > > The next two patches, [4-5/9], put pm_runtime_force_suspend/resume(=
-)
-> > > > and needs_force_resume under CONFIG_PM_SLEEP for consistency and al=
-so
-> > > > because using them outside system-wide PM transitions really doesn'=
-t make
-> > > > sense.
-> > > >
-> > > > Patch [6/9] makes the code for getting a runtime PM callback for a =
-device
-> > > > a bit more straightforward in preparation for the subsequent change=
-s.
-> > >
-> > > I can't find this one. Seems like you did not submit it.
-> > >
-> > > Perhaps make a resend and fixup the patch-numbering too?
-> >
-> > I'm going to send a v2, but the patch in question is here (wrong number=
-):
-> >
-> > https://lore.kernel.org/linux-acpi/3306233.5fSG56mABF@rjwysocki.net/
->
-> No, that's patch2 (which was named pacth0). :-) Nevermind, I think we
-> made some progress so I am awaiting a v2 before continuing my reviews.
+> -        #[expect(clippy::unnecessary_cast)]
 
-OK
+We should avoid converting them into `expect` in the previous patch,
+because then it would break the build between the commits (it is not
+too critical if it is a Clippy one, but we still aim to keep builds
+Clippy clean).
+
+In addition, the reasoning for each of these not being needed may not
+be immediately obvious (unlike other lint patches that follow all a
+pattern). So it would be best to split the patches into cases to
+explain each. For instance, this one is because with the new custom
+FFI mappings `c_long` is always `isize` now, which is always different
+from `c_int` (`i32`).
+
+By the way, please Cc the rust-for-linux list too.
+
+Thanks!
+
+Cheers,
+Miguel
 
