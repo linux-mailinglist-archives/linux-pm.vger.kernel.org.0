@@ -1,132 +1,178 @@
-Return-Path: <linux-pm+bounces-29571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DBA0AE9A28
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 11:35:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F59AE9A49
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 11:39:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 020473AB1F5
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 09:34:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDC2D189C41F
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 09:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C22102D4B4F;
-	Thu, 26 Jun 2025 09:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66BA52C08C9;
+	Thu, 26 Jun 2025 09:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="obLgEmT7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KsIaojvX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF00F2D1F6B
-	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 09:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2AB2BEC3B
+	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 09:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750930445; cv=none; b=czjHdH1UWg7w1viN3bpnq24siAYSn7axSGYSPBDkyjZFKfSYvwhXo4x4Qx8cVCcnLXtLxJO+cpMi3wNmgUvpK4mSMeI3s4YZu+2/8G+WnzzAqGj4KIlXvDJlPOPXCx1gu1rpDT82svGINHSM5eNNl1G/SWcZQRRp6PKZWqvDuqg=
+	t=1750930729; cv=none; b=HkCntEM7D+7gQdI5xhu52FM751jdBkUlIOQeUiMnvjHW763L1K1EA/EQKm+dM5Q0OVUk1r4z6EneR4UnLxxjVBv+2ZqMBDGP6uxCPSMPwTH4WOW65bG6tihwDo7KDEfp1DL/LUviYHVHfVucPZbw2vrdiBBYHjjMHcnNE3I0k0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750930445; c=relaxed/simple;
-	bh=Eqahkamg13uwXjpD2HqVe8PGEmKJKZBW1G6dF/3Hy5o=;
-	h=From:Date:Subject:MIME-Version:Message-Id:In-Reply-To:To:Cc:
-	 Content-Type:References; b=Vvi/7C3jH0aWwgxaipzCvUBg3mptiWrrZQv/Vwf6GQ6z8BuThWuH37QiXqV2ow/8uTZNUXe72j6CJOdc1GUocuBJRKsYnUuxVUEAGEcrmq9hdYQlt1m+saKAEWlyLV92C0k/2EvSWuhHtnW6fq/jqujnjjh7qiBxVv2Xj9DxXsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=obLgEmT7; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250626093402euoutp0178fbb590e998b1e4570d0d95d857629f~MjfXu5Qag1974119741euoutp01K
-	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 09:34:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250626093402euoutp0178fbb590e998b1e4570d0d95d857629f~MjfXu5Qag1974119741euoutp01K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1750930442;
-	bh=o9pup7lxdlJYj1WCugUFlZF6W3E8/CCvLfzm1q+9rG4=;
-	h=From:Date:Subject:In-Reply-To:To:Cc:References:From;
-	b=obLgEmT7BrcyHY2wCqD+VIOfm8/KKrpab9eovN9oMZ+Gix9Ww0syAH2pl44aYJNnm
-	 sTEYDcYL9CsTQb6499N377PxmDpqW4BRs1d/YdPNytRLMSFcUwpcrvDo0kKPgicxID
-	 WDD55G7EbClQaNwmt8/9qJosHF42i+6EtOrLeL4Y=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250626093401eucas1p147c296efa1b9d8b747b04abb0b5536b7~MjfXGO8Ih0088000880eucas1p1k;
-	Thu, 26 Jun 2025 09:34:01 +0000 (GMT)
-Received: from AMDC4942.eu.corp.samsungelectronics.net (unknown
-	[106.210.136.40]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250626093400eusmtip211e953e12a75fc241da835b28339d1d9~MjfWA4cOJ1045310453eusmtip2h;
-	Thu, 26 Jun 2025 09:34:00 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-Date: Thu, 26 Jun 2025 11:33:50 +0200
-Subject: [PATCH v7 5/5] drm/imagination: Enable PowerVR driver for RISC-V
+	s=arc-20240116; t=1750930729; c=relaxed/simple;
+	bh=e6BYYN0RrbPQauR2xmIcMIc/SKh6PKKv9oYpeF+Oqd8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BDRlrGWRUMGFOw2kEMpEdhBEgZNhTLhcYW/alNaUoOwBrsHwQAfMEj5e3e5OKtQK0x/xOfrITdqyphfaTQUoCGEMN8FBxFe4TdWI+EU1Jmv1C6qcp4b06AnIiyzeNbjDusWwKCr/+ZqXTaXu4pT8g6XIZiRF9cnNsH/4kA7RdCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KsIaojvX; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e740a09eb00so592926276.0
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 02:38:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750930725; x=1751535525; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pMUIQ5YDyeNXFe3b105yTgr62Ww89LPKr15AiB8c878=;
+        b=KsIaojvXzRsFuFW8AdaeLjDtWqbVsB9KOLmyXWBGqHa0Faylk2+kFq3hPdxjN6OvP/
+         9JFJdCAQ61WNWESi3gn5SXG1ZUj9r3OBQufANaYCpeyzCxzu6yxINMvZ6q25Dlu5l3KW
+         tHEFFw0PiH2ZT54usj2wEFK+hjmmYf2bkyQDO7ki1dELWwQaAykOqB6DZAhnEctW1KxF
+         /rFw8uF7BJnjJqSxvNECm6hhGvEZXe+4y7tb5vzhtXHF/yHlKt9v1s67ZEqJONb4muXZ
+         JzB5w6PQ960IdSmJzZqi62JxGctdGlpNrH0LdBZyuWRR5nOKhMSB5NhOkcgRjZp5gaen
+         bf0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750930725; x=1751535525;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pMUIQ5YDyeNXFe3b105yTgr62Ww89LPKr15AiB8c878=;
+        b=rz+1OJd+HhE4Bqnq+WJmniU3c/vC81lL5AvzDJDNrtF0pmiDAZjfogMonXZPYJS/vM
+         7VOaHvXBptH4swEFC778EJ/1pQbz9WXIvX1JQFlnEoXOqj3C7yem92yfwaC/W5cFpeOK
+         bINq88lqEBXG8ZguIlJFFBs5H5i7qk30jc2CybD3p+T2kXJS7zW3ibDifipEUO6KoCEc
+         gqXJAGXGNiBGN719pqjLL/8u5QkPXT4t1QDNijyIdY9eR/U1JvTspop5rcK4tRrRMInh
+         8Z9hOG2LmWoSRBkm14/LcTvUyp2L9Y1oWo9ORruvbT5kqrWCT2ksJXI8UnBpm9ASJG1t
+         k1ww==
+X-Gm-Message-State: AOJu0Yx3bem5BWuVSET7yKiEbl+wWPYTHE+kG3ap6E6xRVaWn/8WDR6G
+	UzkaQmD8V/6Jkk9jOAFqUAplG1eqTaK/c15oCjJ+PGfAeLxESY/bP2wuQjkPYNDHv4HTyWh8Bty
+	CEinhnOTflroztMCTDQKhBigv8hxPyuAx5E0x6DSAx1BBJzOzJ9LS
+X-Gm-Gg: ASbGncsItjI6/gjftDzip7I21w8D/LvJmjebh1ctHsnt0A92yI4caM+vykQIafh3ygj
+	D+0YXL46S/k4jUrvJ6BLJUCHSXcJ+h0a/LzM2Jd213UrzB49S/tY3DrP/s9R4Lz5tgIGJgWQEOY
+	BTeaRx4XhdIhvEAm8FEYj4MP358oqicur4dRFbNhDf0S/p
+X-Google-Smtp-Source: AGHT+IGrpanO/3GvZtkdw+zW8xGsoUTA6H0Q9aX5hZ9J/rpREkBRKcp+Slx0dssooKyIYA59huReEPP3hAYYC9tyJtU=
+X-Received: by 2002:a05:6902:168f:b0:e81:52ff:b40 with SMTP id
+ 3f1490d57ef6-e8601786020mr7981913276.20.1750930725237; Thu, 26 Jun 2025
+ 02:38:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250626-apr_14_for_sending-v7-5-6593722e0217@samsung.com>
-In-Reply-To: <20250626-apr_14_for_sending-v7-0-6593722e0217@samsung.com>
-To: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,  Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
-	<conor+dt@kernel.org>,  Michal Wilczynski <m.wilczynski@samsung.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,  Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,  David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,  Paul Walmsley
-	<paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>,  Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
-	<ulf.hansson@linaro.org>,  Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Drew Fustini <fustini@kernel.org>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org,  Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.15-dev
-X-CMS-MailID: 20250626093401eucas1p147c296efa1b9d8b747b04abb0b5536b7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250626093401eucas1p147c296efa1b9d8b747b04abb0b5536b7
-X-EPHeader: CA
-X-CMS-RootMailID: 20250626093401eucas1p147c296efa1b9d8b747b04abb0b5536b7
-References: <20250626-apr_14_for_sending-v7-0-6593722e0217@samsung.com>
-	<CGME20250626093401eucas1p147c296efa1b9d8b747b04abb0b5536b7@eucas1p1.samsung.com>
+References: <22759968.EfDdHjke4D@rjwysocki.net> <2045419.usQuhbGJ8B@rjwysocki.net>
+In-Reply-To: <2045419.usQuhbGJ8B@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 26 Jun 2025 11:38:08 +0200
+X-Gm-Features: Ac12FXyLItyotFSiFfzbcS6RmKm69PO701oLuNAu0WjTraC_1HAu9CP21xq8fYM
+Message-ID: <CAPDyKFq8ea+YogkAExUOBc2TEqi1z9WZswqgP29bLbursFUApg@mail.gmail.com>
+Subject: Re: [PATCH v1 4/9] PM: Move pm_runtime_force_suspend/resume() under CONFIG_PM_SLEEP
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Several RISC-V boards feature Imagination GPUs that are compatible with
-the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
-4A board. This commit adjusts the driver's Kconfig dependencies to allow
-the PowerVR driver to be compiled on the RISC-V architecture.
+On Wed, 25 Jun 2025 at 21:25, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Since pm_runtime_force_suspend/resume() and pm_runtime_need_not_resume()
+> are only used during system-wide PM transitions, there is no reason to
+> compile them in if CONFIG_PM_SLEEP is unset.
+>
+> Accordingly, move them all under CONFIG_PM_SLEEP and make the static
+> inline stubs for pm_runtime_force_suspend/resume() return an error
+> to indicate that they should not be used outside CONFIG_PM_SLEEP.
+>
 
-By enabling compilation on RISC-V, we expand support for these GPUs,
-providing graphics acceleration capabilities and enhancing hardware
-compatibility on RISC-V platforms.
+Just realized that there seems to be some drivers that actually make
+use of pm_runtime_force_suspend() from their ->remove() callbacks.
 
-The RISC-V support is restricted to 64-bit systems (RISCV && 64BIT) as
-the driver currently has an implicit dependency on a 64-bit platform.
+To not break them, we probably need to leave this code to stay under CONFIG_PM.
 
-Add a dependency on MMU to fix a build warning on RISC-V configurations
-without an MMU.
+Kind regards
+Uffe
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
----
- drivers/gpu/drm/imagination/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
-index 3bfa2ac212dccb73c53bdc2bc259bcba636e7cfc..682dd2633d0c012df18d0f7144d029b67a14d241 100644
---- a/drivers/gpu/drm/imagination/Kconfig
-+++ b/drivers/gpu/drm/imagination/Kconfig
-@@ -3,8 +3,9 @@
- 
- config DRM_POWERVR
- 	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
--	depends on ARM64
-+	depends on (ARM64 || RISCV && 64BIT)
- 	depends on DRM
-+	depends on MMU
- 	depends on PM
- 	select DRM_EXEC
- 	select DRM_GEM_SHMEM_HELPER
-
--- 
-2.34.1
-
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/runtime.c |    4 ++++
+>  include/linux/pm_runtime.h   |   20 ++++++++++++++------
+>  2 files changed, 18 insertions(+), 6 deletions(-)
+>
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1941,6 +1941,8 @@
+>         pm_request_idle(link->supplier);
+>  }
+>
+> +#ifdef CONFIG_PM_SLEEP
+> +
+>  bool pm_runtime_need_not_resume(struct device *dev)
+>  {
+>         return atomic_read(&dev->power.usage_count) <= 1 &&
+> @@ -2063,3 +2065,5 @@
+>         return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(pm_runtime_force_resume);
+> +
+> +#endif /* CONFIG_PM_SLEEP */
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -66,9 +66,6 @@
+>
+>  extern int pm_generic_runtime_suspend(struct device *dev);
+>  extern int pm_generic_runtime_resume(struct device *dev);
+> -extern bool pm_runtime_need_not_resume(struct device *dev);
+> -extern int pm_runtime_force_suspend(struct device *dev);
+> -extern int pm_runtime_force_resume(struct device *dev);
+>
+>  extern int __pm_runtime_idle(struct device *dev, int rpmflags);
+>  extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
+> @@ -257,9 +254,6 @@
+>
+>  static inline int pm_generic_runtime_suspend(struct device *dev) { return 0; }
+>  static inline int pm_generic_runtime_resume(struct device *dev) { return 0; }
+> -static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
+> -static inline int pm_runtime_force_suspend(struct device *dev) { return 0; }
+> -static inline int pm_runtime_force_resume(struct device *dev) { return 0; }
+>
+>  static inline int __pm_runtime_idle(struct device *dev, int rpmflags)
+>  {
+> @@ -330,6 +324,20 @@
+>
+>  #endif /* !CONFIG_PM */
+>
+> +#ifdef CONFIG_PM_SLEEP
+> +
+> +extern bool pm_runtime_need_not_resume(struct device *dev);
+> +extern int pm_runtime_force_suspend(struct device *dev);
+> +extern int pm_runtime_force_resume(struct device *dev);
+> +
+> +#else /* !CONFIG_PM_SLEEP */
+> +
+> +static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
+> +static inline int pm_runtime_force_suspend(struct device *dev) { return -ENXIO; }
+> +static inline int pm_runtime_force_resume(struct device *dev) { return -ENXIO; }
+> +
+> +#endif /* CONFIG_PM_SLEEP */
+> +
+>  /**
+>   * pm_runtime_idle - Conditionally set up autosuspend of a device or suspend it.
+>   * @dev: Target device.
+>
+>
+>
 
