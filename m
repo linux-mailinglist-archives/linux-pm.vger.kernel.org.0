@@ -1,210 +1,117 @@
-Return-Path: <linux-pm+bounces-29575-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29576-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65BDAAE9ABE
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:05:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48225AE9AC6
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:07:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6E664A293D
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:05:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26BDB1C41F55
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 737E321CC62;
-	Thu, 26 Jun 2025 10:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EA721A92F;
+	Thu, 26 Jun 2025 10:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zGz7Le59"
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="kz/m0gKr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward103b.mail.yandex.net (forward103b.mail.yandex.net [178.154.239.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4896217701
-	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 10:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B582821A436;
+	Thu, 26 Jun 2025 10:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750932312; cv=none; b=KO+ADh+ZRU4T2JjMfPBiTREWPfF0M5rchB5XR4kLH2TvF6rDCitGfsQf10c+K7T9G86DpxczFAcbDscLaREqxlHZ54xvKl2gAq2CMo1XkTNW19xF2uN09iJejdMvKagcElaVh0ZZ9z3LTmNOn7NHg7rpFsLuVgj+q/suqsGXcFA=
+	t=1750932359; cv=none; b=aSx6ng8RvdlROdS9/7J6v7swn8WIgTlPm2lTCIbqpdg1a/5LmKp3WCmSlviJFlpBtd9kFoVr8qt69nigDMjFOgBiVjgKO8ZI5Mrzz3iSC44btPy7hhSC7MYSpdcOf/dquglh2FUUo8Lw3287m2KWvCuo06EbvlSyw62w0fmVOBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750932312; c=relaxed/simple;
-	bh=dqhmiv/jrw4EXl4UG21c/emO5d4PlM9K6RNlISK2dIU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s9FamEPyg+XWk0QhlWxTcDVoayAh4kcYs2A2xHOFl+IRwBhvyi1Oe4ZJNBYRNj7ry5ImOg/HnffYlU4gqitB4iMDGnJI+KcZCFz+r1457jZbUDDKt/1KMRDC59Di75edMmVG6NlG+Gs3On+B95SJPz88tdZles/c1O2LlNTrw4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zGz7Le59; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e819ebc3144so710633276.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 03:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750932309; x=1751537109; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ef52RvSy9XhGGhE8oWCY3Xw5VEy2HnHxn8942Y4DhVA=;
-        b=zGz7Le59KlLp8uhVP4c8kwKnCfxyfnVL7Tm7MrDqe7zF+LGtaw/xaFo75A1kdtkDf4
-         Bf/OPvT70sGzZ1fT4+nCIYIlcfH0ib3GZyvRfNwDSoEtpxws5AxtLoqe9Sw1y/oXCevw
-         FGzSDx8viD/zCLj3BM5eCM63dtl3EzstzyLwn3zRuT20eMnLyJmM04bB3eYI8W/CrzTm
-         NSF2FrY3FtGPtp+YlCgeccZEsazKPDhyZ++WTYlTUO+cYtlgYX2AZUdvU5WGhahwJZ4U
-         VLjKJ4ZlDaOEZqZCAhh83PjCJuFNAdf5whbpR3Wph/Iyj8e0+NxP7+lIo0/ov9y7wRr8
-         Htpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750932309; x=1751537109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ef52RvSy9XhGGhE8oWCY3Xw5VEy2HnHxn8942Y4DhVA=;
-        b=oz3eUCHhgjQ8Lhdrq7D6b/k4tgAEvVnuHPL0l4XVFn6kdyAuJmqRxVCWpR3QaynOuE
-         DQ8YEgsvtE7SEzM3g26lL0rYuyfRqBoUV+9Ax0MCHTqxJlSEYHgDXjglYlmyVt7vhd3+
-         qIjZpRppMASvuECM2/HBTfJfPWAHk2glfetOERPAr2828QBnmm7V4o6eRjMWF9OgxeM3
-         H+wOCoycv/lM6eKyRwMP4YdOqtg2ydwNCyNK8fZP3gVdpaWq8A4RJXm7WjYGFJBTwm4N
-         o6Vq1INhN2fNedvaylZ6DZTG+3lghrbs4mDxoEa2kqYP0ORiU0zU7PsuQm/gVv8wuHEQ
-         rNig==
-X-Forwarded-Encrypted: i=1; AJvYcCU/VX8xkAlnr85PMlxLTpRexY6R1pU2uEMeSzq0qJRUN3hAryC76Zb+YjMuxFHZ4lTVaJAVfZLMBg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YykKp3i54IcFnCechXgN45lJmdDJyUfDbvRu4SY7+DQFH2KvjQP
-	zqZ+XLt5w4FdRuSgyyV/CBKXHbYOvLAK6VA7FhOEznwHR2ywcYfhls+4vdaVav0QocvUcrhCjLM
-	bGhBd8z3zPpLShmb3V1MgHw9+1s6H7yJHs5sER05K3OqpBwM07ymz
-X-Gm-Gg: ASbGncvc2FW7vh+GSS/dDosna6UGFvKJDo1NZBkvoe7UvXndasdU0XGDqKEoFJrhBHQ
-	Xpkl3LEaEY1PrZhnSRduo4V8kOs4+p8aUrlh3jCdwniWaO/KRGO9yNnMqvOUw/06QXhEarz+tEU
-	tIGEVlM83iHuShGxwAdkC64Xc3UhlWlXiNoUE8rmxc+bRX
-X-Google-Smtp-Source: AGHT+IF7NPAj4Z0CZFURC7bo9oEf2t9Aj4FR2LgmBRt7AfszBVvGJ/ZF2nnBKEqjrDtJWKPfIQqisqh3ixSWLzu82bc=
-X-Received: by 2002:a05:6902:1386:b0:e81:28d6:ed5 with SMTP id
- 3f1490d57ef6-e879b88783fmr4524514276.8.1750932308884; Thu, 26 Jun 2025
- 03:05:08 -0700 (PDT)
+	s=arc-20240116; t=1750932359; c=relaxed/simple;
+	bh=V6YTCqv8OIOxtQZzDkzntC0e9vI7/sizjp0ssSxqBHU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m2sstFymibEY4uNRf1cuZeR5bxbV9Y4QkKCHPGeo0TIdS1FMkA+8eJx6ox0eD8aDCxZUtHPPl0d+MDY0YfaJmRI8rxpHi4xR2MqxPSGBUTlLpqilbiqh24QtUZtbyDGk25v1rpTZopP4b8HJ0nHT1iYfkDL1kBuuPwV9/HsvRbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=kz/m0gKr; arc=none smtp.client-ip=178.154.239.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
+Received: from mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net [IPv6:2a02:6b8:c1e:299f:0:640:8fbe:0])
+	by forward103b.mail.yandex.net (Yandex) with ESMTPS id A664D60AA7;
+	Thu, 26 Jun 2025 13:05:47 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id R5SeXwKLg8c0-n27nJIN2;
+	Thu, 26 Jun 2025 13:05:46 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1750932346;
+	bh=WeJBx0hJf3pn1EIeBpOe1QyfcrmywlGvQz5HjI9T2zE=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=kz/m0gKrsnjeD3B6iCkAl+9lyItvXwCyrZLx4uRdVeELuq13+BaW1YEOjdVEMcEHO
+	 sfAJ/p5ulnJm0tm6EdlDJoM6rndflY5n3n2N0agrD1wqzragA4IVE/NVxR67Yo1Rvm
+	 FdYycab5X+vB2hpv6Id8YiW/sA7egct7kRF7/qlw=
+Authentication-Results: mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+From: =?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Cc: airlied@gmail.com,
+	simona@ffwll.ch,
+	ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	gregkh@linuxfoundation.org,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	davidgow@google.com,
+	nm@ti.com,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
+Subject: [PATCH 0/2] rust: replace `allow(...)` with `expect(...)`
+Date: Thu, 26 Jun 2025 13:04:46 +0300
+Message-ID: <20250626100448.27921-1-work@onurozkan.dev>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <22759968.EfDdHjke4D@rjwysocki.net> <2045419.usQuhbGJ8B@rjwysocki.net>
- <CAPDyKFq8ea+YogkAExUOBc2TEqi1z9WZswqgP29bLbursFUApg@mail.gmail.com> <CAJZ5v0h-9UnvhrQ7YaaYPG5CktwV-i+ZeqAri8OhJQb4TVp82w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h-9UnvhrQ7YaaYPG5CktwV-i+ZeqAri8OhJQb4TVp82w@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 26 Jun 2025 12:04:33 +0200
-X-Gm-Features: Ac12FXyAJDJvyhpucU5vdfApDbdiWQJG4l_jYuOIpSNd9YClkqba7MNA8LQyvF4
-Message-ID: <CAPDyKFoW5ag69LBnxvP5oGH1VAErBn17CAOzh=MX2toxAHwLxA@mail.gmail.com>
-Subject: Re: [PATCH v1 4/9] PM: Move pm_runtime_force_suspend/resume() under CONFIG_PM_SLEEP
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 26 Jun 2025 at 11:41, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Jun 26, 2025 at 11:38=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
-> >
-> > On Wed, 25 Jun 2025 at 21:25, Rafael J. Wysocki <rjw@rjwysocki.net> wro=
-te:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Since pm_runtime_force_suspend/resume() and pm_runtime_need_not_resum=
-e()
-> > > are only used during system-wide PM transitions, there is no reason t=
-o
-> > > compile them in if CONFIG_PM_SLEEP is unset.
-> > >
-> > > Accordingly, move them all under CONFIG_PM_SLEEP and make the static
-> > > inline stubs for pm_runtime_force_suspend/resume() return an error
-> > > to indicate that they should not be used outside CONFIG_PM_SLEEP.
-> > >
-> >
-> > Just realized that there seems to be some drivers that actually make
-> > use of pm_runtime_force_suspend() from their ->remove() callbacks.
-> >
-> > To not break them, we probably need to leave this code to stay under CO=
-NFIG_PM.
->
-> OK, pm_runtime_force_suspend() need not be under CONFIG_PM_SLEEP.
-> That's not the case for the other two functions though AFAICS.
+Replaces various `#[allow(...)]` with `#[expect(...)]` as suggested
+in the kernel coding guidelines: [link]
 
-Right, but maybe better to keep them to avoid confusion? At least the
-corresponding flag is needed.
+[link]: https://docs.kernel.org/rust/coding-guidelines.html#lints
 
-Kind regards
-Uffe
+After switching to `#[expect(...)]`, I found some dead linting rules
+that are no longer needed which are removed in the second patch.
 
->
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/base/power/runtime.c |    4 ++++
-> > >  include/linux/pm_runtime.h   |   20 ++++++++++++++------
-> > >  2 files changed, 18 insertions(+), 6 deletions(-)
-> > >
-> > > --- a/drivers/base/power/runtime.c
-> > > +++ b/drivers/base/power/runtime.c
-> > > @@ -1941,6 +1941,8 @@
-> > >         pm_request_idle(link->supplier);
-> > >  }
-> > >
-> > > +#ifdef CONFIG_PM_SLEEP
-> > > +
-> > >  bool pm_runtime_need_not_resume(struct device *dev)
-> > >  {
-> > >         return atomic_read(&dev->power.usage_count) <=3D 1 &&
-> > > @@ -2063,3 +2065,5 @@
-> > >         return ret;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(pm_runtime_force_resume);
-> > > +
-> > > +#endif /* CONFIG_PM_SLEEP */
-> > > --- a/include/linux/pm_runtime.h
-> > > +++ b/include/linux/pm_runtime.h
-> > > @@ -66,9 +66,6 @@
-> > >
-> > >  extern int pm_generic_runtime_suspend(struct device *dev);
-> > >  extern int pm_generic_runtime_resume(struct device *dev);
-> > > -extern bool pm_runtime_need_not_resume(struct device *dev);
-> > > -extern int pm_runtime_force_suspend(struct device *dev);
-> > > -extern int pm_runtime_force_resume(struct device *dev);
-> > >
-> > >  extern int __pm_runtime_idle(struct device *dev, int rpmflags);
-> > >  extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
-> > > @@ -257,9 +254,6 @@
-> > >
-> > >  static inline int pm_generic_runtime_suspend(struct device *dev) { r=
-eturn 0; }
-> > >  static inline int pm_generic_runtime_resume(struct device *dev) { re=
-turn 0; }
-> > > -static inline bool pm_runtime_need_not_resume(struct device *dev) {r=
-eturn true; }
-> > > -static inline int pm_runtime_force_suspend(struct device *dev) { ret=
-urn 0; }
-> > > -static inline int pm_runtime_force_resume(struct device *dev) { retu=
-rn 0; }
-> > >
-> > >  static inline int __pm_runtime_idle(struct device *dev, int rpmflags=
-)
-> > >  {
-> > > @@ -330,6 +324,20 @@
-> > >
-> > >  #endif /* !CONFIG_PM */
-> > >
-> > > +#ifdef CONFIG_PM_SLEEP
-> > > +
-> > > +extern bool pm_runtime_need_not_resume(struct device *dev);
-> > > +extern int pm_runtime_force_suspend(struct device *dev);
-> > > +extern int pm_runtime_force_resume(struct device *dev);
-> > > +
-> > > +#else /* !CONFIG_PM_SLEEP */
-> > > +
-> > > +static inline bool pm_runtime_need_not_resume(struct device *dev) {r=
-eturn true; }
-> > > +static inline int pm_runtime_force_suspend(struct device *dev) { ret=
-urn -ENXIO; }
-> > > +static inline int pm_runtime_force_resume(struct device *dev) { retu=
-rn -ENXIO; }
-> > > +
-> > > +#endif /* CONFIG_PM_SLEEP */
-> > > +
-> > >  /**
-> > >   * pm_runtime_idle - Conditionally set up autosuspend of a device or=
- suspend it.
-> > >   * @dev: Target device.
-> > >
-> > >
-> > >
-> >
+Onur Özkan (1):
+  replace `#[allow(...)]` with `#[expect(...)]`
+
+onur-ozkan (1):
+  rust: drop unnecessary lints caught by `#[expect(...)]`
+
+ drivers/gpu/nova-core/regs.rs       | 2 +-
+ rust/compiler_builtins.rs           | 2 +-
+ rust/kernel/alloc/allocator_test.rs | 2 +-
+ rust/kernel/cpufreq.rs              | 1 -
+ rust/kernel/devres.rs               | 2 +-
+ rust/kernel/driver.rs               | 2 +-
+ rust/kernel/drm/ioctl.rs            | 8 ++++----
+ rust/kernel/error.rs                | 3 +--
+ rust/kernel/init.rs                 | 6 +++---
+ rust/kernel/kunit.rs                | 2 +-
+ rust/kernel/opp.rs                  | 4 ++--
+ rust/kernel/types.rs                | 2 +-
+ rust/macros/helpers.rs              | 2 +-
+ 13 files changed, 18 insertions(+), 20 deletions(-)
+
+-- 
+2.50.0
+
 
