@@ -1,87 +1,172 @@
-Return-Path: <linux-pm+bounces-29583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29579-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67408AE9B07
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:17:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3143AAE9ADD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 12:10:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA3033B5701
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:16:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF3B13A2930
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jun 2025 10:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73EC2221F03;
-	Thu, 26 Jun 2025 10:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C398721FF37;
+	Thu, 26 Jun 2025 10:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="AqlIhmXM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xNhqTy26"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [178.154.239.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE0C221FA8;
-	Thu, 26 Jun 2025 10:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E5F21CA10
+	for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 10:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750933033; cv=none; b=AZwRxLFcAVNWlBvokR9X6Vl8ytLaQiyiF+evScmMu1NOeEZc7AIDgkNGdiHSNE7ULBL+mJv4iiG9BvPX6loi5C0hGvHtNjM631BQi9IZmpeX7iiFmXXgUdRm1doQinNEITEGAwM3SeNb19O4vWRvMbhJ+bontLQ1PsflUpeVyJ0=
+	t=1750932647; cv=none; b=NRMpJd1e6WjWKqeyFCg2cA8hD0hcj7PMFcDhZ8KH38yYM1KTxfU5xMbd8IX3Wt2GiJSfdFrCwY7z4KyaR8dVLJWjEYKyBMOgjqG1aHqwWR35KHqgzQZZY4Wv0HzinC41QhMlHExqQcUTVunu3r3mUuSD7Grr+yj1KEaxHrUKry0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750933033; c=relaxed/simple;
-	bh=LW0ekEF132zirr3/C0iPKEdjIqOsqdj1sSpsqbrp2ng=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o6wZiBnn92kA+9s0e4Kl+Ks+ldeeoCQpEWE/Rk75EqNXXrJbM+wMnZjq0pgk8hI4yrx6H3cYqov5bHhnawg24JdFTMAlRHxQsmM4/mX9+srkZ9zztJK2qOqINyl5RjtNBoTQV2h+JGw49L0/O9sQgS5viBCtq7+w4Jf3r2elD0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=AqlIhmXM; arc=none smtp.client-ip=178.154.239.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
-Received: from mail-nwsmtp-smtp-production-main-91.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:3b23:0:640:a115:0])
-	by forward502a.mail.yandex.net (Yandex) with ESMTPS id 07922620DB;
-	Thu, 26 Jun 2025 13:09:50 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-91.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id a9SiQLjLaGk0-QaEKKLEt;
-	Thu, 26 Jun 2025 13:09:49 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
-	s=mail; t=1750932589;
-	bh=LW0ekEF132zirr3/C0iPKEdjIqOsqdj1sSpsqbrp2ng=;
-	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-	b=AqlIhmXMu1HgwANBpx1gwlwJSdK2mFxNBgcLe+XjtbneZPYgMay/fVYeeo+s26nPJ
-	 svmn6k/mORV0xESmCEZ/Tj7807Mbiz/7+no8e+O6h0JNq/Jpb1tnoIlhaBhLIlKnNv
-	 BDm8/sEIgXcritMKpV/XG8thJ+TlOLfvDkAPnOUw=
-Authentication-Results: mail-nwsmtp-smtp-production-main-91.iva.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
-Date: Thu, 26 Jun 2025 13:09:36 +0300
-From: Onur <work@onurozkan.dev>
-To: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc: airlied@gmail.com, simona@ffwll.ch, ojeda@kernel.org,
- alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
- aliceryhl@google.com, tmgross@umich.edu, rafael@kernel.org,
- viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- davidgow@google.com, nm@ti.com
-Subject: Re: [PATCH 2/2] rust: drop unnecessary lints caught by
- `#[expect(...)]`
-Message-ID: <20250626130936.3c8b25dc@nimda>
-In-Reply-To: <20250626100448.27921-3-work@onurozkan.dev>
-References: <20250626100448.27921-1-work@onurozkan.dev>
-	<20250626100448.27921-3-work@onurozkan.dev>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-unknown-linux-gnu)
+	s=arc-20240116; t=1750932647; c=relaxed/simple;
+	bh=B8L42uYW7SBVGI49Vdor/dHyRQyBsuPa0eVEeRQde+0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cWOkC3UJTjqEf19kd7PPfEOzHS76yb9Fyb0ysIntLuno6M5LRpWimDumRlmCb8HlgUlDBG4qNEQ96+iMmHe/8iPPXj8vXOnfUdpjttZDtWawID2mGncWzoziN0vA2ouHbxsMunRE7jTYGMDCdtmAvKQ0W3x6GTdFAwBgg7NDN2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xNhqTy26; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e740a09eae0so690800276.1
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jun 2025 03:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750932644; x=1751537444; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RGpPhbuPUiSKZV2cLRZKatSz/MduhYBSX2W+AJmzppM=;
+        b=xNhqTy26NqMOtI0l/BaqO+24iM5Y/HMAyoiTybTwe/cquVyjO9sHaB2tLwwNCJdtZJ
+         kDr+VSDWYX+EHhyUlXvt9C/4G3emIDBIPaqDLFQzIZ3eIWlnPDMyEgsSvJ5lNcfdJk7o
+         f6Z7Mt3HvokUk74v/gg8NVURwq/pApa3iMcIpBAJUSVKInMjNxo6WvbIhyNrTRjGsuu1
+         W6T/9ljDPEm6TXthjCUuOyxo8Fv74qbgfo/Bb6PaZn6Erxyz3XqyvpsORDRLrV7iUmRb
+         3dJVsa0CgRgutrMloxPmWRNF7VsPvIo9EU3qSQu/alyh5YMSoifbnguFMvmVMoE0Zrmi
+         QxTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750932644; x=1751537444;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RGpPhbuPUiSKZV2cLRZKatSz/MduhYBSX2W+AJmzppM=;
+        b=PMnlLfsIVE4Wmz4gcaLLTO4zmXUd68Y6Ct6OF46mDuBUXHCEqMvwj31sOiaenoxt2L
+         mdU6C2hH7AEYqMxIPLG7D17MF6eXMZsCYR8MWgUsKk9e/CcWxtJTBJrf4mZIsb33y5ig
+         abPDmeY9J9q2t4q6CMis/Xhl2PQ3qqV5BDB1eWliWNaxPfVlcVtk6Pkp9zGVTso++dlF
+         jeIkZa1+8eA3F4HRb3NsJtIkhaIF1AMt44NPSlC8U8VherkPNsKTn+1Up0H+bOtzw69C
+         +zFufVWcfTsDLjbqnKTnAew7ucKY1WljemC+WgVOAKefPPP7lNROb5P+JMf4vuYbCQdN
+         lIlQ==
+X-Gm-Message-State: AOJu0Yxu8BqwPsKFM8DZN0ls4a75SiBSNYx25yN17glZqmSWsJELrsKP
+	mVmnk4/RppKPvMufyI73gAqz8YEQJe39MoHWpIxtcJpUHe3EG7bTMrkv3f8Lpm0PXZvgwNeN8rM
+	52X/r5GaYH6e8d8Z1X/JVVDhof8572ekdaOpvyEz4rQ==
+X-Gm-Gg: ASbGncvBjuBwkaqPLxaTk1uYGAeHWPfRDyEjlJn4pL6/T0fNjpYr10f0r8ew/be171S
+	hpgc5Cgx5Nt1FdwGxM/bh7pv6kdl9VB1s+A8FETKsGcML8lBCptuyEtv1DFUSfhHktRYlVoNDs6
+	Meql0DQq6M9arqI5CFRjF3/vd7KelRi1lLDyj4xWs71m8f
+X-Google-Smtp-Source: AGHT+IH7V0BHGImGWUq2RO4C48YNB3kmbkrWJ44nvQyWOyJ0pUkhrpvVs4zkHxSn5wG/qh/yfZkJEJHOsJHa3ZprjII=
+X-Received: by 2002:a05:6902:2e0f:b0:e84:1dd0:45a2 with SMTP id
+ 3f1490d57ef6-e860177f40fmr7990971276.40.1750932644320; Thu, 26 Jun 2025
+ 03:10:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <22759968.EfDdHjke4D@rjwysocki.net> <3306233.5fSG56mABF@rjwysocki.net>
+In-Reply-To: <3306233.5fSG56mABF@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 26 Jun 2025 12:10:08 +0200
+X-Gm-Features: Ac12FXwF7Q7jxkXkEaRsyFNpxSklkmW_lcm577wfPtPxTWlGaikqzxB0LYBa_fQ
+Message-ID: <CAPDyKForsegoD+J6rumvnhHna7W+DVdb5zdKGiRB-TFv27sy7A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] PM: Check power.needs_force_resume in pm_runtime_force_suspend()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 26 Jun 2025 13:04:48 +0300
-Onur =C3=96zkan <work@onurozkan.dev> wrote:
+On Wed, 25 Jun 2025 at 21:25, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Add a power.needs_force_resume check to pm_runtime_force_suspend() so
+> it need not rely on the runtime PM status of the device when deciding
+> whether or not to return early.
+>
+> With the new check in place, pm_runtime_force_suspend() will also skip
+> devices with the runtime PM status equal to RPM_ACTIVE if they have
+> power.needs_force_resume set, so it won't need to change the RPM
+> status of the device to RPM_SUSPENDED in addition to setting
+> power.needs_force_resume in the case when pm_runtime_need_not_resume()
+> return false.
+>
+> This allows the runtime PM status update to be removed from
+> pm_runtime_force_resume(), so the runtime PM status remains unchanged
+> between the pm_runtime_force_suspend() and pm_runtime_force_resume()
+> calls.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/runtime.c |   21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
+>
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1975,7 +1975,7 @@
+>         int ret;
+>
+>         pm_runtime_disable(dev);
+> -       if (pm_runtime_status_suspended(dev))
+> +       if (pm_runtime_status_suspended(dev) || dev->power.needs_force_resume)
+>                 return 0;
+>
+>         callback = RPM_GET_CALLBACK(dev, runtime_suspend);
+> @@ -1990,15 +1990,16 @@
+>         /*
+>          * If the device can stay in suspend after the system-wide transition
+>          * to the working state that will follow, drop the children counter of
+> -        * its parent, but set its status to RPM_SUSPENDED anyway in case this
+> -        * function will be called again for it in the meantime.
+> +        * its parent and the usage counters of its suppliers.  Otherwise, set
+> +        * power.needs_force_resume to let pm_runtime_force_resume() know that
+> +        * the device needs to be taken care of and to prevent this function
+> +        * from handling the device again in case the device is passed to it
+> +        * once more subsequently.
+>          */
+> -       if (pm_runtime_need_not_resume(dev)) {
+> +       if (pm_runtime_need_not_resume(dev))
+>                 pm_runtime_set_suspended(dev);
+> -       } else {
+> -               __update_runtime_status(dev, RPM_SUSPENDED);
+> +       else
+>                 dev->power.needs_force_resume = true;
+> -       }
+>
+>         return 0;
+>
+> @@ -2029,12 +2030,6 @@
+>         if (!dev->power.needs_force_resume)
+>                 goto out;
+>
+> -       /*
+> -        * The value of the parent's children counter is correct already, so
+> -        * just update the status of the device.
+> -        */
+> -       __update_runtime_status(dev, RPM_ACTIVE);
+> -
+>         callback = RPM_GET_CALLBACK(dev, runtime_resume);
+>
+>         dev_pm_disable_wake_irq_check(dev, false);
+>
 
-> From: onur-ozkan <work@onurozkan.dev>
->=20
-> They are no longer needed.
->=20
-> Signed-off-by: onur-ozkan <work@onurozkan.dev>
+As I mentioned for patch4, pm_runtime_force_suspend() is being used
+from driver's ->remove() callback too.
 
-Oh crap... This should be "Onur =C3=96zkan" not "onur-ozkan".
-I forgot to update that in my 2nd computer, which was used
-to send this patch.
+If such a driver/device gets probed again, we need a fresh start. It
+seems like we need to clear the needs_force_resume flag in
+pm_runtime_reinit(). In fact, that looks like an existing bug, even
+before $subject patch, right?
+
+Kind regards
+Uffe
 
