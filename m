@@ -1,264 +1,136 @@
-Return-Path: <linux-pm+bounces-29663-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29664-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC8AAEB786
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 14:19:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 356A8AEB792
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 14:23:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77C017B8401
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 12:17:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88AE93A7DA0
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 12:23:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592F0F4ED;
-	Fri, 27 Jun 2025 12:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D3862BDC37;
+	Fri, 27 Jun 2025 12:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dyqr0BDh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iaAia7Bz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923A31DFE1
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 12:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B923298248;
+	Fri, 27 Jun 2025 12:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751026706; cv=none; b=VVA7CTXU7LL4KssaMJmwoa32kMz3mwwLs43p02tD+J4FBx5sqwADT8CVbXoYHqn7/FievGM4keUicxRZABh2BJ5Y/S9ObMd7tuKrcO0yiT/7mgCcYjSlqYqB68phhCPmNjc6lY8DUV221RBczJa9ijQCiP8cBCvOOUZ2WcWh0XQ=
+	t=1751027007; cv=none; b=iUB8C+ByCh1GKzR4SkgjplOgiOid8miBtIXLDmHJbq49Xbr8xonCZYNu5Hfl6rLoFMnechRkX+1fj028XaMttLqY9sELplt7+kWivRcDVhK7HPkJsl/DS8nxXaEZWPPfb6y/SQzj/L/ImGTH5pgoKEQj6F4bZTIJuepOg3ZNrfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751026706; c=relaxed/simple;
-	bh=wJc4Yq/2qIbN+YrM8hSbDxvEt1nc0UwcLw7/Vd6Yz4E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m9lY1VXDsJyciaxksEZkC0cp1TwMomOQ/ZdSjFN9RE137LgpuBPn767JhOfahzp+fFmxTor/VD8z1MB1+AfAIlpr789l4FBf6YdJPP0qUbCm7axorId1Np0C5+QpQQm/wRDQyjenrwhA2BffDtcFmgy7xyA9eR4BiSS5sc/N/do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dyqr0BDh; arc=none smtp.client-ip=209.85.167.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-40ab5bd9088so1378575b6e.0
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 05:18:24 -0700 (PDT)
+	s=arc-20240116; t=1751027007; c=relaxed/simple;
+	bh=TKE/PcirYgBaEnKVtc6oY0F6itZHLZa+hSxsQ4xJUJ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XMyOsNeZyJTrFFitwn69zeJQB9o33GdR+UPfOpRIl5dr8uWhISaZGjY9XoVjBYq3gH6Zayi0egwgSaivKgXMK+ipR5FGZJQhgzUSDJ9z/kOAKl/DR8sQkqrPJgU6DbixynX6KCfwf9VCPUhmiagWx2nYcwdP9uuIbIhNoh+clfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iaAia7Bz; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-451d54214adso14705075e9.3;
+        Fri, 27 Jun 2025 05:23:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1751026703; x=1751631503; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L/kboISUHVl7C5fi/y0/ImSh6YAy6f5eQsfdMQeLy6w=;
-        b=dyqr0BDhB6tSAMnb1GxS2v2u2o6wsZePtBCdp7KWbOQKa2cuhZVHf31seGIykghkha
-         H2B3Xo2aXQdYRWpLCD0w9y35oC7Kz4v0rxPdb/sBenBDXhcQFD9vIYeKIeFE/Tv5TTIV
-         HEH59Xdi6ANw+fe8JNBJO9lz767XFJJoXOhAI=
+        d=gmail.com; s=20230601; t=1751027004; x=1751631804; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8uHDdjuJYEAU1yduIeaRva64ieAw7KTAi6gEOcE+hfA=;
+        b=iaAia7Bz4kXZ0lNWLMftRiRMejO6AFiMgaRJ27Rza3jg11H9wo83qOrV9xnSiIE2R4
+         6qiHkCRVuZzUVWQRr0FnDtFdI/lcNr+/RexxZBNZol7AeRv+8pIArLPJevNQ5xWnkV8o
+         nKx9hEqS2HsygD656x77jmYVy8vjXvfpNsuxaymqNm49M2aNl22ymiyrPBqoUUYXMIG9
+         56CFDwjQTTQZ9zo1EsklQ4qB0DBNNBDvh60L4Bb2ErPZewPcbwgZBYGCU7ydV+X76BMk
+         uvmFr6jN0PYwCI78ssgjp0XNJvv4MzCRIjQO2Nl5wvj061C4k5wm2ej6/dSV4byOD75h
+         cVCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751026703; x=1751631503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L/kboISUHVl7C5fi/y0/ImSh6YAy6f5eQsfdMQeLy6w=;
-        b=Ptrl0cdx4S3r3Rpf1XDX1tPOJVwAl/+AbJ7slt0I5Jef0l25z4lImSch1UZcVZYZgJ
-         aW36OSr0f5WCwW/AggDKxQZUTJ0hjZTCpMNVGzuVXj2271onUAit3LbAuiP5QwoR38Bq
-         pfhXaFYV0GBTAL8sjeF4Wiqp6Gza2yAgqZ1JW/ksWVG4QjMONQiKA43L94Y0HlutDjjC
-         2/IR5SD6iAOBkuDHAiVa8KkHERYbwrQfD/4kpxsyLCwxKFF6u8W0qWpl6u9q/8MePd7t
-         zkJaUeof53Bx15lZaelnnFRsRI81A0ZU/PJ2knBuhB0bqOya18OWsJ7mvcrE8j4upUpp
-         5jVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVABrJJt36wdfwjQo3czx/EmIBxTpbKBabjp7rGTV63SsUDrMeh+uizAzt0+RcIYWHC6yBzPKIgnQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEDmO5aYvqjIVVV+Ak8tNtGaJuhN2n1VUUM9tUQKqdylkPsku9
-	pAfJ/0XYwMIZKAY3/MY20AZWDzx6ITFxHEt4Clx5g3ZtyrREFEj9MvgNPX1bg3WkRl4X4PfeGTW
-	Zey4=
-X-Gm-Gg: ASbGncuMT1q9/jcDMUexl22PSXdsp0QRO1RJWzdoWQmQpk4tF6AzBJWcN80JLEudvph
-	aBYS1IUDtNbpjp7GG/ZFLjU9Z+JHjyp6IoelH0edgHH2dd+2mmdKHQyDuAbiPiuUuS8BkyJs3Sh
-	JiSwXdmMJpAWwxs7kRMOPmR0UYmPAaNSzfEZmjQlXWYMZDvB+E7hRUy2+nY4nNnKEKPRlaFVWHE
-	Ynb4f0WWH5IW8ixJSnGEzq1MHuNuqxCu58EY1LCWXD6dFqjbiU+ugy7VUkgR5TxJDLussgHeSw+
-	rcfmfeyxQgwEyFujvOKK3oZoDwqVkSoDHw+QjLPbwIApS2SUfzF+kZVsn5PGvuFONuK7DQNllka
-	fVGdlPi8pfiVWUcoN9GzNIw==
-X-Google-Smtp-Source: AGHT+IH2jwcqG/tFvS/D7oHxM5iVjTDcu/gX1eCxdlHHX8JVSF36vvws+LkUL0Baj/qVwyDbFLekRA==
-X-Received: by 2002:a05:6808:3a0e:b0:403:3370:4768 with SMTP id 5614622812f47-40b33c49b7amr1923661b6e.5.1751026703137;
-        Fri, 27 Jun 2025 05:18:23 -0700 (PDT)
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com. [209.85.161.52])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-611b848bba1sm214685eaf.11.2025.06.27.05.18.22
-        for <linux-pm@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1751027004; x=1751631804;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uHDdjuJYEAU1yduIeaRva64ieAw7KTAi6gEOcE+hfA=;
+        b=MldKRYSIKMJL0uYagKlA0PqyrrbSNKNxzbNfFnq7GkYinzU5tFkniOY0TsGI2cTylj
+         WtWMk4rIXoJ1buJVD+P4eWemWr9d5eJpVI2laHLKbIiB21+oGyrAk299wqtLfjCYUIxL
+         1eabsqpaUZGwxNraPAfv/LH+1hWe5wACuB792TPVGUV4kLMS4vq7RXkQMGqDe24uPLUp
+         QQqBva2XipLL4mNOHpXpDhNLvRU1w+fQVl3lAYawoARU5F2THi2aNLVDDNeKsoM/r8FM
+         tf3KR2wE3hdhBcfsvR6tM6pHQOjPsBFz55/3tRFuHDle1ue1oYarlls1RqFBKvZFyCu1
+         7Jfw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMUfDHrPe/CL4HjtDN9oFFaGKRtlHTDcLoXng4IUEAxRqQNIsx88J3cQodT0UmRTRRsUbdZ/MxthOd7Tyi@vger.kernel.org, AJvYcCWEcxt8Nwc3xt2VR2czdi9D6EWPd/G9nnCHKhSVVOPE8bwaV/wECP7mJ66O1yl4CiQ2o9TkoOBTv2I=@vger.kernel.org, AJvYcCXFMJ0+kB0kn48Hj1j5XO0ihIQNEODzBuAwkMdIh5/sZtT7fGBPaaQtrNdPyz30vNiaw4XF1+AesTynUtHn@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo8kp5bE4XVEIwL69QV0Jgthib8KJgcZ6rUh8zonB0WptcXAMu
+	4d712fMg6xPEbC8f0LfdvtNPdKLRPdjcJjrqUdqnpS7kP2bUJ44xJJRN+BfbX8jL
+X-Gm-Gg: ASbGncuh/j45iMtu9fQARruyzBi9b1R1V8Smv2U4xsyXWzsgPxmw6jFsP4YMzCEaZuy
+	SWFMOQJnjnRFsH8q5eq55DqADfhQlr3qhgAV3GalV1BA297RXZ5oBcrHxoePi956hv3syKDVKcE
+	0RF76w7HuxvhrT1SlfxekOLBh82/8nQKlPXVfJ6fM5wlGUizXvxa+46uZ4IFKe/WVy6dkc/KHrl
+	u4Mk0r4TZ2LiLOuVhg6juzZBveuRJ0kljmE1ytoy820TVV1uTtIkTQi3aJppDgvQ74sME5o/iFQ
+	hkGV7IB93Y1CCS9M1d69oRRY/0ZZrY7FjblNa3BPiiRxptAzlkgq0n3B7qNdXXfLYE3u4UENdvx
+	eMn+UdWjrSm/VmBT/pBVLFDKYzwY=
+X-Google-Smtp-Source: AGHT+IHHNyiJnortXGltf6dobXUszzMZIiEWCBoSFL/rKagraeF+X9BVsxcCM0pKIkAYOK9PI1rC+A==
+X-Received: by 2002:a05:600c:4446:b0:442:e9eb:cb9e with SMTP id 5b1f17b1804b1-4538ee85917mr28872705e9.26.1751027003516;
+        Fri, 27 Jun 2025 05:23:23 -0700 (PDT)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453823c42e1sm78774495e9.37.2025.06.27.05.23.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 05:18:22 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6115f7ebf2fso991085eaf.3
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 05:18:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUjNSlM5+SAzrGOP0RHkGFXtSoNFu4xNWeMuun35MYHOk52Ruae9sy1MUi6K9Z0IjFX7yOPEUoGIg==@vger.kernel.org
-X-Received: by 2002:a05:6102:b10:b0:4e5:59ce:471b with SMTP id
- ada2fe7eead31-4ee4f8fa5cbmr2358879137.23.1751026395186; Fri, 27 Jun 2025
- 05:13:15 -0700 (PDT)
+        Fri, 27 Jun 2025 05:23:22 -0700 (PDT)
+Message-ID: <85fa756b-9f18-446e-a50a-2aafaa40744c@gmail.com>
+Date: Fri, 27 Jun 2025 14:23:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250623120154.109429-1-angelogioacchino.delregno@collabora.com> <20250623120154.109429-3-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20250623120154.109429-3-angelogioacchino.delregno@collabora.com>
-From: Fei Shao <fshao@chromium.org>
-Date: Fri, 27 Jun 2025 20:12:39 +0800
-X-Gmail-Original-Message-ID: <CAC=S1njT6ygGuZDPU5KDW94Nu-TbM21DM-6HdR7Pio=WTD_eQA@mail.gmail.com>
-X-Gm-Features: Ac12FXwNi69jmRwGOUm8UJ7WfMt6niSy4CkLT9-9z1YDS1Mi3aHTobxjbgMPxFw
-Message-ID: <CAC=S1njT6ygGuZDPU5KDW94Nu-TbM21DM-6HdR7Pio=WTD_eQA@mail.gmail.com>
-Subject: Re: [PATCH v1 02/13] pmdomain: mediatek: Refactor bus protection
- regmaps retrieval
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-mediatek@lists.infradead.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, matthias.bgg@gmail.com, ulf.hansson@linaro.org, 
-	y.oudjana@protonmail.com, wenst@chromium.org, lihongbo22@huawei.com, 
-	mandyjh.liu@mediatek.com, mbrugger@suse.com, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] interconnect: avoid memory allocation when
+ 'icc_bw_lock' is held
+Content-Language: hu
+To: Johan Hovold <johan@kernel.org>
+Cc: Georgi Djakov <djakov@kernel.org>,
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Johan Hovold <johan+linaro@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
+ <aFvr1zSkf4KmIcMT@hovoldconsulting.com>
+ <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
+ <84b94649-a248-46b0-a401-772aeb8777a2@gmail.com>
+ <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
+ <ac5ba192-b538-457e-acc4-c2d358b1fd0e@gmail.com>
+ <aF0TIWfDI4M1azzc@hovoldconsulting.com>
+ <3b90caec-b4c0-47d8-bdd7-1a7abd5e69d9@gmail.com>
+ <aF5EPhd5smrmB38Q@hovoldconsulting.com>
+ <b960680d-6c5a-4130-b2dd-4ddf1f800430@gmail.com>
+ <aF5nv6TQoyfh7wKS@hovoldconsulting.com>
+From: Gabor Juhos <j4g8y7@gmail.com>
+In-Reply-To: <aF5nv6TQoyfh7wKS@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 23, 2025 at 8:02=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> In preparation to add support for new generation SoCs like MT8196,
-> MT6991 and other variants, which require to set bus protection on
-> different busses than the ones found on legacy chips, and to also
-> simplify and reduce memory footprint of this driver, refactor the
-> mechanism to retrieve and use the bus protection regmaps.
->
-> This is done by removing the three pointers to struct regmap from
-> struct scpsys_domain (allocated for each power domain) and moving
-> them to the main struct scpsys (allocated per driver instance) as
-> an array of pointers to regmap named **bus_prot.
->
-> That deprecates the old devicetree properties to grab phandles to
-> the three predefined busses (infracfg, infracfg-nao and smi) and
-> replaces it with a new property "mediatek,bus-protection" that is
-> meant to be an array of phandles holding the same busses where
-> required (for now - for legacy SoCs).
->
-> The new bus protection phandles are indexed by the bus_prot_index
-> member of struct scpsys, used to map "bus type" (ex.: infra, smi,
-> etc) to the specific *bus_prot[x] element.
->
-> While the old per-power-domain regmap pointers were removed, the
-> support for old devicetree was retained by still checking if the
-> new property (in DT) and new-style declaration (in SoC specific
-> platform data) are both present at probe time.
->
-> If those are not present, a lookup for the old properties will be
-> done in all of the children of the power controller, and pointers
-> to regmaps will be retrieved with the old properties, but then
-> will be internally remapped to follow the new style regmap anyway
-> as to let this driver benefit of the memory footprint reduction.
->
-> Finally, it was necessary to change macros in mtk-pm-domains.h and
-> in mt8365-pm-domains.h to make use of the new style bus protection
-> declaration, as the actual HW block is now recognized not by flags
-> but by its own scpsys_bus_prot_block enumeration.
->
-> The BUS_PROT_(STA)_COMPONENT_{INFRA,INFRA_NAO,SMI} flags were also
-> removed since they are now unused, and because that enumeration was
-> initially meant to vary the logic of bus protection and not the bus
-> where work is performed, anyway!
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+2025. 06. 27. 11:43 keltezéssel, Johan Hovold írta:
+> On Fri, Jun 27, 2025 at 11:36:26AM +0200, Gabor Juhos wrote:
+>> 2025. 06. 27. 9:11 keltezéssel, Johan Hovold írta:
+>>> On Thu, Jun 26, 2025 at 05:00:42PM +0200, Gabor Juhos wrote:
+> 
+>>>> Despite the note above, your proposal looks good to me. Would you like to
+>>>> send it as a formal patch, or shall I do it?
+>>>
+>>> I can post it in a bit.
+>>
+>> Great, just saw the final patch. Thank you!
+> 
+> Here it is for reference:
+> 
+> 	https://lore.kernel.org/lkml/20250627075854.26943-1-johan+linaro@kernel.org/
+> 
+> It looks like Georgi picked up the patch from this thread yesterday,
+> which should be fine as well as I only changed the commit message
+> (replacing the ipc splat with one from sc8280xp) before posting it as
+> v4.
 
-<snip>
-
->
-> +static int scpsys_get_bus_protection_legacy(struct device *dev, struct s=
-cpsys *scpsys)
-> +{
-> +       const u8 bp_blocks[3] =3D {
-> +               BUS_PROT_BLOCK_INFRA, BUS_PROT_BLOCK_SMI, BUS_PROT_BLOCK_=
-INFRA_NAO
-> +       };
-> +       struct device_node *np =3D dev->of_node;
-> +       struct device_node *node, *smi_np;
-> +       int num_regmaps =3D 0, i, j;
-> +       struct regmap *regmap[3];
-> +
-> +       /*
-> +        * Legacy code retrieves a maximum of three bus protection handle=
-s:
-> +        * some may be optional, or may not be, so the array of bp blocks
-> +        * that is normally passed in as platform data must be dynamicall=
-y
-> +        * built in this case.
-> +        *
-> +        * Here, try to retrieve all of the regmaps that the legacy code
-> +        * supported and then count the number of the ones that are prese=
-nt,
-> +        * this makes it then possible to allocate the array of bus_prot
-> +        * regmaps and convert all to the new style handling.
-> +        */
-> +       node =3D of_find_node_with_property(np, "mediatek,infracfg");
-> +       if (node) {
-> +               regmap[0] =3D syscon_regmap_lookup_by_phandle(node, "medi=
-atek,infracfg");
-> +               of_node_put(node);
-> +               num_regmaps++;
-> +               if (IS_ERR(regmap[0]))
-> +                       return dev_err_probe(dev, PTR_ERR(regmap[0]),
-> +                                            "%pOF: failed to get infracf=
-g regmap\n",
-> +                                            node);
-> +       } else {
-> +               regmap[0] =3D NULL;
-> +       }
-> +
-> +       node =3D of_find_node_with_property(np, "mediatek,smi");
-> +       if (node) {
-> +               smi_np =3D of_parse_phandle(node, "mediatek,smi", 0);
-> +               of_node_put(node);
-> +               if (!smi_np)
-> +                       return -ENODEV;
-> +
-> +               regmap[1] =3D device_node_to_regmap(smi_np);
-> +               num_regmaps++;
-> +               of_node_put(smi_np);
-> +               if (IS_ERR(regmap[1]))
-> +                       return dev_err_probe(dev, PTR_ERR(regmap[1]),
-> +                                            "%pOF: failed to get SMI reg=
-map\n",
-> +                                            node);
-> +       } else {
-> +               regmap[1] =3D NULL;
-> +       }
-> +
-> +       node =3D of_find_node_with_property(np, "mediatek,infracfg-nao");
-> +       if (node) {
-> +               regmap[2] =3D syscon_regmap_lookup_by_phandle(node, "medi=
-atek,infracfg-nao");
-> +               num_regmaps++;
-> +               of_node_put(node);
-> +               if (IS_ERR(regmap[2]))
-> +                       return dev_err_probe(dev, PTR_ERR(regmap[2]),
-> +                                            "%pOF: failed to get infracf=
-g regmap\n",
-> +                                            node);
-> +       } else {
-> +               regmap[2] =3D NULL;
-> +       }
-> +
-> +       scpsys->bus_prot =3D devm_kmalloc_array(dev, num_regmaps,
-> +                                             sizeof(*scpsys->bus_prot), =
-GFP_KERNEL);
-> +       if (!scpsys->bus_prot)
-> +               return -ENOMEM;
-> +
-> +       for (i =3D 0, j =3D 0; i < num_regmaps; i++) {
-
-Did you mean BUS_PROT_BLOCK_COUNT?
-Consider a case where only regmap[2] is configured.
+Yes, it is fine. I have tested the icc-fixes branch which contains the IPQ9574
+specific patch as well.
 
 Regards,
-Fei
-
-> +               enum scpsys_bus_prot_block bp_type;
-> +
-> +               if (!regmap[i])
-> +                       continue;
-> +
-> +               bp_type =3D bp_blocks[i];
-> +               scpsys->bus_prot_index[bp_type] =3D j;
-> +               scpsys->bus_prot[j] =3D regmap[i];
-> +
-> +               j++;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-
-<snip>
+Gabor
 
