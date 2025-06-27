@@ -1,177 +1,102 @@
-Return-Path: <linux-pm+bounces-29713-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29714-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1C15AEC174
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:49:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C72F7AEC178
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:50:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CE9F1C205FD
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:49:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 333603A74B7
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA572ED156;
-	Fri, 27 Jun 2025 20:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="iwLKQmF/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CBB258CE8;
+	Fri, 27 Jun 2025 20:50:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from mail-24420.protonmail.ch (mail-24420.protonmail.ch [109.224.244.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC19C255F39;
-	Fri, 27 Jun 2025 20:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995AF1E48A;
+	Fri, 27 Jun 2025 20:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751057346; cv=none; b=JiJI5SbikS1UoNMQOS+7vUZEjmTUjuoYPsWze+DMddwgVys+Kc+yeutVLuxIjj1Eq8icUtYxy4qOIC1tqB7KdYRgh0KteHksUORKHbhGA/MNmUNeWC7xlVSswOuwnf6LmgBI3pQlVfTBMZ+HO+F4k8jC8AMC06+0S6SF3eCBglw=
+	t=1751057412; cv=none; b=u9FryltefJOaMurf+GGQA2Licaz4pgYM1UdI9W5y1sf47UuXh8+mmHjgOequHdnin8m5RbRzA6kYWSGr8DZUR+UQin6zLOZc8X+5e5CdXw3p44s992TkOvE8aa4GcGlxrbREwiwGu58J/YRSjXtB5fpn1I3dFh9UWIXoECsw13g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751057346; c=relaxed/simple;
-	bh=sNnneumzgh8HpZ6dHQ/dWMjwjSBmUwK755TSQoE1p/A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cN0sU6htkN4KjuiXDjbplMjYAMCYaMhNwsWLNSMPM34/2R+ese5pqRLSgxAxyET8pCz/cV4aaxww9Ak+Hd7kBz2wTFjLAYaI1dgSESbZR2xpXZnUvdUUhWkwHQfelcG8k6mWeikCW/1bdrjd0Xft+FT4dpkBufwvzpu/Zy3sN/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=iwLKQmF/; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55RKmwlK2112130;
-	Fri, 27 Jun 2025 15:48:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1751057338;
-	bh=l7Gdp8Nk60ZfRYhbL7kV9nXUPDhA4CVDa+kStehV06k=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=iwLKQmF/0Z4iRQaqC2FBfdg22yRU7fTYaVG+Vcqh4jYXONpgyQo5X6mHl15R/C+ao
-	 1np+r4hIv6he8nd5DXD0k8yy4GltBg/tcPhJceG70jPKq2Vwplmy5C0wrnTaKCJIIf
-	 X2Vkm0QxO9y6ii/0d54uM+0SBAAj5F0L+MX/wdY4=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55RKmw0T783155
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Fri, 27 Jun 2025 15:48:58 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 27
- Jun 2025 15:48:57 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Fri, 27 Jun 2025 15:48:57 -0500
-Received: from uda0506412.dhcp.ti.com (uda0506412.dhcp.ti.com [128.247.81.19])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55RKmpWX3421525;
-	Fri, 27 Jun 2025 15:48:57 -0500
-From: Kendall Willis <k-willis@ti.com>
-To: <nm@ti.com>, <kristo@kernel.org>, <ssantosh@kernel.org>,
-        <ulf.hansson@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC: <d-gole@ti.com>, <vishalm@ti.com>, <sebin.francis@ti.com>,
-        <msp@baylibre.com>, <khilman@baylibre.com>,
-        Kendall Willis <k-willis@ti.com>
-Subject: [PATCH 2/2] pmdomain: ti_sci: Add LPM abort sequence to suspend path
-Date: Fri, 27 Jun 2025 15:48:21 -0500
-Message-ID: <20250627204821.1150459-3-k-willis@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250627204821.1150459-1-k-willis@ti.com>
-References: <20250627204821.1150459-1-k-willis@ti.com>
+	s=arc-20240116; t=1751057412; c=relaxed/simple;
+	bh=14H19cR11NGBgs8VD0gkm0NoBzX0DJXJrULPEtmGD4M=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rJpPLEAFZ33FbFFGN0t1BIelGJVqb42qXTQCT0nxyGAica015Xv0/XDutKvZHsfsvjpgKtaAZtRa7TNjnyS2794dvd/PUVRpYLYejBzsSrKiRPzI8LvwkXLgVYLHn0zWd2DKP/yuk9r23/sGaiprfp92su5S1YHR0/Dl+a+2oks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benis.se; spf=pass smtp.mailfrom=benis.se; arc=none smtp.client-ip=109.224.244.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benis.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=benis.se
+Date: Fri, 27 Jun 2025 20:49:56 +0000
+To: Kurt Borja <kuurtb@gmail.com>
+From: =?utf-8?Q?Benjamin_Hasselgren-Hall=C3=A9n?= <benjamin@benis.se>
+Cc: Armin Wolf <W_Armin@gmx.de>, "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: HP Omnibook Ultra Flip 14 - power profiles
+Message-ID: <jCZyBwYNgVSM_Qk2XkfweZRlZNiSh06WVUBqya9leWoWXAmNFL9fdbgBX038OzfQUEaGE5PU8yhtJL2zq_PRW67FmLYTnoK_SPUPmzoTdco=@benis.se>
+In-Reply-To: <DAXK1634VYQI.1PEUCTQIYAF3Y@gmail.com>
+References: <GXa7F-PA_8BE7nlK9r8dkdSv7c-DW52GvOUiyYHQ6RyoZDxIpNAocWDPYQDeS7WEZeUisqQH_bqmgSV-eaRmuw5r68MGKxyU9X_4Erd0RYQ=@benis.se> <1037e223-a6ad-4d12-9619-f69a29cecba1@gmx.de> <5I8UDmgF_DcJBmBE0zgCXjuvmmhLamDCHkpnkAwRjSAkCa5xcFUvU-SmAeymxTajjDPR8avuW55RxOjhd8idK6jLy-hz8i-Ma3RHSaFy2Gs=@benis.se> <9642ad7e-3e57-45f9-bfd9-beac3e55418e@gmx.de> <GXC8NQl6AY_N7nQAOCRLt7SDGjFNll_TnqQyzYnP_b1weGkRqITOR-kHKcM66lPonOCo9xO2nSWXr7yycwfFuKmjRMtXVlJKya8-qvvkGik=@benis.se> <de8321ce-e595-460a-81d7-f7dae8a7b790@gmx.de> <X-40AqXfdmQw5shUOk3VSaHSXmwJYWHPmDDMLyGUH6GpMt56ty5SbNg8EVfyI_uC9J07uqZ2TtGJmmpB_x8-xpcVOw29fnKzJZ4n9L0x78A=@benis.se> <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de> <DAXK1634VYQI.1PEUCTQIYAF3Y@gmail.com>
+Feedback-ID: 18592338:user:proton
+X-Pm-Message-ID: 5df4ea01e5edf5a5d1a3933e1665f0fa2a281b67
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Create ->suspend_late() and ->suspend_noirq() hooks to add abort sequence
-to any driver within the PM domain with either of those hooks. If a driver
-fails to suspend with those hooks, add a call to the DM to abort entering
-the LPM. The suspend hooks of the PM domains driver inserts itself into
-the suspend path of all devices connected to the TI SCI PM domain. So if
-any device in the PM domain with either a ->suspend_late() or
-->suspend_noirq hook fails to suspend, the PM domain drivers suspend hook
-will send the abort call to the DM.
+Hi Kurt,
 
-Adding an abort call in the ->suspend() hook is not necessary. TI SCI
-suspend sends the message to the DM to prepare to enter a low power mode.
-TI SCI suspend ALWAYS occurs after the ->suspend() hook for all TI SCI
-devices has been called.
+I do not experience the same error messages as in the bug report - no error=
+ message at all. It respons to changing power profile without any errors.
+I also tried 6.12 but same behaviour as 6.15.3 (just getting some gpu glitc=
+hes - problably because of Lunar Lake).
 
-Signed-off-by: Kendall Willis <k-willis@ti.com>
----
- drivers/pmdomain/ti/ti_sci_pm_domains.c | 46 ++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+I am trying to understand how power profiles work - I guess on a high level=
+ it's controlled by uefi and the profile is set by the OS? Or is it more co=
+mplicated than that?=20
 
-diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-index 82df7e44250bb..975defc16271d 100644
---- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-+++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-@@ -2,7 +2,7 @@
- /*
-  * TI SCI Generic Power Domain Driver
-  *
-- * Copyright (C) 2015-2017 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2015-2025 Texas Instruments Incorporated - http://www.ti.com/
-  *	J Keerthy <j-keerthy@ti.com>
-  *	Dave Gerlach <d-gerlach@ti.com>
-  */
-@@ -149,8 +149,47 @@ static int ti_sci_pd_suspend(struct device *dev)
- 
- 	return 0;
- }
-+
-+static int ti_sci_pd_suspend_late(struct device *dev)
-+{
-+	struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-+	struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
-+	const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
-+	int ret;
-+
-+	ret = pm_generic_suspend_late(dev);
-+	if (ret) {
-+		dev_err(dev, "%s: Failed to suspend. Abort entering low power mode.\n", __func__);
-+		if (ti_sci->ops.pm_ops.lpm_abort(ti_sci))
-+			dev_err(dev, "%s: Failed to abort.\n", __func__);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ti_sci_pd_suspend_noirq(struct device *dev)
-+{
-+	struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-+	struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
-+	const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
-+	int ret;
-+
-+	ret = pm_generic_suspend_noirq(dev);
-+	if (ret) {
-+		dev_err(dev, "%s: Failed to suspend. Abort entering low power mode.\n", __func__);
-+		if (ti_sci->ops.pm_ops.lpm_abort(ti_sci))
-+			dev_err(dev, "%s: Failed to abort.\n", __func__);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- #else
- #define ti_sci_pd_suspend		NULL
-+#define ti_sci_pd_suspend_late		NULL
-+#define ti_sci_pd_suspend_noirq		NULL
- #endif
- 
- /*
-@@ -264,6 +303,11 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
- 				    pd_provider->ti_sci->ops.pm_ops.set_latency_constraint)
- 					pd->pd.domain.ops.suspend = ti_sci_pd_suspend;
- 
-+				if (pd_provider->ti_sci->ops.pm_ops.lpm_abort) {
-+					pd->pd.domain.ops.suspend_late = ti_sci_pd_suspend_late;
-+					pd->pd.domain.ops.suspend_noirq = ti_sci_pd_suspend_noirq;
-+				}
-+
- 				pm_genpd_init(&pd->pd, NULL, true);
- 
- 				list_add(&pd->node, &pd_provider->pd_list);
--- 
-2.34.1
 
+
+Best regards,
+Benjamin Hasselgren-Hall=C3=A9n
+
+
+On Friday, 27 June 2025 at 21:15, Kurt Borja <kuurtb@gmail.com> wrote:
+
+> Hi all,
+>=20
+> On Fri Jun 27, 2025 at 2:10 PM -03, Armin Wolf wrote:
+>=20
+> > Am 26.06.25 um 15:20 schrieb Benjamin Hasselgren-Hall=C3=A9n:
+> >=20
+> > > Hi again,
+> > >=20
+> > > dmesg: https://drive.benis.se/s/2crz7zPzkrzaqXN
+> >=20
+> > The following message intrigues me:
+> >=20
+> > platform_profile: Failed to get profile for handler hp-wmi
+>=20
+>=20
+> This might be a regression.
+>=20
+> This was reported a couple months ago and I completely forgot until I
+> saw this thread. See [1].
+>=20
+> @Benjamin: Can you please check if your power profiles work on Linux
+> v6.12 (LTS)?
+>=20
+> Also try:
+>=20
+> $ cat /sys/firmware/acpi/platform_profile
+>=20
+>=20
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D220008
+>=20
+> --
+> ~ Kurt
 
