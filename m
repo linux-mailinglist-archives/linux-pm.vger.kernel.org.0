@@ -1,185 +1,215 @@
-Return-Path: <linux-pm+bounces-29684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ABC6AEBE2E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:07:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F62CAEBE40
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E40E43B59BA
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:07:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70D041C214D7
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:10:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4332EA72E;
-	Fri, 27 Jun 2025 17:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08BA12EAB97;
+	Fri, 27 Jun 2025 17:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yNO4M3jQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F8leUrTE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EFD2EA727
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 17:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4712EA730
+	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 17:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751044051; cv=none; b=nJn2e2ztEgcwfVB70amm8xI1JXk7fHHGPBqyTa8AICYwc0PYKJ/x1WQEHZJIhijC0g+xqOhNk+hrYVumrb/zRPCKrfwC3A1VWbFuISdRW8cFRLfpVBUp/uoYoOeWGXS2dpIL9FEXmcrCCYCU9DOxgYvUbjMBDcGEppkO4pcfvKg=
+	t=1751044217; cv=none; b=fdn4l4KHhnYrxas2Lner1B4QECLHUhmKoPKvTU728VP4qSRocA4aRsX4rUBjZ391VAeDKxKC4dGh1EVzP3QV3OBOktr6i3DG2DMeKwg3hfKjtH13ic7TQyoblQXgafSQzuWgKLO4Vt7dL5tBOlYbGPYChNG7+589VNqpnMICl4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751044051; c=relaxed/simple;
-	bh=otXY5bSrY5xQCnGv8vAhYSiPzAlIJ3HwVEv08LlcErs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sEaVCsx+lbRwms439sAXb+1fHZY/JIj4e3Se6kaleAuyvPYVaj9scj3AAzBnO4JJK4IYIeGidP/4ofFOZm8x8V/gR54qWzrZOdN7pETp0i9zSpGETDO1AMfl1CgLObX9GGreWEXDcfTHCJNfT3fRnbdBl78EJ5VVgKT8bPQDuVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yNO4M3jQ; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4a7f5abac0aso16611cf.0
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 10:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751044049; x=1751648849; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RloYayd5wBONgu0eildPglcuE/QLMbxICUIKSWflWiY=;
-        b=yNO4M3jQ40VH+iMh9KKuRKv0WfWe7MEwhS3lEO2O1cmhjJxn+47ENDXw5SXNQIiXeX
-         g8s7JpCFyLxpUbNxAfqH73u8zs/KYkZ+yf/iccs4hB06q5yppvf0XWLdC11flDEqY0ue
-         4Dut86CPS9+akIxzgBmMOpow8nlXA2OdtwJFY6LdzihGkeP35kw45pVbYLIkh1Zxt9bD
-         4OimqKD8fX8qbIRImC0vr7o5XcqE1T2r6pkHLFyKWPGsitOua4or5h95wmHy+N61Ax2u
-         2F98NBgVMG5qNCDJ1ND18uRTiaBjLKmWlz2gbFcRUPktZZNjKxNhyADq6DLm0j/O936M
-         0Yog==
+	s=arc-20240116; t=1751044217; c=relaxed/simple;
+	bh=ppdYl7lHbi/tBjei3K4fVc93zG6F8OmMk6u5o6UCQ60=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oxUIa1H8kJY6wkuOTqTRP9bvpC7g3FQ6F5zIEHCpegm9VCRJ+HwRju4tE6/cjCl+WEWmrrFiXdvZQ0N8AXkfK4CFV8uMshbvotzF88cL/xqL1VkxslHddGIwwlYQPunqjsyaB3/vRR+yI3bg2TaVQSUjezo8tSXLFniV6+GDZRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F8leUrTE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751044213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NmwfJQJV+c9wJ1hezhGH5ZiqOmaiPpTqYKUu0exw8Qg=;
+	b=F8leUrTEQvdTp9Zx27Ox321ZPO8RG7wVAAzKeQF5C41WPUT8YMqHSdTJIzFvkYWruinwkh
+	sxgGPYuwWHK8Yd2OuJ7AlkBdxcu837O5MQy1ppd/IhkRy7GO9OYVE4oLlvx8OAtS/Cc803
+	ynmHCVvdrxrjIYvXDd1ULonOm7A+1Yg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-627-wcgp9-roM52j7I9xg8LTKQ-1; Fri, 27 Jun 2025 13:10:11 -0400
+X-MC-Unique: wcgp9-roM52j7I9xg8LTKQ-1
+X-Mimecast-MFC-AGG-ID: wcgp9-roM52j7I9xg8LTKQ_1751044210
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45311704d1fso510675e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 10:10:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751044049; x=1751648849;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RloYayd5wBONgu0eildPglcuE/QLMbxICUIKSWflWiY=;
-        b=JR4XSpQ0mZZV+sdHftVW63ng15ufc230fCgymkETYWdfvvrHZ9utGkpHHQX3gBQl6Z
-         BSXkr/s2e9HxHKspUTSeE8Ic57SO9RnH68kvPDf+KhdTtxvfuXmV9eYjE2+mfjqkZjVc
-         8TxhCQJ6EwgoKnIRskDZWCAIpMYxi20G5XJLU6HN4eGl9g5nXwq7muvsGi1xbMT7ar1T
-         /FfV+3JWc5AYPvE9/UVZcrh+lUuClZjx18DAFx6/LK79lxoIF0H5FY4iFBU+pK7IJpjS
-         GgFIly6Mlo+ZCnxAqhgBrXRdRJvLSKZdJWJnyXPH9ctHjl0kI6Bokt4KbtOwko54wALN
-         qfcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrcejbEAl5H6wlG+PrEgdKVyubOUN6FUgKdRP+9EqX664FMjRoR+AxZeDgwGjL3mgc5/wYUcCNrg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtoiU1ruD0rSAhwLZOH5STrleMmMmeO1xQjSyL6JxgY1uFNsk/
-	/gaQf7KweVFCr2mFQE4sEkhvNUYffRxme2Myw7GX69upnVHKcsJOyFXM+7VQmQqamOl6gKNNCYg
-	n7aCsqt4h2/S3xxTOcvvWCLa6LOiz5gcMgNWn08G/
-X-Gm-Gg: ASbGnctNRYfQMo2m/bPze/oJp3yC3S0QokqYlesLYmeigR6Uh8QhiTdsowQn9LczQVM
-	Ph8ovc5Wck7eiH5HvJb4BLBSsn8/3AHP056SajHdulxPoKpB4/teDpsjr4QjsYJz+cpQLcXXdSt
-	yVas1PVSIt4ghMG/orqKuuyVqv7FXG/WaZDEwfgc5z8g==
-X-Google-Smtp-Source: AGHT+IHfIn/2qyi/BP2LcbO4Liai4hJXszJynHIfFVZxjB6pzjgudjP5yfk0uqdKYttjGQzdkn2KQRLHLLEkCzldxDg=
-X-Received: by 2002:a05:622a:d0:b0:494:b833:aa42 with SMTP id
- d75a77b69052e-4a80675f5bemr706221cf.5.1751044048314; Fri, 27 Jun 2025
- 10:07:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751044210; x=1751649010;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NmwfJQJV+c9wJ1hezhGH5ZiqOmaiPpTqYKUu0exw8Qg=;
+        b=BOVvOulDjvB7EM2QoLHOA/Q00Bkf2qupAZDGP6JxqdSkbQamC41V6EY6mXbYAnQkUi
+         xEF/96ZoXoqeiJfesuQ9BwG8cm9640HVLTRzGPGcvxM03JwCVtkGLFx75MlUCzCn1KLm
+         GgZSob2NRS5Bl1GK/6pzC8MEaKPc2qUKWW1sGV7VkNkEIhzTw72FCtgHzsJdgxYalnja
+         Orq+DJPQRrp340IGAz04H8P/zhaJ2Ud1PvXNZRCwLKeMJSo2UtKqk7pUXqAa0EfUcG2b
+         N3r473QRbq+EVkG0JvizIwLv8WC2NUkeqrrDDsBBGTKDEHcEF/Y5dBHYWlLEyveiiVjZ
+         KevQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0oLFNEu6ayFKbPzgpTyJYdM6+1aXHL1bLwZZUKuTvbLXrG4m0gUuDP48ztViven9a/urygi5XaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YztbwDGa6Z7RYWp6Qc25SVd2EiMqr2NfqUyixNlJzSvRXPBvcjQ
+	vpOlKetoxGzNusrFfzNN2Ylcni8lycsyRSuCvFI7mlmcdkdQDRIUUQuQ4Rhbvwr2NCl1CPVtNHp
+	idsH4zVWoXlDRHRdKXyPaQifXBlGKAWgTef8wCDjKvjPWy5kwSMdoFu87h2aI
+X-Gm-Gg: ASbGnctXVBKahquHfs3HRflXoH1vX71nq3m7ez/NMLKxOak5QXnEWSvXBkGtHJLMlje
+	jZ4jhoPfFhRujQvwmN+buuj6jjKKldHni2xyXk/yh2h1QiD4mLQO9ze+wofj4ivDHTexNvGqLrN
+	RZtrs9mFHHZnTT+d1dBbLkNvDa/ZsITd/50Pt13f+O6LknWcvEBGgnDParcZJfBxOMY2YpR74wY
+	Tx9OxovpC0CB2I+Kwx/6iukXWfl84UFfctV84SaYaYPb5QHvstZeP4f3788H8A7ulvAf1kvdwnc
+	O8toNCBx3h4Fi2AJhhpJMQjwQ5EygAWsqaw0O/XB/ko4vCGUcMXN8U+YbaF7kBEznzlkvd0Vyl1
+	yaEGQUJhPwS2mU/D9DmWLB/rv3OeEeAWxSQPe2lgatUynma7iLw==
+X-Received: by 2002:a05:600c:4f4f:b0:442:d9fb:d9f1 with SMTP id 5b1f17b1804b1-453918aefb4mr33153965e9.4.1751044210240;
+        Fri, 27 Jun 2025 10:10:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFejtdyP+lgBSZANc8+ODwaGeOy8e3cABckJGW0iKDwJz7VcuhqUT4sLBN4DTsX9Nc58Z5tEw==
+X-Received: by 2002:a05:600c:4f4f:b0:442:d9fb:d9f1 with SMTP id 5b1f17b1804b1-453918aefb4mr33153355e9.4.1751044209704;
+        Fri, 27 Jun 2025 10:10:09 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2d:5d00:f1a3:2f30:6575:9425? (p200300d82f2d5d00f1a32f3065759425.dip0.t-ipconnect.de. [2003:d8:2f2d:5d00:f1a3:2f30:6575:9425])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453823c3c7csm85945735e9.36.2025.06.27.10.10.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 10:10:09 -0700 (PDT)
+Message-ID: <04116d0f-2815-4583-853e-e4295fb3d014@redhat.com>
+Date: Fri, 27 Jun 2025 19:10:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250619000925.415528-1-pmalani@google.com> <20250619000925.415528-3-pmalani@google.com>
- <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com> <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
- <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
-In-Reply-To: <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
-From: Prashant Malani <pmalani@google.com>
-Date: Fri, 27 Jun 2025 10:07:16 -0700
-X-Gm-Features: Ac12FXwIUxZ0Aa04QLpPk6LjrweXUU0nZqRt-LeVwPBIJoLNPs9CENWzcAXt3xE
-Message-ID: <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-To: Jie Zhan <zhanjie9@hisilicon.com>
-Cc: Ben Segall <bsegall@google.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman <mgorman@suse.de>, 
-	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Valentin Schneider <vschneid@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Ionela Voinescu <ionela.voinescu@arm.com>, Beata Michalska <beata.michalska@arm.com>, 
-	z00813676 <zhenglifeng1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/16] MAINTAINERS: Include GDB scripts under MEMORY
+ MANAGEMENT entry
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ linux-kernel@vger.kernel.org
+Cc: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham
+ <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+ John Ogness <john.ogness@linutronix.de>,
+ Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Kent Overstreet <kent.overstreet@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Uladzislau Rezki <urezki@gmail.com>, Matthew Wilcox <willy@infradead.org>,
+ Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
+ Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>,
+ Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn
+ <illia@yshyn.com>, "open list:COMMON CLK FRAMEWORK"
+ <linux-clk@vger.kernel.org>,
+ "open list:PER-CPU MEMORY ALLOCATOR" <linux-mm@kvack.org>,
+ "open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>,
+ "open list:KASAN" <kasan-dev@googlegroups.com>,
+ "open list:MAPLE TREE" <maple-tree@lists.infradead.org>,
+ "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
+ "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
+References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
+ <20250625231053.1134589-9-florian.fainelli@broadcom.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250625231053.1134589-9-florian.fainelli@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Jie,
+On 26.06.25 01:10, Florian Fainelli wrote:
+> Include the GDB scripts file under scripts/gdb/linux/ that deal with
+> memory mamagenement code under the MEMORY MANAGEMENT subsystem since
+> they parses internal data structures that depend upon that subsystem.
+> 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+>   MAINTAINERS | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cad5d613cab0..52b37196d024 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15812,6 +15812,10 @@ F:	include/linux/mmu_notifier.h
+>   F:	include/linux/pagewalk.h
+>   F:	include/trace/events/ksm.h
+>   F:	mm/
+> +F:	scripts/gdb/linux/mm.py
+> +F:	scripts/gdb/linux/page_owner.py
+> +F:	scripts/gdb/linux/pgtable.py
+> +F:	scripts/gdb/linux/slab.py
 
-On Fri, 27 Jun 2025 at 00:55, Jie Zhan <zhanjie9@hisilicon.com> wrote:
->
->
-> Hi Prashant,
->
-> Sorry for a late reply as I'm busy on other stuff and this doesn't seem to
-> be an easy issue to solve.
->
-
-No worries, the ping was in general to all the people in the thread :)
-
-> For the latest kernel, [1] provides a new 'cpuinfo_avg_freq' sysfs file to
-> reflect the frequency base on AMUs, which is supposed to be more stable.
-> Though it usually shows 'Resource temporarily unavailable' on my platform
-> at the moment and looks a bit buggy.
->
-> Most of the related discussions can be found in the reference links in [1].
-> [1] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.michalska@arm.com/
->
-> As reported, the current frequency sampling method may show an large error
-> on 1) 100% load, 2) high memory access pressure, 3) idle cpus in your case.
->
-> AFAICS, they may all come from the unstable latency accessing remote AMUs
-> for 4 times but delaying a fixed 2us sampling window.
-
-I tried applying [1] which consolidates the ref and del register reads
-into 1 IPI, but that did not make a difference. The values still
-fluctuate wildly.
-
->
-> Increase the sampling windows seems to help but also increase the time
-> overhead, so that's not favoured by people.
->
-
-This experiment did not appear to help in our case. It's a point in
-the direction that this method is inherently inaccurate during idle
-situations.
-
-> On 20/06/2025 13:07, Prashant Malani wrote:
-> > Hi Jie,
-> > On Thu, 19 Jun 2025 at 20:53, Jie Zhan <zhanjie9@hisilicon.com> wrote:
-> >> On 19/06/2025 08:09, Prashant Malani wrote:
-> >>> t0: ref=899127636, del=3012458473
-> >>> t1: ref=899129626, del=3012466509
-> >>> perf=40
-> >>
-> >> In this case, the target cpu is mostly idle but not fully idle during the
-> >> sampling window since the counter grows a little bit.
-> >> Perhaps some interrupts happen to run on the cpu shortly.
->
-> Check back here again, I don't think it 'mostly idle'.
-> Diff of ref counters is around 2000, and I guess the ref counter freq is
-> 1GHz on your platform?  That's exactly 2us, so the target cpu is mostly
-> busy.
-
-I don't think the reference counter increment means that the CPU is
-"busy" or "not idle". Per [2], it just means that the "processor is
-active".
-
-idle_cpu() returning true means that the CPU is just running the idle
-task, and has nothing in its runqueue.
-In our experiments, this is always the case at least when the cpu is
-being brought online (which kind of makes sense).
-
-> > I don't think this is necessarily an issue. The ABI doesn't need to be
-> > synchronous; it is merely a snapshot of the scheduler view of that CPU
-> > at a point in time. Even the current method of perf counters sampling
-> > is purely hueristic. The CPU might be idle for the 2 usec the
-> > sampling is done, and servicing traffic before and after that.
-> > This is inherent whenever you are sampling any system state.
->
-> Then the issue is not totally solved, just less often?
->
-
-Yes. I don't think this can be completely solved, given the inherent
-inaccuracy in hardware. What this *does* do is mitigate one of the
-scenarios, while not impacting sampling when the CPU is actually doing
-something useful; as such I don't see much downside to including it.
-
-Best regards,
-
-[1] https://patchew.org/linux/20240229162520.970986-1-vanshikonda@os.amperecomputing.com/20240229162520.970986-4-vanshikonda@os.amperecomputing.com/
-[2] https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#performance-counters
+Probably they should go to the corresponding sub-sections. At least slab.py?
 
 -- 
--Prashant
+Cheers,
+
+David / dhildenb
+
 
