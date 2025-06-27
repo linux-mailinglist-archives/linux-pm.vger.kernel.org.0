@@ -1,173 +1,185 @@
-Return-Path: <linux-pm+bounces-29683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2691AEBD4C
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 18:28:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABC6AEBE2E
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:07:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C7833AE4C4
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 16:27:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E40E43B59BA
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A642EAB85;
-	Fri, 27 Jun 2025 16:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4332EA72E;
+	Fri, 27 Jun 2025 17:07:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bDXLCAQ0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yNO4M3jQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8680C2E54D5
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 16:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EFD2EA727
+	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 17:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751041648; cv=none; b=M7GHTH945xYnoCacgqVEfJQXHAFUpw1xGL7sFJW7zt7iI5X5AhMEVvAvCTutlk4urjngG2GjLgWFz2fCsdyTTfym2a6XD/kgqctxVBhbtVfa+ENtv7mP3XVw9WeV7c77hscTt6rtjQdrfyqFVj0/vEhs520LoFEW1UnQmWOyvYg=
+	t=1751044051; cv=none; b=nJn2e2ztEgcwfVB70amm8xI1JXk7fHHGPBqyTa8AICYwc0PYKJ/x1WQEHZJIhijC0g+xqOhNk+hrYVumrb/zRPCKrfwC3A1VWbFuISdRW8cFRLfpVBUp/uoYoOeWGXS2dpIL9FEXmcrCCYCU9DOxgYvUbjMBDcGEppkO4pcfvKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751041648; c=relaxed/simple;
-	bh=LRgiyfrICsKTlHv9IhC5r+4XBxhCMDaKngyow+IGVj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JjCkS7VoC1B9R9k7j2bRVYRrEN51b/BLlvPyTUC3cZwbFMszqjW04qjRcYQf201x0aksi8WJiyROBfGRX1+fRsjfdKYKsO1gZjC3Kv00sWSXfk78XJ0bTRsbFZQ6nrO2FY7VqLGFN2M/+yKpHtJN+v/c7Zq/A/6hoD3Z47E1dKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bDXLCAQ0; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55RC2Mht017801
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 16:27:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lvYd1deVAhihvBAnBWJn94CrhAU80ERbjP9yegxtMRc=; b=bDXLCAQ0cbgCnzoi
-	lm+zHp0o4lGhoQHyD9gxNOKnTFOFDsTWHkH8HmlD5/uBJW4rnl8cXb4Iiurr8HK4
-	XWXZUjskbqOFfdlzu8eneXoVRrnHQ0izL8V8U8OGPVNi+/19sBQkKUkT0qngbbsz
-	e6H8F3kGVCBMhN9ByxZkXMJfSy/TJnOIRDEDzWtUNA7vCW+VYrAGwBcyNr8ntvII
-	HNexMP22VMPgv3qVSUFsSxkjm5C/EVvoDKtIgW4KZ/4PGBIG5DNfUa6r+J3jnP0d
-	kzQsq+hYUyJaCEOlqcb7dIarRz7UZeNBOPCWu1nBFcZZieEKow8ZsZwgO1wTFWZP
-	yn6sAg==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47fdfx5rwx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 16:27:25 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d09b74dc4bso45133085a.2
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 09:27:25 -0700 (PDT)
+	s=arc-20240116; t=1751044051; c=relaxed/simple;
+	bh=otXY5bSrY5xQCnGv8vAhYSiPzAlIJ3HwVEv08LlcErs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sEaVCsx+lbRwms439sAXb+1fHZY/JIj4e3Se6kaleAuyvPYVaj9scj3AAzBnO4JJK4IYIeGidP/4ofFOZm8x8V/gR54qWzrZOdN7pETp0i9zSpGETDO1AMfl1CgLObX9GGreWEXDcfTHCJNfT3fRnbdBl78EJ5VVgKT8bPQDuVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yNO4M3jQ; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4a7f5abac0aso16611cf.0
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 10:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751044049; x=1751648849; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RloYayd5wBONgu0eildPglcuE/QLMbxICUIKSWflWiY=;
+        b=yNO4M3jQ40VH+iMh9KKuRKv0WfWe7MEwhS3lEO2O1cmhjJxn+47ENDXw5SXNQIiXeX
+         g8s7JpCFyLxpUbNxAfqH73u8zs/KYkZ+yf/iccs4hB06q5yppvf0XWLdC11flDEqY0ue
+         4Dut86CPS9+akIxzgBmMOpow8nlXA2OdtwJFY6LdzihGkeP35kw45pVbYLIkh1Zxt9bD
+         4OimqKD8fX8qbIRImC0vr7o5XcqE1T2r6pkHLFyKWPGsitOua4or5h95wmHy+N61Ax2u
+         2F98NBgVMG5qNCDJ1ND18uRTiaBjLKmWlz2gbFcRUPktZZNjKxNhyADq6DLm0j/O936M
+         0Yog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751041644; x=1751646444;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvYd1deVAhihvBAnBWJn94CrhAU80ERbjP9yegxtMRc=;
-        b=UHgDxxbwTTSqO0JZXxUb6BMBoOvoXoZmDp2CgCKkgn2zNPSaKOQtGvdcGqeNx8/rfN
-         yX58tmwl96jQj7On6HtvMaIdTc14anaaKR97oRMmtfqbEHaYRA+4oDEhGiRkE+DY68J0
-         fhvAH66TdoMjNQQHXESjcKAouI/AotTRKf/sFU0BBKpzdV4BOUGtlizAdzuplqejsWLx
-         /hasLUTInMgHu75GgCwE12BFag6nGK2r69HajErBG24TFydrvMZmf90sy1BT6DkD16tk
-         7vIPvUHD/2TXfRrKX+i8eeGboP/UlDZins75R5gbD66TUkufZYDXBH+RuMvhBO/c2uXt
-         9mpw==
-X-Forwarded-Encrypted: i=1; AJvYcCXORxSKbs1pCH6wi0q1M39QRtcFDtEONL+0wH6EdWCQtb7lyb8fD0UWiifyeLvA4BqQ+QwZzeJVoQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5sGOP4a9/DXa85LdA9iSRzrUK+7C5/Dw6y3e8h+ItdgAId8fy
-	Rholp9kOJrY/bNqTVOPabbxBOk7haTHb3RpC9BM8fHNiGSuaMXdrBC1j8oeyUi6iA/7l+eqf30C
-	HCBIGL21akP4ZjWGoLpMdtCG6If6KPPPKoZ2k/yWCU/UH2xnaBBnXgdNJiUxL+A==
-X-Gm-Gg: ASbGncuJ0gNEJJt7PMO4BPF0lq/RICZLWkvE9iaqTyTpQqcunHfNkbqBWRZR6zv8YDm
-	1xbJlu0B0ErNphybDMklId4iQabAAA28UndyoZ2TWHsPxGxCLFvqs9uyuzTDwZJi8/gSUZHEhhV
-	oYHTqzZDMukrCGkpV2MWQlDXep8YYPWHUIKOq/KIV37wHVcK30N3Hvw4bQIPRyjbWTBfBoxJeAx
-	7fy7dl2Qs5g0NSH7hrKGO+nKgZ/0nCUhNfH5/iyY4SFc3ZFXvagEKPnt8wc8Dn6cNcYe/PpKzrI
-	yN5Z6NL3qMZ6pS75vA2VPmFSFOUKzlmTDosMogY+1f1oR85Iqcz4Efu776Oy00bnPTrO3dBGGwY
-	1nE0=
-X-Received: by 2002:a05:620a:6011:b0:7c0:c024:d5 with SMTP id af79cd13be357-7d44393af52mr224995085a.8.1751041644597;
-        Fri, 27 Jun 2025 09:27:24 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGQx+88Ksz4ECZwUoGt+Ed4X8fsAOVBGWYUZ4j8qk+znxirQR95/4sMWkJF3ZwWKFN09XhTLg==
-X-Received: by 2002:a05:620a:6011:b0:7c0:c024:d5 with SMTP id af79cd13be357-7d44393af52mr224991485a.8.1751041644137;
-        Fri, 27 Jun 2025 09:27:24 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353659e12sm148855366b.40.2025.06.27.09.27.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 09:27:23 -0700 (PDT)
-Message-ID: <cd6f018d-5653-47d8-abd2-a13f780eb38f@oss.qualcomm.com>
-Date: Fri, 27 Jun 2025 18:27:20 +0200
+        d=1e100.net; s=20230601; t=1751044049; x=1751648849;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RloYayd5wBONgu0eildPglcuE/QLMbxICUIKSWflWiY=;
+        b=JR4XSpQ0mZZV+sdHftVW63ng15ufc230fCgymkETYWdfvvrHZ9utGkpHHQX3gBQl6Z
+         BSXkr/s2e9HxHKspUTSeE8Ic57SO9RnH68kvPDf+KhdTtxvfuXmV9eYjE2+mfjqkZjVc
+         8TxhCQJ6EwgoKnIRskDZWCAIpMYxi20G5XJLU6HN4eGl9g5nXwq7muvsGi1xbMT7ar1T
+         /FfV+3JWc5AYPvE9/UVZcrh+lUuClZjx18DAFx6/LK79lxoIF0H5FY4iFBU+pK7IJpjS
+         GgFIly6Mlo+ZCnxAqhgBrXRdRJvLSKZdJWJnyXPH9ctHjl0kI6Bokt4KbtOwko54wALN
+         qfcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrcejbEAl5H6wlG+PrEgdKVyubOUN6FUgKdRP+9EqX664FMjRoR+AxZeDgwGjL3mgc5/wYUcCNrg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtoiU1ruD0rSAhwLZOH5STrleMmMmeO1xQjSyL6JxgY1uFNsk/
+	/gaQf7KweVFCr2mFQE4sEkhvNUYffRxme2Myw7GX69upnVHKcsJOyFXM+7VQmQqamOl6gKNNCYg
+	n7aCsqt4h2/S3xxTOcvvWCLa6LOiz5gcMgNWn08G/
+X-Gm-Gg: ASbGnctNRYfQMo2m/bPze/oJp3yC3S0QokqYlesLYmeigR6Uh8QhiTdsowQn9LczQVM
+	Ph8ovc5Wck7eiH5HvJb4BLBSsn8/3AHP056SajHdulxPoKpB4/teDpsjr4QjsYJz+cpQLcXXdSt
+	yVas1PVSIt4ghMG/orqKuuyVqv7FXG/WaZDEwfgc5z8g==
+X-Google-Smtp-Source: AGHT+IHfIn/2qyi/BP2LcbO4Liai4hJXszJynHIfFVZxjB6pzjgudjP5yfk0uqdKYttjGQzdkn2KQRLHLLEkCzldxDg=
+X-Received: by 2002:a05:622a:d0:b0:494:b833:aa42 with SMTP id
+ d75a77b69052e-4a80675f5bemr706221cf.5.1751044048314; Fri, 27 Jun 2025
+ 10:07:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: ipq5424: Add NSS clock
- controller node
-To: Luo Jie <quic_luoj@quicinc.com>, Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Anusha Rao <quic_anusha@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, quic_kkumarcs@quicinc.com,
-        quic_linchen@quicinc.com, quic_leiwei@quicinc.com,
-        quic_suruchia@quicinc.com, quic_pavir@quicinc.com
-References: <20250627-qcom_ipq5424_nsscc-v2-0-8d392f65102a@quicinc.com>
- <20250627-qcom_ipq5424_nsscc-v2-7-8d392f65102a@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250627-qcom_ipq5424_nsscc-v2-7-8d392f65102a@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: wE_JMZtuczcJhifvSO9YuNy1qy4emV_I
-X-Proofpoint-ORIG-GUID: wE_JMZtuczcJhifvSO9YuNy1qy4emV_I
-X-Authority-Analysis: v=2.4 cv=MtZS63ae c=1 sm=1 tr=0 ts=685ec66d cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
- a=f6GukiY9ARMaQ3Zrt0MA:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI3MDEzMyBTYWx0ZWRfX+NwZMKCQCcuz
- ca2OX5WPXFkzaw2sPXx2ekt7sH0NJKhsrr13M7N2KnGFPd0obX40c2Kn8mIPRrNzqPgr3pkMuf0
- YKHiQwDSVWETF8sgf4Fq6Frkv/tpQ3CrkYP4SkwHrd5JGcv+yvopjNSyCb6PJA9Le+5DpEMHeXl
- M7jWQlRyYwjs+PEorInMlQehkJfs/pUQd050Dfv2DmZsJhzyeUEKu9c8ju1cEo/ocSllbMUdizT
- mB3nQXAGGR5ycHX19U8ZKG2Sl8ImTR2P5kRQ8aEdnHA2mzX0C6kopgrwNyo67g0Fq2xBIpMTN6y
- CT2dCFOUCns7a9WwgboEvTu/o1J4qFmz9AHe8CmURYT5cBi1ejXewiig4j3BewCHSQ0kcvtmzUx
- gd+dK6bWN/OBdv6mgFjaKH3X4lXZVW8/8dMK4VupxJdRqGAdvVhCbjGVWub79RHynlsXIrzH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-27_05,2025-06-26_05,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 suspectscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 spamscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 mlxscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506270133
+References: <20250619000925.415528-1-pmalani@google.com> <20250619000925.415528-3-pmalani@google.com>
+ <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com> <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
+ <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
+In-Reply-To: <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
+From: Prashant Malani <pmalani@google.com>
+Date: Fri, 27 Jun 2025 10:07:16 -0700
+X-Gm-Features: Ac12FXwIUxZ0Aa04QLpPk6LjrweXUU0nZqRt-LeVwPBIJoLNPs9CENWzcAXt3xE
+Message-ID: <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: Ben Segall <bsegall@google.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman <mgorman@suse.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Valentin Schneider <vschneid@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Ionela Voinescu <ionela.voinescu@arm.com>, Beata Michalska <beata.michalska@arm.com>, 
+	z00813676 <zhenglifeng1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/27/25 2:09 PM, Luo Jie wrote:
-> NSS clock controller provides the clocks and resets to the networking
-> hardware blocks on the IPQ5424, such as PPE (Packet Process Engine) and
-> UNIPHY (PCS) blocks.
-> 
-> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq5424.dtsi | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> index 2eea8a078595..eb4aa778269c 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> @@ -730,6 +730,36 @@ frame@f42d000 {
->  			};
->  		};
->  
-> +		clock-controller@39b00000 {
-> +			compatible = "qcom,ipq5424-nsscc";
-> +			reg = <0 0x39b00000 0 0x800>;
+Hi Jie,
 
-size = 0x100_000
+On Fri, 27 Jun 2025 at 00:55, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+>
+>
+> Hi Prashant,
+>
+> Sorry for a late reply as I'm busy on other stuff and this doesn't seem to
+> be an easy issue to solve.
+>
 
-with that:
+No worries, the ping was in general to all the people in the thread :)
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> For the latest kernel, [1] provides a new 'cpuinfo_avg_freq' sysfs file to
+> reflect the frequency base on AMUs, which is supposed to be more stable.
+> Though it usually shows 'Resource temporarily unavailable' on my platform
+> at the moment and looks a bit buggy.
+>
+> Most of the related discussions can be found in the reference links in [1].
+> [1] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.michalska@arm.com/
+>
+> As reported, the current frequency sampling method may show an large error
+> on 1) 100% load, 2) high memory access pressure, 3) idle cpus in your case.
+>
+> AFAICS, they may all come from the unstable latency accessing remote AMUs
+> for 4 times but delaying a fixed 2us sampling window.
 
-Konrad
+I tried applying [1] which consolidates the ref and del register reads
+into 1 IPI, but that did not make a difference. The values still
+fluctuate wildly.
+
+>
+> Increase the sampling windows seems to help but also increase the time
+> overhead, so that's not favoured by people.
+>
+
+This experiment did not appear to help in our case. It's a point in
+the direction that this method is inherently inaccurate during idle
+situations.
+
+> On 20/06/2025 13:07, Prashant Malani wrote:
+> > Hi Jie,
+> > On Thu, 19 Jun 2025 at 20:53, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+> >> On 19/06/2025 08:09, Prashant Malani wrote:
+> >>> t0: ref=899127636, del=3012458473
+> >>> t1: ref=899129626, del=3012466509
+> >>> perf=40
+> >>
+> >> In this case, the target cpu is mostly idle but not fully idle during the
+> >> sampling window since the counter grows a little bit.
+> >> Perhaps some interrupts happen to run on the cpu shortly.
+>
+> Check back here again, I don't think it 'mostly idle'.
+> Diff of ref counters is around 2000, and I guess the ref counter freq is
+> 1GHz on your platform?  That's exactly 2us, so the target cpu is mostly
+> busy.
+
+I don't think the reference counter increment means that the CPU is
+"busy" or "not idle". Per [2], it just means that the "processor is
+active".
+
+idle_cpu() returning true means that the CPU is just running the idle
+task, and has nothing in its runqueue.
+In our experiments, this is always the case at least when the cpu is
+being brought online (which kind of makes sense).
+
+> > I don't think this is necessarily an issue. The ABI doesn't need to be
+> > synchronous; it is merely a snapshot of the scheduler view of that CPU
+> > at a point in time. Even the current method of perf counters sampling
+> > is purely hueristic. The CPU might be idle for the 2 usec the
+> > sampling is done, and servicing traffic before and after that.
+> > This is inherent whenever you are sampling any system state.
+>
+> Then the issue is not totally solved, just less often?
+>
+
+Yes. I don't think this can be completely solved, given the inherent
+inaccuracy in hardware. What this *does* do is mitigate one of the
+scenarios, while not impacting sampling when the CPU is actually doing
+something useful; as such I don't see much downside to including it.
+
+Best regards,
+
+[1] https://patchew.org/linux/20240229162520.970986-1-vanshikonda@os.amperecomputing.com/20240229162520.970986-4-vanshikonda@os.amperecomputing.com/
+[2] https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#performance-counters
+
+-- 
+-Prashant
 
