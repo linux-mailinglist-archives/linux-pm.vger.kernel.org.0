@@ -1,104 +1,108 @@
-Return-Path: <linux-pm+bounces-29705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25B80AEC059
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E529AEC076
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5EFF1C257E6
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:48:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BD8F1C632C7
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5BB121ADC7;
-	Fri, 27 Jun 2025 19:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FBF82E5435;
+	Fri, 27 Jun 2025 19:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSp31Htf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zq90/u/J"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0501212D97;
-	Fri, 27 Jun 2025 19:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B3B19D8A8;
+	Fri, 27 Jun 2025 19:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751053679; cv=none; b=dW+b2eYUcoWFdkuL9CNNurpmr4lbXIcgMFywUOfnNsoRo+Fs4dzjYVfc13+ORLRPcKzxx1oWw97jDvNTFJBv3cbY7ZeEDylLHd5gfsILbGl2wEh1ViI9vs8i9pTh9K5az2jBDE0dXMTxKa2TrSUt7MSCBLBRtlwUdEVX2RvNIhw=
+	t=1751054156; cv=none; b=iL8HGGFhjcfzfd68UV6JjMsZKdzqpD1lY0FUvZn8+oFon/7jSuwPpCsHvHlnTiFtYcLor80LjKXvg36jh3oZLrzVXNd+wgbS+b53JRaFRWE36y6mZDHxDb/7mkpvtSCQXyV2l/EflnjUe786Tn6WSEF6A6BWbVhQkta8FZ3Jqys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751053679; c=relaxed/simple;
-	bh=qSFxmn8zMD2j4jiMzR4R/375FMeVfeiJxiC4gUPGm7Y=;
+	s=arc-20240116; t=1751054156; c=relaxed/simple;
+	bh=XADjQZ+TEjgr83+mafE8zfYeP7vysAez4r8bxwUi3g0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bsUwpk5uA4yD1+ouDsgjMopg/lBCaZYSnXeznTsPv4G0DQqmPslKNz3zIJ+4wyDWefbH3A6w2e2IpBH47j2VWclYC6QWLjigW1Z6HNUAWsoV1cOEdWb59s0ByXPonnq3YMbCJxY+dQS859vGksPoYCpsmOYDta/aJMd5OGjtOf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSp31Htf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CAEC4AF0B;
-	Fri, 27 Jun 2025 19:47:59 +0000 (UTC)
+	 To:Cc:Content-Type; b=R2oj58M9R/mmHKyB8kHyDhhVz5NUu21k4OIhARiObzqqWBnrmZoS53C8ZXpo5T5RPAHOqJgHBbfaOZKCUyPeBFQCm/A9vR6RubL7RfbjZAocexzGpHirDjvhbkOcXh0CFRBr26NxJpHEsLntltf5kn5+9wvX775u+jLsUDnTAl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zq90/u/J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0BFC4CEE3;
+	Fri, 27 Jun 2025 19:55:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751053679;
-	bh=qSFxmn8zMD2j4jiMzR4R/375FMeVfeiJxiC4gUPGm7Y=;
+	s=k20201202; t=1751054155;
+	bh=XADjQZ+TEjgr83+mafE8zfYeP7vysAez4r8bxwUi3g0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GSp31HtfQLnBral28TfLQvRx010Epl9hR19y9111ibsCt/UwddvdsJKpVOtQo3ZZP
-	 BJwaZWRLE5rrfOiJf1F6EEeJDX7SNf5PZsVv7woUUG9GHPNH3Q/e8kFT6/LTmfRlBZ
-	 JLDfMi5/q0/tVRF/bC0NT6qCbWq9pH2SQL/wy54MFI9tvwIVvvYhd6dS2+E2flnRWG
-	 HQ4c+8sQVFWVaVUv3EZqZ75JWV/eo/05/BZ8B5Bu1H9FhQLShPQuQc7vOTUFuFIcRd
-	 GbklTYnPOb0cHVXarxyWmTmxWbl0lqAbDFoQReYaX6IVcTfQ1vvDnPr3CEwTL71qAl
-	 tOMbfnfsBZkaQ==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-60d5c665fceso110061eaf.1;
-        Fri, 27 Jun 2025 12:47:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW0NrW2KwqnapqG7K1tXPrjkLjSkL3UUpNbk+m3tLpc64gEBl7vZHSI9244SXx40cwfK0HYz3h6PCD9O3c=@vger.kernel.org, AJvYcCXTCds3OyW6PEuNOQfoSpqjzoZKUx1pI7IJXGsNuytj2fw40KYw4NsLEo0BeLuGVjwOaBejkBXSs28=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwetXws20+kip/HtsDsycJfcueZprLxESYEBNkd9XPNusArWCRB
-	D6ZkB35HqWb7n+F2traEt/eXyAxx+lZ4kPlbYCCC6VfxzERlFHod3KoDyZK9iwH+7XIv2qHT5ar
-	hgwyQlcINjsQ2uZkOMTVD1/vQNINzoTo=
-X-Google-Smtp-Source: AGHT+IFIdkTX35vYH56ZqzJMeHfewRj+zYRHyAze0G05YjdlyfHn6jVAJqRX6vVYzK3qxXdFZTewgDanf1gfQlSQA9I=
-X-Received: by 2002:a05:6820:4de7:b0:611:9fd4:ac26 with SMTP id
- 006d021491bc7-611b911d923mr2696321eaf.5.1751053678537; Fri, 27 Jun 2025
- 12:47:58 -0700 (PDT)
+	b=Zq90/u/J+u8bBdOyYl93oy4wqQhio1FyhxZ7ZnWUicVFv0cI7vr8YMP515kvXHslb
+	 1O5+eZE24GaXV+ZOxBwvJERMGhiY/I6yVMLmuQJ5R8KQTwQdU5nrkP96EiXnWVeT6E
+	 61Bbdsl1JOMzwLT5BicTOMcWmDYLbOeGUhefIOcbu6MuEQwWPNpnet2hBtuWYfygPl
+	 3vMJYcWsexgglxmXI/Se19ZkvQkNdzYT3BHBYP9zK5+nSrEXVehNksSEIiJ99y8xoo
+	 ALxZCYbYlBLgi+g658ocfhiB1xX08XaAezLBINcF4CxmB1p0BenAU+PHbCr0tAXIU8
+	 O1Q0HVOQhhx4w==
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-40a55314d06so857782b6e.1;
+        Fri, 27 Jun 2025 12:55:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUwHSP6hX0UebW/pNsBckOvqtyGA2pcL/wKKVpeAfxYTisYxUmjuoiJEIhcuGoyuxPPBYSoPd14RH0=@vger.kernel.org, AJvYcCVVlcx+zhHbXFCTC5B9sR5Iti6ylTB16YB01Cq75hFi7zpU81a8x0h/601Jzzod3kw/PClQaEwgscrAbuM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGIOmgoALlOnvea/mCdmrdzsUBg/T/2mcMDTKVv9ahVNCEcyFh
+	kL9vUGRmXfBDRhXNldQamS8bihUd7AbGajkoEZpQanzIKfT6d7Cfz4lzYIGQQnytYxGAZVLAUsX
+	wcyWHz/AusGIGBf1kVAnon9V2LyY2Ugc=
+X-Google-Smtp-Source: AGHT+IE0UMt7B5qGD4vFLERyqvD0G9OO0kmcGk69gMwZgWs5sQqQ8LROw46/tWkKjZ0d0Bq8bDfbKOOJtnuehLkKFIs=
+X-Received: by 2002:a05:6870:92c1:b0:2c1:650b:fc86 with SMTP id
+ 586e51a60fabf-2efed430f37mr3119354fac.1.1751054154855; Fri, 27 Jun 2025
+ 12:55:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250625020522.253548-1-rui.zhang@intel.com>
-In-Reply-To: <20250625020522.253548-1-rui.zhang@intel.com>
+References: <20250612044538.2970661-1-wei.qiao@intel.com> <20250612070613.2995756-1-wei.qiao@intel.com>
+In-Reply-To: <20250612070613.2995756-1-wei.qiao@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 27 Jun 2025 21:47:47 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jVbc76E0jJA7S4N1xN1ESjuNO0xvfGk9wqDwNVOzBVkg@mail.gmail.com>
-X-Gm-Features: Ac12FXyGNoB1Z0y_1SWfLTkjesRNP8aP5qzLamzRDvOc1UvafelIKdzPm3sUnPM
-Message-ID: <CAJZ5v0jVbc76E0jJA7S4N1xN1ESjuNO0xvfGk9wqDwNVOzBVkg@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl_msr: Add PL4 support for PantherLake
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Date: Fri, 27 Jun 2025 21:55:43 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jPzrRc76qKMH6Uy=YuQg1GY1gyWwhcFxCqxuh-4jCcVA@mail.gmail.com>
+X-Gm-Features: Ac12FXxMFojIMhvONWOReY8H5IeABv_Hwyr3wHiJZ7EiEFWLnDcT8kGqalElQko
+Message-ID: <CAJZ5v0jPzrRc76qKMH6Uy=YuQg1GY1gyWwhcFxCqxuh-4jCcVA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] powercap: intel_rapl: Add support for Bartlett
+ Lake platform
+To: Qiao Wei <wei.qiao@intel.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rui.zhang@intel.com, xiange.pi@intel.com, lili.li@intel.com, 
+	furong.zhou@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 25, 2025 at 4:05=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wro=
-te:
+On Thu, Jun 12, 2025 at 9:32=E2=80=AFAM Qiao Wei <wei.qiao@intel.com> wrote=
+:
 >
-> Add PantherLake to the list of processors where PL4 is supported.
+> Add support for Bartlett Lake platform to the RAPL common driver.
 >
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Acked-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Qiao Wei <wei.qiao@intel.com>
 > ---
-> The PL4 support for Arrowlake-S and Lunarlake are also missing for now.
-> We will add them later when there is a real need. I'm also checking
-> internally to see if it is required or not.
+> Changes since V1:
+> - Remove "[linux-driver-review]" prefix in the subject
+> - Add Acked-by tag from Zhang Rui
 > ---
->  drivers/powercap/intel_rapl_msr.c | 1 +
+>  drivers/powercap/intel_rapl_common.c | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_r=
-apl_msr.c
-> index 8ad2115d65f6..4ed06c71a3ac 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -150,6 +150,7 @@ static const struct x86_cpu_id pl4_support_ids[] =3D =
-{
->         X86_MATCH_VFM(INTEL_METEORLAKE_L, NULL),
->         X86_MATCH_VFM(INTEL_ARROWLAKE_U, NULL),
->         X86_MATCH_VFM(INTEL_ARROWLAKE_H, NULL),
-> +       X86_MATCH_VFM(INTEL_PANTHERLAKE_L, NULL),
->         {}
->  };
->
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/inte=
+l_rapl_common.c
+> index e3be40adc0d7a..c0789df34b2f7 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1261,6 +1261,7 @@ static const struct x86_cpu_id rapl_ids[] __initcon=
+st =3D {
+>         X86_MATCH_VFM(INTEL_RAPTORLAKE,         &rapl_defaults_core),
+>         X86_MATCH_VFM(INTEL_RAPTORLAKE_P,        &rapl_defaults_core),
+>         X86_MATCH_VFM(INTEL_RAPTORLAKE_S,       &rapl_defaults_core),
+> +       X86_MATCH_VFM(INTEL_BARTLETTLAKE,       &rapl_defaults_core),
+>         X86_MATCH_VFM(INTEL_METEORLAKE,         &rapl_defaults_core),
+>         X86_MATCH_VFM(INTEL_METEORLAKE_L,       &rapl_defaults_core),
+>         X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X,   &rapl_defaults_spr_server=
+),
 > --
 
 Applied as 6.17 material, thanks!
