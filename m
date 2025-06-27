@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-29674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29673-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8C0AEBBC0
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:29:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19ED8AEBBC3
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 205CF188B728
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 15:30:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E92DC644B84
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 15:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533522E92DC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6662E92C7;
 	Fri, 27 Jun 2025 15:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6iaMyjI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4JdDqPN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2517E1925BC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF621CAA6C;
 	Fri, 27 Jun 2025 15:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751038170; cv=none; b=PhhsjrTPoENt4RIxO8puYScfd8soVCQLQZn106Fw27xm2tayJNoJ3G0AbSf/Vvw5Zq52E4eClZWMp/St/Z++YXaFzVLr6F5uVh/mZwynWtCohmlzQNL2iDbu94klB6lg6Hh9s25uL4h6K0oasKfB+4OJCOfx3VNLE91NEi50DGo=
+	t=1751038170; cv=none; b=amkcX3SjytAgVVqkCuiQsX7c0ulFQYaweWDk6QLilDodB80vTbn7qJQ7FbBJ3ELpRmCfSEuAY0eMbR8HmaYi8N6RGIKS78XJ9ECvzoEgkSOk4dvFh9N/6Eweoj6NI6cKk1NuOh5mTpvE5YKLjECluHETpKXCxKfAm550kAwuPR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751038170; c=relaxed/simple;
-	bh=P2snesJzCcoewtMetOLPemSPMxBI1rMj38HQO6OHc0g=;
+	bh=HqUKn0G06bLQgn9/7br5JqwZjyala+dj86Idxb210+E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hBZA8CYFLKmILN0y+wB6uAKu5zm/f+q/uMjM482FtPr5gciAeilCVeX6ClakITz/S0QwGJdMSNcn7k4r/DS64ircn+EohyS0SuXY0Fo9SdBpFFJEbW1o6k2C1QnVI3BkyFqkB0RH18vbRo2u7E3VQuiDq9HkVDyOo1+uLAOVxpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6iaMyjI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86233C4CEE3;
+	 MIME-Version; b=aovpS8pixSeb2xdCCw3U9+JMhTr1ft2368uUJ7Eb0XPKUQF2wasau1cBhRVNEhtbWGoUrZIPr4fUNsHo+/QqJy+MKuhvpLgulP0POp6vp6Feu1tVUR5q5X1FMnnA6bhMe4iPRUvVlu0LBeNPv9MqNKKNF69dmEY6hZa6Sr0u1c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4JdDqPN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A848BC4CEF1;
 	Fri, 27 Jun 2025 15:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751038169;
-	bh=P2snesJzCcoewtMetOLPemSPMxBI1rMj38HQO6OHc0g=;
+	bh=HqUKn0G06bLQgn9/7br5JqwZjyala+dj86Idxb210+E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=H6iaMyjIJSuJKtCHJZ6x37YyMHYme+Bod9u1ZsU/7PCjyXrz//E4WTaIOqMbkhjd/
-	 94+M0wIwSFWutdT5V/qplc4oFcCxbz+fKtX/IEtelLZHoWuIZE251HW5Up/60hIoaC
-	 AU32kdGZZilFI92vGZyghti24aRHHEFBE65lQoDD+pbqbazVRg74Y9aYF0IqS8oIbN
-	 yaHZY0go/TQ3yBy3zW38sTyiwcuo+OKWqYD5xS/dWBdm7bAG65bf4E/n4U/j3Xwlfi
-	 Fk/SrzofSaJ0YGEkBqoin29zJWVs94bodR2PeW6ZrQBinmwH1LQPadLLACOGloEEUF
-	 PKAdsBX1HNs1A==
+	b=Q4JdDqPNgf+N/qPpe13/rDdggJ7X82WQoNvBLavdF/iOvGPAzdTEXe0IhAKQMCmVA
+	 Ln3U/mI1h5dDSxMLGDaoMxOR6qv0X8JSUXPmXWY/0bVYSj8hL96ZBFf/ySh9hu8mSu
+	 XwOC6BPRQj2ZTVFU8TQ4lqTyc0QyOsUUZ7AL7Lv8pwqlLHseQX69T53OrFSSSitvlx
+	 HTHN+6ud0sjimLb+vYovqDfvn1dqHYC52gCGsyDkfTHfTaqUe1uRnuBjjXaoogoF9J
+	 yfstODLz/pwRxXt4iOBMpRYRmQIGadAYgZ/jS/G4I5DBJc8/g24KrZBqZq/xcWLMfI
+	 Ja1KkTT7T5l4A==
 Received: by wens.tw (Postfix, from userid 1000)
-	id 2BE3A5FAC5; Fri, 27 Jun 2025 23:29:27 +0800 (CST)
+	id 32F395FF77; Fri, 27 Jun 2025 23:29:27 +0800 (CST)
 From: Chen-Yu Tsai <wens@kernel.org>
 To: Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej@kernel.org>,
@@ -57,9 +57,9 @@ Cc: Andre Przywara <andre.przywara@arm.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH 1/4] dt-bindings: power: Add A523 PPU and PCK600 power controllers
-Date: Fri, 27 Jun 2025 23:29:15 +0800
-Message-Id: <20250627152918.2606728-2-wens@kernel.org>
+Subject: [PATCH 2/4] pmdomain: sunxi: sun20i-ppu: add A523 support
+Date: Fri, 27 Jun 2025 23:29:16 +0800
+Message-Id: <20250627152918.2606728-3-wens@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250627152918.2606728-1-wens@kernel.org>
 References: <20250627152918.2606728-1-wens@kernel.org>
@@ -73,78 +73,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Chen-Yu Tsai <wens@csie.org>
 
-The A523 PPU is likely the same kind of hardware seen on previous SoCs.
+A523 has a PPU like the one in the Allwinner D1 SoC.
 
-The A523 PCK600, as the name suggests, is likely a customized version
-of ARM's PCK-600 power controller. Comparing the BSP driver against
-ARM's PPU datasheet shows that the basic registers line up, but
-Allwinner's hardware has some additional delay controls in the reserved
-register range. As such it is likely not fully compatible with the
-standard ARM version.
-
-Document A523 PPU and PCK600 compatibles.
+Add a compatible entry and a list of power domain names for it.
 
 Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 ---
- .../bindings/power/allwinner,sun20i-d1-ppu.yaml   |  2 ++
- .../power/allwinner,sun55i-a523-pck600.h          | 15 +++++++++++++++
- .../dt-bindings/power/allwinner,sun55i-a523-ppu.h | 12 ++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
- create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+ drivers/pmdomain/sunxi/sun20i-ppu.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
-index f578be6a3bc8..b9f550994512 100644
---- a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
-+++ b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
-@@ -18,6 +18,8 @@ properties:
-     enum:
-       - allwinner,sun20i-d1-ppu
-       - allwinner,sun8i-v853-ppu
-+      - allwinner,sun55i-a523-ppu
-+      - allwinner,sun55i-a523-pck-600
+diff --git a/drivers/pmdomain/sunxi/sun20i-ppu.c b/drivers/pmdomain/sunxi/sun20i-ppu.c
+index 9f002748d224..b65876a68cc1 100644
+--- a/drivers/pmdomain/sunxi/sun20i-ppu.c
++++ b/drivers/pmdomain/sunxi/sun20i-ppu.c
+@@ -193,6 +193,19 @@ static const struct sun20i_ppu_desc sun8i_v853_ppu_desc = {
+ 	.num_domains	= ARRAY_SIZE(sun8i_v853_ppu_pd_names),
+ };
  
-   reg:
-     maxItems: 1
-diff --git a/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h b/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
-new file mode 100644
-index 000000000000..6b3d8ea7bb69
---- /dev/null
-+++ b/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++static const char *const sun55i_a523_ppu_pd_names[] = {
++	"DSP",
++	"NPU",
++	"AUDIO",
++	"SRAM",
++	"RISCV",
++};
 +
-+#ifndef _DT_BINDINGS_POWER_SUN55I_A523_PCK600_H_
-+#define _DT_BINDINGS_POWER_SUN55I_A523_PCK600_H_
++static const struct sun20i_ppu_desc sun55i_a523_ppu_desc = {
++	.names		= sun55i_a523_ppu_pd_names,
++	.num_domains	= ARRAY_SIZE(sun55i_a523_ppu_pd_names),
++};
 +
-+#define PD_VE			0
-+#define PD_GPU			1
-+#define PD_VI			2
-+#define PD_VO0			3
-+#define PD_VO1			4
-+#define PD_DE			5
-+#define PD_NAND			6
-+#define PD_PCIE			7
-+
-+#endif /* _DT_BINDINGS_POWER_SUN55I_A523_PCK600_H_ */
-diff --git a/include/dt-bindings/power/allwinner,sun55i-a523-ppu.h b/include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
-new file mode 100644
-index 000000000000..bc9aba73c19a
---- /dev/null
-+++ b/include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+
-+#ifndef _DT_BINDINGS_POWER_SUN55I_A523_PPU_H_
-+#define _DT_BINDINGS_POWER_SUN55I_A523_PPU_H_
-+
-+#define PD_DSP			0
-+#define PD_NPU			1
-+#define PD_AUDIO		2
-+#define PD_SRAM			3
-+#define PD_RISCV		4
-+
-+#endif /* _DT_BINDINGS_POWER_SUN55I_A523_PPU_H_ */
+ static const struct of_device_id sun20i_ppu_of_match[] = {
+ 	{
+ 		.compatible	= "allwinner,sun20i-d1-ppu",
+@@ -202,6 +215,10 @@ static const struct of_device_id sun20i_ppu_of_match[] = {
+ 		.compatible	= "allwinner,sun8i-v853-ppu",
+ 		.data		= &sun8i_v853_ppu_desc,
+ 	},
++	{
++		.compatible	= "allwinner,sun55i-a523-ppu",
++		.data		= &sun55i_a523_ppu_desc,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, sun20i_ppu_of_match);
 -- 
 2.39.5
 
