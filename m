@@ -1,127 +1,192 @@
-Return-Path: <linux-pm+bounces-29688-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7B54AEBF92
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:16:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 830FDAEBFE5
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:31:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BE60563CBF
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:15:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D0327A9BBB
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332231E1E0B;
-	Fri, 27 Jun 2025 19:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80EEF2ECD2B;
+	Fri, 27 Jun 2025 19:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ed3n96Gv"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="cy7oBoSv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3031F8724;
-	Fri, 27 Jun 2025 19:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8486B2E92DE;
+	Fri, 27 Jun 2025 19:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751051733; cv=none; b=rKuoJxePZ7beQ5eRupHkuag2wCp/S4KlhuzEkvEtTmRn+hNSjMFxHHY/AXOqnfUkY+acqtklF9Om4PA+LDc4a7CJHUU3SGcOIc9Lx/2byWgWJT4sxb2rJRvtCSNlQ6fJ9h/Zup2p+tYBpgXEd7UerJgYawo4PUYzAZy4k7lrTIM=
+	t=1751052587; cv=none; b=StG0JnpZ+Vxr4E1mOTfNBxxRNTkxUs4ogOfsNXjQUn0hwYqR1HPCI7dxHOLJZd4cCnQoN5PntZBqQOh8+eHRl2ONzgrc8pCGh5yuxngQVMG+Ah7EJawYB8BsyORwfqjFmZsr3Gs1m1zfMxCjNc+SqrCaFmhOYK3sDLP8LYfU3Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751051733; c=relaxed/simple;
-	bh=4jrabYQ0JtI6OuhTCr7VLTvejtfzNWRPfphd7z7CjYs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=VDCWTSURH6OAMFRPRDuNNgGmfVgTZOBj6KCFti1skkhsI0vxsXlcQoVHYIkvVZmdvLsigKtHsUYzB621IwCXxthaF/5Hk04Bua/zubiW53JcqqzPimIV6YatToW2qJNtbLFbGkVxyluS35IQnydbJIkHZKunQsgVRw/ArfmF/6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ed3n96Gv; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b321bd36a41so350149a12.2;
-        Fri, 27 Jun 2025 12:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751051731; x=1751656531; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MC33Lr444cQjbDQpogG91dDKBJUHhtcvW36ZB7YX1Y8=;
-        b=ed3n96GvXcwUQ2W9eZuvVbhwpTgg8M5ol8CtCHyOFSaVKo7yga9uAqO50reIF+NLYs
-         pKTQqggdzBYAhuapGSPn596Q56mzuOlJawi48UTAi9Y9q7EBIrwakvAQ5Gv4Vga/uySE
-         MFPvG0SC4oVsTqXB2/oyWc6nE/t+mmUGyBGh70tiuBjcChk7neHTw0xB7qSDpQ08wUy6
-         PKIUzNNC6zUbrYfinjLQE4B+dQvffV7ObFztj7jwFz4W6GE4rRSZVL1ziAgMOthJ8uGo
-         chjKNLvINE9egH0/tHhJwl8GZlhoVDH/8Tv1mUWBxOsbqX0z1Zp7vrCeOzb36ZU1nkeu
-         p36g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751051731; x=1751656531;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MC33Lr444cQjbDQpogG91dDKBJUHhtcvW36ZB7YX1Y8=;
-        b=aE9lYnPRRuF0RlytBAeXf+NU1CinkPhnJVK7rnRKTE9tPg/74eDpQtY1I50bXC5V1E
-         fTYQxLfdydDtU4vpPGgd7YU3klmlyzSRqAcrsFBfC/jtmoDcelA8rGYd5snyXPxzRb2c
-         mKma5B/Ac89QzZfOuft7wdz0xz/c+MOADQk2qk9TbIcHc3Sj0dUIX4GpWK4wZkLp63Xe
-         hmmvwX+nz4hSmOUq8A08EQHbqL7mBMr6/0iuNhQySfWej4Ht/1Exm0GcprbI3v4wIkof
-         09QfBE49Bz/ZOulQ49AKEjOX+dfMc02khWZd/PRMqcXJsST9WmXe1mtqhgRHjYwQIRty
-         6V8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVmQUizcrQGbI0uWoqKUfZImqiRu1YkEW79NUDsNKRED/z5aSPs6XO8cjdYpYWyUkpXI5p0UfWhOg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUPrtVYAcUysfXwtKD/+6k5UATl41BQgMwpa93fdM3FqpvEsVO
-	LEdaViqVY9JEXo+DkggZPWTktl2rBmiZ2pT8xs9zMctX/vomfGuiUnbS
-X-Gm-Gg: ASbGncvImzK3qIuq4bUB7WPwyiBHscr3B0Y35SqjM7/sMu524DTAnFCwWCK8pg4lS7c
-	QsOyszEXiSh/4VthoLJo/hxlPhSns0IZPbtCzKvRZvScwUzV9epYkwlsDg0jXkWYxVi8QnZD81o
-	K5iMx57+fRMLGcdbjSeqxGTdeHkoLxO7a403+SPWBGbaAqVqwuCQZi4ig4ewba/XJ012Nr0HvW/
-	QL06mvpYYAyDKkV60qFjC4a+n4THdneWofp3ectvdLQRxvoi4IKrgwrRpghB8Z/Q/sBdNwWIci5
-	7lQYfw1piMGsxJZoodltrKQ3KpfDSiDgI9vTRWC8nudFlO1cvvF5ygM=
-X-Google-Smtp-Source: AGHT+IHcuG/PKrysKfVFrUFi9VUefuigkudHVP3viNjydqJL6P0UaWxAMZQHOs8+lKRCAE9NOXqMXA==
-X-Received: by 2002:a17:903:2ece:b0:235:f70:fd44 with SMTP id d9443c01a7336-23ac45ce9d3mr68539455ad.21.1751051730662;
-        Fri, 27 Jun 2025 12:15:30 -0700 (PDT)
-Received: from localhost ([181.88.247.122])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb39b97dsm23407155ad.121.2025.06.27.12.15.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 12:15:30 -0700 (PDT)
+	s=arc-20240116; t=1751052587; c=relaxed/simple;
+	bh=Z0N60xq3kCpnv/XjKGtSTa3NRdhZk8CdO9VGmCPoETg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xjak/BfFSTKZkHXOetwASKYHJVSI9/V3J1INouF7N48Lgc4Z/ytUExA4t43bP6L6TlBTTr2kepiK6GUoZO91aIcTKIfCUjIfHFtEPS3MiLV0VtaPHRsgk3tKLhjIqUjJVx2LdoBWJB/f8L19PyXyi6AKPBlvbgqJdBKxXvN4MWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=cy7oBoSv; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from kreacher.localnet (unknown [5.63.189.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C4D9166DE8A;
+	Fri, 27 Jun 2025 21:29:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1751052581;
+	bh=Z0N60xq3kCpnv/XjKGtSTa3NRdhZk8CdO9VGmCPoETg=;
+	h=From:Subject:Date;
+	b=cy7oBoSvAYBHfztWRkfDYCfFz+3E+JuVviX8zuoQwQu/grApsmry0LzplDd2SlOCy
+	 QjrirgVHH1xy3rIHeqQGJwlpKy9xGqq/WV18O4k1W3+FosW7ExM3v+lmSAqAjCIHTs
+	 FIla5vb5K7XNvYIHWYdlJWm1dPSIAREQosfD4bAjM299S9yImQH8u1dOGDIZQMpZtg
+	 YEe22rc4ochQSTq9gES8Kb63yYjlrtmfSQW2TDa5ZO3JxoF+/A24kVCUcut8hjGALn
+	 yZLLbPizsjzTeNCFZxyqwyvOOt0QQrpfSB4sf7H8zczhfpQPSwAUUGOq1wFGQvhstR
+	 PMrZVWrDApkGA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>,
+ Linux PCI <linux-pci@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject:
+ [PATCH v3 3/9] PM: Make pm_runtime_force_resume() work with
+ DPM_FLAG_SMART_SUSPEND
+Date: Fri, 27 Jun 2025 21:15:59 +0200
+Message-ID: <3662906.iIbC2pHGDl@rjwysocki.net>
+In-Reply-To: <5018768.GXAFRqVoOG@rjwysocki.net>
+References: <5018768.GXAFRqVoOG@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 27 Jun 2025 16:15:26 -0300
-Message-Id: <DAXK1634VYQI.1PEUCTQIYAF3Y@gmail.com>
-Subject: Re: HP Omnibook Ultra Flip 14 - power profiles
-From: "Kurt Borja" <kuurtb@gmail.com>
-To: "Armin Wolf" <W_Armin@gmx.de>,
- =?utf-8?q?Benjamin_Hasselgren-Hall=C3=A9n?= <benjamin@benis.se>
-Cc: "platform-driver-x86@vger.kernel.org"
- <platform-driver-x86@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Zhang
- Rui" <rui.zhang@intel.com>, "Linux PM" <linux-pm@vger.kernel.org>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <GXa7F-PA_8BE7nlK9r8dkdSv7c-DW52GvOUiyYHQ6RyoZDxIpNAocWDPYQDeS7WEZeUisqQH_bqmgSV-eaRmuw5r68MGKxyU9X_4Erd0RYQ=@benis.se> <1037e223-a6ad-4d12-9619-f69a29cecba1@gmx.de> <5I8UDmgF_DcJBmBE0zgCXjuvmmhLamDCHkpnkAwRjSAkCa5xcFUvU-SmAeymxTajjDPR8avuW55RxOjhd8idK6jLy-hz8i-Ma3RHSaFy2Gs=@benis.se> <9642ad7e-3e57-45f9-bfd9-beac3e55418e@gmx.de> <GXC8NQl6AY_N7nQAOCRLt7SDGjFNll_TnqQyzYnP_b1weGkRqITOR-kHKcM66lPonOCo9xO2nSWXr7yycwfFuKmjRMtXVlJKya8-qvvkGik=@benis.se> <de8321ce-e595-460a-81d7-f7dae8a7b790@gmx.de> <X-40AqXfdmQw5shUOk3VSaHSXmwJYWHPmDDMLyGUH6GpMt56ty5SbNg8EVfyI_uC9J07uqZ2TtGJmmpB_x8-xpcVOw29fnKzJZ4n9L0x78A=@benis.se> <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de>
-In-Reply-To: <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 5.63.189.50
+X-CLIENT-HOSTNAME: 5.63.189.50
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: dmFkZTGrSjjgwBeoPV1BTemn5ImVCZpPTZb07vPRCPpCLNITJNQNwAJrBW+NvQ9gHfopUGw7eKCZUx2JvTkH7ndztXO95C/5NZYx0U0uzSGwSElzY3a0yFW5y/ST6sLyUL+pkZNb6zBf5QQDeWSHMTwFL5SzhnW4lYOV2aXUoJnPKm0KcXRLQpgIKgvtcuh9kc8szEcWaDKkWT6ZvZMLezK4NKUrQ0LRPHVUG/J8XldG2aWmsAAgiz8DIA4tSCjGi3syq1aAO8pJ5+EOuYaRvLcxgtvWWEpF/MWy84RxjOnkuHVdyEMV6Ug0G9LNrdrQ+TwE0ATvvO2S6WiA1+7Yw5g2H305gslEDzC4qYjPR98sLFkKLIORGzJ+a6iRC4PqBx2XJfBL5VbUkMarbPpAGSLxV5nrbhVZu+BgLG+QIwAWjIxtHQZKqyul0nsdoMPlQuI+34BbIf5IUEXGf/s5wbmIhCg+ettfeT7txWyW53DunSJZt+n2BpRqCSB5HBjgxADJ0aNgcDc4idWZCKEd14ogNps+gnFW/3iXHrnBtRh8CTHXWb8LQ09ge48jhxy+x9yudiztNFDmm7aysKArf1RkA+ocudNePxbW1cHqYMiW2TM0vY9VkvjAGC3ZTTDfkgca1jOeTZEbHIsRuF6nAOympCCOiW1JKjF3iKHi03ojkHCzpQ
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-Hi all,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Fri Jun 27, 2025 at 2:10 PM -03, Armin Wolf wrote:
-> Am 26.06.25 um 15:20 schrieb Benjamin Hasselgren-Hall=C3=A9n:
->
->> Hi again,
->>
->> dmesg: https://drive.benis.se/s/2crz7zPzkrzaqXN
->
-> The following message intrigues me:
->
-> 	platform_profile: Failed to get profile for handler hp-wmi
+Curently, drivers using pm_runtime_force_suspend/resume() cannot set
+DPM_FLAG_SMART_SUSPEND because the devices with that flag set may need
+to be resumed during system-wide resume regardless of whether or not
+they have power.needs_force_resume set.  That can happen due to a
+dependency resolved at the beginning of a system-wide resume transition
+(for instance, a bus type or PM domain has decided to resume a
+subordinate device with DPM_FLAG_SMART_SUSPEND and its parent and
+suppliers also need to be resumed).
 
-This might be a regression.
+To overcome this limitation, modify pm_runtime_force_resume() to check
+the device's power.smart_suspend flag (which is set for devices with
+DPM_FLAG_SMART_SUSPEND set that meet some additional requirements) and
+the device's runtime PM status in addition to power.needs_force_resume.
+Also change it to clear power.smart_suspend to ensure that it will not
+handle the same device twice during one transition.
 
-This was reported a couple months ago and I completely forgot until I
-saw this thread. See [1].
+The underlying observation is that there are two cases in which the
+device needs to be resumed by pm_runtime_force_resume().  One of them
+is when the device has power.needs_force_resume set, which means that
+pm_runtime_force_suspend() has suspended it and decided that it should
+be resumed during the subsequent system resume.  The other one is when
+power.smart_suspend is set and the device's runtume PM status is
+RPM_ACTIVE.
 
-@Benjamin: Can you please check if your power profiles work on Linux
-v6.12 (LTS)?
+Update kerneldoc comments in accordance with the code changes.
 
-Also try:
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-$ cat /sys/firmware/acpi/platform_profile
+v2 -> v3: Reorder (it was patch [5/9] in v2).
+
+v1 -> v2:
+   * Added R-by from Ulf.
+   * Corresponds to patch [3/9] in v1.
+
+---
+ drivers/base/power/runtime.c |   38 +++++++++++++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 11 deletions(-)
+
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1957,10 +1957,6 @@
+  * sure the device is put into low power state and it should only be used during
+  * system-wide PM transitions to sleep states.  It assumes that the analogous
+  * pm_runtime_force_resume() will be used to resume the device.
+- *
+- * Do not use with DPM_FLAG_SMART_SUSPEND as this can lead to an inconsistent
+- * state where this function has called the ->runtime_suspend callback but the
+- * PM core marks the driver as runtime active.
+  */
+ int pm_runtime_force_suspend(struct device *dev)
+ {
+@@ -2008,20 +2004,28 @@
+  * pm_runtime_force_resume - Force a device into resume state if needed.
+  * @dev: Device to resume.
+  *
+- * Prior invoking this function we expect the user to have brought the device
+- * into low power state by a call to pm_runtime_force_suspend(). Here we reverse
+- * those actions and bring the device into full power, if it is expected to be
+- * used on system resume.  In the other case, we defer the resume to be managed
+- * via runtime PM.
++ * This function expects that either pm_runtime_force_suspend() has put the
++ * device into a low-power state prior to calling it, or the device had been
++ * runtime-suspended before the preceding system-wide suspend transition and it
++ * was left in suspend during that transition.
++ *
++ * The actions carried out by pm_runtime_force_suspend(), or by a runtime
++ * suspend in general, are reversed and the device is brought back into full
++ * power if it is expected to be used on system resume, which is the case when
++ * its needs_force_resume flag is set or when its smart_suspend flag is set and
++ * its runtime PM status is "active".
++ *
++ * In other cases, the resume is deferred to be managed via runtime PM.
+  *
+- * Typically this function may be invoked from a system resume callback.
++ * Typically, this function may be invoked from a system resume callback.
+  */
+ int pm_runtime_force_resume(struct device *dev)
+ {
+ 	int (*callback)(struct device *);
+ 	int ret = 0;
+ 
+-	if (!dev->power.needs_force_resume)
++	if (!dev->power.needs_force_resume && (!dev_pm_smart_suspend(dev) ||
++	    pm_runtime_status_suspended(dev)))
+ 		goto out;
+ 
+ 	/*
+@@ -2041,8 +2045,20 @@
+ 	}
+ 
+ 	pm_runtime_mark_last_busy(dev);
++
+ out:
++	/*
++	 * The smart_suspend flag can be cleared here because it is not going
++	 * to be necessary until the next system-wide suspend transition that
++	 * will update it again.
++	 */
++	dev->power.smart_suspend = false;
++	/*
++	 * Also clear needs_force_resume to make this function skip devices that
++	 * have been seen by it once.
++	 */
+ 	dev->power.needs_force_resume = false;
++
+ 	pm_runtime_enable(dev);
+ 	return ret;
+ }
 
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D220008
 
---=20
- ~ Kurt
 
