@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-29716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29715-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2469AEC17F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:51:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2108AEC17D
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:51:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3D3F56442A
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:51:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A29B51C226E2
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36D02ED157;
-	Fri, 27 Jun 2025 20:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAAD2309BE;
+	Fri, 27 Jun 2025 20:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Ldtv7Iig"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="kdq94R90"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F9F2ECD11;
-	Fri, 27 Jun 2025 20:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF4B1E48A;
+	Fri, 27 Jun 2025 20:51:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751057505; cv=none; b=Eg4laSehJ8LOXExcKZT1u6p+hhTbsgQSvk0ZjmDqjxEtf/JMR/bgFwPfW0bTO+vhRp0ZaPBdYuhr/wkD3t5kOSF6zc79ZPo3kprX+o6sjEowrnLqtmwq7c84Al/89q3nVTBFxK36ndOsGQ1Jsp/uUiwVvTBqKlwiURuWGY79OeQ=
+	t=1751057502; cv=none; b=l3QMMaf4x9m9Al06XV4e7U2u3c9S+tWGJe75zqqs7nVb0ufUcr7mrxNGQOr6FTJ9FrzeyCfG6tsIF8w7ixoGLc28vRvUAaNMBeF8In+7v+a9CCUgCBoQNkXsmSaujVRtHwvIN459sGfMgGRvrxV+Ur7iJLDERqqTU7ZTHl25iaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751057505; c=relaxed/simple;
-	bh=Q5MfKjbjYSrHdzI3fRMl17kM6NaOgiBesjgXDepXjh0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nbr4MDje9J5X01sACoAeCbvTmySyMgdUtVFRIwTqRBn/79L5g3FKaaadR8cVfNoSxepUVk6ja1TiAIspLvsfBbDAPGbe/Gs5Dmi3LOSglsmcNqoR3neOim47k0JGvWDSuZ/isvEGeRu/FOdZx/gUqSGHCxMQ3x+4XPzeHxKA3Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Ldtv7Iig; arc=none smtp.client-ip=212.227.15.18
+	s=arc-20240116; t=1751057502; c=relaxed/simple;
+	bh=7bBkr7vOy93+eqGqvYWVbUJzuDZHDCdQa+v7bLkdR0c=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VeU6VGk7DyDtXxrFxXeJulA43F8BU6zLaFzsDnromgxhqghtyaD48n5SRGICRWLOwxQZMBtGRgZYQZbbSq28qBXjFvk7RNNGO4K+NtNZAshnXa0Wb7UOuvpIKiian19Hdbu4PhPPd+Vz2nYDpGQKGqpT7EGY5CPuv/TlNd/u730=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=kdq94R90; arc=none smtp.client-ip=212.227.15.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1751057490; x=1751662290; i=w_armin@gmx.de;
-	bh=hUUsqnZQFIKQOpOknR8UAJqoZYk2LlPuCBFJSqKkl6Q=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1751057493; x=1751662293; i=w_armin@gmx.de;
+	bh=wBbodj4U8PSmgG+umKsS8wnN/yuTYmb0Sf8A08BFjT4=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=Ldtv7Iig848QpAP5wVXd4YoO6HY4SawZhByD2INWouNKbCBWVBygP9vnCvFjzwIP
-	 GfOnmJDiSckC+grtvYwYQq0QgzGlNmb2f2wW3BS2yEE/JgBxbAoVHOupxEj8Ytsyv
-	 Gkw+p/IQnnF7zl3VCzisc4/S6AByWGjL3/mqe5GGHAs1aiGv5ELnPYlaALVdsWe9R
-	 3h8JeE0F/rFA/Y2u9UuQwXTBOg6qw1p7DSALrOFhq4UZZDbD/+mpVIhFmMqHQNwQO
-	 bA2BLE+OONDnoVRXzMc8WOBjbYKgJPT/vZAogA9FCk2vgs2daxUvEUOb/TzT1LDNP
-	 /coRDUSdqk72bVvG4w==
+	b=kdq94R90RsDvk9Dht+U5AC5wFOYXFLDk7ypf7ulp1RUD01akarlm3EyqsSaI4Fq6
+	 DLybp0DbEDkzbNl/OgYJYpjwJNDH+XAOumVnmhJJoRx0qk1kHCgECZLr1QRvsIjPB
+	 48v9RqFLmPZFX8gPEBveeJZFedkk+D9XLNFnwPIb82vI5iJoulKjaFeTMrDorR5sg
+	 Nw3o5S51Kq8PwBK0bcCawNKCPUqUILEl9Qfvv2DLwQgP+oTdgQedStFPCKkvd5Lff
+	 4is+qDFHrF1ETsVsjcsKJFkmpRJRgHEjKrQfUHUgT5Pn9bkJqajX4BtnFzle7PcSe
+	 QBShHrHB4oRjrXFtWA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MCKBc-1udXma11oA-00BMIX; Fri, 27 Jun 2025 22:51:30 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MlNpH-1v9rGT2WY1-00k9yT; Fri, 27 Jun 2025 22:51:32 +0200
 From: Armin Wolf <W_Armin@gmx.de>
 To: sre@kernel.org,
 	hdegoede@redhat.com,
@@ -54,10 +55,12 @@ To: sre@kernel.org,
 Cc: linux-pm@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] power: supply: core: Add power_supply_get/set_property_direct()
-Date: Fri, 27 Jun 2025 22:51:22 +0200
-Message-Id: <20250627205124.250433-1-W_Armin@gmx.de>
+Subject: [PATCH 2/3] power: supply: test-power: Test access to extended power supply
+Date: Fri, 27 Jun 2025 22:51:23 +0200
+Message-Id: <20250627205124.250433-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250627205124.250433-1-W_Armin@gmx.de>
+References: <20250627205124.250433-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,255 +68,99 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Czqf/QmY1VhuYFd4Y/U3MK9Zmg2XtuxSgMU8x5YH5gl7DQ4xiE5
- KIgtMCMYPn9w5vdxz+1n3kWmovB0GREyPPmuh4tU6fP59uv4smeHLeMHA4oZ8tj0q/Biw0x
- KFIinFVJxAe47SIstV73jHQoJrFjeVTPLzQvlH1Tywtg9LjBWzRclU+09H4uVGeVeJEaafI
- bwM9F7yQzD7kQiHS8klIw==
+X-Provags-ID: V03:K1:xhigeZFB7z9FKNrADOTFMSbGd0tKLXDlvaV6NJpbCVGIxowdUPL
+ P89b96jDh0eqZDAmdTfPMraUbcHxVLGzeDjvWwxF3m9CUOhZ1zMmpjg2HRF5b0T+LY8N6Qp
+ ArhO1iX8c17iwxhh+LAx3ZH5G2/zKs9kv/4q10usCSxKpFFf63WYNpoHMTz9KgZ9/pNvMBD
+ HxjeRSI6UglglgPm9mfdg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:trIV/CNFxzk=;xsZvodsyVZGd1mgcihGYZiwdHlL
- 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
- F5U6vA8GY/Oo1Vn/dDwF9PUf2J6U/3Vw=
+UI-OutboundReport: notjunk:1;M01:P0:iAyAiuplWYA=;Lla+UW3/zMdGm/01nAfCqDUi17c
+ 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
+ RK4iAUiQPOZXUlFIF4fXD7velMouthYE=
 
-Power supply extensions might want to interact with the underlying
-power supply to retrieve data like serial numbers, charging status
-and more. However doing so causes psy->extensions_sem to be locked
-twice, possibly causing a deadlock.
+Test that power supply extensions can access properties of their
+power supply using power_supply_get_property_direct(). This both
+ensures that the functionality works and serves as an example for
+future driver developers.
 
-Provide special variants of power_supply_get/set_property() that
-ignore any power supply extensions and thus do not touch the
-associated psy->extensions_sem lock.
-
-Suggested-by: Hans de Goede <hansg@kernel.org>
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/power/supply/power_supply_core.c | 82 ++++++++++++++++++++----
- include/linux/power_supply.h             |  8 +++
- 2 files changed, 78 insertions(+), 12 deletions(-)
+ drivers/power/supply/test_power.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supp=
-ly/power_supply_core.c
-index aedb20c1d276..e70ffedf1a80 100644
-=2D-- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -1241,9 +1241,8 @@ bool power_supply_has_property(struct power_supply *=
-psy,
- 	return false;
- }
-=20
--int power_supply_get_property(struct power_supply *psy,
--			    enum power_supply_property psp,
--			    union power_supply_propval *val)
-+static int __power_supply_get_property(struct power_supply *psy, enum pow=
-er_supply_property psp,
-+				       union power_supply_propval *val, bool use_extensions)
+diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test=
+_power.c
+index 5bfdfcf6013b..2c0e9ad820c0 100644
+=2D-- a/drivers/power/supply/test_power.c
++++ b/drivers/power/supply/test_power.c
+@@ -259,6 +259,7 @@ static const struct power_supply_config test_power_con=
+figs[] =3D {
+ static int test_power_battery_extmanufacture_year =3D 1234;
+ static int test_power_battery_exttemp_max =3D 1000;
+ static const enum power_supply_property test_power_battery_extprops[] =3D=
  {
- 	struct power_supply_ext_registration *reg;
-=20
-@@ -1253,10 +1252,14 @@ int power_supply_get_property(struct power_supply =
-*psy,
- 		return -ENODEV;
- 	}
-=20
--	scoped_guard(rwsem_read, &psy->extensions_sem) {
--		power_supply_for_each_extension(reg, psy) {
--			if (power_supply_ext_has_property(reg->ext, psp))
-+	if (use_extensions) {
-+		scoped_guard(rwsem_read, &psy->extensions_sem) {
-+			power_supply_for_each_extension(reg, psy) {
-+				if (!power_supply_ext_has_property(reg->ext, psp))
-+					continue;
-+
- 				return reg->ext->get_property(psy, reg->ext, reg->data, psp, val);
-+			}
- 		}
- 	}
-=20
-@@ -1267,20 +1270,49 @@ int power_supply_get_property(struct power_supply =
-*psy,
- 	else
- 		return -EINVAL;
- }
-+
-+int power_supply_get_property(struct power_supply *psy, enum power_supply=
-_property psp,
-+			      union power_supply_propval *val)
-+{
-+	return __power_supply_get_property(psy, psp, val, true);
-+}
- EXPORT_SYMBOL_GPL(power_supply_get_property);
-=20
--int power_supply_set_property(struct power_supply *psy,
--			    enum power_supply_property psp,
--			    const union power_supply_propval *val)
-+/**
-+ * power_supply_get_property_direct - Read a power supply property withou=
-t checking for extensions
-+ * @psy: The power supply
-+ * @psp: The power supply property to read
-+ * @val: The resulting value of the power supply property
-+ *
-+ * Read a power supply property without taking into account any power sup=
-ply extensions registered
-+ * on the given power supply. This is mostly useful for power supply exte=
-nsions that want to access
-+ * their own power supply as using power_supply_get_property() directly w=
-ill result in a potential
-+ * deadlock.
-+ *
-+ * Return: 0 on success or negative error code on failure.
-+ */
-+int power_supply_get_property_direct(struct power_supply *psy, enum power=
-_supply_property psp,
-+				     union power_supply_propval *val)
-+{
-+        return __power_supply_get_property(psy, psp, val, false);
-+}
-+EXPORT_SYMBOL_GPL(power_supply_get_property_direct);
-+
-+
-+static int __power_supply_set_property(struct power_supply *psy, enum pow=
-er_supply_property psp,
-+				       const union power_supply_propval *val, bool use_extensions)
++	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
+ 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
+ 	POWER_SUPPLY_PROP_TEMP_MAX,
+ };
+@@ -270,6 +271,9 @@ static int test_power_battery_extget_property(struct p=
+ower_supply *psy,
+ 					      union power_supply_propval *val)
  {
- 	struct power_supply_ext_registration *reg;
-=20
- 	if (atomic_read(&psy->use_cnt) <=3D 0)
- 		return -ENODEV;
-=20
--	scoped_guard(rwsem_read, &psy->extensions_sem) {
--		power_supply_for_each_extension(reg, psy) {
--			if (power_supply_ext_has_property(reg->ext, psp)) {
-+	if (use_extensions) {
-+		scoped_guard(rwsem_read, &psy->extensions_sem) {
-+			power_supply_for_each_extension(reg, psy) {
-+				if (!power_supply_ext_has_property(reg->ext, psp))
-+					continue;
-+
- 				if (reg->ext->set_property)
- 					return reg->ext->set_property(psy, reg->ext, reg->data,
- 								      psp, val);
-@@ -1295,8 +1327,34 @@ int power_supply_set_property(struct power_supply *=
-psy,
-=20
- 	return psy->desc->set_property(psy, psp, val);
- }
-+
-+int power_supply_set_property(struct power_supply *psy, enum power_supply=
-_property psp,
-+			      const union power_supply_propval *val)
-+{
-+	return __power_supply_set_property(psy, psp, val, true);
-+}
- EXPORT_SYMBOL_GPL(power_supply_set_property);
-=20
-+/**
-+ * power_supply_set_property_direct - Write a power supply property witho=
-ut checking for extensions
-+ * @psy: The power supply
-+ * @psp: The power supply property to write
-+ * @val: The value to write to the power supply property
-+ *
-+ * Write a power supply property without taking into account any power su=
-pply extensions registered
-+ * on the given power supply. This is mostly useful for power supply exte=
-nsions that want to access
-+ * their own power supply as using power_supply_set_property() directly w=
-ill result in a potential
-+ * deadlock.
-+ *
-+ * Return: 0 on success or negative error code on failure.
-+ */
-+int power_supply_set_property_direct(struct power_supply *psy, enum power=
-_supply_property psp,
-+				     const union power_supply_propval *val)
-+{
-+	return __power_supply_set_property(psy, psp, val, false);
-+}
-+EXPORT_SYMBOL_GPL(power_supply_set_property_direct);
-+
- int power_supply_property_is_writeable(struct power_supply *psy,
- 					enum power_supply_property psp)
- {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 45468959dd98..f21f806bfb38 100644
-=2D-- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -878,15 +878,23 @@ static inline int power_supply_is_system_supplied(vo=
-id) { return -ENOSYS; }
- extern int power_supply_get_property(struct power_supply *psy,
- 			    enum power_supply_property psp,
- 			    union power_supply_propval *val);
-+int power_supply_get_property_direct(struct power_supply *psy, enum power=
-_supply_property psp,
-+				     union power_supply_propval *val);
- #if IS_ENABLED(CONFIG_POWER_SUPPLY)
- extern int power_supply_set_property(struct power_supply *psy,
- 			    enum power_supply_property psp,
- 			    const union power_supply_propval *val);
-+int power_supply_set_property_direct(struct power_supply *psy, enum power=
-_supply_property psp,
-+				     const union power_supply_propval *val);
- #else
- static inline int power_supply_set_property(struct power_supply *psy,
- 			    enum power_supply_property psp,
- 			    const union power_supply_propval *val)
- { return 0; }
-+static inline int power_supply_set_property_direct(struct power_supply *p=
-sy,
-+						   enum power_supply_property psp,
-+						   const union power_supply_propval *val)
-+{ return 0; }
- #endif
- extern void power_supply_external_power_changed(struct power_supply *psy)=
-;
-=20
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
++		return power_supply_get_property_direct(psy, POWER_SUPPLY_PROP_TIME_TO_=
+EMPTY_AVG,
++							val);
+ 	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
+ 		val->intval =3D test_power_battery_extmanufacture_year;
+ 		break;
 =2D-=20
 2.39.5
 
