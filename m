@@ -1,187 +1,127 @@
-Return-Path: <linux-pm+bounces-29697-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29688-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A46AEBFE7
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B54AEBF92
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:16:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97092565D52
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:31:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BE60563CBF
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B886B20B807;
-	Fri, 27 Jun 2025 19:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332231E1E0B;
+	Fri, 27 Jun 2025 19:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="vQScK1/W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ed3n96Gv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506EC2EA72F;
-	Fri, 27 Jun 2025 19:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3031F8724;
+	Fri, 27 Jun 2025 19:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751052588; cv=none; b=DUJInpWSAJzCn5C9R9wNSqD+LrZBwJx+PoSf1xaCUZaLDcBdfbb3M97GxG+joMOLx1OmNmZTnksDNPOrLWhEqP3WQTVH3EH7Q1NrxuDY1PHpmTwzdfO0XWmWmHBMJmhwura0B/Zwj0OpdwKfCu+3EyOtIEaTebM0jYtt+6tSqdU=
+	t=1751051733; cv=none; b=rKuoJxePZ7beQ5eRupHkuag2wCp/S4KlhuzEkvEtTmRn+hNSjMFxHHY/AXOqnfUkY+acqtklF9Om4PA+LDc4a7CJHUU3SGcOIc9Lx/2byWgWJT4sxb2rJRvtCSNlQ6fJ9h/Zup2p+tYBpgXEd7UerJgYawo4PUYzAZy4k7lrTIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751052588; c=relaxed/simple;
-	bh=qomG2jEgH2N5lQ6ECtla5SnH6Y+Dt64taWawObq9AZw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iH+bqWiIFM35RGJ53q3rYXoBgNxW8VpXkgNK33AMQrWqFvAwaZgE9/H36Wgr55PX7RRaZoXdi5BLytiXTBXGJCGO3W/WaECKR39q7sAuAmHbLKMjXWObYX3yNF40JbxhBjiuAfeddsrh4lnoXGT5fgqJ0iO5dl4kvXZUcFh8Coc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=vQScK1/W; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from kreacher.localnet (unknown [5.63.189.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0D62266DF42;
-	Fri, 27 Jun 2025 21:29:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1751052582;
-	bh=qomG2jEgH2N5lQ6ECtla5SnH6Y+Dt64taWawObq9AZw=;
-	h=From:Subject:Date;
-	b=vQScK1/WZIGw6eW5u3ZmmFvgUUro02zcDYT3XuwAv7YkqYQRCaYUcnqjLGjJwjFot
-	 Pikk4oFa3den575z9ooTOjzFA4cOjiw0klK5LH7wFS3TT8Lb35jOYzReOj4RUSgfa7
-	 i45NmmKrLvL6URYJXv7y0OB4CRs4S0fWJhND3nqgMn/fB3busLtjAdDeLpUAAs1gKr
-	 JkoN6FRmrBP4/fiJLIVAJepV6LHkmslL0wey+eoWG4D49KQI7mnXDqji3V0uc8d42V
-	 FllYRiEK9mNjTIo7WRcWMr+9S04l1nXSeLdma6gVJKzWHUg4cYo5XfBsuhIOiTdRV3
-	 ElS4rTSAvaK7Q==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>,
- Linux PCI <linux-pci@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject:
- [PATCH v3 2/9] PM: Move two sleep-related functions under CONFIG_PM_SLEEP
-Date: Fri, 27 Jun 2025 21:08:48 +0200
-Message-ID: <3384523.aeNJFYEL58@rjwysocki.net>
-In-Reply-To: <5018768.GXAFRqVoOG@rjwysocki.net>
-References: <5018768.GXAFRqVoOG@rjwysocki.net>
+	s=arc-20240116; t=1751051733; c=relaxed/simple;
+	bh=4jrabYQ0JtI6OuhTCr7VLTvejtfzNWRPfphd7z7CjYs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=VDCWTSURH6OAMFRPRDuNNgGmfVgTZOBj6KCFti1skkhsI0vxsXlcQoVHYIkvVZmdvLsigKtHsUYzB621IwCXxthaF/5Hk04Bua/zubiW53JcqqzPimIV6YatToW2qJNtbLFbGkVxyluS35IQnydbJIkHZKunQsgVRw/ArfmF/6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ed3n96Gv; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b321bd36a41so350149a12.2;
+        Fri, 27 Jun 2025 12:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751051731; x=1751656531; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MC33Lr444cQjbDQpogG91dDKBJUHhtcvW36ZB7YX1Y8=;
+        b=ed3n96GvXcwUQ2W9eZuvVbhwpTgg8M5ol8CtCHyOFSaVKo7yga9uAqO50reIF+NLYs
+         pKTQqggdzBYAhuapGSPn596Q56mzuOlJawi48UTAi9Y9q7EBIrwakvAQ5Gv4Vga/uySE
+         MFPvG0SC4oVsTqXB2/oyWc6nE/t+mmUGyBGh70tiuBjcChk7neHTw0xB7qSDpQ08wUy6
+         PKIUzNNC6zUbrYfinjLQE4B+dQvffV7ObFztj7jwFz4W6GE4rRSZVL1ziAgMOthJ8uGo
+         chjKNLvINE9egH0/tHhJwl8GZlhoVDH/8Tv1mUWBxOsbqX0z1Zp7vrCeOzb36ZU1nkeu
+         p36g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751051731; x=1751656531;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MC33Lr444cQjbDQpogG91dDKBJUHhtcvW36ZB7YX1Y8=;
+        b=aE9lYnPRRuF0RlytBAeXf+NU1CinkPhnJVK7rnRKTE9tPg/74eDpQtY1I50bXC5V1E
+         fTYQxLfdydDtU4vpPGgd7YU3klmlyzSRqAcrsFBfC/jtmoDcelA8rGYd5snyXPxzRb2c
+         mKma5B/Ac89QzZfOuft7wdz0xz/c+MOADQk2qk9TbIcHc3Sj0dUIX4GpWK4wZkLp63Xe
+         hmmvwX+nz4hSmOUq8A08EQHbqL7mBMr6/0iuNhQySfWej4Ht/1Exm0GcprbI3v4wIkof
+         09QfBE49Bz/ZOulQ49AKEjOX+dfMc02khWZd/PRMqcXJsST9WmXe1mtqhgRHjYwQIRty
+         6V8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVmQUizcrQGbI0uWoqKUfZImqiRu1YkEW79NUDsNKRED/z5aSPs6XO8cjdYpYWyUkpXI5p0UfWhOg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUPrtVYAcUysfXwtKD/+6k5UATl41BQgMwpa93fdM3FqpvEsVO
+	LEdaViqVY9JEXo+DkggZPWTktl2rBmiZ2pT8xs9zMctX/vomfGuiUnbS
+X-Gm-Gg: ASbGncvImzK3qIuq4bUB7WPwyiBHscr3B0Y35SqjM7/sMu524DTAnFCwWCK8pg4lS7c
+	QsOyszEXiSh/4VthoLJo/hxlPhSns0IZPbtCzKvRZvScwUzV9epYkwlsDg0jXkWYxVi8QnZD81o
+	K5iMx57+fRMLGcdbjSeqxGTdeHkoLxO7a403+SPWBGbaAqVqwuCQZi4ig4ewba/XJ012Nr0HvW/
+	QL06mvpYYAyDKkV60qFjC4a+n4THdneWofp3ectvdLQRxvoi4IKrgwrRpghB8Z/Q/sBdNwWIci5
+	7lQYfw1piMGsxJZoodltrKQ3KpfDSiDgI9vTRWC8nudFlO1cvvF5ygM=
+X-Google-Smtp-Source: AGHT+IHcuG/PKrysKfVFrUFi9VUefuigkudHVP3viNjydqJL6P0UaWxAMZQHOs8+lKRCAE9NOXqMXA==
+X-Received: by 2002:a17:903:2ece:b0:235:f70:fd44 with SMTP id d9443c01a7336-23ac45ce9d3mr68539455ad.21.1751051730662;
+        Fri, 27 Jun 2025 12:15:30 -0700 (PDT)
+Received: from localhost ([181.88.247.122])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb39b97dsm23407155ad.121.2025.06.27.12.15.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 12:15:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 5.63.189.50
-X-CLIENT-HOSTNAME: 5.63.189.50
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: dmFkZTGrSjjgwBeoPV1BTemn5ImVCZpPTZb07vPRCPpCLNITJNQNwAJrBW+NvQ9gHfopUGw7eKCZUx2JvTkH7ndztXO95C/5NZYx0U0uzSGwSElzY3a0yFW5y/ST6sLyUL+pkZNb6zBf5QQDeWSHMTwFL5SzhnW4lYOV2aXUoJnPKm0KcXRLQpgIKgvtcuh9kc8szEcWaDKkWT6ZvZMLezK4NKUrQ0LRPHVUG/J8XldG2aWmsAAgiz8DIA4tSCjGi3syq1aAO8pJ5+EOuYaRvLcxgtvWWEpF/MWy84RxjOnkuHVdyEMV6Ug0G9LNrdrQ+TwE0ATvvO2S6WiA1+7Yw5g2H305Ka/9/AB20Ji8aYocbnvXnSgVE3yuoI/x8dRBi9lwenVlKYIMrlt/oq4QrEwNVvyUKN1kfois/E/YdcEuMI1szrw2gRCq67RS+aNItPgKlX9D+K+blGIPc1BT5T7VZaDtt8o/iEv9+0CIKWFBDIPmpHXh6SlJ4oq1SUu2GgVARUSjO4jCvR44E41RGFQdvahxbMkK8S/MnAJzZlzuq8z1GfLsus4biOc+6aEm/tpC3fevcfY8d/eaPO9KShfPhteoNsJyq0nyVlKE2AuxIKYSuLg3o0/XZlSh+TZ/TATCbsMI/j9wpC1A2J+KBSEP6dj7qiO4EnlhEGF+LSd3m3ollA
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 27 Jun 2025 16:15:26 -0300
+Message-Id: <DAXK1634VYQI.1PEUCTQIYAF3Y@gmail.com>
+Subject: Re: HP Omnibook Ultra Flip 14 - power profiles
+From: "Kurt Borja" <kuurtb@gmail.com>
+To: "Armin Wolf" <W_Armin@gmx.de>,
+ =?utf-8?q?Benjamin_Hasselgren-Hall=C3=A9n?= <benjamin@benis.se>
+Cc: "platform-driver-x86@vger.kernel.org"
+ <platform-driver-x86@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Zhang
+ Rui" <rui.zhang@intel.com>, "Linux PM" <linux-pm@vger.kernel.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
+References: <GXa7F-PA_8BE7nlK9r8dkdSv7c-DW52GvOUiyYHQ6RyoZDxIpNAocWDPYQDeS7WEZeUisqQH_bqmgSV-eaRmuw5r68MGKxyU9X_4Erd0RYQ=@benis.se> <1037e223-a6ad-4d12-9619-f69a29cecba1@gmx.de> <5I8UDmgF_DcJBmBE0zgCXjuvmmhLamDCHkpnkAwRjSAkCa5xcFUvU-SmAeymxTajjDPR8avuW55RxOjhd8idK6jLy-hz8i-Ma3RHSaFy2Gs=@benis.se> <9642ad7e-3e57-45f9-bfd9-beac3e55418e@gmx.de> <GXC8NQl6AY_N7nQAOCRLt7SDGjFNll_TnqQyzYnP_b1weGkRqITOR-kHKcM66lPonOCo9xO2nSWXr7yycwfFuKmjRMtXVlJKya8-qvvkGik=@benis.se> <de8321ce-e595-460a-81d7-f7dae8a7b790@gmx.de> <X-40AqXfdmQw5shUOk3VSaHSXmwJYWHPmDDMLyGUH6GpMt56ty5SbNg8EVfyI_uC9J07uqZ2TtGJmmpB_x8-xpcVOw29fnKzJZ4n9L0x78A=@benis.se> <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de>
+In-Reply-To: <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi all,
 
-Since pm_runtime_force_resume() and pm_runtime_need_not_resume() are only
-needed for handling system-wide PM transitions, there is no reason to
-compile them in if CONFIG_PM_SLEEP is unset.
+On Fri Jun 27, 2025 at 2:10 PM -03, Armin Wolf wrote:
+> Am 26.06.25 um 15:20 schrieb Benjamin Hasselgren-Hall=C3=A9n:
+>
+>> Hi again,
+>>
+>> dmesg: https://drive.benis.se/s/2crz7zPzkrzaqXN
+>
+> The following message intrigues me:
+>
+> 	platform_profile: Failed to get profile for handler hp-wmi
 
-Accordingly, move them under CONFIG_PM_SLEEP and make the static
-inline stub for pm_runtime_force_resume() return an error to indicate
-that it should not be used outside CONFIG_PM_SLEEP.
+This might be a regression.
 
-Putting pm_runtime_force_resume() also allows subsequent changes to
-be more straightforward because this function is going to access a
-device PM flag that is only defined when CONFIG_PM_SLEEP is set.
+This was reported a couple months ago and I completely forgot until I
+saw this thread. See [1].
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+@Benjamin: Can you please check if your power profiles work on Linux
+v6.12 (LTS)?
 
-v2 -> v3: Reorder (previosly it was patch [3/9].
+Also try:
 
-v1 -> v2:
-   * Keep pm_runtime_force_suspend() under CONFIG_PM (Ulf).
-   * Update changelog.
-   * Corresponds to patch [4/9] in v1.
-
----
- drivers/base/power/runtime.c |   18 +++++++++++-------
- include/linux/pm_runtime.h   |   16 ++++++++++++----
- 2 files changed, 23 insertions(+), 11 deletions(-)
-
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1946,13 +1946,6 @@
- 	pm_request_idle(link->supplier);
- }
- 
--bool pm_runtime_need_not_resume(struct device *dev)
--{
--	return atomic_read(&dev->power.usage_count) <= 1 &&
--		(atomic_read(&dev->power.child_count) == 0 ||
--		 dev->power.ignore_children);
--}
--
- /**
-  * pm_runtime_force_suspend - Force a device into suspend state if needed.
-  * @dev: Device to suspend.
-@@ -2014,6 +2007,8 @@
- }
- EXPORT_SYMBOL_GPL(pm_runtime_force_suspend);
- 
-+#ifdef CONFIG_PM_SLEEP
-+
- /**
-  * pm_runtime_force_resume - Force a device into resume state if needed.
-  * @dev: Device to resume.
-@@ -2057,3 +2052,12 @@
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(pm_runtime_force_resume);
-+
-+bool pm_runtime_need_not_resume(struct device *dev)
-+{
-+	return atomic_read(&dev->power.usage_count) <= 1 &&
-+		(atomic_read(&dev->power.child_count) == 0 ||
-+		 dev->power.ignore_children);
-+}
-+
-+#endif /* CONFIG_PM_SLEEP */
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -66,9 +66,7 @@
- 
- extern int pm_generic_runtime_suspend(struct device *dev);
- extern int pm_generic_runtime_resume(struct device *dev);
--extern bool pm_runtime_need_not_resume(struct device *dev);
- extern int pm_runtime_force_suspend(struct device *dev);
--extern int pm_runtime_force_resume(struct device *dev);
- 
- extern int __pm_runtime_idle(struct device *dev, int rpmflags);
- extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
-@@ -257,9 +255,7 @@
- 
- static inline int pm_generic_runtime_suspend(struct device *dev) { return 0; }
- static inline int pm_generic_runtime_resume(struct device *dev) { return 0; }
--static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
- static inline int pm_runtime_force_suspend(struct device *dev) { return 0; }
--static inline int pm_runtime_force_resume(struct device *dev) { return 0; }
- 
- static inline int __pm_runtime_idle(struct device *dev, int rpmflags)
- {
-@@ -330,6 +326,18 @@
- 
- #endif /* !CONFIG_PM */
- 
-+#ifdef CONFIG_PM_SLEEP
-+
-+bool pm_runtime_need_not_resume(struct device *dev);
-+int pm_runtime_force_resume(struct device *dev);
-+
-+#else /* !CONFIG_PM_SLEEP */
-+
-+static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
-+static inline int pm_runtime_force_resume(struct device *dev) { return -ENXIO; }
-+
-+#endif /* CONFIG_PM_SLEEP */
-+
- /**
-  * pm_runtime_idle - Conditionally set up autosuspend of a device or suspend it.
-  * @dev: Target device.
+$ cat /sys/firmware/acpi/platform_profile
 
 
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D220008
 
+--=20
+ ~ Kurt
 
