@@ -1,294 +1,148 @@
-Return-Path: <linux-pm+bounces-29652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9940AEB67F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 13:34:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD5BAEB6D4
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 13:47:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E00D918905D3
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 11:34:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F2043A7F32
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 11:47:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27642BCF45;
-	Fri, 27 Jun 2025 11:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6B21922FA;
+	Fri, 27 Jun 2025 11:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="m65ozer2"
+	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="dKcVtaFm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E8A29DB79
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 11:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196D51DDC1E
+	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 11:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751024041; cv=none; b=Xz7FOMfYhBV5Ji+XQ4govjEeBrzrpYf+Nb1CIVMCBdeYrJqD+qMkv0QMkZ9Ikq8wfbPP6ifzCzwJzqwRCnOgPAG8Lx5bkBVLf8kgvQGltNzRAHKvs/6UHBkvOfseg4bU9hVdYetbJQkvy7LWDgKOmu/4K38LAIzYMSOefueW0Zk=
+	t=1751024857; cv=none; b=Ui/KRBzp0CI1gljxlaljMdM/+L3yXA2N1GlgD8NEOld7ZnH2xj/n1UueO483XOQuciCc99ujbr4hWe3zkWuVuRzd88L6lQMAkU7EpYCCO6Hdg3oMNIDWnYrMIb2pbvjzb5gYgZfLVAc8AsglwN2LGNF5VJ9A9EOy3gnFFH8JYas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751024041; c=relaxed/simple;
-	bh=nrg/5Cr/Ct/L2mrn4jAnolMDR4V2365AXYCSvZSKjPs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=sKh03Q8gYFfMaC6Q+pwGqOviGkcTBvl2fpGxEmtgerTFO3Tr3eMPIqnz3hogmtr+Ehb7V39q9Kq1iVQteDPxfhHhDK0rPgafXuF22mBmTbSMYYxdaPKdrlaUoLPgT0ta1sl5fVykGf1nR4qnXreqyd1fETZn7C1zGcomgzEUNx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=m65ozer2; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ade76b8356cso398920466b.2
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 04:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1751024038; x=1751628838; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8TQIk1vNThf+KbhPSV308tydy65v8ZFP99g2fX+hJzE=;
-        b=m65ozer2x2+YrV6OGSlVtJtLgt3AN5unm8zC2OlARa+S5ZKLL3S0PNEJQhU8PrsbfP
-         TBMJonQayyP0LxMWECp2zT4KNGaHy3mdGnYpuVwrLeaKok4AlEoH4CtWgLr+xnJrgpZ9
-         qOZEZ7pfq0WO8ZuUBwI82SphF0OGKJd+qDG02c+Wf++qW+nwDHeFYdVOWO4DAx4GW4cT
-         NbAk+13orgzXztKq8gEkXb1i1o59oksbsfWDsiO0H9+kKKgLNfLoUCh1fPA/1WcMlEte
-         79k4s3F5a19N+8FYmUdL3Mfvg85txlmbTMh2EjJ07PNjqOSVY5w1whI1uQUjx93Prgtu
-         xJTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751024038; x=1751628838;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8TQIk1vNThf+KbhPSV308tydy65v8ZFP99g2fX+hJzE=;
-        b=xB1RTs9cjKWRA/bRsQzFAJZWAog3FNDwDulD9ySa2pgT3KduyK6coWIMuSiL14m9wF
-         mvA+LkTMRavGXZVoBXjyzN8bMdNBUzmn5teZfgJL7oXbCzwRSI8mIuCTA5he5Id91thy
-         ZOq959S3zPydkNIF4DqHujOs6exh1dlQ4MMnYBf8425JW80wTqMtgHd5YR8DUk0TVvFs
-         EEI/ByrW/XszuLq2VY5mC5X5c7dGkkxfycSLB71CFOphDSfqgulzEZbYWqRuMWPMON+h
-         AuZnnWHKzJF/wBda8AeRO99RSwkxUuVJIhVqTJcD+AygAc5RRt49GN5WGcoQeuNA+ZE/
-         hbtA==
-X-Forwarded-Encrypted: i=1; AJvYcCXhko/8sLzutWQuGd4xQFQ2mI3BOwUO1TlB5vyjWkEuDvQUtulGddSGFTYk/VXuCde954UQyK2YQw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFgzOuxSonC1Kcgi/Eozu5bz4me3Sm+vMZ9XyGZ23AU9A+a6Ps
-	tqkcI43VGju7XWeVWK7/I41kVPInIJz9yFHIXs92eUVgvl6kDzysTag//nr+qlaki3Y=
-X-Gm-Gg: ASbGnctkhU+6SeYQORZOsda7c1Ow/Ni5FLZXqoiGlog5qpoXvgwyt0pR5LYW/NeepT6
-	nr8YNR9B2Gyo1y0y4RvcmnGdQrQ72lBQ7Z04Sa6slCoc0tlK4llcnVf06KL2BF2waFdsML8cOOK
-	x96ZtnWXbyHgGfBrTYKPOBo5V7c26MFopx3gHIXDqeazv/BVkfOzKBRtbRlys8bZHnzs/Ia1ltb
-	eP8hIi/5Etinwruxnp7o6Bs4zinx9fPI5UlYvy+jgHroktBepj+5jMgL2qSKDZFV9UyU0UKX595
-	5gYPunvogAr/ag+BdYinDLml1EAKjHUi12QxNdkbXc1rtQhyZWCLGBTCu5nhnNkoNd75YXpAA5t
-	zJ7XHKIpNQJNtehMjLqjRscs1wEfiE5Y=
-X-Google-Smtp-Source: AGHT+IFTB4ZISQsWRjBnTltqxZ+EzRDnHXDtrROSz2QQZgqYVC+7zZ8R4yhdcBmhaWSRI1bSl9PUhg==
-X-Received: by 2002:a17:906:7951:b0:ad8:a935:b905 with SMTP id a640c23a62f3a-ae34fddeae3mr245758066b.22.1751024037927;
-        Fri, 27 Jun 2025 04:33:57 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c6bdafsm108070066b.143.2025.06.27.04.33.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 04:33:57 -0700 (PDT)
+	s=arc-20240116; t=1751024857; c=relaxed/simple;
+	bh=nXAtJr1zuW96ot66+9iRi9k7hOcZywkm9pkzIfsra2k=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=rqP54JPfxhx8gpLMLWDBnYSITyMY62/bggUXrVXHOnwESK56p6cCWTyFZHuuMEHU54I3kyIlSnUcoia2qKznFXq4Jk8b6q0m85mQVbUo8UQ+8LQ7CWq1sTkZIt3Gmc4J48id4N3d3KBDD5zh4+UXz7fx+Hv6IM0uEB8xI45dJ/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=dKcVtaFm; arc=none smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
+Received: from localhost (localhost [127.0.0.1])
+	by mx1.secunet.com (Postfix) with ESMTP id 507A820860;
+	Fri, 27 Jun 2025 13:47:26 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from mx1.secunet.com ([127.0.0.1])
+ by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GuJDU5XaBaoL; Fri, 27 Jun 2025 13:47:25 +0200 (CEST)
+Received: from EXCH-03.secunet.de (unknown [10.32.0.243])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.secunet.com (Postfix) with ESMTPS id B1A9D207B3;
+	Fri, 27 Jun 2025 13:47:25 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com B1A9D207B3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
+	s=202301; t=1751024845;
+	bh=401e3I6KyDAI29Obk+WjaDRf0d3vYeUk0cY4niFk96I=;
+	h=From:To:CC:Subject:Date:Reply-To:From;
+	b=dKcVtaFmq2nwCh78zn0Ws6l0qGenWRHb8G/u+aTuV2cZ0IaFKv6cOWEasqupu/Ijw
+	 lymjjHtq4uWkRwqOrqsc8JHa++yRmWNll9d5aDddeE3x4s195r+GymYmve33HgYYv3
+	 CGWFZEjv/qKkPYT7Cv4Tck87VhWlkFCRYDnIT8uKQE3wi2tNdqw+WJ2We2eL1kFHCT
+	 WGWUCN5t2Kz/993gHfzPMbLPBBlynMX+XLusmB+rE3QWgWhekXQKfNsFwX3iktvJ1g
+	 R4M06q4WoUWP7S1U7hka9fL+XJTSULEOG/UXTmGkKsr7rqjPUr8By+5LCSRvxk7fqz
+	 J1upiwGKYi/Tg==
+Received: from mbx-dresden-01.secunet.de (10.53.40.199) by EXCH-03.secunet.de
+ (10.32.0.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Fri, 27 Jun
+ 2025 13:47:24 +0200
+Received: from mbx-essen-02.secunet.de (10.53.40.198) by
+ mbx-dresden-01.secunet.de (10.53.40.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 27 Jun 2025 13:47:15 +0200
+Received: from mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff]) by
+ mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff%8]) with mapi id
+ 15.01.2507.039; Fri, 27 Jun 2025 13:47:15 +0200
+From: "Gwara, Mateusz" <mateusz.gwara@secunet.com>
+To: "Gwara, Mateusz" <mateusz.gwara@secunet.com>
+CC: "17a637f633a7560ca87d7461fc56632e5f9e41cc.camel@intel.com"
+	<17a637f633a7560ca87d7461fc56632e5f9e41cc.camel@intel.com>, "Wassenberg,
+ Dennis" <Dennis.Wassenberg@secunet.com>, "daniel.lezcano@linaro.org"
+	<daniel.lezcano@linaro.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+	"rafael@kernel.org" <rafael@kernel.org>, "ricardo.neri@intel.com"
+	<ricardo.neri@intel.com>, "rui.zhang@intel.com" <rui.zhang@intel.com>,
+	"srinivas.pandruvada@intel.com" <srinivas.pandruvada@intel.com>
+Subject: Re: TCC cooling on Meteorlake (and ArrowLake)
+Thread-Topic: Re: TCC cooling on Meteorlake (and ArrowLake)
+Thread-Index: AdvnWSh50GF/XET9RbiGRPCrO/Dctg==
+Date: Fri, 27 Jun 2025 11:47:15 +0000
+Message-ID: <336bd01fae0c4c0b8e1d94a6c66c7d86@secunet.com>
+Reply-To: "b7c2e49c84d94b9e93f3156250346ec8@secunet.com"
+	<b7c2e49c84d94b9e93f3156250346ec8@secunet.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 27 Jun 2025 13:33:56 +0200
-Message-Id: <DAXA7TKVM4GI.J6C7M3D1J1XF@fairphone.com>
-Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
- <linux-mmc@vger.kernel.org>
-Subject: Re: [PATCH 14/14] arm64: dts: qcom: Add The Fairphone (Gen. 6)
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Will Deacon"
- <will@kernel.org>, "Robin Murphy" <robin.murphy@arm.com>, "Joerg Roedel"
- <joro@8bytes.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Manivannan Sadhasivam" <mani@kernel.org>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
- "Vinod Koul" <vkoul@kernel.org>, "Bjorn Andersson" <andersson@kernel.org>,
- "Konrad Dybcio" <konradybcio@kernel.org>, "Robert Marko"
- <robimarko@gmail.com>, "Das Srinagesh" <quic_gurus@quicinc.com>, "Thomas
- Gleixner" <tglx@linutronix.de>, "Jassi Brar" <jassisinghbrar@gmail.com>,
- "Amit Kucheria" <amitk@kernel.org>, "Thara Gopinath"
- <thara.gopinath@gmail.com>, "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Zhang Rui" <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>,
- "Ulf Hansson" <ulf.hansson@linaro.org>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
- <20250625-sm7635-fp6-initial-v1-14-d9cd322eac1b@fairphone.com>
- <4200b3b8-5669-4d5a-a509-d23f921b0449@oss.qualcomm.com>
-In-Reply-To: <4200b3b8-5669-4d5a-a509-d23f921b0449@oss.qualcomm.com>
+MIME-Version: 1.0
 
-On Wed Jun 25, 2025 at 4:38 PM CEST, Konrad Dybcio wrote:
-> On 6/25/25 11:23 AM, Luca Weiss wrote:
->> Add a devicetree for The Fairphone (Gen. 6) smartphone, which is based
->> on the SM7635 SoC.
->
-> [...]
->
->> +	/* Dummy panel for simple-framebuffer dimension info */
->> +	panel: panel {
->> +		compatible =3D "boe,bj631jhm-t71-d900";
->> +		width-mm =3D <65>;
->> +		height-mm =3D <146>;
->> +	};
->
-> I haven't ran through all the prerequisite-xx-id, but have
-> you submitted a binding for this?
+Hi, and sorry for the late reply.
+I waited until my ArrowLake test devices arrived.
 
-Actually not, kind of forgot about this. I believe I can create a
-(mostly?) complete binding for the panel, but this simple description
-for only width-mm & height-mm will differ from the final one, which will
-have the DSI port, pinctrl, reset-gpios and various supplies.
+> I have applied this patch on a couple of machines that I can access but
+> unfortunately they all have TCC offset bit locked. So please check if
+> it works as expected or not.
 
-I think I'll just drop it from v2 and keep it locally only, to get the
-simpledrm scaling right.
+I can confirm, that it works as expected on all current Lenovo Notebooks I =
+had running on MeteorLake & Arrowlake.
+As we usually use older kernel versions and mostly LTS versions I had to mo=
+dify it for 6.8 kernel that we use on MetorLake only:
 
->
-> [...]
->
->> +	reserved-memory {
->> +		/*
->> +		 * ABL is powering down display and controller if this node is
->> +		 * not named exactly "splash_region".
->> +		 */
->> +		splash_region@e3940000 {
->> +			reg =3D <0x0 0xe3940000 0x0 0x2b00000>;
->> +			no-map;
->> +		};
->> +	};
->
-> :/ maybe we can convince ABL not to do it..
+drivers/thermal/intel/intel_tcc_cooling.c
+@@ -64,6 +64,8 @@ static const struct x86_cpu_id tcc_ids[] __initconst =3D =
+{
+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, NULL),
+	{}
+};
 
-Yes, we talked about that. I will look into getting "splash-region" and
-"splash" also into the ABL (edk2) build for the phone. Still won't
-resolve that for any other brand of devices.
+On 6.12 onwards your patch works without any changes:
 
->
-> [...]
->
->> +		vreg_l12b: ldo12 {
->> +			regulator-name =3D "vreg_l12b";
->> +			/*
->> +			 * Skip voltage voting for UFS VCC.
->> +			 */
->
-> Why so?
+On current devices the TCC offset remains at a stable value so that we don'=
+t change/monitor it.
+The offsets from the manufacturer are also very reasonable except for the M=
+eteorLake devices I mentioned before.
 
-From downstream:
 
-		/*
-		 * This is for UFS Peripheral,which supports 2 variants
-		 * UFS 3.1 ,and UFS 2.2 both require different voltages.
-		 * Hence preventing voltage voting as per previous targets.
-		 */
+--=20
+Mateusz Gwara
+Senior Software Developer
+Department Network & Client Security
+Division Public Authorities
+secunet Security Networks AG
 
-I haven't (successfully) brought up UFS yet, so I haven't looked more
-into that.
+Tel.: +49 201 54 54-2934
+E-Mail: mateusz.gwara@secunet.com
+Alt-Moabit 96, 10559 Berlin
+www.secunet.com
+______________________________________________________________________
 
-The storage on FP6 is UFS 3.1 though fwiw.
-
->
-> [...]
->
->> +&gpi_dma0 {
->> +	status =3D "okay";
->> +};
->> +
->> +&gpi_dma1 {
->> +	status =3D "okay";
->> +};
->
-> These can be enabled in SoC DTSI.. it's possible that the secure=20
-> configuration forbids access to one, but these are generally made
-> per-platform
-
-Ack
-
->
-> [...]
->
->> +&pm8550vs_d {
->> +	status =3D "disabled";
->> +};
->> +
->> +&pm8550vs_e {
->> +	status =3D "disabled";
->> +};
->> +
->> +&pm8550vs_g {
->> +	status =3D "disabled";
->> +};
->
-> Hm... perhaps we should disable these by deafult
-
-Do you want me to do this in this patchset, or we clean this up later at
-some point? I'd prefer not adding even more dependencies to my patch
-collection right now.
-
->
-> [...]
->
->> +&pmr735b_gpios {
->> +	pm8008_reset_n_default: pm8008-reset-n-default-state {
->> +		pins =3D "gpio3";
->> +		function =3D PMIC_GPIO_FUNC_NORMAL;
->> +		bias-pull-down;
->> +	};
->> +
->> +	s1j_enable_default: s1j-enable-default-state {
->> +		pins =3D "gpio1";
->> +		function =3D PMIC_GPIO_FUNC_NORMAL;
->> +		power-source =3D <0>;
->> +		bias-disable;
->> +		output-low;
->> +	};
->
-> ordering by pin ID makes more sense, here and in tlmm
->
-> (and is actually written down)
-> https://docs.kernel.org/devicetree/bindings/dts-coding-style.html#order-o=
-f-nodes
-
-Ah, that's news to me. Thanks!
-
->
-> [...]
->
->> +&pon_resin {
->> +	linux,code =3D <KEY_VOLUMEDOWN>;
->> +	status =3D "okay";
->
-> \n before status consistently, please
-
-Ack
-
->
-> [...]
->
->> +&tlmm {
->> +	/*
->> +	 * 8-11: Fingerprint SPI
->> +	 * 13: NC
->> +	 * 63-64: WLAN UART
->> +	 */
->> +	gpio-reserved-ranges =3D <8 4>, <13 1>, <63 2>;
->
-> Please match the style in x1-crd.dtsi
-
-Ack
-
->
-> [...]
->
->> +&usb_1 {
->> +	dr_mode =3D "otg";
->> +
->> +	/* USB 2.0 only */
->
-> Because there's no usb3phy description yet, or due to hw design?
-
-HW design. Funnily enough with clk_ignore_unused this property is not
-needed, and USB(2.0) works fine then. Just when (I assume) the USB3
-clock is turned off which the bootloader has enabled, USB stops working.
-
-Regards
-Luca
-
->
-> Konrad
+secunet Security Networks AG
+Sitz: Kurf=FCrstenstra=DFe 58, 45138 Essen, Deutschland
+Amtsgericht Essen HRB 13615
+Vorstand: Torsten Henn, Dr. Kai Martius, Jessica Nospers
+Aufsichtsratsvorsitzender: Dr. Ralf Wintergerst
+______________________________________________________________________
 
 
