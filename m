@@ -1,50 +1,49 @@
-Return-Path: <linux-pm+bounces-29702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29703-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9925DAEC028
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:39:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E43F5AEC033
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D39053B10A0
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:38:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5826556404C
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99BF2E8E0D;
-	Fri, 27 Jun 2025 19:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B072217F2E;
+	Fri, 27 Jun 2025 19:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJ285+Dm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YPGZ7yVd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8780CA6F;
-	Fri, 27 Jun 2025 19:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE66CA6F;
+	Fri, 27 Jun 2025 19:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751053129; cv=none; b=irwRmoqKv2za8pdxd4olxqfWFclNejtEwbSlIJlBeHUb/MbXgmaA/SLRnkDKfUjOY/9CN280IddZHDnBfAW5cvfMhmWjTSBKoSbm3BiS7CDQP2d6J0lMtwJ8eRI4kJmP9Vcq12eEMGCIloNNgJ5JPiMxp1Fd75UyWiYcaNgHkIk=
+	t=1751053137; cv=none; b=udP/JaPdO4b0PlcJa+CTHrYaLhUtBbzhDJJQr+MiJoyKR4mZpoyezb+ImIZsJd+GQR+LsnK61O1RwZ+bz+uT4kPwiIh7Gygn2PtnVSco6WloHeyHsnlPhE+qmipXf2gwOt47OB99kk0bLOgmLRSN48bvsUBAReAnL2wsM3V1UF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751053129; c=relaxed/simple;
-	bh=cLefzBoTu4L0x8svgda0BFQrX0t5fTTS7VuR6qXKRUA=;
+	s=arc-20240116; t=1751053137; c=relaxed/simple;
+	bh=OE8U2vT7ew5Dt6ec8C7hkjuElIoXUc1rAPhJAuZXxG8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QbouQlUY4pBaGyf8AQ5LmpwOunVofZuo2kjt8R1nAfnoepEv7Rrplp+5vu9UOkNqBcFuDheJXxGJctXTZ3D3HZy1FHAxkDZ+NrMJpN0QRInV4NrWy1bSA8uXajHGpnQrppTkn7ndOwk8G5Unpqy3gjPc3sykWPmJg9oQDqpSpeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJ285+Dm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C99C4CEE3;
-	Fri, 27 Jun 2025 19:38:43 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=jYZ9MYlYWJHDndU7W+ApKdo1uybbfOVWazX6AmqtZ9XF8eEfbdnKEAyqqQzRE4xFtxf4E6BSC+d58jUC1k+6926mhXp3LNQlqqWXMiFIiuuJywH2Z4YauWoCAWTIHstIGQztO8u5eNcZjnywV8BfqTT9jj6kQcNvYa+seZgAPWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YPGZ7yVd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283C1C4CEF6;
+	Fri, 27 Jun 2025 19:38:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751053129;
-	bh=cLefzBoTu4L0x8svgda0BFQrX0t5fTTS7VuR6qXKRUA=;
+	s=k20201202; t=1751053136;
+	bh=OE8U2vT7ew5Dt6ec8C7hkjuElIoXUc1rAPhJAuZXxG8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=UJ285+DmR7zzCY45wYno4MT5Tw1yrlHNqS20XbapkV0J6wMPRPoQ0SKOPTpHyQARj
-	 UCc2ki9J0L3VFyfx+3cEq/rNbID3A/fczjGz1oN9gJowQSmcEFB9CvUWDIX4nECqFo
-	 +OO0dUv7OexFmFEYV/jO6Z01XH7jsiSxSfD/3/B4qkxjD/UJJpTyKMd7XN+zoiwrMK
-	 91UWKzYXLLmB/bpoOX9eBO1R4oxjwte4Tv1FI9sPEMMDsrba0BUWp40T8aL+/KClbu
-	 gjxNUMokIRJBGPFuktwt22vJ4r2q0+Ovp2RrEoid+VWcRMcsQagVBBHgoeua3Dr1ZP
-	 fdAqaPJOZBvjw==
+	b=YPGZ7yVdxGLbHgm7y1rhDBnfH40vpyGmywbcIuoWgPzSGVZQylVK8pc8sG0H0Ajut
+	 UP99Rzrh9GlJKv7QfNyk+MyyellutDgnFh2R7Xiu3VFkXPC665FsBfbqW+XMSo1uD5
+	 bzXAQxt/ahMTNZ8xI/lRCOJQWDdo2wU2PTESbUseSewXDCcJ8kCrvpqdLWFztEPJtz
+	 20s1yYt99RwhltUaKArwd/16gAMti29MT+Dl593FYEEixbTOWluSnBjT0+14f0GSwn
+	 6ptEsco2UXPqaJvwHSpi0sPzGeIwxY7VCrNi6xKloyRfIMPozR3owMJ4IDbyq0YcJA
+	 cP5xHbmkEl6RA==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Fri, 27 Jun 2025 21:37:57 +0200
-Subject: [PATCH 3/4] dt-bindings: interconnect: qcom,qcs615-rpmh: Drop IPA
- interconnects
+Date: Fri, 27 Jun 2025 21:37:58 +0200
+Subject: [PATCH 4/4] clk: qcom: rpmh: Define RPMH_IPA_CLK on QCS615
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-topic-qcs615_icc_ipa-v1-3-dc47596cde69@oss.qualcomm.com>
+Message-Id: <20250627-topic-qcs615_icc_ipa-v1-4-dc47596cde69@oss.qualcomm.com>
 References: <20250627-topic-qcs615_icc_ipa-v1-0-dc47596cde69@oss.qualcomm.com>
 In-Reply-To: <20250627-topic-qcs615_icc_ipa-v1-0-dc47596cde69@oss.qualcomm.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -70,45 +69,39 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  Krzysztof Kozlowski <krzk@kernel.org>, linux-clk@vger.kernel.org, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751053092; l=1318;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751053092; l=1036;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=ZgruXfKaPncujuKscIMIQ6+RfLMQsj/eC1AUlyRhlE8=;
- b=CGrlzb/dvs2sXzZv/QqX+yCGGp7FpPT4obuE9ggWIkYJ9Q8PeDh8/HCcZ4AIg1EskxAG+MR7k
- 2THJf3S2SDwBRyqjkYuVz7LE3aC2LJUa1itS52t2K9pHyIZjo2fMpXN
+ bh=I5Frh8xqHPLbzLba+aZWZ34NiNQSkZoK0uf/p2Aol9Q=;
+ b=Z32XgiO7x666mSxR3HDZ8XOdjJnY4rK71nyJqsrpxcHn+wYCGzZNbU5f/KPR/xtsw+CBzt09K
+ J0n4xR3/hx/CuaFqaJDWkWSZdn2OqtSxDeCo+dnR0Rmr0Wa3ZKFU/NA
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-This has been agreed to be characterized as a clock resource, not an
-interconnect provider. Bring QCS615 in line with the expectation.
+This was previously (mis)represented in the interconnect driver, move
+the resource under the clk-rpmh driver control, just like we did for
+all platforms in the past, see e.g. Commit aa055bf158cd ("clk: qcom:
+rpmh: define IPA clocks where required")
 
-Fixes: 6c5e948f1fff ("dt-bindings: interconnect: document the RPMh Network-On-Chip interconnect in QCS615 SoC")
+Fixes: 42a1905a10d6 ("clk: qcom: rpmhcc: Add support for QCS615 Clocks")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/clk/qcom/clk-rpmh.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml
-index 9d762b2a1fcf87b638a0b9060e7b90579e329cef..e0640482882481408095ee1acac5c824fa8820e0 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs615-rpmh.yaml
-@@ -27,7 +27,6 @@ properties:
-       - qcom,qcs615-config-noc
-       - qcom,qcs615-dc-noc
-       - qcom,qcs615-gem-noc
--      - qcom,qcs615-ipa-virt
-       - qcom,qcs615-mc-virt
-       - qcom,qcs615-mmss-noc
-       - qcom,qcs615-system-noc
-@@ -46,7 +45,6 @@ allOf:
-           contains:
-             enum:
-               - qcom,qcs615-camnoc-virt
--              - qcom,qcs615-ipa-virt
-               - qcom,qcs615-mc-virt
-     then:
-       properties:
+diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+index 00fb3e53a388ed24ed76622983eb5bd81a6b7002..e02346bccdc6f26b1a832ed62dbfdc35f271c858 100644
+--- a/drivers/clk/qcom/clk-rpmh.c
++++ b/drivers/clk/qcom/clk-rpmh.c
+@@ -825,6 +825,7 @@ static struct clk_hw *qcs615_rpmh_clocks[] = {
+ 	[RPMH_RF_CLK1_A]	= &clk_rpmh_rf_clk1_a_ao.hw,
+ 	[RPMH_RF_CLK2]		= &clk_rpmh_rf_clk2_a.hw,
+ 	[RPMH_RF_CLK2_A]	= &clk_rpmh_rf_clk2_a_ao.hw,
++	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+ };
+ 
+ static const struct clk_rpmh_desc clk_rpmh_qcs615 = {
 
 -- 
 2.50.0
