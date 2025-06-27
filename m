@@ -1,183 +1,145 @@
-Return-Path: <linux-pm+bounces-29710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29711-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C76CEAEC15C
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:45:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05475AEC170
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:49:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19B37170DD1
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:45:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 676253A4965
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193D81D79BE;
-	Fri, 27 Jun 2025 20:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306AB1E98F3;
+	Fri, 27 Jun 2025 20:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tXY5VlWs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-10627.protonmail.ch (mail-10627.protonmail.ch [79.135.106.27])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FB419597F
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 20:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7608A1E48A;
+	Fri, 27 Jun 2025 20:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751057136; cv=none; b=j1qA2zW5PmfxwcA0ZBcOqcUEt/0aS5JZAfkjSuWDwCIiQLugNtiEeLqZWs8KC3mRnHi3QMwTBILqIgTmQ+bz6dvHdIj4x0lKO6Dg4XG5lnT9aLEJQue28MgF0YG8QFvY/ANH9slMkbS06HxwLjkxDknq/W6C1yHga7Rq+JEVHlM=
+	t=1751057344; cv=none; b=dSUHPc1+TadzhxUxOkwUhIFbHEodxpRUhjWzCwnTpVLYsL2xrI6OQfzgTpzLKrjDMbdqr5RkW1IiSQMmXcu8TvT7zuBNsrNE5wmwjLcCEKuON0eeeyGe7X1ZCr0G7iejPypsmmAgoZ7iKKBD2BcLHhyRFRT6S0sUYqO10Z6HtTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751057136; c=relaxed/simple;
-	bh=WGG0ELSSGfQb5GW1CIg+EOgVf53HzFDC2LIRtyH4PIM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f5lyxxnbOW9YNX2a4NuWHC20DmjLOS2k/M41iQ6hfImHNsqeONOz2koN8sM/EqkQOi24iiVkwLfRsA4FNAKEJ4vxXNK7nd2ZJG2jEjUrHgxqQZ4WBEAsqQFKbcCKfZToTzZVmjPk8FHT/CJItawBbChDMBv0D/jYaPqp0+yjSfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benis.se; spf=pass smtp.mailfrom=benis.se; arc=none smtp.client-ip=79.135.106.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benis.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=benis.se
-Date: Fri, 27 Jun 2025 20:45:22 +0000
-To: Armin Wolf <W_Armin@gmx.de>
-From: =?utf-8?Q?Benjamin_Hasselgren-Hall=C3=A9n?= <benjamin@benis.se>
-Cc: "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: HP Omnibook Ultra Flip 14 - power profiles
-Message-ID: <IOHmEyRrtQvRrrb8x5tIvlcq13fuJs70jSiNRpuj25c4Pu0-57XXgjgKf8RAiCuHifj5RudJKDWLwLqnHFYm3CFtdJi1lFHW0Z2kyu-apVg=@benis.se>
-In-Reply-To: <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de>
-References: <GXa7F-PA_8BE7nlK9r8dkdSv7c-DW52GvOUiyYHQ6RyoZDxIpNAocWDPYQDeS7WEZeUisqQH_bqmgSV-eaRmuw5r68MGKxyU9X_4Erd0RYQ=@benis.se> <1037e223-a6ad-4d12-9619-f69a29cecba1@gmx.de> <5I8UDmgF_DcJBmBE0zgCXjuvmmhLamDCHkpnkAwRjSAkCa5xcFUvU-SmAeymxTajjDPR8avuW55RxOjhd8idK6jLy-hz8i-Ma3RHSaFy2Gs=@benis.se> <9642ad7e-3e57-45f9-bfd9-beac3e55418e@gmx.de> <GXC8NQl6AY_N7nQAOCRLt7SDGjFNll_TnqQyzYnP_b1weGkRqITOR-kHKcM66lPonOCo9xO2nSWXr7yycwfFuKmjRMtXVlJKya8-qvvkGik=@benis.se> <de8321ce-e595-460a-81d7-f7dae8a7b790@gmx.de> <X-40AqXfdmQw5shUOk3VSaHSXmwJYWHPmDDMLyGUH6GpMt56ty5SbNg8EVfyI_uC9J07uqZ2TtGJmmpB_x8-xpcVOw29fnKzJZ4n9L0x78A=@benis.se> <9439ec38-aadd-4aac-ba51-a8786ba50239@gmx.de>
-Feedback-ID: 18592338:user:proton
-X-Pm-Message-ID: 04ef23a80377720ff0bce4ce2c3ca064323c7da7
+	s=arc-20240116; t=1751057344; c=relaxed/simple;
+	bh=7lh1D7X4PEQNtzbuYBYYZr7+QXtnCRLLN3kysbsGGTQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Qg1u4PDmv3PaSRwbq5j5gw6NuFm5pN4zTzgXHrJAgz+T4+dBSpUZutxzBYw1QWOrXYRC9BDqu2ymr1ep+OgBPPtkO5xdlN8dH9DGopFpkOK686hRvr8b4XF346p1JhVm+9RVLdUoG7OvulCfmD1aHPC8TmOypMwgGob/+9Iyb8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=tXY5VlWs; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55RKmqvX2508627;
+	Fri, 27 Jun 2025 15:48:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1751057332;
+	bh=93MTeUvjAac0mVu0/ygJFfMB9ChTxtocV2BdLcqjMgs=;
+	h=From:To:CC:Subject:Date;
+	b=tXY5VlWsttAx/kckmqxTnws32hkyIMizdP+Fof8ypF05IY/Njpy/3ojw6bH39zdGV
+	 CMcd5iWqIZggeGZkUggZw23GGmlMMLOy3gAkMwVVazOWV7/0il4pRK6IYJx6Ke5Lob
+	 TFUBwGyJG3IeZc2ztQhFi9HTsQt+t3RXPg8L+1tk=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55RKmqcw3578130
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Fri, 27 Jun 2025 15:48:52 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 27
+ Jun 2025 15:48:51 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Fri, 27 Jun 2025 15:48:51 -0500
+Received: from uda0506412.dhcp.ti.com (uda0506412.dhcp.ti.com [128.247.81.19])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55RKmpWV3421525;
+	Fri, 27 Jun 2025 15:48:51 -0500
+From: Kendall Willis <k-willis@ti.com>
+To: <nm@ti.com>, <kristo@kernel.org>, <ssantosh@kernel.org>,
+        <ulf.hansson@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC: <d-gole@ti.com>, <vishalm@ti.com>, <sebin.francis@ti.com>,
+        <msp@baylibre.com>, <khilman@baylibre.com>,
+        Kendall Willis <k-willis@ti.com>
+Subject: [PATCH 0/2] Enable abort sequence from LPM entry
+Date: Fri, 27 Jun 2025 15:48:19 -0500
+Message-ID: <20250627204821.1150459-1-k-willis@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Not sure what sysfs means?=20
+The PM co-processor (device manager or DM) adds the ability to abort
+entry to a low power mode by clearing the mode selection in the
+latest version of its firmware (11.x) [1].
 
-/sys/firmware/acpi# cat platform_profile_choices=20
-cool quiet balanced performance
+This series adds support for aborting entry to a low power mode if an
+error occurs during suspend. If any driver with either ->suspend_late()
+or ->suspend_noirq() hook in the TI SCI PM domain fails to suspend, an
+abort message will be sent to the DM and the DM will abort by clearing
+the current mode selection.
 
-I don't know how to read the error message for not loading hp-wmi, can you =
-guide me?
+The flow for the abort sequence is the following:
+   1. User sends a command to enter sleep
+   2. Linux starts to suspend drivers
+   3. TI SCI suspends and sends prepare_sleep message to DM
+   4. A driver fails to suspend
+   5. Linux sends DM abort message via the TI SCI PM domain driver
+   6. DM aborts LPM entry by clearing the current mode selection
+   7. Linux resumes the drivers that have already suspended
+   8. Linux works as normal
+
+Only devices in the TI SCI PM domain are able to trigger the abort
+message because the TI SCI PM domain driver has ->suspend_late() and
+->suspend_noirq() hooks that are apart of each drivers respective
+suspend path. In the TI SCI PM domain driver suspend hook, the suspend
+hook of the current device will be called and the TI SCI PM domain driver
+will check to see if the suspend returned with an error. If it does, an
+abort message is sent to the DM.
+
+The prepare_sleep message has to be sent to the DM first before the
+abort message is sent since abort works by clearing the low power mode
+selected. The prepare_sleep message is sent as apart of TI SCI
+->suspend(). Since TI SCI suspend happens after all TI SCI devices with
+the ->suspend() hook have suspended, adding an abort call in the
+->suspend() hook isn't needed.
+
+Additionally, if TI SCI fails to suspend or fails to prepare sleep, an
+abort message will be sent to the DM. This had to be done separately
+because TI SCI is not a device in the TI SCI PM domain.
+
+Testing:
+To test this series, a driver in the TI SCI PM domain has to fail to
+suspend. When this happens the following is printed during Linux's
+suspend/resume logs:
+   Failed to suspend. Abort entering low power mode.
+
+Series has been tested on an SK-AM62B-P1 board. Normal suspend/resume
+has been verified. Abort was tested by adding an error into the TI SCI
+suspend hook.
+
+[1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
+
+Kendall Willis (2):
+  firmware: ti_sci: Enable abort handling of entry to LPM
+  pmdomain: ti_sci: Add LPM abort sequence to suspend path
+
+ drivers/firmware/ti_sci.c               | 67 +++++++++++++++++++++++--
+ drivers/firmware/ti_sci.h               |  3 +-
+ drivers/pmdomain/ti/ti_sci_pm_domains.c | 46 ++++++++++++++++-
+ include/linux/soc/ti/ti_sci_protocol.h  |  2 +
+ 4 files changed, 113 insertions(+), 5 deletions(-)
 
 
+base-commit: 2aeda9592360c200085898a258c4754bfe879921
+-- 
+2.34.1
 
-Best regards,
-Benjamin Hasselgren-Hall=C3=A9n
-
-
-On Friday, 27 June 2025 at 19:10, Armin Wolf <W_Armin@gmx.de> wrote:
-
-> Am 26.06.25 um 15:20 schrieb Benjamin Hasselgren-Hall=C3=A9n:
->=20
-> > Hi again,
-> >=20
-> > dmesg: https://drive.benis.se/s/2crz7zPzkrzaqXN
->=20
->=20
-> The following message intrigues me:
->=20
-> platform_profile: Failed to get profile for handler hp-wmi
->=20
-> Can you tell me the exact error message that is returned when reading the=
- platform profile over sysfs?
->=20
-> > So I tested thermald again. So here are some results.
-> >=20
-> > Before:
-> > Running Valheim the power draw is 35w and the fps is 41.
-> >=20
-> > After I have installed thermald:
-> > Running Valheim the power draw is 44w and the fps is 46
-> >=20
-> > So it's working, but I also noticed that it doesn't matter if I change =
-the power profile. Same performance and power draw. So something is still w=
-eird.
->=20
->=20
-> The ACPI code seems to suggest that your device support 7 profiles, while=
- the hp-wmi driver only supports 4. Additionally the drivers fails
-> to properly mask out the platform profile value returned by the firmware,=
- so that could be the reason why it is not working on your device.
->=20
-> Can you test kernel patches?
->=20
-> > Also the bug with the fun still running while the laptop is suspended i=
-s an issue.
->=20
->=20
-> I CCed the people from the thermal subsystem, maybe they know if this is =
-expected behavior or a bug inside the int340x_thermal driver.
->=20
-> Thanks,
-> Armin Wolf
->=20
-> > Thank you very much for your guidance Armin!
-> >=20
-> > Best regards,
-> > Benjamin Hasselgren-Hall=C3=A9n
-> >=20
-> > On Wednesday, 25 June 2025 at 23:43, Armin Wolf W_Armin@gmx.de wrote:
-> >=20
-> > > Am 25.06.25 um 23:22 schrieb Benjamin Hasselgren-Hall=C3=A9n:
-> > >=20
-> > > > The laptop do complain about not being able to load hp-wmi during b=
-oot. Same on Fedora 42 as on Debian 13 (with kernel 6.15).
-> > >=20
-> > > Can you share the output of dmesg?
-> > >=20
-> > > > I did install thermald and that might have increased the power budg=
-et (which is good) - but introduced some bug that keeps the fans on even wh=
-ile suspended.
-> > >=20
-> > > Please elaborate.
-> > >=20
-> > > Thanks,
-> > > Armin Wolf
-> > >=20
-> > > > Best regards,
-> > > > Benjamin Hasselgren-Hall=C3=A9n
-> > > >=20
-> > > > On Wednesday, 25 June 2025 at 15:44, Armin Wolf W_Armin@gmx.de wrot=
-e:
-> > > >=20
-> > > > > Am 25.06.25 um 10:06 schrieb Benjamin Hasselgren-Hall=C3=A9n:
-> > > > >=20
-> > > > > > Hi,
-> > > > > >=20
-> > > > > > The acpidump is here: https://drive.benis.se/s/pcKLAL7i8zncX8q
-> > > > > >=20
-> > > > > > Best regards,
-> > > > > > Benjamin Hasselgren-Hall=C3=A9n
-> > > > > > The hp-wmi driver should be able to control the platform profil=
-e on your device. Does this
-> > > > > > driver load and register a platform profile handler?
-> > > > >=20
-> > > > > Additionally you might need to install and setup the intel therma=
-l daemon for the platform
-> > > > > profile settings to work.
-> > > > >=20
-> > > > > Thanks,
-> > > > > Armin Wolf
-> > > > >=20
-> > > > > > On Monday, 23 June 2025 at 20:52, Armin Wolf W_Armin@gmx.de wro=
-te:
-> > > > > >=20
-> > > > > > > Am 23.06.25 um 15:52 schrieb Benjamin Hasselgren-Hall=C3=
-=A9n:
-> > > > > > >=20
-> > > > > > > > Hi dear Linux friends,
-> > > > > > > >=20
-> > > > > > > > This is very much a long shot and I understand if no one go=
-t any time or motivation for this.However, I am trying to understand how HP=
- Omnibook Ultra Flip (a laptop with Lunar Lake platform) working with power=
- profiles. The reason is that it seems to be very limited while running Lin=
-ux (to 30 watts to be exact, no matter the power profile, this is for the w=
-hole laptop, to compare with something the Omnibook Ultra 14 with AMD Strix=
- draws up to over 70 watts, sure more power hungry platform but still). Als=
-o the gpu performance is not as it should be.
-> > > > > > > > So if anyone got the time or so - let me know where to star=
-t digging!
-> > > > > > > >=20
-> > > > > > > > Best regards,
-> > > > > > > > Benjamin Hasselgren-Hall=C3=A9n
-> > > > > > > > Can you share the output of "acpidump"?
-> > > > > > > > Thanks,
-> > > > > > > > Armin Wolf
 
