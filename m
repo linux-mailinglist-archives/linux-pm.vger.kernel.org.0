@@ -1,475 +1,150 @@
-Return-Path: <linux-pm+bounces-29644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3A30AEB0F6
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 10:08:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83685AEB312
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 11:36:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 608EA170534
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 08:08:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09BF47A3B80
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 09:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147DA23507B;
-	Fri, 27 Jun 2025 08:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A952E293C63;
+	Fri, 27 Jun 2025 09:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VNFpYu9m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlsgBS/2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A05234994;
-	Fri, 27 Jun 2025 08:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1468F293B5E;
+	Fri, 27 Jun 2025 09:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751011734; cv=none; b=UEGOAs4GHa+oof2FiVcB2CJgPj6vtEd6KrPwwUMXFabYTQX4lBQdeNpk+AXpyRH7qBORE46JjD28E/NWZypAYFsoig823/fjBfItu5Wo1nanMcVhtoiKkaAGDPPjDYWStwZOQVtFeWdXfmlrs+J8kCpRWRKNarlQ/FQChnCLtKU=
+	t=1751016991; cv=none; b=DHC28Sh88dRxfaOcJzjyoSx3hutcn7BBNFRi+PMQ1U7nuRFn3xBE2kXLoKEccGDmaiS8XYwwfR38kaAVwY4WX5jZTFDtr8kBAWOXkLdxKOhq0y90nHQS0wfqIfUIHakDY+Ywc/IboeqPhCn3lmuktad4AEwIPfZL26tq975eVxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751011734; c=relaxed/simple;
-	bh=E5dCJgCXz5LGAgBMWwqXeeSh3tGKI1xYAyu0hCa7oEg=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=KLcmdQJvtgqJ8rpbzeBp/d2zA/GS5x17WV/rK5bQCI8lxJHwGhyzdFBbzil6/lBTfr8XvZtMKfNd3wGy0F1eEHU4dZGYvwzv23lc8J0XCOgedJ39DkbL+F3GhJnCBso8I2lqXePCV675IBt1xc4S3zP5weW711Q9rmA3H+FHBCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VNFpYu9m; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751011732; x=1782547732;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=E5dCJgCXz5LGAgBMWwqXeeSh3tGKI1xYAyu0hCa7oEg=;
-  b=VNFpYu9m/aAl3KBq03XdN6dRg1dfSBS9S4opmcYixzsaD0HRNLPTET4X
-   lsXiOSaBuMwXdDgZEilkHap/vu1KqFStgFY/KGjU6aemoMmIZOqKunQxz
-   1UiiHJ5cR8HAKeuz11IA/2Zux4w2+JMwK4Z5wiB2Clig9LJMKiEiqq9ZJ
-   RkzJ21UKe4H0d2bckUwHMv2jPPX9sAkfS/IFVdfHlRkXmIa+YmSxX0nsi
-   WBFpbY0/mcha46PzZ5KdbGTztpEuZ8Lw0ah7Pg/sdHAGAgdp0DD8Acw5V
-   VBBrgJzZvgQKBxvd72iWKROSLsrhYQMnppYSFWwVl4bdpUlLDRsKA3K64
-   A==;
-X-CSE-ConnectionGUID: 39tywPZQTKOp9WDL/nbMHQ==
-X-CSE-MsgGUID: BpWqy1zkQ4WGCKcIAv3FtA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="53184196"
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="53184196"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 01:08:51 -0700
-X-CSE-ConnectionGUID: QfgHaVPrT7iUECpbrdfFrw==
-X-CSE-MsgGUID: AwJNA7G8Q8OAHtKWnb9njw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="152832352"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.71])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 01:08:48 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 27 Jun 2025 11:08:44 +0300 (EEST)
-To: Xi Pardee <xi.pardee@linux.intel.com>
-cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
-    Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] platform/x86:intel/pmc: Show substate requirement
- for S0ix blockers
-In-Reply-To: <4d9c848f-ea87-4b94-b9d3-94362e59a4af@linux.intel.com>
-Message-ID: <67fb2263-003e-71b3-ef6f-9276bded995b@linux.intel.com>
-References: <20250625063145.624585-1-xi.pardee@linux.intel.com> <20250625063145.624585-5-xi.pardee@linux.intel.com> <6f43709c-dfcb-059e-758a-be6a56538724@linux.intel.com> <4d9c848f-ea87-4b94-b9d3-94362e59a4af@linux.intel.com>
+	s=arc-20240116; t=1751016991; c=relaxed/simple;
+	bh=Wu9AW5CnKuIsby46cmtnIf8gL/Rv77+ilEl2eeG6L5s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g3U50OybWorbTM5QOLzWJcT8fN58Gaq0E9oDoRb96VT1749XkSopBUaOly99zlG179Gj6x5CGbQOki5UO/hdjviOPKeomnW7zhQwM48PkssV+Eof5V5QoiSunxAoyw/q6n4Mk/A6OAsiUtzVVMKwziDjXmRT2CjbvxOlTV/7zTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlsgBS/2; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so18591045e9.1;
+        Fri, 27 Jun 2025 02:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751016988; x=1751621788; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p5fCnamO77K411kdyNNvZ5VlXfxiHYsxT++vTJt6tpU=;
+        b=IlsgBS/2yYOMYp6/BW4tq+sfYA9VyXhrMWdNbq3zdaqktXpmegSns7nHsJWbtexkcN
+         fj8KK/FjtU+hkjckMA0L5bbhxFoXTPw8MthM9zKy9AuE8DBPFnYp4gofHiaarcpE865+
+         3CRW+HheZCsAWK65LGur+dNr7GfV8h1a9qlyBLmaGrvZkJ70kd4SQ/Huu0KGGNyIQL5d
+         KU2HtNxMS68w0yHHKnO7pVsmLIY1CNzvzg186ADIRNmrjYapccmp5d3vi0iOQnlUBaTc
+         pNYMmT7T7vbP/KwXMd7y7+4gCi+mZirzlo8Lq7ykwcAj9YjIfPHZ6h76W4RsSkl6mOEV
+         EXbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751016988; x=1751621788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p5fCnamO77K411kdyNNvZ5VlXfxiHYsxT++vTJt6tpU=;
+        b=iYFTKeT7XQ80UA6aRfV2AcKHoG7gvYIAP6CWMAAhuiJOXuk8j/mT8VHq17wQRtn4Nm
+         H0OC2GXK5c1My3/JVprVsNZu9uUd4Kp3wG4Lj4xE7AU/GknKlhvYXjZM2cYORO8VOXsC
+         SLXt63hjiysPRdYZVUPcbsuD89TN+41C0zXzeenH5yYYbQJyUXGmXh0zUfs6Eq1inXqC
+         Mgto/u7Q+qlHG5MVObxyWo0bppY0y6EAfsUcJ4l4V/Q6elP7qOzOx4tkC22yHpHO5x0N
+         lXfGdRCa8DMErlQAYwBZoNKbyt4AiCD92ydCsm5SDiW6iaMP4/+b9DdXtpgFFqvQcNwY
+         dLXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKf7mTbZkWShz8B++ridnTJnbeQTK0d73if+dQKxFYr79KNZyTuWxy+JjLs1uF2ow27asCOwuml41gWJqf@vger.kernel.org, AJvYcCWS5pr1K3byfxlMQQb9yGTI1e6qUPSUTd/xU1LLBw99OINlb/54QFeX2bYnCiLZi2LITqrXM5CDVP/qUcXo@vger.kernel.org, AJvYcCWqh+0NQf7NbvmrSV5vIt9Q2NRpX8HCEN2xfxs1hNAaaXMle8t/cu/4Jhrj0rhvU+rPLnXM7xBUoQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK54crk91nX/uaBivXW8T8JU3R/IzOF5QDraJzCFdCa59orDAv
+	agEvfX+IHDm40cXkD1E2L4t19o7RxS0wQ47T1fO8qq7W/IqvVl+W2Tdc
+X-Gm-Gg: ASbGncseFrThhcg+FSsJnZPWGfmHHU9VlJdT9GCsrVR/frWDScVwNmQ4nLPQYgnPbk/
+	t6woiDGd8CR2RNEEtinE/FIv7z5MYBnxHXrEQcQLvhGQL3ShEZt57tbs8vohZhhBNd/X+d3XmxA
+	RBEdXAUJznSFBmvbNZQnjP8Kal5tSfS06AzUSdBIO1ZWCSQjiM324qIrTBDSZ3p3I2ZKluWouTo
+	MQrACSNueQhs6v8hcZjcqgLVselcJ6T7z4O7qiEm7RehCMXScZv6wGz02UZkBByHwmosv2aXsHS
+	7FUldDbvEPhptA1sHqzpx22XlHVR5pVJOuzTOnw4elu2JNbcYu1rVuS9LiULT6YZG6PjiGyJuG+
+	oOuXfCOISQ5Z/6eMtEXzEUTRC/XE=
+X-Google-Smtp-Source: AGHT+IHslSlEJb0qJ8a/g6NKoqQQ/b+PHsN+VXsoOgNq4hHwuu5INnGw1Tk3qJ/8yaYzQ22Rhmjf7Q==
+X-Received: by 2002:a05:6000:2810:b0:3a6:e1bb:a083 with SMTP id ffacd0b85a97d-3a8f4ee111emr1797485f8f.25.1751016988077;
+        Fri, 27 Jun 2025 02:36:28 -0700 (PDT)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a3a68d7sm45777285e9.14.2025.06.27.02.36.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 02:36:27 -0700 (PDT)
+Message-ID: <b960680d-6c5a-4130-b2dd-4ddf1f800430@gmail.com>
+Date: Fri, 27 Jun 2025 11:36:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1517171256-1751011724=:1730"
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-1517171256-1751011724=:1730
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] interconnect: avoid memory allocation when
+ 'icc_bw_lock' is held
+Content-Language: hu
+To: Johan Hovold <johan@kernel.org>
+Cc: Georgi Djakov <djakov@kernel.org>,
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Johan Hovold <johan+linaro@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
+ <aFvr1zSkf4KmIcMT@hovoldconsulting.com>
+ <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
+ <84b94649-a248-46b0-a401-772aeb8777a2@gmail.com>
+ <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
+ <ac5ba192-b538-457e-acc4-c2d358b1fd0e@gmail.com>
+ <aF0TIWfDI4M1azzc@hovoldconsulting.com>
+ <3b90caec-b4c0-47d8-bdd7-1a7abd5e69d9@gmail.com>
+ <aF5EPhd5smrmB38Q@hovoldconsulting.com>
+From: Gabor Juhos <j4g8y7@gmail.com>
+In-Reply-To: <aF5EPhd5smrmB38Q@hovoldconsulting.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 8bit
 
-On Thu, 26 Jun 2025, Xi Pardee wrote:
+2025. 06. 27. 9:11 keltezéssel, Johan Hovold írta:
+> On Thu, Jun 26, 2025 at 05:00:42PM +0200, Gabor Juhos wrote:
+>> 2025. 06. 26. 11:30 keltezéssel, Johan Hovold írta:
+> 
+>>> Note that this could be extended with a
+>>> name-allocated flag and an appropriate warning somewhere later if anyone
+>>> is worried about drivers failing to use the helper.
+>>>
+>>> Note that we can't use kfree_const() unconditionally as I initially
+>>> intended as apparently some interconnect providers already allocate
+>>> names for non-dynamic nodes.
+>>
+>> Not that I want to worry about anything, but for the sake of completeness I have
+>> to note something. Theoretically, freeing the name in icc_node_destroy() could
+>> cause the following on IPQ9574 under some circumstances:
+>>
+>>   [    4.003692] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffffff80047e4180 pfn:0x447e4
+>>   [    4.008439] flags: 0x0(zone=0)
+>>   [    4.017545] raw: 0000000000000000 fffffffec0000448 ffffff803fdbb518 0000000000000000
+>>   [    4.020480] raw: ffffff80047e4180 0000000000150000 00000000ffffffff 0000000000000000
+>>   [    4.028413] page dumped because: Not a kmalloc allocation
+>>
+>> It is not a problem of your patch though. The root cause of this is the same
+>> as why I saw the lockdep warning on the platform originally. The reason is
+>> that the static node ids used by the 'nsscc-ipq9574' driver are within the
+>> range of dynamic ids. Nevertheless, I have sent a patch [1] to fix that
+>> already.
+> 
+> Yeah, I saw that patch of yours the other day. Good that you tracked
+> that down. I'll probably amend the commit message with a comment about
+> why this triggered on IPQ in the first place too.
+> 
+>> Despite the note above, your proposal looks good to me. Would you like to
+>> send it as a formal patch, or shall I do it?
+> 
+> I can post it in a bit.
 
-> Hi Ilpo,
->=20
-> Thanks for reviewing the patch. My response is inline.
->=20
-> On 6/26/2025 9:38 AM, Ilpo J=C3=A4rvinen wrote:
-> > On Tue, 24 Jun 2025, Xi Pardee wrote:
-> >=20
-> > > Add support to read and show S0ix blocker substate requirements.
-> > > Starting from Panther Lake, substate requirement data is provided
-> > > based on S0ix blockers instead of all low power mode requirements.
-> > > For platforms that support this new feature, add support to display
-> > > substate requirements based on S0ix blockers.
-> > Empty line.
-> Will fix in next version.
-> >=20
-> > > Change the "substate_requirements" attribute of Intel PMC Core
-> > > driver to show the substate requirements for each S0ix blocker
-> > > and the corresponding S0ix blocker value.
-> > >=20
-> > > Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
-> > > ---
-> > >   drivers/platform/x86/intel/pmc/arl.c  |   2 +
-> > >   drivers/platform/x86/intel/pmc/core.c | 111 +++++++++++++++++++++++=
-+--
-> > >   drivers/platform/x86/intel/pmc/core.h |  12 +++
-> > >   drivers/platform/x86/intel/pmc/lnl.c  |   1 +
-> > >   drivers/platform/x86/intel/pmc/mtl.c  |   1 +
-> > >   5 files changed, 121 insertions(+), 6 deletions(-)
-> > >=20
-> > > diff --git a/drivers/platform/x86/intel/pmc/arl.c
-> > > b/drivers/platform/x86/intel/pmc/arl.c
-> > > index 9d66d65e75779..1852876be234f 100644
-> > > --- a/drivers/platform/x86/intel/pmc/arl.c
-> > > +++ b/drivers/platform/x86/intel/pmc/arl.c
-> > > @@ -722,6 +722,7 @@ static int arl_h_core_init(struct pmc_dev *pmcdev=
-,
-> > > struct pmc_dev_info *pmc_dev_
-> > >     struct pmc_dev_info arl_pmc_dev =3D {
-> > >   =09.pci_func =3D 0,
-> > > +=09.telem_info =3D SUB_REQ_LPM,
-> > >   =09.dmu_guid =3D ARL_PMT_DMU_GUID,
-> > >   =09.regmap_list =3D arl_pmc_info_list,
-> > >   =09.map =3D &arl_socs_reg_map,
-> > > @@ -732,6 +733,7 @@ struct pmc_dev_info arl_pmc_dev =3D {
-> > >     struct pmc_dev_info arl_h_pmc_dev =3D {
-> > >   =09.pci_func =3D 2,
-> > > +=09.telem_info =3D SUB_REQ_LPM,
-> > >   =09.dmu_guid =3D ARL_PMT_DMU_GUID,
-> > >   =09.regmap_list =3D arl_pmc_info_list,
-> > >   =09.map =3D &mtl_socm_reg_map,
-> > > diff --git a/drivers/platform/x86/intel/pmc/core.c
-> > > b/drivers/platform/x86/intel/pmc/core.c
-> > > index 47cc5120e7dd6..e9d281b064462 100644
-> > > --- a/drivers/platform/x86/intel/pmc/core.c
-> > > +++ b/drivers/platform/x86/intel/pmc/core.c
-> > > @@ -844,6 +844,56 @@ static void pmc_core_substate_req_header_show(st=
-ruct
-> > > seq_file *s, int pmc_index,
-> > >   =09=09seq_printf(s, " %9s |\n", name);
-> > >   }
-> > >   +static int pmc_core_substate_blk_req_show(struct seq_file *s, void
-> > > *unused)
-> > > +{
-> > > +=09struct pmc_dev *pmcdev =3D s->private;
-> > > +=09unsigned int pmc_index;
-> > > +=09u32 *blk_sub_req_regs;
-> > Why is this here and the other variable in the inner block?
-> Will move the blk_sub_req_regs declaration to the inner block.
-> >=20
-> > > +
-> > > +=09for (pmc_index =3D 0; pmc_index < ARRAY_SIZE(pmcdev->pmcs); pmc_i=
-ndex++)
-> > > {
-> > > +=09=09const struct pmc_bit_map **maps;
-> > > +=09=09unsigned int arr_size, r_idx;
-> > > +=09=09u32 offset, counter;
-> > > +=09=09struct pmc *pmc;
-> > > +
-> > > +=09=09pmc =3D pmcdev->pmcs[pmc_index];
-> > > +=09=09if (!pmc || !pmc->blk_sub_req_regs)
-> > > +=09=09=09continue;
-> > > +
-> > > +=09=09blk_sub_req_regs =3D pmc->blk_sub_req_regs;
-> > > +=09=09maps =3D pmc->map->s0ix_blocker_maps;
-> > > +=09=09offset =3D pmc->map->s0ix_blocker_offset;
-> > > +=09=09arr_size =3D pmc_core_lpm_get_arr_size(maps);
-> > > +
-> > > +=09=09/* Display the header */
-> > > +=09=09pmc_core_substate_req_header_show(s, pmc_index, "Value");
-> > > +
-> > > +=09=09for (r_idx =3D 0; r_idx < arr_size; r_idx++) {
-> > > +=09=09=09const struct pmc_bit_map *map;
-> > > +
-> > > +=09=09=09for (map =3D maps[r_idx]; map->name; map++) {
-> > > +=09=09=09=09int mode;
-> > > +
-> > > +=09=09=09=09if (!map->blk)
-> > > +=09=09=09=09=09continue;
-> > > +
-> > > +=09=09=09=09counter =3D pmc_core_reg_read(pmc, offset);
-> > > +=09=09=09=09seq_printf(s, "pmc%d: %34s |", pmc_index,
-> > > map->name);
-> > > +=09=09=09=09pmc_for_each_mode(mode, pmcdev) {
-> > > +=09=09=09=09=09bool required =3D *blk_sub_req_regs &
-> > > BIT(mode);
-> > > +
-> > > +=09=09=09=09=09seq_printf(s, " %9s |", required ?
-> > > "Required" : " ");
-> > > +=09=09=09=09}
-> > > +=09=09=09=09seq_printf(s, " %9d |\n", counter);
-> > > +=09=09=09=09offset +=3D map->blk * S0IX_BLK_SIZE;
-> > > +=09=09=09=09blk_sub_req_regs++;
-> > > +=09=09=09}
-> > > +=09=09}
-> > > +=09}
-> > > +=09return 0;
-> > > +}
-> > > +DEFINE_SHOW_ATTRIBUTE(pmc_core_substate_blk_req);
-> > > +
-> > >   static int pmc_core_substate_req_regs_show(struct seq_file *s, void
-> > > *unused)
-> > >   {
-> > >   =09struct pmc_dev *pmcdev =3D s->private;
-> > > @@ -1335,7 +1385,10 @@ static void pmc_core_dbgfs_register(struct pmc=
-_dev
-> > > *pmcdev)
-> > >   =09=09debugfs_create_file("substate_requirements", 0444,
-> > >   =09=09=09=09    pmcdev->dbgfs_dir, pmcdev,
-> > >   =09=09=09=09    &pmc_core_substate_req_regs_fops);
-> > > -=09}
-> > > +=09} else if (primary_pmc->blk_sub_req_regs)
-> > > +=09=09debugfs_create_file("substate_requirements", 0444,
-> > > +=09=09=09=09    pmcdev->dbgfs_dir, pmcdev,
-> > > +=09=09=09=09    &pmc_core_substate_blk_req_fops);
-> > >=20
-> > >   =09if (primary_pmc->map->pson_residency_offset &&
-> > > pmc_core_is_pson_residency_enabled(pmcdev)) {
-> > >   =09=09debugfs_create_file("pson_residency_usec", 0444,
-> > > @@ -1441,7 +1494,38 @@ static int pmc_core_pmt_get_lpm_req(struct pmc=
-_dev
-> > > *pmcdev, struct pmc *pmc,
-> > >   =09return ret;
-> > >   }
-> > >   -static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, int fun=
-c)
-> > > +static int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, stru=
-ct
-> > > pmc *pmc,
-> > > +=09=09=09=09=09struct telem_endpoint *ep)
-> > > +{
-> > > +=09u32 num_blocker, sample_id;
-> > > +=09unsigned int index;
-> > > +=09u32 *req_offset;
-> > > +=09int ret;
-> > > +
-> > > +=09num_blocker =3D pmc->map->num_s0ix_blocker;
-> > > +=09sample_id =3D pmc->map->blocker_req_offset;
-> > > +
-> > > +=09pmc->blk_sub_req_regs =3D devm_kcalloc(&pmcdev->pdev->dev,
-> > > +=09=09=09=09=09 num_blocker, sizeof(u32),
-> > > +=09=09=09=09=09 GFP_KERNEL);
-> > Correct alignment.
-> >=20
-> > I guess you want to keep those two args on the same line as this would =
-fit
-> > on 2 lines.
-> Will change the alignment and move two args to be on one line.
-> >=20
-> > > +=09if (!pmc->blk_sub_req_regs)
-> > > +=09=09return -ENOMEM;
-> > > +
-> > > +=09req_offset =3D pmc->blk_sub_req_regs;
-> > > +=09for (index =3D 0; index < num_blocker; index++) {
-> > > +=09=09ret =3D pmt_telem_read32(ep, sample_id, req_offset, 1);
-> > > +=09=09if (ret) {
-> > > +=09=09=09dev_err(&pmcdev->pdev->dev,
-> > > +=09=09=09=09"couldn't read Low Power Mode requirements:
-> > > %d\n", ret);
-> > > +=09=09=09return ret;
-> > > +=09=09}
-> > > +=09=09sample_id++;
-> > > +=09=09req_offset++;
-> > > +=09}
-> > > +=09return 0;
-> > > +}
-> > > +
-> > > +static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, int func,
-> > > unsigned int telem_info)
-> > >   {
-> > >   =09struct pci_dev *pcidev __free(pci_dev_put) =3D NULL;
-> > >   =09struct telem_endpoint *ep;
-> > > @@ -1470,13 +1554,26 @@ static int pmc_core_get_telem_info(struct pmc=
-_dev
-> > > *pmcdev, int func)
-> > >   =09=09=09return -EPROBE_DEFER;
-> > >   =09=09}
-> > >   -=09=09ret =3D pmc_core_pmt_get_lpm_req(pmcdev, pmc, ep);
-> > > +=09=09if (telem_info & SUB_REQ_LPM) {
-> > > +=09=09=09ret =3D pmc_core_pmt_get_lpm_req(pmcdev, pmc, ep);
-> > > +=09=09=09if (ret)
-> > > +=09=09=09=09goto unregister_ep;
-> > > +=09=09}
-> > > +
-> > > +=09=09if (telem_info & SUB_REQ_BLK) {
-> > These two are mutually exclusive? I'm really wondering cuold pointers b=
-e
-> > used instead to avoid these ifs here and in debugfs fops selection.
-> The SUB_REQ_BLK and SUB_REQ_LPM are mutually exclusive. We will also intr=
-oduce
-> more
-> types of data from the telemetry endpoint but not mutually exclusive in t=
-he
-> next series, therefore
-> using bit to identify the type of data sounds appropriate to me. I am not=
- sure
-> how to use pointer to
-> select data type in this scenario, Could you please give an example?
+Great, just saw the final patch. Thank you!
 
-Perhaps there isn't, I didn't have a crystal ball what's coming after this=
-=20
-series at hand. :-)
+Regards,
+Gabor
 
-I just noted there are these mutually exclusive pointers:
-
-debugfs_create_file("substate_requirements", ..., &pmc_core_substate_req_re=
-gs_fops);
-vs
-debugfs_create_file("substate_requirements", ..., &pmc_core_substate_blk_re=
-q_fops);
-
-and
-
-ret =3D pmc_core_pmt_get_lpm_req(pmcdev, pmc, ep);
-vs
-ret =3D pmc_core_pmt_get_blk_sub_req(pmcdev, pmc, ep);
-
-As both look like they're decided based on what platform we're running on,=
-=20
-it looks similar to what pmc_dev_info already contains, having these as=20
-pointers in pmc_dev_info would avoid having to create those two branches=20
-just to use a different pointer.
-
-(BTW, those two places also use a different way to decide which one to=20
-use, which feels slightly inconsistent).
-
-
-Whether using pointers in pmc_dev_info makes sense given the extra info=20
-you provided now, I'm not any more entirely sure.
-
-> > > +=09=09=09ret =3D pmc_core_pmt_get_blk_sub_req(pmcdev, pmc, ep);
-> > > +=09=09=09if (ret)
-> > > +=09=09=09=09goto unregister_ep;
-> > > +=09=09}
-> > > +
-> > >   =09=09pmt_telem_unregister_endpoint(ep);
-> > > -=09=09if (ret)
-> > > -=09=09=09return ret;
-> > >   =09}
-> > >     =09return 0;
-> > > +
-> > > +unregister_ep:
-> > > +=09pmt_telem_unregister_endpoint(ep);
-> > > +=09return ret;
-> > >   }
-> > >     static const struct pmc_reg_map *pmc_core_find_regmap(struct pmc_=
-info
-> > > *list, u16 devid)
-> > > @@ -1585,7 +1682,9 @@ int generic_core_init(struct pmc_dev *pmcdev, s=
-truct
-> > > pmc_dev_info *pmc_dev_info)
-> > >   =09=09pmc_core_punit_pmt_init(pmcdev, pmc_dev_info->dmu_guid);
-> > >     =09if (ssram) {
-> > > -=09=09ret =3D pmc_core_get_telem_info(pmcdev, pmc_dev_info->pci_func=
-);
-> > > +=09=09ret =3D pmc_core_get_telem_info(pmcdev,
-> > > +=09=09=09=09=09      pmc_dev_info->pci_func,
-> > > +=09=09=09=09=09      pmc_dev_info->telem_info);
-> > >   =09=09if (ret)
-> > >   =09=09=09goto unmap_regbase;
-> > >   =09}
-> > > diff --git a/drivers/platform/x86/intel/pmc/core.h
-> > > b/drivers/platform/x86/intel/pmc/core.h
-> > > index 4a94a4ee031e6..d8c7b28493055 100644
-> > > --- a/drivers/platform/x86/intel/pmc/core.h
-> > > +++ b/drivers/platform/x86/intel/pmc/core.h
-> > > @@ -29,6 +29,10 @@ struct telem_endpoint;
-> > >   #define LPM_REG_COUNT=09=0928
-> > >   #define LPM_MODE_OFFSET=09=091
-> > >   +/* Telemetry Endpoint Info bits */
-> > > +#define SUB_REQ_LPM=09=090x01=09/* Substate requirement for
-> > > low power mode requirements */
-> > > +#define SUB_REQ_BLK=09=090x02=09/* Substate requirement for
-> > > S0ix blockers */
-> > > +
-> > >   /* Sunrise Point Power Management Controller PCI Device ID */
-> > >   #define SPT_PMC_PCI_DEVICE_ID=09=09=090x9d21
-> > >   #define SPT_PMC_BASE_ADDR_OFFSET=09=090x48
-> > > @@ -344,6 +348,8 @@ struct pmc_bit_map {
-> > >    * @pm_read_disable_bit: Bit index to read PMC_READ_DISABLE
-> > >    * @slps0_dbg_offset:=09PWRMBASE offset to SLP_S0_DEBUG_REG*
-> > >    * @s0ix_blocker_offset PWRMBASE offset to S0ix blocker counter
-> > > + * @num_s0ix_blocker:=09Number of S0ix blockers
-> > > + * @blocker_req_offset:=09Telemetry offset to S0ix blocker low power
-> > > mode substate requirement table
-> > >    *
-> > >    * Each PCH has unique set of register offsets and bit indexes. Thi=
-s
-> > > structure
-> > >    * captures them to have a common implementation.
-> > > @@ -369,6 +375,8 @@ struct pmc_reg_map {
-> > >   =09const u32 ltr_ignore_max;
-> > >   =09const u32 pm_vric1_offset;
-> > >   =09const u32 s0ix_blocker_offset;
-> > > +=09const u32 num_s0ix_blocker;
-> > > +=09const u32 blocker_req_offset;
-> > >   =09/* Low Power Mode registers */
-> > >   =09const int lpm_num_maps;
-> > >   =09const int lpm_num_modes;
-> > > @@ -404,6 +412,7 @@ struct pmc_info {
-> > >    * @map:=09=09pointer to pmc_reg_map struct that contains platform
-> > >    *=09=09=09specific attributes
-> > >    * @lpm_req_regs:=09List of substate requirements
-> > > + * @blk_sub_req_reqs:=09List of registers showing substate
-> > > requirements for S0ix blockers
-> > >    * @ltr_ign:=09=09Holds LTR ignore data while suspended
-> > >    *
-> > >    * pmc contains info about one power management controller device.
-> > > @@ -413,6 +422,7 @@ struct pmc {
-> > >   =09void __iomem *regbase;
-> > >   =09const struct pmc_reg_map *map;
-> > >   =09u32 *lpm_req_regs;
-> > > +=09u32 *blk_sub_req_regs;
-> > >   =09u32 ltr_ign;
-> > >   };
-> > >   @@ -468,6 +478,7 @@ enum pmc_index {
-> > >   /**
-> > >    * struct pmc_dev_info - Structure to keep PMC device info
-> > >    * @pci_func:=09=09Function number of the primary PMC
-> > > + * @telem_info:=09=09Bitmask to indicate which telemetry info is
-> > > available
-> > >    * @dmu_guid:=09=09Die Management Unit GUID
-> > >    * @regmap_list:=09Pointer to a list of pmc_info structure that cou=
-ld be
-> > >    *=09=09=09available for the platform. When set, this
-> > > field implies
-> > > @@ -480,6 +491,7 @@ enum pmc_index {
-> > >    */
-> > >   struct pmc_dev_info {
-> > >   =09u8 pci_func;
-> > > +=09u8 telem_info;
-> > >   =09u32 dmu_guid;
-> > >   =09struct pmc_info *regmap_list;
-> > >   =09const struct pmc_reg_map *map;
-> > > diff --git a/drivers/platform/x86/intel/pmc/lnl.c
-> > > b/drivers/platform/x86/intel/pmc/lnl.c
-> > > index e08a77c778c2c..ec9e79f6cd913 100644
-> > > --- a/drivers/platform/x86/intel/pmc/lnl.c
-> > > +++ b/drivers/platform/x86/intel/pmc/lnl.c
-> > > @@ -572,6 +572,7 @@ static int lnl_core_init(struct pmc_dev *pmcdev,
-> > > struct pmc_dev_info *pmc_dev_in
-> > >     struct pmc_dev_info lnl_pmc_dev =3D {
-> > >   =09.pci_func =3D 2,
-> > > +=09.telem_info =3D SUB_REQ_LPM,
-> > >   =09.regmap_list =3D lnl_pmc_info_list,
-> > >   =09.map =3D &lnl_socm_reg_map,
-> > >   =09.suspend =3D cnl_suspend,
-> > > diff --git a/drivers/platform/x86/intel/pmc/mtl.c
-> > > b/drivers/platform/x86/intel/pmc/mtl.c
-> > > index faa13a7ee688f..c58a871e2e0df 100644
-> > > --- a/drivers/platform/x86/intel/pmc/mtl.c
-> > > +++ b/drivers/platform/x86/intel/pmc/mtl.c
-> > > @@ -994,6 +994,7 @@ static int mtl_core_init(struct pmc_dev *pmcdev,
-> > > struct pmc_dev_info *pmc_dev_in
-> > >     struct pmc_dev_info mtl_pmc_dev =3D {
-> > >   =09.pci_func =3D 2,
-> > > +=09.telem_info =3D SUB_REQ_LPM,
-> > >   =09.dmu_guid =3D MTL_PMT_DMU_GUID,
-> > >   =09.regmap_list =3D mtl_pmc_info_list,
-> > >   =09.map =3D &mtl_socm_reg_map,
-> > >=20
->=20
-
---=20
- i.
-
---8323328-1517171256-1751011724=:1730--
 
