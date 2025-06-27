@@ -1,85 +1,105 @@
-Return-Path: <linux-pm+bounces-29704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65EEBAEC03E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:41:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25B80AEC059
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 21:48:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E85EB16BAF6
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:41:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5EFF1C257E6
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 19:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D10B212B1E;
-	Fri, 27 Jun 2025 19:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5BB121ADC7;
+	Fri, 27 Jun 2025 19:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGoRR75N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSp31Htf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA5F20B80B;
-	Fri, 27 Jun 2025 19:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0501212D97;
+	Fri, 27 Jun 2025 19:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751053258; cv=none; b=joquvW2L29WIllFYF2gR5FDpz2CzIqvCV9vPIfNitCFa/8M5f0lI3LaJ2+A8ARomRVQqjfi1N31+533ABB02r8dCskFCYlPpQQdxrEoAFBya+QM40r3fgThiEbxxdABfrHBhPj5GV82B7/bjctqSCRqz67rV4GEQkhN3Cm/5jq0=
+	t=1751053679; cv=none; b=dW+b2eYUcoWFdkuL9CNNurpmr4lbXIcgMFywUOfnNsoRo+Fs4dzjYVfc13+ORLRPcKzxx1oWw97jDvNTFJBv3cbY7ZeEDylLHd5gfsILbGl2wEh1ViI9vs8i9pTh9K5az2jBDE0dXMTxKa2TrSUt7MSCBLBRtlwUdEVX2RvNIhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751053258; c=relaxed/simple;
-	bh=6MkKhuTr/kzO2bvG/B9XyStdoHcYnsGwWcEHmKxSoeU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sik7FRI/SzJ9R+TKOKhlfZDPt4YSO2cvdQ3kn2elZFGz7+Yi96E3gJycW7UUrbkPk1aiBCwWGY2Qf9YyXe1L1330npI8dvi59UySEYgHsW6a3sbiUh9mId7MJkyhnoOtVS0aKQ8sZug/FmBKOeXBYNbfl2Ma22j9tunEZX9hAN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGoRR75N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA796C4CEE3;
-	Fri, 27 Jun 2025 19:40:57 +0000 (UTC)
+	s=arc-20240116; t=1751053679; c=relaxed/simple;
+	bh=qSFxmn8zMD2j4jiMzR4R/375FMeVfeiJxiC4gUPGm7Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bsUwpk5uA4yD1+ouDsgjMopg/lBCaZYSnXeznTsPv4G0DQqmPslKNz3zIJ+4wyDWefbH3A6w2e2IpBH47j2VWclYC6QWLjigW1Z6HNUAWsoV1cOEdWb59s0ByXPonnq3YMbCJxY+dQS859vGksPoYCpsmOYDta/aJMd5OGjtOf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSp31Htf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CAEC4AF0B;
+	Fri, 27 Jun 2025 19:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751053258;
-	bh=6MkKhuTr/kzO2bvG/B9XyStdoHcYnsGwWcEHmKxSoeU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XGoRR75NS9RuP6hhgBtMryU4oxmAfnWwpHznQWDniDus/HDNxdTTU3mSUHzS2z+Wm
-	 1nfMONZLmeiC4AmA+2brm+MKcNacPxxslUvnBK22GLhrDC3vI2io22zSRog5JCvS22
-	 L2YWxhpUeuneypndf2P80Qfq7LSKgiUTlK1mbGGqg7GECu8aoVOMCSeGv8PSYdQu4N
-	 Yjf/LCLnUUdENrI6yog82SP22gTdCR+UvZSvq+b5HcUfDypUOzBJgfFGkMQyuL0JOm
-	 cMc90lZLVsNLyYj9w7XEbyxmK9yJyHILh1Bf6gkGpg8DJqHRrw2xyKqndSstsnYRIB
-	 u7nmTIpNaKqsA==
-Date: Fri, 27 Jun 2025 14:40:57 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Casey Connolly <casey.connolly@linaro.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-hardening@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	devicetree@vger.kernel.org, Konrad Dybcio <konradybcio@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 01/11] dt-bindings: power: supply: qcom,pmi89980-charger:
- add pm8150b and 7250b
-Message-ID: <175105325638.4057812.1772308849088053765.robh@kernel.org>
-References: <20250619-smb2-smb5-support-v1-0-ac5dec51b6e1@linaro.org>
- <20250619-smb2-smb5-support-v1-1-ac5dec51b6e1@linaro.org>
+	s=k20201202; t=1751053679;
+	bh=qSFxmn8zMD2j4jiMzR4R/375FMeVfeiJxiC4gUPGm7Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GSp31HtfQLnBral28TfLQvRx010Epl9hR19y9111ibsCt/UwddvdsJKpVOtQo3ZZP
+	 BJwaZWRLE5rrfOiJf1F6EEeJDX7SNf5PZsVv7woUUG9GHPNH3Q/e8kFT6/LTmfRlBZ
+	 JLDfMi5/q0/tVRF/bC0NT6qCbWq9pH2SQL/wy54MFI9tvwIVvvYhd6dS2+E2flnRWG
+	 HQ4c+8sQVFWVaVUv3EZqZ75JWV/eo/05/BZ8B5Bu1H9FhQLShPQuQc7vOTUFuFIcRd
+	 GbklTYnPOb0cHVXarxyWmTmxWbl0lqAbDFoQReYaX6IVcTfQ1vvDnPr3CEwTL71qAl
+	 tOMbfnfsBZkaQ==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-60d5c665fceso110061eaf.1;
+        Fri, 27 Jun 2025 12:47:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW0NrW2KwqnapqG7K1tXPrjkLjSkL3UUpNbk+m3tLpc64gEBl7vZHSI9244SXx40cwfK0HYz3h6PCD9O3c=@vger.kernel.org, AJvYcCXTCds3OyW6PEuNOQfoSpqjzoZKUx1pI7IJXGsNuytj2fw40KYw4NsLEo0BeLuGVjwOaBejkBXSs28=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwetXws20+kip/HtsDsycJfcueZprLxESYEBNkd9XPNusArWCRB
+	D6ZkB35HqWb7n+F2traEt/eXyAxx+lZ4kPlbYCCC6VfxzERlFHod3KoDyZK9iwH+7XIv2qHT5ar
+	hgwyQlcINjsQ2uZkOMTVD1/vQNINzoTo=
+X-Google-Smtp-Source: AGHT+IFIdkTX35vYH56ZqzJMeHfewRj+zYRHyAze0G05YjdlyfHn6jVAJqRX6vVYzK3qxXdFZTewgDanf1gfQlSQA9I=
+X-Received: by 2002:a05:6820:4de7:b0:611:9fd4:ac26 with SMTP id
+ 006d021491bc7-611b911d923mr2696321eaf.5.1751053678537; Fri, 27 Jun 2025
+ 12:47:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250619-smb2-smb5-support-v1-1-ac5dec51b6e1@linaro.org>
+References: <20250625020522.253548-1-rui.zhang@intel.com>
+In-Reply-To: <20250625020522.253548-1-rui.zhang@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 27 Jun 2025 21:47:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jVbc76E0jJA7S4N1xN1ESjuNO0xvfGk9wqDwNVOzBVkg@mail.gmail.com>
+X-Gm-Features: Ac12FXyGNoB1Z0y_1SWfLTkjesRNP8aP5qzLamzRDvOc1UvafelIKdzPm3sUnPM
+Message-ID: <CAJZ5v0jVbc76E0jJA7S4N1xN1ESjuNO0xvfGk9wqDwNVOzBVkg@mail.gmail.com>
+Subject: Re: [PATCH] powercap: intel_rapl_msr: Add PL4 support for PantherLake
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On Thu, 19 Jun 2025 16:55:09 +0200, Casey Connolly wrote:
-> Add compatible strings for these two PMICs which use the SMB5 generation
-> of charger.
-> 
-> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
+On Wed, Jun 25, 2025 at 4:05=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wro=
+te:
+>
+> Add PantherLake to the list of processors where PL4 is supported.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->  .../devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml          | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+> The PL4 support for Arrowlake-S and Lunarlake are also missing for now.
+> We will add them later when there is a real need. I'm also checking
+> internally to see if it is required or not.
+> ---
+>  drivers/powercap/intel_rapl_msr.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_r=
+apl_msr.c
+> index 8ad2115d65f6..4ed06c71a3ac 100644
+> --- a/drivers/powercap/intel_rapl_msr.c
+> +++ b/drivers/powercap/intel_rapl_msr.c
+> @@ -150,6 +150,7 @@ static const struct x86_cpu_id pl4_support_ids[] =3D =
+{
+>         X86_MATCH_VFM(INTEL_METEORLAKE_L, NULL),
+>         X86_MATCH_VFM(INTEL_ARROWLAKE_U, NULL),
+>         X86_MATCH_VFM(INTEL_ARROWLAKE_H, NULL),
+> +       X86_MATCH_VFM(INTEL_PANTHERLAKE_L, NULL),
+>         {}
+>  };
+>
+> --
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-
+Applied as 6.17 material, thanks!
 
