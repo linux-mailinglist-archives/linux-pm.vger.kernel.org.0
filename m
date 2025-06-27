@@ -1,229 +1,318 @@
-Return-Path: <linux-pm+bounces-29641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29642-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C7E7AEB0AB
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 09:55:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1290AEB0C1
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 09:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EB4F171B0F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 07:55:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5517D1894D39
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 07:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4799F22759D;
-	Fri, 27 Jun 2025 07:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3BB822C339;
+	Fri, 27 Jun 2025 07:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FbbeNE/T";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Kty7AgHZ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2fJ8jZ9U";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Hpagzk4S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYDWq6UH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6441B2264B2
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 07:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F89226D1D;
+	Fri, 27 Jun 2025 07:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751010925; cv=none; b=KLrnY4sOH3zWbxhfK3G7TWhrWY4ZrCCTtPK203UeV5OAwV5qBvlkgtzGbKsN2CLG81tSDkCp9L1XldKcezMH+26K+qLqrKO677KczkibSop1Up1daAmt6gVR+EVKCeG2nYRXeurP8mqnZlyhgz0vY5iHnapsE9w+j65r+hn58D8=
+	t=1751011141; cv=none; b=i9hdNMxyR47XLTsekn8OjZ2LIRpndAhXTWWYPB/eBbB12i/fmTHrpFABmgepjPBgB7nPOlVDeoAOC0I5Ed5YtkYzUlydGCfXbYWUlesKjS8kUa+dwGfrh6+zGv3VRUnjSrua+DwU4lS+313NdM//e8XL1cuQa9OJOCbWjYxDZWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751010925; c=relaxed/simple;
-	bh=W43fmgGb+2NzyqFCSS0630HfRedK2fz7xXA7ehGegzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m+EVdC/9abP4diUa1e8BBygs+FGwgKv/C6sHV8sSLJ8tgSIVNcGdaVN0kGzj6KmQCKX7PWARis5/6hYClVkcHHial632uiC2sd8BAR/c3z7/046errl+vnRD7FBTcnEAvZTp/+P5dMtJkyMsof/nmh34bEm1toFWPEYCulAMhTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FbbeNE/T; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Kty7AgHZ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2fJ8jZ9U; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Hpagzk4S; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6A5C021174;
-	Fri, 27 Jun 2025 07:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1751010921; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=FbbeNE/TjNlk4A5o+6fTzCVPxDsccqxkglkAUwvwXESso0vOSRA93wslhbMWSdcgx2I9A1
-	FxsYl8peLk6l5FlB8AleHM4sdaXJe+cEOsXjVgIMGRYviXwc03H/7rf2+6l1NPsoASQO8Z
-	wzfkH8nr4OzuWShSLrvWP5nrRCOcpbg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1751010921;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=Kty7AgHZB6YBFhZcKRw2mTyW6CJChk6RVH9k5j8RNgF+vqOqoDBVsN3ynKtce9dk3L4P2Z
-	9VKCowIUIdiFr1CQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1751010920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=2fJ8jZ9UnZlpBq7wdYctaRSdNpHrqZzHhjN/Plxy+wxWVUpw93g2jWHdviq1K8Z9WZkhjb
-	tL7jzDF3f1yKYcyY69EhbD6WS85W5KiM1KDVbp62R7ZM9CBX94CmJISxLdgPi6korVp0S2
-	k5TJhnCTONmdTMdl3bJVHLNGlUr3awU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1751010920;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=Hpagzk4Sk2vJIqYpZVOghUpIQqL6dR5KUuMdCT2yVko6zVkWWutCvArYyCSpKT1jNDVWP9
-	c0nvjxBxvkOKNUDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5894713786;
-	Fri, 27 Jun 2025 07:55:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id IbGcFWhOXmgIUQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Fri, 27 Jun 2025 07:55:20 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id D996FA099D; Fri, 27 Jun 2025 09:55:19 +0200 (CEST)
-Date: Fri, 27 Jun 2025 09:55:19 +0200
-From: Jan Kara <jack@suse.cz>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	linux-kernel@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Kieran Bingham <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	John Ogness <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Uladzislau Rezki <urezki@gmail.com>, 
-	Matthew Wilcox <willy@infradead.org>, Kuan-Ying Lee <kuan-ying.lee@canonical.com>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>, 
-	Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn <illia@yshyn.com>, 
-	"open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>, "open list:PER-CPU MEMORY ALLOCATOR" <linux-mm@kvack.org>, 
-	"open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>, "open list:KASAN" <kasan-dev@googlegroups.com>, 
-	"open list:MAPLE TREE" <maple-tree@lists.infradead.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>, 
-	"open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH 00/16] MAINTAINERS: Include GDB scripts under their
- relevant subsystems
-Message-ID: <iup2plrwgkxlnywm3imd2ctkbqzkckn4t3ho56kq4y4ykgzvbk@cefy6hl7yu6c>
-References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
- <fynmrmsglw4liexcb37ykutf724lh7zbibilcjpysbmvgtkmes@mtjrfkve4av7>
- <c66deb8f-774e-4981-accf-4f507943e08c@broadcom.com>
+	s=arc-20240116; t=1751011141; c=relaxed/simple;
+	bh=bNv9x2a1Aunm5ZSWXJBFJN6QRl0vJZ4f6hRPK0EsSuw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KEA3YGNrtqKMaU7HrwDw73UX5FZpD9Kxb6YjQqA5cq6N/CgdC6L4LdssK5fXaxqtkSxJCYdCEkC0SlWwy5h7JALVRKSXOA4Kjs4jwHi8VJRe2w+9cRCYCe5KME0y7XFyW8xQ0pBlA1Ppfw5psab+BbUdUt3bfpEVODAoL5/tH8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYDWq6UH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2985BC4CEE3;
+	Fri, 27 Jun 2025 07:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751011141;
+	bh=bNv9x2a1Aunm5ZSWXJBFJN6QRl0vJZ4f6hRPK0EsSuw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UYDWq6UH8RKYlO7dz6BlumOPIvypvezTUD0EgdvCirg0XAK8icxMlWBFmUlFjulKB
+	 A0g7ViIf9D+F0oVGrj51VejHw92lJTDZ6TEsHxlou5tYBaAnMXIod49o0UaffJBO+l
+	 fbGFqWLq44KRYyMh20JCBWs7aW2QFvziULxilKr96cyrrT32d92Dp1thDNd/nzkEeK
+	 rdJ3AUdz7vWUqAy+udLRLouuRA1shF0UTe/ik00KMtdT0P1optid51sCE8xCQC1uO7
+	 GD9wAHphiyOtSSIRKrr+aMMy2PM9nxRp3tRqLnVDEs15N0HLlyN+cO/u8UgzRqxqUy
+	 k0rQ4u9rURr4Q==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1uV3zA-0000000070q-2Es8;
+	Fri, 27 Jun 2025 09:59:01 +0200
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Georgi Djakov <djakov@kernel.org>
+Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+	Gabor Juhos <j4g8y7@gmail.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v4] interconnect: avoid memory allocation when 'icc_bw_lock' is held
+Date: Fri, 27 Jun 2025 09:58:54 +0200
+Message-ID: <20250627075854.26943-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c66deb8f-774e-4981-accf-4f507943e08c@broadcom.com>
-X-Spam-Flag: NO
-X-Spam-Score: -2.30
-X-Spamd-Result: default: False [-2.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_TWELVE(0.00)[49];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[free.fr,gmail.com];
-	R_RATELIMIT(0.00)[to_ip_from(RLb9dmf7wrehepajhg9kqn5udf)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[oracle.com,vger.kernel.org,siemens.com,kernel.org,baylibre.com,gentwo.org,linuxfoundation.org,suse.com,goodmis.org,linutronix.de,chromium.org,linaro.org,gmail.com,google.com,arm.com,linux-foundation.org,samsung.com,linux.dev,zeniv.linux.org.uk,suse.cz,infradead.org,canonical.com,linux.ibm.com,free.fr,mandelbit.com,yshyn.com,kvack.org,googlegroups.com,lists.infradead.org];
-	RCVD_COUNT_THREE(0.00)[3];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
 
-On Thu 26-06-25 09:39:36, Florian Fainelli wrote:
-> On 6/26/25 09:17, Liam R. Howlett wrote:
-> > * Florian Fainelli <florian.fainelli@broadcom.com> [250625 19:13]:
-> > > Linux has a number of very useful GDB scripts under scripts/gdb/linux/*
-> > > that provide OS awareness for debuggers and allows for debugging of a
-> > > variety of data structures (lists, timers, radix tree, mapletree, etc.)
-> > > as well as subsystems (clocks, devices, classes, busses, etc.).
-> > > 
-> > > These scripts are typically maintained in isolation from the subsystem
-> > > that they parse the data structures and symbols of, which can lead to
-> > > people playing catch up with fixing bugs or updating the script to work
-> > > with updates made to the internal APIs/objects etc. Here are some
-> > > recents examples:
-> > > 
-> > > https://lore.kernel.org/all/20250601055027.3661480-1-tony.ambardar@gmail.com/
-> > > https://lore.kernel.org/all/20250619225105.320729-1-florian.fainelli@broadcom.com/
-> > > https://lore.kernel.org/all/20250625021020.1056930-1-florian.fainelli@broadcom.com/
-> > > 
-> > > This patch series is intentionally split such that each subsystem
-> > > maintainer can decide whether to accept the extra
-> > > review/maintenance/guidance that can be offered when GDB scripts are
-> > > being updated or added.
-> > 
-> > I don't see why you think it was okay to propose this in the way you
-> > have gone about it.  Looking at the mailing list, you've been around for
-> > a while.
-> 
-> This should probably have been posted as RFC rather than PATCH, but as I
-> indicate in the cover letter this is broken down to allow maintainers like
-> yourself to accept/reject
-> 
-> > 
-> > The file you are telling me about seems to be extremely new and I needed
-> > to pull akpm/mm-new to discover where it came from.. because you never
-> > Cc'ed me on the file you are asking me to own.
-> 
-> Yes, that file is very new indeed, and my bad for not copying you on it.
-> 
-> I was not planning on burning an entire day worth of work to transition the
-> GDB scripts dumping the interrupt tree away from a radix tree to a maple
-> tree. All of which happens with the author of that conversion having
-> absolutely no idea that broke anything in the tree because very few people
-> know about the Python GDB scripts that Linux has. It is not pleasant to be
-> playing catch when it would have take maybe an extra couple hours for
-> someone intimately familiar with the maple tree to come up with a suitable
-> implementation replacement for mtree_load().
-> 
-> So having done it felt like there is a maintenance void that needs to be
-> filled, hence this patch set.
+From: Gabor Juhos <j4g8y7@gmail.com>
 
-I can see that it takes a lot of time to do a major update of a gdb
-debugging script after some refactoring like this. OTOH mandating some gdb
-scripts update is adding non-trivial amount of work to changes that are
-already hard enough to do as is. And the obvious question is what is the
-value? I've personally never used these gdb scripts and never felt a strong
-need for something like that. People have various debugging aids (like BPF
-scripts, gdb scripts, there's crash tool and drgn, and many more) lying
-around.  I'm personally of an opinion that it is not a responsibility of
-the person doing refactoring to make life easier for them or even fixing
-them and I don't think that the fact that some debug aid is under
-scripts/gdb/ directory is making it more special. So at least as far as I'm
-concerned (VFS, fsnotify and other filesystem related stuff) I don't plan
-on requiring updates to gdb scripts from people doing changes or otherwise
-actively maintain them.
+The 'icc_bw_lock' mutex is introduced in commit af42269c3523
+("interconnect: Fix locking for runpm vs reclaim") in order to decouple
+serialization of bw aggregation from codepaths that require memory
+allocation.
 
-								Honza
+However commit d30f83d278a9 ("interconnect: core: Add dynamic id
+allocation support") added a devm_kasprintf() call into a path protected
+by the 'icc_bw_lock' which causes the following lockdep warning on
+machines like the Lenovo ThinkPad X13s:
+
+    ======================================================
+    WARNING: possible circular locking dependency detected
+    6.16.0-rc3 #15 Not tainted
+    ------------------------------------------------------
+    (udev-worker)/342 is trying to acquire lock:
+    ffffb973f7ec4638 (fs_reclaim){+.+.}-{0:0}, at: __kmalloc_node_track_caller_noprof+0xa0/0x3e0
+
+    but task is already holding lock:
+    ffffb973f7f7f0e8 (icc_bw_lock){+.+.}-{4:4}, at: icc_node_add+0x44/0x154
+
+    which lock already depends on the new lock.
+
+    the existing dependency chain (in reverse order) is:
+
+    -> #1 (icc_bw_lock){+.+.}-{4:4}:
+           icc_init+0x48/0x108
+           do_one_initcall+0x64/0x30c
+           kernel_init_freeable+0x27c/0x500
+           kernel_init+0x20/0x1d8
+           ret_from_fork+0x10/0x20
+
+    -> #0 (fs_reclaim){+.+.}-{0:0}:
+           __lock_acquire+0x136c/0x2114
+           lock_acquire+0x1c8/0x354
+           fs_reclaim_acquire+0x74/0xa8
+           __kmalloc_node_track_caller_noprof+0xa0/0x3e0
+           devm_kmalloc+0x54/0x124
+           devm_kvasprintf+0x74/0xd4
+           devm_kasprintf+0x58/0x80
+           icc_node_add+0xb4/0x154
+           qcom_osm_l3_probe+0x20c/0x314 [icc_osm_l3]
+           platform_probe+0x68/0xd8
+           really_probe+0xc0/0x38c
+           __driver_probe_device+0x7c/0x160
+           driver_probe_device+0x40/0x110
+           __driver_attach+0xfc/0x208
+           bus_for_each_dev+0x74/0xd0
+           driver_attach+0x24/0x30
+           bus_add_driver+0x110/0x234
+           driver_register+0x60/0x128
+           __platform_driver_register+0x24/0x30
+           osm_l3_driver_init+0x20/0x1000 [icc_osm_l3]
+           do_one_initcall+0x64/0x30c
+           do_init_module+0x58/0x23c
+           load_module+0x1df8/0x1f70
+           init_module_from_file+0x88/0xc4
+           idempotent_init_module+0x188/0x280
+           __arm64_sys_finit_module+0x6c/0xd8
+           invoke_syscall+0x48/0x110
+           el0_svc_common.constprop.0+0xc0/0xe0
+           do_el0_svc+0x1c/0x28
+           el0_svc+0x4c/0x158
+           el0t_64_sync_handler+0xc8/0xcc
+           el0t_64_sync+0x198/0x19c
+
+    other info that might help us debug this:
+
+     Possible unsafe locking scenario:
+
+           CPU0                    CPU1
+           ----                    ----
+      lock(icc_bw_lock);
+                                   lock(fs_reclaim);
+                                   lock(icc_bw_lock);
+      lock(fs_reclaim);
+
+     *** DEADLOCK ***
+
+The icc_node_add() functions is not designed to fail, and as such it
+should not do any memory allocation. In order to avoid this, add a new
+helper function for the name generation to be called by drivers which
+are using the new dynamic id feature.
+
+Fixes: d30f83d278a9 ("interconnect: core: Add dynamic id allocation support")
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+Link: https://lore.kernel.org/r/20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com
+Co-developed-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+
+As Gabor pointed out, the reason he hit this on the IPQ9574 in the first
+place is due to a separate bug which is being fixed here:
+
+	https://lore.kernel.org/all/20250625-icc-dyn-id-fix-v1-1-127cb5498449@gmail.com/
+
+Note that this one (along with the IPQ fix) should go into 6.16-final
+since this fixes a regression in 6.16-rc1 that prevents lockdep from
+being used on a number of Qualcomm platforms (and which risks
+introducing further locking issues).
+
+Johan
+
+
+Changes in v4:
+ - make sure to generate a name also for pre-allocated rpmh nodes
+ - add icc_node_set_name() helper
+ - do not use devres to allocate name
+ - use osm-l3 lockdep splat as example in commit message
+ - Link to v3: https://lore.kernel.org/r/20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com
+ 
+Changes in v3:
+  - move memory allocation out from the icc_node_add() function directly into
+    the users of the dynamic id feature
+  - adjust commit description according to the changes
+  - Link to v2: https://lore.kernel.org/r/20250618-icc-bw-lockdep-v2-1-3223da346765@gmail.com
+
+Changes in v2:
+  - move memory allocation outside of icc_lock
+  - issue a warning and return without modifying the node name in case of
+    memory allocation failure, and adjust the commit description
+  - remove offered tags from Johan and Bryan
+    Note: since I was not sure that that the added WARN_ON() is a substantial
+    change or not, I have removed the offered tags intentionally to be on the
+    safe side
+  - Link to v1: https://lore.kernel.org/r/20250529-icc-bw-lockdep-v1-1-3d714b6a9374@gmail.com
+  
+
+ drivers/interconnect/core.c           | 29 +++++++++++++++++++++++----
+ drivers/interconnect/qcom/icc-rpmh.c  |  7 ++++++-
+ drivers/interconnect/qcom/osm-l3.c    |  7 ++++++-
+ include/linux/interconnect-provider.h |  6 ++++++
+ 4 files changed, 43 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 1a41e59c77f8..fdfc755bbd43 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -906,10 +906,35 @@ void icc_node_destroy(int id)
+ 		return;
+ 
+ 	kfree(node->links);
++	if (node->id >= ICC_DYN_ID_START)
++		kfree(node->name);
+ 	kfree(node);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_destroy);
+ 
++/**
++ * icc_node_set_name() - set node name
++ * @node: node
++ * @provider: node provider
++ * @name: node name
++ *
++ * Return: 0 on success, or -ENOMEM on allocation failure
++ */
++int icc_node_set_name(struct icc_node *node, const struct icc_provider *provider, const char *name)
++{
++	if (node->id >= ICC_DYN_ID_START) {
++		node->name = kasprintf(GFP_KERNEL, "%s@%s", name,
++				       dev_name(provider->dev));
++		if (!node->name)
++			return -ENOMEM;
++	} else {
++		node->name = name;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(icc_node_set_name);
++
+ /**
+  * icc_link_nodes() - create link between two nodes
+  * @src_node: source node
+@@ -1038,10 +1063,6 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	node->avg_bw = node->init_avg;
+ 	node->peak_bw = node->init_peak;
+ 
+-	if (node->id >= ICC_DYN_ID_START)
+-		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
+-					    node->name, dev_name(provider->dev));
+-
+ 	if (node->avg_bw || node->peak_bw) {
+ 		if (provider->pre_aggregate)
+ 			provider->pre_aggregate(node);
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index 41bfc6e7ee1d..001404e91041 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -293,7 +293,12 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 			goto err_remove_nodes;
+ 		}
+ 
+-		node->name = qn->name;
++		ret = icc_node_set_name(node, provider, qn->name);
++		if (ret) {
++			icc_node_destroy(node->id);
++			goto err_remove_nodes;
++		}
++
+ 		node->data = qn;
+ 		icc_node_add(node, provider);
+ 
+diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+index baecbf2533f7..b33f00da1880 100644
+--- a/drivers/interconnect/qcom/osm-l3.c
++++ b/drivers/interconnect/qcom/osm-l3.c
+@@ -236,7 +236,12 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+ 			goto err;
+ 		}
+ 
+-		node->name = qnodes[i]->name;
++		ret = icc_node_set_name(node, provider, qnodes[i]->name);
++		if (ret) {
++			icc_node_destroy(node->id);
++			goto err;
++		}
++
+ 		/* Cast away const and add it back in qcom_osm_l3_set() */
+ 		node->data = (void *)qnodes[i];
+ 		icc_node_add(node, provider);
+diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+index 55cfebc658e6..37093b6e1af9 100644
+--- a/include/linux/interconnect-provider.h
++++ b/include/linux/interconnect-provider.h
+@@ -119,6 +119,7 @@ int icc_std_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ struct icc_node *icc_node_create_dyn(void);
+ struct icc_node *icc_node_create(int id);
+ void icc_node_destroy(int id);
++int icc_node_set_name(struct icc_node *node, const struct icc_provider *provider, const char *name);
+ int icc_link_nodes(struct icc_node *src_node, struct icc_node **dst_node);
+ int icc_link_create(struct icc_node *node, const int dst_id);
+ void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+@@ -152,6 +153,11 @@ static inline void icc_node_destroy(int id)
+ {
+ }
+ 
++static int icc_node_set_name(struct icc_node *node, const struct icc_provider *provider, const char *name)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int icc_link_nodes(struct icc_node *src_node, struct icc_node **dst_node)
+ {
+ 	return -EOPNOTSUPP;
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.49.0
+
 
