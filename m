@@ -1,203 +1,294 @@
-Return-Path: <linux-pm+bounces-29651-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29652-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BD2AEB610
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 13:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9940AEB67F
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 13:34:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 234BF189D932
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 11:15:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E00D918905D3
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 11:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F16E29ACF7;
-	Fri, 27 Jun 2025 11:14:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27642BCF45;
+	Fri, 27 Jun 2025 11:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nTn3TdKn"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="m65ozer2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B457280CF6;
-	Fri, 27 Jun 2025 11:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E8A29DB79
+	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 11:33:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751022893; cv=none; b=YwnrF+lJpIphD5TX8JvI6JLunWbjNH9fKB2kEWjjZrw2U5v4PpZRtVRbXvkBmiWa8bTq52xiNbAnp1RYb2Axl7dYYb+zi7Q2nYHhCK8s5U1fYte/HRIO5fAD5YVuflshKUZsbY796eyUbeLxZywMIGDp6w4lM5E4e+oKQOr8i5w=
+	t=1751024041; cv=none; b=Xz7FOMfYhBV5Ji+XQ4govjEeBrzrpYf+Nb1CIVMCBdeYrJqD+qMkv0QMkZ9Ikq8wfbPP6ifzCzwJzqwRCnOgPAG8Lx5bkBVLf8kgvQGltNzRAHKvs/6UHBkvOfseg4bU9hVdYetbJQkvy7LWDgKOmu/4K38LAIzYMSOefueW0Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751022893; c=relaxed/simple;
-	bh=LlNXjuxd1lLlCWM3y57Dwt1ibKE5jXZxaa8JZNOTkUA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dLFD37TSsPgse8gUbqfNytjVV4yCql4JicoRxDlUAn8BuJ/GYvpyB1G12hy0WRZYwlYY7eMya/4911f3zxDnAn8a4Q91HJ2pFt1M1Eo8IXdJ6rOugt9sPHd+MLNlcJ+vwzyP2cUlgHO/DYk3dCXWJFh85G47cRjGohOkajeYG4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nTn3TdKn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D23C5C4CEE3;
-	Fri, 27 Jun 2025 11:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751022892;
-	bh=LlNXjuxd1lLlCWM3y57Dwt1ibKE5jXZxaa8JZNOTkUA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nTn3TdKnMGd7f0uDS9+uSuOk0qitc5hQft4SstpYXZBragL13VQesT5i+Uxd1Nmi4
-	 /eD5fhpqkSMqHc0bcG7KxtKCLsuWU53SdixMEPzx5K/cdHOyqRlVV6mvFLNEyQzlTk
-	 4gBeF5RRzNmIZYy7CpNzHZvOTMp55+sox/pN3AqmvdwSphzUGFF86FNWukX3KiVRAF
-	 Aih/7RxcBD83zyGAkf6kYLz4G8sUyLRnTBgiB/xdhUFLkjYqDPDReXIOXdGSWOqRyt
-	 Bm1jPk5RaC2n9gHQuf8YuIWcw7vacVqXWzqfose/mJ+W9l0wBriZbmcojdrT/dH9cG
-	 /Js/QzYmdALiw==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-60efc773b5fso1032530eaf.3;
-        Fri, 27 Jun 2025 04:14:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVgwA29g+q4dOIk2iuUw6vU+fLeKdfE6LTE0qtOGlvCk9n6SKWkiMKXGK2VhdnZyhyJmBGYqb38Vjcy@vger.kernel.org, AJvYcCXwg9uBf+cMEIHfO/2qCVRSkbdXHvzsPbcuXPneEz/G6jkCnIiyh17yS2HcpSj8XFqkdF3joEeuT0Lg@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhY862FuKCMeZRaq1uTAG+ARd/bLLabc+43sybV0OMAjxMPOca
-	MgtvzftStwOchzicOI0+lta6KbKSBdsoCyK7scIj5vtHdKU9yC+67Xd80aUE+8wEC2/X+PBiuL+
-	C5Zh7Y+/yFXwQN5O3jeQ/KvZuESayqtU=
-X-Google-Smtp-Source: AGHT+IFQVxX4WH/Cb65IXJpVCKwU7owSN3U3ENrl3vl2gB3cUZovGm8T4mZsyKFPeotBV4rWHfsHm+od3VTYBzpCPms=
-X-Received: by 2002:a05:6820:180c:b0:611:b85f:b159 with SMTP id
- 006d021491bc7-611b9015d61mr1942787eaf.1.1751022892079; Fri, 27 Jun 2025
- 04:14:52 -0700 (PDT)
+	s=arc-20240116; t=1751024041; c=relaxed/simple;
+	bh=nrg/5Cr/Ct/L2mrn4jAnolMDR4V2365AXYCSvZSKjPs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=sKh03Q8gYFfMaC6Q+pwGqOviGkcTBvl2fpGxEmtgerTFO3Tr3eMPIqnz3hogmtr+Ehb7V39q9Kq1iVQteDPxfhHhDK0rPgafXuF22mBmTbSMYYxdaPKdrlaUoLPgT0ta1sl5fVykGf1nR4qnXreqyd1fETZn7C1zGcomgzEUNx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=m65ozer2; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ade76b8356cso398920466b.2
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 04:33:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1751024038; x=1751628838; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8TQIk1vNThf+KbhPSV308tydy65v8ZFP99g2fX+hJzE=;
+        b=m65ozer2x2+YrV6OGSlVtJtLgt3AN5unm8zC2OlARa+S5ZKLL3S0PNEJQhU8PrsbfP
+         TBMJonQayyP0LxMWECp2zT4KNGaHy3mdGnYpuVwrLeaKok4AlEoH4CtWgLr+xnJrgpZ9
+         qOZEZ7pfq0WO8ZuUBwI82SphF0OGKJd+qDG02c+Wf++qW+nwDHeFYdVOWO4DAx4GW4cT
+         NbAk+13orgzXztKq8gEkXb1i1o59oksbsfWDsiO0H9+kKKgLNfLoUCh1fPA/1WcMlEte
+         79k4s3F5a19N+8FYmUdL3Mfvg85txlmbTMh2EjJ07PNjqOSVY5w1whI1uQUjx93Prgtu
+         xJTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751024038; x=1751628838;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8TQIk1vNThf+KbhPSV308tydy65v8ZFP99g2fX+hJzE=;
+        b=xB1RTs9cjKWRA/bRsQzFAJZWAog3FNDwDulD9ySa2pgT3KduyK6coWIMuSiL14m9wF
+         mvA+LkTMRavGXZVoBXjyzN8bMdNBUzmn5teZfgJL7oXbCzwRSI8mIuCTA5he5Id91thy
+         ZOq959S3zPydkNIF4DqHujOs6exh1dlQ4MMnYBf8425JW80wTqMtgHd5YR8DUk0TVvFs
+         EEI/ByrW/XszuLq2VY5mC5X5c7dGkkxfycSLB71CFOphDSfqgulzEZbYWqRuMWPMON+h
+         AuZnnWHKzJF/wBda8AeRO99RSwkxUuVJIhVqTJcD+AygAc5RRt49GN5WGcoQeuNA+ZE/
+         hbtA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhko/8sLzutWQuGd4xQFQ2mI3BOwUO1TlB5vyjWkEuDvQUtulGddSGFTYk/VXuCde954UQyK2YQw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFgzOuxSonC1Kcgi/Eozu5bz4me3Sm+vMZ9XyGZ23AU9A+a6Ps
+	tqkcI43VGju7XWeVWK7/I41kVPInIJz9yFHIXs92eUVgvl6kDzysTag//nr+qlaki3Y=
+X-Gm-Gg: ASbGnctkhU+6SeYQORZOsda7c1Ow/Ni5FLZXqoiGlog5qpoXvgwyt0pR5LYW/NeepT6
+	nr8YNR9B2Gyo1y0y4RvcmnGdQrQ72lBQ7Z04Sa6slCoc0tlK4llcnVf06KL2BF2waFdsML8cOOK
+	x96ZtnWXbyHgGfBrTYKPOBo5V7c26MFopx3gHIXDqeazv/BVkfOzKBRtbRlys8bZHnzs/Ia1ltb
+	eP8hIi/5Etinwruxnp7o6Bs4zinx9fPI5UlYvy+jgHroktBepj+5jMgL2qSKDZFV9UyU0UKX595
+	5gYPunvogAr/ag+BdYinDLml1EAKjHUi12QxNdkbXc1rtQhyZWCLGBTCu5nhnNkoNd75YXpAA5t
+	zJ7XHKIpNQJNtehMjLqjRscs1wEfiE5Y=
+X-Google-Smtp-Source: AGHT+IFTB4ZISQsWRjBnTltqxZ+EzRDnHXDtrROSz2QQZgqYVC+7zZ8R4yhdcBmhaWSRI1bSl9PUhg==
+X-Received: by 2002:a17:906:7951:b0:ad8:a935:b905 with SMTP id a640c23a62f3a-ae34fddeae3mr245758066b.22.1751024037927;
+        Fri, 27 Jun 2025 04:33:57 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c6bdafsm108070066b.143.2025.06.27.04.33.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 04:33:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <5015172.GXAFRqVoOG@rjwysocki.net> <2336655.iZASKD2KPV@rjwysocki.net>
- <CAJZ5v0h4AMFfyBugjBwQOV=xY-Hq5kL_vB7Gwrj06N8vo6GQtg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h4AMFfyBugjBwQOV=xY-Hq5kL_vB7Gwrj06N8vo6GQtg@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 27 Jun 2025 13:14:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h1F-N3-Ue5OqUPoORDtR=qwknX-yDNuqxbogEjidxooQ@mail.gmail.com>
-X-Gm-Features: Ac12FXya15hOE4Ngrfdl2VtlXT84PHm_94erZvkil5gb3JYjBEpALp5Mz78nYbs
-Message-ID: <CAJZ5v0h1F-N3-Ue5OqUPoORDtR=qwknX-yDNuqxbogEjidxooQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] PM: Check power.needs_force_resume in pm_runtime_force_suspend()
-To: Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 27 Jun 2025 13:33:56 +0200
+Message-Id: <DAXA7TKVM4GI.J6C7M3D1J1XF@fairphone.com>
+Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+ <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+ <linux-mmc@vger.kernel.org>
+Subject: Re: [PATCH 14/14] arm64: dts: qcom: Add The Fairphone (Gen. 6)
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Will Deacon"
+ <will@kernel.org>, "Robin Murphy" <robin.murphy@arm.com>, "Joerg Roedel"
+ <joro@8bytes.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
+ "Manivannan Sadhasivam" <mani@kernel.org>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
+ "Vinod Koul" <vkoul@kernel.org>, "Bjorn Andersson" <andersson@kernel.org>,
+ "Konrad Dybcio" <konradybcio@kernel.org>, "Robert Marko"
+ <robimarko@gmail.com>, "Das Srinagesh" <quic_gurus@quicinc.com>, "Thomas
+ Gleixner" <tglx@linutronix.de>, "Jassi Brar" <jassisinghbrar@gmail.com>,
+ "Amit Kucheria" <amitk@kernel.org>, "Thara Gopinath"
+ <thara.gopinath@gmail.com>, "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Zhang Rui" <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>,
+ "Ulf Hansson" <ulf.hansson@linaro.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
+References: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
+ <20250625-sm7635-fp6-initial-v1-14-d9cd322eac1b@fairphone.com>
+ <4200b3b8-5669-4d5a-a509-d23f921b0449@oss.qualcomm.com>
+In-Reply-To: <4200b3b8-5669-4d5a-a509-d23f921b0449@oss.qualcomm.com>
 
-On Fri, Jun 27, 2025 at 12:52=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
+On Wed Jun 25, 2025 at 4:38 PM CEST, Konrad Dybcio wrote:
+> On 6/25/25 11:23 AM, Luca Weiss wrote:
+>> Add a devicetree for The Fairphone (Gen. 6) smartphone, which is based
+>> on the SM7635 SoC.
 >
-> On Thu, Jun 26, 2025 at 8:15=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.=
-net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Add a power.needs_force_resume check to pm_runtime_force_suspend() so
-> > it need not rely on the runtime PM status of the device when deciding
-> > whether or not to return early.
-> >
-> > With the new check in place, pm_runtime_force_suspend() will also skip
-> > devices with the runtime PM status equal to RPM_ACTIVE if they have
-> > power.needs_force_resume set, so it won't need to change the RPM
-> > status of the device to RPM_SUSPENDED in addition to setting
-> > power.needs_force_resume in the case when pm_runtime_need_not_resume()
-> > return false.
-> >
-> > This allows the runtime PM status update to be removed from
-> > pm_runtime_force_resume(), so the runtime PM status remains unchanged
-> > between the pm_runtime_force_suspend() and pm_runtime_force_resume()
-> > calls.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v1 -> v2: Corresponds to patch [2/9] (that was posted as [0/9] by mista=
-ke) in v1.
-> >
-> > ---
-> >  drivers/base/power/runtime.c |   21 ++++++++-------------
-> >  1 file changed, 8 insertions(+), 13 deletions(-)
-> >
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -1973,7 +1973,7 @@
-> >         int ret;
-> >
-> >         pm_runtime_disable(dev);
-> > -       if (pm_runtime_status_suspended(dev))
-> > +       if (pm_runtime_status_suspended(dev) || dev->power.needs_force_=
-resume)
-> >                 return 0;
-> >
-> >         callback =3D RPM_GET_CALLBACK(dev, runtime_suspend);
-> > @@ -1988,15 +1988,16 @@
-> >         /*
-> >          * If the device can stay in suspend after the system-wide tran=
-sition
-> >          * to the working state that will follow, drop the children cou=
-nter of
-> > -        * its parent, but set its status to RPM_SUSPENDED anyway in ca=
-se this
-> > -        * function will be called again for it in the meantime.
-> > +        * its parent and the usage counters of its suppliers.  Otherwi=
-se, set
-> > +        * power.needs_force_resume to let pm_runtime_force_resume() kn=
-ow that
-> > +        * the device needs to be taken care of and to prevent this fun=
-ction
-> > +        * from handling the device again in case the device is passed =
-to it
-> > +        * once more subsequently.
-> >          */
-> > -       if (pm_runtime_need_not_resume(dev)) {
-> > +       if (pm_runtime_need_not_resume(dev))
-> >                 pm_runtime_set_suspended(dev);
-> > -       } else {
-> > -               __update_runtime_status(dev, RPM_SUSPENDED);
-> > +       else
-> >                 dev->power.needs_force_resume =3D true;
-> > -       }
+> [...]
 >
-> I kind of see that this change may confuse other things looking at the
-> PM runtime status to determine whether or not the device needs to be
-> suspended that possibly run after pm_runtime_force_suspend().
+>> +	/* Dummy panel for simple-framebuffer dimension info */
+>> +	panel: panel {
+>> +		compatible =3D "boe,bj631jhm-t71-d900";
+>> +		width-mm =3D <65>;
+>> +		height-mm =3D <146>;
+>> +	};
 >
-> I'm also not quite sure why I thought that this patch would be
-> necessary in this series because the [5/9] should just work without
-> it.
+> I haven't ran through all the prerequisite-xx-id, but have
+> you submitted a binding for this?
+
+Actually not, kind of forgot about this. I believe I can create a
+(mostly?) complete binding for the panel, but this simple description
+for only width-mm & height-mm will differ from the final one, which will
+have the DSI port, pinctrl, reset-gpios and various supplies.
+
+I think I'll just drop it from v2 and keep it locally only, to get the
+simpledrm scaling right.
+
 >
-> Please disregard it unless you see why it is needed here.
+> [...]
+>
+>> +	reserved-memory {
+>> +		/*
+>> +		 * ABL is powering down display and controller if this node is
+>> +		 * not named exactly "splash_region".
+>> +		 */
+>> +		splash_region@e3940000 {
+>> +			reg =3D <0x0 0xe3940000 0x0 0x2b00000>;
+>> +			no-map;
+>> +		};
+>> +	};
+>
+> :/ maybe we can convince ABL not to do it..
 
-Well, not quite.
+Yes, we talked about that. I will look into getting "splash-region" and
+"splash" also into the ABL (edk2) build for the phone. Still won't
+resolve that for any other brand of devices.
 
-It is needed, but not at this point.  That is,patch [5/9] will work
-without it, but then it is needed for the PCI and ACPI PM to work with
-pm_runtime_force_suspend().
+>
+> [...]
+>
+>> +		vreg_l12b: ldo12 {
+>> +			regulator-name =3D "vreg_l12b";
+>> +			/*
+>> +			 * Skip voltage voting for UFS VCC.
+>> +			 */
+>
+> Why so?
 
-Namely, say DPM_FLAG_SMART_SUSPEND is set and
-pm_runtime_force_suspend() is used as a driver callback in the
-"suspend" phase.  The PCI PM sets strict_midlayer, so
-pm_runtime_force_suspend() runs the driver runtime PM callback
-directly, but power still needs to be removed from the device.
-However, pci_pm_suspend_noirq() checks dev_pm_skip_suspend() and it
-will bail out if the device is RPM_SUSPENDED.
+From downstream:
 
-I guess I should reorder the patches and add the above bit of
-explanation to the changelog of the $subject one.
+		/*
+		 * This is for UFS Peripheral,which supports 2 variants
+		 * UFS 3.1 ,and UFS 2.2 both require different voltages.
+		 * Hence preventing voltage voting as per previous targets.
+		 */
 
-If you can review patches [2-3/9] from this series, I'll be able to go
-ahead with the first half of it and the rest can be resent separately.
+I haven't (successfully) brought up UFS yet, so I haven't looked more
+into that.
 
-Sorry for the confusion!
+The storage on FP6 is UFS 3.1 though fwiw.
 
-> >
-> >         return 0;
-> >
-> > @@ -2029,12 +2030,6 @@
-> >         if (!dev->power.needs_force_resume)
-> >                 goto out;
-> >
-> > -       /*
-> > -        * The value of the parent's children counter is correct alread=
-y, so
-> > -        * just update the status of the device.
-> > -        */
-> > -       __update_runtime_status(dev, RPM_ACTIVE);
-> > -
-> >         callback =3D RPM_GET_CALLBACK(dev, runtime_resume);
-> >
-> >         dev_pm_disable_wake_irq_check(dev, false);
-> >
-> >
-> >
-> >
+>
+> [...]
+>
+>> +&gpi_dma0 {
+>> +	status =3D "okay";
+>> +};
+>> +
+>> +&gpi_dma1 {
+>> +	status =3D "okay";
+>> +};
+>
+> These can be enabled in SoC DTSI.. it's possible that the secure=20
+> configuration forbids access to one, but these are generally made
+> per-platform
+
+Ack
+
+>
+> [...]
+>
+>> +&pm8550vs_d {
+>> +	status =3D "disabled";
+>> +};
+>> +
+>> +&pm8550vs_e {
+>> +	status =3D "disabled";
+>> +};
+>> +
+>> +&pm8550vs_g {
+>> +	status =3D "disabled";
+>> +};
+>
+> Hm... perhaps we should disable these by deafult
+
+Do you want me to do this in this patchset, or we clean this up later at
+some point? I'd prefer not adding even more dependencies to my patch
+collection right now.
+
+>
+> [...]
+>
+>> +&pmr735b_gpios {
+>> +	pm8008_reset_n_default: pm8008-reset-n-default-state {
+>> +		pins =3D "gpio3";
+>> +		function =3D PMIC_GPIO_FUNC_NORMAL;
+>> +		bias-pull-down;
+>> +	};
+>> +
+>> +	s1j_enable_default: s1j-enable-default-state {
+>> +		pins =3D "gpio1";
+>> +		function =3D PMIC_GPIO_FUNC_NORMAL;
+>> +		power-source =3D <0>;
+>> +		bias-disable;
+>> +		output-low;
+>> +	};
+>
+> ordering by pin ID makes more sense, here and in tlmm
+>
+> (and is actually written down)
+> https://docs.kernel.org/devicetree/bindings/dts-coding-style.html#order-o=
+f-nodes
+
+Ah, that's news to me. Thanks!
+
+>
+> [...]
+>
+>> +&pon_resin {
+>> +	linux,code =3D <KEY_VOLUMEDOWN>;
+>> +	status =3D "okay";
+>
+> \n before status consistently, please
+
+Ack
+
+>
+> [...]
+>
+>> +&tlmm {
+>> +	/*
+>> +	 * 8-11: Fingerprint SPI
+>> +	 * 13: NC
+>> +	 * 63-64: WLAN UART
+>> +	 */
+>> +	gpio-reserved-ranges =3D <8 4>, <13 1>, <63 2>;
+>
+> Please match the style in x1-crd.dtsi
+
+Ack
+
+>
+> [...]
+>
+>> +&usb_1 {
+>> +	dr_mode =3D "otg";
+>> +
+>> +	/* USB 2.0 only */
+>
+> Because there's no usb3phy description yet, or due to hw design?
+
+HW design. Funnily enough with clk_ignore_unused this property is not
+needed, and USB(2.0) works fine then. Just when (I assume) the USB3
+clock is turned off which the bootloader has enabled, USB stops working.
+
+Regards
+Luca
+
+>
+> Konrad
+
 
