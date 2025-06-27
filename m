@@ -1,256 +1,175 @@
-Return-Path: <linux-pm+bounces-29678-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29679-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC82BAEBC02
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80087AEBC21
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 17:40:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 967613A75D7
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 15:35:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFA5C3ABDEE
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 15:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51432EAB90;
-	Fri, 27 Jun 2025 15:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CB4D2E92C4;
+	Fri, 27 Jun 2025 15:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZIh7/9dP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bFQQlKYP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BCD2EA721
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 15:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDAE23E34F
+	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 15:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751038474; cv=none; b=FD0fRhYmheXhM5z+d8G39WZx42z78Q713a3aRStMgkmnpVIZovp00Ll/eby4cryh6YRu9a6mT/8KmYxGIleXgrLyjAk0FjEbupUm2SBv+PaRI0iK5/Cd/0iNrafdxZ6x+KPS+JNoZvOlUU1V2gItEy9m0iuVA76MC1f6B71PIPw=
+	t=1751038841; cv=none; b=P4mw/fQDhYpK8q4uN801nIubeKlcGdUJqcbudmIujzUyKcu9Engvomtbq3xEbEIDMYHMTiOlmEqq1ZIciSjv2wqQx+31K1xYkhruhOElUGDRjv22JHsnw1pWY3Dd9hlvCNxpWqKKMvBbuzgaLuupQnI207eKfxT8uvSm94YVphg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751038474; c=relaxed/simple;
-	bh=Ew8lpjg2KGw8RUtsdIdGkXQu5umyWwe0BTLTaVIb67w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PubGX2aDgrRmuhYGKP0QwpsxOOT4npnJZ6PVtVxyV8qilBrGLaWA3APd/CFAhwfgJvmN151/ECY8mwH/MTmi+7l9u7r4SOPpZnqMZ5UL/9vXDCC+D1ms+n78TIwvKmhqJdygu85who9ikOXEhjKq3DUI5SkRtpPXd0WRyAHLTkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZIh7/9dP; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55RCKOii009967
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 15:34:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fhpcGE0kY2U2qHSOUrNH4gIXVYCbpgzCRlKlqKyiksA=; b=ZIh7/9dPTaRIKAbz
-	qtcRTfYJUmfDMD/1CB8sEgyGGumkjtTwe+1FCskmH91irz9aLvC7+w8nrjV0yIl5
-	QB0xqTRmG3P3Ft7yR9hK7RMWZYwi2POUq3sly/dUJ48WJWKJ9oC/oYfZUNb7O7vm
-	LRWccN5ciTm5RhWLpEa4ACEx19S+i4nLKISatypp1vBgmGk4bGCx72jy9YNPJfE0
-	o0qY4acjP6oYf70tubxgG7+gVbaXm9gWVcLv0iapLnGrDbi7elYbdiW8YQARPy4E
-	GwNMvpxwKqqfzTXYEUxP9yi+/mXni1WFKeH7ELAXBg4/7DE74URNzH7E2BxvGiH2
-	99Dl+w==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47g88fh1e2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 15:34:31 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7d0979e6263so3117585a.2
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 08:34:31 -0700 (PDT)
+	s=arc-20240116; t=1751038841; c=relaxed/simple;
+	bh=d/GwnZrXW005mxplKA0+3KM5bSTcbwWbAmIzKExtCRc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Um5mooozv8cizV+ycNlDXtp5x2reHp6383Dz5bvH4QCnnp4zLnc1zM68b++dWQWO7Ps+pKCDtimwmduYCdlGOWJ0L+I9os9Sp1Iq8nZGX/Ne/hvzaONFA2SsfKBsazjPhywEyNu9hhv2ogr9qcnP4ZOXikseOwnWljDLHPx7NHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bFQQlKYP; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-60c6fea6742so3886220a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jun 2025 08:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751038838; x=1751643638; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jj2bLybNvPyHSij0xa+7vNe8FDo/UYuhavfR08FTa9E=;
+        b=bFQQlKYPKxiyY8eG3TYrpt5hGovP45sXfReq1O19GCqO0OxSR9Qqbi6is3EvjLr1FZ
+         IpGq+Wo1S4Q3jMmgINzHLjCjqnctW1OI4i8Ml7cjmgyfBYEyXz9I0vr+EmCVI64edhL1
+         n104rNkadhyL9CB81cN2Hm4qHquz66o1q7cE5FlVPVi1AwZPvBUMAtqDDi1AtaOknSRk
+         8F4Qso0Fe473bMMlSPDpB6LnHCgATC7Ha4ggUcJqGsspp9hPGEtgwiyn/GEcxy32jMwx
+         +mBnjt7O+6BI/eAbm4KyEnDfr6suvOOd/ygrdK8nnHD/zWfKu0kfXpVkP9Z0i7y0Mg41
+         HHsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751038470; x=1751643270;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhpcGE0kY2U2qHSOUrNH4gIXVYCbpgzCRlKlqKyiksA=;
-        b=WDmwASl65TECuPiFw8m57tlaUI1c7/xPqxef0EpJGu65+lFVIpZCkuacGDU68zz+MI
-         tRBCiYWQKHP1TLg/zY0+3BOEh3odRzeL4DcGes/v6t7x4p2AaLfbqGdFMnP8qYIqQ3Dg
-         eZTc9p6XJETWt8Mt2/bhwrRMOcFFWCgnmf1xacMWg9pHCkzLtIP+AbRchNhWZ4LSGx47
-         YsI/c3iHOnCWXzYDfwygMBNH8w+ls0q2JmzxaSev7xnfDcPGXafDC2rzbZoiLlIIBUJJ
-         eJn6QiDLHWembd35t/15oXM/9t7lPLeOL5TuEHS3KZmrTO8czVUeWLi9cU0ZLbM6XsN0
-         GuMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMrUKyBVffKE6HOLG3hawjtK9oIX0PZyCxBviaiGqt2u8uEOntKqy8cOWLOje7y9pI2VI4WDm1Sw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxZ/Bc0hAryL8IpYgSY3vX5AC0WZlcWTkHzGaTeqTZgCipRM9t
-	Gjq33SJgF0c6AKXpMMn/LhQ0wC1hV5P0aph81wiDquKpmNTPqNpEyQ/J+ltvS8v/bRKLPoeh9NQ
-	GCkq16zzVzmxGEdiwZcr2WbwRgOuCCmhRCVvE6yHqZaxtg6/3oI2q5wqhSW5Dwg==
-X-Gm-Gg: ASbGncudxnBemhn6cTLPw1auItktaoQW9iQRPfcCW6pGy24qMYbRmEPqkqmt3lIq0/m
-	z+67wKWBcJY3HLZ+Rn5Yzv4F2dY0n7FWYx5z9pRgunRfT2O/WnTxlBOXZiI0vqASqlSJvxNGonx
-	iEJadclOOOM+Dlr+IgALdd8VrgkBe7Nj7TgqWxd56GJW5MoqnyO5XJRhK/RaHqFbEc4uWy8NdN4
-	bJtJqBQgeq+IADoCNo32DI36NGQfzqeMJnDkHkeBgyNO4TBMbSRN5xaYzWddBk9QMIkf5vIkNlF
-	WcEuVdBe7wIHzYFt9mA62nIiFZeaoT8m3GwvkGd6ShgFqrLrN9Vwna8+ylGRRk6g/4d6KUtqDeU
-	z9i0=
-X-Received: by 2002:a05:620a:4390:b0:7c0:bc63:7b73 with SMTP id af79cd13be357-7d443966417mr201231485a.13.1751038470165;
-        Fri, 27 Jun 2025 08:34:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHzOTtjkZGz3phOnalpunb7y20OgdgwVxcjlA9JNDAl2YYT7eAuxSBmhUwNsqtuPUIJtvAnnQ==
-X-Received: by 2002:a05:620a:4390:b0:7c0:bc63:7b73 with SMTP id af79cd13be357-7d443966417mr201228685a.13.1751038469653;
-        Fri, 27 Jun 2025 08:34:29 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35363b244sm142288066b.30.2025.06.27.08.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 08:34:28 -0700 (PDT)
-Message-ID: <3fbae47b-d20d-426b-a967-b584e32b8c6e@oss.qualcomm.com>
-Date: Fri, 27 Jun 2025 17:34:24 +0200
+        d=1e100.net; s=20230601; t=1751038838; x=1751643638;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jj2bLybNvPyHSij0xa+7vNe8FDo/UYuhavfR08FTa9E=;
+        b=QcitguJP4QsGHZ6Px7fQr3u1Z717SaVQ9XhDc3vPV/8YbV3MaomBb3ce9YPo6aRPDI
+         Mu+yyW62C4GxX/1TSkeTD6t+MD9r3CMCm1IpJwJEGYcTgAZtWRYrDa95LfV38fjYfSSK
+         2zU8UQWW9FnF/uM7iD30zS5WLPywidpzC5OYvIKLPvJUhew4CjCeDKk3MpxEjrHFfO3U
+         VHZmvIf89QL0f34yUILo3Ekys3fV0jiuMLQD8rxeeI6p2nliEzZ7f15fE49rQ8sPxWDn
+         tGsnGjx6zzdXHb5x/lbM638uLt0rw4CA7ogHykklUYSaoGAQmq32f+fjA33EcUFDvbf+
+         VsFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZujJsvKX8k1EKsbH7/WQtGOBdjZ8v7BmgUCTrXmBA4c0KHnT8MvrdnPfaio514u58cDeOe6H7lQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwswpcAia1Obw0KnxhyVWdg9uObSuZwNG1X56dO65bTRUIfJ+2j
+	Gtr1h+lj5kKGdC8Canq75Z6yyuNf3YhAWkusRQ3c0PIPXinoQyYMy3CrbTBP3GgEewoKpfSdwBA
+	hAXh7LZb3FOVgfHrJv0Y+TS6WpfJobCU6p9Wk1eo/XA==
+X-Gm-Gg: ASbGncv1bwnGmc1P56a6BeR7JVIuXnK/pyo/2yfxLM5I3actqbBdVn1aoleLXGda8dy
+	+rJLzqDbK0cQ+dvSmV5Dn46f4xmD7qJh+NIF9OeYc22+xv7enYm47U/7wB8HpnH9XlRI9Q2WcDG
+	sn6B2g3FxtnntcunUxTXgFrOptL7RtCKKdmTXsN3V+XRprLcRZRtodl/zi16zL+86hPHv8zUT/C
+	mxB2Q==
+X-Google-Smtp-Source: AGHT+IEvkXr4JcCj5oD0vFiY1H6Wn1hmSJv40jglC0KLoMmc4+ZOMxDrQflQwFqUtAQPpKoqyo8PcKiVmvrT6rHam7I=
+X-Received: by 2002:a05:6402:2802:b0:608:6711:a06f with SMTP id
+ 4fb4d7f45d1cf-60c88b33e2bmr3273384a12.4.1751038838221; Fri, 27 Jun 2025
+ 08:40:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/14] arm64: dts: qcom: Add The Fairphone (Gen. 6)
-To: Luca Weiss <luca.weiss@fairphone.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        Thomas Gleixner
- <tglx@linutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-References: <20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com>
- <20250625-sm7635-fp6-initial-v1-14-d9cd322eac1b@fairphone.com>
- <4200b3b8-5669-4d5a-a509-d23f921b0449@oss.qualcomm.com>
- <DAXA7TKVM4GI.J6C7M3D1J1XF@fairphone.com>
- <6d4e77b3-0f92-44dd-b9b0-3129a5f3785b@oss.qualcomm.com>
- <DAXEA131KUXZ.WTO7PST1F3X6@fairphone.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <DAXEA131KUXZ.WTO7PST1F3X6@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI3MDEyNiBTYWx0ZWRfX9G0GcCCarR0R
- QuZ3zXHwObioqKvcy31zpzbq78taBuniNZEAiduzHLFyLmA3zkDhw1jm9neKWnUcmEn4bNjWn/W
- 3onLpmffRCXDHY6dS8TAnr+x2jlV/ULCMiy2bB0ENkM2eIwqGJkyEmYbDx6z6G+I+GGOnefujqy
- DNQCWuZBd+kMPeBHDOHS3ZG6D28GhPvFgQIj4Ms7dkPJgfted3FBYX5naRnDOp8JZgwjSShD4hw
- lgS3m/aPTQSdPN14RCP/mHcVuhenRd3zAN3dD7m8T0IbQOzPrVtnlb4ITKpSE1+qFESKVeGhvIc
- pPV4OlnOOWf7JZMhBPH2QfAEFzwlmuN2CpdQS8Ir/WndpxXW75DZqDGjN/fkhGgPwq3ZMipFRVE
- BnszvKNlaLWw7U9ijYY/pdXb9HZdK+K43EqoAvYUyYKXTYzt7QsZkRT2rIA8T2dcBBDF7ZkX
-X-Proofpoint-ORIG-GUID: 2Z15XOLcok0yRTbhyRw-xmnEXzGHaw9s
-X-Proofpoint-GUID: 2Z15XOLcok0yRTbhyRw-xmnEXzGHaw9s
-X-Authority-Analysis: v=2.4 cv=LNNmQIW9 c=1 sm=1 tr=0 ts=685eba07 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=huVnaSGCcg0LVUp1CDwA:9
- a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-27_04,2025-06-26_05,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506270126
+References: <20250626215911.5992-1-hiagofranco@gmail.com> <CANLsYkzo32BHkxRzSLY1U_PcidMPOaz7xZjDs8HKtTCQ0ZpF=g@mail.gmail.com>
+ <20250627144955.tbmk6ako3rgv3djo@hiagonb>
+In-Reply-To: <20250627144955.tbmk6ako3rgv3djo@hiagonb>
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+Date: Fri, 27 Jun 2025 09:40:27 -0600
+X-Gm-Features: Ac12FXyUCI-R2q8qxbHAG9epzvsz_v3mTi9fyUrRB-IT5cqGx_PrRwpqh4kxuRo
+Message-ID: <CANLsYkz3SD1PPnVwoBnnKhyCUig67o+=NgoDucq5m+4sQ=xMYQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/3] remoteproc: imx_rproc: allow attaching to running
+ core kicked by the bootloader
+To: Hiago De Franco <hiagofranco@gmail.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/27/25 4:44 PM, Luca Weiss wrote:
-> On Fri Jun 27, 2025 at 4:34 PM CEST, Konrad Dybcio wrote:
->> On 6/27/25 1:33 PM, Luca Weiss wrote:
->>> On Wed Jun 25, 2025 at 4:38 PM CEST, Konrad Dybcio wrote:
->>>> On 6/25/25 11:23 AM, Luca Weiss wrote:
->>>>> Add a devicetree for The Fairphone (Gen. 6) smartphone, which is based
->>>>> on the SM7635 SoC.
->>>>
->>>> [...]
->>>>
->>>>> +	/* Dummy panel for simple-framebuffer dimension info */
->>>>> +	panel: panel {
->>>>> +		compatible = "boe,bj631jhm-t71-d900";
->>>>> +		width-mm = <65>;
->>>>> +		height-mm = <146>;
->>>>> +	};
->>>>
->>>> I haven't ran through all the prerequisite-xx-id, but have
->>>> you submitted a binding for this?
->>>
->>> Actually not, kind of forgot about this. I believe I can create a
->>> (mostly?) complete binding for the panel, but this simple description
->>> for only width-mm & height-mm will differ from the final one, which will
->>> have the DSI port, pinctrl, reset-gpios and various supplies.
->>>
->>> I think I'll just drop it from v2 and keep it locally only, to get the
->>> simpledrm scaling right.
->>
->> Yeah I think that'd be best in general
-> 
-> Ack
+On Fri, 27 Jun 2025 at 08:50, Hiago De Franco <hiagofranco@gmail.com> wrote:
+>
+> On Fri, Jun 27, 2025 at 08:31:20AM -0600, Mathieu Poirier wrote:
+> > On Thu, 26 Jun 2025 at 15:59, Hiago De Franco <hiagofranco@gmail.com> wrote:
+> > >
+> > > From: Hiago De Franco <hiago.franco@toradex.com>
+> > >
+> > > This patch series depends on Ulf's patches that are currently under
+> > > review, "pmdomain: Add generic ->sync_state() support to genpd" [1].
+> > > Without them, this series is not going to work.
+> > >
+> >
+> > I thought we agreed to repost when the feature referred to above and
+> > the work in drivers/pmdomain/core.c will be merge.  I'm not sure what
+> > to do with this patchset.
+>
+> Sorry Mathieu, my goal was to update the whole patch series with your
+> reviews from v5 so you could take a look and then I would resend
+> everything again once the others have been merged.
+>
 
-[...]
+Ok, I'll take a look next week.
 
->>>>> +&pm8550vs_d {
->>>>> +	status = "disabled";
->>>>> +};
->>>>> +
->>>>> +&pm8550vs_e {
->>>>> +	status = "disabled";
->>>>> +};
->>>>> +
->>>>> +&pm8550vs_g {
->>>>> +	status = "disabled";
->>>>> +};
->>>>
->>>> Hm... perhaps we should disable these by deafult
->>>
->>> Do you want me to do this in this patchset, or we clean this up later at
->>> some point? I'd prefer not adding even more dependencies to my patch
->>> collection right now.
->>
->> I can totally hear that..
->>
->> Let's include it in this patchset, right before SoC addition
->> I don't think there's any pm8550vs users trying to get merged in
->> parallel so it should be OK
-> 
-> Okay, can do. Disable all of them (_c, _d, _e, _g), and re-enable them
-> in current users? I assume there might also be boards that only have
-> e.g. _d and no _c.
-
-I suppose it's only fair to do so, in line with
-
-d37e2646c8a5 ("arm64: dts: qcom: x1e80100-pmics: Enable all SMB2360 separately")
-
-
->>>>> +&usb_1 {
->>>>> +	dr_mode = "otg";
->>>>> +
->>>>> +	/* USB 2.0 only */
->>>>
->>>> Because there's no usb3phy description yet, or due to hw design?
->>>
->>> HW design. Funnily enough with clk_ignore_unused this property is not
->>> needed, and USB(2.0) works fine then. Just when (I assume) the USB3
->>> clock is turned off which the bootloader has enabled, USB stops working.
->>
->> The USB controller has two possible clock sources: the PIPE_CLK that
->> the QMPPHY outputs, or the UTMI clock (qcom,select-utmi-as-pipe-clk).
-> 
-> So okay like this for you, for a USB2.0-only HW?
-
-Yeah, maybe change the comment to something like:
-
-/* USB 2.0 only (RX/TX lanes physically not routed) */
-
-to avoid getting this question asked again
-
->> Because you said there's no USB3, I'm assuming DP-over-Type-C won't
->> be a thing either? :(
-> 
-> Yep. I'd have preferred USB3+DP as well since it's actually quite cool
-> to have with proper Linux. On Android, at least on older versions it's
-> barely usable imo. Can't even properly watch videos on the big screen
-> with that SW stack.
-
-Bummer! Not something we can change though :(
-
-Konrad
+> If you prefer I can wait for the other patches to be merged and then
+> send the next v7 corrected.
+>
+> Best regards,
+> Hiago.
+>
+> >
+> > > For the i.MX8X and i.MX8 family SoCs, currently when the remotecore is
+> > > started by the bootloader and the M core and A core are in the same
+> > > partition, the driver is not capable to detect the remote core and
+> > > report the correct state of it.
+> > >
+> > > This patch series implement a new function, dev_pm_genpd_is_on(), which
+> > > returns the power status of a given power domain (M core power domains
+> > > IMX_SC_R_M4_0_PID0 and IMX_SC_R_M4_0_MU_1A in this case). If it is
+> > > already powered on, the driver will attach to it.
+> > >
+> > > Finally, the imx_rproc_clk_enable() function was also changed to make it
+> > > return before dev_clk_get() is called, as it currently generates an SCU
+> > > fault reset if the remote core is already running and the kernel tries
+> > > to enable the clock again. These changes are a follow up from a v1 sent
+> > > to imx_rproc [2] and from a reported regression [3].
+> > >
+> > > [1] https://lore.kernel.org/all/20250523134025.75130-1-ulf.hansson@linaro.org/
+> > > [2] https://lore.kernel.org/lkml/20250423155131.101473-1-hiagofranco@gmail.com/
+> > > [3] https://lore.kernel.org/lkml/20250404141713.ac2ntcsjsf7epdfa@hiago-nb/
+> > >
+> > > v6:
+> > > - Added "reviewed by" from Ulf and Bjorn.
+> > > - Fixed and improved commit descriptions of patches 2 and 3.
+> > > - Improved the comment inside imx_rproc.c file.
+> > > v5:
+> > > - https://lore.kernel.org/all/20250617193450.183889-1-hiagofranco@gmail.com/
+> > > v4:
+> > > - https://lore.kernel.org/lkml/20250602131906.25751-1-hiagofranco@gmail.com/
+> > > v3:
+> > > - https://lore.kernel.org/all/20250519171514.61974-1-hiagofranco@gmail.com/
+> > > v2:
+> > > - https://lore.kernel.org/lkml/20250507160056.11876-1-hiagofranco@gmail.com/
+> > > v1:
+> > > - https://lore.kernel.org/lkml/20250505154849.64889-1-hiagofranco@gmail.com/
+> > >
+> > > Hiago De Franco (3):
+> > >   pmdomain: core: introduce dev_pm_genpd_is_on()
+> > >   remoteproc: imx_rproc: skip clock enable when M-core is managed by the
+> > >     SCU
+> > >   remoteproc: imx_rproc: detect and attach to pre-booted remote cores
+> > >
+> > >  drivers/pmdomain/core.c        | 33 +++++++++++++++++++++++++++
+> > >  drivers/remoteproc/imx_rproc.c | 41 ++++++++++++++++++++++++++++------
+> > >  include/linux/pm_domain.h      |  6 +++++
+> > >  3 files changed, 73 insertions(+), 7 deletions(-)
+> > >
+> > > --
+> > > 2.39.5
+> > >
 
