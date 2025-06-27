@@ -1,106 +1,91 @@
-Return-Path: <linux-pm+bounces-29635-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29636-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6E08AEAF6B
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 08:58:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBA9AAEAF75
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 09:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E9EB567F81
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 06:58:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E708E4A5155
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 07:00:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4D9218ABA;
-	Fri, 27 Jun 2025 06:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74EF621CC4E;
+	Fri, 27 Jun 2025 07:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CaWXwu0i"
+	dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b="Stm5HhYk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FE821858D;
-	Fri, 27 Jun 2025 06:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DBB215783;
+	Fri, 27 Jun 2025 07:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.250.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751007526; cv=none; b=KJXFDvWnnRDrbOBMfjSYUr7neKCCYtL2KPHDLGloYMR4C2e+/v8VGwE12g7iugVS0HYNFv4ILExYxzGtOzlAWgDdlzwKA9ZLyEwktSmsw3ZFAHKPw0KNepmWQE+Xr2BHQ0LR8sbyWAsMyb9FH0GuxDsa31PHKeMHCJN0mAzsnU8=
+	t=1751007611; cv=none; b=uOSV/2BnbiZKjswA6lRMzidA5JLpk5qSzhTly+W4Qp1vrk3eGWy9pe17jrUX6I3JOesdkcNJxO1cYpBCc3GkRlTWbJseZsmX7pjY0SyeSqq5RICvjF+EhUg51TssQlwelwbFIf9tQ22Z4JenrfgYWUOcGtI08Ov6m0JsOc+GIbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751007526; c=relaxed/simple;
-	bh=U00Wt6aru37Pu+FP5KMXq1ujUHGShgCuBTIQu4QJPGc=;
+	s=arc-20240116; t=1751007611; c=relaxed/simple;
+	bh=bDYAcTGKsVDb6IWccLRj1xVKwNT7RPiW70T7zFFjHYA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JzFbcmqI/hIhPRYPcPSQE3Bp6C6h6iXWP0/Npyk8bkz2O52kuSzB6eBg/xuvqM8w4SCtDd96Me44IAA6AVFZDIzU92W0xQciXZ2OF11Z7gRK4rWUd1zDeP93Vwm14wwekzux0+vktL5kOf4f+RSJ1oBZYhKbWGqrYz1ohk6eYAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CaWXwu0i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C10C4CEE3;
-	Fri, 27 Jun 2025 06:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751007526;
-	bh=U00Wt6aru37Pu+FP5KMXq1ujUHGShgCuBTIQu4QJPGc=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=THgSGpctvL6ukRo3I4O+gjd2IqYz5/c6rw7GmaTcY71vp7SbVr38ZYSU252G+wuvyKmzMt2255qbZ+XprKF/hknnxGjBF1gCpeYtbftuIVNxHCM0HEeg8rwPfeX5WMour8999utUEWkiVJu0Oab4uKXeXkPKI8tAGALWlSwQGgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b=Stm5HhYk; arc=none smtp.client-ip=85.214.250.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
+Received: from 8bytes.org (p4ffe03ae.dip0.t-ipconnect.de [79.254.3.174])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.8bytes.org (Postfix) with ESMTPSA id 382824EF92;
+	Fri, 27 Jun 2025 09:00:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+	s=default; t=1751007608;
+	bh=bDYAcTGKsVDb6IWccLRj1xVKwNT7RPiW70T7zFFjHYA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CaWXwu0iXbiZA7oWvep3mRF5ME28JAE5DrKZo+jVpHw1zwJENwHfmNG0joHXYb2Kf
-	 SYky40oOM059O/S9O0lCI8BONxLA8agBRfmtrSq5dLu/5rzqHGvTB43N2x/6X5Bn3S
-	 lKwRIAaP9aUCJsHo8FaTSb61FkG5kbVjkI0IPdEz6WkC3JpPza/S6JW4rpFNV5/0NI
-	 oYEHRapl89QIDbBjMrqZLhqz4i/2hOVy30S5FXErywoPVa9QDFSM+JinwJP0OTn18N
-	 Hwv47z7D7GEuBxF6WXi19mtkCFkZIXMJinHvtQhXVATvPxcIKujcHYgMXu3rnj65mJ
-	 QP9ZGi+loBpag==
-Date: Fri, 27 Jun 2025 08:58:42 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com, sre@kernel.org, 
-	heiko@sntech.de, conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, 
-	lee@kernel.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V4 1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A
- Charger
-Message-ID: <20250627-lurking-amorphous-elephant-e14c7f@krzk-bin>
-References: <20250626195343.54653-1-macroalpha82@gmail.com>
- <20250626195343.54653-2-macroalpha82@gmail.com>
+	b=Stm5HhYkUu3h6SLUQiusZ3SjfNQAz1CfbfJUUJZ2Oj0lu3dfUOi42iU3ElQW57su2
+	 SQnGE9nJsxg4OuuM0Tj1trCZ7J23KRbeipebbfLsdGQcHeV00lmUvs1eOuDCz0ff5X
+	 yKXJZkDuxx7+I9hJOBlDlaKVR6EH5WAAch7bvuTLJIcWWICusFh48YSqOFLgjtqy0k
+	 tmPO3UDurTb0UUOpN+m7w1TfNJvAA1zT4y9A8qeICYGzybB9nlSGMsnZ3W6xMWljwf
+	 dfyt3ELUTaiTvKOH1p8OzjzVvV2FLT3pnKhhgYmcEWBE4JczYMRuX/7GETCdX+PZ7E
+	 0vW4syJXZl9yg==
+Date: Fri, 27 Jun 2025 09:00:07 +0200
+From: Joerg Roedel <joro@8bytes.org>
+To: Sven Peter <sven@kernel.org>
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+	iommu@lists.linux.dev, linux-input@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 07/11] iommu/apple-dart: Drop default ARCH_APPLE in
+ Kconfig
+Message-ID: <aF5Bdx-vmQeufdpk@8bytes.org>
+References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+ <20250612-apple-kconfig-defconfig-v1-7-0e6f9cb512c1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250626195343.54653-2-macroalpha82@gmail.com>
+In-Reply-To: <20250612-apple-kconfig-defconfig-v1-7-0e6f9cb512c1@kernel.org>
 
-On Thu, Jun 26, 2025 at 02:53:39PM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Document the Texas instruments BQ25703A series of charger managers/
-> buck/boost regulators.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+On Thu, Jun 12, 2025 at 09:11:31PM +0000, Sven Peter wrote:
+>  drivers/iommu/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
 
-Didn't you receive tag?
-
-> ---
->  .../devicetree/bindings/mfd/ti,bq25703a.yaml  | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-<form letter>
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions of patchset, under or above your Signed-off-by tag, unless
-patch changed significantly (e.g. new properties added to the DT
-bindings). Tag is "received", when provided in a message replied to you
-on the mailing list. Tools like b4 can help here. However, there's no
-need to repost patches *only* to add the tags. The upstream maintainer
-will do that for tags received on the version they apply.
-
-Please read:
-https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
-
-Best regards,
-Krzysztof
-
+Applied, thanks Sven.
 
