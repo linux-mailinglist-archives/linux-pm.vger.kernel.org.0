@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-29718-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2617BAEC188
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:53:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C80B8AEC18F
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 22:54:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C96B01C227AC
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:53:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 450713BAD48
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 20:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0ADD2D3EFC;
-	Fri, 27 Jun 2025 20:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F822E92DE;
+	Fri, 27 Jun 2025 20:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="uEu6qiMj"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="PqpSj+IY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8546A134AC;
-	Fri, 27 Jun 2025 20:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9411F3FED;
+	Fri, 27 Jun 2025 20:53:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751057618; cv=none; b=IclIv7cKI67RV0ba+zC+K9qB45cJq+fMxPq1xM+9zMSgEkKr5fiqjVyayRxQRCu0ENZzTIWXVthYWzhhDa0c7UnObC68QhDyID3+rVgIpANUz7VOx04dzd2pd/EIZmA5jgSxPeVk3d5qtgizo47fujEXTOBuZgSKn+EKzRr39tM=
+	t=1751057625; cv=none; b=A+MJASS/dfFkZS2yjJvLXoxR2V9rnqpzrB/W3jS9WWlKVSKGxsuej2F++lTFJzFQSnw7lsHeext6mSLn/KWO+ZHG3B/6/Al/Th9Q8QVTq1N4TqtDTqKNYDDAlr26ha8aAtk7KRQgBENYrg34sIrpigYXiWBBONrk/9Zyk0B+evo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751057618; c=relaxed/simple;
-	bh=7bBkr7vOy93+eqGqvYWVbUJzuDZHDCdQa+v7bLkdR0c=;
+	s=arc-20240116; t=1751057625; c=relaxed/simple;
+	bh=KjMUJVcwN4e2wA+enjyaCPLTrfrzx9wCh24MNovogHo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CJquZAlo9Pn89JLTdqbph9E0+M0wRT+Y2fp1opkDWF7oJwv3/KZtzlc3JuSD+moiSG/zqQL5rKO4H6Z5SSuVfyhrqV4HVmasJowrxRImUL4AYTHoDn36csrdfoC1OKy1r9eacMYfkAHVJkcrMT1iFYcz4RTvP0IIey3YaMvyqP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=uEu6qiMj; arc=none smtp.client-ip=212.227.15.15
+	 MIME-Version; b=RBR6+3I+hRXBBILQP3F0jrftL/0kzPXltC1ZTTJFXn+RIlwU6OOzqfaEaEOqudtvOl8RFK1acPe83S5xBRXsMrPy0pfg4JTXR2SS3Nuy5ZYMChk7rgzBZc5wgI4FCsUQzJKk+eReKa3lG9/KaNstPo5lzd8WLps4QiRrXnM2GNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=PqpSj+IY; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1751057613; x=1751662413; i=w_armin@gmx.de;
-	bh=wBbodj4U8PSmgG+umKsS8wnN/yuTYmb0Sf8A08BFjT4=;
+	s=s31663417; t=1751057616; x=1751662416; i=w_armin@gmx.de;
+	bh=GkpwTbp/au2bsPcIPtH+WBjZffEsEK9oTVTyL1IPBHU=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=uEu6qiMjDPz17MFiAyZeCbo7CzCrHnMp1egYLyUsl5yFTLOoFKHu7N1Wjd9vYVgh
-	 zwOpbKyBswPwRDGrnVI+Dpjj7sX/0PMz04IMG9O4enQSQRIZLnLnFOnEO1rPjnGQb
-	 YaW9YXcm8Lpbabv584MQpDHuBlgkDj+6t42cFTdQfhXjQAa08vXDDF2pCYo8SjQNB
-	 odvqgA+KOfnYhOYp+qSF8FQ8bUdet6f7klGKYs4pm0LjVbI/0V7vYvAlHF+6qbpEs
-	 O44+9ZfsvU0bewubeFtxoTEuOudN9PxZSrEib3UpJTMUPjTzNnQ644V1aemJe0V2z
-	 5Jy4wr++4hluKVC7Yg==
+	b=PqpSj+IYuJKRZltejQdm/ClhlYeYJ7gDcWBBcA9lfNN18tNItz5SfVsQf2LmeXKC
+	 hIFz3RPnWxnvOqdLp74WF8K6sJNbD5KMvn2hziFRK6aupY2A54Cq/zvergITJ8QU9
+	 kRbRHjGxWlTIZKGKqKAssS7x4h9F65ew4fr1ThIQz5cdyGgq/FMKw7h2+2mMmilqI
+	 Naw3hFjsEkK87AnRtoSYLBlKju/a1icCjO0ajW0w/Zb+cpa7oc2jbSoS6i6Bn7UwJ
+	 JBdLegBcWwCfcYehgQ9+1DhxuQdJQZ67i4UXKQvDHfCrLUJIlxyZFRJi0LQp/UpNr
+	 39WT3CSKrz5P2Phf6Q==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MD9X9-1udonU1ONt-00BdAG; Fri, 27 Jun 2025 22:53:33 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MryT9-1v7fNC2aHN-00qk0n; Fri, 27 Jun 2025 22:53:35 +0200
 From: Armin Wolf <W_Armin@gmx.de>
 To: sre@kernel.org,
 	hdegoede@redhat.com,
@@ -56,9 +56,9 @@ Cc: linux-pm@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux@weissschuh.net
-Subject: [PATCH 2/3] power: supply: test-power: Test access to extended power supply
-Date: Fri, 27 Jun 2025 22:53:24 +0200
-Message-Id: <20250627205325.250608-2-W_Armin@gmx.de>
+Subject: [PATCH 3/3] platform/x86: dell-ddv: Fix taking the psy->extensions_sem lock twice
+Date: Fri, 27 Jun 2025 22:53:25 +0200
+Message-Id: <20250627205325.250608-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250627205325.250608-1-W_Armin@gmx.de>
 References: <20250627205325.250608-1-W_Armin@gmx.de>
@@ -69,99 +69,107 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:hsLVzFy4XGIbkxbD0331eYTkwhkNqRVEGwT+5R/iRfzA6buflyf
- xnnSmKgXxwY4+u9h+W6Ip2tRu9CcULC8GnlQGt25PXQGNiMgeZFhXkrMuDNQOA+LRIq5RWp
- Z4HdkfB491clwdcNrfrFtiq5ZJsMd/FISkUqJi73Ldd9si/VOFe6Er4iRoMACQ+ZyZSoc3u
- /EDTuz0FEWH9T5J4z94Lw==
+X-Provags-ID: V03:K1:JCugStu95WXZgYR3Yfsdp/fDtzzDoUJyjKCGa8Zpr8n0FOCDI9N
+ vRTTBEvekDM2MnB7OfVbTlskTJ8CsPhbHCQiskRmLSikE/cAxaWxvFYG500aIlpF/TfqtiR
+ LRGKAsYnY7FP3KDkjkI6cecP9TVMKsWgjmHRPj7G2Yj/yoq9DZpYcQmZCkOYLeAz+UCX6kL
+ xxGnJyllorKdzMHQfStVw==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ra284GPEdPg=;EnAh/g53jKuft6RWcmDX7uDwLTM
- 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
- IxTbDZaTiCgzfrr/6Z8yHk5cpSaFhehA=
+UI-OutboundReport: notjunk:1;M01:P0:3UZvYep2ZKs=;cw9TW/l5NcZj4fOnv5hyVmuILyP
+ 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
+ 6g==
 
-Test that power supply extensions can access properties of their
-power supply using power_supply_get_property_direct(). This both
-ensures that the functionality works and serves as an example for
-future driver developers.
+Calling power_supply_get_property() inside
+dell_wmi_ddv_battery_translate() can cause a deadlock since this
+function is also being called from the power supply extension code,
+in which case psy->extensions_sem is already being held.
 
+Fix this by using the new power_supply_get_property_direct() function
+to ignore any power supply extensions when retrieving the battery
+serial number.
+
+Tested on a Dell Inspiron 3505.
+
+Reported-by: Hans de Goede <hansg@kernel.org>
+Fixes: 058de163a376 ("platform/x86: dell-ddv: Implement the battery matchi=
+ng algorithm")
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/power/supply/test_power.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/platform/x86/dell/dell-wmi-ddv.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test=
-_power.c
-index 5bfdfcf6013b..2c0e9ad820c0 100644
-=2D-- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -259,6 +259,7 @@ static const struct power_supply_config test_power_con=
-figs[] =3D {
- static int test_power_battery_extmanufacture_year =3D 1234;
- static int test_power_battery_exttemp_max =3D 1000;
- static const enum power_supply_property test_power_battery_extprops[] =3D=
- {
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
- 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
- 	POWER_SUPPLY_PROP_TEMP_MAX,
- };
-@@ -270,6 +271,9 @@ static int test_power_battery_extget_property(struct p=
-ower_supply *psy,
- 					      union power_supply_propval *val)
- {
- 	switch (psp) {
-+	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
-+		return power_supply_get_property_direct(psy, POWER_SUPPLY_PROP_TIME_TO_=
-EMPTY_AVG,
-+							val);
- 	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
- 		val->intval =3D test_power_battery_extmanufacture_year;
- 		break;
+diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
+86/dell/dell-wmi-ddv.c
+index 67f3d7158403..62e3d060f038 100644
+=2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
++++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+@@ -689,9 +689,13 @@ static int dell_wmi_ddv_battery_translate(struct dell=
+_wmi_ddv_data *data,
+=20
+ 	dev_dbg(&data->wdev->dev, "Translation cache miss\n");
+=20
+-	/* Perform a translation between a ACPI battery and a battery index */
+-
+-	ret =3D power_supply_get_property(battery, POWER_SUPPLY_PROP_SERIAL_NUMB=
+ER, &val);
++	/*
++	 * Perform a translation between a ACPI battery and a battery index.
++	 * We have to use power_supply_get_property_direct() here because this
++	 * function will also get called from the callbacks of the power supply
++	 * extension.
++	 */
++	ret =3D power_supply_get_property_direct(battery, POWER_SUPPLY_PROP_SERI=
+AL_NUMBER, &val);
+ 	if (ret < 0)
+ 		return ret;
+=20
 =2D-=20
 2.39.5
 
