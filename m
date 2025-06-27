@@ -1,116 +1,113 @@
-Return-Path: <linux-pm+bounces-29637-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29638-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E8A1AEAFD8
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 09:12:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 845A2AEB053
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 09:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B162189D774
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 07:12:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53C427A6522
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 07:40:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E975921ABDC;
-	Fri, 27 Jun 2025 07:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2HOle7I"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADAB21D3EB;
+	Fri, 27 Jun 2025 07:41:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2BD219E8F;
-	Fri, 27 Jun 2025 07:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9743021C16A;
+	Fri, 27 Jun 2025 07:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751008319; cv=none; b=WSjDsJZ0LpHKMCcW2Of8OQjhdm1Y1Z+pUhcY4IVheLwQ3BvDydfY1ssJCGvEYjFSFWKNe0oJnnRoavRBFhuyj1jTl+xGDqpPUbtFk2NPFqRXUqQuvNNK9pjS0aTn5Bt1+tWAAO4K5Z63itOVJp157XtkSIt1gvfJQTDtcVRwORs=
+	t=1751010078; cv=none; b=fX3j4bpmDGmpHd01SwDO32uCN5+lu9xongPZqlN4SkDSW0ryTra62+Rl1l2/9b7AZ6pyop1UEom3yK4Px7yCCFmPzp0XfJUunYTOLsRTnOxZ6PztlUKzedzjkLfP4SiNKp0pC7dtLW5k63mRG79Bq2smHAFK5FLwI6D+F/5OYj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751008319; c=relaxed/simple;
-	bh=sV7YYEfR40UNrQWFtPcqeuT8brwWEa5QI904RkqIdC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tCwJn+2xXGnxIB7ge8QWhMZoJ0FRVONVZ7845Y138i6yhfu5cuofTSCnKgaWxB091LpBifFhDHtacu6fgsngFGcftnNRZF1Gab+T1h51QROpj7IHwFPl+Vt/QMAFRyupNVkJufpYYH6WcfGxU5Jqh6L5L+wNCotcAX+4z7d023U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2HOle7I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A77C4CEE3;
-	Fri, 27 Jun 2025 07:11:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751008319;
-	bh=sV7YYEfR40UNrQWFtPcqeuT8brwWEa5QI904RkqIdC0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q2HOle7IWs5k5iIB3ZuECVmDVyebf/BrkNyRjpER+MhpAl/tlD7FVOdIo6fVycmaH
-	 aSfmvAMjvJwofFh9ehsxefrBBHB0vNVHD5v0EppwnvP9Zexgmklthc4Kkz6WXESKWC
-	 M4saEZH++OhFeUMgeY3+wUJuhl48kIgbq7Og7hqHnpJL2zQeqtKSS55wrwF3JFSml6
-	 Qz/vDYM6XR29dRK5C5AP5FQS27WlkEKhwpiPiPxJoxMoQAsLty1nOBOiaeEpgTnIX4
-	 qnsVuwNZhAACP/oTl8ctfbx2HmcoDbAZ1g25Pro7FokO90ijykB4JeRkejgafrj/eT
-	 kRAtK/cEt8QeQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uV3Fe-0000000030t-3dkE;
-	Fri, 27 Jun 2025 09:11:59 +0200
-Date: Fri, 27 Jun 2025 09:11:58 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Georgi Djakov <djakov@kernel.org>,
-	Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] interconnect: avoid memory allocation when
- 'icc_bw_lock' is held
-Message-ID: <aF5EPhd5smrmB38Q@hovoldconsulting.com>
-References: <20250625-icc-bw-lockdep-v3-1-2b8f8b8987c4@gmail.com>
- <aFvr1zSkf4KmIcMT@hovoldconsulting.com>
- <aFvuiVX0kMIqXQtZ@hovoldconsulting.com>
- <84b94649-a248-46b0-a401-772aeb8777a2@gmail.com>
- <aFwBYRF0wJwVDdeX@hovoldconsulting.com>
- <ac5ba192-b538-457e-acc4-c2d358b1fd0e@gmail.com>
- <aF0TIWfDI4M1azzc@hovoldconsulting.com>
- <3b90caec-b4c0-47d8-bdd7-1a7abd5e69d9@gmail.com>
+	s=arc-20240116; t=1751010078; c=relaxed/simple;
+	bh=/ILX68ZdimjRT8sZQymo/tfc8nvGg3ozzP0Mjsj2CaM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B9N+dFcAz9ffJvxrBEVtwWqp4xANTsVlJCu5CwydQVeneg8DhDL3QZDHVyik/MzJeA+objVAYmZ05JriWP38o35lzs3xzdkexeTo8s4HQFMZef3TgAwR+y2dmmot/RjPHYmeseuH0QAwARTz8cvpmCJk7KSne4XglSm3DzCRNXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-532d498eb95so546614e0c.1;
+        Fri, 27 Jun 2025 00:41:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751010074; x=1751614874;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9O6AjL1bfiOb1lDaebH7BAFsorBp1P0F7E/Ese0vi9Y=;
+        b=Ld7ORTafBOTy6oXeYgxUliWhHfHMG8jVeftogazaM53FqAEKDubltnyDfcirpQDC6y
+         p5hjNmfSCGG/0ybH+FXVOcVIIlFiZwms2ocHBna24hu1jmq8KSQA7/YltC8wezidC2ez
+         TZbdXvOAXVKE2scjaxfcUOV7GrI/k9GyUwNonUAz5ltqrknd8sWExjTP6lyErFf8Fily
+         PSojYqVATnhJes0Pn9q/l6L6+P8IF/dSHoWMO7r2OrEVwTuLxWqS0VsgtgkA6O/Jss7Q
+         mQ08uGO2kssUjw9bS3CvxNqTpqQ+ngOo7cqOGWpNyQHsq7cAJzRyVOftla8vfx7hJtz+
+         8UEA==
+X-Forwarded-Encrypted: i=1; AJvYcCUuh4lMcevO5AX6p4zsxVUEstEQCqHjnNbZ9zFrE5MmiDXsJPmdb0iFJPDzPID/TnMKQlshEbqXALnhz7FJliSlNPU=@vger.kernel.org, AJvYcCV51KWBNuakVmU6pMIsJgV9QHpsDZGyKJ5txO9usQRdnQz+7NATLF/QUDAwZns8vXeg1AZ7hRNzHA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIgoy6E+z0TmhGErpNb+6/RjLirVFAky5iWmyBnCm//KNjb6Wd
+	IwJxjkHp/RLGsM4C1I212jt9xIa6i84VhZOFXht+8UKlLf+KO6pYi1KRW9qJGWKGwM8=
+X-Gm-Gg: ASbGncvgZDLogV4TZrzzlls5OjJjde9Mp7qxZlPUUNxJea7ZY1bLv7SfW1nUJAgP+fO
+	zQuq+x70uXKKBKC4L1GTNpw0lXf4TT3Gi+UeTRrZolCQ2paA5ZHt1CfFdIy7HHpM1dwl2opSxGo
+	g2LwmR08EuMhJn2xA1xzN84mW3NJjZ/LNaXxeyfiLVmIgi+CHpZL6X+V3KLxDWL+34Mhu2+uvn0
+	HmWO6roJ2LsXIswMNJZT5krMxwLNvqDfII1FDnJAOyYZFxrKCQwEUHwpZyzIt9o8AS/ACMgSZwW
+	Ff5b/FVZi5sDTDdiSRwBs81/Bjrq7EcWRQ65ze+5Wx0olWWhWhb0hQ4aireYcWGMMjDokKFbJD8
+	E0Bi6H6PjlZcti18OvFI8enEJ
+X-Google-Smtp-Source: AGHT+IG7RcAoTCMNP4A164BcD0D1mUfJ1PszCyUTAddwd8v4C22jkZtwYIpIIvq5DYjMuiwa1h+rLQ==
+X-Received: by 2002:a05:6122:3283:b0:530:7bd4:1761 with SMTP id 71dfb90a1353d-5330c0f8ddamr1552766e0c.11.1751010073978;
+        Fri, 27 Jun 2025 00:41:13 -0700 (PDT)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5330909c2e2sm291964e0c.11.2025.06.27.00.41.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 00:41:13 -0700 (PDT)
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4e7ade16082so469894137.1;
+        Fri, 27 Jun 2025 00:41:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvgyHwmST4RwWRyCiPrJQmXkkKU925dhd4JhhZhnmRzx31mmcfGf3a48zZfv00/vFTqDBzwBByd7blcYRETMga9Zg=@vger.kernel.org, AJvYcCXawdlBw9Ls3Xc3V514HbbxZ6pgV7fYIaGdL1W1pXlsOTNkIuavj5mZ9z8pC5+NtI/c9pd1lVEBig==@vger.kernel.org
+X-Received: by 2002:a05:6102:5717:b0:4e9:c773:dca1 with SMTP id
+ ada2fe7eead31-4ee4f6d96fbmr2008309137.11.1751010073518; Fri, 27 Jun 2025
+ 00:41:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3b90caec-b4c0-47d8-bdd7-1a7abd5e69d9@gmail.com>
+References: <875xghhk2y.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <875xghhk2y.wl-kuninori.morimoto.gx@renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 27 Jun 2025 09:41:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUMd9OThTQz0NYF=_vX77nJcHNiLY5e7WHjoE89J+uhFw@mail.gmail.com>
+X-Gm-Features: Ac12FXzPZeAwTyrQxvU3ljrTlAxwRi1jSOzKeGuXY87r-gPbS4it6FJmQm5Y8jc
+Message-ID: <CAMuHMdUMd9OThTQz0NYF=_vX77nJcHNiLY5e7WHjoE89J+uhFw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pmdomain: renesas: use menu for Renesas
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 26, 2025 at 05:00:42PM +0200, Gabor Juhos wrote:
-> 2025. 06. 26. 11:30 keltezéssel, Johan Hovold írta:
+Hi Morimoto-san,
 
-> > Note that this could be extended with a
-> > name-allocated flag and an appropriate warning somewhere later if anyone
-> > is worried about drivers failing to use the helper.
-> > 
-> > Note that we can't use kfree_const() unconditionally as I initially
-> > intended as apparently some interconnect providers already allocate
-> > names for non-dynamic nodes.
-> 
-> Not that I want to worry about anything, but for the sake of completeness I have
-> to note something. Theoretically, freeing the name in icc_node_destroy() could
-> cause the following on IPQ9574 under some circumstances:
-> 
->   [    4.003692] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffffff80047e4180 pfn:0x447e4
->   [    4.008439] flags: 0x0(zone=0)
->   [    4.017545] raw: 0000000000000000 fffffffec0000448 ffffff803fdbb518 0000000000000000
->   [    4.020480] raw: ffffff80047e4180 0000000000150000 00000000ffffffff 0000000000000000
->   [    4.028413] page dumped because: Not a kmalloc allocation
-> 
-> It is not a problem of your patch though. The root cause of this is the same
-> as why I saw the lockdep warning on the platform originally. The reason is
-> that the static node ids used by the 'nsscc-ipq9574' driver are within the
-> range of dynamic ids. Nevertheless, I have sent a patch [1] to fix that
-> already.
+On Fri, 27 Jun 2025 at 06:42, Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+> Current Renesas PM Domains appears on top page. Let's create new
+> menu for Renesas.
+>
+> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-Yeah, I saw that patch of yours the other day. Good that you tracked
-that down. I'll probably amend the commit message with a comment about
-why this triggered on IPQ in the first place too.
+Thanks for your patch series!
+Unfortunately something must have gone wrong, as I only received
+the first patch? The second patch is also missing on lore.
 
-> Despite the note above, your proposal looks good to me. Would you like to
-> send it as a formal patch, or shall I do it?
+For this one:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I can post it in a bit.
+Gr{oetje,eeting}s,
 
-Johan
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
