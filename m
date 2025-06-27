@@ -1,101 +1,177 @@
-Return-Path: <linux-pm+bounces-29649-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29650-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DA10AEB554
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 12:49:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 343B7AEB577
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 12:53:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B3564A1DF2
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 10:49:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C81D3A502B
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jun 2025 10:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90AB129A31C;
-	Fri, 27 Jun 2025 10:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4524298CA6;
+	Fri, 27 Jun 2025 10:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jjT5UI7V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uAuVz6pF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AB1298CB1;
-	Fri, 27 Jun 2025 10:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73539339A8;
+	Fri, 27 Jun 2025 10:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751021376; cv=none; b=R6NWo0LtJW4Esp5aegnmQXlG6pBEzOif+2xDDHPLIs+U39RnNGe6z2EhgLObp2HrJhBTpaxz/2D5fkUpKvW75NFxjn7WYqFTXSrgbjPNbFwH0HB7KYo0PX0Dm6jcQFyFhJiYxE0OXp4nUitj/dQBKH/R7BLPCj/iXRrFQ0P2FSE=
+	t=1751021585; cv=none; b=nli1R21PfGL8yu9I2kPQjuYusuf1vHlqc3seir8jwuM63aPIEGUejkpttmPy3jTBlRW+hKJzLD47v5VKMBhXTmSuFhTMVG1odiKpfMLRLKSZ0L0/ZBJ+lx9KoYiEY0p/WyOYDut8ewnYo5y/HFu6xP5UJtYH9a1tMsN9m6pAwgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751021376; c=relaxed/simple;
-	bh=OrBU5eBwBcoKQHllVdPOQ7ABzGCI1+juFwHu/MwINgI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=BlJqKqHb6QdLMTvpsluWF0H4u3L95Qld6Js6MMdfEfg/dtw0M8DyrTaVfeH3p3xcF6DLJQNjEsSIv2OtHsIKOuKE5RERKIM+K5X27jp0Yve6k/JDcf4fHmoqDOa8OO8nl7IsfAgr7t1m5fO3x5q+wjfmURUsx5rciYn6IWcDNTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jjT5UI7V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E951C4CEE3;
-	Fri, 27 Jun 2025 10:49:27 +0000 (UTC)
+	s=arc-20240116; t=1751021585; c=relaxed/simple;
+	bh=K4XpAjTa7+hKIgq7u8CKdwP6yqA/xD2glJZeavWK7Ho=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gaXUwSiWyuiBwxKcwxJCowpUrri8lpRr/B8ipgAIi3A2GxGpRV59rruR40eFwMjFciMWKlF6MwH3i/rf6h9lLflNO1UxHGcjl8HhpjsSq+E1HSubMZ0TwATS0CBhlyr7xCnlqpioq7jwra9w5I1a9dICqxhRKBye6sDjbGfT0zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uAuVz6pF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8387C4CEF2;
+	Fri, 27 Jun 2025 10:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751021375;
-	bh=OrBU5eBwBcoKQHllVdPOQ7ABzGCI1+juFwHu/MwINgI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jjT5UI7V0MN8cv7Kxou/19uR4bMLbukpmBDE6+Hvnj7C6DXS6KP8eb87VWD61mA/Y
-	 uF5D5Ct5K/Z/Mrf7cosGn/ZaRH55vKh9pgV0l27CFC1BjAimugSNJsYHaP6HKn38mj
-	 HcNcKd0L98nVNcQZyc43Vbx/6LTEUKSGNFfmkWyI3vay2c7yWc3aLakfmJD35TcU2H
-	 g5ZxBVSZ6JvEKZyRuGYVVLMhPvjBDALsYaTGrxu0d478gSF10PT/3nwtqyQQTzEOYl
-	 ieUPrTo4t1AujfFjdwRMS/egGfRxIozKJ30XKuvFCpr4zie36/nJDbhthJ8GcD5eN7
-	 3RnEyk3A+6UBA==
-From: Srinivas Kandagatla <srini@kernel.org>
-To: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
- =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Arnd Bergmann <arnd@arndb.de>, Sven Peter <sven@kernel.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
- linux-input@vger.kernel.org, dmaengine@vger.kernel.org, 
- linux-sound@vger.kernel.org
-In-Reply-To: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
-Subject: Re: (subset) [PATCH 00/11] Drop default ARCH_APPLE from Kconfig
- and use defconfig instead
-Message-Id: <175102136780.6245.11489454367138517610.b4-ty@kernel.org>
-Date: Fri, 27 Jun 2025 11:49:27 +0100
+	s=k20201202; t=1751021584;
+	bh=K4XpAjTa7+hKIgq7u8CKdwP6yqA/xD2glJZeavWK7Ho=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uAuVz6pFEKbocjVvpbM6rYL/y1pxfzqTeU2lLOucXiyZXaJ3jN1l8fdzoid8Urxf1
+	 c5eT03JfanyIx54HrwoMNYnwdoJf1xOUtF3S5btvG7vtAqgfk8lsC0MKbw3lXJxQ/x
+	 NNYdMzpoA8/RUSZ4tgiezTHDp7Ei8kBaS98afaDDtNCw9CDig/kyrw6bL55cofD7hN
+	 WP+q4Nw+tf+aBceGBbhGETZfJUfjeJgMnsT0w6YvWpIGdKd0dPF8UTzAgxvWQAUtN8
+	 1HBF8jpNJGVLUlvUJq/r8tk7tdYwy6WrrjXySE+fqWjxoiKDlWljQtlju26uoy4hvI
+	 DeCUGez17OFLg==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-40b1c099511so1201451b6e.0;
+        Fri, 27 Jun 2025 03:53:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVBttQevcfvqNpdtE4zsh2qLVAexTFFYGNsHSgm8H/znDN9g0DTfE6LMaXO20KyEgtUisACYdVPv9PD@vger.kernel.org, AJvYcCVPsudfaOFdzS/DjkFKsj7hjAcIFTOjBKkbBXww8eeK2Yb31xj80KVwQzp3TT/GDPWnBK0vYWYY729P@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIM7911X5Ng02AOboLTOeFZ77GbNXg8+kfQ1ySj4os2ugXXmWF
+	ozgjcxPvWX4Dgd40ixkWNA+taOYX6Gq2MDx9J54uWsPgKkPwCLc7/y3JBdrNc54/sBjEzUbMJYK
+	HVQcbmkF3UcVTx/3iIupI05kw7lCc52s=
+X-Google-Smtp-Source: AGHT+IGF5o3JdiAyonVr5J6bCA8gf3fqFl/nAXMHCfe9W09f17nIkklyMepiatGdtSYaCw/7Ez4+TL6U4SyEGXl6bDI=
+X-Received: by 2002:a05:6808:2124:b0:407:a0ea:a233 with SMTP id
+ 5614622812f47-40b1caac7b6mr5565686b6e.10.1751021584137; Fri, 27 Jun 2025
+ 03:53:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+References: <5015172.GXAFRqVoOG@rjwysocki.net> <2336655.iZASKD2KPV@rjwysocki.net>
+In-Reply-To: <2336655.iZASKD2KPV@rjwysocki.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 27 Jun 2025 12:52:52 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h4AMFfyBugjBwQOV=xY-Hq5kL_vB7Gwrj06N8vo6GQtg@mail.gmail.com>
+X-Gm-Features: Ac12FXwpg9AnVFZosYa_eZDnu0_6_9S_gG---O66k8-4K1sDgRQ8bmySwBdfXks
+Message-ID: <CAJZ5v0h4AMFfyBugjBwQOV=xY-Hq5kL_vB7Gwrj06N8vo6GQtg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] PM: Check power.needs_force_resume in pm_runtime_force_suspend()
+To: Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jun 26, 2025 at 8:15=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+t> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Add a power.needs_force_resume check to pm_runtime_force_suspend() so
+> it need not rely on the runtime PM status of the device when deciding
+> whether or not to return early.
+>
+> With the new check in place, pm_runtime_force_suspend() will also skip
+> devices with the runtime PM status equal to RPM_ACTIVE if they have
+> power.needs_force_resume set, so it won't need to change the RPM
+> status of the device to RPM_SUSPENDED in addition to setting
+> power.needs_force_resume in the case when pm_runtime_need_not_resume()
+> return false.
+>
+> This allows the runtime PM status update to be removed from
+> pm_runtime_force_resume(), so the runtime PM status remains unchanged
+> between the pm_runtime_force_suspend() and pm_runtime_force_resume()
+> calls.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>
+> v1 -> v2: Corresponds to patch [2/9] (that was posted as [0/9] by mistake=
+) in v1.
+>
+> ---
+>  drivers/base/power/runtime.c |   21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
+>
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1973,7 +1973,7 @@
+>         int ret;
+>
+>         pm_runtime_disable(dev);
+> -       if (pm_runtime_status_suspended(dev))
+> +       if (pm_runtime_status_suspended(dev) || dev->power.needs_force_re=
+sume)
+>                 return 0;
+>
+>         callback =3D RPM_GET_CALLBACK(dev, runtime_suspend);
+> @@ -1988,15 +1988,16 @@
+>         /*
+>          * If the device can stay in suspend after the system-wide transi=
+tion
+>          * to the working state that will follow, drop the children count=
+er of
+> -        * its parent, but set its status to RPM_SUSPENDED anyway in case=
+ this
+> -        * function will be called again for it in the meantime.
+> +        * its parent and the usage counters of its suppliers.  Otherwise=
+, set
+> +        * power.needs_force_resume to let pm_runtime_force_resume() know=
+ that
+> +        * the device needs to be taken care of and to prevent this funct=
+ion
+> +        * from handling the device again in case the device is passed to=
+ it
+> +        * once more subsequently.
+>          */
+> -       if (pm_runtime_need_not_resume(dev)) {
+> +       if (pm_runtime_need_not_resume(dev))
+>                 pm_runtime_set_suspended(dev);
+> -       } else {
+> -               __update_runtime_status(dev, RPM_SUSPENDED);
+> +       else
+>                 dev->power.needs_force_resume =3D true;
+> -       }
 
-On Thu, 12 Jun 2025 21:11:24 +0000, Sven Peter wrote:
-> When support for Apple Silicon was originally upstreamed we somehow
-> started using `default ARCH_APPLE` for most drivers. arm64 defconfig
-> also contains ARCH_APPLE=y such that this will turn into `default y`
-> there by default which is neither what we want nor how this is usually
-> done.
-> Let's fix all that by dropping the default everywhere and adding the
-> drivers to defconfig as modules instead of built-ins.
-> None of these patches depend on each other so we can just take them all
-> independently through the respective subsystem trees.
-> 
-> [...]
+I kind of see that this change may confuse other things looking at the
+PM runtime status to determine whether or not the device needs to be
+suspended that possibly run after pm_runtime_force_suspend().
 
-Applied, thanks!
+I'm also not quite sure why I thought that this patch would be
+necessary in this series because the [5/9] should just work without
+it.
 
-[04/11] nvmem: apple: drop default ARCH_APPLE in Kconfig
-        commit: e426953c193a2b51c8adcd3922fb8eef15790219
+Please disregard it unless you see why it is needed here.
 
-Best regards,
--- 
-Srinivas Kandagatla <srini@kernel.org>
-
+>
+>         return 0;
+>
+> @@ -2029,12 +2030,6 @@
+>         if (!dev->power.needs_force_resume)
+>                 goto out;
+>
+> -       /*
+> -        * The value of the parent's children counter is correct already,=
+ so
+> -        * just update the status of the device.
+> -        */
+> -       __update_runtime_status(dev, RPM_ACTIVE);
+> -
+>         callback =3D RPM_GET_CALLBACK(dev, runtime_resume);
+>
+>         dev_pm_disable_wake_irq_check(dev, false);
+>
+>
+>
+>
 
