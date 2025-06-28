@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-29779-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29778-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF75DAEC90F
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 18:57:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6071DAEC914
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 18:57:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 901C23AD725
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 16:56:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 117BE1BC28F2
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 16:56:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8A325B2FE;
-	Sat, 28 Jun 2025 16:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B74D25F979;
+	Sat, 28 Jun 2025 16:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="C9NZI/8M"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="OLpPkYsS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D42325A620;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F4125A33A;
 	Sat, 28 Jun 2025 16:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751129711; cv=none; b=A/qo5UbXu2Jng8opOMtQbRaZ0vKvoh5RNuzTXh0RUZg3e4DuRjq4FfUb2aZTnzT/XngkVvzafIrx/OthOurm8Nu67Q614QxpcM0uMTnuJUgRzvX6iN/8NfPU4Ijv5T69HIdmk3h0Yr2seyFjhX9+G18vCLpNQ7WLNl3zLr3E9JU=
+	t=1751129711; cv=none; b=pdvJWXZWovBjWWZ5zIEKsk6Dkrasrppjaflq48b5Df8auKZD8WE1NRa7h1f4Pir8RyvYGbYwYjtX7cdfpLgWYQicxhmR+w1Za6VZ/tXiKuSgMLcQEp1W6ZCBTtiKUQsNz8ybCdR1SfKchuqlKYY4TWSAk6n3q9KjO6mms/PsVU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751129711; c=relaxed/simple;
-	bh=Dgdiq1horuDoHLdNztjJFaG+cA4sLMSMTTMWhbKe7+Q=;
+	bh=oEHCeCyYmhRvcoDsSzTQBlneOLnSQNdeNvfMRFj69TE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ee5LYfdTQ7QCnw4cwNnSLslDYKeFNZ/2gyTSZwSbtZ31P51LiEscNqHULpxVv6Uqxbv/AY9UvQX72KUBoMo4GwJp1OfGtmBBXHYYzCZiApigCaJCkwVr5im/I90+nJxek2kKUk5AFNxBrUramlGzX0RqySBuvLAXBcOv4auMkzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=C9NZI/8M; arc=none smtp.client-ip=134.0.28.11
+	 MIME-Version; b=M+nTwxeyB6Nz3t4+uFxGXIOUPYiOqHzt7FjkfVgSLDVEK09RWWt6IM7EX5OBkGqYhHTMWuzLHbJd0vBFRHgAEVTyeE/xY4IdbHu9mbk9jIEgwsZh/lwUt0N6bGS7VauLmWwRVYLIuR3fjKsCJd2TQ1KPMlL4UOPeabhkEwr9GYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=OLpPkYsS; arc=none smtp.client-ip=134.0.28.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout1.routing.net (Postfix) with ESMTP id 0700340373;
+	by mxout2.routing.net (Postfix) with ESMTP id 64A726027C;
 	Sat, 28 Jun 2025 16:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	s=20200217; t=1751129706;
@@ -40,13 +40,13 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DIMuNne++IWVgY0azMoYkvyXCjaefI/n17TVM+rpZxc=;
-	b=C9NZI/8MAu8+mhyQdSakPXSwZELFqyLuGRIKMtiKDFgT2XSApJd57ZIfVzGVOiO38ouGzr
-	3ougfS5ifP4LgEgkS64U7g3/Idq2D+4jbBO0Apr4KIKAui3899MRkcMqcvGXGZGmiwL04Z
-	3JLL8bU9QVQVW+daGT4Gls5ZIyCYZMg=
+	bh=zCArQQjnZOoBXdfm7YKc01KniAiMbD7wl2wyNkiAMyg=;
+	b=OLpPkYsStm3Cq0k5SlImUp0TQ/zwOQ8urHwmvRVUEBl4pWUCg3u4ufaWMd3alAFUMrJ2nP
+	E0Yn36w9S6syo6mr6aQyQPSKEzFMTAljpPwVSXwaYZI36/mmP1simsIIXuvDu1E/C4xdM2
+	P0I2WjzJx12r7cbKPv/BVF01IabZcdI=
 Received: from frank-u24.. (fttx-pool-217.61.150.139.bambit.de [217.61.150.139])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 9F34D12272D;
-	Sat, 28 Jun 2025 16:55:05 +0000 (UTC)
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 09F9D1226EC;
+	Sat, 28 Jun 2025 16:55:06 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	Kyungmin Park <kyungmin.park@samsung.com>,
@@ -78,9 +78,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v7 09/14] arm64: dts: mediatek: mt7988a-bpi-r4: add proc-supply for cci
-Date: Sat, 28 Jun 2025 18:54:44 +0200
-Message-ID: <20250628165451.85884-10-linux@fw-web.de>
+Subject: [PATCH v7 10/14] arm64: dts: mediatek: mt7988a-bpi-r4: drop unused pins
+Date: Sat, 28 Jun 2025 18:54:45 +0200
+Message-ID: <20250628165451.85884-11-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250628165451.85884-1-linux@fw-web.de>
 References: <20250628165451.85884-1-linux@fw-web.de>
@@ -94,29 +94,149 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-CCI requires proc-supply. Add it on board level.
+Pins were moved from SoC dtsi to Board level dtsi without cleaning up
+to needed ones. Drop the unused pins now.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi | 89 -------------------
+ 1 file changed, 89 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi
-index 81ba045e0e0e..afa9e3b2b16a 100644
+index afa9e3b2b16a..30affedf84d4 100644
 --- a/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi
-@@ -40,6 +40,10 @@ reg_3p3v: regulator-3p3v {
- 	};
+@@ -223,18 +223,6 @@ &pcie3 {
  };
  
-+&cci {
-+	proc-supply = <&rt5190_buck3>;
-+};
-+
- &cpu0 {
- 	proc-supply = <&rt5190_buck3>;
+ &pio {
+-	mdio0_pins: mdio0-pins {
+-		mux {
+-			function = "eth";
+-			groups = "mdc_mdio0";
+-		};
+-
+-		conf {
+-			pins = "SMI_0_MDC", "SMI_0_MDIO";
+-			drive-strength = <8>;
+-		};
+-	};
+-
+ 	i2c0_pins: i2c0-g0-pins {
+ 		mux {
+ 			function = "i2c";
+@@ -249,20 +237,6 @@ mux {
+ 		};
+ 	};
+ 
+-	i2c1_sfp_pins: i2c1-sfp-g0-pins {
+-		mux {
+-			function = "i2c";
+-			groups = "i2c1_sfp";
+-		};
+-	};
+-
+-	i2c2_0_pins: i2c2-g0-pins {
+-		mux {
+-			function = "i2c";
+-			groups = "i2c2_0";
+-		};
+-	};
+-
+ 	i2c2_1_pins: i2c2-g1-pins {
+ 		mux {
+ 			function = "i2c";
+@@ -298,34 +272,6 @@ mux {
+ 		};
+ 	};
+ 
+-	gbe0_led1_pins: gbe0-led1-pins {
+-		mux {
+-			function = "led";
+-			groups = "gbe0_led1";
+-		};
+-	};
+-
+-	gbe1_led1_pins: gbe1-led1-pins {
+-		mux {
+-			function = "led";
+-			groups = "gbe1_led1";
+-		};
+-	};
+-
+-	gbe2_led1_pins: gbe2-led1-pins {
+-		mux {
+-			function = "led";
+-			groups = "gbe2_led1";
+-		};
+-	};
+-
+-	gbe3_led1_pins: gbe3-led1-pins {
+-		mux {
+-			function = "led";
+-			groups = "gbe3_led1";
+-		};
+-	};
+-
+ 	i2p5gbe_led0_pins: 2p5gbe-led0-pins {
+ 		mux {
+ 			function = "led";
+@@ -333,13 +279,6 @@ mux {
+ 		};
+ 	};
+ 
+-	i2p5gbe_led1_pins: 2p5gbe-led1-pins {
+-		mux {
+-			function = "led";
+-			groups = "2p5gbe_led1";
+-		};
+-	};
+-
+ 	mmc0_pins_emmc_45: mmc0-emmc-45-pins {
+ 		mux {
+ 			function = "flash";
+@@ -361,40 +300,12 @@ mux {
+ 		};
+ 	};
+ 
+-	snfi_pins: snfi-pins {
+-		mux {
+-			function = "flash";
+-			groups = "snfi";
+-		};
+-	};
+-
+-	spi0_pins: spi0-pins {
+-		mux {
+-			function = "spi";
+-			groups = "spi0";
+-		};
+-	};
+-
+ 	spi0_flash_pins: spi0-flash-pins {
+ 		mux {
+ 			function = "spi";
+ 			groups = "spi0", "spi0_wp_hold";
+ 		};
+ 	};
+-
+-	spi2_pins: spi2-pins {
+-		mux {
+-			function = "spi";
+-			groups = "spi2";
+-		};
+-	};
+-
+-	spi2_flash_pins: spi2-flash-pins {
+-		mux {
+-			function = "spi";
+-			groups = "spi2", "spi2_wp_hold";
+-		};
+-	};
  };
+ 
+ &pwm {
 -- 
 2.43.0
 
