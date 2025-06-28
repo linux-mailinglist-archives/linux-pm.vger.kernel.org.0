@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-29757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29754-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56B7DAEC656
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 11:20:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35397AEC64B
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 11:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E517F18859D4
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 09:19:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 191624A73C2
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 09:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732BF242D93;
-	Sat, 28 Jun 2025 09:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7BCC246771;
+	Sat, 28 Jun 2025 09:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="NlXU94fu"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="AjLz9Omz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3B623373D;
-	Sat, 28 Jun 2025 09:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25917225387;
+	Sat, 28 Jun 2025 09:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751102371; cv=none; b=d8ne3bcjAujVDXu74okok0ZhySYM+/vSnSf6B/wJH5GKESdmtmISvKrt6ujyJkW3nNrRNmZAIHxLHQml3he11iC1B2vef+TacWYGdqH0VRE5FxXR/e1OR/qN8+QzBWtgiH8Ub8rT8L09mXwGWRvt7KomaBzrjqQPcm+SmcPpDWQ=
+	t=1751102296; cv=none; b=n/SFA3QVOGceVJeiNfjTzpCKvM++rCWSCYSKnEN9SfgPz3LoWlqWOy9/GQDjmA4ID5lJwaeueLelOpVFDm6Zo6QcYP5Umm+0AiOWrg10tHapq5UE/Ao8Qj3H2R0+ZQWrXp/m4nJwvpDxCWR5E/3mwB2+gE6p16gJdp8LGzJINiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751102371; c=relaxed/simple;
-	bh=nkVcV3wUNVe/zcsTpVmUYTSaAg8gW0lc9PLvnuMVIIM=;
+	s=arc-20240116; t=1751102296; c=relaxed/simple;
+	bh=Hfaa0gy3uc6c4TBbK3YEGBZqHHPIma4PeUvbj0qjqyE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pPWr1UE3MLSKBRK/b1blsqiyzX+J0LW6yWp9zO0HAGWaDOziRZ+/Mt+ezsg3PdMeBHiCoDtBhPp5/acK0WYNSKDfrh2sAvDmW35zIpNy9fW0fYMBaTxaxY6a1z+jd5NLNFxytR3vtfVIRBnlr8WGELyXWO/kmNNkIS0BS21mLYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=NlXU94fu; arc=none smtp.client-ip=134.0.28.8
+	 MIME-Version; b=r9sgDL4x8xSTI34hcxzQUk1TSf2JJl6ZxoA0u2wibd18ArLlg9HEkQwevi0wRIlgLm9BuzfB6MPeFolbYNEQi3ckx3XPQ5DwIHA3s6LD1W6iZmpIvUFvGD4NuCXdp/tTU82eciWkXD0SCSqdjXmFR/1BIZMDX8De/bIwWyOMD0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=AjLz9Omz; arc=none smtp.client-ip=134.0.28.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout3.routing.net (Postfix) with ESMTP id 33C3D61653;
+	by mxout2.routing.net (Postfix) with ESMTP id 920895FD7B;
 	Sat, 28 Jun 2025 09:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	s=20200217; t=1751101851;
@@ -40,13 +40,13 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=r/pxDHLdKM59vQwtrSmRPlY+HDheivtQ/80IDfz7MYk=;
-	b=NlXU94fuD7PZgRpdcwnXLnEy7O21mBgpj6X5gUNpSNwEesWqQ0C+0SLeB9g3e16ZLvgWVf
-	ltW3KitRagMYlYfgOVw5/fouLgDwoMwmr3+G1POIYx7dF9tyWo2r18K1WDI/1uXCcwbDmH
-	UbA767+i1qWtf7alV8ZhRXo0VrATRR8=
+	bh=DgeEoJwP1RRKkglcECdGpkEEfNbWqvY35txVx4ntqiU=;
+	b=AjLz9OmzYbggR4Ei1+YPIRF1/sNAVGGSlsI/4Z7ZjbytXLQ9j9wcZpPaQrcjjmARskZkHp
+	T17tmyPEjUCgU2g8LYa7l3TxXAJC0y2jpiska5emk0t0/2BbGdUlV/ZRTmPJz8anEqRC43
+	qsjNZkd+CitzoEwR8MRKESJdsfdm1PE=
 Received: from frank-u24.. (fttx-pool-217.61.150.139.bambit.de [217.61.150.139])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id CD4B61226F5;
-	Sat, 28 Jun 2025 09:10:50 +0000 (UTC)
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 3618212272D;
+	Sat, 28 Jun 2025 09:10:51 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	Kyungmin Park <kyungmin.park@samsung.com>,
@@ -78,9 +78,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v6 02/15] dt-bindings: net: mediatek,net: allow irq names
-Date: Sat, 28 Jun 2025 11:10:26 +0200
-Message-ID: <20250628091043.57645-3-linux@fw-web.de>
+Subject: [PATCH v6 03/15] dt-bindings: net: mediatek,net: update for mt7988
+Date: Sat, 28 Jun 2025 11:10:27 +0200
+Message-ID: <20250628091043.57645-4-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250628091043.57645-1-linux@fw-web.de>
 References: <20250628091043.57645-1-linux@fw-web.de>
@@ -94,48 +94,73 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-In preparation for MT7988 and RSS/LRO allow the interrupt-names
-property. Also increase the maximum IRQ count to 8 (4 FE + 4 RSS),
-but set boundaries for all compatibles same as irq count.
+Update binding for mt7988 which has 3 gmac and a sram for dma
+operations.
+
+MT7988 has 4 FE IRQs (currently only 2 are used) and 4 IRQs for use
+with RSS/LRO later.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
-v6: new patch splitted from the mt7988 changes
+v6:
+- split out the interrupt-names into separate patch
+- update irq(name) min count to 4
+- add sram-property
+- drop second reg entry and minitems as there is only 1 item left again
+
+v5:
+- fix v4 logmessage and change description a bit describing how i get
+  the irq count.
+- update binding for 8 irqs with different names (rx,tx => fe0..fe3)
+  including the 2 reserved irqs which can be used later
+- change rx-ringX to pdmaX to be closer to hardware documentation
+
+v4:
+- increase max interrupts to 6 because of adding RSS/LRO interrupts (4)
+  and dropping 2 reserved irqs (0+3) around rx+tx
+- dropped Robs RB due to this change
+- allow interrupt names
+- add interrupt-names without reserved IRQs on mt7988
+  this requires mtk driver patch:
+  https://patchwork.kernel.org/project/netdevbpf/patch/20250616080738.117993-2-linux@fw-web.de/
+
+v2:
+- change reg to list of items
 ---
- Documentation/devicetree/bindings/net/mediatek,net.yaml | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/net/mediatek,net.yaml | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-index 74a139000f60..6672db206b38 100644
+index 6672db206b38..74a139000f60 100644
 --- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
 +++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-@@ -28,8 +28,7 @@ properties:
+@@ -28,7 +28,8 @@ properties:
        - ralink,rt5350-eth
  
    reg:
--    items:
--      - description: Register for accessing the MACs.
-+    maxItems: 1
+-    maxItems: 1
++    items:
++      - description: Register for accessing the MACs.
  
    clocks:
      minItems: 2
-@@ -67,10 +66,6 @@ properties:
+@@ -66,6 +67,10 @@ properties:
        - const: gmac
        - const: ppe
  
--  sram:
--    $ref: /schemas/types.yaml#/definitions/phandle
--    description: phandle to mmio SRAM
--
++  sram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to mmio SRAM
++
    mediatek,ethsys:
      $ref: /schemas/types.yaml#/definitions/phandle
      description:
-@@ -423,7 +418,7 @@ allOf:
+@@ -418,7 +423,7 @@ allOf:
              - const: xgp3
  
  patternProperties:
--  "^mac@[0-2]$":
-+  "^mac@[0-1]$":
+-  "^mac@[0-1]$":
++  "^mac@[0-2]$":
      type: object
      unevaluatedProperties: false
      allOf:
