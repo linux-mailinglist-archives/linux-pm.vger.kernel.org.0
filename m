@@ -1,264 +1,114 @@
-Return-Path: <linux-pm+bounces-29758-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29759-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A326EAEC65A
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 11:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F14AEC690
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 12:30:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05C7F16C717
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 09:25:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D2C64A4058
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 10:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11FF923C519;
-	Sat, 28 Jun 2025 09:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4D9205E3E;
+	Sat, 28 Jun 2025 10:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koMJosSw"
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="NhjXIQ2b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from forward501d.mail.yandex.net (forward501d.mail.yandex.net [178.154.239.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C449122D7A3;
-	Sat, 28 Jun 2025 09:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98E14A3C;
+	Sat, 28 Jun 2025 10:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751102718; cv=none; b=LH9LroB2YtpZOb2FoH8UCuFIp/nd1UCZhX+8BexJPrHMA9+2k6b8Lu/Xi8LRfYNOmroVeUKFcena9bkzILkSYZOIAyoP+evkylEikAiiDPGBVa7MicDRP80NDqkJEqQv1fnnDrsiiB5wiwmYognvTke6zR0qz2CV2XxtbnsYTh8=
+	t=1751106633; cv=none; b=RKl2tAc7KTHxv4VxYBVNWAifr7IytNmoX/7mhd1XyKfU4t/jnyXwhKein0kbsxeR3IBHDZsxp+75wM+HYXP8qz4281hpobnIU/I7rNd9SGM1RbTn0WjLRw7L12nE/Kf1uC9Ai8Li2EEGrlUFRUzxBPd5rJKTqSM+QdQV2KLv3rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751102718; c=relaxed/simple;
-	bh=JojSEzA7X+jR/kNu89V44GciVsM5eLhWK20LdmEerYg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qzkm67DwKIOJR+hcZydIRkXHQRpJtgywErDpIITyInbgT2W1XXDPZ5X3hfk6IHSsGnDQbj37raTI3sgdibsAvBkXFJsvSHykV8hG5/VgsWlTCqq8dhv7Zh13QGRRHOCyiXoPTXJkrc8C43blJRc3QAbdUJ2U+wyRWPHHL43dzFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koMJosSw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC08FC4CEEA;
-	Sat, 28 Jun 2025 09:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751102715;
-	bh=JojSEzA7X+jR/kNu89V44GciVsM5eLhWK20LdmEerYg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=koMJosSwX6VQDUq+sHVJSRy77pEEC9ebRBeCWLTcOu9j1hQ4hyc6kBNCPemVMkIb9
-	 aglPZ0E7ilfXJ28eCGOoe0wX/Bbtzx4Bq8Ttyur8syBqFKIezZ4HwK243bqoEZf6sP
-	 pN6DZOe49VDndB4fph8xo5ybJfSEj/nJq0GKa1hffUCxCLYOfjz6LLCLAw8fe0TDy8
-	 /+TpkbZjvjw3t2VwlAQlIT9CQORYQNIDuEpvvlwDWTHhh9u12cUeSJjgudEx5v7inH
-	 6AFAPPppk7Yb3dlcCvk8UY5m2jr0wbBLtaGDi3YfqpmXgpw3Up1mFvztdOoTvxk3qz
-	 /ex/hPMaQ1jig==
-Message-ID: <b4e077d9-a5f5-47ec-abc7-9e957c32cd5b@kernel.org>
-Date: Sat, 28 Jun 2025 11:25:11 +0200
+	s=arc-20240116; t=1751106633; c=relaxed/simple;
+	bh=uQhRKDxK2mabMgCqoieFovOw4kdCdDL7hqMmNvBVq1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hESvwOd4OC7h5GNXqJpXC82a+G+NE9IGAI7wrACh7XKAsPNwvsIpKEIPOcWPfGEICJF84rmONNhCFJjHSBYXMVg2jkp9yD0GfMjhTgZdbsKnAS8pYoAyTD4vahR0QIsRZK+1qqhLEojF/OKnsX9/ICJwb9QrLYtVwMnMvo8il2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=NhjXIQ2b; arc=none smtp.client-ip=178.154.239.209
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
+Received: from mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:82a4:0:640:9cc1:0])
+	by forward501d.mail.yandex.net (Yandex) with ESMTPS id 847CA6140A;
+	Sat, 28 Jun 2025 13:30:21 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id FUUIxAMLliE0-iaB20H8x;
+	Sat, 28 Jun 2025 13:30:20 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1751106620;
+	bh=uQhRKDxK2mabMgCqoieFovOw4kdCdDL7hqMmNvBVq1w=;
+	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+	b=NhjXIQ2bggrzxKaYhfubQknCHqyk6QZICObr3m6HDPo2sRSdLba6UHytf1es05UqC
+	 CxHrGU8uV2M9ExsJ+PPeniwqeZ9iHt0rKjI+3C58JHDfFrRDXFkRDW3zhEaLLqE2sU
+	 443MrhPJZzvVknbVSGMghG2CUeD4qzdzSWgpkJQE=
+Authentication-Results: mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+Date: Sat, 28 Jun 2025 13:30:13 +0300
+From: Onur <work@onurozkan.dev>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, airlied@gmail.com, simona@ffwll.ch,
+ ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+ a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+ rafael@kernel.org, viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
+ davidgow@google.com, nm@ti.com
+Subject: Re: [PATCH v3 3/3] rust: remove
+ `#[allow(clippy::non_send_fields_in_send_ty)]`
+Message-ID: <20250628133013.703461c8@nimda.home>
+In-Reply-To: <CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
+References: <20250628040956.2181-1-work@onurozkan.dev>
+	<20250628040956.2181-4-work@onurozkan.dev>
+	<CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] power: supply: core: Add
- power_supply_get/set_property_direct()
-To: Armin Wolf <W_Armin@gmx.de>, sre@kernel.org, hdegoede@redhat.com,
- ilpo.jarvinen@linux.intel.com
-Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250627205124.250433-1-W_Armin@gmx.de>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <20250627205124.250433-1-W_Armin@gmx.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Hi Armin,
+On Sat, 28 Jun 2025 09:13:50 +0200
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
 
-On 27-Jun-25 10:51 PM, Armin Wolf wrote:
-> Power supply extensions might want to interact with the underlying
-> power supply to retrieve data like serial numbers, charging status
-> and more. However doing so causes psy->extensions_sem to be locked
-> twice, possibly causing a deadlock.
-> 
-> Provide special variants of power_supply_get/set_property() that
-> ignore any power supply extensions and thus do not touch the
-> associated psy->extensions_sem lock.
-> 
-> Suggested-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> On Sat, Jun 28, 2025 at 6:10=E2=80=AFAM Onur =C3=96zkan <work@onurozkan.d=
+ev> wrote:
+> >
+> > Clippy no longer complains about this lint.
+>=20
+> Do you have more context? For instance, do you know since when it no
+> longer complains, or why was the reason for the change? i.e. why we
+> had the `allow` in the first place, so that we know we don't need it
+> anymore?
+>=20
+> For instance, please how I reasoned about it in commit 5e7c9b84ad08
+> ("rust: sync: remove unneeded
+> `#[allow(clippy::non_send_fields_in_send_ty)]`").
+>=20
+> (It may happen to be the same reason, or not.)
+>=20
+> Thanks!
+>=20
+> Cheers,
+> Miguel
 
-Thank you for your work on this.
+It doesn't seem to be the same reason. I rebased over
+c6af9a1191d042839e56abff69e8b0302d117988 (the exact commit where that
+lint was added) but still Clippy did not complain about it on the
+MSRV. So it was either a leftover, or there is a version between
+1.78 and the current stable where Clippy did complain. I can dig into it
+more during the week if you would like.
 
-The entire series looks good to me:
-
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-for the series.
-
-There is the question of how to merge this. I think it might
-be best for the entire series to go through the power-supply
-tree.
-
-Ilpo would that work for you and if yes can we have your ack ?
-
-Sebastian, IMHO this should be merged as fixed not as for-next
-material.
+IMO, we should require people to add a comment explaining the reason
+for adding these lint rules to the codebase. It would make both reading
+and modifying the code much simpler and clearer.
 
 Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/power/supply/power_supply_core.c | 82 ++++++++++++++++++++----
->  include/linux/power_supply.h             |  8 +++
->  2 files changed, 78 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index aedb20c1d276..e70ffedf1a80 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1241,9 +1241,8 @@ bool power_supply_has_property(struct power_supply *psy,
->  	return false;
->  }
->  
-> -int power_supply_get_property(struct power_supply *psy,
-> -			    enum power_supply_property psp,
-> -			    union power_supply_propval *val)
-> +static int __power_supply_get_property(struct power_supply *psy, enum power_supply_property psp,
-> +				       union power_supply_propval *val, bool use_extensions)
->  {
->  	struct power_supply_ext_registration *reg;
->  
-> @@ -1253,10 +1252,14 @@ int power_supply_get_property(struct power_supply *psy,
->  		return -ENODEV;
->  	}
->  
-> -	scoped_guard(rwsem_read, &psy->extensions_sem) {
-> -		power_supply_for_each_extension(reg, psy) {
-> -			if (power_supply_ext_has_property(reg->ext, psp))
-> +	if (use_extensions) {
-> +		scoped_guard(rwsem_read, &psy->extensions_sem) {
-> +			power_supply_for_each_extension(reg, psy) {
-> +				if (!power_supply_ext_has_property(reg->ext, psp))
-> +					continue;
-> +
->  				return reg->ext->get_property(psy, reg->ext, reg->data, psp, val);
-> +			}
->  		}
->  	}
->  
-> @@ -1267,20 +1270,49 @@ int power_supply_get_property(struct power_supply *psy,
->  	else
->  		return -EINVAL;
->  }
-> +
-> +int power_supply_get_property(struct power_supply *psy, enum power_supply_property psp,
-> +			      union power_supply_propval *val)
-> +{
-> +	return __power_supply_get_property(psy, psp, val, true);
-> +}
->  EXPORT_SYMBOL_GPL(power_supply_get_property);
->  
-> -int power_supply_set_property(struct power_supply *psy,
-> -			    enum power_supply_property psp,
-> -			    const union power_supply_propval *val)
-> +/**
-> + * power_supply_get_property_direct - Read a power supply property without checking for extensions
-> + * @psy: The power supply
-> + * @psp: The power supply property to read
-> + * @val: The resulting value of the power supply property
-> + *
-> + * Read a power supply property without taking into account any power supply extensions registered
-> + * on the given power supply. This is mostly useful for power supply extensions that want to access
-> + * their own power supply as using power_supply_get_property() directly will result in a potential
-> + * deadlock.
-> + *
-> + * Return: 0 on success or negative error code on failure.
-> + */
-> +int power_supply_get_property_direct(struct power_supply *psy, enum power_supply_property psp,
-> +				     union power_supply_propval *val)
-> +{
-> +        return __power_supply_get_property(psy, psp, val, false);
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_get_property_direct);
-> +
-> +
-> +static int __power_supply_set_property(struct power_supply *psy, enum power_supply_property psp,
-> +				       const union power_supply_propval *val, bool use_extensions)
->  {
->  	struct power_supply_ext_registration *reg;
->  
->  	if (atomic_read(&psy->use_cnt) <= 0)
->  		return -ENODEV;
->  
-> -	scoped_guard(rwsem_read, &psy->extensions_sem) {
-> -		power_supply_for_each_extension(reg, psy) {
-> -			if (power_supply_ext_has_property(reg->ext, psp)) {
-> +	if (use_extensions) {
-> +		scoped_guard(rwsem_read, &psy->extensions_sem) {
-> +			power_supply_for_each_extension(reg, psy) {
-> +				if (!power_supply_ext_has_property(reg->ext, psp))
-> +					continue;
-> +
->  				if (reg->ext->set_property)
->  					return reg->ext->set_property(psy, reg->ext, reg->data,
->  								      psp, val);
-> @@ -1295,8 +1327,34 @@ int power_supply_set_property(struct power_supply *psy,
->  
->  	return psy->desc->set_property(psy, psp, val);
->  }
-> +
-> +int power_supply_set_property(struct power_supply *psy, enum power_supply_property psp,
-> +			      const union power_supply_propval *val)
-> +{
-> +	return __power_supply_set_property(psy, psp, val, true);
-> +}
->  EXPORT_SYMBOL_GPL(power_supply_set_property);
->  
-> +/**
-> + * power_supply_set_property_direct - Write a power supply property without checking for extensions
-> + * @psy: The power supply
-> + * @psp: The power supply property to write
-> + * @val: The value to write to the power supply property
-> + *
-> + * Write a power supply property without taking into account any power supply extensions registered
-> + * on the given power supply. This is mostly useful for power supply extensions that want to access
-> + * their own power supply as using power_supply_set_property() directly will result in a potential
-> + * deadlock.
-> + *
-> + * Return: 0 on success or negative error code on failure.
-> + */
-> +int power_supply_set_property_direct(struct power_supply *psy, enum power_supply_property psp,
-> +				     const union power_supply_propval *val)
-> +{
-> +	return __power_supply_set_property(psy, psp, val, false);
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_set_property_direct);
-> +
->  int power_supply_property_is_writeable(struct power_supply *psy,
->  					enum power_supply_property psp)
->  {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 45468959dd98..f21f806bfb38 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -878,15 +878,23 @@ static inline int power_supply_is_system_supplied(void) { return -ENOSYS; }
->  extern int power_supply_get_property(struct power_supply *psy,
->  			    enum power_supply_property psp,
->  			    union power_supply_propval *val);
-> +int power_supply_get_property_direct(struct power_supply *psy, enum power_supply_property psp,
-> +				     union power_supply_propval *val);
->  #if IS_ENABLED(CONFIG_POWER_SUPPLY)
->  extern int power_supply_set_property(struct power_supply *psy,
->  			    enum power_supply_property psp,
->  			    const union power_supply_propval *val);
-> +int power_supply_set_property_direct(struct power_supply *psy, enum power_supply_property psp,
-> +				     const union power_supply_propval *val);
->  #else
->  static inline int power_supply_set_property(struct power_supply *psy,
->  			    enum power_supply_property psp,
->  			    const union power_supply_propval *val)
->  { return 0; }
-> +static inline int power_supply_set_property_direct(struct power_supply *psy,
-> +						   enum power_supply_property psp,
-> +						   const union power_supply_propval *val)
-> +{ return 0; }
->  #endif
->  extern void power_supply_external_power_changed(struct power_supply *psy);
->  
-
+Onur
 
