@@ -1,110 +1,134 @@
-Return-Path: <linux-pm+bounces-29790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D88EAECAAE
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 00:39:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1D99AECAC8
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 01:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71D8117348B
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 22:39:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F7647AA359
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 23:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68BCC2441B8;
-	Sat, 28 Jun 2025 22:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E1723B63F;
+	Sat, 28 Jun 2025 23:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="DA4EkO1k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NEp404Zq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC5B227E9B
-	for <linux-pm@vger.kernel.org>; Sat, 28 Jun 2025 22:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570EE17ADF8;
+	Sat, 28 Jun 2025 23:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751150339; cv=none; b=UV/o4T59VDbYL2VorAZVYrgBPykz6zBGOtn1xp2c10HuALq8c/73HD58c4jCjMbYe4fL95AJsA7Au0b96Y6fnp2cuxFH1uqR0u4Zi68UjfXZ8DsAq6zYfbxjoFUVcyQZoTetXMCcyNoQXMxYOlVtTDF+/m4QOd+nMfRD/8qDgc4=
+	t=1751154024; cv=none; b=PvDAUT9GkXbK89m31rnmiwROBFX/gP/mg1i/utvIjzo9sqUeea6Wf2k98VVEzuQzuaVlGRA4I5QYBzoEsimvFvr+HnKOaMWCl9p3C9+vPPo5BFxSp7Ob/59ISJSBKJ7S+t1sjpmfrYOILAJE3PrR3XqBVK3mzxCeAvMap7HgS9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751150339; c=relaxed/simple;
-	bh=DgGr4XC6BtQAmRfjLMb66i8MKOj0SqYngC4BMS74CPs=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lWBLC2FR/kNl/G4m6t4SQ4acs8seSXu+x8T2MfHGdIdd572X7HcASEHVNC03G9RDbllIIExEHmdUAoYH2b2rh5HEafc9pLZechY0agTiYnDX94pRo1HsK5zHxjIkGFt5LM3jMMBkBd34Pr9SZipKFznYwzw99cIBtSzmNTZE9Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=DA4EkO1k; arc=none smtp.client-ip=212.77.101.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 31775 invoked from network); 29 Jun 2025 00:38:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1751150330; bh=PLFZP/c9fNvh8aFmRu8dwrDO4a59iqD2hrb5gF14geE=;
-          h=From:To:Subject;
-          b=DA4EkO1km60TxTqeraujBDCqDogUVqwBDW2gBzfS1/Ql17TfWYvX3NRrSTg632jPr
-           KRonXKDXCv7MhYi0BwjNpjoSs4DumxQV1TglAgLsh5xFARZbFkEiGrOPvxsCjN0cd1
-           D3jBp++nicZwmEJdUarKweJAw8vq4MtasIy4WUMA3pqqFdADD3be4nmj7RBW0KEof7
-           iQ27EiYbdton953KwsGw2UHMQx0KNueCnN0aNcXxCUJyChlEhSK1B7PiMovmbHVipL
-           xKsOb3ULAMmc2szMwdNtvPxZBs2M3VVp1aU+kmDCKJiKQC0HEjND19uE9dh65AfNkB
-           hKD3oZItvq5hA==
-Received: from 83.24.145.121.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.145.121])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <rafael@kernel.org>; 29 Jun 2025 00:38:50 +0200
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	jic23@kernel.org,
-	dlechner@baylibre.com,
-	nuno.sa@analog.com,
-	andy@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	olek2@wp.pl,
-	zhiyong.tao@mediatek.com,
-	linux-pm@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH 3/3] dt-bindings: iio: adc: Add support for MT7981
-Date: Sun, 29 Jun 2025 00:38:37 +0200
-Message-Id: <20250628223837.848244-4-olek2@wp.pl>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250628223837.848244-1-olek2@wp.pl>
-References: <20250628223837.848244-1-olek2@wp.pl>
+	s=arc-20240116; t=1751154024; c=relaxed/simple;
+	bh=UhU1IO1cb15dVTrBJ46CgfvRJH0rlvL5y0NJdEg/N4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=p1jNoWlIvDERK4aI1jNxg4gZufvxjwhciT23XFcT5ZISvm+wbrm/+dd3TpNg/JagzTeJYL3eYF7RHgNOppQcaCR2WGFMTUvzTLSMoHvmYvufB2IxWCIcNHmT4jtloyVtk4r2uhqaGP64ht+biL6dRDsw/4kRzkO7ac3C8JnUOSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NEp404Zq; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751154022; x=1782690022;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UhU1IO1cb15dVTrBJ46CgfvRJH0rlvL5y0NJdEg/N4w=;
+  b=NEp404ZqboJW42T7f8icUo+CcmCAwKxHjwmlWgFWPgnLXyimyHvIXM3s
+   HicY/dFkIbPRBciDE9knmI6wLh+sqBR7oJRvfcdR624F7m0iXR8I59t0Z
+   iwG7XCiB7v/RYpV4Nhx+fUcvUwf7w2ab7rjlmTmvDHpx/shxHIjW1vHkG
+   b9RP2btATW+z9xG5ZYnB2fLxx/aP9OiLh2eRGsUMT1ZGlPSp3Zlg3pZZZ
+   ZKctPyynGjTQgfX/C7WzD4OGcNC+i1K4TBD6exYDZy5Fa2fzIaNs3HbSy
+   RleDuRyoCsZq5He5OTOqVOJNdUOFp4b1yHPT0ptop93SMOKTECwl+ca8x
+   g==;
+X-CSE-ConnectionGUID: TzrC9VZATHSpxfUYyqcBog==
+X-CSE-MsgGUID: 5MqB8YSwRTWX/By4qA+6+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="57201734"
+X-IronPort-AV: E=Sophos;i="6.16,274,1744095600"; 
+   d="scan'208";a="57201734"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 16:40:22 -0700
+X-CSE-ConnectionGUID: y7CHE3sVRXqqYgAkswKIxw==
+X-CSE-MsgGUID: 3vUyENppQg2EV4EmDvSYSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,274,1744095600"; 
+   d="scan'208";a="153208750"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 28 Jun 2025 16:40:20 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVf9e-000XUQ-0P;
+	Sat, 28 Jun 2025 23:40:18 +0000
+Date: Sun, 29 Jun 2025 07:39:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:fixes 3/5]
+ drivers/powercap/intel_rapl_common.c:357:50-54: opportunity for
+ str_enabled_disabled(mode)
+Message-ID: <202506290745.i7nfrR7D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: e666d4a039fb80211d7087c5597d3d6c
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [IZMh]                               
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The temperature sensor in the MT7981 is same as in the MT7986.
-Add compatible string for mt7981.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
+head:   e962f723d1420ff8ac720a80fa2b65abc7ece1ff
+commit: 3b2cebf28cac6dc375be5be675dd767b400cd294 [3/5] powercap: intel_rapl: Do not change CLAMPING bit if ENABLE bit cannot be changed
+config: x86_64-randconfig-104-20250629 (https://download.01.org/0day-ci/archive/20250629/202506290745.i7nfrR7D-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- .../devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml      | 1 +
- 1 file changed, 1 insertion(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506290745.i7nfrR7D-lkp@intel.com/
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml b/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
-index b489c984c1bb..ceb914dde15b 100644
---- a/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
-@@ -26,6 +26,7 @@ properties:
-           - mediatek,mt2712-auxadc
-           - mediatek,mt6765-auxadc
-           - mediatek,mt7622-auxadc
-+          - mediatek,mt7981-auxadc
-           - mediatek,mt7986-auxadc
-           - mediatek,mt8173-auxadc
-       - items:
+cocci warnings: (new ones prefixed by >>)
+>> drivers/powercap/intel_rapl_common.c:357:50-54: opportunity for str_enabled_disabled(mode)
+
+vim +357 drivers/powercap/intel_rapl_common.c
+
+   339	
+   340	static int set_domain_enable(struct powercap_zone *power_zone, bool mode)
+   341	{
+   342		struct rapl_domain *rd = power_zone_to_rapl_domain(power_zone);
+   343		struct rapl_defaults *defaults = get_defaults(rd->rp);
+   344		u64 val;
+   345		int ret;
+   346	
+   347		cpus_read_lock();
+   348		ret = rapl_write_pl_data(rd, POWER_LIMIT1, PL_ENABLE, mode);
+   349		if (ret)
+   350			goto end;
+   351	
+   352		ret = rapl_read_pl_data(rd, POWER_LIMIT1, PL_ENABLE, false, &val);
+   353		if (ret)
+   354			goto end;
+   355	
+   356		if (mode != val) {
+ > 357			pr_debug("%s cannot be %s\n", power_zone->name, mode ? "enabled" : "disabled");
+   358			goto end;
+   359		}
+   360	
+   361		if (defaults->set_floor_freq)
+   362			defaults->set_floor_freq(rd, mode);
+   363	
+   364	end:
+   365		cpus_read_unlock();
+   366	
+   367		return ret;
+   368	}
+   369	
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
