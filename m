@@ -1,193 +1,264 @@
-Return-Path: <linux-pm+bounces-29747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C39F1AEC627
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 11:11:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A326EAEC65A
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 11:25:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44E393BA38C
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 09:11:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05C7F16C717
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jun 2025 09:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EA922D7A3;
-	Sat, 28 Jun 2025 09:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11FF923C519;
+	Sat, 28 Jun 2025 09:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="r/s3poRq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koMJosSw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A452253A0;
-	Sat, 28 Jun 2025 09:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C449122D7A3;
+	Sat, 28 Jun 2025 09:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751101864; cv=none; b=XhIaWT7qycSSebmwQUKMtChnW8wbB4+3NKsJOP+uaOChBXKBsPP9ls5ZLXr0xNV8+1s3B+EpALIKEER7OX+MAhneTko7FQQ8yITf/FL8EjxONhKBdjeEaQFSgVihJaIa/HYJGLuTGpk72dBXv6V+lWoeYfDhuMVndFzQo9pzSj8=
+	t=1751102718; cv=none; b=LH9LroB2YtpZOb2FoH8UCuFIp/nd1UCZhX+8BexJPrHMA9+2k6b8Lu/Xi8LRfYNOmroVeUKFcena9bkzILkSYZOIAyoP+evkylEikAiiDPGBVa7MicDRP80NDqkJEqQv1fnnDrsiiB5wiwmYognvTke6zR0qz2CV2XxtbnsYTh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751101864; c=relaxed/simple;
-	bh=owery2Y9xho1bAvAYoxF0F6uDfB7KsKdTzyV/Nr07xM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=odQqimo6clDhICdUEiuUvXNrzI9pYuF5sVu9dS3KUij4qS59He4BIdPLMaS/K6a3yTWOmeeeYZr4Pp6GYZxsuoHgrOwoKpRP0Uq+aYNb1FBQhE4tJbqVZoqCFr7XRRJF8DWtJTZxxgeQaiupIRlGN7oA9xw8bhsOIUYVEFF+gT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=r/s3poRq; arc=none smtp.client-ip=134.0.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout1.routing.net (Postfix) with ESMTP id 6597441B9A;
-	Sat, 28 Jun 2025 09:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1751101856;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Mw75z6h4HeFha6AF7YI1R1VXg23z1dS7Y1C1o8vw7rQ=;
-	b=r/s3poRqq/VChsGtyFgPlDXqq72CLYUbSfojrYIpQDxm+axAk4IYVdvqL65kjsb/WoIQRt
-	ZFIo6bZfqpyao7+yjmEacYygPp80IJuKzIWRvKSHKjcta8uI3rUCW0bRZUwo9OkjOy9Q8V
-	1NcshjhY4uxuASOq5MabTXLHPmLZN/s=
-Received: from frank-u24.. (fttx-pool-217.61.150.139.bambit.de [217.61.150.139])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 0AAB512272D;
-	Sat, 28 Jun 2025 09:10:56 +0000 (UTC)
-From: Frank Wunderlich <linux@fw-web.de>
-To: MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Georgi Djakov <djakov@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Frank Wunderlich <frank-w@public-files.de>,
-	Johnson Wang <johnson.wang@mediatek.com>,
-	=?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-	Landen Chao <Landen.Chao@mediatek.com>,
-	DENG Qingfang <dqfext@gmail.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Daniel Golle <daniel@makrotopia.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Felix Fietkau <nbd@nbd.name>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH v6 15/15] arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phys and leds
-Date: Sat, 28 Jun 2025 11:10:39 +0200
-Message-ID: <20250628091043.57645-16-linux@fw-web.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250628091043.57645-1-linux@fw-web.de>
-References: <20250628091043.57645-1-linux@fw-web.de>
+	s=arc-20240116; t=1751102718; c=relaxed/simple;
+	bh=JojSEzA7X+jR/kNu89V44GciVsM5eLhWK20LdmEerYg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qzkm67DwKIOJR+hcZydIRkXHQRpJtgywErDpIITyInbgT2W1XXDPZ5X3hfk6IHSsGnDQbj37raTI3sgdibsAvBkXFJsvSHykV8hG5/VgsWlTCqq8dhv7Zh13QGRRHOCyiXoPTXJkrc8C43blJRc3QAbdUJ2U+wyRWPHHL43dzFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koMJosSw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC08FC4CEEA;
+	Sat, 28 Jun 2025 09:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751102715;
+	bh=JojSEzA7X+jR/kNu89V44GciVsM5eLhWK20LdmEerYg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=koMJosSwX6VQDUq+sHVJSRy77pEEC9ebRBeCWLTcOu9j1hQ4hyc6kBNCPemVMkIb9
+	 aglPZ0E7ilfXJ28eCGOoe0wX/Bbtzx4Bq8Ttyur8syBqFKIezZ4HwK243bqoEZf6sP
+	 pN6DZOe49VDndB4fph8xo5ybJfSEj/nJq0GKa1hffUCxCLYOfjz6LLCLAw8fe0TDy8
+	 /+TpkbZjvjw3t2VwlAQlIT9CQORYQNIDuEpvvlwDWTHhh9u12cUeSJjgudEx5v7inH
+	 6AFAPPppk7Yb3dlcCvk8UY5m2jr0wbBLtaGDi3YfqpmXgpw3Up1mFvztdOoTvxk3qz
+	 /ex/hPMaQ1jig==
+Message-ID: <b4e077d9-a5f5-47ec-abc7-9e957c32cd5b@kernel.org>
+Date: Sat, 28 Jun 2025 11:25:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] power: supply: core: Add
+ power_supply_get/set_property_direct()
+To: Armin Wolf <W_Armin@gmx.de>, sre@kernel.org, hdegoede@redhat.com,
+ ilpo.jarvinen@linux.intel.com
+Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250627205124.250433-1-W_Armin@gmx.de>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <20250627205124.250433-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Hi Armin,
 
-Assign pinctrl to switch phys and leds.
+On 27-Jun-25 10:51 PM, Armin Wolf wrote:
+> Power supply extensions might want to interact with the underlying
+> power supply to retrieve data like serial numbers, charging status
+> and more. However doing so causes psy->extensions_sem to be locked
+> twice, possibly causing a deadlock.
+> 
+> Provide special variants of power_supply_get/set_property() that
+> ignore any power supply extensions and thus do not touch the
+> associated psy->extensions_sem lock.
+> 
+> Suggested-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-v4:
-- reorder switch phy(-led) properties
-v2:
-- add labels and led-function and include after dropping from soc dtsi
----
- .../dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
+Thank you for your work on this.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi
-index 4d709ee527df..7c9df606f60d 100644
---- a/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi
-@@ -4,6 +4,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/regulator/richtek,rt5190a-regulator.h>
-+#include <dt-bindings/leds/common.h>
- 
- #include "mt7988a.dtsi"
- 
-@@ -152,6 +153,66 @@ &gmac2 {
- 	sfp = <&sfp1>;
- };
- 
-+&gsw_phy0 {
-+	pinctrl-0 = <&gbe0_led0_pins>;
-+	pinctrl-names = "gbe-led";
-+};
-+
-+&gsw_phy0_led0 {
-+	function = LED_FUNCTION_WAN;
-+	color = <LED_COLOR_ID_GREEN>;
-+	status = "okay";
-+};
-+
-+&gsw_port0 {
-+	label = "wan";
-+};
-+
-+&gsw_phy1 {
-+	pinctrl-0 = <&gbe1_led0_pins>;
-+	pinctrl-names = "gbe-led";
-+};
-+
-+&gsw_phy1_led0 {
-+	function = LED_FUNCTION_LAN;
-+	color = <LED_COLOR_ID_GREEN>;
-+	status = "okay";
-+};
-+
-+&gsw_port1 {
-+	label = "lan1";
-+};
-+
-+&gsw_phy2 {
-+	pinctrl-0 = <&gbe2_led0_pins>;
-+	pinctrl-names = "gbe-led";
-+};
-+
-+&gsw_phy2_led0 {
-+	function = LED_FUNCTION_LAN;
-+	color = <LED_COLOR_ID_GREEN>;
-+	status = "okay";
-+};
-+
-+&gsw_port2 {
-+	label = "lan2";
-+};
-+
-+&gsw_phy3 {
-+	pinctrl-0 = <&gbe3_led0_pins>;
-+	pinctrl-names = "gbe-led";
-+};
-+
-+&gsw_phy3_led0 {
-+	function = LED_FUNCTION_LAN;
-+	color = <LED_COLOR_ID_GREEN>;
-+	status = "okay";
-+};
-+
-+&gsw_port3 {
-+	label = "lan3";
-+};
-+
- &i2c0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_pins>;
--- 
-2.43.0
+The entire series looks good to me:
+
+Reviewed-by: Hans de Goede <hansg@kernel.org>
+
+for the series.
+
+There is the question of how to merge this. I think it might
+be best for the entire series to go through the power-supply
+tree.
+
+Ilpo would that work for you and if yes can we have your ack ?
+
+Sebastian, IMHO this should be merged as fixed not as for-next
+material.
+
+Regards,
+
+Hans
+
+
+
+
+> ---
+>  drivers/power/supply/power_supply_core.c | 82 ++++++++++++++++++++----
+>  include/linux/power_supply.h             |  8 +++
+>  2 files changed, 78 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index aedb20c1d276..e70ffedf1a80 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -1241,9 +1241,8 @@ bool power_supply_has_property(struct power_supply *psy,
+>  	return false;
+>  }
+>  
+> -int power_supply_get_property(struct power_supply *psy,
+> -			    enum power_supply_property psp,
+> -			    union power_supply_propval *val)
+> +static int __power_supply_get_property(struct power_supply *psy, enum power_supply_property psp,
+> +				       union power_supply_propval *val, bool use_extensions)
+>  {
+>  	struct power_supply_ext_registration *reg;
+>  
+> @@ -1253,10 +1252,14 @@ int power_supply_get_property(struct power_supply *psy,
+>  		return -ENODEV;
+>  	}
+>  
+> -	scoped_guard(rwsem_read, &psy->extensions_sem) {
+> -		power_supply_for_each_extension(reg, psy) {
+> -			if (power_supply_ext_has_property(reg->ext, psp))
+> +	if (use_extensions) {
+> +		scoped_guard(rwsem_read, &psy->extensions_sem) {
+> +			power_supply_for_each_extension(reg, psy) {
+> +				if (!power_supply_ext_has_property(reg->ext, psp))
+> +					continue;
+> +
+>  				return reg->ext->get_property(psy, reg->ext, reg->data, psp, val);
+> +			}
+>  		}
+>  	}
+>  
+> @@ -1267,20 +1270,49 @@ int power_supply_get_property(struct power_supply *psy,
+>  	else
+>  		return -EINVAL;
+>  }
+> +
+> +int power_supply_get_property(struct power_supply *psy, enum power_supply_property psp,
+> +			      union power_supply_propval *val)
+> +{
+> +	return __power_supply_get_property(psy, psp, val, true);
+> +}
+>  EXPORT_SYMBOL_GPL(power_supply_get_property);
+>  
+> -int power_supply_set_property(struct power_supply *psy,
+> -			    enum power_supply_property psp,
+> -			    const union power_supply_propval *val)
+> +/**
+> + * power_supply_get_property_direct - Read a power supply property without checking for extensions
+> + * @psy: The power supply
+> + * @psp: The power supply property to read
+> + * @val: The resulting value of the power supply property
+> + *
+> + * Read a power supply property without taking into account any power supply extensions registered
+> + * on the given power supply. This is mostly useful for power supply extensions that want to access
+> + * their own power supply as using power_supply_get_property() directly will result in a potential
+> + * deadlock.
+> + *
+> + * Return: 0 on success or negative error code on failure.
+> + */
+> +int power_supply_get_property_direct(struct power_supply *psy, enum power_supply_property psp,
+> +				     union power_supply_propval *val)
+> +{
+> +        return __power_supply_get_property(psy, psp, val, false);
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_get_property_direct);
+> +
+> +
+> +static int __power_supply_set_property(struct power_supply *psy, enum power_supply_property psp,
+> +				       const union power_supply_propval *val, bool use_extensions)
+>  {
+>  	struct power_supply_ext_registration *reg;
+>  
+>  	if (atomic_read(&psy->use_cnt) <= 0)
+>  		return -ENODEV;
+>  
+> -	scoped_guard(rwsem_read, &psy->extensions_sem) {
+> -		power_supply_for_each_extension(reg, psy) {
+> -			if (power_supply_ext_has_property(reg->ext, psp)) {
+> +	if (use_extensions) {
+> +		scoped_guard(rwsem_read, &psy->extensions_sem) {
+> +			power_supply_for_each_extension(reg, psy) {
+> +				if (!power_supply_ext_has_property(reg->ext, psp))
+> +					continue;
+> +
+>  				if (reg->ext->set_property)
+>  					return reg->ext->set_property(psy, reg->ext, reg->data,
+>  								      psp, val);
+> @@ -1295,8 +1327,34 @@ int power_supply_set_property(struct power_supply *psy,
+>  
+>  	return psy->desc->set_property(psy, psp, val);
+>  }
+> +
+> +int power_supply_set_property(struct power_supply *psy, enum power_supply_property psp,
+> +			      const union power_supply_propval *val)
+> +{
+> +	return __power_supply_set_property(psy, psp, val, true);
+> +}
+>  EXPORT_SYMBOL_GPL(power_supply_set_property);
+>  
+> +/**
+> + * power_supply_set_property_direct - Write a power supply property without checking for extensions
+> + * @psy: The power supply
+> + * @psp: The power supply property to write
+> + * @val: The value to write to the power supply property
+> + *
+> + * Write a power supply property without taking into account any power supply extensions registered
+> + * on the given power supply. This is mostly useful for power supply extensions that want to access
+> + * their own power supply as using power_supply_set_property() directly will result in a potential
+> + * deadlock.
+> + *
+> + * Return: 0 on success or negative error code on failure.
+> + */
+> +int power_supply_set_property_direct(struct power_supply *psy, enum power_supply_property psp,
+> +				     const union power_supply_propval *val)
+> +{
+> +	return __power_supply_set_property(psy, psp, val, false);
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_set_property_direct);
+> +
+>  int power_supply_property_is_writeable(struct power_supply *psy,
+>  					enum power_supply_property psp)
+>  {
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 45468959dd98..f21f806bfb38 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -878,15 +878,23 @@ static inline int power_supply_is_system_supplied(void) { return -ENOSYS; }
+>  extern int power_supply_get_property(struct power_supply *psy,
+>  			    enum power_supply_property psp,
+>  			    union power_supply_propval *val);
+> +int power_supply_get_property_direct(struct power_supply *psy, enum power_supply_property psp,
+> +				     union power_supply_propval *val);
+>  #if IS_ENABLED(CONFIG_POWER_SUPPLY)
+>  extern int power_supply_set_property(struct power_supply *psy,
+>  			    enum power_supply_property psp,
+>  			    const union power_supply_propval *val);
+> +int power_supply_set_property_direct(struct power_supply *psy, enum power_supply_property psp,
+> +				     const union power_supply_propval *val);
+>  #else
+>  static inline int power_supply_set_property(struct power_supply *psy,
+>  			    enum power_supply_property psp,
+>  			    const union power_supply_propval *val)
+>  { return 0; }
+> +static inline int power_supply_set_property_direct(struct power_supply *psy,
+> +						   enum power_supply_property psp,
+> +						   const union power_supply_propval *val)
+> +{ return 0; }
+>  #endif
+>  extern void power_supply_external_power_changed(struct power_supply *psy);
+>  
 
 
