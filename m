@@ -1,129 +1,183 @@
-Return-Path: <linux-pm+bounces-29797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CFBFAECC76
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 14:28:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F6FAAECE0B
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 16:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D0C53B0825
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 12:28:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 842881896BC1
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 14:47:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA8D21FF55;
-	Sun, 29 Jun 2025 12:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WM9TF5if"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A572248B4;
+	Sun, 29 Jun 2025 14:47:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98CC218E96;
-	Sun, 29 Jun 2025 12:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206694437A;
+	Sun, 29 Jun 2025 14:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751200133; cv=none; b=g9tPMHGKFtMGd2tLD+fjxLQT/LfzvCR/9qNONLJyCl64uzAgWvvOTk/Q0hnHvlPAKGxUsArmGTOYnnhJSvxLBHWcmLChiPJNUgeuVJ+1xUbkRDdnth9JSCnNk8yQ/WumX4hyx9ZK6T1NRccE5JAQhMa13YcxYxqatek4EIgXzEY=
+	t=1751208434; cv=none; b=RFeH/9IlAJA0Ccgu07xZxWVxUogjo2XLM/pvgX04U1wSMaM7jr1nKQfUFtAIV5WltM3WdIGll9j6BnF6Gifjcp88OH4lmKmMgcuq88dc5XdDfqsoWAZmIV4CKjCCn2SvD/LksZ8QpY+lRz+4x1G2CxQ2DB4NDn2KDwKMXyj89V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751200133; c=relaxed/simple;
-	bh=FRu2A26eu4KBFJ6l+JTWln5JaWJl7JJQ3Hdp4WXn+Lg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ChaE/aJ2ATsvfQVcsHSa/Ldo3VMumEog4KESVRrSsXoJnL4SODhp6QInQk6yfNVSkZ0gI4RErnA8tjnb2mb7/Uq+7y211r2mE6ngAJSBqjBhIa8Em6gaPsITRpbhNF466sytGz8wKZKHPMr6MqKofHXmaTde8N/X00CMylCFgFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WM9TF5if; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-747c2cc3419so3570228b3a.2;
-        Sun, 29 Jun 2025 05:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751200131; x=1751804931; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hof9vhiYbQJiRNGLbC7upWUJmQgprv3f9wttuJdIcXM=;
-        b=WM9TF5ifq+xILYZF/Fo2VLyDNcBaoIwPRjzADUJHEt7CH6lr/VkhMXNGzHi0BsU03d
-         oLXdKd8x8puF6ibUUlua45aehjTRKqlsbjVClB9ILWiG8xh/VgGQsIsqTLE8iqyIhIXR
-         QkuKwleHEpGXORO1YukzkcW9KFIYQKhgBZnDe8vT6T86Z6SG3zLPKfbxiJ4KputDeTsn
-         YwU7Oof7OS8gx0NIw7S+lRwSHMyGs9XqFDq0VUcerkv4s3PgpTLxGJnOupLKsVvwem3/
-         z6hMt4ySRTT4IK2eq8WwQQP1ZpFi797wFAZzulGDIHCX0NFBMfZl3YA3dSdXi5d0gobw
-         Rk6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751200131; x=1751804931;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hof9vhiYbQJiRNGLbC7upWUJmQgprv3f9wttuJdIcXM=;
-        b=iRFHtlxyiu7jBr9cMgHaX/sRFw6Gqt9F8yz/xif/Fcp6dBD/x5rUm05iVirUFaMTzW
-         DhGw26GOzJ2kEnnY58FZzVonHCk2StYU9ngU8tx6OO04rM9VKZBHndIxWBC1eiTvB1IK
-         70f923C79UJbcj57k37PgJfAu2rAGHDBOzyQswfIY70OIv1+uRt1hoTZWId2LyLQwQXu
-         QOPFQj6nTPdiC+hysUE1n1lNm0jYsue9BZfDH2ybXXZGtc2kGeMRvQ1XcAZPraO+CKoe
-         KSb64Q3sRvzO++f9uje0n9d/l3otexewgdrkT3Vx+SyHFQsuFHDWpRQZnClt/K1F803N
-         Kg8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVKvS1oJwqxtzSfOcecXYzv647F7tyKTAM3Y4PCyrNCILPRGO7iQHFSELNFoll3xrzXhUpQeD6UOw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yysyx3PKeFfWo1JW8zAzudFIbGOhq0JGZdGJDq87N7Vu8zuoyi5
-	kkJcX+POTzG3xcx0rlsiqqFx2J+TD6o/fSwKi5wFGC4MrliHKo8X3/VD
-X-Gm-Gg: ASbGncs3T9/tT6R6cpxclyJfrXHzYp9VdK2il6aE0FAA/G9tL71FYv8yuP9DkbZCqRJ
-	s4oWOlJJkOogmZirKC6mbUF2c5RDL23V7c+YSR5Fb9yAjpAYxiPVihRcAfIvM+CcdabQU954H61
-	eJIj8Bbl7m9Jhp50SC+/H12XU2r0/+GRSRiRVNWCwWahz88e73mTbjIHynhfWpPbOydOBQ1apFm
-	UV/cQON1Bh+fenEZ1T7mjGsrAUj1ymKl0e0ZyVV5NOTKgfeUS1l8U9DBtv1ijj2fjTPzxvFzPzB
-	OV7ZQ2Mup7RaQHpAGCGMidxfRhQ1V00syR3//bH6RnCpS8xjY7ENgkCWxjBigIImNiCsyDkbxAe
-	t
-X-Google-Smtp-Source: AGHT+IHddfP/qfIqQ/Pq52wae/6r2Lx0bNCOsgAf+8+GNhKSX/5lqk384njvGbup7RDGk3HumHixQQ==
-X-Received: by 2002:a05:6a00:3e17:b0:748:33f3:8da3 with SMTP id d2e1a72fcca58-74af6f2f9d7mr14770731b3a.19.1751200130818;
-        Sun, 29 Jun 2025 05:28:50 -0700 (PDT)
-Received: from [192.168.1.168] ([106.215.181.119])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af540b25dsm6369758b3a.25.2025.06.29.05.28.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jun 2025 05:28:50 -0700 (PDT)
-Message-ID: <a27c8ef8-9b80-4749-a64a-0389c266fd0e@gmail.com>
-Date: Sun, 29 Jun 2025 17:58:44 +0530
+	s=arc-20240116; t=1751208434; c=relaxed/simple;
+	bh=KClsNYwfxeyKw0Nv6uUMfVDKlblzETmDZmLERrHHVgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OB2ioMZBvbXpuOBi+zzWKXs+P4MZc/LTjYKyl8b6oueQJSMrdzpCaU5/mkLql/2mrPUggDeRK9EqcemtS2fGEi3xCgu35xkgQTcR2LJ82LHPS0hQK5j0Aes/ftWsUFJiBiQqlNOjk7hgzX06o7LcIJRj6GgmiQO8/xy7iy4w8jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.98.2)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1uVtJ6-000000001Bw-12Mh;
+	Sun, 29 Jun 2025 14:47:00 +0000
+Date: Sun, 29 Jun 2025 15:46:56 +0100
+From: Daniel Golle <daniel@makrotopia.org>
+To: Frank Wunderlich <linux@fw-web.de>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Frank Wunderlich <frank-w@public-files.de>,
+	Johnson Wang <johnson.wang@mediatek.com>,
+	=?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+	Landen Chao <Landen.Chao@mediatek.com>,
+	DENG Qingfang <dqfext@gmail.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v7 07/14] arm64: dts: mediatek: mt7988: add basic
+ ethernet-nodes
+Message-ID: <aGFR4PJv0pdKdD94@makrotopia.org>
+References: <20250628165451.85884-1-linux@fw-web.de>
+ <20250628165451.85884-8-linux@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/7] cpufreq: intel_pstate: Enable EAS on hybrid
- platforms without SMT
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Morten Rasmussen <morten.rasmussen@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- Pierre Gondois <pierre.gondois@arm.com>,
- Christian Loehle <christian.loehle@arm.com>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <2999205.e9J7NaK4W3@rjwysocki.net>
- <CAJZ5v0jLpKEgAodWx8G0k127vMUe-J1rGkCEreRP7a1dQXT2vA@mail.gmail.com>
- <CAJZ5v0gcgMJ-qihgc3_OF4djxAy8K0i-cmnjRe4AQrc_YEu4DQ@mail.gmail.com>
-Content-Language: en-US
-From: Ibrahim Ansari <ansari.ibrahim1@gmail.com>
-In-Reply-To: <CAJZ5v0gcgMJ-qihgc3_OF4djxAy8K0i-cmnjRe4AQrc_YEu4DQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250628165451.85884-8-linux@fw-web.de>
 
-Hi,
+On Sat, Jun 28, 2025 at 06:54:42PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add basic ethernet related nodes.
+> 
+> Mac1+2 needs pcs (sgmii+usxgmii) to work correctly which will be linked
+> later when driver is merged.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> v6:
+> - fix whitespace-errors for pdma irqs (spaces vs. tabs)
+> - move sram from eth reg to own sram node (needs CONFIG_SRAM)
+> 
+> v5:
+> - add reserved irqs and change names to fe0..fe3
+> - change rx-ringX to pdmaX to be closer to documentation
+> 
+> v4:
+> - comment for fixed-link on gmac0
+> - update 2g5 phy node
+>   - unit-name dec instead of hex to match reg property
+>   - move compatible before reg
+>   - drop phy-mode
+> - add interrupts for RSS
+> - add interrupt-names and drop reserved irqs for ethernet
+> - some reordering
+> - eth-reg and clock whitespace-fix based on angelos review
+> ---
+>  arch/arm64/boot/dts/mediatek/mt7988a.dtsi | 137 +++++++++++++++++++++-
+>  1 file changed, 134 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+> index 560ec86dbec0..cf765a6b1fa8 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+> @@ -680,7 +680,28 @@ xphyu3port0: usb-phy@11e13000 {
+>  			};
+>  		};
+>  
+> -		clock-controller@11f40000 {
+> +		xfi_tphy0: phy@11f20000 {
+> +			compatible = "mediatek,mt7988-xfi-tphy";
+> +			reg = <0 0x11f20000 0 0x10000>;
+> +			clocks = <&xfi_pll CLK_XFIPLL_PLL_EN>,
+> +				 <&topckgen CLK_TOP_XFI_PHY_0_XTAL_SEL>;
+> +			clock-names = "xfipll", "topxtal";
+> +			resets = <&watchdog 14>;
+> +			mediatek,usxgmii-performance-errata;
+> +			#phy-cells = <0>;
+> +		};
+> +
+> +		xfi_tphy1: phy@11f30000 {
+> +			compatible = "mediatek,mt7988-xfi-tphy";
+> +			reg = <0 0x11f30000 0 0x10000>;
+> +			clocks = <&xfi_pll CLK_XFIPLL_PLL_EN>,
+> +				 <&topckgen CLK_TOP_XFI_PHY_1_XTAL_SEL>;
+> +			clock-names = "xfipll", "topxtal";
+> +			resets = <&watchdog 15>;
+> +			#phy-cells = <0>;
+> +		};
+> +
+> +		xfi_pll: clock-controller@11f40000 {
+>  			compatible = "mediatek,mt7988-xfi-pll";
+>  			reg = <0 0x11f40000 0 0x1000>;
+>  			resets = <&watchdog 16>;
+> @@ -714,19 +735,129 @@ phy_calibration_p3: calib@97c {
+>  			};
+>  		};
+>  
+> -		clock-controller@15000000 {
+> +		ethsys: clock-controller@15000000 {
+>  			compatible = "mediatek,mt7988-ethsys", "syscon";
+>  			reg = <0 0x15000000 0 0x1000>;
+>  			#clock-cells = <1>;
+>  			#reset-cells = <1>;
+>  		};
+>  
+> -		clock-controller@15031000 {
+> +		ethwarp: clock-controller@15031000 {
+>  			compatible = "mediatek,mt7988-ethwarp";
+>  			reg = <0 0x15031000 0 0x1000>;
+>  			#clock-cells = <1>;
+>  			#reset-cells = <1>;
+>  		};
+> +
+> +		eth: ethernet@15100000 {
+> +			compatible = "mediatek,mt7988-eth";
+> +			reg = <0 0x15100000 0 0x80000>;
 
-On 5/13/25 19:31, Rafael J. Wysocki wrote:
+I think this should be
 
-> Finally, schedutil needs to be the cpufreq governor which requires
-> intel_pstate to operate in the passive mode (schedutil is the default
-> governor in that case).  The most straightforward way to switch it
-> into the passive mode is to write "passive" to
-> /sys/devices/system/cpu/intel_pstate/status (it may also be started in
-> the passive mode as described in
-> https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_pstate.html).
+reg = <0 0x15100000 0 0x40000>;
 
-I'm curious if you intend to bring back support for EAS with 
-intel_pstate in active mode down the line?
+as the range from 15140000 ~ 1517ffff is used as SRAM on MT7981/MT7986 and
+doesn't seem to be used at all on MT7988.
 
-That would get this working out of the box across distros, since 
-`intel_pstate=active` is the default setup everywhere (and typically 
-what users should prefer? as I understand from the documentation.)
-
-Thanks for your work!
-
+root@OpenWrt:~# devmem 0x15140000 32
+0xDEADBEEF
+...
+root@OpenWrt:~# devmem 0x1517fffc 32
+0xDEADBEEF
+(with 0xDEADBEEF all that range)
 
