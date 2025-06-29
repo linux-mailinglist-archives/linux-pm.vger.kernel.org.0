@@ -1,71 +1,95 @@
-Return-Path: <linux-pm+bounces-29798-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29799-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F6FAAECE0B
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 16:47:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F5A8AECE9E
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 18:23:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 842881896BC1
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 14:47:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AD7B18920B3
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Jun 2025 16:24:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A572248B4;
-	Sun, 29 Jun 2025 14:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CE823183B;
+	Sun, 29 Jun 2025 16:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PdLYxxxO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206694437A;
-	Sun, 29 Jun 2025 14:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127C05227;
+	Sun, 29 Jun 2025 16:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751208434; cv=none; b=RFeH/9IlAJA0Ccgu07xZxWVxUogjo2XLM/pvgX04U1wSMaM7jr1nKQfUFtAIV5WltM3WdIGll9j6BnF6Gifjcp88OH4lmKmMgcuq88dc5XdDfqsoWAZmIV4CKjCCn2SvD/LksZ8QpY+lRz+4x1G2CxQ2DB4NDn2KDwKMXyj89V8=
+	t=1751214225; cv=none; b=GETEYm7Fi225gvWecWgn1uGidXu6VvrnodO6Mjp6Sx0wFKiU0kGtNfNgXzDrOxBvgfW/nlZwdl0efJbASYrWKONE19fUyq3GPq13VQOsAwYE8Cq8Rr95SJdkvCVUEB+2WSPHUQdc9JxzvdLhtnI9KKqvBarD3noqIKv4b28zr8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751208434; c=relaxed/simple;
-	bh=KClsNYwfxeyKw0Nv6uUMfVDKlblzETmDZmLERrHHVgE=;
+	s=arc-20240116; t=1751214225; c=relaxed/simple;
+	bh=JqfaalQqRJu0oypmymEvV6QArJyNK8a8hndEAk5F8Ts=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OB2ioMZBvbXpuOBi+zzWKXs+P4MZc/LTjYKyl8b6oueQJSMrdzpCaU5/mkLql/2mrPUggDeRK9EqcemtS2fGEi3xCgu35xkgQTcR2LJ82LHPS0hQK5j0Aes/ftWsUFJiBiQqlNOjk7hgzX06o7LcIJRj6GgmiQO8/xy7iy4w8jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.98.2)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1uVtJ6-000000001Bw-12Mh;
-	Sun, 29 Jun 2025 14:47:00 +0000
-Date: Sun, 29 Jun 2025 15:46:56 +0100
-From: Daniel Golle <daniel@makrotopia.org>
-To: Frank Wunderlich <linux@fw-web.de>
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Frank Wunderlich <frank-w@public-files.de>,
-	Johnson Wang <johnson.wang@mediatek.com>,
-	=?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-	Landen Chao <Landen.Chao@mediatek.com>,
-	DENG Qingfang <dqfext@gmail.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v7 07/14] arm64: dts: mediatek: mt7988: add basic
- ethernet-nodes
-Message-ID: <aGFR4PJv0pdKdD94@makrotopia.org>
-References: <20250628165451.85884-1-linux@fw-web.de>
- <20250628165451.85884-8-linux@fw-web.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2JEDuSiE3vOFIKKMd6oUb+U0hAAiSZXacaP5wZ0RAyn6VBwke62gWG5HVedeZF1nOdOCO7eM9tmkbL/9/SLhQyuQcDQlYcvpSNrckea/xsujqwskK7rjKEWzs94QKc6IOhxh2tV4D7R6IMrTp0ApsfjDfTfscrjaiXrvUdu9CU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PdLYxxxO; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6facba680a1so17535076d6.3;
+        Sun, 29 Jun 2025 09:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751214223; x=1751819023; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NfieMz5m9Z2E/riszCvxx0vxjw0boZDSxhpy/iJ0gcc=;
+        b=PdLYxxxOeogJutLjxDqIWozi+YhodzHf+0iLAvyi9rtXHcotG8KdOCVnnJm6dXYtNa
+         +Ebd27O+SgAVWA5BNOv4JlySPsszqu/NMrSR2FBs/nh0CZbpNDaQXRUszy5zd4AMlEJN
+         1MHcMiFfhKpXlouxaoRyNRTydamm0E2EvbIy1T6MeXa3HfhU0X2/eltmTwvlbdo6SF6l
+         AZjZG/HV6AuHZvSQ2kuRj0mppPqR08sJT0Yufd4+7V9W+yN0KXFRe2BRP0p+fA14sVwU
+         v8lALNBBdThwBvyQ3U5xuAY/ms9RztT+Nm3hxeYN0/8btZvza9fG9QxnN1YH5eUP1dHX
+         cw9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751214223; x=1751819023;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NfieMz5m9Z2E/riszCvxx0vxjw0boZDSxhpy/iJ0gcc=;
+        b=TONwjVbQ+S8BqgC4tRUzmJqIxQMLDT59Rg0D/bZAsZzT5Im7RAGlVtVGat6Qf2NGPi
+         l41kNcVXOdoIuA9YhyOi1g+9YFWiDYQBFbci8w1WuC+5boMCthuva5WUSC2L+WVUtCzn
+         lr9zICagVD87BNzHItZki3RMRF/CyxlLcsO8pwwOwVOfu+Ncf054KUre+0GIzsY0eiKe
+         YCfnLCJ4KlGo8jSui6AIyOm9ot13l6sh1AzyFi6F+Gw8ljqTLvf9ieDdqz73Zt9BQogI
+         eCJSjd8Bnp+H1WloQYtpNA5AKUfomUziZ745EKUxAo4eJOBcvSPvf66baJ19hKSZPF0N
+         AZbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCbBfTEAxRhmtsB0qsf49e3CJen4UX6BM37VKgOlcm2WgGRWCTlcII1kD7Llknip41tQmnm7+X8/GHTno+c7eD8Q==@vger.kernel.org, AJvYcCUuXrlIyPfUgkilGKnCeUUHeFizCcM4wpKOyZKUkCouvN2BOXVlzmpaluP0+vFxAxeJZMF9sswMVjw=@vger.kernel.org, AJvYcCWmwmlWfXzTvlu9j46buUg+4wWTxuKKE4hOs4Kip8YpprdFshL1nIC4YV0qgTI/oyY1frT/F8ziVGDBOTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytRqbjvyvHc94YWlTGpB1p5A1Gh/9pcw6GzHDPYs9wwvi9mSSO
+	CgDZCw1idqJZMwIefOlLnUVPDUWjYldcIwVbzY8qzLimcyopLt0mEy4B
+X-Gm-Gg: ASbGncs3xbR7TGt1lvT77MNCVbEfckKzD80pnMO61slYqw2DE08pwWoKxpJQ9SFxgxY
+	SS9H9hf4QPbWlYqzfVmUPO6o6p32vM4h4D93PoGpZM7wlvttiQJGlsVFAFgU6MO49qVhmoDY/G4
+	kZCkIqkiV/XTspbLJpUm+qYQ8rmdjv6LcU6gkkNQ8pz0/SSlytFzMvKOGi2f1BoAjzUkUCIaWOF
+	ok8ZdGUjXHWAbktYdG4lR7Vcp7ehFgCDHP3gNmAgeYc2sTZ/6MQTdbKwMgMhvD6os9rm9rvKsUo
+	KQg4Ara/VkrOdv/pZ9xP1T1EJc6Ps+ToRzsh8w+F2n2QNd7bI8qvV7vH67+B
+X-Google-Smtp-Source: AGHT+IESfg0oyaXsV4gGFWt99icXqEwyys8YI4taj0L64tG5xEmVRuFGmG2zMdbH9gxzpEcZWddl/Q==
+X-Received: by 2002:ad4:5aaf:0:b0:6fa:d8bb:294c with SMTP id 6a1803df08f44-70002deaefamr184709886d6.14.1751214222731;
+        Sun, 29 Jun 2025 09:23:42 -0700 (PDT)
+Received: from hiagonb ([2804:1b3:a7c3:c88d:6da3:af6d:a237:3289])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd772e7301sm53047806d6.62.2025.06.29.09.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jun 2025 09:23:42 -0700 (PDT)
+Date: Sun, 29 Jun 2025 13:23:36 -0300
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com,
+	iuliana.prodan@oss.nxp.com,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v6 0/3] remoteproc: imx_rproc: allow attaching to running
+ core kicked by the bootloader
+Message-ID: <20250629162336.tazeqojyhtgnecmw@hiagonb>
+References: <20250626215911.5992-1-hiagofranco@gmail.com>
+ <CANLsYkzo32BHkxRzSLY1U_PcidMPOaz7xZjDs8HKtTCQ0ZpF=g@mail.gmail.com>
+ <20250627144955.tbmk6ako3rgv3djo@hiagonb>
+ <CANLsYkz3SD1PPnVwoBnnKhyCUig67o+=NgoDucq5m+4sQ=xMYQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,110 +98,92 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250628165451.85884-8-linux@fw-web.de>
+In-Reply-To: <CANLsYkz3SD1PPnVwoBnnKhyCUig67o+=NgoDucq5m+4sQ=xMYQ@mail.gmail.com>
 
-On Sat, Jun 28, 2025 at 06:54:42PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Fri, Jun 27, 2025 at 09:40:27AM -0600, Mathieu Poirier wrote:
+> On Fri, 27 Jun 2025 at 08:50, Hiago De Franco <hiagofranco@gmail.com> wrote:
+> >
+> > On Fri, Jun 27, 2025 at 08:31:20AM -0600, Mathieu Poirier wrote:
+> > > On Thu, 26 Jun 2025 at 15:59, Hiago De Franco <hiagofranco@gmail.com> wrote:
+> > > >
+> > > > From: Hiago De Franco <hiago.franco@toradex.com>
+> > > >
+> > > > This patch series depends on Ulf's patches that are currently under
+> > > > review, "pmdomain: Add generic ->sync_state() support to genpd" [1].
+> > > > Without them, this series is not going to work.
+> > > >
+> > >
+> > > I thought we agreed to repost when the feature referred to above and
+> > > the work in drivers/pmdomain/core.c will be merge.  I'm not sure what
+> > > to do with this patchset.
+> >
+> > Sorry Mathieu, my goal was to update the whole patch series with your
+> > reviews from v5 so you could take a look and then I would resend
+> > everything again once the others have been merged.
+> >
 > 
-> Add basic ethernet related nodes.
-> 
-> Mac1+2 needs pcs (sgmii+usxgmii) to work correctly which will be linked
-> later when driver is merged.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> v6:
-> - fix whitespace-errors for pdma irqs (spaces vs. tabs)
-> - move sram from eth reg to own sram node (needs CONFIG_SRAM)
-> 
-> v5:
-> - add reserved irqs and change names to fe0..fe3
-> - change rx-ringX to pdmaX to be closer to documentation
-> 
-> v4:
-> - comment for fixed-link on gmac0
-> - update 2g5 phy node
->   - unit-name dec instead of hex to match reg property
->   - move compatible before reg
->   - drop phy-mode
-> - add interrupts for RSS
-> - add interrupt-names and drop reserved irqs for ethernet
-> - some reordering
-> - eth-reg and clock whitespace-fix based on angelos review
-> ---
->  arch/arm64/boot/dts/mediatek/mt7988a.dtsi | 137 +++++++++++++++++++++-
->  1 file changed, 134 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
-> index 560ec86dbec0..cf765a6b1fa8 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
-> @@ -680,7 +680,28 @@ xphyu3port0: usb-phy@11e13000 {
->  			};
->  		};
->  
-> -		clock-controller@11f40000 {
-> +		xfi_tphy0: phy@11f20000 {
-> +			compatible = "mediatek,mt7988-xfi-tphy";
-> +			reg = <0 0x11f20000 0 0x10000>;
-> +			clocks = <&xfi_pll CLK_XFIPLL_PLL_EN>,
-> +				 <&topckgen CLK_TOP_XFI_PHY_0_XTAL_SEL>;
-> +			clock-names = "xfipll", "topxtal";
-> +			resets = <&watchdog 14>;
-> +			mediatek,usxgmii-performance-errata;
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		xfi_tphy1: phy@11f30000 {
-> +			compatible = "mediatek,mt7988-xfi-tphy";
-> +			reg = <0 0x11f30000 0 0x10000>;
-> +			clocks = <&xfi_pll CLK_XFIPLL_PLL_EN>,
-> +				 <&topckgen CLK_TOP_XFI_PHY_1_XTAL_SEL>;
-> +			clock-names = "xfipll", "topxtal";
-> +			resets = <&watchdog 15>;
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		xfi_pll: clock-controller@11f40000 {
->  			compatible = "mediatek,mt7988-xfi-pll";
->  			reg = <0 0x11f40000 0 0x1000>;
->  			resets = <&watchdog 16>;
-> @@ -714,19 +735,129 @@ phy_calibration_p3: calib@97c {
->  			};
->  		};
->  
-> -		clock-controller@15000000 {
-> +		ethsys: clock-controller@15000000 {
->  			compatible = "mediatek,mt7988-ethsys", "syscon";
->  			reg = <0 0x15000000 0 0x1000>;
->  			#clock-cells = <1>;
->  			#reset-cells = <1>;
->  		};
->  
-> -		clock-controller@15031000 {
-> +		ethwarp: clock-controller@15031000 {
->  			compatible = "mediatek,mt7988-ethwarp";
->  			reg = <0 0x15031000 0 0x1000>;
->  			#clock-cells = <1>;
->  			#reset-cells = <1>;
->  		};
-> +
-> +		eth: ethernet@15100000 {
-> +			compatible = "mediatek,mt7988-eth";
-> +			reg = <0 0x15100000 0 0x80000>;
+> Ok, I'll take a look next week.
 
-I think this should be
+Thanks, I will be sending v7 with the missing reviewed-by then.
 
-reg = <0 0x15100000 0 0x40000>;
+Best regards,
+Hiago.
 
-as the range from 15140000 ~ 1517ffff is used as SRAM on MT7981/MT7986 and
-doesn't seem to be used at all on MT7988.
-
-root@OpenWrt:~# devmem 0x15140000 32
-0xDEADBEEF
-...
-root@OpenWrt:~# devmem 0x1517fffc 32
-0xDEADBEEF
-(with 0xDEADBEEF all that range)
+> 
+> > If you prefer I can wait for the other patches to be merged and then
+> > send the next v7 corrected.
+> >
+> > Best regards,
+> > Hiago.
+> >
+> > >
+> > > > For the i.MX8X and i.MX8 family SoCs, currently when the remotecore is
+> > > > started by the bootloader and the M core and A core are in the same
+> > > > partition, the driver is not capable to detect the remote core and
+> > > > report the correct state of it.
+> > > >
+> > > > This patch series implement a new function, dev_pm_genpd_is_on(), which
+> > > > returns the power status of a given power domain (M core power domains
+> > > > IMX_SC_R_M4_0_PID0 and IMX_SC_R_M4_0_MU_1A in this case). If it is
+> > > > already powered on, the driver will attach to it.
+> > > >
+> > > > Finally, the imx_rproc_clk_enable() function was also changed to make it
+> > > > return before dev_clk_get() is called, as it currently generates an SCU
+> > > > fault reset if the remote core is already running and the kernel tries
+> > > > to enable the clock again. These changes are a follow up from a v1 sent
+> > > > to imx_rproc [2] and from a reported regression [3].
+> > > >
+> > > > [1] https://lore.kernel.org/all/20250523134025.75130-1-ulf.hansson@linaro.org/
+> > > > [2] https://lore.kernel.org/lkml/20250423155131.101473-1-hiagofranco@gmail.com/
+> > > > [3] https://lore.kernel.org/lkml/20250404141713.ac2ntcsjsf7epdfa@hiago-nb/
+> > > >
+> > > > v6:
+> > > > - Added "reviewed by" from Ulf and Bjorn.
+> > > > - Fixed and improved commit descriptions of patches 2 and 3.
+> > > > - Improved the comment inside imx_rproc.c file.
+> > > > v5:
+> > > > - https://lore.kernel.org/all/20250617193450.183889-1-hiagofranco@gmail.com/
+> > > > v4:
+> > > > - https://lore.kernel.org/lkml/20250602131906.25751-1-hiagofranco@gmail.com/
+> > > > v3:
+> > > > - https://lore.kernel.org/all/20250519171514.61974-1-hiagofranco@gmail.com/
+> > > > v2:
+> > > > - https://lore.kernel.org/lkml/20250507160056.11876-1-hiagofranco@gmail.com/
+> > > > v1:
+> > > > - https://lore.kernel.org/lkml/20250505154849.64889-1-hiagofranco@gmail.com/
+> > > >
+> > > > Hiago De Franco (3):
+> > > >   pmdomain: core: introduce dev_pm_genpd_is_on()
+> > > >   remoteproc: imx_rproc: skip clock enable when M-core is managed by the
+> > > >     SCU
+> > > >   remoteproc: imx_rproc: detect and attach to pre-booted remote cores
+> > > >
+> > > >  drivers/pmdomain/core.c        | 33 +++++++++++++++++++++++++++
+> > > >  drivers/remoteproc/imx_rproc.c | 41 ++++++++++++++++++++++++++++------
+> > > >  include/linux/pm_domain.h      |  6 +++++
+> > > >  3 files changed, 73 insertions(+), 7 deletions(-)
+> > > >
+> > > > --
+> > > > 2.39.5
+> > > >
 
