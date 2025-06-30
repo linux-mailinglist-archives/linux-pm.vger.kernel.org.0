@@ -1,55 +1,40 @@
-Return-Path: <linux-pm+bounces-29825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29826-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60885AED8DE
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 11:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F99AED95A
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 12:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8446C1886441
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 09:36:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D4ED18892EB
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 10:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7EE246766;
-	Mon, 30 Jun 2025 09:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Z4FMDe5y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3010924C67A;
+	Mon, 30 Jun 2025 10:07:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39479244683;
-	Mon, 30 Jun 2025 09:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7FE24A041;
+	Mon, 30 Jun 2025 10:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751276197; cv=none; b=fEceNSYB1CO6eV19QDelqTZU3VxY5Eui5vYQH8oMCT/YK264LlsG0ZXfey/9PSkxTKgdSBujjFuVyAcxk/tuhHA7cOi+g+xb3TQhLqcZ2iE5AWIHMKuPyfeXDzjtAq6V+umJnyxopHhdFx4VoKOOvN9PCkVmpVhlrjuLyPvjb/o=
+	t=1751278031; cv=none; b=WKkKAPd8tQqBmVarO699OttEW5Om7JIvqFp766GLOKMfultChK74eEYrCg83127xj4DXvr+Mekw/kIrDIwnPzuc37gD1/qf+jD7QmmMgvYZVhKxvtBpBA31oUoRDaF5q9viCz1ryLLTxmdE+zhlgJv3SHNKNsMAX72GlWDZFVDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751276197; c=relaxed/simple;
-	bh=u1wSOQ/c7/ofEu2h9hbQ/4iI7lWdBhtbLLe0jwM9Ou4=;
+	s=arc-20240116; t=1751278031; c=relaxed/simple;
+	bh=BBC7Jiocg90QkWAgP3ev2DTS4q8/YMW6mfcj5aBowm4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dzr9TBfTa36NdJ3ejjnS4L/ILreb41qBjRfzqw7s9fUYfkiYtCu6YH/PiH3B0bLbRaquDfca66kXkEfGYze0SOjOxUCjNoJ8fZYqlmS7I66IZwiDp8mFFM0ljz2uL4ui35HMC057vP1yTGi/iqwzplf0vx2mYFCNeuN0EGGmJy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Z4FMDe5y; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1751276193;
-	bh=u1wSOQ/c7/ofEu2h9hbQ/4iI7lWdBhtbLLe0jwM9Ou4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Z4FMDe5yXZNkebN+3Zo/Uj/Nqc7Zt1c/Vzh/95R+B15UKHo51B+khrudvuTItHBC8
-	 SwXJacNZE16Pj0PkwP8/ySOz7KI5jlWd7sEbSS8792+SBk9JQ84KKfKeZVye5/fcQw
-	 u7CjVh4/F9c04rTSg2aIh6YaheMdDXrdMY21iuHklz8GDFIaVBggjvTsMvoT/b7e1x
-	 XJuRxI9ygnW59VOqoNSDB20+0rgfeY5x+bqL/UAhnAprZGxHhAJ3qg7WM6F5CnBjt7
-	 hUhObydkS2dAVZ/Jquw3Y35aS6w4mCJO4ksHagkXS8IvznaP88k/yuXcM8u3ojtCkC
-	 Yrbj0FQZx5zKQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 6FF5317E0342;
-	Mon, 30 Jun 2025 11:36:32 +0200 (CEST)
-Message-ID: <e59b2bbb-ee1e-42b5-9516-f2e545dbf700@collabora.com>
-Date: Mon, 30 Jun 2025 11:36:31 +0200
+	 In-Reply-To:Content-Type; b=aoN6Q4laJkENMK+Z4X1SFWKs9/LXoMe317PG/rTbNYTdAa3GkAy+NaabkkNAgElksxklStr8H3viMbwxm0nPuPMyCQhUDhcAVUInSRiqO/5f5DA594kQw5QUKLSmBoPDVcihhIYVbr790oYmmL1QGGHc4s5NuUjQxCiqTdTFi4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3521E1D34;
+	Mon, 30 Jun 2025 03:06:53 -0700 (PDT)
+Received: from [10.57.85.50] (unknown [10.57.85.50])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DADD13F58B;
+	Mon, 30 Jun 2025 03:07:06 -0700 (PDT)
+Message-ID: <5afe2400-659d-40d8-ab4f-33a1b250ac85@arm.com>
+Date: Mon, 30 Jun 2025 11:07:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,129 +42,61 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 01/13] dt-bindings: power: mediatek: Document
- mediatek,bus-protection
-To: Rob Herring <robh@kernel.org>
-Cc: linux-mediatek@lists.infradead.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, matthias.bgg@gmail.com, ulf.hansson@linaro.org,
- y.oudjana@protonmail.com, fshao@chromium.org, wenst@chromium.org,
- lihongbo22@huawei.com, mandyjh.liu@mediatek.com, mbrugger@suse.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- kernel@collabora.com
-References: <20250623120154.109429-1-angelogioacchino.delregno@collabora.com>
- <20250623120154.109429-2-angelogioacchino.delregno@collabora.com>
- <20250627201543.GA4171766-robh@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v2 00/10] PM: EM: Add netlink support for the energy
+ model.
+To: Changwoo Min <changwoo@igalia.com>
+Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
+ len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
+ linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org, "Rafael J. Wysocki"
+ <rafael.j.wysocki@intel.com>
+References: <20250613094428.267791-1-changwoo@igalia.com>
+ <b74f6484-dd16-430a-bad9-4dca6384d1dc@igalia.com>
 Content-Language: en-US
-In-Reply-To: <20250627201543.GA4171766-robh@kernel.org>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <b74f6484-dd16-430a-bad9-4dca6384d1dc@igalia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Il 27/06/25 22:15, Rob Herring ha scritto:
-> On Mon, Jun 23, 2025 at 02:01:42PM +0200, AngeloGioacchino Del Regno wrote:
->> Add a new mediatek,bus-protection property in the main power
->> controller node and deprecate the old mediatek,infracfg,
->> mediatek,infracfg-nao and mediatek,smi properties located in
->> the children.
->>
->> This is done in order to both simplify the power controller
->> nodes and in preparation for adding support for new generation
->> SoCs like MT8196/MT6991 and other variants, which will need
->> to set protection on new busses.
+Hi Changwoo,
+
+On 6/27/25 04:37, Changwoo Min wrote:
+> Gentle ping as it reaches 2-weeks.
+
+My apologies for delay on that topic.
+
+Let me have a look into this...
+
 > 
-> Protection like access controls? We have the access-controller binding
-> for that.
-> 
+> @Lukasz, @Rafael -- I have a question related to the energy model
+> in general. As far as I understand, the energy model describes
+> the performance-energy consumption tradeoff when a single CPU in
+> a performance domain is running. However, in reality, SoCs may
+> have thermal constraints, which would result in additional
+> constraints. For example, running all CPUs with the highest
+> frequency may not be possible. My question is this: does kernel
+> maintain and use such (thermal?) constraints?
 
-I was not aware of that - but that's *so* cool.
+That's true in real scenarios on mobile SoCs, running with max freq
+on all CPUs is possible likely only for short period...
 
- From a very (very, very) fast look, it looks like that fits this case perfectly.
-I'll check if that's right and will come up with a v2 for that.
+The Energy Model itself doesn't handle such situation. The code in
+thermal framework and in Energy Aware Scheduler has feature to handle
+it and know which top OPPs are not possible to be used.
 
-Thanks a lot!
-Angelo
+Although, the EM in such situation is likely to be adjusted, because the
+SoC temperature reaches high values. Especially if that heat was
+generated by the GPU not CPUs themselves, then it's extra leakage will
+be accounted and EM data modified in runtime.
 
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../power/mediatek,power-controller.yaml      | 40 +++++++++++++++++++
->>   1 file changed, 40 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
->> index 9c7cc632abee..2530c873bb3c 100644
->> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
->> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
->> @@ -44,6 +44,18 @@ properties:
->>     '#size-cells':
->>       const: 0
->>   
->> +  mediatek,bus-protection:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    description:
->> +      A number of phandles to external blocks to set and clear the required
->> +      bits to enable or disable bus protection, necessary to avoid any bus
->> +      faults while enabling or disabling a power domain.
->> +      For example, this may hold phandles to INFRACFG and SMI.
->> +    minItems: 1
->> +    maxItems: 3
->> +    items:
->> +      maxItems: 1
->> +
->>   patternProperties:
->>     "^power-domain@[0-9a-f]+$":
->>       $ref: "#/$defs/power-domain-node"
->> @@ -123,14 +135,17 @@ $defs:
->>         mediatek,infracfg:
->>           $ref: /schemas/types.yaml#/definitions/phandle
->>           description: phandle to the device containing the INFRACFG register range.
->> +        deprecated: true
->>   
->>         mediatek,infracfg-nao:
->>           $ref: /schemas/types.yaml#/definitions/phandle
->>           description: phandle to the device containing the INFRACFG-NAO register range.
->> +        deprecated: true
->>   
->>         mediatek,smi:
->>           $ref: /schemas/types.yaml#/definitions/phandle
->>           description: phandle to the device containing the SMI register range.
->> +        deprecated: true
->>   
->>       required:
->>         - reg
->> @@ -138,6 +153,31 @@ $defs:
->>   required:
->>     - compatible
->>   
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - mediatek,mt8183-power-controller
->> +    then:
->> +      properties:
->> +        mediatek,bus-protection:
->> +          minItems: 2
->> +          maxItems: 2
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - mediatek,mt8365-power-controller
->> +    then:
->> +      properties:
->> +        mediatek,bus-protection:
->> +          minItems: 3
->> +          maxItems: 3
->> +
->>   additionalProperties: false
->>   
->>   examples:
->> -- 
->> 2.49.0
->>
+Another scenario when the EM might be updated is when Middleware
+will recognize a known 'scenario' e.g. long video conference
+with camera in use (thus Image Signal Processor, which also can
+heat the SoC, like GPU). Or a 'preferred profile' for light-weight
+application using some HW decoding, e.g. video playback and
+thus some CPUs are more preferred by EAS to be used in it (EM might
+change the energy efficiency gently for such CPUs).
+
+Regards,
+Lukasz
 
