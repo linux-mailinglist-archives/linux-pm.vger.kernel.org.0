@@ -1,137 +1,127 @@
-Return-Path: <linux-pm+bounces-29815-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29816-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A13AED39D
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 06:54:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25F5EAED3A8
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 07:03:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46E343B135B
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 04:53:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8DE616D943
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 05:02:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFA31A3154;
-	Mon, 30 Jun 2025 04:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF1218DF9D;
+	Mon, 30 Jun 2025 05:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmS2Fw2G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A185E194A44;
-	Mon, 30 Jun 2025 04:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7FF1FDD;
+	Mon, 30 Jun 2025 05:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751259251; cv=none; b=LENQiwp8YkLTBNVuYlHZOprkcBgjdWoIhV/7SC+YGYZFWwWKZK9gKTFIM9mmLlu5zMHHyIDOe/PzibwJ1ZPZgK2x/3wJdTlVjxxdpFr7MGSns9iGsLHSdcY9e7947bfrMXtws+yahYQxFgBN/ASookQLBPf/A626S4CTy22OCZs=
+	t=1751259772; cv=none; b=J/sstf+59woIU9N97M/lT4mzR4aI27xqh8T3JoBFd5dGwxRcs0kNoNMLB71LVhGzrwMowxIB78HXNuSpBwH3K+uo76sQCVKn9JM1/+Tus21cgkuQqdApPABYicXBrpvcy6vjPOoqLWX1REb5yDRMzScQwjYFre+sXZ5U4WRG7vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751259251; c=relaxed/simple;
-	bh=q4cChbdvhDL1OSZn8A56fKuAJVHQOXAwQbXbtQgi6LI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hUDtsisxlUC7fLzVMzA8raPCOZVP03sI3HfJTI84aqj5JOEi03xLIfudUDpfNleDm4DBzk9yacg6iCSSjF8U3aLRl8ZKklDNgHyCQ2h0FfJ2z9sejB7MMnI/rISETE7V6Ip+LOB0/hhssEEFBMxfpQKQdgxaQge8xtmpgOWjMos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
+	s=arc-20240116; t=1751259772; c=relaxed/simple;
+	bh=5VTdQ4tGtrefrn2S+93SpE0Y+HCmh+YKtuLUej5R6hs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qFuDn9+hrAdEPtY6bwSQsW0gSRiBouR5kqkQelBqUCKWNPdJI9COGILPc3MBFAUn6WGuNEHg+gHHGPc6R/PwfxM8a7H/9VI7RSL9+pezljDo3RmRicsCCZiUTtSSoBsXn0YvlNRbWIXZpVy4nqOEgxWVP9s1eVWIJaDrjtaA8xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmS2Fw2G; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5535652f42cso4737256e87.2;
-        Sun, 29 Jun 2025 21:54:09 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-23602481460so39240355ad.0;
+        Sun, 29 Jun 2025 22:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751259770; x=1751864570; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k14vHInxFXfvWiA3yiBDXZSY6za1W36jbGVMCLDj9aM=;
+        b=NmS2Fw2Gva9xt7kq0M2uJfYhSPTu4fR/+snZ3x5jhn0yOFngl5cjVbpkyUi8mIb38v
+         xSiiYbO4fbFZEP/zOXpkGNotTiuU1RhjtKa2rxGiyH8tXeK+5z9U00RtAtWZxFArDxbn
+         VwWNFN5n1oQR9bbHkAOw/3CXFS3p5m89ZmHfAwPHgSko7CBngCJgOaqXmrKZv+WpunN4
+         uOIqq2V7SdoioUegdVe9TlPbhInWUmiYOD4UJDs7ssqJGOn8XYXM/tyrST8f9qjuVpkn
+         jBXbA8R4bgryh1deQ2hfRIBT2rxjHmdj0cnvs85cUzJ7IQTSR+KLWpgjctHLacF3qSlx
+         Ik5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751259244; x=1751864044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+et2JbQsekjoDqNx2V23zrGG58Up1Zz2cWU2HWIxxkw=;
-        b=J7l+GeIPwAG9EqZ4O3gPdEEHLnDeSXM+pDI6ul1GI1yHvzlEPA3Eo5bVF40fP51+qP
-         T++bNfYYFvsCCNr8iGy5JCy7omXALrfXHYe1UGPF36Z/V3aqX+8VJ+52wJKp0ancCbfy
-         K4DY2FYAX+7kqX+y/Mo+achwRLj5tTHedHwe6w5VImNY60vuQ4nYwXMoExQsFRDwLMzS
-         JX+m8Wv00v/DRR7kFceoVLSXaH/513S1mIlUY+W2rR+Q/GiUSwRTg+qUfblLYXjA2hW1
-         c4qQntPB2Usc8m378GcQB4nfkN1/TI6YMpQ8UnSO4a5xRiYkF7GZpY2VAn7FFhdEEEie
-         mH8w==
-X-Forwarded-Encrypted: i=1; AJvYcCV38otyxYvCYbLavSFnz7nLFFK8ZKLhTGw7+KcAatJVoBw7izQQKjuFwg2WBAKYFTarcHJWeNx9Rbq9@vger.kernel.org, AJvYcCVkJOr0NFVr3zNyqgqnXgEc4Bj75S8+6i/MPpz0RRoipoG3YlnYCQo0GYZCbbGVD7rF16ad5q7OGW1TtSK6@vger.kernel.org, AJvYcCWb6qrOfjUHmQT3D5sx9BagGtE1BlbFe7vMqGaFlxgUaDuF/SmjfU+5tPjNguYAO7agPFXMeFADzYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsP+nfC4WNDRrpSoiEiLtCkYVHOSDg5pv+GEtn3am3OWB2jy/p
-	sdflreBZAJWUEL2N1vHyK1q0oYkXv4tsihOxNPO111xp++KphkcFT5tYdFrIz6nE
-X-Gm-Gg: ASbGncutoOpZpuwyhkC271wBZaqG3YRmHnVRCS/1V4LHKmg9frryHbKzoKXfS0ooZIH
-	pwzUiJdMBA1ucCVBbaqoJoD8fax+2UaEIwPsXGeIro+ni4ZU2j0scy3heKq27YnEqAlPnCq2KJQ
-	vfBg+T3GeTJ99Pi7gNoKFhvWM2UKGBz6e/uK/0AnXCPTvWIPTbjhoLZVDQSrILoGmYuUM2gU/wJ
-	qGJrYpcwdU4wDQ5UhOO/luC0zvZSkV6wgjkbWLUm3olaJJqlBfXR2pX1gYGzKqBwxTrG392m3tM
-	7BqS8lsy3WBUcGOl2tNtaQgMB7tMhrcme1pJ4KgzZOyU72DaEftU4jWURMGTFyd9nW5zf8KUObv
-	RTvwvmsNw3lctYvNSEjo=
-X-Google-Smtp-Source: AGHT+IEPXdE08Sp3Oy4NMTRIgRjshR5wQvGlfnBAMYKeAZ2ac9PBCar5nquYG8ey///R0QWkpPyf4A==
-X-Received: by 2002:a05:6512:e95:b0:553:33b9:bd3a with SMTP id 2adb3069b0e04-5550b8e6179mr3083357e87.53.1751259244355;
-        Sun, 29 Jun 2025 21:54:04 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b24ed7esm1296440e87.81.2025.06.29.21.54.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jun 2025 21:54:03 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-32b910593edso33078961fa.1;
-        Sun, 29 Jun 2025 21:54:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVXoFPwTajZmdNDJv5gpY9As3jzy/9jE6EcXYRcezcAjLTOcDXmPhXDFN0iyQKOZ72UNtVTruGD29c=@vger.kernel.org, AJvYcCW/NGMFdB5zI+MzFBwYQ83N71XVP3byyvygbxqyQKVbFypbccL1FrttKIisdhYZDAcHefbXxWkMywpVrOhr@vger.kernel.org, AJvYcCXPUirFIg43WaEVRDHW5bgx9p8oMDkZFXU7zYjjrrJtZyxkAC/9PdXqoImfkPxL8TRe3E/6CJdD5aNA@vger.kernel.org
-X-Received: by 2002:a05:651c:31ca:10b0:32c:a851:e4e with SMTP id
- 38308e7fff4ca-32cdc575ebcmr24256581fa.40.1751259243150; Sun, 29 Jun 2025
- 21:54:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751259770; x=1751864570;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k14vHInxFXfvWiA3yiBDXZSY6za1W36jbGVMCLDj9aM=;
+        b=o0UM6sMTMohk2KGGBg7wdxefzp+sHzqwTQlNIyftQxw2C869k6whfM4kg/zWEe9kMC
+         dU0PXiJwBk0IfCmp54AfFomKBtqXxYagnXITR3W3cKOkDMa78PYS71ZI75MhgVW+aido
+         ZLxmyLRIzpM4SkYvbON8glQr3lrKn7/G7n+Md58z28tsqUtYFHEdvtgy2hs//29pHG/C
+         xKfQRaiJYKbYpVryWhHgfpAI9/LSSeGIFVWivgdcr4oFeQwUrA3l688MPm99OrJshTkt
+         uwdlfUJTBD4fIS1dUm6fxiR42J87GdqI+AWsi2yhWXOEgtgip+5hCunb5rvzplaMisGF
+         Zdag==
+X-Forwarded-Encrypted: i=1; AJvYcCUJgDzRRT63CVF1NDAnuh0Bp/TJKNT8We9G6EYCGYGyITQFu3G95cxSmxn3qhzswkAdCB5grsjwG5fBKrZP@vger.kernel.org, AJvYcCVVi8p2Bz4EUcPgddkDubzzVvMLlVe0rdPeSFAFhLEtFjunbAlo75jtqp9n38dwdeIhCM5Gb/1NU2I=@vger.kernel.org, AJvYcCWKJkiyGk4vr1aoaj9aePklXL/ucWo19pLOXS9vb3VskTXIahDVRas5ZHJ8dsqrgEAdocCHx/Dg+cU=@vger.kernel.org, AJvYcCXCgex86kRCUlE182BacLliR51XaZU5WfxHmsJGzSXx/2n2z0jETrBGZEmz11aKwGbQoKJpuj9rqIpl@vger.kernel.org, AJvYcCXlIZihNSA+/QVwREhfhuN2lvWKzL2DgN/5xqisQUcHMrDKDIptBWI1uq+ODIQRsnRT+FxESlJWJ3H4aumYcJzFnB4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiJF34tTWo2B1N8Pkd6e/k2U8nDAUmCEekqKsUju+ntInKxSwa
+	zPhPAjDWtYNI+aMkOTJj0UB2oyVt/pli8vr115xFbbRJt5vFeyAtD3F6
+X-Gm-Gg: ASbGncufSmskDRwVYIlA/wuYI+gjgD7mGCHPm90rpBirtfKp2gV9hZK6YpvdJklNMMs
+	6XRu7Ian3aJzzCRxdke1X9AHuVVVMD0HPG0lZV1vUjzZr3hUi40FwZnnybobTlAhKH4qbGGHm9A
+	eZBFs+8oGTMAQZWwpMa0PbHwxbRtUzuP5a8R4muoAG3bOsjH5Y52Vpd7w1boA9c1SAydGRAleyK
+	U8yQ4kMkaC1aupilJkdIvMs7AU47SK1fJXrCOb4yDCiCCHpiyBfkBbR+LB/HyntzlwR0ttfXuqX
+	Oiy3vNSpFmZbfo3x3fy/BKGLljA2QWf+ms8glBwxVcg2cz8yNq8kHdrBQsRE1YN0mCSJkKbS
+X-Google-Smtp-Source: AGHT+IE5SYnmn2DsoXc2OcyiJSIeLfFJprEUGRZPg+PLqeBpDfsjB+lQj9pvXgneyXycHf+dUh7hcA==
+X-Received: by 2002:a17:902:e881:b0:235:f3e6:4680 with SMTP id d9443c01a7336-23ac3cf5c12mr163799695ad.21.1751259769921;
+        Sun, 29 Jun 2025 22:02:49 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:c92b:c666:1f8:990e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3bc4fdsm72602095ad.202.2025.06.29.22.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jun 2025 22:02:49 -0700 (PDT)
+Date: Sun, 29 Jun 2025 22:02:45 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	jic23@kernel.org, daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
+	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	fabrizio.castro.jz@renesas.com, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	linux-i2c <linux-i2c@vger.kernel.org>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+Subject: Re: [PATCH v4 1/2] PM: domains: Detach on device_unbind_cleanup()
+Message-ID: <f4vj7rab6uftieicz5s3qur7yk26cg3xxaabhcmqnx3nybhshl@j6ahyvw6grik>
+References: <20250616135357.3929441-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250616135357.3929441-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAJZ5v0j_nm_z4ma2AsRkjiZn-AJ2bK982+Mwa8+_PoUAveNATQ@mail.gmail.com>
+ <04a6c53c-8383-4496-b502-149bd261cfdb@tuxon.dev>
+ <CAJZ5v0gZ3GZ79j2gbhVSjTN+RmYjEUJQjGMSoLsEkUYtjWTngQ@mail.gmail.com>
+ <CAPDyKFo5=_eiWBf8fpv6kG8qhM6K3DxnqhttgHHgSTP6CM8LuA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250411003827.782544-1-iuncuim@gmail.com> <20250411003827.782544-3-iuncuim@gmail.com>
-In-Reply-To: <20250411003827.782544-3-iuncuim@gmail.com>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Mon, 30 Jun 2025 12:53:51 +0800
-X-Gmail-Original-Message-ID: <CAGb2v670s_r4NG8hWHQ_exc6TM5JnvAEYw-vp5ndMn39X-B4Yw@mail.gmail.com>
-X-Gm-Features: Ac12FXylrAnNPmh-5tW8elyoVrQtjqLfo-AL1Tmi56dNnknRJjo1EfbWOyGYXgQ
-Message-ID: <CAGb2v670s_r4NG8hWHQ_exc6TM5JnvAEYw-vp5ndMn39X-B4Yw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] thermal/drivers/sun8i: replace devm_reset_control_get
- to shared
-To: iuncuim <iuncuim@gmail.com>
-Cc: Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Andre Przywara <andre.przywara@arm.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFo5=_eiWBf8fpv6kG8qhM6K3DxnqhttgHHgSTP6CM8LuA@mail.gmail.com>
 
-On Fri, Apr 11, 2025 at 8:39=E2=80=AFAM iuncuim <iuncuim@gmail.com> wrote:
->
-> From: Mikhail Kalashnikov <iuncuim@gmail.com>
->
-> The A523 processor has two temperature controllers, but they share a comm=
-on
-> reset line. We need to use devm_reset_control_get_shared() instead of
-> devm_reset_control_get()
->
-> Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
-> ---
->  drivers/thermal/sun8i_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_ther=
-mal.c
-> index 1f3908a60..dc4055c9c 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -391,7 +391,7 @@ static int sun8i_ths_resource_init(struct ths_device =
-*tmdev)
->                 return PTR_ERR(tmdev->regmap);
->
->         if (tmdev->chip->has_bus_clk_reset) {
-> -               tmdev->reset =3D devm_reset_control_get(dev, NULL);
-> +               tmdev->reset =3D devm_reset_control_get_shared(dev, NULL)=
-;
+On Thu, Jun 19, 2025 at 02:16:37PM +0200, Ulf Hansson wrote:
+> 
+> I am not sure it's needed, unless it's especially targeted for the
+> ACPI PM domain, which I find hard to believe.
+> 
+> Also, I find it awkward why the i2c bus should be any different from
+> many other types of buses. It's probably just because of legacy and
+> that someone took a decision when we added it.
 
-You could just use devm_reset_control_get_shared_deasserted() and then
-drop the reset_control_deassert() and devm_add_action_or_reset() stuff belo=
-w
-this hunk. This simplifies the driver a bit.
+It has nothing to do with I2C and everything to do with ACPI and the
+fact that it brings devices into D0 when probing. On ACPI systems
+(unlike DT ones) power sequencing is done in firmware so drivers are
+unable to control this. And this causes annoying flashing of privacy
+leds on webcams.
 
->                 if (IS_ERR(tmdev->reset))
->                         return PTR_ERR(tmdev->reset);
->
-> --
-> 2.49.0
->
+See details in 1e96078e0ae4 ("at24: Support probing while in non-zero ACPI D state")
+
+If there was a SPI device sharing power rails with a camera we'd need
+similar hack in SPI bus.
+
+Thanks.
+
+-- 
+Dmitry
 
