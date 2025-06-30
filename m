@@ -1,197 +1,150 @@
-Return-Path: <linux-pm+bounces-29851-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29852-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D2EAEE6A4
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 20:17:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EBE4AEE6C8
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 20:32:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F37C3BEFE8
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 18:17:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B7471BC161C
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 18:32:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758921F3D56;
-	Mon, 30 Jun 2025 18:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D5228C2D4;
+	Mon, 30 Jun 2025 18:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="k9siFlH6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIn8dNDW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E83D1C5D57
-	for <linux-pm@vger.kernel.org>; Mon, 30 Jun 2025 18:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0911672613;
+	Mon, 30 Jun 2025 18:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751307437; cv=none; b=klxS29D5TtIQh5yaOjHgshy4sWc/Tru+3jyPTnaUIp4CMhYiFeHXqAaOXuHejiPj8ctSEtltuglMnoUSmOSCsLyk6j20xd4NxzDmC/yVKbg09B4xMmBAg30EnWj2EIQO38GZdO8KOco9lot+9+t6WvbMZRwxQdaDCRkDyQimnvQ=
+	t=1751308322; cv=none; b=KM4x5qvEAUC5eFWMn3irez6Vld0DKgo5ueINEeb6t5oM992q9fVeRGOKTvK1foVfc41XLJ2d6vGvhIKm4TkfrS0tYRSwMm719NVbr10utWsCZwj7q0Z0jQt8nboRZCI6iW8RsF7vKgs9COcE2eiplWI1tTmu5bi6YzY4iGST0Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751307437; c=relaxed/simple;
-	bh=XzYE0ggpzi/xWgQAv+8GzWJs6sZVm5N0XHvtxn3e7g8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gLXQUyhUTxbcLF+e+7+objUcnae2t53dLipRR82TCa4l8Wked1y3S54xb85sxUaTRrrrttSXK54Q7E7cDp5moi0QdmwZAjbQR0QuM6SKsE86mE2gF7TUktQCgZHVDV/AFoIrSH2XB2ZlJY/6Sr/O0ap3Ye0/gZyqb3KAAqCqiGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=k9siFlH6; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-74801bc6dc5so4583043b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 30 Jun 2025 11:17:14 -0700 (PDT)
+	s=arc-20240116; t=1751308322; c=relaxed/simple;
+	bh=cg5QB42byw5/eyDVnJ7rJQrWcmUM7VDs7F+Ui6B2qiA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jxrFq9cUNgKQhj0aEx2RvZylPiloOhkVLtCvl9VyeLQ8r/80F8wG1dsSe8DhLuPtOtfuGRrTrNxs89biomMDi8xAZC0JwEhZTQOvtrirooA5mmZb4aTWyXz91wS8hRICfuAx98kCizM6qGadLlJGVdO1RCKwPftQFyYvUyE7QfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIn8dNDW; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-32ca160b4bcso48333691fa.3;
+        Mon, 30 Jun 2025 11:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1751307434; x=1751912234; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yBjVRv/LWhtEYGg3uh+SYefd6WbGxbfazNc3AwALFSQ=;
-        b=k9siFlH6wyfr9RLxXvJHUnczNqaw+Kd5aILCUq3H3ZXypPZU0A/GZ0dVlJ5kj8IVnw
-         DfMxBy2OUV4RrSnP9z3zEeYERanHVn2WVDLltw3LauUDA7glCi8x2FS8D8WSoTQI1g5t
-         D09iE/fUN4v6d28dKQ+nP4doQdUDvnqLrukp1FD8AFVsAAJO5emaETgv+2yidruhOZRM
-         AtZl0qrd9h+/Sy6xs8G1gI9KCdZLsCIZtO4tTY9XrinkCT3yLcQNF1YmGhzeKns0ajUR
-         6zG9KaxgLopsgwi4TxSJPxyTNkP99kM6PClzGcRQwwYb4sp8l6+38WDrsSd9e937ihcY
-         /YMQ==
+        d=gmail.com; s=20230601; t=1751308319; x=1751913119; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ai6tAv34puQfBTGh9QvYgWi5UihLDDoPAxs87G2TzgY=;
+        b=PIn8dNDW/d9jv1JQmH4PZS552mEzVRW3DTjOzAexv6QWmOuE/U+DBr3S4ZAtxAweqz
+         dSGIgap+ioS56T2JTfC7urH2DP0mh0JTf5d+2g25NbdS1XXcluCRYND3FXfwpQeRTAUC
+         hXb8s8LWr954l9UJc/R7aGD13oMmvLMFUNyMV1nBMmgofSmn0cvbDUCOsTzPpgAyrFpS
+         qU+M4HPAIPLIM24dwXPP1rzSHXRSo2DXwx/JJBA/stlnt+rC4CLpoI4YxOr7o+AweAfk
+         u0HZTqXt8oY3HMFpYwOHezRgoZXvxRrbX+zv2GKZqfA7vTRM+NRamIQF9zVP5r/yGGbL
+         BMEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751307434; x=1751912234;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yBjVRv/LWhtEYGg3uh+SYefd6WbGxbfazNc3AwALFSQ=;
-        b=OeXZeAyNmVReubnEdPHTosq97KoPFi8rGT2uIUU2OxXxixRztDxdjQ+hCA+nEhRJUf
-         sLT7jWmwTPzcNwV0fzBYelzfOul0pYW/HF7jee4uVvi7YLCWCH858K8elRmCLZlhOHoo
-         liMKaLtkUOIXinr2tyw4sIcbcKMo6rxDytRLoRNi6Udi1ZoATDAmf62dhXqY3IYv9H05
-         FQ9Okj4s5cUaJQh0gv+ysnToMO9pqaGilpEnXLZYwsNVMt6hSq90dkE5NnWj6Q0Mj6DG
-         pNfX/IiCEDWfhQF3gpBpybKYtY9FPmdB5LXuvYky55evRpfZ46CFkWKmSK3ocuudUsU8
-         IZ1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWM62TBgbdyKBmyA8jYymgN+n8tZqcwzRfBtpVaIAmHpLiBvJrgVViNja/gvASexliD67UEUIbKPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQKMjqV4kCyKwnxVsv/V8x9Ab6phwTuQe0UkVJhTwpoAZrZD5j
-	30qHG+pgehvaKm9oybcF9ZOar/UNmAktZ6tkxa3NCXUjVnIDCFLEaoc7dCcfe+CVMYE=
-X-Gm-Gg: ASbGncsx2Ng/bZ5vWRHqzQStOzcQf4PBr27DCSZQ5s5xBkNQOpaKSKJ+PBkKdcffCfU
-	MWqaL60n2PqMFTeklLTW3Kba/sc37O54LmRHA9g/ByrKm8FNdFacwhlaUwrTzkEh5dimW3IKQs9
-	lzMhie08ba9dwoTc13Gba3bOQauJrKZzpzgYdEZWdy0DRLhJEG0cK27W3GwQc1MoRpJngqyl8Rt
-	0kt61gwznWDTbnP5kD6SG/oyiGYofkz2MvGHdB0E2R/5BRGLp+t/KOnoFJxf/xzLSqjcFuMS15t
-	kvOsHhVE+Nhr5aGhUkC0bxGwbmO6SygJ/KyBe0fRBHSU1y6VV7ywJcaYVOuayqqDeH8YL0o=
-X-Google-Smtp-Source: AGHT+IGQOXcusfsnRzzu9tTsp4bqdnB978cAzt96coGY3e06638Az0cSdJ5vM52cbySItmU05CF2DQ==
-X-Received: by 2002:a05:6a00:4b11:b0:748:a0b9:f873 with SMTP id d2e1a72fcca58-74b3bc8da15mr742566b3a.9.1751307433908;
-        Mon, 30 Jun 2025 11:17:13 -0700 (PDT)
-Received: from localhost ([97.126.182.119])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af540ae4csm9398150b3a.34.2025.06.30.11.17.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 11:17:13 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v3 2/2] pmdomain: core: add support for subdomains
- using power-domain-map
-In-Reply-To: <CAPDyKFpTgAmLBq2ZExPoxWM0wL756zH96vW7M6wHSA1MTTG1wA@mail.gmail.com>
-References: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
- <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
- <CAPDyKFrO9rb0eDb2qO+EGaVjOFG=7emgca8511XACDhWY=dt5g@mail.gmail.com>
- <7hsejzp4xg.fsf@baylibre.com>
- <CAPDyKFo-iPBPgkM43q+5cGR2sptkLk4E6TAERCQbCu24o1RfFQ@mail.gmail.com>
- <7hcyb1os9y.fsf@baylibre.com>
- <CAPDyKFpTgAmLBq2ZExPoxWM0wL756zH96vW7M6wHSA1MTTG1wA@mail.gmail.com>
-Date: Mon, 30 Jun 2025 11:17:13 -0700
-Message-ID: <7hjz4tnlg6.fsf@baylibre.com>
+        d=1e100.net; s=20230601; t=1751308319; x=1751913119;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ai6tAv34puQfBTGh9QvYgWi5UihLDDoPAxs87G2TzgY=;
+        b=YJCsEXJgXUbLuwGAW7LtBDzdwCVrcDIXR8dLv6+H3NhYBmbiyiu3n5B3NEnoqEYT5w
+         rdTwUQFCxDIJpd/G3UmpXW/sEvk8RMtTdEYNkIITlX/Kq7rLFnc+RCs6xHxYoyW7CoWu
+         uPdEdQ9Germ4dH5556HGsV2urab8njVsD2idm4XpM90sjQaPPMOaJ5abJftEb8WERIb8
+         IgoKSK12ZCpRSkPK+UOk1i+ndynRlJi9V2Av7hIyOS1VtKRPwuj1geM7g0+HK2V4RJhY
+         2d4p0WHeaeUwcQu/TPRY3A1orPcVg19axfsU8s+izKtbwMmPCAptO9EEDUTkob1Cent0
+         FQFA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4qxkKUTiWszud5upcoO6BoHz7oIUDWTPGVcnDjK26iuiABA6O8foFD6ILTqyi/w7pp1n0xsPOCHNB@vger.kernel.org, AJvYcCUCpZflwYH2qm49UlF26yeWizucelDvfy/cSNX/yeN8YxEKKdymGX42AAttk8ydUOC3L1gIuLkTuvGI/PM=@vger.kernel.org, AJvYcCV0KZXAFkww8yhOy9kFeGnDV+GoadYqOcJkFvzkxnym1/r8CnxHd6mzCXmTXTplr/0o0XXHWoi7Akc=@vger.kernel.org, AJvYcCWgrO0v89lfLOyHYp3LrRJx+4Pk/LnmB3HrnF6s5vGvdoCAPm4PWMxyPWZQTvz5m7TiqqlGSYiANN0DQRI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHPjMKAhOmG2+m2z/touqSDn90gCZv+hqbJHEKh3cMjJKm9QiU
+	LKWJE2HkQgpvnS49BhR7iGjQh/RzxjH4l55mWCY10skO4qOGCmkYnbq+qi0VqNkSLbdKs+QL0yM
+	jeqjKhBL/wa4Ctv0D3A4wyJ2Qd03tvzwO+5l6xWE=
+X-Gm-Gg: ASbGncsuPhilzNOfF43XQqQt3kk8U4hY39HK0OgHag5t18PvMcGtwAfFgxmWSW/l+6b
+	Lv5uuXsglx5dM++wi7ET453oaaE/NBRGHMt9o+y+BDzT2Qfq96vkr9Uc2yZXMYJ0tqZ2bQbsea+
+	REUdL0JCzBAv5sAF0Tx4kfVlU2p9MpyYm8JnUZ+SoEyNk=
+X-Google-Smtp-Source: AGHT+IFFlmIm+enc9TVfwVEzI5i5UrpTUkxdFArCLPINzmek/bvv2i80hFOIl+yU0HrPhUHbgUTt5az/k7cjhYRZ5tg=
+X-Received: by 2002:a2e:8e74:0:b0:32a:7826:4d42 with SMTP id
+ 38308e7fff4ca-32cdc50d72amr34297321fa.31.1751308318788; Mon, 30 Jun 2025
+ 11:31:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com> <nz76wk5yqytag255jijxlyuodzpo3fm6d5coxutqrd7tgomzxm@pwzvpv4frjxu>
+In-Reply-To: <nz76wk5yqytag255jijxlyuodzpo3fm6d5coxutqrd7tgomzxm@pwzvpv4frjxu>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Mon, 30 Jun 2025 13:31:46 -0500
+X-Gm-Features: Ac12FXy1RvVgqtIu_YbU3P5gESjgnNVHKx_yI5vyivJxu6NSFHgJgYSIdjaX3dw
+Message-ID: <CALHNRZ9WYJef8+QyCfpkxLhUj_KRY=kZisEwq=arrTxXXfCknA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/3] PCI: tegra: Allow building as a module
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ulf Hansson <ulf.hansson@linaro.org> writes:
+On Fri, Jun 13, 2025 at 1:17=E2=80=AFAM Manivannan Sadhasivam <mani@kernel.=
+org> wrote:
+>
+> On Wed, May 07, 2025 at 10:25:51PM -0500, Aaron Kling via B4 Relay wrote:
+>
+> You should always add the context of the series in the cover letter.
+>
+> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> > ---
+> > Changes in v6:
+> > - Remove unused debugfs cleanup function, as caught by kernel ci
+> > - Link to v5: https://lore.kernel.org/r/20250505-pci-tegra-module-v5-0-=
+827aaac998ba@gmail.com
+> >
+> > Changes in v5:
+> > - Copy commit message exactly word for word on patch 1, as required by =
+reviewer
+> > - Delete remove callback in patch 3, per request
+> > - Don't clean up debugfs, per request, which drops patch 4 entirely
+> > - Link to v4: https://lore.kernel.org/r/20250505-pci-tegra-module-v4-0-=
+088b552c4b1a@gmail.com
+> >
+> > Changes in v4:
+> > - Updated commit messages for patches 1 and 2, per review
+> > - Link to v3: https://lore.kernel.org/r/20250502-pci-tegra-module-v3-0-=
+556a49732d70@gmail.com
+> >
+> > Changes in v3:
+> > - Add patch to drop remove callback, per request
+> > - Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v2-0-=
+c11a4b912446@gmail.com
+> >
+> > Changes in v2:
+> > - Add patch to export tegra_cpuidle_pcie_irqs_in_use as required when
+> >   building pci-tegra as a module for arm
+> > - Drop module exit to prevent module unloading, as requested
+> > - Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v1-0-=
+c0a1f831354a@gmail.com
+> >
+> > ---
+> > Aaron Kling (3):
+> >       irqdomain: Export irq_domain_free_irqs
+> >       cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
+>
+> I need an ACK from the cpuidle maintainers to take these 3 patches throug=
+h PCI
+> tree.
 
-> [...]
->
->> I've done an implementation with struct device_node *.  This works
->> better (IMO) than struct of_phandle_args * because the caller (in my
->> case scmi_pm_domain.c) already has device nodes, but not phandle args.
->>
->> The result will be that the pmdomain helper will call
->> pm_genpd_add_subdomain() instead of of_genpd_add_subdomain().
->>
->> Below[1] is the current working version, which includes adding the
->> helper to the PM domain core and showing the usage by the SCMI provider.
->>
->> How does this look?
->
-> It's a lot better in my opinion. Although, I have a few comments below.
->
->>
->> Note that doing this at provider creation time instead of
->> <genpd>->attach_dev() time will require some changes to
->> of_parse_phandle_with_args_map() because that function expects to be
->> called for a device that has a `power-domains = <provider>` property,
->> not for the provider itself.  But I have it working with some local
->> changes to make that helper work if called for the provider directly.
->> If you're OK with the PM domains approach, I'll post another rev of this
->> series which includes the OF changes for review by DT maintainers.
->>
->> Kevin
->>
->> [1]
->> ---
->>  drivers/pmdomain/arm/scmi_pm_domain.c | 12 ++++++++--
->>  drivers/pmdomain/core.c               | 34 +++++++++++++++++++++++++++
->>  include/linux/pm_domain.h             | 11 ++++++++-
->>  3 files changed, 54 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
->> index a7784a8bb5db..8197447e9d17 100644
->> --- a/drivers/pmdomain/arm/scmi_pm_domain.c
->> +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
->> @@ -54,7 +54,7 @@ static int scmi_pd_power_off(struct generic_pm_domain *domain)
->>
->>  static int scmi_pm_domain_probe(struct scmi_device *sdev)
->>  {
->> -       int num_domains, i;
->> +       int num_domains, i, ret;
->>         struct device *dev = &sdev->dev;
->>         struct device_node *np = dev->of_node;
->>         struct scmi_pm_domain *scmi_pd;
->> @@ -115,7 +115,15 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
->>
->>         dev_set_drvdata(dev, scmi_pd_data);
->>
->> -       return of_genpd_add_provider_onecell(np, scmi_pd_data);
->> +       ret = of_genpd_add_provider_onecell(np, scmi_pd_data);
->> +       if (ret)
->> +               return ret;
->> +
->> +       /* check for (optional) subdomain mapping with power-domain-map */
->> +       for (i = 0; i < num_domains; i++, scmi_pd++)
->> +               of_genpd_add_subdomain_map(np, domains[i], i);
->> +
->> +       return ret;
->>  }
->>
->>  static void scmi_pm_domain_remove(struct scmi_device *sdev)
->> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
->> index 88819659df83..3ede4baa4bee 100644
->> --- a/drivers/pmdomain/core.c
->> +++ b/drivers/pmdomain/core.c
->> @@ -3220,6 +3220,40 @@ int of_genpd_parse_idle_states(struct device_node *dn,
->>  }
->>  EXPORT_SYMBOL_GPL(of_genpd_parse_idle_states);
->>
->> +int of_genpd_add_subdomain_map(struct device_node *np,
->> +                              struct generic_pm_domain *domain,
->> +                              int index)
->
-> Providing the struct generic_pm_domain *domain as an in-parameter for
-> the child-domain seems unnecessary and limiting to me.
->
-> Instead I think we should parse the power-domain-map DT property at
-> 'index', to find the corresponding child-domain's specifier/index and
-> its corresponding parent-domain.
->
-> In other words, we don't need the struct generic_pm_domain *domain as
-> an in-parameter, right?
+Reminder about this series. I'm normally interacting with the tegra
+maintainers, but I don't particularly care which tree it goes through
+as long as something that works gets merged. So, can one of the
+cpuidle maintainers take a quick look through this, please?
 
-I'm not sure I follow.  The `struct generic pm_domain *domain` is the
-SCMI child domain.  From the map, we use the index to find the parent
-domain.  And then we add the child as a subdomain of the parent.
-
-Are you suggesting that I (re)parse the DT for to find the child domain
-also? 
-
-Thanks for the review & guidance,
-
-Kevin
+Aaron
 
