@@ -1,118 +1,127 @@
-Return-Path: <linux-pm+bounces-29853-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29854-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E90C3AEE6EF
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 20:44:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E84E1AEE6FE
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 20:51:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 129BD18817D8
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 18:44:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0330018871F1
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 18:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1809292B24;
-	Mon, 30 Jun 2025 18:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B77128E5F3;
+	Mon, 30 Jun 2025 18:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkOeEFum"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQl7M/F4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF9723C4FA;
-	Mon, 30 Jun 2025 18:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2322579D2;
+	Mon, 30 Jun 2025 18:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751309035; cv=none; b=qwTz/A1GXr/BWwmwaigal/CRITi7Rufpg8fiTzR9ketcMhcHSFpa0GofDLOwJmlvf6TX5EHSmCMQVEk+ARqqX0BzRWY27jwyMEL0mqROYIGyAWaAh6a8a0Hql5sp8DbrCk71Cw5omjSI7X+BXVm3q+hzPu4RdMHjzJsl3g17f3w=
+	t=1751309503; cv=none; b=vBmkirJoZPA42DOsxZdYmqVnPxWQHxkFWI3qbIqYCibIvXVn4PowVYrLHpJ0sQv4WPr9+nKifAw0U4fRoQ0PF4f8NpoqydldmNq62MMqhHw/O6Hu2qfNN0WatTBPgOwFovNh6MKdFvb08mUupZHT+FnsKJ54Awoff+FonHgsgtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751309035; c=relaxed/simple;
-	bh=aFSIbwA0Obs5QTHKNt8wYCpB5FVrzEDjx2aUoocbr9A=;
+	s=arc-20240116; t=1751309503; c=relaxed/simple;
+	bh=BB1hru3f2vFyFMuhG/mIR1DVvdU+UPOTAF42hcJno70=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jWihqo4mujlv1Yyd0sGWKaaZ8KmbcMDz0gq9kywHoy4/xX5qUzDyH3RAxmT2e8FBmZst3eIX7PNS3076WntXem/r1ca5s2mthOHIn915KFDyT9zD7PVvzm9WpgMMlfHL7jxy7Jm8tEODFmUY/J2TB2LdkGsd2jlocH1Cayvsv5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkOeEFum; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-553cf020383so5410321e87.2;
-        Mon, 30 Jun 2025 11:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751309032; x=1751913832; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aFSIbwA0Obs5QTHKNt8wYCpB5FVrzEDjx2aUoocbr9A=;
-        b=bkOeEFumHtVdi0K3Ku8qM8LG8DUpLsPmDbhg/0hEEwSWjYBnZatRSG1NUOrj3ZuM2V
-         Z06R83W0L6Orly4J2oNfRYufyGuedlvSIcRJPiaqSx0i9BHP3J/Y6OXfOEaCliiCwnZI
-         ZDyncefWcwyg/kUqNQ9KnsvwHEhZuOTWcJp2hoOC/DkBA2Y2RA5HPzyWSXa4SYdT0YZN
-         nQAZ5U2w3rtmxIwbRi0+ZYU4sjIUnUuH/Bh/KEH9S+vf0bSmKWPnrEPahYRK9GZOTz0L
-         mZlm5WMW1e3d16EwgaIzSwna+cN6Hp6cbWQYyWEV556nkKeP2AI3RRCjJ5RH9vyOhU9G
-         GveA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751309032; x=1751913832;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aFSIbwA0Obs5QTHKNt8wYCpB5FVrzEDjx2aUoocbr9A=;
-        b=fNzPMCkYTpf5TFRQzquAPQ6I0BEnBEntMjCx1IS9AANE6QZ5BS35fATsFa7YDvFwbE
-         UErwNHrKaoqz9dCTXh9zO0KGz1S/2YhanBNMXJitWJwEGHAxGrHbtBeXP1PWMj/XfSKg
-         QAAfH1wIsabljJLjT6VNMehfGKPqhPmazjym6IDyK8VRlYKqrTMtpvnAsBlxAfpXE3uz
-         TsKd6Yf5AX4rO2UjP3j+o1NOAiisYMNYN638ByL0v+4Gbr27ho65Fok4yv2dhenobTk7
-         xNmWrXWhQwW6eoQntk3LiaJ2ZzeBK6RQB+C8Tr8ZJeluPmpcbbHPwejxLxstKjEddaqJ
-         D1UA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgFB4yv3tPYryKh0r/1bLieNcxPeXfieHBCMtcIZ5K5uATd3kkZBPlytPVkvRvKbXgJpMlfwuQz1vts0o=@vger.kernel.org, AJvYcCWYYynIM7xA4muNxpvcORyDFChFOPkKvOkDZx4eKUICh8uZ1X0q2Oc43IinKYccPAEaDBHoH41QRYw=@vger.kernel.org, AJvYcCX0oxWBD6iJHP8wAMMS36DounI8i9aWLikNrrKaAmxx44jajLkBq52+W8B4sD8y7qwMv67wjSkhBd6ypqw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZSjrvxE4rAlrH32fxVbANiccmY3UF9wQzGVkQPgRfXB8tDzh5
-	fSF0HdGBWod1TIVa4GyQSxVzBlZ505/STBB1Is13W0+bVR7+TuXiRXKhc8gxGKPcPUPEGGnwLrJ
-	DVBbBO5DmPV7fKHxg/O9APBglYUIaQtw=
-X-Gm-Gg: ASbGncuxxnVCFbzzknIf6B4/+xBru09rNYvViFWlc2FnhTjHo17rEMEs/OLG8c2i3ZL
-	snrjjXWBH39oCblPKtzjLp6/EfddePu3mkzGk1sAXgnWZkqZKYhI5kEixPBodTG8fjcPQ9FgH7v
-	p1pr1s8VSUXNTW/ZP/amgB85d7KzK1Zf5yI5AW1mD6Jr4=
-X-Google-Smtp-Source: AGHT+IFts7B2G94g1BsJej0yK8agM1bwVzu0mWbSXDl/5ZEwOcpHgL67IjAqouLat6jwnKktyvp8cEJm7vvx5kQIH00=
-X-Received: by 2002:a05:6512:b12:b0:554:f79d:ce59 with SMTP id
- 2adb3069b0e04-5550b9ee228mr4566554e87.27.1751309031764; Mon, 30 Jun 2025
- 11:43:51 -0700 (PDT)
+	 To:Cc:Content-Type; b=AYFAMrbFk9mC7FY/7PksE+au+xuc20iVda0Nawyp+C2k3eRpJW32NxJV2esQcfU0tR2MuotALWZMwxwl8xZPFPC6r+6UwY9VGaX1TbYqj1Vw39uHJf/vLlVnaG6FjrHcSw1h8uMyt5yWMiKePtU0YBImH5v4Sh9D0qK8u2MaHZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQl7M/F4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABCD6C4CEE3;
+	Mon, 30 Jun 2025 18:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751309501;
+	bh=BB1hru3f2vFyFMuhG/mIR1DVvdU+UPOTAF42hcJno70=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mQl7M/F4PHfXi0a8XxDQWi25BMicMMgPbKFva1Ugd3PIf0GVP8104FAnrtIRtOTpJ
+	 BropP7Sd6+CnH2Xg9hOBt+C9xBeGz0weLPsu4quG1F8y/fN5gCFhbExs/NDYt/3mKi
+	 O3L3r4hfpwsym5mOquO0VsrbmZZr1BKXbVEQm/zSBmK65f2jtMbGELqDswUA2oryJj
+	 36/0EaFJ2pFJPyZppYVkES4adT/0HDzNWGOOZqf9JXybovs34muqylbZMZrIvF2har
+	 HHwEbja34KOBwf69xyzp0xLWY0qu/I+bmABSooViJIpzJnCk4zClFkSEa6DkG67Q/q
+	 PjVlqXIcjvKIg==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-60d5c665fceso1168367eaf.1;
+        Mon, 30 Jun 2025 11:51:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGRDolWmZYqCb2ugROxKcjZ0A8UpJld9GhazGBbdVS/f8aY4lF2yqaK4ttkngN66/ILOmvatapr+cjFBc=@vger.kernel.org, AJvYcCUlaMPBb5AEGsa712ZJC5WItAiSxpsOpnWB2smBpAxSO7liQgb1Q6jZXhy7vojJ4IAe77teRo85oOw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIB0j4/ZWQ6QbTCXEp1af2t/7WVP8utBuyOhXh3MF3sEJy6FGr
+	939ld/kcgu/zqToott+fzxO+/vcryP6hMLmynPNE0AfOGU/+OrqYh7LQkV7Qg1K/AaIEZcp9Orp
+	fyB/99K4072oeUyDAoTKg5x82VyWvMRo=
+X-Google-Smtp-Source: AGHT+IEC/8k5KDPL73q97a5GP1aRN7ZwzGI2n4+tqf7+RFYGgWRvEcbGSeu2b1wHjkMKdVaMUxitXhTAyEI4AnIX+Fg=
+X-Received: by 2002:a05:6820:c83:b0:611:f29c:a1b5 with SMTP id
+ 006d021491bc7-611f29ca486mr934324eaf.1.1751309500969; Mon, 30 Jun 2025
+ 11:51:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com> <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
- <20250519101725.k644wzizjwygtwa7@vireshk-i7> <49e7d006-e9cb-49da-a4cb-b73a08f6b792@nvidia.com>
- <20250520100218.te5i5ltrx43zjsq6@vireshk-i7> <9826e66a-3474-4a00-967d-b7784ff60be4@nvidia.com>
- <20250605105151.5s6eblr472mbhunt@vireshk-i7>
-In-Reply-To: <20250605105151.5s6eblr472mbhunt@vireshk-i7>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Mon, 30 Jun 2025 13:43:40 -0500
-X-Gm-Features: Ac12FXxHvk8KZYtykBjWMf5LNIhZa8_RViROFbSfDc-CY2-mP9QdqIlLFIs5w1U
-Message-ID: <CALHNRZ-uA6vHYbb5UdDvhRrNy5j2jyds4iTsiOxc6O=2nnedbg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Jon Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <2999205.e9J7NaK4W3@rjwysocki.net> <CAJZ5v0jLpKEgAodWx8G0k127vMUe-J1rGkCEreRP7a1dQXT2vA@mail.gmail.com>
+ <CAJZ5v0gcgMJ-qihgc3_OF4djxAy8K0i-cmnjRe4AQrc_YEu4DQ@mail.gmail.com> <a27c8ef8-9b80-4749-a64a-0389c266fd0e@gmail.com>
+In-Reply-To: <a27c8ef8-9b80-4749-a64a-0389c266fd0e@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 30 Jun 2025 20:51:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hx+Ra0V7PBNZRKJ1wV-9J-FV5MFhVAsqUzpvHkfdN76Q@mail.gmail.com>
+X-Gm-Features: Ac12FXwKs6wW7yWxeQRejTFKwNbV3hb-HrFkzl3ufDUAVNZQxWd_076CipKQO4g
+Message-ID: <CAJZ5v0hx+Ra0V7PBNZRKJ1wV-9J-FV5MFhVAsqUzpvHkfdN76Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] cpufreq: intel_pstate: Enable EAS on hybrid
+ platforms without SMT
+To: Ibrahim Ansari <ansari.ibrahim1@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
+	Pierre Gondois <pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 5, 2025 at 5:51=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> On 05-06-25, 11:34, Jon Hunter wrote:
-> > I think that would be fine. Given that the tegra124-cpufreq driver is t=
-he
-> > parent, if it fails to resume, then I assume that cpufreq-dt driver wou=
-ld
-> > not resume either?
->
-> There is no resume interface in the cpufreq-dt driver, it is the cpufreq =
-core
-> which resumes to doing DVFS and I think it will try to do DVFS even if te=
-gra's
-> driver failed.
+Hi,
 
-In my opinion, I'm thinking the original flow makes more sense. If
-resume fails, disable cpufreq. Then the subsystem doesn't keep trying
-and failing and causing who knows what kind of havoc. But if that's
-still not desired, what should I do to get this moving again? Just
-drop the error handling entirely, as suggested?
+On Sun, Jun 29, 2025 at 2:28=E2=80=AFPM Ibrahim Ansari
+<ansari.ibrahim1@gmail.com> wrote:
+>
+> Hi,
+>
+> On 5/13/25 19:31, Rafael J. Wysocki wrote:
+>
+> > Finally, schedutil needs to be the cpufreq governor which requires
+> > intel_pstate to operate in the passive mode (schedutil is the default
+> > governor in that case).  The most straightforward way to switch it
+> > into the passive mode is to write "passive" to
+> > /sys/devices/system/cpu/intel_pstate/status (it may also be started in
+> > the passive mode as described in
+> > https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_pstate.html=
+).
+>
+> I'm curious if you intend to bring back support for EAS with
+> intel_pstate in active mode down the line?
 
-Aaron
+No plans as of today and this is somewhat technically questionable
+because EAS requires the schedutil governor for cpufreq which is only
+available in the passive mode.
+
+It may be revisited in the future, though, if there's sufficient demand.
+
+> That would get this working out of the box across distros, since
+> `intel_pstate=3Dactive` is the default setup everywhere (and typically
+> what users should prefer? as I understand from the documentation.)
+
+It's generally hard to say what users should prefer because it depends
+on what they need.
+
+The active mode involves less complexity in the kernel code and so it
+is the default.  It is also somewhat performance-oriented relative to
+EAS.
+
+Users who prefer EAS can append intel_pstate=3Dpassive to the default
+kernel command line.
+
+> Thanks for your work!
+
+Anytime!
 
