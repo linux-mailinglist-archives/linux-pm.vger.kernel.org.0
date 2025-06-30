@@ -1,187 +1,234 @@
-Return-Path: <linux-pm+bounces-29823-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0EAFAED8B9
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 11:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D99A2AED8BE
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 11:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3FE21892491
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 09:32:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAD771899D88
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 09:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7427E243399;
-	Mon, 30 Jun 2025 09:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEAB5244683;
+	Mon, 30 Jun 2025 09:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oKHMoiWE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2831120E70B;
-	Mon, 30 Jun 2025 09:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A8821420F;
+	Mon, 30 Jun 2025 09:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751275939; cv=none; b=fKJuaky2KGZ7L+V3yfhV97EcJNS1opc/PUU2HAU9+k2G7rl1gu0InTqQXq4tX7tbUPjaBG61lvlqI4iQhQRaXQCXBS+D9BktY4AztIT+WVr4v+Swte16/gsHs1S0Uy6onzE7VU4mnB2WSeDMvgzxOZ/0xqbcz8EHllKRZwOLlkU=
+	t=1751275970; cv=none; b=VuV0Cw9LqacTHunwibNUgm/Hvjof0xGhRCyGXbtqZRKLmn/7NxYVhXCAfN4Ec5JX2+oOgjHzIM8r0gq3cYvXgOupPtQDOq6V5Kvi4FQlfy47xHTxkRykScz/hpPcf5jIT9TMCUUkDWRkwqCMqoKZIrVxCRD3ATxfB8Iymu/2aXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751275939; c=relaxed/simple;
-	bh=BwUCkqpykc2xiyZ4oqu+ZEGw0sMiSNpgXHtRj3lEPbo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Jq9DQdZyDfG/mmmKU9xI8T5URCIO4rKyKWRabEHIZYZHys9WkAK95q4MzvakADBL/2p1mnkPhWtI4CAgJFVjvYAsOdix0KfKowCEZURND/5DTN96OgS79GoVs4XUuiw5BmAmPs85tjH0AFT7EtrognT3sICdIQyYeQ/d9cZt684=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-4e2b5ffb932so902301137.0;
-        Mon, 30 Jun 2025 02:32:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751275934; x=1751880734;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0HHyttpDTe6qStRsM+nsbJq6FKJZTXS/oIqRBj8ZQtE=;
-        b=ctrdL+PabSDUxXpMQyhjEyw83wjJysr0wzzfRaOMsKs0Y1UFM8vU5MAqcmpKTLHO1i
-         JqEI3WO6y7j2wesNeo/i/Q8hixOHgJOYEC2rFC1G0kiq19k3m38mFUvWyBLyBbTMajYi
-         NPJT4oGbC8sLRhNtdNy6xrgEapYFZajYDU443RaaaJNUGPZaapIeX65jotwWF7QVFrGE
-         3FxWhdfcLuudVaLwCTIaI3tvFLbPkVH8BENbY78/rogWMIU8Y+AqkQktgWbIsvn+2iEB
-         LdsoRCQI43Tv/Roczps60MsB89kbd4xETgHg6743wLohqwvUXg6+4OvUZQct4emVt+hz
-         lRVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUr5oArRa/bndIom0ck9TTYT+v9tJ0ZVwHxBxEnoXudZVDfM8FQ9YyfpNImskjyluuFMA/cEuM+aBcEcFc=@vger.kernel.org, AJvYcCVM7Vw40M+2a2vFgNdvYBybgTAkhlw3w6vSGgqJxYRQXY1Tdy9a9Bkh8EKExbHhe7xcLFnOtKidvBU=@vger.kernel.org, AJvYcCXrH7lNreOj9fi3UJAxnLfSe4T7SQSYKHwZ11qHhMGeUOTUpKNXMhzwM0YC+Lu0a5+Wz1020ixhJ5MvZDjG5C8q01c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaqO+BQBel6p5wuYAorPlpdTJ2K6phMr4l7HWZVglAxKeVU7xZ
-	caNFIPOmOPvBSvzTwKL/rD9oDre+zDzF7ZvYi0MhXi+xNQvMHjNEdTTQ0aKrcdoJ
-X-Gm-Gg: ASbGncv0rIgwouDy3mynwjVJAzdWkEmy+EEu3klG062aEw13CBwIqCGBJuL7Dz5ZntW
-	Dg0gk7KaqK/ESsmWbi12tDYZhG/fHYjbsIxgGlPgU2VMH3NCsA6VZP5x+gwO3cYMsF7tuXxDMaI
-	azuLu4ptVQhERvqXHYxtvTpiahNjjruC6ZrmeExtKqho0oDmSHGC23fL7qEe3D8fyHyUVmU3nFP
-	YbJkHYo9ofPf3kS5Rn44ZIydygUyppMwWcdIKgRbvtQlLXfSMWoJNKSxolVzgYXUU/PgAzzlSZp
-	akqMVcC0tlzZqYTIYOnJUvUKL9PnixwvNzfD+vncW47zYmBRiEBaJ3ls0rCkd5cA2j9YSTVC+lt
-	xhEvyC1Igea8mYDzCiaAxS4HM
-X-Google-Smtp-Source: AGHT+IGIT+E/CaAL5PE6ydDStpFjv3VCBTFdIKHAfw1sinZ2+157uXsHfhTqTuNcMw8c/ZcwN0uV7g==
-X-Received: by 2002:a05:6102:5e8a:b0:4e5:980a:d164 with SMTP id ada2fe7eead31-4ee4f0c2d1bmr8831842137.0.1751275933478;
-        Mon, 30 Jun 2025 02:32:13 -0700 (PDT)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-884d1c3781esm1606687241.10.2025.06.30.02.32.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jun 2025 02:32:12 -0700 (PDT)
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4e7fc3309f2so919111137.2;
-        Mon, 30 Jun 2025 02:32:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUUxmaTCuRJfAIndzTd41c4PxlEqfTq+N19g4cXfplgimESkcLzekDGRX2Lz99Q1taSb9TzHPMPvG4HxZk=@vger.kernel.org, AJvYcCVA1Q5FrIIRIWr1YG9w5cghVa/zOkLJ9KU5vhCrGRkGlhudzFJWfvK0xZxB4Fto9G/KL1jjuMD3S+c=@vger.kernel.org, AJvYcCXFIvmPkkDG1NylBHyraBVQnZPIvlYM1Xw1vmmHTzXqpXscF4f0OmjQsCpegV8j3ZTS58ISYRaT7BovsA7qmKqVwYw=@vger.kernel.org
-X-Received: by 2002:a05:6102:f82:b0:4e2:c6e4:ab1e with SMTP id
- ada2fe7eead31-4ee4f55bd15mr8009074137.7.1751275931927; Mon, 30 Jun 2025
- 02:32:11 -0700 (PDT)
+	s=arc-20240116; t=1751275970; c=relaxed/simple;
+	bh=QWD/CZiB02p5Y9rO/SrSW4JBcHFnpOwu/VqcsLoMJnI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OFO72G/SViNGC//stCU5YkWrZZZOgwiOdEix58rGhH7aAJ9YW4ePIf5M6g+jqFE84GTw7a8UePXyNHo2DswGtbTO2NTksC9XK2zX3LICDE5Vd9Yhwqf7kfqLRzEZus1K+hsZu4DHVwp8jEGFFG3lNKwUScdyo35K28vQFV4XTfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=oKHMoiWE; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1751275966;
+	bh=QWD/CZiB02p5Y9rO/SrSW4JBcHFnpOwu/VqcsLoMJnI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oKHMoiWElN1piNx6lnOGBBN3mlX0nfB2KP6BBJZTI1844D6x9kqssN/NSARTunD/O
+	 Ssvf7n3hq2l1a/tXIkqNMBYw2mouhknv+SULB3ZWJAIDdT2XQ1Bbc6osdiJ11jhWmg
+	 LXAcogkiNNgFrY579znmNLB4/eadkA8SAb6Tw7Ymy5+A+2NP9Ut3gaF/pHqX1aJT2S
+	 5le/dPJ9sVRkcqg2TQ/vj7mUik7b+MrPeKbirQkcFpgkXxzm1d0Ud0ABULYtLzQddv
+	 UsX+Y5OI0dq9iV14BmXHfQEqAfRjiTT1WD0D+GXUMqdNPRp3iWqXn4AhXjiPuToH/Y
+	 fDVbEv3hrOwIw==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9985B17E0B0D;
+	Mon, 30 Jun 2025 11:32:45 +0200 (CEST)
+Message-ID: <e958afe7-b338-47dc-905e-f3223b4f3cdb@collabora.com>
+Date: Mon, 30 Jun 2025 11:32:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523134025.75130-1-ulf.hansson@linaro.org>
- <fd4cfe7a-e29b-4237-b82f-48354deead3b@ideasonboard.com> <CAPDyKFpprO=HGuiHX3MQ_+m1YRnaWG=XwCx8-fSdXak8VBDUbQ@mail.gmail.com>
- <CAPDyKFpXcpwkacnYqWz2vxaTd7pW5bSRa2F063BryFxVNEAmPA@mail.gmail.com>
- <CAMuHMdXGS+efbbQ_Pn1iYhQ1aWc_DuJ-CBN=jxfjwOWxTRx+9Q@mail.gmail.com> <CAPDyKFoJHFuY278eEobje4TOv_+-i966H2OuP9fqHMLLevb0qw@mail.gmail.com>
-In-Reply-To: <CAPDyKFoJHFuY278eEobje4TOv_+-i966H2OuP9fqHMLLevb0qw@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 30 Jun 2025 11:31:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVo1eOZiRpcH_XNqP6Y0imk4+bcAe=+W4_Su1pF16uRVA@mail.gmail.com>
-X-Gm-Features: Ac12FXyy1jcX9FikFs2NK5_wkqpBj31k8jOziXAUTCaEyHrb3yLbemdWFSlcECU
-Message-ID: <CAMuHMdVo1eOZiRpcH_XNqP6Y0imk4+bcAe=+W4_Su1pF16uRVA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/21] pmdomain: Add generic ->sync_state() support to genpd
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Saravana Kannan <saravanak@google.com>, 
-	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Johan Hovold <johan@kernel.org>, Maulik Shah <maulik.shah@oss.qualcomm.com>, 
-	Michal Simek <michal.simek@amd.com>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 02/13] pmdomain: mediatek: Refactor bus protection
+ regmaps retrieval
+To: Fei Shao <fshao@chromium.org>
+Cc: linux-mediatek@lists.infradead.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, matthias.bgg@gmail.com, ulf.hansson@linaro.org,
+ y.oudjana@protonmail.com, wenst@chromium.org, lihongbo22@huawei.com,
+ mandyjh.liu@mediatek.com, mbrugger@suse.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, kernel@collabora.com
+References: <20250623120154.109429-1-angelogioacchino.delregno@collabora.com>
+ <20250623120154.109429-3-angelogioacchino.delregno@collabora.com>
+ <CAC=S1njT6ygGuZDPU5KDW94Nu-TbM21DM-6HdR7Pio=WTD_eQA@mail.gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <CAC=S1njT6ygGuZDPU5KDW94Nu-TbM21DM-6HdR7Pio=WTD_eQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Ulf,
+Il 27/06/25 14:12, Fei Shao ha scritto:
+> On Mon, Jun 23, 2025 at 8:02 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> In preparation to add support for new generation SoCs like MT8196,
+>> MT6991 and other variants, which require to set bus protection on
+>> different busses than the ones found on legacy chips, and to also
+>> simplify and reduce memory footprint of this driver, refactor the
+>> mechanism to retrieve and use the bus protection regmaps.
+>>
+>> This is done by removing the three pointers to struct regmap from
+>> struct scpsys_domain (allocated for each power domain) and moving
+>> them to the main struct scpsys (allocated per driver instance) as
+>> an array of pointers to regmap named **bus_prot.
+>>
+>> That deprecates the old devicetree properties to grab phandles to
+>> the three predefined busses (infracfg, infracfg-nao and smi) and
+>> replaces it with a new property "mediatek,bus-protection" that is
+>> meant to be an array of phandles holding the same busses where
+>> required (for now - for legacy SoCs).
+>>
+>> The new bus protection phandles are indexed by the bus_prot_index
+>> member of struct scpsys, used to map "bus type" (ex.: infra, smi,
+>> etc) to the specific *bus_prot[x] element.
+>>
+>> While the old per-power-domain regmap pointers were removed, the
+>> support for old devicetree was retained by still checking if the
+>> new property (in DT) and new-style declaration (in SoC specific
+>> platform data) are both present at probe time.
+>>
+>> If those are not present, a lookup for the old properties will be
+>> done in all of the children of the power controller, and pointers
+>> to regmaps will be retrieved with the old properties, but then
+>> will be internally remapped to follow the new style regmap anyway
+>> as to let this driver benefit of the memory footprint reduction.
+>>
+>> Finally, it was necessary to change macros in mtk-pm-domains.h and
+>> in mt8365-pm-domains.h to make use of the new style bus protection
+>> declaration, as the actual HW block is now recognized not by flags
+>> but by its own scpsys_bus_prot_block enumeration.
+>>
+>> The BUS_PROT_(STA)_COMPONENT_{INFRA,INFRA_NAO,SMI} flags were also
+>> removed since they are now unused, and because that enumeration was
+>> initially meant to vary the logic of bus protection and not the bus
+>> where work is performed, anyway!
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+> 
+> <snip>
+> 
+>>
+>> +static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *scpsys)
+>> +{
+>> +       const u8 bp_blocks[3] = {
+>> +               BUS_PROT_BLOCK_INFRA, BUS_PROT_BLOCK_SMI, BUS_PROT_BLOCK_INFRA_NAO
+>> +       };
+>> +       struct device_node *np = dev->of_node;
+>> +       struct device_node *node, *smi_np;
+>> +       int num_regmaps = 0, i, j;
+>> +       struct regmap *regmap[3];
+>> +
+>> +       /*
+>> +        * Legacy code retrieves a maximum of three bus protection handles:
+>> +        * some may be optional, or may not be, so the array of bp blocks
+>> +        * that is normally passed in as platform data must be dynamically
+>> +        * built in this case.
+>> +        *
+>> +        * Here, try to retrieve all of the regmaps that the legacy code
+>> +        * supported and then count the number of the ones that are present,
+>> +        * this makes it then possible to allocate the array of bus_prot
+>> +        * regmaps and convert all to the new style handling.
+>> +        */
+>> +       node = of_find_node_with_property(np, "mediatek,infracfg");
+>> +       if (node) {
+>> +               regmap[0] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg");
+>> +               of_node_put(node);
+>> +               num_regmaps++;
+>> +               if (IS_ERR(regmap[0]))
+>> +                       return dev_err_probe(dev, PTR_ERR(regmap[0]),
+>> +                                            "%pOF: failed to get infracfg regmap\n",
+>> +                                            node);
+>> +       } else {
+>> +               regmap[0] = NULL;
+>> +       }
+>> +
+>> +       node = of_find_node_with_property(np, "mediatek,smi");
+>> +       if (node) {
+>> +               smi_np = of_parse_phandle(node, "mediatek,smi", 0);
+>> +               of_node_put(node);
+>> +               if (!smi_np)
+>> +                       return -ENODEV;
+>> +
+>> +               regmap[1] = device_node_to_regmap(smi_np);
+>> +               num_regmaps++;
+>> +               of_node_put(smi_np);
+>> +               if (IS_ERR(regmap[1]))
+>> +                       return dev_err_probe(dev, PTR_ERR(regmap[1]),
+>> +                                            "%pOF: failed to get SMI regmap\n",
+>> +                                            node);
+>> +       } else {
+>> +               regmap[1] = NULL;
+>> +       }
+>> +
+>> +       node = of_find_node_with_property(np, "mediatek,infracfg-nao");
+>> +       if (node) {
+>> +               regmap[2] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
+>> +               num_regmaps++;
+>> +               of_node_put(node);
+>> +               if (IS_ERR(regmap[2]))
+>> +                       return dev_err_probe(dev, PTR_ERR(regmap[2]),
+>> +                                            "%pOF: failed to get infracfg regmap\n",
+>> +                                            node);
+>> +       } else {
+>> +               regmap[2] = NULL;
+>> +       }
+>> +
+>> +       scpsys->bus_prot = devm_kmalloc_array(dev, num_regmaps,
+>> +                                             sizeof(*scpsys->bus_prot), GFP_KERNEL);
+>> +       if (!scpsys->bus_prot)
+>> +               return -ENOMEM;
+>> +
+>> +       for (i = 0, j = 0; i < num_regmaps; i++) {
+> 
+> Did you mean BUS_PROT_BLOCK_COUNT?
+> Consider a case where only regmap[2] is configured.
+> 
 
-On Tue, 24 Jun 2025 at 17:30, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Mon, 23 Jun 2025 at 17:06, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Mon, 23 Jun 2025 at 16:21, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > On Thu, 19 Jun 2025 at 13:40, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > Do you think it would be possible to move rcar_gen4_sysc_pd_init() to
-> > > > a postcore/arch_initcall?
-> > >
-> > > I did some investigation around this and found that both
-> > > drivers/pmdomain/renesas/rcar-gen4-sysc.c and
-> > > drivers/pmdomain/renesas/rcar-sysc.c are registering their genpd
-> > > providers at the early_initcall() level.
-> > >
-> > > I was trying to find (by browsing renesas DTSes and looking into
-> > > drivers) if there is any consumers that actually relies on this, but
-> > > so far the earliest consumer I have found is the
-> > > drivers/irqchip/irq-renesas-irqc.c, but that's at postcore_initcall().
-> > > Of course, it's difficult to say if my analysis is complete as there
-> > > are a lot of platform variants and I didn't check them all.
-> > >
-> > > Maybe we should just give it a try and move both two drivers above to
-> > > postcore_initcall and see if it works (assuming the irq-renesas-irqc
-> > > supports -EPROBE_DEFER correctly too).
-> > >
-> > > If this doesn't work, I think we need to find a way to allow deferring
-> > > the call to device_add() in of_genpd_provider_add*() for genpd
-> > > provider's devices.
-> >
-> > Commit dcc09fd143bb97c2 ("soc: renesas: rcar-sysc: Add DT support for
-> > SYSC PM domains") explains:
-> >
-> >    "Initialization is done from an early_initcall(), to make sure the PM
-> >     Domains are initialized before secondary CPU bringup."
-> >
-> > but that matters only for arm32 systems (R-Car Gen1 and Gen2).
-> > Arm64 systems (R-Car Gen3 and Gen4) use PSCI for CPU PM Domain control.
->
-> Geert, thanks a lot for providing these details and helping out, much
-> appreciated!
->
-> > While changing rcar-sysc.c to use a postcore_initcall indeed moves PM
-> > Domain initialization after secondary CPU bringup, the second CPU core
-> > on R-Car M2-W is still brought up fine.
+Yep. None of the many platforms that we have tested hit this issue, but it's as
+bad as it sounds! :')
 
-To rule out relying on anything being enabled by the bootloader,
-I offlined the second CPU, and booted the kernel using kexec.
-The second CPU still comes up fine.  Which is not that unsurprising,
-as rcar-sysc.c ignores domains with the PD_CPU flag...
+Thanks for spotting this one!
 
-> > For R-Car H1, there is a regression:
-> >
-> >     smp: Bringing up secondary CPUs ...
-> >     CPU1: failed to boot: -19
-> >     CPU2: failed to boot: -19
-> >     CPU3: failed to boot: -19
-> >     smp: Brought up 1 node, 1 CPU
-> >     SMP: Total of 1 processors activated (500.00 BogoMIPS).
-> >
-> > CPU bringup/teardown in userspace using
-> > /sys/devices/system/cpu/cpu*/online still works.
-> > R-Car H1 was never converted to use "enable-method" in DT, and relies
-> > on calling into the rcar-sysc driver directly (see [1]).  However,
-> > that does not use any actual calls into the genpd core, so probably it
-> > can be made to work by splitting rcar_sysc_pd_init() in two parts: an
-> > early_initcall() that allocates all domain structures and populates the
-> > internal hierarchy, and a postcore_initcall() that registers everything
-> > with the genpd core.
->
-> Yes, that seems like a viable option.
+Cheers,
+Angelo
 
-... so it's just R-Car H1 that needs some code to run early.
-
-> Unless you prefer to have a stab at it, I intend to look into it and
-> make the patch(es) part of a new version of the $subject series. Of
-> course I am still relying on your help with testing/review.
-
-Sure, I will do testing and review.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Regards,
+> Fei
+> 
+>> +               enum scpsys_bus_prot_block bp_type;
+>> +
+>> +               if (!regmap[i])
+>> +                       continue;
+>> +
+>> +               bp_type = bp_blocks[i];
+>> +               scpsys->bus_prot_index[bp_type] = j;
+>> +               scpsys->bus_prot[j] = regmap[i];
+>> +
+>> +               j++;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+> 
+> <snip>
 
