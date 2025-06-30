@@ -1,195 +1,183 @@
-Return-Path: <linux-pm+bounces-29828-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46EFEAED9DB
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 12:30:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D082AEDA15
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 12:41:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E62D189AE04
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 10:30:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C37B316699A
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 10:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74584217F29;
-	Mon, 30 Jun 2025 10:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01AE257427;
+	Mon, 30 Jun 2025 10:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KGt7OTNr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mM6bjPaG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2050.outbound.protection.outlook.com [40.107.94.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD64A1C862D;
-	Mon, 30 Jun 2025 10:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751279423; cv=none; b=io0ZrNe3UVxMXOADbSccyXSL71KOn0wToly8V2rBdPHMulhZ72+4p8EWJh2m8aUfbvMKjQGKYC02bmI2tw6NgAg9jYl0SiVrvsjuxxnMmd8pGRLitFkE2CDfRXZjH0chM+iMHsFWoVkNBozTb5QA4umkdtRR/GP0TeKapX80cIc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751279423; c=relaxed/simple;
-	bh=D8Rid0bcVc5Pr2IELERjxtYwzLWTo01IYXtAN+LRJfk=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=cnhBKie74PaZn+bbmpQiZLiFN306odAjV1FJAFHKel2/9cppI700zrWE864nfJGda3azp3BsgmhlrTODNaHCvw7qFBOIIQzVJDUEFlw/3H25x9s6Llu0Ly/GSgvfOzvXAV3rCjl3dDOmzyFkteNFztKCagKXWeMNkH005l9M/Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KGt7OTNr; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751279422; x=1782815422;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=D8Rid0bcVc5Pr2IELERjxtYwzLWTo01IYXtAN+LRJfk=;
-  b=KGt7OTNrtG30Fej/UFoP4sKRBX/z24BCki2qyy0JjUqaKt2z07Uw6mxj
-   +fpfoqSm5tEojlxtqhLx5ygoGO7ijUNFhL87t46aNB9IcoNgI4uVSa/o5
-   dKZZ0YJ6L6Tbibh5HlIDSpz+5Ddv9MGSHKnt7BzHx5sGk7U3kFSaGzBMY
-   vQdldMqTZ6GwIZzAxBTL+OdxiZmQfAeGF7eT0HJqCHplDu77sSbMM3/me
-   +OcTkthhlt07Oe4de77ZTZHGavwhQtAG45ktLWCbdOpwqIl0qzDnyokJc
-   w+Y6TWQLD62AM/NtDw0PrSiURbsl574FxjI1YtDec/q3NH0QgQ0ANO7A4
-   A==;
-X-CSE-ConnectionGUID: gJstAsThTiqtlOd5D22reQ==
-X-CSE-MsgGUID: 43qohBGYSK6FLYYIWg5GDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11479"; a="78940308"
-X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
-   d="scan'208";a="78940308"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 03:30:21 -0700
-X-CSE-ConnectionGUID: xV/uDRqjS7atOjXTMdnVmA==
-X-CSE-MsgGUID: k9O9eEo4TdmfRaK2YxefHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
-   d="scan'208";a="153050589"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.65])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 03:30:15 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 30 Jun 2025 13:30:12 +0300 (EEST)
-To: Mario Limonciello <superm1@kernel.org>
-cc: Mario Limonciello <mario.limonciello@amd.com>, 
-    Perry Yuan <perry.yuan@amd.com>, Thomas Gleixner <tglx@linutronix.de>, 
-    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-    Dave Hansen <dave.hansen@linux.intel.com>, 
-    "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, 
-    "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Huang Rui <ray.huang@amd.com>, 
-    "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
-    "Rafael J . Wysocki" <rafael@kernel.org>, 
-    Viresh Kumar <viresh.kumar@linaro.org>, 
-    "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER" <platform-driver-x86@vger.kernel.org>, 
-    "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>, 
-    "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-    "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v11 00/13] Add support for AMD hardware feedback
- interface
-In-Reply-To: <20250609200518.3616080-1-superm1@kernel.org>
-Message-ID: <5b312c44-346b-0499-962e-5a80a787e031@linux.intel.com>
-References: <20250609200518.3616080-1-superm1@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DAA248F4F;
+	Mon, 30 Jun 2025 10:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751280093; cv=fail; b=TG/CLEQTpMgZz69y1L7OmJhIYVp73pVRvPhCjOv0sgoxx1I2+QbWRrZ8KckPkEapnopFaw6p/LiR/pqaghIKVBPBykF9SpOa53sF4/ufy3JEO1gp2KqAKyAPVtJE/QA30gUessr7LxlSE/GK5avwImOCg5YwZwZvL17H8JgPtNg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751280093; c=relaxed/simple;
+	bh=SpYofLHQkuYdfrdwBhcVP3Tys6eQDKSNLCdAcD2wIhE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=o84UVgqH05M+KGycydV1Xl3H/VSpLL8x8hktA4BSuNhriqEyYyzO7fPkYqrOxcme0ytV4Tyc2iKRa+8aj18UMPWqVgbH9WnHNK6Dmxj4uuqeyOmBpftzlVzRrvL8sOLTXUZQBuy7ErRMNZh0TvX/w6Oq3xyR0QNqUIVX1ZayjA4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mM6bjPaG; arc=fail smtp.client-ip=40.107.94.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q5A5nbn5v8bTRbnxjl1xUP6qeHZqrGJbq0VUBgnO4BmyvOM4QV8LIoVaXvQbt9l88eYFE9F4JMcxNYz9tE1CQcrK3KXuhIGe7HtQ+8YXZ1k+EMeWIN1NGqQf0dZNd8VR4xl28Cl11xvRsTxdpocvEvVHWL0NjdojocWxDs/tQPbAWsN7mNDYj06ZIRMouhM0lR71KDAkOKdgrecRPYs5bSf2+dE9Ge/wcBHUDfm+Anjn1RFVGuOtAHikgbFG+QhAJw7rfRQTs+VPv5PpD82JuXWi4G1H98OrT45o1+3bq8del1iijzAOXuxt1APvbC6UVx2qPGTnSdyHHowFU4meGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xGSEIg0BOU50F6F9OELM40PS9YexQ2QnL0zoqHcG50A=;
+ b=XnZTo3LtgWHX4MJePf8jiNQXNFdyYGN68+dz+6p5M+l0GvrfH24Yqt9eAXj+MdUajGLsK7Qs7tT1ogcZ7RKUnEXU5mpboDcGoNI073UG336ZzBvhBpbiz87X+KMc8RVw3dhe8iz+irv7SjOfJtazFF/Gq1XXBoZzBoYu8bgyZmLqmi7ezybzWeP0qg+v6CPBBVuxpN2yts7aM58rDjIbOgQJVHj91YOuax14XrhWq80uoVqiuUFuf1BOH5DRNFRTeg4NYIJK0iGne7/SEtAKNzVsRw9HDP7Jk+OcMz1/vHjX+sLxXoClYsK/bP9WZKq74fjzuXjzWoPzDi1sU9YUog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xGSEIg0BOU50F6F9OELM40PS9YexQ2QnL0zoqHcG50A=;
+ b=mM6bjPaGvzFp7NzcuLrwW0dMTot68aDYscyC0nu+Ky9feZ0egYgpkzQdv38/NGYRFDqRy2fj/PglAJPr8VLrZVhN5u52ZYCu11P0nR+B+6DZCXgrDvDQU7VXZSZaiyCfSKm/ZVXrynt+Vkpk0dM4QMNUlX5eWYbTRyvMtEpE73k=
+Received: from MW4PR03CA0013.namprd03.prod.outlook.com (2603:10b6:303:8f::18)
+ by DM6PR12MB4401.namprd12.prod.outlook.com (2603:10b6:5:2a9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.21; Mon, 30 Jun
+ 2025 10:41:28 +0000
+Received: from CO1PEPF000042AA.namprd03.prod.outlook.com
+ (2603:10b6:303:8f:cafe::a6) by MW4PR03CA0013.outlook.office365.com
+ (2603:10b6:303:8f::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.32 via Frontend Transport; Mon,
+ 30 Jun 2025 10:41:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1PEPF000042AA.mail.protection.outlook.com (10.167.243.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8901.15 via Frontend Transport; Mon, 30 Jun 2025 10:41:27 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
+ 2025 05:41:26 -0500
+Received: from hjbog-srdc-41.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 30 Jun 2025 05:41:23 -0500
+From: Samuel Zhang <guoqing.zhang@amd.com>
+To: <rafael@kernel.org>, <len.brown@intel.com>, <pavel@kernel.org>,
+	<alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+	<mario.limonciello@amd.com>, <lijo.lazar@amd.com>
+CC: <victor.zhao@amd.com>, <haijun.chang@amd.com>, <Qing.Ma@amd.com>,
+	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Samuel Zhang
+	<guoqing.zhang@amd.com>
+Subject: [PATCH 0/3] reduce system memory requirement for hibernation
+Date: Mon, 30 Jun 2025 18:41:13 +0800
+Message-ID: <20250630104116.3050306-1-guoqing.zhang@amd.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-1730005503-1751279366=:7079"
-Content-ID: <16e53ef6-1677-69e6-f234-6f14e754d788@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB03.amd.com: guoqing.zhang@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042AA:EE_|DM6PR12MB4401:EE_
+X-MS-Office365-Filtering-Correlation-Id: cbcb2210-4963-4d8d-e3f1-08ddb7c2ab16
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?wbIw1qgS/0Z0w6713Kb3gzPb+t/KpoZccQCYLruA3QmTECJZvAAPVmbxs1Q4?=
+ =?us-ascii?Q?4OhQPWCyqCdKGil8JNfejjLPz47b3mhxQL93GEVQb2kkZ4SzF3JIEM9FJEN0?=
+ =?us-ascii?Q?FvacEH5R/T44HuS24MbYG6DXB+ensVZSvByO8xjVdLZf+jf5uzblQckuf0gZ?=
+ =?us-ascii?Q?q5YLEbW0gNI10Cc4TK+SjLixJuH8ZeLIhHbrGnWLUxEI+SNvgucQOG9rgYL8?=
+ =?us-ascii?Q?HlCif8+TcxLuSJp5flKx2MclNBWa5fGLtPKGWHagHA0k48iJD2X31Tjvi7Zv?=
+ =?us-ascii?Q?i/wcs/M9Lg0GBsSH0ul6yE5XJWvkyFc9/+L0O6dMZZnf0aF0WNkUiqofi7Tg?=
+ =?us-ascii?Q?KCq8vCrlCzuG8wrl4E1TJ1qkJ3OZ7yl9DIl9QHS/CmTv6G/Ih5/KOsVWavIq?=
+ =?us-ascii?Q?aEmcBh16TAB9UzLImv3atmjEN+c0tWjboRvxY3pcPx3gJSqTDVutCFIBIko6?=
+ =?us-ascii?Q?LMwRJSrl2v4LEspKeiU0UhUaF87o8Q7HPF0r3Av14Nxhxcx413ORDb52Va+G?=
+ =?us-ascii?Q?EaFDKp4PkB/0BYBMi3RtyHt4L1Td0cIcrHBudVRtHgnP6hykI0rLQzGl5ifD?=
+ =?us-ascii?Q?M/Wz+BrNtXtHGhgHMxisKHglGRuHZGg9EZ/rauD552r9VFtv0SPdAA0tAGt4?=
+ =?us-ascii?Q?U4+VkcLsg3+0t57eLA6yE9VK9qfQIjKoZsReLJDJne8PM3L6PXw9LO0VgMEy?=
+ =?us-ascii?Q?b8dI3M97V3dkSan85xE5fOBSp6SK7XMHMpoQys98VK8uJJ2D0X44xmewHnYI?=
+ =?us-ascii?Q?rEJeMpaceDM23VMkHEyjBZENRwHBDlmSbTMNe5GWLyRY7CMltUjRFWyxNi8M?=
+ =?us-ascii?Q?ZWpiqQmrvvRILivlkwQSnX4tg1adjaAiOtPj8JoFEtay1vsTy/7Xr9dl7+Z/?=
+ =?us-ascii?Q?Il1l3gB//I49gMCiiHgRhKN4LqnhsNlneVGyBn3r+nzVoIlHHSLqJhSHX4oW?=
+ =?us-ascii?Q?9ugJgPsduuYlNjbPeQNsVYTjOGKmD8B3yW3qZYsALAEbGhmrSjQ4VDhvSp5O?=
+ =?us-ascii?Q?r2/CUXkB6hXQTfvEX+F43QddSOj0eEh3SWpxcO8F63+bfDYz7IJrdV1VNIn+?=
+ =?us-ascii?Q?/M0M1woGbBPoDCN025XW380Us8U55Hf15BqQMo0NXIxuapFY11fewla0UtxT?=
+ =?us-ascii?Q?2ClxVPntebwk9CnpJF9BnEIOhvHI4H3l/XydfBzkH8XbG2xaP6IfE9Pp0S/u?=
+ =?us-ascii?Q?xiJojuxWfwVTESQozyhJD8qOIFuBJQRdD5WUcprefHplgjtGe8umWn9yZNhO?=
+ =?us-ascii?Q?juVlAvAXjQfW+R0FWg11iVcRVMrbkcgcrkrwVxS8RSU9nP+YES7p/DLC5jCy?=
+ =?us-ascii?Q?PFgLtf3Imj7AcuyCZEHtOY+xMTsDT/o4oA67DeKd72k+pW49F4geYi+IyhZf?=
+ =?us-ascii?Q?baziVgLpMyA9FebCaOAInzLXw1B6kCZVNpO6cCwqNy4Sm0n5CT+wL0awGSGi?=
+ =?us-ascii?Q?/4PHCI0RZAQnlh247jFiIaiI+okwLR8EdWZCFGDhFSeKKFn4rcWRuRvjLXLI?=
+ =?us-ascii?Q?yLQIhEmHhDOAV+f0e7a9/Z+E6aGBsmF2pLlL?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 10:41:27.7075
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbcb2210-4963-4d8d-e3f1-08ddb7c2ab16
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000042AA.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4401
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Modern data center dGPUs are usually equipped with very large VRAM. On
+server with such dGPUs(192GB VRAM * 8) and 2TB system memory, hibernate
+will fail due to no enough free memory.
 
---8323328-1730005503-1751279366=:7079
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <8943e6f1-0a75-8515-3884-25951a634d31@linux.intel.com>
+The root cause is that during hibernation all VRAM memory get evicted to
+GTT or shmem. In both case, it is in system memory and kernel will try to 
+copy the pages to hibernation image. In the worst case, this causes 2 
+copies of VRAM memory in system memory, 2TB is not enough for the 
+hibernation image. 192GB * 8 * 2 = 3TB > 2TB.
 
-On Mon, 9 Jun 2025, Mario Limonciello wrote:
+The fix includes following 2 changes. With 2 changes, there's much less 
+pages needed to be copied to hibernate image and hibernation can succeed.
+1. move GTT to shmem after evicting VRAM. then the GTT pages can be freed.
+2. force write shmem pages to swap disk and free shmem pages.
 
-> From: Mario Limonciello <mario.limonciello@amd.com>
->=20
-> The AMD Heterogeneous core design and Hardware Feedback Interface (HFI)
-> provide behavioral classification of tasks.
->=20
-> Threads are classified during runtime into enumerated classes.
-> Currently, the driver supports 3 classes (0 through 2). These classes
-> represent thread performance/power characteristics that may benefit from
-> special scheduling behaviors. The real-time thread classification is
-> consumed by the operating system and is intended to be used to inform the=
- scheduler
-> of where the thread should be placed for optimal performance or energy ef=
-ficiency.
->=20
-> The thread classification can be used to helps to select CPU from a ranki=
-ng table
-> that describes an efficiency and performance ranking for each classificat=
-ion from
-> two dimensions. This is not currently done in this series, but is intende=
-d for future
-> follow ups after the plumbing is laid down.
->=20
-> The ranking data provided by the ranking table are numbers ranging from 0=
- to 255,
-> where a higher performance value indicates higher performance capability =
-and a higher
-> efficiency value indicates greater efficiency. All the CPU cores are rank=
-ed into
-> different class IDs. Within each class ranking, the cores may have differ=
-ent ranking
-> values. Therefore, picking from each classification ID will later allow t=
-he scheduler
-> to select the best core while threads are classified into the specified w=
-orkload class.
->=20
-> This series was originally submitted by Perry Yuan [1] but he is now doin=
-g a different
-> role and he asked me to take over.
->=20
-> Link: https://lore.kernel.org/all/cover.1724748733.git.perry.yuan@amd.com=
-/
->=20
-> v10->v11:
->  * rebase on v6.16-rc1
->  * Adjust for Randy's and Ingo's feedback
->=20
-> Mario Limonciello (5):
->   MAINTAINERS: Add maintainer entry for AMD Hardware Feedback Driver
->   cpufreq/amd-pstate: Disable preferred cores on designs with workload
->     classification
->   platform/x86/amd: hfi: Set ITMT priority from ranking data
->   platform/x86/amd: hfi: Add debugfs support
->   x86/itmt: Add debugfs file to show core priorities
->=20
-> Perry Yuan (8):
->   Documentation: x86: Add AMD Hardware Feedback Interface documentation
->   x86/msr-index: define AMD heterogeneous CPU related MSR
->   platform/x86: hfi: Introduce AMD Hardware Feedback Interface Driver
->   platform/x86: hfi: parse CPU core ranking data from shared memory
->   platform/x86: hfi: init per-cpu scores for each class
->   platform/x86: hfi: add online and offline callback support
->   platform/x86: hfi: add power management callback
->   x86/process: Clear hardware feedback history for AMD processors
->=20
->  Documentation/arch/x86/amd-hfi.rst    | 133 +++++++
->  Documentation/arch/x86/index.rst      |   1 +
->  MAINTAINERS                           |   9 +
->  arch/x86/include/asm/msr-index.h      |   5 +
->  arch/x86/kernel/itmt.c                |  23 ++
->  arch/x86/kernel/process_64.c          |   4 +
->  drivers/cpufreq/amd-pstate.c          |   6 +
->  drivers/platform/x86/amd/Kconfig      |   1 +
->  drivers/platform/x86/amd/Makefile     |   1 +
->  drivers/platform/x86/amd/hfi/Kconfig  |  18 +
->  drivers/platform/x86/amd/hfi/Makefile |   7 +
->  drivers/platform/x86/amd/hfi/hfi.c    | 551 ++++++++++++++++++++++++++
+After swapout GTT to shmem in hibernation prepare stage, swapin and 
+restore BOs in thaw stage takes lots of time(50 mintues observed for 
+8 dGPUs). And it's not necessary since the follow-up hibernate stages do 
+not use GPU for hibernation successful case. The third patch is just skip 
+the BOs restore in thaw stage to reduce the hibernation time.
 
-I don't have objections to this series. But as discussed before, not all=20
-features are provided by this series and follow-up series will be=20
-required to provide what are documented as features (perhaps more than=20
-one).
+Samuel Zhang (3):
+  drm/amdgpu: move GTT to SHM after eviction for hibernation
+  PM: hibernate: shrink shmem pages after dev_pm_ops.prepare()
+  drm/amdgpu: skip kfd resume_process for dev_pm_ops.thaw()
 
-The pdx86 side seems pretty conflict free as this is new code. If e.g. x86=
-=20
-wants to merge this due to this series touching existing code there=20
-(besides the minor cpufreq bits), it would be fine with me,
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    |  2 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c    | 13 ++++++++++++-
+ drivers/gpu/drm/ttm/ttm_resource.c         | 18 ++++++++++++++++++
+ include/drm/ttm/ttm_resource.h             |  1 +
+ kernel/power/hibernate.c                   | 13 +++++++++++++
+ 6 files changed, 47 insertions(+), 2 deletions(-)
 
-Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+-- 
+2.43.5
 
-
---=20
- i.
---8323328-1730005503-1751279366=:7079--
 
