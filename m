@@ -1,113 +1,147 @@
-Return-Path: <linux-pm+bounces-29855-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29856-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FE67AEE803
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 22:17:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A343AEE810
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 22:21:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E081417F92F
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 20:17:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B05953E005C
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jun 2025 20:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1119B1F583A;
-	Mon, 30 Jun 2025 20:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A1122309B0;
+	Mon, 30 Jun 2025 20:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qsrsb9Cd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YwZsr1xX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D8017BD3;
-	Mon, 30 Jun 2025 20:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BAB21CA1F;
+	Mon, 30 Jun 2025 20:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751314628; cv=none; b=YaqsVrym3jRfJmBu7zSL2ztDMlOvMucCa6GOqnP+NEzNSJOVw5vQYi9zSSm06pECCH+i5g+CvPWZ4skZ5GekIyDgnFj/uNs1jZmKeWD3jJSVB7dHRnND04SwTQlwiBaD5p4V1O9p+dZn+dc8qs47iMZRVUoeIxiz9tETLk4muH4=
+	t=1751314879; cv=none; b=h3vjwI3URVfFKQH02qoeUtANOROCSE448hfD1I0RwkLLcY/V8nJ0K9KpLuK50NKgtBdfzck35f3eEj+BJhoFmObWk7rDwGOC7FyWFFKqoY/JHK94NLEsw3a1cnYQUPoogcAxSmdwetM5bzlaRXimenU0IYPqFaidwPYsRQ9mrdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751314628; c=relaxed/simple;
-	bh=aAsNAuHsjR344Fd3da5SxFMjfR93EvLv2BO/bbHMQsk=;
+	s=arc-20240116; t=1751314879; c=relaxed/simple;
+	bh=Fwnv+3tI8qpYaNOAohnsjqByw40uQGXP3Ew7dw6SJA8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RISemCdrGDl6ICqmzYcNud4Z8jpOMihkDI+lynAKmYlcLkVm1y/2lLBqA0zrbTabfAQ/sKjNaBAxWT2xLBr0IxH6XSDLXqYvoHM7b4pwgL2CUtQUf5qAFXOHYMtJbGU40MYikE2ykSlZYprQLAV7eKqPvtwdOMfI4vwIX3cXHcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qsrsb9Cd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5698EC4CEF1;
-	Mon, 30 Jun 2025 20:17:07 +0000 (UTC)
+	 To:Cc:Content-Type; b=K+o9Vh/meuVRbT5giJEtCk+fWTTG9ThsaA36nSHwNQoaOf8ovuq2gcahLQmbYRnThL4NTIbqVPB/UJ8woWD69UmmYPGi7wyzbTBdjRCn+rHIKPxh9VYwoNYxd6J6kqiUgCHfKUycNRgIDGkFIa4wEWgoDMN19NDZcqMsfLkA/Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YwZsr1xX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB35DC4AF09;
+	Mon, 30 Jun 2025 20:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751314627;
-	bh=aAsNAuHsjR344Fd3da5SxFMjfR93EvLv2BO/bbHMQsk=;
+	s=k20201202; t=1751314876;
+	bh=Fwnv+3tI8qpYaNOAohnsjqByw40uQGXP3Ew7dw6SJA8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qsrsb9CdnjS8aBsZzTogFwDJtZ/kN8nr4JXWtAnCxhBlivoALMCusBbhwcHnxytvN
-	 08Sb9gzcdLgnHVtto7HNJMqvKYL2Rp7jVlo2o35G7+6n85u2ojBZcQidijqscwDjjh
-	 kVdXZ/PFTKV1UphJBxO2bHUGw6+bt6dZDHc2MM3+o/OCVwySmYmW1LJhD8QQUM18yN
-	 AuMrQoShf+XyxkRRH76Wo9oHb8vVS9RcIBdMitE3pWt++vQ9Bq3O7rPOGLl+73VSs9
-	 AcZAecKi6+gTtr+qbGPfsfa23OvUPcSHcI+oWlh1Uj3zOnmV2YtQS0dmvvMBtPxi3+
-	 Fi/WzVREycZqw==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-611e455116aso661014eaf.1;
-        Mon, 30 Jun 2025 13:17:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUVNVSi+PkwaurFX1J5KJ6w+K7d449z1N9ux8zJ7dyVlg6UJSdlxK0RJP/TnHvQOFk8Z6lMwPhMrvduLDg=@vger.kernel.org, AJvYcCViCpCxzZ71r9EI1ZBDqM3TGq7BQzrTJsBqS9nce4vYtrUEVSX+Piq6YBhTPxmJ8fUhFLqP+19W/G8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx94AJcV+Kld9+vvAfj7hx+p/62Kr0VytX447uPFmU+uWlqStfU
-	GK7pvB/f+zLpi+r63720wtZvGaU3v+SIHEmuGSCfd/7noydDB5SD1OlffV7Z/1v80NO+pSmDuha
-	jRH6cheTCGHyBOh30XQm4UGVNXjcLXg0=
-X-Google-Smtp-Source: AGHT+IG6nI6hSzCJRBR/esxMVU3rTbhv42O5XI1PlfMUn3jv9xx39C8ZdVdHIRMHR4ZwSlkCdTZ3jpMB509JK8Vb5WU=
-X-Received: by 2002:a4a:edcd:0:b0:609:dd17:795 with SMTP id
- 006d021491bc7-611b90cb057mr10165680eaf.6.1751314626626; Mon, 30 Jun 2025
- 13:17:06 -0700 (PDT)
+	b=YwZsr1xX+f4zd1tKcntuyeRJiCHKqqtQ7eHY5VqiH0XMuY24YtQDRDsDvrsSUaMXe
+	 3p0j79Ik0tqnefle7qOltOyqosNox8H0hRG9Cb8YlBUC3SRmoptWLWJ4GgHde5Jc8e
+	 8HZO9Qj3Lv1oFsnn5C77CEwZy5R2ua87vNfyEF96RYuLoD8bwXVew/yQOLP3E72U71
+	 KM/VORM19/XBvUkb1tQ5EABlHc0If4V1wWOvz5+GafEhTAkJtZzZzmEz2LbuAPYmFW
+	 x9YmrQER/arhm3zNNc5i6TrjD4ET10n8WvYpjIGps4KmIpqCAZ9Z2rs6puye2vzcsv
+	 /DKYjzJe6go0w==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-60f276c7313so1611043eaf.2;
+        Mon, 30 Jun 2025 13:21:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVZViIrvVou+kNrkRHf/TeXmKb/XArfFwW2/07OgEkIV5kaGikCbYXRlpFVuQLaC9YtxWBdmYB91LA=@vger.kernel.org, AJvYcCXYYdXc6Z2aj0VwLaZ9KZjD1b4W8/6K1FrZ37Ml7z36W0/oFAss9zcqUa+tn2KXS6U0wVjr7r06HS4RxEo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRK/8rMdunRPesXsCqzzPOthhtT3CBqyJ/9Hdkv1VdWvCrrbvw
+	dUkU1lClSvGjomaDEtuQb7LkMGy+dIYnT7oR7Us7BnxP+ji5uLqloQTJhK+MjyFwsZGleZs2KgY
+	ajckM6P8t4iEDoednYAfTvh+eJz5nETE=
+X-Google-Smtp-Source: AGHT+IHwBKk2EFjdrktPIO4q1VjCPfY5q+iVAPT3tEDnoSpBPNjqGQzYmuLvHcfpLiofmKKiMqsX8EX0gS5R2y5J/mc=
+X-Received: by 2002:a05:6820:8109:b0:611:4bfe:610a with SMTP id
+ 006d021491bc7-611b90edbcfmr9164059eaf.8.1751314875866; Mon, 30 Jun 2025
+ 13:21:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250618231632.113471-1-sivany32@gmail.com> <CAJZ5v0jXPten8QwruK_Dqzvc0izLCfecMPBWMMoP8cnG4mDY0Q@mail.gmail.com>
- <CAFcvxdMozCv1mJFKemQKhOnZPLpfkWs3d97bHUijRdw7MdFO1w@mail.gmail.com>
-In-Reply-To: <CAFcvxdMozCv1mJFKemQKhOnZPLpfkWs3d97bHUijRdw7MdFO1w@mail.gmail.com>
+References: <20250630104116.3050306-1-guoqing.zhang@amd.com> <20250630104116.3050306-3-guoqing.zhang@amd.com>
+In-Reply-To: <20250630104116.3050306-3-guoqing.zhang@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 30 Jun 2025 22:16:55 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gPfkztEFR5T239VOQErUkxBT35piDZgGi4ZtYBSOO_LQ@mail.gmail.com>
-X-Gm-Features: Ac12FXz29VxFYMfbWcEghZNOYzrtRv5tZ1n7U4srR6S3UCaPY8__OVL_KbY2SlI
-Message-ID: <CAJZ5v0gPfkztEFR5T239VOQErUkxBT35piDZgGi4ZtYBSOO_LQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: dtpm_cpu: Fix NULL pointer dereference race
- during CPU offlining
-To: Elazar Leibovich <elazarl@atero.ai>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Sivan Zohar-Kotzer <sivany32@gmail.com>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, elazarl@gmail.com, linux-pm@vger.kernel.org, 
+Date: Mon, 30 Jun 2025 22:21:04 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i2v+yUyNes4KpTpDuQVdS8m1x0eBva5_GrMpmuWT4oKQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxQnPDN8j2mvespiFaa_u1FRxEcRxrjhC9FkCzbNLDo-NAXahtAh7DLk0E
+Message-ID: <CAJZ5v0i2v+yUyNes4KpTpDuQVdS8m1x0eBva5_GrMpmuWT4oKQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] PM: hibernate: shrink shmem pages after dev_pm_ops.prepare()
+To: Samuel Zhang <guoqing.zhang@amd.com>
+Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	alexander.deucher@amd.com, christian.koenig@amd.com, 
+	mario.limonciello@amd.com, lijo.lazar@amd.com, victor.zhao@amd.com, 
+	haijun.chang@amd.com, Qing.Ma@amd.com, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 29, 2025 at 12:13=E2=80=AFAM Elazar Leibovich <elazarl@atero.ai=
-> wrote:
+On Mon, Jun 30, 2025 at 12:41=E2=80=AFPM Samuel Zhang <guoqing.zhang@amd.co=
+m> wrote:
 >
-> On Fri, Jun 27, 2025 at 11:07=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > > * DTPM power calculations are triggered (e.g., via sysfs reads) while=
- CPU is online
-> > > * The CPU goes offline during the calculation, before em_cpu_get() is=
- called
-> > > * em_cpu_get() now returns NULL since the energy model was unregister=
-ed
-> >
-> > But energy models for CPUs are never unregistered.
-> >
+> When hibernate with data center dGPUs, huge number of VRAM data will be
+> moved to shmem during dev_pm_ops.prepare(). These shmem pages take a lot
+> of system memory so that there's no enough free memory for creating the
+> hibernation image. This will cause hibernation fail and abort.
 >
-> Can't the following happen (extremely rare, but still):
+> After dev_pm_ops.prepare(), call shrink_all_memory() to force move shmem
+> pages to swap disk and reclaim the pages, so that there's enough system
+> memory for hibernation image and less pages needed to copy to the image.
 >
-> CPU gets set to impossible during shutdown sequence, e.g.
+> This patch can only flush and free about half shmem pages. It will be
+> better to flush and free more pages, even all of shmem pages, so that
+> there're less pages to be copied to the hibernation image and the overall
+> hibernation time can be reduced.
 >
-> // arch/alpha/kernel/process.c
-> common_shutdown_1(void *generic_ptr)
-> ...
->         set_cpu_possible(boot_cpuid, false);
+> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+> ---
+>  kernel/power/hibernate.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 >
-> Just before `get_cpu_device` is called by `em_cpu_get`.
-> Then `get_cpu_device` returns NULL for impossible CPU, causing
-> `em_cpu_get` to return NULL.
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 10a01af63a80..913a298c1d01 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -370,6 +370,17 @@ static int create_image(int platform_mode)
+>         return error;
+>  }
 >
-> It's not a common scenario, but it seems NULL checking doesn't cost much,
-> and can assure us no rare case is crashing the system.
+> +static void shrink_shmem_memory(void)
+> +{
+> +       struct sysinfo info;
+> +       unsigned long pages, freed;
+> +
 
-It can happen, but in that case (1) the patch changelog is misleading
-and (2) the message printed by the new code is not particularly
-useful.
+Please add a comment explaining what is going on here.
 
-Thanks!
+> +       si_meminfo(&info);
+> +       pages =3D info.sharedram;
+> +       freed =3D shrink_all_memory(pages);
+> +       pr_debug("requested to reclaim %lu pages, freed %lu pages\n", pag=
+es, freed);
+
+This message will be hard to decode without any context.
+
+> +}
+> +
+>  /**
+>   * hibernation_snapshot - Quiesce devices and create a hibernation image=
+.
+>   * @platform_mode: If set, use platform driver to prepare for the transi=
+tion.
+> @@ -411,6 +422,8 @@ int hibernation_snapshot(int platform_mode)
+>                 goto Thaw;
+>         }
+>
+
+Please add a comment explaining why the below is done.
+
+> +       shrink_shmem_memory();
+> +
+>         suspend_console();
+>         pm_restrict_gfp_mask();
+>
+> --
+> 2.43.5
+>
+>
 
