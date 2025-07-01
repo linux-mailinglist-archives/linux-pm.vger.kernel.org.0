@@ -1,117 +1,115 @@
-Return-Path: <linux-pm+bounces-29882-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29883-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F00B5AEF19F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 10:46:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D7B6AEF2FC
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:17:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB07B3A5B64
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 08:45:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CDBD1884ADE
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 09:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE7D223327;
-	Tue,  1 Jul 2025 08:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C87D26D4E7;
+	Tue,  1 Jul 2025 09:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ao0bvY5m"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Tu05Qvcx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60A01E833C;
-	Tue,  1 Jul 2025 08:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D7C26A0B3;
+	Tue,  1 Jul 2025 09:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751359580; cv=none; b=L21nMRbN3JUKtTe8fwilViofv1B3TpgVv7NGvweGZKpFfmh6DgSwTg5QbrVapPXVBMEOA7Ahw3vNn+c0PaMRFHgU2k+8pM7RH/TJ9iMHgpTd8xixEE8/0Jr1pEv0d/vI2kaRPOP4OwJoNaGhpHqYbxgYd/34OAkO5lVCwjC/RjY=
+	t=1751361375; cv=none; b=lSbTFpXcZw9Cw9m8QLYOJsUNtIyqq9yRQxs8i3JbDY1mNiGwwcyeGXSzoTTY6RM7VScgPJxUrq9fAS5q0M12BYITwWYCOUnQYR6+SEJwT/qbtmas+BJfVkMtoT+cf6hy8jP+ucHFKLMaxHluAncWUXlNR1JhB5R7oluLkuv/BCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751359580; c=relaxed/simple;
-	bh=adu+8i0sSmJ/HE3ZQgmBuKqQJ13BpqfiMhweYdrG56Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fWsK113Pr/diFx8T/hwqADkv8lSE4JNHkNTwaTpE+aTMdKg2+Zr9xDXNeKJvG4Zsgva5EB38cy30JdtcZq4jcainv+rPwQy7xsnSvSbCVluWODEdl0tAl3YZAF6Wia7aCSDHRhEJos20kEzDf/L29qMbXzLsi6l4R/r+58SHWaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ao0bvY5m; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b34dde96cbfso424939a12.2;
-        Tue, 01 Jul 2025 01:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751359578; x=1751964378; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c/v0xD6UvnMJc03nf121OpAGHnJPH1i49Y2f3p3BdBU=;
-        b=Ao0bvY5mlnsQv9k1okNkEF+WiKH4BP96wrWJOe/D0HZQQegu5AWWszpSoVuUZGbuCg
-         3XK128wsSGefs6ga1ZtZl/VxDYI9L6Dx5L5jNCNUba2BRyYtlOXowfWHK7JS3RvlWAdp
-         xxxGOmoFXT+hEjhR/v4/C5s8bIDbP1pU0kp/BbRtyU3si6Cd4tNWgum5t7vmRqr592lM
-         LfK574d78SoK+xnGdS9vOF+NsPj+/oL2oVfipVsbu7x9PUtTqRfpsmaiCU/b8XO9cfwi
-         v4tFsxU4pFK4MmC2BSZ3dwoa7J8mbZSMdCloaIG3+yMNkVptERPNzTp5d7hU1ymAxVIJ
-         6/Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751359578; x=1751964378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/v0xD6UvnMJc03nf121OpAGHnJPH1i49Y2f3p3BdBU=;
-        b=L4oey5quoH0Kelpb6SDB2cUdduo40MZjy+Fbz6qBPXz3Tr23D5MXfQSilZP20J6DgO
-         L+JaSjqPGYOfhZ61oX1UyeCoHT2YzgB9L4MWEcjASRR9ZnHK2MEPK1Tgh+fScjIf+A5y
-         A3siyNNc6xZrZdeUOAS3bB0kGvXiP9gOdjbuEp9xaeXZFNYQFei2WRgdHK3zHFTuTtZ7
-         wquxRCj9jDtsjQWFTRC7YQeZklHfAkpj/Htp+18fs0vVN9FfTvZGRGgACiqn5a9cssnH
-         cWylYkN4+RCB1/KW68WmUVrEr+mrPRSk84XNdVxgbWgLmN2q6DUWD2n1sjlI7C6z2Acp
-         qidA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnTr/YZUFn2yDhVDyThtf6efQ+c+bsK6g7+JNBJd3teCxw19IZZsExilBtbaOQehWBjYJGJwthacg=@vger.kernel.org, AJvYcCVjSFfJU8QaP2vU/YDoUwZAl/S8jyPpNxAtsiKGjiLeLnzkUo84qGnXMEgJQgHNGvbtbDQi67KZo8UWqP5Nij9x@vger.kernel.org, AJvYcCX7OysUKFe8KCtk7SOT58hSsQnA1cK5ebP21ARh+9i7mViCv98fldgktWr3P1RyREr3SlU3mz0dgTyg2ZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy9L+Q1p5UVNiLZgdh/8HzI3lB9qZKLp94BJ/xjxLvTDvIY+4N
-	ledZEwzBVtJkhfjg3EfGSf/FHrHltOz+z58hX100rvjZ/P6C8JZb47Gk5AhXo1+wCJ83RyQoY3P
-	8gNC2PipJg6JlwqadzWvgXf6Q6xc0IbY=
-X-Gm-Gg: ASbGncuVZYgZFXuqXNp4boF8HItXJ4p+k+qrlweXgF26l9j08yQhq3cBxrJJTXyWKI1
-	+AU86nmLqI5TFXE1xjXL+w7Clscp/3EdKxUvZ3C4XSRkQqNdxtRhK0NhIcD7i4Q6UReQjg8vqy2
-	6WYowgYo+4PEDLLKkfdKPhZ0f2oU9ibzUAvBpqYIlLaiY=
-X-Google-Smtp-Source: AGHT+IGayysUot5FJmNyS1+LhAXkSuEABGqTts/x9kFQq2v3uECf9Pjd6BFyweSkXtMkC4KdiSu54T+GD3+7VQpgqcQ=
-X-Received: by 2002:a17:90b:3c91:b0:312:1ae9:1537 with SMTP id
- 98e67ed59e1d1-319420d6defmr1484022a91.0.1751359577749; Tue, 01 Jul 2025
- 01:46:17 -0700 (PDT)
+	s=arc-20240116; t=1751361375; c=relaxed/simple;
+	bh=ur4i4yzLkviKWu6sBni8onG/o9Yhcc21MCL8Xl7R2bE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c4iAmr5MpuRPUgw3pUoO036XGKLDLr5zn2JTVQWUr8qJ/4zkGA/gEW5hZrZVFAThRuJIEVfsszr+jxIZRM38qSANBEsGCnfsPBICI5tbxV1h66IjI9yaWUL4rNBBsCPZmgmeKEEch+V0gf9FDxGtwbcTfhJ29NcW84a1hoBt68s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Tu05Qvcx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CC6C4CEEB;
+	Tue,  1 Jul 2025 09:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751361374;
+	bh=ur4i4yzLkviKWu6sBni8onG/o9Yhcc21MCL8Xl7R2bE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Tu05QvcxTTryu1orfNafIVyr6I4lmoos32qmVZHcsOqY/nYUfrJ4sPOMm8sUI2o8p
+	 9NWWkvV6adHPBOBlJloHS7DmtmB6GYiis9n70ZimT9DrwMMjCVqh5tDMYtOUyHZwwk
+	 Yo021tkT5ABHUMteNtDEgI3HJhP5nQ+W9MqJdt7o=
+Date: Tue, 1 Jul 2025 11:16:11 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v12 0/5] rust: replace kernel::str::CStr w/
+ core::ffi::CStr
+Message-ID: <2025070102-pantry-siamese-905f@gregkh>
+References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701053557.20859-1-work@onurozkan.dev> <20250701053557.20859-7-work@onurozkan.dev>
-In-Reply-To: <20250701053557.20859-7-work@onurozkan.dev>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 1 Jul 2025 10:46:04 +0200
-X-Gm-Features: Ac12FXzHDv1UinEBt9Y-8t0CdxgdsylkUNnz7RlsW1aWZL7FWxUuIV4iYhqdPNA
-Message-ID: <CANiq72=NBhCeENQ7x94viBEmSx+N8ET0if91y=N93pXFoGKdDQ@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] rust: remove `#[allow(clippy::non_send_fields_in_send_ty)]`
-To: =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, airlied@gmail.com, simona@ffwll.ch, 
-	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-	rafael@kernel.org, viresh.kumar@linaro.org, gregkh@linuxfoundation.org, 
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, 
-	davidgow@google.com, nm@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 
-On Tue, Jul 1, 2025 at 7:36=E2=80=AFAM Onur =C3=96zkan <work@onurozkan.dev>=
- wrote:
->
-> Just like how we did in [1], we no longer need this lint
-> as it's no longer part of Clippy's `suspicious` lint group.
->
-> Link: https://github.com/torvalds/linux/commit/5e7c9b84ad08cc7a41b2ddbbba=
-ccb60057da3860 [1]
+On Thu, Jun 19, 2025 at 11:06:24AM -0400, Tamir Duberstein wrote:
+> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+> have omitted Co-authored tags, as the end result is quite different.
+> 
+> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+> 
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Normally this format is used:
-
-    ... did in commit 5e7c9b84ad08 ("rust: sync: remove unneeded
-`#[allow(clippy::non_send_fields_in_send_ty)]`"), we no longer ...
-
-Maintainers may want to fix this when they apply the patch, so I
-wouldn't send a new version just for this (but if you do, then please
-reword it).
-
-Cheers,
-Miguel
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
