@@ -1,246 +1,226 @@
-Return-Path: <linux-pm+bounces-29921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 348E4AEFF19
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 18:09:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C96AEFF41
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 18:15:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D5343ACAC3
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 16:07:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82D7E188F8AC
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 16:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D9127703A;
-	Tue,  1 Jul 2025 16:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CFA727D782;
+	Tue,  1 Jul 2025 16:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYr3iXr5"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="X4t9Qp1C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012040.outbound.protection.outlook.com [52.101.71.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A32D273818;
-	Tue,  1 Jul 2025 16:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751386044; cv=none; b=HYdjzJIZ4MUpSZ3P4VXHe8xLOSv+N4rK4acXs4cQjcNxjLXJC/vFcOGdjXjVs7VTXxyfkKVb4TPVr+MlMU741OfbbgmEmpLgJrsgeAiZEOYepsxo7WWAVZi7WCJv6FWvWv9gFwCY6PjnpbcLKR9IShhwdqpiqZ3L63kkDR2tBoY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751386044; c=relaxed/simple;
-	bh=HsjIkpBxBstl9Atcqae/pq36VptWvAxCi7tw7cCSpjI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RSGVPVTioWy8qafhYYcz36Lfj6FZ83KUtJte1oF0stN2ZqrUhHk81odFBI8sCaI62e0VcZP3TPWONRDxhi/nV1Gpys8SZ4BPx2uwsdY7e+YLSg4ehY4r8T6NFSto+P+gGyBJ/QuuNEBlSJ5FdMIvN6ya8t/9Q4HcU2CLID2iRJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYr3iXr5; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-31306794b30so762810a91.2;
-        Tue, 01 Jul 2025 09:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751386042; x=1751990842; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6s5/kLm6bcjzmUmo8TOBM6JrD/Wu1K8ZqjA08OXVfrw=;
-        b=NYr3iXr5+WAt7n7QhC9vd1xzdqDorGcsifypy3pM8HTHJRMFS+LD0NrdvAmZswnW2L
-         DOZcDtlkLizNMOF5cklkAxnwXMmVAPq8OyV2qqAyHPR7j7Z4J7Oo5ssM7ThzT5sMeXU+
-         ID5Va+Yr+IejoEqs9UQHQGEdhLXvm7m8J/oy4SKcLbZZKMwY/T1g77sH1cROHJID2uAm
-         7iraDmJhkouQWlcNXAbtoN2LcicBd9haoEO0wIklcU0w5zuIE93KvD0bpgnG9F256Blp
-         6Jb4aJerl34pazuSz/NIucRF48ypBQu/by8QVa9KZEHrC+p5V5Ygj+qLRLEbM9wBLqNJ
-         LDww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751386042; x=1751990842;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6s5/kLm6bcjzmUmo8TOBM6JrD/Wu1K8ZqjA08OXVfrw=;
-        b=RyLSVf8FimJzC2dBZvgP53YVuZdE/OuGK7FDpPiQRHdRwxVU5loVwQ/DMLKwB3TN9h
-         q7ry3aW4T4MCWJBZDuAm2b6CCJAsANmC9y5bngWB7mPY3aM1L6CeySAFJFyoPkJ1Ibsf
-         85klH4cftlzmTAbFE7+VL79JvNvP0QVtIfu7AAhDdAXbyDaP89Shtr2KeVaboA7/F0+c
-         NFnwe/4JjGXHC5/N00IMkXn44EulnDBwhTerUOty3qg6/2z3a/yMxYZFJednzEQJLRtw
-         HRTRB7FqWIx1N42beGxcjaEif/hVjp729mY9VWK+vjiew4TsfRYt78j5eczuSCAwhNI2
-         HNZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7Ly+oARt8lTlMvN6wCkKsLoYZqJ+1q0JtYrbuFHyFrrpCzneIDSPW2UPAyCioLyXVK8c4abq0RjzAlZA=@vger.kernel.org, AJvYcCWEsM1OLOD/Ro3IaG1cx4M/HtXgPPpRdbdiK+0Zw2eyGehNsYKriywB6TvkjXzLrdTrnrJClpecjtM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF7MGGDwTpCPPhSHis24FqikIVOZMhFfssseWuxyXMi3+dix6G
-	CFmDKJcBlefaeiERu6NbMut0vwRsQzUlW2wd7MbSWUSYHQHVuG3K7waLdnOmiwzM8VZhRR795b0
-	ARlRe++JHqv7wanH4cnJj+vxiDCuOXNpJDw==
-X-Gm-Gg: ASbGncv2nTrOXULqOhIYWeZMbwN/VarnldpH1f1CwzXpGrAvkCcJMCHkxrVfDVg2xRC
-	KYk3gdrVKdQ6a5OogbzVE6K6VVghKDr1hefc3fcOZRWLu5pj/0dkJnqsSQtFe2LLgbGEcsI+1NO
-	H+/puEvSoAE7eSUGaYxFneW4KpU0hDkCfw6u/64mu/EboG
-X-Google-Smtp-Source: AGHT+IFQJNo7HwID/TeXlAbTPbbNefXtXxAG2rRd8AEgaEOCEY9ozjNHRKWsTXfzbsIfuCVK/y+uC5IX0mQc9ZwS12g=
-X-Received: by 2002:a17:90b:180e:b0:310:8d54:3209 with SMTP id
- 98e67ed59e1d1-31a800bba6bmr1931961a91.2.1751386042181; Tue, 01 Jul 2025
- 09:07:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA126AD9;
+	Tue,  1 Jul 2025 16:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751386474; cv=fail; b=MYWogtscd9q1eEr/Do8lQBsqWDy8/cudyMcFNMUIbvT8ikVheBJgSeSsGDrZndWg7miQQnbmI+3mO74jfppttO+FcUyqoVQH4WAtRoEgYEFUEj6VH5VEr/GmnTZs4EsHxrhfMPpK/rgtiLsQGJCG9E1+MbhjiWhVSo5I5weUEg4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751386474; c=relaxed/simple;
+	bh=Ck9tVlS0jxHa93aUXqW7Qk2ltG3sZdgR+2o+gJoXl1A=;
+	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Y7XWc7g0PjxiL6JF93KJNM8jJiOHcJA0Yapbma+RUBNFvPYdiqmdWku14axIsIsIvgq6LYrp2zEhUxvYXizp7+GGDdR7m1kKY6Tmg7CQdahd30N639P+LIhcIQT72Jn6vqStdSxMiKJ7EEDRyhAcbar7l+oFQmQ4X++szl6tCGY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=X4t9Qp1C; arc=fail smtp.client-ip=52.101.71.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rI1NU4IfJCzIKXzGfD6OJpqpKWYZq0T5jB6aPrw/8DgfOIZK+SAJ63V1EvIMtl5GwPTFFmJhFg46aYBbodlE9u4a4aZBK+LnCirwjLDX50ZWAs9awqoOPa6yCq10JVZl7AVLXrGERerMYbbKuiXmgeIw+1LPyTwLc41JerRnOyGNZi1vMJIAABL+QDY8HHkOwCOW+zQ6lMx322c3IRGvosa4d+vavpGYq722934QNCLLh7lPbQGx5r1hAQPJYMbzHbzTJd5XtgCizi3Iz+GMsBMlN3ZSkY1O351R6f8fd0d8KQZm42ejnzUVFjzJ+m8JZE+AYkHWSwcbxyIvEP+mDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xsb8k4IMCmipnR9snmGaY/l2ZASseBpznxZbFP4F5Vc=;
+ b=UknXR+fMyMKV3sTcvOajiQx4G00XiTVmrq8JTXl8noen6THaRIy+uH5f3yrty1sQdUbCDzqY2YypwDcgRMiWD7ksp2XT6e9fbykKu5wcM5zwAyaxwn2djG0y4QEUEjC6EQS/tBsf4pfKtih0Qj/GhjiRB6g/77VZw9J4KmJNZtmdZE+CHnwVYdIVugZRcNHnU2TKrMcVHmh+llflwJzYo5QZ6nbna0MQNdjSXTEhQ0dm/oeYfm55LN/bnuXljI/xeQzUAbQkPlAatyU3/sPHG++VMCYdVB/uR4Txhid70AEUsAe3LCq6jyUwDVJ2g7+ucPBUSyWMwL28Mvy/evpttQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xsb8k4IMCmipnR9snmGaY/l2ZASseBpznxZbFP4F5Vc=;
+ b=X4t9Qp1CC86+odP1kgNIlZx8XPjEf6weFJGXEreu/cDFU4WbiSDSzhpmq/sYikafo/W43gyipd0bJcLi4h6nk4CS2uKTdHvT5Luv0yfZlHyZ4hqy84+PPVFe+Tml5d/1TGZi6xabc3YYU25CJ5y2YNj+mquI4AFS1Ve/1xOoG1s=
+Received: from DU7PR01CA0040.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50e::23) by DU0PR02MB8096.eurprd02.prod.outlook.com
+ (2603:10a6:10:314::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.21; Tue, 1 Jul
+ 2025 16:14:28 +0000
+Received: from DB1PEPF00050A00.eurprd03.prod.outlook.com
+ (2603:10a6:10:50e:cafe::1d) by DU7PR01CA0040.outlook.office365.com
+ (2603:10a6:10:50e::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.32 via Frontend Transport; Tue,
+ 1 Jul 2025 16:14:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DB1PEPF00050A00.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8901.15 via Frontend Transport; Tue, 1 Jul 2025 16:14:28 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail01w.axis.com (10.20.40.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 1 Jul
+ 2025 18:14:27 +0200
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: David Lechner <dlechner@baylibre.com>
+CC: Vignesh Raghavendra <vigneshr@ti.com>, Julien Panis <jpanis@baylibre.com>,
+	William Breathitt Gray <wbg@kernel.org>, Linus Walleij
+	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin
+	<peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>, Nuno
+ =?utf-8?Q?S=C3=A1?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>, Lars-Peter Clausen
+	<lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>,
+	"Matthias Brugger" <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Matteo Martelli
+	<matteomartelli3@gmail.com>, Heiko Stuebner <heiko@sntech.de>, "Francesco
+ Dolcini" <francesco@dolcini.it>, =?utf-8?Q?Jo=C3=A3o?= Paulo =?utf-8?Q?Go?=
+ =?utf-8?Q?n=C3=A7alves?= <jpaulo.silvagoncalves@gmail.com>, Hugo Villeneuve
+	<hvilleneuve@dimonoff.com>, Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>,
+	Mudit Sharma <muditsharma.info@gmail.com>, Gerald Loacker
+	<gerald.loacker@wolfvision.net>, Song Qiang <songqiang1304521@gmail.com>,
+	"Crt Mori" <cmo@melexis.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	"Ulf Hansson" <ulf.hansson@linaro.org>, Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>, Gabriel Somlo <gsomlo@gmail.com>,
+	Joel Stanley <joel@jms.id.au>, Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark
+ Wang <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Vinod Koul
+	<vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof
+ Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, Sebastian
+ Reichel <sre@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
+	<ukleinek@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, Kevin
+ Hilman <khilman@baylibre.com>, "Jerome Brunet" <jbrunet@baylibre.com>, Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>, Han Xu <han.xu@nxp.com>,
+	Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>, Mark
+ Brown <broonie@kernel.org>, Avri Altman <avri.altman@wdc.com>, Bart Van
+ Assche <bvanassche@acm.org>, "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+	<martin.petersen@oracle.com>, Souradeep Chowdhury
+	<quic_schowdhu@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Liam Girdwood <lgirdwood@gmail.com>, Peter Ujfalusi
+	<peter.ujfalusi@linux.intel.com>, Bard Liao
+	<yung-chuan.liao@linux.intel.com>, Ranjani Sridharan
+	<ranjani.sridharan@linux.intel.com>, Daniel Baluta <daniel.baluta@nxp.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>, Pierre-Louis Bossart
+	<pierre-louis.bossart@linux.dev>, Jaroslav Kysela <perex@perex.cz>, "Takashi
+ Iwai" <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, <kernel@axis.com>,
+	<linux-iio@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-rockchip@lists.infradead.org>,
+	<linux-input@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+	<imx@lists.linux.dev>, <netdev@vger.kernel.org>,
+	<linux-phy@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+	<linux-amlogic@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>, <sound-open-firmware@alsa-project.org>,
+	<linux-sound@vger.kernel.org>
+Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
+In-Reply-To: <3df2c424-297e-4538-b350-5c465b22fa39@baylibre.com> (David
+	Lechner's message of "Tue, 1 Jul 2025 10:16:47 -0500")
+References: <pnd7c0s6ji2.fsf@axis.com>
+	<3df2c424-297e-4538-b350-5c465b22fa39@baylibre.com>
+User-Agent: a.out
+Date: Tue, 1 Jul 2025 18:14:26 +0200
+Message-ID: <pndy0t76g7x.fsf@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250630104116.3050306-1-guoqing.zhang@amd.com>
- <20250630104116.3050306-4-guoqing.zhang@amd.com> <8806781b-90d1-4b99-a798-dd1d29d4c8c0@amd.com>
- <8eb1700d-4d60-4a1e-9d09-718f65baaf1e@amd.com> <019a15d5-142f-4761-9408-58c103d3922b@amd.com>
-In-Reply-To: <019a15d5-142f-4761-9408-58c103d3922b@amd.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Tue, 1 Jul 2025 12:07:10 -0400
-X-Gm-Features: Ac12FXwdbdy8HjwfCgq96-OHQZyxxU6ldvjvewIOGImA43uESTZlF3tB4NQ9pb0
-Message-ID: <CADnq5_PHfNTbLL7Xmb9HFgtZemDVaLSqbrONWWEf9hjwk1rF1Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] drm/amdgpu: skip kfd resume_process for dev_pm_ops.thaw()
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: "Zhang, GuoQing (Sam)" <GuoQing.Zhang@amd.com>, "rafael@kernel.org" <rafael@kernel.org>, 
-	"len.brown@intel.com" <len.brown@intel.com>, "pavel@kernel.org" <pavel@kernel.org>, 
-	"Deucher, Alexander" <Alexander.Deucher@amd.com>, 
-	"Limonciello, Mario" <Mario.Limonciello@amd.com>, "Lazar, Lijo" <Lijo.Lazar@amd.com>, 
-	"Zhao, Victor" <Victor.Zhao@amd.com>, "Chang, HaiJun" <HaiJun.Chang@amd.com>, 
-	"Ma, Qing (Mark)" <Qing.Ma@amd.com>, 
-	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail01w.axis.com
+ (10.20.40.7)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF00050A00:EE_|DU0PR02MB8096:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82d1a656-5d8a-47a7-c136-08ddb8ba5b19
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?zbyQLz3O8s4IQT3OW9eGYTNglVofY85uWyQmX0YrFG3g9g09yv5z6wI85IHA?=
+ =?us-ascii?Q?7/0hiLROQVENK3tnhnolQBWBpz00tyXNCkgJ8Cvor7m1ssXU1KKmP4i9+1x5?=
+ =?us-ascii?Q?eL6hYcpumk0PXOaJv4XSRCefgAcS8XKyv0AKQ8W4cx0ZLMD8NBfRzLdrfKr8?=
+ =?us-ascii?Q?L0YNlnbTaSr1blVBMwzWdp7d1M5F0/1rkXyJfkaK+SBwZn4DMxflVNhJQ1Yo?=
+ =?us-ascii?Q?2WUzPMhR26if38p6t/uqlFwlZAzXKbR9uxYNlshN++4nvS7AJYPmIID/yji3?=
+ =?us-ascii?Q?sW0rx+6CIcFH0MP8KjmXUieHSIoiplJeGq4dDbhQnVnrkqrVTiutvsj63ITX?=
+ =?us-ascii?Q?jsvSAUTBKxGOpA93YlPEKxJdoGc6+PelWHgleItG2Kq3fPQuGMcPwxPb/0v7?=
+ =?us-ascii?Q?5mAT6KkU+ZzL8QTrMkCs720u2dUfUUsgeRclej+fUkgBI5zemD1XFsISnquw?=
+ =?us-ascii?Q?rEFppE2gdxqxDDytgB0SYxQfXo2wJ2chRmAdi1teJQB4BSN3KY+xT386MeoA?=
+ =?us-ascii?Q?iA51Y0HyCSKDeTu6KeXkgMBkmqooT5oq/UpQLTq9RJVwWQoPDU1Xp5+d+nXy?=
+ =?us-ascii?Q?IqFJI2iMGMgk00MalJIT4CCRUpaTk+55k5Gc8+w52ZMJRR+sDSDGyj92ZF6F?=
+ =?us-ascii?Q?dAEvRJadQfJ2pcaKuA5MAGD3mljkMq4EhBrOM0nESzhFYaOKwlWKcXRtaNDM?=
+ =?us-ascii?Q?30JlwmX+99Yj3Adne/w2RheYS3sCPnJR779u0aeuZvlWWQh998EODPgxBEVd?=
+ =?us-ascii?Q?X/+G9Jqh/5zhtUAWl08V3KHKZhP92hJXc1TR6YD856Z1CIUVAnhLbEpOluCn?=
+ =?us-ascii?Q?xl2VDJSOUz3ZH0qfhkz4EmDQED75etewjU8lMcpR6HWeUwhYF26HeHbLpISP?=
+ =?us-ascii?Q?tjpoS5nZzF4XOltCjlkzY4eLjebQxjPKl487+TNpOIMr6CVRM7+Gb6nsS5eQ?=
+ =?us-ascii?Q?3FO0PqBAzIWdnwdf5XHBlOYggnqojTQ67aKN9GzOncXy0a4efhTy7Ki93a8/?=
+ =?us-ascii?Q?NANSv8dSZy4y+NAeLBA55lGTalFvA8kCoVwgQHFghOo4rDQXDsPCZDgiECVx?=
+ =?us-ascii?Q?R4oUhHcrcb++QFnju4vbziMs+qrPZK7hl+f8CY2+8rQrlnDHKQueYu6bmIhO?=
+ =?us-ascii?Q?B4nUulzVOE6JECh944oKcpUvpq3qdkjfGufW531AvBHNNnA82S8CcT0SeKwI?=
+ =?us-ascii?Q?oq3VMclwK64hl0lUDSWhOuXMntlVJKvNdIvpl4/w5go5vv5zVKok4Q8qFhWb?=
+ =?us-ascii?Q?YOJQB/CEfam7r0Cf0ThC7lVibbU2kEtsx4/as/DzWr2s7DdpIqH3IZWaizOs?=
+ =?us-ascii?Q?9/qdXacBIwcz6oTiFyVamplCOlLOJsH9n9OR2QV1YQv3F6p5IkGQxDBbRy7E?=
+ =?us-ascii?Q?7WKJvEGxex1A8fVHq6jJjyKdJx4G89ceV63xSEHGWF2AYCMBpMrSkIBT9f0E?=
+ =?us-ascii?Q?9sSlsjM6t7+khcjrkRScasnaxIuoxBLw6kN+DKI1BXt/LbScvPwzZrqD9ndX?=
+ =?us-ascii?Q?avcAMqrCzAGFTX3rEfWlwY6e3HxOLuwhfjNn?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2025 16:14:28.7668
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82d1a656-5d8a-47a7-c136-08ddb8ba5b19
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF00050A00.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB8096
 
-On Tue, Jul 1, 2025 at 4:32=E2=80=AFAM Christian K=C3=B6nig <christian.koen=
-ig@amd.com> wrote:
->
-> On 01.07.25 10:03, Zhang, GuoQing (Sam) wrote:
-> >
-> > thaw() is called before writing the hiberation image to swap disk. See
-> > the doc here.
-> > https://github.com/torvalds/linux/blob/v6.14/Documentation/driver-api/p=
-m/devices.rst?plain=3D1#L552 <https://github.com/torvalds/linux/blob/v6.14/=
-Documentation/driver-api/pm/devices.rst?plain=3D1#L552>
-> >
-> > And amdgpu implemented thaw() callback by calling amdgpu_device_resume(=
-).
-> > https://github.com/torvalds/linux/blob/v6.14/drivers/gpu/drm/amd/amdgpu=
-/amdgpu_drv.c#L2572 <https://github.com/torvalds/linux/blob/v6.14/drivers/g=
-pu/drm/amd/amdgpu/amdgpu_drv.c#L2572>
-> >
-> > This patch is skip amdgpu_amdkfd_resume_process() call in thaw() during
-> > hibernation. it is not skipped in restore() during resume from
-> > hibernation when system boot again.
-> >
-> >
-> > I just found the following kernel doc. Thaw() is intended to resume the
-> > storage device for saving the hibernation image.
->
-> Ah, that makes much more sense.
->
-> > Our GPU is not involved
-> > in it, it is not necessary to resume our GPU in thaw().
-> > https://github.com/torvalds/linux/blob/v6.14/Documentation/power/pci.rs=
-t?plain=3D1#L588 <https://github.com/torvalds/linux/blob/v6.14/Documentatio=
-n/power/pci.rst?plain=3D1#L588>
-> >
-> > So another implementation is to remove the amdgpu_device_resume() call
-> > in amdgpu_pmops_thaw(), and skip amdgpu_device_ip_suspend() call in
-> > amdgpu_pci_shutdown()for hibernation.
-> > Initial tests show it's working fine for hibernation successful case.
-> > Should I switch to this implementation?
->
-> No idea. Alex and the KFD guys need to take a look at that.
->
-> > But thaw() is also called to restore the GPU when hibernation is aborte=
-d
-> > due to some error in hibernation image creation stage. In this case,
-> > amdgpu_device_resume() is needed in thaw().
-> >
-> > So I need a method to check if hibernation is aborted or not to
-> > conditionally skip amdgpu_device_resume() in thaw(). Currently I don't
-> > know how to do this.
->
-> Yeah that approach here looks fishy to me, but I don't know how to proper=
-ly fix it either.
->
-> @Alex any idea?
+On Tue, Jul 01, 2025 at 10:16 -0500 David Lechner <dlechner@baylibre.com> wrote:
 
-Yeah, I'm not sure how to handle that.  I don't see a way to avoid
-having all of the callbacks.  We could ideally skip some of the steps.
-Maybe we could optimize the freeze and thaw routines if we had some
-hint from the pm core about why we were getting called.  E.g., thaw
-after a failed hibernation restore.
+> On 7/1/25 10:03 AM, Waqar Hameed wrote:
+>> When `devm_add_action_or_reset()` fails, it is due to a failed memory
+>> allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
+>> anything when error is `-ENOMEM`. Therefore, remove the useless call to
+>> `dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
+>> return the value instead.
+>> 
+>> Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
+>> ---
+> I can't speak for all subsystems, but this would probably be acceptable
+> in the iio subsystem.
+>
+> However, I don't think anyone is going to accept a patch that touches
+> all of these files at the same time across subsystems.
+>
+> So I would suggest to split this up into one patch per driver and create
+> one series per subsystem. This way, each subsystem isn't bothered by unrelated
+> patches that they don't particularly need to care about. And note that some
+> subsystems like net have additional expectations, e.g for the patch subject
+> so that it gets picked up by automated tools, so be sure to check the docs
+> for this.
 
-Alex
+Thanks for the suggestion David! I will do that then.
 
->
-> Regards,
-> Christian.
->
-> >
-> >
-> > Regards
-> > Sam
-> >
-> >
-> > On 2025/6/30 19:58, Christian K=C3=B6nig wrote:
-> >> On 30.06.25 12:41, Samuel Zhang wrote:
-> >>> The hibernation successful workflow:
-> >>> - prepare: evict VRAM and swapout GTT BOs
-> >>> - freeze
-> >>> - create the hibernation image in system memory
-> >>> - thaw: swapin and restore BOs
-> >> Why should a thaw happen here in between?
-> >>
-> >>> - complete
-> >>> - write hibernation image to disk
-> >>> - amdgpu_pci_shutdown
-> >>> - goto S5, turn off the system.
-> >>>
-> >>> During prepare stage of hibernation, VRAM and GTT BOs will be swapout=
- to
-> >>> shmem. Then in thaw stage, all BOs will be swapin and restored.
-> >> That's not correct. This is done by the application starting again and=
- not during thaw.
-> >>
-> >>> On server with 192GB VRAM * 8 dGPUs and 1.7TB system memory,
-> >>> the swapin and restore BOs takes too long (50 minutes) and it is not
-> >>> necessary since the follow-up stages does not use GPU.
-> >>>
-> >>> This patch is to skip BOs restore during thaw to reduce the hibernati=
-on
-> >>> time.
-> >> As far as I can see that doesn't make sense. The KFD processes need to=
- be resumed here and that can't be skipped.
-> >>
-> >> Regards,
-> >> Christian.
-> >>
-> >>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
-> >>> ---
-> >>>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
-> >>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    | 2 ++
-> >>>   2 files changed, 3 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu=
-/drm/amd/amdgpu/amdgpu_device.c
-> >>> index a8f4697deb1b..b550d07190a2 100644
-> >>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> >>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> >>> @@ -5328,7 +5328,7 @@ int amdgpu_device_resume(struct drm_device *dev=
-, bool notify_clients)
-> >>>               amdgpu_virt_init_data_exchange(adev);
-> >>>               amdgpu_virt_release_full_gpu(adev, true);
-> >>>
-> >>> -            if (!adev->in_s0ix && !r && !adev->in_runpm)
-> >>> +            if (!adev->in_s0ix && !r && !adev->in_runpm && !adev->in=
-_s4)
-> >>>                       r =3D amdgpu_amdkfd_resume_process(adev);
-> >>>       }
-> >>>
-> >>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/dr=
-m/amd/amdgpu/amdgpu_drv.c
-> >>> index 571b70da4562..23b76e8ac2fd 100644
-> >>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>> @@ -2734,7 +2734,9 @@ static int amdgpu_pmops_poweroff(struct device =
-*dev)
-> >>>   static int amdgpu_pmops_restore(struct device *dev)
-> >>>   {
-> >>>       struct drm_device *drm_dev =3D dev_get_drvdata(dev);
-> >>> +    struct amdgpu_device *adev =3D drm_to_adev(drm_dev);
-> >>>
-> >>> +    adev->in_s4 =3D false;
-> >>>       return amdgpu_device_resume(drm_dev, true);
-> >>>   }
-> >>>
-> >
->
+(I was contemplating on doing that at first, but gambled on this, since
+I saw some other commits patches touching multiple files in different
+sub-systems.)
 
