@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-29881-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29882-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8A7AEF188
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 10:43:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F00B5AEF19F
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 10:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99BD77A9557
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 08:42:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB07B3A5B64
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 08:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB3926A0DF;
-	Tue,  1 Jul 2025 08:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE7D223327;
+	Tue,  1 Jul 2025 08:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ogih3zBt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ao0bvY5m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6658A1E515;
-	Tue,  1 Jul 2025 08:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60A01E833C;
+	Tue,  1 Jul 2025 08:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751359406; cv=none; b=HoIquyDUgcEkWj5OpiGutiFytoCGKiT2wdO+XSM+ryqXCF+xPX6FV9JFpL5faEMGbN9BfcEKA/BuB9nIq+i30+FD0TTCFZUOn65vRNxFVFfvgh/eb7X2o7b7xIzJSjRla44sa91nlU/CGqj/duhxIAiJlhOTtxcJZVCC3rc6u0E=
+	t=1751359580; cv=none; b=L21nMRbN3JUKtTe8fwilViofv1B3TpgVv7NGvweGZKpFfmh6DgSwTg5QbrVapPXVBMEOA7Ahw3vNn+c0PaMRFHgU2k+8pM7RH/TJ9iMHgpTd8xixEE8/0Jr1pEv0d/vI2kaRPOP4OwJoNaGhpHqYbxgYd/34OAkO5lVCwjC/RjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751359406; c=relaxed/simple;
-	bh=2sA7hDRqPBifitR9aGf3wB+vj7jF5rphWDBpFYVEbJk=;
+	s=arc-20240116; t=1751359580; c=relaxed/simple;
+	bh=adu+8i0sSmJ/HE3ZQgmBuKqQJ13BpqfiMhweYdrG56Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rgh45/O8syy3kOb0NDSkC5uy891t4Ly0afs1tdXno1fEK6KufDdZFAsPejriOqOSIbUhD83UFA54SEml3BQ7itOacsH8ZJVYsz1me1XipDJHnjgfI4VmkMQ9ydTLk8M76dqj7YVYEObGWSwx0UTyIwHVmO4PKd1JkNtuDkz6jL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ogih3zBt; arc=none smtp.client-ip=209.85.216.45
+	 To:Cc:Content-Type; b=fWsK113Pr/diFx8T/hwqADkv8lSE4JNHkNTwaTpE+aTMdKg2+Zr9xDXNeKJvG4Zsgva5EB38cy30JdtcZq4jcainv+rPwQy7xsnSvSbCVluWODEdl0tAl3YZAF6Wia7aCSDHRhEJos20kEzDf/L29qMbXzLsi6l4R/r+58SHWaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ao0bvY5m; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-313067339e9so842088a91.2;
-        Tue, 01 Jul 2025 01:43:24 -0700 (PDT)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b34dde96cbfso424939a12.2;
+        Tue, 01 Jul 2025 01:46:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751359404; x=1751964204; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751359578; x=1751964378; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oxNSHfAB9MRWXdubFVEH8wkk+3HweA1a7Rdb19kGmyc=;
-        b=Ogih3zBtOMI4RjOm/Jswwi61Cd3e1fnPNf6TyX9BUAuQfG+vrl8kd0KCRaBTjujRJa
-         5gNqWNIFSwF6h8qo9TVaVHkqW0Sv62j7gUQ6X4Ws2lwEqufrWEa3MOim0oO0a+T5XAyh
-         jGHo8zVS2toeTUEkm9MTfLtk45UP7LD4hHGpCRVrl7Phw5oE74H+QebqtvzO0RxKwetO
-         q55B9ljfnWw7gIUinydjDqYOZeSbN7jL144JVNKMyBAop+dZXDCfmPLlP6G3QekS0pew
-         EcwMbvW1HLKRA+rMYJFx6bejS0xcsX9uDbP4p1S98uWcV50IfYLCokWDeIkIpLwRzt2N
-         K6cA==
+        bh=c/v0xD6UvnMJc03nf121OpAGHnJPH1i49Y2f3p3BdBU=;
+        b=Ao0bvY5mlnsQv9k1okNkEF+WiKH4BP96wrWJOe/D0HZQQegu5AWWszpSoVuUZGbuCg
+         3XK128wsSGefs6ga1ZtZl/VxDYI9L6Dx5L5jNCNUba2BRyYtlOXowfWHK7JS3RvlWAdp
+         xxxGOmoFXT+hEjhR/v4/C5s8bIDbP1pU0kp/BbRtyU3si6Cd4tNWgum5t7vmRqr592lM
+         LfK574d78SoK+xnGdS9vOF+NsPj+/oL2oVfipVsbu7x9PUtTqRfpsmaiCU/b8XO9cfwi
+         v4tFsxU4pFK4MmC2BSZ3dwoa7J8mbZSMdCloaIG3+yMNkVptERPNzTp5d7hU1ymAxVIJ
+         6/Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751359404; x=1751964204;
+        d=1e100.net; s=20230601; t=1751359578; x=1751964378;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oxNSHfAB9MRWXdubFVEH8wkk+3HweA1a7Rdb19kGmyc=;
-        b=HlcVbSue4DgL+4dvE6+jkqr4jHapt0WmIvZXsaaufJw6fB+bqsTc+qWECxljzTNFuK
-         nGocV4cw6ajWuYRoPBSegCxE3aDDA+IYH6ipx+JguIQ86tbFcmXRHpSgivQc4icU+rOj
-         uuT6w90dSfWOtLwmdzFZbQetqG56oSv3inUb0UK0B1r5BGV4vSRMfVu1CU5X4iMEi7jO
-         /EC2MdjR2hVwRg7QyrUfhKVLE/9ey3GHULfOuakKgp3sZM0p01bweUFvPRzt8Il+LeW5
-         kt2JPJR/A6tQiPE/WMUJ0IZEoQ93MXNSizdxAfto8zzPnu0PmE6pKF5wrX655PX2c93C
-         8yHA==
-X-Forwarded-Encrypted: i=1; AJvYcCViLogJ+nn7KVw/0AHYs0ID+0AgvXkLq5i8/SwUyrWzOKHYVVs4J8eDAdzjVLsL8ChNv1FBRlTBcVNWWXx1jZOa@vger.kernel.org, AJvYcCVmCBGBvv65i1SJqNMxOLXvJTfLRrUFdRuW51+sZMpIRYX6a9UVJWW6H0gJ6qKvxUvWDKfKh2adDNBG72o=@vger.kernel.org, AJvYcCXIF8WcN+TKk04SeV1neRpdiX66x68qfVH1vaIhH2I66cfqKxTYtBH/7TntuW1PC1Ia/F6q3P31Z98=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+Nt+lLG+90gb9om5uKejlYOIFcv4Hw8laucNuyJRFxMwVthf3
-	pGBNr64S3yeWye9NBPtiCQ8bCUUzLbs5cXtRgK65w9CGqpzPEk1vft+BA1SgLb+NCJQCjqGqqY0
-	hCTqLDyMdkbEVdi3y49QKWGKwmUN4iCQ=
-X-Gm-Gg: ASbGncscpMKqKtTFxlU9MepgwdLMQg40wTx6ibM+Pb1CWvIHiYHj74VIifzzLXN4ZWp
-	yMOKsXOXlKP3NfHyK+X06iJ3NSx2AHoIuaCeiGq0cw2YS3S7zLLlorc4iVU2XswlZXeg4W4HLih
-	dPFsmhOTZXAuQGgrKWoUAtuPy73t2/YIPKROw68a3vseY=
-X-Google-Smtp-Source: AGHT+IF+84LcVdlYoIoIe8TlGbMXF1hU8ya8MeZB+0h3qGlySzxftGhGnmh7fR1Qt2waAbxhWaEH5q3Rzv+M81FKjX0=
-X-Received: by 2002:a17:90b:280a:b0:311:b0ec:135e with SMTP id
- 98e67ed59e1d1-3195196fe9fmr1365806a91.2.1751359404037; Tue, 01 Jul 2025
- 01:43:24 -0700 (PDT)
+        bh=c/v0xD6UvnMJc03nf121OpAGHnJPH1i49Y2f3p3BdBU=;
+        b=L4oey5quoH0Kelpb6SDB2cUdduo40MZjy+Fbz6qBPXz3Tr23D5MXfQSilZP20J6DgO
+         L+JaSjqPGYOfhZ61oX1UyeCoHT2YzgB9L4MWEcjASRR9ZnHK2MEPK1Tgh+fScjIf+A5y
+         A3siyNNc6xZrZdeUOAS3bB0kGvXiP9gOdjbuEp9xaeXZFNYQFei2WRgdHK3zHFTuTtZ7
+         wquxRCj9jDtsjQWFTRC7YQeZklHfAkpj/Htp+18fs0vVN9FfTvZGRGgACiqn5a9cssnH
+         cWylYkN4+RCB1/KW68WmUVrEr+mrPRSk84XNdVxgbWgLmN2q6DUWD2n1sjlI7C6z2Acp
+         qidA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnTr/YZUFn2yDhVDyThtf6efQ+c+bsK6g7+JNBJd3teCxw19IZZsExilBtbaOQehWBjYJGJwthacg=@vger.kernel.org, AJvYcCVjSFfJU8QaP2vU/YDoUwZAl/S8jyPpNxAtsiKGjiLeLnzkUo84qGnXMEgJQgHNGvbtbDQi67KZo8UWqP5Nij9x@vger.kernel.org, AJvYcCX7OysUKFe8KCtk7SOT58hSsQnA1cK5ebP21ARh+9i7mViCv98fldgktWr3P1RyREr3SlU3mz0dgTyg2ZU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy9L+Q1p5UVNiLZgdh/8HzI3lB9qZKLp94BJ/xjxLvTDvIY+4N
+	ledZEwzBVtJkhfjg3EfGSf/FHrHltOz+z58hX100rvjZ/P6C8JZb47Gk5AhXo1+wCJ83RyQoY3P
+	8gNC2PipJg6JlwqadzWvgXf6Q6xc0IbY=
+X-Gm-Gg: ASbGncuVZYgZFXuqXNp4boF8HItXJ4p+k+qrlweXgF26l9j08yQhq3cBxrJJTXyWKI1
+	+AU86nmLqI5TFXE1xjXL+w7Clscp/3EdKxUvZ3C4XSRkQqNdxtRhK0NhIcD7i4Q6UReQjg8vqy2
+	6WYowgYo+4PEDLLKkfdKPhZ0f2oU9ibzUAvBpqYIlLaiY=
+X-Google-Smtp-Source: AGHT+IGayysUot5FJmNyS1+LhAXkSuEABGqTts/x9kFQq2v3uECf9Pjd6BFyweSkXtMkC4KdiSu54T+GD3+7VQpgqcQ=
+X-Received: by 2002:a17:90b:3c91:b0:312:1ae9:1537 with SMTP id
+ 98e67ed59e1d1-319420d6defmr1484022a91.0.1751359577749; Tue, 01 Jul 2025
+ 01:46:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701053557.20859-1-work@onurozkan.dev>
-In-Reply-To: <20250701053557.20859-1-work@onurozkan.dev>
+References: <20250701053557.20859-1-work@onurozkan.dev> <20250701053557.20859-7-work@onurozkan.dev>
+In-Reply-To: <20250701053557.20859-7-work@onurozkan.dev>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 1 Jul 2025 10:43:10 +0200
-X-Gm-Features: Ac12FXxogephnHWqcurm2KToOo7hzNrx3JYMdURGRcPiUy3NtJ-hL8ti9d_xbHo
-Message-ID: <CANiq72keo+NKF75F7qB_Epcbf7fhQqUo27EEVkdet1J2syQfvQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] replace `allow(...)` lints with `expect(...)`
+Date: Tue, 1 Jul 2025 10:46:04 +0200
+X-Gm-Features: Ac12FXzHDv1UinEBt9Y-8t0CdxgdsylkUNnz7RlsW1aWZL7FWxUuIV4iYhqdPNA
+Message-ID: <CANiq72=NBhCeENQ7x94viBEmSx+N8ET0if91y=N93pXFoGKdDQ@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] rust: remove `#[allow(clippy::non_send_fields_in_send_ty)]`
 To: =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
 Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -97,26 +97,20 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jul 1, 2025 at 7:36=E2=80=AFAM Onur =C3=96zkan <work@onurozkan.dev>=
  wrote:
 >
-> Onur =C3=96zkan (6):
->   rust: switch to `#[expect(...)]` in core modules
->   rust: switch to `#[expect(...)]` in init and kunit
->   drivers: gpu: switch to `#[expect(...)]` in nova-core/regs.rs
->   rust: switch to `#[expect(...)]` in devres, driver and ioctl
->   rust: remove `#[allow(clippy::unnecessary_cast)]`
->   rust: remove `#[allow(clippy::non_send_fields_in_send_ty)]`
+> Just like how we did in [1], we no longer need this lint
+> as it's no longer part of Clippy's `suspicious` lint group.
+>
+> Link: https://github.com/torvalds/linux/commit/5e7c9b84ad08cc7a41b2ddbbba=
+ccb60057da3860 [1]
 
-Thanks for splitting this, it is very much appreciated.
+Normally this format is used:
 
-I think you decided on a split based on similarity (?). In the kernel,
-different maintainers/trees take care of different areas/files (the
-`MAINTAINERS` file describes this mapping). For instance, in one of
-them, KUnit and init is mixed, which are maintained by different
-people.
+    ... did in commit 5e7c9b84ad08 ("rust: sync: remove unneeded
+`#[allow(clippy::non_send_fields_in_send_ty)]`"), we no longer ...
 
-That is why the split I suggested was one that allows maintainers to
-pick them independently. With this one, maintainers still have to
-coordinate, which isn't a big deal, since the changes are small and
-straightforward, but the purpose of the split was to avoid that.
+Maintainers may want to fix this when they apply the patch, so I
+wouldn't send a new version just for this (but if you do, then please
+reword it).
 
 Cheers,
 Miguel
