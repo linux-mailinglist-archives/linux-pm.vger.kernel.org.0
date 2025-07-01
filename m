@@ -1,78 +1,79 @@
-Return-Path: <linux-pm+bounces-29903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 792E4AEF727
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 13:50:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9063BAEF72D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 13:51:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0036447D01
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:49:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A580E1C02237
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601B4275AE5;
-	Tue,  1 Jul 2025 11:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6443E275B1A;
+	Tue,  1 Jul 2025 11:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SV7sjp00"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HG+Svjpq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEA227584C
-	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67ADD2750F1
+	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751370485; cv=none; b=uye4MnUO3YRhGQ4q05130pO0VSqmjWVrcvoygs0UV3ubTGepnb/bJ6UveZsElhFNRSuCPco6JGv7zricQ910F5r12rzXNeiKX3UWJYdW6r0/7EvIEduRYcHprZwcHdY5kd4hfWn/q7S3zeXA2wyT3nsLhM34v5GY34/5gCJww48=
+	t=1751370487; cv=none; b=UzFAGQA81420TNH78PiHOsHCVLKwkiiJO3r2paPEZZYIWgr8XghjRif7PImCZ9UxZd5CVy+weCgYa13Fmx1YsEA25luLf/4dBvX17McXiI+5cDns1DSgePtziW0ZcrAi7lZyIOzHCm+oT7CENTRiIyezjsXXhEev5LFzfD2S1Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751370485; c=relaxed/simple;
-	bh=7XFOVVB/6P0E/TmGAipE5EVbPBj1K41pMO/cwOHZe6E=;
+	s=arc-20240116; t=1751370487; c=relaxed/simple;
+	bh=dCfKc8M+VAFcuXjqcI2B+OXim4o2mp+Y/13x31tJu98=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H3I8qyJ244I7u8uMwv8//avqZJmFSFzpIgdsvuMaCz3Ev+FwRpGHmwTYIkrrQB5lkZMxMw0iyxtnuSLS/q8oRBMwbP5NSvz1TfzmcYIf27DYqKqZxgZzzCFuTYmnGTsqJAqpKIIPyrsxyoiLl1r9FepQT6SkoZmOipg7qUB2y8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SV7sjp00; arc=none smtp.client-ip=209.85.208.169
+	 MIME-Version; b=VYbjLQGoPnjq10N+wHy0jEaKrDnoOACZgwJF0xPuHHM9yTMjfU0flMmNETrC7JMCcdVYANZWOcFacjG/U/cdmepX00Mu9ReW5ejJ8lEf89hLy4UXNF6kkVrwJHEraqzLOGNIbIFdblVkybECWoUsLJJNaqNubdLFtIo2aEbTxpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HG+Svjpq; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-32cdc9544ceso27152361fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:48:03 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-553cf020383so6211680e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751370482; x=1751975282; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1751370483; x=1751975283; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nhr1wJzX5x14/nTupeiMBqLBJv2X3ymsgvaInizlCPo=;
-        b=SV7sjp00mKEpaXCBezxr5x0W5/gBh62DWT0wLqIjgjH4lBOBFHbvrj14lxDweDAdjM
-         9ZAgHm2TCh5M7oFuLaEnLLQkj/qH1lBHtAnEXLC2r6IimLBFY23uIY/fM1oipUzVoSO3
-         +/zYJp2zP8d1LRlBsSfeGIyG1YlVtycrOFXAeZZGHZx2Z/U7U++l608ZEBgaLi9Bw5n+
-         fj7W99YkbqKv7Zt6nStK6JIDJHGOaUER1KhhcvRUNWxZBRLB7Fo93N4zrna8yHUuKcDt
-         q8LL7hxoLLncQonCcwOmK6Vj4+uerZfIk2NdfkekWcVJsdf6N9Qd6M43yqp1D06ykz+n
-         6Sdw==
+        bh=Ou37oVNU8EcrZ39XggNFqJJBkEWIeWX5cH4SBBxr5bU=;
+        b=HG+Svjpqal+PjGwJZ64cvQQhONk84b3kcd9AyORVzmQwILpH75utmbtV+nKmEiyD2i
+         8ePNEDm+Q41WHywn/yVT2F3spvtYuwhapZCgPQ2r375OOh6qQjalNEAfzdr4qs25vm61
+         O3UkWhcSOiLpXsQ+Oz+p2JhHk3IitkaxUHgc+plCT1spOd0ol/dI5nOoOFOjlmQjtvoS
+         8zocYKU7jdOPRxywu89KFSbJDz2m2zBuW/rddpzZepuEg8rCGdPQqR79VVTgTm/OaKk6
+         mslFjya+R9VVxhAP7+uGEmqXVFUtE7OB5O2jh5cgVeQgPa3rfBjXSOdN9YVwMZ3wYQmi
+         FOsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751370482; x=1751975282;
+        d=1e100.net; s=20230601; t=1751370483; x=1751975283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nhr1wJzX5x14/nTupeiMBqLBJv2X3ymsgvaInizlCPo=;
-        b=kSYi+HE8dR5KeADJLqaFTq47ITQ6X7C9hifRdesuValMfe8opD/Hh890y68gJ1UqWi
-         qCAGkWirSakdBUfNE4mMXY68uC6jfR6v4sVb0f5yQQFxff8ykFUQedg43Na1VnFeQ4Ja
-         UlCqlqKXm+roElaFHeFzyMNpMFWWjC432C75ntUFlMdzM7xWv22JKUWOVoFAlCvRvnZ9
-         d7GORKebFyKbkPbpD//87aHsTloc6apztW+tLmtQXcSCsvpApFdCTWev4MLfsZvhe68j
-         vMFtW5aim3CgMHxKeAyjq2e5mLToSZK6ViPKW227iljtK4fZAZnHxl4YXDw+q8B//X9T
-         /Hpw==
-X-Forwarded-Encrypted: i=1; AJvYcCWzZWAzTIsJmzR2X1bGs0Auzi46OGjiXk8ltX0yqS20B17PgxDaH50vjm0ndL4SAHLna1w5X9aDEQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWyaEGJY5D+1H+PXJcM2Rkj0GzwM6dAtWdux0uj0ZXD7XiSNJ1
-	4UCT/AcAoo6DZHW3ToGC80G/j75C7uBJYZgqZ0LjddQmO453W5gstvdgCoKcXOPUP/4=
-X-Gm-Gg: ASbGncsnrmPUe45I8ngw5+U7GKR6ariEqV20oB5r1mEVd8yXj+QMMaSW0PQolL5dplc
-	8Tztj4TcFhAkwd8ZZWrCOeLrwiTEyM4mgzBmc1guaLFXB2jwWQJCVsnuEGX9pum2kdnBAAU6vhQ
-	/xHGlud+fFhq2YYGUGbI91cQXb42j9SdxcghK4QZPySrkHDl1VhtV/krcaA4KJNMG05BwF0Y30g
-	EKwBuIbPP3eai48eBEiVdU+e3a96ogu3LhymyAnB5zSc37ttidaBYMDK5uLKZ0IhjW9QzM2w6on
-	KYbqFARUcFZJel4q7ynic6nEI6GQ0tOUO0sMU6yEyc12Gi3p3vG23Lx1bn/OkuvczHLDGKtGExA
-	fJXh9v5cInh0w72uYZCkbIV7430uUtqxbu7gA
-X-Google-Smtp-Source: AGHT+IF/OcNrgYw3hgtvoO/MekAs2AHo39DQa2rN3+FnsXniz31yfEH69hiNRp80adgJjRiNtdFnTw==
-X-Received: by 2002:a05:6512:224b:b0:553:2868:6355 with SMTP id 2adb3069b0e04-5550b8669b0mr5326369e87.18.1751370481798;
-        Tue, 01 Jul 2025 04:48:01 -0700 (PDT)
+        bh=Ou37oVNU8EcrZ39XggNFqJJBkEWIeWX5cH4SBBxr5bU=;
+        b=vXGaGpcvzQanxBPxQeVd+pEjuR38TLwfDpH9BKpF7W86OfJQ29XsJpItELgEkf5iv3
+         zWyRk+ekjlwWFWD+FEiUfhYPvf3jjZ0Od7MPUQos+Z4t9kqJbbQYyGS6SJWvOsRd9TIF
+         GVZG5N7E3mtwe0Rmg1DMSIEJRwvGQHjyVH4zXA0cbp/PiNmFsIyTWfuF1n2MWe8QanqF
+         N4iojzbi5oYqPhr+9QXPnTpb8nb4OqK1uJYzDMPTiGmUca3Hp0P4UvbyoHcxy2sc9pVF
+         U6kH7l/2hKBVlHv/VtEUR7t9jjDC/a1OZtBIT/RoLkLwGuwgrr/zRa72Aq1KPHQUWalh
+         Ma1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVLsUhVqaX+QfGaBJkm2FKxtAhUmM71gYRRaO8dhnWfWy6Qc319qgZIDp7lU4eXw0K/qnXB0y6iZg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+Vn+hNe4pX4DqhSbQyCYv0SNoEFv4RqWc89ntrUZn3eR9E1m1
+	JwXX96F8Lq8UOJHYdQ40IxoN29Cc4bV74bX89GvrM3ShhJAqt8ioZPjWDWVGLnx2uY92o4e7NHV
+	hDsIY
+X-Gm-Gg: ASbGncuQSIhY+OaBzTaQo7cDY60XSIyFVmv7UohAEyd9q0JdcqIsNS8DczyUGfI6SSb
+	bCFyeML7eALveZm8q4tWPX7wVygZI5JhMi5vq3CA5xuVuQBs+XRUw+ujAbaIiD8CLMjjtHXx+DQ
+	HsFShJEdT4GhJXYavCAm1ihYXqOTqwtpYJzjbDY2vVp0W0NaNInB+Ah34VLXa9I74dHQg2F89wb
+	HWYcq7+neJpEtZgT/UtWvF/X5qyFW48b2lfs8kfdNrDzJ8PojeOFepf2ambIKsRtFbh3o9ct3cZ
+	lpv5VbHUTqYiaQACpWiYOZDu01u9CXd0F9taiPHQ0GH/+VJdhG5hGZAz/bs2JfItWSI35McvqKB
+	J+gcRpuyMJviR7DLyAml8Z2nD4j397ZWeHQ3j
+X-Google-Smtp-Source: AGHT+IH0vCvElE8qdxxXL5THgRVp/JjfgP3AQLH5VtPUuqSALJU6t/Q2a/vaudzsxqj21OUKqYtVNg==
+X-Received: by 2002:a05:6512:31d0:b0:553:abcd:cf51 with SMTP id 2adb3069b0e04-5550ba16ad6mr4341553e87.40.1751370483312;
+        Tue, 01 Jul 2025 04:48:03 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.48.00
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.48.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 04:48:01 -0700 (PDT)
+        Tue, 01 Jul 2025 04:48:02 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Saravana Kannan <saravanak@google.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -94,10 +95,11 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Geert Uytterhoeven <geert@linux-m68k.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 13/24] pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
-Date: Tue,  1 Jul 2025 13:47:15 +0200
-Message-ID: <20250701114733.636510-14-ulf.hansson@linaro.org>
+	linux-kernel@vger.kernel.org,
+	Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH v3 14/24] firmware/pmdomain: xilinx: Move ->sync_state() support to firmware driver
+Date: Tue,  1 Jul 2025 13:47:16 +0200
+Message-ID: <20250701114733.636510-15-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250701114733.636510-1-ulf.hansson@linaro.org>
 References: <20250701114733.636510-1-ulf.hansson@linaro.org>
@@ -109,31 +111,90 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To make sure genpd tries to power off unused PM domains, let's call
-of_genpd_sync_state() from our own ->sync_state() callback.
+Rather than having the genpd provider to add device_links for each device
+that gets attached, to implement the ->sync_state() support, let's rely on
+fw_devlink to do this for us.
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konradybcio@kernel.org>
+In this way, we can simplify the code by moving the ->sync_state() callback
+into the firmware driver, so let's do that.
+
+Cc: Michael Tretter <m.tretter@pengutronix.de>
+Cc: Michal Simek <michal.simek@amd.com>
 Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Colibri iMX8X
 Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> # TI AM62A,Xilinx ZynqMP ZCU106
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/pmdomain/qcom/rpmhpd.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/firmware/xilinx/zynqmp.c            | 10 ++++++++++
+ drivers/pmdomain/xilinx/zynqmp-pm-domains.c | 16 ----------------
+ 2 files changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-index 078323b85b56..d9ad6a94b3ab 100644
---- a/drivers/pmdomain/qcom/rpmhpd.c
-+++ b/drivers/pmdomain/qcom/rpmhpd.c
-@@ -1027,6 +1027,8 @@ static void rpmhpd_sync_state(struct device *dev)
- 	unsigned int i;
+diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+index 7356e860e65c..a91a0191c689 100644
+--- a/drivers/firmware/xilinx/zynqmp.c
++++ b/drivers/firmware/xilinx/zynqmp.c
+@@ -2100,6 +2100,15 @@ static void zynqmp_firmware_remove(struct platform_device *pdev)
+ 	platform_device_unregister(em_dev);
+ }
+ 
++static void zynqmp_firmware_sync_state(struct device *dev)
++{
++	if (!of_device_is_compatible(dev->of_node, "xlnx,zynqmp-firmware"))
++		return;
++
++	if (zynqmp_pm_init_finalize())
++		dev_warn(dev, "failed to release power management to firmware\n");
++}
++
+ static const struct of_device_id zynqmp_firmware_of_match[] = {
+ 	{.compatible = "xlnx,zynqmp-firmware"},
+ 	{.compatible = "xlnx,versal-firmware"},
+@@ -2112,6 +2121,7 @@ static struct platform_driver zynqmp_firmware_driver = {
+ 		.name = "zynqmp_firmware",
+ 		.of_match_table = zynqmp_firmware_of_match,
+ 		.dev_groups = zynqmp_firmware_groups,
++		.sync_state = zynqmp_firmware_sync_state,
+ 	},
+ 	.probe = zynqmp_firmware_probe,
+ 	.remove = zynqmp_firmware_remove,
+diff --git a/drivers/pmdomain/xilinx/zynqmp-pm-domains.c b/drivers/pmdomain/xilinx/zynqmp-pm-domains.c
+index d579220a4500..b5aedd6e33ad 100644
+--- a/drivers/pmdomain/xilinx/zynqmp-pm-domains.c
++++ b/drivers/pmdomain/xilinx/zynqmp-pm-domains.c
+@@ -153,14 +153,8 @@ static int zynqmp_gpd_attach_dev(struct generic_pm_domain *domain,
+ 				 struct device *dev)
+ {
+ 	struct zynqmp_pm_domain *pd = to_zynqmp_pm_domain(domain);
+-	struct device_link *link;
  	int ret;
  
-+	of_genpd_sync_state(dev->of_node);
-+
- 	mutex_lock(&rpmhpd_lock);
- 	for (i = 0; i < desc->num_pds; i++) {
- 		pd = rpmhpds[i];
+-	link = device_link_add(dev, &domain->dev, DL_FLAG_SYNC_STATE_ONLY);
+-	if (!link)
+-		dev_dbg(&domain->dev, "failed to create device link for %s\n",
+-			dev_name(dev));
+-
+ 	/* If this is not the first device to attach there is nothing to do */
+ 	if (domain->device_count)
+ 		return 0;
+@@ -298,19 +292,9 @@ static void zynqmp_gpd_remove(struct platform_device *pdev)
+ 	of_genpd_del_provider(pdev->dev.parent->of_node);
+ }
+ 
+-static void zynqmp_gpd_sync_state(struct device *dev)
+-{
+-	int ret;
+-
+-	ret = zynqmp_pm_init_finalize();
+-	if (ret)
+-		dev_warn(dev, "failed to release power management to firmware\n");
+-}
+-
+ static struct platform_driver zynqmp_power_domain_driver = {
+ 	.driver	= {
+ 		.name = "zynqmp_power_controller",
+-		.sync_state = zynqmp_gpd_sync_state,
+ 	},
+ 	.probe = zynqmp_gpd_probe,
+ 	.remove = zynqmp_gpd_remove,
 -- 
 2.43.0
 
