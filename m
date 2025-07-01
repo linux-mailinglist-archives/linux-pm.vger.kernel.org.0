@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-29898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77EF8AEF71A
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF018AEF71B
 	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 13:49:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 159EE1BC6B6A
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:49:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4C44179E39
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B57DA274B28;
-	Tue,  1 Jul 2025 11:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0B3274FC6;
+	Tue,  1 Jul 2025 11:48:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HX5ihn36"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e7PAmCKy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC73E2749CA
-	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D502749FF
+	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751370478; cv=none; b=hByeGE6LUcET8VU+TCuYmD27U24O/PzZjWZUpYUHgkY8WLj0znUCr2WtDnQ3pJZlSUwBwV4jAzAnKj99ogoBEL8ISLQvC5PAysnJTUBRwYgWRGPup9XHZNQDrWBwtriUNS8yUR6DX8BbijNfpC18cWb9IQWS++Bx+DjwlfjhbTA=
+	t=1751370480; cv=none; b=tfG/A2sjtyWdbYB2J/pJJUvFXvEXrfTgFc0zO27Eh9tkeORK5du73hGfIsMywiWdBq9sD9Fdr8Hko2P3yCsVE6slYPMP07hcW/VJMb11IWQ9IugJBVNfSoxZETK3vSn6cGsM8HSrbFJourlps52km5gezFQSTU4QPXKSzfksa/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751370478; c=relaxed/simple;
-	bh=dJ8EsJdalLFjFwUQ3vvaJretZ0FF7C0LZXGbOwfHU6U=;
+	s=arc-20240116; t=1751370480; c=relaxed/simple;
+	bh=LHxZDkyo502rMyxdajeshiUDkvLObery09pkUl63guQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=od44JCH1765cyPxfoBAAB0C3rY50gFCsPD8eOKUpRSGOIH/LBUq7dLGfFRzAOMhb/eawb82L5+aER7HC4LwSD1Y6+8GT3y9oKmgnYerrdr8aXctvCoGnmgbIFB00CU0gA6Ypg7eGxS8Zc8EvRkrlmw0GYzuRQ4XG+hItmEL9RXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HX5ihn36; arc=none smtp.client-ip=209.85.167.45
+	 MIME-Version; b=PiGdbslS1sDzFNOcb1nQUyblAed4vj4ZynMwKryuRGX6El39ycw3AL9+Gb6rIwJlQ03Hag/KUZOcCqjEht3svaSKDwAAPR7hyutsc10oO2kJic1HrVVIrGZq5msYfgOZqI03asKfWX9INJ5Lhf0SvoI6xATForinUO/Oj7OAq08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e7PAmCKy; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-553dceb345eso3764737e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:47:56 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-32b7cf56cacso53582271fa.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751370475; x=1751975275; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1751370476; x=1751975276; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=79lLQOvWjPgr3ms40rqLbg+1wi6d2CJf/NthKCtHiEc=;
-        b=HX5ihn364HYe4waWW194HK5vnXDLyAFYXEdt1VLExN1TGEockwn2tWBJAm4j5sytVY
-         knEl9reJOywq5pp8rlB0aEAeOaPPyM6u/mOro1LYBfpi1oZJptGtJpfmQMu7TqxElSco
-         ExnHtl8lJQV5hYE9uB0hcu7MCLtMfLHT+6hJa520Q9tqbYGHP/F8XkMAt/uYRpZnYYtN
-         CshTgLyuRBuvIkkEay3czqP3bbEFLJF4gNoEHaXxj19N2WoiagbYL8MmnCVj0/s1uYdM
-         eR98afQODJdtrxJLMpj/XM+nIUzPXt9fFzcCONRXuQ1bZ0o/q883Kg8yp4otcz+WrRXB
-         aUiA==
+        bh=sYtOzZmGnMBH7yNv+nKiRPqWoWqO5OBErjnboqxVlX8=;
+        b=e7PAmCKybusLt0X5GvqWNqzAKlDGWNGd4MNPEedzrZIwl2NyhjPtznAi0Ga0YWO8GF
+         pO/i18GNe6QaeatTe17vjrnz0G4tNw3XswRgb+qOLO3P1QF6XPMClMoIoVX8fiW9ESBY
+         U0QcTEWuw0NA8mGQextT9v0j/ogOqsAxN2PapEl27s0nw7P4saNofucRz0ev1B/774PP
+         Pb5CKag1JiIO8+tX8gR2BDEmgX/2RnD2l/ZuB1kUUHToXwnecF3f2MTOAGGk9y/Rmq3I
+         9VsRXRmC4LCqOYfaNwjPEFSm5Sb3XAc3Kyy/u5fz61Fu7OIBdZX3N3LQnCJmKXVpheYO
+         21UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751370475; x=1751975275;
+        d=1e100.net; s=20230601; t=1751370476; x=1751975276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=79lLQOvWjPgr3ms40rqLbg+1wi6d2CJf/NthKCtHiEc=;
-        b=GigvLiJv0QgH7sZ3mbCVdmB60TakAD/9XPlgqA9+FJm1e12gk2erj6kYCwfYgvBWKo
-         b2u/TbA0+h0TP147kxiRbftkUoHOy4K6FANF49F/DXfSkel6pDUXuRcda/YUCfuTTOiC
-         6zrpg4PPr24ZiE2yDmEO8+49ObmKkLiC7Lpfzd5ZvXvBqGfzoI8vwLQzGen1yR50001Y
-         wYWCaS8AXw8Wt9fzS3Cv6wUs28rAZEF70a4W5sqaODARjzAhCZi5+QRFUoEj1OfDED6X
-         pdlJpHBlEOiQ2zeBPjEl9G73xXlY4GsiO94RqdZcmZK08IClQ++fJsbocFEFvolntMRn
-         xtJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeu3FuK5Dv52lFawlZswWq6NAdQfejNRBCBkkW2DeGOvInIdXGJmk7lmnw5LUFIIJDpMQp+OzgXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNH/Ylj470nh5bXdHvZ9/yXAU9Y2HlynyW1iuUfdtzpiIQBQPb
-	WDpL5TWf79fAF8hegVpwWllGV1n0xwMlmo/kO+0ehnsqWVXAKQykujz4vl06d3eHNOk=
-X-Gm-Gg: ASbGncuWGD38R5+6/Bc1wU60eG7HR88KtvQax6KBTISNOzMaqvBitpb3YGci70rlFG6
-	m+jhGYxDHB8u/sB2QlaU//9uThquWVxSB6n0XQqHy8rlIMGydBnIbTUAidlGCLAHAYBwrhyn/vY
-	vjcZ7JHMxYjPTxTZZ45L/llYNzUQFDwwrXEr4EmtAsdQmqxxpOv/QWhRi4bbpm6OuhvnbaRngSr
-	jEFlal1iXZ2Hmvsh925wu8e4iSBvtEiz8H/bop8yBZaduXR19FCgnS2e9fXAQ38aAYV/8cvfk8X
-	Wx8KL0Fa4xPC6F6gJnDiuXG+dOndjC6LAKxH67nF9CBfcE2cipevp6r9YoQjIYDT88QWQtuaKXo
-	pG4b/qsf1JYzDqoduPprj8bfmJLHIq4AKTUNE
-X-Google-Smtp-Source: AGHT+IH4G62NAIzkTDdd4Bnq5FbST4e5sFqlJvIjwn56lcRCHhQ1EM+lmASjybjZreaBKv2h5BjCKA==
-X-Received: by 2002:a05:6512:3501:b0:553:296b:a62 with SMTP id 2adb3069b0e04-5550b7e761dmr5493897e87.12.1751370474952;
-        Tue, 01 Jul 2025 04:47:54 -0700 (PDT)
+        bh=sYtOzZmGnMBH7yNv+nKiRPqWoWqO5OBErjnboqxVlX8=;
+        b=BFPLJoJz3q4l2G4V7Mc2mZNjI7VK/ud538fQaWfDSbiln+MMRSGqXZ1tDMupSvEGT0
+         SjKdPXdzQrbCX2I1oV2P7cjtp00jE2VQmE9K+x9qK3BEUKroPZWgRW6BzVvcc39hnnlE
+         3Yxv9Lc9YoPxIiP+q03epqBoM84qWTwOkzCxBgM95Tcj1bL4zoVPS9hX3NuORsRwDlAL
+         E/NrWxYi2iR3optsSJi1s+AgIKc9rKRayejhGzh5RM3sgVn4+NOKwRrBX/uW3dYsCjGY
+         ycrYDewIYgYPNT/KGSoX1AEf3iNV3Goa2fxR9ptpR+lZiJCzHD1K0cd28gmNPvIgqCrN
+         QtmA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9WiuwURTjv/5fS9HqfpSWHFlBYf1KtLzADatZyCTHYO84bUVTInrFch+twurQqS92hNhc9dAZ6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWFLN6dxXDL4Azmm/hREpRn8RC7nk5Tjfwn8nbbEc4TcG2XVLF
+	rEX3ERmRoI4YFiTmWxgcnRDuBd/vPkCwhb1wdG02XjDsGt5hSbn/3fpa5Snq6WrQork=
+X-Gm-Gg: ASbGnctKn3gI+ap7lOuFJC+Bq8m786vIqcaBI5cq7udVyfy/Ql+iQw8MCuO2zAcVcXM
+	iV0ykzSpNCMI6wK2rY7+n9JoWS0rzwzcSgv7QH98K73A06XaU15VF5P9YQfTYnKoEG5sZq0d4oU
+	3oD1TaaK8+wbfKReXLgTZ79u0UxZlwQeUcVpux97IFTy9lWO+cQ0a30LPdMWp6O7gaLc8aemFXO
+	AyOBEOYW2axocmzOJWzF9QBO72CpP9VjKI3S2LGBgb+kw1IwTmwD0WfeRu8cb61iQ5MMp8V5YiB
+	7WwSVREsXvnyJo4HvevckMXplylqIj+eT3yTMBOyUbvx2JJd2rXawJwvCdoiEpE7ZeU7ogyV5Ax
+	kIt5tlbxhVir7aG51vs7pXTVi8fEVSRl8GwN7
+X-Google-Smtp-Source: AGHT+IFSPaZorQ+Qh+OkD3aotM2d9NhdvbOFk3i1QZMiUSjQgU+7klRfn1pjmSzZTdcbR7VQIAkesw==
+X-Received: by 2002:a05:6512:b1e:b0:553:d910:9344 with SMTP id 2adb3069b0e04-5550ba2b25dmr5366069e87.45.1751370476453;
+        Tue, 01 Jul 2025 04:47:56 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.47.53
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.47.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 04:47:54 -0700 (PDT)
+        Tue, 01 Jul 2025 04:47:55 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Saravana Kannan <saravanak@google.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -95,9 +95,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 08/24] pmdomain: core: Prepare to add the common ->sync_state() support
-Date: Tue,  1 Jul 2025 13:47:10 +0200
-Message-ID: <20250701114733.636510-9-ulf.hansson@linaro.org>
+Subject: [PATCH v3 09/24] soc/tegra: pmc: Opt-out from genpd's common ->sync_state() support
+Date: Tue,  1 Jul 2025 13:47:11 +0200
+Message-ID: <20250701114733.636510-10-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250701114733.636510-1-ulf.hansson@linaro.org>
 References: <20250701114733.636510-1-ulf.hansson@linaro.org>
@@ -109,44 +109,102 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Before we can implement the common ->sync_state() support in genpd, we need
-to allow a few specific genpd providers to opt out from the new behaviour.
+Tegra implements its own specific ->sync_state() callback for the genpd
+providers. Let's set the GENPD_FLAG_NO_SYNC_STATE to inform genpd about it.
 
-Let's introduce GENPD_FLAG_NO_SYNC_STATE as a new genpd config option, to
-allow providers to opt out.
+Moreover, let's call of_genpd_sync_state() to make sure genpd tries to
+power off unused PM domains.
 
-Suggested-by: Saravana Kannan <saravanak@google.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
 Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Colibri iMX8X
 Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> # TI AM62A,Xilinx ZynqMP ZCU106
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- include/linux/pm_domain.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/soc/tegra/pmc.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 3578196e6626..9329554b9c4a 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -104,6 +104,11 @@ struct dev_pm_domain_list {
-  * GENPD_FLAG_DEV_NAME_FW:	Instructs genpd to generate an unique device name
-  *				using ida. It is used by genpd providers which
-  *				get their genpd-names directly from FW.
-+ *
-+ * GENPD_FLAG_NO_SYNC_STATE:	The ->sync_state() support is implemented in a
-+ *				genpd provider specific way, likely through a
-+ *				parent device node. This flag makes genpd to
-+ *				skip its internal support for this.
-  */
- #define GENPD_FLAG_PM_CLK	 (1U << 0)
- #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
-@@ -114,6 +119,7 @@ struct dev_pm_domain_list {
- #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
- #define GENPD_FLAG_OPP_TABLE_FW	 (1U << 7)
- #define GENPD_FLAG_DEV_NAME_FW	 (1U << 8)
-+#define GENPD_FLAG_NO_SYNC_STATE (1U << 9)
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index e0d67bfe955c..d209e3435878 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -418,7 +418,6 @@ struct tegra_pmc_soc {
+  * @irq: chip implementation for the IRQ domain
+  * @clk_nb: pclk clock changes handler
+  * @core_domain_state_synced: flag marking the core domain's state as synced
+- * @core_domain_registered: flag marking the core domain as registered
+  * @wake_type_level_map: Bitmap indicating level type for non-dual edge wakes
+  * @wake_type_dual_edge_map: Bitmap indicating if a wake is dual-edge or not
+  * @wake_sw_status_map: Bitmap to hold raw status of wakes without mask
+@@ -462,7 +461,6 @@ struct tegra_pmc {
+ 	struct notifier_block clk_nb;
  
- enum gpd_status {
- 	GENPD_STATE_ON = 0,	/* PM domain is on */
+ 	bool core_domain_state_synced;
+-	bool core_domain_registered;
+ 
+ 	unsigned long *wake_type_level_map;
+ 	unsigned long *wake_type_dual_edge_map;
+@@ -1297,6 +1295,7 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
+ 
+ 	pg->id = id;
+ 	pg->genpd.name = np->name;
++	pg->genpd.flags = GENPD_FLAG_NO_SYNC_STATE;
+ 	pg->genpd.power_off = tegra_genpd_power_off;
+ 	pg->genpd.power_on = tegra_genpd_power_on;
+ 	pg->pmc = pmc;
+@@ -1406,6 +1405,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+ 		return -ENOMEM;
+ 
+ 	genpd->name = "core";
++	genpd->flags = GENPD_FLAG_NO_SYNC_STATE;
+ 	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
+ 
+ 	err = devm_pm_opp_set_regulators(pmc->dev, rname);
+@@ -1425,8 +1425,6 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+ 		goto remove_genpd;
+ 	}
+ 
+-	pmc->core_domain_registered = true;
+-
+ 	return 0;
+ 
+ remove_genpd:
+@@ -4263,8 +4261,25 @@ static const struct of_device_id tegra_pmc_match[] = {
+ 
+ static void tegra_pmc_sync_state(struct device *dev)
+ {
++	struct device_node *np, *child;
+ 	int err;
+ 
++	np = of_get_child_by_name(dev->of_node, "powergates");
++	if (!np)
++		return;
++
++	for_each_child_of_node(np, child)
++		of_genpd_sync_state(child);
++
++	of_node_put(np);
++
++	np = of_get_child_by_name(dev->of_node, "core-domain");
++	if (!np)
++		return;
++
++	of_genpd_sync_state(np);
++	of_node_put(np);
++
+ 	/*
+ 	 * Newer device-trees have power domains, but we need to prepare all
+ 	 * device drivers with runtime PM and OPP support first, otherwise
+@@ -4278,9 +4293,6 @@ static void tegra_pmc_sync_state(struct device *dev)
+ 	 * no dependencies that will block the state syncing. We shouldn't
+ 	 * mark the domain as synced in this case.
+ 	 */
+-	if (!pmc->core_domain_registered)
+-		return;
+-
+ 	pmc->core_domain_state_synced = true;
+ 
+ 	/* this is a no-op if core regulator isn't used */
 -- 
 2.43.0
 
