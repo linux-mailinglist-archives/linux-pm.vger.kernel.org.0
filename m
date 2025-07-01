@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-29891-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16490AEF709
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 13:48:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3502EAEF70D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 13:48:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 130041C01D9B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:48:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F13CE17D607
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E568F27381D;
-	Tue,  1 Jul 2025 11:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E840273D8C;
+	Tue,  1 Jul 2025 11:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K7F/pNaq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LqPc2VBE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A18A25A33A
-	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6070127380F
+	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751370470; cv=none; b=NOjUd2kPfwJ/k6jxMzw52Dp+Owcbyj4rWgsxciTpEUW18vzST2fReO8lz3WX2JUhTGS6X0f+KRdmK4tWhMsaFzZd8pJGNPI7qn1PT6Pu8nNDN/IYQWNoHwBoiQHOBPM0jpgrmoWv5ZNHZw1VJdmK9ugZ+urBslZfIyxq04hkqbg=
+	t=1751370472; cv=none; b=tWsh29aXRCxqFPxcyo2QwDK8rkbG+/Av+vqhao/PVKEv0lxMfXHWVlYuZuEWJGTwVUFS0fI4lsOKei1qj/g/Go8eOjzVCSTt0l0kprEzbTF1vPAz/KMpJXrp3JX7bgaEMcGOP2oKsyX6k4rl+7FP86UHfRRYQgkaF83h8FYTNXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751370470; c=relaxed/simple;
-	bh=pVRpR1S2HDeRvzXbIKzoXt5qvVDcQEyiyD3SHvPQFTM=;
+	s=arc-20240116; t=1751370472; c=relaxed/simple;
+	bh=OJ7vM9iaMyWGCEbwZfryMptI4hIou2/uDCYlamFnw3E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QHyUy5QYsx62rMkv+i92GW8WDz4VpCBcwssNnThglse275b76j/Vbp44h67+vpIof0+KKp3o0chey+5ZMluN63O64LdcH2bpcJnpeahDW+BjiG2vr/6FdaaAQFGhZurgIYGXa2kD1J1EAPeJpmeSmhKwuLKPfxUbdYFVbahbRso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K7F/pNaq; arc=none smtp.client-ip=209.85.167.52
+	 MIME-Version; b=sAvf+I3b3s/2eX84FL72PkeNktXLNiHK5bKArW4cGpKHvNIV0gQJPhXT0B3m+vGPXll+gA4nb+k5punFeqjBONXmPDDfthCq9ri3w6NOaDzrhSSTBjx4/ZUEaz83vmTUhPdqcQIM2ssD+PL7gZa5tubJrBQzZYPwpOqz/S5ljz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LqPc2VBE; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-553b5165cf5so7449235e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:47:47 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5561ab55c4dso1991724e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751370466; x=1751975266; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1751370468; x=1751975268; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2djU9nLQ8VglyUcEstpnVg4eaMTkukRCnzKizHYIlO4=;
-        b=K7F/pNaqRYDyFQ/EFhymu/ZSYXH/sEhGgIvSutg1yhmCnVcLQLYpRUKodic1AKfch1
-         FeGGvyfoZ9G8/el3XEXIODLUl0uzlFyHrU7CjdeNpgrDn+dGhoS5fMn8HZSbgg9GOWor
-         +GXECQz4piZ8ZFy9Br8mLwMkvfhoaqFIKTr2OpszLeWNPuodjnoE1X6oNWBFW3e50Ukl
-         aH1oPp/EW73dIsChLheHsU5Xb8CSbE+ebPZC2Owb+3luzPimp2Gp9ICSCFIvPZuF3wFs
-         07ay+pYT9X4yGgOPIPerRxA/zlc1iPbFtI4g4DFwo93Ing4x6B55CtLXnnXDjQ/cRdTR
-         R3OA==
+        bh=xR/zckWVNzKKFa7LSQ++02YjQJSEEQWqz9MIi6yuZiU=;
+        b=LqPc2VBE9aT5rrPWOCCLizVSwVx6o3yNpiIoDWSEAlr+QzykBQVbc4TiRBj3Bfi4Tr
+         2xm98cclKutHtOvYZW5xKsjP/XnU2RVKqI++KQNxZMHWvfSI+E/8aQtJGN7nOomv1k2w
+         aGCFBO/5TiNBH8x9qqEsyFMeO8Sgub8uZ8KcLS7rZEKr/COZ5ozORJeZ7I7mrnSTw+rK
+         fEjlHaQ9PtkKr2OJGNRz12yZUl2iPX3CyzKD0E3gm5CM9Qk5CTuQQ1DjOVx22bUi1JTU
+         upD91mCeCaPychQodlT9YtyrwfyoO5oRJJO+vbZyJRUpFm89JguuYwPkREuOnu7MkjUc
+         HOeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751370466; x=1751975266;
+        d=1e100.net; s=20230601; t=1751370468; x=1751975268;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2djU9nLQ8VglyUcEstpnVg4eaMTkukRCnzKizHYIlO4=;
-        b=MUBChA9LYJdJkgY8mCBEUJ8zlV7Olz977wWSNiPjDTtHrOY83OFri7p+J/mmLFGhUP
-         Y6gG64heStAjll2WG1gVkEnaRuZtBHD6KsPe6oFNQrx7U1YVLBzrNd5snerI1oWj6Zo+
-         p8jIfxtgUTsAON6NLRUOIQlkj/EmLBum/Lulb/6QyvYdh0pL9Xl8/sg72GdRdATgjYIq
-         NpVC8ULlwiXU6vzNTEfinli1GWo/KlAsG/Gonh787AKevEtYxWmx3yC8ylHmcOyHARyy
-         7FzH3nHCGS0cjPvHf+cwNboteSCavZ+v4mjndgylJEtzlv3ROeXFIjwoLbc9kweMVWJF
-         tiTg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGtDH/z4bYhiuzOV8f5UxFvLXaJ03ya2os9bJqeUwwD7nKsAjug8BXhQdRi2aHmORi7PIOPqFnWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwWZGeMHQsnN5z0nXVHWrZRHpWvQjRdNqQsTd8RH8s4uvZ50qB
-	A+D9o52WmKqUrc9QddBtxmRIwKNhl4T4Pi8LjfBcoGn0z0rCfWGmrTBuc/bjXYnhn4g=
-X-Gm-Gg: ASbGncvohdwvLWbLJopsJmCwCryVpPLyLI0wha2gF2agTMBadBCp19whnbCiW6aqY8+
-	exR1HQWCOA4cwe+SwVCDMfqpv/gUR6Inf6foYOjxUSbcP77fGSIrc4kEIcuuhWdMkUEkTCKLHuW
-	pMdtveg70WYHQXbrLMIWkOJok7sAba8BJUH1WPJ5ey5u6iKpCjQCQBBIUpUZSUeludKkziWyTen
-	ek6AzugOerkku8/pCC25XLZNHsxb0Meqw/4oLZzKhx2diCDneQEHahhuEQlmsAgYF35yiHSyXkg
-	araonsu/0OjTQpKN8HgOALoE4NpvXX0doQjrui9XOBBR5K8lx+XmU+6xwxwQenlwClKfN7S5Y5X
-	O7IbneaYpfxCDaoFedauF1zlIAao2CrRAA1x6
-X-Google-Smtp-Source: AGHT+IFk1+sM2wFrURHBujkY60jtzQNdzYc3WqI7dzo+D/13c4kVHtOgYXZqpdwPvp8P1wttj8OecA==
-X-Received: by 2002:a05:6512:b86:b0:553:2154:7bd0 with SMTP id 2adb3069b0e04-5550b869fedmr5078899e87.5.1751370465534;
-        Tue, 01 Jul 2025 04:47:45 -0700 (PDT)
+        bh=xR/zckWVNzKKFa7LSQ++02YjQJSEEQWqz9MIi6yuZiU=;
+        b=ju/PS7H4IbM0SevEtFrINyBjf4fk/38naoaOLR4o8Wyrrw+fITpaAzOO3i2mTdbHoL
+         UTW3T1uyOlF502/A9WVqIPMFUl0GPnRWrFE6gp8wmeuZaIIlrkC5JAf1Yzloa0RaS+mR
+         mVkt1WZUhZu9B0SIIFQ+nkbZ6OtP8RYiK5V/5C0P4Bk5MEce+PhZhxSb7aOKTaBzCVeG
+         TW0Kr++3iRp1s5SOLmPXr8WFTd/QEHll3uv8sq6NDhOadmijQTeeK9EmC+ufYQzmqZ1e
+         JeohFDEdP2ndU9KFtqYn77C+aHgVguTQgMRpAtsRj38d3Yfrlg+5YxlFzQazuFF+cH71
+         Nf7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWeG0ABFuz4TaBfAZnoLZ0ZZ0Ju7vCh/KhBWq3KM1aaEJteb+aKCqrfZAe6noJpANhUfshmCYynkg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPp/6TeN2cfN5EsNbl9tLg6Ch/NcHAnRU3nsP+IqE0YZo6f6ub
+	fkiQ8dV8kc6ocLyFz+eaGaGiTz4MD/obdmwDCe5I57LS5khMl4xLUnrNPMd8ramLq5g=
+X-Gm-Gg: ASbGnct4xQRU56g+LjTbY1O0CZQsECnRmf4OiohUa4YDo3IyiXW3tuVlOvBo1dT3G/D
+	bAiIU9NN4pNPjq7/lKGeuY94P+RRIasOn5Yk3VCGPSU9qiSN3a5aEjSFj5FnTIqFBo6xhyRsqcD
+	/jJGqgVvxF+Vli08qjLEBFCDLF5+1+VR18gS9Gs5g6TASQYXX0Nrkc8CbQhlsxJ1Ntl9ZqT2LXG
+	+797qCH127vRV+fDwm/dCTbckgzBvYEJWoTl0fg7W6d3DRf4zlMQfsmCDTST6W04sVi+Kq59Yf5
+	SUQtKz3XHg87YKNAHfExbt3wC6oGOWDhx/NWZ7cLap0NpotftofbulKQ+ifoddIuc35Pk2dTUFO
+	c5RjdkAbib5gfDA5V5NLfnWA3Ng3eQpLpP9pH
+X-Google-Smtp-Source: AGHT+IGO5gKzZu+VtDDlyhN1DOFOUCU8t35eiES1E+DxBtLsVS3EGtlEnPMXH9LKCJiKW0MjI+Jmzw==
+X-Received: by 2002:a05:6512:159a:b0:553:ac4c:2177 with SMTP id 2adb3069b0e04-5550b83772amr4796245e87.20.1751370466845;
+        Tue, 01 Jul 2025 04:47:46 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.47.44
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 04:47:45 -0700 (PDT)
+        Tue, 01 Jul 2025 04:47:46 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Saravana Kannan <saravanak@google.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -95,9 +95,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 01/24] pmdomain: renesas: rcar-sysc: Add genpd OF provider at postcore_initcall
-Date: Tue,  1 Jul 2025 13:47:03 +0200
-Message-ID: <20250701114733.636510-2-ulf.hansson@linaro.org>
+Subject: [PATCH v3 02/24] pmdomain: renesas: rmobile-sysc: Move init to postcore_initcall
+Date: Tue,  1 Jul 2025 13:47:04 +0200
+Message-ID: <20250701114733.636510-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250701114733.636510-1-ulf.hansson@linaro.org>
 References: <20250701114733.636510-1-ulf.hansson@linaro.org>
@@ -111,13 +111,7 @@ Content-Transfer-Encoding: 8bit
 
 Subsequent changes to genpd adds a limitation that registering a genpd OF
 providers must be done after its bus registration, which is at
-core_initcall.
-
-To adopt to this, let's split the initialization into two steps. The first
-part keep registering the PM domains with genpd at early_initcall, as this
-is needed to bringup the CPUs for R-Car H1, by calling
-rcar_sysc_power_up_cpu(). The second and new part, moves the registration
-of the genpd OF provider to a postcore_initcall().
+core_initcall. To adopt to this, let's move to a postcore_initcall.
 
 Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
@@ -127,53 +121,20 @@ Changes in v3:
 	- New patch.
 
 ---
- drivers/pmdomain/renesas/rcar-sysc.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/pmdomain/renesas/rmobile-sysc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-index 047495f54e8a..4b310c1d35fa 100644
---- a/drivers/pmdomain/renesas/rcar-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-sysc.c
-@@ -342,6 +342,7 @@ struct rcar_pm_domains {
- };
+diff --git a/drivers/pmdomain/renesas/rmobile-sysc.c b/drivers/pmdomain/renesas/rmobile-sysc.c
+index 5848e79aa438..8eedc9a1d825 100644
+--- a/drivers/pmdomain/renesas/rmobile-sysc.c
++++ b/drivers/pmdomain/renesas/rmobile-sysc.c
+@@ -335,5 +335,4 @@ static int __init rmobile_init_pm_domains(void)
  
- static struct genpd_onecell_data *rcar_sysc_onecell_data;
-+static struct device_node *rcar_sysc_onecell_np;
- 
- static int __init rcar_sysc_pd_init(void)
- {
-@@ -428,7 +429,8 @@ static int __init rcar_sysc_pd_init(void)
- 		}
- 	}
- 
--	error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
-+	rcar_sysc_onecell_np = np;
-+	return 0;
- 
- out_put:
- 	of_node_put(np);
-@@ -436,6 +438,21 @@ static int __init rcar_sysc_pd_init(void)
+ 	return ret;
  }
- early_initcall(rcar_sysc_pd_init);
- 
-+static int __init rcar_sysc_pd_init_provider(void)
-+{
-+	int error;
-+
-+	if (!rcar_sysc_onecell_np)
-+		return -ENODEV;
-+
-+	error = of_genpd_add_provider_onecell(rcar_sysc_onecell_np,
-+					      rcar_sysc_onecell_data);
-+
-+	of_node_put(rcar_sysc_onecell_np);
-+	return error;
-+}
-+postcore_initcall(rcar_sysc_pd_init_provider);
-+
- #ifdef CONFIG_ARCH_R8A7779
- static int rcar_sysc_power_cpu(unsigned int idx, bool on)
- {
+-
+-core_initcall(rmobile_init_pm_domains);
++postcore_initcall(rmobile_init_pm_domains);
 -- 
 2.43.0
 
