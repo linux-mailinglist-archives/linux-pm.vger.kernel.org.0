@@ -1,119 +1,124 @@
-Return-Path: <linux-pm+bounces-29942-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29943-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9985AF0623
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 00:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D8C3DAF0663
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 00:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 054E21C080B1
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 22:02:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 213461BC2646
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 22:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0822265CC8;
-	Tue,  1 Jul 2025 22:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A35B126A0EB;
+	Tue,  1 Jul 2025 22:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nb6q70EP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gc43EE+I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B62E7260F;
-	Tue,  1 Jul 2025 22:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE18617C91
+	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 22:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751407341; cv=none; b=mEq94+nwEwEzYCowhcO4HI/AkLqb35T1HNNJMh0HKrG8v8Eh3NDK+MWZwW509KiU0mjx2Cv31e0TgLiUYBeieRcEj8qa5B8z3/iO5rCBV4Lt2buqT5rJkj5pQrVilnElsnga38wyYcrQrr1lHenqRQjQAVpb/5upgnLzvnKSHLU=
+	t=1751408084; cv=none; b=Dt+oeOaQPozDhykQaJz9+LxkCWc2/cDongmde63GEAXRssMzyDqV8Bn5Tg7yltS1uHjJIgQdCBrHlPlvnPSr/GFzFoZaK9pm1no34LA6MVMXvDJi4tyd+kMKWWXa8t6VQk+InVU0Z/mfvQsNN8UwuhZQC1R6rKT/xbOzV2zkOg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751407341; c=relaxed/simple;
-	bh=/UEZb8NkTVMB0RuIfOdOOTMZsG9K+IXgRCinG9NNSXs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iR9s8ShvVG+30BlAEQ4SJrp+1IjBvtwSLl+ugjm4LnSWmFd0GbKh2JmwlfDbBs0dSu9/wFxOGr9KF/F4OYZCefrReVJvKalUGTXMnnP31xQtUAVSatPek0O1JuQ01mEVgxuS4dnxWmrscEiqrk+Xg8/0ovPmkPy+CFn85BA+hn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nb6q70EP; arc=none smtp.client-ip=209.85.219.171
+	s=arc-20240116; t=1751408084; c=relaxed/simple;
+	bh=4HTXde3wZn3e8R9vMjGA8GkBevtC7qMn9QnbaLg22KM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aRJGDS8CD86SDt7c9Y/py+kzJMzHdnfOUePzlMbDzvSlUR0BoJX7XVoTku+YqQu6aOrdgpcvVk7wqa1AHsuU/DBs8UU5yEjzUYbgbD2eQcxZDxGPuzddb8TumYzlBDx33RVtV54ELY9DQqTXq2ow8mMmQ2625lP0i4qtJpmGXCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gc43EE+I; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e85e06a7f63so3133517276.1;
-        Tue, 01 Jul 2025 15:02:18 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a522224582so3245902f8f.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 15:14:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751407338; x=1752012138; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r+3A1kXTvGxPm2wKLJImng/HgBPkwj3/5xTfa5vLd9M=;
-        b=Nb6q70EPN0pkXppjque2cH+WtCPP5r5Ykw0ry/PzhSF497qwEbgLICcEpxRK0qNrPx
-         IWvo6JrMILw3rhIb4HSbtOIAZM+yDTSwDGgVGg2vmjhM1m7xHSxsK5li5sCytVvt1GGu
-         dmfw51ZE5mjJjGjmVVDdyLYYX6LiNu/rXvDBXR54wXW6+flIrsYtVM5pY1WP7fgn2VFl
-         QHziO2KKGNAnRvWP/gpQzI6ofgKVTpAQ2T7HtqSOuC0KM6en3t8Rdwni9snSj1UZHCbt
-         4XecUtl11bC16Cqix8exunJQ61lwkev6W1eh4GJKOXc1Rf9OjUFkI3t2JCCsAEnZIW3y
-         h4hQ==
+        d=gmail.com; s=20230601; t=1751408081; x=1752012881; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WiTipLh2pzGLpF7l5i+J4rDWhXcPzaLY51qoe/W5Rs8=;
+        b=gc43EE+IvtQxKNpLMpmFHOngqbIZq9lVhy5ownye1CJt3Zm+5DD4FasD5M+yxMA7Vz
+         dFLLunExX0dItWPtNbwu1tynMwpv6EUskok3eUcnSqg2bsmLP4e4xnZWjpD349+sVHtQ
+         EhHdliOyUCccdn8ASxZfL5sgEGGpiUjU4RDkzzvWRAKoIdrwNDsZaI/CRChGFADjQzp9
+         YamOSt4pVdaBlwEFTISQ81gFpMgPEujH4XG9X6y93+M+aSqiTODPQdUiIRMoFXsX2SQu
+         1Z1lfnxkZtz1wKzMozBQU3uzXMYMZDPp9LwOcwFWy3vQbt8xlcrjOGUOkLFhehne1VJ1
+         WuCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751407338; x=1752012138;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r+3A1kXTvGxPm2wKLJImng/HgBPkwj3/5xTfa5vLd9M=;
-        b=rTwx+NH6xFJ1aabo/FNsVX/4+nS/SEoPPEYXzIFFYubcS8risdvHWDGO4AEzKihqme
-         /4y27PHK9tgl74aqXRb33KeOc0OSf3IniVSX6uRObEhXywZZap4en7Sgy6f2GlxToNn3
-         ZoguuCjGL9IpiJgQ6E4QsIfDuA1BRER/PNiYRl8Jpl+b1lsFfjW78t8Ph5kVHSXNy+FC
-         gJ7pgfxPsspQyxi6HmmFMsyI4PQLM6OKDWUUuv9CtlReMSDOFCa44x6g776X8mXwEtEn
-         M7M3F7KRxomheG22WJB9XhUkFQBIByZCk6B9eujIEW80PnmMFl8KoADo6JVncMVmpMrv
-         m6vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6hcI/P/I2YuUUuP/wLodRzc/hID1bWWvvhrHRJ2i1mLh6q0LTQIMytnngOxwTwnYDUf2UQLdPBts=@vger.kernel.org, AJvYcCVwBtltbo2X1hzX2FxUTntpYEdQVFyLHwRzrneHxFdsVRRcVkykX6GIu69daf7BO0M+OSEUPI/ztyI2jRU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwweZ/w9Fbyhv2Z5vE78rw6n0BNVNV2OMRRocHQ4VpQJ9aHons6
-	EITKe0CEBe3XzeSZa+AOVRs1WnmAegDSK46qaDhb5vVTqhkGG47OWXbb0yRFqNzDIW6yEjJI1T+
-	HXLbciBqsP9fLqHclzYJ51TL4UN/WlK4E3Siskk8=
-X-Gm-Gg: ASbGncvRp5ZBX1DS4STzMspdv3mCwuf3qmyDIGyTkPMmatt5y+CwZsDwugK08Ssrlr6
-	A+0S+zA5qvrctTKjQdXIedAkAeHWiXl6dmXjoU68xdp32PNTG2sr5gIEL3UqLjD3CFSGc2Edjxw
-	JZdwLKnvgKyUFpI39RHLpxBlxdSJSbRuk1TKH571p4
-X-Google-Smtp-Source: AGHT+IF2UwMzQTrU3c/1ff/h/O/X4HdiWRMl22fU7K+HHjqvTPMz+NeEM0BS0HZeGjnyecFyCDlnJtDG71RLt/iQtNg=
-X-Received: by 2002:a05:690c:ec3:b0:70e:1771:c165 with SMTP id
- 00721157ae682-7164d47332amr5473697b3.29.1751407338021; Tue, 01 Jul 2025
- 15:02:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751408081; x=1752012881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WiTipLh2pzGLpF7l5i+J4rDWhXcPzaLY51qoe/W5Rs8=;
+        b=Omg5g+w41EDLMI83X5sLKKVuKTN5BTCWqqNmJixza0R95N4HgLKdh1m2MZvK90vyfA
+         o5gWcO+LdAQnSR7X5+q0Dyrj6zg+N3wHvJloMpj93gL36uic9R+sfZqH+8BjamdAF5X5
+         W+NICbmV4CK4XMDfDEdnyIdhVYpuC7b8FzUMyUHIa83D5Pb+mt7RoUiBU4KX4LMXEAA2
+         a5+UD6ddm59qf4f8ji2NIPl5ya9sRo0M7qsakZUxnD9VR+INAb8LNrCZL3lbmWj5dqCy
+         4oYpA/9bajapxOf1fHgj8TMTQj6g+fhO6IcWSHctvlwD7LE43gQ36f6VdLTwscL0jSCW
+         W3Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCVGT1dE8nSfvgMpGb3WCkNqmL99WzX4oPTCdYUSnOMST1X3vvvv+UF7xvmVVn9RyuMUP+tzdA/Ytw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB0bnX5wbbB0KDGpr15NBmQIPyaNWRRWhVDDs8t8Xv9ETfqoOH
+	ZWMk8Tb2jEIHG5MHrChMn8kL+FVNHeTmxKWwDeWNPQVd5Us4g+JMgFJa
+X-Gm-Gg: ASbGncvmJQtGXZdY60n1Ied66ZHG+a81fEf1E+lFLMOyytPXU4OBzUfkIv6Zow263EK
+	ydKUJy0xlaFDvOlu/lMKHNQ7EPGSDwIazz/KpctukFsUP9+136UEquQdUZsQEzYtdT5jPeJNU9F
+	93Xai+zoeo6ShaD+G51KkbO5g6cXOf6b6Y0nqXEE/TIyIL0mz3zE8X8NKvE/YoUFzksGVpKU0ZI
+	ExXVcd+4beLmpf/7uKrYoE9c3aLKhESiP9Ebyr32wRnLx+KcNPPH7EfkLbJ7JGObruuGHnfqZYt
+	82S2EXNEw+Xp+YGlmdpdI96M1uZRRndOb8Zcvcx8owlrybg0R/dpyxHEEk7uNQTup7ZToAf6AB9
+	WsVQB2/SAuND81y24nCwDzwyPpLU=
+X-Google-Smtp-Source: AGHT+IGkS5eJtYVKv1x6gdzkk/49uoPiaLLs1y432JXqBArE9x6HNHh+0ZC/SQ4Vzhqz2XCZvgwIyg==
+X-Received: by 2002:a05:6000:1447:b0:3a4:ed10:c14 with SMTP id ffacd0b85a97d-3b1fe2de3f0mr154968f8f.14.1751408081006;
+        Tue, 01 Jul 2025 15:14:41 -0700 (PDT)
+Received: from localhost.localdomain (89-139-4-59.bb.netvision.net.il. [89.139.4.59])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453923a22fbsm136795215e9.34.2025.07.01.15.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 15:14:40 -0700 (PDT)
+From: Sivan Zohar-Kotzer <sivany32@gmail.com>
+To: Daniel Lezcano <daniel.lezcano@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: elazarl@gmail.com,
+	linux-pm@vger.kernel.org,
+	Sivan Zohar-Kotzer <sivany32@gmail.com>
+Subject: [PATCH v1] powercap: dtpm_cpu: Fix NULL pointer dereference in get_pd_power_uw()
+Date: Wed,  2 Jul 2025 01:13:55 +0300
+Message-ID: <20250701221355.96916-1-sivany32@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701215648.95912-1-sivany32@gmail.com>
-In-Reply-To: <20250701215648.95912-1-sivany32@gmail.com>
-From: Sivan Zohar Kotzer <sivany32@gmail.com>
-Date: Wed, 2 Jul 2025 01:02:06 +0300
-X-Gm-Features: Ac12FXyoix9dUSUaftAXwYQOV8H9M1SaO6QN7zS1MwNHDnFdaMqKkUFGl-8U9sU
-Message-ID: <CAB_eDKbTzZh7Dp8E1LroEOb4zVA6Mo0guoRqh3p18ipaZuUAug@mail.gmail.com>
-Subject: Re: [PATCH v1] Linux 6.16-rc2
-To: Daniel Lezcano <daniel.lezcano@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: elazarl@gmail.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-This email was sent by accident, my apologies.
+The get_pd_power_uw() function can crash with a NULL pointer dereference
+when em_cpu_get() returns NULL. This occurs when a CPU becomes impossible
+during runtime, causing get_cpu_device() to return NULL, which propagates
+through em_cpu_get() and leads to a crash when em_span_cpus() dereferences
+the NULL pointer.
 
-=E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=93=D7=
-=B3, 2 =D7=91=D7=99=D7=95=D7=9C=D7=99 2025 =D7=91-0:56 =D7=9E=D7=90=D7=AA =
-=E2=80=AASivan Zohar-Kotzer=E2=80=AC=E2=80=8F
-<=E2=80=AAsivany32@gmail.com=E2=80=AC=E2=80=8F>:=E2=80=AC
->
-> From: Linus Torvalds <torvalds@linux-foundation.org>
->
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 69c534982415..ba0827a1fccd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -2,7 +2,7 @@
->  VERSION =3D 6
->  PATCHLEVEL =3D 16
->  SUBLEVEL =3D 0
-> -EXTRAVERSION =3D -rc1
-> +EXTRAVERSION =3D -rc2
->  NAME =3D Baby Opossum Posse
->
->  # *DOCUMENTATION*
-> --
-> 2.45.2
->
+Add a NULL check after em_cpu_get() and return 0 if unavailable,
+matching the existing fallback behavior in __dtpm_cpu_setup().
+
+Fixes: eb82bace8931 ("powercap/drivers/dtpm: Scale the power with the load")
+Signed-off-by: Sivan Zohar-Kotzer <sivany32@gmail.com>
+---
+ drivers/powercap/dtpm_cpu.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index 6b6f51b21550..0f1c19308f46 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -97,6 +97,9 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ 
+ 	pd = em_cpu_get(dtpm_cpu->cpu);
+ 
++	if (!pd)
++		return 0;
++
+ 	pd_mask = em_span_cpus(pd);
+ 
+ 	freq = cpufreq_quick_get(dtpm_cpu->cpu);
+-- 
+2.45.2
+
 
