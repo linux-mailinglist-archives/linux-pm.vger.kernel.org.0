@@ -1,308 +1,193 @@
-Return-Path: <linux-pm+bounces-29889-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29890-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8680AEF59B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 12:52:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1E0AEF704
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 13:47:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A5A0189E740
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 10:52:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CCED44138D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5338C270EAD;
-	Tue,  1 Jul 2025 10:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E4626B2A6;
+	Tue,  1 Jul 2025 11:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="q6ygmPaT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FH7fCI/9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B642C26E71A;
-	Tue,  1 Jul 2025 10:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E914242D86
+	for <linux-pm@vger.kernel.org>; Tue,  1 Jul 2025 11:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751367140; cv=none; b=gFXg+kxzP4vmr54xUGMudTtR2Zq75+IPquJxw2c12251fgNRFL4nlXoEXjEAZgasCWgxRJumDn0mBdtZ/OKI3+JoBcM08AKOe561KgyYwdlDzo40bgJ7gKzQmFNHhUCLwm9g3uMEzhtnDlMOZDMPRE4KFlADaYFbz9KGEg5bfl4=
+	t=1751370468; cv=none; b=LtXOmFI9/XbJGBoNUUIiWvrsjD0LCOh3vy/wBv7gV9m+xpftjBHlD3hOP2EOmzXK65wJRvRBVKS8KNLrI/LHuRugQhDLONJzjwRX0HrY1XTTqhs0v8X2MDJH7hc/OCASmkVmm24+VWHSCyhb5QUz+A6Uz5TGouzMkq0gJLZlKwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751367140; c=relaxed/simple;
-	bh=PK2PDcN3SNcc+Zwtx/+Ecvz8LoJJ09xOiNWonKP7GK8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=U0u8W2MJ0iStjGw5eMrKkyM7NwCcMtzn9Os2PnI5cUG53XFuIUNGLm1SPK8Xvsj1jPfUfzPVXJKTebwTQBnLXl/WDBc1bEOOvGCRO+9clTxqxZ9DBFg+bqOFk8PPSw8hPDIujGxzhjT+FkXb3Ms2dpmIJrRkVknHsyoYH8deg+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=q6ygmPaT; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
-	s=s31663417; t=1751367099; x=1751971899; i=frank-w@public-files.de;
-	bh=fzinALOKJSg5BHqUrqm0HfAIrQmnYOWWzYnc9uuZeLo=;
-	h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
-	 References:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=q6ygmPaTuDGvJa475IHhXhS1mWBLh7P5g1oIVBeGG+/bd5MGYcn0rhnD7WerUTNn
-	 +sxj0GO2hzp7TBRPTTizuisLpIwy7dSAJkAR4Ufcpj2qNdiXZxzic0ELDMRKI6zz9
-	 PT8yfkxKvKlMVbM0Tg50OL1q/b0nSifKzYhz8dUiV+yCoxv2NbnNpqdKAb2a+Reki
-	 Q7zgqccbq69ixST29bjf6fhnmqpDemcJ3XHjgxBNJER5I7Ek3jUmnml3hrxiPWtHt
-	 BOsN723eBEciXhelCoNKjLGQQ+9uoNRcVjvfTeuhCDJsoBjy3T04PoY1PNZ9r0210
-	 mQoAC3nZ1PbsNnbPpg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [IPv6:::1] ([80.187.118.70]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZkpR-1uAqar2qiF-00YN80; Tue, 01
- Jul 2025 12:51:39 +0200
-Date: Tue, 01 Jul 2025 12:51:31 +0200
-From: Frank Wunderlich <frank-w@public-files.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Frank Wunderlich <linux@fw-web.de>
-CC: MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Johnson Wang <johnson.wang@mediatek.com>,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>,
- Sean Wang <sean.wang@mediatek.com>, Daniel Golle <daniel@makrotopia.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v7 01/14] dt-bindings: net: mediatek,net: allow irq names
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <20250701-wisteria-walrus-of-perfection-bdfbec@krzk-bin>
-References: <20250628165451.85884-1-linux@fw-web.de> <20250628165451.85884-2-linux@fw-web.de> <20250701-wisteria-walrus-of-perfection-bdfbec@krzk-bin>
-Message-ID: <9AF787EF-A184-4492-A6F1-50B069D780E7@public-files.de>
+	s=arc-20240116; t=1751370468; c=relaxed/simple;
+	bh=RE4tQl1bLw4Bdz6vsD8Am1PSure6jPJf0Xnvxh4XDDQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cJiFJFqx/Y2N8Njxn7w7YsHXH1Op0TwZrMSnSDssgwj3XByP4tlUsjYjcqEP6HJ9+WzVJaRCitqtgj2p3doepGT6CLsBbMkntwcTEczJPtwan8Y9pHDZXqrw6QsdKbiHXuih9vO0MvrcpiiLvHAPaZ44mE39PkzJi2pkTdKad5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FH7fCI/9; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5551a770828so2416019e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Jul 2025 04:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751370464; x=1751975264; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DoOnZ3Y5OuCPaJSe04VL4I/hU24z8+Cw4G4Ln/A/Lw8=;
+        b=FH7fCI/9/tdce4NJS75lYM78SS3W6Mdu7rFeaaqrZQ4uZ6sqzL3j4GWF+6qzoaBL0I
+         9ME2hs+zVtJBwP2m+ocTzhJGzJcCpVu1RuJ1KfPYTXPL5eyLVr9mpLmgoPQjBnfGB90b
+         nOVWQs253jSw2V2aSF2hJLQA3zGGAUG2H1yiqo1mDM1H9r+n9ky9pc8D7uLrEO/gdaLD
+         CEsY+0687RgJSYnKfp1R0Jk0NA6xSNQipInDUCVFjvdq0VrqF7Biu/KRH7DBkf882eR1
+         q3x5+GOiZzLXVScmzzasUQifWZ2TXLf7ixIf2RKgX1xnZynbd1bkox8SF8twdpArbyUF
+         omPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751370464; x=1751975264;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DoOnZ3Y5OuCPaJSe04VL4I/hU24z8+Cw4G4Ln/A/Lw8=;
+        b=dKSbt7en5epiI1/eldZLUPvfaIXQXU7YbJ/jibQ6hX7q1ucELMK+uJSH2HVkWw4Y6n
+         p28FKWFcinlryY4sLxoK950Ea1+bAhq3Gvur9vif4vt4Ytmc/ABxGsXuE40fJN+Bwyda
+         mUvFldPaEnlakHgR5JFlV2pBtyU84K/9e3XSDijMcFuOnn0XcSlEIkOCt/cyaybl8/xx
+         iPc5UlAAhr5vKzk3WdZhvXpSqyceBn5tUsoMSmmyxJLjZH8S4MgqkCXRyMFS9XkfP4yi
+         ImPd0+FZ40aHJuWCvMoznix2kDSnt2Ob83wYI6noMuYI0omaJ0vaEXazNLDWeeibCvXZ
+         CbUw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpISyS1ztmtliQDGavZGmm17ehEUshytP/SW5Z/Km2cZRHZw4A3IRm/bJu45AXoVKnmZHAeK+7Jg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjC2PX0Nh9JEY92F1s5DMxVA8KB89YgHptSE5n0dJoWe6WXvUZ
+	sD8gDgFFw/jrY9g1WiZmwcbJaMyFYbZ7H/GAL6KdOl9znJA4ZYYwqeQ8zvz87E7pEqE=
+X-Gm-Gg: ASbGncv3hnEDcoXThsasa0/srseO/VN9JOgYgbseP3iZKWdKcEZbQzfl4Im5/L8wPj/
+	Qit+GJv//j6LCPqZb9C2PL6RYgd3OzyU1HXpDYDV7xttkC//b+JMSqOwuWL8rvvgFntksKTeUcM
+	rbFWlowi51RCEravCihcfeV0dP0P/umQSCXV+i2kM3x8GNSpnOauxXDQ3f8sAjh+9WSurBm+g89
+	UuOgJnmq/eNhk4sCcgvspqyJk55S5xK7plL3llpKmqD29hBOp4OaJQRz0PER5Y74/KW2eeUQ9zt
+	8KrSpJAPMfl4fzE8geLuGcIYeeblz+8og4/y4neAV7QPW3rGYjxiC1Ax9+GWUqxTCL9eX5ZduwK
+	XT016b/sgVfX5DU6H1O4KJCsBjHJjcKz+vFlZ
+X-Google-Smtp-Source: AGHT+IFEnI8edSGqM0HnhUhPwpSZ3r1Gp9Zq3NgqwGOKGx5afReOxMS/S22NLgTkPgvFIWV29dureQ==
+X-Received: by 2002:a05:6512:b86:b0:553:5429:bb87 with SMTP id 2adb3069b0e04-5550b9eedfdmr4938325e87.36.1751370464185;
+        Tue, 01 Jul 2025 04:47:44 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1800592e87.248.2025.07.01.04.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 04:47:43 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Saravana Kannan <saravanak@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Peng Fan <peng.fan@oss.nxp.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Johan Hovold <johan@kernel.org>,
+	Maulik Shah <maulik.shah@oss.qualcomm.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
+Date: Tue,  1 Jul 2025 13:47:02 +0200
+Message-ID: <20250701114733.636510-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/x13cGSdXeC8a3AZxM86LjNC4QW9IjV/yKhknGpUw58qFVsmBUk
- ManrKwGyZL++1Rgi13uVdYel61STP231jKRojunlUxXrrplSqVsRsRTgN0qu03NSKmzdPP+
- gpXAspXnmqtd6y9LjyPcWQnM67Ya0vTSbd1yf8x+GGeBQvb4wKdZnQSto2cV3wE9BwRdIe7
- 75RVRsjc4O7gF9RO63S6w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:IwHMtIvjAYg=;YDRSDgoITeSH1NIvelvbRaSGEis
- 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
- QrcpWXy1JQV2vISFETlQ==
+Content-Transfer-Encoding: 8bit
 
-Am 1=2E Juli 2025 08:44:02 MESZ schrieb Krzysztof Kozlowski <krzk@kernel=2E=
-org>:
->On Sat, Jun 28, 2025 at 06:54:36PM +0200, Frank Wunderlich wrote:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->> In preparation for MT7988 and RSS/LRO allow the interrupt-names
->
->Why? What preparation, what is the purpose of adding the names, what do
->they solve?
+Changes in v3:
+	- Added a couple of patches to adress problems on some Renesas
+	platforms. Thanks Geert and Tomi for helping out!
+	- Adressed a few comments from Saravanna and Konrad.
+	- Added some tested-by tags.
 
-Devicetree handled by the mtk_eth_soc driver have
-a wild mix of shared and non-shared irq definitions
-accessed by index (shared use index 0,
-non-shared
-using 1+2)=2E Some soc have only 3 FE irqs (like mt7622)=2E
+Changes in v2:
+	- Well, quite a lot as I discovered various problems when doing
+	additional testing of corner-case. I suggest re-review from scratch,
+	even if I decided to keep some reviewed-by tags.
+	- Added patches to allow some drivers that needs to align or opt-out
+	from the new common behaviour in genpd.
 
-This makes it unclear which irq is used for what
-on which SoC=2E Adding names for irq cleans this a bit
-in device tree and driver=2E
+If a PM domain (genpd) is powered-on during boot, there is probably a good
+reason for it. Therefore it's known to be a bad idea to allow such genpd to be
+powered-off before all of its consumer devices have been probed. This series
+intends to fix this problem.
 
->> property=2E Also increase the maximum IRQ count to 8 (4 FE + 4 RSS),
->
->Why? There is no user of 8 items=2E
+We have been discussing these issues at LKML and at various Linux-conferences
+in the past. I have therefore tried to include the people I can recall being
+involved, but I may have forgotten some (my apologies), feel free to loop them
+in.
 
-MT7988 *with* RSS/LRO (not yet supported by driver
-yet,but i add the irqs in devicetree in this series)
-use 8 irqs,but RSS is optional and 4 irqs get working
-ethernet stack=2E
+I have tested this with QEMU with a bunch of local test-drivers and DT nodes.
+Let me know if you want me to share this code too.
 
-I hope this explanation makes things clearer=2E=2E=2E
+Please help review and test!
+Finally, a big thanks to Saravana for all the support!
 
->> but set boundaries for all compatibles same as irq count=2E
->
->Your patch does not do it=2E
-
-I set Min/max-items for interrupt names below like
-interrupts count defined=2E
-
->>=20
->> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
->> ---
->> v7: fixed wrong rebase
->> v6: new patch splitted from the mt7988 changes
->> ---
->>  =2E=2E=2E/devicetree/bindings/net/mediatek,net=2Eyaml | 38 +++++++++++=
-+++++++-
->>  1 file changed, 37 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/Documentation/devicetree/bindings/net/mediatek,net=2Eyaml =
-b/Documentation/devicetree/bindings/net/mediatek,net=2Eyaml
->> index 9e02fd80af83=2E=2E6672db206b38 100644
->> --- a/Documentation/devicetree/bindings/net/mediatek,net=2Eyaml
->> +++ b/Documentation/devicetree/bindings/net/mediatek,net=2Eyaml
->> @@ -40,7 +40,19 @@ properties:
->> =20
->>    interrupts:
->>      minItems: 1
->> -    maxItems: 4
->> +    maxItems: 8
->> +
->> +  interrupt-names:
->> +    minItems: 1
->> +    items:
->> +      - const: fe0
->> +      - const: fe1
->> +      - const: fe2
->> +      - const: fe3
->> +      - const: pdma0
->> +      - const: pdma1
->> +      - const: pdma2
->> +      - const: pdma3
->> =20
->>    power-domains:
->>      maxItems: 1
->> @@ -135,6 +147,10 @@ allOf:
->>            minItems: 3
->>            maxItems: 3
->> =20
->> +        interrupt-names:
->> +          minItems: 3
->> +          maxItems: 3
->> +
->>          clocks:
->>            minItems: 4
->>            maxItems: 4
->> @@ -166,6 +182,9 @@ allOf:
->>          interrupts:
->>            maxItems: 1
->> =20
->> +        interrupt-namess:
->> +          maxItems: 1
->> +
->>          clocks:
->>            minItems: 2
->>            maxItems: 2
->> @@ -192,6 +211,10 @@ allOf:
->>            minItems: 3
->>            maxItems: 3
->> =20
->> +        interrupt-names:
->> +          minItems: 3
->> +          maxItems: 3
->> +
->>          clocks:
->>            minItems: 11
->>            maxItems: 11
->> @@ -232,6 +255,10 @@ allOf:
->>            minItems: 3
->>            maxItems: 3
->> =20
->> +        interrupt-names:
->> +          minItems: 3
->> +          maxItems: 3
->> +
->>          clocks:
->>            minItems: 17
->>            maxItems: 17
->> @@ -274,6 +301,9 @@ allOf:
->>          interrupts:
->>            minItems: 4
->> =20
->> +        interrupt-names:
->> +          minItems: 4
->> +
->>          clocks:
->>            minItems: 15
->>            maxItems: 15
->> @@ -312,6 +342,9 @@ allOf:
->>          interrupts:
->>            minItems: 4
->> =20
->> +        interrupt-names:
->> +          minItems: 4
->
->8 interrupts is now valid?
->
->> +
->>          clocks:
->>            minItems: 15
->>            maxItems: 15
->> @@ -350,6 +383,9 @@ allOf:
->>          interrupts:
->>            minItems: 4
->> =20
->> +        interrupt-names:
->> +          minItems: 4
->
->So why sudenly this device gets 8 interrupts? This makes no sense,
->nothing explained in the commit msg=2E
-
-4 FrameEngine IRQs are required to be defined (currently 2 are used in dri=
-ver)=2E
-The other 4 are optional,but added in the devicetree
-to not run into problems supporting old devicetree
-when adding RSS/LRO to driver=2E
-
->I understand nothing from this patch and I already asked you to clearly
->explain why you are doing things=2E This patch on its own makes no sense=
-=2E
->
->Best regards,
->Krzysztof
->
+Kind regards
+Ulf Hansson
 
 
-regards Frank
+Saravana Kannan (1):
+  driver core: Add dev_set_drv_sync_state()
+
+Ulf Hansson (23):
+  pmdomain: renesas: rcar-sysc: Add genpd OF provider at
+    postcore_initcall
+  pmdomain: renesas: rmobile-sysc: Move init to postcore_initcall
+  pmdomain: renesas: rcar-gen4-sysc: Move init to postcore_initcall
+  pmdomain: core: Prevent registering devices before the bus
+  pmdomain: core: Add a bus and a driver for genpd providers
+  pmdomain: core: Add the genpd->dev to the genpd provider bus
+  pmdomain: core: Export a common ->sync_state() helper for genpd
+    providers
+  pmdomain: core: Prepare to add the common ->sync_state() support
+  soc/tegra: pmc: Opt-out from genpd's common ->sync_state() support
+  cpuidle: psci: Opt-out from genpd's common ->sync_state() support
+  cpuidle: riscv-sbi: Opt-out from genpd's common ->sync_state() support
+  pmdomain: qcom: rpmpd: Use of_genpd_sync_state()
+  pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
+  firmware/pmdomain: xilinx: Move ->sync_state() support to firmware
+    driver
+  firmware: xilinx: Don't share zynqmp_pm_init_finalize()
+  firmware: xilinx: Use of_genpd_sync_state()
+  driver core: Export get_dev_from_fwnode()
+  pmdomain: core: Add common ->sync_state() support for genpd providers
+  pmdomain: core: Default to use of_genpd_sync_state() for genpd
+    providers
+  pmdomain: core: Leave powered-on genpds on until late_initcall_sync
+  pmdomain: core: Leave powered-on genpds on until sync_state
+  cpuidle: psci: Drop redundant sync_state support
+  cpuidle: riscv-sbi: Drop redundant sync_state support
+
+ drivers/base/core.c                         |   8 +-
+ drivers/cpuidle/cpuidle-psci-domain.c       |  14 --
+ drivers/cpuidle/cpuidle-riscv-sbi.c         |  14 --
+ drivers/firmware/xilinx/zynqmp.c            |  18 +-
+ drivers/pmdomain/core.c                     | 211 ++++++++++++++++++--
+ drivers/pmdomain/qcom/rpmhpd.c              |   2 +
+ drivers/pmdomain/qcom/rpmpd.c               |   2 +
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c   |   2 +-
+ drivers/pmdomain/renesas/rcar-sysc.c        |  19 +-
+ drivers/pmdomain/renesas/rmobile-sysc.c     |   3 +-
+ drivers/pmdomain/xilinx/zynqmp-pm-domains.c |  16 --
+ drivers/soc/tegra/pmc.c                     |  26 ++-
+ include/linux/device.h                      |  13 ++
+ include/linux/firmware/xlnx-zynqmp.h        |   6 -
+ include/linux/pm_domain.h                   |  17 ++
+ 15 files changed, 291 insertions(+), 80 deletions(-)
+
+-- 
+2.43.0
+
 
