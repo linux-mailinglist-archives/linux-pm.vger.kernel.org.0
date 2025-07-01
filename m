@@ -1,130 +1,148 @@
-Return-Path: <linux-pm+bounces-29884-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29885-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5329AEF374
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:35:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D640AEF3E4
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 11:49:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 406757A7BE5
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 09:34:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E84631BC2CD6
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Jul 2025 09:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2102125CC64;
-	Tue,  1 Jul 2025 09:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EDB425DAFF;
+	Tue,  1 Jul 2025 09:49:51 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0491B130A73;
-	Tue,  1 Jul 2025 09:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43988221281;
+	Tue,  1 Jul 2025 09:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751362549; cv=none; b=sPqFAX18wSIqjexCAA3qars4pZ6f+KaTRP3Gq8FiRE5BFbQKtyjcIq9+qR2pjbz3AJqkaA7Fa+jFAoP9Cvx7sTt1Y9JOLaUPzYDHi6e8Rs1ViDWcCYRXkEZLRxtve3C3Et9IaGNoXNvo+ZotpYTuGWVpyxIoaDwL2QZ0if5+EwA=
+	t=1751363391; cv=none; b=VgMTux14ulhr44bJ2C1PqenOc6qhftpovOzFGslkOPhdNUi1Sg16LGKYyfYXu4lD6fTSrmx2byZ/NEOvwPXXxVnxZL2t46dApWZOWkuPIZLQaDfJOnbUjwZcxXpV9yxlZFw9VhHvDuFuY0of6HvX4Y9dI3a3Mq0aQBQ21I4NjYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751362549; c=relaxed/simple;
-	bh=4/yZRVhckkkdnIhk42y14ft4PKjDzeXsk8J1u4zFlxA=;
+	s=arc-20240116; t=1751363391; c=relaxed/simple;
+	bh=RnXlg8AJ+ernY7eQdJmoxzM3rqTYCMTSE4KMB8mRE2s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kCzYOE7TobAaZ2sngCM73WjPDKF+wbUruYIpUC92tiMRLv4wljjVNT8xS7AZZ922sVSE4avwLLZ5Pbrrug8b3AcIV54rOb2fUeDhq1YtPVTQswk2A7K9+JP6MpsbW1Ashw3jitmWdiTOF8dUQc/37enVh02BKIE/oXXsmI2HaYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.47
+	 To:Cc:Content-Type; b=SSrMR3J8m3e+tBlDY223OXx2sL1RuVvVahjqwAENcqkqDrI/i+ail1ba+/fz3cIPgN0EunJAbhnclUQRHfHIhM0EK2V2YaAY8Al8YMrp5pvxkNnc3gY+WlLPA6cx15hLvK4yvusxelsXQVLkVqTBpwgajoQqOM45QOB290nySwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4e8088896b7so4236319137.1;
-        Tue, 01 Jul 2025 02:35:46 -0700 (PDT)
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4e7fac85892so1447888137.3;
+        Tue, 01 Jul 2025 02:49:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751362544; x=1751967344;
+        d=1e100.net; s=20230601; t=1751363387; x=1751968187;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UkC7eZA+uDX58TZWGGsjh/Z3xk06FWPrdqdvUqT03SQ=;
-        b=ZaYzJ5kQJVNwxiUVxUKEzrWJgxUDy7LqEZAzzU3sxvi2k8wZbu5545+4+TgZUfjvik
-         krh9vBuwBMk3R3w4SuKYrGQZiK/H2jRJZPlpzBLRijm9XmIrkBg/xQyhZMzsxJm2e0Z6
-         7leFOeMp/FgAGuhFhFWW6poHSYjm4s5M0UB095hwusu2zXCPGVFrm3E6kUTiv3zpk+0S
-         T5g7a2KJzMZYQXTIe/Bpq63vYip4EvDmS08H9lWCHkAnE3OpcQrxnXS41Vf6PJ/fxoLj
-         +fVLE92j7XUH9tphECH/UPK+6wQnAT5i8hWzn0xkRZZX8HIoQBbvzeXUEz0WoVGroHcx
-         4MAg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTiINld3MnAEzx9XPwMncMmNTRgSLp7Rum9MFhftkIln4Zex13K/RRyy4+EidDq4P20f5yItWKy4Oy07ouKLucAmI=@vger.kernel.org, AJvYcCVw4LuD0ym/ML5ZlcwS6QOLMGgMqZzvX6NK4i39kf/0Hs23CGRfniZM+/W4cjBArQJ4XTCoHp+vWd9jrTJ9yhAVpAQ=@vger.kernel.org, AJvYcCVzwnqDRsoCUAxqc6DFcy2DeTYwshY9Y5ustBwtRJGMk3aNef0F8C16BVh2TEIIL591WcXRIUMeP80=@vger.kernel.org, AJvYcCXqjAvZNQ72KkJaGKdftz/lk1ItXvE2u+BQI2cngbS2u6T/XF6tUzt1wGELyzMLRX0j/FKxMDKsU8MjdSE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAUlEPZbSQbEr2d/Ut5iN2/tzJdJx0SHJ3G/xxPS3OPYpC2a3t
-	QZjZUoPkIe/ZF6m/lKwdrqqxTuSFLv4aZUdKpdrIh55xJVGEi+oUqAdqsy8eyS3N
-X-Gm-Gg: ASbGncsRLE56fAd0ALgklIrSCiePCRphnCkuVRCOv1I+fZlnXe+/EbwgQLf7p7bG8BT
-	3n9+cBBUDMFI855s8XayxscRWJT8cQuVQgmYEGpL0T7/kKboIw6JoV31y5lfIclcghzvDOVGj3o
-	HIFsf9sKD1NkKVTfIaqi/aoufqQ0yus4O6Dqc26mJSBWJfVbwAGqrnB2Xx8tVXTKZ6ZZRssTItp
-	Er927C5DpUFYhSsyDd2xzNbSKqtGLEThHvifDvDRcCnVlDJkGJgTstnCu6pFtKgqIZGuRVztCqz
-	ETmUD06t6UkLUzjTRvQ2ebu6BGHI7n+GH2Qqqjpvrz6Tq4Mo6dWMxiKaHEkc5Tfw/LFmIthVSMY
-	3BkfJeVHbg6qwwul1ayW2frjryj5m
-X-Google-Smtp-Source: AGHT+IHN0HIvXUUXf6jV1T2+PNT+34EOQs+EDUxlGDFe64weAado3IEqoGBw3DS+TSkmuNovDGFDKA==
-X-Received: by 2002:a05:6102:548f:b0:4ec:e1fa:ed7b with SMTP id ada2fe7eead31-4f143bec2fdmr1604920137.9.1751362539179;
-        Tue, 01 Jul 2025 02:35:39 -0700 (PDT)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4ee4cbbad44sm1463629137.24.2025.07.01.02.35.38
+        bh=3hpOzG4bA/3/H3ZPetNO4dpuhh7/G4WIu5rMJYldPpA=;
+        b=LG3JDaXNkW05tZrshzryV6Wuxm2SgD+QBnq4kY3ZIBe3DkwTzw+m+Ru0f6zBKOQF1f
+         4nFU4uZT8lThZrALFcsQP6J4/7vWgCoigtUQjJxoJ3OZcY8lwB16l83ect3MRXw+SfRI
+         UEd+QLHopAKXBNyseLAmj0A5x9W1Itr51ew+1y7XjHYECp/5sbMibHGzYzOUN/ojsoqU
+         fZbnAAkfoKQpvtOwtPWMSvCvxUGIaPsOQy/Vd03utsL6xtuTyCkSZJTeVEODxpsKPHm4
+         fFNbDc42Zi+QBRmBmCBbSxAdN0Lhs/pYsRjEObVt2YLrhj6fk8kQDQ4UrIqmDq36J26+
+         k3bA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMJEH+gd0ifpjpa05RhrCgReOJ5D3SioVlOxl/RnSyDe4AIbb4YCmmIMYipfeHj06TeqFuoulE9jeATToVR1lh+xU=@vger.kernel.org, AJvYcCX2q+lCpXlacXDV9yle9xldMWluFUTOFzva+H7ANgrHlg2fFNpInds6w/hGVql7rgAT7u0+oe7W/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyCoPdGr+kIEM25RAGUAvFZjjz560qe8JdFa7IvlL3EwYhGw+0
+	x0Vr7EeOsEffPaFLSyMCKIcHoZ34iNSIj4H1sej1Jpq1gYQZQHE6Xfo+Bkh55SO7
+X-Gm-Gg: ASbGncsftiO1aICpu5bF2QCw1npIHpMh3lQYnYeYw0LCocUPaPFDT/UiIJprqyU7jsR
+	m3IHgyhY4d5oK8KIemgbrr4BmR0h/HBzfiej7iZmW2+WrXPK/9B9gXOZ6c7en2d8UCzdeCStB6u
+	Kq9OJHuSuKPBHIdrnsZuT8wiR5Q0IoWc4nGliSbLCa/q0PazfE3bMack6CDOqQtz1kIB1MrT/Vz
+	GuQ9FBTeowPiDdbmxU9nOvZKtsKiN+z6pkMhvfcFh+XwrX5oCp2u9w1ON4gG8l6dqx/MarUGrEU
+	PpzSwc4aiu7yIJuU7U9Qd3Tuk3nmwRZkQbUKBoVfJDjKQHZz7/aibDc2bAPtLyy+Mu3cIriavbO
+	bxdHfaPBC+MpBdqaNZIXS7UhVbw8s
+X-Google-Smtp-Source: AGHT+IHqESHLBGJ1I4l6vKdVDE4Zn5SH3RV6UphFPZfQmzIYJ6JbtPuV73ydvgdxz4LO9uhJswWStA==
+X-Received: by 2002:a05:6102:6101:20b0:4e5:9426:f9e6 with SMTP id ada2fe7eead31-4eead771486mr6213045137.23.1751363387090;
+        Tue, 01 Jul 2025 02:49:47 -0700 (PDT)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4ee4cc5f0e6sm1498589137.30.2025.07.01.02.49.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Jul 2025 02:35:38 -0700 (PDT)
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5315ebfd92cso3354139e0c.0;
-        Tue, 01 Jul 2025 02:35:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUkK8gWl0ez8IEUuAM6L9k6hdXryAQ3cdS3wUR4WxeoN4TyJpww9nhpOS9zQThaBMDEMfB+nnNrpTNUruo=@vger.kernel.org, AJvYcCUrN+PVrwZvFdiAY3LYuEsaagXEg6MNSDaBivjld2193yiuIN7cyXJ3KaBmiwJ/hYj/p5KBC1wjrZ/MlDK4X+NvXdQ=@vger.kernel.org, AJvYcCWMVK9fdFJQ6K+r1IO8S6/h4OK7XB2EBOaaLxtuZHDwPJK5wJCmEO/JTZkn1hbTUjIlYuIZ5KRxt16aHYA6jzgnHaE=@vger.kernel.org, AJvYcCWmXnjbOQ4i9bQXoD2im1dxD0xnQqYFAz0ENRNRD6QZl4s414xK6wvaCHqLxHaASxhifAWjPmR/2Rs=@vger.kernel.org
-X-Received: by 2002:a05:6122:811b:20b0:531:bb45:18b1 with SMTP id
- 71dfb90a1353d-53425617336mr1027771e0c.7.1751362537889; Tue, 01 Jul 2025
- 02:35:37 -0700 (PDT)
+        Tue, 01 Jul 2025 02:49:46 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-52b2290e28eso1245049e0c.3;
+        Tue, 01 Jul 2025 02:49:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVBIAeKYW61CLH2s5ruoTis/HI74XKb+xrNtCGTz5zQ83PPGDMfLOJRCm1l32cI7BnyZTixEEBB4A==@vger.kernel.org, AJvYcCVfQSbeffy4Bu0JX3NMpQcC4IbzrZTBTA+2T6TQUm2S591tH9esL/FZBLGpdDgdsAM+Wj9RX8DBMtl3VmxLcpifWD8=@vger.kernel.org
+X-Received: by 2002:a05:6102:e0d:b0:4e1:52fa:748d with SMTP id
+ ada2fe7eead31-4ee4f774e46mr9862697137.15.1751363386437; Tue, 01 Jul 2025
+ 02:49:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250620160834242DDgecL4HF8b1OBLiZnnrl@zte.com.cn>
-In-Reply-To: <20250620160834242DDgecL4HF8b1OBLiZnnrl@zte.com.cn>
+References: <878qlagmrq.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <878qlagmrq.wl-kuninori.morimoto.gx@renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 1 Jul 2025 11:35:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVEkq_W99XuKA9KJW5Bm156ZBZowH2gmg2iY27y2fDFug@mail.gmail.com>
-X-Gm-Features: Ac12FXxtXuRYLmTpc7TJbisFnd7Fe3xZafLHlyEUkNhw-qkfFhNc1GHH1T18Cpo
-Message-ID: <CAMuHMdVEkq_W99XuKA9KJW5Bm156ZBZowH2gmg2iY27y2fDFug@mail.gmail.com>
-Subject: Re: [PATCH v3] pmdomain: Use str_enable_disable() and str_on_off() helpers
-To: shao.mingyin@zte.com.cn
-Cc: geert+renesas@glider.be, changhuang.liang@starfivetech.com, 
-	magnus.damm@gmail.com, heiko@sntech.de, alim.akhtar@samsung.com, 
-	walker.chen@starfivetech.com, sebastian.reichel@collabora.com, 
-	detlev.casanova@collabora.com, finley.xiao@rock-chips.com, 
-	shawn.lin@rock-chips.com, pgwipeout@gmail.com, linux-pm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, yang.yang29@zte.com.cn, 
-	xu.xin16@zte.com.cn, yang.tao172@zte.com.cn, ye.xingchen@zte.com.cn
+Date: Tue, 1 Jul 2025 11:49:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVqqCX1=2j740xnU6C=C8x=K-ayQ-uSbmafPVaa-nGtMA@mail.gmail.com>
+X-Gm-Features: Ac12FXxx2fEEmHjOdGwvXVeE_pFneiFDpCS5yRUBYJfKgWs1i5G42mN_PEnt1xA
+Message-ID: <CAMuHMdVqqCX1=2j740xnU6C=C8x=K-ayQ-uSbmafPVaa-nGtMA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pmdomain: renesas: sort Renesas Kconfig configs
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Shao,
+Hi Morimoto-san,
 
-On Fri, 20 Jun 2025 at 10:09, <shao.mingyin@zte.com.cn> wrote:
-> From: Shao Mingyin <shao.mingyin@zte.com.cn>
+On Mon, 30 Jun 2025 at 01:18, Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+> Renesas Kconfig is using "SoC serial number" for CONFIG symbol, but is
+> using "SoC chip name" for menu description. Because of it, it looks
+> random order when we run "make menuconfig".
 >
-> Use str_enable_disable() and str_on_off() helper instead of open
-> coding the same.
+> commit 6d5aded8d57f ("soc: renesas: Sort driver description title")
+> sorted Renesas Kconfig is by menu description title order, but it makes
+> confusable to add new config.
 >
-> Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
-> Reviewed-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
-> v3:
-> preserve the original patch format to avoid whitespace-damaged
->  drivers/pmdomain/renesas/rcar-gen4-sysc.c    | 3 ++-
->  drivers/pmdomain/renesas/rcar-sysc.c         | 3 ++-
->  drivers/pmdomain/rockchip/pm-domains.c       | 3 ++-
->  drivers/pmdomain/samsung/exynos-pm-domains.c | 6 +++---
->  drivers/pmdomain/starfive/jh71xx-pmu.c       | 7 ++++---
->  5 files changed, 13 insertions(+), 9 deletions(-)
+> Let's unify "System Controller support for ${CHIP_NUMBER} (${CHIP_NAME}).
 >
-> diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-> index e001b5c25bed..c8aa7538e95f 100644
-> --- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-> +++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-> @@ -18,6 +18,7 @@
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/types.h>
-> +#include <linux/string_choices.h>
+> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-Please insert new includes alphabetically, like in Krzysztof's original [1],
-for which I already provided my Rb-tag.
+Thanks for your patch!
 
-[1] https://lore.kernel.org/all/CAMuHMdXJ57mATWW4AnBedn+D7TQ4PadkJ642daquFtAo=wZFrQ@mail.gmail.com/
+> --- a/drivers/pmdomain/renesas/Kconfig
+> +++ b/drivers/pmdomain/renesas/Kconfig
+> @@ -2,114 +2,116 @@
+>  if SOC_RENESAS
+>  menu "Renesas PM Domains"
+>
+> +# SoC Type
+
+"# Family"?
+
+>  config SYSC_RCAR
+>         bool "System Controller support for R-Car" if COMPILE_TEST
+>
+>  config SYSC_RCAR_GEN4
+>         bool "System Controller support for R-Car Gen4" if COMPILE_TEST
+>
+> -config SYSC_R8A77995
+> -       bool "System Controller support for R-Car D3" if COMPILE_TEST
+> +config SYSC_RMOBILE
+> +       bool "System Controller support for R-Mobile" if COMPILE_TEST
+> +
+> +# SoC
+> +config SYSC_R8A7742
+> +       bool "System Controller support for R8A7742 (RZ/G1H)" if COMPILE_TEST
+>         select SYSC_RCAR
+
+[...]
+
+> -config SYSC_R8A779F0
+> -       bool "System Controller support for R-Car S4-8" if COMPILE_TEST
+> -       select SYSC_RCAR_GEN4
+> +config SYSC_R8A7791
+> +       bool "System Controller support for R8A7791 (R-Car M2-W/N)" if COMPILE_TEST
+
+"R8A7791/R8A7793"?
+
+> +       select SYSC_RCAR
+>
+
+The rest LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
