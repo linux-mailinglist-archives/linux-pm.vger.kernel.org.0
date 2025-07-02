@@ -1,201 +1,275 @@
-Return-Path: <linux-pm+bounces-29977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 386DAAF1526
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 14:15:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9610FAF5A46
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 15:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E0717AD49B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 12:12:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7BDE442FE7
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 13:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C954E26D4E4;
-	Wed,  2 Jul 2025 12:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA3327E1DC;
+	Wed,  2 Jul 2025 13:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZU28WMT7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JBZ3QUvR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21CE6272E7A
-	for <linux-pm@vger.kernel.org>; Wed,  2 Jul 2025 12:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3812625CC40;
+	Wed,  2 Jul 2025 13:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751458380; cv=none; b=VIf7DWlHWxJI/ChZQTT8sYZhvTAoqZngPrjAsXpgKvZvVeExXadFoUpw2FrVV1Hjju0MCNOeB9znHDwGgXxMt4BtRLSzPgPu9ph0G12n7HIUbwBFmUZvu/NYbydn+aohrvaskfC1MjwGhDeRXOKNFhRj8VWqlHLs7aVj/qlnvew=
+	t=1751464495; cv=none; b=WLGvYGXKAS3TT+YGOZXlj81jNEl/voM3k6wZ2ZT2NKplGlSp2O3X+Ig3a5hhFdclvCs4OGqYx4VW4aJK9BMGO+Y2N1kqH5HFV2hwQKcS/QNsVzOvS5Rr299fHYWZ7bh71fgSiw4YLjhveruabAUpYO1iZUSraOxSWzkPAmqnjcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751458380; c=relaxed/simple;
-	bh=oClDJcT0mTELwPMf1uIqlxpRObpfhkuJDcTpu4d7ylI=;
+	s=arc-20240116; t=1751464495; c=relaxed/simple;
+	bh=3zvdBVFljoLJVgwcrueuE3wpbqS6pt/N2C0eXTnOCj4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kLiZLgdmOPjQh3KI1m0PYPUzsLmAJU5eno4BKARJx1wod4s7VKz75dkWMBlyDX9X/woW10LgGzs+4Sg+qg3KVh9f2XhgsRji9pCHn+SwTi3jAr56mlSd0Z3oYVNeoxYUY6KlNtGW3Rbyl4xq/la7tjdzhUlBt05Hoi2pXea7bYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZU28WMT7; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e8187601f85so5975885276.2
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jul 2025 05:12:57 -0700 (PDT)
+	 To:Cc:Content-Type; b=qpOM2GaldHOs2IBDSZLdPK/9wlIbNVVcdDrDXUXbBvzsQ4iKBLYrMP6ch0HHn8v+Ph2cmKUyHShTwtANDmuv7JGYuB0rhrzNgq1OMK4vUy4t8Cs7Yp+JCsK+rjSF5fULUwjO+OI07H9J/ha5uGNJXS6/6AtEmCGF7jurs+qIF3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JBZ3QUvR; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-313862d48e7so820254a91.1;
+        Wed, 02 Jul 2025 06:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751458377; x=1752063177; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gk4s+SONPpEB34QsQQb13XEXrE5uFgXKOQWW3pBsTo=;
-        b=ZU28WMT7BcvN/b+AqfWX8nv6lqhMzC6PC4DdDm2j5uJVs79wLIa8LdUIviL6C7YjL1
-         GMcdbXoY3xo7hW5zBHIE7xHjDNz9r4ZaFjXE1bzPil/JUC9UhKGyVUsfzZOZ8inqN62J
-         Plfj2RXo6eL4sNHPV3cRUhwPnOZwi/6vgEOm71FPCvOVNe04b20L9eUMFXx/E8l4Wdrf
-         qIPn+QAgvh8pxl252LaP3bHn8u+W2uqnpIdTf9lQE1vZhAf15zV6jipEMgbUJ86xWPJu
-         rwUOYzW9qguirxoq7aqMyOfL+8vxyxu+V+dddJOj13U55QcP4o79Zjdwi97WpQfRUy+Z
-         1rZw==
+        d=gmail.com; s=20230601; t=1751464493; x=1752069293; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=guEO+X2TlstsCPyD5rnbkNBVqzNfH7Sc2OBJNfyq+ZM=;
+        b=JBZ3QUvR831gRYUkSr8puPn+p90QHa+5N5SwLfJ5zbDe4bp1OZYKvq7l31zgrv+gJX
+         GVm8v7TIWN0LCQh6R9C4HDy91haaI/zSY9F0VP28EemCsc+NcE/BKV/CuLbInWns8+e+
+         SxEfXICPXGCrnnQkoFGbBwW/XZcSuIco97NF0Ms7UoSWkxoZXtg8cljg2RkzYbswDOTF
+         RPaUh1NqCwNUf+SPOfZjFYUQH+CEsi1moL1+TOslNMCiQRa2lBkqVRsn0iCc9Vpq74Hp
+         FK2iK/NFjJ+G1D3xBhhh/JIGmlYZ0qgSTSaV/vqSivTE4Tl2spmKnfvLvTn8B0rCVBWY
+         b2sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751458377; x=1752063177;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9gk4s+SONPpEB34QsQQb13XEXrE5uFgXKOQWW3pBsTo=;
-        b=XsYrtzKMDXImCD3ZVX62wC7PLc0JHEhDU0SPcJvum+TYwM/y1MHgOnL+bCJphgVYK9
-         OTi7v1r1inP2wA78Qm7sbAxa4wzhNkn9xgdgas1ACUGhfsREO+umA1O10XR4HHmhTHSK
-         H7bn8DbW6oYgoZRsWtjd9vqhbNVQsdVV5vp3qL7z0fSdzcIi0O4hQnRHaMLuDNbq2p4A
-         LED4j9QBC20LdJ4I6DG4164KX12lRvyyG2tDWLANXUC7A2tw0OKzYO5oyOgCUtDzeiZh
-         oIxA4fKox5O+v0EjxdbCk99tc8tbHbv0PldExZYdgh6iuAEph/LnzWcu+xC9CVtdxvg2
-         pimg==
-X-Forwarded-Encrypted: i=1; AJvYcCXrdFBI0caGl3nQuOfXvUuDWRCXevp0eEvSoaZX2RzmWjInh4Vy78uOpfUCd4yetfghvcVPMZnGhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvZiJLbwtBV3INkN5+yNUtUzRS3N+TIIXPUT7ToYPNjpm45KH7
-	GWWrBLQlyViGZUFoerDFt8T4DPpG9WVChSRs2yj3pHRrvsJGNQdXL3ynRevzGK85sWsfLwjhHDe
-	YaI62h0wbnQKsjQ6Osv92UeUqmKZDO3ztUzJVke03uQ==
-X-Gm-Gg: ASbGncvBmzZag3Lus7DwVPSuoqBpmHO2GEHmI8Gmhb60+9kKP88E6iFPBSgjse4juA+
-	t1Ih4/AfKXH05perbImBxkLjYcvUBnOXbrLnTWw8+MZumq2kMxAr8IXqV3gslEAuXBpcovse/wh
-	julw1MkwxTPZxQPFLFAoc2sX4W8H1FYcbhUI8gndbOD0vkN0ME7bFU/Vs=
-X-Google-Smtp-Source: AGHT+IG3NWai+ZP/un1xZG3CzZCkLzSMLJaFL3JR+EQ/9jK23FydSpvbz+8ZOtgLz/en/MyFioW+0zHkRi1p3FqLmno=
-X-Received: by 2002:a05:690c:4a0b:b0:6fb:a696:b23b with SMTP id
- 00721157ae682-7164d571f91mr35480447b3.33.1751458376965; Wed, 02 Jul 2025
- 05:12:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751464493; x=1752069293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=guEO+X2TlstsCPyD5rnbkNBVqzNfH7Sc2OBJNfyq+ZM=;
+        b=PukY1uSRWghBj8GzfsD5+I0KLrxvJzD4rSr7ZplxNcRcl6BYjcrjVn98kTNidU7lNd
+         iv4avIsBjC7aYI1er/T1vXEHs7OQlrDHZiJVJg3B5H9/CNqMAVvVBPbxhEydHEAZ8sIi
+         U+MtLR72kA8yb9zv3TwFH70wWlPhQV22cyvYM1F4b+/ApcgKV22mpOlkhl/3/EWGLr7z
+         Rsk0pSNNSbWSGihxO48TgI8slrIbeI4IrZhJ6+pZZjvnlX1J1NHOTnG/ssSafjN1iswW
+         3B9bybVcEeqNpzZ/yo/Q/Ikr2QlBt1UrCEOIuzqtnG7JYwQtPMp5Ul4SCc04VL3DH/EG
+         kTjA==
+X-Forwarded-Encrypted: i=1; AJvYcCVlBMWVnArbNeB8RN8pNluNNZd8yKxoG6b212hpetpDNV5RpK4irq9ccY+MqvJXACTv5K2S6qiZBG0=@vger.kernel.org, AJvYcCW7jHjsr9q0ZkzsXoVclK7mx4cePTCHZwwbHJlgSblO/xfbKtYI5l0sX6eQn8wulwV/NqMnTdtg6WdGJ6g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUUeYTSRDP5ecDRVUOz64ehTrooJjqZSqYnE0Yq7rXusTUxjMm
+	V7DboI4ckhnrqvBywGFCDUjeAb5xW84ah7NY2ipHhHuaWj+9QJgvdLKzXwo/4O4tKWIHD0adGB6
+	dSXUVeuJu7gd30rxWSLi2pRqMGmFy4GOsIg==
+X-Gm-Gg: ASbGncsAdv2zCHzncTCaUgH3AcHFLumXX9plxGGPuNgpi/3zpgiNRioyo//MFINAS8B
+	RAUdbJ9yNnuJ5Uxxxn1PZ3WsWXCZbjiLVQ0hyjkyC+V7TceyFvclE1lFpQVDD4KmU4uiv3efVC8
+	eV0l5kw21uzNZkErZZyZQdDqF9XLI6zZ4Y4zvYhVA7cO/Q
+X-Google-Smtp-Source: AGHT+IGz9xeZKYvy5a2NukWtiE7Le0rFEBMYvJw3zExK04u12YuSeV52WPllxSnaAX6EzjHaGyjLIxgzJ53817LFsk4=
+X-Received: by 2002:a17:90b:35c5:b0:314:2d38:3e4d with SMTP id
+ 98e67ed59e1d1-31a90bdc410mr1767000a91.3.1751464493199; Wed, 02 Jul 2025
+ 06:54:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
- <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
- <CAPDyKFrO9rb0eDb2qO+EGaVjOFG=7emgca8511XACDhWY=dt5g@mail.gmail.com>
- <7hsejzp4xg.fsf@baylibre.com> <CAPDyKFo-iPBPgkM43q+5cGR2sptkLk4E6TAERCQbCu24o1RfFQ@mail.gmail.com>
- <7hcyb1os9y.fsf@baylibre.com> <CAPDyKFpTgAmLBq2ZExPoxWM0wL756zH96vW7M6wHSA1MTTG1wA@mail.gmail.com>
- <7hjz4tnlg6.fsf@baylibre.com>
-In-Reply-To: <7hjz4tnlg6.fsf@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 2 Jul 2025 14:12:20 +0200
-X-Gm-Features: Ac12FXx099YexnSX3D-jd8HuUZnwt5D-jZ9PNizBBy6pBlCC473WjWV1dygsTok
-Message-ID: <CAPDyKFrY2kNaP=Hk-81B4WEGxyKUTYqBWJHQKtHnyTPWTFUOEQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 2/2] pmdomain: core: add support for subdomains
- using power-domain-map
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20250630104116.3050306-1-guoqing.zhang@amd.com>
+ <20250630104116.3050306-4-guoqing.zhang@amd.com> <8806781b-90d1-4b99-a798-dd1d29d4c8c0@amd.com>
+ <8eb1700d-4d60-4a1e-9d09-718f65baaf1e@amd.com> <019a15d5-142f-4761-9408-58c103d3922b@amd.com>
+ <CADnq5_PHfNTbLL7Xmb9HFgtZemDVaLSqbrONWWEf9hjwk1rF1Q@mail.gmail.com> <1e82f0af-daf6-4dd6-bc43-2969ac970589@amd.com>
+In-Reply-To: <1e82f0af-daf6-4dd6-bc43-2969ac970589@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Wed, 2 Jul 2025 09:54:39 -0400
+X-Gm-Features: Ac12FXyRsLYdypBJymECkaaNjTssfLfSQkcuc1lxngJzDfTT75YxJid0fH1rcK4
+Message-ID: <CADnq5_M_NWSbqJUrBcDy_bARrPcQDDhSvHCKCqEoTWijBWHxGg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] drm/amdgpu: skip kfd resume_process for dev_pm_ops.thaw()
+To: Sam <guoqzhan@amd.com>
+Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"Zhang, GuoQing (Sam)" <GuoQing.Zhang@amd.com>, "rafael@kernel.org" <rafael@kernel.org>, 
+	"len.brown@intel.com" <len.brown@intel.com>, "pavel@kernel.org" <pavel@kernel.org>, 
+	"Deucher, Alexander" <Alexander.Deucher@amd.com>, 
+	"Limonciello, Mario" <Mario.Limonciello@amd.com>, "Lazar, Lijo" <Lijo.Lazar@amd.com>, 
+	"Zhao, Victor" <Victor.Zhao@amd.com>, "Chang, HaiJun" <HaiJun.Chang@amd.com>, 
+	"Ma, Qing (Mark)" <Qing.Ma@amd.com>, 
+	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 30 Jun 2025 at 20:17, Kevin Hilman <khilman@baylibre.com> wrote:
+On Wed, Jul 2, 2025 at 3:24=E2=80=AFAM Sam <guoqzhan@amd.com> wrote:
 >
-> Ulf Hansson <ulf.hansson@linaro.org> writes:
 >
-> > [...]
+> On 2025/7/2 00:07, Alex Deucher wrote:
+> > On Tue, Jul 1, 2025 at 4:32=E2=80=AFAM Christian K=C3=B6nig <christian.=
+koenig@amd.com> wrote:
+> >> On 01.07.25 10:03, Zhang, GuoQing (Sam) wrote:
+> >>> thaw() is called before writing the hiberation image to swap disk. Se=
+e
+> >>> the doc here.
+> >>> https://github.com/torvalds/linux/blob/v6.14/Documentation/driver-api=
+/pm/devices.rst?plain=3D1#L552 <https://github.com/torvalds/linux/blob/v6.1=
+4/Documentation/driver-api/pm/devices.rst?plain=3D1#L552>
+> >>>
+> >>> And amdgpu implemented thaw() callback by calling amdgpu_device_resum=
+e().
+> >>> https://github.com/torvalds/linux/blob/v6.14/drivers/gpu/drm/amd/amdg=
+pu/amdgpu_drv.c#L2572 <https://github.com/torvalds/linux/blob/v6.14/drivers=
+/gpu/drm/amd/amdgpu/amdgpu_drv.c#L2572>
+> >>>
+> >>> This patch is skip amdgpu_amdkfd_resume_process() call in thaw() duri=
+ng
+> >>> hibernation. it is not skipped in restore() during resume from
+> >>> hibernation when system boot again.
+> >>>
+> >>>
+> >>> I just found the following kernel doc. Thaw() is intended to resume t=
+he
+> >>> storage device for saving the hibernation image.
+> >> Ah, that makes much more sense.
+> >>
+> >>> Our GPU is not involved
+> >>> in it, it is not necessary to resume our GPU in thaw().
+> >>> https://github.com/torvalds/linux/blob/v6.14/Documentation/power/pci.=
+rst?plain=3D1#L588 <https://github.com/torvalds/linux/blob/v6.14/Documentat=
+ion/power/pci.rst?plain=3D1#L588>
+> >>>
+> >>> So another implementation is to remove the amdgpu_device_resume() cal=
+l
+> >>> in amdgpu_pmops_thaw(), and skip amdgpu_device_ip_suspend() call in
+> >>> amdgpu_pci_shutdown()for hibernation.
+> >>> Initial tests show it's working fine for hibernation successful case.
+> >>> Should I switch to this implementation?
+> >> No idea. Alex and the KFD guys need to take a look at that.
+> >>
+> >>> But thaw() is also called to restore the GPU when hibernation is abor=
+ted
+> >>> due to some error in hibernation image creation stage. In this case,
+> >>> amdgpu_device_resume() is needed in thaw().
+> >>>
+> >>> So I need a method to check if hibernation is aborted or not to
+> >>> conditionally skip amdgpu_device_resume() in thaw(). Currently I don'=
+t
+> >>> know how to do this.
+> >> Yeah that approach here looks fishy to me, but I don't know how to pro=
+perly fix it either.
+> >>
+> >> @Alex any idea?
+> > Yeah, I'm not sure how to handle that.  I don't see a way to avoid
+> > having all of the callbacks.  We could ideally skip some of the steps.
+> > Maybe we could optimize the freeze and thaw routines if we had some
+> > hint from the pm core about why we were getting called.  E.g., thaw
+> > after a failed hibernation restore.
 > >
-> >> I've done an implementation with struct device_node *.  This works
-> >> better (IMO) than struct of_phandle_args * because the caller (in my
-> >> case scmi_pm_domain.c) already has device nodes, but not phandle args.
-> >>
-> >> The result will be that the pmdomain helper will call
-> >> pm_genpd_add_subdomain() instead of of_genpd_add_subdomain().
-> >>
-> >> Below[1] is the current working version, which includes adding the
-> >> helper to the PM domain core and showing the usage by the SCMI provider.
-> >>
-> >> How does this look?
-> >
-> > It's a lot better in my opinion. Although, I have a few comments below.
-> >
-> >>
-> >> Note that doing this at provider creation time instead of
-> >> <genpd>->attach_dev() time will require some changes to
-> >> of_parse_phandle_with_args_map() because that function expects to be
-> >> called for a device that has a `power-domains = <provider>` property,
-> >> not for the provider itself.  But I have it working with some local
-> >> changes to make that helper work if called for the provider directly.
-> >> If you're OK with the PM domains approach, I'll post another rev of this
-> >> series which includes the OF changes for review by DT maintainers.
-> >>
-> >> Kevin
-> >>
-> >> [1]
-> >> ---
-> >>  drivers/pmdomain/arm/scmi_pm_domain.c | 12 ++++++++--
-> >>  drivers/pmdomain/core.c               | 34 +++++++++++++++++++++++++++
-> >>  include/linux/pm_domain.h             | 11 ++++++++-
-> >>  3 files changed, 54 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-> >> index a7784a8bb5db..8197447e9d17 100644
-> >> --- a/drivers/pmdomain/arm/scmi_pm_domain.c
-> >> +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
-> >> @@ -54,7 +54,7 @@ static int scmi_pd_power_off(struct generic_pm_domain *domain)
-> >>
-> >>  static int scmi_pm_domain_probe(struct scmi_device *sdev)
-> >>  {
-> >> -       int num_domains, i;
-> >> +       int num_domains, i, ret;
-> >>         struct device *dev = &sdev->dev;
-> >>         struct device_node *np = dev->of_node;
-> >>         struct scmi_pm_domain *scmi_pd;
-> >> @@ -115,7 +115,15 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
-> >>
-> >>         dev_set_drvdata(dev, scmi_pd_data);
-> >>
-> >> -       return of_genpd_add_provider_onecell(np, scmi_pd_data);
-> >> +       ret = of_genpd_add_provider_onecell(np, scmi_pd_data);
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       /* check for (optional) subdomain mapping with power-domain-map */
-> >> +       for (i = 0; i < num_domains; i++, scmi_pd++)
-> >> +               of_genpd_add_subdomain_map(np, domains[i], i);
-> >> +
-> >> +       return ret;
-> >>  }
-> >>
-> >>  static void scmi_pm_domain_remove(struct scmi_device *sdev)
-> >> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> >> index 88819659df83..3ede4baa4bee 100644
-> >> --- a/drivers/pmdomain/core.c
-> >> +++ b/drivers/pmdomain/core.c
-> >> @@ -3220,6 +3220,40 @@ int of_genpd_parse_idle_states(struct device_node *dn,
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(of_genpd_parse_idle_states);
-> >>
-> >> +int of_genpd_add_subdomain_map(struct device_node *np,
-> >> +                              struct generic_pm_domain *domain,
-> >> +                              int index)
-> >
-> > Providing the struct generic_pm_domain *domain as an in-parameter for
-> > the child-domain seems unnecessary and limiting to me.
-> >
-> > Instead I think we should parse the power-domain-map DT property at
-> > 'index', to find the corresponding child-domain's specifier/index and
-> > its corresponding parent-domain.
-> >
-> > In other words, we don't need the struct generic_pm_domain *domain as
-> > an in-parameter, right?
+> > Alex
 >
-> I'm not sure I follow.  The `struct generic pm_domain *domain` is the
-> SCMI child domain.  From the map, we use the index to find the parent
-> domain.  And then we add the child as a subdomain of the parent.
 >
-> Are you suggesting that I (re)parse the DT for to find the child domain
-> also?
+> I just found pm_transition variable can be used to check if hibernation
+> is cancelled (PM_EVENT_RECOVER) or not(PM_EVENT_THAW) in thaw(). I just
+> need to export this variable in kernel.
+> https://github.com/torvalds/linux/blob/master/drivers/base/power/main.c#L=
+64
+>
+> Provided pm_transition is available, should we skip
+> amdgpu_amdkfd_resume_process() only, or skip amdgpu_device_resume()
+> completely?
 
-Correct!
+Hmmm.  Still not sure how best to handle this.  For entering
+hibernation, all we really need is freeze().  Once we are done with
+that we don't need thaw() or poweroff() for hibernation as we've
+already suspended in freeze() so there is nothing else to do.  For
+exiting hibernation, we need freeze() to suspend and then either
+thaw() (if the hibernation image is bad) or restore() (if the
+hibernation image is good) to resume.
 
-The DT property ("power-domains-map") that you added in patch1/2,
-contains all the information so let's just parse it and assign
-child/parent domains based on it.
+Alex
 
-Kind regards
-Uffe
+>
+> Regards
+> Sam
+>
+>
+> >
+> >> Regards,
+> >> Christian.
+> >>
+> >>>
+> >>> Regards
+> >>> Sam
+> >>>
+> >>>
+> >>> On 2025/6/30 19:58, Christian K=C3=B6nig wrote:
+> >>>> On 30.06.25 12:41, Samuel Zhang wrote:
+> >>>>> The hibernation successful workflow:
+> >>>>> - prepare: evict VRAM and swapout GTT BOs
+> >>>>> - freeze
+> >>>>> - create the hibernation image in system memory
+> >>>>> - thaw: swapin and restore BOs
+> >>>> Why should a thaw happen here in between?
+> >>>>
+> >>>>> - complete
+> >>>>> - write hibernation image to disk
+> >>>>> - amdgpu_pci_shutdown
+> >>>>> - goto S5, turn off the system.
+> >>>>>
+> >>>>> During prepare stage of hibernation, VRAM and GTT BOs will be swapo=
+ut to
+> >>>>> shmem. Then in thaw stage, all BOs will be swapin and restored.
+> >>>> That's not correct. This is done by the application starting again a=
+nd not during thaw.
+> >>>>
+> >>>>> On server with 192GB VRAM * 8 dGPUs and 1.7TB system memory,
+> >>>>> the swapin and restore BOs takes too long (50 minutes) and it is no=
+t
+> >>>>> necessary since the follow-up stages does not use GPU.
+> >>>>>
+> >>>>> This patch is to skip BOs restore during thaw to reduce the hiberna=
+tion
+> >>>>> time.
+> >>>> As far as I can see that doesn't make sense. The KFD processes need =
+to be resumed here and that can't be skipped.
+> >>>>
+> >>>> Regards,
+> >>>> Christian.
+> >>>>
+> >>>>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+> >>>>> ---
+> >>>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
+> >>>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    | 2 ++
+> >>>>>    2 files changed, 3 insertions(+), 1 deletion(-)
+> >>>>>
+> >>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/g=
+pu/drm/amd/amdgpu/amdgpu_device.c
+> >>>>> index a8f4697deb1b..b550d07190a2 100644
+> >>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> >>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> >>>>> @@ -5328,7 +5328,7 @@ int amdgpu_device_resume(struct drm_device *d=
+ev, bool notify_clients)
+> >>>>>                amdgpu_virt_init_data_exchange(adev);
+> >>>>>                amdgpu_virt_release_full_gpu(adev, true);
+> >>>>>
+> >>>>> -            if (!adev->in_s0ix && !r && !adev->in_runpm)
+> >>>>> +            if (!adev->in_s0ix && !r && !adev->in_runpm && !adev->=
+in_s4)
+> >>>>>                        r =3D amdgpu_amdkfd_resume_process(adev);
+> >>>>>        }
+> >>>>>
+> >>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_drv.c
+> >>>>> index 571b70da4562..23b76e8ac2fd 100644
+> >>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> >>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> >>>>> @@ -2734,7 +2734,9 @@ static int amdgpu_pmops_poweroff(struct devic=
+e *dev)
+> >>>>>    static int amdgpu_pmops_restore(struct device *dev)
+> >>>>>    {
+> >>>>>        struct drm_device *drm_dev =3D dev_get_drvdata(dev);
+> >>>>> +    struct amdgpu_device *adev =3D drm_to_adev(drm_dev);
+> >>>>>
+> >>>>> +    adev->in_s4 =3D false;
+> >>>>>        return amdgpu_device_resume(drm_dev, true);
+> >>>>>    }
+> >>>>>
 
