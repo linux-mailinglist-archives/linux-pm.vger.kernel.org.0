@@ -1,351 +1,195 @@
-Return-Path: <linux-pm+bounces-29979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77FC1AF5A98
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 16:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47288AF5AB0
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 16:12:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 614381881226
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 14:09:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 513E71890D82
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 14:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DAD288CA7;
-	Wed,  2 Jul 2025 14:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C388B2BCF51;
+	Wed,  2 Jul 2025 14:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dIpB6TOU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JzVfcQmI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B89288CA4;
-	Wed,  2 Jul 2025 14:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751465277; cv=fail; b=d91eY3TVh/7lyp9ge074MiGdQDrqlasBV5ioN3+PTSoSgC6mkzsf7yzfhtY2EzI/Us0tCPY/JTsEedPfyScBWtkhVoPB7f0Br5ROQv2UDOPlUIboQ+Vxcz648LCp+YMOMkWTeyYdrGubcoxhmy6st436V+9fAj2PTDZ40e/uBu0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751465277; c=relaxed/simple;
-	bh=zv9Ub2UjSUasQLafzgPJwE79YI4udOlk1L4yjx+1KxM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=fpyMzaoPWh58h8HfBv+g3W0i66FlsL38yK1IqMzedN2+lqExwn0SF/MmNtSOJ0k+NEwwHDOu3cfPWnpKM6d6vGgbEUDVigti/2cm2NWqBgWdo2k6IUjUersDVl23ru2oJ0K2jAiQv/x9ZHpNyTH5SXcBgAQgvWgtxLljNpY5owg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dIpB6TOU; arc=fail smtp.client-ip=40.107.243.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ScQsvjgz/cBj6k20KdBX9YhdahkvE6lLX5ZPpN7Gdl/wxnOidtZsKgAzqcoVKJsGzAPaj2+4hNzl0RbrjE33L6R5cyCfK3ILKJtDPCa9fsvh3eKZBDp8CAXV4DvtQ11ri622MRUlkxdocTWwFv8QoXvITqprpb00qxBEyZDmRslfh5Xl0K6FDHDZutUWIn5guYKNnb6c8j32ra9KiRIFxOWcEhg7U9NiKZbmK9ewtNTn8CuZelxdPAHLmHsBZH30+5cD5MRpEHgiMDLWrITaW39iz4kxUJ+D1Pf/Psgt/ZrhBhl76qY92ArK9Esa+Iw/A8Llgw6iCgjE6wGzn1K7Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vQZdYMLRcst0xvvLdGgZxcvQuHEaoiPg7wll016keEE=;
- b=Q24IPJDtdlEw6Rpn3D3gWPqMq8Nf2M366/5oFH/+N6Ed58IXugBkHMpQvN0y2DayqGqtkC01uE9NN3iqzosXq4vtJPRAo2IapN7Bp8HXg6fpDHcjnrd08Efyn6PP76f7Ss9ibrCmQyW59jdDA2R9NVeSHFXdb0P0z7/KeyPCuUglNrImWTQP29QIuO8u0FOpqyWAPR9zW8Wu+TwGSLtfDfbBR+kpKk0gbIiTgSXO4XwnniyIYkdteDkk87oJvRqyVO6UmRd6n9Cu/DLgsCMNdNJf6OJ5/cFQUqInJ0UJN+HpYZTCHQc8MOLHiPljsgfMb52ivYj2+q3icn8mrQWOuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vQZdYMLRcst0xvvLdGgZxcvQuHEaoiPg7wll016keEE=;
- b=dIpB6TOUY2V8h5n43u67cuwg+90piyLIR6lipf0BAmiNODs9o7bflFVe/M7YXXn73YlFAZXtxflNbBNrkvMchTGbbrKlzdkkYALJea/qjvXEHqzpq5jdIWQ7j4/rMx4IQbxehy0v1l563UE/KjHeG+ssSuVl65qlB/vfSzt3KFc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS0PR12MB7804.namprd12.prod.outlook.com (2603:10b6:8:142::5) by
- PH7PR12MB7331.namprd12.prod.outlook.com (2603:10b6:510:20e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.29; Wed, 2 Jul
- 2025 14:07:50 +0000
-Received: from DS0PR12MB7804.namprd12.prod.outlook.com
- ([fe80::8327:d71a:ce21:a290]) by DS0PR12MB7804.namprd12.prod.outlook.com
- ([fe80::8327:d71a:ce21:a290%4]) with mapi id 15.20.8880.023; Wed, 2 Jul 2025
- 14:07:50 +0000
-Message-ID: <84d111fd-f71d-4f4b-ab33-a6ff800731f8@amd.com>
-Date: Wed, 2 Jul 2025 19:37:41 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] drm/amdgpu: skip kfd resume_process for
- dev_pm_ops.thaw()
-To: Alex Deucher <alexdeucher@gmail.com>, Sam <guoqzhan@amd.com>
-Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Zhang, GuoQing (Sam)" <GuoQing.Zhang@amd.com>,
- "rafael@kernel.org" <rafael@kernel.org>,
- "len.brown@intel.com" <len.brown@intel.com>,
- "pavel@kernel.org" <pavel@kernel.org>,
- "Deucher, Alexander" <Alexander.Deucher@amd.com>,
- "Limonciello, Mario" <Mario.Limonciello@amd.com>,
- "Zhao, Victor" <Victor.Zhao@amd.com>, "Chang, HaiJun"
- <HaiJun.Chang@amd.com>, "Ma, Qing (Mark)" <Qing.Ma@amd.com>,
- "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20250630104116.3050306-1-guoqing.zhang@amd.com>
- <20250630104116.3050306-4-guoqing.zhang@amd.com>
- <8806781b-90d1-4b99-a798-dd1d29d4c8c0@amd.com>
- <8eb1700d-4d60-4a1e-9d09-718f65baaf1e@amd.com>
- <019a15d5-142f-4761-9408-58c103d3922b@amd.com>
- <CADnq5_PHfNTbLL7Xmb9HFgtZemDVaLSqbrONWWEf9hjwk1rF1Q@mail.gmail.com>
- <1e82f0af-daf6-4dd6-bc43-2969ac970589@amd.com>
- <CADnq5_M_NWSbqJUrBcDy_bARrPcQDDhSvHCKCqEoTWijBWHxGg@mail.gmail.com>
-Content-Language: en-US
-From: "Lazar, Lijo" <lijo.lazar@amd.com>
-In-Reply-To: <CADnq5_M_NWSbqJUrBcDy_bARrPcQDDhSvHCKCqEoTWijBWHxGg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0229.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::11) To DS0PR12MB7804.namprd12.prod.outlook.com
- (2603:10b6:8:142::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173A02BD5A7
+	for <linux-pm@vger.kernel.org>; Wed,  2 Jul 2025 14:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751465529; cv=none; b=p6XITmdBKMj73llyxBAooqkhqiX8IrZDJrcdMoDxL05dIM/gYUEHizE3cJThfCGdXa03GMk4jbhxKb/+XQBtEuqOS1j/wG+argzuSeyIKZ7Cmn2WvYUqS3fetJGmtmljFBXURBK44eB6GvqrrH6SmgckwYdZRiiyV8VyuGXjspA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751465529; c=relaxed/simple;
+	bh=JRJPH4m3gHOL8iOAGjaKdf0GbC0HHnVxh4Krznoo3KI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RBD/C1SFejNDBrpLOLkCFrxuRSpxoiJcl+VMrfJZqc70FuHMtPPzhDvaeOrOdc9FPrWulQGAG1yeOGGt5pkA3mj2BOlHkG1pzhZ3nC3XIQyoMoID9VRQAVfiuoe/y99ZQJ1RaFzIv7EMK5ogJxkQsipQSQiL4b3sbK83C1a0GHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JzVfcQmI; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-70e1d8c2dc2so45547077b3.3
+        for <linux-pm@vger.kernel.org>; Wed, 02 Jul 2025 07:12:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751465526; x=1752070326; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1mPoU1UCDxjl6IWc+jKm50U28f8v3ln7LdhgS9xFHd8=;
+        b=JzVfcQmIhRCBHkY7YMzvyyFHMH69W22USFiAIMlmWmJViWurdbP3UXDxOUX/ZB56DH
+         hriNNwFVMwhrsnyiXPsNHLdpwjXlAG2x+RN9Q44qwoBOFBbdXt1KEqsvlGpS550s0Xk9
+         wCrC1VKfTa4IMjvM3dLfwA/PYLwedmkAUXB+xPSJBbLsBAfjM9n+qNtzysq6H1G/qPix
+         +OruNqP2iKwIQPLiWDoDjNFmDj7wxRhmOqn/8b4FqR27y7826azVnBmT4XnY/JcXfYrM
+         sN08NyOhntVoojALkTFFZERbXodeU2OqZN9wWLhfwJOHfzn43EZRRv+nTDnxxxKdzA+N
+         tNVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751465526; x=1752070326;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1mPoU1UCDxjl6IWc+jKm50U28f8v3ln7LdhgS9xFHd8=;
+        b=Vyx5z4G+bkzblTLBrx2/fh4SsO3fA2lyArh5o9j3OnMDBX8P+WQNI/5nZBMZClhCPh
+         /ugobwtJjR6gfKLusKTJbB9yyNunbPOF+5F4CDMs89JhAWINlPRLMzCHCZ9YK5H1A6Zz
+         QTRxVweMA8Ag958fmTkyc3H1Z1VCewD+ulEbLyyMEYv5SrBp495be9A/IgWS3f73jFQA
+         NN9j5K1R8GdGfP72l1n0jTSkTFCZHUvXi5CS5sP7gPLP/3sgoEnXp9zNoeJSJk0gK/Go
+         GaaIzbLMnb2hzbc/RV6hxP8qtGMqz2O+zfXGHozE+ox5PQba8rPm3Oc2E79+CD/X2Qe0
+         S15A==
+X-Gm-Message-State: AOJu0YyMemsQvqg02qVNZ3GSBudkmOlmgKBqMNSp+oIixA0sHE4yPl67
+	4h1TgHfj/58z6BF0pFbbs5o5mHmnzqm3SEjZquUF61EnTVPvWYeGCmL0Onvc8bGB7O3qwWK8EAQ
+	eJIKPewqnxodLDJ1peOdSq5yDHfH9U8rPylcrLeFWSCiT5J2y2tLW
+X-Gm-Gg: ASbGncsqf7w1g4FqEsKBI6yZq9IkvTCZHXzONCTI8SLQwDc3jXhFtOokU5kgmC3nMZ+
+	3UbHIlCgtlLV4zzrNq0Oocf9o0T/ZU59x51/EEV8Ji/x3wl/zCXHGwoyV2YPpQW15HWOZT610FF
+	bBQ5xpg7ZaOM5e1m60OXYNqhinZwtRujo9DZ+inJUD4HzO
+X-Google-Smtp-Source: AGHT+IHPaXrxmHFVKX7Eql3EMD5x4On0T3oI0issqDZiJ0MoiOv4sD7i0/jMP72156cYMAUC8axQa4qkX4Dj4M+kpkU=
+X-Received: by 2002:a05:690c:6213:b0:70e:7882:ea91 with SMTP id
+ 00721157ae682-7164d4b88d2mr41815867b3.35.1751465525819; Wed, 02 Jul 2025
+ 07:12:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7804:EE_|PH7PR12MB7331:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3773be9-4baa-4f80-3ec3-08ddb971d41c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YzhrbElVSmo1RmpkaHViRWk5dUtQbnRoOTFFRjNNYytUYWpjK2VDeGxtWlNQ?=
- =?utf-8?B?aWs5SHpMUHJTRThUN1ZYclJ0UWI3eGdQa0FYWTBISFE0UHRXZ3lUQkxJT0RV?=
- =?utf-8?B?VCtVenJQYXI3YzV1NHQ2UUVkc2g3d1ozSHBQT2k1cCtJMERPQitudCt5eTBD?=
- =?utf-8?B?N0JTcXg5VzA0Z0ZTVHdwWElpalc2RnU5N1lTYS9sd3pTWG80QjM4anJ6dk5F?=
- =?utf-8?B?c1k0Y3V3Z0FucW9qUXIwVnpITEVod0JJNHg0S3orYlkyZlVmbDFLaHBLWUYr?=
- =?utf-8?B?RmdFWWZPQXY5RkhoU3hTcGF2dUoxTnVOYXo0T2ttYWx5OGsrQ05BdEV4cnlh?=
- =?utf-8?B?OVRWcXM1S3ljM25ldnFXUHdYWlVQSng5MWdSSThhZTI2NXVjaDVnMFZBZUh1?=
- =?utf-8?B?MnhRMk1RQTliUGJkUVlrZ0NXQU4xZUUxQWZvMmJmR0Mxc3lyQTYrWDU5V0ZJ?=
- =?utf-8?B?UHdUVVZCd005NkNDdTlQRzgzWjBVMEY3OHExVFJMYmgrUGlFbm1taGtZRU9L?=
- =?utf-8?B?U3NMMUFpam1wVk1vTDZqTVF0R1FoZ1NPVUdhL2RuRWtReG15MlZNTHBYajNn?=
- =?utf-8?B?NmNIUytqWkZ0ZUplTUExN0IzZGxPelpPRU9yV0k4YlR0aWVwcFdRSnY4YWpn?=
- =?utf-8?B?TlIzMVBTWFRLSWxmQ0dsUFVGanQ4MmxTVEZkRnk0bUV5UjIwMFFBTVVHNzR1?=
- =?utf-8?B?WG9yMWtEOEpEcld4T2xqSFN0R0VPOU1ydjR2REV1Wlo0MXR6c3o2RFNuVlRy?=
- =?utf-8?B?T1pPdjlQaFFPNmpjYzErMCthcysrdjk0Mld0SHAwZnoxRDRhMXdMQzVDN3l0?=
- =?utf-8?B?WGlYOTRLU3pTVzdvbVdvbExkK3poaWduN1lZNVNuNjZwSC9TR0JSdVBhQito?=
- =?utf-8?B?VFo2UHU0N0NCQ2VQWGl3Zm44cDVoZVJKc09pYWdEZzlpQnNHdlY2Y2JJaVB3?=
- =?utf-8?B?dlJLL01wb1J5cys3V2VIK0lPUEVqYjYvVGo0d0IrNzBZanJaV0tnaVRENVF3?=
- =?utf-8?B?aDc3UkxNdnZTTjFqbGNtdkx0NzlxekEyc1h0d05lOEU4Rkh2QzhHYVcrdnpR?=
- =?utf-8?B?RVJ4UFpLRjZtNGlnOU1OcjY3UGlmZzFSVW5EWXljUWJWeWgweEh4eUl1R0FD?=
- =?utf-8?B?NU5BaWZ5bzE5OThKQSs4RlljNTlJQWpURFFpS2ZFNEdtVmI5UkQrZGVlYURi?=
- =?utf-8?B?L0orMjVCT1NKRlVWcVNFNWtTRmRnQStENmpqRi9QQWkvZlNnVFU2RmN0MCtw?=
- =?utf-8?B?QThQUHR2b3hkVDZIZk8wa3RYTlN5a0diK0NZT1dNTGJVWnc1WTloZXVvVnhB?=
- =?utf-8?B?ZXVGVmw4M1MyclRINmRzTTdIUXNKY01IN3ErMnVBVE9STFRYd0xSNS9QTnlk?=
- =?utf-8?B?eFJFalM2cXBCcDZMa2M5VnZIOVNIV2hqd1o5ejdSZ09VVFg5UWFWelZJKzM5?=
- =?utf-8?B?QUMyV0NZaHlJSFFNUjZhaXcwMWN0VnVVYUZ1WmRBTnFjdE1Ya1ZsSGNxSXRE?=
- =?utf-8?B?T3hsL3pGSHZQN2IyYjcxVlRQQjdKUzhnaURDV29COGtMK1Z2ajJxcGNFOVNE?=
- =?utf-8?B?ODRrTXloMU52eitKaCthc0ZWeFJxRFIxK1NiRWhEdzNPUlJTR1ArQlp1bWZP?=
- =?utf-8?B?Zk45cGdFVnArUFNSMUIzZ1h4emw1ZWpKTWxOdFpqd3dFeDNBWHVXZFNpYll4?=
- =?utf-8?B?OWhGNmZhU0xINVNGVjRGdWRpWXFxNVVIWmJxZU9qV1p0QjliaDN4Y292VXlv?=
- =?utf-8?B?WG1ndGV2UmI1WXJQdlFwYXBoUmpZMWllcUV6cmYyOWk0UlF3Nzkxa2pVclM2?=
- =?utf-8?B?Zmd0WUNMbi84YU9ZUXd5aWpBV2htOTZrb0RidEgzOFVZMXBFb1JObHFuTHJr?=
- =?utf-8?Q?nu1eY2LOTt3Fh?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7804.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(13003099007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aHEvOGFCME1XSHlRSVlzMFRQQjFnbG5XUGYzUUIrSU9HZEVZRGF2OWFrZERt?=
- =?utf-8?B?SnZqQnZibHVIaThiZG1tNzhFUjBhS0hxNkNjVS9GSHdwSEFPYkMxeDdEUHF5?=
- =?utf-8?B?Wlp3cEZnZWJTS0RWVDF0bmhxczFVRkJ1RitPVXRrR0YzZnduNEVCeGtlNnJw?=
- =?utf-8?B?M3Eyai9vMDNtWitTMDMwdkVMazdEa2R0U1JNNzN2UDhnamdDZUxSYm42ZGZL?=
- =?utf-8?B?NU0xbVNjd1ZFUHJvSlRtTWJ5cFNnVm9SbjB6ZENQcEtwajBWYlExdm9kWWxB?=
- =?utf-8?B?UThpTkVxQjd3dmpMZ3BqWG5hcVYzNjY4ZjVLZURBOVgxZW1tZXIrYmE0TmlY?=
- =?utf-8?B?QnRUY1ZGekVPK0Nha0pZWnhVbG11M1JvTDFyVkZYRTNDTGFNdmIzZjZOQVhU?=
- =?utf-8?B?T2ovZHBqamJsVGlpaDhHQmtOdFhZUnp2RXF0bjlrY1R1Umtoc09idTVIUEJY?=
- =?utf-8?B?MkF5SzV1OXV2dmpaRW1yUmQ0OGdkR003cjJqcjlIM050d2ptMHBEK055bG0w?=
- =?utf-8?B?TW82UGg3cnYyLzJnOTF6K0QyeGFXWjZ5eSsvdlIzY1FhRFpWVkxBcitoakNi?=
- =?utf-8?B?djdaZDB1ZGkySmN3dWxEdzVGenpiVjZaOHcreFU3RWdFMWhPbVhHK3RwNXBK?=
- =?utf-8?B?czRzaWFCNTJxMzB6bkpuakJBQU9JQnBsNkwyeUxRUWNxeW5TV2kxZlhoRmdC?=
- =?utf-8?B?eE5KRVNzemxsZU9Mc3JqWFpGZGxUYkxjVG5IKytGRGlMS1hZR0JoZGlDdVBn?=
- =?utf-8?B?L0ZXcVNSZkZYMDRyMHJ4YU1TYjA2TnBYVTJFcFFCU1JmZnlOSWp0OC9ST094?=
- =?utf-8?B?b2IvaXhqdmY1TTMyWTBwejYrSUt3Q1BCTnZVY0h4eC9mRGd2QlNWSk9jVU1G?=
- =?utf-8?B?dVlqRmVYZEtDS0UxRTR1c2ZDQzQ1a2g5dnExTGVNUVlwdWZOY0R1K28xWUdL?=
- =?utf-8?B?V2QzWkRrcFp0UlFLZ2dXQW1ZZ3FNYW5lcGpWeU0xVUNveUVCMWpGODhibkJ1?=
- =?utf-8?B?U1k2SldxVjR5VGtUREw4QTJVaWRTWVIxMUx6SGFMSnJkS09VaHBJdmJUbHda?=
- =?utf-8?B?OTRRNlJueFVSdFFPUTA5M0Z5YktId0U3Q21lR3cyaHV2KzIrQk1tOWY3ZVFo?=
- =?utf-8?B?Y0l5OUlESWhwT2tUQnp1dDZrQmxzUHBEYjJjZ2dKaWRHMU9TVjczV21nS1dK?=
- =?utf-8?B?Z3dQb1hTZ3daMUJ1M091ZUpMaGlhRS9FUllFVDA4MTBlbk1GeHU5T2VxOW1p?=
- =?utf-8?B?S3ZWQ1BVWU11emd6Z3ZqVk5UN2ZoWkVCU0hVajludmlZbHFaKzlod3NOUDEx?=
- =?utf-8?B?ZmE5U1pmNE5aSTM3bXdnL1Z1ZjczVmExVHBSUEtjM2pqYUh6MmhPMXRnVHYy?=
- =?utf-8?B?QS9XdUVEVWFrQXR6ZFM3cG5wZmdKZWxSZTRGTTJseWFaYjNXL1h4SFQ4aVFS?=
- =?utf-8?B?Njk2TmREM29wWUxBTHZONW1aSWVXQi9nR1gvbU1mRFVxeWNFck96cGFjZDlq?=
- =?utf-8?B?MDM0Q1JTRHl6aTE1QjNZVktHM1JwWWN1eUxJSHRBM2NyOW9mSDNqc2krMGNq?=
- =?utf-8?B?MmZSUFJ3bWNSZUpseGlzRnBNdWVod283dmZnZm9MU2FZaWtNZCtkS0JndkNN?=
- =?utf-8?B?WitXc1VZQUlyT3d3YllEZm8ybVF0R3M0UzVSbHR4VzZXejFsaTVGSlBJczNH?=
- =?utf-8?B?NW51a2NIRmwrQjdRWGtZS3lick1XUGtrd21IQXRRMUNJakNoOXdlK2VMWUxQ?=
- =?utf-8?B?R0Vmbnp0K29GeDJDVjE0bzdiRDdQcHh4MFJOSHJvRjlweVNyL29XeG5xRkJW?=
- =?utf-8?B?c0t4REhMYzF1dGxkbDE3SEFGVmNZWTVCdytFOGpKUUhjWkd5a0pqVGVZS2sx?=
- =?utf-8?B?SmVFYmNzcWR0ZlFsRHMxendBWFVHNE1yRVJsblFyNmhKWWZWWXZqYUE4UzFt?=
- =?utf-8?B?ZVJTS0lCYzRHK1pSWU4yUSs2a3cxQWJmc3hjc3M0SytmZXc5Rk1qYjl4NE1r?=
- =?utf-8?B?Y3NQL1BYRXpYT2hiUGtLM2VZUWhHV3IwZFd2OHJKd3Bqd3lwWjFlejBqVzhG?=
- =?utf-8?B?blQ0VGM0cFVsa1NYUzE5ZU1iSFhNQzFldjJrNTh1YU1kN1dNUzJtaG5pcUln?=
- =?utf-8?Q?ajHDFv7QUyZ+pGKQil8d1c7te?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3773be9-4baa-4f80-3ec3-08ddb971d41c
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7804.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 14:07:50.3332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YRGuJQjx4uWBH2+IGTiFkxrsb8IkoaW1ZkHOAcQRl6Zlc0KKw0JLD759ERZ6W2pq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7331
+References: <5018768.GXAFRqVoOG@rjwysocki.net>
+In-Reply-To: <5018768.GXAFRqVoOG@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 2 Jul 2025 16:11:30 +0200
+X-Gm-Features: Ac12FXynITunG4rG5UQO1EB1vzYUCxa7rAXh-RE6XqfZ0CLPy3V92JuMPVtw6hI
+Message-ID: <CAPDyKFp35SjpQmEQ02u7ZbsaFftaett_rBBf-7hbsBpGWH08hw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] PM: Reconcile different driver options for runtime
+ PM integration with system sleep
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Fri, 27 Jun 2025 at 21:29, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> Hi Everyone,
+>
+> This is an update of the series the v2 of which was posted yesterday:
+>
+> https://lore.kernel.org/linux-pm/5015172.GXAFRqVoOG@rjwysocki.net/
+>
+> and the v1 is here:
+>
+> https://lore.kernel.org/linux-pm/22759968.EfDdHjke4D@rjwysocki.net/
+>
+> This update reorders the patches (again), updates the changelogs of some of
+> them and changes the subject of one patch slightly.  It also adds a kerneldoc
+> comment to a new function in patch [5/9].
+>
+> This part of the cover letter still applies:
+>
+> "This series addresses a couple of issues related to the integration of runtime
+> PM with system sleep I was talking about at the OSMP-summit 2025:
+>
+> https://lwn.net/Articles/1021332/
+>
+> Most importantly, DPM_FLAG_SMART_SUSPEND cannot be used along with
+> pm_runtime_force_suspend/resume() due to some conflicting expectations
+> about the handling of device runtime PM status between these functions
+> and the PM core.
+>
+> Also pm_runtime_force_suspend/resume() currently cannot be used in PCI
+> drivers and in drivers that collaborate with the general ACPI PM domain
+> because they both don't expect their mid-layer runtime PM callbacks to
+> be invoked during system-wide suspend and resume.
+>
+> Patch [1/9] is a preparatory cleanup changing the code to use 'true' and
+> 'false' as needs_force_resume flag values for consistency."
+>
+> Patch [2/9] (which was [3/9] in v2) puts pm_runtime_force_resume() and one
+> other function that is only used during system sleep transitions under
+> CONFIG_PM_SLEEP.
+>
+> Patch [3/9] (which was [5/9] in v2) causes the smart_suspend flag to be taken
+> into account by pm_runtime_force_resume() which allows it to resume devices
+> with smart_suspend set whose runtime PM status has been changed to RPM_ACTIVE
+> by the PM core at the beginning of system resume.  After this patch, drivers
+> that use pm_runtime_force_suspend/resume() can also set DPM_FLAG_SMART_SUSPEND
+> which may be useful, for example, if devices handled by them are involved in
+> dependency chains with other devices setting DPM_FLAG_SMART_SUSPEND.
+>
+> Since patches [1,3/9] have been reviewed already and patch [2/9] should not
+> be particularly controversial, I think that patches [1-3/9] are good to go.
+>
+> Patch [4/9] (which was [2/9] in v2), makes pm_runtime_reinit() clear
+> needs_force_resume in case it was set during driver remove.
+>
+> Patch [5/9] (which was [4/9] in v2) makes pm_runtime_force_suspend() check
+> needs_force_resume along with the device's runtime PM status upfront, and bail
+> out if it is set, which allows runtime PM status updates to be eliminated from
+> both that function and pm_runtime_force_resume().  I recalled too late that
+> it was actually necessary for the PCI PM and ACPI PM to work with
+> pm_runtime_force_suspend() correctly after the subsequent changes and that
+> patch [3/9] did not depend on it.  I have also realized that patch [5/9]
+> potentially unbreaks drivers that call pm_runtime_force_suspend() from their
+> "remove" callbacks (see the patch changelog for a bit of an explanation).
+>
+> Patch [6/9] (which has not been changed since v2) makes the code for getting a
+> runtime PM callback for a device a bit more straightforward, in preparation for
+> the subsequent changes.
+>
+> Patch [7/9] introduces a new device PM flag called strict_midlayer that
+> can be set by middle layer code which doesn't want its runtime PM
+> callbacks to be used during system-wide PM transitions, like the PCI bus
+> type and the ACPI PM domain, and updates pm_runtime_force_suspend/resume()
+> to take that flag into account.  Its changelog has been updated since v2 and
+> there is a new kerneldoc comment for dev_pm_set_strict_midlayer().
+>
+> Patch [8/9] modifies the ACPI PM "prepare" and "complete" callback functions,
+> used by the general ACPI PM domain and by the ACPI LPSS PM domain, to set and
+> clear strict_midlayer, respectively, which allows drivers collaborating with it
+> to use pm_runtime_force_suspend/resume().  The changelog of this patch has been
+> made a bit more precise since v2.
+>
+> That may be useful if such a driver wants to be able to work with different
+> PM domains on different systems.  It may want to work with the general ACPI PM
+> domain on systems using ACPI, or with another PM domain (or even multiple PM
+> domains at the same time) on systems without ACPI, and it may want to use
+> pm_runtime_force_suspend/resume() as its system-wide PM callbacks.
+>
+> Patch [9/9] updates the PCI bus type to set and clear, respectively, strict_midlayer
+> for all PCI devices in its "prepare" and "complete" PM callbacks, in case some
+> PCI drivers want to use pm_runtime_force_suspend/resume() in the future.  They
+> will still need to set DPM_FLAG_SMART_SUSPEND to avoid resuming their devices during
+> system suspend, but now they may also use pm_runtime_force_suspend/resume() as
+> suspend callbacks for the "regular suspend" phase of device suspend (or invoke
+> these functions from their suspend callbacks).  The changelog of this patch has
+> been made a bit more precise since v2, like the changelog of patch [8/9].
+>
+> As usual, please refer to individual patch changelogs for more details.
+>
+> Thanks!
+>
 
+For the v3 series, please add:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-On 7/2/2025 7:24 PM, Alex Deucher wrote:
-> On Wed, Jul 2, 2025 at 3:24 AM Sam <guoqzhan@amd.com> wrote:
->>
->>
->> On 2025/7/2 00:07, Alex Deucher wrote:
->>> On Tue, Jul 1, 2025 at 4:32 AM Christian König <christian.koenig@amd.com> wrote:
->>>> On 01.07.25 10:03, Zhang, GuoQing (Sam) wrote:
->>>>> thaw() is called before writing the hiberation image to swap disk. See
->>>>> the doc here.
->>>>> https://github.com/torvalds/linux/blob/v6.14/Documentation/driver-api/pm/devices.rst?plain=1#L552 <https://github.com/torvalds/linux/blob/v6.14/Documentation/driver-api/pm/devices.rst?plain=1#L552>
->>>>>
->>>>> And amdgpu implemented thaw() callback by calling amdgpu_device_resume().
->>>>> https://github.com/torvalds/linux/blob/v6.14/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c#L2572 <https://github.com/torvalds/linux/blob/v6.14/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c#L2572>
->>>>>
->>>>> This patch is skip amdgpu_amdkfd_resume_process() call in thaw() during
->>>>> hibernation. it is not skipped in restore() during resume from
->>>>> hibernation when system boot again.
->>>>>
->>>>>
->>>>> I just found the following kernel doc. Thaw() is intended to resume the
->>>>> storage device for saving the hibernation image.
->>>> Ah, that makes much more sense.
->>>>
->>>>> Our GPU is not involved
->>>>> in it, it is not necessary to resume our GPU in thaw().
->>>>> https://github.com/torvalds/linux/blob/v6.14/Documentation/power/pci.rst?plain=1#L588 <https://github.com/torvalds/linux/blob/v6.14/Documentation/power/pci.rst?plain=1#L588>
->>>>>
->>>>> So another implementation is to remove the amdgpu_device_resume() call
->>>>> in amdgpu_pmops_thaw(), and skip amdgpu_device_ip_suspend() call in
->>>>> amdgpu_pci_shutdown()for hibernation.
->>>>> Initial tests show it's working fine for hibernation successful case.
->>>>> Should I switch to this implementation?
->>>> No idea. Alex and the KFD guys need to take a look at that.
->>>>
->>>>> But thaw() is also called to restore the GPU when hibernation is aborted
->>>>> due to some error in hibernation image creation stage. In this case,
->>>>> amdgpu_device_resume() is needed in thaw().
->>>>>
->>>>> So I need a method to check if hibernation is aborted or not to
->>>>> conditionally skip amdgpu_device_resume() in thaw(). Currently I don't
->>>>> know how to do this.
->>>> Yeah that approach here looks fishy to me, but I don't know how to properly fix it either.
->>>>
->>>> @Alex any idea?
->>> Yeah, I'm not sure how to handle that.  I don't see a way to avoid
->>> having all of the callbacks.  We could ideally skip some of the steps.
->>> Maybe we could optimize the freeze and thaw routines if we had some
->>> hint from the pm core about why we were getting called.  E.g., thaw
->>> after a failed hibernation restore.
->>>
->>> Alex
->>
->>
->> I just found pm_transition variable can be used to check if hibernation
->> is cancelled (PM_EVENT_RECOVER) or not(PM_EVENT_THAW) in thaw(). I just
->> need to export this variable in kernel.
->> https://github.com/torvalds/linux/blob/master/drivers/base/power/main.c#L64
->>
->> Provided pm_transition is available, should we skip
->> amdgpu_amdkfd_resume_process() only, or skip amdgpu_device_resume()
->> completely?
-> 
-> Hmmm.  Still not sure how best to handle this.  For entering
-> hibernation, all we really need is freeze().  Once we are done with
-> that we don't need thaw() or poweroff() for hibernation as we've
-> already suspended in freeze() so there is nothing else to do.  For
-> exiting hibernation, we need freeze() to suspend and then either
-> thaw() (if the hibernation image is bad) or restore() (if the
-> hibernation image is good) to resume.
-> 
-
-If pm_transition is available, we can keep thaw() as we have now and do
-resume only if pm_transition =  PM_EVENT_RECOVER. shutdown() may check
-in_s4 and do nothing.
-
-Thanks,
-Lijo
-
-
-> Alex
-> 
->>
->> Regards
->> Sam
->>
->>
->>>
->>>> Regards,
->>>> Christian.
->>>>
->>>>>
->>>>> Regards
->>>>> Sam
->>>>>
->>>>>
->>>>> On 2025/6/30 19:58, Christian König wrote:
->>>>>> On 30.06.25 12:41, Samuel Zhang wrote:
->>>>>>> The hibernation successful workflow:
->>>>>>> - prepare: evict VRAM and swapout GTT BOs
->>>>>>> - freeze
->>>>>>> - create the hibernation image in system memory
->>>>>>> - thaw: swapin and restore BOs
->>>>>> Why should a thaw happen here in between?
->>>>>>
->>>>>>> - complete
->>>>>>> - write hibernation image to disk
->>>>>>> - amdgpu_pci_shutdown
->>>>>>> - goto S5, turn off the system.
->>>>>>>
->>>>>>> During prepare stage of hibernation, VRAM and GTT BOs will be swapout to
->>>>>>> shmem. Then in thaw stage, all BOs will be swapin and restored.
->>>>>> That's not correct. This is done by the application starting again and not during thaw.
->>>>>>
->>>>>>> On server with 192GB VRAM * 8 dGPUs and 1.7TB system memory,
->>>>>>> the swapin and restore BOs takes too long (50 minutes) and it is not
->>>>>>> necessary since the follow-up stages does not use GPU.
->>>>>>>
->>>>>>> This patch is to skip BOs restore during thaw to reduce the hibernation
->>>>>>> time.
->>>>>> As far as I can see that doesn't make sense. The KFD processes need to be resumed here and that can't be skipped.
->>>>>>
->>>>>> Regards,
->>>>>> Christian.
->>>>>>
->>>>>>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
->>>>>>> ---
->>>>>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
->>>>>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    | 2 ++
->>>>>>>    2 files changed, 3 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->>>>>>> index a8f4697deb1b..b550d07190a2 100644
->>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->>>>>>> @@ -5328,7 +5328,7 @@ int amdgpu_device_resume(struct drm_device *dev, bool notify_clients)
->>>>>>>                amdgpu_virt_init_data_exchange(adev);
->>>>>>>                amdgpu_virt_release_full_gpu(adev, true);
->>>>>>>
->>>>>>> -            if (!adev->in_s0ix && !r && !adev->in_runpm)
->>>>>>> +            if (!adev->in_s0ix && !r && !adev->in_runpm && !adev->in_s4)
->>>>>>>                        r = amdgpu_amdkfd_resume_process(adev);
->>>>>>>        }
->>>>>>>
->>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>>>>>> index 571b70da4562..23b76e8ac2fd 100644
->>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>>>>>> @@ -2734,7 +2734,9 @@ static int amdgpu_pmops_poweroff(struct device *dev)
->>>>>>>    static int amdgpu_pmops_restore(struct device *dev)
->>>>>>>    {
->>>>>>>        struct drm_device *drm_dev = dev_get_drvdata(dev);
->>>>>>> +    struct amdgpu_device *adev = drm_to_adev(drm_dev);
->>>>>>>
->>>>>>> +    adev->in_s4 = false;
->>>>>>>        return amdgpu_device_resume(drm_dev, true);
->>>>>>>    }
->>>>>>>
-
+Kind regards
+Uffe
 
