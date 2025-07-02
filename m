@@ -1,393 +1,235 @@
-Return-Path: <linux-pm+bounces-29964-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29965-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCB42AF0D1D
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 09:49:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DFC9AF0D37
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 09:54:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEEA57A1289
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 07:47:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C3241BC7BC9
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 07:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40ED22B8CF;
-	Wed,  2 Jul 2025 07:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6164C230BD4;
+	Wed,  2 Jul 2025 07:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="43UEbdQX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFmlGPHc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8541223DEA;
-	Wed,  2 Jul 2025 07:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751442538; cv=fail; b=ZtumWGsVb/tHvEjmDtCWj7uMoo9thYGabUyoprbAGmhtLUw2tfSz2F++vaZn9kRX67PXe+Dl3Y8BJw/dRlqzcKj7vGWDV88npyRXJRVRA9F6mpjYI2N68VtX4KjShtQHL9KvdvkhqSzMWdXdP6tDT2/ccQYrHsiM9fBCcVMrGI0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751442538; c=relaxed/simple;
-	bh=5973ktVk++GlhAsIEHYB3dG1GC+So0CNWoQGM+mK+zI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=eLwAlsrM25zG0Qqnc9A1fFy9Ed5XGYQFqEYirpBfbOMe0ZdE0SI+hFLQE88I1fHHXhK/QOk5lKMm9F+CCKdCzqHtgYjIw56bF9+RXSxb0sHRyoKT2kMeuBN8VlTEvKvoWx5DSiW7nivH4nfUaOltJ2+fuC/mxNj/czJiWWMqlNo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=43UEbdQX; arc=fail smtp.client-ip=40.107.223.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=umVlF77fZssT9M0CzyUV+GxfzT7hNM/MSiG/TG++UasTC+EggoRUQ8V+qKAc3Gc38TrxFxNx8LZJg4NGwqcCef19E1/t+fOJlGbJd6Uea4k8RC14eC6+NfnfgDGiscRAxa9OBqOeCEsP/PQI0mRcK0lXxD3CQUolWmta+XJl32d9IKyGf8g2+t1FnLO8bCepT/g/gmpOuAQmA9eZDpoWRdvcyCcPijDA+Z5ADuGGaNSp2kIMaDsC18OpkaQTOP1jWzupmy8FiHyBVga/6EROFhE/gOKfes2swTDjXG3eFjrlNhHVrJLrTUOFvemdxmvI5Du8iSzNhPM6Bp5qgcTKxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W/U8F0oOJWbG90xTe1aumRBaVXx+Br5cBuz7ajRVPlI=;
- b=cizgG+neAFS9nEvfkyP0MRAEfJqL250cY3D4MrJjw6spl0s3LjUDOlNLOwulpsFflus1NMfSPSDfDj4eNiadmznWamYTZIYx9xmwASYmhx3kCh+A9099B7aobWyFrhkqBzi1y9xf+vkkAIw+VFEbMc/Bj5qQMYLog10mhynm4cvKUnhUnZUEX7dNR/mYIZzCAEwCGNCD0eJnSBlmRlFD7xPGpq183yGRWKVhRuGhqE+NPBRrQO+ZPVXREcwysLQzbd8p2hfMPayx4FMKph4s8jjaglAr9Hq8m+eULFUno8dRGmmrg7GLub9Yv+SiNOszhchknlY7Qav2pX1GSjuw4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W/U8F0oOJWbG90xTe1aumRBaVXx+Br5cBuz7ajRVPlI=;
- b=43UEbdQXducTvbd8elkeTrzoRGPhdyoipFgUQl2RJeE0/Q7+wT+TlAJ5Lg4Dx+uoguGerPQd9d6kghyUavVzWk4E5151cGOfyQajsh0ZEEZ0NkLoGw7SgiKWGwfAHY/kSryWyTJWTM3+U13Arte+V6LO62+WyfA1KT/tOi1gRuE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by DS0PR12MB6631.namprd12.prod.outlook.com (2603:10b6:8:d1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Wed, 2 Jul
- 2025 07:48:53 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5%5]) with mapi id 15.20.8901.018; Wed, 2 Jul 2025
- 07:48:52 +0000
-Message-ID: <62ff22f5-f10d-4b32-aa04-eabb21935fdf@amd.com>
-Date: Wed, 2 Jul 2025 09:48:47 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] drm/amdgpu: move GTT to SHM after eviction for
- hibernation
-To: Samuel Zhang <guoqzhan@amd.com>,
- "Zhang, GuoQing (Sam)" <GuoQing.Zhang@amd.com>,
- "rafael@kernel.org" <rafael@kernel.org>,
- "len.brown@intel.com" <len.brown@intel.com>,
- "pavel@kernel.org" <pavel@kernel.org>,
- "Deucher, Alexander" <Alexander.Deucher@amd.com>,
- "Limonciello, Mario" <Mario.Limonciello@amd.com>,
- "Lazar, Lijo" <Lijo.Lazar@amd.com>
-Cc: "Zhao, Victor" <Victor.Zhao@amd.com>, "Chang, HaiJun"
- <HaiJun.Chang@amd.com>, "Ma, Qing (Mark)" <Qing.Ma@amd.com>,
- "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20250630104116.3050306-1-guoqing.zhang@amd.com>
- <20250630104116.3050306-2-guoqing.zhang@amd.com>
- <ce04e266-6c3f-4256-aade-bafca8609ab3@amd.com>
- <DM4PR12MB5937FFB3E121E489A261785DE541A@DM4PR12MB5937.namprd12.prod.outlook.com>
- <ba843972-f564-4817-8651-b3b776c5f375@amd.com>
- <558ad3d6-7349-40f1-ba06-0fa46701b247@amd.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <558ad3d6-7349-40f1-ba06-0fa46701b247@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0082.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:cd::12) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF1200BA1;
+	Wed,  2 Jul 2025 07:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751442862; cv=none; b=dB1c7XXXCXgl0UerEa1O3+p3bKMCDMvJNXZRSYqH/Ct4sAz1jYnPW2YdC01FYVxtJI3/1tfYRLqweQQl+vIM1nvK44xG9Hhi2s7Z7rtScjOQRVMj/gH4pA3aC1+1Ak/f4Z78EvUZE6O/kVxvZ32bS+pgga/rW9vFyWb0DAMh4+I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751442862; c=relaxed/simple;
+	bh=rUwUc12CwDq37/2slGik7dRlGZeOaTXSpDsb9W6K1i0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=seWro7qJbYup7GFHmBryUyfZyi21bjRG0TQ+CZ8891D2I9JMrh4nutDvxHDeSGNPrMSsQ+CmWda+BZKloUyPnBbpVUY8UdreAnrSj0KlCxoUkF7kJAqGUyO4dxrMY1LcI5h8kwPyXtaNGAJqyDGt8Uci5l6yvS078UflmaX12Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFmlGPHc; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751442861; x=1782978861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rUwUc12CwDq37/2slGik7dRlGZeOaTXSpDsb9W6K1i0=;
+  b=WFmlGPHcxwX2SUVmyW4anhqDN0rNuxfRwK7E9iwtDHAcNG7n7mt90SIG
+   mK78cNLxHgzP3jnCF5zBRVkB5QsRJEhrlhQmctWpLYDy9hcKUJP6osqIO
+   ITXwPhqMBGIlBPD2tkZ/cmVS0tyfS6Wjljwn5b5AqfAW4+OULwBzvS6Ia
+   VNXeQvB+I9uTDKycbHdAlqDbmLW72LHH0o8b0E1KLE3EpPwUTagjbcNkJ
+   sD5Z8b8zH7l+nmdMuJGYuhw04CIvNLIjNCFTwTpaY5NQuObmC41d0/3rr
+   aJEMHOiMdpkSl/NH+LB91PDo5gtbLJgp6Ar6+xQVimIwHzbUkEPsv6fmh
+   w==;
+X-CSE-ConnectionGUID: erfliI1MQcScn6KMnows+g==
+X-CSE-MsgGUID: 824dVOprSDmNoKTkDgl55Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="64326060"
+X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
+   d="scan'208";a="64326060"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 00:54:18 -0700
+X-CSE-ConnectionGUID: 98SccRJrQ5yvJqszW1ShBA==
+X-CSE-MsgGUID: 52dATgF7Sy6tK3S06PLKug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
+   d="scan'208";a="153636445"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 00:53:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1uWsHv-0000000BrCM-1jUQ;
+	Wed, 02 Jul 2025 10:53:51 +0300
+Date: Wed, 2 Jul 2025 10:53:50 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Waqar Hameed <waqar.hameed@axis.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Julien Panis <jpanis@baylibre.com>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matteo Martelli <matteomartelli3@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Francesco Dolcini <francesco@dolcini.it>,
+	=?iso-8859-1?Q?Jo=E3o_Paulo_Gon=E7alves?= <jpaulo.silvagoncalves@gmail.com>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>,
+	Mudit Sharma <muditsharma.info@gmail.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Song Qiang <songqiang1304521@gmail.com>, Crt Mori <cmo@melexis.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
+	Yogesh Gaur <yogeshgaur.83@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, kernel@axis.com,
+	linux-iio@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
+	linux-mmc@vger.kernel.org, imx@lists.linux.dev,
+	netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+	linux-spi@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	sound-open-firmware@alsa-project.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
+Message-ID: <aGTljgePpiPJq2xj@smile.fi.intel.com>
+References: <pnd7c0s6ji2.fsf@axis.com>
+ <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
+ <CAHp75Ve=Zas8=6YKoPeTRrvjCaTyyRAyJG1gBLripqZgQpfg7g@mail.gmail.com>
+ <zxtyk4vly2salnoy3lng2ni7pzu3wg6qnmucadnclfigrd2m2m@i6xcrmvh34r5>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|DS0PR12MB6631:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2176971e-2bbc-425c-7d3f-08ddb93ce34f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NkZMQ0hUeDE3Qnc2dStkbjhKbFhpRkVkRFBuby9jVUdoRHhtOVpwTG5SOXIy?=
- =?utf-8?B?SCtEaDdycTgyMGp4NnV6dzBlQWw4RlQ5ZU1tWFpWT1V2SkJxVEJ2UXVubEhE?=
- =?utf-8?B?TEpvdHN6OHVDRlJzelBRREgwOU1pQ05aTlB5UFh3dUdWckFTNm1DQkhaTnZU?=
- =?utf-8?B?ZEJQaUxxVHJVc1oxVUpaNzEycUwwcnFDS1l6TkdNRFVGQ2VlSjFlQXJTQmRL?=
- =?utf-8?B?eHNOQ0VrQXdQMHVlcm1CMC9wMFpBQXhzT1hDU3VaRndEOW9VVHowSW1ZaFUr?=
- =?utf-8?B?bnFDWldYUW9lcXkrUEU1M2MxTVllTWswWEUrNmpqK09IWFVLUWtva0NXZUI5?=
- =?utf-8?B?RSs1cVhROTVrSUs5MDdGMEhYSUdla1RhcHpUb1ErazNKd2pIRURid2c3ZTVo?=
- =?utf-8?B?UVFGT29qVmg2WWNNZEJEam1vSnpaMDAvZWs1cWVCQmlWc3M3ZXZGQmVSazNx?=
- =?utf-8?B?NlRWZFg2eFZpM05QS0thR3YyczEzclQ2R003SGhOb2xJWnJHNzN3UlpFSm4v?=
- =?utf-8?B?RVZZOHpjTnB5VldPQVB0ZlljRUdnY1RpMXRldWdROWtiTkh4dzk1TU44S3N0?=
- =?utf-8?B?Q01ibXFGMUVWRnVjMFlGV3VvSk9QT1BWbzlOcnlJS1VWeWJjNDFYMC9KVVFk?=
- =?utf-8?B?ekEvVXNFMzNsWUQ2RFRYeGRqVmhmNWZmK2NzdjhZV1JiS1NMRm5oRmtYeTF1?=
- =?utf-8?B?Q2d6dy9IenBNeUo4ci9BN2pSTEtrejRSLzUwcEl6enJ2c3hIOHpSdGJHcXBW?=
- =?utf-8?B?RjJYUHN4RlhuZmxSTG5aa0lUOXBjWjBHeFVVYjVhbDZnaExEaEVXNktJT04z?=
- =?utf-8?B?TUY3REcyWlRrQ09oM0ZMcWhwcEtxN2pXb0dqVlhpWWMvRE5JT0ZXUEZLbGdZ?=
- =?utf-8?B?RFlIWUlhMW0wMkt4MkFkdFFPUHRRdWI5d2RZc3AwS0E1MzZQbUJyUWJQZllv?=
- =?utf-8?B?QUdmMjl1WDJSbUNSVzdvV0Z2SXo5QmxSMTFBSzErM3hzVTBnTWo2SzQvK2VT?=
- =?utf-8?B?UTVtTkJ6cEs1RXhBeUxHOEJWT0wrY1pCSElIeFlxazh0bGNBdm9hcVVTUFA0?=
- =?utf-8?B?dHFVWHRoVm5IM216WlE1RHFXOXF6eDhZYWNQMTNVQVpsejhMU1JlaVllQU9v?=
- =?utf-8?B?cnZ4Z21MWStQZ1oxc1ZFWjdMbnhnUDVaVlVBNFdEV1Z3c1ZTb2pGb2lyanNK?=
- =?utf-8?B?STh1Zmh6UGNpNUtuc3dZdnhkQWxXUnlVK2NMYjZhMTFPYlJjSWltaUtUd0pz?=
- =?utf-8?B?dVFjQlgxVDViMG91QXE0bFVMWjM2SEN1S0ZQaU5zWklIY1IxQ3g2a1JVb25G?=
- =?utf-8?B?VzZhaTEybkNOS3VQZUxqR0o3TUkwQUJ6YzRSbE55RWxDT04zZDBJQkk3d0lv?=
- =?utf-8?B?QVloeEVidHEyWGZVRkRqWGF1MWluVlExcXNlNVRzZHpIZjErQ1JTRmJSQm5h?=
- =?utf-8?B?UklyWWU5SlJ5SHd4NlUzSUdyTk1ZaDk3S2JydVdvM296aUNLT204NGFXMWo4?=
- =?utf-8?B?VDdHUU81VEtuR1hiY2ppQWUvRjF4ZHFZbUw0aXk2aGZLa2FZUW5RV0ZsdmNs?=
- =?utf-8?B?Y2JwNy9Ea2J3UWlkb1hUSmwzRERkNEtRUWtXbG8yemcvSVgyK0F5M2RsV0I5?=
- =?utf-8?B?bHh3anFvYjg0WE9sMnBkL1NpV3RJMFhqYzloU1BsQ21zeWQvN2x3UlFzb254?=
- =?utf-8?B?ZjMrMnA4U1ZubFRIL2dPK2YyQ3E1VnZMeWFHWW0vRmdQRE8zMWNYSURZZHc5?=
- =?utf-8?B?S3hHNUtFa2hiYmd0ZTRZQ0w2L3V1NlpOaVpadzJzZkh0dUNQN1RwVk1EN0d2?=
- =?utf-8?B?VkNyRnB3MFVTdVNIQlVqRVNNUmJpUDVpRlVEQ3VHbTNYd0VnOVBQbEprNFpL?=
- =?utf-8?B?bnk0T0QzKy8zMHY4VnZST2tGaCtPSmxyT2hIY0oxZ3BnaHFoUDNCSUlCLzdU?=
- =?utf-8?B?dDdmM3luUHpZVUp1QWZOcHdQT1REVVI4QmVLY1dkVzQvcFVRY2pyVGRiamcr?=
- =?utf-8?B?ZkNnS04wVTlnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Nk9DY05iM3RZQnFKM1AzUDMzYk9ESHBid3lrRkNTRzNsVnpneFk0Ylp4OFEw?=
- =?utf-8?B?TTBiRDY0bXpwV2VlKzFzNW5nRkhBNFBjL3k1eUVhR21oTmVXMkIrY0RrQTgw?=
- =?utf-8?B?cGRON2Ewd2t6T0pES1lvRE1BNjZ3WVRwazVoTjRoTEpNK0JScjh2N2c5K3Fp?=
- =?utf-8?B?UUNlbnJ4dEJiaXFzTUdyRDUyTjZOMk9yajJsMlo1QjFWV29jMGdaUms3aXo2?=
- =?utf-8?B?QWV5YnMwaW5Mcnd6V1cvbWdmVVhxVnRFc0NDSHpqVDdRdHcyd2tVTlozaDVn?=
- =?utf-8?B?Q1owd2JocGlXSkVnN0IvSnZaTVlxdFRHV2x3TzlSSFhnSEwzNE9Ea3ZaZ0c4?=
- =?utf-8?B?TWQ4eEpId0pzOUgrclhsaURwY0IzaTIzSDlscDdlREhjNkhGaVd6Z2p5RWNm?=
- =?utf-8?B?Vld6STJKK0V3Z2tTcnFlUXVGL3NTMjcxOFJMMVVwRHNMVzZFN1hqQUpLd2Fx?=
- =?utf-8?B?U01qbTlydDdjSUh3bzNXZ2xjQlpyTmhGeHJDdUtWLysyZVFPOCtCQnZ4VFo1?=
- =?utf-8?B?NWUzcVArUW9zMUE0NmF0V1pZOEwwc3FtMWRTenltcnNuZXcvV0FLMklFV2RC?=
- =?utf-8?B?TURxWll0WDNCTXZoa1RveVM3WVNIc0NiNkgyeFNVcjFBMjBYajM2Y3RHMXJX?=
- =?utf-8?B?TTQzUG5DL1F6MkgvcVc0WkRQMkxOakpsTUNjZkF5WWJZSENJUFZqbEtPQWdk?=
- =?utf-8?B?b3lId2grL0Fxd1NZKzNrZzU2R0w1aEFvMWhhRHlqSmJaaWdablFRcjNFLzZT?=
- =?utf-8?B?Y2VHUThuWitlUkJvaDYvQUwwT3cvbG51M2Y5NnhSSnZWV05GdEh3VGhPblRX?=
- =?utf-8?B?b3F1K1lINzRiLzF0azNkQklLd1dpRnY3RmQyRXRrYmRMUGVRMGZadXVzU3lY?=
- =?utf-8?B?K2pmSERJZk5QL05GTVlLbERNYjZ4aU93ZVR3cW0vR2ZBcUloT0lPeEdLb0hz?=
- =?utf-8?B?TS96MTBhUUZHdzhRcGwzVERMN0VMOWxlVlNhNVRMZjRvUktvSEE1a0IxaEZT?=
- =?utf-8?B?SVBmUThEYkpEYy82c1RraklnVmlsN2lEVzJ5emJacEJtS043dVlXMmxMc3pa?=
- =?utf-8?B?UEJmdGZZcFRlUjUxbkJIelU0NkdyTkRHSW1wKzBTOU14d0Y2VStsdGJrK3Ix?=
- =?utf-8?B?U014b1FUNGZ5VW1aVU9EcGV2RzF3TXVseW8wY1h6cGhzWjdMajFscUtwbnVw?=
- =?utf-8?B?NjltV1lkR2g0RmdkNTZ2aTl1OWU5elo4ZUM5dW9JWS9hWGMzY0hDNU5iREVR?=
- =?utf-8?B?YVNJSXY2MXhNMDd0WHBGY3JvcGVvRlBsdVVtZEwrckdod1FTSFdRNE5Eb1lW?=
- =?utf-8?B?UFZJQ0dHVlpZUkZqanZBR3dqWWRNSC9uS0xlSmt3VEIrOTBvOHZZcUJkZzJI?=
- =?utf-8?B?YThDdXlnZmN5a2dKZHlkNTAxRTBSWWtRdkEyUkpJUG85SkFGaU83WEZ3dHI0?=
- =?utf-8?B?QS9pL2FWWXRCUXc0UFJlTGp5MEdRczc0V3dOT2FuUFg3cG96RHh5QUp3c3cz?=
- =?utf-8?B?UjMzelNWcm9MOXZkWm02SEdEQTZMbEpWYnhBVkRzYU9naDBxSGZackFmSjFv?=
- =?utf-8?B?TVRPb3A2Mnd3YjBLaUJvSUw4WDRyaG5aN0JUNWxZd28vM01Zc1UzcjNEMHA1?=
- =?utf-8?B?azhabmtFdVM4TTJLN3IzM3dvcG5SNEk2dzZhTUpqdXlCNHJTM0UrSFA4dVpl?=
- =?utf-8?B?aW4wWDVuS1BQcXc2aVBVcklHWFV2Kzg5WnhCNDl4alpIOE5XQk5GYWg2d0Iy?=
- =?utf-8?B?TnlaSTArb0hXNElBbC8zVzZoU2JhWTdyL2JwMDRkZG5wL2ZJdkg1b05yeVRP?=
- =?utf-8?B?L0poZHMrUHBBMHVVU3I0bmNIWFhJemdXQ0s1NE9ZbTlhR0lZZTRMNXZpaGRq?=
- =?utf-8?B?YVl0N1JEV3d4MHJXWS9DOE11MENMWjE5d3pLbVZ3d3M3dEFQa3RnaE5mMm1I?=
- =?utf-8?B?ZEZ0ZC90TGNCS1JqOHFJMUZkeUJlazRMZytCL3VrM0hpWlFocTNpN3QwZlph?=
- =?utf-8?B?Vk9FZW5XeUQ2ME1rRDVEM2NYNjFtMFJHdHRpY21BKzNCWmRlT2QvdFdXSEov?=
- =?utf-8?B?eG1ZbkxQVWtsdzgrcmxKQWlUaURXd2ZnSEs5TGFCUlNlUVo3NEY1SkNjL0h3?=
- =?utf-8?Q?6GTwLvbjc1Yu465Z+tEEIeF9F?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2176971e-2bbc-425c-7d3f-08ddb93ce34f
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 07:48:52.2267
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 930AvchIv9jj0AwxufH7zdDqXxbzPGxB2EbHwEegGOzBDomZfqUjTV8Ig/M5Iydr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6631
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <zxtyk4vly2salnoy3lng2ni7pzu3wg6qnmucadnclfigrd2m2m@i6xcrmvh34r5>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 02.07.25 09:28, Samuel Zhang wrote:
-> 
-> On 2025/7/1 16:22, Christian König wrote:
->> On 01.07.25 10:18, Zhang, GuoQing (Sam) wrote:
->>> [AMD Official Use Only - AMD Internal Distribution Only]
->>>
->>>
->>> Hi Christian,
->>>
->>>  
->>> Thank you for the feedback.
->>>
->>>  
->>> For “return ret < 0 ? ret : 0;”, it is equivalent to “return ret;” since ret is always <= 0 after the loop.
->> No it isn't.
->>
->> ttm_global_swapout() returns the number of pages swapped out and only a negative error code if something went wrong.
-> 
-> 
-> /**
->  * move GTT BOs to shmem for hibernation.
->  *
->  * returns 0 on success, negative on failure.
->  */
-> int ttm_device_prepare_hibernation(void)
-> {
->     struct ttm_operation_ctx ctx = {
->         .interruptible = false,
->         .no_wait_gpu = false,
->         .force_alloc = true
->     };
->     int ret;
-> 
->     do {
->         ret = ttm_global_swapout(&ctx, GFP_KERNEL);
->     } while (ret > 0);
->     return ret;
-> }
-> 
-> This is the new code version.
-> If ttm_global_swapout() return positive number, the while loop will continue to the next iteration.
-> The while loop stops only when ttm_global_swapout() returns 0 or negative number. In both case, the new function can just return the ret.
+On Wed, Jul 02, 2025 at 08:10:28AM +0200, Uwe Kleine-König wrote:
+> On Tue, Jul 01, 2025 at 08:57:02PM +0300, Andy Shevchenko wrote:
+> > On Tue, Jul 1, 2025 at 8:44 PM Uwe Kleine-König <ukleinek@kernel.org> wrote:
+> > > On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote:
 
-Ok, now I at least got what you wanted to do. But that is not really what I had in mind and isn't really good coding style.
+...
 
-Please use ttm_device_swapout() instead of ttm_global_swapout(), apart from that we can probably keep it that way.
+> > > With that
+> > >
+> > >         ret = devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
+> > >                                        meson->channels[i].clk);
+> > >         if (ret)
+> > >                 return dev_err_probe(dev, ret,
+> > >                                      "Failed to add clk_put action\n");
+> > >
+> > > from drivers/pwm/pwm-meson.c is optimized to
+> > >
+> > >         ret = devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
+> > >                                        meson->channels[i].clk);
+> > >         if (ret)
+> > >                 return ret;
+> > >
+> > > .
+> > >
+> > > I would prefer this approach, because a) there is no need to drop all
+> > > dev_err_probe()s after devm_add_action_or_reset() and b) the
+> > > dev_err_probe()s could stay for consistency in the error paths of a
+> > > driver.
+> > 
+> > Why do we need a dev_err_probe() after devm_add_action*()? I would
+> > expect that the original call (if needed) can spit out a message.
+> 
+> I'm not a big fan of API functions that emit an error message.
 
-Regards,
-Christian.
+We do have that in devm_ioremap*() family. Just saying...
 
-> 
-> The ret values printed in the do while loop:
-> [   53.745892] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 512
-> [   53.950975] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 35840
-> [   53.951713] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 9
-> [   67.712196] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 2187264
-> [   67.713726] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 512
-> [   67.759212] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 32768
-> [   67.761946] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1024
-> [   67.762685] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 85
-> [   67.763518] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 175
-> [   67.767318] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 2367
-> [   67.767942] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1
-> [   67.768499] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1
-> [   67.769054] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1
-> ...
-> [   67.783554] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1
-> [   67.785755] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1
-> [   67.788607] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 1
-> [   67.789906] [TTM DEVICE] ttm_device_prepare_hibernation:164 ret 0
-> 
-> 
-> Regards
-> Sam
-> 
-> 
-> 
->>
->> And it's probably not a good idea to return that from the new function.
->>
->> Regards,
->> Christian.
->>
->>>  
->>> For all other comments, I will revise the patch accordingly in v2.
->>>
->>>  
->>> Regards
->>>
->>> Sam
->>>
->>>  
->>>  
->>> *From: *Koenig, Christian <Christian.Koenig@amd.com>
->>> *Date: *Monday, June 30, 2025 at 19:54
->>> *To: *Zhang, GuoQing (Sam) <GuoQing.Zhang@amd.com>, rafael@kernel.org <rafael@kernel.org>, len.brown@intel.com <len.brown@intel.com>, pavel@kernel.org <pavel@kernel.org>, Deucher, Alexander <Alexander.Deucher@amd.com>, Limonciello, Mario <Mario.Limonciello@amd.com>, Lazar, Lijo <Lijo.Lazar@amd.com>
->>> *Cc: *Zhao, Victor <Victor.Zhao@amd.com>, Chang, HaiJun <HaiJun.Chang@amd.com>, Ma, Qing (Mark) <Qing.Ma@amd.com>, amd-gfx@lists.freedesktop.org <amd-gfx@lists.freedesktop.org>, dri-devel@lists.freedesktop.org <dri-devel@lists.freedesktop.org>, linux-pm@vger.kernel.org <linux-pm@vger.kernel.org>, linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
->>> *Subject: *Re: [PATCH 1/3] drm/amdgpu: move GTT to SHM after eviction for hibernation
->>>
->>> On 30.06.25 12:41, Samuel Zhang wrote:
->>>> When hibernate with data center dGPUs, huge number of VRAM BOs evicted
->>>> to GTT and takes too much system memory. This will cause hibernation
->>>> fail due to insufficient memory for creating the hibernation image.
->>>>
->>>> Move GTT BOs to shmem in KMD, then shmem to swap disk in kernel
->>>> hibernation code to make room for hibernation image.
->>> This should probably be two patches, one for TTM and then an amdgpu patch to forward the event.
->>>
->>>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
->>>> ---
->>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 13 ++++++++++++-
->>>>    drivers/gpu/drm/ttm/ttm_resource.c      | 18 ++++++++++++++++++
->>>>    include/drm/ttm/ttm_resource.h          |  1 +
->>>>    3 files changed, 31 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
->>>> index 4d57269c9ca8..5aede907a591 100644
->>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
->>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
->>>> @@ -2889,6 +2889,7 @@ int amdgpu_fill_buffer(struct amdgpu_bo *bo,
->>>>    int amdgpu_ttm_evict_resources(struct amdgpu_device *adev, int mem_type)
->>>>    {
->>>>          struct ttm_resource_manager *man;
->>>> +     int r;
->>>>             switch (mem_type) {
->>>>          case TTM_PL_VRAM:
->>>> @@ -2903,7 +2904,17 @@ int amdgpu_ttm_evict_resources(struct amdgpu_device *adev, int mem_type)
->>>>                  return -EINVAL;
->>>>          }
->>>>    -     return ttm_resource_manager_evict_all(&adev->mman.bdev, man);
->>>> +     r = ttm_resource_manager_evict_all(&adev->mman.bdev, man);
->>>> +     if (r) {
->>>> +             DRM_ERROR("Failed to evict memory type %d\n", mem_type);
->>>> +             return r;
->>>> +     }
->>>> +     if (adev->in_s4 && mem_type == TTM_PL_VRAM) {
->>>> +             r = ttm_resource_manager_swapout();
->>>> +             if (r)
->>>> +                     DRM_ERROR("Failed to swap out, %d\n", r);
->>>> +     }
->>>> +     return r;
->>>>    }
->>>>       #if defined(CONFIG_DEBUG_FS)
->>>> diff --git a/drivers/gpu/drm/ttm/ttm_resource.c b/drivers/gpu/drm/ttm/ttm_resource.c
->>>> index fd41b56e2c66..07b1f5a5afc2 100644
->>>> --- a/drivers/gpu/drm/ttm/ttm_resource.c
->>>> +++ b/drivers/gpu/drm/ttm/ttm_resource.c
->>>> @@ -534,6 +534,24 @@ void ttm_resource_manager_init(struct ttm_resource_manager *man,
->>>>    }
->>>>    EXPORT_SYMBOL(ttm_resource_manager_init);
->>>>    +int ttm_resource_manager_swapout(void)
->>> This needs documentation, better placement and a better name.
->>>
->>> First of all put it into ttm_device.c instead of the resource manager.
->>>
->>> Then call it something like ttm_device_prepare_hibernation or similar.
->>>
->>>
->>>> +{
->>>> +     struct ttm_operation_ctx ctx = {
->>>> +             .interruptible = false,
->>>> +             .no_wait_gpu = false,
->>>> +             .force_alloc = true
->>>> +     };
->>>> +     int ret;
->>>> +
->>>> +     while (true) {
->>> Make that:
->>>
->>> do {
->>>          ret = ...
->>> } while (ret > 0);
->>>
->>>> +             ret = ttm_global_swapout(&ctx, GFP_KERNEL);
->>>> +             if (ret <= 0)
->>>> +                     break;
->>>> +     }
->>>> +     return ret;
->>> It's rather pointless to return the number of swapped out pages.
->>>
->>> Make that "return ret < 0 ? ret : 0;
->>>
->>> Regards,
->>> Christian.
->>>
->>>> +}
->>>> +EXPORT_SYMBOL(ttm_resource_manager_swapout);
->>>> +
->>>>    /*
->>>>     * ttm_resource_manager_evict_all
->>>>     *
->>>> diff --git a/include/drm/ttm/ttm_resource.h b/include/drm/ttm/ttm_resource.h
->>>> index b873be9597e2..46181758068e 100644
->>>> --- a/include/drm/ttm/ttm_resource.h
->>>> +++ b/include/drm/ttm/ttm_resource.h
->>>> @@ -463,6 +463,7 @@ void ttm_resource_manager_init(struct ttm_resource_manager *man,
->>>>       int ttm_resource_manager_evict_all(struct ttm_device *bdev,
->>>>                                     struct ttm_resource_manager *man);
->>>> +int ttm_resource_manager_swapout(void);
->>>>       uint64_t ttm_resource_manager_usage(struct ttm_resource_manager *man);
->>>>    void ttm_resource_manager_debug(struct ttm_resource_manager *man,
+> In general the caller knows better what went wrong (here:
+> devm_add_action_or_reset() doesn't know this to be about the clk_put
+> action), so the error message can be more expressive.
+
+I'm not sure I was clear about my suggestion. What I argued is something like
+this
+
+devm_foo_alloc()
+{
+	ret = foo_alloc();
+	if (ret)
+		return dev_err_probe();
+
+	return devm_add_action_or_reset();
+}
+
+foo_alloc() in my example is left untouched.
+
+> Also in general an API function doesn't know if a failure is fatal or if
+> the consumer handles the failure just well and if the call is part of a
+> driver's .probe() so it's unclear if dev_err_probe() can/should be used.
+> (I admit that the last two probably don't apply to
+> devm_add_action_or_reset() but that's not a good enough reason to
+> make this function special. Every special case is a maintanance burden.)
+
+devm_*() are only supposed to be called in the probe phase. So using
+dev_err_probe() there (implementations) is natural thing to do, if required.
+And see above, we have such cases already.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
