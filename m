@@ -1,254 +1,182 @@
-Return-Path: <linux-pm+bounces-29968-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29969-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 472AAAF0F56
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 11:13:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2041AF0F59
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 11:13:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19B541C26CE9
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 09:13:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AFDF1C26D0A
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 09:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F87823ED56;
-	Wed,  2 Jul 2025 09:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B0623D29E;
+	Wed,  2 Jul 2025 09:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="TR3v0U1t"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FehmnoY1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF9E23D2B4
-	for <linux-pm@vger.kernel.org>; Wed,  2 Jul 2025 09:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFDD233D9E;
+	Wed,  2 Jul 2025 09:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751447595; cv=none; b=Pz9V09Vwv6b2qNhVMc3unXZEmwXu4S1EMVvyooOPHr+i5Qn/TEGr+dc1EMJGByAacBAsfwzFzEru9lgGqxag4oq0+MrbqfEiAjPcLejIanZQ0TovlTdtilgAKwjldMVRvUTiM4kzpxx0moqOhsDizJGNnHFevzU7SzVbVbw3Sm4=
+	t=1751447614; cv=none; b=oHXlJfnRgx6v/f+tf7+y8tgo8GkXulIqMxd2gU9PhtprG4kIVgzWbfJpndGeOpC7CYuSraNlxakqHmLdhtiPJV+wNIp+emnQbyjDNBDenNKv0i/D78ida4olC/K0f/TX92ysx98LhlC1m3tFNZLWjfFs+JnV5PlZxhJE/T0lHzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751447595; c=relaxed/simple;
-	bh=2FPjzMzKyA6adFzJ0yhBTxg69acIxuCchSzT7oFh9NU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=rjn5AHjVqArLct0YjJxGur8unUSZCysZZ5D2EXp9hXehP2eRaSHOeFKRGII57bAhIBwORwy1qt9dOLIrPlx+QKH+bfMr9inFaw5TS3jQ6Jv+b18xU0r6q0Tfib3cR35ZbLnCihKwUbksFzQ/lLvT7N8lv1XtDKNYPfSPIJxmolo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=TR3v0U1t; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6fa980d05a8so70112096d6.2
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jul 2025 02:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1751447593; x=1752052393; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vo6FBHptvz4zRCJelPx9LjfFz/JvRA8JCJ880HRAykw=;
-        b=TR3v0U1tGZKdwx8e1Hlvu+Y3kjtGLtaGnNUKd9YeC3f4eWz5kqe74YCKIGq8ayt1P+
-         8qgHlcLNX1MC0T0++1wo3CGOiVd4kXqZ0rbclxehSvU5LGkckORqtRFMBEGBNeX7Bjmz
-         ZNeKzViz0GgkAp/GsZvYSjN+1GB5lDvBVAEVvzlQB1vnVl4HuYaTuSfa7b914mlVa8DU
-         +6qCC1la6kgn+xBa8N5PsokdjPB0MN0xOoO+wmA0oWkzoiToeBEglI3uNKYXHEvvdpJD
-         XHiA8KCf6MmqsZ/WMp15QNtYPZSOfIVvmuxrfXq2TRF95hGRjI0jdaCsON7QB35d4ZFr
-         QLiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751447593; x=1752052393;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vo6FBHptvz4zRCJelPx9LjfFz/JvRA8JCJ880HRAykw=;
-        b=OTUTGXPq+MgMumoq+muBvcTp51CHASHdsRhT7taRm8pBleTd3p6nti1d1l2SIJzeR0
-         41xwxoYzzE3ucBnxAF2EBbySqezFLxyMJz0opnEPNntEOfuocHrP0a+tDm2JDMirH+Ns
-         126+DXJAgAuCEUws9NniyIzr2VoTSvUq1PE/RJqcJwEKLkuF2efO/UPu3Se4+zZ052ay
-         /MD+uoOvOYw0y1cHkVO+iZ3d16y590NppRYDog5weqkCjpkkKdbMNn/ziRMsdCdE8Gbg
-         iHnkHP6/ztIzfrz4HH7U7sztkVtVXq1mLpJfZ42y7P6w5gS75PIFhGdj86Qa0GdXaGct
-         TETg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrW+ci1+iwrRsWDn4Lr95EQUHuNNeVDoqQajE0F74lvWHJ1ph4bbwM4LhbnGGvb+PcAtrm9zAAxw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcCg1kRA4ACYCS19h0gfALstzQH7JSEu+8h42U0YPW8RG6pZnZ
-	Iot0n51JWfrQgNr9k/+d5VDvFCu78fId5j3+WlfnRb/LZcIM3T8qbpoyOmOt7oRNF+s=
-X-Gm-Gg: ASbGncsL6OjEwy+HG+aXJhTzcrcJ0PfmZldBqXA4jlpQDPa1BnJEshNNHCcl0/43d5/
-	7SADFONdYU6a9XOA7QgSYGNpKqqVk02gcqltCfIzLwgoOyLhx+j3wc+V0TPgiKMB4ySub4rGq1r
-	8YtQt50eaIWkEOJ3k9Nbycc+HgPxDXXCLg9g9Hm68QfZVD8qjpj8UGabWxUol17r2Q9CkHR1Q0N
-	5a0Vj5cbgI88mULRCe1yE0bq4e6P2DPYPj0b0xHnx6vtcBbNRR21BuatPQRyS11bCLqWn5mStgU
-	AmToovgsitj/rA6YxCQJLbkpE68mWRgPFjHgM5wN0qVmBAq7bwEELL5+vNKz6qDAZHACxe8Gx2B
-	sHL7aZJL4
-X-Google-Smtp-Source: AGHT+IFzmLCmLoGxxKwpjhHax+Cuhcc0opHmznf13C5TLU2uQvyPNUYZotNsu3vuaVV6k6gxhSCFeA==
-X-Received: by 2002:a05:6214:20cf:b0:6fd:7604:d90a with SMTP id 6a1803df08f44-702b1aae28fmr19229146d6.6.1751447593097;
-        Wed, 02 Jul 2025 02:13:13 -0700 (PDT)
-Received: from hsinchu26.internal.sifive.com ([210.176.154.34])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d4431344f7sm911736285a.2.2025.07.02.02.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 02:13:12 -0700 (PDT)
-From: Nick Hu <nick.hu@sifive.com>
-To: conor+dt@kernel.org,
-	krzk+dt@kernel.org,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: Nick Hu <nick.hu@sifive.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v3 3/3] cpuidle: Add SiFive power provider
-Date: Wed,  2 Jul 2025 17:12:36 +0800
-Message-Id: <20250702091236.5281-4-nick.hu@sifive.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250702091236.5281-1-nick.hu@sifive.com>
-References: <20250702091236.5281-1-nick.hu@sifive.com>
+	s=arc-20240116; t=1751447614; c=relaxed/simple;
+	bh=mhAUJwLGyWJWM5SoEqiWDX1ozKMiVyu7+WEYBedEpWw=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=Qqu9ztbgzHjGZ4e9s42uOslnN2pv/DQHGLh4DtyOB3o/Ad6xqsonDBOBqFdwvNMkTiaI3vree/y2cRgBzs+GLtfRyvlbX7uUaN+vjUfW8rPsVCEmxUHCDPg9xiiAR6SP0jz/cHvEfeifY9TZ20AtekWp9ityk1DH1Swq2kiaCts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FehmnoY1; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5625Bn8e024756;
+	Wed, 2 Jul 2025 09:13:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=dGErFcn2bbUfPM6EYCa3He
+	g6EeeHal565bae2oygEyc=; b=FehmnoY1d7PyHiOmPU4x2GMQhblSfJUZU+fFZs
+	4wDEroZ+1NgZNSKy6GYxW3+46slGyFcjWueiHTTiyZiS21wNMAvbfUxNobO4jkBT
+	T5slpbeBxyZ7X+8jV3XvUD+hArWmRfZvgi3Jxr6Kz5/V8Osecg/7sFIWdQogPGEF
+	o3IVLA1W+F+mD0wok1PigrqBQFCK3unshMiBwgzXq0TLci33SzZi/2VHRLBFZ0k7
+	aCoXneBdT7+ehA89Wo3yUxeOMcoXwH2pvnoeSu8lFsHN+C5xAxhPWoMYzskpObQ1
+	Yp/nyWK2Gjw0gfP6mtm9+Mf56tLlWNI1NKj6a8MiBdHj3QOg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47j8s9m07p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 02 Jul 2025 09:13:28 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5629DR0U012657
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 2 Jul 2025 09:13:27 GMT
+Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Wed, 2 Jul 2025 02:13:23 -0700
+From: Taniya Das <quic_tdas@quicinc.com>
+Subject: [PATCH v5 0/3] Add support for clock controllers and CPU scaling
+ for QCS615
+Date: Wed, 2 Jul 2025 14:43:08 +0530
+Message-ID: <20250702-qcs615-mm-cpu-dt-v4-v5-0-df24896cbb26@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACT4ZGgC/32QTW7EIAyFrxKxrisgQH5UVb1HNQtwnA5qCDOQi
+ VqNcveSzGZWlbx5lt/nZ99ZpuQps766s0Srzz7OReiXiuHZzl8EfiiaSS41N1LDFbMRGkIAvNx
+ gWGBV4IzrHDZDTdqw4rwkGv3PQf08PXSi663Al0eTBcrZHvC+ejvYDZdP7FVwwCniN2CclxSni
+ VIuXQEcOpTCkCiT1n0UKvoZXzGG9321s5mKJwS/9JW0JK21o5NCaTWqphVY86ZWne5wlLK2TrW
+ GRraHPPu8xPR7fGJVR8p/jy61Z7Fty1HX2vDnLOy0bdsfYsPA6l0BAAA=
+X-Change-ID: 20250625-qcs615-mm-cpu-dt-v4-b6b9bc7d3e56
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Manivannan
+ Sadhasivam" <mani@kernel.org>
+CC: Ajit Pandey <quic_ajipan@quicinc.com>,
+        Imran Shaik
+	<quic_imrashai@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Taniya Das
+	<quic_tdas@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.15-dev-aa3f6
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=H/Pbw/Yi c=1 sm=1 tr=0 ts=6864f838 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8
+ a=COk6AnOGAAAA:8 a=a7MBU3iHR-4UK4nVPLsA:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 7Sa-EcWuHgivbyF7NZ0tzl0QW1TLf6Xs
+X-Proofpoint-GUID: 7Sa-EcWuHgivbyF7NZ0tzl0QW1TLf6Xs
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAyMDA3NCBTYWx0ZWRfX59chx2AqQDrX
+ 09P4BHgy8BYV5xdMqsb7QYZaNatuXX68Hrq3XsFWNBsrQGZO1rNxhBJ+3Tdy70zn2lUwQft4Bom
+ Q7GZXHezXlV2jbgWL3xrFMw1+WwyWmspB/RfVUUtFg1XHZGTbRsw2Zmf2URnNTpsF4apGk/ihV3
+ ra6r6lyjuqZAXgsx906kUzXX7gcTLIi91MrWdjy2cAVSMEcNjvTw4HP0hcH/eAc5WZKe4qQ99W1
+ 0TCkSlNG9LnV9Z85w0GniGzJYEXWqg8tgl7ygKEwRUpHQ7zZxNZxhFvTHIiXpHhEFxxYmJUlRHz
+ Tr1sLvYmpzLoAEJL3ctbx2i1GVgcJbVD2tzUQnjo3LdVGp5RccyXxK6XXZNmaUgD0HoxlDKL+qY
+ 2Ins7as3wOLnyCc3KIDBPbIUgvodmUruQakw+iKKi5l+ODZd8qWgj+I0YASveJi5DHywTCMG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-02_01,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1011 mlxscore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 bulkscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507020074
 
-The SiFive DMC is the power provider of the devices that inside the
-SiFive CPU power domains, which include Tile, Cluster and Core Complex
-power domains. Before the cpu entering the firmware-based idle state,
-each devices that inside the corresponding domain should be suspended
-properly. So this driver will create the power provider and set the
-correct idle state.
+Add the video, camera, display and gpu clock controller nodes and the
+cpufreq-hw node to support cpu scaling.
 
-Signed-off-by: Nick Hu <nick.hu@sifive.com>
+Clock Dependency:
+https://lore.kernel.org/all/20250702-qcs615-mm-v10-clock-controllers-v11-0-9c216e1615ab@quicinc.com
+
+Changes in v5:
+- Update the documentation for CPUFREQ-HW for QCS615.
+- Update the device tree node for cpufreq-hw to point to the new compatible.
+- Link to v4: https://lore.kernel.org/r/20250625-qcs615-mm-cpu-dt-v4-v4-0-9ca880c53560@quicinc.com
+
+Changes in v4:
+- Fix the typo(removal of "") from cpufreq-hw node
+- Link to v3: https://lore.kernel.org/r/20250612-qcs615-mm-cpu-dt-v3-v3-0-721d5db70342@quicinc.com
+
+Changes in v3:
+- Move the cpufreq-hw node under /soc {}
+- Add the RB-tag on (v2) from [Konrad]
+
+Changes in v2:
+- pad address field to 8 digits [Dmitry]
+- Replace cpu/CPU in commit [Dmitry]
+- Update the binding to use SC7180 compatible, as QCS615 uses the same
+  hardware version.
+- Link to v1: https://lore.kernel.org/r/20241108-qcs615-mm-dt-nodes-v1-0-b2669cac0624@quicinc.com
+
+Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+
+Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 ---
- drivers/cpuidle/Kconfig.riscv           |  12 +++
- drivers/cpuidle/Makefile                |   1 +
- drivers/cpuidle/cpuidle-sifive-dmc-pd.c | 102 ++++++++++++++++++++++++
- 3 files changed, 115 insertions(+)
- create mode 100644 drivers/cpuidle/cpuidle-sifive-dmc-pd.c
+Taniya Das (3):
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCS615 compatible
+      arm64: dts: qcom: qcs615: Add clock nodes for multimedia clock
+      arm64: dts: qcom: qcs615: Add CPU scaling clock node
 
-diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
-index 78518c26af74..f461d09e0bdc 100644
---- a/drivers/cpuidle/Kconfig.riscv
-+++ b/drivers/cpuidle/Kconfig.riscv
-@@ -13,3 +13,15 @@ config RISCV_SBI_CPUIDLE
- 	  Select this option to enable RISC-V SBI firmware based CPU idle
- 	  driver for RISC-V systems. This drivers also supports hierarchical
- 	  DT based layout of the idle state.
-+
-+config SIFIVE_DMC_PD_CPUIDLE
-+	bool "SiFive DMC SBI PD Provider Driver"
-+	depends on ARCH_SIFIVE && RISCV_SBI && PM && OF
-+	select PM_GENERIC_DOMAINS
-+	select PM_GENERIC_DOMAINS_OF
-+	select RISCV_SBI_CPUIDLE
-+	default y
-+	help
-+	  Select this option to enable SiFive DMC SBI PD Provider driver.
-+	  This driver will create the genpd provider and work with the
-+	  RISC-V SBI firmware based CPU idle driver.
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index 1de9e92c5b0f..1f8e01b415e8 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -42,3 +42,4 @@ obj-$(CONFIG_POWERNV_CPUIDLE)		+= cpuidle-powernv.o
- ###############################################################################
- # RISC-V drivers
- obj-$(CONFIG_RISCV_SBI_CPUIDLE)		+= cpuidle-riscv-sbi.o
-+obj-$(CONFIG_SIFIVE_DMC_PD_CPUIDLE)	+= cpuidle-sifive-dmc-pd.o
-diff --git a/drivers/cpuidle/cpuidle-sifive-dmc-pd.c b/drivers/cpuidle/cpuidle-sifive-dmc-pd.c
-new file mode 100644
-index 000000000000..1c6b2131e573
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-sifive-dmc-pd.c
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * SiFive CPUIDLE SBI PD driver
-+ */
-+
-+#define pr_fmt(fmt) "sifive_cpuidle_sbi_pd: " fmt
-+
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+
-+#include "cpuidle-riscv-sbi.h"
-+#include "dt_idle_genpd.h"
-+
-+static void sifive_dmc_remove(struct platform_device *pdev)
-+{
-+	struct generic_pm_domain *pd = platform_get_drvdata(pdev);
-+	struct device *dev = &pdev->dev;
-+
-+	pm_runtime_disable(dev);
-+	of_genpd_del_provider(dev->of_node);
-+	pm_genpd_remove(pd);
-+	dt_idle_pd_free(pd);
-+}
-+
-+static int sifive_dmc_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct generic_pm_domain *pd;
-+	struct of_phandle_args child, parent;
-+	int ret = -ENOMEM;
-+
-+	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
-+	if (!pd)
-+		goto fail;
-+
-+	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
-+	pd->power_off = sbi_cpuidle_pd_power_off;
-+
-+	ret = pm_genpd_init(pd, &pm_domain_cpu_gov, false);
-+	if (ret)
-+		goto free_pd;
-+
-+	ret = of_genpd_add_provider_simple(np, pd);
-+	if (ret)
-+		goto remove_pd;
-+
-+	if (of_parse_phandle_with_args(np, "power-domains",
-+				       "#power-domain-cells", 0,
-+				       &parent) == 0) {
-+		child.np = np;
-+		child.args_count = 0;
-+
-+		if (of_genpd_add_subdomain(&parent, &child))
-+			pr_warn("%pOF failed to add subdomain: %pOF\n",
-+				parent.np, child.np);
-+		else
-+			pr_debug("%pOF has a child subdomain: %pOF.\n",
-+				 parent.np, child.np);
-+	}
-+
-+	platform_set_drvdata(pdev, pd);
-+	pm_runtime_enable(dev);
-+	pr_info("%s create success\n", pd->name);
-+	return 0;
-+
-+remove_pd:
-+	pm_genpd_remove(pd);
-+free_pd:
-+	dt_idle_pd_free(pd);
-+fail:
-+	pr_info("%s create fail\n", pd->name);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id sifive_dmc_of_match[] = {
-+	{ .compatible = "sifive,tmc1", },
-+	{ .compatible = "sifive,tmc0", },
-+	{ .compatible = "sifive,smc1", },
-+	{ .compatible = "sifive,smc0", },
-+	{ .compatible = "sifive,cmc2", },
-+	{}
-+};
-+
-+static struct platform_driver sifive_dmc_driver = {
-+	.probe = sifive_dmc_probe,
-+	.remove = sifive_dmc_remove,
-+	.driver = {
-+		.name = "sifive_dmc",
-+		.of_match_table = sifive_dmc_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+
-+static int __init sifive_dmc_init(void)
-+{
-+	return platform_driver_register(&sifive_dmc_driver);
-+}
-+arch_initcall(sifive_dmc_init);
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |  2 +
+ arch/arm64/boot/dts/qcom/qcs615.dtsi               | 80 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+---
+base-commit: 2ae2aaafb21454f4781c30734959cf223ab486ef
+change-id: 20250625-qcs615-mm-cpu-dt-v4-b6b9bc7d3e56
+prerequisite-message-id: <20250702-qcs615-mm-v10-clock-controllers-v11-0-9c216e1615ab@quicinc.com>
+prerequisite-patch-id: 9879d98848e0c7b1a5d898d657c8318738c44ac2
+prerequisite-patch-id: 6414e91724ba90fe820c3d2bb5caa720c99cf3be
+prerequisite-patch-id: e4e24f3dc507891b70936c9587ee1416f1a53e6f
+prerequisite-patch-id: 23062409b23977940c958bf22a215ae5dc45e93a
+prerequisite-patch-id: c35335d37fdf9a7f665f1c6d79d34b091d45e291
+prerequisite-patch-id: 9a0caaaa8d25634dd0db5edffbc939eb7e734c6c
+prerequisite-patch-id: 0b08c5ea612ac291dd829f5e7e63c499cd2812f7
+prerequisite-patch-id: 2327271def3656283d53dadb2ce9f8cd561249d1
+prerequisite-patch-id: c97840c551e081b0b9bf6c0e77b551935454f62d
+prerequisite-patch-id: 71f0eb0fb98c3177dcbe6736c120cba4efef0c33
+
+Best regards,
 -- 
-2.17.1
+Taniya Das <quic_tdas@quicinc.com>
 
 
