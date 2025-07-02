@@ -1,100 +1,110 @@
-Return-Path: <linux-pm+bounces-29988-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29989-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977DEAF61C8
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 20:47:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B221AF61D8
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 20:52:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0716C4A0A62
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 18:47:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79AA84E755E
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 18:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECB61DDC07;
-	Wed,  2 Jul 2025 18:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780142BE636;
+	Wed,  2 Jul 2025 18:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtTnCluC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+BdkLx4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BCD2F7D07;
-	Wed,  2 Jul 2025 18:47:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5126E2BE626;
+	Wed,  2 Jul 2025 18:52:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751482052; cv=none; b=E78aSVv7X4GuiZEtbWln0Y637ofBaXq9pK9cQ7owPRiPWyGjwx66FVDZj7dMIG3186YM75VE33ktbngzAL23Q+nC5bKMT1a5GJJf80mWIfsEeGlPfuaNhDBtxzi+5BRxDWN2Jh3mVRNV0NaE+fZKPg4JhhpH+Dcny50D5rT5sp0=
+	t=1751482325; cv=none; b=mAtVuAjGIDvNdePe1bqY9HgpuBzZMDcqIpEF2X+dZrMOjwRQoB8HCYWPqoBpU6cwvQJuYVeQoUswQSCa/7dG9+2GmznPodb4eWovrv1sH7Zhhf5s9J1z4wZTASXtpxfLBuR/uL4E67irgH1onIMdfovEoZgAe+lem4UQuQ0X3GU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751482052; c=relaxed/simple;
-	bh=urZtsqWwOJhSQf6BJio6DtJ58Ptki5mkWpBNQK5au1g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=I+d6KESvvQN0s3+k1tT8bm2HZIheWkoO0f6KH06qIhuraTs2xpMcz+B+3ldE/XkP3aQLKel2+Mzt8kcB39vQyEC1efEXcmrTHHP63gv3fV25KApdI8f4VLFwOami9mUZy3julNy0daA7a3QVjyHe+LrJmIB1D3nGT6FPRLtbxFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtTnCluC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01742C4CEE7;
-	Wed,  2 Jul 2025 18:47:26 +0000 (UTC)
+	s=arc-20240116; t=1751482325; c=relaxed/simple;
+	bh=Tr/jSXt2sR6pI5xPiIGtAmoJPkl4Wo3HBvqjjFVXZfQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SIX/IvCbauxVy9s5kz1lmZUOWIYs2LmgxFP/4Pz6dcSz19Lu05LuM3fS5PNZxQDFJfFBMvzaZ2ynydcB/2w/2H8l7MRSEghN6BUpm289RnpDzjI12M2GjB4thP9nBtGMzvRMIcxYXJ4+jb8030hZG/aRrmZJqzc+no9T1LHwOV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+BdkLx4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A46C4CEF1;
+	Wed,  2 Jul 2025 18:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751482051;
-	bh=urZtsqWwOJhSQf6BJio6DtJ58Ptki5mkWpBNQK5au1g=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=NtTnCluCW6K3OmHZvzLAR9+57BQhXtTHx/AVdwGAUf2iuo1Aerne5Kdbd15ViaIu6
-	 8FpzUqcwykIQEg687Hubs/pyPP++v9SWXn3TIHy9dMa1sPMzvQegm1Nr9z87QUky+W
-	 3ny0Ica0XI+4/XEyeEgik6IUkHoJIYUVQxeqXqR/cgsfKZbnAWMySc6MSUQBO6Gb/Z
-	 tx0NkXSY9HtmIec3CZEZgIpbVmGMeYA2B/UEycJLjehmsP7v6RuOw7MREBDQFakeff
-	 AGWgzgikNi/c6VYojooPLjQ4N0PNBGFQ6QeToVBYR53NoAHT4qt3b/bpa1DdJdNzWi
-	 5ALCrQ/0Af5ig==
+	s=k20201202; t=1751482324;
+	bh=Tr/jSXt2sR6pI5xPiIGtAmoJPkl4Wo3HBvqjjFVXZfQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=M+BdkLx4YPOcgIaiuCVDnMOBOMAs/aCYb82Lj+MpStd0wBlQ3qxzDg99aEu7RmYsy
+	 OzXtU/jgkgP4AKqA6iw2WBBlJKeE5F6QlVO9uU6d/wrPhDUbfisxobQ7KGqWOviAoq
+	 XflmtdRDoWmOWdEMqO8mX9C4u+7RmFUuiI/jHipcs4GnznpOIoVxz7r68uMMCGJR+D
+	 D8SiU10aXFxeoYPlFNRMbb5HUkwOtJSsQh1wchcUrPDE37bF0ueHur5nNQ+YOyOe18
+	 XsdBAcoNevCYKrwCcy2FEhv8b/ptCl7MQLYGlLq8Y70ljDONAs6edt9TcrR1ppkNzD
+	 8uyiOVU09NOMw==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6119b103132so154906eaf.1;
+        Wed, 02 Jul 2025 11:52:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVqbLztcohxjXI4AMU7XwHfNo3SQ4FAwDyblIx3b9U75dmXYDyawsEh/rZuI/zTxKL15vmY4PMujvlD20Q=@vger.kernel.org, AJvYcCX6+pDwWPxRB+4NsCeRE51ivHLck9n2FgPbRueP+maOnYuiw/jV9ON/NJ5TkICsh/1TYiVBmDpkbBM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCDygjqyRMZilSxD2Fp616vXrV5Tvu+XIXkE8DMWRs6ey/GqhA
+	tP3Xqe7YtBNyU8iHpPPOQ1Xu2ERGfoBwH3ldiJeLCTWbXLwKFSpn5AWMrVXVsdaAgDFdou3+ojt
+	srAWiOqA+3AcbrhnQ772FYYN/8vSBwhg=
+X-Google-Smtp-Source: AGHT+IHOMCJ8yeX1yw8ax6BvbRw3cnCHOoxVsmjjHb+MatlzhLVOWeGSgmW8oA7g4HuSXgc5iHRb2RrrWCm0EyUYu0U=
+X-Received: by 2002:a05:6820:1996:b0:611:a5f4:42c0 with SMTP id
+ 006d021491bc7-6137e88b272mr531992eaf.2.1751482323932; Wed, 02 Jul 2025
+ 11:52:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20250530100036.11954-1-zhangzihuan@kylinos.cn>
+In-Reply-To: <20250530100036.11954-1-zhangzihuan@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 2 Jul 2025 20:51:52 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h1xAx7HRRgH_7=D8U71j3yU1qji_5vYyt0ym+Hnrne6g@mail.gmail.com>
+X-Gm-Features: Ac12FXwke7zsok5_lzNB9WRmt9X-rHv5pRzyuLS3JSRQQeV1Gyp9a_hxRVbSC2A
+Message-ID: <CAJZ5v0h1xAx7HRRgH_7=D8U71j3yU1qji_5vYyt0ym+Hnrne6g@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: hibernate: Avoid redundant resume_device
+ assignment in resume_store()
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: rafael@kernel.org, pavel@kernel.org, len.brown@intel.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 02 Jul 2025 20:47:25 +0200
-Message-Id: <DB1SKFOR9W3I.1MBT3C6FGBWH7@kernel.org>
-Cc: <airlied@gmail.com>, <simona@ffwll.ch>, <ojeda@kernel.org>,
- <alex.gaynor@gmail.com>, <boqun.feng@gmail.com>, <gary@garyguo.net>,
- <bjorn3_gh@protonmail.com>, <a.hindborg@kernel.org>,
- <aliceryhl@google.com>, <tmgross@umich.edu>, <rafael@kernel.org>,
- <viresh.kumar@linaro.org>, <gregkh@linuxfoundation.org>,
- <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
- <tzimmermann@suse.de>, <davidgow@google.com>, <nm@ti.com>
-Subject: Re: [PATCH v4 2/6] rust: switch to `#[expect(...)]` in init and
- kunit
-From: "Benno Lossin" <lossin@kernel.org>
-To: =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>
-X-Mailer: aerc 0.20.1
-References: <20250701053557.20859-1-work@onurozkan.dev>
- <20250701053557.20859-3-work@onurozkan.dev>
-In-Reply-To: <20250701053557.20859-3-work@onurozkan.dev>
 
-	=20
-On Tue Jul 1, 2025 at 7:35 AM CEST, Onur =C3=96zkan wrote:
-> This makes it clear that the warning is expected not just
-> ignored, so we don't end up having various unnecessary
-> linting rules in the codebase.
+On Fri, May 30, 2025 at 12:00=E2=80=AFPM Zihuan Zhang <zhangzihuan@kylinos.=
+cn> wrote:
 >
-> Some parts of the codebase already use this approach, this
-> patch just applies it more broadly.
+> In resume_store(), if the device number written to /sys/power/resume
+> is the same as the current swsusp_resume_device, we can skip reassignment=
+.
+> This avoids unnecessary locking and improves efficiency slightly.
 >
-> No functional changes.
->
-> Signed-off-by: Onur =C3=96zkan <work@onurozkan.dev>
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
 > ---
->  rust/kernel/init.rs  | 6 +++---
->  rust/kernel/kunit.rs | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  kernel/power/hibernate.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 519fb09de5e0..504a1c2465ce 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -1291,6 +1291,9 @@ static ssize_t resume_store(struct kobject *kobj, s=
+truct kobj_attribute *attr,
+>         if (error)
+>                 return error;
+>
+> +       if (dev =3D=3D swsusp_resume_device)
+> +               return n;
+> +
 
-@Miguel are you going to pick this eventually, or do you think it should=20
-have a new version with the right splitting?=09
+The main purpose of this function is to run software_resume(), not to
+set swsusp_resume_device.  You're breaking it with this change.
 
----
-Cheers,
-Benno
-
-
-
-
+>         sleep_flags =3D lock_system_sleep();
+>         swsusp_resume_device =3D dev;
+>         unlock_system_sleep(sleep_flags);
+> --
+> 2.25.1
+>
 
