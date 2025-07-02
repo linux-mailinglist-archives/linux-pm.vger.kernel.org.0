@@ -1,198 +1,120 @@
-Return-Path: <linux-pm+bounces-29955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29956-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4F40AF0BFF
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 08:55:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A66EAF0C15
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 08:58:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92CC0446B5B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 06:54:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6294D4A76EB
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 06:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9EB7225760;
-	Wed,  2 Jul 2025 06:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HgEzaVEs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7223E221F37;
+	Wed,  2 Jul 2025 06:58:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4E21D7E41;
-	Wed,  2 Jul 2025 06:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEB01885B8;
+	Wed,  2 Jul 2025 06:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751439291; cv=none; b=BjfMjfHkxNG/5DvAGvzbZLvTEKzn+u8ddSmrXTImXjzHopwtvDy6llJmAGdu4eIH0dxlIcqNsl95Hp+PRawPWXTt1DpfcdYajuXsdD3ghRf84pAbjE2Pff8auxKLO4l0zbLwvMpOAJt7U7yU0/RQuojBpyseFN3KVKl2WHyjAe4=
+	t=1751439515; cv=none; b=MNSt2v1xz5EIOsa2kNwvOpHjF8fLY1z0OMcTRnzO8sBdgXLxLpfOmFaR0O00xmYkjLevQi2mLslPG0L6QK5AIWNEFuT/WmRgy1E6WqerkcdB3a3aDTaB5jeN1Nmlp7kn0hl3Jgz+We4lkxChq64cxS6nTZRfDHBHhDTfdt1W+cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751439291; c=relaxed/simple;
-	bh=OygOYEPels4czGsYfayew2rB/2MBUfzsc+sH9m4SBq0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KBBfrUnx9JuUhGVeZWDW8VRQY/VuyV4KM9C+G391oK4/4pwqIrx2j17CoRcnQJYc08TNW90QrZBH4tqaQBI++It2Z9EJTitBWsUQ4tyicMLDtWpnF5+OsFd52mAjMDBcD7SfqGX+famczpUpXpY8NOsxKq2m2qGgos+KJ4lyheQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HgEzaVEs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DADDC4CEEE;
-	Wed,  2 Jul 2025 06:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751439290;
-	bh=OygOYEPels4czGsYfayew2rB/2MBUfzsc+sH9m4SBq0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HgEzaVEsk//JdYC+Qyn/5EKrQUtKGk9503aAH2+MGID4BNeVQ532beH+YUPat8bTE
-	 ksassL7x58UVM8H2z1YiCwar+F03MKvsVVnuzRRKynO2HQG/FWdGtT9efkSLGsT2I7
-	 Ms+P4pZHTOL3Vi5wMI5yX6frOXuS33VSRWuaxiWcuK7ssHBQAM1VMY79ox/M3t/Kkg
-	 MpzSll7uEgbWqbwWs12mIdTWwhhed0E7KABMg9q7RSCMgBIviaW2okigJHox485Vzp
-	 +NGA4KhTUCCW4PB5nkG0t/tcwwrvz8+nBPF7c5fUeC9tKEKmXUIejMhEFiSWJ7w1Sq
-	 ROwcsDKchkEaA==
-Date: Wed, 2 Jul 2025 08:54:48 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Waqar Hameed <waqar.hameed@axis.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Julien Panis <jpanis@baylibre.com>, 
-	William Breathitt Gray <wbg@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>, 
-	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Cosmin Tanislav <cosmin.tanislav@analog.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Matteo Martelli <matteomartelli3@gmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Francesco Dolcini <francesco@dolcini.it>, 
-	=?utf-8?Q?Jo=C3=A3o_Paulo_Gon=C3=A7alves?= <jpaulo.silvagoncalves@gmail.com>, Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
-	Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>, Mudit Sharma <muditsharma.info@gmail.com>, 
-	Gerald Loacker <gerald.loacker@wolfvision.net>, Song Qiang <songqiang1304521@gmail.com>, 
-	Crt Mori <cmo@melexis.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Karol Gugala <kgugala@antmicro.com>, 
-	Mateusz Holenko <mholenko@antmicro.com>, Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>, 
-	Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, 
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>, 
-	Yogesh Gaur <yogeshgaur.83@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Peter Ujfalusi <peter.ujfalusi@linux.intel.com>, 
-	Bard Liao <yung-chuan.liao@linux.intel.com>, Ranjani Sridharan <ranjani.sridharan@linux.intel.com>, 
-	Daniel Baluta <daniel.baluta@nxp.com>, Kai Vehmanen <kai.vehmanen@linux.intel.com>, 
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, kernel@axis.com, 
-	linux-iio@vger.kernel.org, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, imx@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	sound-open-firmware@alsa-project.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-Message-ID: <jeajjewfbg5qo736imozpghnpxln2pux74aegtqsi57qsbpug2@opndel6zc3m3>
-References: <pnd7c0s6ji2.fsf@axis.com>
- <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
- <20250701185519.1410e831@jic23-huawei>
+	s=arc-20240116; t=1751439515; c=relaxed/simple;
+	bh=6R4yyFMX/5iFCdLslkgrvlcRr+rsZA2fnb0Cwb1tTkM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dryOQxUb1ksglk6veq/FOAKrHcfWlDDH1H6j5tk0QRT3AvhstxIOdAxylpmmi3WKHqiW4l6xmPyO2VJ1ElgNbf8uExOrZJrmpZGkW4Q+dohRdZciS0BqHeBqdKQIengCDDSfBspI40Y+jEwzlhH3hgfL6J1hd+c7rybbf9uwkBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4e9a109035bso2857105137.1;
+        Tue, 01 Jul 2025 23:58:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751439510; x=1752044310;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DLsWLIJlGGWKZ0waZhVddmIAs54RW9FUXBL9VCP+TSg=;
+        b=Gz8CsUHHslhPMadujR+C6CULGy4NeJ0K1XvmDJpPFMF/7EsR2kyIFIK+/YV9nH1rs9
+         dsJfs2J8uU38V7QOdzkpx1Xx/w4kt35GeNI4JN3LeR8WJWfxu7jhDSaGrvcyFnVtc6qZ
+         t5KTuOLPaN109KBj1sn10B2qVkHfmWPk9BLZvPC9cAIQXd7Suvd7sIGZA38MeOZ6RCIk
+         5oka/YkEBGN6izAxvQjD4/7La/5tbj4K/8G9ofN6xlZhhQqdsPm2fbX/HiQYp+onKdR1
+         nILfIMTfJbg62yrqZ6x9axhajS3+sD2KO0K+YlYwYpiaCuKhLmmoLfAxNXnLazBA9vfJ
+         voGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJDA/7VhJoVfsS+y64+/Cm0VpwTxUc+leS/INYeCgtcCqK2pWqtI643X6/IkO1GAnzkK9adzUpk925cIMqqQdxkww=@vger.kernel.org, AJvYcCUrNSrAocZumn18RiwfcWZSQ6Omcq2Y++x3UDHx+gP9292jYb3toWCnW2Q4wXyWwZTVxEiedfbF8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFGuf1CWXCl2OrXUHk/6LB14yHWZXv9vHHjfM98DGok7tGtm7b
+	g6znu8iGUrV3eo00LM9FDTZ1ZeY9CPtIkkSp6KMqadGTwE7Xz9wnh0cbLQ7WAzTs
+X-Gm-Gg: ASbGncvEvHcvDOzbfdBvAc8WwIFLLx+gkLyeW8bK0gSTGjPnRXuvAVL/oBxkZHINXro
+	nbm6duybervWaun3G0QHjaA0kBo3WzJfsJ+mgnwWsVFoQXyIPpnhhX7dY6zmAQhGe5CiJQ3IhQ1
+	S9Z7AlXs1qOdPXdDeICWtpPmRjCP2QDS2XlOa8d7B2wCe1HplVtCv9bKDVxXGVhnI2wBN1pENOv
+	CV/1eaLrpKLUg2OG3ABf4fTF5GTMmgSm6X0NB/Ir9FGfbNBqdhNvomMgzJRHsQl4rk3JwSge+s1
+	UXgBc9CLDKMQsqtaMp0FsWMaqz806bkC5W4TkhtORoWWRn6mhoE1fmKMPjR3TX158mxZSoxJh/S
+	slFVwx0w6q1j6Z+pLXlMpHySQ
+X-Google-Smtp-Source: AGHT+IFg4aoCYApiokQBLkUFKA6FdmorcRANagzX5cKM/UXRtjRpmAJzNoKXGgcdx7rnBTQg1oOzKQ==
+X-Received: by 2002:a05:6102:3f0a:b0:4df:9e8b:8cad with SMTP id ada2fe7eead31-4f16143e23dmr740333137.22.1751439510483;
+        Tue, 01 Jul 2025 23:58:30 -0700 (PDT)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-884d1da07f0sm2383120241.24.2025.07.01.23.58.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jul 2025 23:58:30 -0700 (PDT)
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-4e7feaae0e1so2678638137.2;
+        Tue, 01 Jul 2025 23:58:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU/w/TRv2DRYQV7yP2/UFh0ikIGSllqRKDVAJtrA6oazGtpIgI8fP9vkb2LqiYk+T+DER22/NDz1Q==@vger.kernel.org, AJvYcCU3bcB+S/v9i5dZp4Q7pofNMyrIpNTHyTLVSx0T982V0ftcBdRVHXd9x/nUk058N4E3T4k9PQ0tdvxmyVXPIir5OJQ=@vger.kernel.org
+X-Received: by 2002:a05:6102:8087:b0:4e6:f7e9:c481 with SMTP id
+ ada2fe7eead31-4f161108ae6mr746060137.7.1751439509960; Tue, 01 Jul 2025
+ 23:58:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yoqxembgtzssn7jy"
-Content-Disposition: inline
-In-Reply-To: <20250701185519.1410e831@jic23-huawei>
+References: <878qlagmrq.wl-kuninori.morimoto.gx@renesas.com>
+ <CAMuHMdVqqCX1=2j740xnU6C=C8x=K-ayQ-uSbmafPVaa-nGtMA@mail.gmail.com> <87cyajzdij.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <87cyajzdij.wl-kuninori.morimoto.gx@renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 2 Jul 2025 08:58:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVwN9UBso4dx9hTwrBbf84JWkvHUJqg_ZR9aVp8zk=7rQ@mail.gmail.com>
+X-Gm-Features: Ac12FXzD02bK9ILhQkP5B5oL9swxU-k_6WQ5SOxFCZgotheZg5EW2S2MoUBgNuQ
+Message-ID: <CAMuHMdVwN9UBso4dx9hTwrBbf84JWkvHUJqg_ZR9aVp8zk=7rQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pmdomain: renesas: sort Renesas Kconfig configs
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Morimoto-san,
 
---yoqxembgtzssn7jy
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-MIME-Version: 1.0
-
-Hello Jonathan,
-
-On Tue, Jul 01, 2025 at 06:55:19PM +0100, Jonathan Cameron wrote:
-> On Tue, 1 Jul 2025 19:44:17 +0200
-> Uwe Kleine-K=F6nig <ukleinek@kernel.org> wrote:
->=20
-> > On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote:
-> > >  drivers/pwm/pwm-meson.c                          | 3 +-- =20
-> >=20
-> > Looking at this driver I tried the following:
->=20
-> I'm not sure what we actually want here.
->=20
-> My thought when suggesting removing instances of this
-> particular combination wasn't saving on code size, but rather just
-> general removal of pointless code that was getting cut and
-> paste into new drivers and wasting a tiny bit of review bandwidth.
-> I'd consider it bad practice to have patterns like
->=20
-> void *something =3D kmalloc();
-> if  (!something)
-> 	return dev_err_probe(dev, -ENOMEM, ..);
->=20
-> and my assumption was people would take a similar view with
-> devm_add_action_or_reset().
+On Wed, 2 Jul 2025 at 01:40, Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+> > > +# SoC Type
+> >
+> > "# Family"?
+> (snip)
+> > > -config SYSC_R8A779F0
+> > > -       bool "System Controller support for R-Car S4-8" if COMPILE_TEST
+> > > -       select SYSC_RCAR_GEN4
+> > > +config SYSC_R8A7791
+> > > +       bool "System Controller support for R8A7791 (R-Car M2-W/N)" if COMPILE_TEST
+> >
+> > "R8A7791/R8A7793"?
+> (snip)
+> > The rest LGTM, so
 >
-> It is a bit nuanced to have some cases where we think prints
-> are reasonable and others where they aren't so I get your
-> point about consistency.
+> Should I post v2 patch ? Or can you adjust/fixup when you applying ?
 
-The problem I see is that there are two classes of functions: a) Those
-that require an error message and b) those that don't. Class b) consists
-of the functions that can only return success or -ENOMEM and the
-functions that emit an error message themselves. (And another problem I
-see is that for the latter the error message is usually non-optimal
-because the function doesn't know the all details of the request. See my
-reply to Andy for more details about that rant.)
+That is up to the PM Domain maintainer (Ulf).
 
-IMHO what takes away the review bandwidth is that the reviewer has to
-check which class the failing function is part of. If this effort
-results in more driver authors not adding an error message after
-devm_add_action_or_reset() that's nice, but in two months I have
-forgotten the details of this discussion and I have to recheck if
-devm_add_action_or_reset() is part of a) or b) and so the burden is
-still on me.
+Gr{oetje,eeting}s,
 
-So to give my answer on your question "What do we actually want here?":
-Please let us get rid of the need to care for a) or b).
+                        Geert
 
-> The code size reduction is nice so I'd not be against it as an extra
-> if the reduction across a kernel builds is significant and enough
-> people want to keep these non printing prints.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-To complete implementing my wish all API functions would need to stop to
-emit an error message. Unfortunately that isn't without downsides
-because the result is that there are more error strings and so the
-kernel size is increased. So you have to weight if you prefer individual
-error messages and easier review/maintenance at the cost of a bigger
-binary size and more dev_err_probe() calls in drivers eating vertical
-space in your editor.
-
-I know on which side I am, but I bet we won't find agreement about that
-in the kernel community ...
-
-Best regards
-Uwe
-
---yoqxembgtzssn7jy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmhk17UACgkQj4D7WH0S
-/k4YcQgAlm1BDi3/P3JcN5b6Y1UamZV/S9cGOikezq/kf1GhqDBu8DxrVjTBFjOf
-OJoBgw/566zxq5agBq8EUgc7GrJBwe7BhieAXUGmYQI0pBg1Zdhgyj42kXhx7B9R
-u2j6XXXrEWa1Sw58sbK3g8bLeDEo9/kIem6g0Yk6NZX2WibbNU6Bw6UuV3yVwVaX
-TH4uFzMJ5wVvnwJDz2HCuxCLQ9NO25UL0U3DdZWIPI9oeuodG3U3MVNJWMJ5OuXc
-e+Yo5MhzsrnrMpj4nWPaicdD25qLOdVCySFDim72U4oI24wsmtlQBiJmDuNoldf/
-kbQM9dmwp48V3mVs7SFSmrt/TD4bFw==
-=6zPO
------END PGP SIGNATURE-----
-
---yoqxembgtzssn7jy--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
