@@ -1,110 +1,280 @@
-Return-Path: <linux-pm+bounces-29966-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29967-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A59AF0D8D
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 10:12:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78FA0AF0F55
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 11:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DEB24E2B87
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 08:12:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEF721C26CB1
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 09:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA9821C187;
-	Wed,  2 Jul 2025 08:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9620D23C51B;
+	Wed,  2 Jul 2025 09:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i2TeDSNG"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="mImfGX30"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2630F235341
-	for <linux-pm@vger.kernel.org>; Wed,  2 Jul 2025 08:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C001EE7A1
+	for <linux-pm@vger.kernel.org>; Wed,  2 Jul 2025 09:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751443933; cv=none; b=Jbzm6zUA70NT5dt5Tj9/vXkXHeuylsV4+lgyB+PXXzXSJEHqU1BsSfgQf7cz2+aTIvAiSfJqPxpbuI4CW0/AQn4Gbb2yMvGiMs9Ey0LQdRuKdv0uDYxX9skYd0NLLJyDdSIAmAceNehnhnv6doyJ6aHtm4CQKWqlH8pu8UraIf4=
+	t=1751447590; cv=none; b=Q8F7qgZa+d3VXAh0KWXqe9onEb8/OjzbWTNwN2XCUEwvrCun/iGFp2yv3EBH5J4eMC7Ho8uPtIc21GHbGitj8P+acub2pDSjIlsa6KAxR3WNxZjImD3JcmCkKh7pKAjDZ+bpqTBQTZmFAm1gDpG3aNIwZF1atNADV2MLLzM1RXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751443933; c=relaxed/simple;
-	bh=z0Z5jvK6xUvtBK4jnkZkseYCrZ79UTYnTdxbGRs6ZSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SjWrZT5n+3E+neLX72VPzQr20GZRET3TnsBzE5HPZRv30+MvLXwn8aUVMGeACGnijIQT7gEs3wRQledLYyShCxPBXTTgwJ92Ecy/5dHP5Mukiyh4K532hgDK8FxgyKTmA9xQ+iknZKI9IVr+jtg+qoOj/AuRV5MDgbwKKwTPcgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=i2TeDSNG; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-234c5b57557so40694335ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 02 Jul 2025 01:12:10 -0700 (PDT)
+	s=arc-20240116; t=1751447590; c=relaxed/simple;
+	bh=OPEy6ZWX+tLFSyWVop0YvN+Dtq3RDFjs+iqPy7PtJT8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=HpfRuGSIFOL2Hxn78roumhhQNylciOPffF98n2pRK9ZqJik4+RvvpIEoAvHKAd/LTIBuun8inxBHdtvn5POSh1AnQqw6CACD6k5Nm9SXppRvsAplbkbvup8xsoczrbBb8cLFUGlQxCAnwoiwidSCgiWTfi1+kwxRH3kSALQPZ68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=mImfGX30; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7d3f192a64eso601784585a.2
+        for <linux-pm@vger.kernel.org>; Wed, 02 Jul 2025 02:13:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751443930; x=1752048730; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uy53KgmSlwJ+OJKWpNvJE3andfzWWOVCz+777PvTMw4=;
-        b=i2TeDSNGtUgm+EL+XAnsMEId4NkbW1o96T2UmskStRLoLd/liWptHY13il2s8bhgBh
-         CK7ANf4kJq4QMBGPwkkTstGujdvVwzhLrd1gmiseMNW6CxzYOQIyiEiPSXWqgOFs4phM
-         PoZ8gPbmenJeXNHvqEx5XpXzKvSxePdXbMjuePNWqs9hxEKOxdtmK1PHBI9sqHCHkLIq
-         28SOoBNWmn6Np/lfVzeV+WsPngwZ26yPB45TwgAFhHyGcbtdL9EFnTkSCfJLpbj6E9wr
-         NY0SC1q87IQqJpJ2KMR6DVZd8P5RbgV2CnLCBGtb6DvLtFp3PCIqyiQmOrfXCtmZT6/N
-         xM4Q==
+        d=sifive.com; s=google; t=1751447588; x=1752052388; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KHzlGdMwQxoYI42j0/Tje1yOd002VzLUSjXq3Zpp2lQ=;
+        b=mImfGX30Fx51BxpoWorAUBrEQYBmnU/ffaLGq3nsFbXfLh4c0Kna0Rec2GVqINMCvC
+         6wrn+EBoCrKT/Hp0qrVzA9Ghmmb8neczzhqXmQ/S/Hjwdhzm0tzMJ1SXR6cazMz4aIuB
+         wvm5SA/sSkmEYysJE2nsvzcHFTJbkuGWLwZ7CkCRIYXKkA7VCuOTaWzt0/XyiZvJe8N7
+         Mk112bF8PzCzytZ2hizLXlnycvUhHeXGh0pgtoyr0HEEH6IN2bUn5/zz7hh1fouNOvWu
+         jIY2HNRBNxd2n5Jpc5ssqJ/E15MYvBxXvud9rv8OiCTjzzSWSnnjyemAvCl14Y7TJDxM
+         iMVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751443930; x=1752048730;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uy53KgmSlwJ+OJKWpNvJE3andfzWWOVCz+777PvTMw4=;
-        b=r6G3u+QqqK2tyDn2Rzl2X2u7mgJR82vGuXMTq5rzqtw0HsOLFWZgu97d2s5dIkhX2I
-         7uv2+NUFQT7G3U/uJEYWPYxydtGjWkLUGqmUupgQvAWKYRKBofkYKMgKkEttE+FxOSGZ
-         8BpMU3PKKncgm7bugxbBYO7+VrKpWa8d6ZLhbrQdXAZCNIIih/LOBcWCTiidC2nyVKR/
-         GJr2oIs3TW1BFVGGEBJ4PBjuEk41dl5BjoAvaskJ2S5FbH3iPmfV03PDEBQb9U1kbHkK
-         Q5CD1w5upcPdoUWURbmueLabRrP20BzzpRXn5HuB4GiC5xBho4FR7Kj7k2n5MkMsKVtL
-         cahg==
-X-Forwarded-Encrypted: i=1; AJvYcCXUVaMRKKih0EaSO9hbS55JqctUK+A7m7WvYRIoiD1LgcEa/vsj7mhXYN8+a8im3RWV3C6iohcOzw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzsrh0/2ohp+kteYy6Q0WL46svqJiSpz3V39VxFb1zCpJHk778R
-	I8tmImON6Gacnds59NgqhcUQdtRsaXibZ1okthNSGg+3XE2c7wtFuzN0wUY1JvYTRH8=
-X-Gm-Gg: ASbGnctIIirPNlPMF9yRP+DqAGlfucBPf0em0AhHfL4VHbhPEDCx/cDerSnPuVCAG9t
-	pNPiVVMnkRpNWfyv9M9oJA890o+O9iVnV1C3kSCkCKZuTZFQOhtd2ZLiccou/hOi3hACUf+mK1h
-	1LWszujZmWwfsfN2DAlPanuKvvTUvBFQA95HrrYMfJanl2nYh/wuw7UnfMnhGZpuTqq00hGfhCS
-	pPRSA0jcOlAgLLwi/KIW59jorrR2DzFtmRLqy/YLYjnbUBqXOY6L13zxDJ3czJZS7BMe18r5ajS
-	80oSpzYuejeCNOvnGgYdvfCSezWBrKyl/kihXsFdfWK46TmdMh5eYx5KG2A/OlE=
-X-Google-Smtp-Source: AGHT+IE7wcE0iwVAH1jLYj4z9nMQShh8CBuXC3Zk4EQNxjP7Cck5KCN98jBFqey7FxfNbCfChiLb2Q==
-X-Received: by 2002:a17:903:3c6b:b0:234:9670:cc73 with SMTP id d9443c01a7336-23c6e490fc1mr32796355ad.5.1751443930566;
-        Wed, 02 Jul 2025 01:12:10 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2e1bc3sm121786925ad.28.2025.07.02.01.12.09
+        d=1e100.net; s=20230601; t=1751447588; x=1752052388;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KHzlGdMwQxoYI42j0/Tje1yOd002VzLUSjXq3Zpp2lQ=;
+        b=B3Cw2qHPPs/4bUJag5VGNxtbJBZrZiS9gCj4TQaO9w9mTH11oa5EJDnurOACWDsqFk
+         uHE/rOFZilTewJjyFYARBTGG+b+uipfJplzBps3e5g1YoQQwIeAumVMTeQjnoUktDHm3
+         NbMrBH1PAb2KlVKCZe+eKZ7ceZmRnjYBUWwZcl2WDWTj0q/t46jq+eLYVO1HR30/Pwl3
+         LqTkFQhjF377OJ06of28l223Z9kkW1pex0RAYC1kemUpZBSAKNG1wsISq4eXZTc4Xgxa
+         5KjwY/WI+dKj2xV++V23YmEEaZd6qUXd9BXm6ftmRkr92SBY2FdlSJsvNzaUUn8FK/17
+         9F6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXSVI8H8zUTOFdIk2Q01I75GVsCUL4e3JLinVcl5aoKBlxh0LnvmP9KDeXbPmkazANt5bqRKCG++A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/UO2oMr08UN4Zr3Xz67cDt8WGWrz+NeKwb448edZMw1sI9gCJ
+	Z8BYUaoq2YM2wikT6R7EmQF7g8XWS06+2PTmKGT9l+0xUvJCx83tIbHb4m/yIL3inLoKONuXs2n
+	H+qw6
+X-Gm-Gg: ASbGnct9QcE90x3HkwuyczN3V+SSddPqmQPtCjJja8gxn23A6BLghr31cixk7zHsT/K
+	Y5cQzpebVbsR/4TX7klT3PutV3Sdoq6lJuLLsUohwzwmFZA30xA9f7eLXjqVmRFlKCnKMpXb3TX
+	/hzjIEweJr0xFIdF5Q6nOpBwJwm+LW7k/1d2FE48i9s1rgAoLTySK2BNDQ78Zcz69j4zCz7CWfp
+	RsDnZMMqmyhFmjFeiCXctPlDbNzyu4Mdmq1JGVRCjCXCRyRmEKxLlRWvUvb2+TguXc0SOoT9B+V
+	7ke/Wzwfnf65cZrKNUO02Nku+e+jVLIX8rAl0iTkfwYWd92e+LsmN+Y5XXBdPMj7aohclubwohg
+	bGDJGx0HY
+X-Google-Smtp-Source: AGHT+IH35dTpRZYzuojWxWpu+46mPK8pBpHMUsqRqtbAP72WybmXXi1h3qyzhULS+BwBb0Rk/+L3YA==
+X-Received: by 2002:a05:620a:27d6:b0:7d4:587e:c322 with SMTP id af79cd13be357-7d5c46a6254mr312983285a.22.1751447587687;
+        Wed, 02 Jul 2025 02:13:07 -0700 (PDT)
+Received: from hsinchu26.internal.sifive.com ([210.176.154.34])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d4431344f7sm911736285a.2.2025.07.02.02.13.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 01:12:10 -0700 (PDT)
-Date: Wed, 2 Jul 2025 13:42:07 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: webgeek1234@gmail.com
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] cpufreq: tegra124: Allow building as a module
-Message-ID: <20250702081207.bzru3mtl56ns372v@vireshk-i7>
-References: <20250702-tegra124-cpufreq-v5-0-66ab3640a570@gmail.com>
- <20250702-tegra124-cpufreq-v5-3-66ab3640a570@gmail.com>
+        Wed, 02 Jul 2025 02:13:07 -0700 (PDT)
+From: Nick Hu <nick.hu@sifive.com>
+To: conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: Nick Hu <nick.hu@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Anup Patel <anup@brainfault.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Subject: [PATCH v3 2/3] cpuidle: riscv-sbi: Work with the external pmdomain driver
+Date: Wed,  2 Jul 2025 17:12:35 +0800
+Message-Id: <20250702091236.5281-3-nick.hu@sifive.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20250702091236.5281-1-nick.hu@sifive.com>
+References: <20250702091236.5281-1-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250702-tegra124-cpufreq-v5-3-66ab3640a570@gmail.com>
 
-On 02-07-25, 02:46, Aaron Kling via B4 Relay wrote:
-> +static struct platform_device *platform_device;
+To work with the external pmdomain driver, exposing the
+`sbi_cpuidle_pd_power_off` and `sbi_dt_parse_state_node` so the external
+pmdomain driver can parse the riscv idle state data and set the domain
+idle state where powering off. In addition, separate the genpd init and
+the idle driver init. The genpd remains functional even when the idle
+state is absent.
 
-Maybe initialize this to an error value...
+Co-developed-by: Samuel Holland <samuel.holland@sifive.com>
+Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+Signed-off-by: Nick Hu <nick.hu@sifive.com>
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 46 ++++++++++++++++++-----------
+ drivers/cpuidle/cpuidle-riscv-sbi.h | 20 +++++++++++++
+ 2 files changed, 48 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/cpuidle/cpuidle-riscv-sbi.h
 
-> +static void __exit tegra_cpufreq_module_exit(void)
-> +{
-> +	if (platform_device && !IS_ERR(platform_device))
-
-... and then this could be simplified ?
-
-Or use !IS_ERR_OR_NULL .
-
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index 0fe1ece9fbdc..be3949971eed 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -27,6 +27,7 @@
+ #include <asm/suspend.h>
+ 
+ #include "cpuidle.h"
++#include "cpuidle-riscv-sbi.h"
+ #include "dt_idle_states.h"
+ #include "dt_idle_genpd.h"
+ 
+@@ -43,7 +44,6 @@ struct sbi_domain_state {
+ static DEFINE_PER_CPU_READ_MOSTLY(struct sbi_cpuidle_data, sbi_cpuidle_data);
+ static DEFINE_PER_CPU(struct sbi_domain_state, domain_state);
+ static bool sbi_cpuidle_use_osi;
+-static bool sbi_cpuidle_use_cpuhp;
+ static bool sbi_cpuidle_pd_allow_domain_state;
+ 
+ static inline void sbi_set_domain_state(u32 state)
+@@ -171,9 +171,6 @@ static void sbi_idle_init_cpuhp(void)
+ {
+ 	int err;
+ 
+-	if (!sbi_cpuidle_use_cpuhp)
+-		return;
+-
+ 	err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
+ 					"cpuidle/sbi:online",
+ 					sbi_cpuidle_cpuhp_up,
+@@ -188,7 +185,7 @@ static const struct of_device_id sbi_cpuidle_state_match[] = {
+ 	{ },
+ };
+ 
+-static int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
++int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
+ {
+ 	int err = of_property_read_u32(np, "riscv,sbi-suspend-param", state);
+ 
+@@ -213,10 +210,6 @@ static int sbi_dt_cpu_init_topology(struct cpuidle_driver *drv,
+ 	if (!sbi_cpuidle_use_osi)
+ 		return 0;
+ 
+-	data->dev = dt_idle_attach_cpu(cpu, "sbi");
+-	if (IS_ERR_OR_NULL(data->dev))
+-		return PTR_ERR_OR_ZERO(data->dev);
+-
+ 	/*
+ 	 * Using the deepest state for the CPU to trigger a potential selection
+ 	 * of a shared state for the domain, assumes the domain states are all
+@@ -226,7 +219,6 @@ static int sbi_dt_cpu_init_topology(struct cpuidle_driver *drv,
+ 	drv->states[state_count - 1].enter = sbi_enter_domain_idle_state;
+ 	drv->states[state_count - 1].enter_s2idle =
+ 					sbi_enter_s2idle_domain_idle_state;
+-	sbi_cpuidle_use_cpuhp = true;
+ 
+ 	return 0;
+ }
+@@ -282,7 +274,6 @@ static void sbi_cpuidle_deinit_cpu(int cpu)
+ 	struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
+ 
+ 	dt_idle_detach_cpu(data->dev);
+-	sbi_cpuidle_use_cpuhp = false;
+ }
+ 
+ static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
+@@ -325,8 +316,9 @@ static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
+ 	/* Initialize idle states from DT. */
+ 	ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
+ 	if (ret) {
+-		pr_err("HART%ld: failed to init idle states\n",
+-		       cpuid_to_hartid_map(cpu));
++		if (ret != -EPROBE_DEFER)
++			pr_err("HART%ld: failed to init idle states\n",
++			       cpuid_to_hartid_map(cpu));
+ 		return ret;
+ 	}
+ 
+@@ -356,7 +348,7 @@ static void sbi_cpuidle_domain_sync_state(struct device *dev)
+ 
+ #ifdef CONFIG_DT_IDLE_GENPD
+ 
+-static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
++int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
+ {
+ 	struct genpd_power_state *state = &pd->states[pd->state_idx];
+ 	u32 *pd_state;
+@@ -529,6 +521,27 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ 			return ret;
+ 	}
+ 
++	/* Attaching the cpu to the corresponding power domain */
++	if (sbi_cpuidle_use_osi) {
++		for_each_present_cpu(cpu) {
++			struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
++
++			data->dev = dt_idle_attach_cpu(cpu, "sbi");
++			if (IS_ERR_OR_NULL(data->dev)) {
++				ret = PTR_ERR_OR_ZERO(data->dev);
++				if (ret != -EPROBE_DEFER)
++					pr_debug("Hart%ld: fail to attach the power domain\n",
++						 cpuid_to_hartid_map(cpu));
++
++				while (--cpu >= 0)
++					dt_idle_detach_cpu(data->dev);
++				return ret;
++			}
++		}
++		/* Setup CPU hotplut notifiers */
++		sbi_idle_init_cpuhp();
++	}
++
+ 	/* Initialize CPU idle driver for each present CPU */
+ 	for_each_present_cpu(cpu) {
+ 		ret = sbi_cpuidle_init_cpu(&pdev->dev, cpu);
+@@ -539,9 +552,6 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	/* Setup CPU hotplut notifiers */
+-	sbi_idle_init_cpuhp();
+-
+ 	if (cpuidle_disabled())
+ 		pr_info("cpuidle is disabled\n");
+ 	else
+@@ -556,7 +566,7 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ 		cpuidle_unregister(drv);
+ 		sbi_cpuidle_deinit_cpu(cpu);
+ 	}
+-
++out:
+ 	return ret;
+ }
+ 
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.h b/drivers/cpuidle/cpuidle-riscv-sbi.h
+new file mode 100644
+index 000000000000..f39186b65a10
+--- /dev/null
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __CPUIDLE_RISCV_SBI
++#define __CPUIDLE_RISCV_SBI
++
++#ifdef CONFIG_DT_IDLE_GENPD
++
++int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd);
++
++#else
++
++static inline int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
++{
++	return 0;
++}
++
++#endif
++
++int sbi_dt_parse_state_node(struct device_node *np, u32 *state);
++
++#endif
 -- 
-viresh
+2.17.1
+
 
