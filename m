@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-29952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-29953-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC35AF0BA6
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 08:28:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35A9AF0BAE
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 08:30:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70F477AFAA0
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 06:26:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA77644046A
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Jul 2025 06:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36696222582;
-	Wed,  2 Jul 2025 06:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE586221D94;
+	Wed,  2 Jul 2025 06:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vj3cc4AQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OBIy9Vkk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A752222B7;
-	Wed,  2 Jul 2025 06:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B60821FF50;
+	Wed,  2 Jul 2025 06:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751437666; cv=none; b=cDM/znSNFpwnpoejju4YNAXWQ+huugExMc4IGDBpHOcZSCPseMLL9Z/rokB+lTA76WTcVfZju3Pr/GBS7LhfJhPHor9k91AqmsryYVP/XfDt+6Qhds8oqKnLhkddsYk23dBwqLGTGwVaGRHkFInFsCtuyU5YxLQu7+72IO7P4Oo=
+	t=1751437795; cv=none; b=c3k8Lw9JCXt3yXvB0oMPUmYMV8O1DN5CzqMVSHSPH9Y/23Q81iS7NfXs+amdAAENFNLfelIurpPsqoIsdwAY7TS0SfOu18Q4RjyldQKb2BfsqYzmCz3KDNcMcPiqu3rjppmzjdpTV332+1IslbiCMZvXf/+UWpJTjyZWdYhmmhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751437666; c=relaxed/simple;
-	bh=b1raSCnVk/x9Xxqknj4FVa7tpOBkc/kLtEQ6J+PvXac=;
+	s=arc-20240116; t=1751437795; c=relaxed/simple;
+	bh=AMRFxCWLdoWrMp2ZhjH6hlkSlVARLzk+UVFFQga9tCs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HW4fsV414MFGDpW0Vxa77Gmbk21e4soBXZHdBOOh0pqBl7qwbSQosibEWTH0qBp3kNUK+BEBnPrf6RYP1iA4p+8KfC/szmb04spZ/oxqaz1WOBY40LmTSTw7lpPbZ5gSFPe4T0+UTNoJBGnrGJOBJpM9JEzQlMWkIDh8RvvNeEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vj3cc4AQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A6CC4CEEE;
-	Wed,  2 Jul 2025 06:27:38 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Wwn+cd2tb7Ie6py0pKjmBOaCcHyVL8DznmzwAzMdz7Fw+VIjYdLwN3D2FSWivqLt5BuMtBY9VtQbqPiOegNKD8aaI3FuJMB3QMACejHKX8FRUEtUflUnHEyA/2u4tqPv74eeJySCfIQDt8fEnL4lxvzSKHKy+6f7f4tfGWJX23Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OBIy9Vkk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8E7C4CEEE;
+	Wed,  2 Jul 2025 06:29:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751437665;
-	bh=b1raSCnVk/x9Xxqknj4FVa7tpOBkc/kLtEQ6J+PvXac=;
+	s=k20201202; t=1751437795;
+	bh=AMRFxCWLdoWrMp2ZhjH6hlkSlVARLzk+UVFFQga9tCs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vj3cc4AQYlH6o3b4qrzMkDKClYEhqGVqfZTckD7VMqGkGIUY7WUh/Ko5jVuW3rCnm
-	 ZXa5Sx3IEPsc+cL1Tbq8chjgbsc45sQFfiJMnit9G+RbmU4vhB9EPAzm9WWrIQAWD8
-	 qn18UO+OlhM4KV7rJEXx2striA4Ot5olpeXJYe8duS56D2UvvFm+FbwBlHnrsd1f1s
-	 zCnNneY2ScJSPHFO8O5qplzYNv1r1xhCw4GFB517MVDkw6tk25GzRZZPNIlKCQ6WXP
-	 K4FCbamQKRbvglxP6KRPz7KihZUZKAuBz6BIchdOJYUdx9mk3yuE6Y9919HgxxVipe
-	 hp4qruqsD8bKQ==
-Message-ID: <158755b2-7b1c-4b1c-8577-b00acbfadbdc@kernel.org>
-Date: Wed, 2 Jul 2025 08:27:37 +0200
+	b=OBIy9Vkk7iB1SMBH4EXyad+ksf6gTOMwt8nGqer9NdvAujLPALLnLUVFWazyHSnZO
+	 kokNV8dkwznSbVcSLtu31gUjgptca+jnHj9LEeJAdCg4HTcq5pIl41leDpVKMrvZCH
+	 MDH7RXmxox3+h/25dFUWiixuCnCYRKlM1oxYeNPXN/UsRkmaC3DqtpZMD4BRBPMwfM
+	 x4SZWDIXXF1N+aN6pVjfNjW+C8o4oYyvxVSDQwtPRozG3UERuuG8njhzyOPd2m5Wm0
+	 cTPYJPZ/7XTaJthPKzZezng4VKQ6kaFtyokmaXOoQH+pz+XzFsoYjvROi1qhxR4uem
+	 lN+osU6+Lq3og==
+Message-ID: <24081402-4690-4a1b-a6d0-adab803d0049@kernel.org>
+Date: Wed, 2 Jul 2025 08:29:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 01/14] dt-bindings: net: mediatek,net: allow irq names
+Subject: Re: [PATCH v7 02/14] dt-bindings: net: mediatek,net: update for
+ mt7988
 To: frank-w@public-files.de, Frank Wunderlich <linux@fw-web.de>
 Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
  Kyungmin Park <kyungmin.park@samsung.com>,
@@ -71,9 +72,9 @@ Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
  netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org
 References: <20250628165451.85884-1-linux@fw-web.de>
- <20250628165451.85884-2-linux@fw-web.de>
- <20250701-wisteria-walrus-of-perfection-bdfbec@krzk-bin>
- <9AF787EF-A184-4492-A6F1-50B069D780E7@public-files.de>
+ <20250628165451.85884-3-linux@fw-web.de>
+ <20250701-rebel-mellow-parrot-fda216@krzk-bin>
+ <8C311FDD-094A-4F1C-AE26-7E3ABB337C14@public-files.de>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -119,203 +120,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <9AF787EF-A184-4492-A6F1-50B069D780E7@public-files.de>
+In-Reply-To: <8C311FDD-094A-4F1C-AE26-7E3ABB337C14@public-files.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/07/2025 12:51, Frank Wunderlich wrote:
-> Am 1. Juli 2025 08:44:02 MESZ schrieb Krzysztof Kozlowski <krzk@kernel.org>:
->> On Sat, Jun 28, 2025 at 06:54:36PM +0200, Frank Wunderlich wrote:
+On 01/07/2025 12:33, Frank Wunderlich wrote:
+> Am 1. Juli 2025 08:41:42 MESZ schrieb Krzysztof Kozlowski <krzk@kernel.org>:
+>> On Sat, Jun 28, 2025 at 06:54:37PM +0200, Frank Wunderlich wrote:
 >>> From: Frank Wunderlich <frank-w@public-files.de>
 >>>
->>> In preparation for MT7988 and RSS/LRO allow the interrupt-names
+>>> Update binding for mt7988 which has 3 gmac and a sram for dma
+>>> operations.
 >>
->> Why? What preparation, what is the purpose of adding the names, what do
->> they solve?
-> 
-> Devicetree handled by the mtk_eth_soc driver have
-> a wild mix of shared and non-shared irq definitions
-> accessed by index (shared use index 0,
-> non-shared
-> using 1+2). Some soc have only 3 FE irqs (like mt7622).
-> 
-> This makes it unclear which irq is used for what
-> on which SoC. Adding names for irq cleans this a bit
-> in device tree and driver.
-
-It's implied ABI now, even if the binding did not express that. But
-interrupt-names are not necessary to express that at all. Look at other
-bindings: we express the list by describing the items:
-items:
-  - description: foo
-  - ... bar
-
-> 
->>> property. Also increase the maximum IRQ count to 8 (4 FE + 4 RSS),
+>> I asked why you are updating. You claim you update because it has 3
+>> GMAC... but that's irrelevant, because it is easy to answer with: it did
+>> not have 3 GMAC before?
 >>
->> Why? There is no user of 8 items.
+>> So same question: Provide real reason why you are making updates. That's
+>> why you have commit msg.
 > 
-> MT7988 *with* RSS/LRO (not yet supported by driver
-> yet,but i add the irqs in devicetree in this series)
-> use 8 irqs,but RSS is optional and 4 irqs get working
-> ethernet stack.
+> MT7988 had always 3 gmac,but no dts with ethernet
+> node till now.
+> As i try to upstream the dts,i fell over this.
 
-That's separate change than fixing ABI and that user MUST BE HERE. You
-cannot add some future interrupts for some future device. Adding new
-device is the only reason to add more interrupts.
-
-> 
-> I hope this explanation makes things clearer...
-
-
-Commit msg must explain all this, not me asking.
+What does it mean? Are you adding new device or not? Nothing explains
+that something was missing.
 
 > 
->>> but set boundaries for all compatibles same as irq count.
->>
->> Your patch does not do it.
-> 
-> I set Min/max-items for interrupt names below like
-> interrupts count defined.
+> Imho changing the regex for the mac subnodes was
+> simply forgotten to be updated on initial mt7988
+> support patch.
 
-No, you don't. It's all fluid and flexible - limited constraints.
-
-> 
->>>
->>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
->>> ---
->>> v7: fixed wrong rebase
->>> v6: new patch splitted from the mt7988 changes
->>> ---
->>>  .../devicetree/bindings/net/mediatek,net.yaml | 38 ++++++++++++++++++-
->>>  1 file changed, 37 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
->>> index 9e02fd80af83..6672db206b38 100644
->>> --- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
->>> +++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
->>> @@ -40,7 +40,19 @@ properties:
->>>  
->>>    interrupts:
->>>      minItems: 1
->>> -    maxItems: 4
->>> +    maxItems: 8
->>> +
->>> +  interrupt-names:
->>> +    minItems: 1
->>> +    items:
->>> +      - const: fe0
->>> +      - const: fe1
->>> +      - const: fe2
->>> +      - const: fe3
->>> +      - const: pdma0
->>> +      - const: pdma1
->>> +      - const: pdma2
->>> +      - const: pdma3
->>>  
->>>    power-domains:
->>>      maxItems: 1
->>> @@ -135,6 +147,10 @@ allOf:
->>>            minItems: 3
->>>            maxItems: 3
->>>  
->>> +        interrupt-names:
->>> +          minItems: 3
->>> +          maxItems: 3
->>> +
->>>          clocks:
->>>            minItems: 4
->>>            maxItems: 4
->>> @@ -166,6 +182,9 @@ allOf:
->>>          interrupts:
->>>            maxItems: 1
->>>  
->>> +        interrupt-namess:
->>> +          maxItems: 1
->>> +
->>>          clocks:
->>>            minItems: 2
->>>            maxItems: 2
->>> @@ -192,6 +211,10 @@ allOf:
->>>            minItems: 3
->>>            maxItems: 3
->>>  
->>> +        interrupt-names:
->>> +          minItems: 3
->>> +          maxItems: 3
->>> +
->>>          clocks:
->>>            minItems: 11
->>>            maxItems: 11
->>> @@ -232,6 +255,10 @@ allOf:
->>>            minItems: 3
->>>            maxItems: 3
->>>  
->>> +        interrupt-names:
->>> +          minItems: 3
->>> +          maxItems: 3
->>> +
->>>          clocks:
->>>            minItems: 17
->>>            maxItems: 17
->>> @@ -274,6 +301,9 @@ allOf:
->>>          interrupts:
->>>            minItems: 4
->>>  
->>> +        interrupt-names:
->>> +          minItems: 4
->>> +
->>>          clocks:
->>>            minItems: 15
->>>            maxItems: 15
->>> @@ -312,6 +342,9 @@ allOf:
->>>          interrupts:
->>>            minItems: 4
->>>  
->>> +        interrupt-names:
->>> +          minItems: 4
->>
->> 8 interrupts is now valid?
->>
->>> +
->>>          clocks:
->>>            minItems: 15
->>>            maxItems: 15
->>> @@ -350,6 +383,9 @@ allOf:
->>>          interrupts:
->>>            minItems: 4
->>>  
->>> +        interrupt-names:
->>> +          minItems: 4
->>
->> So why sudenly this device gets 8 interrupts? This makes no sense,
->> nothing explained in the commit msg.
-> 
-> 4 FrameEngine IRQs are required to be defined (currently 2 are used in driver).
-> The other 4 are optional,but added in the devicetree
-
-There were only 4 before and you do not explain why all devices get 8.
-You mentioned that MT7988 has 8 but now make 8 for all other variants!
-
-Why you are not answering this question?
-
-> to not run into problems supporting old devicetree
-> when adding RSS/LRO to driver.
-
-This is not about driver, it does not matter for the driver. Binding and
-DTS are supposed to be complete.
+Fix
+your
+wrapping because
+it is
+difficult
+to follow
+such
+style.
 
 > 
->> I understand nothing from this patch and I already asked you to clearly
->> explain why you are doing things. This patch on its own makes no sense.
->>
->> Best regards,
->> Krzysztof
->>
+> I try to rephrase it like this:
 > 
-> 
-> regards Frank
+> Binding was not aware for 3 MAC subnodes because
+> previous mediatek SoC had only 2. Change this to allow
+> 3 GMAC in mt7988 devicetree.
 
+So a fix for existing? Than add Fixes tag, describe the issue and fix
+ONLY that issue.
 
 Best regards,
 Krzysztof
