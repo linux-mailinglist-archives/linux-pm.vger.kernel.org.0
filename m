@@ -1,403 +1,153 @@
-Return-Path: <linux-pm+bounces-30015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85985AF6EC7
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 11:33:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9517AF6FB5
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 12:08:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59EEC4A0988
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 09:32:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EE2D3A3B41
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 10:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C3B2D8791;
-	Thu,  3 Jul 2025 09:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706402E172C;
+	Thu,  3 Jul 2025 10:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdPt2XDh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcmLiAVH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68C81E8338;
-	Thu,  3 Jul 2025 09:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EDC242D80;
+	Thu,  3 Jul 2025 10:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751535141; cv=none; b=QdlQs2Ws0Wmug/kDdgXRrlW23jFPjrbgrSFRLi6TjUAB5f9cluP3YatoBEpFiwm5ltFD+x5WpTMQv797cEUxnZvPxxmogeyXj81BR1lPMhZvc1xLEZvmBoR9J7TpSzB9xYuE9fAcnZVUYV4695diHRHQnqikufFs/S9O8GToc4M=
+	t=1751537318; cv=none; b=BBwmoSDGZua/HzmiVueLqJHGaFavtT4jD0ULBvtUD6mZnOonUwGhp46L74ZXzCh0DuGvzpjQ1pZ7cp56tyI6N/5t8AYwgFgEY+2xaWbqdlijwl67eC7qgwZDnznBMOUuADLGP2o2MLDe/aPzV1yswtkZsp+uyx0nEkLGDgvzmnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751535141; c=relaxed/simple;
-	bh=WtO1DgUxyix8oDOSgjZfMtxXQjswM3LI+TSs1gDywZg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=l8GvH7Pdrtd4fJCoduqVchA49aHq03u5vBVzfqc5JkCBPapnlo+3Vk7ey0PBwRn1C9EUJ8cLDzZcp4QisnjwGKCJPpV3+EV1qQOZqq6b16ew+cYwtJ1c2FJadMiNicbETT8LWrda9mDjgF5tbdMC/XnqNf6I7WsBQNwFMw7n+pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdPt2XDh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD0DC4CEE3;
-	Thu,  3 Jul 2025 09:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751535139;
-	bh=WtO1DgUxyix8oDOSgjZfMtxXQjswM3LI+TSs1gDywZg=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=PdPt2XDhT93ntXTcvbBpnFi+Vp43qWrOTV8apH25X/OTbnhL7q3cDHTb+eEs1S6FN
-	 byoaUU84MkJoHRtB6frTgxrNxHJ07pzp7FkepC9If0jj/Woeiz8HWUFkxHC7CeQlR5
-	 T/5Iea4mPe/5Xf5+6YfdT7aRrUFon4wI1LeIJqR2/5nJvKSN9y/8Z+w5av1BnrjGCj
-	 inULlHQYluATDD3nWJfOJsLTnNmVB5K0jK8xLINhcQhHyS96/X5NCTLbc17DFX3OjI
-	 ay5ZRmAGoY67ktEqCeRBECvTPRbAc9Qcj4ukGwQrIHoHeiKjak6hbo3yOo4Cm8P9Gt
-	 LyMUdqnzaTcPw==
+	s=arc-20240116; t=1751537318; c=relaxed/simple;
+	bh=AT1CnXLkiA949eHbI3N4NRZADoe17hbbQAYuiZp/Zhw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eJvAtGZVL4Yx7PI1/N+z5Wmf1P6K8HwC31EzUXS/WeDRicnQOejeozBOxrAEA1zV7B5qzkNF/j1WsLxAYHX7byn8Fxs64UWcWjrqPP2NzSH1A2U8UzoVTYbP0e+ZK+bJINchb/aMxOv//Xw0VIStDFDCQR2+a7YLFoR538svl5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcmLiAVH; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a52874d593so4525699f8f.0;
+        Thu, 03 Jul 2025 03:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751537315; x=1752142115; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AT1CnXLkiA949eHbI3N4NRZADoe17hbbQAYuiZp/Zhw=;
+        b=JcmLiAVHFNTrwYImNpHkMO1suxt3kTDGHfmnh53Xznc9vRLNxZ2AlxxNdAm3Blyuvy
+         pw2E4a79U0lVBOuXPByOeN0MR/U82Q54GBJ0xd4cLG9OPJ2cKe0Wb2ysH1qKCXHlwVTQ
+         CS8CncqIgXjfm7DWNndFndiew25CI7pDNyUqiguZDtYluIvdoimDy0W3y5DSJ0QHnoEO
+         ApVyAeYN5GQvCUhQWAh1d5nNM3c70T1skWp4JfDM+xswne8mc7gQtww2J1RA2IrN1YJg
+         xmmg4AQzl3aIpuqu54AGjhCTpDfYLQlG82lkFUPKmqfHsfdKpp5RQ9coozZ9T162iJjV
+         e29Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751537315; x=1752142115;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AT1CnXLkiA949eHbI3N4NRZADoe17hbbQAYuiZp/Zhw=;
+        b=Yj9rH2CGCz1/zUY382gQont4JoxWPQtCz4aXs8Z7xuMsMsnT1RDvUsb3KMKH+DDZxg
+         zQ4eqKABNFkMAQv808yQEU1/tpWJpvNvgbuCF7vBcHp5sMErbG50NoDNV9FCP1f+9tZU
+         8ijAKNg1o46CFnlT/hpWF39Gv3hPE5i/04f2GmhaCaiRgZUYWNtJPlIfx5DxjTGfEbSd
+         SAT7V4pJ7jiBYi6c0PnQzE4bzvbNnko12QGhWp4YIJrmWFf6Cv1vTON1Eyg+4r052jsX
+         dzwt+l6ZtLIzvnTSAX/C3f8NefG4gBdl12LpKmeMPqXx99laCS4gLFQzAOs7C5K49cf6
+         J3lQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqbUS6ANNZXVOgiiYAPnxuVMDObTX1pXiLNLUQkJQsxAIgByYMgtRaKZAX07t36fhpdTnPmHWj1NkeqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg4aXpv+ukp09qDfOnkRw6MA4cIM4Y2uAgfHRXeIYjbO0r+Lx6
+	+PKxSZlcwIT6WQxO0XrIV2Aftw3LKWZ9NAhfgo69sRkbDI/SONFBCFg7FIfh+w==
+X-Gm-Gg: ASbGncs4CJww06DPKZVUPN+g1h/HRUIro53Qda1EhSfBw7QDhdKIyZuRjiMGJVHvJv7
+	Vy2uTpTnGi1RXzq5v0xQtw1809uK7n+a6tU+L2Pi5DrJ0o4ttNYKnLaRqB+7fmYlhIN86p4Ts9X
+	aug3qpOyHTAl8Tldey68DQgW0kKuZ1XBl71/mfDnc+hJU0NA3BrreCWgw90IPCJhvI75VZJh4zx
+	eHnx6stncQR/KM6veOAYC+bS7R715JYl+C0AtLpgGC4Z1Lih8Wm0M+TrUemhHTZ2IPOQkqoBaep
+	mQZu5sgdcxeXoQRuXyfUTXPUPMM94r920cas97pBOf4nMTsXyKi7LRZJW2drLVY/d/WZR8wln+J
+	ruv6bUVirNelsCfMn0Jry5lOI7dl4DYWy2ipe6PYTol/r3D8qRbsi9SFDOB4=
+X-Google-Smtp-Source: AGHT+IETajEME0XqnHpss2XyhqyS6HlcQReH+pyyCGg3rACxCGSi8imadxWYD1Y3lB2jG1a6lNtKbw==
+X-Received: by 2002:a05:6000:43c9:b0:3a5:2599:4178 with SMTP id ffacd0b85a97d-3b32bbd689cmr1357777f8f.19.1751537314773;
+        Thu, 03 Jul 2025 03:08:34 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a9bac51bsm22609605e9.39.2025.07.03.03.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 03:08:33 -0700 (PDT)
+Date: Thu, 3 Jul 2025 12:08:30 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-tegra@vger.kernel.org
+Subject: Forcing devices into idle
+Message-ID: <rlzpjdsg6cbgxc553j6m25ysb6tyldy4lnxsjjn4hdzv7rszpp@y6rfcrbjfook>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 03 Jul 2025 11:32:05 +0200
-Message-Id: <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
- <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Tamir Duberstein" <tamird@gmail.com>, "Michal Rostecki"
- <vadorovsky@protonmail.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
- Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary
- Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Danilo Krummrich"
- <dakr@kernel.org>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Maxime Ripard" <mripard@kernel.org>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "FUJITA
- Tomonori" <fujita.tomonori@gmail.com>, "Rob Herring" <robh@kernel.org>,
- "Saravana Kannan" <saravanak@google.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Will Deacon"
- <will@kernel.org>, "Waiman Long" <longman@redhat.com>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt"
- <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>, "Heiner Kallweit"
- <hkallweit1@gmail.com>, "Russell King" <linux@armlinux.org.uk>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Bjorn
- Helgaas" <bhelgaas@google.com>, "Arnd Bergmann" <arnd@arndb.de>, "Jens
- Axboe" <axboe@kernel.dk>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, "Dave Ertman" <david.m.ertman@intel.com>, "Ira
- Weiny" <ira.weiny@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Breno
- Leitao" <leitao@debian.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
-In-Reply-To: <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="z5seqlr4kwwbvdcx"
+Content-Disposition: inline
 
-On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
-> Introduce a `fmt!` macro which wraps all arguments in
-> `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
-> formatting of foreign types (like `core::ffi::CStr`) that do not
-> implement `core::fmt::Display` due to concerns around lossy conversions w=
-hich
-> do not apply in the kernel.
->
-> Replace all direct calls to `format_args!` with `fmt!`.
->
-> Replace all implementations of `core::fmt::Display` with implementations
-> of `kernel::fmt::Display`.
->
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General=
-/topic/Custom.20formatting/with/516476467
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
->  drivers/block/rnull.rs       |  2 +-
->  drivers/gpu/nova-core/gpu.rs |  4 +-
->  rust/kernel/block/mq.rs      |  2 +-
->  rust/kernel/device.rs        |  2 +-
->  rust/kernel/fmt.rs           | 89 ++++++++++++++++++++++++++++++++++++++=
-+
->  rust/kernel/kunit.rs         |  6 +--
->  rust/kernel/lib.rs           |  1 +
->  rust/kernel/prelude.rs       |  3 +-
->  rust/kernel/print.rs         |  4 +-
->  rust/kernel/seq_file.rs      |  2 +-
->  rust/kernel/str.rs           | 22 ++++------
->  rust/macros/fmt.rs           | 99 ++++++++++++++++++++++++++++++++++++++=
-++++++
->  rust/macros/lib.rs           | 19 +++++++++
->  rust/macros/quote.rs         |  7 ++++
->  scripts/rustdoc_test_gen.rs  |  2 +-
->  15 files changed, 236 insertions(+), 28 deletions(-)
 
-This would be a lot easier to review if he proc-macro and the call
-replacement were different patches.
+--z5seqlr4kwwbvdcx
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Forcing devices into idle
+MIME-Version: 1.0
 
-Also the `kernel/fmt.rs` file should be a different commit.
+Hi Rafael, all,
 
-> diff --git a/rust/kernel/fmt.rs b/rust/kernel/fmt.rs
-> new file mode 100644
-> index 000000000000..348d16987de6
-> --- /dev/null
-> +++ b/rust/kernel/fmt.rs
-> @@ -0,0 +1,89 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Formatting utilities.
-> +
-> +use core::fmt;
+I've been looking at adding support for VPR on Tegra. This is a special
+type of protected memory (video protection region) and since it can be
+used for potentially large video frames, it can grow fairly large. For
+certain devices, this is prohibitively large, so the VPR needs to be
+resizable at runtime.
 
-I think we should pub export all types that we are still using from
-`core::fmt`. For example `Result`, `Formatter`, `Debug` etc.
+One of the prerequisites for runtime resizing of the VPR is that certain
+devices need to go into idle mode. Essentially they need to be suspended
+before the VPR resize and resumed after.
 
-That way I can still use the same pattern of importing `fmt` and then
-writing
+Instead of adding some custom API to achieve this, I was hoping I could
+use the PM framework for this. I can hook up devices with VPR using DT
+properties, and using the reserved memory infrastructure I can get
+access to all the necessary struct device:s for the devices that are
+impacted by this.
 
-    impl fmt::Display for MyType {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {}
-    }
+Unfortunately, I can't seem to find a good way to force devices into an
+idle mode using the existing APIs. I've had some success by running
+pm_runtime_put_sync() and pm_runtime_get_sync() before and after the
+resize on these devices, but that feels wrong, since these APIs are more
+targeted at being called from the owning drivers themselves.
 
-> +
-> +/// Internal adapter used to route allow implementations of formatting t=
-raits for foreign types.
-> +///
-> +/// It is inserted automatically by the [`fmt!`] macro and is not meant =
-to be used directly.
-> +///
-> +/// [`fmt!`]: crate::prelude::fmt!
-> +#[doc(hidden)]
-> +pub struct Adapter<T>(pub T);
-> +
-> +macro_rules! impl_fmt_adapter_forward {
-> +    ($($trait:ident),* $(,)?) =3D> {
-> +        $(
-> +            impl<T: fmt::$trait> fmt::$trait for Adapter<T> {
-> +                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result=
- {
-> +                    let Self(t) =3D self;
-> +                    fmt::$trait::fmt(t, f)
-> +                }
-> +            }
-> +        )*
-> +    };
-> +}
-> +
-> +impl_fmt_adapter_forward!(Debug, LowerHex, UpperHex, Octal, Binary, Poin=
-ter, LowerExp, UpperExp);
-> +
-> +/// A copy of [`fmt::Display`] that allows us to implement it for foreig=
-n types.
-> +///
-> +/// Types should implement this trait rather than [`fmt::Display`]. Toge=
-ther with the [`Adapter`]
-> +/// type and [`fmt!`] macro, it allows for formatting foreign types (e.g=
-. types from core) which do
-> +/// not implement [`fmt::Display`] directly.
-> +///
-> +/// [`fmt!`]: crate::prelude::fmt!
-> +pub trait Display {
-> +    /// Same as [`fmt::Display::fmt`].
-> +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
-> +}
-> +
-> +impl<T: ?Sized + Display> Display for &T {
-> +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-> +        Display::fmt(*self, f)
-> +    }
-> +}
-> +
-> +impl<T: ?Sized + Display> fmt::Display for Adapter<&T> {
-> +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-> +        let Self(t) =3D self;
-> +        Display::fmt(t, f)
+Any thoughts on how to solve this? Is the pm_runtime_{put,get}_sync()
+method acceptable? If not, are there other alternatives to achieve the
+same thing that I'm not aware of? Would it be useful to add a new set of
+APIs to force devices into an idle state (which could be semantically
+different from runtime suspend)? Or is this all too specific for any
+kind of generic API?
 
-Why not `Display::fmt(&self.0, f)`?
+Thanks,
+Thierry
 
-> +    }
-> +}
-> +
-> +macro_rules! impl_display_forward {
-> +    ($(
-> +        $( { $($generics:tt)* } )? $ty:ty $( { where $($where:tt)* } )?
-> +    ),* $(,)?) =3D> {
-> +        $(
-> +            impl$($($generics)*)? Display for $ty $(where $($where)*)? {
-> +                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result=
- {
-> +                    fmt::Display::fmt(self, f)
-> +                }
-> +            }
-> +        )*
-> +    };
-> +}
-> +
-> +impl_display_forward!(
-> +    bool,
-> +    char,
-> +    core::panic::PanicInfo<'_>,
-> +    fmt::Arguments<'_>,
-> +    i128,
-> +    i16,
-> +    i32,
-> +    i64,
-> +    i8,
-> +    isize,
-> +    str,
-> +    u128,
-> +    u16,
-> +    u32,
-> +    u64,
-> +    u8,
-> +    usize,
-> +    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>: fmt::D=
-isplay},
-> +    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::UniqueAr=
-c<T>: fmt::Display},
-> +);
+--z5seqlr4kwwbvdcx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
-> new file mode 100644
-> index 000000000000..edc37c220a89
-> --- /dev/null
-> +++ b/rust/macros/fmt.rs
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +use proc_macro::{Ident, TokenStream, TokenTree};
-> +use std::collections::BTreeSet;
-> +
-> +/// Please see [`crate::fmt`] for documentation.
-> +pub(crate) fn fmt(input: TokenStream) -> TokenStream {
-> +    let mut input =3D input.into_iter();
-> +
-> +    let first_opt =3D input.next();
-> +    let first_owned_str;
-> +    let mut names =3D BTreeSet::new();
-> +    let first_lit =3D {
-> +        let Some((mut first_str, first_lit)) =3D (match first_opt.as_ref=
-() {
-> +            Some(TokenTree::Literal(first_lit)) =3D> {
-> +                first_owned_str =3D first_lit.to_string();
-> +                Some(first_owned_str.as_str()).and_then(|first| {
-> +                    let first =3D first.strip_prefix('"')?;
-> +                    let first =3D first.strip_suffix('"')?;
-> +                    Some((first, first_lit))
+-----BEGIN PGP SIGNATURE-----
 
-You're only using first_lit to get the span later, so why not just get
-the span directly here?
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhmVpoACgkQ3SOs138+
+s6H8eA/8DKYXM8Q4NfN3Dy4sm+8suSuldzrTG2nzdVrJS7jjhpg6iBam0X/tYTvz
+xUfL8LCp6jllqzMZJw9RNyiX+oavicZVGoFoAeg/AcrlFRUzLjbHwEvLllg52R8c
++AjbncteyFTszrmUoEwrpy+dq0JtQuItUOcQPhFV2ULjsVux4NcWMusgRdQEmzjY
+b1YJ8MMYo8Rr2iX0zQs0+v12sJuS6IYA6+rn6tmGIzUehAlrsKGHcGLcxk4k8+d6
+fhEbDH+DKescqZ05F1mLbQs4qVwQcLVnN/2nuJw2C0P4Nm5f2xgj4FyWs3+VUfRF
+bQ7cmXSmx6irZsWe9VJqKWJ6AEcJ/zkAL/acjt4dtFFMls20DDixjP4lJcbsqxfd
+sG5J/w21r64fw2oAYE+sWg9agvfKBf3q39VPDw6nK7AneQv63o3Jgnh3OOS65WVy
+lqFT4NcsOHayGNeoMlzFOKblkY6yvMqCJ7iAFR3FVYc+jpmKaTyuuESsX6+g2r3a
+KKUjyf9nCP5RvEG8/mJiaEFJgZQDMenciUTyfPrYXWY2eQfCgL1jKmMW/Cp3Gs2Q
+Jkjv1t7DElIor4KIUFT3NwZy6K5T/CcR6YQRPFhpfDGU3NvZYb4wxy9xBE4kGN51
+L06NpjjfQZQSCNSJH/0EKyv3yoA8KXcCPFQgIevMCTh4+/31M0I=
+=gwc0
+-----END PGP SIGNATURE-----
 
-> +                })
-> +            }
-> +            _ =3D> None,
-> +        }) else {
-> +            return first_opt.into_iter().chain(input).collect();
-> +        };
-> +        while let Some((_, rest)) =3D first_str.split_once('{') {
-
-Let's put a comment above this loop mentioning [1] and saying that it
-parses the identifiers from the format arguments.
-
-[1]: https://doc.rust-lang.org/std/fmt/index.html#syntax
-
-> +            first_str =3D rest;
-> +            if let Some(rest) =3D first_str.strip_prefix('{') {
-> +                first_str =3D rest;
-> +                continue;
-> +            }
-> +            if let Some((name, rest)) =3D first_str.split_once('}') {
-> +                first_str =3D rest;
-> +                let name =3D name.split_once(':').map_or(name, |(name, _=
-)| name);
-> +                if !name.is_empty() && !name.chars().all(|c| c.is_ascii_=
-digit()) {
-> +                    names.insert(name);
-> +                }
-> +            }
-> +        }
-> +        first_lit
-> +    };
-> +
-> +    let first_span =3D first_lit.span();
-> +    let adapter =3D quote_spanned! {
-> +        first_span =3D> ::kernel::fmt::Adapter
-> +    };
-
-I think we should follow the formatting convention from the quote crate:
-
-    let adapter =3D quote_spanned!(first_span=3D> ::kernel::fmt::Adapter);
-
-> +
-> +    let mut args =3D TokenStream::from_iter(first_opt);
-> +    {
-> +        let mut flush =3D |args: &mut TokenStream, current: &mut TokenSt=
-ream| {
-
-You don't need to pass `args` as a closure argument, since you always
-call it with `&mut args`.
-
-> +            let current =3D std::mem::take(current);
-> +            if !current.is_empty() {
-> +                let (lhs, rhs) =3D (|| {
-> +                    let mut current =3D current.into_iter();
-> +                    let mut acc =3D TokenStream::new();
-> +                    while let Some(tt) =3D current.next() {
-> +                        // Split on `=3D` only once to handle cases like=
- `a =3D b =3D c`.
-> +                        if matches!(&tt, TokenTree::Punct(p) if p.as_cha=
-r() =3D=3D '=3D') {
-> +                            names.remove(acc.to_string().as_str());
-> +                            // Include the `=3D` itself to keep the hand=
-ling below uniform.
-> +                            acc.extend([tt]);
-> +                            return (Some(acc), current.collect::<TokenSt=
-ream>());
-> +                        }
-> +                        acc.extend([tt]);
-> +                    }
-> +                    (None, acc)
-> +                })();
-> +                args.extend(quote_spanned! {
-> +                    first_span =3D> #lhs #adapter(&#rhs)
-> +                });
-> +            }
-> +        };
-> +
-> +        let mut current =3D TokenStream::new();
-
-Define this before the closure, then you don't need to pass it as an
-argument.
-
----
-Cheers,
-Benno
-
-> +        for tt in input {
-> +            match &tt {
-> +                TokenTree::Punct(p) if p.as_char() =3D=3D ',' =3D> {
-> +                    flush(&mut args, &mut current);
-> +                    &mut args
-> +                }
-> +                _ =3D> &mut current,
-> +            }
-> +            .extend([tt]);
-> +        }
-> +        flush(&mut args, &mut current);
-> +    }
-> +
-> +    for name in names {
-> +        let name =3D Ident::new(name, first_span);
-> +        args.extend(quote_spanned! {
-> +            first_span =3D> , #name =3D #adapter(&#name)
-> +        });
-> +    }
-> +
-> +    quote_spanned! {
-> +        first_span =3D> ::core::format_args!(#args)
-> +    }
-> +}
+--z5seqlr4kwwbvdcx--
 
