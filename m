@@ -1,116 +1,355 @@
-Return-Path: <linux-pm+bounces-30018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0BF6AF7079
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 12:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 960F7AF7189
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A1FB540619
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 10:34:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5E134A54A6
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 11:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4482E3391;
-	Thu,  3 Jul 2025 10:33:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6512E62A1;
+	Thu,  3 Jul 2025 11:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NgSdbYKW"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="mg0ppVZE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8A91FECBA
-	for <linux-pm@vger.kernel.org>; Thu,  3 Jul 2025 10:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F01A2E4278;
+	Thu,  3 Jul 2025 11:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751538819; cv=none; b=ej/wI4p/KGcTtCd7CGpwQ1t0qnDiPtLtG9h+66XUqqM213k7yfpXYZCCHyI2Y9RLAfAddzgQViDEFgLg9e3xJ4mseGJ9/FqDfyuaLfcsMnuQUzHHkZDa0W2SloacVZpFYzeGxRPnqm8S84OkMfsGXea4QfTMcZbOCamwLYlnqK8=
+	t=1751540513; cv=none; b=QESN74hPh8rEIuuVIGJLYNnn6F3tA7ji0Kx399NwZ2G2P2NK3Olf873Zm+dUr87J0nqjSO9Wp/sX4VupWWsAkW9BPNdDCkuH1JKxYMMzVfUO7dM3wvkugjYbFiIthOG0qmCVpgz0WyS2Gc13/556A/33lPMip2NjfPtHxn9ilNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751538819; c=relaxed/simple;
-	bh=xe9m/r2wNEKhNTq1yGfIvhKesACxvY2oAvUudaItXOc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EMkBaj6UxrIX27NWCtO7ZtdLwGHPOz1fyMFDUty/jF2zyRG/X7GNovEgHgoxBuhcO1sOk7Jh984oBq5YVoYoDmn3ZgbpB8NvAtgEk4YtcoId6DBqVFpC97+gvcQ4c0Z75s/R3FEq0dZ4jwNCYdPFkk/+yFeJqEgKFxLHvIqnCJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NgSdbYKW; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ae223591067so895539666b.3
-        for <linux-pm@vger.kernel.org>; Thu, 03 Jul 2025 03:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751538816; x=1752143616; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FtQ9lRAm6z5cCoKKpjFUoJ7pNUTxADNFPTG8yUssXP0=;
-        b=NgSdbYKWtC1iB97sW90g4jlmqpWTRwTaKuaZkMIwgWJbO9dJZTo39WHco1/oZjtQ04
-         WBc3mf7RoOmNkt9wUOyYtHQ2Hqq45D3yvE42j6LJSTGHpJ10ROoW/6fyC9TuSUFPV/hf
-         HziW3SdlMtA97glCSrfvaCjifsyAZnkckMzqXgAfD6sov0/znm89nsf3vWIQmCw3GjJQ
-         iOsgtx1zNP7KkKqjZ3cpw7STuEHOlHJALy/BPh2JNVA2RMQpgevZUt2dcM9Y2lVMu+hh
-         L1ENVHqm9/ktRvh3dg4IBAqUNHxKRpk5CzBX+QpqW4xGMwwzb11ndODRM+IYJM+XO1Bu
-         8y+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751538816; x=1752143616;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FtQ9lRAm6z5cCoKKpjFUoJ7pNUTxADNFPTG8yUssXP0=;
-        b=vMKugEL6JVrSNaIYWXlZCz0jcvK9ixcVptK9/YoPWA+6w2FZZHDO3VUK8kzfheYJlM
-         VwCsdvlXXfBwocnP7dXP3q9j6MzkTMlJnngUzxVh2c3TuWhs2OoaKs9xWRMLqm3WiDhf
-         I/GdSbVNunydev9LYStdjtq1KDcpHvii7q+JeRd6LG3ZA41krsD9F1eoXmA2nGejGDwE
-         8pOFndRaktk9g9QutFCPTOFVJ0WGYswAuN30Zc6Ll+FD+d3oc3yZtKLeGriHq25X5A3l
-         8s9vpTi/eVMA2E94PXR8JwC5/FxWmDLQtkN//+sE+rM7E3BMYYqAQ6Jb+dth/aKuF6rT
-         FrVA==
-X-Gm-Message-State: AOJu0Yy6vCwlaUpnahLh9EaQ07MmGnSSQX2pUWNCxSrxaDym7wNbvtKL
-	ko3F/+tqnMVbsjHkMFtLc43pORDUYlCWN4QVOWtIrV7XUwpg6W463B/YFqmF1uSNCIo=
-X-Gm-Gg: ASbGncsCB9x1M4bjFhQP0VY8hjXjFF73YvF3H2pBwahdqLkVvxXGVU2mar19UfN/HD3
-	bHgkySlodHUHScTVAJHlfMCX9GLc8YHhAfxlFue/i9Mcr4khsPrmxgV7lldiVmxmaj5xE5ljcnX
-	ELWG7UQ//q1XYQsDpPCzNfy7ufOBi1rI+BEC8HJRUnMje67UfRhFI0/gMb794zCe8sokZp4ORQp
-	YY4oDSGyT00ZrsSVVujPCv2PHahDm2OIjy3wRxkjbrLHoQB9hitaFvhpDFwjhh1rU3xgtCoMO6B
-	HtNK4enWNEmKf2T13QJQ/Yvhu01Blg2IUjjp10ilfSjj5uI50cYrgft2T25kwsFbiSqDUSEdyzf
-	yO0yKhxF8sgJzOzK4
-X-Google-Smtp-Source: AGHT+IEAH1Qbn4XNukfjtEADuVdGYHRx0aWx0QTiYECTFTYG6zMFHteBb3TPETKc8kywiiMldQNjzg==
-X-Received: by 2002:a17:907:9720:b0:ad2:2146:3b89 with SMTP id a640c23a62f3a-ae3d8983431mr230012266b.47.1751538815896;
-        Thu, 03 Jul 2025 03:33:35 -0700 (PDT)
-Received: from [10.128.60.15] ([81.92.17.128])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c6bda4sm1246384366b.141.2025.07.03.03.33.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Jul 2025 03:33:35 -0700 (PDT)
-Message-ID: <fbfc6bf9-d7c6-4df5-85d0-b1d357159d88@suse.com>
-Date: Thu, 3 Jul 2025 12:33:33 +0200
+	s=arc-20240116; t=1751540513; c=relaxed/simple;
+	bh=cJLrkpYalhKPxKq8UM8Ce8k97L/lW0At13Qbw13iBVE=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=dsnlTzNZz8g0wkDef0thB9xDa6t0IGPaisVzmF7VksrYkaZOSoDRvfm+6uEvsaDBRkoLiqYW4QlntswOlGDlBo+Ds+UoXoe9x5mT52mFnuPvnvaSbMV1iYXru8bUvPyi0jv+/S/6J6uCYJV4mpclJ0RQOQJ1YmZ0AfTkmev0uHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=mg0ppVZE; arc=none smtp.client-ip=134.0.28.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+	by mxout3.routing.net (Postfix) with ESMTP id CC90E60470;
+	Thu,  3 Jul 2025 11:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1751540502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IUOk9rg8FJKLiO2I6XaC3qKD4aR5RnkKJ8cRJENolq0=;
+	b=mg0ppVZEIw2vFYZi1hGkgJFJzAXnpBgCwsBZ+eYDHO0mNLiKdLRhwZzoTD4po6PiM9nvFJ
+	q0THIholsJJYhvoQrILHnJu65UtCGFkNtZDA24jOfd/E/spJoSTHi0pdax7rqLjmpS/VcA
+	3IhAAhmnP1/f+bskKEhHPKQtnFk07Qc=
+Received: from webmail.hosting.de (unknown [134.0.26.148])
+	by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 7E23B3603D0;
+	Thu,  3 Jul 2025 11:01:40 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Forcing devices into idle
-To: Thierry Reding <thierry.reding@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-tegra@vger.kernel.org
-References: <rlzpjdsg6cbgxc553j6m25ysb6tyldy4lnxsjjn4hdzv7rszpp@y6rfcrbjfook>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <rlzpjdsg6cbgxc553j6m25ysb6tyldy4lnxsjjn4hdzv7rszpp@y6rfcrbjfook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date: Thu, 03 Jul 2025 13:01:40 +0200
+From: "Frank Wunderlich (linux)" <linux@fw-web.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: frank-w@public-files.de, MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean
+ <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Johnson Wang <johnson.wang@mediatek.com>, =?UTF-8?Q?Ar=C4=B1n=C3=A7_?=
+ =?UTF-8?Q?=C3=9CNAL?= <arinc.unal@arinc9.com>, Landen Chao
+ <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>, Sean Wang
+ <sean.wang@mediatek.com>, Daniel Golle <daniel@makrotopia.org>, Lorenzo
+ Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v7 01/14] dt-bindings: net: mediatek,net: allow irq names
+In-Reply-To: <158755b2-7b1c-4b1c-8577-b00acbfadbdc@kernel.org>
+References: <20250628165451.85884-1-linux@fw-web.de>
+ <20250628165451.85884-2-linux@fw-web.de>
+ <20250701-wisteria-walrus-of-perfection-bdfbec@krzk-bin>
+ <9AF787EF-A184-4492-A6F1-50B069D780E7@public-files.de>
+ <158755b2-7b1c-4b1c-8577-b00acbfadbdc@kernel.org>
+Message-ID: <b68435e3e44de0532fc1e0c2e7f7bf54@fw-web.de>
+X-Sender: linux@fw-web.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+X-Mail-ID: f16835e3-c754-4e77-8260-ceabe9311a0a
 
-On 03.07.25 12:08, Thierry Reding wrote:
+Am 2025-07-02 08:27, schrieb Krzysztof Kozlowski:
+> On 01/07/2025 12:51, Frank Wunderlich wrote:
+>> Am 1. Juli 2025 08:44:02 MESZ schrieb Krzysztof Kozlowski 
+>> <krzk@kernel.org>:
+>>> On Sat, Jun 28, 2025 at 06:54:36PM +0200, Frank Wunderlich wrote:
+>>>> From: Frank Wunderlich <frank-w@public-files.de>
+>>>> 
+>>>> In preparation for MT7988 and RSS/LRO allow the interrupt-names
+>>> 
+>>> Why? What preparation, what is the purpose of adding the names, what 
+>>> do
+>>> they solve?
+>> 
+>> Devicetree handled by the mtk_eth_soc driver have
+>> a wild mix of shared and non-shared irq definitions
+>> accessed by index (shared use index 0,
+>> non-shared
+>> using 1+2). Some soc have only 3 FE irqs (like mt7622).
+>> 
+>> This makes it unclear which irq is used for what
+>> on which SoC. Adding names for irq cleans this a bit
+>> in device tree and driver.
+> 
+> It's implied ABI now, even if the binding did not express that. But
+> interrupt-names are not necessary to express that at all. Look at other
+> bindings: we express the list by describing the items:
+> items:
+>   - description: foo
+>   - ... bar
 
-> Any thoughts on how to solve this? Is the pm_runtime_{put,get}_sync()
-> method acceptable? If not, are there other alternatives to achieve the
-> same thing that I'm not aware of? Would it be useful to add a new set of
-> APIs to force devices into an idle state (which could be semantically
-> different from runtime suspend)? Or is this all too specific for any
-> kind of generic API?
+ok, so i need to define descriptions for all interrupts instead of only 
+increasing the count. Ok, was not clear to me.
 
-Basically what you need is what happens when the system prepares to
-do a snapshot for S4. However, if you just perform FREEZE and then THAW,
-devices will assume that user space has been frozen. You need a way
-to substitute for that assumption.
+so something like this:
 
-Runtime power management is unlikely to be a fruitful approach to your
-needs.
+item0: on SoCs with shared IRQ (mt762[18]) used for RX+TX, on other free 
+to be used
+item1: on non-shared SoCs used for TX
+item2: on non-shared SoCs used for RX (except RSS/LRO is used)
+item3: reserved / currently unused
+item4-7: IRQs for RSS/LRO
 
-	HTH
-		Oliver
+>> 
+>>>> property. Also increase the maximum IRQ count to 8 (4 FE + 4 RSS),
+>>> 
+>>> Why? There is no user of 8 items.
+>> 
+>> MT7988 *with* RSS/LRO (not yet supported by driver
+>> yet,but i add the irqs in devicetree in this series)
+>> use 8 irqs,but RSS is optional and 4 irqs get working
+>> ethernet stack.
+> 
+> That's separate change than fixing ABI and that user MUST BE HERE. You
+> cannot add some future interrupts for some future device. Adding new
+> device is the only reason to add more interrupts.
 
+MT7988 is basicly new because there is no devicetree there yet...only 
+driver and
+this (incomplete) binding.
+
+>> 
+>> I hope this explanation makes things clearer...
+> 
+> 
+> Commit msg must explain all this, not me asking.
+> 
+>> 
+>>>> but set boundaries for all compatibles same as irq count.
+>>> 
+>>> Your patch does not do it.
+>> 
+>> I set Min/max-items for interrupt names below like
+>> interrupts count defined.
+> 
+> No, you don't. It's all fluid and flexible - limited constraints.
+
+i thought i can limit is by setting the MaxItems in the soc-spcific 
+blocks below.
+What reason does MaxItems have there if not this? of course if there is 
+any Soc not
+having a specific block it is open.But this is also the case for 
+interrupts property
+handles the same way before.
+
+I only left it open on mt7988 (only set minitems because all 8 can be 
+used, but 4 are required).
+
+>> 
+>>>> 
+>>>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>>>> ---
+>>>> v7: fixed wrong rebase
+>>>> v6: new patch splitted from the mt7988 changes
+>>>> ---
+>>>>  .../devicetree/bindings/net/mediatek,net.yaml | 38 
+>>>> ++++++++++++++++++-
+>>>>  1 file changed, 37 insertions(+), 1 deletion(-)
+>>>> 
+>>>> diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml 
+>>>> b/Documentation/devicetree/bindings/net/mediatek,net.yaml
+>>>> index 9e02fd80af83..6672db206b38 100644
+>>>> --- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
+>>>> +++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
+>>>> @@ -40,7 +40,19 @@ properties:
+>>>> 
+>>>>    interrupts:
+>>>>      minItems: 1
+>>>> -    maxItems: 4
+>>>> +    maxItems: 8
+>>>> +
+>>>> +  interrupt-names:
+>>>> +    minItems: 1
+>>>> +    items:
+>>>> +      - const: fe0
+>>>> +      - const: fe1
+>>>> +      - const: fe2
+>>>> +      - const: fe3
+>>>> +      - const: pdma0
+>>>> +      - const: pdma1
+>>>> +      - const: pdma2
+>>>> +      - const: pdma3
+>>>> 
+>>>>    power-domains:
+>>>>      maxItems: 1
+>>>> @@ -135,6 +147,10 @@ allOf:
+>>>>            minItems: 3
+>>>>            maxItems: 3
+>>>> 
+>>>> +        interrupt-names:
+>>>> +          minItems: 3
+>>>> +          maxItems: 3
+
+limited here to the same as interrupts.
+
+>>>>          clocks:
+>>>>            minItems: 4
+>>>>            maxItems: 4
+>>>> @@ -166,6 +182,9 @@ allOf:
+>>>>          interrupts:
+>>>>            maxItems: 1
+>>>> 
+>>>> +        interrupt-namess:
+>>>> +          maxItems: 1
+dito
+
+>>>>          clocks:
+>>>>            minItems: 2
+>>>>            maxItems: 2
+>>>> @@ -192,6 +211,10 @@ allOf:
+>>>>            minItems: 3
+>>>>            maxItems: 3
+>>>> 
+>>>> +        interrupt-names:
+>>>> +          minItems: 3
+>>>> +          maxItems: 3
+dito and so on
+
+>>>>          clocks:
+>>>>            minItems: 11
+>>>>            maxItems: 11
+>>>> @@ -232,6 +255,10 @@ allOf:
+>>>>            minItems: 3
+>>>>            maxItems: 3
+>>>> 
+>>>> +        interrupt-names:
+>>>> +          minItems: 3
+>>>> +          maxItems: 3
+>>>> +
+>>>>          clocks:
+>>>>            minItems: 17
+>>>>            maxItems: 17
+>>>> @@ -274,6 +301,9 @@ allOf:
+>>>>          interrupts:
+>>>>            minItems: 4
+>>>> 
+>>>> +        interrupt-names:
+>>>> +          minItems: 4
+>>>> +
+>>>>          clocks:
+>>>>            minItems: 15
+>>>>            maxItems: 15
+>>>> @@ -312,6 +342,9 @@ allOf:
+>>>>          interrupts:
+>>>>            minItems: 4
+>>>> 
+>>>> +        interrupt-names:
+>>>> +          minItems: 4
+>>> 
+>>> 8 interrupts is now valid?
+>>> 
+>>>> +
+>>>>          clocks:
+>>>>            minItems: 15
+>>>>            maxItems: 15
+>>>> @@ -350,6 +383,9 @@ allOf:
+>>>>          interrupts:
+>>>>            minItems: 4
+>>>> 
+>>>> +        interrupt-names:
+>>>> +          minItems: 4
+>>> 
+>>> So why sudenly this device gets 8 interrupts? This makes no sense,
+>>> nothing explained in the commit msg.
+>> 
+>> 4 FrameEngine IRQs are required to be defined (currently 2 are used in 
+>> driver).
+>> The other 4 are optional,but added in the devicetree
+> 
+> There were only 4 before and you do not explain why all devices get 8.
+> You mentioned that MT7988 has 8 but now make 8 for all other variants!
+> 
+> Why you are not answering this question?
+
+The original binding excluded the 4 RSS/LRO IRQs as this is an optional 
+feature not
+yet available in driver. It is needed to get the full speed on the 10G 
+interfaces.
+MT7988 is the first SoC which has 10G MACs. Older Socs like mt7986 and 
+mt7981 can also
+support RSS/LRO to reduce cpu load. But here we will run into the "new 
+kernel - old
+devicetree" issue, if we try to upstream this. Maybe we do not add this 
+because these
+only have 2.5G MACs.
+
+>> to not run into problems supporting old devicetree
+>> when adding RSS/LRO to driver.
+> 
+> This is not about driver, it does not matter for the driver. Binding 
+> and
+> DTS are supposed to be complete.
+
+if i upstream the ethernet-node now with only 4 IRQS, we have to extend 
+them later and
+have to deal with only 4 IRQs in driver to be compatible with older DTS. 
+So newer
+kernel with RSS/LRO support cannot work with older DT.
+To avoid this i add all related IRQs now (from DT perspective a new 
+device - there is
+no mt7988 device with ethernet node in devicetree yet).
+
+>> 
+>>> I understand nothing from this patch and I already asked you to 
+>>> clearly
+>>> explain why you are doing things. This patch on its own makes no 
+>>> sense.
+
+i tried to explain :(
+i have a working dts for mt7988 and try to upstream it in this series 
+and thats the
+cause i have to update the binding. Imho i cannot increase the 
+interrupt-count in SoC
+specific block (e.g. setting count globally to 4 but to 8 for only 
+mt7988).
+
+I added interrupt-names to get it cleaner in driver (access via name 
+instead of
+index). And also in Devicetree we see the meaning of IRQs without 
+looking through
+driver. I see really no reason for not adding the interrupt names.
+
+>>> Best regards,
+>>> Krzysztof
+
+regards Frank
 
