@@ -1,209 +1,163 @@
-Return-Path: <linux-pm+bounces-30077-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30078-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38551AF7E5B
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 19:05:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0A66AF7E77
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 19:15:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D83814A07E1
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:04:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 407AF7B6A53
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40FBC258CF8;
-	Thu,  3 Jul 2025 17:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD469283CAF;
+	Thu,  3 Jul 2025 17:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQMznmMm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EZLojwzK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A82B17A319;
-	Thu,  3 Jul 2025 17:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFFF283FE9;
+	Thu,  3 Jul 2025 17:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751562299; cv=none; b=l3owlYSHO2q/u3tv0LVq+OAfYpJcGFD6N8apgNqpNVqTwRHUUaMxm3+dvL54MExLtaVHA7FT2BL2AHhGX299akX0A6QPlhudKq8UqZASUMio2jolajPKxB5ROxmj+ebOA+NJCVTI6P3ddaihESHtNSRbwMTP8IO5GzDmx6tTJvw=
+	t=1751562939; cv=none; b=Jtm+vX21eki1CzU7scjg97ctGjPTEHJwvMigrIT2bRnBcfgVlgI1nRKjwDIal0j6FFnv7fD1mPWyF+ZqKMEt1Q1HUwfuQBOOgp2LHp7KWFP9OPO4qsh+u3OnKjJ3bOsmxKSRQuHiHJ6dMiav2SRk9ljn7QT0BXo1VsciGYydZ8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751562299; c=relaxed/simple;
-	bh=QsC4CqDA0Dxv8zb6CyeYGANC/Ef8RVUzUXmP4D/HMSM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VaeZQTz9XSBRxxGseKGEQ2C2ei0FKgTnYKGyqpxYRT5QyshXNT4WvZqG5LTFD4EnKnEEp44lo7YPhIx/9zBRXXZ0JyCSMGUpwS7Wdg4iSj7Oxd25NlMvPnJ5FBc99s2nwcnRtbypnpWyNRmElw+/SdqdcPpCr1fH0pM1sTU6zao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQMznmMm; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751562296; x=1783098296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QsC4CqDA0Dxv8zb6CyeYGANC/Ef8RVUzUXmP4D/HMSM=;
-  b=GQMznmMmocKUBFBTnOu2G43QI8WKQjn5vrKPKk3vY69d0O7lv6zb90RZ
-   mO23uIWbTqEOd5II0YF4iFs/ezX7OG/c+gG1+PXIvlZXBPDa8o0bhHOPW
-   lGx7J0GwQV6NLXdBiOOw6dwdtJrCrfziKcxJl0ZZLedjbty1RW5nN1M2Z
-   jBh2rMqeqsL27aDpVsexkacWotJZw+KXLoKEXgIYJfE1ZLzDqHtjzMOkc
-   qoRIrRCjg1BYbWWuX9GXnZUwgynSmHOlURsOvJxJwYJnbNeCE5Y7rW53g
-   cMFH4Squ70RFCiig1xfjl2nTEtm5dk+v2C9loJU9xPy73DGmCuzYL3hFr
-   g==;
-X-CSE-ConnectionGUID: xpkPe0hCTyS6eoJfpcdEYg==
-X-CSE-MsgGUID: VKrIbyniSvW2+oOQZGiKsw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53868202"
-X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
-   d="scan'208";a="53868202"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 10:04:56 -0700
-X-CSE-ConnectionGUID: cM4NzYspRFWldVkEozDfmA==
-X-CSE-MsgGUID: DXOA958VQjupwLGla7Z+3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
-   d="scan'208";a="154062938"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Jul 2025 10:04:52 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXNMf-0002op-2A;
-	Thu, 03 Jul 2025 17:04:49 +0000
-Date: Fri, 4 Jul 2025 01:04:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nick Hu <nick.hu@sifive.com>, conor+dt@kernel.org, krzk+dt@kernel.org,
-	Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc: oe-kbuild-all@lists.linux.dev, Nick Hu <nick.hu@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Anup Patel <anup@brainfault.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH v3 2/3] cpuidle: riscv-sbi: Work with the external
- pmdomain driver
-Message-ID: <202507040001.Jm6FQyH6-lkp@intel.com>
-References: <20250702091236.5281-3-nick.hu@sifive.com>
+	s=arc-20240116; t=1751562939; c=relaxed/simple;
+	bh=Uj5bkWtXtQIbvR4+Cyjubp71UGpdlL9kRH9NmZs+kbI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rO8fEZRctmQpiEgxpsL23m34dwDM2Q0bkGMOk9ljiMDqeKuSE36pX5YRknfa+7pOMSKmGTye6BCMmuthK60dBt0iS5V/DUpiYYPo3fMdT4kiJbTc70opD4depCo7ClrYpHbDTzctyB07P0bLowFGJOX6UEq4RuDmM7HqBrYzTFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EZLojwzK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FE8C4CEF1;
+	Thu,  3 Jul 2025 17:15:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751562935;
+	bh=Uj5bkWtXtQIbvR4+Cyjubp71UGpdlL9kRH9NmZs+kbI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EZLojwzKYfWSJypQ4Gpc+9FErnZQt383Xc0tS6o0odBayeAhe8N7NE0DOq1G+qI85
+	 nzS6OvngMwZjqo/EFqtHblUOxCQQNls5KRSrjDdJ6GO0vuVby1MnCjtV+qEtk2h+Hn
+	 Dt2PA3aDN5t0OPPUq1PaxmQPTXL9kwrhQ4R6jHmkHWuQMuz3dL4iUhp/9K26AxdM12
+	 5JZxyotIi2g9e09qfbSfMapzLpgfzhiIQcUC6GwzVIaP0JAE/cUzsxPtJ3aVnwpIVo
+	 Vn3H6PJj/5ZevypHhiSK6ashwWNyxrnJquqBvNFmRG4lf/p705QBckb7Cw4jrJHXzo
+	 XCjKoUcg6+VDw==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2ef493de975so135416fac.1;
+        Thu, 03 Jul 2025 10:15:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUIAIJWJXtveWHLXvMkIxsCPR1eDakRh2e0G9o7aHob5LKwB6Vlv1Hb60wOa53jNaIYze9MTx+1J4ZUKFw=@vger.kernel.org, AJvYcCXYD98jSCxwaG+aJvQMch8WHzKD2liLwZx3agWp8DHvqx0LD/VTiT1vy22K5prW3Z4Nf/RVUerlses=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3iK7JRpwlqt5jtzMBZJQLjOhC7OxPokZrk8l6TZNdYX/NK1/H
+	botSIhI3qx5pOWgZS+nTt1vzqyfJmHf3u2TjXcvUAd6N6zddZuNYScLWRgLrxLBGtJFje13pcDU
+	cPWUkwWWmAoItZ7sR543BHPTAFSGfhDQ=
+X-Google-Smtp-Source: AGHT+IEYlj3vLW+c4XkEkv8B/bM6r36a2ahFcGIyezWBMmDPT1obgS5xRySJi42SiXgxBLmD36WUq/fUlJrmXUn3ljQ=
+X-Received: by 2002:a05:6808:1c06:b0:40b:af9:b32d with SMTP id
+ 5614622812f47-40b887479eemr5537857b6e.2.1751562935126; Thu, 03 Jul 2025
+ 10:15:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250702091236.5281-3-nick.hu@sifive.com>
+References: <20250611101247.15522-1-zhangzihuan@kylinos.cn>
+ <20250611101247.15522-2-zhangzihuan@kylinos.cn> <CAJZ5v0jpuUVM73M=Gzq36je=K_7zEkvVd8bxohi6N5OYgxgUug@mail.gmail.com>
+ <20250703164021.GY1613200@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250703164021.GY1613200@noisy.programming.kicks-ass.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 3 Jul 2025 19:15:23 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j29Nu2nitmj6tPhOQYuSaHBtXQVR21ikDtrxpejPdW8A@mail.gmail.com>
+X-Gm-Features: Ac12FXz93EwlKd-IAkIsLjDKdeUgrASdjeyJ_SQspgR1S8NicQ73UFbiFIo8y24
+Message-ID: <CAJZ5v0j29Nu2nitmj6tPhOQYuSaHBtXQVR21ikDtrxpejPdW8A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] PM / Freezer: Skip zombie/dead processes to
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zihuan Zhang <zhangzihuan@kylinos.cn>, pavel@kernel.org, 
+	len.brown@intel.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Oleg Nesterov <oleg@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nick,
+On Thu, Jul 3, 2025 at 6:40=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Thu, Jul 03, 2025 at 04:15:10PM +0200, Rafael J. Wysocki wrote:
+> > The patch subject appears to be incomplete.
+> >
+> > On Wed, Jun 11, 2025 at 12:13=E2=80=AFPM Zihuan Zhang <zhangzihuan@kyli=
+nos.cn> wrote:
+> > >
+> > > When freezing user space during suspend or hibernation, the freezer
+> > > iterates over all tasks and attempts to freeze them via
+> > > try_to_freeze_tasks().
+> > >
+> > > However, zombie processes (i.e., tasks in EXIT_ZOMBIE state) are no
+> > > longer running and will never enter the refrigerator. Trying to freez=
+e
+> > > them is meaningless and causes extra overhead, especially when there =
+are
+> > > thousands of zombies created during stress conditions such as fork
+> > > storms.
+> > >
+> > > This patch skips zombie processes during the freezing phase.
+> > >
+> > > In our testing with ~30,000 user processes (including many zombies), =
+the
+> > > average freeze time during suspend (S3) dropped from ~43 ms to ~16 ms=
+:
+> > >
+> > >     - Without the patch: ~43 ms average freeze latency
+> > >     - With the patch:    ~16 ms average freeze latency
+> > >     - Improvement:       ~62%
+> >
+> > And what's the total suspend time on the system in question?
+> >
+> > > This confirms that skipping zombies significantly speeds up the freez=
+ing
+> > > process when the system is under heavy load with many short-lived tas=
+ks.
+> > >
+> > > Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> > >
+> > > Changes in v3:
+> > > - Added performance test
+> > >
+> > > Changes in v2:
+> > > - Simplified code, added judgment of dead processes
+> > > - Rewrite changelog
+> > > ---
+> > >  kernel/power/process.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/power/process.c b/kernel/power/process.c
+> > > index a6f7ba2d283d..2bbe22610522 100644
+> > > --- a/kernel/power/process.c
+> > > +++ b/kernel/power/process.c
+> > > @@ -51,7 +51,7 @@ static int try_to_freeze_tasks(bool user_only)
+> > >                 todo =3D 0;
+> > >                 read_lock(&tasklist_lock);
+> > >                 for_each_process_thread(g, p) {
+> > > -                       if (p =3D=3D current || !freeze_task(p))
+> > > +                       if (p =3D=3D current || p->exit_state || !fre=
+eze_task(p))
+> > >                                 continue;
+> > >
+> > >                         todo++;
+> > > --
+> >
+> > This is basically fine by me, but I wonder what other people think.
+> >
+> > Peter?
+>
+> How realistic is it to have a significant amount of zombies when
+> freezing? This seems like an artificial corner case at best.
+>
+> Zombie tasks are stuck waiting on their parent to consume their exit
+> state or something, right? And those parents being frozen, they pretty
+> much stay there.
+>
+> So I suppose the logic holds, but urgh, do we really need this?
 
-kernel test robot noticed the following build warnings:
+Unlikely in practice, but the code change is small and it would be
+prudent to get this addressed IMV (at least so we don't need to
+revisit it).
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge robh/for-next linus/master v6.16-rc4 next-20250703]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Hu/cpuidle-riscv-sbi-Work-with-the-external-pmdomain-driver/20250702-181250
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250702091236.5281-3-nick.hu%40sifive.com
-patch subject: [PATCH v3 2/3] cpuidle: riscv-sbi: Work with the external pmdomain driver
-config: riscv-randconfig-001-20250703 (https://download.01.org/0day-ci/archive/20250704/202507040001.Jm6FQyH6-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 13.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507040001.Jm6FQyH6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507040001.Jm6FQyH6-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_probe':
->> drivers/cpuidle/cpuidle-riscv-sbi.c:569:1: warning: label 'out' defined but not used [-Wunused-label]
-     569 | out:
-         | ^~~
-
-
-vim +/out +569 drivers/cpuidle/cpuidle-riscv-sbi.c
-
-   493	
-   494	static int sbi_cpuidle_probe(struct platform_device *pdev)
-   495	{
-   496		int cpu, ret;
-   497		struct cpuidle_driver *drv;
-   498		struct cpuidle_device *dev;
-   499		struct device_node *pds_node;
-   500	
-   501		/* Detect OSI support based on CPU DT nodes */
-   502		sbi_cpuidle_use_osi = true;
-   503		for_each_possible_cpu(cpu) {
-   504			struct device_node *np __free(device_node) = of_cpu_device_node_get(cpu);
-   505			if (np &&
-   506			    of_property_present(np, "power-domains") &&
-   507			    of_property_present(np, "power-domain-names")) {
-   508				continue;
-   509			} else {
-   510				sbi_cpuidle_use_osi = false;
-   511				break;
-   512			}
-   513		}
-   514	
-   515		/* Populate generic power domains from DT nodes */
-   516		pds_node = of_find_node_by_path("/cpus/power-domains");
-   517		if (pds_node) {
-   518			ret = sbi_genpd_probe(pds_node);
-   519			of_node_put(pds_node);
-   520			if (ret)
-   521				return ret;
-   522		}
-   523	
-   524		/* Attaching the cpu to the corresponding power domain */
-   525		if (sbi_cpuidle_use_osi) {
-   526			for_each_present_cpu(cpu) {
-   527				struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
-   528	
-   529				data->dev = dt_idle_attach_cpu(cpu, "sbi");
-   530				if (IS_ERR_OR_NULL(data->dev)) {
-   531					ret = PTR_ERR_OR_ZERO(data->dev);
-   532					if (ret != -EPROBE_DEFER)
-   533						pr_debug("Hart%ld: fail to attach the power domain\n",
-   534							 cpuid_to_hartid_map(cpu));
-   535	
-   536					while (--cpu >= 0)
-   537						dt_idle_detach_cpu(data->dev);
-   538					return ret;
-   539				}
-   540			}
-   541			/* Setup CPU hotplut notifiers */
-   542			sbi_idle_init_cpuhp();
-   543		}
-   544	
-   545		/* Initialize CPU idle driver for each present CPU */
-   546		for_each_present_cpu(cpu) {
-   547			ret = sbi_cpuidle_init_cpu(&pdev->dev, cpu);
-   548			if (ret) {
-   549				pr_debug("HART%ld: idle driver init failed\n",
-   550					 cpuid_to_hartid_map(cpu));
-   551				goto out_fail;
-   552			}
-   553		}
-   554	
-   555		if (cpuidle_disabled())
-   556			pr_info("cpuidle is disabled\n");
-   557		else
-   558			pr_info("idle driver registered for all CPUs\n");
-   559	
-   560		return 0;
-   561	
-   562	out_fail:
-   563		while (--cpu >= 0) {
-   564			dev = per_cpu(cpuidle_devices, cpu);
-   565			drv = cpuidle_get_cpu_driver(dev);
-   566			cpuidle_unregister(drv);
-   567			sbi_cpuidle_deinit_cpu(cpu);
-   568		}
- > 569	out:
-   570		return ret;
-   571	}
-   572	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+But I would ask for a comment above this check to explain that zombies
+need not be frozen.
 
