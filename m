@@ -1,123 +1,204 @@
-Return-Path: <linux-pm+bounces-30039-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17B7CAF7360
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:11:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EE45AF75BB
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 15:32:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 974383B7229
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 12:11:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C15D83A9750
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:32:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349902E3AF0;
-	Thu,  3 Jul 2025 12:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49027176ADE;
+	Thu,  3 Jul 2025 13:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjPVz5eT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTO3y/sR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B142DE6E2;
-	Thu,  3 Jul 2025 12:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848AE13B2A4;
+	Thu,  3 Jul 2025 13:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751544707; cv=none; b=PVYUY9iPLXKhNc4ysy0rC8YQWINxEs6SIkiVgCkcSD0c4pQpnsg3FSdxW7PtsYixh6tOZwT/mM6tzsiy3iv2zxPY20jF/cuswJL/7GVAtjp0oBFU4LdUm1j3h4eZMbI9dNJk6Isg/gL17sZXwd989+4W8SMkB5pjLAQyfyvTab8=
+	t=1751549552; cv=none; b=HPDp+Lw6EKjfMKaj/yzuhRrr/g1+VaPF3iEakEGe9FEPC/9dLdBNkj+pkSuudu3BoCmCnHv9D5IHnMMz+aexdE5WGyMp/b9aFkroZLxbxRcCgU8F5IaUn0rCGby0DWMEKbO5Xc5OL++265Zc7n/rnU1EnWjCID1zqzcAquYjchg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751544707; c=relaxed/simple;
-	bh=/u695DCkL8w+yoQZGNJnVtq6t82qtpyg/gJ1B9UDub0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T8K7rb2SiynnxpUoZTioGeNW3K1T8AzvlMW7H7MgMRuUJFZ2X9WpOKrFMKwMgCZpCGOIFT6pSn20HU//H7EgkD/glcclkAYiAu/pHAuY6veyUXTcDsRCE9dPKcRF3NXC3ZJStWfT3ynmhJKbd8M9n5n+GypehDVRL0ewqHuCAl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjPVz5eT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C03C4CEE3;
-	Thu,  3 Jul 2025 12:11:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751544706;
-	bh=/u695DCkL8w+yoQZGNJnVtq6t82qtpyg/gJ1B9UDub0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FjPVz5eTcZjLiKLc4yZNGS0tEKOsUK6irjZ9OpErjuLjVQ3MlgZqs2Mizo/tELfkC
-	 wp7kmeqOWM7ZR3MJYNLTKRMYJDgpb3/z+U6cXgX1vuuiecmAgeQR7dWlDdQTNIlc4w
-	 qrE2Z8QfHdOhueZCRzMv1gj96sqtR530RHuKv19GObiCzplnCqUI6i7qj5tq/t5fAD
-	 8O6Fnf3KbLniVCrlyP6FhtIJ69r5o2jtPdpc7NKghF7GEPa/2Cgd+1nFehqd/gMCQz
-	 xlYpglmpmDMwRBG2cyWP5jxcXUVQL7vVXya3CTBnspG9CX0hlvtHqrygjXV1SaIHyF
-	 H5LOMcG2QEMVw==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6113f0cafb2so2556478eaf.1;
-        Thu, 03 Jul 2025 05:11:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVFKLdsbRfccLYcWSgqMkUkFE3byc2I2WNqSiqch1eO8MpJDqN8S9gEiPu6empzmrlwVQCBZ2scwmA=@vger.kernel.org, AJvYcCXPO0jVbJMh3Djvd1N+4ZIfAKN++o1XyKpKYvgaEdtqRrif+Yu+4PxqPs0LS+8DU5coB7m6oby9kLKL3Ofv@vger.kernel.org, AJvYcCXzbVVJrv/D/WSvH6xAmTrHRSV/a3XLViMrD1h2t8JfnREVv9cAX/Mh+wTtVMcug6O1wEc4wTmd7pIT@vger.kernel.org
-X-Gm-Message-State: AOJu0YynrG5NlE4LuXQ3taQvMQZGI95wwWlCoWq7+ERwy6+fu1LlSMJs
-	4Po6Itb+J6824rJW825RxN4ApFL6n8lNkGVRbBZQ53pyci1TWfr0tuB3a/nI5NsjJrqDsgOCw6S
-	STS0DtOnB+cH7GgIKHJzpPDhtSI597vY=
-X-Google-Smtp-Source: AGHT+IE5Vw4m4mXPct9wVJmubJXbT4c5/+l/c/Mue+EJKIDprCrU46NbVGdZsrRTFJ0qceb/2zMPdR465PTwB9KXq7c=
-X-Received: by 2002:a05:6820:c8f:b0:611:e00a:598d with SMTP id
- 006d021491bc7-6120116d82fmr4804121eaf.8.1751544705742; Thu, 03 Jul 2025
- 05:11:45 -0700 (PDT)
+	s=arc-20240116; t=1751549552; c=relaxed/simple;
+	bh=zGKkOzJI2At6lwlypOoOWjmLIZuzEOoWGySWBtnvhTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QuGOt5Tjua0awFDy/q5Ijprop5Dwbl08q6C03jDaG6tL7Fo/F2ZxROiji6obs/vVJdzJH8NKInyhq60gGb3paY+AlW2KTrnBNvLVzhT8dG4azXUtKDN0J9G7vkY8AMoCUbpqZXcmYZvnTFEKheQNBIHZfyzWSBtuT/63607hb+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTO3y/sR; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a507e88b0aso4464076f8f.1;
+        Thu, 03 Jul 2025 06:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751549548; x=1752154348; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VzTZN1Rgi3KEaXkVhx7sTEQ+GfRghm0dQNuxhM8Lk7o=;
+        b=hTO3y/sRMpU7KHb3YXqVcBt+kadH6BFfvfVvNGab6ykLtzoVBAAQj7JGijc5gVtE/t
+         pcCmw3gSHjgCMJBM7KVr8+FF/Sub/vSBYM8vGNH0TnO/paI/DgWKJqjdaQEZBx636iqH
+         Q9UnM5MkcoacKIe2KcGSrGPq+nkb65oqX6AhDSlnjY5KmF3n4fOBLXKR5XolXZNFoS4h
+         lREs5XWG1TsOE9AJKU+pCxURgUuNqUBn29xe/TayZ+ux25OTv0OB1lvg8TVPyKQpo69H
+         y6bumlK4kOM1TcXnePBCjeTVFS5PMGQeM5B250hdAx9axyb4Ak6P8CLqxpWBUKD5d5m9
+         KUVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751549548; x=1752154348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VzTZN1Rgi3KEaXkVhx7sTEQ+GfRghm0dQNuxhM8Lk7o=;
+        b=Pyj3SwcsXH6Ev6kBO34HAa4E6b5SXqm1DpN3HqaSnee3IYVL39L9ELcTzzNrT2JlM1
+         HaZIhNRYn/BgvsjbInEXWT+JZFagZSTOtMUgrDfdni/tgrva9RPkJJh8MI8kcV7sBUsj
+         ztba2L8lwegFrvDnjngkSI9BjY6qQ1rgRgA/0WiHCMK3OVojccdJ7Oh6VqX5gq4qMKKS
+         ClhUMaI2EdEbZ2/NX65TrHLGEDxQY3G9crzRwSkfuGYtj6kuUkVIell++sZVK7d/4TrB
+         /v07lrYEmdUEJSuMilECVcDfpKg03WgRweWqWmumgN1r5VJ+pBCq6721ViG8XNd3S4eg
+         kT5w==
+X-Forwarded-Encrypted: i=1; AJvYcCX4JWNlMzmnkzaBZXbYgnKPECJdwhnUW9Jk3JkUMNbssktk23N2FsJR93bVm6Aq4BlohP6co0azeg==@vger.kernel.org, AJvYcCXrxJzTZfBbS4SwViw0PcgyBrxXptbHhW2GCFCF+zHqJ+XmIRb85JtOh6hqvVohueHw4Pj7fTWSgTaNouQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweNZYxmxS8PN/4GruUTg+wbUIq+LbCSt32KC9E15NwFepoecUX
+	6iBy1P86kivv3YAGG4Ss4LLWlkkvoOW/sqCF+U2FZuuUccv9B7M0+4tMUogf4Q==
+X-Gm-Gg: ASbGnctC1+YMIWFtYKImV3UAOJE7HxWGL5ipMNIDvQ9BGq/o5mbJzXx94jDhPkYTIxC
+	y7QwWMsJPLEstSkgRfCjbDVS6EKnvjj2UgGDhx/+Mpd+HDgqAjlm/lUawkdV7h5gGV8SfJEBX/D
+	9lqH4D9KafAhJENQjynsvOp58htF9GNCo8hdCgdHMBwbhwvTeh3UtUWe6PAXGWQZEF+JF7R00YT
+	2m/ZSg+/fqUHEhYHpsRZdOV62Ye1kzV7DhDGpPYjB3D18PPnkWTDYnMRaIHmhcxfNt/n1VEKjbb
+	TCWw2VHOsrplvId2C2C9kb/CRdm2WCv2X1TOwLIx41gyO8GdnoaJHrEjHpV5XFEK/iHfPgd2CKp
+	LkqlqW7wOOpfanU79b2txNu6AJptv9n19H6g+ARnNRwh1w9vJ
+X-Google-Smtp-Source: AGHT+IGWpisDXiFyyqwzWsMXcKSEHmRXU6edUilLRNhMLwl6kmpAmMNt1c/YASvIJDD2NqdC0Xef1A==
+X-Received: by 2002:a5d:64e4:0:b0:3a4:efbb:6df3 with SMTP id ffacd0b85a97d-3b32b14582dmr2868264f8f.10.1751549547337;
+        Thu, 03 Jul 2025 06:32:27 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a999c8cdsm27218775e9.24.2025.07.03.06.32.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 06:32:25 -0700 (PDT)
+Date: Thu, 3 Jul 2025 15:32:24 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Oliver Neukum <oneukum@suse.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: Forcing devices into idle
+Message-ID: <e635l6gfpg7amck2hnu4l47tnc54lr6e26v7y3ohaywil6pjwr@4trxzfdigo62>
+References: <rlzpjdsg6cbgxc553j6m25ysb6tyldy4lnxsjjn4hdzv7rszpp@y6rfcrbjfook>
+ <fbfc6bf9-d7c6-4df5-85d0-b1d357159d88@suse.com>
+ <CAJZ5v0hPh19h9uVRVHSXiLaHxm3PR9A3W5+j=2=-B-YCyBr=uw@mail.gmail.com>
+ <hjkm55hus3ctueydf7ebfb25hbdw6w3spdzx7maauzlzmnakas@noqexx2pxxtj>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250621051704.12050-1-sumeet4linux@gmail.com>
- <CAJZ5v0hqAO32zdLcwZ9UtWEhf=OfCqUN0PkB83v6=suXMP14UQ@mail.gmail.com> <CAJ9orWQAPun6Oy3wMOBK+OYcvUTHDEZ7GUgsuxU2pctNY7O3Mw@mail.gmail.com>
-In-Reply-To: <CAJ9orWQAPun6Oy3wMOBK+OYcvUTHDEZ7GUgsuxU2pctNY7O3Mw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 3 Jul 2025 14:11:33 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g-bArTdntUCv=NiuBX7aDTGifYFF8Q8nhn6XmBgSKgCQ@mail.gmail.com>
-X-Gm-Features: Ac12FXxyhSxv2LmBLQfy0x5Qbf55cDQu9Rq43uU9cCdIUQP2BDKCcltIagN9xd4
-Message-ID: <CAJZ5v0g-bArTdntUCv=NiuBX7aDTGifYFF8Q8nhn6XmBgSKgCQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: FAN: Update fps count debug print
-To: "Sumeet R.P." <sumeet4linux@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org, lenb@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kl7qpfexrmgtjonf"
+Content-Disposition: inline
+In-Reply-To: <hjkm55hus3ctueydf7ebfb25hbdw6w3spdzx7maauzlzmnakas@noqexx2pxxtj>
+
+
+--kl7qpfexrmgtjonf
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: Forcing devices into idle
+MIME-Version: 1.0
 
-On Thu, Jul 3, 2025 at 1:37=E2=80=AFPM Sumeet R.P. <sumeet4linux@gmail.com>=
- wrote:
->
->
-> On Wed, Jul 2, 2025 at 11:24=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
->>
->> On Sat, Jun 21, 2025 at 7:17=E2=80=AFAM Sumeet Pawnikar <sumeet4linux@gm=
-ail.com> wrote:
->> >
->> > Update invalid value returned debug print with fps_count
->> > instead of control value for checking fan fps count condition.
->> >
->> > Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
->> > ---
->> >  drivers/acpi/fan_core.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
->> > index 8ad12ad3aaaf..9f2696a1928c 100644
->> > --- a/drivers/acpi/fan_core.c
->> > +++ b/drivers/acpi/fan_core.c
->> > @@ -102,7 +102,7 @@ static int fan_get_state_acpi4(struct acpi_device =
-*device, unsigned long *state)
->> >                         break;
->> >         }
->> >         if (i =3D=3D fan->fps_count) {
->> > -               dev_dbg(&device->dev, "Invalid control value returned\=
-n");
->> > +               dev_dbg(&device->dev, "Invalid fps_count value returne=
-d\n");
->>
->> I guess this should be "fps" instead of "fps_count" because the latter
->> is just the array size, isn't it?
->>
->
-> Yes, this can be fps.
->
->>
->> But I don't see why it should not be "control" either.
->>
-> In this same function fan_get_state_acpi4(), the same debug print message
-> is already present for invalid control value.
-> So, it's confusing when we get the message and difficult to identify
-> due to which condition the message is coming from.
+On Thu, Jul 03, 2025 at 02:06:00PM +0200, Thierry Reding wrote:
+> On Thu, Jul 03, 2025 at 01:12:15PM +0200, Rafael J. Wysocki wrote:
+> > On Thu, Jul 3, 2025 at 12:33=E2=80=AFPM Oliver Neukum <oneukum@suse.com=
+> wrote:
+> > >
+> > > On 03.07.25 12:08, Thierry Reding wrote:
+> > >
+> > > > Any thoughts on how to solve this? Is the pm_runtime_{put,get}_sync=
+()
+> > > > method acceptable? If not, are there other alternatives to achieve =
+the
+> > > > same thing that I'm not aware of? Would it be useful to add a new s=
+et of
+> > > > APIs to force devices into an idle state (which could be semantical=
+ly
+> > > > different from runtime suspend)? Or is this all too specific for any
+> > > > kind of generic API?
+> > >
+> > > Basically what you need is what happens when the system prepares to
+> > > do a snapshot for S4. However, if you just perform FREEZE and then TH=
+AW,
+> > > devices will assume that user space has been frozen. You need a way
+> > > to substitute for that assumption.
+> >=20
+> > Well, you just need to freeze user space beforehand.
+>=20
+> Freezing userspace seems a bit heavy-handed. There's only a very few
+> devices that need to be put into reset (such as the GPU), so most of
+> userspace should be fine to continue to run. For the GPU the idea is
+> to block all incoming requests while the device is forced into idle,
+> and then to resume processing these requests after the VPR resize.
+>=20
+> But maybe freezing userspace isn't the heavy operation that I think it
+> is. Ideally we do not want to suspend things for too long to avoid
+> stuttering on the userspace side.
+>=20
+> Also, I think we'd want the freezing to be triggered by the VPR driver
+> because userspace ideally doesn't know when the resizing happens. The
+> DMA BUF heap API that I'm trying to use is too simple for that, and
+> only the VPR driver knows when a resize needs to happen.
+>=20
+> Is it possible to trigger the freeze from a kernel driver? Or localize
+> the freezing of userspace to only the processes that are accessing a
+> given device?
+>=20
+> Other than that, freeze() and thaw() seem like the right callbacks for
+> this.
 
-Agreed, so maybe change the second message to something like "No
-matching fps control value".
+I've prototyped this using the sledgehammer freeze_processes() and
+thaw_processes() functions and the entire process seems to be pretty
+quick. I can get through most of it in ~30 ms. This is on a mostly
+idle test system, so I expect this to go up significantly if there
+is a high load.
+
+On the other hand, this will drastically simplify the GPU driver
+implementation, because by the time ->freeze() is called, all userspace
+will be frozen, so there's no need to do any blocking on the kernel
+side.
+
+What I have now is roughly this:
+
+	freeze_processes();
+
+	for each VPR device dev:
+		pm_generic_freeze(dev);
+
+	resize_vpr();
+
+	for each VPR device dev:
+		pm_generic_thaw(dev);
+
+	thaw_processes()
+
+I still can't shake the feeling that this is sketchy, but it seems to
+work. Is there anything blatantly wrong about this?
+
+Thierry
+
+--kl7qpfexrmgtjonf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhmhmUACgkQ3SOs138+
+s6F+6g//aRuHpYkzTMvccJ4QyH5yNDpNqRpGvN9HG7a5R6V0sul3YDjRBFiTSJ5U
+87wncw9HcxnM/em3AHaqPeoGjLL5R95Sz1owAMh1TPxUHWfVlUfSqB5TCyd7dJ0S
+O+F1EIjuVJrOcdd8P9gccBZLzJEkIGCdBe1ZAVWBapuj1wxAQxhPXZme/grtCiet
+dzUbcHuZzkxThASpUDs0ftezwiamiW0W3xYKS+PjWC1sstlw7E2EIcsOTYyomLOA
+LxcncWBzXYiApIwLuQtEI71We/5bATYbUJHdN1lo0Wc5tGlTFxgnKPRYME2WUit6
+l2M6/3TfHPZOD7RxicU8NIeB1kBk5IefqiZ54SzH6BVuRV66gD56UmjxJP66K6vc
+3OIgbXNeKwTsbMdd2Ho3fV9qEMfWdswH/YXev+WojMCGJLXQNzo9E6fO2bNH6FWA
+5nHvK2/Ms2z6Q06Mbm+VSFnWSpcRf81vyqXFvD3ODX44hemA+tnEVB20T1/gEESe
+Y8cuNsa0Jk6agmgQAA6Gpftne8R5gSO/gyQJrTJKBv+oTlR31P439/cd9nTB5pzT
+aK0cD+JGCPoZZww4fuYwww5DwSRAq+/viU7Og71OF859E/BwOP6l5G2UDX7Qew9I
+6Ekqjd9864mv0m9wIkDkLSM9gEU8E6qKMWQKyMrPzbJIQ1TJCpw=
+=tnZJ
+-----END PGP SIGNATURE-----
+
+--kl7qpfexrmgtjonf--
 
