@@ -1,268 +1,163 @@
-Return-Path: <linux-pm+bounces-30036-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30037-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C975FAF7238
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:28:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36C3EAF7296
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:38:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 384D83BCCCF
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 11:28:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CECD4E5933
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 11:37:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A6D2E62D7;
-	Thu,  3 Jul 2025 11:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="cxqeRkAm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B982E427C;
+	Thu,  3 Jul 2025 11:36:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F472E6117
-	for <linux-pm@vger.kernel.org>; Thu,  3 Jul 2025 11:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E122E4279;
+	Thu,  3 Jul 2025 11:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751542076; cv=none; b=pOmGvhZ6X9YgmHAwzexUWvbqn4+JPW4ycuZme0oDP7KkKiWLKKMHzNgEjYnz0w7SlEvWViZ6ftVy0ezC1NlzsJnlN1Aitd8aGyCzHeoGKXxGadnnj3yRLIlQGNPkwC/S1cH+jQj3SXQIt2ewtoXDK1F6bXiUdornUlEgfnNm8dM=
+	t=1751542591; cv=none; b=efa7bUz7NEJPP8Wjb36QgO740maQbWqH7bRHFHm+AqrdtYBzgDqJiws/27TaYmnhAVy75g+w6GkK76LrD4AbIi4ShlMl6VeANILMOqIYIE+MbmIdUbdbglR9hFcUsBipUcvsXwZ9mjyM6vq2eLOchWMXR240ZzNqqfi+musPdIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751542076; c=relaxed/simple;
-	bh=dKp9sNBVKhCMWq2ozbMkBemUSa+iPERmFu+4dZggoQ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qnoqtqOpzwcraTeiQ3/ER12EiV5XwljlY9jrdp8MvtMo9HQ+hSuXguEJRsVsO3ACAagWZE1fivWr2U/w1xKC/3qYMu3XKPhkHRLeP3sd1ksreeLVUTC9badKt9DJuqkqIBGQohoPYL6lRBfdgTx213K1u0QTLtpKnI3c7QbnuKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=cxqeRkAm; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ae0bde4d5c9so1444871666b.3
-        for <linux-pm@vger.kernel.org>; Thu, 03 Jul 2025 04:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1751542072; x=1752146872; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=amy1aSEWJFLjdFKle4TRafGT1dI6FK2dRgoWrJhpEoE=;
-        b=cxqeRkAmo+uhAkoMMQwvBP/akaaA+fW/9V9vZNVm2+J3NsvGJPkfzEQDkhNz6BvmOh
-         3sy7SDwTPiykFPgHxFKqPDV70lgxb9VitxB2zID8UhJEFqbjSr6/beF1A+paHxzJLbV2
-         fCsPFX0X2dXVHFISOIdTo8bHJzzw2i/2PWJU1fYLb+tV1f0mIKR8nnHFEOgX2m69aacR
-         NgtAX6hIBrFtiKatkSlnHgVieJORSNq7h/WbY5fRfJUzCPYMt6OG0G9qmrBkr2OuIoFH
-         BjAsSdZRFHbIo+yxKwu60qLSEiRdqqKoSmqYbWC/MXA7Fwv6q3tItqmJmsLAJS2Nzb1K
-         iL3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751542072; x=1752146872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=amy1aSEWJFLjdFKle4TRafGT1dI6FK2dRgoWrJhpEoE=;
-        b=JpQDLY60jt/lnlMELH5FabRDnFQv+Jc2bbaC8iW66OhgSp4GSsTwDIKN11kBmvK8cJ
-         rDeKMrvWj1ukz6wWUkseRrLRGpO4Fu9nSI2dHnOLfVOWKd9aKoQU7wd8rB4Z3C9CAJXT
-         86j1VJGFQaLol5fl+a6y9t82yfNN6fzf0GtdXsq4Q3FWhsI1RpN+LYCeEzkdHky2Dj37
-         W9JsmZhPf5kTicUG7IwJ0VXH3mrEo01LYxB2nrlnomb/UO4ZLtqMzCIe8WmjKt2PQ+OW
-         Ixx+XHmxe4Rm9PRmmubA1eYy0bNSJE9HqVNsw0wjWomqY6z9qe0y1YiQ2baau4bck+Nd
-         7aAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBOPd6LMcYv2enAcY3gpQ0ab7tuInQ3wVwhTavSJw/322T6Pm5joVV+vf9T6x5QNX7f4awEvBgzQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm842aT2Q7o0W5O8kFAW0YjqUVzswkfHu9ZzMUnK+eo0YQVX16
-	QkEWjXMws9y4EVpj/+FhHlSae0pk+iYhxFPcjsQDffviWt5hPqi++aWfDaHSCYeRFIs=
-X-Gm-Gg: ASbGnctjGSXvrqaUHcBGVS5WqQSQEM/ZLHOwCJfqEltla5IaULH3kp3qtD8H2gM2tzl
-	DLItgdL5Sqi+k0V5RpOBpVaXEu4dyO0l9CYRPIgQA3BbCcODLttb+XqHe4YzwXu6MN+5vMsqVMU
-	ZyqJbFDU0CauqunkxE/lxKSMZB8+RddFOZUG6dFSdneK79UKZYKJNRKkK4F14/0Yr7Zv9LbOjNV
-	kITssCOncHRk6JiziLPQx/ZFdrdoEoQzXydZcbXxL7WGOV640/2RHyYSa0B1iXnJkmgAjdg3omQ
-	E97Ku7cJWjdSmFg0Nmmh1qRFS4bc8Kzo9fLsmxkdkO3vD4z2hEmehOEjD9EaGv9gw7F9wjxQC4u
-	FFkWgHob+gyHdkZ4=
-X-Google-Smtp-Source: AGHT+IGtvsJyDMQsLfUDl9utWzUCxFT2n50ILIV0XhgAq1dND93ylmRMS+yE9TxwtIdCeTyEpsNdFg==
-X-Received: by 2002:a17:907:d644:b0:ae3:cd73:efde with SMTP id a640c23a62f3a-ae3d8b1b1d4mr273821366b.44.1751542072208;
-        Thu, 03 Jul 2025 04:27:52 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.83])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a75fsm1247016966b.67.2025.07.03.04.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 04:27:51 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: linux@armlinux.org.uk,
-	gregkh@linuxfoundation.org,
-	david.m.ertman@intel.com,
-	ira.weiny@intel.com,
-	leon@kernel.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org,
-	andersson@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	wsa+renesas@sang-engineering.com,
-	ulf.hansson@linaro.org,
-	mathieu.poirier@linaro.org,
-	vkoul@kernel.org,
-	yung-chuan.liao@linux.intel.com,
-	pierre-louis.bossart@linux.dev,
-	broonie@kernel.org,
-	robh@kernel.org,
-	jirislaby@kernel.org,
-	saravanak@google.com,
-	jic23@kernel.org,
-	dmitry.torokhov@gmail.com
-Cc: claudiu.beznea@tuxon.dev,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	bhelgaas@google.com,
-	geert@linux-m68k.org,
-	linux-iio@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	fabrizio.castro.jz@renesas.com,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v5 3/3] driver core: platform: Drop dev_pm_domain_detach() call
-Date: Thu,  3 Jul 2025 14:27:08 +0300
-Message-ID: <20250703112708.1621607-4-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1751542591; c=relaxed/simple;
+	bh=Sy5KK+ahsW1yAaKri1MbI11E8xyt8D6mK1pL569PzGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dzCbqxIusMJgH8Mn6n38uag2zlPgrwLErbnq9YDsYXQ2YB0X4n9lx8rzykbZNcEm8kcRkdESS17iOPCDtlhA3zEgn25CohOhotSeBcSHn0TkuHHD7hSqGx86f0DhTgmQqOO+Ak1BZG7zTGb0WM1sWtGeQQas/W4rRQRq+sOjHk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.98.2)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1uXIES-000000004sT-1IDF;
+	Thu, 03 Jul 2025 11:36:00 +0000
+Date: Thu, 3 Jul 2025 12:35:56 +0100
+From: Daniel Golle <daniel@makrotopia.org>
+To: "Frank Wunderlich (linux)" <linux@fw-web.de>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, frank-w@public-files.de,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Johnson Wang <johnson.wang@mediatek.com>,
+	=?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+	Landen Chao <Landen.Chao@mediatek.com>,
+	DENG Qingfang <dqfext@gmail.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v7 01/14] dt-bindings: net: mediatek,net: allow irq names
+Message-ID: <aGZrHMnpMMzNkIjF@makrotopia.org>
+References: <20250628165451.85884-1-linux@fw-web.de>
+ <20250628165451.85884-2-linux@fw-web.de>
+ <20250701-wisteria-walrus-of-perfection-bdfbec@krzk-bin>
+ <9AF787EF-A184-4492-A6F1-50B069D780E7@public-files.de>
+ <158755b2-7b1c-4b1c-8577-b00acbfadbdc@kernel.org>
+ <b68435e3e44de0532fc1e0c2e7f7bf54@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b68435e3e44de0532fc1e0c2e7f7bf54@fw-web.de>
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Thu, Jul 03, 2025 at 01:01:40PM +0200, Frank Wunderlich (linux) wrote:
+> Am 2025-07-02 08:27, schrieb Krzysztof Kozlowski:
+> > On 01/07/2025 12:51, Frank Wunderlich wrote:
+> > > Am 1. Juli 2025 08:44:02 MESZ schrieb Krzysztof Kozlowski
+> > > <krzk@kernel.org>:
+> > > > On Sat, Jun 28, 2025 at 06:54:36PM +0200, Frank Wunderlich wrote:
+> > > > > From: Frank Wunderlich <frank-w@public-files.de>
+> > > > > 
+> > > > > In preparation for MT7988 and RSS/LRO allow the interrupt-names
+> > > > 
+> > > > Why? What preparation, what is the purpose of adding the names,
+> > > > what do
+> > > > they solve?
+> > > 
+> > > Devicetree handled by the mtk_eth_soc driver have
+> > > a wild mix of shared and non-shared irq definitions
+> > > accessed by index (shared use index 0,
+> > > non-shared
+> > > using 1+2). Some soc have only 3 FE irqs (like mt7622).
+> > > 
+> > > This makes it unclear which irq is used for what
+> > > on which SoC. Adding names for irq cleans this a bit
+> > > in device tree and driver.
+> > 
+> > It's implied ABI now, even if the binding did not express that. But
+> > interrupt-names are not necessary to express that at all. Look at other
+> > bindings: we express the list by describing the items:
+> > items:
+> >   - description: foo
+> >   - ... bar
+> 
+> ok, so i need to define descriptions for all interrupts instead of only
+> increasing the count. Ok, was not clear to me.
+> 
+> so something like this:
+> 
+> item0: on SoCs with shared IRQ (mt762[18]) used for RX+TX, on other free to
+> be used
+> item1: on non-shared SoCs used for TX
+> item2: on non-shared SoCs used for RX (except RSS/LRO is used)
+> item3: reserved / currently unused
+> item4-7: IRQs for RSS/LRO
 
-On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
-clocks are managed through PM domains. These PM domains, registered on
-behalf of the clock controller driver, are configured with
-GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
-clocks are enabled/disabled using runtime PM APIs. The power domains may
-also have power_on/power_off support implemented. After the device PM
-domain is powered off any CPU accesses to these domains leads to system
-aborts.
+These descriptions match the current *software* use of those interrupts,
+however, DT should describe the hardware and esp. item0 up to item3 could
+be used in different ways in the future (by programming MTK_FE_INT_GRP
+register differently).
 
-During probe, devices are attached to the PM domain controlling their
-clocks and power. Similarly, during removal, devices are detached from the
-PM domain.
+I think using interrupt-names fe0...fe3 and pdma0...pdma3 is still the
+best option, so the driver can request the interrupts by name which is
+much more readable in the driver code and SoC's dtsi than relying on a
+specific order.
 
-The detachment call stack is as follows:
+> > 
+> > There were only 4 before and you do not explain why all devices get 8.
+> > You mentioned that MT7988 has 8 but now make 8 for all other variants!
+> > 
+> > Why you are not answering this question?
+> 
+> The original binding excluded the 4 RSS/LRO IRQs as this is an optional
+> feature not
+> yet available in driver. It is needed to get the full speed on the 10G
+> interfaces.
+> MT7988 is the first SoC which has 10G MACs. Older Socs like mt7986 and
+> mt7981 can also
+> support RSS/LRO to reduce cpu load. But here we will run into the "new
+> kernel - old
+> devicetree" issue, if we try to upstream this. Maybe we do not add this
+> because these
+> only have 2.5G MACs.
 
-device_driver_detach() ->
-  device_release_driver_internal() ->
-    __device_release_driver() ->
-      device_remove() ->
-        platform_remove() ->
-          dev_pm_domain_detach()
+It might be important to note that
 
-During driver unbind, after the device is detached from its PM domain,
-the device_unbind_cleanup() function is called, which subsequently invokes
-devres_release_all(). This function handles devres resource cleanup.
+MT7621, MT7628: 1 IRQ
+MT7622, MT7623: 3 IRQs (only two used by the driver for now)
+MT7981, MT7986: 4 IRQs (only two used by the driver for now)
 
-If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
-cleanup process triggers the action or reset function for disabling runtime
-PM. This function is pm_runtime_disable_action(), which leads to the
-following call stack of interest when called:
-
-pm_runtime_disable_action() ->
-  pm_runtime_dont_use_autosuspend() ->
-    __pm_runtime_use_autosuspend() ->
-      update_autosuspend() ->
-        rpm_idle()
-
-The rpm_idle() function attempts to resume the device at runtime. However,
-at the point it is called, the device is no longer part of a PM domain
-(which manages clocks and power states). If the driver implements its own
-runtime PM APIs for specific functionalities - such as the rzg2l_adc
-driver - while also relying on the power domain subsystem for power
-management, rpm_idle() will invoke the driver's runtime PM API. However,
-since the device is no longer part of a PM domain at this point, the PM
-domain's runtime PM APIs will not be called. This leads to system aborts on
-Renesas SoCs.
-
-Another identified case is when a subsystem performs various cleanups
-using device_unbind_cleanup(), calling driver-specific APIs in the process.
-A known example is the thermal subsystem, which may call driver-specific
-APIs to disable the thermal device. The relevant call stack in this case
-is:
-
-device_driver_detach() ->
-  device_release_driver_internal() ->
-    device_unbind_cleanup() ->
-      devres_release_all() ->
-        devm_thermal_of_zone_release() ->
-          thermal_zone_device_disable() ->
-            thermal_zone_device_set_mode() ->
-              struct thermal_zone_device_ops::change_mode()
-
-At the moment the driver-specific change_mode() API is called, the device
-is no longer part of its PM domain. Accessing its registers without proper
-power management leads to system aborts.
-
-Drop the call to dev_pm_domain_detach() from the platform bus remove
-function and rely on the newly introduced call in device_unbind_cleanup().
-This ensures the same effect, but the call now occurs after all
-driver-specific devres resources have been freed.
-
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
-
-Changes in v5:
-- dropped tab in the call traces from patch description
-- used PD_FLAG_ATTACH_POWER_ON, PD_FLAG_DETACH_POWER_OFF
-
-Changes in v4:
-- dropped devm_pm_domain_attach() approach
-- adjusted patch description to reflect this
-
-Changes in v3:
-- adjusted the call to devm_pm_domain_attach() as it now gets
-  2 parameters
-
-Changes in v2:
-- dropped the devres group open/close approach and use
-  devm_pm_domain_attach()
-- adjusted patch description to reflect the new approach
-
- drivers/base/platform.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index df1ec34fdf56..09450349cf32 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -1396,15 +1396,13 @@ static int platform_probe(struct device *_dev)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = dev_pm_domain_attach(_dev, PD_FLAG_ATTACH_POWER_ON);
-+	ret = dev_pm_domain_attach(_dev, PD_FLAG_ATTACH_POWER_ON |
-+					 PD_FLAG_DETACH_POWER_OFF);
- 	if (ret)
- 		goto out;
- 
--	if (drv->probe) {
-+	if (drv->probe)
- 		ret = drv->probe(dev);
--		if (ret)
--			dev_pm_domain_detach(_dev, true);
--	}
- 
- out:
- 	if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
-@@ -1422,7 +1420,6 @@ static void platform_remove(struct device *_dev)
- 
- 	if (drv->remove)
- 		drv->remove(dev);
--	dev_pm_domain_detach(_dev, true);
- }
- 
- static void platform_shutdown(struct device *_dev)
--- 
-2.43.0
-
+While older SoCs MT7981 and MT7986 have limited support for *either LRO
+or RSS* in hardware, only MT7988 got 4 frame-engine IRQs like MT7981 and
+MT7986 and an additional 4 IRQs for the 4 RX DMA rings on top of that,
+so a total of 8, and can do both RSS and LRO.
 
