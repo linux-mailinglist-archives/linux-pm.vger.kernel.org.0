@@ -1,126 +1,137 @@
-Return-Path: <linux-pm+bounces-30052-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30053-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 162D2AF77AF
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 16:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AD71AF77C3
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 16:39:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EB17188B678
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:36:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 043AE1880884
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BA92EBBB7;
-	Thu,  3 Jul 2025 14:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84AC2ED16E;
+	Thu,  3 Jul 2025 14:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ccq7GgnF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZPMEHH3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E50F17FAC2;
-	Thu,  3 Jul 2025 14:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901DA2EBBB7;
+	Thu,  3 Jul 2025 14:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751553368; cv=none; b=EZ0WtOLFIU1KTuN82Mxqgbf3yMMuKL5zeIwEaS+nri1e8FYShtLcINI+zRj0nQ8T2Nx05xZVsZ5D6d5cZH7rogHFJTUXi8p7olmbapXqecGrpfcwdwsd0avvmvsVj2Jf5xCDlQbdNSEcMMleSM+q0rd5hvqYU1vVhv1snsnB4k0=
+	t=1751553534; cv=none; b=g5dcZ2OU2DnCcnKlY4+QmI/Uh+ppAy71fB9aVNFtCf0+2y+tj47ltRaBPj/JKwmNbkDQxMJb5gVSHKuvrw/ZTuG/OsOKSj1glEcd6m70EV203lZg0kQcDorsSIOsWIfcQWu10vxCjiHv4rHS7cRmVmraT3VUhtTBAuZDpWXhEGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751553368; c=relaxed/simple;
-	bh=pvG7xe6BGbrfAKTfLgoDx+709pfuEK1E7qCKVSKlUn8=;
+	s=arc-20240116; t=1751553534; c=relaxed/simple;
+	bh=zvfS0hlVmZgCH6Ec9VZqZpSodo2ZG81sQHZGHrVDm2c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tRVDxLivlTU5ou3HA1IeW6xdg42dGg+uxhqWsXrzqwol1d7I/O1xBCUuEFzn5U0Z8yfWcPXWHsyu7khqtFw6XK+eCKZ03CWi15s3AQqY2FeDUhLFtU4sEiyw+hWO1f/iYgyHfSy3dZGQde7MpX0Ck00+MAmwsAc1XpUbdWfrznI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ccq7GgnF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5564C4AF09;
-	Thu,  3 Jul 2025 14:36:07 +0000 (UTC)
+	 To:Cc:Content-Type; b=CKXXq+cmDAxRrPXaEWv0jWy8Z7GPOiYE0x0gB9+jW5MFNxQuS5ya2mZkd/Zwl1B3oYbQ/JSpNXTOTeo90LmW9Ydf/QaPjP19e7sPXeN/nmI/6anZiFGco/XK1haWs62xvO3IjEwyJdCh+zYKiaTOVPTynyOEUOHKV2sc9QfMX9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZPMEHH3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21744C4CEE3;
+	Thu,  3 Jul 2025 14:38:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751553367;
-	bh=pvG7xe6BGbrfAKTfLgoDx+709pfuEK1E7qCKVSKlUn8=;
+	s=k20201202; t=1751553533;
+	bh=zvfS0hlVmZgCH6Ec9VZqZpSodo2ZG81sQHZGHrVDm2c=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ccq7GgnF0NuNYeTP/kVe4NStb8lu5PFyyKieEqXXKWkXfKqcQwBWG58NtsVofqMfv
-	 zLjYaWXNfLN5XWLHffYl8NBoVmSRIIUHzRFN1EUqEBlJz8jtBvmVC+jn9FUSklDh6g
-	 ylcZKUBEuSQ73LNXPxJJI7eiLmUA7e1voaFv9xTBGK3W7muS7H+trpX4XoM+oCxT46
-	 K6GKyEQYa+nXfhsvSl2eIym2Kxp4YvBwAEoyJN5FL5xF49BfSP0h7O0K0TX+br96Hx
-	 a9DjCxUilIvhY79jm0ayAep+zIN87Vten0v7Oa8KM6v7X4oof0tVeBAMJjoEy4+sNi
-	 X1eE8iHclIDnQ==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-60d63174f05so7286eaf.0;
-        Thu, 03 Jul 2025 07:36:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWw6Zh2spd1G0/LvlnbGOnZe20gbu4JjqNiTX8wnJXif4ODgs41rQt4YbABRZ9KwTQG7W3bdOEkQtWSiyk=@vger.kernel.org, AJvYcCXweO/+Ho+Op2GyWc/rySQwbbJSUQfVBcEo484DxpB3VUf8KBEfFQLx1rbqCQbVoruRbUZEAmO9ZBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYt7Asya+K2vFDpqzSg5hGu9oapu2ZIwcgCQx2E0/3psXMyA1O
-	6t3h+XEfpVIGUupImCqkBDwmjMyu7wE2Te1ZgfR6a/GKOQv/l4sDw1c1mbqvdgL1NQ2im1+KGjj
-	9WMVEgHi/QTrQUy+b/+36CZOdpqEbmOg=
-X-Google-Smtp-Source: AGHT+IEkhvn+8jNU8o3fMR9sAH17KtdXghaVznuEOh1N6nMSzEeABnDR+qkAPL7IcARL4Hda9+wwliIPwgpysrkaXUI=
-X-Received: by 2002:a05:6820:2913:b0:613:872a:7b0b with SMTP id
- 006d021491bc7-613872a7e73mr1287331eaf.1.1751553366919; Thu, 03 Jul 2025
- 07:36:06 -0700 (PDT)
+	b=FZPMEHH30nWrJnsg6H7KIh9nYTEJv6WSEeYwDklJxEujIUs8eFQjQz8/nRu5RavuD
+	 e45WeDIGHpR0x480X/hb8Dwuoq46TlWxkbEiqRwNvaEB+VH5sv5C08mYjBDr8mg9+O
+	 eS3ikMhmRqGQD8DIen9ZzDZKoBy+dC3DLC87xIlCcpqi/7ZOAC6+8RAkNBR1/75CEc
+	 D0p4WZ5kShrD+SW6n8CUQGUsul3JZ66Hpp2MLvxQUzlUlQwcQy8+rrn8fNjLlw4rwV
+	 3vJYxu5lZjSLt/PIcSNf9+pOpuNV8ilp4tp+ULXzKIRjCl1Qjgxo4kvnH48GfiEv8n
+	 L2Hc6R0BUxUtA==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-60f0a92391bso15021eaf.0;
+        Thu, 03 Jul 2025 07:38:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWJ+bFYhcIPI7UsAbPjMBFRDMa0FjyIVHRe/8EzVXhYSvofJ4cZ30KZyKWZK2pEYkFCj7czgZ9E/lw=@vger.kernel.org, AJvYcCXeb9pqC9xG/JUT4gsfEJgL6T5l84A60Vi+tmItnxazj5mX3q6O7uryJgcCboyKKp8SI4jAVV/P3jaMYsI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaaMshFxRlO/Td5vS5MuVekSnpVm/qAqDgLNsI4IFwFti77536
+	RJCwHr5mREwK4R/+8QCXaizTSPOsuvXb0pdh6/kZO1R04HJS9CVIhUE5l3x5IgFpRU0cFg/TP6c
+	oju1HwRD8ArfXKEwnvO1u7mxzChOn6Xw=
+X-Google-Smtp-Source: AGHT+IGO+6spzaSlr9bkN+L/3X/YVAAjnPK4L/sMudY4VMGRLPtz+v154mwJVVIo6PYuoX1QarlZtHQ3D+dDj4fLKf0=
+X-Received: by 2002:a05:6820:290f:b0:611:feed:a7b6 with SMTP id
+ 006d021491bc7-6137e698007mr3242379eaf.7.1751553532492; Thu, 03 Jul 2025
+ 07:38:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250617084650.341262-1-quic_zhonhan@quicinc.com>
-In-Reply-To: <20250617084650.341262-1-quic_zhonhan@quicinc.com>
+References: <20250619035355.33402-1-zhangzihuan@kylinos.cn> <20250619035355.33402-2-zhangzihuan@kylinos.cn>
+In-Reply-To: <20250619035355.33402-2-zhangzihuan@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 3 Jul 2025 16:35:55 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hbuQ8sRctAB7eC3JTr5TrDBnu5yjjG82HrSiJ23_99bQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwX-Q0wtKZ01ONvEW8u-19Nxyc4fwRb1remFu35TrXz9gluPQ6gcBRSo-w
-Message-ID: <CAJZ5v0hbuQ8sRctAB7eC3JTr5TrDBnu5yjjG82HrSiJ23_99bQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: Drop superfluous might_sleep() calls
-To: Zhongqiu Han <quic_zhonhan@quicinc.com>
-Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
-	gregkh@linuxfoundation.org, dakr@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Thu, 3 Jul 2025 16:38:41 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gLVTe0a8mTRhiDa_4NuFsYw8gPZF9dnLrZzFh3yt424Q@mail.gmail.com>
+X-Gm-Features: Ac12FXzEqMrT-8hLYr8iP64JV_wOntB9ABfjixfTmlkc4ai1x6ayTfF3IGQE1ac
+Message-ID: <CAJZ5v0gLVTe0a8mTRhiDa_4NuFsYw8gPZF9dnLrZzFh3yt424Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] PM: freezer: Add retry count statistics for freeze
+ pass iterations
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: rafael@kernel.org, pavel@kernel.org, len.brown@intel.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 17, 2025 at 10:47=E2=80=AFAM Zhongqiu Han <quic_zhonhan@quicinc=
-.com> wrote:
+On Thu, Jun 19, 2025 at 5:54=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
 >
-> Drop superfluous might_sleep() calls from dpm_resume(), dpm_complete(),
-> and dpm_prepare(). These functions already invoke primitives that
-> implicitly check for sleep in atomic context:
+> Freezer retry loops during suspend are often triggered by tasks entering
+> D-state (TASK_UNINTERRUPTIBLE), which cannot be frozen.  This patch adds
+> a simple retry counter to freeze_processes() to help quantify how many
+> attempts were required before all tasks entered the frozen state. This
+> is useful for performance tuning and debugging unpredictable suspend
+> delays.
 >
-> - dpm_resume() and dpm_complete() invoke mutex_lock(), which internally
->   triggers might_sleep()
-> - dpm_prepare() calls wait_for_device_probe(), which internally uses
->   flush_work(), and thus might_sleep()
+> A new dmesg log is added for visibility:
 >
-> These annotations are unnecessary and can be dropped to reduce clutter.
+> freeze round: xx, tasks to freeze: xx
 >
-> Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
+> This message allows users to correlate freeze instability with system
+> state.
+>
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
 > ---
->  drivers/base/power/main.c | 3 ---
->  1 file changed, 3 deletions(-)
+>  kernel/power/process.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index eebe699fdf4f..0f40c00c1401 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -1095,7 +1095,6 @@ void dpm_resume(pm_message_t state)
->         ktime_t starttime =3D ktime_get();
+> diff --git a/kernel/power/process.c b/kernel/power/process.c
+> index dc0dfc349f22..87616ca710ac 100644
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -32,6 +32,7 @@ static int try_to_freeze_tasks(bool user_only)
+>         struct task_struct *g, *p;
+>         unsigned long end_time;
+>         unsigned int todo;
+> +       unsigned int retry =3D 0;
+>         bool wq_busy =3D false;
+>         ktime_t start, end, elapsed;
+>         unsigned int elapsed_msecs;
+> @@ -63,6 +64,8 @@ static int try_to_freeze_tasks(bool user_only)
+>                         todo +=3D wq_busy;
+>                 }
 >
->         trace_suspend_resume(TPS("dpm_resume"), state.event, true);
-> -       might_sleep();
->
->         pm_transition =3D state;
->         async_error =3D 0;
-> @@ -1198,7 +1197,6 @@ void dpm_complete(pm_message_t state)
->         struct list_head list;
->
->         trace_suspend_resume(TPS("dpm_complete"), state.event, true);
-> -       might_sleep();
->
->         INIT_LIST_HEAD(&list);
->         mutex_lock(&dpm_list_mtx);
-> @@ -2109,7 +2107,6 @@ int dpm_prepare(pm_message_t state)
->         int error =3D 0;
->
->         trace_suspend_resume(TPS("dpm_prepare"), state.event, true);
-> -       might_sleep();
->
->         /*
->          * Give a chance for the known devices to complete their probes, =
-before
-> --
+> +               pm_pr_dbg("freeze round: %d, task to freeze: %d\n", retry=
+, todo);
+> +
 
-Applied as 6.17 material, thanks!
+This is kind of fine if it is really needed, but it needs to have a
+separate on/off switch as far as I'm concerned.
+
+Maybe use pr_debug() for it in which case it would be controlled via
+dynamic debug?
+
+>                 if (!todo || time_after(jiffies, end_time))
+>                         break;
+>
+> @@ -79,6 +82,7 @@ static int try_to_freeze_tasks(bool user_only)
+>                 usleep_range(sleep_usecs / 2, sleep_usecs);
+>                 if (sleep_usecs < 8 * USEC_PER_MSEC)
+>                         sleep_usecs *=3D 2;
+> +               retry++;
+>         }
+>
+>         end =3D ktime_get_boottime();
+> --
+> 2.25.1
+>
 
