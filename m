@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-30003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB447AF6752
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 03:49:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC693AF6753
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 03:49:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01BEE18910B1
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 01:49:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC5801C20996
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 01:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EDF61581F9;
-	Thu,  3 Jul 2025 01:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094E317C208;
+	Thu,  3 Jul 2025 01:49:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="aLcr/3I4"
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="fKssZetC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011062.outbound.protection.outlook.com [52.101.125.62])
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011026.outbound.protection.outlook.com [52.101.125.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18F53FE7;
-	Thu,  3 Jul 2025 01:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0BE3FE7;
+	Thu,  3 Jul 2025 01:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.26
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751507354; cv=fail; b=jdMmBak5wRpIK4L24hDvvOtQ11SVdYkh+uGzBVIIHpb+vXI31ZK+Dxs4k9OKN20YrblMhHGQADnN8vvI8t+q+TIzdJUrCw0Bodf79tT98nnb6EYXEPocAKYM5HchHNLseKAFDuJYSdSVIQj6mOlLW6xf+3nIbPMM0m8R3rQfGIM=
+	t=1751507365; cv=fail; b=GYRhJHE2qZ5vlR1OftWy7k5LtyUrgK8t7yrkAJKdeq3RiHeLEJQRnLDZa0oC2wOApRn2RFKOpuaKrJiAMQ4//rLJPTGs8ein/L+OE/3PYnmCsB/DZMQ+4DT0tt36ss9TN2Np2b4fGmCSiWY/m3cN0UzUJIBgHl0U6vTHaLr7Xcw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751507354; c=relaxed/simple;
-	bh=e5d0MssvZStVvo+vmdxRAYRo9OyRsz7r1eP1KqAMYEw=;
+	s=arc-20240116; t=1751507365; c=relaxed/simple;
+	bh=2UXUfRl17E1iDh5ZQbple9GEEdzUJiqXTAkJtFiux9U=;
 	h=Message-ID:To:From:Subject:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=oVjY9aqwMzakkC8lgO6TcVyR1EpKeO7HlB6oIUz9n/WsmxPgnu3So0+GOmdLxWLCDJ22DCSVVigVH6oRO8Qs9FS11mPNO4bl4Q3yC1/FKFJGHETwfaGPSx1HwPRxbBpWiKBfUpHb8uWZbLCRW/3OO7w983EtXqWyEFMwWOPe8Y0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=aLcr/3I4; arc=fail smtp.client-ip=52.101.125.62
+	 Date:MIME-Version; b=dPtQntq0rdx1w9QtnZpAKBd6QSfkiPgVWH1MFDgU7vjXgkGBTK5y/u72RadDtv5DqX3kcDononmc8G2zXLC19GRQc9Xrci3cCiUMcokSoT2DtzczI0whrYYoq6N5K/nfDTjqTfLvghT34vzog8LjTDweI2mXij9iYicyGVd+TLY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=fKssZetC; arc=fail smtp.client-ip=52.101.125.26
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nSmo6CaLqV2cyknW9ifGHTMlO9Ptsl6r5GS88CcMitFttY78iDEHaV2zbujkInjzzds3rBMJ+W/l1htHfFKw2gBbiTZRPwCjZIeAxLrP+I7eXlcTSYiEHT1XyKh0Vwnr8TyzJiseTkvtAoFPOYUkgrLQeKj+hKr04pVX0BGWhDf9Ayk12k1w3oXJ4QGSlzv1yhOwoXHD+HZFY0k9PlH07beiY+m6mcePrCagAtYqZvaXzbg9j8OtOXfOOEfOu0ij6QbDHeH9Wpig4c3KCZJi6TP8JLOYepjFQdPJL6HSciBGuwvWh4Tqx9NCge0eGPM5Mysb5hi5uaCidnigqjwE9A==
+ b=HUZeWFnsnyX7+cG61kUjjIAin6W3kWYWOepIfADu0BKVbnARO7K9cxPZ/u8dG/saqhVWfrHLdHnHd1jdEOj14sClOflekLQI36JP4wCJYom7Wa7cFys6dTVWgGt2N6TZYkiUTrd+Zk0upTEaxbSSonpdbnPnsmzA6JFSj/AMpGsoFr2EIPXcCzcPOzjsWvD0nNTcZN6tYf18oiAj+bsj1qlPo8woXYJS0zDuWwycTTPBYp5/kG+Oo3gJMjulJa5TceBvQZf2O3nLH7iiCZMdSv8Q72uFymsTPIQFgPEA9wFFdKaWd+6jb9tsnyTUhOhLGHKm2CiRaPQJGkYMGtZRRg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GuJss/jGOGeNtYe63dETebimdDceOuRut79y8Hq+84U=;
- b=u2fecysPF1jRYig8rsUNY2aC3xZ/qhIZSGz/uZNLTpkd/apZ5RVX9GTe9AO9v/idUCJGk2n5lpkngu1SpSwIe5CD3M8bNmWNkNyL2CiorjkamLdioeCUeTtkAv7mDE7LBPTAKtdW/NXhAwpTmuXnVHTzk3nYDSJuqrqpuT+gzUOgVahqStBRKaX3Xmi5qaNUSQ+4797TxDWS2dnCK4hBWIu/v80RgCLSBxfF78Nd4ck41b3ad4TJ6ODFtK4++qHtO4YHPGDtEp00j+x3IQiBAD9xPorw0fAUO6h0a9CRwT8ZCssvVxIrWqy8Woc9q74Lyuj2zmD9TbCac3rizrZtdw==
+ bh=aoa63F2Uv7tPFcLstK6istzmOhGfphOLvC+DbxCBfFE=;
+ b=VrFdb0E4FdItvOzjcDQtE+0XOL1MEwWn7h7U1PCxnLfqikBkHbs6yUB4aMzUApEjPg0/nyZqSwQeBSavyhIXk1KaLEdnjwkDhYmOwiPrxCRYzAILg2o6LnRDMFDe4vYHBcmtudWmaGEqopBw/hrQmnSi7DEwcpBX7VCX8EuQvJi7jmyTPyqDxuKQVa4dSC9rOeO/X7MK2HSXFXmBP1wKHQCsLC6IcL+M4Y6bgtyw9F9q35h0ZF8YjtlU8aJ285Xl8XYTbcd2+7Vuh9TUsY1ZotrwuMvFClFHN2bAOHAqZT244YlQpxQFBjPltqKklMHT4fPPNiQ7db02KcxnIJ5rOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
  dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GuJss/jGOGeNtYe63dETebimdDceOuRut79y8Hq+84U=;
- b=aLcr/3I4iKXOnEvAb/UgsDVVyFlC56XB1+3ugvjCaosyTF5uCO7+uuZwpH1TahaUnkgNYqe7WMFMcjdKoKx75+lyUQUFPXf4F6TF8cKSv8IV7LziSPE8XTRRNX57iOw0/vvV28HMJEQpCr0Wl55QJxwgIc4JRY6fTayNWv5cN90=
+ bh=aoa63F2Uv7tPFcLstK6istzmOhGfphOLvC+DbxCBfFE=;
+ b=fKssZetCv5dbcFiKmX6XQkrdxNxQlEzMqRrpylRkhKTKoByGY/N2CFNZVDezoZtusvNOZ8tPE5ArYeQFg3y12wF064FMRtCEPov3JS7VrmX5AJ/8WLqCxVE73G1tN9Vu58hCiW+A6c4LmY3WXl13hlzAK9IQDCYwJuEFSlzb3MY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=renesas.com;
 Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
  (2603:1096:400:3a9::11) by OSOPR01MB12299.jpnprd01.prod.outlook.com
  (2603:1096:604:2d9::6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Thu, 3 Jul
- 2025 01:49:09 +0000
+ 2025 01:49:21 +0000
 Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
  ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
  ([fe80::c568:1028:2fd1:6e11%4]) with mapi id 15.20.8880.021; Thu, 3 Jul 2025
- 01:49:09 +0000
-Message-ID: <87jz4qcacr.wl-kuninori.morimoto.gx@renesas.com>
+ 01:49:21 +0000
+Message-ID: <87ikkacacf.wl-kuninori.morimoto.gx@renesas.com>
 To: Geert Uytterhoeven <geert+renesas@glider.be>, Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
 From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH v2 1/3] pmdomain: renesas: use menu for Renesas
+Subject: [PATCH v2 2/3] pmdomain: renesas: sort Renesas Kconfig configs
 In-Reply-To: <87ldp6cadg.wl-kuninori.morimoto.gx@renesas.com>
 References: <87ldp6cadg.wl-kuninori.morimoto.gx@renesas.com>
 Content-Type: text/plain; charset=US-ASCII
-Date: Thu, 3 Jul 2025 01:49:09 +0000
-X-ClientProxiedBy: TYCP286CA0124.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b6::6) To TYCPR01MB10914.jpnprd01.prod.outlook.com
+Date: Thu, 3 Jul 2025 01:49:20 +0000
+X-ClientProxiedBy: TYCP286CA0346.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:7c::14) To TYCPR01MB10914.jpnprd01.prod.outlook.com
  (2603:1096:400:3a9::11)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -76,106 +76,279 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|OSOPR01MB12299:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58341903-58df-433b-45d8-08ddb9d3cd72
+X-MS-Office365-Filtering-Correlation-Id: a5baa24b-8ec0-4521-443f-08ddb9d3d464
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Kl4sDG7GdoNVRLXF09CygIXKQzBnY/lcdac9s7qtlmJy8DdfAHXO241YMnkI?=
- =?us-ascii?Q?+lYYhsgeEtew0/4eMtwwFSH6Wcl1ivJm4o41m9FNUV4yB6JvX1hTmLtuDPiL?=
- =?us-ascii?Q?Xj4aqrzu2c0GFAA1TK0MkSe/M/kDvPepQoJ0WsOn+dRAEbgOfMkpg/FDsLuX?=
- =?us-ascii?Q?A0rxUgfmw0vvRJ4+6sXiVb+IyPZdM9g0LH6mOC1PXolREs2uT9nsxh+0lXNf?=
- =?us-ascii?Q?tLQDnO7L0rzCQdUOeU940IPsrTOVQkUTwVqt1qiBcY7B9fhRsYaigpDyRn6c?=
- =?us-ascii?Q?99/2lFOAuBZwA6cw0rfBxJJ+4tp5SLh3kjyK6+l6xuBMWTQVTApGavVQAG+T?=
- =?us-ascii?Q?B68szR4I55unNETF5kYRN1gXHLMg7XYvtz3BYQesEkP9mZsag0mw/e/2DUBM?=
- =?us-ascii?Q?TGtfT9GmUMyEXIWoe/Q6wIoSijjnYCgV1Q7JXaZC0oTR9aFR3YiB2zzdJST6?=
- =?us-ascii?Q?q7Cu3wekUDsSNknW2ehTn6NwKqOIkm7PrsNP1Tl1yu5BT4XXAKNwSOYTaWup?=
- =?us-ascii?Q?h5S4kEy0+ohLGkH9mtkdDP2ax8asjPZCnQME7ekJk91pEVvXWCq2VKoyJmwO?=
- =?us-ascii?Q?nGt33RduAjBG3m9Tf0jfj0W3Ogq27U7ASBCBWF6BQW9vIlVI9ET2ha90awMS?=
- =?us-ascii?Q?9qFiXTLZnubhQuJmbrg+ow8RQPXnwqqtcvIMXdoDrI50hVUXCVQ5CpGkZHMf?=
- =?us-ascii?Q?fC42W46TvhhP1O5WMFczjseEThdHo+7yXRxK6MaCtET0+v3AWHdrx+woSSHf?=
- =?us-ascii?Q?RrENqv7ftmJsQge4MvGN9Gr3KhnfN7X3tIl61v9Ecz31GjSslonWqMEjxTi0?=
- =?us-ascii?Q?iRwzZ55fEliJ7ddlxH2quTBDJWeJKtDXuZcsjnGQJogVY21WvPM7tzHbl9wv?=
- =?us-ascii?Q?/ZAqeGIfUYr+Cu/+KFlNEiv8C6swVjlWm8tORve86FPkrbJJUfYsMbRSub1E?=
- =?us-ascii?Q?Sz5TVFsm+PE/Fh13/wmZmeo/WWdQD1ZYWr75BEYVy2ZZTWMdJkkKZxo3VgKY?=
- =?us-ascii?Q?K7qOnd6+gM4itosykPUdwkaTzqQESPlnBZWMNQI7aV/LSGzpgFTobNrTZfMH?=
- =?us-ascii?Q?vIglix3Es5uaxOO1I3LfAdmAi6uCvkHp/3OtZqT02aDwx37mReyRnquHZ6IL?=
- =?us-ascii?Q?entjhRx6o8LU4p1P7YNXb25nHkbkKFRTtzz/I6G+R92AhIcQ1qrEiRlcpM3K?=
- =?us-ascii?Q?DIXNXSyJjI/tmlj3iuR12+SuepBkcu3xSrKInpQsuZqpvtvL/khPRuxhUNFY?=
- =?us-ascii?Q?O162HqBGSKoE3mH1LvicPl/hIpYrlHq83pSEsfKnF59ijyIv6sxgVbwdBBD1?=
- =?us-ascii?Q?Kl+btjdLyU5uTU6ZPPTbWKKJrHlc2CPfsHWGX7/PP4I6QY6mqytKCR4mZuVA?=
- =?us-ascii?Q?U7vJoJapuJ0oNRvgC0zVaspHXt82IXsfXNBTNzmIR4xLYX/6QAg5Lo1vEpRK?=
- =?us-ascii?Q?uH+VlaAV3wX/2nDKgFoOjLsmslEvm5KyLHqRlcudtTzTRJWztV9WOA=3D=3D?=
+	=?us-ascii?Q?R1Y17LXLtSVBLTC5sf0suYst1PmJXL9nKzfM9y1nJWJpVtwnj5FIb4xYrMrW?=
+ =?us-ascii?Q?//b8zU2qTKL/FOIwcKsHD9tKhIXunAx3CV/d648AeKukjGLTfMMg2vSO6e3P?=
+ =?us-ascii?Q?UqEzziwqbg4KuYYi3b1yYGKRGZcBVKvNDqgKlnx4ptNtc41x4EQIFCmGr0hS?=
+ =?us-ascii?Q?YREHW7SsOesjzEBoAKjMdYjtARUkgt+ENvgqBch9IpEdPwLktBpiWxkqRAu/?=
+ =?us-ascii?Q?efBDSPHQ1aX+m68IYqUoyKlr/vIFwLQM8R2Mft+PEr7CE9ORznwnYFWA4SdH?=
+ =?us-ascii?Q?8SxJ2nEkbNrltuLQpO2PydmfUw4qmpSnPqSTFZ/VxoJYUbh8RcqwFSLc1e2q?=
+ =?us-ascii?Q?AG/j2q5jLcnnSmU925XjAWY3OV5CGSwMhTE8oX2W5aoLgDCtcqQvLMIYNvYe?=
+ =?us-ascii?Q?vimXVdOQ1QMbp7sjlRnUNQ1WAOVeVV/K4huaOR/W7DFhy8TE0iQKeEsme2Rf?=
+ =?us-ascii?Q?gB6UEPXuYRBI1ravjawlUbmsAXzs21JeE9R7AAhgZM+AlxwE769EF00OVmou?=
+ =?us-ascii?Q?52ttVXFccOE56efDJ5Xa159mVNatn5zkRZMTPty7HjXYGczcV+0oaGGN8RzK?=
+ =?us-ascii?Q?hgtdO9NpiUJt21/QuaI6fr2QkrB/AvCiKoDYBCu5NB+Te6LovTgBU8S0O7P1?=
+ =?us-ascii?Q?KUK/2fuVKC0QPbfFJYYPvoKcmP6nlXKyKUUwiVIp52iNGQQfyjIPM6oyIQjS?=
+ =?us-ascii?Q?+FoKbRkjv60vHOhrJMCe6pAnFogyPu1wyh61xI6fSoKY+cDS7Tq+0Cqx9dLq?=
+ =?us-ascii?Q?+P5A0ewg2+GNIQi1rl5WphUtTkyqaNgmTzPHbD0v+mBSTwx9sdPnkoiH/ycJ?=
+ =?us-ascii?Q?JjBEUmC5ey2tMhk/psqsMgCzzYIgaQha93xfswQVos782ql/dGtb+nCEuP0d?=
+ =?us-ascii?Q?wqr9x4QCYTRnPZ7HDUju2LO4fJhsMDCvMTxZnsQHE5Ns4fqnNhHoEhAsCaVD?=
+ =?us-ascii?Q?w0Hhl8eifrU/n9I69L3EpOvZrqGp+qctIITaRipfPbIJsUO+HoTRosZ2LUqw?=
+ =?us-ascii?Q?/IevYh3jzrUL5homhVIxDvjZy87ElZOnvVrUA2dUf/lsGJiz8CtHWVhejo7b?=
+ =?us-ascii?Q?YtEX0HI5owhuma9o73BdIT4IJirmfBJqGR5N+qKwHGIQAGBy0LnZwqePvnO3?=
+ =?us-ascii?Q?WnE1gwbts+oENbz56rBH3f1MdSWm5LF2F7IpHR1j4Y1wdbEjhnhxnDD2x1Ji?=
+ =?us-ascii?Q?OzeqQIA9RmuR4QF+hWnl5wELooV/9HKKP9ALR3qSyXdk28rJZZ39gtQ36IEu?=
+ =?us-ascii?Q?YBIGH4dfe4XRQVt13aipa2x04/jmlvzw45IlFKk8lvJbfwaoD24baF2wTeU2?=
+ =?us-ascii?Q?OGCJM5OTYfRdorFGae3bLUxsRE8Vr4EidF6KE9/gxP2JOympTbhtzWn3VGBi?=
+ =?us-ascii?Q?psIsf2izoFLEMN2UW/m17Dx6dEfiIpejaItzWrkTyJlKZZtXHdvr1K6XuWu1?=
+ =?us-ascii?Q?ZNOTkAJRyZOoONKmu7srmKCF+OVO9mYuHFDxiaPd6F1eajlPZ18W9Q=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?H2i0muk8piP+RknSwfkmZhVZq0njEay8RFIA9f9EVgiF1Y/bIMujqPAPeV00?=
- =?us-ascii?Q?ZZK4bBpfWyQ0cMGSsF8mijNbIKywSDRdjbbvb3dA+sul+QB4rHbx7GbrycYL?=
- =?us-ascii?Q?+zqz5z8oAT9mI0rO+EnkPQ79da3rJNv1C1IKXvJa7JQBa3nJgMBpmdj30oFG?=
- =?us-ascii?Q?lMphyJv9NE1mt1biQHenWf31Cvf2i2cN6qvHg8m3uTUJngmsrMFoGxJOEEIl?=
- =?us-ascii?Q?dgZRpa8YGxC5Q5P7nPYLwRFKz8xdX8Yi39od4qLS9JNqp4C+g2isZy5F0bPK?=
- =?us-ascii?Q?QByIxm7n8ui3wqpJl+xZ1rcS604pXDjCq9nFrwxawuzdwLhz+IMyLDKSVO/H?=
- =?us-ascii?Q?/4TLZf8+QhrlBLp7p1+oYdbV+TvWnrcl+yIo6TM3mAnVhf20fo/Tb71WbBR5?=
- =?us-ascii?Q?Lxtl1RMBHxAfE8KvtkRVumhxfUTxhD5zPgGVWmpU6b98rw3RveV9fPTBHMzw?=
- =?us-ascii?Q?fyNz5CiKwwqgFdcZpQDix8WZjE8JJSs+RzLbQSck1nq45cf5x8LD/wCNn0tE?=
- =?us-ascii?Q?3W7iacLq1ZHWoY8Z+eP4khgPUI4y94irzUo7VbH8a+aRIkWH33xb72netw3r?=
- =?us-ascii?Q?himcPi7oAyMyRjnwLicOj9E2SZXk25Nn9R0jA9Nw1IYAjARmWJqNxNB4GvRk?=
- =?us-ascii?Q?L8ZnNO5+BbAXIA+fJGgfH/SPY5t2os/ncFnWc1xkWN9fuJIhQMCrC/k9H5L3?=
- =?us-ascii?Q?nmIjj9eH/giqq+kTxtISCFu4W/y0UcQJKsi+PPmePSUq7irWSIqhnngBY5Jk?=
- =?us-ascii?Q?lHk7rUaOTgmils9J2cJGve24IvLKo0bDbYziH/uvlDMRRVcvz1SVbfr7KrUT?=
- =?us-ascii?Q?htj6r0+ILuwEykafqb/YdI9ydqr428vRVB17Tsjzji7zXRgkW1idVqmvflp6?=
- =?us-ascii?Q?dS8WfzFhQxMFWCiHU2RW+88sABjVfh0OrAt4q7lgHEeO2DCXmXh42WccRKJn?=
- =?us-ascii?Q?l94FeOm6GQCiohRwuUlpHPm50n9rEVbyqAIqq4LroTqspWgZBu6FUF9wMDvH?=
- =?us-ascii?Q?lbwDboUQM9YYESiWiEV+mcS6tNb3UcDTCa/UrbnMs4VqILGTljv0talNyN/l?=
- =?us-ascii?Q?i1MeSZ1iHtTuKlM/PqMbU3JSb+ULqcTgml34pTojcPFDyBnJULWc3tAxBu6J?=
- =?us-ascii?Q?6nzRYaTWYhrazRxs34fp4KIiETucouD2A14lcCHtlbncZZ6jgYfvZgLQTA3y?=
- =?us-ascii?Q?cc1PpW/oKqQfeyqokehrZdIIValrvXVhZd/QvrkfnUXJZ+lvUl1fsGa/9M90?=
- =?us-ascii?Q?NU1xg5fIGWuqrVkmn0pYe9kpENNQ/vxDGu+HsL+wxCmy0OvUjsKbsHqDBoQN?=
- =?us-ascii?Q?1m6glr7q/25eBtcTytuSGd/ZX2/iTEXr6xQ/X1pCOvu4nN02x5bk6qsFgcRu?=
- =?us-ascii?Q?PA9aD0sGTguyAIR1nx+qffAC1t1Ar19qWvaXb95GMO8djnZeLX5SxCuR3qFd?=
- =?us-ascii?Q?ePge1RnrrUe2n0MdMp2ar5Wt3Op63CcybHgeOc58EcH0fyW2VbrN1eZF0QNj?=
- =?us-ascii?Q?RzRsW55VGmLJ3S7L4JkY0cnB+gbOQwJtofiZEVIoxkHuRBldh5U36S/xTC1B?=
- =?us-ascii?Q?ngHt8xIp0G2kbJKab2WkMhJ+if2+P78bt+2wOVRVcC3WJ7TYZpzEmhgw3huf?=
- =?us-ascii?Q?+SZpnYgG0a0MG/slrAdJlzs=3D?=
+	=?us-ascii?Q?ROC8g/n39tgS0M8WOQWxOotF7ol6dUDSQsYi/Dv0oSXXYzfamx1F6ofOeeqe?=
+ =?us-ascii?Q?0a+gMJLbui6wXEOP5W94s3pBMcJNShmj1pSBk62+0AuYVs+tutWj29HO96d/?=
+ =?us-ascii?Q?n3456ieDW6aFmFoxzccbFCWLZrYlWm+b+gJyEDdCEobytvM3QuZqlIzoZq3+?=
+ =?us-ascii?Q?PND96WLe2Os6bzuH6i/csewDkP13NJBHR9A8mx4BQSMQyPTVU2ExvgQBy1pf?=
+ =?us-ascii?Q?sHiLO6jyE2pzE0N92AAZLSciEzRP9VcQEb0AMrAk6c7vltD82D+8Ike7hEhY?=
+ =?us-ascii?Q?FJvcFZi2OYW8uPh5SFkFM5i6Y8JZALNG3mWu4NUqDQh0rZBM4N1m1QhNRaQc?=
+ =?us-ascii?Q?PDxA6K4Ep83NWtv6loCDN9ScFmhXQOvFGGT2ufCMFRybqRnz1am8KMO7UqKt?=
+ =?us-ascii?Q?NfTRM1wBA7Qj8wes9vllntGfmTlG/N/ACizgBt4QCKpVvF3TmSL/ssKMb+uJ?=
+ =?us-ascii?Q?4ez2Vib+vIel8F2BPWHKRVFBtEGPQ1oBwq7tc8Lm6CEjnOmtXsvRflRUe8mZ?=
+ =?us-ascii?Q?l6fLygLJLW19K3jonuqc0/+rTR5Rx66dymvrMLjJlIAJQhyxN8d/3QjPkRfB?=
+ =?us-ascii?Q?CdyP8SHSKX0YrXe2JXn96SQ74qWsP/Gcq7syv4fIsnNs4kHh/R9RUMifGnrw?=
+ =?us-ascii?Q?cy19ZSib/LymjAI0fm4mhc3FC4h97SNy7AEB0IQwkd0v+eNn9CEsTrTF28q8?=
+ =?us-ascii?Q?mp9ytIULXRyUo0xa+xs26h3X35cnEvBJTS3/hZldvBRIarw3oe4X4zFZhg25?=
+ =?us-ascii?Q?Q5qNGNnrAguCUqPxBlSIbzZp6jOKuAPktKEtk7HmSQnmqAmD4WY0imL3FA3p?=
+ =?us-ascii?Q?zMvLLHzbkiF3E9x/bxN5HE4XI+OvJcZJcERrelEdrgM4EQcR2TYbandsAol9?=
+ =?us-ascii?Q?gU+HCoUcjTAWTP/cbXsneBA7+kjwoqjS7aagno/vGAjso/L33p5T75+7RPB5?=
+ =?us-ascii?Q?8/yAxxTHi4+ceZ4I9CYcTN+52iHRzIY4FjIGKEyx1fIT3O8Ng++WZ3NPHAmt?=
+ =?us-ascii?Q?lhCksThsVqSYjkw6J5CDgw8zMdtFS6VI0sLFJOaEJbhIB/wU+uOlCErOddct?=
+ =?us-ascii?Q?TZrBOVwsI/vTof6E8+t73DP/hP2vrXmArP0AVMf6EGZU/8KsI4/bqWNOyP5K?=
+ =?us-ascii?Q?AQsGr4oMgxN94GwU6JGE3ymlMe+l2moQ2547eEzkW5BjWhJmtz59CRS8tXx7?=
+ =?us-ascii?Q?uRzfGje1ynuIT/TkjYYAaallsRzq6Jcy5howsbd0NEM/LRDu2NOJgGLCVQQo?=
+ =?us-ascii?Q?t/ZIx7Emx9b6njiIKdmFFcX/A/y6ymPKz2BGW0nrLGfLoJwq7/OCpZqq0eCV?=
+ =?us-ascii?Q?QF60AhtURTX7EfUogjk8NP+X/w1sLTiZdkhbR4PFeG3vO1V0nPeRmi5xmQ0Y?=
+ =?us-ascii?Q?MFRf++xlIVwS8hdBDFno5QWxoxNrVtJUd/QQfQaj+cbk0H9lC/xgXDICFYfF?=
+ =?us-ascii?Q?IKopqYrOktk9A1ks985V0vwY++KqPRB9d2kEWA1NVW2jvvR71cVbU1wKpKrs?=
+ =?us-ascii?Q?wv509dZa69MOlTaPCzP129ocIfabnrUraXIvZfGs7B7alrdoVk3tVN+XxUJ3?=
+ =?us-ascii?Q?T7wwoomMSfs9S2Oi8y4CUxddUKgtP6ih2hlq5BDjJtPtgKEGKUS5AJTJw/qX?=
+ =?us-ascii?Q?fy6uuaKHJaHQbZWxaKkS3xY=3D?=
 X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58341903-58df-433b-45d8-08ddb9d3cd72
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5baa24b-8ec0-4521-443f-08ddb9d3d464
 X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2025 01:49:09.3732
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2025 01:49:21.0309
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 061W4Ka+8Q1vHtYjHHMghV3Ur/h/yuqvk4BW91g0ev3tyG1PEcaC1CUaT6l34iKlnvDukdVKJIc63Bpuf4NHe/gbF9va0uyt8p1Q6GcvW9L2sd2ZGWVsLw9eQpa616uu
+X-MS-Exchange-CrossTenant-UserPrincipalName: rS6MXMJQeRickrysS3NXOlZs4rYv3EN5q/b/xCKwSe3l7FRdi5YnjVUhX9kRUFVdAHVFctnvNNT+NPliGdipXhdqz6OvruGT03BrTk7Hvc6h2sTlc1uRJeHp2Hi67X4n
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSOPR01MB12299
 
-Current Renesas PM Domains appears on top page. Let's create new
-menu for Renesas.
+Renesas Kconfig is using "SoC chip number" for CONFIG symbol, but is
+using "SoC chip name" for menu description. Because of it, it looks
+random order when we run "make menuconfig".
+
+commit 6d5aded8d57f ("soc: renesas: Sort driver description title")
+sorted Renesas Kconfig by "menu description title order" (= SoC chip
+name), but it makes confusable to add new config, because developer
+usually checks CONFIG symbols (= SoC chip number).
+
+Let's indicate both "SoC chip number" and "SoC chip name" in description
+and sort it again.
 
 Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/pmdomain/renesas/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pmdomain/renesas/Kconfig | 122 ++++++++++++++++---------------
+ 1 file changed, 62 insertions(+), 60 deletions(-)
 
 diff --git a/drivers/pmdomain/renesas/Kconfig b/drivers/pmdomain/renesas/Kconfig
-index 54acb4b1ec7c..70bd6605a97c 100644
+index 70bd6605a97c..b507c3e0d723 100644
 --- a/drivers/pmdomain/renesas/Kconfig
 +++ b/drivers/pmdomain/renesas/Kconfig
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
+@@ -2,114 +2,116 @@
  if SOC_RENESAS
-+menu "Renesas PM Domains"
+ menu "Renesas PM Domains"
  
++# SoC Family
  config SYSC_RCAR
  	bool "System Controller support for R-Car" if COMPILE_TEST
-@@ -110,4 +111,5 @@ config SYSC_R8A774B1
- 	bool "System Controller support for RZ/G2N" if COMPILE_TEST
+ 
+ config SYSC_RCAR_GEN4
+ 	bool "System Controller support for R-Car Gen4" if COMPILE_TEST
+ 
+-config SYSC_R8A77995
+-	bool "System Controller support for R-Car D3" if COMPILE_TEST
++config SYSC_RMOBILE
++	bool "System Controller support for R-Mobile" if COMPILE_TEST
++
++# SoC
++config SYSC_R8A7742
++	bool "System Controller support for R8A7742 (RZ/G1H)" if COMPILE_TEST
  	select SYSC_RCAR
  
-+endmenu
+-config SYSC_R8A7794
+-	bool "System Controller support for R-Car E2" if COMPILE_TEST
++config SYSC_R8A7743
++	bool "System Controller support for R8A7743 (RZ/G1M)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A77990
+-	bool "System Controller support for R-Car E3" if COMPILE_TEST
++config SYSC_R8A7745
++	bool "System Controller support for R8A7745 (RZ/G1E)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7779
+-	bool "System Controller support for R-Car H1" if COMPILE_TEST
++config SYSC_R8A77470
++	bool "System Controller support for R8A77470 (RZ/G1C)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7790
+-	bool "System Controller support for R-Car H2" if COMPILE_TEST
++config SYSC_R8A774A1
++	bool "System Controller support for R8A774A1 (RZ/G2M)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7795
+-	bool "System Controller support for R-Car H3" if COMPILE_TEST
++config SYSC_R8A774B1
++	bool "System Controller support for R8A774B1 (RZ/G2N)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7791
+-	bool "System Controller support for R-Car M2-W/N" if COMPILE_TEST
++config SYSC_R8A774C0
++	bool "System Controller support for R8A774C0 (RZ/G2E)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A77965
+-	bool "System Controller support for R-Car M3-N" if COMPILE_TEST
++config SYSC_R8A774E1
++	bool "System Controller support for R8A774E1 (RZ/G2H)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A77960
+-	bool "System Controller support for R-Car M3-W" if COMPILE_TEST
++config SYSC_R8A7779
++	bool "System Controller support for R8A7779 (R-Car H1)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A77961
+-	bool "System Controller support for R-Car M3-W+" if COMPILE_TEST
++config SYSC_R8A7790
++	bool "System Controller support for R8A7790 (R-Car H2)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A779F0
+-	bool "System Controller support for R-Car S4-8" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
++config SYSC_R8A7791
++	bool "System Controller support for R8A7791/R8A7793 (R-Car M2-W/N)" if COMPILE_TEST
++	select SYSC_RCAR
+ 
+ config SYSC_R8A7792
+-	bool "System Controller support for R-Car V2H" if COMPILE_TEST
++	bool "System Controller support for R8A7792 (R-Car V2H)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A77980
+-	bool "System Controller support for R-Car V3H" if COMPILE_TEST
++config SYSC_R8A7794
++	bool "System Controller support for R8A7794 (R-Car E2)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A77970
+-	bool "System Controller support for R-Car V3M" if COMPILE_TEST
++config SYSC_R8A7795
++	bool "System Controller support for R8A7795 (R-Car H3)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A779A0
+-	bool "System Controller support for R-Car V3U" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
+-
+-config SYSC_R8A779G0
+-	bool "System Controller support for R-Car V4H" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
+-
+-config SYSC_R8A779H0
+-	bool "System Controller support for R-Car V4M" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
+-
+-config SYSC_RMOBILE
+-	bool "System Controller support for R-Mobile" if COMPILE_TEST
+-
+-config SYSC_R8A77470
+-	bool "System Controller support for RZ/G1C" if COMPILE_TEST
++config SYSC_R8A77960
++	bool "System Controller support for R8A77960 (R-Car M3-W)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7745
+-	bool "System Controller support for RZ/G1E" if COMPILE_TEST
++config SYSC_R8A77961
++	bool "System Controller support for R8A77961 (R-Car M3-W+)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7742
+-	bool "System Controller support for RZ/G1H" if COMPILE_TEST
++config SYSC_R8A77965
++	bool "System Controller support for R8A77965 (R-Car M3-N)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A7743
+-	bool "System Controller support for RZ/G1M" if COMPILE_TEST
++config SYSC_R8A77970
++	bool "System Controller support for R8A77970 (R-Car V3M)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A774C0
+-	bool "System Controller support for RZ/G2E" if COMPILE_TEST
++config SYSC_R8A77980
++	bool "System Controller support for R8A77980 (R-Car V3H)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A774E1
+-	bool "System Controller support for RZ/G2H" if COMPILE_TEST
++config SYSC_R8A77990
++	bool "System Controller support for R8A77990 (R-Car E3)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A774A1
+-	bool "System Controller support for RZ/G2M" if COMPILE_TEST
++config SYSC_R8A77995
++	bool "System Controller support for R8A77995 (R-Car D3)" if COMPILE_TEST
+ 	select SYSC_RCAR
+ 
+-config SYSC_R8A774B1
+-	bool "System Controller support for RZ/G2N" if COMPILE_TEST
+-	select SYSC_RCAR
++config SYSC_R8A779A0
++	bool "System Controller support for R8A779A0 (R-Car V3U)" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
++
++config SYSC_R8A779F0
++	bool "System Controller support for R8A779F0 (R-Car S4-8)" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
++
++config SYSC_R8A779G0
++	bool "System Controller support for R8A779G0 (R-Car V4H)" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
++
++config SYSC_R8A779H0
++	bool "System Controller support for R8A779H0 (R-Car V4M)" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
+ 
+ endmenu
  endif
 -- 
 2.43.0
