@@ -1,73 +1,74 @@
-Return-Path: <linux-pm+bounces-30088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B7AAF82BC
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 23:38:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E562FAF83B2
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 00:43:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D00ED4A6569
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 21:38:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFD6C7B6F21
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 22:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791152BEC5E;
-	Thu,  3 Jul 2025 21:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88AE22C3240;
+	Thu,  3 Jul 2025 22:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FcnmSzi8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FP1tYnIq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01B42BE62C;
-	Thu,  3 Jul 2025 21:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9182C15A4;
+	Thu,  3 Jul 2025 22:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751578722; cv=none; b=jFlC3DTZAtI3Mvw+f/z/whhJRKb4BApwjxsXd2s/rVvTrnwIgGSxVwpUEpVna2JWyF7XTVfGfbYT10lqG4gLVBtcnAIYGqJCshZermbYzAx9+A5Pa5hkjcVIZk1wUY16qxEh/H9P6vF6eYwsa4q8LCEJzaaiVX6Xse6SHkWewfk=
+	t=1751582524; cv=none; b=FMww1u6LBWBQURCYnZ3czM9TT38pfkZFPHLZGd8psEC4gh8DdnTfzF5hHRiK99s6Ps4KK4Ac+fiTBgZhmxclrIJ3YlFCFb6lhY89BzBjuLLWD4rpWLpOhneXXxSxytZBySR+StWLKRBmm21NIMLaJ9TddT1AxiHJyTig2HRRXs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751578722; c=relaxed/simple;
-	bh=pHNodlGoraqosvL2in94YD46DI6OCuusa8x3ST+BCu8=;
+	s=arc-20240116; t=1751582524; c=relaxed/simple;
+	bh=zeHKNMSssMPRHBMuQyOCn6e2+n2u7TY6KIrwJXAHBFo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YSzbT4SNIeEZmSlAiDs+sAid1kdstNJBP5y3r/uUGKTQ/HmYCYlb1RLCRs6j9htceKpzPJyqmsVF9vQHoN9N6P628sJ7rNiA7gx9QWv8nRUW1DnUCBPBAfpgRNzE/wkdrss4PwocRQ80W6KeYZBQZf6Tmhzic1zEvFGc4xqv4jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FcnmSzi8; arc=none smtp.client-ip=209.85.214.177
+	 To:Cc:Content-Type; b=aGWtYxoAI7tCQlLZghKu2g4qJV8tGMCBElkGMP9BDfoTOB3y0kA996lWQZ17E8L992tbR7oBsbHq6XSz59v5H2lx16/o4WufYHJRfzMr9H+OL1j16gsDtMQOfzejY+P1MdvL7iP9SKbfrnjFLPMzA4kQg+AVRUgjBKA61WU16sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FP1tYnIq; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-234d3103237so807595ad.0;
-        Thu, 03 Jul 2025 14:38:40 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-32b43cce9efso3442591fa.3;
+        Thu, 03 Jul 2025 15:42:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751578720; x=1752183520; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751582520; x=1752187320; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pHNodlGoraqosvL2in94YD46DI6OCuusa8x3ST+BCu8=;
-        b=FcnmSzi84dDk2lm76LMKwizrQ+eGwTY5zrUJVXvtbii13HCQK8i0XfjYz+B/vTl+/M
-         nQsIFk3c4MydDh2VdMx8Kz703OxLsGIuKQuz0gktpESi3PdNzCszrAzbQdhzWcNOpDBt
-         nuyIjcgaqmfOeWt9zwfrResJA+FrYwd+TapyhI55t2Rz17GSdEBm3Glomv8PESEh96H2
-         4tKxnpHWRVp8iZ4EOLZrGks8bXorirRW1LY4cWqu5o+Jx6Y9SzxLrGJts6+LEct+Qbcp
-         irV0O8dM8vl4yFUJo81cwDWL15/3RhaN7OI7hiGDZipWZPxpPyaQr4+yKPb1Nzm5GY2k
-         WcOQ==
+        bh=D1Qg1F6O8BBVdVvv4eHMsC5wNUKHIHHTTLEMuZoIZA4=;
+        b=FP1tYnIqkKV+BxZGFTL+slVsN5XsVdZmCjMCHDVm20x42w9qVRrIdcHo07CIsNqmRN
+         NaC/bCAHbRXKzYr66bF+mJu3lEgnx6GB2v0voNr7zxGamKC3OXbUh0sGatZaSBFtl7sy
+         SgeTdSkyp8p4aKgklCtl1VnAKxwY3IDZY+STt62KYESIOtWJb2W/I9YQb4/FyiK7Ar8I
+         XxSNbOfl0gcub9+hn8vlNt3ddBXlc7b+rLXoK57ZjrVvkEISR2uks02jCaFLyDJOJC2V
+         S64hsQxk88vzuYTiSZq98wXx/7vr9nRug+f1f1cc8GiPC5gkEuT+VyVyL6/r9RlxZZq4
+         sShQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751578720; x=1752183520;
+        d=1e100.net; s=20230601; t=1751582520; x=1752187320;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pHNodlGoraqosvL2in94YD46DI6OCuusa8x3ST+BCu8=;
-        b=XgInk6G7S1X1jmy1ozBVcBXMF1bjI2qeQKP+BV6P1CBWdhEjxlj4w6cNJI/OMVBLVg
-         6TiZTesn/lU9iNIuLBI0UxbcfeJLRQo+/PZa6p+XcE555qI95/6RdHcRbMlTEKloJtVB
-         hTn6XpH9J0OP8Hr5BtRP8pXJTyq/X27cyVGOfR57fFVOiOtBB+Gh3A3Fwcm3Fy4ADaVo
-         iKj88cUByWIDHf/OtsUfCGZO7md3YVR3T9HZrDnBW5tpyrSCloCpmLeoebqru1s/LUaT
-         q7tFp1v2vemQ2wlU+eWAxVwFUaYCZyeGWhcC0f/+TYGl3wWKcMGcesX9/0iTShJlylMe
-         qWCg==
-X-Forwarded-Encrypted: i=1; AJvYcCU2QHXolY4XjJ7t89g3iqcFma7TpMicYnyS4Jh+7uybDCFQYib2bL4RQDre6CyYREq5BRnNVlVi2zLb@vger.kernel.org, AJvYcCUQNaTbuixnYMb0k4j5NyET9IEtP40MHavZgJy8zBytIreyHMsRsea2F2eSmRHEx0WZ2W7ddef7iWar@vger.kernel.org, AJvYcCUZvuyOSEB+clTw2H49kKw6DGwJTFj5ONXo59Oij3bD3SjAF6taF/BOkxf31EDgL8EBkjR2nqb3VvfqMgNvPbY=@vger.kernel.org, AJvYcCUcK9Cu9kCOfGT6qOI15mSlRxaE0BI6wcSDhmvgIK7I4hF/Y8qRZ0LFD4XKOdStQuOil9VfdC2UpYQkPZkQ+HV9@vger.kernel.org, AJvYcCVhJ7SiVoGYbbO+bEocPC2WF0S0B+X5m21EU6XY12C+Kqb9V7GGZLgHGOJ5fXfJemXAij37AlITDKA=@vger.kernel.org, AJvYcCVlWgkosT3wMsrUGZ1qgNRbL1UEgusCSkMvSqnlRb2h5KjXtgBjz1wyYi2pmLJlWF55Fl6XQZgsGJk7dTU=@vger.kernel.org, AJvYcCWcQLtTdK1qlw+wDAqpAiSnpnC9YKhob4/lsX6iBJUKgJo/gmUDC5uYacECW34Uat3n1YbZgztuDdvt@vger.kernel.org, AJvYcCXlqkd/tNPaLHePeKwXdE+4UAtcqxjbSAUS5GIGGwvllYLlJytGLzn40EcKKKHRb573x4+y1Fjv@vger.kernel.org, AJvYcCXstNJwUgubTKXrqnjvPxxFIotS6uWl6E/dz/nrd9sbcIo3BUdaGAAwJzY4vH4s1C6f5X/KYlCxEdsiJlB7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0faTRB1KTYiMpCoYWg6uYiCRCAb0+I5Cd+7UkDRY+a3aeEkfA
-	/pfJ38h3n/w1korh6K5xWmxXknsrAsKEjDp8qArp2M+yNzZfKgVzntSymAhEtxXa/CaB/f8pD9D
-	6q1YAqYNX0CAUaaFv9Ev2aID0HOdZm6I=
-X-Gm-Gg: ASbGncshFcuPe2Oz+0tR+mm8DnVt0lMWnPAzLI1dRawceSV/nJhaxZjylwZb6Q60R1w
-	6YiFDfkZ5Ov1yq0+vk4rXi+uhxgmcp0lzz5734NUsM15RvOmwcWiJcqJRuz4JhuVG0RTvVcnUL8
-	Edyu3G1Uf9Bz9ceN5NJgM4c1ooNDIb1zMW3rC/KkkiNRg=
-X-Google-Smtp-Source: AGHT+IELtB5XgtVh1TIl503YSOBpKDzFFV0lUuu4UGNcygnKkLkVRq6ABgmlhe/GC2s+Ns1XtRhxYcb0/TcFag3V8H0=
-X-Received: by 2002:a17:902:c404:b0:234:f4a3:f73e with SMTP id
- d9443c01a7336-23c85ec795bmr1697845ad.9.1751578720047; Thu, 03 Jul 2025
- 14:38:40 -0700 (PDT)
+        bh=D1Qg1F6O8BBVdVvv4eHMsC5wNUKHIHHTTLEMuZoIZA4=;
+        b=upLu/HzYbK/FhWGn97IpsBzWzuxZWwKnfdEhEa10ed4sQbjsiDT1IShbtv/g+L/oo2
+         TRFmyagDbokwUH6XsWrFJ8fKYX30T3/Rekv67yIf2QO99sk2NB+FRnxIQBdbIQhj0+1v
+         3f7/dug3ZhD+wYs7pXPdUuqObIIp+JLsAnWW976cqeDOEZSnP3JTpVxcFJRh+N8k3M/n
+         7PWMRCORX0llg6zPlvV8AVBXOTz8ySuNzBQg0hR0A3fOE+4wsvaIfANyPh5Gd+oVDfw/
+         rqYlUp3rdjUr3kHWl+epb9ByFcxd2ErENfYZ428FdzYv5vDiP+Gd4oKW0qrCJDqkEYXI
+         ATAg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0+rMlnHbgRUvuW/1YuqgahMMl9j6qgN6T72tKozTMpiGfX1okcoXVG5tjgMs18qumHplgb7IiEq/E@vger.kernel.org, AJvYcCU88f/Qr9l9SO8cjB9ec+JgVbR2EVQOt9xcd/Y/8+vvmopQdyi1aSVDzQjyXkFfxyoKILa/5GQROGYqZwia@vger.kernel.org, AJvYcCUo2Aiupq+LzKnEd0S2sEXHm9xPYMfpvYmIffcaBI1X1bsP/XnlehG6R6Fk2x5Sl3zqRqaiBOEr9resLvEcRyY=@vger.kernel.org, AJvYcCUv6E6cgvRO0ewNLlXiWSYZCto/950oh49UgE24VN0/2nZfZsd58CnbAB9DeKM/tuJu/wh8jxFnTGo=@vger.kernel.org, AJvYcCVA34Y3zecQWVEs+XEnk/kJOYCAUQO0NGIvpYNJbMpDrQwzfLXNvF1fRf/UJuehgP3EkAwPqUkO1h0N@vger.kernel.org, AJvYcCVvWExJxadKM8K9/wp/J/gQDjfQtNWIw4B3p/f1YThw7kcnkN39u7r/6hhpAvMpF5ahog71DytBbRjfEUc=@vger.kernel.org, AJvYcCWUkZ/j6OKIJ9GI3I+mifU7asABwTMLHyt7Ge/yVQHUdaWIzHbOM2/OKKqidfsjZYE77tAlntfavffs@vger.kernel.org, AJvYcCWimCwQ4DcKG4/L/iPIyQwg9rzMjnX6zG1rm1RnycNarGf6RCrLMXHfHgbe2VBMMnKh4uSekok8@vger.kernel.org, AJvYcCWmPjn6wAHdHZigpViO0/lDwMVCUirMMZwnA53EjlV5qt4evNweFz9qk4KXfF71pF/vAelG5mKGZopzB7nKA0Ut@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFU2fTPOY9HSC6yC9OogEqnfDEEKbt4LGg/CejwbCtjq69exaq
+	EsFb/LifFM+BdnHMlJtvDTxiGL9eXYTJa/uLAUea1y3MUZrjGozjpdHE7d4vtaQuD3cNxakOvXK
+	uimYDME+uF62bvRd9n0xD/xWZobJVExc=
+X-Gm-Gg: ASbGncuhTFbao/SoMjgH+V93JMrGu3onifS5FzusNCSKRpCCye6pU5ZVZLMywVi4yJj
+	2HXKXUd+sWs5sLH37yMTEhkxkZ10g9c79FcUylAM3p6oBVaenIKeeDouE/pvbHAjFl0hCIQcBqZ
+	yRXwK1IzYXq72C6SdofEvhxx4BDSqwaHz+kkKKwegQiEHRK/beBNGo+qta5fCu7R23qYepqTeQH
+	zAwVQ==
+X-Google-Smtp-Source: AGHT+IF/t3ZEtmjCL9D2hV/pUOr7MKQyCU+hJLvbY3a+HlkEEdLNrViyvM7S6Yvq56dYm7fbL0DEEZ7CtTi3HmveDVA=
+X-Received: by 2002:a2e:b8d5:0:b0:32a:6312:bfc1 with SMTP id
+ 38308e7fff4ca-32e5f5e9318mr633481fa.24.1751582519435; Thu, 03 Jul 2025
+ 15:41:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,16 +79,15 @@ References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
  <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
  <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
  <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org> <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
-In-Reply-To: <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 3 Jul 2025 23:38:27 +0200
-X-Gm-Features: Ac12FXwdXJJ0hQiiGaabkdHfelYANMQVK7rSTVhFAhKXDapeaUgG2_fvXL2LwP0
-Message-ID: <CANiq72ksOG10vc36UDdBytsM-LT7PdgjcZ9B0dkqSETH6a0ezA@mail.gmail.com>
+ <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
+In-Reply-To: <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Thu, 3 Jul 2025 18:41:23 -0400
+X-Gm-Features: Ac12FXx5T1CWZv8EzyusKcnGahP16LvJ8y4OiMbwugKJnpUmBKST0YNjwC9XD5U
+Message-ID: <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
 Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Tamir Duberstein <tamird@gmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+To: Benno Lossin <lossin@kernel.org>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
 	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
 	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
@@ -102,7 +102,7 @@ Cc: Tamir Duberstein <tamird@gmail.com>, Benno Lossin <lossin@kernel.org>,
 	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
 	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
@@ -121,16 +121,171 @@ Cc: Tamir Duberstein <tamird@gmail.com>, Benno Lossin <lossin@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 3, 2025 at 11:28=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
+On Thu, Jul 3, 2025 at 4:36=E2=80=AFPM Benno Lossin <lossin@kernel.org> wro=
+te:
 >
-> A small patch tends to be more obviously correct than a big patch. The
-> commit message is more focused and helpful because it refers to a
-> small chunk of code. Because the commit message is more focused, it
-> can answer questions reviewers might ask, before they ask them. If i
+> On Thu Jul 3, 2025 at 8:55 PM CEST, Tamir Duberstein wrote:
+> > On Thu, Jul 3, 2025 at 11:08=E2=80=AFAM Benno Lossin <lossin@kernel.org=
+> wrote:
+> >> On Thu Jul 3, 2025 at 3:55 PM CEST, Tamir Duberstein wrote:
+> >> > On Thu, Jul 3, 2025 at 5:32=E2=80=AFAM Benno Lossin <lossin@kernel.o=
+rg> wrote:
+> >> >> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
+> >> >> > Introduce a `fmt!` macro which wraps all arguments in
+> >> >> > `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This e=
+nables
+> >> >> > formatting of foreign types (like `core::ffi::CStr`) that do not
+> >> >> > implement `core::fmt::Display` due to concerns around lossy conve=
+rsions which
+> >> >> > do not apply in the kernel.
+> >> >> >
+> >> >> > Replace all direct calls to `format_args!` with `fmt!`.
+> >> >> >
+> >> >> > Replace all implementations of `core::fmt::Display` with implemen=
+tations
+> >> >> > of `kernel::fmt::Display`.
+> >> >> >
+> >> >> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> >> >> > Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089=
+-General/topic/Custom.20formatting/with/516476467
+> >> >> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >> >> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> >> >> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> >> >> > ---
+> >> >> >  drivers/block/rnull.rs       |  2 +-
+> >> >> >  drivers/gpu/nova-core/gpu.rs |  4 +-
+> >> >> >  rust/kernel/block/mq.rs      |  2 +-
+> >> >> >  rust/kernel/device.rs        |  2 +-
+> >> >> >  rust/kernel/fmt.rs           | 89 ++++++++++++++++++++++++++++++=
++++++++++
+> >> >> >  rust/kernel/kunit.rs         |  6 +--
+> >> >> >  rust/kernel/lib.rs           |  1 +
+> >> >> >  rust/kernel/prelude.rs       |  3 +-
+> >> >> >  rust/kernel/print.rs         |  4 +-
+> >> >> >  rust/kernel/seq_file.rs      |  2 +-
+> >> >> >  rust/kernel/str.rs           | 22 ++++------
+> >> >> >  rust/macros/fmt.rs           | 99 ++++++++++++++++++++++++++++++=
+++++++++++++++
+> >> >> >  rust/macros/lib.rs           | 19 +++++++++
+> >> >> >  rust/macros/quote.rs         |  7 ++++
+> >> >> >  scripts/rustdoc_test_gen.rs  |  2 +-
+> >> >> >  15 files changed, 236 insertions(+), 28 deletions(-)
+> >> >>
+> >> >> This would be a lot easier to review if he proc-macro and the call
+> >> >> replacement were different patches.
+> >> >>
+> >> >> Also the `kernel/fmt.rs` file should be a different commit.
+> >> >
+> >> > Can you help me understand why? The changes you ask to be separated
+> >> > would all be in different files, so why would separate commits make =
+it
+> >> > easier to review?
+> >>
+> >> It takes less time to go through the entire patch and give a RB. I can
+> >> take smaller time chunks and don't have to get back into the entire
+> >> context of the patch when I don't have 30-60min available.
+> >
+> > Ah, I see what you mean. Yeah, the requirement to RB the entire patch
+> > does mean there's a benefit to smaller patches.
+> >
+> >> In this patch the biggest problem is the rename & addition of new
+> >> things, maybe just adding 200 lines in those files could be okay to go
+> >> together, see below for more.
+> >
+> > After implementing your suggestion of re-exporting things from
+> > `kernel::fmt` the diffstat is
+> >
+> > 26 files changed, 253 insertions(+), 51 deletions(-)
+> >
+> > so I guess I could do all the additions in one patch, but then
+> > *everything* else has to go in a single patch together because the
+> > formatting macros either want core::fmt::Display or
+> > kernel::fmt::Display; they can't work in a halfway state.
+>
+> I don't understand, can't you just do:
+>
+> * add `rust/kernel/fmt.rs`,
+> * add `rust/macros/fmt.rs`,
+> * change all occurrences of `core::fmt` to `kernel::fmt` and
+>   `format_args!` to `fmt!`.
 
-Yeah, also better for smaller reverts, as well as typically easier to
-backport if needed, etc.
+Yes, such a split could be done - I will do so in the next spin
 
-Cheers,
-Miguel
+
+> The last one could be split by subsystem, no? Some subsystems might
+> interact and thus need simultaneous splitting, but there should be some
+> independent ones.
+
+Yes, it probably can. As you say, some subsystems might interact - the
+claimed benefit of doing this subsystem-by-subsystem split is that it
+avoids conflicts with ongoing work that will conflict with a large
+patch, but this is also the downside; if ongoing work changes the set
+of interactions between subsystems then a maintainer may find
+themselves unable to emit the log message they want (because one
+subsystem is using kernel::fmt while another is still on core::fmt).
+
+>
+> >> > I prefer to keep things in one commit because the changes are highly
+> >> > interdependent. The proc macro doesn't make sense without
+> >> > kernel/fmt.rs and kernel/fmt.rs is useless without the proc macro.
+> >>
+> >> I think that `Adapter`, the custom `Display` and their impl blocks
+> >> don't need to be in the same commit as the proc-macro. They are relate=
+d,
+> >> but maybe someone is not well-versed in proc-macros and thus doesn't
+> >> want to review that part.
+> >
+> > Sure, I guess I will split them. But as noted above: changing the
+> > formatting macros and all the types' trait implementations has to be a
+> > "flag day" change.
+>
+> See above.
+>
+> >> >> > +impl_fmt_adapter_forward!(Debug, LowerHex, UpperHex, Octal, Bina=
+ry, Pointer, LowerExp, UpperExp);
+> >> >> > +
+> >> >> > +/// A copy of [`fmt::Display`] that allows us to implement it fo=
+r foreign types.
+> >> >> > +///
+> >> >> > +/// Types should implement this trait rather than [`fmt::Display=
+`]. Together with the [`Adapter`]
+> >> >> > +/// type and [`fmt!`] macro, it allows for formatting foreign ty=
+pes (e.g. types from core) which do
+> >> >> > +/// not implement [`fmt::Display`] directly.
+> >> >> > +///
+> >> >> > +/// [`fmt!`]: crate::prelude::fmt!
+> >> >> > +pub trait Display {
+> >> >> > +    /// Same as [`fmt::Display::fmt`].
+> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
+> >> >> > +}
+> >> >> > +
+> >> >> > +impl<T: ?Sized + Display> Display for &T {
+> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+> >> >> > +        Display::fmt(*self, f)
+> >> >> > +    }
+> >> >> > +}
+> >> >> > +
+> >> >> > +impl<T: ?Sized + Display> fmt::Display for Adapter<&T> {
+> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+> >> >> > +        let Self(t) =3D self;
+> >> >> > +        Display::fmt(t, f)
+> >> >>
+> >> >> Why not `Display::fmt(&self.0, f)`?
+> >> >
+> >> > I like destructuring because it shows me that there's only one field=
+.
+> >> > With `self.0` I don't see that.
+> >>
+> >> And what is the benefit here?
+> >
+> > In general the benefit is that the method does not ignore some portion
+> > of `Self`. A method that uses `self.0` would not provoke a compiler
+> > error in case another field is added, while this form would.
+>
+> Yeah, but why would that change happen here? And even if it got another
+> field, why would that invalidate the impl of `fn fmt`?
+
+I don't know, but I would rather force a person to make that decision
+when they add another field rather than assume that such an addition
+wouldn't require changes here.
 
