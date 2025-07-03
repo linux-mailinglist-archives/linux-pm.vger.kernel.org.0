@@ -1,163 +1,170 @@
-Return-Path: <linux-pm+bounces-30037-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30038-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36C3EAF7296
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 504A2AF733C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:06:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CECD4E5933
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 11:37:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FBE3562BCD
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 12:06:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B982E427C;
-	Thu,  3 Jul 2025 11:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F87A2E4275;
+	Thu,  3 Jul 2025 12:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJi0k6Ao"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E122E4279;
-	Thu,  3 Jul 2025 11:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD702E2EF3;
+	Thu,  3 Jul 2025 12:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751542591; cv=none; b=efa7bUz7NEJPP8Wjb36QgO740maQbWqH7bRHFHm+AqrdtYBzgDqJiws/27TaYmnhAVy75g+w6GkK76LrD4AbIi4ShlMl6VeANILMOqIYIE+MbmIdUbdbglR9hFcUsBipUcvsXwZ9mjyM6vq2eLOchWMXR240ZzNqqfi+musPdIA=
+	t=1751544367; cv=none; b=NOQQmUmyNaZjl5J/V5MJ/g5DFu3dsa+IdWsAkVHioW6ED+EtOeD3tEpbFFPTwBlqTn7Guhn69sP0/Apx8K+Wu34K00l4gNdDsrl00Jz2Yz9GDaHQKVVBkN0o32P0rhT7HBzpDX0bYNRUuOR/nGPKATZ8ZpEmbuqdKAM3BfJ9Dng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751542591; c=relaxed/simple;
-	bh=Sy5KK+ahsW1yAaKri1MbI11E8xyt8D6mK1pL569PzGA=;
+	s=arc-20240116; t=1751544367; c=relaxed/simple;
+	bh=6WaqC49F51IOyelBTQXhzsOxCLazmLYXNHOkK7Ky7AY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dzCbqxIusMJgH8Mn6n38uag2zlPgrwLErbnq9YDsYXQ2YB0X4n9lx8rzykbZNcEm8kcRkdESS17iOPCDtlhA3zEgn25CohOhotSeBcSHn0TkuHHD7hSqGx86f0DhTgmQqOO+Ak1BZG7zTGb0WM1sWtGeQQas/W4rRQRq+sOjHk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.98.2)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1uXIES-000000004sT-1IDF;
-	Thu, 03 Jul 2025 11:36:00 +0000
-Date: Thu, 3 Jul 2025 12:35:56 +0100
-From: Daniel Golle <daniel@makrotopia.org>
-To: "Frank Wunderlich (linux)" <linux@fw-web.de>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, frank-w@public-files.de,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Johnson Wang <johnson.wang@mediatek.com>,
-	=?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-	Landen Chao <Landen.Chao@mediatek.com>,
-	DENG Qingfang <dqfext@gmail.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v7 01/14] dt-bindings: net: mediatek,net: allow irq names
-Message-ID: <aGZrHMnpMMzNkIjF@makrotopia.org>
-References: <20250628165451.85884-1-linux@fw-web.de>
- <20250628165451.85884-2-linux@fw-web.de>
- <20250701-wisteria-walrus-of-perfection-bdfbec@krzk-bin>
- <9AF787EF-A184-4492-A6F1-50B069D780E7@public-files.de>
- <158755b2-7b1c-4b1c-8577-b00acbfadbdc@kernel.org>
- <b68435e3e44de0532fc1e0c2e7f7bf54@fw-web.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZqiGBbchAAMJ/iIwTLSsd79SzsHxfG1nHpCNpIVpKHal/Oaw4KmpSOljczM4fet3xcoMdgQHNl5vfWPj81Qv7Oh+otnZtsoswxw/bVo+sgindZ7tMp0V91pswLADZemOoCXINs0W7+RKB+G2QAMz6kg1s8/ZWtc2auaBLyJD9Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJi0k6Ao; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-450cb2ddd46so47834015e9.2;
+        Thu, 03 Jul 2025 05:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751544364; x=1752149164; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6WaqC49F51IOyelBTQXhzsOxCLazmLYXNHOkK7Ky7AY=;
+        b=fJi0k6Aohm+HIbi874SVadJie5gEqS1q2gv9/sd2xIFww6V/bfcWnBLSbNkjWwgfXo
+         9MuAOOA7RwckTsE4qC9Ml8BdkZs0hwI7AkK0Z2sWoi7N4XwrGcDNLjEGLbOm/AvvxuB0
+         8/tZNg7p3boB/pSJtmCX9aIYiia6By9JUJiJcvBg5Qw/YBxvuE8YMlYR3vEjn0kob/BV
+         tKfD1JHBWpXAHnWvKtivGSLfunl9YRt3Musqv+wrZB94bV8Q1FwWV4Pt5IxXH7Wv9+Ej
+         kpRNmPFJa4by6ZhNCZ+BwCaEru/giuuYaBVtD6ma/xZnV1I+zgyZWiQsirQpFJSxX3Z5
+         QVyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751544364; x=1752149164;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6WaqC49F51IOyelBTQXhzsOxCLazmLYXNHOkK7Ky7AY=;
+        b=gAVnf1lm2ezzIa4vwAdB4mgVDikwYlfkDtCHDvO8Wo6kzvC9xW+08N8odIDY+cLiCq
+         ofvk96EXVTDkSbQRJhLb96jaJwPsrnaA4jCyejcWyv59RjK4cowjadluGbHIF8tfTzCM
+         XJcYSsgsXSDixBJr69Z/XC2XuIdMlYHlpme0VtDBXoraz9jTUJg5A+TDG1w+a9cG6BtV
+         BD277Ko8gX3Psss3Zn3sWzqDbIW5Bh53ySR80RMlNgyNgmcrppIkM+3G1Krch+ckjtUt
+         5Lbvhpsg2sr9+12kS1qkevIHFL2PGBrRfGfzue0Qk+4JCVRjTLoMEBNFA54jljqH4krS
+         w0ig==
+X-Forwarded-Encrypted: i=1; AJvYcCUZcCgiigQq3LbBeYqUCh6b46pn22+K9N+q6DuRUbCBPBw/4nUyw5MW1ARFMsVNVPcjUJRxmSRbAQ==@vger.kernel.org, AJvYcCWnMHMwz7ruayGgOvZrzS5rPgk+F9i4yxqxGdXAxYuGCtu5dZnMRhHSIiAniQi5kGL35OcUPsAhF/6/634=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYckHWFpTnKieEG4HGuUr/dLcZBNmFhgG4bBSBxzXIrXFM7o+5
+	dD58gZ66FcgEFLud3E/dk4gFQ97ek70Ag0OkmROjAYoDwBIdgGjJMAes
+X-Gm-Gg: ASbGncsOFTGfz2VMlUiTSkTpeVnql/DVI5E5q8Stos+lYcxzutCrzbgzJjbQwgKhxag
+	lTgndiEfUHbHdqroMg7nqlI3+43mTf2BsGFn8NPpYWh65Y8nZw1pZyGD4OEDGadwAmSReD3UlHx
+	sFbW858/4yFGph5gPb4cbU4kpjw10TehSe2dFlCDIUyoSERiUwtl9D98Wpx1//wVNXrPwrY78aQ
+	vcwY1SrV76La75e2hQlIZADGAVfOs6WFRoTH6376aCJxQkeC6dVgoPmx6GdU5rgVEdolqdYQdLu
+	PRPZpI3vlUsxFRxOJt53NnEqks9OvS1Yz9nbMcTz2L1EwR5hNfna20yZxRbJTgpooksLg1gmqC4
+	Z/k8stsfbloBfLj6O11YsTsg/XLopJZ6q9Bkv3j50RLr4I5fX
+X-Google-Smtp-Source: AGHT+IGrBlPl4cRrJmgRU179mhSMUlfqSodkLrix516bOaydIFPSh5W7HlkBnUI4slm7YJjOXnlyYA==
+X-Received: by 2002:a05:600c:c0cc:b0:453:8a62:df34 with SMTP id 5b1f17b1804b1-454a3708ec2mr43553745e9.21.1751544363158;
+        Thu, 03 Jul 2025 05:06:03 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e6214fsm18693068f8f.98.2025.07.03.05.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 05:06:01 -0700 (PDT)
+Date: Thu, 3 Jul 2025 14:06:00 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Oliver Neukum <oneukum@suse.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: Forcing devices into idle
+Message-ID: <hjkm55hus3ctueydf7ebfb25hbdw6w3spdzx7maauzlzmnakas@noqexx2pxxtj>
+References: <rlzpjdsg6cbgxc553j6m25ysb6tyldy4lnxsjjn4hdzv7rszpp@y6rfcrbjfook>
+ <fbfc6bf9-d7c6-4df5-85d0-b1d357159d88@suse.com>
+ <CAJZ5v0hPh19h9uVRVHSXiLaHxm3PR9A3W5+j=2=-B-YCyBr=uw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="c3trq7oliwem474c"
 Content-Disposition: inline
-In-Reply-To: <b68435e3e44de0532fc1e0c2e7f7bf54@fw-web.de>
+In-Reply-To: <CAJZ5v0hPh19h9uVRVHSXiLaHxm3PR9A3W5+j=2=-B-YCyBr=uw@mail.gmail.com>
 
-On Thu, Jul 03, 2025 at 01:01:40PM +0200, Frank Wunderlich (linux) wrote:
-> Am 2025-07-02 08:27, schrieb Krzysztof Kozlowski:
-> > On 01/07/2025 12:51, Frank Wunderlich wrote:
-> > > Am 1. Juli 2025 08:44:02 MESZ schrieb Krzysztof Kozlowski
-> > > <krzk@kernel.org>:
-> > > > On Sat, Jun 28, 2025 at 06:54:36PM +0200, Frank Wunderlich wrote:
-> > > > > From: Frank Wunderlich <frank-w@public-files.de>
-> > > > > 
-> > > > > In preparation for MT7988 and RSS/LRO allow the interrupt-names
-> > > > 
-> > > > Why? What preparation, what is the purpose of adding the names,
-> > > > what do
-> > > > they solve?
-> > > 
-> > > Devicetree handled by the mtk_eth_soc driver have
-> > > a wild mix of shared and non-shared irq definitions
-> > > accessed by index (shared use index 0,
-> > > non-shared
-> > > using 1+2). Some soc have only 3 FE irqs (like mt7622).
-> > > 
-> > > This makes it unclear which irq is used for what
-> > > on which SoC. Adding names for irq cleans this a bit
-> > > in device tree and driver.
-> > 
-> > It's implied ABI now, even if the binding did not express that. But
-> > interrupt-names are not necessary to express that at all. Look at other
-> > bindings: we express the list by describing the items:
-> > items:
-> >   - description: foo
-> >   - ... bar
-> 
-> ok, so i need to define descriptions for all interrupts instead of only
-> increasing the count. Ok, was not clear to me.
-> 
-> so something like this:
-> 
-> item0: on SoCs with shared IRQ (mt762[18]) used for RX+TX, on other free to
-> be used
-> item1: on non-shared SoCs used for TX
-> item2: on non-shared SoCs used for RX (except RSS/LRO is used)
-> item3: reserved / currently unused
-> item4-7: IRQs for RSS/LRO
 
-These descriptions match the current *software* use of those interrupts,
-however, DT should describe the hardware and esp. item0 up to item3 could
-be used in different ways in the future (by programming MTK_FE_INT_GRP
-register differently).
+--c3trq7oliwem474c
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Forcing devices into idle
+MIME-Version: 1.0
 
-I think using interrupt-names fe0...fe3 and pdma0...pdma3 is still the
-best option, so the driver can request the interrupts by name which is
-much more readable in the driver code and SoC's dtsi than relying on a
-specific order.
+On Thu, Jul 03, 2025 at 01:12:15PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Jul 3, 2025 at 12:33=E2=80=AFPM Oliver Neukum <oneukum@suse.com> =
+wrote:
+> >
+> > On 03.07.25 12:08, Thierry Reding wrote:
+> >
+> > > Any thoughts on how to solve this? Is the pm_runtime_{put,get}_sync()
+> > > method acceptable? If not, are there other alternatives to achieve the
+> > > same thing that I'm not aware of? Would it be useful to add a new set=
+ of
+> > > APIs to force devices into an idle state (which could be semantically
+> > > different from runtime suspend)? Or is this all too specific for any
+> > > kind of generic API?
+> >
+> > Basically what you need is what happens when the system prepares to
+> > do a snapshot for S4. However, if you just perform FREEZE and then THAW,
+> > devices will assume that user space has been frozen. You need a way
+> > to substitute for that assumption.
+>=20
+> Well, you just need to freeze user space beforehand.
 
-> > 
-> > There were only 4 before and you do not explain why all devices get 8.
-> > You mentioned that MT7988 has 8 but now make 8 for all other variants!
-> > 
-> > Why you are not answering this question?
-> 
-> The original binding excluded the 4 RSS/LRO IRQs as this is an optional
-> feature not
-> yet available in driver. It is needed to get the full speed on the 10G
-> interfaces.
-> MT7988 is the first SoC which has 10G MACs. Older Socs like mt7986 and
-> mt7981 can also
-> support RSS/LRO to reduce cpu load. But here we will run into the "new
-> kernel - old
-> devicetree" issue, if we try to upstream this. Maybe we do not add this
-> because these
-> only have 2.5G MACs.
+Freezing userspace seems a bit heavy-handed. There's only a very few
+devices that need to be put into reset (such as the GPU), so most of
+userspace should be fine to continue to run. For the GPU the idea is
+to block all incoming requests while the device is forced into idle,
+and then to resume processing these requests after the VPR resize.
 
-It might be important to note that
+But maybe freezing userspace isn't the heavy operation that I think it
+is. Ideally we do not want to suspend things for too long to avoid
+stuttering on the userspace side.
 
-MT7621, MT7628: 1 IRQ
-MT7622, MT7623: 3 IRQs (only two used by the driver for now)
-MT7981, MT7986: 4 IRQs (only two used by the driver for now)
+Also, I think we'd want the freezing to be triggered by the VPR driver
+because userspace ideally doesn't know when the resizing happens. The
+DMA BUF heap API that I'm trying to use is too simple for that, and
+only the VPR driver knows when a resize needs to happen.
 
-While older SoCs MT7981 and MT7986 have limited support for *either LRO
-or RSS* in hardware, only MT7988 got 4 frame-engine IRQs like MT7981 and
-MT7986 and an additional 4 IRQs for the 4 RX DMA rings on top of that,
-so a total of 8, and can do both RSS and LRO.
+Is it possible to trigger the freeze from a kernel driver? Or localize
+the freezing of userspace to only the processes that are accessing a
+given device?
+
+Other than that, freeze() and thaw() seem like the right callbacks for
+this.
+
+Thierry
+
+--c3trq7oliwem474c
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhmciQACgkQ3SOs138+
+s6FrWRAArTr2+v5/RiI52gbOtblSZZHd0u8bRWvZc9eKsca1KbnLFzZqLR3EtWTj
+LR3Iulq6+bbV7R3mxRltaDyZMzW8PzHy0/TO4pRV0sX/N3DUGDx9HkXHyGxCmfl2
+zqRoWKvHvyX27BNImb/pk5HwxD6FgDyc8uRb71jR1/Ur7Wrs5wh9w/RCPU1ffOvD
+54n1HVluWCJN38tDM05fsTdmBErnMbN+TkDxXusbmtOdAZBWLtkHxSH/3b9k5O/y
+yokK4UfzVDVR3S97p5Q+hMi93fHztgR7rtDQjvMjELghNxO5cKfUrYRuqUYQASAC
+VnuccLKZd5g/h05WcJaCScnxxA6yndutfVIh/okQc/g0P5ZY9obdtZ4e089D0jql
+om7njxOFxVC0Dmr4dIePDlN19oStPGf3m2C9ZhqNQLKksarWF4rG9uX+ZIalIUN3
+PrN1bGSr//mBuL0vAyj1VkrtIajFp1HqMfb1l9VGxvA0XVGPxuwn4+8X/i1G99rX
+AJt7FzFfHHricO2SdmbpTpQPDOoTJa8YEKcaj6cuzFr7eb4yVrob7NqtIqhZ92/z
+dk50CNH35WHeUToip/P8Fg499IcjMJEzHgqnTISOP89p5+gdKYLVhEpJX0eo0TkX
+1eZ1EPawFYKUyscLynI6MhmoXcGLwo7/06bQ0KkGU9sVKal4Xx4=
+=EP0t
+-----END PGP SIGNATURE-----
+
+--c3trq7oliwem474c--
 
