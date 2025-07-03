@@ -1,223 +1,153 @@
-Return-Path: <linux-pm+bounces-30050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F7EAF7740
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 16:23:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52975AF779D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 16:34:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C07CF16216F
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:23:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BC2F7BE21B
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C142E9EB0;
-	Thu,  3 Jul 2025 14:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7794B2EAB6B;
+	Thu,  3 Jul 2025 14:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OrYJfjdz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EUtQUVaT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F682E7F28;
-	Thu,  3 Jul 2025 14:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C022EA46B;
+	Thu,  3 Jul 2025 14:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751552590; cv=none; b=nhmsWO+h7C4UgeJofXMAnAaaepuNAvwXNHmWqqgg/6+BVUT5p6OI8xwhR+6O06tNNsNvk7PlBhjsgaEAqiiKpq87NCwOScJoQdO7X6IpOZv80NeNJjuqH+RoOXX1v7BbI0rsKCTBCFZTaSJlILoFrYcFOTBD2+BVgw6+WcwOM18=
+	t=1751552999; cv=none; b=npNgCoDP15zhF2pTy5ZJPez5SDQycnojO8GfDTYKwaP/2iSeJR06p9OfK1+a6dO+4QV5PnFYs+9WHNY8SeewsgCURExfQjJO5atYZ3LBc3q6psEEWeWxXVJ26fQOtS9WxnjyqCGYPog7V8BfpVcuY5Z/UFRbeKiLNOtv0vcOZgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751552590; c=relaxed/simple;
-	bh=l5n7kXhvAGrOm9NphwOIVtuuLX/5c5Et3Q8TUpS+US4=;
+	s=arc-20240116; t=1751552999; c=relaxed/simple;
+	bh=Fm3qk2Sxt9oTRrrfhvZcED03yYICrUHHIb3sCtzNWN4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IE9WLTWzhuqsopQ3m5FEoHTZzXRexKsbtrQTna3RdNngXzRtSCxuhtsADlO0voxnI9t+g7g7vTfyh3BZKJ8CxuLQ1QRDyjK4dVQjTFwJ3dv2FZSBRJrzRJ1Uy0iB9znifVEYTzKdLTd5E4pzoH5lk5+dJP4mXU3subSe18DzBf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OrYJfjdz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D51C4CEF2;
-	Thu,  3 Jul 2025 14:23:09 +0000 (UTC)
+	 To:Cc:Content-Type; b=f71O/7tWZaI3KhAj3P6qGjqXBrR+gFILRs7Zd72VSFGluHfTIYJPNX4Zo3BJTcURyIsc49NtI/wxQVw9mTgPmqxVnY7QgUwhIVxVRQC1PJm7rQOuq/4Y/XphfEMDkj95v+6bvDfVXO5b0ObwoU+nmWxjD06vMfasVoSz8piY8bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EUtQUVaT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C47C4AF0B;
+	Thu,  3 Jul 2025 14:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751552589;
-	bh=l5n7kXhvAGrOm9NphwOIVtuuLX/5c5Et3Q8TUpS+US4=;
+	s=k20201202; t=1751552998;
+	bh=Fm3qk2Sxt9oTRrrfhvZcED03yYICrUHHIb3sCtzNWN4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OrYJfjdzly7hPsRweQ3SxWicKOQlByqTvJPo5H1+ZM/N5bmTiM8qVtGxGW4NYt8A+
-	 Fyz0yGwWWpkaZ4sgwJmFYUk+yz4WfV0i7qSLr6tBpaR7dXG9e/UM0wYwEJhkICRAng
-	 IHpjNSGaAqQDgSxx/4S58S5DElJBTJsx4dX6SImkDMUeOXVVWUzMxfFkUfpwOjecIx
-	 /RWBD44O5sNPErwj9Ni9rPCi7yyz+8V+VGNdc/UvtaAKu+jCDp1/c+wRxeEgQbSBbd
-	 0exGF6Yc9SzMNScAAOQ5SH5P4ZAyiunRZcMX1dagjGrfiYuKIjfygTdK6DDbX4osQ5
-	 RAClFYHJRB/0Q==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-6119b103132so722570eaf.1;
-        Thu, 03 Jul 2025 07:23:09 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUgWozcbbB9msCwsA0bdTQnoJSRXuNtfeQtGwwxeU+KEJqr5i99dPzvxzTZje/T3zDPjRTTM4IMC9MceKY=@vger.kernel.org, AJvYcCXoQUevJd4ZvRuwi0QOm3xb+MzA0iDrM7oEz/rIU08in4NTE6DFhQ53sd803hNiuCcP/HSzDYA+7A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yycb2ltZ0oPWYjvwIwtlXLufPmzBH2HAk+MBkdiMGKMHp1WYCXa
-	L5rg31d44Fe+Hz5V9Q7YgmGa8GSZ+I97mFd54q/dl5Xa8/ovD5wodcmIbvu8IVjfIfEYEPyMk3n
-	8ZJ1dxSBnhsW6ovUEaTwakxeiuCAz+IY=
-X-Google-Smtp-Source: AGHT+IFsH0aSRQp7wu8IXYaHCIuiI4gj2e6MChKhmc3gfYwOzlI7yDPtPCwjVxuHnUkhcxa7iNP0U4E8pr0r21y0m7k=
-X-Received: by 2002:a05:6820:2d0b:b0:611:a5f4:42c0 with SMTP id
- 006d021491bc7-613835b96e9mr1676596eaf.2.1751552589091; Thu, 03 Jul 2025
- 07:23:09 -0700 (PDT)
+	b=EUtQUVaTKURBSPBDtNxwsZsLLGU/xuEHfm0PM0K5AWLaAr0lx8/+TnwYPfB+kyugp
+	 o5d1bOfi4bMzMx2v5TNIDepiHs+lhKKtjX3PEHUE1FABzscTZA81BEJuCo0M0+oFZE
+	 dOrF4zbUAof8uuDe+iZKSFilPr/iDnGR0fZS146Rn1y2CwpF2gGr8tGklAwmWHwLd/
+	 H8Hc4TXVr72JEd4ApQIUdwamFnhZZ9yo02YLAo86ZBHy6BnhWR2tguDc4rTB9wd0PV
+	 4ddhT8qjZhuaiqWLp/lCL2F70yOJqRDWT/21+N7ylRkXCOvzQfNM3ccrTj/VKiWXAz
+	 zCMqHWcqpGzCA==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-610d87553b6so3239901eaf.2;
+        Thu, 03 Jul 2025 07:29:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGLNMn8xDXP/CdB+o+Odk4XOQAOV46qm0PqJS1QbplrnnfPrmBgEFdzHHbCkTls49lLE0olSRye9qn@vger.kernel.org, AJvYcCUHqUnwnjQcTWDKxYupZMEjwptdst7KXenxVJ6/dnVFCxiucqEGkB0rRDbtbIVnzUqGR6Ziz5sgV0Ou@vger.kernel.org, AJvYcCVyNZTU15TfF5FdZZqqWPfPv5UgNrxCng4xnRgIqT3bAJ9ox9P2FzoOKSam10x6HjjcElPMSchQgI8=@vger.kernel.org, AJvYcCX7ZX3/1EVzejOdGOeUyBz176L8EvQqGV+Xkq2MPxsJSw+F2rWb8H121B5TpD5yM3KTwImtrahC1iEK6io=@vger.kernel.org, AJvYcCXpikidFen+InVaqwdbKQ03ZBrFROJFDXIPx6jola4LQQvUlUB7DjSWzWJibLG76uWLxbxnY0O084ZUqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkVMhyJoCmyMy2tLcPji2GPZ/GtOf1FbXQGeXcf9gN7QNFu3Ud
+	F/Q6qhlWDjKWMhMdRLKF3YTeLaTQdbjSzK60eReGB+y3+IT2KOdgVbrR4KalAAcz6xjXSUKOjOY
+	QsUXW0yiZLNTGVQZjCAWxOsTEA0KFfFk=
+X-Google-Smtp-Source: AGHT+IGKqgRrtyx19Ohp3Z1EI2LoOc/W9BuT9DA7/iSo9WQpIWa8l502nswOSx3IuDHZQjfc+w2NIPaPXuTzX8u35dk=
+X-Received: by 2002:a05:6820:2713:b0:611:bbad:7b62 with SMTP id
+ 006d021491bc7-6120112a218mr4957769eaf.3.1751552997991; Thu, 03 Jul 2025
+ 07:29:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <rlzpjdsg6cbgxc553j6m25ysb6tyldy4lnxsjjn4hdzv7rszpp@y6rfcrbjfook>
- <fbfc6bf9-d7c6-4df5-85d0-b1d357159d88@suse.com> <CAJZ5v0hPh19h9uVRVHSXiLaHxm3PR9A3W5+j=2=-B-YCyBr=uw@mail.gmail.com>
- <hjkm55hus3ctueydf7ebfb25hbdw6w3spdzx7maauzlzmnakas@noqexx2pxxtj>
- <e635l6gfpg7amck2hnu4l47tnc54lr6e26v7y3ohaywil6pjwr@4trxzfdigo62>
- <CAJZ5v0gsLCpGnA5fNSSVLOoPL6Qinw=o_fBGG-0iFKeWyQtFZQ@mail.gmail.com> <lhqjjycgtiap37ckghkyovdyosxxo5ugdep6t7jjtxidk3rws4@re2x2rom7chc>
-In-Reply-To: <lhqjjycgtiap37ckghkyovdyosxxo5ugdep6t7jjtxidk3rws4@re2x2rom7chc>
+References: <20250616175019.3471583-1-superm1@kernel.org>
+In-Reply-To: <20250616175019.3471583-1-superm1@kernel.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 3 Jul 2025 16:22:57 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hNsHsuo=RCxJ2Egm5v6Sarao5QCguLKov0sWBcvNQ3xg@mail.gmail.com>
-X-Gm-Features: Ac12FXwxCTmB0vY3edGbSK2DrfllNGxUqVpq9I-NJoPzzzT1x_r9hV2kLxvt_Vo
-Message-ID: <CAJZ5v0hNsHsuo=RCxJ2Egm5v6Sarao5QCguLKov0sWBcvNQ3xg@mail.gmail.com>
-Subject: Re: Forcing devices into idle
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Oliver Neukum <oneukum@suse.com>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Date: Thu, 3 Jul 2025 16:29:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jc-tjs_a+RCzu6bvrbfhv5QHqsWx-zKjH0wpisiJciKA@mail.gmail.com>
+X-Gm-Features: Ac12FXyr5oPvb2c3yNjkDygXC9l6Pt_56oLkJ04HxD0-cR-THCDtscKWWn70wDY
+Message-ID: <CAJZ5v0jc-tjs_a+RCzu6bvrbfhv5QHqsWx-zKjH0wpisiJciKA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] Improvements to S5 power consumption
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Deucher <alexander.deucher@amd.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, 
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>, 
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 3, 2025 at 4:14=E2=80=AFPM Thierry Reding <thierry.reding@gmail=
-.com> wrote:
+On Mon, Jun 16, 2025 at 7:50=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
 >
-> On Thu, Jul 03, 2025 at 03:46:03PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Jul 3, 2025 at 3:32=E2=80=AFPM Thierry Reding <thierry.reding@g=
-mail.com> wrote:
-> > >
-> > > On Thu, Jul 03, 2025 at 02:06:00PM +0200, Thierry Reding wrote:
-> > > > On Thu, Jul 03, 2025 at 01:12:15PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Thu, Jul 3, 2025 at 12:33=E2=80=AFPM Oliver Neukum <oneukum@su=
-se.com> wrote:
-> > > > > >
-> > > > > > On 03.07.25 12:08, Thierry Reding wrote:
-> > > > > >
-> > > > > > > Any thoughts on how to solve this? Is the pm_runtime_{put,get=
-}_sync()
-> > > > > > > method acceptable? If not, are there other alternatives to ac=
-hieve the
-> > > > > > > same thing that I'm not aware of? Would it be useful to add a=
- new set of
-> > > > > > > APIs to force devices into an idle state (which could be sema=
-ntically
-> > > > > > > different from runtime suspend)? Or is this all too specific =
-for any
-> > > > > > > kind of generic API?
-> > > > > >
-> > > > > > Basically what you need is what happens when the system prepare=
-s to
-> > > > > > do a snapshot for S4. However, if you just perform FREEZE and t=
-hen THAW,
-> > > > > > devices will assume that user space has been frozen. You need a=
- way
-> > > > > > to substitute for that assumption.
-> > > > >
-> > > > > Well, you just need to freeze user space beforehand.
-> > > >
-> > > > Freezing userspace seems a bit heavy-handed. There's only a very fe=
-w
-> > > > devices that need to be put into reset (such as the GPU), so most o=
-f
-> > > > userspace should be fine to continue to run. For the GPU the idea i=
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> A variety of issues both in function and in power consumption have been
+> raised as a result of devices not being put into a low power state when
+> the system is powered off.
+>
+> There have been some localized changes[1] to PCI core to help these issue=
+s,
+> but they have had various downsides.
+>
+> This series instead tries to use the S4 flow when the system is being
+> powered off.  This lines up the behavior with what other operating system=
 s
-> > > > to block all incoming requests while the device is forced into idle=
-,
-> > > > and then to resume processing these requests after the VPR resize.
-> > > >
-> > > > But maybe freezing userspace isn't the heavy operation that I think=
- it
-> > > > is. Ideally we do not want to suspend things for too long to avoid
-> > > > stuttering on the userspace side.
-> > > >
-> > > > Also, I think we'd want the freezing to be triggered by the VPR dri=
-ver
-> > > > because userspace ideally doesn't know when the resizing happens. T=
-he
-> > > > DMA BUF heap API that I'm trying to use is too simple for that, and
-> > > > only the VPR driver knows when a resize needs to happen.
-> > > >
-> > > > Is it possible to trigger the freeze from a kernel driver? Or local=
-ize
-> > > > the freezing of userspace to only the processes that are accessing =
-a
-> > > > given device?
-> > > >
-> > > > Other than that, freeze() and thaw() seem like the right callbacks =
-for
-> > > > this.
-> > >
-> > > I've prototyped this using the sledgehammer freeze_processes() and
-> > > thaw_processes() functions and the entire process seems to be pretty
-> > > quick. I can get through most of it in ~30 ms. This is on a mostly
-> > > idle test system, so I expect this to go up significantly if there
-> > > is a high load.
-> > >
-> > > On the other hand, this will drastically simplify the GPU driver
-> > > implementation, because by the time ->freeze() is called, all userspa=
-ce
-> > > will be frozen, so there's no need to do any blocking on the kernel
-> > > side.
-> > >
-> > > What I have now is roughly this:
-> > >
-> > >         freeze_processes();
-> > >
-> > >         for each VPR device dev:
-> > >                 pm_generic_freeze(dev);
-> > >
-> > >         resize_vpr();
-> > >
-> > >         for each VPR device dev:
-> > >                 pm_generic_thaw(dev);
-> > >
-> > >         thaw_processes()
-> > >
-> > > I still can't shake the feeling that this is sketchy, but it seems to
-> > > work. Is there anything blatantly wrong about this?
-> >
-> > There are a few things to take into consideration.
-> >
-> > First, there are 4 tiers of "freeze" callbacks (->prepare, ->freeze,
-> > ->freeze_late, ->freeze_noirq), and analogously for "thaw" callbacks,
-> > but you only use one of them.  This may be fine in a particular case,
-> > but you need to ensure that the other tiers are not needed and, in
-> > particular, the _noirq ones need not be involved.  Also ensure that
-> > they don't assume that PM notifiers have run (or that they will run on
-> > the resume side).
->
-> I think that's something we can accomodate in this case. The primary
-> device that needs this in the integrated GPU on Tegra, so it's very a
-> narrow set.
->
-> > Second, if there are dependencies between the devices being frozen and
-> > other devices, they will have to be taken into account.
->
-> Fortunately, as far as I know the only dependency, if any, would be via
-> the userspace. There's no relationship between the devices from a PM
-> point of view.
->
-> There might be a video decoder that decodes images into the VPR and the
-> GPU would then read data out of the VPR and composite onto the screen.
-> So as long as userspace is frozen, there should be no issue.
->
-> > Also note that kernel threads are generally not affected by
-> > freeze_processes(), but I guess this is not a problem in your use
-> > case.
->
-> I had read through some of the documentation around this, and yes, the
-> kernel threads shouldn't be an issue.
->
-> In any case I'll make sure to add comments where necessary to point out
-> the peculiarities of the whole thing.
->
-> So this sounds like a workable solution. If for whatever reason freezing
-> the entire userspace doesn't work out, would it still be possible to
-> "abuse" the freeze() and thaw() callbacks like this? The way I imagine
-> this would be for freeze() to include code that effectively suspends all
-> userspace submissions to the GPU (i.e. effectively suspend all GPU
-> related operations).
+> do as well.  If for some reason that fails or is not supported, unwind an=
+d
+> do the previous S5 flow that will wake all devices and run their shutdown=
+()
+> callbacks.
 
-If you can effectively prevent user space from interacting with any of
-the affected devices, directly or indirectly, even via mmapped memory
-regions or some such, then this should work.
+I actually like this approach, but I think that it is risky.
 
-The freezing of tasks is basically all about getting user space out of the =
-way.
+It also requires more work/review from other people.
+
+I'll be sending some comments on the individual patches going forward,
+but I think the earliest it can go in is after 6.17-rc1 (given it is
+reviewed properly till then).
+
+Thanks!
+
+> v3->v4:
+>  * Fix LKP robot failure
+>  * Rebase on v6.16-rc2
+>
+> Previous submissions [1]:
+> Link: https://lore.kernel.org/linux-pm/CAJZ5v0hrKEJa8Ad7iiAvQ3d_0ysVhzZcX=
+SYc5kkL=3D6vtseF+bg@mail.gmail.com/T/#m91e4eae868a7405ae579e89b135085f49062=
+25d2
+> Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@=
+kernel.org/
+> Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limon=
+ciello@amd.com/ (v1)
+> Link: https://lore.kernel.org/linux-pm/20250514193406.3998101-1-superm1@k=
+ernel.org/ (v2)
+> Link: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@ke=
+rnel.org/ (v3)
+>
+> Mario Limonciello (5):
+>   PM: Use hibernate flows for system power off
+>   PCI: Put PCIe ports with downstream devices into D3 at hibernate
+>   drm/amd: Avoid evicting resources at S5
+>   scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+>   usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+>
+>  drivers/base/power/main.c                  |  7 ++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+>  drivers/pci/pci-driver.c                   | 94 ++++++++++++++--------
+>  drivers/scsi/mesh.c                        |  1 +
+>  drivers/scsi/stex.c                        |  1 +
+>  drivers/usb/host/sl811-hcd.c               |  1 +
+>  include/linux/pm.h                         |  3 +
+>  include/trace/events/power.h               |  3 +-
+>  kernel/reboot.c                            |  6 ++
+>  9 files changed, 86 insertions(+), 34 deletions(-)
+>
+> --
+> 2.43.0
+>
 
