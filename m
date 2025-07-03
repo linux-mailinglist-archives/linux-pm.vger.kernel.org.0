@@ -1,236 +1,157 @@
-Return-Path: <linux-pm+bounces-30005-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30006-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F8FEAF6755
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 03:49:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B2E9AF6902
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 06:06:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1967F16AF55
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 01:49:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDEBD521D9E
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 04:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A7B18641;
-	Thu,  3 Jul 2025 01:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="XIYcwZUc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64747289819;
+	Thu,  3 Jul 2025 04:06:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011048.outbound.protection.outlook.com [40.107.74.48])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098E715442C;
-	Thu,  3 Jul 2025 01:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751507372; cv=fail; b=DXGh3JtXclO9tutvprFkSQN0Zvsql4ZL/BkS+/OOzVk6ONioPrY2fISHNjPGv3QT2fJaVtwDjPFWoIsvgTGZrxWOrLNP8uRP+SyU/XF3QnkXnhqATM38GcbP8OzaLZtJx3PupYqfofUdvNvrHDb5SHtxjweZ+CrcUvlciiDQ6so=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751507372; c=relaxed/simple;
-	bh=ONTGn1nXSZqQArOGx8YmLe8fLW8tgLFeaRGpcdnfSs8=;
-	h=Message-ID:To:From:Subject:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=GnlWjMpDIuyFMWUelYAU93s6rJ7jNNeD68V9TKa7gS5ESySO2rp/lr9ctvdMMlViL4pQ90MxtExRPCp2OX26Kb4vfYRSEIwvk8oSOycK39fYP3lu78Aie/TnpjFimfWPDYvJGRLvSFjoRPGtLBrWwsjdytVaKEmgRpVqz3ijXHA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=XIYcwZUc; arc=fail smtp.client-ip=40.107.74.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d89bsQHv2lOFGf9Cksv2Bo7dM9WMlbfnZr+q7DHAzUHnnBfS/zXTC/195RIkmSgab5QUNtp7d5nYoBZljkff3MZwb6ev+O0HeVf6jDaRRuClge/UbAQuZF0mvz9tQT5pRhyLZj4UwYDuVmKJyC/xT+3KUvlVr7oYRZS48irrSybtz1OQyEABncR6CX76j7GgHfjnP99LCbz/TdEjNd5vzqLhGe0Ys8LA1V9fC0jwq76T8OR+NjWVzn7Kc9Ly/UkenncN87gvVCJXGYqxrPkuKupp2dgLe/T4KCqTcZCiLsN9UUcK+cvVB9eer2zMt4Ikvo03p7eX0gGDUSipqXIP2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/o8+spcbMcSbLXVQMbus1Vwvq8wzXBaGXNHnEADyNs8=;
- b=nDWp6aQzxD0Thi/tI6OHpOzMm7q/ko3eixXVHc6fwMjJi/4BsUBtJJteBO4usC9iUC+l2m/dbadqfcva638aG1YMNOSXhXWN4lTv9RcS6W6Z9cRHMuKiURu5UBqxZE5AMU3BmO0KVDOAGTfv7+Siki4f0qtfNws3QXfOaF+9vEXXKMGQH+6Fli8TR/QLCKKSm10UL+to4aZ8tzlZrCbie5OCoNuFVw4c9RaChHhPbOhiYSLQXr25xSBrFRHCgYFd82I3qD8HtGTthwzWpNDISMyIMs27WkoQTO2X4Qsjt/pW9lfWFhQtjl/iRrW3RZOI3J98kMcdNs7dMiTmHOJ/DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/o8+spcbMcSbLXVQMbus1Vwvq8wzXBaGXNHnEADyNs8=;
- b=XIYcwZUc3MAiL4S+EUGej1raYgdwmmRXZJf21HBFExBUp34oRE3G0pXc1qPasakuQIxBHLQvJhQIDphzf7uGbgJeOPNTX+LNuj+8Hi9hRn3F/y5s/Z2YT7dw13+H5d4GSsKJtDIQO3FwbfFzrPA47up1yfcxdznP20YdbQMuklw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11) by OSOPR01MB12299.jpnprd01.prod.outlook.com
- (2603:1096:604:2d9::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Thu, 3 Jul
- 2025 01:49:27 +0000
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::c568:1028:2fd1:6e11%4]) with mapi id 15.20.8880.021; Thu, 3 Jul 2025
- 01:49:27 +0000
-Message-ID: <87h5zucac8.wl-kuninori.morimoto.gx@renesas.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>, Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH v2 3/3] pmdomain: renesas: separate R8A7791/R8A7793
-In-Reply-To: <87ldp6cadg.wl-kuninori.morimoto.gx@renesas.com>
-References: <87ldp6cadg.wl-kuninori.morimoto.gx@renesas.com>
-Content-Type: text/plain; charset=US-ASCII
-Date: Thu, 3 Jul 2025 01:49:27 +0000
-X-ClientProxiedBy: TYCP286CA0257.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:455::8) To TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204BB27CCE7;
+	Thu,  3 Jul 2025 04:06:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751515605; cv=none; b=jIlR3ASD9N8aJwi0fj8uGeD5SNa7REsygsMeWCqoEa/GDwA7hFcfXAfTOcEweAxr+O50i7H2HAGqT/vevS7vJi+qNTjStCPVxVqvqZZiUDaJ1yepumUk/HA74GO9OGBCCdYePcHAXMs6XzsLXNXWM2+XAUl+tYxByalUN3IomJU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751515605; c=relaxed/simple;
+	bh=iS0wN2Yp0X7jntgoyl3sfkNmwNrYwe5UFBjTK78uceg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FT8UzxdFxqoim2XPYb4gqId30gpn+c4qc0UH4yRTMfvwTrfOVfDrPsb2Z3xc7XNVjnSKAsOFfqy10ceELsi5bMxmeWdZy9/ytXQvMZsqbNVDeVnlTs6Epc4U58h0GHIuVAYAWid7OA3BIh3BnVJIamYC4TvX7UGdYizrbTd3y4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1c89bf4257c311f0b29709d653e92f7d-20250703
+X-CID-CACHE: Type:Local,Time:202507031108+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:a8956ad4-1408-452a-aa1d-55176fd265e6,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:b40b5519b5e8ef877da3e0894f364ad6,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 1c89bf4257c311f0b29709d653e92f7d-20250703
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1294250978; Thu, 03 Jul 2025 12:06:35 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 89623E008FA2;
+	Thu,  3 Jul 2025 12:06:35 +0800 (CST)
+X-ns-mid: postfix-686601CB-4747671
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id E894AE008FA1;
+	Thu,  3 Jul 2025 12:06:34 +0800 (CST)
+Message-ID: <c1fd270f-624f-4a63-b54a-d2d98f06cb49@kylinos.cn>
+Date: Thu, 3 Jul 2025 12:06:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|OSOPR01MB12299:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d391d36-e727-4f29-f5c6-08ddb9d3d86f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mrWeO/xY1y5/rd7nsDmUC/7bLOyqWjwCeqwKBLzveGTls/Pf09aqIw78rS/I?=
- =?us-ascii?Q?1Wha5lAJXZfhDVTo98QHDo3k51LX4WD+XGgOBhqFWvAuPyR4xg9dYLZIZYD7?=
- =?us-ascii?Q?iPnChObyO7AMbUGD9cIm+xgMCsF5wCPT3BmPwTywsb0F1bsoUMYWuU47t2fs?=
- =?us-ascii?Q?k/PubVv6nTFhgSqYSn4KdvCbQoqGmhyv4oT8nfQOlWgKsjTeHwHsU28VbzYC?=
- =?us-ascii?Q?SDZJ+We4+/8I8R2aLgu3dI2WP8bnZsME1BC04k7wRfRgYEfRXAZPG6g8i3Dz?=
- =?us-ascii?Q?j+P6ersg1fXs7RlT0ezpZt+nrlmaR1iUmmkHp03497D5BBUl6GvtcrBiwyUV?=
- =?us-ascii?Q?dzPJHx0m4TlFYfovVqtX16p21sa9squRzEU2zvf6nZ2mxUUXrr/qhmf6uoqZ?=
- =?us-ascii?Q?7HHFnnnYT9MXBfoz36MFonIivnzLmhN5KBjlAPFepRfSEvAE7wv2mCJXDA0N?=
- =?us-ascii?Q?nl6BMvwE/rjcRNC8Gq/QTj6kGLdfksMGu3jq3BZadMcB3VYgCUxJLKlxZRIo?=
- =?us-ascii?Q?mj4Nx4jG/6Hw/bhyVtaUdGSk1CU/J+BKDiXn3SGfo06DQC0bj6BDDVWcbkGS?=
- =?us-ascii?Q?bYBaSKnyQvhas9MiFB8Vt6m5uufq5ml01BFNo0VFQ1Hfv6dStbNuYPcsjdea?=
- =?us-ascii?Q?PklDILwF6I7Dm9HPOhNBqNRWtfzNXuo3f40hLpX0REmzXY2bRjgljfbYnJpF?=
- =?us-ascii?Q?1U2vPozsNCrasadYB+xFO3QGEEqoiblt8Y7+q+kgHWX0dMB/HEoBydLUp6HD?=
- =?us-ascii?Q?ogABDttmjGnpMNRctXSh8Iv31Gyr/giVIg1nvSy05lzWWaDvsCGR8PRZXrf5?=
- =?us-ascii?Q?Yn9YJq63/yv2tjgyc36KX+yagIwA/p+IQnKpM77J2lKB+PV0cVnMyC+cpesx?=
- =?us-ascii?Q?Z6bXdjGIqNxgxsfp/H593T9qrxnnt69LgIky6Yf1+VG8gNQin6kRu88qMOIU?=
- =?us-ascii?Q?THzhxwkJ8HZEBTpNBoHNc25PYuRZlAJjpojk8s4GDWBI6ivM8xCQrnyx9f2I?=
- =?us-ascii?Q?lPFClldL+LWOa4D6YRBrdgHkvwqENj9m1C6FRpNLKsXI7v6ai9mGo43msNI7?=
- =?us-ascii?Q?oJSMofAa35PBiHEUpf6A0qs8egacmv3y2tr/549mGUd0MipM9Cg2SROaaO8/?=
- =?us-ascii?Q?nugLe6u86tDv0IpPs0iCgZYuHBnPa9xGJyTSL0oAfVRpL2l/CLnoU4yaBpr2?=
- =?us-ascii?Q?6D0D5td/TPNGq2Io7FE4RJm557nI0tnq8txleEXzYHLfwgVNyeGxVRiNXEaJ?=
- =?us-ascii?Q?+ls4c5mX/g1s67/hN1J9HKerMHXRFVWSKDvbX5uzRVCiKU8vZ184Qr2WpAz5?=
- =?us-ascii?Q?bm4wxYB7FM4Xd6+7MVSP7FkUHV34Cs0r7gP7z0frosX/vpSI2VqmpGHNN+rH?=
- =?us-ascii?Q?+G40WoqfKHXPW2fOyAKQMy8OJ4ziMnu2hqZixUdkAbmSL7nX1/vsHE4KHaI3?=
- =?us-ascii?Q?iXKCnzeI+QmbMNMJ5Xqt0yFjnImVAoogx+giTkSKPSA23SQ8532rVw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?37+ZXtuMN6RDTcMoHFEds9DWKj6Ga+75w2Le+K92Y4wikc8Rt4O8rfe7Hpq8?=
- =?us-ascii?Q?WAEhnQJMzJH5PIcJbLUClQMLTwXiWvKUh+Q0umc1WJQDPtHK8WWJNeOl5B05?=
- =?us-ascii?Q?md0RsLTG8Nf+XyR44ZGMF2wDXBa2U8DMb15mZlq94fNsEdP/cn4lTYUWijGV?=
- =?us-ascii?Q?mrgIoj9SpLHTj5jbhafGnyfiH7vbMdyqAODg+jOLgKX3spRIpLYe5qIFO09U?=
- =?us-ascii?Q?h28vKJ809PEtmgfhBhGP/9nM1YDRF6vbsulmzg9mxxJUjC2fAV3gx8oEeYIu?=
- =?us-ascii?Q?9HjMTB3Ig3tVBePlD1VbcYI/+Jcg+3sNIdYgzUk0/rlVxAJIWDPQ8iHjFQ/c?=
- =?us-ascii?Q?RpLniaEJzr7Za0/HzCoFeuN7FCkyJgfDtJkA++tDAsm90WzS6ZCHS0fnk+9D?=
- =?us-ascii?Q?6RXozZ4fdgXyFm8q/0nHNdVOc6Ryq8KDw7MAtdHCW6aUYrFjGmMclu7l+d4b?=
- =?us-ascii?Q?vA3Fe5wKnQoXIEmQQ+HftHAX7MR2vN+bucMgfr8i5M0huD01lchG6mqVzbJJ?=
- =?us-ascii?Q?iIB4Z5wW662LrGMaqa8CEkvlz/2j9dphi/v3aA0yZPruZCBJFlMOQTX6unMZ?=
- =?us-ascii?Q?1kQYtPhIY9CxDCV/GM2rm6J1fXMP+4gCZ0SzJ2rNAL1dYZKCBlhJeOpFEMxW?=
- =?us-ascii?Q?LqEMm4/KN5O6EuZmDaWDVLxXW9tvVErbj2iVC0hWG68e48EcOajHBKOeAnk7?=
- =?us-ascii?Q?5w6RK0yWScpHMNU32ezS7ui1YOyjw7X9QW3YrlsZzDHuUIx2Q27MEz7RGR6d?=
- =?us-ascii?Q?+T0k5JMIH8cRQKEK/sxA/5wRi9znbw5crGQJDKPHf94Gkhv8xfejcHkNyy5i?=
- =?us-ascii?Q?T2oG5FTgBb3n5ldGYXmRQi531r0K5HPOe6JBqHsOptlYALGlytrHzdnZVMyv?=
- =?us-ascii?Q?DEPgcAoOqO8QB2jOXgvkjmanNVeiJDG8NeiG29/lLmzZbVDRSeHown5V7eeH?=
- =?us-ascii?Q?Rmidf0OfLb/7riwE8h9gUF5hi+PAW7EqM+ZIuCTA4iUTXZuV43SXgqm2QG6B?=
- =?us-ascii?Q?VRYrnzpnXjTn2ycKrkDtpOsuCT7h2s4edBmungPzk+37V0wMvpGUqZmJI0KH?=
- =?us-ascii?Q?FxzxeruKRaflgyXGztf7+6B2lIV/drpgU3Z9PcwCrCRPTMkduZZF6y2MNykb?=
- =?us-ascii?Q?2s8H/4109g7JYTnUDX1/p+RBmG+jSJKbOZxcWAo+HqJkgNVLpWgjnxr6Hle6?=
- =?us-ascii?Q?dxJSX7eg/5K0uDdnZlJT3Ywy9pFII0SqiqfJHO8B56VfuTntd0iQ3O8NtYdv?=
- =?us-ascii?Q?AxcdRMRtVcMsfjJCUkKn6n4Y0Vnp2ln3jiWC6kcFIpnbT9ZGD/+hfZMCxUNS?=
- =?us-ascii?Q?6EwejovCqDOLat7bAYdRyDAe9OM58pqel7PECdtaXkMk6F2es30w4QVBjB4H?=
- =?us-ascii?Q?Flu1FGg6d0R5fw1I0uu+389CLAzZWkLHj79PuWQUbehmwwYJstjnd5/5zhjb?=
- =?us-ascii?Q?nm3N3r6xSmqDRtiQOyWzoxPp60eYuqYKbCL0uadMol+x224eV+L0kG/nPtFm?=
- =?us-ascii?Q?2UHmIlQjL0tuywVvoKE+O1MNESYy41Hzn67ktc4yUcFAjnX78WekkzLGU46E?=
- =?us-ascii?Q?5j+yCTDdln+u3hTMW6RzFEzZh9ztP8vydI2CTyyQu9ysGcSP7WU4dtGyoebj?=
- =?us-ascii?Q?CZVVF4VPd6bFOVEVSp+1aBM=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d391d36-e727-4f29-f5c6-08ddb9d3d86f
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2025 01:49:27.8130
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gUAnDd0cQ1dMHb5EoIYWW7VUdolQye/UdA0FCMgIL3ihuAKfVWrkqj80/Fa7Oqval2CAF2jUgtKc7j2brO64QKjRH0KV4S640GUp7S2YdNaEEQL4qEmHqhfuT/hnbU4C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSOPR01MB12299
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] PM: suspend: Assign pm_suspend_target_state
+ earlier for valid debug logs
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: pavel@kernel.org, len.brown@intel.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250619035355.33402-1-zhangzihuan@kylinos.cn>
+ <20250619035355.33402-4-zhangzihuan@kylinos.cn>
+ <CAJZ5v0hEzTfZZgrgyo4NNnXj+eFrAnJgmP9Ls7kB3GM3c1V2Mw@mail.gmail.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <CAJZ5v0hEzTfZZgrgyo4NNnXj+eFrAnJgmP9Ls7kB3GM3c1V2Mw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-R8A7791/R8A7793 are sharing same code, but because of it, Kconfig
-settings is a little bit confusable. Let's separete these.
+Hi=C2=A0Rafael,
 
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
----
- drivers/pmdomain/renesas/Kconfig     | 6 +++++-
- drivers/pmdomain/renesas/Makefile    | 1 +
- drivers/pmdomain/renesas/rcar-sysc.c | 5 +++--
- drivers/soc/renesas/Kconfig          | 2 +-
- 4 files changed, 10 insertions(+), 4 deletions(-)
+=E5=9C=A8 2025/7/3 02:58, Rafael J. Wysocki =E5=86=99=E9=81=93:=E3=80=80 =
+=E3=80=80 =E3=80=80 =E3=80=80=E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=
+=80 =E3=80=80 =E3=80=80 =E3=80=80=20
+=E3=80=80 =E3=80=80 =E3=80=80=E3=80=80
+>> On Thu, Jun 19, 2025 at 5:54=E2=80=AFAM Zihuan Zhang <zhangzihuan@kyli=
+nos.cn> wrote:
+>>
+>> pm_suspend_target_state is used in debug logs inside enter_state(), bu=
+t
+>> it is only assigned inside suspend_devices_and_enter(), which is too l=
+ate..
+>>
+>> This causes early pm_pr_dbg() output to either show incorrect state or
+>> nothing at all, making suspend debugging harder.
+>>
+>> Assign pm_suspend_target_state at the beginning of enter_state() to en=
+sure
+>> early log output is meaningful.
+>>
+>> Signed-off-by: Zihuan Zhang
+>>   ---
+>> kernel/power/suspend.c | 3 +++
+>> 1 file changed, 3 insertions(+)
+>>
+>> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+>> index 76b141b9aac0..16172ca22f21 100644
+>> --- a/kernel/power/suspend.c
+>> +++ b/kernel/power/suspend.c
+>> @@ -584,6 +584,8 @@ static int enter_state(suspend_state_t state)
+>> if (!mutex_trylock(&system_transition_mutex))
+>> return -EBUSY;
+>>
+>> + pm_suspend_target_state =3D state;
+>> +
+>> if (state =3D=3D PM_SUSPEND_TO_IDLE)
+>> s2idle_begin();
+>>
+>> @@ -616,6 +618,7 @@ static int enter_state(suspend_state_t state)
+>> suspend_finish();
+>> Unlock:
+>> filesystems_thaw();
+>> + pm_suspend_target_state =3D PM_SUSPEND_ON;
+>> mutex_unlock(&system_transition_mutex);
+>> return error;
+>> }}
+>>
+>> --
+>> =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =
+=E3=80=80 =E3=80=80 =E3=80=80=E3=80=80=20
+> Good catch, but you should remove the existing assignments at the
+> same time. =E3=80=80
+Thanks for your review and feedback.
 
-diff --git a/drivers/pmdomain/renesas/Kconfig b/drivers/pmdomain/renesas/Kconfig
-index b507c3e0d723..d8a2fed2fd26 100644
---- a/drivers/pmdomain/renesas/Kconfig
-+++ b/drivers/pmdomain/renesas/Kconfig
-@@ -54,13 +54,17 @@ config SYSC_R8A7790
- 	select SYSC_RCAR
- 
- config SYSC_R8A7791
--	bool "System Controller support for R8A7791/R8A7793 (R-Car M2-W/N)" if COMPILE_TEST
-+	bool "System Controller support for R8A7791 (R-Car M2-W)" if COMPILE_TEST
- 	select SYSC_RCAR
- 
- config SYSC_R8A7792
- 	bool "System Controller support for R8A7792 (R-Car V2H)" if COMPILE_TEST
- 	select SYSC_RCAR
- 
-+config SYSC_R8A7793
-+	bool "System Controller support for R8A7793 (R-Car M2-N)" if COMPILE_TEST
-+	select SYSC_RCAR
-+
- config SYSC_R8A7794
- 	bool "System Controller support for R8A7794 (R-Car E2)" if COMPILE_TEST
- 	select SYSC_RCAR
-diff --git a/drivers/pmdomain/renesas/Makefile b/drivers/pmdomain/renesas/Makefile
-index 0391e6e67440..0ea5798519e0 100644
---- a/drivers/pmdomain/renesas/Makefile
-+++ b/drivers/pmdomain/renesas/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_SYSC_R8A7779)	+= r8a7779-sysc.o
- obj-$(CONFIG_SYSC_R8A7790)	+= r8a7790-sysc.o
- obj-$(CONFIG_SYSC_R8A7791)	+= r8a7791-sysc.o
- obj-$(CONFIG_SYSC_R8A7792)	+= r8a7792-sysc.o
-+obj-$(CONFIG_SYSC_R8A7793)	+= r8a7791-sysc.o # same as r8a7791
- obj-$(CONFIG_SYSC_R8A7794)	+= r8a7794-sysc.o
- obj-$(CONFIG_SYSC_R8A7795)	+= r8a7795-sysc.o
- obj-$(CONFIG_SYSC_R8A77960)	+= r8a77960-sysc.o
-diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-index 047495f54e8a..ea6e15865f14 100644
---- a/drivers/pmdomain/renesas/rcar-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-sysc.c
-@@ -300,12 +300,13 @@ static const struct of_device_id rcar_sysc_matches[] __initconst = {
- #endif
- #ifdef CONFIG_SYSC_R8A7791
- 	{ .compatible = "renesas,r8a7791-sysc", .data = &r8a7791_sysc_info },
--	/* R-Car M2-N is identical to R-Car M2-W w.r.t. power domains. */
--	{ .compatible = "renesas,r8a7793-sysc", .data = &r8a7791_sysc_info },
- #endif
- #ifdef CONFIG_SYSC_R8A7792
- 	{ .compatible = "renesas,r8a7792-sysc", .data = &r8a7792_sysc_info },
- #endif
-+#ifdef CONFIG_SYSC_R8A7793
-+	{ .compatible = "renesas,r8a7793-sysc", .data = &r8a7791_sysc_info }, /* same as r8a7791 */
-+#endif
- #ifdef CONFIG_SYSC_R8A7794
- 	{ .compatible = "renesas,r8a7794-sysc", .data = &r8a7794_sysc_info },
- #endif
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 5213eb485a05..da677cbb156c 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -188,7 +188,7 @@ config ARCH_R8A7793
- 	select ARCH_RCAR_GEN2
- 	select ARM_ERRATA_798181 if SMP
- 	select I2C
--	select SYSC_R8A7791
-+	select SYSC_R8A7793
- 
- config ARCH_R8A7794
- 	bool "ARM32 Platform support for R8A7794 (R-Car E2)"
--- 
-2.43.0
+You=E2=80=99re right that ideally pm_suspend_target_state should only be=20
+assigned once in enter_state(), and I initially considered removing the=20
+original assignment in suspend_devices_and_enter() as well.
+
+However, I noticed that some drivers and subsystems may rely on the=20
+value of pm_suspend_target_state later in the suspend path, not just for=20
+logging but also for decision-making (e.g. conditional behavior based on=20
+suspend state). Because of this, I was cautious about removing the=20
+original assignment inside suspend_devices_and_enter() without verifying=20
+all potential dependencies.
+
+Would you consider it acceptable to keep both assignments for now =E2=80=94=
+ one=20
+early for logging purposes, and one later to ensure correctness and=20
+compatibility =E2=80=94 or do you think it=E2=80=99s preferable to remove=
+ the later one=20
+and carefully audit all usage sites?
+
+Happy to adjust accordingly based on your recommendation.
+
+Best regards,
+Zihuan Zhang
 
 
