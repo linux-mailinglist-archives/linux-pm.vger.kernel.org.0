@@ -1,116 +1,96 @@
-Return-Path: <linux-pm+bounces-30058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30059-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22F5FAF78CC
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 16:54:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D02AF7974
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:01:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 267601CA16A3
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:52:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B67A164FF3
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FE32EF656;
-	Thu,  3 Jul 2025 14:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED17C2EE29D;
+	Thu,  3 Jul 2025 14:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HOBX3ma7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AOBudWEd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED37126BFF;
-	Thu,  3 Jul 2025 14:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E332E7F1A;
+	Thu,  3 Jul 2025 14:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751554285; cv=none; b=AbQ1J4SfqNctmLuFM9wO3z2NSHO77B+3SDm0eaIRCDckqNZN3i1aD0/Jx6PERF6VUpHf2NX9SEExbsfi68ez4wya+uYIJY5+vTi0MQgxza2LwBYWDwvcAhuLURHCsYUey7BZOtEi+tavxFWTw2td3jft3zussRz8JfF6sR980ZQ=
+	t=1751554758; cv=none; b=WqAu1VZC4y20JBE83S29zx/KjNZyrsf1lFhrr4KJ926x7QPCZivhgeVif/FZ6KtopUbyNMD6ReWSAG5WJsiDH/X5jQLJ5RDpJJfEM5thPX/ZfxRl01YcoCN5WZlKudhNXpGKaW3n8nn+cK79NkybmYjmF/USf22xVYmmV3JoH7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751554285; c=relaxed/simple;
-	bh=nmrggkRGP+YzUsxlEigAfo2TfRxLLgXQPq8gEiJ/iHc=;
+	s=arc-20240116; t=1751554758; c=relaxed/simple;
+	bh=ff9oYNuQUjEFu3J8AsdAlUyzg1ssWZNtQ/uwSo+turY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XW2vzDbZjid3zQyBMLYhISXzRtxvHwaPoXFGKyF+t+0QRXpeBNQOb2dZyO1GSOMQ1alcSFbPlTO9tupD4LvK3YjdDwpBhF6cGQkko0XJTFLTPQJ4zkL8l+UVApXX6bCfcUKU6PlVM73qFDW4hvaZzz6yhscYRFHUqwwNk7F7k8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HOBX3ma7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0954C4CEF4;
-	Thu,  3 Jul 2025 14:51:24 +0000 (UTC)
+	 To:Cc:Content-Type; b=TGOhq7OYLSHMn46hAPKa59DlhkwubZQuBIPtOKq8l+rQZJbGuYCLdIJmgawpQ7VgOv+5rojgJi/dIeZXfdFG1a3b2+sHYxGCHjWN7BT6sDlF0FMcdQEIzccAunIrwDsscIHPKvNM1nwgqCWrAFdclSDdcB79vrF4gNPRyKDF0Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AOBudWEd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891D3C4CEE3;
+	Thu,  3 Jul 2025 14:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751554284;
-	bh=nmrggkRGP+YzUsxlEigAfo2TfRxLLgXQPq8gEiJ/iHc=;
+	s=k20201202; t=1751554757;
+	bh=ff9oYNuQUjEFu3J8AsdAlUyzg1ssWZNtQ/uwSo+turY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HOBX3ma7G8qwLwoZcsWloD6igB3cH3kpEzNjWaAGzUFc05IU3aVeWNqbve14/x0In
-	 /2JSBR5qANHLBkkpYeibTf3Lor8DF4+4iSfygeu6Ypb/6hd/QDhq0VRz0rXJQiqbmg
-	 LS4gv7kOez7oDyQG1Qlqv3wXZgEpKXSpFY9EScTUMzVXngGDAy7Hf14Ru87Br7bPV4
-	 Qrtwce85mq4zSPkAx3nIbWyTeO07+CqBmDtlwwoaC1jgO5VVeCSCcb0m8+DQaSvmkz
-	 Sb59imsqJowc2a4WWLymMyR6bY3FXfKexUV2Q7Lt5Sw0i+QJQAENUeOV9s3EV5z9IQ
-	 BQa/hXiDyRySg==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6116d9bb6ecso8751eaf.3;
-        Thu, 03 Jul 2025 07:51:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVHeRTIDNKarCfP4sk06QJ5LH0rCXnTnpiL0pD3PTj8IxKKc6bEKSLWry8b2NJx06HZ2w+jeU77CVrlvzc=@vger.kernel.org, AJvYcCWp5J3qOexUhyvbssyegVwEu2TeD5jir4s20YJ/dYX4JpNcGdggEUaBIrcUx+ZSDsGYD1Ay3ZpYqeg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywxcf4TQF3UTb+fv0ZqoPpg0M1d0Rb92bYFnw8pj78LYmcggTnF
-	y15M53R9VBXRDHY41TeHJLonP5/RAq9hrTyv2Zfuo4b9O2gF+TNmDoNjrUm4lQEGcOPt1zcVhg4
-	H8+pR3P04777+I6+Pv/9oOLkHI9r1AMw=
-X-Google-Smtp-Source: AGHT+IFdp2UeYa9pYq8nFzdPrYMur2skNp/LDdRrtjF6WSPChxq2+gboSoQEyQCRE2tNMWJu6Wpz7HoQo6e3U35/k0E=
-X-Received: by 2002:a05:6820:1f0f:b0:611:b24d:c27b with SMTP id
- 006d021491bc7-6120122af91mr6144019eaf.7.1751554284255; Thu, 03 Jul 2025
- 07:51:24 -0700 (PDT)
+	b=AOBudWEdghvvFNqAgPtFc9aWgb2/Vj/cDemwuvmMarZm1zVc2M+Elt27stm5k9jW2
+	 KXuAhX5gayBRRg+LPnyOuckH/8Fqgnb4cKUpwvF0pkK5lZjvnfBc2tQxs56vK78zTQ
+	 LCHiYZFsEYD3R7KPyK5//ypLjsL2ShtF6JratXPoZ0Ry/Ri923TOvs7X/uHTQYiUnz
+	 C6JI51vTeN2vKXBHugpKgXdmMsZuopI+UDd/wtsjZe7v5go7W5ODw5oUiZzbryTsUX
+	 XWl/7IdHU6sIIg7sL94C3smdIQo6aOheAbQ4PpA8yR13PRyjLMWU//BGyH7DdBfj35
+	 3pvuZHYhBvB4A==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-40ba2ad38ddso31733b6e.0;
+        Thu, 03 Jul 2025 07:59:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU9/7U4wVSUTRMczGC8XyTfgC+YD6P0avcHNei1FFLvgO2Mx0kNFFa3ZRe1rLjLKToC9AaOChyJqXo=@vger.kernel.org, AJvYcCW6R70nD5J/TM8GU2QMtAoGKY3QCE058SLjLmcblgnGVO7qZ3LT6dwWhKFb1yl7CE81jyWTQgdvzc8AGsw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymTarp6E1KvA7v9W4eM3RiIP0dA/ySQXyW7QnvdmU9r2uzGkzm
+	eLZLTOMBvRgbsbz8OyGN5EtuRZBwfEEIoLRvOGSYoCyAiAFAJ0QnZYSlsUKKlxc1w6uMPMakuwc
+	TD0pQuNtqLTfFV/1D4wkkvq2+yZeggGg=
+X-Google-Smtp-Source: AGHT+IGUNnWc6ttFUV9nW/7DEV1wUgCWbL6Ei/UD+4lf3y4vuTNqy/P7bfhxYpg/UYeBmDCDsSuXEzZstvwl1oECUQA=
+X-Received: by 2002:a05:6808:1b90:b0:3f8:3489:d93d with SMTP id
+ 5614622812f47-40b88816cbemr5270609b6e.25.1751554756905; Thu, 03 Jul 2025
+ 07:59:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5011988.GXAFRqVoOG@rjwysocki.net> <aGKNMySk6I0hJXSY@bogus>
-In-Reply-To: <aGKNMySk6I0hJXSY@bogus>
+References: <20250623133402.3120230-1-zhenglifeng1@huawei.com>
+ <20250623133402.3120230-4-zhenglifeng1@huawei.com> <CAJZ5v0jvdttYihgNcTF=VVnd2K5QsC+W9XJJanqy4F_PXw+u2g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jvdttYihgNcTF=VVnd2K5QsC+W9XJJanqy4F_PXw+u2g@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 3 Jul 2025 16:51:13 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jvf_1JAbWRVi1=oYPqFk_qJ_p0zHJy-ZzugxLkTF4cWw@mail.gmail.com>
-X-Gm-Features: Ac12FXxxSG95La_UNSEwXYZjHPL4UG0rEgYf5Fea3GqIJ8DYy5NAPdBEYUy-8E0
-Message-ID: <CAJZ5v0jvf_1JAbWRVi1=oYPqFk_qJ_p0zHJy-ZzugxLkTF4cWw@mail.gmail.com>
-Subject: Re: [RFT][PATCH v4 0/2] PM: sleep: Handle async suppliers like
- parents and async consumers like children
-To: Sudeep Holla <sudeep.holla@arm.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Chris Bainbridge <chris.bainbridge@gmail.com>, 
-	Saravana Kannan <saravanak@google.com>
+Date: Thu, 3 Jul 2025 16:59:05 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jKY2og0bSwq97fwu7W690E-GeYxGkeju3kq4DVgOFCaw@mail.gmail.com>
+X-Gm-Features: Ac12FXxgW8YzL8MpjxfmQmYqohwRl87wSd5TsFBz8agO_QGk5OPbcTw6P0Vv3dY
+Message-ID: <CAJZ5v0jKY2og0bSwq97fwu7W690E-GeYxGkeju3kq4DVgOFCaw@mail.gmail.com>
+Subject: Re: [PATCH 3/7] cpufreq: Contain scaling_cur_freq.attr in cpufreq_attrs
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, viresh.kumar@linaro.org, 
+	ionela.voinescu@arm.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 30, 2025 at 3:13=E2=80=AFPM Sudeep Holla <sudeep.holla@arm.com>=
- wrote:
+On Mon, Jun 23, 2025 at 5:30=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 >
-> On Mon, Jun 23, 2025 at 02:44:09PM +0200, Rafael J. Wysocki wrote:
-> > Hi Everyone,
+> On Mon, Jun 23, 2025 at 3:34=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei=
+.com> wrote:
 > >
-> > These two patches complement the recently made PM core changes related =
-to
-> > the async suspend and resume of devices.  They should apply on top of
-> > 6.16-rc3.
-> >
-> > They were sent along with the other changes mentioned above:
-> >
-> > https://lore.kernel.org/linux-pm/2229735.Mh6RI2rZIc@rjwysocki.net/
-> > https://lore.kernel.org/linux-pm/2651185.Lt9SDvczpP@rjwysocki.net/
-> >
-> > (and this is v4 because they have been rebased in the meantime), but th=
-ey don't
-> > make any difference on my test-bed x86 systems, so I'd appreciate a con=
-firmation
-> > that they are actually needed on ARM (or another architecture using DT)=
-.
-> >
+> > After commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file=
+ for
+> > set_policy() drivers"), the file scaling_cur_freq is exposed to all
+> > drivers. No need to create this file separately. It's better to be
+> > contained in cpufreq_attrs.
 >
-> All the changes LGTM.
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Fair enough.
 
-Thank you!
+And so applied as 6.17 material along with the [4/7].
 
-> I don't have platform to exercise this patch much ATM, so sorry can't do
-> much testing though.
-
-No worries.
-
-Everyone seems to be liking this series, so I'm going to queue it up
-for 6.17 and we'll see how it goes.
+The other patches in the series need more work IMV.
 
 Thanks!
 
