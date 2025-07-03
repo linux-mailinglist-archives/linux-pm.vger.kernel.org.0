@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-30065-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30066-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5188CAF7B14
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:21:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 084B3AF7B00
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:20:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1316A3A3CA9
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 15:14:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8103586958
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 15:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620942F0E5F;
-	Thu,  3 Jul 2025 15:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27712F235C;
+	Thu,  3 Jul 2025 15:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bFQDyUm/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bKrZZbkX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840172F0C6C;
-	Thu,  3 Jul 2025 15:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C66A2EBB8D;
+	Thu,  3 Jul 2025 15:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751555585; cv=none; b=n0xiyWwuwNFihNm7TcOA5DKQ5fIT5AoeYYQAHe8VOnHlRUzJtsHhUgAMBP6IOj68SNUs1dWiav58UyddpGyrIU6xWsSltEDozgN/0DMNInkVVM2zaSdl1mnMPa1vvw1XPtkP5qwyyU8Zv1aQbv83xKQWGaqMjXH+P0ywwtcEKAE=
+	t=1751555604; cv=none; b=TdDAIKk37iGKRXfiyeL1ofdUdjFEQ8pebBdFUlVYZ9ntrqmJtlnIQ0e83yrIjyspyfUXMKsLa0RjmATMG3Ctc4YMZ/pp5aVeLCX8C/Ae6aPYPf19Vu2/v6H+rRnskYCc/S7np36APfcdqUYB5gRKuJ5fmgKNeUlgVauwt2uGhPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751555585; c=relaxed/simple;
-	bh=iboJ0KlMSWJGY+VsG4+b/czJxm0Le+jeHStxvFchug8=;
+	s=arc-20240116; t=1751555604; c=relaxed/simple;
+	bh=nv9OK1L0UQMxg74LXR+ORBLR37vlz1npBtTJKz/DTXg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u1YNavgYEtZb1P/D2xesXEp27t1gzlgX0+8VZ6Lx0hd35mMdArSl8cUO2WlIKDeJfC8GkjSjfMa9GOu8C4MwVhxNGXU/f2oadk4hhhUFXePREWELR5eGMvktvbqKs2BkECG7INeohh/3Dwxp81wo3QJQBqB/RqK1MWq0nbTmd9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bFQDyUm/; arc=none smtp.client-ip=209.85.167.54
+	 MIME-Version; b=eQDHFR8FzcdVWKIhaDxnF5BJIzoUtv9s+2ukOnLItfv3b5VLdNZ6Nlehiinp9R/8l7VjEeIHNA9LCChExMNAtB394Z62jUOecNZRaXy4JVw32bbQphsdYx2pB7Lrj5BeTqmM2hwqX7OE2WeS7dwmyzcuhsruHOplypOWMiWq6xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bKrZZbkX; arc=none smtp.client-ip=209.85.208.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5562838ce68so22052e87.2;
-        Thu, 03 Jul 2025 08:13:03 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-32b8134ef6aso352911fa.0;
+        Thu, 03 Jul 2025 08:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751555582; x=1752160382; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751555601; x=1752160401; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JSM5+fYnMtOsm8GdwVjstZSV2NM3rH5RSvo+XZzua+E=;
-        b=bFQDyUm/6JeBXkdpFozvJ2Nr3IntK44oTUUMpbklH/dE8XCmcYufpBNSAyBchBzrw7
-         vda/N7bWDzp8JCT3zUF5h6wwDaG9rmN8UW/1QbNmDnAPjlMnZlRX6TtrZyayd7VAePVH
-         k8tD8NKpUNfNotG+Jb3wAbS8urSuy3XoCWybqXdNkDFKofyTUkshje1pDBENzrgRPexU
-         sUNlFQCvB6bVh27DqrbNq3xBlaLgmsN53IGWnEtetf4kNKK6cUIIaW14dVuOy7sXNx/g
-         aZ/0OW7tR1YAQ9AQynOOa4taJAmsQ3WIPUtBoG4xXb3EnWHyysJZlentdIMSg5dU2WEi
-         8foQ==
+        bh=K/HlbY0O85zcixYzgYTA8H0Mdv+GR5C9KDIOJVQIiKc=;
+        b=bKrZZbkXGULAT/YkPMxe2h0qjI/AJLTssJYM99eRc0LSJONCQ5KLYsIFHQ+Xm384t2
+         /9UvJtZ/wp6VSP4pXev6kaEFk1hT5bwDy6HVFKwzTd2BRl+iyrXiqL1cQrMg5L2667pC
+         vYSeTwax3EsKYQiReaL8Sha1HESONBy6Rgntc2HUooCN6n+opciZvke8R1wWDZXgcGEm
+         ODecxFi+ay9WUxvHUlLBh6YahUj5zbJAyuDUY5iqcHYs2j1JcuqJOsRjHKYhLw7rIbL/
+         HupGG1pG4wmU8nLRu0PV1ZuPg3n/NYiQKegZBuAW9kdRVQniot+fvslARgLqaLJBHebP
+         IAGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751555582; x=1752160382;
+        d=1e100.net; s=20230601; t=1751555601; x=1752160401;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JSM5+fYnMtOsm8GdwVjstZSV2NM3rH5RSvo+XZzua+E=;
-        b=t0ZaC31ce7dY0PZq++Em6khXtWZo6UgsGkS1YoPe44XocpeT8X7uW7q0vQsl5TaEro
-         VRRwSlHs/dSgF/YofcU8cFWN3ArJp+xInebQRJfJzDltJw5A/St1jLRmdzaQin+jdoYr
-         OGCQQW5G/FOMAi/YefFhuURi810tx+YsBe+pVo7lgKymyyolv6P+P4cDzHwo7Rm+YjE5
-         HXFUFn7pr2043rPIGlymIERPvJqrb8fVIG4bLhdMPzJBMmqXr0s6DrFohd0Vlk8TETCD
-         ZNi18gczo9ZxOOGDpZjUAbz6CfFb2UW1Pr9eBF3M5j61VBc/UhhqAOHVDICQuPkmYi7r
-         BKCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUkbzgq2NT6fbOndr5IA24UFvGbKstVz8Yec7DZsSXVksZASlFrHnQ/Oil6m4dVfdMvVkc8Yg+TbK0=@vger.kernel.org, AJvYcCUrTEIhFz3UAzZo5xRljnM4HzyWtoIjgYa4M3DFTG21O1nvVjcqbi53pQ01jUHoB783MmRfUbLb9ZTY@vger.kernel.org, AJvYcCWq09WOeoDluV0+eYubN5ncBmGHs5oDFzee79lmQJhyXMvj8nFIobGHuGXi+M4zqi/6zCV5XY4NQrZ8svfc@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJqGfEYC4M9AH0Vl35BA7g7EJtw9l5JBlgJndYDDyd04Pl8DR2
-	Nd1NSIMxiX9x1UZ0ytz3oqpSX7RGrpE5Ky1tNUgq0XgPKbAxOF41V/ef
-X-Gm-Gg: ASbGncvQg8/XNjClzNMlXsLylFT6CXr0eeCshZ85j1KCGZy2yPA4RiX7zVJjgyaOMNr
-	P4yN1xaNgKz+ErYPaP8GjZbDT0fWrWMjCBl1/lvPD+NlNYzq8xFwARLbJEmWoOsG5KQa9iUPSkp
-	yZ2yXgktSpNpURPSjo3PW+VK3dOGWRh6KWzI+x28eBCltpoP/Hn3kXeZUsnPPZF5Jhzzjwi+YTd
-	MuM6MieeGOmc4lbt1HDqeXnJE9jgoluxJy5sp+h0iNBKHKXTamTGOQczV2Z445KO5o9bgdyJNqS
-	3uoCT5qupYeGmyNGPFzb14CKg5TaEiRQfmDKPhjHjVe0ghQ4Jequ0t60NUQy8QT6kO+rsag=
-X-Google-Smtp-Source: AGHT+IHcwagZ0bz8urHkgSxiQduhEhToNj/qwjiDIvUuGgoplh+L+oS4JKl6ajnw+KxoaxGfavI79w==
-X-Received: by 2002:a05:6512:1390:b0:553:252f:adf3 with SMTP id 2adb3069b0e04-5562ee3f0e3mr1589090e87.16.1751555581341;
-        Thu, 03 Jul 2025 08:13:01 -0700 (PDT)
+        bh=K/HlbY0O85zcixYzgYTA8H0Mdv+GR5C9KDIOJVQIiKc=;
+        b=EkI+ZD8BmqTpGsvVFoiwhn/JHXAJW1+2/PtAwQ8nNEI5kMW1lYFt17roRGceAgXNH4
+         TF7L0uhiWDD0ikT9d7ZCkQ8WNkvP17BMIU2G/62uad4i1Y4cdCaalmoEnNbH41Qrtej5
+         XBIlULbMZi0s+AwLDU3mZuiVRZgyoVNhCUTOZbH05wkCZBuMVyJeD3WaZMvTYgG89vct
+         KtbGfp5Efr0SHNce3W4LZK0bJlDori5jNGq2YMcqzepjz20hkwPfL6C4cy8TBAzgUvU/
+         GJyvRGL7qSqn8yGKADAW6JCIuX0hzwB9XDYdc4PCeBN571WddroagRI4eVB22AbSB6nH
+         vDuw==
+X-Forwarded-Encrypted: i=1; AJvYcCWEWLtf+GRZnAH1oC9OiOsc4tPCIrnUHyCLjcHXY5mHP11iJ2rnBNsdYKfJo9HSekjKvzUdc/2S8UdQoqFE@vger.kernel.org, AJvYcCX98cZ9z8cMC8uw0su0UlDvjdPVpj801MSr4QCHI+HDpnwURYN02CD0Bh5JNGA5AEhHdGm00D5MSjQ=@vger.kernel.org, AJvYcCXQCq8A1qmnZaUKK0pSW5JyhQylhdoDjKL2AIsmvQmbx/nawKWmHTYdsjwalAmXjXZ5fHJROBte2FTP@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnaiCnC/9kurYU+kAJYc6hTjQBwFWWKuWaVmSe+DfkuxTkGZ0k
+	uvmKrz1Ne/sIusi175VdU1MhmRHJ0ge+yabIJStSyjtJz/bjHJVYoXSL
+X-Gm-Gg: ASbGncs04LdfQYzhnuObzlKSRj1a7VSqGTELSyYW4u4UG3gYTjSBPNUkp/a+tLxeL3x
+	dlCwXU4Mt5FIBlrkNhE2Z6OCww5ekNbrLomtBFzoSFMX9PfEGPuJLs8+z9/95Brmn9XmQmTSWCI
+	A2N9/RyEed96kyafxoubWHOxvz3fqArRQvQo507k1aaTDLiqC7axWoOHKCSkqPLmchzYX9bwTQ8
+	fmxgf09nC1sBpAQwfaYx0ZMkzpJUBTy8/dRc0T/BOOMvavUfgqK/ByZPZOhrjdwvIDBYcOWOBY7
+	c0JgoESUuXnv1K6twFvKr9q7KGryoCUEfWmt3Ox4JDdvbnrP3U6xx5D9I6FTZ/okR7ZM1Qw=
+X-Google-Smtp-Source: AGHT+IFizivHRCGbn2xa6qy5KahETw6sFgoEVp5+fipVdvBjkYyulTltzT89w8oz7cos8x+uQdLuBg==
+X-Received: by 2002:a05:6512:aca:b0:553:25e4:274b with SMTP id 2adb3069b0e04-55628344003mr2815796e87.41.1751555601020;
+        Thu, 03 Jul 2025 08:13:21 -0700 (PDT)
 Received: from localhost.localdomain ([212.192.12.80])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-556384ae15esm725e87.178.2025.07.03.08.12.43
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-556384ae15esm725e87.178.2025.07.03.08.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 08:13:00 -0700 (PDT)
+        Thu, 03 Jul 2025 08:13:20 -0700 (PDT)
 From: iuncuim <iuncuim@gmail.com>
 To: Srinivas Kandagatla <srini@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -93,9 +93,9 @@ To: Srinivas Kandagatla <srini@kernel.org>,
 	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v2 3/8] thermal/drivers/sun8i: add gpadc clock
-Date: Thu,  3 Jul 2025 23:11:27 +0800
-Message-ID: <20250703151132.2642378-4-iuncuim@gmail.com>
+Subject: [PATCH v2 4/8] thermal/drivers/sun8i: replace devm_reset_control_get to devm_reset_control_get_shared_deasserted
+Date: Thu,  3 Jul 2025 23:11:28 +0800
+Message-ID: <20250703151132.2642378-5-iuncuim@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250703151132.2642378-1-iuncuim@gmail.com>
 References: <20250703151132.2642378-1-iuncuim@gmail.com>
@@ -109,53 +109,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Mikhail Kalashnikov <iuncuim@gmail.com>
 
-Some processors (e.g. Allwinner A523) require GPADC clocking activation for
-temperature sensors to work. So let's add support for enabling it.
+The A523 processor has two temperature controllers, but they share a common
+reset line. We can to use devm_reset_control_get_shared_deasserted() instead
+of devm_reset_control_get(). This will simplify the driver.
 
 Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
 ---
- drivers/thermal/sun8i_thermal.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/thermal/sun8i_thermal.c | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
 diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 226747906..45aaf5348 100644
+index 45aaf5348..bdd15ee45 100644
 --- a/drivers/thermal/sun8i_thermal.c
 +++ b/drivers/thermal/sun8i_thermal.c
-@@ -66,8 +66,9 @@ struct tsensor {
- };
+@@ -344,11 +344,6 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+ 	return ret;
+ }
  
- struct ths_thermal_chip {
--	bool            has_mod_clk;
--	bool            has_bus_clk_reset;
-+	bool		has_gpadc_clk;
-+	bool		has_mod_clk;
-+	bool		has_bus_clk_reset;
- 	bool		needs_sram;
- 	int		sensor_num;
- 	int		offset;
-@@ -89,7 +90,8 @@ struct ths_device {
- 	struct regmap_field			*sram_regmap_field;
- 	struct reset_control			*reset;
- 	struct clk				*bus_clk;
--	struct clk                              *mod_clk;
-+	struct clk				*mod_clk;
-+	struct clk				*gpadc_clk;
- 	struct tsensor				sensor[MAX_SENSOR_NUM];
- };
+-static void sun8i_ths_reset_control_assert(void *data)
+-{
+-	reset_control_assert(data);
+-}
+-
+ static struct regmap *sun8i_ths_get_sram_regmap(struct device_node *node)
+ {
+ 	struct platform_device *sram_pdev;
+@@ -391,19 +386,10 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ 		return PTR_ERR(tmdev->regmap);
  
-@@ -417,6 +419,12 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
- 	if (ret)
- 		return ret;
+ 	if (tmdev->chip->has_bus_clk_reset) {
+-		tmdev->reset = devm_reset_control_get(dev, NULL);
++		tmdev->reset = devm_reset_control_get_shared_deasserted(dev, NULL);
+ 		if (IS_ERR(tmdev->reset))
+ 			return PTR_ERR(tmdev->reset);
  
-+	if (tmdev->chip->has_gpadc_clk) {
-+		tmdev->gpadc_clk = devm_clk_get_enabled(&pdev->dev, "gpadc");
-+		if (IS_ERR(tmdev->gpadc_clk))
-+			return PTR_ERR(tmdev->gpadc_clk);
-+	}
-+
- 	if (tmdev->chip->needs_sram) {
- 		struct regmap *regmap;
- 
+-		ret = reset_control_deassert(tmdev->reset);
+-		if (ret)
+-			return ret;
+-
+-		ret = devm_add_action_or_reset(dev, sun8i_ths_reset_control_assert,
+-					       tmdev->reset);
+-		if (ret)
+-			return ret;
+-
+ 		tmdev->bus_clk = devm_clk_get_enabled(&pdev->dev, "bus");
+ 		if (IS_ERR(tmdev->bus_clk))
+ 			return PTR_ERR(tmdev->bus_clk);
 -- 
 2.49.0
 
