@@ -1,61 +1,60 @@
-Return-Path: <linux-pm+bounces-30006-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30007-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B2E9AF6902
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 06:06:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92F30AF695C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 07:14:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDEBD521D9E
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 04:06:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E0F47A406F
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 05:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64747289819;
-	Thu,  3 Jul 2025 04:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB09428DEF0;
+	Thu,  3 Jul 2025 05:14:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204BB27CCE7;
-	Thu,  3 Jul 2025 04:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20452AE99;
+	Thu,  3 Jul 2025 05:14:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751515605; cv=none; b=jIlR3ASD9N8aJwi0fj8uGeD5SNa7REsygsMeWCqoEa/GDwA7hFcfXAfTOcEweAxr+O50i7H2HAGqT/vevS7vJi+qNTjStCPVxVqvqZZiUDaJ1yepumUk/HA74GO9OGBCCdYePcHAXMs6XzsLXNXWM2+XAUl+tYxByalUN3IomJU=
+	t=1751519684; cv=none; b=S5bMwvyjgVySSSyHebj4m7/X51YyLcNrt+shqp8k1frO4noMgckLwoSDsBU28r7VoBmh0F4wOpSsGKo3+9VQha3Vm4q587eAqXhGqVtgxFsCLj2FS1S8VPt23GERuCRRMFDQvTGF8N38TkT8S2g08Xw1gF8qNptn8u9q8WJnc8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751515605; c=relaxed/simple;
-	bh=iS0wN2Yp0X7jntgoyl3sfkNmwNrYwe5UFBjTK78uceg=;
+	s=arc-20240116; t=1751519684; c=relaxed/simple;
+	bh=Bj0TUjVVYrkGFkiDXHNzZs9oAAjx/5DoN5FUsmoPB0A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FT8UzxdFxqoim2XPYb4gqId30gpn+c4qc0UH4yRTMfvwTrfOVfDrPsb2Z3xc7XNVjnSKAsOFfqy10ceELsi5bMxmeWdZy9/ytXQvMZsqbNVDeVnlTs6Epc4U58h0GHIuVAYAWid7OA3BIh3BnVJIamYC4TvX7UGdYizrbTd3y4Y=
+	 In-Reply-To:Content-Type; b=T+hV3lOUYZ0fGFQv3hxNSDzrSzVW1yktfvLKopPqncKGly8xCD7YkqdJTru97JyUCo5GtTmOdXO/Clf/2mMo/1d3Nv7LPkax1TN+QTijBeuy19PYECbwMgJ+zknmRkh4VNTktkuUXqBMBU9dfLhuDarH1y78iBsBuOO9KjI8HQo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1c89bf4257c311f0b29709d653e92f7d-20250703
-X-CID-CACHE: Type:Local,Time:202507031108+08,HitQuantity:1
+X-UUID: 9b57f74057cc11f0b29709d653e92f7d-20250703
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:a8956ad4-1408-452a-aa1d-55176fd265e6,IP:0,U
+X-CID-O-INFO: VERSION:1.1.45,REQID:ba98264a-1ba8-4481-a040-005e572265bf,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:b40b5519b5e8ef877da3e0894f364ad6,BulkI
+X-CID-META: VersionHash:6493067,CLOUDID:40c293299c91643a264805fa5bb4a241,BulkI
 	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
 	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
 	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 1c89bf4257c311f0b29709d653e92f7d-20250703
+X-UUID: 9b57f74057cc11f0b29709d653e92f7d-20250703
 Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
 	(envelope-from <zhangzihuan@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 1294250978; Thu, 03 Jul 2025 12:06:35 +0800
+	with ESMTP id 1366317938; Thu, 03 Jul 2025 13:14:33 +0800
 Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 89623E008FA2;
-	Thu,  3 Jul 2025 12:06:35 +0800 (CST)
-X-ns-mid: postfix-686601CB-4747671
+	by mail.kylinos.cn (NSMail) with SMTP id C68DFE008FA2;
+	Thu,  3 Jul 2025 13:14:33 +0800 (CST)
+X-ns-mid: postfix-686611B8-5402731
 Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id E894AE008FA1;
-	Thu,  3 Jul 2025 12:06:34 +0800 (CST)
-Message-ID: <c1fd270f-624f-4a63-b54a-d2d98f06cb49@kylinos.cn>
-Date: Thu, 3 Jul 2025 12:06:34 +0800
+	by mail.kylinos.cn (NSMail) with ESMTPA id 716CDE008FA1;
+	Thu,  3 Jul 2025 13:14:31 +0800 (CST)
+Message-ID: <9d7f88da-d8eb-4c2b-9380-30b6a0a46076@kylinos.cn>
+Date: Thu, 3 Jul 2025 13:14:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,95 +62,63 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] PM: suspend: Assign pm_suspend_target_state
- earlier for valid debug logs
+Subject: Re: [PATCH v1] PM: hibernate: Avoid redundant resume_device
+ assignment in resume_store()
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: pavel@kernel.org, len.brown@intel.com, linux-pm@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20250619035355.33402-1-zhangzihuan@kylinos.cn>
- <20250619035355.33402-4-zhangzihuan@kylinos.cn>
- <CAJZ5v0hEzTfZZgrgyo4NNnXj+eFrAnJgmP9Ls7kB3GM3c1V2Mw@mail.gmail.com>
+References: <20250530100036.11954-1-zhangzihuan@kylinos.cn>
+ <CAJZ5v0h1xAx7HRRgH_7=D8U71j3yU1qji_5vYyt0ym+Hnrne6g@mail.gmail.com>
 From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <CAJZ5v0hEzTfZZgrgyo4NNnXj+eFrAnJgmP9Ls7kB3GM3c1V2Mw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0h1xAx7HRRgH_7=D8U71j3yU1qji_5vYyt0ym+Hnrne6g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-Hi=C2=A0Rafael,
+Hi Rafael,
 
-=E5=9C=A8 2025/7/3 02:58, Rafael J. Wysocki =E5=86=99=E9=81=93:=E3=80=80 =
-=E3=80=80 =E3=80=80 =E3=80=80=E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=
-=80 =E3=80=80 =E3=80=80 =E3=80=80=20
-=E3=80=80 =E3=80=80 =E3=80=80=E3=80=80
->> On Thu, Jun 19, 2025 at 5:54=E2=80=AFAM Zihuan Zhang <zhangzihuan@kyli=
+=E5=9C=A8 2025/7/3 02:51, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> On Fri, May 30, 2025 at 12:00=E2=80=AFPM Zihuan Zhang <zhangzihuan@kyli=
 nos.cn> wrote:
+>> In resume_store(), if the device number written to /sys/power/resume
+>> is the same as the current swsusp_resume_device, we can skip reassignm=
+ent.
+>> This avoids unnecessary locking and improves efficiency slightly.
 >>
->> pm_suspend_target_state is used in debug logs inside enter_state(), bu=
-t
->> it is only assigned inside suspend_devices_and_enter(), which is too l=
-ate..
+>> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+>> ---
+>>   kernel/power/hibernate.c | 3 +++
+>>   1 file changed, 3 insertions(+)
 >>
->> This causes early pm_pr_dbg() output to either show incorrect state or
->> nothing at all, making suspend debugging harder.
+>> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+>> index 519fb09de5e0..504a1c2465ce 100644
+>> --- a/kernel/power/hibernate.c
+>> +++ b/kernel/power/hibernate.c
+>> @@ -1291,6 +1291,9 @@ static ssize_t resume_store(struct kobject *kobj=
+, struct kobj_attribute *attr,
+>>          if (error)
+>>                  return error;
 >>
->> Assign pm_suspend_target_state at the beginning of enter_state() to en=
-sure
->> early log output is meaningful.
->>
->> Signed-off-by: Zihuan Zhang
->>   ---
->> kernel/power/suspend.c | 3 +++
->> 1 file changed, 3 insertions(+)
->>
->> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
->> index 76b141b9aac0..16172ca22f21 100644
->> --- a/kernel/power/suspend.c
->> +++ b/kernel/power/suspend.c
->> @@ -584,6 +584,8 @@ static int enter_state(suspend_state_t state)
->> if (!mutex_trylock(&system_transition_mutex))
->> return -EBUSY;
->>
->> + pm_suspend_target_state =3D state;
+>> +       if (dev =3D=3D swsusp_resume_device)
+>> +               return n;
 >> +
->> if (state =3D=3D PM_SUSPEND_TO_IDLE)
->> s2idle_begin();
->>
->> @@ -616,6 +618,7 @@ static int enter_state(suspend_state_t state)
->> suspend_finish();
->> Unlock:
->> filesystems_thaw();
->> + pm_suspend_target_state =3D PM_SUSPEND_ON;
->> mutex_unlock(&system_transition_mutex);
->> return error;
->> }}
->>
+> The main purpose of this function is to run software_resume(), not to
+> set swsusp_resume_device.  You're breaking it with this change.
+Thank you for the feedback.
+
+You=E2=80=99re absolutely right =E2=80=94 I misunderstood the primary rol=
+e of=20
+resume_store() as being only to update swsusp_resume_device, and I=20
+overlooked that its main purpose is to trigger software_resume().
+
+I=E2=80=99ll drop this patch accordingly. Thanks again for pointing this =
+out.
+
+>>          sleep_flags =3D lock_system_sleep();
+>>          swsusp_resume_device =3D dev;
+>>          unlock_system_sleep(sleep_flags);
 >> --
->> =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =
-=E3=80=80 =E3=80=80 =E3=80=80=E3=80=80=20
-> Good catch, but you should remove the existing assignments at the
-> same time. =E3=80=80
-Thanks for your review and feedback.
-
-You=E2=80=99re right that ideally pm_suspend_target_state should only be=20
-assigned once in enter_state(), and I initially considered removing the=20
-original assignment in suspend_devices_and_enter() as well.
-
-However, I noticed that some drivers and subsystems may rely on the=20
-value of pm_suspend_target_state later in the suspend path, not just for=20
-logging but also for decision-making (e.g. conditional behavior based on=20
-suspend state). Because of this, I was cautious about removing the=20
-original assignment inside suspend_devices_and_enter() without verifying=20
-all potential dependencies.
-
-Would you consider it acceptable to keep both assignments for now =E2=80=94=
- one=20
-early for logging purposes, and one later to ensure correctness and=20
-compatibility =E2=80=94 or do you think it=E2=80=99s preferable to remove=
- the later one=20
-and carefully audit all usage sites?
-
-Happy to adjust accordingly based on your recommendation.
-
+>> 2.25.1
+>>
 Best regards,
 Zihuan Zhang
-
 
