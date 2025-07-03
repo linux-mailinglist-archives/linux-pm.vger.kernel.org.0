@@ -1,96 +1,115 @@
-Return-Path: <linux-pm+bounces-30059-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30060-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43D02AF7974
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD616AF79ED
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 17:07:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B67A164FF3
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 14:59:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CA0116D7B5
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 15:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED17C2EE29D;
-	Thu,  3 Jul 2025 14:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D892E7BBF;
+	Thu,  3 Jul 2025 15:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AOBudWEd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ciw/whlb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E332E7F1A;
-	Thu,  3 Jul 2025 14:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794C12B9A6;
+	Thu,  3 Jul 2025 15:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751554758; cv=none; b=WqAu1VZC4y20JBE83S29zx/KjNZyrsf1lFhrr4KJ926x7QPCZivhgeVif/FZ6KtopUbyNMD6ReWSAG5WJsiDH/X5jQLJ5RDpJJfEM5thPX/ZfxRl01YcoCN5WZlKudhNXpGKaW3n8nn+cK79NkybmYjmF/USf22xVYmmV3JoH7k=
+	t=1751555036; cv=none; b=syo0fGgVxW+5OOt3rAVDw98FRBKMooG5/queiako1tXZpqVaCw7SP9QA2IUq4DdbsDbhzVkvwlquoDsdOkfwN17BnuTXE/ijAE28Q8o+0lAcqCe/3D7cnYtVhLKKyXn7OXhwEWamr3ywrkOavg4wgUsHeKz7hhMVuu62ewShr6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751554758; c=relaxed/simple;
-	bh=ff9oYNuQUjEFu3J8AsdAlUyzg1ssWZNtQ/uwSo+turY=;
+	s=arc-20240116; t=1751555036; c=relaxed/simple;
+	bh=agq/qe8sXsc3dCu6lab7Vni2cwMdaK7LfiV13CgmH/0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TGOhq7OYLSHMn46hAPKa59DlhkwubZQuBIPtOKq8l+rQZJbGuYCLdIJmgawpQ7VgOv+5rojgJi/dIeZXfdFG1a3b2+sHYxGCHjWN7BT6sDlF0FMcdQEIzccAunIrwDsscIHPKvNM1nwgqCWrAFdclSDdcB79vrF4gNPRyKDF0Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AOBudWEd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891D3C4CEE3;
-	Thu,  3 Jul 2025 14:59:17 +0000 (UTC)
+	 To:Cc:Content-Type; b=YfilRFQfP9PbJ5UayoyUJ2Ue5V8bc8CIef1t21MDX7poVsMtq5qebEK80/hYWh4ajbgni6elh0L624mRa0MfZtaiSiJ1zTEO4gdPHMLVEnfoxuzW7iy4ZwirqVAEN1usaXpkwLGBAaT5zSlzvbbgyGZUwVnGSpoIxdNaJlLJVdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ciw/whlb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45276C4CEED;
+	Thu,  3 Jul 2025 15:03:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751554757;
-	bh=ff9oYNuQUjEFu3J8AsdAlUyzg1ssWZNtQ/uwSo+turY=;
+	s=k20201202; t=1751555036;
+	bh=agq/qe8sXsc3dCu6lab7Vni2cwMdaK7LfiV13CgmH/0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AOBudWEdghvvFNqAgPtFc9aWgb2/Vj/cDemwuvmMarZm1zVc2M+Elt27stm5k9jW2
-	 KXuAhX5gayBRRg+LPnyOuckH/8Fqgnb4cKUpwvF0pkK5lZjvnfBc2tQxs56vK78zTQ
-	 LCHiYZFsEYD3R7KPyK5//ypLjsL2ShtF6JratXPoZ0Ry/Ri923TOvs7X/uHTQYiUnz
-	 C6JI51vTeN2vKXBHugpKgXdmMsZuopI+UDd/wtsjZe7v5go7W5ODw5oUiZzbryTsUX
-	 XWl/7IdHU6sIIg7sL94C3smdIQo6aOheAbQ4PpA8yR13PRyjLMWU//BGyH7DdBfj35
-	 3pvuZHYhBvB4A==
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-40ba2ad38ddso31733b6e.0;
-        Thu, 03 Jul 2025 07:59:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU9/7U4wVSUTRMczGC8XyTfgC+YD6P0avcHNei1FFLvgO2Mx0kNFFa3ZRe1rLjLKToC9AaOChyJqXo=@vger.kernel.org, AJvYcCW6R70nD5J/TM8GU2QMtAoGKY3QCE058SLjLmcblgnGVO7qZ3LT6dwWhKFb1yl7CE81jyWTQgdvzc8AGsw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymTarp6E1KvA7v9W4eM3RiIP0dA/ySQXyW7QnvdmU9r2uzGkzm
-	eLZLTOMBvRgbsbz8OyGN5EtuRZBwfEEIoLRvOGSYoCyAiAFAJ0QnZYSlsUKKlxc1w6uMPMakuwc
-	TD0pQuNtqLTfFV/1D4wkkvq2+yZeggGg=
-X-Google-Smtp-Source: AGHT+IGUNnWc6ttFUV9nW/7DEV1wUgCWbL6Ei/UD+4lf3y4vuTNqy/P7bfhxYpg/UYeBmDCDsSuXEzZstvwl1oECUQA=
-X-Received: by 2002:a05:6808:1b90:b0:3f8:3489:d93d with SMTP id
- 5614622812f47-40b88816cbemr5270609b6e.25.1751554756905; Thu, 03 Jul 2025
- 07:59:16 -0700 (PDT)
+	b=Ciw/whlbBkJv7CbcN4DuFihAaw2gPPgWaXmYRESD5tWV7Dxq3JfbGiJaSgv8BC8e5
+	 Y+fZnuyOD2ILcXwRKPPxHpOa+/elaFSnR6imbvthYByfLxQltru16nB3kM94L1plfb
+	 4esjB/XSspLFe7WkoR5BA5ZdRP2rumvE6t+HxCyDlRIzYBm06MeJVTjFQOrf4AClCR
+	 KPHGWJyZLK4PYT3SukB/LxWPobsxCz5MZKe9CTOvRGOlo43/GCNCky+jm2wfPvmga9
+	 /cAuJ1R1s1BzatidqjQbdIFLIrRuG5uamwu53ZDynYlB8b20BSFCHiA/VMv3Nu5+LH
+	 xZsmMIG2IUXOw==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2eacb421554so19956fac.1;
+        Thu, 03 Jul 2025 08:03:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVekMUOrkoR642cVJFigebJPqfK6yc/rHSg01ezeA9yRIxH8rzx8mFgQQsYqZl0FkX8ryPrkpQtv83lFmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQJczjxkjbyaqcf38c6J/3ToiuuXPcO1+aOSRcGiOO1a35he/Y
+	LwXKc2AkozoNiwUMrlEdIZWbtZenwcAbKPEpJVfPPkI2zzxRAPi3QiF8N529Z0yFiiGZ8gqAo7V
+	75+P+v6ZA69VzfNSRfvNVcpOBObW2hoY=
+X-Google-Smtp-Source: AGHT+IEqy5XefO+GaHlEDA7AIKCnaU/Uvzlfmt0/ui1TVGFVpiq35KhvPC9/VafsQGyHh8koBGWrsQ4D7WyTcMOWgeI=
+X-Received: by 2002:a05:6870:2420:b0:2eb:adf2:eb2 with SMTP id
+ 586e51a60fabf-2f76ca89a81mr2583505fac.36.1751555035383; Thu, 03 Jul 2025
+ 08:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250623133402.3120230-1-zhenglifeng1@huawei.com>
- <20250623133402.3120230-4-zhenglifeng1@huawei.com> <CAJZ5v0jvdttYihgNcTF=VVnd2K5QsC+W9XJJanqy4F_PXw+u2g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jvdttYihgNcTF=VVnd2K5QsC+W9XJJanqy4F_PXw+u2g@mail.gmail.com>
+References: <20250626154244.324265-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20250626154244.324265-1-andriy.shevchenko@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 3 Jul 2025 16:59:05 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jKY2og0bSwq97fwu7W690E-GeYxGkeju3kq4DVgOFCaw@mail.gmail.com>
-X-Gm-Features: Ac12FXxgW8YzL8MpjxfmQmYqohwRl87wSd5TsFBz8agO_QGk5OPbcTw6P0Vv3dY
-Message-ID: <CAJZ5v0jKY2og0bSwq97fwu7W690E-GeYxGkeju3kq4DVgOFCaw@mail.gmail.com>
-Subject: Re: [PATCH 3/7] cpufreq: Contain scaling_cur_freq.attr in cpufreq_attrs
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, viresh.kumar@linaro.org, 
-	ionela.voinescu@arm.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com
+Date: Thu, 3 Jul 2025 17:03:44 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hQLbKZ-DBWcQ-VKryV24Lc-=nsqJQ_fpkystvq6kVCbw@mail.gmail.com>
+X-Gm-Features: Ac12FXzVKYTQZ3rI1JVwVCd722cmyjy9biQf3ZlkFDmrXr5Lz0hYK0O90PHnecw
+Message-ID: <CAJZ5v0hQLbKZ-DBWcQ-VKryV24Lc-=nsqJQ_fpkystvq6kVCbw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] PM: Don't use "proxy" headers
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 23, 2025 at 5:30=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Thu, Jun 26, 2025 at 5:42=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Mon, Jun 23, 2025 at 3:34=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei=
-.com> wrote:
-> >
-> > After commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file=
- for
-> > set_policy() drivers"), the file scaling_cur_freq is exposed to all
-> > drivers. No need to create this file separately. It's better to be
-> > contained in cpufreq_attrs.
+> Update header inclusions to follow IWYU (Include What You Use)
+> principle.
 >
-> Fair enough.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/linux/pm.h | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index f0bd8fbae4f2..938b1b446a5d 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -8,14 +8,15 @@
+>  #ifndef _LINUX_PM_H
+>  #define _LINUX_PM_H
+>
+> -#include <linux/export.h>
+> -#include <linux/list.h>
+> -#include <linux/workqueue.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/wait.h>
+> -#include <linux/timer.h>
+> -#include <linux/hrtimer.h>
+>  #include <linux/completion.h>
+> +#include <linux/export.h>
+> +#include <linux/hrtimer_types.h>
+> +#include <linux/mutex.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
+> +#include <linux/util_macros.h>
+> +#include <linux/wait.h>
+> +#include <linux/workqueue_types.h>
+>
+>  /*
+>   * Callbacks for platform drivers to implement.
+> --
 
-And so applied as 6.17 material along with the [4/7].
-
-The other patches in the series need more work IMV.
-
-Thanks!
+Applied as 6.17 material, thanks!
 
