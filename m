@@ -1,122 +1,112 @@
-Return-Path: <linux-pm+bounces-30079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD75AAF7FFE
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 20:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7F2DAF8012
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 20:34:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 572BA581F1C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 18:28:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CF6A582E6E
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 18:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB4A2E6D1A;
-	Thu,  3 Jul 2025 18:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C582F237F;
+	Thu,  3 Jul 2025 18:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nfraprado@collabora.com header.b="lB5lACBU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0GOz2Dg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8955528E616;
-	Thu,  3 Jul 2025 18:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751567308; cv=pass; b=Xnv3yBKLCIdRJk3fQZyyFz4CvsRrxdDqDLLUn8iAXgglriWvWA6e/djjhL9yuCNYsm8uBETwOUSb0xqs4QrBpCGqye5A4CCfVVEraguj/BrzBqHzSgVCxxPBPKjbXWYfJmgwaolZAFEGcPla9ONCnFx+6wKClQNksKY+N+y7M3Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751567308; c=relaxed/simple;
-	bh=EIGTeSFGl+y3lSh82LnuwOwDvyKO/NJTdsF2vBpDxJ0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kOI843MKyM6YVuLsI1QxO8QmxAW1U1Gd/6tuQ7HcCwAmMrYOBZieqIr0hJZTx2zP4edATqVagHt78ipdB632TG0fCsBTLyauYv9GA0CssMo7KH9XbVAgkyhas4CvtIFDa/Yb0cPtGs0z3dPFJj7sBlVXJ32A7Gs7JQZz3Zrs/hw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nfraprado@collabora.com header.b=lB5lACBU; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751567269; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=EAwRzK/atLZp81y99CJDlb538jQm470pWJL4qPIlO8yDaz/DWV2sIUxttUGQHjEl44LLYuE4sHAVToGp3ItB4hvFekOq1tkPgSHMhWmyBO0b+edEooKS8kV0ovrSYr3icN1n4sMdmnLop98XqG7Sk9kEt8I1Ab6bAzG/USpdsiA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751567269; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=EIGTeSFGl+y3lSh82LnuwOwDvyKO/NJTdsF2vBpDxJ0=; 
-	b=oB0LfmZBG66ZUZ/wv2kO3rQ97NauunYjM3/lZhpzefJ4wUSNUf15RztBrKGu7NBuyE4lFC5hwuyj0wBCPTHU3df5Eiq/AV1roJVSMbp0NyYEYnzBRPBNR0yKbmGWAgK0ZHyWewIRMIjFESDHy9RjAEGPSiA7vsdR0h17mRUOduQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nfraprado@collabora.com;
-	dmarc=pass header.from=<nfraprado@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751567269;
-	s=zohomail; d=collabora.com; i=nfraprado@collabora.com;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=EIGTeSFGl+y3lSh82LnuwOwDvyKO/NJTdsF2vBpDxJ0=;
-	b=lB5lACBUqAuSqEfnmk/y2Ek/zH4biccP08KIK/ORsFGlJv/GtpNvLOKD96lJEfkC
-	io0PymrNsahr9NRUjcE28owwMk57ai76yrZR6iFrzMzFSYWU6z6+jjXEMIOVNENEopU
-	OUosdZjl2cu7sFBOMDJ6QRDtaa1d5+CmypeIdqss=
-Received: by mx.zohomail.com with SMTPS id 1751567267207310.7183175991179;
-	Thu, 3 Jul 2025 11:27:47 -0700 (PDT)
-Message-ID: <5bfcd5e059e86a96807426bfc6543209d09b557f.camel@collabora.com>
-Subject: Re: [PATCH 00/10] pmdomain: Partial refactor, support modem and RTFF
-From: =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado" <nfraprado@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	linux-mediatek@lists.infradead.org
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	matthias.bgg@gmail.com, ulf.hansson@linaro.org, y.oudjana@protonmail.com, 
-	fshao@chromium.org, wenst@chromium.org, lihongbo22@huawei.com, 
-	mandyjh.liu@mediatek.com, mbrugger@suse.com, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel@collabora.com
-Date: Thu, 03 Jul 2025 14:27:45 -0400
-In-Reply-To: <20250703110247.99927-1-angelogioacchino.delregno@collabora.com>
-References: <20250703110247.99927-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEC91D5CE5;
+	Thu,  3 Jul 2025 18:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751567603; cv=none; b=k0Dv9SVc8qbrwo2JwNI/x5sDRT+PoJfVlI3NDe0fymPj15b81Pdks+ccSmRCuC/KcyStlXrcmJ/7Osst0kDC2xaY8NnR2DvnoX3IL5aKrc5vq/CXr0b+7ctfj9yHbwb2b70xSwRHeSK8RWecrSBQ9d8GdWmmaR/OdMa9oh+/Vs0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751567603; c=relaxed/simple;
+	bh=iY85BkZVGgoxJEu88tGytmKfxLrT4qHZK8r+PttF4yU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q8Pf8wJ8pLNmOEoBOsHEozJm8h4VtianqnzvB6z1HLssNYwQEZPiREJVjAY/kqtPLBx6SuLBGOrMkgmiv+zwdfn54IfCxju3d24N8aLUCJ3j9QgVW+GR/JGS/5dZvZZOX1z1BjvHGxzBkDdFYaCahDC24lMA/Esz3oyIOIYNvEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0GOz2Dg; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-32b50f357ecso2048771fa.2;
+        Thu, 03 Jul 2025 11:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751567600; x=1752172400; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y8mXa+t6YUXZo7Fg3Xqd/oUrkEQP+PUVzRz3Oo94FoU=;
+        b=e0GOz2DgP5pF+RMhwiQYdixVuuBiNMs+KoTEbRTrWRmzIt+Zcxl+tYAD9+dQXvUSvm
+         P3uWgybfW6eLZnHljcWs4bNWBt9XKri7T8sEcRPZWWnR323K8MeGYor9oaMf8dVxFVlh
+         6qgxMiO/KeNbSTIiGY+MO/yCRPWviSxI3xHMJ7tyDqRC22OvX9/czYbAwD3J4pOhnp86
+         Tg1NS7mkWC59Q8jBrOQJgepka6Q6iGZB9+//vuF/KWmBms1QXcYP68lallhHc6gOF5Jp
+         in/pr0gpj7IET9vCMiDDIfJ3I4ae01RQ/MBPdeiyzV1rxVCyKUuqeGz0uWZs3ggtgPD5
+         od3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751567600; x=1752172400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y8mXa+t6YUXZo7Fg3Xqd/oUrkEQP+PUVzRz3Oo94FoU=;
+        b=nQSc45sJ8AfaVfp7WzLCvNz9yhaaM4Z4ICVn1aTwvo4jnV9c5sIuCAWVba7HeizdrU
+         mzhYKQe4OUnHLO7vEXBK9B1qfIhvcVVUBZJA6DVRcLY5TUiD6GrQPtsnmMchG49a6cL6
+         jgMIX9yOCiu3dfHklziP4CBL8kMgYj4lKeGJ+KazKJrF0IA2OxxdKVDK+71AT1Ovj6J4
+         1vA/abSkSQivaXPmW2DQpByF1c62HirBoqVBcNzlgaeP0Yhli+X8uNzyyOk44m6QSJof
+         ckNf4lmzVeQm9B0bmKinitTxbBfRahuekGXqhFsYUwEDul4obswfuU2msZ+dPZ3+3s7v
+         eJrA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/U/jJQEdWRNF3FysZZ9t9sVGVJnTgIDQEhbscDrqxtWt1LIuo4FBFjettQy0pSTQQYUHd7gRdh34=@vger.kernel.org, AJvYcCVwzVGoU2qZanipLMfhkmsrDikgetTLl/tqSJPjrKFoiXgWEg4UdFGNp842fYklAM5zhcTDqKaKfcupQR0=@vger.kernel.org, AJvYcCXQiCo/ZSF/zP6IUj20hkFvidgodjyb5h9IyNQLBL2g+GpohyZC6mL62RM5fPyOlcq/3T82fFzZ2kQOPSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTrD81w0fIvRIPKPVDHaqicbOCMQkMx7lRytzsxZn0yiUsGuoy
+	kXZ6vR51ksbvbQ6rhEXQk7gZzoZzjfdxP0xqbJCEt2lOOjqKW9Jc7JFsuoC00BF7BV2LKdm/dAi
+	V1beIDISRVNXR/lG5dZhFJqpRhQP4Q4Dy3y4wUuY=
+X-Gm-Gg: ASbGncsDfnZVviGZdhIwP+b/9e+RjNtdZV4E+4LtR4FW7xl/SLCavp+ZCCWc+gnMuD0
+	ms/zIzwQ4WRHfi3LAxtYcabQ8ozpgWH5uAM4/VD8Vb8cFGtGeJijD+MHxG0Hl8YcZ3DN34jI1Q5
+	8j8DbapVl7Y2eDPxPN3qysjhkJLKMKoWuGP588BseJYFk=
+X-Google-Smtp-Source: AGHT+IF4aaN60H2XWg6v+/Qj8Z244EqH2cUzPIpYmYhJXoZrcvEZvdNgze4bbKHNl+FZmlYaAo5AYWk3DruHq8QO/tQ=
+X-Received: by 2002:a05:6512:1381:b0:553:37e7:867c with SMTP id
+ 2adb3069b0e04-55628347062mr3215354e87.50.1751567599796; Thu, 03 Jul 2025
+ 11:33:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+References: <20250702-tegra124-cpufreq-v5-0-66ab3640a570@gmail.com>
+ <20250702-tegra124-cpufreq-v5-3-66ab3640a570@gmail.com> <20250702081207.bzru3mtl56ns372v@vireshk-i7>
+In-Reply-To: <20250702081207.bzru3mtl56ns372v@vireshk-i7>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Thu, 3 Jul 2025 13:33:08 -0500
+X-Gm-Features: Ac12FXzz5Yv8oiI05qYO9V66A8XCIkXZSe5g1pk_3izL2EhDAowW1MUYRp6QlbM
+Message-ID: <CALHNRZ_jzSGF2xTNMt_giEa4T6r6+qfhp-EubTViqYL7jYf=sw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] cpufreq: tegra124: Allow building as a module
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-07-03 at 13:02 +0200, AngeloGioacchino Del Regno wrote:
-> This series is a subset of [1], leaving out the Hardware Voter
-> specific
-> bits for MT8196 until the discussion around it reaches a conclusion.
-[..]
-> Compared to v1 in [1]:
-> =C2=A0- Changed mediatek,bus-protection to access-controllers
-> =C2=A0=C2=A0 as suggested by Rob (thanks!)
-> =C2=A0- Added commits to document #access-controller-cells on all of
-> =C2=A0=C2=A0 the access control providers
-[..]
-> [1]
-> https://lore.kernel.org/all/20250623120154.109429-1-angelogioacchino.delr=
-egno@collabora.com
->=20
-> AngeloGioacchino Del Regno (10):
-> =C2=A0 dt-bindings: memory: mtk-smi: Document #access-controller-cells
-> =C2=A0 dt-bindings: clock: mediatek: Document #access-controller-cells
-> =C2=A0 dt-bindings: power: mediatek: Document access-controllers property
-> =C2=A0 pmdomain: mediatek: Refactor bus protection regmaps retrieval
-> =C2=A0 pmdomain: mediatek: Handle SoCs with inverted SRAM power-down bits
-> =C2=A0 pmdomain: mediatek: Move ctl sequences out of power_on/off
-> functions
-> =C2=A0 pmdomain: mediatek: Add support for modem power sequences
-> =C2=A0 pmdomain: mediatek: Add support for RTFF Hardware in MT8196/MT6991
-> =C2=A0 pmdomain: mediatek: Convert all SoCs to new style regmap retrieval
-> =C2=A0 arm64: dts: mediatek: Convert all SoCs to use access-controllers
+On Wed, Jul 2, 2025 at 3:12=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> On 02-07-25, 02:46, Aaron Kling via B4 Relay wrote:
+> > +static struct platform_device *platform_device;
+>
+> Maybe initialize this to an error value...
+>
+> > +static void __exit tegra_cpufreq_module_exit(void)
+> > +{
+> > +     if (platform_device && !IS_ERR(platform_device))
+>
+> ... and then this could be simplified ?
+>
+> Or use !IS_ERR_OR_NULL .
 
-As already pointed out by rob's bot you're missing adding the
-properties to
+Latter sounds better to me. I'll queue that up and send a new patchset
+in a couple days, pending any further comments.
 
-mediatek,mt8195-sys-clock.yaml
-mediatek,mt8188-sys-clock.yaml
-
-on patch 2. But other than that, for the whole series (since the tag
-wasn't added from the previous version):
-
-Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-
---=20
-Thanks,
-
-N=C3=ADcolas
+Aaron
 
