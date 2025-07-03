@@ -1,160 +1,166 @@
-Return-Path: <linux-pm+bounces-30013-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30014-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3606BAF6DC0
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 10:55:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23263AF6EA8
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 11:29:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8BFF5207DA
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 08:55:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AAF03B4954
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 09:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056B92D3740;
-	Thu,  3 Jul 2025 08:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="X/p6n1PL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DEF92D77F5;
+	Thu,  3 Jul 2025 09:29:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5676E299ABF;
-	Thu,  3 Jul 2025 08:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF592AEFE;
+	Thu,  3 Jul 2025 09:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751532901; cv=none; b=rRQg4s2y6tFNp3K7TFlNXEhh/G25vejZWHZ1O5sgBxzSPFfyBjzXCNgeNOD0PI2iCHS6FRLsnzON2s4tbuXx9DjO45ZFPgd+56JTez5tCh6g2hJ7iRYvPCVp+rJZTKKrG2yZh+wyEB3U9YMF8aU//MSlIjSLmTPFYHEeQ7lJbig=
+	t=1751534969; cv=none; b=ZfqgIo0v+jA07Q5/BfaIjIFHrwkdmHUyS4hbmon7DcIEgFGi7Bsm36LcQ/hVfBCtlffJ7sq28low3xGv+DUU8mkw+a6VgSFi9tXGHhUF6KWOQG5sGxQyvc84z6oqMI9AmoCmhAPJvkTw4xC5rFgOUFtks/MCrjPiKergmTDWBqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751532901; c=relaxed/simple;
-	bh=bkxsZXQXk1taRkpxPK1WqrlT/Fj2yKejwmtoFGbPKrg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AfQM0RPTYTePhgYVNk1gleWsd1Vv4DXgaIHO1OGf3aCHiwmoKvoQrpJ6nR0vTuOY0y2fjO2uPJ7Z9CAgFqfulY65CLcD5O6rjCCmYO21yIkKfhfdPcQQSW9wHGhZkSFXpQcflTqsrXSyJ6+C+/mY4y8MTh6/qnSkJLLj9VHClR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=X/p6n1PL; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5631018o026279;
-	Thu, 3 Jul 2025 08:54:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Hc2H3+qssMR9WWuhbSr9WpF7LcGGN6jvOIx1REmjJ1s=; b=X/p6n1PLf2eKQTs6
-	US+qn7rPFmtVbrGeym0+/lnbg/pz1/9/MKouFEZjhOthjqV8lcxtIk4C7dBceyDU
-	5oMsaFnW75rlETOvra5AAw996Gt2wIf1/W5zfU5LuL0OflbautZbXfGDouWXV1xq
-	QKzA342M3x4rliNbfvmWo4dFwXzT6Mook67quTalmyrCc7rR0jY0PNomlNJ1T+Du
-	VxHXLMThvew8r73NJn7ahBTgURPpSW7t85WBmD7SmmZBin5AZ69OVZf+PyiAtHia
-	ExVV4+5szuC2bJkpqEuX7yj3d93VQqRg7S6GDwfvBmpNsN30u1h17BcsWPUTzgsu
-	iAacZg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47kd64vv56-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 08:54:56 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5638st0d021889
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 3 Jul 2025 08:54:55 GMT
-Received: from [10.217.217.109] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 3 Jul
- 2025 01:54:50 -0700
-Message-ID: <8351e7ad-6f28-4500-a0e8-8b1c3f66672d@quicinc.com>
-Date: Thu, 3 Jul 2025 14:24:44 +0530
+	s=arc-20240116; t=1751534969; c=relaxed/simple;
+	bh=IkMlE040LUQcsX0QjWWAw+3qdRDLQ2DX/AwnoQdxHP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QuEpu21BTkBHCXu1JsPedSD3oQw1Gy/zrqmIJ/yL3/AsFC1nnXenNdiJDKWLcDReeQs2RtnMfhCj+sxj0qVGE4DUQKtfRYgvjQxfMxM/qY6L0FmpYNpwC320mUYGpZYcIue/9ZBiFNhoP+XAfr+7Kdt04KBb5IsyLxdiBfL+bsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2E0E1655;
+	Thu,  3 Jul 2025 02:29:11 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C3FE3F58B;
+	Thu,  3 Jul 2025 02:29:22 -0700 (PDT)
+Date: Thu, 3 Jul 2025 11:29:12 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Prashant Malani <pmalani@google.com>
+Cc: Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aGZNVui_8xa2rHXQ@arm.com>
+References: <20250619000925.415528-1-pmalani@google.com>
+ <20250619000925.415528-3-pmalani@google.com>
+ <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com>
+ <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
+ <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
+ <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
+ <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] Add support for clock controllers and CPU scaling
- for QCS615
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Manivannan
- Sadhasivam" <mani@kernel.org>,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        "Imran
- Shaik" <quic_imrashai@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>
-References: <20250702-qcs615-mm-cpu-dt-v4-v5-0-df24896cbb26@quicinc.com>
- <20250703-daft-asparagus-gaur-e77861@krzk-bin>
- <b6cabc11-a4f0-4d8a-97b1-140be394feca@quicinc.com>
- <6df04862-2254-4181-8db7-c58023f9716c@kernel.org>
-Content-Language: en-US
-From: Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <6df04862-2254-4181-8db7-c58023f9716c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=Z+PsHGRA c=1 sm=1 tr=0 ts=68664560 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8
- a=COk6AnOGAAAA:8 a=PA7-FZJZPMTzKNGQEtQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAzMDA3MSBTYWx0ZWRfX7aqtEuf7wDVi
- fm+QUcDUfXBapxceB3SyX65FgIKIv84mRn007Sa5ehPavdMCFUpWypgpdHFdXVvq2A8crCMg1uY
- iSGP0wA1WOONEbHnHO8YBy+XuV8zeTBGfP1UvC0j/lrS/N3UKQ7HpF2AYfGZl5eHKsJ0UeIpJrD
- aNpds5RvxGdZfNQ/dfCn9NTMk8+gKwlHbKBuJ/EX9V7CuU6mndmXpIg9bQkN6kaL9FuhQwVet5h
- KKDLcmckK/ame83n6tg5IJp1GdFpcHPzHNCnS8egPkZRLRSZSb8WqkXBB1C06E9uZGf4R1OZLU5
- TXPTlrSK8fB+xDBASDSfICBUvhB966zFtVg9aSu4CjmHFW7fEqIRiQvzHYSIP9rJvLVLOGUJyTX
- vPPnzlt4DYFftGFTVU6ziKyCJzwzG67LEDPfqBwqBKb22jCrF5uRpR2P/9dF+KMbpiv6/hhQ
-X-Proofpoint-GUID: WolCNvLlDVPXjmxWy6Mi53AZ8pullkBi
-X-Proofpoint-ORIG-GUID: WolCNvLlDVPXjmxWy6Mi53AZ8pullkBi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-03_02,2025-07-02_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 clxscore=1015 malwarescore=0 mlxlogscore=619
- spamscore=0 adultscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
- impostorscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507030071
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
 
-
-
-On 7/3/2025 2:06 PM, Krzysztof Kozlowski wrote:
-> On 03/07/2025 10:28, Taniya Das wrote:
->>
->>
->> On 7/3/2025 12:51 PM, Krzysztof Kozlowski wrote:
->>> On Wed, Jul 02, 2025 at 02:43:08PM +0530, Taniya Das wrote:
->>>> Add the video, camera, display and gpu clock controller nodes and the
->>>> cpufreq-hw node to support cpu scaling.
->>>>
->>>> Clock Dependency:
->>>> https://lore.kernel.org/all/20250702-qcs615-mm-v10-clock-controllers-v11-0-9c216e1615ab@quicinc.com
->>>>
->>>> Changes in v5:
->>>> - Update the documentation for CPUFREQ-HW for QCS615.
->>>
->>> What did you update? This has to be specific, not vague.
->>
->> Sorry, this is the update: "compatible for cpufreq hardware on Qualcomm
->> QCS615 platform."
->>
-> Do you mean you added a new patch?
+Hi Prashant,
+On Wed, Jul 02, 2025 at 11:38:11AM -0700, Prashant Malani wrote:
+> Hi All,
 > 
+> Ionela, Beata, could you kindly review ?
+> 
+I've totally missed that - apologies for that. Will try to have a look within
+next day or two.
 
-Yes, Krzysztof, I’ve added a new patch. Initially, I was reusing the
-compatible string of the SC7180 SoC for QCS615, since both SoCs share
-the same hardware design. However, Dmitry and Konrad raised a valid
-point — if we ever need to handle quirks specific to a particular SoC,
-using distinct compatible entries would make that easier. Based on that,
-I’ve updated the patch accordingly.
-
--- Taniya.
+---
+BR
+Beata
+> On Fri, 27 Jun 2025 at 10:07, Prashant Malani <pmalani@google.com> wrote:
+> >
+> > Hi Jie,
+> >
+> > On Fri, 27 Jun 2025 at 00:55, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+> > >
+> > >
+> > > Hi Prashant,
+> > >
+> > > Sorry for a late reply as I'm busy on other stuff and this doesn't seem to
+> > > be an easy issue to solve.
+> > >
+> >
+> > No worries, the ping was in general to all the people in the thread :)
+> >
+> > > For the latest kernel, [1] provides a new 'cpuinfo_avg_freq' sysfs file to
+> > > reflect the frequency base on AMUs, which is supposed to be more stable.
+> > > Though it usually shows 'Resource temporarily unavailable' on my platform
+> > > at the moment and looks a bit buggy.
+> > >
+> > > Most of the related discussions can be found in the reference links in [1].
+> > > [1] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.michalska@arm.com/
+> > >
+> > > As reported, the current frequency sampling method may show an large error
+> > > on 1) 100% load, 2) high memory access pressure, 3) idle cpus in your case.
+> > >
+> > > AFAICS, they may all come from the unstable latency accessing remote AMUs
+> > > for 4 times but delaying a fixed 2us sampling window.
+> >
+> > I tried applying [1] which consolidates the ref and del register reads
+> > into 1 IPI, but that did not make a difference. The values still
+> > fluctuate wildly.
+> >
+> > >
+> > > Increase the sampling windows seems to help but also increase the time
+> > > overhead, so that's not favoured by people.
+> > >
+> >
+> > This experiment did not appear to help in our case. It's a point in
+> > the direction that this method is inherently inaccurate during idle
+> > situations.
+> >
+> > > On 20/06/2025 13:07, Prashant Malani wrote:
+> > > > Hi Jie,
+> > > > On Thu, 19 Jun 2025 at 20:53, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+> > > >> On 19/06/2025 08:09, Prashant Malani wrote:
+> > > >>> t0: ref=899127636, del=3012458473
+> > > >>> t1: ref=899129626, del=3012466509
+> > > >>> perf=40
+> > > >>
+> > > >> In this case, the target cpu is mostly idle but not fully idle during the
+> > > >> sampling window since the counter grows a little bit.
+> > > >> Perhaps some interrupts happen to run on the cpu shortly.
+> > >
+> > > Check back here again, I don't think it 'mostly idle'.
+> > > Diff of ref counters is around 2000, and I guess the ref counter freq is
+> > > 1GHz on your platform?  That's exactly 2us, so the target cpu is mostly
+> > > busy.
+> 
+> I think it is pertinent to note: the actual act of reading the CPPC counters
+> will (at least for ACPI_ADR_SPACE_FIXED_HARDWARE counters)
+> wake the CPU up, so even if a CPU *was* idle, the reading of the counters
+> calls cpc_read_ffh() [1] which does an IPI on the target CPU [2] thus waking
+> it up from WFI.
+> 
+> And that brings us back to the original assertion made in this patch:
+> the counter values are quite unreliable when the CPU is in this
+> idle (or rather I should correct that to, waking from WFI) state.
+> 
+> This work around probably hits more types of implementations, but
+> I can't see another way to limit it to only ARM FFH. Open to suggestions!
+> 
+> [1] https://elixir.bootlin.com/linux/v6.15.4/source/arch/arm64/kernel/topology.c#L482
+> [2] https://elixir.bootlin.com/linux/v6.15.4/source/arch/arm64/kernel/topology.c#L453
+> 
+> Best regards,
+> 
+> -Prashant
+> 
+> 
+> -- 
+> -Prashant
 
