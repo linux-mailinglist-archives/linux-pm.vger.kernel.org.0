@@ -1,251 +1,212 @@
-Return-Path: <linux-pm+bounces-30083-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30084-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED00BAF8139
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 21:17:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C82A3AF816A
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 21:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E1FE178463
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 19:17:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF07C4873B8
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 19:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20CC02F2C6B;
-	Thu,  3 Jul 2025 19:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 004AA2FF465;
+	Thu,  3 Jul 2025 19:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XHYN9jhC"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="hbg+t8G2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DB8298CA3;
-	Thu,  3 Jul 2025 19:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818C92FEE2C;
+	Thu,  3 Jul 2025 19:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751570243; cv=none; b=e4hpULlTv8t7bcb5izd1Oz44z2U0S6n7WBYTRqj0xyzfO7hwjWEXbHdd1gLgt3PtfKvenhbJEaZSg6/HuykP2x6I4aXXeFawQbI+cO+Tt5vZ4sAzqcu+cNnFhwXuJzKfXy5N03+K6BqLe/9NzmQhqiqHaK4gGs4GprZWyVeU8E8=
+	t=1751571083; cv=none; b=oSjUM3xBtxZ89d/vWFPGxoRLpSV8i1NilfhEOIRHO16vNTUEm7QDoJ3k5Chqsp0KOrJUbGBC3KQVbQlf95uMhCMBEvFUCuA6G3SttewZMO6aJMPoPQtvqjNtGLt2OYW6Lac6/XYaYN1Gwgy/VfF3+c1kx8frrIpAFpbwrSWr5oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751570243; c=relaxed/simple;
-	bh=8e3W8v7w5bcyQIgewGyA9kt9oSM7xIJIbCEFgUMyAAE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kY17xv5a+RGTC34ItuF4Zv/9IefofXjcM7XLZGIh2WYuU2R/xf/IWd+p4cSWXYTRDSxYpB4bOaOwAOQAMuYqQEpe0PIrZE/n5Gm2+mEq5rAiUaEihf1wZaWAGYoA6tEE0KrClBiJOcYL6NIZ/0UBjNPJQUGrNZqya9YEJabRa9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XHYN9jhC; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-32cd0dfbd66so1943161fa.3;
-        Thu, 03 Jul 2025 12:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751570239; x=1752175039; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R3Barr3IhXzrNTPGC2RTs5bswjpJKBTkkOzXAPniR4c=;
-        b=XHYN9jhC0PZ64ASbC6MVF6NWEpjDLlqnSZcdhSmT/MYnclnSalVM02TEqQD+LackTU
-         xf9vqY5/HLBUBCjGWwvWUSBP6FFyw4dWBHw5fMEuf8YSNYI0a16sSjgRCTDLldMZg7t1
-         DXXNRCTu3J09Q9W70UcQ5ISFZQcnB+POq+0QwsMMeCLxlTB1Jn1UJZWZZZN2cNEscqGD
-         /Pry5/Qzs/EQgG4693kddfOrBCKRYh1+kDorUaQrPAieks4IRtZu5Xt/HTJlzgt2eFZl
-         bvhR2avzKXIcPTv9oVzuAlOIEV3udetfxpdy7DHKZhL/2B9GTwnZSwM+5OwiVG+lFHPn
-         L28A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751570239; x=1752175039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R3Barr3IhXzrNTPGC2RTs5bswjpJKBTkkOzXAPniR4c=;
-        b=BKpTY2KjJVOWQiXriis4qJ0dyxkmE780Mz+n1Pdmt2PJKsyhAFneilkmZe7OP9fewU
-         XQqPYEhMniDigAVFO1wwXISv/up80QCxW51dPYKSvIg4BkO2Ja3472/CZ5XgaQZD1+QF
-         kMNqN68WnCag5hBZtqgdN7O6JszbzaQAy19TJEmYxn+KRQ40kz1roxf+odM1qrCk5M6k
-         Bu1FEjUVglkCQLnHpxLNV0ytV9MhC+ETjdQmb+j/JwirA4bQyPdvb93kvccmaN3Lbc9H
-         E7dK6Z9pwDc8JP/YUfMDfXC0g7c9UGaIvDCYlw8WCGXjudXADxQWsMh1SnFzkqgMYooK
-         g0sg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0x1prkS9Opk/WN2MBLJh7F65VUMIIlB6VgPwT7Rqh/smAanb7pGUqAeiqBrHC2D7MYybicrSUobtqS8M=@vger.kernel.org, AJvYcCV6JMO3qtQwPDMk4zcmAJ9WEuqieKKX/1QsIYYMBjkb29duPbfufwwupKIn9hHFRtqNGLsxqgl3ek9t@vger.kernel.org, AJvYcCVKvbkl0UkzHXGMwGQtFn6qFuAlvpphN45VHO0ujEI+rm9dKcdk1PnLNXs77zIlXCDPy0F6zp0H@vger.kernel.org, AJvYcCWXjm0Z8X3X/SbxUoIXAnN2JG2nMQoZ+iKaZUXQUnXeHkTi2XZRsn85/VMB2Kyu9xIfT8Bk8ZO1Y4ciNzGX@vger.kernel.org, AJvYcCWYqOBU/tN9EnPpoc9hxnO/xeOhzrM0mAdHUPrBqZf5jEi4xrqbvodUCKF8c3ZLNnPx1lEVt8YoaLBmzKoMsRc=@vger.kernel.org, AJvYcCX8MvpA5ZcXrustMrBULAJQwMtNQfj4IXXdEJe8QGny7si0t0ZwYRNDMqDh7KcfCcRESLbxjhdTGuX9@vger.kernel.org, AJvYcCXDuNADXeCALEcj31q5XyazECv/9UG1MxKUYazfeQVnSr7NQ1OEdPU4kzLi8A/D2rajf2E42MTw7ADj0+BEB9LP@vger.kernel.org, AJvYcCXFDUQ6zmK6wMMuweaBgSNFfHkEsZGrcqtD9VWrM0QOlhtKVF093oASgq2kWT1pBXjgHxVrY1ABckc=@vger.kernel.org, AJvYcCXcqXVhntPjs453kfnuO/Bno79rixzJtG1J3qQAuFFgOBXJXYWyeLckkQMKWLLldmaTHJo8rfdP75yJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRX0JkJwNF1MSdUMP8JTwneFdTf2W0To9LngexUnCRHxyKaQOK
-	hpA+GYXwjGfjd+Z66Xm4QodQtDxjlbHFcqQ6UCzStvqIERsqG8oBIdrN2IA59RjQ1fsT2Zke/CT
-	m8DynGvGj7WCGbUu5I1VQCRwi8N2nYe0=
-X-Gm-Gg: ASbGncvE/17EmCkJpr+D89P468ZRQho8gGUlYT9LXEp5nOy4cyTwEbeA4wVvN1m5NkE
-	Jc4WZcPQPIYqOWeen+HfoXnOSjQI6YL7/ibvOYwb2r5A4vxNDK6UlDVKxI2fPBi9UxnyaHuEqom
-	KGMpxDc2JDhkh8+YITxGL8NHn8m3rn9Fe96nFl8iNtUrgMzQ==
-X-Google-Smtp-Source: AGHT+IGjC0TGXLvqJzlq7AH9t/Q8+27F2aQQEGTeZqTm6S+IuruBMFgglwnG67+02iIc84HBQzCfPbXa93QdJ3TTD74=
-X-Received: by 2002:a05:651c:3c2:b0:327:fec0:b85d with SMTP id
- 38308e7fff4ca-32e00049994mr27628221fa.21.1751570238849; Thu, 03 Jul 2025
- 12:17:18 -0700 (PDT)
+	s=arc-20240116; t=1751571083; c=relaxed/simple;
+	bh=myhGY+wL/+nI6WirhjHbJl7w+o4iNkVILjdgWN6Ix4s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=lEU8r0TsV5F7Km1QqWzcB4v8JcqS4DkpuVnKxhuhV/Onf1A4NiqlDpat2FDsuYDL9Rb1DOT34KCF9jNAyWi0kFMBxpBXpoIEmP+NREM4RI5DXH6/JRrlOHzGd0SHGSYoCyicpxp2DYhgvzHG+m9I1vZUP8T0Yl6ExHSbPllD1+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=hbg+t8G2; arc=none smtp.client-ip=198.47.23.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 563JVBcC108295;
+	Thu, 3 Jul 2025 14:31:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1751571071;
+	bh=EyAAmzRd4ACr//ZBtdwhdaSbEwuX2K9tOqctWHmBUDM=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=hbg+t8G2c+PJbpP3mdlaPPXms6ITfVf8IMgdGLXzweIxJNLK29vYIKmNsixnYju4H
+	 PNrnUDr6Uz5/ZmpbjJ4l1VwJ9UhADPIZF0oFopbr2rvG89+3tK/3hEekjiFa0X50IB
+	 IfcZHU0ozK3rtBOEQhRgpcCAHSOe+gA84WDeIhwI=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 563JVBMD2640475
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 3 Jul 2025 14:31:11 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 3
+ Jul 2025 14:31:10 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Thu, 3 Jul 2025 14:31:10 -0500
+Received: from [128.247.81.19] (uda0506412.dhcp.ti.com [128.247.81.19])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 563JVAZQ1364345;
+	Thu, 3 Jul 2025 14:31:10 -0500
+Message-ID: <049171d7-d4ee-4499-8414-4b66b2c6e5b2@ti.com>
+Date: Thu, 3 Jul 2025 14:31:10 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org> <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
-In-Reply-To: <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 3 Jul 2025 15:16:42 -0400
-X-Gm-Features: Ac12FXxZ9om-DmQ4Jtb_QO5Js54rwUi8z1hnIkmX71Lj1sGPMSjTGrGnMcngSCg
-Message-ID: <CAJ-ks9nCHCBqfM5nG3XpBBsWSqGpJLexV53UGL2i3KTdRiWRXQ@mail.gmail.com>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-To: Benno Lossin <lossin@kernel.org>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] pmdomain: ti_sci: Add LPM abort sequence to suspend
+ path
+To: Ulf Hansson <ulf.hansson@linaro.org>
+CC: <nm@ti.com>, <kristo@kernel.org>, <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <d-gole@ti.com>, <vishalm@ti.com>,
+        <sebin.francis@ti.com>, <msp@baylibre.com>, <khilman@baylibre.com>
+References: <20250627204821.1150459-1-k-willis@ti.com>
+ <20250627204821.1150459-3-k-willis@ti.com>
+ <CAPDyKForKeb=uTkOXWcJea-P9c+7wQ3ZRWFYpTXk=xLoQPsQaw@mail.gmail.com>
+Content-Language: en-US
+From: Kendall Willis <k-willis@ti.com>
+In-Reply-To: <CAPDyKForKeb=uTkOXWcJea-P9c+7wQ3ZRWFYpTXk=xLoQPsQaw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Thu, Jul 3, 2025 at 2:55=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
-wrote:
->
-> On Thu, Jul 3, 2025 at 11:08=E2=80=AFAM Benno Lossin <lossin@kernel.org> =
-wrote:
-> >
-> > On Thu Jul 3, 2025 at 3:55 PM CEST, Tamir Duberstein wrote:
-> > > On Thu, Jul 3, 2025 at 5:32=E2=80=AFAM Benno Lossin <lossin@kernel.or=
-g> wrote:
-> > >> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
-> > >> > Introduce a `fmt!` macro which wraps all arguments in
-> > >> > `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This en=
-ables
-> > >> > formatting of foreign types (like `core::ffi::CStr`) that do not
-> > >> > implement `core::fmt::Display` due to concerns around lossy conver=
-sions which
-> > >> > do not apply in the kernel.
-> > >> >
-> > >> > Replace all direct calls to `format_args!` with `fmt!`.
-> > >> >
-> > >> > Replace all implementations of `core::fmt::Display` with implement=
-ations
-> > >> > of `kernel::fmt::Display`.
-> > >> >
-> > >> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> > >> > Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-=
-General/topic/Custom.20formatting/with/516476467
-> > >> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> > >> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > >> > ---
-> > >> >  drivers/block/rnull.rs       |  2 +-
-> > >> >  drivers/gpu/nova-core/gpu.rs |  4 +-
-> > >> >  rust/kernel/block/mq.rs      |  2 +-
-> > >> >  rust/kernel/device.rs        |  2 +-
-> > >> >  rust/kernel/fmt.rs           | 89 +++++++++++++++++++++++++++++++=
-++++++++
-> > >> >  rust/kernel/kunit.rs         |  6 +--
-> > >> >  rust/kernel/lib.rs           |  1 +
-> > >> >  rust/kernel/prelude.rs       |  3 +-
-> > >> >  rust/kernel/print.rs         |  4 +-
-> > >> >  rust/kernel/seq_file.rs      |  2 +-
-> > >> >  rust/kernel/str.rs           | 22 ++++------
-> > >> >  rust/macros/fmt.rs           | 99 +++++++++++++++++++++++++++++++=
-+++++++++++++
-> > >> >  rust/macros/lib.rs           | 19 +++++++++
-> > >> >  rust/macros/quote.rs         |  7 ++++
-> > >> >  scripts/rustdoc_test_gen.rs  |  2 +-
-> > >> >  15 files changed, 236 insertions(+), 28 deletions(-)
-> > >>
-> > >> This would be a lot easier to review if he proc-macro and the call
-> > >> replacement were different patches.
-> > >>
-> > >> Also the `kernel/fmt.rs` file should be a different commit.
-> > >
-> > > Can you help me understand why? The changes you ask to be separated
-> > > would all be in different files, so why would separate commits make i=
-t
-> > > easier to review?
-> >
-> > It takes less time to go through the entire patch and give a RB. I can
-> > take smaller time chunks and don't have to get back into the entire
-> > context of the patch when I don't have 30-60min available.
->
-> Ah, I see what you mean. Yeah, the requirement to RB the entire patch
-> does mean there's a benefit to smaller patches.
->
-> > In this patch the biggest problem is the rename & addition of new
-> > things, maybe just adding 200 lines in those files could be okay to go
-> > together, see below for more.
->
-> After implementing your suggestion of re-exporting things from
-> `kernel::fmt` the diffstat is
->
-> 26 files changed, 253 insertions(+), 51 deletions(-)
->
-> so I guess I could do all the additions in one patch, but then
-> *everything* else has to go in a single patch together because the
-> formatting macros either want core::fmt::Display or
-> kernel::fmt::Display; they can't work in a halfway state.
->
-> >
-> > > I prefer to keep things in one commit because the changes are highly
-> > > interdependent. The proc macro doesn't make sense without
-> > > kernel/fmt.rs and kernel/fmt.rs is useless without the proc macro.
-> >
-> > I think that `Adapter`, the custom `Display` and their impl blocks
-> > don't need to be in the same commit as the proc-macro. They are related=
-,
-> > but maybe someone is not well-versed in proc-macros and thus doesn't
-> > want to review that part.
->
-> Sure, I guess I will split them. But as noted above: changing the
-> formatting macros and all the types' trait implementations has to be a
-> "flag day" change.
->
-> >
-> > >> > diff --git a/rust/kernel/fmt.rs b/rust/kernel/fmt.rs
-> > >> > new file mode 100644
-> > >> > index 000000000000..348d16987de6
-> > >> > --- /dev/null
-> > >> > +++ b/rust/kernel/fmt.rs
-> > >> > @@ -0,0 +1,89 @@
-> > >> > +// SPDX-License-Identifier: GPL-2.0
-> > >> > +
-> > >> > +//! Formatting utilities.
-> > >> > +
-> > >> > +use core::fmt;
-> > >>
-> > >> I think we should pub export all types that we are still using from
-> > >> `core::fmt`. For example `Result`, `Formatter`, `Debug` etc.
-> > >>
-> > >> That way I can still use the same pattern of importing `fmt` and the=
-n
-> > >> writing
-> > >>
-> > >>     impl fmt::Display for MyType {
-> > >>         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {}
-> > >>     }
-> > >
-> > > Great idea, done for the next spin. It would be nice to be able to
-> > > lint against references to `core::fmt` outside of kernel/fmt.rs.
-> >
-> > I think there was something in clippy that can do that globally and we
-> > could allow that in this file?
->
-> I didn't find anything suitable. Do you have one in mind?
+On 7/2/25 07:06, Ulf Hansson wrote:
+> On Fri, 27 Jun 2025 at 22:49, Kendall Willis <k-willis@ti.com> wrote:
+>>
+>> Create ->suspend_late() and ->suspend_noirq() hooks to add abort sequence
+>> to any driver within the PM domain with either of those hooks. If a driver
+>> fails to suspend with those hooks, add a call to the DM to abort entering
+>> the LPM. The suspend hooks of the PM domains driver inserts itself into
+>> the suspend path of all devices connected to the TI SCI PM domain. So if
+>> any device in the PM domain with either a ->suspend_late() or
+>> ->suspend_noirq hook fails to suspend, the PM domain drivers suspend hook
+>> will send the abort call to the DM.
+>>
+>> Adding an abort call in the ->suspend() hook is not necessary. TI SCI
+>> suspend sends the message to the DM to prepare to enter a low power mode.
+>> TI SCI suspend ALWAYS occurs after the ->suspend() hook for all TI SCI
+>> devices has been called.
+>>
+>> Signed-off-by: Kendall Willis <k-willis@ti.com>
+>> ---
+>>   drivers/pmdomain/ti/ti_sci_pm_domains.c | 46 ++++++++++++++++++++++++-
+>>   1 file changed, 45 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+>> index 82df7e44250bb..975defc16271d 100644
+>> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
+>> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+>> @@ -2,7 +2,7 @@
+>>   /*
+>>    * TI SCI Generic Power Domain Driver
+>>    *
+>> - * Copyright (C) 2015-2017 Texas Instruments Incorporated - http://www.ti.com/
+>> + * Copyright (C) 2015-2025 Texas Instruments Incorporated - http://www.ti.com/
+>>    *     J Keerthy <j-keerthy@ti.com>
+>>    *     Dave Gerlach <d-gerlach@ti.com>
+>>    */
+>> @@ -149,8 +149,47 @@ static int ti_sci_pd_suspend(struct device *dev)
+>>
+>>          return 0;
+>>   }
+>> +
+>> +static int ti_sci_pd_suspend_late(struct device *dev)
+>> +{
+>> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+>> +       struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
+>> +       const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
+>> +       int ret;
+>> +
+>> +       ret = pm_generic_suspend_late(dev);
+>> +       if (ret) {
+>> +               dev_err(dev, "%s: Failed to suspend. Abort entering low power mode.\n", __func__);
+>> +               if (ti_sci->ops.pm_ops.lpm_abort(ti_sci))
+>> +                       dev_err(dev, "%s: Failed to abort.\n", __func__);
+>> +               return ret;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int ti_sci_pd_suspend_noirq(struct device *dev)
+>> +{
+>> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+>> +       struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
+>> +       const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
+>> +       int ret;
+>> +
+>> +       ret = pm_generic_suspend_noirq(dev);
+>> +       if (ret) {
+>> +               dev_err(dev, "%s: Failed to suspend. Abort entering low power mode.\n", __func__);
+>> +               if (ti_sci->ops.pm_ops.lpm_abort(ti_sci))
+>> +                       dev_err(dev, "%s: Failed to abort.\n", __func__);
+>> +               return ret;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>>   #else
+>>   #define ti_sci_pd_suspend              NULL
+>> +#define ti_sci_pd_suspend_late         NULL
+>> +#define ti_sci_pd_suspend_noirq                NULL
+>>   #endif
+>>
+>>   /*
+>> @@ -264,6 +303,11 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
+>>                                      pd_provider->ti_sci->ops.pm_ops.set_latency_constraint)
+>>                                          pd->pd.domain.ops.suspend = ti_sci_pd_suspend;
+>>
+>> +                               if (pd_provider->ti_sci->ops.pm_ops.lpm_abort) {
+>> +                                       pd->pd.domain.ops.suspend_late = ti_sci_pd_suspend_late;
+>> +                                       pd->pd.domain.ops.suspend_noirq = ti_sci_pd_suspend_noirq;
+> 
+> This doesn't work as pm_genpd_init() is assigning the
+> ->suspend_noirq() callback, hence overriding the callback.
+> 
+> Moreover I am not sure this is the correct thing to do, as having your
+> own ->suspend_noirq() callback would mean that you will be by-passing
+> genpd's internal reference counting to understand when it's fine to
+> power-off the PM domain, vi a the ->power_off() callback.
+> 
+> Can the LPM abort be handled from a ->complete() callback instead?
 
-I think we want https://github.com/rust-lang/rust-clippy/issues/14807.
+Handling the abort from a ->complete() callback does look like a much 
+better solution than adding the ->suspend_late() and ->suspend_noirq() 
+callbacks. The only problem with it is that there doesn't seem to be a 
+way to tell if system suspend failed in order to call the abort sequence.
+
+However, the abort sequence just clears the LPM selection in the DM 
+which the DM already does upon successful suspend/resume. Clearing it 
+multiple times shouldn't be an issue, but I will have to look into this 
+more.
+
+Thanks,
+Kendall
+
+> 
+>> +                               }
+>> +
+>>                                  pm_genpd_init(&pd->pd, NULL, true);
+>>
+>>                                  list_add(&pd->node, &pd_provider->pd_list);
+>> --
+>> 2.34.1
+>>
+> 
+> Kind regards
+> Uffe
+
 
