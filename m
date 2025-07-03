@@ -1,141 +1,152 @@
-Return-Path: <linux-pm+bounces-30043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C178AF761D
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 15:49:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF30EAF75D0
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 15:35:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFFCB7B94C8
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:47:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B5575675A1
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Jul 2025 13:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35DC82E7BDB;
-	Thu,  3 Jul 2025 13:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4902E3398;
+	Thu,  3 Jul 2025 13:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqPzRx1r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9B528B516;
-	Thu,  3 Jul 2025 13:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413FB2E03F4;
+	Thu,  3 Jul 2025 13:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751550501; cv=none; b=tFWC7S7QbAAoEedqm+e9DgAdsWfES2Uf03a4657qlOGewLLqvAFZOFE34VtOT3aon5W8ZT656cNTdnTZ7xM+l515bdlBBrsLa1whkitMgkEecse/xHLRTeScnGQcdXW/UCwLjTJXOaHdSL3Qy5L+7lakh0GZm6aZMMQ0WMLYoHY=
+	t=1751549704; cv=none; b=kmedMZQAPN6cCKZoW5HSQehSOoQ2NrkWiNr2ylSH8pMvmi1e4U1dP804OmQRpTliCx2XkKujSJ5OnPjv5pIa/a6t1+lt6uv12BB/iS7q75lFUpAsKVKdsZl50GsRukei2yFOMMLNll8QgVMvY0nvyh3e7VQs3P9MbYkLTD2aE5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751550501; c=relaxed/simple;
-	bh=8IvgdlogpP7JuvdzwJQsuveomKygW/XCJS9EI4AtOQQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CA7MJHTfoyeFykBApoURGAQJcbzl3hYw0aRDe+SJD8TgjUReuHRe2sOw5kZdvDLmV9MHTByRevbA5qAJLLEqFajBPjyYMu2lYoSgSyH2I+4qo5dgxI13TLxwoQLuWGUsoUkEdG8dK4V6GDHN1Dw7nVUE8LtRH9rewg5AnOhMPAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bXylN3bTtzYQtrF;
-	Thu,  3 Jul 2025 21:48:16 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 5C96B1A12D0;
-	Thu,  3 Jul 2025 21:48:15 +0800 (CST)
-Received: from hulk-vt.huawei.com (unknown [10.67.174.121])
-	by APP3 (Coremail) with SMTP id _Ch0CgDXOCYJimZoV+8fAg--.35082S2;
-	Thu, 03 Jul 2025 21:48:15 +0800 (CST)
-From: Chen Ridong <chenridong@huaweicloud.com>
-To: peterz@infradead.org,
-	rafael@kernel.org,
-	pavel@kernel.org,
-	timvp@google.com,
-	tj@kernel.org,
-	mkoutny@suse.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lujialin4@huawei.com,
-	chenridong@huawei.com
-Subject: [PATCH next] sched,freezer: prevent tasks from escaping being frozen
-Date: Thu,  3 Jul 2025 13:34:27 +0000
-Message-Id: <20250703133427.3301899-1-chenridong@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1751549704; c=relaxed/simple;
+	bh=WVh03UrKKMZebFsj28jXXmaKIXAvdki6/0YMrcBckWE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zi8HJ/nUIMNVoHRg6ubGqlEUBPO+Z4oja+qKfwmZLG7YfmL4XEKBK5E8avJaqNh4amLFooSIo/63Q5oxxxAcDrSv7TXI23qJYN0g1aq5XjgxBNSX+eSbswM3h34wzamKHPH52ob6jzLocVz0swHojAtM38l0WiueIzgMmjH1uco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqPzRx1r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C778FC4CEE3;
+	Thu,  3 Jul 2025 13:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751549703;
+	bh=WVh03UrKKMZebFsj28jXXmaKIXAvdki6/0YMrcBckWE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iqPzRx1rrUSaHtuwZ6DJdTYB4GQ8FkakwKL7eBHFP2oehlq+8Nov6LTzI/Tg1Z+Bi
+	 U1Wk7TKZ43JEscCnyQSP//4x/umWagmt6mZL4g8ihF46qG/rAlBQuXKqcrJvDUbUOM
+	 /P18XaYsiwTr8aZBWMftAC0fI7pMsMr5T32ksODQvTWWXEYZ1/+R++z1gDkNk8NsQS
+	 p3lvKj2/JIRESxM8SRQYnlp/w1/pbF6sIxw/kuTSHUheZbU4G2gV5X5SwvRHYYajhZ
+	 g6yDDuLDW+YJ2McJcemnXp4Pwq4Q+e/nmkYMiID3987fADkBz6QY6IKGbrLVJkhw4L
+	 CgH+9by2T3vOg==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-611b246727cso2843307eaf.0;
+        Thu, 03 Jul 2025 06:35:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVAWiFLEzhLFYvFzYxMkrRjr1AI1LjOeKfi4m8IRVTV8hwF5Po2gQwfiZ5taAEn2dzKLhtRlXIT4LTf942z3ZPF6kgn@vger.kernel.org, AJvYcCVlkxsOB8FrgRH/0u8yFqh2QAchvdlsb47ve3qSkp5zlXXVUiqsXPfyHaqeBlFPtSPSl1ZRi4EP6g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3u1wpG02eNGwbbw4wlSlcrYoBw4CHGoKKNybg1smw2F6IXLRe
+	9df5mM46RLAm6kdM2kAo0jAVwSj9DXAjI2lGBwERn3d9pcu2zcvqlWnZtYWcl1UfmUO+g6WCgZ8
+	puifWlSzDrnD6/rnaolak98boPNGnLYg=
+X-Google-Smtp-Source: AGHT+IFXCo3QjWMLEfAx2AHr/+WcA8i4kKNZBECRqwWrpQd2bXdgx/R657LBUV+shBDZm70G215NOPFVkIIseBbBgRw=
+X-Received: by 2002:a05:6820:218:b0:612:c547:7984 with SMTP id
+ 006d021491bc7-612c54780dbmr3207808eaf.1.1751549703080; Thu, 03 Jul 2025
+ 06:35:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgDXOCYJimZoV+8fAg--.35082S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr15JrykWFyUJrWDKF1xXwb_yoW8uFyUp3
-	95Wa1UGw10qr42ywnxta1v9398K39rJr4UG34kCF18Xa1YqasxWr4xCry3Wr4jvr1I9r9x
-	JayYg34SyayUCa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-	n4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-	tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-	CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvj
-	xUF1v3UUUUU
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+References: <20250611032310.10610-1-qiwu.chen@transsion.com>
+In-Reply-To: <20250611032310.10610-1-qiwu.chen@transsion.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 3 Jul 2025 15:34:51 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g-7ZrnKO5s--zXmaA+M07tiLBy1x-hsw4JqLPvCtt4aQ@mail.gmail.com>
+X-Gm-Features: Ac12FXwcnbbdlK2F_TNpx83OutHKwJ5zPO-Qu4_o-BgPDR5aZCj7-ZW1Q4QnlV8
+Message-ID: <CAJZ5v0g-7ZrnKO5s--zXmaA+M07tiLBy1x-hsw4JqLPvCtt4aQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH] cpuidle: Add find_deepest_state trace event
+To: "qiwu.chen" <qiwuchen55@gmail.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, "qiwu.chen" <qiwu.chen@transsion.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Chen Ridong <chenridong@huawei.com>
+On Wed, Jun 11, 2025 at 5:23=E2=80=AFAM qiwu.chen <qiwuchen55@gmail.com> wr=
+ote:
+>
+> Add a new trace event namely cpuidle_find_deepest_state to trace
+> the found deepest idle state during CPUidle flow.
+>
+> The new trace event will help developers debug CPUidle issues by
+> providing more detailed information about the CPUidle states.
 
-The commit cff5f49d433f ("cgroup_freezer: cgroup_freezing: Check if not
-frozen") modified the cgroup_freezing() logic to also verify that the
-FROZEN flag is not set, which affects the return value of the freezing()
-function.
+I wonder what exactly this is needed for.
 
-In __refrigerator(), the FROZEN flag is set before checking whether the
-task should be frozen. This creates a race condition where:
-1. The task's FROZEN flag is set.
-2. The cgroup freezer state changes to FROZEN (Can be triggered by reading
-   freezer.state).
-3. freezing() is called and returns false.
+The function being traced is used mostly during suspend-to-idle, so is
+this what you have in mind or something else?
 
-As a result, the task may escape being frozen when it should be.
+In any case, the changelog needs to be more specific about the reason
+why the new trace event is needed.
 
-To fix this, move the setting of the FROZEN flag to occur just before
-schedule(). This ensures the flag is only set when we're certain the
-task must be switched out.
-
-Fixes: cff5f49d433f ("cgroup_freezer: cgroup_freezing: Check if not frozen")
-Reported-by: Zhong Jiawei<zhongjiawei1@huawei.com>
-Signed-off-by: Chen Ridong <chenridong@huawei.com>
----
- kernel/freezer.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index 8d530d0949ff..89edd7550d27 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -71,12 +71,6 @@ bool __refrigerator(bool check_kthr_stop)
- 	for (;;) {
- 		bool freeze;
- 
--		raw_spin_lock_irq(&current->pi_lock);
--		WRITE_ONCE(current->__state, TASK_FROZEN);
--		/* unstale saved_state so that __thaw_task() will wake us up */
--		current->saved_state = TASK_RUNNING;
--		raw_spin_unlock_irq(&current->pi_lock);
--
- 		spin_lock_irq(&freezer_lock);
- 		freeze = freezing(current) && !(check_kthr_stop && kthread_should_stop());
- 		spin_unlock_irq(&freezer_lock);
-@@ -84,6 +78,12 @@ bool __refrigerator(bool check_kthr_stop)
- 		if (!freeze)
- 			break;
- 
-+		raw_spin_lock_irq(&current->pi_lock);
-+		WRITE_ONCE(current->__state, TASK_FROZEN);
-+		/* unstale saved_state so that __thaw_task() will wake us up */
-+		current->saved_state = TASK_RUNNING;
-+		raw_spin_unlock_irq(&current->pi_lock);
-+
- 		was_frozen = true;
- 		schedule();
- 	}
--- 
-2.34.1
-
+> Signed-off-by: qiwu.chen <qiwu.chen@transsion.com>
+> ---
+>  drivers/cpuidle/cpuidle.c    |  2 ++
+>  include/trace/events/power.h | 24 ++++++++++++++++++++++++
+>  2 files changed, 26 insertions(+)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 0835da449db8..9065aa396892 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -103,6 +103,8 @@ static int find_deepest_state(struct cpuidle_driver *=
+drv,
+>                 latency_req =3D s->exit_latency_ns;
+>                 ret =3D i;
+>         }
+> +       trace_cpuidle_find_deepest_state(dev->cpu, s2idle, ret);
+> +
+>         return ret;
+>  }
+>
+> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+> index 9253e83b9bb4..82b5ac8c46e6 100644
+> --- a/include/trace/events/power.h
+> +++ b/include/trace/events/power.h
+> @@ -62,6 +62,30 @@ TRACE_EVENT(cpu_idle_miss,
+>                 (unsigned long)__entry->state, (__entry->below)?"below":"=
+above")
+>  );
+>
+> +TRACE_EVENT(cpuidle_find_deepest_state,
+> +
+> +       TP_PROTO(unsigned int cpu_id, bool s2idle, unsigned int deepest_s=
+tate),
+> +
+> +       TP_ARGS(cpu_id, s2idle, deepest_state),
+> +
+> +       TP_STRUCT__entry(
+> +               __field(u32,            cpu_id)
+> +               __field(bool,           s2idle)
+> +               __field(u32,            deepest_state)
+> +       ),
+> +
+> +       TP_fast_assign(
+> +               __entry->cpu_id =3D cpu_id;
+> +               __entry->s2idle =3D s2idle;
+> +               __entry->deepest_state =3D deepest_state;
+> +       ),
+> +
+> +       TP_printk("cpu_id=3D%lu is_s2idle=3D%s deepest_state=3D%lu",
+> +                (unsigned long)__entry->cpu_id,
+> +                (__entry->s2idle)?"yes":"no",
+> +                (unsigned long)__entry->deepest_state)
+> +);
+> +
+>  DECLARE_EVENT_CLASS(psci_domain_idle,
+>
+>         TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
+> --
+> 2.25.1
+>
 
