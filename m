@@ -1,119 +1,148 @@
-Return-Path: <linux-pm+bounces-30120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0EA8AF8F2C
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 11:52:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF292AF8F67
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 12:05:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71FAD7B51EC
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 09:47:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FB121C260B0
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 10:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC012DCC17;
-	Fri,  4 Jul 2025 09:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178392EE96F;
+	Fri,  4 Jul 2025 10:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XirrYf0G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIFzhyDo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CEB28D840;
-	Fri,  4 Jul 2025 09:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA112877C7;
+	Fri,  4 Jul 2025 10:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751622545; cv=none; b=r9S+M8HMEHMDa0Rhisa67WFQrGAGuaSN/55jAEYit5lHERhE0akMW1mASYgE3R9z3DZvnD1vDWa2EizLQu5v9QDgsvizP1fDfADwgDodcFamWZUXFLKNwzu+dx5B/QkHyfzu3Ha+111KeV/OfgdoqOB1UnP/Uqb+O33KtJHQFxU=
+	t=1751623541; cv=none; b=SKmhhTy2nycJPZ7nFszWAZiFJarf70YCmeXcN+pOwvxH0vMKuoioFTDbQRpC5ncpfCRj0/NZ+ibd4qG5YbqrNp5A4GiBAgK1b67lOmx4IDpcils/5qwgN7+/hkeevOFroRt2y9WGXz5+na1gEz6BOAlcucpBD604As8EWtrVJD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751622545; c=relaxed/simple;
-	bh=0Ud86XP9bYEP8sLzhOOGO61bEW1HVjXeaRHDIa3CSGY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dn5/tbKyfbrQBpZFv9hVl3yQYGwPMX9HTep0ItjUV6KTsOIyPu57Eq3h4dgtU+FZGzjovAIuQFysEWzemO43eKSNvLxOOARFjmzReGkUdWjx2rqdfLpn3oi1y7IOGMbvzRIuOJVHZGgBLR6Yd5wX6JqkjwAb3XBbdwBiU+Bq10k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XirrYf0G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E833C4CEEE;
-	Fri,  4 Jul 2025 09:49:05 +0000 (UTC)
+	s=arc-20240116; t=1751623541; c=relaxed/simple;
+	bh=3zMvBpnjYhXNk119LId6VxXRlohR+SMqHtEt+DjGgOs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Lw1FLW99xPWNr/qjic2EsDUo68wNQjAZq6pA+jWDO/bLp/oGaGiEwKpHmervEXwOmSI4KesNrU3KuCjHnH3rtFVwl+YwLRdS4sIEo/9ktlLjPuMm+uSD+pB0OPoQWRgaLgqLJuqRppZOdsWCZY+PyNzDLrwW1+rP5VarwAIpKwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dIFzhyDo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8AFC4CEE3;
+	Fri,  4 Jul 2025 10:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751622545;
-	bh=0Ud86XP9bYEP8sLzhOOGO61bEW1HVjXeaRHDIa3CSGY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XirrYf0GjePlbRcR4e5kgYVe+qrZwml1Adl2K8NBLzxXu/C1de4Zin8szgl+Y2BRj
-	 /RWmJniJH9MAqKTAVtbV+8s8xLYqYlgs2eoIMlMLLt6nWpsMc1smIJvmrQKuoIQGxu
-	 EsP4MTY6YsbXdOc3OBzOLe4uLfTTJmA5WSpWcdnkR63juOBhdTpOmdGbwbeJkDrfkR
-	 lK7PpY33hQnaZ6wuEnM+jOhGdxK/GIXeFEFfPxj+UVHPoqIXeCmixXkiR6sr6HTFie
-	 BL65kw3Sb6LT6U7YkDfSmeGuf/5wI3/rPnuAf51NKiBVmETMCP/jUTFTpTrJeDbsiy
-	 UcZtuzEcorcjw==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-61396c3f681so49529eaf.3;
-        Fri, 04 Jul 2025 02:49:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVbjbBgXIXoODmQGeiVM9Gcq11E4u9RnmEi5o+1VFRX9u9/WBOq0tBM0aA8DgeZ7JvZKbzIAGgUt2s=@vger.kernel.org, AJvYcCWMwM0HijLpLL3qbq7zgeI0Xr7EMZD54Nh2CITLLIEsXdfRQ2Yu1H0VhfDnqXX4EV43pK0j65sTGHmnfLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzkrs8fJ5Z41Y625WK44T8b0WHMsafv5sxLXaaXEdqQwMrueLOM
-	C3wBZO3uHEcw8xBU3k9rXgyFxGt5Au93JK8Yp7sU8h+8xcdCK6nqUjEprC1IhiNKDK4Der1gIii
-	ufsq758soJwt63ATPQ278c5LfKXEkhyM=
-X-Google-Smtp-Source: AGHT+IHSKYWJVT4Y3YWle481bfVW84W5gzUk/bh3TVw9A/v1XsLO3tSf/KPvBrhlZSIXrYhDTyrVfPi7AKbp7pOOHw8=
-X-Received: by 2002:a05:6820:174b:b0:613:7eb8:a4a6 with SMTP id
- 006d021491bc7-6138fd5e525mr1548591eaf.2.1751622544551; Fri, 04 Jul 2025
- 02:49:04 -0700 (PDT)
+	s=k20201202; t=1751623540;
+	bh=3zMvBpnjYhXNk119LId6VxXRlohR+SMqHtEt+DjGgOs=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=dIFzhyDoOtTAbxDe4ng7ZMrO/97heBHHA2tlOt/nH+8zNG51bHrYZPY5Otop9wkEE
+	 GOrKb3MaWAOEqB12OvaklthhMEb5eZrWI0BPDhSMueKmloWwIpmrdhA574pgwdyDVL
+	 5lRojgAt+uopNziY+Nbq2Vyar7Ow/l0OqQ3ieJWWl/vzootQhnKntCRzNGjWwagrXs
+	 ZQVT86x9TMFgy9J6Lt1mMum6Y6ipYwyQeTLs74SvWohAan1nxvN+IidtlqAZw2lilc
+	 nqy6gMPSSrHzKKMC7HAuqqW0Qh3uEfCRekMqt+80F1Dobu3rSHA5697iSIX1wfMM87
+	 5aWiEaLuho2cA==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250623133402.3120230-1-zhenglifeng1@huawei.com>
- <20250623133402.3120230-8-zhenglifeng1@huawei.com> <CAJZ5v0hizEYaJw77feqAoHJWYuANvbdxZ6BbogZ52sTU2eKTUA@mail.gmail.com>
- <7c509446-7925-4bcb-97c5-1a6082550d96@huawei.com>
-In-Reply-To: <7c509446-7925-4bcb-97c5-1a6082550d96@huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 4 Jul 2025 11:48:52 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h6iN_EQd6kMvYZjQwryF5cPo-EEXDFcJ6MK+k=24dr2Q@mail.gmail.com>
-X-Gm-Features: Ac12FXwRFY3IHfo2wyyje1ul5fFlkpToFDdYhI6wzgo76tUDvNADNu-Ibd6MZS0
-Message-ID: <CAJZ5v0h6iN_EQd6kMvYZjQwryF5cPo-EEXDFcJ6MK+k=24dr2Q@mail.gmail.com>
-Subject: Re: [PATCH 7/7] cpufreq: Exit governor when failed to start old governor
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org, ionela.voinescu@arm.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com, 
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, lihuisong@huawei.com, 
-	yubowen8@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 04 Jul 2025 12:05:26 +0200
+Message-Id: <DB36PVASJ5G9.2TMRXNIXYI9UO@kernel.org>
+Cc: "Michal Rostecki" <vadorovsky@protonmail.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
+ <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Brendan Higgins"
+ <brendan.higgins@linux.dev>, "David Gow" <davidgow@google.com>, "Rae Moar"
+ <rmoar@google.com>, "Danilo Krummrich" <dakr@kernel.org>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
+ <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
+ Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Russ Weight"
+ <russ.weight@linux.dev>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>,
+ "Rob Herring" <robh@kernel.org>, "Saravana Kannan" <saravanak@google.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Will Deacon" <will@kernel.org>, "Waiman Long" <longman@redhat.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>,
+ "Heiner Kallweit" <hkallweit1@gmail.com>, "Russell King"
+ <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Bjorn Helgaas" <bhelgaas@google.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Jens Axboe" <axboe@kernel.dk>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, "Dave
+ Ertman" <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>,
+ "Leon Romanovsky" <leon@kernel.org>, "Breno Leitao" <leitao@debian.org>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
+ <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+ <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Tamir Duberstein" <tamird@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
+ <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
+ <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
+ <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
+ <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+In-Reply-To: <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
 
-On Fri, Jul 4, 2025 at 11:38=E2=80=AFAM zhenglifeng (A) <zhenglifeng1@huawe=
-i.com> wrote:
+On Fri Jul 4, 2025 at 12:41 AM CEST, Tamir Duberstein wrote:
+> On Thu, Jul 3, 2025 at 4:36=E2=80=AFPM Benno Lossin <lossin@kernel.org> w=
+rote:
+>> On Thu Jul 3, 2025 at 8:55 PM CEST, Tamir Duberstein wrote:
+>> > On Thu, Jul 3, 2025 at 11:08=E2=80=AFAM Benno Lossin <lossin@kernel.or=
+g> wrote:
+>> >> On Thu Jul 3, 2025 at 3:55 PM CEST, Tamir Duberstein wrote:
+>> >> > On Thu, Jul 3, 2025 at 5:32=E2=80=AFAM Benno Lossin <lossin@kernel.=
+org> wrote:
+>> >> >> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
+>> >> >> > +impl<T: ?Sized + Display> fmt::Display for Adapter<&T> {
+>> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+>> >> >> > +        let Self(t) =3D self;
+>> >> >> > +        Display::fmt(t, f)
+>> >> >>
+>> >> >> Why not `Display::fmt(&self.0, f)`?
+>> >> >
+>> >> > I like destructuring because it shows me that there's only one fiel=
+d.
+>> >> > With `self.0` I don't see that.
+>> >>
+>> >> And what is the benefit here?
+>> >
+>> > In general the benefit is that the method does not ignore some portion
+>> > of `Self`. A method that uses `self.0` would not provoke a compiler
+>> > error in case another field is added, while this form would.
+>>
+>> Yeah, but why would that change happen here? And even if it got another
+>> field, why would that invalidate the impl of `fn fmt`?
 >
-> On 2025/6/23 23:12, Rafael J. Wysocki wrote:
->
-> > On Mon, Jun 23, 2025 at 3:34=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huaw=
-ei.com> wrote:
-> >>
-> >> Detect the result of starting old governor in cpufreq_set_policy(). If=
- it
-> >> fails, exit the governor and clear policy->governor.
-> >>
-> >> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> >> ---
-> >>  drivers/cpufreq/cpufreq.c | 8 +++++---
-> >>  1 file changed, 5 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >> index 7b82ffb50283..2b431845a8a3 100644
-> >> --- a/drivers/cpufreq/cpufreq.c
-> >> +++ b/drivers/cpufreq/cpufreq.c
-> >> @@ -2715,10 +2715,12 @@ static int cpufreq_set_policy(struct cpufreq_p=
-olicy *policy,
-> >>         pr_debug("starting governor %s failed\n", policy->governor->na=
-me);
-> >>         if (old_gov) {
-> >>                 policy->governor =3D old_gov;
-> >> -               if (cpufreq_init_governor(policy))
-> >> +               if (cpufreq_init_governor(policy)) {
-> >>                         policy->governor =3D NULL;
-> >> -               else
-> >> -                       cpufreq_start_governor(policy);
-> >> +               } else if (cpufreq_start_governor(policy)) {
-> >> +                       cpufreq_exit_governor(policy);
-> >
-> > This may introduce a governor module reference imbalance AFAICS.
->
-> Sorry, I don't really understand this. Could you explain more? Thanks.
+> I don't know, but I would rather force a person to make that decision
+> when they add another field rather than assume that such an addition
+> wouldn't require changes here.
 
-It looks like I've confused cpufreq_start_governor() with
-cpufreq_init_governor(), sorry for the noise.
+I don't think so. If this were in another file, then destructuring
+might make sense if the struct could conceivably get more fields in the
+future **and** it if the other file relied on there only being one
+field (or if it *had* to be changed when there was a field added). This
+isn't the case here so it's just unnecessary noise.
+
+---
+Cheers,
+Benno
 
