@@ -1,109 +1,66 @@
-Return-Path: <linux-pm+bounces-30107-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307D0AF8B1E
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 10:21:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C28B4AF8B09
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 10:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5B423B35B1
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 08:17:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE597B40232
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 08:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBFBA326A59;
-	Fri,  4 Jul 2025 07:57:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4A532623A;
+	Fri,  4 Jul 2025 07:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="jTK77Tij"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ok/N6c8Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8894326A58;
-	Fri,  4 Jul 2025 07:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93E0326231;
+	Fri,  4 Jul 2025 07:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751615865; cv=none; b=cDaMhBwWbO1DNHBi08PTmAI5q1r0TrfsEVn1pJge7w+07gJmfg5AdS54ZBvDCgfAE+cVBROpQNKXvbSPLJooufNB78vOB4ShfaMpZfPYw9Yh5JLvGJjuaVsznCRLAIbCMjQ1hwRu1opQ971XplUT5a1GBuqOAO6Gcv5n1Hkspbo=
+	t=1751615845; cv=none; b=Aa4vhqTgIZu2wIE48O0DcObBTS1zri+VfnAoe9aokw5G5qdSF3sFEpFX7BNeQt6dS6v5qf40DQVxi8I5HrG5QVe0cEBh6lQnivIyyybW5M8SeNf7hQME0IA3AdEDG5jw5oG5ZWXXEJAVI4i+m5xWAVZY0pEm0n5lN/XKAvKfb8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751615865; c=relaxed/simple;
-	bh=bPS2JYksrIppycfYjPG2JSlEWAOe/ZXoQROBn/MlDBY=;
+	s=arc-20240116; t=1751615845; c=relaxed/simple;
+	bh=MgFEolINa2mqHDNtnOb4oERRABfY40yjNkoZlWQnkZk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q+n42N1qAmQGfEgKQU7fEUxmTehC3RfmxKXaQl2hQ4PhipArRBasdEAUpdP+S1MVIZLYvViSi+GrQIh5qMQS8FtqOTI2DWKNeB6+ERR8KEj5jT+velnKS0+92nmktO5vRACuY3wMTqAuEbF8RiqfQcNmmehFeByDHPQQrOm+K3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=jTK77Tij; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=5qrkD9bX+jI4ab6c+XtoSydd7j+KnW2OaBzeTTEC/QE=; b=jTK77Tij9gZIa4yFat5vka5xRz
-	zxo2K3t3N98K2N9r3t0x1GzxeIxrNCnwCWaXoIAcYUClezLp6LYgcNldRMWVG6g9Wl76TbfZVdEJo
-	8webAKr8ryhcY5PYw6AJiDWHNqoMr5QS+4SvlL1Zc3qnZ4gKNAd4lQYtfsMSWHxyzqpY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uXbIH-000BBm-4J; Fri, 04 Jul 2025 09:57:13 +0200
-Date: Fri, 4 Jul 2025 09:57:13 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Benno Lossin <lossin@kernel.org>,
-	Michal Rostecki <vadorovsky@protonmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-Message-ID: <efe97ed7-dd60-4f1c-ac5c-b700300f0390@lunn.ch>
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
- <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
- <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
- <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XBnpWD9HzOuvSXGueVapoIlmwa8kA2sJQttSDjgPBEALCMcon28OLMbvsqBdo4rQLXCB173R2EViyNyX0TZGI9ghZoADZbGnBtgb380bfXZxbCRlf9Q7dm06e62Us/moPwCtVK61l1MF79QEy4vCHWZGPwWhlIcCLpgwgpb2ErI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ok/N6c8Q; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=L0bdJ55ZuGgGGTacDM0SpqaswUQMNdvtMXzThUW4T3M=; b=ok/N6c8QoiKqC9VyX88ZXrEXhj
+	wYv0ERTE0LGnSRzAhporwVm9X77AJX2ZvnFfYvToGVRee3PmRp3WHJNQ/np0X8up+AEOzJxtcp4AP
+	YiaXVYTagHG0IOgYDVNGWvFeSRQ2vo5vuZgT9xcbJ25kTnpd9T++xGJlaAptP6ZB0CWWstc5mOXsG
+	jRA9U7UeBhZEk+88wlppPBF9K8Xk2IbeQCkjnKN9Tl2InP9wGhHcokumn0kAuZRQte7cgkRX9w2Zd
+	BlNA4mFA2b55FUgMR2PBc4zVbAL0xBrGo1ZxqlFKSS1IAQcA8996dTYayewmhcF2sHJSkva3ffrcx
+	Mj1+WNSA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uXbIN-00000007pyj-3Jvg;
+	Fri, 04 Jul 2025 07:57:20 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B4906300233; Fri, 04 Jul 2025 09:57:18 +0200 (CEST)
+Date: Fri, 4 Jul 2025 09:57:18 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Chen Ridong <chenridong@huaweicloud.com>
+Cc: Michal Koutn?? <mkoutny@suse.com>, rafael@kernel.org, pavel@kernel.org,
+	timvp@google.com, tj@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lujialin4@huawei.com,
+	chenridong@huawei.com
+Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being
+ frozen
+Message-ID: <20250704075718.GA2001818@noisy.programming.kicks-ass.net>
+References: <20250703133427.3301899-1-chenridong@huaweicloud.com>
+ <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
+ <f4c4f465-72b9-4682-99e6-c249ecab8572@huaweicloud.com>
+ <8dae8006-e63d-467f-bb7c-e8470878e534@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -112,27 +69,48 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+In-Reply-To: <8dae8006-e63d-467f-bb7c-e8470878e534@huaweicloud.com>
 
-> Yes, it probably can. As you say, some subsystems might interact - the
-> claimed benefit of doing this subsystem-by-subsystem split is that it
-> avoids conflicts with ongoing work that will conflict with a large
-> patch, but this is also the downside; if ongoing work changes the set
-> of interactions between subsystems then a maintainer may find
-> themselves unable to emit the log message they want (because one
-> subsystem is using kernel::fmt while another is still on core::fmt).
+On Fri, Jul 04, 2025 at 11:11:52AM +0800, Chen Ridong wrote:
 
-This sounds like an abstraction problem. As a developer, i just want
-an API to print stuff. I don't care about what happens underneath.
+Your patches are mangled; please educate your MUA.
 
-Could you add an implementation of the API which uses core:fmt
-underneath. Get that merged. You can then convert each subsystem one
-by one to use the new API. Since all you are changing is the API, not
-the implementation, there is no compatibility issues. Then, once all
-users are converted to the API, you can have one patch which flips the
-implementation from core:fmt to kernel:fmt. It might take you three
-kernel cycles to get this done, but that is relatively fast for a tree
-wide change, which sometimes takes years.
+> --- a/kernel/freezer.c
+> +++ b/kernel/freezer.c
+> @@ -71,19 +71,20 @@ bool __refrigerator(bool check_kthr_stop)
+>         for (;;) {
+>                 bool freeze;
+> 
+> -               raw_spin_lock_irq(&current->pi_lock);
+> -               WRITE_ONCE(current->__state, TASK_FROZEN);
+> -               /* unstale saved_state so that __thaw_task() will wake
+> us up */
+> -               current->saved_state = TASK_RUNNING;
+> -               raw_spin_unlock_irq(&current->pi_lock);
+> -
+>                 spin_lock_irq(&freezer_lock);
+> -               freeze = freezing(current) && !(check_kthr_stop &&
+> kthread_should_stop());
+> +               freeze = (freezing(current) || !cgroup_thawed(current))
+> +                        && !(check_kthr_stop && kthread_should_stop());
 
-	Andrew
+This makes no sense to me; why can't this stay in cgroup_freezing()?
+
+Also, can someone please fix that broken comment style there.
+
+>                 spin_unlock_irq(&freezer_lock);
+> 
+>                 if (!freeze)
+>                         break;
+> 
+> +               raw_spin_lock_irq(&current->pi_lock);
+> +               WRITE_ONCE(current->__state, TASK_FROZEN);
+> +               /* unstale saved_state so that __thaw_task() will wake
+> us up */
+> +               current->saved_state = TASK_RUNNING;
+> +               raw_spin_unlock_irq(&current->pi_lock);
+> +
+
+And I'm not quite sure I understand this hunk either. If we bail out,
+current->__state is reset to TASK_RUNNING, so what's the problem?
 
