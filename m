@@ -1,396 +1,247 @@
-Return-Path: <linux-pm+bounces-30142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7B4AAF9707
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 17:38:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ECCAAF9881
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 18:36:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD91848468C
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 15:37:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 533AB3B1F29
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 16:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D062C325A;
-	Fri,  4 Jul 2025 15:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476E2309DA8;
+	Fri,  4 Jul 2025 16:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ziC6Hxfi"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="D/BwV/uF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1073A2D94BA
-	for <linux-pm@vger.kernel.org>; Fri,  4 Jul 2025 15:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEDE3093D1
+	for <linux-pm@vger.kernel.org>; Fri,  4 Jul 2025 16:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751643472; cv=none; b=W6wOxIJjJBDYnfy3lvUIUMLUgb9VPEAgWWUUCBIUXvBovrHZB2/COQQ0xRXa/oyJ4cjZXye0q3tuPXH0Ego3jy3jihplc03mDkQBjB+Q19T6Au/4Z3L7AefbZ6FXg3U2nzNI9Z6VsSyDGob/Em8HOY77+fanD+Wv8lS4s3D+NEY=
+	t=1751646932; cv=none; b=LuD1atMv2Z1h2fC0obuMuOEoqyADUthpKH92nUHEt1XFt4s20hz6s6EQ4s3CTe116NLTQunxIF4C9onfhgPMwXccoN17VSpioAqb9mCe5Q5mygtbTvqW29M1X+MgmbxbflJOF5njafDzgBPdwN/icPLhjKH17zviMDo4H+lN6N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751643472; c=relaxed/simple;
-	bh=AqCAt1wI7tAF5McZIeuIhOgu1S/knglyj60+bdPhkbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nAc5QQVBrxSwV+H+LafEwfuKkptUZ4JMkm5ZqpXaBQHVRROrjuCixTf2e/Hp09QzurzpMDwFIo2blDcksSGOWKrPPmXHXF+QuvLODGkpX7nYyujYIkX9Zdrkd0UFjEeQaVqGg08gHCYVDeUo/OA2mNdd1ari1I8NW5qfU9/8gCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ziC6Hxfi; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-74b56b1d301so698018b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 04 Jul 2025 08:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751643466; x=1752248266; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pfUDmHeepnt8bgi+nNBa1jZtXWQ+k/4Kcm7pPkbYwkQ=;
-        b=ziC6HxfiLCtBqhZc6qt3dRh9L9ae72vgX1Ji1xziuE7879XZZFlH1Ev6cUvMZVzBZ1
-         O92b/dh2zytrc+ZXGOcAoPQH1g8mVBtafQttlkHaGoy1frvu4PF2TWOYe3ObJ04hAHVg
-         bboZhbngbVsriRB8rKU33i1Tw0TkTdaWTD02QE9f8QOjLx8kYvv+e3N+H7vp6E7T+fo/
-         mfUkLX3ryWGvVzsFCbWeXs06y/klclfuBaUCuduiEXNHbtF1cV9s4SS60QxgVaHohdB6
-         d/cp57q63oet12DVmfw7+gKkxEa2Pypkx/e4lGeu7kSm9iYte7J3PMTwlWgdT5qFCUkN
-         RSuw==
+	s=arc-20240116; t=1751646932; c=relaxed/simple;
+	bh=Po3uAnbbJQfcOJ9AwjjvOgDGl5MOefKiXSjPVGg+duA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FUt9m4R0Xr7HgvWFjEqjGSCsQ1sTMGvMYnAD7XPUN4hoYt2Fqb7c250fQkdckOkwgiwPGzUiIDgftuaMfnZiHOM5Q1orWxqMpOerZ2hlLq1Qc5VTjQMbZbLgTJYzL88La60YJG2qGo7HAYuJez67k3GpoX6B5jOxdnOXeMVPK00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=D/BwV/uF; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56498owv011258
+	for <linux-pm@vger.kernel.org>; Fri, 4 Jul 2025 16:35:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=x+uc35o7ZAs4x+Vhq1bn38
+	TM/2Sgai0URazaa2yZZXc=; b=D/BwV/uF50S5g+Rk1bn+6iA0qx/6gplbGT3crC
+	QEYgxGelFN8srvoM+gkJFkE62cyv1pG1dttuxp1xuX24Of9wRTHBMOzW5gDTbFon
+	gFYQs21sxKJrJaF8O8cAIhbbtYpuBsnyZuowuAPxC+JI7GgN5hFNQpIkOPZQvzBk
+	V0fXyp40jDnr+VC8n0cNOUd5FwGycpU6NW6w0aawteZdBXQhm1mHCrcH2fg+TAH4
+	DHfQDxeneZ+h3WINUw4My1L+5lptJR8n+hJZZjS41hcFDhc2c8HRKrOPDheV5ofL
+	Iz9bB4Uj+N32Ow7etd8TyiX6CjXW0pM8QJAsoawsY8blSUwA==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47j802c7jw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 04 Jul 2025 16:35:29 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7d22790afd2so145393185a.2
+        for <linux-pm@vger.kernel.org>; Fri, 04 Jul 2025 09:35:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751643466; x=1752248266;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pfUDmHeepnt8bgi+nNBa1jZtXWQ+k/4Kcm7pPkbYwkQ=;
-        b=EaxG7YRE2wpaeXHJJ6AYdpK5wem2I8bMoyto8ovJw9uStb1QnErpauEc+1cOHb2GdR
-         spuQWKe88KtPW+Hfj8rv9omm96pmaPUhLvl+mde0GALvN6hlcz3T3rlesrLlZONIuCig
-         LbPlR8YdPufmgJgSh59Czis8yhmt7rrbkO3PJ2xETOmNqVlQ3jxH972Qc/1I92RNaVyn
-         GV23zeWt4cKRQ2vg9Q8zhJ5WBIZThjuc/rlRhoiOi+4YB67u+8Gw9aBoZFf6gBj+jMPh
-         GLRJBjJTyp/ATlh61eFOLOa/U2Q04tagLdqrhZodQdHRXcOJpqrRSiS7gaeS3Y9rOx7d
-         GLOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVEX+TgUTFnuYqqZEfbPHiC/SHc7uJg7wthTGsu2JDoFOk+6L2b1Zsjt994QoLeevSojCThMC9oTQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwS/ktv0XaH1qBv7iWU+2b4CSEpIaf1WYE/+OnIftkGOOGMJvi6
-	0NITxeg1we/pveq4ih5zrUj4qQ6i2FoCTSHXKNdF4ljFRqppdpRvybfm020wiaX0ZLc=
-X-Gm-Gg: ASbGncs0qmTcIlSD7xeTQ0TyVum5rWSFhW2ayWXh0j32xoHXG8HbTldsz28hWlLSgoI
-	OTq5iVVh55h3Gv3AxqWuXij2d7mcu220N2KiTsQX+NN+QI6GcTmLovw8adbWR0rM8VnCFRoKx9V
-	74+rGMdUjk0B3ShmpDwLaihITbyO50ieVoxDVsQBXygbolLztG8CezITB9SykshVr4fjKgM2a7q
-	BZ07f14MRjvEiaaeIeTaZcmATHH8SIoKd9LOvLE/rLAFCmDTrP0lSxo5sWu7zP5QVxQA+dwgFcD
-	h7IW8D0heH3Udchd2oSKZ0q2vEExdvyD+G2VYJEDTWgayu1uPuRpshzQOAjCU/yfRA==
-X-Google-Smtp-Source: AGHT+IFPI2zhve4aVtUtekaO97BS+JFBRK74WkSk2tLAhK9T3VoR5MF+THO0XUOGjGGiMHNpLBAJwA==
-X-Received: by 2002:a17:90a:d604:b0:312:1143:cf8c with SMTP id 98e67ed59e1d1-31aadd86742mr4003854a91.16.1751643466282;
-        Fri, 04 Jul 2025 08:37:46 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:ebf3:da99:de93:f600])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31a9cb7e88esm5358629a91.0.2025.07.04.08.37.43
+        d=1e100.net; s=20230601; t=1751646923; x=1752251723;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x+uc35o7ZAs4x+Vhq1bn38TM/2Sgai0URazaa2yZZXc=;
+        b=XpVGWK5LiWU92zqgjVG4MiY9k/awGquGi34LAv6cazFx6vh1xc50S0pBuSMzJTIzkR
+         PIZJnMARB9szauoX54TobpJWpN46ryoNxQ7jM5EUHn3qpf2L2J5oNfygRVNdSdE8DDR4
+         frTBqcUdoZm09dTBdIE/24nCOZe+9PJRV99sTnKQ7l/6WERppUF1646Z7TOOrnfg7twa
+         X7qUMZNgHktWg09sEO83tGzFa2oSceOkoXWYT0IYq21xXDwyFNGZJ8QNulsNEc2M6m0W
+         BZhYSxRc1z6wtfwswPEpfF45bro+BmOwPSks24yCbux8NzfIe4hFGRAKdR9wjdF8EBvi
+         qaig==
+X-Forwarded-Encrypted: i=1; AJvYcCVarX6NqcaiLtYMd4JiVjSw3Ok7EJViO+SZLaLgyTFCsU7btVcoqg5wgh8TMkRL96ND5mGHUGNcQw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJnzx71XPl3Qmhjc4cGfBx0sl9eA5nHUmOKlAY7tq38NzOJmff
+	CyqBJzaYMsDYWTtD354Se804B3yhj8S7cnKgZdS39ry0DLTG5CtOmiI3w/8id+kPhqgtP1WlmYY
+	/ggJtrKatKqg7jnWLvsCHW0l0BcDVQ42tOEreCxLvdFV/9dznirPK297JRTtjjbP0GHlOF06s
+X-Gm-Gg: ASbGncvo9X0t+A18haPuP7tbeJJJ42HqIQxnPuL5sDkN6yw9FTsGXp25HxmcZPIgQAw
+	6G9FI0OCaXz+/Po7N6eDhcCee7pFpWDVF6Z0I7YWlg9A08bZK7T5NO80eLT3dhDnMwtt4mTMDod
+	ifpePRIpfXiOd34LicyEDmMkm7R+NCpCG/RQNQBjRSJrK7UF5RVilBZyeGsNgprWhjtLyqfsAIC
+	fyKr/N2pme1AGRGfCYJDCuijstBqG0f2ObrxG9rVfr79vqF7wcxggIh9mYDBVhOWZDqGO4B9EXM
+	g1Ifq/TSipQK/0Zum9sOBUYdYs5xYmhsTur1PpstGJmtBSJFDTaeccLEfeIwrTPCNCJjvmZ+HSF
+	yZjDC9dbztncBFfo2hhCEa5MBEnMfYqyuSRA=
+X-Received: by 2002:a05:620a:2915:b0:7ca:f02a:4d2b with SMTP id af79cd13be357-7d5dcc7295dmr437631085a.12.1751646923038;
+        Fri, 04 Jul 2025 09:35:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGQf8t57Yy79UtDPPVGPKb+uYjUJ6VtqYRO6eocRU7Sq95hkq8WDUXdXfwQHNnP+4vGWZMFKQ==
+X-Received: by 2002:a05:620a:2915:b0:7ca:f02a:4d2b with SMTP id af79cd13be357-7d5dcc7295dmr437627185a.12.1751646922586;
+        Fri, 04 Jul 2025 09:35:22 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-556383d33f3sm298321e87.68.2025.07.04.09.35.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jul 2025 08:37:45 -0700 (PDT)
-Date: Fri, 4 Jul 2025 09:37:42 -0600
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-	david.m.ertman@intel.com, ira.weiny@intel.com, leon@kernel.org,
-	rafael@kernel.org, dakr@kernel.org, len.brown@intel.com,
-	pavel@kernel.org, andersson@kernel.org, mturquette@baylibre.com,
-	sboyd@kernel.org, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	simona@ffwll.ch, wsa+renesas@sang-engineering.com,
-	ulf.hansson@linaro.org, vkoul@kernel.org,
-	yung-chuan.liao@linux.intel.com, pierre-louis.bossart@linux.dev,
-	broonie@kernel.org, robh@kernel.org, jirislaby@kernel.org,
-	saravanak@google.com, jic23@kernel.org, dmitry.torokhov@gmail.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-	bhelgaas@google.com, geert@linux-m68k.org,
-	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	fabrizio.castro.jz@renesas.com,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v5 1/3] PM: domains: Add flags to specify power on
- attach/detach
-Message-ID: <aGf1Rjy7WLEuNGme@p14s>
-References: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
- <20250703112708.1621607-2-claudiu.beznea.uj@bp.renesas.com>
+        Fri, 04 Jul 2025 09:35:21 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: [PATCH v2 00/28] interconnect: qcom: icc-rpmh: use NULL-terminated
+ arrays and drop static IDs
+Date: Fri, 04 Jul 2025 19:35:12 +0300
+Message-Id: <20250704-rework-icc-v2-0-875fac996ef5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250703112708.1621607-2-claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMACaGgC/02OQQ6CMBBFr0K6ttgWbYWV9zAsShm1Uah0CmIId
+ 7dATNxM8iZ/3vyJIHgLSIpkIh4Gi9a1EcQuIeau2xtQW0cmgokjkzyjHt7OP6g1hrI6q5RQUqv
+ 8ROLBy8PVjqvsUka+WwzOf1b3wJftTyP/NQOnjFaGZ0KK/FArfnaIadfrp3FNk8ZBynnTe+j6W
+ DFsP0ilEegSsqFIWhjDvtEYwMf8/AXxTldm2gAAAA==
+X-Change-ID: 20250613-rework-icc-0d3b7276a798
+To: Georgi Djakov <djakov@kernel.org>, Bjorn Andersson <andersson@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5598;
+ i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
+ bh=Po3uAnbbJQfcOJ9AwjjvOgDGl5MOefKiXSjPVGg+duA=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBoaALE8yCzNhw3/zTB2MAdpwiQlGQG4bu0xxob0
+ cq9Z93tUlOJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaGgCxAAKCRCLPIo+Aiko
+ 1czFB/96HwsiGptRvOgP15Z2sYwphRfPTxhO3NcZg1F4G9OXZA2oFymEffyjC7eKVYgKqDHfqKK
+ +3HWbvmZw5PoNwgtY8htkRUQOzvc2+Lj6SgmYOxRCuEV8TxRSyZCEgEbHKcqtp8ylaVANKY72Pj
+ /5fNheiejelgr6hnSgAGW+vQwx/F9AUBS485inlZoR2MeMfTgqMLBVtUDGKL8Hfo7SnRlzc+kg5
+ 5+I5T3+WazLUJ5YfnhiHb/YFjq89raluIU8Nvq37XRhzn8YbkIKJXrP2WeGxNjY7AsHKQoxQfvr
+ AJEuzrnOHulF2HD5xwQdrSiUrHxgZU1yD7ZOyMR2fj8WkFfh
+X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+X-Proofpoint-GUID: OiX-U-843ITdkk8eEZxpmDW46lZKg9CM
+X-Authority-Analysis: v=2.4 cv=YPWfyQGx c=1 sm=1 tr=0 ts=686802d1 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=XAMh8DXI7HpmVRFZxe8A:9
+ a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-ORIG-GUID: OiX-U-843ITdkk8eEZxpmDW46lZKg9CM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA0MDEyNiBTYWx0ZWRfX3gSWv1UAV1ha
+ oWUJC9T8OEin+eg2BpE5N9XYXj1q087raFCCSASdGpakbyTMAep7IIEQYKvyBbdihdavQdFezT0
+ vRNMsOuiNem/O31ZghGlXnQg5TFxtUI7wcKrXtMabQplnnl6cKZy/BiWlEzQ1QuotfHJ10gaEvR
+ sj2KY2y8Uac7tQwPKSW3cumIXhvx9zVV+m8aiiKgWON9vIasHo/VCb9r6CYDNQgdTriYpcSCDnS
+ v6weLpVnkkdp7Iyxti6Fi6XF2D3SWuSJlRD6SKP1iPMGO1VV300bD/5L4UZzyN9LbucISBvNc70
+ 15R7oHsZ8O1zsIx+RibsZ5zx7peeR/OIEDh8SjsbJ4EySIOxMeDmWT5mixs/EHZ22lKcSANwhiz
+ x3G7jYC/uTo2fbYl5mZ1jGxX3MY+BduBg7kjF0FiOfb6mAZw/Zbr+yiys+eYJRu/fC5U8xpq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-04_06,2025-07-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 mlxlogscore=684 mlxscore=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507040126
 
-On Thu, Jul 03, 2025 at 02:27:06PM +0300, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> Calling dev_pm_domain_attach()/dev_pm_domain_detach() in bus driver
-> probe/remove functions can affect system behavior when the drivers attached
-> to the bus use devres-managed resources. Since devres actions may need to
-> access device registers, calling dev_pm_domain_detach() too early, i.e.,
-> before these actions complete, can cause failures on some systems. One such
-> example is Renesas RZ/G3S SoC-based platforms.
-> 
-> If the device clocks are managed via PM domains, invoking
-> dev_pm_domain_detach() in the bus driver's remove function removes the
-> device's clocks from the PM domain, preventing any subsequent
-> pm_runtime_resume*() calls from enabling those clocks.
-> 
-> The second argument of dev_pm_domain_attach() specifies whether the PM
-> domain should be powered on during attachment. Likewise, the second
-> argument of dev_pm_domain_detach() indicates whether the domain should be
-> powered off during detachment.
-> 
-> Upcoming commits address the issue described above (initially for the
-> platform bus only) by deferring the call to dev_pm_domain_detach() until
-> after devres_release_all() in device_unbind_cleanup(). The detach_power_off
-> field in struct dev_pm_info stores the detach power off info from the
-> second argument of dev_pm_domain_attach().
-> 
-> Because there are cases where the device's PM domain power-on/off behavior
-> must be conditional (e.g., in i2c_device_probe()), the patch introduces
-> PD_FLAG_ATTACH_POWER_ON and PD_FLAG_DETACH_POWER_OFF flags to be passed to
-> dev_pm_domain_attach().
-> 
-> Finally, dev_pm_domain_attach() and its users are updated to use the newly
-> introduced PD_FLAG_ATTACH_POWER_ON and PD_FLAG_DETACH_POWER_OFF macros.
-> 
-> This is a preparatory commit.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
-> 
-> Changes in v5:
-> - none; this patch is new
-> 
->  drivers/amba/bus.c                       |  4 ++--
->  drivers/base/auxiliary.c                 |  2 +-
->  drivers/base/platform.c                  |  2 +-
->  drivers/base/power/common.c              |  6 +++---
->  drivers/clk/qcom/apcs-sdx55.c            |  2 +-
->  drivers/gpu/drm/display/drm_dp_aux_bus.c |  2 +-
->  drivers/i2c/i2c-core-base.c              |  2 +-
->  drivers/mmc/core/sdio_bus.c              |  2 +-
->  drivers/rpmsg/rpmsg_core.c               |  2 +-
+Qualcomm interconnect code has been using .num_foo fields together with
+the arrays embedded in the structure, which results in hard-to-notice
+mistakes if .num_foo gets omitted or incorrect.
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Rework RPMh interconnect code to use NULL-terminated arrays for the
+dynamic IDs case (as now all the arrays contain only pointers) and,
+while we are at it, rework all the drivers to use dynamic IDs and drop
+static IDs code.
 
->  drivers/soundwire/bus_type.c             |  2 +-
->  drivers/spi/spi.c                        |  2 +-
->  drivers/tty/serdev/core.c                |  2 +-
->  include/linux/pm_domain.h                | 10 ++++++++--
->  13 files changed, 23 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-> index 71482d639a6d..74e34a07ef72 100644
-> --- a/drivers/amba/bus.c
-> +++ b/drivers/amba/bus.c
-> @@ -138,7 +138,7 @@ static int amba_read_periphid(struct amba_device *dev)
->  	void __iomem *tmp;
->  	int i, ret;
->  
-> -	ret = dev_pm_domain_attach(&dev->dev, true);
-> +	ret = dev_pm_domain_attach(&dev->dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret) {
->  		dev_dbg(&dev->dev, "can't get PM domain: %d\n", ret);
->  		goto err_out;
-> @@ -291,7 +291,7 @@ static int amba_probe(struct device *dev)
->  		if (ret < 0)
->  			break;
->  
-> -		ret = dev_pm_domain_attach(dev, true);
-> +		ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
->  		if (ret)
->  			break;
->  
-> diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
-> index dba7c8e13a53..44cd3f85b659 100644
-> --- a/drivers/base/auxiliary.c
-> +++ b/drivers/base/auxiliary.c
-> @@ -217,7 +217,7 @@ static int auxiliary_bus_probe(struct device *dev)
->  	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
->  	int ret;
->  
-> -	ret = dev_pm_domain_attach(dev, true);
-> +	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret) {
->  		dev_warn(dev, "Failed to attach to PM Domain : %d\n", ret);
->  		return ret;
-> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> index 075ec1d1b73a..df1ec34fdf56 100644
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -1396,7 +1396,7 @@ static int platform_probe(struct device *_dev)
->  	if (ret < 0)
->  		return ret;
->  
-> -	ret = dev_pm_domain_attach(_dev, true);
-> +	ret = dev_pm_domain_attach(_dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret)
->  		goto out;
->  
-> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-> index 781968a128ff..fecb85fa85ac 100644
-> --- a/drivers/base/power/common.c
-> +++ b/drivers/base/power/common.c
-> @@ -83,7 +83,7 @@ EXPORT_SYMBOL_GPL(dev_pm_put_subsys_data);
->  /**
->   * dev_pm_domain_attach - Attach a device to its PM domain.
->   * @dev: Device to attach.
-> - * @power_on: Used to indicate whether we should power on the device.
-> + * @flags: indicate whether we should power on/off the device on attach/detach
->   *
->   * The @dev may only be attached to a single PM domain. By iterating through
->   * the available alternatives we try to find a valid PM domain for the device.
-> @@ -100,14 +100,14 @@ EXPORT_SYMBOL_GPL(dev_pm_put_subsys_data);
->   * Returns 0 on successfully attached PM domain, or when it is found that the
->   * device doesn't need a PM domain, else a negative error code.
->   */
-> -int dev_pm_domain_attach(struct device *dev, bool power_on)
-> +int dev_pm_domain_attach(struct device *dev, u32 flags)
->  {
->  	int ret;
->  
->  	if (dev->pm_domain)
->  		return 0;
->  
-> -	ret = acpi_dev_pm_attach(dev, power_on);
-> +	ret = acpi_dev_pm_attach(dev, !!(flags & PD_FLAG_ATTACH_POWER_ON));
->  	if (!ret)
->  		ret = genpd_dev_pm_attach(dev);
->  
-> diff --git a/drivers/clk/qcom/apcs-sdx55.c b/drivers/clk/qcom/apcs-sdx55.c
-> index 3ba01622d8f0..90dd1f1855c2 100644
-> --- a/drivers/clk/qcom/apcs-sdx55.c
-> +++ b/drivers/clk/qcom/apcs-sdx55.c
-> @@ -111,7 +111,7 @@ static int qcom_apcs_sdx55_clk_probe(struct platform_device *pdev)
->  	 * driver, there seems to be no better place to do this. So do it here!
->  	 */
->  	cpu_dev = get_cpu_device(0);
-> -	ret = dev_pm_domain_attach(cpu_dev, true);
-> +	ret = dev_pm_domain_attach(cpu_dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret) {
->  		dev_err_probe(dev, ret, "can't get PM domain: %d\n", ret);
->  		goto err;
-> diff --git a/drivers/gpu/drm/display/drm_dp_aux_bus.c b/drivers/gpu/drm/display/drm_dp_aux_bus.c
-> index 7b9afcf48836..2d279e82922f 100644
-> --- a/drivers/gpu/drm/display/drm_dp_aux_bus.c
-> +++ b/drivers/gpu/drm/display/drm_dp_aux_bus.c
-> @@ -58,7 +58,7 @@ static int dp_aux_ep_probe(struct device *dev)
->  		container_of(aux_ep, struct dp_aux_ep_device_with_data, aux_ep);
->  	int ret;
->  
-> -	ret = dev_pm_domain_attach(dev, true);
-> +	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret)
->  		return dev_err_probe(dev, ret, "Failed to attach to PM Domain\n");
->  
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 2ad2b1838f0f..38eabf1173da 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -573,7 +573,7 @@ static int i2c_device_probe(struct device *dev)
->  		goto err_clear_wakeup_irq;
->  
->  	do_power_on = !i2c_acpi_waive_d0_probe(dev);
-> -	status = dev_pm_domain_attach(&client->dev, do_power_on);
-> +	status = dev_pm_domain_attach(&client->dev, do_power_on ? PD_FLAG_ATTACH_POWER_ON : 0);
->  	if (status)
->  		goto err_clear_wakeup_irq;
->  
-> diff --git a/drivers/mmc/core/sdio_bus.c b/drivers/mmc/core/sdio_bus.c
-> index b66b637e2d57..656601754966 100644
-> --- a/drivers/mmc/core/sdio_bus.c
-> +++ b/drivers/mmc/core/sdio_bus.c
-> @@ -161,7 +161,7 @@ static int sdio_bus_probe(struct device *dev)
->  	if (!id)
->  		return -ENODEV;
->  
-> -	ret = dev_pm_domain_attach(dev, false);
-> +	ret = dev_pm_domain_attach(dev, 0);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 6ee36adcbdba..bece5e635ee9 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -479,7 +479,7 @@ static int rpmsg_dev_probe(struct device *dev)
->  	struct rpmsg_endpoint *ept = NULL;
->  	int err;
->  
-> -	err = dev_pm_domain_attach(dev, true);
-> +	err = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (err)
->  		goto out;
->  
-> diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
-> index 75d6f16efced..bc1e653080d9 100644
-> --- a/drivers/soundwire/bus_type.c
-> +++ b/drivers/soundwire/bus_type.c
-> @@ -101,7 +101,7 @@ static int sdw_drv_probe(struct device *dev)
->  	/*
->  	 * attach to power domain but don't turn on (last arg)
->  	 */
-> -	ret = dev_pm_domain_attach(dev, false);
-> +	ret = dev_pm_domain_attach(dev, 0);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 1bc0fdbb1bd7..8200b47b2295 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -427,7 +427,7 @@ static int spi_probe(struct device *dev)
->  	if (spi->irq < 0)
->  		spi->irq = 0;
->  
-> -	ret = dev_pm_domain_attach(dev, true);
-> +	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-> index 0213381fa358..d16c207a1a9b 100644
-> --- a/drivers/tty/serdev/core.c
-> +++ b/drivers/tty/serdev/core.c
-> @@ -399,7 +399,7 @@ static int serdev_drv_probe(struct device *dev)
->  	const struct serdev_device_driver *sdrv = to_serdev_device_driver(dev->driver);
->  	int ret;
->  
-> -	ret = dev_pm_domain_attach(dev, true);
-> +	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 0b18160901a2..62a35a78ce9b 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -36,10 +36,16 @@
->   *				isn't specified, the index just follows the
->   *				index for the attached PM domain.
->   *
-> + * PD_FLAG_ATTACH_POWER_ON:	Power on the domain during attach.
-> + *
-> + * PD_FLAG_DETACH_POWER_OFF:	Power off the domain during detach.
-> + *
->   */
->  #define PD_FLAG_NO_DEV_LINK		BIT(0)
->  #define PD_FLAG_DEV_LINK_ON		BIT(1)
->  #define PD_FLAG_REQUIRED_OPP		BIT(2)
-> +#define PD_FLAG_ATTACH_POWER_ON		BIT(3)
-> +#define PD_FLAG_DETACH_POWER_OFF	BIT(4)
->  
->  struct dev_pm_domain_attach_data {
->  	const char * const *pd_names;
-> @@ -501,7 +507,7 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
->  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
->  
->  #ifdef CONFIG_PM
-> -int dev_pm_domain_attach(struct device *dev, bool power_on);
-> +int dev_pm_domain_attach(struct device *dev, u32 flags);
->  struct device *dev_pm_domain_attach_by_id(struct device *dev,
->  					  unsigned int index);
->  struct device *dev_pm_domain_attach_by_name(struct device *dev,
-> @@ -518,7 +524,7 @@ int dev_pm_domain_start(struct device *dev);
->  void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd);
->  int dev_pm_domain_set_performance_state(struct device *dev, unsigned int state);
->  #else
-> -static inline int dev_pm_domain_attach(struct device *dev, bool power_on)
-> +static inline int dev_pm_domain_attach(struct device *dev, u32 flags)
->  {
->  	return 0;
->  }
-> -- 
-> 2.43.0
-> 
+This series touches only RPMh interconnect drivers. Corresponding series
+for RPM drivers will follow up shortly.
+
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+---
+Changes in v2:
+- Rebased on linux-next, dropping applied dependency
+- Link to v1: https://lore.kernel.org/r/20250616-rework-icc-v1-0-bc1326294d71@oss.qualcomm.com
+
+---
+Dmitry Baryshkov (28):
+      interconnect: qcom: sc8280xp: specify num_links for qnm_a1noc_cfg
+      interconnect: qcom: sc8180x: specify num_nodes
+      interconnect: qcom: rpmh: make nodes a NULL_terminated array
+      interconnect: qcom: rpmh: make link_nodes a NULL_terminated array
+      interconnect: qcom: sc7280: convert to dynamic IDs
+      interconnect: qcom: sc8180x: convert to dynamic IDs
+      interconnect: qcom: sc8280xp: convert to dynamic IDs
+      interconnect: qcom: sdm845: convert to dynamic IDs
+      interconnect: qcom: sm8250: convert to dynamic IDs
+      interconnect: qcom: x1e80100: convert to dynamic IDs
+      interconnect: qcom: qcs615: convert to dynamic IDs
+      interconnect: qcom: qcs8300: convert to dynamic IDs
+      interconnect: qcom: qdu1000: convert to dynamic IDs
+      interconnect: qcom: sar2130p: convert to dynamic IDs
+      interconnect: qcom: sc7180: convert to dynamic IDs
+      interconnect: qcom: sdm670: convert to dynamic IDs
+      interconnect: qcom: sdx55: convert to dynamic IDs
+      interconnect: qcom: sdx65: convert to dynamic IDs
+      interconnect: qcom: sdx75: convert to dynamic IDs
+      interconnect: qcom: sm6350: convert to dynamic IDs
+      interconnect: qcom: sm7150: convert to dynamic IDs
+      interconnect: qcom: sm8150: convert to dynamic IDs
+      interconnect: qcom: sm8350: convert to dynamic IDs
+      interconnect: qcom: sm8450: convert to dynamic IDs
+      interconnect: qcom: sm8550: convert to dynamic IDs
+      interconnect: qcom: sm8650: convert to dynamic IDs
+      interconnect: qcom: sm8750: convert to dynamic IDs
+      interconnect: qcom: icc-rpmh: drop support for non-dynamic IDS
+
+ drivers/interconnect/qcom/bcm-voter.c |    4 +-
+ drivers/interconnect/qcom/icc-rpmh.c  |   20 +-
+ drivers/interconnect/qcom/icc-rpmh.h  |   13 +-
+ drivers/interconnect/qcom/qcs615.c    |  713 ++++++++-----------
+ drivers/interconnect/qcom/qcs615.h    |  128 ----
+ drivers/interconnect/qcom/qcs8300.c   |  911 +++++++++++-------------
+ drivers/interconnect/qcom/qcs8300.h   |  177 -----
+ drivers/interconnect/qcom/qdu1000.c   |  470 ++++++------
+ drivers/interconnect/qcom/qdu1000.h   |   95 ---
+ drivers/interconnect/qcom/sa8775p.c   |  493 ++++++-------
+ drivers/interconnect/qcom/sar2130p.c  |  795 ++++++++-------------
+ drivers/interconnect/qcom/sc7180.c    |  892 +++++++++++------------
+ drivers/interconnect/qcom/sc7180.h    |  149 ----
+ drivers/interconnect/qcom/sc7280.c    |  840 ++++++++++------------
+ drivers/interconnect/qcom/sc7280.h    |  154 ----
+ drivers/interconnect/qcom/sc8180x.c   | 1013 +++++++++++++-------------
+ drivers/interconnect/qcom/sc8180x.h   |  179 -----
+ drivers/interconnect/qcom/sc8280xp.c  | 1257 ++++++++++++++++-----------------
+ drivers/interconnect/qcom/sc8280xp.h  |  209 ------
+ drivers/interconnect/qcom/sdm670.c    |  712 +++++++++----------
+ drivers/interconnect/qcom/sdm670.h    |  128 ----
+ drivers/interconnect/qcom/sdm845.c    |  986 ++++++++++++--------------
+ drivers/interconnect/qcom/sdm845.h    |  140 ----
+ drivers/interconnect/qcom/sdx55.c     |  611 ++++++++--------
+ drivers/interconnect/qcom/sdx55.h     |   70 --
+ drivers/interconnect/qcom/sdx65.c     |  577 +++++++--------
+ drivers/interconnect/qcom/sdx65.h     |   65 --
+ drivers/interconnect/qcom/sdx75.c     |  498 ++++++-------
+ drivers/interconnect/qcom/sdx75.h     |   97 ---
+ drivers/interconnect/qcom/sm6350.c    |  838 +++++++++++-----------
+ drivers/interconnect/qcom/sm6350.h    |  139 ----
+ drivers/interconnect/qcom/sm7150.c    |  860 +++++++++++-----------
+ drivers/interconnect/qcom/sm7150.h    |  140 ----
+ drivers/interconnect/qcom/sm8150.c    |  930 ++++++++++++------------
+ drivers/interconnect/qcom/sm8150.h    |  152 ----
+ drivers/interconnect/qcom/sm8250.c    |  977 ++++++++++++-------------
+ drivers/interconnect/qcom/sm8250.h    |  168 -----
+ drivers/interconnect/qcom/sm8350.c    |  901 ++++++++++++-----------
+ drivers/interconnect/qcom/sm8350.h    |  158 -----
+ drivers/interconnect/qcom/sm8450.c    |  823 ++++++++++-----------
+ drivers/interconnect/qcom/sm8450.h    |  169 -----
+ drivers/interconnect/qcom/sm8550.c    |  683 ++++++++----------
+ drivers/interconnect/qcom/sm8550.h    |  138 ----
+ drivers/interconnect/qcom/sm8650.c    |  713 ++++++++-----------
+ drivers/interconnect/qcom/sm8650.h    |  144 ----
+ drivers/interconnect/qcom/sm8750.c    |  779 ++++++++------------
+ drivers/interconnect/qcom/x1e80100.c  |  819 ++++++++++-----------
+ drivers/interconnect/qcom/x1e80100.h  |  192 -----
+ 48 files changed, 8655 insertions(+), 13464 deletions(-)
+---
+base-commit: 26ffb3d6f02cd0935fb9fa3db897767beee1cb2a
+change-id: 20250613-rework-icc-0d3b7276a798
+
+Best regards,
+-- 
+With best wishes
+Dmitry
+
 
