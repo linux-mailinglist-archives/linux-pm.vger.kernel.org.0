@@ -1,125 +1,175 @@
-Return-Path: <linux-pm+bounces-30132-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30133-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E5E6AF90CC
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 12:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22BD0AF914C
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 13:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45FF17ADB14
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 10:38:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 865937B79B7
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 11:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 703572EF2AA;
-	Fri,  4 Jul 2025 10:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4132BE621;
+	Fri,  4 Jul 2025 11:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Z8S2ENiT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tQyS3S4B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C441A2EE96F
-	for <linux-pm@vger.kernel.org>; Fri,  4 Jul 2025 10:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E87258CF8
+	for <linux-pm@vger.kernel.org>; Fri,  4 Jul 2025 11:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751625605; cv=none; b=A99wLyhIt3oM5jeBSzgPihJpP9IZ+D0WP6E5sUoYfd5x3JaVuQ6fZN1jnX72JJ8Dy+0QCqOPNkRwvl8mHhzalKGErE3FKAcKXz8HTP/cKjLOTqYL7Op9lRNbcQCc5XwIpnXMgtANQ2OLADlXQh0BPx/61SfNtug13OSIbfFGuaE=
+	t=1751627770; cv=none; b=nDEY2z3n+Ve7DZryBOY5+OBpCckZqM9hFO7e8bgBYJA5QhJxInDTphYR7IIqLrDYaNdialDoCiUkWaionyrp3f66IQP0PdZQr7H35Mr7CIFfVjTiALVQ+QhMvOswxqOXaYOQubRyMXdEgvTSluhUU3JXAyQx7TMAj3A5YJKrUec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751625605; c=relaxed/simple;
-	bh=QTDQwxpmMa7bdrjCOtTfl4c7nTDaps3asxtgIQRarGE=;
+	s=arc-20240116; t=1751627770; c=relaxed/simple;
+	bh=b9rtoKDrBAYC3BaF1M9Ck1YA+omLHf3ebvKNPvZnx2s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XRLpkVfSAZcfkccpcOgu5HJEeBgXZn+ikIQtArZqjgpLQRkJRuzgZKEg8nphoa7fr9QLrb6A/MIwVE7T0tof7g821dRAJTRDEKvTzeADh6vCKzQ3lrI9KP+Pt/1Ca1LAli8lNZYnHDM5+YUaQlCCV5E5bf6UE1MSMAhck6M+F/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=Z8S2ENiT; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-73972a54919so830518b3a.3
-        for <linux-pm@vger.kernel.org>; Fri, 04 Jul 2025 03:40:03 -0700 (PDT)
+	 To:Cc:Content-Type; b=Jaa5slROf7KDSz1OqQbNPjnu8Ey8R2VG+YF5x1fDmkERDLy/cViTr8mEOvfMC4kjEYJxiPpDjbLhJG9JgCrkn6x4UDakkAdlu2JwHXgz90rBDY1zsmwy84BBGZrKjuIKkF3vko0nLvuimjQyx9LwKb9VMsYkVADDGekPAFfjdfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tQyS3S4B; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-70e77831d68so7027697b3.2
+        for <linux-pm@vger.kernel.org>; Fri, 04 Jul 2025 04:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1751625603; x=1752230403; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6qpm9oVk31iPLMFRDyV/0+2lbwRDN6/sR7bTcFUqHlY=;
-        b=Z8S2ENiTkQoIN1MVeLNIfnDmEKgJIztplobAA5pYZWftRJYOCcnBVIisz0/onL9Fmz
-         z+x0H6RkA1epXBUbkYWhiZ4/248WiX6fwVqu6SXwgteYmu1fN9ZM5Xk7OMKo1aeh64+b
-         pNF7OqtI9Jaupe+NTY0sQ+WEIBMGL5wcSIqbG5AUiwKF7/peC5nJ4P1cZr9u9ibWUyvc
-         ZmSlanbe91kE2n1iOxmqrit5N34SNSx2J7PV4wQlR+QtE1fv7tJgDWW4Ue/Rg+fr1Us2
-         yJTezJEaNc0jLUyZZSsCmF7SYgo6HZpWp+giCAiVaHPYfUSP/W6CtUXgXF4IuHvuRnMS
-         LFEA==
+        d=linaro.org; s=google; t=1751627767; x=1752232567; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjpGYVa/Cr3/NCJD8CT9IY6HzXhXvTQMbsQZwOON6l4=;
+        b=tQyS3S4B2wbGP1Dqsu7JNrBtVdj91LQh2w8veoQ7h0MrGDi1p7vqMTB2KnEfYSxOYT
+         nCeOIdg0bzfoUS9fknPL6U/uxlkZoBZmwNkMV4zBDt1GmAfbMkwVeKutU2q2RNlrQDpR
+         6prf8vynMeEeFXAOcHn0YsENBARqw9mHcSL6Sq/8ElrEo3wIGrX7fqJWQ1wie3U8xryT
+         7IezF6IwbQ86ZUR+nRM3Q2oweyf2+uWHTZWLmUmL7uDSz65WecELfxdVUzs3c92fAZIL
+         AGmaOLE0mGwpaUqqqNHdyNAHU9oKyisiMgEfGXhUHqOvRVJrQrtdTvhr+8krET00XqJ5
+         CoMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751625603; x=1752230403;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6qpm9oVk31iPLMFRDyV/0+2lbwRDN6/sR7bTcFUqHlY=;
-        b=qQb6rTnQDZIdyPjwO0d+dlyldA9PtqYftJTslC6/WVa4rxFvGZn9G3IzGWWWOs1ozK
-         eiUQ40zDEtEFjuA3smiEMFQby7BbaSTBM8V0NvZa/bDvq92g3gv8UEoMLhpN5aoMhFwV
-         nwKmPMMFkIPsGdrIceA44+5j2TS/yfSppTXOXqynBWzsuxfIOSTvZ3eUy6upXtmv0UY/
-         qgmRXf77eoo3gW8lH8tzjJV6PURHs9GLSoK0ovyxMvHavPal6/gMFvfQkA4XU0Sxl+SS
-         85XsjkgH5MdX0qonFIKakxzbpkqukZ6XuK7oqHMAnoZU6jCKLVvDt22wuXbs6sR640j2
-         UQJw==
-X-Forwarded-Encrypted: i=1; AJvYcCWON4P5jPLcO4dOJyT+yFX/D61YuVRkn+jnYNfCi5otD7E+Z6aXURgiPVIBZ1kHqj29r8lZwgIoww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF1dfCxREMsGDaO8NDDaN3PwMdI9d7WLEeF/OnaUP0y6ZX2wAu
-	RlvMqAxnaD8i12hsnxMpyW4ISjA9jFTKgPU2QE5RkwIYW7sr7lUchlqLWLc3ys8vHcgk41vclq5
-	DDG7w/anRibm4tzWJswaTqdSDngY5zvMX1/QTSkXOOw==
-X-Gm-Gg: ASbGncv///9LHY8gkEFfAR1zIj5j4CtpmkBm8FrWBdCRdjo4G77r4HjcK4QMK1Elo5/
-	6fzrBLK47e1lneZUxT9CtQoMop6UvHNbWbrLbz5AsHROZKnxRljPRhLiOrzQkA7au+FA92rJFNy
-	AyZGf78N7VPh1uvNHAD/gMBXjM+ga0aKL4P2W3/6lIR0G9Z0mZgHVQX7IHiAv3b46FNUTmFZUiX
-	aNl
-X-Google-Smtp-Source: AGHT+IGBs9C/a1h9wEnSJ4u2whXXZ8h6N1fXxSXBnoBq+aBJJFdxWz87n4GrI9gt5Rt5fyk2gdtaErEvJ5wxodxEPAg=
-X-Received: by 2002:a05:6a21:328a:b0:21d:fd1:9be with SMTP id
- adf61e73a8af0-226095a50bemr2186092637.12.1751625603014; Fri, 04 Jul 2025
- 03:40:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751627767; x=1752232567;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PjpGYVa/Cr3/NCJD8CT9IY6HzXhXvTQMbsQZwOON6l4=;
+        b=soig7s5YRjGtvRpokkQDtajRJVlYAMfUnJIa46RSBomIn0qxpJUEVhzCyQo3ouBmUA
+         Pbt2bgrElpjDggLoOuUv+BODjZA+2xYUyOo/nZHx7xzz1a1Yw/pWfV2qrAW3EjuaONqo
+         ouOaShlPlOxb0sUX4kSEHZtDagpnEOlnghWSpA0JdYk5XCq61gF5meiNF2RMTsowXdxd
+         OsImk2AGKb0iRNjfs7H2nX2XIQoqpWLG4Pq2gS4cbsCSi7Lc6xE86Xid9OCoLvI/iOIJ
+         PAwpY35W854eDpyAjgWhTdsSFtB/u7RW+U0uBpcn5A4mc9GZH5Fajv5eomjxym/FBMNj
+         pKDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXeD595om8bR8fJYqetjoW+i3CtYrzWzqTHf+OvBZMjbKE8PhaMCvPu5jicqywPmECJaVO2/6kug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkipE3hSQE85lylv54fqKj8U2Ts2kTH1V2CjRe7P3r/AuQkKoI
+	5ZBsyOiZ+SUIqVv48vcRWbeIULioiOywP7zUOVIeA89Wr6SA3WV8825i7B3H1r29lhb1LrErQla
+	vUjQJfhFD+3ENg4tqSktdUo7mF946vc/8IFk7Dp0C+g==
+X-Gm-Gg: ASbGncsBkQnWdRr+c9V+vhVD0nAlLJzgXE4Xa2oXVxPID7g0Qjtd4cWr8g0cfv64XDb
+	XfXhNJeZQWBH2fyApa4D692rqjgRZEdkJ7sR5fJAaodpUYk9sEBphf2cMcLoUHHqWMdw4OVmzmZ
+	2SNR0cZa6EWjgpy1+j32MO0z/HCu/XrcvktPvdJFfT9nIP
+X-Google-Smtp-Source: AGHT+IHAW8UyCQ9W+pvHvcTvef9aFULLZGbhQe98R4X9+6EEdiQxhHHKyUMUuOYP0+BDeQPC3PK4UvgN4CdOsI4nxiQ=
+X-Received: by 2002:a05:690c:9c09:b0:70f:9fcd:2075 with SMTP id
+ 00721157ae682-71668c0e0ddmr26398687b3.3.1751627767124; Fri, 04 Jul 2025
+ 04:16:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701114733.636510-1-ulf.hansson@linaro.org> <20250701114733.636510-25-ulf.hansson@linaro.org>
-In-Reply-To: <20250701114733.636510-25-ulf.hansson@linaro.org>
-From: Rahul Pathak <rpathak@ventanamicro.com>
-Date: Fri, 4 Jul 2025 16:09:27 +0530
-X-Gm-Features: Ac12FXzyhceuDUHxAgg09E47FfPnvNTySeb2d62SyjDeeom2LGwO1x_uyESViw4
-Message-ID: <CA+Oz1=aU=2KFEsJNmO6LHjE0Wsdyor7Z4Yr30nLwRkAGm=ZO6w@mail.gmail.com>
-Subject: Re: [PATCH v3 24/24] cpuidle: riscv-sbi: Drop redundant sync_state support
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>, 
-	linux-riscv@lists.infradead.org
+References: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 4 Jul 2025 13:15:31 +0200
+X-Gm-Features: Ac12FXwfheYVCqCiLAFVR27m9ptp6dfE-AwljIFg4O16ch_FdabejHZIDOFh5ww
+Message-ID: <CAPDyKFoznqfdX7Dvu3VPa5Me10VHGphnRRHrU17w-fie7HrQ5g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] PM: domains: Detach on device_unbind_cleanup()
+To: Claudiu <claudiu.beznea@tuxon.dev>, rafael@kernel.org
+Cc: linux@armlinux.org.uk, gregkh@linuxfoundation.org, 
+	david.m.ertman@intel.com, ira.weiny@intel.com, leon@kernel.org, 
+	dakr@kernel.org, len.brown@intel.com, pavel@kernel.org, andersson@kernel.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, maarten.lankhorst@linux.intel.com, 
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch, 
+	wsa+renesas@sang-engineering.com, mathieu.poirier@linaro.org, 
+	vkoul@kernel.org, yung-chuan.liao@linux.intel.com, 
+	pierre-louis.bossart@linux.dev, broonie@kernel.org, robh@kernel.org, 
+	jirislaby@kernel.org, saravanak@google.com, jic23@kernel.org, 
+	dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
+	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	fabrizio.castro.jz@renesas.com, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 1, 2025 at 5:23=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
- wrote:
+On Thu, 3 Jul 2025 at 13:27, Claudiu <claudiu.beznea@tuxon.dev> wrote:
 >
-> The recent updates to the genpd core, can entirely manage the sync_state
-> support for the cpuidle-riscv-sbi-domain. More precisely, genpd prevents
-> our ->power_off() callback from being invoked, until all of our consumers
-> are ready for it.
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> Let's therefore drop the sync_state support for the
-> cpuidle-riscv-sbi-domain as it has become redundant.
+> Hi,
 >
-> Cc: Anup Patel <anup@brainfault.org>
-> Cc: linux-riscv@lists.infradead.org
-> Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Colibri iMX8X
-> Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> # TI AM62A,Xi=
-linx ZynqMP ZCU106
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 22 +---------------------
->  1 file changed, 1 insertion(+), 21 deletions(-)
+> Series drops the dev_pm_domain_detach() from platform bus remove and
+> adds it in device_unbind_cleanup() to avoid runtime resumming the device
+> after it was detached from its PM domain.
+>
+> Please provide your feedback.
+>
+> Thank you,
+> Claudiu
+>
+> Changes in v5:
+> - added PD_FLAG_ATTACH_POWER_ON, PD_FLAG_DETACH_POWER_OFF;
+>   due to this a new patch was introduced
+>   "PM: domains: Add flags to specify power on attach/detach"
+>
+> Changes in v4:
+> - added a flag in dev_pm_info that is saved in dev_pm_domain_attach()
+>   and used in device_unbind_cleanup()
+>
+> Changes in v3:
+> - add devm_pm_domain_attach()
+>
+> Changes in v2:
+> - dropped the devres group open/close approach and use
+>   devm_pm_domain_attach()
+> - adjusted patch description to reflect the new approach
+>
+>
+> Claudiu Beznea (3):
+>   PM: domains: Add flags to specify power on attach/detach
+>   PM: domains: Detach on device_unbind_cleanup()
+>   driver core: platform: Drop dev_pm_domain_detach() call
+>
+>  drivers/amba/bus.c                       |  4 ++--
+>  drivers/base/auxiliary.c                 |  2 +-
+>  drivers/base/dd.c                        |  2 ++
+>  drivers/base/platform.c                  |  9 +++------
+>  drivers/base/power/common.c              |  9 ++++++---
+>  drivers/clk/qcom/apcs-sdx55.c            |  2 +-
+>  drivers/gpu/drm/display/drm_dp_aux_bus.c |  2 +-
+>  drivers/i2c/i2c-core-base.c              |  2 +-
+>  drivers/mmc/core/sdio_bus.c              |  2 +-
+>  drivers/rpmsg/rpmsg_core.c               |  2 +-
+>  drivers/soundwire/bus_type.c             |  2 +-
+>  drivers/spi/spi.c                        |  2 +-
+>  drivers/tty/serdev/core.c                |  2 +-
+>  include/linux/pm.h                       |  1 +
+>  include/linux/pm_domain.h                | 10 ++++++++--
+>  15 files changed, 31 insertions(+), 22 deletions(-)
+>
+> --
+> 2.43.0
 >
 
-LGTM
+The series looks good to me, please add:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Reviewed-by: Rahul Pathak <rpathak@ventanamicro.com>
+Rafael, do you intend to pick this via your tree?
+
+Another note, the similar thing that is being done in patch3 from the
+platform bus, is needed for other buses too (at least the amba bus for
+sure). Claudiu, are you planning to do that as a step on top - or are
+you expecting others to help out?
+
+Kind regards
+Uffe
 
