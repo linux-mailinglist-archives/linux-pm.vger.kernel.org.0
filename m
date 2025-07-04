@@ -1,176 +1,161 @@
-Return-Path: <linux-pm+bounces-30176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B4EEAF9B3E
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 21:39:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72FDCAF9B58
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 21:53:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3367F7AFDCC
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 19:38:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3DB616F9CA
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 19:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3C3227EA7;
-	Fri,  4 Jul 2025 19:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4900521638A;
+	Fri,  4 Jul 2025 19:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I9UO33Ch"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZQWPG3w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F6F1DE4DC;
-	Fri,  4 Jul 2025 19:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FD620ED;
+	Fri,  4 Jul 2025 19:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751657973; cv=none; b=pF3dCC/1IBrfPjXQ7MWrsStrquO41pEvy0lULOvHuOavYrXC6hnkupNLImQWJbiYl3/Q/FW/r1sMg4xEK+NWB7L/UZgoZuo5sNCZAWQKkZZOzfQZ3TEJAofM7yDRuVHNrHD7X6k86yJ3epQiwKuFFR3Gtn4uVVtsZDK4ZMB5btk=
+	t=1751658796; cv=none; b=eVEm3I5g+hTNkXF8ZRaXJi55oxy+CiHMgIT8zZz/LzQADASvkrKEnPos+dRZbb/S/8eETbvYTEsyWAVxtxvjXtlxPvfIJe4JnCjxJNtruqdybxCCWL1xNtHeEJeD++ou4K/TnEP3nLgfhdjgPRVyZJb8T5KSC2hmQI2Uum2XUOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751657973; c=relaxed/simple;
-	bh=ty9V8JMAdvvmDv0P0k4PGgC/jV1j8pI2d1WXBXRtpJI=;
+	s=arc-20240116; t=1751658796; c=relaxed/simple;
+	bh=DET2Gu0vw6K100zocQHh/uFyXtWFTkNoh5o1rTKK820=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bZ/IV4rgiavEdPXn/WiOxNcdii4rhQAQRTOnUeG51Pmce/PiJNm8a2f8Tc1ILrQF+Qg37bWBgiP9N7VmS1O17fl7HlnOKvdQeShHGTstME/zZhayJNROYQo65NC6FlR3+8x6xpxLo4fWFiUSZgrCQcTRxoAsgdWEwhr7m7Ph64A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I9UO33Ch; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-32f1763673cso2319421fa.3;
-        Fri, 04 Jul 2025 12:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751657969; x=1752262769; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PaN1iXlsiktU/ZIaAdJUYYtsPKiTgtwWPQpDE5mPO2Y=;
-        b=I9UO33Ch8Q9mrOD/M7pYrNP/6yXwnGYuiISlMxIx+fEgmO7W7xKxBWu7VE7BMhNeVz
-         B5VDHSNZ0a4SOXmult/S2ys6kOcY5rtYGnarXdjmrKCdIegLMN0dFgr96dmfJyIoclPv
-         VzKZ+qxH6H/Rn7XQvOJ0spguCYfsH6/87wnDHywwc1IKBh8VMFlPhPjxZjr1Taz9Icp1
-         O+qVNi/gO4mE6s0WggvOcnmjrzo1UJH9tYlwvqwEGf5+DqJOX18EEfs+bC8Q8MftxS9A
-         lNoKLhbAn72+T7w47bXi+ymPlA5QrFMNoo1a1i3sLaPpUZLIjzhBDrrdv23BVAcJMweQ
-         bp7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751657969; x=1752262769;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PaN1iXlsiktU/ZIaAdJUYYtsPKiTgtwWPQpDE5mPO2Y=;
-        b=qTAByDLsFTL5NJ+cgfyLtSRfQo1qqF+UkUPANt/aycwHPGnwbVsnonZqr32K4BJiXn
-         Q0aAvyEGFIY6hLkRRa33PMIeXZSiBvdUXjoPSu2k990VZkUEzFXfqPQUHu9NYJAblUG2
-         mGbv7Qq0gn1gwoW6y+/OMUW2tv2y5gM94WFWhjJKc351wTgq5ps2MiiXfQHY2lK8nTqK
-         /JGOY+MYIDjWxP+3Lzn3N3v+Irx+BI2YO06U8qkYX9mzimAWGH9pffSWS5OJ04Upbhhs
-         WxbkAJJZzixP+qv8b6Ly5rlr0Uv50TlqRC21VP4DPbJJlrXCjcOTWDAIq++FU1x1JcDr
-         yJtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5bE6gYhBjtGijKZvpSP1iwBGuBpiQUIgB6x4PJES8xlC7qE5eu9rw/oI7/62+seyG4h1A9302nGXk2cykGxpn@vger.kernel.org, AJvYcCUH+S1fFbCXyJIcUE2m0Sw+ZqNlxjqGVqZzLCLzpKCH4AlxHT5nLGkg8QpCyXrNmfD0Qt2wNq300m2SpVxOFzs=@vger.kernel.org, AJvYcCUtq7h4qLLJy3OVh9VMg54/leVmm//v1hh9TZ0ubEcR7yp5bY7kHdGk6rq/uU/7goVAart/Wc/SqN4=@vger.kernel.org, AJvYcCUuFc2YE+0eazNbwlNd+IF0kqr1pvK7SmvyBikZDHrROy2/r6YsVcUFuNf3g8r3anS52XVC3GSY1uEmmvMe@vger.kernel.org, AJvYcCWXYlyFJPoY3pBbVB+1gio1tzfiSPEAT5XLiaHkYobZM0vgc+LSnorvyPRVxm0ZC5kyvMmMteTMPCyl@vger.kernel.org, AJvYcCWsFQoldrMHxuaS7QYxNIkzPi0sDNsG/fOrinWYaYh8mU+Y2vMmjtALRYYWD1YQGrdDUR/Sp4HXVCPM@vger.kernel.org, AJvYcCWxI4E0lc9vhXcYhgMvOpDHc1+rP6YRR4dPMFoKcOQ+WvagZXaXuLRCa4E1wQvxjTYDImIzbrhO2Lpz@vger.kernel.org, AJvYcCX7W5ocIKModOBVt5zie92WusYsn+u+PaitpMlcsAhtBlH+eEfzbYf0DWkgjKb3gQPXpJQQ7CW/@vger.kernel.org, AJvYcCXbnBEJEoyS5AUyxlWnxTPGTNghA2zsrfxjVAcwxxEZQgn08S4YwmwvTsez+T8qjkzVDagg4hbsQCq+osM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYk0xN29p7aRys9tiPnFLhnZMPtKzM8lg22NNojhzUdstDfiGY
-	EKKXDm7j31NRcxjUS+8Xug0NSdCE7xynQTVRv5yzzXh3Ajbk6d0WIIz978/40qHXVzxr2QlxEbk
-	2ei273M1We1fHE3+1BOWSu+0HbHHGw8M=
-X-Gm-Gg: ASbGncvlYShZkkURrkUg43I1M1XWZTlTiQ5ygjIqM5Feus3x/wo+J6M3OycGwtvxBCB
-	LYrPwATqM1K80/vAecVzgdBtAoBtqccUJbipLBelwksYf6n4mX7H+lJ8I/1DpoNxDJowLKqfBno
-	ffazwGFf3Z6yDgDc6QEZO6zH02D6Kjf2lDbCbmsbCFup+iPEC/heekMxX1RESQRzWWEJOrqCRM6
-	tdv9g==
-X-Google-Smtp-Source: AGHT+IEUCasNpOjrLiPTdba+G1DzRMt5tyZu55jlQh+AX9oNhtSkPC1M27OuhbpRgJbummxXICHmkFV1J91gViP7ObU=
-X-Received: by 2002:a2e:b88f:0:b0:32a:6c63:92a with SMTP id
- 38308e7fff4ca-32f03639f57mr13413521fa.22.1751657968994; Fri, 04 Jul 2025
- 12:39:28 -0700 (PDT)
+	 To:Cc:Content-Type; b=PSJc3G0ptJoJCShRtFeZj+HUShREHFd5oRvv3ZdvAtP3DRAuvv2rCrVn/nUek9Z1pi4oNoE2Q8qWe7slblDouwJAZJW89mceuM7BrM8NrdZnXJGLF1q1Kbh3LcI94AbA0AcCjwZfJNqQOZXmgYLrIy8yHojXVUXKEq8lsj9v42c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZQWPG3w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A59DC19421;
+	Fri,  4 Jul 2025 19:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751658795;
+	bh=DET2Gu0vw6K100zocQHh/uFyXtWFTkNoh5o1rTKK820=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DZQWPG3w0lJkqYfBxwBNM3BVHGWmPzyMBcjTAIkyB/N9SqiQ4/IOx2DJRrKeiNw3i
+	 w8lMfZ9su1NRgEQ80Er9kIAvm/ShWhC0Qi20IwZY2UB37ha31FmXvBf8mfBDS4M7qe
+	 xwt/q+VrNeGN7W9JlI4kalMSjNfC8yH8yWh5roHFJSIWsERZN/7Xk+QIozVj8kOq0R
+	 Qoy0wPppSnr+DF2T5UZqfJ7RoWXYM9MNzS4YD9f6AqHq+fYeV6riQww1jKtdhQXFpg
+	 Xri+k6bHoSbB1P2T+bFHl0Y6C0zIsv3HOEFPZZ4nPP/S6IpRlAjFF+Yf4/ZclM//hD
+	 f28emAB+5GrbQ==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7387f21daadso1409244a34.0;
+        Fri, 04 Jul 2025 12:53:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU6/wqTrQKLFkskvwey5ed3uuYg8b8TJzMRGAA36AM6pAPHJnACO38vGJnBQe6ce8SDyugVT1iT5Uh/@vger.kernel.org, AJvYcCV3jIfbSu9SnOYj+NOFK7tvwkuIFvaBD0XXA5M1YrEN6KpO+KfAk5oBPxF4Jmd8qnGxmVpm7fua11yIJ14=@vger.kernel.org, AJvYcCVEI3hjhiQxNg9XyGP52a2BrI5UzP1pA7SQExIQM070ZBzmFg661cXZfA/KcgcqLRUdeDJaak33hVca@vger.kernel.org, AJvYcCVQiz3X3dLwULVkqW17SPGfttnisuTw6eeJ5p1BbIJeRNQnAoCFncn0UF7SYfbIKsdRpzKzzKtQrTFFBsPq@vger.kernel.org, AJvYcCVcEJZc11p24SKj/vrqVa6medaQK9aUruVC9NA8H1gdMSV0LfIqOjqdCZL9twZULaeyIG9bS4orvru0srxC3ZHhV40=@vger.kernel.org, AJvYcCVeeKGq3p1xVHfrqk6T0a7cx/mgu9pJ/O7397udUXz1i6PO28dThPIbp1mZO+yG6kcVrW2USs6Lq/8Majsqruscsw==@vger.kernel.org, AJvYcCWDdUHmSgwXR22/L9jKIFnSZDYYHFAaND//8PwjWShigIa/5zK6+kHgU6RV3LV4tWJBFYul4eWFmv+CWAL2@vger.kernel.org, AJvYcCWYHkLr7s13pm6NCntUx7ZRCGrZsKhQ7SytuAEs4e5ozGU6xFNlnpyruRxGmKWM3Sb1K3EQItCcn0PpghQw@vger.kernel.org, AJvYcCWbOZxP8Hi3TH6RrFn92rXb4OdPLjPwi7JWsbDV2+heggvnc7yyFESzXyTNBKM3cCswcQ5qzjBFeb/Y@vger.kernel.org, AJvYcCWuEJcV
+ T1/+wke4vtzdiM406LdRydcMGH4irFTtqMJ9coAwl3SQOPeZe2fEAq6KcL9GymrgCphQKpI=@vger.kernel.org, AJvYcCXfDIUeXEm4RwdpGDxksDUx1G7srmGevgdjYIKokxob5ISbRV70FdEBI+X9Cju1H7ZaLW68TlYhT8EQ@vger.kernel.org, AJvYcCXgFgyVIK8udl7foc7t7RERBst0yD4T5Ik2BQ+SYs7sWH6kWrlg5zXqmLnqEM5/SiHw58xS2EpZ3nVt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx46CCdg84FCk8EY6Jjhy/WMJEy9wJFVko+/0+2E49DaqS8Et55
+	Mm4U98sXfThJN1oeNgIHpiJ3fHhMUHNZGl5N8NefMT9iXu+n7lLrANLN+CsXLDVvNRmKb6t5uGb
+	X9MLQBejz/fV3YAVSi0WHU635Yvnhq/U=
+X-Google-Smtp-Source: AGHT+IGwyJdpfUpQdC1ll+pDxheWsfqF2OxiXgG5efFF2JMqLn7rWmU52bUG3dmWON2puNLtUSymlX1XAG1ud9UOuuY=
+X-Received: by 2002:a05:6808:4f11:b0:40b:1e12:3cda with SMTP id
+ 5614622812f47-40d028eb731mr3068338b6e.0.1751658794378; Fri, 04 Jul 2025
+ 12:53:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-3-29f7d3eb97a6@gmail.com> <DB3AFTUC22W1.39C4DMWSENZGB@kernel.org>
-In-Reply-To: <DB3AFTUC22W1.39C4DMWSENZGB@kernel.org>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 4 Jul 2025 15:38:53 -0400
-X-Gm-Features: Ac12FXzIFREDgXqCwrv6XJgEObqPEvHKICa5en-HTCiFL74MHyUAIu3tq-_u52g
-Message-ID: <CAJ-ks9=Q2+zmBzq36aYnePmRm2b5NL3buMXP36FpmnJ+UU3FWQ@mail.gmail.com>
-Subject: Re: [PATCH v13 3/5] rust: replace `CStr` with `core::ffi::CStr`
-To: Benno Lossin <lossin@kernel.org>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org
+References: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com> <CAPDyKFoznqfdX7Dvu3VPa5Me10VHGphnRRHrU17w-fie7HrQ5g@mail.gmail.com>
+In-Reply-To: <CAPDyKFoznqfdX7Dvu3VPa5Me10VHGphnRRHrU17w-fie7HrQ5g@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 4 Jul 2025 21:53:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gH9ZAK9br58KB0VEtG+4VdwO7vEKtrKbpcYOKnZPf7bg@mail.gmail.com>
+X-Gm-Features: Ac12FXwblY0_4cI57ifv3CnjCYA9AzB00n7d7xgdR8a0f_LjAGiuDDstt8INfuU
+Message-ID: <CAJZ5v0gH9ZAK9br58KB0VEtG+4VdwO7vEKtrKbpcYOKnZPf7bg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] PM: domains: Detach on device_unbind_cleanup()
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Claudiu <claudiu.beznea@tuxon.dev>, rafael@kernel.org, linux@armlinux.org.uk, 
+	gregkh@linuxfoundation.org, david.m.ertman@intel.com, ira.weiny@intel.com, 
+	leon@kernel.org, dakr@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, 
+	airlied@gmail.com, simona@ffwll.ch, wsa+renesas@sang-engineering.com, 
+	mathieu.poirier@linaro.org, vkoul@kernel.org, yung-chuan.liao@linux.intel.com, 
+	pierre-louis.bossart@linux.dev, broonie@kernel.org, robh@kernel.org, 
+	jirislaby@kernel.org, saravanak@google.com, jic23@kernel.org, 
+	dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
+	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	fabrizio.castro.jz@renesas.com, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 4, 2025 at 9:00=E2=80=AFAM Benno Lossin <lossin@kernel.org> wro=
-te:
+On Fri, Jul 4, 2025 at 1:16=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
+ wrote:
 >
-> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
-> > `kernel::ffi::CStr` was introduced in commit d126d2380131 ("rust: str:
-> > add `CStr` type") in November 2022 as an upstreaming of earlier work
-> > that was done in May 2021[0]. That earlier work, having predated the
-> > inclusion of `CStr` in `core`, largely duplicated the implementation of
-> > `std::ffi::CStr`.
+> On Thu, 3 Jul 2025 at 13:27, Claudiu <claudiu.beznea@tuxon.dev> wrote:
 > >
-> > `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64 in
-> > September 2022. Hence replace `kernel::str::CStr` with `core::ffi::CStr=
-`
-> > to reduce our custom code footprint, and retain needed custom
-> > functionality through an extension trait.
+> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > >
-> > C-String literals were added in Rust 1.77, while our MSRV is 1.78. Thus
-> > opportunistically replace instances of `kernel::c_str!` with C-String
-> > literals where other code changes were already necessary or where
-> > existing code triggered clippy lints; the rest will be done in a later
-> > commit.
+> > Hi,
 > >
-> > Link: https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f=
-8e43f1d8d5c0860d98a23f [0]
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > ---
-> >  drivers/gpu/drm/drm_panic_qr.rs |   2 +-
-> >  rust/kernel/auxiliary.rs        |   4 +-
-> >  rust/kernel/configfs.rs         |   4 +-
-> >  rust/kernel/cpufreq.rs          |   2 +-
-> >  rust/kernel/device.rs           |   4 +-
-> >  rust/kernel/drm/device.rs       |   4 +-
-> >  rust/kernel/error.rs            |   4 +-
-> >  rust/kernel/firmware.rs         |  11 +-
-> >  rust/kernel/kunit.rs            |   6 +-
-> >  rust/kernel/miscdevice.rs       |   2 +-
-> >  rust/kernel/net/phy.rs          |   2 +-
-> >  rust/kernel/of.rs               |   2 +-
-> >  rust/kernel/prelude.rs          |   5 +-
-> >  rust/kernel/seq_file.rs         |   4 +-
-> >  rust/kernel/str.rs              | 394 +++++++++++---------------------=
---------
-> >  rust/kernel/sync/condvar.rs     |   2 +-
-> >  rust/kernel/sync/lock.rs        |   2 +-
-> >  rust/kernel/sync/lock/global.rs |   2 +-
-> >  samples/rust/rust_configfs.rs   |   2 +-
-> >  19 files changed, 140 insertions(+), 318 deletions(-)
+> > Series drops the dev_pm_domain_detach() from platform bus remove and
+> > adds it in device_unbind_cleanup() to avoid runtime resumming the devic=
+e
+> > after it was detached from its PM domain.
+> >
+> > Please provide your feedback.
+> >
+> > Thank you,
+> > Claudiu
+> >
+> > Changes in v5:
+> > - added PD_FLAG_ATTACH_POWER_ON, PD_FLAG_DETACH_POWER_OFF;
+> >   due to this a new patch was introduced
+> >   "PM: domains: Add flags to specify power on attach/detach"
+> >
+> > Changes in v4:
+> > - added a flag in dev_pm_info that is saved in dev_pm_domain_attach()
+> >   and used in device_unbind_cleanup()
+> >
+> > Changes in v3:
+> > - add devm_pm_domain_attach()
+> >
+> > Changes in v2:
+> > - dropped the devres group open/close approach and use
+> >   devm_pm_domain_attach()
+> > - adjusted patch description to reflect the new approach
+> >
+> >
+> > Claudiu Beznea (3):
+> >   PM: domains: Add flags to specify power on attach/detach
+> >   PM: domains: Detach on device_unbind_cleanup()
+> >   driver core: platform: Drop dev_pm_domain_detach() call
+> >
+> >  drivers/amba/bus.c                       |  4 ++--
+> >  drivers/base/auxiliary.c                 |  2 +-
+> >  drivers/base/dd.c                        |  2 ++
+> >  drivers/base/platform.c                  |  9 +++------
+> >  drivers/base/power/common.c              |  9 ++++++---
+> >  drivers/clk/qcom/apcs-sdx55.c            |  2 +-
+> >  drivers/gpu/drm/display/drm_dp_aux_bus.c |  2 +-
+> >  drivers/i2c/i2c-core-base.c              |  2 +-
+> >  drivers/mmc/core/sdio_bus.c              |  2 +-
+> >  drivers/rpmsg/rpmsg_core.c               |  2 +-
+> >  drivers/soundwire/bus_type.c             |  2 +-
+> >  drivers/spi/spi.c                        |  2 +-
+> >  drivers/tty/serdev/core.c                |  2 +-
+> >  include/linux/pm.h                       |  1 +
+> >  include/linux/pm_domain.h                | 10 ++++++++--
+> >  15 files changed, 31 insertions(+), 22 deletions(-)
+> >
+> > --
+> > 2.43.0
+> >
 >
-> Is it also possible to split this? First rename the existing functions
-> on our CStr to match upstream & then you don't need to do the rename &
-> removal of our CStr in the same patch?
+> The series looks good to me, please add:
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> Rafael, do you intend to pick this via your tree?
 
-Yes.
+I do in general, but I haven't looked at this version yet.  I'll get
+to it early next week.
 
