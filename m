@@ -1,48 +1,45 @@
-Return-Path: <linux-pm+bounces-30096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30097-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 992B6AF8562
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 04:01:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DDE8AF85E0
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 05:03:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D55A1C846AD
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 02:01:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1EF1892E41
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Jul 2025 03:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483A67D3F4;
-	Fri,  4 Jul 2025 02:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hkT6XxXa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6761CF96;
+	Fri,  4 Jul 2025 03:03:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4A2869E;
-	Fri,  4 Jul 2025 02:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C161FC8;
+	Fri,  4 Jul 2025 03:03:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751594493; cv=none; b=qxKHJyy84qHxHvzwqlmYBg9yxBatrOc/3UQwXUel9ZfKt/eoTh+QpVnHp8rDzhTybkeEBquaMqh2d/IqtCrzRptBchqP6AFJLsmwFKPEDHVEsARuVYcCf+RWbK0pzaCa0/Y/bKddir3kN/SeDp5ju4jobUJK8E7uzRr2C3LcLC0=
+	t=1751598185; cv=none; b=NC0eWgNIUCyOLVksaeYmECtmewpbTDM9/2EDUx1reIz/MUw1NJSZCLIaVFuNmSV/efnU5cUIyr9PISLr9dTjwD6aZEe68D2qumMryO27+l8zgV0Fkq3jLxDDUSiDelA787AdQ1PaV7u0gbD2+k8WHgKnuwKbGhpLsthaLuAeS5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751594493; c=relaxed/simple;
-	bh=bOYiwreUJd6fupghKK4N1Ov79oxyIiLE7aijDZhysuo=;
+	s=arc-20240116; t=1751598185; c=relaxed/simple;
+	bh=ZgHTbRTeGiZ8EpW6hO1ZtyTKBA/nk9NpvvOOIBJgvys=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JqUtZHXG0CoJnwFfd7kWLVFBGysnbGSlL4BteQKd5tENnGB551OVTB9CkLnkI2aOO5QAgTGtgFIZ0uIuhaO5Q64+lfqol8nYb1NZfOhMFjavPADcDzFh4oUNzHUBEiT1Jx/36om+M/5Kb9TLniK9o/DH/XJ9YN9R9f2sdTAT8hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hkT6XxXa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9390DC4CEE3;
-	Fri,  4 Jul 2025 02:01:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751594492;
-	bh=bOYiwreUJd6fupghKK4N1Ov79oxyIiLE7aijDZhysuo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hkT6XxXaM+qLqZ/3aN9wdEephOGUKE6kkqGZMAEWEgdc1TTY/L69D4WqUyWr7Nbxc
-	 Y95DZlsS+lZBDLlJaNCATZ0IgyVLyvhtQDle6KE9JbY5lE4cPFIczsZc7wZF2FUbH2
-	 rqUe0BXglbQA8Wx/nZZn6HlZlNtINB6SWw/9MbITS571lQQgWMQ3A1iFi13iv0wLSn
-	 NKq2KHwUTb17SyaP32hsHnQMOhx8WSffRIWv0NgGpgaPci4MSQNCxDGntkM+0kRElN
-	 +m4tAlN53C9n7HRIGewrKAFpT0udTf4CVlzaVP5i/ZVA8z+zfKhmLkCobJ1r7VqUUK
-	 pF0Fx9/E7iWHA==
-Message-ID: <8fda8cf1-1291-422e-bb63-094e38c47b7b@kernel.org>
-Date: Thu, 3 Jul 2025 22:01:30 -0400
+	 In-Reply-To:Content-Type; b=bybABHj/6k5UJIHu+q3uknCsENpMMt+Fee2VPiojXTaONdgLIkBag82mmf99jJcVZb+VO+Y/fEQvVEKJ/uPdwkwKx96jFwUJaY2+ofhtfHUTqU7alXt3rI+dSpcIBA4cTvx+Eavc6WLxKzZOMGCulAyiHWftSC7YG/2UQTujR/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bYJNH3pqTzKHMg5;
+	Fri,  4 Jul 2025 11:02:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id ECD851A0BA8;
+	Fri,  4 Jul 2025 11:02:53 +0800 (CST)
+Received: from [10.67.109.79] (unknown [10.67.109.79])
+	by APP3 (Coremail) with SMTP id _Ch0CgCnBiRcRGdobx9aAg--.19058S2;
+	Fri, 04 Jul 2025 11:02:53 +0800 (CST)
+Message-ID: <f4c4f465-72b9-4682-99e6-c249ecab8572@huaweicloud.com>
+Date: Fri, 4 Jul 2025 11:02:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,104 +47,109 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/5] Improvements to S5 power consumption
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Danilo Krummrich <dakr@kernel.org>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250616175019.3471583-1-superm1@kernel.org>
- <CAJZ5v0jc-tjs_a+RCzu6bvrbfhv5QHqsWx-zKjH0wpisiJciKA@mail.gmail.com>
+Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being
+ frozen
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: peterz@infradead.org, rafael@kernel.org, pavel@kernel.org,
+ timvp@google.com, tj@kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, lujialin4@huawei.com, chenridong@huawei.com
+References: <20250703133427.3301899-1-chenridong@huaweicloud.com>
+ <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
 Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <CAJZ5v0jc-tjs_a+RCzu6bvrbfhv5QHqsWx-zKjH0wpisiJciKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgCnBiRcRGdobx9aAg--.19058S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr1fZw47Aw4UJryxWw1fCrg_yoW8trWDpr
+	WrWrWUG3Z7trs2yrnrXw4vvws8K392vF4UGrykCrWxJa1YqasIgr4Iy3yY9F1jvryxJrnF
+	qa1Yv3s3Aa1UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On 7/3/25 10:29, Rafael J. Wysocki wrote:
-> On Mon, Jun 16, 2025 at 7:50 PM Mario Limonciello <superm1@kernel.org> wrote:
->>
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> A variety of issues both in function and in power consumption have been
->> raised as a result of devices not being put into a low power state when
->> the system is powered off.
->>
->> There have been some localized changes[1] to PCI core to help these issues,
->> but they have had various downsides.
->>
->> This series instead tries to use the S4 flow when the system is being
->> powered off.  This lines up the behavior with what other operating systems
->> do as well.  If for some reason that fails or is not supported, unwind and
->> do the previous S5 flow that will wake all devices and run their shutdown()
->> callbacks.
+
+
+On 2025/7/4 1:01, Michal Koutný wrote:
+> Hello Ridong.
 > 
-> I actually like this approach, but I think that it is risky.
-
-Yeah; it does touch a lot of areas.
-
+> On Thu, Jul 03, 2025 at 01:34:27PM +0000, Chen Ridong <chenridong@huaweicloud.com> wrote:
+>> 2. The cgroup freezer state changes to FROZEN (Can be triggered by reading
+>>    freezer.state).
+> /o\
 > 
-> It also requires more work/review from other people.
-
-I view patches 3-5 as being dependent upon patch 1, so until we have 
-agreement on that one the others might not make a lot of sense.
-
-Bjorn,
-
-Can you take a look at patch 2?
-
+>> 3. freezing() is called and returns false.
 > 
-> I'll be sending some comments on the individual patches going forward,
-> but I think the earliest it can go in is after 6.17-rc1 (given it is
-> reviewed properly till then).
-
-Thanks!
-
+> I can see how this can happen because freezer_lock != freezer_mutex.
 > 
-> Thanks!
+>> As a result, the task may escape being frozen when it should be.
+>>
+>> To fix this, move the setting of the FROZEN flag to occur just before
+>> schedule(). This ensures the flag is only set when we're certain the
+>> task must be switched out.
 > 
->> v3->v4:
->>   * Fix LKP robot failure
->>   * Rebase on v6.16-rc2
->>
->> Previous submissions [1]:
->> Link: https://lore.kernel.org/linux-pm/CAJZ5v0hrKEJa8Ad7iiAvQ3d_0ysVhzZcXSYc5kkL=6vtseF+bg@mail.gmail.com/T/#m91e4eae868a7405ae579e89b135085f4906225d2
->> Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@kernel.org/
->> Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limonciello@amd.com/ (v1)
->> Link: https://lore.kernel.org/linux-pm/20250514193406.3998101-1-superm1@kernel.org/ (v2)
->> Link: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kernel.org/ (v3)
->>
->> Mario Limonciello (5):
->>    PM: Use hibernate flows for system power off
->>    PCI: Put PCIe ports with downstream devices into D3 at hibernate
->>    drm/amd: Avoid evicting resources at S5
->>    scsi: Add PM_EVENT_POWEROFF into suspend callbacks
->>    usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
->>
->>   drivers/base/power/main.c                  |  7 ++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
->>   drivers/pci/pci-driver.c                   | 94 ++++++++++++++--------
->>   drivers/scsi/mesh.c                        |  1 +
->>   drivers/scsi/stex.c                        |  1 +
->>   drivers/usb/host/sl811-hcd.c               |  1 +
->>   include/linux/pm.h                         |  3 +
->>   include/trace/events/power.h               |  3 +-
->>   kernel/reboot.c                            |  6 ++
->>   9 files changed, 86 insertions(+), 34 deletions(-)
->>
->> --
->> 2.43.0
->>
+> Is it sufficient? (If the task is spuriously woken up, the next
+> iteration in that refrigerator loop would be subject to same race, no?)
+> 
+> Thanks,
+> Michal
+
+Hi, Michal:
+
+Regarding your question: Did you mean that the task was frozen, received
+another signal to wake up, but should have remained frozen instead of
+entering the running state?
+
+For this scenario, the solution I've found is that the task can only
+break out of the frozen state when its cgroup is thawed. The code
+modification would look like the following, and we'll need to add the
+cgroup_thawed(p) function:
+
+--- a/kernel/freezer.c
++++ b/kernel/freezer.c
+@@ -71,19 +71,20 @@ bool __refrigerator(bool check_kthr_stop)
+        for (;;) {
+                bool freeze;
+
+-               raw_spin_lock_irq(&current->pi_lock);
+-               WRITE_ONCE(current->__state, TASK_FROZEN);
+-               /* unstale saved_state so that __thaw_task() will wake
+us up */
+-               current->saved_state = TASK_RUNNING;
+-               raw_spin_unlock_irq(&current->pi_lock);
+-
+                spin_lock_irq(&freezer_lock);
+-               freeze = freezing(current) && !(check_kthr_stop &&
+kthread_should_stop());
++               freeze = (freezing(current) && !cgroup_thawed(current))
++                        && !(check_kthr_stop && kthread_should_stop());
+                spin_unlock_irq(&freezer_lock);
+
+                if (!freeze)
+                        break;
+
++               raw_spin_lock_irq(&current->pi_lock);
++               WRITE_ONCE(current->__state, TASK_FROZEN);
++               /* unstale saved_state so that __thaw_task() will wake
+us up */
++               current->saved_state = TASK_RUNNING;
++               raw_spin_unlock_irq(&current->pi_lock);
++
+
+I'd welcome any suggestions for better solutions to this problem.
+
+Best regards,
+Ridong
 
 
