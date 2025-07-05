@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-30197-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30198-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A75AAF9F51
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 11:15:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72E5CAF9F56
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 11:16:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49DF41C809B5
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 09:16:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E3931C80C86
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 09:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C148204F8C;
-	Sat,  5 Jul 2025 09:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186572063F0;
+	Sat,  5 Jul 2025 09:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbXaelXj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMkdMpG6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5F52E36EC;
-	Sat,  5 Jul 2025 09:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD96311CA9;
+	Sat,  5 Jul 2025 09:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751706952; cv=none; b=IWR+JmA0/ScSJtZ82h4xZ/MPiYTly/KHOduf/SNYWxQ64qw+UcumxzbuuhIUd6nHaaraLKabL8CGsG9V1V1/heH9eiBCYcW9Oc9Mm6mJikxeYiUW+zJWWOs5MirlEzk5WFo9Q6ZzWaNw/z77Yn6UV1ghPRE6rOOjqYDG+f9PvqE=
+	t=1751706987; cv=none; b=YGE5yk58VUt+44g8wRN/ZOATLBDc14gKO/fnTcV8vBCAGmX+eCYwAa9N76LA+8cpXwEj1WLib0vuEj6+I6V8PwjL3ROpPH3vG4A5NC/T3gF+sNiatrIhmnPpLQdhJvOyv7Nmq2yqeFrh92dI2aI0JbSnrPUF4RfW9zacrEiz6YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751706952; c=relaxed/simple;
-	bh=zAAwL1qn9DWYaFXEYo3FHdzOi6eWfYIf0GhD/81me8I=;
+	s=arc-20240116; t=1751706987; c=relaxed/simple;
+	bh=M6bMzxg09V9B8u3UKAzQBjLxSHYceHj0mjWXmolGqNw=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=URHhUSaT3lfcaexiZ2c468Vm15hmRMnW85Kzkn4XXXdrlNpnR2i86YslJqrArLUSPKapuIhAKYCiFjXh1zSbdWjLgKyP5+XV85X/Ehq6wvvGgIYX4keDzOH0rUs9ovZgABn0Qi+/QpT7grK3RvB+fY7vkq/Hh6+gaYzGEdFaPCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbXaelXj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBDB0C4CEE7;
-	Sat,  5 Jul 2025 09:15:47 +0000 (UTC)
+	 References:In-Reply-To; b=Gu0Ag+vNhqgkhlcdnLPebtB5V53Zt0ZSGflZjNtCvhV5yd36HN5nBTPN46KuGIEhmuTr/ELhMXSsU3CWiuJdDxzsypfjBztO+xLbcIZuwuYqYzWgC2djgOc9QyWhwhTnfnvM3V+obnatLe3eUJkoV5z9jqaSQ8uwpjTutLOil9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMkdMpG6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C56C4CEE7;
+	Sat,  5 Jul 2025 09:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751706951;
-	bh=zAAwL1qn9DWYaFXEYo3FHdzOi6eWfYIf0GhD/81me8I=;
+	s=k20201202; t=1751706986;
+	bh=M6bMzxg09V9B8u3UKAzQBjLxSHYceHj0mjWXmolGqNw=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=VbXaelXjrbmiJwwmiM8rVc2FLbx9FZq2GjG+M4uRZSSKbUGRyyKOGF8pC82TJ1Zwe
-	 or72p6rhJA8vKjVtOiaX5p2KBpUUA/EaCkQ4HNOoNlR1omc9y0eiAqsevVZ+e2rLJF
-	 SMhVZjwHdAGhc3H0hgXTkfLyhNSN1OD9sHfJhq9nFd05Yf1HA5LUQef20WzoVtNSVr
-	 E9YT/jjS8tnvHtWwlElv0Y838z0aaLTbhzgYO2ZIs9TQq4ngbO8QjY2Jl6q/9/OTwE
-	 Lj6wRBc1lwBLpAwtoTmH6EZoN58NHGrYN8lQst+JZi6lsjf94hqsTwp9hD5kFSP6dr
-	 w56MSIa42VUWg==
+	b=oMkdMpG6H1c3z5A0dIkQpg4Oi3naBJbm+sgnfh179Uylqsp06Uc0K3SC9AqnmmcI/
+	 KPQPJYN3kQ1UbXYP0nXyRmH4raYzrK99Mx8X8JVrY/XFT7v+pJRB5Sflzs8hZLRPkd
+	 snCEH3QDE5K2Pnw8wORthL1/h0u3qfZDogPB4Dq/nxBgj3YeTR9VCvo81UaGMh3Z2D
+	 sYvGwEXN+U59HOV0ME9e1Y6iRuCyFfVJXFpY9pRdPip2PyI7W5oTHHUlscRJpVaNGV
+	 FsGpG0aI3hAg2jCWnhkyVBYOLC75Wzt2d4Fw82hfADOFWugqBzdX+M31PsHaHl9ZUd
+	 3xzQJSeV6pZ2A==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,12 +49,12 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Jul 2025 11:15:46 +0200
-Message-Id: <DB40ADOHZ908.3PN41XZ77MR29@kernel.org>
+Date: Sat, 05 Jul 2025 11:16:20 +0200
+Message-Id: <DB40ATQ74EOZ.31YEPO3YH5O3B@kernel.org>
 Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
  <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
  <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH 5/6] rust: add `CStr` methods matching `core::ffi::CStr`
+Subject: Re: [PATCH 6/6] rust: use `core::ffi::CStr` method names
 From: "Benno Lossin" <lossin@kernel.org>
 To: "Tamir Duberstein" <tamird@gmail.com>, "Rafael J. Wysocki"
  <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Danilo
@@ -67,17 +67,15 @@ To: "Tamir Duberstein" <tamird@gmail.com>, "Rafael J. Wysocki"
  "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>
 X-Mailer: aerc 0.20.1
 References: <20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com>
- <20250704-core-cstr-prepare-v1-5-a91524037783@gmail.com>
-In-Reply-To: <20250704-core-cstr-prepare-v1-5-a91524037783@gmail.com>
+ <20250704-core-cstr-prepare-v1-6-a91524037783@gmail.com>
+In-Reply-To: <20250704-core-cstr-prepare-v1-6-a91524037783@gmail.com>
 
 On Fri Jul 4, 2025 at 10:14 PM CEST, Tamir Duberstein wrote:
-> Prepare for replacing `CStr` with `core::ffi::CStr` by soft-deprecating
-> methods which don't exist on `core::ffi::CStr`.
+> Prepare for `core::ffi::CStr` taking the place of `kernel::str::CStr` by
+> avoiding methods that only exist on the latter.
 >
-> We could keep `as_bytes{,_with_nul}` through an extension trait but
-> seeing as we have to introduce `as_char_ptr_in_const_context` as a free
-> function, we may as well introduce `to_bytes{,_with_nul}` here to allow
-> downstream code to migrate in one cycle rather than two.
+> Also avoid `Deref<Target=3DBStr> for CStr` as that impl doesn't exist on
+> `core::ffi::CStr`.
 >
 > Link: https://github.com/Rust-for-Linux/linux/issues/1075
 > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
@@ -89,6 +87,7 @@ Cheers,
 Benno
 
 > ---
->  rust/kernel/str.rs | 37 ++++++++++++++++++++++++++++++++++---
->  1 file changed, 34 insertions(+), 3 deletions(-)
+>  rust/kernel/error.rs |  2 +-
+>  rust/kernel/str.rs   | 20 ++++++++++----------
+>  2 files changed, 11 insertions(+), 11 deletions(-)
 
