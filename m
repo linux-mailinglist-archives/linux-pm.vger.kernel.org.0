@@ -1,132 +1,87 @@
-Return-Path: <linux-pm+bounces-30195-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E13FBAF9F0A
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 10:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 389B8AF9EFF
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 10:04:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BEEB1C8360B
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 08:05:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C48A1C231FF
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Jul 2025 08:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200CD2797AE;
-	Sat,  5 Jul 2025 08:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A332701C7;
+	Sat,  5 Jul 2025 08:04:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="WovYhOnm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UyGAt+uj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5771FE474;
-	Sat,  5 Jul 2025 08:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EE6218827;
+	Sat,  5 Jul 2025 08:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751702701; cv=none; b=ayOVNnrjpiQlEHnOrSvPQ0falbp3Av6AtF/B9p3gUCq3XvlRhRKgN9FbWZlTae+oBv5gtocWQbBUcZEJnLccPf0p/kPQa07eaNzFSJvRKxcilBrNg6ic+pUY+VNZaqfiSfVlQC6oM9aV5xFh291g+KOqfGM+N3AqBTzdDC1/RDg=
+	t=1751702675; cv=none; b=g7SLJI9DF6v8UnwJBXPBkbO5UnNp+Xn3vIK8qnSM0UT0uv2QUsqj9Pv631sQhOAfUxgiQxl5v+RVhBbm/15IUtWc6C4b79SDcBs7b7SxpSUG+/9yCA/UFNStsIDyOSxGO5b4jVwdOggGmH+2FDLx5jWrdxJW70ePnBrn1mJVm2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751702701; c=relaxed/simple;
-	bh=U8NsfQg6c0knWs9dyk4H2KnEFXMYtXjYXDrkEYXnUb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X0rl+dPl5tzYI3sMzDO2uuFCP5hzRTuW417RuQHgC47TLaaE2Wv1fY20lghC0olrqJESeUfFMRjI8eYqieHUZZNCC9B1ohZeaOpZ4o6BNGprfbwiXEYQ1aG/utnX49ATlcjWkrGc8rW5/LR402M1vMfOp397GsLDFDPMwa8Ipi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=WovYhOnm; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=ZyzKEihZDNZ16DmOGMSJ88ULGx/pSbICKS/fdJw2ya4=; b=WovYhOnmAWVhGBmVShxVSXCTwl
-	KsTC761cpyV/PL7pyO1+z87KG4GV/WJ5cZTpgj4Kw6nxQ5HZ6uDgyaA/G/6CqEJfp/U0bgh+VOJFS
-	0yOZfJvHjAhF4e6yYUVUNjWH8BzxdJ/qNqWFS3TdQMHJToKBKeHkHyGdHnexNZTTDYdA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uXxsY-000NJL-1K; Sat, 05 Jul 2025 10:04:10 +0200
-Date: Sat, 5 Jul 2025 10:04:10 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Michal Rostecki <vadorovsky@protonmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-Message-ID: <a9bd145e-b634-41ca-972c-5f81e5e1033d@lunn.ch>
-References: <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
- <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
- <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
- <CAJ-ks9kNiOgPO7FF3cAbaSNtTWs0_PzQ4k4W0AxjHNFuMJnDcQ@mail.gmail.com>
- <DB36T5JWBL10.2F56EDJ1XKAD0@kernel.org>
- <CAJ-ks9=Jutg+UAwCVER_X91BGxWzmVq=OdStDgLZjTyMQSEX6Q@mail.gmail.com>
- <CANiq72nZhgpbWOD4Evy-qw2J=G=RY4Hsoq9_rj6HGWMQW=2kTw@mail.gmail.com>
- <CAJ-ks9m4S1jujQvyt9TOvNMewjNSztps8vayGga+MnNU+0YUcQ@mail.gmail.com>
+	s=arc-20240116; t=1751702675; c=relaxed/simple;
+	bh=gno/0LEj5ipEWscOXuFUP5p23Zzxa+r2Bh8Hv/hJ5GQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=IG/HDievZW0RRFpA2H0Qa0KBRIUfKAGrpKrLoxnrr/6kNbSv5h36MBdd4km54cX8sgGdFUl9EGKsVt04OuJC+YLJBFvEoLvlt+vZIFTtJpOuqbomCg59qF+cLE6AwpzgQkJwz9KU/ott7oMH5qVqeH8nditCocaj/5MixDUEeDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UyGAt+uj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A94C4CEE7;
+	Sat,  5 Jul 2025 08:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751702674;
+	bh=gno/0LEj5ipEWscOXuFUP5p23Zzxa+r2Bh8Hv/hJ5GQ=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=UyGAt+ujqFDZpp0LdmolpxWu5svih6F5sD6IBytgX99q2v7Y0ipuz2k3Sr8Doxaw4
+	 +PfDTDaltJq8WKa0xmXkchGcMTia5mOVKOp9PS7q0qKexSZXm0jTUHt/ws2Kcd9kNA
+	 NR0DMVoP7SrS312+w548r4N4Q/RNP4mZEKQ1oyEqNnThA10JzLG0oVe3WC55nfD27h
+	 3OHamxalhB7m+kAipSlJwkr2KTyO65HaHtWEF9vIS4QbtzL39sIJcIK+hPFN6jgyo4
+	 FHv3MIA4Vbo3fb/OSQpxxjyKYDQvSbPYTqhUZcUkYU/fxJnCz42RNtxSny5Jy/6ptN
+	 E4q4OovmoPf8w==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ-ks9m4S1jujQvyt9TOvNMewjNSztps8vayGga+MnNU+0YUcQ@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 05 Jul 2025 10:04:28 +0200
+Message-Id: <DB3YRSRVRGVN.B7EBLCMSZG3P@kernel.org>
+Subject: Re: [PATCH 4/6] rust: str: remove unnecessary qualification
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Tamir Duberstein" <tamird@gmail.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Danilo
+ Krummrich" <dakr@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>, "Nishanth Menon" <nm@ti.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>
+Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+ <rust-for-linux@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com>
+ <20250704-core-cstr-prepare-v1-4-a91524037783@gmail.com>
+In-Reply-To: <20250704-core-cstr-prepare-v1-4-a91524037783@gmail.com>
 
-> OK, with all the splitting requested, this comes out to ~54 patches.
-> I'll send the first bit (which can go in cycle 0) as v14.
+On Fri Jul 4, 2025 at 10:14 PM CEST, Tamir Duberstein wrote:
+> `core::ffi::*` is in the prelude, which is imported here.
+>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-FYI: Some subsystems have limits as to how many patches can be posted
-at once. e.g. for netdev, don't send more than 15.
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 
-This is another rule about making it easier for reviewers. If i see 20
-patches, i will defer reviewing them until later, when i have more
-time. For a handful of patches, especially small obvious patches, i'm
-more likely to look at them straight away.
+---
+Cheers,
+Benno
 
-	Andrew
+> ---
+>  rust/kernel/str.rs | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
