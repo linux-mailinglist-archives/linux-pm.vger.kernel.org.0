@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-30213-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6897FAFA564
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 15:29:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C29CAFA53A
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 15:22:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8EEB3AE670
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 13:28:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA318189480E
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 13:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450B6267B89;
-	Sun,  6 Jul 2025 13:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCCC214A8B;
+	Sun,  6 Jul 2025 13:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="d7WKfi7x"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="HHVo/YJL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
+Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A1222FDEA;
-	Sun,  6 Jul 2025 13:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D445191F7E;
+	Sun,  6 Jul 2025 13:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751808489; cv=none; b=bV2i2Xk9B9CyDGQAxahjpel67Z8DTG42zoIFOyvcujaFK4kjn5Qj4m6zVahsXes0spHToO9MwE3EgV4IEP137M6i/3NcbUmCm1qfoCTXaZBlH5Z99oRi8yUgE3KKcQqI726Rylu1hya9mGN0lNCm1VkBtO7NL7rcCQ5KPrqD0rw=
+	t=1751808158; cv=none; b=rXtkL5XHJPmUYztu5+7airpWg6PzteM24c7P9dCohzIWH2Jxreu6jL29HsUFpofm/fEGiqUPvuX4o21sAml29jWKyYmElgObiWKy4Hn99ssJDixgxKY27wvH/XA8ovyCSjutessbIgIObNVyl+UPXDArKbYsoJRFcrYA+dvwRBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751808489; c=relaxed/simple;
-	bh=iyhUbnvRK9c3a6z3CgOQJwdtebP7P79sf017YIg+RyA=;
+	s=arc-20240116; t=1751808158; c=relaxed/simple;
+	bh=nNNXCz0QoVlTtDWFNzY0gqKDOSoNeIlY3uahvtlyf00=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fxHKvCLFqUdAJ6Zaz2waherNoMUe9lqEWUSE/Xx1i16B+l4Npz4saClQu4R4XxZgVxHzPPGgMoJu+aVC/nvgjIf4yTDeNZ7Vhiia6Jku/yAg8QDGRpJm+JZbE6/ynpSfBxvC8QpYwbRDuh8I8lBZptlTbWu/Lcux4pQYn7k+p2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=d7WKfi7x; arc=none smtp.client-ip=134.0.28.9
+	 MIME-Version; b=PHDzp5QqxPb91bDsiNQMB2j67InPLbO8TlgewM9srwaKGH5d/sxLCzmnsBhFsgUfhcHtEef8QTuwkbPWhix02OklV+ucDVCGFNNv8JxfJEFOZv7ubgqbcbTYQtF3XDWDbEvUj7HdJina9tB5NOgQH0BjYKDW6GOhw1Bu8QbcGt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=HHVo/YJL; arc=none smtp.client-ip=134.0.28.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout4.routing.net (Postfix) with ESMTP id 2FABD100813;
+	by mxout3.routing.net (Postfix) with ESMTP id 8A230604DC;
 	Sun,  6 Jul 2025 13:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	s=20200217; t=1751808148;
@@ -40,13 +40,13 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=71EqQ6Np0u0pAiJm9Ys2o5R9RiJdK+KyILbtVMDBcO0=;
-	b=d7WKfi7xOy9dRKe30aW0RihUiYxjU3MrC1XaYr0/tT8J6vYKj/UBt84kkBGaknzIVqSyTb
-	3HPTIyhYkM9e9GstWQrAS+nKatQyc0njUiqilY8nnhKg8/OHa3fxyxc0NdgZEzKT7K9m4E
-	zZArF2M7VlVKH7nZIJosywqrr6O7Cp8=
+	bh=AKLGNFT60/m9GUw3XIxCW7kQ4f+bA70MARehu2D8Bjk=;
+	b=HHVo/YJL16+z5Nb0XQhrqvB5SFG6D9j/isP+KpY+kF72N2OQRDNcEeMmkdDPxM0l1fqIWi
+	BYFcGGKTdXSxJkgKBb7nW6j4IP3yuctvV81sCADm/z4MIhoHMrkAS/OXV789B4TXaDg0RH
+	lv+69pcvXKWCNSOD0FoWoadIpxJ4FOc=
 Received: from frank-u24.. (fttx-pool-194.15.86.111.bambit.de [194.15.86.111])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id CBFBB1226F8;
-	Sun,  6 Jul 2025 13:22:27 +0000 (UTC)
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 34B8E1226A5;
+	Sun,  6 Jul 2025 13:22:28 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	Kyungmin Park <kyungmin.park@samsung.com>,
@@ -78,9 +78,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v8 03/16] dt-bindings: net: mediatek,net: allow irq names
-Date: Sun,  6 Jul 2025 15:21:58 +0200
-Message-ID: <20250706132213.20412-4-linux@fw-web.de>
+Subject: [PATCH v8 04/16] dt-bindings: net: mediatek,net: add sram property
+Date: Sun,  6 Jul 2025 15:21:59 +0200
+Message-ID: <20250706132213.20412-5-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250706132213.20412-1-linux@fw-web.de>
 References: <20250706132213.20412-1-linux@fw-web.de>
@@ -94,129 +94,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-In preparation for MT7988 and RSS/LRO allow the interrupt-names
-property.
-In this way driver can request the interrupts by name which is much
-more readable in the driver code and SoC's dtsi than relying on a
-specific order.
+Meditak Filogic SoCs (MT798x) have dedicated MMIO-SRAM for dma operations.
 
-Frame-engine-IRQs (fe0..3):
-MT7621, MT7628: 1 IRQ
-MT7622, MT7623: 3 IRQs (only two used by the driver for now)
-MT7981, MT7986: 4 IRQs (only two used by the driver for now)
+MT7981 and MT7986 currently use static offset to ethernet MAC register
+which will be changed in separate patch once this way is accepted.
 
-RSS/LRO IRQs (pdma0..3) only on Filogic (MT798x) with count of 4.
-
-Set boundaries for all compatibles same as irq count.
+Add "sram" property to map ethernet controller to dedicated mmio-sram node.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
 v8:
-  - fixed typo in mt7621 section "interrupt-namess"
-  - separated interrupt count from interrupt-names
-  - rephrased description a bit to explain the "why"
-v7: fixed wrong rebase
-v6: new patch splitted from the mt7988 changes
+- splitted out mac subnode pattern
+- dropped reg naming change
+- rephrased description
+- drop change of reg-name
+
+v6:
+- split out the interrupt-names into separate patch
+- update irq(name) min count to 4
+- add sram-property
+- drop second reg entry and minitems as there is only 1 item left again
+
+v5:
+- fix v4 logmessage and change description a bit describing how i get
+  the irq count.
+- update binding for 8 irqs with different names (rx,tx => fe0..fe3)
+  including the 2 reserved irqs which can be used later
+- change rx-ringX to pdmaX to be closer to hardware documentation
+
+v4:
+- increase max interrupts to 6 because of adding RSS/LRO interrupts (4)
+  and dropping 2 reserved irqs (0+3) around rx+tx
+- dropped Robs RB due to this change
+- allow interrupt names
+- add interrupt-names without reserved IRQs on mt7988
+  this requires mtk driver patch:
+  https://patchwork.kernel.org/project/netdevbpf/patch/20250616080738.117993-2-linux@fw-web.de/
+
+v2:
+- change reg to list of items
 ---
- .../devicetree/bindings/net/mediatek,net.yaml | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ Documentation/devicetree/bindings/net/mediatek,net.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-index 766224e4ed86..da7bda20786a 100644
+index da7bda20786a..afacd30b37c0 100644
 --- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
 +++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-@@ -42,6 +42,18 @@ properties:
-     minItems: 1
-     maxItems: 8
+@@ -66,6 +66,10 @@ properties:
+       - const: gmac
+       - const: ppe
  
-+  interrupt-names:
-+    minItems: 1
-+    items:
-+      - const: fe0
-+      - const: fe1
-+      - const: fe2
-+      - const: fe3
-+      - const: pdma0
-+      - const: pdma1
-+      - const: pdma2
-+      - const: pdma3
++  sram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to mmio SRAM
 +
-   power-domains:
-     maxItems: 1
- 
-@@ -135,6 +147,10 @@ allOf:
-           minItems: 3
-           maxItems: 3
- 
-+        interrupt-names:
-+          minItems: 3
-+          maxItems: 3
-+
-         clocks:
-           minItems: 4
-           maxItems: 4
-@@ -166,6 +182,9 @@ allOf:
-         interrupts:
-           maxItems: 1
- 
-+        interrupt-names:
-+          maxItems: 1
-+
-         clocks:
-           minItems: 2
-           maxItems: 2
-@@ -192,6 +211,10 @@ allOf:
-           minItems: 3
-           maxItems: 3
- 
-+        interrupt-names:
-+          minItems: 3
-+          maxItems: 3
-+
-         clocks:
-           minItems: 11
-           maxItems: 11
-@@ -232,6 +255,10 @@ allOf:
-           minItems: 3
-           maxItems: 3
- 
-+        interrupt-names:
-+          minItems: 3
-+          maxItems: 3
-+
-         clocks:
-           minItems: 17
-           maxItems: 17
-@@ -274,6 +301,9 @@ allOf:
-         interrupts:
-           minItems: 4
- 
-+        interrupt-names:
-+          minItems: 4
-+
-         clocks:
-           minItems: 15
-           maxItems: 15
-@@ -312,6 +342,9 @@ allOf:
-         interrupts:
-           minItems: 4
- 
-+        interrupt-names:
-+          minItems: 4
-+
-         clocks:
-           minItems: 15
-           maxItems: 15
-@@ -350,6 +383,9 @@ allOf:
-         interrupts:
-           minItems: 4
- 
-+        interrupt-names:
-+          minItems: 4
-+
-         clocks:
-           minItems: 24
-           maxItems: 24
+   mediatek,ethsys:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
 -- 
 2.43.0
 
