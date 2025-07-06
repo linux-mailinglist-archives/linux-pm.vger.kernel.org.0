@@ -1,75 +1,71 @@
-Return-Path: <linux-pm+bounces-30230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30231-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C0DBAFA868
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 01:34:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1CB9AFA86B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 01:36:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 586DE7A2798
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 23:33:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68B47189AD8C
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 23:37:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F9101F8EEC;
-	Sun,  6 Jul 2025 23:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C041F8AC8;
+	Sun,  6 Jul 2025 23:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="fHqd48Hj"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="S5i+tdZV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E572919005E;
-	Sun,  6 Jul 2025 23:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F01919005E
+	for <linux-pm@vger.kernel.org>; Sun,  6 Jul 2025 23:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751844862; cv=pass; b=jcuZfsZJ+hk8WrGYA0NDbelXBqgPflxZSX3vFRMQuT1NFEl+f/ACyTWYdSTsYkMFQxh1+Wq9JoWtG56NmR+XhxsIc6CASMLrE1+3PtGUv3biglAGjBBZSn36pmJEZWzWlBg78SzXK9AnbZeeKFWJWraZhtusprwreu7JZ6neBoY=
+	t=1751845013; cv=pass; b=usKvI+DlyrL14F19HLA8vOKIfUpN7js+yRmuAtEVvIMGoQilrYZdM+bnHiXree/i4dcSVENThcZ5qFfYDmfKpzfO7TWklMWziCMT5tISNUS1R3vU+kmjPRJyDR79bzPMOjCxGbK/FMwj2IRjujCNYRCiH2ubhWRDV7F3QnjWy3o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751844862; c=relaxed/simple;
-	bh=itjhecGpCikTA7dpGfNaSXg7eAyxUUlQBMvigTlb97k=;
+	s=arc-20240116; t=1751845013; c=relaxed/simple;
+	bh=ut6MmXusWWSmcEU4wG58lSpJgjtseEk8JQVBCFgglAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BqwzD+wYdi4Y72fHoqPnDTJuufPjwGr5cFE+6cbhkFQYBn3Q3S41FHAt4zUfwVw0YxJBzVtv8mzL79Q1HYFkHRN09kZPjAUmApeQqTHXywlzq8aUJwzvfjoQ77kUXlvDmsysSdlS7cF40exNbks8AZSPw0HBguZP4FB/i2dMmHw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=fHqd48Hj; arc=pass smtp.client-ip=136.143.188.112
+	 Content-Type:Content-Disposition:In-Reply-To; b=g4CXh7BFDPhG1f4f8kFm4Ys3yYs5fzxStzg7aG0weWptDWIiUeRpnul7+dx6zOvWcUP0NBrJJ4JqbKLmPIc/OyxD65+LObV37r8rdVEZZA7rr6w452YY+45XxKGC2HyJ/Ngegb2YpQkeUlujg2ctiKF8ZHPj01jWLwmp1uvqvBE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=S5i+tdZV; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751844824; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1751845005; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=BGHqLupuRiyOQ1O3SOFWjX1OzBR9/2L7EWvrdj4HC3DJ/jytlmR2oTGkvdkTTkiGWcc8Ijn6VTC1kcu+TMse5Y80UZe0qUlI6QQChhRRH7LGlSMsZEy+GsbqZ/7lN/ntpebKG6WsrhazZdgqCCUDZ1MmH2+12uixVLJqE9lKYMA=
+	b=TMyC6Nj56Gm7JicCJh1VG7W/GzxxYdXBrwKlBaZTQPILusFudy1G1NcUtFU5Dlez0WBYM/M1JAC+S7452uodi6sAkKUYGkojeKlGr1Fn4b/bSe1Rcb9OpwIlIv77KK5fpQI/PSDKnVdGG8H9smdPfvRx4HBfwksic+5gNMiJp5g=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751844824; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=itjhecGpCikTA7dpGfNaSXg7eAyxUUlQBMvigTlb97k=; 
-	b=FSCPsjbHM/QxheLzaj2IeDe18PIhW0v9YYck/XB+AhqrAH+Igv0HShxRaF+Te00iJIxc6hvX71Zx45J6YXOVfO2/989rxIPCP8vy9sQrfNb1BC6Cpuo70EQrezls9lAIEly5Kwl7b0jx86Nr3F84LgSqfV/XV79qnmFxzs4Bulg=
+	t=1751845005; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=ut6MmXusWWSmcEU4wG58lSpJgjtseEk8JQVBCFgglAo=; 
+	b=fuqEZsxAmtw2vGYWFIgQiNkjp+V2eE3uKSOT/VDeJx7GrFN58O/LrbJOnj3OQR5mdNq9mkXFhIJAR/pyXANu1kI17nIU1v1cSJGbgVNsbUPmGBbhQPynFHYoqnb8XkC8fO/OSzKLqyjMPRT4MG4Z7p4SBq/c25qVbuy/FBZdpT4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751844824;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751845005;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=itjhecGpCikTA7dpGfNaSXg7eAyxUUlQBMvigTlb97k=;
-	b=fHqd48HjBTov/+ORYD0F1yxkLSXlu7JcNS+HeYvgngpp78UczV/swrwXMnSBXcsn
-	ZpocJNHdOcJepk9PPLo/xl+BkCf0242YbOp1zk0tR52eccGEVyS44J/A/RCSaEmq9fN
-	4ZqtNx/s+j96u+Ghlcc7+UlC+M4VRjM7Z5H2gBmo=
-Received: by mx.zohomail.com with SMTPS id 1751844821754603.230935627197;
-	Sun, 6 Jul 2025 16:33:41 -0700 (PDT)
+	bh=ut6MmXusWWSmcEU4wG58lSpJgjtseEk8JQVBCFgglAo=;
+	b=S5i+tdZVkV9vJHLlvHN/xmibsHt5zzKYxvoOtqEu2Q/SJ1nSPit1+3eT7c4prlLG
+	VoknDHIK8zMpK5Uh5yHPs9tVb4Cq1UCEfVTqIzvsewh52pK+PxGpPQH2vJFDz++fwfO
+	w5zaivTayjsOQ57HX1BMZPmDK55rIxTD9DNSy78c=
+Received: by mx.zohomail.com with SMTPS id 1751845001907173.35088717664098;
+	Sun, 6 Jul 2025 16:36:41 -0700 (PDT)
 Received: by venus (Postfix, from userid 1000)
-	id 2C647180F14; Mon, 07 Jul 2025 01:33:36 +0200 (CEST)
-Date: Mon, 7 Jul 2025 01:33:36 +0200
+	id 20362180F14; Mon, 07 Jul 2025 01:36:39 +0200 (CEST)
+Date: Mon, 7 Jul 2025 01:36:39 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Frank Li <Frank.li@nxp.com>, imx@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>, 
-	Robin Gong <b38343@freescale.com>, Robin Gong <yibin.gong@nxp.com>, 
-	Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v7 5/6] power: supply: pf1550: add battery charger support
-Message-ID: <i7qehdo46eegyj7ebp4hetr7jtwkxceoate6tqw6aukw4cbgsl@pl6lgh4k5m4o>
-References: <20250612-pf1550-v7-0-0e393b0f45d7@savoirfairelinux.com>
- <20250612-pf1550-v7-5-0e393b0f45d7@savoirfairelinux.com>
- <xgwx65axwiebh27hrq7rluuf7jynb7v4o77mf2zztsf64bx3bw@iagwzeumk2su>
- <aFwFhYoaWoSXcFdR@fedora>
+To: Mark Brown <broonie@kernel.org>
+Cc: Hans de Goede <hansg@kernel.org>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	linux-pm@vger.kernel.org
+Subject: Re: (subset) [PATCH 00/10] power: supply: ug3105_battery: Switch to
+ power_supply_batinfo_ocv2cap()
+Message-ID: <cyhxxtweyya7yc5vmjg6trpmia4wtzsqxhwcgdh35p63hu7oja@4vjoryxaopq5>
+References: <20250608204010.37482-1-hansg@kernel.org>
+ <175055104892.226297.388983002573981633.b4-ty@collabora.com>
+ <cql7vri3yyk3fl6y4rrmfbj6ca75gv3y2hap5as4ulcefjenwg@jlebnndhe65x>
+ <aF3YYgw-GHpjepSs@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,66 +73,66 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hkm4pffdfaovyioh"
+	protocol="application/pgp-signature"; boundary="ue6gog4mxtbbt547"
 Content-Disposition: inline
-In-Reply-To: <aFwFhYoaWoSXcFdR@fedora>
+In-Reply-To: <aF3YYgw-GHpjepSs@finisterre.sirena.org.uk>
 X-Zoho-Virus-Status: 1
 X-Zoho-Virus-Status: 1
 X-Zoho-AV-Stamp: zmail-av-1.4.3/251.827.75
 X-ZohoMailClient: External
 
 
---hkm4pffdfaovyioh
+--ue6gog4mxtbbt547
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 5/6] power: supply: pf1550: add battery charger support
+Subject: Re: (subset) [PATCH 00/10] power: supply: ug3105_battery: Switch to
+ power_supply_batinfo_ocv2cap()
 MIME-Version: 1.0
 
-Hello Samuel,
+Hi,
 
-On Wed, Jun 25, 2025 at 10:19:49AM -0400, Samuel Kayode wrote:
-> The pf1550 charger receives a VBUS power input which can be provided eith=
-er by
-> an AC adapter or a USB bus. A depleted battery is charged using the VBUS =
-power
-> input (VBUSIN). When no power is supplied to VBUSIN, the pf1550 switches =
-the
-> load to the connected non-depleted battery.
+On Fri, Jun 27, 2025 at 12:31:46AM +0100, Mark Brown wrote:
+> On Sun, Jun 22, 2025 at 03:09:05AM +0200, Sebastian Reichel wrote:
 >=20
-> I could have two power_supply_desc, one for battery and one for the exter=
-nal
-> power?
+> > I obviously also applied 1-7, but without b4 as that required some
+> > manual work to prepare the immutable branch for regulator and
+> > squashing the fixup patches :)
+>=20
+> > Here is the pull information for regulator:
+>=20
+> Uh, JFTR I hadn't actually reviewed this - there was a !fixup in the
+> middle of the series so it looked like an obvious missend and I just
+> binned it.
 
-That's acceptable. But don't you have a fuel-gauge for the battery?
-If you register two POWER_SUPPLY_TYPE_BATTERY devices, then your
-board should have two batteries. If you have a fuel-gauge it will
-very likely provide much better battery data then anything you get
-out of pf1550.
+oh sorry, Hans' patch series was based on a much older series from
+me, which has been pending for the last two kernel cycles. I somehow
+misremembered, that you already Ack'd it, since it was so trivial.
+I should have checked before merging this.
 
 Greetings,
 
 -- Sebastian
 
---hkm4pffdfaovyioh
+--ue6gog4mxtbbt547
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhrB88ACgkQ2O7X88g7
-+po93Q/6A6bYXRf5lstEnL9kwKOfTphsoJCMbORUtvQ+oD/fFxd9tJ2CL8+hZ9GZ
-++4xcLZp7Qc6HnLXF3OjnZBjCsCVUd/uUyfH6fU6ZqrXqLTJC2hFHHsuIvJUw3zZ
-GQY06j7LYRgvXuM2orQoxqtyi1x/GnajlmYzeUzT5NvvWWyXPE+rOPea7DeLghvM
-VVtlcnRIFQO2K/ZS6U0reUFDlzzjX+BfiyRDciBRIj9Xb8L5vwEiUdKXe3edZXyR
-xZ9/shpsmELBMo2QNjKN3dT9ReGqX+z/MxubOhR5CdK54nYsxl5fSanVIvNZ9AF3
-0sMvhYm1Iop4JZ6pCJhCLd2GCrAsys1LQ0f/6ppYU+zH4DHYO1+gb/g/UN7uFdvy
-aGl1q3E2XBQXUdVPsoHCuPId77Om7+opGaxk+vEtCw0H1a/1cmLvkfvkShy+XqKP
-nb73pvL9o2zECr6zeb+M2Ff+/1zv+R2p2HVfv51CHYC/LHvZcs+2UVQ+ZlqOEB+X
-Vr/9khKhm2E/WOPoINRAWbu17bvy5TCfyAej6hJbAB/TGkNv1FjYBmxmLgb1BwDT
-NN9dJVyBoDh5hqn9qAvs/cP40RWuP/dABj6GZ6AHYWaJMHOb4eC7zavrvWSBemWn
-Sow9U1YcnEF2WcTpp6WtK0PO8T83Gae4fY1iRlWLjN2tkqYffUE=
-=hZ0x
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhrCIYACgkQ2O7X88g7
++prcKQ/9G6BBIJ/46xxKeC7UwZf333hB86X01IYr7w9830F4iKRqx5gnct4iCHQh
+obWJaCSXU4Mj5AaBmOkdxpQxjtTWtYJqAbI75eP5jMhRWo6r85S6DSNN+LlY3uBI
+0WGfLEV4pLXd90GOVpcJiHsxVHHAZ22DUxzbTw9pfbaeFnvdFHZ3jrjPJQFPiao3
+UOdSKqDyg9EUEr8/3lAj/3aYoqaApp5WjDKtHNY47XV/hGlWgLYbd1v7EtaNRcc+
+JNOXPlcYT9blJQXGgt9piNFugGtcUxGIL63r0M4YPNgno/Grmo+Jjd6ub1yO+Ffn
+qYrgQAPg4QtbgMw7azEULHWdQ572WV089HOcTBJceiRQGAl9leQZdF2+tI2lFcrP
+bh2MRTmyPoGayoSHAextXy12iv2ShJoot7VQXwroVZOw2g8GdMD35IO7zsx7oZ2M
+OvSXX/AizR3DpelqcCaW3yNsef7QAUNGwPsRilpmK+40G0HUAQ/AVuah1SPN2s+w
+lExlh4IoZTz31VoV2FReohxsuzbZHdtATaMv/ivkoM0ICXcCr+QYSmicPwoyDUKp
+Y1Mv1gFTgRyhVa9208MrN+RJTkYiQgoX1NMO4yehS7nAUUZ0pVSN6k8S1uTUSlhL
+osj+xS9Id0fF8opa+DIcmIszmzUKisFJ+WXvjdt7U9vPjaxAXek=
+=xrdj
 -----END PGP SIGNATURE-----
 
---hkm4pffdfaovyioh--
+--ue6gog4mxtbbt547--
 
