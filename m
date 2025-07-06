@@ -1,138 +1,150 @@
-Return-Path: <linux-pm+bounces-30231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1CB9AFA86B
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 01:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B463AFA86C
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 01:38:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68B47189AD8C
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 23:37:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF4C6189ADE7
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 23:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C041F8AC8;
-	Sun,  6 Jul 2025 23:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="S5i+tdZV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C4E202F87;
+	Sun,  6 Jul 2025 23:38:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F01919005E
-	for <linux-pm@vger.kernel.org>; Sun,  6 Jul 2025 23:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751845013; cv=pass; b=usKvI+DlyrL14F19HLA8vOKIfUpN7js+yRmuAtEVvIMGoQilrYZdM+bnHiXree/i4dcSVENThcZ5qFfYDmfKpzfO7TWklMWziCMT5tISNUS1R3vU+kmjPRJyDR79bzPMOjCxGbK/FMwj2IRjujCNYRCiH2ubhWRDV7F3QnjWy3o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751845013; c=relaxed/simple;
-	bh=ut6MmXusWWSmcEU4wG58lSpJgjtseEk8JQVBCFgglAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g4CXh7BFDPhG1f4f8kFm4Ys3yYs5fzxStzg7aG0weWptDWIiUeRpnul7+dx6zOvWcUP0NBrJJ4JqbKLmPIc/OyxD65+LObV37r8rdVEZZA7rr6w452YY+45XxKGC2HyJ/Ngegb2YpQkeUlujg2ctiKF8ZHPj01jWLwmp1uvqvBE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=S5i+tdZV; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751845005; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=TMyC6Nj56Gm7JicCJh1VG7W/GzxxYdXBrwKlBaZTQPILusFudy1G1NcUtFU5Dlez0WBYM/M1JAC+S7452uodi6sAkKUYGkojeKlGr1Fn4b/bSe1Rcb9OpwIlIv77KK5fpQI/PSDKnVdGG8H9smdPfvRx4HBfwksic+5gNMiJp5g=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751845005; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ut6MmXusWWSmcEU4wG58lSpJgjtseEk8JQVBCFgglAo=; 
-	b=fuqEZsxAmtw2vGYWFIgQiNkjp+V2eE3uKSOT/VDeJx7GrFN58O/LrbJOnj3OQR5mdNq9mkXFhIJAR/pyXANu1kI17nIU1v1cSJGbgVNsbUPmGBbhQPynFHYoqnb8XkC8fO/OSzKLqyjMPRT4MG4Z7p4SBq/c25qVbuy/FBZdpT4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751845005;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=ut6MmXusWWSmcEU4wG58lSpJgjtseEk8JQVBCFgglAo=;
-	b=S5i+tdZVkV9vJHLlvHN/xmibsHt5zzKYxvoOtqEu2Q/SJ1nSPit1+3eT7c4prlLG
-	VoknDHIK8zMpK5Uh5yHPs9tVb4Cq1UCEfVTqIzvsewh52pK+PxGpPQH2vJFDz++fwfO
-	w5zaivTayjsOQ57HX1BMZPmDK55rIxTD9DNSy78c=
-Received: by mx.zohomail.com with SMTPS id 1751845001907173.35088717664098;
-	Sun, 6 Jul 2025 16:36:41 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 20362180F14; Mon, 07 Jul 2025 01:36:39 +0200 (CEST)
-Date: Mon, 7 Jul 2025 01:36:39 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Hans de Goede <hansg@kernel.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	linux-pm@vger.kernel.org
-Subject: Re: (subset) [PATCH 00/10] power: supply: ug3105_battery: Switch to
- power_supply_batinfo_ocv2cap()
-Message-ID: <cyhxxtweyya7yc5vmjg6trpmia4wtzsqxhwcgdh35p63hu7oja@4vjoryxaopq5>
-References: <20250608204010.37482-1-hansg@kernel.org>
- <175055104892.226297.388983002573981633.b4-ty@collabora.com>
- <cql7vri3yyk3fl6y4rrmfbj6ca75gv3y2hap5as4ulcefjenwg@jlebnndhe65x>
- <aF3YYgw-GHpjepSs@finisterre.sirena.org.uk>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4776219D8A3;
+	Sun,  6 Jul 2025 23:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751845097; cv=none; b=Flxcc583VrnuICVjz6hSqp0xEfM36HIb2j3YO0Y7YHjY5udi6qaex46VeirVQhDpc3XzBP2EM2HyCfCWrqjx8y00EVYuVXo475+iljBYEVg61lzPm69Dv/b4VxK/NBPX1FJS0WnEnmWbx87B6mpLtaBTVaZj+037S31QQ+ZSHkw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751845097; c=relaxed/simple;
+	bh=GIW4M+B02meitepEZRICFQHNNiA29C676M+kLF16Q4I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Hgxxuyn4ZDASWlws6gJKrYcMfBtyO2gfAs6Fq26CsZSWIs0uDb66TwF8OZlUArKyA3Oqqa5gdBZkKOAn+IsnPH/Wqdu8kug2dJBpvsPNdmjGIsCX7ItHpcKRpvBLMs08dldzmnyfHFxGGoCIMB7qQ9c1RMa36gtQRmmGyB4sbCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A98CB1E8D;
+	Sun,  6 Jul 2025 16:38:00 -0700 (PDT)
+Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB5DB3F694;
+	Sun,  6 Jul 2025 16:38:11 -0700 (PDT)
+Date: Mon, 7 Jul 2025 00:36:40 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Chen-Yu Tsai <wens@kernel.org>
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>, Samuel
+ Holland <samuel@sholland.org>, Ulf Hansson <ulf.hansson@linaro.org>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, linux-sunxi@lists.linux.dev,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: power: Add A523 PPU and PCK600 power
+ controllers
+Message-ID: <20250707003640.73e08911@minigeek.lan>
+In-Reply-To: <20250627152918.2606728-2-wens@kernel.org>
+References: <20250627152918.2606728-1-wens@kernel.org>
+	<20250627152918.2606728-2-wens@kernel.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ue6gog4mxtbbt547"
-Content-Disposition: inline
-In-Reply-To: <aF3YYgw-GHpjepSs@finisterre.sirena.org.uk>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/251.827.75
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 27 Jun 2025 23:29:15 +0800
+Chen-Yu Tsai <wens@kernel.org> wrote:
 
---ue6gog4mxtbbt547
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: (subset) [PATCH 00/10] power: supply: ug3105_battery: Switch to
- power_supply_batinfo_ocv2cap()
-MIME-Version: 1.0
+> From: Chen-Yu Tsai <wens@csie.org>
+> 
+> The A523 PPU is likely the same kind of hardware seen on previous SoCs.
+> 
+> The A523 PCK600, as the name suggests, is likely a customized version
+> of ARM's PCK-600 power controller. Comparing the BSP driver against
+> ARM's PPU datasheet shows that the basic registers line up, but
+> Allwinner's hardware has some additional delay controls in the reserved
+> register range. As such it is likely not fully compatible with the
+> standard ARM version.
+> 
+> Document A523 PPU and PCK600 compatibles.
+> 
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 
-Hi,
+Both PPUs are merely mentioned in the user manual, but do not have a
+register description. But the BSP source code confirms the mapping of
+the power domains used below, so:
 
-On Fri, Jun 27, 2025 at 12:31:46AM +0100, Mark Brown wrote:
-> On Sun, Jun 22, 2025 at 03:09:05AM +0200, Sebastian Reichel wrote:
->=20
-> > I obviously also applied 1-7, but without b4 as that required some
-> > manual work to prepare the immutable branch for regulator and
-> > squashing the fixup patches :)
->=20
-> > Here is the pull information for regulator:
->=20
-> Uh, JFTR I hadn't actually reviewed this - there was a !fixup in the
-> middle of the series so it looked like an obvious missend and I just
-> binned it.
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-oh sorry, Hans' patch series was based on a much older series from
-me, which has been pending for the last two kernel cycles. I somehow
-misremembered, that you already Ack'd it, since it was so trivial.
-I should have checked before merging this.
+Cheers,
+Andre
 
-Greetings,
+> ---
+>  .../bindings/power/allwinner,sun20i-d1-ppu.yaml   |  2 ++
+>  .../power/allwinner,sun55i-a523-pck600.h          | 15 +++++++++++++++
+>  .../dt-bindings/power/allwinner,sun55i-a523-ppu.h | 12 ++++++++++++
+>  3 files changed, 29 insertions(+)
+>  create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
+>  create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+> 
+> diff --git a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
+> index f578be6a3bc8..b9f550994512 100644
+> --- a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
+> +++ b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
+> @@ -18,6 +18,8 @@ properties:
+>      enum:
+>        - allwinner,sun20i-d1-ppu
+>        - allwinner,sun8i-v853-ppu
+> +      - allwinner,sun55i-a523-ppu
+> +      - allwinner,sun55i-a523-pck-600
+>  
+>    reg:
+>      maxItems: 1
+> diff --git a/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h b/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
+> new file mode 100644
+> index 000000000000..6b3d8ea7bb69
+> --- /dev/null
+> +++ b/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +
+> +#ifndef _DT_BINDINGS_POWER_SUN55I_A523_PCK600_H_
+> +#define _DT_BINDINGS_POWER_SUN55I_A523_PCK600_H_
+> +
+> +#define PD_VE			0
+> +#define PD_GPU			1
+> +#define PD_VI			2
+> +#define PD_VO0			3
+> +#define PD_VO1			4
+> +#define PD_DE			5
+> +#define PD_NAND			6
+> +#define PD_PCIE			7
+> +
+> +#endif /* _DT_BINDINGS_POWER_SUN55I_A523_PCK600_H_ */
+> diff --git a/include/dt-bindings/power/allwinner,sun55i-a523-ppu.h b/include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+> new file mode 100644
+> index 000000000000..bc9aba73c19a
+> --- /dev/null
+> +++ b/include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +
+> +#ifndef _DT_BINDINGS_POWER_SUN55I_A523_PPU_H_
+> +#define _DT_BINDINGS_POWER_SUN55I_A523_PPU_H_
+> +
+> +#define PD_DSP			0
+> +#define PD_NPU			1
+> +#define PD_AUDIO		2
+> +#define PD_SRAM			3
+> +#define PD_RISCV		4
+> +
+> +#endif /* _DT_BINDINGS_POWER_SUN55I_A523_PPU_H_ */
 
--- Sebastian
-
---ue6gog4mxtbbt547
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhrCIYACgkQ2O7X88g7
-+prcKQ/9G6BBIJ/46xxKeC7UwZf333hB86X01IYr7w9830F4iKRqx5gnct4iCHQh
-obWJaCSXU4Mj5AaBmOkdxpQxjtTWtYJqAbI75eP5jMhRWo6r85S6DSNN+LlY3uBI
-0WGfLEV4pLXd90GOVpcJiHsxVHHAZ22DUxzbTw9pfbaeFnvdFHZ3jrjPJQFPiao3
-UOdSKqDyg9EUEr8/3lAj/3aYoqaApp5WjDKtHNY47XV/hGlWgLYbd1v7EtaNRcc+
-JNOXPlcYT9blJQXGgt9piNFugGtcUxGIL63r0M4YPNgno/Grmo+Jjd6ub1yO+Ffn
-qYrgQAPg4QtbgMw7azEULHWdQ572WV089HOcTBJceiRQGAl9leQZdF2+tI2lFcrP
-bh2MRTmyPoGayoSHAextXy12iv2ShJoot7VQXwroVZOw2g8GdMD35IO7zsx7oZ2M
-OvSXX/AizR3DpelqcCaW3yNsef7QAUNGwPsRilpmK+40G0HUAQ/AVuah1SPN2s+w
-lExlh4IoZTz31VoV2FReohxsuzbZHdtATaMv/ivkoM0ICXcCr+QYSmicPwoyDUKp
-Y1Mv1gFTgRyhVa9208MrN+RJTkYiQgoX1NMO4yehS7nAUUZ0pVSN6k8S1uTUSlhL
-osj+xS9Id0fF8opa+DIcmIszmzUKisFJ+WXvjdt7U9vPjaxAXek=
-=xrdj
------END PGP SIGNATURE-----
-
---ue6gog4mxtbbt547--
 
