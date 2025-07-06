@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-30203-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30217-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C29CAFA53A
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 15:22:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F87AFA573
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 15:32:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA318189480E
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 13:23:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73FEF17C43C
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 13:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCCC214A8B;
-	Sun,  6 Jul 2025 13:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B17B28504A;
+	Sun,  6 Jul 2025 13:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="HHVo/YJL"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="xhM1O+lv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
+Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D445191F7E;
-	Sun,  6 Jul 2025 13:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0AE28468E;
+	Sun,  6 Jul 2025 13:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751808158; cv=none; b=rXtkL5XHJPmUYztu5+7airpWg6PzteM24c7P9dCohzIWH2Jxreu6jL29HsUFpofm/fEGiqUPvuX4o21sAml29jWKyYmElgObiWKy4Hn99ssJDixgxKY27wvH/XA8ovyCSjutessbIgIObNVyl+UPXDArKbYsoJRFcrYA+dvwRBQ=
+	t=1751808738; cv=none; b=LMKnnYMIzaBDN+Xv9wnmDsYYhiCNVPt62EdQ9d/patuoAjqh5soBkYJYGtzzyH7JKDoPtoBklTG4Kl4/QSI/5EYz8+THq3bqmpCXBFoCKt0PYlAOtRngc3mF5gS6dCvwsRa1fq5Dyznh5A7C3iJeajmoRXFkJElTWI1bEqIWuDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751808158; c=relaxed/simple;
-	bh=nNNXCz0QoVlTtDWFNzY0gqKDOSoNeIlY3uahvtlyf00=;
+	s=arc-20240116; t=1751808738; c=relaxed/simple;
+	bh=JgZ1cPMKbEPkJlrteoo8n9KC9VeiMg4oo1zrlG+bnQQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PHDzp5QqxPb91bDsiNQMB2j67InPLbO8TlgewM9srwaKGH5d/sxLCzmnsBhFsgUfhcHtEef8QTuwkbPWhix02OklV+ucDVCGFNNv8JxfJEFOZv7ubgqbcbTYQtF3XDWDbEvUj7HdJina9tB5NOgQH0BjYKDW6GOhw1Bu8QbcGt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=HHVo/YJL; arc=none smtp.client-ip=134.0.28.8
+	 MIME-Version; b=cIJraCxAFaIbSjkGHc3GfuNQh6HerBmYBv8aIYN/cEZmlhiRNXavingh0rxDIAX6wOCyTzIpRAhfv+nY1X/dO60tN07Bd2Bkr30CYt1hMuHc9utoYjT+ykCzOAEXBFf8G/JMXoPJ/wsRRo2kZTWNTiv5yN47kE7k7ghyouWcWD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=xhM1O+lv; arc=none smtp.client-ip=134.0.28.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout3.routing.net (Postfix) with ESMTP id 8A230604DC;
+	by mxout1.routing.net (Postfix) with ESMTP id EC29A40033;
 	Sun,  6 Jul 2025 13:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1751808148;
+	s=20200217; t=1751808149;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AKLGNFT60/m9GUw3XIxCW7kQ4f+bA70MARehu2D8Bjk=;
-	b=HHVo/YJL16+z5Nb0XQhrqvB5SFG6D9j/isP+KpY+kF72N2OQRDNcEeMmkdDPxM0l1fqIWi
-	BYFcGGKTdXSxJkgKBb7nW6j4IP3yuctvV81sCADm/z4MIhoHMrkAS/OXV789B4TXaDg0RH
-	lv+69pcvXKWCNSOD0FoWoadIpxJ4FOc=
+	bh=R99PFLgv7EGPI4uV/VSEzfV0kYW/ZQPDNvpGbpm2GOY=;
+	b=xhM1O+lvWfbNk7SUipFTNPuxvYoMT6kIvhmM4O4jz3CydhWERIOuzfIHQJVlR4pCsyGEm7
+	B86Sq6G6phGOUlwvrpOYxAdBqQfC8XDV81zquLgOCy0EnXsYNmzrDdzU+wPratSN6diSjV
+	dZv2C9GszWBuECxbORp53UXPRiR4wGI=
 Received: from frank-u24.. (fttx-pool-194.15.86.111.bambit.de [194.15.86.111])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 34B8E1226A5;
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 910501226F8;
 	Sun,  6 Jul 2025 13:22:28 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -78,9 +78,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v8 04/16] dt-bindings: net: mediatek,net: add sram property
-Date: Sun,  6 Jul 2025 15:21:59 +0200
-Message-ID: <20250706132213.20412-5-linux@fw-web.de>
+Subject: [PATCH v8 05/16] dt-bindings: net: dsa: mediatek,mt7530: add dsa-port definition for mt7988
+Date: Sun,  6 Jul 2025 15:22:00 +0200
+Message-ID: <20250706132213.20412-6-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250706132213.20412-1-linux@fw-web.de>
 References: <20250706132213.20412-1-linux@fw-web.de>
@@ -94,64 +94,48 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Meditak Filogic SoCs (MT798x) have dedicated MMIO-SRAM for dma operations.
-
-MT7981 and MT7986 currently use static offset to ethernet MAC register
-which will be changed in separate patch once this way is accepted.
-
-Add "sram" property to map ethernet controller to dedicated mmio-sram node.
+Add own dsa-port binding for SoC with internal switch where only phy-mode
+'internal' is valid.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
-v8:
-- splitted out mac subnode pattern
-- dropped reg naming change
-- rephrased description
-- drop change of reg-name
+ .../bindings/net/dsa/mediatek,mt7530.yaml          | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-v6:
-- split out the interrupt-names into separate patch
-- update irq(name) min count to 4
-- add sram-property
-- drop second reg entry and minitems as there is only 1 item left again
-
-v5:
-- fix v4 logmessage and change description a bit describing how i get
-  the irq count.
-- update binding for 8 irqs with different names (rx,tx => fe0..fe3)
-  including the 2 reserved irqs which can be used later
-- change rx-ringX to pdmaX to be closer to hardware documentation
-
-v4:
-- increase max interrupts to 6 because of adding RSS/LRO interrupts (4)
-  and dropping 2 reserved irqs (0+3) around rx+tx
-- dropped Robs RB due to this change
-- allow interrupt names
-- add interrupt-names without reserved IRQs on mt7988
-  this requires mtk driver patch:
-  https://patchwork.kernel.org/project/netdevbpf/patch/20250616080738.117993-2-linux@fw-web.de/
-
-v2:
-- change reg to list of items
----
- Documentation/devicetree/bindings/net/mediatek,net.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-index da7bda20786a..afacd30b37c0 100644
---- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
-+++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-@@ -66,6 +66,10 @@ properties:
-       - const: gmac
-       - const: ppe
+diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+index 51205f9f2985..9b983fdbf3c7 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+@@ -190,6 +190,18 @@ required:
+   - reg
  
-+  sram:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle to mmio SRAM
+ $defs:
++  builtin-dsa-port:
++    patternProperties:
++      "^(ethernet-)?ports$":
++        patternProperties:
++          "^(ethernet-)?port@[0-6]$":
++            if:
++              required: [ ethernet ]
++            then:
++              properties:
++                phy-mode:
++                  const: internal
 +
-   mediatek,ethsys:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description:
+   mt7530-dsa-port:
+     patternProperties:
+       "^(ethernet-)?ports$":
+@@ -297,7 +309,7 @@ allOf:
+             - airoha,en7581-switch
+             - airoha,an7583-switch
+     then:
+-      $ref: "#/$defs/mt7530-dsa-port"
++      $ref: "#/$defs/builtin-dsa-port"
+       properties:
+         gpio-controller: false
+         mediatek,mcm: false
 -- 
 2.43.0
 
