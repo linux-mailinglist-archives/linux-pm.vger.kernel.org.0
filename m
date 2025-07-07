@@ -1,131 +1,273 @@
-Return-Path: <linux-pm+bounces-30239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E64CAFA8BB
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 03:05:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EA1BAFA9A4
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 04:28:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F1CA1898F00
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 01:05:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D5153A77B5
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 02:28:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9633633993;
-	Mon,  7 Jul 2025 01:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C1D19B3EC;
+	Mon,  7 Jul 2025 02:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yR2z0hMC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2043.outbound.protection.outlook.com [40.107.212.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859281BC3F;
-	Mon,  7 Jul 2025 01:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751850334; cv=none; b=aaSCf3XVbWKXwiexetOJBeSk99tB12rr5kVQwLzrsy+WVLOJmUcYLzXwT3NsXNRJ18shs/uPZ7/DdROJW0dOdkTtfGXYBkfbvrDBcvAa4/1Ae9NloIsT+PlEmimXQFQgxOusMVAqUWmu+MaxNYVrCpfCDXjnA1YO2aMxbGEE9AA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751850334; c=relaxed/simple;
-	bh=lFtl0/KhCyGQtSvdjpdRV3oo3TI3vyWSr89jtNIGjYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TX0Wy23Za2DOjiGOVqYpuIdH5uaGscpeJc+e0JvkKGX4p+frSzpX3QC/8oGrEInuZLqBCDUojYjvWeFLPSkXdzIdM7iRFz4RxKFwE4kg5+rRDieA83lVQebN8KpYHMGU0UDdFjD/7XhItEClTLf9iplJ19RUOkpnUHg/tOqL3Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: bd5d76905acd11f0b29709d653e92f7d-20250707
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:b540f768-9daa-4551-9621-e99882fbf9a8,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:6493067,CLOUDID:721bd41f0dd6331f36630ea02494de61,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|83|102,TC:nil,Content:0|52,EDM:-3,
-	IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
-X-UUID: bd5d76905acd11f0b29709d653e92f7d-20250707
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 80701485; Mon, 07 Jul 2025 09:00:14 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id CCCECE008FA2;
-	Mon,  7 Jul 2025 09:00:13 +0800 (CST)
-X-ns-mid: postfix-686B1C1D-73792946
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id AF560E008FAA;
-	Mon,  7 Jul 2025 09:00:12 +0800 (CST)
-Message-ID: <de7e327a-202c-4b28-b372-2d648c680dbe@kylinos.cn>
-Date: Mon, 7 Jul 2025 09:00:12 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E95D18027;
+	Mon,  7 Jul 2025 02:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751855325; cv=fail; b=JC+kt33H6lPQT8YwWUHMS1xTcExtT/WRbvHkWeyjLGx86oYO4LZAXkUGcDnIUD8px4lQ7RaTdKTHKOvMoligZ/56BfbJpUAV2KX+Vi9g+FLvx2uSywIdmd/20DSW2zgL6PLAH2EKZI/ctaUfzwZhHBAzdw8PEpZ6NtOfkmNsc5M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751855325; c=relaxed/simple;
+	bh=qNa3OxeV11tIX4swXDq2AJAkt+tqbT2rC7chdiL3oKM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Y13Hueex4w9clpeJwCfrjmxc+lRa4r9AQ2Bt2T9b+HqQNubpIGDiteuuPDTQy6xBNTlPgpnBWwOOnRFHZaM5I9iQyNYHpdNmMBrhpCfW5kjXcoWkyp7VlJ7xL8D5ldkCMCiSs1iZvPoZDE20RZdc5YoiS7QYf4g1xbm9fU9gr6w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yR2z0hMC; arc=fail smtp.client-ip=40.107.212.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Tuhgcr3yvrXc/91H6hKl3GFb4g++vNJjpS/GIUIo/82NPAM9rYycvsndHYOHgrWynqVNV/z6jGciq9sZl/H/c8I0b1hTURsCoszdzShu5qa5m2VNqVfzZOAYDzHzMyFCE1+s3pgTnvbAPcwRUk5BhQjWJmtrK2DCNEhDWrWSaluedOruf5K9x3MNG4gII7GmKi6RYYQxvZOWTWXwoik9WV65CWjAy3n4UC0hFi3rKWzfnRj7ZgNL/BiR2NxahS+og/4wp9KQrfiVc0V+MgIXvV5DrdcOUFZofH+IThqbAB4N/iUkPRo41SGdFJKL9qCR47SqYavXuzTY/fUfEUJYsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qDE8LFKVAfKfPAqWBQc3X/4uzMOgnwRtrk+os29f62Q=;
+ b=L1KEAJHS5SdqEUUHH4lo6Ex4FcX9mxF4qwm1/6FTnieHyIVBcuPTIdlQOgaq74asOgngy0qS/zEO25JNLCs9AAtQq57NBXDv7Pwqp5sMCuIxmg7SGuCskRju7UaymTnIFLN5tXijlIleSpRWXhqq3NLP6cHnGuvAlboCgiojM90NsmBH20MrHOcWsX9jQio6IS1a7NLD/rTi/g6rngyJ7VhQ/v+KrCmW1Qrb2TfBvDGFGsuh6Ne1fze4t45r6ynpyIDwAGzRG6sfQLzxxkTySSXOAiNZ90/bvEeZ4Qhv205xb6fEvNNbIEHlyXnvy8cKql9GKQCVBVqXXx8YuIoKgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qDE8LFKVAfKfPAqWBQc3X/4uzMOgnwRtrk+os29f62Q=;
+ b=yR2z0hMCZVbCopmHHKNVjCwsilL6PLVEgPEN5LiNUuR1aSio2UtpmaoSn/l0TKBKBnZnDyC+NPRBP9iTWR+e7nVfpkISehxGYnUW4nrlEcqLTUnY67hHqIHCJoMMvFEz2t5ed5WnMmV3leU3752aqTtshzf8E7j8wTkKXKX3BOw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB7804.namprd12.prod.outlook.com (2603:10b6:8:142::5) by
+ IA1PR12MB8496.namprd12.prod.outlook.com (2603:10b6:208:446::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.25; Mon, 7 Jul
+ 2025 02:28:40 +0000
+Received: from DS0PR12MB7804.namprd12.prod.outlook.com
+ ([fe80::8327:d71a:ce21:a290]) by DS0PR12MB7804.namprd12.prod.outlook.com
+ ([fe80::8327:d71a:ce21:a290%4]) with mapi id 15.20.8880.023; Mon, 7 Jul 2025
+ 02:28:40 +0000
+Message-ID: <5f944f42-d631-4435-985f-c47944f770bd@amd.com>
+Date: Mon, 7 Jul 2025 07:58:27 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/5] drm/amdgpu: do not resume device in thaw for
+ normal hibernation
+To: Mario Limonciello <mario.limonciello@amd.com>,
+ Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
+ christian.koenig@amd.com, rafael@kernel.org, len.brown@intel.com,
+ pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
+ airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com,
+ matthew.auld@intel.com, matthew.brost@intel.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de
+Cc: victor.zhao@amd.com, haijun.chang@amd.com, Qing.Ma@amd.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20250704101233.347506-1-guoqing.zhang@amd.com>
+ <20250704101233.347506-6-guoqing.zhang@amd.com>
+ <c847783d-eb92-49aa-919c-447cbc34baed@amd.com>
+Content-Language: en-US
+From: "Lazar, Lijo" <lijo.lazar@amd.com>
+In-Reply-To: <c847783d-eb92-49aa-919c-447cbc34baed@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0199.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e9::9) To DS0PR12MB7804.namprd12.prod.outlook.com
+ (2603:10b6:8:142::5)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] PM / Freezer: Skip zombie/dead processes to
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, pavel@kernel.org,
- len.brown@intel.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Oleg Nesterov <oleg@redhat.com>
-References: <20250611101247.15522-1-zhangzihuan@kylinos.cn>
- <20250611101247.15522-2-zhangzihuan@kylinos.cn>
- <CAJZ5v0jpuUVM73M=Gzq36je=K_7zEkvVd8bxohi6N5OYgxgUug@mail.gmail.com>
- <20250703164021.GY1613200@noisy.programming.kicks-ass.net>
- <CAJZ5v0j29Nu2nitmj6tPhOQYuSaHBtXQVR21ikDtrxpejPdW8A@mail.gmail.com>
- <20250704081941.GC2001818@noisy.programming.kicks-ass.net>
- <67997bdd-d00a-413a-a565-188c4b06f385@kylinos.cn>
- <20250704092144.GH2001818@noisy.programming.kicks-ass.net>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250704092144.GH2001818@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB7804:EE_|IA1PR12MB8496:EE_
+X-MS-Office365-Filtering-Correlation-Id: fe366193-8fcb-444b-2976-08ddbcfdfb65
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|366016|376014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MGp6cmVPcEQ3MG9PNERRenlkNVRnam9JcmdTaDZYSk96azBhSkdmMHdhaFVG?=
+ =?utf-8?B?NGNhS3NHZFhwdU52VE1KNzh4aDZPWGhhTHhoNmlJcXlCdGJJYXd0ejFIZ0hl?=
+ =?utf-8?B?a3BOeEdXYW5hVUsyRXY3UFRqWHUvOS91QmhpL1lXRHA5ZnRNOU1FeXpQUS9S?=
+ =?utf-8?B?TXJpd1laaytJL0M4dTBraXRqSmpUTkdkZVB4Z0lLOXJOVGU2L3FITlB6VXli?=
+ =?utf-8?B?aXkvUkN2Z2Z0QS9yeklaMnFDTElXMENsZ1J5WnlmQ0pzWFJaSGJhWDd4Umd4?=
+ =?utf-8?B?aS90b0UvR3Bja2tmSExSZmR5R2lqS2VkSDYwelZ1QzU2MmkzTTJxdkE0VHZO?=
+ =?utf-8?B?MUcwWlJFZTBqR3UrK2FBbEJrbm5IZHptNzEyM25uQ0psWUlGWGRCTURwaXJC?=
+ =?utf-8?B?MVU2TEUvVGNaajI1ZUNLRE1yTU1aYUNneWR6eTVPZm1wVTJFTmc3MWQrdlI3?=
+ =?utf-8?B?V3EyZkl6ZStscXhua05POERLL0R2bmI0b1ZWYWZVTVFIQlZ0WlhhWm5hSU9n?=
+ =?utf-8?B?VHFNY1BqcnJuZnNNdERtNnRxemNPZC83anJqZXlTWEpCdFUyQys3ZUVPZEht?=
+ =?utf-8?B?V0EzbTFUcCt2bG9PQStvSDBkSjYveHRNWGpsaTVxOGpQTVB5VDIzb1dzLzRN?=
+ =?utf-8?B?aE04L0JxMFQyc0hLcEZlQnRsQUtHNkZxZE13OGxHQnpnM2lHdXZkMUU2Qmxj?=
+ =?utf-8?B?V3J2dUVBOHFCTUdZbkMrVklYRkd0azJPWFV6Q3NkN2dTM1A1NEdONXZhK0lT?=
+ =?utf-8?B?NUVqenFOMys2a3RLVjV6THBnN3oxK2VkVG44YXEyRHN5RjBSMnFiYXpJVGRy?=
+ =?utf-8?B?dGp5Vnk5bDR0L3M5YjlMdTh2eHBybXE5OXl5YlkxdjBYN1ZxSlExRVJoZ2tS?=
+ =?utf-8?B?RDZ4V0lVTU1PS2ZSZ1NzTEM3Sjk4cHNxdkRLZ1gyaktYVGNRM09iL2NmNnJR?=
+ =?utf-8?B?U1g4UjZHMEd5a3RiWE9SM0hQUFVzbE44b29kQ2pReDEraVZjZ3JhL25MeWx5?=
+ =?utf-8?B?SCtIQzFvTjc3NHFPUHVOak9lc0VhbUQvUGw2ZzF3STFEVkFaUWJjbW96ODM1?=
+ =?utf-8?B?ekdOdlA2ZzNqK1g0SmxzOFFSUGtVMGw3Z09HYTFGeHYxTGMvWnFSYk1PK3Jy?=
+ =?utf-8?B?UHkrNURlbDd2dTRqYTJqaVcvNkNjOTJHK2oxUWRSZW9VQTNBU2doRy92alNr?=
+ =?utf-8?B?L3IzaGZxZExYUktDOEYvaVBneTdROG1mamhyNjZaTnZhcFZWb05FQXNyTWN3?=
+ =?utf-8?B?TEExT3pvOWMwblVqRkE3NTViNmpWdGd5d0h2ZnNMTWZmakdYMkJxRjJxNUY3?=
+ =?utf-8?B?YTFQVGFGWjRUUVlFdEJPVUJyUFgweWZseWtKZHJkUzFHVUhVUDBuS3RGN1JL?=
+ =?utf-8?B?R1lOTmlMeitnbHpKYzJRK0pSVXZhNXBqcjdhVExRRmlUSjE3S1hFNHdEdXZH?=
+ =?utf-8?B?OUhLZ2NnZ3ZmNHpDc0ZsSml0a2ZiU3JPNXhMeUo0bkthSFFKSXpsZUJiTy9G?=
+ =?utf-8?B?alQ5cGk5amwxM081dWlFQU9ielkyd2k4MXJzcXZkRzFTakRUUU4wZXkrNmxD?=
+ =?utf-8?B?Sjl2dysxaWE0R0xZMER2VThmdUZ1K2tOTytDNWRCQXRWV2hBU1RwN3JrNWhD?=
+ =?utf-8?B?WGpFeUZqZXdUZUs4TGtZZFdRRnQrSDRwVFNSN3BFRG1nNXl0VGdRN2Z1RkJj?=
+ =?utf-8?B?WkF3L002c3NjQlM2N3BmdXZIS3pSTXlGNkVsMnVmMmxUazFDOUlwZmZzWHhU?=
+ =?utf-8?B?RHFiSGlmcjg0ckRBSmNpdFR0RlZTbG5KT0tKNnZJZkNpMVY2czJpK1NkYlR4?=
+ =?utf-8?B?U2dITzVjcFc2d2Y5NlZ1Vzk1TXllQld3YngzYy9mYW5pUEM4K2tKL2pqQkQr?=
+ =?utf-8?B?TFJldzRnVHBjL2srRzM5R2NYQkUzcEdxc21uWjlTTUdMNWNrMDJ1SVNmWXRV?=
+ =?utf-8?B?bFk5K1ZaNFgxNjE0M3NYVE5QRThZTXRVY2pSRGoxMUlJUHIwR0tmOGpxenFT?=
+ =?utf-8?B?Q01CWXRTQ1RBPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7804.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(376014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TTd6dHhWV3dBOUhhV3VyRy9CU0NYUUdZTU1oWmVTcTJyZjgxTUM3aFFERTgw?=
+ =?utf-8?B?empzaGFIa25iWVU3Z1AzcVp1dnJ2ZUtMSzc0b2hRb2J4eHNSTFVGdEpra09K?=
+ =?utf-8?B?Qit2YXR5aWorbERyZ2RnTmx0Z3NLSVdhQTRqcFlDZzZTUHhSQWkvOFo3V1dE?=
+ =?utf-8?B?SEw1djVjbGFXK1cwSHZYczJ3aFp5V0ZoYndUelNtT0F6aFMvblZ5VTJqTTFv?=
+ =?utf-8?B?cit6M1o3bk9GYjNEMjZlMzBkbHQ1bGxENzUrcTV0ellGaW1PVnFQMHpGOE1S?=
+ =?utf-8?B?Mi9oUEZCd0Y4MWFNT2JDeFRrSG9ETDYwdVlzbndDS1NRbDAyQ0JhMGRZSllQ?=
+ =?utf-8?B?Sk1XNXpnMmtzV3BCU0g5NzkwOGpDYWxNK0ZsTkkxUWF0UzRvWjduejI1UGpI?=
+ =?utf-8?B?V3E4aStKYTRGRThZUDlCemFhWVZSdGRIYTF5WUlOVkp1emtxREZjZG50dGl6?=
+ =?utf-8?B?aThLVGI4Um9PU29VQTR5c2dGSkNnbldjeURiMUdmd0V1eThRVlBIYnQxeUw2?=
+ =?utf-8?B?a3RkemVPc0dMbmw5eEJJYlFvUFZmQ2ZValpZS1VLTlQ5Wjd0UVQ0R1UrSjl1?=
+ =?utf-8?B?SysrdlRLeUZWbkhqVjdYSFRJZ2M3OU50TlljcUp1VFNock53L2tJbnpjd1RD?=
+ =?utf-8?B?ZG9XckZqNEFDWEkxMmFGYnZJdDBrdk9JT0tON0N0TjJ3THNlbTRCUSt5bWtz?=
+ =?utf-8?B?dGdTd2dUZjVUVVB1MUNEZ2Vsai9YYlVKVldUQ0hvc3A3K1lDakVHQWtNMlA5?=
+ =?utf-8?B?LzRwbDZKaytVbVI3WGNVaEtsRy9ibEpxb1pVNklRc0diTEZ2WjBxTkNyNm43?=
+ =?utf-8?B?bVM5cTRXbFFEK0I0VmN2UWZHQW5wUy9DekRUb3NtRVBrMVR5THdaa3luL1ph?=
+ =?utf-8?B?ODJIZ1NHbUp4OGxJYnRGSENSeXdvS09Hc2xodUY0YWY1SDRIMXZHQS9xQlpJ?=
+ =?utf-8?B?YkkzbCtlci9jM0lpK1lVNFFONnFaeDZuTENTQjhyQmV2cmhVY2VlNzZpV1dy?=
+ =?utf-8?B?N2g1S2E0QlNFVHdtVjA5ODhlbTNTM1VETGdlMGFEelVCdkRwaVpsRHdsUGY1?=
+ =?utf-8?B?OURHdVlaNUd5Uk5SaVVYdzl3bzA5cEE0RFdwWWV4TmdWUDRHWHhVQVFxZi9V?=
+ =?utf-8?B?YjhDbVl2WVdERG8vQis3aHBqVWtUcE1rcnU1UTJzYW13eklSVzE3blhhcnc1?=
+ =?utf-8?B?RzIvaUVBWjNhc2FQdkVleE5rQU1CcExZblY5czB4QjJQQnBIRXJiUXY1bkFj?=
+ =?utf-8?B?NHJ3bDBMNGxDYjl5TG12anlFd3dDUWhSaDRxUk1rbllCclFmb2NVSDFYb00x?=
+ =?utf-8?B?OXBBcnRudisrSUpBT0I1czg0NUlZOHhsRXRqL3Uzelh2WjVkNnVxVEcrMDdG?=
+ =?utf-8?B?STRkSzBrTXo1M2hzNkJCamdsYnFEcXRKQ2tXRFFqdThHSmZMN1NDdXlTUUJj?=
+ =?utf-8?B?aVZMbS9udFZsVDgrY3ZwZ0JuaGI3anhMai93N2c1bUVUam9nUG8wRzh0N3U2?=
+ =?utf-8?B?amladGE1WlNHQnlFcTh1dWsxdGZMTjN1WU10ODhDbXk0V2JvWWtlUmh1a09w?=
+ =?utf-8?B?T1lBNFNUQi9KNkNTYzZsa3Y0RkJGN2V2UnJrU3lrbC9XcmFCRVhZU1hLbEpu?=
+ =?utf-8?B?WjR5YXdNU0p2R3NXZXpLSWdERGFUL2ZRalkzNWFlRGlNRGhDTWFUdU52alhE?=
+ =?utf-8?B?ejhJZHpMZ3NOcDljRE9YMDNUT0wwUVV4Sjg5cGp5RmxBSS9GYmI1dC9KSTZ1?=
+ =?utf-8?B?UHh0K1hPNzA1NmFUekEzaVN4RE1aV1p5aXBRb0gyaUJJdzdhYWlWL051a3M5?=
+ =?utf-8?B?ZGFEc091clVHTWlkUUFyNzc1aENnVVhYTUhoTk5idlRPcXk3Yy9KVWcxTXo4?=
+ =?utf-8?B?T1dvOWxaVlI1dXA2bHNQSzBoV29lelBGdEkyTVJmMWFDdEpRQUFIalI4OFg4?=
+ =?utf-8?B?d2tRM0VNY1FNVjNXWWRJT0dkRVFGL3FsblpaWndnK2FDdWtWbFE2Tlc0eVNV?=
+ =?utf-8?B?S0g5VkFTZVBNTXBORWM1Y1RUTTduUENwOERBTy9Sc3lWN1laaENNYkIxTTgr?=
+ =?utf-8?B?dU0xQmtHa3NqSUhNNityMDc5N01nMHRyUVBSa016NE1uTjhEWW94VCttcjcz?=
+ =?utf-8?Q?qaejgI+D9BWxXOlzh0X0v6Ko6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe366193-8fcb-444b-2976-08ddbcfdfb65
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7804.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2025 02:28:39.9431
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sS2nV8xVl8nh8P4tLvgzuerkxjvvfPrtjvwpnP7hLsQkVlWIT5hTyKzlk/IURMLK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8496
 
 
-=E5=9C=A8 2025/7/4 17:21, Peter Zijlstra =E5=86=99=E9=81=93:
-> You're missing the obvious. How about we 'fix' the PF_NOFREEZE handling
-> and help all cases that set that and not only zombies?=E3=80=80=E3=80=80=
-=E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80=E3=80=80 =E3=80=80 =E3=80=80 =E3=80=
-=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80=
-=E3=80=80
 
-It sounds like a good idea, but there=E2=80=99s a potential risk in relyi=
-ng=20
-solely on PF_NOFREEZE: it=E2=80=99s a mutable flag that can be set or cle=
-ared=20
-dynamically during runtime, even within the freeze window.
-If a task changes its PF_NOFREEZE state after passing the early check in=20
-try_to_freeze_task(), we might skip freezing it incorrectly, leading to=20
-inconsistent behavior or unexpected task escapes. This is particularly=20
-tricky for some kernel threads or exit paths where PF_NOFREEZE is=20
-manipulated as part of cleanup or teardown.
-In contrast, checking exit_state for EXIT_ZOMBIE or EXIT_DEAD is fully=20
-stable and irreversible =E2=80=94 once a task becomes a zombie, it's no l=
-onger=20
-schedulable and doesn=E2=80=99t require freezing. That makes the conditio=
-n both=20
-safe and predictable, without risk of races or missed transitions.
-Currently, the safest way to skip tasks based on PF_NOFREEZE would be:
-*if (!(p->flags & PF_KTHREAD) && (p->flags & PF_NOFREEZE))*
-to avoid skipping kernel threads that may dynamically toggle this flag.=20
-But this increases code complexity compared to simply checking
-*if (p->exit_state)*
+On 7/7/2025 2:04 AM, Mario Limonciello wrote:
+> On 7/4/2025 6:12 AM, Samuel Zhang wrote:
+>> For normal hibernation, GPU do not need to be resumed in thaw since it
+>> is not involved in writing the hibernation image. Skip resume in this
+>> case can reduce the hibernation time.
+> 
+> Since you have the measurements would you mind including them in the
+> commit message for reference?
+> 
+>>
+>> For cancelled hibernation, GPU need to be resumed.
+> 
+> If I'm following right you are actually handling two different things in
+> this patch aren't you?
+> 
+> 1) A change in thaw() to only resume on aborted hibernation
+> 2) A change in shutdown() to skip running if the in s4 when shutdown()
+> is called.
+> 
+> So I think it would be more logical to split this into two patches.
+> 
 
-which is more straightforward.
-Importantly, exit_state is set earlier and more reliably than PF_NOFREEZE=
-,
-So while improving PF_NOFREEZE handling is a worthwhile direction (and=20
-I=E2=80=99d be happy to explore that in a separate patch RFC=20
-[1]<https://lore.kernel.org/all/20250624115244.19260-1-zhangzihuan@kylino=
-s.cn/>),=20
-this small patch keeps the logic minimal and avoids subtle corner cases.=20
-It also reduces unnecessary locking for zombie tasks, which can help=20
-when there are lots of them around.
-[1]:=20
-https://lore.kernel.org/all/20250624115244.19260-1-zhangzihuan@kylinos.cn=
-/
-Thanks again for your insightful feedback =E2=80=94 much appreciated.
+This is doing only one thing - Keep the device in suspended state for
+thaw() operation during a successful hibernation. Splitting into two
+could break hibernation during integration of the first part - it will
+attempt another suspend during shutdown. I think we don't take care of
+consecutive suspend calls.
 
-Best regards,
-Zihuan Zhang
+Thanks,
+Lijo
+
+>>
+>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+>> ---
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/
+>> drm/amd/amdgpu/amdgpu_drv.c
+>> index 4f8632737574..e064816aae4d 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> @@ -2541,6 +2541,10 @@ amdgpu_pci_shutdown(struct pci_dev *pdev)
+>>       if (amdgpu_ras_intr_triggered())
+>>           return;
+>>   +    /* device maybe not resumed here, return immediately in this
+>> case */
+>> +    if (adev->in_s4 && adev->in_suspend)
+>> +        return;
+>> +
+>>       /* if we are running in a VM, make sure the device
+>>        * torn down properly on reboot/shutdown.
+>>        * unfortunately we can't detect certain
+>> @@ -2655,6 +2659,10 @@ static int amdgpu_pmops_thaw(struct device *dev)
+>>   {
+>>       struct drm_device *drm_dev = dev_get_drvdata(dev);
+>>   +    /* do not resume device for normal hibernation */
+>> +    if (pm_transition.event == PM_EVENT_THAW)
+>> +        return 0;
+>> +
+> 
+> Without digging into pm.h documentation I think it's not going to be
+> very obvious next time we look at this code that amdgpu_device_resume()
+> is only intended for the aborted case.
+> 
+> How would you feel about a switch/case?
+> 
+> Something like this:
+> 
+> switch (pm_transition.event) {
+> /* normal hibernation */
+> case PM_EVENT_THAW:
+>     return 0;
+> /* for aborted hibernation */
+> case PM_EVENT_RECOVER:
+>     return amdgpu_device_resume(drm_dev, true);
+> default:
+>     return -EOPNOTSUP;
+> }
+> 
+> 
+>>       return amdgpu_device_resume(drm_dev, true);
+>>   }
+>>   
+> 
 
 
