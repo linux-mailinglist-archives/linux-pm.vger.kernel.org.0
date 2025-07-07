@@ -1,142 +1,179 @@
-Return-Path: <linux-pm+bounces-30249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69EEFAFAE29
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:07:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C255AFAEB1
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:33:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 179D03A8CB3
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:07:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 975F5166A99
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:33:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3011B28A72A;
-	Mon,  7 Jul 2025 08:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OrAeMbWM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4822727702E;
+	Mon,  7 Jul 2025 08:33:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516E228A40D
-	for <linux-pm@vger.kernel.org>; Mon,  7 Jul 2025 08:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D46E0286D49;
+	Mon,  7 Jul 2025 08:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751875460; cv=none; b=kGnEpZZ0bxXpsDw0chVvgaGKDJXmfFh7vM8Yj8jhWlcKmqCTkzsdxpXtXJZsGPX0pT1tjrtygzq39HXApWclxdp7Xwon5/qUASX/9bElgLs3hIafs0kduSqvXtdHGY9EFc9k8N3umTHs8ks8OYkutVKUhgIm/+hKskRJpV/gGuY=
+	t=1751877190; cv=none; b=U/9wlpfM3B71aQsn8qPkBUBLhTn0lhkDyOtsRw30rG8Vt0iev/ebMCFlD7amIPSTlUW1RCNeylkK8XlUDdFcCbEFs2Q9t0MmdhI8ZGbvyT0nse+OBj2La6VQkoBbg8kzjkfSex4vOlY7E174H96aw41uAPvd43FtfZghgAKJ8RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751875460; c=relaxed/simple;
-	bh=IEoYgZVPqV6REtyvNEYkqmdU4AlOYV3bBv9n+zrtW+0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GPuZ2zMOLbpcEvcSC2+wfAsL5rz7V4B/Z38HcXbEMzbrh+yDp4Qjx3SbUpVlPDg0KQMXRIj/j75bvKtak+cviBPMFbAL2RaMWWJUVFMDbbHFJOut1v83WerzAt9DHNlik1W+zmwbnFOdv7zA9R4h9HI56R4Nvb/72+0P+OAZcKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OrAeMbWM; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a5257748e1so2263381f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jul 2025 01:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751875457; x=1752480257; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IEoYgZVPqV6REtyvNEYkqmdU4AlOYV3bBv9n+zrtW+0=;
-        b=OrAeMbWMGSqIdFhUjy2qNfv5YBKOfuqvgNPSGBqk9aclu0IZgqRwttTG3akD7TAlst
-         Dr5vjqlBcG8iOK4ZN9kQdgO4ShCmi2l1UBC4Tq9UWqGgHsu0p5ysxA+9Rlov7EXp1QdR
-         4CYbcr+MD9/bdV6BagNrbqx7CTKPA0V8mlIT6FmTTMaJjJ9jSxSMH0plhbJH+rfDxIg2
-         2Ze63+yXKmr991n7Z6jHYBientUxswE8D0AYyPNPpbZ37lPiOCYFzIWmMPVQKhw+ojAM
-         kJzuyeSna28MRFSTRuIEnSR22BtxHG7bH9mx1pi7qckY50/UzjDA7bhQcpwAWLonaBOb
-         0ikQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751875457; x=1752480257;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IEoYgZVPqV6REtyvNEYkqmdU4AlOYV3bBv9n+zrtW+0=;
-        b=va+BT6WaBuEh5oQxJ+sFwFdK/3KSUSbgMjTqCJW3KuTa91RUW57W16QxxA9Aj2EgUG
-         uobkupIUK2UgmjCS28FHTLrVTfs6nGizlGHVCTY5ZJg+g+NuO4rcfvwJ0w8rCL7ARBJI
-         f6q1qFWSwDhdDLjWg92W50hKazTa0aq6ye9yxCScMgwkroWTVmTUILRV39mgSQy57f+w
-         BmXDDN3CROeccoJzbJCFGFFp/jBinYUZl7rEslRsZNHYEsvRuxoc3hKpvcuqW10CT2k7
-         GnIWetVZ0juXPkWMiJ3s9nkfLdt94biUSPOGWp8mpWVfNbvhS5S6Tg1xKjfqXxKXBgt9
-         CeVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMiX/SaVo4HP9kmDbfqUcyR8yHuo0wEqAU+Wx00dSH8pGmDx5Ruu7NgfUVhjRwcquh62IP3c0T0w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3Dm3yjIm65jtZ32Xb1Ij/GSsaa7FuwtEhVBVWZUk2zDECp/E9
-	ozullM5s+hMqIa78n4dDlaJctiC9AXX/3IZCH4DqaXErOG3GKVjWVAaiMEvQhB+/wHI=
-X-Gm-Gg: ASbGncv3MB3cU8PUmm1z9g3oN35NnSy9GS18Yc+o3HDRCfKsnv4kjA1kOn4K5A4cEb/
-	5XO38osbdVrauJcmfVnEsCwOk3WiJg5VAju2GjEqeLe5cQVPOmRv7DqVPUXbxqolEy+jZlAqctq
-	QMehxs5jOgju4V7blgq7HWIedPlXZWq0dsVgdKTVXe912hI9S8WxvqGsqcbDJM50Ij4jYiPFomF
-	oDlsmvvCcLj0yGyN/FOQMXtYWLBoRD+++iiUhXvjEneqGOEne2f99AAZQF5CnjO7ytXfrH3AAiu
-	9QaP0+PvLfVXbgGvFOqJjUHbOHgtf8oFYWj03D+MZ24+UD4rh2kizqJhATE325QONg==
-X-Google-Smtp-Source: AGHT+IHEIeX1O24CgOzuWsNBfkxeH6TOmmWEVLZJcsdlbgvxYrZII56COdsRCTeJJ4eyH1AmqDGCWg==
-X-Received: by 2002:a5d:64e5:0:b0:3a4:e609:dc63 with SMTP id ffacd0b85a97d-3b49701fd14mr7926081f8f.20.1751875456566;
-        Mon, 07 Jul 2025 01:04:16 -0700 (PDT)
-Received: from [10.1.1.59] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454b1698f54sm103519225e9.33.2025.07.07.01.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 01:04:16 -0700 (PDT)
-Message-ID: <2e26f8f534284b280e9d5e8d4ae556a452e93ff5.camel@linaro.org>
-Subject: Re: [PATCH v4 2/5] power: supply: add support for max77759 fuel
- gauge
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Peter Griffin <peter.griffin@linaro.org>, Thomas Antoine
-	 <t.antoine@uclouvain.be>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Dimitri Fedrau	 <dima.fedrau@gmail.com>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon	 <will@kernel.org>, Tudor
- Ambarus <tudor.ambarus@linaro.org>, Alim Akhtar	 <alim.akhtar@samsung.com>,
- linux-pm@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org
-Date: Mon, 07 Jul 2025 09:04:14 +0100
-In-Reply-To: <CADrjBPo2=FajKA0t7TTMdH6iK_qbWCSJK-hEqh+UWEuzC7wyGQ@mail.gmail.com>
-References: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be>
-	 <20250523-b4-gs101_max77759_fg-v4-2-b49904e35a34@uclouvain.be>
-	 <CADrjBPqOMOyHP=aQ1+fg2X58NWRp-=MJBRZfpbEhQsTzaZ9LHw@mail.gmail.com>
-	 <bc40326f-db40-4657-84a7-152def2ca9e3@uclouvain.be>
-	 <CADrjBPo2=FajKA0t7TTMdH6iK_qbWCSJK-hEqh+UWEuzC7wyGQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1+build1 
+	s=arc-20240116; t=1751877190; c=relaxed/simple;
+	bh=dOerYKCIIu0Ldwt7JnAEhthNKLc0cAZQdHOqiQZGC9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aQ/i9+gqvu0eiwdgZgYkA9ob/baziMStuJnL4/SVGdDZsUfcg5lAIttJ5GxChy7A1gtGWYn1JMHcsrzLt6x/V58wrtk5JJvnrait86X4v71jdhriAECfB6xYPWoAGKlqN3HUtHvj+vZxFN2ov2zJkE7I0eRSlvaChgE0O4u33Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46956153B;
+	Mon,  7 Jul 2025 01:32:54 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 046BB3F6A8;
+	Mon,  7 Jul 2025 01:33:02 -0700 (PDT)
+Date: Mon, 7 Jul 2025 10:32:46 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Prashant Malani <pmalani@google.com>
+Cc: Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aGuGLu2u7iKxR3ul@arm.com>
+References: <20250619000925.415528-1-pmalani@google.com>
+ <20250619000925.415528-3-pmalani@google.com>
+ <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com>
+ <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
+ <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
+ <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
+ <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
 
-Hi,
+Hi Prashant,
 
-On Mon, 2025-07-07 at 08:16 +0100, Peter Griffin wrote:
-> Hi Thomas,
->=20
-> On Tue, 24 Jun 2025 at 16:45, Thomas Antoine <t.antoine@uclouvain.be> wro=
-te:
->=20
-> > I am unsure about what to do about this initalization, especially for v=
-alues
-> > which slightly differ from the devicetree. I think for next version, I
-> > will have the same parameters be passed in the devicetree like android.
->=20
-> We don't really pass register values like the downstream driver is
-> doing in the device tree. I think you will likely need to add a
-> max77759-gs101-oriole compatible to the driver and then have the
-> application specific values, and m5 gauge model algorithm as static
-> info in the driver applied from the dedicated compatible. It would
-> also be worth checking whether any more of those register values can
-> be represented by the standard power-supply binding properties that
-> already exist.
+On Wed, Jul 02, 2025 at 11:38:11AM -0700, Prashant Malani wrote:
+> Hi All,
+> 
+> Ionela, Beata, could you kindly review ?
+> 
+> On Fri, 27 Jun 2025 at 10:07, Prashant Malani <pmalani@google.com> wrote:
+> >
+> > Hi Jie,
+> >
+> > On Fri, 27 Jun 2025 at 00:55, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+> > >
+> > >
+> > > Hi Prashant,
+> > >
+> > > Sorry for a late reply as I'm busy on other stuff and this doesn't seem to
+> > > be an easy issue to solve.
+> > >
+> >
+> > No worries, the ping was in general to all the people in the thread :)
+> >
+> > > For the latest kernel, [1] provides a new 'cpuinfo_avg_freq' sysfs file to
+> > > reflect the frequency base on AMUs, which is supposed to be more stable.
+> > > Though it usually shows 'Resource temporarily unavailable' on my platform
+> > > at the moment and looks a bit buggy.
+> > >
+> > > Most of the related discussions can be found in the reference links in [1].
+> > > [1] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.michalska@arm.com/
+> > >
+> > > As reported, the current frequency sampling method may show an large error
+> > > on 1) 100% load, 2) high memory access pressure, 3) idle cpus in your case.
+> > >
+> > > AFAICS, they may all come from the unstable latency accessing remote AMUs
+> > > for 4 times but delaying a fixed 2us sampling window.
+> >
+> > I tried applying [1] which consolidates the ref and del register reads
+> > into 1 IPI, but that did not make a difference. The values still
+> > fluctuate wildly.
+> >
+> > >
+> > > Increase the sampling windows seems to help but also increase the time
+> > > overhead, so that's not favoured by people.
+> > >
+> >
+> > This experiment did not appear to help in our case. It's a point in
+> > the direction that this method is inherently inaccurate during idle
+> > situations.
+> >
+> > > On 20/06/2025 13:07, Prashant Malani wrote:
+> > > > Hi Jie,
+> > > > On Thu, 19 Jun 2025 at 20:53, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+> > > >> On 19/06/2025 08:09, Prashant Malani wrote:
+> > > >>> t0: ref=899127636, del=3012458473
+> > > >>> t1: ref=899129626, del=3012466509
+> > > >>> perf=40
+> > > >>
+> > > >> In this case, the target cpu is mostly idle but not fully idle during the
+> > > >> sampling window since the counter grows a little bit.
+> > > >> Perhaps some interrupts happen to run on the cpu shortly.
+> > >
+> > > Check back here again, I don't think it 'mostly idle'.
+> > > Diff of ref counters is around 2000, and I guess the ref counter freq is
+> > > 1GHz on your platform?  That's exactly 2us, so the target cpu is mostly
+> > > busy.
+> 
+> I think it is pertinent to note: the actual act of reading the CPPC counters
+> will (at least for ACPI_ADR_SPACE_FIXED_HARDWARE counters)
+> wake the CPU up, so even if a CPU *was* idle, the reading of the counters
+> calls cpc_read_ffh() [1] which does an IPI on the target CPU [2] thus waking
+> it up from WFI.
+> 
+> And that brings us back to the original assertion made in this patch:
+> the counter values are quite unreliable when the CPU is in this
+> idle (or rather I should correct that to, waking from WFI) state.
+>
+I'd say that's very platform specific, and as such playing with the delay makes
+little sense. I'd need to do more deliberate testing, but I haven't noticed
+(yet) any discrepancies in AMU counters on waking up.
+Aside, you have mentioned that you've observed the frequency reported to be
+above max one (4GHz vs 3.5HZ if I recall correctly) - shouldn't that be clamped
+by the driver if the values are outside of supported range ?
 
-I believe these are likely battery specific values, and were obtained durin=
-g
-battery characterization by the vendor (or Maxim). They can change (with a
-different battery supplier etc, hence I don't think basing this on a
-max77759-gs101-oriole would be correct here.
+Verifying whether the CPU is idle before poking it just to get a counters
+reading to derive current frequency from those does feel rather like an
+appealing idea. Narrowing the scope for ACPI_ADR_SPACE_FIXED_HARDWARE cases
+could be solved by providing a query for the address space. Though I am not an
+expert here so would be good to get some input from someone who is
+(on both).
 
-As we learned from the Pixel 6a battery updates, the same phone may use
-batteries (e.g. from different suppliers).
+---
+BR
+Beata
+> This work around probably hits more types of implementations, but
+> I can't see another way to limit it to only ARM FFH. Open to suggestions!
+> 
+> [1] https://elixir.bootlin.com/linux/v6.15.4/source/arch/arm64/kernel/topology.c#L482
+> [2] https://elixir.bootlin.com/linux/v6.15.4/source/arch/arm64/kernel/topology.c#L453
 
-Either it needs to know about the specific battery model, or the values
-should be passed from DT in some way.
-
-Cheers,
-Andre'
+> 
+> Best regards,
+> 
+> -Prashant
+> 
+> 
+> -- 
+> -Prashant
 
