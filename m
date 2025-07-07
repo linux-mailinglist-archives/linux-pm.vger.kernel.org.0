@@ -1,132 +1,186 @@
-Return-Path: <linux-pm+bounces-30301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83865AFB862
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 18:12:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E86B9AFB89F
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 18:29:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCD89163FB3
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 16:12:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927821885F8B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 16:30:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF5D32264B2;
-	Mon,  7 Jul 2025 16:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DE921ABAC;
+	Mon,  7 Jul 2025 16:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orDysagG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="feLCwmh5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8562C18D65C;
-	Mon,  7 Jul 2025 16:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B19F202963;
+	Mon,  7 Jul 2025 16:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751904730; cv=none; b=XlmlvYSuN/it43igniM/6q7JEyz04jpTrLig7YhR89w2YukhYLrj8xDddXHrIH7yAfpBbK9wK2dOpmL4QjMi1dXK03fqajb6q7oAW4gEAWU0z5h57B8hfYSdpf7kDdOZ5uEw4/TTD2WMVWEyxaySNf3FL672FFhB5LCdD2oi3a0=
+	t=1751905779; cv=none; b=hby+L7KUkfMly9Hokm1kwCBN6qTkv6MaoYYLnA9AOr+G5Pyr2g9M/hekoEmrRV+TvVLGhxMlW5GczZW0uwbIonMEFybjf3jAN/bCTs+y4/uM7oGOgvFzdKuhQYVYlsO+nOiidAqW7/MEasKKj4GqWOy99wqGPNCWvZcfekqhwcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751904730; c=relaxed/simple;
-	bh=wov1r5ZCmJejiVbu/tzWRiyxLJFB7QQF2Lk1aCyMpT0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WW36/AOKbx8Siy2gK3+wfzvXY6sZhGvmLirSYMkGv7IXZ8fABKR03INkdeFtI23r7AZTmB/RNehQMqxkOPXBmEzgLg8XSRu2phYLXqM4GtHTDDXg92WOyn/3yKIld6SNk/HJpl69oFKzpaG6QVdB9vpU8OEnoD/AicsvzX4xDmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orDysagG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110A9C4CEF5;
-	Mon,  7 Jul 2025 16:12:10 +0000 (UTC)
+	s=arc-20240116; t=1751905779; c=relaxed/simple;
+	bh=x6xy6Nd7dJ9i3jyg0TWuMRSyOLMSWqFMfnjYToAUBZ4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=aiFn9IWj1GVitfA7kAxIhSXMY1DRVfQPXodj1064mr6ENm1txTD/gRuUrhRpt0EeHWmIwD5wUfX1Ylm57Fl8HGkMDiLpg86i4vYeW1bllsm/2Lx8r1gmtdCl+969L4nskZ/Abx325QZNvlPnS5P8FdirT43U62l5Gy/1vDPf21k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=feLCwmh5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E59CC4CEE3;
+	Mon,  7 Jul 2025 16:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751904730;
-	bh=wov1r5ZCmJejiVbu/tzWRiyxLJFB7QQF2Lk1aCyMpT0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=orDysagGMFqXXwG9d5Zlns8JlQ3Zp0+1O7m9Ox32+ofShNAVtU2KnL14C1bjaXLhM
-	 fdJI8gbAucNYJMNBROFCLVVqcAzESyRsXKekeTWMTNJ/NWElh4ZpLljfUNunv9sCgi
-	 7nkogKeCpS+q9eRRCZQXrUJhu1jx637zV3q/B2Wn6xp6PUhYUxH0WvBMxDU8mlW9dp
-	 UYQeqyxH4fe796fywS+NKJmKH5Zo6mn2Z12zuuTOYb7PyuqXXy9mr0FMJ3B1y2Bcr6
-	 KTFTXIoKh3/ftYd2SE8L7eddp/OBC6SHV1a5wZiIg0ix2LqQ5mRU389ZUkx9ofe0at
-	 j7VEKXGjwxNKA==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-610d86b3da9so813434eaf.0;
-        Mon, 07 Jul 2025 09:12:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUxFIHLkXSz3lFHq2bkxwcj7g54Mx8jT1KzzBXMR3teURcxo9wcPwRGv6HYrL+pFzFTFX2NnT2xmxs=@vger.kernel.org, AJvYcCVsGh0eMKJRazPM1uFJF+ZTYjl4nr24SLmH6hLKLhoihv9MI9SeASUrm3jyNBS059UdQ3KdXLL4hVLgifE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsypwYWYoRxunRAzA/HI4brBKvg/kVmeeXL6OSz7uki/cJ4b8O
-	6N4IGk1snd3baiqdWVSNVE5Dc3u1BNXnTwfAoGNVSbEZD1qiBjR0ljMb1tSHWy+OwxBT4B7q9ba
-	MrLDLQ2u9UCqbdzDWLeg1Bapu++6ItQI=
-X-Google-Smtp-Source: AGHT+IElb02x8Xl685G1DpPwBcV+PQuNswcyZVnQR4hfX006qbbFVGw+gnfGxhcsjTmFxbw84Mbhmjk6sHb5u+Tk2VU=
-X-Received: by 2002:a05:6820:4b89:b0:611:ae2b:4d33 with SMTP id
- 006d021491bc7-613c02656b0mr61500eaf.6.1751904729312; Mon, 07 Jul 2025
- 09:12:09 -0700 (PDT)
+	s=k20201202; t=1751905779;
+	bh=x6xy6Nd7dJ9i3jyg0TWuMRSyOLMSWqFMfnjYToAUBZ4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=feLCwmh5YdpJZXI29tCuzXYsUyUphB7cCHw7buA5DLz71bWk38f1R/NnFcVuDn5JP
+	 tzMI0IJbP9lLJkDKuPzgdGmBnngferkCMTwpRR7XQc5SnLAwQpaxul8opYGiEEao2y
+	 crd76J6aB5/tVB6A02G4pxElsPvYB/q75dnRauB2mJwVNRfl5/iUFRr6LIS5U3Dyuf
+	 gHk56Z92frw+MRvzU2uC2f2yoLbgZENdI+/qfhh2zORLpaGYBNDoAuYaLJzIJnGsDs
+	 20RMCudzbNcnm6qt+G5tUMptb1pdB38J7NKxNpSB+qiUbBHxtERz8J4JAPUEDnpcTN
+	 G8R0zirh/1Sew==
+From: Mark Brown <broonie@kernel.org>
+To: linux-pm@vger.kernel.org, Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
+In-Reply-To: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
+References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
+Subject: Re: (subset) [PATCH 00/80] treewide: Remove redundant
+ pm_runtime_mark_last_busy() calls
+Message-Id: <175190577792.67593.6107021560229375929.b4-ty@kernel.org>
+Date: Mon, 07 Jul 2025 17:29:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604213908.27819-1-yury.norov@gmail.com> <CAJZ5v0h7CeO+vG4BVcdc=XxcWMRY+OmhrWxtrAS59T-uK1KDOw@mail.gmail.com>
- <aGvoMhLuX0-zIFVk@yury>
-In-Reply-To: <aGvoMhLuX0-zIFVk@yury>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 7 Jul 2025 18:11:58 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gUdm_e6wfLP1aS+L7fe-JNOAWVNvNHLSYqtSydzm5bQg@mail.gmail.com>
-X-Gm-Features: Ac12FXxggHAojbFGLIyP5sFl1jk0N63Tg_1Aa4rB-ERdBH7d1jgvNV8-FbqMyWs
-Message-ID: <CAJZ5v0gUdm_e6wfLP1aS+L7fe-JNOAWVNvNHLSYqtSydzm5bQg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: dt: fix opencoded for_each_cpu() in idle_state_valid()
-To: Yury Norov <yury.norov@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
-On Mon, Jul 7, 2025 at 5:31=E2=80=AFPM Yury Norov <yury.norov@gmail.com> wr=
-ote:
->
-> On Wed, Jul 02, 2025 at 08:27:21PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Jun 4, 2025 at 11:39=E2=80=AFPM Yury Norov <yury.norov@gmail.co=
-m> wrote:
-> > >
-> > > From: Yury Norov [NVIDIA] <yury.norov@gmail.com>
-> > >
-> > > The function opencodes the for_each_cpu_from() by using an open for-l=
-oop.
-> > > Fix that in sake of readability.
-> > >
-> > > While there, drop the 'valid' variable as it's pretty useless here.
-> > >
-> > > Signed-off-by: Yury Norov [NVIDIA] <yury.norov@gmail.com>
-> > > ---
-> > >  drivers/cpuidle/dt_idle_states.c | 14 +++++---------
-> > >  1 file changed, 5 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_id=
-le_states.c
-> > > index 97feb7d8fb23..558d49838990 100644
-> > > --- a/drivers/cpuidle/dt_idle_states.c
-> > > +++ b/drivers/cpuidle/dt_idle_states.c
-> > > @@ -98,7 +98,6 @@ static bool idle_state_valid(struct device_node *st=
-ate_node, unsigned int idx,
-> > >  {
-> > >         int cpu;
-> > >         struct device_node *cpu_node, *curr_state_node;
-> > > -       bool valid =3D true;
-> > >
-> > >         /*
-> > >          * Compare idle state phandles for index idx on all CPUs in t=
-he
-> > > @@ -107,20 +106,17 @@ static bool idle_state_valid(struct device_node=
- *state_node, unsigned int idx,
-> > >          * retrieved from. If a mismatch is found bail out straight
-> > >          * away since we certainly hit a firmware misconfiguration.
-> > >          */
-> > > -       for (cpu =3D cpumask_next(cpumask_first(cpumask), cpumask);
-> > > -            cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, cpumask)) {
-> > > +       cpu =3D cpumask_first(cpumask) + 1;
-> >
-> > Doing
-> >
-> > cpu =3D cpumask_next(cpumask_first(cpumask), cpumask);
-> >
-> > here might save a few iterations for sparse cpumasks.
->
-> For that it's better to use cpumask_nth(1).
->
-> I believe there will be no benefit in calling cpumask_next() before
-> entering the loop because for_each_cpu_from() is based on it, and it
-> will be called anyways.
+On Fri, 04 Jul 2025 10:52:25 +0300, Sakari Ailus wrote:
+> Sakari Ailus (80):
+>   accel/ivpu: Remove redundant pm_runtime_mark_last_busy() calls
+>   accel/amdxdna: Remove redundant pm_runtime_mark_last_busy() calls
+>   Bluetooth: Remove redundant pm_runtime_mark_last_busy() calls
+>   bus: sunxi-rsb: Remove redundant pm_runtime_mark_last_busy() calls
+>   hwrng: Remove redundant pm_runtime_mark_last_busy() calls
+>   clk: imx: Remove redundant pm_runtime_mark_last_busy() calls
+>   clk: qcom: Remove redundant pm_runtime_mark_last_busy() calls
+>   crypto: Remove redundant pm_runtime_mark_last_busy() calls
+>   dmaengine: at_xdmac: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   dmaengine: pl330: Remove redundant pm_runtime_mark_last_busy() calls
+>   dmaengine: qcom: Remove redundant pm_runtime_mark_last_busy() calls
+>   dmaengine: ste_dma40: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   dmaengine: ti: Remove redundant pm_runtime_mark_last_busy() calls
+>   dmaengine: zynqmp_dma: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   gpio: arizona: Remove redundant pm_runtime_mark_last_busy() calls
+>   drm/amd: Remove redundant pm_runtime_mark_last_busy() calls
+>   drm/nouveau: Remove redundant pm_runtime_mark_last_busy() calls
+>   drm/radeon: Remove redundant pm_runtime_mark_last_busy() calls
+>   drm/panfrost: Remove redundant pm_runtime_mark_last_busy() calls
+>   drivers: drm: Remove redundant pm_runtime_mark_last_busy() calls
+>   HSI: omap_ssi_port: Remove redundant pm_runtime_mark_last_busy() calls
+>   stm class: Remove redundant pm_runtime_mark_last_busy() calls
+>   i2c: Remove redundant pm_runtime_mark_last_busy() calls
+>   i3c: master: svc: Remove redundant pm_runtime_mark_last_busy() calls
+>   i3c: dw: Remove redundant pm_runtime_mark_last_busy() calls
+>   HID: intel-thc-hid: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: accel: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: adc: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: chemical: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: common: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: dac: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: gyro: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: imu: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: light: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: magnetometer: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: pressure: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: proximity: Remove redundant pm_runtime_mark_last_busy() calls
+>   iio: temperature: Remove redundant pm_runtime_mark_last_busy() calls
+>   Input: omap4-keypad: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   Input: cs40l50: Remove redundant pm_runtime_mark_last_busy() calls
+>   media: Remove redundant pm_runtime_mark_last_busy() calls
+>   mfd: Remove redundant pm_runtime_mark_last_busy() calls
+>   mei: Remove redundant pm_runtime_mark_last_busy() calls
+>   mmc: Remove redundant pm_runtime_mark_last_busy() calls
+>   mtd: rawnand: gpmi: Remove redundant pm_runtime_mark_last_busy() calls
+>   net: ethernet: Remove redundant pm_runtime_mark_last_busy() calls
+>   net: ipa: Remove redundant pm_runtime_mark_last_busy() calls
+>   net: wireless: Remove redundant pm_runtime_mark_last_busy() calls
+>   net: wwan: Remove redundant pm_runtime_mark_last_busy() calls
+>   nfc: trf7970a: Remove redundant pm_runtime_mark_last_busy() calls
+>   PCI/portdrv: Remove redundant pm_runtime_mark_last_busy() calls
+>   phy: motorola: phy-mapphone-mdm6600: Remove redundant
+>     pm_runtime_mark_last_busy() calls
+>   phy: ti: phy-twl4030-usb: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   power: supply: bq24190: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   power: supply: twl4030_charger: Remove redundant
+>     pm_runtime_mark_last_busy() calls
+>   pwm: img: Remove redundant pm_runtime_mark_last_busy() calls
+>   regulator: stm32-vrefbuf: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   remoteproc: omap: Remove redundant pm_runtime_mark_last_busy() calls
+>   slimbus: Remove redundant pm_runtime_mark_last_busy() calls
+>   soundwire: Remove redundant pm_runtime_mark_last_busy() calls
+>   spi: Remove redundant pm_runtime_mark_last_busy() calls
+>   staging: greybus: Remove redundant pm_runtime_mark_last_busy() calls
+>   greybus: Remove redundant pm_runtime_mark_last_busy() calls
+>   media: rkvdec: Remove redundant pm_runtime_mark_last_busy() calls
+>   thunderbolt: Remove redundant pm_runtime_mark_last_busy() calls
+>   serial: Remove redundant pm_runtime_mark_last_busy() calls
+>   usb: Remove redundant pm_runtime_mark_last_busy() calls
+>   w1: omap-hdq: Remove redundant pm_runtime_mark_last_busy() calls
+>   ALSA: hda: Remove redundant pm_runtime_mark_last_busy() calls
+>   ASoC: atmel: Remove redundant pm_runtime_mark_last_busy() calls
+>   ASoC: codecs: Remove redundant pm_runtime_mark_last_busy() calls
+>   ASoC: Intel: Remove redundant pm_runtime_mark_last_busy() calls
+>   ASoC: component: Remove redundant pm_runtime_mark_last_busy() calls
+>   ASoC: SOF: Remove redundant pm_runtime_mark_last_busy() calls
+>   ALSA: intel_hdmi: Remove redundant pm_runtime_mark_last_busy() calls
+>   soc: apple: mailbox: Remove redundant pm_runtime_mark_last_busy()
+>     calls
+>   block: pm: Remove redundant pm_runtime_mark_last_busy() calls
+>   Input: cyapa - Remove redundant pm_runtime_mark_last_busy() calls
+>   mei: Remove redundant pm_runtime_mark_last_busy() calls
+>   scsi: block: pm: Remove redundant pm_runtime_mark_last_busy() calls
+> 
+> [...]
 
-Fair enough.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[61/80] spi: Remove redundant pm_runtime_mark_last_busy() calls
+        commit: 2fca750160f29015ab1109bb478537a4e415f7cd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
