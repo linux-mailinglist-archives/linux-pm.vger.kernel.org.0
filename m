@@ -1,166 +1,282 @@
-Return-Path: <linux-pm+bounces-30237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D00DFAFA88E
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 02:15:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7B6EAFA8AD
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 02:47:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F68D176D92
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 00:15:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBBE63B856E
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 00:47:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDD63597A;
-	Mon,  7 Jul 2025 00:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A447346F;
+	Mon,  7 Jul 2025 00:47:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="eQNcOwYH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IZ1svor3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1B218035;
-	Mon,  7 Jul 2025 00:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018203234;
+	Mon,  7 Jul 2025 00:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751847345; cv=pass; b=r74OimeZN7UPfcFCHYIVcnDRbNVSApy12JSnh0IL+HULI29lGvhLDJK3gxMl00bBPLkM3vqRvDy2sMfrhkEP2A40TowehPwvNxOjYHQY12BIFePFf8K5G6BseFhTWFRbl1Tx7gkSRg60nGHZezWjRX1CsQmqCmc9X9HawRYaKHM=
+	t=1751849255; cv=fail; b=Oo7cpAqHGJIGanC7uxobvqzvIREr8XIrTbm0EX9RsLH4zJx9be2J35UEiQgPPdOUBJCTXR+rko2w6yVhR28duR2P21BxCcIfP5T0tfbjSe9JNgIHQUhK9+FJWsmJAXsU8uvVkKjbASbzonSJM6pTrW65ufECu3Iq5DBKK4h9JXs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751847345; c=relaxed/simple;
-	bh=bg3UTIoYitdrE1fKKbSI9xlD3lw7ZBNyiPwF21r9hGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AcpYzlth0SGRcWt9MYlP7fqqsIp0w59xeof3sN4SNC3vIjVgE9AUWgvAdy3jlX0kEQ5+/LIIlaKuYJswTthhOry9WYZOBhaW0id01WwmMGf7t6ikcKqr/MlzmUjeybG/XpZt+WpB2dBafxJSCzEYIuB80TWwu+R4wQc3YdiTNA8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=eQNcOwYH; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751847330; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=UTrKTZ3xXD548GT3q5KhD3JK9dOlxc1/gl993isZWCDB7ZdC6tm8r2W+Qp5UhIm84ID1a8s+c5ahoB6x1Qixq6yG8PKLajvXPq+j8xR6/c1murPnw4hi+Jh/BKNJNL28IcO/KjB8ClIaHtHoaM11OnFvvxI/O6n9cY5aBGMnr/k=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751847330; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=bg3UTIoYitdrE1fKKbSI9xlD3lw7ZBNyiPwF21r9hGQ=; 
-	b=NxZbSbRmmq0WqYYLz2Z7EGdVQgB6LYDvNjNag+is8SPK5O4+TjkA7qbYTXXeigvvN9s3PDfbUHw/ZPBLeuUEPG6VKS4gjdIH242qHj1/3y1x7XonGD87ktU+Rrunk0oVU8New/T0jo8H4fuvyw0wsivX2AtlXlFLZh3sy6gZpFs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751847330;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=bg3UTIoYitdrE1fKKbSI9xlD3lw7ZBNyiPwF21r9hGQ=;
-	b=eQNcOwYHfMrChfzs/bOXHZAs3RO0F7clXQprNAjtlaEA974VEP17E0Au6WE8lLvH
-	KuH8iGLRDNF+uST57YHjjjfffgtxcGH/xaNQkQ2hxPxG7iFvBhN2uy6k8ZQmhax84VL
-	7H3fGzTQpLW/DVxyyIeohIUqny+wsACP0phn5ROc=
-Received: by mx.zohomail.com with SMTPS id 175184732787092.66100338687909;
-	Sun, 6 Jul 2025 17:15:27 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 230A0180F14; Mon, 07 Jul 2025 02:15:22 +0200 (CEST)
-Date: Mon, 7 Jul 2025 02:15:22 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	kernel@oss.qualcomm.com, devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] power: supply: core: Add resistance power supply
- property
-Message-ID: <fb3ielhucosims237ikv4jfp3oq6fu5ftgt2mvenj6pjmzrpqo@vip3r6qew32p>
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-1-9e377193a656@oss.qualcomm.com>
- <b7m55sjc2rtvtelvez6sxnjvdostvxmfjhhsr4uxhyhh4bxrcd@xmioz2bsgis2>
- <e9160bb8-2b5c-4c30-b60f-520decde851e@oss.qualcomm.com>
+	s=arc-20240116; t=1751849255; c=relaxed/simple;
+	bh=DDxZayI1Bs30RUHiwOJ4GMh/aX3l05IvEO9SlXsEILI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Wg6BQ/cevXhEd76/nDeIxHS8HK0At8JDHt8UlXS67WLDXCIeADK7jpnOX9VPQ/ESybo260kXNwekvO4Pxf4eEk91/OZ9BHbjdXoo/yhahrix9PVL74AtN2sHLAwbym62s5cwoiauxPIIG0uFDfuAX1YVe9EiPdLkE3vT7V0YHUk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IZ1svor3; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751849253; x=1783385253;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=DDxZayI1Bs30RUHiwOJ4GMh/aX3l05IvEO9SlXsEILI=;
+  b=IZ1svor3gQSfws1Apg4gs4apag01Ia1+cNsEJ/4Bv89ESACEA6ByQ/zm
+   Sv2MGsEGU8uWrXu53rXSBHNFZvxf5+XPRfHwJZih6L4GXIlYN5ZadGtSM
+   yJEN6F8RYcQ/oxow8L5fiNPY3FqXd1kbaOkPw2qjGfMYikglWsoOoD2yf
+   JYqAx/OnEKV41QmT1XUdw4PuGaebZ04TZjwwSFCJbNTP/o4jqzhisc3Cd
+   UTXvGlRX4EbqdFpvGMdEPcrvn1sE7o7fx1wlBu4wsOokWzhp1ZwmhpELG
+   WDsZ1mdXWufP7InRmtF9Cm6Cq8BABAp++EzZsZtw1rJmjwZ0NLJwzNNRi
+   w==;
+X-CSE-ConnectionGUID: l1xgTihgRPiCs6dRfBhpig==
+X-CSE-MsgGUID: iFiAzgHgTFayEOGeeYURNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="64753693"
+X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
+   d="scan'208";a="64753693"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 17:47:32 -0700
+X-CSE-ConnectionGUID: i4PXHjOVQy6gCT80jPTvWQ==
+X-CSE-MsgGUID: yBNDLoBqTeqj6UQlikIToA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
+   d="scan'208";a="192261269"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 17:47:32 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Sun, 6 Jul 2025 17:47:31 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Sun, 6 Jul 2025 17:47:31 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (40.107.223.79)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Sun, 6 Jul 2025 17:47:31 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xQJb9OUP0tx+SAuSOip7clCNAOvAfL0jBa1yRFHQu/gTp4X5EdK1kZ2Q/wR50pRc1ydh/+rreKoKS4CHNKlQ0aHETZODJEzEdggun+BDXj8EZi5jR3I9zHiq9TyNGF4jHCSitX/NH1Qnau4AR3Fvjvg8BT1hMg94xW3GwBV4qQV6dzYxDwGJueZ/UowRZGB+dIgBpqwz7hm3ZplRVGR31VkmAklw/TKtGqFTil8WiOeag7mRKse6aj19FpXutpvSZkJ0jbVBxrs5/mtvvk5ZGrVyHbT3nhg0tSfGMNjXPM2dOZrq4/gYcLm7Kck9dFUnvj9FlSWCMlotV7tu8cJXsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kp9Xqv43yFmpS9Z05S5wwDFXcW9r7drbg0BwnWiPY6s=;
+ b=RAGYmmavd9CKOXagSnhFOYUYy3BOmVAh8FZ+WuJzYJf/nIds2rp3peWgMpDL2emXU5SnSoPLLQ8GIccvHh8/e+slgEedNcRRhOfZxt998JEcINxulbgPnrtyTK3ADOrQzNvHYrjuq8zrcPB/OWNaRnqAgngXI8xhrHew4mV17K9wnB53kKkiVOLAAkf5yEEU06xCIe9f48ly3uaCwaY8UTzoNOaEmAzK0LEZ83S/Zmo7TzQTas71wK1UpkvaagiEDRLAVR3hYa6hqiJPoK524Delz7TAO7hCgfv7IMv8F+aTIPe0k1ntQZ0n6maKlnmrxS9WjKhFDkI3wil85iw31g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com (2603:10b6:510:212::12)
+ by SJ1PR11MB6274.namprd11.prod.outlook.com (2603:10b6:a03:457::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.25; Mon, 7 Jul
+ 2025 00:47:14 +0000
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::9e94:e21f:e11a:332]) by PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::9e94:e21f:e11a:332%5]) with mapi id 15.20.8901.018; Mon, 7 Jul 2025
+ 00:47:13 +0000
+Date: Sun, 6 Jul 2025 17:48:56 -0700
+From: Matthew Brost <matthew.brost@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+CC: Samuel Zhang <guoqing.zhang@amd.com>, <alexander.deucher@amd.com>,
+	<christian.koenig@amd.com>, <rafael@kernel.org>, <len.brown@intel.com>,
+	<pavel@kernel.org>, <gregkh@linuxfoundation.org>, <dakr@kernel.org>,
+	<airlied@gmail.com>, <simona@ffwll.ch>, <ray.huang@amd.com>,
+	<matthew.auld@intel.com>, <maarten.lankhorst@linux.intel.com>,
+	<mripard@kernel.org>, <tzimmermann@suse.de>, <lijo.lazar@amd.com>,
+	<victor.zhao@amd.com>, <haijun.chang@amd.com>, <Qing.Ma@amd.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH v2 1/5] drm/ttm: add ttm_device_prepare_hibernation() api
+Message-ID: <aGsZeOFhBcMAl341@lstrano-desk.jf.intel.com>
+References: <20250704101233.347506-1-guoqing.zhang@amd.com>
+ <20250704101233.347506-2-guoqing.zhang@amd.com>
+ <5c4f5f0d-024a-46e5-9506-0b589f6cce5d@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5c4f5f0d-024a-46e5-9506-0b589f6cce5d@amd.com>
+X-ClientProxiedBy: SJ0PR05CA0106.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::21) To PH7PR11MB6522.namprd11.prod.outlook.com
+ (2603:10b6:510:212::12)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="orqvdfabm65lopjd"
-Content-Disposition: inline
-In-Reply-To: <e9160bb8-2b5c-4c30-b60f-520decde851e@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/251.827.75
-X-ZohoMailClient: External
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6522:EE_|SJ1PR11MB6274:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39155841-615a-4857-1856-08ddbcefd05e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?PD5amweKx6q5nEQlOrGEnEe0x19NQt+leMbEg3zeQFA6mcRm5icVxMAT/rrZ?=
+ =?us-ascii?Q?Xj/vrEX0DhnhmzoCvmLiT32MQ3gRIe+l7sl2HcVjTw3judbH3kbVMy7YgAfV?=
+ =?us-ascii?Q?Dh8yJDlcjUkCgLsR40eUMKC8kdeazW05KfUb2uLMQtx0VK6z8N1VTpcmV8LR?=
+ =?us-ascii?Q?Fa6V5gCH81AZAwSnEnBdg42cRJLpWzxUhYILSwAPE1YGPQ0G/yJx2cDYkzBC?=
+ =?us-ascii?Q?d9LPiiSOMIkxAY+nQORk0+Ou1FwqfWqcM2Ok3RmobGeKGkMAweE/8bdvk8GS?=
+ =?us-ascii?Q?evxTPlTYAcgvDdz2YjVCTnecwvR3eXPl7FCoqgZMRjD1mwaYHNb/j0Cz0947?=
+ =?us-ascii?Q?WxP4w66gupmhaHyWhfUZv3nwiC+xC5jZ7u1VDO73i8gM5ForQNHDPndNJuCR?=
+ =?us-ascii?Q?pb1d0yJtyPjcHyadwxwDtXZmxD32iuXeXmTmJl9I1UCyuSwGFHRfkRu/4fF8?=
+ =?us-ascii?Q?j0qK6J54MIj2yYQHGU3B/NRhdWDAksnqv03sSPDt679/5jlyyq4YEa83UP3N?=
+ =?us-ascii?Q?ra+tP6ai/Alzl0rRla3yJ7kphqoiPWcLUpIFy/gGM2dWCjWKJNtr4ir8oS12?=
+ =?us-ascii?Q?dIJcH4ytNNMWGJm7jgt0EMu0haY5odKgX+cycCTT+iM4aCAj/maS6sB+DgdL?=
+ =?us-ascii?Q?OBLPf/iy3EsCO02StSSiJWBdyS9U3XIEa7VilWKh8+FtCsWZR3OGXxEPzMl6?=
+ =?us-ascii?Q?S+/SH1hMbBHebnCzY64bshYehCbgcnjxxS7K+Wcw///uHC3AgxmTAsAdYb4N?=
+ =?us-ascii?Q?wZ+c6Pki4XbQNFRg4ZahzA2TMtkoM2Xk8JN0kBMS5pbeicbeMBYsrrSKhYPj?=
+ =?us-ascii?Q?VAUaKDjlxtuJr+MvLKEZ3neyvN738QnPJBaOZTFQwOiST16yuJKF+r+IJSSD?=
+ =?us-ascii?Q?+DohFaITWDKL73yganrnSZaprSfZQvG86y/ChkZ3MI1UOb22Tp+o4WaKAu/Z?=
+ =?us-ascii?Q?mA0bAeCHzlrjh7y1Q4WDEsxxTxSMCXTFU1bGjwWrN43XIeB/mSXNNZn6pqBY?=
+ =?us-ascii?Q?CLqnZAyU0EQhO8WNgoQrnBhsFqUnbwj4Z5hu9odxbfVTWAVrOIxPUHjS4k+/?=
+ =?us-ascii?Q?SqOhPw6C6uY0/GAbRTuavhLcF54RJFUKHm7W8/poipbhhypNF+0LQtmm+cm9?=
+ =?us-ascii?Q?Bo/Ad7DH1VK05SW58+Da0ZUTDAqpxSsnWI8G/YGqc72uGfM0bUD+WvF3zc1W?=
+ =?us-ascii?Q?wxASRrUh1H7BUNmO09JEWpL5mMF4lwbcCd284U2KpHcKVh3RFKvyloaY9beD?=
+ =?us-ascii?Q?kM6regfBAuD8yg4DKzJzfqUmwwSOLUZG3D63YayMywKa+eGAE09XGloBJGO0?=
+ =?us-ascii?Q?HWJCwVBQObIvG+OmInCRnCGi/lzHmenSHEkoIBX4VXLYSQKFpQVWzraObj6w?=
+ =?us-ascii?Q?GeS481JjGY+D48aSckR7OpPZ23Spv+tJy0vnbmoviRZum6dqaxMCfrEMum9h?=
+ =?us-ascii?Q?DMAoi9WDOJE=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6522.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Pajov32B8661pv9EFfxdDcyL/yRxBj9PutqqpIuVYZUqdJRqfHrdy51PQErt?=
+ =?us-ascii?Q?q+sXaAOPGFlG3uv+BdcJ80rt3rfl2s0dmjWoCNkrwycastY5W8fEdYx4cCBn?=
+ =?us-ascii?Q?FpRjxQqO2GNJKbwpNdWg9IGpZEahd9YrdFQwpoNYq+4DJenZIkmlOtLVVwKf?=
+ =?us-ascii?Q?NSFm1fN8JZ9wzwjjJKnVF0ASeOYMwnFctHFhxVRtzuNQhzTs+xB/MgnOgGbc?=
+ =?us-ascii?Q?akzV0N0MUPvky9v1Uavg8A++J2sNRcjWkIzN49L5zEAv9yzyNOI2AQKpYUWR?=
+ =?us-ascii?Q?KMltZsF31EccShgOxYY/BV6R9A1uz5AahDhs/xYBA2ojomv/A5ArP6/gExwa?=
+ =?us-ascii?Q?BrO8Cnl5U3pqsE3qIiqbeu0EJhFtJTAxVTBjlL3adaMvoYG94nK/WOeLIr0b?=
+ =?us-ascii?Q?uTL5hcNLXlt0J9N0Wd+8X/D1sLnJhnzhgSej30WY1kDesKBhbZOrjHWxvBSv?=
+ =?us-ascii?Q?dS5hNwLRVTIE8No4Fyn4eT7qRFOZS3sQbSj6ciBf74K+B1AJkpnS6iPxzHme?=
+ =?us-ascii?Q?QciWE77OsQdUdTivXABEnbNoJ0u47eOnaIGDWmTfau1v825KjJtGrFOZmkFi?=
+ =?us-ascii?Q?2HwQTPBCEazHBo3ELraGCxVS+EsYu7s17pg1I2Bp12IjdBDnhR+0+zLlScZ3?=
+ =?us-ascii?Q?QBsiTBZQ11UGuDpB7O6zbXy3JNIs6WrBKHEeKbRMP3xDmH4FUtPpzmqVLVNt?=
+ =?us-ascii?Q?oXPZyD5DipApQFyh8BZjC/+8Acw/gAfBeVSUPmB3P11VqlJch/9qr2pi1hRP?=
+ =?us-ascii?Q?bCtVuWcCZFuPeOZznw/FS6PscrGMGgegvRM8QZeAECSZ1RU4ROuvcWPyjY5z?=
+ =?us-ascii?Q?MmeH8kuVb/qja8eVuwsIgOTD5GyDktHOq3cU9ObZs+seafjcUYjhcO7UFUOw?=
+ =?us-ascii?Q?UiGKc6ByUAcEKg7qPk/F2+GzAOPiclGKiFNPgQEHa+MAAKClul/sdcBWwAWD?=
+ =?us-ascii?Q?GZSrsF/0fLD3liidzlkNZ5ArE65cogpR3sDpnPvKL2sD+e/ZovfjmjeiDPk2?=
+ =?us-ascii?Q?JNCJv8LVn935TpLIXkrY23vLEjNHjmRRGObswOf8MJmf1HK/aWdj6qlJYZYG?=
+ =?us-ascii?Q?m2pS5IgdwMAF4GbDJEwzrWKOc1Ku/tHBbHzIzTJxSAlCJ2Tf2G+nXAIQPfOt?=
+ =?us-ascii?Q?Gl+SVb5J1N6nNIli/OBm/mzr64KEXXo0WQIdspWfvU1FEeRamHduadistrUM?=
+ =?us-ascii?Q?qoJaZnXHYW1LmVPFRghc/pyzH1aF1NY5tRILJcKY7KiBPjchOe05q1dn2rA4?=
+ =?us-ascii?Q?fCMFLCGprwRjSicrs1NA1Du0OeoeeuMHjFemTikgQISAAWYEM+gVJXfIGa5X?=
+ =?us-ascii?Q?+yKZEn3TqlG/PPNzKt2nkys+cgqhRc3YF9p1bb75HJRu8xLvmCIfi5axlWBo?=
+ =?us-ascii?Q?JyXZZNAQPymWwHev8sfZthIInoHA1Bq2doTKs5O6+t+ijLGdzH7ontloCgTM?=
+ =?us-ascii?Q?GuZ4puBUGbS+JwzPbzwa4vXPu+m/JX3n8+LqExnCalXKs1maV8YDODUwdok6?=
+ =?us-ascii?Q?O6WNNHEbu5C0HNPKKfdW9vgRUoQCcbRADKqea50qE+mJqUqpV1s21Ajmwkiv?=
+ =?us-ascii?Q?5KMYOJfPrWRHjCSNvaqoZa1S0MWqb1VACx2vPIwdKcs27Vrfuf7279kn3kGi?=
+ =?us-ascii?Q?ug=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39155841-615a-4857-1856-08ddbcefd05e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6522.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2025 00:47:13.8097
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OiTb03/y+JCtzqSdIhTOARPa3KL84wrTU/cA54lgP9P3DcsDZutUj/J8lal/7b1xoMjnIBtwmnWq5cVbKuPJkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6274
+X-OriginatorOrg: intel.com
 
+On Sun, Jul 06, 2025 at 04:44:27PM -0400, Mario Limonciello wrote:
+> On 7/4/2025 6:12 AM, Samuel Zhang wrote:
+> > This new api is used for hibernation to move GTT BOs to shmem after
+> > VRAM eviction. shmem will be flushed to swap disk later to reduce
+> > the system memory usage for hibernation.
+> > 
+> > Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+> > ---
+> >   drivers/gpu/drm/ttm/ttm_device.c | 29 +++++++++++++++++++++++++++++
+> >   include/drm/ttm/ttm_device.h     |  1 +
+> >   2 files changed, 30 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/ttm/ttm_device.c b/drivers/gpu/drm/ttm/ttm_device.c
+> > index 02e797fd1891..19ab35ffeead 100644
+> > --- a/drivers/gpu/drm/ttm/ttm_device.c
+> > +++ b/drivers/gpu/drm/ttm/ttm_device.c
+> > @@ -123,6 +123,35 @@ static int ttm_global_init(void)
+> >   	return ret;
+> >   }
+> > +/**
+> > + * move GTT BOs to shmem for hibernation.
+> > + *
+> > + * returns 0 on success, negative on failure.
+> > + */
+> > +int ttm_device_prepare_hibernation(void)
+> > +{
+> > +	struct ttm_operation_ctx ctx = {
+> > +		.interruptible = false,
+> > +		.no_wait_gpu = false,
+> > +		.force_alloc = true
+> > +	};
+> > +	struct ttm_global *glob = &ttm_glob;
+> > +	struct ttm_device *bdev;
+> > +	int ret = 0;
+> > +
+> > +	mutex_lock(&ttm_global_mutex);
+> > +	list_for_each_entry(bdev, &glob->device_list, device_list) {
+> > +		do {
+> > +			ret = ttm_device_swapout(bdev, &ctx, GFP_KERNEL);
+> > +		} while (ret > 0);
+> > +		if (ret < 0)
+> > +			break;
+> > +	}
+> > +	mutex_unlock(&ttm_global_mutex);
+> > +	return ret;
+> 
+> I'd personally rather see scoped guard here so you can return immediately
+> and the guard will clean up but up to Christian what he thinks.
+> 
+> int ret;
+> 
+> scoped_guard(mutex, &ttm_global_mutex) {
 
---orqvdfabm65lopjd
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/8] power: supply: core: Add resistance power supply
- property
-MIME-Version: 1.0
+guard(mutex)(&ttm_global_mutex) would be more apporiate for this as the
+scope of the guard is the entire function.
 
-Hi,
+Matt
 
-On Mon, Jun 30, 2025 at 04:28:14PM +0800, Fenglin Wu wrote:
-> On 6/22/2025 9:26 AM, Sebastian Reichel wrote:
-> > On Fri, May 30, 2025 at 03:35:06PM +0800, Fenglin Wu via B4 Relay wrote:
-> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> > >=20
-> > > Some battery drivers provide the ability to export resistance as a
-> > > parameter. Add resistance power supply property for that purpose.
-> > This is missing some information and the naming is bad.
-> >=20
-> > Which resistance (I suppose battery internal resistance)?
-> >=20
-> > That is heavily dependent on the battery temperature. So this needs
-> > to document if this is for the current temperature or for some
-> > specific one.
-> >=20
-> > -- Sebastian
->=20
-> This is battery internal resistance calculated by battery management syst=
-em,
-> using the real-time temperature measured by the thermistor inside the
-> battery pack.
->=20
-> I can update the name to something like "rt_internal_resistance" and upda=
-te
-> the description accordingly.
-
-Your message is kind of mixed signal to me.
-
-If the BMS needs the thermistor to calculate the internal
-resistance, it means the data is either not real-time, but
-just adopting some fixed value to the current temperature,
-or the internal resistance is adopted from the current
-temperature to some fixed temperature.
-
-My expectation would be, that the BMS instead actually measures the
-internal resistance via ohm's and law and Kirchhoff's voltage law.
-So please make sure to understand what data is actually provided by
-the BMS for a proper ABI description.
-
-Depending on the description I think 'internal_resistance' is a good
-name.
-
-Greetings,
-
--- Sebastian
-
---orqvdfabm65lopjd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhrEZYACgkQ2O7X88g7
-+poJbA//S3Qz3Ln7piw+pbGa8pohdUZjhJetS+frJHREKwEQX31E8iqMa5bbumhb
-QQHbrNvDREndfwHjJZXWsCUA0YI6kLVWlUpUKegJJzszVuR++7ihPSwPo3AYs1kA
-70dUL45RUIeqaaDfThdP0hZIkJZEiu9n72I/n4Y3R6QzlhOTAy1FwmZIdlY6Pfpa
-Zdes/Kbp6YsTpftEfyBK90lrEUE5qRXu0sCDkjtaQQACIHr/61m2/h5v9D2OlEMn
-0RgXFWi6hYAezGfGyY6+YjTkqmtcZcnHJlTdqORv5hmhbQYqqGrjP6gHzM7jwRx8
-/4/lL5ax3EMjWQk8KdAs0s9GYsby9DeNGYcgpp0Qfee58mDUepagNkVntRQFhW6v
-rCW1T5lYh4vkoY5GrOP8dLgRQEJQP66JPVq8pgppMj8WCCXyh7EbaltNvXGfm+WP
-5h8hhsg8ysi9v2FTVqrHobvSc4BJ4DrUD9Gx2j11PjFV80KDjGiZAM4ZQXj9QjgQ
-pvDozcn5C3mswYHBsT36Daan2S/16QQi9WIKwKCqUrRIW50xAJNzyWrsADh2NMe8
-a2tDVYNK4c4qMvb7rqoPql/PtNAit/G4+nw5M2IddtG5eVxW7CrgSBpq5fJpDjdx
-Bs/EzIFfg8j4K8xY9l0iRbVrze/jhO5Dsck3cbbXlUM5fCIEZGI=
-=Jeor
------END PGP SIGNATURE-----
-
---orqvdfabm65lopjd--
+> 	list_for_each_entry(bdev, &glob->device_list, device_list) {
+> 		do {
+> 			ret = ttm_device_swapout(bdev, &ctx, GFP_KERNEL);
+> 		} while (ret > 0);
+> 		if (ret)
+> 			return ret;
+> }
+> 
+> return 0;
+> 
+> > +}
+> > +EXPORT_SYMBOL(ttm_device_prepare_hibernation);
+> > +
+> >   /*
+> >    * A buffer object shrink method that tries to swap out the first
+> >    * buffer object on the global::swap_lru list.
+> > diff --git a/include/drm/ttm/ttm_device.h b/include/drm/ttm/ttm_device.h
+> > index 39b8636b1845..b45498b398dd 100644
+> > --- a/include/drm/ttm/ttm_device.h
+> > +++ b/include/drm/ttm/ttm_device.h
+> > @@ -272,6 +272,7 @@ struct ttm_device {
+> >   int ttm_global_swapout(struct ttm_operation_ctx *ctx, gfp_t gfp_flags);
+> >   int ttm_device_swapout(struct ttm_device *bdev, struct ttm_operation_ctx *ctx,
+> >   		       gfp_t gfp_flags);
+> > +int ttm_device_prepare_hibernation(void);
+> >   static inline struct ttm_resource_manager *
+> >   ttm_manager_type(struct ttm_device *bdev, int mem_type)
+> 
 
