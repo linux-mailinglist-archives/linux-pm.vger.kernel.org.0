@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-30236-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30237-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3983FAFA888
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 01:59:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D00DFAFA88E
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 02:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCE1C18984B7
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Jul 2025 23:59:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F68D176D92
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 00:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B5D20297C;
-	Sun,  6 Jul 2025 23:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDD63597A;
+	Mon,  7 Jul 2025 00:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="eGcSIRgb"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="eQNcOwYH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCBA19005E;
-	Sun,  6 Jul 2025 23:59:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1B218035;
+	Mon,  7 Jul 2025 00:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751846361; cv=pass; b=W0KBUiCKb1dGikyvv3BECZiWURawv4UVUETGRqhNnn4Cc9ljd4N/uIjWpf83pPQDEqsO88jjrN3ubWBXylZvLRUejRQztsMLU0k9aBtGn+x/DhvS0UdDth0dI9QydlOQ+A3rTIATj1dseTIZIRzyl66TXNMmNmwLYpfJNhxshJM=
+	t=1751847345; cv=pass; b=r74OimeZN7UPfcFCHYIVcnDRbNVSApy12JSnh0IL+HULI29lGvhLDJK3gxMl00bBPLkM3vqRvDy2sMfrhkEP2A40TowehPwvNxOjYHQY12BIFePFf8K5G6BseFhTWFRbl1Tx7gkSRg60nGHZezWjRX1CsQmqCmc9X9HawRYaKHM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751846361; c=relaxed/simple;
-	bh=K2TLkI7gP4juXCxzoZJJXd81gycFQI6C2x4UpGsuZko=;
+	s=arc-20240116; t=1751847345; c=relaxed/simple;
+	bh=bg3UTIoYitdrE1fKKbSI9xlD3lw7ZBNyiPwF21r9hGQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bRtC5P0vzBG1zoxunDdIobYEhQhURZpMiQC5poAHSR6SD68ertkNfmXQRoR/dyFA5/DiRXSL03dwyqGremlzio3CuSD4DB0md76iyT0TOkQ/zXDSYublvINBBAvx8+GfdhkSZcmN9JJO8HaZnWp4BYYTrnyOT7glyrolmkQi2CI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=eGcSIRgb; arc=pass smtp.client-ip=136.143.188.112
+	 Content-Type:Content-Disposition:In-Reply-To; b=AcpYzlth0SGRcWt9MYlP7fqqsIp0w59xeof3sN4SNC3vIjVgE9AUWgvAdy3jlX0kEQ5+/LIIlaKuYJswTthhOry9WYZOBhaW0id01WwmMGf7t6ikcKqr/MlzmUjeybG/XpZt+WpB2dBafxJSCzEYIuB80TWwu+R4wQc3YdiTNA8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=eQNcOwYH; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751846345; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1751847330; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=iZvaqcHYYkkWJOoppH7Mhh0AovxMxPTU70vRdmiv/dQafEq274MLjqun5UBcpTzCRneUyu66xuRxr/rOaJX/rDzMogwERiCONXa79OI/tBQzC58nZgq0HH3gP79q36EdPBUK/RBoluzN64emgfQFGrQRIb8nvZsDQaUIvL363rw=
+	b=UTrKTZ3xXD548GT3q5KhD3JK9dOlxc1/gl993isZWCDB7ZdC6tm8r2W+Qp5UhIm84ID1a8s+c5ahoB6x1Qixq6yG8PKLajvXPq+j8xR6/c1murPnw4hi+Jh/BKNJNL28IcO/KjB8ClIaHtHoaM11OnFvvxI/O6n9cY5aBGMnr/k=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751846345; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=4YASFBwX97G7t8uWuk6GOjhJx3b5rCBSNe6Sfs+DpWs=; 
-	b=YyRzIjBCrybNrlXnavLDi+yAIEtDDCKY6qpJaw8SSSs67rnLke56mxO+m5JJB0DCQQv6p+nHE+TzqHm/7axxhfk5rMbgufzkBk9ENGpKQwKxu7Udh5UBstP6U6t4xuQJVSDwqGnrWyqUsC4Eoz/e3cynwwd6/kQ2pH7P4GgcZfU=
+	t=1751847330; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=bg3UTIoYitdrE1fKKbSI9xlD3lw7ZBNyiPwF21r9hGQ=; 
+	b=NxZbSbRmmq0WqYYLz2Z7EGdVQgB6LYDvNjNag+is8SPK5O4+TjkA7qbYTXXeigvvN9s3PDfbUHw/ZPBLeuUEPG6VKS4gjdIH242qHj1/3y1x7XonGD87ktU+Rrunk0oVU8New/T0jo8H4fuvyw0wsivX2AtlXlFLZh3sy6gZpFs=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751846345;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751847330;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=4YASFBwX97G7t8uWuk6GOjhJx3b5rCBSNe6Sfs+DpWs=;
-	b=eGcSIRgbzjQxAg+nwQqZFkt6qAYLEFDkSR4V03bo+1gNTbdYv0KMyapLYS9DIJfv
-	wTaZwy9uSa4PJPPZhYB0MGYR+exSSuS0dyYAk6DVP/Yjdd2IS4m9h8CSNTAS2ZV0i4l
-	coco5iR2apAUJgsLtsdAzNNr524wIM934CGhwa84=
-Received: by mx.zohomail.com with SMTPS id 1751846342840223.73657093435042;
-	Sun, 6 Jul 2025 16:59:02 -0700 (PDT)
+	bh=bg3UTIoYitdrE1fKKbSI9xlD3lw7ZBNyiPwF21r9hGQ=;
+	b=eQNcOwYHfMrChfzs/bOXHZAs3RO0F7clXQprNAjtlaEA974VEP17E0Au6WE8lLvH
+	KuH8iGLRDNF+uST57YHjjjfffgtxcGH/xaNQkQ2hxPxG7iFvBhN2uy6k8ZQmhax84VL
+	7H3fGzTQpLW/DVxyyIeohIUqny+wsACP0phn5ROc=
+Received: by mx.zohomail.com with SMTPS id 175184732787092.66100338687909;
+	Sun, 6 Jul 2025 17:15:27 -0700 (PDT)
 Received: by venus (Postfix, from userid 1000)
-	id 8B6FF180F14; Mon, 07 Jul 2025 01:58:57 +0200 (CEST)
-Date: Mon, 7 Jul 2025 01:58:57 +0200
+	id 230A0180F14; Mon, 07 Jul 2025 02:15:22 +0200 (CEST)
+Date: Mon, 7 Jul 2025 02:15:22 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Thomas Antoine <t.antoine@uclouvain.be>
-Cc: Rob Herring <robh@kernel.org>, 
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] power: supply: add support for max77759 fuel gauge
-Message-ID: <5n5nkgbviv2dyuqiji3n5ehp5bo5d4azqrlbcz45m2wpmnl525@4vgwghcaytc6>
-References: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be>
- <20250523-b4-gs101_max77759_fg-v4-2-b49904e35a34@uclouvain.be>
- <4cahu6dog7ly4ww6xyjmjigjfxs4m55mrnym2bjmzskscfvk34@guazy6wxbzfh>
- <793c02e4-fa7a-4c13-bfc3-bb058e211b5f@uclouvain.be>
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	kernel@oss.qualcomm.com, devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] power: supply: core: Add resistance power supply
+ property
+Message-ID: <fb3ielhucosims237ikv4jfp3oq6fu5ftgt2mvenj6pjmzrpqo@vip3r6qew32p>
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-1-9e377193a656@oss.qualcomm.com>
+ <b7m55sjc2rtvtelvez6sxnjvdostvxmfjhhsr4uxhyhh4bxrcd@xmioz2bsgis2>
+ <e9160bb8-2b5c-4c30-b60f-520decde851e@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,152 +77,90 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nclyy4wjoce7arde"
+	protocol="application/pgp-signature"; boundary="orqvdfabm65lopjd"
 Content-Disposition: inline
-In-Reply-To: <793c02e4-fa7a-4c13-bfc3-bb058e211b5f@uclouvain.be>
+In-Reply-To: <e9160bb8-2b5c-4c30-b60f-520decde851e@oss.qualcomm.com>
 X-Zoho-Virus-Status: 1
 X-Zoho-Virus-Status: 1
 X-Zoho-AV-Stamp: zmail-av-1.4.3/251.827.75
 X-ZohoMailClient: External
 
 
---nclyy4wjoce7arde
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--orqvdfabm65lopjd
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 2/5] power: supply: add support for max77759 fuel gauge
+Subject: Re: [PATCH v2 1/8] power: supply: core: Add resistance power supply
+ property
 MIME-Version: 1.0
 
 Hi,
 
-On Wed, Jun 25, 2025 at 02:12:21PM +0200, Thomas Antoine wrote:
-> > On Fri, May 23, 2025 at 02:51:45PM +0200, Thomas Antoine via B4 Relay w=
-rote:
-> >> From: Thomas Antoine <t.antoine@uclouvain.be>
-> >>
-> >> The interface of the Maxim MAX77759 fuel gauge has a lot of common wit=
-h the
-> >> Maxim MAX1720x. A major difference is the lack of non-volatile memory
-> >> slave address. No slave is available at address 0xb of the i2c bus, wh=
-ich
-> >> is coherent with the following driver from google: line 5836 disables
-> >> non-volatile memory for m5 gauge.
-> >>
-> >> Link: https://android.googlesource.com/kernel/google-modules/bms/+/1a6=
-8c36bef474573cc8629cc1d121eb6a81ab68c/max1720x_battery.c
-> >>
-> >> Other differences include the lack of V_BATT register to read the batt=
-ery
-> >> level. The voltage must instead be read from V_CELL, the lowest voltag=
-e of
-> >> all cells. The mask to identify the chip is different. The computation=
- of
-> >> the charge must also be changed to take into account TASKPERIOD, which
-> >> can add a factor 2 to the result.
-> >>
-> >> Add support for the MAX77759 by taking into account all of those
-> >> differences based on chip type.
-> >>
-> >> Do not advertise temp probes using the non-volatile memory as those are
-> >> not available.
-> >>
-> >> The regmap was proposed by Andr=E9 Draszik in
-> >>
-> >> Link: https://lore.kernel.org/all/d1bade77b5281c1de6b2ddcb4dbbd033e455=
-a116.camel@linaro.org/
-> >>
-> >> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
-> >> ---
-> >>  drivers/power/supply/max1720x_battery.c | 265 +++++++++++++++++++++++=
-+++++----
-> >>  1 file changed, 238 insertions(+), 27 deletions(-)
-> >>
-> >> diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/s=
-upply/max1720x_battery.c
-> >> index 68b5314ecf3a234f906ec8fe400e586855b69cd9..c9ad452ada9d0a2a51f37d=
-04fd8c3260be522405 100644
-> >> --- a/drivers/power/supply/max1720x_battery.c
-> >> +++ b/drivers/power/supply/max1720x_battery.c
-> >> @@ -37,6 +37,7 @@
-> >>  #define MAX172XX_REPCAP			0x05	/* Average capacity */
-> >>  #define MAX172XX_REPSOC			0x06	/* Percentage of charge */
-> >>  #define MAX172XX_TEMP			0x08	/* Temperature */
-> >> +#define MAX172XX_VCELL			0x09	/* Lowest cell voltage */
-> > [...]
-> >>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> > [...]
-> >> +			ret =3D regmap_read(info->regmap, MAX172XX_VCELL, &reg_val);
-> >> +			val->intval =3D max172xx_cell_voltage_to_ps(reg_val);
+On Mon, Jun 30, 2025 at 04:28:14PM +0800, Fenglin Wu wrote:
+> On 6/22/2025 9:26 AM, Sebastian Reichel wrote:
+> > On Fri, May 30, 2025 at 03:35:06PM +0800, Fenglin Wu via B4 Relay wrote:
+> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> > >=20
+> > > Some battery drivers provide the ability to export resistance as a
+> > > parameter. Add resistance power supply property for that purpose.
+> > This is missing some information and the naming is bad.
 > >=20
-> > I haven't reviewed this fully due to all the feedback you already
-> > got from Peter Griffin and the DT binding being broken, but something
-> > that catched my eye:
+> > Which resistance (I suppose battery internal resistance)?
 > >=20
-> > POWER_SUPPLY_PROP_VOLTAGE_NOW provides the voltage of the whole
-> > battery and not of a single cell. E.g. a typical Li-Ion battery
-> > with two serial cells has a nominal voltage of roughly 7.4V while
-> > each cell has just 3.7V.
-> >=20
-> > Greetings,
+> > That is heavily dependent on the battery temperature. So this needs
+> > to document if this is for the current temperature or for some
+> > specific one.
 > >=20
 > > -- Sebastian
 >=20
-> Downstream just reports this value which is usually a bit over 4V when I
-> record it.
+> This is battery internal resistance calculated by battery management syst=
+em,
+> using the real-time temperature measured by the thermistor inside the
+> battery pack.
 >=20
-> Also from what I saw online, it seems that the battery does output
-> voltages around 3.86V as it is written on the battery:
-> https://cdn.shopify.com/s/files/1/0092/8133/9443/files/QeqxTLOL6eAp6OpZ.j=
-pg?v=3D1728588266&width=3D2048
->=20
-> So I guess that there could only be a single cell in the battery? Which
-> would explain why they only report the lowest one.
->=20
-> It thus should be ok if we consider only the Google Pixel 6 (Pro). If we
-> need to take into account the possibility that the chip would be
-> used with other batteries, we could take from the devicetree the number
-> of cells and only provide the voltage if the number of cells is 1. Would
-> this be a good solution?
+> I can update the name to something like "rt_internal_resistance" and upda=
+te
+> the description accordingly.
 
-That's fine with me. But getting the DT binding prepared will take
-some time (the DT property should definetly go via
-Documentation/devicetree/bindings/power/supply/battery.yaml), we
-had some prior discussions around this IIRC. It might be sensible
-to move adding VOLTAGE_NOW support to an extra series.
+Your message is kind of mixed signal to me.
 
-> There is also a VSYS register (0xb1) but I couldn't find anything
-> about it. Taking a LSB of 156uV (twice the one of VCell), I see a
-> clear correlation with VCell, except for it being very slightly
-> lower. As it is mostly guesswork, I don't think it would be a good
-> idea to use this without any confirmation it is correct.
+If the BMS needs the thermistor to calculate the internal
+resistance, it means the data is either not real-time, but
+just adopting some fixed value to the current temperature,
+or the internal resistance is adopted from the current
+temperature to some fixed temperature.
 
-I see the datasheet does not have the register listed for < 0x10.
-Have you tried contacting the original Google driver author to shed
-some light to this?
+My expectation would be, that the BMS instead actually measures the
+internal resistance via ohm's and law and Kirchhoff's voltage law.
+So please make sure to understand what data is actually provided by
+the BMS for a proper ABI description.
+
+Depending on the description I think 'internal_resistance' is a good
+name.
 
 Greetings,
 
 -- Sebastian
 
---nclyy4wjoce7arde
+--orqvdfabm65lopjd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhrDb0ACgkQ2O7X88g7
-+poIhRAAi6S6FcK4GYRPjYWN/URGf5qBd1DRGWJF9nlVoYfXUWFJiuXTvnPjPMQ3
-y6b9zWXHRaIn5fa0pDcyKrO6oAz7EBsflk0aijPqnbPGxlIBthmk1QaynzQ/8Ldr
-WFTkKE3sorCC/Ki43Q2+QFzBMDgknGfeQNVhOfIHrDmNpnXg9TR2V+jnYZzyP2Xj
-Iz/vYtIpqSMOWMdfkGxi25nhMOjn6t99GRjhT5ajhqVfv5qNuR8Eihqz8Czttr0/
-jFTz8Ct01b6f7N+9HoPpWS2TLqiH3atq1+Z69EAdAssTaT7SFd7ZqYGSIs9KY+bZ
-aBLr4avVNNDe7qrrxFh8jjEwEy4qYyq64ZM9uSuMG7WKF8ronqPiTKn4mU6Ec8t/
-OZzLBVgwUQG5DXL1USMu37sfmo/kfqS0XTUu+XK/UGfPkj3kwKdXMjo+6yyZ3mNF
-bOeLTWfv/fIpJ4AJivZSbbTRbhqjD1xW9Z6dbMqJ+x88Xern9lB8JdVzkActXzt3
-gdk9tQ/U7YH+kn+oVWuJ8lNkrujSO0t6rvCVGmealRDdLUoFuzl8UaGoYJ4i1Clo
-CaK0gQ51wv430u3SB+O2MTF2Q+LWvuYa6ao12KhE5FTPxBZ4WicvV73yXAhgJgnd
-o2JD8WjWl4LRIRzVUef9O5AxKRZxkbnAUNgJ2yQ5VD9PzkLP0hs=
-=Lwm3
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhrEZYACgkQ2O7X88g7
++poJbA//S3Qz3Ln7piw+pbGa8pohdUZjhJetS+frJHREKwEQX31E8iqMa5bbumhb
+QQHbrNvDREndfwHjJZXWsCUA0YI6kLVWlUpUKegJJzszVuR++7ihPSwPo3AYs1kA
+70dUL45RUIeqaaDfThdP0hZIkJZEiu9n72I/n4Y3R6QzlhOTAy1FwmZIdlY6Pfpa
+Zdes/Kbp6YsTpftEfyBK90lrEUE5qRXu0sCDkjtaQQACIHr/61m2/h5v9D2OlEMn
+0RgXFWi6hYAezGfGyY6+YjTkqmtcZcnHJlTdqORv5hmhbQYqqGrjP6gHzM7jwRx8
+/4/lL5ax3EMjWQk8KdAs0s9GYsby9DeNGYcgpp0Qfee58mDUepagNkVntRQFhW6v
+rCW1T5lYh4vkoY5GrOP8dLgRQEJQP66JPVq8pgppMj8WCCXyh7EbaltNvXGfm+WP
+5h8hhsg8ysi9v2FTVqrHobvSc4BJ4DrUD9Gx2j11PjFV80KDjGiZAM4ZQXj9QjgQ
+pvDozcn5C3mswYHBsT36Daan2S/16QQi9WIKwKCqUrRIW50xAJNzyWrsADh2NMe8
+a2tDVYNK4c4qMvb7rqoPql/PtNAit/G4+nw5M2IddtG5eVxW7CrgSBpq5fJpDjdx
+Bs/EzIFfg8j4K8xY9l0iRbVrze/jhO5Dsck3cbbXlUM5fCIEZGI=
+=Jeor
 -----END PGP SIGNATURE-----
 
---nclyy4wjoce7arde--
+--orqvdfabm65lopjd--
 
