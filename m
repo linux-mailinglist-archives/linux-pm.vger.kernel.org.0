@@ -1,139 +1,129 @@
-Return-Path: <linux-pm+bounces-30268-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30269-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8212EAFB105
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 12:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7459AFB12E
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 12:27:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A82004A2314
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:19:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 287CF17F3F3
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:27:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF2728DEEE;
-	Mon,  7 Jul 2025 10:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2394295DBF;
+	Mon,  7 Jul 2025 10:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YNZKposv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CA3262FF5;
-	Mon,  7 Jul 2025 10:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E107291C28
+	for <linux-pm@vger.kernel.org>; Mon,  7 Jul 2025 10:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751883538; cv=none; b=qjmlHhY58IQFsXGMg2RNam0JfYG7TyuLZLKVP4Yb6VzXwawwqaZug4r9u3sv+Fq+vurFFFLMBzaQ6Htncpr9WD9EudR59Jh97poIqvH3D1YelD/JbgLS3UlP+O1VVNgcAQPSitLuwhP+TOby/Sg16UG192pchGP1/CFF7CmIL0c=
+	t=1751884038; cv=none; b=WfgjHqqRkA4HoOHSDF6NGOg81+WLIIjzgGFhEtBlkCPgz2rnEaBNlH5gRgpH2HGGN+puuVheUIxaddz/all8f/7+znYsn5YMAQwG82eFWU6C0umxkEWFIbpplWoPLANeObCSiGeZ5/gDLXMAbxvHXoRfJyax4sTYMTzy5+EpVYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751883538; c=relaxed/simple;
-	bh=cFAP6CR3owaA7Dm23KKzSciiAjNJqaVw9lWzRnyw9YE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D1c/XJ3TFYO/BRwaip69ZAFixWIzZs9CLdvxHq/CfZNNzi09WczzLm81B8Ogu8iRIQ+yyXDWSWFbPEh6HHw2p9E4o76xmGFZxxicZv5CGaFg8QxSe8sEJXA29JObQyB5qKhXmPXiDZ/IOejHyRsneQuthnbVkXLFT0xe2fbfP3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-87f2adec2b7so1035307241.0;
-        Mon, 07 Jul 2025 03:18:56 -0700 (PDT)
+	s=arc-20240116; t=1751884038; c=relaxed/simple;
+	bh=xFUNUc5m5ajWoG/fAc3PfI2ibizJRteLWpJOojk196U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hDctKDa1alOqJZlLk1jrmvf9D75yyOc1Rw6CkcDdZgAaZqCv0Rm7yKOFPPRHDR3qLtyvZia585JOTt2ByWGL5E2xWUKgwgITmNL2hR96zETq60Bui1BY1CGhd7PIpSzaFEheb2tVwfyknZ6tbA8XAXBhsGXxltHSJ4sP0fRD6ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YNZKposv; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2363616a1a6so25612105ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jul 2025 03:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1751884036; x=1752488836; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UrCguQvMCX0qN0EKrycpjflp0FRWcgp0pAKxoev4M7U=;
+        b=YNZKposvjQSErj8F+ZstHuGLurQsHkaiIGNtvQi3GI2HkLtEGEvEH0XLxc8HXLpBb1
+         stx3ecuLmfejyyHVBhb8llXyxE8CCGYPkudOLGJ10/10lgSlfb2+hgttYmKH4fkk9agn
+         XMKKQL3b5qAYN7w4CPqpZ2tYSSSvIqyc1iySg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751883535; x=1752488335;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1751884036; x=1752488836;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=H3S6y58EcgsVdkbN4ejnB1qrJUDIxRRLQQfV+wcdOeE=;
-        b=UdM3q+HjnWkZBWN5aYNgrEojcqcRMzey/qvs9bCLXNOWCKNVt8ow76ix+Cygze5QRs
-         UE5yGhg1MPao3cRPvSN8A8RCHzL9Uq9Nmc9f7VmxaBvGJpJ8zeQtOLJn7HXMzHB7+lyo
-         0zuoq8cDgnqHcvuzXb70MKSCvUMJTGks7wwDxqnBwhub04irAyPOER4cQqsYQEqd9V1k
-         1JVbVHcYZ6V45hbBMhBvd0Yg+Hq6G0qxV08OZxcwA8RpzOoD5QD5utCHEj7pC5Dc/YHY
-         uRH5VsDSqdyaNpLBb4XUuy9L4zIaodsi4p4ySz6MIQAwVVGYU7gjaG3xAiCLETaW8IFi
-         2RKA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzN56U7jKE9xBR3hVBRuQN7r9NenEmOVrV81x5D4vvCdVk2/NnqqwTi5RFk0UMIHFU/ClwD8Os9g==@vger.kernel.org, AJvYcCW9ctaK9OmG1B505ssyI1jg3v6qWqS0Mr3eJN+KBOqVL5E0twp8wGfYSGA9tza9wtkFfBE/CoA9Goi3gabgcIbK++Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6r4WNSYFZmo+VcSkPDCxkU2FbZ5AVArPeinO7EAkgFbZc5X1w
-	Gin20cCxfkwMVXZN4eFbhErU4HsgsSZc1/lyW1VTiI4xFQ8Da9pup00/fbreW62/
-X-Gm-Gg: ASbGncupvPsnQo0jxGjsMdH0CM7uyd3NtuqNS0Nm7Eui5GlYUQDI8sZJpF/pT5ydjAK
-	hID6xRZ6WgIBIccHzP3pjHE8R9VedJFvThmTAWDi3zNWgKPUOvYGc+sFfNiGh31mjvfrBqULvGd
-	gQaKLgxYATimtfnGHi39UE5p4YPgrKaKHshOxl5ftLaaq8pCuIfwA+06pggwkhldceMWxJoHnrO
-	5XoJJMW/feIoIx7AtmZoeBke6GUkbdhBzSBWQb+pvZl59P6mDz7goZABIuSP3pyapyokl0dgAbo
-	oMKuXx2VcaG0duy3TwmEC8jf4ViU9Z1K0LRHF2nuVsJt7eJtZDj2TP5h72ATBnCH8QlzLmJdDGO
-	nP45iIw9wcEg5V48ZF+ff/D6T
-X-Google-Smtp-Source: AGHT+IH9GarWhR3spFlE3QF3KdcQJC/rCHmjAXUZb5YUwmb7i8uP2XRrkzOMi1OV5ZmfGVjO8KPKMA==
-X-Received: by 2002:a05:6102:3752:b0:4e9:a2bd:b455 with SMTP id ada2fe7eead31-4f2f1ed7245mr6521450137.14.1751883534837;
-        Mon, 07 Jul 2025 03:18:54 -0700 (PDT)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-886e93f56eesm1309143241.30.2025.07.07.03.18.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jul 2025 03:18:54 -0700 (PDT)
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-87f2adec2b7so1035295241.0;
-        Mon, 07 Jul 2025 03:18:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVN8iQQ+G4iYiCylYp7p/PigGLaIIkBqF10VyRrQLxj3dq8VTI18JTvbWYWPxkguVm6RoQ7tpmjCg==@vger.kernel.org, AJvYcCXCvX9oAoH+d+7vw5tRrWHgFz0V9IwWR+UM6IcX/IhGiLje8hROeVB2WtZ4sGKpKRTJ3qEQJmB5nGiuqXVgSc1WcRg=@vger.kernel.org
-X-Received: by 2002:a05:6102:4404:b0:4e6:f7e9:c481 with SMTP id
- ada2fe7eead31-4f2f1e02c34mr6502633137.7.1751883534212; Mon, 07 Jul 2025
- 03:18:54 -0700 (PDT)
+        bh=UrCguQvMCX0qN0EKrycpjflp0FRWcgp0pAKxoev4M7U=;
+        b=cnOjhdx2rxBaihKD/jU3Z4h6PHH+ckrmWk/4vb2vCVVvRZ4+4sBoEaAyLcumXAbmnS
+         9AAWfokJuk0yb/1pUl8WuxRWrXU7izBaPWcl/J6ZaBWepvx50FMKk9zmeCKUyyS/sAf5
+         S9wen7opvrN1HZHLM8kB/77mtP6GZDQ+GfIimQUooiF6pdHeUSvU3QntFn3hlsg0nroi
+         UvPmX14wijsCR26BiL7Xf70Pt1t3ENqg/f+3TvxVuAMPnVQMQKFrDFUNC4STvKUrEr+C
+         AdLT9AWg5lAWy3f2cFr8xAD4GmXPnwYLp1qsTqzzMP+tMHS69KquwCNuS0QTqaYXKBag
+         Y96Q==
+X-Gm-Message-State: AOJu0Yx+EF65RHOK0BtD4CNTyfnsocomJIbva5Wchoak9fa3k7u5T6B5
+	V0grkbaHgRQbqBjqkfxay76LkNu6a5bp2J7Dam8tmQalb9uMgmoNx0ixkLJSnpv0hg==
+X-Gm-Gg: ASbGncuX+72EixSr6v3VeesAg2uzeIMlVvXqbgo/5TOnsQZ2n82h2vJTW5IBBhF/U/3
+	i4P3LSxhRdnAGnr133YMsBxb6FbZqq0ZQjTvP7nNe1mpAc//Nxr5l7Evu2/zrs18B5waDTLLoAn
+	VuZFKkwsDqWnjbM9n6DDS7jXDrOFUC3nwyv3NTxJJpNgqEwsBY41rAoqoaLuZ1wiy2b/yjxjD9u
+	YnctL3U9kmZSgUFU5Q3QWiHEk8+KBmUqnGGSozDqFkzb/iHra8cXA/G8zCXd99ionu/HXQmzo89
+	1IesFSkoNYUe1Ds3qwDhUFbvMlveEfHLeoDNpDSE1KwaVjih2kQrJIX6KXCZXwezB0gHEX18UV/
+	AHmLNpY4jDK6GLU9Wmdlreh8FeS1j9IU=
+X-Google-Smtp-Source: AGHT+IFDfxeN+onnny+B6L+7wHiiEtPBfsMaJLUeKdhihyzBWk863pmDXzSYrNTM3um5yiBK4Jo6vQ==
+X-Received: by 2002:a17:903:138a:b0:235:eb71:a386 with SMTP id d9443c01a7336-23c875e8180mr142789935ad.50.1751884036508;
+        Mon, 07 Jul 2025 03:27:16 -0700 (PDT)
+Received: from yuanhsinte-p620-1.tpe.corp.google.com ([2401:fa00:1:10:53d3:893:10bb:1dc3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23c8434f0d8sm82986895ad.82.2025.07.07.03.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jul 2025 03:27:16 -0700 (PDT)
+From: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Date: Mon, 07 Jul 2025 18:27:10 +0800
+Subject: [PATCH 6.6] thermal/of: Fix mask mismatch when no trips subnode
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <87ldp6cadg.wl-kuninori.morimoto.gx@renesas.com>
- <87h5zucac8.wl-kuninori.morimoto.gx@renesas.com> <CAMuHMdWzSY1FofgbveAZumuuyE6B=Ub2Zxpd9_ks_d9KmrVYtA@mail.gmail.com>
- <87wm8oq3mu.wl-kuninori.morimoto.gx@renesas.com>
-In-Reply-To: <87wm8oq3mu.wl-kuninori.morimoto.gx@renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 7 Jul 2025 12:18:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUtrzd1yQpdQcDuFECZipzHob=RNGUMKZSPoq-zGXemxg@mail.gmail.com>
-X-Gm-Features: Ac12FXwSc1xiWah__M3-isN-bcuoLZryLIu6TyTmF4VYI1L78hXmUg_22y7TlBc
-Message-ID: <CAMuHMdUtrzd1yQpdQcDuFECZipzHob=RNGUMKZSPoq-zGXemxg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] pmdomain: renesas: separate R8A7791/R8A7793
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250707-trip-point-v1-1-8f89d158eda0@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAP2ga2gC/x3MPQqAMAxA4atIZiO1/gS9ijiIjZqlllREKN7d4
+ vgN7yWIrMIRxiKB8i1RTp9RlwWsx+J3RnHZYI3tDBnCSyVgOMVfSI1beNjcsFILOQjKmzz/bIK
+ +6mF+3w8zmkmzYQAAAA==
+X-Change-ID: 20250707-trip-point-73dae9fd9c74
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Hsin-Te Yuan <yuanhsinte@chromium.org>
+X-Mailer: b4 0.15-dev-2a633
 
-Hi Morimoto-san,
+After commit 725f31f300e3 ("thermal/of: support thermal zones w/o trips
+subnode") was backported on 6.6 stable branch as commit d3304dbc2d5f
+("thermal/of: support thermal zones w/o trips subnode"), thermal zones
+w/o trips subnode still fail to register since `mask` argument is not
+set correctly. When number of trips subnode is 0, `mask` must be 0 to
+pass the check in `thermal_zone_device_register_with_trips()`.
 
-On Fri, 4 Jul 2025 at 01:03, Kuninori Morimoto
-<kuninori.morimoto.gx@renesas.com> wrote:
-> > >  config SYSC_R8A7791
-> > > -       bool "System Controller support for R8A7791/R8A7793 (R-Car M2-W/N)" if COMPILE_TEST
-> > > +       bool "System Controller support for R8A7791 (R-Car M2-W)" if COMPILE_TEST
-> > >         select SYSC_RCAR
-> > >
-> > >  config SYSC_R8A7792
-> > >         bool "System Controller support for R8A7792 (R-Car V2H)" if COMPILE_TEST
-> > >         select SYSC_RCAR
-> > >
-> > > +config SYSC_R8A7793
-> > > +       bool "System Controller support for R8A7793 (R-Car M2-N)" if COMPILE_TEST
-> > > +       select SYSC_RCAR
-> > > +
-> > >  config SYSC_R8A7794
-> > >         bool "System Controller support for R8A7794 (R-Car E2)" if COMPILE_TEST
-> > >         select SYSC_RCAR
-> >
-> > When configuring the kernel for a Renesas platform, all SYSC_* symbols
-> > are invisible symbols, which are auto-selected when needed.  So I see
-> > no need to complicate this internal invisible logic.
->
-> Hmm ? Yes, but it is for Renesas case.
-> non-Renesas can select it, because it has "if COMPILE_TEST" ?
->
-> I can see like this (via x86)
->
->         ...
->         [*] System Controller support for R8A7779 (R-Car H1)
->         [*] System Controller support for R8A7790 (R-Car H2)
-> =>      [*] System Controller support for R8A7791/R8A7793 (R-Car M2-W/N)
->         [*] System Controller support for R8A7792 (R-Car V2H)
->         [*] System Controller support for R8A7794 (R-Car E2)
->         ...
+Set `mask` to 0 when there's no trips subnode.
 
-Is that really a problem? This is shown only when compile-testing.
+Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+---
+ drivers/thermal/thermal_of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 0f520cf923a1e684411a3077ad283551395eec11..97aeb869abf5179dfa512dd744725121ec7fd0d9 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -514,7 +514,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+ 	of_ops->bind = thermal_of_bind;
+ 	of_ops->unbind = thermal_of_unbind;
+ 
+-	mask = GENMASK_ULL((ntrips) - 1, 0);
++	mask = ntrips ? GENMASK_ULL((ntrips) - 1, 0) : 0;
+ 
+ 	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+ 						     mask, data, of_ops, &tzp,
 
-                        Geert
+---
+base-commit: a5df3a702b2cba82bcfb066fa9f5e4a349c33924
+change-id: 20250707-trip-point-73dae9fd9c74
 
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Hsin-Te Yuan <yuanhsinte@chromium.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
