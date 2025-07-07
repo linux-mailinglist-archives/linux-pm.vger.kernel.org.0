@@ -1,148 +1,120 @@
-Return-Path: <linux-pm+bounces-30247-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30248-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FAA6AFAD1C
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 09:31:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 700C6AFADF6
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:03:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148E817CAB1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 07:31:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 039A4188B27A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A39E274B32;
-	Mon,  7 Jul 2025 07:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C331528A1FB;
+	Mon,  7 Jul 2025 08:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="tcPHlMoW"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="X9Ev8Ni8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446B3279918;
-	Mon,  7 Jul 2025 07:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFC3275867
+	for <linux-pm@vger.kernel.org>; Mon,  7 Jul 2025 08:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751873438; cv=none; b=BQnn5cozS4YrbcP0qHNUkcgoM1nl9NTSYtkm39Kz13NwVBZqSW/vLeHS77fCpe9mErQ9ycXNg1y7iLuAAmSqELsjmAddnP0F6tqkHn6ECo2ps+oZR4IQJU+hxXUfLsdcClIqvDcZZ5voekMCj9mKX/mvoVpXeBpQV626/+4a0B0=
+	t=1751875403; cv=none; b=AaB6wNWsvlsrnD6qZeQMns3tZYGgU84pqMtYT0ZrvKhaeCZ8ofCPpoi2UukMheyWAJcOd7uRGCzoE/Ff6gV4/X4MGzMTdkG+oKUHMSorEC49EcdYpbQyQsIhkCSnT8dmrHDAvyeKE8aw69nTynbiVjLHkMbM8jIcekNEDwKqAVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751873438; c=relaxed/simple;
-	bh=zVp3mU9tpJoLyKShOFZbvOMZjx+sbDfvqdrK5RIOkbg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=dnKZKvJFkxX0ObBgAWIdHZYyi2AfLGJdmzplvA+FMz7A63lWrxMDGJ7F9V8FTwGQWQ6uY48Sr3SVZeDmfP5UNY/wvFV0BGBbHOJ83W883p94JgD3wHroH2BQ114p6BhGRMkTe7k7rslbvu3fipw7Xx3oq+mei+V9FxsWqTAoLzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=tcPHlMoW; arc=none smtp.client-ip=134.0.28.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-	by mxout2.routing.net (Postfix) with ESMTP id B0FE35FAAF;
-	Mon,  7 Jul 2025 07:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1751873433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zVp3mU9tpJoLyKShOFZbvOMZjx+sbDfvqdrK5RIOkbg=;
-	b=tcPHlMoWChlrn8xTPaCqBQ/0kL86NAfoif4bczhRr5EPFM2mHMEWkuotkm7Qcm8BgxNhKd
-	cfd7uYKu7+c3NyNy1MFOYQHSkksnV/+Gw9qqAyCXu09nxFsZXLYurxI+bXh6AVtUosXhwp
-	CTur5EUurSQKKFv4T1RiC3Lo7PaHHeg=
-Received: from [IPv6:::1] (unknown [IPv6:2a01:599:808:65f4:756a:9686:4114:2d58])
-	by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 3BB8D100758;
-	Mon,  7 Jul 2025 07:30:31 +0000 (UTC)
-Date: Mon, 07 Jul 2025 09:30:32 +0200
-From: Frank Wunderlich <linux@fw-web.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Johnson Wang <johnson.wang@mediatek.com>,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>,
- Sean Wang <sean.wang@mediatek.com>, Daniel Golle <daniel@makrotopia.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
- Frank Wunderlich <frank-w@public-files.de>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_02/16=5D_dt-bindings=3A_n?=
- =?US-ASCII?Q?et=3A_mediatek=2Cnet=3A_allow_up_to_8_IRQs?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250707-modest-awesome-baboon-aec601@krzk-bin>
-References: <20250706132213.20412-1-linux@fw-web.de> <20250706132213.20412-3-linux@fw-web.de> <20250707-modest-awesome-baboon-aec601@krzk-bin>
-Message-ID: <B875B8FF-FEDB-4BBD-8843-9BA6E4E89A45@fw-web.de>
+	s=arc-20240116; t=1751875403; c=relaxed/simple;
+	bh=WQE2kv3HQ0gTQZ4sJoK5QnluNwdWhUSE4VaZEjb6gBg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BW1HNpbfQTH4LyjXB5aQWK0El1kbw3KrBIcCptqDTsrSVGuGFW6inL28ytfIa3aFJTrQphhsqiQZKciWwtVi8ZNe/j+qwDh6rCfkDKr13dWMha+t7b7eNmS8xocbtWEaklE2bCmdxdUVnOO/mGn09zeF0prR1UYkpN+h/VwDl2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=X9Ev8Ni8; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a548a73ff2so2731450f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jul 2025 01:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1751875400; x=1752480200; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j8ER9RiwBf3a0PNuzWR+wHPlPKYNVAx60ODVLZpCr8E=;
+        b=X9Ev8Ni8VR+vXSZ17LvHTTqKiBx58SkM/ADlXFfNLgkbZ252vTGdrnC5PhAyDlzmPq
+         tbVIe35BJ8G75QMDg4Ya6L5jTbqbXqTugWaS+uCqUhkVe9Y8CJxIroW5zT9DiuxhS8aT
+         i5GIP0TUhNzpooMwpVK2UZCsyUULoymVSO/Jd8cWYLl7FMOyZAqKOPuNSHMMYSr0o10L
+         SjhEfnlidBHMSmmZr9Aa07r3cnzzL4lo4wdBO1vAx+IzqKrx0h+9Mh78LGTIdCfz8gNf
+         KO3ykplQ709pTXgmxOfDu3x2D/KedTxBSHJsVktTfDMbNTKtVfS3jw2X9hZPc84xszpi
+         oSWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751875400; x=1752480200;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j8ER9RiwBf3a0PNuzWR+wHPlPKYNVAx60ODVLZpCr8E=;
+        b=wUI8CGSKZf0+hXsdzDB7p1Lo0cga4Uzdtx0UD19/STthAFPuZ0ny02wKef8P0isaPu
+         WApy8ejjhbVgXin8KTArUxhW+/lfkUQFKC4/rxQ8ZPyU7jIY+owgFxzTR8S0GpHwdG1z
+         CNdcUE4DQ4UUmNANST+dq0NSizfnib/yxBAK+3sQ+MaiCQTDBa73xyR/2T5vpEGIX2n8
+         wkUZJB867JBjTkJhLZ48KP6DBRxErOsMP+TKNg5n0p7ELWEsdw/ldxFo3neCQfT8mekD
+         zXp3A0v6hgdeN0ygIAOcR9YzgY0FwXggGjw/Krbvm5nqDXel2qWJlGQ/gJvA1BzJQQSZ
+         v/mg==
+X-Gm-Message-State: AOJu0YzqjZb4FSNs66majG5bZloEtMsZXVXNWvkPAwBTFiKTmi7T6xRl
+	9Z7llZwVtBtiVIfBOHI64yl2YaHcDlTfWgP/gJtCoAOCSkbvn2kIpKu6u1eabZw1MabjXrQzCWh
+	Y46xSvpM=
+X-Gm-Gg: ASbGncuXrWMSm3qHx5tFNYRNTRqZG0kmrwhcWWkSVcaOP44cj/mE2Sd6W5hSl7H2+eB
+	pVolSL/w4t40ScnZ0ozKDp5HRXT2ECz8ss0fd//46ct6ZbnuM3YWHsMLcLtFodHSa8dDXyo2JoE
+	GOs5KdJhddik6tNy+0YrgBi21y4oJMITcKzZGM+Rwfq77kLy3Mfo7wtVlmPW8emlw/2lhwZw55O
+	1TULVHH7TEqjJa2nzl0mXAMotieS1dtbHLwczf23lxNHXZjnCDLW9eOKnmNi9WxMA7ARJIiRWeJ
+	acMStEmeQ6V9ghJEGjDUtoC0pyFhObuwMJbISM8zro2o7oP+TDFQVYVsV4Q6iuw=
+X-Google-Smtp-Source: AGHT+IEuKhwyI5Z+SjqvtbsXi6ZzIS1X4CZuWomS6qhOy+fAEFEaFFSGiYj31JlHRtL0PKXI2U00Ng==
+X-Received: by 2002:a5d:64c9:0:b0:3b1:9259:3ead with SMTP id ffacd0b85a97d-3b49aa73e31mr5001650f8f.28.1751875399847;
+        Mon, 07 Jul 2025 01:03:19 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:3cf3:a61f:85ed:69db])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a997e367sm130980235e9.15.2025.07.07.01.03.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jul 2025 01:03:19 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: linux-pm@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: (subset) [PATCH 00/80] treewide: Remove redundant pm_runtime_mark_last_busy() calls
+Date: Mon,  7 Jul 2025 10:03:18 +0200
+Message-ID: <175187539072.14957.12381640890960188309.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
+References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: 03c03832-acef-4e85-9034-7323a57b8c25
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Am 7=2E Juli 2025 08:31:11 MESZ schrieb Krzysztof Kozlowski <krzk@kernel=2E=
-org>:
->On Sun, Jul 06, 2025 at 03:21:57PM +0200, Frank Wunderlich wrote:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->> Increase the maximum IRQ count to 8 (4 FE + 4 RSS/LRO)=2E
->
->Because? Hardware was updated? It was missing before?
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-There is no RSS support in driver yet,so IRQs were not added to existing D=
-TS yet=2E
 
->>=20
->> Frame-engine-IRQs (max 4):
->> MT7621, MT7628: 1 IRQ
->> MT7622, MT7623: 3 IRQs (only two used by the driver for now)
->> MT7981, MT7986, MT7988: 4 IRQs (only two used by the driver for now)
->
->You updated commit msg - looks fine - but same problem as before in your
->code=2E Now MT7981 has 4-8 interrupts, even though you say here it has on=
-ly
->4=2E
+On Fri, 04 Jul 2025 10:52:25 +0300, Sakari Ailus wrote:
+> Late last year I posted a set to switch to __pm_runtime_mark_last_busy()
+> and gradually get rid of explicit pm_runtime_mark_last_busy() calls in
+> drivers, embedding them in the appropriate pm_runtime_*autosuspend*()
+> calls. The overall feedback I got at the time was that this is an
+> unnecessary intermediate step, and removing the
+> pm_runtime_mark_last_busy() calls can be done after adding them to the
+> relevant Runtime PM autosuspend related functions. The latter part has
+> been done and is present in Rafael's tree at the moment, also see
+> <URL:https://lore.kernel.org/linux-pm/CAJZ5v0g7-8UWp6ATOy+=oGdxDaCnfKHBG_+kbiTr+VeuXZsUFQ@mail.gmail.com/>:
+> 
+> [...]
 
-Ethernet works with 4,but can be 8 for MT798x=2E
-I cannot increase the MinItems here as it will
-throw error because currently only 4 are defined in DTS=2Esame for MT7986=
-=2E
->>=20
->> Mediatek Filogic SoCs (mt798x) have 4 additional IRQs for RSS and/or
->> LRO=2E
->
->Although I don't know how to treat this=2E Just say how many interrupts
->are there (MT7981, MT7986, MT7988: 4 FE and 4 RSS), not 4 but later
->actually 4+4=2E
+Applied, thanks!
 
-First block is for Frame Engine IRQs and second for RSS/LRO=2E Only mentio=
-n total count=20
-across all SoCs is imho more confusing=2E
+[15/80] gpio: arizona: Remove redundant pm_runtime_mark_last_busy() calls
+        https://git.kernel.org/brgl/linux/c/2fd13c8e5be15369d157da3277ac7407fa73f90a
 
->I also do not understand why 7 interrupts is now valid=2E=2E=2E Are these=
- not
->connected physically?
-
-7 does not make sense but i know no way to allow 8 with min 4 without betw=
-een (5-7)=2E
-
->Best regards,
->Krzysztof
-
-Hi
-
-Thanks for taking time for review again=2E
-
-First block are the frame engine IRQs which are max 4 and on all SoCs=2E
-The RSS IRQs are only valid on Filogic (MT798x),so there a total of 8, but=
- on
-MT7981 and MT7986 not yet added as i prepare the RSS/LRO driver in backgro=
-und=2E
-We just want to add the IRQs for MT7988 now=2E
-regards Frank
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
