@@ -1,165 +1,219 @@
-Return-Path: <linux-pm+bounces-30286-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30287-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5065DAFB253
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 13:33:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81BEEAFB307
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 14:17:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F02F3A7458
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 11:32:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29E211AA137D
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 12:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92E028A726;
-	Mon,  7 Jul 2025 11:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8DB28853F;
+	Mon,  7 Jul 2025 12:17:52 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FA41B3925;
-	Mon,  7 Jul 2025 11:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3D229AB07;
+	Mon,  7 Jul 2025 12:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=183.62.165.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751887987; cv=none; b=XqUa0KOw9n+0w/7PrTb7UVjCI0c48u04hBev1bYp1NmHyam51ZPxlQ4P02vvKRzkrpVuHI6jnR1pD4AWmOZFpj+YtF2Q9ZiT3+ad09X+8AvJ4z9JBys3kKPwpCSaJKNy87S8C1yiDM1W6Vcf2VqkRDbTPGQqN8R5t27kbwCM/30=
+	t=1751890672; cv=none; b=cEHbzAxB5C6u1uWMHaJHDYmwZTRmEpCproHhBtf9bVu+xWJclxjDnIvILnudK/VpHioElwWIJB8bO14993FVeltTr32aaHqTdBoQEkNYJUStwjr6uZ6Wkt6OFU3dyT+41y1sUtVuI9yeT0q/tu+s7Q122iwdDyl7lNkOdZvCC/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751887987; c=relaxed/simple;
-	bh=2oZpAz8+MxmhAJfukRgTlHr2Qu9Ax32beFxHKIqm0/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V5U29wkE4gux3yrRQ8b1E8m6gK+8H9Fs2iw8c2w0k1JLFf6BhLNjp/FjduFRfm5R3Nm2mDGtBFi8xdVyoE3w/25ezrOiQ7UZXPUWJPoqpZwVyPl+/QC/BQi4QXbJmFsGckr3FZ8xUMNCWvQDs/TIX9khQ8QIAvfc2BMxcwHw37g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bbMYW0xKqzKHMZH;
-	Mon,  7 Jul 2025 19:33:03 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 913D11A0EC3;
-	Mon,  7 Jul 2025 19:33:01 +0800 (CST)
-Received: from [10.67.109.79] (unknown [10.67.109.79])
-	by APP2 (Coremail) with SMTP id Syh0CgBHMA5ssGtokfTAAw--.13365S2;
-	Mon, 07 Jul 2025 19:33:01 +0800 (CST)
-Message-ID: <c63a1698-2d93-4105-8641-ecec69b48523@huaweicloud.com>
-Date: Mon, 7 Jul 2025 19:32:59 +0800
+	s=arc-20240116; t=1751890672; c=relaxed/simple;
+	bh=GHP2t4XYotp+4m74VTLoM0og2PSMiBPuSglV7gkwuzo=;
+	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=i/qYENgHId2Fj0yy2jMv4Wa+Vp0oyr6Sd99qhNGsap/SK19/Ec6A9iySR884WlgsXa/s4laNFuHUxQn9oqwN2r8acFZRypUelbX2bHw3a67IoEKhhwV7rt+ZLwK2ccSOpVQ96BRLtc5ZhyKGx/s5wzcgmqwhFcfdcvAgsXw5wYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=183.62.165.209
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mxct.zte.com.cn (FangMail) with ESMTPS id 4bbNXj4wqdz4x5pp;
+	Mon,  7 Jul 2025 20:17:25 +0800 (CST)
+Received: from xaxapp04.zte.com.cn ([10.99.98.157])
+	by mse-fl1.zte.com.cn with SMTP id 567CHOTs040120;
+	Mon, 7 Jul 2025 20:17:24 +0800 (+08)
+	(envelope-from shao.mingyin@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Mon, 7 Jul 2025 20:17:27 +0800 (CST)
+Date: Mon, 7 Jul 2025 20:17:27 +0800 (CST)
+X-Zmail-TransId: 2afa686bbad7fffffffffe8-248e9
+X-Mailer: Zmail v1.0
+Message-ID: <20250707201727549ObAZpoScxRwGsruRnQQCP@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being
- frozen
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: timvp@google.com, Michal Koutn?? <mkoutny@suse.com>, rafael@kernel.org,
- pavel@kernel.org, tj@kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, lujialin4@huawei.com, chenridong@huawei.com
-References: <20250703133427.3301899-1-chenridong@huaweicloud.com>
- <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
- <f4c4f465-72b9-4682-99e6-c249ecab8572@huaweicloud.com>
- <8dae8006-e63d-467f-bb7c-e8470878e534@huaweicloud.com>
- <20250704075718.GA2001818@noisy.programming.kicks-ass.net>
- <85fc85e8-af92-4d58-8271-9bf4aeb0a63d@huaweicloud.com>
- <bdc5a4d3-6942-4ba2-a13d-35f2e13c0b37@huaweicloud.com>
- <20250707101019.GE1613200@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20250707101019.GE1613200@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBHMA5ssGtokfTAAw--.13365S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWktw4kJFW8AF1xJw18Zrb_yoW8tw1Up3
-	95G3WvkrnYqrnFyrsFyw4UZrZYka93JryUWr95Wr1xJF4ftasaqr47Aa4YkF4jvr97Ka45
-	JFWj9wn3u3ykZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Mime-Version: 1.0
+From: <shao.mingyin@zte.com.cn>
+To: <geert+renesas@glider.be>
+Cc: <changhuang.liang@starfivetech.com>, <geert+renesas@glider.be>,
+        <magnus.damm@gmail.com>, <heiko@sntech.de>, <alim.akhtar@samsung.com>,
+        <walker.chen@starfivetech.com>, <sebastian.reichel@collabora.com>,
+        <detlev.casanova@collabora.com>, <finley.xiao@rock-chips.com>,
+        <shawn.lin@rock-chips.com>, <pgwipeout@gmail.com>,
+        <shao.mingyin@zte.com.cn>, <linux-pm@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <yang.yang29@zte.com.cn>,
+        <xu.xin16@zte.com.cn>, <yang.tao172@zte.com.cn>,
+        <ye.xingchen@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIHY0XSBwbWRvbWFpbjogVXNlIHN0cl9lbmFibGVfZGlzYWJsZSgpIGFuZCBzdHJfb25fb2ZmKCkgaGVscGVycw==?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl1.zte.com.cn 567CHOTs040120
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 686BBAD5.000/4bbNXj4wqdz4x5pp
 
+From: Shao Mingyin <shao.mingyin@zte.com.cn>
 
+Use str_enable_disable() and str_on_off() helper instead of open
+coding the same.
 
-On 2025/7/7 18:10, Peter Zijlstra wrote:
-> On Mon, Jul 07, 2025 at 12:02:47PM +0800, Chen Ridong wrote:
-> 
->>>> And I'm not quite sure I understand this hunk either. If we bail out,
->>>> current->__state is reset to TASK_RUNNING, so what's the problem?
->>>
->>> The issue occurs in this race scenario:
->>>
->>> echo FROZEN > freezer.state
->>>   freeze_cgroup()
->>>     freeze_task()
->>>       fake_signal_wake_up() // wakes task to freeze it
->>>
->>> In task context:
->>> get_signal
->>>   try_to_freeze
->>>     __refrigerator
->>>       WRITE_ONCE(current->__state, TASK_FROZEN); // set TASK_FROZEN
->>>       // race: cgroup state updates to frozen
-> 
-> I suppose this is me not quite knowing how this cgroup freezer works;
-> how does it race? what code marks the task frozen?
-> 
+Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
+Reviewed-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+---
+v4:
+insert new includes alphabetically
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c    | 3 ++-
+ drivers/pmdomain/renesas/rcar-sysc.c         | 3 ++-
+ drivers/pmdomain/rockchip/pm-domains.c       | 3 ++-
+ drivers/pmdomain/samsung/exynos-pm-domains.c | 6 +++---
+ drivers/pmdomain/starfive/jh71xx-pmu.c       | 7 ++++---
+ 5 files changed, 13 insertions(+), 9 deletions(-)
 
-Hi.Peter,
-Thank you for your reply.
+diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+index e001b5c25bed..d93caae5bed5 100644
+--- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
++++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+@@ -17,6 +17,7 @@
+ #include <linux/pm_domain.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/string_choices.h>
+ #include <linux/types.h>
 
-Below is the race condition scenario:
+ #include "rcar-gen4-sysc.h"
+@@ -171,7 +172,7 @@ static int rcar_gen4_sysc_power(u8 pdr, bool on)
+  out:
+ 	spin_unlock_irqrestore(&rcar_gen4_sysc_lock, flags);
 
-get_signal				read freezer.state
-try_to_freeze
-__refrigerator				freezer_read
-					update_if_frozen
-WRITE_ONCE(current->__state, TASK_FROZEN);			
-					// The task is set to frozen(now, frozen(task) == ture).
-					// we suppose other tasks are all frozen.
-					// set cgroup frozen when all tasks are frozen
-					freezer->state |= CGROUP_FROZEN;
-// freezing(current) will return false,
-// since cgroup is frozen(not freezing)
-break out
-__set_current_state(TASK_RUNNING);
-//bug: the task is set to running, but it should be frozen.
+-	pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
++	pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
+ 		 pdr, ioread32(rcar_gen4_sysc_base + SYSCISCR(reg_idx)), ret);
+ 	return ret;
+ }
+diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
+index 047495f54e8a..38406414035a 100644
+--- a/drivers/pmdomain/renesas/rcar-sysc.c
++++ b/drivers/pmdomain/renesas/rcar-sysc.c
+@@ -14,6 +14,7 @@
+ #include <linux/pm_domain.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/string_choices.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+ #include <linux/soc/renesas/rcar-sysc.h>
+@@ -162,7 +163,7 @@ static int rcar_sysc_power(const struct rcar_sysc_pd *pd, bool on)
 
-Please let me know if you have any questions.
+ 	spin_unlock_irqrestore(&rcar_sysc_lock, flags);
 
->>>       freezing(current) now return false
->>>       // We bail out, the task is not frozen but it should be frozen.
->>>
->>> I hope this explanation clarifies the issue I encountered.
->>>
->>
->> Hi, Peter, Tim
->>
->> I was looking at the WARN_ON_ONCE(freezing(p)) check in __thaw_task
->> and started wondering: since we already have !frozen(p) check, is this
->> warning still needed? If we can remove it, maybe reverting commit
->> cff5f49d433f ("cgroup_freezer: cgroup_freezing: Check if not frozen")
->> would be a better approach.
-> 
-> I suppose that is possible; modern sensibilities require we write that
-> function something like so:
-> 
-> void __thaw_task(struct task_struct *p)
-> {
-> 	guard(spinlock_irqsave)(&freezer_lock);
-> 	if (frozen(p) && !task_call_func(p, __restore_freezer_state, NULL))
-> 		wake_up_state(p, TASK_FROZEN);
-> }
+-	pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
++	pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
+ 		 pd->isr_bit, ioread32(rcar_sysc_base + SYSCISR), ret);
+ 	return ret;
+ }
+diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+index 242570c505fb..a7abbb67ae70 100644
+--- a/drivers/pmdomain/rockchip/pm-domains.c
++++ b/drivers/pmdomain/rockchip/pm-domains.c
+@@ -21,6 +21,7 @@
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/mfd/syscon.h>
++#include <linux/string_choices.h>
+ #include <soc/rockchip/pm_domains.h>
+ #include <soc/rockchip/rockchip_sip.h>
+ #include <dt-bindings/power/px30-power.h>
+@@ -599,7 +600,7 @@ static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
+ 					is_on == on, 0, 10000);
+ 	if (ret) {
+ 		dev_err(pmu->dev, "failed to set domain '%s' %s, val=%d\n",
+-			genpd->name, on ? "on" : "off", is_on);
++			genpd->name, str_on_off(on), is_on);
+ 		return ret;
+ 	}
 
-Glad to heard that.
+diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+index 9b502e8751d1..1a892c611dad 100644
+--- a/drivers/pmdomain/samsung/exynos-pm-domains.c
++++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+@@ -13,6 +13,7 @@
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/pm_domain.h>
+ #include <linux/delay.h>
+ #include <linux/of.h>
+@@ -38,7 +39,6 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
+ 	struct exynos_pm_domain *pd;
+ 	void __iomem *base;
+ 	u32 timeout, pwr;
+-	char *op;
 
-Best regards,
-Ridong
+ 	pd = container_of(domain, struct exynos_pm_domain, pd);
+ 	base = pd->base;
+@@ -51,8 +51,8 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
 
+ 	while ((readl_relaxed(base + 0x4) & pd->local_pwr_cfg) != pwr) {
+ 		if (!timeout) {
+-			op = (power_on) ? "enable" : "disable";
+-			pr_err("Power domain %s %s failed\n", domain->name, op);
++			pr_err("Power domain %s %s failed\n", domain->name,
++			       str_enable_disable(power_on));
+ 			return -ETIMEDOUT;
+ 		}
+ 		timeout--;
+diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
+index 74720c09a6e3..dc3e109e273a 100644
+--- a/drivers/pmdomain/starfive/jh71xx-pmu.c
++++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
+@@ -12,6 +12,7 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
++#include <linux/string_choices.h>
+ #include <dt-bindings/power/starfive,jh7110-pmu.h>
+
+ /* register offset */
+@@ -155,7 +156,7 @@ static int jh7110_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+
+ 	if (ret) {
+ 		dev_err(pmu->dev, "%s: failed to power %s\n",
+-			pmd->genpd.name, on ? "on" : "off");
++			pmd->genpd.name, str_on_off(on));
+ 		return -ETIMEDOUT;
+ 	}
+
+@@ -197,8 +198,8 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+ 	}
+
+ 	if (is_on == on) {
+-		dev_dbg(pmu->dev, "pm domain [%s] is already %sable status.\n",
+-			pmd->genpd.name, on ? "en" : "dis");
++		dev_dbg(pmu->dev, "pm domain [%s] is already %s status.\n",
++			pmd->genpd.name, str_enable_disable(on));
+ 		return 0;
+ 	}
+
+-- 
+2.25.1
 
