@@ -1,107 +1,118 @@
-Return-Path: <linux-pm+bounces-30304-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30305-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E15B2AFB8DA
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 18:43:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A7AAAFB95A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 18:58:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3736188654E
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 16:44:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE80F5609A5
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 16:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F64D2248B3;
-	Mon,  7 Jul 2025 16:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E545A2949ED;
+	Mon,  7 Jul 2025 16:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aluFT9jJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rcgh7ctZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1346E3214;
-	Mon,  7 Jul 2025 16:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C2C28C2C3;
+	Mon,  7 Jul 2025 16:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751906628; cv=none; b=IETti6wgF8OlqlcOR/fp3I019wK7sdiDiRg00x+cLtXkI/Mckbv9PjKGiwEHv2odGa3JeIpn4ArX5Dfp1JVaOJUxVG5eVDh4ArYAMRPhvCexJsreip4orA7ISZmOEvYHctO6pEuixAJDkMuL9sCkU+SaDfATVQKfvFiRTKlm4z4=
+	t=1751907448; cv=none; b=sR74nmcsYQ82NJvHZZXnv9fTDjkfC37iRsu7Y/7qLkOXVDc2KuBu5wpAHls+HAcUivXIOnXJ3OmHRjtGYVf+zLXfqagJFHEJ4Im2zGD5I/O+QtwLwIBKWT7l6OWWF202iqjR1YO+TAhDKWkAH5eE3e1qCQ17bJEf5SbON4HW62w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751906628; c=relaxed/simple;
-	bh=qo0v+QPLlpiFYrEAjLkcdvARHqyBsCjBOsJK6mdXbq0=;
+	s=arc-20240116; t=1751907448; c=relaxed/simple;
+	bh=tNNr80vT7oFBRYr1+P4foxOFm7tJDFnWWkbUlEpN0kc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hH6r20oWY9qZTuJ+x0SW30BUf3hvqC4vFIERLnEqwiqoOKtcgWBQX39q5htG95AqC/9XhBpR2+onIH8hl+gQn4AfaqDp5cbFsAsWHzOTiKpVCP4jKZcQhyGTag987XYbrlvUs/2wK+e2ae+mSFMBfhESbXewxSqO0zczbzRrubY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aluFT9jJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D88C4CEF5;
-	Mon,  7 Jul 2025 16:43:47 +0000 (UTC)
+	 To:Cc:Content-Type; b=FpoVZXh9/4ckKktwIcZv/+wmkiufOarcAjPB3NWHL4px4Iw7+0bBCII0s3XACd4DRmoEOXY0Ei0GHXvZrdA09bB7AIPgxKkaWprmXFi0uALo6YeniXJrM9/R26APwz1hgR+zFNosOEXafcoXapQrp0jmMPLJrk1vkWK+x687TiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rcgh7ctZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D0FC4CEE3;
+	Mon,  7 Jul 2025 16:57:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751906627;
-	bh=qo0v+QPLlpiFYrEAjLkcdvARHqyBsCjBOsJK6mdXbq0=;
+	s=k20201202; t=1751907448;
+	bh=tNNr80vT7oFBRYr1+P4foxOFm7tJDFnWWkbUlEpN0kc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aluFT9jJOhqWwZHBSIAzUt84iaQjIQSqK6Ifk9MFTdW6GcTowZvF/c6XT+9dl54PE
-	 bOaTeaT8x6FpeMqK6BTokO7xjrXQE863F+lLT3rCi7IQua8/RcNzAmJuJhgwI86z8J
-	 jC5TdboOy0Pt8xdtacIp4/l1h8ZdzMvy/baDHQabe2l7YI66bPX0j0PPB8fkJcUAKq
-	 HlhNfF/cOboqfBTrNKKxG5zV0xq2j2AbBokg/E4I797itIauboRDBd8/CDnQ+t+lqK
-	 YlXFrucikYqyPpScJZKQF5jSVvQudVr0KP4r0xFRR89iQUPYtQnOJK5ip0xyXn6oMh
-	 GUjLCxh9lUC7A==
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-40d12821c1cso1537149b6e.2;
-        Mon, 07 Jul 2025 09:43:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUx8dxxxxQwGv/oMadxXyF1+HtnbdFcYxej61FT5tP51l/2Wce6NZwBcn+7KyA35LZ/Z1G+03cuRmS7qLs4@vger.kernel.org, AJvYcCWE0+s69zKTS/Do/Z50uaI7WzPMOtKB0+Gc5UljixtjV11olWefn/zoipmQugG5aXgS+TE3ooTmNfbD@vger.kernel.org, AJvYcCWvCHQ8vzKRQeHcouJ5QLavP24JkrSt9VVz5fgKvoEIAIPMy2hvokv9DOZbf7tocVUnwqlfjvGeX1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcZKQfPSu+QUE2VjsG4ckoReXnJURRvuRM/kvwMzt3aST/YLp5
-	q7wj847thX8bF+RpQs9RGdouhP7ndUzn3fu7jasOIg3yejuwniuS7sMFEIWO2hVi883taqCUy/7
-	4RVPgwoL9JJO0zlrr8GtnNQXL2jZWzPg=
-X-Google-Smtp-Source: AGHT+IFDHeZTD7NQfecuChnzhujOybAaAYpaZaRxBlkUeTvBG5UHH4Tb0mjM99CwSaIJZ4hQuFK50vf9N/cCsM23b24=
-X-Received: by 2002:a05:6808:67c9:b0:406:6a21:524f with SMTP id
- 5614622812f47-40d043e7524mr11111111b6e.19.1751906626865; Mon, 07 Jul 2025
- 09:43:46 -0700 (PDT)
+	b=Rcgh7ctZ7DlnsMRiM1U/8VlbtnvRWehPdVS8ZZU9wKmj1cpCUPmmfB4loyA++p3fq
+	 penbj0UXO3pZjt+I8N2O9g9QNAcR9FGqYUx0SwN+Z0kbqL7DXxJGS8P4FVETLyEjEB
+	 wUp+BQt5Qp3H9xykE5y3JBv8ovGyvUUrCETAsvjiK+CxsyrUAI8wCvIpPO7zJjSZJz
+	 8/jgFjI+/JqPw297MQcaG/hZPajlZW7daXI3EtDe5yW8ONUcaqTFItM19kD0mAfYZ9
+	 /+wh8S8EAz4eRT5q/5zC7XFflfKyqVJ3U+2Qo8BqxtM3Y2Q9WNr+Fg9Xf0nKG+425R
+	 zAzwpEGqLp42w==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-60d666804ebso2480987eaf.1;
+        Mon, 07 Jul 2025 09:57:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVtQ7IrCaQ+RVuASDuUcFXPEqVMYjAInaLR3yjyrDc4/No9QBhBdso2ebmUaCs2tNBhtg6WPwX2@vger.kernel.org, AJvYcCWUBI72x0Uxgr+WiGs43j8nQEpSNcQlVR4fcIeuQ4yyRw1UAIUMlDGCkGdp3u0ILAcHd70uTGIichFbN6Q=@vger.kernel.org, AJvYcCWqXgw4vMvqlHPkg/VurcYQXJjV7U5hLshUoZwlHccv9/RwYalFp/5vODY1I2849Q1hh8hG7MBs4+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbhON56R82qecQC6Rk6hy18OkozNZ3Q8a4e2FJ7QlbsAHiuGkJ
+	ajPI6hNHzzVn8fpdfbHeqiUhrsJSkYQjPCEQEKKEZ38gXOV+JQdzRHw8pvpean/vF88rW8M59tD
+	kdrYcTJpOc9K8m+XVbXlGi2T2LjIJbe4=
+X-Google-Smtp-Source: AGHT+IELhvUdbErMoodFxPp5UcX5oIhVVIY14d49V912ioILHXfP/Mqq4p8T++smi+2bzoWhvw7mgmof0hvX3aZg6FQ=
+X-Received: by 2002:a4a:bb8d:0:b0:611:5a9e:51c4 with SMTP id
+ 006d021491bc7-613c03bcf11mr98988eaf.4.1751907447677; Mon, 07 Jul 2025
+ 09:57:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250705110005.4343-1-sumeet4linux@gmail.com>
-In-Reply-To: <20250705110005.4343-1-sumeet4linux@gmail.com>
+References: <20250707-trip-point-v1-1-8f89d158eda0@chromium.org>
+In-Reply-To: <20250707-trip-point-v1-1-8f89d158eda0@chromium.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 7 Jul 2025 18:43:35 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ghk=s9r3BHW6A19_RwfCFhFconmR-aWKv7O9SCdgKSMQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwknHctRSFbyQILlEAe-z-BjIXdYKFXUwEq4gZdL5JRwp__LwaXRQUGcp0
-Message-ID: <CAJZ5v0ghk=s9r3BHW6A19_RwfCFhFconmR-aWKv7O9SCdgKSMQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: FAN: Update fps count debug print
-To: Sumeet Pawnikar <sumeet4linux@gmail.com>
-Cc: rafael@kernel.org, linux-acpi@vger.kernel.org, lenb@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Mon, 7 Jul 2025 18:57:15 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gOm4-qmAGGswk9nuPb45UGabNK-DqkcZEGmTO71tRLkQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxAanzGlIkOQgjFHOTHg1kMQRxJ2B69g__BbWCYP_YxWs5cjixLuT7YgZk
+Message-ID: <CAJZ5v0gOm4-qmAGGswk9nuPb45UGabNK-DqkcZEGmTO71tRLkQ@mail.gmail.com>
+Subject: Re: [PATCH 6.6] thermal/of: Fix mask mismatch when no trips subnode
+To: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 5, 2025 at 1:00=E2=80=AFPM Sumeet Pawnikar <sumeet4linux@gmail.=
-com> wrote:
+On Mon, Jul 7, 2025 at 12:27=E2=80=AFPM Hsin-Te Yuan <yuanhsinte@chromium.o=
+rg> wrote:
 >
-> Update invalid control value returned debug print with
-> appropriate message as no matching fps control value
-> for checking fan fps count condition.
+> After commit 725f31f300e3 ("thermal/of: support thermal zones w/o trips
+> subnode") was backported on 6.6 stable branch as commit d3304dbc2d5f
+> ("thermal/of: support thermal zones w/o trips subnode"), thermal zones
+> w/o trips subnode still fail to register since `mask` argument is not
+> set correctly. When number of trips subnode is 0, `mask` must be 0 to
+> pass the check in `thermal_zone_device_register_with_trips()`.
 >
-> Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
+> Set `mask` to 0 when there's no trips subnode.
+>
+> Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
 > ---
-> v1->v2: Addressed review comment received from Rafael Wysocki
->         to update the debug message appropriately.
-> ---
->  drivers/acpi/fan_core.c | 2 +-
+>  drivers/thermal/thermal_of.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-> index 8ad12ad3aaaf..095502086b41 100644
-> --- a/drivers/acpi/fan_core.c
-> +++ b/drivers/acpi/fan_core.c
-> @@ -102,7 +102,7 @@ static int fan_get_state_acpi4(struct acpi_device *de=
-vice, unsigned long *state)
->                         break;
->         }
->         if (i =3D=3D fan->fps_count) {
-> -               dev_dbg(&device->dev, "Invalid control value returned\n")=
-;
-> +               dev_dbg(&device->dev, "No matching fps control value\n");
->                 return -EINVAL;
->         }
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 0f520cf923a1e684411a3077ad283551395eec11..97aeb869abf5179dfa512dd74=
+4725121ec7fd0d9 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -514,7 +514,7 @@ static struct thermal_zone_device *thermal_of_zone_re=
+gister(struct device_node *
+>         of_ops->bind =3D thermal_of_bind;
+>         of_ops->unbind =3D thermal_of_unbind;
 >
-> --
+> -       mask =3D GENMASK_ULL((ntrips) - 1, 0);
+> +       mask =3D ntrips ? GENMASK_ULL((ntrips) - 1, 0) : 0;
+>
+>         tz =3D thermal_zone_device_register_with_trips(np->name, trips, n=
+trips,
+>                                                      mask, data, of_ops, =
+&tzp,
+>
+> ---
 
-Applied as 6.17 material with edited subject, thanks!
+If this issue is present in the mainline, it is not necessary to
+mention "stable" in the changelog.
+
+Just post a patch against the mainline with an appropriate Fixes: tag.
+
+Thanks!
 
