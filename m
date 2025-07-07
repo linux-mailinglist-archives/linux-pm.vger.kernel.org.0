@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-30276-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30275-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10336AFB1BE
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 12:56:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A174CAFB1BF
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 12:56:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9BD01891BC1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:57:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91B353ACC73
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031F6299AB1;
-	Mon,  7 Jul 2025 10:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB353299A98;
+	Mon,  7 Jul 2025 10:56:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CjBAoZCS"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="j4yvMqnm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05519296158;
-	Mon,  7 Jul 2025 10:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054B4296155;
+	Mon,  7 Jul 2025 10:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751885781; cv=none; b=qjtRLcJlNKClRtrOuEPv6c+MLaaAVyCxOPVl0sfTfzweTqFQ3EG8lB/qy+Ap2u0c5mQVN0mbRAquNcObdwl6Ybt5VotRgt9nzBc4ffabFpfOldky6AcxjgPVTzYqgigZuUwJH9UaWrha3+ztOzuedMv9hpuxM8D16/x0IowDuJU=
+	t=1751885781; cv=none; b=t84mcX+mxL0EMRt4RO8SUQxiJsj7g6zDfRSnfl4vZhe5PVT2SuLwRae/ep+GAYJ1P36M31OLzQu0QbfIEa+2bXDXKE/AiNH2vH/NI2P5j3HyPjUaERbVss1eBCo6otruH5fKTkSXsClmuXDCAec3I/UxmfxWGEyFrsI8SaDCIRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751885781; c=relaxed/simple;
-	bh=mJNDHPpArKghJz+dCLO1GxtYWSj/lPdQ4uLFczfyhGE=;
+	bh=BGp/by0qy5om0sHBtMnQDXf+Z4hF738kIkEKJDLYgVI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bvCwsmxGWTvhWhfY2OnT6jNcYkhv5IlS4d5MEmjnXRZmwk7ePb3W60w5uNNVhcNEUtSjSw1GVuUyOjRrdxy9sF5SKYa1NswNn4jWqhNNWPlcCCpB+pPkCdOKeXUPmlmhvOYw43uGHlkXiIYBNzxSgrJXAKLyBcw98EC0w19OsHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CjBAoZCS; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version:Content-Type; b=t5OCaj3eot2mO3kkgMmY9JtgiVLwk2rD0j/uKpIYcccaemt1GLQbfX+FzxLcjCRR5hOlj3MeGTDMONidIE0jnjO/YFJd0D4DP800fv4ee4oi3vmYMQVxMGFgeGyK8QUT3Q83sdsFzPd0M8SvGO83IcS+1gYctHlA3JQJHkdJOYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=j4yvMqnm; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1751885777;
-	bh=mJNDHPpArKghJz+dCLO1GxtYWSj/lPdQ4uLFczfyhGE=;
+	s=mail; t=1751885778;
+	bh=BGp/by0qy5om0sHBtMnQDXf+Z4hF738kIkEKJDLYgVI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CjBAoZCS9fRNqDaAF+owIAkgBE1lWANHZTdJqUKVjvTH6Bl64l1eGNl8TUXt4Hgs2
-	 ZlTiZf1cFhXsQ1BEQcS2uBsdjNtGS0Z0n0od0ph+LbsWiJYX17+t1bP2eo0W5MFycw
-	 ZC64f1pWxHW7Qar60Jf0hNdG3b14dylhkaoss0IdvhgmmOmJzfX0qTr4MAYRIYSrv/
-	 2KVVX8P53Xct1m3iGqQW3BuBIScFykObo2B9A0G19XU3GjGWkQYp0yOxVkrWWKHi0s
-	 heHrWM9/Y36KiQYO13RkDsB4VTX51kQVbgn04I0cZ1tICLx/em+9Bwz1mw5ETI/rTm
-	 GBbr7W+L+ZuoQ==
+	b=j4yvMqnmQbWWbz/fHOpX9o4cDrOSeZfW+k7klJhncmmbXh8GtdbjRfI1Y23etjweO
+	 b5VM4bQoSOC1XuhBOhvYchZBnSAY1rlMnD4zxS/Cwp+4Y2W9jfZ2pd0UEePEB2xFf/
+	 k+43/GZItqsamlYfT0/cqa1P2kEMRcsAgNKIL0NmW3HQatmQ+Z7gcNgEEWVeonFAks
+	 euYageJJIk7TeTm/BVc2mQhQiwu8SUTAARCJZn6PFHFu5UIaiJHi8SfVSeYPTEsXIo
+	 9OE5trqVkN1Ls4PrbDaL2nH1aNKACFE2fb1tFYkwyxe4TsWjEhod8rQY6cimdsY52V
+	 apoK9pOqbe7HQ==
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4A3A417E108A;
-	Mon,  7 Jul 2025 12:56:16 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7353817E1110;
+	Mon,  7 Jul 2025 12:56:17 +0200 (CEST)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: linux-mediatek@lists.infradead.org
 Cc: robh@kernel.org,
@@ -68,9 +68,9 @@ Cc: robh@kernel.org,
 	linux-pm@vger.kernel.org,
 	kernel@collabora.com,
 	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
-Subject: [PATCH v2 02/10] dt-bindings: clock: mediatek: Document #access-controller-cells
-Date: Mon,  7 Jul 2025 12:55:57 +0200
-Message-ID: <20250707105605.98248-3-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 03/10] dt-bindings: power: mediatek: Document access-controllers property
+Date: Mon,  7 Jul 2025 12:55:58 +0200
+Message-ID: <20250707105605.98248-4-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250707105605.98248-1-angelogioacchino.delregno@collabora.com>
 References: <20250707105605.98248-1-angelogioacchino.delregno@collabora.com>
@@ -83,200 +83,93 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Allow the #access-controller-cells property on all of the infracfg
-controllers on all MediaTek SoCs, as this always acts as an access
-control provider.
+Allow specifying access-controllers in the main power controller
+node and deprecate the old mediatek,infracfg, mediatek,infracfg-nao
+and mediatek,smi properties located in the children.
+
+This is done in order to both simplify the power controller
+nodes and in preparation for adding support for new generation
+SoCs like MT8196/MT6991 and other variants, which will need
+to set protection on new busses.
 
 Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../bindings/clock/mediatek,infracfg.yaml         |  3 +++
- .../bindings/clock/mediatek,mt8186-sys-clock.yaml | 15 +++++++++++++++
- .../bindings/clock/mediatek,mt8188-sys-clock.yaml | 15 +++++++++++++++
- .../bindings/clock/mediatek,mt8192-sys-clock.yaml | 15 +++++++++++++++
- .../bindings/clock/mediatek,mt8195-sys-clock.yaml | 15 +++++++++++++++
- .../bindings/clock/mediatek,mt8365-sys-clock.yaml | 15 +++++++++++++++
- 6 files changed, 78 insertions(+)
+ .../power/mediatek,power-controller.yaml      | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,infracfg.yaml b/Documentation/devicetree/bindings/clock/mediatek,infracfg.yaml
-index d1d30700d9b0..27f1a31c3424 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,infracfg.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,infracfg.yaml
-@@ -47,6 +47,9 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+index 9c7cc632abee..82bfd3899b22 100644
+--- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
++++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+@@ -44,6 +44,17 @@ properties:
+   '#size-cells':
+     const: 0
  
-+  '#access-controller-cells':
-+    const: 0
++  access-controllers:
++    description:
++      A number of phandles to external blocks to set and clear the required
++      bits to enable or disable bus protection, necessary to avoid any bus
++      faults while enabling or disabling a power domain.
++      For example, this may hold phandles to INFRACFG and SMI.
++    minItems: 1
++    maxItems: 3
++    items:
++      maxItems: 1
 +
-   '#clock-cells':
-     const: 1
+ patternProperties:
+   "^power-domain@[0-9a-f]+$":
+     $ref: "#/$defs/power-domain-node"
+@@ -123,14 +134,17 @@ $defs:
+       mediatek,infracfg:
+         $ref: /schemas/types.yaml#/definitions/phandle
+         description: phandle to the device containing the INFRACFG register range.
++        deprecated: true
  
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8186-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8186-sys-clock.yaml
-index 1c446fbc5108..2a1bf9073b7d 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt8186-sys-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt8186-sys-clock.yaml
-@@ -36,6 +36,9 @@ properties:
-   reg:
-     maxItems: 1
+       mediatek,infracfg-nao:
+         $ref: /schemas/types.yaml#/definitions/phandle
+         description: phandle to the device containing the INFRACFG-NAO register range.
++        deprecated: true
  
-+  '#access-controller-cells':
-+    const: 0
+       mediatek,smi:
+         $ref: /schemas/types.yaml#/definitions/phandle
+         description: phandle to the device containing the SMI register range.
++        deprecated: true
+ 
+     required:
+       - reg
+@@ -138,6 +152,31 @@ $defs:
+ required:
+   - compatible
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mediatek,mt8183-power-controller
++    then:
++      properties:
++        access-controllers:
++          minItems: 2
++          maxItems: 2
 +
-   '#clock-cells':
-     const: 1
- 
-@@ -48,6 +51,18 @@ required:
- 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mediatek,mt8365-power-controller
++    then:
++      properties:
++        access-controllers:
++          minItems: 3
++          maxItems: 3
++
  additionalProperties: false
  
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: mediatek,mt8186-infracfg_ao
-+then:
-+  properties:
-+    '#access-controller-cells': true
-+else:
-+  properties:
-+    '#access-controller-cells': false
-+
  examples:
-   - |
-     topckgen: syscon@10000000 {
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml
-index db13d51a4903..08472d363e8a 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml
-@@ -36,6 +36,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  '#access-controller-cells':
-+    const: 0
-+
-   '#clock-cells':
-     const: 1
- 
-@@ -49,6 +52,18 @@ required:
- 
- additionalProperties: false
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: mediatek,mt8188-infracfg_ao
-+then:
-+  properties:
-+    '#access-controller-cells': true
-+else:
-+  properties:
-+    '#access-controller-cells': false
-+
- examples:
-   - |
-     clock-controller@10000000 {
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8192-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8192-sys-clock.yaml
-index bf8c9aacdf1e..f1ab8b0e0a98 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt8192-sys-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt8192-sys-clock.yaml
-@@ -26,6 +26,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  '#access-controller-cells':
-+    const: 0
-+
-   '#clock-cells':
-     const: 1
- 
-@@ -38,6 +41,18 @@ required:
- 
- additionalProperties: false
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: mediatek,mt8192-infracfg
-+then:
-+  properties:
-+    '#access-controller-cells': true
-+else:
-+  properties:
-+    '#access-controller-cells': false
-+
- examples:
-   - |
-     topckgen: syscon@10000000 {
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8195-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8195-sys-clock.yaml
-index 69f096eb168d..dcce8b188e4f 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt8195-sys-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt8195-sys-clock.yaml
-@@ -34,6 +34,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  '#access-controller-cells':
-+    const: 0
-+
-   '#clock-cells':
-     const: 1
- 
-@@ -46,6 +49,18 @@ required:
- 
- additionalProperties: false
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: mediatek,mt8195-infracfg_ao
-+then:
-+  properties:
-+    '#access-controller-cells': true
-+else:
-+  properties:
-+    '#access-controller-cells': false
-+
- examples:
-   - |
-     topckgen: syscon@10000000 {
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8365-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8365-sys-clock.yaml
-index 643f84660c8e..b6f074f98db7 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt8365-sys-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt8365-sys-clock.yaml
-@@ -28,6 +28,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  '#access-controller-cells':
-+    const: 0
-+
-   '#clock-cells':
-     const: 1
- 
-@@ -38,6 +41,18 @@ required:
- 
- additionalProperties: false
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: mediatek,mt8365-infracfg
-+then:
-+  properties:
-+    '#access-controller-cells': true
-+else:
-+  properties:
-+    '#access-controller-cells': false
-+
- examples:
-   - |
-     topckgen: clock-controller@10000000 {
 -- 
 2.49.0
 
