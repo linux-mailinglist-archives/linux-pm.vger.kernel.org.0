@@ -1,44 +1,42 @@
-Return-Path: <linux-pm+bounces-30250-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30251-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C255AFAEB1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:33:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58348AFAEB8
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 10:35:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 975F5166A99
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:33:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D42A7A2086
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4822727702E;
-	Mon,  7 Jul 2025 08:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D24028A1D8;
+	Mon,  7 Jul 2025 08:35:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D46E0286D49;
-	Mon,  7 Jul 2025 08:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B73286880;
+	Mon,  7 Jul 2025 08:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751877190; cv=none; b=U/9wlpfM3B71aQsn8qPkBUBLhTn0lhkDyOtsRw30rG8Vt0iev/ebMCFlD7amIPSTlUW1RCNeylkK8XlUDdFcCbEFs2Q9t0MmdhI8ZGbvyT0nse+OBj2La6VQkoBbg8kzjkfSex4vOlY7E174H96aw41uAPvd43FtfZghgAKJ8RI=
+	t=1751877347; cv=none; b=l1o4i01l6PD6XeuJyQn4lX1rPJAltoWmKyngzsPttYgkuQXcL60i65C2O0usLhMXA3r7iX/+0gImC5NFlvXwPULlpSwBpx67A6aOP/zXzFy9wRXActdSCP0EtRZ4SRjet1exyHvjxE65tbkk7KExCSVI1P7xNIiGkQVCab4KHMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751877190; c=relaxed/simple;
-	bh=dOerYKCIIu0Ldwt7JnAEhthNKLc0cAZQdHOqiQZGC9c=;
+	s=arc-20240116; t=1751877347; c=relaxed/simple;
+	bh=aCW3py4LC/FhSwrb7dWFXORC15iko6Ud2YCiD3w7Y8Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aQ/i9+gqvu0eiwdgZgYkA9ob/baziMStuJnL4/SVGdDZsUfcg5lAIttJ5GxChy7A1gtGWYn1JMHcsrzLt6x/V58wrtk5JJvnrait86X4v71jdhriAECfB6xYPWoAGKlqN3HUtHvj+vZxFN2ov2zJkE7I0eRSlvaChgE0O4u33Lw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=KV0H+9P7gBs+FLiZYSAMDSTt11qhVaRgWpgdhIboUsFjCJ5/y1E110VVxTF7WoRswi9L9bu8PazYk/wOjs7vBVJ0bgrQmGX2w1c1j+CE3CEj9wWwTO7Zvw15pgA8GdZ9h3qDffyjmFDH7ylWWPWElSCrOKv77kvAGwNFdVwDTW4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46956153B;
-	Mon,  7 Jul 2025 01:32:54 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62C011595;
+	Mon,  7 Jul 2025 01:35:32 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 046BB3F6A8;
-	Mon,  7 Jul 2025 01:33:02 -0700 (PDT)
-Date: Mon, 7 Jul 2025 10:32:46 +0200
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 21BE13F6A8;
+	Mon,  7 Jul 2025 01:35:40 -0700 (PDT)
+Date: Mon, 7 Jul 2025 10:35:37 +0200
 From: Beata Michalska <beata.michalska@arm.com>
-To: Prashant Malani <pmalani@google.com>
-Cc: Jie Zhan <zhanjie9@hisilicon.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Ben Segall <bsegall@google.com>,
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: Prashant Malani <pmalani@google.com>, Ben Segall <bsegall@google.com>,
 	Dietmar Eggemann <dietmar.eggemann@arm.com>,
 	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
 	open list <linux-kernel@vger.kernel.org>,
@@ -49,16 +47,15 @@ Cc: Jie Zhan <zhanjie9@hisilicon.com>,
 	Valentin Schneider <vschneid@redhat.com>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
 	z00813676 <zhenglifeng1@huawei.com>
 Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-Message-ID: <aGuGLu2u7iKxR3ul@arm.com>
+Message-ID: <aGuG2ayA23ojsUix@arm.com>
 References: <20250619000925.415528-1-pmalani@google.com>
  <20250619000925.415528-3-pmalani@google.com>
  <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com>
  <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
  <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
- <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
- <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,113 +64,112 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
+In-Reply-To: <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
 
-Hi Prashant,
-
-On Wed, Jul 02, 2025 at 11:38:11AM -0700, Prashant Malani wrote:
-> Hi All,
+On Fri, Jun 27, 2025 at 03:54:59PM +0800, Jie Zhan wrote:
 > 
-> Ionela, Beata, could you kindly review ?
+> Hi Prashant,
 > 
-> On Fri, 27 Jun 2025 at 10:07, Prashant Malani <pmalani@google.com> wrote:
-> >
-> > Hi Jie,
-> >
-> > On Fri, 27 Jun 2025 at 00:55, Jie Zhan <zhanjie9@hisilicon.com> wrote:
-> > >
-> > >
-> > > Hi Prashant,
-> > >
-> > > Sorry for a late reply as I'm busy on other stuff and this doesn't seem to
-> > > be an easy issue to solve.
-> > >
-> >
-> > No worries, the ping was in general to all the people in the thread :)
-> >
-> > > For the latest kernel, [1] provides a new 'cpuinfo_avg_freq' sysfs file to
-> > > reflect the frequency base on AMUs, which is supposed to be more stable.
-> > > Though it usually shows 'Resource temporarily unavailable' on my platform
-> > > at the moment and looks a bit buggy.
-> > >
-> > > Most of the related discussions can be found in the reference links in [1].
-> > > [1] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.michalska@arm.com/
-> > >
-> > > As reported, the current frequency sampling method may show an large error
-> > > on 1) 100% load, 2) high memory access pressure, 3) idle cpus in your case.
-> > >
-> > > AFAICS, they may all come from the unstable latency accessing remote AMUs
-> > > for 4 times but delaying a fixed 2us sampling window.
-> >
-> > I tried applying [1] which consolidates the ref and del register reads
-> > into 1 IPI, but that did not make a difference. The values still
-> > fluctuate wildly.
-> >
-> > >
-> > > Increase the sampling windows seems to help but also increase the time
-> > > overhead, so that's not favoured by people.
-> > >
-> >
-> > This experiment did not appear to help in our case. It's a point in
-> > the direction that this method is inherently inaccurate during idle
-> > situations.
-> >
-> > > On 20/06/2025 13:07, Prashant Malani wrote:
-> > > > Hi Jie,
-> > > > On Thu, 19 Jun 2025 at 20:53, Jie Zhan <zhanjie9@hisilicon.com> wrote:
-> > > >> On 19/06/2025 08:09, Prashant Malani wrote:
-> > > >>> t0: ref=899127636, del=3012458473
-> > > >>> t1: ref=899129626, del=3012466509
-> > > >>> perf=40
-> > > >>
-> > > >> In this case, the target cpu is mostly idle but not fully idle during the
-> > > >> sampling window since the counter grows a little bit.
-> > > >> Perhaps some interrupts happen to run on the cpu shortly.
-> > >
-> > > Check back here again, I don't think it 'mostly idle'.
-> > > Diff of ref counters is around 2000, and I guess the ref counter freq is
-> > > 1GHz on your platform?  That's exactly 2us, so the target cpu is mostly
-> > > busy.
+> Sorry for a late reply as I'm busy on other stuff and this doesn't seem to
+> be an easy issue to solve.
 > 
-> I think it is pertinent to note: the actual act of reading the CPPC counters
-> will (at least for ACPI_ADR_SPACE_FIXED_HARDWARE counters)
-> wake the CPU up, so even if a CPU *was* idle, the reading of the counters
-> calls cpc_read_ffh() [1] which does an IPI on the target CPU [2] thus waking
-> it up from WFI.
+> I may provide some thoughts but probably need more time to go through the
+> history and come up with a good solution.
+>  
+> Actually, the inaccuracy of cppc_cpufreq_get_rate() has been reported and
+> discussed many times.  I believe your issue is just one of the cases.
 > 
-> And that brings us back to the original assertion made in this patch:
-> the counter values are quite unreliable when the CPU is in this
-> idle (or rather I should correct that to, waking from WFI) state.
+> For the latest kernel, [1] provides a new 'cpuinfo_avg_freq' sysfs file to
+> reflect the frequency base on AMUs, which is supposed to be more stable.
+> Though it usually shows 'Resource temporarily unavailable' on my platform
+> at the moment and looks a bit buggy.
 >
-I'd say that's very platform specific, and as such playing with the delay makes
-little sense. I'd need to do more deliberate testing, but I haven't noticed
-(yet) any discrepancies in AMU counters on waking up.
-Aside, you have mentioned that you've observed the frequency reported to be
-above max one (4GHz vs 3.5HZ if I recall correctly) - shouldn't that be clamped
-by the driver if the values are outside of supported range ?
-
-Verifying whether the CPU is idle before poking it just to get a counters
-reading to derive current frequency from those does feel rather like an
-appealing idea. Narrowing the scope for ACPI_ADR_SPACE_FIXED_HARDWARE cases
-could be solved by providing a query for the address space. Though I am not an
-expert here so would be good to get some input from someone who is
-(on both).
+I'd say that would mean the CPU for which the 'cpuinfo_avg_freq' is queried is
+mostly idle. If that is not the case then I guess it is 'buggy' and should be
+fixed, so more details would be appreciated.
 
 ---
 BR
 Beata
-> This work around probably hits more types of implementations, but
-> I can't see another way to limit it to only ARM FFH. Open to suggestions!
+> Most of the related discussions can be found in the reference links in [1].
+> [1] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.michalska@arm.com/
 > 
-> [1] https://elixir.bootlin.com/linux/v6.15.4/source/arch/arm64/kernel/topology.c#L482
-> [2] https://elixir.bootlin.com/linux/v6.15.4/source/arch/arm64/kernel/topology.c#L453
-
+> As reported, the current frequency sampling method may show an large error
+> on 1) 100% load, 2) high memory access pressure, 3) idle cpus in your case.
 > 
-> Best regards,
+> AFAICS, they may all come from the unstable latency accessing remote AMUs
+> for 4 times but delaying a fixed 2us sampling window.
 > 
-> -Prashant
+> Increase the sampling windows seems to help but also increase the time
+> overhead, so that's not favoured by people.
 > 
+> On 20/06/2025 13:07, Prashant Malani wrote:
+> > Hi Jie,
+> > 
+> > Thanks for taking a look at the patch.
+> > 
+> > On Thu, 19 Jun 2025 at 20:53, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+> >> On 19/06/2025 08:09, Prashant Malani wrote:
+> >>> AMU performance counters tend to be inaccurate when measured on idle CPUs.
+> >>> On an idle CPU which is programmed to 3.4 GHz (verified through firmware),
+> >>> here is a measurement and calculation of operating frequency:
+> >>>
+> >>> t0: ref=899127636, del=3012458473
+> >>> t1: ref=899129626, del=3012466509
+> >>> perf=40
+> >>
+> >> In this case, the target cpu is mostly idle but not fully idle during the
+> >> sampling window since the counter grows a little bit.
+> >> Perhaps some interrupts happen to run on the cpu shortly.
 > 
-> -- 
-> -Prashant
+> Check back here again, I don't think it 'mostly idle'.
+> Diff of ref counters is around 2000, and I guess the ref counter freq is
+> 1GHz on your platform?  That's exactly 2us, so the target cpu is mostly
+> busy.
+> 
+> So that might be some other issue.  Let's forget the minimum threshold
+> stuff below for now.
+> 
+> >>
+> >> Thus, the actual issue is the accuracy of frequency sampling becomes poor
+> >> when the delta of counters are too small to obtain a reliable accuracy.
+> >>
+> >> Would it be more sensible to put a minimum threshold of the delta of
+> >> counters when sampling the frequency?
+> > 
+> > I'm happy to throw together a patch if there is some safe
+> > threshold the experts here can agree on for the minimum delta for
+> > the ref counter. I would caution that with this sort of approach we
+> > start running into the familiar issue:
+> > - What value is appropriate? Too large and you get false
+> > positives (falling back to the idle invalid path when we shouldn't), and
+> > too less and you get false negatives (we still report inaccurate
+> > counter values).
+> > - Is the threshold the same across platforms?
+> > - Will it remain the same 5/10 years from now?
+> > 
+> >>  BTW, that ABI
+> >> doesn't seem to be synchronous at all, i.e. the cpu might be busy when we
+> >> check and then become idle when sampling.
+> >>
+> > 
+> > I don't think this is necessarily an issue. The ABI doesn't need to be
+> > synchronous; it is merely a snapshot of the scheduler view of that CPU
+> > at a point in time. Even the current method of perf counters sampling
+> > is purely hueristic. The CPU might be idle for the 2 usec the
+> > sampling is done, and servicing traffic before and after that.
+> > This is inherent whenever you are sampling any system state.
+> 
+> Then the issue is not totally solved, just less often?
+> 
+> > 
+> > I would imagine it is more reliable to trust the kernel scheduler's view
+> > of whether a CPU is idle, than relying on counters and a calculation
+> > method which are sensitive and unreliable for idle systems
+> > (i.e stray interrupts can throw off the calculations).
+> > 
+> > That said, I'm happy to go with the approach folks on this list recommend.
+> > 
+> > Cheers,
+> > 
 
