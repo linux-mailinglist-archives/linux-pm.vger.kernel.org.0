@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-30244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A166AFABED
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:31:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ADE7AFABF2
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 08:33:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C7701899CE0
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 06:31:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C14AE3A37C5
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 06:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C342727702E;
-	Mon,  7 Jul 2025 06:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807DA27991E;
+	Mon,  7 Jul 2025 06:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PVqZknEw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNVts38q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929502F50;
-	Mon,  7 Jul 2025 06:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D6D2750FD;
+	Mon,  7 Jul 2025 06:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751869874; cv=none; b=jFDzqwRJseMFdBnOgRCfTHTxB/LwL3S+U1uYJ4orkFfoUVUl+LjXYJZ2jPYxzcBxrZoGbauXNfWvVxGVmJpzc60j12csCxqdvgKD8R/BQGme/MXQQZCzxL6egJFHQs/2kiCubYgpQmYZkiJU2YFX4R5GuOpninLDTUkxlHqrJTg=
+	t=1751870019; cv=none; b=C7dfWE7XI0Y7giVSqqmZPJ0OVHJ3jed1XiLnWtd0IbRu6IfIFBBtxdsXKj6Li1xpcERUROom5cCX1YvjlF+pUYeexeEm+yb0PiI6hdrQ96NfdzG3FPaMuzgnVHCKjD6FeX+pYXkz0K5Dsp2di5nN/AtT/jV9PeXWw/CVi/H+l7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751869874; c=relaxed/simple;
-	bh=Dp4PB4uQ9UlsKQjhR6+p8KTy4sduZM+pc6pwopcw86s=;
+	s=arc-20240116; t=1751870019; c=relaxed/simple;
+	bh=h24qSJ8Oi8rLBWzEyRk9kWuH5HysbbgpfVyMwQU3sDQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GJ925Pu5qZTx862GEP9u0NTyDy18aLDLjPu4JLh0cTPBPdwHemO+KH1qOSNeTYSS6/mh7S7x1a7cXvqy8TTUess71C0/ioOyCblkaCiz0Dvqb44mMbhx63vkG45t3kOtCFzNZfniZDSEDR46Cc4bXIZ+HMVYvEZUEGrhU/KhwJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PVqZknEw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 935BFC4CEE3;
-	Mon,  7 Jul 2025 06:31:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=e1kK0gtTi0r03806iiyDluklv42l6uTMxUYmsO7duins8BmjN3GxuxjOhokJGu+0PrUUDBj8ub+uIC3RZvqsEDpOLbsWQn0W1Q6EI6r/rbfnLL3Xr6Mnk8bDVq2Fu9S7yOVrEzJcjLrwACPpcULTlGHA9xVeeFCtmczejY+ZYCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNVts38q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E327C4CEE3;
+	Mon,  7 Jul 2025 06:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751869874;
-	bh=Dp4PB4uQ9UlsKQjhR6+p8KTy4sduZM+pc6pwopcw86s=;
+	s=k20201202; t=1751870018;
+	bh=h24qSJ8Oi8rLBWzEyRk9kWuH5HysbbgpfVyMwQU3sDQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PVqZknEwQSsVOljR/z6LzhmwxegK6GNwiBbGAEIzG7igrT9cSHrxzGfMN2dr2OkjW
-	 /MvE9fKZPCkwj8a8gmgm+J0C2/PX0C3tmE1vqIFI05Pe5TfOWpnvU8T7eB6/k4sP+a
-	 sbncJaX8mYRz6x2IHd+89sSvNQqOv0rq9crRbFDjMmmWpIsBXmINIQYSSAF8d5QIzw
-	 0moFrfrFrmvRdI/lgT3Tzo0zcAgB5u9KHySi/7jb7WpFXc23zldnP5GeSkDco6w9WW
-	 snp+yrJNENBQiywM+iIS/OtE0q96OpNQ/tqmRYtJQVtAQYRWTorYmtkuW4ky4ORO9t
-	 bbunM7VxZQilg==
-Date: Mon, 7 Jul 2025 08:31:11 +0200
+	b=PNVts38qKFiTktRXWRXh6+TlqSdyDKDvCa2/ImWYK0/XxpNZsykfGB7JAQ20u1kRV
+	 5EP+uNwiFYIFBVDX8fo6U5cWii2AKx0S9qBMhTmAc6QUsjnEv+vr4kYn4Bqi4ZkzlT
+	 MH3efX8fVmTsr6/tqCPYnxOv8vyuW4zBZZPO1Th3LSd9pbceYxdgmkLIlrtPDjxBne
+	 oxuosy7fbK1EragWHWFY2PNmm0zpGs88gg8mIRTabCuDkqvGRLnaW2Fi+NxCQ+m96W
+	 jPrKdtxC7rgg7cl9C1pOQX/LcFJSgM1tsQNoEXmYw87DfUgxr0iNri7SeOk19+aGGi
+	 raLJ94KvYDJDw==
+Date: Mon, 7 Jul 2025 08:33:36 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Frank Wunderlich <linux@fw-web.de>
 Cc: MyungJoo Ham <myungjoo.ham@samsung.com>, 
@@ -59,11 +59,11 @@ Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v8 02/16] dt-bindings: net: mediatek,net: allow up to 8
- IRQs
-Message-ID: <20250707-modest-awesome-baboon-aec601@krzk-bin>
+Subject: Re: [PATCH v8 04/16] dt-bindings: net: mediatek,net: add sram
+ property
+Message-ID: <20250707-masked-ambrosial-pegasus-2ff8fc@krzk-bin>
 References: <20250706132213.20412-1-linux@fw-web.de>
- <20250706132213.20412-3-linux@fw-web.de>
+ <20250706132213.20412-5-linux@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,35 +72,14 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250706132213.20412-3-linux@fw-web.de>
+In-Reply-To: <20250706132213.20412-5-linux@fw-web.de>
 
-On Sun, Jul 06, 2025 at 03:21:57PM +0200, Frank Wunderlich wrote:
+On Sun, Jul 06, 2025 at 03:21:59PM +0200, Frank Wunderlich wrote:
 > From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Increase the maximum IRQ count to 8 (4 FE + 4 RSS/LRO).
+> Meditak Filogic SoCs (MT798x) have dedicated MMIO-SRAM for dma operations.
 
-Because? Hardware was updated? It was missing before?
-
-> 
-> Frame-engine-IRQs (max 4):
-> MT7621, MT7628: 1 IRQ
-> MT7622, MT7623: 3 IRQs (only two used by the driver for now)
-> MT7981, MT7986, MT7988: 4 IRQs (only two used by the driver for now)
-
-You updated commit msg - looks fine - but same problem as before in your
-code. Now MT7981 has 4-8 interrupts, even though you say here it has only
-4.
-
-> 
-> Mediatek Filogic SoCs (mt798x) have 4 additional IRQs for RSS and/or
-> LRO.
-
-Although I don't know how to treat this. Just say how many interrupts
-are there (MT7981, MT7986, MT7988: 4 FE and 4 RSS), not 4 but later
-actually 4+4.
-
-I also do not understand why 7 interrupts is now valid... Are these not
-connected physically?
+You need "sram: false" for other variants.
 
 Best regards,
 Krzysztof
