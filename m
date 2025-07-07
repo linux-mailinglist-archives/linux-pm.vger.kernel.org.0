@@ -1,278 +1,174 @@
-Return-Path: <linux-pm+bounces-30241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4030CAFA9A8
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 04:30:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A5EBAFAA7A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 06:03:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E01E21897B7F
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 02:30:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0DB17A4FB5
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 04:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A9B1B4257;
-	Mon,  7 Jul 2025 02:30:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="A8WQT4DR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4468618A6DF;
+	Mon,  7 Jul 2025 04:02:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9581AA782;
-	Mon,  7 Jul 2025 02:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751855404; cv=fail; b=rGWpQGO6DIUW3pcus6cbFHvUuvKb1giZCM7e0RUA7zgUsUldtUBXAZnHBqPNIT+Iil+YkNi5Yo33ia5x1RGNYioWnQV3yzSbM0ZkFxvqWhyHh0WwS2iiI6nJfcgJmr8zhRrPm4VQwI+kbRphweC6MBmxMBQZQLpJCvfNxVC10IY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751855404; c=relaxed/simple;
-	bh=ncTdaMfoGr9B0SqukqsXokfwi/1kZmBcJ/+MI7VBqV8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Wu3SW87GvoLdniBj3NcyqJ5Go30OKKmNH2W13A4mTYlCXd9O16jEys1afnKVIVQv/0hOzb52iv3BYCDwDOpQ7ZjZyASbNPwVIxAaeyUdBVI+3JB7X3uWTxcqwalCd4Hx0IxH0iWA9YVP2aA7U81/L8aCZPk0lsVIXlC+fbKHbSw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=A8WQT4DR; arc=fail smtp.client-ip=40.107.243.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=A1vpiSGEMbbDTtgep9HeKN4OIAqkhpo8QkD7gy9EE+pdcMgCsDjgm9RhQUENfpwgld2t3sbtSs6IoeHOG0v5u/UJ8DV4drC6qGoHNXER2AMt1NTn6HIvuyZEcxIC+idHsOj/8xtpknmk4Iw2FHREJ86GzGN3q/3eEnSfOhR2/lzm7D53OL4fUBeKyJknf4F88vJ/SexPtKBPBdjpu37NjFERpql7d2Yprs1/bwW6HRKJRyvWUILQ54ofbLAWdJg4wqFvONPS38eQXFVqBTKDYIYcxqsWxASJvk5350altEUhJD7WGs8E+f8uGovT2UsbVi8DL6vjxGfNPmko0DILLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=51GGSdbCYYBk0jid1mqD9awAYAm1d24ABkjC36zWYvE=;
- b=bacP48U0CheMKfVItF712fiySsEsJaBOAjEHAWGVrEf+2KjwBH+/CpPWBd3vW4bWZXcDXHj2JaC+317IK1e+zNQKPQilbVX1+C/BoF13RvghMqv//n8tDnub0DyLwsRmA5FSUTOCdjiazAejDYvOIYi3WNPIre7j2A7qxHHLPFq0r7HmD8lzewDa8Z5b+iQn+Avgj8t7lN0ycOhZKOoe6uKyIViWmI05FXHN8Ck90LQGjIe18P5AmMFc0gr/TbZw+UjJzdUeqNotL3BmmOibP9QSh/FcGje+PbNhjkpGbMGv+eGQzaRc6k9/DwvdQZs8gV7JBi2LptJ1duFOLGnkEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=51GGSdbCYYBk0jid1mqD9awAYAm1d24ABkjC36zWYvE=;
- b=A8WQT4DRO7xq+yNhCGkJCkkIys27mJpfMEZqKBo2v3EZX2Q1Rc5Iw2IH9bYC64tvAbXoNyv3qt7hqglQ5M+ng4YjSLuIEGBxixFrGxF6kdWgyBhOvN+WDC1lZyr8SzniJwpk9VPEmwxrgZbBcPj1JfXlsbn+HXIbJXEtlqiqVno=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH1PPFC8B3B7859.namprd12.prod.outlook.com (2603:10b6:61f:fc00::622) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.27; Mon, 7 Jul
- 2025 02:30:01 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8901.021; Mon, 7 Jul 2025
- 02:30:00 +0000
-Message-ID: <733dabc9-8a5a-4e3a-99bb-e67cd36428f6@amd.com>
-Date: Sun, 6 Jul 2025 22:29:55 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] drm/amdgpu: do not resume device in thaw for
- normal hibernation
-To: "Lazar, Lijo" <lijo.lazar@amd.com>, Samuel Zhang <guoqing.zhang@amd.com>,
- alexander.deucher@amd.com, christian.koenig@amd.com, rafael@kernel.org,
- len.brown@intel.com, pavel@kernel.org, gregkh@linuxfoundation.org,
- dakr@kernel.org, airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com,
- matthew.auld@intel.com, matthew.brost@intel.com,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de
-Cc: victor.zhao@amd.com, haijun.chang@amd.com, Qing.Ma@amd.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20250704101233.347506-1-guoqing.zhang@amd.com>
- <20250704101233.347506-6-guoqing.zhang@amd.com>
- <c847783d-eb92-49aa-919c-447cbc34baed@amd.com>
- <5f944f42-d631-4435-985f-c47944f770bd@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <5f944f42-d631-4435-985f-c47944f770bd@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4PR01CA0046.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:fe::14) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC76F9CB;
+	Mon,  7 Jul 2025 04:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751860974; cv=none; b=d++dmArx5izlaveQ6Wvz7RzFY2jFvp4R5Encko2Qc3JdW/Klf/HWAHsST3pfkQKqs+YCqBGANB2a/VUhIDYowOG7acN7VirQD5+wAvZQqAv4fex4H7kI9E4dlS39TdTQEqpmAQrtzXd2cHF/Gb/4vwqc17vh0z5offUWfE9fcwI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751860974; c=relaxed/simple;
+	bh=XqeXht5H88ggNIkEZWgWOp9EnyfQkP+PDOU8tlnxtko=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=F7c/G+ewikc5sLZ7Y3Am6w2EgSQ89EKvHZj9LpCBj4wVNNbUN1vIDhAHtjKIiOc1/pMjT6cCzEdJSODR6cwOK3OU8FHPn555nwMiLEbuua1Cc6dyHBmQSHUzVuKk/CCplOiU0DYMnyDlRmA9DSQA3KaUVIDvVo6aQc1xcIFsFPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bb9Z255NwzKHMw1;
+	Mon,  7 Jul 2025 12:02:50 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 2EB961A121C;
+	Mon,  7 Jul 2025 12:02:49 +0800 (CST)
+Received: from [10.67.109.79] (unknown [10.67.109.79])
+	by APP3 (Coremail) with SMTP id _Ch0CgDXOCbnRmtoudKcAw--.32718S2;
+	Mon, 07 Jul 2025 12:02:49 +0800 (CST)
+Message-ID: <bdc5a4d3-6942-4ba2-a13d-35f2e13c0b37@huaweicloud.com>
+Date: Mon, 7 Jul 2025 12:02:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH1PPFC8B3B7859:EE_
-X-MS-Office365-Filtering-Correlation-Id: daca20a6-5f11-4bba-1b34-08ddbcfe2c52
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RDRPdGdBWW9qNEhLalM3MlhuSzlqb1JsVGZ1NnV5dFBvY1V6U0hFYWs5VE5a?=
- =?utf-8?B?YUhZZ1RsYnVTRXZVb1prYllGMjNRSzRmSDZyNXlzNFcyMDgyZDF4VkRaUDJO?=
- =?utf-8?B?d1I0VVpkRncrd0p0R2JvczBmWXY1RTdjR2dXUEdPQzB2OE55WllDNUk3MStu?=
- =?utf-8?B?QVhETzhpa0NmVjdRdG41L3hDZmJ5akRIQ2VEOWFFQUFSM2pLcTlWbzh1dzU1?=
- =?utf-8?B?czk1SWh4SWxyODFRRVltczZEd2ZFcnI2MlNyeHoxQzdmRFE1SlJ6bWZkSFlI?=
- =?utf-8?B?UFZOSnhmQ01xQk9IU1JOajNwSDV5YmRxeHJjdFJ1S2ZSK0FXaVdBZlVNMVln?=
- =?utf-8?B?cmhTZlNueUVqTjFIdThvOGpYZXIzb0EwMlZMcWowdi8vN1dwN0dCeFFtTzk0?=
- =?utf-8?B?Sm1KbzV6M1RxUWdTc2g5Ykx2a0t0VDZ4T1NXSXBmTnQ1VHRndDJQai9WTXRx?=
- =?utf-8?B?bkdWMElEWEJjVXpVb0ExSklGWkVQY0djWkFFckhFdS9id3pIT09IYmt0bmJp?=
- =?utf-8?B?dEoxM3YzVDhBMDhnTGFSNmxLdFgxd3JYQ2pmNjM1dlN4WUlJLzIwRUF6L1gv?=
- =?utf-8?B?RWM5RXg5d1RkZERhdUpnVTd6VnZaS1R6Y0lSV2Z4MmJocnlrc1g1b0FmU0VG?=
- =?utf-8?B?UUVsK0JjWVpMRGVaeVB0MENWS013QTR3ckVGdDdQWXp6NEV0NUxVb0VObVNR?=
- =?utf-8?B?aktvNWpiaTNjcTZzY2E0aTlrdFhjTTgzNUFsQkZFR2VCaW84dGl1VG0xQVdh?=
- =?utf-8?B?NEFyRk1rY1J6d21zZmx0MmhYQ2lrVFZ3SXBsVGRLYjR5bnNaNnloL2F3cGxi?=
- =?utf-8?B?aEFkQjJadHhzZTBONmRlMVpOMjBIU1FrYm01d1hxMWY1RUFiVTAzTE9WcERL?=
- =?utf-8?B?NEdWRkxlMVFUUFByRmUxcGE3UlJpRVJXeWZXelV6eVJHMVNZM2c4WU1memlM?=
- =?utf-8?B?NVhheFBYVnlkOVVNZzF1YklLejl0eEtmaUdXRzhadUJ6K01PVEpZNjAxNzhB?=
- =?utf-8?B?aEtnUmsxNGpCYlNBKytsZDVVVWVDUXJKN0FuS0V6NUhsOXF3SjJxVDd0NjNM?=
- =?utf-8?B?dGxTa1k3dVA0YitVOW9TOGVVVFpSNGtoVG1nMHlydUJDNWhzTExrQzlKMXRP?=
- =?utf-8?B?THMrcEFqMmhTVHNNYytNem5MVWc5SDBlSjNMZ0FidVFyUjZxelR3V1M2alRV?=
- =?utf-8?B?M1NGWkZhRnl5bG5nbFg2M1lKRVJmZlRtU01lUStkU2Fxd0tMSE4yZ0ZFcFBH?=
- =?utf-8?B?bHRtVEdONXhnMFJEc3RLWEo0NjQxSC91Y0RTUFlISlplYjRhNW54dDhKMkNC?=
- =?utf-8?B?WmJPQTAwY1JIZFB6ME1zN3YvZktlYm9nc08wcVRWVGRnbVNoallrNGlYUi9Q?=
- =?utf-8?B?ZE0yL2xuaGZyall3VzRhZEFUYnovY3hNWFBNelV3U2JqNEZvQlE0TVp3SFBX?=
- =?utf-8?B?c0FueFo4ZGVsdXJ6Yjk3VVBlVmlGVW1YL0FTRnJWRm1Sc1QxSWY4RkV2Ulkz?=
- =?utf-8?B?OUQvNXFNWUhmUmtiYUM1d25wTVlpazFvVmQ5NjhPeDFqWmFNemlyTnZZUHVI?=
- =?utf-8?B?MGNsNlhqSitndUdaUzVYWnJmeUhYWXkrNjRpdWFXajRjWGRGUmpUY0tRRkRN?=
- =?utf-8?B?cWZKT0tuMUVvR1JOOTlmcER5cGIxVU5XRzdwdjRZUmhoM0JWbVVoRWZ0eHAy?=
- =?utf-8?B?azBwV3dkUURUSVdlS1RTZUVUN3VRMEk5MHhOTTBSV2xDRUVEa05sTmhYTmF6?=
- =?utf-8?B?WDF5WmRtYy9CVnlLSjAvblZib1B4SzdneDJHRjNvanFwNW5JL1hKK1drWWxT?=
- =?utf-8?B?K3o5UzFJdEpVR3ZJMGRndEJvblBZWTA3Zmw4M1FobFRUdENZMmRzNmFlTGdJ?=
- =?utf-8?B?VXp6WHQveTFTQm9RQ3Y5bXFMS1NQWitzZ3FaWDFSejVueVIvbStudlh5RDFE?=
- =?utf-8?B?bDhXSnpnOVk2YmJSUmU2Ny9OWENMamZzMXZTUitxNnpyeVNoMy8yTzY2K3F1?=
- =?utf-8?B?WFZIOGZWeFpBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K1NFTUZEUWE3U09QamE4MDE4c1RiK2ZNa1E0MEd0YXJPVW80M1UzTkh6b094?=
- =?utf-8?B?WDNwRHdETTFTeVpubVY1M2U0bUpsZDFlYVJBM3J6YW9qZ3NPWDZEcWNEZUZl?=
- =?utf-8?B?bVFBSjZpc0thcC9sVmwrV25rUnZUMmdYSGRpOXkvenlsb2JCTWRYZDA5NmFt?=
- =?utf-8?B?UTRyL01oRVJHMjhNZVZ1eFVhN2hzUTkvcE1teDIzTCs5R3JncE54OXlKTFZP?=
- =?utf-8?B?cC9xUVJlRUtJV0lLV2UxWXFhRG1BZk1Ddy9MRkJpNlRpNGxhTnArRGI1ejNR?=
- =?utf-8?B?cFlGMDRwZy9nYzMzVGpMalNFSVpnMk1MZGpaZnpiSGJJVmE4UVlNWGtTU0d5?=
- =?utf-8?B?dmpTdmlsMXFUV3VlY3Z5dzRhZE03Vkk5bFJ3enFHQ1k1MWJUNzVhZGU4Zkd4?=
- =?utf-8?B?c1ZBdXJHV2l6dmRxTjJSNTBFSjRTcytCVFJ0dnFPOXVrQXM4VmVLRjFYVFZC?=
- =?utf-8?B?aS9IUGlINkx6ZXYyVGRyb2dNWlRlei9kSUlWcTRkTGdrUzhvVmw2Z2s2UDF4?=
- =?utf-8?B?elNpOVkwWDVNNlV1emhlMEFnbk4za3EzeTVYVXRNY0lLRzBMUG9RWlFKRnRI?=
- =?utf-8?B?VVh3OEFZNnVHR2pTUk9tOWQra0s5cUxWR28zT3p5T3BHakpyMXhZZUlkZGc2?=
- =?utf-8?B?WUlvcmk3TU0yRHl5VUpFaCtuQnk1bzhnVXhtR2puM3NORUx1T2diUkM5Q0Jm?=
- =?utf-8?B?R3IvN2ZSNVBoM3MreU5DcTZiaDRkLzRha2M4aXJJTlpWUlQzTzAxYkdCYStr?=
- =?utf-8?B?VkpUVDhSdUlJWU9keG10MlpiWmxPL21Bc1I0N3grVXg3N1dXU1FGT3dJemFi?=
- =?utf-8?B?c2taN2pPWmk3VUc5VURkM2pZeTFwTjF1Nmp1WisxQ2NBVGM5a25VL25MeWpl?=
- =?utf-8?B?aHZDelpnN1IrdTVhVWZ6YkVaSjc3OEVlYUtNUDM1cXlGY1dwSkg4Z0xudVN4?=
- =?utf-8?B?RDJCa1MvZGZCWTlrUjcwNmhkL1dyUnpKUW5iZ1krTU5NQ045Q1l2eEJtRHFN?=
- =?utf-8?B?Mm1ObTNJT3B0MnFMNzVJb0lVWEdiQUZJN2lQN0ltbWY2ZFNMRkZTdHdhZjFz?=
- =?utf-8?B?ZXJuWlZEZjRMdnl3bjRkRmxNU0k2RkFrbU9uam5EODhKVUhwVVhZUVh3VTU2?=
- =?utf-8?B?VE9OOG9xVWVGUVVtRStYcm5PcGhPWE5Wcmh5UkJreTJQR3lQZnRURFAwQ25T?=
- =?utf-8?B?bjI3Z29oY3E0VFFraDl5MmthZVJ6b1h4TFI2b3ZXNmMzNUVNWWNjTE9aZHRG?=
- =?utf-8?B?bGczcEJ1YVVXVVZTQnFSU0YyeGIxZ3hJMFI0OXFmTHJTdm9oUzFucWlUR0Vy?=
- =?utf-8?B?Um95eXpXSUJMdHdseExRbGRsZm5Ma3ZjS3B1TG0yaUlMTTY3UVUxMVAxYVJ0?=
- =?utf-8?B?TkE4SGU1T1VjR1Z3QWg5MEdISWgvRDVYTSs1OThmTHZiMExyc2kxYnJ6bmh0?=
- =?utf-8?B?RTVpUElqS05xU0laZ2R6c1RydmcyeVNYZnNkYytGMmF4NjdHUkw1MXdZcVR6?=
- =?utf-8?B?VFhPNmNaMVFuL0JsOWFydk9GUGxydFpZVGJjM2ZQdHBwVndGa3lDMmkzaWNq?=
- =?utf-8?B?RGJEWmRmUm1pSXU1ZTVvQ1hHMWhXZWxhdURZNHEySVB4aGVLSURwUnFQN3NC?=
- =?utf-8?B?OU9SYkJrMlhhMkt1N0xNa2VkNGhJTzhyVHI1eTVqMGl5TkZaek9wVHd6NlNG?=
- =?utf-8?B?NGlnOUE1c25IaEpOM3lVbXZaUGVvR1BvMGkrMUlaRDlOOWlyeVc3SlJKVVJ6?=
- =?utf-8?B?SUJ4b2lOWXVXOEhnK2VxNytIL2VOYytycnNtV2tKRFVFVEh5dkUyVUViWWhx?=
- =?utf-8?B?dWI5bGJHVkxBQkk3V3QzalY0Q0R4Q1dTMnJmNjNrZWRMZUJMcU40a0RFdS9n?=
- =?utf-8?B?Vjl5eVNQOUlqc2NCL3Q0eVp3alIwTTI3SVppMXQxNXFsZnZNRjZHeiswTFMw?=
- =?utf-8?B?OUVMcnpPc3RTMG5XOUdLVFF3QkpKYUxubWR4Rkkxdlg2Nk1qdHF4eGQvQ29M?=
- =?utf-8?B?WlBPMmNCSVdHVWsvNllSVmFtVjFIQm1vR3ErTjZ0UmpGalNYbnlocHJyT1Qw?=
- =?utf-8?B?QzZ1bzRFaHExOUc3QjlvL0dvM0oxK0FlaFlMOVBxL2l2dkMzUUxXeXlXMlpD?=
- =?utf-8?Q?+k64wjgokd/UPtpotPCUSAraG?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: daca20a6-5f11-4bba-1b34-08ddbcfe2c52
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2025 02:30:00.9220
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jvUgqx0zx2xpJ2dOw02uPgCBntcH3WD+58VKC5KiF16ix5gGZ3mWDzs7xL9CEaaT0Fkk0KCXAyQb9FXXSDCa+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPFC8B3B7859
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being
+ frozen
+From: Chen Ridong <chenridong@huaweicloud.com>
+To: Peter Zijlstra <peterz@infradead.org>, timvp@google.com
+Cc: Michal Koutn?? <mkoutny@suse.com>, rafael@kernel.org, pavel@kernel.org,
+ timvp@google.com, tj@kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, lujialin4@huawei.com, chenridong@huawei.com
+References: <20250703133427.3301899-1-chenridong@huaweicloud.com>
+ <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
+ <f4c4f465-72b9-4682-99e6-c249ecab8572@huaweicloud.com>
+ <8dae8006-e63d-467f-bb7c-e8470878e534@huaweicloud.com>
+ <20250704075718.GA2001818@noisy.programming.kicks-ass.net>
+ <85fc85e8-af92-4d58-8271-9bf4aeb0a63d@huaweicloud.com>
+Content-Language: en-US
+In-Reply-To: <85fc85e8-af92-4d58-8271-9bf4aeb0a63d@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgDXOCbnRmtoudKcAw--.32718S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4rtFyktF17XF43Gry5twb_yoW5Xw1kp3
+	95XF4UJ3WFqr17urnFvw4qqrZ5Ka9F9r4UGrykW3WxJF4YqasxXr17ArW5KF4jvry8Kry7
+	XayjgrZ3A3yUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On 7/6/2025 10:28 PM, Lazar, Lijo wrote:
-> 
-> 
-> On 7/7/2025 2:04 AM, Mario Limonciello wrote:
->> On 7/4/2025 6:12 AM, Samuel Zhang wrote:
->>> For normal hibernation, GPU do not need to be resumed in thaw since it
->>> is not involved in writing the hibernation image. Skip resume in this
->>> case can reduce the hibernation time.
->>
->> Since you have the measurements would you mind including them in the
->> commit message for reference?
->>
->>>
->>> For cancelled hibernation, GPU need to be resumed.
->>
->> If I'm following right you are actually handling two different things in
->> this patch aren't you?
->>
->> 1) A change in thaw() to only resume on aborted hibernation
->> 2) A change in shutdown() to skip running if the in s4 when shutdown()
->> is called.
->>
->> So I think it would be more logical to split this into two patches.
->>
-> 
-> This is doing only one thing - Keep the device in suspended state for
-> thaw() operation during a successful hibernation. Splitting into two
-> could break hibernation during integration of the first part - it will
-> attempt another suspend during shutdown. I think we don't take care of
-> consecutive suspend calls.
-> 
-> Thanks,
-> Lijo
 
-Got it; thanks for clarification.
 
+On 2025/7/4 18:25, Chen Ridong wrote:
 > 
+> 
+> On 2025/7/4 15:57, Peter Zijlstra wrote:
+>> On Fri, Jul 04, 2025 at 11:11:52AM +0800, Chen Ridong wrote:
+>>
+>> Your patches are mangled; please educate your MUA.
+>>
+> Hi Peter,
+> 
+> Thank you for your review and feedback
+> Apologies for the formatting issues in the patch.
+> 
+>>> --- a/kernel/freezer.c
+>>> +++ b/kernel/freezer.c
+>>> @@ -71,19 +71,20 @@ bool __refrigerator(bool check_kthr_stop)
+>>>         for (;;) {
+>>>                 bool freeze;
 >>>
->>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
->>> ---
->>>    drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 8 ++++++++
->>>    1 file changed, 8 insertions(+)
+>>> -               raw_spin_lock_irq(&current->pi_lock);
+>>> -               WRITE_ONCE(current->__state, TASK_FROZEN);
+>>> -               /* unstale saved_state so that __thaw_task() will wake
+>>> us up */
+>>> -               current->saved_state = TASK_RUNNING;
+>>> -               raw_spin_unlock_irq(&current->pi_lock);
+>>> -
+>>>                 spin_lock_irq(&freezer_lock);
+>>> -               freeze = freezing(current) && !(check_kthr_stop &&
+>>> kthread_should_stop());
+>>> +               freeze = (freezing(current) || !cgroup_thawed(current))
+>>> +                        && !(check_kthr_stop && kthread_should_stop());
+>>
+>> This makes no sense to me; why can't this stay in cgroup_freezing()?
+>>
+>> Also, can someone please fix that broken comment style there.
+>>
+> The change relates to commit cff5f49d433f ("cgroup_freezer: cgroup_freezing: Check if not frozen"),
+> which modified cgroup_freezing() to verify the FROZEN flag isn't set. The freezing(p) will return
+> false if the cgroup is frozen.
+> 
+>>>                 spin_unlock_irq(&freezer_lock);
 >>>
->>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/
->>> drm/amd/amdgpu/amdgpu_drv.c
->>> index 4f8632737574..e064816aae4d 100644
->>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>> @@ -2541,6 +2541,10 @@ amdgpu_pci_shutdown(struct pci_dev *pdev)
->>>        if (amdgpu_ras_intr_triggered())
->>>            return;
->>>    +    /* device maybe not resumed here, return immediately in this
->>> case */
->>> +    if (adev->in_s4 && adev->in_suspend)
->>> +        return;
->>> +
->>>        /* if we are running in a VM, make sure the device
->>>         * torn down properly on reboot/shutdown.
->>>         * unfortunately we can't detect certain
->>> @@ -2655,6 +2659,10 @@ static int amdgpu_pmops_thaw(struct device *dev)
->>>    {
->>>        struct drm_device *drm_dev = dev_get_drvdata(dev);
->>>    +    /* do not resume device for normal hibernation */
->>> +    if (pm_transition.event == PM_EVENT_THAW)
->>> +        return 0;
+>>>                 if (!freeze)
+>>>                         break;
+>>>
+>>> +               raw_spin_lock_irq(&current->pi_lock);
+>>> +               WRITE_ONCE(current->__state, TASK_FROZEN);
+>>> +               /* unstale saved_state so that __thaw_task() will wake
+>>> us up */
+>>> +               current->saved_state = TASK_RUNNING;
+>>> +               raw_spin_unlock_irq(&current->pi_lock);
 >>> +
 >>
->> Without digging into pm.h documentation I think it's not going to be
->> very obvious next time we look at this code that amdgpu_device_resume()
->> is only intended for the aborted case.
->>
->> How would you feel about a switch/case?
->>
->> Something like this:
->>
->> switch (pm_transition.event) {
->> /* normal hibernation */
->> case PM_EVENT_THAW:
->>      return 0;
->> /* for aborted hibernation */
->> case PM_EVENT_RECOVER:
->>      return amdgpu_device_resume(drm_dev, true);
->> default:
->>      return -EOPNOTSUP;
->> }
->>
->>
->>>        return amdgpu_device_resume(drm_dev, true);
->>>    }
->>>    
->>
+>> And I'm not quite sure I understand this hunk either. If we bail out,
+>> current->__state is reset to TASK_RUNNING, so what's the problem?
 > 
+> The issue occurs in this race scenario:
+> 
+> echo FROZEN > freezer.state
+>   freeze_cgroup()
+>     freeze_task()
+>       fake_signal_wake_up() // wakes task to freeze it
+> 
+> In task context:
+> get_signal
+>   try_to_freeze
+>     __refrigerator
+>       WRITE_ONCE(current->__state, TASK_FROZEN); // set TASK_FROZEN
+>       // race: cgroup state updates to frozen
+>       freezing(current) now return false
+>       // We bail out, the task is not frozen but it should be frozen.
+> 
+> I hope this explanation clarifies the issue I encountered.
+> 
+
+Hi, Peter, Tim
+
+I was looking at the WARN_ON_ONCE(freezing(p)) check in __thaw_task and started wondering: since we
+already have !frozen(p) check, is this warning still needed? If we can remove it, maybe reverting
+commit cff5f49d433f ("cgroup_freezer: cgroup_freezing: Check if not frozen") would be a better approach.
+
+What do you think?
+
+Best regards,
+Ridong
 
 
