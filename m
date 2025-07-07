@@ -1,204 +1,291 @@
-Return-Path: <linux-pm+bounces-30295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44AC0AFB645
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 16:42:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2311AFB674
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 16:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB3B51732B0
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 14:42:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CBDA1888C5F
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Jul 2025 14:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8281D2E11BC;
-	Mon,  7 Jul 2025 14:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1227A2E1C63;
+	Mon,  7 Jul 2025 14:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gm7GOlYa"
+	dkim=pass (1024-bit key) header.d=viavisolutions.com header.i=@viavisolutions.com header.b="H19iCsR5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2108.outbound.protection.outlook.com [40.107.95.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85652D97AF
-	for <linux-pm@vger.kernel.org>; Mon,  7 Jul 2025 14:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751899341; cv=none; b=kEHsHWYxFLpaG/wVMk6Y1tjFT0kN5TOBGBFjvrjR6/AS7MotjdkRmYXu7dxT5Uv3dlVfGbxJnZfq6jfvgTDalR4aB9kkBHASxPk1tGSfof6xlafdvSzGlabN7O6jBl4kMR5o0y8HfOrgT6i0/IAHx615jvrTboGb4lq4l7bGD8U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751899341; c=relaxed/simple;
-	bh=WdArDEtLe89Q6g7L4LligwAlwWkbQ5MDMZfw7t5oEXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ahiTJvxHINocLsj3djxOrhUobeiJCBl+Rx9kmg0oPjuP8JmGR7VkmB5J7iykYais1bmPh2f8T1g+D4cQvDwgXHBrT2Tbi+pFgxCpWHJmHnaTNxk8SQ4pUJGrNwYtvXDCxYsR5CF5vWOl8s12QxmL7I8zqokIVvSPOcW7w4w6pFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gm7GOlYa; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a6cdc27438so2707014f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jul 2025 07:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751899336; x=1752504136; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PG8mV4pDhYymeozzS82ZZcM9xZV+pEOeW3uE1qROtU0=;
-        b=gm7GOlYapgAzIhHWkI9PQZFa/3JYUN7jYeN7v9dgRIDXhT9JPSIZQKhYHHOYEJ/I9F
-         xVMxX5vhx1Zixu95kLwJcnYkUvtM9vKTBTa24j73pR0VdQxVSy0pg2+Jhi+gKBMQD3Sg
-         iyT7duN/l0rL1wKkdeD+u8vc0d+YpA7kUeNfAzHCIGKhzG1deGPKYANhbRdWsWZYhJjq
-         zN/c4ZJGaDvjQGKDxJuHe4Kg89KydPzCUYTZiDARUGVPYFmVRYqV7Yu3CbRNBpmS227l
-         akRAwE6vdKJX1sfIhmHb9Ts+o3GKGpJIwhwCyll3554vDzJEp9OO2b+891+7mklueidY
-         Ua0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751899336; x=1752504136;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PG8mV4pDhYymeozzS82ZZcM9xZV+pEOeW3uE1qROtU0=;
-        b=Zuzazn+mBdWsR/f2bgPTJokCzdh64nFwob+eJO9/StArO4kcQGnCwygibLcEFN1TxZ
-         Q28GcORkUno9P2WhFFpyobA7n9sRf94fHecpBN3K0HjLHr8KYhdyIJjNOLruz4t2tgVC
-         yE1+eJce0Qd5OcfxOCW4Eb27odGoIts8Z+wlyLah5wljUw2PhpxLSKgWSFb9Xh0upw2H
-         msGK4R2vKr7w3vm9OdoxuX3LD+P4fMnjeJLs7ESMcag77DspmJ+f9hNM0H4sc2+QOWUf
-         dWd0Kmn9iGMd0nzeJVYdIr7NylyxqCyIGhIaPPQFT+mFnXRaS+5dzXkoZlinzehREXtR
-         KM3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCViTZ3itjuW/2sU9BLbu88Mh5o+n6Kz/u04gQ66kn2xU/WjzkI6e1Pr+EyS23IUJuhE6kObhmv/FQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ1OZZOgOJ5ZTMEOo2mbb8q5SPs8UXksTjKopzw2WeGyUtaTmb
-	6DgD/JtLmXFTQPJpJoUBpRm0iika5P25dDQhcxvAl+utP5SSlJRIjpmbR33gnnt1SX0=
-X-Gm-Gg: ASbGncsO906YY90XBEuNxkOprcPMxxK34GX0LsQMsuYzOsCTBRupBABYVeERl2LV+0b
-	oENOWdWR9zgGRe0VbP1IfNF+pnSxTio7O92DOy/sC1n6/ZzcrhwPQQTUjr5ocg8Bk4iiqJ0+M7m
-	myY1hI2EdPOyvcKu6P/5y1z51bZuVjpTkJdzSLdW71QouWSgmyqqYEbWb7FMEJnO1r26sLkuy7J
-	fYEpI96rkqXwbFKmARBuhLA07bI+rRHYjJwcuFD2H3VtMcbbamjrBvDy7DydwL/SGUgqfKC2T8d
-	zbKo4H7OdmQ29SZQV6DrZX5A5hgQE9SD1GO1ykuEaHBRPEsCuquZVr87GgCVLXxusDIgbQZ2TW4
-	LCHv04wrJ7SKLFy+4YU0ei0giOTJ57Go=
-X-Google-Smtp-Source: AGHT+IGyYoZy50qjmAjoyeY/+RRpyL9VdrWvFAUJlbX9qLSoaWQqvRrm9Uhn/ZI8f2iL8dQXzws9/w==
-X-Received: by 2002:a5d:6f0a:0:b0:3a4:ef70:e0e1 with SMTP id ffacd0b85a97d-3b49703dd84mr10413739f8f.55.1751899335190;
-        Mon, 07 Jul 2025 07:42:15 -0700 (PDT)
-Received: from [192.168.1.159] (p4fc3d4fa.dip0.t-ipconnect.de. [79.195.212.250])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b968ebsm10252375f8f.47.2025.07.07.07.42.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jul 2025 07:42:14 -0700 (PDT)
-Message-ID: <fe454257-aa21-4304-868f-aefbea9963c4@linaro.org>
-Date: Mon, 7 Jul 2025 16:42:13 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEFF2E11CF
+	for <linux-pm@vger.kernel.org>; Mon,  7 Jul 2025 14:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.108
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751899736; cv=fail; b=KsYcRx7pP04sBVzuIbPVx5+QC1Fq5ZLHIYL8nd/noV3uuiEwm6r6v/il+C/2fZIyngO/LNmmd3c1gTTSIMcaBGcuCHHLUC7ZEW9Bwi0Q5KYhSvbyZ93byF1bfBduP1n0nLOGAT3NR8RPmkBvcPMkq2C93LLXHk507CssXfpAFME=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751899736; c=relaxed/simple;
+	bh=rrsLLwujs9e0twI1zyOMOhXAHbSlcb4XZJiDVoeaAgs=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=Gbtxkqq2SF3lDSTfecZB++e9XkUwTM1W+ettcPh3VFZAN/fyVexHMyMJSexuwSCF/dN2QMmvlRIRfqzCChkPuYC3tlVuStge7ixpJEk0DHoO1O75DFHte0usvFXfXwD2mwQN+yCG+crpqL4Yok1ogUtb2jM3XUJmHT/ab+Wcf5c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=viavisolutions.com; spf=pass smtp.mailfrom=viavisolutions.com; dkim=pass (1024-bit key) header.d=viavisolutions.com header.i=@viavisolutions.com header.b=H19iCsR5; arc=fail smtp.client-ip=40.107.95.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=viavisolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=viavisolutions.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SKj38zUl6smwiscG6jYW/W0an5JsKIVVdV1M5mfnlZ2wbJXha8DxbdsEsht19x6tyI2UJCwAx7Ra3i0k73wuRlnpLVPB2ahl9sclg56evCkJ4Sit6Aufjb71kDTA+NJQ58GRYnV+QZ1P4ZMUyEcWLFqrTZizHGsP1Jkqnc06OQBkzrt60dhWMYgopzO42B5EsYPBa/Ra+C1AP7Zrcve9X3oKAvJ4NqRcY7wPKI+03Ri7Uv9oPjUrPlb/i9BK8PZNSZ0XhcU7ThVoFXLEWPsnfecoPOjAd5EXU5LGF07/Y1LCgU8vBCaSH0gKZRBzQTn8QIPQgHg9VoA5MB9BF/uoIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5OjhSlDELTwkEec5emEvQbhHDDZqfn33qNG7d8hLV7c=;
+ b=BbGm3d5eXIvH0MLywChmh++QeV90LCSX7y0E0X4zCbOlQKxG83381aJ6AN7eseJ2I7RXp/dwqq96GGN3cehAjLHf1vX52+j06kFTZkwwUlrPlsyGvfrlX9JjGtim0CTPsTaE39bd5iMihZ3NJyQiDeXenXnj1cl9E42lcOHtdC3d61FergtX6ntj57UXp4KvBN0KcTylyMOXZwwM/qYpukANg3bg9pCPQAKTWJDsQ+cnhP+/2C7nSLIursz412HNkFVF7sjQ0bLv031NjvdW6OY3v5vzW/tGAgU8F9fUQdh/0udhTzPpb+DlyCjs4pHikzVnrflO23q5CAA+fsTrVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viavisolutions.com; dmarc=pass action=none
+ header.from=viavisolutions.com; dkim=pass header.d=viavisolutions.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=viavisolutions.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5OjhSlDELTwkEec5emEvQbhHDDZqfn33qNG7d8hLV7c=;
+ b=H19iCsR50B6MwRoAwIrCZkXLsufiRSCN8sRHCGpVDRcQpEiWdriv7VoF+v8cg6jZ6bRF22NPmmrspbFSuisTETq3Ynzeu66+XM9hIqIW0LzeKf9jDL3UW8Hingys0p9jAldT3/p7nQ3UxAaKcHyzN15S8LJ3nZ2+Qf/cOWyqXNY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=viavisolutions.com;
+Received: from PH7PR18MB5549.namprd18.prod.outlook.com (2603:10b6:510:2f9::5)
+ by DS4PPFFD8A841C2.namprd18.prod.outlook.com (2603:10b6:f:fc00::ad2) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.29; Mon, 7 Jul
+ 2025 14:48:51 +0000
+Received: from PH7PR18MB5549.namprd18.prod.outlook.com
+ ([fe80::b355:4e50:c0fa:ae1d]) by PH7PR18MB5549.namprd18.prod.outlook.com
+ ([fe80::b355:4e50:c0fa:ae1d%7]) with mapi id 15.20.8901.021; Mon, 7 Jul 2025
+ 14:48:51 +0000
+Message-ID: <e3e71f22-7865-4daa-b02b-b6b58b1abd53@viavisolutions.com>
+Date: Mon, 7 Jul 2025 16:48:47 +0200
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+From: Fabien Proriol <fabien.proriol@viavisolutions.com>
+Subject: [PATCH] power: supply: sbs-charger: Support multiple devices
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PR0P264CA0252.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100::24)
+ To PH7PR18MB5549.namprd18.prod.outlook.com (2603:10b6:510:2f9::5)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] pmdomain: qcom: rpmhpd: Add Milos power domains
-To: Luca Weiss <luca.weiss@fairphone.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250707-sm7635-rpmhpd-v2-0-b4aa37acb065@fairphone.com>
- <20250707-sm7635-rpmhpd-v2-2-b4aa37acb065@fairphone.com>
- <06760125-4800-4068-8936-dddf27c28d17@linaro.org>
- <DB5VDDKCAQQG.LDCMHXAZN17S@fairphone.com>
-Content-Language: en-US, en-GB
-From: Casey Connolly <casey.connolly@linaro.org>
-In-Reply-To: <DB5VDDKCAQQG.LDCMHXAZN17S@fairphone.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR18MB5549:EE_|DS4PPFFD8A841C2:EE_
+X-MS-Office365-Filtering-Correlation-Id: 781a5e19-6b02-42ca-e79d-08ddbd65637b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RERKSTVpUzg3Z0NUVnp4N3FQZjd4dlRNemVnWHY0enZEUXFGV2dXS3l4Skl2?=
+ =?utf-8?B?VkdVcTZZY2ltM216UllaREpMZDlzNTJ0NWU3alZJSjRqQTY0WHlhTk5pQ2dH?=
+ =?utf-8?B?enNiZDRUb3FMbnRYVHNybFJheWYzd1NuWE1aL1lVY1ZsUnlmU0w4VTZvUGZq?=
+ =?utf-8?B?MFZvRVZXczEyK3gyUHpvdGJ1aFJNNGYwMElnVC9tRGI4N0Q3alczZGp1dnJr?=
+ =?utf-8?B?Vko1MWdRTmRFT2JvOFV0MUl2RDNJNytNMkJDTTBGUThYQWUwWEZjaHlScng0?=
+ =?utf-8?B?YURqT05WYTZ4c05hTkhoWVA2QmZaMFlNcGdFcmZSRlRGTTg0Q2FGN0pPd2pT?=
+ =?utf-8?B?clIrUjMxOEwzNGZCbXd2SkNZY2dOdHJnN0VWbHVXNVljRzZqRVJmN0VOTkVi?=
+ =?utf-8?B?ZDZnZjIwdytuckY2Tmg5VmZYZEZkQnV4Tzc5aXRySVdJamwzak5FcVdFa05G?=
+ =?utf-8?B?eHNsVDdNRDNHVEpEQk1qUEl6QjZubkIySDBJUXUvZWo4UWFmZngxWVJYK0Nx?=
+ =?utf-8?B?SDhwRjRqYyt0d1ByNmVENVpzWVNnUHJmV09LdldXOW5BaFZ4UWNiYmN2OGV2?=
+ =?utf-8?B?MHlsL3dxSFlIZXJncWs5VktGVFFSN25EVTU0Nkt4bU80Z1dOTDZEZFJHVGlh?=
+ =?utf-8?B?dGJRMzBibzFHS3NmWks1SHRuYWlzL1FzYkxoeHNSdmhTSlJIUElvaCswQ04r?=
+ =?utf-8?B?YnczaXgyZmdLTHlza1p1eU0vZWNQaWlBcFZMcmNEWTVjak1VdEwyekY5M01J?=
+ =?utf-8?B?am5oRnJqWm4yZFRiZWlHS2tKQXo0d0FBc3hVR0lPd29RbTl5OFdoNFR5c1kw?=
+ =?utf-8?B?eU1vY2c0QkZiVmFDNyt5REZYUU9VZ2hjUVErdE82WHozSngwVk5FdW5mcVZY?=
+ =?utf-8?B?Ylo0ZWNuV0U3OXAxM3N2S1AwYkNPMnRSdCt0Si9zK3BsTUJqT2hBalVRMGlt?=
+ =?utf-8?B?RFdVOTJhdnBDUk5pYU10NzUzMUFEVlh6dUZrc1VDd1FEU2pEQ0VHNW1QRmFV?=
+ =?utf-8?B?S2c5djBaOS9UTGFtMDJwZkVFSkgxY3dsM3pwdkRTZlJKYlJwM2pTZzUwT1RP?=
+ =?utf-8?B?a0VzY2dFK2FudjZWU0hyRGltRHFMSzQxYkVBc3I1NDVnTzNMWXE3N1RqRGZm?=
+ =?utf-8?B?MHJvSXZZSGZqUzc0YW42NUFuNWVONW0rSkNxMDZjRk9IUHliRkxpbzdEc3M5?=
+ =?utf-8?B?N29iZFZDWVlRS05jYXp1UFVRZlZmcHNNaHZiU0w4T0lydjdtcWJEcVVUR3Vj?=
+ =?utf-8?B?WlA3M09DQk53YnFVWWUvQmNTYzV0NmZ5NzQzUFpHWlp6K0Rqa1FvM3Vqa09V?=
+ =?utf-8?B?RE9HZzZSZndhMWpQdHZqUW1GWVVkd0hjUHZCclQzbjdBRUx4WGFxVDBqaXk0?=
+ =?utf-8?B?SFNCdlBPL1lZendabW5qaS82ampBSlpGR3Z4WnRSZjM5NjYySk1oNFBscmVs?=
+ =?utf-8?B?OGh1Z2dJdkxwWTNudkYrdnZRTHNxKzd4V04vSjZ4OEEzRjQwZkQ1d2hNRGhj?=
+ =?utf-8?B?NUF6cWdacGlEeWZUaVlhT0FGSUNIUHk4RDFSdzZ1OHoweFh4RXloSlJBNnhJ?=
+ =?utf-8?B?VE5RajNDTERHVHNZVUIxMWdEU1Rmb0FiTGhQcEkwNTJ6NmIvRU1WaUNVUHBX?=
+ =?utf-8?B?THBhanA2MnkweTA3bXVndVIraFo3bDhJaFV1Q3QxdVNaS3JENDZvVnVUMTdE?=
+ =?utf-8?B?N3JYOWRBdVVpK1RMVVpsc3JlRTY3YWlDWHcydjVWc2JJQ1RGSzZFUHMwL3dS?=
+ =?utf-8?B?d3FwUHBlOXZCS0l1N2FYOTVPb1hMelVVOVJOVjRpRkhHTDJNTEJLcGNTUzNv?=
+ =?utf-8?B?SGJiVGpzMUo1TDRQSXJTMTdYSXlNMGFZNDBDS2NucWYzRm5xZmN2bTlmVW1h?=
+ =?utf-8?B?Yi80UW5BcUQ1dlNDQzBGRGUvZnRjZDhwZ3NEekJ5UmdNUyttT2duenJMWm9y?=
+ =?utf-8?Q?HQlr8QXvQk4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR18MB5549.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eTdreVFNMDRlOXUvZVdMMG4yNkVaSjdVK0ZSaDlabytkWVFNNGVNZEFjZmFO?=
+ =?utf-8?B?dmo4blhtQ3dXcjZ4ZHoyQVRGck9iSzNLd0psbTBQZllQNjZRbEI0dW01czBy?=
+ =?utf-8?B?eU41dWpZTkxpdC9rd1BMUFZEVHNaUzE2K2lOYkJHVFdIZ21QSUpqTTZsRGZz?=
+ =?utf-8?B?cGZURUE4bHBxVkxpUG5qWlJZV0xSMEZ1RjFvZkg2TzZEZGI5dFN5VHpqdnpn?=
+ =?utf-8?B?ejMzS2FVVER6TjF3YmpRdzRST2tiUXNqTXlHazJseThiaTVESTVZYTlHMFJR?=
+ =?utf-8?B?amNVdE5vMFBGdXBMVnRPa2RBUEFGWUlmK20rWHFWdEZEaEZhd09pc0NYUTEv?=
+ =?utf-8?B?K3RNeVRPV2EvaWFmN2p1Y1RYZHkzMlFJMmlLR25OUGVsZGJaaFNoQTBKNVRF?=
+ =?utf-8?B?RVBvUlNhRStqY3MwTTRUR0w1V1hwcnh1UHNHNFRva094WHUvd1RFSEdVcGhM?=
+ =?utf-8?B?dDB4aG10SnN6d2NPdHhpbnV2eVo5SVJ2bi84VFh1anhVdXErRmhTTk03WTNt?=
+ =?utf-8?B?YXh1Myt5eGI0WVRtTklEUDVVNWk0SmxIbWFrQlBZY2tkNlRYTHlvTVZPN1hx?=
+ =?utf-8?B?Wnp2RTVCNmx1bmtnSkF3VExkdkpOSlNmemJIbW4rUVdoTkF0eXJBcUFDY0VB?=
+ =?utf-8?B?M2tJU1MxM29kakVMb3czZ0hkb2hEN2t2QlRudFFVeTNuU0w3ZERhN1FnaHdU?=
+ =?utf-8?B?djhldmZpbWc1ZHZrTjlUYWJHbXhLMHRjRHk1THZCTlA4ZHhDREZhTUFmUGhE?=
+ =?utf-8?B?RjJkc2VwSGtXZGFrR0E1UzJPN1NjWWwvUzFxMTgyMEJFVW9iMk02aEVDZE1z?=
+ =?utf-8?B?YzBKdkozUmM3dkNuZmRSVW5ITzY1cC9kMzVjYmQ1NHlBR1lLd0NZTExXWVBz?=
+ =?utf-8?B?blpETUxtd0JVakl4OHY1MkdLVEJXM3BvR0JwUWpoZXkrTEQ5K0dmNTNtdUVB?=
+ =?utf-8?B?NjdtSXpsQ0Rpdnp4NEdJUndpYSttS3hGZXEvZFV6aEs0b2YyeUN6dTg3aVhV?=
+ =?utf-8?B?ZXYwZFc1MVM1QktiaW91eHRMY01pSkZwejhVSTFWTllwV2NKSGFOZVQydnFw?=
+ =?utf-8?B?bHNabmo2eGdrdHRBbFVDVExvQkRnWS9IY0NTVSsvZklNQXI0aVF6WXVDT09q?=
+ =?utf-8?B?ZGQ4MG8weVkrR3QxZE51RW5nNDZpNUFFQ3V1ejdNOE5FaHVlbTNEWUY5Tkps?=
+ =?utf-8?B?VHgzNkV3ZVNZdkRtSzNJU2czZW9TQ2NkZzRaK0FaMmFOcjFDbkpFY2o4Y2d1?=
+ =?utf-8?B?T01wYy9kRDNTNzZTZnJKc1NWU2N4bGY4Wi8ya3hFRjlnMUJhU0dwYXBvR2ZX?=
+ =?utf-8?B?Z1JTWmlvTEIreUxoUE1vRCtKVG5FdG5DTWEyeDZPY3JiYkQ2L3hvVDlxanQw?=
+ =?utf-8?B?ajFHbUtFakRKSkxiYnhsSDFHa1B1TSs1THNpcWtxc09OVDJHd0JXaE12Unc2?=
+ =?utf-8?B?alRwZC9OK0xzSkdobUZDWmNwQnNmYzNNbXgxYWx2WEk3dzdwOGpxYmwyVklL?=
+ =?utf-8?B?OWJ4c2tVMktFZzh5b1o1R3NLSEU1TmpPWHBLVGlzMW1NWC84RlpVYldHUElT?=
+ =?utf-8?B?T1gzRUh1K3h5UE02NGVSK3lvaWlaOEZhTkxFZEZiWE5hLzMzVVl4eWxvN2hr?=
+ =?utf-8?B?Z1hDUkdxTXBvMnQvNFNjWTBBZWpJd0pxWnZzUG5oNnhndXlBUFpEYWpEUUxV?=
+ =?utf-8?B?dHpRVGNmNkJJZTIybGZ0Njd6R0UxNFFUZGRXTjQ4UXo1b0tCTzNUcGFyOUxy?=
+ =?utf-8?B?dlMxTzh2d09jRFhBbUtKT055UUlnWGx3YXFmRFBwTjUrWFgxOHA4L3V5YWRt?=
+ =?utf-8?B?K0UwU0hnbE9rcDlpTEMxbWlIOXp3cUgycWpnS3M3Qk1xU0xEVVVCQVJBaG80?=
+ =?utf-8?B?K09MQzltalNIcmFZTUlrT05lb1NwcTc1TSs5RmFJQk5ndjhvWXZyS1VONjBK?=
+ =?utf-8?B?V0xnZjl5U0RwdVFwbDBIZXRVUzF0ZGJ1UVAxKzJKbmhKRG9ibDc4bFIvNzN4?=
+ =?utf-8?B?ZlRhWkY2bXdIcndpeUJETE5PMUszd2xJMUZSZ004WjlqenBHbk9ycWhpRm9D?=
+ =?utf-8?B?WmUvMTJjSzZRajFnVjc4eDNRT2xTZHVubG5uR0VqUFFqS0FMZTFzMWFXcXZD?=
+ =?utf-8?B?MDB3MDFTRXVidHBXaWJ4a3dTbWNTdkJMMi80OTNTYk14UVlGUVIydlZ2ZVBl?=
+ =?utf-8?Q?OKJBoeLqdJN7Lwu8Pxi23/0=3D?=
+X-OriginatorOrg: viavisolutions.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 781a5e19-6b02-42ca-e79d-08ddbd65637b
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR18MB5549.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2025 14:48:51.6394
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: c44ec86f-d007-4b6c-8795-8ea75e4a6f9b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rB+ClWR7TiQNQLKvlrYKEAMM5tRrlwY72QqGM0kiBFQzJNVxGt+6yavb1jwoVBpBR3W3dwSuikZY6AM0kz7gIYR9oon9iHJHcBwgHBmlms0svp5upjwR64oWJSxRL7zg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPFFD8A841C2
+
+From c24a5c0b6f08edcd9fa0affe182cf69a4f66c770 Mon Sep 17 00:00:00 2001
+From: Fabien Proriol <fabien.proriol@viavisolutions.com>
+Date: Mon, 7 Jul 2025 16:46:51 +0200
+Subject: [PATCH] power: supply: sbs-charger: Support multiple devices
+
+If we have 2 instances of sbs-charger in the DTS, the driver probe for 
+the second instance will fail:
+
+[    8.012874] sbs-battery 18-000b: sbs-battery: battery gas gauge 
+device registered
+[    8.039094] sbs-charger 18-0009: ltc4100: smart charger device registered
+[    8.112911] sbs-battery 20-000b: sbs-battery: battery gas gauge 
+device registered
+[    8.134533] sysfs: cannot create duplicate filename 
+'/class/power_supply/sbs-charger'
+[    8.143871] CPU: 3 PID: 295 Comm: systemd-udevd Tainted: G 
+           O      5.10.147 #22
+[    8.151974] Hardware name: ALE AMB (DT)
+[    8.155828] Call trace:
+[    8.158292]  dump_backtrace+0x0/0x1d4
+[    8.161960]  show_stack+0x18/0x6c
+[    8.165280]  dump_stack+0xcc/0x128
+[    8.168687]  sysfs_warn_dup+0x60/0x7c
+[    8.172353]  sysfs_do_create_link_sd+0xf0/0x100
+[    8.176886]  sysfs_create_link+0x20/0x40
+[    8.180816]  device_add+0x270/0x7a4
+[    8.184311]  __power_supply_register+0x304/0x560
+[    8.188930]  devm_power_supply_register+0x54/0xa0
+[    8.193644]  sbs_probe+0xc0/0x214 [sbs_charger]
+[    8.198183]  i2c_device_probe+0x2dc/0x2f4
+[    8.202196]  really_probe+0xf0/0x510
+[    8.205774]  driver_probe_device+0xfc/0x160
+[    8.209960]  device_driver_attach+0xc0/0xcc
+[    8.214146]  __driver_attach+0xc0/0x170
+[    8.218002]  bus_for_each_dev+0x74/0xd4
+[    8.221862]  driver_attach+0x24/0x30
+[    8.225444]  bus_add_driver+0x148/0x250
+[    8.229283]  driver_register+0x78/0x130
+[    8.233140]  i2c_register_driver+0x4c/0xe0
+[    8.237250]  sbs_driver_init+0x20/0x1000 [sbs_charger]
+[    8.242424]  do_one_initcall+0x50/0x1b0
+[    8.242434]  do_init_module+0x44/0x230
+[    8.242438]  load_module+0x2200/0x27c0
+[    8.242442]  __do_sys_finit_module+0xa8/0x11c
+[    8.242447]  __arm64_sys_finit_module+0x20/0x30
+[    8.242457]  el0_svc_common.constprop.0+0x64/0x154
+[    8.242464]  do_el0_svc+0x24/0x8c
+[    8.242474]  el0_svc+0x10/0x20
+[    8.242481]  el0_sync_handler+0x108/0x114
+[    8.242485]  el0_sync+0x180/0x1c0
+[    8.243847] sbs-charger 20-0009: Failed to register power supply
+[    8.287934] sbs-charger: probe of 20-0009 failed with error -17
+
+This is mainly because the "name" field of power_supply_desc is a constant.
+This patch fixes the issue by reusing the same approach as sbs-battery.
+With this patch, the result is:
+[    7.819532] sbs-charger 18-0009: ltc4100: smart charger device registered
+[    7.825305] sbs-battery 18-000b: sbs-battery: battery gas gauge 
+device registered
+[    7.887423] sbs-battery 20-000b: sbs-battery: battery gas gauge 
+device registered
+[    7.893501] sbs-charger 20-0009: ltc4100: smart charger device registered
 
 
+Signed-off-by: Fabien Proriol <fabien.proriol@viavisolutions.com>
+---
+drivers/power/supply/sbs-charger.c | 16 +++++++++++++---
+1 file changed, 13 insertions(+), 3 deletions(-)
 
-On 7/7/25 15:49, Luca Weiss wrote:
-> Hi Casey,
-> 
-> On Mon Jul 7, 2025 at 3:23 PM CEST, Casey Connolly wrote:
->>
->>
->> On 7/7/25 12:18, Luca Weiss wrote:
->>> Add the power domains exposed by RPMH in the Qualcomm Milos platform.
->>
->> \o/ codenames!
->>
->>>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->>>    drivers/pmdomain/qcom/rpmhpd.c | 19 +++++++++++++++++++
->>>    1 file changed, 19 insertions(+)
->>>
->>> diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
->>> index 078323b85b5648e33dd89e08cf31bdc5ab76d553..e09552a469264f28952fc46c3ab8c125e87310da 100644
->>> --- a/drivers/pmdomain/qcom/rpmhpd.c
->>> +++ b/drivers/pmdomain/qcom/rpmhpd.c
->>> @@ -217,6 +217,24 @@ static struct rpmhpd gmxc = {
->>>    	.res_name = "gmxc.lvl",
->>>    };
->>>    
->>> +/* Milos RPMH powerdomains */
->>
->> I can't find any public docs telling us which SoC is Milos (the only
->> relevant result is Bjorn's email asking you to use that name instead of
->> SM7635). So for the sake of future generations could you reference both
->> names in a comment somewhere? Or even the commit message would be enough
->> tbh.
-> 
-> I don't know the full list of model numbers for Milos. I assume it's
-> SM7635, SM6650, SM6650P, QCM6690 and QCS6690 based on the info I could
-> fine, but such info is hard to get. So this is not a definite list that
-> all those are actually Milos, or that this is the full list of Milos
-> chipsets.
+diff --git a/drivers/power/supply/sbs-charger.c 
+b/drivers/power/supply/sbs-charger.c
+index 27764123b929..4bf4dfb50539 100644
+--- a/drivers/power/supply/sbs-charger.c
++++ b/drivers/power/supply/sbs-charger.c
+@@ -154,8 +154,7 @@ static const struct regmap_config sbs_regmap = {
+.val_format_endian = REGMAP_ENDIAN_LITTLE, /* since based on SMBus */
+};
 
-oof, I see... that complicates things. It sure would be good if this 
-list was documented in the kernel though imo.
+-static const struct power_supply_desc sbs_desc = {
+-.name = "sbs-charger",
++static const struct power_supply_desc sbs_default_desc = {
+.type = POWER_SUPPLY_TYPE_MAINS,
+.properties = sbs_properties,
+.num_properties = ARRAY_SIZE(sbs_properties),
+@@ -166,8 +165,19 @@ static int sbs_probe(struct i2c_client *client)
+{
+struct power_supply_config psy_cfg = {};
+struct sbs_info *chip;
++struct power_supply_desc *sbs_desc;
+int ret, val;
 
-> 
->> Off-topic here, but maybe it would be a good idea to add some Qualcomm
->> platform docs to the kernel with a table of all the publicly known names
->> for each SoC? This would also be really helpful even ignoring codenames
->> just to know that SM8550 is Snapdragon 8 Gen 2 for example.
-> 
-> So far my source for this has been the postmarketOS wiki, and this
-> Google Doc, but the latter hasn't been updated for new chips since a
-> year or so, and is also probably not very complete:
-> https://docs.google.com/spreadsheets/d/1WrKHLj_oSoiykhSc6xqXAkT3nlD2hq-fzUPSGiq3Kbc/edit?gid=1270863184#gid=1270863184
-> 
-> And I've got some notes locally for a couple that I regularly need.
-> 
-> But I'd love a more central place that isn't specific to postmarketOS
-> for example. Not sure where though?
++sbs_desc = devm_kmemdup(&client->dev, &sbs_default_desc,
++sizeof(*sbs_desc), GFP_KERNEL);
++if (!sbs_desc)
++return -ENOMEM;
++
++sbs_desc->name = devm_kasprintf(&client->dev, GFP_KERNEL, "sbs-%s",
++dev_name(&client->dev));
++if (!sbs_desc->name)
++return -ENOMEM;
++
+chip = devm_kzalloc(&client->dev, sizeof(struct sbs_info), GFP_KERNEL);
+if (!chip)
+return -ENOMEM;
+@@ -191,7 +201,7 @@ static int sbs_probe(struct i2c_client *client)
+return dev_err_probe(&client->dev, ret, "Failed to get device status\n");
+chip->last_state = val;
 
-kernel docs seem sensible to me? Maybe a wiki on gh/linux-msm?
+-chip->power_supply = devm_power_supply_register(&client->dev, 
+&sbs_desc, &psy_cfg);
++chip->power_supply = devm_power_supply_register(&client->dev, sbs_desc, 
+&psy_cfg);
+if (IS_ERR(chip->power_supply))
+return dev_err_probe(&client->dev, PTR_ERR(chip->power_supply),
+      "Failed to register power supply\n");
+-- 
+2.47.2
 
-> 
-> Regards
-> Luca
-> 
->>
->> Kind regards,
->> Casey (she/they)
->>
->>> +static struct rpmhpd *milos_rpmhpds[] = {
->>> +	[RPMHPD_CX] = &cx,
->>> +	[RPMHPD_CX_AO] = &cx_ao,
->>> +	[RPMHPD_EBI] = &ebi,
->>> +	[RPMHPD_GFX] = &gfx,
->>> +	[RPMHPD_LCX] = &lcx,
->>> +	[RPMHPD_LMX] = &lmx,
->>> +	[RPMHPD_MSS] = &mss,
->>> +	[RPMHPD_MX] = &mx,
->>> +	[RPMHPD_MX_AO] = &mx_ao,
->>> +};
->>> +
->>> +static const struct rpmhpd_desc milos_desc = {
->>> +	.rpmhpds = milos_rpmhpds,
->>> +	.num_pds = ARRAY_SIZE(milos_rpmhpds),
->>> +};
->>> +
->>>    /* SA8540P RPMH powerdomains */
->>>    static struct rpmhpd *sa8540p_rpmhpds[] = {
->>>    	[SC8280XP_CX] = &cx,
->>> @@ -723,6 +741,7 @@ static const struct rpmhpd_desc qcs615_desc = {
->>>    };
->>>    
->>>    static const struct of_device_id rpmhpd_match_table[] = {
->>> +	{ .compatible = "qcom,milos-rpmhpd", .data = &milos_desc },
->>>    	{ .compatible = "qcom,qcs615-rpmhpd", .data = &qcs615_desc },
->>>    	{ .compatible = "qcom,qcs8300-rpmhpd", .data = &qcs8300_desc },
->>>    	{ .compatible = "qcom,qdu1000-rpmhpd", .data = &qdu1000_desc },
->>>
-> 
+
 
 
