@@ -1,176 +1,132 @@
-Return-Path: <linux-pm+bounces-30363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEA0AAFCAAB
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:42:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDAC6AFCAB2
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:44:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 982847A33B6
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 12:41:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB466480198
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 12:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE482DCF49;
-	Tue,  8 Jul 2025 12:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7302DAFB4;
+	Tue,  8 Jul 2025 12:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="dWXqJbYT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ne3SNLi2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3642DCBFA
-	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 12:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A732DCBE0;
+	Tue,  8 Jul 2025 12:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751978544; cv=none; b=umb/9K97tjEb/rvLypIwy1pI2uu6UpqcWQ1DnqJNHVMEPGrnQ2yueL1JjREUh4AqZ8kFKYAi/L0PHVI17ZC/WJT9v4r1JXdLkxD/xvE3TfJ5l3e2Nl2+gLpRGuTwThKCyZOlptwIJeiKAwdqCH2e4XyaFXSquSyxMEfeU4TJ7rY=
+	t=1751978656; cv=none; b=RuhPL1x9itYycvoXbRdlRBxu9S2zkGPWbAbQ2wkB9PiAGM9pkniRWs2QdyKhDF4zNQC3emCZmr3ysxFKJp5bdO6fve479OL8hhIkSa4f4y3gm6AIzS6fcYmRqQU1fHdPzJ9C8avdKZ2/vwOfUV7Ga7W/fNBEC6AN8PjYcTECMO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751978544; c=relaxed/simple;
-	bh=OMUTx42+lxnfbmDa4w9KRyTNqE2cIBR6M9QVHF4w1fI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=pD2QgAx7dKWIExwkBbutixeMCJFcvwOCddzV9qU4m1Y8uaCQCdUFxgbuFjgazlpuBAaJ/kd/pPbwY8pGHnZ7kCQPzhPk7ok+DDqwShpgxXy4mh8rTn1XrRsYW1Hz/w0VZP2DKT4lgR51eCkQ3nKvbmv072zYx1b18eSWp3tEzCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=dWXqJbYT; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ae0a0cd709bso1096201166b.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 05:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1751978541; x=1752583341; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=krWI5dKupRfQc3/61VnzeAoMeO2jYhgWh27WUPDNkkI=;
-        b=dWXqJbYT4l0gvL7r8Bk7j3OlqbHVe7abqQS/crSvNpbKx0hQJa7XCbzm9vh1a6ouoN
-         65coz8Ejmlkd9cB/NUD6Oh6zz0aMNJ3NBFpTlgfWL2WG4RIZIX4w8e2GHfIX8+Dc9b9g
-         ZWzc+Vgi6AEn2o5N0LAFDJf3NtjRKjqUhcKdQt/pJNT3vfNeGrPo4yO7lguh0UGxPV/9
-         kXags8eDsrnf07OBD4OG008qKpk29DcGjytFo6HJLeVycrbINXC1a6X/jHxxTyGsRzpG
-         x57ln0NusPENSiDS5ElopQv6s5pNRZMw3Mea0PUA27J69fDkFMGkSXroci04BU2JUUXq
-         53pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751978541; x=1752583341;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=krWI5dKupRfQc3/61VnzeAoMeO2jYhgWh27WUPDNkkI=;
-        b=n5Gkz7RzyUmzph/VSNap2vAi4ezIxFy0dpZux8AN+OmS936JDW73qKx3Sc3p/5ovYB
-         DdWvnwpvY2b6N+asPyIBw19jRQKyI/47lWalHCSAb11YYWUhKO8QmrTALICQvdNjHXyj
-         K4k4jXNdN+QEoRdnQuxrWjviuvAX/J7mcdxV3onUKbiu5ScTo+Na5ngWaI3QPSmEyl7H
-         mM6ayaQBzCTQW5A2Nm2FB/IpF7198FoNw6RcGXRxSacIfES7/Rv6iAg/+EnZkJIvh0Ov
-         +NIavk4sCsClAKJlYyX5RobJQxCIZ1y3YmhTq9cknTNQmAI8xBwwEphzK4Kek5Oo/WFl
-         5FwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlUs+QgNljOfVkj29VLIXPPDNxTmd8DfC50zOVJN+0RfqC1voVHj/3u1nQWLdFbdpulbCBGbqCPA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy99ABPEpbhIaQxMHiwlZb2sZCWsO047AF4FaiYwTz+9xl5C+N6
-	KYS4N944FKvkQuqrJtJbyqu0otEz8yY+GHvQfc2EQ8kSZntyUwImk6ISHTIr9MLwMVM=
-X-Gm-Gg: ASbGnctFDzcE+lUieAx2/wtcwfT1x3BMrCZ3UHZRP3CDNslEHsZ2sMpnErEPwgipV5M
-	QTka8HqkJY5HZQuLon8SmfFUoHCINUDysG6ztnS4rMbUZLQPf8GyIsCa/BNcPb0kbEcs+5dgJwN
-	RXe6mG7cMP9eOWemVeAk+KCpS3zRZQdtgSXCg9JF+wU3Y+jb/c1XJHjNI4BFN0Kssq67fjPcbm9
-	9mbxjFsSFztA/hJJ27H53jN0GTxStqUgQuwplWjkDImKVsbwYikEPIyfaLvLs9WiMuGAH/8+L1R
-	iPpbO7MZ8gGRJEXhceUrXxmYY93nGsos9NLR4u0hxYAZArFmjOXsJdyrQ0MANPDokIWanvhxcob
-	6gSzhumUxgmLbvcwgAR4ZhO3RBVb2Z1M=
-X-Google-Smtp-Source: AGHT+IF8+quXXledQG534WGGLgZTN7F2C1w8IIy/x0D8Dajv4m6QB5Hjruw4R2tZAmvqG+s4Kctcmg==
-X-Received: by 2002:a17:907:3f0a:b0:ad8:91e4:a931 with SMTP id a640c23a62f3a-ae6b2b34160mr265150966b.26.1751978540601;
-        Tue, 08 Jul 2025 05:42:20 -0700 (PDT)
-Received: from localhost (144-178-202-139.static.ef-service.nl. [144.178.202.139])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f6949cb2sm889858666b.67.2025.07.08.05.42.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 05:42:20 -0700 (PDT)
+	s=arc-20240116; t=1751978656; c=relaxed/simple;
+	bh=Tfq6U9j3UqtDfuImMpaxdIa3wUmTSJFPDtlgJI3oLKo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cUz1KLi5EdCRbHiO/ry2cs+qiDQF40kHU0GELYRHHrP6jjw6fZ3ADPqgjffogz501Y/DcuOq83IPJgzq3hSbU8gaKkjhpleJaGJftWmKgyOe9kLDY2pja7TeLuH+Z1Lgi1DyZXQ7OfRo73m1VNGwraRSrTex68TtvtQ9QAj0/i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ne3SNLi2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD58C4CEED;
+	Tue,  8 Jul 2025 12:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751978656;
+	bh=Tfq6U9j3UqtDfuImMpaxdIa3wUmTSJFPDtlgJI3oLKo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ne3SNLi2KURMWTu07rcIAWc8sqRtOXf/Eb7kyS83XtQDJODtUXtYakJ/KvxWcOzRD
+	 C0wxqJ4Z6sB9JULinQ+dqlwO1r9ufTuzfXw5canRblvgxSnrGHcTS8Q+nGI1CFYaYA
+	 LCgVNkslCnVoNrRri+zpEgMNqNBh5XuP7XmL6z3942gn9U5jVFZ6MdMHSXFa4kgEGk
+	 wrV7iEr5Kgf90e/YH3GJNPjdVe3TRCyfuEabaxSJXZyhyAn2tQ+qfmXtdOuZSUjyov
+	 r1ajO5qB+hd67Nx3bWyv/2RceuIDqDTUTYmx2PTRzakA9sPgRyWDlgyc/PJH2Ml5zW
+	 Pv4Tf4HQE5kuw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-61208b86d75so2327606eaf.2;
+        Tue, 08 Jul 2025 05:44:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUXIsJs7YitaKOlB6dCUUmekrWYqLtIkHS8PMhziX1hxAVm8vIiABZMK70l3dUDc5G2hFhX2bB/@vger.kernel.org, AJvYcCX5UNPdfBjhp8xq93Q88QRCeGHSb2Dkt+g4/ca8mpmGlZwIGkPRBO5psryGOz6MYj/WYdO9iTyXdZcdAIQ=@vger.kernel.org, AJvYcCXN+vkWlsSm/lTJSez6r2STsi1m1wL350heHueDr9UHjgYEz8lbkcKtg+vcV4vOS1kp06IKbhq59no=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlB5p/1MBRa/n8Vj8EoVqSquSp+rYMeps3vCgsgRYIrW8vJdzR
+	iYpQmunwRyOBYMsQGnhlWjANcQT+66G2bq4EsLT5UOdLAe1c4Q9RiVM7InIPS22EJZCEAh8dbGh
+	W3vb/aHLUrPoiWEz/C7BTqpYhEhNrZQE=
+X-Google-Smtp-Source: AGHT+IH84OmBbX2dpd1EJzzLz8MdrM74HLsLpl03lVZpvjZ4f1+6Nks9HDT+/xp4+wjfAkr/Xl8/PWTSugHyt1l7Z5o=
+X-Received: by 2002:a05:6820:1792:b0:612:c547:7984 with SMTP id
+ 006d021491bc7-613928f68f4mr10686972eaf.1.1751978655467; Tue, 08 Jul 2025
+ 05:44:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20250707-trip-point-v1-1-8f89d158eda0@chromium.org>
+ <CAJZ5v0gOm4-qmAGGswk9nuPb45UGabNK-DqkcZEGmTO71tRLkQ@mail.gmail.com> <CAHc4DNK2_=81j-q4+1vsM9uyWJJ89dH4y2u_H5ie671umyNWxg@mail.gmail.com>
+In-Reply-To: <CAHc4DNK2_=81j-q4+1vsM9uyWJJ89dH4y2u_H5ie671umyNWxg@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 8 Jul 2025 14:44:04 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gAL0-OWZJd4tA-vTTrVVFzr7TK2uxES27U+uDvpBnH5w@mail.gmail.com>
+X-Gm-Features: Ac12FXzA8wSnG6HTf8bMeQQzyX235KIL7T09DnPO2I3g82KkYeVYuqQZ7uns0No
+Message-ID: <CAJZ5v0gAL0-OWZJd4tA-vTTrVVFzr7TK2uxES27U+uDvpBnH5w@mail.gmail.com>
+Subject: Re: [PATCH 6.6] thermal/of: Fix mask mismatch when no trips subnode
+To: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 08 Jul 2025 14:42:19 +0200
-Message-Id: <DB6OK61BL9ZS.31XB5TN5YTX62@fairphone.com>
-Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
- <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add Milos interconnect
- provider driver
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Georgi Djakov"
- <djakov@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250708-sm7635-icc-v2-0-e158dbadb29c@fairphone.com>
- <20250708-sm7635-icc-v2-2-e158dbadb29c@fairphone.com>
- <0a09fbc8-8835-4e94-862b-0baaea5ee251@oss.qualcomm.com>
-In-Reply-To: <0a09fbc8-8835-4e94-862b-0baaea5ee251@oss.qualcomm.com>
 
-On Tue Jul 8, 2025 at 1:30 PM CEST, Konrad Dybcio wrote:
-> On 7/8/25 12:20 PM, Luca Weiss wrote:
->> Add driver for the Qualcomm interconnect buses found in Milos based
->> platforms. The topology consists of several NoCs that are controlled by
->> a remote processor that collects the aggregated bandwidth for each
->> master-slave pairs.
->>=20
->> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->> ---
+On Tue, Jul 8, 2025 at 8:41=E2=80=AFAM Hsin-Te Yuan <yuanhsinte@chromium.or=
+g> wrote:
 >
-> [...]
->
->> +static struct qcom_icc_bcm * const aggre1_noc_bcms[] =3D {
->> +};
->
-> You can remove the empty bcm arrays and .(num_)bcms assignments
-> for them
+> On Tue, Jul 8, 2025 at 12:57=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >
+> > On Mon, Jul 7, 2025 at 12:27=E2=80=AFPM Hsin-Te Yuan <yuanhsinte@chromi=
+um.org> wrote:
+> > >
+> > > After commit 725f31f300e3 ("thermal/of: support thermal zones w/o tri=
+ps
+> > > subnode") was backported on 6.6 stable branch as commit d3304dbc2d5f
+> > > ("thermal/of: support thermal zones w/o trips subnode"), thermal zone=
+s
+> > > w/o trips subnode still fail to register since `mask` argument is not
+> > > set correctly. When number of trips subnode is 0, `mask` must be 0 to
+> > > pass the check in `thermal_zone_device_register_with_trips()`.
+> > >
+> > > Set `mask` to 0 when there's no trips subnode.
+> > >
+> > > Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+> > > ---
+> > >  drivers/thermal/thermal_of.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_o=
+f.c
+> > > index 0f520cf923a1e684411a3077ad283551395eec11..97aeb869abf5179dfa512=
+dd744725121ec7fd0d9 100644
+> > > --- a/drivers/thermal/thermal_of.c
+> > > +++ b/drivers/thermal/thermal_of.c
+> > > @@ -514,7 +514,7 @@ static struct thermal_zone_device *thermal_of_zon=
+e_register(struct device_node *
+> > >         of_ops->bind =3D thermal_of_bind;
+> > >         of_ops->unbind =3D thermal_of_unbind;
+> > >
+> > > -       mask =3D GENMASK_ULL((ntrips) - 1, 0);
+> > > +       mask =3D ntrips ? GENMASK_ULL((ntrips) - 1, 0) : 0;
+> > >
+> > >         tz =3D thermal_zone_device_register_with_trips(np->name, trip=
+s, ntrips,
+> > >                                                      mask, data, of_o=
+ps, &tzp,
+> > >
+> > > ---
+> >
+> > If this issue is present in the mainline, it is not necessary to
+> > mention "stable" in the changelog.
+> >
+> > Just post a patch against the mainline with an appropriate Fixes: tag.
+> >
+> > Thanks!
+> `mask` has been removed from the mainline, so this patch is only
+> applicable on old branches.
 
-Sure!
-
->
-> [...]
->
->> +static const struct of_device_id qnoc_of_match[] =3D {
->> +	{ .compatible =3D "qcom,milos-aggre1-noc", .data =3D &milos_aggre1_noc=
-},
->> +	{ .compatible =3D "qcom,milos-aggre2-noc", .data =3D &milos_aggre2_noc=
-},
->> +	{ .compatible =3D "qcom,milos-clk-virt", .data =3D &milos_clk_virt},
->> +	{ .compatible =3D "qcom,milos-cnoc-cfg", .data =3D &milos_cnoc_cfg},
->> +	{ .compatible =3D "qcom,milos-cnoc-main", .data =3D &milos_cnoc_main},
->> +	{ .compatible =3D "qcom,milos-gem-noc", .data =3D &milos_gem_noc},
->> +	{ .compatible =3D "qcom,milos-lpass-ag-noc", .data =3D &milos_lpass_ag=
-_noc},
->> +	{ .compatible =3D "qcom,milos-mc-virt", .data =3D &milos_mc_virt},
->> +	{ .compatible =3D "qcom,milos-mmss-noc", .data =3D &milos_mmss_noc},
->> +	{ .compatible =3D "qcom,milos-nsp-noc", .data =3D &milos_nsp_noc},
->> +	{ .compatible =3D "qcom,milos-pcie-anoc", .data =3D &milos_pcie_anoc},
->> +	{ .compatible =3D "qcom,milos-system-noc", .data =3D &milos_system_noc=
-},
->> +	{ }
->
-> a space before '}' would be neat
-
-There is a space :)
-
->
-> Konrad
->
->> +};
->> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
->> +
->> +static struct platform_driver qnoc_driver =3D {
->> +	.probe =3D qcom_icc_rpmh_probe,
->> +	.remove =3D qcom_icc_rpmh_remove,
->> +	.driver =3D {
->> +		.name =3D "qnoc-milos",
->> +		.of_match_table =3D qnoc_of_match,
->> +		.sync_state =3D icc_sync_state,
->
-> Are there any issues with sync_state? (hopefully not)
-
-Don't think so, I don't see any sync_state pending warnings in dmesg so
-I assume it's 'synced'? Anything I should look out for in particular?
-
-Also since it looks like I'll anyways send a v3, I've already ported the
-QoS settings, and don't think I'm seeing any issues booting up with
-that. So I'll include it with v3.
-
-Regards
-Luca
-
->
-> Konrad
-
+So the way to go would be to follow the mainline in those branches.
 
