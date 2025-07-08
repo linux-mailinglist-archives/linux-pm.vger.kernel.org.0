@@ -1,60 +1,80 @@
-Return-Path: <linux-pm+bounces-30329-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30330-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7229FAFBF8D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 02:56:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7C33AFBFA0
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 03:05:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DAF51889721
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 00:57:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 781037A3F2B
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 01:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0D715C15F;
-	Tue,  8 Jul 2025 00:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE3A1552FD;
+	Tue,  8 Jul 2025 01:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rvQs8R1f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1BA1C8611;
-	Tue,  8 Jul 2025 00:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7A6800
+	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 01:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751936201; cv=none; b=POBhHtpX/bzAz4SHMiS0vjsh2WsEqImqmRMuBGpoS4JASAh2xEnjNYu7Z4LHtypd6auskShHfmOrlgL0TYHQZjNUTfHAP1Ol33551xOIH+9I1SJ+4ZgbgOIn6WvAtT7kRJv9PJRXkNrGGnsFRGou+dFU4C9CrpITXJ91J/mVHGI=
+	t=1751936707; cv=none; b=p/NhqE5qGZKQB8EGGP5xCzzp35ZZQWkM0Pc7GrpliDHjbxfA1xePkdmUJCnls3ViZnALnde6fxKUZxehTLJ1qbNxTB7dlsKN33R1buciPsstAuahU14H7NNDeB7e/vo+LGG3KRDKrYjN/1zx1SP0RvJ+JtJXKkdVp+uC2/eE+vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751936201; c=relaxed/simple;
-	bh=+/F1bGbjjKvu1Uo6Wdq5/ZVs3WqOf6ln3yLQ6I089zE=;
+	s=arc-20240116; t=1751936707; c=relaxed/simple;
+	bh=i84yZfnml941z8sD89nX4ooEHdytXw1Osqc2CBQFlo0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ufXxKOEgcR0lHPVOmr+pY1mEnsOIDtKAnG7qeUkK89uBUvqoKXPmqAjWVXrkz7E7tGvrpjZaC+BdG8sJgVeLxsXKhf3x1rJV6WQH6beKBzjIdqtI5ZOBFVDSyU4NEXt0i19TH5RVhu06sAJb3DMKDS6eYfDpijKXhSLgl+ngUEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 63057f3e5b9611f0b29709d653e92f7d-20250708
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:54a55555-2426-4274-a88c-e24e906d6a63,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:339e88bba938cd16ff2c540091de5e7f,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 63057f3e5b9611f0b29709d653e92f7d-20250708
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 451992315; Tue, 08 Jul 2025 08:56:31 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 17B48E008FA2;
-	Tue,  8 Jul 2025 08:56:31 +0800 (CST)
-X-ns-mid: postfix-686C6CBE-6398994
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id A62AFE008FA1;
-	Tue,  8 Jul 2025 08:56:28 +0800 (CST)
-Message-ID: <6b28003b-58ee-4870-ade6-c488148a7b4f@kylinos.cn>
-Date: Tue, 8 Jul 2025 08:56:27 +0800
+	 In-Reply-To:Content-Type; b=S0gcF3C7gAxGoN7U03LppUHkbyaq6jVCvHr07IAAQCJYxnrZ0+NU9xDtdpK51DUz/XwT5PmyvXe9dS7z1BOcfKysjGogI/qQyQry3v9t75oYmYrpJ6B+kU4oA9g8LWIk5THGtD6sx2PgZg2rXf0E54P6UbX0v+ZlinCicu5hedU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rvQs8R1f; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-313154270bbso3889503a91.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Jul 2025 18:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751936705; x=1752541505; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fces0U4vBTah/txjkL1uaWJbDbXttpdltEcQXNSodqI=;
+        b=rvQs8R1feLI21gzOEhABwtIdi+FIEix9MCZftO8F/g311g3qjPrGS/1lrZxlSFeXPu
+         qQtWjLHHYnQNqgV7ohcaQCqu+clcmIkhC2I4nFZ2oVtf/UYGiHR7uHKUIVe/MhjQJEVJ
+         5r028Kl9BNouk+RUYlkELtrY1+y+xY7fGtjD1u01iH0YXvBejzfdg8+mydk+/jBgTqg0
+         8yRGGltSuTnahWG62ZmrnKnwLr4BQH9NPtmNqgmsu5hhirmX7UhyGlMLIGbCJ+bLKuPx
+         j+d2obkdQoGjW1ojq8/KRBR4eboU3miLeKeoG5xhZKCL7ZHRnSJ4ZvMFRc3PbdEi4ZKs
+         DnWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751936705; x=1752541505;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fces0U4vBTah/txjkL1uaWJbDbXttpdltEcQXNSodqI=;
+        b=b8byTiHvkV4VZOePYzLzrIRYbxK0l7XbKobdDNwrclNtucMrLLxwCDmkGE48EDFX/m
+         Ot+kNKBh9T/nmmKYcPdYxRz9jAzOWJzXaV3Slk41OH6GDEByY4PIX/CbRiO7r3z0lULA
+         0wTPfGwd/4N1VqXSuB9W7+lGCAqpAUSHuvziD77d64sEbbLOhnwdczFbM0ZU0k5uWRMS
+         3jmy5OCiJz52iSzQU5Jy2BCBnhJ/QAEdUemNwmFYfVO9AvJaaJQWtnkBodoRNXqgVxbd
+         +Bpm75cJEJ/jVHUjFZ/minIKvK7JjURueclOo0iqbOh2mP4oD0ZH6GZhHQSmeB+RcsSg
+         zaOA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0Y7EwvXGA+A4r1+tPJqVoEFakJkLjTPczqyBTlABDOAW+m+snI+IpGk95hJ9d3Ks6yvB2niIbHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyzf8t/pKGDWA/N2UT/3gkrXbBkKJOX/xiTY6rgapILX62YJIdf
+	x7vjri3OJVYEZhU1P97PGWQ7p1nSqvSW9rJ4YnFY8R82n0Y/zKC/5FKDUtlMgLOklw==
+X-Gm-Gg: ASbGncs9rf9Ero9MXcARs+G+BOFs8ZFB19cWkwcjeVLqjfv3zwYtbkuOGu3bt7SyaA/
+	SXgWGBR42WN51yjg6m64TPH37S0qLjk9LNbzQk33QaELmyh55SRHX+qqjlOjtLifC2IDEDF5AJb
+	0aqrOoDLeSqwfA9ZY2DVS5tVGrV6QdlvDLdF/1ScpAliae6Q/oChPLKoO9QGMbepTo/P/7R25j5
+	uPpSK4RBi2RWF87MIq7//h35495xAZKLnHbkWHixOBgRxSUAwWELmRIEMNqfCKfo32Bnv1bQipt
+	6Oc+T9XALH/FwCq3myymqO7y16/wGw2/mmp43hYM1+W5p0gfFOohRCmkMCe8lO7m2gpjEwa6//9
+	8Xd6Lgq1C11QA9NetaFmtj8V9rtPZ6eLDbbTUPgv7VVckDhv8RjFu4h/GGmfaRbRDe1LPU/A=
+X-Google-Smtp-Source: AGHT+IGLNKYmGe1JyOgmsT56Z5FG9Cik3JHHYN0Bra0/4AUj+wLy8xc/9t+rwkpUYrPvw07PkZPv4w==
+X-Received: by 2002:a17:90b:57c7:b0:311:ffe8:20e6 with SMTP id 98e67ed59e1d1-31aac432932mr20537013a91.3.1751936705207;
+        Mon, 07 Jul 2025 18:05:05 -0700 (PDT)
+Received: from ?IPV6:2a00:79e0:2e14:7:990d:1c2a:935c:f693? ([2a00:79e0:2e14:7:990d:1c2a:935c:f693])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c220bfbe3sm524860a91.46.2025.07.07.18.05.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Jul 2025 18:05:04 -0700 (PDT)
+Message-ID: <4dba5e10-9a8d-45bb-b1cb-8b4d563e7f97@google.com>
+Date: Mon, 7 Jul 2025 18:05:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,123 +82,173 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] PM / Freezer: Skip zombie/dead processes to
-To: Peter Zijlstra <peterz@infradead.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, pavel@kernel.org,
- len.brown@intel.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Oleg Nesterov <oleg@redhat.com>
-References: <20250611101247.15522-1-zhangzihuan@kylinos.cn>
- <20250611101247.15522-2-zhangzihuan@kylinos.cn>
- <CAJZ5v0jpuUVM73M=Gzq36je=K_7zEkvVd8bxohi6N5OYgxgUug@mail.gmail.com>
- <20250703164021.GY1613200@noisy.programming.kicks-ass.net>
- <CAJZ5v0j29Nu2nitmj6tPhOQYuSaHBtXQVR21ikDtrxpejPdW8A@mail.gmail.com>
- <20250704081941.GC2001818@noisy.programming.kicks-ass.net>
- <67997bdd-d00a-413a-a565-188c4b06f385@kylinos.cn>
- <20250704092144.GH2001818@noisy.programming.kicks-ass.net>
- <de7e327a-202c-4b28-b372-2d648c680dbe@kylinos.cn>
- <20250707084214.GD1613200@noisy.programming.kicks-ass.net>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250707084214.GD1613200@noisy.programming.kicks-ass.net>
+Subject: Re: [PATCH v2 4/5] power: supply: core: add vendor and product id
+ properties
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-4-8d06130bffe6@google.com>
+ <5zjoseyepm3tnqbwrh77liwuuqgmghn4kcj43urnk7z4yrttlx@yqqpnnlifdk5>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <5zjoseyepm3tnqbwrh77liwuuqgmghn4kcj43urnk7z4yrttlx@yqqpnnlifdk5>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+Hi Sebastian,
 
-=E5=9C=A8 2025/7/7 16:42, Peter Zijlstra =E5=86=99=E9=81=93:
-> A quick browse through the code seems to suggest that for user tasks,
-> PF_NOFREEZE is set just like exit_state, once at death.
+On 6/23/25 2:44 PM, Sebastian Reichel wrote:
+> Hi,
 >
-I couldn=E2=80=99t agree more =E2=80=94 for user tasks, PF_NOFREEZE is in=
-deed set at the=20
-same time as exit_state, right at death.
-> For kernel threads the situation is a little more complex; but typicall=
-y
-> a kthread is spawned with PF_NOFREEZE set, and then some will clear it
-> again, but always before then calling a TASK_FREEZABLE wait.=E3=80=80=E3=
-=80=80 =E3=80=80 =E3=80=80
+> On Wed, May 07, 2025 at 06:00:25PM -0700, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> Add the following properties:
+>>    * Vendor Identifier (VID): Assigned to the battery manufacturer by USB
+>>      Implementers Forum (USB-IF).
+>>    * Product Identifier (PID) assigned by the manufacturer to the
+>>      battery.
+>>
+>> This info is required by USB Type-C PD devices containing batteries.
+>> This enables the USB Type C devices to respond to a Battery capacity
+>> request from the port partner by querying for the PID & VID assigned to
+>> the batteries. Refer to "USB Power Delivery Specification Rev3.1 v1.8"
+>> Chapter 5.5 Battery_Capabilities Message.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>   Documentation/ABI/testing/sysfs-class-power | 19 +++++++++++++++----
+>>   Documentation/power/power_supply_class.rst  | 11 +++++++++++
+>>   drivers/power/supply/power_supply_sysfs.c   |  2 ++
+>>   include/linux/power_supply.h                |  2 ++
+>>   4 files changed, 30 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+>> index 2a5c1a09a28f91beec6b18ca7b4492093026bc81..5495e82885b2294cdfd5ace0e7e5fcbeadfccb5f 100644
+>> --- a/Documentation/ABI/testing/sysfs-class-power
+>> +++ b/Documentation/ABI/testing/sysfs-class-power
+>> @@ -814,11 +814,22 @@ Description:
+>>   		Access: Read
+>>   		Valid values: 1-31
+>>   
+>> -What:		/sys/class/power_supply/<supply_name>/extensions/<extension_name>
+>> -Date:		March 2025
+> Why does this remove existing Documentation?
 
-While that=E2=80=99s generally the expected pattern, it depends on each k=
-thread=20
-correctly managing the PF_NOFREEZE flag before entering a TASK_FREEZABLE=20
-wait.
+Oops. I think that probably happened while resolving merge conflicts  I 
+guess. Will fix.
 
-This assumption can be fragile in practice =E2=80=94 a missed update or=20
-unconventional usage could lead to inconsistent freezing behavior.
 
-> The only thing I didn't fully investigate is this
-> {,un}lock_system_sleep() thing. But that would appear to need at least
-> the below fixlet.
 >
-> diff --git a/kernel/power/main.c b/kernel/power/main.c index=20
-> 3d484630505a..a415e7d30a2c 100644 --- a/kernel/power/main.c +++=20
-> b/kernel/power/main.c @@ -52,8 +52,8 @@ void pm_restrict_gfp_mask(void)=
-  unsigned int lock_system_sleep(void)
->   {
->   	unsigned int flags =3D current->flags;
-> - current->flags |=3D PF_NOFREEZE;  	mutex_lock(&system_transition_mute=
-x);
-> + current->flags |=3D PF_NOFREEZE;  	return flags;
->   }
->   EXPORT_SYMBOL_GPL(lock_system_sleep); =E3=80=80 =E3=80=80 =E3=80=80
-It seems to me that setting PF_NOFREEZE before acquiring=20
-system_transition_mutex might be intentional =E2=80=94 possibly to preven=
-t=20
-deadlocks.
+>> +What:		/sys/class/power_supply/<supply_name>/usbif_vendor_id
+> I think we can use USB_VENDOR_ID and USB_PRODUCT_ID for this like
+> everyone else?
 
-If the task were to be frozen while holding or waiting for the mutex, it=20
-could block suspend or resume paths. So changing the order may risk=20
-breaking that protection.
+Agreed.
 
-So, although PF_NOFREEZE could be the better long-term solution, right=20
-now depending exclusively on it might cause issues.
 
-It would require further standardization and guarantees about the flag=E2=
-=80=99s=20
-stability during the freezing process before we can fully rely on it.
-
-I=E2=80=99m looking forward to your thoughts on this.
-
->   =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80=E3=80=80
-> Anyway, this seems to suggest something relatively simple like this her=
-e
-> should do:
 >
-> diff --git a/kernel/freezer.c b/kernel/freezer.c index=20
-> 8d530d0949ff..8b7cecd17564 100644 --- a/kernel/freezer.c +++=20
-> b/kernel/freezer.c @@ -162,20 +162,22 @@ static bool=20
-> __freeze_task(struct task_struct *p)   */
->   bool freeze_task(struct task_struct *p)
->   {
-> - unsigned long flags; - - spin_lock_irqsave(&freezer_lock, flags); -=20
-> if (!freezing(p) || frozen(p) || __freeze_task(p)) { -=20
-> spin_unlock_irqrestore(&freezer_lock, flags); + /* + * User tasks get=20
-> NOFREEZE in do_task_dead(). + */ + if ((p->flags & (PF_NOFREEZE |=20
-> PF_KTHREAD)) =3D=3D PF_NOFREEZE)  		return false;
-> - } =20
-> - if (!(p->flags & PF_KTHREAD)) - fake_signal_wake_up(p); - else -=20
-> wake_up_state(p, TASK_NORMAL); + scoped_guard (spinlock_irqsave,=20
-> &freezer_lock) { + if (!freezing(p) || frozen(p) || __freeze_task(p))=20
-> + return false; + + if (!(p->flags & PF_KTHREAD)) +=20
-> fake_signal_wake_up(p); + else + wake_up_state(p, TASK_NORMAL); + } =20
-> - spin_unlock_irqrestore(&freezer_lock, flags);  	return true;
->   }
+>> +Date:		May 2025
+>>   Contact:	linux-pm@vger.kernel.org
+>>   Description:
+>> -		Reports the extensions registered to the power supply.
+>> -		Each entry is a link to the device which registered the extension.
+>> +		Reports the vendor id assigned to the battery manufacturer by USB
+>> +		Implementers Forum (USB-IF).
+>>   
+>>   		Access: Read
+>> +		Valid values: 0x0-0xffff
+> If I haven't missed something the formatting will be in decimal. I
+> think the hex format is more sensible, so this needs some extra
+> handling in power_supply_format_property() in power_supply_sysfs.c.
 
-Thanks for the suggestion =E2=80=94 this looks really clean and simplifie=
-s the=20
-logic nicely! The use of a scoped spinlock and the early return based on=20
-PF_NOFREEZE | PF_KTHREAD makes the flow easier to follow.
-
-By the way, in the code above, since for user tasks the PF_NOFREEZE flag=20
-is only set once at death (similar to how exit_state is handled), would=20
-it make sense to check p->exit_state directly here instead?
-
-It seems semantically equivalent for user tasks, and exit_state might be=20
-more explicit in conveying the task's lifecycle state. I'm curious if=20
-there's a specific reason to prefer PF_NOFREEZE over exit_state in this=20
-case.
-
-Best regards,
-Zihuan Zhang
+I see. I will add special handling for these in 
+power_supply_format_property().
 
 
+>
+>> +
+>> +What:		/sys/class/power_supply/<supply_name>/usbif_product_id
+>> +Date:		May 2025
+>> +Contact:	linux-pm@vger.kernel.org
+>> +Description:
+>> +		Reports the product id assigned to the battery by the manufacturer
+>> +		(associated with usbif_vendor_id).
+>> +
+>> +		Access: Read
+>> +		Valid values: 0x0-0xffff
+>> diff --git a/Documentation/power/power_supply_class.rst b/Documentation/power/power_supply_class.rst
+>> index da8e275a14ffb9f84bae9ae1efc4720a55ea3010..6d0a6bcf501e719fa4454845b583a8b38d371bb4 100644
+>> --- a/Documentation/power/power_supply_class.rst
+>> +++ b/Documentation/power/power_supply_class.rst
+>> @@ -213,6 +213,17 @@ TIME_TO_FULL
+>>     seconds left for battery to be considered full
+>>     (i.e. while battery is charging)
+>>   
+>> +USBIF_VENDOR_ID
+>> +  Vendor ID (VID) assigned to manufacturer or device vendor associated with the
+>> +  battery by USB Implementers Forum (USB-IF). This property is described in
+>> +  "USB Power Delivery Specification Rev3.1 V1.8" Chapter 6.5.5 Battery
+>> +  Capabilities, Section 6.5.5.1 Vendor ID (VID).
+>> +USBIF_PRODUCT_ID
+>> +  Product ID (PID) assigned to the battery, such that if the VID belongs to the
+>> +  manufacturer then the PID will be designated by it. Similarly if the VID
+>> +  belongs to the device vendor then the PID will be designated by it. This
+>> +  property is described in "USB Power Delivery Specification Rev3.1 V1.8"
+>> +  Chapter 6.5.5 Battery Capabilities, Section 6.5.5.2 Product ID (PID).
+>>   
+>>   Battery <-> external power supply interaction
+>>   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+>> index edb058c19c9c44ad9ad97a626fc8f59e3d3735a6..534ed3cd049866fa747455bb6dae1ec2dc5e2da6 100644
+>> --- a/drivers/power/supply/power_supply_sysfs.c
+>> +++ b/drivers/power/supply/power_supply_sysfs.c
+>> @@ -211,6 +211,8 @@ static struct power_supply_attr power_supply_attrs[] __ro_after_init = {
+>>   	POWER_SUPPLY_ATTR(TIME_TO_EMPTY_AVG),
+>>   	POWER_SUPPLY_ATTR(TIME_TO_FULL_NOW),
+>>   	POWER_SUPPLY_ATTR(TIME_TO_FULL_AVG),
+>> +	POWER_SUPPLY_ATTR(USBIF_VENDOR_ID),
+>> +	POWER_SUPPLY_ATTR(USBIF_PRODUCT_ID),
+>>   	POWER_SUPPLY_ENUM_ATTR(TYPE),
+>>   	POWER_SUPPLY_ENUM_ATTR(USB_TYPE),
+>>   	POWER_SUPPLY_ENUM_ATTR(SCOPE),
+>> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+>> index a35b08bd368e9305554e1a608dc8e526983cfa12..100eb559dcede938595ffbf83bc5ef3645a5a172 100644
+>> --- a/include/linux/power_supply.h
+>> +++ b/include/linux/power_supply.h
+>> @@ -165,6 +165,8 @@ enum power_supply_property {
+>>   	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
+>>   	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
+>>   	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
+>> +	POWER_SUPPLY_PROP_USBIF_VENDOR_ID,
+>> +	POWER_SUPPLY_PROP_USBIF_PRODUCT_ID,
+>>   	POWER_SUPPLY_PROP_TYPE, /* use power_supply.type instead */
+>>   	POWER_SUPPLY_PROP_USB_TYPE,
+>>   	POWER_SUPPLY_PROP_SCOPE,
+> Neither this series, nor the Pixel 6 one seems to have any user for
+> these new properties? This becomes part of the kernel ABI, so we do
+> not add new properties without a user.
+
+I realize that there's no current driver that supplies these values atm. 
+I plan to add it for 
+https://lore.kernel.org/all/20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be/ 
+driver once it gets accepted.
+
+
+Thanks,
+
+Amit
+
+>
+> Greetings,
+>
+> -- Sebastian
 
