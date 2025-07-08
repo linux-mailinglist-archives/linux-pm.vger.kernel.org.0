@@ -1,253 +1,190 @@
-Return-Path: <linux-pm+bounces-30368-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30369-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0324BAFCD9A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:31:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E68DAFCDA1
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:31:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43647166C06
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:28:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9377169BC8
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198B22DEA82;
-	Tue,  8 Jul 2025 14:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 718062E0911;
+	Tue,  8 Jul 2025 14:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="T1d7Ukld"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lvLnkvfG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2041.outbound.protection.outlook.com [40.107.237.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685862DF3F8;
-	Tue,  8 Jul 2025 14:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751984916; cv=fail; b=SbJxlSg6vWdok5ImS6pDAoDeq1tpZ0knH8rX+dMX5zYwufg1zKUja99mONjbETPeVT7S3foqZS/kfafMxHmR6bzSwuA3vpIYUZDsv2PCW1m0c48K/aYmLYgKMBSv7kRfsj529YU+uIbrC0ertYT02u073zbwBtvmUJtEMVra2EY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751984916; c=relaxed/simple;
-	bh=0Bsam5TcuJSyx8mYorNFjQKhnAIju8b9nSL/g84KdVw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=AJ4nyvGQDMe+RJTz+6n1l53DT76usbDh7jsNoIZAanz5DHhyozlZU+mqCctT7EBZ9/mg52XVPl5sr2M35mkXMdS1xOmDKKegLNTb3EGeB6HtDDnalNY3sko/Vx6HPcVQpwiYn62DC/EF45/dAivd1As49pRpMkkPzw0zSGjatro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=T1d7Ukld; arc=fail smtp.client-ip=40.107.237.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vxjHaygs8TWKEn5higuBDdnUAycHO6berTrV9ZIgC9DDPTfRNERuED8F/Rp5zZFStYfZ4rExdydls0ZvmTCu9z+PR0JZaKfeqXH+iT7Fw7d8Zn9IrI/DkJUoPUd6lqZUYSw9rj+nQI68tpyM4EynqpqaD82Z/xOq9WDDl1ki/PxAcsJnXgtaBR17KmeK1LdSnQU8yS9jTe2M1yNSONIH/kxMhV98RmC9hCZlO6+0NWZ+iCSqDinBS+K58bMzT9UiOtrL3/HBzuhmJb/TOUOh7VYtppU5WpKVliIZMiNi9ox/nKxKAfqqYdJtxtHiagNcWOq+61i/qAZgKWav0ZqUjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=13Kss5/ZlqS2hOsyED47OwOTHIyLQlqHAxO1NNr/yVY=;
- b=Rg3J232y04DTAP1N2bJ0DqExZCf+rLcOXD5BUofP5tBOdqUspj+6AM/gb0Vd4JvBnkxQuEZPOsb8fVS3W7LdQH4TTwn6x9YVoO1AwLcMu1j1cMfmuNFfQGnUIT0NZZ9NwJ6hxJCHQPXSnh4HtgdYtjdnQ776LmaeCVl7Ybz00f1+rxjb7eXmbJ/zXLaZZTd4bYMLldgnoFK7uBRC35pNEdSLZYasuqU82pK4oCyaZbm256nuqET7XYqzs6cOTi12tSPt6YBbDTuHLmXyVrdLS4/XxfOoUxEbdJ1AuVBAhKyaEBIcYt6aZD55p+2M0XeBR+brZgbDnO1lXycRkM2/8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=13Kss5/ZlqS2hOsyED47OwOTHIyLQlqHAxO1NNr/yVY=;
- b=T1d7UkldRylgbQ3KXS1XpeKBT/Rxrjd+sSBE6jVQUQReJoAIX7JeBqwACONXes3hXsIGHyq9JeY+y8X2u8HE2PZYBgd9cWPegnl+t8gggUgOOgGTl8bCDw8q08R+JtqpFzJNGeZ+ebT6/+OGcQmvbfBCJ95rSwLzEe60DGi1/Pc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by IA1PR12MB9737.namprd12.prod.outlook.com (2603:10b6:208:465::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Tue, 8 Jul
- 2025 14:28:32 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%3]) with mapi id 15.20.8901.024; Tue, 8 Jul 2025
- 14:28:32 +0000
-Message-ID: <bd30f96b-44d2-4127-a019-f02bc2689aa2@amd.com>
-Date: Tue, 8 Jul 2025 10:28:21 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/5] PM: hibernate: shrink shmem pages after
- dev_pm_ops.prepare()
-To: Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
- christian.koenig@amd.com, rafael@kernel.org, len.brown@intel.com,
- pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
- airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com,
- matthew.auld@intel.com, matthew.brost@intel.com,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de
-Cc: lijo.lazar@amd.com, victor.zhao@amd.com, haijun.chang@amd.com,
- Qing.Ma@amd.com, Owen.Zhang2@amd.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org
-References: <20250708074248.1674924-1-guoqing.zhang@amd.com>
- <20250708074248.1674924-4-guoqing.zhang@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20250708074248.1674924-4-guoqing.zhang@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0409.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10b::14) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712542E090D
+	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 14:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751984922; cv=none; b=LkzdXyU0YxrVzjGxKNg1zZJ41ZTGykMNlfQYYN3Hs5loqu9i3O2Ci9Vaj4M/jyRt6s0sMqACbjcFnYQxepJbp+kr/VvCQQwVw4rOY0tkku55D8+fftqmBaT2lig9hadNuEANKQodjQ4SBV6riRF09nED0YYFLdvv9pv79eXRH2A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751984922; c=relaxed/simple;
+	bh=jWrF/dpjWXBvpXy6EsBSTMmZytF1FtpgbDD05a1Vidg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GfRwlmbof0LvndQwkuziySOks3CGUvzzOhUf5yayJJhABz40JnOQdM7qXvhDm4uTv0BXZyXXsYIG12ALrP2MaeFLVDwpZK04ESgkcRMbQsyqZ/y9hTZpizzWH4JBj1safFMRX0cMN2FhX0A9ObZYk/CoxIijSCwbGYdJ1zF+hOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lvLnkvfG; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a525eee2e3so2876151f8f.2
+        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 07:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751984919; x=1752589719; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a1u0ZnpKBMPq+ESjeFyy2iZIrYKgj2r6h5XgXP2nS68=;
+        b=lvLnkvfGU6EcDzZAQkuAv3FNXGz/6NbOGaFnU7bg+OTfkka61x6ShSQ5PiapE8acCp
+         414S5KggiPQ36rrhbLvLRVaZwkljUaYFp1W2OQSRupPTWuLixPAubEhGZbgYgVpyyMga
+         qAExDhcLyjdUFfWeN8kj6h4je01ycDPwspq9J7l4Yf0gA8a1YmrIeCtbr9cxxd8TEOI8
+         L7GiloLjr0g6d2WZTpmPO4DySrNpcZf0kby5KS4IJwPDTjwkYaZHsa+2rB8qR8d7O1mc
+         sjVewX9U94XJoYEQ5k5kN+LC8z06QBAPADpNPzLwmrMzbYByp0A6MEmIVrymE5j9KFYE
+         WHBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751984919; x=1752589719;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a1u0ZnpKBMPq+ESjeFyy2iZIrYKgj2r6h5XgXP2nS68=;
+        b=nL5E+cWcLrLyT7elGFTEpGI7RVFPnH2AKRvevsB383nqI9yf7opSqEtbConI6VhQFc
+         DbfIlcqNCMNfbesrnNM8fX/1wtQkGDx4DI6IjP25PnHnSeMhZ+EMehzMxzFweYedLs3E
+         Klq4xAaUcXVGRfGWPXPDsP5quvUISpTRufZGqiNaLNOBi2GnkJHhNu3+EuqfWjG3xq39
+         Twupmt5ntj/lhJzP/jZ9T8YPG2PGOtdO8nF4d5kEPdd6tyys22Jh66tn1HM4ugv3go07
+         hyEPpBtJY5PVT26qT6uaRYDfUAYTeSA66iYz+FyZnRe7miKjuzs+dM0L7iH5rAsItABg
+         hBMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUeHH5SzZ56A+dpiHs4pSm6bjxlguJWyhR1PfXFLpdVgSF4HSJzE4t0o019YIpE/J3COMvKNpx+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVPs5LQS2hHgkdmVizV2260hb8k/5qQdqdM+rdMsCOyciZ5nAH
+	RBUs5D+iffnheY8yMmLA5WlXevUnOafUOE3eeoxoqlsrlcCJz56B1V/SUTpRaOp188U=
+X-Gm-Gg: ASbGncuKPuD5QchXWjG556y+1S0UdffumzjBI4GoDw8fDse9dnGRXdpa+1xcANx+sa9
+	kQb3pgMM2pYvmK0QCgZkb8Xm41qDUmye14MUa9zhWo3vhMeCmSX4/AxKOUiuHbiskxhzKT5iMQs
+	m/HCIssuUH0ctrlvBalATeGjQYnj7XgFxdSjytEip1e25RQuq2AGele9I7PR24yQH0wOrlBbwXk
+	M523GmaL1aS/rJMHDZrvg/a8G74Gn41Xjo6IGWbxJJEMXMxOzNeyMGWrFAG1cV/AMaJj4cG6elo
+	ZM349u6aY2fLUCHlYxPHdRZ517Fm1CxVQe/rkV3dG0wKoLNTfNRwfASEpdCrA9R5Q/6etuA6V50
+	fp2DVc1vRP9xpsL2ZZphCP7eOS5RwjtxJw4E74rpWDQ==
+X-Google-Smtp-Source: AGHT+IGHYlyW/KuMeQ38ZTMg8cjufpV+V4CRuoUvRrQjYHvmdYHiGY/2hZbUDnpbC+myZxX6Hsqw1w==
+X-Received: by 2002:a05:6000:290d:b0:3a4:dc32:6cbc with SMTP id ffacd0b85a97d-3b5dde8bb2fmr3026994f8f.20.1751984918672;
+        Tue, 08 Jul 2025 07:28:38 -0700 (PDT)
+Received: from ta2.c.googlers.com (24.125.187.35.bc.googleusercontent.com. [35.187.125.24])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b4708d099esm12963602f8f.21.2025.07.08.07.28.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jul 2025 07:28:38 -0700 (PDT)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+Date: Tue, 08 Jul 2025 14:28:35 +0000
+Subject: [PATCH] PM: add kernel parameter to disable asynchronous
+ suspend/resume
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB9737:EE_
-X-MS-Office365-Filtering-Correlation-Id: fcff4c9b-e897-44f0-9798-08ddbe2bb6d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NW9BTzBqc3VmZ2hiTW9ZZXVyK1NadjJtL3FUMGFHTE1uRDlYRkxXQ29VR0VL?=
- =?utf-8?B?TVF5UmZ0SUMwUXV3bS9ZQ1htbklRdWRMQVlBSXRRUEk2clZONzRvRnhUeEZ5?=
- =?utf-8?B?ZWJkZDBWV2JaNEYzWG5UcGRlR0RSelNwRUZ6OWpNdzZ2YmpPT1RBMzN0eTQx?=
- =?utf-8?B?R0hhajNJdkRzd0ZZaUgwZ04yQUJWNVNuczVoaTRxMm5pa20wNFM3WWZ0Y3dZ?=
- =?utf-8?B?dzFId2pIcVFBUDU3cXBMSjlWZHNsRFhLSzhDOUdHT2p2WnFaeXBCWWNoeStJ?=
- =?utf-8?B?V2J4Zi9WeCtwNVc2b0srbUx4NFp5aDZqYldzWEJITmhQS2tZaUp3Y1NkYzhV?=
- =?utf-8?B?a0hRWFdBbmRkYTVSRWIvWW5LOUVra25OQ3JsT0Q3c0dnY2E2VmthTTVsZ0xH?=
- =?utf-8?B?RnBXMUU4aEVDREthbkE2OVBpUTRtYWJlNUtjWWdncDg5a0liYjFHUEYxZmlp?=
- =?utf-8?B?b2MzbjdldVlNVVU2RmI1Qk82ZTZMQkFaMENYbVNGMVFWeVR1emU5RFJybXJ1?=
- =?utf-8?B?Q2ZFRVlKKzNtYTdEUnhpaTVOUGpUeGhJQmFWTHJtMGdiME5tcVBSMUpEbXZ0?=
- =?utf-8?B?WlBNMmRoVHJGSmdvcDFaM3Q0dHZiam55SHFNS0hhcUo1bTZZeG1FSjlPTnV6?=
- =?utf-8?B?cG5MRm4rd0pwa1hua3IrVGRROVpKaW45b0VIdHI2WjVzRjArTkhjUTNkMHRS?=
- =?utf-8?B?Rlp2OUlneXhOUTZMa3Zpdm56dXk4VFVuaTNwTXBuQWw0cVg3bzFrWitJY2Fu?=
- =?utf-8?B?ejY5SVUxdlBCN0xWdWFxdXJUY0QvcFpvMjIzaUtKU2JheUtqazk2M2JQNkZY?=
- =?utf-8?B?MGZ4dS9Nang1a0h2N3VhVFNnelc3RUwrTFRzcytVYlZYekR5QlFuZzVhLysx?=
- =?utf-8?B?aHJXdkNZbVRzZVN4OThpemNuMUZzTmRKVHRQODlFNE12alJZdS9QMUNHVVd4?=
- =?utf-8?B?MjFkWmN4a1JJRU92bWZ0dC9Ic2FoNlNhZE9pZWxIbXRqbk00U1pERHNRWndw?=
- =?utf-8?B?ZnpvRjMrbFhEQ3FvM012MWNxVjJLQnd2clpLTlBvVkd3YzVWU3FjVXZreEJB?=
- =?utf-8?B?SkM5a0EyRlJ2akgxSW5mTVZRY0dRYWhjVFVtdm51YWZxb2dMOHlnakIrOU9L?=
- =?utf-8?B?KzdheGhTdk1VL2pmZHdpeHF4S09XbzFDTkNuOUk2WFRaeUZVQVhjaXhCdmda?=
- =?utf-8?B?ZkxPRm5MTkxOUnl3MWxwMUxOaURhaU5qOFF0NVFZcFBFUWs5SXFaemM1ZW4y?=
- =?utf-8?B?dE9tVmhkWDBVY0pIMldBY1YwNmJoZHVPb3pXR3lHcjdoL0NuQW1ScExzRTZW?=
- =?utf-8?B?QkpPME1ma0dtbTA2d00zdmZKSmExNXBXTzg0M1FPOVlCTnYvKzZoakduNEdv?=
- =?utf-8?B?U2dJY2Z3MkJmdURyeUVjSnNKRzVST0dPZDRCVndTWkg3aFh1ZGh1RGdUT2JZ?=
- =?utf-8?B?SW9jU2NWc25vdFpJWlBHQXBSZkZBNzExV0dQdkZ0K1lFMFc4NmUxb2VGYklQ?=
- =?utf-8?B?YW41Zitaa0NScGxtRGZ3ZUpBeHI3dlFlaUgxRDJjZUoxaHlYbytzU1lxY2I1?=
- =?utf-8?B?SWdzNkN1Q1BYYWZjWHhmQUFHU25mZk5BR2Q2RzBNeStXUldaTzJyTUJWZ016?=
- =?utf-8?B?VnVuanVtTU9IdFBNN1dTcitSc0YzU3o5STBhVTFoeTAwU3ZBSU5ma1JkREN0?=
- =?utf-8?B?YU1STHNUNUg2OVdWSnlRdFEyKzlGSmY5NzdFaVgveGlyYjF2cGo0djNhN3Jw?=
- =?utf-8?B?elBjejk5alh6SnpIUHlyU2RLVVcxQXRGMHJUY3cyYUpuZWNleG4yYWpCWWNq?=
- =?utf-8?B?UXczMGRINitPb1IwZzEyMmNsZFo2aGtvazhMK255aFZtZzlhL0VoUUtRU25Q?=
- =?utf-8?B?NS9yUlhvMUwxVTV4eEtxMFpFUnlCY213VEk2WXlFQW12eUtpaDEzalpQUzFr?=
- =?utf-8?B?NTIxN000ay8wa1VmOEdBeDgrUDBkdWg4NW1xdzAxemt2UWdlR2tFMEhtczF1?=
- =?utf-8?B?cENVUHM2Ny9nPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?N2dvQVQ4eGZ6WS9MVml4RitSN2ljZ0NqRnh0UDdRdkIwNUt3ZEJEejV6d20y?=
- =?utf-8?B?Zkloa1cxb2wvbXFNZW9pK1lpT1VLNGluWWlmZmpldzZ6bmFZSldNR01SeENz?=
- =?utf-8?B?cUI5VkFxTGJFdmRUbFEvVUdLaUJFRlhPZTE0ZTZHZzF4QlI5SG1sVEdqWFho?=
- =?utf-8?B?R2pyVCtJUTVvbXh3NWViTnprbzlMZTVCSVRxbDFjMWkxSnpRUGtwdThFeW9u?=
- =?utf-8?B?SXJGd3AzemNrNGxiTEp5MnkvVWZLS2dRc05xblY5VFdGQXk1M0QvcXFLWXdF?=
- =?utf-8?B?UkxoZWpUazU4eG1zV3pzQXdhUGVzaXczTS9jTkVqdWNYTjhXOU9WdDgxUDh2?=
- =?utf-8?B?ZTF2SjVyUk5aZlBGTjhQd2s2b0dPU0F1Yk5CV21sdHhCOVdsbkk2M1duNGNk?=
- =?utf-8?B?cG43blpKUWdNVUREaXB4cG85TU1nTU5kTitra1NXSXcvcnQ3bG9RT2l6RjFi?=
- =?utf-8?B?cEZ6aEpuWXZQd1IxKzdIT0lUUmsxY1Z1TmRjVHBvb2JFcXo3N0NBTmY4VVZu?=
- =?utf-8?B?NitNVW8wL0FLd2dtOHRHRnlTZWVTQW1ZRVJENGVwLzVFaE1kYURxbGNYWmgy?=
- =?utf-8?B?bE5WQ2xxbDRiWC9RNWhYN2ZKMjNRNVpYdlJnWmFOdHphOStBVDZGVmhWM0xP?=
- =?utf-8?B?MGlXTkNjWnozRXFKWFZjZ1ZML2R2ZXp2R0g0UlJEZ2tTd3NMZVlBdTBoeDEw?=
- =?utf-8?B?UDJKWXVCc250Y1pZelJZMXpXdlI5dlZHZDhIVGljQXZybG5PdU9icjh0bm5t?=
- =?utf-8?B?STVLYm5vb3dGMFJlOFhGWFVVVm5FZkhMakJPN1pnZUMzVURsOWZiRFU3QXV2?=
- =?utf-8?B?enJnSnJCclh5WHZiOCt0Yjd1WlB6Q3BwMGNrYnpzTVFsdmhzOGY3T1NTcmp6?=
- =?utf-8?B?bTFjeVJwaXc2SHVSY2kxT0xDSkhucVVPWDBnbDhaNG9RZUhMd3BJQUlmUzEy?=
- =?utf-8?B?OXpNSFpTTEx3U2lrZyt5Qld0dkh1QlkxWjRtaXBGa2d6K2lFVkNxWnFaU1A5?=
- =?utf-8?B?dGo1RC93aGRmWUhIWWRHL0pSb0ZBdjFkdjVvbmEvR2kwdmNYc2lUbmtJOUNQ?=
- =?utf-8?B?T2NDcmNway9rRzJIYmZIT1N0RTdWZ0tXbHVVemtrM25BamFCQ0pBK3VtcnFu?=
- =?utf-8?B?bWpERmZhTVByUXQ4aFl5S1V6aWNwMFRxSkd6RjJNcXpBZVpDWG9XaWRGSm1p?=
- =?utf-8?B?MWZzNmdCUENUcEYvYTY4NE84cjc5V295NWdRVXpYcHlxeXYvRzRLL1h6V1JG?=
- =?utf-8?B?SFVhV0pCa0FtVy8zL0pDME9IQnQyYUxBQ0tRdDcybHpCd2VLa3BoMWlScWt1?=
- =?utf-8?B?K0RsL284Y1JDM0U4eDZ2UkJLMGpHbkhZQkhKd1J3UWF0QUlRejNaTnE4NHZV?=
- =?utf-8?B?TlU5TWxXRGNMOU00RXlTc01rNXkyakxJQU1WUGFmeTgrRy9OZVRVdy9VdThh?=
- =?utf-8?B?U0pkWUtpYkVtUSt3cUM2UmtMZHJQTFhscloyQkN0V1FIcCs0ZVUvT0JWY0RC?=
- =?utf-8?B?Vi9Fei9ISVNyVDNVU0tMQ3VuTUpsbEFGb2w0TmJTTXYrU1ZrbFMyY0tVVTUw?=
- =?utf-8?B?VG9yMU13VXFEUU9ySGRWK2xFWXgxdXVReDZkWmprL2RiQlBLOWhzdHdoWUdy?=
- =?utf-8?B?RVJjZFBoeWdmNTRudnBjT3lEa21OMGlNRUp1K002ZVhUR1VubnUwQmVZQzN5?=
- =?utf-8?B?eEFBUzBLTE5QOTQvSGVwdHZndUtYd2VReE15cHhtN1V4dXZiaGpBWFpvRFdE?=
- =?utf-8?B?RmtMd1BxUVBWQmkzQ0JRclJJQ2tDaVh1L1pGY3hFWkQyN3JxTk5VdHJid2xk?=
- =?utf-8?B?cjVjeER4UDBGM2NCQkJBUU9WZGtaZSsrUWc5SjBpbmpNN1VRTkZ2QzRaelM4?=
- =?utf-8?B?dno4N1NFOEwzTDExRmE2T1RpODNpMnYrY0RPcDRWUlAwdWtqOElvM0QyMmZ1?=
- =?utf-8?B?bGNBeXRjZHlQYjFENEd3d3NJV2JLSjBuMUFIV3hZQ2tic04rM0dVZEgzVVFz?=
- =?utf-8?B?UXg5SXhTejYwTEk2TUtuQmwxR1lpdWplU1lEZ2l1b0M0dStabmxaU3RjZUox?=
- =?utf-8?B?eHMvcXo3bEczU1lqNkIzTW43VTlIdzNrK3kzSk5uY2JSTlFTQ01iME5mazVk?=
- =?utf-8?Q?O444VK1F5TKIDxRgujP+VbZ+p?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcff4c9b-e897-44f0-9798-08ddbe2bb6d6
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2025 14:28:31.9353
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CMbrE/JqpU5bDyn4xbehCLBbekvzN7Ww55kt4iPpiiqraSFFIZsU7T1CegpLPQ5PKSiqEFdyANk//wmr+8hxiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9737
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250708-pm-async-off-v1-1-1b200cc03d9c@linaro.org>
+X-B4-Tracking: v=1; b=H4sIABIrbWgC/x3MMQqAMAxA0atIZgM1IhWvIg61JprBKi2IUry7x
+ fEN/2dIHJUTDFWGyJcmPUJBU1fgNxdWRl2KgQx1xpoezx1deoLHQwRnIdcyObIsUJIzsuj978b
+ pfT/H+3OQXgAAAA==
+X-Change-ID: 20250708-pm-async-off-bf2a3e2a27ef
+To: Jonathan Corbet <corbet@lwn.net>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+ Len Brown <len.brown@intel.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, peter.griffin@linaro.org, 
+ andre.draszik@linaro.org, willmcvicker@google.com, kernel-team@android.com, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751984918; l=3222;
+ i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
+ bh=jWrF/dpjWXBvpXy6EsBSTMmZytF1FtpgbDD05a1Vidg=;
+ b=ZNYMiW1EANTACN67LgcSUzSu4Nbqflr85S7w13JDo9s/T284rPyYfYKZDkPV/U5QUb7yiydKA
+ UjSZAMdLQWKCo9ztdFEtbW8KCtERSMMB8BsrRaJLnONnjWGGmBZBXuR
+X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
+ pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
 
-On 7/8/2025 3:42 AM, Samuel Zhang wrote:
-> When hibernate with data center dGPUs, huge number of VRAM data will be
-> moved to shmem during dev_pm_ops.prepare(). These shmem pages take a lot
-> of system memory so that there's no enough free memory for creating the
-> hibernation image. This will cause hibernation fail and abort.
-> 
-> After dev_pm_ops.prepare(), call shrink_all_memory() to force move shmem
-> pages to swap disk and reclaim the pages, so that there's enough system
-> memory for hibernation image and less pages needed to copy to the image.
-> 
-> This patch can only flush and free about half shmem pages. It will be
-> better to flush and free more pages, even all of shmem pages, so that
-> there're less pages to be copied to the hibernation image and the overall
-> hibernation time can be reduced.
-> 
-> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+On some platforms, device dependencies are not properly represented by
+device links, which can cause issues when asynchronous power management
+is enabled. While it is possible to disable this via sysfs, doing so
+at runtime can race with the first system suspend event.
 
-AFAICT this didn't tangibly change and was just reordered in the series, 
-I think you should carry Rafael's A-b tag forward.
+This patch introduces a kernel command-line parameter, "pm_async", which
+can be set to "off" to globally disable asynchronous suspend and resume
+operations from early boot. This provides a robust way to fall back to
+synchronous (sequential) operation, which can stabilize platforms with
+problematic dependencies and also serve as a useful debugging tool.
 
-> ---
->   kernel/power/hibernate.c | 26 ++++++++++++++++++++++++++
->   1 file changed, 26 insertions(+)
-> 
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 10a01af63a80..7ae9d9a7aa1d 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -370,6 +370,23 @@ static int create_image(int platform_mode)
->   	return error;
->   }
->   
-> +static void shrink_shmem_memory(void)
-> +{
-> +	struct sysinfo info;
-> +	unsigned long nr_shmem_pages, nr_freed_pages;
-> +
-> +	si_meminfo(&info);
-> +	nr_shmem_pages = info.sharedram; /* current page count used for shmem */
-> +	/*
-> +	 * The intent is to reclaim all shmem pages. Though shrink_all_memory() can
-> +	 * only reclaim about half of them, it's enough for creating the hibernation
-> +	 * image.
-> +	 */
-> +	nr_freed_pages = shrink_all_memory(nr_shmem_pages);
-> +	pr_debug("requested to reclaim %lu shmem pages, actually freed %lu pages\n",
-> +			nr_shmem_pages, nr_freed_pages);
-> +}
-> +
->   /**
->    * hibernation_snapshot - Quiesce devices and create a hibernation image.
->    * @platform_mode: If set, use platform driver to prepare for the transition.
-> @@ -411,6 +428,15 @@ int hibernation_snapshot(int platform_mode)
->   		goto Thaw;
->   	}
->   
-> +	/*
-> +	 * Device drivers may move lots of data to shmem in dpm_prepare(). The shmem
-> +	 * pages will use lots of system memory, causing hibernation image creation
-> +	 * fail due to insufficient free memory.
-> +	 * This call is to force flush the shmem pages to swap disk and reclaim
-> +	 * the system memory so that image creation can succeed.
-> +	 */
-> +	shrink_shmem_memory();
-> +
->   	suspend_console();
->   	pm_restrict_gfp_mask();
->   
+The default behavior remains unchanged (asynchronous enabled). To disable
+it, boot the kernel with the "pm_async=off" parameter.
+
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+Dealing with the pixel6 downstream drivers to cope with the changes from
+https://lore.kernel.org/linux-pm/10629535.nUPlyArG6x@rjwysocki.net/.
+
+Similar to what people already reported it seems pixel6 lacks proper
+device links dependencies downstream causing i2c and spi client drivers
+to fail to suspend. Add kernel param to disable async suspend/resume.
+---
+ Documentation/admin-guide/kernel-parameters.txt | 9 +++++++++
+ kernel/power/main.c                             | 9 +++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index f1f2c0874da9ddfc95058c464fdf5dabaf0de713..55ba3e747d86c09a0696e105a1d9cd99218f0c07 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5000,6 +5000,15 @@
+ 			that number, otherwise (e.g., 'pmu_override=on'), MMCR1
+ 			remains 0.
+ 
++	pm_async	[PM]
++			If set to "off", disables asynchronous suspend and
++			resume of devices during system-wide power transitions.
++			This can be useful on platforms where device
++			dependencies are not well-defined, or for debugging
++			power management issues. Defaults to "on" (asynchronous
++			operations enabled).
++
++
+ 	pm_debug_messages	[SUSPEND,KNL]
+ 			Enable suspend/resume debug messages during boot up.
+ 
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 3d484630505ae91fea29f7f9b3fbcf7e585955d8..3cf2d7e72567ecbea2cd80acd3c7f6da85f5bef4 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/acpi.h>
+ #include <linux/export.h>
++#include <linux/init.h>
+ #include <linux/kobject.h>
+ #include <linux/string.h>
+ #include <linux/pm-trace.h>
+@@ -112,6 +113,14 @@ int pm_notifier_call_chain(unsigned long val)
+ /* If set, devices may be suspended and resumed asynchronously. */
+ int pm_async_enabled = 1;
+ 
++static int __init pm_async_setup(char *str)
++{
++	if (!strcmp(str, "off"))
++		pm_async_enabled = 0;
++	return 1;
++}
++__setup("pm_async=", pm_async_setup);
++
+ static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 			     char *buf)
+ {
+
+---
+base-commit: d7b8f8e20813f0179d8ef519541a3527e7661d3a
+change-id: 20250708-pm-async-off-bf2a3e2a27ef
+
+Best regards,
+-- 
+Tudor Ambarus <tudor.ambarus@linaro.org>
 
 
