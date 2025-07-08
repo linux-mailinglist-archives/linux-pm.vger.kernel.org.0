@@ -1,200 +1,132 @@
-Return-Path: <linux-pm+bounces-30379-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30381-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CEEFAFCED4
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 17:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D16CAFCF5C
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 17:36:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74E991BC2DF7
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 15:16:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 782061BC5499
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 15:36:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F6B2E0B69;
-	Tue,  8 Jul 2025 15:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3EA2E0405;
+	Tue,  8 Jul 2025 15:36:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DeJ7K1jF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sOBK1fUZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1ECD2E0916
-	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 15:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F8F2E03FE
+	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 15:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751987783; cv=none; b=BbqIj7jq5CGUDKvKMtf42rKfb8f8HSoZiYbWDl528Sny9SPItbNFgcXjMEqKaZK9wr4XySHbo/qcksxHx8ZTO5sYI8n0QD8HYnOY6SiF0vih52LhCw6p2efZWNERXdwC45hKommtb2ms8vMcH6pK659RtgwPpjyuQ1gr9uz7Kkg=
+	t=1751988973; cv=none; b=Zpj6KmGcVlK//21C6ILa6+faVsRlMB2ZLWPgv66oekBpKeH77BDWs7lzzlYr6WG5t7NdcLfqF/rzICo7UwUl3U5PmVaqygXSZ8iV9SPDiUIzeTH3+GwKeny0OD5Rr8gwHcXlMVpi974JWmL1/cmeRq7EBQiagRjd/1M4jALL24I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751987783; c=relaxed/simple;
-	bh=BO0g3NVsjvD3zy5Hf1jD2LqFckcH8XesA8tsE3wCODk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=F9n5r1/Z3PM5d7MluHtAbiv7YPi5u0uB6nZa6AGX5mKoVf9aUgCNyl+Ku/zhWIc6hvpta7zSvz6vQOalXo8/Q0b7FiW3eRstFtcy3yCZaK+WAyEg9Z5trJOnw/AE9tD6fNJ40it6gFHUPlyFzW48WNgFsXINSORTfwQCfA0cJPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DeJ7K1jF; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a507e88b0aso3520532f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 08:16:21 -0700 (PDT)
+	s=arc-20240116; t=1751988973; c=relaxed/simple;
+	bh=MYoMBKYTdN+8xP9wcucpfxgCMC4X7lR7pJmRicnPgXk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gTIiJCndYp9lVp+82/QnF9QrE+FU+eva+lXVBg+HVKyXX2/iYw+aM+8ljhGCe5il33mU+PffdDw4I3zqGtZVQc0PIKCSj9w47rDSJeJeO+eKKurPsTtS8Ry+cj8ztqQCvBObHUS4lnsYjCSU5aMQ+df1/L6lAQPKwmson4ZFzD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sOBK1fUZ; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5f438523d6fso9757a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 08:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751987780; x=1752592580; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vefbhrYFOAFjA+Ss9IWgRjUUOKbEdez2x+aQKjYMss8=;
-        b=DeJ7K1jFzcFc29dPVAJPNFldlYzRxbBMp+wuVbWiLoyqhD7UNgQ2ThJCZOFfgdz6B9
-         rAoAA0WY/o3Nz594X97VD6+FLKmewST63HCjCc4hHW5ev9dUpn5VPAm/qidD3DxTw/zO
-         FFABxyURp0EuXCwC6AvNsDoMmWvQL5vXb7iaFACe3/luymEDYgyf7XdFyMxUkamCSpVt
-         TNYdmfYWqEOw/rlIxz6C4TittbBV+ID1aN5Vw4JfvJI01a9giPNltsLgJP6vFqemN8cU
-         6KoQ9oqan74ABR85Y/mwYlN+VBJhlH8CaY77tDbnFrfwljUYyRk/Q8zBTmeh55vImYyp
-         iACg==
+        d=google.com; s=20230601; t=1751988970; x=1752593770; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MYoMBKYTdN+8xP9wcucpfxgCMC4X7lR7pJmRicnPgXk=;
+        b=sOBK1fUZtZ7RwQdr3WSLtxP6b/fVBLUGPYtx+TuUvUr0lRABKoxtJsW/Zq+C+mmtfI
+         5SE6XQe3KvlrKRJ9K3po7J/0sz6HE4ol6lAz/IRUjp/GNWZgNT5Dk4oNYe3cQNnJ3JVK
+         cdnf0KanBRwcaoak4OP2zCR6GQxFikVktkH+Es3rLZdSSjSGfFygnOBDttEiuljv+BNU
+         eAVw4l1DfokRSvrIQNP3uKPKEodVOboGhMfHaiU0VtbrFUQVK7S4A5z0usMEfnoN2Oay
+         WICfh7PeXVsujWuawFJtO9mqX9yTaFVHjpknZSzL9IiREGN0ByYdpp1EFJtBWP5h1uC1
+         /y/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751987780; x=1752592580;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1751988970; x=1752593770;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vefbhrYFOAFjA+Ss9IWgRjUUOKbEdez2x+aQKjYMss8=;
-        b=aA2afGAMCqcMjoH6xck+gFtPvVdghAWzFJTFcZ2irmZ3tLs7zLBG3HcSJpCY1Slzc/
-         FPXPvQCsggNUn2y2m7sfapTsQyyeD9BgiuCgYAAhvGjGdKFBXfJ0h1jcXvMQmiXwDlvb
-         eW2+qEn008VtRVwbMQjaOewkuE9jNjWRd1eNsPRIvULRr16ggQ06XA9mfuq4jzbUpigN
-         zXMH6/KeTV9m9vTZTvBTOyGsDpWxOsGsOeOjA/v4ljMA939ZMCug3CB8offDk6iA9WQt
-         GrF51RBOeT4KBuanbEhagCfalegWyN0zvPDqMcubWKudwZoJmO2iM7Y464UoPSbt/Nnz
-         f9Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5eVVqsMHBMvnYlYsmVUCreWlpbP9z7dzPG1bk0ZrtPxDjDPosAgJjX1vwE6Uqx7YyBCBzjVmRkw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBp4XPvlkx7XCEa+d6wbDNvrxH2xXH8t4rr4jKcBSWhT/b//ym
-	17COPq52rGtAqlsr53GmENRdySm8PHj/wKv/G/sI9m4Sxsx3kq+E3TGkj4Eq2/plkkA=
-X-Gm-Gg: ASbGncvFoa+1Vowu2by1qa4GoXhyIcmp7IMmWkJzV8vuicwi0kg6jz42J5ipskPoeEt
-	JLM3bnLw9NU9s0F503BAWK0b52D+awTQWpQpqTieD2UrCDDdB7muaPbgC1gQsXlM9uzUUwPCDW7
-	HRn/exw5Pan2aA3068Mz7fx7nJOEnB18PVVYKxA3b4qz+Eejq7kXsQZ1iZVi79NJfPjuV7RwalE
-	LYT5KRC8sMhmTf/uv3ZxIjpwPFdrogawkN7ZnwWWb0/2atykK7MB5xFGFhiZEhHk9RbUT60onPd
-	cXnSzvgm94RGguWNi3X2Z1j/iZbMu/ocUqz8B6uYFs3v4OUlBh9w8/yNprXBa5bjUCJk+nnaMr3
-	OEiEIvf8e4w3R2o3d/eoHtAQwJjmH36jmCdkH60llVA==
-X-Google-Smtp-Source: AGHT+IGcFQuwb1MMLl2dKUjfYTUZlEeNX8v0f5iGL8b9Z3yiss2UDsE8Rr8Y8j1xL6GHbC9MyU7dow==
-X-Received: by 2002:a5d:64c3:0:b0:3b2:e07f:757 with SMTP id ffacd0b85a97d-3b4964f5198mr15567653f8f.1.1751987779991;
-        Tue, 08 Jul 2025 08:16:19 -0700 (PDT)
-Received: from ta2.c.googlers.com (24.125.187.35.bc.googleusercontent.com. [35.187.125.24])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b4708d0ed9sm13422219f8f.38.2025.07.08.08.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jul 2025 08:16:19 -0700 (PDT)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-Date: Tue, 08 Jul 2025 15:16:18 +0000
-Subject: [PATCH v2] PM: add kernel parameter to disable asynchronous
- suspend/resume
+        bh=MYoMBKYTdN+8xP9wcucpfxgCMC4X7lR7pJmRicnPgXk=;
+        b=hyaf4TJ1phQatCWrCkKL+MZ5XMeZRYScBKqCAD15mo/6SYOZSn/waOatcquoNvas/a
+         D3Qt64+w6AKI6SlTKpmYsG4o/NfZZcb7i640Qsnsz/69E36Obr0pkG8xmc+pGv2VbPsg
+         G4xeKtzhapbz8ZeHj9VZiglTxz1Yc90QBsCwyjwIGrWDfrs7cNRvk0qyjCuAlgRXA+AP
+         xMEF3BMTuU/lfoeWoaXrcu0L7Wz650fhnZ4Y9yIGQD5Dr4O1ti1m2GvSfgENR/wuC5Mq
+         lxRPW9ZTqZi+fF6kNoVllaBe6+WicwjmT2YuSlzMwHGkaGRNLMO3dUnOF7t6/McTpL7L
+         vN4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVfYuZ5YZvm17J3Dxgl5Fmpgy2URj/y/YCnCoKuMP+hEHE5RcLd0nfrxIwFreiKz/xeo3MNatoqAw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6WCaQgIFtCem/h6LTRQmdoQQv89pPZ3IHIPhmRBjPtwJ5byVa
+	w50P9u5rt1QlYHhubcUqcCLs96Jn+SoV4P4F/PkPcAUvaijlZJWyIcOn9o5jobzWfVTQJ8uIUfh
+	clwg5w4xb1vRs1gnU32DBxg0dzkscOODD/3M7QyG2
+X-Gm-Gg: ASbGncugvmE5TAHATk3vSKhS5W2R90J7bz1nrKC3TYJRejKW3yWIG80573lU6rMx5sf
+	UEGAmzhcdXZBoPDS0kK8z+ANKzYrVHECI3mcmt6XQNh/ubIe/zuSy9n5NJRGj6t6K0s7zX/jVcn
+	G0htv+2oUmmYf86oTa0MOBgIqxiXVaEHjVAn1jrgHcxfVimF57YAHr4uDRyA+TJkkD0h7/EH1H5
+	w==
+X-Google-Smtp-Source: AGHT+IEPUK/jvl04L0OyeFsSxIjRQtkdBjuLNluT3iIs8drQXWQ//HPwuIFPYk1LRglja7VeVEMSrWu7C3Y4sbePbGs=
+X-Received: by 2002:a05:6402:2142:b0:607:bd2:4757 with SMTP id
+ 4fb4d7f45d1cf-61051c1dbd1mr69264a12.1.1751988970231; Tue, 08 Jul 2025
+ 08:36:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250708-pm-async-off-v2-1-7fada54f01c0@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAEE2bWgC/3WMQQqDMBBFryKz7pQ4Umy76j3ERYwTHWgTmRSpS
- O7e1H35q/fhvR0Sq3CCe7WD8ipJYihApwrcbMPEKGNhIEMX05orLi+0aQsOo/c4eLINk6WWPRR
- lUfbyOXJdX3iW9I66HfW1/r1/QmuNZQMZ45xpxpt7PCVYjeeoE/Q55y+T5r9MqQAAAA==
-X-Change-ID: 20250708-pm-async-off-bf2a3e2a27ef
-To: Jonathan Corbet <corbet@lwn.net>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
- Len Brown <len.brown@intel.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, peter.griffin@linaro.org, 
- andre.draszik@linaro.org, willmcvicker@google.com, kernel-team@android.com, 
- Tudor Ambarus <tudor.ambarus@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751987779; l=3744;
- i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
- bh=BO0g3NVsjvD3zy5Hf1jD2LqFckcH8XesA8tsE3wCODk=;
- b=nxgXM/6WbOhhZErwDKymuatsJhC3gAMLqLl3ogzft5EwC2wI9aAa9G7icLP6QytYoyEMXSCuC
- HWSpx/mXtubCDNxhQaMC+gY5OFUYMbfd3DR7Q5i+L+shVizUN3H77xt
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
- pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
+References: <20250703133427.3301899-1-chenridong@huaweicloud.com>
+ <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
+ <f4c4f465-72b9-4682-99e6-c249ecab8572@huaweicloud.com> <8dae8006-e63d-467f-bb7c-e8470878e534@huaweicloud.com>
+ <20250704075718.GA2001818@noisy.programming.kicks-ass.net>
+ <85fc85e8-af92-4d58-8271-9bf4aeb0a63d@huaweicloud.com> <bdc5a4d3-6942-4ba2-a13d-35f2e13c0b37@huaweicloud.com>
+ <20250707101019.GE1613200@noisy.programming.kicks-ass.net>
+ <c63a1698-2d93-4105-8641-ecec69b48523@huaweicloud.com> <20250708072852.GD1613376@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250708072852.GD1613376@noisy.programming.kicks-ass.net>
+From: Tim Van Patten <timvp@google.com>
+Date: Tue, 8 Jul 2025 09:35:58 -0600
+X-Gm-Features: Ac12FXyfsRKbqGkPeoIgIohRRLgHBPdWpZRSJXL2Iv-TPWxxyVYMGYfsAif89Ao
+Message-ID: <CANkg5ezUe4--TyR5rTrr0LSeOcEAtnDaydGOmxQq5nvfeEpwwg@mail.gmail.com>
+Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being frozen
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, "Michal Koutn??" <mkoutny@suse.com>, rafael@kernel.org, 
+	pavel@kernel.org, tj@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, lujialin4@huawei.com, chenridong@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 
-On some platforms, device dependencies are not properly represented by
-device links, which can cause issues when asynchronous power management
-is enabled. While it is possible to disable this via sysfs, doing so
-at runtime can race with the first system suspend event.
+I am (admittedly) more of a naive observer here than anything, and far
+from an expert, but my
+understanding matches what the code says:
 
-This patch introduces a kernel command-line parameter, "pm_async", which
-can be set to "off" to globally disable asynchronous suspend and resume
-operations from early boot. It effectively provides a way to set the
-initial value of the existing pm_async sysfs knob at boot time. This
-offers a robust method to fall back to synchronous (sequential) operation,
-which can stabilize platforms with problematic dependencies and also
-serve as a useful debugging tool.
+* freezing(): Check if there is a request to freeze a process
+* frozen(): Check if a process has been frozen
 
-The default behavior remains unchanged (asynchronous enabled). To disable
-it, boot the kernel with the "pm_async=off" parameter.
+> Before this change, most callers of
+> freezing(p) would receive true when the cgroup was frozen, whereas now they receive false.
+>
+> My concern is that the state where freezing(p) returns true (i.e., the cgroup is freezing but not
+> yet frozen) should be transient. I'm not entirely sure whether all callers of freezing(p) (except
+> __thaw_task) expect or handle this state correctly. Do the callers want the intermediate freezing
+> state? I am not sure...
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
-Dealing with the pixel6 downstream drivers to cope with the changes from
-https://lore.kernel.org/linux-pm/10629535.nUPlyArG6x@rjwysocki.net/.
+I agree that there's not a clear way to be certain what the caller's
+intent was, so all we have is the code.
+Based on that, my interpretation is that anyone calling freezing() is
+interested in the transient state (there
+was a request, but it hasn't completed yet) and any callers treating
+freezing() as frozen() are incorrect.
+They should be calling frozen() instead (or possibly also) based on
+the documentation and naming.
 
-Similar to what people already reported it seems pixel6 lacks proper
-device links dependencies downstream causing i2c and spi client drivers
-to fail to suspend. Add kernel param to disable async suspend/resume.
----
-Changes in v2:
-- update the documentation and the commit message to describe that the
-  "pm_async" kernel parameter provides a way to change the initial value
-  of the existing /sys/power/pm_async sysfs knob.
-- Link to v1: https://lore.kernel.org/r/20250708-pm-async-off-v1-1-1b200cc03d9c@linaro.org
----
- Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
- kernel/power/main.c                             |  9 +++++++++
- 2 files changed, 20 insertions(+)
+> Given this, I'm considering whether we should revert commit cff5f49d433f, provided we can safely
+> remove the WARN_ON_ONCE(freezing(p)) check in __thaw_task. I'd appreciate your thoughts on this
+> approach.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f1f2c0874da9ddfc95058c464fdf5dabaf0de713..33ca6b881b1d77bdeea765b19291a90b2a82e8a3 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5000,6 +5000,17 @@
- 			that number, otherwise (e.g., 'pmu_override=on'), MMCR1
- 			remains 0.
- 
-+	pm_async	[PM]
-+			If set to "off", disables asynchronous suspend and
-+			resume of devices during system-wide power transitions.
-+			This parameter sets the initial value of the
-+			/sys/power/pm_async sysfs knob at boot time.
-+			This can be useful on platforms where device
-+			dependencies are not well-defined, or for debugging
-+			power management issues. Defaults to "on" (asynchronous
-+			operations enabled).
-+
-+
- 	pm_debug_messages	[SUSPEND,KNL]
- 			Enable suspend/resume debug messages during boot up.
- 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 3d484630505ae91fea29f7f9b3fbcf7e585955d8..3cf2d7e72567ecbea2cd80acd3c7f6da85f5bef4 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/export.h>
-+#include <linux/init.h>
- #include <linux/kobject.h>
- #include <linux/string.h>
- #include <linux/pm-trace.h>
-@@ -112,6 +113,14 @@ int pm_notifier_call_chain(unsigned long val)
- /* If set, devices may be suspended and resumed asynchronously. */
- int pm_async_enabled = 1;
- 
-+static int __init pm_async_setup(char *str)
-+{
-+	if (!strcmp(str, "off"))
-+		pm_async_enabled = 0;
-+	return 1;
-+}
-+__setup("pm_async=", pm_async_setup);
-+
- static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
-
----
-base-commit: d7b8f8e20813f0179d8ef519541a3527e7661d3a
-change-id: 20250708-pm-async-off-bf2a3e2a27ef
-
-Best regards,
--- 
-Tudor Ambarus <tudor.ambarus@linaro.org>
-
+At the end of the day my goal was to clean up the warning since it was
+breaking tests, so if we remove that
+as part of the revert then we're still in the same state. I disagree
+that we should revert though, since the
+code now matches the documentation and naming, in my opinion. However,
+I'll have to defer to the experts
+for the final decision, since they're ultimately responsible for any
+changes here.
 
