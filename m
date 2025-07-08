@@ -1,175 +1,166 @@
-Return-Path: <linux-pm+bounces-30373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 834D6AFCDDC
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:38:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4407EAFCDFC
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:42:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D772D3B80C4
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:38:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC8AE1888574
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE292D8DA8;
-	Tue,  8 Jul 2025 14:38:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95AC02DF3C6;
+	Tue,  8 Jul 2025 14:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFzV81ts"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s3O72sxg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E297A207669;
-	Tue,  8 Jul 2025 14:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8C514883F;
+	Tue,  8 Jul 2025 14:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751985513; cv=none; b=hLIBIkGaZyoiQWsYTI7QAh4roGIHk7wTV4bfDcZ1bpqdOTGxm1BFrgOhxQyGlTvhjFLCjF68+1koIYHnk7ziiU5DI4kVwYTYavWs5W3TDV8mA1coCKq41O9p1WP4hyU5yrktuWkAgp8GyGrPSydvIhO+/3cCVkMsak0q57Jhha8=
+	t=1751985580; cv=none; b=INZW9f32xFbWcOudQK1fGbxjKnVFYlwCC3hDGnKtVtu0yYzFSTr2C9kdpEkbKN4btaAgpKGbmd3gvGwo1Fc7G+su5ri3TdN2q7/bzEKlAirce/DQDKDo6iwW5h2kTxMu1MW2V9R0BB2ajLulFmVS2p3TgP82SQoLV1OvmwPmT/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751985513; c=relaxed/simple;
-	bh=9BWhMjraB4vk+6Le52s2xMvqWl10R7LW8tT5ANBlkQg=;
+	s=arc-20240116; t=1751985580; c=relaxed/simple;
+	bh=g7JNnaXSPMt+VqEG9a7P7H3phrBTW8jOu04WbuFibsU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MKBvjfyWqDj3WnQ/xEUapkQZjg8k4cMh8Gmx4B/vb//YsBT16/Kc8JL1e41CYjPKYr7U0UXLX3/ERTNgrJyOit+dmF5rcK/sPSnzeV0jghVXJ6iBQsVm9TYUcgp6OfzfPdEOfOQg4JhWUmu23rhyw64uB0HUKPouAk7hSeRHKOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFzV81ts; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4223AC4CEFA;
-	Tue,  8 Jul 2025 14:38:32 +0000 (UTC)
+	 To:Cc:Content-Type; b=HImG9zkPutKetwnqre88vPbctGSSGaCzLc0sVvHCcbf8YXV8HiQ19XormqHG9eFGheAB5p2SpW/vJSUiT+kNd3tG2m/rfhpqn38SAEU8tMke4YVW4Y0Qpq71FvtIN64AH+MTYvP6WphNmdsjUFd0XdcU8i0W0/9RdjUxTJ69LEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s3O72sxg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5BCC4CEF9;
+	Tue,  8 Jul 2025 14:39:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751985512;
-	bh=9BWhMjraB4vk+6Le52s2xMvqWl10R7LW8tT5ANBlkQg=;
+	s=k20201202; t=1751985580;
+	bh=g7JNnaXSPMt+VqEG9a7P7H3phrBTW8jOu04WbuFibsU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dFzV81tspRIa3CEsSB9Q74gFSuD6T7CP/PneoV/I0EIQgL7yhp2y1GYRS3epqeYgx
-	 3ojPEZBj8aHZvbS6h9zEZQhotvVhAVd5sN8clj1xhYUAUzZ9jbJmZWDy68RFT38IWE
-	 OtzpDVnvSssdvr7UOkTyWR6giYLgv4tlqh+dO1L0Bq9YstX6dql8ouk9P817s3GrYn
-	 1wZhHyucr2ITOVea8LzKo/7bKJy33zbX/IwYOUPE/6oLd8GVgvsB/WX4/ohQTx0dz2
-	 7GJjYInQwT8Xj1ca739inKdPucu6/6kyYhjCNcOeftbrFyGdUKEIPItDuD5szOJiBC
-	 d7GTOwhjsLCug==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-613a6e39f52so1144428eaf.3;
-        Tue, 08 Jul 2025 07:38:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU7mLKIXdi1yRp3+TncIcHwMJtS4fL7J3c1Yb/43Ea2pmLx7jC5mun9Fg7weS074XKDUa/S5aNM+gcLP/5G@vger.kernel.org, AJvYcCVrNSvBj1wU+gHluRBmkMJDUkmCIAdpTkc+qijeYEJ87aNKVy41rZThn9JEihH6Q1av4phO3y2t8yU=@vger.kernel.org, AJvYcCXl+Pdjc/oluXodCa9eJVJUVkWCB55aDTrD2aWkRb4WfBNyRJ1qz3sawoFiIKbZRocBpjB6EVq2tKw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTbG3ZNh0lke3Orl1CMtjYqc9WWFWvN5mjuflVdEF/VBESQNH6
-	N8DHQHQrgxkAYfRkG3L88JX+uMNuRr1SboMzOy2AkcztuzYqlD2hVRPwz1T0JeFwzidjK2qUb7L
-	zmmv4PdxEUzqDFhsBHJ5BGJ61sTEF+hM=
-X-Google-Smtp-Source: AGHT+IFv73u9dDnx+yNNHigzU8NEvuUzjF9dVqQp8XMNcyJXTW9T1kRfBlPhMliEv2SNGkiAznuTib7tkriv9vnN/WI=
-X-Received: by 2002:a05:6820:4d0a:b0:613:bfa6:2130 with SMTP id
- 006d021491bc7-613bfa62307mr3102626eaf.8.1751985511402; Tue, 08 Jul 2025
- 07:38:31 -0700 (PDT)
+	b=s3O72sxg3nj0vXCiW+P7HVPpEje5HvkAMPnuzmWE7FHX8DLSeU2Diy6jU/2hGriOX
+	 VAat9E+ziM8nyzy9vkXNadkaajXVkwI5XwWy1tnrwmeob4SgnpkH7HxU3HcrmPyxdd
+	 2P/qTalhQJ/ByNmu8cfyYT9hICeNGjC/ZcWaIAZ7C73IZ4y8dDHG5tv7AICCCLkEQI
+	 mKuBVwNDVieoaJwXx05nu1aqXLoG0f2rQybj9as/KpVSOo/jnrJJL7UYKsaZZuo5fO
+	 E0n9ewrnxfGW7qfU7qR+3+kSKhMBG4i1gJ7KllGCRUqOUMh7A/CUyYfHjzJTSAyLP6
+	 OnILmV3ioYMeg==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-72c09f8369cso1469229a34.3;
+        Tue, 08 Jul 2025 07:39:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUhaM6aq5cII4hLC/uZY5NbuKiBNV2QQAtYyrXdvNNMJHUFLxoQp42FE2yZ5phXPEuBaj6Is+l09O0BzMU=@vger.kernel.org, AJvYcCXLyvlTE/Yk0tk1h7Yvs4j79hOhEXsC33f0AiTammTt+1mzMMLlPiUfixz0SI25fQEYMb/9DXZbcm4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf4Wax2JQOyM0IX1Ix9mXmQRgAraZpBr63qZsC7FQvbuB5/C+D
+	lAxLa/jJysn0R3yh245TRuvn6O8VhWN1JKrPQGH3ga9vnXMuqjR7NECi6yGwloWi5Me58xs4Juh
+	S9w0vpDxrHROWDFLZjPiwTpj3Ua987dM=
+X-Google-Smtp-Source: AGHT+IHiTi+tK7OBKN3ciDaO2n9BCiXei6vti+iRh6w6s5ITlTagv0S3T9OaABT6TshT1h/8Lt9SWI8UCBcRgqIfg+A=
+X-Received: by 2002:a05:6808:308c:b0:40a:f48f:2c10 with SMTP id
+ 5614622812f47-4125cd1b519mr20316b6e.10.1751985579249; Tue, 08 Jul 2025
+ 07:39:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250708-pm-async-off-v1-1-1b200cc03d9c@linaro.org>
-In-Reply-To: <20250708-pm-async-off-v1-1-1b200cc03d9c@linaro.org>
+References: <20250708074248.1674924-1-guoqing.zhang@amd.com>
+ <20250708074248.1674924-5-guoqing.zhang@amd.com> <1fa50a8e-9942-45c4-bef0-f31c23ef9923@amd.com>
+In-Reply-To: <1fa50a8e-9942-45c4-bef0-f31c23ef9923@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 8 Jul 2025 16:38:19 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gMk+Jt5WBUB=+cvv2YoU+49nRxL4KPRGm9TAdzkUvQhQ@mail.gmail.com>
-X-Gm-Features: Ac12FXzC0PRSkm_cnKrA4OLmQUCv8hAsap1llb354LiKb1DhMduIFnSKHO04qpI
-Message-ID: <CAJZ5v0gMk+Jt5WBUB=+cvv2YoU+49nRxL4KPRGm9TAdzkUvQhQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: add kernel parameter to disable asynchronous suspend/resume
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <len.brown@intel.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	peter.griffin@linaro.org, andre.draszik@linaro.org, willmcvicker@google.com, 
-	kernel-team@android.com
+Date: Tue, 8 Jul 2025 16:39:28 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j4BuFi_WPPvW64=42Ww=tM8xwpX6gPz8_HX8fJE_Wv1Q@mail.gmail.com>
+X-Gm-Features: Ac12FXzvqGDKTtz6zV1G6dpp5vC1FXf7sqbpxq5Jl57O26uN2XAqE-cZGhzEN-A
+Message-ID: <CAJZ5v0j4BuFi_WPPvW64=42Ww=tM8xwpX6gPz8_HX8fJE_Wv1Q@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] PM: hibernate: add new api pm_transition_event()
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com, 
+	christian.koenig@amd.com, rafael@kernel.org, len.brown@intel.com, 
+	pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org, 
+	airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com, matthew.auld@intel.com, 
+	matthew.brost@intel.com, maarten.lankhorst@linux.intel.com, 
+	mripard@kernel.org, tzimmermann@suse.de, lijo.lazar@amd.com, 
+	victor.zhao@amd.com, haijun.chang@amd.com, Qing.Ma@amd.com, 
+	Owen.Zhang2@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 8, 2025 at 4:28=E2=80=AFPM Tudor Ambarus <tudor.ambarus@linaro.=
-org> wrote:
+On Tue, Jul 8, 2025 at 4:37=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> On some platforms, device dependencies are not properly represented by
-> device links, which can cause issues when asynchronous power management
-> is enabled. While it is possible to disable this via sysfs, doing so
-> at runtime can race with the first system suspend event.
->
-> This patch introduces a kernel command-line parameter, "pm_async", which
-> can be set to "off" to globally disable asynchronous suspend and resume
-> operations from early boot. This provides a robust way to fall back to
-> synchronous (sequential) operation, which can stabilize platforms with
-> problematic dependencies and also serve as a useful debugging tool.
->
-> The default behavior remains unchanged (asynchronous enabled). To disable
-> it, boot the kernel with the "pm_async=3Doff" parameter.
-
-IIUC, this effectively is a way to change the initial value of the
-existing pm_async sysfs knob.
-
-Might be worth mentioning in the changelog.
-
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
-> Dealing with the pixel6 downstream drivers to cope with the changes from
-> https://lore.kernel.org/linux-pm/10629535.nUPlyArG6x@rjwysocki.net/.
->
-> Similar to what people already reported it seems pixel6 lacks proper
-> device links dependencies downstream causing i2c and spi client drivers
-> to fail to suspend. Add kernel param to disable async suspend/resume.
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++++
->  kernel/power/main.c                             | 9 +++++++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-> index f1f2c0874da9ddfc95058c464fdf5dabaf0de713..55ba3e747d86c09a0696e105a=
-1d9cd99218f0c07 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5000,6 +5000,15 @@
->                         that number, otherwise (e.g., 'pmu_override=3Don'=
-), MMCR1
->                         remains 0.
->
-> +       pm_async        [PM]
-> +                       If set to "off", disables asynchronous suspend an=
+> On 7/8/2025 3:42 AM, Samuel Zhang wrote:
+> > dev_pm_ops.thaw() is called in following cases:
+> > * normal case: after hibernation image has been created.
+> > * error case 1: creation of a hibernation image has failed.
+> > * error case 2: restoration from a hibernation image has failed.
+> >
+> > For normal case, it is called mainly for resume storage devices for
+> > saving the hibernation image. Other devices that are not involved
+> > in the image saving do not need to resume the device. But since there's
+> > no api to know which case thaw() is called, device drivers can't
+> > conditionally resume device in thaw().
+> >
+> > The new pm_transition_event() is such a api to query if thaw() is calle=
 d
-> +                       resume of devices during system-wide power transi=
-tions.
-> +                       This can be useful on platforms where device
-> +                       dependencies are not well-defined, or for debuggi=
-ng
-> +                       power management issues. Defaults to "on" (asynch=
-ronous
-> +                       operations enabled).
+> > in normal case. The returned value in thaw() is:
+> > * PM_EVENT_THAW: normal case, no need to resume non-storage devices.
+> > * PM_EVENT_RECOVER: error case, need to resume devices.
+> >
+> > Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+> > ---
+> >   drivers/base/power/main.c |  5 +++++
+> >   include/linux/pm.h        | 16 ++++++++++++++++
+> >   2 files changed, 21 insertions(+)
+> >
+> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> > index 40e1d8d8a589..7e0982caa4d4 100644
+> > --- a/drivers/base/power/main.c
+> > +++ b/drivers/base/power/main.c
+> > @@ -62,6 +62,11 @@ static LIST_HEAD(dpm_noirq_list);
+> >
+> >   static DEFINE_MUTEX(dpm_list_mtx);
+> >   static pm_message_t pm_transition;
+> > +int pm_transition_event(void)
+> > +{
+> > +     return pm_transition.event;
+> > +}
+> > +EXPORT_SYMBOL_GPL(pm_transition_event);
+> >
+> >   static int async_error;
+> >
+> > diff --git a/include/linux/pm.h b/include/linux/pm.h
+> > index 78855d794342..d1cb77ede1a2 100644
+> > --- a/include/linux/pm.h
+> > +++ b/include/linux/pm.h
+> > @@ -657,6 +657,22 @@ struct pm_subsys_data {
+> >   #define DPM_FLAG_SMART_SUSPEND              BIT(2)
+> >   #define DPM_FLAG_MAY_SKIP_RESUME    BIT(3)
+> >
+> > +/**
+> > + * pm_transition_event() - Query the current pm transition event value=
+.
+> > + *
+> > + * Used to query the reason why thaw() is called. It will be one of 2 =
+values:
+> > + *
+> > + * PM_EVENT_THAW: normal case.
+> > + *           hibernation image has been created.
+> > + *
+> > + * PM_EVENT_RECOVER: error case.
+> > + *           creation of a hibernation image or restoration of the mai=
+n memory
+> > + *           contents from a hibernation image has failed.
+>
+> I don't believe this documentation is complete.  In the use in this
+> series those are two events used, but as this is now exported this might
+> be used by other callers later which could use it for other PM_EVENT_*.
+>
+> So because of this I think it's best to convert the comment in
+> include/linux/pm.h to kdoc and then reference that from this kdoc.
 
-And here too because it is now unclear how this relates to the pm_sync
-under /sys/power/.
++1
 
-> +
-> +
->         pm_debug_messages       [SUSPEND,KNL]
->                         Enable suspend/resume debug messages during boot =
-up.
+> > + *
+> > + * Return: PM_EVENT_ messages
+> > + */
+> > +int pm_transition_event(void);
+> > +
+> >   struct dev_pm_info {
+> >       pm_message_t            power_state;
+> >       bool                    can_wakeup:1;
 >
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 3d484630505ae91fea29f7f9b3fbcf7e585955d8..3cf2d7e72567ecbea2cd80acd=
-3c7f6da85f5bef4 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -8,6 +8,7 @@
->
->  #include <linux/acpi.h>
->  #include <linux/export.h>
-> +#include <linux/init.h>
->  #include <linux/kobject.h>
->  #include <linux/string.h>
->  #include <linux/pm-trace.h>
-> @@ -112,6 +113,14 @@ int pm_notifier_call_chain(unsigned long val)
->  /* If set, devices may be suspended and resumed asynchronously. */
->  int pm_async_enabled =3D 1;
->
-> +static int __init pm_async_setup(char *str)
-> +{
-> +       if (!strcmp(str, "off"))
-> +               pm_async_enabled =3D 0;
-> +       return 1;
-> +}
-> +__setup("pm_async=3D", pm_async_setup);
-> +
->  static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute=
- *attr,
->                              char *buf)
->  {
->
-> ---
 
