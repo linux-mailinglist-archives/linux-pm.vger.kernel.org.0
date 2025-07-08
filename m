@@ -1,205 +1,103 @@
-Return-Path: <linux-pm+bounces-30343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30344-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EDEBAFC4B0
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 09:53:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D36DCAFC504
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 10:06:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6F391AA5E3B
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 07:53:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED00E174D50
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 08:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D77612BE025;
-	Tue,  8 Jul 2025 07:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED7929B797;
+	Tue,  8 Jul 2025 08:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="blTlIFQw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a/M7ElAp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2043.outbound.protection.outlook.com [40.107.236.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD4229ACF6;
-	Tue,  8 Jul 2025 07:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751961117; cv=fail; b=W1pqfpzwYDa/jwXtaSxyNLl8OHpg6LguvEODaDcDWQv6NkKzFwi1Hdgt0mx8u5fzVuWpZ2p56BDei87igbVFAyGKuVLrVpxkk+w79k9t4pzC/JyUluro9KCULMVTWXq494EL5NLJjL4AhP2YXkVeHOcfqWsbTkF+s7Xy52E5kcs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751961117; c=relaxed/simple;
-	bh=9CtXcQVIsO23IWuRxBVBfU4npeApn5Cak1PdY+ffTd8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QGjWWhUc6n81z6dwFiiN6l5yw4arVYFBkWLNRVCfzsAfYgSOLfJqQrPiG3VUnrWnthXOYgvlT0kU2FRigTwnQ1VY4lMQ6o+3irR31c0KfOVfEqtL+tAb4sbVktez8MITc9SlxQhuYs25ZNRaVVd3tAguYK2VNvMOXSlAaW9q2t8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=blTlIFQw; arc=fail smtp.client-ip=40.107.236.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v1bzYsxgjf004ur+BaEM8y+ebjPsGIiPtUMFE4TBUlb2E+dFXEoAaVnz45FSpp8Vg/hiPM0DennlZYS02cVWB6RZlkcs4ckKbX77wM1Q2s4vNPlKmRLxOi4vImuDyCCcX0MCBGwvhOEBbTovxY0jEQMkTF5mABjbk282JoKaeOe4RMHAO3yqTGhKFUxOLwyjTNN6hbGvCssmTDFFwSLrBQXJm3YERJ4OdH+uYF8bhMlxKYhRNPP8DIdLLeWoXCw0nMyAMz9orqBEq7PHWrGmDc/PqnzrTx4WS55FM2bsI7IaRIuxYR/TKYKEAHxDeDUQhhaTv2w7Dry8qMWx804ZkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J+z59hz6hvs10vCN8K6MNPh2EIOQdQt1+J3Ggl8NyT8=;
- b=y15mqYJlZZkbDXT14N9ww0HA0q3lupCLG9tiIFUsdlBKWB6CWAG1S0rihlR8ESO1gvsgt/8uRfM5+xe04tScH+rlSa3D82+N1VI+wp+aHFo7NHOyXFY5hu2AP7GA7xZ7C+3xGjus3fj0AP9q7umv1f6QlE8d8N88r6wkT15ZsGmuKikYsNUauS2J0S67JPdPe0dzt/FWWJq7yjJru7+PM2K5At6yrVFnX2G88J3w6I6+usvlwz58mgqeOIsaaijz0Nuj1lYokkX56rUBT3eOkUQNsN/t0PdcwwgnoCEyxaUSCXJoZc7HP1yZSJ6iZT0tyg8eqbVgDGvOMQYr25CDoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J+z59hz6hvs10vCN8K6MNPh2EIOQdQt1+J3Ggl8NyT8=;
- b=blTlIFQwSHF4YE1NKJKThVZp3BgeML2txtBvN8M0Svkv34bvaZRJiqsVhgvqXVVVfYCA4TBsacuEoKvCs2uj8Cl49BN+btgtE1h6Qw2V3Z82YvCysj5pWpqXNZImZqhLfJ3XjXhiT7Gu2tw/RL8TM/Z1pnEhJnvX+aMqCmK93Cg=
-Received: from DM6PR05CA0048.namprd05.prod.outlook.com (2603:10b6:5:335::17)
- by SN7PR12MB8004.namprd12.prod.outlook.com (2603:10b6:806:341::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.19; Tue, 8 Jul
- 2025 07:51:51 +0000
-Received: from DS2PEPF0000343A.namprd02.prod.outlook.com
- (2603:10b6:5:335:cafe::f7) by DM6PR05CA0048.outlook.office365.com
- (2603:10b6:5:335::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8922.20 via Frontend Transport; Tue,
- 8 Jul 2025 07:51:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS2PEPF0000343A.mail.protection.outlook.com (10.167.18.37) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8901.15 via Frontend Transport; Tue, 8 Jul 2025 07:51:51 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 8 Jul
- 2025 02:51:51 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 8 Jul
- 2025 02:51:50 -0500
-Received: from hjbog-srdc-41.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 8 Jul 2025 02:51:45 -0500
-From: Samuel Zhang <guoqing.zhang@amd.com>
-To: <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
-	<rafael@kernel.org>, <len.brown@intel.com>, <pavel@kernel.org>,
-	<gregkh@linuxfoundation.org>, <dakr@kernel.org>, <airlied@gmail.com>,
-	<simona@ffwll.ch>, <ray.huang@amd.com>, <matthew.auld@intel.com>,
-	<matthew.brost@intel.com>, <maarten.lankhorst@linux.intel.com>,
-	<mripard@kernel.org>, <tzimmermann@suse.de>
-CC: <mario.limonciello@amd.com>, <lijo.lazar@amd.com>, <victor.zhao@amd.com>,
-	<haijun.chang@amd.com>, <Qing.Ma@amd.com>, <Owen.Zhang2@amd.com>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>, "Samuel
- Zhang" <guoqing.zhang@amd.com>
-Subject: [PATCH v3 5/5] drm/amdgpu: do not resume device in thaw for normal hibernation
-Date: Tue, 8 Jul 2025 15:42:48 +0800
-Message-ID: <20250708074248.1674924-6-guoqing.zhang@amd.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250708074248.1674924-1-guoqing.zhang@amd.com>
-References: <20250708074248.1674924-1-guoqing.zhang@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5689410A1F;
+	Tue,  8 Jul 2025 08:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751961955; cv=none; b=ZgKvyCgBFCYnKFa/HgXr260zW1ZVHWbrFI1tnoW9ks/1s0OkTnqFwwPBfl9xUoclyH16Z3dPlF/OniGkLiDv2/ZxGQA4uhKHUTEtZumviVqsKGb2wMYWihF95kt8VsRAKIjCwsWEL0PrGok4bQUa8FdHzW5CQH0CDt4yT39A5o0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751961955; c=relaxed/simple;
+	bh=pR61KyM+qKZt65tV9gRAUety3LIBktxJjUCMLek7X1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XF/ZrWTW/LhAwuZ6BCjCPDigQGVkoJA2eCDCUY+jfUsvWMWvSqPGpxcarwhEbEA6c6H/rZ4L9yzSO+NFAihrUNn0kU6jsikQjv1RCPBacp1/G9FjtLB/0fRJ53BDMIe2Lem4x5k3vqLAoqf/s1/R7Mzf6o86/JOf37aw9AOk8W4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a/M7ElAp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6998FC4CEED;
+	Tue,  8 Jul 2025 08:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751961955;
+	bh=pR61KyM+qKZt65tV9gRAUety3LIBktxJjUCMLek7X1k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a/M7ElApJGkjJPAJa985F1T9IeZyU6zYLe2o+sxhfhsJOVEIQTBoQFPNGFxZhFi5d
+	 P4aacDA8eERYuUeUxhXX1RZLcHXYaTg57tbC6HqIhoCrTq/1td5JI+bugvXM5Re0s+
+	 BEuM9D/nGLB8h/AJ0LixKDhX0KwTeqNehCBqV7Xn/MnimZWSU1BslrpvlGG28xLFNZ
+	 ObK7qgzi2CEUZ34IcCH5qpbojRtlvum4A5ST+B07svkXnYvetS8SKBKejAWQxQ3Ht5
+	 2A5n34cbTokIKBJAllyGVivgtV25nv8YPiVn8MlMu+53YqY1bZpragoPGSbOI0QT0D
+	 pdYb1MTrg5RBA==
+Date: Tue, 8 Jul 2025 10:05:51 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Casey Connolly <casey.connolly@linaro.org>
+Cc: Luca Weiss <luca.weiss@fairphone.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] pmdomain: qcom: rpmhpd: Add Milos power domains
+Message-ID: <20250708-vengeful-bright-rhino-d8d5ea@krzk-bin>
+References: <20250707-sm7635-rpmhpd-v2-0-b4aa37acb065@fairphone.com>
+ <20250707-sm7635-rpmhpd-v2-2-b4aa37acb065@fairphone.com>
+ <06760125-4800-4068-8936-dddf27c28d17@linaro.org>
+ <DB5VDDKCAQQG.LDCMHXAZN17S@fairphone.com>
+ <fe454257-aa21-4304-868f-aefbea9963c4@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF0000343A:EE_|SN7PR12MB8004:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92375cc1-0d12-4f22-1f23-08ddbdf44ce6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?IHzt+vfbzcf2D8pp5okWaiqqvXeYSjuaJrn32sQFQlF0Px+1m8eKznMHQF6i?=
- =?us-ascii?Q?5AkYZJJhq9ykjq67NDNEky/9xED0SSva8+GFtN9yiZxUh4VCKYvQGNPnMJWS?=
- =?us-ascii?Q?zrW9T4YnRmU4kpbV2hPcxyzJQMuDsgtu6pSW05Rikz5MhuIJWE8eCQ6z2AFO?=
- =?us-ascii?Q?g9pkFD1pNb7k0Fonu3cxcp9hyFaaHM2Qg6xcAwukp5HhFxV98pMSDrnYJ6yF?=
- =?us-ascii?Q?VLlv1q6Zw66Gc9KTNhodOOqr9vT4vNBOSMJQ4aRaGr2B/7WvBGXZDQLBfp7U?=
- =?us-ascii?Q?PZDyD9LGb+k7rWkkAvkN7jXhpPU9idlcWW+J+3WZWN/sXj+sJUBWd31zHvQ0?=
- =?us-ascii?Q?t5rvrSXzRYQM3VdOAcfOFqNGO90uIX7X95aHT8XUTQ/SDSu8EDOYlJTa63H7?=
- =?us-ascii?Q?0h5++4lyweWobgQCP652dIecUD7aVXQsj+8/CNzKEYuc65GX5GAZtisqdA8D?=
- =?us-ascii?Q?MDtZxXMPotaWWQfn0nQIU/XuW9cBO8xlvKA6wq/uEHa1rwMzqVP55A6kDxid?=
- =?us-ascii?Q?8CeKaUrIAzW7MxFdvRF609b5Wbuh7c+XXI3q7+u0C0NfN8g7mp8fmQRHqw1a?=
- =?us-ascii?Q?Dkt16OZKpCYVEruBus5F9fHInYO6NA8Yj++9ayqypcvqLgaIri9m7o/IvmCn?=
- =?us-ascii?Q?E0yTOdShxdw4EcexuSX7tzlpHPaBpCqV2KcBsZ4EFGX14cKcw7pPj9VerLIH?=
- =?us-ascii?Q?fYuuQCz8fwEypX6ayk19U0L9FMLtagHQLHiFJMfifGbkHRS7Ff4KJgRDQUz8?=
- =?us-ascii?Q?hyaJtd6usM5+zNBusp/rtOROMBWwHMrfKg5hhqgElL3hxaYyJgLG4lHs/K2b?=
- =?us-ascii?Q?tCCtphoW5Zq4KjZyh0kHD0p3S2bMevH0JhBgfFd08DuBeZcdl5ILgLImeESo?=
- =?us-ascii?Q?Q5bDkhU4rBf/UCEfKDIP6sm+sZZeMj0+JJM0O8+OVEYsm7azmcO03U96XN39?=
- =?us-ascii?Q?+D8jNS4gBuhBkBQIvNwbNuXOEUJJ631+p8uCTqBzPjDgN8R57fyTX2u9SEDi?=
- =?us-ascii?Q?GokN4Z4U3/yHiTO6ZIIZK7rtp6Yziw6g2+MhZvdr03WQYhlsE9OKkbd4eTDW?=
- =?us-ascii?Q?T8wQZ2uZ+FeZuRUzvI6OcMNgIl4H91fo1eGU0IJQgPTc760RcfRIi1mgGoSL?=
- =?us-ascii?Q?slcSOzL6zHkbWfWGMD91Mqcek7P3U09ztoxEJ2BUgVZfXDh4kNjALU0qkjiO?=
- =?us-ascii?Q?jVNxIWvqaTWyR8gA//JQGUZmVifyDKsEFVHK1moXbzYVXMOMyihptn/ktA3E?=
- =?us-ascii?Q?+sRME1u+L5cHOvzRhshZ+jEma4kQk2wJ+ZF2v51spkVnP1yskAt7wSV+a08q?=
- =?us-ascii?Q?T4MxpQlkFUS2tLJ9yVLu0gnZwghIroSmykwcE0QLm5BndwmUl7supaPPNkfG?=
- =?us-ascii?Q?tOeRm2DYQv25lffivzYSWH3Glmwaz1Kce5TDYgoOFw3k9H+4OHzxWER+PWaE?=
- =?us-ascii?Q?fNJIBV/fsEU0i623beHEXGcz+6Qt+/l+tC39RwM1mx6tc8y6Dot8B7SbKkAZ?=
- =?us-ascii?Q?1uJvHkyBzLekv0std230cpiAhfanMwqZKA/Gp0QeHHZRnCyCSBH/xmCcxA?=
- =?us-ascii?Q?=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2025 07:51:51.5486
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92375cc1-0d12-4f22-1f23-08ddbdf44ce6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF0000343A.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8004
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fe454257-aa21-4304-868f-aefbea9963c4@linaro.org>
 
-For normal hibernation, GPU do not need to be resumed in thaw since it is
-not involved in writing the hibernation image. Skip resume in this case
-can reduce the hibernation time.
+On Mon, Jul 07, 2025 at 04:42:13PM +0200, Casey Connolly wrote:
+> > > > diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
+> > > > index 078323b85b5648e33dd89e08cf31bdc5ab76d553..e09552a469264f28952fc46c3ab8c125e87310da 100644
+> > > > --- a/drivers/pmdomain/qcom/rpmhpd.c
+> > > > +++ b/drivers/pmdomain/qcom/rpmhpd.c
+> > > > @@ -217,6 +217,24 @@ static struct rpmhpd gmxc = {
+> > > >    	.res_name = "gmxc.lvl",
+> > > >    };
+> > > > +/* Milos RPMH powerdomains */
+> > > 
+> > > I can't find any public docs telling us which SoC is Milos (the only
+> > > relevant result is Bjorn's email asking you to use that name instead of
+> > > SM7635). So for the sake of future generations could you reference both
+> > > names in a comment somewhere? Or even the commit message would be enough
+> > > tbh.
+> > 
+> > I don't know the full list of model numbers for Milos. I assume it's
+> > SM7635, SM6650, SM6650P, QCM6690 and QCS6690 based on the info I could
+> > fine, but such info is hard to get. So this is not a definite list that
+> > all those are actually Milos, or that this is the full list of Milos
+> > chipsets.
+> 
+> oof, I see... that complicates things. It sure would be good if this list
+> was documented in the kernel though imo.
 
-On VM with 8 * 192GB VRAM dGPUs, 98% VRAM usage and 1.7TB system memory,
-this can save 50 minutes.
+Kernel is not the place to store mappings or descriptions of some random
+company products and their names, so no.
 
-Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Also it's not a task of contributor of a new SoC to decipher Qualcomm
+model numbering and document it anywhere.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 4f8632737574..10827becf855 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2541,6 +2541,10 @@ amdgpu_pci_shutdown(struct pci_dev *pdev)
- 	if (amdgpu_ras_intr_triggered())
- 		return;
- 
-+	/* device maybe not resumed here, return immediately in this case */
-+	if (adev->in_s4 && adev->in_suspend)
-+		return;
-+
- 	/* if we are running in a VM, make sure the device
- 	 * torn down properly on reboot/shutdown.
- 	 * unfortunately we can't detect certain
-@@ -2654,8 +2658,17 @@ static int amdgpu_pmops_freeze(struct device *dev)
- static int amdgpu_pmops_thaw(struct device *dev)
- {
- 	struct drm_device *drm_dev = dev_get_drvdata(dev);
-+	int event = pm_transition_event();
- 
--	return amdgpu_device_resume(drm_dev, true);
-+	switch (event) {
-+	case PM_EVENT_THAW: /* normal case */
-+		return 0;
-+	case PM_EVENT_RECOVER: /* error case */
-+		return amdgpu_device_resume(drm_dev, true);
-+	default:
-+		pr_err("unknown pm_transition_event %d\n", event);
-+		return -EOPNOTSUPP;
-+	}
- }
- 
- static int amdgpu_pmops_poweroff(struct device *dev)
--- 
-2.43.5
+Best regards,
+Krzysztof
 
 
