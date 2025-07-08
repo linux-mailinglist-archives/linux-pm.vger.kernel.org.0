@@ -1,61 +1,59 @@
-Return-Path: <linux-pm+bounces-30344-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D36DCAFC504
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 10:06:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2549AFC508
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 10:07:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED00E174D50
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 08:06:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB2007A5699
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 08:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED7929B797;
-	Tue,  8 Jul 2025 08:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1F029B8E6;
+	Tue,  8 Jul 2025 08:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a/M7ElAp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojphUlrm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5689410A1F;
-	Tue,  8 Jul 2025 08:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F23B19E992;
+	Tue,  8 Jul 2025 08:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751961955; cv=none; b=ZgKvyCgBFCYnKFa/HgXr260zW1ZVHWbrFI1tnoW9ks/1s0OkTnqFwwPBfl9xUoclyH16Z3dPlF/OniGkLiDv2/ZxGQA4uhKHUTEtZumviVqsKGb2wMYWihF95kt8VsRAKIjCwsWEL0PrGok4bQUa8FdHzW5CQH0CDt4yT39A5o0=
+	t=1751962033; cv=none; b=Z75fTIZ2gqr+wr/8SWa/BoZpXGnyHMlKkm2vQrWteXdz5F1yoOEG4l1sfvgfEnBbwGu4pyWaOZ+HBmBNabZpUfZOHXmFSGrM5c91U0PC1H09X1fBaprhaWa7p7DIpwqzlAdR3zvafZT/l0OMvh8ChVKW4ZYjFbnUHTu6WdDYRxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751961955; c=relaxed/simple;
-	bh=pR61KyM+qKZt65tV9gRAUety3LIBktxJjUCMLek7X1k=;
+	s=arc-20240116; t=1751962033; c=relaxed/simple;
+	bh=Y8Gvvfv+exKnqgTnsgCD3HEpXy6Nv9JBt5z6zPldElY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XF/ZrWTW/LhAwuZ6BCjCPDigQGVkoJA2eCDCUY+jfUsvWMWvSqPGpxcarwhEbEA6c6H/rZ4L9yzSO+NFAihrUNn0kU6jsikQjv1RCPBacp1/G9FjtLB/0fRJ53BDMIe2Lem4x5k3vqLAoqf/s1/R7Mzf6o86/JOf37aw9AOk8W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a/M7ElAp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6998FC4CEED;
-	Tue,  8 Jul 2025 08:05:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fxCAaAh78pjcXhZhqxVev97c6Va6k7u0FdWmLNtcPm39mP4fgdyD17gu+Ng6enZ0M8bQ6nGZAKJnwngST6RXN9WuggZhXwJWOSO9zEnbcQvJxJfTzsXYEPJiEUK+9mSS6Ve/ZjYb5EbXX7baAuk6HblDIoGj26+8LXLdeIKFjM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojphUlrm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 114FAC4CEF0;
+	Tue,  8 Jul 2025 08:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751961955;
-	bh=pR61KyM+qKZt65tV9gRAUety3LIBktxJjUCMLek7X1k=;
+	s=k20201202; t=1751962032;
+	bh=Y8Gvvfv+exKnqgTnsgCD3HEpXy6Nv9JBt5z6zPldElY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a/M7ElApJGkjJPAJa985F1T9IeZyU6zYLe2o+sxhfhsJOVEIQTBoQFPNGFxZhFi5d
-	 P4aacDA8eERYuUeUxhXX1RZLcHXYaTg57tbC6HqIhoCrTq/1td5JI+bugvXM5Re0s+
-	 BEuM9D/nGLB8h/AJ0LixKDhX0KwTeqNehCBqV7Xn/MnimZWSU1BslrpvlGG28xLFNZ
-	 ObK7qgzi2CEUZ34IcCH5qpbojRtlvum4A5ST+B07svkXnYvetS8SKBKejAWQxQ3Ht5
-	 2A5n34cbTokIKBJAllyGVivgtV25nv8YPiVn8MlMu+53YqY1bZpragoPGSbOI0QT0D
-	 pdYb1MTrg5RBA==
-Date: Tue, 8 Jul 2025 10:05:51 +0200
+	b=ojphUlrmCYL+ylHhwJQLmTpIAWlu/m/SvoBx5cJ0himdrhJoKefEMSson6tINBWv4
+	 NmbgfunAqDCQ1eBnTQfFKZPvHHSSDGHORVyxcP4dm0rF8zEwIGFpH8kZIbTpRisPnv
+	 h7xYFEy6xXc1nyQFYfEH12rKWmxODiklFmk/GnKZ4HVaj3M+YHuEHpzZF01lVkHGSN
+	 iwHDyEhfIuWotgGAGvC+o2MkN/QdntFk7svAn5rMUmG9EGza70mu6V0jJIqBRJEJih
+	 EptMSl4+BmUflRkpgZCIG0XKC8MUMG/aVPgq9+X3KFVKgeYYadVKPAd/gWIVxtfHhF
+	 FuXUWTRmGwmEA==
+Date: Tue, 8 Jul 2025 10:07:10 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Casey Connolly <casey.connolly@linaro.org>
-Cc: Luca Weiss <luca.weiss@fairphone.com>, Rob Herring <robh@kernel.org>, 
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Bjorn Andersson <andersson@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
 	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] pmdomain: qcom: rpmhpd: Add Milos power domains
-Message-ID: <20250708-vengeful-bright-rhino-d8d5ea@krzk-bin>
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: qcom,rpmpd: document the
+ Milos RPMh Power Domains
+Message-ID: <20250708-scrupulous-chubby-bustard-4ccbdb@krzk-bin>
 References: <20250707-sm7635-rpmhpd-v2-0-b4aa37acb065@fairphone.com>
- <20250707-sm7635-rpmhpd-v2-2-b4aa37acb065@fairphone.com>
- <06760125-4800-4068-8936-dddf27c28d17@linaro.org>
- <DB5VDDKCAQQG.LDCMHXAZN17S@fairphone.com>
- <fe454257-aa21-4304-868f-aefbea9963c4@linaro.org>
+ <20250707-sm7635-rpmhpd-v2-1-b4aa37acb065@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,38 +62,18 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fe454257-aa21-4304-868f-aefbea9963c4@linaro.org>
+In-Reply-To: <20250707-sm7635-rpmhpd-v2-1-b4aa37acb065@fairphone.com>
 
-On Mon, Jul 07, 2025 at 04:42:13PM +0200, Casey Connolly wrote:
-> > > > diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-> > > > index 078323b85b5648e33dd89e08cf31bdc5ab76d553..e09552a469264f28952fc46c3ab8c125e87310da 100644
-> > > > --- a/drivers/pmdomain/qcom/rpmhpd.c
-> > > > +++ b/drivers/pmdomain/qcom/rpmhpd.c
-> > > > @@ -217,6 +217,24 @@ static struct rpmhpd gmxc = {
-> > > >    	.res_name = "gmxc.lvl",
-> > > >    };
-> > > > +/* Milos RPMH powerdomains */
-> > > 
-> > > I can't find any public docs telling us which SoC is Milos (the only
-> > > relevant result is Bjorn's email asking you to use that name instead of
-> > > SM7635). So for the sake of future generations could you reference both
-> > > names in a comment somewhere? Or even the commit message would be enough
-> > > tbh.
-> > 
-> > I don't know the full list of model numbers for Milos. I assume it's
-> > SM7635, SM6650, SM6650P, QCM6690 and QCS6690 based on the info I could
-> > fine, but such info is hard to get. So this is not a definite list that
-> > all those are actually Milos, or that this is the full list of Milos
-> > chipsets.
-> 
-> oof, I see... that complicates things. It sure would be good if this list
-> was documented in the kernel though imo.
+On Mon, Jul 07, 2025 at 12:18:10PM +0200, Luca Weiss wrote:
+> Document the RPMh Power Domains on the Milos (e.g. SM7635) Platform.
 
-Kernel is not the place to store mappings or descriptions of some random
-company products and their names, so no.
+s/Platform/SoC/
 
-Also it's not a task of contributor of a new SoC to decipher Qualcomm
-model numbering and document it anywhere.
+otherwise it is ambiguous - platform as a board, platform
+as a family or platform as a SoC sub arch (which usually we call
+platform in kernel docs, see maintainers soc profile).
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
