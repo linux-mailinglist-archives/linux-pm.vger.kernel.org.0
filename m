@@ -1,243 +1,213 @@
-Return-Path: <linux-pm+bounces-30375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30376-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE2C9AFCDED
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:40:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12368AFCE05
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:43:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 084A23A6EE6
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:39:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07895567010
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 14:42:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6153C2DF3F2;
-	Tue,  8 Jul 2025 14:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8C12DFA32;
+	Tue,  8 Jul 2025 14:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uH5R3MYc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xXpJK1BP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2085.outbound.protection.outlook.com [40.107.96.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB39421B184;
-	Tue,  8 Jul 2025 14:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751985612; cv=fail; b=UdcjYX69gEoLroT67DOQt8tBJO0mjn6nS2lHs2kDsxXXCRsdT8FVIi3kdbz67tJh40uXgI8hpXpfPuFxNsC/QM6emS+gFMm5P3BuH+TPlLaprODGnv01l3mrVHNplrydPmuaNiLnVH6V5C4YBQXkgfTIWI7dPRBX7whyAyEMxy0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751985612; c=relaxed/simple;
-	bh=qKEA8HSmM6ym0JkxpL3dljeT/Vpf5F7kxgvicxcdA20=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=U/Aa7Mb2CJds+QZpDwBUcdAZhVVdtjtLSxVorRJtEoHHged/H3xLUez9rkh4VkHyhB2rgTltWqvIaEukV/iYTMjiGwdwU0XYwTvwAEevfRScRvxwjZn1clUlMKGmgn3lTWhWsUuj5bSLw4TGR50Bba+Ytp3fYk6WvM86TYzIfNI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uH5R3MYc; arc=fail smtp.client-ip=40.107.96.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fihEw9TVHmW2j19lf0zQXDiMFYIJNlSKXh8agNx0XuFwCIUKywA8//WqrueOeXzKKPVk8JlohX44cQa+7FxNiSSFyvOJun6rOk9guVI1WESvxRD5VgrfB5kg0rvfHsAqmySisGIT6db+jAcjKDlvu5Z4pJQT6ZyAGtgY8xs1C4kKtzjkF6oK69OVBd3jpPNV2hnR0SgRLBfTNOtkpQ9T4UfdXwzzoKz6csh9yDtklTJPOuPQylFPfOpfx/Lzi0QtZ2yykTWqJX1N4sEZUFQkZjOOiIQn5U00msqjzDrTFdKxCT4cbSogeY5H1obnvTb7aSkW7ll6iK6dvWJbX6/TJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q01eD6iiHAHvjNC3slmkZd/eJluU8Zcf45p5kJ9sceg=;
- b=VgQlwdzfzozPn5kJds48mucK5Lkhz0vhQTZLLyicCdsz1np5XFny8tDDaAK2TdJONUJWO7qqL6RglaNKea+zrXfBbDeD8LkqUavRP8sfau7TvOu5E8k7gnW28iGTylCmDa3KUOfmqvdsv05i4Hj+UkN38X34SOosnO1n1G+/YBqLysgSy8bUzyKrfx7szxPtkMAW1Fo5SVbzA0KfIHofdtuV9i4hdaDDVIlVSW0rMTuOQYRrG+g8iH07Ytjg5w8SJIF98Y6n7o3H76m2dEKY/idyptTGOUDRQS/7EHdCEELUWgUzVWImRuUSwPNTvpGND3qiB+cE4bki4jPStdJqjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q01eD6iiHAHvjNC3slmkZd/eJluU8Zcf45p5kJ9sceg=;
- b=uH5R3MYckdNbCiOwe3hbvs3nR6I5S7kVkpOQhklHELUUZy8cEe8XHhrrBK0pF6IEwP+W5JxrNzBjL80x7dxMABW/9MpvTCYtMUK5mUTsp1keP+3WSWPgMTSq2mHMEEkXkr8fhbWA6YZTbcwKnYdMc4VGRZupPV4vP7RbKI+TJNg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.26; Tue, 8 Jul
- 2025 14:40:06 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%3]) with mapi id 15.20.8901.024; Tue, 8 Jul 2025
- 14:40:06 +0000
-Message-ID: <a23ee023-3e70-4d49-8f11-7d5798ca7576@amd.com>
-Date: Tue, 8 Jul 2025 10:40:03 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] drm/amdgpu: do not resume device in thaw for
- normal hibernation
-To: Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
- christian.koenig@amd.com, rafael@kernel.org, len.brown@intel.com,
- pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
- airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com,
- matthew.auld@intel.com, matthew.brost@intel.com,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de
-Cc: lijo.lazar@amd.com, victor.zhao@amd.com, haijun.chang@amd.com,
- Qing.Ma@amd.com, Owen.Zhang2@amd.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org
-References: <20250708074248.1674924-1-guoqing.zhang@amd.com>
- <20250708074248.1674924-6-guoqing.zhang@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20250708074248.1674924-6-guoqing.zhang@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0370.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:fd::27) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBCD2D8DA8
+	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 14:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751985724; cv=none; b=aJt9rKVtSPG4cWnZ2ysMIIWKLA3HszYST1+wMl6doiYi4aiHeESuOh/vJkdaVOFrUGNzqHays/eKlWFLY/fH8EpMjnRq7D8w72F4jRCZiJjvTa0gibTgdR0/lyAHL5m4R4DlgqjI80aGnOvTyyA/NDH8g8uEviL1l5wR4gOUEp0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751985724; c=relaxed/simple;
+	bh=0mcJIAv963kRXxd7avSTBLgnDGUQ9rev3Q2V/CY3u5A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Acq4gy4+aFRQzcfUO7vvIVMa0ExGbrAa00cA73B1WxC96uhUIm5hnmj1qNJh9edfzmtWkcfn3YVE/738oXUDghtsxMnR6XdJVGDYrGsue6gnog7QKTeOD7MSamn2vByFI8huzQRxuvXWyDGWKMErWiEgVimmzWLJCHhFn1qSCSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xXpJK1BP; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-70e77831d68so39000267b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 07:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751985721; x=1752590521; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8X1Ax/c7OCSOjjpVTfEgcVIxTR2rSGaImcIXzMGcrTo=;
+        b=xXpJK1BP1mJ5cfutK6YTy+9rxQqlLmPf/5yCt51bnenUS5QZiZkMLAf9+KcRkERi2s
+         hzTV9WTDnxrt5U5eZ0hlP4JhDmuVQCkNWm8kCr3T5WV7EvzygknJgi1ryShfUoIEW1d+
+         dnlRXb47uOyrHrPYjltQUAN0vyxjjoYdA+i5KBTXFl63+QfLj5sImx43PoFIER/GxmeL
+         EaT0W77k7gle5XsuK7j/cqosZT2sePJmkOFuXLZweaNI4w6dctjCftqP+aflKLhRB07a
+         L+vIgBO6PIGr8TYhUAXvQ6+s4AOx1AqHb8mj/yxmvDx8ZU6v6oESwiJWi81nXHbXV5Yw
+         90qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751985721; x=1752590521;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8X1Ax/c7OCSOjjpVTfEgcVIxTR2rSGaImcIXzMGcrTo=;
+        b=INA5fVYIRS6XFqYJw/PR5Mo3iN89HNsNgjRWcYEOWHENEBMS0ynTyqNhivOPVwtQcg
+         n6uVqApxLnbTPzh0nBhwOBOhGAChnWlF+trN4n5jiboxZl2GYXGsTgzYqAiAs0OPrqxR
+         8MQS4FCPT87RnV2mAseRleK40h21fHUgqvWjCnIOG0jD1RaPhLM8yFXDNOfby6jQHW2P
+         Ie48kiHFbC0iSoxp2M+sh9z9ywiejzHfyv0uplS2gUfPEY6ogcKvDGcZ/d1AjExgSP2a
+         xhorckukfM+oF8vuW03FKozJCODpZvXdTzEMjUZBodc5opfb2CjA04OoLwlfDMv4rlNl
+         zi7Q==
+X-Gm-Message-State: AOJu0YysN+rqbZDr+nJE4qj3j6vvRej88isniUxAzl/3P7LH6585Y/Qt
+	8zj5ZNKGGHIw92Wc0uwe8+zU7wdXYSa18R8xvrfC2q+CaUyypg6Or6zolPY+Ny2q0MCcEtGGdqt
+	KDcfmXkoS2xz2SPb7pvUDoQVWEPvtS4YPO54JUlFOojpuRzgkvaRG/BA=
+X-Gm-Gg: ASbGncs1L45ZWKiNce72Ir2HpLKg64L9QmpuwNropu3wbE9E+J89ZFwaBO/WFn8qVXy
+	pbRTv64qpOAJPNNCnauNRhzrloY2FDx5COCm36jXQdsNVE6gZPmPhPcGmxyJM85vIS0p+NLroSK
+	L9A+YuepHvX6Qke3bjZZgn0pyRVSnkdyUef3/iH83PeYAP
+X-Google-Smtp-Source: AGHT+IG5S+08e/JdbYjJIFZyOr0+cJ0P3N9YKEaV/R7CFPKmW7CVIaQwpF7t7Nsv3w8b90GP+LHZk0meEqPMhgNNqQo=
+X-Received: by 2002:a05:690c:b84:b0:70f:84c8:3105 with SMTP id
+ 00721157ae682-71668d73139mr239782947b3.37.1751985720735; Tue, 08 Jul 2025
+ 07:42:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CYYPR12MB8655:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71e679f4-d411-405a-138b-08ddbe2d5486
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VkpKV2MvRkoyVjRoUGpFbW5MTzRuZUNocFlFYWdueXNLQzFraEQvcUNJQTF1?=
- =?utf-8?B?VUVXS0w4VnJxZTc3TUJ0UHo1TGdyYjJyZmpJQy9IMU5HMzZQUm1LSW9SZjRZ?=
- =?utf-8?B?T2RWRWw1aUtTNWxKcEowZ0lzRjhEYWYrY1Y4amt6M1pTOHFaVHhWbHRQcWhW?=
- =?utf-8?B?djVYUjlaMTFoV2VsbGt2OWFSVkhJS05nTFJ3Ri9hTlJqMXJoNGNLNnU4NWZw?=
- =?utf-8?B?NnUvQWhwMFpORlpFUGpvY1YvNll0OFVxMTRtWURheUFrWDBKeDdITHdSSjY2?=
- =?utf-8?B?UUhmRmVLdEt2SjZoVzRDaGErUjk1ZVdTYjRJTFVYWGNTekkySHQyWm9aTTc0?=
- =?utf-8?B?QjAwSm43dlQza2hiZFlxbXdwSjFRbDJmd1FxdDJXb2k5dmNtN0hGYnM1NGpk?=
- =?utf-8?B?QjZwWGlxdGxTdmxUMFFlS05RWlEvcUYxQkhvOGVJekFlcWFNcjQvdzlDSDFo?=
- =?utf-8?B?N0NNRHlLQy9BMEsrS05FTkcrM1RyZ0NQOFpUTklnUFZwYzc4QW1uaFlkdGto?=
- =?utf-8?B?U3dBQ0hqK0FkNldPeDV5czNXbjV0aVB2bEc3Zmh4UUNSams1VTBtdUw3eGgw?=
- =?utf-8?B?c0NiY3VaS3cxNWRxSmZhQ1RrZklXZDlScm5RQ25DaUhVNzBGdU9oWlNFcGpX?=
- =?utf-8?B?UXk2RU1WVm5RRzNFK3B4VFpTWjdWeGFua1dSQVlGS2dzM1R5VTloL1NNWXBQ?=
- =?utf-8?B?bzUvWWQvQkpWSnIyWXdtRlI3L1hPaXdQMEcwUFMycDZ0UnMwODRqMFV1RFcy?=
- =?utf-8?B?SkU0c1BvWjBURExIUW1UVEorU3QvVEVURjZzSVVvSElVRXFEOWYrbTV1dDdY?=
- =?utf-8?B?ZGVrdCtMa3NxMHVFUHpuRXNLUjRSUzM0L3pCblh4QS9NRlpZSDJDSG01a0JT?=
- =?utf-8?B?MkpkU0Q0dy9qVHBmL2ZmUGlOWGROUzNpTjg2WDJSR25YS2dxeFlzT3cwU1ZE?=
- =?utf-8?B?cnEvdzJOUGc1eFVxUTA1RkJ1bDRzejU3TENKakFXQytsWUp5M0syNlFFMkRB?=
- =?utf-8?B?RzNYTmJoMlFYK3YvcVNqbzdlOUFESERsNWJ4d2V1L1h6UkFMS3loOUFScVZJ?=
- =?utf-8?B?c1dPQ2I5NlZvb2NzMWpKOThwTC85NVkybm5WRk1DS0ZTOUlId2RMWEhiKzkv?=
- =?utf-8?B?RW1EeEo4U3pmZVpiTkJpT1NZREljUzN2b09SRVBSMysrekMyUDc4Tmc5dHky?=
- =?utf-8?B?L2VKZml5eXZHYW9mb244THZHby9xZ0RMRloxU2FzZXdMNE1jb2V2d1ZYN1FT?=
- =?utf-8?B?alc4bzFMR0J6Q3gyUVNTaklmRHliQ0tWZGFGVVI0ZzdweGY5ZTZRaUVwOVNt?=
- =?utf-8?B?Ui9vbk1DUHpXenV6N0p3K3p3dk9qSHp3bzBVR1NadGN4aFZzb2xRWnBrMStE?=
- =?utf-8?B?OElsdnZQeU1jMVgzc2ovSEVkWTFPYk1GVFJFWEVYNytoN0lOM1l2YnQ3VlNX?=
- =?utf-8?B?NEVCS1IvMVRabUdGbVdnMDFSaWFGTCtWSndmMTE3ZkxWYWxZcnlabUs3Wkpw?=
- =?utf-8?B?Y25VM2dNNVFWY3dYT0lSZzlqVEljbnBxbVlFcGtPbzJLSGF4TXRnU0N3Q0tS?=
- =?utf-8?B?UjBwS05PbVJGTU1wajdVT3FQMURIT2ZkRVRrRGhobCsxWFFELzA5OUVXSnRn?=
- =?utf-8?B?RGJsSlAzNzk5QTVPUXhsRXh4YmcxcEFDZWhVNzBlOU1xUkhvbkdVNy9LbVB6?=
- =?utf-8?B?MFF4VVBzS2JPWEptQlYvS0oraG5jRkd3TUE4OFgvclZpUEgxTWk1bk54RDNh?=
- =?utf-8?B?dWdwWW9XaStIQ0dtdVFVekhKSUdwS2cxWDFtbUtYandXckgxeDRTalF4cUla?=
- =?utf-8?B?NTY1Q3pBMVd0c1E2SGNvTE94bjB4b2dUUE5CRHRLUXE2QkttdUJYZEVVN2NH?=
- =?utf-8?B?SjhaOTlsZytvbGFBMmxOYXhSWUJTVWltekZXUUNHVlR0bnl6Z3VNRFEydlhI?=
- =?utf-8?B?NTNpbDF6TmRQVHVXMC8rMmVJZjZwa05rQTlZTWkzU29ZMXV0K0QzdXUzUkxi?=
- =?utf-8?B?b3M4eDdkNzNRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MHljMUdsa2N5Z2ltWFhNTDI0eWhlSElKTWQ0ZmVHWnpFbnVYYk4zNEp0VGlY?=
- =?utf-8?B?ei80ZGVpUmdHbGNwcnpqYlB2Tm9QbzVkazZWSEZsT2E5NGxFZVhSLzlqL0RP?=
- =?utf-8?B?bFFxRFZ2SExIVVZqSVM5ME9BaGZ4NnFYa1V2WkJDTVBQQUl5N0M5ZkZTa0dZ?=
- =?utf-8?B?cU1sUlZKS040NjZOWGpkVCs2RWMxb1BsbzMreVpLSUpZemhwc2JNV29GSzBX?=
- =?utf-8?B?aTRGOWFsMHhURWt2NkdGdlJJTm9GdDhIdnlDWmRwVTJHQlZ5K09NdUtrNVdv?=
- =?utf-8?B?LzNBRUpOcjQ3L1JYOXVwNWxoemtVSnJKWHh2azhxbnJBY2NFTUZDdUhCdFVV?=
- =?utf-8?B?N2hwRE9WMnJRUjcxRjNZdmpkOGVscE04TW1pbzUrdEdINWVFcGtxM1BadWlH?=
- =?utf-8?B?d3I0bXZWbzFNOU14YU82Y0hIaEpDWHB2ZVdFcjh5dTVaRkdJeXpUTmlnVW03?=
- =?utf-8?B?dUJPdG9DRWN3RE5ISTROZHRPMUl1RXQwQ0NSckxCSkRsOGV2REcyWVl0Yzgw?=
- =?utf-8?B?djk1ZEhCN0cxc1JsU2ZKM3NVcTFuVHVTUzVaZjRxeFdNVjZYdVBnaUYrT084?=
- =?utf-8?B?c0dJaTJtR0hSOVQyb2FRcXdQT3dkZGx2a29yRmZoN1RBeThlY1JyTHBuRVk3?=
- =?utf-8?B?dTYySkhwcFlqU2RkRTNQNXhlZDk4eWo2b2Y3amdreEJjclZQbFpaTjhjQnhN?=
- =?utf-8?B?S3hETHZvNThGYk1aNEpPME1qQTg0UHNqYTM4OVZHZ1lLcWl3L0JmZkhVdjBk?=
- =?utf-8?B?VVJSRFRWLzZPai83WUtVV0M5NUVXQllnamhkSXprZVEvMCtIVlJqd21QNW1y?=
- =?utf-8?B?VW42dHRRNzVEZjZZWmlxY0sxVFNPanhNcXp3YVRFcGU4TEpQQ2E3bnQyb09Q?=
- =?utf-8?B?eE9Od3ViS3Y0WHBjbFZsUjlWVmJjZEZIRFdiZEZoYjk1emhrSGtGQ2ZwcTZm?=
- =?utf-8?B?RUdMMXovdTJjcnJRRmpvRy9BM0FJdkdOc2VpcExzN2VaMEZRR3dsdFprdGx4?=
- =?utf-8?B?T09JNGEzd1hPY3JhQm5KWEZ2TmJ0eElhelJGaWRvTkJiNjRVSDZJU0Z2a0FQ?=
- =?utf-8?B?L1p3dlNFUzR2YmUzV0pXVVJqTHVxTzB0eVhuMmRlMjVDNituQ0ZRc2R1N1cr?=
- =?utf-8?B?bFlHd1IzODViZVNZL1o4R05tVVBmWk0xRUcxYUZ3cHNyTmV5T2h2WUVrWjYz?=
- =?utf-8?B?Sjd5U3NrR243S3BqOEhNTDNmQUJraVZ6NmZRdnNjSGFqcFNMcG9JQWxLdmVh?=
- =?utf-8?B?SFNSR2R6eGhjbnRCQ2pkM3NxcHptZ2JRd3ZRRkJZYVI5KzdhTmJ0RlhJTFRY?=
- =?utf-8?B?STRDZWs0TzJaSWR4bElMS1Uwdkt2SFhwMDR3VE4wUGRZVFkrM0dVYiswNkl4?=
- =?utf-8?B?V0FKcVIwdXZqeHIrUnV6MXd0cys2WFJQUHJxRm1qajBjT1VadTduK1BXR2VX?=
- =?utf-8?B?b2FsZXJMeXdMOHdpOElSMHhuK0hBWE1kb2RrL0UyOU5GOTZOS25ubCtlQi9t?=
- =?utf-8?B?MHZHdXlwYzY1OWV4d3Y0RmhPeVhJb1VlOUpieDBjYjBxcmdtNkt2RUt2RXZk?=
- =?utf-8?B?SEdKNS9hdmhXdXBZM3JTb0tMaGNMM0gwRWtheXF6WDNEMWhYeWRwYWhaQjZS?=
- =?utf-8?B?MTJ6U3hwRnZad1MxeGp6N1hrYUVGWXVtbnZjWkw5Rmc4R0xLb2N0NDB0L2V5?=
- =?utf-8?B?MU1OazJKN1NRUjFIOXcxZUxpQ2NoZDIvQy9ydTkxOVNjeDRTS0Q3T3BPYXRN?=
- =?utf-8?B?dkgyb1Q0UnRYMkpWNzF6ZUdkOWpPdTNrV2lYOVJFR3IrRW5lUUVuWXhSV0ov?=
- =?utf-8?B?aXlMTkYrVHcxaFI2dmF1UkhwajVNTjRhZ1RxTkVVcWhncFErWEhuYkhvN0ZH?=
- =?utf-8?B?QnZUQ0UvS2d5Q1kxM2djZDAvb3ZvcU1rWmUwbnhXM0Fjb08xMklxeDRoN1la?=
- =?utf-8?B?eWxlYnBhQW1Gb0tjblRVbmpXODJicFEwMTBLSnhMb2pLVXlxUlRhc3dWeHB6?=
- =?utf-8?B?b0dxdzlGL0YvMTJSbjdqUXl1TXJWaWFaT2NYUEFONHQ0WDkvTE1IVjV3cGVN?=
- =?utf-8?B?SEgxcVIyRGZOdFY0U3VTQnRDQW9tQS9IZ1V6ZmJTNDdmellaTjY0VWFSTmxm?=
- =?utf-8?Q?1X6W7H5H91TMUnD3EmuvFZklK?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71e679f4-d411-405a-138b-08ddbe2d5486
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2025 14:40:05.8921
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MvYLqr4ESARJ6fp12fgveh2berPQbPq9aGsIWe2Gupd+W60YXG59PExgbpy8h6oWhCZRJWQ0S6MCvBeM7vftmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8655
+References: <20250708-pmdomain_qos-v1-1-7c502f4c901a@oss.qualcomm.com>
+In-Reply-To: <20250708-pmdomain_qos-v1-1-7c502f4c901a@oss.qualcomm.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 8 Jul 2025 16:41:25 +0200
+X-Gm-Features: Ac12FXydQdF3ospRk6QaRRhIc30sIrq41cRq2xIJwRbfj9xsGxlUOl2OgbqnTok
+Message-ID: <CAPDyKFrL63Jv4_cUbrjAaU4UtNNDVMpALt41Mu6NbGcAefmWUA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: governor: Consider CPU latency tolerance from pm_domain_cpu_gov
+To: Maulik Shah <maulik.shah@oss.qualcomm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/8/2025 3:42 AM, Samuel Zhang wrote:
-> For normal hibernation, GPU do not need to be resumed in thaw since it is
-> not involved in writing the hibernation image. Skip resume in this case
-> can reduce the hibernation time.
-> 
-> On VM with 8 * 192GB VRAM dGPUs, 98% VRAM usage and 1.7TB system memory,
-> this can save 50 minutes.
+On Tue, 8 Jul 2025 at 07:15, Maulik Shah <maulik.shah@oss.qualcomm.com> wrote:
+>
+> pm_domain_cpu_gov is selecting a cluster idle state but does not consider
+> latency tolerance of child CPUs. This results in deeper cluster idle state
+> whose latency does not meet latency tolerance requirement.
+>
+> Select deeper idle state only if global and device latency tolerance of all
+> child CPUs meet.
+>
+> Test results on SM8750 with 300 usec PM-QoS on CPU0 which is less than
+> domain idle state entry (2150) + exit (1983) usec latency mentioned in
+> devicetree, demonstrate the issue.
+>
+>         # echo 300 > /sys/devices/system/cpu/cpu0/power/pm_qos_resume_latency_us
+>
+> Before: (Usage is incrementing)
+> ======
+>         # cat /sys/kernel/debug/pm_genpd/power-domain-cluster0/idle_states
+>         State          Time Spent(ms) Usage      Rejected   Above      Below
+>         S0             29817          537        8          270        0
+>
+>         # cat /sys/kernel/debug/pm_genpd/power-domain-cluster0/idle_states
+>         State          Time Spent(ms) Usage      Rejected   Above      Below
+>         S0             30348          542        8          271        0
+>
+> After: (Usage is not incrementing due to latency tolerance)
+> ======
+>         # cat /sys/kernel/debug/pm_genpd/power-domain-cluster0/idle_states
+>         State          Time Spent(ms) Usage      Rejected   Above      Below
+>         S0             39319          626        14         307        0
+>
+>         # cat /sys/kernel/debug/pm_genpd/power-domain-cluster0/idle_states
+>         State          Time Spent(ms) Usage      Rejected   Above      Below
+>         S0             39319          626        14         307        0
+>
+> Signed-off-by: Maulik Shah <maulik.shah@oss.qualcomm.com>
 
-If I'm not mistaken this will also have the side effect that display is 
-not resumed in the "normal case" too, right?
+Thanks for posting this! I am actually carrying a local patch in my
+tree for this, just haven't reached the point of posting it. :-)
 
-I know the GPU you used doesn't have a display, but I'm just thinking 
-about the callpaths and implications.
-
-Would you be able to test this series specifically on an APU with a 
-display connected to eDP and no compositor running (so no DRM master) to 
-make sure it works as intended?
-
-> 
-> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
 > ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> index 4f8632737574..10827becf855 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> @@ -2541,6 +2541,10 @@ amdgpu_pci_shutdown(struct pci_dev *pdev)
->   	if (amdgpu_ras_intr_triggered())
->   		return;
->   
-> +	/* device maybe not resumed here, return immediately in this case */
-> +	if (adev->in_s4 && adev->in_suspend)
-> +		return;
-> +
->   	/* if we are running in a VM, make sure the device
->   	 * torn down properly on reboot/shutdown.
->   	 * unfortunately we can't detect certain
-> @@ -2654,8 +2658,17 @@ static int amdgpu_pmops_freeze(struct device *dev)
->   static int amdgpu_pmops_thaw(struct device *dev)
->   {
->   	struct drm_device *drm_dev = dev_get_drvdata(dev);
-> +	int event = pm_transition_event();
->   
-> -	return amdgpu_device_resume(drm_dev, true);
-> +	switch (event) {
-> +	case PM_EVENT_THAW: /* normal case */
-> +		return 0;
-> +	case PM_EVENT_RECOVER: /* error case */
-> +		return amdgpu_device_resume(drm_dev, true);
-> +	default:
-> +		pr_err("unknown pm_transition_event %d\n", event);
-> +		return -EOPNOTSUPP;
-> +	}
->   }
->   
->   static int amdgpu_pmops_poweroff(struct device *dev)
+>  drivers/pmdomain/governor.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/governor.c
+> index c1e148657c873a6b5b4d9c0f058d54cb020c56e2..d5ac4c1b5b5a432f0072209d17379e58ec891202 100644
+> --- a/drivers/pmdomain/governor.c
+> +++ b/drivers/pmdomain/governor.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/pm_domain.h>
+>  #include <linux/pm_qos.h>
+>  #include <linux/hrtimer.h>
+> +#include <linux/cpu.h>
+>  #include <linux/cpuidle.h>
+>  #include <linux/cpumask.h>
+>  #include <linux/ktime.h>
+> @@ -349,6 +350,8 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+>         struct cpuidle_device *dev;
+>         ktime_t domain_wakeup, next_hrtimer;
+>         ktime_t now = ktime_get();
+> +       struct device *device;
 
+Nitpick: Maybe rename to "cpu_dev" to better distinguish between the
+cpuidle_device *dev, above?
+
+> +       s64 cpu_constraint, global_constraint;
+>         s64 idle_duration_ns;
+>         int cpu, i;
+>
+> @@ -359,6 +362,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+>         if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN))
+>                 return true;
+>
+> +       global_constraint = cpu_latency_qos_limit();
+>         /*
+>          * Find the next wakeup for any of the online CPUs within the PM domain
+>          * and its subdomains. Note, we only need the genpd->cpus, as it already
+> @@ -372,8 +376,16 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+>                         if (ktime_before(next_hrtimer, domain_wakeup))
+>                                 domain_wakeup = next_hrtimer;
+>                 }
+> +
+> +               device = get_cpu_device(cpu);
+> +               if (device) {
+> +                       cpu_constraint = dev_pm_qos_read_value(device, DEV_PM_QOS_RESUME_LATENCY);
+
+We should be able to use dev_pm_qos_raw_resume_latency() here, similar
+to how cpuidle_governor_latency_req() does it. I think it's better as
+it avoids acquiring/releasing the spinlock.
+
+> +                       if (cpu_constraint < global_constraint)
+> +                               global_constraint = cpu_constraint;
+> +               }
+>         }
+>
+> +       global_constraint *= NSEC_PER_USEC;
+>         /* The minimum idle duration is from now - until the next wakeup. */
+>         idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
+>         if (idle_duration_ns <= 0)
+> @@ -389,8 +401,10 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+>          */
+>         i = genpd->state_idx;
+>         do {
+> -               if (idle_duration_ns >= (genpd->states[i].residency_ns +
+> -                   genpd->states[i].power_off_latency_ns)) {
+> +               if ((idle_duration_ns >= (genpd->states[i].residency_ns +
+> +                   genpd->states[i].power_off_latency_ns)) &&
+> +                   (global_constraint >= (genpd->states[i].power_on_latency_ns +
+> +                   genpd->states[i].power_off_latency_ns))) {
+>                         genpd->state_idx = i;
+>                         genpd->gd->last_enter = now;
+>                         genpd->gd->reflect_residency = true;
+>
+> ---
+> base-commit: 50c8770a42faf8b1c7abe93e7c114337f580a97d
+> change-id: 20250703-pmdomain_qos-25b8dbb623ea
+>
+> Best regards,
+> --
+> Maulik Shah <maulik.shah@oss.qualcomm.com>
+>
+
+Besides the minor things above, this looks good to me.
+
+Kind regards
+Uffe
 
