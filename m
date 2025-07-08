@@ -1,208 +1,206 @@
-Return-Path: <linux-pm+bounces-30395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30396-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28EA2AFD73B
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 21:40:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 157ADAFD7A5
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 21:52:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE8E77B0C3D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 19:39:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E12823AC5AE
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 19:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5923122126C;
-	Tue,  8 Jul 2025 19:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3591F239E9B;
+	Tue,  8 Jul 2025 19:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JeSfSNiE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vy9Zq8kd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F1521CA0E
-	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 19:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6921DDA24;
+	Tue,  8 Jul 2025 19:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752003632; cv=none; b=qlDKcbPJ5zGNpgTscTw6BnZn3MEHuCURkyGoAwEtTMc2SGkGLKidaFyYK6QBL8bHXKzDukK3CfRvKLGVJv4G0einVLnJiZv6eOmh8fFbER0MvUiLGTcb8J5DPJLH99irGSbQGsUBnFurNFweu/DGLUK+BaoCGBAROcJW7tLtVHU=
+	t=1752004312; cv=none; b=ca4pfbSC5Ze1RHC8HaiX1OI+aZN/auSCi8a3p5gdQQeU9BO1QjfN9tOkqmvxFuSHyMRVvbRZMjoC5UuKqyW1gS0x+CgM/lI/DJhqMkus1CvRucNV0P8vayLqJjJJztuVlHDs2B2myzi0xQKe5/F+nUC5mDCifEG5DFIkbwGB+1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752003632; c=relaxed/simple;
-	bh=dB0CumTGWtJGkpBYar++Rj0PACqzVwrkyMsciBSXkLs=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=KxsD+zSKI2htlHnmOaXKg1zPiIqEJxHJ/7/fz5sqOeP0FpArGcYvmFZB35P0Zcsi0KetJ1NTtOmbG2m1As5Yiql0d/+2P/rat1PwnUJ/9rMByp4gix/NdcEKV35pWsFyLp9EXu6F/nWos6G5G9uIXQ3Wz892fN8OVHjK3uriJPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JeSfSNiE; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-875f28fde67so453035839f.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 12:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1752003629; x=1752608429; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=2aT+wselAJy48WsFwg2kxwprmngL6RERUExxyAIax9A=;
-        b=JeSfSNiEtiSTXn1CTW+T9kCCDlwbkt5n43TnecMMWKqvmHw3+B9xzI4pCDhVshizST
-         lab7e7iDD2rP+BI09Ue0JVrAh/oN//3WoPshLOUT8ZyH4vWiLkpmI8b8ZtwfdttsxxKx
-         uT9g0AUFRWjJzFZz2hwESV0w/EEcUDitb4Hnc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752003629; x=1752608429;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2aT+wselAJy48WsFwg2kxwprmngL6RERUExxyAIax9A=;
-        b=QmYgaslaVw2LtNhkZlAZhcE68fj70jHcpO16/IEsV7z86ETDpCt+HauHITSmnkFwSF
-         WflCZ8emPTQBXJTem6m7LflYbZoX4p6spTQKxLPjfHwRagpu966pdYBL/rkLEDrHp9ZU
-         G2CfLJh+peBUdtkbMAWf+D5s0vRy8T05m4z9gB7JBhpncSEgbuplrnBNwCmyWTyFuPP+
-         b+p/vz9oKd+nvk8xOGYTL+CMufihBuOOqB4giZkhHz8y3td6GrbzOafat67f0dMm1quJ
-         4NiiqBk67YkIXdub+spMxyCBPO1Cj3F07yG4PccaZVvAN91Kv98Pvcd7Q/BfRoQ1SSy1
-         CpGg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4wjbE3esr5pEeZBM6NFE5KnIqrMbsXL2FLHboBEsue1APdAY8PpYAc0jFqC3csyRDf0geCUEekQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAY8vilcNY+se6hcDzDBdE19z/hQ9BlSEjPTnGPpgnE9ZWz5oE
-	Dq/NtUagjJKCPYJZgSDZ+AkH5mK9aOxQqHEZqCLOGC/7WQ2zZ7B16YfaCsR7UO011Ig=
-X-Gm-Gg: ASbGncs6dRSlndesAu3sT8XhZTse57hW1eMwVCrl614UqggOm12ei8GlL/w0yUawS7X
-	0iU/eWexQbi8VXmxmw+JziwTUSO1k2jg/xrasuSyZR/CI/ZxUsir6OZtS3I8lyuDakGOhKnMCmy
-	hmxpGPy1mysoyx45zAIwVLsZdE9GyVNknH0D4y6nWRv+iV+7XlSglF/mCp1Blxvzt20HtQ6YWNY
-	8Bk/isMTKg0S8mOOzAvAxsD7LFW6gB6yGkGHtLuWpPkzMkMLc9q6TgqYFacMnM/Z4v4yb8iOPY8
-	sNzb07dvxmCpAVMZ25X0N4RJUn9woUhpGX4ev0fIoaBvKnfCH3Ry0W8l4tF/0SdE8QcG+z7qug=
-	=
-X-Google-Smtp-Source: AGHT+IEjj39711rTkfOAsDLT8KEkdMOlxGB1B1vXgPqa+jmbk6jS6kTHoRYbAn3Ymb/KtmaWNOLnww==
-X-Received: by 2002:a05:6602:2d96:b0:86a:256e:12df with SMTP id ca18e2360f4ac-8794b432c1cmr551069039f.2.1752003629195;
-        Tue, 08 Jul 2025 12:40:29 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-503b5c8f7f2sm2338426173.145.2025.07.08.12.40.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 12:40:28 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------1GPtmu3oopRfGuZOvTz2t2bY"
-Message-ID: <ebbb6534-5968-4530-b9c8-0f6b21a96992@linuxfoundation.org>
-Date: Tue, 8 Jul 2025 13:40:28 -0600
+	s=arc-20240116; t=1752004312; c=relaxed/simple;
+	bh=yTr2Lf6OzbgYuYzMP6Xk0nLwlLvEYoyDrhjaU0F+Y9I=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=h0wWwYb5wu5JeN+dBydELgKV/EUT40unLzTif9VGQ9ayTeXtl/m+VljZBsp6KjgEKcRFKTcp27iUFLpIZSDTpfwiYbkV/GqHaFUjo++Hfi0EHdiijd0Oer7XfRJhO4BrpkI6tvi9Ictpzw1ni/3CQ380aoNoKwBn17/B8qkwZuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vy9Zq8kd; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752004311; x=1783540311;
+  h=date:from:to:cc:subject:message-id;
+  bh=yTr2Lf6OzbgYuYzMP6Xk0nLwlLvEYoyDrhjaU0F+Y9I=;
+  b=Vy9Zq8kdq/yjkTlSNIUljGMRqTlsyuGFC8JDRJ0fhE2i04obylfirioa
+   q9L4OCBD+CKGVM8j8g0OoKieMgc2J+ixyAGsJLxutOtGkMLyVGqri3msL
+   6svL8xsQHViA86x5Kvq/wKVhOo9u99kVLepVZxsUqZVr+V9acoiCtyZxW
+   rNSQOWtLGBJv95hNhMA6d01eZQYPvtZHVA9CH/5rENJKEoyChFlsf3dcG
+   us1ztYNWpS9j7NNS+nIcWfsvcTFOr8V5kKc17lwz0s+Dk5fpAusGA8k9K
+   Nk4f3Wz6GfQ13/Pj/AoRI+tAedl7YV8PrEZQFdNjI/AHf4GNqazdmhj1Y
+   Q==;
+X-CSE-ConnectionGUID: kbLkTwhzTFmGdnj+yuTCEw==
+X-CSE-MsgGUID: PlFAp+t2T92bBJ8xiFsvgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="64951998"
+X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
+   d="scan'208";a="64951998"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 12:51:50 -0700
+X-CSE-ConnectionGUID: PqruNcHvTAeMHX3Yug7l5g==
+X-CSE-MsgGUID: wyBvPltBRuuxPQpRO2P3pQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
+   d="scan'208";a="161136258"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 08 Jul 2025 12:51:48 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uZELx-0002hq-2q;
+	Tue, 08 Jul 2025 19:51:45 +0000
+Date: Wed, 09 Jul 2025 03:50:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 133eb9f50b0fea3a4a19b95d3207f793ca5aa77a
+Message-ID: <202507090335.IEivsA0f-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Thomas Renninger <trenn@suse.com>, Thomas Renninger <trenn@suse.de>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] cpupower update for Linux 6.17-rc1
 
-This is a multi-part message in MIME format.
---------------1GPtmu3oopRfGuZOvTz2t2bY
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 133eb9f50b0fea3a4a19b95d3207f793ca5aa77a  Merge branch 'pm-misc' into bleeding-edge
 
-Hi Rafael,
+elapsed time: 1452m
 
-Please pull the following cpupower update for Linux 6.17-rc1.
+configs tested: 112
+configs skipped: 3
 
-Fixes
-  - snapshot-order of tsc ,mperf, clock in mperf_stop()
-  - printing of CORE, CPU fields in cpupower-monitor
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Improves Python binding's Makefile
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                   randconfig-001-20250708    gcc-13.4.0
+arc                   randconfig-002-20250708    gcc-8.5.0
+arc                        vdk_hs38_defconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                           imxrt_defconfig    clang-21
+arm                          ixp4xx_defconfig    gcc-15.1.0
+arm                   randconfig-001-20250708    clang-21
+arm                   randconfig-002-20250708    clang-17
+arm                   randconfig-003-20250708    gcc-10.5.0
+arm                   randconfig-004-20250708    clang-21
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250708    gcc-9.5.0
+arm64                 randconfig-002-20250708    clang-19
+arm64                 randconfig-003-20250708    clang-21
+arm64                 randconfig-004-20250708    gcc-8.5.0
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20250708    gcc-13.4.0
+csky                  randconfig-002-20250708    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250708    clang-21
+hexagon               randconfig-002-20250708    clang-21
+i386        buildonly-randconfig-001-20250708    clang-20
+i386        buildonly-randconfig-002-20250708    clang-20
+i386        buildonly-randconfig-003-20250708    clang-20
+i386        buildonly-randconfig-004-20250708    gcc-12
+i386        buildonly-randconfig-005-20250708    clang-20
+i386        buildonly-randconfig-006-20250708    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-21
+loongarch             randconfig-001-20250708    clang-21
+loongarch             randconfig-002-20250708    clang-21
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                         10m50_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250708    gcc-8.5.0
+nios2                 randconfig-002-20250708    gcc-8.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250708    gcc-9.3.0
+parisc                randconfig-002-20250708    gcc-14.3.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc               randconfig-001-20250708    gcc-8.5.0
+powerpc               randconfig-002-20250708    clang-19
+powerpc               randconfig-003-20250708    clang-21
+powerpc64             randconfig-001-20250708    clang-21
+powerpc64             randconfig-002-20250708    clang-21
+powerpc64             randconfig-003-20250708    clang-21
+riscv                             allnoconfig    gcc-15.1.0
+riscv                               defconfig    clang-21
+riscv                 randconfig-001-20250708    clang-16
+riscv                 randconfig-002-20250708    gcc-11.5.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-21
+s390                  randconfig-001-20250708    gcc-14.3.0
+s390                  randconfig-002-20250708    gcc-9.3.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                         ecovec24_defconfig    gcc-15.1.0
+sh                 kfr2r09-romimage_defconfig    gcc-15.1.0
+sh                    randconfig-001-20250708    gcc-11.5.0
+sh                    randconfig-002-20250708    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250708    gcc-13.4.0
+sparc                 randconfig-002-20250708    gcc-13.4.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20250708    clang-21
+sparc64               randconfig-002-20250708    gcc-15.1.0
+um                               alldefconfig    clang-21
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250708    clang-21
+um                    randconfig-002-20250708    clang-17
+um                           x86_64_defconfig    clang-21
+x86_64                            allnoconfig    clang-20
+x86_64      buildonly-randconfig-001-20250708    gcc-12
+x86_64      buildonly-randconfig-002-20250708    gcc-12
+x86_64      buildonly-randconfig-003-20250708    clang-20
+x86_64      buildonly-randconfig-004-20250708    gcc-12
+x86_64      buildonly-randconfig-005-20250708    clang-20
+x86_64      buildonly-randconfig-006-20250708    clang-20
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250708    gcc-8.5.0
+xtensa                randconfig-002-20250708    gcc-9.3.0
 
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit e044b8a9545cd8265c7110c179aeec2624c16455:
-
-   cpupower: split unitdir from libdir in Makefile (2025-06-09 10:17:46 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.17-rc1-fixed
-
-for you to fetch changes up to b74710eaff314d6afe4fb0bbe9bc7657bf226fd4:
-
-   cpupower: Improve Python binding's Makefile (2025-07-01 10:58:00 -0600)
-
-----------------------------------------------------------------
-linux-cpupower-6.17-rc1-fixed
-
-Fixes
-  - snapshot-order of tsc,mperf, clock in mperf_stop()
-  - printing of CORE, CPU fields in cpupower-monitor
-
-Improves Python binding's Makefile
-
-----------------------------------------------------------------
-Gautham R. Shenoy (2):
-       pm: cpupower: Fix the snapshot-order of tsc,mperf, clock in mperf_stop()
-       pm: cpupower: Fix printing of CORE, CPU fields in cpupower-monitor
-
-John B. Wyatt IV (1):
-       cpupower: Improve Python binding's Makefile
-
-  tools/power/cpupower/bindings/python/Makefile              | 12 +++++++-----
-  tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c |  4 ----
-  tools/power/cpupower/utils/idle_monitor/mperf_monitor.c    |  4 ++--
-  3 files changed, 9 insertions(+), 11 deletions(-)
-----------------------------------------------------------------
---------------1GPtmu3oopRfGuZOvTz2t2bY
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-cpupower-6.17-rc1-fixed.diff"
-Content-Disposition: attachment; filename="linux-cpupower-6.17-rc1-fixed.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi9NYWtl
-ZmlsZSBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZQpp
-bmRleCA4MWRiMzlhMDNlZmIuLjQ1MjdjZDczMmI0MiAxMDA2NDQKLS0tIGEvdG9vbHMvcG93
-ZXIvY3B1cG93ZXIvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Bvd2Vy
-L2NwdXBvd2VyL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZQpAQCAtNCwyMCArNCwyMiBAQAog
-IyBUaGlzIE1ha2VmaWxlIGV4cGVjdHMgeW91IGhhdmUgYWxyZWFkeSBydW4gYG1ha2UgaW5z
-dGFsbC1saWJgIGluIHRoZSBsaWIKICMgZGlyZWN0b3J5IGZvciB0aGUgYmluZGluZ3MgdG8g
-YmUgY3JlYXRlZC4KIAotQ0MgOj0gZ2NjCitDQyA/PSBnY2MKKyMgQ0ZMQUdTID89CitMREZM
-QUdTID89IC1sY3B1cG93ZXIKIEhBVkVfU1dJRyA6PSAkKHNoZWxsIGlmIHdoaWNoIHN3aWcg
-Pi9kZXYvbnVsbCAyPiYxOyB0aGVuIGVjaG8gMTsgZWxzZSBlY2hvIDA7IGZpKQogSEFWRV9Q
-WUNPTkZJRyA6PSAkKHNoZWxsIGlmIHdoaWNoIHB5dGhvbi1jb25maWcgPi9kZXYvbnVsbCAy
-PiYxOyB0aGVuIGVjaG8gMTsgZWxzZSBlY2hvIDA7IGZpKQogCi1QWV9JTkNMVURFID0gJChm
-aXJzdHdvcmQgJChzaGVsbCBweXRob24tY29uZmlnIC0taW5jbHVkZXMpKQotSU5TVEFMTF9E
-SVIgPSAkKHNoZWxsIHB5dGhvbjMgLWMgImltcG9ydCBzaXRlOyBwcmludChzaXRlLmdldHNp
-dGVwYWNrYWdlcygpWzBdKSIpCitQWV9JTkNMVURFID89ICQoZmlyc3R3b3JkICQoc2hlbGwg
-cHl0aG9uLWNvbmZpZyAtLWluY2x1ZGVzKSkKK0lOU1RBTExfRElSID89ICQoc2hlbGwgcHl0
-aG9uMyAtYyAiaW1wb3J0IHNpdGU7IHByaW50KHNpdGUuZ2V0c2l0ZXBhY2thZ2VzKClbMF0p
-IikKIAogYWxsOiBfcmF3X3B5bGliY3B1cG93ZXIuc28KIAogX3Jhd19weWxpYmNwdXBvd2Vy
-LnNvOiByYXdfcHlsaWJjcHVwb3dlcl93cmFwLm8KLQkkKENDKSAtc2hhcmVkIC1sY3B1cG93
-ZXIgcmF3X3B5bGliY3B1cG93ZXJfd3JhcC5vIC1vIF9yYXdfcHlsaWJjcHVwb3dlci5zbwor
-CSQoQ0MpIC1zaGFyZWQgJChMREZMQUdTKSByYXdfcHlsaWJjcHVwb3dlcl93cmFwLm8gLW8g
-X3Jhd19weWxpYmNwdXBvd2VyLnNvCiAKIHJhd19weWxpYmNwdXBvd2VyX3dyYXAubzogcmF3
-X3B5bGliY3B1cG93ZXJfd3JhcC5jCi0JJChDQykgLWZQSUMgLWMgcmF3X3B5bGliY3B1cG93
-ZXJfd3JhcC5jICQoUFlfSU5DTFVERSkKKwkkKENDKSAkKENGTEFHUykgJChQWV9JTkNMVURF
-KSAtZlBJQyAtYyByYXdfcHlsaWJjcHVwb3dlcl93cmFwLmMKIAogcmF3X3B5bGliY3B1cG93
-ZXJfd3JhcC5jOiByYXdfcHlsaWJjcHVwb3dlci5zd2cKIGlmZXEgKCQoSEFWRV9TV0lHKSww
-KQpkaWZmIC0tZ2l0IGEvdG9vbHMvcG93ZXIvY3B1cG93ZXIvdXRpbHMvaWRsZV9tb25pdG9y
-L2NwdXBvd2VyLW1vbml0b3IuYyBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL3V0aWxzL2lkbGVf
-bW9uaXRvci9jcHVwb3dlci1tb25pdG9yLmMKaW5kZXggYWQ0OTMxNTdmODI2Li5lOGIzODQx
-ZDVjMGYgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL3V0aWxzL2lkbGVfbW9u
-aXRvci9jcHVwb3dlci1tb25pdG9yLmMKKysrIGIvdG9vbHMvcG93ZXIvY3B1cG93ZXIvdXRp
-bHMvaWRsZV9tb25pdG9yL2NwdXBvd2VyLW1vbml0b3IuYwpAQCAtMTIxLDEwICsxMjEsOCBA
-QCB2b2lkIHByaW50X2hlYWRlcihpbnQgdG9wb2xvZ3lfZGVwdGgpCiAJc3dpdGNoICh0b3Bv
-bG9neV9kZXB0aCkgewogCWNhc2UgVE9QT0xPR1lfREVQVEhfUEtHOgogCQlwcmludGYoIiBQ
-S0d8Iik7Ci0JCWJyZWFrOwogCWNhc2UgVE9QT0xPR1lfREVQVEhfQ09SRToKIAkJcHJpbnRm
-KCJDT1JFfCIpOwotCQlicmVhazsKIAljYXNlCVRPUE9MT0dZX0RFUFRIX0NQVToKIAkJcHJp
-bnRmKCIgQ1BVfCIpOwogCQlicmVhazsKQEAgLTE2NywxMCArMTY1LDggQEAgdm9pZCBwcmlu
-dF9yZXN1bHRzKGludCB0b3BvbG9neV9kZXB0aCwgaW50IGNwdSkKIAlzd2l0Y2ggKHRvcG9s
-b2d5X2RlcHRoKSB7CiAJY2FzZSBUT1BPTE9HWV9ERVBUSF9QS0c6CiAJCXByaW50ZigiJTRk
-fCIsIGNwdV90b3AuY29yZV9pbmZvW2NwdV0ucGtnKTsKLQkJYnJlYWs7CiAJY2FzZSBUT1BP
-TE9HWV9ERVBUSF9DT1JFOgogCQlwcmludGYoIiU0ZHwiLCBjcHVfdG9wLmNvcmVfaW5mb1tj
-cHVdLmNvcmUpOwotCQlicmVhazsKIAljYXNlIFRPUE9MT0dZX0RFUFRIX0NQVToKIAkJcHJp
-bnRmKCIlNGR8IiwgY3B1X3RvcC5jb3JlX2luZm9bY3B1XS5jcHUpOwogCQlicmVhazsKZGlm
-ZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL3V0aWxzL2lkbGVfbW9uaXRvci9tcGVy
-Zl9tb25pdG9yLmMgYi90b29scy9wb3dlci9jcHVwb3dlci91dGlscy9pZGxlX21vbml0b3Iv
-bXBlcmZfbW9uaXRvci5jCmluZGV4IDczYjZiMTBjYmRkMi4uNWFlMDJjM2Q1YjY0IDEwMDY0
-NAotLS0gYS90b29scy9wb3dlci9jcHVwb3dlci91dGlscy9pZGxlX21vbml0b3IvbXBlcmZf
-bW9uaXRvci5jCisrKyBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL3V0aWxzL2lkbGVfbW9uaXRv
-ci9tcGVyZl9tb25pdG9yLmMKQEAgLTI0MCw5ICsyNDAsOSBAQCBzdGF0aWMgaW50IG1wZXJm
-X3N0b3Aodm9pZCkKIAlpbnQgY3B1OwogCiAJZm9yIChjcHUgPSAwOyBjcHUgPCBjcHVfY291
-bnQ7IGNwdSsrKSB7Ci0JCW1wZXJmX21lYXN1cmVfc3RhdHMoY3B1KTsKLQkJbXBlcmZfZ2V0
-X3RzYygmdHNjX2F0X21lYXN1cmVfZW5kW2NwdV0pOwogCQljbG9ja19nZXR0aW1lKENMT0NL
-X1JFQUxUSU1FLCAmdGltZV9lbmRbY3B1XSk7CisJCW1wZXJmX2dldF90c2MoJnRzY19hdF9t
-ZWFzdXJlX2VuZFtjcHVdKTsKKwkJbXBlcmZfbWVhc3VyZV9zdGF0cyhjcHUpOwogCX0KIAog
-CXJldHVybiAwOwo=
-
---------------1GPtmu3oopRfGuZOvTz2t2bY--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
