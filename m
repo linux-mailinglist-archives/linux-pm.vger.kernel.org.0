@@ -1,134 +1,212 @@
-Return-Path: <linux-pm+bounces-30407-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30408-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD686AFD9D7
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 23:27:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74E3BAFD9F9
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 23:31:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0D071C27253
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 21:27:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A0B2189D507
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 21:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDE2241CA2;
-	Tue,  8 Jul 2025 21:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2A3246794;
+	Tue,  8 Jul 2025 21:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="Zv84NmEP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGVcmEvm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1022472AC;
-	Tue,  8 Jul 2025 21:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB178246783;
+	Tue,  8 Jul 2025 21:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752009968; cv=none; b=O0D+ekT14/NCZ9HmRS6jytkYdWYPYhAkYJA4LuDpQpkgmjDqF3K16CrdBX9OjluHG6xm03pqngY7uIZbIAc0jhOXI+6YnIQ5G+tw5iQRfHVmazCM/nk6nff4jdv2CXkXeK8lEOO02uU0SjQT1xvTs0cQ455Blyje1gaGkR7tM/U=
+	t=1752010266; cv=none; b=apOSLLDmqEgv5dBgfpccBT4Y+4ENwQrprhkCQRk3KbLnXYiHM1HJZ0UAOxmmStxmmElebIpT3k4kFYKL0WVFC1JXj7zBC3PA+T9tiOArkz9xBex/LAJ6hxh/wjyHEhaK+1Tjl+GMwxsnbEzt1fXe95RMqDXIeHweEGChZxpWPKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752009968; c=relaxed/simple;
-	bh=8P8IF4V93/LGE6cK9wIVDi+sh1sxcwgtfbhFn+IaGYk=;
+	s=arc-20240116; t=1752010266; c=relaxed/simple;
+	bh=muHKFMk3+FAqjA0IzFbxIYjKJ0jfprPa6PDJaUth2bE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nqLZ+E4yvKRHjEReJum5ynXmtguHxnMJBsSn/28EW8BPRwjw5XmeCsc5hb0huA3OnzKWOVtfcAhPv5UCBlFMgiJ/xII39xnYt6XGz89lFS+66yGgpS9U7QgBQAPRh5EUY0gNZom+lxKxFBfbDW2rg09q4Y705dSVC4kquZIcnUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=Zv84NmEP; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 05F791C008E; Tue,  8 Jul 2025 23:26:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1752009963;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LD0jV/9ETPDQjueVoxO1J46hQbXvI3qr0F5qgo1rUzo=;
-	b=Zv84NmEP5bfltdOq3XEN/eXdbg0FvJCc/LZpS56h+bEs8887Iv5R2048NDz8WLn8d78I4c
-	Zc9O9iDl6jhYjOXACo1cXjl8Unddaqq2WY705WKskpHTxrgdnb8B7Pq85ir8bYGs61RkyA
-	bHBSv6MtZlfCuDQOCj++FDbuah82SM0=
-Date: Tue, 8 Jul 2025 23:26:02 +0200
-From: Pavel Machek <pavel@ucw.cz>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Willy Tarreau <w@1wt.eu>, "Eric W. Biederman" <ebiederm@xmission.com>,
-	patches@lists.linux.dev, stable@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Nat Wittstock <nat@fardog.io>, Lucian Langa <lucilanga@7pot.org>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	rafael@kernel.org, len.brown@intel.com, linux-pm@vger.kernel.org,
-	kexec@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 6.15 6/8] PM: Restrict swap use to later in the
- suspend sequence
-Message-ID: <aG2M6rmyLqsub8/8@duo.ucw.cz>
-References: <20250708000215.793090-1-sashal@kernel.org>
- <20250708000215.793090-6-sashal@kernel.org>
- <87ms9esclp.fsf@email.froward.int.ebiederm.org>
- <aG2AcbhWmFwaHT6C@lappy>
- <aG2BjYoCUYUaLGsJ@duo.ucw.cz>
- <20250708204607.GA5648@1wt.eu>
- <aG2JzsVKuBkFcXj9@lappy>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KDGMJ8qzpWf5GKyRjLDgSJDFXujo45LAXV8gJxIhbzjv0Rj3Z4zHQYcX3JuX8YS+MNPD5a268lULd73zBarmTOykckWKfs+8tgdC2V1yya/SvcWOKfkAi0rENI1YamWuSag5RTlbU1nK16YAKtdO9/6xMdJueTEDcTupbxZlGZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGVcmEvm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3F5C4CEED;
+	Tue,  8 Jul 2025 21:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752010266;
+	bh=muHKFMk3+FAqjA0IzFbxIYjKJ0jfprPa6PDJaUth2bE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FGVcmEvmklitC/oRvIIlzZDODGrxGHGZMrPtrgRGSFM4SODotqhCuqlMpYIaMZTd8
+	 oAq0yve0BQTlIu+xdjj0pDceX0WMK/IAwinjabWbHUp9n0rqXL2XWbl2advUAWFdFQ
+	 KLRHLRDy7tn1GtMOMk+rkqnbwQ8R1DNJmNDOzpKnJi2FR5CK11s8qQod+3dUbRoOXn
+	 aAk6+sRmRRENypWzalxuvmE3SWwpfzj49366mHzVCtedI+CtjurXdkou89KYFBm934
+	 vad1SKWyOf3050iK9v3LZ9HU45NoX0coAkK+GgQhfbRpyiX5lcgBZ1gD01C3AsPL1r
+	 6wyjO1oLjv++g==
+Date: Tue, 8 Jul 2025 16:31:05 -0500
+From: Rob Herring <robh@kernel.org>
+To: iuncuim <iuncuim@gmail.com>
+Cc: Srinivas Kandagatla <srini@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Vasily Khoruzhick <anarsoul@gmail.com>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/8] dt-bindings: thermal: sun8i: Add A523 THS0/1
+ controllers
+Message-ID: <20250708213105.GA1082606-robh@kernel.org>
+References: <20250703151132.2642378-1-iuncuim@gmail.com>
+ <20250703151132.2642378-3-iuncuim@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="TYDyTl+a+81TEOKE"
-Content-Disposition: inline
-In-Reply-To: <aG2JzsVKuBkFcXj9@lappy>
-
-
---TYDyTl+a+81TEOKE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250703151132.2642378-3-iuncuim@gmail.com>
 
-On Tue 2025-07-08 17:12:46, Sasha Levin wrote:
-> On Tue, Jul 08, 2025 at 10:46:07PM +0200, Willy Tarreau wrote:
-> > On Tue, Jul 08, 2025 at 10:37:33PM +0200, Pavel Machek wrote:
-> > > On Tue 2025-07-08 16:32:49, Sasha Levin wrote:
-> > > > I've gone ahead and added you to the list of people who AUTOSEL will
-> > > > skip, so no need to worry about wasting your time here.
-> > >=20
-> > > Can you read?
-> > >=20
-> > > Your stupid robot is sending junk to the list. And you simply
-> > > blacklist people who complain? Resulting in more junk in autosel?
-> >=20
-> > No, he said autosel will now skip patches from you, not ignore your
-> > complaint. So eventually only those who are fine with autosel's job
-> > will have their patches selected and the other ones not. This will
-> > result in less patches there.
->=20
-> The only one on my blacklist here is Pavel.
->=20
-> We have a list of folks who have requested that either their own or the
-> subsystem they maintain would not be reviewed by AUTOSEL. I've added Eric=
-'s name
-> to that list as he has indicated he's not interested in receiving these
-> patches. It's not a blacklist (nor did I use the word blacklist).
+On Thu, Jul 03, 2025 at 11:11:26PM +0800, iuncuim wrote:
+> From: Mikhail Kalashnikov <iuncuim@gmail.com>
+> 
+> Add a binding for D1/T113s thermal sensor controller. Add dt-bindings
+> description of the thermal sensors in the A523 processor.
+> The controllers require activation of the additional frequency of the
+> associated gpadc controller, so a new clock property has been added.
+> 
+> The calibration data is split into two cells that are in different areas
+> of nvmem. Both controllers require access to both memory cell, so a new
+> property nvmem-cells has been added. To maintain backward compatibility,
+> the name of the old cell remains the same and the new nvmem-cell-names is
+> called calibration-second-part
+> 
+> Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
+> ---
+>  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 49 +++++++++++++++++--
+>  1 file changed, 46 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> index 3e61689f6..80657435a 100644
+> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> @@ -24,18 +24,22 @@ properties:
+>        - allwinner,sun50i-h5-ths
+>        - allwinner,sun50i-h6-ths
+>        - allwinner,sun50i-h616-ths
+> +      - allwinner,sun55i-a523-ths0
+> +      - allwinner,sun55i-a523-ths1
+>  
+>    clocks:
+>      minItems: 1
+>      items:
+>        - description: Bus Clock
+>        - description: Module Clock
+> +      - description: GPADC Clock
 
-Can you please clearly separate emails you wrote, from emails some
-kind of LLM generate? Word "bot" in the From: would be enough.
+You add a 3rd clock for everyone, but I don't see a conditional schema 
+keeping the existing users at 2 clocks (maxItems: 2).
 
-Also, can you please clearly mark patches you checked, by
-Signed-off-by: and distinguish them from patches only some kind of
-halucinating autocomplete checked, perhaps, again, by the word "bot"
-in the Signed-off-by: line?
+>  
+>    clock-names:
+>      minItems: 1
+>      items:
+>        - const: bus
+>        - const: mod
+> +      - const: gpadc
+>  
+>    reg:
+>      maxItems: 1
+> @@ -47,11 +51,16 @@ properties:
+>      maxItems: 1
+>  
+>    nvmem-cells:
+> -    maxItems: 1
+> -    description: Calibration data for thermal sensors
+> +    minItems: 1
+> +    items:
+> +      - description: Calibration data for thermal sensors
+> +      - description: Additional cell in case of separate calibration data
+>  
+>    nvmem-cell-names:
+> -    const: calibration
+> +    minItems: 1
+> +    items:
+> +      - const: calibration
+> +      - const: calibration-second-part
+>  
+>    allwinner,sram:
+>      maxItems: 1
+> @@ -107,6 +116,7 @@ allOf:
+>              enum:
+>                - allwinner,sun8i-h3-ths
+>                - allwinner,sun20i-d1-ths
+> +              - allwinner,sun55i-a523-ths0
+>  
+>      then:
+>        properties:
+> @@ -132,6 +142,26 @@ allOf:
+>          - clock-names
+>          - resets
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - allwinner,sun55i-a523-ths0
+> +              - allwinner,sun55i-a523-ths1
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: bus
+> +            - const: gpadc
 
-Thank you.
+But if there's really still just 2 clocks, you need the last entry to be 
+'enum: [ mod, gpadc ]'
 
-Hopefully I'm taking to human this time.
-								Pavel
---=20
-I don't work for Nazis and criminals, and neither should you.
-Boycott Putin, Trump, and Musk!
+Though really, how can this h/w now not have a clock for itself? 
 
---TYDyTl+a+81TEOKE
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> +        nvmem-cells:
+> +          minItems: 2
+> +        nvmem-cell-names:
+> +          minItems: 2
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCaG2M6gAKCRAw5/Bqldv6
-8uWXAJ9iwtaQ4B9BUZoI/jwJndhFnx3B5gCfY34DANR721Opp073dZHhyFfrv4E=
-=dg3Q
------END PGP SIGNATURE-----
+Everyone else needs 'maxItems: 1'
 
---TYDyTl+a+81TEOKE--
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -176,4 +206,17 @@ examples:
+>          #thermal-sensor-cells = <1>;
+>      };
+>  
+> +  - |
+> +    thermal-sensor@2009400 {
+> +      compatible = "allwinner,sun55i-a523-ths1";
+> +      reg = <0x02009400 0x400>;
+> +      interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
+> +      clocks = <&ccu CLK_BUS_THS>, <&ccu CLK_GPADC1>;
+> +      clock-names = "bus", "gpadc";
+> +      resets = <&ccu RST_BUS_THS>;
+> +      nvmem-cells = <&ths_calibration0>, <&ths_calibration1>;
+> +      nvmem-cell-names = "calibration",
+> +             "calibration-second-part";
+> +      #thermal-sensor-cells = <1>;
+> +    };
+>  ...
+> -- 
+> 2.49.0
+> 
 
