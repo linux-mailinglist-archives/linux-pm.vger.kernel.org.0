@@ -1,79 +1,80 @@
-Return-Path: <linux-pm+bounces-30383-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30384-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7ABCAFCFE5
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 17:58:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BA2BAFD024
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 18:08:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64B2D7ABC6A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 15:57:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E71761AA0803
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 16:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11E5B2E4254;
-	Tue,  8 Jul 2025 15:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B81601E412A;
+	Tue,  8 Jul 2025 16:08:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JqQX9nS/"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Vh/4ThnA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CD32E2644
-	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 15:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751990286; cv=none; b=Omied7pF8FumBvwaCcDLudBhOqFmRio6J+uKvohwdsk4ae/9Yk35gX8SxXndVC/iU8ceW7ZbrxbdZnTpnxs7RekSsas7pEvMe+w2oY23/vbV2cLqEC18u9dYcUYae8OdKQcDhn6EaweN2owN+NrCzYfpWC0NZkoSuRcZWip5+nA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751990286; c=relaxed/simple;
-	bh=7gQeCLAZtQEfIyXXcezsvaIrZXV7Qk5Jv0/UhljKckk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p6a/Nfa84of5KsK3jS2lpv1e+KGRxtPa/49+vUyAhDqlOxLhDlNy/CwimMwnb85av2h+HlpS81n1yYknlGQECuybYQThldV+I0DZ4KqLiptu5UsyeQnpNiJpGwJyXfXCB5HDJvOAxjmAN/2529DkmzzeVhdKQKgVRrc5O7/DMH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JqQX9nS/; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-60702d77c60so8975548a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 08 Jul 2025 08:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751990282; x=1752595082; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tiJvxbpJm4ueaILExBT2ruQnafJPKLQnKbXYAJpzmYw=;
-        b=JqQX9nS/QiWWJ+Al0rJUSn3Qb3bPIJlfOylkeHvFqOE3KXrEZgyy9SafPhhlAzxaB6
-         vcE/O7Bo8K972vCtMf4hJ5AKb6haJ+EgOeJZwR+Ve/gIwXmBpIbfWmIXBo1lCYbm9xpo
-         C/o7ve5Ptb5po7C56fKKpKNK1R7x0nelTcstMciGo+27uammt/5hZ2HVY4Ai+DHLJzbw
-         PBd0XOx3STzQO9/Wrp6q2pHAne81pMynhU9IHhVBcuWWQNUIGyn0rJIobR9EV7861bNE
-         uOGcfgpXuVAUTb0PVfL3tY2WL2qM2a9frAKTiB0wVHJC89N3FVqH6+F76zOwG8tkT7S8
-         ANLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751990282; x=1752595082;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tiJvxbpJm4ueaILExBT2ruQnafJPKLQnKbXYAJpzmYw=;
-        b=ObBFn3YAtWVVc2ryWk0Uj/6Q4UpPG5wxw8STnzHLVpkCsEfBV+WbfaX+u2QSQdrrYf
-         LDqnh3YOgbphE4Ee5d1jhSFVw9S2J+f28z7PNqJWMjYbEQasusH/jzwU86oE66+ckgae
-         +kwWwcNVeMrV5t5BOqeOhHZdQ34jRVw70X9yycSM5zLV23v/yUBTdiKQfmlptbdJnUkt
-         rryuemWuHkIHDdy7w3hl61q/urfKmdS7ibNJir68PVyDsRd7AkTkKxmNv/DFwc6oXN8R
-         Dr4fbA+n91+9CaykNUl0ACiQIZ/fz7zXUfDyslF1APB591RE0qja27b66WdZZ2FRwZOH
-         /3Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCUsux3vg7abumpGej4L+ZGNMZE8FaBsqKR2gIBPdFG6akSs+tIXXDMcNusfYoWjzBUt9blwoSpt9g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkE0IUPiOQ4QlxsxMktkY2IBA24hLWIma6j26dovTmTVOHBa93
-	XcBufFgiQLg7xgj2NHlDU024Ddfzz5PBXsa2a+DAja9dYeL/Sq6Y8jZ9BHhj5smf95c=
-X-Gm-Gg: ASbGnctYHiFMrRpWAUZOP+J1goVLb3zVqSJx8Ju843N1NOU4y634oh8pYOLScjyjxBK
-	qsJcMt1tnfJ5EjImlMRaXTgwJZCdcj2wucpyVLjowhP97Xkq+HHGS75Z2vMo0yajRxHsOELWjVx
-	zr7X39KE0wHr2EufY3ap0o1Q4Kzm2qpFG7hr6G3Dk4zU2dZii3rlox5HQqSEkrYtiy+NpK3of0U
-	mvD/Hm4ewtP8/M8BHnhkM23DTkz+jCfLL7wMlq51PT3XXBefT6iHhKITZV3n/h+k2Loyv5XDunL
-	GaqJwqCCcqZyDudhz4QTH/pmREyCKXEbIj+MK8tUeuu+xRiTgRoyAfiG3qBenut1ytBsOik=
-X-Google-Smtp-Source: AGHT+IG00ZItLfvhtpCxt6kkcwqcafrRvWaaK7c0sFOt4CTrsTCYl9LvDHEYPMR0h+/qH0anL1ixPA==
-X-Received: by 2002:a17:907:1c9f:b0:ae3:f2a0:459f with SMTP id a640c23a62f3a-ae6b0ebac72mr353922366b.54.1751990281967;
-        Tue, 08 Jul 2025 08:58:01 -0700 (PDT)
-Received: from [192.168.0.251] ([82.76.204.12])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fcb8c80acsm7396418a12.80.2025.07.08.08.58.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 08:58:01 -0700 (PDT)
-Message-ID: <cabab318-95a4-4e81-a931-458ee6023f3a@linaro.org>
-Date: Tue, 8 Jul 2025 16:58:00 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BE82E4264;
+	Tue,  8 Jul 2025 16:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751990894; cv=fail; b=AThg+wPBn/W9fupqPCQ10DKdAQ1h+kT3sjmhnxUxVI24wKMJstPv3QWMWco8oqtCF44y9cCTnWGbyPafUqNB4sBGAFOcO5YLqEChwssjUY7OmO9mqZpSa06IlY4EHifJ9HjjOTbPNSPUxnNhFbrvl5lUaQEi8oOOL+PUok1C9Cg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751990894; c=relaxed/simple;
+	bh=kgMXvfBipcQusM1GiHHp49ADzVSwBnrdciDUsY3gQic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=W5QH1UJmZpq5GCXhhUhzzjmysY8cDRo1zp89PQkRvIYI0MFNQcVoQhKiYyCIEyYlg0V/KBDcYiatkwJsXZn+rFSHyoXD9rh93b0cL0yM4Sqas0JdWko5yZQ+pI61hQHWG2+yYgMIdcfdThcnJsrWhQsPNRzfvTS3EDLQm70Gy64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Vh/4ThnA; arc=fail smtp.client-ip=40.107.236.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cvI6bkb36rVQyxKJ86fs2vkAIa8hoVqySxLV8yV7Bzrig8uc5nbZBUkKKxafgDFrzARbNL/CzrEca8/Is6Ld2ogDFJ/Q1cO16hJxxDPWmYr92YtTKQplNZfBInKiYj3NHym4uPWIjYy7sINKWlcGIBrVsznE7/tY97MSjoT0DLMZJnLYO8WqrPBguLcW9VjYAXE/DwHE7WCCr6CrJyC3gTkPVbEFNqBVgWbf4P0vZ/0ZYmo9uoinZ0kbk5dEstBem+sqMcKGJ4X963Rxdngjh1/3xQFQ3WpOzTvTvjjTdczQSwnbuN+UMBDAZs26lF9WWX7D/Hx+rfBaJIweE+xHrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IUv+fy2qxYjCK8Nuc9rtN67IMYT9vW1uDnf8dznPTaE=;
+ b=wC/Rq8yVQ4QU5Hqn5TMK8u3m0igIesgDS5OT06YbNkARpdYhd7uO8RmeDjmgoNZsk8CI1sglqH4UxAR6/vhfMKi8x9p58693u0PiPX8wyowoMvz45EIStgfy7z5LIVY9Jb/eAHIEn5FaeS3bgvDvwwKjWWHTr/oR+YjQtci16BugjzA3lT7+DMcG+PLI9auRsN7ljMwsiNrR7Wsyu6fFl13O4lP7L+Jn3k1yS1ePAucZnMrlcMG+uaGn4DEpo42zkX2/40Q6xyRIOIBTjkOXz5cY+AdUwJ9msVSQixOcRBlFxuDtrq2h+T27j58caCM8W9/IbitgoHvuhZPlIC0qHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IUv+fy2qxYjCK8Nuc9rtN67IMYT9vW1uDnf8dznPTaE=;
+ b=Vh/4ThnAm8wkqrxm7ImAXGBWSlPujKF8q9nASuchDn8dhVRXX6uxleXPc0qwjxn7yNm9y1hz6kggiinTSnFloL4n+KSQzc8p4mYqS8uXn2MuwJg/g0ReSnfVUK0ZdHRsiZgw83Xe/Kx64MQN46G3iW5FBhh7RBsn1FIy6ytlK2Y=
+Received: from SJ0PR13CA0006.namprd13.prod.outlook.com (2603:10b6:a03:2c0::11)
+ by SA3PR12MB8810.namprd12.prod.outlook.com (2603:10b6:806:31f::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.27; Tue, 8 Jul
+ 2025 16:08:10 +0000
+Received: from SJ5PEPF000001EB.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c0:cafe::98) by SJ0PR13CA0006.outlook.office365.com
+ (2603:10b6:a03:2c0::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8922.21 via Frontend Transport; Tue,
+ 8 Jul 2025 16:08:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ5PEPF000001EB.mail.protection.outlook.com (10.167.242.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8901.15 via Frontend Transport; Tue, 8 Jul 2025 16:08:09 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 8 Jul
+ 2025 11:08:03 -0500
+Received: from [172.31.125.8] (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Tue, 8 Jul 2025 11:07:58 -0500
+Message-ID: <41a78619-d9c6-4e2a-9684-056e91d09e64@amd.com>
+Date: Wed, 9 Jul 2025 00:07:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,70 +82,172 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] PM: add kernel parameter to disable asynchronous
- suspend/resume
-To: Randy Dunlap <rdunlap@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Len Brown <len.brown@intel.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, peter.griffin@linaro.org,
- andre.draszik@linaro.org, willmcvicker@google.com, kernel-team@android.com
-References: <20250708-pm-async-off-v2-1-7fada54f01c0@linaro.org>
- <18c12f92-2194-4244-8793-5d916edfd4e8@infradead.org>
+Subject: Re: [PATCH v3 4/5] PM: hibernate: add new api pm_transition_event()
+To: Mario Limonciello <mario.limonciello@amd.com>, Samuel Zhang
+	<guoqing.zhang@amd.com>, <alexander.deucher@amd.com>,
+	<christian.koenig@amd.com>, <rafael@kernel.org>, <len.brown@intel.com>,
+	<pavel@kernel.org>, <gregkh@linuxfoundation.org>, <dakr@kernel.org>,
+	<airlied@gmail.com>, <simona@ffwll.ch>, <ray.huang@amd.com>,
+	<matthew.auld@intel.com>, <matthew.brost@intel.com>,
+	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+	<tzimmermann@suse.de>
+CC: <lijo.lazar@amd.com>, <victor.zhao@amd.com>, <haijun.chang@amd.com>,
+	<Qing.Ma@amd.com>, <Owen.Zhang2@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>
+References: <20250708074248.1674924-1-guoqing.zhang@amd.com>
+ <20250708074248.1674924-5-guoqing.zhang@amd.com>
+ <1fa50a8e-9942-45c4-bef0-f31c23ef9923@amd.com>
 Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <18c12f92-2194-4244-8793-5d916edfd4e8@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: "Zhang, GuoQing (Sam)" <guoqzhan@amd.com>
+In-Reply-To: <1fa50a8e-9942-45c4-bef0-f31c23ef9923@amd.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Received-SPF: None (SATLEXMB04.amd.com: guoqzhan@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001EB:EE_|SA3PR12MB8810:EE_
+X-MS-Office365-Filtering-Correlation-Id: a66047fa-e720-47eb-bd21-08ddbe39a1fb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cVVNLy9iSW9hUmVNR1Z1ZVV0ZE5rVnVMNk5BNmpiSGxjMFdWM1diM201K0Fq?=
+ =?utf-8?B?Y21XY1lvRHNubzdHS1FUQTlyYWREZDEvTzJDc1VLOERwYTFXQjRYazBFRG1B?=
+ =?utf-8?B?bFZsZVFWcVAyNjRJR3F6UlZyV0JNTkFuMjNwUGVsZFVhSmZZVlVUSTJLVG41?=
+ =?utf-8?B?NEQ2WC9POEdVUmtHWlQ4SFRCRi82aXpOcU10RHhDVTF0eU1jaEV1WUlHWG9j?=
+ =?utf-8?B?MWRoWEJxY2VLYlNVYkhwQk4vc2dKcUhnTEswQWVhZWNDUHFhQjR6NVBYYkJn?=
+ =?utf-8?B?TURXSHQ5MDZNZ0xxR0k0RXJKbVczR0MzZkUyVUhyZ2R6d0JscUlHWGJUWGxK?=
+ =?utf-8?B?dHZ5b01MamE4c1krOS94d0E4V2lUMzFiUFpCRzMwVVd5b1VlL0VsWTVNOURD?=
+ =?utf-8?B?Z1NKalRWTzBYQjJUd3JyYldLY2l6UjBjNE1xK2RaTFFzRkxyY3RmaXB6eVdV?=
+ =?utf-8?B?TWJBU1pnYjBtYlRJMjh2Mm9jNUFlNEFnY3NIRE9QYVlEQkUvZjZEejZqZjB5?=
+ =?utf-8?B?L256WlY1L3FKUktodDFKNXRoVEpuWlRvR1hYVEJvd090WkVkM2JGdEVoUzhn?=
+ =?utf-8?B?T2QrTVFwY2h6NUtlL2IwcGVGbmJaeTFNU3pNVTlvOWlCOFQyR2txOERwVVFa?=
+ =?utf-8?B?WlBLRUR2WGQ5OHFNQUpyNVZrMTRxUU50Yms1MERHUENKSEhuQVpMVGZGR3NT?=
+ =?utf-8?B?NTRNMTI1d253c1BkNnVhUHY2OHd3MWxhSTl4NzNGQ1paTktOK2E1K3VkWkJZ?=
+ =?utf-8?B?b0xta2R4T242K2N2SVhNaWFrSU45aVFRVEQxVXNLK1ltcElHWHlvQU42Vjlr?=
+ =?utf-8?B?eHM4WERCS3ptbTVWbXdUZmhqc282UHdLN3J3cVB6S2lYaWZYdHhud1hkZFNI?=
+ =?utf-8?B?WngwbXMzYmtkVGpHYXQvNCt5czhueDM0eFNDejBWVURpRW9BbWlDOFlYMXgx?=
+ =?utf-8?B?bXhjMkd5VXI0R08ydjk1djRDckdqNGZxOFhMQUxvenFrNDZWdnh6REI2d3lx?=
+ =?utf-8?B?OTVmOUVCaHRUcC9FRGdzYkJGc3VFc1ZqekdQLy9BcVFsNGNBRnB5RFRUdWFz?=
+ =?utf-8?B?YXIrTE0zUk5BaUwzdTBSSVJ0ZlVwVUVvekd6cmp2cEVOcXhRMnpuQWpZa0ho?=
+ =?utf-8?B?R1ZzZkpodlJQOCtlN2RPdFlBbUZES1VYZU1iRCtpeUJYNWY5K0IzeFNlQ1po?=
+ =?utf-8?B?SUYrSDBydGdZalo0Wk5GVzkyMTJlNk9lbmFpczBHSkFSZm1MTkRrOGM4RVhL?=
+ =?utf-8?B?YjdNNXlqOWRNUGVhdGJtUmtNWXBYR0p4WGh6aWhsZ1pGZHdBNzRSaXhzb3lD?=
+ =?utf-8?B?Y3NWRWFCNUpDKzMraVg1NDdqaHZnK2xlWVZzamdnL2JkaGJZeW9jVUVzNjQ1?=
+ =?utf-8?B?aDIxcE5lMUxTVzZvanRURStQcm5pT0RsVWhqV0xJVnJnZ2Q1U0lGUVBYb2p4?=
+ =?utf-8?B?b0hRTk1PM2t0aUpSSjcvOVdrV1h3RWJrZWg4d2l0RTRPSXpRUzEwQS9HeTFR?=
+ =?utf-8?B?YWNUODF6OWFrTE1URWFhRk5KY0c3N1ozSXJBVnYxdjhuMEdPajJ3amtJTHk5?=
+ =?utf-8?B?eDJ0SGl4ZDRydk1LYU1nc1ZuQWxBbzlJS2JFK3pqUHlOdE5KQ25teDF3NFVy?=
+ =?utf-8?B?a1k0Q3RnalR1ZXhCVHNqdlU0M3B0d1RiYVliUnZTZndYTzMrK0V4d2lsWW9o?=
+ =?utf-8?B?NnZjY1NCSWNiYkJUWTFETzNRMi9pRXlPS0pENkJ5NnZ3Q2VWeVhERXVuMXdC?=
+ =?utf-8?B?RzZSVmY1MHB4RHNwUXVHdmNSM08vMVA4Vy9vUXVqVUt3a1NCRU5JZUc1U05U?=
+ =?utf-8?B?TmVnYmMrZytqVFlqMytlNnVycFlXR3ZadWl2d0VtanY0MWdFTnlqVEs5c0pE?=
+ =?utf-8?B?WnBDaS9lS1RxK2JLNGxXQnlUY1NxbDVoUVh5WDNBaktPS1NUMTRKeE1DMkVC?=
+ =?utf-8?B?RVRBYUdmTm9UNWNSU0xqS0Y4OUhZQ2J4ajdhd0pzQkhKbnBSWWlZTW1ZeGNI?=
+ =?utf-8?B?a3pPcjhkbHhVSTJVU3ZTalJicWNRVXZubmkrdzNoYUU2U2Npa0pIbjlXYWRN?=
+ =?utf-8?B?ZFhWbkJ3L2w4eHdwcEhMOWp2MllJd2tRTDdCdz09?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2025 16:08:09.5186
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a66047fa-e720-47eb-bd21-08ddbe39a1fb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001EB.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8810
 
 
-
-On 7/8/25 4:36 PM, Randy Dunlap wrote:
-> Hi,
-> 
-
-Hi, Randy!
-
-> On 7/8/25 8:16 AM, Tudor Ambarus wrote:
-> 
->> ---
->>  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
->>  kernel/power/main.c                             |  9 +++++++++
->>  2 files changed, 20 insertions(+)
+On 2025/7/8 22:36, Mario Limonciello wrote:
+> On 7/8/2025 3:42 AM, Samuel Zhang wrote:
+>> dev_pm_ops.thaw() is called in following cases:
+>> * normal case: after hibernation image has been created.
+>> * error case 1: creation of a hibernation image has failed.
+>> * error case 2: restoration from a hibernation image has failed.
 >>
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
->> index f1f2c0874da9ddfc95058c464fdf5dabaf0de713..33ca6b881b1d77bdeea765b19291a90b2a82e8a3 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -5000,6 +5000,17 @@
->>  			that number, otherwise (e.g., 'pmu_override=on'), MMCR1
->>  			remains 0.
->>  
-> 
-> This should be more like:
-> 
-> 
-> 	pm_async=off	[PM]
-> 
-> or
-> 
->> +	pm_async	[PM]
-> 
-> 	pm_async=	[PM]
-> 			Format: off
+>> For normal case, it is called mainly for resume storage devices for
+>> saving the hibernation image. Other devices that are not involved
+>> in the image saving do not need to resume the device. But since there's
+>> no api to know which case thaw() is called, device drivers can't
+>> conditionally resume device in thaw().
+>>
+>> The new pm_transition_event() is such a api to query if thaw() is called
+>> in normal case. The returned value in thaw() is:
+>> * PM_EVENT_THAW: normal case, no need to resume non-storage devices.
+>> * PM_EVENT_RECOVER: error case, need to resume devices.
+>>
+>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+>> ---
+>>   drivers/base/power/main.c |  5 +++++
+>>   include/linux/pm.h        | 16 ++++++++++++++++
+>>   2 files changed, 21 insertions(+)
+>>
+>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>> index 40e1d8d8a589..7e0982caa4d4 100644
+>> --- a/drivers/base/power/main.c
+>> +++ b/drivers/base/power/main.c
+>> @@ -62,6 +62,11 @@ static LIST_HEAD(dpm_noirq_list);
+>>     static DEFINE_MUTEX(dpm_list_mtx);
+>>   static pm_message_t pm_transition;
+>> +int pm_transition_event(void)
+>> +{
+>> +    return pm_transition.event;
+>> +}
+>> +EXPORT_SYMBOL_GPL(pm_transition_event);
+>>     static int async_error;
+>>   diff --git a/include/linux/pm.h b/include/linux/pm.h
+>> index 78855d794342..d1cb77ede1a2 100644
+>> --- a/include/linux/pm.h
+>> +++ b/include/linux/pm.h
+>> @@ -657,6 +657,22 @@ struct pm_subsys_data {
+>>   #define DPM_FLAG_SMART_SUSPEND        BIT(2)
+>>   #define DPM_FLAG_MAY_SKIP_RESUME    BIT(3)
+>>   +/**
+>> + * pm_transition_event() - Query the current pm transition event value.
+>> + *
+>> + * Used to query the reason why thaw() is called. It will be one of 
+>> 2 values:
+>> + *
+>> + * PM_EVENT_THAW: normal case.
+>> + *        hibernation image has been created.
+>> + *
+>> + * PM_EVENT_RECOVER: error case.
+>> + *        creation of a hibernation image or restoration of the main 
+>> memory
+>> + *        contents from a hibernation image has failed.
+>
+> I don't believe this documentation is complete.  In the use in this 
+> series those are two events used, but as this is now exported this 
+> might be used by other callers later which could use it for other 
+> PM_EVENT_*.
+>
+> So because of this I think it's best to convert the comment in 
+> include/linux/pm.h to kdoc and then reference that from this kdoc.
 
-Indeed. I see this second description, "kernel_param=", largely used in
-the existing kernel parameters, so maybe that's what I shall follow.
-However, I don't really know which format to choose, I see:
 
-Format: <string>
-Format: { off }
-Format: {off}
-Format: { "off" }
-Format: {"off"}
-Format: off
+Hi Mario, thank you for the feedback. I don't have experience on kdoc. 
+do you mean generate new `Documentation/power/pm.rst` from 
+`include/linux/pm.h` using the `scripts/kernel-doc` tool? Could you give 
+some guidance on this? Thank you!
 
-Any idea if there's an already agreed string format?
-Thanks,
-ta
+Regards
+Sam
+
+
+>
+>> + *
+>> + * Return: PM_EVENT_ messages
+>> + */
+>> +int pm_transition_event(void);
+>> +
+>>   struct dev_pm_info {
+>>       pm_message_t        power_state;
+>>       bool            can_wakeup:1;
+>
 
