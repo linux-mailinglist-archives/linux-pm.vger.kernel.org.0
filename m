@@ -1,80 +1,60 @@
-Return-Path: <linux-pm+bounces-30328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEDA2AFBF8A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 02:56:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7229FAFBF8D
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 02:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FDF44A1691
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 00:56:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DAF51889721
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 00:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE1AB1DE3DC;
-	Tue,  8 Jul 2025 00:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TT091p7M"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0D715C15F;
+	Tue,  8 Jul 2025 00:56:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF19E15C15F
-	for <linux-pm@vger.kernel.org>; Tue,  8 Jul 2025 00:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1BA1C8611;
+	Tue,  8 Jul 2025 00:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751936161; cv=none; b=YDPdWHOHkxe1Wp8w5Go37fZwts+5DEUlGb71kriY7rbopLDfCvye/YDblytjkNqbZsVTSUA+F2AujrDUxZifKD8ELj3AYRo0x0dVQDMWwSF5LsOw9EUfZZsrLzKdTQ5rn2VAtSazqtl8rFeIEbf4/r9B2z0EMSBvUhkJabne/VY=
+	t=1751936201; cv=none; b=POBhHtpX/bzAz4SHMiS0vjsh2WsEqImqmRMuBGpoS4JASAh2xEnjNYu7Z4LHtypd6auskShHfmOrlgL0TYHQZjNUTfHAP1Ol33551xOIH+9I1SJ+4ZgbgOIn6WvAtT7kRJv9PJRXkNrGGnsFRGou+dFU4C9CrpITXJ91J/mVHGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751936161; c=relaxed/simple;
-	bh=5/W5PDx2OgC/pBsDMzDvztUMs/25/b1FwBAaU2+4M1s=;
+	s=arc-20240116; t=1751936201; c=relaxed/simple;
+	bh=+/F1bGbjjKvu1Uo6Wdq5/ZVs3WqOf6ln3yLQ6I089zE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XBbN4xsMvvEmxZWkIJCWD3iyjakUnPeNVjTIrPQv/syOn6WyAh6q6r3UsKv/trzkrqw8/vSKKbrsD0bI99yZzeeeidrUOwrAb9UcURblGa7LR/4uJpd8a6GILNUs46e8SjBCrN6XLYUdj3BarKx/fSQ+9J/69U3hclgRWX3hsqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TT091p7M; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b3220c39cffso3783843a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 07 Jul 2025 17:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751936158; x=1752540958; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W485WHAP1uqJod7yt/QMj2+3WtWakaGzk8TE+3KhyPE=;
-        b=TT091p7MIP3+W5/lVorl4419pv8I+NHeQw5YzUC2SWsAkc728EHZ1twm27BE/9xQSJ
-         CVUbsYBgt0zWmfgcRfEr5koAtMqvQ8D/wUaBgN6IZimacbxvwOw06FpQ/v/gqftn7zV3
-         3pLXj9d3YeuSRGqr/A5piIM/UjU2ljB0F0vTmbM74jDywAErFqvQmwXey3M+8UTm1S5F
-         73uDmoALXwho95HoipMsgbzgT4LH70UR0bdSRQOqJz65uqjY3xzqEBhzTfMQcaKG0E+a
-         Fn6etbvJqRD45FDmzDIduemqw0X/pL9MihDacJQiCKy/6KFgBVec6XC9v5yhbBQ9sRLH
-         AmJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751936158; x=1752540958;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W485WHAP1uqJod7yt/QMj2+3WtWakaGzk8TE+3KhyPE=;
-        b=pU74K4eEMVi/oQo9EVrw3c1mU2BcZJ08Jc/Mf0wkcgBolZ0ztdf6Tmg2l9NFC0s/K8
-         9SLPF3Tnk2HzDCVdZSjlNyk6wyDO3iLEi7wnwBJZ6x2bJmktE1Gl8C4I8cCKUCd6e/VL
-         xTzp8cUNMvhhx3412HC8zeTlP8CmbpfhFuYiptWskZfXKW8TiFyvE+gBBUlhto81Ztqa
-         duXxQT7tDrkpn1/Y5wwioFsWQhLVYxWgCQm3CXv7VmREMwD1f3MBXGoUlA0grUqE0WkU
-         JT5wQYkEwreMwWqRHFCcC31/iloUkPcsnNmnFz+bk3di4cmRf9CBFPeQJeuEnQxQVTDX
-         KKeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUepyBSX7qfz56BUam+JuGQD5y/Lj28CEYpmKrYFBJyEiQUEBFZUWVx0ow8KN4p/cU0f/p61xdXcw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAB66SR2PQgUC7h/cVpZYbVuCOo/RsSdk5DsWEJv3ieT72JV76
-	ddzrGMpfnEkU6DQNPPWwVgB/PbWtHeQiagZS0W43dMQvvpcovFWiGTbyhwj2m1cAmg==
-X-Gm-Gg: ASbGncsipCHJ0WQsO3+MI4kL91nWStO+inOk3g6dQj+7GavmzRVQ1rOriCkCAtJ/2/v
-	uAXTUKRi+tLqkj7K9nsO/IqmFrSaUbKv4ZMZmjXWA/Oud5vCYOnCG8LpJ0/g15na6+5S6WoNTXL
-	0JgjHtfH/zYLbLnHDb+SBzUAQeISjvjv+SLzrJsx3lKAXqU92TbF/ARAlGa8thLEKRRIkIAZ+Xo
-	2h+mR5znyZzl/x0rnaqJ78ygokkTkXn/GVP4KyXJb7Tn7D4ps+U0dTB/EbPVqBtYVjZHdoV0jrh
-	blNjj3d6uy9uYBAcMWYmpmzjzRwWYxsr44tce/BML6OGK3VaRceB3bbfO7mqU1LLyuRrdrYoRSZ
-	MQrPKu5kYSnmHQV7XMsfkYEQigmgVwr352gxCVZUjE3aLLwBEQO6NOBxwY4ZB
-X-Google-Smtp-Source: AGHT+IE2Y6RL3XN7SOZqgdPNO5uGsxBxp2KziPU4v6b4C3QEfxLieWn8MgzQq9cvik6V8PHCA4N4aA==
-X-Received: by 2002:a17:90b:2d4f:b0:311:e9ac:f5ce with SMTP id 98e67ed59e1d1-31aadd9b5ddmr20638582a91.21.1751936157723;
-        Mon, 07 Jul 2025 17:55:57 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:7:990d:1c2a:935c:f693? ([2a00:79e0:2e14:7:990d:1c2a:935c:f693])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c23006d72sm166800a91.1.2025.07.07.17.55.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jul 2025 17:55:57 -0700 (PDT)
-Message-ID: <776de517-ed60-4cf8-8790-531c1cafc512@google.com>
-Date: Mon, 7 Jul 2025 17:55:55 -0700
+	 In-Reply-To:Content-Type; b=ufXxKOEgcR0lHPVOmr+pY1mEnsOIDtKAnG7qeUkK89uBUvqoKXPmqAjWVXrkz7E7tGvrpjZaC+BdG8sJgVeLxsXKhf3x1rJV6WQH6beKBzjIdqtI5ZOBFVDSyU4NEXt0i19TH5RVhu06sAJb3DMKDS6eYfDpijKXhSLgl+ngUEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 63057f3e5b9611f0b29709d653e92f7d-20250708
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:54a55555-2426-4274-a88c-e24e906d6a63,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:339e88bba938cd16ff2c540091de5e7f,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 63057f3e5b9611f0b29709d653e92f7d-20250708
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 451992315; Tue, 08 Jul 2025 08:56:31 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 17B48E008FA2;
+	Tue,  8 Jul 2025 08:56:31 +0800 (CST)
+X-ns-mid: postfix-686C6CBE-6398994
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id A62AFE008FA1;
+	Tue,  8 Jul 2025 08:56:28 +0800 (CST)
+Message-ID: <6b28003b-58ee-4870-ade6-c488148a7b4f@kylinos.cn>
+Date: Tue, 8 Jul 2025 08:56:27 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,80 +62,123 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] usb: typec: tcpm: Add support for Battery Status
- response message
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
- <20250507-batt_ops-v2-3-8d06130bffe6@google.com>
- <iqsj5w5pqcbjof3vqohhzptdp5xj7bir6digzqes775at2tpj2@r7kzy4j2fqmw>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <iqsj5w5pqcbjof3vqohhzptdp5xj7bir6digzqes775at2tpj2@r7kzy4j2fqmw>
+Subject: Re: [PATCH v3 1/1] PM / Freezer: Skip zombie/dead processes to
+To: Peter Zijlstra <peterz@infradead.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, pavel@kernel.org,
+ len.brown@intel.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Oleg Nesterov <oleg@redhat.com>
+References: <20250611101247.15522-1-zhangzihuan@kylinos.cn>
+ <20250611101247.15522-2-zhangzihuan@kylinos.cn>
+ <CAJZ5v0jpuUVM73M=Gzq36je=K_7zEkvVd8bxohi6N5OYgxgUug@mail.gmail.com>
+ <20250703164021.GY1613200@noisy.programming.kicks-ass.net>
+ <CAJZ5v0j29Nu2nitmj6tPhOQYuSaHBtXQVR21ikDtrxpejPdW8A@mail.gmail.com>
+ <20250704081941.GC2001818@noisy.programming.kicks-ass.net>
+ <67997bdd-d00a-413a-a565-188c4b06f385@kylinos.cn>
+ <20250704092144.GH2001818@noisy.programming.kicks-ass.net>
+ <de7e327a-202c-4b28-b372-2d648c680dbe@kylinos.cn>
+ <20250707084214.GD1613200@noisy.programming.kicks-ass.net>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <20250707084214.GD1613200@noisy.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
 
-On 6/23/25 2:27 PM, Sebastian Reichel wrote:
-> Hi,
+=E5=9C=A8 2025/7/7 16:42, Peter Zijlstra =E5=86=99=E9=81=93:
+> A quick browse through the code seems to suggest that for user tasks,
+> PF_NOFREEZE is set just like exit_state, once at death.
 >
-> On Wed, May 07, 2025 at 06:00:24PM -0700, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add support for responding to Get_Battery_Status (extended) request with
->> a Battery_Status (data) msg. The requester shall request the status of
->> an individual battery by providing an index in Get_Battery_Status. In
->> case of failure to identify battery, the responder shall reply with an
->> appropriate message indicating so.
->>
->> Battery status support is only provided for fixed batteries indexed from
->> 0 - 3.
->>
->> Support for Battery_Status message is required for sinks that contain
->> battery as specified in USB PD Rev3.1 v1.8
->> ("Applicability of Data Messages" section).
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
->> Reviewed-by: Kyle Tso <kyletso@google.com>
->> ---
-> (partial review)
+I couldn=E2=80=99t agree more =E2=80=94 for user tasks, PF_NOFREEZE is in=
+deed set at the=20
+same time as exit_state, right at death.
+> For kernel threads the situation is a little more complex; but typicall=
+y
+> a kthread is spawned with PF_NOFREEZE set, and then some will clear it
+> again, but always before then calling a TASK_FREEZABLE wait.=E3=80=80=E3=
+=80=80 =E3=80=80 =E3=80=80
+
+While that=E2=80=99s generally the expected pattern, it depends on each k=
+thread=20
+correctly managing the PF_NOFREEZE flag before entering a TASK_FREEZABLE=20
+wait.
+
+This assumption can be fragile in practice =E2=80=94 a missed update or=20
+unconventional usage could lead to inconsistent freezing behavior.
+
+> The only thing I didn't fully investigate is this
+> {,un}lock_system_sleep() thing. But that would appear to need at least
+> the below fixlet.
 >
->> +static int tcpm_pd_send_batt_status(struct tcpm_port *port)
->> +{
->> +	struct pd_message msg;
->> +	struct power_supply *batt;
->> +	u32 bsdo;
->> +	u32 batt_id = port->batt_request;
->> +	union power_supply_propval val;
->> +	int ret;
->> +	bool batt_present = false;
->> +	u8 charging_status = BSDO_BATTERY_INFO_RSVD;
->> +	u16 present_charge = BATTERY_PROPERTY_UNKNOWN;
->> +
->> +	memset(&msg, 0, sizeof(msg));
->> +	if (batt_id < MAX_NUM_FIXED_BATT && port->fixed_batt[batt_id]) {
->> +		batt_present = true;
-> power_supply_get_property(batt, POWER_SUPPLY_PROP_PRESENT, &batt_present);
+> diff --git a/kernel/power/main.c b/kernel/power/main.c index=20
+> 3d484630505a..a415e7d30a2c 100644 --- a/kernel/power/main.c +++=20
+> b/kernel/power/main.c @@ -52,8 +52,8 @@ void pm_restrict_gfp_mask(void)=
+  unsigned int lock_system_sleep(void)
+>   {
+>   	unsigned int flags =3D current->flags;
+> - current->flags |=3D PF_NOFREEZE;  	mutex_lock(&system_transition_mute=
+x);
+> + current->flags |=3D PF_NOFREEZE;  	return flags;
+>   }
+>   EXPORT_SYMBOL_GPL(lock_system_sleep); =E3=80=80 =E3=80=80 =E3=80=80
+It seems to me that setting PF_NOFREEZE before acquiring=20
+system_transition_mutex might be intentional =E2=80=94 possibly to preven=
+t=20
+deadlocks.
 
-Will update in the next revision.
+If the task were to be frozen while holding or waiting for the mutex, it=20
+could block suspend or resume paths. So changing the order may risk=20
+breaking that protection.
 
-Thanks,
+So, although PF_NOFREEZE could be the better long-term solution, right=20
+now depending exclusively on it might cause issues.
 
-Amit
+It would require further standardization and guarantees about the flag=E2=
+=80=99s=20
+stability during the freezing process before we can fully rely on it.
 
+I=E2=80=99m looking forward to your thoughts on this.
 
+>   =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80 =E3=80=80=E3=80=80
+> Anyway, this seems to suggest something relatively simple like this her=
+e
+> should do:
 >
->> ...
-> Greetings,
->
-> -- Sebastian
+> diff --git a/kernel/freezer.c b/kernel/freezer.c index=20
+> 8d530d0949ff..8b7cecd17564 100644 --- a/kernel/freezer.c +++=20
+> b/kernel/freezer.c @@ -162,20 +162,22 @@ static bool=20
+> __freeze_task(struct task_struct *p)   */
+>   bool freeze_task(struct task_struct *p)
+>   {
+> - unsigned long flags; - - spin_lock_irqsave(&freezer_lock, flags); -=20
+> if (!freezing(p) || frozen(p) || __freeze_task(p)) { -=20
+> spin_unlock_irqrestore(&freezer_lock, flags); + /* + * User tasks get=20
+> NOFREEZE in do_task_dead(). + */ + if ((p->flags & (PF_NOFREEZE |=20
+> PF_KTHREAD)) =3D=3D PF_NOFREEZE)  		return false;
+> - } =20
+> - if (!(p->flags & PF_KTHREAD)) - fake_signal_wake_up(p); - else -=20
+> wake_up_state(p, TASK_NORMAL); + scoped_guard (spinlock_irqsave,=20
+> &freezer_lock) { + if (!freezing(p) || frozen(p) || __freeze_task(p))=20
+> + return false; + + if (!(p->flags & PF_KTHREAD)) +=20
+> fake_signal_wake_up(p); + else + wake_up_state(p, TASK_NORMAL); + } =20
+> - spin_unlock_irqrestore(&freezer_lock, flags);  	return true;
+>   }
+
+Thanks for the suggestion =E2=80=94 this looks really clean and simplifie=
+s the=20
+logic nicely! The use of a scoped spinlock and the early return based on=20
+PF_NOFREEZE | PF_KTHREAD makes the flow easier to follow.
+
+By the way, in the code above, since for user tasks the PF_NOFREEZE flag=20
+is only set once at death (similar to how exit_state is handled), would=20
+it make sense to check p->exit_state directly here instead?
+
+It seems semantically equivalent for user tasks, and exit_state might be=20
+more explicit in conveying the task's lifecycle state. I'm curious if=20
+there's a specific reason to prefer PF_NOFREEZE over exit_state in this=20
+case.
+
+Best regards,
+Zihuan Zhang
+
+
 
