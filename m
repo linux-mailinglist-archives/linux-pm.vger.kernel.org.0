@@ -1,60 +1,61 @@
-Return-Path: <linux-pm+bounces-30348-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30349-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C66AFC612
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 10:47:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78A27AFC622
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 10:51:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 060533B8A4B
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 08:47:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 994B13ACA06
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Jul 2025 08:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42EE129AAF5;
-	Tue,  8 Jul 2025 08:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB332BE7BB;
+	Tue,  8 Jul 2025 08:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LhBy+/LR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyjkQPOt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F32218845;
-	Tue,  8 Jul 2025 08:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B08F221D87;
+	Tue,  8 Jul 2025 08:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751964453; cv=none; b=mLCtPPvlwQUI80OjslQ0KeY0zcktbt4kvPd/5yDmps8JdgWZiDpE7A6K1ODEhL5j3keeb5en41GsCuTrwZmQUrI4xDJ2EzSJO5RutjmjvMs/uiWLnPrrz/HRwNcxx2z3nnY9UME564WGt3+K/i7rCq1wpmK/L0/AJ5DzWJvqIZY=
+	t=1751964666; cv=none; b=lD0xzbSp/Iay5Vj63SAO/pBr6Lp5IVMtSXfUoBKS0NtO0epyt1taSrOKA54ljgnICqj3K6oLDUJ3A6r36mXaqBKM+SMZdseEjzAbmx1CqwdhNPuIdubeC7/1cPwa4hEL/z/994B8PM5M5YmandCXbE9zoRBmaGsW11lWiM0EVHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751964453; c=relaxed/simple;
-	bh=k+zfhW6ZJvXzA7urDGHSqxbfp1IKiol29GpPHOu53ik=;
+	s=arc-20240116; t=1751964666; c=relaxed/simple;
+	bh=N/0d0mKW07wFgRFLTBIlelDE6XtrInsDavk8ZqJpx5s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U6ievKDeiD6r2n/Ca4WnGxknRZJiBegAIxNHm7islcMvdIQgQI/jCvozQEY8ey5pYiPC1LEie+BBHnYDZ4wT2AfjcDqWYriqcQLxzltXSCcGqPJeIJQ/AJ/9b+A/6qaQ7vGryD/QQGjI18MmjbuKGXYX00TlPBZYzWgG3pvKB4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LhBy+/LR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B14C4CEED;
-	Tue,  8 Jul 2025 08:47:32 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=REeyhHl/ilDPqH95SICyVM7EjubbEqztugez+BY/VKDKBplVV5uuFVzeSXy/UQQck/dWfEYaxPdVfmrilNMZ4LUjjf1WDxT3dFflbpXNO8ssIWpdKqP/V6rCVfP9GNxlmfS7waS6G3xoDnIKDdUTCryhjVBDED4walXQjt/Uyr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyjkQPOt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514BEC4CEED;
+	Tue,  8 Jul 2025 08:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751964452;
-	bh=k+zfhW6ZJvXzA7urDGHSqxbfp1IKiol29GpPHOu53ik=;
+	s=k20201202; t=1751964665;
+	bh=N/0d0mKW07wFgRFLTBIlelDE6XtrInsDavk8ZqJpx5s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LhBy+/LRHkzOMGB2nHTqWWpOZ7AE7/BhmnFLXpVu8tCkHu7cHPUjaH292KTDHLqQp
-	 4dI/1IpKz1xBP0EP1V+0BnsZzJJ9OA5SMVXJTWHfpH+/3LDTcT4icA0thJbNb0Mx3C
-	 HKr0SxKXFpiUTo7NpMHgI+jBzoKl9gcXdUbM/jKU1GHte1SOqkafxr2IIRdBmatcPL
-	 8yXUjgbJfYY5qsmOPlLC9Nbo8Rvv5RmQJjCAjJXve7p7lXPiqeLFB/JnzPWetTsCPH
-	 QmuLXJKO6rVq2VWpZRVPXkuZD63veHbNwxVkarHCh/q/oR/zWhSVJiYLGl0QbnXBQ4
-	 V1saidESCzsSA==
-Date: Tue, 8 Jul 2025 10:47:30 +0200
+	b=GyjkQPOtw0ym/NrawZ2Hn26MiYvjJ2VzHekm5U8LVHv0NJsyc9lIRH84NvkZYNYSt
+	 2jzCq32+gtes2SzmX52d97LISK0cnyDUXlaHbuKusCLP0E8OOq/3upy+GtCxhuPfpj
+	 DYDQXMfCGKCzbY1Mjg1zmm8sdMalepsPeX10hz93durHXub9sSO6Z0ZaNtvs3yBkvN
+	 YS2iA/04qADiFOO+Nxgu8bHtrFD4Cm4gBSXrgXYYrTDMSrL2qqkJ3QPwPS2jJkXmYP
+	 YppHeyX7Gybx357//q7sPpvRPDyVA3iy1VOQC0BvodLAzQUbHwjQcQnxSUKUqtG7wo
+	 KZy5cignph7kg==
+Date: Tue, 8 Jul 2025 10:51:03 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chen-Yu Tsai <wens@kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>, 
-	Samuel Holland <samuel@sholland.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Andre Przywara <andre.przywara@arm.com>, 
-	linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: power: Add A523 PPU and PCK600 power
- controllers
-Message-ID: <20250708-capable-caiman-of-feminism-9dfef2@krzk-bin>
-References: <20250627152918.2606728-1-wens@kernel.org>
- <20250627152918.2606728-2-wens@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Georgi Djakov <djakov@kernel.org>, Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Dmitry Baryshkov <lumag@kernel.org>, Taniya Das <quic_tdas@quicinc.com>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: qcs615: Drop IPA interconnects
+Message-ID: <20250708-amiable-owl-of-enthusiasm-e75662@krzk-bin>
+References: <20250627-topic-qcs615_icc_ipa-v1-0-dc47596cde69@oss.qualcomm.com>
+ <20250627-topic-qcs615_icc_ipa-v1-1-dc47596cde69@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,55 +64,27 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250627152918.2606728-2-wens@kernel.org>
+In-Reply-To: <20250627-topic-qcs615_icc_ipa-v1-1-dc47596cde69@oss.qualcomm.com>
 
-On Fri, Jun 27, 2025 at 11:29:15PM +0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
+On Fri, Jun 27, 2025 at 09:37:55PM +0200, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> The A523 PPU is likely the same kind of hardware seen on previous SoCs.
+> In the same spirit as e.g. Commit 6314184be391 ("arm64: dts: qcom:
+> sc8180x: Drop ipa-virt interconnect") drop the resources that should
+> be taken care of through the clk-rpmh driver.
 > 
-> The A523 PCK600, as the name suggests, is likely a customized version
-> of ARM's PCK-600 power controller. Comparing the BSP driver against
-> ARM's PPU datasheet shows that the basic registers line up, but
-> Allwinner's hardware has some additional delay controls in the reserved
-> register range. As such it is likely not fully compatible with the
-> standard ARM version.
-> 
-> Document A523 PPU and PCK600 compatibles.
-> 
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
->  .../bindings/power/allwinner,sun20i-d1-ppu.yaml   |  2 ++
->  .../power/allwinner,sun55i-a523-pck600.h          | 15 +++++++++++++++
->  .../dt-bindings/power/allwinner,sun55i-a523-ppu.h | 12 ++++++++++++
->  3 files changed, 29 insertions(+)
->  create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
->  create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
-> 
-> diff --git a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
-> index f578be6a3bc8..b9f550994512 100644
-> --- a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
-> +++ b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
-> @@ -18,6 +18,8 @@ properties:
->      enum:
->        - allwinner,sun20i-d1-ppu
->        - allwinner,sun8i-v853-ppu
-> +      - allwinner,sun55i-a523-ppu
-> +      - allwinner,sun55i-a523-pck-600
+>  arch/arm64/boot/dts/qcom/qcs615.dtsi | 6 ------
 
-Don't add items at the end, but placed in alphabetical order. Could be
-natural sort if you insist, but binding does not use it.
+This is non-bisectable and breaks the users. Should be the last patch,
+not the first, with explicit notice that it must wait after the next
+merge window.
 
->  
->    reg:
->      maxItems: 1
-> diff --git a/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h b/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
-> new file mode 100644
-> index 000000000000..6b3d8ea7bb69
-> --- /dev/null
-> +++ b/include/dt-bindings/power/allwinner,sun55i-a523-pck600.h
-
-Filename matching compatible (which ever one is correct).
+Plus this affects all outside users, which also should be somehow
+explained. "Spirit" of some other commit does not apply here. These are
+different products, different users. It needs its own rationale and
+justification.
 
 Best regards,
 Krzysztof
