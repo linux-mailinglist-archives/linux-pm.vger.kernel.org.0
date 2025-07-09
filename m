@@ -1,245 +1,238 @@
-Return-Path: <linux-pm+bounces-30437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5ADCAFE3CC
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 11:14:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A136CAFE521
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 12:09:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 428AE7A4127
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 09:12:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B80F0188F5F0
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 10:07:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 621E027D77B;
-	Wed,  9 Jul 2025 09:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3000128A415;
+	Wed,  9 Jul 2025 10:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="vdh8fbOO"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="bm/3AjL1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC11275867;
-	Wed,  9 Jul 2025 09:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E2628642D;
+	Wed,  9 Jul 2025 10:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.86
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752052442; cv=fail; b=RtkJ9VtH6Oy5xeufDM/tLAWMAk+mYLlJpL9Ty7p1AAy4t5IO1o10CkQ+HJ/KmpYhSoncaRQnhRmxOLztRrpVmIiQKGhVQtpf/nLSYlWyrW9Qe9ACP44Ql8p74az1ZUWMlrlgujJYRg+1OMD1YxSbObHWZMd93feRgJB+FjJClCk=
+	t=1752055539; cv=fail; b=u+feS4uQ7a2fb3b/ScN5PcNNOSJ+fZmZRcE2gTCba4wV+UOYNu7LYEfWg1cpR3iZRAcD/teTYrCH7KT2eRYxWLwGPddv8Cjo+mKGKmSj8O8pKhsHxng6RAhW6Aou2bUNLQJeP7Lol02vqJ5JtzD3KYrY8OameGDgClHjXrmt7/8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752052442; c=relaxed/simple;
-	bh=kRGukeNeyK6N0w1cel9yhjhmQK/FC3DjOh7KizwgqhY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=kE/qJAqp1JEyozjteFJb9WO+I2R1z/Re1cKmfgt1DN6q3C9/OoYS5eWhiJmRcV4ZjdYzi0c825HAOjocvyYleOD0kYJV9kKhMXgQoe9vP+hXlVE+uM9/JUcTontCoRs0CojvaitVDY8XLnRO5GeCU2CZatqhy5CNCK68rpeHx+o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=vdh8fbOO; arc=fail smtp.client-ip=40.107.94.82
+	s=arc-20240116; t=1752055539; c=relaxed/simple;
+	bh=WG0AE3FWbS1zqJbUFim+5dgfZv4k/rU41m2ufpNkqes=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B/tYRein8b62w1af9msZQHs569BHBWWi+9uHC6MzDub3BQTES1njDu0FKuxnBbh2pg3Dl/dsNUJsH7WXPInVIt6wZbpYbIt2DJQiZTTo3hP2gB3DKjoXlkuBl9oXz+s4LAqpJD7WBvcJnRMVEUqsBiTw793uJ0lnDK4m6y6rIRI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=bm/3AjL1; arc=fail smtp.client-ip=40.107.92.86
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s9zJP1ZNRnac5qPEaYPajaT78M4EzVkBgbedRw0ayDC1HBhUonwQ2P4J44qvuuj4Y62Bd/FgpPA6XhJXCWXgS6bkh9qCGoVqDXYHa2F/UDQ9UzynAgwBy89ejAqmaREcz3MZdJxBdQedgr/wZO+67siQOFxoCIT+FApCXAEvMPel9ElVl3FI6pYA+fmQ4xOk46YlznGQdfYA1gVWTWeuKfczz19gEgO7EQPE2Ak2+z/uIhc6DKnjRlBNUnbKKUoZd9+NCUSwWAPVkpK5NNpTGgcNcwa52XK/8B5LEmWO+4D1o/eAk6j20jy95D0IWYG5MtfdnlwGzks3a2FMnvsPKw==
+ b=m6eoyucfOdgDnPOG1lPmBxfur/grpwgKWn6yxFMvDiljAcQRABw0Lp0g1LzagH+wXD12/a5hlJ2w5clvgtCDoYroJjvEyMLyj94Ac6ny9YCaQYsaXd9H1149LTV7kyUgDpTXYGSQyYrunuT9OXQDGRpLTPVpq3YsQciPi2nIPCxLkuRnYGM/UjhhKqMwLGJg5wYyeyupf2W42UFntbNhoi++bgc/9zkekcn0oE77nKRGHz4pstYwiFxf7YZ9tjIDbEBsaqy49+j/kkQs8zxcvitbya7a//gdZpd96MRKcP0ijKFIYSvnkywVffc9ZbtjWuLVhVlj/8d/rVb902fhcw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p74tVXTHTRuw+eB0/39qIFF0/amZXlokYFw4dqG0Leg=;
- b=rCtqJ6eJS7uRyMpxSCFlyODghrKSPcm61VxlP/utMYyHgHSfgPdk8idhhYU5PBmEuF5YS/9y/1W2eGO/840t2nQ9SPH4sL6XVu+3Ha+U9tKSGkTh27Lx7IL0JO580qmWNVz1Mr9pa87dqetKEO4GZykyS3YrRwh3abWUADXfdHoPMw8K+aOE5eh+G/cGjpHtdGWeSqujS1Z38mQBqiTLHs4ATwo8PnpvfRpBEWmd+YKYfLc5VIuQMRrScIA/LWAcRNCJocQ2jbGfEdhHZneEJ0MqPlrfxwhK3LpQH4O7JLbw7pE0eN3NZ/e3tNrw4bd9rMTxYtaua0tREK1OxHGSPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=5+Ii46D5z9lMOd0y2VlDdiYeeZr1BdwlBDjPRSbmCFw=;
+ b=Fcd+nX/joDLWQmTLxFKY4xUHjFold2bPZptZbARjuVPyPnPTzqRnU5EH6IdpjKsw9oXR/6Swqp0oDkJr/78/H+DMzLhtt5VPYguQezboqYHlnM1sw6qfVxTO1p9fzSwQWro8g+KdLB3ctUk1BYb+JwHPp3Xy3TKC6K5UUe1soMqwtwFmsKF0G5tbMjE6zB9d4/v3nNM/rQMvIcOXMWJot5Db32Glw/q2ZJo3E/tfH7x7XinwHEWqaI4LWtYdh/8qkDWOlT0a14mgOU5FNx23Gnjc0l4ECsS6BYW+MBhetYkeo5lOjqNPsnjrvXjVkutxsWBv9IP/9NSR4Pdhud0Gfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p74tVXTHTRuw+eB0/39qIFF0/amZXlokYFw4dqG0Leg=;
- b=vdh8fbOOe6O5DMx1nXP9AAE9oUmMvdQs3hoxxhwjEKDYZHKegViFznLxxIcM9wnC2d7exzZj/XxUR50NJIxcM06JOa9b2q1ruKv12j4BcgT+xgLaiD6afEk9hgb754CkHwvchaNjLt6DM2u1RhujHKXTN6MQEsOcBMorCBZ9TMY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by CYYPR12MB8704.namprd12.prod.outlook.com (2603:10b6:930:c2::19) with
+ bh=5+Ii46D5z9lMOd0y2VlDdiYeeZr1BdwlBDjPRSbmCFw=;
+ b=bm/3AjL17m6FpvhYqvkC9o+EolJG6ntXkBR2BH6yyAuoqHVxHtCN+xU/p6sQ7ip15Gw1NSBikIyajXdYcmTk6YLMJ68ik8nD1UgBFBr37rhJd1J5PGXf6Me+wnxa3BuVTX6TmH584ZHRuSJ4d4eVroYWn5ecVmaw8COWe6SobFc=
+Received: from SA0PR13CA0013.namprd13.prod.outlook.com (2603:10b6:806:130::18)
+ by DM4PR12MB7670.namprd12.prod.outlook.com (2603:10b6:8:105::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.26; Wed, 9 Jul
- 2025 09:13:57 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5%5]) with mapi id 15.20.8901.024; Wed, 9 Jul 2025
- 09:13:57 +0000
-Message-ID: <a72d9d65-d05c-435c-8387-600797725998@amd.com>
-Date: Wed, 9 Jul 2025 11:13:48 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] drm/ttm: add new api
- ttm_device_prepare_hibernation()
-To: Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
- rafael@kernel.org, len.brown@intel.com, pavel@kernel.org,
- gregkh@linuxfoundation.org, dakr@kernel.org, airlied@gmail.com,
- simona@ffwll.ch, ray.huang@amd.com, matthew.auld@intel.com,
- matthew.brost@intel.com, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, tzimmermann@suse.de
-Cc: mario.limonciello@amd.com, lijo.lazar@amd.com, victor.zhao@amd.com,
- haijun.chang@amd.com, Qing.Ma@amd.com, Owen.Zhang2@amd.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20250709064404.839975-1-guoqing.zhang@amd.com>
- <20250709064404.839975-2-guoqing.zhang@amd.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20250709064404.839975-2-guoqing.zhang@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0127.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9e::15) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.34; Wed, 9 Jul
+ 2025 10:05:31 +0000
+Received: from SA2PEPF00003AE6.namprd02.prod.outlook.com
+ (2603:10b6:806:130:cafe::c2) by SA0PR13CA0013.outlook.office365.com
+ (2603:10b6:806:130::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.5 via Frontend Transport; Wed, 9
+ Jul 2025 10:05:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ SA2PEPF00003AE6.mail.protection.outlook.com (10.167.248.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8922.22 via Frontend Transport; Wed, 9 Jul 2025 10:05:30 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 9 Jul
+ 2025 05:05:29 -0500
+Received: from hjbog-srdc-41.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Wed, 9 Jul 2025 05:05:24 -0500
+From: Samuel Zhang <guoqing.zhang@amd.com>
+To: <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+	<rafael@kernel.org>, <len.brown@intel.com>, <pavel@kernel.org>,
+	<gregkh@linuxfoundation.org>, <dakr@kernel.org>, <airlied@gmail.com>,
+	<simona@ffwll.ch>, <ray.huang@amd.com>, <matthew.auld@intel.com>,
+	<matthew.brost@intel.com>, <maarten.lankhorst@linux.intel.com>,
+	<mripard@kernel.org>, <tzimmermann@suse.de>
+CC: <mario.limonciello@amd.com>, <lijo.lazar@amd.com>, <victor.zhao@amd.com>,
+	<haijun.chang@amd.com>, <Qing.Ma@amd.com>, <Owen.Zhang2@amd.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>, "Samuel
+ Zhang" <guoqing.zhang@amd.com>
+Subject: [PATCH v5 0/5] reduce system memory requirement for hibernation
+Date: Wed, 9 Jul 2025 18:05:07 +0800
+Message-ID: <20250709100512.3762063-1-guoqing.zhang@amd.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Received-SPF: None (SATLEXMB03.amd.com: guoqing.zhang@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CYYPR12MB8704:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c755ce3-3223-4636-c564-08ddbec8ef1a
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE6:EE_|DM4PR12MB7670:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac1fa3b8-2227-4aa1-fc25-08ddbed02314
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|921020;
+	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WHVJcFRmK2xGNWF2dm9uZUNkK3gwSEhjaFN0UFZ5d2tnbStRS2xnVnZKdmwz?=
- =?utf-8?B?SHdnRlFVWUpheVZqRkNhQjRHSzROb0xjV0NBeTloQUU1SkxjOHplNHNKRldj?=
- =?utf-8?B?ZEJZUTNmSnpUWXQ3QzQrdDNvM0hmQ0xVUFUxc0lUaWRteVh5ZGdrNFlvUW51?=
- =?utf-8?B?YlpSYUlTQldnQldUQlRQUE5RM0xscnVnSWNZV1h2RVV0QUlEUHUrRDBlNWJL?=
- =?utf-8?B?L3NRTmpzVWxIVHUya3dPK0hFZDcrYUg3bDZCTkhpU1JCQjB5bnVqWkk2dUpF?=
- =?utf-8?B?SlBsQys2RHg4U0w3RnVZL0hWY0lNc1BNUUU2V2FtK01icFJVU2hUQnVCUzhi?=
- =?utf-8?B?WjQ5UTNSNy9HZUZLSUN6QWpJa3FsMUN0YUczbERTMVFFZDB4bU1ia3RLOGpZ?=
- =?utf-8?B?UTlhU1N0YnAya3JRNUhLQXlsRzNJVk1NUUJnQWRmRHhka0ttd29vMzlnS2sv?=
- =?utf-8?B?NVlXb2c3eDBuQnBkQWpjdUdnSnFhZkdTTDhrRVprd3pzRUlHUlNhZGZicEcr?=
- =?utf-8?B?eDNEdyt1SExSdHpLbjhKWWxnMVVhOFp6Sm54Q0NGN2tJYnRSSWNwZEdjRlNS?=
- =?utf-8?B?Uk52N2d1dExVajA3b3VJUzlTMkp0UERzQVVxZ21aTHZUdkVmMFdnNHVhYThW?=
- =?utf-8?B?RVZrYXlsaEc5WEZ4bjRCelpLMHdYeC9QVU0vczdhclZVaExhU2NYaHRkc3Iy?=
- =?utf-8?B?S21HcUhrS003VWlTbWcrZjQxQlJHdWdzdGs3SG9JSHJucnptamtHTW9VOUZB?=
- =?utf-8?B?QWl3SHl2ZjZISmgzeG9wdElEaXBtQ1QyZHBPbjhqTnAyTUtVSHpSd2UvNjNL?=
- =?utf-8?B?SnkxSDJ6RDA1T28xa01XUmFUNUZ5QlFZbm9hMXE5S0M2WEI4YS9oYVZCQ3R5?=
- =?utf-8?B?Wis1VXE0OURFM2VKd1IyWXhyd3RsZTc3dUNBbDZ4KzdveEtUejN6N0dGQU1w?=
- =?utf-8?B?N013THpUckVNeUd1SmJ0UlNnaWEzeWdXVmVROWh2ZFFEZjFqVExScXFlSnNZ?=
- =?utf-8?B?K2FBRExzenJ2SStibFZkOERRY3A2c3I2YlJ0aWQ0Y3RRWlcxVWdvTExBcmg3?=
- =?utf-8?B?aUF0Y0pzNW5KUVdEUFRkVGZLeWhZa1BLUGljQ2ZscXllbFVPNDArdEFaUmxZ?=
- =?utf-8?B?cFFLOEZZUm9YUHlTZU4reFJWSTdxTkRHNllqNGpKUzdmOFNNbG1ya3p6VnE1?=
- =?utf-8?B?ZHpWMk81aUpTMzhtUS9mNmRiVzlLUlg5bUFSTW9GM0xmalk0d3BicEFvVmVD?=
- =?utf-8?B?d2w4NnZTSk1mV3QrNW5LdCtmNk5RSFgwZmZnQzhwR20yS1F3TFZhSVRybFY2?=
- =?utf-8?B?UWk4L0l1cFdpUDh3RlR5SmpIRVc2d3VuZmwrMngwUVBxOHQwb2F2d2tlM3Iv?=
- =?utf-8?B?VVRiRndLQ2g3OCtHc1RKWEVRMDYzeDBJZ1BWTlFrRDY5NngxNVgxS2c3YjdS?=
- =?utf-8?B?aGZZdW5NVWd1bnFReGNVSlNMYTBmN1NXUldXNnZESXlWRUJmK2EyK2p0SFIr?=
- =?utf-8?B?anYzMEo1UDh0cmFNTGFDVGJabVp4MzdWbStJakF2Vk1XYS9EQUxNN0xqUzBt?=
- =?utf-8?B?YXlpQVIvSVFRanJVa09RemtkOFlaWVFpZG9sOXBTVU9MV3RCU21ycDNVN2Fp?=
- =?utf-8?B?SVpHUjcrN2M0TGRBaE44ZWU3SisrVkRYM1B4NEMzYmYzRmF4MVVWbTJNczB3?=
- =?utf-8?B?Z1VsaVZZUC82clFkMjJ6RzQyNnV3TndxY3ZHT1N2T1A4ZXpEODhrZlMzWDU3?=
- =?utf-8?B?OTJsbnVvUnBpMzI2NjMwS28vK20rdzhHMGE4Y00wYWkrd01xUmJhcG5wdStq?=
- =?utf-8?B?Uzc3bGxVOEhCNWdtUXlubmFKZ09zWnNXbUZ5bUpZTDA5V25nSFMwSDROUUdz?=
- =?utf-8?B?K0pQY2hCZDdSRE9NSGFjSitVbjF1a3JKenRrN2tQcDZlRk5DTTVFejUrSFNE?=
- =?utf-8?B?NHhqM2hjYVVQay9MM3NoWDByRSsvVy9iRGYzcFlkZDFHelh5b2JHZHhZVzlU?=
- =?utf-8?B?NVVZd1RhQ0l3PT0=?=
+	=?utf-8?B?SitHb2hUdmV1SVBVemM4RVJqTFd0dy9HNnJkbDhkRWY5d284Nnl3aXo5c3lY?=
+ =?utf-8?B?UElQZzVsbWI1ZElucXFoZlA4YWJlZkZYM2k2WjJhNlZJL2FTb1BueTd4WGVE?=
+ =?utf-8?B?bHpEMEtHNkUrVENndkt5MDgzZnlYdjluYWhJVDNaWnhNN3RXdmdGNWU2UTFv?=
+ =?utf-8?B?cEdmU3FMTHNkY05FaDZUNDhjd2pQUEVsV1A4c2NPWG1ESXhjSy90dU1JZHNB?=
+ =?utf-8?B?clVsVHNTbm4zWUl0c3FuNDl1UWxrVCtKS2h2OWRiZ1YyRjlFNlc4bkZHNFBS?=
+ =?utf-8?B?R2k3YXM4ZmhaQzlFM1ZrNVl3RUp5WjBvWUt1QjlVUEhyRWE4aVJIeUJOZ1dY?=
+ =?utf-8?B?SGFHT0IvY1llSHUvcm81cTZCS2NqS3RHYnVLRDBUR2NtakRsR3I2WUhZQzRz?=
+ =?utf-8?B?RXpPanFnZ3Y0bkhDSEJZVDVPbEh6NG9NQ0U3VFc0SEVseEc2NTg3cGZvTEpi?=
+ =?utf-8?B?NktWWURNSWF5YnNHeXFhMUdQc2dSd1JQTEl3MkNlVGZsb3pRM1I1MHNSZlpN?=
+ =?utf-8?B?c29rZWdTa0lmV1dxWFRrM2xQT0hFNE50ZnI1bXdKK1FDYXFZOS8weGd6TTcv?=
+ =?utf-8?B?aVhRRWNLZ3B6OEp5VU5DUFQ1Z1I3MXBuSDZkRTFVZG84K0xJQmkvSFpkZ0w5?=
+ =?utf-8?B?dDNiN3JvVll4YmhMbmFaVUljYjdyWVhIOHRKZ3FPUlZrNlZRN2tNTkVmekFK?=
+ =?utf-8?B?dGNsKzBHQXZEcysvdzdzaC9OdHBoK2IzSmdwZVF6Y01WRm9GaXorRlpoQzhq?=
+ =?utf-8?B?aEdtbWwya2hWS1ZQWkJlQmI1dlNSYzJDL3lIMXJsZ3JvM2p2VEtaNDE0YkUv?=
+ =?utf-8?B?d1o0ZFFMUXdEY2Zoa0lEeloxcm5OSHRQanRGdVB3Z0RqWGIxWUU0UFpxcHly?=
+ =?utf-8?B?NzZSeGJMb3JwTGw0dHVLUDMwZC8yVU5pYW96diswNGhpbFVkSnl6eWFnRzFX?=
+ =?utf-8?B?YWpoLzhBUVNrb1o3eS9tWmJLRXBXVVZxUjdJVkxEZ2ErWnNEMmhNaTh5eUZ5?=
+ =?utf-8?B?SEJjdEhEK2JFNjVIWml6N0xuWmdQM250Zm9LQzdvNDBMK0lGMzI0TkRWeXN2?=
+ =?utf-8?B?enZLakM0SVgyNHVRRUptWE1Vd3FuTEYxbFR6RVF6SElHeVBQNi9vcjVrajU1?=
+ =?utf-8?B?MkxkbWc5Mkt3N2JLanpHbmx5eUE0VTFJT3JpTEhBVjF3eEVtT01CVnZUNjZl?=
+ =?utf-8?B?Y01jT2FyNGw3SlNzYmdMUlprR294RlgvZlVGRG9Fd0FzeDVZUkJRZE5RNGVT?=
+ =?utf-8?B?dGxKdTIvcGpDeTkxRzY1eSt1ajExSG9LbTJCdDgxVHNHVnFJY2ZHQ2huNVFi?=
+ =?utf-8?B?SXh5d0RZbHl5V2Y1SnZNUTJocndNU0g1dWd6Z3QrbDg1NWpPd2VhbHFBYTRB?=
+ =?utf-8?B?dFRMeEQySHgwcytLcTFNWktmMzdvMUwyQ3N3bHhuK2JweW1VcTF1eHJWRFdi?=
+ =?utf-8?B?T25MWGRVc2o0R3JJK2svdDZBd3RQU1dGT3kxbU9sL284Z2QwWGoyTnBUcFBF?=
+ =?utf-8?B?c0FPSURWcHFnT05Yc0JwZkwxNXplSXkrd3pqRkxHSUgzZ1R6M3o1Z2lQQkhz?=
+ =?utf-8?B?a21ROE5wTmtQMURrTEhKU3ZwdFFHaG93UklyWGtWd3ExbHVUaCtvL3VTUUg5?=
+ =?utf-8?B?Wm9iaFFJU2pQdThMZU16ZkY0QjNSTVRMRFNTZHdUVDBPcW1XN2VhWC9NRk9B?=
+ =?utf-8?B?NXRCa0ZCTHJrTzB5QnBTbXViV1lZVXY0TWNrV1hmMkpvaExJeUxBNS9MeE44?=
+ =?utf-8?B?aWJnOGtyL09aSFJRdEhWd2FpQ2JxSHVFNzhzbUJjeGF2OXVkdTVTS3B6UUhF?=
+ =?utf-8?B?cWdPRnVycjJtZG5LQkhGTUZ3VzJPbEVuUVZOK2lvb0YvTjNiZGg0NDZpT0JS?=
+ =?utf-8?B?bTJEdWFVTlZsUE9BTlpMZXUrWDNVT3M2c0c5UlRrWU9ybm5aNjkvdjlsYmxw?=
+ =?utf-8?B?NksveHdPQTNjbXhQeWlRQWJZcU1MR3ZIWUlOOHhoQ1dKUjAveEViRzlwaXp1?=
+ =?utf-8?B?NXIzejcza2ZJRFhUa1FYK2kvYSt4QjNmWjljeTd3WVJaQm80S09yNVVIVmE1?=
+ =?utf-8?B?NldxWHp5S2FuazlLdSt6Tk9LVlJmd1AySE80dz09?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TGpybmszQXQ0UXE0ZnNxVmtmbzFEdDN2eWtUQk1aWkNEL3cyaWNlSGkzUS9U?=
- =?utf-8?B?eFNrU3YrUmU3QmdDejBiNktBN2hMZjlnYUIrVWdDVGJUNCt2aEl5ZnBMekdy?=
- =?utf-8?B?SjRIcVMwRmlKY2QzOUtsUXg5b05IazlzT3U5M1piL2RqaHZDUHhZTXcwMkRM?=
- =?utf-8?B?RGs1RGJVYkEvcEdDZ1BqdDZwMnZJS2ZFUUhrY09kYlNsM0ZjR1k4a0lYSmw4?=
- =?utf-8?B?dGp2U3FZSlJKMUttNXdpRmQ0QURTTlFiZ29sT3pxRUdzaGg4aktlZm5PNFlL?=
- =?utf-8?B?aUJTSEJYL25JKy9zdE1KVFRhZm1FOFNLSXVHN1k2SllQTDh2NjIrLzduTnBK?=
- =?utf-8?B?SWhtRTdvUFZ3UTRJWVdVc2JtN0V4VW1MOVN6TzI0eERjcnRSK01Zemc3Tnls?=
- =?utf-8?B?NFE1Q0U5cWI0REM1ZTB1KzY5WGx1N3ZTK0pGSVhxbkh4SUxsR3QrL1dySVBm?=
- =?utf-8?B?cUlWSVZVZDNTVEo1Rk85bWZSeTFQWlZhcmJQUGNpK1NQeUhUdnZzeXh3bVZV?=
- =?utf-8?B?eFkyNWRBa1g3aVFlVzRLUUhPZzFOQyt2UU5Ndnl3ZWN6WlVZNmNSdk9BY0xw?=
- =?utf-8?B?NnhvdlFUcjhWRHlPK0JyUXk1MjBRaWx1RTFMK1VmamthRFRGdVlKdXRETzdH?=
- =?utf-8?B?WUoyWWhPbEtBOE1PcGg3bUk3Qzc2YUdyM0FaSVQxZVdBSWYzTmRvWlZpdy94?=
- =?utf-8?B?NFBVeHBMeldabFJweEJhcmNLb0N5b284c2VUS3RRK0Z3UzBNK0RkcllueUw3?=
- =?utf-8?B?VTNJMFAvcUtHYzdLVlBNZnp6b1JEam9rQW9CUUxZbzJiM2Z3UGlucFFqdnNy?=
- =?utf-8?B?T3h6cThUaUpzNmI2NTJ1cm9ZK2xpVU1YQ1RpYzNJcDVISitwZ3RxOW1rMk1I?=
- =?utf-8?B?ZzhGTVdjYmhLY1hMTzFqb05HeXdER0dPVklTMjZvMUgwN09YY0VYNEQ0djdJ?=
- =?utf-8?B?bG80Q1hhcC9DZnlJbk9xcTNKNlVlV2xJVDFkZDdoRXE1RnIrT1BRRVRVRURB?=
- =?utf-8?B?N0FGbkxDWkpqYVZ6NFo3VGRXUTJjK21WSVRYY1BUQmpPMnZJRDlNeUdJSk84?=
- =?utf-8?B?MlBZa3lpU2x4Zm84RDBzdjAweXZUT2trdDl2UU5oMlBqRWY1eTBtcXoxcTRH?=
- =?utf-8?B?ekEwWHorTEVpVytWRFZpQTM1bzFraFlPSXdHaHVBYXdteHdBTU50Qzh2UU5a?=
- =?utf-8?B?WWFMblZONmdLSklETWhWQkRQT0gyRVpodThRNGw2RDZwc1J3SmxOTW9yUnpo?=
- =?utf-8?B?QURzN2JGenJRNGl4R2pPcEtpRXdxeWxycUlYa1VqTzRpcWVGenZZdkIrRVZn?=
- =?utf-8?B?dkRwVEN4c1JBMTF0U0x5Zmk5N25jR1lHYmxEL0lnK01LZ3U2THEwQ0p5cENH?=
- =?utf-8?B?VjdhR2xCWTJvdFRkYzdHQzdqOWRPNGlnNU9Ba0dRd0o0ME5wRnJCdzdnZHpV?=
- =?utf-8?B?WlE5Tk1LaWtnVjJuT2g2SzBIZ3U3K295Q0Nubk1yTnkvbHVxT21HWUNEOVVN?=
- =?utf-8?B?UlpXZU11NUVEMVBPUmVqM3k5dUZtTCsrVTRheTM0bmNIck5tNG9kWnpqNThw?=
- =?utf-8?B?TkJJRWF1d3JweXlSSndDdjhJUjFteFFMRmU5QTUvbjZQdWZSTVdFcGNsVnZm?=
- =?utf-8?B?MTdZTGZGeEpldGlpQ1ZQRkk4bGRrVWJBTXB6OExES0VrVWxPa0NJKy81bytz?=
- =?utf-8?B?Z3ZUazJ4QUpWZS94U09OU3gxNi9CZWNMRDhHL29Vb0JmVyszd2RWMmxBM2c3?=
- =?utf-8?B?UW1YeXJLNWdtUEZzYVlKQ1RPZGxHdklqUzRzQytmRUN4dHg3TzBRNzBFKytD?=
- =?utf-8?B?aWV5MFlzYU1EZ0lUaXpDQlQ3RnI4bHIyalV1aUtKM2xFZlR0WDlmNHhpUnZ0?=
- =?utf-8?B?UWJ2NVFROXBnKzhRRXVuMVJIQ1lZZkIxTStzN1RFU3dka1hKVWI2M1RxTDBU?=
- =?utf-8?B?L0tIOERZYS9JZVQvQW94Vm41NGpDQmlrMWtJNlIwdmpkWGN4OUJIZEM1aXdR?=
- =?utf-8?B?cTJQNDkzTTFheUNlQmtRbWFGUEZ3NWNFWjd3dCtiZTQwcUpZVGdTOXkwalh5?=
- =?utf-8?B?bTRuaFZoOVgvQlZZdXVSNHlxWVVWZ1ovVmhZNVIrVmdtZzZ4NzVTZTZmMjVB?=
- =?utf-8?Q?CmS0fN93ymNPAk7e9edWoaVuW?=
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c755ce3-3223-4636-c564-08ddbec8ef1a
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2025 09:13:57.4186
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2025 10:05:30.6873
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac1fa3b8-2227-4aa1-fc25-08ddbed02314
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yBZVUyU8ymUrcQNaxK1KJov6ZUa1ls+caxvdKM9r/bLkj5op1q6vhJUVsyZIZ1zy
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8704
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003AE6.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7670
 
-On 09.07.25 08:44, Samuel Zhang wrote:
-> This new api is used for hibernation to move GTT BOs to shmem after
-> VRAM eviction. shmem will be flushed to swap disk later to reduce
-> the system memory usage for hibernation.
-> 
-> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+Modern data center dGPUs are usually equipped with very large VRAM. On
+server with such dGPUs(192GB VRAM * 8) and 2TB system memory, hibernate
+will fail due to no enough free memory.
 
-> ---
->  drivers/gpu/drm/ttm/ttm_device.c | 23 +++++++++++++++++++++++
->  include/drm/ttm/ttm_device.h     |  1 +
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/ttm/ttm_device.c b/drivers/gpu/drm/ttm/ttm_device.c
-> index 02e797fd1891..9c9ab1903919 100644
-> --- a/drivers/gpu/drm/ttm/ttm_device.c
-> +++ b/drivers/gpu/drm/ttm/ttm_device.c
-> @@ -123,6 +123,29 @@ static int ttm_global_init(void)
->  	return ret;
->  }
->  
-> +/**
-> + * ttm_device_prepare_hibernation - move GTT BOs to shmem for hibernation.
-> + *
-> + * @bdev: A pointer to a struct ttm_device to prepare hibernation for.
-> + *
-> + * Return: 0 on success, negative number on failure.
-> + */
-> +int ttm_device_prepare_hibernation(struct ttm_device *bdev)
-> +{
-> +	struct ttm_operation_ctx ctx = {
-> +		.interruptible = false,
-> +		.no_wait_gpu = false,
-> +		.force_alloc = true
-> +	};
-> +	int ret;
-> +
-> +	do {
-> +		ret = ttm_device_swapout(bdev, &ctx, GFP_KERNEL);
-> +	} while (ret > 0);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(ttm_device_prepare_hibernation);
-> +
->  /*
->   * A buffer object shrink method that tries to swap out the first
->   * buffer object on the global::swap_lru list.
-> diff --git a/include/drm/ttm/ttm_device.h b/include/drm/ttm/ttm_device.h
-> index 39b8636b1845..592b5f802859 100644
-> --- a/include/drm/ttm/ttm_device.h
-> +++ b/include/drm/ttm/ttm_device.h
-> @@ -272,6 +272,7 @@ struct ttm_device {
->  int ttm_global_swapout(struct ttm_operation_ctx *ctx, gfp_t gfp_flags);
->  int ttm_device_swapout(struct ttm_device *bdev, struct ttm_operation_ctx *ctx,
->  		       gfp_t gfp_flags);
-> +int ttm_device_prepare_hibernation(struct ttm_device *bdev);
->  
->  static inline struct ttm_resource_manager *
->  ttm_manager_type(struct ttm_device *bdev, int mem_type)
+The root cause is that during hibernation all VRAM memory get evicted to
+GTT or shmem. In both case, it is in system memory and kernel will try to 
+copy the pages to hibernation image. In the worst case, this causes 2 
+copies of VRAM memory in system memory, 2TB is not enough for the 
+hibernation image. 192GB * 8 * 2 = 3TB > 2TB.
+
+The fix includes following changes. With these changes, there's much less
+pages needed to be copied to hibernate image and hibernation can succeed.
+* patch 1 and 2: move GTT to shmem after evicting VRAM. so that the GTT 
+  pages can be freed.
+* patch 3: force write shmem pages to swap disk and free shmem pages.
+
+
+After swapout GTT to shmem in hibernation prepare stage, the GPU will be
+resumed again in thaw stage. The swapin and restore BOs of resume takes
+lots of time (50 mintues observed for 8 dGPUs). And it's unnecessary since
+writing hibernation image do not need GPU for hibernate successful case.
+* patch 4 and 5: skip resume of device in thaw stage for successful
+  hibernation case to reduce the hibernation time.
+
+
+v2:
+* split first patch to 2 patches, 1 for ttm, 1 for amdgpu
+* refined the new ttm api
+* add more comments for shrink_shmem_memory() and its callsite
+* export variable pm_transition in kernel
+* skip resume in thaw() for successful hibernation case
+v3:
+* refined ttm_device_prepare_hibernation() to accept device argument
+* use guard(mutex) to replace mutex_lock and mutex_unlock
+* move ttm_device_prepare_hibernation call to amdgpu_device_evict_resources()
+* add pm_transition_event(), instead of exporting pm_transition variable
+* refined amdgpu_pmops_thaw(), use switch-case for more clarity
+v4:
+* remove guard(mutex) and fix kdoc for ttm_device_prepare_hibernation
+* refined kdoc for pm_transition_event() and PM_EVENT_ messages
+* use dev_err in amdgpu_pmops_thaw()
+* add Reviewed-by and Acked-by for patch 2 3 and 5
+v5:
+* add Reviewed-by for patch 1
+* use pm_hibernate_is_recovering() to replace pm_transition_event()
+* check in_suspend in amdgpu_pmops_prepare() and amdgpu_pmops_poweroff()
+
+
+The merge options are either:
+* the linux-pm changes go to linux-pm and an immutable branch for drm to 
+  merge
+* everything goes through amd-staging-drm-next (and an amdgpu PR to drm 
+  later)
+* everything goes through drm-misc-next
+
+Mario Limonciello think everything through drm-misc-next makes most sense
+if everyone is amenable.
+
+
+Samuel Zhang (5):
+1. drm/ttm: add new api ttm_device_prepare_hibernation()
+2. drm/amdgpu: move GTT to shmem after eviction for hibernation
+3. PM: hibernate: shrink shmem pages after dev_pm_ops.prepare()
+4. PM: hibernate: add new api pm_hibernate_is_recovering()
+5. drm/amdgpu: do not resume device in thaw for normal hibernation
+
+ drivers/base/power/main.c                  | 14 ++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 10 ++++++++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    |  7 ++++++
+ drivers/gpu/drm/ttm/ttm_device.c           | 23 +++++++++++++++++++
+ include/drm/ttm/ttm_device.h               |  1 +
+ include/linux/pm.h                         |  2 ++
+ kernel/power/hibernate.c                   | 26 ++++++++++++++++++++++
+ 7 files changed, 82 insertions(+), 1 deletion(-)
+
+-- 
+2.43.5
 
 
