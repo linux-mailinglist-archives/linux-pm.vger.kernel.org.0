@@ -1,126 +1,192 @@
-Return-Path: <linux-pm+bounces-30471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67E3BAFE7CE
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 13:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18D2FAFE7D2
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 13:32:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA3671712F6
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 11:31:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A9FE17725D
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 11:32:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A362D9780;
-	Wed,  9 Jul 2025 11:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF1D62D9ED7;
+	Wed,  9 Jul 2025 11:31:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d4zvvMFw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IQ5Tk9/i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA992D6638
-	for <linux-pm@vger.kernel.org>; Wed,  9 Jul 2025 11:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC812D97B8
+	for <linux-pm@vger.kernel.org>; Wed,  9 Jul 2025 11:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752060692; cv=none; b=UIRk68tioJbItynl/nTi3bbM3yvZH1wyqELGiNVZtv55/cf7soybB5Vn+QtoKE6kAQNGtJpbZ0e5/nKiPUjSLYT77Ui2AetFIZjv4eSKqTksvd67YEnjV+FjUDdm7o+RQG7hgIUDS/+jFrjYhRAWov7TBsLqmttZYEjxebZh+a8=
+	t=1752060695; cv=none; b=U8C0cax1KBzc5Uz6WMskPh8XxiGuA2uDnwHYr6umPt3dr2MmiYOXPRlSc/DoDNSVMOUR7e5SSJXhs+0lZ0rmJ0ioI/c06TRbdniYqAWzuL6zTko0GA2asw6WOZPcZYgUg3RLipvmDbszlG6939mAcjYsxLoydvl7PRr8Losi0sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752060692; c=relaxed/simple;
-	bh=KC3Z6R9qM6d7cSIbmQ52PjX+ds9juhkme3cOPH/FE0Y=;
+	s=arc-20240116; t=1752060695; c=relaxed/simple;
+	bh=eaFq9gWWTxEjM3UTumvG5t2cF6D7OUJx6+dlbUGCjxQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GZ/I4e7kB5UXbXwvNh0Z4Az7RYws83b72hgMzlQVFNT/9URndmytyjrMLpxVXReUB14hCbdLDO6HEaPfl8Ak64Q0D1COedWOCEZNnO1s1Ld3U+3fed/v+0wFCPlW6vAYydNvfCr1EyWRP9fUkdOnY2jnHRztMVoNfCovZIly49o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d4zvvMFw; arc=none smtp.client-ip=209.85.219.177
+	 To:Cc:Content-Type; b=nLKUpM0vXa2yG5wSqC280aKNQNnwtalta3ihFXuhCwToriHeYpfTm4x4w63Tz42p2p7QgWXUmmzqru2duy262FJ9jAqdYUE2omz8xzw8uCPA2RLsDfEXmeIh88PeH64aOeQTXh63xEkT5X/d0uoJNSAjmRdq/tBzL2THqr84qPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IQ5Tk9/i; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e818a572828so3771427276.1
-        for <linux-pm@vger.kernel.org>; Wed, 09 Jul 2025 04:31:30 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-714067ecea3so39152527b3.0
+        for <linux-pm@vger.kernel.org>; Wed, 09 Jul 2025 04:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752060690; x=1752665490; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1752060693; x=1752665493; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H4qDIkCxD7aqIeJI126uepcAwUwJhAjQhx18iyCLj3I=;
-        b=d4zvvMFwQWq5AtwhSFVZlEp2VsvEL4yY6W4uvGlxWtC4VC5WEd916YWS+qtBYC4505
-         nJbWun+f95puMGOb8sVtFFdXWhQ+BzYzbxg16VSS8+ZaEfmNWCEwa9GGtOagKTz24KKC
-         HsraMdu6Mh4VNXMALvfa0I3NuThWMsEQjdK35pKEmf89rfWM6OphJFs6HVc8zyP7CS04
-         FNqUgHOQ6QJ0WG23eVrr6jvL6bYgiTea4NCdQtq6DfUng4s4AjKrhHtDWpjDz7pHZXSr
-         P5RiYoAYwNGHLyhWmNOaaNXTNBLu3pYnTovmikJVUehgGPUx8ld4nY8KZfYEnuKEaPgN
-         rBSQ==
+        bh=JNiQ1+5y2VFFZCNEkl5wzPIEOOAGrk6ZMXzGD1167g8=;
+        b=IQ5Tk9/i+fJhBdfeD0E2ZeHduy403dhKzse9YTsCatOUAgVmbblFr2ouV4+ZBArH2U
+         u1fn6FzWe5RkWgyNUW0IeHvSoDT5XocZDdT8PJ9exAF+vOydSJfcwtR5Go2XR8oCXy++
+         Nuc3fEWW6/0g9xGLR6bHxpuq90lhVL9JM/Q6IPHUW/8kGm1+84tvv6ALmkEWY5G19tyZ
+         aBfHeqtElyZvW5UBSmaJlufi5qPhT1IcYXvJZteQzn3iidfx8lMd5poS5Oz6Eqdz6YRh
+         JvpskF9JQFFd1kViv/KPI0IAN4YEMcBDUhKk5VnjEHCVGJ/KT+9o9xFc0Toi7KZ/egs9
+         kfxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752060690; x=1752665490;
+        d=1e100.net; s=20230601; t=1752060693; x=1752665493;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=H4qDIkCxD7aqIeJI126uepcAwUwJhAjQhx18iyCLj3I=;
-        b=n77YsThu98pfDJIILp0Qd54kStHQCSvgAnsZ856iPBZ/oC0E3BOAITasTsCL9OCkdT
-         AM2oZoBVlT1tJKccSLW0xN+Gt4xVL5XQ5hb0FBBnFCZYpw6nsU0qqxCI5ZXjpfx6q3td
-         ITfkSQ0NGU9oxdiFeMpLKvhNvogb5djzbZPpKhWinxUguKAlUZnRtUFB9lj1zlx2R2aP
-         t6EvXuQGXWhAzbpVBSMYCSYcyBv6Z0X8CFiqJV/jVhpJDiXUPBRtkgSXETHTDj5wEtwJ
-         zZzzgEPtUinIQF3G50afwF84nh6u/OZ4uamXBAr0JLSI0cZa+GXdVerI1tAD9fDr9eYI
-         FtxA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgXxxD7YlFTukrjQ6ddZVlkzmUSovSf2nLjfKP7YxiHWDuJzp3JsKNmQM071b1AJAHseH5IpRw7w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpGA399XDrl5Y2oPEoWaOom0FD6yui2PV3AU7crRfD8rGUj34V
-	KpdnLjbffM5uZ5CbdABR8NlakR2/yA/VdC20EZPwxvrttIUgI2ON/BWQLyPxJOcrHOsPVlb9FQk
-	uZsu/pTsRjHxbyG8w2XcPRy+X+TvvOmj3cKSXsVNs6Q==
-X-Gm-Gg: ASbGnctxE+hPOeIStwa2ZCUMqOEPWdKNONbkNTJQYuGs93WMo79VL7RaHRPr3kcD0TF
-	DcCTqKuf9qwdI7G/o4DwrYHc9JsN5QIOVE+y0Yk/LlSbHFWW8+V6k2K5jHdDfMDEG9YxEJVeHH6
-	k3x8xz6YdQdjqeIkI3eFeaTsTP15mRz8bZDtc1YIg09C2L
-X-Google-Smtp-Source: AGHT+IGEJ4mmuKS7rt1MFlUz2bfdy5YmSqNFhku/Q0Up5ig+Hhd1s6mTWPeVIQL/2Z6ktbTHNLkVtt8rYKM0Ty9sofo=
-X-Received: by 2002:a05:690c:34c1:b0:70f:83ef:ddf7 with SMTP id
- 00721157ae682-717b1ba3c3emr33058457b3.13.1752060689721; Wed, 09 Jul 2025
- 04:31:29 -0700 (PDT)
+        bh=JNiQ1+5y2VFFZCNEkl5wzPIEOOAGrk6ZMXzGD1167g8=;
+        b=EN+8UsxreZvnXAfj1V9VC5R47fV1BYRlRxuo0mIYX56jJ2KQH2iR7n09sELjQtfW/M
+         cLDGX1+55CthsRBsTWeqFdJ7JGG9CALSWO+yqOhD0LB9z9hKYOFZMSykCCFXmyVLW3Vn
+         qk1LRyKOzyGvg6E6yuinnKVXJdBgTvU/HnNRY2EaT/T3VzO5I5xFs4bF9grQ8E5fAwK4
+         Eip/psSNo1PUyUE0XeHfnOwr/3BS1RXRu719+pqoHb8XEUTcw7qjwZH8XS3WvZIKPyfJ
+         mP/M20cON5r+EIdSJWlBTE/LNoS4D3hgAPm0Jf5m2O+t9fMC3WnfNM3rQBTFp9C8nEP2
+         b9aA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8n7/3mMvqnm20yAZWUCi+EtzjEF+m/Lt/e7Su10l5EvT5R4BxNZYOKqueBvNkIZ9ZaqTZL2QRAw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYbQDrUTluKfLV6P1WNRPgDGL1t+8EAEColJ07ha0vmt76u7bY
+	xTpC2Ch6EcZydWRjZXDyyC7x+zVpnkPnEWqz/0UFLNDmkwQyBY5ld1mDfees95qBe0NYwtN5udT
+	iCK1eB9OxwZfrgYROlxeLKX0+tytReE7jfVFx3aiNwA==
+X-Gm-Gg: ASbGncvRdMCTzKP4uymTuPkL9Z313UiyzXWynu8iTVJBtXtM6IUZdH7VbXfmKeCDfcb
+	l9iWxPla/6KrZrAl81g3uVXjJYY4t7bNekgcUgDtt6LUWS4yLTr7+P2oRQuJYMQD3VQa8WSMEwB
+	6yqNEbBSEa0d1ZCYP+YimF/q2eeWcpPEa+EnEWQ5qS8vaWPuwX4u7rzNI=
+X-Google-Smtp-Source: AGHT+IFsS/ASN7bZj//LEOdFtJiqcKW9aOOwexSDyjzYRjOXer6dnb2P/mGTPna4qIWw/UGl9cHvGrgqRWogtZJ+2Ik=
+X-Received: by 2002:a05:690c:6b0e:b0:70f:8884:17af with SMTP id
+ 00721157ae682-717b16723f0mr33351387b3.6.1752060693143; Wed, 09 Jul 2025
+ 04:31:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250707-sm7635-rpmhpd-v2-0-b4aa37acb065@fairphone.com>
-In-Reply-To: <20250707-sm7635-rpmhpd-v2-0-b4aa37acb065@fairphone.com>
+References: <20250701114733.636510-1-ulf.hansson@linaro.org>
+In-Reply-To: <20250701114733.636510-1-ulf.hansson@linaro.org>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 9 Jul 2025 13:30:52 +0200
-X-Gm-Features: Ac12FXxRo-xD5eCPtXLrowuQGz-kjsQVt_Zu_iyEtrGYNOPit2r7unOQDND3zzc
-Message-ID: <CAPDyKFonLENQbafjo621hHPkoWjMNoQ5GRNeNndpezMNnM1=sA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Add Milos RPMHPD power domains
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Wed, 9 Jul 2025 13:30:57 +0200
+X-Gm-Features: Ac12FXwPPsq7QQFWnJjGj5aeIXDZuRVVIUPoQyxowJKYffEpQh6cBhizErrlUZ0
+Message-ID: <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
+To: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 7 Jul 2025 at 12:18, Luca Weiss <luca.weiss@fairphone.com> wrote:
+On Tue, 1 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Add support for the rpmhpd power domains in the Milos SoC.
->
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> Changes in v3:
+>         - Added a couple of patches to adress problems on some Renesas
+>         platforms. Thanks Geert and Tomi for helping out!
+>         - Adressed a few comments from Saravanna and Konrad.
+>         - Added some tested-by tags.
 
-The series applied for next (with a minor update to the commit message
-for patch1, according to suggestions from Krzysztof), thanks!
+I decided it was time to give this a try, so I have queued this up for
+v6.17 via the next branch at my pmdomain tree.
+
+If you encounter any issues, please let me know so I can help to fix them.
 
 Kind regards
 Uffe
 
 
-
-> ---
+>
 > Changes in v2:
-> - Rebrand SM7635 to Milos as requested: https://lore.kernel.org/linux-arm-msm/aGMI1Zv6D+K+vWZL@hu-bjorande-lv.qualcomm.com/
-> - Link to v1: https://lore.kernel.org/r/20250625-sm7635-rpmhpd-v1-0-92d3cb32dd7e@fairphone.com
+>         - Well, quite a lot as I discovered various problems when doing
+>         additional testing of corner-case. I suggest re-review from scratch,
+>         even if I decided to keep some reviewed-by tags.
+>         - Added patches to allow some drivers that needs to align or opt-out
+>         from the new common behaviour in genpd.
 >
-> ---
-> Luca Weiss (2):
->       dt-bindings: power: qcom,rpmpd: document the Milos RPMh Power Domains
->       pmdomain: qcom: rpmhpd: Add Milos power domains
+> If a PM domain (genpd) is powered-on during boot, there is probably a good
+> reason for it. Therefore it's known to be a bad idea to allow such genpd to be
+> powered-off before all of its consumer devices have been probed. This series
+> intends to fix this problem.
 >
->  .../devicetree/bindings/power/qcom,rpmpd.yaml         |  1 +
->  drivers/pmdomain/qcom/rpmhpd.c                        | 19 +++++++++++++++++++
->  2 files changed, 20 insertions(+)
-> ---
-> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-> change-id: 20250620-sm7635-rpmhpd-dcb5dc066ce2
+> We have been discussing these issues at LKML and at various Linux-conferences
+> in the past. I have therefore tried to include the people I can recall being
+> involved, but I may have forgotten some (my apologies), feel free to loop them
+> in.
 >
-> Best regards,
+> I have tested this with QEMU with a bunch of local test-drivers and DT nodes.
+> Let me know if you want me to share this code too.
+>
+> Please help review and test!
+> Finally, a big thanks to Saravana for all the support!
+>
+> Kind regards
+> Ulf Hansson
+>
+>
+> Saravana Kannan (1):
+>   driver core: Add dev_set_drv_sync_state()
+>
+> Ulf Hansson (23):
+>   pmdomain: renesas: rcar-sysc: Add genpd OF provider at
+>     postcore_initcall
+>   pmdomain: renesas: rmobile-sysc: Move init to postcore_initcall
+>   pmdomain: renesas: rcar-gen4-sysc: Move init to postcore_initcall
+>   pmdomain: core: Prevent registering devices before the bus
+>   pmdomain: core: Add a bus and a driver for genpd providers
+>   pmdomain: core: Add the genpd->dev to the genpd provider bus
+>   pmdomain: core: Export a common ->sync_state() helper for genpd
+>     providers
+>   pmdomain: core: Prepare to add the common ->sync_state() support
+>   soc/tegra: pmc: Opt-out from genpd's common ->sync_state() support
+>   cpuidle: psci: Opt-out from genpd's common ->sync_state() support
+>   cpuidle: riscv-sbi: Opt-out from genpd's common ->sync_state() support
+>   pmdomain: qcom: rpmpd: Use of_genpd_sync_state()
+>   pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
+>   firmware/pmdomain: xilinx: Move ->sync_state() support to firmware
+>     driver
+>   firmware: xilinx: Don't share zynqmp_pm_init_finalize()
+>   firmware: xilinx: Use of_genpd_sync_state()
+>   driver core: Export get_dev_from_fwnode()
+>   pmdomain: core: Add common ->sync_state() support for genpd providers
+>   pmdomain: core: Default to use of_genpd_sync_state() for genpd
+>     providers
+>   pmdomain: core: Leave powered-on genpds on until late_initcall_sync
+>   pmdomain: core: Leave powered-on genpds on until sync_state
+>   cpuidle: psci: Drop redundant sync_state support
+>   cpuidle: riscv-sbi: Drop redundant sync_state support
+>
+>  drivers/base/core.c                         |   8 +-
+>  drivers/cpuidle/cpuidle-psci-domain.c       |  14 --
+>  drivers/cpuidle/cpuidle-riscv-sbi.c         |  14 --
+>  drivers/firmware/xilinx/zynqmp.c            |  18 +-
+>  drivers/pmdomain/core.c                     | 211 ++++++++++++++++++--
+>  drivers/pmdomain/qcom/rpmhpd.c              |   2 +
+>  drivers/pmdomain/qcom/rpmpd.c               |   2 +
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.c   |   2 +-
+>  drivers/pmdomain/renesas/rcar-sysc.c        |  19 +-
+>  drivers/pmdomain/renesas/rmobile-sysc.c     |   3 +-
+>  drivers/pmdomain/xilinx/zynqmp-pm-domains.c |  16 --
+>  drivers/soc/tegra/pmc.c                     |  26 ++-
+>  include/linux/device.h                      |  13 ++
+>  include/linux/firmware/xlnx-zynqmp.h        |   6 -
+>  include/linux/pm_domain.h                   |  17 ++
+>  15 files changed, 291 insertions(+), 80 deletions(-)
+>
 > --
-> Luca Weiss <luca.weiss@fairphone.com>
+> 2.43.0
 >
 
