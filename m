@@ -1,201 +1,223 @@
-Return-Path: <linux-pm+bounces-30486-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 474B5AFEA2F
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 15:29:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DA7BAFEC22
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 16:37:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EC173AF29D
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 13:26:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C524F4A3DE6
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 14:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089292E54C4;
-	Wed,  9 Jul 2025 13:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF152E5B0D;
+	Wed,  9 Jul 2025 14:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f0f0VZPw"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="z5Lt8yB8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C532E5432
-	for <linux-pm@vger.kernel.org>; Wed,  9 Jul 2025 13:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752067528; cv=none; b=QsSxqyFVHIzi+4iaE8apbmKHPZAE3N6612EcI7M6amgaB3nMNPGBdhNOaD4RClP+TCs8SXbVTfYFin4TEGcSSB4U0Q0mTCLQFr+T9SnNiy5yOE+I017QOxuKFQgOyUSRrwmhO6AHc5+bV5k8eatN9/pRb7ha8mpFDwdqXs/6Lug=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752067528; c=relaxed/simple;
-	bh=0Kt7fyGJ9S5hVGnqLvyQoR9maETa92oP1ICT/52AnNc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u10QPkjYPYCq89aHdcOYzJYpnAn/ux6GQ1NO2zYa0wzgj62+zM1rQeJw/LahpkhvFxi2Z8gBNJgO6UA9Iqi8O7xrWGLoyCJHWazGdicvUEUTUKAUzLi0tjRgVDSnebvI43k1JiB6gbaRPzgH09QXj23hjnPAIAaY6tkjrUdH4qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f0f0VZPw; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-708d90aa8f9so50945627b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 09 Jul 2025 06:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752067526; x=1752672326; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oa3/IrQyBvmTYTtNd/N8HxLuoVeEFku8rfsBSVlEkKw=;
-        b=f0f0VZPw7Xnel890WbvozB62aRFc70t+As4Ax+TzgKKzvK0qY0BnjGxMdxSCq+CbxN
-         NN8fWW7JZnnmX/ZA8tlz5nmAsMA3HCOBZ66CZS6sYtLm1DT5NRLEaxpLO9TdEa4jZbh/
-         zAofpTNUMIHwDXhRfpWVEotlxp+AkI2WeH7GkvKSBHgvfRcWIkf9yTTWgGYYMVbbzMA1
-         Luw7mIDQjKcpxMagYjfmzKwOcyZMikP5lR/0KRXEnZ5EYilzBK1w3xp/7mUH72H3RCvg
-         nxkpNDonuVtdx6DJjLjodMjkt7pcDMVvZIPnV5SKnImaODdaE4B2mz2jpC+9IlKpG11i
-         N8cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752067526; x=1752672326;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oa3/IrQyBvmTYTtNd/N8HxLuoVeEFku8rfsBSVlEkKw=;
-        b=MT5A2j14vUaVIYvugpKBsPfUpwagjU4cNaeN5SRxd1jpYIrj/Y2hKU7PfVjDtRqUSS
-         B3Bj+CE7RrYXpkU2hXzk9itdNYRQCcA3xcPM2DnYn8GVPtDmsCaj4dZpTeX8WpxNxPhV
-         OMb12MzgfPrSuhW2suhVdBHel4j+DVp2grGTPISmMIBl9YWxeTXP+5WtiGHXyudYjhWz
-         8IWcz1jyICBaYJCnTrWnNTJulswlcGBqZlurfr1qS0RvLMUcAZcCqFqJwNTjlOpYnz03
-         jYjSo4kBYNDw6Pz5Ycg09VdbttwekClTgf0ojqGkRLcpIjR2vxplHpbtM5fdOuzCSnrU
-         48JA==
-X-Forwarded-Encrypted: i=1; AJvYcCVI2lf/fLnLrlMTQiSMCrcA0scEIZfvLKZYizZZ66ffbQPAeyd3UCmIYCGWbG8i6gU3+BQoNZkmtA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN5Lglk/zXnBpT9BdpmmVukLbb2j3HLAI0iGT5rlEr6bglkKvF
-	NNm4nF3ne6jh7xrh+xTficmTkiTzBBAD8otmjrG9O9jEp0+cbcdPlx91LfZ7GRbxQz6+1OtmBcm
-	rbZsopHTg+ngzJSpIGrXMv1wNNIWtZhIdV1UI0iU+FA==
-X-Gm-Gg: ASbGnctu4fFpiKZ/LTJd3KJSoI5iubJZIgfbllzk33SLuSXODjC5djJHQWD+byBqqlZ
-	nKiJcysxuyefHgQT2yfDEujN7Wv4V22Sxb8NyyUr5pcEjT28qdmD+svVNJcn2Z8feqL9A7QZOHc
-	QJrwpUbz021yu5uP11dyUz8R2rgjyo6a3hji9JoqyvEoZb
-X-Google-Smtp-Source: AGHT+IFUQ6txa1Y8SDWT8eyNJEl2lGsRx5T0N8Gh9XBD/67jrCyb9nnoly91e6q8APx5gOkc74rwLzNts7Vy+2o7WLA=
-X-Received: by 2002:a05:690c:3349:b0:70c:c013:f2f with SMTP id
- 00721157ae682-717b1a2758amr39801867b3.35.1752067525556; Wed, 09 Jul 2025
- 06:25:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9A72DCF74;
+	Wed,  9 Jul 2025 14:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752071746; cv=fail; b=YAwbN4Z5UpO+i2ibT1OUwSv/bXGarmBlBN1mqR15FJ2xazYOujLXFKi8lOSqmnrGLU2YBo1f/CNebeBlPeUZjTMFo/nK5GRDR52IecBO+LYyadRz5REhPjSvREBv4597s/QWoKpxqbYRBER48XojCnX/QVj/KF000kteElI4BlU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752071746; c=relaxed/simple;
+	bh=D/6IxA9yIEF7LwL92pnF+DhTwQ3yXlD1JljCs87tsJY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Fu59yrfKvays4k6riTfnjTkZgE7JmQGaudhvBb0cFrWXz2ka2s/ghTpwoY59kJtqa7LpMjWDoLeW4p9ALtiPeYBbSDhyi7XHJHnCKjJtRpyeL6QVUR1arCCDuLVLbSpAYvHZxxBpB74g4pwxD41jbrZ0Qa8GJpA0tnPppG/+1o8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=z5Lt8yB8; arc=fail smtp.client-ip=40.107.94.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CGN2q//H0HF+Ow41RVlHCYfUXYIvWvIvagvjDBcuQv1gZrfcYeNQ+WgWNtC1+SLcVh7jiOAZMp/M0Ov7fKVY132Z4MFAg9JVBRCYqVP3dPUoffw17mP48lcgxjqj6lqeZxeuCICzYOvP2QcopmedQSIlOI36ABIGWsrCbfLQYH8znUHpCz7uxjfGMTHSUUNTakQHgm7hN5X8NNnhepS0cn/lnYNNdeK0d57BTur0IN2R8KapSKWhDINNznZFW2osbIhIrrspl/+NBDX99P6M7+d4RFRoUj1h9zxq+ES2Ih/wFdGXwvxY0K/NJwZuZyaT2x9oryX581aEcdA+e+Mo8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XLE8NtYm4NLVgl055MqbNJouH65MXjU2mTWEElAMvCY=;
+ b=r5HDMqiFhZP1tFNxrjdMv8q7KRPsSVPLuknSZ0bf6/QabKr7e5iQwbJTcC77m4VteEKXSKFrJIKs5O10guDLlq0cQiNFpajejYTBk3OJfX5V4l1Qsa/JHJLSxpWZpqFWL02sCEGrmj9dzb/soiIWUaE3bo8AjC6tWpBueVYP/t7N1o9VkFsO9yTQVWbfQHS+NhTIfaU6DQt4lc1JbORbErj6mLgcZMyFKPLdy45zGKwaLYOu2NtapjWefOHvJGgGiLgRxBlFEo6wXsY8slFUwfy1yeJth/gwGgMoyNMmQ6lsbgJ4hc4tkII61xdXDXaPkdP7kknrv5d4adh/1BrsXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XLE8NtYm4NLVgl055MqbNJouH65MXjU2mTWEElAMvCY=;
+ b=z5Lt8yB8lKe7q8YdYF3PQzM4rNNxjUv+Kj8U9Ghj+7cZWoTB9BnnPyGhP25QYf4ROeGn8VTEjfh9YVoNfJCdlXHkzQxKAUWW7rdC08R2vns/hVxxsbw4Hqx9V3/epkuyxizXYTRUNPPF5GqijpYxo4Hie7hfB41Hb575xVAEtGI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SJ0PR12MB6688.namprd12.prod.outlook.com (2603:10b6:a03:47d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.26; Wed, 9 Jul
+ 2025 14:35:42 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%3]) with mapi id 15.20.8901.024; Wed, 9 Jul 2025
+ 14:35:42 +0000
+Message-ID: <24c245be-1ae6-4931-a0ac-375cae18e937@amd.com>
+Date: Wed, 9 Jul 2025 10:35:40 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH AUTOSEL 6.15 6/8] PM: Restrict swap use to later in the
+ suspend sequence
+To: Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>, patches@lists.linux.dev,
+ stable@vger.kernel.org, Nat Wittstock <nat@fardog.io>,
+ Lucian Langa <lucilanga@7pot.org>,
+ "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, rafael@kernel.org,
+ len.brown@intel.com, linux-pm@vger.kernel.org, kexec@lists.infradead.org
+References: <20250708000215.793090-1-sashal@kernel.org>
+ <20250708000215.793090-6-sashal@kernel.org>
+ <87ms9esclp.fsf@email.froward.int.ebiederm.org> <aG2AcbhWmFwaHT6C@lappy>
+ <87tt3mqrtg.fsf@email.froward.int.ebiederm.org> <aG2bAMGrDDSvOhbl@lappy>
+ <aG4AilDpnqrqHXaS@duo.ucw.cz>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <aG4AilDpnqrqHXaS@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0487.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10c::14) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12700973.O9o76ZdvQC@rjwysocki.net> <CAPDyKFpGH=ZUyQ0wbkEKVLxknm59hDX6DNm9hXpuqzHCpoe-KQ@mail.gmail.com>
- <CAJZ5v0how7VXTjuxtd533zNeqKwCqnJDVVKK=Vpww_HbQkwxKw@mail.gmail.com> <CAJZ5v0isuV-HDyGCrLeFp0WFcCQoQpi9dMEbJnWrsOdvk4Bf1A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0isuV-HDyGCrLeFp0WFcCQoQpi9dMEbJnWrsOdvk4Bf1A@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 9 Jul 2025 15:24:49 +0200
-X-Gm-Features: Ac12FXwgWJz7GdJwpPBaSqY2rwe7dkrPOkMHFV_ripKLsw4BjkwqjZLt2vHONYE
-Message-ID: <CAPDyKFooD2z9J0vYC0GzcoyQBsEv1PEM4tG9RiQktDGt94sAPA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Take active children into account in pm_runtime_get_if_in_use()
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Alex Elder <elder@linaro.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ0PR12MB6688:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8854723-51c6-4c4d-1154-08ddbef5e19c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WXdFSzZacGdaUEtnWGlDNXQ4T0pFMkJXTERLSGpWeWw2OEtHUWFsSW9YNnJ5?=
+ =?utf-8?B?WGp2dVFtM2xjaGY0bGNxV3hIUi9nWXArZFUyREluRVk0RTZsNUZ0Y0VSVU5o?=
+ =?utf-8?B?VnRpVTJlZUNvRVcvYkV2Z29SZitqaHRPUU80eWp5WGhTNkI2b1ZpWm9NN0lT?=
+ =?utf-8?B?K0JmejgwanRKQm5oWWpySnhRZ2JwNjJ3V0xmSXRmNS9NOWZ1Nkx0MXFmQ3NG?=
+ =?utf-8?B?NnVGUWdOVlpwenNSUllURFkzbnFNRXUzN0dDd2NXMUZRdlVDTVRZODFiNHZa?=
+ =?utf-8?B?MCtscUthdXNscWNFV1dGTlM5YVZVUjZ1QklnMFBENk1QZ2F6cG5pbVdJUis3?=
+ =?utf-8?B?REpkSmF5RWQ3MnBqUW5ZV2cxQWlUTDFjY09tMkhmZEVPOGtJbmM5cERmcG5V?=
+ =?utf-8?B?NEtFcWt1bEtTalMwOUFpQklIY291NVQ0RjVIRUlrMnA3ZWtpTmdSVjJIcEpO?=
+ =?utf-8?B?bTVpVlYxOVloSWphVlJBK0dsLzk1ZFlHTUFOOU9zTDVSTTFiR09WaWJXRWNC?=
+ =?utf-8?B?dWp3Mm1rcmNBR3NBUlBsUnZQWnVrNXMwOGFzUk1ORmo4L3ZhV3U5cytQRmhU?=
+ =?utf-8?B?M1QxRFVndmU4bFJmZy9mS3lkeFZsMWFWSTUzbHEzcmNCQ1pKMVVNRlJSdUdU?=
+ =?utf-8?B?M01PS0ZwN1ZDei9JamMrZVJrdkhSZmo3NmVvdkJneGFla0xlWWQ5WWdqd2pD?=
+ =?utf-8?B?ZTdiUFVhWWk0YTRJRUZubi9Ua3NBMXdSb0lhVW5CcHpzMW9GeFRyTlhhU3FJ?=
+ =?utf-8?B?N3BrNmJhKy9qU3ExeldyUG1MR05ia3dwUHlVVDNlZlZOM3ZqSUtFMlV0QWhM?=
+ =?utf-8?B?NUkrejBoM25mWFFGemRxaWV3VnJxU1ozbG12R2d1eHJ2akhTd3IxUTZyNTdw?=
+ =?utf-8?B?MFJINnlrZkVWbXpaU3VpaXJNS3VRWkV2dmJGWGNKSHNDdkVZWVVWTEFVODR3?=
+ =?utf-8?B?YkgyK01Jb0NxUjZpNGdudGp5cjBWNlk5QXNvZXBMVXZxamdNUml6bFZmKzFT?=
+ =?utf-8?B?T2NtMkswNGVOTXAwU2J0dWVjeXBCeWU3WmIxMXV4aFFhYUJXZGFidlF5R0xM?=
+ =?utf-8?B?T1UybXhUc3pDdE4wQnNDL3ZLMFpaaW5OZjFLSWN0cW14K2dHeSticlpyYnNw?=
+ =?utf-8?B?K3lIYW9hc29BaWRuQlpPdTYvK0t6b21uSkJkKzZubEFILzQ5K25vQTdzRDR5?=
+ =?utf-8?B?WHgzSmJxaTV5aDFWQTg2ZjRuek0zZ0lEZThRby83SCtmUUpJUW1hWDJFU0VY?=
+ =?utf-8?B?WFpYRHRQdlkvUDBJWU9EZ1hueXRJM0lqT2t1alhpanZFWjZHOTY4dyt3Qmhl?=
+ =?utf-8?B?cE5sem1OK0Z1UGJOd3M2N0tLMnlzVUNGS2hPL2JQc2RuRENvanJUWVAxUmxk?=
+ =?utf-8?B?VkMzeXF4b0xzaW40RS9UNHhXdDlUZ2RweGZlL1N1OFgrY29qQkJmdHpLRUlk?=
+ =?utf-8?B?OEtWajNWby96WUxQSzZDbTNCdG1kNUlvSE0rdTVmOG1hdHVaaFEvWG9QTHhy?=
+ =?utf-8?B?RWFHLzF1Qk5LZUE1UG8xTzZtTlg1YmxPRkQ1ZncxVTQ3WkIwaHdWbkdVUDVj?=
+ =?utf-8?B?SkVpY1dQRHR2elpWd1ZrUVJKV3pZelh1MVh3NmpTVEFYZHAwckYzd29STFZU?=
+ =?utf-8?B?emNrZTlraGM0RjJaWktxQ2xxZEcyTjhWbnZraDF0VFpvYUlCVGUxNHVLRklT?=
+ =?utf-8?B?enE5b3Qzbzc1ckJ0dW93M05NekhmZWdrMUpoMXRWN3pva3Q1QnFQMFIzanZk?=
+ =?utf-8?B?bXorSXBUa0NpQnJHbnp1aGFUNEhRd1BsejY2RE5sNVVOWUk5cEFmcVJGSnZt?=
+ =?utf-8?B?d1ptWE91TmFSby9lc2RxUTlqRzFiQVhlZHFVcVN6QU54WGlFWU1oTVh2WmZW?=
+ =?utf-8?B?QlA0QnhaNVMxc3NncHpoMW9CUTVVY21FeVJuZjE1NGI5ckJETzNBR0F0VVBH?=
+ =?utf-8?Q?4MnhvGHG1To=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N3NBbXJWaU5kbG1acGNiTWc4Z2lCSzFITmlncnlaVFY1amdZRGs0OUZYRy9Z?=
+ =?utf-8?B?VmNnaUM5akZVck1OVEIzMHpiMy9tVVoyb1JtZloyc24rMUpieVdsUURYUVZ3?=
+ =?utf-8?B?QmhRSFR1ZllLRWRDdWZOZHJzaEtSQmVTd1RYUkkwMmtteFludWI0dFVLVTN3?=
+ =?utf-8?B?OTlMaE5tcDNVNkYzSm5HTVpTVU9JN1hNL0s5blg0ZFk3QmVUbzJDQXErTE95?=
+ =?utf-8?B?UHlXRWVkalZaL2pZZnVvVDNXb29KUkJFQi9NZVpMUFdocjZJK2NGRnZxY1Ro?=
+ =?utf-8?B?YUhmeU90b0ZQNS9RUmFGMU96eWVjUjJFUXFONko4SXBnd0NDLzdBaHhtazAw?=
+ =?utf-8?B?aTdIckJZNWl1alJYaEU5T0JoVWpsazNSQUZmN0Rwb2psbG1NYmc0MTFYTCtx?=
+ =?utf-8?B?VHRXTDY4NU95MyszV1JTeTEzUFNVKzBxQ21NK2swa2dkVVUySS9VTEpWenRS?=
+ =?utf-8?B?RURXdWZVeUZVbGNuV2J2NXBhd3lZRm1rbFBWK1ZMNlRLQ3IrQXFXMkNPc3RY?=
+ =?utf-8?B?cUg4ZHZxUFk0UFBLcTlwTFd6QzA2bW5La3pKYUN5NFBrdHRJaElhM04wR29V?=
+ =?utf-8?B?UFJUK3pnemtYZFNZYWlvR3FNS2orWGZQVlFTYUNrNW8rMmdleU92VmNyT0JH?=
+ =?utf-8?B?cko3QnFTZldNUDJHT0t1cTM2eGJiM3gyYitaTVBiN1NYeDNDS0tiT0llTlAv?=
+ =?utf-8?B?aFFjZmE5K3pXdDM0RDU1dkcxdlVXYlZpbWhORlZVdzRENnZYbTRvNDVOQ0Zt?=
+ =?utf-8?B?RklBMjFqcDBlNXNpRzV5enVjRzA1cVRrajUvbnpsUytTSm51cFZjaEt5YXlI?=
+ =?utf-8?B?SmZWMmZJbzhuN2wrQ0thRTFWMlNVeFBWVC9YR3MwTFRTalFxQ0tYaXQ0RGQ5?=
+ =?utf-8?B?VGtoakhnSmRzVGJwTkltWWVaaERnU3kzamQ4VmJvcHQ0Z1FWWWgyWStBRXhz?=
+ =?utf-8?B?WURBUXFoTG03R3BaZXhqZjRnVmxSOFVXUjZuUzltVnR6RkxsK1ZtMDBFMS9I?=
+ =?utf-8?B?RnNZdEpzU0xYb0lGWmlRS25PZFcyb3JaRzlLMURxajhha0U1UjgxZEd2OXJp?=
+ =?utf-8?B?T3lCcmhFMkl4c2l1ZzVhT1o1T1N5ZHdzd3lLQklCVXF3OXZiT2ZrbWJZa3Zt?=
+ =?utf-8?B?T3huaUdhcWFKRmNFaDBwRkVONE1xblMvSmx1emROY0JKRFBjUm5DcTFLdzEv?=
+ =?utf-8?B?d0c4R0MvV2ZWT2QvNlB5bzM0MTE1cFRQQnI2Zk5XOERja3o3OVZrOVRqcWw1?=
+ =?utf-8?B?bXNLWkw1aHBmUzBmaTRsWGF0RXUxNnpQSHVnRENNTUhEaDhoQkloamRlc0VZ?=
+ =?utf-8?B?WjRRQnVKVEpadk5UUTRLUEJSMmlFM1MwaUFmSkhkK3lzSWYwZU1HZ1ZXVTNE?=
+ =?utf-8?B?bzR0WXcxYWxtUXEzazVkZFMxR1FKZ1BJYUxvWXR3enlXY1ptY0V1UmdwWm1m?=
+ =?utf-8?B?by9xRGxNN0xyYW5BM3VnTURBVDJ2UmpSU2R3bFRwTkpkVlVLYlV6ME1zeCtO?=
+ =?utf-8?B?TmxGa1pHbjJ6bWl2aGVmVmVGUlk3d3RFR2JBb1NXVFRNdERBZUdpZkoxdzNh?=
+ =?utf-8?B?c1dlZmhRakJaeGlNbk03Q3YybDR3OVEyRmFBSE92M2tFOXA3enRENitsWEpv?=
+ =?utf-8?B?MkVTNzEzNTlVOElBeEhhYVI2eVlJQ1lPLytGRm5lUjVNZW1OVGJnb3hUWXVN?=
+ =?utf-8?B?VVZJWkhjcFdGald5Qng3VE9CcU5zbUxPOHNJNzdnOTVDQkFLaDJqNlJ3c0lr?=
+ =?utf-8?B?Zi9rdVIvZkRXck01RVNFZ09KVE9vRFgzcVVrdndYS3k1RXJvKzZ2KzlOck9O?=
+ =?utf-8?B?amwydURKR2RONHRqdTBSbVg4eXZtbzFuOU43eEJCa0VpUCtNR0dpajA5UmVn?=
+ =?utf-8?B?WHpMNEpEeE8vdjNqVVNKU3YwYlBNWm5xZ2xJbXdRQytlejFSa0MzeEg1OFFY?=
+ =?utf-8?B?MWNCbjB3SUNObGJVR0NVcnRVd2xNQnV3YWtyd1hXRGRyc1JmNTFYMGNWUGdZ?=
+ =?utf-8?B?YkxuTDEzMi9RVUkrUFFGUkI2ZXpoTUxJQzZhaUI5MjVOU1lBaGpJMjA5K2ht?=
+ =?utf-8?B?dFdzSDYwLzNZMkRHbGh6TWg2S1VhQ0hHSjAvbVhvbEoxSjlIaXpuVmk0VjJE?=
+ =?utf-8?Q?d+fRURme9/AO4Jgclngmbjvcd?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8854723-51c6-4c4d-1154-08ddbef5e19c
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2025 14:35:41.9202
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ndjo6isAEOa51ifNZgiPk0p0SgUP3ulkmoCGs65vKfEUZAxvlcvbljbShxta6Q7h/uSPziwYfgiyTkVh4lNPtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6688
 
-On Wed, 9 Jul 2025 at 14:48, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Jul 9, 2025 at 2:06=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
-> >
-> > On Wed, Jul 9, 2025 at 1:47=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
-> > >
-> > > On Wed, 9 Jul 2025 at 12:41, Rafael J. Wysocki <rjw@rjwysocki.net> wr=
-ote:
-> > > >
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > For all practical purposes, there is no difference between the situ=
-ation
-> > > > in which a given device is not ignoring children and its active chi=
-ld
-> > > > count is nonzero and the situation in which its runtime PM usage co=
-unter
-> > > > is nonzero.  However, pm_runtime_get_if_in_use() will only incremen=
-t the
-> > > > device's usage counter and return 1 in the latter case.
-> > > >
-> > > > For consistency, make it do so in the former case either by adjusti=
-ng
-> > > > pm_runtime_get_conditional() and update the related kerneldoc comme=
-nts
-> > > > accordingly.
-> > > >
-> > > > Fixes: c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_activ=
-e() usage")
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >  drivers/base/power/runtime.c |   27 ++++++++++++++++++---------
-> > > >  1 file changed, 18 insertions(+), 9 deletions(-)
-> > > >
-> > > > --- a/drivers/base/power/runtime.c
-> > > > +++ b/drivers/base/power/runtime.c
-> > > > @@ -1203,10 +1203,12 @@
-> > > >   *
-> > > >   * Return -EINVAL if runtime PM is disabled for @dev.
-> > > >   *
-> > > > - * Otherwise, if the runtime PM status of @dev is %RPM_ACTIVE and =
-either
-> > > > - * @ign_usage_count is %true or the runtime PM usage counter of @d=
-ev is not
-> > > > - * zero, increment the usage counter of @dev and return 1. Otherwi=
-se, return 0
-> > > > - * without changing the usage counter.
-> > > > + * Otherwise, if its runtime PM status is %RPM_ACTIVE and (1) @ign=
-_usage_count
-> > > > + * is set, or (2) @dev is not ignoring children and its active chi=
-ld count is
-> > > > + * nonero, or (3) the runtime PM usage counter of @dev is not zero=
-, increment
-> > > > + * the usage counter of @dev and return 1.
-> > > > + *
-> > > > + * Otherwise, return 0 without changing the usage counter.
-> > > >   *
-> > > >   * If @ign_usage_count is %true, this function can be used to prev=
-ent suspending
-> > > >   * the device when its runtime PM status is %RPM_ACTIVE.
-> > > > @@ -1228,7 +1230,8 @@
-> > > >                 retval =3D -EINVAL;
-> > > >         } else if (dev->power.runtime_status !=3D RPM_ACTIVE) {
-> > > >                 retval =3D 0;
-> > > > -       } else if (ign_usage_count) {
-> > > > +       } else if (ign_usage_count || (!dev->power.ignore_children =
-&&
-> > > > +                  atomic_read(&dev->power.child_count) > 0)) {
-> > >
-> > > I am not sure I understand why this is needed, sorry.
-> > >
-> > > If someone and somehow we have "dev->power.runtime_status =3D=3D
-> > > RPM_ACTIVE", then the dev's parents/childrens and suppliers/consumers
-> > > should have been reference counted correctly already.
-> >
-> > Sure.
-> >
-> > > Otherwise it should not have been possible to set the runtime_status =
-to RPM_ACTIVE
-> > > in the first place, right?
-> >
-> > Right.
-> >
-> > runtime_status must be RPM_ACTIVE, but pm_runtime_get_if_in_use() only
-> > wants to bump it up if the device is in use in addition to that.
->
-> I mean pm_runtime_get_if_in_use() only wants to bump up the device's
-> usage counter if it is in use already.
->
-> > So far it's been checking the usage counter only though.
->
-> And the above is correct.
+On 7/9/2025 1:39 AM, Pavel Machek wrote:
+> 
+>> In this instance I honestly haven't read the LLM explanation. I agree
+>> with you that the explanation is flawed, but the patch clearly fixes a
+>> problem:
+>>
+>> 	"On AMD dGPUs this can lead to failed suspends under memory
+>> 	pressure situations as all VRAM must be evicted to system memory
+>> 	or swap."
+>>
+>> So it was included in the AUTOSEL patchset.
+> 
+> Is "may fix a problem" the only criteria for -stable inclusion? You
+> have been acting as if so. Please update the rules, if so.
 
-Aha, I understand your point now.
+I would say that it most definitely does fix a problem.  There are 
+multiple testers who have confirmed it.
 
-Comparing how a runtime resume of consumer-device-link works (it bumps
-the provider's usage count), your change makes perfect sense as it
-aligns the behaviour for child devices.
+But as it's rightfully pointed out the environment that drivers have 
+during the initial pmops callbacks is different (swap is still available).
 
-[...]
+I don't expect regressions from this; but wider testing is the only way 
+that we will find out.  Either we find out in 6.15.y or we find out in 
+6.16.y.  Either way if there are regressions we either revert or fix them.
 
-That said, please add:
+> 
+>>> I assume going forward that AUTOSEL will not consider any patches
+>>> involving the core kernel and the user/kernel ABI going forward.  The
+>>> areas I have been involved with over the years, and for which my review
+>>> might be interesting.
+>>
+>> The filter is based on authorship and SoBs. Individual maintainers of a
+>> subsystem can elect to have their entire subsystem added to the ignore
+>> list.
+> 
+> Then the filter is misdesigned.
+> 
+> BR,
+> 								Pavel
+> 
+> 
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
 
