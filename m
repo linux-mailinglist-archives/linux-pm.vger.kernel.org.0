@@ -1,186 +1,205 @@
-Return-Path: <linux-pm+bounces-30488-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30489-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D8B0AFED36
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 17:10:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74EE0AFEE01
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 17:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B41EF7B766F
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 15:08:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EB921C41B64
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 15:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6FD2E5B09;
-	Wed,  9 Jul 2025 15:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35A62E9728;
+	Wed,  9 Jul 2025 15:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWDilB6I"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E84lmFSn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D72F28D8EF;
-	Wed,  9 Jul 2025 15:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1C92E613F
+	for <linux-pm@vger.kernel.org>; Wed,  9 Jul 2025 15:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752073808; cv=none; b=Ulg61Dvgwbux1ZrJ8R1Stp1NYbrHMJ9FN8Orh7gOGJkBi4482medeO2LGpCmsSRDFiGWEJy9LiOOfYwcus/An6HZo3yP/hFs5p52P31oNM0QEWtJKyNQnXfEKDte7XyZSteDox030wjzQmEj84A5WphdyZFIfRqLryB3V5DKybM=
+	t=1752076069; cv=none; b=dO//46FDQBdccKKYRwtxPEtU5pms5HxP7JkBiz/D+/UniZ8h+TYeKDTiDWJWN67bPUCedLj0go0VbgVvFvBP+FpGf56JWJRcdF6PJqQEuZIvghGYTOPCWrv2gmwmtwM4YZGBwrzTU3JLoIfwNQUwg4TyRmK+YBHgMBZ7j4tv6jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752073808; c=relaxed/simple;
-	bh=yKG/nnY2WnyjUIASFqiowuZ9/aWHqNRR6qTW0XFu1wI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXoktTFN1AIm3w1X23Jrnbp1ibm0fyx6DO2Kdui2ozmAYW6u5qszTQRDxjM6jY+Hvrlfxd7/PIimJ86nCBNnmr/jRBy6qGb1OcTlgGrFvaK0iH4cMMFxrX3wvY5IJFzURYppXr/E4pSzmLD8gYQTzKk7dC9NHN0rYd5Eeyyn4tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RWDilB6I; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-451d3f72391so58876095e9.3;
-        Wed, 09 Jul 2025 08:10:04 -0700 (PDT)
+	s=arc-20240116; t=1752076069; c=relaxed/simple;
+	bh=h6tMRQRXn67KOocJPl7gL2XSOaaSQRap9WsxQwDoJLY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lySZt5k5Rb5E1bDshpgHw3pfvJrRkWwwMyMwPGgxz4KhOn3rJulwgSltcAQyQbGgnHuVRELQXjF1Tt4eASW+ecIVm+6TzyFgwkDzKKJUobahKHBixR+rsAu2y0xRTkEqpq14hhFlTwDigsq7L4a4pH403HzDGScQgdFIhomXC/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=E84lmFSn; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso64384f8f.2
+        for <linux-pm@vger.kernel.org>; Wed, 09 Jul 2025 08:47:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752073803; x=1752678603; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e6XI6lEJsP+gVFIc/qsO9HaCG0IVBwc4p2KoW83c4fA=;
-        b=RWDilB6I3BqmMqGqFJ5CdlzXK2r1oMtD5x7VXYzeOQ5uo40A9tc8908ZweIerzh54J
-         5LUK3CETXU4QYi9AOY90sK+Tjw5zPMbfcXVeagEYLgEt4I1jNW1Y08Gh/RqvtxLS5Qwy
-         QdmSCmmjErWAETuIAtYJLiCrjRU7pDyr636oPRrOM7ldgyjuTmqxZJN6AYIhNLfc6LBo
-         ucJpAmRa5xkG8hInq6gYI8PlI2eGXhYrdG1/4rA4UBMIIH11LpKwM2vXMptUaV1w70Iz
-         SC6P5DMo21aLEE89vI33IjNoPF2GCxmTMD86/IyLFq7ujY/deuVg/Ek4L34OTfKl5Luc
-         zJYw==
+        d=linaro.org; s=google; t=1752076066; x=1752680866; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4M7LELCI1cPFBstNSyN002g4c3zY7P9EeDdL35tmOwI=;
+        b=E84lmFSnmHBpUWKcnOp7gkz1a+J7IIz0uyU+ZaSkNK7sou1YggHzcpemdEQfGqj4eG
+         ablawCUq399SHmSFlk+4gKeBgRLU8Twh6l6U7afVlnsjWuRWy9/VgYy8/DjvCX6qrgar
+         9TFV8X9Mymjvv3QZEhmgRqUoy7ZTNzznAvwTu3e5jyRsQEpgcDTUganHsRmbyg5D9Zwo
+         AR3okqhFm/PscynOoGOlIjPerkkECyHqpfPLk4Rc4TOlyaxhdwsCRT+0TH5v2Prq7qRy
+         6slmu//kY4YS0Mfa6/qjkcaOD6WlUsQgHDfrmg/CydYbB3LE2Oy7JP4z9coJpoaFkSbN
+         m6Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752073803; x=1752678603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e6XI6lEJsP+gVFIc/qsO9HaCG0IVBwc4p2KoW83c4fA=;
-        b=vTtoAinFVoOv9mAd+I562pV5EKHhxAwWFNvR9jx7J5/u5djG7OJ2pd/U0s2oWo6StC
-         xg1uSNdEYxG461mtHBRTg2n1/nFEKqEY3+WMUc7kLkvD01WTdAQXoWMkZs2C9Dx8cQD5
-         1wPCevx0xklsIaUKSP3sWDpl0foDQSDlLMaJY1+83/cqX5IliL5apuAf99lMY52T1u90
-         wQUOOlIU0t5eMadCu1icXCdaBTOiEk/oOPyCZ13GWpeNS4Ph0PZQF22Mk3AGOkKQsZ56
-         xx6Ndh9vW43KatD+gO1kynqsaflrLSFJEJZbWdjPenrbcHG9Q5VmAB0Ka5EupF+AEoGt
-         8Mxw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0+EXF/n2gZ7N7skb8mUfdkx7Fv+jKumi4utc59EdHQI5FbduyE5BVbgirLMX8Mu/wrUtbyyAQ3KA=@vger.kernel.org, AJvYcCUxiKxB5qVtRTG2cg/VMjZu7hFnqdFfCIqN9+EjkcraPird6e2qDnpQnZJT+Ur6LCOAoh0m16i9J+A=@vger.kernel.org, AJvYcCXQbeZL1D4akrXxvm1WP4OdfYpI/aQ6GUS+1TsLVCJi6DPqYWWOTc1gSRo+LLP19iVD4vG6LP9yznh9tNrI@vger.kernel.org, AJvYcCXRzANFMazuYlW/yB6PT9o68fLZeQmp7oYo0uFg7v7x92I3HKIg92zIyurnbFRcgDj7fuLHt2QChElynog=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuE9Q+THUpvtNSkCq25nlQKEO2uUIm27btvgWwS7bfFrFRra/b
-	Jff2ydEvbZTQA15br0tGOSR8iNi0PCIqLHeb/DxcBAjCMoRgjOAtQJKk
-X-Gm-Gg: ASbGnct8C107jen7qUueRm+Q/JkC2Bg+saFNUm+qouuHfZ8MjbZMLfnovcdnTdEI/Uc
-	TZOs184NrgcvVTsAKZ3IcZrq4i2LpZAkk0GJYW+qd93unZrCpBVRyqhIv0BGb6WpVwnA69wFSb8
-	fr4Ry1S26KV9OYBTVKTx/YfE5Dhc6x9OrL1Vlg4nHVnztaLNvcMG5Xo7dIG96h7SgxOrKPSJmqw
-	kWMc1el8faE3j+1tJeWIk0iWWqtY/psSSaWMyBJodIBDu9lfGzj3jPkBkiEXiArO7lRd6Bmei5M
-	cryW3IsLAt+W/NaRwjDZ8XAInGvR8OK0W36w8Q3p5ck+6/l9Mtl7hKX3bDeay//R6AS/WLONTaE
-	erlEUb9jerVvatZfVYJPSQJ2vzBeUf3ML+NzCNd0oElM2iByN
-X-Google-Smtp-Source: AGHT+IE997K+2s8FZooKcpsspW56Ksu6KSWd7Tg55RVgboFUo07wUy6P0U0dFCLDBqevY/CBbGewmw==
-X-Received: by 2002:a05:600c:3b12:b0:454:afb1:3bcb with SMTP id 5b1f17b1804b1-454d538b8d0mr28808985e9.25.1752073803141;
-        Wed, 09 Jul 2025 08:10:03 -0700 (PDT)
-Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97376sm16425032f8f.61.2025.07.09.08.10.01
+        d=1e100.net; s=20230601; t=1752076066; x=1752680866;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4M7LELCI1cPFBstNSyN002g4c3zY7P9EeDdL35tmOwI=;
+        b=MJaPo3TMdqI9/HwoAH/uwov3BbjpWDuAxJkQ1xPR6QSW2A6OJl4xxKIra5WhAllmm3
+         PoW4ufXIYgV8Ng/psH8J6hqLdfhGfq6ZFRB9bDILqBMDnvegnrVcfyNbiAUVwPH08RYg
+         /d1f7gi38zb8FHtzuT2knJQnWGjp2BUEEhbFxyuYxuAsO6m7PbS9UaJo3EImG/xCBApc
+         3s+aDzPKTa9R8DjXp9Cebc3Z7gzkxasjKv7Sy89lbV8IQuli/6+4KahJWbt6AJ19RDoW
+         gr5I107U9q7Y3jOAzqAAv4KXE5F2lefBIsAK8s9Qf/qSd3ceUV90gT8rqbVlmDSVnHK3
+         Y8Ng==
+X-Gm-Message-State: AOJu0YzuWiE+36/eSH0HTCoXEEMPdfeLrQyGU28VuoDuXmemjCocgTnj
+	BvREKa0QrJDoaYCRhTmm4BLgrbbpSPdD2ISwY+NdopvE6NInzpiy/NMUKWeIRo1RPJc=
+X-Gm-Gg: ASbGncvDUf6X0KWR50uZK/5BNLmY+Eie2o3Zk6lHclnJzi8vRAnzG8zZn0AooaJdMfm
+	z/AoJJNzYz+DcMF1fDjyxqr1ZhQrakGp6wcmgMLQufSyzvIMf1VA1YNvkP32x/MKbKgLKcEdhQt
+	8AjngvVPfcY3a1+jcMJfZTTvWUbKcxst+kA8pAl0yCQZBmXtS3gesx+DghTbfp29xtzxJgtGEX5
+	ymJlQShHQNQFV8nz+HaQnYwIip/1BmXa72/3MKpFCNnvzxj0fnn30tusWVGYTNVeWVg32kotcan
+	GHGwRoUoly/MgPsGmvuUrE81cQ1FIeaTawb41O72rgrCITPJBIepcbiv6o+XN8lXSIc/seP2kIo
+	IPK4XNwF7pyqx
+X-Google-Smtp-Source: AGHT+IFtb3wKvcyNXV4wx2vLvybT75yPG2OAwmNgwliyjrb9KJP4FNMYX9tqHYbI3ZRouro6vvXlVw==
+X-Received: by 2002:a05:6000:2206:b0:3a5:42:b17b with SMTP id ffacd0b85a97d-3b5e452a289mr2446888f8f.29.1752076065919;
+        Wed, 09 Jul 2025 08:47:45 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97732sm16783647f8f.59.2025.07.09.08.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 08:10:01 -0700 (PDT)
-Date: Wed, 9 Jul 2025 17:10:00 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Svyatoslav Ryhel <clamor95@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Peter De Schrijver <pdeschrijver@nvidia.com>, 
-	Prashant Gaikwad <pgaikwad@nvidia.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] drivers: clk: tegra: add DFLL support for Tegra 4
-Message-ID: <hmyn24xd7ov752c5gyrdsocdp22feyole4cnerotnknygv7ujj@oowsdx3z4tmt>
-References: <20250321095556.91425-1-clamor95@gmail.com>
- <20250321095556.91425-3-clamor95@gmail.com>
- <aef4574b-8167-4af3-a29c-8c962b396496@kernel.org>
- <g7kegtso3opafpwocvibhm3rym35oikxoyq2wmphqy3wjenzpa@m7extntwahau>
- <ea77c51d-6fad-4bd1-a608-987642f77aba@kernel.org>
+        Wed, 09 Jul 2025 08:47:45 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: rafael@kernel.org,
+	sudeep.holla@arm.com,
+	ulf.hansson@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-rt-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Raghavendra Kakarla <quic_rkakarla@quicinc.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-rt-devel@lists.linux.dev (open list:Real-time Linux (PREEMPT_RT))
+Subject: [PATCH] cpuidle: psci: Fix cpuhotplug routine with PREEMPT_RT=y
+Date: Wed,  9 Jul 2025 17:47:28 +0200
+Message-ID: <20250709154728.733920-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c4aeyb5sspca7m64"
-Content-Disposition: inline
-In-Reply-To: <ea77c51d-6fad-4bd1-a608-987642f77aba@kernel.org>
+Content-Transfer-Encoding: 8bit
 
+Currently cpu hotplug with the PREEMPT_RT option set in the kernel is
+not supported because the underlying generic power domain functions
+used in the cpu hotplug callbacks are incompatible from a lock point
+of view. This situation prevents the suspend to idle to reach the
+deepest idle state for the "cluster" as identified in the
+undermentioned commit.
 
---c4aeyb5sspca7m64
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 2/3] drivers: clk: tegra: add DFLL support for Tegra 4
-MIME-Version: 1.0
+Use the compatible ones when PREEMPT_RT is enabled and remove the
+boolean disabling the hotplug callbacks with this option.
 
-On Wed, Jun 18, 2025 at 11:13:37AM +0200, Krzysztof Kozlowski wrote:
-> On 10/06/2025 13:07, Thierry Reding wrote:
-> >>
-> >>> @@ -0,0 +1,13 @@
-> >>> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-> >>> +/*
-> >>> + * This header provides Tegra114-specific constants for binding
-> >>> + * nvidia,tegra114-car.
-> >>> + */
-> >>> +
-> >>> +#ifndef _DT_BINDINGS_RESET_TEGRA114_CAR_H
-> >>> +#define _DT_BINDINGS_RESET_TEGRA114_CAR_H
-> >>> +
-> >>> +#define TEGRA114_RESET(x)		(5 * 32 + (x))
-> >>
-> >>
-> >> Does not look like a binding, but some sort of register. Binding IDs
-> >> start from 0 (or 1) and are incremented by 1.
-> >=20
-> > I'll try and clear up some of the confusion around this. The way that
-> > resets are handled on these Tegra devices is that there is a set of
-> > peripheral clocks & resets which are paired up. This is because they
-> > are laid out in banks within the CAR (clock and reset) controller. In
-> > most cases we're referring to those resets, so you'll often see a clock
-> > ID used in conjection with the same reset ID for a given IP block.
-> >=20
-> > In addition to those peripheral resets, there are a number of extra
-> > resets that don't have a corresponding clock and which are exposed in
-> > registers outside of the peripheral banks, but still part of the CAR.
-> > To support those "special" registers, the TEGRA*_RESET() is used to
-> > denote resets outside of the regular peripheral resets. Essentially it
-> > defines the offset within the CAR at which special resets start. In the
-> > above case, Tegra114 has 5 banks with 32 peripheral resets each. The
-> > first special reset, TEGRA114_RESET(0), therefore gets ID 5 * 32 + 0.
-> >=20
-> > So to summarize: We cannot start enumerating these at 0 because that
-> > would fall into the range of peripheral reset IDs.
->=20
-> So these are hardware values, not bindings. Drop the header or move it
-> outside of bindings like other headers for hardware constants.
+With this change the platform can reach the deepest idle state
+allowing at suspend time to consume less power.
 
-5 banks and 32 peripheral resets per bank are properties of the
-hardware, yes. However, the notion of starting the enumeration of the
-extra resets after those 160 resets is a binding. There's no concept
-in the chip that would tie the DFLL reset to index 160.
+Tested-on Lenovo T14s with the following script:
 
-Dropping the header altogether would mean that we need to hardcode
-the value, which makes its meaning completely opaque. Besides, there are
-a bunch of header files in include/dt-bindings that define symbolic
-names for hardware values, and I'm not sure why you think these here
-would be different.
+echo 0 > /sys/devices/system/cpu/cpu3/online
+BEFORE=$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/idle_states | grep S0 | awk '{ print $3 }') ;
+rtcwake -s 1 -m mem;
+AFTER=$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/idle_states | grep S0 | awk '{ print $3 }');
+if [ $BEFORE -lt $AFTER ]; then
+    echo "Test successful"
+else
+    echo "Test failed"
+fi
+echo 1 > /sys/devices/system/cpu/cpu3/online
 
-Thierry
+Fixes: 1c4b2932bd62 ("cpuidle: psci: Enable the hierarchical topology for s2idle on PREEMPT_RT")
+Cc: Raghavendra Kakarla <quic_rkakarla@quicinc.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/cpuidle/cpuidle-psci.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
---c4aeyb5sspca7m64
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index 4e1ba35deda9..b19bc60cc627 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -45,7 +45,6 @@ struct psci_cpuidle_domain_state {
+ static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
+ static DEFINE_PER_CPU(struct psci_cpuidle_domain_state, psci_domain_state);
+ static bool psci_cpuidle_use_syscore;
+-static bool psci_cpuidle_use_cpuhp;
+ 
+ void psci_set_domain_state(struct generic_pm_domain *pd, unsigned int state_idx,
+ 			   u32 state)
+@@ -124,8 +123,12 @@ static int psci_idle_cpuhp_up(unsigned int cpu)
+ {
+ 	struct device *pd_dev = __this_cpu_read(psci_cpuidle_data.dev);
+ 
+-	if (pd_dev)
+-		pm_runtime_get_sync(pd_dev);
++	if (pd_dev) {
++		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
++			pm_runtime_get_sync(pd_dev);
++		else
++			dev_pm_genpd_resume(pd_dev);
++	}
+ 
+ 	return 0;
+ }
+@@ -135,7 +138,11 @@ static int psci_idle_cpuhp_down(unsigned int cpu)
+ 	struct device *pd_dev = __this_cpu_read(psci_cpuidle_data.dev);
+ 
+ 	if (pd_dev) {
+-		pm_runtime_put_sync(pd_dev);
++		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
++			pm_runtime_put_sync(pd_dev);
++		else
++			dev_pm_genpd_suspend(pd_dev);
++
+ 		/* Clear domain state to start fresh at next online. */
+ 		psci_clear_domain_state();
+ 	}
+@@ -196,9 +203,6 @@ static void psci_idle_init_cpuhp(void)
+ {
+ 	int err;
+ 
+-	if (!psci_cpuidle_use_cpuhp)
+-		return;
+-
+ 	err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
+ 					"cpuidle/psci:online",
+ 					psci_idle_cpuhp_up,
+@@ -259,10 +263,8 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
+ 	 * s2ram and s2idle.
+ 	 */
+ 	drv->states[state_count - 1].enter_s2idle = psci_enter_s2idle_domain_idle_state;
+-	if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
+-		psci_cpuidle_use_cpuhp = true;
+-	}
+ 
+ 	return 0;
+ }
+@@ -339,7 +341,6 @@ static void psci_cpu_deinit_idle(int cpu)
+ 
+ 	dt_idle_detach_cpu(data->dev);
+ 	psci_cpuidle_use_syscore = false;
+-	psci_cpuidle_use_cpuhp = false;
+ }
+ 
+ static int psci_idle_init_cpu(struct device *dev, int cpu)
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhuhkQACgkQ3SOs138+
-s6GEDg//ZM7tv/7+CIYmiMFpfhKO1wfHNp7FXvaSFzPgf+s5DOE6y/q/v6qyys07
-rC7loHmifF7Lkfrp1nkJxxyV8cSzgkHZfVp/jxA4vUGP1zz5aUWG5T2p6StH8iqN
-8vMrDvHMlSCzte/+fmOMFrOVuFLwpGefPkRmiVsqxcW6+vWvWbCouwmhSHlarSVO
-njey0uI7lhvIA5/pA7MsHJhQa3U9LDe/EfNAnIwqZy6OexHc8i5F9RKVFAyOX3I9
-Ux0eT2nsJD5oPUlolH6ebuqtcGSFLeukTY3EEyPP70VJ2m+gT8Ga2tZukOXlGzqJ
-REgWhMdmeeE6lZiByEBHKzEQOsigKfrqoCSfWKX5HYc5Xk8rMGzyFXs4ZZBOqJGX
-9fb4rsiwcD+c429AXvoJ2Pvporja+HdaVC1iAktTjs/6AkgUU2okoKWKoCgL1H7z
-DAr42CvSDEHEvvaVcoMws9yEm5/wFWlw8yLThtml72QiWe0hN9lu+3ThBoR1E2Xt
-Z3jKPBCyuID6PEezswWo8sJeia6Deq1ebTRzDJnYmAesHerZI7y34qPEb8SjWi8L
-21nPtwWb810flxkE0niTX54dkXjDgXoavZOtlg+Ec4iMpj2A6G18CWOj4u7JXCdN
-cBKpq+P07mTB6lcLkVVLqGAvPTCfz6H04Gcn/qb0dy3PdAhgIdw=
-=txg1
------END PGP SIGNATURE-----
-
---c4aeyb5sspca7m64--
 
