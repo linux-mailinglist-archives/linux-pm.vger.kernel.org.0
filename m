@@ -1,105 +1,102 @@
-Return-Path: <linux-pm+bounces-30432-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6116AFE238
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 10:16:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE89AFE28E
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 10:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 344B0580CBB
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 08:16:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A21A1C42AD9
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 08:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C27823B605;
-	Wed,  9 Jul 2025 08:12:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B9D2741D0;
+	Wed,  9 Jul 2025 08:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xEBgJEku"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9C1zRrn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3412749D1
-	for <linux-pm@vger.kernel.org>; Wed,  9 Jul 2025 08:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED640273D84;
+	Wed,  9 Jul 2025 08:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752048766; cv=none; b=VS7WtOifxwXyDyLSbMGSmqo7lItk8s0BFvg98eima1JRzg9cvE0J4WYvGabHcwAZEym6ApKMUZByMS/tIe++8KDn4624tD72/REYz8HN+iP6dZT65qN2uRVt6z3PHbiJJKHEi484kQ4ZPujCNtSXAySFV5L+8JaNxYW4iBMaHCA=
+	t=1752049674; cv=none; b=XoNQ1yVLia6+SFKdbeHd4vPvs9g54rqrc3pBRBwW4Y+87lZIElTQoms2iTkWwkxGo4XZjM727FM/X4R0z0to3/Q77m3/USxdPjzkNAOQHRRVJJyVkb61sSBXM0twWodnhSyBot2fAkVOyCGkHPeTTcm9RuUBm6qKzQ2FLiso+JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752048766; c=relaxed/simple;
-	bh=/zZwSYh2vU/5k39pFJ6jmYxsKtGH5f1vixahgGk51Zc=;
+	s=arc-20240116; t=1752049674; c=relaxed/simple;
+	bh=JQ1+Vm+0K0y8h9HijNHayqn7WMa42BU+nZE0V6oZ0Xw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PRJx6eKGJJE/jIVuMaw3h+shuubZNZymdNVHAVBLgF48GWbSfoWZ43VYzM9l7pGbGSYNY1aHvUFpiBz6R5P6k8JxpKrOla8JZ16BU99tq7DSloOFQpIOrNYEizLva5n8KUKiI1IrMKOOGICZ1/Hu+1xXP1kpJ0b6R3Ss5v/aj5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xEBgJEku; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-234b9dfb842so48113595ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 09 Jul 2025 01:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752048763; x=1752653563; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5RyC7LXvFVaBKX4nsxZCPQg0l7p2DFOwCn7njR7ZoLI=;
-        b=xEBgJEkuEF3a4t4DRNaa1vtbDBhD3XroghoTzlHEBI9yVTv4GCxJ+iylZfjv2LgWN3
-         +qCyFzLO1DDUWrJaHhKVPy5TA8jF14GIhxtUmmbj10uaPlhplF2XmSxlJsBw3EOMQ+Vi
-         rTl5I9f79weQ4mO5oSIUyzYaaX49LrtfNZO6mqHLi3SbicuY1lTq0+g9EAHlIH8dPtSU
-         imEcD7Xe6Hn0xYnPiUDj2PWfHoEpWt0J6E/1z68jpYIZ6b3+i8Azh/2oBXVrz2Kvkf3x
-         Ih+q5XJlYyDfJzo2a354RF7ouo6OiyfmN9ClPjRFFoKDfbgGgRRYwVRElpIo5f3c6qDi
-         A/yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752048763; x=1752653563;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5RyC7LXvFVaBKX4nsxZCPQg0l7p2DFOwCn7njR7ZoLI=;
-        b=AZUYDDCcpUe0JIZpUFy52lkJVbKvqz0T8ZWiCzitUPQWOG6ZjOocFtsWqmqPbAxlx6
-         FcQ/R1SIrolU+O5TdeikW0f+S6G9mlUAvwn+n+JPmcVH2v/roX7XmI+B81Sx8WVTQ75h
-         QnTJQbjK+jgheC+Z6JzBU75LSqo8fcLwCNmR4NNTlzqdCbsPhEXmG01jBS7ve2Kx7mZU
-         wQrNv8P9ilwSJRWvFYqLaSomZ0Ut52S5hnyuaBFwvMst+6ru1fkgMvDQsfUmMvsBb5kX
-         Tfrsohg6cOp4+svZxQd62SHsQ7U5fdAegfTOIjZv4Vmf16LfXBczXpWCpSNtzN+41oU6
-         AJUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWT3lIIXy9mDVBi1M1+fsoHJi2Jmmhghb6DDcqxP5RNDK3b9D0wundrSrIf1A6ieAOQDwdUEdxW1w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVWrWACWokbPx0lU5qszWSdsY2CrdqxE77FGuy8n3y/4KA/rSo
-	6TXNPXIAX8sYSkKltFOgJjMXq/JAScutAtlCkr0u6S7Wu/2uAGIAX1wQwXpHTnzD6ao=
-X-Gm-Gg: ASbGncshBSy4/5QRNInxf4nZd5kMVPDEnzXxmWdC3ceIaX94qhu8wcgti1llQ1Canj7
-	y9T1DH429xoHWKPesLsFj3yD3ZAZ8ondY6al+IskXAc6GUYEXrTAKgZSsUXJd6hxdEgIWiX+1zC
-	rG8+4QX+DaHASKCw1f8X9j07YnsI6maMOXmQq6/d9cts0bFjCn1GP/oXnCaTns3ZMzTUx5Molx6
-	WDwss64qJeKLiGfdpc/6nKc0wdUbcAGDzeeENAjiZCh/7Ki6XAbfUbSjBS+04rGncHYBbV0hZdx
-	db1oNtwPMTydZlErmITU7uUQCLAjFlUwjbgYwpgzMM+XswCVwsZbudz7S4xcEgJs1XrNq8QxJw=
-	=
-X-Google-Smtp-Source: AGHT+IFiRMnSHmNBvUClpBlaNrV3TBD2G3A1eITscwtWGj20grwDeZwpsDQEjZBDH9aGNpfCQqSsrw==
-X-Received: by 2002:a17:902:c412:b0:234:bca7:2920 with SMTP id d9443c01a7336-23ddb2e82a8mr32305155ad.24.1752048763584;
-        Wed, 09 Jul 2025 01:12:43 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23c8457e673sm139950205ad.174.2025.07.09.01.12.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 01:12:42 -0700 (PDT)
-Date: Wed, 9 Jul 2025 13:42:40 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: webgeek1234@gmail.com
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v6 0/3] Support building tegra124-cpufreq as a module
-Message-ID: <20250709081240.wycbxl6fc2mmkmlz@vireshk-i7>
-References: <20250707-tegra124-cpufreq-v6-0-fe69c0f9bbab@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DPeptb2QIjsyza+cszjmUVzIOJyRtIOtDs+5BHmjw7FKrbJTFET+8c4GmCHAY6i3IYxHTYfk9rQUzj9FQZxismpQlnS4Q/PX2++sYdBFHkZ1/EgeiMBGBthl7eP42F6D/RAXiMEWgt3g0LBgpS1CUtxMPqBraomZaMVTimLCffg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9C1zRrn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F19C4CEEF;
+	Wed,  9 Jul 2025 08:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752049673;
+	bh=JQ1+Vm+0K0y8h9HijNHayqn7WMa42BU+nZE0V6oZ0Xw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m9C1zRrngUo+zKh1qz9o/lGUIhk+lgLUAzXQ1p4p7yV42CMp2UU43uCVuuof5vfDM
+	 8UWVAh5dA0DKSUY1z8GCEf++dqYgg2kRO7zkXKOli2vGTngBMpk8RJQoNoAwDOXSft
+	 Fm6lPLk+svrUkXC2uBZOEZUUnj8VSpdgoxgmZmUHxkcI1ELJOHrI/zOFPUz+Fcyv7V
+	 YYJfeyB8msSWd43v4A7z3fRG7RbuuCwnaD1XcdOl5zzQIq1sBv8H7aPAx0vAS1DR8D
+	 Sk/Ox8R/6ALoIRhA8JygHl0O9vdAnAxSW/vKtm8hr2huo8222T5tAGx21WKx7n1coP
+	 2rOFj9FsmFR6A==
+Date: Wed, 9 Jul 2025 10:27:50 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com, 
+	andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, s.hauer@pengutronix.de, 
+	zhiyong.tao@mediatek.com, linux-pm@vger.kernel.org, linux-iio@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: iio: adc: Add support for MT7981
+Message-ID: <20250709-industrious-marigold-snake-5a3eb5@krzk-bin>
+References: <20250708220405.1072393-1-olek2@wp.pl>
+ <20250708220405.1072393-2-olek2@wp.pl>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250707-tegra124-cpufreq-v6-0-fe69c0f9bbab@gmail.com>
+In-Reply-To: <20250708220405.1072393-2-olek2@wp.pl>
 
-On 07-07-25, 16:17, Aaron Kling via B4 Relay wrote:
-> This adds remove and exit routines that were not previously needed when
-> this was only available builtin.
+On Wed, Jul 09, 2025 at 12:04:03AM +0200, Aleksander Jan Bajkowski wrote:
+> The temperature sensor in the MT7981 is same as in the MT7986.
+> Add compatible string for mt7981.
 > 
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
+>  .../devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml   | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Applied. Thanks.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-viresh
+
+<form letter>
+This is an automated instruction, just in case, because many review
+tags are being ignored. If you know the process, just skip it entirely
+(please do not feel offended by me posting it here - no bad intentions
+intended, no patronizing, I just want to avoid wasted efforts). If you
+do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions of patchset, under or above your Signed-off-by tag, unless
+patch changed significantly (e.g. new properties added to the DT
+bindings). Tag is "received", when provided in a message replied to you
+on the mailing list. Tools like b4 can help here ('b4 trailers -u ...').
+However, there's no need to repost patches *only* to add the tags. The
+upstream maintainer will do that for tags received on the version they
+apply.
+
+https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitting-patches.rst#L591
+</form letter>
+
+Best regards,
+Krzysztof
+
 
