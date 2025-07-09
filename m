@@ -1,122 +1,132 @@
-Return-Path: <linux-pm+bounces-30490-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D770AFEE03
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 17:48:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C26FAFEE24
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 17:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3D5E1C419B2
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 15:48:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED63F4A17FC
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 15:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965A32E9720;
-	Wed,  9 Jul 2025 15:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398BC2E9742;
+	Wed,  9 Jul 2025 15:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lfgKfkIS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qV/UEic+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76FB2E92C6;
-	Wed,  9 Jul 2025 15:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED72028FA87;
+	Wed,  9 Jul 2025 15:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752076080; cv=none; b=GqrmjbMZR5sUIyKxPcglAJDEqp48DpakDKmeBkIpA6TRJLhBGBwIhwOxsiOpFk37MeVPEelHviJxo8kcMr88d2afPgff4bPPbICiEMTl3ZuU7pLvaogOJbEvw6F2mUZHi4ZRiqHFCo/P+0GDKay/jRkON7QKuQlRAlwnI9oK2EA=
+	t=1752076427; cv=none; b=KKOrgrUtJ4TRvIJ5E7Edy9Qyd5DyKyv1aLPBMU4J58D27cPh5oClZB/8EttN3jgkrAglBbx7R3OM6rf7IWJFhOG8KjfoKvoQWF7vActUlc8T5E4MNEny7vdipJev+y6jNwDfru0QJpir7XUbm5eCdT0idtvT/dt9r9qWW6NmZw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752076080; c=relaxed/simple;
-	bh=SOheTdsRFKozeT9Fp2mcGWDzaSdmePACoK8QhwFtSik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pyrrFscxZLEkc1QpFTSw0+0P+s3saQWABukVIndKiU9+qzG++Nlrc0yjxFhOQyObB9AfvD1d6sU7GVx7Yg8NxY4HJz/KTFVbcCqmUa043pGPRmb10bGIECon0yUkqE5pykvTuX8WUCMcyD8YTt3x3koTsCGpGGfSz7JWVBbdGOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lfgKfkIS; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=Ks2OjtLyTmyTH0uiJf+Wx9c4m1e3G4yvXwX2JOxKTn0=; b=lfgKfkISo1BG4DBxjL6yDIGKUN
-	WNWbUSFg3ukA6KIC9DR7hg1cy2zM5iK8LW9f7DGpreu/u6Rz2PU7m6zoURZ7t8A/YFarYuoYfkzVA
-	izANtTATbD5a5FaCp/jSl7pca5nBRRqH0sXLnaN30spveEcr1zFhnmidRxwrZNejWdoYFXcJm+qp5
-	2NgVydLM5IVw9uWFI+y09MsYGXokEusbRqHBUIoIrqzTk6DEGbvQaEB2X1d8fBJTaw4z5yOgNnLux
-	6nHNKYs5tnwu5NzUN5K8Vei6A7ZwhKZ5MLElhwNC1B2l214FoNH6/4lWOfq8cDrxLDhbj0JC7Ycyr
-	1ofov0Zg==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uZX1V-00000004fEx-3k3o;
-	Wed, 09 Jul 2025 15:47:54 +0000
-Message-ID: <47d5f907-f2a9-4a4a-91b3-0cf6ea997678@infradead.org>
-Date: Wed, 9 Jul 2025 08:47:48 -0700
+	s=arc-20240116; t=1752076427; c=relaxed/simple;
+	bh=RY67xBd5sUO3XFR2TQQgs/qjtaenGN5JeNcwWjGIERE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IyZuIg3JRfEHcg3kOYulx3R9U2W3Nqyp/LumkTY8fiTPDOkB4gWPzFudwajHOLWXxZMqRYYCGDII+k83WvO9T7R7P1zAautC8C954ZZ2nXSzb1YkNmwETZ8gfSiGuLyvR9XB/zJX9yXDBoyRiu2q7fKP/DwBtDVWeYzgdsD/nXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qV/UEic+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D22C4CEF6;
+	Wed,  9 Jul 2025 15:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752076426;
+	bh=RY67xBd5sUO3XFR2TQQgs/qjtaenGN5JeNcwWjGIERE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qV/UEic+NBgClUfBz1cfNkW0Vs8dXgLz1LNkXdAdMku5pyLmZGxLWDxrPuEWj9qQ5
+	 G3wFAJZLcmoc6Uwi56kl1ecu/isZ4chLIGt97wnlb48XO2LYiQgAKafL41DgahbqlK
+	 vJbXyfnbcEjQFOLnSsPLactoi2xC1dtwd5rytZwZdCXrsbr2xknxOb/AwBRMtyi/wu
+	 5+/5DEdZg+rJQSehvL60c5UArOmtji26e0pGmSydFST+Bpbpc81AiyQfqkWSBNUT4a
+	 XdCpZiZ9ZAzK6taLlnMriEeH1wbbFiZ/srkU0mUv2pd7zyrQ3gVcaRXf032XINajL/
+	 KIKebC9QeAjMQ==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 2F5C85FCB4; Wed,  9 Jul 2025 23:53:44 +0800 (CST)
+From: Chen-Yu Tsai <wens@kernel.org>
+To: Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-sunxi@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/4] allwinner: a523: Add power controllers
+Date: Wed,  9 Jul 2025 23:53:39 +0800
+Message-Id: <20250709155343.3765227-1-wens@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PM: add kernel parameter to disable asynchronous
- suspend/resume
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, Jonathan Corbet
- <corbet@lwn.net>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, peter.griffin@linaro.org,
- andre.draszik@linaro.org, willmcvicker@google.com, kernel-team@android.com
-References: <20250709-pm-async-off-v3-1-cb69a6fc8d04@linaro.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250709-pm-async-off-v3-1-cb69a6fc8d04@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+
+From: Chen-Yu Tsai <wens@csie.org>
+
+Hi folks,
+
+This is v2 of my A523 power controllers series.
+
+Changes since v1:
+- Re-order compatible string entries
+- Fix name of header file to match compatible string
+- Link to v1:
+  https://lore.kernel.org/all/20250627152918.2606728-1-wens@kernel.org/
+
+This series adds the power controllers found in the Allwinner A523
+family of SoCs. There are two power controllers. One is the same type
+as those found in the D1 SoC, just with a different number of valid
+power domains. The second is (I assume) a unit based on ARM's PCK-600
+power controller. Some of the registers and values match up, but there
+are extra registers for delay controls in the PCK-600's reserved
+register range.
+
+Patch 1 adds new compatible string entries for both of these
+controllers.
+
+Patch 2 adds support for the A523 PPU to the existing D1 PPU driver.
+
+Patch 3 adds a new driver of the PCK-600 unit in the A523 SoC.
+
+Patch 4 adds device nodes for both of these controllers.
 
 
+Please have a look. The power controllers are critical for enabling more
+peripherals, such as display output, camera input, video codecs, the NPU,
+and a second DWMAC-compatible ethernet interface.
 
-On 7/9/25 5:31 AM, Tudor Ambarus wrote:
-> On some platforms, device dependencies are not properly represented by
-> device links, which can cause issues when asynchronous power management
-> is enabled. While it is possible to disable this via sysfs, doing so
-> at runtime can race with the first system suspend event.
-> 
-> This patch introduces a kernel command-line parameter, "pm_async", which
-> can be set to "off" to globally disable asynchronous suspend and resume
-> operations from early boot. It effectively provides a way to set the
-> initial value of the existing pm_async sysfs knob at boot time. This
-> offers a robust method to fall back to synchronous (sequential) operation,
-> which can stabilize platforms with problematic dependencies and also
-> serve as a useful debugging tool.
-> 
-> The default behavior remains unchanged (asynchronous enabled). To disable
-> it, boot the kernel with the "pm_async=off" parameter.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
-> Dealing with the pixel6 downstream drivers to cope with the changes from
-> https://lore.kernel.org/linux-pm/10629535.nUPlyArG6x@rjwysocki.net/.
-> 
-> Similar to what people already reported it seems pixel6 lacks proper
-> device links dependencies downstream causing i2c and spi client drivers
-> to fail to suspend. Add kernel param to disable async suspend/resume.
-> ---
-> Changes in v3:
-> - update documentation with "pm_async=" and "Format: off" (Randy)
-> - reword documentation to make it clear "on" isn't a selectable option
->   for pm_async because it's the default behavior.
-> - Link to v2: https://lore.kernel.org/r/20250708-pm-async-off-v2-1-7fada54f01c0@linaro.org
-> 
-> Changes in v2:
-> - update the documentation and the commit message to describe that the
->   "pm_async" kernel parameter provides a way to change the initial value
->   of the existing /sys/power/pm_async sysfs knob.
-> - Link to v1: https://lore.kernel.org/r/20250708-pm-async-off-v1-1-1b200cc03d9c@linaro.org
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 12 ++++++++++++
->  kernel/power/main.c                             |  9 +++++++++
->  2 files changed, 21 insertions(+)
-> 
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks
+ChenYu
 
-Thanks.
+
+Chen-Yu Tsai (4):
+  dt-bindings: power: Add A523 PPU and PCK600 power controllers
+  pmdomain: sunxi: sun20i-ppu: add A523 support
+  pmdomain: sunxi: add driver for Allwinner A523's PCK-600 power
+    controller
+  arm64: dts: allwinner: a523: Add power controller device nodes
+
+ .../power/allwinner,sun20i-d1-ppu.yaml        |   4 +-
+ .../arm64/boot/dts/allwinner/sun55i-a523.dtsi |  18 ++
+ drivers/pmdomain/sunxi/Kconfig                |   8 +
+ drivers/pmdomain/sunxi/Makefile               |   1 +
+ drivers/pmdomain/sunxi/sun20i-ppu.c           |  17 ++
+ drivers/pmdomain/sunxi/sun55i-pck600.c        | 225 ++++++++++++++++++
+ .../power/allwinner,sun55i-a523-pck-600.h     |  15 ++
+ .../power/allwinner,sun55i-a523-ppu.h         |  12 +
+ 8 files changed, 299 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/pmdomain/sunxi/sun55i-pck600.c
+ create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck-600.h
+ create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+
 -- 
-~Randy
+2.39.5
+
 
