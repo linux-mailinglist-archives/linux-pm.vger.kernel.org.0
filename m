@@ -1,110 +1,104 @@
-Return-Path: <linux-pm+bounces-30505-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30506-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8592DAFEFE2
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 19:31:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D47C9AFEFF3
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 19:37:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78EC11C464B3
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 17:31:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FA865A725A
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 17:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0A121FF26;
-	Wed,  9 Jul 2025 17:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CEF230BE0;
+	Wed,  9 Jul 2025 17:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIKG/3eG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QLHtwoBR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0409CFC1D;
-	Wed,  9 Jul 2025 17:31:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A362A230264;
+	Wed,  9 Jul 2025 17:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752082281; cv=none; b=DjfZPmJUqU+NjYyk/Y5MYguNWrhqNq5bUftoyXIYES0IgQtZ0KW3WHVw9Vfjq/duZSyjBA8tNLVuhY3cJOcJXkX4sqprGOO0AKgXdLoHASgw1WkY2z55oxbqXgx6TqB6Mh0HqhAoJK1Mlrr893EAmiAUSw3Y1ydKtYfcrYFoGG4=
+	t=1752082665; cv=none; b=KGyqcBiqnJdDHk+u389fib2yvYABjoF3FbW8rH2+WgeWSP+HkTRyxhQrd5b3Mg1limF0TO22XX/s9dCtLu0kFaR8oUTA0LUfvv/Ci7NHBbQdp2vGyG87l5eVMVD+RSSqMVLPhllciYMpdfupqB5K4h80MdCCyyOOGrnoIAtWWfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752082281; c=relaxed/simple;
-	bh=nEAZeGARqGzJQhxm4s2rG9HkgzS2kOIUSL1iaCVzm3g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TnkW3zHqwhOF7h6DF9VxW8dp9w3yNYMXmEbDmMyQOTOqp0I8nbY6cWKf599lOYu+zM8q9DdvBsCpyWLn8OMSAmss4gbXMYumyhWilEnjzo787RT+uibA7mm8rwtA7pGvdi4Fk1ZMQe0PhjMrZRHLQxQf4Lzb49mbitZmtEUWAvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIKG/3eG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38BBC4CEF6;
-	Wed,  9 Jul 2025 17:31:17 +0000 (UTC)
+	s=arc-20240116; t=1752082665; c=relaxed/simple;
+	bh=UrMsQCIJDhTzvXs4RqAiNo8Cvl8Hxt1Ziw4xZzCivP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FDbryEw3HqZnd91v1WRaaVRt1fdz+u15QUwtnikHHSfH2XzsithFTxZxUHf68whWrCJ73CXpBG3HdAO96d+OJjtUC4yfJvz5QtP7gmBMJUmPpkvw8kxRHY2gLBx0a5+FJVAQHlUAJjZ/JsXMJe8c2yp/1VAHINupeLLUPR+s5Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QLHtwoBR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC82AC4CEF4;
+	Wed,  9 Jul 2025 17:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752082280;
-	bh=nEAZeGARqGzJQhxm4s2rG9HkgzS2kOIUSL1iaCVzm3g=;
-	h=From:To:Cc:Subject:Date:From;
-	b=fIKG/3eGKzZNhhdOns11GXctZ0COMjvT8x2A1EgUd5DN1gEZhVckYa4HOVNkXqfsD
-	 1ET3VfNxoUKU3jdOD9XLZX5RpyTZynWqBlRLOfa1YzPC+44B4vY+Wz/PHMrxitJU66
-	 pxklV3wf2bRIPmiShv6T+SqTgt2atmjrd/tVikPPQrdeS//TIpCsQOxz7pmK8CtHe/
-	 AoEhgip5KDSNwxUVpxFiSUQcKuQK+FU146/nofRef2XUAv8GCZEKEQ/imoB4pkXAHn
-	 lQbJP2nBFB/mAompV/nbHmPq9yHrhWY5Yu3yEN+C6MI1Ht4mtp5AFIpcH/sbpooocq
-	 2A/w1XcY0KGRA==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Pavel Machek <pavel@kernel.org>,
- Len Brown <lenb@kernel.org>
-Subject:
- [PATCH v1] PM: sleep: Clean up MAINTAINERS entries for suspend and
- hibernation
-Date: Wed, 09 Jul 2025 19:31:07 +0200
-Message-ID: <2798682.mvXUDI8C0e@rjwysocki.net>
-Organization: Linux Kernel Development
+	s=k20201202; t=1752082665;
+	bh=UrMsQCIJDhTzvXs4RqAiNo8Cvl8Hxt1Ziw4xZzCivP8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QLHtwoBRBDQXByIwztN3KSGJHjSq3oNBskn8+BqLMMhqdtnTR0UyUptamUZIYxGzS
+	 05rD14LKHLKqTeimzJ2y929jnGWklGIhtvQp6ocTIgZI3vagwr61joiQn1TPHnUZ89
+	 ycdYhIM+lzyzlbzjyDSkxSyKQ6uYEu5lkXBMrDbs3vtdGAMwESE30BKXvvCDPaVQUt
+	 W7dT2TuhGDf9YXB8WzyeFU2zclFXHgGlkoBe4ce2jqo0L70OLsP/cbUwRrE/xtKpDK
+	 byWECBlTs4hfYQ4Le26gLoYuh+ujVmaP2G9fkzWyxgJrH2kUpRW7Z/X8wfGAOFJC6w
+	 5tyz4QMbmlGCg==
+Date: Wed, 9 Jul 2025 13:37:40 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: patches@lists.linux.dev, stable@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Nat Wittstock <nat@fardog.io>, Lucian Langa <lucilanga@7pot.org>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+	linux-pm@vger.kernel.org, kexec@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.15 6/8] PM: Restrict swap use to later in the
+ suspend sequence
+Message-ID: <aG6o5BYqwe1RmSqb@lappy>
+References: <20250708000215.793090-1-sashal@kernel.org>
+ <20250708000215.793090-6-sashal@kernel.org>
+ <87ms9esclp.fsf@email.froward.int.ebiederm.org>
+ <aG2AcbhWmFwaHT6C@lappy>
+ <87tt3mqrtg.fsf@email.froward.int.ebiederm.org>
+ <aG2bAMGrDDSvOhbl@lappy>
+ <87ms9dpc3b.fsf@email.froward.int.ebiederm.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <87ms9dpc3b.fsf@email.froward.int.ebiederm.org>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Jul 09, 2025 at 11:23:36AM -0500, Eric W. Biederman wrote:
+>There is no indication that the kexec code path has ever been exercised.
+>
+>So this appears to be one of those changes that was merged under
+>the banner of "Let's see if this causes a regression".
+>
+>To the original authors.  I would have appreciated it being a little
+>more clearly called out in the change description that this came in
+>under "Let's see if this causes a regression".
+>
+>Such changes should not be backported automatically.  They should be
+>backported with care after the have seen much more usage/testing of
+>the kernel they were merged into.  Probably after a kernel release or
+>so.  This is something that can take some actual judgment to decide,
+>when a backport is reasonable.
 
-Since Pavel Machek and Len Brown do not actually maintain the system
-suspend and hibernation code, change their records in the relevant
-MAINTAINERS entries into reviewers.
+I'm assuming that you also refer to stable tagged patches that get
+"automatically" picked up, right?
 
-While at it, use the Len Brown's kernel.org address in the suspend-to-RAM
-MAINTAINERS record.
+We already have a way to do what you suggest: maintainers can choose
+not to tag their patches for stable, and have both their subsystem
+and/or individual contributions ignored by AUTOSEL. This way they can
+send us commits at their convenience.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- MAINTAINERS |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+There is one subsystem that is mostly doing that (XFS).
 
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9785,7 +9785,7 @@
- 
- FREEZER
- M:	"Rafael J. Wysocki" <rafael@kernel.org>
--M:	Pavel Machek <pavel@kernel.org>
-+R:	Pavel Machek <pavel@kernel.org>
- L:	linux-pm@vger.kernel.org
- S:	Supported
- F:	Documentation/power/freezing-of-tasks.rst
-@@ -10661,7 +10661,7 @@
- 
- HIBERNATION (aka Software Suspend, aka swsusp)
- M:	"Rafael J. Wysocki" <rafael@kernel.org>
--M:	Pavel Machek <pavel@kernel.org>
-+R:	Pavel Machek <pavel@kernel.org>
- L:	linux-pm@vger.kernel.org
- S:	Supported
- B:	https://bugzilla.kernel.org
-@@ -23943,8 +23943,8 @@
- 
- SUSPEND TO RAM
- M:	"Rafael J. Wysocki" <rafael@kernel.org>
--M:	Len Brown <len.brown@intel.com>
--M:	Pavel Machek <pavel@kernel.org>
-+R:	Len Brown <lenb@kernel.org>
-+R:	Pavel Machek <pavel@kernel.org>
- L:	linux-pm@vger.kernel.org
- S:	Supported
- B:	https://bugzilla.kernel.org
+The other ones are *choosing* not to do that.
 
-
-
+-- 
+Thanks,
+Sasha
 
