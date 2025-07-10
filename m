@@ -1,238 +1,153 @@
-Return-Path: <linux-pm+bounces-30616-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30617-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40489B00752
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 17:42:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88810B00785
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 17:49:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F78E1CA5BF2
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 15:39:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A943E169C66
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 15:45:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E472EAB6A;
-	Thu, 10 Jul 2025 15:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86716274B52;
+	Thu, 10 Jul 2025 15:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2tHOLqW"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VJHGUBTM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACA32EA73C;
-	Thu, 10 Jul 2025 15:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5442713B293
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752161532; cv=none; b=hg/CxVwN8CgRCoaqv7ZzdhrDyWoOls7UMbBvy/8sT2pI87Rypes2KGruDfU4YC38chCbCk8r6WzaJn4iRbq/bChrjz07/odyT4qroSGnq4Dz1LZNdGG3D8rM1hqCGNCC/0TurE8HUTYcKnq/uH7knO28Lv+tNFoYlehqLQpTMe0=
+	t=1752162302; cv=none; b=Pntr1QclzQmBpqRdty4TBv6LmMlhBO8ZwCc3d25YadEgdcwljKuXncNiuyVq+Myrl/W5/jKe0HPddwV7hV0QCEtlfEOEsrnRQGnKTPlgdtuqXbHHxGY/WPl6UxF4Q/UK7ybqPf90fNhR/z2YECjjC9ubDo+FHs7/MDxQJgV3org=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752161532; c=relaxed/simple;
-	bh=lLdnM+NUEuXkQdsCZ2Zc/ZWA5W8wgiORDQ2a6677Zzo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IQhSe7SYC7glGeEpmnVeCfn4FWCWUqx3Yv2sJxYkJOSdkobLMzJhe+NEoIkXgM2Rba59OIdEr4gyFBYhDmQLOspEDkRVWwiEDKew0U9DkPwKeZYWnZ7Zz0AQ54KVn6Iv7racMZvONi73/dpA0Sjq/TT6yJKsgEwhkcFnT+azL0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2tHOLqW; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6face367320so10040656d6.3;
-        Thu, 10 Jul 2025 08:32:10 -0700 (PDT)
+	s=arc-20240116; t=1752162302; c=relaxed/simple;
+	bh=QmujRR/DPSYeyQdUA2QOLtioAeBLj6yZR1ReOaTTl+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O4UEojHaZ1/6i2yET3oPrBTqgzilLvmqvv/gk2ejhha2lE9RbAHT0Q0eUmk0oVlmaxOsgMuESkWQ+4dT/ceptxcQNy6uOsqe7+TB3g5WJraG204/4Nx7A+H4+mta1WuFWJj7TjGfBo3+oC8XdMz0a1QyJV5OWCMNtxPZNa/Iq+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VJHGUBTM; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3b49ffbb31bso720266f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 08:45:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752161529; x=1752766329; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qg9MyoLzW2O/wZTFQuwcCSu9JeslcLq4bzCQcPCtBGw=;
-        b=H2tHOLqWsA/F9mJv+GKxy7Wvb1tP/3gMKiJipylhtMWB3Xqq8PxJ4hL5ey7LIOn2rS
-         LwLlqcKTBLprwN9jkhBH2yKlB3yxII02DuVw6bibBBrMHDB3OnmLFOBtEhiEBmpRXne0
-         wxOMxtlA9KZBz2ScGpgBOpZClHFw2sYPkdt+Eu5e1DXflitGMLbD6jl+BEIZNGiJB1IS
-         7u1vRqNs8czVBj7iapBCuicCpf8dg5BpUlDYAMV86ywh4Ity2rWt+YuqAufOdbXr4iJL
-         E7SgBUgnPuGxbB1EVvGN4e75lcQQjUknD1IgDZI7jTmiWl71YHKEBkxmuOeFkS96xpQt
-         5Lnw==
+        d=suse.com; s=google; t=1752162299; x=1752767099; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DfKz8g7IocA8u5rsIUzAiiuZKjZKWsYc3v5k3LQbtY4=;
+        b=VJHGUBTMrwMERuPq97dXUa1f3iWn0ttX6YUPPU3Bf64GuLg08iC/mOmzAbhEXMt963
+         QFGir/+AUhFavobeK6ga7QThe5y8TidehjGwrxBScWT0W2otPz7JTPBri5eyfdxjxjjr
+         WgtGihaGQ5PGjxyWytU04/ZbJQO/eqaiJk+k7ryUN6sA1AuMLIElY7sO2skSx45m+0Y9
+         LBjWx+LCYBHgZ9w9mNilyJSpIBGen428HNXQXT2HLuTw/QUE9oQzqf79CRFiKnDtlDM/
+         tsyjK76Z6OoZ/uY3qCmIWazs1QCGKjEYMFT0GT3+fPdlIAOuFvHAhs8ixJrWqtpoIKv4
+         PGMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752161529; x=1752766329;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qg9MyoLzW2O/wZTFQuwcCSu9JeslcLq4bzCQcPCtBGw=;
-        b=fr8BAfjZfC823xSNDi8T+Njkm375b2w4Yva6zyHJchOZsVud82oJRP9qwx2iOODXWF
-         W+dFPW3mtIZudYfM4STNk9Vw+ovh7mJQyi76LapSSfahSHbpfC6kqpQjOH8xxiTVQHO0
-         lLMIGDjdCu0h1PYkLAywIppikmhES5s7fHhs9FRKQxxeeBwKMVTYmsyQ4XCMS259iIym
-         GQjjHEhvGC1g17lBw4bUaW4OYgJhL5OhIlcyJZ1O/E28WxmMyOkqFtEuVdDieVsEkTFm
-         Wf8nRaYKRULjwtBhpDjHYgzCHIDgyx2Kz0DUrvd0PW5e4b31JC2vyNrja2wh11SDzx09
-         2wcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUNPo8ztHMvstNB5uOIJ5Ht95+ugQDreiZ0q4H5eW4SeDo85yE6ahJHIdxEr/jRPtW3GED2eUAs1Iq3G4Hv8IA=@vger.kernel.org, AJvYcCUVIJKbeldAT1iOs81ce2UO6ZA4QtIYUxe2SA/GJvtjltHH/sX4uFqJgAQqyhXSOh4MS4QarbDD/YABFQ==@vger.kernel.org, AJvYcCUYqb8yhy2JVggzvJ8BG7N39Cn8tpazPGeMrTJZ50sBsMo/doKUYrGthYZyiK1CrAyqiwfdgykq@vger.kernel.org, AJvYcCVJcOXJ0VvfepV6A1ASFgVpRWY4pSdghv5LpNkezmRBrb17undJhUhY+ZkuDTQnnlnNUMlCK4rioB6S@vger.kernel.org, AJvYcCVo5m1rlrV8/2s3ssP1sSYQq+z83Ee9JfQt1VXwsshzH287y/g//SUvJEeRD1S1MZxEooGtTjYRqOV+Dm26DV2U@vger.kernel.org, AJvYcCXJtWOrpYSwS+qHacLTnykXyQHwaFH847PmVyCd6qSOfpdmFtgAV8vPWdXRaFkY0/HUibYssOjlrx+M@vger.kernel.org, AJvYcCXkQup6nqO+6OKlAxo9aFjSDMeE8dK15n0QIZ9eisOrd8NrGoQ63mcjiX65YFH7osOzS8CqyqB5HfFM3GpJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCBP0y17bK2oCxc570hYMuD8Ho55sJBGysQ/UGoGn5RkfNXSuB
-	uDUJBi3ReOnuGl3QOt4HgohW8+xeDA507WW2SrxtLY/IQDnxLxYkAgG2
-X-Gm-Gg: ASbGncu2qj5CiaSAdaRxvftywAFpJPu0kIHttrFdZDNHVETnhHaMcnU9ywtvZYDdcrr
-	XyuAxZoYQOXgTP/3gKIBts/HmA2WvyX8WXmUGpIXqCU6UbYI9e7tCflxz77AydFevm0LjWwZO4R
-	xOiOVgppdXsKCwR22yJXOjLEyXRLnWxnKMoaLAi5u2TPDmIy/X92Z12DUWlaONFQNbk9JQD2jZL
-	L+XiVZbEipp7Wl/bZTmjfW33mdl944IA4dKC36B/oRmQNcmwc1MtHHKCfe786SZIXrFaICKpvRr
-	cIiHeBXWsKgapkJHivQGNYmi43w2fHTaDU94D3ReKU0O6uvmCJsYVJ0sjGZqr/0rmzrBTFdJcvW
-	LSFdvhc1T1n5rgkK/RbW/4YzNYR4dKlq5o7qTPs6pTk8cxFgOW5cD3aDjjw==
-X-Google-Smtp-Source: AGHT+IGR2RRZQW2bcini0bMXKS9fKRmwAOf5eVXkkfrEVuuKui6PaVOKJy0ulnbPEP69BzEKMolKgw==
-X-Received: by 2002:a05:6214:328e:b0:6fa:bb26:1459 with SMTP id 6a1803df08f44-70494eeb96cmr79324366d6.7.1752161529395;
-        Thu, 10 Jul 2025 08:32:09 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([148.76.185.197])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-704979dbc3asm9449496d6.38.2025.07.10.08.32.07
+        d=1e100.net; s=20230601; t=1752162299; x=1752767099;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DfKz8g7IocA8u5rsIUzAiiuZKjZKWsYc3v5k3LQbtY4=;
+        b=jtlkOpPHSwu6hmCPoTVLYWfkawbe1YLjw+a2jb829EVr2JRSQQE1VJGMcxhUn381cb
+         sY1ZopHgt3A1mz+e+b7DWJs7rfzz1SSJFVabbVMnoXrtDYEyzGhoytAHZD/wjVQUt8cb
+         GSsHUiUmmTrLAQWTFGipeoMXmUF3otIaSjcKr3ebFMihi8KPdmZYtxeRFM9bXOdAmD+N
+         06KeSPvyK0ehOjFY90VbJPg5zYic+96WJHr8vu7gdkb55/8lzwU6r8LQ6E8ze8ZWRk8B
+         bKUcP/2XLHrptpm3PveH17eDxTOLCdP9RNtBDEnRSGbRby78weIO488XccumYQaPB77L
+         PJMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXhKG3r1tkkTkNyQLjchNt4RWDuhkH7u+TblyRk6rWW1jPB3I7e67nbhblOAcMuvbAt8nvS3F6FdA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWnnOf1phXMUDVUq7i5xDvmAjF06hrKWN6sl9tPeKWF0lCmPa5
+	CYDdEmUBO4WqfKfUsIV6t5+teO4BJgYuRgGHGKs88d3XVjrldfivzlbOABhlplIYK34=
+X-Gm-Gg: ASbGncsCCGUly0ya+fA8xGOlKHn2mW+Rzg6oI0JMcYLCvqxQWA2WvUf7EW2tCW+df4m
+	0OlEi7qeuZbsZnX/zrVsXvJUnkPhM/Aa6h88aE+2TlDU+ioGVvdrtP8PXbShULW6v4ztedPJlB8
+	unDPoQQJNHE+7O/Kh/X+0aQKVut08Kgd2yvJ95ZDVEtRJUJDMYuFpQ4qxJsZ2ftitwaH3BQxul9
+	PSxWvGDU9D0bMzkzYlNAa7nvzyy2yVS5lWqNEqb1K23ltpT3n+XckrTNltXDxgGnuEAztua3qgf
+	IRMMJhmyXfcqhQGBnrWa3z9rKgdroG3M8YowaEbZ3tG2i/kQHXwFWb4LCd7LCtKV
+X-Google-Smtp-Source: AGHT+IEi2g5/DN1K+2wwgAq7qMOuInWE+sU8AeJJ+3cUVcc8tWGmi1OpKIHzd2MuXTKU6wOxwERxHA==
+X-Received: by 2002:a05:6000:4603:b0:3a4:dd02:f724 with SMTP id ffacd0b85a97d-3b5e4536c3fmr5408824f8f.43.1752162298609;
+        Thu, 10 Jul 2025 08:44:58 -0700 (PDT)
+Received: from blackdock.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454d50dcc84sm64914835e9.24.2025.07.10.08.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 08:32:08 -0700 (PDT)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 10 Jul 2025 11:31:20 -0400
-Subject: [PATCH 17/17] rust: sync: replace `kernel::c_str!` with C-Strings
+        Thu, 10 Jul 2025 08:44:58 -0700 (PDT)
+Date: Thu, 10 Jul 2025 17:44:55 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Chen Ridong <chenridong@huaweicloud.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, timvp@google.com, 
+	rafael@kernel.org, pavel@kernel.org, tj@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, lujialin4@huawei.com, chenridong@huawei.com
+Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being
+ frozen
+Message-ID: <2v47s2xlbmuz2mgxk2p7o2q4t343nde6hkyqxpmfgmrjygmrz7@alrwuxvupe36>
+References: <20250703133427.3301899-1-chenridong@huaweicloud.com>
+ <n23vsu6y6cjf2vwdbfcjl2mj7venvpzpblncoa7adn3q5r4lph@qsfa3deqtamc>
+ <f4c4f465-72b9-4682-99e6-c249ecab8572@huaweicloud.com>
+ <8dae8006-e63d-467f-bb7c-e8470878e534@huaweicloud.com>
+ <20250704075718.GA2001818@noisy.programming.kicks-ass.net>
+ <85fc85e8-af92-4d58-8271-9bf4aeb0a63d@huaweicloud.com>
+ <bdc5a4d3-6942-4ba2-a13d-35f2e13c0b37@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-core-cstr-cstrings-v1-17-027420ea799e@gmail.com>
-References: <20250710-core-cstr-cstrings-v1-0-027420ea799e@gmail.com>
-In-Reply-To: <20250710-core-cstr-cstrings-v1-0-027420ea799e@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
- Heiner Kallweit <hkallweit1@gmail.com>, 
- Russell King <linux@armlinux.org.uk>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Breno Leitao <leitao@debian.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
- Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
- Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
- Jens Axboe <axboe@kernel.dk>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-pci@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-block@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1752161491; l=3792;
- i=tamird@gmail.com; h=from:subject:message-id;
- bh=lLdnM+NUEuXkQdsCZ2Zc/ZWA5W8wgiORDQ2a6677Zzo=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
- MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QEQCLdocV7E4OivASyLh0mReapGH3HAqrlKw6p+xfkfcFh+9TajU5mVNbgdK6iJLvlwtkJLY9Sp
- YR4gNbcIrDgs=
-X-Developer-Key: i=tamird@gmail.com; a=openssh;
- fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="paycgh4vipu5nayz"
+Content-Disposition: inline
+In-Reply-To: <bdc5a4d3-6942-4ba2-a13d-35f2e13c0b37@huaweicloud.com>
 
-C-String literals were added in Rust 1.77. Replace instances of
-`kernel::c_str!` with C-String literals where possible.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- drivers/block/rnull.rs         | 2 +-
- rust/kernel/sync.rs            | 5 ++---
- rust/kernel/sync/completion.rs | 2 +-
- rust/kernel/workqueue.rs       | 8 ++++----
- 4 files changed, 8 insertions(+), 9 deletions(-)
+--paycgh4vipu5nayz
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH next] sched,freezer: prevent tasks from escaping being
+ frozen
+MIME-Version: 1.0
 
-diff --git a/drivers/block/rnull.rs b/drivers/block/rnull.rs
-index 6366da12c5a5..9aa79b862b63 100644
---- a/drivers/block/rnull.rs
-+++ b/drivers/block/rnull.rs
-@@ -55,7 +55,7 @@ fn init(_module: &'static ThisModule) -> impl PinInit<Self, Error> {
-         })();
- 
-         try_pin_init!(Self {
--            _disk <- new_mutex!(disk?, "nullb:disk"),
-+            _disk <- new_mutex!(disk?, c"nullb:disk"),
-         })
-     }
- }
-diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index 63c99e015ad6..9a6d2753937d 100644
---- a/rust/kernel/sync.rs
-+++ b/rust/kernel/sync.rs
-@@ -43,7 +43,6 @@ impl LockClassKey {
-     ///
-     /// # Examples
-     /// ```
--    /// # use kernel::c_str;
-     /// # use kernel::alloc::KBox;
-     /// # use kernel::types::ForeignOwnable;
-     /// # use kernel::sync::{LockClassKey, SpinLock};
-@@ -55,7 +54,7 @@ impl LockClassKey {
-     /// {
-     ///     stack_pin_init!(let num: SpinLock<u32> = SpinLock::new(
-     ///         0,
--    ///         c_str!("my_spinlock"),
-+    ///         c"my_spinlock",
-     ///         // SAFETY: `key_ptr` is returned by the above `into_foreign()`, whose
-     ///         // `from_foreign()` has not yet been called.
-     ///         unsafe { <Pin<KBox<LockClassKey>> as ForeignOwnable>::borrow(key_ptr) }
-@@ -111,6 +110,6 @@ macro_rules! optional_name {
-         $crate::c_str!(::core::concat!(::core::file!(), ":", ::core::line!()))
-     };
-     ($name:literal) => {
--        $crate::c_str!($name)
-+        $name
-     };
- }
-diff --git a/rust/kernel/sync/completion.rs b/rust/kernel/sync/completion.rs
-index c50012a940a3..97d39c248793 100644
---- a/rust/kernel/sync/completion.rs
-+++ b/rust/kernel/sync/completion.rs
-@@ -34,7 +34,7 @@
- /// impl MyTask {
- ///     fn new() -> Result<Arc<Self>> {
- ///         let this = Arc::pin_init(pin_init!(MyTask {
--///             work <- new_work!("MyTask::work"),
-+///             work <- new_work!(c"MyTask::work"),
- ///             done <- Completion::new(),
- ///         }), GFP_KERNEL)?;
- ///
-diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-index cce23684af24..432624c69c72 100644
---- a/rust/kernel/workqueue.rs
-+++ b/rust/kernel/workqueue.rs
-@@ -51,7 +51,7 @@
- //!     fn new(value: i32) -> Result<Arc<Self>> {
- //!         Arc::pin_init(pin_init!(MyStruct {
- //!             value,
--//!             work <- new_work!("MyStruct::work"),
-+//!             work <- new_work!(c"MyStruct::work"),
- //!         }), GFP_KERNEL)
- //!     }
- //! }
-@@ -98,8 +98,8 @@
- //!         Arc::pin_init(pin_init!(MyStruct {
- //!             value_1,
- //!             value_2,
--//!             work_1 <- new_work!("MyStruct::work_1"),
--//!             work_2 <- new_work!("MyStruct::work_2"),
-+//!             work_1 <- new_work!(c"MyStruct::work_1"),
-+//!             work_2 <- new_work!(c"MyStruct::work_2"),
- //!         }), GFP_KERNEL)
- //!     }
- //! }
-@@ -215,7 +215,7 @@ pub fn try_spawn<T: 'static + Send + FnOnce()>(
-         func: T,
-     ) -> Result<(), AllocError> {
-         let init = pin_init!(ClosureWork {
--            work <- new_work!("Queue::try_spawn"),
-+            work <- new_work!(c"Queue::try_spawn"),
-             func: Some(func),
-         });
- 
+On Mon, Jul 07, 2025 at 12:02:47PM +0800, Chen Ridong <chenridong@huaweiclo=
+ud.com> wrote:
+> I was looking at the WARN_ON_ONCE(freezing(p)) check in __thaw_task and s=
+tarted wondering: since we
+> already have !frozen(p) check, is this warning still needed? If we can re=
+move it, maybe reverting
+> commit cff5f49d433f ("cgroup_freezer: cgroup_freezing: Check if not froze=
+n") would be a better approach.
 
--- 
-2.50.0
+I think freezing(p) (the part of global freezer) and cgroup_freezing(p)
+should be consistent with each other. AFAICS, the former predicate is
+derived from pm_freezing and that is set all the time between
+freeze_processes() and thaw_processes(), i.e. it stands for both the
+transition (freezing) and goal (frozen).
+With that, the warning in __thaw_task() is incorrect and the solution
+might be the revert + drop the warning.
 
+(Or transfer the logic from cff5f49d433f only to the warning like
+@@ -204,7 +204,7 @@ void __thaw_task(struct task_struct *p)
+        unsigned long flags;
+
+        spin_lock_irqsave(&freezer_lock, flags);
+-       if (WARN_ON_ONCE(freezing(p)))
++       if (WARN_ON_ONCE(freezing(p) && !frozen(p)))
+                goto unlock;
+
+but I'm not sure the warning buys us anything in either case.)
+
+0.02=E2=82=AC,
+Michal
+
+--paycgh4vipu5nayz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaG/f9QAKCRB+PQLnlNv4
+CD0AAQCwacgAQtPb5lDXkPUYXAxsRthQNUdqxkR0o4AUiOIrLAEA1ffpWdi73UAZ
+BXGSp+kJOxD2mYefTfoKzPggWAziwQs=
+=VYIq
+-----END PGP SIGNATURE-----
+
+--paycgh4vipu5nayz--
 
