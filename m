@@ -1,136 +1,203 @@
-Return-Path: <linux-pm+bounces-30637-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30638-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D793B00EC2
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 00:35:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C20E1B00EDC
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 00:42:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CA104E8690
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 22:34:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0DCC1CA7BEF
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 22:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3388A29A30A;
-	Thu, 10 Jul 2025 22:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858272BEFF0;
+	Thu, 10 Jul 2025 22:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ow/zjSNn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OdG/ekYj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF5E29993F
-	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 22:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDAE2BEC31
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 22:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752186899; cv=none; b=mKSVcage36asbMrSFV/40yeqH8sNBWbf9PLE3K3TKhIOHuHY8VSvmj4LBSeShdzGd8rZo+0ow0sKALL0xpN5pJNH20mN+TYkGOZd9wxF/QX4cOlXd4Xpo7QmTvsmSaRipBpnnzbabk/DWJ6d+8J+e7iVOzTlUaJxhEsxArASduQ=
+	t=1752187258; cv=none; b=HwQBic1Dio9jCJRf+MVq5HaQ+bZtZUkcKpeWiR9dnvJE2JRdrqsHihK2YRAe+U5ukXOQMMdZXXUvNSLipi3WLi5jEEmTtOtOY46Us8dN3I1+o+Jw9L+y41N5LoLHSb9p6RKQoUMo/Ifv99q5r5+axnMLvUTPcsiYZVVMx6rYKBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752186899; c=relaxed/simple;
-	bh=yVh66acthu6J6IcXm4m/4Uj6wbfy1DTZooP7O1ZX4H8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D1y5i/l6UCIsdxxgr8L6B8FQgg4ZEdbXV5jUWIu9N8Lm1/Emi9CkSPj8C+YP/+aEcE3L1haA7ZjKWWvq701x06422eYRZ00+jFPUAgOKl+318nNZaz++lnhii+BNvSHSrqYWvt0Mem7LlgpGVMtY+ov502P8hWl1bCPRK39uS2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ow/zjSNn; arc=none smtp.client-ip=209.85.167.52
+	s=arc-20240116; t=1752187258; c=relaxed/simple;
+	bh=rkYvC/hLm1zxzUDW2ngueVIOPaIZfje0rU9DgOXSYiw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=TE50TPjXV0iGxunugmWQ/8hNDfA6WFSC6kn90XBQMCfmnFi0mF3rtyJ91Wapwfhxl/Tp6op9TBL+c303AKwaz5vU5zM/jAxOcLBdLWqwEkXHDWE2YTTO8OwHzjIamAx2ZEhBQYu4vZA/oyXGfGzHujrcVmysNGJzmLswA7sQ4Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OdG/ekYj; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-558fa0b2cc8so1296546e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:34:56 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b31cc625817so2087598a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752186895; x=1752791695; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4dPHJ//ZU8p5qKrzh9zty72ZQJ4R8fsELp28sl7pL/M=;
-        b=Ow/zjSNnttk4xulKkUfjGD93GHch6RikRFveK8BfaAQ00grSoDkI8DhYd2m/bZtrFN
-         GRGKqqGcVNeJIvopUZa5m/KOQn9U2LPL5x1+OklNO8Lo4pIPR9YltyguHnZ9PpUpcg+M
-         1Mqy9jDabO6WmbIi+eGmU9P4UM4xuFJCE1urb+6XIjR7ypatVn75os50ylYt1VhLIlAZ
-         9RBBBI0jqnXmxKSf6fRJ430lVegNu5OgeRjf6rNkSHW/ke4FziK1BHs7Rxcas3Pk/c2B
-         3EnlCBsT0+Ou9kPmfKfs/CUVF2/ou0o0OmNu8Ikem5UkLlcvnkXcpAzZq4xpBFPzpKW0
-         Ra4A==
+        d=google.com; s=20230601; t=1752187256; x=1752792056; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rg/zpR/MVBtYaD2VmbJBetWuckcaW+z6F/PTphqosL8=;
+        b=OdG/ekYju2YLVQ6LrcDVPcXdyffTBRGNf4BO7d+t9Ps3B+ZyPdCLUrPdYcCMea2pVS
+         OhoMbhQus+P/1VI6XuIO1pbGmDTYfVOJ3baQDsWbTOnTBGbF9ybQUJLymZ9FDxnyRUns
+         TCIBOjKHjhKbJ2N5E1nM3KgrQ+2gP1C8l8DHCcv7LKNdlI69b3vmHkFDLHmOsUj/9/Bb
+         Mt9d5+FkKxFIiUaP78U8hQZHeW4Zn+GSMY4g9e6thZM91ZbuzVSt4Rkxa5UJPbs7wRhz
+         88hAuaVAF8xTfyEDOayj8C/dxkx+081SekTWYKldLxnG38gkWHhMXLhG31MZgSZvgiU+
+         etiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752186895; x=1752791695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4dPHJ//ZU8p5qKrzh9zty72ZQJ4R8fsELp28sl7pL/M=;
-        b=X62AMAKzJYUIbTCAlmNfFjLokzWQqusvd5piur0P+dJ/+3ATlCQaMnUV8H7suK4YyP
-         gKyT0kQUkOvV89Uhhm5G1UFgAilqKK0eWxgaE8t1E+tFLRxM/nM7050jQPp7oIpIdJzU
-         jtT+yE/thHgc5HOFvKLjxcpO1RRWcTECdl9owdVR0E7eapFCr6qW/xfkSXF/nct195kS
-         OlQW8teEOYsWa/FpS9ufFLJfuRe8LcrYj2sTF6PO83eTXwQ9ODce7LIcDJE/HmU/1LyP
-         mu++ijOrJtWonQVVF/04u5AMuNcYbN1mkzk1yjBu6zyC3qV4ufbrBdpiNyYD1ICSCxM/
-         tmrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUCZcul8jBglCa7+v5b1iw9pskYYFVqeZZMOqYcfEoEksRZvUJ1XZ6853E2wd8hXXGhS20pDIee5A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7Av8hyZRnJ50rHn7z9/BsYy60XUd/qCj97D5ih83myLFj+ZaN
-	5OJNf8+P/a3/CFTzQ/ujwVXXqEfpgrpzW3sm8Wd0lw9cNkgjQK60MjZC1o+qYuV1kSYUrUzyc2p
-	oFn6/CuYFrtq7Lk1AH+F7zELOuLRdj0x/t8VKbYI=
-X-Gm-Gg: ASbGncvCp1oxOKNxJ6Ntn00utOPsoDPhbGvZb40ft0pqjxXBmN3FHZ0F3tFCQ4NDeR0
-	uyxbsURkcEEWN6AkFVM5TVMw2kEmBzPW+zcLl/oUkDQmyz+1PycIpYvtO0a++ovIvw/Hj8K6u9W
-	bh3E2qflauF7uFLA4I8EhaXnWRkkI9Q9Q7iYKqJ/RlQhEkQeDwCBqo6bGZ4xOdFpO8P9CYwL5eH
-	JIcCsanyKchWNIE+uwM2zFYKzHUZj4FsQw0sbAYR9vSmBI=
-X-Google-Smtp-Source: AGHT+IG0Jt0F+H8ws01F7A/4pvkhxz8kyGzoUj7Y3DMX9DxPL5uC4Dxim0O59t0qkQgtO/+aMgx5AjX4UJwG32eQQ1w=
-X-Received: by 2002:a05:6512:15aa:b0:553:28f1:66ec with SMTP id
- 2adb3069b0e04-55a045f07bbmr166129e87.31.1752186895155; Thu, 10 Jul 2025
- 15:34:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752187256; x=1752792056;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rg/zpR/MVBtYaD2VmbJBetWuckcaW+z6F/PTphqosL8=;
+        b=TFbDq/fTSKkOoI0CRKIF0g8bOTxKvdZqBWZdf8IYD3Id8YGDPTzAJYrKe4yVSekaiA
+         PKmU4qSTMed7jkARxz8dq/vV0FiWQo1etGc4R0CriDZeWKqJrAqhPF9n14LcrpuANBRZ
+         +TW3Af4cXQhtskftn18uFTjiY1NTn59Y66Tz8lzrTJZfUWEVYCB40gJ++84A8uU3dMRz
+         la0XrmJFkkpFJtZmzyCLk2+ZNoGwy12pyIgjG3ULNOM14Ud7LVT76LOpZ2HE8VBLUdqk
+         eRPwIVaPKeFJcWHyLmFZzSbY4zzF7m06kwPoRDUyQfo3td7yqWRFG5dbvkGpauy0NNtY
+         SKPg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+8Sd0YIWcDH6pLsWLBWgQCarUx3jPCLtoGGc9Bb4RnLar67gitsEBJfguEX3RU09NZl7OrJtZog==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWT5tKdHLSt7M6/eOwt0WfYrxstwQJ2dZz/q7GKn9y3muJy8jx
+	6qzF9tyDuK/Y/hKpeFihncCNMUibqCb46bTCDC9P2XIT+DmQiTqEaDaUC9NmqRo5fc9EHQ1SUvS
+	57fY1Dg==
+X-Google-Smtp-Source: AGHT+IHc742ruSye4OoTb/Au/x7eNNBjWEEHnHH3qF8Iq8txWo1pUscyTPynkoiHx7x2Py13DdMAWa9XgTE=
+X-Received: from pfbbj10.prod.google.com ([2002:a05:6a00:318a:b0:748:da37:7e37])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6d85:b0:220:2fe9:f07a
+ with SMTP id adf61e73a8af0-2312551f2b1mr1418967637.6.1752187256024; Thu, 10
+ Jul 2025 15:40:56 -0700 (PDT)
+Date: Thu, 10 Jul 2025 15:40:54 -0700
+In-Reply-To: <d7a11ebd-48d5-48bf-abac-317d5da80a6a@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <3cbd9533b091576a62f597691ced375850d7464a.camel@decadent.org.uk> <CANDhNCoYPX_5m-v_sR4TJ3Xj5TVtrMLP8Bswo_-_+BMXwWUkjg@mail.gmail.com>
-In-Reply-To: <CANDhNCoYPX_5m-v_sR4TJ3Xj5TVtrMLP8Bswo_-_+BMXwWUkjg@mail.gmail.com>
-From: John Stultz <jstultz@google.com>
-Date: Thu, 10 Jul 2025 15:34:43 -0700
-X-Gm-Features: Ac12FXzRtPRCG3vVKe_al9TAYFZy78y3CS7g8LC2LK-_0V2sZ7fkJfcot95IKmY
-Message-ID: <CANDhNCqK26S7p0nypKOytgvzKUL8CMMr4-JbN-8PkNc=Em6VYA@mail.gmail.com>
-Subject: Re: User-space watchdog timers vs suspend-to-idle
-To: Ben Hutchings <ben@decadent.org.uk>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-pm@vger.kernel.org, 1107785@bugs.debian.org, 
-	Tiffany Yang <ynaffit@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20250612214849.3950094-1-sohil.mehta@intel.com>
+ <20250612214849.3950094-9-sohil.mehta@intel.com> <aG1laKXYu7Uc4Tsb@google.com>
+ <d7a11ebd-48d5-48bf-abac-317d5da80a6a@intel.com>
+Message-ID: <aHBBdmdMGHbv5lSm@google.com>
+Subject: Re: [PATCH v7 08/10] x86/nmi: Enable NMI-source for IPIs delivered as NMIs
+From: Sean Christopherson <seanjc@google.com>
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
+	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
+	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Jul 10, 2025 at 2:59=E2=80=AFPM John Stultz <jstultz@google.com> wr=
-ote:
-> On Thu, Jul 10, 2025 at 12:52=E2=80=AFPM Ben Hutchings <ben@decadent.org.=
-uk> wrote:
-> > There seems to be a longstanding issue with the combination of user-
-> > space watchdog timers (using CLOCK_MONOTONIC) and suspend-to-idle.  Thi=
-s
-> > was reported at <https://bugzilla.kernel.org/show_bug.cgi?id=3D200595> =
-and
-> > more recently at <https://bugs.debian.org/1107785>.
+On Thu, Jul 10, 2025, Sohil Mehta wrote:
+> On 7/8/2025 11:37 AM, Sean Christopherson wrote:
+> 
+> > This patch is buggy.  There are at least two implementations of ->send_IPI_mask()
+> > that this breaks:
+> > 
+> 
+> Thank you for point this out. I should have been more diligent.
+> 
+> 
+> > Looking at all of this again, shoving the NMI source information into the @vector
+> > is quite brittle.  Nothing forces implementations to handle embedded delivery
+> > mode information.
+> > 
+> 
+> I agree. There is already some confusion with NMI_VECTOR and APIC_DM_NMI
+> used interchangeably sometimes. Adding the new NMI-source vectors with
+> the encoded delivery mode makes it worse.
+> 
+> 
+> > One thought would be to pass a small struct (by value), and then provide macros
+> > to generate the structure for a specific vector.  That provides some amount of
+> > type safety and should make it a bit harder to pass in garbage, without making
+> > the callers any less readable.
 > >
-> > During suspend-to-idle the system may be woken by interrupts and the
-> > CLOCK_MONOTONIC clock may tick while that happens, but no user-space
-> > tasks are allowed to run.  So when the system finally exits suspend, a
-> > watchdog timer based on CLOCK_MONOTONIC may expire immediately without
-> > the task being supervised ever having an opportunity to pet the
-> > watchdog.
-> >
-> > This seems like a hard problem to solve!
->
-> So I don't know much about suspend-to-idle, but I'm surprised it's not
-> suspending timekeeping! That definitely seems problematic.
+> > struct apic_ipi {
+> > 	u8 vector;
+> > 	u8 type;
+> > };
+> >  
+> 
+> I am fine with this approach. Though, the changes would be massive since
+> we have quite a few interfaces and a lot of "struct apic".
 
-Hrm. The docs here seem to call out that timekeeping is supposed to be
-suspended in s2idle:
-  https://docs.kernel.org/admin-guide/pm/sleep-states.html#suspend-to-idle
+It'd definitely be big, but it doesn't seem like it'd be overwhelmingly painful.
+Though it's certainly enough churn that I wouldn't do anything until there's a
+consensus one way or the other :-)
 
-Looking at enter_s2idle_proper():
-https://elixir.bootlin.com/linux/v6.16-rc5/source/drivers/cpuidle/cpuidle.c=
-#L154
+> 	.send_IPI
+> 	.send_IPI_mask
+> 	.send_IPI_mask_allbutself
+> 	.send_IPI_allbutself
+> 	.send_IPI_all
+> 	.send_IPI_self
+> 
+> 
+> An option I was considering was whether we should avoid exposing the raw
+> delivery mode to the callers since it is mainly an APIC internal thing.
+> The callers should only have to say NMI or IRQ along with the vector and
+> let the APIC code figure out how to generate it.
+> 
+> One option is to add a separate set of send_IPI_NMI APIs parallel to
+> send_IPI ones that we have. But then we would end with >10 ways to
+> generate IPIs.
 
-We call tick_freeze():
-https://elixir.bootlin.com/linux/v6.16-rc5/source/kernel/time/tick-common.c=
-#L524
+Yeah, that idea crossed my mind too, and I came to the same conclusion.
 
-Which calls timekeeping_suspend() when the last cpu's tick has been frozen.
+> Another way would be to assign the NMI vectors in a different range and
+> use the range to differentiate between IRQ and NMI.
+> 
+> For example:
+> 	IRQ => 0x0-0xFF
+> 	NMI => 0x10000-0x1000F.
+> 
+> However, this would still be fragile and probably have similar issues to
+> the one you pointed out.
+> 
+> > 
+> > static __always_inline void __apic_send_IPI_self(struct apic_ipi ipi)
+> 
+> Taking a step back:
+> 
+> Since we are considering changing the interface, would it be worth
+> consolidating the multiple send_IPI APIs into one or two? Mainly, by
+> moving the destination information from the function name to the
+> function parameter.
+> 
+>   apic_send_IPI(DEST, MASK, TYPE, VECTOR)
+> 
+>   DEST   => self, all, allbutself, mask, maskbutself
+> 
+>   MASK   => cpumask
+> 
+>   TYPE   => IRQ, NMI
+> 
+>   VECTOR => Vector number specific to the type.
+> 
+> I like the single line IPI invocation. All of this can still be passed
+> in a neat "struct apic_ipi" with a macro helping the callers fill the
+> struct.
+> 
+> These interfaces are decades old. So, maybe I am being too ambitious and
+> this isn't practically feasible. Thoughts/Suggestions?
 
-So it seems like the problem might be somehow all the cpus maybe
-aren't entering s2idle, causing time to keep running?
+I suspect making DEST a parameter will be a net negative.  Many (most?) implementations
+will likely de-multiplex the DEST on the back end, i.e. the amount of churn will
+be roughly the same, and we might end up with *more* code due to multiple
+implemenations having to do the fan out.
 
-thanks
--john
+I think we'd also end up with slightly less readable code in the callers.
+
+> Note: Another part of me says there are only a handful of NMI IPI usages
+> and the heavy lifting isn't worth it. We should fix the bugs, improve
+> testing and use the existing approach since it is the least invasive :)
+
+FWIW, I think the churn would be worthwhile in the long run.  But I'm also not
+volunteering to do said work...
 
