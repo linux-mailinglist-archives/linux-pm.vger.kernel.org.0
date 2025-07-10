@@ -1,441 +1,279 @@
-Return-Path: <linux-pm+bounces-30528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDFA3AFF7DB
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 06:15:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BC2AAFF7E3
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 06:19:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3785562394
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 04:14:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC0114E205A
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 04:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE0E2F3E;
-	Thu, 10 Jul 2025 04:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5F501E522;
+	Thu, 10 Jul 2025 04:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mH7Pb3lI"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BbtnxbjP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2055.outbound.protection.outlook.com [40.107.93.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2191F8747;
-	Thu, 10 Jul 2025 04:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752120905; cv=none; b=nl4Pv9VE7BrowXphLA+Q4/NhGUH9enmBMoB5ESuNRLkI38cb4jVuxPbiVRXyvx1GdTI3lz7HeX8TMEorrg4dUzYQUzuf9K9YZL8cDVJYJoZANbkb6haRR6ijLzcZkYq83aouOXn7iHgD6EXuETXYdad+KZXKGX7Ce6/S/3rsU9I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752120905; c=relaxed/simple;
-	bh=ARTKtxmOir5rmmLBFRa3OmU/j2lHpRMgK/qhHHuOKko=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=luFzv5tL4SIA4u/smGPJ7HqrP9Ob8+5Td2t2qw805wXNNuKY6L3UYnbsUIkCbiL/9f56tK4EUkyHN0YjykX4bhi45TWJYZYrAB5H+hxgvIXFpYsfbg7QAuJJ1tTwwU2hMPeZs0Cf8Z2IcFTH26Y9FWuQ3XeU15fr48x/kfDGVCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mH7Pb3lI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DA6C4CEF7;
-	Thu, 10 Jul 2025 04:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752120904;
-	bh=ARTKtxmOir5rmmLBFRa3OmU/j2lHpRMgK/qhHHuOKko=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-	b=mH7Pb3lIyHhd//Rhj4JWpHiUfwse2DP+b12ZR9i6aoBlAMBbeVa7sZ2E46n7Ru/fj
-	 CyhJ7h56V/0eIZB04avnU/YSZ/WGMmtJWNga/pHvuWCOPdV9/aKBuy3D8TW5PEgId3
-	 CjqSTs9gTHRhNbT1Hmo/rdTVO4lZYGoeMbPV9Ne+5mBcWWndzL/nsDVP86jhR2KSXv
-	 M8t+u3l6Xjj1UKI+PmQf/vItnDvctmNJRrEixn3+JEBkQxvDUepNKIhtS3gB05L/At
-	 VUrH/5jJIGy/xi7wTtNKBbqFPaqJRcorVQtYQn6ZunH755mf+pGSNVz66rgbX8g32P
-	 2lzKkJmERadLA==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-32f1df58f21so4874771fa.3;
-        Wed, 09 Jul 2025 21:15:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV9TFwPMqfHf0bSs4c64W0nvrqik9nTqCiewv16oAvdw/OUE1YLJdddyDcQGgVnoyWjIxiTZDhTc0MNWOC1@vger.kernel.org, AJvYcCVn2qDbbju2PIftigKzwVSRm2wq1NSTKjyTyY5gIe2fONGHXJNJBtRZQ2nkIY2JBSANSm3+y/WS4+hR@vger.kernel.org, AJvYcCW9H4+kQ5fyo9DQuB10VxL+FmC7d82z8JdzaQr2OPGqHo1gv0jEeK8OTqePSFP9cophnL95Wpb0Yd4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSmIPvfDPgF9VCfntA/sUyF+BcUA6UvEn9zMkKdpdd//jLp7Dx
-	IfpbVDHGoJd+4OWmhEmwEB5B8ALmWUJCo9JrP+rVvbz8GrGp8PlRzZmoMxEJwe4xQPhkF9V9rJF
-	012PxR96O9Yqiq4dpgRCXHupz1YXiMT4=
-X-Google-Smtp-Source: AGHT+IHd/yaX+Sqp/87RP8yhtv3wso+0gj3wtRChh7YZklI8P0YowqNGBnRN0oNMARoYZ86bfbf8+dq5Jpj7iubVQ4c=
-X-Received: by 2002:a05:651c:f0e:b0:32a:739d:fac with SMTP id
- 38308e7fff4ca-32fb2e345d2mr2833601fa.36.1752120903028; Wed, 09 Jul 2025
- 21:15:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F282F3E;
+	Thu, 10 Jul 2025 04:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752121145; cv=fail; b=Kc4Kpo3hQvU9AKqYhTqrIXijoBvfaCL9RD5wqcXLEayEjp/OxVd/Age++FYeEZTCmnWQRr013MeJQslzt8ZkMaN0mZXTLU9JQMsDzD93oJ1ILfR+pguUVlTMLL8rPYYsqUjssihJNfwsSIFrWwFDra3ic5+7SJGl4oc6kwlNTdE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752121145; c=relaxed/simple;
+	bh=+sTXd2pGyEd3+H9PYCnuNC8or9moMN/5BYsW/aaJBSQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=tig0X87aLeayfTmQBKPidrCqMKJzogsNhtGbkcX2bVfx/NkgseAkj9jL035XkzcpI7eADRqsUSXFVxIgfQ98p3jAlfeqSKsP1Mn/sWZCwNOPBdjJSf5Q+t8QfBaUegOOXdz4BJx+hp4+1AJN1p2RZXLxk8ESUvw7oOHo/JJOlJI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BbtnxbjP; arc=fail smtp.client-ip=40.107.93.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pGwtxDq4Pomsve37bssNYBmsd+XideaekWDwl9cJmUfOcoJrKiKcS0B+rWr6uBIpne4Nvb6151W5AD4HNZaFxqdHYMCklODLZi2kHdSXGOdc1cOpJvgQyAuy6GBGxcRPjerjd/vlfUm7yJb/RCKegCDGCXdC3i8M+O9kA59UARzfjqyzgRj1qYokUnfSmmq6zYP1LhiVK7nDw7JE5m9VWCJn5WG4nLFoWzM7DLsRhHarwHQDsG5yWRWFvURKkDXu/B1pqn73imYN/pYCMtHJNHQ91Gnsk1W5yb7lNBPH4I7sMfXpQSHhrsc7MlBSm7/oO57IbkiItjQhzdDGLxuPFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p41P7Vz1hFBf8M2eb9LxvvdSgmkWULzzGW86J9ZAvEw=;
+ b=qG5sZKO+4huFQ4Zg+Am9MjVSQZlxaeSaX/hhsjnEYWZID+RK0d5OyzndZFVoWjdlTIIc+6flBpAdI+z+S0deOh+4d8IhR9Yu07xXeGlbwQnR4/jrg1vuTvHWhdukxf2kGK1BjBK6rt4EHdmo9fyypxAFkZJmt0mz9qNidjT5UEx1kdasmi7y0Yo87Q8wnUhXv49DGSy4LGJCnagOP1FDGS4jBnrBJgmk5I4d+JUMitHKMrJDdlesWOmWkqwF7xvhKnLIFHbo94AaCUC0aTdwUtSOFTnrz8EHjPW60J1sJiMm06ADpnHAC/iS9FcT52syZZZ3zlRtVUg48Lfzae3h1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p41P7Vz1hFBf8M2eb9LxvvdSgmkWULzzGW86J9ZAvEw=;
+ b=BbtnxbjPd5a1zaAW1jj5ryMh1zXn0nyvbWK7LIM+UWgAnZ/mISSfVlFtSFSV3rc1RYgyhKWw4SYvjsgju7b68dc/8rvW0xbzyArqctOvD2eIevT5emuShnj9GfFeKS6zv+6Yb7a65c4Gxgk6K5p5nCwt7Dojf+F2E6dwd1ZU88U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB7804.namprd12.prod.outlook.com (2603:10b6:8:142::5) by
+ BY5PR12MB4036.namprd12.prod.outlook.com (2603:10b6:a03:210::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.29; Thu, 10 Jul
+ 2025 04:19:01 +0000
+Received: from DS0PR12MB7804.namprd12.prod.outlook.com
+ ([fe80::8327:d71a:ce21:a290]) by DS0PR12MB7804.namprd12.prod.outlook.com
+ ([fe80::8327:d71a:ce21:a290%4]) with mapi id 15.20.8880.023; Thu, 10 Jul 2025
+ 04:19:00 +0000
+Message-ID: <202dae4c-6280-4f35-9c16-fdf6398ba856@amd.com>
+Date: Thu, 10 Jul 2025 09:48:49 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 5/5] drm/amdgpu: do not resume device in thaw for
+ normal hibernation
+To: Mario Limonciello <mario.limonciello@amd.com>,
+ Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
+ christian.koenig@amd.com, rafael@kernel.org, len.brown@intel.com,
+ pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
+ airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com,
+ matthew.auld@intel.com, matthew.brost@intel.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de
+Cc: victor.zhao@amd.com, haijun.chang@amd.com, Qing.Ma@amd.com,
+ Owen.Zhang2@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20250709100512.3762063-1-guoqing.zhang@amd.com>
+ <20250709100512.3762063-6-guoqing.zhang@amd.com>
+ <6963322b-d4e2-4d4d-b4b6-e2c44d49a94b@amd.com>
+Content-Language: en-US
+From: "Lazar, Lijo" <lijo.lazar@amd.com>
+In-Reply-To: <6963322b-d4e2-4d4d-b4b6-e2c44d49a94b@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BMXP287CA0022.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:2c::33) To DS0PR12MB7804.namprd12.prod.outlook.com
+ (2603:10b6:8:142::5)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709155343.3765227-1-wens@kernel.org> <20250709155343.3765227-4-wens@kernel.org>
- <043e5826-b68a-4289-bf22-79587bcdad26@arm.com>
-In-Reply-To: <043e5826-b68a-4289-bf22-79587bcdad26@arm.com>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Thu, 10 Jul 2025 12:14:50 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65WsPmAtUZRbf5Cu3Pb6Oi+dGH1RH3HhnZLmpJgh5Nu1g@mail.gmail.com>
-X-Gm-Features: Ac12FXwfvlY2YWxEzkxFkJVP_9hOVgGw3zz-RJg-5O5SKFrgYbis0hTLsBZzYiU
-Message-ID: <CAGb2v65WsPmAtUZRbf5Cu3Pb6Oi+dGH1RH3HhnZLmpJgh5Nu1g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] pmdomain: sunxi: add driver for Allwinner A523's
- PCK-600 power controller
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Jernej Skrabec <jernej@kernel.org>, Samuel Holland <samuel@sholland.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-sunxi@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jul 10, 2025 at 7:46=E2=80=AFAM Andre Przywara <andre.przywara@arm.=
-com> wrote:
->
-> Hi Chen-Yu,
->
-> thanks for posting this! This is a quick first view, haven't compared
-> against the BSP bits yet....
->
-> On 09/07/2025 16:53, Chen-Yu Tsai wrote:
-> > From: Chen-Yu Tsai <wens@csie.org>
-> >
-> > Allwinner A523 family has a second power controller, named PCK-600 in
-> > the datasheets and BSP. It is likely based on ARM's PCK-600 hardware
-> > block, with some additional delay controls. The only documentation for
-> > this hardware is the BSP driver. The standard registers defined in ARM'=
-s
-> > Power Policy Unit Architecture Specification line up. Some extra delay
-> > controls are found in the reserved range of registers.
-> >
-> > Add a driver for this power controller. Delay control register values
-> > and power domain names are from the BSP driver.
-> >
-> > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> > ---
-> >   drivers/pmdomain/sunxi/Kconfig         |   8 +
-> >   drivers/pmdomain/sunxi/Makefile        |   1 +
-> >   drivers/pmdomain/sunxi/sun55i-pck600.c | 225 ++++++++++++++++++++++++=
-+
-> >   3 files changed, 234 insertions(+)
-> >   create mode 100644 drivers/pmdomain/sunxi/sun55i-pck600.c
-> >
-> > diff --git a/drivers/pmdomain/sunxi/Kconfig b/drivers/pmdomain/sunxi/Kc=
-onfig
-> > index 43eecb3ea981..3e2b77cd9a2b 100644
-> > --- a/drivers/pmdomain/sunxi/Kconfig
-> > +++ b/drivers/pmdomain/sunxi/Kconfig
-> > @@ -18,3 +18,11 @@ config SUN50I_H6_PRCM_PPU
-> >         Say y to enable the Allwinner H6/H616 PRCM power domain driver.
-> >         This is required to enable the Mali GPU in the H616 SoC, it is
-> >         optional for the H6.
-> > +
-> > +config SUN55I_PCK600
-> > +     bool "Allwinner A523 PCK-600 power domain driver"
->
-> Any particular reason this is not tristate? The driver advertises itself
-> as a platform driver module?
-
-Cargo-culted from the D1 PPU driver. So, no particular reason.
-
-> > +     depends on PM
-> > +     select PM_GENERIC_DOMAINS
-> > +     help
-> > +       Say y to enable the PCK-600 power domain driver. This saves pow=
-er
-> > +       when certain peripherals, such as the video engine, are idle.
->
-> If I understand correctly, this driver is *required* to make use of
-> those peripherals, and the video engine is not even the most prominent
-> user. So regardless of the reset state of the power domain, I think the
-> wording should be changed, to make sure distributions activate this
-> option. At the moment it sounds highly optional. I wonder if we should
-> use "default y if ARCH_SUNXI" even.
-
-Makes sense. Though this was also cargo-culted from the D1 PPU. So I
-guess I should fix both.
-
-> > diff --git a/drivers/pmdomain/sunxi/Makefile b/drivers/pmdomain/sunxi/M=
-akefile
-> > index c1343e123759..e344b232fc9f 100644
-> > --- a/drivers/pmdomain/sunxi/Makefile
-> > +++ b/drivers/pmdomain/sunxi/Makefile
-> > @@ -1,3 +1,4 @@
-> >   # SPDX-License-Identifier: GPL-2.0-only
-> >   obj-$(CONFIG_SUN20I_PPU)            +=3D sun20i-ppu.o
-> >   obj-$(CONFIG_SUN50I_H6_PRCM_PPU)    +=3D sun50i-h6-prcm-ppu.o
-> > +obj-$(CONFIG_SUN55I_PCK600)          +=3D sun55i-pck600.o
-> > diff --git a/drivers/pmdomain/sunxi/sun55i-pck600.c b/drivers/pmdomain/=
-sunxi/sun55i-pck600.c
-> > new file mode 100644
-> > index 000000000000..7248f6113665
-> > --- /dev/null
-> > +++ b/drivers/pmdomain/sunxi/sun55i-pck600.c
-> > @@ -0,0 +1,225 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Allwinner PCK-600 power domain support
->
-> Can you please mention here that this device is based on the Arm PCK-600
-> IP, as done in the commit message. And say that this is a minimal
-> implementaton, just supporting the off/on states.
->
-> Maybe also mention the relevant documentation: the "ARM CoreLink PCK=E2=
-=80=91600
-> Power Control Kit" TRM and the "Arm Power Policy Unit" architecture
-> specification (DEN0051E).
-
-Will do.
-
-> > + *
-> > + * Copyright (c) 2025 Chen-Yu Tsai <wens@csie.org>
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/container_of.h>
-> > +#include <linux/device.h>
-> > +#include <linux/dev_printk.h>
-> > +#include <linux/err.h>
-> > +#include <linux/io.h>
-> > +#include <linux/iopoll.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pm_domain.h>
-> > +#include <linux/reset.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/string_choices.h>
-> > +
-> > +#define PPU_PWPR    0x0
-> > +#define PPU_PWSR    0x8
-> > +#define      PPU_DCDR0   0x170
->
-> white space issue?
->
-> > +#define PPU_DCDR1   0x174
-> > +
-> > +#define PPU_PWSR_PWR_STATUS  GENMASK(3, 0)
->
-> Would just PPU_PWR_STATUS be a better name, since it's used by both the
-> PWPR and PWSR registers?
->
-> > +#define PPU_POWER_MODE_ON    0x8
-> > +#define PPU_POWER_MODE_OFF   0x0
-> > +
-> > +#define PPU_REG_SIZE 0x1000
-> > +
-> > +struct sunxi_pck600_desc {
-> > +     const char * const *pd_names;
-> > +     unsigned int num_domains;
-> > +     u32 logic_power_switch0_delay_offset;
-> > +     u32 logic_power_switch1_delay_offset;
-> > +     u32 off2on_delay_offset;
-> > +     u32 device_ctrl0_delay;
-> > +     u32 device_ctrl1_delay;
-> > +     u32 logic_power_switch0_delay;
-> > +     u32 logic_power_switch1_delay;
-> > +     u32 off2on_delay;
->
-> Is there any indication that those parameters are different between
-> different SoCs? I appreciate the idea of making this future-proof, but
-> this might be a bit premature, if all SoCs use the same values?
-
-It's hard to tell since the BSP driver only covers the A523. I'd just
-keep this the way it is, since it makes it easier to generalize this
-to cover PCK-600 in other platforms, if such a need ever presents itself.
-
-> > +};
-> > +
-> > +struct sunxi_pck600_pd {
-> > +     struct generic_pm_domain genpd;
-> > +     struct sunxi_pck600 *pck;
-> > +     void __iomem *base;
-> > +};
-> > +
-> > +struct sunxi_pck600 {
-> > +     struct device *dev;
-> > +     struct genpd_onecell_data genpd_data;
-> > +     struct sunxi_pck600_pd pds[];
-> > +};
-> > +
-> > +#define to_sunxi_pd(gpd) container_of(gpd, struct sunxi_pck600_pd, gen=
-pd)
-> > +
-> > +static int sunxi_pck600_pd_set_power(struct sunxi_pck600_pd *pd, bool =
-on)
-> > +{
-> > +     struct sunxi_pck600 *pck =3D pd->pck;
-> > +     struct generic_pm_domain *genpd =3D &pd->genpd;
-> > +     int ret;
-> > +     u32 val, reg;
-> > +
-> > +     val =3D on ? PPU_POWER_MODE_ON : PPU_POWER_MODE_OFF;
-> > +
-> > +     reg =3D readl(pd->base + PPU_PWPR);
-> > +     FIELD_MODIFY(PPU_PWSR_PWR_STATUS, &reg, val);
-> > +     writel(reg, pd->base + PPU_PWPR);
->
-> Don't we need a lock here, or is this covered by the power domain framewo=
-rk?
-
-AFAICT genpd has a lock for each power domain. Since each power domain has
-its own set of registers, I think we're good here.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB7804:EE_|BY5PR12MB4036:EE_
+X-MS-Office365-Filtering-Correlation-Id: 099ddebf-54d2-4eab-99af-08ddbf68e579
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?L0hudHNSODFkQUhHb2QrMXQwOVhENHNMZFhmTkNtOHZwaG00N0RlZWIyMGZZ?=
+ =?utf-8?B?RzRkQlNHRHR0ZWJ3NXhyWXlYSmsrY0VEZFRBOENISU5DK1Nkc1NuU0d0MWdX?=
+ =?utf-8?B?aEd4TmsrWmVKOWVQYlN6RS9EMnpnWERoazF4dnByejlRdVk3QVBPRm42cWRE?=
+ =?utf-8?B?MW9waWptTkc4TU5pNU9CckFuM0ZLOUZmam9nMDIwWnZKYzVZQzVWRHNzUnpu?=
+ =?utf-8?B?aFNaOWsrT1FjcEd0eHdnZWdaV0NFVjYxeUxaVVpxVU1zQ3d4VFhrQkp0TWp3?=
+ =?utf-8?B?U3VBWmRVbWlGZEtVcEI3MERkQjdKOHMzTVFBU21tQUVyQ3NFRWZ0ellUKzJH?=
+ =?utf-8?B?UEY4eERWdTBObXo3NURZM05iNFFuYkh5aExiNGNKRnAvRC9JckxwZEkwNU5B?=
+ =?utf-8?B?YytEbTRXeW8rZ3NTUHlVLzVZeFhNdlF3UkR2K0NUZjh2bElHVDQzU0lkRW9X?=
+ =?utf-8?B?UnRDNUt1Q3JxL3ZPT3l6aVJBenZBQm1lQXVLNGlVNTZESHE1QUVrd3FUdDBm?=
+ =?utf-8?B?STA1emk2RmVSbTB5VmFOMldOZjBpajdUNnFTcUEvbEpyRjBpcTdtaHJBYk9T?=
+ =?utf-8?B?clNTU3lRSVA3eTRtYmROdUZCcGZIU0Qwb01FZVphVXdJZHQvdzUwM2s0Ty81?=
+ =?utf-8?B?U3M4UEZUNkZGdjhUTjE0L0RIdHRLbXVBOUpUVjhiSmFhbFpEdVZqNnJuWkQ3?=
+ =?utf-8?B?UWg3bGc4Q3pXQWtTWlNWMmIxL0NQRmpiQmdXNTFuallkYVllUm1heXVmZFg2?=
+ =?utf-8?B?WUtRVGRGSDh0YmplLzdLZGNuWTRoU2xKUEdRSk9PQmx2b2ZrR1ZLTVVtb3RO?=
+ =?utf-8?B?QWxCdjdRbE03KzNtbHVIV3lnZGVsRWpXY3lhZlNpc0pKbTQxRGNRdGVWMUFw?=
+ =?utf-8?B?VkFVRWluS01UUXBqeUtzRUxDOVpzR2xXZm1SUC96dkh5OXpSWmRHWk5mRkRw?=
+ =?utf-8?B?Z25wQ0pDSWFkdnptSDViWEVacEhVYWl0TmNDRHNxbWVMZG1NOG1UaWZBWWpl?=
+ =?utf-8?B?MUkzbytON0YxNm1kaXVGSVY3aVJTZDB0dnQ1RDdLRnExUWVCT3JvMWplN2dG?=
+ =?utf-8?B?eUs2QjMwVjZnSm9hRmlyRldYcFRXbTRMY3FUQkNpT01DUkJXeDI4aFJSWGdD?=
+ =?utf-8?B?NW8xKzRHd0UvSzNTYWQ0QnBQSmtVaUlPaGJINTZDV2hBcUIrOWRLMENzbS9E?=
+ =?utf-8?B?TDIvSU5SdTRzT0pWMUJMaTViY2hjRGo4aWc5TTdhcUJ4c2hBZ1pqRkNxbUI2?=
+ =?utf-8?B?YzV4S01lSU50OXlJMzZTV2FUa1ZrU0ozVXF5TWt1MEk1ZG5MUlJNWjB6SHAw?=
+ =?utf-8?B?TTVWQW1FekU0a1RzYTZyVmxOcHN3MzhPUGE3bkN1cEhCc2dVbytYQnJlNkJj?=
+ =?utf-8?B?a3JITXJCcmpOcld6SXo3M2N4SzMrUDdzd252endxaU1PdEowK3hHKytEdXlB?=
+ =?utf-8?B?djlkM3ZGdlNVeDVjUC8veHVNOGlJWUhXVE5WM2pjYnM4ZlFMMGxJYklwR05Z?=
+ =?utf-8?B?VkVMbG51QnRSQ0Q3dG05NTBWYUJIN1RZUEUxMjJ4akRweU5Ya2VYUEZ1THRi?=
+ =?utf-8?B?eThyODhnVWhkRGVyZFY1Qm1UTUFVNUlnMzl2Yk5TSlJid211SG9YdGtaWVJ1?=
+ =?utf-8?B?QnErL3JUbU10bXplVnZ2SEg2Y2I1YVVaTE9xVU55eHZjN3N4ZXN1YUlGeDl6?=
+ =?utf-8?B?TEVpa0orTkIvL1BJMFBLYkNnTFE0aFR5dkRpSlU0VHdvbi9xWlM3S3FFTjht?=
+ =?utf-8?B?VkJ2WUtVc2RSa055VlpaaCtoY3ByOUtmNGk1T1ZsZkdQMklPNWsxVVV0ZDR0?=
+ =?utf-8?B?UG9IbXNoUlFFdDh2QlJxYzdoNWw4V21CUURVRHUyOHlJUTVac3V2M3FuQnZr?=
+ =?utf-8?B?WHVZUk9qRFB3cjZ0dVltRytqYWM1b092TE5oMXJYbUxHOTZKN0EwblpLN1ZM?=
+ =?utf-8?B?LzdEQ3N1ajlNWVRpY3J5dkxTZ3lYVXhBb0xzb28zaUtaZjRZWW1OQVdwbm4x?=
+ =?utf-8?B?WURXb1d1WjVRPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7804.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?akg2alp2VzNjcjdWTExETW9pOHlEY0dPUlVuSGxTTGhqclUxU09HRUlmd3Qw?=
+ =?utf-8?B?eS9HcnNQb2I0Wm5HNHhoQ0VHR1RRTHpKSzFpU2JMU1JRSWRyNndtcFJ4M20v?=
+ =?utf-8?B?UnpZRmIwaGlQR1dGM21PbjlNMm1kN1pZVmpaaUhueTUwNnQwczZXdDNYNDRl?=
+ =?utf-8?B?VmErMmt2V0liTndaMURsNnhRcU9XUURaa1RnUE03TmwvN08rUUFPMiszc0Zy?=
+ =?utf-8?B?eTN5OEplZHFkK2RWMEVITThRUXI1eUZKWE1YdlhQMUFyZmdZMlpXdnlSbGFO?=
+ =?utf-8?B?Z2tGMmU1ZGo1ODBuNnkzYmFYYTZsSk0zZUZxd01zOEljTmdaOWdVOWZZN0VZ?=
+ =?utf-8?B?a040QjF1UXVxaG1sU0R2ZGNpMjRXOEhIZmlDSWtNQ3duSXV0OTExOWtBUW1u?=
+ =?utf-8?B?aHFaUXg0OGJjMndtb1lnWE1oYWtsTlVpQlBscVZ3NHN3L0lCRkFhOUt3MnBO?=
+ =?utf-8?B?K01JaVc4Z3UzZHQweFJoc2Y1dzUyNFhndGRPWFJKZEhza2RKSWZCM0R0YnVR?=
+ =?utf-8?B?RXRJUzVrNFpvbmNlR0xGOFN5VHc0YnF0Z0FodmloVkdKcXkzSURPK1Z3U2cy?=
+ =?utf-8?B?ZTg0UjlkSFhkd1drYlJPMWhrWXVuaFVkdGxqUDZlWEl1L3dwUG1jNFhaNnNY?=
+ =?utf-8?B?K2R1YlRJYm5BUVBKaEFPSmtublhDSVNBRkNyelZVUG1UTFhHZzk4QksvVTNK?=
+ =?utf-8?B?eEpLeTkrV1hmK0I5c3pWUlRrK1lmTVpzRk9ZNmExSG1oRXFPdWh5K2ZOSExH?=
+ =?utf-8?B?RTh6ZHJNM285YzVxY3hkeE4veWRqL0EySGlBdmxqNXNXUE0xV1JUM2RlakVt?=
+ =?utf-8?B?L2F4bkJMNC83U3o5ZEs4elpRVXpjbG9yZVBEaGtSU0dVUUhiNHArQk5rV0Zx?=
+ =?utf-8?B?K3U3TEFHT1cyQ1pLaHRranhmeTR5amVEcHo5clZFMWNQTHFKblVIaTJXMXRC?=
+ =?utf-8?B?ODVBck1mZG5DSFlqL3J1c1lXbGxvOGgxSThqTys5N1RDS2VZa1pUUlQzYXNi?=
+ =?utf-8?B?RW1tY3NoWVlqZE1URWZWS1VlWjVCV1ZiQ3g3UjFNaDY5UVFmUmhzeUtSMk5u?=
+ =?utf-8?B?WWZyOEp0SEN6VFkwUFNNNnFkM0d3MTdlSHhwYmhITnpUc0dQaER1eEc5b0lT?=
+ =?utf-8?B?TXFyd3lsM3FVT2o5U1BoRW5mUXAwdk82ZHVwT1JpQytrRmkzR0Y0eWJSZEJ3?=
+ =?utf-8?B?dnNKRThjKyt4YWNJZk1DWGx2SmRxb0hiQ2JjSk5HM1FlSzBES0xBRmNzazNI?=
+ =?utf-8?B?ZWlWeUdSTjJTamNZOWhRZkFBd0ZXNmFEZnM3WjBlVk1sSFpScldQVjk2aExC?=
+ =?utf-8?B?cmNNTXBtU0VHcVhIMlZueFI3UHFjSkNvVXpPMVd0ZVlNTTMvd3hjeFNOdDZP?=
+ =?utf-8?B?SExpVzk1WGw0QUw4M1NUNHpPYldSbzBUbURDZ2VCaTEycm4xWkY5eUc5NW95?=
+ =?utf-8?B?M3ZvUTRmMmxDUFRPY1JzcFZQOVVRMHppTW1IQ3FSSG1rcEVMRjdHM1A2OG1t?=
+ =?utf-8?B?VTU4cmhBcEZpamhMamZURnlkR0RLQXFHNmFWSVlHSmJIYWJRdDhCMEUrd0cz?=
+ =?utf-8?B?TGFERW5oaTdYLzdzb0d1YnYzajI1WXQ1Nmllb0NiamJaOW10bjZnbHBJNjZG?=
+ =?utf-8?B?T2RQdkJyK0YyeHRVV2gya0xRKzIrOWxyOUR4YmtIelZzeGZqTnIrb2NJWXpG?=
+ =?utf-8?B?V3Q2MkNwQzBiczkwRGdiNXpielFVOGpXa3E4Y202cSt6WGUyQUZNR2dQWkJG?=
+ =?utf-8?B?NmNhQjYzakQ1QXMxZE02cnpwV0RGUkhteWxKWVpKK2dneWt2V1djQ0JHdVlF?=
+ =?utf-8?B?d2g2V3dibnBNMzBGbXNUYWRleTI0UVFOazM1NnVXdlZPUXZiRWo0eXh5eWVV?=
+ =?utf-8?B?OExEVzlsNXc1cC9DT1YwVUFFSnc5UWJoRHptSEU1bGYvUTRpU1VSZmVsOUVw?=
+ =?utf-8?B?RTBibjIxU1hNQy94eHdCb3RnWGgySVRudjNUVEpRTW5EdlNONUJ0eEdGNzNP?=
+ =?utf-8?B?MENlMWxyN3JoK091ODJIU3NJbVM3YTl2eW1ELzdWemVuU2xRUDlzMjBpNlo4?=
+ =?utf-8?B?MlRBdlZ0aEYzZHZoWkdwTnI0ODlsQTR3bGRFWEgwT3VRc1FWTXdWeU4rQmIx?=
+ =?utf-8?Q?KUENhqBujA5qcJvawJNSVGq57?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 099ddebf-54d2-4eab-99af-08ddbf68e579
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7804.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 04:19:00.7286
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pbaqbCOyH4dslmI14UmIeNdyTnitUr2oMDb00T7RH3LqfEoBDh6FQT/P83Xz1lmB
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4036
 
 
-Thanks
-ChenYu
 
-> Cheers,
-> Andre
->
-> > +
-> > +     /* push write out to hardware */
-> > +     reg =3D readl(pd->base + PPU_PWPR);
-> > +
-> > +     ret =3D readl_poll_timeout_atomic(pd->base + PPU_PWSR, reg,
-> > +                                     FIELD_GET(PPU_PWSR_PWR_STATUS, re=
-g) =3D=3D val,
-> > +                                     0, 10000);
-> > +     if (ret)
-> > +             dev_err(pck->dev, "failed to turn domain \"%s\" %s: %d\n"=
-,
-> > +                     genpd->name, str_on_off(on), ret);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int sunxi_pck600_power_on(struct generic_pm_domain *domain)
-> > +{
-> > +     struct sunxi_pck600_pd *pd =3D to_sunxi_pd(domain);
-> > +
-> > +     return sunxi_pck600_pd_set_power(pd, true);
-> > +}
-> > +
-> > +static int sunxi_pck600_power_off(struct generic_pm_domain *domain)
-> > +{
-> > +     struct sunxi_pck600_pd *pd =3D to_sunxi_pd(domain);
-> > +
-> > +     return sunxi_pck600_pd_set_power(pd, false);
-> > +}
-> > +
-> > +static void sunxi_pck600_pd_setup(struct sunxi_pck600_pd *pd,
-> > +                               const struct sunxi_pck600_desc *desc)
-> > +{
-> > +     writel(desc->device_ctrl0_delay, pd->base + PPU_DCDR0);
-> > +     writel(desc->device_ctrl1_delay, pd->base + PPU_DCDR1);
-> > +     writel(desc->logic_power_switch0_delay,
-> > +            pd->base + desc->logic_power_switch0_delay_offset);
-> > +     writel(desc->logic_power_switch1_delay,
-> > +            pd->base + desc->logic_power_switch1_delay_offset);
-> > +     writel(desc->off2on_delay, pd->base + desc->off2on_delay_offset);
-> > +}
-> > +
-> > +static int sunxi_pck600_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *dev =3D &pdev->dev;
-> > +     const struct sunxi_pck600_desc *desc;
-> > +     struct genpd_onecell_data *genpds;
-> > +     struct sunxi_pck600 *pck;
-> > +     struct reset_control *rst;
-> > +     struct clk *clk;
-> > +     void __iomem *base;
-> > +     int i, ret;
-> > +
-> > +     desc =3D of_device_get_match_data(dev);
-> > +
-> > +     pck =3D devm_kzalloc(dev, struct_size(pck, pds, desc->num_domains=
-), GFP_KERNEL);
-> > +     if (!pck)
-> > +             return -ENOMEM;
-> > +
-> > +     pck->dev =3D &pdev->dev;
-> > +     platform_set_drvdata(pdev, pck);
-> > +
-> > +     genpds =3D &pck->genpd_data;
-> > +     genpds->num_domains =3D desc->num_domains;
-> > +     genpds->domains =3D devm_kcalloc(dev, desc->num_domains,
-> > +                                    sizeof(*genpds->domains), GFP_KERN=
-EL);
-> > +     if (!genpds->domains)
-> > +             return -ENOMEM;
-> > +
-> > +     base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +     if (IS_ERR(base))
-> > +             return PTR_ERR(base);
-> > +
-> > +     rst =3D devm_reset_control_get_exclusive_released(dev, NULL);
-> > +     if (IS_ERR(rst))
-> > +             return dev_err_probe(dev, PTR_ERR(rst), "failed to get re=
-set control\n");
-> > +
-> > +     clk =3D devm_clk_get_enabled(dev, NULL);
-> > +     if (IS_ERR(clk))
-> > +             return dev_err_probe(dev, PTR_ERR(clk), "failed to get cl=
-ock\n");
-> > +
-> > +     for (i =3D 0; i < desc->num_domains; i++) {
-> > +             struct sunxi_pck600_pd *pd =3D &pck->pds[i];
-> > +
-> > +             pd->genpd.name =3D desc->pd_names[i];
-> > +             pd->genpd.power_off =3D sunxi_pck600_power_off;
-> > +             pd->genpd.power_on =3D sunxi_pck600_power_on;
-> > +             pd->base =3D base + PPU_REG_SIZE * i;
-> > +
-> > +             sunxi_pck600_pd_setup(pd, desc);
-> > +             ret =3D pm_genpd_init(&pd->genpd, NULL, false);
-> > +             if (ret) {
-> > +                     dev_err_probe(dev, ret, "failed to initialize pow=
-er domain\n");
-> > +                     goto err_remove_pds;
-> > +             }
-> > +
-> > +             genpds->domains[i] =3D &pd->genpd;
-> > +     }
-> > +
-> > +     ret =3D of_genpd_add_provider_onecell(dev_of_node(dev), genpds);
-> > +     if (ret) {
-> > +             dev_err_probe(dev, ret, "failed to add PD provider\n");
-> > +             goto err_remove_pds;
-> > +     }
-> > +
-> > +     return 0;
-> > +
-> > +err_remove_pds:
-> > +     for (i--; i >=3D 0; i--)
-> > +             pm_genpd_remove(genpds->domains[i]);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static const char * const sun55i_a523_pck600_pd_names[] =3D {
-> > +     "VE", "GPU", "VI", "VO0", "VO1", "DE", "NAND", "PCIE"
-> > +};
-> > +
-> > +static const struct sunxi_pck600_desc sun55i_a523_pck600_desc =3D {
-> > +     .pd_names =3D sun55i_a523_pck600_pd_names,
-> > +     .num_domains =3D ARRAY_SIZE(sun55i_a523_pck600_pd_names),
-> > +     .logic_power_switch0_delay_offset =3D 0xc00,
-> > +     .logic_power_switch1_delay_offset =3D 0xc04,
-> > +     .off2on_delay_offset =3D 0xc10,
-> > +     .device_ctrl0_delay =3D 0xffffff,
-> > +     .device_ctrl1_delay =3D 0xffff,
-> > +     .logic_power_switch0_delay =3D 0x8080808,
-> > +     .logic_power_switch1_delay =3D 0x808,
-> > +     .off2on_delay =3D 0x8
-> > +};
-> > +
-> > +static const struct of_device_id sunxi_pck600_of_match[] =3D {
-> > +     {
-> > +             .compatible     =3D "allwinner,sun55i-a523-pck-600",
-> > +             .data           =3D &sun55i_a523_pck600_desc,
-> > +     },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(of, sunxi_pck600_of_match);
-> > +
-> > +static struct platform_driver sunxi_pck600_driver =3D {
-> > +     .probe =3D sunxi_pck600_probe,
-> > +     .driver =3D {
-> > +             .name   =3D "sunxi-pck-600",
-> > +             .of_match_table =3D sunxi_pck600_of_match,
-> > +             /* Power domains cannot be removed if in use. */
-> > +             .suppress_bind_attrs =3D true,
-> > +     },
-> > +};
-> > +module_platform_driver(sunxi_pck600_driver);
-> > +
-> > +MODULE_DESCRIPTION("Allwinner PCK-600 power domain driver");
-> > +MODULE_AUTHOR("Chen-Yu Tsai <wens@csie.org>");
-> > +MODULE_LICENSE("GPL");
->
->
+On 7/10/2025 1:20 AM, Mario Limonciello wrote:
+> On 7/9/2025 6:05 AM, Samuel Zhang wrote:
+>> For normal hibernation, GPU do not need to be resumed in thaw since it is
+>> not involved in writing the hibernation image. Skip resume in this case
+>> can reduce the hibernation time.
+>>
+>> On VM with 8 * 192GB VRAM dGPUs, 98% VRAM usage and 1.7TB system memory,
+>> this can save 50 minutes.
+>>
+>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
+> 
+> I hand modified the patches for other changes missing from linux-next in
+> your base.
+> 
+> I checked on an APU with an eDP display connected and from a VT
+> hibernate does keep the display off now so this is definitely an
+> improvement there too.
+> 
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> 
+>> ---
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/
+>> drm/amd/amdgpu/amdgpu_drv.c
+>> index 4f8632737574..b24c420983ef 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> @@ -2541,6 +2541,10 @@ amdgpu_pci_shutdown(struct pci_dev *pdev)
+>>       if (amdgpu_ras_intr_triggered())
+>>           return;
+>>   +    /* device maybe not resumed here, return immediately in this
+>> case */
+>> +    if (adev->in_s4 && adev->in_suspend)
+>> +        return;
+>> +
+>>       /* if we are running in a VM, make sure the device
+>>        * torn down properly on reboot/shutdown.
+>>        * unfortunately we can't detect certain
+>> @@ -2557,6 +2561,10 @@ static int amdgpu_pmops_prepare(struct device
+>> *dev)
+>>       struct drm_device *drm_dev = dev_get_drvdata(dev);
+>>       struct amdgpu_device *adev = drm_to_adev(drm_dev);
+>>   +    /* device maybe not resumed here, return immediately in this
+>> case */
+>> +    if (adev->in_s4 && adev->in_suspend)
+>> +        return 0;
+>> +
+> 
+> Is this one right?  Don't we still want to call prepare() for all the HW
+> IP blocks?  The eviction call that happens in prepare() is a no-op but
+> there are other IP blocks with an prepare_suspend() callback like DCN.
+> 
+> That is I think you're destroying the optimization from commit
+> 50e0bae34fa6b ("drm/amd/display: Add and use new dm_prepare_suspend()
+> callback") by adding this code here.
+> 
+
+I guess this takes care of the prepare() before a power_off(). For the
+hibernate prepare() call, in_suspend flag will remain false and it
+should get executed. If the device is runtime-suspended already, then
+the path won't be taken. Assuming that's fine.
+
+Thanks,
+Lijo
+
+> 
+>>       /* Return a positive number here so
+>>        * DPM_FLAG_SMART_SUSPEND works properly
+>>        */
+>> @@ -2655,12 +2663,21 @@ static int amdgpu_pmops_thaw(struct device *dev)
+>>   {
+>>       struct drm_device *drm_dev = dev_get_drvdata(dev);
+>>   +    /* do not resume device if it's normal hibernation */
+>> +    if (!pm_hibernate_is_recovering())
+>> +        return 0;
+>> +
+>>       return amdgpu_device_resume(drm_dev, true);
+>>   }
+>>     static int amdgpu_pmops_poweroff(struct device *dev)
+>>   {
+>>       struct drm_device *drm_dev = dev_get_drvdata(dev);
+>> +    struct amdgpu_device *adev = drm_to_adev(drm_dev);
+>> +
+>> +    /* device maybe not resumed here, return immediately in this case */
+>> +    if (adev->in_s4 && adev->in_suspend)
+>> +        return 0;
+>>         return amdgpu_device_suspend(drm_dev, true);
+>>   }
+> 
+
 
