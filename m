@@ -1,304 +1,275 @@
-Return-Path: <linux-pm+bounces-30618-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30619-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3101EB00789
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 17:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94AE1B007FC
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 18:01:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0BB11661E7
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 15:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72738174A48
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 15:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8235A233715;
-	Thu, 10 Jul 2025 15:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDE627AC45;
+	Thu, 10 Jul 2025 15:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KnNb1FX5"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="CWlxzgfk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D8F13B293
-	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752162322; cv=none; b=sJmuOBRbwa0WfO4GraNWA/cmg1u1bdLpJ69Jf8vwBBsmeqoLyGdoiEbXH3S76Cuw8WJaZt8BRs4u4jzCOjNjDOF8BIpWQG/axz2PcM6gYd/sSqMD4Iu83Z4slTztCsmR4rbrC3HIo9KXrLzzOxNr2qsI7CKzcr7y/mQOchoKxCs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752162322; c=relaxed/simple;
-	bh=sWLNbRGR1WallWCM4ueaRFzJawzsy7FQNASnovpTbV8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gBLgMG8T5Kb6/eJn9oMNWuSPy1Gt/srXJC/idT11n5HuxpPUpIKZ1Jce6P2C/vc71SKfIWMpUamiVGuTwPwkpC85p+bdOv6QZjy2ddq4ssf/f6nxv9ccsysYJoTOU88rfC2i9UEV9xe1on6TghonD3Wvpha0kXMCr57kIgN+l5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KnNb1FX5; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56A95Y9e016649
-	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:45:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2Ncm63/MfiuPbDjDVklTQd8+kupDoVzcsE+k6jeIleo=; b=KnNb1FX5hzQYi1xI
-	zA7Uh98UKUkyt/1X3LPA+iboHhUo60Q8NsuQ+j/+pYe+V7qm/tdkojBRTi5GoUkX
-	nPMaDQzL3Wy8yMmK8Bke6qmNICNdt+b+pJEo7gOKKm7moVknA276ngxWtJI9K7ux
-	hadHKYaTyBxM3ndfT+EmJPJxL4KWJbITB/2JWZbHJK6k1zpzRYszhYf366yP7Q5+
-	VLnfL+zNUfcmJk7YHDU4yqMlV+1NhXfhYElD9wD5zJ6gWVPTKY3rqFj8xjkk4Hhf
-	2hUhXMgwOTO0cGdte45iIxSOpCdFB+1zryLDHG6KpNvv0jVVCJ9ouQgDdAd50ChW
-	t9iZYQ==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47smap5gpy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:45:19 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4a9b1f1fa5eso1707981cf.2
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 08:45:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752162318; x=1752767118;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Ncm63/MfiuPbDjDVklTQd8+kupDoVzcsE+k6jeIleo=;
-        b=hw4IIsSax3vL/OMg/4Ga40KcjACgw5c8xJP1EM9xNfknnBc5cqahhcqArPicacPXwP
-         ZgUWDknUQ20fqaK/PIHH1WpP2BX8ZK1X1DGM/vQ4sNe+2GxnuMOkpIc8DCyy6G5/1vN2
-         ID4UOQkjkMAlpIedkjvzcDAS9HOTpADhg+Hm++fw40P4oLdUgLU4OP2ulFi3h1VilvdS
-         1KLzQoWHInti95tIRAcym+KhQh9sr3XGQZHEWYkE728tDwtitojW7aXXbB0HVv9SVHw1
-         wAd0YXuj1M4Kj1AeTXOfq7RiPlJLydixj/C7Dhe7l/TqtirHtPkprgsHUrPZTLqTNYcQ
-         /ZvA==
-X-Forwarded-Encrypted: i=1; AJvYcCVUnOEnTmXNSa2tmcGylI0zPXIImOuDG+1fD8Vfr7ijm/k6R94uYX8ZAIunsO8XRwHGyTfX1V8dAQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyln5uWSANvkDwvwOQPRafIeuNprvd+pWnZoJn2+Yoaw8uTzeFw
-	CVVyiIkgrHxeh5Yr0Q4rmdnM//vcAT7ydNHp2/0KUNxDZCwBfZ6HvfGP3+RosUg7+3JC555EUgX
-	zEm89kUTs4rI5EZKa3cX5cmEGKbk3M8YUVDsjEDGyJ6f9QIBJ+sLPPRstdO8Yeg==
-X-Gm-Gg: ASbGncs6FaNB+78Kr/sG1gd3wedQLvAOKqiYfECUdfLoy57wluf0j/T7K6pgtHUWUqS
-	DS2n7IzQtFdzL8WmiX0jRa5cybbDf53ymdaupF6s/gqDquMOOuBe173gs+MfOFlIex0GcI3fm64
-	Vd5rR01nisReMoj04klPIDqFvSV8hR3cTtL1Db0i4PT/+sleyq5wZbxBKMRzfSrcldytFXZPEep
-	x8uIbEzBdbOdxlL2iqeZWgwvVElj/IMj+j1kHMyWea+SVTCx3o4iuA+eT9rbdCRON2M67ZzD4oa
-	Dvlho4pTiu61G2YN4uhZzB+jQmPWY1L1XkxdDrTpGGYE5tR/CIjwPAAkv//Dr+D6Y+FPwvIqaap
-	rto8=
-X-Received: by 2002:ac8:5e46:0:b0:4a9:f582:dc03 with SMTP id d75a77b69052e-4a9f582dfcemr10046901cf.9.1752162318260;
-        Thu, 10 Jul 2025 08:45:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEGMNtJ4drdObgcfuSdkFknAQN4Odw7/i1HjVhwWIis053P28UmmNK+qrTjCWD2/caZ4V7w5g==
-X-Received: by 2002:ac8:5e46:0:b0:4a9:f582:dc03 with SMTP id d75a77b69052e-4a9f582dfcemr10046111cf.9.1752162317396;
-        Thu, 10 Jul 2025 08:45:17 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7ee44basm152828266b.42.2025.07.10.08.45.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jul 2025 08:45:16 -0700 (PDT)
-Message-ID: <4ca0df4e-7697-4cfe-ada4-6eee8224938f@oss.qualcomm.com>
-Date: Thu, 10 Jul 2025 17:45:11 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695F2279DB6;
+	Thu, 10 Jul 2025 15:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752163065; cv=fail; b=BNafMN0hvfNIhFE5yRVuZ65LYFuaLHV4U4QnPCB8+i1cNZ4KqhzjLmvEEjxaIxEiHWVJMwNVtU1vcfm+2F/cCLEs0GWvAJXW+/M5VTNAI+cCdiMYTRO/wyKsWALRzuqeYKcl5fKDNmuz/lozLErjHDbVkILYGImZLUeQyp6zK14=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752163065; c=relaxed/simple;
+	bh=JXimizUE1NRNJtJPtejsYcgD2wChpvYMM4uzfGEX/LU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=lNUaCuRDGG6yqmOBRPcP/LbMQ+lpvIUvOBSt21CRO48oLRslbadH+wAtYMJLz9R5SPOyCaItTXuyRvV4cOlXnTD81bL26MpzPeJHvqKqJmJojqBuUT3uQ4K4QT5dcsT39T1CozVwl4hhIpazdAsL5h8Np/ovuS7RPKEpyCz9U18=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=CWlxzgfk; arc=fail smtp.client-ip=40.107.94.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=akH3sHFe+RptBy2v7NpBxWEOU4afAfXC1mMil2qejjxC09Fua5bwscSetYdkQ3iRkkpvVrLBYdrjulOktyeoGPZAkv+Z2s3bgB9xnLZqD1h4tnYFq6YmHCfliasvRjmc2hY2wxP1tiyHP9gFnxOYFmrzgUIJxgdHkIDPFJVtQ1SZU1kElAblw/zOVisVU5MvVXjrBGScZlDmC5Xr+UYih+mCgWxGF7NaKkEk2BC08aTRG9icKdPr/WIBFUYr1lq9dK8gpyOJ5BXsExXjKi/zT2Ulz2H3dBBshfju7fJnU6+6DpqQTaoWbHYyLWsbmh0cAliHD60uo1lqJzNPm4ucng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JTn+QZkh/ySjvl+HBNEX7BtilHcxzZ0r/6xlxKOqvbw=;
+ b=hB8B1Q7agvib0YLuvFHPoHMMDn/dHACENew9y5xbxHYtP8sJ9L5fa4LtMyr4ZyAVhySY8dt7gm7LRpoxNJGAozL42ekfI/RQVeiwBaTBqhEy5BMfTPUkLn9A1P/XdbUMfpzniXdqz7YzS6uvHD8LGzex81+kDOCEkZmpDIIf5H49BTIieu10b8qazInb7LSF+1/yRoC+pVUUdO77J8lbXgHKGQzMEd/lSf60Y2sW5F9dXqIiYW6cLd//9Kn/fYyCzLL9d8wkmfK9x33lRpn7RzIDMk0HUFULO19EcaNCsAmgMhlHA9FsPhN5otyFAUSN7sH6Bpff6p3yFZo0oXfzog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JTn+QZkh/ySjvl+HBNEX7BtilHcxzZ0r/6xlxKOqvbw=;
+ b=CWlxzgfkNuOubnnLmKS/WHA1l3bWhknd2SaCYGvKy6yifNECArFJ+etmImmI9GvTO/owT7vroT0l+tH+vPu5UPfwxGlE4FaN71ro0TB35XRTcS6WelR6wdTekljBIyn/vbkfW6nEDs/n4CILqnzWt2d7VugxO+SB7NRgbcpyodY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CH1PPF931B95D07.namprd12.prod.outlook.com (2603:10b6:61f:fc00::619) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.27; Thu, 10 Jul
+ 2025 15:57:40 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%3]) with mapi id 15.20.8901.024; Thu, 10 Jul 2025
+ 15:57:39 +0000
+Message-ID: <b6a83977-eeb7-494c-8e1e-1b11b25fd61e@amd.com>
+Date: Thu, 10 Jul 2025 11:57:37 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/5] reduce system memory requirement for hibernation
+To: Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
+ christian.koenig@amd.com, rafael@kernel.org, len.brown@intel.com,
+ pavel@kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org,
+ airlied@gmail.com, simona@ffwll.ch, ray.huang@amd.com,
+ matthew.auld@intel.com, matthew.brost@intel.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de
+Cc: lijo.lazar@amd.com, victor.zhao@amd.com, haijun.chang@amd.com,
+ Qing.Ma@amd.com, Owen.Zhang2@amd.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org
+References: <20250710062313.3226149-1-guoqing.zhang@amd.com>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20250710062313.3226149-1-guoqing.zhang@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0086.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:84::34) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 05/10] firmware: psci: Implement vendor-specific
- reset-types as reboot-mode
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Elliot Berman <elliotb317@gmail.com>
-Cc: Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        Andre Draszik <andre.draszik@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, Wei Xu <xuwei5@hisilicon.com>,
-        linux-rockchip@lists.infradead.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Srinivas Kandagatla <srini@kernel.org>
-References: <20250710-arm-psci-system_reset2-vendor-reboots-v10-0-b2d3b882be85@oss.qualcomm.com>
- <20250710-arm-psci-system_reset2-vendor-reboots-v10-5-b2d3b882be85@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250710-arm-psci-system_reset2-vendor-reboots-v10-5-b2d3b882be85@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=Ar7u3P9P c=1 sm=1 tr=0 ts=686fe00f cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=GLYJuuS3cqMp142eAlYA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
-X-Proofpoint-ORIG-GUID: mZ12YBuVLJLqdmIE9MuUzHvMUJVlixuo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEzNiBTYWx0ZWRfX6EDcgs5kxGa6
- +tXRMPfwQG5y2Q6gLJMY3TGGypsRvsuUA9qZVhTu+Fvpb1HBhLC51N1TS6J29BWsbDJ2zeX6Yr4
- KvLJqey/cGp/Irrt6oIK1zr5GjJY7ZJ6qS84zlfrhhcGM8UPOQVlHerUXD3qWmjfdsxabuSQI+2
- y7bIfLGs7rvYmBZRX5Pz7H1N3I7ZYmflfYx4gTsK7PFGp4i50wozUoA80oFhz2HBuufbMU6INC/
- Y+3cq0S7XHV7kj2JHVd/5towdp3qNpYVz6+P5gsovey3tThCVELxSQvpN6sV09rXPi7RwAnEL06
- C9ECkV//li2555A3QhsOmshDdxCXJnssybIuJ50vNgS/zbdI6syMi5VhNwlFIz5Cie7DqG/Nlik
- qjDiC1YeBwhFQ66L81BCRVQYuHuvdFtv3U9e52DbL6whfU79L36hidekI52iv5+GfT8TdC0c
-X-Proofpoint-GUID: mZ12YBuVLJLqdmIE9MuUzHvMUJVlixuo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-10_04,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
- phishscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507100136
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH1PPF931B95D07:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0533cf53-667d-4618-bd3f-08ddbfca7f2d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|366016|376014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Um52bUVpT1FaZnV2bWU0dmVVNHdIMElXVGJRaWNHOFBqaFo5QytJMUp0dW1R?=
+ =?utf-8?B?bVFYWUFSdXEwS041TDREYTQ5NEduT0RjQ1pJd2pmeUdDVitIWllMNHRWQm1p?=
+ =?utf-8?B?ZTRoSmtGZzRreWREazBaQ21Cc2dsek5CRGxzbnJCelkyQk85dU1rRUZZTGJs?=
+ =?utf-8?B?Q040WnF0WGtUVnExYlliWUNzaVo4OXM1dGhENVIrYTAyWCtrOUJQYzNLa1E5?=
+ =?utf-8?B?M3U1NmxJNEJ2dDJSWU5Md2F3ZTN2bVN5K1VLeDB4MVFRYzJYYThlQmU1dlUx?=
+ =?utf-8?B?RjRqZFptQmszQ0Rwbm1CVzVMS1BRdEo2UTk3RUxVNGJWblZHVVZ0ZG4yTGZV?=
+ =?utf-8?B?VDRlSFFHK1hkNjg2NjRxQjRQclQrNGR6NFB2SkxucktqY29rc1E3RlR1V1M3?=
+ =?utf-8?B?Q28wWnZiV3A0cjJoUWJsS0xzellZVkR6ZzRvZGRCYjRIdWV0aHplYXVUUnc5?=
+ =?utf-8?B?ZEEvb09VeDB3Z1l3bVhLSWh5L05aWWY5M0xUVDhVd1dkVVQ4YklHcVJpWklZ?=
+ =?utf-8?B?dTdBeUhjUWxONEErYU0yQ2JUZFpQeUhheE1odG1JSXROek9DOW0zSFcxVnIz?=
+ =?utf-8?B?M3VpeEZpS2VLUlcrVTBCeDAwOGtFZUhHK3IvOWZ5TEhZdEU3elU1dUN3aHRW?=
+ =?utf-8?B?bU03bkNXUDU4RE8xd3Z4dDJKU0xKL24wejZSR09yaEl4SWs0OFphUXJlMnZV?=
+ =?utf-8?B?aXU1bnZORGg4bmVvYVd5NzhwZW5UaGxhNXhXRUtTKzl1akRwbUVHcG1xU0Jj?=
+ =?utf-8?B?cjZuNkRvVzhZU1MxeDZRaXllT21JcG5DSmZwUFhvZDBWSmZoclByZGJBWHR3?=
+ =?utf-8?B?N1krSnc1L0JCN1NBakhQK2lOdFB1aUF6c2pzbUNMUTErYkNObVpjMlRrQVhL?=
+ =?utf-8?B?U3Z3MXBMbTkxMUc0clBUWjBzWVlac3hPTVFVTmNkNWNXMHc5UkNvYzFBTTlI?=
+ =?utf-8?B?d1hlL2VEaEMrT3pTUVkyNjJQemJ4dkNxaDl1S0JjSTVYcHRZMElrcXFMdExy?=
+ =?utf-8?B?bHR0b0Y4SW45ekRkYWVZQ0J4UVhXQk1UTE41ejk3QjFMVUhNdTBBMWU4a1Bk?=
+ =?utf-8?B?Tmljd3JjOUxLYWgxKzlBVThFdWhYQ3N5cy8wWENqejRLZGF3UXlwQ3V2dUtj?=
+ =?utf-8?B?SVF6blFrNE9hYXlGbmExNnZQaUFPN3E3SW1PTUtsU1NZRWFrckVtRVJ1czlu?=
+ =?utf-8?B?MlpJZnVTSG1oWklBZ0p4cDZRam9sRlNDZUpOaWFhS24wVDJXckRGYXlESzJK?=
+ =?utf-8?B?OG1JNllVZHdqMFlFM0FkeHgyR1JRbWFKSFhCdDB2Q2ZJVGROMkROMU9WTjVF?=
+ =?utf-8?B?dDdTbkVDZ3g0TmN3K3BweHVDbTE0dm5hOC9LMEt5MTVqelIwNUF6NW55UERO?=
+ =?utf-8?B?Rm5rRnhETHVaTFpBTEpUc0VtZDJFU1dCKzNMZVBYU2pwN3crUzBEZ0xGUFM4?=
+ =?utf-8?B?ZG9vemxnaW1mcSs5eXlTRTZvZ1dHU0k2YWlZV0hJVEpwR25nSjF4aVZaVjFt?=
+ =?utf-8?B?UHNZbytOYlpGaUhyQ1RYdFljQU16T0dTNXJYdVE4dGpzM0d2S2pMMVQxNTFH?=
+ =?utf-8?B?R2M0bHRmZEpjR3M5S2dsMnljSWZ6L2JwTkNnWWM1YzdVSDdxWWh0OXp4dVYv?=
+ =?utf-8?B?UlJrQVdQT0RVK0NPT3d2dytYMnNud2NacEFXS3lGUTFmQlhJYWdtdzdYa3po?=
+ =?utf-8?B?bERlZmQ5TlU1a3BSaG1wOExSRWNXL3o2U21mNDAyOVlORTRpY0toTzgxSjI3?=
+ =?utf-8?B?L1VDWTBQejlCb2IxNjBMSG9hbWxMYmxDOWROVE1GcHdQVjZmNm1zUVd1UjJ1?=
+ =?utf-8?B?U0pNOEZjQXlEMXhRcG1kang3T0dPNHlzUUEvUUVFcExvRWx0WEM3YmtkK21z?=
+ =?utf-8?B?T3dpVTd6WHFOOUgrOEgzTWhmczg0VHR2bnVIOWF0VjBvYnVnNmgrSk1xZmdt?=
+ =?utf-8?B?M0d5YkI1bUxkYVl5SkNhM3JnOFB2STV0Unc4WDdSYVQwbktXSDU4NWNXdmhp?=
+ =?utf-8?B?R2srME1rVGhRPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UlNKbEJOMURQaVUwUEYrVGk2azJwcFhLNmhjUWYzditTT0xSc2VRdWxxYk5q?=
+ =?utf-8?B?allQWU4rcldWY0pGaGFXNUR0TGxpOHQyRk01ZVFLZVpoK1YzK3RIdzdQYkJ4?=
+ =?utf-8?B?NWE2R2lwREhHWWpLMWhuVUw4Qm95bGlZOVFxRUxObUpWUHcxYms2dWc2aUgz?=
+ =?utf-8?B?c3ZnR1pic2cwbi9DSkZXeUZNb3hOdjF0WGhBeG5CUjR0Sm1oS2JZbS9XM3dK?=
+ =?utf-8?B?N3dOc2J3YmtuV1ZkaVEzb3lLbmFKS0VqekljU1diYkpGc1p2cmNpM3lFZmFn?=
+ =?utf-8?B?Sk9mY3drUGppYkErR2ltd0d0anl3TWpibHMyamRJNEZyL3BmS1ZSeGRsZzhv?=
+ =?utf-8?B?RWRSRXpQaEppMG1rN1lBZ0FpeWZCelRwY1RyRzZROVZYbVFlU0lRSG9JYkZ6?=
+ =?utf-8?B?MGZYUlBmM3haYXhZZmJPQ01EdFBJL3hXTXRXcVZ0UnBjS1VVeE83cHhndXNj?=
+ =?utf-8?B?ZFJSVkk1bTMwdThRdFpNMFhGb0djWWNwckV3Rm5OSk44Y0UwSm41bkNPbFc5?=
+ =?utf-8?B?RlZFZ0diaWd4NnlWV3E5RnhWc0k5WmRrdzNWa3NRbmtpZXFKZ1NDRWtQUUVO?=
+ =?utf-8?B?ZkR3MjRPYlpsbnJraHlFdkxEajRZMm1tblNPeExiWm1sSFpBRzR4YnhKYVdN?=
+ =?utf-8?B?dHhGSW5CSjFRdThBSXd3QWFySW1LNXVYd3FRbG5yNDVjOVZFbWZOK2ZPaG1h?=
+ =?utf-8?B?UDdVY3JLWHVkNXk0cy9IcXMwWEZjUm1neUdGdmdVVUE2NFZSYitsUlB5aE5R?=
+ =?utf-8?B?VEJWQjRoc3hCR0xOR3BacVgyOUZPWmh5ZmpwSUFLZlNOOWhBWHQrc1BGQ1Rn?=
+ =?utf-8?B?VWtGYUpLT1VjWkJPaVZFdWtEcnVzZnU1RXRhNktDM094VkwrYjdhU2NKNFQ5?=
+ =?utf-8?B?VGg1R2lMNGtsM25EQjA0YWFpQlFndHhRcVRZR0hFWlFoOHcxOGM0K2JKUHhX?=
+ =?utf-8?B?am9JMXVQTFZpUW1QcGE2UHFReTF0SmlNUnVRcngxNE5KRTR2cTlRcVA3TFBy?=
+ =?utf-8?B?T2JLK2R0SDdpZ2VXcGE3aUFCdWxPYXFGVlcvMm5mREZBazJINWNGYldraEl0?=
+ =?utf-8?B?U3h1am1wUElOZXR6UHhKM29jOW5IVG51QkVFUytlODZicVVId2ZHQ09sRksv?=
+ =?utf-8?B?V3o3R0E4UkpSNFFudXRSWWtHZThZeHl1czNoOEhYb2lnNXcwZVRJdVBXTmZM?=
+ =?utf-8?B?UmEvWUlVSzkxNUVUYXl3OGpQQzlrZmozaHJuUG1yRzltUWRHS2pQWTc4RllL?=
+ =?utf-8?B?RFhNb2JSR3FNb0VZZmk3SWx5VTJIejV4allPNkxhbzkrUlYrK1ZvbmNiTTA4?=
+ =?utf-8?B?c01nallreGhWRWdlaDNwSHBCVGo3Rk50RE5jYUM4QjZ1c3NmdW4vUi9WamdW?=
+ =?utf-8?B?TUdUa2JUY0tqcVdyQ2dudGxHNVA4WFNaQWJ0cjRPMEUxU0RLZGNxdkVrMFVv?=
+ =?utf-8?B?dHg2dUt0UGRJa0t2Wk1qWUcyZTFPdWtvU3VSZm1LZUs4aGNHQjJGNGJ1MTQ2?=
+ =?utf-8?B?TWVrU3gzbko1RnpGVTE0b1BrcXdYYW9PNGdIdEdqeU9zdmExK0J4OTVVelJq?=
+ =?utf-8?B?eXlEZk5HS0h0YWc2R2tyL3ZKcjdZUlFMQVF1WDVsQis3SmRrSmIxUEFXZENG?=
+ =?utf-8?B?b0dFa0o2eVp4cmpYVFpaWEsrNGF2WXdLTzBRcE51THlzU2wxUGdjOFFWN3ZT?=
+ =?utf-8?B?VUJrbnE3RkloVkJPZGIzWVJUL1U0VE0ySmUzRlVyRFRKQjFRVnBmbzMzTjli?=
+ =?utf-8?B?VEpHU2MzUkZXcjBobERFQzRPQkVOUjQ1THUxZ056a2wrQ1d6a3orK0RVaTM4?=
+ =?utf-8?B?MWRwUHhaZkV4emRZZ3RIR1lmaFIvRTVwNVIxcURWcWl0ZEEwNTFidWtQNE8x?=
+ =?utf-8?B?c0FmK2JCNXpRSXlpT0l5K2tBd1Q5bDBET1dXNm9PazhMOWdoWkxJeC9LK3p5?=
+ =?utf-8?B?NWZzZzR5Vmo1dUF3ZEl0WWpHazExcVhQenU2dXVlVVY5bDRKVWRjUjVuNVN0?=
+ =?utf-8?B?aWM5djl4VzRtQXkya0xxT2pmdkxEUmFJZGxMSWdNVDcwUFB6eW1uQ0RXQUFP?=
+ =?utf-8?B?ZVpqQTVrcmhlajlYaUgxNzJ1bDVjT1pmYXk2Uko1T2VFOE5aWlJmWkg5WGJo?=
+ =?utf-8?Q?7a8GATIA3LfYMsARlGIuWmebp?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0533cf53-667d-4618-bd3f-08ddbfca7f2d
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 15:57:39.6736
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uefM7HDL1C0OcUITouOJi97r0rlhXDC9AEU0Yi1rhhnnOYSRpORhxLUHKLrvLHnqcOD/ILKU0GYyre3P3cQPGg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPF931B95D07
 
-On 7/10/25 11:15 AM, Shivendra Pratap wrote:
-> SoC vendors have different types of resets which are controlled
-> through various hardware registers. For instance, Qualcomm SoC
-> may have a requirement that reboot with “bootloader” command
-> should reboot the device to bootloader flashing mode and reboot
-> with “edl” should reboot the device into Emergency flashing mode.
-> Setting up such reboots on Qualcomm devices can be inconsistent
-> across SoC platforms and may require setting different HW
-> registers, where some of these registers may not be accessible to
-> HLOS. These knobs evolve over product generations and require
-> more drivers. PSCI spec defines, SYSTEM_RESET2, vendor-specific
-> reset which can help align this requirement. Add support for PSCI
-> SYSTEM_RESET2, vendor-specific resets and align the implementation
-> to allow user-space initiated reboots to trigger these resets.
+On 7/10/2025 2:23 AM, Samuel Zhang wrote:
 > 
-> Introduce a late_initcall to register PSCI vendor-specific resets
-> as reboot-mode arguments like reset_type and cookie. For a SoC
-> where, PSCI vendor-specific system_reset2 is supported, the
-> appropriate value gets filled to reset_type and cookie during
-> this reboot-mode hook registration. If the secure firmware
-> supports PSCI system_reset2, restart notifier will make secure
-> call to trigger appropriate requested reset type.
+> Modern data center dGPUs are usually equipped with very large VRAM. On
+> server with such dGPUs(192GB VRAM * 8) and 2TB system memory, hibernate
+> will fail due to no enough free memory.
 > 
-> By using the above implementation, usespace will be able to issue
-> such resets using the reboot() system call with the "*arg"
-> parameter as a string based command. The commands can be defined
-> in PSCI device tree node as “reset-types” and are based on the
-> reboot-mode based commands.
+> The root cause is that during hibernation all VRAM memory get evicted to
+> GTT or shmem. In both case, it is in system memory and kernel will try to
+> copy the pages to hibernation image. In the worst case, this causes 2
+> copies of VRAM memory in system memory, 2TB is not enough for the
+> hibernation image. 192GB * 8 * 2 = 3TB > 2TB.
 > 
-> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> ---
->  drivers/firmware/psci/Kconfig |  1 +
->  drivers/firmware/psci/psci.c  | 53 ++++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 53 insertions(+), 1 deletion(-)
+> The fix includes following changes. With these changes, there's much less
+> pages needed to be copied to hibernate image and hibernation can succeed.
+> * patch 1 and 2: move GTT to shmem after evicting VRAM. so that the GTT
+>    pages can be freed.
+> * patch 3: force write shmem pages to swap disk and free shmem pages.
 > 
-> diff --git a/drivers/firmware/psci/Kconfig b/drivers/firmware/psci/Kconfig
-> index 97944168b5e66aea1e38a7eb2d4ced8348fce64b..9d65fe7b06a6429de8a26d06f9384e5c93f36e5f 100644
-> --- a/drivers/firmware/psci/Kconfig
-> +++ b/drivers/firmware/psci/Kconfig
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config ARM_PSCI_FW
->  	bool
-> +	select REBOOT_MODE
->  
->  config ARM_PSCI_CHECKER
->  	bool "ARM PSCI checker"
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index 38ca190d4a22d6e7e0f06420e8478a2b0ec2fe6f..87293f78ed83eb33ba67ded73728729811693ea3 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -13,10 +13,13 @@
->  #include <linux/errno.h>
->  #include <linux/linkage.h>
->  #include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
->  #include <linux/pm.h>
->  #include <linux/printk.h>
->  #include <linux/psci.h>
->  #include <linux/reboot.h>
-> +#include <linux/reboot-mode.h>
->  #include <linux/slab.h>
->  #include <linux/suspend.h>
->  
-> @@ -51,6 +54,14 @@ static int resident_cpu = -1;
->  struct psci_operations psci_ops;
->  static enum arm_smccc_conduit psci_conduit = SMCCC_CONDUIT_NONE;
->  
-> +struct psci_vendor_sysreset2 {
-> +	u32 reset_type;
-> +	u32 cookie;
-> +	bool valid;
-> +};
-> +
-> +static struct psci_vendor_sysreset2 vendor_reset;
-> +
->  bool psci_tos_resident_on(int cpu)
->  {
->  	return cpu == resident_cpu;
-> @@ -309,7 +320,14 @@ static int get_set_conduit_method(const struct device_node *np)
->  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
->  			  void *data)
->  {
-> -	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
-> +	if (vendor_reset.valid && psci_system_reset2_supported) {
-> +		/*
-> +		 * if vendor_reset.valid is true call sys reset2 with
-> +		 * the vendor_reset(reset_type and cookie).
-> +		 */
+> 
+> After swapout GTT to shmem in hibernation prepare stage, the GPU will be
+> resumed again in thaw stage. The swapin and restore BOs of resume takes
+> lots of time (50 mintues observed for 8 dGPUs). And it's unnecessary since
+> writing hibernation image do not need GPU for hibernate successful case.
+> * patch 4 and 5: skip resume of device in thaw stage for successful
+>    hibernation case to reduce the hibernation time.
+> 
+> 
+> v2:
+> * split first patch to 2 patches, 1 for ttm, 1 for amdgpu
+> * refined the new ttm api
+> * add more comments for shrink_shmem_memory() and its callsite
+> * export variable pm_transition in kernel
+> * skip resume in thaw() for successful hibernation case
+> v3:
+> * refined ttm_device_prepare_hibernation() to accept device argument
+> * use guard(mutex) to replace mutex_lock and mutex_unlock
+> * move ttm_device_prepare_hibernation call to amdgpu_device_evict_resources()
+> * add pm_transition_event(), instead of exporting pm_transition variable
+> * refined amdgpu_pmops_thaw(), use switch-case for more clarity
+> v4:
+> * remove guard(mutex) and fix kdoc for ttm_device_prepare_hibernation
+> * refined kdoc for pm_transition_event() and PM_EVENT_ messages
+> * use dev_err in amdgpu_pmops_thaw()
+> * add Reviewed-by and Acked-by for patch 2 3 and 5
+> v5:
+> * add Reviewed-by for patch 1
+> * use pm_hibernate_is_recovering() to replace pm_transition_event()
+> * check in_suspend in amdgpu_pmops_prepare() and amdgpu_pmops_poweroff()
+> v6:
+> * move pm_hibernate_is_recovering() from pm.h to suspend.h
+> * rebase to next-20250709 tag of linux-next
+> * add Tested-by for patch 5
+> 
+> 
+> The merge options are either:
+> * the linux-pm changes go to linux-pm and an immutable branch for drm to
+>    merge
+> * everything goes through amd-staging-drm-next (and an amdgpu PR to drm
+>    later)
+> * everything goes through drm-misc-next
+> 
+> Mario Limonciello think everything through drm-misc-next makes most sense
+> if everyone is amenable.
+> 
 
-This comment repeats the line above and below it without
-bringing additional value
+Applied, thanks.
 
-Konrad
+530694f54dd5e (HEAD -> drm-misc-next, drm-misc/for-linux-next, 
+drm-misc/drm-misc-next) drm/amdgpu: do not resume device in thaw for 
+normal hibernation
+c2aaddbd2dede PM: hibernate: add new api pm_hibernate_is_recovering()
+2640e819474f4 PM: hibernate: shrink shmem pages after dev_pm_ops.prepare()
+924dda024f3be drm/amdgpu: move GTT to shmem after eviction for hibernation
+40b6a946d21ee drm/ttm: add new api ttm_device_prepare_hibernation()
 
-> +		invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2), vendor_reset.reset_type,
-> +			       vendor_reset.cookie, 0);
-> +	} else if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
->  	    psci_system_reset2_supported) {
->  		/*
->  		 * reset_type[31] = 0 (architectural)
-> @@ -547,6 +565,39 @@ static const struct platform_suspend_ops psci_suspend_ops = {
->  	.enter          = psci_system_suspend_enter,
->  };
->  
-> +static int psci_set_vendor_sys_reset2(struct reboot_mode_driver *reboot,
-> +				      u32 reset_type, u32 cookie)
-> +{
-> +	if (psci_system_reset2_supported) {
-> +		vendor_reset.reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | reset_type;
-> +		vendor_reset.cookie = cookie;
-> +		vendor_reset.valid = true;
-> +	}
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int __init psci_init_vendor_reset(void)
-> +{
-> +	struct reboot_mode_driver *reboot;
-> +	struct device_node *np;
-> +
-> +	np = of_find_node_by_name(NULL, "reset-types");
-> +	if (!np)
-> +		return -ENODEV;
-> +
-> +	reboot = kzalloc(sizeof(*reboot), GFP_KERNEL);
-> +	if (!reboot) {
-> +		of_node_put(np);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	reboot->write_with_cookie = psci_set_vendor_sys_reset2;
-> +
-> +	return reboot_mode_register(reboot, np);
-> +}
-> +late_initcall(psci_init_vendor_reset)
-> +
->  static void __init psci_init_system_reset2(void)
->  {
->  	int ret;
 > 
+> Samuel Zhang (5):
+> 1. drm/ttm: add new api ttm_device_prepare_hibernation()
+> 2. drm/amdgpu: move GTT to shmem after eviction for hibernation
+> 3. PM: hibernate: shrink shmem pages after dev_pm_ops.prepare()
+> 4. PM: hibernate: add new api pm_hibernate_is_recovering()
+> 5. drm/amdgpu: do not resume device in thaw for normal hibernation
+> 
+>   drivers/base/power/main.c                  | 14 ++++++++++++
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 10 ++++++++-
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    | 17 ++++++++++++++
+>   drivers/gpu/drm/ttm/ttm_device.c           | 23 +++++++++++++++++++
+>   include/drm/ttm/ttm_device.h               |  1 +
+>   include/linux/suspend.h                    |  2 ++
+>   kernel/power/hibernate.c                   | 26 ++++++++++++++++++++++
+>   7 files changed, 92 insertions(+), 1 deletion(-)
+> 
+
 
