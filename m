@@ -1,384 +1,291 @@
-Return-Path: <linux-pm+bounces-30525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30526-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C30BBAFF57B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 01:46:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C811FAFF661
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 03:17:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C0151C82E8A
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Jul 2025 23:47:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00B0C7B213A
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 01:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 737D522837F;
-	Wed,  9 Jul 2025 23:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D6926E703;
+	Thu, 10 Jul 2025 01:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bcOPn8gy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2071115A8;
-	Wed,  9 Jul 2025 23:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2DDA95C;
+	Thu, 10 Jul 2025 01:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752104808; cv=none; b=SEdshH0bJO9sJ7qd+Fp3vC4s5rycX5LsPP48epSJoEOODqbwpJB3Oy4eGO/NYWByEEngLGHV4lIWKsqquGlulw3gyVzbYVIV6HPXdcrpyB7XZyNcFOMB2IVijK7rymjZXoFDI7hCHpu6Yp2Km0InK/JRrriuEqgysQlc8CjLpPs=
+	t=1752110217; cv=none; b=uINr+Ee6Lqc+p++ZP8tPY7gxGojhFPnUkWgELbai9L1dbr4d3nD1l+4EhGSSLp4wnW+l8JbRCi/pVXmFm9NV12Q/ZSMJimV8d5zonkK5S0J4OCnTT/r/YYACB3vaTOa0xKpzlYw2oJu8qyUIYa4j6S74UF03z2qn4OPNwU4FpsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752104808; c=relaxed/simple;
-	bh=rH3qA85caV2LQXZRaSQAurqA/DMEoKvuFh9sKxnPZB0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mxNaiAYyjHG5kfQMQYbOqx+C/TAkCFJq6V6bUt3ORwwGPtbTzY+QUhL+urcLvmJMjJqnHLFhxH0oWD8ZHFXUAse+j/etF4Xkwn/p9Fa+cZoroaKxOK7qTZcluPEiyOIG7FiPIpuz+K67Rlds09akqxertwRXdnOWvmLKQCn9sGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4560150C;
-	Wed,  9 Jul 2025 16:46:32 -0700 (PDT)
-Received: from [10.43.3.235] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 186AE3F66E;
-	Wed,  9 Jul 2025 16:46:41 -0700 (PDT)
-Message-ID: <043e5826-b68a-4289-bf22-79587bcdad26@arm.com>
-Date: Thu, 10 Jul 2025 00:46:42 +0100
+	s=arc-20240116; t=1752110217; c=relaxed/simple;
+	bh=DeUXFPOjpXvG8V4k8qJUO9OWQj3zvW7e31e875GRdqA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RAG0PzaVMyd2ERVK+OUN+T7GRdBHdxBnK6weWV9h3tTbOj0/IV0hm2al9V+EnhsjjtVrdyfVZ5B8qG0ayh310oc8OSq1WlTMKrilj9Fe/r59rOAWz7WxDMOIYi8NAC8osp7DmDJ8jRyKqrRwUwipCpiDUwaHhF0+xojOFN8aboM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bcOPn8gy; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752110216; x=1783646216;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DeUXFPOjpXvG8V4k8qJUO9OWQj3zvW7e31e875GRdqA=;
+  b=bcOPn8gyV5hV9Jca+Q0hzd3mRA8d0auLmMUzGG+KVg0dM5rye7s8DgFT
+   pDxrhlmnnP5ddpUJcOzI5rorLM/1+S2JNChiN40L2LwQnz/75a7muqkCC
+   D4uvQkaEKePnGoIP2QQhZDMe6FyiJQCqQV9MixkvRnijFFJ3nRKspbvQZ
+   WZjm+c88+wonTPzSYUSDSETD/dm+TExYCBWSEP4PhhfVvf4j0d1991DiO
+   CHn37KFm3BXBF9nPEj+EGqXgvi+/0zpBzzyvCYc72dUPIPc8lq5tdrpZ0
+   wIr1TLvW3EcdfFORAptNDc5huJJJqDw3CJQNeS6RBlkeFFbdYWSKdwOhl
+   g==;
+X-CSE-ConnectionGUID: KmKUb2OpRUasR1Qt3rQZXA==
+X-CSE-MsgGUID: MIaSK5OsSc+Es5IBLMnLQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="54354905"
+X-IronPort-AV: E=Sophos;i="6.16,299,1744095600"; 
+   d="scan'208";a="54354905"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2025 18:16:55 -0700
+X-CSE-ConnectionGUID: XUxjQmV9TzShAhTjnDtn3Q==
+X-CSE-MsgGUID: Wnx31L7pRhivcbwfCqbbPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,299,1744095600"; 
+   d="scan'208";a="179635248"
+Received: from mgerlach-mobl1.amr.corp.intel.com (HELO debox1-desk4.intel.com) ([10.124.221.209])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2025 18:16:53 -0700
+From: "David E. Box" <david.e.box@linux.intel.com>
+To: rafael@kernel.org,
+	bhelgaas@google.com,
+	andrea.righi@canonical.com,
+	vicamo.yang@canonical.com,
+	kenny@panix.com,
+	nirmal.patel@linux.intel.com
+Cc: "David E. Box" <david.e.box@linux.intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI/ASPM: Allow ASPM enablement for devices behind Intel VMD
+Date: Wed,  9 Jul 2025 18:16:46 -0700
+Message-ID: <20250710011647.990046-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Andre Przywara <andre.przywara@arm.com>
-Subject: Re: [PATCH v2 3/4] pmdomain: sunxi: add driver for Allwinner A523's
- PCK-600 power controller
-To: Chen-Yu Tsai <wens@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej@kernel.org>, Samuel Holland <samuel@sholland.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250709155343.3765227-1-wens@kernel.org>
- <20250709155343.3765227-4-wens@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20250709155343.3765227-4-wens@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-Hi Chen-Yu,
+Devices behind Intel's Volume Management Device (VMD) controller reside on
+a synthetic PCI hierarchy that is intentionally hidden from ACPI and
+firmware. As such, BIOS does not configure ASPM for these devices, and the
+responsibility for link power management, including ASPM and LTR, falls
+entirely to the VMD driver.
 
-thanks for posting this! This is a quick first view, haven't compared 
-against the BSP bits yet....
+However, the current PCIe ASPM code prevents ASPM configuration when the
+ACPI_FADT_NO_ASPM flag is set, disallowing OS management. This leaves ASPM
+permanently disabled for these devices, contrary to the platform's design
+intent.
 
-On 09/07/2025 16:53, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
-> 
-> Allwinner A523 family has a second power controller, named PCK-600 in
-> the datasheets and BSP. It is likely based on ARM's PCK-600 hardware
-> block, with some additional delay controls. The only documentation for
-> this hardware is the BSP driver. The standard registers defined in ARM's
-> Power Policy Unit Architecture Specification line up. Some extra delay
-> controls are found in the reserved range of registers.
-> 
-> Add a driver for this power controller. Delay control register values
-> and power domain names are from the BSP driver.
-> 
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> ---
->   drivers/pmdomain/sunxi/Kconfig         |   8 +
->   drivers/pmdomain/sunxi/Makefile        |   1 +
->   drivers/pmdomain/sunxi/sun55i-pck600.c | 225 +++++++++++++++++++++++++
->   3 files changed, 234 insertions(+)
->   create mode 100644 drivers/pmdomain/sunxi/sun55i-pck600.c
-> 
-> diff --git a/drivers/pmdomain/sunxi/Kconfig b/drivers/pmdomain/sunxi/Kconfig
-> index 43eecb3ea981..3e2b77cd9a2b 100644
-> --- a/drivers/pmdomain/sunxi/Kconfig
-> +++ b/drivers/pmdomain/sunxi/Kconfig
-> @@ -18,3 +18,11 @@ config SUN50I_H6_PRCM_PPU
->   	  Say y to enable the Allwinner H6/H616 PRCM power domain driver.
->   	  This is required to enable the Mali GPU in the H616 SoC, it is
->   	  optional for the H6.
-> +
-> +config SUN55I_PCK600
-> +	bool "Allwinner A523 PCK-600 power domain driver"
+Introduce a callback mechanism that allows the VMD driver to enable ASPM
+for its domain, bypassing the global ACPI_FADT_NO_ASPM restriction that is
+not applicable in this context. This ensures that devices behind VMD can
+benefit from ASPM savings as originally intended.
 
-Any particular reason this is not tristate? The driver advertises itself 
-as a platform driver module?
+Link: https://lore.kernel.org/linux-pm/0b166ece-eeec-ba5d-2212-50d995611cef=
+@panix.com
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+---
+ drivers/pci/controller/vmd.c | 28 ++++++++++++++++++++++++++--
+ drivers/pci/pci.h            |  8 ++++++++
+ drivers/pci/pcie/aspm.c      | 36 +++++++++++++++++++++++++++++++++++-
+ 3 files changed, 69 insertions(+), 3 deletions(-)
 
-> +	depends on PM
-> +	select PM_GENERIC_DOMAINS
-> +	help
-> +	  Say y to enable the PCK-600 power domain driver. This saves power
-> +	  when certain peripherals, such as the video engine, are idle.
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index 8df064b62a2f..e685586dc18b 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -21,6 +21,8 @@
+=20
+ #include <asm/irqdomain.h>
+=20
++#include "../pci.h"
++
+ #define VMD_CFGBAR	0
+ #define VMD_MEMBAR1	2
+ #define VMD_MEMBAR2	4
+@@ -730,7 +732,7 @@ static void vmd_copy_host_bridge_flags(struct pci_host_=
+bridge *root_bridge,
+ }
+=20
+ /*
+- * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
++ * Enable LTR settings on devices that aren't configured by BIOS.
+  */
+ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+ {
+@@ -770,10 +772,27 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, =
+void *userdata)
+ 	 * PCIe r6.0, sec 5.5.4.
+ 	 */
+ 	pci_set_power_state_locked(pdev, PCI_D0);
+-	pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
+ 	return 0;
+ }
+=20
++static long vmd_get_link_state(struct pci_dev *pdev, void *data)
++{
++	struct pci_bus *vmd_bus =3D data;
++	struct pci_bus *bus =3D pdev->bus;
++
++	while (bus) {
++		if (bus =3D=3D vmd_bus)
++			return PCIE_LINK_STATE_ALL;
++
++		if (!bus->self)
++			break;
++
++		bus =3D bus->self->bus;
++	}
++
++	return -ENODEV;
++}
++
+ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ {
+ 	struct pci_sysdata *sd =3D &vmd->sysdata;
+@@ -785,6 +804,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsig=
+ned long features)
+ 	resource_size_t membar2_offset =3D 0x2000;
+ 	struct pci_bus *child;
+ 	struct pci_dev *dev;
++	struct pcie_aspm_vmd_link_state vmd_link_state;
+ 	int ret;
+=20
+ 	/*
+@@ -911,6 +931,10 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsi=
+gned long features)
+ 		return -ENODEV;
+ 	}
+=20
++	vmd_link_state.cb =3D vmd_get_link_state;
++	vmd_link_state.data =3D vmd->bus;
++	pci_register_vmd_link_state_cb(&vmd_link_state);
++
+ 	vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus),
+ 				   to_pci_host_bridge(vmd->bus->bridge));
+=20
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 12215ee72afb..dcf7d39c660f 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -821,6 +821,12 @@ void pci_configure_aspm_l1ss(struct pci_dev *dev);
+ void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+ void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+=20
++
++struct pcie_aspm_vmd_link_state {
++	long (*cb)(struct pci_dev *pdev, void *data);
++	void *data;
++};
++
+ #ifdef CONFIG_PCIEASPM
+ void pcie_aspm_init_link_state(struct pci_dev *pdev);
+ void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+@@ -828,6 +834,7 @@ void pcie_aspm_pm_state_change(struct pci_dev *pdev, bo=
+ol locked);
+ void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+ void pci_configure_ltr(struct pci_dev *pdev);
+ void pci_bridge_reconfigure_ltr(struct pci_dev *pdev);
++void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *state=
+);
+ #else
+ static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+@@ -835,6 +842,7 @@ static inline void pcie_aspm_pm_state_change(struct pci=
+_dev *pdev, bool locked)
+ static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) {=
+ }
+ static inline void pci_configure_ltr(struct pci_dev *pdev) { }
+ static inline void pci_bridge_reconfigure_ltr(struct pci_dev *pdev) { }
++void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *state=
+) { }
+ #endif
+=20
+ #ifdef CONFIG_PCIE_ECRC
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 29fcb0689a91..c609d3c309be 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -320,6 +320,27 @@ static int policy_to_clkpm_state(struct pcie_link_stat=
+e *link)
+ 	return 0;
+ }
+=20
++static struct pcie_aspm_vmd_link_state vmd_state;
++
++void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *state)
++{
++	mutex_lock(&aspm_lock);
++	vmd_state.cb =3D state->cb;
++	vmd_state.data =3D state->data;
++	mutex_unlock(&aspm_lock);
++}
++EXPORT_SYMBOL_GPL(pci_register_vmd_link_state_cb);
++
++static long pci_get_vmd_link_state(struct pci_dev *pdev)
++{
++	int state =3D -ENODEV;
++
++	if (vmd_state.cb)
++		state =3D vmd_state.cb(pdev, vmd_state.data);
++
++	return state;
++}
++
+ static void pci_update_aspm_saved_state(struct pci_dev *dev)
+ {
+ 	struct pci_cap_saved_state *save_state;
+@@ -794,6 +815,7 @@ static void pcie_aspm_cap_init(struct pcie_link_state *=
+link, int blacklist)
+ 	u32 parent_lnkcap, child_lnkcap;
+ 	u16 parent_lnkctl, child_lnkctl;
+ 	struct pci_bus *linkbus =3D parent->subordinate;
++	int vmd_aspm_default;
+=20
+ 	if (blacklist) {
+ 		/* Set enabled/disable so that we will disable ASPM later */
+@@ -865,8 +887,20 @@ static void pcie_aspm_cap_init(struct pcie_link_state =
+*link, int blacklist)
+ 		pcie_capability_write_word(child, PCI_EXP_LNKCTL, child_lnkctl);
+ 	}
+=20
++	/*
++	 * Devices behind Intel VMD operate on a synthetic PCI bus that BIOS
++	 * and ACPI do not enumerate or configure. ASPM for these devices must
++	 * be managed by the VMD driver itself, independent of global ACPI ASPM
++	 * constraints. This callback mechanism allows selective ASPM
++	 * enablement for such domains.
++	 */
++	vmd_aspm_default =3D pci_get_vmd_link_state(parent);
++
+ 	/* Save default state */
+-	link->aspm_default =3D link->aspm_enabled;
++	if (vmd_aspm_default < 0)
++		link->aspm_default =3D link->aspm_enabled;
++	else
++		link->aspm_default =3D vmd_aspm_default;
+=20
+ 	/* Setup initial capable state. Will be updated later */
+ 	link->aspm_capable =3D link->aspm_support;
 
-If I understand correctly, this driver is *required* to make use of 
-those peripherals, and the video engine is not even the most prominent 
-user. So regardless of the reset state of the power domain, I think the 
-wording should be changed, to make sure distributions activate this 
-option. At the moment it sounds highly optional. I wonder if we should 
-use "default y if ARCH_SUNXI" even.
-
-> diff --git a/drivers/pmdomain/sunxi/Makefile b/drivers/pmdomain/sunxi/Makefile
-> index c1343e123759..e344b232fc9f 100644
-> --- a/drivers/pmdomain/sunxi/Makefile
-> +++ b/drivers/pmdomain/sunxi/Makefile
-> @@ -1,3 +1,4 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   obj-$(CONFIG_SUN20I_PPU)		+= sun20i-ppu.o
->   obj-$(CONFIG_SUN50I_H6_PRCM_PPU)	+= sun50i-h6-prcm-ppu.o
-> +obj-$(CONFIG_SUN55I_PCK600)		+= sun55i-pck600.o
-> diff --git a/drivers/pmdomain/sunxi/sun55i-pck600.c b/drivers/pmdomain/sunxi/sun55i-pck600.c
-> new file mode 100644
-> index 000000000000..7248f6113665
-> --- /dev/null
-> +++ b/drivers/pmdomain/sunxi/sun55i-pck600.c
-> @@ -0,0 +1,225 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Allwinner PCK-600 power domain support
-
-Can you please mention here that this device is based on the Arm PCK-600 
-IP, as done in the commit message. And say that this is a minimal 
-implementaton, just supporting the off/on states.
-
-Maybe also mention the relevant documentation: the "ARM CoreLink PCK‑600 
-Power Control Kit" TRM and the "Arm Power Policy Unit" architecture 
-specification (DEN0051E).
-
-> + *
-> + * Copyright (c) 2025 Chen-Yu Tsai <wens@csie.org>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/container_of.h>
-> +#include <linux/device.h>
-> +#include <linux/dev_printk.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +#include <linux/reset.h>
-> +#include <linux/slab.h>
-> +#include <linux/string_choices.h>
-> +
-> +#define PPU_PWPR    0x0
-> +#define PPU_PWSR    0x8
-> +#define	PPU_DCDR0   0x170
-
-white space issue?
-
-> +#define PPU_DCDR1   0x174
-> +
-> +#define PPU_PWSR_PWR_STATUS	GENMASK(3, 0)
-
-Would just PPU_PWR_STATUS be a better name, since it's used by both the 
-PWPR and PWSR registers?
-
-> +#define PPU_POWER_MODE_ON	0x8
-> +#define PPU_POWER_MODE_OFF	0x0
-> +
-> +#define PPU_REG_SIZE	0x1000
-> +
-> +struct sunxi_pck600_desc {
-> +	const char * const *pd_names;
-> +	unsigned int num_domains;
-> +	u32 logic_power_switch0_delay_offset;
-> +	u32 logic_power_switch1_delay_offset;
-> +	u32 off2on_delay_offset;
-> +	u32 device_ctrl0_delay;
-> +	u32 device_ctrl1_delay;
-> +	u32 logic_power_switch0_delay;
-> +	u32 logic_power_switch1_delay;
-> +	u32 off2on_delay;
-
-Is there any indication that those parameters are different between 
-different SoCs? I appreciate the idea of making this future-proof, but 
-this might be a bit premature, if all SoCs use the same values?
-
-> +};
-> +
-> +struct sunxi_pck600_pd {
-> +	struct generic_pm_domain genpd;
-> +	struct sunxi_pck600 *pck;
-> +	void __iomem *base;
-> +};
-> +
-> +struct sunxi_pck600 {
-> +	struct device *dev;
-> +	struct genpd_onecell_data genpd_data;
-> +	struct sunxi_pck600_pd pds[];
-> +};
-> +
-> +#define to_sunxi_pd(gpd) container_of(gpd, struct sunxi_pck600_pd, genpd)
-> +
-> +static int sunxi_pck600_pd_set_power(struct sunxi_pck600_pd *pd, bool on)
-> +{
-> +	struct sunxi_pck600 *pck = pd->pck;
-> +	struct generic_pm_domain *genpd = &pd->genpd;
-> +	int ret;
-> +	u32 val, reg;
-> +
-> +	val = on ? PPU_POWER_MODE_ON : PPU_POWER_MODE_OFF;
-> +
-> +	reg = readl(pd->base + PPU_PWPR);
-> +	FIELD_MODIFY(PPU_PWSR_PWR_STATUS, &reg, val);
-> +	writel(reg, pd->base + PPU_PWPR);
-
-Don't we need a lock here, or is this covered by the power domain framework?
-
-Cheers,
-Andre
-
-> +
-> +	/* push write out to hardware */
-> +	reg = readl(pd->base + PPU_PWPR);
-> +
-> +	ret = readl_poll_timeout_atomic(pd->base + PPU_PWSR, reg,
-> +					FIELD_GET(PPU_PWSR_PWR_STATUS, reg) == val,
-> +					0, 10000);
-> +	if (ret)
-> +		dev_err(pck->dev, "failed to turn domain \"%s\" %s: %d\n",
-> +			genpd->name, str_on_off(on), ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sunxi_pck600_power_on(struct generic_pm_domain *domain)
-> +{
-> +	struct sunxi_pck600_pd *pd = to_sunxi_pd(domain);
-> +
-> +	return sunxi_pck600_pd_set_power(pd, true);
-> +}
-> +
-> +static int sunxi_pck600_power_off(struct generic_pm_domain *domain)
-> +{
-> +	struct sunxi_pck600_pd *pd = to_sunxi_pd(domain);
-> +
-> +	return sunxi_pck600_pd_set_power(pd, false);
-> +}
-> +
-> +static void sunxi_pck600_pd_setup(struct sunxi_pck600_pd *pd,
-> +				  const struct sunxi_pck600_desc *desc)
-> +{
-> +	writel(desc->device_ctrl0_delay, pd->base + PPU_DCDR0);
-> +	writel(desc->device_ctrl1_delay, pd->base + PPU_DCDR1);
-> +	writel(desc->logic_power_switch0_delay,
-> +	       pd->base + desc->logic_power_switch0_delay_offset);
-> +	writel(desc->logic_power_switch1_delay,
-> +	       pd->base + desc->logic_power_switch1_delay_offset);
-> +	writel(desc->off2on_delay, pd->base + desc->off2on_delay_offset);
-> +}
-> +
-> +static int sunxi_pck600_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	const struct sunxi_pck600_desc *desc;
-> +	struct genpd_onecell_data *genpds;
-> +	struct sunxi_pck600 *pck;
-> +	struct reset_control *rst;
-> +	struct clk *clk;
-> +	void __iomem *base;
-> +	int i, ret;
-> +
-> +	desc = of_device_get_match_data(dev);
-> +
-> +	pck = devm_kzalloc(dev, struct_size(pck, pds, desc->num_domains), GFP_KERNEL);
-> +	if (!pck)
-> +		return -ENOMEM;
-> +
-> +	pck->dev = &pdev->dev;
-> +	platform_set_drvdata(pdev, pck);
-> +
-> +	genpds = &pck->genpd_data;
-> +	genpds->num_domains = desc->num_domains;
-> +	genpds->domains = devm_kcalloc(dev, desc->num_domains,
-> +				       sizeof(*genpds->domains), GFP_KERNEL);
-> +	if (!genpds->domains)
-> +		return -ENOMEM;
-> +
-> +	base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	rst = devm_reset_control_get_exclusive_released(dev, NULL);
-> +	if (IS_ERR(rst))
-> +		return dev_err_probe(dev, PTR_ERR(rst), "failed to get reset control\n");
-> +
-> +	clk = devm_clk_get_enabled(dev, NULL);
-> +	if (IS_ERR(clk))
-> +		return dev_err_probe(dev, PTR_ERR(clk), "failed to get clock\n");
-> +
-> +	for (i = 0; i < desc->num_domains; i++) {
-> +		struct sunxi_pck600_pd *pd = &pck->pds[i];
-> +
-> +		pd->genpd.name = desc->pd_names[i];
-> +		pd->genpd.power_off = sunxi_pck600_power_off;
-> +		pd->genpd.power_on = sunxi_pck600_power_on;
-> +		pd->base = base + PPU_REG_SIZE * i;
-> +
-> +		sunxi_pck600_pd_setup(pd, desc);
-> +		ret = pm_genpd_init(&pd->genpd, NULL, false);
-> +		if (ret) {
-> +			dev_err_probe(dev, ret, "failed to initialize power domain\n");
-> +			goto err_remove_pds;
-> +		}
-> +
-> +		genpds->domains[i] = &pd->genpd;
-> +	}
-> +
-> +	ret = of_genpd_add_provider_onecell(dev_of_node(dev), genpds);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "failed to add PD provider\n");
-> +		goto err_remove_pds;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_remove_pds:
-> +	for (i--; i >= 0; i--)
-> +		pm_genpd_remove(genpds->domains[i]);
-> +
-> +	return ret;
-> +}
-> +
-> +static const char * const sun55i_a523_pck600_pd_names[] = {
-> +	"VE", "GPU", "VI", "VO0", "VO1", "DE", "NAND", "PCIE"
-> +};
-> +
-> +static const struct sunxi_pck600_desc sun55i_a523_pck600_desc = {
-> +	.pd_names = sun55i_a523_pck600_pd_names,
-> +	.num_domains = ARRAY_SIZE(sun55i_a523_pck600_pd_names),
-> +	.logic_power_switch0_delay_offset = 0xc00,
-> +	.logic_power_switch1_delay_offset = 0xc04,
-> +	.off2on_delay_offset = 0xc10,
-> +	.device_ctrl0_delay = 0xffffff,
-> +	.device_ctrl1_delay = 0xffff,
-> +	.logic_power_switch0_delay = 0x8080808,
-> +	.logic_power_switch1_delay = 0x808,
-> +	.off2on_delay = 0x8
-> +};
-> +
-> +static const struct of_device_id sunxi_pck600_of_match[] = {
-> +	{
-> +		.compatible	= "allwinner,sun55i-a523-pck-600",
-> +		.data		= &sun55i_a523_pck600_desc,
-> +	},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, sunxi_pck600_of_match);
-> +
-> +static struct platform_driver sunxi_pck600_driver = {
-> +	.probe = sunxi_pck600_probe,
-> +	.driver = {
-> +		.name   = "sunxi-pck-600",
-> +		.of_match_table = sunxi_pck600_of_match,
-> +		/* Power domains cannot be removed if in use. */
-> +		.suppress_bind_attrs = true,
-> +	},
-> +};
-> +module_platform_driver(sunxi_pck600_driver);
-> +
-> +MODULE_DESCRIPTION("Allwinner PCK-600 power domain driver");
-> +MODULE_AUTHOR("Chen-Yu Tsai <wens@csie.org>");
-> +MODULE_LICENSE("GPL");
+base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
+--=20
+2.43.0
 
 
