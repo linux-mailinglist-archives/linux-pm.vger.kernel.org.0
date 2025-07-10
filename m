@@ -1,159 +1,127 @@
-Return-Path: <linux-pm+bounces-30629-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30630-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4A98B00C22
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 21:30:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CB09B00C58
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 21:53:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 777651CA0A11
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 19:31:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24F5A640E4C
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 19:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4CD288C80;
-	Thu, 10 Jul 2025 19:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="kw7up1/5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1FE92FD86B;
+	Thu, 10 Jul 2025 19:53:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [65.21.191.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACE721B9F4;
-	Thu, 10 Jul 2025 19:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752175850; cv=pass; b=VWTnB7C/OOA2xNpDjFUQ/eHhhU1Ps7XwRdojLaA2yHPdLIDNcjtYHUdh0pD/34l1E72HL32VHkMZiNIo1hqtQ4xZaVEtR4POOENfTgwbm/fnbgHZE6K/RsBDO1rk6cYeSajpk8XvcxiqMGzeVFtyWLpi+dX3pTvFJ+rkjxy6duc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752175850; c=relaxed/simple;
-	bh=B0vHwcGOIIHb89H2gzxv6p6IhFT8hgODSk55/vhzf4U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GJgXcydhShmNBQP0hosgPDsDXjB+rCRQxVLqMKnpNTcATFdQ6EEeS4VFFsrIlxQa4opRfu6vLYA52njd3Fm56a5DDfEaHshzb6j01scebmXLczjhAWfyQoL5DIMCjvtfGBp0h42/98Ii8cVybQlbLHst6WkRkVpdlSmaUfaydRM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=kw7up1/5; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1752175820; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=I/ka+SLGhV+QGCE7fhGV9qYnglLgy9/7ibP/VHkpOEkzzlN+hYr3n1hU+m0Czd3JuzQEcq3dJutzOQDlLs4uuTOHYI/Lj8p3iXdTFweEpCXHRjKKkqLQ24u3kz7ogTT6ITQRIH8buzu3rmYlidtSoboB93yZBpHRO+aGTxnuDY4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1752175820; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=2bzdLOutw45NuzUy8PqWXaJAtp7VYXU2KwETf6FwUq4=; 
-	b=KGNFyCXuU/Eu7gI53XiCbXZ+2vpS1Ajv5tsP6P5DkQZQ7IogkRrzv2E2nSQ6QPoYGfJZFxB9rHfMFncR5gkPpshEpNmhmshWWYu93Hkr46rex2NKwDW57U5JARz8hTeTCfu6ErwawJQdGWt5x+2Gy63PfS87RHWiQxSiNu09gwk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1752175820;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=2bzdLOutw45NuzUy8PqWXaJAtp7VYXU2KwETf6FwUq4=;
-	b=kw7up1/5sk7CS9DwqFvhC738rMQmLkDy+YBescJyPukKyMiQXceMUwSSbDObh1iU
-	ZFgMXP3VSkSTnRsOVkc3kmN5JNUm1ed5mQHxwFolk5+x8M8+Yi9IJdDT66VzpDBwZwD
-	9Sono6bXrQ7cofGqQpGwIZMHjH9DgKP4GZKvxFWQ=
-Received: by mx.zohomail.com with SMTPS id 1752175818697100.88359010230067;
-	Thu, 10 Jul 2025 12:30:18 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Alexey Charkov <alchark@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Jonas Karlman <jonas@kwiboo.se>, Heiko Stuebner <heiko@sntech.de>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v6 4/7] dt-bindings: thermal: rockchip: document otp thermal trim
-Date: Thu, 10 Jul 2025 21:30:12 +0200
-Message-ID: <6505070.lOV4Wx5bFT@workhorse>
-In-Reply-To: <3592348.tdWV9SEqCh@phil>
-References:
- <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
- <20250610-rk3576-tsadc-upstream-v6-4-b6e9efbf1015@collabora.com>
- <3592348.tdWV9SEqCh@phil>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A1C2367CB;
+	Thu, 10 Jul 2025 19:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.21.191.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752177188; cv=none; b=aOmiXDYf8IeC7H3jO7n7Xv2D5uPefA1uylibsDdBdmMjY19YaIG10RWCPbWRGD7Tri9hrlRFYfQe6KeHIo7vPJICerD5asHe3FJJOND17vOUPRadLBKZBhxNpPrGQD/Jf5JYVLzdkhrjeqf3D+qsN7der+qEWuJ9a95R1WX5e2c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752177188; c=relaxed/simple;
+	bh=lmWhfEqKI2hQcwc3PkrLX3XptMWojeEklCPmU+OgZf8=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=YFbko8ZGRJwQ3SgEutBBYsuURGJYIb66Y1Ial1IC2oqJUhDS2kl4xeL5K8OeSR7RWhRYFvHjpZ9U3wO/xeBqTt+RWnx4kdrWSEhjJnCq1m9Uds4+Lp2EG76Cf4F2p2F2+u6/imbjXFCNhhIw5iCTud2UxzL8/ibfUSNdL49rYIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk; spf=pass smtp.mailfrom=decadent.org.uk; arc=none smtp.client-ip=65.21.191.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=decadent.org.uk
+Received: from [89.234.162.240] (helo=deadeye)
+	by maynard with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ben@decadent.org.uk>)
+	id 1uZxJv-004sfF-0I;
+	Thu, 10 Jul 2025 19:52:39 +0000
+Received: from ben by deadeye with local (Exim 4.98.2)
+	(envelope-from <ben@decadent.org.uk>)
+	id 1uZxJu-0000000D93M-09gH;
+	Thu, 10 Jul 2025 21:52:38 +0200
+Message-ID: <3cbd9533b091576a62f597691ced375850d7464a.camel@decadent.org.uk>
+Subject: User-space watchdog timers vs suspend-to-idle
+From: Ben Hutchings <ben@decadent.org.uk>
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ "Rafael J. Wysocki"	 <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>,  John Stultz <jstultz@google.com>, Thomas
+ Gleixner <tglx@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
+	1107785@bugs.debian.org
+Date: Thu, 10 Jul 2025 21:52:30 +0200
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-MyYK5Gp6ctxLfjUkNktP"
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 89.234.162.240
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+
+
+--=-MyYK5Gp6ctxLfjUkNktP
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 
-On Thursday, 10 July 2025 13:21:19 Central European Summer Time Heiko Stueb=
-ner wrote:
-> Am Dienstag, 10. Juni 2025, 14:32:40 Mitteleurop=C3=A4ische Sommerzeit sc=
-hrieb Nicolas Frattaroli:
-> > Several Rockchip SoCs, such as the RK3576, can store calibration trim
-> > data for thermal sensors in OTP cells. This capability should be
-> > documented.
-> >=20
-> > Such a rockchip thermal sensor may reference cell handles that store
-> > both a chip-wide trim for all the sensors, as well as cell handles
-> > for each individual sensor channel pointing to that specific sensor's
-> > trim value.
-> >=20
-> > Additionally, the thermal sensor may optionally reference cells which
-> > store the base in terms of degrees celsius and decicelsius that the trim
-> > is relative to.
-> >=20
-> > Each SoC that implements this appears to have a slightly different
-> > combination of chip-wide trim, base, base fractional part and
-> > per-channel trim, so which ones do which is documented in the bindings.
-> >=20
-> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
->=20
-> Acked-by: Heiko Stuebner <heiko@sntech.de>
->=20
-> with one question below
->=20
-> > ---
-> >  .../bindings/thermal/rockchip-thermal.yaml         | 61 ++++++++++++++=
-++++++++
-> >  1 file changed, 61 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal=
-=2Eyaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-> > index 49ceed68c92ce5a32ed8d4f39bd88fd052de0e80..573f447cc26ed7100638277=
-598b0e745d436fd01 100644
-> > --- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-> > +++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-> > @@ -40,6 +40,17 @@ properties:
-> >        - const: tsadc
-> >        - const: apb_pclk
-> > =20
-> > +  nvmem-cells:
-> > +    items:
-> > +      - description: cell handle to where the trim's base temperature =
-is stored
-> > +      - description:
-> > +          cell handle to where the trim's tenths of Celsius base value=
- is stored
-> > +
-> > +  nvmem-cell-names:
-> > +    items:
-> > +      - const: trim_base
-> > +      - const: trim_base_frac
-> > +
->=20
-> are we sure, we want underscores here?
-> trim-base, trim-base-frac looks somewhat nicer.
+Hi all,
 
-a quick grep of all the bindings shows me that _ vs. - is about even.
-I'm not sure deviating from what downstream calls it, what I already
-sent, and what the already sent driver expects is really worth anyone's
-time and mailbox space for what boils down to a matter of personal
-preference.
+There seems to be a longstanding issue with the combination of user-
+space watchdog timers (using CLOCK_MONOTONIC) and suspend-to-idle.  This
+was reported at <https://bugzilla.kernel.org/show_bug.cgi?id=3D200595> and
+more recently at <https://bugs.debian.org/1107785>.
 
->=20
-> Heiko
->=20
+During suspend-to-idle the system may be woken by interrupts and the
+CLOCK_MONOTONIC clock may tick while that happens, but no user-space
+tasks are allowed to run.  So when the system finally exits suspend, a
+watchdog timer based on CLOCK_MONOTONIC may expire immediately without
+the task being supervised ever having an opportunity to pet the
+watchdog.
 
-Kind regards,
-Nicolas Frattaroli
+This seems like a hard problem to solve!
 
+By definition we cannot allow CLOCK_MONOTONIC to run backward, and I
+assume we do not want it to stop while interrupts are being handled.=20
+But could CLOCK_MONOTONIC be split into a CLOCK_MONOTONIC_KERNEL (may
+tick during suspend-to-idle) and CLOCK_MONOTONIC_USER (only ticks while
+user tasks can run), with user-space CLOCK_MONOTONIC being the latter?=20
+(I'm aware that adding yet another clock type would be a rather large
+job even if this is possible.)
 
+Until and unless that happens, is it possible to detect that
+CLOCK_MONOTONIC advanced during suspend-to-idle by reading e.g.
+/proc/schedtat?  If not, could the necessary information be exposed
+through one of the pseudo-filesystems?
 
+Ben.
 
+--=20
+Ben Hutchings
+Never attribute to conspiracy what can adequately be explained
+by stupidity.
+
+--=-MyYK5Gp6ctxLfjUkNktP
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmhwGf8ACgkQ57/I7JWG
+EQnjZg/6AmnBmhkdS1JVPYSVhh4z6maqizuIHgdKYG9Yf3oCKCfPGpQsW4KkVidJ
+ep8yu59Z8mkKnR6wl7KtBXgfSqboFH1kSqq+Wjt7xyAQSft4eAglZivahSwqeUF1
+SqFzjJjGy7KakttI4d1dOk4KUcKOEv2qeU5LmbcYqKODqy3VWThnxllek+Tt59+j
+iSGl7hCaFF88hsAqWj7cSQQN9k1x+LFF5EmyXx0l5w5NrGcvt+VKWSRbemjYCWns
+0mKcJ/6panhiG26Anx1LQsENVuSyOe1yn9WuHo6/HW1ziDrmYq5Q3BgVNRN7ZIwA
+n/DMKyIb6dHXV4x8xXEfuND9Qs9DUTXv85ZGbFOrAxtl8Rzr4iZ83vgCCb7GRj6z
+Y5xcT8so4orULKDlr9kDRiwYuh1d+q0uqohLkFCGtUVKNegbdfUsiNoCkiz2TO4X
+QIqPEo+MviT7E93EMYPUMO5KOuHQu1CXl+m0RABr3IQsSz5s/Bh2y7z+Y3+a4PJS
+Fjg/2BUde77EDxMs4hoFWlasqeA8DJak6MOYEZwuNHar27Vb/vZjuv+zMmsYUBxl
+dSICWHHdpR/v7bY+wZFJqVpmUddQCRE6x6LPKgXRvuXrbsuAzHQb82A3bEWw5S7G
+UNp6wG8EN3q9RwedoopipS8HFRuhQjhg/wN9l2Kl8qHAzCT0XgA=
+=xEYp
+-----END PGP SIGNATURE-----
+
+--=-MyYK5Gp6ctxLfjUkNktP--
 
