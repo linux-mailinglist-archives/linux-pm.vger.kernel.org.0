@@ -1,336 +1,384 @@
-Return-Path: <linux-pm+bounces-30631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33315B00C60
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 21:54:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38640B00CF2
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 22:20:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B7A2587CAD
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 19:53:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EB721C41065
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 20:20:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C9B2FD86B;
-	Thu, 10 Jul 2025 19:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F32D72FD5B6;
+	Thu, 10 Jul 2025 20:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5KYpuI7"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="PtWsIt+m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCF225B1D2;
-	Thu, 10 Jul 2025 19:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BF32FC3B3
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 20:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752177211; cv=none; b=TVIU6lKQ6MnQb1yvAPpeuIFqUKpPiUdZXmHLt9oyuWHEzNBxKFFEA+kj4DNqecE6Fb4rLW8xBTbQqV8/Suvtit8ZQIml36ipvBAUVpnaqDtIah4WwS+AAnCDexeTKq7ghp60FAHK1DxOTFUr60tugid18rhpJm/5Hqrs8k4eGkE=
+	t=1752178813; cv=none; b=ZMc4yddwgqHHUhqlmXIPvZQN1ZdKC/QjMyII4ubgW3GuYjObPtXMuPhLq9tVy1uVfCJINKqK/sMW6aXlOUGcWvW3QdVXhJBIx9djwM1VZ2mhieql8UqgxCFT83y9gpQI36iquFf3ZqwR6wxRIqfjLNQShkgJ5OEcCwAgrAcW3tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752177211; c=relaxed/simple;
-	bh=LAGiC2+0XfOzw1ORGZUeQz0hI4p/gihgz2wJQsqIs50=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uzV+FvE9or6deFpz5xlkii2CBTpAxBHtncgEg00BgYLSwLY/WFcylejrADluZturKFGI0G1kfD4Im26RqvGxdAnhIBP/zEfnNSbG8zqBiR1k0WxLuWsAtHo+H9ivMY5lFHzT/PL+dYsQZ12WUXE8sGqRWcL0qkt0WzQLtU6hCKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5KYpuI7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973FFC4CEF6;
-	Thu, 10 Jul 2025 19:53:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752177210;
-	bh=LAGiC2+0XfOzw1ORGZUeQz0hI4p/gihgz2wJQsqIs50=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g5KYpuI7ZIzE6dQ3vjx/NhG9KoBI47IJA0asxt6j46TG1G8Nu88plI5Ek2zfdUTy7
-	 iuyhu2yPR9mu8Ek1Z8AVDY9M6GvRxl3CDMfRpoiAhu99VhnA1XajC7jRkeLKHNj0wN
-	 vFgvlrgRMirJgWT59JOZ1MV64BmZmglD8ElMeslvXbLzyJPPLUc9t+g+y8CC/mqyS6
-	 lNhhrBqwWLvEyguoxThg/p3bFsE5Y8PpnBDgfRfTyGRPD7sm6f5v8Py8aC+M4E0yYP
-	 5Z1Zw+h5zNupHbHHLgg6qrr70WjTsDK+icIHdLbP7rEGD8qtD6J94g6xWT38DOhhia
-	 d27JmLf4+/i/Q==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2e95f0b6cb7so479238fac.3;
-        Thu, 10 Jul 2025 12:53:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXwka7X3i7qIaRHK19vT4TgiEzMZkylnjxxbnuHat5HUzY7ADZR9wzarCT5caJEhCKe5L0Z8xs/oNz@vger.kernel.org, AJvYcCWOQ/3jMqIzsNMDQyIrxiJSRv7ptwlbgugdROHMdfnCY0HQpv3GzQeAqJmUvTjlVW3oeOT9y2QnWUk=@vger.kernel.org, AJvYcCWb443Ptl9A5R3QEVDNeE3PA28pBEFDeGl2G3qYOlpnagCNhlr5R25pBt4LRHtHvbV0SvzJPLRiOv4viSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfiIRHjdFf/VX+kDNgdh4awxXrmnAyU7b4Q+ZLwUmH8YmiV0EH
-	S670yIC7+rSnW4xl0MLZoA488340mbGeLEsITuFeJ26aWoFR/QFU8zlmfLRcjDQyX7PeE6F5okX
-	g7Q6FQyFdYd/fkZN91cdw32BdlswsO/4=
-X-Google-Smtp-Source: AGHT+IEEk0T+9hKHAB3bzgxk2q+cxy2hrS8HEynzA9IAfDJVDWz/njQkMODs6jKyQF79w9XU51rZNAv3nPJ14ojsTBo=
-X-Received: by 2002:a05:6870:478a:b0:2d4:d07c:7cc5 with SMTP id
- 586e51a60fabf-2ff2676e951mr387582fac.12.1752177209706; Thu, 10 Jul 2025
- 12:53:29 -0700 (PDT)
+	s=arc-20240116; t=1752178813; c=relaxed/simple;
+	bh=EFpUUux5IGFLjI8F9dyw5URIdRYoHLpUtpWMUT+bYN8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IcT7JAOKEFeIU1Q2GmKgYvhGXyHiQECMtJ+r6Ch+F6F6hurlPR0VI1cVxMWdW6/5VbuiIagXYMJA0T4/plLLC/42eDQ9fHgRBCKCZwIQd/XKCTydElfrDCHUK847DAe6UkVWuXM7JKh32lJQLJIFGZk/Or4FU+F4p3ilUbtxut0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=PtWsIt+m; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7490acf57b9so1092791b3a.2
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 13:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1752178811; x=1752783611; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fDA1snVpr4c+NFAM0uEmirZxMpXwZuvq35CUMbMBbtw=;
+        b=PtWsIt+mkTOqqG26WG96b1qMA6jeH38ZRWXxG2M2exGEWi7aiHa+NBNu5N7pbQwL7f
+         i7MAHSljI1W7Rt+gPgcOpbijdCk2o9E0naKrQ/qgc4vwAu5asr1nd0Zt06Nl7tyh/uRv
+         GCGA/+55IMTYGVftSlUSTtrVTyGvDeoTHzoAo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752178811; x=1752783611;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fDA1snVpr4c+NFAM0uEmirZxMpXwZuvq35CUMbMBbtw=;
+        b=n3Lc23hO+LwetOGkB0st7GGMJBLyU0GGuUUsCpa3uWfphusfMyFRA71+Q2I0i8RMcI
+         wtShY2bXSgWlJqnTB4n9l15cak8kBVbonYE6zeUk5a0kdH0PnIyjwI3BW/bt1vHEOTzO
+         gYmE4Jee7AsNR6O2zNoSL95d2JPIU4Q+pFl90XBX6VtvFC7UYovc/RnihT8pK3O7MAMZ
+         klWV3L2Lz748Dq45FGc421i2SVSWHBkAvOJrm+3DoWw2fNHLp4s7dEFvouY8HcXXZRwO
+         b46g+AOAOmppHU3okIoucsRJpenPK39yewhS8n041ICxH37cSkeFUe5sOevnpqjcxYCv
+         W9uA==
+X-Forwarded-Encrypted: i=1; AJvYcCVmS9DI5ApuLh23Ci7K+WqIjEPTFRExXJisAMJ0pMwxYePj3paU82XNrR62aG/CzdGUJxFlddXkIg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyANnb7YqxZ45W6/o9+8ZdmaqGbl4RildcoqY7/SVl28eGYLLc1
+	RKwCTvY71BGiEgzrvgiUUQUuqunytEUyTsGI7No5saCexvoOqTkWKRXW/i/ac9Eu1g==
+X-Gm-Gg: ASbGncsx7T0CIatkAf9p1VH0Pr5ajwrRRWRbT3GAewpa9k/GS1QX4Ckprjj3Qku6IYi
+	Af5QqqdKIxmm+mVE2AG70QjmjmKytH3ff5kLBm0KsDq3JlLvtgEU0vtwfK2+UzSunL/WLO6rvme
+	6niFBqBCPy78v8egIzmeSHwNKlji/p4vdGs7AON/HWeOKXmXATvyUFusQYipDnS0NF86llieYf6
+	cBzzavLiHQek46tpJYup7v+ijSMbJ2NdKzVqVe1bwtCTiO9poHVEaR8lNYy7+2o8gzo8RGQunT3
+	IL+JYkI6G+aOFPnkCBLZ18hlP79r92kZ4aMVj4xOSUbVF+UhksDNoFGAJ/RRtszQWzUb8ucSiSi
+	1K6kJtYieGudvBixoG6vugayLdw==
+X-Google-Smtp-Source: AGHT+IFL7AIbBKtnmbpYy0bxdMeh4A8w6D5qedofW87hyUDv74Ybf7PLb906ZmUsinFv9/MPjCLj0w==
+X-Received: by 2002:a05:6a21:a81:b0:21f:a883:d1dd with SMTP id adf61e73a8af0-2311e93bfbfmr940590637.14.1752178811479;
+        Thu, 10 Jul 2025 13:20:11 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe72f8a9sm2946867a12.74.2025.07.10.13.20.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jul 2025 13:20:10 -0700 (PDT)
+Message-ID: <34dde6a1-bb75-45ed-a20d-057e3f32f592@broadcom.com>
+Date: Thu, 10 Jul 2025 13:20:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250710011647.990046-1-david.e.box@linux.intel.com>
-In-Reply-To: <20250710011647.990046-1-david.e.box@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 10 Jul 2025 21:53:18 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iWAaj5_hBC_1pZcA-cQ0Yz6hvQjbsv3Gmv6jN_utt4OQ@mail.gmail.com>
-X-Gm-Features: Ac12FXz1_2170Nhzax8i_B5jtgfN9SEVFNmf4-T1qLKuTq3v00MF1G05oHjw8cY
-Message-ID: <CAJZ5v0iWAaj5_hBC_1pZcA-cQ0Yz6hvQjbsv3Gmv6jN_utt4OQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI/ASPM: Allow ASPM enablement for devices behind Intel VMD
-To: "David E. Box" <david.e.box@linux.intel.com>
-Cc: rafael@kernel.org, bhelgaas@google.com, andrea.righi@canonical.com, 
-	vicamo.yang@canonical.com, kenny@panix.com, nirmal.patel@linux.intel.com, 
-	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
-	ilpo.jarvinen@linux.intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 00/10] Implement vendor resets for PSCI SYSTEM_RESET2
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
+ Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Konrad Dybcio <konradybcio@kernel.org>,
+ cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Elliot Berman <elliotb317@gmail.com>
+Cc: Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ Andre Draszik <andre.draszik@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-samsung-soc@vger.kernel.org,
+ Wei Xu <xuwei5@hisilicon.com>, linux-rockchip@lists.infradead.org,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Sen Chu <sen.chu@mediatek.com>,
+ Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Elliot Berman <quic_eberman@quicinc.com>,
+ Srinivas Kandagatla <srini@kernel.org>,
+ Elliot Berman <elliot.berman@oss.qualcomm.com>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+References: <20250710-arm-psci-system_reset2-vendor-reboots-v10-0-b2d3b882be85@oss.qualcomm.com>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <20250710-arm-psci-system_reset2-vendor-reboots-v10-0-b2d3b882be85@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 10, 2025 at 3:16=E2=80=AFAM David E. Box
-<david.e.box@linux.intel.com> wrote:
->
-> Devices behind Intel's Volume Management Device (VMD) controller reside o=
-n
-> a synthetic PCI hierarchy that is intentionally hidden from ACPI and
-> firmware. As such, BIOS does not configure ASPM for these devices, and th=
-e
-> responsibility for link power management, including ASPM and LTR, falls
-> entirely to the VMD driver.
->
-> However, the current PCIe ASPM code prevents ASPM configuration when the
-> ACPI_FADT_NO_ASPM flag is set, disallowing OS management. This leaves ASP=
-M
-> permanently disabled for these devices, contrary to the platform's design
-> intent.
->
-> Introduce a callback mechanism that allows the VMD driver to enable ASPM
-> for its domain, bypassing the global ACPI_FADT_NO_ASPM restriction that i=
-s
-> not applicable in this context. This ensures that devices behind VMD can
-> benefit from ASPM savings as originally intended.
->
-> Link: https://lore.kernel.org/linux-pm/0b166ece-eeec-ba5d-2212-50d995611c=
-ef@panix.com
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+On 7/10/25 02:15, Shivendra Pratap wrote:
+> The PSCI SYSTEM_RESET2 call allows vendor firmware to define
+> additional reset types which could be mapped to the reboot
+> argument.
+>   
+> User-space should be able to reboot a device into different
+> operational boot-states supported by underlying bootloader and
+> firmware. Generally, some HW registers need to be written, based
+> on which the bootloader and firmware decide the next boot state
+> of device, after the reset. For example, a requirement on
+> Qualcomm platforms may state that reboot with "bootloader"
+> command, should reboot the device into bootloader flashing mode
+> and reboot with “edl” command, should reboot the device into an
+> Emergency flashing mode.  Setting up such reboots on Qualcomm
+> devices can be inconsistent across SoC platforms and may require
+> setting different HW registers, where some of these registers may
+> not be accessible to HLOS. These knobs evolve over product
+> generations and require more drivers.  PSCI defines a
+> vendor-specific reset in SYSTEM_RESET2 spec, which enables the
+> firmware to take care of underlying setting for any such
+> supported vendor-specific reboot. Qualcomm firmwares are
+> beginning to support and expose PSCI SYSTEM_RESET2
+> vendor-specific reset types to simplify driver requirements from
+> Linux. With such support added in the firmware, we now need a
+> Linux interface which can make use of the firmware calls for PSCI
+> vendor-specific resets. This will align such reboot requirement
+> across platforms and vendors.
+>   
+> The current psci driver supports two types of resets –
+> SYSTEM_RESET2 Arch warm-reset and SYSTEM_RESET cold-reset. The
+> patchset introduces the PSCI SYSTEM_RESET2 vendor-specific reset
+> into the reset path of the psci driver and aligns it to work with
+> reboot system call - LINUX_REBOOT_CMD_RESTART2, when used along
+> with a supported string-based command in “*arg”.
+> 
+> The patchset uses reboot-mode based commands, to define the
+> supported vendor reset-types commands in psci device tree node
+> and registers these commands with the reboot-mode framework.
+> 
+> The PSCI vendor-specific reset takes two arguments, being,
+> reset_type and cookie as defined by the spec. As the
+> vendor-specific reset needs two arguments reset_type and cookie
+> to be passes to the firmware, enhance the reboot-mode framework
+> to support two arguments (magic and cookie), for each reboot-mode
+> command, where cookie will be optional.
+> 
+> Along this line, the patchset also extends the reboot-mode
+> framework to add a non-device-based registration function which
+> will allow drivers to register using DT node, while keeping
+> backward compatibility for existing users of reboot-mode. This
+> will enable psci driver to register for reboot-mode and implement
+> a write_with_cookie function which will save the
+> magic(reset_type) and cookie and then use it in psci reset path
+> to make a vendor-specific reset call into the firmware. In
+> addition, the patchset will expose a sysfs entry interface within
+> reboot-mode which can be used by userspace to view the supported
+> reboot-mode commands.
+> 
+> The list of vendor-specific reset commands remains open due to
+> divergent requirements across vendors, but this can be
+> streamlined and standardized through dedicated device tree
+> bindings.
+> 
+> Currently three drivers register with reboot-mode framework -
+> syscon-reboot-mode, nvmem-reboot-mode and qcom-pon. Consolidated
+> list of commands currently added across various vendor DTs:
+>   mode-loader
+>   mode-normal
+>   mode-bootloader
+>   mode-charge
+>   mode-fastboot
+>   mode-reboot-ab-update
+>   mode-recovery
+>   mode-rescue
+>   mode-shutdown-thermal
+>   mode-shutdown-thermal-battery
+> 
+> Detailed list of commands being used by syscon-reboot-mode:
+>      arm64/boot/dts/exynos/exynosautov9.dtsi:
+> 	mode-bootloader = <EXYNOSAUTOV9_BOOT_BOOTLOADER>;
+> 	mode-fastboot = <EXYNOSAUTOV9_BOOT_FASTBOOT>;
+> 	mode-recovery = <EXYNOSAUTOV9_BOOT_RECOVERY>;
+> 
+>      arm64/boot/dts/exynos/google/gs101.dtsi:
+>      	mode-bootloader = <0xfc>;
+>      	mode-charge = <0x0a>;
+>      	mode-fastboot = <0xfa>;
+>      	mode-reboot-ab-update = <0x52>;
+>      	mode-recovery = <0xff>;
+>      	mode-rescue = <0xf9>;
+>      	mode-shutdown-thermal = <0x51>;
+>      	mode-shutdown-thermal-battery = <0x51>;
+> 
+>      arm64/boot/dts/hisilicon/hi3660-hikey960.dts:
+>      	mode-normal = <0x77665501>;
+>      	mode-bootloader = <0x77665500>;
+>      	mode-recovery = <0x77665502>;
+> 
+>      arm64/boot/dts/hisilicon/hi6220-hikey.dts:
+>      	mode-normal = <0x77665501>;
+>      	mode-bootloader = <0x77665500>;
+>      	mode-recovery = <0x77665502>;
+> 
+>      arm64/boot/dts/rockchip/px30.dtsi:
+>      	mode-bootloader = <BOOT_BL_DOWNLOAD>;
+>      	mode-fastboot = <BOOT_FASTBOOT>;
+>      	mode-loader = <BOOT_BL_DOWNLOAD>;
+>      	mode-normal = <BOOT_NORMAL>;
+>      	mode-recovery = <BOOT_RECOVERY>;
+> 
+>      arm64/boot/dts/rockchip/rk3308.dtsi:			
+>      	mode-bootloader = <BOOT_BL_DOWNLOAD>;
+>      	mode-loader = <BOOT_BL_DOWNLOAD>;
+>      	mode-normal = <BOOT_NORMAL>;
+>      	mode-recovery = <BOOT_RECOVERY>;
+>      	mode-fastboot = <BOOT_FASTBOOT>;
+> 
+>      arm64/boot/dts/rockchip/rk3566-lckfb-tspi.dts:
+>      	mode-normal = <BOOT_NORMAL>;
+>      	mode-loader = <BOOT_BL_DOWNLOAD>;
+> 			mode-recovery = <BOOT_RECOVERY>;
+> 			mode-bootloader = <BOOT_FASTBOOT>;
+> 
+> Detailed list of commands being used by nvmem-reboot-mode:
+>      arm64/boot/dts/qcom/pmXXXX.dtsi:(multiple qcom DTs)
+> 			mode-recovery = <0x01>;
+> 			mode-bootloader = <0x02>;
+> 
+> Previous discussions around SYSTEM_RESET2:
+> - https://lore.kernel.org/lkml/20230724223057.1208122-2-quic_eberman@quicinc.com/T/
+> - https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
 
-First of all, thanks for doing this work, much appreciated!
+Humm, something changed compared to the last version that I tested from 
+Elliot which worked ok. With this patch applied and the following Device 
+Tree snippet:
 
-> ---
->  drivers/pci/controller/vmd.c | 28 ++++++++++++++++++++++++++--
->  drivers/pci/pci.h            |  8 ++++++++
->  drivers/pci/pcie/aspm.c      | 36 +++++++++++++++++++++++++++++++++++-
->  3 files changed, 69 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 8df064b62a2f..e685586dc18b 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -21,6 +21,8 @@
->
->  #include <asm/irqdomain.h>
->
-> +#include "../pci.h"
-> +
->  #define VMD_CFGBAR     0
->  #define VMD_MEMBAR1    2
->  #define VMD_MEMBAR2    4
-> @@ -730,7 +732,7 @@ static void vmd_copy_host_bridge_flags(struct pci_hos=
-t_bridge *root_bridge,
->  }
->
->  /*
-> - * Enable ASPM and LTR settings on devices that aren't configured by BIO=
-S.
-> + * Enable LTR settings on devices that aren't configured by BIOS.
->   */
->  static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
->  {
-> @@ -770,10 +772,27 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev=
-, void *userdata)
->          * PCIe r6.0, sec 5.5.4.
->          */
->         pci_set_power_state_locked(pdev, PCI_D0);
-> -       pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
+         psci {
+                 method = "smc";
+                 compatible = "arm,psci-0.2", "arm,psci";
+                 cpu_on = <0xc4000003>;
+                 cpu_suspend = <0xc4000001>;
+                 cpu_off = <0x84000002>;
 
-Do I think correctly that this doesn't work because of the
-aspm_disabled check in __pci_enable_link_state()?
+                 reset-types {
+                         mode-powercycle = <0x01>;
+                 };
+         };
 
->         return 0;
->  }
->
-> +static long vmd_get_link_state(struct pci_dev *pdev, void *data)
-> +{
-> +       struct pci_bus *vmd_bus =3D data;
-> +       struct pci_bus *bus =3D pdev->bus;
-> +
-> +       while (bus) {
-> +               if (bus =3D=3D vmd_bus)
-> +                       return PCIE_LINK_STATE_ALL;
-> +
-> +               if (!bus->self)
-> +                       break;
-> +
-> +               bus =3D bus->self->bus;
-> +       }
+I get the following invoking "reboot powercycle":
 
-If I'm not mistaken, it would be sufficient to do a check like
+# reboot powercycle
+[   21.403188] Unable to handle kernel NULL pointer dereference at 
+virtual address 0000000000000000 is not a phandle reference
+[   21.412032] Mem abort info:extended_property): 
+/rdb/waketimer@841a840:interrupts-extended: cell 0 is not a phandle 
+reference
+[   21.414840]   ESR = 0x0000000086000004operty): 
+/rdb/waketimer@841a840:interrupts-extended: cell 2 is not a phandle 
+reference
+[   21.418601]   EC = 0x21: IABT (current EL), IL = 32 bitsparent: cell 
+0 is not a phandle reference
+[   21.423927]   SET = 0, FnV = 0: /rdb/xhci_v2@8d00000:phys: cell 0 is 
+not a phandle reference
+[   21.426988]   EA = 0, S1PTW = 0 /rdb/sata@8b0a000/sata-port@0:phys: 
+cell 0 is not a phandle reference
+[   21.430138]   FSC = 0x04: level 0 translation fault:phys: cell 0 is 
+not a phandle reference
+[   21.435054] user pgtable: 4k pages, 48-bit VAs, pgdp=000000010112c000 
+a phandle reference
+[   21.441508] [0000000000000000] pgd=0000000000000000, 
+p4d=0000000000000000handle reference
+[   21.448318] Internal error: Oops: 0000000086000004 [#1]  SMPcell 0 is 
+not a phandle reference
+[   21.453990] Modules linked in: bdc 
+udc_core/thermal-zones/cpu-thermal:thermal-sensors: cell 0 is not a 
+phandle reference
+[   21.458188] CPU: 0 UID: 0 PID: 1566 Comm: reboot Not tainted 
+6.16.0-rc5-next-20250710-gdd78270edd5a #2 NONE 4)
+[   21.468032] Hardware name: BCX972160DV (DT)ases property name must 
+include only lowercase and '-'
+[   21.472221] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS 
+BTYPE=--)only lowercase and '-'
+[   21.479193] pc : 0x0s_paths): /aliases:pcie0: aliases property is not 
+a valid node (/pcie@8b10000)
+[   21.481388] lr : reboot_mode_notify+0x64/0x80es property name must 
+include only lowercase and '-'
+[   21.485760] sp : ffff80008344bbe0iases: aliases property name must 
+include only lowercase and '-'
+[   21.489079] x29: ffff80008344bbe0 x28: ffff0000c3bb3d00 x27: 
+ffff800080ab58e8ly lowercase and '-'
+[   21.496228] x26: 0000000000000000 x25: ffff0000c3bb3d00 x24: 
+ffff800082cf9bc8ly lowercase and '-'
+[   21.503376] x23: ffff80008344bcb8 x22: 0000000000000001 x21: 
+ffff0000c31b87b0
+[   21.510524] x20: 00000000fffffffc x19: ffff0000c31b8780 x18: 
+0000000000000000
+[   21.517673] x17: 0000000000000000 x16: 0000000000000000 x15: 
+0000000000000000
+[   21.524821] x14: 0000000000000000 x13: 0000000000000000 x12: 
+0000000000000000
+[   21.531969] x11: 0000000000000000 x10: 00007fffc02bb958 x9 : 
+0000000000000010
+[   21.539118] x8 : 0101010101010101 x7 : 0000000000000000 x6 : 
+000080c38080ffff
+[   21.546266] x5 : ffff0000c3000000 x4 : 0000808000800000 x3 : 
+0000000000000000
+[   21.553415] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 
+ffff0000c31b8780
+[   21.560565] Call trace:
+[   21.563014]  0x0 (P)
+[   21.565205]  notifier_call_chain+0x70/0x120
+[   21.569401]  blocking_notifier_call_chain+0x4c/0x78
+[   21.574288]  kernel_restart+0x30/0xc8
+[   21.577957]  __do_sys_reboot+0x1c8/0x268
+[   21.581886]  __arm64_sys_reboot+0x28/0x38
+[   21.585902]  invoke_syscall+0x4c/0x118
+[   21.589660]  el0_svc_common.constprop.0+0x44/0xe8
+[   21.594373]  do_el0_svc+0x20/0x30
+[   21.597694]  el0_svc+0x18/0x58
+[   21.600758]  el0t_64_sync_handler+0x98/0xe0
+[   21.604947]  el0t_64_sync+0x154/0x158
+[   21.608625] Code: ???????? ???????? ???????? ???????? (????????)
+[   21.614730] ---[ end trace 0000000000000000 ]---
+Segmentation fault
+#
 
-    if (pci_dev->bus->ops =3D=3D &vmd_ops)
-            return PCIE_LINK_STATE_ALL;
-
-instead of the above, or if not then why not?
-
-> +
-> +       return -ENODEV;
-> +}
-> +
->  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features=
-)
->  {
->         struct pci_sysdata *sd =3D &vmd->sysdata;
-> @@ -785,6 +804,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, uns=
-igned long features)
->         resource_size_t membar2_offset =3D 0x2000;
->         struct pci_bus *child;
->         struct pci_dev *dev;
-> +       struct pcie_aspm_vmd_link_state vmd_link_state;
->         int ret;
->
->         /*
-> @@ -911,6 +931,10 @@ static int vmd_enable_domain(struct vmd_dev *vmd, un=
-signed long features)
->                 return -ENODEV;
->         }
->
-> +       vmd_link_state.cb =3D vmd_get_link_state;
-> +       vmd_link_state.data =3D vmd->bus;
-> +       pci_register_vmd_link_state_cb(&vmd_link_state);
-> +
->         vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus),
->                                    to_pci_host_bridge(vmd->bus->bridge));
->
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 12215ee72afb..dcf7d39c660f 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -821,6 +821,12 @@ void pci_configure_aspm_l1ss(struct pci_dev *dev);
->  void pci_save_aspm_l1ss_state(struct pci_dev *dev);
->  void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
->
-> +
-> +struct pcie_aspm_vmd_link_state {
-> +       long (*cb)(struct pci_dev *pdev, void *data);
-> +       void *data;
-> +};
-> +
->  #ifdef CONFIG_PCIEASPM
->  void pcie_aspm_init_link_state(struct pci_dev *pdev);
->  void pcie_aspm_exit_link_state(struct pci_dev *pdev);
-> @@ -828,6 +834,7 @@ void pcie_aspm_pm_state_change(struct pci_dev *pdev, =
-bool locked);
->  void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
->  void pci_configure_ltr(struct pci_dev *pdev);
->  void pci_bridge_reconfigure_ltr(struct pci_dev *pdev);
-> +void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *sta=
-te);
->  #else
->  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
->  static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
-> @@ -835,6 +842,7 @@ static inline void pcie_aspm_pm_state_change(struct p=
-ci_dev *pdev, bool locked)
->  static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev)=
- { }
->  static inline void pci_configure_ltr(struct pci_dev *pdev) { }
->  static inline void pci_bridge_reconfigure_ltr(struct pci_dev *pdev) { }
-> +void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *sta=
-te) { }
->  #endif
->
->  #ifdef CONFIG_PCIE_ECRC
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 29fcb0689a91..c609d3c309be 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -320,6 +320,27 @@ static int policy_to_clkpm_state(struct pcie_link_st=
-ate *link)
->         return 0;
->  }
->
-> +static struct pcie_aspm_vmd_link_state vmd_state;
-> +
-> +void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *sta=
-te)
-> +{
-> +       mutex_lock(&aspm_lock);
-> +       vmd_state.cb =3D state->cb;
-> +       vmd_state.data =3D state->data;
-> +       mutex_unlock(&aspm_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(pci_register_vmd_link_state_cb);
-> +
-> +static long pci_get_vmd_link_state(struct pci_dev *pdev)
-> +{
-> +       int state =3D -ENODEV;
-> +
-> +       if (vmd_state.cb)
-> +               state =3D vmd_state.cb(pdev, vmd_state.data);
-> +
-> +       return state;
-> +}
-> +
->  static void pci_update_aspm_saved_state(struct pci_dev *dev)
->  {
->         struct pci_cap_saved_state *save_state;
-> @@ -794,6 +815,7 @@ static void pcie_aspm_cap_init(struct pcie_link_state=
- *link, int blacklist)
->         u32 parent_lnkcap, child_lnkcap;
->         u16 parent_lnkctl, child_lnkctl;
->         struct pci_bus *linkbus =3D parent->subordinate;
-> +       int vmd_aspm_default;
->
->         if (blacklist) {
->                 /* Set enabled/disable so that we will disable ASPM later=
- */
-> @@ -865,8 +887,20 @@ static void pcie_aspm_cap_init(struct pcie_link_stat=
-e *link, int blacklist)
->                 pcie_capability_write_word(child, PCI_EXP_LNKCTL, child_l=
-nkctl);
->         }
->
-> +       /*
-> +        * Devices behind Intel VMD operate on a synthetic PCI bus that B=
-IOS
-> +        * and ACPI do not enumerate or configure. ASPM for these devices=
- must
-> +        * be managed by the VMD driver itself, independent of global ACP=
-I ASPM
-> +        * constraints. This callback mechanism allows selective ASPM
-> +        * enablement for such domains.
-> +        */
-> +       vmd_aspm_default =3D pci_get_vmd_link_state(parent);
-> +
->         /* Save default state */
-> -       link->aspm_default =3D link->aspm_enabled;
-> +       if (vmd_aspm_default < 0)
-> +               link->aspm_default =3D link->aspm_enabled;
-> +       else
-> +               link->aspm_default =3D vmd_aspm_default;
-
-Well, this is not nice.
-
-First off, it adds VMD-specific stuff to otherwise generic ASPM code.
-Second, it doesn't actually do anything about the aspm_disabled checks
-all over the place, so they will still trigger even though ASPM will
-be effectively enabled for devices on the VMD bus.
-
->
->         /* Setup initial capable state. Will be updated later */
->         link->aspm_capable =3D link->aspm_support;
->
-> base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
-> --
-
-It appears to me that the underlying problem is that aspm_disabled is
-global and it is set during PCI root bus creation in
-acpi_pci_root_add().  Thus it affects all of the PCI buses even though
-the BIOS says that it wants to control ASPM for this particular PCIe
-hierarchy.  If there were another PCI root enumerated by ACPI where
-the OS would be allowed to control ASPM, it would not work just like
-the VMD case.
-
-To me, this suggests an approach based on moving the "ASPM disabled
-because the BIOS wants to control it" setting to pci_bus_flags_t and
-setting it on a per-hierarchy basis.  Since the VMD bus is a separate
-PCIe hierarchy from the kernel perspective, it will not have this flag
-set and the OS should be able to configure ASPM for devices on that
-bus.
-
-Do I think correctly or am I overlooking something here?
+--
+Florian
 
