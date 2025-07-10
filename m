@@ -1,130 +1,221 @@
-Return-Path: <linux-pm+bounces-30595-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30596-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13F36B005D7
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 16:55:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B28B2B005D5
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 16:55:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85E4516B37B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:54:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 073721897C7C
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32A80273D8E;
-	Thu, 10 Jul 2025 14:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11335273D94;
+	Thu, 10 Jul 2025 14:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="uhPFOwbe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DHUKbCea"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-24421.protonmail.ch (mail-24421.protonmail.ch [109.224.244.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5226478C91;
-	Thu, 10 Jul 2025 14:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35033270568
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 14:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752159286; cv=none; b=ajHgu47SJ0PDQjQ/Huri/MGwYya8Bzg6SVdAdmM6cWJdXmiq4dDqtIoAwYrk4RlIGN1dA3CaTGcIE37+zKhnuGQPrHbaTmlYYiIq8R0WgS8J9zyWPpkJb75vNuYAm7ABDU9LBIs9RepNjiT7Fel0CIgW8KJdyaocl+1ibXSnA+Y=
+	t=1752159329; cv=none; b=EzbmfbPQ+oKUDfUULSt0mJITCRvfXI7J2mdDOznN2pTgpHhy34MzChGvUBBzhMVxqTWqnlZT5mWBLW7K6zA2q8ArpGHH+xmb/T/rUK1sd0+6ceJgdC5RAL9vX0SXhXR4CBETqpm1aQ8Nj1bjnVe+K2jV3KrqqcL8qoUE6Nye0Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752159286; c=relaxed/simple;
-	bh=/BZeJ9skQYgL/W2BpgbCzGkjhkKi61qTc1GVie0Bgso=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FVq2hunHNW/lPZkOdCqYdym2izDpC5mvXC6a7GbXXXAg5nyuyoG8bP2tBqo1bnP6pCgPpaayDPowOykKEqsqmUFTREcb45gvQ3CQom8k91S7z+5DjtFny5M3ds+shKtxWzwjSHBYbZLgwcjRFfViqU0b5AJ74DZ4y6DCJnrB/sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=uhPFOwbe; arc=none smtp.client-ip=109.224.244.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geanix.com;
-	s=protonmail; t=1752159281; x=1752418481;
-	bh=8hCoJT7oSQ2+hO4Crxb7/QCTsLK+i6Ix8pOcE1yioP0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=uhPFOwbeICsKGailuEYBwH6LRdeKbV8Yd2OFHcUz01WN1lgd/jdyXl6/fF4cXEJ5e
-	 PY6+i9bfZ7M2R9ILo6ZO3dlftaltWKXJTKrOC8Upt0TYKs6vzvSk6pa0AM1Rnpni3G
-	 /9+yFMFK+B4lb9THN2oRSu6ilVfqjYvG3HXJzfTfY8TUMcEScLh1w8Qd61MSifgdF9
-	 yG0NxcHvZ43k/qjgsgd6szdh2tlIDC+sKrBihRCzit57fep6ItGp3zx5Izh7GExYKe
-	 VrmgdXL81sMQ++NOnsNHWJUnb5lEqlPjtZoOwW6HxtERdXRbpNTdegSrWdnz6XWfj8
-	 FE780GM89Jdqw==
-Date: Thu, 10 Jul 2025 14:54:38 +0000
-To: samuel.kayode@savoirfairelinux.com
-From: Sean Nyekjaer <sean@geanix.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>, imx@lists.linux.dev, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, Robin Gong <yibin.gong@nxp.com>, Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v8 2/6] mfd: pf1550: add core driver
-Message-ID: <idqtxdptxq6s57r452staq3xv6zzs3i5bbapzxdlu3o7cdahaq@j257j4okrw52>
-In-Reply-To: <20250707-pf1550-v8-2-6b6eb67c03a0@savoirfairelinux.com>
-References: <20250707-pf1550-v8-0-6b6eb67c03a0@savoirfairelinux.com> <20250707-pf1550-v8-2-6b6eb67c03a0@savoirfairelinux.com>
-Feedback-ID: 134068486:user:proton
-X-Pm-Message-ID: 3c444e4d1f4130e043ffc827ffec8747504ef419
+	s=arc-20240116; t=1752159329; c=relaxed/simple;
+	bh=RgZOXcAiaWJ2UESpiY6hcJImCEgHuZweTtoYAmvvpfA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BqtAsGw6NnL497INefuT1Cc+LkAyxui1NcR6A+djvoNodXzfLvd2p/dE772lG9V2F87hlRc+t2vEwttfRqWnIUxUmaMI61kk4yfxl0ZC6o6W2oQpYzCQciauAtjRrv73+Nt/QRQnrxdgTf2MN4EaR1d5bD6EKHVqHg7riSIXNZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DHUKbCea; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-711a3dda147so12276857b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 07:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752159327; x=1752764127; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nwOZdn2NiDVjIPrABYZCyte+ZpAf7Y1hBgPJVXATIso=;
+        b=DHUKbCeaWzngKFD1x7IB2bNDAA8bYEMWY+/noEO2RLYNRiXvAPJ2C/eOnp1xMOVFR8
+         DVfLZS1upM1zXONmIoXIvtASUqJ3IjS017mCC7qMJLDvQJaecAL55PaLNNoTcZ2TXOOE
+         9kbGvLIuM1xzXa/CQZ1hp2HPIYpn8O0hbtQqgM5D8JeIePIP9E3xdha9XWNmRpf5AH9t
+         c0hhQ5CWdKKoBxjIF3OFsv880Z3bnLwuAA/dnhw7IfjGmO+FDEaZVDmhHERSBkSeM/7S
+         fiUgxQwL/hwI9rXhuu4bhyD9KteOyxgBQYvHTyUkqPahJ08u6i+baUZIdAQpgFPugGo4
+         rqew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752159327; x=1752764127;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nwOZdn2NiDVjIPrABYZCyte+ZpAf7Y1hBgPJVXATIso=;
+        b=AGU53EfhfrQnCAIBE6XV9ciLxj65Kp8YfTYYtBLEN1Ei8t/OUkP5R5Ct/FGQgMf9E9
+         6mG8chQBiCFB1X2KCgHlO8dOF898R0qCErH82P33DskrWQw1J+z0Lz3sTDDVW3NE51GG
+         fwKtTj2lmKqyXTEN87MUR9IwyhmXuBBB+FBVmM8N64ODs8qouQ1upog0YrlV8BIiub83
+         CUUEx0JXSf2MkRKkQeAO7QW9vObB7N2V+VzcFpba/R9GDiC0BcNRvJqK2+O1Sn7Y2z3n
+         QXeQlYPyLvC77f4UCkGG5ohNltWjjCExWtyK8U2b/aq44FA/K67jd+Y1+pq/N5slfIZX
+         anqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKVqjRnxtdguSsCL46BtwaFhw+G1+iMArAdLkwqnkeGAh4dZ8/yYkFhKPykh1npVbkFb/OzFOOVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAL+NoON5A66gGNxrmfqhbxHQ4EtwbE8ufs0HIWIcPoTg6tJfx
+	obNAPPdo6vYAhHdJHgYM7JIVx2G24PDTaWH/o3MMjvjiy0kY8ltYKmBwQ2K6G4+pqkEuxlfgWT6
+	r5ubGgpL+r/F/C52xRd+9SRKuxhG2IqsebtL8c6enCA==
+X-Gm-Gg: ASbGnctBAD6n8G4A7BydkINAMQlgqMz8bhksALKtl4l+tmuGYQkHr/nN3e/r3OW4q6i
+	r3W+x3FLO3Pd/W+hK4lqp2PodxPlBr37N++POA6ms4SWmkbLCRsfOCYt2JvRhB3a5WGZudk2kIo
+	im3QAoJ4k8dBxFJm6V1XNG3mEFdOU7wcl2cXbUW11vQwM=
+X-Google-Smtp-Source: AGHT+IHc5dtpkiZ7u2SN9CrdCVrZBHY9P08NaQD/OycrMWylt76w9oUZCr6FAkSY6jbXyljQzIQ7UX5mkXVQHKZ643o=
+X-Received: by 2002:a05:690c:87:b0:70d:ecdd:9bd1 with SMTP id
+ 00721157ae682-717b198ef8emr101473497b3.24.1752159326962; Thu, 10 Jul 2025
+ 07:55:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20250701114733.636510-1-ulf.hansson@linaro.org>
+ <CGME20250710122654eucas1p20f1179a9ff22d562d89252f924d34dae@eucas1p2.samsung.com>
+ <20250701114733.636510-22-ulf.hansson@linaro.org> <212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com>
+In-Reply-To: <212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 10 Jul 2025 16:54:50 +0200
+X-Gm-Features: Ac12FXxhP_ygVu4kvJK5PvHoMEGqfNOT1CdeqATazqx35-lOUW-8uexy7JlAHYk
+Message-ID: <CAPDyKFrPOgWW_=ehCjtqAUR97HoLKmgFNO3bRT50-w6A1LgGFw@mail.gmail.com>
+Subject: Re: [PATCH v3 21/24] pmdomain: core: Leave powered-on genpds on until late_initcall_sync
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Samuel,
+On Thu, 10 Jul 2025 at 14:26, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> On 01.07.2025 13:47, Ulf Hansson wrote:
+> > Powering-off a genpd that was on during boot, before all of its consumer
+> > devices have been probed, is certainly prone to problems.
+> >
+> > As a step to improve this situation, let's prevent these genpds from being
+> > powered-off until genpd_power_off_unused() gets called, which is a
+> > late_initcall_sync().
+> >
+> > Note that, this still doesn't guarantee that all the consumer devices has
+> > been probed before we allow to power-off the genpds. Yet, this should be a
+> > step in the right direction.
+> >
+> > Suggested-by: Saravana Kannan <saravanak@google.com>
+> > Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Colibri iMX8X
+> > Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> # TI AM62A,Xilinx ZynqMP ZCU106
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> This change has a side effect on some Exynos based boards, which have
+> display and bootloader is configured to setup a splash screen on it.
+> Since today's linux-next, those boards fails to boot, because of the
+> IOMMU page fault.
 
-On Mon, Jul 07, 2025 at 05:37:21PM +0100, Samuel Kayode via B4 Relay wrote:
-> From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
->=20
-> Add the core driver for pf1550 PMIC. There are 3 subdevices for which the
-> drivers will be added in subsequent patches.
->=20
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> ---
+Thanks for reporting, let's try to fix this as soon as possible then.
 
-[...]
+>
+> This happens because the display controller is enabled and configured to
+> perform the scanout from the spash-screen buffer until the respective
+> driver will reset it in driver probe() function. This however doesn't
+> work with IOMMU, which is being probed earlier than the display
+> controller driver, what in turn causes IOMMU page fault once the IOMMU
+> driver gets attached. This worked before applying this patch, because
+> the power domain of display controller was simply turned off early
+> effectively reseting the display controller.
 
-> +
-> +static int pf1550_i2c_probe(struct i2c_client *i2c)
-> +{
-> +=09const struct mfd_cell *regulator =3D &pf1550_regulator_cell;
-> +=09const struct mfd_cell *charger =3D &pf1550_charger_cell;
-> +=09const struct mfd_cell *onkey =3D &pf1550_onkey_cell;
-> +=09unsigned int reg_data =3D 0, otp_data =3D 0;
-> +=09struct pf1550_ddata *pf1550;
-> +=09struct irq_domain *domain;
-> +=09int irq, ret =3D 0;
-> +
-> +=09pf1550 =3D devm_kzalloc(&i2c->dev, sizeof(*pf1550), GFP_KERNEL);
-> +=09if (!pf1550)
-> +=09=09return -ENOMEM;
-> +
-> +=09i2c_set_clientdata(i2c, pf1550);
-> +=09pf1550->dev =3D &i2c->dev;
-> +=09pf1550->irq =3D i2c->irq;
-> +
-> +=09pf1550->regmap =3D devm_regmap_init_i2c(i2c, &pf1550_regmap_config);
-> +=09if (IS_ERR(pf1550->regmap))
-> +=09=09return dev_err_probe(pf1550->dev, PTR_ERR(pf1550->regmap),
-> +=09=09=09=09     "failed to allocate register map\n");
-> +
-> +=09ret =3D regmap_read(pf1550->regmap, PF1550_PMIC_REG_DEVICE_ID, &reg_d=
-ata);
-> +=09if (ret < 0)
-> +=09=09return dev_err_probe(pf1550->dev, ret, "cannot read chip ID\n");
-> +=09if (reg_data !=3D PF1550_DEVICE_ID)
-> +=09=09return dev_err_probe(pf1550->dev, -ENODEV,
-> +=09=09=09=09     "invalid device ID: 0x%02x\n", reg_data);
-> +
-> +=09/* Regulator DVS */
-> +=09ret =3D pf1550_read_otp(pf1550, PF1550_OTP_SW2_SW3, &otp_data);
-> +=09if (ret)
-> +=09=09return ret;
-> +
-> +=09/* When clear, DVS should be enabled */
-> +=09if (!(otp_data & OTP_DVS_ENB))
-> +=09=09pf1550->dvs_enb =3D true;
-> +
+I can certainly try to help to find a solution, but I believe I need
+some more details of what is happening.
 
-Thanks for upstreaming this :)
+Perhaps you can point me to some relevant DTS file to start with?
 
-We need to handle DVS for SW1 here.
-I'm using the A6 variant that have DVS enabled for SW1 and disabled for
-SW2.
-The A1 variant have DVS for SW1 disabled...
+>
+> This has been discussed a bit recently:
+> https://lore.kernel.org/all/544ad69cba52a9b87447e3ac1c7fa8c3@disroot.org/
+> and I can add a workaround for this issue in the bootloaders of those
+> boards, but this is something that has to be somehow addressed in a
+> generic way.
 
-/Sean
+It kind of sounds like there is a missing power-domain not being
+described in DT for the IOMMU, but I might have understood the whole
+thing wrong.
 
+Let's see if we can work something out in the next few days, otherwise
+we need to find another way to let some genpds for these platforms to
+opt out from this new behaviour.
+
+Kind regards
+Uffe
+
+>
+> > ---
+> >   drivers/pmdomain/core.c   | 10 ++++++++--
+> >   include/linux/pm_domain.h |  1 +
+> >   2 files changed, 9 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> > index 5cef6de60c72..18951ed6295d 100644
+> > --- a/drivers/pmdomain/core.c
+> > +++ b/drivers/pmdomain/core.c
+> > @@ -931,11 +931,12 @@ static void genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+> >        * The domain is already in the "power off" state.
+> >        * System suspend is in progress.
+> >        * The domain is configured as always on.
+> > +      * The domain was on at boot and still need to stay on.
+> >        * The domain has a subdomain being powered on.
+> >        */
+> >       if (!genpd_status_on(genpd) || genpd->prepared_count > 0 ||
+> >           genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd) ||
+> > -         atomic_read(&genpd->sd_count) > 0)
+> > +         genpd->stay_on || atomic_read(&genpd->sd_count) > 0)
+> >               return;
+> >
+> >       /*
+> > @@ -1346,8 +1347,12 @@ static int __init genpd_power_off_unused(void)
+> >       pr_info("genpd: Disabling unused power domains\n");
+> >       mutex_lock(&gpd_list_lock);
+> >
+> > -     list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+> > +     list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
+> > +             genpd_lock(genpd);
+> > +             genpd->stay_on = false;
+> > +             genpd_unlock(genpd);
+> >               genpd_queue_power_off_work(genpd);
+> > +     }
+> >
+> >       mutex_unlock(&gpd_list_lock);
+> >
+> > @@ -2352,6 +2357,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+> >       INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
+> >       atomic_set(&genpd->sd_count, 0);
+> >       genpd->status = is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
+> > +     genpd->stay_on = !is_off;
+> >       genpd->sync_state = GENPD_SYNC_STATE_OFF;
+> >       genpd->device_count = 0;
+> >       genpd->provider = NULL;
+> > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> > index d68e07dadc99..99556589f45e 100644
+> > --- a/include/linux/pm_domain.h
+> > +++ b/include/linux/pm_domain.h
+> > @@ -199,6 +199,7 @@ struct generic_pm_domain {
+> >       unsigned int performance_state; /* Aggregated max performance state */
+> >       cpumask_var_t cpus;             /* A cpumask of the attached CPUs */
+> >       bool synced_poweroff;           /* A consumer needs a synced poweroff */
+> > +     bool stay_on;                   /* Stay powered-on during boot. */
+> >       enum genpd_sync_state sync_state; /* How sync_state is managed. */
+> >       int (*power_off)(struct generic_pm_domain *domain);
+> >       int (*power_on)(struct generic_pm_domain *domain);
+>
+> Best regards
+> --
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+>
 
