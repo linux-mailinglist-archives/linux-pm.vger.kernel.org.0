@@ -1,55 +1,104 @@
-Return-Path: <linux-pm+bounces-30582-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30583-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E1DBB002B0
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:58:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FD92B002BE
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 15:01:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 406833A590F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 12:57:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9AA4E6321
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 13:00:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B6A025FA3B;
-	Thu, 10 Jul 2025 12:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19B5223DF1;
+	Thu, 10 Jul 2025 13:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="u53pnXEh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ShMwq5Qd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D2A1E8333;
-	Thu, 10 Jul 2025 12:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDB018B47D;
+	Thu, 10 Jul 2025 13:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752152281; cv=none; b=dSCz13zxv2ahe9Bp+1mmJ6ifJl/XehvNeGkHZ44EGXqesIKBaa2lWlE91ST1c/1H8UKkwyuGNwmvaZVoYF7qoZYOWBXrDfdaGSPxjpcX4AAUihWMb9X34kxkBLqQDxWxFEfmGXEZW8WrNe3LLWJ6M9/5CLhjfzcml+RU4gor+IM=
+	t=1752152460; cv=none; b=QbrlP7cJAkRzwXgQ5rwmLheUy29EGbiivHPWUgtzG5P+iexgMslbEEDwk0lQ5tjn+0iliOeMuf3lhSXo/2XeyAUmeuhDeXuG9JuPfr1NeDoW/DGCTcCjrkIjvb0pv0OJrlkxr7QM3/OPX2FEDINbO1sNipyg8ANqi+kpljK/WAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752152281; c=relaxed/simple;
-	bh=zwBtqkT25ZAX+sp1nl3oFbbZxZoeWwTF/wCZRk2t2ZU=;
+	s=arc-20240116; t=1752152460; c=relaxed/simple;
+	bh=jzpxRsJ6VW1YxSlJsbTN9FpLUNduUWgpjq0ALHBpxwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RmGbt6Hgm4LYZ+PsygB5oAn9GTmDmqX2T3he7oUDdUDUtOi5IUdFoUZfQ+CkzHlb8aC+x281lFBvUzS+q0Yp7llbHSybwjjb57wdUf7+7mxw4tRUR4Tp4hScWQsXVodllyR4QtL+PYTacpe5F08znD9w1aFz3tSf3bZFStffVr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED9891EA6;
-	Thu, 10 Jul 2025 05:57:46 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B09F73F66E;
-	Thu, 10 Jul 2025 05:57:55 -0700 (PDT)
-Date: Thu, 10 Jul 2025 13:57:52 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, ulf.hansson@linaro.org,
-	Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-	linux-rt-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Raghavendra Kakarla <quic_rkakarla@quicinc.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	"open list:Real-time Linux (PREEMPT_RT)" <linux-rt-devel@lists.linux.dev>
-Subject: Re: [PATCH] cpuidle: psci: Fix cpuhotplug routine with PREEMPT_RT=y
-Message-ID: <aG-40INpi05v3-fQ@bogus>
-References: <20250709154728.733920-1-daniel.lezcano@linaro.org>
- <CAJZ5v0ixk5hZPPQc_1rDLMTzjh=KpMQF_A2U=HehMTuNSMQwtQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Er/a9wilmIXgZ5/U+BA7BtjOyuKMDumABn296fpJece3gIvfddW12cjwwhv0oQqC75c5R5axXVuTb/PjQdwrRir8iRXYTn6aZB3HAP5aVBK8A1VkamgjJuCKWL9k1FoRIgvnwqHzoRK9mOAZ+fgpG33E2TPrIuULyi1UCUCCWj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=u53pnXEh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ShMwq5Qd; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id F04EBEC025F;
+	Thu, 10 Jul 2025 09:00:57 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Thu, 10 Jul 2025 09:00:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1752152457;
+	 x=1752238857; bh=7HDLZP/6/SAsDo7hZEfPxId47x3a7/9rXug00+vwYvo=; b=
+	u53pnXEhNUr5SAaJujCtAuQI0z0AHafwbpVKYYuaeNnMv+kiG+dI2jiZb4gtYlHM
+	vvxLS5GmMwNjJfI4MpVFIylp5fU6rNBR5lptr0kB+RcWRhn7jiYWOJcgDpmj/XMZ
+	5Qy+nNh1Kx+UMIwgyhYITKkfiXjw09VPPV2tCFV5HtfERqwVfsB0vym2W+FnJ+Kd
+	RbbcpFreduGEf9EKFeGRTZCwl6ypsK0SZjTYVIu8iy/4S69wC4RWmUDUKSLaNwM3
+	gDXpxSXI/XGGFwTJl1SUP727LUiWrP45e5pwhNid90XKeKUSsdIe+O3ClWkX7dQS
+	RTTXxORgHDRh95Djm81tnw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1752152457; x=
+	1752238857; bh=7HDLZP/6/SAsDo7hZEfPxId47x3a7/9rXug00+vwYvo=; b=S
+	hMwq5Qdsrx3sQ3sDPy+/pUZcl79dFHY/YxSqciYqM5RHUGXYUmqseE9hkZ6nthMY
+	7/7372CZp8rBI2wbaysuuF9Dn2A5E5LS5rEfwXbSow+bgBqebJ49GP1V4vzktIzk
+	5CdBH+WKSeK+kWnowNC7nn/UF2CDm+QpLNUpBdUCKv/+4ukqOk+/rEF6PFJi7LES
+	iZHt77o3g8OyfbU6GLcbyhLkXC5epXssGnsWmODmmLMpxjBiMJejuB1ewJFMdIlp
+	rTE4A9iRfEgRxdZ6Oa7WtbcuIj2u103/Y29BT+YvuDdDV9t4ympLpcz/AcZbFSqP
+	aoFV2KaZJkfBpsM086suA==
+X-ME-Sender: <xms:iblvaMt5BjosKbh9UnbvyoCzAsbjzNZWefh494USW_DJRb9adDvojw>
+    <xme:iblvaNQRBx-WBw-w4AoNGaS8BOpT3McftB6Hb901SOqwTQ7G91dE8lXmWKYDY4uy5
+    -DB0SUVJdhroBIPjz4>
+X-ME-Received: <xmr:iblvaA1vxCkQdESXK4wfdmmJHivuOQqpC-mcW9GUj0oD3BekTu3i8osxSGNmqXvUV-RnzLJgR0BSdkFbIzfQcdc1ykZRdSX5Og>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdegtdehudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheppfhikhhlrghs
+    ucfunpguvghrlhhunhguuceonhhikhhlrghsrdhsohguvghrlhhunhgusehrrghgnhgrth
+    gvtghhrdhsvgeqnecuggftrfgrthhtvghrnhepveetgedtvddvhfdtkeeghfeffeehteeh
+    keekgeefjeduieduueelgedtheekkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepnhhikhhlrghsrdhsohguvghrlhhunhgusehrrghgnhgr
+    thgvtghhrdhsvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhhtpdhrtg
+    hpthhtohepghgvvghrthdorhgvnhgvshgrshesghhlihguvghrrdgsvgdprhgtphhtthho
+    pehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvg
+    iitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehi
+    nhhtvghlrdgtohhmpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
+    dprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrd
+    horhhg
+X-ME-Proxy: <xmx:iblvaCtSP16XhuEZyNJvl0QeX3yso_53-xGqeZDcMUXoPJlaTkcIpQ>
+    <xmx:iblvaGiZ1ZySKnWVeiybmz484Xjq_S6rQJzsNnxrZH00mXb10JzzSw>
+    <xmx:iblvaD9_Mt4NHziQjlgm4CiF6a5oR7EfWfCN6iGZFiHfMK4gi8WIsA>
+    <xmx:iblvaJvlz15n1fxV0oehSNkbkP-W1OiwqUOeFESedSqEUzVpejmXZQ>
+    <xmx:iblvaL-ZLO-Qec_jyWwNsOG6GGd4QzJj0cyInAJEGOVP4TnwPgTdKyPz>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Jul 2025 09:00:56 -0400 (EDT)
+Date: Thu, 10 Jul 2025 15:00:55 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] thermal: rcar: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+Message-ID: <20250710130055.GC2234326@ragnatech.se>
+References: <4bf4c21a72abeb53649ea545a3db768355b03d50.1752087838.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,52 +108,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ixk5hZPPQc_1rDLMTzjh=KpMQF_A2U=HehMTuNSMQwtQ@mail.gmail.com>
+In-Reply-To: <4bf4c21a72abeb53649ea545a3db768355b03d50.1752087838.git.geert+renesas@glider.be>
 
-On Thu, Jul 10, 2025 at 02:43:10PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jul 9, 2025 at 5:47 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> > Currently cpu hotplug with the PREEMPT_RT option set in the kernel is
-> > not supported because the underlying generic power domain functions
-> > used in the cpu hotplug callbacks are incompatible from a lock point
-> > of view. This situation prevents the suspend to idle to reach the
-> > deepest idle state for the "cluster" as identified in the
-> > undermentioned commit.
-> >
-> > Use the compatible ones when PREEMPT_RT is enabled and remove the
-> > boolean disabling the hotplug callbacks with this option.
-> >
-> > With this change the platform can reach the deepest idle state
-> > allowing at suspend time to consume less power.
-> >
-> > Tested-on Lenovo T14s with the following script:
-> >
-> > echo 0 > /sys/devices/system/cpu/cpu3/online
-> > BEFORE=$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/idle_states | grep S0 | awk '{ print $3 }') ;
-> > rtcwake -s 1 -m mem;
-> > AFTER=$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/idle_states | grep S0 | awk '{ print $3 }');
-> > if [ $BEFORE -lt $AFTER ]; then
-> >     echo "Test successful"
-> > else
-> >     echo "Test failed"
-> > fi
-> > echo 1 > /sys/devices/system/cpu/cpu3/online
-> >
-> > Fixes: 1c4b2932bd62 ("cpuidle: psci: Enable the hierarchical topology for s2idle on PREEMPT_RT")
-> > Cc: Raghavendra Kakarla <quic_rkakarla@quicinc.com>
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Hi Geert,
+
+Thanks for your work.
+
+On 2025-07-09 21:04:17 +0200, Geert Uytterhoeven wrote:
+> Convert the Renesas R-Car thermal driver from SIMPLE_DEV_PM_OPS() to
+> DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr().  This lets us drop the
+> check for CONFIG_PM_SLEEP, and reduces kernel size in case CONFIG_PM or
+> CONFIG_PM_SLEEP is disabled, while increasing build coverage.
 > 
-> As per MAINTAINERS, this is for Ulf/Sudeep.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  drivers/thermal/renesas/rcar_thermal.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-
-LGTM, so
-
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-
-I still prefer to hear from Ulf who has more knowledge and hands-on experience
-with s2idle + PREEMPT_RT in case I am missing something.
+> diff --git a/drivers/thermal/renesas/rcar_thermal.c b/drivers/thermal/renesas/rcar_thermal.c
+> index 00a66ee0a5b00c5f..4323b96670e7571f 100644
+> --- a/drivers/thermal/renesas/rcar_thermal.c
+> +++ b/drivers/thermal/renesas/rcar_thermal.c
+> @@ -534,7 +534,6 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int rcar_thermal_suspend(struct device *dev)
+>  {
+>  	struct rcar_thermal_common *common = dev_get_drvdata(dev);
+> @@ -567,15 +566,14 @@ static int rcar_thermal_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+> -static SIMPLE_DEV_PM_OPS(rcar_thermal_pm_ops, rcar_thermal_suspend,
+> -			 rcar_thermal_resume);
+> +static DEFINE_SIMPLE_DEV_PM_OPS(rcar_thermal_pm_ops, rcar_thermal_suspend,
+> +				rcar_thermal_resume);
+>  
+>  static struct platform_driver rcar_thermal_driver = {
+>  	.driver	= {
+>  		.name	= "rcar_thermal",
+> -		.pm = &rcar_thermal_pm_ops,
+> +		.pm = pm_sleep_ptr(&rcar_thermal_pm_ops),
+>  		.of_match_table = rcar_thermal_dt_ids,
+>  	},
+>  	.probe		= rcar_thermal_probe,
+> -- 
+> 2.43.0
+> 
 
 -- 
-Regards,
-Sudeep
+Kind Regards,
+Niklas Söderlund
 
