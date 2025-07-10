@@ -1,271 +1,192 @@
-Return-Path: <linux-pm+bounces-30564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37B91B00195
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:22:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 926C9B001AA
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:27:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D64F1C866CD
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 12:23:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79D011C88366
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 12:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE13024DD0E;
-	Thu, 10 Jul 2025 12:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FCC25229C;
+	Thu, 10 Jul 2025 12:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BO6VUhzM"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="kuJjdzKF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2056.outbound.protection.outlook.com [40.107.92.56])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E4F1EA73;
-	Thu, 10 Jul 2025 12:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752150161; cv=fail; b=uaDkMwk+m7C9IEA0SeGm0wUIZHgOY9SUB4dkkeROo3DmrpTWfBnjvnNiMxMHADFvh0o4py6W3KftcDsdPhZNrq5eC7lJum9HR4979NZwKyBa9pON6bVA4Xb05/PNua9fyZA57VpI/FabKISPRhaci4c4E97RugHCp9j1d3xkzlI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752150161; c=relaxed/simple;
-	bh=ze5YxOmNw/H8dcYAENn2IC8JLraHwfiJK41na4Ewhpk=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=qe7YQY+X85GRjP0cHinLc1jxfW+DuNtGQRfgUoH63oQZ6pV1kuE4um3xyb2exNvRouPUY4pPbepJAozy5nNaNqIo1S+YK9wHxlC1ymUlTicr8gKHJKDFCAi13ZUxjxlPkPZOvHorzlbVnUc+VZT/T7t+36JJh+ioC3YX69jNhT4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BO6VUhzM; arc=fail smtp.client-ip=40.107.92.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OFsG4pnfHmz6+FPIC+ycF0i9vVHm/PTzTrM/VToDJHvuxqhFAbthGT1pKZTFPRif1Y/WvdfK5Ai2f3D4RXKXSK411Fq82AQoaMRim9UrK53iU8J2WibnfyR4C+bMilS1rDyeY/IwkJ/fhB6tvVY4iOS3d/IYWj44gKBsZOvMJPdmlHzZiLgxgDdbE/AttmlTTQKYjdQmGDa0b58GdtAKatB5j1k4U22W9e4jRBofp6tt2ESwBDXtYen2vyHGbjglN72U/99hS8Gks9AHPPRgVYLSAXMycnwAstPIy73mNQmeeuAnSgJurgIGflCS2ZwoIzndRuJEtQK4f3CywduIKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6WKU9IueZFVpniQyOchqwjtWcA1huUc5bDs78bpY6qI=;
- b=dE08/hS9zm5SxqQeX9R8avIVy1dFkI2ws3oSffLXBstoYFQWdI9FrGaYL2zSo4n6T1WHUH/fLLkfGsnMqMqGs6LKeDkSB9Z7q3m1Gads4qmNRDTuL9A0RHmJCFdQqqgOT/fK5iiAo9DcL6gRYXS2c22M5sh9fjTS12Tif6XK5BNWd4B6ICFDzpYl0ftgC3T/k5MlN+rI/7WPxu+61GWAi1OvI/i/RcQW/3fIAuEYZ8VSi8k2HPOrc7UHacmjr59p/gibv6EMfru3wMOenGi738UIMBPBhqx+NvM0IYOAz7HBC3+K1y824CFoZOQ+RvIkzhn2nfL3iLy8zw5wt0C+tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6WKU9IueZFVpniQyOchqwjtWcA1huUc5bDs78bpY6qI=;
- b=BO6VUhzMEpr92ZsnzTxudOLjFbMiZ1VEk5LVcz95Ak7HpWaMemKSKd70Gdsn6ThPZZ+J5t8mWlfqx69F0j0Y+eV4Fj0+z3Ys8pxjv7HCF2nJpyTMce6GZF1oZPWMV1lUqdu4zca5LCv6/y5QW1bPeTj01B4tISQhrjx1W/xh7AU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SA0PR12MB7461.namprd12.prod.outlook.com (2603:10b6:806:24b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.27; Thu, 10 Jul
- 2025 12:22:35 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%3]) with mapi id 15.20.8901.024; Thu, 10 Jul 2025
- 12:22:35 +0000
-Message-ID: <6df29eeb-756f-4117-9d56-204d778395b3@amd.com>
-Date: Thu, 10 Jul 2025 08:22:32 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/5] drm/amdgpu: do not resume device in thaw for
- normal hibernation
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Samuel Zhang <guoqing.zhang@amd.com>, alexander.deucher@amd.com,
- rafael@kernel.org, len.brown@intel.com, pavel@kernel.org,
- gregkh@linuxfoundation.org, dakr@kernel.org, airlied@gmail.com,
- simona@ffwll.ch, ray.huang@amd.com, matthew.auld@intel.com,
- matthew.brost@intel.com, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, tzimmermann@suse.de
-Cc: lijo.lazar@amd.com, victor.zhao@amd.com, haijun.chang@amd.com,
- Qing.Ma@amd.com, Owen.Zhang2@amd.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org
-References: <20250710062313.3226149-1-guoqing.zhang@amd.com>
- <20250710062313.3226149-6-guoqing.zhang@amd.com>
- <b9bb9865-8bf4-4d9a-9bfd-945d38a7698a@amd.com>
- <da71b812-6ac8-4abd-82d6-4cfc6a168146@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <da71b812-6ac8-4abd-82d6-4cfc6a168146@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT2PR01CA0003.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:38::8) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0DB24C068
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 12:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752150419; cv=none; b=TyyU30Jv+e1SOwlcmXt3YOmGv+brv2R8Uv2jVhSe3OfsjVWU0869ND7Lr8/ZCUqi2BOYUFvqoeHtST1uylfsh7W4vCtPe8kl+YUVMU5ciEPaS/4qOM+jjfM3WDDO06duV3OC8tFCgd/CH5LqfmI1qeJ+Iqc/hHCYgBGbNq9jio0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752150419; c=relaxed/simple;
+	bh=Zjt6Z7VIw7JQUZVnhJKSv50IULygtlhHmMKIpQV5MnY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=D+ka0TdXu7bLTGLKDRGL9FEEg2COddH5E4OO6Uve5cGJP1zmXuVRuMuLH3RsGR7akqSj7j27NNFZDrorIVtRnk18uTcO+ZQtcIDSUTU2pe/xXuCP7vqX3alA3gsBhE79H+Yt5HEPH9zP91YsRBYxtoLV/BHfzywJn/SWrM04NIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=kuJjdzKF; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250710122654euoutp013664ee10730698650cccd25494b0c17a~Q44TF-xXz1236512365euoutp01g
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 12:26:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250710122654euoutp013664ee10730698650cccd25494b0c17a~Q44TF-xXz1236512365euoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1752150414;
+	bh=D/oWQEudpESa3h5p25FZ2E/peR9srzu3zLywQospGPM=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=kuJjdzKFrQrPl6guBdNHnmzta9I3S5ng7rIMZbSj6LmBH1ogtj39zUKoZvvREbeaN
+	 NmbHpEDc5PurEoaRLa3Iau9o2Fc+JVY/L+Ntad4xAfN7AtmK3UhYCEfOLjbJP2rykf
+	 BfkD5LetV4o3GLXom+6g/gBvnr4CIu/8exE01jCU=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250710122654eucas1p20f1179a9ff22d562d89252f924d34dae~Q44Stx9J21669716697eucas1p26;
+	Thu, 10 Jul 2025 12:26:54 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250710122652eusmtip1205fb97fbbf5070e4fbdb96b09b6fb55~Q44RtpbyU1085010850eusmtip1Z;
+	Thu, 10 Jul 2025 12:26:52 +0000 (GMT)
+Message-ID: <212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com>
+Date: Thu, 10 Jul 2025 14:26:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SA0PR12MB7461:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07edd026-dff4-4f29-036b-08ddbfac7393
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Szlod3lWVVRESWtzc1YwMGJleWhiRmhKR1BtUW5DdjgwU1luT2d5VE01L0p0?=
- =?utf-8?B?aE1CclpDblRZQi9MV1R6QzZyT2p2eTBWeHgvQlVkNXNWM2phL0w1WTZCYU1q?=
- =?utf-8?B?QWYrNXM4cnAza3hNVkI4MEdoUmdYRVBCVGNrQytNMEx1MG1vQm0zdTZRWmFC?=
- =?utf-8?B?V0hZOTBDRmJGOUt2T3hQRXRib1l0eVcwVW51VmxVVjhZZndmNkg2ZnZvMVNS?=
- =?utf-8?B?eXlCa3RzSlZNOFkrZ2lMT2p0KzBEdmQxQnZkZ1VNdVhRTmtKejRBMk9HMlkz?=
- =?utf-8?B?d3NMYm05NmhBb3R1dmYySENCcXUyY3JQdlFLaTQwUDJsaVR0VURBVkFnREFt?=
- =?utf-8?B?TXhHbTIrZXlXa3d6SmdBazA1bGhUeVpGcTcrS21Ga0d0R2c2ZmpvM3lkUGtr?=
- =?utf-8?B?cEVNTkNXalJlUXkxYTVtVXRJSStTTTB2M2RjSWFXcEFFNTlpRWR0MUI3Tk5D?=
- =?utf-8?B?QTJKR1Y2dDRIY2hJMkZNeDB5U1VDSjdrL0ZMbnZnMHFwb0RGbFlFQkVkT1lp?=
- =?utf-8?B?RzQ4U2owMnd1UFd6ZlhEbVZDYitNc2dmUWswUUdIelNoeXNkUXZzK1lkU0FE?=
- =?utf-8?B?dW1JMkZhaDVpN2pYb2hNMks1L2YvaWdJZDhjQTVUV1BGdVc5SFZobGhtaThp?=
- =?utf-8?B?ZEM1ZVFaVldzSHlrQTc2T1F5TlJ2R1ZGQUtpUlhGQkxsNTZwUmtWUXFjQVBR?=
- =?utf-8?B?Vml0WnlsdHdnZW5YT0FQdzR4Z2taSjRpV0xkYkEvMHZScWVIMFpkRGhSUW5O?=
- =?utf-8?B?ckMrcC9Wa0RSQUZ4eGV0NmF2VGFkM3BLNmlHVFh0bm56YVpWRHF1MlZDdnpW?=
- =?utf-8?B?VmRDOVJPcG50UXZpWUROdFdwNThtVzdlVm94dzNOU1VWWFk2TllhRFd6N0xn?=
- =?utf-8?B?TU80MVJtalhuWGNta0hqM2pkSXlRVjBRS0JKcG5EdGpIVmxvRjhycEc4WEdw?=
- =?utf-8?B?VTdwQldrcnBRTzh1VnRoSFRabzJoRzUvVEdFd2JKWlM2a3ZTR3FqOHNFVGJC?=
- =?utf-8?B?QXBUZHpYeUoyR3pLOUpINkFaQ3dTcnFsR2kwUzcxMnZxOWpva2p3ZTc4L3NP?=
- =?utf-8?B?eXBZM3M5c2QvNkdydThXWnF5RG9WeXRUaVI0OVVLWWxRNzBaL0J1dkI1WGJa?=
- =?utf-8?B?czdNcDlyVzhuVlRrN0lPemtXRk5JRXp3QThBMWYybnZSd1lZa09RMEc2d1or?=
- =?utf-8?B?S2VOTGNOZXlVbFIxNnlIL2RaU09KVmJGUnBtMEIyZ2c0UWduWS83a005bXhB?=
- =?utf-8?B?SnZRay9SQ0hOZW1GbWg3Q3BTamxtY1JqdnJab0NIR1l4K0FEakVkTWM3QTA1?=
- =?utf-8?B?VXZmdEt6bkxlRVdzTGhacHVoZGN2TFNzNVlPWCtNOTlKc245KzRRRzUrQ3ZI?=
- =?utf-8?B?QU1IdUJ0UEQ4WktFSGdMbndNQjlUaWlMNmlYY2Y2bU1ZN2F3bjdwM3lhTVh4?=
- =?utf-8?B?eFVIMjZJU2I4TGQzREUvaDFvOFRlTzY0bmpobDdTQjlZbW1PQWliZDFrZDNt?=
- =?utf-8?B?Z3lhbGtVT3o0Z2JXbmJTUGRMdTJWczlwR1NzRW0vQU9RSzYvZTJrOVRiZnN3?=
- =?utf-8?B?cVc3UkJpV090K2FLbXJSaFRzVDNDZEtlSk9pdFlQTDZiNnJzV2Y3cWowS3FD?=
- =?utf-8?B?aDlPNzdGNW4xdmNRRnZQV2pjSXJRNkQ5YmtVNEVObko3NSsvd1BKc1E1WjI4?=
- =?utf-8?B?RG4yd0laNUJFeFRqaUFWc1JXRGpOdnJnL3ljc3M0S3hpa1ExUU43RUNZbFBI?=
- =?utf-8?B?SDJvTlNMbDJwNzQ5dWZjdjhEN0ZGWmZoa3JZNUFWSk1PL1VMN21BazdkTkVG?=
- =?utf-8?B?eHJ2MUpVSkpFNm1Fa0xUOXh6Q0NaZHEwbG5ic1NvRGVuWWxqWDl0Q0NjYWV6?=
- =?utf-8?B?dzNMYVo3WUdKWjRtdEp3QUFTa004TU0va3hBNFNkMWJBV3Zldk9aZU96VU43?=
- =?utf-8?B?UVFlWVNBS1Z1V3JmMkZIRjY1Q1kxbTg0WmZ6T2pzcDNOeFphUUNCQnBlNits?=
- =?utf-8?B?b1BRNXprNGdnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bE90cXpVSE13bnpmMklpYUFKaXdxeTZlTXFmVjdCY1JOeWtQK29FVHM4NkdM?=
- =?utf-8?B?RUlCWmE3a3lrRmdWRTUrZXp4cklsOTZMRzVVa2RJVFd4M2xOT2pRanJSYlJF?=
- =?utf-8?B?a0FuR1lBZWN1cGV0WmU5cmdEaXFVVURoV0pmd2pndUlKemYrQmRCOFRsV3d3?=
- =?utf-8?B?S3djYnE4a0ZhZytWTHBLR3IxN0djQjMybm92U24rV0dkaUJQY2JnWWNCSVJp?=
- =?utf-8?B?Wm5abmFpbURLcmFXbHZDcURsQkFlSnkwZ2t3VGE0cmsrbXpWZEN5bmJjZ3VK?=
- =?utf-8?B?UlBlUTZNWDZTanB3bTZtZHZUdXhWcVFVRmRoN3RSQmFMTElORVh3WmRQVTc1?=
- =?utf-8?B?a0hTbGtmTmlrUTNUMUJEMk5FR20vZFd3c1RrRyt3bGVGY1BlZ0RwcnIrbGI4?=
- =?utf-8?B?bUE4bU1POTF2TUsyVzZPWmFhR3BJcUVmYXJRZWcvN0lkakZydjV2WkMxQmJI?=
- =?utf-8?B?c00zZzFwbUxUZ1RUY2JSdTlsY3VrTVBjazluYWk1Q2VTeWtaVFRGVlg5c3U4?=
- =?utf-8?B?Q0l2bk5NZnJkY2taZzFMMVZCRm9XRWxGTTQ0aHcyOXNYN3Axd0ZFbTZxbzZC?=
- =?utf-8?B?bDBpS2E0TFBBRmJqcmlhSENodHlZRElwOWw4SHlHWmhKek1HSk15NkpaSDJy?=
- =?utf-8?B?aTc5OXRhV2JUTFp0ekN3QXFpZE5uNlhLRzZkenNWcWdVOWk0WW4yc0VyS0Yw?=
- =?utf-8?B?eE04UUVRREdlRVI4RE5RK0Y0M1M0bUsyM1MyVDRqdmVmWVdQTHZFMHFIcVQv?=
- =?utf-8?B?VHFnd3AxcGppM0g0Z1JHNzVabVowZ2QxamU1MjF5eWdhVEI3YjRxbTN4bEVY?=
- =?utf-8?B?VWNwc2p6aFlJdDd6ZUMwKzhRTDczbW5aelpnSnA4THJsMzVyWHhZeUNveEp0?=
- =?utf-8?B?UmJRdS9XQVZIWmdsdWdtOVNtSFBMZWFaV0NacGRLd2hrRU13Z21oNU1xYk9Z?=
- =?utf-8?B?TStRTEQrYkVkcE0rV0FicTUxMkdRbWFrcUpVc0lCNG5HbWw3SFRVc0w0WWt2?=
- =?utf-8?B?ckg2WmJVWlR0S2ZRUEhndWtPaUtKOU1Wbi9zRVNnTGdaMEx3ejRkVUZGWEFz?=
- =?utf-8?B?S1Z5K2craUR0VTdaZGpZNDNaaVRJNjFTL1oxRU14UmNDVnUrK2FWVVBUTWFx?=
- =?utf-8?B?QTFPaVh4SmVSdGtodndlRi9JSFFlb3QrZHg4SVBIWXdTbGQ1WmgzeEdyNXh3?=
- =?utf-8?B?WGUvTVErWWgzbjJ4OTAyL3FsZjNoTjBKeVcwZ0VQekw1NlA1aUtPbGJYaXZx?=
- =?utf-8?B?Sm9RZERIOStzRFlhZmtZVVlpbVp0RUM1STFRNFFXNXlwdXlLWlN1MnVnN0do?=
- =?utf-8?B?b2dLV1psbHA2MHBLdThZRDVSYUF2Q2t4Ujdrcllub2tpZ29qMk9ucjI0U1hV?=
- =?utf-8?B?elZLL3ZVdWs2STJWRVp1QWxQT1dwL0UyY3laK2FGYXJ0ak1lT0VBaGlkUTlR?=
- =?utf-8?B?eFh4L3RhdE03U082MDFaTUcwYm9WTWl6SnFkdGZteHhFa0M0K2I2UXhrUXNW?=
- =?utf-8?B?Mkg3VDJTb01PL0pHbFhIY2xvVHk3WUVmNW5Gbk9DaWtZbnNGN00zczdJWmlh?=
- =?utf-8?B?KzZhdmkzZHBtK0tHdnAxQ25TMmFrdHdPOXEyQU1UclZnWEZiZlg1OUpMY05K?=
- =?utf-8?B?eWVUNExSdElrem9laXEyRVFaNmpQSlVmVEI1bTgrS0lBbEdqQ2pPWmI5QWRa?=
- =?utf-8?B?SHh4SXpSeWZuc2M5WVhCM1N2ZUNQaWhaekhlNUE2bWNiTTFiR3dVN3M4SUE2?=
- =?utf-8?B?SHR5TCthNkxaL2g3V21aOHZScm8zbUNYUUhhT3BwT1FFWG1hdzNKaWRSTFNh?=
- =?utf-8?B?SHVhVW1MNDUyVHlEZXlhczdGaTEwOXZqWEFkQVlCMTFvMndkbnE4YndESnB0?=
- =?utf-8?B?REtzaGkwdW1UR2xDaExPOVlaejZLSnNmZURBNUlkODI2Uk4yWU1TSTU3Y05C?=
- =?utf-8?B?cUNFMUFQTVoyRXRhRDE3SUVBajgyL3NXY3lEZU5NemNYc3VqU2x6cnREbHl2?=
- =?utf-8?B?cDJsUmdUMERTS1dwL2lJQUdsNWExeE9QUVVDckpvcXdQT3AxRXIrT1U0VWJK?=
- =?utf-8?B?YWFCNUdkc241N3Ircm9OOHgxdXRudnNTYUQxaDIyb0JvbW9pQkF6YjlTV1ZJ?=
- =?utf-8?Q?KeCiShjYTFkSU+ZYh/2/41SZz?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07edd026-dff4-4f29-036b-08ddbfac7393
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 12:22:35.2592
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8tDCpRjAq1+EgqIzP0jyPgZJPTMQKxoVvHBW9qBRK0Ju0V/d56yn8OFJz3F2A1foWxXrfhppQnLQypIkwVz5dw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7461
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 21/24] pmdomain: core: Leave powered-on genpds on
+ until late_initcall_sync
+To: Ulf Hansson <ulf.hansson@linaro.org>, Saravana Kannan
+	<saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Michael Grzeschik
+	<m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, Abel
+	Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, Tomi Valkeinen
+	<tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, Maulik
+	Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>,
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding
+	<thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Hiago De
+	Franco <hiago.franco@toradex.com>, Geert Uytterhoeven
+	<geert@linux-m68k.org>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20250701114733.636510-22-ulf.hansson@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250710122654eucas1p20f1179a9ff22d562d89252f924d34dae
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250710122654eucas1p20f1179a9ff22d562d89252f924d34dae
+X-EPHeader: CA
+X-CMS-RootMailID: 20250710122654eucas1p20f1179a9ff22d562d89252f924d34dae
+References: <20250701114733.636510-1-ulf.hansson@linaro.org>
+	<20250701114733.636510-22-ulf.hansson@linaro.org>
+	<CGME20250710122654eucas1p20f1179a9ff22d562d89252f924d34dae@eucas1p2.samsung.com>
 
-On 7/10/2025 8:20 AM, Christian König wrote:
-> On 10.07.25 14:13, Mario Limonciello wrote:
->> On 7/10/2025 2:23 AM, Samuel Zhang wrote:
->>> For normal hibernation, GPU do not need to be resumed in thaw since it is
->>> not involved in writing the hibernation image. Skip resume in this case
->>> can reduce the hibernation time.
->>>
->>> On VM with 8 * 192GB VRAM dGPUs, 98% VRAM usage and 1.7TB system memory,
->>> this can save 50 minutes.
->>>
->>> Signed-off-by: Samuel Zhang <guoqing.zhang@amd.com>
->>> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
->> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> I think we now have reviews and acks for all patches, don't we?
+On 01.07.2025 13:47, Ulf Hansson wrote:
+> Powering-off a genpd that was on during boot, before all of its consumer
+> devices have been probed, is certainly prone to problems.
+>
+> As a step to improve this situation, let's prevent these genpds from being
+> powered-off until genpd_power_off_unused() gets called, which is a
+> late_initcall_sync().
+>
+> Note that, this still doesn't guarantee that all the consumer devices has
+> been probed before we allow to power-off the genpds. Yet, this should be a
+> step in the right direction.
+>
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Colibri iMX8X
+> Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> # TI AM62A,Xilinx ZynqMP ZCU106
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Yeah we do.
+This change has a side effect on some Exynos based boards, which have 
+display and bootloader is configured to setup a splash screen on it. 
+Since today's linux-next, those boards fails to boot, because of the 
+IOMMU page fault.
 
-> 
-> What was the conclusion on how this should go upstream? Through drm-misc-next?
-> 
-> I've seen that you asked Mario, but I think I missed the response.
-> 
+This happens because the display controller is enabled and configured to 
+perform the scanout from the spash-screen buffer until the respective 
+driver will reset it in driver probe() function. This however doesn't 
+work with IOMMU, which is being probed earlier than the display 
+controller driver, what in turn causes IOMMU page fault once the IOMMU 
+driver gets attached. This worked before applying this patch, because 
+the power domain of display controller was simply turned off early 
+effectively reseting the display controller.
 
-It hasn't been discussed, but we have Acks on all of the non-drm patches 
-so it seems most reasonable to me.
+This has been discussed a bit recently: 
+https://lore.kernel.org/all/544ad69cba52a9b87447e3ac1c7fa8c3@disroot.org/ 
+and I can add a workaround for this issue in the bootloaders of those 
+boards, but this is something that has to be somehow addressed in a 
+generic way.
 
-I'll give it a few hours today and If there is no opposition I'll commit 
-it there later today.
+> ---
+>   drivers/pmdomain/core.c   | 10 ++++++++--
+>   include/linux/pm_domain.h |  1 +
+>   2 files changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 5cef6de60c72..18951ed6295d 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -931,11 +931,12 @@ static void genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>   	 * The domain is already in the "power off" state.
+>   	 * System suspend is in progress.
+>   	 * The domain is configured as always on.
+> +	 * The domain was on at boot and still need to stay on.
+>   	 * The domain has a subdomain being powered on.
+>   	 */
+>   	if (!genpd_status_on(genpd) || genpd->prepared_count > 0 ||
+>   	    genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd) ||
+> -	    atomic_read(&genpd->sd_count) > 0)
+> +	    genpd->stay_on || atomic_read(&genpd->sd_count) > 0)
+>   		return;
+>   
+>   	/*
+> @@ -1346,8 +1347,12 @@ static int __init genpd_power_off_unused(void)
+>   	pr_info("genpd: Disabling unused power domains\n");
+>   	mutex_lock(&gpd_list_lock);
+>   
+> -	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+> +	list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
+> +		genpd_lock(genpd);
+> +		genpd->stay_on = false;
+> +		genpd_unlock(genpd);
+>   		genpd_queue_power_off_work(genpd);
+> +	}
+>   
+>   	mutex_unlock(&gpd_list_lock);
+>   
+> @@ -2352,6 +2357,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>   	INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
+>   	atomic_set(&genpd->sd_count, 0);
+>   	genpd->status = is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
+> +	genpd->stay_on = !is_off;
+>   	genpd->sync_state = GENPD_SYNC_STATE_OFF;
+>   	genpd->device_count = 0;
+>   	genpd->provider = NULL;
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index d68e07dadc99..99556589f45e 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -199,6 +199,7 @@ struct generic_pm_domain {
+>   	unsigned int performance_state;	/* Aggregated max performance state */
+>   	cpumask_var_t cpus;		/* A cpumask of the attached CPUs */
+>   	bool synced_poweroff;		/* A consumer needs a synced poweroff */
+> +	bool stay_on;			/* Stay powered-on during boot. */
+>   	enum genpd_sync_state sync_state; /* How sync_state is managed. */
+>   	int (*power_off)(struct generic_pm_domain *domain);
+>   	int (*power_on)(struct generic_pm_domain *domain);
 
-> Regards,
-> Christian.
-> 
->>
->>> ---
->>>    drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 17 +++++++++++++++++
->>>    1 file changed, 17 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>> index 1c54b2e5a225..021defca9b61 100644
->>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->>> @@ -2541,6 +2541,10 @@ amdgpu_pci_shutdown(struct pci_dev *pdev)
->>>        if (amdgpu_ras_intr_triggered())
->>>            return;
->>>    +    /* device maybe not resumed here, return immediately in this case */
->>> +    if (adev->in_s4 && adev->in_suspend)
->>> +        return;
->>> +
->>>        /* if we are running in a VM, make sure the device
->>>         * torn down properly on reboot/shutdown.
->>>         * unfortunately we can't detect certain
->>> @@ -2557,6 +2561,10 @@ static int amdgpu_pmops_prepare(struct device *dev)
->>>        struct drm_device *drm_dev = dev_get_drvdata(dev);
->>>        struct amdgpu_device *adev = drm_to_adev(drm_dev);
->>>    +    /* device maybe not resumed here, return immediately in this case */
->>> +    if (adev->in_s4 && adev->in_suspend)
->>> +        return 0;
->>> +
->>>        /* Return a positive number here so
->>>         * DPM_FLAG_SMART_SUSPEND works properly
->>>         */
->>> @@ -2655,12 +2663,21 @@ static int amdgpu_pmops_thaw(struct device *dev)
->>>    {
->>>        struct drm_device *drm_dev = dev_get_drvdata(dev);
->>>    +    /* do not resume device if it's normal hibernation */
->>> +    if (!pm_hibernate_is_recovering())
->>> +        return 0;
->>> +
->>>        return amdgpu_device_resume(drm_dev, true);
->>>    }
->>>      static int amdgpu_pmops_poweroff(struct device *dev)
->>>    {
->>>        struct drm_device *drm_dev = dev_get_drvdata(dev);
->>> +    struct amdgpu_device *adev = drm_to_adev(drm_dev);
->>> +
->>> +    /* device maybe not resumed here, return immediately in this case */
->>> +    if (adev->in_s4 && adev->in_suspend)
->>> +        return 0;
->>>          return amdgpu_device_suspend(drm_dev, true);
->>>    }
->>
-> 
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
 
