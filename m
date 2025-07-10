@@ -1,152 +1,174 @@
-Return-Path: <linux-pm+bounces-30593-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30594-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB13B00578
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 16:41:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32963B005C0
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 16:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6FD3164244
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:41:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7959480715
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C092273817;
-	Thu, 10 Jul 2025 14:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A895C274FCF;
+	Thu, 10 Jul 2025 14:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rwUGKSUV"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="lT5EKIeC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4323.protonmail.ch (mail-4323.protonmail.ch [185.70.43.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F6317B421
-	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 14:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C349B2749C7;
+	Thu, 10 Jul 2025 14:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752158498; cv=none; b=fjjNZYEUBU3JKb1cBZnCzBdEeI7sJJXdDctrpNRM1EtDtvSBTCP3P2Pf1GCwyTn66/lDYech2BhuZsnbxzUxueoJIWOnV9Q9MCr6VqyjfSCZTSvngrtNGcD2LcFCbch0CLhT3YJKSGkO/Kdcpf2PLprnke2hkl/CSkXDdv7nxlA=
+	t=1752158973; cv=none; b=qXwCA1ANBzEvchPCVSMnvIbhGuMQfEQqv3+ReiHzG7u86I3D9ZavALh0RyRoRdSb7d/lgkhPuoMW/oeAqhvF3+cAwxoki/ZjGW8ja7xLMH803++dGUAhoOeSqlPHaHAkkQGgIaaBdYgbr3ZHU7lSVvfcVolAoIHWHMvS3SgvMO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752158498; c=relaxed/simple;
-	bh=rTCP0eFlUYf1cAy9AjZjkIhxqdiUY75FHK6S4X4wtU0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sDr/rkJHTp6Lelshca+IygGOl83So7urTxqFGgn7LhQiyWgWYi9I46Bp3DZsPZ+48oFvMWettc1AKx4LbkP930LOOywsEM8TzwLySCfSgFaRLretJlblMsXFodNmYGmXudlzGzVQDY6k3DoWvPA1KeKBEceXofgipXKyieKgnHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rwUGKSUV; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-710f39f5cb9so10393877b3.3
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 07:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752158496; x=1752763296; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IlZgkHsxN8ZXtcGrfVzgc7A5zah0HXAJABQ2cFxyfyc=;
-        b=rwUGKSUV8Slq1pMf/VqILsmsYbgr2+yuMHjomTPOb6GmpP4oXw1oQwnqaG+8Sw+XuP
-         npNEi9gXsKSMYsgdSQxuyjiAqwvdnf/bSsTt13RapO8FKyBRo9SgHHp+TXJdrHPXDHkj
-         O5OuAWQWwkg+iNFCUOiBXJLIPJH8/hhxAIOQ1wAOK7XPoEwFoKV/bS/3C7S7uk5rrUZ3
-         x+bohO63snsJ7AEuMqKscfSaZFdTuFGiYxZsD9FscpFISuJ/q6T6U5YP2EOkpyUYWsQG
-         nvSHGiXfTiMc/cQ/Dd8dfL16nL2AkuuOF4SKAM9WrQUpIjDXPRRgVtTk9IpEDMQ9bvdf
-         EvkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752158496; x=1752763296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IlZgkHsxN8ZXtcGrfVzgc7A5zah0HXAJABQ2cFxyfyc=;
-        b=NyZjBKon/e2TpsGIMrE/mHZ/4dQkOGuiK89dN/kcM4P3l5ExRDe5/xUGTA24Y6VZp+
-         Di2zjizsQ/DVopQpFiAfUHrSaV6YnfIWD1xGBL7euh4acpKNOaQaHCJu08fSWqJIDAR2
-         k2czEB0VOitntOVqEcG2snpdB18zOvHRpoZiGC3kR4tfeV9TirYmf8gaGEbJek+zLXrJ
-         aGXGtliEnetcDPu0/NTVQ9DdKYj2+CcYMm6XfhwoMU7sKtkkeV0zISCdwYfbHo9pt5HL
-         HlRfF8xHDY4mMVjA9jV5tSgufUD5TH024q2oPm4kuc0gyuLV1uYkiOJzKdt5r6lwBRcU
-         q9xg==
-X-Forwarded-Encrypted: i=1; AJvYcCXl5NG7OYQ+5J6RnA+TJQq9vNuB/dUFaMWzwSWeRAXnqJebr0KjP8rLdFPsRg9RTQL405tE/bSKvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxfKzPpTPVLeBH/OPAySMtk+b9jtlJTygpvM2w8G+22YqSna7k
-	+cOHz4XblbxogvunqnxHgeqW2uQBoGvMFQ6TKOzCJ8kkI1qrVCRf10/XHu03bsK4J1SsyVSw2JH
-	xlykJvYX3nLMq8dTzjmZuqRaKRIy6wKLel+q5VgZPK25B3V2+GYlq
-X-Gm-Gg: ASbGnctc/+kcsqO+Z/DdtMyEa5UFqG4PPh0g3Horf7gkUrhLLprzXMbt3EIVm1WU/Tr
-	7cREqlJp5iEiSmz5Qg3JO4IOOZz6Ul7oFKIlViHwFuFiAPDFFPHNc3+yzwcT2bLkgcJwIasvIHa
-	6MCNiGVeqThS5yWFyJAoPze2cDtbjFUxfxpzruXfrJwZg=
-X-Google-Smtp-Source: AGHT+IHVD6gPsHq+Dexvu9tOsagl+k20PpDSEAg/CCtZ6R9oh9y4FIYINC4cgMj3d0zJYPGC/y7DQa6nR8qkXx9Q06g=
-X-Received: by 2002:a05:690c:d90:b0:6fb:b8a1:d3bb with SMTP id
- 00721157ae682-717b19cb233mr100039137b3.17.1752158495634; Thu, 10 Jul 2025
- 07:41:35 -0700 (PDT)
+	s=arc-20240116; t=1752158973; c=relaxed/simple;
+	bh=isscTgcBZAVVEBwnse1MUKIvJL0xJ/IuXJKT2AqzWlQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TEMfuLF9QqNGYrGU3oilGmRQAX9q1e0iLoXItzOG+zz9nSI9PqKYmULvQIRr9GM9fxZnw7VeiLKFbhzNo3aP22JWGINelCKGn1CdoEAcOV5bg5X5TXA7U7x3gNHzMjpkNFxIzi0fX11zSdV5Dxt70FyHzI8knoC5fOIhUgiNOCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=lT5EKIeC; arc=none smtp.client-ip=185.70.43.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geanix.com;
+	s=protonmail; t=1752158968; x=1752418168;
+	bh=5I8flEWvmqDd6x+t/g5P7dZT4ROh7WF5XE11abOETzc=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=lT5EKIeCBMtt/STEPtaaBBeEB1Ix3xKS6p/qK1e+XbiIrgZ+30aQ1UfrdWVs2hf/l
+	 MiaUkMt3xSoq3Iyi5qDZPu+IQxVHCbmG/SwaFRvbem0dTi8vN6c7YOXJMzsZBJAFUu
+	 +MUolG1J5OoHT0ShW5AJHttVv46gKg8OYpb4MLnOpXbqX6ebq9NR6/ChE2nSC9GRoC
+	 /cD/5toabjPu34pjkG3hIEcRwdk77h+Cmg8N8O9GFVo05Czdq5a/icKUNTBtRV65Nh
+	 d3Sd9SdU9gUe/+Z7jR0Hp7Ra5rVKGBofrOF+Eog9zu6OoKT6RTJn9G9rd7ATftnP1W
+	 V3TLsRm8mUyug==
+Date: Thu, 10 Jul 2025 14:49:21 +0000
+To: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+From: Sean Nyekjaer <sean@geanix.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>, imx@lists.linux.dev, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, Robin Gong <yibin.gong@nxp.com>, Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH v8 3/6] regulator: pf1550: add support for regulator
+Message-ID: <ni3bmj4ye3dp3opolk466r2ayx7iuk6hhyx4pdikydizqykfx7@nc5qdok32hsm>
+In-Reply-To: <20250707-pf1550-v8-3-6b6eb67c03a0@savoirfairelinux.com>
+References: <20250707-pf1550-v8-0-6b6eb67c03a0@savoirfairelinux.com> <20250707-pf1550-v8-3-6b6eb67c03a0@savoirfairelinux.com>
+Feedback-ID: 134068486:user:proton
+X-Pm-Message-ID: 11f257d26d96d1d079ba2b2c2800d3b5475e57b2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709154728.733920-1-daniel.lezcano@linaro.org>
- <CAJZ5v0ixk5hZPPQc_1rDLMTzjh=KpMQF_A2U=HehMTuNSMQwtQ@mail.gmail.com> <aG-40INpi05v3-fQ@bogus>
-In-Reply-To: <aG-40INpi05v3-fQ@bogus>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 10 Jul 2025 16:40:59 +0200
-X-Gm-Features: Ac12FXw291rGaeQnkKGBJOE99wWaDDVeGF-LGyRZrV90PjOPwqUc_kzJDb-fgDQ
-Message-ID: <CAPDyKFqS9fawvgxEhk9W=o3oUpA_HGc71-5siw8AGqenQegrLA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: psci: Fix cpuhotplug routine with PREEMPT_RT=y
-To: Sudeep Holla <sudeep.holla@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-rt-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Raghavendra Kakarla <quic_rkakarla@quicinc.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	"open list:Real-time Linux (PREEMPT_RT)" <linux-rt-devel@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 10 Jul 2025 at 14:57, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, Jul 10, 2025 at 02:43:10PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Jul 9, 2025 at 5:47=E2=80=AFPM Daniel Lezcano <daniel.lezcano@l=
-inaro.org> wrote:
-> > >
-> > > Currently cpu hotplug with the PREEMPT_RT option set in the kernel is
-> > > not supported because the underlying generic power domain functions
-> > > used in the cpu hotplug callbacks are incompatible from a lock point
-> > > of view. This situation prevents the suspend to idle to reach the
-> > > deepest idle state for the "cluster" as identified in the
-> > > undermentioned commit.
-> > >
-> > > Use the compatible ones when PREEMPT_RT is enabled and remove the
-> > > boolean disabling the hotplug callbacks with this option.
-> > >
-> > > With this change the platform can reach the deepest idle state
-> > > allowing at suspend time to consume less power.
-> > >
-> > > Tested-on Lenovo T14s with the following script:
-> > >
-> > > echo 0 > /sys/devices/system/cpu/cpu3/online
-> > > BEFORE=3D$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/i=
-dle_states | grep S0 | awk '{ print $3 }') ;
-> > > rtcwake -s 1 -m mem;
-> > > AFTER=3D$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/id=
-le_states | grep S0 | awk '{ print $3 }');
-> > > if [ $BEFORE -lt $AFTER ]; then
-> > >     echo "Test successful"
-> > > else
-> > >     echo "Test failed"
-> > > fi
-> > > echo 1 > /sys/devices/system/cpu/cpu3/online
-> > >
-> > > Fixes: 1c4b2932bd62 ("cpuidle: psci: Enable the hierarchical topology=
- for s2idle on PREEMPT_RT")
-> > > Cc: Raghavendra Kakarla <quic_rkakarla@quicinc.com>
-> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >
-> > As per MAINTAINERS, this is for Ulf/Sudeep.
-> >
->
-> LGTM, so
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->
-> I still prefer to hear from Ulf who has more knowledge and hands-on exper=
-ience
-> with s2idle + PREEMPT_RT in case I am missing something.
+Hi Samuel,
 
-Rafael, Sudeep,
+On Mon, Jul 07, 2025 at 05:37:22PM +0100, Samuel Kayode wrote:
+> Add regulator support for the pf1550 PMIC.
+>=20
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 
-I will pick this patch via my pmdomain tree, but will run some tests
-of it first to be sure.
+[...]
 
-Kind regards
-Uffe
+> diff --git a/drivers/regulator/pf1550-regulator.c b/drivers/regulator/pf1=
+550-regulator.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..fa8c4b17270e750e64fef9107=
+4727951511d14f3
+> --- /dev/null
+> +++ b/drivers/regulator/pf1550-regulator.c
+
+[...]
+
+> +
+> +#define PF_SW1(_chip, match, _name, mask, voltages)=09{=09\
+> +=09.desc =3D {=09\
+> +=09=09.name =3D #_name,=09\
+> +=09=09.of_match =3D of_match_ptr(match),=09\
+> +=09=09.regulators_node =3D of_match_ptr("regulators"),=09\
+> +=09=09.n_voltages =3D ARRAY_SIZE(voltages),=09\
+> +=09=09.ops =3D &pf1550_sw1_ops,=09\
+> +=09=09.type =3D REGULATOR_VOLTAGE,=09\
+> +=09=09.id =3D _chip ## _ ## _name,=09\
+> +=09=09.owner =3D THIS_MODULE,=09\
+> +=09=09.volt_table =3D voltages,=09\
+> +=09=09.vsel_reg =3D _chip ## _PMIC_REG_ ## _name ## _VOLT, \
+> +=09=09.vsel_mask =3D (mask),=09\
+> +=09},=09\
+> +=09.stby_reg =3D _chip ## _PMIC_REG_ ## _name ## _STBY_VOLT,=09\
+> +=09.stby_mask =3D (mask),=09\
+> +}
+
+This is unused.
+
+> +
+> +#define PF_SW3(_chip, match, _name, min, max, mask, step)=09{=09\
+
+[...]
+
+> +
+> +static struct pf1550_desc pf1550_regulators[] =3D {
+> +=09PF_SW3(PF1550, "sw1", SW1, 600000, 1387500, 0x3f, 12500),
+> +=09PF_SW3(PF1550, "sw2", SW2, 600000, 1387500, 0x3f, 12500),
+> +=09PF_SW3(PF1550, "sw3", SW3, 1800000, 3300000, 0xf, 100000),
+
+Seems weird they all use the PF_SW3 macro.
+
+> +=09PF_VREF(PF1550, "vrefddr", VREFDDR, 1200000),
+> +=09PF_LDO1(PF1550, "ldo1", LDO1, 0x1f, pf1550_ldo13_volts),
+> +=09PF_LDO2(PF1550, "ldo2", LDO2, 0xf, 1800000, 3300000, 100000),
+> +=09PF_LDO1(PF1550, "ldo3", LDO3, 0x1f, pf1550_ldo13_volts),
+> +};
+> +
+
+[...]
+
+> +
+> +static int pf1550_regulator_probe(struct platform_device *pdev)
+> +{
+> +=09const struct pf1550_ddata *pf1550 =3D dev_get_drvdata(pdev->dev.paren=
+t);
+> +=09struct regulator_config config =3D { };
+> +=09struct pf1550_regulator_info *info;
+> +=09int i, irq =3D -1, ret =3D 0;
+> +
+> +=09info =3D devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+> +=09if (!info)
+> +=09=09return -ENOMEM;
+> +
+> +=09config.regmap =3D dev_get_regmap(pf1550->dev, NULL);
+> +=09if (!config.regmap)
+> +=09=09return dev_err_probe(&pdev->dev, -ENODEV,
+> +=09=09=09=09     "failed to get parent regmap\n");
+> +
+> +=09config.dev =3D pf1550->dev;
+> +=09config.regmap =3D pf1550->regmap;
+> +=09info->dev =3D &pdev->dev;
+> +=09info->pf1550 =3D pf1550;
+> +
+> +=09memcpy(info->regulator_descs, pf1550_regulators,
+> +=09       sizeof(info->regulator_descs));
+> +
+> +=09for (i =3D 0; i < ARRAY_SIZE(pf1550_regulators); i++) {
+> +=09=09struct regulator_desc *desc;
+> +
+> +=09=09desc =3D &info->regulator_descs[i].desc;
+> +
+> +=09=09if (desc->id =3D=3D PF1550_SW2 && pf1550->dvs_enb) {
+
+We should enter here if dvs_enb =3D=3D false.
+My A6 variant reported 0.625V instead of the correct 1.35V
+
+> +=09=09=09/* OTP_SW2_DVS_ENB =3D=3D 1? */
+> +=09=09=09desc->volt_table =3D pf1550_sw12_volts;
+> +=09=09=09desc->n_voltages =3D ARRAY_SIZE(pf1550_sw12_volts);
+> +=09=09=09desc->ops =3D &pf1550_sw1_ops;
+> +=09=09}
+>
+
+/Sean
+
 
