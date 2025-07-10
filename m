@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-30554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30555-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C529EAFFE7C
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 11:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 961ECAFFE80
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 11:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3EB81C8188F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 09:52:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9708B1C81D0A
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 09:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4925B2D46B0;
-	Thu, 10 Jul 2025 09:52:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93C62D4B79;
+	Thu, 10 Jul 2025 09:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIDgM0RR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q5BWyxpH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8C22D46A0;
-	Thu, 10 Jul 2025 09:52:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65D32D3EEA;
+	Thu, 10 Jul 2025 09:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752141133; cv=none; b=qu7N3SOA4qWcAmkjYrBbczbuMfq2ofkfr5+qw2hw3cnU0uAzkbNs+ts+SAimXCryMt337dmegWlZpY6xcpTRJGKtCtYX7EJIAGW/nRPsbR9FMPhSSEf4CEV8cJYwydaiDdDjI2I56gLyYDY9usjU4LTR6m+vn75lCcbNZMUgT4c=
+	t=1752141156; cv=none; b=sByRwWSkZ71xFGDNkQJkafu/MboZfaTR0CDioy4/iiuuSv+vAxI8FREA+LTHrZ7BluzaVh+l0wBGN7TsI5iemDrugh7I1I/3yiyMnkXWwQrl+bnXbmVGLWOXI10eoy9UCeR5rWIABS9AEYxi/sYMlG52uM3ByTNmrJwSd1JM6vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752141133; c=relaxed/simple;
-	bh=pZGaq0Wu1dT/dxRh+MB2XlLidtH1F8cMudtE386pfjg=;
+	s=arc-20240116; t=1752141156; c=relaxed/simple;
+	bh=/HJYYChAy20DN1nkebvN+gQiiYH8PgHrzFXUdHv1QKQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uiMWunN2gpWaMEyqKHi67FEPcvXpth8oXXB+JNLKLA+8Mnpk7mMxQNQZpLe3g4oOrIzl/uNOAYtlW9ouTCW8/ysI+3FVAR7kwSMtDxkNUUtw+xMtm/d8QHEnp9EsWKH3m2XPBO3MwaxOfu34jT0hOfbhPGLo336Nx0RT0TOuSug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIDgM0RR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5D7C4CEE3;
-	Thu, 10 Jul 2025 09:52:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=C8noZ7zL2qeC3EtD2cwk+WaShpTZYfVM/7QgngVEJHjuFpBAVeIwqU4dkYw6WjZq8EH1SsTJwdmWSuV8HP7hUAyQnWbxpElW8lCBgi2rg4hdtmuPneeSWdi3M74liCByCm8jOKbpv+4avl6cS62Y6a4TQz8kituYmSO1VEvPaDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q5BWyxpH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9595C4CEE3;
+	Thu, 10 Jul 2025 09:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752141132;
-	bh=pZGaq0Wu1dT/dxRh+MB2XlLidtH1F8cMudtE386pfjg=;
+	s=k20201202; t=1752141156;
+	bh=/HJYYChAy20DN1nkebvN+gQiiYH8PgHrzFXUdHv1QKQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lIDgM0RRhADkfkCfjrESf7N9LWIsVsPWJutieH2NNF9Z1EW8Q4D3kAeZGMJyu55+5
-	 zwPw6eAQHXbJOpcZH7O02IYZ4joxKi0sMWSFyLygR9IdsbUtY6X25oPvtP3XiCpC04
-	 4gCXlq4UsCF2j6U19+893abdzEUw9I76OLTy4OZrr4Nr3Lz5N+0gE4j9BZD0saSUQQ
-	 Dxg9ZTSMk0b8q+Gn6oKnSrrfxG0dR9SK4NDvHJzW1Kly6RXeERNvBAsyGaWPCicZvo
-	 DbnPbuKRn3HVOA3d10mSYUWWlcCzmzXQ8BdYk8R+cnGvpymuS7BoES+e0YXYJFJWxh
-	 R9idoDyVAjeXA==
-Date: Thu, 10 Jul 2025 11:52:10 +0200
+	b=q5BWyxpHwKCnatmuyA0n/neImgZGYGMGy2RhjjVP8r9hJ60tyjc53VqlbIcspNnhR
+	 qHrjedu2jDjzVOa0Rs7z7QKD/k5GDHr34HAdmuBm/JN52DTMSF0yNQFmNy9haNa1Ov
+	 2xgc4xh1MHaTDf3aEHsN7Egt0qJ82vlvS17nSv86quml+wwcVVp1PaChwjhipZ26Df
+	 F99+QMGldthrABMOQ7wJyKoEWY6Eg5SgEnaQcQy/GRoh3tzecGYtyR7SwhyW3aTXje
+	 HtD7ULTPrjRTISSkrdwQjv2e/Lkyl7f5V7hniWLnCtKee+CXNsuBcZ0PYY+f+iQeqO
+	 r7Im83PPJgYDQ==
+Date: Thu, 10 Jul 2025 11:52:32 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Frank Wunderlich <linux@fw-web.de>
 Cc: MyungJoo Ham <myungjoo.ham@samsung.com>, 
@@ -59,10 +59,11 @@ Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v9 03/13] dt-bindings: net: mediatek,net: allow irq names
-Message-ID: <20250710-dashing-wine-hippo-d879c9@krzk-bin>
+Subject: Re: [PATCH v9 04/13] dt-bindings: net: mediatek,net: add sram
+ property
+Message-ID: <20250710-masked-intelligent-dalmatian-caccbc@krzk-bin>
 References: <20250709111147.11843-1-linux@fw-web.de>
- <20250709111147.11843-4-linux@fw-web.de>
+ <20250709111147.11843-5-linux@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,26 +72,17 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250709111147.11843-4-linux@fw-web.de>
+In-Reply-To: <20250709111147.11843-5-linux@fw-web.de>
 
-On Wed, Jul 09, 2025 at 01:09:39PM +0200, Frank Wunderlich wrote:
+On Wed, Jul 09, 2025 at 01:09:40PM +0200, Frank Wunderlich wrote:
 > From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> In preparation for MT7988 and RSS/LRO allow the interrupt-names
-> property.
-> In this way driver can request the interrupts by name which is much
-> more readable in the driver code and SoC's dtsi than relying on a
-> specific order.
+> Meditak Filogic SoCs (MT798x) have dedicated MMIO-SRAM for dma operations.
 > 
-> Frame-engine-IRQs (fe0..3):
-> MT7621, MT7628: 1 FE-IRQ
-> MT7622, MT7623: 3 FE-IRQs (only two used by the driver for now)
-> MT7981, MT7986: 4 FE-IRQs (only two used by the driver for now)
+> MT7981 and MT7986 currently use static offset to ethernet MAC register
+> which will be changed in separate patch once this way is accepted.
 > 
-> RSS/LRO IRQs (pdma0..3) additional only on Filogic (MT798x) with
-> count of 4. So all IRQ-names (8) for Filogic.
-> 
-> Set boundaries for all compatibles same as irq count.
+> Add "sram" property to map ethernet controller to dedicated mmio-sram node.
 > 
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
