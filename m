@@ -1,203 +1,191 @@
-Return-Path: <linux-pm+bounces-30638-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30639-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C20E1B00EDC
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 00:42:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6103CB00EEC
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 00:46:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0DCC1CA7BEF
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 22:42:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6C933AB718
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 22:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858272BEFF0;
-	Thu, 10 Jul 2025 22:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70DF29CB40;
+	Thu, 10 Jul 2025 22:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OdG/ekYj"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JQUg/9GR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDAE2BEC31
-	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 22:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FEFE2980DB
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 22:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752187258; cv=none; b=HwQBic1Dio9jCJRf+MVq5HaQ+bZtZUkcKpeWiR9dnvJE2JRdrqsHihK2YRAe+U5ukXOQMMdZXXUvNSLipi3WLi5jEEmTtOtOY46Us8dN3I1+o+Jw9L+y41N5LoLHSb9p6RKQoUMo/Ifv99q5r5+axnMLvUTPcsiYZVVMx6rYKBU=
+	t=1752187561; cv=none; b=HgQTe3jFdOKurZusuNXHP+3T6trOR8raCk2DuM9CXN6vC2q6dNA793z9Zsfk12h93HeCSVGsfnjbJaL+C88Ma9PscP6g8Tx+P6Lycvl5XvwYHYz/ccX+KIMcgsu3MUmJ9HWsuGHP6QZkZVev+3x2p2jz4xC7jF4nsHXKq7/svec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752187258; c=relaxed/simple;
-	bh=rkYvC/hLm1zxzUDW2ngueVIOPaIZfje0rU9DgOXSYiw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TE50TPjXV0iGxunugmWQ/8hNDfA6WFSC6kn90XBQMCfmnFi0mF3rtyJ91Wapwfhxl/Tp6op9TBL+c303AKwaz5vU5zM/jAxOcLBdLWqwEkXHDWE2YTTO8OwHzjIamAx2ZEhBQYu4vZA/oyXGfGzHujrcVmysNGJzmLswA7sQ4Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OdG/ekYj; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b31cc625817so2087598a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752187256; x=1752792056; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rg/zpR/MVBtYaD2VmbJBetWuckcaW+z6F/PTphqosL8=;
-        b=OdG/ekYju2YLVQ6LrcDVPcXdyffTBRGNf4BO7d+t9Ps3B+ZyPdCLUrPdYcCMea2pVS
-         OhoMbhQus+P/1VI6XuIO1pbGmDTYfVOJ3baQDsWbTOnTBGbF9ybQUJLymZ9FDxnyRUns
-         TCIBOjKHjhKbJ2N5E1nM3KgrQ+2gP1C8l8DHCcv7LKNdlI69b3vmHkFDLHmOsUj/9/Bb
-         Mt9d5+FkKxFIiUaP78U8hQZHeW4Zn+GSMY4g9e6thZM91ZbuzVSt4Rkxa5UJPbs7wRhz
-         88hAuaVAF8xTfyEDOayj8C/dxkx+081SekTWYKldLxnG38gkWHhMXLhG31MZgSZvgiU+
-         etiA==
+	s=arc-20240116; t=1752187561; c=relaxed/simple;
+	bh=mmbmraD0GVPdhgEJxQAseZnsrJCcvwfGHElQMcTQKT4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hQXGgZPXrDeFsWhE7qT5i8eUGdgrreNbZZv5/JcgOmPQ8yLRM906BIwdDfWEFS5MlW3qc/gV50HSdecyguPLDrCWgNqD41/jSZ4eNbNLAVAXghLgq/Vm0x9DrYXX45SZtC41t4x06ThrfKO8kFtFSN33UsqevMy1ZUMJkDUFCT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JQUg/9GR; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56AJR0ZL027436
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 22:45:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=fafKzIR+UT4s3pdmqSTYy0cRGU3UkuQ70ms
+	vu7PcnDU=; b=JQUg/9GRm07HG3V5q5P+htqWOQxUSo2ehvHJNua96cNsaQiYydB
+	XkLFUyYaO6kBKEOrxQN1N5t0WEeQOTV0BgOIDCKxE/ynNxqGHKL0WHQNtG8xGGbD
+	zAgwLWWtWYHZYUoVTr8YMWt/6kEIIhDSfUXQJ0wQa2r+xyYHsFqcDfIuOJGdpiFn
+	ImwodB57eH6CIDDkLxPDRR1wG4NFvjbN6/B9ej5UO/6z5Vkv4KTrq0G4pg6LDdha
+	esxEWcecFxSN36Ax1ghZ/9XsEbWbfAZ4e127PhFMIzfLP46OOrKt3Tx05+zxrzg2
+	ExSWbbKPeFiX55q7NqaiGWdDE4hQFJ4mlZg==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47smap6kkd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 22:45:58 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-23632fd6248so14843135ad.3
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 15:45:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752187256; x=1752792056;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rg/zpR/MVBtYaD2VmbJBetWuckcaW+z6F/PTphqosL8=;
-        b=TFbDq/fTSKkOoI0CRKIF0g8bOTxKvdZqBWZdf8IYD3Id8YGDPTzAJYrKe4yVSekaiA
-         PKmU4qSTMed7jkARxz8dq/vV0FiWQo1etGc4R0CriDZeWKqJrAqhPF9n14LcrpuANBRZ
-         +TW3Af4cXQhtskftn18uFTjiY1NTn59Y66Tz8lzrTJZfUWEVYCB40gJ++84A8uU3dMRz
-         la0XrmJFkkpFJtZmzyCLk2+ZNoGwy12pyIgjG3ULNOM14Ud7LVT76LOpZ2HE8VBLUdqk
-         eRPwIVaPKeFJcWHyLmFZzSbY4zzF7m06kwPoRDUyQfo3td7yqWRFG5dbvkGpauy0NNtY
-         SKPg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+8Sd0YIWcDH6pLsWLBWgQCarUx3jPCLtoGGc9Bb4RnLar67gitsEBJfguEX3RU09NZl7OrJtZog==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWT5tKdHLSt7M6/eOwt0WfYrxstwQJ2dZz/q7GKn9y3muJy8jx
-	6qzF9tyDuK/Y/hKpeFihncCNMUibqCb46bTCDC9P2XIT+DmQiTqEaDaUC9NmqRo5fc9EHQ1SUvS
-	57fY1Dg==
-X-Google-Smtp-Source: AGHT+IHc742ruSye4OoTb/Au/x7eNNBjWEEHnHH3qF8Iq8txWo1pUscyTPynkoiHx7x2Py13DdMAWa9XgTE=
-X-Received: from pfbbj10.prod.google.com ([2002:a05:6a00:318a:b0:748:da37:7e37])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6d85:b0:220:2fe9:f07a
- with SMTP id adf61e73a8af0-2312551f2b1mr1418967637.6.1752187256024; Thu, 10
- Jul 2025 15:40:56 -0700 (PDT)
-Date: Thu, 10 Jul 2025 15:40:54 -0700
-In-Reply-To: <d7a11ebd-48d5-48bf-abac-317d5da80a6a@intel.com>
+        d=1e100.net; s=20230601; t=1752187557; x=1752792357;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fafKzIR+UT4s3pdmqSTYy0cRGU3UkuQ70msvu7PcnDU=;
+        b=YYOlq4gyMH8OGGb7h4zAnL7+faMCSRR9ZW6Wq3DZK4rzkNS6uF3dLa2sEc8gzYFMLZ
+         Yf9bWHS7j4WB2mdaVwkU2FtP5KcVL4IdbiVlrIr2gm7M20rQPJUbzXA3lU6iuIkPdcMx
+         TRMjHPL0BUPc+v5CWt4dWZ0z0QUURxsa673O0pzKrJiP/P5JGPaE3bva2+G9DvZNMRkB
+         dySY9QSJ6ZS2l1nHNHJgvrNqAtzST0lqgwaKHN0dL+VVkFNPgRw2uQEUbABhOssg1o0b
+         J5Y7/v47NWLGk1sLichmVdbh/8HUbNEZUHwGmzWXb3tdzlEDpKDRHYMUomZvMVtBOVn5
+         aL6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXfOORmdJBdHQrnK9uAARMFtwpvq08Abo0M6MlKwgh2tExOMgky2bKJSpqUSX7c9WXwCpukIJ3BxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyllRJxW8GLBwtjhN9SoulLcEZw5gOU74MjSvZFE5GXAW6sNLWm
+	wLx8GbyttZ8vPwOE9zdCzq+ovcZfSw1rT6O5rqpZR9rdnLDpQWUWJiH7W7Yowo5ckrfpMrAIDoP
+	FqiP2B/VPBzZJuzKBsE5C2HYfFCvw9gz78yuiEKulzucq+r+kUA6HpRx5R5yXgA==
+X-Gm-Gg: ASbGncv8bDOBAG1tPrYPKAFxTPFMb8X7EqTK+rpDaHr7CzT+h0YK0ax39kqfTBJhC1p
+	NcDpeOF5F+arpM/zc4yB0VdZmiSwYy5583OWc7LnaG9VMEbVWv2P0gD+B90LWrcxY5n/wvYjHfJ
+	yBAKQWCj+SPQpZydsJ2C2gTxXp5K8R0GXNOuQIqExlikC+5oNFn4e7IIPosWa54DpMe/k2+AhHn
+	Z8icAKqAOaiQjNnSHS4iruUGcq/+13d7HUT5qJrBY/kMzKo28f0YH77X8T+DjH4SvOzDOIMApUk
+	ZWsaKZcXWs1uTfhS1UgnLdfQNJpCl7W9UuBd3QZVb2n5Sc2Auf5WAILZxL0TSHh5m5kVpHn5f3x
+	IanCpyL2hfr89wTqEPsCeM+HU1fc=
+X-Received: by 2002:a17:902:cec8:b0:234:ef42:5d48 with SMTP id d9443c01a7336-23dee0c6e5dmr11945535ad.38.1752187557254;
+        Thu, 10 Jul 2025 15:45:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH9Js2zgDvvFTjbOa9Smev8Tav2pVyi97CNSmAdgK0xJNfcRNqNo9js/40yj5slNO+Q0jYhRg==
+X-Received: by 2002:a17:902:cec8:b0:234:ef42:5d48 with SMTP id d9443c01a7336-23dee0c6e5dmr11945325ad.38.1752187556816;
+        Thu, 10 Jul 2025 15:45:56 -0700 (PDT)
+Received: from hu-amelende-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4341d51sm30479615ad.189.2025.07.10.15.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jul 2025 15:45:56 -0700 (PDT)
+From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, david.collins@oss.qualcomm.com,
+        stefan.schmidt@linaro.org, quic_tsoni@quicinc.com,
+        konrad.dybcio@oss.qualcomm.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.baryshkov@linaro.org, dmitry.baryshkov@oss.qualcomm.com
+Subject: [PATCH v6 0/5] thermal: qcom-spmi-temp-alarm: Add support for new TEMP_ALARM subtypes
+Date: Thu, 10 Jul 2025 15:45:50 -0700
+Message-Id: <20250710224555.3047790-1-anjelique.melendez@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250612214849.3950094-1-sohil.mehta@intel.com>
- <20250612214849.3950094-9-sohil.mehta@intel.com> <aG1laKXYu7Uc4Tsb@google.com>
- <d7a11ebd-48d5-48bf-abac-317d5da80a6a@intel.com>
-Message-ID: <aHBBdmdMGHbv5lSm@google.com>
-Subject: Re: [PATCH v7 08/10] x86/nmi: Enable NMI-source for IPIs delivered as NMIs
-From: Sean Christopherson <seanjc@google.com>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
-	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
-	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=Ar7u3P9P c=1 sm=1 tr=0 ts=687042a6 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=p-nOP-kxAAAA:8
+ a=EUspDBNiAAAA:8 a=NNaZUpVlUtzckGV9HeoA:9 a=GvdueXVYPmCkWapjIL-Q:22
+ a=TjNXssC_j7lpFel5tvFf:22 a=XN2wCei03jY4uMu7D0Wg:22
+X-Proofpoint-ORIG-GUID: j9TXURYs9hN0mYto-CUogjWXcRR6rh_E
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDE5MSBTYWx0ZWRfX3cLWPcbxzLfb
+ IKoVchpWATLBZ7dsAUjBRCbOs4TnSWjid/b8nQo/TZqPQMlJxoAWU288Pt/MVhL1bAT7Twzsong
+ EAQVuPwui+zM9WnWNQlODT+9IP6tKwhUE8nks7BAdJbyiPs4PRPJaLlSXfCiD0BDKpj8Pjz8QKM
+ xQVmrC5QtIu8KAGGTkJqrhLrqCLlYi9UXn1sxQEg3kQlF1nGylHxRxyN1r1bzf8rwMtk27cZOhB
+ xFPaJ/Y/3uDJkCMaDqcNukBkAEn93E3tnboeHFK4DcTbpmzHABe9RC7ubeKCRbbxZV808SVt/gK
+ odEhOsIlZvPEA9te+SY+tBZpzx7AQeEAAcv3j4/lRLQbFeN0f9LL2n2dXMm4FBcqx8E1oa2/dlB
+ ZUERDDLBJsD6j03VkGniY72f1e12/qsoI6/4bFCka3H+W/Pg76n1lKFTXFrm2vtBbrPRx9dD
+X-Proofpoint-GUID: j9TXURYs9hN0mYto-CUogjWXcRR6rh_E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-10_05,2025-07-09_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
+ phishscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507100191
 
-On Thu, Jul 10, 2025, Sohil Mehta wrote:
-> On 7/8/2025 11:37 AM, Sean Christopherson wrote:
-> 
-> > This patch is buggy.  There are at least two implementations of ->send_IPI_mask()
-> > that this breaks:
-> > 
-> 
-> Thank you for point this out. I should have been more diligent.
-> 
-> 
-> > Looking at all of this again, shoving the NMI source information into the @vector
-> > is quite brittle.  Nothing forces implementations to handle embedded delivery
-> > mode information.
-> > 
-> 
-> I agree. There is already some confusion with NMI_VECTOR and APIC_DM_NMI
-> used interchangeably sometimes. Adding the new NMI-source vectors with
-> the encoded delivery mode makes it worse.
-> 
-> 
-> > One thought would be to pass a small struct (by value), and then provide macros
-> > to generate the structure for a specific vector.  That provides some amount of
-> > type safety and should make it a bit harder to pass in garbage, without making
-> > the callers any less readable.
-> >
-> > struct apic_ipi {
-> > 	u8 vector;
-> > 	u8 type;
-> > };
-> >  
-> 
-> I am fine with this approach. Though, the changes would be massive since
-> we have quite a few interfaces and a lot of "struct apic".
+Add support in the qcom-spmi-temp-alarm driver for the new PMIC
+TEMP_ALARM peripheral subtypes: GEN2 rev 2 and LITE. The GEN2 rev 2
+subtype provides greater flexibility in temperature threshold
+specification by using an independent register value to configure
+each of the three thresholds. The LITE subtype utilizes a simplified
+set of control registers to configure two thresholds: warning and
+shutdown. While at it refactor the qcom-spmi-temp-alarm driver to limit
+code reuse and if/else statements when deciphering between TEMP_ALARM 
+peripheral subtypes. 
 
-It'd definitely be big, but it doesn't seem like it'd be overwhelmingly painful.
-Though it's certainly enough churn that I wouldn't do anything until there's a
-consensus one way or the other :-)
+Also add support to avoid a potential issue on certain versions of
+the TEMP_ALARM GEN2 subtype when automatic stage 2 partial shutdown
+is disabled.
 
-> 	.send_IPI
-> 	.send_IPI_mask
-> 	.send_IPI_mask_allbutself
-> 	.send_IPI_allbutself
-> 	.send_IPI_all
-> 	.send_IPI_self
-> 
-> 
-> An option I was considering was whether we should avoid exposing the raw
-> delivery mode to the callers since it is mainly an APIC internal thing.
-> The callers should only have to say NMI or IRQ along with the vector and
-> let the APIC code figure out how to generate it.
-> 
-> One option is to add a separate set of send_IPI_NMI APIs parallel to
-> send_IPI ones that we have. But then we would end with >10 ways to
-> generate IPIs.
+This patch series is a continuation of older series from 7/2024
+(https://lore.kernel.org/all/20240729231259.2122976-1-quic_amelende@quicinc.com/)
+but current series has been reworked to address the change in thermal framework to
+update .set_trip_temp() callback function variables
+(https://lore.kernel.org/all/8392906.T7Z3S40VBb@rjwysocki.net/)
 
-Yeah, that idea crossed my mind too, and I came to the same conclusion.
+Changes since v5:
+  - Updated variable names to use stage2 instead of s2 in patch 1/5
+  - Added overtemp_stage enum for more clarity when reading back specific
+    temperature threshold in patch 2/5
+  - Updated temp alarm data subtype identification order in patch 4/5
+  - link: https://lore.kernel.org/all/20250620001918.4090853-1-anjelique.melendez@oss.qualcomm.com/
+Changes since v4:
+  - Removed the unnecessary thresh member of the qpnp_tm_chip struct in patch 2/5
+  - Updated order of logic to limit acquiring and releasing lock within
+    qpnp_tm_init() in patch 3/5
+  - Fixed misuse of signed vs unsigned integers in patches 4/5 and 5/5
+  - Added Dmitry's reviewed-by tag in patch 5/5
+  - link: https://lore.kernel.org/all/20250528235026.4171109-1-anjelique.melendez@oss.qualcomm.com/
+Changes since v3:
+  - Updated order of logic and made dig revision a local variable in patch 1/5
+  - Updated Locking Logic in patches 3/5, 4/5, 5/5
+  - link: https://lore.kernel.org/all/20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com/
+Changes since v2:
+  - Updated function name to include "gen1" in patch 2/5
+  - Added Dmitry's reviewed-by tag in patch 2/5
+  - link: https://lore.kernel.org/all/20250225192429.2328092-1-anjelique.melendez@oss.qualcomm.com/
+Changes since v1:
+  - Remove unnecessary moving of code
+  - Added new v2 patch 3/5 add a preparation patch to v1 patch 2/5
+  - Updated temp alarm data function names to be consistently named
+  - link: https://lore.kernel.org/all/20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com/
 
-> Another way would be to assign the NMI vectors in a different range and
-> use the range to differentiate between IRQ and NMI.
-> 
-> For example:
-> 	IRQ => 0x0-0xFF
-> 	NMI => 0x10000-0x1000F.
-> 
-> However, this would still be fragile and probably have similar issues to
-> the one you pointed out.
-> 
-> > 
-> > static __always_inline void __apic_send_IPI_self(struct apic_ipi ipi)
-> 
-> Taking a step back:
-> 
-> Since we are considering changing the interface, would it be worth
-> consolidating the multiple send_IPI APIs into one or two? Mainly, by
-> moving the destination information from the function name to the
-> function parameter.
-> 
->   apic_send_IPI(DEST, MASK, TYPE, VECTOR)
-> 
->   DEST   => self, all, allbutself, mask, maskbutself
-> 
->   MASK   => cpumask
-> 
->   TYPE   => IRQ, NMI
-> 
->   VECTOR => Vector number specific to the type.
-> 
-> I like the single line IPI invocation. All of this can still be passed
-> in a neat "struct apic_ipi" with a macro helping the callers fill the
-> struct.
-> 
-> These interfaces are decades old. So, maybe I am being too ambitious and
-> this isn't practically feasible. Thoughts/Suggestions?
 
-I suspect making DEST a parameter will be a net negative.  Many (most?) implementations
-will likely de-multiplex the DEST on the back end, i.e. the amount of churn will
-be roughly the same, and we might end up with *more* code due to multiple
-implemenations having to do the fan out.
+Anjelique Melendez (4):
+  thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW
+    subtype
+  thermal: qcom-spmi-temp-alarm: Prepare to support additional Temp
+    Alarm subtypes
+  thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 2 PMIC
+    peripherals
+  thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
 
-I think we'd also end up with slightly less readable code in the callers.
+David Collins (1):
+  thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
 
-> Note: Another part of me says there are only a handful of NMI IPI usages
-> and the heavy lifting isn't worth it. We should fix the bugs, improve
-> testing and use the existing approach since it is the least invasive :)
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 596 +++++++++++++++++---
+ 1 file changed, 520 insertions(+), 76 deletions(-)
 
-FWIW, I think the churn would be worthwhile in the long run.  But I'm also not
-volunteering to do said work...
+-- 
+2.34.1
+
 
