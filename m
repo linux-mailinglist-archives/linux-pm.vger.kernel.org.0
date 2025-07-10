@@ -1,265 +1,152 @@
-Return-Path: <linux-pm+bounces-30592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30593-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B5F9B004B9
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 16:09:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB13B00578
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 16:41:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F24AA7B9910
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:07:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6FD3164244
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Jul 2025 14:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3BB327057C;
-	Thu, 10 Jul 2025 14:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C092273817;
+	Thu, 10 Jul 2025 14:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="eiI5L9tx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rwUGKSUV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C461242D62;
-	Thu, 10 Jul 2025 14:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F6317B421
+	for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 14:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752156509; cv=none; b=Ux2gxVpGAw0taA9L2QjNmLSH+NXaMQzd/4442sxi05motFi6dNqB1Cf5WSyRfzXzpLOF1b3+YXgME9W0Rj7zwAokn0SkV0heRh3r5UZxE951bSYUA8DbnXXWJQ/ft0COmwpanL3l4USR2Hc4egegsK5vqHVbURdREcVdZir45vY=
+	t=1752158498; cv=none; b=fjjNZYEUBU3JKb1cBZnCzBdEeI7sJJXdDctrpNRM1EtDtvSBTCP3P2Pf1GCwyTn66/lDYech2BhuZsnbxzUxueoJIWOnV9Q9MCr6VqyjfSCZTSvngrtNGcD2LcFCbch0CLhT3YJKSGkO/Kdcpf2PLprnke2hkl/CSkXDdv7nxlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752156509; c=relaxed/simple;
-	bh=6+V6b48EzWgWG8MSnsUjJWAfwO4HcQ599pAv9PMWIe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X0fna1ZBCsiqel5mvDg9x+/Mvz+M5KpviulD9o3H1qP3u0yMx/e6W0abnlbkEz0Lz6baqp/+ET+3+eku0gxXBEzx/BL/6mpij9KzJccRF9p9/eTFx09T4EY2Prfo3DPEIIUUX6Quc77uVpN+dpKSIdZ9ORfRXHNTpCaEPe0hy/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=eiI5L9tx; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 807163D8570F;
-	Thu, 10 Jul 2025 10:08:20 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id O8O26kgwxypV; Thu, 10 Jul 2025 10:08:19 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id A7AE33D875E7;
-	Thu, 10 Jul 2025 10:08:19 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com A7AE33D875E7
+	s=arc-20240116; t=1752158498; c=relaxed/simple;
+	bh=rTCP0eFlUYf1cAy9AjZjkIhxqdiUY75FHK6S4X4wtU0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sDr/rkJHTp6Lelshca+IygGOl83So7urTxqFGgn7LhQiyWgWYi9I46Bp3DZsPZ+48oFvMWettc1AKx4LbkP930LOOywsEM8TzwLySCfSgFaRLretJlblMsXFodNmYGmXudlzGzVQDY6k3DoWvPA1KeKBEceXofgipXKyieKgnHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rwUGKSUV; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-710f39f5cb9so10393877b3.3
+        for <linux-pm@vger.kernel.org>; Thu, 10 Jul 2025 07:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1752156499; bh=EhdCuuk3MsnvKWneuePEB9v7psFEpBgaIrswFJsCaTM=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=eiI5L9txRHCopE2fnkP0oI2iR09ru1hhSxhD72AiJph9EmOfBFWozobaGPW96AJCg
-	 y20ij65cW9KEn2XjyNQOPE65m6uIniR/s4iYaKCdfJmx+WkBXOV0mJHBnMZNmXNFqn
-	 epC8zeVa3dGaPk/5jGzdzupceRde0cG3neSQFZD44FYUdaxnZL97VZMQyaDZ+xJgyq
-	 +ywApD4UlTpFGG9/xevR+agtU/kSNGNvivGQ4lmfljx85CsIKXQb37kR2gM8JKOJGk
-	 JrfZVByyinDxo4geIA6o8I951StEPiElJvF6PUPXhR2EPrUYt3jTwEE/8Sk3pRe0mJ
-	 3ZzcN5cTuFweQ==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id 8J66NYaKQAMU; Thu, 10 Jul 2025 10:08:19 -0400 (EDT)
-Received: from fedora (unknown [192.168.51.254])
-	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 595523D8570F;
-	Thu, 10 Jul 2025 10:08:19 -0400 (EDT)
-Date: Thu, 10 Jul 2025 10:08:18 -0400
-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: devnull+samuel.kayode.savoirfairelinux.com@kernel.org, Frank.li@nxp.com,
-	abelvesa@kernel.org, abelvesa@linux.com, b38343@freescale.com,
-	broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	dmitry.torokhov@gmail.com, eballetbo@gmail.com, imx@lists.linux.dev,
-	krzk+dt@kernel.org, lee@kernel.org, lgirdwood@gmail.com,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, robh@kernel.org, sre@kernel.org,
-	yibin.gong@nxp.com
-Subject: Re: [PATCH v8 2/6] mfd: pf1550: add core driver
-Message-ID: <aG_JUhEQaiYQfJmz@fedora>
-References: <20250707-pf1550-v8-0-6b6eb67c03a0@savoirfairelinux.com>
- <20250707-pf1550-v8-2-6b6eb67c03a0@savoirfairelinux.com>
- <0406698c-6534-4aca-8994-e8a69ecee2b2@wanadoo.fr>
+        d=linaro.org; s=google; t=1752158496; x=1752763296; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IlZgkHsxN8ZXtcGrfVzgc7A5zah0HXAJABQ2cFxyfyc=;
+        b=rwUGKSUV8Slq1pMf/VqILsmsYbgr2+yuMHjomTPOb6GmpP4oXw1oQwnqaG+8Sw+XuP
+         npNEi9gXsKSMYsgdSQxuyjiAqwvdnf/bSsTt13RapO8FKyBRo9SgHHp+TXJdrHPXDHkj
+         O5OuAWQWwkg+iNFCUOiBXJLIPJH8/hhxAIOQ1wAOK7XPoEwFoKV/bS/3C7S7uk5rrUZ3
+         x+bohO63snsJ7AEuMqKscfSaZFdTuFGiYxZsD9FscpFISuJ/q6T6U5YP2EOkpyUYWsQG
+         nvSHGiXfTiMc/cQ/Dd8dfL16nL2AkuuOF4SKAM9WrQUpIjDXPRRgVtTk9IpEDMQ9bvdf
+         EvkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752158496; x=1752763296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IlZgkHsxN8ZXtcGrfVzgc7A5zah0HXAJABQ2cFxyfyc=;
+        b=NyZjBKon/e2TpsGIMrE/mHZ/4dQkOGuiK89dN/kcM4P3l5ExRDe5/xUGTA24Y6VZp+
+         Di2zjizsQ/DVopQpFiAfUHrSaV6YnfIWD1xGBL7euh4acpKNOaQaHCJu08fSWqJIDAR2
+         k2czEB0VOitntOVqEcG2snpdB18zOvHRpoZiGC3kR4tfeV9TirYmf8gaGEbJek+zLXrJ
+         aGXGtliEnetcDPu0/NTVQ9DdKYj2+CcYMm6XfhwoMU7sKtkkeV0zISCdwYfbHo9pt5HL
+         HlRfF8xHDY4mMVjA9jV5tSgufUD5TH024q2oPm4kuc0gyuLV1uYkiOJzKdt5r6lwBRcU
+         q9xg==
+X-Forwarded-Encrypted: i=1; AJvYcCXl5NG7OYQ+5J6RnA+TJQq9vNuB/dUFaMWzwSWeRAXnqJebr0KjP8rLdFPsRg9RTQL405tE/bSKvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxfKzPpTPVLeBH/OPAySMtk+b9jtlJTygpvM2w8G+22YqSna7k
+	+cOHz4XblbxogvunqnxHgeqW2uQBoGvMFQ6TKOzCJ8kkI1qrVCRf10/XHu03bsK4J1SsyVSw2JH
+	xlykJvYX3nLMq8dTzjmZuqRaKRIy6wKLel+q5VgZPK25B3V2+GYlq
+X-Gm-Gg: ASbGnctc/+kcsqO+Z/DdtMyEa5UFqG4PPh0g3Horf7gkUrhLLprzXMbt3EIVm1WU/Tr
+	7cREqlJp5iEiSmz5Qg3JO4IOOZz6Ul7oFKIlViHwFuFiAPDFFPHNc3+yzwcT2bLkgcJwIasvIHa
+	6MCNiGVeqThS5yWFyJAoPze2cDtbjFUxfxpzruXfrJwZg=
+X-Google-Smtp-Source: AGHT+IHVD6gPsHq+Dexvu9tOsagl+k20PpDSEAg/CCtZ6R9oh9y4FIYINC4cgMj3d0zJYPGC/y7DQa6nR8qkXx9Q06g=
+X-Received: by 2002:a05:690c:d90:b0:6fb:b8a1:d3bb with SMTP id
+ 00721157ae682-717b19cb233mr100039137b3.17.1752158495634; Thu, 10 Jul 2025
+ 07:41:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <0406698c-6534-4aca-8994-e8a69ecee2b2@wanadoo.fr>
+References: <20250709154728.733920-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0ixk5hZPPQc_1rDLMTzjh=KpMQF_A2U=HehMTuNSMQwtQ@mail.gmail.com> <aG-40INpi05v3-fQ@bogus>
+In-Reply-To: <aG-40INpi05v3-fQ@bogus>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 10 Jul 2025 16:40:59 +0200
+X-Gm-Features: Ac12FXw291rGaeQnkKGBJOE99wWaDDVeGF-LGyRZrV90PjOPwqUc_kzJDb-fgDQ
+Message-ID: <CAPDyKFqS9fawvgxEhk9W=o3oUpA_HGc71-5siw8AGqenQegrLA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: psci: Fix cpuhotplug routine with PREEMPT_RT=y
+To: Sudeep Holla <sudeep.holla@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-rt-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Raghavendra Kakarla <quic_rkakarla@quicinc.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	"open list:Real-time Linux (PREEMPT_RT)" <linux-rt-devel@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 08, 2025 at 08:46:48PM +0200, Christophe JAILLET wrote:
-> Le 07/07/2025 =E0 23:37, Samuel Kayode via B4 Relay a =E9crit=A0:
-> > From: Samuel Kayode <samuel.kayode-4ysUXcep3aM1wj+D4I0NRVaTQe2KTcn/@p=
-ublic.gmane.org>
-> >=20
-> > Add the core driver for pf1550 PMIC. There are 3 subdevices for which=
- the
-> > drivers will be added in subsequent patches.
-> >=20
-> > Reviewed-by: Frank Li <Frank.Li-3arQi8VN3Tc@public.gmane.org>
-> > Signed-off-by: Samuel Kayode <samuel.kayode-4ysUXcep3aM1wj+D4I0NRVaTQ=
-e2KTcn/@public.gmane.org>
->=20
-> Hi,
->=20
-> some nitpicks and a few real questions.
->=20
-> CJ
->=20
-> ...
->=20
-> > +	/* Add top level interrupts */
-> > +	ret =3D devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, pf155=
-0->irq,
-> > +				       IRQF_ONESHOT | IRQF_SHARED |
-> > +				       IRQF_TRIGGER_FALLING,
-> > +				       0, &pf1550_irq_chip,
-> > +				       &pf1550->irq_data);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Add regulator */
-> > +	irq =3D regmap_irq_get_virq(pf1550->irq_data, PF1550_IRQ_REGULATOR)=
-;
->=20
-> Same as above.
->=20
-> > +	if (irq < 0)
-> > +		return dev_err_probe(pf1550->dev, irq,
-> > +				     "Failed to get parent vIRQ(%d) for chip %s\n",
-> > +				     PF1550_IRQ_REGULATOR, pf1550_irq_chip.name);
-> > +
-> > +	ret =3D devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, irq,
-> > +				       IRQF_ONESHOT | IRQF_SHARED |
-> > +				       IRQF_TRIGGER_FALLING, 0,
-> > +				       &pf1550_regulator_irq_chip,
-> > +				       &pf1550->irq_data_regulator);
-> > +	if (ret)
-> > +		return dev_err_probe(pf1550->dev, ret,
-> > +				     "Failed to add %s IRQ chip\n",
-> > +				     pf1550_regulator_irq_chip.name);
-> > +
-> > +	domain =3D regmap_irq_get_domain(pf1550->irq_data_regulator);
-> > +
-> > +	ret =3D  devm_mfd_add_devices(pf1550->dev, PLATFORM_DEVID_NONE, reg=
-ulator,
->=20
-> 2 spaces after =3D
+On Thu, 10 Jul 2025 at 14:57, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-Will drop.
-> > +				    1, NULL, 0, domain);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Add onkey */
-> > +	irq =3D regmap_irq_get_virq(pf1550->irq_data, PF1550_IRQ_ONKEY);
->=20
-> Same
->=20
-> > +	if (irq < 0)
-> > +		return dev_err_probe(pf1550->dev, irq,
-> > +				     "Failed to get parent vIRQ(%d) for chip %s\n",
-> > +				     PF1550_IRQ_ONKEY, pf1550_irq_chip.name);
-> > +
-> > +	ret =3D devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, irq,
-> > +				       IRQF_ONESHOT | IRQF_SHARED |
-> > +				       IRQF_TRIGGER_FALLING, 0,
-> > +				       &pf1550_onkey_irq_chip,
-> > +				       &pf1550->irq_data_onkey);
-> > +	if (ret)
-> > +		return dev_err_probe(pf1550->dev, ret,
-> > +				     "Failed to add %s IRQ chip\n",
-> > +				     pf1550_onkey_irq_chip.name);
-> > +
-> > +	domain =3D regmap_irq_get_domain(pf1550->irq_data_onkey);
-> > +
-> > +	ret =3D  devm_mfd_add_devices(pf1550->dev, PLATFORM_DEVID_NONE, onk=
-ey, 1,
->=20
-> 2 spaces after =3D
->=20
-Will drop.
-> > +				    NULL, 0, domain);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Add battery charger */
-> > +	irq =3D regmap_irq_get_virq(pf1550->irq_data, PF1550_IRQ_CHG);
->=20
-> This calls irq_create_mapping().
-> Should irq_dispose_mapping() or another helper be called in the error
-> handling path and in the remove function, or is it already handled by a
-> devm_ function?
->=20
-This creates a mapping for the allocated `irq_data` runtime controller by
-devm_regmap_add_irq. The `irq_data` is for the top level interrupts. Sinc=
-e it
-was allocated with a devm_, I think irq_dispose_mapping is called during =
-a
-remove.
-> > +	if (irq < 0)
-> > +		return dev_err_probe(pf1550->dev, irq,
-> > +				     "Failed to get parent vIRQ(%d) for chip %s\n",
-> > +				     PF1550_IRQ_CHG, pf1550_irq_chip.name);
-> > +
-> > +	ret =3D devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, irq,
-> > +				       IRQF_ONESHOT | IRQF_SHARED |
-> > +				       IRQF_TRIGGER_FALLING, 0,
-> > +				       &pf1550_charger_irq_chip,
-> > +				       &pf1550->irq_data_charger);
-> > +	if (ret)
-> > +		return dev_err_probe(pf1550->dev, ret,
-> > +				     "Failed to add %s IRQ chip\n",
-> > +				     pf1550_charger_irq_chip.name);
-> > +
-> > +	domain =3D regmap_irq_get_domain(pf1550->irq_data_charger);
-> > +
-> > +	return devm_mfd_add_devices(pf1550->dev, PLATFORM_DEVID_NONE, charg=
-er,
-> > +				    1, NULL, 0, domain);
-> > +}
-> > +
-> > +static int pf1550_suspend(struct device *dev)
-> > +{
-> > +	struct pf1550_ddata *pf1550 =3D dev_get_drvdata(dev);
-> > +
-> > +	if (device_may_wakeup(dev)) {
-> > +		enable_irq_wake(pf1550->irq);
-> > +		disable_irq(pf1550->irq);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int pf1550_resume(struct device *dev)
-> > +{
-> > +	struct pf1550_ddata *pf1550 =3D dev_get_drvdata(dev);
-> > +
-> > +	if (device_may_wakeup(dev)) {
-> > +		disable_irq_wake(pf1550->irq);
-> > +		enable_irq(pf1550->irq);
->=20
-> Should this 2 lines be inverted?
->=20
-I don't think it matters. disable_irq_wake is 'completely orthogonal' to =
-the
-enable/disable(irq). See function irq_set_irq_wake.
-> > +	}
-> > +
-> > +	return 0;
-> > +}
->=20
-> ...
->=20
-> > +#define PF1550_CHG_LINEAR_ONLY		12
-> > +#define PF1550_CHG_SNS_MASK		0xf
-> > +#define PF1550_CHG_INT_MASK             0x51
->=20
-> Space vs tab
->=20
-Will make changes.
-> > +
-> > +#define PF1550_BAT_NO_VBUS		0
-> > +#define PF1550_BAT_LOW_THAN_PRECHARG	1
+> On Thu, Jul 10, 2025 at 02:43:10PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Jul 9, 2025 at 5:47=E2=80=AFPM Daniel Lezcano <daniel.lezcano@l=
+inaro.org> wrote:
+> > >
+> > > Currently cpu hotplug with the PREEMPT_RT option set in the kernel is
+> > > not supported because the underlying generic power domain functions
+> > > used in the cpu hotplug callbacks are incompatible from a lock point
+> > > of view. This situation prevents the suspend to idle to reach the
+> > > deepest idle state for the "cluster" as identified in the
+> > > undermentioned commit.
+> > >
+> > > Use the compatible ones when PREEMPT_RT is enabled and remove the
+> > > boolean disabling the hotplug callbacks with this option.
+> > >
+> > > With this change the platform can reach the deepest idle state
+> > > allowing at suspend time to consume less power.
+> > >
+> > > Tested-on Lenovo T14s with the following script:
+> > >
+> > > echo 0 > /sys/devices/system/cpu/cpu3/online
+> > > BEFORE=3D$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/i=
+dle_states | grep S0 | awk '{ print $3 }') ;
+> > > rtcwake -s 1 -m mem;
+> > > AFTER=3D$(cat /sys/kernel/debug/pm_genpd/power-domain-cpu-cluster0/id=
+le_states | grep S0 | awk '{ print $3 }');
+> > > if [ $BEFORE -lt $AFTER ]; then
+> > >     echo "Test successful"
+> > > else
+> > >     echo "Test failed"
+> > > fi
+> > > echo 1 > /sys/devices/system/cpu/cpu3/online
+> > >
+> > > Fixes: 1c4b2932bd62 ("cpuidle: psci: Enable the hierarchical topology=
+ for s2idle on PREEMPT_RT")
+> > > Cc: Raghavendra Kakarla <quic_rkakarla@quicinc.com>
+> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >
+> > As per MAINTAINERS, this is for Ulf/Sudeep.
+> >
+>
+> LGTM, so
+>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+>
+> I still prefer to hear from Ulf who has more knowledge and hands-on exper=
+ience
+> with s2idle + PREEMPT_RT in case I am missing something.
 
-Thanks,
-Sam
+Rafael, Sudeep,
+
+I will pick this patch via my pmdomain tree, but will run some tests
+of it first to be sure.
+
+Kind regards
+Uffe
 
