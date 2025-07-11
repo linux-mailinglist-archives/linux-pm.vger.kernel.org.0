@@ -1,192 +1,166 @@
-Return-Path: <linux-pm+bounces-30706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2CA3B02261
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 19:14:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBCECB022BF
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 19:40:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C2014A5BA8
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 17:14:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12C7717D155
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 17:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330EE2F004B;
-	Fri, 11 Jul 2025 17:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A988A2F19A3;
+	Fri, 11 Jul 2025 17:39:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dEa/dwq+"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BNRI7qml";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kg/6aE9g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from flow-b8-smtp.messagingengine.com (flow-b8-smtp.messagingengine.com [202.12.124.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EC42EFD81
-	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 17:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEC62EF66E;
+	Fri, 11 Jul 2025 17:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752254044; cv=none; b=WqwyLav/7tabbL2b6GYuLXSzsWeprFUpmpsleCyIoPDbB4j/HPSxCrvGjHgmiwbTHiLEaGM7WkU4yyoxYOgpeP/Vb9t6SGmQet9tHJnq0Rh9YL0Rl8oTEqQ7TDMbOvXAXQQuKz8Z730WXDjCyHkhXwbhvwr7ElggRYxbK1hwRiI=
+	t=1752255585; cv=none; b=UFAQa6RP2R/hDRL/tZQN35sICawvQnh7rwhcaxSCSdbFOM0pM3iNZ6YRWJHkH+Mt6pvZqRnR2I1DcfR6tNGha3GgGGkKFGlB/TvnIX78m7DSiYqj8agptnY+yI14X8CW7Iu5gN7u6s6acMdZzmqkXYt3G0HGbg9qvLtDEy8mKgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752254044; c=relaxed/simple;
-	bh=IfkgkvwrICiY1PpPvpmdoJ/Llw9dqsyr42ryaHPpX6I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m2bobZSST4Sgzf9IOvr+jV/Sk/xL0KBGeu8HMbiQRngGXJedj/UKxDa6GHt+n3k7Sw0PfnfZ7o+5JFEXqNNnDd0nTh6ha3klMCALmzMfFvPjmkcT1PUuxNYNJxoufD3iQIq7eYgtaS8/2iEWIFtq3qZMqk6vWsxR81StgzCAUKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dEa/dwq+; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56BAefJg016260
-	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 17:14:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+yUxiWOGlCs35rCfqD4oAy1uFpwrIW5gk0AdeeQDOzs=; b=dEa/dwq+qpYCp9ov
-	IwRHGfEsQXTn43yLpCT4+xX/3a7ltSkZSMokDMIE38v3evpbApnArv+9rfpFfgv+
-	sE8M3YGTtI0B0kJnQ4glXiPL0ahgiGk2cyyzjmpWf7U//T312lcmwB0uANxwwqAm
-	Y/g7DfZWTHTbPgzXBsnwKI3tFzsWH3uVx7Ve2i1N66S4qY0wA4WBV+vSIKFEaBbj
-	SE93RvPCIUB4+go9Kd3WeUOSWupWlAiXk6YPp20rUFRTrbo+DkG9Bl0a4r3rLJ6W
-	CHTF5zkuY7PP4Mbcx8HQ+ccxeHvsKOefhJkmsimVzEOQ4cjo//lOTj3+pajpdLda
-	6PzSHg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47t83u5nq6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 17:14:01 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-31202bbaafaso2472719a91.1
-        for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 10:14:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752254041; x=1752858841;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+yUxiWOGlCs35rCfqD4oAy1uFpwrIW5gk0AdeeQDOzs=;
-        b=N6nQuabUqLCjmP9j0z+PDIDgYtxdth+TOHmscZsQ3FRXa4xe2pmj/BY2mdbfwSf++l
-         3X3G3huuI/VbKPmNL084Jk8BqHkqCB7G1fVbnsNjeCGaKYKpOS7Fw6NOxUAuL5OPZwSL
-         KislRlKMptgmeM4g0z86bLZfP1sBmvcEaPKOPcJiRNVHX2t1Pr6ptDToTVDWNLZniGaR
-         8yjRy9LOM9qnJnnevgj60hid2DgOUjfbC36ruvf+Q4R1QS9qjq+0UMO4OlxGt0OWT54D
-         5Ynl+qZ9Jqdjlcwl+mJyzVJDVWCqqYBjJJeNnn+tIvg+XbgfteHArRe3d5yhth4q83s4
-         efKA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWFDPAn9O790j1dbUPl1dvCZD6gijGIh8u/CPoIrnqWdxh7xJHyJaNIoN92o7fbBFZJpAn0FvY8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX8D9U5wCF94nWCx3NNUMr/RUJRTqMkvOs25XDf+go4QPaRqTq
-	3jmEyE43AnZsgbPl1Pc3LcgcotVYffGA6gdlbaoAwbVKrbAzmRX+b6/vLysC9XW6qdxgcnmABAA
-	GuVtFsgB+wQyR6IoYo8EKvdYRatXK0RU7IKoORLYtU5Nycx62pRYfRCBAYL1mPg==
-X-Gm-Gg: ASbGncu/G+PvwGoZR9DMYusUMmfhagLKHcYMpfCB+2l4e4htNvlVF1isBqQ2ikiMhB4
-	GL7GLS4Iv41hOgZfZUw5fozBvtgrcTv+3T3wB+zqKzOfXYGzmN5HhD3Sm9tMrQYPSEjib1nTAuW
-	KN5kX8MBZRQofVvDFs6BbpPvlPaWsG0j0uDXENg+HlJ2/LKTx/4HTgYGv40Fh9nWPIIIuAyD/D/
-	+rm6hTP79KftRkiuLUqqrGkTbKyB5D01DIJhCvle97q7346GBHafEELWvaN6BKvbIJbOdGiuUaj
-	PHb/HnE1WcgdJdAm7rDLphQHWcTFLsTp3sZ1w/qpbc3FS3fGwr+O+WUYSOOp89ErFE5C5LCfBA=
-	=
-X-Received: by 2002:a17:90b:2287:b0:31a:9004:8d36 with SMTP id 98e67ed59e1d1-31c4f512a2emr3401804a91.20.1752254040864;
-        Fri, 11 Jul 2025 10:14:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE8jwEw4xKzZ2Gauazi95OMMWknYXW3kdStTOkWdXT5CV0YXjXLaabiJCMU/29GPhFaCVApJA==
-X-Received: by 2002:a17:90b:2287:b0:31a:9004:8d36 with SMTP id 98e67ed59e1d1-31c4f512a2emr3401777a91.20.1752254040270;
-        Fri, 11 Jul 2025 10:14:00 -0700 (PDT)
-Received: from [192.168.29.115] ([49.43.229.152])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c3e973e80sm5633493a91.15.2025.07.11.10.13.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Jul 2025 10:13:59 -0700 (PDT)
-Message-ID: <b6f4819e-462d-7a59-eb19-bfb65ec27229@oss.qualcomm.com>
-Date: Fri, 11 Jul 2025 22:43:45 +0530
+	s=arc-20240116; t=1752255585; c=relaxed/simple;
+	bh=dxN5T4WkAVHPoUzZwiY+yrDiSgaHEZLUFT5ip3OenNY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=phJzEtcHALgDBpbKQliNAxbvQOXeah1rCZadEQsuC+cvXYOGf2DmiEMaf/cQ1YzC/mjGc6mJTnFgFV6RIZ9lEtHPm1PCa/iVE4/A8lgAdnrDw/QQyJj1L0tftTT0Q+jrqj4AUrOP1F20iHTrcv8ZsmCzgrxqvMRN5JEvWsc63a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BNRI7qml; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kg/6aE9g; arc=none smtp.client-ip=202.12.124.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id F0F6C1300AE9;
+	Fri, 11 Jul 2025 13:39:40 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Fri, 11 Jul 2025 13:39:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1752255580;
+	 x=1752262780; bh=/7nAQ8MFihVRjT4v6jCf4oIhuL2he8+p7e3TrE0+kYI=; b=
+	BNRI7qml8FGqqjAjz4ECuSXh4sUCbOHlAfr9QmNo21rjBp7/dg/LIiLEY3xEKDYg
+	fYjQ7KQL9lbUb4UoeEAhrzrsLxuKPySftGrqE6HRgMhm++bFQDJhzNHSjHy/0fRL
+	tOxYfhllkHVoy6G99ytXT5Vm9F2GIJ4efWkE2UcQl5sMP+E1LDC/ytS1YsUnCjvE
+	Y1V+Vm1U4IbvoVykZ8hRTHtrUnzXUuDwNikD1FlWtj43IDoCx4eJfuyDj1ZtaViC
+	YA1mktP6p/K0wk7tUO7PDcvxTMh812zGXM7QCfj2yostqeHD4py0IqVBv+NGLEBD
+	62Bd0eKpqVW/xRTn/tndcA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1752255580; x=
+	1752262780; bh=/7nAQ8MFihVRjT4v6jCf4oIhuL2he8+p7e3TrE0+kYI=; b=k
+	g/6aE9gWmA1nQ2IF5rhoo758cBW7YBIcJMB7Gxh3UOcFWttFsFuIiS3oMZGU0tAw
+	f8KExaR9ijyYiaWaBux3y0iF7eaI7wGIKf5hbFw8j7nlNRM/ySiN8QKXw30/LPiT
+	uw7bf3U8b6mmh3Ln5QZFuQmMM2RI71easRsoDwEu+XV4BbIq/XxXKDsJcrQNjtTV
+	1qpyf/j4/hQQ9E78WwRx8NXZT0XIuOFe1MdZlMhkgEZsjotLENbKAD79el/JOXd5
+	eYmfznEkTDoUmc2CCp8sugqZLXXyuQzj+kf5Emo+/hLI7xvZjJGflZGy/CxBstHh
+	Nn2XRsVbXP/W44n9wKzwQ==
+X-ME-Sender: <xms:WkxxaAy6ubjXTr4Nr3GqrLfMPAuOl6P_C6EqtSatLOBP6xBRgcD05A>
+    <xme:WkxxaEQbQbfx7KVZqVEZ7vCzymFyNiE2UyyUyKdwb2gB3N44toNbXvmGMgHMNhQtt
+    6b8oMf0CLqT2M0uE8I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdegfeelfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegfedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepshhouhhvihhkrdgthhgrkhhrrghvrghrthihsegrrhhmrdgtohhmpd
+    hrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphht
+    thhopehmrghrkhdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopehsuhguvg
+    gvphdrhhholhhlrgesrghrmhdrtghomhdprhgtphhtthhopegrlhgvgigrnhgurhgvrdgs
+    vghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsggtmhdqkhgvrhhnvg
+    hlqdhfvggvuggsrggtkhdqlhhishhtsegsrhhorggutghomhdrtghomhdprhgtphhtthho
+    pehflhhorhhirghnrdhfrghinhgvlhhlihessghrohgruggtohhmrdgtohhmpdhrtghpth
+    htoheprhhjuhhisegsrhhorggutghomhdrtghomhdprhgtphhtthhopehssghrrghnuggv
+    nhessghrohgruggtohhmrdgtohhm
+X-ME-Proxy: <xmx:WkxxaOOV1N-8cl8ewsOEadvfG9DMjh2ELghTwN74WNv3Gt0JyYjdHA>
+    <xmx:WkxxaIr6oCFMaVmWU7gxOVhY4rm3xw3dXBakD_FIPF7wB40OD4bF_g>
+    <xmx:WkxxaNScigY_hlnDbZTVOu3n_jiKONFprcnm_y-D-b4g8TtNSC1wFA>
+    <xmx:WkxxaM3NFQKdNmcyxUur-EZMEEThitW_iCEZiwnrKDKhCenUTLnX9Q>
+    <xmx:XExxaGAHDmkRJpoC78wbh25FI-BA2SRsBk3w8jQ6FIofe9fmBAXSmU4N>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2721B700065; Fri, 11 Jul 2025 13:39:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v10 04/10] dt-bindings: arm: Document reboot mode magic
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Elliot Berman <elliotb317@gmail.com>
-Cc: Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        =?UTF-8?Q?Andr=c3=a9_Draszik?= <andre.draszik@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, Wei Xu <xuwei5@hisilicon.com>,
-        linux-rockchip@lists.infradead.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Elliot Berman <elliot.berman@oss.qualcomm.com>
-References: <20250710-arm-psci-system_reset2-vendor-reboots-v10-0-b2d3b882be85@oss.qualcomm.com>
- <20250710-arm-psci-system_reset2-vendor-reboots-v10-4-b2d3b882be85@oss.qualcomm.com>
- <2d8e17ad-6bd6-47a9-b5ab-0a91689684ee@app.fastmail.com>
- <9bd63c0b-cf14-d00b-c600-9582061e3afc@oss.qualcomm.com>
- <23e0f0d5-c0f6-4fc5-9775-c0ae73681d31@app.fastmail.com>
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <23e0f0d5-c0f6-4fc5-9775-c0ae73681d31@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: T7b8765a73c29189d
+Date: Fri, 11 Jul 2025 19:39:17 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Shivendra Pratap" <shivendra.pratap@oss.qualcomm.com>,
+ "Rob Herring" <robh@kernel.org>
+Cc: "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ "Bjorn Andersson" <andersson@kernel.org>,
+ "Sebastian Reichel" <sre@kernel.org>,
+ "Sudeep Holla" <sudeep.holla@arm.com>,
+ "Souvik Chakravarty" <Souvik.Chakravarty@arm.com>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Andy Yan" <andy.yan@rock-chips.com>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+ "Olof Johansson" <olof@lixom.net>,
+ "Konrad Dybcio" <konradybcio@kernel.org>,
+ cros-qcom-dts-watchers@chromium.org, "Vinod Koul" <vkoul@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>,
+ "Florian Fainelli" <florian.fainelli@broadcom.com>,
+ "Elliot Berman" <elliotb317@gmail.com>,
+ "Stephen Boyd" <swboyd@chromium.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ "Alim Akhtar" <alim.akhtar@samsung.com>,
+ linux-samsung-soc@vger.kernel.org, "Wei Xu" <xuwei5@hisilicon.com>,
+ linux-rockchip@lists.infradead.org,
+ "Baolin Wang" <baolin.wang@linux.alibaba.com>,
+ "Sen Chu" <sen.chu@mediatek.com>, "Sean Wang" <sean.wang@mediatek.com>,
+ "Macpaul Lin" <macpaul.lin@mediatek.com>,
+ "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
+ "Ray Jui" <rjui@broadcom.com>, "Scott Branden" <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com,
+ "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Elliot Berman" <quic_eberman@quicinc.com>,
+ "Srinivas Kandagatla" <srini@kernel.org>
+Message-Id: <b870ed33-7d4f-4b0e-a9ae-b9c374ea854b@app.fastmail.com>
+In-Reply-To: <28f277af-9882-2c70-5156-123c95adc2ee@oss.qualcomm.com>
+References: 
+ <20250710-arm-psci-system_reset2-vendor-reboots-v10-0-b2d3b882be85@oss.qualcomm.com>
+ <20250710-arm-psci-system_reset2-vendor-reboots-v10-2-b2d3b882be85@oss.qualcomm.com>
+ <20250710224740.GA15385-robh@kernel.org>
+ <cdadd6cf-18c9-15c7-c58a-b5d56b53452a@oss.qualcomm.com>
+ <454c8361-151e-42b3-adfc-d82d2af62299@app.fastmail.com>
+ <28f277af-9882-2c70-5156-123c95adc2ee@oss.qualcomm.com>
+Subject: Re: [PATCH v10 02/10] dt-bindings: power: reset: Document reboot-mode cookie
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: QdWfaYzEKe5feDKmQODGVB2DJRXr-fts
-X-Authority-Analysis: v=2.4 cv=OotPyz/t c=1 sm=1 tr=0 ts=68714659 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=8g6h00HoWaIZ3EdQG8aEvw==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=rM0-y_1GYM4-gDGtagQA:9
- a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzExMDEyNiBTYWx0ZWRfX0V/OJ/XXQw0y
- 2KLRcWUN02XNr4wb6kYx5jkP1BpnzPod8Y82dWkc9pZK/BcFdEYS+3EkOXx5Lmob9lL6eN7fJI6
- AOVlOrT3w6NiOHTEY8FWZPCU5RH1ix7CoHdMzTbG47v9xmnaUh+c0YrjyJha7skh0ibj8oVsGP7
- Dxlk5VdATPZOmctPrX78qHa2RVsOEl6eJoMpFitudmP0jV8VMS0NCLhdWYKXlBDU+KrIDoG3ajj
- pxcogEi3GMNPcLkNYaWcWfN1/4Ud6hBj5A/3LQsjZMHGiOF6M0BUTQvQbWX2IpaSTVb5JBnnv22
- DH8GF9W8CUxDsnZwLbdht2BA4gbNguhAH7PxaKkO5KqaL0rQtuesu2JL1SEL0kFHiFxMIm5YQ4l
- oLIZlgmwLrYtoy0SO17vmWJaez6baCTHtGSRBUtGNnILFZ3MRCGrRUCnh2tPe51AB7uWy7mC
-X-Proofpoint-GUID: QdWfaYzEKe5feDKmQODGVB2DJRXr-fts
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-11_04,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0
- malwarescore=0 mlxlogscore=932 clxscore=1015 suspectscore=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507110126
 
+On Fri, Jul 11, 2025, at 19:00, Shivendra Pratap wrote:
+> On 7/11/2025 8:14 PM, Arnd Bergmann wrote:
+>> On Fri, Jul 11, 2025, at 14:32, Shivendra Pratap wrote:
+>> 
+>> The distinction between cookie and magic value may be relevant in the
+>> context of the psci specification, but for the Linux driver, this is
+>> really just a 64-bit magic number.
+> ok. then if i understand, this binding change for reboot-mode be dropped
+> and driver can internally handle the two 32 bit numbers?
 
+Yes, if you can easily keep it internal to the psci driver, that
+would work, or you could just change the callback type to take a
+64-bit number and leave the interpretation up to the driver.
 
-On 7/11/2025 11:10 AM, Arnd Bergmann wrote:
-> On Thu, Jul 10, 2025, at 18:53, Shivendra Pratap wrote:
->> On 7/10/2025 9:00 PM, Arnd Bergmann wrote:
->>> On Thu, Jul 10, 2025, at 11:15, Shivendra Pratap wrote:
->>>
->>>> +  reset-types:
->>>> +    type: object
->>>> +    $ref: /schemas/power/reset/reboot-mode.yaml#
->>>
->>> The other users of the reboot-mode.yaml binding all call this
->>> node 'reboot-mode' instead of 'reset-types', can you change that
->>> here for consistency?
->> nvmem-reboot-mode and syscon-reboot-mode use reboot-mode in the
->> device tree node name.
->> qcom-pon does not uses reboot-mode at its device tree node name, it
->> uses pon.
->> Kept it reset-types as this patch was already reviewed earlier and
->> the name makes it closer to vendor-specific reset-type.
->> Should we make it reboot-mode? Please suggest.
-> 
-> Yes, I would still change that. At least all the platform-independent
-> drivers are consistent that way.
-Ack. will change this to reboot-mode.
-> 
->       Arnd
+     Arnd
 
