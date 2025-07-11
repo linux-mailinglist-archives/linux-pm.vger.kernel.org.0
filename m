@@ -1,59 +1,60 @@
-Return-Path: <linux-pm+bounces-30698-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30699-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78729B01FFC
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 17:01:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1715FB01FF7
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 17:00:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BC7217345E
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 14:58:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 993ED18857B6
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 14:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 140D22EAB76;
-	Fri, 11 Jul 2025 14:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B602EAB8C;
+	Fri, 11 Jul 2025 14:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="dncZ4K9L"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="aaqcBnF5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5240B2EA49C;
-	Fri, 11 Jul 2025 14:58:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318C02EAB78;
+	Fri, 11 Jul 2025 14:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752245896; cv=pass; b=T6sLa0jWhpw3kQn5o45p/90Rc5UTSktqr99Wek4hxmxH4NOmpa/BAPwybTTL3K00svdcRcRbPtoWaN8KGyVewiZrykKnLI77Mc67NE+cF2Yvv3Io9KXBRaGEzCQvnU4L/gOrcQpSxYxmGes1A9ActphShAHZGa4TAp7KJHdg9nE=
+	t=1752245898; cv=pass; b=Aggz1MwRta6DOtxnRxOX5CNaS1ntNQEnB6YX/leOIs9zL7DMkOOpODChfCVWUS3fgPU3Yd4LCS85XzsrGn9k+luhMQ18CXzgTj6yzR9J6Q2g9+PMECIf2IRo+JoPs1REPFP3Amp74B5urfO4WhHVdjbDY6wqOwmdFr90Hg5bgiM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752245896; c=relaxed/simple;
-	bh=T/XZsQbQLrcIV9fFKHUv1e6mI5VjQpUWX7EjJia/LTU=;
+	s=arc-20240116; t=1752245898; c=relaxed/simple;
+	bh=EjeP7OrDgKOt79C3FOGtxu/5R2W4xfEOnhRHSKf7BG8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ltYBRpRqAJKDuvg284XLHG9mZpfo24nSSzvYBN03WGFkN19M/S1A4KvmtarBq8updavDyNX+pduE4OibV8uNvjMiIr+Mo5UguHXG+OZKKnkY4wfsyUvsg/Y0lvu0b0A9ZembKVkMNiOuFym2xVahV7mg66cxI8aBU8uFlLN/VIA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=dncZ4K9L; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=KBqJppNA4kW0nHf8AsPiPgNalxyyjats4ke2SE1otvpmDzApb66JyQp+m4m43AMEE7NfcUzOx+cTZ9DrZNAcqw5PIyCTQlFha2ulqdArHcgQ5gJaJH0guD7SCvF5kPkgWJcQeKkOvV2Y1AOCsh3w8bSlNMaGXZVO7IosrHh5OpA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=aaqcBnF5; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1752245875; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1752245879; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=Sbo7WLHYGAc49B5RUnp/nZKGY19T10UabJVAINX76rzQqrvbeqc237Ivdc2o8iTBsv6eSmGuuXKFBbbHIJSH3eujjCWEY57dOP2fpq5OtKH1hJFO1Ot1dwaBdk9DNyMUeOYrQRf7CRNPoypCq8cFM1QE47kd+zDVEjo/F050DqU=
+	b=mLT4odeGP3wtaLuuJNmMU4mcGOoofU0jqjV3UnHSpd9vUccGyc2MCwVWnfUY70ss4ksb32AtkbMcjzAt+vZd7EB8i9shS9RYaC5Qt8RjLb5pOFDfbVz9w9cFOw/w6y7fENObqG7ikgsgP1K+yZWgVsgKlHN9PPZ6vY/2IFGrnSA=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1752245875; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Rl4uSsmt0R6ta2ds9zDGarKw8XggCRJaKwQecyR3iSA=; 
-	b=lyWrtzxHomY1LT1lb/qyuScyIMV7gKCRPoE3c3Bx6CGpHjmvjPD0YIyWa0Zxepzx9yvjkOKGp2RTEl0Yyq3Rc1nXCD+TLExO2rnf25fssC0jUtv4yM8NI77cJzEXzp8cRLOxX2AdcMiPJArIk5ozi+BCZxDt7iAUhb+zUwQeWPc=
+	t=1752245879; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=kEyk9gUxmxGGqpdMez2kdxKmqgQQdyz75f8g3l8O+F0=; 
+	b=FYJPubdba2WS9Oxd+ltzCD+nVb4CVjmHzdoqQa3b1Ck/hUM1j7kIPSCgge51wfrr9KIp5wKdyA3VddFIMRYxsIK41Ie4NXNxmtZhtqDpSb0/0A7S0Y5v1exgUR2lr5ZaMdwoHA3mp/kXrKToFboZmq+kioffTDkxxM8N1kqXNUQ=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1752245875;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1752245879;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=Rl4uSsmt0R6ta2ds9zDGarKw8XggCRJaKwQecyR3iSA=;
-	b=dncZ4K9LDZnJZA9Kb6hls19yvSMJ8g8zlHpM+d4wvBeBhxAehFfmRJIRFRrJBzbT
-	JXbY8eTvgJNDmWUUUDm7hbUZMSKnQnjXNMaHI1iIIzPYDGyfvffjk8Qz3fsTsZxvclx
-	p/8TpHl04CH1dmgCA9S+sLBk0E5ozS+M4pXkflkI=
-Received: by mx.zohomail.com with SMTPS id 1752245874097527.3770039598888;
-	Fri, 11 Jul 2025 07:57:54 -0700 (PDT)
+	bh=kEyk9gUxmxGGqpdMez2kdxKmqgQQdyz75f8g3l8O+F0=;
+	b=aaqcBnF5Xda15uuNKnHDj3Hd2rA3hsPqIm8XjzsJdb6WHPd4bF7K+v99IX3Js5gJ
+	Qn1UlapnRbcJDp2ycM69mTk/A2n/Ncie4DqvBn7zNOZh5r7xL/Ip3dViuygldQedsVp
+	WN5bhr5PgzCUCzHgtj9G+1mVEB0AqCaBmJwsNjzc=
+Received: by mx.zohomail.com with SMTPS id 1752245877398787.5849825391359;
+	Fri, 11 Jul 2025 07:57:57 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Fri, 11 Jul 2025 16:57:35 +0200
-Subject: [PATCH 3/5] cpufreq: mediatek-hw: Refactor match data into struct
+Date: Fri, 11 Jul 2025 16:57:36 +0200
+Subject: [PATCH 4/5] cpufreq: mediatek-hw: Separate per-domain and
+ per-instance data
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,7 +63,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250711-mt8196-cpufreq-v1-3-e1b0a3b4ac61@collabora.com>
+Message-Id: <20250711-mt8196-cpufreq-v1-4-e1b0a3b4ac61@collabora.com>
 References: <20250711-mt8196-cpufreq-v1-0-e1b0a3b4ac61@collabora.com>
 In-Reply-To: <20250711-mt8196-cpufreq-v1-0-e1b0a3b4ac61@collabora.com>
 To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -79,84 +80,173 @@ Cc: kernel@collabora.com, devicetree@vger.kernel.org,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.2
 
-While the driver could get away with having the per-compatible match
-data just be an array of the reg offsets, the only thing it used it for
-right now, this doesn't really allow it to be extended in any meaningful
-way if some other per-variant information needs to be communicated.
+As it stood, the mediatek cpufreq driver could get away with never
+really having a private driver instance struct. This is because all data
+was stored in the per-domain structs.
 
-Refactor the code to make the DT match data a struct, which currently
-only contains a single member: the reg offsets. This will allow this
-struct to be extended with other members for other hardware variants.
+However, this complicates matters when actual per-instance data like the
+variant struct is introduced. Instead of having a pointer to it for
+every domain, have a pointer to a global "priv" struct that can be
+extended over time, and rename the "data" struct to "domain" to
+distinguish its purpose better.
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/cpufreq/mediatek-cpufreq-hw.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq-hw.c | 42 ++++++++++++++++++++++-------------
+ 1 file changed, 27 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
-index 74f1b4c796e4cc9ebccf50dd4e165a1eba03136a..b2aba1842226c7d24a8b9599ea62408cac9f803c 100644
+index b2aba1842226c7d24a8b9599ea62408cac9f803c..53611077d0d9a2d9865cf771568ab71abc0e6fbd 100644
 --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
 +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-@@ -41,15 +41,22 @@ struct mtk_cpufreq_data {
+@@ -35,13 +35,17 @@ enum {
+ 	REG_ARRAY_SIZE,
+ };
+ 
+-struct mtk_cpufreq_data {
++struct mtk_cpufreq_priv {
++	const struct mtk_cpufreq_variant *variant;
++};
++
++struct mtk_cpufreq_domain {
++	struct mtk_cpufreq_priv *parent;
+ 	struct cpufreq_frequency_table *table;
+ 	void __iomem *reg_bases[REG_ARRAY_SIZE];
  	struct resource *res;
  	void __iomem *base;
  	int nr_opp;
-+	const struct mtk_cpufreq_variant *variant;
+-	const struct mtk_cpufreq_variant *variant;
  };
  
--static const u16 cpufreq_mtk_offsets[REG_ARRAY_SIZE] = {
--	[REG_FREQ_LUT_TABLE]	= 0x0,
--	[REG_FREQ_ENABLE]	= 0x84,
--	[REG_FREQ_PERF_STATE]	= 0x88,
--	[REG_FREQ_HW_STATE]	= 0x8c,
--	[REG_EM_POWER_TBL]	= 0x90,
--	[REG_FREQ_LATENCY]	= 0x110,
-+struct mtk_cpufreq_variant {
-+	const u16 reg_offsets[REG_ARRAY_SIZE];
-+};
-+
-+static const struct mtk_cpufreq_variant cpufreq_mtk_base_variant = {
-+	.reg_offsets = {
-+		[REG_FREQ_LUT_TABLE]	= 0x0,
-+		[REG_FREQ_ENABLE]	= 0x84,
-+		[REG_FREQ_PERF_STATE]	= 0x88,
-+		[REG_FREQ_HW_STATE]	= 0x8c,
-+		[REG_EM_POWER_TBL]	= 0x90,
-+		[REG_FREQ_LATENCY]	= 0x110,
-+	},
- };
+ struct mtk_cpufreq_variant {
+@@ -63,7 +67,7 @@ static int __maybe_unused
+ mtk_cpufreq_get_cpu_power(struct device *cpu_dev, unsigned long *uW,
+ 			  unsigned long *KHz)
+ {
+-	struct mtk_cpufreq_data *data;
++	struct mtk_cpufreq_domain *data;
+ 	struct cpufreq_policy *policy;
+ 	int i;
  
- static int __maybe_unused
-@@ -157,7 +164,7 @@ static int mtk_cpu_create_freq_table(struct platform_device *pdev,
+@@ -90,7 +94,7 @@ mtk_cpufreq_get_cpu_power(struct device *cpu_dev, unsigned long *uW,
+ static int mtk_cpufreq_hw_target_index(struct cpufreq_policy *policy,
+ 				       unsigned int index)
+ {
+-	struct mtk_cpufreq_data *data = policy->driver_data;
++	struct mtk_cpufreq_domain *data = policy->driver_data;
+ 
+ 	writel_relaxed(index, data->reg_bases[REG_FREQ_PERF_STATE]);
+ 
+@@ -99,7 +103,7 @@ static int mtk_cpufreq_hw_target_index(struct cpufreq_policy *policy,
+ 
+ static unsigned int mtk_cpufreq_hw_get(unsigned int cpu)
+ {
+-	struct mtk_cpufreq_data *data;
++	struct mtk_cpufreq_domain *data;
+ 	struct cpufreq_policy *policy;
+ 	unsigned int index;
+ 
+@@ -118,7 +122,7 @@ static unsigned int mtk_cpufreq_hw_get(unsigned int cpu)
+ static unsigned int mtk_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+ 					       unsigned int target_freq)
+ {
+-	struct mtk_cpufreq_data *data = policy->driver_data;
++	struct mtk_cpufreq_domain *data = policy->driver_data;
+ 	unsigned int index;
+ 
+ 	index = cpufreq_table_find_index_dl(policy, target_freq, false);
+@@ -129,7 +133,7 @@ static unsigned int mtk_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+ }
+ 
+ static int mtk_cpu_create_freq_table(struct platform_device *pdev,
+-				     struct mtk_cpufreq_data *data)
++				     struct mtk_cpufreq_domain *data)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	u32 temp, i, freq, prev_freq = 0;
+@@ -164,9 +168,9 @@ static int mtk_cpu_create_freq_table(struct platform_device *pdev,
  
  static int mtk_cpu_resources_init(struct platform_device *pdev,
  				  struct cpufreq_policy *policy,
--				  const u16 *offsets)
-+				  const struct mtk_cpufreq_variant *variant)
+-				  const struct mtk_cpufreq_variant *variant)
++				  struct mtk_cpufreq_priv *priv)
  {
- 	struct mtk_cpufreq_data *data;
+-	struct mtk_cpufreq_data *data;
++	struct mtk_cpufreq_domain *data;
  	struct device *dev = &pdev->dev;
-@@ -200,9 +207,10 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
+ 	struct resource *res;
+ 	struct of_phandle_args args;
+@@ -187,6 +191,8 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
+ 	index = args.args[0];
+ 	of_node_put(args.np);
+ 
++	data->parent = priv;
++
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+ 	if (!res) {
+ 		dev_err(dev, "failed to get mem resource %d\n", index);
+@@ -207,10 +213,9 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
  
  	data->base = base;
  	data->res = res;
-+	data->variant = variant;
+-	data->variant = variant;
  
  	for (i = REG_FREQ_LUT_TABLE; i < REG_ARRAY_SIZE; i++)
--		data->reg_bases[i] = base + offsets[i];
-+		data->reg_bases[i] = base + variant->reg_offsets[i];
+-		data->reg_bases[i] = base + variant->reg_offsets[i];
++		data->reg_bases[i] = base + priv->variant->reg_offsets[i];
  
  	ret = mtk_cpu_create_freq_table(pdev, data);
  	if (ret) {
-@@ -336,7 +344,7 @@ static void mtk_cpufreq_hw_driver_remove(struct platform_device *pdev)
- }
+@@ -231,7 +236,7 @@ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ {
+ 	struct platform_device *pdev = cpufreq_get_driver_data();
+ 	int sig, pwr_hw = CPUFREQ_HW_STATUS | SVS_HW_STATUS;
+-	struct mtk_cpufreq_data *data;
++	struct mtk_cpufreq_domain *data;
+ 	unsigned int latency;
+ 	int ret;
  
- static const struct of_device_id mtk_cpufreq_hw_match[] = {
--	{ .compatible = "mediatek,cpufreq-hw", .data = &cpufreq_mtk_offsets },
-+	{ .compatible = "mediatek,cpufreq-hw", .data = &cpufreq_mtk_base_variant },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, mtk_cpufreq_hw_match);
+@@ -270,7 +275,7 @@ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ 
+ static void mtk_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+ {
+-	struct mtk_cpufreq_data *data = policy->driver_data;
++	struct mtk_cpufreq_domain *data = policy->driver_data;
+ 	struct resource *res = data->res;
+ 	void __iomem *base = data->base;
+ 
+@@ -283,7 +288,7 @@ static void mtk_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+ static void mtk_cpufreq_register_em(struct cpufreq_policy *policy)
+ {
+ 	struct em_data_callback em_cb = EM_DATA_CB(mtk_cpufreq_get_cpu_power);
+-	struct mtk_cpufreq_data *data = policy->driver_data;
++	struct mtk_cpufreq_domain *data = policy->driver_data;
+ 
+ 	em_dev_register_perf_domain(get_cpu_device(policy->cpu), data->nr_opp,
+ 				    &em_cb, policy->cpus, true);
+@@ -305,6 +310,7 @@ static struct cpufreq_driver cpufreq_mtk_hw_driver = {
+ 
+ static int mtk_cpufreq_hw_driver_probe(struct platform_device *pdev)
+ {
++	struct mtk_cpufreq_priv *priv;
+ 	const void *data;
+ 	int ret, cpu;
+ 	struct device *cpu_dev;
+@@ -328,7 +334,13 @@ static int mtk_cpufreq_hw_driver_probe(struct platform_device *pdev)
+ 	if (!data)
+ 		return -EINVAL;
+ 
+-	platform_set_drvdata(pdev, (void *) data);
++	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->variant = data;
++
++	platform_set_drvdata(pdev, priv);
+ 	cpufreq_mtk_hw_driver.driver_data = pdev;
+ 
+ 	ret = cpufreq_register_driver(&cpufreq_mtk_hw_driver);
 
 -- 
 2.50.0
