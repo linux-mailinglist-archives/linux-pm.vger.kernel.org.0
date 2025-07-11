@@ -1,139 +1,163 @@
-Return-Path: <linux-pm+bounces-30679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A57B7B01B25
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 13:51:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E3ECB01BBE
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 14:16:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CBC0179C44
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 11:50:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84C995A59CB
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 12:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08530293462;
-	Fri, 11 Jul 2025 11:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FD8724676F;
+	Fri, 11 Jul 2025 12:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iHFO21fS"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="g6k/UOfc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A0228B4EB
-	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 11:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBDB1DA4E
+	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 12:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752234454; cv=none; b=tPe45PlhpKsavv19t+m2vNP+HYm0qQmlJxQ4eZFiSMwRSuncIlupuGxNyeC2jpGWsNsfsu9KbY1koIVPsos8OaA1nXzA2aXstBoxiHs8I0yxxtqpQRq5FJUWZ4RHMhSZ3db9HoBxj/6zakQ61bWEBYLtofks0v0XEmIBExn/tiU=
+	t=1752236112; cv=none; b=dxpY4dcSOxcgxJlkTHPPrXCTvLQW9lOETJeQKAJQYj3Y5lq5PotAQJXdpS5lgCj/Pwz9pB0tJ9GMD3ZlN4dPoyPpmbMf7PToIUTfHkNXDvzSHTCK1njzGujW4Y7fZuENRH3RqxDfE1/XjKid7r3G0pXUf6J1qmSv8YrWFWVOylg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752234454; c=relaxed/simple;
-	bh=QJVaK3OzonhM172ouy0CpSbbwuoG2dejA4OnkSXs130=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jyFeVdEbqgeh7WjDhldWbgYzClzw9Rs1hNHhy7YZjdagSWHl1DWrhmAY6pcqTizDgk2djCKPyrfbsWnpEDthujIAAuy90CeA5nffYesobuDk1F8GNaRZ5XTyvnE3leRA0oLKHf6zSetiyK/LrFMY0jg0b7TxrxVblGavlkRvPUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iHFO21fS; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-55516abe02cso2005629e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 04:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752234450; x=1752839250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRhFukVlfvQMsLzBFVuMG+Qi50dL1WntO88bS057RO0=;
-        b=iHFO21fSeB6r0NI9Bn82bDDS8mZpmM3mfP7lbcTnFrvyFkVRYw6J+vgEdeyD22Y/au
-         toTAc+SxPYaIJ4Oec2eOpBKdGKEyPnWUs2yno2f/QYSYbW+xcsV6xyZw10nKYj3pACcF
-         HYXSaSTCNRDd5s/zAtMXywxrEoMVm9fef6hMkQq20T1EUEOFit2wX2baJIzDYQ/xVPEc
-         BCKQjLNb6Z+jv2KPbX+VZM9FxI9my0H4yQsXm3sJ98RccjP5MFGLwcUROwEfIGTilEVm
-         EosHI/RpkSeHABHQt/OysGmVQWtjjaUcv/3hY8ATMPy4H90Twi+SAXBbnuFP1Nro6ciM
-         VhuA==
+	s=arc-20240116; t=1752236112; c=relaxed/simple;
+	bh=Xjn5ySGEMA9LsrxbMTZ6SdqT5i31QukUV4A0p1xnku8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JkpN0JLCI7tie8XNe0UdScbm23f+QYmzyK1oAi+BHtFTXl76RiuwKqvNFfNntlPq9hk9Ke/dA67mD7wMkZGgJF1KeXamTMG9hK3XTtxuqe7xX+WQHedFdGN/NqEnOO/ORHqrGb1Gd+UL/y8P+mIniWwMNjZnfpf4J8T9f9MoX+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=g6k/UOfc; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56BB3J9Y031220
+	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 12:15:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	5WmSJVa8+LyzMZ7AuALMmZArLhe9+Oxn8lyjPgHFxns=; b=g6k/UOfch29P5CwI
+	pqtIbwhQNYh5wJ/FG+d5qTLMv3uOF9J4rZS8PlXlw4ARvQYZ96QHgm3DQFKi2uAz
+	v8rd+pwUwbnPMKXl/IyIel8uZh8YOw2CcTn9SZQMGQyQleDmkft5vZE2lYuss0/N
+	0HZWFHax5VC52ZJguWDzh5L/tBw9jOjjEMpR5Lieo0mOqKVvvdSTNqTuckwroswg
+	MvPwRtZeg1AAEOXG92f9aU+B5xtiRvfVbzo2fVY5JIr+qidvo+E3IboRLrDrEVtX
+	3H8NO0Ot3lxVFcNUvMbC+TThfLfawJliw6yrbBHTNGmVZCRiUyfBfZX1oqLCpCda
+	FmRWPw==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47smberjhp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 12:15:10 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d3eeb07a05so31664885a.2
+        for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 05:15:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752234450; x=1752839250;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uRhFukVlfvQMsLzBFVuMG+Qi50dL1WntO88bS057RO0=;
-        b=jOloNDJ7Lu5CDp5BtuUXCY4WazzNbB6pomGhyXfgNJrG8MBZjcVm1yJzuF39SfPvrz
-         n7bpKEp69IBedRQ/HWKuunSogfGDhFUne2PEA13APpqF//Wi4ebTSlHPHL5SXx9PLgqo
-         7WKr53p0FeQsMBj3n4q2cbJ0tDc+AXbOBDtpZ6yaKm2tL3uCJENnjuwz4xk8rKKrJJGr
-         Vi604DQrhi6hRn+5qb5KN9wEYxFbhGibsuuqdjDFRkNUI5VMQvqDFuOXsDL7i0/l5Vl+
-         X66z5/MQsc0Da82+gym4/xWTBExvH+jFqhVIS8QY8RcGJW/6VodvvO6Zij6INsRyKdJZ
-         fBPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUt/TuBYaGUGHOfCuPu4VPIy3aAjmAwOj14GKca8mRVD61bCScwgzzslsd1b7On0Ecayc1LfvtFdQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3mUF54gvyxtVMmnSzcUxCOKs6TkgRAvwkhcObQm9u6PzLFfmB
-	HgPds8QFzaebrd52PFOCEifZuAMrRFXQTduITE9vnrxdGJa+3dbr8wrI1hcUTdfzcOkEYSxChUX
-	Hoqsg
-X-Gm-Gg: ASbGnct/9uHwVOzSeAwaP4zk5xwMDgpLxF3kxne629Vwk/aqkZoNAdcHFCD8psaHPcG
-	GFSvke5b/wlWI3VWz7A/xaxDyxQKdYUHe/42pyFNzx0CcBdb8PpVEgl4ftSt+49isyShOzvka3p
-	BkeQ0MqDvZFduB7ra+4GjDTtNWE6FtJz1tjTPUGPgAZAnARoQxWPqNeNMOVZX/7/T7RQY33YMY1
-	VDcpLPSyYWQXsq/I8JAme+K3aa46Y2qOwClS8QeRSzCka0FcylnwVTd+AIEaf6qEp22s02MAT0+
-	9Moo9fhsEOODWc34P0owVS7pNqmIYvYHDtxctqYuS0GTPKKD+I+pvdQcGaReXK0WKOmZEwo3U/h
-	XzH1p+anF86hlRTxuqJH+segoxzdD6iqjay/0KZGRWlYO7SYboWCTkw1feKuWDOTBFhLeCQwfxk
-	yYQl+d6lY=
-X-Google-Smtp-Source: AGHT+IG12UDrTXalEDU0YKI0OWyt7RE273XbDSoBAUX3pRGix+0Sj5LWHFUpgBtVPKp9Q0+KnL0ueA==
-X-Received: by 2002:a05:6512:3405:b0:553:243c:c1d3 with SMTP id 2adb3069b0e04-5590071bca8mr2492286e87.18.1752234449986;
-        Fri, 11 Jul 2025 04:47:29 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55943b60f09sm915928e87.154.2025.07.11.04.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 04:47:29 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state
-Date: Fri, 11 Jul 2025 13:47:19 +0200
-Message-ID: <20250711114719.189441-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1752236109; x=1752840909;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WmSJVa8+LyzMZ7AuALMmZArLhe9+Oxn8lyjPgHFxns=;
+        b=hpYLAmOs2HxPanH5mIxTw0Ro+9OSZeNvz/pE112oA7FTqqNKuzA60hwjaSjohsno7t
+         sW/FDRPKxFy6UPDNnmq6QKWNA7SgWU/iDpgoOu0yh/7HEb9Rrx4RLWhQzDMcy2eKTVnU
+         OFu8g1qefA9U1pfSHHV/8lS5nrYub9MJvbzgDfCkKBPMrnB1qq+Tjpkt8WUXzQNA4dGy
+         TKny8BbonQMZ4azoWu4CSOH85xnvj6Jt7B/pGd+HQgFDnnXQ9h0DYxc0w09FyO3MXcE9
+         EqoQSdWhCsW6de74FljckWZ9xVgRxcLDOgkZMLcRHuHnL7WNGhUZ4qrRbSkId88o1wxH
+         1uqg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTdSbzz0kS/fwxh3ZeCqH25a8kV7Aq/8aIpzs6V1njguMu7B33vZxoch2NtcXRbF24PanVHsIpXQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFjauphlAjbhl1w+CkW6a6DiMhRgDAIGLMOQR4H/aO4mrONcZD
+	0+7igA8TsIRyal8vMBKzJvRkF3qwNz4gLVvBCfQy4N2gOiUOpyps40+CJdfiKa/vrCxHGPWB2p9
+	mc0afTh2U1aGOXZItv6ZDKqm6JZ2bQ6CpyoFkSOun5IJxmUSRcQAuorXKW78Agg==
+X-Gm-Gg: ASbGncuGsWCYHiyyv5ThWX2eX+W+7FK0LnOS7W+nUf8NQMMSRLChYOWCEt5upHy8823
+	WT27BXq4Eq25wDYSM4mdBDDNaa9kjE++L1JA9JTyhHypfx8cnQ2ZuTOJvgF8YtUmYofWG7NP1Vi
+	hOfrXhIlCj+cnqaUWzf5rBGvq6/JEhGd0t8qa9Gg4zzVpJOV0AeuB7/kbBb5y8EcY1ezboYPGjo
+	O0lNh+3UouScSwBAMFq6sQZTQ79OsdAKauGtlj5HjM9HfEIX5+0MgIP/A70AgcxOLIhgnl5Btx9
+	SeIIclAdegkzg6APSmyMwIysxXjOV7MILAr9YLbbWKvP01UT27hWCEjzxzsrZKypfLhUs+Cauit
+	fL65ZtSvB9nrGFwJ905bc
+X-Received: by 2002:a05:620a:438c:b0:7c5:8ece:8b56 with SMTP id af79cd13be357-7de989b3079mr130008585a.4.1752236109105;
+        Fri, 11 Jul 2025 05:15:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE9IlpHxAb7R4TrzGfVeGwtAC/FU5V/+FMIw/QGwRVWYeM3sTSRsEHYiAI4QhJLyZVlXQj3Zg==
+X-Received: by 2002:a05:620a:438c:b0:7c5:8ece:8b56 with SMTP id af79cd13be357-7de989b3079mr130003685a.4.1752236108508;
+        Fri, 11 Jul 2025 05:15:08 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e82964f5sm293248466b.143.2025.07.11.05.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Jul 2025 05:15:07 -0700 (PDT)
+Message-ID: <93082ccd-40d2-4a6b-a526-c118c1730a45@oss.qualcomm.com>
+Date: Fri, 11 Jul 2025 14:15:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 05/10] dt-bindings: clock: ipq9574: Rename NSS CC
+ source clocks to drop rate
+To: Rob Herring <robh@kernel.org>, Luo Jie <quic_luoj@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Anusha Rao <quic_anusha@quicinc.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        quic_kkumarcs@quicinc.com, quic_linchen@quicinc.com,
+        quic_leiwei@quicinc.com, quic_pavir@quicinc.com,
+        quic_suruchia@quicinc.com
+References: <20250710-qcom_ipq5424_nsscc-v3-0-f149dc461212@quicinc.com>
+ <20250710-qcom_ipq5424_nsscc-v3-5-f149dc461212@quicinc.com>
+ <20250710225412.GA25762-robh@kernel.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250710225412.GA25762-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzExMDA4NiBTYWx0ZWRfX0JAN82njbX/i
+ MI1/ZBbt2LslvcIG3YH/v93Dns+tVZQL5+ANn2HuBGXZgufoAgkA3mwl78ZC95GV7/t19nUQR9F
+ JGlAd857HozFp9Zbkl+o9dinAQxxOIiOTEUHum92btNIjekLRDKh062442x3KCXwUtuBVpQo0sB
+ M3soBZQptXPa1iVtf1b8L4UwJMQ7cfMepXVk5a3brxE4Ja2Pv+UxhW8hRY9wgxa0UP0mQOWhu7S
+ JESqaa6+o4vwzQi1HSplXw+Nf5KP8fzlM1PRSRxyTLPWaa26F/UGaY86i1IdE/kh0l0Hglen5TP
+ 5TK0hGbJp0ad0qrfm3vOu9pgoe4pDSSd9YphLCTArAisvJP5v+5I8/HPMQZ2QKh1QNsM58BwXBQ
+ IVoN7yVxWGKHl7WedAqDawrvE8pAfrCFdqdSVJ4uAON7oTczCQSpVurjzA8rfXalwb+YCifi
+X-Proofpoint-GUID: PVrtC2axcaIGJZrYdJRzGcuX5EJGqq2l
+X-Proofpoint-ORIG-GUID: PVrtC2axcaIGJZrYdJRzGcuX5EJGqq2l
+X-Authority-Analysis: v=2.4 cv=VpQjA/2n c=1 sm=1 tr=0 ts=6871004e cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=icw32r7lKnDoEl_Wh00A:9
+ a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-11_03,2025-07-09_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 malwarescore=0 suspectscore=0 clxscore=1015 impostorscore=0
+ phishscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507110086
 
-It's has been reported that some Samsung platforms fails to boot with
-genpd's new sync_state support.
+On 7/11/25 12:54 AM, Rob Herring wrote:
+> On Thu, Jul 10, 2025 at 08:28:13PM +0800, Luo Jie wrote:
+>> Drop the clock rate suffix from the NSS Clock Controller clock names for
+>> PPE and NSS clocks. A generic name allows for easier extension of support
+>> to additional SoCs that utilize same hardware design.
+> 
+> This is an ABI change. You must state that here and provide a reason the 
+> change is okay (assuming it is). Otherwise, you are stuck with the name 
+> even if not optimal.
 
-Typically the problem exists for platforms where bootloaders are turning on
-the splash-screen and handing it over to be managed by the kernel. However,
-at this point, it's not clear how to correctly solve the problem.
+The reason here seems to be simplifying the YAML.. which is not a good
+reason really..
 
-Although, to make the platforms boot again, let's add a temporary hack in
-the samsung power-domain provider driver, which enforces a sync_state that
-allows the power-domains to be reset before consumer devices starts to be
-attached.
+I would instead suggest keeping the clocks list as-is for ipq9574 (this
+existing case), whereas improving it for any new additions
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/all/212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/pmdomain/samsung/exynos-pm-domains.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index 9b502e8751d1..5d478bb37ad6 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -147,6 +147,15 @@ static int exynos_pd_probe(struct platform_device *pdev)
- 				parent.np, child.np);
- 	}
- 
-+	/*
-+	 * Some Samsung platforms with bootloaders turning on the splash-screen
-+	 * and handing it over to the kernel, requires the power-domains to be
-+	 * reset during boot. As a temporary hack to manage this, let's enforce
-+	 * a sync_state.
-+	 */
-+	if (!ret)
-+		of_genpd_sync_state(np);
-+
- 	pm_runtime_enable(dev);
- 	return ret;
- }
--- 
-2.43.0
-
+Konrad
 
