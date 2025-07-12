@@ -1,175 +1,195 @@
-Return-Path: <linux-pm+bounces-30712-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30713-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89B28B0264B
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 23:19:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 463F3B028EE
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 04:19:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 022D21C25FC3
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Jul 2025 21:20:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB6E7A46813
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 02:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45BC3221294;
-	Fri, 11 Jul 2025 21:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 202B7A59;
+	Sat, 12 Jul 2025 02:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mH1Lj303"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TnoQGQRt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B9A1DE3CB;
-	Fri, 11 Jul 2025 21:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585A617993
+	for <linux-pm@vger.kernel.org>; Sat, 12 Jul 2025 02:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752268783; cv=none; b=ZUQgLC9dBzhi7pNgy0DvpLx3Z/IcuQZKUCfw1GzW5uZsQmLIC0LLLZd+p+WrkPO5Lf2tOw0HHd1tTXyJ4EBWbyrJMf89U2giaGhYkrENwVzbvLwjBGTVVpRi4Pt/cr0rKEXNu92sXstkaOX5P2zF5DVVMkcWm3oD1+XMq6RHSzc=
+	t=1752286768; cv=none; b=E2WoH4yhB2ZqO1PLjb3dVv1EZHD+bkPSWDcrvrxbWtWPD5zsxKQHxTyxy0HejTKcoLXX/oegE6mbxVM1IZiJvuaV5UEAYJVt0Lq7mNvR41LAPIiwg4TnjkPjLa9fkRlIQvlwnU6qqg5ougioTAOYm6wihyd8rIAHY8E6RNNQwGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752268783; c=relaxed/simple;
-	bh=Y6ruZaklCb+BcpDgczIa2wplngYzuGzV5dv2F1vLS0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=dF0oZQ8JVbL2ix/iqZmn7kJRc5BM26B9CjQBMwSf2Hd+0HJicp1O019wzIPvKTV2ORYZoZGo7UTZ025D1howVmqQve5kOSS1oRgRYDP921pAobbGN4ldIOZp6ECUasiB+Kte1REqQXaQlTSM+GE+CCgPqJvzSCNrXC/v85S0xDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mH1Lj303; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D16C4CEED;
-	Fri, 11 Jul 2025 21:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752268782;
-	bh=Y6ruZaklCb+BcpDgczIa2wplngYzuGzV5dv2F1vLS0E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=mH1Lj3030pRwdBffwlBwUNtfC/W9h1AGGbZjnM9KIqSD+rJJtEmooIW7m985xTw3n
-	 uzbYN9BDtyFQW7MEOJfWpUAyJdNCpUaZcSxLy1IsGcN0+OhNUiN01iem6/WGz/KoFC
-	 ctXT0ZD3n7cSOnT2DRCqxKhY5a6w0ltU5WNw3/Ik/BeyytNG1VpYG9/Hdzl9Ktcl+9
-	 I7dzan0lFw1EFcS5l86tIVG7INFPeMjB3CzFM27BjrDxJ4y595ks9TXbVfwn2qP3GL
-	 Gxj3GDcl2bibesmcqDI3tj4ewVkJ/jRWQuCVB2EsJ//IZVtOJi4CopQ7zKdkWrblzL
-	 FSHj96XEGWaKA==
-Date: Fri, 11 Jul 2025 16:19:41 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: David Box <david.e.box@linux.intel.com>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	bhelgaas@google.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-	vicamo.yang@canonical.com, kenny@panix.com,
-	nirmal.patel@linux.intel.com, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI/ASPM: Allow ASPM enablement for devices behind Intel
- VMD
-Message-ID: <20250711211941.GA2306776@bhelgaas>
+	s=arc-20240116; t=1752286768; c=relaxed/simple;
+	bh=MvNLqhKnm9tWE58Gy7d2l/AjmUMR9CdzU5l3kGcW4VM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZgsKRs4ZzpI18nE2qRVjbcWYoSjVxPod7ZrPPmZVv+wxMNFQA/gTBaAT0ydc3+32+2VVM+yruzOYRKI6ZRHSNtWBqYHejbGEGdS0YNVoN25+X4u2pSZEp4T+tKQ8q6toXiLO7+DgG26K6g6K6tK6j4yqTjNI6+GLKhl3VGOERhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TnoQGQRt; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-553b6a349ccso3286662e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 11 Jul 2025 19:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752286764; x=1752891564; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGsy4dRD4YlqKx46rnboov0LsZI/I/Oxbnuh0sVluT0=;
+        b=TnoQGQRt1eh4sYPhYXTqN0bwal1iSxxDqCEuAiAusIgba5QZMlpTz3spC7ISOdbLdP
+         PQCLv536iL4QgcmCJ0SQkpApAEG11SjxPRpteuE5iUxBy9t7+0tXaZXoKnMe7OB1aOai
+         OJiiQVQmZm4ug0W1YLwqV/03kgItNNGhwcfTfSCbT6Giw1xAKOljVc/GKhO3VF9spTFl
+         fTLKmjKj55w+SKzvX861xRXQiF1pinECObx2TzuER8e7okRsIERWFmQbOQo3JOhUVoys
+         QRzKjNBbiRt9wLm8NCgeRvt8QjCWkTNpZYW8cnDyiF2xqiLCpSCCdu8X+vx8EOW0Bjjw
+         QYgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752286764; x=1752891564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BGsy4dRD4YlqKx46rnboov0LsZI/I/Oxbnuh0sVluT0=;
+        b=WH1crRiIRY2FrKShUmrbz85ml9FS2G8ni4ITReTJ9lVydUZaG8XpLOpesTuZ7dwVPw
+         oe4ot1VWmp4crLoBWZY267V8Z44qWhqvIeJeSPmFzLHkCKy/vpJjARMfIVr10hoLJGxa
+         bl1bfmi9BIB9bBnO2BqiTpdeq1S3AqnEIkyt3DgJ3DIwoJQ1bxhqCg6fD6yAgTCGPAhH
+         kSSpcuqkjkZX9diGNBuWQ4obmKMgfoBsGQj5v3UrNWA/kD3hK5C76atqu5eaoNokX7Od
+         B8TbaPXXIIchaYcdY0dvkUCL716ay+n4x5HY9wZDdrsXMdaUxqR3o+LMF1cs9gCVPi7G
+         349g==
+X-Forwarded-Encrypted: i=1; AJvYcCXjuUUOloVDymXlkhMHuAamYr7nLTfVaUNiWkZbUutKiJnEkcJfIaAvNkeeToNwqNuCPBjusIKwgQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3H3l1PTsfZB3RJocMSOwfTlqHpc/RFIF1qK8cI3E1Ki1nvpLB
+	w77hx3AW/rJ4H8a/+XEtucn7A0jzzqb0DpmrVQ14Xz1kOyiCmwWRjP36gB041icAGpK1kUSju6C
+	81IOPlpm9NM40wBuvY0ltryDoLZ/AZSQOm6U4ruQ=
+X-Gm-Gg: ASbGncuIKm2gT3MYdCNbwA2peu+sy3Asbd+P2sI/91qObpnmLjzi6DJMngl2DM+s0w4
+	koogA9SqoJvgEa+1UKpexC8eo3m18rYOUYoHxtSj8ugMRAxiSaA57NOedZPYvnd4Knf36emEs2Z
+	Mm3KDtU7NzRynEZkw0N18dz4uMj0EE4cAFIspoCIzt3hyojSM7oagxamoXbC5eWATF8WLvRlh1Y
+	v8BO6rRWdksXI8locwOmyYj0L7ppAxTMMzI
+X-Google-Smtp-Source: AGHT+IERGSMZprnmjmswl+nIzfWcSM0tYb29xmZk/NuCanGaERTLD7955zRy3xM1RQTP+jgABlNVrDjD85FH1QjzX90=
+X-Received: by 2002:ac2:4e01:0:b0:553:358e:72a8 with SMTP id
+ 2adb3069b0e04-55a046001d9mr1640746e87.38.1752286764221; Fri, 11 Jul 2025
+ 19:19:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ohil4of5wkoowdwouawjwlrmmmpeim2miscynn35v4ddg7zaoh@rebfuhcozirz>
+References: <3cbd9533b091576a62f597691ced375850d7464a.camel@decadent.org.uk>
+ <CANDhNCoYPX_5m-v_sR4TJ3Xj5TVtrMLP8Bswo_-_+BMXwWUkjg@mail.gmail.com>
+ <CANDhNCqK26S7p0nypKOytgvzKUL8CMMr4-JbN-8PkNc=Em6VYA@mail.gmail.com> <CAJZ5v0j+s35bwjcRf3R7T6Om0CGd6HsYqC_S4b7a7Mj4HNwJQA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j+s35bwjcRf3R7T6Om0CGd6HsYqC_S4b7a7Mj4HNwJQA@mail.gmail.com>
+From: John Stultz <jstultz@google.com>
+Date: Fri, 11 Jul 2025 19:19:12 -0700
+X-Gm-Features: Ac12FXyI8kBc43hsn-fbzDpUZgjJ_pZte22xX3JWMIyKf8tOb-mAeqxBRTRIy8c
+Message-ID: <CANDhNCr+7=1W9Oiq3AupXRVasU8FgLorzOnf3_RhYp-WK4qbyg@mail.gmail.com>
+Subject: Re: User-space watchdog timers vs suspend-to-idle
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Ben Hutchings <ben@decadent.org.uk>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-pm@vger.kernel.org, 1107785@bugs.debian.org, 
+	Tiffany Yang <ynaffit@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 11, 2025 at 09:06:27AM -0700, David Box wrote:
-> On Fri, Jul 11, 2025 at 05:49:03PM +0300, Ilpo Järvinen wrote:
-> > On Fri, 11 Jul 2025, David Box wrote:
-> > > On Thu, Jul 10, 2025 at 09:53:18PM +0200, Rafael J. Wysocki wrote:
-> > > > On Thu, Jul 10, 2025 at 3:16 AM David E. Box
-> > > > <david.e.box@linux.intel.com> wrote:
-> > > > >
-> > > > > Devices behind Intel's Volume Management Device (VMD) controller reside on
-> > > > > a synthetic PCI hierarchy that is intentionally hidden from ACPI and
-> > > > > firmware. As such, BIOS does not configure ASPM for these devices, and the
-> > > > > responsibility for link power management, including ASPM and LTR, falls
-> > > > > entirely to the VMD driver.
-> > > > >
-> > > > > However, the current PCIe ASPM code prevents ASPM configuration when the
-> > > > > ACPI_FADT_NO_ASPM flag is set, disallowing OS management. This leaves ASPM
-> > > > > permanently disabled for these devices, contrary to the platform's design
-> > > > > intent.
-> > > > >
-> > > > > Introduce a callback mechanism that allows the VMD driver to enable ASPM
-> > > > > for its domain, bypassing the global ACPI_FADT_NO_ASPM restriction that is
-> > > > > not applicable in this context. This ensures that devices behind VMD can
-> > > > > benefit from ASPM savings as originally intended.
-> ...
+On Fri, Jul 11, 2025 at 1:55=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+> On Fri, Jul 11, 2025 at 12:34=E2=80=AFAM John Stultz <jstultz@google.com>=
+ wrote:
+> > On Thu, Jul 10, 2025 at 2:59=E2=80=AFPM John Stultz <jstultz@google.com=
+> wrote:
+> > > On Thu, Jul 10, 2025 at 12:52=E2=80=AFPM Ben Hutchings <ben@decadent.=
+org.uk> wrote:
+> > > > There seems to be a longstanding issue with the combination of user=
+-
+> > > > space watchdog timers (using CLOCK_MONOTONIC) and suspend-to-idle. =
+ This
+> > > > was reported at <https://bugzilla.kernel.org/show_bug.cgi?id=3D2005=
+95> and
+> > > > more recently at <https://bugs.debian.org/1107785>.
+> > > >
+> > > > During suspend-to-idle the system may be woken by interrupts and th=
+e
+> > > > CLOCK_MONOTONIC clock may tick while that happens, but no user-spac=
+e
+> > > > tasks are allowed to run.  So when the system finally exits suspend=
+, a
+> > > > watchdog timer based on CLOCK_MONOTONIC may expire immediately with=
+out
+> > > > the task being supervised ever having an opportunity to pet the
+> > > > watchdog.
+> > >
+> > > So I don't know much about suspend-to-idle, but I'm surprised it's no=
+t
+> > > suspending timekeeping! That definitely seems problematic.
+> >
+> > Hrm. The docs here seem to call out that timekeeping is supposed to be
+> > suspended in s2idle:
+> >   https://docs.kernel.org/admin-guide/pm/sleep-states.html#suspend-to-i=
+dle
+> >
+> > Looking at enter_s2idle_proper():
+> > https://elixir.bootlin.com/linux/v6.16-rc5/source/drivers/cpuidle/cpuid=
+le.c#L154
+> >
+> > We call tick_freeze():
+> > https://elixir.bootlin.com/linux/v6.16-rc5/source/kernel/time/tick-comm=
+on.c#L524
+> >
+> > Which calls timekeeping_suspend() when the last cpu's tick has been fro=
+zen.
+> >
+> > So it seems like the problem might be somehow all the cpus maybe
+> > aren't entering s2idle, causing time to keep running?
+>
+> Well, there is a suspend-to-idle path in which timekeeping is not suspend=
+ed.
+>
+> It is the one in which cpuidle_enter_s2idle() returns 0 (or less)
+> causing cpuidle_idle_call() to fall back to call_cpuidle() after
+> selecting the deepest available idle state.
+>
+> This happens when the cpuidle driver in use doesn't implement
+> ->enter_s2idle() callbacks for any of its states and the most
+> straightforward remedy is to implement those callbacks in the given
+> cpuidle driver (they must guarantee that interrupts will not be
+> enabled, however).
 
-> > > > > +       /*
-> > > > > +        * Devices behind Intel VMD operate on a synthetic PCI bus that BIOS
-> > > > > +        * and ACPI do not enumerate or configure. ASPM for these devices must
-> > > > > +        * be managed by the VMD driver itself, independent of global ACPI ASPM
-> > > > > +        * constraints. This callback mechanism allows selective ASPM
-> > > > > +        * enablement for such domains.
-> > > > > +        */
-> > > > > +       vmd_aspm_default = pci_get_vmd_link_state(parent);
-> > > > > +
-> > > > >         /* Save default state */
-> > > > > -       link->aspm_default = link->aspm_enabled;
-> > > > > +       if (vmd_aspm_default < 0)
-> > > > > +               link->aspm_default = link->aspm_enabled;
-> > > > > +       else
-> > > > > +               link->aspm_default = vmd_aspm_default;
-> > > > 
-> > > > Well, this is not nice.
-> > > > 
-> > > > First off, it adds VMD-specific stuff to otherwise generic
-> > > > ASPM code.  Second, it doesn't actually do anything about the
-> > > > aspm_disabled checks all over the place, so they will still
-> > > > trigger even though ASPM will be effectively enabled for
-> > > > devices on the VMD bus.
-> > > 
-> > > I agree that it's not nice to be mixing VMD specific code here.
-> > > It's a working bad solution to come up with a working good
-> > > solution :)
-> > > 
-> > > The reason this patch works is that the aspm_disabled checks
-> > > only gate OS-controlled ASPM configuration. They don't affect
-> > > the BIOS default values, which are what we're setting in
-> > > link->aspm_default. The ASPM code uses link->aspm_default as the
-> > > fallback when ASPM is globally disabled, which is exactly what
-> > > we want for devices behind VMD where the driver, not BIOS,
-> > > effectively is the platform provider of the defaults.
-> > 
-> > Oh, this was a big news to me.
-> > 
-> > So what you're saying is that if aspm_disabled is set,
-> > ->aspm_disable cannot be set and thus pcie_config_aspm_link() that
-> > is not gated by aspm_disabled can alter ASPM state despite OS not
-> > having ASPM control???
-> 
-> Yes, that’s correct. Bjorn can confirm, but I believe this is by
-> design. The aspm_disabled flag is really a bit of a misnomer. It
-> probably should have been called something like os_aspm_disabled.
-> The intent as I understand it is that, when disallowed, the OS
-> cannot select or manage the active ASPM policy, but it can still
-> configure the link to match the BIOS provided policy.
+It seems like in this case maybe would it be better to abort the
+suspend if the hardware doesn't really support it?
 
-Right, there's a long ugly history of this, here's the pcie_no_aspm()
-comment:
+> There are also cases in which suspending timekeeping is delayed for
+> various reasons.  For instance, on some systems, if the temperature is
+> too high, the platform will refuse to enter its deepest power state
+> (ask platform designers which they thought that this would be a good
+> idea), so the kernel waits for the temperature to drop before it
+> attempts to go for proper suspend-to-idle.
 
-  /*
-   * Disabling ASPM is intended to prevent the kernel from modifying
-   * existing hardware state, not to clear existing state. To that end:
-   * (a) set policy to POLICY_DEFAULT in order to avoid changing state
-   * (b) prevent userspace from changing policy
-   */
-  if (!aspm_force) {
-	  aspm_policy = POLICY_DEFAULT;
-	  aspm_disabled = 1;
-  }
+Hrm. Practically how long would this thermal delay for s2idle be?
 
-which came from 3c076351c402 ("PCI: Rework ASPM disable code").  All
-the ASPM disable, force, support_enabled, policy, etc flags make this
-ugly and impossible to read.  I guess renaming might help a little.
+> Moreover, if there are wakeup events while suspended that do not cause
+> the system to resume (you may regard them as "spurious"), timekeeping
+> is resumed and suspended again every time this happens.
 
-> In other words, ASPM isn’t fully disabled. It’s just not under OS
-> control. The BIOS values, reflected in link->aspm_default, remain
-> valid and pcie_config_aspm_link() can apply them regardless of the
-> aspm_disabled setting.
-> 
-> > ...That's really odd logic which the ASPM driver seems to be full of.
+Ok,  I'd expect it to be resumed and suspended (though I'm wondering
+if that should be rethought)
 
-+10
+> So in general time may keep running at least somewhat in the
+> suspend-to-idle flow, but this also happens during any system
+> suspend-resume flow (timekeeping is only suspended after all devices
+> have been suspended and it takes time to suspend them all and
+> analogously for resume).
 
-Also the ugliness of pcie_aspm_init_link_state() being called
-completely out of the usual enumeration flow.  And the parallel device
-hierarchy maintained in struct pcie_link_state.  And config options to
-set the default policy.  Ugh.
+Yeah, for small amounts of time, I do expect that the suspend time
+will be slightly shorter than the time that applications are frozen -
+obviously to your point about the suprious irq case, that delta might
+grow with suspend time, but I'm hoping we're still dealing with
+relatively small amounts that won't confuse applications.
 
-I hope we can avoid adding VMD-specific code in aspm.c.
+But from the bug report it sounds like timekeeping is just never
+getting suspended at all, which is unexpected.
 
-Bjorn
+thanks
+-john
 
