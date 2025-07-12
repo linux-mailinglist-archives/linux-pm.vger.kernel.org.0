@@ -1,211 +1,132 @@
-Return-Path: <linux-pm+bounces-30721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30722-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05E46B029BF
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 09:42:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2283CB029CB
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 09:52:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062AF1C22513
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 07:42:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79555581306
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 07:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997D3221703;
-	Sat, 12 Jul 2025 07:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EAF4215F4B;
+	Sat, 12 Jul 2025 07:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JstjVc0b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVUob5A/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDAA22157F;
-	Sat, 12 Jul 2025 07:41:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CC18F5B;
+	Sat, 12 Jul 2025 07:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752306075; cv=none; b=eBjg7Vaw99KU9l4N29x8Di0zLdzoj7lZTCEi03FrXf+/tkMo3alWuQu8VNAZJWKFE07qg2z3m2QWc/ZvhGtY1LuD8LH6zWbPyv5Gz/hr3sanUCiyc6q/0Tq6eT81phRKP1UTSL4v1Hvl4qKqhstxWmfTvrZRYezgf4hB+JAMTv4=
+	t=1752306757; cv=none; b=s8Tlu4uOQyGYcei8SRH4g8tReoId+KjYS0JEdy2EwHT/xOu/Z8AnFhFWAhUxtUQ+SIgRdTiHrkZvWnOFQE+taoEUpCu2/ehSRd6T0gTvnkSpaJrYElXgFOsIIjRam5E+yj/irwPmFszDcfWA6RfrW7i50nI4zzMs4U58etAGVY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752306075; c=relaxed/simple;
-	bh=kc63JS6G4xP4lSzu82XCqj2vToEGgOo4rcZGpLG9JOc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=iYoeJWpDxpH8BwgbF5LybJ9p12luWrtEew2yXUCGNbxKj+5TUNdTuYwLdffxzjIbCnrwdLV+KjFweKRQxLEkQag95zXLHnPGsfhYrCf1Cz/9jRCJQfVrCqb7KkqWVkK5Kft7pnDnTIyT7sdynT5ryQPSwoKGa+8uH7p0kauLHC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JstjVc0b; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752306073; x=1783842073;
-  h=date:from:to:cc:subject:message-id;
-  bh=kc63JS6G4xP4lSzu82XCqj2vToEGgOo4rcZGpLG9JOc=;
-  b=JstjVc0btU85uLkvg4jdTZJxJO76yJhkm2FCw1yY9maPTSSrhgCaryfX
-   z925zy+BN1hIAC6CwmWXKWr1t++C0wh9oZOgxWbPMrPygy9mZNEjjUTLN
-   eWvBWDRnVVGk9cyt+8rfNVTXA0WqVkcAEboXPNUD1rHGlWVJ4o+6FUafq
-   G9nfVEDxnpqH+/qN6KN8/curAEMC+uSi4vBhaA5Cf5U8rKROHeE2XGE0F
-   TyI67wX53mSsfBncc/acQPhIHBIOAgldf8cEGXm/gJ0VIk9dxr9Z6jowF
-   W0D7DWMI9XwQNjEsThoT2KoqmGjxqyHnsosaxVLqmvaC3Cn6rIBkFf/cE
-   Q==;
-X-CSE-ConnectionGUID: TC1LPZqOSFeSftqE7UZn/Q==
-X-CSE-MsgGUID: TztxU9yMRsOvZnj/lVmrZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="42222576"
-X-IronPort-AV: E=Sophos;i="6.16,306,1744095600"; 
-   d="scan'208";a="42222576"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 00:41:13 -0700
-X-CSE-ConnectionGUID: 7GATgJq6SF2IkOiokvTAgw==
-X-CSE-MsgGUID: Dus/9sDNQ2OK5zhSbKcfiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,306,1744095600"; 
-   d="scan'208";a="187507328"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Jul 2025 00:41:12 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uaUr7-00079P-2N;
-	Sat, 12 Jul 2025 07:41:09 +0000
-Date: Sat, 12 Jul 2025 15:40:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 2a9fac3d32db6a4f7c0b4647aa17c183cf3afa19
-Message-ID: <202507121532.Vhk5emrG-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1752306757; c=relaxed/simple;
+	bh=Ovl3SBGISov0rIfRZoGndqdQZutg9gmcb12N601d76M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qzWgfUpgbH8ajLOjNcqu/M1HX+Cks/dVd0SnHO5Z1mfgNGa841unswDXJEeoWVM5Qf9YKKv1R+aSSWNFv6UriYOV9f/krPaUcf6DEmLkgxwqHr+AaLjc2vw+0ro5PhWooZDB2vVCoujMu3XKFJiJcge06zrnY9+wJsQi7vpjaMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVUob5A/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F96DC4CEEF;
+	Sat, 12 Jul 2025 07:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752306756;
+	bh=Ovl3SBGISov0rIfRZoGndqdQZutg9gmcb12N601d76M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BVUob5A/gBKrAEWEqetuMhE854N/Cx9j+wTJxPEGV75EdKnFCWjWYJRqCf6K5d4wz
+	 f+LEiPVa935i3LQF3TSdyoK5l4CIAf/HV0vTGvfd8ai+dWtTmJ+w2931kd/t6oupiV
+	 x6HVNOvSLPLGgMCFRmDEqEBY9kytRzo/aDWeb1C9Kju0wGbOxq+tSfvzgssin3VYv4
+	 7uhSyNP1NlTJYC84V/S5/j7nRHfkhvkOX1SHlA0uVCeplcmh9EZJ5cdJspza1wS1jy
+	 T5kObBFNrqgZ92JmvS8hEaQBrz+3sItytNXIUDuDZQPXDcvOcwLQXQjhhjSKrcqdxm
+	 yKFhyk9LtWIxw==
+Message-ID: <be042c1e-fac0-4928-a378-1fe3fec14a9e@kernel.org>
+Date: Sat, 12 Jul 2025 09:52:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] pmdomain: samsung: Fix splash-screen handover by
+ enforcing a sync_state
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, linux-pm@vger.kernel.org
+Cc: Alim Akhtar <alim.akhtar@samsung.com>,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250711114719.189441-1-ulf.hansson@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250711114719.189441-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 2a9fac3d32db6a4f7c0b4647aa17c183cf3afa19  Merge branch 'pm-kexec' into bleeding-edge
+On 11/07/2025 13:47, Ulf Hansson wrote:
+> It's has been reported that some Samsung platforms fails to boot with
+> genpd's new sync_state support.
+> 
+> Typically the problem exists for platforms where bootloaders are turning on
+> the splash-screen and handing it over to be managed by the kernel. However,
+> at this point, it's not clear how to correctly solve the problem.
+> 
+> Although, to make the platforms boot again, let's add a temporary hack in
+> the samsung power-domain provider driver, which enforces a sync_state that
+> allows the power-domains to be reset before consumer devices starts to be
+> attached.
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Link: https://lore.kernel.org/all/212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
 
-elapsed time: 1279m
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-configs tested: 117
-configs skipped: 6
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250711    gcc-8.5.0
-arc                   randconfig-002-20250711    gcc-8.5.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-15.1.0
-arm                   randconfig-001-20250711    clang-19
-arm                   randconfig-002-20250711    clang-21
-arm                   randconfig-003-20250711    gcc-15.1.0
-arm                   randconfig-004-20250711    clang-20
-arm                           sunxi_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250711    clang-18
-arm64                 randconfig-002-20250711    clang-21
-arm64                 randconfig-003-20250711    gcc-12.3.0
-arm64                 randconfig-004-20250711    clang-21
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250711    gcc-14.3.0
-csky                  randconfig-002-20250711    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250711    clang-19
-hexagon               randconfig-002-20250711    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250711    gcc-12
-i386        buildonly-randconfig-002-20250711    gcc-12
-i386        buildonly-randconfig-003-20250711    clang-20
-i386        buildonly-randconfig-004-20250711    clang-20
-i386        buildonly-randconfig-005-20250711    gcc-11
-i386        buildonly-randconfig-006-20250711    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-21
-loongarch             randconfig-001-20250711    clang-21
-loongarch             randconfig-002-20250711    clang-21
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                           gcw0_defconfig    clang-21
-mips                        qi_lb60_defconfig    clang-21
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250711    gcc-10.5.0
-nios2                 randconfig-002-20250711    gcc-14.2.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                       virt_defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250711    gcc-12.4.0
-parisc                randconfig-002-20250711    gcc-14.3.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-21
-powerpc               randconfig-001-20250711    clang-18
-powerpc               randconfig-002-20250711    clang-21
-powerpc               randconfig-003-20250711    clang-21
-powerpc64             randconfig-001-20250711    clang-21
-powerpc64             randconfig-002-20250711    clang-21
-powerpc64             randconfig-003-20250711    gcc-13.4.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                 randconfig-001-20250711    gcc-8.5.0
-riscv                 randconfig-002-20250711    gcc-12.4.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250711    clang-21
-s390                  randconfig-002-20250711    gcc-10.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250711    gcc-12.4.0
-sh                    randconfig-002-20250711    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250711    gcc-10.3.0
-sparc                 randconfig-002-20250711    gcc-12.4.0
-sparc64               randconfig-001-20250711    gcc-8.5.0
-sparc64               randconfig-002-20250711    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250711    clang-20
-um                    randconfig-002-20250711    clang-19
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250711    clang-20
-x86_64      buildonly-randconfig-002-20250711    clang-20
-x86_64      buildonly-randconfig-003-20250711    clang-20
-x86_64      buildonly-randconfig-004-20250711    gcc-12
-x86_64      buildonly-randconfig-005-20250711    clang-20
-x86_64      buildonly-randconfig-006-20250711    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                          iss_defconfig    gcc-15.1.0
-xtensa                randconfig-001-20250711    gcc-9.3.0
-xtensa                randconfig-002-20250711    gcc-14.3.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
 
