@@ -1,133 +1,156 @@
-Return-Path: <linux-pm+bounces-30714-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30718-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE3DEB02910
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 05:08:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55D37B029B4
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 09:41:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4A011C40231
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 03:09:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EFD77B8106
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 07:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5D51991B2;
-	Sat, 12 Jul 2025 03:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549762222A1;
+	Sat, 12 Jul 2025 07:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0ycObuO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FC62AD0C;
-	Sat, 12 Jul 2025 03:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131C921A42F;
+	Sat, 12 Jul 2025 07:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752289729; cv=none; b=NyexCINi5KVLwGaeml3GGdloC7uzpOV3es7TfyXXzns1XZ0LH/M90A8ETWkWFy45gUbiEjDXT0r8XW7aJalVBefQ6unIgWy6JQxm8qhrvPlozUN6J3+5qCX13vACqnNwlVvt3Y/11R5oiiJb9g8B2n/JPtnBMvEJY6rzGU8eXOM=
+	t=1752306046; cv=none; b=l1PuUPBw6LJJHlT/7iYersPphICFCdnhytsgmz9guf5mPbBBhSP5t66wnuQLwjDOFM3HAMdrCFWTxWQUDsl6X1QKlYBfNXP03tEENs+AS54RkZtBQDlhse7yZeg8OL/kHzMLnmxsnDGaJYHAalPWgAQPzVjnD2XgdEAYWsQTezI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752289729; c=relaxed/simple;
-	bh=xXpsNqrIXAelX9++dafpoeliHQpwtHT+K5FEXp5y6QE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pvzp3aXpbU+UuzcJmegjw5Yi7FGmy/16RfLzqu+xJTtmwD/v1nyXBdSGMIundVnx3SppeIg04o/78Ci5qhSCGfo5tRp3FP+DUKpPE4rdQiPATvNoOC/1Q+GVk5iv13deY5EdY6jKreVGQyWnfo4HhtEDa2h33QTc0fwb5+myLyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 7c48f6a85ecd11f0b29709d653e92f7d-20250712
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:3eb91566-35af-40cd-989e-b43e6266bb63,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:cfdb6a373986939dd1356ddc48538b76,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 7c48f6a85ecd11f0b29709d653e92f7d-20250712
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1090271228; Sat, 12 Jul 2025 11:08:29 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 4D669E008FA3;
-	Sat, 12 Jul 2025 11:08:29 +0800 (CST)
-X-ns-mid: postfix-6871D1AD-10186120
-Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 08630E008FA2;
-	Sat, 12 Jul 2025 11:08:27 +0800 (CST)
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Christian Brauner <brauner@kernel.org>
-Cc: Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@kernel.org>,
-	linux-pm@vger.kernel.org,
+	s=arc-20240116; t=1752306046; c=relaxed/simple;
+	bh=j3RoFO1dhVwL6jmvjZyPBg5Kvfp8mEXq3Fmz3LtyzAE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GV3/+xQbl1XffCZPnzV8h/Xt4G5SR2cIj61VUAxm6qHG+pz7KSqy7eXIzWqchm7ZUY6YHlv9y5eqZfwVZP6MEPlpNL4O0nsPXPRjcC4QPepbhftc/9oPpXnxOEKdFHMBkxPxlDj0Doap5jogNFF7l3nSzAcyakiJFm9xZP5pnWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0ycObuO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E930C4AF09;
+	Sat, 12 Jul 2025 07:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752306045;
+	bh=j3RoFO1dhVwL6jmvjZyPBg5Kvfp8mEXq3Fmz3LtyzAE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Y0ycObuOUGsRDhtbaZJzXbYT2gZ+H8JuiqMmoSCKBcG7pIgJ1MBTxIW2yOwoIHLfd
+	 YaeIcr9Y1le8FnCQO/CRvhrgcqT6jGMvo1swNgYSicKZYTbV7HVNi5dMKXZQEA/GZW
+	 h5UUEmc/hJ6E806EGKK8T1lCwGC7z/ZssU866tgZ7Qg5VVfRuafWG6fjkUNWDnBGPH
+	 pvzaYuUvIWYQX/X69W4rPVBzvJvXRE89ko+cYKNanbXgsmyS/D/19YtHTyN3Gf3ziV
+	 eQ27XgYp9IDfQCkHcNGhAubbl66xGh/s2Bn+QeB3x18cBk+LId2xCxdfif+VtNSQQt
+	 xMSCV4X3DGdgw==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 4FCC05FE7F; Sat, 12 Jul 2025 15:40:42 +0800 (CST)
+From: Chen-Yu Tsai <wens@kernel.org>
+To: Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Andre Przywara <andre.przywara@arm.com>,
+	linux-sunxi@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH v1] PM: suspend: clean up redundant filesystems_freeze/thaw handling
-Date: Sat, 12 Jul 2025 11:08:24 +0800
-Message-Id: <20250712030824.81474-1-zhangzihuan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/5] allwinner: a523: Add power controllers
+Date: Sat, 12 Jul 2025 15:40:16 +0800
+Message-Id: <20250712074021.805953-1-wens@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-The recently introduced support for freezing filesystems during system
-suspend included calls to filesystems_freeze() in both suspend_prepare()
-and enter_state(), as well as calls to filesystems_thaw() in both
-suspend_finish() and the Unlock path in enter_state(). These are
-redundant.
+From: Chen-Yu Tsai <wens@csie.org>
 
-- filesystems_freeze() is already called in suspend_prepare(), which is
-  the proper and consistent place to handle pre-suspend operations. The
-second call in enter_state() is unnecessary and removed.
+Hi folks,
 
-- filesystems_thaw() is invoked in suspend_finish(), which covers
-  successful suspend/resume paths. In the failure case , we add a call
-to filesystems_thaw() only when needed, avoiding the duplicate call in
-the general Unlock path.
+This is v3 of my A523 power controllers series.
 
-This change simplifies the suspend code and avoids repeated freeze/thaw
-calls, while preserving correct ordering and behavior.
+Changes since v2:
+- pck600 driver:
+  - Fixed whitespace issue
+  - Added explanation about possible PCK-600 lineage and document
+    references to driver
+  - Changed Kconfig option to tristate
+  - Rewrote Kconfig option help text to make it clear that the driver
+    is required for certain peripherals to work
+  - Made it depend on ARCH_SUNXI or COMPILE_TEST
+  - Made it enabled by default for ARCH_SUNXI
+  - Renamed PPU_PWSR_PWR_STATUS to PPU_PWR_STATUS, and added a comment
+    to note the macro is shared between two registers
+- New patch changing sun20i-ppu driver to tristate, and enable by
+  default for ARCH_SUNXI
+- Fixed pck-600 header path in dtsi file
+- Link to v2:
+  https://lore.kernel.org/all/20250709155343.3765227-1-wens@kernel.org/
 
-Fixes: eacfbf74196f91e4c26d9f8c78e1576c1225cd8c ("power: freeze filesyste=
-ms during suspend/resume")
-Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
----
- kernel/power/suspend.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Changes since v1:
+- Re-order compatible string entries
+- Fix name of header file to match compatible string
+- Link to v1:
+  https://lore.kernel.org/all/20250627152918.2606728-1-wens@kernel.org/
 
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index bb608b68fb30..8f3e4c48d5cd 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -384,6 +384,7 @@ static int suspend_prepare(suspend_state_t state)
- 		return 0;
-=20
- 	dpm_save_failed_step(SUSPEND_FREEZE);
-+	filesystems_thaw();
- 	pm_notifier_call_chain(PM_POST_SUSPEND);
-  Restore:
- 	pm_restore_console();
-@@ -593,8 +594,6 @@ static int enter_state(suspend_state_t state)
- 		ksys_sync_helper();
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
- 	}
--	if (filesystem_freeze_enabled)
--		filesystems_freeze();
-=20
- 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state])=
-;
- 	pm_suspend_clear_flags();
-@@ -614,7 +613,6 @@ static int enter_state(suspend_state_t state)
- 	pm_pr_dbg("Finishing wakeup.\n");
- 	suspend_finish();
-  Unlock:
--	filesystems_thaw();
- 	mutex_unlock(&system_transition_mutex);
- 	return error;
- }
---=20
-2.25.1
+This series adds the power controllers found in the Allwinner A523
+family of SoCs. There are two power controllers. One is the same type
+as those found in the D1 SoC, just with a different number of valid
+power domains. The second is (I assume) a unit based on ARM's PCK-600
+power controller. Some of the registers and values match up, but there
+are extra registers for delay controls in the PCK-600's reserved
+register range.
+
+Patch 1 adds new compatible string entries for both of these
+controllers.
+
+Patch 2 adds support for the A523 PPU to the existing D1 PPU driver.
+
+Patch 3 adds a new driver of the PCK-600 unit in the A523 SoC.
+
+Patch 4 aligns Kconfig dependencies and default for SUN20I_PPU with the
+new PCK-600 driver.
+
+Patch 5 adds device nodes for both of these controllers.
+
+
+Please have a look. The power controllers are critical for enabling more
+peripherals, such as display output, camera input, video codecs, the NPU,
+and a second DWMAC-compatible ethernet interface.
+
+
+Thanks
+ChenYu
+
+
+Chen-Yu Tsai (5):
+  dt-bindings: power: Add A523 PPU and PCK600 power controllers
+  pmdomain: sunxi: sun20i-ppu: add A523 support
+  pmdomain: sunxi: add driver for Allwinner A523's PCK-600 power
+    controller
+  pmdomain: sunxi: sun20i-ppu: change to tristate and enable for
+    ARCH_SUNXI
+  arm64: dts: allwinner: a523: Add power controller device nodes
+
+ .../power/allwinner,sun20i-d1-ppu.yaml        |   4 +-
+ .../arm64/boot/dts/allwinner/sun55i-a523.dtsi |  18 ++
+ drivers/pmdomain/sunxi/Kconfig                |  19 +-
+ drivers/pmdomain/sunxi/Makefile               |   1 +
+ drivers/pmdomain/sunxi/sun20i-ppu.c           |  17 ++
+ drivers/pmdomain/sunxi/sun55i-pck600.c        | 234 ++++++++++++++++++
+ .../power/allwinner,sun55i-a523-pck-600.h     |  15 ++
+ .../power/allwinner,sun55i-a523-ppu.h         |  12 +
+ 8 files changed, 316 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/pmdomain/sunxi/sun55i-pck600.c
+ create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck-600.h
+ create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+
+-- 
+2.39.5
 
 
