@@ -1,140 +1,116 @@
-Return-Path: <linux-pm+bounces-30733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ACD7B02D41
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 23:45:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7C4B02E33
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 01:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 140343BB13E
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 21:45:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560FA1C21BCF
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Jul 2025 23:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D63225A38;
-	Sat, 12 Jul 2025 21:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF1A1531C8;
+	Sat, 12 Jul 2025 23:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SkApOp/b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/YOKvM2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481C91F2BAE
-	for <linux-pm@vger.kernel.org>; Sat, 12 Jul 2025 21:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3E3BE6C
+	for <linux-pm@vger.kernel.org>; Sat, 12 Jul 2025 23:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752356730; cv=none; b=IRETBoMM6fq3Ff+cr597vvksJ9+jmyUiJg5hAGtZ5R+f9IVV53INK9p4Zu/hQ3x+LVn1wJukGurMgwiN6m0xK6zBBU6YKlzC195iSS24ohBfLsIw77LejLViWF1/1y27ZRXwaKoo5KV24LKWQjOj3pdwK8uJd5KJVfB2aDNOMk4=
+	t=1752363442; cv=none; b=Oc2UuiT4tZnSiZ9BxGxujCGh7DTJDgRP80mmlQrgrd/BQU/pqsGnsLdUrssbnV4ypzCUf1yeB9TLRFbfnVQTMB3rDDF4lHdljI+/W3P178Fc3QdiBDyAY6HxY4m/KtSVCtDVjNANSU372fRaJTq0hLs1MuNJjhB/W6Dd8x6mHH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752356730; c=relaxed/simple;
-	bh=8IX5mpUXCYTmlFFh11WohKJGUsbbEjDDWLInJqawZEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uoRI+De35MKtRwlsMMIj7T5unT53YyqW3ytu4/gGFn9rXt+TSc+g6ZN256OPZPkwHwmVNZnMWQfYi+gMeZRZSB+ONVhT3lLINa/pIJPwqK8Q5ZoEIIFO0CCVwE6/j3whVrzx/zPhsuEOzvIoROoNgRA1FBsZP58/8A83krj/FFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SkApOp/b; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752356729; x=1783892729;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8IX5mpUXCYTmlFFh11WohKJGUsbbEjDDWLInJqawZEY=;
-  b=SkApOp/bYJe2vop5MVX3ly8djmboKT00fOrNAY6mxcoLxQGWYKITBDeS
-   vJr3Ey33QM9+LTEcrF18frGpBuK1QEjf3kswE+ZSlGosQpLJBZ3bbdcrg
-   Np9bq6dLs6qOE7pVHtYSZ6aJvOMoXoRaGXEQD2dlWmXIfc3Ko144lPtfw
-   N6mOaKL4e58ZLHne0p4ftWEiEzJpWGpe38EiJ+OLDDOLKhnqMIrmkSdji
-   GJGdP0sJigkfnW1ZrE9hpUaJAYxtwqRaJK3W4+16LLsiN2aN4ySn7f/V/
-   g3Syqb2ZdevtnxT+qzy1eGKyTA1ajH2HlLOpJSzydyBXvuId0WtxC/5uc
-   A==;
-X-CSE-ConnectionGUID: 2LzlrytMTuuoDj1FFDBw/w==
-X-CSE-MsgGUID: FDxu2DIwQUmbv/bl8MQX8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="65186567"
-X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
-   d="scan'208";a="65186567"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 14:45:28 -0700
-X-CSE-ConnectionGUID: RmIkj5dVTpazBxX/ONimvA==
-X-CSE-MsgGUID: 7ReyvrBwRCC9uIny1h44Uw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
-   d="scan'208";a="156714724"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 12 Jul 2025 14:45:26 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uai28-0007i3-1J;
-	Sat, 12 Jul 2025 21:45:24 +0000
-Date: Sun, 13 Jul 2025 05:44:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
-	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org,
+	s=arc-20240116; t=1752363442; c=relaxed/simple;
+	bh=/LiC+Ai0of5JbvPFlAftW4zV6IqawUX5LcPgMaLbbmM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aCnldGCFcRBxCWsmuh8CdIPzNm3R4ToktQU1eILPiXoAFQ9WHvARWIckdVQFEGD+18yiKWpnPfBAjgEKj1txziMm7IryVfGYwn5ALrQMu8mXQT3Xh7+XdU5GHkTlLJRs76yC0RrARkH9PcVisgz57K3OECiTK/ExB8uuKu2JTfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/YOKvM2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1A6DC4CEEF;
+	Sat, 12 Jul 2025 23:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752363441;
+	bh=/LiC+Ai0of5JbvPFlAftW4zV6IqawUX5LcPgMaLbbmM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=j/YOKvM2os2z1tsxH1GXdZwmkWn2UXNLFcDUdLMeMIJOWFsLRlwr7l0Efy9wkHPCZ
+	 GsdnanLWr3SzvCWZfWinJsK4u+d2P+spUwec3HkA3e0cmqtPY6pWD9SRPwLdKPpYwx
+	 9HXz2s9ym6CT3PglrsW3BJh70YMO0+8xJeN9Jn5a4/llpHajKZDmsA71WnIyHypfiW
+	 gT6DfGZV6njAU1GIETHDV9vfs8NeGxbAOrXnRkbXcb1IH9htVLP0Jvh6J7/KQA/KR2
+	 SFSVrCAvuW/qjOTdx5+/XdYD/sxwEwzz8fljnlr5x7KlO04dMAH8G+7VnITkU1OJyZ
+	 kBsnxcASlvqMw==
+From: Mario Limonciello <superm1@kernel.org>
+To: mario.limonciello@amd.com,
+	rafael@kernel.org,
+	pavel@kernel.org,
+	len.brown@intel.com,
 	guoqing.zhang@amd.com
-Cc: oe-kbuild-all@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+Cc: Randy Dunlap <rdunlap@infradead.org>,
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: hibernate: Add stub for pm_hibernate_is_recovering()
-Message-ID: <202507130544.2Nxzh8Qg-lkp@intel.com>
-References: <20250712185851.591024-1-superm1@kernel.org>
+Subject: [PATCH v2] PM: hibernate: Add stub for pm_hibernate_is_recovering()
+Date: Sat, 12 Jul 2025 18:37:12 -0500
+Message-ID: <20250712233715.821424-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250712185851.591024-1-superm1@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Mario,
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-kernel test robot noticed the following build errors:
+Randy reports that amdgpu fails to compile with the following error:
+ERROR: modpost: "pm_hibernate_is_recovering" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
-[auto build test ERROR on linux-next/master]
-[cannot apply to linus/master v6.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This happens because pm_hibernate_is_recovering() is only compiled when
+CONFIG_PM_SLEEP is set.  Add a stub for it so that drivers don't need
+to depend upon CONFIG_PM.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-hibernate-Add-stub-for-pm_hibernate_is_recovering/20250713-025938
-base:   linux-next/master
-patch link:    https://lore.kernel.org/r/20250712185851.591024-1-superm1%40kernel.org
-patch subject: [PATCH] PM: hibernate: Add stub for pm_hibernate_is_recovering()
-config: i386-buildonly-randconfig-003-20250713 (https://download.01.org/0day-ci/archive/20250713/202507130544.2Nxzh8Qg-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507130544.2Nxzh8Qg-lkp@intel.com/reproduce)
+Cc: Samuel Zhang <guoqing.zhang@amd.com>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Closes: https://lore.kernel.org/dri-devel/CAJZ5v0h1CX+aTu7dFy6vB-9LM6t5J4rt7Su3qVnq1xx-BFAm=Q@mail.gmail.com/T/#m2b9fe212b35fde11d58fcbc4e0727bc02ebba7b0
+Fixes: c2aaddbd2dede ("PM: hibernate: add new api pm_hibernate_is_recovering()")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+--
+v2:
+ * put stub in right ifdef
+---
+ include/linux/suspend.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507130544.2Nxzh8Qg-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/base/power/main.c:77:6: error: redefinition of 'pm_hibernate_is_recovering'
-      77 | bool pm_hibernate_is_recovering(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/base/power/main.c:32:
-   include/linux/suspend.h:420:20: note: previous definition of 'pm_hibernate_is_recovering' with type 'bool(void)' {aka '_Bool(void)'}
-     420 | static inline bool pm_hibernate_is_recovering(void) { return false; }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/pm_hibernate_is_recovering +77 drivers/base/power/main.c
-
-098dff738abbea Rafael J. Wysocki 2010-09-22  68  
-c2aaddbd2deded Samuel Zhang      2025-07-10  69  /**
-c2aaddbd2deded Samuel Zhang      2025-07-10  70   * pm_hibernate_is_recovering - if recovering from hibernate due to error.
-c2aaddbd2deded Samuel Zhang      2025-07-10  71   *
-c2aaddbd2deded Samuel Zhang      2025-07-10  72   * Used to query if dev_pm_ops.thaw() is called for normal hibernation case or
-c2aaddbd2deded Samuel Zhang      2025-07-10  73   * recovering from some error.
-c2aaddbd2deded Samuel Zhang      2025-07-10  74   *
-c2aaddbd2deded Samuel Zhang      2025-07-10  75   * Return: true for error case, false for normal case.
-c2aaddbd2deded Samuel Zhang      2025-07-10  76   */
-c2aaddbd2deded Samuel Zhang      2025-07-10 @77  bool pm_hibernate_is_recovering(void)
-c2aaddbd2deded Samuel Zhang      2025-07-10  78  {
-c2aaddbd2deded Samuel Zhang      2025-07-10  79  	return pm_transition.event == PM_EVENT_RECOVER;
-c2aaddbd2deded Samuel Zhang      2025-07-10  80  }
-c2aaddbd2deded Samuel Zhang      2025-07-10  81  EXPORT_SYMBOL_GPL(pm_hibernate_is_recovering);
-c2aaddbd2deded Samuel Zhang      2025-07-10  82  
-
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 293137210fdf4..fcb150ee83b6b 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -426,8 +426,6 @@ int is_hibernate_resume_dev(dev_t dev);
+ static inline int is_hibernate_resume_dev(dev_t dev) { return 0; }
+ #endif
+ 
+-bool pm_hibernate_is_recovering(void);
+-
+ /* Hibernation and suspend events */
+ #define PM_HIBERNATION_PREPARE	0x0001 /* Going to hibernate */
+ #define PM_POST_HIBERNATION	0x0002 /* Hibernation finished */
+@@ -478,6 +476,7 @@ extern unsigned int lock_system_sleep(void);
+ extern void unlock_system_sleep(unsigned int);
+ 
+ extern bool pm_sleep_transition_in_progress(void);
++bool pm_hibernate_is_recovering(void);
+ 
+ #else /* !CONFIG_PM_SLEEP */
+ 
+@@ -508,6 +507,7 @@ static inline unsigned int lock_system_sleep(void) { return 0; }
+ static inline void unlock_system_sleep(unsigned int flags) {}
+ 
+ static inline bool pm_sleep_transition_in_progress(void) { return false; }
++static inline bool pm_hibernate_is_recovering(void) { return false; }
+ 
+ #endif /* !CONFIG_PM_SLEEP */
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
