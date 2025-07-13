@@ -1,292 +1,376 @@
-Return-Path: <linux-pm+bounces-30735-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30736-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2399B02E98
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 06:41:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 788CFB02E9B
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 06:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F27C61A613FA
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 04:41:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEECD3B8DA1
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 04:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A4D1547EE;
-	Sun, 13 Jul 2025 04:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0488143C69;
+	Sun, 13 Jul 2025 04:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IpUpNi93"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X8D9hm9k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8EE94A24;
-	Sun, 13 Jul 2025 04:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0480139D;
+	Sun, 13 Jul 2025 04:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752381665; cv=none; b=O2T50HqdVMx1kWPvRSWm7REhGRg+SKIA005/8+5Z5sdTW/Iul5+WT59RC822Qp6aeKKqdexqKB+qYBNTPNrz9ycQ7f7RDXVv3Jrc8f1T+C7px8iSgpPLLWiIB4m4WmBHsLRs5g72yQpw6wfWLkmYU1uqZSsvPXDTygt5AHh7gfQ=
+	t=1752382063; cv=none; b=RDk/9XTpXpEZmxv2QDIPAMrK4hL5S1iMJKVBfPWLj15A4T7tP+neeDUBSxzDs0oSewT7hBsglDIQEGpve9ygwwE1kdgJATKImRJ8Lwjlzz6/X+0I+4r1nUQKlaWrpsiC8c08oCPKV7Pif8KTgjWsueSrj8VuRpdfWv/nMqGtD0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752381665; c=relaxed/simple;
-	bh=YjRRKL9PU/3Xn6uDFQdkDu1HQJ3WLHhvW5B6pzsO/X8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=gaHTKvu+yrFWsGytd7rTuk3aiTVsTxIA51Obud3yqNlh9AioK0MHvLY415q72pSDt1EuVob4A9CVgwvLcCfQSys+h8kAcPGlF0Mu1+x2bCbKonlynSEEY1cunuWGHXpBWgmw7+Ck6yv4kK0H88cB4Ui1YDs1zVgKT01rF0+5rxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IpUpNi93; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752382063; c=relaxed/simple;
+	bh=JfYWi+ZY6CyENj6NGNMMqzhveM+wnEPZGDoQKXVotdc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E9mONTNW1A9Fe0nzVATxvd4xInSaDsyBRGmS8Cv5DBK20vxx1MUFBhWynJnVFLs5q0vgY/GEXxZk1l9JIKWawtC4T2BJ0YDp/wc5YZTkqag7e6bD5gZL4p7UVwUbreXkM959chPeNZYsZog921e39Z3pcWZncUwIvAbamvk5Hmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X8D9hm9k; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752381661; x=1783917661;
-  h=date:from:to:cc:subject:message-id;
-  bh=YjRRKL9PU/3Xn6uDFQdkDu1HQJ3WLHhvW5B6pzsO/X8=;
-  b=IpUpNi93/NNXz3ELyuunyjB+QiIbj2V3QXfOX+LzEmRzFerA3HNmgSMi
-   dP2QPlmdhFzyIPrsi7II/rrTsTXyPQGhnvC9lxILnpxwir/UiATQriDG/
-   37B+qu1fMteHGZe/laTQY7NhuUYxmwJh1TY5dmUPVUwIFI26YAquXyMro
-   tLqgbqfCKgK2pTCss0X8kGNhCzcTfYXW5V9HMhLwabS6+d2QGP6K/yTP4
-   teomgwVEFsU7YclGII7V0MNo3uIzwaUHLkdnSUx4r+FzmoftBRD1SgFw1
-   I4IaSRL/0RooPXAlng01sEMDzmXQFgUlIGhTgoN063BngoJOuy30DnTYd
-   w==;
-X-CSE-ConnectionGUID: rhzpG4NPQgKRqwdMzm2lWw==
-X-CSE-MsgGUID: GYN6ZveOS0ms2mjZCg4Gaw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="65970950"
-X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
-   d="scan'208";a="65970950"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 21:41:00 -0700
-X-CSE-ConnectionGUID: iprAVTdzQsat+VfNzCfRJA==
-X-CSE-MsgGUID: D6lkTso1TDGQHHjhMU/YOw==
+  t=1752382062; x=1783918062;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JfYWi+ZY6CyENj6NGNMMqzhveM+wnEPZGDoQKXVotdc=;
+  b=X8D9hm9kwAuQTbDkxmeCQjNLHTwvLjkc1CxaW3ADlZUyRRVvdFND0cqY
+   HtMosEPh7wN2FHzDWeH0lvdWI2FOt3D3w1St+5cHdE9ZL9d7tUnj52u72
+   odFLkjehdWXuCwMLpr21HVqZVg4mD4irt5jeQ/dk8GyBilR5ApoZInSeW
+   lKA8o1hWTb1Lgbws+EKR/cg0IimVrVwc2VB7Os/GoDxXLSvJvUOaNytUa
+   4BydBquKcgVkEZNTH+XfmYNGf/nZ8ytu7dF66oSJjM4B0Mc/WJHjSLmpL
+   v1WhEDYTejA/IwizF4eZi7TGS7d5rh02l2xrd8xiBQlvkDfF31WEAVkqT
+   Q==;
+X-CSE-ConnectionGUID: Yd03bjpzTKWKrkTZyQPguQ==
+X-CSE-MsgGUID: +uHCRfeoS26CD6qAtFROtg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="65680295"
+X-IronPort-AV: E=Sophos;i="6.16,308,1744095600"; 
+   d="scan'208";a="65680295"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 21:47:39 -0700
+X-CSE-ConnectionGUID: skIH0heLQ9WI/dNgnbPhXQ==
+X-CSE-MsgGUID: ESHyGC1aR/C0gmwby3tD/A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
-   d="scan'208";a="157218117"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Jul 2025 21:40:58 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uaoWG-0007sp-1Q;
-	Sun, 13 Jul 2025 04:40:56 +0000
-Date: Sun, 13 Jul 2025 12:40:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- d47c63d531e87f8120199edcf8f2adce10d8c2d1
-Message-ID: <202507131257.AZK599I5-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+X-IronPort-AV: E=Sophos;i="6.16,308,1744095600"; 
+   d="scan'208";a="160688736"
+Received: from mgoodin-mobl3.amr.corp.intel.com (HELO localhost) ([10.124.222.227])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 21:47:38 -0700
+Date: Sat, 12 Jul 2025 21:47:37 -0700
+From: David Box <david.e.box@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: bhelgaas@google.com, andrea.righi@canonical.com, 
+	vicamo.yang@canonical.com, kenny@panix.com, nirmal.patel@linux.intel.com, 
+	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, ilpo.jarvinen@linux.intel.com, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/ASPM: Allow ASPM enablement for devices behind Intel
+ VMD
+Message-ID: <yaix6p3kivut57gizbdnlzawopna5nyimoum24advwh2rrowuw@pnszf3saqhwm>
+References: <20250710011647.990046-1-david.e.box@linux.intel.com>
+ <CAJZ5v0iWAaj5_hBC_1pZcA-cQ0Yz6hvQjbsv3Gmv6jN_utt4OQ@mail.gmail.com>
+ <yqtsfh4pmbnogt67m6tk6pqpdcbz3kx3xx4lpinbgfvq4yi5wn@leoipmcnqsgs>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <yqtsfh4pmbnogt67m6tk6pqpdcbz3kx3xx4lpinbgfvq4yi5wn@leoipmcnqsgs>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d47c63d531e87f8120199edcf8f2adce10d8c2d1  Merge branch 'pm-kexec' into bleeding-edge
+On Fri, Jul 11, 2025 at 07:33:15AM -0700, David Box wrote:
+> Hey Rafael,
+> 
+> On Thu, Jul 10, 2025 at 09:53:18PM +0200, Rafael J. Wysocki wrote:
+> > On Thu, Jul 10, 2025 at 3:16 AM David E. Box
+> > <david.e.box@linux.intel.com> wrote:
+> > >
+> > > Devices behind Intel's Volume Management Device (VMD) controller reside on
+> > > a synthetic PCI hierarchy that is intentionally hidden from ACPI and
+> > > firmware. As such, BIOS does not configure ASPM for these devices, and the
+> > > responsibility for link power management, including ASPM and LTR, falls
+> > > entirely to the VMD driver.
+> > >
+> > > However, the current PCIe ASPM code prevents ASPM configuration when the
+> > > ACPI_FADT_NO_ASPM flag is set, disallowing OS management. This leaves ASPM
+> > > permanently disabled for these devices, contrary to the platform's design
+> > > intent.
+> > >
+> > > Introduce a callback mechanism that allows the VMD driver to enable ASPM
+> > > for its domain, bypassing the global ACPI_FADT_NO_ASPM restriction that is
+> > > not applicable in this context. This ensures that devices behind VMD can
+> > > benefit from ASPM savings as originally intended.
+> > >
+> > > Link: https://lore.kernel.org/linux-pm/0b166ece-eeec-ba5d-2212-50d995611cef@panix.com
+> > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > 
+> > First of all, thanks for doing this work, much appreciated!
+> > 
+> > > ---
+> > >  drivers/pci/controller/vmd.c | 28 ++++++++++++++++++++++++++--
+> > >  drivers/pci/pci.h            |  8 ++++++++
+> > >  drivers/pci/pcie/aspm.c      | 36 +++++++++++++++++++++++++++++++++++-
+> > >  3 files changed, 69 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> > > index 8df064b62a2f..e685586dc18b 100644
+> > > --- a/drivers/pci/controller/vmd.c
+> > > +++ b/drivers/pci/controller/vmd.c
+> > > @@ -21,6 +21,8 @@
+> > >
+> > >  #include <asm/irqdomain.h>
+> > >
+> > > +#include "../pci.h"
+> > > +
+> > >  #define VMD_CFGBAR     0
+> > >  #define VMD_MEMBAR1    2
+> > >  #define VMD_MEMBAR2    4
+> > > @@ -730,7 +732,7 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
+> > >  }
+> > >
+> > >  /*
+> > > - * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
+> > > + * Enable LTR settings on devices that aren't configured by BIOS.
+> > >   */
+> > >  static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+> > >  {
+> > > @@ -770,10 +772,27 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+> > >          * PCIe r6.0, sec 5.5.4.
+> > >          */
+> > >         pci_set_power_state_locked(pdev, PCI_D0);
+> > > -       pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
+> > 
+> > Do I think correctly that this doesn't work because of the
+> > aspm_disabled check in __pci_enable_link_state()?
+> 
+> Yes.
+> 
+> > 
+> > >         return 0;
+> > >  }
+> > >
+> > > +static long vmd_get_link_state(struct pci_dev *pdev, void *data)
+> > > +{
+> > > +       struct pci_bus *vmd_bus = data;
+> > > +       struct pci_bus *bus = pdev->bus;
+> > > +
+> > > +       while (bus) {
+> > > +               if (bus == vmd_bus)
+> > > +                       return PCIE_LINK_STATE_ALL;
+> > > +
+> > > +               if (!bus->self)
+> > > +                       break;
+> > > +
+> > > +               bus = bus->self->bus;
+> > > +       }
+> > 
+> > If I'm not mistaken, it would be sufficient to do a check like
+> > 
+> >     if (pci_dev->bus->ops == &vmd_ops)
+> >             return PCIE_LINK_STATE_ALL;
+> > 
+> > instead of the above, or if not then why not?
+> 
+> As a replacement in the loop, that does look sufficient. I'm not sure if
+> you're also suggesting replacing the loop itself.
+> 
+> > 
+> > > +
+> > > +       return -ENODEV;
+> > > +}
+> > > +
+> > >  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> > >  {
+> > >         struct pci_sysdata *sd = &vmd->sysdata;
+> > > @@ -785,6 +804,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> > >         resource_size_t membar2_offset = 0x2000;
+> > >         struct pci_bus *child;
+> > >         struct pci_dev *dev;
+> > > +       struct pcie_aspm_vmd_link_state vmd_link_state;
+> > >         int ret;
+> > >
+> > >         /*
+> > > @@ -911,6 +931,10 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> > >                 return -ENODEV;
+> > >         }
+> > >
+> > > +       vmd_link_state.cb = vmd_get_link_state;
+> > > +       vmd_link_state.data = vmd->bus;
+> > > +       pci_register_vmd_link_state_cb(&vmd_link_state);
+> > > +
+> > >         vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus),
+> > >                                    to_pci_host_bridge(vmd->bus->bridge));
+> > >
+> > > diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> > > index 12215ee72afb..dcf7d39c660f 100644
+> > > --- a/drivers/pci/pci.h
+> > > +++ b/drivers/pci/pci.h
+> > > @@ -821,6 +821,12 @@ void pci_configure_aspm_l1ss(struct pci_dev *dev);
+> > >  void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+> > >  void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+> > >
+> > > +
+> > > +struct pcie_aspm_vmd_link_state {
+> > > +       long (*cb)(struct pci_dev *pdev, void *data);
+> > > +       void *data;
+> > > +};
+> > > +
+> > >  #ifdef CONFIG_PCIEASPM
+> > >  void pcie_aspm_init_link_state(struct pci_dev *pdev);
+> > >  void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+> > > @@ -828,6 +834,7 @@ void pcie_aspm_pm_state_change(struct pci_dev *pdev, bool locked);
+> > >  void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+> > >  void pci_configure_ltr(struct pci_dev *pdev);
+> > >  void pci_bridge_reconfigure_ltr(struct pci_dev *pdev);
+> > > +void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *state);
+> > >  #else
+> > >  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+> > >  static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+> > > @@ -835,6 +842,7 @@ static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev, bool locked)
+> > >  static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
+> > >  static inline void pci_configure_ltr(struct pci_dev *pdev) { }
+> > >  static inline void pci_bridge_reconfigure_ltr(struct pci_dev *pdev) { }
+> > > +void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *state) { }
+> > >  #endif
+> > >
+> > >  #ifdef CONFIG_PCIE_ECRC
+> > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > index 29fcb0689a91..c609d3c309be 100644
+> > > --- a/drivers/pci/pcie/aspm.c
+> > > +++ b/drivers/pci/pcie/aspm.c
+> > > @@ -320,6 +320,27 @@ static int policy_to_clkpm_state(struct pcie_link_state *link)
+> > >         return 0;
+> > >  }
+> > >
+> > > +static struct pcie_aspm_vmd_link_state vmd_state;
+> > > +
+> > > +void pci_register_vmd_link_state_cb(struct pcie_aspm_vmd_link_state *state)
+> > > +{
+> > > +       mutex_lock(&aspm_lock);
+> > > +       vmd_state.cb = state->cb;
+> > > +       vmd_state.data = state->data;
+> > > +       mutex_unlock(&aspm_lock);
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(pci_register_vmd_link_state_cb);
+> > > +
+> > > +static long pci_get_vmd_link_state(struct pci_dev *pdev)
+> > > +{
+> > > +       int state = -ENODEV;
+> > > +
+> > > +       if (vmd_state.cb)
+> > > +               state = vmd_state.cb(pdev, vmd_state.data);
+> > > +
+> > > +       return state;
+> > > +}
+> > > +
+> > >  static void pci_update_aspm_saved_state(struct pci_dev *dev)
+> > >  {
+> > >         struct pci_cap_saved_state *save_state;
+> > > @@ -794,6 +815,7 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
+> > >         u32 parent_lnkcap, child_lnkcap;
+> > >         u16 parent_lnkctl, child_lnkctl;
+> > >         struct pci_bus *linkbus = parent->subordinate;
+> > > +       int vmd_aspm_default;
+> > >
+> > >         if (blacklist) {
+> > >                 /* Set enabled/disable so that we will disable ASPM later */
+> > > @@ -865,8 +887,20 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
+> > >                 pcie_capability_write_word(child, PCI_EXP_LNKCTL, child_lnkctl);
+> > >         }
+> > >
+> > > +       /*
+> > > +        * Devices behind Intel VMD operate on a synthetic PCI bus that BIOS
+> > > +        * and ACPI do not enumerate or configure. ASPM for these devices must
+> > > +        * be managed by the VMD driver itself, independent of global ACPI ASPM
+> > > +        * constraints. This callback mechanism allows selective ASPM
+> > > +        * enablement for such domains.
+> > > +        */
+> > > +       vmd_aspm_default = pci_get_vmd_link_state(parent);
+> > > +
+> > >         /* Save default state */
+> > > -       link->aspm_default = link->aspm_enabled;
+> > > +       if (vmd_aspm_default < 0)
+> > > +               link->aspm_default = link->aspm_enabled;
+> > > +       else
+> > > +               link->aspm_default = vmd_aspm_default;
+> > 
+> > Well, this is not nice.
+> > 
+> > First off, it adds VMD-specific stuff to otherwise generic ASPM code.
+> > Second, it doesn't actually do anything about the aspm_disabled checks
+> > all over the place, so they will still trigger even though ASPM will
+> > be effectively enabled for devices on the VMD bus.
+> 
+> I agree that it's not nice to be mixing VMD specific code here. It's a
+> working bad solution to come up with a working good solution :)
+> 
+> The reason this patch works is that the aspm_disabled checks only gate
+> OS-controlled ASPM configuration. They don't affect the BIOS default
+> values, which are what we're setting in link->aspm_default. The ASPM
+> code uses link->aspm_default as the fallback when ASPM is globally
+> disabled, which is exactly what we want for devices behind VMD where the
+> driver, not BIOS, effectively is the platform provider of the defaults.
+> 
+> I put it here using a callback value because this where the BIOS
+> defaults are saved for each device.
+> 
+> > 
+> > >
+> > >         /* Setup initial capable state. Will be updated later */
+> > >         link->aspm_capable = link->aspm_support;
+> > >
+> > > base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
+> > > --
+> > 
+> > It appears to me that the underlying problem is that aspm_disabled is
+> > global and it is set during PCI root bus creation in
+> > acpi_pci_root_add().  Thus it affects all of the PCI buses even though
+> > the BIOS says that it wants to control ASPM for this particular PCIe
+> > hierarchy. If there were another PCI root enumerated by ACPI where
+> > the OS would be allowed to control ASPM, it would not work just like
+> > the VMD case.
+> 
+> It would work in the non-VMD case because it has the BIOS default to
+> use. VMD does not.
+> 
+> > 
+> > To me, this suggests an approach based on moving the "ASPM disabled
+> > because the BIOS wants to control it" setting to pci_bus_flags_t and
+> > setting it on a per-hierarchy basis.
 
-elapsed time: 1178m
+A bus flag would address the need to bypass aspm_disabled for a given
+hierarchy, but it doesn’t solve the second part of the problem, providing
+the policy to apply in place of the missing BIOS defaults.
 
-configs tested: 198
-configs skipped: 8
+Ideally, policy should be determined within pcie_aspm_cap_init(), rather
+than requiring a separate walk, which the VMD driver does now (but only
+works when aspm_disabled is not set).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+To support this cleanly, what if we added a pm_ops pointer to struct
+pci_bus?
 
-tested configs:
-alpha                            alldefconfig    gcc-15.1.0
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    clang-19
-arc                              allmodconfig    clang-19
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-19
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    clang-19
-arc                   randconfig-001-20250712    gcc-10.5.0
-arc                   randconfig-002-20250712    gcc-13.4.0
-arm                              allmodconfig    clang-19
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    clang-19
-arm                              allyesconfig    gcc-15.1.0
-arm                                 defconfig    clang-19
-arm                       imx_v6_v7_defconfig    clang-16
-arm                        mvebu_v7_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250712    gcc-8.5.0
-arm                   randconfig-002-20250712    gcc-10.5.0
-arm                   randconfig-003-20250712    clang-21
-arm                   randconfig-004-20250712    clang-21
-arm                         s5pv210_defconfig    gcc-15.1.0
-arm                         vf610m4_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    clang-19
-arm64                 randconfig-001-20250712    gcc-12.3.0
-arm64                 randconfig-002-20250712    gcc-12.3.0
-arm64                 randconfig-003-20250712    gcc-8.5.0
-arm64                 randconfig-004-20250712    gcc-13.4.0
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    clang-19
-csky                  randconfig-001-20250712    gcc-14.3.0
-csky                  randconfig-002-20250712    gcc-11.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-21
-hexagon                             defconfig    clang-19
-hexagon               randconfig-001-20250712    clang-21
-hexagon               randconfig-002-20250712    clang-18
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    clang-20
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250712    clang-20
-i386        buildonly-randconfig-002-20250712    gcc-11
-i386        buildonly-randconfig-003-20250712    gcc-12
-i386        buildonly-randconfig-004-20250712    gcc-12
-i386        buildonly-randconfig-005-20250712    gcc-12
-i386        buildonly-randconfig-006-20250712    clang-20
-i386                                defconfig    clang-20
-i386                  randconfig-001-20250713    clang-20
-i386                  randconfig-002-20250713    clang-20
-i386                  randconfig-003-20250713    clang-20
-i386                  randconfig-004-20250713    clang-20
-i386                  randconfig-005-20250713    clang-20
-i386                  randconfig-006-20250713    clang-20
-i386                  randconfig-007-20250713    clang-20
-i386                  randconfig-011-20250713    gcc-12
-i386                  randconfig-012-20250713    gcc-12
-i386                  randconfig-013-20250713    gcc-12
-i386                  randconfig-014-20250713    gcc-12
-i386                  randconfig-015-20250713    gcc-12
-i386                  randconfig-016-20250713    gcc-12
-i386                  randconfig-017-20250713    gcc-12
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-21
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20250712    gcc-15.1.0
-loongarch             randconfig-002-20250712    gcc-14.3.0
-m68k                             allmodconfig    clang-19
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    clang-19
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    clang-19
-m68k                           virt_defconfig    gcc-15.1.0
-microblaze                       allmodconfig    clang-19
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    clang-19
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                          eyeq6_defconfig    gcc-15.1.0
-mips                            gpr_defconfig    clang-18
-nios2                             allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-15.1.0
-nios2                               defconfig    gcc-14.2.0
-nios2                               defconfig    gcc-15.1.0
-nios2                 randconfig-001-20250712    gcc-11.5.0
-nios2                 randconfig-002-20250712    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-12
-openrisc                       virt_defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250712    gcc-8.5.0
-parisc                randconfig-002-20250712    gcc-12.4.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-21
-powerpc                          allyesconfig    gcc-15.1.0
-powerpc                   lite5200b_defconfig    clang-21
-powerpc                 mpc8315_rdb_defconfig    clang-21
-powerpc               randconfig-001-20250712    gcc-15.1.0
-powerpc               randconfig-002-20250712    gcc-8.5.0
-powerpc               randconfig-003-20250712    clang-21
-powerpc64             randconfig-002-20250712    clang-21
-powerpc64             randconfig-003-20250712    clang-19
-riscv                            allmodconfig    clang-21
-riscv                            allmodconfig    gcc-15.1.0
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                            allyesconfig    gcc-15.1.0
-riscv                               defconfig    gcc-12
-riscv                 randconfig-001-20250712    gcc-8.5.0
-riscv                 randconfig-002-20250712    clang-21
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20250712    clang-21
-s390                  randconfig-002-20250712    clang-21
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-12
-sh                    randconfig-001-20250712    gcc-15.1.0
-sh                    randconfig-002-20250712    gcc-14.3.0
-sh                           se7721_defconfig    gcc-15.1.0
-sh                             sh03_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250712    gcc-13.4.0
-sparc                 randconfig-002-20250712    gcc-15.1.0
-sparc                       sparc64_defconfig    gcc-15.1.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20250712    clang-20
-sparc64               randconfig-002-20250712    gcc-14.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-12
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250712    gcc-12
-um                    randconfig-002-20250712    clang-21
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250712    gcc-12
-x86_64      buildonly-randconfig-002-20250712    gcc-12
-x86_64      buildonly-randconfig-003-20250712    clang-20
-x86_64      buildonly-randconfig-004-20250712    clang-20
-x86_64      buildonly-randconfig-005-20250712    gcc-12
-x86_64      buildonly-randconfig-006-20250712    gcc-12
-x86_64                              defconfig    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20250713    gcc-12
-x86_64                randconfig-002-20250713    gcc-12
-x86_64                randconfig-003-20250713    gcc-12
-x86_64                randconfig-004-20250713    gcc-12
-x86_64                randconfig-005-20250713    gcc-12
-x86_64                randconfig-006-20250713    gcc-12
-x86_64                randconfig-007-20250713    gcc-12
-x86_64                randconfig-008-20250713    gcc-12
-x86_64                randconfig-071-20250713    clang-20
-x86_64                randconfig-072-20250713    clang-20
-x86_64                randconfig-073-20250713    clang-20
-x86_64                randconfig-074-20250713    clang-20
-x86_64                randconfig-075-20250713    clang-20
-x86_64                randconfig-076-20250713    clang-20
-x86_64                randconfig-077-20250713    clang-20
-x86_64                randconfig-078-20250713    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-12
-x86_64                         rhel-9.4-kunit    gcc-12
-x86_64                           rhel-9.4-ltp    gcc-12
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250712    gcc-8.5.0
-xtensa                randconfig-002-20250712    gcc-8.5.0
+This pci_bus_pm_ops struct could include a method, like get_aspm_default(),
+that aspm.c would query to retrieve the appropriate default policy if
+present. The presence of this pm_ops interface would also indicate that
+aspm_disabled should not apply to that bus, avoiding the need for an
+additional flag.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The relevant logic in pcie_aspm_cap_init() would look like this:
+
+        struct pci_bus_pm_ops *pm_ops = parent->bus->pm_ops;
+
+        ...
+
+        if (pm_ops && pm_ops->get_aspm_default)
+                link->aspm_default = pm_ops->get_aspm_default(parent);
+        else
+                link->aspm_default = link->aspm_enabled;
+
+Would this be a more acceptable direction?
+
+David
 
