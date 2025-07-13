@@ -1,140 +1,173 @@
-Return-Path: <linux-pm+bounces-30755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30756-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9345B030D8
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 13:29:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8B43B0312F
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 15:32:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AB8A3BC542
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 11:29:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48346175246
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 13:32:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B931F7910;
-	Sun, 13 Jul 2025 11:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30161262D29;
+	Sun, 13 Jul 2025 13:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxOsCIre"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NAegdKTP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014962E371B
-	for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 11:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD752E36EE;
+	Sun, 13 Jul 2025 13:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752406178; cv=none; b=oSFC4uZk7K9f1Rd5ycjP9/P5Kalvqd/J0owcTELb0KfPy64oX9EFzhJtnEM5P0tQ0TUMSkltY7LGsKXnopuqKXeENld5vmpn8u0gpkk5wMLhIZNL3zaD4mXtj6TKtunRa9S+ic5Bcn+VvbJdfzD6dbUlRg2COOW3XaJRUyS2uzc=
+	t=1752413523; cv=none; b=b1JQan0EgwLp3bOWgDmFnZba54aWusJXuXGoGWPPLh20alCTK3rteNIuFPXEGFFBgxjeeU9kj9bUxVSR+lvbXk1dLF0DH/gIEDwK2BWpQV+7c5umMQKbrpg/1W3wwkOWbPED7c/8//hmxBS2uj1EAZ8pKaCPW+qSJ73N8OZ8FsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752406178; c=relaxed/simple;
-	bh=ig/sm57boXoszdJ3yZiDJeFX0iSRVVKic0nJd8RRGPI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cdd8YMJcTsHw6KAW7aR6kMatzD3HQeIf/gs9/VprYgCFPh0vJonZFx3a18rhbT9rom4xD40pqW6NgDpQmvWfzui5o6ZWW2Fwg/aMktRhUrwsaw35LABB+FCsKqw5WwqasNu2w/It7f/QfQtknR2l4vtMGY2l2ffENU92KZibWJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxOsCIre; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5FDC4CEF6
-	for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 11:29:37 +0000 (UTC)
+	s=arc-20240116; t=1752413523; c=relaxed/simple;
+	bh=Sb3s9wGLtY+M3hpUawaRjK8gLZhXFTW3DV50k1kRVJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H5UlI19pSGRpHBPoEnhsrzEQ9XmBlVx9H4hDW85gh2WJJCAVFTlzxeZCff0GD31EGavpqmPje4/9LnSFczI1h23xnnUTWsmOzAqhcijukPzl252xvspiPYvTCxBfm8FTfbCRqtSTDx8OFA45Kuvv1WGQ/14K0E0uyWUc5kwo31o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NAegdKTP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 777A8C4CEE3;
+	Sun, 13 Jul 2025 13:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752406177;
-	bh=ig/sm57boXoszdJ3yZiDJeFX0iSRVVKic0nJd8RRGPI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hxOsCIred2UJMy8IbaIthkeTlB3WqZL+UnSFRVsvrqxbkpzODsQL2COS/0Bk0f4AR
-	 zP1kGBTMzgb/QtYO801I/b7ZJ5vh73gJjPBxe201tM9Yaz1kNu5VP0HkWRlnpeywPp
-	 vifQt/APv58PF67up35PRHRopQpj4m25DQyVW+yzHM/d5SRD4npMunrlQ/LEddghpL
-	 8gvmofDAe+V6YFcFsYTYjlDBBnp40mVww4jIlWU6SV0t0rmpaz+gkVAfTnSJBOVP8Z
-	 U1W918CsUTfhNmdliZtMxk0KQxzFK6RMygKtR/5R6M96ht1GvsaNlAF/fQn/j5MMy5
-	 ds79+O8hDCNYg==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-40af40aee93so2191946b6e.0
-        for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 04:29:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVLCk2MUHYBQcLQdyidI+k6Dht5NX/8OeOFdsJTCYYDYcCGTjy2abRAC9O4EkRoD2qgL1t1/0Q17A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywiv9kaVy4zLI7M5Iz0qBqeUbDYIeHHEsW31gr1WWvxn5woovp4
-	+brvvNsxzgZxU0cp0F7OzDz/wJxPjyEnrLBMjj02vGcgftk/Plm9AI1Xxbxq8XqgFb2LkDAUOhk
-	o1dDv+06w19RC0qewHllUnNb8W3cMcL4=
-X-Google-Smtp-Source: AGHT+IEbeIBNi8DPExLaD+X7ITACu0H7obzT6EaTy+D26zLM43xcwDkekX0CkoMJbiG8/74DftIxgzJluaI88+uCObo=
-X-Received: by 2002:a05:6808:66cc:b0:415:969d:26f8 with SMTP id
- 5614622812f47-415969d2775mr5248875b6e.17.1752406176681; Sun, 13 Jul 2025
- 04:29:36 -0700 (PDT)
+	s=k20201202; t=1752413522;
+	bh=Sb3s9wGLtY+M3hpUawaRjK8gLZhXFTW3DV50k1kRVJ8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NAegdKTPKXSfJBWKEKnuLJNpg9fH+kLU+vrlCoQ7OP338WeTPONfSThypHjdeSOVT
+	 A95XJ4ylTaepmvs4WD8z4IMQkPw4LAcyrhdjHZlPZEdE9VO7CpR/187EOpglKIg7b5
+	 ZI+Pz3l96kXSCxZasGnWyjDF8CeMbXuiRyMLt23yjFPAEw88mmxbOaWMP0eH8opNoK
+	 4QRZTH9T8y/Ek6EXZcQifKk/HTaVOENHWL6l9Y86JAwzJ/hNOiB367Nx1lqd+nIrc3
+	 CIfWMMgyTItPLY0pISIAHe5MzyBmF0GeeGO5IqioLi0YqWq9G8K+LWb38n6epAeEf5
+	 C610H2UshMx5w==
+Date: Sun, 13 Jul 2025 14:31:49 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+Cc: robh@kernel.org, krzysztof.kozlowski@linaro.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+ lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+ konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
+ rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
+ david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+ quic_kamalw@quicinc.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+ quic_skakitap@quicinc.com, neil.armstrong@linaro.org,
+ stephan.gerhold@linaro.org
+Subject: Re: [PATCH V6 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+Message-ID: <20250713143149.60763b52@jic23-huawei>
+In-Reply-To: <5b55acbf-065d-4383-a816-82561bf91273@oss.qualcomm.com>
+References: <20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com>
+	<20250509110959.3384306-5-jishnu.prakash@oss.qualcomm.com>
+	<20250511140418.33171ca3@jic23-huawei>
+	<ff19780e-5bbd-4074-9db3-b4f27922a093@oss.qualcomm.com>
+	<20250628173112.63d9334e@jic23-huawei>
+	<5b55acbf-065d-4383-a816-82561bf91273@oss.qualcomm.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250712233715.821424-1-superm1@kernel.org>
-In-Reply-To: <20250712233715.821424-1-superm1@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sun, 13 Jul 2025 13:29:25 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iEquLgxScuTny0r2+H59OekpkauB4bh+1kkSXu+gtYeQ@mail.gmail.com>
-X-Gm-Features: Ac12FXyLrndCakcjz9qF2YkknZuM9Pp8_2nzYOSeJvmT7z9ZPCr-NFKEOExqjkQ
-Message-ID: <CAJZ5v0iEquLgxScuTny0r2+H59OekpkauB4bh+1kkSXu+gtYeQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: hibernate: Add stub for pm_hibernate_is_recovering()
-To: Mario Limonciello <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, rafael@kernel.org, pavel@kernel.org, 
-	len.brown@intel.com, guoqing.zhang@amd.com, 
-	Randy Dunlap <rdunlap@infradead.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jul 13, 2025 at 1:37=E2=80=AFAM Mario Limonciello <superm1@kernel.o=
-rg> wrote:
->
-> From: Mario Limonciello <mario.limonciello@amd.com>
->
-> Randy reports that amdgpu fails to compile with the following error:
-> ERROR: modpost: "pm_hibernate_is_recovering" [drivers/gpu/drm/amd/amdgpu/=
-amdgpu.ko] undefined!
->
-> This happens because pm_hibernate_is_recovering() is only compiled when
-> CONFIG_PM_SLEEP is set.  Add a stub for it so that drivers don't need
-> to depend upon CONFIG_PM.
->
-> Cc: Samuel Zhang <guoqing.zhang@amd.com>
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/dri-devel/CAJZ5v0h1CX+aTu7dFy6vB-9LM6t5J4=
-rt7Su3qVnq1xx-BFAm=3DQ@mail.gmail.com/T/#m2b9fe212b35fde11d58fcbc4e0727bc02=
-ebba7b0
-> Fixes: c2aaddbd2dede ("PM: hibernate: add new api pm_hibernate_is_recover=
-ing()")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+On Thu, 10 Jul 2025 12:14:13 +0530
+Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> Hi Jonathan,
+> 
+> On 6/28/2025 10:01 PM, Jonathan Cameron wrote:
+> > 
+> >   
+> >>>> +	.hw_settle_1 = (unsigned int [VADC_HW_SETTLE_SAMPLES_MAX])
+> >>>> +				{ 15, 100, 200, 300, 400, 500, 600, 700,
+> >>>> +				  1000, 2000, 4000, 8000, 16000, 32000,
+> >>>> +				  64000, 128000 },    
+> >>> Andy often points this out, but I'll do it this time. Fixed numbers (typically power of 2)
+> >>> elements per line make it much easier to see which element is which in these arrays.
+> >>> Reduce the indent a little to allow that here.    
+> 
+> ...
+> 
+> >>>
+> >>> It was never worth bothering with release until we had devm managed form but
+> >>> now we do the code complexity cost is low enough to make it reasonable.
+> >>>     
+> >>>> +	indio_dev->name = pdev->name;    
+> >>>
+> >>> Just to check.  Does that end up as a part number or similar?    
+> >>
+> >> I printed this name and it appeared like this:
+> >>
+> >> indio_dev->name: c426000.spmi:pmic@0:adc@9000
+> >>
+> >> It only gets the DT node names, which are generic, there are 
+> >> no part numbers in this name.  
+> > I thought it might be something along those lines.
+> > 
+> > indio_dev->name should be the part number so hard code it rather than
+> > getting it from the pdev->name
+> >   
+> 
+> Actually there would be more than one PMIC which can function as the master PMIC
+> for Gen3 ADC functionality, so I don't think I can simply hard code a name here
+> based on PMK8550, if we want to keep the part number correct.
+> 
+> Since we can't get the part number directly from the DT node names, we
+> could try one of the following ways to add it:
+> 
+> 1. Add a devicetree property for the part number
+>    This would be simple, but I'm not sure if this is the best way, 
+>    if the below method looks good.
+Nope as if you need a part number, that's should be via the compatible.
+> 
+> 2. Add a string in the compatible property for the part number.
+>    This means updating the compatible from "qcom,spmi-adc5-gen3"
+>    to something like this for PMK8550:
+> 
+>    compatible = "qcom,pmk8550-adc5-gen3", "qcom,spmi-adc5-gen3";
+> 
+>    and then extracting the part number from the first string.
 
-> --
-> v2:
->  * put stub in right ifdef
-> ---
->  include/linux/suspend.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 293137210fdf4..fcb150ee83b6b 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -426,8 +426,6 @@ int is_hibernate_resume_dev(dev_t dev);
->  static inline int is_hibernate_resume_dev(dev_t dev) { return 0; }
->  #endif
->
-> -bool pm_hibernate_is_recovering(void);
-> -
->  /* Hibernation and suspend events */
->  #define PM_HIBERNATION_PREPARE 0x0001 /* Going to hibernate */
->  #define PM_POST_HIBERNATION    0x0002 /* Hibernation finished */
-> @@ -478,6 +476,7 @@ extern unsigned int lock_system_sleep(void);
->  extern void unlock_system_sleep(unsigned int);
->
->  extern bool pm_sleep_transition_in_progress(void);
-> +bool pm_hibernate_is_recovering(void);
->
->  #else /* !CONFIG_PM_SLEEP */
->
-> @@ -508,6 +507,7 @@ static inline unsigned int lock_system_sleep(void) { =
-return 0; }
->  static inline void unlock_system_sleep(unsigned int flags) {}
->
->  static inline bool pm_sleep_transition_in_progress(void) { return false;=
- }
-> +static inline bool pm_hibernate_is_recovering(void) { return false; }
->
->  #endif /* !CONFIG_PM_SLEEP */
->
-> --
-> 2.43.0
->
+Do it via a compatible lookup + data in relevant tables rather
+than messing with string break up.  Sometimes we'll get the
+part number of the fallback compatible but I don't really care.
+However, see below - I think spmi-adc5-gen3 is effectively the
+part number for the IP. It just happens to be inside a PMIC
+that has another name.
+
+> 
+> Please let me know which method you would prefer.
+> 
+> In addition, does the below string look fine, to assign to
+> indio_dev->name for PMK8550?
+> 
+> pmk8550_adc
+
+That's ok, though given it's an ADC anyway, pmk8550 should be sufficient
+for this IIO specific name.
+If it makes no practical difference what PMIC it is for this driver
+then simply use spmi-adc5-gem3 or something along those lines.
+So kind of a generic part number for the IP rather than specifics of
+which PMIC it is implemented in.
+
+Jonathan
+
+
+> 
+> Please let me know if you want a different format here.
+> 
+> Thanks,
+> Jishnu
+> 
+> > 
+> > Jonathan  
+> 
+> 
+
 
