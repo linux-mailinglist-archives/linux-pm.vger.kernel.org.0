@@ -1,129 +1,140 @@
-Return-Path: <linux-pm+bounces-30754-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30755-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC2A2B02FF0
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 10:34:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9345B030D8
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 13:29:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59E623A3F79
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 08:34:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AB8A3BC542
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 11:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950291F03D8;
-	Sun, 13 Jul 2025 08:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B931F7910;
+	Sun, 13 Jul 2025 11:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o01Y+j/Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxOsCIre"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E8081E;
-	Sun, 13 Jul 2025 08:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014962E371B
+	for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 11:29:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752395693; cv=none; b=T09k8auGf5iW29fh91cVWIQbwg144M3wVOxx8DtH/w8xiJSLSge8FdnoSxftwUcyEwk2sZYO6NVfutl9LeDBgOYzmjaDgcg3TVKAY7duajy2Dzu5bA/ZlnAyhBWfBbGXk+T1OVyRhUmG7TgbwhCXrInPAcX6X+3HjTDvvqpEgAY=
+	t=1752406178; cv=none; b=oSFC4uZk7K9f1Rd5ycjP9/P5Kalvqd/J0owcTELb0KfPy64oX9EFzhJtnEM5P0tQ0TUMSkltY7LGsKXnopuqKXeENld5vmpn8u0gpkk5wMLhIZNL3zaD4mXtj6TKtunRa9S+ic5Bcn+VvbJdfzD6dbUlRg2COOW3XaJRUyS2uzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752395693; c=relaxed/simple;
-	bh=I0ovE260u/gC1Up9amFDoKnv8ENJK4Lp5nCpuguLc8I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sVNHvEWH/LXrhFg+k5eq8XMf/RiRyg4CBOduVsi2UBFUMkhtPXgji3kGx263VfCOGL1oc0fe/2tBEZ8OlseE8hz53ccccWj09Iw7W8etST/varquTgQ9OVg3sI5ulZsPIQR0tYfkCoDTWzvMTmWik7aBWjR4aJuBWFVu0wJe/sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o01Y+j/Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8E1C4CEE3;
-	Sun, 13 Jul 2025 08:34:49 +0000 (UTC)
+	s=arc-20240116; t=1752406178; c=relaxed/simple;
+	bh=ig/sm57boXoszdJ3yZiDJeFX0iSRVVKic0nJd8RRGPI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cdd8YMJcTsHw6KAW7aR6kMatzD3HQeIf/gs9/VprYgCFPh0vJonZFx3a18rhbT9rom4xD40pqW6NgDpQmvWfzui5o6ZWW2Fwg/aMktRhUrwsaw35LABB+FCsKqw5WwqasNu2w/It7f/QfQtknR2l4vtMGY2l2ffENU92KZibWJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxOsCIre; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5FDC4CEF6
+	for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 11:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752395692;
-	bh=I0ovE260u/gC1Up9amFDoKnv8ENJK4Lp5nCpuguLc8I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=o01Y+j/QO7DPCyhRI+BNpv1/fcPAnRTbIzzkdgMlxXFdD9JEWXJ2YhIYH/fwi/5cM
-	 H5Si5YOoGTPTI3WNxN/7qam/iRaskRodl0/ZBrXMQDSL7uGtm9f6yoQ3hziQTnz4DM
-	 UEPz2qDHVRbWB85ltXTCSBYZtMGT2F8doXi0YEg16/pEf+wFd0RHCGd15YaB4ILrAy
-	 4oFpWwuov1bfyX6h0k5DG9yQIjTBcsZpJxrV74KP7d6fYuggzsN5yHpdQj34etHgGl
-	 +/etx1Fa4jTJmc3jtgc1PWLpirsYbn3ZLkVQAqx6d5y5uHrkQcJuvutRjEWuVJists
-	 b8PdogeY7+9Fw==
-Message-ID: <c9887764-8085-4abe-9188-9690ea8b5191@kernel.org>
-Date: Sun, 13 Jul 2025 10:34:47 +0200
+	s=k20201202; t=1752406177;
+	bh=ig/sm57boXoszdJ3yZiDJeFX0iSRVVKic0nJd8RRGPI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hxOsCIred2UJMy8IbaIthkeTlB3WqZL+UnSFRVsvrqxbkpzODsQL2COS/0Bk0f4AR
+	 zP1kGBTMzgb/QtYO801I/b7ZJ5vh73gJjPBxe201tM9Yaz1kNu5VP0HkWRlnpeywPp
+	 vifQt/APv58PF67up35PRHRopQpj4m25DQyVW+yzHM/d5SRD4npMunrlQ/LEddghpL
+	 8gvmofDAe+V6YFcFsYTYjlDBBnp40mVww4jIlWU6SV0t0rmpaz+gkVAfTnSJBOVP8Z
+	 U1W918CsUTfhNmdliZtMxk0KQxzFK6RMygKtR/5R6M96ht1GvsaNlAF/fQn/j5MMy5
+	 ds79+O8hDCNYg==
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-40af40aee93so2191946b6e.0
+        for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 04:29:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVLCk2MUHYBQcLQdyidI+k6Dht5NX/8OeOFdsJTCYYDYcCGTjy2abRAC9O4EkRoD2qgL1t1/0Q17A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywiv9kaVy4zLI7M5Iz0qBqeUbDYIeHHEsW31gr1WWvxn5woovp4
+	+brvvNsxzgZxU0cp0F7OzDz/wJxPjyEnrLBMjj02vGcgftk/Plm9AI1Xxbxq8XqgFb2LkDAUOhk
+	o1dDv+06w19RC0qewHllUnNb8W3cMcL4=
+X-Google-Smtp-Source: AGHT+IEbeIBNi8DPExLaD+X7ITACu0H7obzT6EaTy+D26zLM43xcwDkekX0CkoMJbiG8/74DftIxgzJluaI88+uCObo=
+X-Received: by 2002:a05:6808:66cc:b0:415:969d:26f8 with SMTP id
+ 5614622812f47-415969d2775mr5248875b6e.17.1752406176681; Sun, 13 Jul 2025
+ 04:29:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/3] dt-bindings: interconnect: Add EPSS L3 compatible
- for QCS8300 SoC
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Sibi Sankar
- <quic_sibis@quicinc.com>, Odelu Kukatla <quic_okukatla@quicinc.com>,
- Mike Tipton <mdtipton@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250711102540.143-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250711102540.143-2-raviteja.laggyshetty@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250711102540.143-2-raviteja.laggyshetty@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250712233715.821424-1-superm1@kernel.org>
+In-Reply-To: <20250712233715.821424-1-superm1@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sun, 13 Jul 2025 13:29:25 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iEquLgxScuTny0r2+H59OekpkauB4bh+1kkSXu+gtYeQ@mail.gmail.com>
+X-Gm-Features: Ac12FXyLrndCakcjz9qF2YkknZuM9Pp8_2nzYOSeJvmT7z9ZPCr-NFKEOExqjkQ
+Message-ID: <CAJZ5v0iEquLgxScuTny0r2+H59OekpkauB4bh+1kkSXu+gtYeQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: Add stub for pm_hibernate_is_recovering()
+To: Mario Limonciello <superm1@kernel.org>
+Cc: mario.limonciello@amd.com, rafael@kernel.org, pavel@kernel.org, 
+	len.brown@intel.com, guoqing.zhang@amd.com, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/07/2025 12:25, Raviteja Laggyshetty wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider binding for
-> QCS8300 SoC. As the EPSS hardware in QCS8300 and SA8775P are same,
-> added a family-level compatible for SA877P SoC. This shared fallback
-> compatible allows grouping of SoCs with similar hardware, reducing
-> the need to explicitly list each variant in the driver match table.
-> 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+On Sun, Jul 13, 2025 at 1:37=E2=80=AFAM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> Randy reports that amdgpu fails to compile with the following error:
+> ERROR: modpost: "pm_hibernate_is_recovering" [drivers/gpu/drm/amd/amdgpu/=
+amdgpu.ko] undefined!
+>
+> This happens because pm_hibernate_is_recovering() is only compiled when
+> CONFIG_PM_SLEEP is set.  Add a stub for it so that drivers don't need
+> to depend upon CONFIG_PM.
+>
+> Cc: Samuel Zhang <guoqing.zhang@amd.com>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Closes: https://lore.kernel.org/dri-devel/CAJZ5v0h1CX+aTu7dFy6vB-9LM6t5J4=
+rt7Su3qVnq1xx-BFAm=3DQ@mail.gmail.com/T/#m2b9fe212b35fde11d58fcbc4e0727bc02=
+ebba7b0
+> Fixes: c2aaddbd2dede ("PM: hibernate: add new api pm_hibernate_is_recover=
+ing()")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+> --
+> v2:
+>  * put stub in right ifdef
 > ---
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+>  include/linux/suspend.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 293137210fdf4..fcb150ee83b6b 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -426,8 +426,6 @@ int is_hibernate_resume_dev(dev_t dev);
+>  static inline int is_hibernate_resume_dev(dev_t dev) { return 0; }
+>  #endif
+>
+> -bool pm_hibernate_is_recovering(void);
+> -
+>  /* Hibernation and suspend events */
+>  #define PM_HIBERNATION_PREPARE 0x0001 /* Going to hibernate */
+>  #define PM_POST_HIBERNATION    0x0002 /* Hibernation finished */
+> @@ -478,6 +476,7 @@ extern unsigned int lock_system_sleep(void);
+>  extern void unlock_system_sleep(unsigned int);
+>
+>  extern bool pm_sleep_transition_in_progress(void);
+> +bool pm_hibernate_is_recovering(void);
+>
+>  #else /* !CONFIG_PM_SLEEP */
+>
+> @@ -508,6 +507,7 @@ static inline unsigned int lock_system_sleep(void) { =
+return 0; }
+>  static inline void unlock_system_sleep(unsigned int flags) {}
+>
+>  static inline bool pm_sleep_transition_in_progress(void) { return false;=
+ }
+> +static inline bool pm_hibernate_is_recovering(void) { return false; }
+>
+>  #endif /* !CONFIG_PM_SLEEP */
+>
+> --
+> 2.43.0
+>
 
