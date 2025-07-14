@@ -1,76 +1,78 @@
-Return-Path: <linux-pm+bounces-30769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C62A3B0396A
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:25:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DA95B0395F
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:24:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D9CF18837CA
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:23:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCD934A0185
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:23:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E66923B60D;
-	Mon, 14 Jul 2025 08:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B956323BCFA;
+	Mon, 14 Jul 2025 08:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5Gm9kQO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EnrPjiH8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E288223DDF;
-	Mon, 14 Jul 2025 08:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BE323A9BB;
+	Mon, 14 Jul 2025 08:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752481393; cv=none; b=EMjmoAm19R4reF5YlnlPJny+BSROzwYSdu9JurRsmVKnFvjaBAahhHuJBkVVJYBxdrCkHT5T9QyBCqxRDQNJuSTVXG63sXjbKwNbk7tiClxaSvnCr/3RwpLvA7Wkv/R02ZzBnqFQbn6wDeBsJ+wPiFr8srQf6sPwztol8Hltam0=
+	t=1752481394; cv=none; b=PQXP9bq203R8qeHIVeZy0E/z/VnBUPZmsfFWghkWoiM5EERzjYyHAouHfrPcdI7OfbgjbetbUVmpDQalAZ8N69dVZnNHFpmnnJdzG3DD0Mw9NieiKdJUnuODfByvS+KZoAB5KSr1E5T0gi2NDR3AMs8sZOlRlf0hXm9VzTqMJuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752481393; c=relaxed/simple;
-	bh=RfqUbaa9s7JOmh2LfjwsNwwwmm0uXMw9G0+7rubVqf8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OYiJnav/kxEVCZ1VHyfmJ+zFRn1hFMgsp80CsaGJvq9Dnyj9rx8/mJJ2+lGAQBo5nzoJQ1E+k+X0DAZGy69tm0aNSbBJsoHca8/Y2FGrM8iRgiXHE50S5zDYQIPvj297gdRSwHtW0QzTl29/s4uL4+1NgWj0kPlPWsg4D871yjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5Gm9kQO; arc=none smtp.client-ip=209.85.167.45
+	s=arc-20240116; t=1752481394; c=relaxed/simple;
+	bh=e/AbcwBM9uIFEwZ/6mpXZP2Y3Z4bGt/eHFgnbobATzs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RtUcJglQn1RNVlEP0KGZtLQKR8mywQiCU2047d4kwHPuG9UyLXwzWsRqXdaX8XaQ/szyQkjaf315y6JVY8gcBMOksGoR3WcNvgGVhrapX26qgoMaE/ZcboaJC38itI/1KD/nN+UG4d0hHlMciRik7za2rD0x5pkyXwKgvyyr+jE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EnrPjiH8; arc=none smtp.client-ip=209.85.167.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-553b6a349ccso4957109e87.0;
-        Mon, 14 Jul 2025 01:23:11 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-558facbc19cso3154066e87.3;
+        Mon, 14 Jul 2025 01:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752481390; x=1753086190; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6hrDr1ho+LmcOihDF5/afd2FJMkMgiWJJggRREgOis=;
-        b=l5Gm9kQOhNOq8P3wMqU7GZN56IfjuaW/38XOm3/e/CQokank9pGHLTAC/3S3wPtCEe
-         KGW1Ev+3gbCMMC96ghjPI2M0+EiCdLNUqrDWpm89Fa+HdkllBsKWw+4d8LjYaLob4dWD
-         QdkMwYt9Zext5uj2aqR9VrXQeK6NXTc7WSZ1QmMPFedQ6sauFfvL8Z5ggxHYZFNuqGtz
-         I5WEdJb44gBPVeoXpEHV79jMAAFCDoq1nk5jj2id78OeiA3T1huwlDyuX08BV3K8mfcc
-         mWk5yH7v8L5Ar5hcByFPBV12L7VLDauAr9msqTJz6lfZdEchzVCeMP1mXbaSxVzJr/WA
-         iFQQ==
+        d=gmail.com; s=20230601; t=1752481391; x=1753086191; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jv63TPoByrIyI7mUvMKjVHJSZMGf19SIsGRaSMWTF9U=;
+        b=EnrPjiH8KzLL5jpO9FLX22VsfMzB95Ul9bxaLH7u6FoB+Sbqdq+OWia1hB+6iBagTd
+         hnYTKaTeunyBVbDRnMQLOknYHanXQ2nA96yMe+P0Z511VixCHUENnCvQ8rEHBY8LEuSV
+         AVWHIxjot1JaWz9CQPbUaAGEzmDoWhyDhsIQJB+niZLL3qcooe9gNI+XhnHHbDtPfky8
+         5Xen0usHwlmaxVyGR4BYTKLmyMBTMP5QTBQbmwO/ebAoSMCWMY6oJ8MXknEqNR/uNQXN
+         o56bKgvtYtCrjHM7Ci7/4qmkqr1Mj2HLfmfXUHlc2TQJ6l3nnW/ispLfEUW0RHDVT+XV
+         Oqzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752481390; x=1753086190;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y6hrDr1ho+LmcOihDF5/afd2FJMkMgiWJJggRREgOis=;
-        b=tobn41OZRCV2ViYKWt2779kTszWfNF+9jvknShZuJpLF5qT36iiZirfFKG48HN3TsU
-         XmsNdwxPTdlsIszmVZ7jP9D2mRTy5q8JdPXtGOij1zX/BwQAXgZyodfxhvx7Bl7/kl9u
-         13rCuX9puvxyR3jzK66WanN9PTCsE3rn8DbvToNvFYNCp3god1WlYVcp8fu/iMEe2J4Z
-         9e2wtS9mA7/Ejm0grDhOiwn8T4kbOa988f1eo3+lL7ysQneA1L41E8hxG5NE/NZIn57w
-         UguylOuPqilduefuKKjC+vLzde9d5hU8M2vmMd0NxW7Tek+aq7jG5eHv+58nPCmNzn30
-         H/Sw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfVcOU+4wfIR7ZClZteJrHMdC4ZSQ8gl00o/RVEVEQbUOvTNfoUFR0tA8vB+eMM9GnAkNcc56yVQrP57Cx@vger.kernel.org, AJvYcCWB+p+3rLB0ad0tnIwW1TilBH3XWlOZ8+63I8E8/onDU0gZgtlY7aBtsDuZRhgCws6CdHdpeG98vOLfJNE=@vger.kernel.org, AJvYcCXMs0l03OsaU36qk8C0FMbgDIHqOfZsmy36Tutp71npLYXMNVfMavIlD1kPPu8iczCJxI1GbURPnGze@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyfsebK61BxoPeP3+Z/aSG3/g+ySdmfm4IkDDKJSDOPM4TfrXb
-	Dlaa2+H+ZaLkQGy4TglfTDvJZSRXcsA4LJFDSfUqXsFN+JH6TCSkmNFX
-X-Gm-Gg: ASbGncufocJ2n8i+ksHl5iG+zn3H75BzdFpAxah/IevFFtpACUCUSsTlegEbdhAaIXU
-	7OJSRpsQt42eGygWEm1075cIX01RDwu2C0PXA6PDo8MjmLhkDhWo86FC77ibW0XlOq3yTWN2JiN
-	b2HItVsIVNpP5iZXM9vQrrlU/eGk4txu4l+hW5dVJJZHkSGxx1X9Hw/WxXNoBPA6CiTFwLwTfs0
-	YT5gMO3DXKpOS2hJaduzEtwjMqVjXgaSLbO4ScxDuUvApn5cMkKk8u1Dk8axUbycRrWPo6Tw3Dw
-	nhdPydWNCLxwBk9Z63nPcdQFfO2i1Jr9dItkGZrFx7TX5ztIChE9x8C/QCO2jcNCoHKl5xOpmil
-	nNVyaFG6QhmHUPw==
-X-Google-Smtp-Source: AGHT+IE/cT/hjY2GCM1WSnH0h5q/mZeYUgMYbbjoyfEzTj0kg7wgS9qDCIngeBrTB4ZjtayJ44GjnA==
-X-Received: by 2002:a05:6512:31c8:b0:553:296b:a62 with SMTP id 2adb3069b0e04-55a0448b825mr3586374e87.12.1752481389417;
-        Mon, 14 Jul 2025 01:23:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752481391; x=1753086191;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jv63TPoByrIyI7mUvMKjVHJSZMGf19SIsGRaSMWTF9U=;
+        b=vDrjr3DDe87Ii5VV4cYs/KeWxL/+IAnnf0lfYbqTCdNuwJG9NNtEZnhkuz0/Y5pBp9
+         AEGQJQp9dcua8XmS6FeSToqimbSAx9nmOmb+evovap8Y92Fu2wi/LAPHLkNiJuiCDeJ3
+         Z29/9GK8iOBPgHcno5r7CPPiZzjy5ZT01OA/suw6AgWAcuwLm9lEjZ++GjSqsZKOEgEW
+         tJStnu5I/HKYcL4Q9efJTuycEUEbu4ryXhNA1lcwaGANGCWfMIBmU+ptEvVULfImsfSe
+         xs9tyeRspC1gI3Co+W0pjTNi7F57Yq4Zkp3pQgxy3T9zpIBPzSVl9C/gQ4ed9PCoAj5N
+         g8cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiJnsE3ZqMg4vglshjWhLr68Z3Y8UTPI1IR8drW4Jo0+v7nHukjT9gLOpa8ehLkyrtMvZoHYM3bkos7gin@vger.kernel.org, AJvYcCV5uUE2wqmr3qXrXgpqsETyKeQjvKATTBSCdf7bpZ6t0jRVbNbatH8TSvIgRuJXtNnVhb+reM0RoL2D2U0=@vger.kernel.org, AJvYcCW21V60eVHeeZZK6PGabeLaT7xpRQ7r1LByy9sS6QxnZRFZ90KgS8n5XNL9+3/vI3yfDyeFrmPNLdHZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaEkKsC88wbulj0btQeN2Y1QbYcUZ5ia5GLhxbkir9WSQ2+nSC
+	ik/bHWHPLqJIpP00ohVmGBjV1jUG8awVJJ2z1Wrqn43Q47/DuecWdggbjWei9g==
+X-Gm-Gg: ASbGnctjo1qApcdFPhgRrYpYXdzuUf85YWem3i4Ik8poziQYnovWSl2JnoKCFzIuhrr
+	9/SS6RTZPeaXnY+ODtQ71sUujpjt4f0NhOH/9PWFrMOIZgC29nh+0iFfT985vRyITxP1mm6KXyl
+	AwaUIyTlUi7Qg5zwRpF+3ve5Dl/FbNmpeeVAIiKBVf+D9u91QFFExvyESMOMqsNDO/paM4Pk0eo
+	47Kp1yhZj2crmvyjsaAo10pI4ZzkLKyrPCA0HMCNzSrQjHhc/dEKlXbR6eIYyqdOcxogvdsycxy
+	gDt1L8P9h5vyTkoQfvldjG4KMiQ6CFPg9TGPnm9ZV+xjyBiprCSB960yqyz5Ktsy4UilFpZm3+e
+	Mg12FsVqh41Mbfw==
+X-Google-Smtp-Source: AGHT+IFWIm/1du1E9goD8K0HMm58wP6nFtbtAkp6kgsVQZapdXpGamxEE2sU+7knP42ZSgmU+w5Pdw==
+X-Received: by 2002:a05:6512:a8f:b0:553:2154:7bda with SMTP id 2adb3069b0e04-55a04633fdfmr3678522e87.38.1752481390457;
+        Mon, 14 Jul 2025 01:23:10 -0700 (PDT)
 Received: from xeon.. ([188.163.112.60])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5593c7bbd55sm1885717e87.23.2025.07.14.01.23.08
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5593c7bbd55sm1885717e87.23.2025.07.14.01.23.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jul 2025 01:23:08 -0700 (PDT)
+        Mon, 14 Jul 2025 01:23:10 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -84,10 +86,12 @@ Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-tegra@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/5] thermal: tegra: add SOCTHERM support for Tegra114
-Date: Mon, 14 Jul 2025 11:22:47 +0300
-Message-ID: <20250714082252.9028-1-clamor95@gmail.com>
+Subject: [PATCH v2 1/5] soc: tegra: fuse: add Tegra114 nvmem cells and fuse lookups
+Date: Mon, 14 Jul 2025 11:22:48 +0300
+Message-ID: <20250714082252.9028-2-clamor95@gmail.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250714082252.9028-1-clamor95@gmail.com>
+References: <20250714082252.9028-1-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,38 +100,154 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-SOCTHERM is thermal sensor and thermal throttling controller found in Tegra
-SoC starting from Tegra114. Existing Tegra124 setup is mostly compatible
-with Tegra114 and needs only a few slight adjustmets of fuse calibration
-process.
+Add missing Tegra114 nvmem cells and fuse lookups which were added for
+Tegra124+ but omitted for Tegra114.
 
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
-Changes in v2:
-- no changes, resend.
----
+ drivers/soc/tegra/fuse/fuse-tegra30.c | 122 ++++++++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
 
-Svyatoslav Ryhel (5):
-  soc: tegra: fuse: add Tegra114 nvmem cells and fuse lookups
-  dt-bindings: thermal: Document Tegra114 SOCTHERM Thermal Management
-    System
-  thermal: tegra: soctherm-fuse: parametrize configuration further
-  thermal: tegra: add Tegra114 specific SOCTHERM driver
-  ARM: tegra: Add SOCTHERM support on Tegra114
-
- .../thermal/nvidia,tegra124-soctherm.yaml     |   2 +
- arch/arm/boot/dts/nvidia/tegra114.dtsi        | 197 ++++++++++++++++
- drivers/soc/tegra/fuse/fuse-tegra30.c         | 122 ++++++++++
- drivers/thermal/tegra/Makefile                |   1 +
- drivers/thermal/tegra/soctherm-fuse.c         |  33 ++-
- drivers/thermal/tegra/soctherm.c              |   6 +
- drivers/thermal/tegra/soctherm.h              |  17 +-
- drivers/thermal/tegra/tegra114-soctherm.c     | 213 ++++++++++++++++++
- drivers/thermal/tegra/tegra124-soctherm.c     |   8 +
- drivers/thermal/tegra/tegra132-soctherm.c     |   8 +
- drivers/thermal/tegra/tegra210-soctherm.c     |   8 +
- 11 files changed, 604 insertions(+), 11 deletions(-)
- create mode 100644 drivers/thermal/tegra/tegra114-soctherm.c
-
+diff --git a/drivers/soc/tegra/fuse/fuse-tegra30.c b/drivers/soc/tegra/fuse/fuse-tegra30.c
+index e24ab5f7d2bf..524fa1b0cd3d 100644
+--- a/drivers/soc/tegra/fuse/fuse-tegra30.c
++++ b/drivers/soc/tegra/fuse/fuse-tegra30.c
+@@ -117,6 +117,124 @@ const struct tegra_fuse_soc tegra30_fuse_soc = {
+ #endif
+ 
+ #ifdef CONFIG_ARCH_TEGRA_114_SOC
++static const struct nvmem_cell_info tegra114_fuse_cells[] = {
++	{
++		.name = "tsensor-cpu1",
++		.offset = 0x084,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu2",
++		.offset = 0x088,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-common",
++		.offset = 0x08c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu0",
++		.offset = 0x098,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration",
++		.offset = 0x0f0,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu3",
++		.offset = 0x12c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-gpu",
++		.offset = 0x154,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-mem0",
++		.offset = 0x158,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-mem1",
++		.offset = 0x15c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-pllx",
++		.offset = 0x160,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	},
++};
++
++static const struct nvmem_cell_lookup tegra114_fuse_lookups[] = {
++	{
++		.nvmem_name = "fuse",
++		.cell_name = "xusb-pad-calibration",
++		.dev_id = "7009f000.padctl",
++		.con_id = "calibration",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-common",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "common",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-cpu0",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "cpu0",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-cpu1",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "cpu1",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-cpu2",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "cpu2",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-cpu3",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "cpu3",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-mem0",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "mem0",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-mem1",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "mem1",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-gpu",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "gpu",
++	}, {
++		.nvmem_name = "fuse",
++		.cell_name = "tsensor-pllx",
++		.dev_id = "700e2000.thermal-sensor",
++		.con_id = "pllx",
++	},
++};
++
+ static const struct tegra_fuse_info tegra114_fuse_info = {
+ 	.read = tegra30_fuse_read,
+ 	.size = 0x2a0,
+@@ -127,6 +245,10 @@ const struct tegra_fuse_soc tegra114_fuse_soc = {
+ 	.init = tegra30_fuse_init,
+ 	.speedo_init = tegra114_init_speedo_data,
+ 	.info = &tegra114_fuse_info,
++	.lookups = tegra114_fuse_lookups,
++	.num_lookups = ARRAY_SIZE(tegra114_fuse_lookups),
++	.cells = tegra114_fuse_cells,
++	.num_cells = ARRAY_SIZE(tegra114_fuse_cells),
+ 	.soc_attr_group = &tegra_soc_attr_group,
+ 	.clk_suspend_on = false,
+ };
 -- 
 2.48.1
 
