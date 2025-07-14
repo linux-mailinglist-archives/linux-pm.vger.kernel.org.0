@@ -1,127 +1,158 @@
-Return-Path: <linux-pm+bounces-30776-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30777-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71375B039CA
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:47:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94439B03AD8
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 11:31:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8C8E3B9057
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:47:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EEF67ACE94
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 09:29:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D7D23956A;
-	Mon, 14 Jul 2025 08:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Wzm4jIIJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C9223C518;
+	Mon, 14 Jul 2025 09:31:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A649718D;
-	Mon, 14 Jul 2025 08:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B29C1C831A;
+	Mon, 14 Jul 2025 09:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752482863; cv=none; b=KANTA58afO/fAQovKIoa098O/NKkN4FwbZXP4PBfIX78sC4Ryi6hAFe1wd5GXWKdilt7ZuyvM0j9s7HS9zGsnZiyUIg0T/HLKZfIMAEP9Yxz4uK6VpeJAMpM0mHD5zdENHnSmX92fxdv8noUJBK+b2DWlQT3rtC67A1oL9QJMC0=
+	t=1752485470; cv=none; b=Tl5ee0V3X/dRpM5rwEG6uRodlt10JstPGsuc2w6brD8SfrykZge5nOLI/HtTt2FU5PyTYXf5wYw9WayOo5fN8G9kFAwEmK4mZnEVsODayLUjud32ahIWb1dkXgD1/KAqUk4wV3wYo1jdTz8zI1PsINoCAl7nz102CCmjF3edP3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752482863; c=relaxed/simple;
-	bh=2yuai8UnBb9zpoj2Dz89OXxlnRC1pzOFSWPiKRkdFpQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W4PlRXiADD7C5sP/ZbtfhLUCk8hd8eWXSFNgtkcVosfu8Ou8nbmc4RYg6DnsMKP+iKurZ4Yv8YRZwKlIz9pImmRwwaO4cJ2iQhZ71pKDfEfetreBJE9FXCI8ls2DCq72gJnt3kJ3rkcdQcuDL2XaB74qha1LqbWhUYXRkuUhUSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Wzm4jIIJ; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1752482854;
-	bh=2yuai8UnBb9zpoj2Dz89OXxlnRC1pzOFSWPiKRkdFpQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Wzm4jIIJtgJreaN92gm42sD6apc9wRY3xZ1FVNYWbhJdyNsOQ5Q2QlelUTgRDWdT1
-	 freAjquBex0sEw9hjUvBpuL8JT0WGHkQXXrcZI0NxnAbxn5mKPsPQEE3qn433KL59C
-	 gk/AASg+Ww7oar/9ABMOmCgdtmYBEq+iSjCsWjYt6diX0almRkMLN8XdnSDts+tdW6
-	 pif5SfJrOYi6KT0FoHbPAyGzmIZH5MKi5r5vuBjoho0+whjaoKHq0JbxKA/Op/0Hdi
-	 +gFiN36PItGgd9myBZxQ51R7NvyS4fCtVOZWTi7nLoyStTlkbav/wvIWmP6B/Wf3aL
-	 fy9IlPEXbSnyw==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 49D4C17E056F;
-	Mon, 14 Jul 2025 10:47:33 +0200 (CEST)
-Message-ID: <4537173f-7f79-4629-a2ef-cbf1edd2ed81@collabora.com>
-Date: Mon, 14 Jul 2025 10:47:32 +0200
+	s=arc-20240116; t=1752485470; c=relaxed/simple;
+	bh=CAV5eH90W2TTjeN+Jc9+5pYhbnK9Yx/gii7tAtBTe8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xk8mQHc9NQWnyFxHokGasYlnW5qV91LEC3Lcd9eDYM2b5JkUNhzZ8LnqWLrBh7snQmd18YitvwK+EH3JYeqgs4mIuAQ3SEvHUu6ZTMAItRXzbA3jjlX/SvU+5mF2JuMfJyeLLg6LtUuFqfaKWqtIWX0bYVVtnrOOsZydNBq4qPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36E3A1BC0;
+	Mon, 14 Jul 2025 02:30:59 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CBDF3F694;
+	Mon, 14 Jul 2025 02:31:02 -0700 (PDT)
+Date: Mon, 14 Jul 2025 11:30:51 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Prashant Malani <pmalani@google.com>
+Cc: Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aHTOSyhwIAaW_1m1@arm.com>
+References: <20250619000925.415528-1-pmalani@google.com>
+ <20250619000925.415528-3-pmalani@google.com>
+ <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com>
+ <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
+ <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
+ <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
+ <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
+ <aGuGLu2u7iKxR3ul@arm.com>
+ <CAFivqmJL90xsELhz4tPtkYA9vMzS9C=V__nwo=kWJKjKS=mE_Q@mail.gmail.com>
+ <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: mfd: syscon: Add mt8196 fdvfs syscons
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Hector Yuan <hector.yuan@mediatek.com>
-Cc: kernel@collabora.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20250711-mt8196-cpufreq-v1-0-e1b0a3b4ac61@collabora.com>
- <20250711-mt8196-cpufreq-v1-1-e1b0a3b4ac61@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250711-mt8196-cpufreq-v1-1-e1b0a3b4ac61@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
 
-Il 11/07/25 16:57, Nicolas Frattaroli ha scritto:
-> The MT8196 SoC uses two syscon ranges for CPU DVFS that are separate
-> from each other. One, mt8196-fdvfs-config, is used to check for a magic
-> number at that memory address to verify that fdvfs should be used. The
-> other, mt8196-fdvfs, is used to configure the desired frequency for the
-> DVFS controller for each CPU core.
+On Wed, Jul 09, 2025 at 03:49:03PM -0700, Prashant Malani wrote:
+> On Wed, 9 Jul 2025 at 10:25, Prashant Malani <pmalani@google.com> wrote:
+> >
+> > Hi Beata,
+> >
+> > Thanks for taking a look.
+> >
+> > On Mon, 7 Jul 2025 at 01:33, Beata Michalska <beata.michalska@arm.com> wrote:
+> > >
+> > > Hi Prashant,
+> > >
+> > > On Wed, Jul 02, 2025 at 11:38:11AM -0700, Prashant Malani wrote:
+> > > > Hi All,
+> > > >
+> > > > Ionela, Beata, could you kindly review ?
+> > > >
+> > > > On Fri, 27 Jun 2025 at 10:07, Prashant Malani <pmalani@google.com> wrote:
+> > > > >
+> > > >
+> > > > I think it is pertinent to note: the actual act of reading the CPPC counters
+> > > > will (at least for ACPI_ADR_SPACE_FIXED_HARDWARE counters)
+> > > > wake the CPU up, so even if a CPU *was* idle, the reading of the counters
+> > > > calls cpc_read_ffh() [1] which does an IPI on the target CPU [2] thus waking
+> > > > it up from WFI.
+> > > >
+> > > > And that brings us back to the original assertion made in this patch:
+> > > > the counter values are quite unreliable when the CPU is in this
+> > > > idle (or rather I should correct that to, waking from WFI) state.
+> > > >
+> > > I'd say that's very platform specific, and as such playing with the delay makes
+> > > little sense. I'd need to do more deliberate testing, but I haven't noticed
+> > > (yet) any discrepancies in AMU counters on waking up.
+> > > Aside, you have mentioned that you've observed the frequency reported to be
+> > > above max one (4GHz vs 3.5HZ if I recall correctly) - shouldn't that be clamped
+> > > by the driver if the values are outside of supported range ?
+> > >
+> > > Verifying whether the CPU is idle before poking it just to get a counters
+> > > reading to derive current frequency from those does feel rather like an
+> > > appealing idea.
+> >
+> > That's good to hear. What can we do to refine this series further?
+So I believe this should be handled in CPUFreq core, if at all.
+Would be good to get an input/opinion from the maintainers: Viresh and Rafael.
+> >
+> > > Narrowing the scope for ACPI_ADR_SPACE_FIXED_HARDWARE cases
+> > > could be solved by providing a query for the address space. Though I am not an
+> > > expert here so would be good to get some input from someone who is
+> > > (on both).
+> >
+> > Who would be the expert here (are they on this mailing list)?
+Probably as above + Sudeep Holla
+> >
+> > Could you point me to an example for the query for the address space? Then
+> > I can respin this series to use that query and narrow the scope.
+>
+Actually was suggesting adding one.
+> Actually, if the idea of this optimization (the idle_cpu check) sounds
+> good to you,
+> I don't see why we should limit it to ACPI_ADR_SPACE_FIXED_HARDWARE.
+> IOW, the patch can remain in its current form.
 > 
+Right, that does need though verifying against all users.
 
-What is the reason why you're using syscons here?
+In the meantime ....
+It seems that the issue of getting counters on a CPU that is idle is not
+in the counters themselves, but in the way how they are being read - at least
+from what I can observe.
+The first read experience longer delay between reading core and const counters,
+and as const one is read as a second one, it misses some increments (within
+calculated delta). So, what we could do within the driver is either:
+- Add a way to request reading both counters in a single cpc_read (preferable
+  I guess, though I would have to have a closer look at that)
+- Add some logic that would make sure the reads are not far apart
 
-Can't we simply assign the FDVFS MMIO to the cpufreq-hw node?
+Would you be able to verify that on your end?
 
-Or is there any reason why we can't declare it as mmio-sram? ...because I'm not
-entirely sure but the FDVFS space should effectively be a [c]SRAM memory range...
-
-Cheers,
-Angelo
-
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->   Documentation/devicetree/bindings/mfd/syscon.yaml | 4 ++++
->   1 file changed, 4 insertions(+)
+---
+BR
+Beata
+> Best regards,
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> index 27672adeb1fedb7c81b8ae86c35f4f3b26d5516f..5ee49d2ba0cdb72dd697a0fd71c8416ad4fd2c1e 100644
-> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> @@ -88,6 +88,8 @@ select:
->             - mediatek,mt8135-pctl-a-syscfg
->             - mediatek,mt8135-pctl-b-syscfg
->             - mediatek,mt8173-pctl-a-syscfg
-> +          - mediatek,mt8196-fdvfs
-> +          - mediatek,mt8196-fdvfs-config
->             - mediatek,mt8365-syscfg
->             - microchip,lan966x-cpu-syscon
->             - microchip,mpfs-sysreg-scb
-> @@ -194,6 +196,8 @@ properties:
->             - mediatek,mt8135-pctl-a-syscfg
->             - mediatek,mt8135-pctl-b-syscfg
->             - mediatek,mt8173-pctl-a-syscfg
-> +          - mediatek,mt8196-fdvfs
-> +          - mediatek,mt8196-fdvfs-config
->             - mediatek,mt8365-infracfg-nao
->             - mediatek,mt8365-syscfg
->             - microchip,lan966x-cpu-syscon
-> 
-
-
+> -- 
+> -Prashant
 
