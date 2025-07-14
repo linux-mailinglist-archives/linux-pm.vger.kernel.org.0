@@ -1,143 +1,222 @@
-Return-Path: <linux-pm+bounces-30778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30779-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58F2BB03AE2
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 11:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37EF6B03BBF
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:18:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8EA417BB8B
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 09:34:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6196416B7F9
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495D5241674;
-	Mon, 14 Jul 2025 09:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="di1SOu9k"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7833824468A;
+	Mon, 14 Jul 2025 10:18:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CA32E3718
-	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 09:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8798A244684
+	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752485689; cv=none; b=inQ3lY7P/11AuGcLWIT3OTzJtIztOroHngcRwy7j7fjbTdHfB6r2NQPp65qJbYQrtWsgDnObxT2kg0CS+5jLUFrj06UIOgcTi40H7AxV0nM6BRrcnVFg7ijhN7bRhaR/04X2UP7KcvbjIikc57OJb8+cmIj10hlJEveKUJT4WU8=
+	t=1752488286; cv=none; b=AHKJF+JR9f0isaBr6QVzlj/cfbrCvWzsQ6ET+EqC9BK2C58+GCdd/558zUV7rcm6D1Fqd3G/gE8nEP8zEq1NQP/pab1pKvn1XYQRuOPl2bcuB0ozd6zgJGDxU+BOIJzUj3FT8BR7ROexldyxGqP9qz/SFmSLL6Yh+lhNqnL4twM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752485689; c=relaxed/simple;
-	bh=UfwKYdfhLk2Qy+lp7anf0iJDtzV7naJAbuUbpizuis4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SeJhqh0oAuOkB2ox1j/h5Z+vaIT/bVANW+6+zglQgGuqeLBcy603LQyhkmRpFOUAN104+bOnpxRvAD98jdfUDc358xt+aDuvoj4vdDJv4yLNSckNLzM3q48CaGzUy7AVvI1YOnp+iEy84TdWr7W2bK3auac8ZdcSGInCCJyJLoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=di1SOu9k; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-713fba639f3so33656257b3.1
-        for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 02:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752485685; x=1753090485; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEmmr4XGYIHTUb8r2LHfVd1MIoDVWAOSUqn/NEpPRbM=;
-        b=di1SOu9kEFU45yaf/R5J/6R+Bg6mYwoa9dYW5LtCDcJzD1ToEk5wcOtE/9Iag6dWcf
-         FJzKHkIh7LL9XZpdOe9l5mpGzgzKV4lf4vbyjSiaY0E0Cf6eQHy7jBS4RssfRCQ1bwiK
-         mlMjxiK0WpoBtUfGVevE+X+EhK7X41zVYyF+DisvaNNr+F3CYwihd4eVhJ0BqnSYxIce
-         42AvKP1sASthFrA0dcHmdF97uoz5WHuebMavzGRy4uhPicT7vMZGkPUjU51aZViAybC4
-         YlP3Ig+ZWzk68fU/dCrGTPcN4CJuLBw1XKm1RVRyE76462b88rNzZlxSw8Ef4gfToPtY
-         hqxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752485685; x=1753090485;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vEmmr4XGYIHTUb8r2LHfVd1MIoDVWAOSUqn/NEpPRbM=;
-        b=ih+m9pTFTMVfaC+BkgoNPBpl8FP0xM+ZnggObK7ru+r5+ZLCpE+jO6r4yMg0REuFTD
-         9BSDIucGkylcYTGUta54oemDPkJ6Bru+5CN9uLtAx+qsOyD34IAxIDcGHZ6W9Y9ea9Rt
-         thCkuAvzIpuAJbha7dIq5nkUbjhhr2XE41q9GN53qqWlINMG/7+cZ+SJQPG+QlgE01yC
-         CdGPCrPVM05XbFEFZ697p3EX5YUCAqF2MEhMCZe6T9oDl3+ZrsoAjN+x3bG5BE3JjHhD
-         EMnF7UUByKZxCgowoijNFUyf6oIF/KXvjeKq3lxkSUrh0xDBjAGGozdji4HlJ0xux6Rz
-         pxzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWeMSLHafuz8wrxl7K8kOuwidQA5LjtEuDLXCyRxP+6brgqnr5dhV3xZjF6Cuu3qE+UMhfhExjYWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywtmc8GpdFluG+qakgipUi5gupv/0LEJVxWlCDggM5YV2/Ygexm
-	toM92msiDHzFJQC8wWJGnOlTEf6DphJ/uCInOr/nUptvweviX06WyGO440Pg9AyGL0szUSGzDGs
-	Qp9dyOag2MGnEuiMs1y7UJ6RBeFa1H4xPW6LwqnigxqaCLVEqr3/wrGg=
-X-Gm-Gg: ASbGncvFCbzsVC4ZOgEIkilDgbj6AXgdzePBM+xx8tU5fGM6pG9Ii5MQGL5DXF7bJ+c
-	Okoce3Dzp2gA0GleDs/zbxDAsSlXAb0EqV24GiGrSorVQ56yAVkvg5mUf3PaCcJA5pyp/cAkiK+
-	lhAby/f5LDBVR5vEd/hRv03zAKkDHMnjDtaOVy75z1U/8APFzIQXJX168y7Fi6zkTdVyT1ROkQV
-	gLacnRfC6E5sbkVpVo=
-X-Google-Smtp-Source: AGHT+IHIlg2QgBnKLSKe6umOG6mLkyHuyOGa5CDuUCJGRmLch13uGRl1lyUH/fje8e3UhcJpXB/eeeAkkqwb0eDhQ3E=
-X-Received: by 2002:a05:690c:628a:b0:70e:7ff6:9ff3 with SMTP id
- 00721157ae682-717d5f3d391mr195973477b3.35.1752485685299; Mon, 14 Jul 2025
- 02:34:45 -0700 (PDT)
+	s=arc-20240116; t=1752488286; c=relaxed/simple;
+	bh=aeszjQw2c9arLj1BbbOYpfg53cIWR3hrpjFv96howeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kUcYeuSSvvFaX64BbsHbvYBkcCcl/EYVdjFRDK9gHJa4anRmqVo2MTtn3d1Xh6OHKOwEfkyDCJ95QvrjwWtGOBL9aud6n0bfwkb0xcleHqQSqzEoquT33KpJ/9IxubDJqeh+evb9/bb+Zgy1f0xsGe0R0E7Sr5MBNnntATDpit0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1ubGFp-0006xk-La; Mon, 14 Jul 2025 12:17:49 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1ubGFo-008Oei-1j;
+	Mon, 14 Jul 2025 12:17:48 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1ubGFo-0007P4-1M;
+	Mon, 14 Jul 2025 12:17:48 +0200
+Date: Mon, 14 Jul 2025 12:17:48 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>,
+	Guenter Roeck <groeck@chromium.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v11 0/7] Introduction of PSCR Framework and Related
+ Components
+Message-ID: <aHTZTFxfS6Bn4yhz@pengutronix.de>
+References: <20250618120255.3141862-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250711114719.189441-1-ulf.hansson@linaro.org>
-In-Reply-To: <20250711114719.189441-1-ulf.hansson@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 14 Jul 2025 11:34:08 +0200
-X-Gm-Features: Ac12FXwf4BfTjOB0bq-V0l481-9ls28bgQwLelpMu5ij-cJg8s7O_Ow2nAI2D7E
-Message-ID: <CAPDyKFrouK9b8Gd+DYg-=BE0dYVuiwy3+Jkrp1=4dDXu90gDTw@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: samsung: Fix splash-screen handover by
- enforcing a sync_state
-To: Marek Szyprowski <m.szyprowski@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250618120255.3141862-1-o.rempel@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On Fri, 11 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> It's has been reported that some Samsung platforms fails to boot with
-> genpd's new sync_state support.
->
-> Typically the problem exists for platforms where bootloaders are turning on
-> the splash-screen and handing it over to be managed by the kernel. However,
-> at this point, it's not clear how to correctly solve the problem.
->
-> Although, to make the platforms boot again, let's add a temporary hack in
-> the samsung power-domain provider driver, which enforces a sync_state that
-> allows the power-domains to be reset before consumer devices starts to be
-> attached.
->
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Link: https://lore.kernel.org/all/212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Hi Greg,
 
-Marek, Krzysztof thanks for reviewing and testing!
+this patch series doesn’t belong to any single existing subsystem. It
+spans drivers like power/reset/, touches nvmem, regulator, and adds new
+interfaces.
 
-I have applied for this for next!
+Since there's no clear maintainer fit and the code is self-contained,
+I’d like to ask you to pick it up.
 
-Kind regards
-Uffe
+The latest version is v11 and has addressed all review comments.
 
-> ---
->  drivers/pmdomain/samsung/exynos-pm-domains.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> index 9b502e8751d1..5d478bb37ad6 100644
-> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> @@ -147,6 +147,15 @@ static int exynos_pd_probe(struct platform_device *pdev)
->                                 parent.np, child.np);
->         }
->
-> +       /*
-> +        * Some Samsung platforms with bootloaders turning on the splash-screen
-> +        * and handing it over to the kernel, requires the power-domains to be
-> +        * reset during boot. As a temporary hack to manage this, let's enforce
-> +        * a sync_state.
-> +        */
-> +       if (!ret)
-> +               of_genpd_sync_state(np);
-> +
->         pm_runtime_enable(dev);
->         return ret;
->  }
+Thanks!
+Oleksij
+
+On Wed, Jun 18, 2025 at 02:02:48PM +0200, Oleksij Rempel wrote:
+> changes v11:
+> - add missing break reported by kernel test robot <lkp@intel.com>
+> 
+> changes v10:
+> - add some add Reviewed-by tags
+> - regulator_handle_critical: set pscr = PSCR_UNKNOWN for default case
+> - make g_pscrr static
+> 
+> changes v9:
+> - Remove redundant pr_crit() messages before hw_protection_trigger()
+> - Replace psc_reason_to_str() switch with static const string array
+> - Mark psc_last_reason as static
+> 
+> changes v8:
+> - Use DEFINE_GUARD() and guard(g_pscrr) for scoped locking of the global
+>   pscrr_core struct
+> - Replace manual mutex_lock/unlock with automatic cleanup-based guard()
+>   usage
+> - Centralize backend and locking state in struct pscrr_core
+> - Prepare for future multi-backend support with clean encapsulation
+> - Improve sysfs documentation:
+>   * Added full enum psc_reason value table
+>   * Simplified example comments, removed redundant "may differ" phrasing
+>   * Added note that not all values are supported on all systems
+>   * Linked value definitions to include/linux/reboot.h
+>   * Added clear read/write usage examples for sysfs entries
+> 
+> changes v7:
+> - document expected values in sysfs documentation
+> - make write support optional
+> 
+> changes v6:
+> - add sysfs documentation
+> - rebase against latest hw_protection_reboot changes:
+>   https://web.git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-nonmm-unstable&id=212dd3f6e57f6af8ed3caa23b93adc29334f9652
+> - push core part of the reset reason the kernel/reboot.c
+> 
+> changes v5:
+> - fix compile with NVMEM=n and potential issues with NVMEM=m
+> 
+> changes v4:
+> - fix compile with CONFIG_PSCRR=n
+> 
+> changes v3
+> - rework to remove devicetree dependencies
+> - extend NVMEM to search devices and cells by names.
+> 
+> changes v2:
+> - rename the framework from PSCR to PSCRR (last R is for Recorder)
+> - extend power on reason header and use it to show detected reason on
+>   system start and in sysfs.
+> - remove "unknow" reason
+> - rebase on top of v6.8-rc1
+> - yaml fixes
+> - zero reason state on boot
+> 
+> Hello all,
+> 
+> This patch series introduces the Power State Change Reasons Recording
+> (PSCRR) framework and its related components into the kernel. The PSCR
+> framework is designed for systems where traditional methods of storing
+> power state change reasons, like PMICs or watchdogs, are inadequate. It
+> provides a structured way to store reasons for system shutdowns and
+> reboots, such as under-voltage or software-triggered events, in
+> non-volatile hardware storage.
+> 
+> These changes are critical for systems requiring detailed postmortem
+> analysis and where immediate power-down scenarios limit traditional
+> storage options. The framework also assists bootloaders and early-stage
+> system components in making informed recovery decisions.
+> 
+> 
+> 
+> Oleksij Rempel (7):
+>   power: Extend power_on_reason.h for upcoming PSCRR framework
+>   reboot: hw_protection_trigger: use standardized numeric
+>     shutdown/reboot reasons instead of strings
+>   power: reset: Introduce PSCR Recording Framework for Non-Volatile
+>     Storage
+>   nvmem: provide consumer access to cell size metrics
+>   nvmem: add support for device and sysfs-based cell lookups
+>   power: reset: add PSCR NVMEM Driver for Recording Power State Change
+>     Reasons
+>   Documentation: Add sysfs documentation for PSCRR reboot reason
+>     tracking
+> 
+>  .../ABI/testing/sysfs-kernel-reboot-pscrr     |  74 ++++
+>  drivers/nvmem/core.c                          | 134 ++++++
+>  drivers/platform/chrome/cros_ec_lpc.c         |   2 +-
+>  drivers/power/reset/Kconfig                   |  47 ++
+>  drivers/power/reset/Makefile                  |   2 +
+>  drivers/power/reset/pscrr-nvmem.c             | 254 +++++++++++
+>  drivers/power/reset/pscrr.c                   | 405 ++++++++++++++++++
+>  drivers/regulator/core.c                      |  16 +-
+>  drivers/regulator/irq_helpers.c               |   9 +-
+>  drivers/thermal/thermal_core.c                |   3 +-
+>  include/linux/nvmem-consumer.h                |  25 ++
+>  include/linux/power/power_on_reason.h         |   4 +
+>  include/linux/pscrr.h                         |  58 +++
+>  include/linux/reboot.h                        |  77 +++-
+>  kernel/reboot.c                               |  85 +++-
+>  15 files changed, 1173 insertions(+), 22 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
+>  create mode 100644 drivers/power/reset/pscrr-nvmem.c
+>  create mode 100644 drivers/power/reset/pscrr.c
+>  create mode 100644 include/linux/pscrr.h
+> 
 > --
-> 2.43.0
->
+> 2.39.5
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
