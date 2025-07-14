@@ -1,79 +1,88 @@
-Return-Path: <linux-pm+bounces-30780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AC4EB03BFC
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:36:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539B6B03C87
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:53:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715EB1884359
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:36:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F215B1A62E8F
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCCA2441A0;
-	Mon, 14 Jul 2025 10:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BA3125CC74;
+	Mon, 14 Jul 2025 10:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e82JNUsr"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OjgikyEb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983EC24061F
-	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:36:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7462459FD
+	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752489362; cv=none; b=jBVEJ7klyMfobxYQ2cCUGa+7puDR+POVKxfBuZTcfEI/1NJ2/EUCz2bqioHc0sE2BTyyE0xsmX0DUOTwHBsIJKmeocxVKkLwTaZNNULIRisCB40XUi/a2H8RZZ0IHp0X1ne1yHiu99yysoufWAnPrJhsX6SqMbD/AmlUagIEQsQ=
+	t=1752489961; cv=none; b=Wwu21LNebCXG2ddwoUOp2iEgU1sdFQzf79kzsEdxwruBU7Wh0BwYPlTbYMynQFUQBfxTHDvOEZViBlCPtK+HE0nhM58LeMvOT7JeyigY+QlbJT8kDhMuKSVAGhFQXmsT18qlj9y1KipUZK883KfKrRqOXZ2WHDos162aWJtES2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752489362; c=relaxed/simple;
-	bh=94R/CNsAvVceT58hWwVo0TxguwEZWGooqC6rD1XcJVk=;
+	s=arc-20240116; t=1752489961; c=relaxed/simple;
+	bh=GsngcRU9ghE95V5sobt8zThiAoxS3bXWswd84ZP946Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mMhQIGq4FZ7DDAJVSn3tBwzQYiHtRvLObZvX+b7FKMw/xBQIPoHVqNkqAqlZIgXsHLDyBuG7kNxL9GXmwQBhuqiblAEkGt2IQYCTIvUDEnkcbe3J2XRGBq44YxrfyrFMNPERTsKY2J3HUVVDW/gpfV1+ijdvXZufkuk6g65G6ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e82JNUsr; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a16e5so8023653a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 03:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752489359; x=1753094159; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xHzOD3RpVjOUZUSkinK31z2xmSemdrgPuSeEWTG+rT8=;
-        b=e82JNUsrJr5PDc1OQrZ8q2mDHNHx5creZmzb68VkyK1B5PCPI0aHh2g011fQHiwI4U
-         bGH8bpn/MAFtN3W/qrdbPNP9BwF0QC7S3EeB9df1wF2LMnt1FxkqI7kGnXkzsNumKfDU
-         uOglbSHy5iIKrGDLwXb7QtsfSAwkDUzNFlHXQrdrRBhgJGU74GKSEJbCL3CyYGajVyUY
-         OBm+EL9zI9inl7Dh9yW0VWjdzBTzIpTh1M/uLUwoZsS3io/qOes7DkicKtFKv1h0wky1
-         11Rdkq871dujp+p4FCQgEsuHhURvGSPfUE4rr1/lqVVNsX37W1oOuygZ2qxafA4uxj0h
-         kWtg==
+	 In-Reply-To:Content-Type; b=m9ZGEI5a40Nx8n+QhX32jDJzihH0ZC/MKSS51GwE+LX86MdHQDK4Cic6hYA6HcnqW1hyMXskOR+Yp+jqyS4NneE1Ad7gb+FXDGUfXXiFRcjihsrs0KjtLwnR/VFSf3KKnhj5sodKTvtgmzf2/4ZdZ6rDZG2HObWlVE1s9MsUiFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OjgikyEb; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56E66qaQ001872
+	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:45:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	NvkMX/SfCrQy1ThgqRjv/mjGrsXTIeTx9QKU6pkfYrU=; b=OjgikyEb1mjfDte1
+	wtP/hpabasFr7CEflySVgYGJm5q0nSReES76WtUDsAjuVaGWqBaidYYc+ixjFAyW
+	B1c+hS+/h5RiQtj9mbC1P/SNWh13uGAsktQ+25BjHlJO2Yp713g1b5IHML/EBtSm
+	7GzjdcMCTjs4eqzESvGMBglzsukbovmXSYVcRUR95hJqGozKR0o4Tq+VKiIzkcFL
+	d2fSI2y5SYSoWoqem9sJnwPZTiCFACI19+lhnsk1Jfkwn0Ld6LVvaYjNUlAeoL8U
+	XKNcKYWWEsO5Gslfhw/4ku1cVVXMLjTp13cMhyuFWE+l4Q/IgOCH250QMqJZNIJm
+	+gON1w==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47vvay0yq5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:45:58 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4ab7077ad49so1388791cf.1
+        for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 03:45:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752489359; x=1753094159;
+        d=1e100.net; s=20230601; t=1752489957; x=1753094757;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xHzOD3RpVjOUZUSkinK31z2xmSemdrgPuSeEWTG+rT8=;
-        b=GbDuoPSUrzJ69Db0jtSPoDU1jLRsMBxaCdIJPrfTob4PSnCQZjjhugwIad/AC0z0BH
-         /qIgwfLDuPZgvkMimG4m1Sf99GTGtJO42o32txHvmgBq78w/0Q6l+yxrZhnT9VMfIZpV
-         ZEJJgVJ8jAoSTtuiouD5xXl7cbSrRMB3fQhHrSSvOKLN360AcOYsY7lJa6AgW4xQvIED
-         TRlPRJTSxgM7v864Zh+i6KPgM7hKPR8+yTpWpGXKzDfHKnvc2Lwi0ak2oyo0uGnbcdne
-         KqVsr/HMRS5BfER6zxfEV3AM9qLi6+cum7N+aAgIlCXyt7JhUxEBQpbWIUEBLR2ZjFhb
-         NKFQ==
-X-Gm-Message-State: AOJu0YwZ7bjtDzuFa/XAuwWdol87b0WeI6jVgYM3x0HH088q6cO76XxP
-	CoPdFSOY5hdxN32RGCKIxk10xT6F1o6OU3TbNikRHGajZdtUP4gwbXx5rjgJCPCj6oo=
-X-Gm-Gg: ASbGncv4nQ0y7dwXw1tpq54tgFimge3uzXtVUURcu+NcuwbfuQqDHZkaL6HBe2KZDna
-	pHnAYsHTh6OIXdmKduax1UGn0Y9rp331NOe+7yi0/sK6gkMk2rnCnGEb6LpdWCggHCeHNGb1Yr2
-	+kOsHQudC3IvDyk2VL+/JMua+SHWzNhDCs8ypKujA8QV8dcrT9jJS87wJyQyxb8f9syLJEh3YT9
-	KzOM8agQnf0lCWhPhun+Q5N3T8cyp2GDNobNvbKKC/0ToLSyNxujAaJ87ekB+adg+cWrPq4bUSY
-	X/ycL0KjGNEl9wIWSAnCqfGCReRlFYQOdsm9lfv8gaqc8dLz9KoH+DsBGP267ZqVSJlWgFmGk/z
-	/i8CGK6U/pRZCGgnaKJ4bDFFvqc8nPwFH
-X-Google-Smtp-Source: AGHT+IEWM7xpTjyIWJctw5C17VQ6g2wMjwiF1ZUkbDf1k366SzU3jICj63GNJpd/07+BLZ85FDqxnw==
-X-Received: by 2002:a05:6402:24c9:b0:608:176c:f139 with SMTP id 4fb4d7f45d1cf-611e760e496mr9464977a12.5.1752489358729;
-        Mon, 14 Jul 2025 03:35:58 -0700 (PDT)
-Received: from [192.168.0.251] ([188.27.143.49])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-611c9528ae0sm5815303a12.29.2025.07.14.03.35.57
+        bh=NvkMX/SfCrQy1ThgqRjv/mjGrsXTIeTx9QKU6pkfYrU=;
+        b=KK2t37Xf+2LQS68iMnoR7tR8+YnunpPvd/InkTEU7tartHcih+eZ+TmWJSVSPx4bFi
+         kkwwxxE4bBMFQYwHwMYmdRbhWeQPgz0FPPrEN2Ch/C47bAed8HY6ytgVm3FVwTPqWTES
+         byZ1ZxXjEzm8O1rAhQLdcFfQSevxgWxkiB+YccoXJEnRT/1Wl7xm1qkniCaLxV1c4jNc
+         b7kUmN76PnnJkIC4U0hTTr/UgOF4xYI8nJeXf+FabN7YsocJeuNkQrNiYB4J8nebCCN6
+         Vr58YC1wnkic9tzJf8cliFgTfsNg1MV9C5s8uTxNJ0LBNYsGSFU7eBSFwqTkkynfGY6C
+         gFsg==
+X-Forwarded-Encrypted: i=1; AJvYcCWU+yvjTQaevXgTRUPc/bTq5TGIPIV51cTvxyUKhGNwxDYVqbIo30csW3q7Sdz5Mni9h/ymbidN7w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGycUr6ni2Ev92OMgUzOQRzF5rRDswXlskau9NS7TOv0SsbSFA
+	hwKxht4ru+t1RR8zKVqLbuzPQy0DiXevAAb0sXpn0NN1myA2omWfFRXE3t1452UN5BFBH7sjYuR
+	++tOLTnV88ntNg/SPLlCc098kkpNyCJgy/FuUzIdKffSwsIfctpWMz6ga0Au6Ng==
+X-Gm-Gg: ASbGncvRXduER0u41KqBREVpE8+6I5fqn1FvAylFhwIYd10NWZJt8oCknsxszvBrClb
+	nJswsulqtETOROx26auVNBy9S6ReQ+VujjjVcNNyxRTwSEn9iJV2A6UezBG/e11xK4GMrWpEGUw
+	KbqSh87vs/Zz0R3CQtcC89UQjKaHkp7O+PMtqvQ/b0rtIcYRt0ZZS9sf/xU6S+rrtdQZkAy4LNB
+	ruVm6MZgS7FV2F/Im8U8213WV7rmY2CEtcnruKo4FP0XNYvDENi7a5Unhrl+VGN2SHPCHCH1JaZ
+	8aBl1S2D8oBIC6/chNtIFvf/L3BPjxDtDJmnxD5lam7YOnRU8t5SBpMfirGwThS7/YLBIMI3kQo
+	gsYOXn0gyh+ww8T8BbDyW
+X-Received: by 2002:a05:622a:2308:b0:4a9:a2d2:5cd5 with SMTP id d75a77b69052e-4a9fb85981emr61407221cf.6.1752489957162;
+        Mon, 14 Jul 2025 03:45:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IELfiE1hbm9W21cfQCQReZLaomvmcfube3hO9vSP/hdiOgPjCPkHWjuKc+mXLxmKJJITonrVA==
+X-Received: by 2002:a05:622a:2308:b0:4a9:a2d2:5cd5 with SMTP id d75a77b69052e-4a9fb85981emr61406911cf.6.1752489956642;
+        Mon, 14 Jul 2025 03:45:56 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e8294c15sm803864866b.117.2025.07.14.03.45.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jul 2025 03:35:58 -0700 (PDT)
-Message-ID: <7186da1f-4d16-48f5-bdc0-cb04942b3a5e@linaro.org>
-Date: Mon, 14 Jul 2025 11:35:56 +0100
+        Mon, 14 Jul 2025 03:45:56 -0700 (PDT)
+Message-ID: <e2b92065-e495-465c-957c-ac10db8fec09@oss.qualcomm.com>
+Date: Mon, 14 Jul 2025 12:45:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,116 +90,85 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] PM: sleep: Resume children after resuming the
- parent
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson
- <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>,
- Jon Hunter <jonathanh@nvidia.com>, Saravana Kannan <saravanak@google.com>,
- William McVicker <willmcvicker@google.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-References: <10629535.nUPlyArG6x@rjwysocki.net>
- <CAJZ5v0hpPOHNYCSTM1bb+p-wyAZkpg+k-huf9f5df9_S8MfvEg@mail.gmail.com>
- <CAJZ5v0jFP2njw3ic47yyh_7u7evKQKQuqGp27Vj7X-FfDLH7uQ@mail.gmail.com>
- <4677865.LvFx2qVVIh@rjwysocki.net>
- <ae6d65f7-990a-4145-9865-63f23518405c@linaro.org>
- <CAJZ5v0hatwNn_Qh7n7wjDyXDZK=L4vkB+aotZRfn4Zi21sGKxw@mail.gmail.com>
+Subject: Re: [PATCH v2 13/15] arm64: dts: qcom: pm8550vs: Disable different
+ PMIC SIDs by default
+To: Luca Weiss <luca.weiss@fairphone.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Thomas Gleixner
+ <tglx@linutronix.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+References: <20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com>
+ <20250713-sm7635-fp6-initial-v2-13-e8f9a789505b@fairphone.com>
 Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <CAJZ5v0hatwNn_Qh7n7wjDyXDZK=L4vkB+aotZRfn4Zi21sGKxw@mail.gmail.com>
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250713-sm7635-fp6-initial-v2-13-e8f9a789505b@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: Zjaw1_mXwwLWl6LXkrZHoAeEdi6NMV3i
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDA2MyBTYWx0ZWRfX2xyoOjWvqGBG
+ Byxt39H/JNw0Ptzc0KZ/fktB+B7MkiE2NHdL9j/XXu6nwmjC7o32fpHeL0+ELdYldcL1Fs+rDtu
+ GlsGkisEIIqQntxVwr4ku2HlK9MzjAZfRgxCXnNG8RTmNSemVN3y8VDAGpOX3CcXsU6e8x1UCyt
+ 0B7+YkdxbHR/nZota18QxsDj8wm/mmg+f0/KW+mVT5XqR0ATEv7igDxkq2M8zoljR/x0yL6cZvg
+ FTjI22nuU9Epxazl5lgW+t5mRjxvgbSikwHWmOf3bEiLuSAiD5buaOh+UrxqhHjbK9/fuyK7Dm5
+ 3PI6TgIJlD4Uij+8ABBuzjr2fwvSU/gjzH1zmFhedDfbEh5eZ9oJe32oX02Ipy3ApGGZeDMAfZ5
+ +0438Dvh6QGSDi4wIGJ2z6GslCKWR6W621H9nfS00DfM25kiNOZL3b3CHH5Lv2+3F7zRo8ws
+X-Authority-Analysis: v=2.4 cv=GNIIEvNK c=1 sm=1 tr=0 ts=6874dfe6 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=6H0WHjuAAAAA:8 a=EUspDBNiAAAA:8
+ a=yhMgBbtfkmf45w4ReXcA:9 a=QEXdDO2ut3YA:10 a=dawVfQjAaf238kedN5IG:22
+ a=Soq9LBFxuPC4vsCAQt-j:22
+X-Proofpoint-ORIG-GUID: Zjaw1_mXwwLWl6LXkrZHoAeEdi6NMV3i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-14_01,2025-07-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxlogscore=754 phishscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507140063
 
-
-
-On 7/14/25 8:29 AM, Rafael J. Wysocki wrote:
->> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
->> index d9d4fc58bc5a..0e186bc38a00 100644
->> --- a/drivers/base/power/main.c
->> +++ b/drivers/base/power/main.c
->> @@ -1281,6 +1281,27 @@ static void dpm_async_suspend_parent(struct device *dev, async_func_t func)
->>                 dpm_async_with_cleanup(dev->parent, func);
->>  }
->>
->> +static void dpm_async_suspend_complete_all(struct list_head *device_list)
->> +{
->> +       struct device *dev;
->> +
->> +
->> +       pr_err("tudor: %s: enter\n", __func__);
->> +       guard(mutex)(&async_wip_mtx);
->> +
->> +       list_for_each_entry_reverse(dev, device_list, power.entry) {
->> +               /*
->> +                * In case the device is being waited for and async processing
->> +                * has not started for it yet, let the waiters make progress.
->> +                */
->> +               pr_err("tudor: %s: in device list\n", __func__);
->> +               if (!dev->power.work_in_progress) {
->> +                       pr_err("tudor: %s: call complete_all\n", __func__);
->> +                       complete_all(&dev->power.completion);
->> +               }
->> +       }
->> +}
->> +
->>  /**
->>   * resume_event - Return a "resume" message for given "suspend" sleep state.
->>   * @sleep_state: PM message representing a sleep state.
->> @@ -1459,6 +1480,7 @@ static int dpm_noirq_suspend_devices(pm_message_t state)
->>                 mutex_lock(&dpm_list_mtx);
->>
->>                 if (error || async_error) {
->> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
->>                         /*
->>                          * Move all devices to the target list to resume them
->>                          * properly.
->> @@ -1663,6 +1685,7 @@ int dpm_suspend_late(pm_message_t state)
->>                 mutex_lock(&dpm_list_mtx);
->>
->>                 if (error || async_error) {
->> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
->>                         /*
->>                          * Move all devices to the target list to resume them
->>                          * properly.
->> @@ -1959,6 +1982,7 @@ int dpm_suspend(pm_message_t state)
->>                 mutex_lock(&dpm_list_mtx);
->>
->>                 if (error || async_error) {
->> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
-> -> There is a bug here which is not present in the patch I've sent.
-
-My bad, I edited by hand, sorry.
-
+On 7/13/25 10:05 AM, Luca Weiss wrote:
+> Keep the different PMIC definitions in pm8550vs.dtsi disabled by
+> default, and only enable them in boards explicitly.
 > 
-> It should be
+> This allows to support boards better which only have pm8550vs_c, like
+> the Milos/SM7635-based Fairphone (Gen. 6).
 > 
->         dpm_async_suspend_complete_all(&dpm_prepared_list);
-
-
-Wonderful, it seems this makes suspend happy on downstream pixel6!
-I'm running some more tests and get back to you in a few hours.
-
+> Note: I assume that at least some of these devices with PM8550VS also
+> don't have _c, _d, _e and _g, but this patch is keeping the resulting
+> devicetree the same as before this change, disabling them on boards that
+> don't actually have those is out of scope for this patch.
 > 
-> It is also there in dpm_noirq_suspend_devices() above, but it probably
-> doesn't matter.
-> 
->>                         /*
->>                          * Move all devices to the target list to resume them
->>                          * properly.
->> @@ -1970,9 +1994,12 @@ int dpm_suspend(pm_message_t state)
->>
->>         mutex_unlock(&dpm_list_mtx);
->>
->> +       pr_err("tudor: %s: before async_synchronize_full\n", __func__);
->>         async_synchronize_full();
->>         if (!error)
->>                 error = async_error;
->> +       pr_err("tudor: %s: after async_synchronize_full();\n", __func__);
->> +
->>
->>         if (error)
->>                 dpm_save_failed_step(SUSPEND_SUSPEND);
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
 
+thanks
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
+Konrad
 
