@@ -1,177 +1,170 @@
-Return-Path: <linux-pm+bounces-30757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29528B03207
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 18:09:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40C3FB036A7
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:12:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84C603BE8AF
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Jul 2025 16:09:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CBF6174CDF
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 06:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9D8227A454;
-	Sun, 13 Jul 2025 16:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B4B218AA0;
+	Mon, 14 Jul 2025 06:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v5hRAdQ1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nKugY+EC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115E627978B
-	for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 16:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4B6212B0A;
+	Mon, 14 Jul 2025 06:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752422965; cv=none; b=V9DafcU7LT7sjaAxrw3lRobiSyi085IQwcKkr/umV2licJSvnF2ul898EPuu86gMz3TGOYz2Vz9WAyU5u+Rx8YVnkjowxnzVkfozqMTfRIPV8WgMNlyUPSkkPu4UoOluZDlS2t6J/Ropm6gnxYqri69ue9McuTAyyplMbvuVoOc=
+	t=1752473552; cv=none; b=jvPGSBOYcQOCRuA7rMhwHDTa2c1mfKxrxrm1GtQawSDVzoFTVrtZAIM5X7bshYFilf9S78kzYGExzYyg4j/zTwF+ncANHs2n2Ti4W3j+Rb2WjVoJIokJmYXyozGHA1wIejF1+aH7kvOZVXKz+CYMgS6oAP3gnH5J8+Db58m8wzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752422965; c=relaxed/simple;
-	bh=KRmk3NsGgVD0LMF5wEKWU3R43QFvlORAzL53r7et8Sk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mnna+1KpYJ+InB1wKVblModTwd7VIpdyAU4gyZQBuBZnrqAUGXZ8aNulT6h5AxF893VMKGMdsGeYgT010Asd5TAKuIo6q2UslEDNRljzGlv6Ve/gDqGNg0nTGygTg8KLBuymhOvegiCS1fejTL16DybdBFybTwZW0lHiDKaZTbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v5hRAdQ1; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-455b00339c8so14153535e9.3
-        for <linux-pm@vger.kernel.org>; Sun, 13 Jul 2025 09:09:23 -0700 (PDT)
+	s=arc-20240116; t=1752473552; c=relaxed/simple;
+	bh=GCvuFIHfHnTY+lLbeieHAjb6PL9SdLYd5HNTQR33Wzg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VeoghloAyfWQE41SClqTJFHeB73yQpVIhmuxph+brYa8xWldjZPEsrhcMvrXCoRBTFz2UH/KdgiZqNHNAUdV3yFyrXukzgbGNJzBtO2BvvIjTYCpM/JRzp6Htz/LmzfpsDDc63H5WgkLv4EkUFO22KQkoUXqgRbbvmqUkfY3i1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nKugY+EC; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-32f144d0db8so26256521fa.0;
+        Sun, 13 Jul 2025 23:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752422962; x=1753027762; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Rhba6lHhtD1VINr4iXPUASGWwdiuWX3glc/gMg4zgjM=;
-        b=v5hRAdQ1M5mp6Zq73IZ7fTE6RsstjPBsaTOFI/WLLpPRNqylGAtGFWqonysxRK/jo8
-         2aKNmvj00SN/5MVN6NJWqVTFcjD8TnD+2YCpnwfkp40+FKxT9nuSRR+AmLRpWcLl4moq
-         6pYgnye4xChuGCNF2MmvcIzsii4tW9onDNBba8TGHPwzhGM4d906coiFVVwOaCX97PTn
-         pvbJbVbSnNZsuSIvXMJijfIZJw/gz2/b9UWOtXISQrX9QtSOBBsArg2UtoZIal7nr+42
-         mK+aS8bnja18jQxxZ9ouH0VPq1uYisQoTdYLQlDDvYh6OzrqTVwtM9xtITDpR4ER4NH7
-         Kmsg==
+        d=gmail.com; s=20230601; t=1752473548; x=1753078348; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4HclH83NzlDxFp3WCu9k+tiTs4nj/yAfFDR01jNUC5M=;
+        b=nKugY+ECmULHuFBnZTezniRPGThSqsFexy1m1l8HZGSM/7PRbTvABsU3HYv6Lk52Uk
+         Ysk5W7KI6hQnrpVCxUdyo4r0kS+pdTMhIJXlNeio9dtA5WRSoOd1pZkxDQNLdAZor8eo
+         qwyKYmomhbD9QkAz01Gr92QTQdCRcHyeEVsDZsmpecqHrYJT5eiztrm/B6A5plJbIVXg
+         31duqjZWcHJhjozHL7oGLl6kr26cguPPSzp7EI4OvsCtP6jtDl37HABgdkDdkN4fOu2r
+         dP5umGnjP+LdgA7jf64BD9BgxBohFUMZ8IGeN8Vv1ORx8LEZN057dalkv9adGMPKjozy
+         mzKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752422962; x=1753027762;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rhba6lHhtD1VINr4iXPUASGWwdiuWX3glc/gMg4zgjM=;
-        b=Lr9eocOBUGGfc78BIcCuyle+9VMq6p0QSkZEhwCw07MKJ9Pb6jIrD5uNGSoXZU+PUa
-         ZO/IVAKB/Oe2oZg2MU+RWqS8cKWz90k2u+zhFpTo3VcTUtvAitaCBSWN/udOa/rlzGxQ
-         VtsOMM3lw6E+AD76vka/Noe+9XsnK1nB/2u7UKM0xxmDxvBQ8g7FuZK6zgTyFJtYZlur
-         ZF7uoXaJq5j037Bz9dGaXlpYt7kYIGYYI+LCM17M+H5ApqERj8AgIcnte8G3cXysduZl
-         FhwEqK1ip/M67HCmvXJWWa+nZ40ZasCCAYR8dr0G7DobpRWVGOOdYWhjDbzO6serUnpn
-         Cspw==
-X-Forwarded-Encrypted: i=1; AJvYcCVqj3P86hrjOi5CbH6LVn+jl35TkqC5TDro433+it0axJbzzwgBxltAFtxutS05iwl8CmPQ44lNQw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRwGONLqbnu1WIKijy/q0NB+sk6/WrfbYaxGRb/khyDJnk8Irt
-	aiV6MYeDJ1PuZB/J6zdAXvjlGyklm48vUVs77G3yHFEDUvkhxDZTm+C9yKwYQ4Yv5Wk=
-X-Gm-Gg: ASbGncu6oruX9skrZksVK57PjaMEqZas0elMlU2OkOv2VM6WW8tarTwkwhzeipyvcWN
-	c0kkgELTIIsIljbXWyLV84tO6sn98W8gDKjChvVOJfnI84flLeDBpk9sgBoVuaGgSc8hZr4giOh
-	KvcoMR+8W+chZ2TiJeiMykLE0pkhd9EAeDr1mHrm7XGE42lw9GAX3F44VFQihLlRJ6/8lMqyLuY
-	8kIN1Ydi9WC2bapT6YFCQvYFQur0locBCmmxAeOJ3ovB9Z0aXCOTos3kMRO8YO+6umJoAMaySvM
-	D24vA4OP1G2piFnD7MV6fUrrKFBiAaH+oxjeYGJpc+9LUOorGnP2rAyPXRRgD8rd5nIUBN80CKa
-	BkCuF05aTBzlOEhq2wtRZxpu9o6z6Xa6XQJb3m00hICYk0pEXodWCXzhbyQuE
-X-Google-Smtp-Source: AGHT+IHRfMcJZ1kG+n5978iWlkkPgMANVyQONUJ0QtigPrdAhXAs7eN2xp9KoLqBx3H87ZSTp3kuUA==
-X-Received: by 2002:a05:600c:3f0c:b0:456:1006:5401 with SMTP id 5b1f17b1804b1-4561006660amr32350185e9.5.1752422962278;
-        Sun, 13 Jul 2025 09:09:22 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4561976784dsm11426405e9.18.2025.07.13.09.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Jul 2025 09:09:20 -0700 (PDT)
-Date: Sun, 13 Jul 2025 18:09:17 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-	rui.zhang@intel.com, lukasz.luba@arm.com,
-	david.collins@oss.qualcomm.com, stefan.schmidt@linaro.org,
-	quic_tsoni@quicinc.com, konrad.dybcio@oss.qualcomm.com,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org,
-	dmitry.baryshkov@oss.qualcomm.com
-Subject: Re: [PATCH v6 0/5] thermal: qcom-spmi-temp-alarm: Add support for
- new TEMP_ALARM subtypes
-Message-ID: <aHPaLZ46BCdM2lRA@mai.linaro.org>
-References: <20250710224555.3047790-1-anjelique.melendez@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1752473548; x=1753078348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4HclH83NzlDxFp3WCu9k+tiTs4nj/yAfFDR01jNUC5M=;
+        b=WlTlYjJPhDeUwbmwLTecV/n36CAS0okYxau+f6UqQLV8lrxNp24OwC5KAezRkbCyWr
+         cq1EedDqCauYcuRHctwuXvDUrA0ycfuDa0TjLUK3oNkQmXuMgLRip9KCn/ppelbSCLpP
+         p3HvkFR40aZDZwhrsE6PdmlcNdrblnqFZ5z45a1cjQM+yjGwDILD7flWD4n5h3fycxVh
+         Spu5m4fl2YbNCVTf7vh4wrcfVdSq5qHDaTHmwD1jzKmsoWZHAHxZSl1C6QXBZPRb8Fli
+         FqORFjlT2Fb/VK6vnhI66uvr7vmYI/V9Me/EmcCYBvyzj7KhCMMMme1awnQKhZo1ZssT
+         ZVyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBNbaPkEEE3Wo4jJjPgTp8P4TlC1IQAKkg20rJnuXU6N2IOgPMIuGY+raG/WHsqzSsio9H8bk0jY+hiX8=@vger.kernel.org, AJvYcCUqtvWcrRfpsGN17b41ean25RH+JiFZ7RHpnn7J9mkTeholc4Eob8t9jRIwL0UC9sWLrYWjkYp9V6ye@vger.kernel.org, AJvYcCWiF1suW3LLxNbgXGXwcx88/mpx0I9qHpstatMUqoSW3yE/Pj6bceS4vamSq2MgZ6vuF8t7mbgVYaM=@vger.kernel.org, AJvYcCXEJJZYBxxGGKBCutmfC0P1PCXSWmzq8ry7235T6xbw+kl4tuSSc5+4+9VwLlMVZ8+hMCXEDQXEDyPoQNM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0LFUl1J6XucQHa/SLe1l2i17z9JsrbptXMNzvyySq9EzVt98n
+	3eXnJeqbGBb2Bdv1mt6dI29eWUC7UAobBdsUmFwYLQDRbb6O4KZbu990lZmqOOE08NYbdB4fBCT
+	Re03XHpf9UR24uhh6rWvPgv7YZrORJwM=
+X-Gm-Gg: ASbGncuLW79G96YJMT3PiUyvQG5l/yAcM6ONfD9ni44/6iTn1Pxk7VF7APRyvB7Qk8W
+	jirMox6hIasBA1NQqxeUCZsAqQk2Hagr6ovWO9cDOcEpw6PrYOyXovcvGWC4l7auwaB2K4QAxum
+	1BwPMxwum/UdCBUkoYzJy/j7d2snsUP9Q88uUIPVteIdYJ8gtlEdul7ADswbmfT4tbW8g2sz/ue
+	iF4Fc0=
+X-Google-Smtp-Source: AGHT+IEEmZLhzLOHhcNX69E4EEM1Zr6whZ6ca7n1lHdYKFmEhiFtuzgKib+HMpneZvKeFl2cpxv/6S8jqM6l32aEim0=
+X-Received: by 2002:a2e:a902:0:b0:32b:a9a4:cd58 with SMTP id
+ 38308e7fff4ca-33052279345mr39539821fa.15.1752473548356; Sun, 13 Jul 2025
+ 23:12:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250710224555.3047790-1-anjelique.melendez@oss.qualcomm.com>
+References: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com>
+ <nz76wk5yqytag255jijxlyuodzpo3fm6d5coxutqrd7tgomzxm@pwzvpv4frjxu> <CALHNRZ9WYJef8+QyCfpkxLhUj_KRY=kZisEwq=arrTxXXfCknA@mail.gmail.com>
+In-Reply-To: <CALHNRZ9WYJef8+QyCfpkxLhUj_KRY=kZisEwq=arrTxXXfCknA@mail.gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Mon, 14 Jul 2025 01:12:16 -0500
+X-Gm-Features: Ac12FXxzicaLORWlI4imvwogYPOLZV3Z9geQKHYOjwVJ4Ej31UmrR1MncJN4u1E
+Message-ID: <CALHNRZ84Xj=_HqrFWnYHdV-A9YM4yu2FhfYgHy4-sR65tsYbUA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/3] PCI: tegra: Allow building as a module
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 10, 2025 at 03:45:50PM -0700, Anjelique Melendez wrote:
-> Add support in the qcom-spmi-temp-alarm driver for the new PMIC
-> TEMP_ALARM peripheral subtypes: GEN2 rev 2 and LITE. The GEN2 rev 2
-> subtype provides greater flexibility in temperature threshold
-> specification by using an independent register value to configure
-> each of the three thresholds. The LITE subtype utilizes a simplified
-> set of control registers to configure two thresholds: warning and
-> shutdown. While at it refactor the qcom-spmi-temp-alarm driver to limit
-> code reuse and if/else statements when deciphering between TEMP_ALARM 
-> peripheral subtypes. 
-> 
-> Also add support to avoid a potential issue on certain versions of
-> the TEMP_ALARM GEN2 subtype when automatic stage 2 partial shutdown
-> is disabled.
-> 
-> This patch series is a continuation of older series from 7/2024
-> (https://lore.kernel.org/all/20240729231259.2122976-1-quic_amelende@quicinc.com/)
-> but current series has been reworked to address the change in thermal framework to
-> update .set_trip_temp() callback function variables
-> (https://lore.kernel.org/all/8392906.T7Z3S40VBb@rjwysocki.net/)
-> 
-> Changes since v5:
->   - Updated variable names to use stage2 instead of s2 in patch 1/5
->   - Added overtemp_stage enum for more clarity when reading back specific
->     temperature threshold in patch 2/5
->   - Updated temp alarm data subtype identification order in patch 4/5
->   - link: https://lore.kernel.org/all/20250620001918.4090853-1-anjelique.melendez@oss.qualcomm.com/
-> Changes since v4:
->   - Removed the unnecessary thresh member of the qpnp_tm_chip struct in patch 2/5
->   - Updated order of logic to limit acquiring and releasing lock within
->     qpnp_tm_init() in patch 3/5
->   - Fixed misuse of signed vs unsigned integers in patches 4/5 and 5/5
->   - Added Dmitry's reviewed-by tag in patch 5/5
->   - link: https://lore.kernel.org/all/20250528235026.4171109-1-anjelique.melendez@oss.qualcomm.com/
-> Changes since v3:
->   - Updated order of logic and made dig revision a local variable in patch 1/5
->   - Updated Locking Logic in patches 3/5, 4/5, 5/5
->   - link: https://lore.kernel.org/all/20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com/
-> Changes since v2:
->   - Updated function name to include "gen1" in patch 2/5
->   - Added Dmitry's reviewed-by tag in patch 2/5
->   - link: https://lore.kernel.org/all/20250225192429.2328092-1-anjelique.melendez@oss.qualcomm.com/
-> Changes since v1:
->   - Remove unnecessary moving of code
->   - Added new v2 patch 3/5 add a preparation patch to v1 patch 2/5
->   - Updated temp alarm data function names to be consistently named
->   - link: https://lore.kernel.org/all/20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com/
-> 
-> 
-> Anjelique Melendez (4):
->   thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW
->     subtype
->   thermal: qcom-spmi-temp-alarm: Prepare to support additional Temp
->     Alarm subtypes
->   thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 2 PMIC
->     peripherals
->   thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
-> 
-> David Collins (1):
->   thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
-> 
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 596 +++++++++++++++++---
->  1 file changed, 520 insertions(+), 76 deletions(-)
-> 
-> -- 
+On Mon, Jun 30, 2025 at 1:31=E2=80=AFPM Aaron Kling <webgeek1234@gmail.com>=
+ wrote:
+>
+> On Fri, Jun 13, 2025 at 1:17=E2=80=AFAM Manivannan Sadhasivam <mani@kerne=
+l.org> wrote:
+> >
+> > On Wed, May 07, 2025 at 10:25:51PM -0500, Aaron Kling via B4 Relay wrot=
+e:
+> >
+> > You should always add the context of the series in the cover letter.
+> >
+> > > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> > > ---
+> > > Changes in v6:
+> > > - Remove unused debugfs cleanup function, as caught by kernel ci
+> > > - Link to v5: https://lore.kernel.org/r/20250505-pci-tegra-module-v5-=
+0-827aaac998ba@gmail.com
+> > >
+> > > Changes in v5:
+> > > - Copy commit message exactly word for word on patch 1, as required b=
+y reviewer
+> > > - Delete remove callback in patch 3, per request
+> > > - Don't clean up debugfs, per request, which drops patch 4 entirely
+> > > - Link to v4: https://lore.kernel.org/r/20250505-pci-tegra-module-v4-=
+0-088b552c4b1a@gmail.com
+> > >
+> > > Changes in v4:
+> > > - Updated commit messages for patches 1 and 2, per review
+> > > - Link to v3: https://lore.kernel.org/r/20250502-pci-tegra-module-v3-=
+0-556a49732d70@gmail.com
+> > >
+> > > Changes in v3:
+> > > - Add patch to drop remove callback, per request
+> > > - Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v2-=
+0-c11a4b912446@gmail.com
+> > >
+> > > Changes in v2:
+> > > - Add patch to export tegra_cpuidle_pcie_irqs_in_use as required when
+> > >   building pci-tegra as a module for arm
+> > > - Drop module exit to prevent module unloading, as requested
+> > > - Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v1-=
+0-c0a1f831354a@gmail.com
+> > >
+> > > ---
+> > > Aaron Kling (3):
+> > >       irqdomain: Export irq_domain_free_irqs
+> > >       cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
+> >
+> > I need an ACK from the cpuidle maintainers to take these 3 patches thro=
+ugh PCI
+> > tree.
+>
+> Reminder about this series. I'm normally interacting with the tegra
+> maintainers, but I don't particularly care which tree it goes through
+> as long as something that works gets merged. So, can one of the
+> cpuidle maintainers take a quick look through this, please?
+>
+> Aaron
 
-Applied, thanks
+There's been no responses here for a month. If no cpuidle maintainers
+wish to respond, then what?
 
+It makes more sense to me to take this through the tegra tree. But
+Thierry had concerns about removing functionality that was confirmed
+working. Manivannan, if this was to go through the tegra tree, would
+you still block this conversion if it didn't drop the unplug/unload
+functionality? There's many existing drivers, including one for newer
+tegra archs, that are unloadable modules that would be affected by the
+IRQ concern. I don't want to cause friction here, but I do want to get
+this merged before the next LTS, so I can use it for my projects.
 
--- 
-
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Aaron
 
