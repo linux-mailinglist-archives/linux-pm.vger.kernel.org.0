@@ -1,158 +1,143 @@
-Return-Path: <linux-pm+bounces-30777-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30778-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94439B03AD8
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 11:31:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58F2BB03AE2
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 11:34:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EEF67ACE94
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 09:29:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8EA417BB8B
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 09:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C9223C518;
-	Mon, 14 Jul 2025 09:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495D5241674;
+	Mon, 14 Jul 2025 09:34:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="di1SOu9k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B29C1C831A;
-	Mon, 14 Jul 2025 09:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CA32E3718
+	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 09:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752485470; cv=none; b=Tl5ee0V3X/dRpM5rwEG6uRodlt10JstPGsuc2w6brD8SfrykZge5nOLI/HtTt2FU5PyTYXf5wYw9WayOo5fN8G9kFAwEmK4mZnEVsODayLUjud32ahIWb1dkXgD1/KAqUk4wV3wYo1jdTz8zI1PsINoCAl7nz102CCmjF3edP3s=
+	t=1752485689; cv=none; b=inQ3lY7P/11AuGcLWIT3OTzJtIztOroHngcRwy7j7fjbTdHfB6r2NQPp65qJbYQrtWsgDnObxT2kg0CS+5jLUFrj06UIOgcTi40H7AxV0nM6BRrcnVFg7ijhN7bRhaR/04X2UP7KcvbjIikc57OJb8+cmIj10hlJEveKUJT4WU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752485470; c=relaxed/simple;
-	bh=CAV5eH90W2TTjeN+Jc9+5pYhbnK9Yx/gii7tAtBTe8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xk8mQHc9NQWnyFxHokGasYlnW5qV91LEC3Lcd9eDYM2b5JkUNhzZ8LnqWLrBh7snQmd18YitvwK+EH3JYeqgs4mIuAQ3SEvHUu6ZTMAItRXzbA3jjlX/SvU+5mF2JuMfJyeLLg6LtUuFqfaKWqtIWX0bYVVtnrOOsZydNBq4qPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36E3A1BC0;
-	Mon, 14 Jul 2025 02:30:59 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CBDF3F694;
-	Mon, 14 Jul 2025 02:31:02 -0700 (PDT)
-Date: Mon, 14 Jul 2025 11:30:51 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: Prashant Malani <pmalani@google.com>
-Cc: Jie Zhan <zhanjie9@hisilicon.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	z00813676 <zhenglifeng1@huawei.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-Message-ID: <aHTOSyhwIAaW_1m1@arm.com>
-References: <20250619000925.415528-1-pmalani@google.com>
- <20250619000925.415528-3-pmalani@google.com>
- <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com>
- <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
- <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
- <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
- <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
- <aGuGLu2u7iKxR3ul@arm.com>
- <CAFivqmJL90xsELhz4tPtkYA9vMzS9C=V__nwo=kWJKjKS=mE_Q@mail.gmail.com>
- <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
+	s=arc-20240116; t=1752485689; c=relaxed/simple;
+	bh=UfwKYdfhLk2Qy+lp7anf0iJDtzV7naJAbuUbpizuis4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SeJhqh0oAuOkB2ox1j/h5Z+vaIT/bVANW+6+zglQgGuqeLBcy603LQyhkmRpFOUAN104+bOnpxRvAD98jdfUDc358xt+aDuvoj4vdDJv4yLNSckNLzM3q48CaGzUy7AVvI1YOnp+iEy84TdWr7W2bK3auac8ZdcSGInCCJyJLoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=di1SOu9k; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-713fba639f3so33656257b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 02:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752485685; x=1753090485; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vEmmr4XGYIHTUb8r2LHfVd1MIoDVWAOSUqn/NEpPRbM=;
+        b=di1SOu9kEFU45yaf/R5J/6R+Bg6mYwoa9dYW5LtCDcJzD1ToEk5wcOtE/9Iag6dWcf
+         FJzKHkIh7LL9XZpdOe9l5mpGzgzKV4lf4vbyjSiaY0E0Cf6eQHy7jBS4RssfRCQ1bwiK
+         mlMjxiK0WpoBtUfGVevE+X+EhK7X41zVYyF+DisvaNNr+F3CYwihd4eVhJ0BqnSYxIce
+         42AvKP1sASthFrA0dcHmdF97uoz5WHuebMavzGRy4uhPicT7vMZGkPUjU51aZViAybC4
+         YlP3Ig+ZWzk68fU/dCrGTPcN4CJuLBw1XKm1RVRyE76462b88rNzZlxSw8Ef4gfToPtY
+         hqxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752485685; x=1753090485;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vEmmr4XGYIHTUb8r2LHfVd1MIoDVWAOSUqn/NEpPRbM=;
+        b=ih+m9pTFTMVfaC+BkgoNPBpl8FP0xM+ZnggObK7ru+r5+ZLCpE+jO6r4yMg0REuFTD
+         9BSDIucGkylcYTGUta54oemDPkJ6Bru+5CN9uLtAx+qsOyD34IAxIDcGHZ6W9Y9ea9Rt
+         thCkuAvzIpuAJbha7dIq5nkUbjhhr2XE41q9GN53qqWlINMG/7+cZ+SJQPG+QlgE01yC
+         CdGPCrPVM05XbFEFZ697p3EX5YUCAqF2MEhMCZe6T9oDl3+ZrsoAjN+x3bG5BE3JjHhD
+         EMnF7UUByKZxCgowoijNFUyf6oIF/KXvjeKq3lxkSUrh0xDBjAGGozdji4HlJ0xux6Rz
+         pxzg==
+X-Forwarded-Encrypted: i=1; AJvYcCWeMSLHafuz8wrxl7K8kOuwidQA5LjtEuDLXCyRxP+6brgqnr5dhV3xZjF6Cuu3qE+UMhfhExjYWA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywtmc8GpdFluG+qakgipUi5gupv/0LEJVxWlCDggM5YV2/Ygexm
+	toM92msiDHzFJQC8wWJGnOlTEf6DphJ/uCInOr/nUptvweviX06WyGO440Pg9AyGL0szUSGzDGs
+	Qp9dyOag2MGnEuiMs1y7UJ6RBeFa1H4xPW6LwqnigxqaCLVEqr3/wrGg=
+X-Gm-Gg: ASbGncvFCbzsVC4ZOgEIkilDgbj6AXgdzePBM+xx8tU5fGM6pG9Ii5MQGL5DXF7bJ+c
+	Okoce3Dzp2gA0GleDs/zbxDAsSlXAb0EqV24GiGrSorVQ56yAVkvg5mUf3PaCcJA5pyp/cAkiK+
+	lhAby/f5LDBVR5vEd/hRv03zAKkDHMnjDtaOVy75z1U/8APFzIQXJX168y7Fi6zkTdVyT1ROkQV
+	gLacnRfC6E5sbkVpVo=
+X-Google-Smtp-Source: AGHT+IHIlg2QgBnKLSKe6umOG6mLkyHuyOGa5CDuUCJGRmLch13uGRl1lyUH/fje8e3UhcJpXB/eeeAkkqwb0eDhQ3E=
+X-Received: by 2002:a05:690c:628a:b0:70e:7ff6:9ff3 with SMTP id
+ 00721157ae682-717d5f3d391mr195973477b3.35.1752485685299; Mon, 14 Jul 2025
+ 02:34:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
+References: <20250711114719.189441-1-ulf.hansson@linaro.org>
+In-Reply-To: <20250711114719.189441-1-ulf.hansson@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 14 Jul 2025 11:34:08 +0200
+X-Gm-Features: Ac12FXwf4BfTjOB0bq-V0l481-9ls28bgQwLelpMu5ij-cJg8s7O_Ow2nAI2D7E
+Message-ID: <CAPDyKFrouK9b8Gd+DYg-=BE0dYVuiwy3+Jkrp1=4dDXu90gDTw@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: samsung: Fix splash-screen handover by
+ enforcing a sync_state
+To: Marek Szyprowski <m.szyprowski@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jul 09, 2025 at 03:49:03PM -0700, Prashant Malani wrote:
-> On Wed, 9 Jul 2025 at 10:25, Prashant Malani <pmalani@google.com> wrote:
-> >
-> > Hi Beata,
-> >
-> > Thanks for taking a look.
-> >
-> > On Mon, 7 Jul 2025 at 01:33, Beata Michalska <beata.michalska@arm.com> wrote:
-> > >
-> > > Hi Prashant,
-> > >
-> > > On Wed, Jul 02, 2025 at 11:38:11AM -0700, Prashant Malani wrote:
-> > > > Hi All,
-> > > >
-> > > > Ionela, Beata, could you kindly review ?
-> > > >
-> > > > On Fri, 27 Jun 2025 at 10:07, Prashant Malani <pmalani@google.com> wrote:
-> > > > >
-> > > >
-> > > > I think it is pertinent to note: the actual act of reading the CPPC counters
-> > > > will (at least for ACPI_ADR_SPACE_FIXED_HARDWARE counters)
-> > > > wake the CPU up, so even if a CPU *was* idle, the reading of the counters
-> > > > calls cpc_read_ffh() [1] which does an IPI on the target CPU [2] thus waking
-> > > > it up from WFI.
-> > > >
-> > > > And that brings us back to the original assertion made in this patch:
-> > > > the counter values are quite unreliable when the CPU is in this
-> > > > idle (or rather I should correct that to, waking from WFI) state.
-> > > >
-> > > I'd say that's very platform specific, and as such playing with the delay makes
-> > > little sense. I'd need to do more deliberate testing, but I haven't noticed
-> > > (yet) any discrepancies in AMU counters on waking up.
-> > > Aside, you have mentioned that you've observed the frequency reported to be
-> > > above max one (4GHz vs 3.5HZ if I recall correctly) - shouldn't that be clamped
-> > > by the driver if the values are outside of supported range ?
-> > >
-> > > Verifying whether the CPU is idle before poking it just to get a counters
-> > > reading to derive current frequency from those does feel rather like an
-> > > appealing idea.
-> >
-> > That's good to hear. What can we do to refine this series further?
-So I believe this should be handled in CPUFreq core, if at all.
-Would be good to get an input/opinion from the maintainers: Viresh and Rafael.
-> >
-> > > Narrowing the scope for ACPI_ADR_SPACE_FIXED_HARDWARE cases
-> > > could be solved by providing a query for the address space. Though I am not an
-> > > expert here so would be good to get some input from someone who is
-> > > (on both).
-> >
-> > Who would be the expert here (are they on this mailing list)?
-Probably as above + Sudeep Holla
-> >
-> > Could you point me to an example for the query for the address space? Then
-> > I can respin this series to use that query and narrow the scope.
+On Fri, 11 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-Actually was suggesting adding one.
-> Actually, if the idea of this optimization (the idle_cpu check) sounds
-> good to you,
-> I don't see why we should limit it to ACPI_ADR_SPACE_FIXED_HARDWARE.
-> IOW, the patch can remain in its current form.
-> 
-Right, that does need though verifying against all users.
+> It's has been reported that some Samsung platforms fails to boot with
+> genpd's new sync_state support.
+>
+> Typically the problem exists for platforms where bootloaders are turning on
+> the splash-screen and handing it over to be managed by the kernel. However,
+> at this point, it's not clear how to correctly solve the problem.
+>
+> Although, to make the platforms boot again, let's add a temporary hack in
+> the samsung power-domain provider driver, which enforces a sync_state that
+> allows the power-domains to be reset before consumer devices starts to be
+> attached.
+>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Link: https://lore.kernel.org/all/212a1a56-08a5-48a5-9e98-23de632168d0@samsung.com
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-In the meantime ....
-It seems that the issue of getting counters on a CPU that is idle is not
-in the counters themselves, but in the way how they are being read - at least
-from what I can observe.
-The first read experience longer delay between reading core and const counters,
-and as const one is read as a second one, it misses some increments (within
-calculated delta). So, what we could do within the driver is either:
-- Add a way to request reading both counters in a single cpc_read (preferable
-  I guess, though I would have to have a closer look at that)
-- Add some logic that would make sure the reads are not far apart
+Marek, Krzysztof thanks for reviewing and testing!
 
-Would you be able to verify that on your end?
+I have applied for this for next!
 
----
-BR
-Beata
-> Best regards,
-> 
-> -- 
-> -Prashant
+Kind regards
+Uffe
+
+> ---
+>  drivers/pmdomain/samsung/exynos-pm-domains.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> index 9b502e8751d1..5d478bb37ad6 100644
+> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
+> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> @@ -147,6 +147,15 @@ static int exynos_pd_probe(struct platform_device *pdev)
+>                                 parent.np, child.np);
+>         }
+>
+> +       /*
+> +        * Some Samsung platforms with bootloaders turning on the splash-screen
+> +        * and handing it over to the kernel, requires the power-domains to be
+> +        * reset during boot. As a temporary hack to manage this, let's enforce
+> +        * a sync_state.
+> +        */
+> +       if (!ret)
+> +               of_genpd_sync_state(np);
+> +
+>         pm_runtime_enable(dev);
+>         return ret;
+>  }
+> --
+> 2.43.0
+>
 
