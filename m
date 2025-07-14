@@ -1,80 +1,40 @@
-Return-Path: <linux-pm+bounces-30790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E0E0B03E6F
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 14:15:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA953B03E77
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 14:17:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5277B17DA33
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:15:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E5197A5A65
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9452824502D;
-	Mon, 14 Jul 2025 12:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v2wYO0fN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB161FE471;
+	Mon, 14 Jul 2025 12:17:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8BF33991
-	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 12:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BED980B;
+	Mon, 14 Jul 2025 12:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752495301; cv=none; b=obo4HgWs4/YJBTXe0aZq2VW23UOF4VxdYfUyYDNjgz3sSmwWp6n5L3JA7c/YU0/m+vS+RemK7SSYyFXUkucSbwhmRXdXbqJiiwevnlbe8FHeHYKJ1Zkw2LfLFYcnm+xl11Dx6BPfre2V3g5JOWYPAZCOwtFdDyMtVVESPIeOzhk=
+	t=1752495442; cv=none; b=RGH+h/eXStW/+zXh683NeGhuxStuHjgaLlUvuF+eaFv75jCx6Hk6B6LPwvoolNd9FkHIKYdGVC7my1EEGkXZzi4rOqf+Wes26HXLaFHQexsnR+m3uHavkyAM5faPlCeH9LzVYP9+2yHFgvUGTDSwmaq8P7LTY1HoYn9H9n4q5Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752495301; c=relaxed/simple;
-	bh=BYzBPfh/ytviOirTkWz4504u4O0RE0FqexEQaYlECV4=;
+	s=arc-20240116; t=1752495442; c=relaxed/simple;
+	bh=rVzCRsG6jbe1SFUCABKrLG0KeTKJrBiOOgY3bakeaSk=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=W06puQXHuO+MGSlunvfYyIa1rTGmUw7uPcjYXFpt0j7H6GZzXIZQQfwD1VmsArlEHW3FAyEopLH1iUDt9/AKbfAP8WOi8gE40u+uR1gP/hgXu4QodpRKZ8my3+k+AyCEJWYDjKh0YwO88DDpNJEyBGlH8RjZMVayjBNr4U3YIbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v2wYO0fN; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ae0dd7ac1f5so879790166b.2
-        for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 05:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752495298; x=1753100098; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KsBsNedKx8xGt4I6WaKkCB8jsWquCjMbNNOAEnJdX54=;
-        b=v2wYO0fNllNinMF0JVTpFgsGwXhvAhLR61DG4MT/u45zZNwrxwuB60jlY4wLD/fj3n
-         ZvWFEkCJ4B1nkN4dKfkN/fwsZq8nslmSVj2IfFDXhA8LSlYZpVwZY9O6raWY9f8MJqXL
-         hsdbC7DvQ7Xuk2anEUL5Y6ct9g/WgjVUI+8mx2nXe6VwdZcVDHp4B7nyCYjKM3OnrIzW
-         Z28LHVrZsA55p/l+Ut10S9olhI83ypopN8AZxRS7zLYm9A41yaCqaIXpqX6i3gmegcon
-         rAnYlX8zZVYW4W2S/cEZ7ilhmgKGxMWByOldsLVuOLU8pmW0+hiGKjFhuUP4ArfBOn2H
-         VuYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752495298; x=1753100098;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KsBsNedKx8xGt4I6WaKkCB8jsWquCjMbNNOAEnJdX54=;
-        b=iD75XhU7mvNQIVRp21SM31yixgQmLc5iPKrAUD1CrUaCoI675Iu/tQl/kTEIgNS0Fi
-         PaQX/UqBYVEXsdIufYJj3jlLALdS/GZk3f9+eqqMhypXhxoTcAa0qeLgHGv6yUyk5vpO
-         5NjVLq3FPcY/PDYzY59Luk7kzLyKVDlCGPwMQ14vuDBgnRMyQs3RQ05k5xthzRXB1agL
-         pU4qd4t2QmtVF1FiEbEZjFlWToJC9ty697b8KAkGww/7lBTAZCvQWW+TbR3Mh2bVhjcR
-         NrT0BwWRSJSyGPiZ3zhbMP6eo5eg5yFoFVp1nQI7+IrEc+re5XBYTsWWNmbFX0AOgVw9
-         x6VQ==
-X-Gm-Message-State: AOJu0YzNuztlsOSOQVnqoBb3sLCw5P9RZ82N5059jdgm5ouvlaybnDNC
-	jSq4kIyKvujpEmd6G+3vLn9SyKTOneCyjgiKKv3c4/TeFADV8Zgb1THhW/iQc6evodd6mmYsfk+
-	NZRAI
-X-Gm-Gg: ASbGncuz7Lxp7TDwwl9MXvAHjqac6fwGucDnVmOpAkYted9TxHFWKVGJOdkA2FN2VCe
-	ljcvG+EMPNDtDlWU+8eh2z21BDX9x7IRq4eoq7FVPfrs1yJ5rxoes9zjnpeUtd0eAup0YRi7J/A
-	oGJupktw9nAabhRhfVL2XlkXdqR1rlpiLVyupY6LK9pjpgv1+8IyNCnSF7vXh00OZNqTb4WEWSk
-	JHG1zil1mSQNDr+Cx48OgoiGcVej4ndw8grLFMR/SltfNmZLwAZyKxUri07BF/rYKwrCxxt1yvU
-	rprqqEW7mP4wRj/4zZ4uZwtUIW818aTHnVGLALLHHjhYEo0fPeCYf2v4lzwv+k7yXa8+a5HGATd
-	fhWc2fTuCgjysW0M0At8uZ6xPXfgmgwlo
-X-Google-Smtp-Source: AGHT+IG5VtsLFvFUDT520ex2RKhAB9eBro+IUiGxHRhjbk7jTorQ4ULKI2K0vvCF0z4O054xQO9Yxw==
-X-Received: by 2002:a17:906:9c82:b0:ae3:6bb4:2741 with SMTP id a640c23a62f3a-ae6fbfa7d75mr1203346566b.38.1752495298018;
-        Mon, 14 Jul 2025 05:14:58 -0700 (PDT)
-Received: from [192.168.0.251] ([188.27.143.49])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7ee4607sm827250566b.57.2025.07.14.05.14.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jul 2025 05:14:57 -0700 (PDT)
-Message-ID: <30a08478-824b-4ac5-91e7-c985adcf4d09@linaro.org>
-Date: Mon, 14 Jul 2025 13:14:56 +0100
+	 In-Reply-To:Content-Type; b=DJSLC7vRCMrszNTR5On0CGu0Xx7D7VY2X7bRmjsEqllYDAZJsoYA1OQbkGR7ICJu0qxKSehVGfLZdEak5lxpyRJrNxIyqRMfDuLlevw+SwJHXUnf03eh9EZ3omsjXTwoeGLri04Sy7plMoE370DwLooOjIEcq3Nha1ZQRhKbIHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A8471BC0;
+	Mon, 14 Jul 2025 05:17:10 -0700 (PDT)
+Received: from [192.168.178.6] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13B0D3F694;
+	Mon, 14 Jul 2025 05:17:17 -0700 (PDT)
+Message-ID: <e89b250a-7e9b-45fa-9e81-fc071487078b@arm.com>
+Date: Mon, 14 Jul 2025 14:16:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,104 +42,120 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] PM: sleep: Resume children after resuming the
- parent
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson
- <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>,
- Jon Hunter <jonathanh@nvidia.com>, Saravana Kannan <saravanak@google.com>,
- William McVicker <willmcvicker@google.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-References: <10629535.nUPlyArG6x@rjwysocki.net>
- <CAJZ5v0hpPOHNYCSTM1bb+p-wyAZkpg+k-huf9f5df9_S8MfvEg@mail.gmail.com>
- <CAJZ5v0jFP2njw3ic47yyh_7u7evKQKQuqGp27Vj7X-FfDLH7uQ@mail.gmail.com>
- <4677865.LvFx2qVVIh@rjwysocki.net>
- <ae6d65f7-990a-4145-9865-63f23518405c@linaro.org>
- <CAJZ5v0hatwNn_Qh7n7wjDyXDZK=L4vkB+aotZRfn4Zi21sGKxw@mail.gmail.com>
- <7186da1f-4d16-48f5-bdc0-cb04942b3a5e@linaro.org>
+Subject: Re: [RFC PATCH] cpufreq,base/arch_topology: Calculate cpu_capacity
+ according to boost
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Sudeep Holla <sudeep.holla@arm.com>,
+ Christian Loehle <christian.loehle@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Robin Murphy <robin.murphy@arm.com>,
+ Beata Michalska <beata.michalska@arm.com>, zhenglifeng1@huawei.com,
+ "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+ Ionela Voinescu <ionela.voinescu@arm.com>
+References: <20250626093018.106265-1-dietmar.eggemann@arm.com>
 Content-Language: en-US
-In-Reply-To: <7186da1f-4d16-48f5-bdc0-cb04942b3a5e@linaro.org>
+In-Reply-To: <20250626093018.106265-1-dietmar.eggemann@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
++cc Vincent Guittot <vincent.guittot@linaro.org>
++cc Ionela Voinescu <ionela.voinescu@arm.com>
+
+On 26/06/2025 11:30, Dietmar Eggemann wrote:
+> I noticed on my Arm64 big.Little platform (Juno-r0, scmi-cpufreq) that
+> the cpu_scale values (/sys/devices/system/cpu/cpu*/cpu_capacity) of the
+> little CPU changed in v6.14 from 446 to 505. I bisected and found that
+> commit dd016f379ebc ("cpufreq: Introduce a more generic way to set
+> default per-policy boost flag") (1) introduced this change.
+> Juno's scmi FW marks the 2 topmost OPPs of each CPUfreq policy (policy0:
+> 775000 850000, policy1: 950000 1100000) as boost OPPs.
+> 
+> The reason is that the 'policy->boost_enabled = true' is now done after
+> 'cpufreq_table_validate_and_sort() -> cpufreq_frequency_table_cpuinfo()'
+> in cpufreq_online() so that 'policy->cpuinfo.max_freq' is set to the
+> 'highest non-boost' instead of the 'highest boost' frequency.
+> 
+> This is before the CPUFREQ_CREATE_POLICY notifier is fired in
+> cpufreq_online() to which the cpu_capacity setup code in
+> [drivers/base/arch_topology.c] has registered.
+> 
+> Its notifier_call init_cpu_capacity_callback() uses
+> 'policy->cpuinfo.max_freq' to set the per-cpu
+> capacity_freq_ref so that the cpu_capacity can be calculated as:
+> 
+> cpu_capacity = raw_cpu_capacity (2) * capacity_freq_ref /
+> 				      'max system-wide cpu frequency'
+> 
+> (2) Juno's little CPU has 'capacity-dmips-mhz = <578>'.
+> 
+> So before (1) for a little CPU:
+> 
+> cpu_capacity = 578 * 850000 / 1100000 = 446
+> 
+> and after:
+> 
+> cpu_capacity = 578 * 700000 / 800000 = 505
+> 
+> This issue can also be seen on Arm64 boards with cpufreq-dt drivers
+> using the 'turbo-mode' dt property for boosted OPPs.
+> 
+> What's actually needed IMHO is to calculate cpu_capacity according to
+> the boost value. I.e.:
+> 
+> (a) The infrastructure to adjust cpu_capacity in arch_topology.c has to
+>     be kept alive after boot.
+> 
+> (b) There has to be some kind of notification from cpufreq.c to
+>     arch_topology.c about the toggling of boost. I'm abusing
+>     CPUFREQ_CREATE_POLICY for this right now. Could we perhaps add a
+>     CPUFREQ_MOD_POLICY for this?
+> 
+> (c) Allow unconditional set of policy->cpuinfo.max_freq in case boost
+>     is set to 0 in cpufreq_frequency_table_cpuinfo().
+>     This currently clashes with the commented feature that in case the
+>     driver has set a higher value it should stay untouched.
+> 
+> Tested on Arm64 Juno (scmi-cpufreq) and Hikey 960 (cpufreq-dt +
+> added 'turbo-mode' to the topmost OPPs in dts file).
+> 
+> This is probably related what Christian Loehle tried to address in
+> https://lkml.kernel.org/r/3cc5b83b-f81c-4bd7-b7ff-4d02db4e25d8@arm.com .
+
+Christian L. reminded me that since commit dd016f379ebc we also have a
+performance regression on a system with boosted OPPs using schedutil
+CPUfreq governor.
+
+The reason is that per cpu 'capacity_freq_ref' is set in
+drivers/base/arch_topology.c only during system boot so far based on the
+highest non-boosted OPP since boost is disabled per default.
+
+Schedutil uses capacity_freq_ref (*) in get_next_freq() to calculate the
+next frequency request:
+
+   next_freq = max_freq * util / max
+               ^^^^^^^^
+                 (*)
+
+In case the boost OPPs will be enabled:
+
+   echo 1 > /sys/devices/system/cpu/cpufreq/boost
+
+'capacity_freq_ref' stays at the highest non-boosted OPP's so schedutil
+won't request any boosted OPPs for util values > ''highest non boosted
+OPP'/'highest boosted OPP' * max'. The 'highest non boosted OPP' will be
+used by schedutil instead.
+
+This performance regression will go away with the proposed patch as well.
+
+Calling drivers/base/arch_topology.c's init_cpu_capacity_callback() in
+the event that boost is toggled makes sure that 'capacity_freq_ref' will
+be set to the highest boosted (0->1) or highest non-boosted (1->0) OPP.
+
+[...]
 
 
-On 7/14/25 11:35 AM, Tudor Ambarus wrote:
-> 
-> 
-> On 7/14/25 8:29 AM, Rafael J. Wysocki wrote:
->>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
->>> index d9d4fc58bc5a..0e186bc38a00 100644
->>> --- a/drivers/base/power/main.c
->>> +++ b/drivers/base/power/main.c
->>> @@ -1281,6 +1281,27 @@ static void dpm_async_suspend_parent(struct device *dev, async_func_t func)
->>>                 dpm_async_with_cleanup(dev->parent, func);
->>>  }
->>>
->>> +static void dpm_async_suspend_complete_all(struct list_head *device_list)
->>> +{
->>> +       struct device *dev;
->>> +
->>> +
->>> +       pr_err("tudor: %s: enter\n", __func__);
->>> +       guard(mutex)(&async_wip_mtx);
->>> +
->>> +       list_for_each_entry_reverse(dev, device_list, power.entry) {
->>> +               /*
->>> +                * In case the device is being waited for and async processing
->>> +                * has not started for it yet, let the waiters make progress.
->>> +                */
->>> +               pr_err("tudor: %s: in device list\n", __func__);
->>> +               if (!dev->power.work_in_progress) {
->>> +                       pr_err("tudor: %s: call complete_all\n", __func__);
->>> +                       complete_all(&dev->power.completion);
->>> +               }
->>> +       }
->>> +}
->>> +
->>>  /**
->>>   * resume_event - Return a "resume" message for given "suspend" sleep state.
->>>   * @sleep_state: PM message representing a sleep state.
->>> @@ -1459,6 +1480,7 @@ static int dpm_noirq_suspend_devices(pm_message_t state)
->>>                 mutex_lock(&dpm_list_mtx);
->>>
->>>                 if (error || async_error) {
->>> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
->>>                         /*
->>>                          * Move all devices to the target list to resume them
->>>                          * properly.
->>> @@ -1663,6 +1685,7 @@ int dpm_suspend_late(pm_message_t state)
->>>                 mutex_lock(&dpm_list_mtx);
->>>
->>>                 if (error || async_error) {
->>> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
->>>                         /*
->>>                          * Move all devices to the target list to resume them
->>>                          * properly.
->>> @@ -1959,6 +1982,7 @@ int dpm_suspend(pm_message_t state)
->>>                 mutex_lock(&dpm_list_mtx);
->>>
->>>                 if (error || async_error) {
->>> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
->> -> There is a bug here which is not present in the patch I've sent.
-> 
-> My bad, I edited by hand, sorry.
-> 
->>
->> It should be
->>
->>         dpm_async_suspend_complete_all(&dpm_prepared_list);
-> 
-> 
-> Wonderful, it seems this makes suspend happy on downstream pixel6!
-> I'm running some more tests and get back to you in a few hours.
-> 
 
-Solves failures on pixel6 downstream:
-Reported-and-tested-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-Thanks!
+
 
