@@ -1,99 +1,93 @@
-Return-Path: <linux-pm+bounces-30768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C950B03916
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:19:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C62A3B0396A
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:25:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CE0016D0BE
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:18:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D9CF18837CA
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDAE623F417;
-	Mon, 14 Jul 2025 08:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E66923B60D;
+	Mon, 14 Jul 2025 08:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lftX3dS/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5Gm9kQO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BBF23DEB6;
-	Mon, 14 Jul 2025 08:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E288223DDF;
+	Mon, 14 Jul 2025 08:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752481071; cv=none; b=eW8jR5M0i/pkdYTXiq0z1cYqs3FTXE8tLe2FHLi9oDmgQ47sQKCGu7RyBdjYBmMREUgHne3JwqZb3eCDVzIrYiP37+j2kvhUN7ojN8X8P5nAuhIp40KWmnTAKg9+5XT4g0sgu0rwYrNZG6FnJxBmsEvd/ye876Qm7nEpEOM/+jc=
+	t=1752481393; cv=none; b=EMjmoAm19R4reF5YlnlPJny+BSROzwYSdu9JurRsmVKnFvjaBAahhHuJBkVVJYBxdrCkHT5T9QyBCqxRDQNJuSTVXG63sXjbKwNbk7tiClxaSvnCr/3RwpLvA7Wkv/R02ZzBnqFQbn6wDeBsJ+wPiFr8srQf6sPwztol8Hltam0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752481071; c=relaxed/simple;
-	bh=xVTUmk5wK8gtQSnPEozCad/1ZZEdP2mLrfNNJy7RfRg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k8KUCGMrnUaV8eDrtqDBtrVclTg2H4HQYCMKjwJB8LBb8SYLe9IjAEYtHwV0Cd6cG5tfHfMt4Q7++SBVAUTh0x6jVDA4zvB2r7YvXjGt3co5VRttx5j9RfFz5XBBWaouFTLx9POIby2ehji+AHvmqSSIfTieP9wQLd11sS/KvKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lftX3dS/; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1752481393; c=relaxed/simple;
+	bh=RfqUbaa9s7JOmh2LfjwsNwwwmm0uXMw9G0+7rubVqf8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OYiJnav/kxEVCZ1VHyfmJ+zFRn1hFMgsp80CsaGJvq9Dnyj9rx8/mJJ2+lGAQBo5nzoJQ1E+k+X0DAZGy69tm0aNSbBJsoHca8/Y2FGrM8iRgiXHE50S5zDYQIPvj297gdRSwHtW0QzTl29/s4uL4+1NgWj0kPlPWsg4D871yjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5Gm9kQO; arc=none smtp.client-ip=209.85.167.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ae6fa02d8feso454559666b.0;
-        Mon, 14 Jul 2025 01:17:49 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-553b6a349ccso4957109e87.0;
+        Mon, 14 Jul 2025 01:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752481068; x=1753085868; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+2Ol1UOEYNLKkG5Q441otqdf9QDG7fzV3P3+NIyafPM=;
-        b=lftX3dS/ncYZOQmtBfWCWFFd4zZXER4JHSy2BGjRWSaCZxaMpVBtcLTNtPFXEOJjw0
-         WDRXj51Tf9nknxR2uiVHQ7r88XjvEuGTM72wpkRkt8NEt1NACYT7V80lY1+oECWpBgvJ
-         GjZgVnTE7zomrUI+OA6zemwhFBleDr2DHFjIeKSO3xzjbVOse/kn0LuxZu6sjq4AKLch
-         KmXtFz6nuLR+XWDTqT3Kr3HNVbzSLERzRurasJIQmDEpziQYDBykE7UU2BEI3D+S8RTy
-         wr12YfuwpugYeuEBXgefV6qTL7i0XIwm0LYeqe1r6x83VWfParxri4tW/BfnTqfh+ANS
-         P5jA==
+        d=gmail.com; s=20230601; t=1752481390; x=1753086190; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y6hrDr1ho+LmcOihDF5/afd2FJMkMgiWJJggRREgOis=;
+        b=l5Gm9kQOhNOq8P3wMqU7GZN56IfjuaW/38XOm3/e/CQokank9pGHLTAC/3S3wPtCEe
+         KGW1Ev+3gbCMMC96ghjPI2M0+EiCdLNUqrDWpm89Fa+HdkllBsKWw+4d8LjYaLob4dWD
+         QdkMwYt9Zext5uj2aqR9VrXQeK6NXTc7WSZ1QmMPFedQ6sauFfvL8Z5ggxHYZFNuqGtz
+         I5WEdJb44gBPVeoXpEHV79jMAAFCDoq1nk5jj2id78OeiA3T1huwlDyuX08BV3K8mfcc
+         mWk5yH7v8L5Ar5hcByFPBV12L7VLDauAr9msqTJz6lfZdEchzVCeMP1mXbaSxVzJr/WA
+         iFQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752481068; x=1753085868;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+2Ol1UOEYNLKkG5Q441otqdf9QDG7fzV3P3+NIyafPM=;
-        b=T9gL3gaNNYih9DUWDpOZMKiWdcarc+1kz/7ezy/0w6u21XBtiFVegpLEeHAc2mt/7U
-         KceO6a5R5tPp7GSxp+FVB4BhXlZzK8XK6yk2p6k8W7x/easjUSCmM9GWpkUa9g5jAY1M
-         z6ZuS1sImoHwWu2JJ7uGlZ41/9ke7NA8QU9hh9p7uKRWyXkOJraur/eVZg/WJRCIczQ9
-         AoE+nFx89dQTfqeH0YOI2/bcOoZDO59330RjLGMOgOu8mKadWACfvmUIGFU+lwDLARRg
-         BP0+jqm0x7b3V++wm5CEpnDjEKTk5oBwntLWThO61yh/puWcU2FOjGjQpyTSoVXirxis
-         /WfA==
-X-Forwarded-Encrypted: i=1; AJvYcCU4kfyZkNijQEL+9/1ypLpF0SvnvJigEKBJoH7PLOGXCvU3JRnuiiHKxXP5hHF/zw4wh5qzkCAcTdI=@vger.kernel.org, AJvYcCU88VotYDn3N+fU9XMybUkh/0+D0l0YoCEdYXTGSl24cnYr4YofDTk5OoDwVc6eGoTIF52cHUhQAOQ=@vger.kernel.org, AJvYcCXgYAWT/rxkkBehv6cn5hZJoFN00z6SexIyb8fQdI2BIgwUd6DsXR+P/S9ffh/VLM746HLSSC+l5eMscwWv@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaTPmg92trQWKgRzJujLci7zMfLonK+TFh8/w37YfroXy0+DdP
-	iQV4QztxB8Ln/ePCdG2v1n5BuZ7Lhjj+yNQ15r60rA8TVdX9yGK9DWJe
-X-Gm-Gg: ASbGncv7yAz1bFxqttThQk3oeT1WT3giTTYXeZcjJiD/UPVg5EyHaxVEsC9XpVg5vCX
-	eoqo+b5H9Rn/9p1wapmylBam8fwd8p7v8MKw+UM/5HEAKNdF3956XJ/LSQCVbV0CsATJJnHOCyR
-	hw0OkMwbrF1dHJeNjOETC9OU5Zf+TBpFSUjMPU9WS1WJEaCSTpFydq8onTurJBt+jvppUR8RRUH
-	XHMQ9poREaebL2GkebjUvY4xVs3AuvoYsg/IO+IpvMK5KF2kZGuhegCb0OXMM/WPdKyiSliw3yB
-	Rw6MzbEFjMR20EeMcHcG51zi+Z7xuWHuYTy2BuM30mF8Ji/GGOoz8lMgB6uT0UfvF7HLNNd3EPQ
-	3w8eG40dUSYn5wzwvJExVFudR
-X-Google-Smtp-Source: AGHT+IEJnCGdr+8I3GjjyVQpD33j0o5roW38EDoCOs0+EHgWQU1I08uXgYucN/0e3vw6muh3vpF+Cw==
-X-Received: by 2002:a17:906:c154:b0:ae0:dfa5:3520 with SMTP id a640c23a62f3a-ae6fcbc353fmr1315833666b.31.1752481068031;
-        Mon, 14 Jul 2025 01:17:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752481390; x=1753086190;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y6hrDr1ho+LmcOihDF5/afd2FJMkMgiWJJggRREgOis=;
+        b=tobn41OZRCV2ViYKWt2779kTszWfNF+9jvknShZuJpLF5qT36iiZirfFKG48HN3TsU
+         XmsNdwxPTdlsIszmVZ7jP9D2mRTy5q8JdPXtGOij1zX/BwQAXgZyodfxhvx7Bl7/kl9u
+         13rCuX9puvxyR3jzK66WanN9PTCsE3rn8DbvToNvFYNCp3god1WlYVcp8fu/iMEe2J4Z
+         9e2wtS9mA7/Ejm0grDhOiwn8T4kbOa988f1eo3+lL7ysQneA1L41E8hxG5NE/NZIn57w
+         UguylOuPqilduefuKKjC+vLzde9d5hU8M2vmMd0NxW7Tek+aq7jG5eHv+58nPCmNzn30
+         H/Sw==
+X-Forwarded-Encrypted: i=1; AJvYcCVfVcOU+4wfIR7ZClZteJrHMdC4ZSQ8gl00o/RVEVEQbUOvTNfoUFR0tA8vB+eMM9GnAkNcc56yVQrP57Cx@vger.kernel.org, AJvYcCWB+p+3rLB0ad0tnIwW1TilBH3XWlOZ8+63I8E8/onDU0gZgtlY7aBtsDuZRhgCws6CdHdpeG98vOLfJNE=@vger.kernel.org, AJvYcCXMs0l03OsaU36qk8C0FMbgDIHqOfZsmy36Tutp71npLYXMNVfMavIlD1kPPu8iczCJxI1GbURPnGze@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyfsebK61BxoPeP3+Z/aSG3/g+ySdmfm4IkDDKJSDOPM4TfrXb
+	Dlaa2+H+ZaLkQGy4TglfTDvJZSRXcsA4LJFDSfUqXsFN+JH6TCSkmNFX
+X-Gm-Gg: ASbGncufocJ2n8i+ksHl5iG+zn3H75BzdFpAxah/IevFFtpACUCUSsTlegEbdhAaIXU
+	7OJSRpsQt42eGygWEm1075cIX01RDwu2C0PXA6PDo8MjmLhkDhWo86FC77ibW0XlOq3yTWN2JiN
+	b2HItVsIVNpP5iZXM9vQrrlU/eGk4txu4l+hW5dVJJZHkSGxx1X9Hw/WxXNoBPA6CiTFwLwTfs0
+	YT5gMO3DXKpOS2hJaduzEtwjMqVjXgaSLbO4ScxDuUvApn5cMkKk8u1Dk8axUbycRrWPo6Tw3Dw
+	nhdPydWNCLxwBk9Z63nPcdQFfO2i1Jr9dItkGZrFx7TX5ztIChE9x8C/QCO2jcNCoHKl5xOpmil
+	nNVyaFG6QhmHUPw==
+X-Google-Smtp-Source: AGHT+IE/cT/hjY2GCM1WSnH0h5q/mZeYUgMYbbjoyfEzTj0kg7wgS9qDCIngeBrTB4ZjtayJ44GjnA==
+X-Received: by 2002:a05:6512:31c8:b0:553:296b:a62 with SMTP id 2adb3069b0e04-55a0448b825mr3586374e87.12.1752481389417;
+        Mon, 14 Jul 2025 01:23:09 -0700 (PDT)
 Received: from xeon.. ([188.163.112.60])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7e949f2sm787867166b.34.2025.07.14.01.17.46
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5593c7bbd55sm1885717e87.23.2025.07.14.01.23.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jul 2025 01:17:47 -0700 (PDT)
+        Mon, 14 Jul 2025 01:23:08 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>,
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
 	Thierry Reding <treding@nvidia.com>,
 	Jonathan Hunter <jonathanh@nvidia.com>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
 	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v2 3/3] ARM: tegra: Add DFLL clock support on Tegra114
-Date: Mon, 14 Jul 2025 11:17:13 +0300
-Message-ID: <20250714081713.8409-4-clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] thermal: tegra: add SOCTHERM support for Tegra114
+Date: Mon, 14 Jul 2025 11:22:47 +0300
+Message-ID: <20250714082252.9028-1-clamor95@gmail.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250714081713.8409-1-clamor95@gmail.com>
-References: <20250714081713.8409-1-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -102,73 +96,38 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add DFLL clock node to common Tegra114 device tree along with clocks
-property to cpu node.
+SOCTHERM is thermal sensor and thermal throttling controller found in Tegra
+SoC starting from Tegra114. Existing Tegra124 setup is mostly compatible
+with Tegra114 and needs only a few slight adjustmets of fuse calibration
+process.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- arch/arm/boot/dts/nvidia/tegra114.dtsi | 34 ++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Changes in v2:
+- no changes, resend.
+---
 
-diff --git a/arch/arm/boot/dts/nvidia/tegra114.dtsi b/arch/arm/boot/dts/nvidia/tegra114.dtsi
-index 4caf2073c556..3ee51d7f3935 100644
---- a/arch/arm/boot/dts/nvidia/tegra114.dtsi
-+++ b/arch/arm/boot/dts/nvidia/tegra114.dtsi
-@@ -4,6 +4,7 @@
- #include <dt-bindings/memory/tegra114-mc.h>
- #include <dt-bindings/pinctrl/pinctrl-tegra.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/reset/tegra114-car.h>
- #include <dt-bindings/soc/tegra-pmc.h>
- 
- / {
-@@ -693,6 +694,30 @@ mipi: mipi@700e3000 {
- 		#nvidia,mipi-calibrate-cells = <1>;
- 	};
- 
-+	dfll: clock@70110000 {
-+		compatible = "nvidia,tegra114-dfll";
-+		reg = <0x70110000 0x100>, /* DFLL control */
-+		      <0x70110000 0x100>, /* I2C output control */
-+		      <0x70110100 0x100>, /* Integrated I2C controller */
-+		      <0x70110200 0x100>; /* Look-up table RAM */
-+		interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&tegra_car TEGRA114_CLK_DFLL_SOC>,
-+			 <&tegra_car TEGRA114_CLK_DFLL_REF>,
-+			 <&tegra_car TEGRA114_CLK_I2C5>;
-+		clock-names = "soc", "ref", "i2c";
-+		resets = <&tegra_car TEGRA114_RST_DFLL_DVCO>;
-+		reset-names = "dvco";
-+		#clock-cells = <0>;
-+		clock-output-names = "dfllCPU_out";
-+		nvidia,sample-rate = <11500>;
-+		nvidia,droop-ctrl = <0x00000f00>;
-+		nvidia,force-mode = <1>;
-+		nvidia,cf = <10>;
-+		nvidia,ci = <0>;
-+		nvidia,cg = <2>;
-+		status = "disabled";
-+	};
-+
- 	mmc@78000000 {
- 		compatible = "nvidia,tegra114-sdhci";
- 		reg = <0x78000000 0x200>;
-@@ -824,6 +849,15 @@ cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a15";
- 			reg = <0>;
-+
-+			clocks = <&tegra_car TEGRA114_CLK_CCLK_G>,
-+				 <&tegra_car TEGRA114_CLK_CCLK_LP>,
-+				 <&tegra_car TEGRA114_CLK_PLL_X>,
-+				 <&tegra_car TEGRA114_CLK_PLL_P>,
-+				 <&dfll>;
-+			clock-names = "cpu_g", "cpu_lp", "pll_x", "pll_p", "dfll";
-+			/* FIXME: what's the actual transition time? */
-+			clock-latency = <300000>;
- 		};
- 
- 		cpu1: cpu@1 {
+Svyatoslav Ryhel (5):
+  soc: tegra: fuse: add Tegra114 nvmem cells and fuse lookups
+  dt-bindings: thermal: Document Tegra114 SOCTHERM Thermal Management
+    System
+  thermal: tegra: soctherm-fuse: parametrize configuration further
+  thermal: tegra: add Tegra114 specific SOCTHERM driver
+  ARM: tegra: Add SOCTHERM support on Tegra114
+
+ .../thermal/nvidia,tegra124-soctherm.yaml     |   2 +
+ arch/arm/boot/dts/nvidia/tegra114.dtsi        | 197 ++++++++++++++++
+ drivers/soc/tegra/fuse/fuse-tegra30.c         | 122 ++++++++++
+ drivers/thermal/tegra/Makefile                |   1 +
+ drivers/thermal/tegra/soctherm-fuse.c         |  33 ++-
+ drivers/thermal/tegra/soctherm.c              |   6 +
+ drivers/thermal/tegra/soctherm.h              |  17 +-
+ drivers/thermal/tegra/tegra114-soctherm.c     | 213 ++++++++++++++++++
+ drivers/thermal/tegra/tegra124-soctherm.c     |   8 +
+ drivers/thermal/tegra/tegra132-soctherm.c     |   8 +
+ drivers/thermal/tegra/tegra210-soctherm.c     |   8 +
+ 11 files changed, 604 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/thermal/tegra/tegra114-soctherm.c
+
 -- 
 2.48.1
 
