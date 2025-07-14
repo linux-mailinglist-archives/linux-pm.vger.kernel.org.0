@@ -1,166 +1,181 @@
-Return-Path: <linux-pm+bounces-30763-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30764-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C894B0382D
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 09:41:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FF01B038BE
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:08:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D94017A66B
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 07:41:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65DA1189D2B2
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 08:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 905082367AD;
-	Mon, 14 Jul 2025 07:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6D22376EF;
+	Mon, 14 Jul 2025 08:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mU2U9pud"
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="cQC6Icyw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from jpms-ob02-os7.noc.sony.co.jp (jpms-ob02-os7.noc.sony.co.jp [211.125.139.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5FA23644D;
-	Mon, 14 Jul 2025 07:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0BD1FECB4;
+	Mon, 14 Jul 2025 08:08:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.139.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752478890; cv=none; b=TbV8+bAt3kXJxkf8UzdjyL7SKJYalbCq9Lg5WR/nXnCwM8YVlVAM+NgotaAslc8HZWyIZzrzbMYphFWYpplJv36VSO9nH+rHFHtVtgJSvtJFRQeKYFlLGNEQWM/vBFVgskFrEvabJg6Z0zcCYXRMURlUKUhAO56JVahQsoz7O/Q=
+	t=1752480519; cv=none; b=LnC7fls1qXql8dTRoPFjo9EA0GMI3yw+SlHKIbThXzuWevK+k4rUEK5sFWSycN+O0Gsgzk2SYIc8hOeDE+dMd72tGfm2Q34vNi73sDOeG+DvfcN38iv+kX3P92ueMII8tBAmPEXMR2uqRJYTS+SasKW3KZEJR3IWJwOeyGU3Yzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752478890; c=relaxed/simple;
-	bh=c5oXUnZQjWluCTOADuJWO/SA6yL+BgCzjJwJnzdWKSs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lwmU5eRKPy21S2k2wTDY+E+J5qPawuJymbslrShrtZNgnQ+sZQW8PXxGI2TUaH9GVrfrDc9t4+HblrZcnMgtoko3TBXn5rdC4GVhiauivymTdZsZi6z/LMQwLbHNPxgBFOFHORjTnwOuR3d8jI1mlcQ3fTSiZQpm4zvta7WWrlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mU2U9pud; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA89C4CEED;
-	Mon, 14 Jul 2025 07:41:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752478889;
-	bh=c5oXUnZQjWluCTOADuJWO/SA6yL+BgCzjJwJnzdWKSs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mU2U9pudA34L6ZiTZwOpRWNtYJ3H1Y338t0tS3T2N+/32adGBbSvved1vdIhlaAm2
-	 hdXHQn2O5WQ7vQonLFtzgq0eC6zO3RkW3X306xPNlRrNzBoJO42EqCzPLIY9K9ziiX
-	 yPp91In6NmyCz7sXvzLyhngebYvySBmBCM6zb9YvxQLMg19lkGHMS2tlBRYJoii+yP
-	 Xslz+zQYBbUqU5WfdaiBxmxQp4A8fCzBQByjxLQorqKTmiKvpCtciwiGb+vC/h5rhb
-	 ltq9zxtpG+etPqq8eckfTsjxSnAEAFCZnBxL1jDlmJIXGfiimOrVMYn79ZjBrFsOpL
-	 3NEGgifh0eXSw==
-Message-ID: <222133f7-9483-4e4b-b3fe-90e2e830fcf6@kernel.org>
-Date: Mon, 14 Jul 2025 09:41:16 +0200
+	s=arc-20240116; t=1752480519; c=relaxed/simple;
+	bh=o/I9ED/6RYXiA0gj4CHZ4R9Zuwm0EsxA4Q+MJceqOdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tSSNI8b0rORwz7e+IYvnE+0iDrdRxAsnAWba4acliz+S08Lf6GQOHhJO0w5h8iNDUanQeHD1Yx7f8Sqh/XXbbE5CeDnZks3zFuvV42wbdJMszXZEFZ8HSq7jD+/TkuiqiRw6UM444/PY1Zxy4SZ6IKbyEykjUeMBkwLP9QTdrCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=cQC6Icyw; arc=none smtp.client-ip=211.125.139.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1752480516; x=1784016516;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KK8q8fL86i3SFNr8AqR/QJFlAoxKfHCpjRRUJZxX4N0=;
+  b=cQC6IcywV6fNn4/8X2xbRb5UbCruwX1EtBnqwyzOVm1Q2XNZDNMVwuZS
+   7OxXpYVMVoJyWcpzsm8lXoGaS9W3MsI1Vuo+PsL4UvGev2nhWE8tW96yK
+   aTCDt9argH3dyLNsqAbEz9vboxUw8cBoY5cMWfHytEdVlOfaezjifjKyN
+   RUUH+bE6YMzm7Yx42uGV4K90ViCD5Fr/OATdSrINmiEYjKs5kFANlbDOy
+   rUX2tXKTeZ5NOBRlXJoKlcsTeZGR5DeSleNpAYqOtAa5h6R6g2ECBMLc/
+   R4awkRMU/jylsw9T5qhuozRAVDyxqK4fGvEvhyYbuXeeXPza2ZRfzcLYZ
+   w==;
+Received: from unknown (HELO jpmta-ob01-os7.noc.sony.co.jp) ([IPv6:2001:cf8:acf:1104::6])
+  by jpms-ob02-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 16:58:27 +0900
+X-IronPort-AV: E=Sophos;i="6.16,310,1744038000"; 
+   d="scan'208";a="7055890"
+Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:eb3e:119e])
+  by jpmta-ob01-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 16:58:27 +0900
+Date: Mon, 14 Jul 2025 16:58:24 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Russell Haley <yumpusamongus@gmail.com>
+Subject: Re: [PATCH v1] cpufreq: intel_pstate: Always use HWP_DESIRED_PERF in
+ passive mode
+Message-ID: <aHS4oFDFUhQcuZj6@JPC00244420>
+References: <6173276.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 02/16] dt-bindings: net: mediatek,net: allow up to 8
- IRQs
-To: frank-w@public-files.de,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Frank Wunderlich <linux@fw-web.de>
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Johnson Wang <johnson.wang@mediatek.com>, =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?=
- <arinc.unal@arinc9.com>, Landen Chao <Landen.Chao@mediatek.com>,
- DENG Qingfang <dqfext@gmail.com>, Sean Wang <sean.wang@mediatek.com>,
- Daniel Golle <daniel@makrotopia.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Felix Fietkau <nbd@nbd.name>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-References: <20250706132213.20412-1-linux@fw-web.de>
- <20250706132213.20412-3-linux@fw-web.de>
- <20250707-modest-awesome-baboon-aec601@krzk-bin>
- <B875B8FF-FEDB-4BBD-8843-9BA6E4E89A45@fw-web.de>
- <90a3191f-882d-4302-afd5-e73e751b5b95@collabora.com>
- <9696BB13-9D1E-48D3-B323-03AD23110CF5@public-files.de>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <9696BB13-9D1E-48D3-B323-03AD23110CF5@public-files.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6173276.lOV4Wx5bFT@rjwysocki.net>
 
-On 07/07/2025 12:43, Frank Wunderlich wrote:
-> Hi Angelo,
+Hi Rafael,
+
+On Mon, Jun 16, 2025 at 08:19:19PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Am 7. Juli 2025 12:06:02 MESZ schrieb AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>:
->> Il 07/07/25 09:30, Frank Wunderlich ha scritto:
->>> Am 7. Juli 2025 08:31:11 MESZ schrieb Krzysztof Kozlowski <krzk@kernel.org>:
->>>> On Sun, Jul 06, 2025 at 03:21:57PM +0200, Frank Wunderlich wrote:
->>>>> From: Frank Wunderlich <frank-w@public-files.de>
->>>>>
->>>>> Increase the maximum IRQ count to 8 (4 FE + 4 RSS/LRO).
->>>>
->>>> Because? Hardware was updated? It was missing before?
->>>
->>> There is no RSS support in driver yet,so IRQs were not added to existing DTS yet.
->>>
->>
->> That's the problem. It's the hardware that you should've described, not the driver.
->>
->> In short, you should've allowed the interrupts from the get-go, and you wouldn't
->> be in this situation now :-)
+> In the passive mode, intel_cpufreq_update_pstate() sets HWP_MIN_PERF in
+> accordance with the target frequency to ensure delivering adequate
+> performance, but it sets HWP_DESIRED_PERF to 0, so the processor has no
+> indication that the desired performance level is actually equal to the
+> floor one.  This may cause it to choose a performance point way above
+> the desired level.
 > 
-> I have not upstreamed MT7981 or MT7986. I also do not want to say anybody else did this wrong.
-> I'm happy that MT7986 is working in mainline. It was basicly not taken into account that these IRQs may be needed in future.
+> Moreover, this is inconsistent with intel_cpufreq_adjust_perf() which
+> actually sets HWP_DESIRED_PERF in accordance with the target performance
+> value.
 > 
-> The technical documents are often not complete and we get some information step-by-step while testing.
-> Or it was not seen when documents are too large :) many reasons why it was "forgotten to add".
-> We use what we get from sdk and docs and try to make it compatible with mainline....no optimal process,but it is like it is.
+> Address this by adjusting intel_cpufreq_update_pstate() to pass
+> target_pstate as both the minimum and the desired performance levels
+> to intel_cpufreq_hwp_update().
+> 
+> Fixes: a365ab6b9dfb ("cpufreq: intel_pstate: Implement the ->adjust_perf() callback")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -3249,8 +3249,8 @@
+>  		int max_pstate = policy->strict_target ?
+>  					target_pstate : cpu->max_perf_ratio;
+>  
+> -		intel_cpufreq_hwp_update(cpu, target_pstate, max_pstate, 0,
+> -					 fast_switch);
+> +		intel_cpufreq_hwp_update(cpu, target_pstate, max_pstate,
+> +					 target_pstate, fast_switch);
+>  	} else if (target_pstate != old_pstate) {
+>  		intel_cpufreq_perf_ctl_update(cpu, target_pstate, fast_switch);
+>  	}
 
+The patch looks good to me. In fact, I'm surprised this is not how it has always
+been :)
 
-Then explain in the commit msg that hardware description was incomplete
-and was missing this and that.
+Here are two tests to look at the power consumption and performance implications.
+The tests were run on a Intel Core Ultra 5 135H machine with 6.16-rc5 defconfig +
+CONFIG_CPU_FREQ_GOV_POWERSAVE + CONFIG_CPU_FREQ_GOV_CONSERVATIVE.
 
-This is the valid reason for doing the change.
+Both the idle power consumption test and the CPU stressor power consumption test
+were run with the powersave, performance, conservative, and ondemand governors
+on all the cores.
 
-Best regards,
-Krzysztof
+We don't expect any changes in the powersave and performance governors because
+they have strict_target set. So in their case, the change is:
+
+	min_perf     = target        min_perf     = target
+	desired_perf = 0        =>   desired_perf = target
+	max_perf     = target        max_perf     = target
+
+So, that change does nothing. We only expect to see a change in the conservative
+and ondemand governors, which is confirmed by the test results.
+
+In summary, this patch lowers idle power consumption with conservative and
+ondemand governors by 9%. There are no significant energy or duration changes
+with any of the governors for the stress-ng cpu stressor.
+
+1. Idle power consumption
+
+Monitor average power usage every minute for six minutes:
+
+turbostat --Summary --quiet --show PkgWatt --interval 60 --num_iterations 6
+
++--------------+-------------------+-------+---------+
+|              |     Average power (W)     |         |
++   Governor   +-------------------+-------+ Change  +
+|              | Before            | After |         |
++--------------+-------------------+-------+---------+
+| Powersave    | 7                 | 7.1   | ~0%     |
+| Performance  | 11.85             | 11.85 | ~0%     |
+| Conservative | 8.1               | 7.35  | -9%     |
+| Ondemand     | 7.55              | 6.85  | -9%     |
++--------------+-------------------+-------+---------+
+
+2. CPU stressor's power consumption
+
+Run stress-ng's matrixprod cpu stressor on each of the cores for 5 million bogo
+ops (fixed workload), with a cpu load of 50%, so that there's some leeway for
+frequency tuning by the governor. At the default 100% cpu load, the frequency
+would just shoot up to the maximum.
+
+turbostat --quiet --Summary --Joules --show Pkg_J \ 
+	stress-ng --cpu $(nproc) --cpu-ops 5000000 --cpu-load 50 \
+		  --cpu-method matrixprod --metrics-brief
+
++--------------+------------+--------------+------------+--------------+--------+-----------+
+|              |          Before           |           After           |      Change        |
++   Governor   +------------+--------------+------------+--------------+--------+-----------+
+|              | Energy (J) | Duration (s) | Energy (J) | Duration (s) | Energy | Duration  |
+|--------------+------------+--------------+------------+--------------+--------+-----------+
+| Powersave    | 10680      | 773          | 10691      | 776          | 0%     | 0%        |
+| Performance  | 11753      | 409          | 11723      | 405          | 0%     | -1%       |
+| Conservative | 11815      | 409          | 11922      | 414          | 1%     | 1%        |
+| Ondemand     | 11803      | 408          | 11814      | 409          | 0%     | 0%        |
++--------------+------------+--------------+------------+--------------+--------+-----------+
+
+Tested-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+
+Thanks,
+Shashank
 
