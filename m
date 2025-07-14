@@ -1,304 +1,129 @@
-Return-Path: <linux-pm+bounces-30795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFC67B03EC7
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 14:33:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0499B03ECD
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 14:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 243AF7A9AB7
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:32:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2336B1731D7
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE39247295;
-	Mon, 14 Jul 2025 12:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C09524887F;
+	Mon, 14 Jul 2025 12:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Psz4i85h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTAt0zcR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390BF1DBB0C;
-	Mon, 14 Jul 2025 12:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F7D20AF67;
+	Mon, 14 Jul 2025 12:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752496404; cv=none; b=d2mMkbb1kIEUWecbofP78j/UVUXzLzaNeyaTN01X7Ci7fuGJOwQ6i1SxrF1L2EBpSa+HdkZ6vm0JHKNn6G0PWcA3fPPxsLdlhHI+ooMe/y6E/rFuCeRVYulzIQCPxqqrfRRUcMjUNvR5TPzbc/yNvZDV7U/qbs1jdn+k2AqFQc8=
+	t=1752496538; cv=none; b=WSP+SrOLrUtkA52/yRePv9IzpAhPMzUOlZ5ni+gfDDJrNhTC6a2vYuHpFZO8Ah5kpf/g0fS+fl5q1z5Z9Go/Vltda7sCQe6Jw7+MAcsomlImZWNUO/fyJK2iDY7dwW78mReLpBF1WkHOfbq1Ry2pjnOGfIAigwOPSSoKjyg13s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752496404; c=relaxed/simple;
-	bh=4irWIhJ4mRp4qA3am0X7ku6qyTiSX9hhxAXsieMpu28=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d066PF11SZTd+N/xCLaU0aBdiJwnFbfE6cRAJrChpBvPBh2LHhz2srH0bVkIw3ozzzqcv+EtSLkXv3J1AGaaSTyC9ciY/SFXW94Dz/vQwwBhMWofnaJMJy+alRsAWOw9M5WL8ZyfExEBIrWOrhlZjN4Zu4ex3/2AX5f+zk/VOj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Psz4i85h; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1752496400;
-	bh=4irWIhJ4mRp4qA3am0X7ku6qyTiSX9hhxAXsieMpu28=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Psz4i85hVOvV3ihew+dZZNJAlptx1OOddZmXypsKodmHlA/Enmv9mzxl522aySVWy
-	 asOcdKWO/byCjjuDkcEVL75xfHVALfoxyt0dZCpk7FPcMHNKFDjjWgEFZXpB9/aQ2W
-	 +KBL96Yq5FpMWFbNKVATPyqRI0cOUuGN4TmAjC72ahzLMpcHMNYdoOz6rSPjFCzGiJ
-	 7BO5+8deLtqNwTmV/wMwKKBqF3yq0RPb72NbjG3gBMtF6NCVWOoGJWe/yNMvQI+M2f
-	 dI7jPbBfKYLTo0qLlzEUQgDd9HxIhIyBXdotVepf9ZqBTtDx23yeE6ZnjmIIgIXFYn
-	 csVbFyUqx1riA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5E55717E05F0;
-	Mon, 14 Jul 2025 14:33:19 +0200 (CEST)
-Message-ID: <190c5ddd-b89b-427f-abfe-b8ccccb75c3f@collabora.com>
-Date: Mon, 14 Jul 2025 14:33:18 +0200
+	s=arc-20240116; t=1752496538; c=relaxed/simple;
+	bh=rKnLYV6EmHmE3mzoMHqDHoN8VPsmF1S4gphrWDmSfbw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CGnI4HktYvVhhlJz46hhInURiQFJqVHhCZ2zSiBgiDGvEi+3y2J7xGP9hpHj5SOsmmWQfm+ZscV2PwtucXz9pjl+VEg31AQUBZ+8xYF/sM/i9rV9TWKhSQve2XoqulA3z1pIyCxo1OlFubt4zI5yD9HvFL1uJzDfN5lyNxgFFeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTAt0zcR; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so7703239a12.2;
+        Mon, 14 Jul 2025 05:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752496534; x=1753101334; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/JJkBY6StLlPiYYNcDOCRaSTmquHRBX1aQ9fP/9Yejg=;
+        b=HTAt0zcRenTTuIAy7QHrcU+NnxaEGPRAQN9tSIyMGU2SdFMzuERaYQkPMBRCKOybbw
+         0k8BpL9X/XScJYwSDCfdrF0KKHbp/B2nEzQaxsXKA8/NjJi07ke0ijq29Vl2QIRIC6Yg
+         QtV5qHL8h2Z/PvebG+ICoQfRVycUlL4205resx/Nx9/PJRBdVjQ9tProGmRMUnovfDnu
+         igDleclR2O207edI+QvD6KfccH+f3bZOX9DCtIW8amYahRj0Jkhy55yLUIkEPFxNskJv
+         MKt44ZoyH/p+yH9MZ8tAUa32+X1//Fmkd3shyBAJ7UnIQdtxehxMNpWN9MT7eVBbiLeS
+         eBWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752496534; x=1753101334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/JJkBY6StLlPiYYNcDOCRaSTmquHRBX1aQ9fP/9Yejg=;
+        b=kYJ1xbP+l5WXe9PtCXHI5Zz28Gg9Um6sBSTxWHHdhRSJ4ETTJAbKveK808FeTv/nVL
+         OVno4qOQhqxodsWPRdWXzAwftXlbA76ENN+6Gd615nIxQF1kIDUNSUhap9dF9+OYr2Y1
+         6MOltHL2uJ+G4QP8CECKG8A0MBAVo0ogsm+7WZV0wUKl8DXxkm4MSvUlbeWyBTCZBz/o
+         sXYG608Q0TiiNvY9c0YVjtXPV1vbFgPw5IlkZ4ja7FPODI483JNJgQeFnap1LCXochuB
+         PG+sl6Umwn5PJ5j8pu1xefw6hGb21wFAESVQsPm2babWBIe5CoHuVbv5koU1MR35a0au
+         FmcA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+3RgLUvf2NiU381lhtaSRkoWLEdJpTi6FmN8UGTjCURjAn1kRXksGHdXGZTOPvQMrhRWnTVEji3NeO7mb@vger.kernel.org, AJvYcCUhGBCuCfY+pNyWG4OtLUYeyOkH2+TEqGj8u07G/PaiJFSobQSiNQMWwPRqG0kv2pWonmTftT5DAOE=@vger.kernel.org, AJvYcCVNGUiRgJa3d4MjJmaVQ+3HaX87Bp9agYs9YFc2L6WcmqwYdSOLBxJjMtwamlkoud5eO4K3Ff3B+5ez5V3Jpno=@vger.kernel.org, AJvYcCXLlJTpvLULoU66O+bpqEMLejFaWROSk0YSdyYGrL0gALk/5JPT5kq5dSv+z85/24HS4J208GZY1OCi@vger.kernel.org, AJvYcCXWrTKpfQvGrIzreTDNoRWT8uqf1C9majubdMA6OSC+Jf7xcZlbg6GxVW58nWPR7a57QAT+tHtp@vger.kernel.org, AJvYcCXiSl7mbii0oZ3nc6nA/32wlOCYSPyGvILEe7z62cuowD4lTHCWwMJA0f+0FsFUBRdaXF8zBI55crjEIu72uZOc@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRY67yT44xp7eMkHjBIKftmuf6PvahA25X0nhhrlLOVRwLkJAc
+	3WV3chcsbeMt8Fdf+jE1p5ipzRgnf/6E810wE02yVxd4PUGNnF0fY+dxpcD24QhYrIrgjaSzZRq
+	SDjZqXnxEjMJdIC+UsAG/V7IILal3WHI=
+X-Gm-Gg: ASbGncsQvZBOTswBI3UQQaNwNy/oQT9c5D1K9S+CfGQlIjQl6+QKPqFvbaO7gSssTgr
+	A0bXv80UYm7/ueigk5wnlIxkTD2Q1WReGvCRFOCRjuUnbmx3NjVUzsMhZYNADaNffhPgZC/W2fh
+	XGbyuZA7vpTS9w3QyD9Y3BNZR3H59n4XsM966fIcnvVYwxZQ4FbhhJSGA/rH1Vg2zM4fJN2vM6r
+	rE1wiBgvyoW7bXzmU60uFOCsddBf1ZgScURuxKR1sjCYiMXbaAu
+X-Google-Smtp-Source: AGHT+IEHpxC5111y9Cj6JQaRaXgMXbAFzbh9lkbxM7Yb2ILuf+3IGoAWfMQm4cez9+Bj4NXuw+pe+X+/AUAJqf9Zudk=
+X-Received: by 2002:a17:906:d7d5:b0:ae3:6744:3675 with SMTP id
+ a640c23a62f3a-ae6fc0c3796mr1235555966b.48.1752496533691; Mon, 14 Jul 2025
+ 05:35:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: mfd: syscon: Add mt8196 fdvfs syscons
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Hector Yuan <hector.yuan@mediatek.com>
-Cc: kernel@collabora.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20250711-mt8196-cpufreq-v1-0-e1b0a3b4ac61@collabora.com>
- <20250711-mt8196-cpufreq-v1-1-e1b0a3b4ac61@collabora.com>
- <4537173f-7f79-4629-a2ef-cbf1edd2ed81@collabora.com>
- <2866261.BEx9A2HvPv@workhorse>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <2866261.BEx9A2HvPv@workhorse>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
+ <20250709-core-cstr-fanout-1-v1-1-fd793b3e58a2@gmail.com> <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
+In-Reply-To: <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 14 Jul 2025 08:34:56 -0400
+X-Gm-Features: Ac12FXyt7LMvW07NA5KJthMOxTToFChah-hJr4NBCGuAbPJrhV6AWz6kEkIvvTw
+Message-ID: <CAJ-ks9=ZHtzeyyFSZaVuA1t-3C8-hc40n6r8qFWxn628qT-OeA@mail.gmail.com>
+Subject: Re: [PATCH 01/10] gpu: nova-core: use `core::ffi::CStr` method names
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, Javier Martinez Canillas <javierm@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il 14/07/25 13:58, Nicolas Frattaroli ha scritto:
-> On Monday, 14 July 2025 10:47:32 Central European Summer Time AngeloGioacchino Del Regno wrote:
->> Il 11/07/25 16:57, Nicolas Frattaroli ha scritto:
->>> The MT8196 SoC uses two syscon ranges for CPU DVFS that are separate
->>> from each other. One, mt8196-fdvfs-config, is used to check for a magic
->>> number at that memory address to verify that fdvfs should be used. The
->>> other, mt8196-fdvfs, is used to configure the desired frequency for the
->>> DVFS controller for each CPU core.
->>>
->>
->> What is the reason why you're using syscons here?
->>
->> Can't we simply assign the FDVFS MMIO to the cpufreq-hw node?
-> 
-> That would require refactoring the driver way more since it currently
-> gets the number of performance domains from the number of regs. If
-> you want me to do that, I'll need to know how we should disambiguate
-> performance domains from misc things like fdvfs. Stuff like string
-> comparisons on reg-names seems very ugly for the driver to do, but
-> adding a property to explicitly specify the number of performance
-> domains would then put into question what the existing binding did
-> by just assuming this information is something that implementations
-> can get without any ambiguity.
-> 
-> Even if we forget that Linux is the only kernel that cares about this
-> device tree, I'm not totally on board with having the smattering of
-> dozens of different tiny register ranges in every DT node on mediatek
-> like the vendor kernel does it. And not to forget, it'd change the
-> binding even more, to the point where I'd probably have to create a
-> new binding for mt8196.
-> 
+On Mon, Jul 14, 2025 at 7:11=E2=80=AFAM Danilo Krummrich <dakr@kernel.org> =
+wrote:
+>
+> On Wed Jul 9, 2025 at 9:58 PM CEST, Tamir Duberstein wrote:
+> > Prepare for `core::ffi::CStr` taking the place of `kernel::str::CStr` b=
+y
+> > avoid methods that only exist on the latter.
+> >
+> > Link: https://github.com/Rust-for-Linux/linux/issues/1075
+> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> > ---
+> >  drivers/gpu/drm/drm_panic_qr.rs | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> This doesn't look like nova-core. :)
 
-The problem that I see with having a syscon for this is that I can foresee
-future SoCs using the same cpufreq-hybrid IP, which means that we'd surely
-be cluttering the dt-bindings/mfd/syscon.yaml with a huge list of MediaTek
-SoCs (x2, because it's two syscons, even) without having a really-really
-valid reason to do so.
+Oops :(
 
-
->> Or is there any reason why we can't declare it as mmio-sram? ...because I'm not
->> entirely sure but the FDVFS space should effectively be a [c]SRAM memory range...
-> 
-> mmio-sram is fairly useless for the purposes of having something as
-> a fixed set of registers, hence why nobody else does it. From my
-> research, it appears to mainly be used if you want to actually treat
-> it like a pool of memory from which to then dynamically allocate
-> things.
-> 
-> To use it like a syscon, which is what we're doing, you'll have to
-> specify your mmio-sram node, then add a child node as a reserved range
-> for the "syscon-like" area, and then specify in ranges that you want
-> that child node's address translated into the global address space as
-> expected. Then in the driver, you can't just do a single function call
-> to get some regmap to write into, you have to follow a phandle in your
-> vendor property pointing to said sram range, then get its address,
-> translate said address to the global SoC address space, and then iomap
-> it. And the cleanup for error paths/driver remove isn't fun either.
-> 
-> Besides, we don't actually know whether this is an sram range, or how
-> large it is. The only confirmed sram range was the csram_sys thing at
-> like 0x11bc00 which is not used because it turned out to be useless,
-> and dealing with the kernel's sram interface to use it as a reserved
-> range just to read 4 bytes from it was a wasted afternoon. And that's
-> not even the real starting address of that sram area, that's just a
-> part we know is used because downstream uses 5 KiB there for a codepath
-> that's dead when fdvfs is present (except the one thing where it installs
-> a panic handler to shove something into a register to make it stop dvfs
-> logging if the kernel is in the process of crashing).
-> 
-> I can be convinced to go through the pain of making this mmio-sram if
-> I have documentation of the whole memory map of the SoC that shows me
-> where and how large each area of sram is, so that I don't need to come
-> up with my own starting addresses and offsets based on whatever random
-> stuff I can infer from downstream DT.
-> 
-> Really, every writable syscon is probably implemented as "sram" in
-> hardware. But an sram cell that is not general use memory but is
-> treated by the hardware as having some meaning is not mmio-sram. We
-> can't ever use it in any way other than as a syscon, and telling
-> implementations that they can except then slapping a huge reserved
-> range into it just makes them have to implement syscons twice, once
-> as syscons and once as syscons-except-it's-a-reserved-sram-mmio-range.
-> 
-
-I understand. That's a valid reason, it's ok.
-
-I'm not sure though why you're talking about huge restructuring of the MediaTek
-cpufreq driver to add the FDVFS registers in the reg list?
-
-There are only two MMIOs that we care about here, right? FDVFS and FDVFS-CONFIG.
-
-Imagine the devicetree node being like this:
-
-performance-controller@1234 {
-   compatible = "mediatek,mt8196-cpufreq-hw";
-   reg = <0 0xdomain1 0 0xsz>, <0 0xdomain2 0 0xsz>, <0xdomainN 0 0xsz> ...
-         <0 0xfdvfs 0 0xsz>, <0 0xfdvfsconfig 0 0xsz>;
-   #performance-domain-cells = <1>;
-};
-
-If you want, you can even do without having reg-names (though that might be better
-for readability), because:
-
-   1. This is a MT8196-specific binding (and node); this means that you can safely
-      assume that:
-      - There are three clusters (ignorable)
-      - There is FDVFS support (not ignorable)
-   2. No other SoC will ever use the MT8196 binding without being compatible with it
-      and anyway newer socs will need something like
-      compatible = "mediatek,mt1234-cpufreq-hw", "mediatek,mt8196-cpufreq-hw";
-      - This means that N.1 still stands for new SoCs
-
-So I do see two solutions here, of which I kinda prefer the one without reg-names.
-
-With reg-names:
-  1. Check all MMIOs named "domain%u" (domain0, domain1, domain2): this kind-of
-     reflects the naming of the cpufreq policies (policy0...N), which even keeps
-     things consistent between both hardware names and cpufreq software names (but
-     of course - as long as HW is described in bindings, we don't care about any
-     software defined names);
-     - This gives you the number of performance domains, 3 in the specific case
-       of the MT8196 SoC (and some future others for sure!)
-  2. Get reg by name: "fdvfs-base", "fdvfs-config"
-
-Without reg-names:
-  1. Define the following in the dt-bindings for the cpufreq with fdvfs:
-     reg:
-       - description: FDVFS Performance State (or voltage?) setting region
-       - description: FDVFS Configuration region
-       - description: Cluster 0 OPP tables and Performance State setting region
-       - description: Cluster 1 OPP tables and ...
-       - description: Cluster 2 OPP tables and ...
-       (new socs) - description: Cluster 3 ... etc etc etc
-  2. Add the MT8196 conditionals and exclusions:
-     if: (blahblah) mediatek,mt8196-cpufreq-hw
-     then: reg:   minItems: 5    maxItems: 5
-  3. Modify the driver like so:
-     - Add platform data for MT8196, and set a "uses_fdvfs = true" (or something
-       like that, anyway, your call about the naming)
-     - Get the FDVFS regions:
-         fdvfs_base = devm_platform_ioremap_resource(pdev, 0);
-         error_checking_here();
-         fdvfs_config = devm_platform_ioremap_resource(pdev, 1);
-         error_checking_here();
-
-         static int mtk_cpu_resources_init(.....)
-         {
-           .....code......
-           index = args.args[0]; /* performance-domains number after parsing */
-
-           if (pdata->uses_fdvfs)
-             index += 2;
-
-           ...code... (no further modification required)
-         }
-   4. Profit!
-
-Now, if you're thinking about *guaranteeing* that FDVFS is always the first two
-MMIOs in the node... just do not care.
-
-You are already enforcing that with devicetree bindings, so that's how you are
-guaranteeing that.
-
-Anyway - If you want to make an entirely new binding named
-            mediatek,mt8196-cpufreq-hw.yaml
-noone prevents you from doing that.
-
-If the binding describes the same hardware, it is WRONG to create a new one, but
-in this case it would be describing *new hardware* that is incompatible with the
-previous version, so that's RIGHT to do.
-
-You don't need to have two drivers for two bindings, either.
-
-You can have one driver with two different bindings, as long as it makes sense to
-have that (as in, if the two are incompatible in the binding, but in the actual
-code it still makes sense to have both in the same driver, that's ok).
-
-Cheers!
-Angelo
-
->>
->> Cheers,
->> Angelo
->>
-> 
-> Kind regards,
-> Nicolas Frattaroli
-> 
->>> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
->>> ---
->>>    Documentation/devicetree/bindings/mfd/syscon.yaml | 4 ++++
->>>    1 file changed, 4 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
->>> index 27672adeb1fedb7c81b8ae86c35f4f3b26d5516f..5ee49d2ba0cdb72dd697a0fd71c8416ad4fd2c1e 100644
->>> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
->>> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
->>> @@ -88,6 +88,8 @@ select:
->>>              - mediatek,mt8135-pctl-a-syscfg
->>>              - mediatek,mt8135-pctl-b-syscfg
->>>              - mediatek,mt8173-pctl-a-syscfg
->>> +          - mediatek,mt8196-fdvfs
->>> +          - mediatek,mt8196-fdvfs-config
->>>              - mediatek,mt8365-syscfg
->>>              - microchip,lan966x-cpu-syscon
->>>              - microchip,mpfs-sysreg-scb
->>> @@ -194,6 +196,8 @@ properties:
->>>              - mediatek,mt8135-pctl-a-syscfg
->>>              - mediatek,mt8135-pctl-b-syscfg
->>>              - mediatek,mt8173-pctl-a-syscfg
->>> +          - mediatek,mt8196-fdvfs
->>> +          - mediatek,mt8196-fdvfs-config
->>>              - mediatek,mt8365-infracfg-nao
->>>              - mediatek,mt8365-syscfg
->>>              - microchip,lan966x-cpu-syscon
->>>
->>
->>
->>
-> 
-> 
-> 
-> 
+How should I respin this one? the subject should be drm/panic, I think.
 
