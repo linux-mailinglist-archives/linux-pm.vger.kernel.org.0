@@ -1,222 +1,196 @@
-Return-Path: <linux-pm+bounces-30779-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30780-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37EF6B03BBF
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:18:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC4EB03BFC
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 12:36:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6196416B7F9
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:18:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715EB1884359
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Jul 2025 10:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7833824468A;
-	Mon, 14 Jul 2025 10:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCCA2441A0;
+	Mon, 14 Jul 2025 10:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e82JNUsr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8798A244684
-	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983EC24061F
+	for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 10:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752488286; cv=none; b=AHKJF+JR9f0isaBr6QVzlj/cfbrCvWzsQ6ET+EqC9BK2C58+GCdd/558zUV7rcm6D1Fqd3G/gE8nEP8zEq1NQP/pab1pKvn1XYQRuOPl2bcuB0ozd6zgJGDxU+BOIJzUj3FT8BR7ROexldyxGqP9qz/SFmSLL6Yh+lhNqnL4twM=
+	t=1752489362; cv=none; b=jBVEJ7klyMfobxYQ2cCUGa+7puDR+POVKxfBuZTcfEI/1NJ2/EUCz2bqioHc0sE2BTyyE0xsmX0DUOTwHBsIJKmeocxVKkLwTaZNNULIRisCB40XUi/a2H8RZZ0IHp0X1ne1yHiu99yysoufWAnPrJhsX6SqMbD/AmlUagIEQsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752488286; c=relaxed/simple;
-	bh=aeszjQw2c9arLj1BbbOYpfg53cIWR3hrpjFv96howeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kUcYeuSSvvFaX64BbsHbvYBkcCcl/EYVdjFRDK9gHJa4anRmqVo2MTtn3d1Xh6OHKOwEfkyDCJ95QvrjwWtGOBL9aud6n0bfwkb0xcleHqQSqzEoquT33KpJ/9IxubDJqeh+evb9/bb+Zgy1f0xsGe0R0E7Sr5MBNnntATDpit0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1ubGFp-0006xk-La; Mon, 14 Jul 2025 12:17:49 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1ubGFo-008Oei-1j;
-	Mon, 14 Jul 2025 12:17:48 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1ubGFo-0007P4-1M;
-	Mon, 14 Jul 2025 12:17:48 +0200
-Date: Mon, 14 Jul 2025 12:17:48 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>,
-	Guenter Roeck <groeck@chromium.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v11 0/7] Introduction of PSCR Framework and Related
- Components
-Message-ID: <aHTZTFxfS6Bn4yhz@pengutronix.de>
-References: <20250618120255.3141862-1-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1752489362; c=relaxed/simple;
+	bh=94R/CNsAvVceT58hWwVo0TxguwEZWGooqC6rD1XcJVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mMhQIGq4FZ7DDAJVSn3tBwzQYiHtRvLObZvX+b7FKMw/xBQIPoHVqNkqAqlZIgXsHLDyBuG7kNxL9GXmwQBhuqiblAEkGt2IQYCTIvUDEnkcbe3J2XRGBq44YxrfyrFMNPERTsKY2J3HUVVDW/gpfV1+ijdvXZufkuk6g65G6ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e82JNUsr; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a16e5so8023653a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 14 Jul 2025 03:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752489359; x=1753094159; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xHzOD3RpVjOUZUSkinK31z2xmSemdrgPuSeEWTG+rT8=;
+        b=e82JNUsrJr5PDc1OQrZ8q2mDHNHx5creZmzb68VkyK1B5PCPI0aHh2g011fQHiwI4U
+         bGH8bpn/MAFtN3W/qrdbPNP9BwF0QC7S3EeB9df1wF2LMnt1FxkqI7kGnXkzsNumKfDU
+         uOglbSHy5iIKrGDLwXb7QtsfSAwkDUzNFlHXQrdrRBhgJGU74GKSEJbCL3CyYGajVyUY
+         OBm+EL9zI9inl7Dh9yW0VWjdzBTzIpTh1M/uLUwoZsS3io/qOes7DkicKtFKv1h0wky1
+         11Rdkq871dujp+p4FCQgEsuHhURvGSPfUE4rr1/lqVVNsX37W1oOuygZ2qxafA4uxj0h
+         kWtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752489359; x=1753094159;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xHzOD3RpVjOUZUSkinK31z2xmSemdrgPuSeEWTG+rT8=;
+        b=GbDuoPSUrzJ69Db0jtSPoDU1jLRsMBxaCdIJPrfTob4PSnCQZjjhugwIad/AC0z0BH
+         /qIgwfLDuPZgvkMimG4m1Sf99GTGtJO42o32txHvmgBq78w/0Q6l+yxrZhnT9VMfIZpV
+         ZEJJgVJ8jAoSTtuiouD5xXl7cbSrRMB3fQhHrSSvOKLN360AcOYsY7lJa6AgW4xQvIED
+         TRlPRJTSxgM7v864Zh+i6KPgM7hKPR8+yTpWpGXKzDfHKnvc2Lwi0ak2oyo0uGnbcdne
+         KqVsr/HMRS5BfER6zxfEV3AM9qLi6+cum7N+aAgIlCXyt7JhUxEBQpbWIUEBLR2ZjFhb
+         NKFQ==
+X-Gm-Message-State: AOJu0YwZ7bjtDzuFa/XAuwWdol87b0WeI6jVgYM3x0HH088q6cO76XxP
+	CoPdFSOY5hdxN32RGCKIxk10xT6F1o6OU3TbNikRHGajZdtUP4gwbXx5rjgJCPCj6oo=
+X-Gm-Gg: ASbGncv4nQ0y7dwXw1tpq54tgFimge3uzXtVUURcu+NcuwbfuQqDHZkaL6HBe2KZDna
+	pHnAYsHTh6OIXdmKduax1UGn0Y9rp331NOe+7yi0/sK6gkMk2rnCnGEb6LpdWCggHCeHNGb1Yr2
+	+kOsHQudC3IvDyk2VL+/JMua+SHWzNhDCs8ypKujA8QV8dcrT9jJS87wJyQyxb8f9syLJEh3YT9
+	KzOM8agQnf0lCWhPhun+Q5N3T8cyp2GDNobNvbKKC/0ToLSyNxujAaJ87ekB+adg+cWrPq4bUSY
+	X/ycL0KjGNEl9wIWSAnCqfGCReRlFYQOdsm9lfv8gaqc8dLz9KoH+DsBGP267ZqVSJlWgFmGk/z
+	/i8CGK6U/pRZCGgnaKJ4bDFFvqc8nPwFH
+X-Google-Smtp-Source: AGHT+IEWM7xpTjyIWJctw5C17VQ6g2wMjwiF1ZUkbDf1k366SzU3jICj63GNJpd/07+BLZ85FDqxnw==
+X-Received: by 2002:a05:6402:24c9:b0:608:176c:f139 with SMTP id 4fb4d7f45d1cf-611e760e496mr9464977a12.5.1752489358729;
+        Mon, 14 Jul 2025 03:35:58 -0700 (PDT)
+Received: from [192.168.0.251] ([188.27.143.49])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-611c9528ae0sm5815303a12.29.2025.07.14.03.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Jul 2025 03:35:58 -0700 (PDT)
+Message-ID: <7186da1f-4d16-48f5-bdc0-cb04942b3a5e@linaro.org>
+Date: Mon, 14 Jul 2025 11:35:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250618120255.3141862-1-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] PM: sleep: Resume children after resuming the
+ parent
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>,
+ Jon Hunter <jonathanh@nvidia.com>, Saravana Kannan <saravanak@google.com>,
+ William McVicker <willmcvicker@google.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+References: <10629535.nUPlyArG6x@rjwysocki.net>
+ <CAJZ5v0hpPOHNYCSTM1bb+p-wyAZkpg+k-huf9f5df9_S8MfvEg@mail.gmail.com>
+ <CAJZ5v0jFP2njw3ic47yyh_7u7evKQKQuqGp27Vj7X-FfDLH7uQ@mail.gmail.com>
+ <4677865.LvFx2qVVIh@rjwysocki.net>
+ <ae6d65f7-990a-4145-9865-63f23518405c@linaro.org>
+ <CAJZ5v0hatwNn_Qh7n7wjDyXDZK=L4vkB+aotZRfn4Zi21sGKxw@mail.gmail.com>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <CAJZ5v0hatwNn_Qh7n7wjDyXDZK=L4vkB+aotZRfn4Zi21sGKxw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Greg,
 
-this patch series doesn’t belong to any single existing subsystem. It
-spans drivers like power/reset/, touches nvmem, regulator, and adds new
-interfaces.
 
-Since there's no clear maintainer fit and the code is self-contained,
-I’d like to ask you to pick it up.
+On 7/14/25 8:29 AM, Rafael J. Wysocki wrote:
+>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>> index d9d4fc58bc5a..0e186bc38a00 100644
+>> --- a/drivers/base/power/main.c
+>> +++ b/drivers/base/power/main.c
+>> @@ -1281,6 +1281,27 @@ static void dpm_async_suspend_parent(struct device *dev, async_func_t func)
+>>                 dpm_async_with_cleanup(dev->parent, func);
+>>  }
+>>
+>> +static void dpm_async_suspend_complete_all(struct list_head *device_list)
+>> +{
+>> +       struct device *dev;
+>> +
+>> +
+>> +       pr_err("tudor: %s: enter\n", __func__);
+>> +       guard(mutex)(&async_wip_mtx);
+>> +
+>> +       list_for_each_entry_reverse(dev, device_list, power.entry) {
+>> +               /*
+>> +                * In case the device is being waited for and async processing
+>> +                * has not started for it yet, let the waiters make progress.
+>> +                */
+>> +               pr_err("tudor: %s: in device list\n", __func__);
+>> +               if (!dev->power.work_in_progress) {
+>> +                       pr_err("tudor: %s: call complete_all\n", __func__);
+>> +                       complete_all(&dev->power.completion);
+>> +               }
+>> +       }
+>> +}
+>> +
+>>  /**
+>>   * resume_event - Return a "resume" message for given "suspend" sleep state.
+>>   * @sleep_state: PM message representing a sleep state.
+>> @@ -1459,6 +1480,7 @@ static int dpm_noirq_suspend_devices(pm_message_t state)
+>>                 mutex_lock(&dpm_list_mtx);
+>>
+>>                 if (error || async_error) {
+>> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
+>>                         /*
+>>                          * Move all devices to the target list to resume them
+>>                          * properly.
+>> @@ -1663,6 +1685,7 @@ int dpm_suspend_late(pm_message_t state)
+>>                 mutex_lock(&dpm_list_mtx);
+>>
+>>                 if (error || async_error) {
+>> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
+>>                         /*
+>>                          * Move all devices to the target list to resume them
+>>                          * properly.
+>> @@ -1959,6 +1982,7 @@ int dpm_suspend(pm_message_t state)
+>>                 mutex_lock(&dpm_list_mtx);
+>>
+>>                 if (error || async_error) {
+>> +                       dpm_async_suspend_complete_all(&dpm_late_early_list);
+> -> There is a bug here which is not present in the patch I've sent.
 
-The latest version is v11 and has addressed all review comments.
+My bad, I edited by hand, sorry.
 
-Thanks!
-Oleksij
+> 
+> It should be
+> 
+>         dpm_async_suspend_complete_all(&dpm_prepared_list);
 
-On Wed, Jun 18, 2025 at 02:02:48PM +0200, Oleksij Rempel wrote:
-> changes v11:
-> - add missing break reported by kernel test robot <lkp@intel.com>
-> 
-> changes v10:
-> - add some add Reviewed-by tags
-> - regulator_handle_critical: set pscr = PSCR_UNKNOWN for default case
-> - make g_pscrr static
-> 
-> changes v9:
-> - Remove redundant pr_crit() messages before hw_protection_trigger()
-> - Replace psc_reason_to_str() switch with static const string array
-> - Mark psc_last_reason as static
-> 
-> changes v8:
-> - Use DEFINE_GUARD() and guard(g_pscrr) for scoped locking of the global
->   pscrr_core struct
-> - Replace manual mutex_lock/unlock with automatic cleanup-based guard()
->   usage
-> - Centralize backend and locking state in struct pscrr_core
-> - Prepare for future multi-backend support with clean encapsulation
-> - Improve sysfs documentation:
->   * Added full enum psc_reason value table
->   * Simplified example comments, removed redundant "may differ" phrasing
->   * Added note that not all values are supported on all systems
->   * Linked value definitions to include/linux/reboot.h
->   * Added clear read/write usage examples for sysfs entries
-> 
-> changes v7:
-> - document expected values in sysfs documentation
-> - make write support optional
-> 
-> changes v6:
-> - add sysfs documentation
-> - rebase against latest hw_protection_reboot changes:
->   https://web.git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-nonmm-unstable&id=212dd3f6e57f6af8ed3caa23b93adc29334f9652
-> - push core part of the reset reason the kernel/reboot.c
-> 
-> changes v5:
-> - fix compile with NVMEM=n and potential issues with NVMEM=m
-> 
-> changes v4:
-> - fix compile with CONFIG_PSCRR=n
-> 
-> changes v3
-> - rework to remove devicetree dependencies
-> - extend NVMEM to search devices and cells by names.
-> 
-> changes v2:
-> - rename the framework from PSCR to PSCRR (last R is for Recorder)
-> - extend power on reason header and use it to show detected reason on
->   system start and in sysfs.
-> - remove "unknow" reason
-> - rebase on top of v6.8-rc1
-> - yaml fixes
-> - zero reason state on boot
-> 
-> Hello all,
-> 
-> This patch series introduces the Power State Change Reasons Recording
-> (PSCRR) framework and its related components into the kernel. The PSCR
-> framework is designed for systems where traditional methods of storing
-> power state change reasons, like PMICs or watchdogs, are inadequate. It
-> provides a structured way to store reasons for system shutdowns and
-> reboots, such as under-voltage or software-triggered events, in
-> non-volatile hardware storage.
-> 
-> These changes are critical for systems requiring detailed postmortem
-> analysis and where immediate power-down scenarios limit traditional
-> storage options. The framework also assists bootloaders and early-stage
-> system components in making informed recovery decisions.
-> 
-> 
-> 
-> Oleksij Rempel (7):
->   power: Extend power_on_reason.h for upcoming PSCRR framework
->   reboot: hw_protection_trigger: use standardized numeric
->     shutdown/reboot reasons instead of strings
->   power: reset: Introduce PSCR Recording Framework for Non-Volatile
->     Storage
->   nvmem: provide consumer access to cell size metrics
->   nvmem: add support for device and sysfs-based cell lookups
->   power: reset: add PSCR NVMEM Driver for Recording Power State Change
->     Reasons
->   Documentation: Add sysfs documentation for PSCRR reboot reason
->     tracking
-> 
->  .../ABI/testing/sysfs-kernel-reboot-pscrr     |  74 ++++
->  drivers/nvmem/core.c                          | 134 ++++++
->  drivers/platform/chrome/cros_ec_lpc.c         |   2 +-
->  drivers/power/reset/Kconfig                   |  47 ++
->  drivers/power/reset/Makefile                  |   2 +
->  drivers/power/reset/pscrr-nvmem.c             | 254 +++++++++++
->  drivers/power/reset/pscrr.c                   | 405 ++++++++++++++++++
->  drivers/regulator/core.c                      |  16 +-
->  drivers/regulator/irq_helpers.c               |   9 +-
->  drivers/thermal/thermal_core.c                |   3 +-
->  include/linux/nvmem-consumer.h                |  25 ++
->  include/linux/power/power_on_reason.h         |   4 +
->  include/linux/pscrr.h                         |  58 +++
->  include/linux/reboot.h                        |  77 +++-
->  kernel/reboot.c                               |  85 +++-
->  15 files changed, 1173 insertions(+), 22 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
->  create mode 100644 drivers/power/reset/pscrr-nvmem.c
->  create mode 100644 drivers/power/reset/pscrr.c
->  create mode 100644 include/linux/pscrr.h
-> 
-> --
-> 2.39.5
-> 
-> 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Wonderful, it seems this makes suspend happy on downstream pixel6!
+I'm running some more tests and get back to you in a few hours.
+
+> 
+> It is also there in dpm_noirq_suspend_devices() above, but it probably
+> doesn't matter.
+> 
+>>                         /*
+>>                          * Move all devices to the target list to resume them
+>>                          * properly.
+>> @@ -1970,9 +1994,12 @@ int dpm_suspend(pm_message_t state)
+>>
+>>         mutex_unlock(&dpm_list_mtx);
+>>
+>> +       pr_err("tudor: %s: before async_synchronize_full\n", __func__);
+>>         async_synchronize_full();
+>>         if (!error)
+>>                 error = async_error;
+>> +       pr_err("tudor: %s: after async_synchronize_full();\n", __func__);
+>> +
+>>
+>>         if (error)
+>>                 dpm_save_failed_step(SUSPEND_SUSPEND);
+
 
