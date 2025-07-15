@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-30838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD6B7B04FEB
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 06:04:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0599B04FEA
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 06:04:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05A061AA732A
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 04:04:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53226188F9A5
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 04:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F1852D4B44;
-	Tue, 15 Jul 2025 04:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CBD2D46CD;
+	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npUfWfvb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKb7aXUd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971202D322E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9703E2D322C;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752552231; cv=none; b=KRcPufYQsA0ghNvQPT37kW8tKcSCBl7yqoZbpvUH3JVjBNy2qGb6snKLlW0zsGDNVDufrItgzr3Ir6xOeFqMscplnd3O9kRtYCqvaTIe1yopdEz9e+pa3RdgLAuEvtiKNPFd7wp8YpkyIf1Kls7GirsJp7NkgcprpxKjAgv/UZw=
+	t=1752552231; cv=none; b=U1cpFbqHipsCAKQKidGRLQ33JoNdJfEPgPH2TGfkyR53h74Gs57AlchIZSfVQOwJjarkj1LGWAIoMSTt290YNGgtnr7DzWQXTcW7ag5nQoAw1rc/AYGL2ivZ4OK8Hx1Fj7yxzR7t/T9j9gbLQW0oR5+vMabefdm8EkEaTawsc5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752552231; c=relaxed/simple;
-	bh=NXtp7w76eILz7UJorQaVSrmzzRCcq8QUVDUca4Vg+Qc=;
+	bh=eYz4Uz7qvxPXvaD5+scVscI+Mnw/orHA8ggA3QXS2uQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KT1do4gmzCPoEKwYqnv0mWQRUqI6gAFdqhrKM72sYsJK8CRULpmrSojlCgj5yvOhBvM7AkXx4EHBVcRM3y7R2+gsl2/+49/UW819UUNboToqRYgkRpjhndntmL1VeCKUcFTNXyFKrcnADQAtsJRyqD7JsU+mDTlIiVCTwfn1ryo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npUfWfvb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4514DC16AAE;
+	 In-Reply-To:To:Cc; b=L6dMLfT/eiVcsGZWkC+HJhyV9shSzfufQV7fqlm9Bq0pbIeJ8+C2u1FrnvA5AjKv45K6G3CaQSHTP+X8K7VOgWiMMEjqZBe5z/N14R2Q8X/hucVSfxoSxhRzMXwl4Gx7JL2dCk1/rlFWE8+wctd8BvD5dVVcmdBafpuj/X0ioLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKb7aXUd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51BB8C116D0;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752552231;
-	bh=NXtp7w76eILz7UJorQaVSrmzzRCcq8QUVDUca4Vg+Qc=;
+	bh=eYz4Uz7qvxPXvaD5+scVscI+Mnw/orHA8ggA3QXS2uQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=npUfWfvbA7lJFIhCallO/I0yc9wr3VBfo5zQc5Ga12ufBUuaKaEe6Rw+hv9A9YKi0
-	 XABQxXUBM0WBelHvxxjl60F8krg+avKwzxLgIGTtQNxXDoppmJCFBUksLHCZJEK5FM
-	 bU8R4B/MjXh8+ewgjsWvY0VLaAiA07QlfQdt+kMMykoOF6ILPYSGti1+yUrewjteh/
-	 c0+UVha9A/PWPoWJUUjCpUBCrvmwbgsN7i/6xNkbcaySHu5FhA0z1oJzZFw7JV7GIV
-	 sDkf3fNNY1LHFeifiGbaIOmeNxDJ0pzOg2/VqIRi5K48v0ZzCg99PpbgufgiKN+bW4
-	 spIHTtVeemPVQ==
+	b=oKb7aXUdpvWmbeIMOMnPdzEQQ0JDJuSXoxIFqu59czvTTfNRBexW0dqGBzP5tx6+H
+	 rdnR5/FnJwP7WOB0lHiAg2Dl4D5NxlsRPrXVXa1YJ6lAG2hFE2LujBqaz1582HFLPU
+	 jWJX8ovg0bfSl0yLjAPIEOYlFxb6mkbB53GPa60umeqglfM0WHpn0o+WioqqTt7pd7
+	 4oIrJL9K0IxItzA5F4BdaQB95OEc9HBgPVF0HPeydra7wulO8dumYJSMzQalRsv73j
+	 61FQ7LKBezXFU84FYuKArg9204hPFIM7IMYPB/UZZKbH7tp7DnuKRQzyH1CHBrfY7E
+	 WCdxbrZVYEH/g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38F11C83F21;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 472BCC83F22;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Mon, 14 Jul 2025 23:02:52 -0500
-Subject: [PATCH 09/17] soc/tegra: pmc: Add Tegra210B01 support
+Date: Mon, 14 Jul 2025 23:02:53 -0500
+Subject: [PATCH 10/17] phy: tegra: xusb: Add Tegra201B01 Support
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250714-t210b01-v1-9-e3f5f7de5dce@gmail.com>
+Message-Id: <20250714-t210b01-v1-10-e3f5f7de5dce@gmail.com>
 References: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
 In-Reply-To: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -76,13 +76,13 @@ Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
  linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>, 
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>, Azkali Manad <a.ffcc7@gmail.com>
+ Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=7406;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=4435;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=hzjKnBO/Bhd6FTOOojs+tMJUMscvli8+8bMrtnhg7WI=;
- b=UJmfrzgea8bspNX1hqX9xywhLGh0IZF0nArp+5yu5aCmw2r06knUY1zdSnE1/2YiY0a4myVOp
- UX1Qtl6NQrVBmO8Tqnr3Q7wMX/qdPqYi0cM8Fbhe88EFYoSZ/kkyFtJ
+ bh=TSuQQI+G6ILFcFZHB2dMmAYCp0s3pQX0JPK9qVVVEqg=;
+ b=aRbDQDeDAgDBuaO6BSCQXo+tsZtTbtOCuQw0YShxKtJvYDjZtpUGKEnf4KuwnX1bqv766iqcu
+ ZRVeTH/QJlRBD2uReHxAsHfiSDtd2/H8JFsAvYfRabzHBWKS3/7yL4S
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -90,147 +90,117 @@ X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
 X-Original-From: Aaron Kling <webgeek1234@gmail.com>
 Reply-To: webgeek1234@gmail.com
 
-From: Azkali Manad <a.ffcc7@gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
 
+It has slightly different lanes compared to the original Tegra210.
+
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- drivers/soc/tegra/pmc.c | 117 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
+ drivers/phy/tegra/xusb-tegra210.c | 41 +++++++++++++++++++++++++++++++++++++++
+ drivers/phy/tegra/xusb.c          |  4 ++++
+ drivers/phy/tegra/xusb.h          |  1 +
+ 3 files changed, 46 insertions(+)
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index e0d67bfe955cdea6b4703952741b0b9970084d66..689354c280883f7096f007ae714dad1b379a2852 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -3732,6 +3732,122 @@ static const struct tegra_pmc_soc tegra210_pmc_soc = {
- 	.has_single_mmio_aperture = true,
+diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
+index ebc8a7e21a318160b162113eea8a6c97b7ed7966..06b587f84270cdea2ea397e55e1e326e270d4caa 100644
+--- a/drivers/phy/tegra/xusb-tegra210.c
++++ b/drivers/phy/tegra/xusb-tegra210.c
+@@ -2559,6 +2559,15 @@ static const struct tegra_xusb_lane_soc tegra210_pcie_lanes[] = {
+ 	TEGRA210_UPHY_LANE("pcie-6", 0x028, 24, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(6)),
  };
  
-+static const struct tegra_io_pad_soc tegra210b01_io_pads[] = {
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_AUDIO, 17, 0x1b8, 0x1bc, 5, "audio"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_AUDIO_HV, 29, 0x1c0, 0x1c4, 18, "audio-hv"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CAM, 4, 0x1c0, 0x1c4, 10, "cam"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIA, 0, 0x1b8, 0x1bc, UINT_MAX, "csia"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIB, 1, 0x1b8, 0x1bc, UINT_MAX, "csib"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIC, 10, 0x1c0, 0x1c4, UINT_MAX, "csic"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CSID, 11, 0x1c0, 0x1c4, UINT_MAX, "csid"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIE, 12, 0x1c0, 0x1c4, UINT_MAX, "csie"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIF, 13, 0x1c0, 0x1c4, UINT_MAX, "csif"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DBG, 25, 0x1b8, 0x1bc, 19, "dbg"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DEBUG_NONAO, 26, 0x1b8, 0x1bc, UINT_MAX, "debug-nonao"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DMIC, 18, 0x1c0, 0x1c4, 20, "dmic"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DP, 19, 0x1c0, 0x1c4, UINT_MAX, "dp"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DSI, 2, 0x1b8, 0x1bc, UINT_MAX, "dsi"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DSIB, 7, 0x1c0, 0x1c4, UINT_MAX, "dsib"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DSIC, 8, 0x1c0, 0x1c4, UINT_MAX, "dsic"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_DSID, 9, 0x1c0, 0x1c4, UINT_MAX, "dsid"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_EMMC, 3, 0x1c0, 0x1c4, UINT_MAX, "emmc"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_EMMC2, 5, 0x1c0, 0x1c4, UINT_MAX, "emmc2"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_GPIO, 27, 0x1b8, 0x1bc, 21, "gpio"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_HDMI, 28, 0x1b8, 0x1bc, UINT_MAX, "hdmi"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_HSIC, 19, 0x1b8, 0x1bc, UINT_MAX, "hsic"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_LVDS, 25, 0x1c0, 0x1c4, UINT_MAX, "lvds"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_MIPI_BIAS, 3, 0x1b8, 0x1bc, UINT_MAX, "mipi-bias"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_PEX_BIAS, 4, 0x1b8, 0x1bc, UINT_MAX, "pex-bias"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_PEX_CLK1, 5, 0x1b8, 0x1bc, UINT_MAX, "pex-clk1"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_PEX_CLK2, 6, 0x1b8, 0x1bc, UINT_MAX, "pex-clk2"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_PEX_CNTRL, UINT_MAX, UINT_MAX, UINT_MAX, 11, "pex-cntrl"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_SDMMC1, 1, 0x1c0, 0x1c4, 12, "sdmmc1"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_SDMMC3, 2, 0x1c0, 0x1c4, 13, "sdmmc3"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_SPI, 14, 0x1c0, 0x1c4, 22, "spi"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_SPI_HV, 15, 0x1c0, 0x1c4, 23, "spi-hv"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_UART, 14, 0x1b8, 0x1bc, 2, "uart"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_USB0, 9, 0x1b8, 0x1bc, UINT_MAX, "usb0"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_USB1, 10, 0x1b8, 0x1bc, UINT_MAX, "usb1"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_USB2, 11, 0x1b8, 0x1bc, UINT_MAX, "usb2"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_USB3, 18, 0x1b8, 0x1bc, UINT_MAX, "usb3"),
-+	TEGRA_IO_PAD(TEGRA_IO_PAD_USB_BIAS, 12, 0x1b8, 0x1bc, UINT_MAX, "usb-bias"),
++static const struct tegra_xusb_lane_soc tegra210b01_pcie_lanes[] = {
++	TEGRA210_UPHY_LANE("pcie-0", 0x028, 12, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(0)),
++	TEGRA210_UPHY_LANE("pcie-1", 0x028, 14, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(1)),
++	TEGRA210_UPHY_LANE("pcie-2", 0x028, 16, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(2)),
++	TEGRA210_UPHY_LANE("pcie-3", 0x028, 18, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(3)),
++	TEGRA210_UPHY_LANE("pcie-4", 0x028, 20, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(4)),
++	TEGRA210_UPHY_LANE("pcie-5", 0x028, 22, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(5)),
 +};
 +
-+static const struct pinctrl_pin_desc tegra210b01_pin_descs[] = {
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_AUDIO, "audio"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_AUDIO_HV, "audio-hv"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CAM, "cam"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CSIA, "csia"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CSIB, "csib"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CSIC, "csic"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CSID, "csid"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CSIE, "csie"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_CSIF, "csif"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DBG, "dbg"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DEBUG_NONAO, "debug-nonao"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DMIC, "dmic"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DP, "dp"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DSI, "dsi"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DSIB, "dsib"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DSIC, "dsic"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_DSID, "dsid"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_EMMC, "emmc"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_EMMC2, "emmc2"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_GPIO, "gpio"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_HDMI, "hdmi"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_HSIC, "hsic"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_LVDS, "lvds"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_MIPI_BIAS, "mipi-bias"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_PEX_BIAS, "pex-bias"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_PEX_CLK1, "pex-clk1"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_PEX_CLK2, "pex-clk2"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_PEX_CNTRL, "pex-cntrl"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_SDMMC1, "sdmmc1"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_SDMMC3, "sdmmc3"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_SPI, "spi"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_SPI_HV, "spi-hv"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_UART, "uart"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_USB0, "usb0"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_USB1, "usb1"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_USB2, "usb2"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_USB3, "usb3"),
-+	TEGRA_IO_PIN_DESC(TEGRA_IO_PAD_USB_BIAS, "usb-bias"),
+ static struct tegra_xusb_usb3_port *
+ tegra210_lane_to_usb3_port(struct tegra_xusb_lane *lane)
+ {
+@@ -2847,6 +2856,13 @@ static const struct tegra_xusb_pad_soc tegra210_pcie_pad = {
+ 	.ops = &tegra210_pcie_ops,
+ };
+ 
++static const struct tegra_xusb_pad_soc tegra210b01_pcie_pad = {
++	.name = "pcie",
++	.num_lanes = ARRAY_SIZE(tegra210b01_pcie_lanes),
++	.lanes = tegra210b01_pcie_lanes,
++	.ops = &tegra210_pcie_ops,
 +};
 +
-+static const struct tegra_pmc_soc tegra210b01_pmc_soc = {
-+	.supports_core_domain = false,
-+	.num_powergates = ARRAY_SIZE(tegra210_powergates),
-+	.powergates = tegra210_powergates,
-+	.num_cpu_powergates = ARRAY_SIZE(tegra210_cpu_powergates),
-+	.cpu_powergates = tegra210_cpu_powergates,
-+	.has_tsense_reset = true,
-+	.has_gpu_clamps = true,
-+	.needs_mbist_war = true,
-+	.has_impl_33v_pwr = false,
-+	.maybe_tz_only = true,
-+	.num_io_pads = ARRAY_SIZE(tegra210b01_io_pads),
-+	.io_pads = tegra210b01_io_pads,
-+	.num_pin_descs = ARRAY_SIZE(tegra210b01_pin_descs),
-+	.pin_descs = tegra210b01_pin_descs,
-+	.regs = &tegra20_pmc_regs,
-+	.init = tegra20_pmc_init,
-+	.setup_irq_polarity = tegra20_pmc_setup_irq_polarity,
-+	.powergate_set = tegra114_powergate_set,
-+	.irq_set_wake = tegra210_pmc_irq_set_wake,
-+	.irq_set_type = tegra210_pmc_irq_set_type,
-+	.reset_sources = tegra210_reset_sources,
-+	.num_reset_sources = ARRAY_SIZE(tegra210_reset_sources),
-+	.reset_levels = NULL,
-+	.num_reset_levels = 0,
-+	.num_wake_events = ARRAY_SIZE(tegra210_wake_events),
-+	.wake_events = tegra210_wake_events,
-+	.pmc_clks_data = tegra_pmc_clks_data,
-+	.num_pmc_clks = ARRAY_SIZE(tegra_pmc_clks_data),
-+	.has_blink_output = true,
-+	.has_usb_sleepwalk = true,
-+	.has_single_mmio_aperture = true,
+ static const struct tegra_xusb_lane_soc tegra210_sata_lanes[] = {
+ 	TEGRA210_UPHY_LANE("sata-0", 0x028, 30, 0x3, pcie, XUSB_PADCTL_UPHY_MISC_PAD_S0_CTL2),
+ };
+@@ -3016,6 +3032,11 @@ static const struct tegra_xusb_pad_soc * const tegra210_pads[] = {
+ 	&tegra210_sata_pad,
+ };
+ 
++static const struct tegra_xusb_pad_soc * const tegra210b01_pads[] = {
++	&tegra210_usb2_pad,
++	&tegra210b01_pcie_pad,
 +};
 +
- static const struct tegra_io_pad_soc tegra186_io_pads[] = {
- 	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIA, 0, 0x74, 0x78, UINT_MAX, "csia"),
- 	TEGRA_IO_PAD(TEGRA_IO_PAD_CSIB, 1, 0x74, 0x78, UINT_MAX, "csib"),
-@@ -4253,6 +4369,7 @@ static const struct of_device_id tegra_pmc_match[] = {
- 	{ .compatible = "nvidia,tegra194-pmc", .data = &tegra194_pmc_soc },
- 	{ .compatible = "nvidia,tegra186-pmc", .data = &tegra186_pmc_soc },
- 	{ .compatible = "nvidia,tegra210-pmc", .data = &tegra210_pmc_soc },
-+	{ .compatible = "nvidia,tegra210b01-pmc", .data = &tegra210b01_pmc_soc },
- 	{ .compatible = "nvidia,tegra132-pmc", .data = &tegra124_pmc_soc },
- 	{ .compatible = "nvidia,tegra124-pmc", .data = &tegra124_pmc_soc },
- 	{ .compatible = "nvidia,tegra114-pmc", .data = &tegra114_pmc_soc },
+ static int tegra210_usb2_port_enable(struct tegra_xusb_port *port)
+ {
+ 	return 0;
+@@ -3290,6 +3311,26 @@ const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc = {
+ };
+ EXPORT_SYMBOL_GPL(tegra210_xusb_padctl_soc);
+ 
++const struct tegra_xusb_padctl_soc tegra210b01_xusb_padctl_soc = {
++	.num_pads = ARRAY_SIZE(tegra210b01_pads),
++	.pads = tegra210b01_pads,
++	.ports = {
++		.usb2 = {
++			.ops = &tegra210_usb2_port_ops,
++			.count = 4,
++		},
++		.usb3 = {
++			.ops = &tegra210_usb3_port_ops,
++			.count = 4,
++		},
++	},
++	.ops = &tegra210_xusb_padctl_ops,
++	.supply_names = tegra210_xusb_padctl_supply_names,
++	.num_supplies = ARRAY_SIZE(tegra210_xusb_padctl_supply_names),
++	.need_fake_usb3_port = true,
++};
++EXPORT_SYMBOL_GPL(tegra210b01_xusb_padctl_soc);
++
+ MODULE_AUTHOR("Andrew Bresticker <abrestic@chromium.org>");
+ MODULE_DESCRIPTION("NVIDIA Tegra 210 XUSB Pad Controller driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index c89df95aa6ca988ea02df6220061be5c7f2c9a46..4a55f1dde660a502d3ff1ab4a275a3f97f19632d 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -59,6 +59,10 @@ static const struct of_device_id tegra_xusb_padctl_of_match[] = {
+ 		.compatible = "nvidia,tegra210-xusb-padctl",
+ 		.data = &tegra210_xusb_padctl_soc,
+ 	},
++	{
++		.compatible = "nvidia,tegra210b01-xusb-padctl",
++		.data = &tegra210b01_xusb_padctl_soc,
++	},
+ #endif
+ #if defined(CONFIG_ARCH_TEGRA_186_SOC)
+ 	{
+diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
+index 6e45d194c68947618778dc132720ae757f5fd656..a2074dd3770449c64157e60ef230cefc27238ceb 100644
+--- a/drivers/phy/tegra/xusb.h
++++ b/drivers/phy/tegra/xusb.h
+@@ -503,6 +503,7 @@ extern const struct tegra_xusb_padctl_soc tegra124_xusb_padctl_soc;
+ #endif
+ #if defined(CONFIG_ARCH_TEGRA_210_SOC)
+ extern const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc;
++extern const struct tegra_xusb_padctl_soc tegra210b01_xusb_padctl_soc;
+ #endif
+ #if defined(CONFIG_ARCH_TEGRA_186_SOC)
+ extern const struct tegra_xusb_padctl_soc tegra186_xusb_padctl_soc;
 
 -- 
 2.50.0
