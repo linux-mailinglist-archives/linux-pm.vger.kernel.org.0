@@ -1,197 +1,114 @@
-Return-Path: <linux-pm+bounces-30861-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30862-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22201B05A7E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 14:46:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA3EB05A90
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 14:49:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 603DF1AA5903
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 12:46:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 126C44E1104
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 12:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCBD381C4;
-	Tue, 15 Jul 2025 12:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171241EF09D;
+	Tue, 15 Jul 2025 12:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oT9hige+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1KanH5D"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0211ADF59;
-	Tue, 15 Jul 2025 12:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23F81E1A31;
+	Tue, 15 Jul 2025 12:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752583594; cv=none; b=XaUfypMb02C/4Q9cxroKikshbIuDiK/+6s6BiL0R+DzhHPxUKEVLFiGlQlwKAplrgKOG4/P2oP7Zunhz8MjE+LXdxxvuZAmbGtFsrXam/AFfPQJpiPQylH4n3ZBtTtqGoF6pxQ/5yxSWAi4hMjVQ1ykpTxJNfbjxHNJuDMAigeI=
+	t=1752583717; cv=none; b=E9tYuHhrO8aq9X9JIvwwvS8MAiv0Bm2QyLMusjK3rAos798fgUgojZpOSUxJigK3iXjwhsDZz02PUna2LngW4JwyIWqJ/D0YifkPYatVgjDULDSJC1IIP5QJRvWuBLp0M7ItXpE8i3C2MGxb4eu+Oe6wfJ+gKixx4upy3WDTTfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752583594; c=relaxed/simple;
-	bh=7+EiGA5DqyRfAT8n2kRDa1y3dt2X7YvUBYZXT6JOCq0=;
+	s=arc-20240116; t=1752583717; c=relaxed/simple;
+	bh=t3kRF9DW//cxgAY4RwJrfGg5IU+PW+muRgdn6txGjfg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rLG3z18t4mYJgAmj3ARGOOiwpGDitk3mbX6TLO5nm9BEpiOmS4IOdppc43HQzklLuCIXkyDr1Q7XG/d5anOSCfTPaiKKrYOhvfLqg10PmwXpKs0/tN5XuGIiz7DKbR512Qd9aqHru49D61efWoQE26VG0s7/+pJKsbb/gv/rynQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oT9hige+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75047C4CEF1;
-	Tue, 15 Jul 2025 12:46:33 +0000 (UTC)
+	 To:Cc:Content-Type; b=DXbCqQEnsc5UqC+Dmxy8p6AMJHu4/Xaz1lLxHcjU8EIOkZXooKDK86i/3MxmXAUX4XaEzuoSRyuHkd+1vmkR9XY8kghxapeC3lPNYdUrZz/WpTP6AqJ/0okflaXCr0eH+xhL8LjuqK65YEZLwP1VAF14b/56b5a8BjQT4FlN7mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j1KanH5D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E77C4CEE3;
+	Tue, 15 Jul 2025 12:48:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752583593;
-	bh=7+EiGA5DqyRfAT8n2kRDa1y3dt2X7YvUBYZXT6JOCq0=;
+	s=k20201202; t=1752583716;
+	bh=t3kRF9DW//cxgAY4RwJrfGg5IU+PW+muRgdn6txGjfg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oT9hige+EO6kjraS6G6MxR2H7jUnt+7mUDfV9HhWX29lItbEJvSC7I3iwduRotnZ4
-	 9n8qsSFA/yjos2ZLHEkkzze0aGLdN3eU/qHtik46RQQn6efvv+Dn8/o/7XtZF/g4vv
-	 XvQykouEWV/GwXIiDXYHTDSF4cL4V3B4xzpYuAtX/0nxD2tmV0QHHvcPimNuYn0pzo
-	 pNtrqojEyRaqnV1lAQep802FJsr85zAJdbAThoHjtGc4vd7++2W5jrjYPGhRSvIv1p
-	 gaUM/7GwQR+W1jFY0pwK2iWUytudKUsXI8iI8N+TfRuPeJUa5b0nQ8s/uryIzAOYW/
-	 ukuPAYTvubPEw==
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-41b309ce7d5so449401b6e.0;
-        Tue, 15 Jul 2025 05:46:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVUGTJyMINVmHye3dYaaH+1UveYkkY2p7V7LCXSmbM0mVjNtQgx5pCxhxetJHJg5YorM58kUFfGKlU=@vger.kernel.org, AJvYcCW9pquVUguf7JelkucqZKOF/Cebrf+Y5DjB7Fppe49xolV6aoSW/KG/vilPB77iebgz2dpG61oHh0SOBVU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3P+JJVc3y1d+EIAA57/2SptdnlNiW2YW5mXyrKLIl6qx5YsYr
-	7yK6fdwqbL5nD0MW4xIyBsKslRqLwQH3Oppgyabi9laVJvF4NqcQMFKDU3fi8ympbglpyTw37YG
-	3UHQFmCm9BI6t/P/gynSF8Y4OtSibipw=
-X-Google-Smtp-Source: AGHT+IFu/Q9xSrZ9iC1xiCEb7hs4kQ2UwtV4aD99pKB7qP9MAFC1OGVN2pUi4hZ9VdLis2qJe60K5sTkT2iz4Dhtxdo=
-X-Received: by 2002:a05:6808:17a1:b0:40b:4208:8602 with SMTP id
- 5614622812f47-4150d646f10mr12295394b6e.4.1752583592621; Tue, 15 Jul 2025
- 05:46:32 -0700 (PDT)
+	b=j1KanH5DHsTwgGabasl0v7Rou73MdkyulAGDLAekcCyGJG50MBUZUQCtXs8uVUPT3
+	 7DhO5PcOpbFkVfIYIVvJPdF8vqlsGLIiApUc6aoLJqfgnj177s0E++dVYZa2XhwlFt
+	 0HzDM5md9tIlEeur4ExcxZ/k6p9k+AqVZ5xEtAudP0MYsCV2tSXw64FY6Vd6jitqJJ
+	 BxidI88dFl1j9330GiIHynMS+rFAhY9uJuD1pGrL1Un2BwPcNj/wwT3OLeSOVTHx34
+	 6c8/K+4xYU6wOgwWGXCjYRbhmCJcOBvx1j7wweJ3XzNj2vOxg3Oe+iK4qUMMQl0D6P
+	 zU2t0oERP4dCg==
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-40aef72f252so1495290b6e.0;
+        Tue, 15 Jul 2025 05:48:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVXMSpHrDKH//ToJmlxd69rXqhfG1j3ARaQothoPrV8FCjr3f2YjQLwCNZEKp3ZWLU/8RsTE4d8F/yyGV4=@vger.kernel.org, AJvYcCX7yZmF7GKMxA6nUdYCSQmwXBtv8BEeBcm1CSxeH98B0eg7YDNu4sSrIEuiD1KpGVr7qSmpkGxhp1c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyjQFmMcveBH5RIMNjyxOqNASHoBkb/9xegxpUAVwXBp6wnEy7
+	e9gk8wH1unsi6R5UuebYOtyZc7nr6M7jnqZwN4mL90dp49bYi+i/zoJyrI6BVnHTv3M7xJmvhLg
+	l7R0E4Q40ePO/Q/TjIsqHmzKBzP2Z+e0=
+X-Google-Smtp-Source: AGHT+IGU/g8i3nzaWagW3UcONVPpebwZNNz8b1J1UQh5Qc53tVe2lFSz557yyTokDlXBx82gXWYabIklMKSwv+/rOtI=
+X-Received: by 2002:a05:6808:4f62:b0:3fa:daa:dd8e with SMTP id
+ 5614622812f47-41bab41f1damr1984869b6e.35.1752583715652; Tue, 15 Jul 2025
+ 05:48:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12700973.O9o76ZdvQC@rjwysocki.net> <aHYCRvz0ohgi2xUk@kekkonen.localdomain>
-In-Reply-To: <aHYCRvz0ohgi2xUk@kekkonen.localdomain>
+References: <20250712030824.81474-1-zhangzihuan@kylinos.cn>
+ <9d35035d-c63e-4d11-a403-54c50e8b35c1@kylinos.cn> <CAJZ5v0g22fMDc21yV2svePf_4BWZRrcy+b3-efpbfAGLpa2=Lw@mail.gmail.com>
+ <76a87abf-8fc9-445b-83d5-0daa33746014@kylinos.cn>
+In-Reply-To: <76a87abf-8fc9-445b-83d5-0daa33746014@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Jul 2025 14:46:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jEELFB6vb1dtkPgu_3_eew7Y1Jebevfmhye+ZPLk0Jtg@mail.gmail.com>
-X-Gm-Features: Ac12FXyRglH3SKE9RdnWM8j7VCLS4iKVOw1yueYUi33KBroSMCWLlFW7h4oKd-o
-Message-ID: <CAJZ5v0jEELFB6vb1dtkPgu_3_eew7Y1Jebevfmhye+ZPLk0Jtg@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Take active children into account in pm_runtime_get_if_in_use()
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alex Elder <elder@linaro.org>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 15 Jul 2025 14:48:24 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jKwHZUpsYLzUkcL4=FDnewXoTeJo5e+ccyHw2bZ+ghTg@mail.gmail.com>
+X-Gm-Features: Ac12FXwUoA_bQtKEdmFpzn8lu7PEpyAPa1OoMBnFbIMFyvcKAZjHOanxwdvdfDY
+Message-ID: <CAJZ5v0jKwHZUpsYLzUkcL4=FDnewXoTeJo5e+ccyHw2bZ+ghTg@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: suspend: clean up redundant filesystems_freeze/thaw
+ handling
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Sakari,
-
-On Tue, Jul 15, 2025 at 9:28=E2=80=AFAM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
+On Tue, Jul 15, 2025 at 8:12=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
 >
 > Hi Rafael,
 >
-> Thanks for the patch.
->
-> On Wed, Jul 09, 2025 at 12:41:45PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> =E5=9C=A8 2025/7/15 01:57, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > Hi,
 > >
-> > For all practical purposes, there is no difference between the situatio=
-n
-> > in which a given device is not ignoring children and its active child
-> > count is nonzero and the situation in which its runtime PM usage counte=
-r
-> > is nonzero.  However, pm_runtime_get_if_in_use() will only increment th=
-e
-> > device's usage counter and return 1 in the latter case.
+> > On Mon, Jul 14, 2025 at 10:44=E2=80=AFAM Zihuan Zhang <zhangzihuan@kyli=
+nos.cn> wrote:
+> >> Hi Rafael,
+> >>
+> >> Just a gentle ping on this patch.
+> > I've lost track of it for some reason, sorry.
 > >
-> > For consistency, make it do so in the former case either by adjusting
-> > pm_runtime_get_conditional() and update the related kerneldoc comments
-> > accordingly.
-> >
-> > Fixes: c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_active() =
-usage")
+> >> I realized I forgot to mention an important motivation in the changelo=
+g:
+> >> calling filesystems_freeze() twice (from both suspend_prepare() and
+> >> enter_state()) lead to a black screen and make the system unable to re=
+sume..
+> >>
+> >> This patch avoids the duplicate call and resolves that issue.
+> > Now applied as a fix for 6.16-rc7, thank you!
 >
-> I guess this should be:
 >
-> Fixes: c111566bea7c ("PM: runtime: Add pm_runtime_get_if_active()")
-
-Technically yes, but that would require specific backport changes for
-older "stable" series.
-
-> Should this also be cc'd to stable?
-
-Possibly.
-
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-Thank you!
-
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/base/power/runtime.c |   27 ++++++++++++++++++---------
-> >  1 file changed, 18 insertions(+), 9 deletions(-)
-> >
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -1203,10 +1203,12 @@
-> >   *
-> >   * Return -EINVAL if runtime PM is disabled for @dev.
-> >   *
-> > - * Otherwise, if the runtime PM status of @dev is %RPM_ACTIVE and eith=
-er
-> > - * @ign_usage_count is %true or the runtime PM usage counter of @dev i=
-s not
-> > - * zero, increment the usage counter of @dev and return 1. Otherwise, =
-return 0
-> > - * without changing the usage counter.
-> > + * Otherwise, if its runtime PM status is %RPM_ACTIVE and (1) @ign_usa=
-ge_count
-> > + * is set, or (2) @dev is not ignoring children and its active child c=
-ount is
-> > + * nonero, or (3) the runtime PM usage counter of @dev is not zero, in=
-crement
-> > + * the usage counter of @dev and return 1.
-> > + *
-> > + * Otherwise, return 0 without changing the usage counter.
-> >   *
-> >   * If @ign_usage_count is %true, this function can be used to prevent =
-suspending
-> >   * the device when its runtime PM status is %RPM_ACTIVE.
-> > @@ -1228,7 +1230,8 @@
-> >               retval =3D -EINVAL;
-> >       } else if (dev->power.runtime_status !=3D RPM_ACTIVE) {
-> >               retval =3D 0;
-> > -     } else if (ign_usage_count) {
-> > +     } else if (ign_usage_count || (!dev->power.ignore_children &&
-> > +                atomic_read(&dev->power.child_count) > 0)) {
-> >               retval =3D 1;
-> >               atomic_inc(&dev->power.usage_count);
-> >       } else {
-> > @@ -1261,10 +1264,16 @@
-> >   * @dev: Target device.
-> >   *
-> >   * Increment the runtime PM usage counter of @dev if its runtime PM st=
-atus is
-> > - * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in =
-which case
-> > - * it returns 1. If the device is in a different state or its usage_co=
-unt is 0,
-> > - * 0 is returned. -EINVAL is returned if runtime PM is disabled for th=
-e device,
-> > - * in which case also the usage_count will remain unmodified.
-> > + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0 or i=
-t is not
-> > + * ignoring children and its active child count is nonzero.  1 is retu=
-rned in
-> > + * this case.
-> > + *
-> > + * If @dev is in a different state or it is not in use (that is, its u=
-sage
-> > + * counter is 0, or it is ignoring children, or its active child count=
- is 0),
-> > + * 0 is returned.
-> > + *
-> > + * -EINVAL is returned if runtime PM is disabled for the device, in wh=
-ich case
-> > + * also the usage counter of @dev is not updated.
-> >   */
-> >  int pm_runtime_get_if_in_use(struct device *dev)
-> >  {
-> >
-> >
+> Thanks for the reply!
 >
-> --
-> Kind regards,
+> Just a quick follow-up question =E2=80=94 we noticed that even when the =
+=E2=80=9Cfreeze
+> filesystems=E2=80=9D feature is not enabled, the current code still calls
+> filesystems_thaw().
 >
-> Sakari Ailus
->
+> Do you think it would make sense to guard this with a static key (or
+> another mechanism) to avoid unnecessary overhead?
+
+Possibly, if this overhead is significant, but is it?
 
