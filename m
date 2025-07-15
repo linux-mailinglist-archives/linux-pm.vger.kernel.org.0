@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-30840-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30845-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC7DB04FF7
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 06:05:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73666B04FE9
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 06:04:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FE071AA78B2
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 04:05:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C49554A717A
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 04:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C082D5C62;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932DA2D6639;
 	Tue, 15 Jul 2025 04:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nigDLP18"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MOzBX4Bd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7732D46BF;
-	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7712D46DD;
+	Tue, 15 Jul 2025 04:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752552232; cv=none; b=o1QldWdjkvUOxXQ4MtSqGlRwivPoR3VHIbSvxX29H0Y31hPHOzCCWe5seuKkE+mTLthuuhtzu98iwTTmK4DdssMmOliJFFrSnb2JXOzuZxK1PCPxRlj0yTvx9kQwRLdg/aiAxzOexWptxqRFTPVlWQ5Cb4VaY3IiVURNqbysQNI=
+	t=1752552232; cv=none; b=lyEVlMUhgnAThPE/0RVO2+6h8+y3SR+A6Ne/owWGxrHQHmPz+umL6eEJgKpZ2LKluQRZjWE7mx5D6GB+dvuretyPLw1bBkS2ailhrzBK5OwWsyvjQcfkEua/KEUKCaNSzydocbo5p/iJUnINA7bt0cv/6GNvRqx9RF6F/QyvQbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752552232; c=relaxed/simple;
-	bh=69mT4j9gGXbCwC6IkkO5kcgglBEd5iCH6O4+hlHZFSk=;
+	bh=3vbgZyoOzJWVkFYh6VTooz49lAPSd9vdeX5UjyFPhdY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Vn6wyN4IXMUWGVz/r0YsVSmZl58mOHmxzwEbVlDPvHwZ9zoldIcAer2i1pA7de3MMyufEi6S/b9h5HOUWpxG8kFOF9DB9XVy3rGEyF4b/F0UDMOuNEBbVjDXx3wEzMZvk/nYy/WkjjYqEoaNs3fJkO+8RqT8E/8S47179+N1Ipc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nigDLP18; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ABE67C19425;
+	 In-Reply-To:To:Cc; b=sUuIvPlc4WeUuxeXa1nmrB3l3KF+dmfyWqRpQH3uYy0onjferDiAIqsjHjVL9MGswlPtVYr9lOTjS873cztM/620Bno9Orw3mPd6vsYG9O0eD84I//k25gfVa8GhRdlZ+t9CaH7ZMMQbuesmZr+y0rGzhw5YSvTfqdXgrmL7wvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MOzBX4Bd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C21EBC19423;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752552231;
-	bh=69mT4j9gGXbCwC6IkkO5kcgglBEd5iCH6O4+hlHZFSk=;
+	bh=3vbgZyoOzJWVkFYh6VTooz49lAPSd9vdeX5UjyFPhdY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=nigDLP18VaNEzjJMeF8RvKkLgdk43JpoKP68NQdV+5+Sz/JAALgGnS755n3xsgYr8
-	 HxllM9g7d3B2Pm3BakbZLd4h0wpSSYDCgAOse2N7HOQ3vT8GjvTuMnJydC19ZEHyvZ
-	 JFR4DOL8f8b4PbtpcwK7xG0l5B+2WXZBnQU0vOB65Hzbs7+jYvBxI/WmBhhzjFelo6
-	 04lKCrAHVzSiKoTAkAkM7L6VV2ik8gCOv1AK6S7nepwrzV9S+3EodGdoKqIviLgyZh
-	 I1C/3tnh1oERR1Ge6f0lp8Uyu0S8VuP9OCYvx4+TMzYO7UN4JKzpcnODsOicIT+yGN
-	 6oCNvtf2eFehQ==
+	b=MOzBX4BdkcEz1YZONKBIEBKm/w63+UQs7+AuRythm/Oh8nX4jKclbXU2uyYqKwNbi
+	 jXlnYJXn3SFwn3XP06aAp7vt9pTpchoBGrPJw/OW2d0WS/JKznKLGbjRAlTTjC00Bm
+	 yaX5eixlb3BpOuWlPqvisE5ztzJriVD8kVVS+ksFQ9A8b5AZKhsIifXTL1xJ5yqMpc
+	 Vf8YK94TD1ZGwmHhn/TM6Qtm+7FRsWG+88mQfam/J2tdeWFAhwT7S6/UM3WQnzIJkx
+	 2wUSJZXwKmj+alB3yltpgfW32X4kXABTrj0+tNnG0cBQn1phPRVKNpki/0LpZw32/v
+	 jEn+Dgr4Ec40g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F875C83F2E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADC16C83F22;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Mon, 14 Jul 2025 23:02:58 -0500
-Subject: [PATCH 15/17] arm64: tegra: Add BPMP node for Tegra210
+Date: Mon, 14 Jul 2025 23:02:59 -0500
+Subject: [PATCH 16/17] arm64: tegra: Add Tegra210B01 support
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250714-t210b01-v1-15-e3f5f7de5dce@gmail.com>
+Message-Id: <20250714-t210b01-v1-16-e3f5f7de5dce@gmail.com>
 References: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
 In-Reply-To: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -78,11 +78,11 @@ Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
  Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=1355;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=1982;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=EGqGpsmvVUcZ9BC/fErJCUcbZka+SWE7U9kl0UCL2e0=;
- b=mdM9cDjp2UVQwDqZNIt4haw/jqF7QKWVAk+1bKi6m2zSE+O3aSw0x9JGVxpwNHm7atlknU0w/
- CazoxeUkeIQAXH/SGE+z9O1gO9SzReVSRTf5oDW6/2gMtHB7hJriSrp
+ bh=ttd5rUNPwZRMhsRQKkGWJfHHoJfZzc3FeVaJMr3kaiQ=;
+ b=V7YYm/8SDSYxjrFYhexfVPwU4NHOHbtDeT+FeEtB/40Estcu06tC7OoY8L2RhzQQt7UBi+nCE
+ Zd3vX2DCKITDJpzTW6DEKqcIEz1JpK6PE86u8kC+TU0LoKY3WEMTEnX
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -92,40 +92,88 @@ Reply-To: webgeek1234@gmail.com
 
 From: Aaron Kling <webgeek1234@gmail.com>
 
-The Tegra210 soc supports bpmp offload for power management among other
-things. This was considered insecure partway through the soc's lifecycle
-and support was removed in the bootloader. However, Tegra210B01 returned
-to using the bpmp. Plus old bootloaders on the original Tegra210 still
-work with the existing driver. So add the node to the common Tegra210
-soc dtsi, but disabled by default.
+Also known as Tegra X1+, the Tegra210B01 has higher CPU and GPU clocks
+than the original Tegra210.
+
+Add a SoC-level device tree file that describes most of the hardware
+available on the SoC. This is derived from the Tegra210 dtsi, as they
+share a lot.
 
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- arch/arm64/boot/dts/nvidia/tegra210.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm64/boot/dts/nvidia/tegra210b01.dtsi | 64 +++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 402b0ede1472af625d9d9e811f5af306d436cc98..3361de1ab41b37e430d399df2bf77d64226f33e8 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -968,6 +968,17 @@ cec@70015000 {
- 		status = "disabled";
- 	};
- 
-+	bpmp: bpmp@70016000 {
-+		compatible = "nvidia,tegra210-bpmp";
-+		reg = <0x0 0x70016000 0x0 0x2000
-+		       0x0 0x60001000 0x0 0x1000>;
-+		status = "disabled";
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210b01.dtsi b/arch/arm64/boot/dts/nvidia/tegra210b01.dtsi
+new file mode 100644
+index 0000000000000000000000000000000000000000..87e55af3ed2466c5d353dbd8706230aef97b90f7
+--- /dev/null
++++ b/arch/arm64/boot/dts/nvidia/tegra210b01.dtsi
+@@ -0,0 +1,64 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "tegra210.dtsi"
 +
-+		interrupts = <GIC_SPI 6 IRQ_TYPE_EDGE_RISING>,
-+			     <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>;
-+		interrupt-names = "tx", "rx";
++/ {
++	compatible = "nvidia,tegra210b01", "nvidia,tegra210";
++
++	host1x@50000000 {
++		/delete-node/ sor@54540000;
++		/delete-node/ dpaux@545c0000;
++
++		dc@54200000 {
++			nvidia,outputs = <&dsia &dsib &sor1>;
++		};
++
++		dc@54240000 {
++			nvidia,outputs = <&dsia &dsib &sor1>;
++		};
 +	};
 +
- 	mc: memory-controller@70019000 {
- 		compatible = "nvidia,tegra210-mc";
- 		reg = <0x0 0x70019000 0x0 0x1000>;
++	clock@60006000 {
++		compatible = "nvidia,tegra210b01-car";
++	};
++
++	i2c@7000d100 {
++		/delete-property/ pinctrl-0;
++		/delete-property/ pinctrl-1;
++		/delete-property/ pinctrl-names;
++	};
++
++	pmc@7000e400 {
++		compatible = "nvidia,tegra210b01-pmc";
++	};
++
++	bpmp@70016000 {
++		status = "okay";
++	};
++
++	usb@70090000 {
++		compatible = "nvidia,tegra210b01-xusb";
++	};
++
++	padctl@7009f000 {
++		compatible = "nvidia,tegra210b01-xusb-padctl";
++	};
++
++	usb@700d0000 {
++		compatible = "nvidia,tegra210b01-xudc";
++	};
++
++	thermal-sensor@700e2000 {
++		compatible = "nvidia,tegra210b01-soctherm";
++
++		throttle-cfgs {
++			heavy {
++				nvidia,cpu-throt-percent = <0>;
++				nvidia,gpu-throt-level = <TEGRA_SOCTHERM_THROT_LEVEL_NONE>;
++			};
++		};
++	};
++
++	clock@70110000 {
++		compatible = "nvidia,tegra210b01-dfll";
++	};
++};
 
 -- 
 2.50.0
