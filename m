@@ -1,81 +1,91 @@
-Return-Path: <linux-pm+bounces-30863-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30864-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D571B05B7E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 15:21:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E552B05C28
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 15:28:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E384B7B6854
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 13:17:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8DA3BBA2E
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 13:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A402D2701B8;
-	Tue, 15 Jul 2025 13:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95BCB2E6104;
+	Tue, 15 Jul 2025 13:24:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gLAYK/pU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BCLxxMxj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4F62E11D3;
-	Tue, 15 Jul 2025 13:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FD52E54C1
+	for <linux-pm@vger.kernel.org>; Tue, 15 Jul 2025 13:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752585545; cv=none; b=EBBBtoLmB6D7950amf9WL3hPFJbhcJm9q7gdltZL5Xoa23hY5M/wSVXVHn0ib6gSdtfhZhpy78TVDKNbss4JAkCHRMFLbldHK1Iq2v/b/S0m6qAxs0zWnPB80Q+9mG5HhhnHOFZ5xtDGS//gHVMlOHp2C6e6UwvWva/QJtWYrUA=
+	t=1752585851; cv=none; b=WieS5+9C9CAqrdZ+XXz5AUm+osERLwaAlI531XlIR3mWMGvmtXz07jQh5Bwb/prd+TIy8ag68PBkPWhbPisNApVU/avelyjeb611UL28lwaZDfvFV/GpmX4khtNGng/xhP5bQ1OgtoFwgNqz01DniGzzSOCL93WIwbFw5+ml6Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752585545; c=relaxed/simple;
-	bh=Q7CJmLoluI6Xm9e7tAsyLnHK9TYVSx9FLwZ/M7LJR04=;
+	s=arc-20240116; t=1752585851; c=relaxed/simple;
+	bh=xu71qnr1VwTZ4+bd4q94HN3+XBjexaGP2P8tok7p9Ok=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cVTiYnobj3kdg+vJTDZjIpJAm7GwbdYI+li1XHawAz4MwGhUmNBTYAoliCQ7ZMIfTuOG6fOeWGngw2J3eNUSWUZNb/ob3/gv3SiH0G0lcOfH9yse0fo8duNI0bmVJhW4WiMaOI4REhhuSGHx23mvCKzzlGfuRDmhvoPZv3l6SF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gLAYK/pU; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752585544; x=1784121544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Q7CJmLoluI6Xm9e7tAsyLnHK9TYVSx9FLwZ/M7LJR04=;
-  b=gLAYK/pUMtAyfdwsj89GKw4VNzb1hrRj7GFFxebNc8yeXhwVA0ujFmFK
-   Qeq661iA0KPA47cwvu1bEXK4cPImyw3UCxYnLfR9B5lqhdcfZlBbe9BEN
-   B0o+WHsa8MdDk20ip0uDDuiV4I3Djf6UCeLZm8TPF51alB0lrKTvqVtfe
-   LUKx83j+8XEzMP/XyvlDi3GgBKhgwFZcseKRiadP2BdXaMjUBF6yI6UGM
-   fadeVTDLa2aTtT6apiT2we77kubPdfk+l1gNNRIFb1/qrLnUptBpsFI8f
-   8DGw0/bS4oLI6JEl6j71h6gq55Bd1xNeMcPGY6ghPPUI0ZCO43nRGUWSu
-   g==;
-X-CSE-ConnectionGUID: eLH1tClfQxme3ld0LM1GDA==
-X-CSE-MsgGUID: Lb+2gG8TQzqoVSmWSIir/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="65872056"
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="65872056"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 06:19:02 -0700
-X-CSE-ConnectionGUID: IS/xJoJqR1u+4fCBsGY1DA==
-X-CSE-MsgGUID: eps8aJzXQnmEXJseNvDhjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="157316002"
-Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.145])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 06:19:00 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D070911F8A6;
-	Tue, 15 Jul 2025 16:18:57 +0300 (EEST)
-Date: Tue, 15 Jul 2025 13:18:57 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>, Alex Elder <elder@linaro.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v1] PM: runtime: Take active children into account in
- pm_runtime_get_if_in_use()
-Message-ID: <aHZVQaY6E9R_YWKs@kekkonen.localdomain>
-References: <12700973.O9o76ZdvQC@rjwysocki.net>
- <aHYCRvz0ohgi2xUk@kekkonen.localdomain>
- <CAJZ5v0jEELFB6vb1dtkPgu_3_eew7Y1Jebevfmhye+ZPLk0Jtg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=l7MUodLex09bF4bWHqEQt86XX8vXiqxah9RgCK3YYrU5P5/Jt5UBDVHF0n/7QYtetk4oE/3RaZdBdI6Q6Ashe1DPsUUY93sQigC1hkhLhD8UMEONa+6/686+xpc9q4g/J5LjEqhECAeVCVI+Vzf3D8oAmSJ2oS5QkbWeAjzbCXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BCLxxMxj; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4561607166aso18096525e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jul 2025 06:24:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752585847; x=1753190647; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GOiczrZQ07TlImzuWhdRA1uRrJzdt3bEMH2PMY2Z0lI=;
+        b=BCLxxMxjX+BsYdczI2PSq8IW0/VxPm9g3jC5+pqWRmgUjdRP+BLP6LYDgp0E78Nljp
+         byjdEKxUXnvWU8+P6DWfEUdHqodCUGL8Gu3qMzNzB53m4TmuqkIEE3wqcS6qmpxGL4Wr
+         Ytek1ahFCpIGgOVKyDkLDhrh+LeY97hT61qBZiWWDmY20RKZlzHrg86+BkrusHkEWZVe
+         7qlhLwd21OlluYotwk2v3tN8+8P1Xlhfc+V3ItXJ0XqI0maX+RWxZeRaXUbDm3rGf1PF
+         fl+L/4a7dxO9VVGv5GJ1tz90QAs9n9IIstZjI0YwofAki6KVeAaSR+FWQq5HUdpnFU2T
+         +eGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752585847; x=1753190647;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GOiczrZQ07TlImzuWhdRA1uRrJzdt3bEMH2PMY2Z0lI=;
+        b=YxX+6enRXp9xGVNxWZ0i3sneQ18h6i8qRCQeyB4rFfATBxfr3jE55qPKoWep10RTq+
+         +Rg6De+g0NwOO5W6S8gm9o7xObXVccgr77S2boOLSggubwG5YTv2yuO9lgMBRH/0dE7k
+         vfOEXYj2SFmIohPtQHstIZX3LZza7b+Id4cXS4sq1e4raX7voyNqqfZ5ZbZrtbfibh1P
+         sTYJO5fI83BanHJSWD6xd4uBl40C/kJZ2LH5ZOqdZxrpGaxXwlCv/TNKQ6foIA2Ru7e3
+         qX6MlmTNos6OrU5xnD+GPGjDNpmPKQqx0uMsvZmCVqyyTog24Hth7EfByyKW9FJE7g+6
+         7Yaw==
+X-Forwarded-Encrypted: i=1; AJvYcCU590Psun51d4oU6gNoNimjrrf6bz8hFVI/e9ZehIadjzXlh7aMwjzwQGlMYtBGiKWcizprNdsjBg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFHhfbSILAtmSIKPaHXlR5zxmGODGzmFGtullZCT2Zy6qxxRRl
+	3qmUsA/GYmIEBrE4S5oQNI3GDOGqDTuIkmNMlV+kubzKdB/cbfA+u1pUwAAYEA/s4K8=
+X-Gm-Gg: ASbGnctMzK6RzLcxYG9ESpJwDF7Jd8lpbgI/CBLlgLEP8gR8wsNsjjVKDe4X4vwzVXH
+	O+ZEcPS7I4Ec2FeGtxPzyCWWT/qF7LofRnPMjaaXl4PMiSUGhBktahDQvCgKEB7uW7U1rcg7cIl
+	V934nToTZdpOdkRYcR/7l/hq7+6TnaREKHifAZ/nUzXgMdZVOMeSXUeveD2C/637Gj7of4m8ChE
+	0PRCgqaH5+/44QeynLU5899dgE+gN8dQXrr9rSzjA29wgoCxmai5pPEfzi5ZZEP6v3P6Bd3ZeqM
+	wt+HG+0hLWBeTk0M6qaXUg2fIeSEDGPKVouCse1JSI5BCpRFmhEcqgjVY2uKmqKs6c6rl8EwP/Z
+	9Us9pIrmIrZmHVrfGCfJ+tdOce42xoTIKRKbrCZWGYhYHUxHknIG4izAoGqXh
+X-Google-Smtp-Source: AGHT+IEs+ScYaBoPod0KS92i4ye+McpE9jOei8lbZ41OgzZYALXJoP1+s9eQ2gbL76aM01wUZbMIAw==
+X-Received: by 2002:a05:600c:1ca2:b0:456:1a69:94fa with SMTP id 5b1f17b1804b1-4561a699783mr71744425e9.13.1752585847534;
+        Tue, 15 Jul 2025 06:24:07 -0700 (PDT)
+Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4561dd91072sm49780995e9.14.2025.07.15.06.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 06:24:06 -0700 (PDT)
+Date: Tue, 15 Jul 2025 15:24:04 +0200
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: zhanghongchen <zhanghongchen@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/loongson2: Constify struct
+ thermal_zone_device_ops
+Message-ID: <aHZWdMSYDsjebRh-@mai.linaro.org>
+References: <5f5f815f85a9450bca7848c6d47a1fee840f47e5.1748176328.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,119 +95,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jEELFB6vb1dtkPgu_3_eew7Y1Jebevfmhye+ZPLk0Jtg@mail.gmail.com>
+In-Reply-To: <5f5f815f85a9450bca7848c6d47a1fee840f47e5.1748176328.git.christophe.jaillet@wanadoo.fr>
 
-Hi Rafael,
+On Sun, May 25, 2025 at 02:32:30PM +0200, Christophe JAILLET wrote:
+> 'struct thermal_zone_device_ops' could be left unmodified in this driver.
+> 
+> Constifying this structure moves some data to a read-only section, so
+> increases overall security, especially when the structure holds some
+> function pointers.
+> 
+> This partly reverts commit 734b5def91b5 ("thermal/drivers/loongson2: Add
+> Loongson-2K2000 support") which removed the const qualifier. Instead,
+> define two different structures.
+> 
+> On a x86_64, with allmodconfig:
+> Before:
+> ======
+>    text	   data	    bss	    dec	    hex	filename
+>    5089	   1160	      0	   6249	   1869	drivers/thermal/loongson2_thermal.o
+> 
+> After:
+> =====
+>    text	   data	    bss	    dec	    hex	filename
+>    5464	   1128	      0	   6592	   19c0	drivers/thermal/loongson2_thermal.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested only
+> ---
 
-On Tue, Jul 15, 2025 at 02:46:21PM +0200, Rafael J. Wysocki wrote:
-> Hi Sakari,
-> 
-> On Tue, Jul 15, 2025 at 9:28 AM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > Thanks for the patch.
-> >
-> > On Wed, Jul 09, 2025 at 12:41:45PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > For all practical purposes, there is no difference between the situation
-> > > in which a given device is not ignoring children and its active child
-> > > count is nonzero and the situation in which its runtime PM usage counter
-> > > is nonzero.  However, pm_runtime_get_if_in_use() will only increment the
-> > > device's usage counter and return 1 in the latter case.
-> > >
-> > > For consistency, make it do so in the former case either by adjusting
-> > > pm_runtime_get_conditional() and update the related kerneldoc comments
-> > > accordingly.
-> > >
-> > > Fixes: c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_active() usage")
-> >
-> > I guess this should be:
-> >
-> > Fixes: c111566bea7c ("PM: runtime: Add pm_runtime_get_if_active()")
-> 
-> Technically yes, but that would require specific backport changes for
-> older "stable" series.
-
-The lines in pm_runtime_get_conditional() were added by c111566bea7cc, it
-looks like the actual fix would be backportable without changes whereas the
-documentation would require them. So splitting the patch should allow
-backporting the fix only while leaving the documentation as-is. I don't
-really have an opinion either way. It's perhaps unlikely the issue causes
-actual problems but you never know...
-
-> 
-> > Should this also be cc'd to stable?
-> 
-> Possibly.
-> 
-> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> Thank you!
-> 
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/base/power/runtime.c |   27 ++++++++++++++++++---------
-> > >  1 file changed, 18 insertions(+), 9 deletions(-)
-> > >
-> > > --- a/drivers/base/power/runtime.c
-> > > +++ b/drivers/base/power/runtime.c
-> > > @@ -1203,10 +1203,12 @@
-> > >   *
-> > >   * Return -EINVAL if runtime PM is disabled for @dev.
-> > >   *
-> > > - * Otherwise, if the runtime PM status of @dev is %RPM_ACTIVE and either
-> > > - * @ign_usage_count is %true or the runtime PM usage counter of @dev is not
-> > > - * zero, increment the usage counter of @dev and return 1. Otherwise, return 0
-> > > - * without changing the usage counter.
-> > > + * Otherwise, if its runtime PM status is %RPM_ACTIVE and (1) @ign_usage_count
-> > > + * is set, or (2) @dev is not ignoring children and its active child count is
-> > > + * nonero, or (3) the runtime PM usage counter of @dev is not zero, increment
-> > > + * the usage counter of @dev and return 1.
-> > > + *
-> > > + * Otherwise, return 0 without changing the usage counter.
-> > >   *
-> > >   * If @ign_usage_count is %true, this function can be used to prevent suspending
-> > >   * the device when its runtime PM status is %RPM_ACTIVE.
-> > > @@ -1228,7 +1230,8 @@
-> > >               retval = -EINVAL;
-> > >       } else if (dev->power.runtime_status != RPM_ACTIVE) {
-> > >               retval = 0;
-> > > -     } else if (ign_usage_count) {
-> > > +     } else if (ign_usage_count || (!dev->power.ignore_children &&
-> > > +                atomic_read(&dev->power.child_count) > 0)) {
-> > >               retval = 1;
-> > >               atomic_inc(&dev->power.usage_count);
-> > >       } else {
-> > > @@ -1261,10 +1264,16 @@
-> > >   * @dev: Target device.
-> > >   *
-> > >   * Increment the runtime PM usage counter of @dev if its runtime PM status is
-> > > - * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in which case
-> > > - * it returns 1. If the device is in a different state or its usage_count is 0,
-> > > - * 0 is returned. -EINVAL is returned if runtime PM is disabled for the device,
-> > > - * in which case also the usage_count will remain unmodified.
-> > > + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0 or it is not
-> > > + * ignoring children and its active child count is nonzero.  1 is returned in
-> > > + * this case.
-> > > + *
-> > > + * If @dev is in a different state or it is not in use (that is, its usage
-> > > + * counter is 0, or it is ignoring children, or its active child count is 0),
-> > > + * 0 is returned.
-> > > + *
-> > > + * -EINVAL is returned if runtime PM is disabled for the device, in which case
-> > > + * also the usage counter of @dev is not updated.
-> > >   */
-> > >  int pm_runtime_get_if_in_use(struct device *dev)
-> > >  {
-> > >
-> > >
-> >
+Applied, thanks
 
 -- 
-Kind regards,
 
-Sakari Ailus
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
