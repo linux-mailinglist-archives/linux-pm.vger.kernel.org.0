@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-30879-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E99B0658D
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 20:05:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BA67B06594
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 20:05:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B9B04E13ED
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 18:04:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 185A64E13ED
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 18:05:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE4D29C335;
-	Tue, 15 Jul 2025 18:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA70529E10A;
+	Tue, 15 Jul 2025 18:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lhw+Y7am"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0QYAmwzH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2067.outbound.protection.outlook.com [40.107.237.67])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BB529AAE3;
-	Tue, 15 Jul 2025 18:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F2029C328;
+	Tue, 15 Jul 2025 18:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752602674; cv=fail; b=AaIVFtqvXecTdeVCwAjxMJHQkGLG2vDgYtXYalIk/A+oZZTdcnstk+DA6NyaU5ScABe27Gz4JYZ3wLqADccOqdMQw5Qo3ECDPwpjXMluIeam54fyfmJsX/6c6A5XaO9UKSSi3hKtPA7uY0WokoxkF+56Ar9m1mWiTFHGl8+ccxE=
+	t=1752602676; cv=fail; b=bWdwdNhY0WcKbAuQp5c820b9gGN134XKLiElZXh3ZSM2KLzgramM2g47HikjClYA8pKtVnlBYZFAH2hqgeLnkxjrLzqbJY97/gSdL86393CKdXEGTPxIfCdn37v9fL8X6fk/KC+Wen+nGKRzOghamRI79kz+39QSHmp8fUUgxLg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752602674; c=relaxed/simple;
-	bh=f3S7I5CCykyORFk8vxLMw4JFfP+kVILpBa2SkE69blc=;
+	s=arc-20240116; t=1752602676; c=relaxed/simple;
+	bh=oDoXq258QUMOumsvgMo4BYpsBp5f7Di5WWHSB1jNbng=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UZC0ySUUfqNMhtQBU/XTokJWm8Z8gdzgGKcmYA0vP4Yi/aY4NBW9np8BRbg13qp77k0QJ7dHh9uypzUyWzCKXiOzV8HPgu+Ef6Zsi9xZDOnVFLLOjFDvcqXqa00ep8Gxb59SNIv6E0PdsmH68PnjsLyhq/XxqR1RIUPbpViD1KE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lhw+Y7am; arc=fail smtp.client-ip=40.107.237.67
+	 MIME-Version:Content-Type; b=oWs+xAfTsTTqjDR8TqRk3mJseUyzQNKhF7V8GFxLiBRHA8rPROLF7fPj+QtsPFW1Z0Y7RfnCKAFC0IhIyTRW3g9mHzuRiiy0uvHiCw+92YqMpNsbTLbQs3aNhQ6NI3MSuULVNOWpfc1iw678J/apDiuIBTdRHzJjctOb9+hbO5M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=0QYAmwzH; arc=fail smtp.client-ip=40.107.93.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LP1vFKG02kLOn5kl7uIGZ7DjrWXBH+U9o/tXSg2Wh7eyTkInrMCR0sSOKfUfvLFgdK2QVMSnMOPq9Wjc/I7SHH+PGBpS3Gzvg+M4phqUubZ7Wg4UaBIpDwKXkFgp3jkHFPjZpqlyt+8SORQkcSGwKxd0/cjd41TfIhUg196wij0EbDSNP1xNFJnUPR8B8NE+8HI4kRzH8Ds+sSYst+sCNplQcPFjsDKXH1NhjDZ82Ll53A+dSG5dcEqNb8B0y9WSZbBe0uOhqSHoxxnudXt2InTCLA7sh3lDjkiEeW0Kzj6S6BYSKp6IKV7pxEIlj4Ld2vd/7WOtEVnoIotlcqXtlA==
+ b=Og3uBfPdn0ClV3IHEGdK3EYh3o1yb3zOKl35OTRsq1vNJIdYzbKqKs8svP+Y4Jd8Qo2YtPdiDYgjo+2l04kw/2naDavzKRk0BEGFHUpdfvbwop4NLuObsLhPsalfckqdRKDXHU524d59f9axp7XlyyHjdGiDzraEXFMNoD8BGiJocoxbdi1kfSQiEvCeemN2b7iP6iSIKBTNW6ZkrdP70KjwW46Oik9PsQA82Ti/yc1I3ulLDHjsOquPbSQM6jqmLN1zsq7Cv3D8IlQh2dXD/cEuow1yhNFQgq8N7CCG0+9b0SY11YgXfz6Ny8WeQ0yUumYLFrfI/skPK1+ZOaPibg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7J2bo91wVPJQhPnuS1Q5588KdrQ2oBJZ953/6sUZqvY=;
- b=DZNhyl4I8KjRQ2riULWXnYKx1xNY2tOqhnKYgjb0XzIMtahwyaHyBSGP0uKfKt0/CRkoJC+XoUnTiRIrR3IsXsqpPtGwrJpjRlQx7xjocZvxipCwyaxXMpPG3k8+RIEY/u9LpxvTf2WsHUSVj84XHjOxkTSWqFxvUu4tWHe4btYZ7GuKwW5U7kJeO4RgGyDWwqjsSlNjJtdFTdAjPcfzRWami4V2l0YvraZX0HbqiJL7CQ+ue5CWHnWWxrcQV9358jg+vO0NP4I+Bh1j8Z3wfqsktcIhQqgMcEVwlof3iJhu0L2YqzZJ5uJC3Z0IyuF8p9T8VXaxBrgw0CY+Jp+kVg==
+ bh=IGVzPLsW5IcmU3fwL+pJo3+R4qkmThPMGSYxwuQhB54=;
+ b=exle9nOWXJjjFLS7JXOiCwy+FXq0yAPQh6tmM+r1cO/fssI0epk8QRACNC389Qe/QX9G78iQ4EviBHyjYgok2SPKGlpJjgSPyRYzPpz1rGuTc6pKe8dykfOId8ei43Te/ZU//GOhMzlp+cGqwZ52M/QUdMRnf5krav5RhfAytQzP6FKZuExgaRiIU6cak0TTnRR0YRypv6qpt1I81nWBOjGsmt4jzYvPLvHUCz/YYvNZDePMQJl+dM8YRTJJHGUcDt8B4vEm1c4M/fb2GafmhoZTSjJDfHM2Foa3ReRwMs3B1Bl+xSrD4fkPMtNVvnV77aBCACxwHLak05CK4EX1dA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7J2bo91wVPJQhPnuS1Q5588KdrQ2oBJZ953/6sUZqvY=;
- b=lhw+Y7amvonCiG3U9DLwnFve1re+4+nEd3+XWt4cYJRTxmEqMR34aaCwC/KZEsfNnlZq9wScfNhLSvL0fkXAchG/cIX3xETs/dqVnRvp81y05atdy310oPKwPyIpL1CaX1BFbVjtE0xn5onTcrifVjGB6mTsCiDtUSxfK2savcI=
-Received: from BY3PR04CA0028.namprd04.prod.outlook.com (2603:10b6:a03:217::33)
- by DM6PR12MB4314.namprd12.prod.outlook.com (2603:10b6:5:211::22) with
+ bh=IGVzPLsW5IcmU3fwL+pJo3+R4qkmThPMGSYxwuQhB54=;
+ b=0QYAmwzHQVxSNSn8vCll5U1p4MbsaP4TnCYcjS+DbuFBX5/hnfapUgxmEwCG9yzzbEPcpsW9VyO0NxoVRyGblPPSVS50IzEb7ZI3yRKWxR1GQ7w4Bim5MwHwvKthKVNJg2F5TLjLJ8DZW4kV0ZAbbbTVewLMJG7nhuHeT2T266w=
+Received: from BY3PR04CA0020.namprd04.prod.outlook.com (2603:10b6:a03:217::25)
+ by DS0PR12MB8785.namprd12.prod.outlook.com (2603:10b6:8:14c::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.35; Tue, 15 Jul
- 2025 18:04:29 +0000
+ 2025 18:04:30 +0000
 Received: from SJ5PEPF000001D0.namprd05.prod.outlook.com
- (2603:10b6:a03:217:cafe::89) by BY3PR04CA0028.outlook.office365.com
- (2603:10b6:a03:217::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.19 via Frontend Transport; Tue,
- 15 Jul 2025 18:04:29 +0000
+ (2603:10b6:a03:217:cafe::c3) by BY3PR04CA0020.outlook.office365.com
+ (2603:10b6:a03:217::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.17 via Frontend Transport; Tue,
+ 15 Jul 2025 18:04:30 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,11 +65,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SJ5PEPF000001D0.mail.protection.outlook.com (10.167.242.52) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8922.22 via Frontend Transport; Tue, 15 Jul 2025 18:04:29 +0000
+ 15.20.8922.22 via Frontend Transport; Tue, 15 Jul 2025 18:04:30 +0000
 Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 15 Jul
- 2025 13:04:26 -0500
+ 2025 13:04:27 -0500
 From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 To: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
@@ -89,9 +89,9 @@ CC: Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
 	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
 	<benjamin.cheatham@amd.com>, PradeepVineshReddy Kodamati
 	<PradeepVineshReddy.Kodamati@amd.com>, Zhijian Li <lizhijian@fujitsu.com>
-Subject: [PATCH v5 2/7] cxl/core: Rename suspend.c to probe_state.c and remove CONFIG_CXL_SUSPEND
-Date: Tue, 15 Jul 2025 18:04:02 +0000
-Message-ID: <20250715180407.47426-3-Smita.KoralahalliChannabasappa@amd.com>
+Subject: [PATCH v5 3/7] cxl/acpi: Add background worker to coordinate with cxl_mem probe completion
+Date: Tue, 15 Jul 2025 18:04:03 +0000
+Message-ID: <20250715180407.47426-4-Smita.KoralahalliChannabasappa@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250715180407.47426-1-Smita.KoralahalliChannabasappa@amd.com>
 References: <20250715180407.47426-1-Smita.KoralahalliChannabasappa@amd.com>
@@ -106,64 +106,79 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D0:EE_|DM6PR12MB4314:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c3cd4f6-8516-41b6-39c5-08ddc3ca0b55
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D0:EE_|DS0PR12MB8785:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0573b98-a259-4ccd-552d-08ddc3ca0bb5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024;
+	BCL:0;ARA:13230040|7416014|376014|82310400026|1800799024|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TDBwSQygH7SidFB3Z9PjcXK30A7iawHNPuLDZD/AXPd3l2peyS7kJxvXd6sw?=
- =?us-ascii?Q?FOheg+7vUf0H048nOAP3rlPpFlzwJRb95bC57Nak2K8r8Og3+o8OrG01soK0?=
- =?us-ascii?Q?QBieZNVurj9XzF7KMZ/e1hFU5W/DeyxEhccV4kca+bKlJb2co1v28NHLUEyo?=
- =?us-ascii?Q?Pcp7hDH8HdalYAjX3tJCAMyomMfLesIUPkXQ3eQq8AaGKROn9je/uMmFiX3A?=
- =?us-ascii?Q?ofUqSffA4AwPKPCVYum6X623EyX4xoHY4nC1YwA7jJcCXthV5pJ385Zel8Vu?=
- =?us-ascii?Q?ox/QBL3vX5Y1CsqrFf+6sDU2vEu5HvldnWOXEwqWMw4n1VK2LqcGsWYffV/G?=
- =?us-ascii?Q?UKOh6twP+ExP/C49iBVET/yU3ytfTXAJU0aHZVsbJ7wWeanBAcUPINFsOS6k?=
- =?us-ascii?Q?Pa4Ky3iQwkWljogVJ/grqYWE6UVXsUn5ON7Muedzc8XMXOEiLA9IWo+h8+5h?=
- =?us-ascii?Q?MFXE3oNaAcPfal8SNzvV7wwhM8seu9aPPf+kAuq6hytoURRllzurzJEqtIro?=
- =?us-ascii?Q?9g4aC1gpOBKkhL1M/RxCXT+m8pRjFCAFUTQ2dFedMj5nGj8+X4UFUMQNcYNJ?=
- =?us-ascii?Q?7EQ/+AqZ2a/IeEo6KpO+aGA92/XUlsIBoyE+UVmAkMLfVwbq6JTkmOftyJeB?=
- =?us-ascii?Q?0LjwMIMP/Bd7LvtPpiyHrn4XbGcRh34TexDaeCZ2X3P3LyMXTYwDEnhPgWRc?=
- =?us-ascii?Q?Ck3IwC5ReiT13fo9qC3CldgvgeQ+wRujIdSaV6ejibfK9ZJculiuPp4NWEpw?=
- =?us-ascii?Q?kaLijnP89oDxYLLzQ1J/Exw/KGIeva2XKkNg2SOO4vZU7U6eVxtQIHZJQEsY?=
- =?us-ascii?Q?MOwwNzbmULkaXH0hUI3mdjMBSKKerMQrkGnXP9d1a8oxgONaYckkkEviGRZc?=
- =?us-ascii?Q?5hNN9wx1i7p5Q+TuJpbyL1EdXtbHUswSybJHfzMiG2yKfDyH3gU8STlgrOib?=
- =?us-ascii?Q?asavsdfZotTHNh/t9fZ3A1hXyDs9a2srhk66hFFuWfcxA/9RyKfLkS5k6oNG?=
- =?us-ascii?Q?d2+1lvfY4CMd/NGhwfykLWjaCEt3DxiHackJ9Utt/2GHbLBSvvFSi/7IU6EP?=
- =?us-ascii?Q?4+OC9M06CSBFnarm9337sBL7DFoE7qLu0AW8jJPOHs5EbOR7XKf8yEkuHZcN?=
- =?us-ascii?Q?pJzIQSCKOiwxA0ZrwFlo7tcA5FX4bZWni2HBIFFNdwWmhslStS6GXKP50rKQ?=
- =?us-ascii?Q?JtF2BQZ6KKfjX3HzjSMl58HeaFoop8sgZ8oKOU3My+J/sVOINFkBkKercIft?=
- =?us-ascii?Q?/YXmKnUcITqpzwI/T6vvlZyo+Od5kd9ixo9ARXwKDX5wiRJZVPqMDT8ATx1A?=
- =?us-ascii?Q?Gcm4BWBFXFGIPAOXzCudIiF10+E4gDfLvVqPq4zClCJPglnowa1wBDClQtK/?=
- =?us-ascii?Q?DqthlrUROj2ax9U94kd9DNsMiIImo80BD5Qy813TZZob3aApP15AwELoZi/a?=
- =?us-ascii?Q?BO6KlTy0ZStaB2ckb0/JJtG+RJk972yNJf1U81FULCZaqzR/B5t9mHggM4WB?=
- =?us-ascii?Q?D7OpNLC4kLPdPtOdy/dOY++gdxBxCgBTaQK6?=
+	=?us-ascii?Q?syndIYNd/fXioqKJk648z59M+VY6yoJw1+baD9B8o9GIFp5qyeIfT1NKj2j+?=
+ =?us-ascii?Q?KondhjKnLV2wBeFbybgETSay7wqIDJSkZFciaH7AUrp1PU1x3WQe7OYWvRVO?=
+ =?us-ascii?Q?VbXJ3UY/yzqmwZ6kHHXUFJqFMGa5NtNEOzIgcnhUGfepq7jvqyKHiDVO8IDZ?=
+ =?us-ascii?Q?qF8+k/ejXnXabCljpaT2/ykwIJPoXekr7I4MC68Szw2R3iFFfbFJJNAUSxG2?=
+ =?us-ascii?Q?kuHNcaNSSUr6eXDuFyXLV4lQOVxAVSqsDaBPnCWZXNJ/hA2j/7q1C2KcsZRI?=
+ =?us-ascii?Q?jaaNbP42o03wwiFcWa3ROYimQ5bbTsxCciJUmGE11/lOpkS+/9ins5CJBXnL?=
+ =?us-ascii?Q?i4y3+aXSYLFYDB1jxikTXJTXmq6UMUP6g4KNEonJHq+x3AMSGjr7YO8KEDKd?=
+ =?us-ascii?Q?0Ri9/jQIOJtP8uvrI69w4UNnjj3TIS7IbVXfBPaouGJNC+sbNGKfrToWIZz7?=
+ =?us-ascii?Q?qDxgPgtK2t3zC3uEze7NNfAQR29OlmuMvmkHx9suSRXFPG2QlTLhpUazStmt?=
+ =?us-ascii?Q?ZHVLk7YvzgLbEnq+Saif1sjcO26L9D/zcXL5EyrQEf+0t+eCJdOzteLCHxaQ?=
+ =?us-ascii?Q?RG6MwaXUndfm+J5ia9Sdw7sbfba1eRRkuzZVoE7LTNkYivwn7pMICiHfhFm4?=
+ =?us-ascii?Q?9MsPjXTrMyVDxXiq1E/xMzgWE4nttQeQ8yQtovctkATIFRdiMOhPklxcAOE4?=
+ =?us-ascii?Q?6wZZS8Qjf2BpMkFAMlAtNyKk4bcR7tJ0sUBV4bAJzKyFuL+paWSMSLTar4qW?=
+ =?us-ascii?Q?3jqkF07JQbzNI2Yuv2SERvm1fAi6x5xGYREZ1qNEL5zujGk164tFHgCG1+Xo?=
+ =?us-ascii?Q?jBm6W+B5FgeU6ic6gTHl9h6pIVEkEzIaLUgYgioaLAIthUUkiYnuph+keOwK?=
+ =?us-ascii?Q?g4hgN1yWcGt46PGx+eZKCl4UkxBBG7FTgBKKsRrg6fcUpFPpH636liJJyNxD?=
+ =?us-ascii?Q?ugzeVKMeVM9I0aW5xxZFGkIm2KcShHdSFzBE3XffFZAsHQZRZZl09NW7+eIH?=
+ =?us-ascii?Q?jBMSsPYh8i8mRvrMm6P/2FpYELYyZgDwTaGmPuV4AGu2HQFWQle3kBhpEjUo?=
+ =?us-ascii?Q?Lb0pEFNwL+ZoHa/uTvoclVMksaOxd4qZxJAh5PIzl+Aj7g6wwjm9vLMSJ5JY?=
+ =?us-ascii?Q?q36mw6YUKfI3dz06OD2DGoDqBkCdK7LWid2k89TQ/ZDUNVlA3hiKbVgCSGKk?=
+ =?us-ascii?Q?/6dijOXW5ylQvo44yeo8vLyAhodZRT2sDRhE4CC5hX0qGKhACLdbH0YUYzz4?=
+ =?us-ascii?Q?1iNFBdcqGgrHV36d9hmrkpsJ+Ang8l7W9yHr2hUfinvgS0G6kIcQleIxo1Hj?=
+ =?us-ascii?Q?TCvxuFWcjYRt9DFBziKnYqXNcXOh/730E7NYK+QrXlCT58r5AmLIxfSUcMrk?=
+ =?us-ascii?Q?yOUtkssRfLHZLy6xWdjbg0Jwdk0U+HeYZj0dcg/DDG3PIyD4C7ST3VP+al3k?=
+ =?us-ascii?Q?YxpFWAEYwFO5TwtGsmyB+E2CAwq54m48xPe6taSfWFGLhVsxthmpON0tjrPF?=
+ =?us-ascii?Q?sXqzjXIJelpYsEqYZBo2Hq2KojrMNuKqR96z?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2025 18:04:29.6073
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2025 18:04:30.2175
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c3cd4f6-8516-41b6-39c5-08ddc3ca0b55
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0573b98-a259-4ccd-552d-08ddc3ca0bb5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ5PEPF000001D0.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4314
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8785
 
-The cxl_mem_active_inc()/dec() and cxl_mem_active() helpers were initially
-introduced to coordinate suspend/resume behavior. However, upcoming
-changes will reuse these helpers to track cxl_mem_probe() activity during
-SOFT RESERVED region handling.
+Introduce a background worker in cxl_acpi to delay SOFT RESERVE handling
+until the cxl_mem driver has probed at least one device. This coordination
+ensures that DAX registration or fallback handling for soft-reserved
+regions is not triggered prematurely.
 
-To reflect this broader purpose, rename suspend.c to probe_state.c and
-remove CONFIG_CXL_SUSPEND Kconfig option. These helpers are now always
-built into the CXL core subsystem.
+The worker waits on cxl_wait_queue, which is signaled via
+cxl_mem_active_inc() during cxl_mem_probe(). Once at least one memory
+device probe is confirmed, the worker invokes wait_for_device_probe()
+to allow the rest of the CXL device hierarchy to complete initialization.
 
-This ensures drivers like cxl_acpi to coordinate with cxl_mem for
-region setup and hotplug handling.
+Additionally, it also handles initialization order issues where
+cxl_acpi_probe() may complete before other drivers such as cxl_port or
+cxl_mem have loaded, especially when cxl_acpi and cxl_port are built-in
+and cxl_mem is a loadable module. In such cases, using only
+wait_for_device_probe() is insufficient, as it may return before all
+relevant probes are registered.
+
+While region creation happens in cxl_port_probe(), waiting on
+cxl_mem_active() would be sufficient as cxl_mem_probe() can only succeed
+after the port hierarchy is in place. Furthermore, since cxl_mem depends
+on cxl_pci, this also guarantees that cxl_pci has loaded by the time the
+wait completes.
+
+As cxl_mem_active() infrastructure already exists for tracking probe
+activity, cxl_acpi can use it without introducing new coordination
+mechanisms.
 
 Co-developed-by: Nathan Fontenot <Nathan.Fontenot@amd.com>
 Signed-off-by: Nathan Fontenot <Nathan.Fontenot@amd.com>
@@ -171,113 +186,97 @@ Co-developed-by: Terry Bowman <terry.bowman@amd.com>
 Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 ---
-While these helpers are no longer specific to suspend, they couldn't be
-moved into files like memdev.c or mem.c, as those are built as modules.
+ drivers/cxl/acpi.c             | 18 ++++++++++++++++++
+ drivers/cxl/core/probe_state.c |  5 +++++
+ drivers/cxl/cxl.h              |  2 ++
+ 3 files changed, 25 insertions(+)
 
-The problem is that cxl_mem_active() is invoked by core kernel components
-such as kernel/power/suspend.c and hibernate.c, which are built into
-vmlinux. If the helpers were moved into a module, it would result in
-unresolved symbol errors as symbols are not guaranteed to be available.
-
-One option would be to force memdev.o to be built-in, but that introduces
-unnecessary constraints, since it includes broader device management
-logic. Instead, I have renamed it to probe_state.c.
----
- drivers/cxl/Kconfig                           | 4 ----
- drivers/cxl/core/Makefile                     | 2 +-
- drivers/cxl/core/{suspend.c => probe_state.c} | 5 ++++-
- drivers/cxl/cxlmem.h                          | 9 ---------
- include/linux/pm.h                            | 7 -------
- 5 files changed, 5 insertions(+), 22 deletions(-)
- rename drivers/cxl/core/{suspend.c => probe_state.c} (83%)
-
-diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-index 48b7314afdb8..d407d2c96a7a 100644
---- a/drivers/cxl/Kconfig
-+++ b/drivers/cxl/Kconfig
-@@ -189,10 +189,6 @@ config CXL_PORT
- 	default CXL_BUS
- 	tristate
+diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+index ca06d5acdf8f..3a27289e669b 100644
+--- a/drivers/cxl/acpi.c
++++ b/drivers/cxl/acpi.c
+@@ -823,6 +823,20 @@ static int pair_cxl_resource(struct device *dev, void *data)
+ 	return 0;
+ }
  
--config CXL_SUSPEND
--	def_bool y
--	depends on SUSPEND && CXL_MEM
--
- config CXL_REGION
- 	bool "CXL: Region Support"
- 	default CXL_BUS
-diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
-index 79e2ef81fde8..0fa7aa530de4 100644
---- a/drivers/cxl/core/Makefile
-+++ b/drivers/cxl/core/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_CXL_BUS) += cxl_core.o
--obj-$(CONFIG_CXL_SUSPEND) += suspend.o
-+obj-y += probe_state.o
++static void cxl_softreserv_mem_work_fn(struct work_struct *work)
++{
++	if (!wait_event_timeout(cxl_wait_queue, cxl_mem_active(), 30 * HZ))
++		pr_debug("Timeout waiting for cxl_mem probing");
++
++	wait_for_device_probe();
++}
++static DECLARE_WORK(cxl_sr_work, cxl_softreserv_mem_work_fn);
++
++static void cxl_softreserv_mem_update(void)
++{
++	schedule_work(&cxl_sr_work);
++}
++
+ static int cxl_acpi_probe(struct platform_device *pdev)
+ {
+ 	int rc = 0;
+@@ -903,6 +917,9 @@ static int cxl_acpi_probe(struct platform_device *pdev)
+ 	cxl_bus_rescan();
  
- ccflags-y += -I$(srctree)/drivers/cxl
- CFLAGS_trace.o = -DTRACE_INCLUDE_PATH=. -I$(src)
-diff --git a/drivers/cxl/core/suspend.c b/drivers/cxl/core/probe_state.c
-similarity index 83%
-rename from drivers/cxl/core/suspend.c
-rename to drivers/cxl/core/probe_state.c
-index 29aa5cc5e565..5ba4b4de0e33 100644
---- a/drivers/cxl/core/suspend.c
+ out:
++	/* Update SOFT RESERVE resources that intersect with CXL regions */
++	cxl_softreserv_mem_update();
++
+ 	return rc;
+ }
+ 
+@@ -934,6 +951,7 @@ static int __init cxl_acpi_init(void)
+ 
+ static void __exit cxl_acpi_exit(void)
+ {
++	cancel_work_sync(&cxl_sr_work);
+ 	platform_driver_unregister(&cxl_acpi_driver);
+ 	cxl_bus_drain();
+ }
+diff --git a/drivers/cxl/core/probe_state.c b/drivers/cxl/core/probe_state.c
+index 5ba4b4de0e33..3089b2698b32 100644
+--- a/drivers/cxl/core/probe_state.c
 +++ b/drivers/cxl/core/probe_state.c
-@@ -8,7 +8,10 @@ static atomic_t mem_active;
+@@ -2,9 +2,12 @@
+ /* Copyright(c) 2022 Intel Corporation. All rights reserved. */
+ #include <linux/atomic.h>
+ #include <linux/export.h>
++#include <linux/wait.h>
+ #include "cxlmem.h"
+ 
+ static atomic_t mem_active;
++DECLARE_WAIT_QUEUE_HEAD(cxl_wait_queue);
++EXPORT_SYMBOL_NS_GPL(cxl_wait_queue, "CXL");
  
  bool cxl_mem_active(void)
  {
--	return atomic_read(&mem_active) != 0;
-+	if (IS_ENABLED(CONFIG_CXL_MEM))
-+		return atomic_read(&mem_active) != 0;
-+
-+	return false;
+@@ -13,10 +16,12 @@ bool cxl_mem_active(void)
+ 
+ 	return false;
  }
++EXPORT_SYMBOL_NS_GPL(cxl_mem_active, "CXL");
  
  void cxl_mem_active_inc(void)
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 551b0ba2caa1..86e43475a1e1 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -883,17 +883,8 @@ static inline void devm_cxl_memdev_edac_release(struct cxl_memdev *cxlmd)
- { return; }
- #endif
- 
--#ifdef CONFIG_CXL_SUSPEND
- void cxl_mem_active_inc(void);
- void cxl_mem_active_dec(void);
--#else
--static inline void cxl_mem_active_inc(void)
--{
--}
--static inline void cxl_mem_active_dec(void)
--{
--}
--#endif
- 
- int cxl_mem_sanitize(struct cxl_memdev *cxlmd, u16 cmd);
- 
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index f0bd8fbae4f2..415928e0b6ca 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -35,14 +35,7 @@ static inline void pm_vt_switch_unregister(struct device *dev)
+ {
+ 	atomic_inc(&mem_active);
++	wake_up(&cxl_wait_queue);
  }
- #endif /* CONFIG_VT_CONSOLE_SLEEP */
+ EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, "CXL");
  
--#ifdef CONFIG_CXL_SUSPEND
- bool cxl_mem_active(void);
--#else
--static inline bool cxl_mem_active(void)
--{
--	return false;
--}
--#endif
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index 3f1695c96abc..3117136f0208 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -903,6 +903,8 @@ void cxl_coordinates_combine(struct access_coordinate *out,
  
+ bool cxl_endpoint_decoder_reset_detected(struct cxl_port *port);
+ 
++extern wait_queue_head_t cxl_wait_queue;
++
  /*
-  * Device power management
+  * Unit test builds overrides this to __weak, find the 'strong' version
+  * of these symbols in tools/testing/cxl/.
 -- 
 2.17.1
 
