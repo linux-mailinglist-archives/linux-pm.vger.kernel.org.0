@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-30834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E265BB04FBC
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 06:04:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12DA2B04FC1
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 06:04:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A2E84E0F64
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 04:03:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A35A816E2B5
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 04:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1352D372D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B787F2D3750;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpQIOFJK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fo1lKPta"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692B12D29AB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEB32D29C3;
 	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752552231; cv=none; b=jTO13iAbb/88sTIK9q0cat9h0cNIDNQVIB0erUYO1GMh32ugEBrV/216Ba51dk9E+tz4B5Az79asi0npCv6B8zd6C4QdGhNotlDksO+uw9Xs/YXpmVrYcUppx9f9xacbS7s6M2RWt4xkIkgb+LwOV0IXeOgaLlx+xjm4pH95Kyo=
+	t=1752552231; cv=none; b=h+yZHIVDda+y4z75GsQmqXV7oig9yT93k5dtw3ylDgy5MG79T3DoB4KSUSPGI+FQWPVdqs1biHQf13Tl2CYdzFJ1Q6paCKBF9MTxM9dsX1L1VKKBJ9kCO9FQsYt5ZKjC8jEcGHiEmhsvVupueoj8rzTQivvy69k26YX931MQx9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752552231; c=relaxed/simple;
-	bh=OPn3szrWlchRd10WmNpX5YnmLoApC1PT+n7eOQGRQ3Y=;
+	bh=NWmyLjJ+pZUJFrZ4rkC1nd1VWhd5SOk1veK/za+8ulM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cMkOUBy5TB6ozrfdGN/16H37Wo0Z0hUqG8h+uW3fAbQ9dMbP0DsfbkcLu6kJKk9MvvPs88MujPULkc9EPxib1QZ5zZW0MuXABwLb8jT1wkbg9PW95hN27K3GTvTwQZIBU77g5+rDziWb4cJ82gkM8WMQCvo2ZoEnf8W28YM9pNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpQIOFJK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DD613C113CF;
+	 In-Reply-To:To:Cc; b=DVUAI4qxXWcsbyolfGonVV8vsVxQPNZn53g6vS8XyyJPcjW/0SWSuvznYUosDq7eofzJpKc5Ga9N+EHguG9keXy1XjlUR83uI0MfnrjVY7ubzKZ/RvHb4LyKlGkTgfyDmtehDKN31nVdn2gupLBgHt8SnW5GHYeb0hnH6LiNwsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fo1lKPta; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F0A56C113D0;
 	Tue, 15 Jul 2025 04:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752552230;
-	bh=OPn3szrWlchRd10WmNpX5YnmLoApC1PT+n7eOQGRQ3Y=;
+	s=k20201202; t=1752552231;
+	bh=NWmyLjJ+pZUJFrZ4rkC1nd1VWhd5SOk1veK/za+8ulM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=LpQIOFJKMEgkmtCE8ayaMOwhNFgyML2mfvl4MH+zYxwWIIP2B1K5S2/8zBFc8KGXo
-	 wd3FmVOBDPpaGhWGh/Jj1lyyZUbhPhGdbPI7FH+mJ5OsBtHqRmpWUtHFQSzWDkiSp7
-	 bm9CLVLPfswfh54TODjgWekjjTlHwTCWaLh2sbtbIc4i+sXsf/8QWxk9rhp3ZXo/XO
-	 jRGxMb7CnLPlAPva4uyBFMd1BbuAao0/yYtYKaKe7slD6V4HkrgED7H1XMQyrT6iHI
-	 JMPssk4sUf7v3q1K5UroaqmArsIrKOLRL9htTY3cJO3gf/pwYaddF9uFfTULL2TOB1
-	 tomlHrTcJuBEw==
+	b=Fo1lKPta8/0NICHH1lZUGWUu2iKqLzBPCx4bIiVYDjeJUguriddk2cL3jDpzcAg1T
+	 9ySixynD5ktjW7s9VrMyVzsm+M1cd3Skecq0E/6rwKOp/36z98Y/O2FR2JakOuss9b
+	 8xmqITQ0hEpqmQwqx6sbWikc0suDk+gloVIlYJsT7EnxPGo6n9l4M6dCktzuLPjn9k
+	 cLphSUcA7AG/IJbmXmAaucQ7MbkRuvYUBTIESqZPk33e5W6aUPKvl9M13Q/+ZYsDlf
+	 mFoR1BzaiQr0uovi0wrHooF0qlAD5sLlMnblrAQYc+dRWrvLlerSBz/NGddGwaErN5
+	 TxQ5FiiHxEecQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D33DDC83F22;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4AC0C83F2E;
 	Tue, 15 Jul 2025 04:03:50 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Mon, 14 Jul 2025 23:02:48 -0500
-Subject: [PATCH 05/17] dt-bindings: thermal: tegra: Document Tegra210B01
+Date: Mon, 14 Jul 2025 23:02:49 -0500
+Subject: [PATCH 06/17] dt-bindings: clock: tegra: Document Tegra210B01
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250714-t210b01-v1-5-e3f5f7de5dce@gmail.com>
+Message-Id: <20250714-t210b01-v1-6-e3f5f7de5dce@gmail.com>
 References: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
 In-Reply-To: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -78,11 +78,11 @@ Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
  Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=1090;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=1553;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=05phOL1Dk7sts/Zv8aPXcMDWKmJ0zvrejtZlUljALbM=;
- b=ERUZlXkxLtaEh2lh/a0ee4xRcCMkPQla+rmLuy5X/T5En0QI7paPtwQZk20opHhYzl/JlsWrB
- 64PIupUlki9AD0MPObudtulmcSzNSVz8o/rJqeU45DlCIDorqcLcZzP
+ bh=v/eU4/Zbau/0drZs69pubd0H4hdpQftQ1XoOMJlu6DM=;
+ b=G9Twzppau8KbstCQKxzCRCRpTGrNB+antQiJeq1WCfUYuIE6VYKSzvermTojlmY9fOLbOKvrA
+ WJK9KxQiJzIBU/91EcyplXqJVkjI2JGdQ3/KQpL8FfgFl3wusseWPNu
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -92,33 +92,42 @@ Reply-To: webgeek1234@gmail.com
 
 From: Aaron Kling <webgeek1234@gmail.com>
 
-Add the compatible string for Tegra210B01 SOC_THERM
+* Add the compatible string for Tegra210B01 clock and reset
+* Add Tegra210B01 specific clock bindings
 
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml | 1 +
+ include/dt-bindings/clock/tegra210-car.h                        | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-index 19bb1f324183bb22bc75630798da67fc834920b8..cf47a1f3b3847d4a0371d0bc711638fc5e3b6cd3 100644
---- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-+++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-@@ -21,6 +21,7 @@ properties:
-       - nvidia,tegra124-soctherm
-       - nvidia,tegra132-soctherm
-       - nvidia,tegra210-soctherm
-+      - nvidia,tegra210b01-soctherm
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+index bee2dd4b29bfe391caee346aa5afad49772c2c41..88cce500bbc43de934f6c56152e5b2d006f8a8bb 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+@@ -32,6 +32,7 @@ properties:
+       - nvidia,tegra30-car
+       - nvidia,tegra114-car
+       - nvidia,tegra210-car
++      - nvidia,tegra210b01-car
  
    reg:
-     maxItems: 2
-@@ -207,6 +208,7 @@ allOf:
-             enum:
-               - nvidia,tegra124-soctherm
-               - nvidia,tegra210-soctherm
-+              - nvidia,tegra210b01-soctherm
-     then:
-       properties:
-         reg:
+     maxItems: 1
+diff --git a/include/dt-bindings/clock/tegra210-car.h b/include/dt-bindings/clock/tegra210-car.h
+index 9cfcc3baa52c6eef0439c859200cf44446a1cd17..27485d9b80f68fc0e7668a8abbd1b821f62035dd 100644
+--- a/include/dt-bindings/clock/tegra210-car.h
++++ b/include/dt-bindings/clock/tegra210-car.h
+@@ -409,6 +409,9 @@
+ #define TEGRA210_CLK_DMIC3_SYNC_CLK 392
+ #define TEGRA210_CLK_DMIC3_SYNC_CLK_MUX 393
+ 
+-#define TEGRA210_CLK_CLK_MAX 394
++#define TEGRA210_CLK_UTMIPLL_60M 531
++#define TEGRA210_CLK_PLL_P_UPHY_OUT 532
++
++#define TEGRA210_CLK_CLK_MAX 533
+ 
+ #endif	/* _DT_BINDINGS_CLOCK_TEGRA210_CAR_H */
 
 -- 
 2.50.0
