@@ -1,92 +1,133 @@
-Return-Path: <linux-pm+bounces-30853-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30854-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 156D4B0555E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 10:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4D1DB05564
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 10:50:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 264823BF1B3
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 08:49:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B906B4A5219
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 08:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CCCE275851;
-	Tue, 15 Jul 2025 08:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF2A2D3EDC;
+	Tue, 15 Jul 2025 08:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgbCLmVm"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="WybPOzXk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F1B231849;
-	Tue, 15 Jul 2025 08:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D36B2D29C6
+	for <linux-pm@vger.kernel.org>; Tue, 15 Jul 2025 08:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752569410; cv=none; b=DyPqK+N4Nctj3U6b89FZ8jaQHwqyEvzaqEfXlJkqbQUPskOTRi6EuGMVYfKSc8TF7ScoTCaIw0gbG9ySOenxua0AdgViSlpfUslJJnaqrZTDMF1Xg2R+kjBR3uGEHyRsRX7hQxBM9JxAbkSwBKgq0KYBULct6Y+577MM12C/vzM=
+	t=1752569418; cv=none; b=TPnsAEkcXSzLUyIb3aP35T7lW4SIE4YcSLhToxs8JKBg5l7EKxSAQmcyxGmKGFPeePUVzKhkfLoTAhXVpKq05B6mYwKqHDKjK7KthP6odjkqCzEXbIV6efEvlh/CWDA837u56uzqY1YwuLy2HSJNivLdnI5j0Tr0h4vX4VDIFoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752569410; c=relaxed/simple;
-	bh=289O4eRlY4l0x9C7ngrEvXUFEF5rxjK+EO1/Qq/NHTU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=alH4oumP6OshDb3Psp1B/JdAZlYybmbuYN0q0mN3lRo2MLhLEYqRkoqKLQL+3YPcZyBTZ+oDs2/d8BFzhuJjvh4p5MBjGw26nG7l8oN+Vbkeb/Mzo731sztHIQeX597L6Zzn5eUls0FknEibijHQRZswBPc3V1T1zQI0ustNpKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgbCLmVm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C83C4CEE3;
-	Tue, 15 Jul 2025 08:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752569409;
-	bh=289O4eRlY4l0x9C7ngrEvXUFEF5rxjK+EO1/Qq/NHTU=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=fgbCLmVmkWLQhT4X1hcB5K77kJSFdd+63vBa66dHKERmwum4xP2/2rsMFmRQdFm5X
-	 RUy0H18klWoQxp6WV9VAVH9IrDrZLkqolE7bHcRGDp3w2fzrZjfLfM3sJ6veKaw08D
-	 5J9ZKeRTNz8KQjhRpInS0E5JE8qQW2qtxXjKCLZ2Rq6RdAdQ/XsWQ6IznhzYxrGWXf
-	 B3nWjFnXH6DS97cyGPjYDjxDkTLXqiaHZyv/+ApdWhydk1r+W/DCjUBbJCqmhp+L0L
-	 RQtDUCmvSNXumTxRw9w84QRroFe8hm6FNeA/poNypkNTpHE4mstqxh5QV/D5buJUev
-	 Nve9vM3UWqElQ==
+	s=arc-20240116; t=1752569418; c=relaxed/simple;
+	bh=d0lPW1A5fBB4fVKDhlkux6p6Ga7DYrMc9g8pnwepm44=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r6fqwiIeRpbzhCvgCUIYuizRaNmrpApKb2l9g1TWfRltAZMuFC1TW5c07D3iir/gpN9He+ccx20G88VsB6+DOItO6/biTkiTSu4mS8Y1nvHVnobXmqPE5tpTYWaTj5IWL3bxiUwzvcX4+TqX/2zpZucmY+DXBB+ggh9S92yEwdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=WybPOzXk; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-45611a6a706so11677145e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 15 Jul 2025 01:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1752569412; x=1753174212; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+nh6JxemvhPIP24kZ/vb+SGxVcCnNFMlQjgWa9fn3A=;
+        b=WybPOzXkd2lXNZCmVvfeQPhPO+EcMmgh8ij+cE2OAA/KZlMvZAAxswihN9UrOv88GW
+         Suyxy0ncyVNFlJU7gLE/4VQsWsPpKmYLNvAp/vkkWvcJm0yedAjC1EaWxKC48+Rot2Ky
+         pSWFWTVe8w3ldkbrVFrazmOYhRRn4ihdJW1rrKHLQfOiplX1MbMgC4hZTZt/LOZnnlQT
+         dJRWkeXlaXMaa7oqwcfvOUGlBAW9G566zerjSH7pJQuhNo7RdFRF9vWweimaWo0JUpGI
+         eEFCdr6d9lcUOwVJQQWxfvnTvgpFyZa3wsJP3+CcubYS9N+ekT5YGVvmGKqkUOOsOCk9
+         wQNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752569412; x=1753174212;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C+nh6JxemvhPIP24kZ/vb+SGxVcCnNFMlQjgWa9fn3A=;
+        b=eu3u+I08PpIgh4FuXLYQbTtPIYYjH4Edw/BXEtiX+7mN5EutofyjUcSbrE3oprIoF5
+         WejKja0WILUVfZycx+p+cpVqgwSLvlMTGiiBmtACQfSP/VfqW0/LwFY+fubjHNkGLtxM
+         JleCNIW8VVPzoHuvECKMp/Bm61ebou2Bnw+umybAxu9R8FRoDkz6bTibfXI7mxiyfGm3
+         W8NDyK9HQQVLNQ64K18vQueVfZ5QCfpPag2/0SMVEk05jJRKL9kTi9jPeQhkmdES1FEK
+         kg20psNqZ6p/sU387yOEzSLtmGv3NPz+A282gP/ysDiRJ/SgxATZPsIMz9f/iBRUcs4M
+         bQUQ==
+X-Gm-Message-State: AOJu0YyioiG1ebU9l9ycstZP2YduMk4G6DK/A5aDfB5INhOcpXIsrpOM
+	te6BmFZBJXRiSIwDjffzSRMi0i1M4ZVDqhWnV3Wg+Bd3RIPTWSKTHtBtiVFBbEfslEqIHpUMLu3
+	qX0WjlSs=
+X-Gm-Gg: ASbGnct8axN1l+zSjaxNvkDAPFvelfdK41pdwfEOevyduX2j1jyu8LwzNaac7X71RVH
+	bQznLJxD2GqI/5mH2Ol9kOQn17m0/qZVNkSibikW06AsE5TnGwbkuSTrltCmdSRxoJ+ATbc87qA
+	BL+6eF+en+R7NOdLeePSadTMk7i674nkUYTfsK8cdI9a1kppUfm/LBTFP2pUBQsM1Da86WgAd7j
+	QDmOCnnZJ4AGv4jEzb983/YwKYGNMYWWp8Pxf88Qarw9pIJYRjmlLfEZB17ybdyTGZ+TB+ST5Q0
+	RRcQ2pa5viQuncegrqeatjNLbygMMeeZ9nuSSo6AZeupZuBY8FdH6hMvBUKBbgaUQxlCmbS1aqN
+	a25MwxqN7qgXFdj+qKXR8MsMU7Q==
+X-Google-Smtp-Source: AGHT+IFMmk/5rfMV1ctfylvB0nED4z6hP+M5t84uEkTcCAMiiEw2CTJ7Qjv4i3vnDPZtivHARzAKVA==
+X-Received: by 2002:a05:600c:a301:b0:455:f187:6203 with SMTP id 5b1f17b1804b1-455f187666bmr101086915e9.27.1752569412556;
+        Tue, 15 Jul 2025 01:50:12 -0700 (PDT)
+Received: from [127.0.1.1] ([2a01:e0a:e50:3860:9f6b:776d:f95a:bf2f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4560ceb1337sm92280065e9.13.2025.07.15.01.50.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 01:50:12 -0700 (PDT)
+From: Guillaume La Roque <glaroque@baylibre.com>
+Date: Tue, 15 Jul 2025 10:50:08 +0200
+Subject: [PATCH v2] pmdomain: ti: Select PM_GENERIC_DOMAINS
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 15 Jul 2025 10:50:03 +0200
-Message-Id: <DBCI05B4Y2ZX.VM9KNB61PGU2@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support
- to genpd
-Cc: "Saravana Kannan" <saravanak@google.com>, "Stephen Boyd"
- <sboyd@kernel.org>, <linux-pm@vger.kernel.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Michael Grzeschik" <m.grzeschik@pengutronix.de>, "Bjorn Andersson"
- <andersson@kernel.org>, "Abel Vesa" <abel.vesa@linaro.org>, "Peng Fan"
- <peng.fan@oss.nxp.com>, "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
- "Johan Hovold" <johan@kernel.org>, "Maulik Shah"
- <maulik.shah@oss.qualcomm.com>, "Michal Simek" <michal.simek@amd.com>,
- "Konrad Dybcio" <konradybcio@kernel.org>, "Thierry Reding"
- <thierry.reding@gmail.com>, "Jonathan Hunter" <jonathanh@nvidia.com>,
- "Hiago De Franco" <hiago.franco@toradex.com>, "Geert Uytterhoeven"
- <geert@linux-m68k.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>
-To: "Ulf Hansson" <ulf.hansson@linaro.org>
-References: <20250701114733.636510-1-ulf.hansson@linaro.org>
- <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
-In-Reply-To: <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250715-depspmdomain-v2-1-6f0eda3ce824@baylibre.com>
+X-B4-Tracking: v=1; b=H4sIAD8WdmgC/3XMQQ6DIBCF4auYWZcGJqKmq96jcYEw1kkqEGhIj
+ fHupe67/F/yvh0yJaYMt2aHRIUzB18DLw3YxfgnCXa1ASVq2ctWOIo5ri6shr1Aq4e2b7WzZoB
+ 6iYlm/pzcY6y9cH6HtJ16Ub/1D1SUUIJm7JXUuqMO75PZXjwlutqwwngcxxfkdejKqwAAAA==
+To: vigneshr@ti.com, nm@ti.com, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, vishalm@ti.com, 
+ matthias.schiffer@ew.tq-group.com, 
+ Guillaume La Roque <glaroque@baylibre.com>
+X-Mailer: b4 0.14.1
 
-Hi Ulf,
+Select PM_GENERIC_DOMAINS instead of depending on it to ensure
+it is always enabled when TI_SCI_PM_DOMAINS is selected.
+Since PM_GENERIC_DOMAINS is an implicit symbol, it can only be enabled
+through 'select' and cannot be explicitly enabled in configuration.
+This simplifies the dependency chain and prevents build issues
 
-On Wed Jul 9, 2025 at 1:30 PM CEST, Ulf Hansson wrote:
-> I decided it was time to give this a try, so I have queued this up for
-> v6.17 via the next branch at my pmdomain tree.
->
-> If you encounter any issues, please let me know so I can help to fix them=
-.
+Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+---
+Changes in v2:
+- update commit message
+- fix select rules
+- Link to v1: https://lore.kernel.org/r/20250704-depspmdomain-v1-1-ef2710556e62@baylibre.com
+---
+ drivers/pmdomain/ti/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Can you please address my concern in patch 17 ("driver core: Export
-get_dev_from_fwnode()")?
+diff --git a/drivers/pmdomain/ti/Kconfig b/drivers/pmdomain/ti/Kconfig
+index 67c608bf7ed0..5386b362a7ab 100644
+--- a/drivers/pmdomain/ti/Kconfig
++++ b/drivers/pmdomain/ti/Kconfig
+@@ -10,7 +10,7 @@ if SOC_TI
+ config TI_SCI_PM_DOMAINS
+ 	tristate "TI SCI PM Domains Driver"
+ 	depends on TI_SCI_PROTOCOL
+-	depends on PM_GENERIC_DOMAINS
++	select PM_GENERIC_DOMAINS if PM
+ 	help
+ 	  Generic power domain implementation for TI device implementing
+ 	  the TI SCI protocol.
 
-Since this has been applied already, a subsequent patch would be perfectly =
-fine.
+---
+base-commit: 8d6c58332c7a8ba025fcfa76888b6c37dbce9633
+change-id: 20250704-depspmdomain-2c584745dca8
 
-Thanks,
-Danilo
+Best regards,
+-- 
+Guillaume La Roque <glaroque@baylibre.com>
+
 
