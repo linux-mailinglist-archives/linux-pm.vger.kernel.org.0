@@ -1,151 +1,264 @@
-Return-Path: <linux-pm+bounces-30906-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30907-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9B61B075F1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 14:42:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9438B075F8
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 14:43:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 393BD1C26A10
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 12:42:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5F5F168255
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 12:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F5552EA72F;
-	Wed, 16 Jul 2025 12:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CEE2F2734;
+	Wed, 16 Jul 2025 12:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R88IL4R8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TCsPaXPw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919C82F50A7;
-	Wed, 16 Jul 2025 12:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE73121B9C8;
+	Wed, 16 Jul 2025 12:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752669747; cv=none; b=XuiPnRlMXdC46Ov9gbp09tOHS5Vak4F0GJ+t3OTe8EGWMOuE4T1B5JKO8CzLnvsVXpUeltQsKiXb+v7WfnXyyKv+sHK3s+laDCiaTMbTpHg3bsqoJCz9SqJxWRZTfjYZ5XwT2xuX8+VhclWiW0cfk1ZGq/bC4qQuvuVFMV8xxvw=
+	t=1752669831; cv=none; b=HyM+qu59cbpmuugt1iU7b/GUhteNPBFV2SnE4CBy2RznKGKg0Y0ck4Pxs4iwI6DKiwu7uulqWX4bAgf3m7adZQUUAt05CgO06xfcryEJQfX+9r07+0urJmvKdI4QYbaMXEEYClAUnCVa/OvIMRi+2Ieu+pLlSjMqQzV00eKoKAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752669747; c=relaxed/simple;
-	bh=LdY2FA6e8vNjYb+3yFFkKdBdvl2VddseAmXA5ewCPOM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jUEHl6IAXtmmL2ElRg2DrTg8qq9oZKziEUxkLFovUG/EVKW67OyG2jN0LYC0rySqUhyP8Ej45CeFjJ2DB8xe1v560e42kMOqSVHIMmRHy5N5l2JJIlcM0R28VnAtW+4Xrjdwhk/ik7VOdoZzwzNd6Hf/+/FEMQp8l2F1AXVeQXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R88IL4R8; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7490acf57b9so4675837b3a.2;
-        Wed, 16 Jul 2025 05:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752669745; x=1753274545; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=57Q2fhzh+9ypYiu1C19WAgFO9FIiKdNlSYbPpfQ2oEc=;
-        b=R88IL4R8rk2I66nwyOk5jk0JbJnJVjI/lWNCRm/ZQF3f5ci5IdKdGw0IQUlGPnUabI
-         I9thk5/EtAaflL3qRXH80otvGWx6Ero156+I2IdvyEgE3RNYrK1MstMsa/bluiqJWih8
-         I0n66eDAugP5nrm4PM2wCjj+HeKdy518aSRIfK27caPHMUd8otypbLRI4oK9wqbF9uAh
-         WWYTD/PsSAn0DezTtqLLluEDrYTP7+RV++M1zsptSKNhTLT1fGFrxiy5KRbPxo+eltcS
-         UanSaPVxwUn/TeYMQ2Br8Egt8H2blYkFL7XWSUptS+6GYx85BgPRTme+FlA/mMN526na
-         uD7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752669745; x=1753274545;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=57Q2fhzh+9ypYiu1C19WAgFO9FIiKdNlSYbPpfQ2oEc=;
-        b=wMYS4grQUyz88MnN3ECoGFAaV89F9M549PWqYarbgfV1j8WAoC+KocRq0UWgPJZR25
-         PF0IOawiDPBQshxSRYTDerTLEp11JA88VgVYoCp8QO63pbg981F8gJvTR3wbgC6EEXwA
-         yk9GfBcwUNNJWHuDDwgoSU7i7el82QTqluduvTPI4jC0kDsWLGRMb+CYV5UWruiUUZ4M
-         NLq5oCJD+fQI2QZtsIkIh3/ntyk0KhIHOBjbTZnHkb86F0PamYmWpjiT1oywzpT+AUSP
-         pxvcl+5dIolpEHp/g02hItkAEdcYf8O3hauzj/MShvNCbOBPsYOX2iln01fOwkyIKPyj
-         pq4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUBtfoToROLtf2ATYM52GvKe18gskPIbwsDWZCNKJ9nU8/xQDpzlExeRd4YAIJyWVpm6TI/mVVChBc=@vger.kernel.org, AJvYcCWPNQq4IkWgiVE7uwvPSn7v0Wvo3xJB1RDniRvkAmRgJAfQQ8WzGhdBiz7zwmnloxEIp71sCYGDisIMGNM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZqcdi73+bFYufk7kCSCC9K2R7VphoQYvXsyI7l5g/+qnamd1M
-	e32QKQgJLqsXfIMe1nAy9UkEjzy5zSV5yz5eIxThsVxh73F8VWqZp8vp
-X-Gm-Gg: ASbGnctTvLQTuFwoe99lMrZIhAul2QhIPJq2qRH0dIZIsqExzYMpwI7GhhLvHqOivn0
-	FAP5SpPV9RUQgbWTaER3fKyFm6/bV5G8IVhImjQf0lIu6T3FK0ox8Rvw2OepNOHgJrG1w/S6OyM
-	VUP+ygFkW9krKgeSXpIErTTfomnc7UXLgRc2qs0ea5BaWgOE0v+yYWEL/Us2fJ5mL/tltud0YPw
-	bRQ/+1uVOVN3sHQAAi9OeBaPcW1pkx+rmR8ys4SLTeOEJ5QI5NeHoqZ9/KEhNfC+w/ArX4roZ6s
-	CjX3lCGI8LiHvY724ni5+atzOIRmTAOA4N9szvlCXz9RtLMLcl08knYXElaljRR9KE90EH6VzWR
-	hRcRhoQpF4pRxn+E6Hsly8wjYtXY89WF9vTCdtW0AgKze+M8xDDTCBHeJKdVEqVnPtpnLBEbTmd
-	k=
-X-Google-Smtp-Source: AGHT+IGADh+QdEdZfpb4G+4TIgboVAA3ciqlURmOA/3x2Ybx4N+nax8niUc7GqwwwWHdataRV/gtKQ==
-X-Received: by 2002:a05:6a20:a10f:b0:230:69f1:620a with SMTP id adf61e73a8af0-2381313f837mr3801675637.42.1752669744745;
-        Wed, 16 Jul 2025 05:42:24 -0700 (PDT)
-Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([27.57.176.233])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f4aabdsm13714705b3a.124.2025.07.16.05.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 05:42:24 -0700 (PDT)
-From: Darshan Rathod <darshanrathod475@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Len Brown <len.brown@intel.com>,
+	s=arc-20240116; t=1752669831; c=relaxed/simple;
+	bh=Ie/vudHyUAw0gcZE2VY84j6FL1GN4ErvwXH8B3crDUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h9yndH2g2Gb6EzjZBg+nWWwRvANqp0h+BiCt3jcxt0qhzLBG9r6rHWSd0yvQR13R0DR4npem1+qePde9g/lWSL21ZcoMPOqqTpKZFKLFk6t8/WbmdI8tMfbWhIdGA9ESZWt4hugXUOC8gKbdVMlwfJddbkpA4vGolHnm4ETrBHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TCsPaXPw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E4CC4CEF0;
+	Wed, 16 Jul 2025 12:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752669830;
+	bh=Ie/vudHyUAw0gcZE2VY84j6FL1GN4ErvwXH8B3crDUM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TCsPaXPwDySpyV0F+5fg5akK205LWTDPjc+nQxMjMnMTS25ziEdReHyN1ZI0ckoJy
+	 995/flkzHfWCECdiEQv0YVaHDwynRE/JiEoBn8KaOAFJhKOl/POE4HzzGKyI4GjGI+
+	 c0QZ9tsNkK4yZPEnTx2lF/KlTkz7Uq5MaTz0019k=
+Date: Wed, 16 Jul 2025 14:43:47 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Darshan Rathod <darshanrathod475@gmail.com>
-Subject: [PATCH] power: snapshot: Fix coding style issues
-Date: Wed, 16 Jul 2025 12:42:16 +0000
-Message-ID: <20250716124216.64329-1-darshanrathod475@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
+	Guenter Roeck <groeck@chromium.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v11 3/7] power: reset: Introduce PSCR Recording Framework
+ for Non-Volatile Storage
+Message-ID: <2025071645-panoramic-pyromania-2f8c@gregkh>
+References: <20250618120255.3141862-4-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250618120255.3141862-4-o.rempel@pengutronix.de>
 
-Clean up various coding style violations in snapshot.c identified by
-checkpatch.pl.
+Overall, no real issues, just some very minor ones:
 
-- Add a space after control flow keywords (for, if).
-- Correct indentation from spaces to tabs for a variable declaration.
+On Wed, Jun 18, 2025 at 02:02:51PM +0200, Oleksij Rempel wrote:
+> + * Sysfs Interface:
+> + * ----------------
+> + *   /sys/kernel/pscrr/reason       - Read/write current power state change
+> + *				      reason
+> + *   /sys/kernel/pscrr/reason_boot  - Read-only last recorded reason from
+> + *				      previous boot
 
-These changes have no functional impact and improve compliance with the
-Linux Kernel Coding Style.
+The sysfs documentation is in the ABI file, so it's not needed here.
 
-Signed-off-by: Darshan Rathod <darshanrathod475@gmail.com>
----
- kernel/power/snapshot.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> +static int pscrr_reboot_notifier(struct notifier_block *nb,
+> +				 unsigned long action, void *unused)
+> +{
+> +	struct pscrr_backend *backend;
+> +	int ret;
+> +
+> +	guard(g_pscrr)(&g_pscrr);
+> +
+> +	backend = g_pscrr.backend;
+> +
+> +	if (!backend || !backend->ops || !backend->ops->write_reason)
+> +		return NOTIFY_DONE;
+> +
+> +	ret = backend->ops->write_reason(get_psc_reason());
+> +	if (ret) {
+> +		pr_err("PSCRR: Failed to store reason %d (%s) at reboot, err=%pe\n",
+> +		       get_psc_reason(), psc_reason_to_str(get_psc_reason()),
+> +		       ERR_PTR(ret));
+> +	} else {
+> +		pr_info("PSCRR: Stored reason %d (%s) at reboot.\n",
+> +			get_psc_reason(), psc_reason_to_str(get_psc_reason()));
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 2af36cfe35cd..501df0676a61 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -1536,7 +1536,7 @@ static unsigned long copy_data_pages(struct memory_bitmap *copy_bm,
- 	memory_bm_position_reset(orig_bm);
- 	memory_bm_position_reset(copy_bm);
- 	copy_pfn = memory_bm_next_pfn(copy_bm);
--	for(;;) {
-+	for (;;) {
- 		pfn = memory_bm_next_pfn(orig_bm);
- 		if (unlikely(pfn == BM_END_OF_MAP))
- 			break;
-@@ -2161,13 +2161,13 @@ static const char *check_image_kernel(struct swsusp_info *info)
- {
- 	if (info->version_code != LINUX_VERSION_CODE)
- 		return "kernel version";
--	if (strcmp(info->uts.sysname,init_utsname()->sysname))
-+	if (strcmp(info->uts.sysname, init_utsname()->sysname))
- 		return "system type";
--	if (strcmp(info->uts.release,init_utsname()->release))
-+	if (strcmp(info->uts.release, init_utsname()->release))
- 		return "kernel release";
--	if (strcmp(info->uts.version,init_utsname()->version))
-+	if (strcmp(info->uts.version, init_utsname()->version))
- 		return "version";
--	if (strcmp(info->uts.machine,init_utsname()->machine))
-+	if (strcmp(info->uts.machine, init_utsname()->machine))
- 		return "machine";
- 	return NULL;
- }
-@@ -2361,7 +2361,7 @@ static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm,
- 		struct memory_bitmap *zero_bm)
- {
- 	unsigned long decoded_pfn;
--        bool zero;
-+	bool zero;
- 	int j;
- 
- 	for (j = 0; j < PAGE_SIZE / sizeof(long); j++) {
--- 
-2.43.0
+Why print anything?  If this works properly, it should be quiet, right?
 
+> +static ssize_t reason_show(struct kobject *kobj, struct kobj_attribute *attr,
+> +			   char *buf)
+> +{
+> +	struct pscrr_backend *backend;
+> +	enum psc_reason r;
+> +
+> +	guard(g_pscrr)(&g_pscrr);
+> +
+> +	backend = g_pscrr.backend;
+> +
+> +	if (!backend || !backend->ops)
+> +		return scnprintf(buf, PAGE_SIZE, "No backend registered\n");
+
+So a string, or an int will be returned?  That's crazy, just return an
+error here, -ENODEV?
+
+> +
+> +	/* If the backend can read from hardware, do so. Otherwise, use our cached value. */
+> +	if (backend->ops->read_reason) {
+> +		if (backend->ops->read_reason(&r) == 0) {
+> +			/* Also update our cached value for consistency */
+> +			set_psc_reason(r);
+> +		} else {
+> +			/* If read fails, fallback to cached. */
+> +			r = get_psc_reason();
+> +		}
+> +	} else {
+> +		r = get_psc_reason();
+> +	}
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "%d\n", r);
+
+sysfs files should use sysfs_emit() so you don't get people sending you
+patches later on to convert it :)
+
+> +static ssize_t reason_store(struct kobject *kobj, struct kobj_attribute *attr,
+> +			    const char *buf, size_t count)
+> +{
+> +	struct pscrr_backend *backend;
+> +	long val;
+> +	int ret;
+> +
+> +	guard(g_pscrr)(&g_pscrr);
+> +
+> +	backend = g_pscrr.backend;
+> +
+> +	if (!backend || !backend->ops || !backend->ops->write_reason)
+> +		return -ENODEV;
+> +
+> +	ret = kstrtol(buf, 10, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val > U32_MAX)
+> +		return -ERANGE;
+> +
+> +	if (val < PSCR_UNKNOWN || val > PSCR_MAX_REASON)
+> +		/*
+> +		 * Log a warning, but still attempt to write the value. In
+> +		 * case the backend can handle it, we don't want to block it.
+> +		 */
+> +		pr_warn("PSCRR: writing unknown reason %ld (out of range)\n",
+> +			val);
+
+Do not let userspace cause a DoS of kernel log messages just because it
+sent you an invalid data range.
+
+> +static struct kobj_attribute reason_attr = __ATTR(reason, 0644, reason_show,
+> +						  reason_store);
+
+__ATTR_RW(), right?  If not, why not?
+
+> +static struct kobj_attribute reason_boot_attr =
+> +	__ATTR(reason_boot, 0444, reason_boot_show, NULL); /* Read-only */
+
+__ATTR_RO(), right?  Then no comment is needed :)
+
+> +int pscrr_core_init(const struct pscrr_backend_ops *ops)
+> +{
+> +	enum psc_reason stored_val = PSCR_UNKNOWN;
+> +	struct pscrr_backend *backend;
+> +	int ret;
+> +
+> +	guard(g_pscrr)(&g_pscrr);
+> +
+> +	backend = g_pscrr.backend;
+> +
+> +	if (backend) {
+> +		pr_err("PSCRR: Core is already initialized!\n");
+
+All of the "PSCRR:" stuff should just be set with pr_fmt being defined
+at the top of this file, don't put it everywhere manually.
+
+> +		return -EBUSY;
+> +	}
+> +
+> +	if (!ops->read_reason) {
+> +		pr_err("PSCRR: Backend must provide read callbacks\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	backend = kzalloc(sizeof(*backend), GFP_KERNEL);
+> +	if (!backend)
+> +		return -ENOMEM;
+> +
+> +	backend->ops = ops;
+> +	backend->last_boot_reason = PSCR_UNKNOWN;
+> +	g_pscrr.backend = backend;
+> +
+> +	ret = ops->read_reason(&stored_val);
+> +	if (!ret) {
+> +		backend->last_boot_reason = stored_val;
+> +		pr_info("PSCRR: Initial read_reason: %d (%s)\n",
+> +			stored_val, psc_reason_to_str(stored_val));
+
+When code works properly, it should be quiet.  Don't spam the boot log
+please.
+
+> +	ret = sysfs_create_group(g_pscrr.kobj, &pscrr_attr_group);
+> +	if (ret) {
+> +		pr_err("PSCRR: Failed to create sysfs group, err=%pe\n",
+> +		       ERR_PTR(ret));
+> +		goto err_kobj_put;
+> +	}
+> +
+> +	pr_info("PSCRR: initialized successfully.\n");
+
+Same here, be quiet.
+
+> +void pscrr_core_exit(void)
+> +{
+> +	guard(g_pscrr)(&g_pscrr);
+> +
+> +	if (!g_pscrr.backend)
+> +		return;
+> +
+> +	if (g_pscrr.kobj) {
+> +		sysfs_remove_group(g_pscrr.kobj, &pscrr_attr_group);
+> +		kobject_put(g_pscrr.kobj);
+> +	}
+> +
+> +	unregister_reboot_notifier(&g_pscrr.reboot_nb);
+> +
+> +	kfree(g_pscrr.backend);
+> +	g_pscrr.backend = NULL;
+> +
+> +	pr_info("PSCRR: exited.\n");
+
+Same here, please be quiet.
+
+thanks,
+
+greg k-h
 
