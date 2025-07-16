@@ -1,143 +1,199 @@
-Return-Path: <linux-pm+bounces-30889-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30890-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 159E5B0690E
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 00:08:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 152C9B06B89
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 04:04:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55ED17B337E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Jul 2025 22:06:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EFD4A17EA
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 02:04:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A562C159D;
-	Tue, 15 Jul 2025 22:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJxL1QV+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E79272805;
+	Wed, 16 Jul 2025 02:04:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA962AF1D;
-	Tue, 15 Jul 2025 22:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D422701DC;
+	Wed, 16 Jul 2025 02:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752617276; cv=none; b=BmM0BYU6pkRP4zB5iervSOH2dbor1KW5VZflGXnvxDPgDxCtS0YO8ChDpiSjDf2fW3QhkhiZQA1A1SAtA5dJZPykqLbJKWNQEnBVOdimzE88WvGcUJMv8HyDQBEUg6D7cuCws7SHF+GaN5cEXi/G6zLiIFa989qMR3pSOCB98AE=
+	t=1752631482; cv=none; b=iZ+fQV9Yd+oTN3UTIc+WOueIVHJptfMW2f87pWfw3mAs9WENPXl4IQQCLJtFbnoVu8J51DzshUdPFat2xBkCaC76scoTGswYFsgWNSTe9zaVmKD5qXgTmkjSxg8iCExJ8lkmGYy5vpvhviqWHoCziQti5GQ5pY8hiWBDIfpaWWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752617276; c=relaxed/simple;
-	bh=Zd8zXCwF0hQTiVzyVbw1IEp0HkYJGefGxnsNS4GWNqE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WrmOSRhUMOxGKcCAnRif5y2mWVHpHGpbADDv1nCJbhsSPBvkNBYx/CQfY3UHgAbogQXBmxFe1/+y3lKdg80Buf/kitb95fJiFwP5QS6gN1QNiquAtYkrM8Z2nUL8QRTvAq1uJAcIDdemlXsH1Z3aF5Ugh/vDAHUL8sjjceYqZQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hJxL1QV+; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752617274; x=1784153274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zd8zXCwF0hQTiVzyVbw1IEp0HkYJGefGxnsNS4GWNqE=;
-  b=hJxL1QV+HcyChGetheMDP19YQ896IpEDKkHe+4L8kFBRdlQeQcyzdich
-   83n0FbvgHmfhEysMc7Ul731rOpFJ3UNTcYnLIFLKIsAIw+U8UzEVU7jSM
-   qGF0DoNoQolL7zbLUERuU3HaPNg9ivUKbcOUHoZdMD/6CsBafxfc0Sz16
-   YepXMYWeFKgmPGkLLUOspe5du070JBRdUdk9y2+OTAtJijKMkAabyVVgE
-   yM7Ppz8pUPjZs9cL7JrqywlOUWUjUDx88Pp6o9JP2F95vdBR0PVS7H86q
-   z0r+SOTNTYpy7FbBr+eBwj2JloZy6Kzv4BvRtj2od64MmLPZ/wGM5TUqv
-   Q==;
-X-CSE-ConnectionGUID: MzafmcvlTAysCsZ5nClFOw==
-X-CSE-MsgGUID: cOoaIl/SQQ6A0VW7X9QqFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="54826714"
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="54826714"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 15:07:53 -0700
-X-CSE-ConnectionGUID: 2/CTSCq4QzqxTY/7962AOA==
-X-CSE-MsgGUID: h6UmUrYARBK8MvLyxd9OmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="156731421"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 15 Jul 2025 15:07:47 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubnoO-000BaZ-1F;
-	Tue, 15 Jul 2025 22:07:44 +0000
-Date: Wed, 16 Jul 2025 06:06:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aaron Kling <webgeek1234@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Peter De Schrijver <pdeschrijver@nvidia.com>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	Aaron Kling <webgeek1234@gmail.com>
-Subject: Re: [PATCH 13/17] thermal: tegra: Add Tegra210B01 Support
-Message-ID: <202507160557.t7TfWvFP-lkp@intel.com>
-References: <20250714-t210b01-v1-13-e3f5f7de5dce@gmail.com>
+	s=arc-20240116; t=1752631482; c=relaxed/simple;
+	bh=QL/1MgBYeSPk9Lzm58uCKHoKPSsWn+wu+/SE+qLrTe0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mwr4KcQ6i/xgI3YDOzpkZHu5+vxVd3Ecw8+FFbJ4kLwCwozd4SRdzTJoMgs3VGDklRh8PYgZcuDHsdyWZeqOoFphCrp3vWaT8KYXgw9QzEARSUuw2WIDEQLU0Str05tvgW48cB04dPADLLdVxeHw5+GOA/Yxf9o06oqFkve49mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 37f46c9861e911f0b29709d653e92f7d-20250716
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:02022675-8772-4696-92c9-0a1a099c0a81,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:63f44a96740b67ed7dd09419d91e2980,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 37f46c9861e911f0b29709d653e92f7d-20250716
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1535533330; Wed, 16 Jul 2025 10:04:34 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 048F6E008FA3;
+	Wed, 16 Jul 2025 10:04:34 +0800 (CST)
+X-ns-mid: postfix-687708B1-893896271
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 58BFFE008FA2;
+	Wed, 16 Jul 2025 10:04:33 +0800 (CST)
+Message-ID: <79468a7f-061f-479a-9357-e48c69cadbb8@kylinos.cn>
+Date: Wed, 16 Jul 2025 10:04:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250714-t210b01-v1-13-e3f5f7de5dce@gmail.com>
-
-Hi Aaron,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 347e9f5043c89695b01e66b3ed111755afcf1911]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Kling/dt-bindings-arm-tegra-pmc-Document-Tegra210B01/20250715-160630
-base:   347e9f5043c89695b01e66b3ed111755afcf1911
-patch link:    https://lore.kernel.org/r/20250714-t210b01-v1-13-e3f5f7de5dce%40gmail.com
-patch subject: [PATCH 13/17] thermal: tegra: Add Tegra210B01 Support
-config: arm64-randconfig-003-20250716 (https://download.01.org/0day-ci/archive/20250716/202507160557.t7TfWvFP-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160557.t7TfWvFP-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160557.t7TfWvFP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/tegra/tegra210-soctherm.c:47:49: warning: 'tegra210b01_tsensor_config' defined but not used [-Wunused-const-variable=]
-    static const struct tegra_tsensor_configuration tegra210b01_tsensor_config = {
-                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] PM: suspend: clean up redundant
+ filesystems_freeze/thaw handling
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250712030824.81474-1-zhangzihuan@kylinos.cn>
+ <9d35035d-c63e-4d11-a403-54c50e8b35c1@kylinos.cn>
+ <CAJZ5v0g22fMDc21yV2svePf_4BWZRrcy+b3-efpbfAGLpa2=Lw@mail.gmail.com>
+ <76a87abf-8fc9-445b-83d5-0daa33746014@kylinos.cn>
+ <CAJZ5v0jKwHZUpsYLzUkcL4=FDnewXoTeJo5e+ccyHw2bZ+ghTg@mail.gmail.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <CAJZ5v0jKwHZUpsYLzUkcL4=FDnewXoTeJo5e+ccyHw2bZ+ghTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +/tegra210b01_tsensor_config +47 drivers/thermal/tegra/tegra210-soctherm.c
+=E5=9C=A8 2025/7/15 20:48, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> On Tue, Jul 15, 2025 at 8:12=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+>> Hi Rafael,
+>>
+>> =E5=9C=A8 2025/7/15 01:57, Rafael J. Wysocki =E5=86=99=E9=81=93:
+>>> Hi,
+>>>
+>>> On Mon, Jul 14, 2025 at 10:44=E2=80=AFAM Zihuan Zhang <zhangzihuan@ky=
+linos.cn> wrote:
+>>>> Hi Rafael,
+>>>>
+>>>> Just a gentle ping on this patch.
+>>> I've lost track of it for some reason, sorry.
+>>>
+>>>> I realized I forgot to mention an important motivation in the change=
+log:
+>>>> calling filesystems_freeze() twice (from both suspend_prepare() and
+>>>> enter_state()) lead to a black screen and make the system unable to =
+resume..
+>>>>
+>>>> This patch avoids the duplicate call and resolves that issue.
+>>> Now applied as a fix for 6.16-rc7, thank you!
+>>
+>> Thanks for the reply!
+>>
+>> Just a quick follow-up question =E2=80=94 we noticed that even when th=
+e =E2=80=9Cfreeze
+>> filesystems=E2=80=9D feature is not enabled, the current code still ca=
+lls
+>> filesystems_thaw().
+>>
+>> Do you think it would make sense to guard this with a static key (or
+>> another mechanism) to avoid unnecessary overhead?
+> Possibly, if this overhead is significant, but is it?
 
-    46	
-  > 47	static const struct tegra_tsensor_configuration tegra210b01_tsensor_config = {
-    48		.tall = 16300,
-    49		.tiddq_en = 1,
-    50		.ten_count = 1,
-    51		.tsample = 240,
-    52		.tsample_ate = 480,
-    53	};
-    54	
+We've done some testing using ftrace to measure the overhead of=20
+filesystems_thaw(). When freeze_filesystems is not enabled, the overhead=20
+is typically around 15=E2=80=9340 microseconds.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+However, when freeze is enabled, we observed that filesystems_thaw() can=20
+take over 3 seconds to complete (e.g.,=C2=A03,450,644=C2=A0us in one test=
+ case).
+
+freeze_filesystems=C2=A0 not enabled:
+
+# tracer: function_graph
+#
+# CPU=C2=A0 DURATION=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 FUNCTION CALLS
+# |=C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A0|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A0|=C2=A0 =C2=A0|=C2=
+=A0 =C2=A0|
+ =C2=A0 4) + 15.740 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A011) + 16.894 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A010) + 17.805 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0 8) + 37.762 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0------------------------------------------
+ =C2=A011) systemd-54512=C2=A0 =3D> systemd-66433
+ =C2=A0------------------------------------------
+
+ =C2=A011) + 15.167 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0 6) + 16.760 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0 7) + 14.870 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0 3) + 16.171 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0 1) + 16.461 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+ =C2=A0------------------------------------------
+ =C2=A0 3) systemd-71984=C2=A0 =3D> systemd-73036
+ =C2=A0------------------------------------------
+
+ =C2=A0 3) + 28.314 us=C2=A0 =C2=A0|=C2=A0 filesystems_thaw();
+
+freeze_filesystems=C2=A0 enabled:
+
+ =C2=A010)=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =
+filesystems_thaw() {
+ =C2=A0 2) $ 3450644 us=C2=A0 |=C2=A0 } /* filesystems_thaw */
+ =C2=A0------------------------------------------
+ =C2=A0 1) systemd-72561=C2=A0 =3D> systemd-99210
+ =C2=A0------------------------------------------
+
+ =C2=A0 1)=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =
+filesystems_thaw() {
+ =C2=A0------------------------------------------
+ =C2=A0 7) systemd-71501=C2=A0 =3D> systemd-99210
+ =C2=A0------------------------------------------
+
+ =C2=A0 7) $ 3429306 us=C2=A0 |=C2=A0 } /* filesystems_thaw */
+ =C2=A0------------------------------------------
+ =C2=A0 7) systemd-99210=C2=A0 =3D> systemd-100028
+ =C2=A0------------------------------------------
+
+ =C2=A0 7)=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =
+filesystems_thaw() {
+ =C2=A0------------------------------------------
+ =C2=A0 4) systemd-53278=C2=A0 =3D> systemd-100028
+ =C2=A0------------------------------------------
+
+ =C2=A0 4) $ 3270122 us=C2=A0 |=C2=A0 } /* filesystems_thaw */
+ =C2=A0------------------------------------------
+ =C2=A0 7) systemd-100028 =3D> systemd-100720
+ =C2=A0------------------------------------------
+
+ =C2=A0 7) $ 3446496 us=C2=A0 |=C2=A0 filesystems_thaw();
+ =C2=A0------------------------------------------
+ =C2=A0 7) systemd-100720 =3D> systemd-112075
+ =C2=A0------------------------------------------
+
+ =C2=A0 7)=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =
+filesystems_thaw() {
+ =C2=A0------------------------------------------
+ =C2=A011) systemd-66433=C2=A0 =3D> systemd-112075
+ =C2=A0------------------------------------------
+
+ =C2=A011) $ 3454117 us=C2=A0 |=C2=A0 } /* filesystems_thaw */
+
+
 
