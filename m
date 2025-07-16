@@ -1,191 +1,200 @@
-Return-Path: <linux-pm+bounces-30895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 375A4B06E36
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 08:48:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9BB9B0757E
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 14:24:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7400D1A60CC1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 06:48:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA37D3B2BC2
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 12:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78FF2288C25;
-	Wed, 16 Jul 2025 06:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68E42F49FD;
+	Wed, 16 Jul 2025 12:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAJ9eJQa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF07946C
-	for <linux-pm@vger.kernel.org>; Wed, 16 Jul 2025 06:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC8A2F49F1;
+	Wed, 16 Jul 2025 12:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752648504; cv=none; b=KTiz/v+2htayoeoUGTITtHuoMH1USFl1ispqjTsdJGnkxMDhfA6IBJNMJh53VKq81nRpdFeObG3cJ2wOhCKgfGootk2yHh43SFyOPuPTzN53gF7QzkkLbhvrlTQyOlsxHmjePG2Hvfi0R2f7oVS/aVwqXHIVSC5IKHMfH3i+Xzg=
+	t=1752668637; cv=none; b=JuTXLMOO9/YZ4K0HUVx9M1NxeDOpa9GKBpTXDc85/+yOna4euTschFbK87JdIDWkoDg2nBbJVCX4qbX1oI7Yv6AAw6X+/K7I/EK38gYG1zFHt1cXzmCjMPsozQGuGleLb0502ZlkiV031Vy5Lecbe1O8V3ZMEafRGcqilJiGbC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752648504; c=relaxed/simple;
-	bh=uR2x6F0oOADiuwAEP1NeDfAFGHxgoMzVDPZHh9nosEU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=nK9mLApnucR0+iyUorkDWz4eUvSRQ8Iu/JA42rzzNy/I38EA4ymLpnZHcYxntSwC6p5YspCHpMXF+VxNTsvdJyXbLulFzx8Ki2Y8tRTqn1JBpLz8AEDaXyrC0y6AJghAc60GewbNCTkW0c6sOVFUGa8ocm/pxIeghCw0fQ1E/Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4bhmjG3SLtz14M26;
-	Wed, 16 Jul 2025 14:43:30 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 32DC6180489;
-	Wed, 16 Jul 2025 14:48:17 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
- (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 16 Jul
- 2025 14:48:16 +0800
-Message-ID: <bab969f4-819d-4f81-6487-328014c94491@hisilicon.com>
-Date: Wed, 16 Jul 2025 14:48:15 +0800
+	s=arc-20240116; t=1752668637; c=relaxed/simple;
+	bh=adfBujZfHC31DSYRyLy0OgdmyJaP5mTjJ9NVnjL4SDY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GdLj51OCfad1YX1zOuq+a+ClEM+8AaGFWPZtyCiejLDsr2e01XWfvctULYzwh/j7VnVoaPoOnAW5iyAo+XfflhQaTdZfedIZkGq2lOR2/Yo+lrG8gF6VG83cxIVJwcKIpb7QJPXjgwAw/LoKC9WlI83g2ePUvx2b9Wld+7Y9STo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAJ9eJQa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19569C4CEF4;
+	Wed, 16 Jul 2025 12:23:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752668636;
+	bh=adfBujZfHC31DSYRyLy0OgdmyJaP5mTjJ9NVnjL4SDY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WAJ9eJQaV1kHxKH2ss7lCYqUDWkYnB3Y/pjXDA305kCIxCYoPV8nwkcjB+rkxddww
+	 cLAixshYaMSVpxlaFEs22AVelL6I5Z8L+tMOn72YkAfVXFdF+aYhUPPq2CJn0D4w/b
+	 gOb4UdMDk5TM4GcSsK3X1X+jpYbq6/wRchZ6xqNXMa3aAxj7UQyN9hUF2TR2pne2Xb
+	 iz9cjRfPXOol8C3rC2rKoQ7sUz54hkCUq616rLlbIHYuIQHP1afoC2pCG+66qLCn2R
+	 evQnzq5jPehqEWgWqScBzGgisL+pfjFGbDYVCAMuy/4DgNLzLQXwoMge7jNqJNG/m9
+	 +HKYtYsaUJrgQ==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-40a4bf1eb0dso3082473b6e.3;
+        Wed, 16 Jul 2025 05:23:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX21ws5t0w9ICzVh576iS/2JA9scc0DJd+R7l5e35sroD/nSI1xlxAJwplEwjfMeijQoqXzJqy7Y7EOsl4=@vger.kernel.org, AJvYcCXy21h7M2modQrFzz2owJRNeL6rbv89e0BniWoWAf37+DzzwaFtOACnlMHsTTQRQHYWwjPeRjG1VhY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGFalJ2reFngjFV90B6KeB8kBt/EVLEe89ze+r8Do+cd03TmGz
+	uW5Q3V/99BfYMZdEdBlaoUHlL8Kuy/Z0y97t2PffGL+FLrZiS6qJDmz+T9a8P3w+CZg41G4sTdz
+	QS6cSrK/6ygFWezevCBY0AWSF6kLgmCg=
+X-Google-Smtp-Source: AGHT+IE5fLu0mPJIYxNwAkT62HeKwY7Lp3Q5SsfJH5r8kneuXOjh/KvASJHdcTnn9K6mPMmo7rapYVfTYKOJItgBXB0=
+X-Received: by 2002:a05:6808:bc4:b0:41c:35b9:acbc with SMTP id
+ 5614622812f47-41d032fccefmr1731912b6e.2.1752668635250; Wed, 16 Jul 2025
+ 05:23:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v6 0/2] PM / devfreq: Add HiSilicon uncore frequency
- scaling driver
-To: Chanwoo Choi <chanwoo@kernel.org>
-CC: =?UTF-8?B?7LWc7LCs7Jqw?= <cw00.choi@samsung.com>, MyungJoo Ham
-	<myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, Linux
- PM list <linux-pm@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>, Jonathan
- Cameron <jonathan.cameron@huawei.com>, <alireza.sanaee@huawei.com>, Lifeng
- Zheng <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <liwei728@huawei.com>, <prime.zeng@hisilicon.com>
-References: <20250623143401.4095045-1-zhanjie9@hisilicon.com>
- <9e028620-75b9-5a9a-dab6-8374b0a4fa4e@hisilicon.com>
- <CAGTfZH0eHz8aRDkSOTNosNqZGv9Qhf2K-Rtz-Yt+_GpNQzXo5g@mail.gmail.com>
- <0038c928-60ff-f6ab-763b-6958f1c24200@hisilicon.com>
- <CAGTfZH0fY1Bv5=a8t2w0iNH0shHkQ6-v9077F0XWheK6iGMoZA@mail.gmail.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <CAGTfZH0fY1Bv5=a8t2w0iNH0shHkQ6-v9077F0XWheK6iGMoZA@mail.gmail.com>
+References: <20250712030824.81474-1-zhangzihuan@kylinos.cn>
+ <9d35035d-c63e-4d11-a403-54c50e8b35c1@kylinos.cn> <CAJZ5v0g22fMDc21yV2svePf_4BWZRrcy+b3-efpbfAGLpa2=Lw@mail.gmail.com>
+ <76a87abf-8fc9-445b-83d5-0daa33746014@kylinos.cn> <CAJZ5v0jKwHZUpsYLzUkcL4=FDnewXoTeJo5e+ccyHw2bZ+ghTg@mail.gmail.com>
+ <79468a7f-061f-479a-9357-e48c69cadbb8@kylinos.cn>
+In-Reply-To: <79468a7f-061f-479a-9357-e48c69cadbb8@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 16 Jul 2025 14:23:42 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j4biD2Jd5isUGFmwAva1RJsPDCHNpb1VEjM5vTBrk-jQ@mail.gmail.com>
+X-Gm-Features: Ac12FXwtXi1zr5T7_1efrXKgutl40aXbTzP8Ps82-K5dI3fE71PQpgPM3bdsf3s
+Message-ID: <CAJZ5v0j4biD2Jd5isUGFmwAva1RJsPDCHNpb1VEjM5vTBrk-jQ@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: suspend: clean up redundant filesystems_freeze/thaw
+ handling
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jul 16, 2025 at 4:04=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
+>
+>
+> =E5=9C=A8 2025/7/15 20:48, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > On Tue, Jul 15, 2025 at 8:12=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+> >> Hi Rafael,
+> >>
+> >> =E5=9C=A8 2025/7/15 01:57, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> >>> Hi,
+> >>>
+> >>> On Mon, Jul 14, 2025 at 10:44=E2=80=AFAM Zihuan Zhang <zhangzihuan@ky=
+linos.cn> wrote:
+> >>>> Hi Rafael,
+> >>>>
+> >>>> Just a gentle ping on this patch.
+> >>> I've lost track of it for some reason, sorry.
+> >>>
+> >>>> I realized I forgot to mention an important motivation in the change=
+log:
+> >>>> calling filesystems_freeze() twice (from both suspend_prepare() and
+> >>>> enter_state()) lead to a black screen and make the system unable to =
+resume..
+> >>>>
+> >>>> This patch avoids the duplicate call and resolves that issue.
+> >>> Now applied as a fix for 6.16-rc7, thank you!
+> >>
+> >> Thanks for the reply!
+> >>
+> >> Just a quick follow-up question =E2=80=94 we noticed that even when th=
+e =E2=80=9Cfreeze
+> >> filesystems=E2=80=9D feature is not enabled, the current code still ca=
+lls
+> >> filesystems_thaw().
+> >>
+> >> Do you think it would make sense to guard this with a static key (or
+> >> another mechanism) to avoid unnecessary overhead?
+> > Possibly, if this overhead is significant, but is it?
+>
+> We've done some testing using ftrace to measure the overhead of
+> filesystems_thaw(). When freeze_filesystems is not enabled, the overhead
+> is typically around 15=E2=80=9340 microseconds.
+
+So this is the time that can be saved by adding a
+filesystem_freeze_enabled check before calling filesystems_thaw()
+IIUC.
+
+I'd say don't bother.
 
 
-
-On 16/07/2025 14:45, Chanwoo Choi wrote:
-> Hi Jie,
-> 
-> Yes. I'll send pull request to be merged into v6.17-rc1 within this week.
-
-Sure, thanks!
-
-> 
-> 
-> Best Regards,
-> Chanwoo Choi
-> 
-> 2025년 7월 16일 (수) 오후 3:33, Jie Zhan <zhanjie9@hisilicon.com <mailto:zhanjie9@hisilicon.com>>님이 작성:
-> 
->     Hi Chanwoo,
-> 
->     A quick check. Is this series queueing up for v6.17-rc1?
-> 
->     Regards,
->     Jie
-> 
->     On 02/07/2025 11:21, Chanwoo Choi wrote:
->     > Hi,
->     >
->     > I'm sorry for late review. I'll review and then merge until this week.
->     >
->     > Best Regards,
->     > Chanwoo Choi
->     >
->     > 2025년 7월 2일 (수) 오전 11:37, Jie Zhan <zhanjie9@hisilicon.com <mailto:zhanjie9@hisilicon.com> <mailto:zhanjie9@hisilicon.com <mailto:zhanjie9@hisilicon.com>>>님이 작성:
->     >
->     >     Hi devfreq maintainers,
->     >
->     >     A kindly ping on this series.
->     >     I believe it's in a good shape now.
->     >
->     >     Jie
->     >
->     >     On 23/06/2025 22:33, Jie Zhan wrote:
->     >     > Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
->     >     > the devfreq framework.  The uncore domain contains shared computing
->     >     > resources, including system interconnects and L3 cache.  The uncore
->     >     > frequency significantly impacts the system-wide performance as well as
->     >     > power consumption.  This driver adds support for runtime management of
->     >     > uncore frequency from kernel and userspace.  The main function includes
->     >     > setting and getting frequencies, changing frequency scaling policies, and
->     >     > querying the list of CPUs whose performance is significantly related to
->     >     > this uncore frequency domain, etc.  The driver communicates with a platform
->     >     > controller through an ACPI PCC mailbox to take the actual actions of
->     >     > frequency scaling.
->     >     >
->     >     > Changelog:
->     >     >
->     >     > v6:
->     >     > Consolidate hisi_uncore_init_pcc_chan() related stuff:
->     >     > - Move devm_mutex_init() to hisi_uncore_init_pcc_chan()
->     >     > - Move devm_add_action_or_reset() into hisi_uncore_request_pcc_chan()
->     >     >
->     >     > v5:
->     >     > https://lore.kernel.org/all/20250619151456.3328624-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/all/20250619151456.3328624-1-zhanjie9@hisilicon.com/> <https://lore.kernel.org/all/20250619151456.3328624-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/all/20250619151456.3328624-1-zhanjie9@hisilicon.com/>>
->     >     > - Comment more on error code related stuff about
->     >     >   hisi_uncore_mark_related_cpus(), and return failure early on errors
->     >     >   except for -EINVAL, which indicates possibly broken firmware.
->     >     > - Separate error prints apart for two cases in hisi_platform_gov_handler()
->     >     > - Make the 'related_cpus' sysfs ABI description more generic
->     >     > - Some coding style cleanups and typo fixes
->     >     >
->     >     > v4:
->     >     > https://lore.kernel.org/linux-pm/20250530081722.280776-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250530081722.280776-1-zhanjie9@hisilicon.com/> <https://lore.kernel.org/linux-pm/20250530081722.280776-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250530081722.280776-1-zhanjie9@hisilicon.com/>>
->     >     > - Allow devfreq core to accept device-specific sysfs ABIs
->     >     > - Replace custom sysfs attrs with dev_groups and let the devfreq core
->     >     >   manage it
->     >     > - Update 'related_cpus' description in the devfreq ABI doc
->     >     > - Remove COMPILE_TEST in Kconfig as the mailbox_client.h doesn't support
->     >     >   this yet
->     >     > - Replace dev_err() with dev_err_probe() during drv->probe()
->     >     > - Replace mutex_init() with devm_mutex_init() to warn on UAF
->     >     > - Replace uncore->dev with dev in some places to make code a bit shorter
->     >     > - Remove redundant uncore->pchan check in hisi_uncore_free_pcc_chan()
->     >     > - Use __free() to let compiler release temporary memory
->     >     > - Clean up the error handling and redundant 'status = 0' in
->     >     >   hisi_uncore_send_cmd()
->     >     > - Some coding style cleanup
->     >     >
->     >     > v3:
->     >     > https://lore.kernel.org/linux-pm/20250522031701.1912458-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250522031701.1912458-1-zhanjie9@hisilicon.com/> <https://lore.kernel.org/linux-pm/20250522031701.1912458-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250522031701.1912458-1-zhanjie9@hisilicon.com/>>
->     >     > - Remove redundant resource freeing processes when drv->probe() fails as
->     >     >   they're already handled by devm
->     >     >
->     >     > v2:
->     >     > https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/> <https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/>>
->     >     > - Make devm manage the release sequence, remove drv->remove()
->     >     > - Warn on !uncore or !uncore->pchan as they're no longer expected
->     >     > - Remove ioremap of pcc shared memory because it's done by the pcc driver
->     >     > - Fix compiler warning of discarding 'const'
->     >     > - Minor trivial coding style changes
->     >     >
->     >     > v1:
->     >     > https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/> <https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/ <https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/>>
->     >     >
->     >     > Jie Zhan (2):
->     >     >   PM / devfreq: Allow devfreq driver to add custom sysfs ABIs
->     >     >   PM / devfreq: Add HiSilicon uncore frequency scaling driver
->     >     >
->     >     >  Documentation/ABI/testing/sysfs-class-devfreq |   9 +
->     >     >  drivers/devfreq/Kconfig                       |  11 +
->     >     >  drivers/devfreq/Makefile                      |   1 +
->     >     >  drivers/devfreq/devfreq.c                     |   1 +
->     >     >  drivers/devfreq/hisi_uncore_freq.c            | 658 ++++++++++++++++++
->     >     >  include/linux/devfreq.h                       |   4 +
->     >     >  6 files changed, 684 insertions(+)
->     >     >  create mode 100644 drivers/devfreq/hisi_uncore_freq.c
->     >     >
->     >
-> 
+> However, when freeze is enabled, we observed that filesystems_thaw() can
+> take over 3 seconds to complete (e.g., 3,450,644 us in one test case).
+>
+> freeze_filesystems  not enabled:
+>
+> # tracer: function_graph
+> #
+> # CPU  DURATION                  FUNCTION CALLS
+> # |     |   |                     |   |   |   |
+>    4) + 15.740 us   |  filesystems_thaw();
+>   11) + 16.894 us   |  filesystems_thaw();
+>   10) + 17.805 us   |  filesystems_thaw();
+>    8) + 37.762 us   |  filesystems_thaw();
+>   ------------------------------------------
+>   11) systemd-54512  =3D> systemd-66433
+>   ------------------------------------------
+>
+>   11) + 15.167 us   |  filesystems_thaw();
+>    6) + 16.760 us   |  filesystems_thaw();
+>    7) + 14.870 us   |  filesystems_thaw();
+>    3) + 16.171 us   |  filesystems_thaw();
+>    1) + 16.461 us   |  filesystems_thaw();
+>   ------------------------------------------
+>    3) systemd-71984  =3D> systemd-73036
+>   ------------------------------------------
+>
+>    3) + 28.314 us   |  filesystems_thaw();
+>
+> freeze_filesystems  enabled:
+>
+>   10)               |  filesystems_thaw() {
+>    2) $ 3450644 us  |  } /* filesystems_thaw */
+>   ------------------------------------------
+>    1) systemd-72561  =3D> systemd-99210
+>   ------------------------------------------
+>
+>    1)               |  filesystems_thaw() {
+>   ------------------------------------------
+>    7) systemd-71501  =3D> systemd-99210
+>   ------------------------------------------
+>
+>    7) $ 3429306 us  |  } /* filesystems_thaw */
+>   ------------------------------------------
+>    7) systemd-99210  =3D> systemd-100028
+>   ------------------------------------------
+>
+>    7)               |  filesystems_thaw() {
+>   ------------------------------------------
+>    4) systemd-53278  =3D> systemd-100028
+>   ------------------------------------------
+>
+>    4) $ 3270122 us  |  } /* filesystems_thaw */
+>   ------------------------------------------
+>    7) systemd-100028 =3D> systemd-100720
+>   ------------------------------------------
+>
+>    7) $ 3446496 us  |  filesystems_thaw();
+>   ------------------------------------------
+>    7) systemd-100720 =3D> systemd-112075
+>   ------------------------------------------
+>
+>    7)               |  filesystems_thaw() {
+>   ------------------------------------------
+>   11) systemd-66433  =3D> systemd-112075
+>   ------------------------------------------
+>
+>   11) $ 3454117 us  |  } /* filesystems_thaw */
+>
+>
+>
 
