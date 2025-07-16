@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-30918-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30919-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C243B07931
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 17:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D7B4B07934
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 17:12:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D3CB3AF5E9
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 15:11:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F21D3B27DC
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 15:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1FF2D9EC9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 788732EE97D;
 	Wed, 16 Jul 2025 15:11:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OgsTsEFl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kr9HO/6q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4C7275861;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37614275AE0;
 	Wed, 16 Jul 2025 15:11:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752678714; cv=none; b=hxMY1TU1U9cq/XOXfzKxXQavc1ojWkvQso5dfBhRq2L+CAWHxyABpASH0IN17cz8OWvY8nfr5FKGCHKmNEpt3aqIk4x4SxFS7j7coaOOM1WN/pIoJD9/LTti8hmPJKWaVrMnSy2YmtJkeUGN+xp1kATzsVs/k6/YRDQiIeWxKY0=
+	t=1752678714; cv=none; b=s9yu/hpCWn2PWzg6oAvvlUcY+5oLSEn80RXm1RFMDQCjI03HMHh1+eM1utA1w1/WEurTMHO14RwY2yBK6otfuEmXCV3vvMT9oEBV0fWMRc12l61VyyFt0aVe6cq5IJSBmi4WKEhAzYI1OE8iZyxR3XwUY88xIHNV1BFZQAKALmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752678714; c=relaxed/simple;
-	bh=5GDJ4bHuCklImxmj752RSsC996NXeJ1IKH4BOoQmLec=;
+	bh=zeUTjh1J//m6OhigRHlKUs+Il+fdWWxPijqspR4x8jg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mdMEIIf81mlz4VCktakZoifPU9e6K+keOXnuJGa5NSaAklwppjyz9cd2nMro1tOzguln2k2iu+ASKmvdwBCYxwBgXRpiuIkHxXWI6KV9Hj3z9C/tHJJo/2D1xj2UC+gArKSQM4EyrATaxd2If+EL9uMQ+ysk1I7/0T76grSRWMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OgsTsEFl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B2A89C4CEF7;
+	 In-Reply-To:To:Cc; b=C8BVZYOPRKT49/YIFbFUNKJdNc037bdbSklSbyNqsfjMWXi2D6V/I/LkRSdTK9kAg56QmBJ+vFDdJtL15QDag/FalSf6luyLY2x+fhXEjTrOQ/xZeyjb3rYVYo9dUCPks7X3aFPNw4owbIA6f6xGL/bpvPZaV9DMsXsNTjwm6d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kr9HO/6q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BDDF0C4CEFE;
 	Wed, 16 Jul 2025 15:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752678713;
-	bh=5GDJ4bHuCklImxmj752RSsC996NXeJ1IKH4BOoQmLec=;
+	bh=zeUTjh1J//m6OhigRHlKUs+Il+fdWWxPijqspR4x8jg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=OgsTsEFlikvZkfPd18+U0xAjhiyr2CBIdJpINI8LLJF8sKYZRwClKu9QTqHv8kS1M
-	 hDx4Jh5gwy7F857ZgUo89/vvV5sg+0fTMtR7kuOBQSGy0thn2faJyw5P4RZqDeceOo
-	 iKspm+UvsvGBNTbzoTHiQRbGZIo8WXHwXkGpLsQtxTpOD/ihhSzk6J8DFpf52QOzWl
-	 feGMQz7NoiNfSnEsI8/Ca/H6cQ4i+Sf+CJLA1W8NUmgxvfSu+b1kO2vRe6ARMvAL6L
-	 AeDl95DmKuNSMOX+puQNi6NnUORD5jc5CKnRHHXTZ775RTXdjbSs8PYrBlInfV3JiA
-	 Kc65OYuLslRIg==
+	b=kr9HO/6qP+GjkwkFd4RzgvyYOz1i2XOQgh35GYyXiXM6cl7vCOBP0xeRQMRCTxsaS
+	 ku04F4KLC7PHx9PtrxNkgx1UGq24ZiKLjziGbviDL9fkdc5P1VN9TiHJuWY7FCl+li
+	 8KWySPGefPDZBOKteqOwt3NpW+trDEnLmPfCILUzioKl3eU0nNGMmNgHTDmr4+fHo2
+	 mL1vIwY++IrUD8yZEWBKDBAiIkGYscqY4+tglT5ckSUr/+I4qj2DmDVXHtn07h4Vnm
+	 JsthtMFMfayT00zQr2bBIAbzpHqpAYgq1xBmmuZghq5Xumba08T4ZLkePTgj4SLWUK
+	 xJe++J+pGEVyg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3F47C83F1B;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B22BFC83F37;
 	Wed, 16 Jul 2025 15:11:53 +0000 (UTC)
 From: Samuel Kayode via B4 Relay <devnull+samuel.kayode.savoirfairelinux.com@kernel.org>
-Date: Wed, 16 Jul 2025 11:11:46 -0400
-Subject: [PATCH v9 3/6] regulator: pf1550: add support for regulator
+Date: Wed, 16 Jul 2025 11:11:47 -0400
+Subject: [PATCH v9 4/6] input: pf1550: add onkey support
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250716-pf1550-v9-3-502a647f04ef@savoirfairelinux.com>
+Message-Id: <20250716-pf1550-v9-4-502a647f04ef@savoirfairelinux.com>
 References: <20250716-pf1550-v9-0-502a647f04ef@savoirfairelinux.com>
 In-Reply-To: <20250716-pf1550-v9-0-502a647f04ef@savoirfairelinux.com>
 To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -75,12 +75,12 @@ Cc: imx@lists.linux.dev, devicetree@vger.kernel.org,
  Samuel Kayode <samuel.kayode@savoirfairelinux.com>, 
  Abel Vesa <abelvesa@kernel.org>, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752678712; l=17254;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752678712; l=8814;
  i=samuel.kayode@savoirfairelinux.com; s=20250527;
  h=from:subject:message-id;
- bh=/DveMMjpqew7P54FR6mWn2nRJFXVbJ3kGRPgr2EEikc=;
- b=5OT+6XveMO4NHhFCvMcdIO9JcX3THpSQwvNchzkbt1vAZBGZds+BSKWOSxxYCKdcWgRjdl427
- OpqhZjflm0mB/ZjXAmwOF+InPQY3Hi9n+xb6JhsU+XvxBIV2VwA+nNi
+ bh=C+xgFLxnIqfULJKCBSISSMrTcSFdK8J7INoHzCH7r+4=;
+ b=MCqXPknHmhknUylLjZ13LPFwvHeTtc4yhA9WbEcPC9RoV7JBGZO0f6A4/n42Q5QJcyLly+1WK
+ HNfvzj/cNxaDJINDF+1NAeMevJspFnhqAuoZ6vlEWLAmtOwUG6N79AL
 X-Developer-Key: i=samuel.kayode@savoirfairelinux.com; a=ed25519;
  pk=TPSQGQ5kywnnPyGs0EQqLajLFbdDu17ahXz8/gxMfio=
 X-Endpoint-Received: by B4 Relay for
@@ -90,515 +90,288 @@ Reply-To: samuel.kayode@savoirfairelinux.com
 
 From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 
-Add regulator support for the pf1550 PMIC.
+Add support for the onkey of the pf1550 PMIC.
 
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Reviewed-by: Frank Li <Frank.Li@nxp.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 ---
 v9:
 - Requested by Sean:
-  - Add support for SW1 DVS enable/disable
-  - Add support for standby voltages
-- Add map_voltage for all configurable regulators
-- Add regulator enable/disable for all regulators
-- Fix for DVS activation when meant to be disabled
+  - Add support for disabling power down of system by onkey
+v8:
+- Pick up `Acked-by` tag from Dmitry
+- Use C++ for SPDX license header comment and C type for rest of license
+  comment
 v7:
 - Use reverese christmas tree style
 - Drop unecessary 0 in id table's driver data
-v6:
-- Use dvs_enb variable in pf1550_dev as suggested by Frank Li
-v5:
-- Address Mark's feedback:
-  - Add comments to clarify difference in interrupts
-  - Issue warn event for _LS(low side) interrupt
-  - Validate maximum ramp_delay
 v4:
-- Address Mark's feedback:
-  - Use C++ comments for SPDX license
-  - Add portions copyright to reflect my update
-  - Validate ramp_delay
-  - Report overcurrent and temperature events
-- Use platform_get_irq
+- Address Dmitry's feedback
+  - Drop irq variable in onkey_drv_data
+  - Drop keycode variable in onkey_drv_data
+  - Define wakeup as type bool
+  - Use platform_get_irq
+  - Use type const for struct pf1550_dev in onkey_drv_data
+  - Replace (error < 0) with (error) in if statement when applicable
+  - No need to define driver_data in table id
+- Define driver.pm with pm_sleep_ptr
 v3:
-- Drop duplicate include
-- Drop unnecessary includes
-- Accept lower case regulator names from devicetree
-- Use virqs mapped in core MFD driver
+- Address Dmitry's feedback
+  - Drop compatible string
+  - Remove dependency on OF
+  - Use generic device properties
+  - Drop unnecessary includes
+  - Drop unnecessary initializations in probe
+  - Always use the KEY_POWER property for onkey->keycode
+  - Do mapping of irqs in MFD driver
+  - Define onkey->input before interrupts are active
+  - Drop unnecessary input_free_device since devm
+  - Manage onkey irqs instead of the main interrupt line.
+- Fix integer overflow when unmasking onkey irqs in onkey_resume.
 v2:
-- Add driver for regulator
+- Add driver for onkey
 ---
- drivers/regulator/Kconfig            |   9 +
- drivers/regulator/Makefile           |   1 +
- drivers/regulator/pf1550-regulator.c | 429 +++++++++++++++++++++++++++++++++++
- 3 files changed, 439 insertions(+)
+ drivers/input/misc/Kconfig        |  11 +++
+ drivers/input/misc/Makefile       |   1 +
+ drivers/input/misc/pf1550-onkey.c | 196 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 208 insertions(+)
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 6d8988387da4599633ca9bde2698b9711e34a245..de455887f9aeeada5546e44b8dc9d7ed041618a6 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1049,6 +1049,15 @@ config REGULATOR_PV88090
- 	  Say y here to support the voltage regulators and convertors
- 	  on PV88090
+diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+index f5496ca0c0d2bfcb7968503ccd1844ff43bbc1c0..47b3c43ff0550f14d61990997976366436411adc 100644
+--- a/drivers/input/misc/Kconfig
++++ b/drivers/input/misc/Kconfig
+@@ -179,6 +179,17 @@ config INPUT_PCSPKR
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called pcspkr.
  
-+config REGULATOR_PF1550
-+	tristate "NXP PF1550 regulator"
++config INPUT_PF1550_ONKEY
++	tristate "NXP PF1550 Onkey support"
 +	depends on MFD_PF1550
 +	help
-+	  Say y here to select this option to enable the regulators on
-+	  the PF1550 PMICs.
-+	  This driver controls the PF1550 regulators via I2C bus.
-+	  The regulators include three bucks and three ldos.
++	  Say Y here if you want support for PF1550 PMIC. Onkey can trigger
++	  release and 1s(push hold), 2s, 3s, 4s, 8s interrupt for long press
++	  detect.
 +
- config REGULATOR_PWM
- 	tristate "PWM voltage regulator"
- 	depends on PWM
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index c0bc7a0f4e67098c50ac3cf887ae95f46b2eac44..891174b511fc0653bac662c71659498122e8441f 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -125,6 +125,7 @@ obj-$(CONFIG_REGULATOR_QCOM_USB_VBUS) += qcom_usb_vbus-regulator.o
- obj-$(CONFIG_REGULATOR_PALMAS) += palmas-regulator.o
- obj-$(CONFIG_REGULATOR_PCA9450) += pca9450-regulator.o
- obj-$(CONFIG_REGULATOR_PF9453) += pf9453-regulator.o
-+obj-$(CONFIG_REGULATOR_PF1550) += pf1550-regulator.o
- obj-$(CONFIG_REGULATOR_PF8X00) += pf8x00-regulator.o
- obj-$(CONFIG_REGULATOR_PFUZE100) += pfuze100-regulator.o
- obj-$(CONFIG_REGULATOR_PV88060) += pv88060-regulator.o
-diff --git a/drivers/regulator/pf1550-regulator.c b/drivers/regulator/pf1550-regulator.c
++	  To compile this driver as a module, choose M here. The module will be
++	  called pf1550-onkey.
++
+ config INPUT_PM8941_PWRKEY
+ 	tristate "Qualcomm PM8941 power key support"
+ 	depends on MFD_SPMI_PMIC
+diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+index 6d91804d0a6f761a094e6c380f878f74c3054d63..c652337de464c1eeaf1515d0bc84d10de0cb3a74 100644
+--- a/drivers/input/misc/Makefile
++++ b/drivers/input/misc/Makefile
+@@ -62,6 +62,7 @@ obj-$(CONFIG_INPUT_PCAP)		+= pcap_keys.o
+ obj-$(CONFIG_INPUT_PCF50633_PMU)	+= pcf50633-input.o
+ obj-$(CONFIG_INPUT_PCF8574)		+= pcf8574_keypad.o
+ obj-$(CONFIG_INPUT_PCSPKR)		+= pcspkr.o
++obj-$(CONFIG_INPUT_PF1550_ONKEY)	+= pf1550-onkey.o
+ obj-$(CONFIG_INPUT_PM8941_PWRKEY)	+= pm8941-pwrkey.o
+ obj-$(CONFIG_INPUT_PM8XXX_VIBRATOR)	+= pm8xxx-vibrator.o
+ obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)	+= pmic8xxx-pwrkey.o
+diff --git a/drivers/input/misc/pf1550-onkey.c b/drivers/input/misc/pf1550-onkey.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..9141276a7d529a58be1169761e1e90f97b3db1ff
+index 0000000000000000000000000000000000000000..8b24ed518b8cdd48be9078d0ef9da501752802d6
 --- /dev/null
-+++ b/drivers/regulator/pf1550-regulator.c
-@@ -0,0 +1,429 @@
++++ b/drivers/input/misc/pf1550-onkey.c
+@@ -0,0 +1,196 @@
 +// SPDX-License-Identifier: GPL-2.0
-+//
-+// regulator driver for the PF1550
-+//
-+// Copyright (C) 2016 Freescale Semiconductor, Inc.
-+// Robin Gong <yibin.gong@freescale.com>
-+//
-+// Portions Copyright (c) 2025 Savoir-faire Linux Inc.
-+// Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-+//
++/*
++ * Driver for the PF1550 ONKEY
++ * Copyright (C) 2016 Freescale Semiconductor, Inc. All Rights Reserved.
++ *
++ * Portions Copyright (c) 2025 Savoir-faire Linux Inc.
++ * Samuel Kayode <samuel.kayode@savoirfairelinux.com>
++ */
 +
 +#include <linux/err.h>
++#include <linux/input.h>
 +#include <linux/interrupt.h>
-+#include <linux/mfd/pf1550.h>
++#include <linux/kernel.h>
 +#include <linux/module.h>
++#include <linux/mfd/pf1550.h>
 +#include <linux/platform_device.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
 +
-+#define PF1550_REGULATOR_IRQ_NR		11
-+#define PF1550_MAX_REGULATOR		7
++#define PF1550_ONKEY_IRQ_NR	6
 +
-+struct pf1550_desc {
-+	struct regulator_desc desc;
-+	unsigned char stby_reg;
-+	unsigned char stby_mask;
-+	unsigned char stby_enable_reg;
-+	unsigned char stby_enable_mask;
-+};
-+
-+struct pf1550_regulator_info {
++struct onkey_drv_data {
 +	struct device *dev;
 +	const struct pf1550_ddata *pf1550;
-+	struct pf1550_desc regulator_descs[PF1550_MAX_REGULATOR];
-+	struct regulator_dev *rdevs[PF1550_MAX_REGULATOR];
++	bool wakeup;
++	struct input_dev *input;
 +};
 +
-+static const int pf1550_sw12_volts[] = {
-+	1100000, 1200000, 1350000, 1500000, 1800000, 2500000, 3000000, 3300000,
-+};
-+
-+static const int pf1550_ldo13_volts[] = {
-+	750000, 800000, 850000, 900000, 950000, 1000000, 1050000, 1100000,
-+	1150000, 1200000, 1250000, 1300000, 1350000, 1400000, 1450000, 1500000,
-+	1800000, 1900000, 2000000, 2100000, 2200000, 2300000, 2400000, 2500000,
-+	2600000, 2700000, 2800000, 2900000, 3000000, 3100000, 3200000, 3300000,
-+};
-+
-+static int pf1550_set_ramp_delay(struct regulator_dev *rdev, int ramp_delay)
++static irqreturn_t pf1550_onkey_irq_handler(int irq, void *data)
 +{
-+	int id = rdev_get_id(rdev);
-+	unsigned int ramp_bits = 0;
-+	int ret;
++	struct onkey_drv_data *onkey = data;
++	struct platform_device *pdev = to_platform_device(onkey->dev);
++	int i, state, irq_type = -1;
 +
-+	if (id > PF1550_VREFDDR)
-+		return -EACCES;
-+
-+	if (ramp_delay < 0 || ramp_delay > 6250)
-+		return -EINVAL;
-+
-+	ramp_delay = 6250 / ramp_delay;
-+	ramp_bits = ramp_delay >> 1;
-+
-+	ret = regmap_update_bits(rdev->regmap, rdev->desc->vsel_reg + 4, 0x10,
-+				 ramp_bits << 4);
-+	if (ret < 0)
-+		dev_err(&rdev->dev, "ramp failed, err %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int pf1550_set_suspend_enable(struct regulator_dev *rdev)
-+{
-+	const struct pf1550_desc *desc = container_of(rdev->desc,
-+						      struct pf1550_desc,
-+						      desc);
-+	unsigned int val = desc->stby_enable_mask;
-+
-+	return regmap_update_bits(rdev->regmap, desc->stby_enable_reg,
-+				  desc->stby_enable_mask, val);
-+}
-+
-+static int pf1550_set_suspend_disable(struct regulator_dev *rdev)
-+{
-+	const struct pf1550_desc *desc = container_of(rdev->desc,
-+						      struct pf1550_desc,
-+						      desc);
-+
-+	return regmap_update_bits(rdev->regmap, desc->stby_enable_reg,
-+				  desc->stby_enable_mask, 0);
-+}
-+
-+static int pf1550_buck_set_table_suspend_voltage(struct regulator_dev *rdev,
-+	       int uV)
-+{
-+	const struct pf1550_desc *desc = container_of(rdev->desc,
-+						      struct pf1550_desc,
-+						      desc);
-+	int ret;
-+
-+	ret = regulator_map_voltage_ascend(rdev, uV, uV);
-+	if (ret < 0) {
-+		dev_err(rdev_get_dev(rdev), "failed to map %i uV\n", uV);
-+		return ret;
-+	}
-+
-+	return regmap_update_bits(rdev->regmap, desc->stby_reg,
-+				  desc->stby_mask, ret);
-+}
-+
-+static int pf1550_buck_set_linear_suspend_voltage(struct regulator_dev *rdev,
-+	       int uV)
-+{
-+	const struct pf1550_desc *desc = container_of(rdev->desc,
-+						      struct pf1550_desc,
-+						      desc);
-+	int ret;
-+
-+	ret = regulator_map_voltage_linear(rdev, uV, uV);
-+	if (ret < 0) {
-+		dev_err(rdev_get_dev(rdev), "failed to map %i uV\n", uV);
-+		return ret;
-+	}
-+
-+	return regmap_update_bits(rdev->regmap, desc->stby_reg,
-+				  desc->stby_mask, ret);
-+}
-+
-+static const struct regulator_ops pf1550_sw1_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.set_suspend_enable = pf1550_set_suspend_enable,
-+	.set_suspend_disable = pf1550_set_suspend_disable,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.list_voltage = regulator_list_voltage_table,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-+	.set_suspend_voltage = pf1550_buck_set_table_suspend_voltage,
-+	.map_voltage = regulator_map_voltage_ascend,
-+	.set_ramp_delay = pf1550_set_ramp_delay,
-+};
-+
-+static const struct regulator_ops pf1550_sw2_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.set_suspend_enable = pf1550_set_suspend_enable,
-+	.set_suspend_disable = pf1550_set_suspend_disable,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.list_voltage = regulator_list_voltage_linear,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-+	.set_suspend_voltage = pf1550_buck_set_linear_suspend_voltage,
-+	.map_voltage = regulator_map_voltage_linear,
-+	.set_ramp_delay = pf1550_set_ramp_delay,
-+};
-+
-+static const struct regulator_ops pf1550_ldo1_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.set_suspend_enable = pf1550_set_suspend_enable,
-+	.set_suspend_disable = pf1550_set_suspend_disable,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.list_voltage = regulator_list_voltage_table,
-+	.map_voltage = regulator_map_voltage_ascend,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+};
-+
-+static const struct regulator_ops pf1550_ldo2_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.set_suspend_enable = pf1550_set_suspend_enable,
-+	.set_suspend_disable = pf1550_set_suspend_disable,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.list_voltage = regulator_list_voltage_linear,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.map_voltage = regulator_map_voltage_linear,
-+};
-+
-+static const struct regulator_ops pf1550_fixed_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.set_suspend_enable = pf1550_set_suspend_enable,
-+	.set_suspend_disable = pf1550_set_suspend_disable,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.list_voltage = regulator_list_voltage_linear,
-+};
-+
-+#define PF_VREF(_chip, match, _name, voltage)	{	\
-+	.desc = {	\
-+		.name = #_name,	\
-+		.of_match = of_match_ptr(match),	\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.n_voltages = 1,	\
-+		.ops = &pf1550_fixed_ops,	\
-+		.type = REGULATOR_VOLTAGE,	\
-+		.id = _chip ## _ ## _name,	\
-+		.owner = THIS_MODULE,	\
-+		.min_uV = (voltage),	\
-+		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+		.enable_mask = 0x1,	\
-+	},	\
-+	.stby_enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+	.stby_enable_mask = 0x2,	\
-+}
-+
-+#define PF_SW(_chip, match, _name, min, max, mask, step)	{	\
-+	.desc = {	\
-+		.name = #_name,	\
-+		.of_match = of_match_ptr(match),	\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.n_voltages = ((max) - (min)) / (step) + 1,	\
-+		.ops = &pf1550_sw2_ops,	\
-+		.type = REGULATOR_VOLTAGE,	\
-+		.id = _chip ## _ ## _name,	\
-+		.owner = THIS_MODULE,	\
-+		.min_uV = (min),	\
-+		.uV_step = (step),	\
-+		.linear_min_sel = 0,	\
-+		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-+		.vsel_mask = (mask),	\
-+		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+		.enable_mask = 0x1,	\
-+	},	\
-+	.stby_reg = _chip ## _PMIC_REG_ ## _name ## _STBY_VOLT,	\
-+	.stby_mask = (mask),	\
-+	.stby_enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+	.stby_enable_mask = 0x2,	\
-+}
-+
-+#define PF_LDO1(_chip, match, _name, mask, voltages)	{	\
-+	.desc = {	\
-+		.name = #_name,	\
-+		.of_match = of_match_ptr(match),	\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.n_voltages = ARRAY_SIZE(voltages),	\
-+		.ops = &pf1550_ldo1_ops,	\
-+		.type = REGULATOR_VOLTAGE,	\
-+		.id = _chip ## _ ## _name,	\
-+		.owner = THIS_MODULE,	\
-+		.volt_table = voltages, \
-+		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-+		.vsel_mask = (mask),	\
-+		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+		.enable_mask = 0x1,	\
-+	},	\
-+	.stby_enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+	.stby_enable_mask = 0x2,	\
-+}
-+
-+#define PF_LDO2(_chip, match, _name, mask, min, max, step)	{	\
-+	.desc = {	\
-+		.name = #_name,	\
-+		.of_match = of_match_ptr(match),	\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.n_voltages = ((max) - (min)) / (step) + 1,	\
-+		.ops = &pf1550_ldo2_ops,	\
-+		.type = REGULATOR_VOLTAGE,	\
-+		.id = _chip ## _ ## _name,	\
-+		.owner = THIS_MODULE,	\
-+		.min_uV = (min),	\
-+		.uV_step = (step),	\
-+		.linear_min_sel = 0,	\
-+		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-+		.vsel_mask = (mask),	\
-+		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+		.enable_mask = 0x1,	\
-+	},	\
-+	.stby_enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-+	.stby_enable_mask = 0x2,	\
-+}
-+
-+static struct pf1550_desc pf1550_regulators[] = {
-+	PF_SW(PF1550, "sw1", SW1, 600000, 1387500, 0x3f, 12500),
-+	PF_SW(PF1550, "sw2", SW2, 600000, 1387500, 0x3f, 12500),
-+	PF_SW(PF1550, "sw3", SW3, 1800000, 3300000, 0xf, 100000),
-+	PF_VREF(PF1550, "vrefddr", VREFDDR, 1200000),
-+	PF_LDO1(PF1550, "ldo1", LDO1, 0x1f, pf1550_ldo13_volts),
-+	PF_LDO2(PF1550, "ldo2", LDO2, 0xf, 1800000, 3300000, 100000),
-+	PF_LDO1(PF1550, "ldo3", LDO3, 0x1f, pf1550_ldo13_volts),
-+};
-+
-+static irqreturn_t pf1550_regulator_irq_handler(int irq, void *data)
-+{
-+	struct pf1550_regulator_info *info = data;
-+	struct device *dev = info->dev;
-+	struct platform_device *pdev = to_platform_device(dev);
-+	int i, irq_type = -1;
-+	unsigned int event;
-+
-+	for (i = 0; i < PF1550_REGULATOR_IRQ_NR; i++)
++	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++)
 +		if (irq == platform_get_irq(pdev, i))
 +			irq_type = i;
 +
 +	switch (irq_type) {
-+	/* The _LS interrupts indicate over-current event. The _HS interrupts
-+	 * which are more accurate and can detect catastrophic faults, issue
-+	 * an error event. The current limit FAULT interrupt is similar to the
-+	 * _HS'
-+	 */
-+	case PF1550_PMIC_IRQ_SW1_LS:
-+	case PF1550_PMIC_IRQ_SW2_LS:
-+	case PF1550_PMIC_IRQ_SW3_LS:
-+		event = REGULATOR_EVENT_OVER_CURRENT_WARN;
-+		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-+			if (!strcmp(rdev_get_name(info->rdevs[i]), "SW3"))
-+				regulator_notifier_call_chain(info->rdevs[i],
-+							      event, NULL);
++	case PF1550_ONKEY_IRQ_PUSHI:
++		state = 0;
 +		break;
-+	case PF1550_PMIC_IRQ_SW1_HS:
-+	case PF1550_PMIC_IRQ_SW2_HS:
-+	case PF1550_PMIC_IRQ_SW3_HS:
-+		event = REGULATOR_EVENT_OVER_CURRENT;
-+		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-+			if (!strcmp(rdev_get_name(info->rdevs[i]), "SW3"))
-+				regulator_notifier_call_chain(info->rdevs[i],
-+							      event, NULL);
-+		break;
-+	case PF1550_PMIC_IRQ_LDO1_FAULT:
-+	case PF1550_PMIC_IRQ_LDO2_FAULT:
-+	case PF1550_PMIC_IRQ_LDO3_FAULT:
-+		event = REGULATOR_EVENT_OVER_CURRENT;
-+		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-+			if (!strcmp(rdev_get_name(info->rdevs[i]), "LDO3"))
-+				regulator_notifier_call_chain(info->rdevs[i],
-+							      event, NULL);
-+		break;
-+	case PF1550_PMIC_IRQ_TEMP_110:
-+	case PF1550_PMIC_IRQ_TEMP_125:
-+		event = REGULATOR_EVENT_OVER_TEMP;
-+		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-+			regulator_notifier_call_chain(info->rdevs[i],
-+						      event, NULL);
++	case PF1550_ONKEY_IRQ_1SI:
++	case PF1550_ONKEY_IRQ_2SI:
++	case PF1550_ONKEY_IRQ_3SI:
++	case PF1550_ONKEY_IRQ_4SI:
++	case PF1550_ONKEY_IRQ_8SI:
++		state = 1;
 +		break;
 +	default:
-+		dev_err(dev, "regulator interrupt: irq %d occurred\n",
++		dev_err(onkey->dev, "onkey interrupt: irq %d occurred\n",
 +			irq_type);
++		return IRQ_HANDLED;
 +	}
++
++	input_event(onkey->input, EV_KEY, KEY_POWER, state);
++	input_sync(onkey->input);
 +
 +	return IRQ_HANDLED;
 +}
 +
-+static int pf1550_regulator_probe(struct platform_device *pdev)
++static int pf1550_onkey_probe(struct platform_device *pdev)
 +{
-+	const struct pf1550_ddata *pf1550 = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_config config = { };
-+	struct pf1550_regulator_info *info;
-+	int i, irq = -1, ret = 0;
++	struct onkey_drv_data *onkey;
++	struct input_dev *input;
++	bool key_power = false;
++	int i, irq, error;
 +
-+	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-+	if (!info)
++	onkey = devm_kzalloc(&pdev->dev, sizeof(*onkey), GFP_KERNEL);
++	if (!onkey)
 +		return -ENOMEM;
 +
-+	config.regmap = dev_get_regmap(pf1550->dev, NULL);
-+	if (!config.regmap)
++	onkey->dev = &pdev->dev;
++
++	onkey->pf1550 = dev_get_drvdata(pdev->dev.parent);
++	if (!onkey->pf1550->regmap)
 +		return dev_err_probe(&pdev->dev, -ENODEV,
-+				     "failed to get parent regmap\n");
++				     "failed to get regmap\n");
 +
-+	config.dev = pf1550->dev;
-+	config.regmap = pf1550->regmap;
-+	info->dev = &pdev->dev;
-+	info->pf1550 = pf1550;
++	onkey->wakeup = device_property_read_bool(pdev->dev.parent,
++						  "wakeup-source");
 +
-+	memcpy(info->regulator_descs, pf1550_regulators,
-+	       sizeof(info->regulator_descs));
-+
-+	for (i = 0; i < ARRAY_SIZE(pf1550_regulators); i++) {
-+		struct regulator_desc *desc;
-+
-+		desc = &info->regulator_descs[i].desc;
-+
-+		if ((desc->id == PF1550_SW2 && !pf1550->dvs2_enb) ||
-+		    (desc->id == PF1550_SW1 && !pf1550->dvs1_enb)) {
-+			/* OTP_SW2_DVS_ENB == 1? or OTP_SW1_DVS_ENB == 1? */
-+			desc->volt_table = pf1550_sw12_volts;
-+			desc->n_voltages = ARRAY_SIZE(pf1550_sw12_volts);
-+			desc->ops = &pf1550_sw1_ops;
-+		}
-+
-+		info->rdevs[i] = devm_regulator_register(&pdev->dev, desc,
-+							 &config);
-+		if (IS_ERR(info->rdevs[i]))
-+			return dev_err_probe(&pdev->dev,
-+					     PTR_ERR(info->rdevs[i]),
-+					     "failed to initialize regulator-%d\n",
-+					     i);
++	if (device_property_read_bool(pdev->dev.parent,
++				      "nxp,disable-key-power")) {
++		error = regmap_write(onkey->pf1550->regmap,
++				     PF1550_PMIC_REG_PWRCTRL1, 0);
++		if (error)
++			return dev_err_probe(&pdev->dev, error,
++					     "failed: disable turn system off");
++	} else {
++		key_power = true;
 +	}
 +
-+	platform_set_drvdata(pdev, info);
++	input = devm_input_allocate_device(&pdev->dev);
++	if (!input)
++		return dev_err_probe(&pdev->dev, -ENOMEM,
++				     "failed to allocate the input device\n");
 +
-+	for (i = 0; i < PF1550_REGULATOR_IRQ_NR; i++) {
++	input->name = pdev->name;
++	input->phys = "pf1550-onkey/input0";
++	input->id.bustype = BUS_HOST;
++
++	if (key_power)
++		input_set_capability(input, EV_KEY, KEY_POWER);
++
++	onkey->input = input;
++	platform_set_drvdata(pdev, onkey);
++
++	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
 +		irq = platform_get_irq(pdev, i);
 +		if (irq < 0)
 +			return irq;
 +
-+		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+						pf1550_regulator_irq_handler,
-+						IRQF_NO_SUSPEND,
-+						"pf1550-regulator", info);
-+		if (ret)
-+			return dev_err_probe(&pdev->dev, ret,
++		error = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++						  pf1550_onkey_irq_handler,
++						  IRQF_NO_SUSPEND,
++						  "pf1550-onkey", onkey);
++		if (error)
++			return dev_err_probe(&pdev->dev, error,
 +					     "failed: irq request (IRQ: %d)\n",
 +					     i);
 +	}
 +
++	error = input_register_device(input);
++	if (error)
++		return dev_err_probe(&pdev->dev, error,
++				     "failed to register input device\n");
++
++	device_init_wakeup(&pdev->dev, onkey->wakeup);
++
 +	return 0;
 +}
 +
-+static const struct platform_device_id pf1550_regulator_id[] = {
-+	{ "pf1550-regulator", },
++static int pf1550_onkey_suspend(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
++	int i, irq;
++
++	if (!device_may_wakeup(&pdev->dev))
++		regmap_write(onkey->pf1550->regmap,
++			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
++			     ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
++			     ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI);
++	else
++		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
++			irq = platform_get_irq(pdev, i);
++			if (irq > 0)
++				enable_irq_wake(irq);
++		}
++
++	return 0;
++}
++
++static int pf1550_onkey_resume(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
++	int i, irq;
++
++	if (!device_may_wakeup(&pdev->dev))
++		regmap_write(onkey->pf1550->regmap,
++			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
++			     ~((u8)(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI |
++			     ONKEY_IRQ_2SI | ONKEY_IRQ_3SI | ONKEY_IRQ_4SI |
++			     ONKEY_IRQ_8SI)));
++	else
++		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
++			irq = platform_get_irq(pdev, i);
++			if (irq > 0)
++				disable_irq_wake(irq);
++		}
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(pf1550_onkey_pm_ops, pf1550_onkey_suspend,
++			 pf1550_onkey_resume);
++
++static const struct platform_device_id pf1550_onkey_id[] = {
++	{ "pf1550-onkey", },
 +	{ /* sentinel */ }
 +};
-+MODULE_DEVICE_TABLE(platform, pf1550_regulator_id);
++MODULE_DEVICE_TABLE(platform, pf1550_onkey_id);
 +
-+static struct platform_driver pf1550_regulator_driver = {
++static struct platform_driver pf1550_onkey_driver = {
 +	.driver = {
-+		   .name = "pf1550-regulator",
-+		   },
-+	.probe = pf1550_regulator_probe,
-+	.id_table = pf1550_regulator_id,
++		.name = "pf1550-onkey",
++		.pm   = pm_sleep_ptr(&pf1550_onkey_pm_ops),
++	},
++	.probe = pf1550_onkey_probe,
++	.id_table = pf1550_onkey_id,
 +};
-+module_platform_driver(pf1550_regulator_driver);
++module_platform_driver(pf1550_onkey_driver);
 +
-+MODULE_DESCRIPTION("NXP PF1550 regulator driver");
-+MODULE_AUTHOR("Robin Gong <yibin.gong@freescale.com>");
++MODULE_AUTHOR("Freescale Semiconductor");
++MODULE_DESCRIPTION("PF1550 onkey Driver");
 +MODULE_LICENSE("GPL");
 
 -- 
