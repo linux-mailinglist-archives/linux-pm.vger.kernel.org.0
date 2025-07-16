@@ -1,220 +1,127 @@
-Return-Path: <linux-pm+bounces-30910-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30911-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C08E0B07637
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 14:51:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4879B0769B
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 15:09:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DBB77BC4A2
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 12:50:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE56F3B6A39
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 13:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CE11891AB;
-	Wed, 16 Jul 2025 12:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025FB2F4309;
+	Wed, 16 Jul 2025 13:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Kr13GJL+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qoT5j6+1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADC5DDAD;
-	Wed, 16 Jul 2025 12:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD41E2F3C1D;
+	Wed, 16 Jul 2025 13:09:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752670297; cv=none; b=SKlWgjlYXwvsbOcT5XI8HqYZqJkwuidKGdF2GQjEHOMVgGUmoCRWXuATSQDwEaWxBHtr6BA7CqCUnGYWc0T1eCovwDy5rAhfoGm+EK3jHbgHRY1+CEwuQ4MrbZMxx7pbIqx/TkaFxgA1QJAJBOVmfkJV8X0hZLttsfHzVqOtRj8=
+	t=1752671343; cv=none; b=RZF2ACXzIihvYfnFRxEVdVoa0UCHF2SLY5URRjcPnZxkUyqRfXqvHNKjJE2COcOf9Y4hJeC8vsCXaEHPdRmwGDXGZmOj/uZnDxpG05UnhLbAj4hbEr98qXH7UmUm3iZlhnyv6zagytCO5SKjCIpg21wnEdnyNrnC5esC7KHW1Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752670297; c=relaxed/simple;
-	bh=J54eoEWwWNy+ylE6R6oz//6xnGPALJEFSyh5pY2yyfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tnxhH9w6RlSBW0ksFXqBMQPxIZgyMNVqc3FcZPvID2oCAGPoHkJwWIYJD4nVHuN4aBVCEUBXkMSpb37le8UkuVwHyELELz6au+uBypH6v7waZMbB1ZKzBNbD35cW0Jt7Q2/vOGpUQTvpLsz9OUYI+Oh6urL3p8jjr+1F2lVivp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Kr13GJL+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C85C4CEF4;
-	Wed, 16 Jul 2025 12:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752670296;
-	bh=J54eoEWwWNy+ylE6R6oz//6xnGPALJEFSyh5pY2yyfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Kr13GJL+eokFFyuUKDnzt0/0vk+dLernPfT1kKSAiOmKkDGx4rFJw7s4CXlbzaTpo
-	 6gXMQLkr0bScacKwD45raj2G5MxUmuKGtySEU+SDrI3PrCyzoi+OP17DVfWPVQ5Kun
-	 dotUfIgmxZ1BTC3yxwaOPUmz+iBRqFdRxDz2gq3g=
-Date: Wed, 16 Jul 2025 14:51:34 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
-	Guenter Roeck <groeck@chromium.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v11 6/7] power: reset: add PSCR NVMEM Driver for
- Recording Power State Change Reasons
-Message-ID: <2025071631-henna-synthesis-9961@gregkh>
-References: <20250618120255.3141862-7-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1752671343; c=relaxed/simple;
+	bh=3sNMrCCvmOrN1UDF9Di67oG7Y+yXP/L+hr2KnWDbfcA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=YvrdmuK7ffofBP9igVxXzS7OVuvKSTqIMPsYItN5cPRZR/OZGRQ1QBka1Qvr1r0XDtultUugmYy/8z0SfPKbqL4r/oWLhMApYUlQBIpRtv1PpT6B0FwyhTLlRK/GAwNCbdsv4c11SWaB1xuL2EViXBHdEUs0Lmbyx3Qvk5g7nIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qoT5j6+1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E068C4CEF0;
+	Wed, 16 Jul 2025 13:08:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752671343;
+	bh=3sNMrCCvmOrN1UDF9Di67oG7Y+yXP/L+hr2KnWDbfcA=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=qoT5j6+1E+4dAhDM8fkvRfa1Cauhp+Xezx0aCuNnSDbx44WDevi6G73dQek5rXok/
+	 kFlLhnneEjgTYHyGgbcsaLBbsBtxh2AjMopEU1GZm0u7r8Os+AFc7FB5jSkJkyX7Yq
+	 UCGdlHQ13qNUFlCtay6Nb/M8yumZ7RqP+ILSPeg77g93aQXPqLBpxl+9zbA9sXEZ4/
+	 AJ2EjjlF3bWMDt5qNorXKBDqbipsOJ6vy8F6+S4pwjU9RpSiRQ698EPinhuiSMSoBH
+	 y25bfeXl28Z1KFe3fkdPJl9vt6Dfq7oPZkcsN0ZG8P4AUL9gyJXYQ/THXpT1IV61+H
+	 eQ6y6pL2YMeYg==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250618120255.3141862-7-o.rempel@pengutronix.de>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Jul 2025 15:08:57 +0200
+Message-Id: <DBDI4X0LDTPZ.16PODOZINXKEP@kernel.org>
+Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support
+ to genpd
+Cc: "Saravana Kannan" <saravanak@google.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, <linux-pm@vger.kernel.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Michael Grzeschik" <m.grzeschik@pengutronix.de>, "Bjorn Andersson"
+ <andersson@kernel.org>, "Abel Vesa" <abel.vesa@linaro.org>, "Peng Fan"
+ <peng.fan@oss.nxp.com>, "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
+ "Johan Hovold" <johan@kernel.org>, "Maulik Shah"
+ <maulik.shah@oss.qualcomm.com>, "Michal Simek" <michal.simek@amd.com>,
+ "Konrad Dybcio" <konradybcio@kernel.org>, "Thierry Reding"
+ <thierry.reding@gmail.com>, "Jonathan Hunter" <jonathanh@nvidia.com>,
+ "Hiago De Franco" <hiago.franco@toradex.com>, "Geert Uytterhoeven"
+ <geert@linux-m68k.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>
+To: "Ulf Hansson" <ulf.hansson@linaro.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20250701114733.636510-1-ulf.hansson@linaro.org>
+ <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+ <DBCI05B4Y2ZX.VM9KNB61PGU2@kernel.org>
+ <CAPDyKFqUHmMi6tBOJyA2YAOYLX-c_kDMskyRTC1Q+c9B4q_g8w@mail.gmail.com>
+In-Reply-To: <CAPDyKFqUHmMi6tBOJyA2YAOYLX-c_kDMskyRTC1Q+c9B4q_g8w@mail.gmail.com>
 
-On Wed, Jun 18, 2025 at 02:02:54PM +0200, Oleksij Rempel wrote:
-> This driver utilizes the Power State Change Reasons Recording (PSCRR)
-> framework to store specific power state change information, such as
-> shutdown or reboot reasons, into a designated non-volatile memory
-> (NVMEM) cell.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Tested-by: Francesco Valla <francesco@valla.it>
-> ---
-> changes v6:
-> - rename pscr_reason to psc_reason
-> changes v5:
-> - avoid a build against NVMEM=m
-> changes v4:
-> - remove devicetree dependencies
-> ---
->  drivers/power/reset/Kconfig       |  22 +++
->  drivers/power/reset/Makefile      |   1 +
->  drivers/power/reset/pscrr-nvmem.c | 254 ++++++++++++++++++++++++++++++
->  3 files changed, 277 insertions(+)
->  create mode 100644 drivers/power/reset/pscrr-nvmem.c
-> 
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 69e038e20731..3affef932e4d 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -354,3 +354,25 @@ menuconfig PSCRR
->  	  be recorded unless hardware provides the reset cause.
->  
->  	  If unsure, say N.
-> +
-> +if PSCRR
-> +
-> +config PSCRR_NVMEM
-> +	tristate "Generic NVMEM-based Power State Change Reason Recorder"
-> +	depends on NVMEM || !NVMEM
-> +	help
-> +	  This option enables support for storing power state change reasons
-> +	  (such as shutdown, reboot, or power failure events) into a designated
-> +	  NVMEM (Non-Volatile Memory) cell.
-> +
-> +	  This feature allows embedded systems to retain power transition
-> +	  history even after a full system restart or power loss. It is useful
-> +	  for post-mortem debugging, automated recovery strategies, and
-> +	  improving system reliability.
-> +
-> +	  The NVMEM cell used for storing these reasons can be dynamically
-> +	  configured via module parameters.
+On Wed Jul 16, 2025 at 2:46 PM CEST, Ulf Hansson wrote:
+> On Tue, 15 Jul 2025 at 10:50, Danilo Krummrich <dakr@kernel.org> wrote:
+>>
+>> Hi Ulf,
+>>
+>> On Wed Jul 9, 2025 at 1:30 PM CEST, Ulf Hansson wrote:
+>> > I decided it was time to give this a try, so I have queued this up for
+>> > v6.17 via the next branch at my pmdomain tree.
+>> >
+>> > If you encounter any issues, please let me know so I can help to fix t=
+hem.
+>>
+>> Can you please address my concern in patch 17 ("driver core: Export
+>> get_dev_from_fwnode()")?
+>>
+>> Since this has been applied already, a subsequent patch would be perfect=
+ly fine.
+>
+> Hi Danilo,
+>
+> As Greg and Saravana were happy, I didn't want to hold back the whole
+> series only because of a minor comment on some missing documentation.
 
-Module parameters?  Why?
+Fair enough -- yet, a brief reply asking if it can be done as a follow-up w=
+ould
+have been appreciated.
 
-> +
-> +	  If unsure, say N.
-> +
-> +endif
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index 025da19cb335..cc9008c8bb02 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -34,6 +34,7 @@ obj-$(CONFIG_POWER_RESET_SYSCON) += syscon-reboot.o
->  obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
->  obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
->  obj-$(CONFIG_PSCRR) += pscrr.o
-> +obj-$(CONFIG_PSCRR_NVMEM) += pscrr-nvmem.o
->  obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
->  obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
->  obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
-> diff --git a/drivers/power/reset/pscrr-nvmem.c b/drivers/power/reset/pscrr-nvmem.c
-> new file mode 100644
-> index 000000000000..7d02d989893f
-> --- /dev/null
-> +++ b/drivers/power/reset/pscrr-nvmem.c
-> @@ -0,0 +1,254 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * pscrr_nvmem.c - PSCRR backend for storing shutdown reasons in small NVMEM
-> + *		   cells
-> + *
-> + * This backend provides a way to persist power state change reasons in a
-> + * non-volatile memory (NVMEM) cell, ensuring that reboot causes can be
-> + * analyzed post-mortem. Unlike traditional logging to eMMC or NAND, which
-> + * may be unreliable during power failures, this approach allows storing
-> + * reboot reasons in small, fast-access storage like RTC scratchpads, EEPROM,
-> + * or FRAM.
-> + *
-> + * The module allows dynamic configuration of the NVMEM device and cell
-> + * via module parameters:
-> + *
-> + * Example usage:
-> + *   modprobe pscrr-nvmem nvmem_name=pcf85063_nvram0 cell_name=pscr@0,0
+I don't think it's that minor. The race may be unlikely to happen, but if i=
+t
+happens because someone isn't careful with this (now exported) API - and I'=
+m
+absolutely sure it's only gonna be a matter of time until that happens -, i=
+t'll
+be painful. :(
 
-Ugh, no, this isn't the 1990's anymore.  Module parameters don't make
-sense for dynamic systems with multiple devices and names and the like.
-Please use a proper api for this instead of this static one.
+> But, yes, let me look into it. It may take a while though, as vacation
+> is getting closer. If you want to send a patch yourself, please, feel
+> free to do it.
 
-> +/*
-> + * Module parameters:
-> + *   nvmem_name: Name of the NVMEM device (e.g. "pcf85063_nvram0").
-> + *   cell_name : Sysfs name of the cell on that device (e.g. "pscr@0,0").
-> + */
-> +static char *nvmem_name;
-> +module_param(nvmem_name, charp, 0444);
-> +MODULE_PARM_DESC(nvmem_name, "Name of the NVMEM device (e.g. pcf85063_nvram0)");
-> +
-> +static char *cell_name;
-> +module_param(cell_name, charp, 0444);
-> +MODULE_PARM_DESC(cell_name, "Sysfs name of the NVMEM cell (e.g. pscr@0,0)");
+Ok, let me see if I can get to it.
 
-Again, don't.  Please don't.
+> Note that, while at it, we should probably also add some documentation
+> of device_set_node() (next to get_dev_from_fwnode()) as it also lacks
+> it.
 
-You now only have one name, and one device.  WHat happens to the next
-system that has multiple ones?  And who is enforcing this arbitrary
-naming scheme?  Why is that now a user/kernel abi that can never change?
+Agreed!
 
-> +	pr_info("PSCRR-nvmem: Loaded (nvmem=%s, cell=%s), can store 0..%zu\n",
-> +		nvmem_name, cell_name, priv->max_val);
+Have a nice vacation!
 
-Again, when code works, it is quiet.
-
-> +static void __exit pscrr_nvmem_exit(void)
-> +{
-> +	pscrr_core_exit();
-> +
-> +	if (priv) {
-> +		if (priv->cell) {
-> +			nvmem_cell_put(priv->cell);
-> +			priv->cell = NULL;
-> +		}
-> +		if (priv->nvmem) {
-> +			nvmem_device_put(priv->nvmem);
-> +			priv->nvmem = NULL;
-> +		}
-> +		kfree(priv);
-> +		priv = NULL;
-> +	}
-> +
-> +	pr_info("pscrr-nvmem: Unloaded\n");
-
-Again, please be quiet.
-
-And use pr_fmt().
-
-thanks,
-
-greg k-h
+- Danilo
 
