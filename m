@@ -1,640 +1,452 @@
-Return-Path: <linux-pm+bounces-30950-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FC06B07F54
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 23:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26A9DB07F62
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 23:15:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6041169FB4
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 21:11:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B8BA582A51
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Jul 2025 21:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E110D291894;
-	Wed, 16 Jul 2025 21:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8701E1D79BE;
+	Wed, 16 Jul 2025 21:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r9alFGzo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TYi3mjlh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632871D86FF
-	for <linux-pm@vger.kernel.org>; Wed, 16 Jul 2025 21:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD1E19E83C
+	for <linux-pm@vger.kernel.org>; Wed, 16 Jul 2025 21:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752700290; cv=none; b=lybGJSXBOCM+j+N1XrfFcIvMRoPPkMS2wpI1INaWwOc0IQs3djLnn9fOQyvCQba5PuRfh++3hJfHblQb/iPH9B2GxKnerGvcjdi4bg38FD44h9rHzHkEWV9lLMkkF4cUhoX9DRPXNOcarvQQjU75D5xRHArdgCx2YYoVx1axozw=
+	t=1752700529; cv=none; b=SmsWWL6g0TgFtu9Y2RDAEkCCgrTPMZSCB8vw03iXflTvtrxBgNRaE5h5FWWaY51X1lVXggsuW3X7RRc00V0yw8qYhKxgTf7tWeuO02nkr/V+vEiF+zMkaOuR1mWH0vfp2+dKazbTiJrdpFZTn39s/yHEM0W2z5ODdrvb3ZjK2Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752700290; c=relaxed/simple;
-	bh=khIpO9nEi5JNAN+84qJe8YJsbNQ5sLQK5mEclr5WCkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u0cBxMgkWtUOAigwjsPrSteZ0GrEbuQ+dBvdGrzXFJcT+Ql5zdSqjc4RgRnK5s/suordWGQln4gQ4fk72OgbLzEESlq6lgOsg9uE593GFhRYtRc2cb/Js3Nr3F2+eNSUn6K7vJB9hGbkzJ2Xl4nmVilhaSye5yOG9tF/xQgiAss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r9alFGzo; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a54700a46eso172088f8f.1
-        for <linux-pm@vger.kernel.org>; Wed, 16 Jul 2025 14:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752700287; x=1753305087; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cYWXOrwNiK0Go9DsX9otPJZKea4HQNwTD7zd0doQnOc=;
-        b=r9alFGzoDyF+SWoiNWW7rTnTyrWHJDRTjjgITnHFGNik2BqcBAytnnEHgIAIlkuyaq
-         YvD4XCJ4cZ9IN3PERGyh2ohEAb4igiMstn+QS5ysHF9eouxyV/7+R4zSLvzgZUfx3QvP
-         gAmVkXAua0VaF4zZwPaTtK3bs7p5hp1DbGRwLfnQ18U9OmvrPczc4+yS1SKwacxZ4/Pl
-         nt+ty0qpoX1waHsbvJdt3RhRGvIeOyjr1qlKu0mtftCYSw3qUHov2/8SvsPj6OuX9Upb
-         oM17Z/WjyiwE/MS6W4FH5p099AhqsNdkhZ+/rY9byA7ZnpUgXG3Ub9+kYB+np8I0CK8G
-         PNUw==
+	s=arc-20240116; t=1752700529; c=relaxed/simple;
+	bh=FukWgzNsJKare6BXZbNXusV9s6vX5Y2YzA0r+72g6Fs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IjGOrc9OKAoMp2x3ZG67ikvDXgu/cqJMhcQix40yq123Zdm0xhjzznexw05yQiqm87oByce6aEVh0yjwWETtKuiaO+DVNMDimz7iJvugcojHVNMuHxqW3xwlK0tKbggkSIwEzdzwlKScVE9g/WThrqjFim0Z1qJjq1Tzv4OE0dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TYi3mjlh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1752700526;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jah8q+9VF9jPv6RX7CYskal9Vq9xQi30YSBCNspuCSg=;
+	b=TYi3mjlhAjdfJeXLRRZNZ42bjdv6qCfdTkJwMJwK8TM9fF+qQp6sSVhizeRCl2Lyyfb2yI
+	zy9t/ryjz7V6eAs/Szr6vHAa2LeuwwddodQNgM5eeKvKn5oQUkWnKz60wHl6uKt21vxnNf
+	IfA/E6H8yJVOwQkk7PDFJC4s6MaSdsM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-399-P3mWhvK6OXCZxJYOsATvKw-1; Wed, 16 Jul 2025 17:15:24 -0400
+X-MC-Unique: P3mWhvK6OXCZxJYOsATvKw-1
+X-Mimecast-MFC-AGG-ID: P3mWhvK6OXCZxJYOsATvKw_1752700522
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ae0cd07eeb2so18263566b.3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Jul 2025 14:15:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752700287; x=1753305087;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1752700522; x=1753305322;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cYWXOrwNiK0Go9DsX9otPJZKea4HQNwTD7zd0doQnOc=;
-        b=bn/N0W/LpcA+XUSVGNF3mkqDeK6pAuake0I8fPslmtPalXxmia4An14WnPtl1hVee3
-         AWBIythYc8mAxGBNfxPHNNnH7MqnO1FcaOJKAD68TiBuZy+fPpYB9LBpLh+lJWSHgA7C
-         u2y81ptTqzAj1UA9hGvr1JGLuch8Rr5AYgFeW+OFqNMCcEKnWwH0NomL6SYvfSwKWeQY
-         nKx3xoH+hUjFaMQlTyicwLu7b7w20mnQ/R3uI8MZbNLw2u0QVtxljyy5dLiHfFu3qHkl
-         9RcVBrRbGODsDuJbWNw9qHsQY50AeshArU6Q8gniON/RIjskqJ5NiTCZVVAoGFMjo3D7
-         CBbg==
-X-Forwarded-Encrypted: i=1; AJvYcCVc17dLuDuEM2mRXRGqbRSH816TJkE9cWjOk/DY5QLADNJWp4eRPPclUJuPpGFUpzeU1gQfcSXrfw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtMSd6jL21HOTG40iV/zUAV15pYrODGBq4QGVgd8rpdFlh96J9
-	Ta+Oz/xCsR0yPNSKgcUAYYxNrhogK8jKi1kHC4C2ZC9gQLKRYJVnMTUxRMHsdNPbQI4=
-X-Gm-Gg: ASbGncsdJ6tSCj4v/T6teSEHMw3UHGVfQwdhUxMQqctBL05EAg9vKhhEr0/Wh5XLw/2
-	3vLRyIucG/urn0AS5x1n5NryLJYKSS7Rtjf/pKRbFpR/92w6yoT3VZvxMPKC7KOIRcq+VAGEneL
-	UAYeYogCElLDYb/wdjBa9NVyrJPUEqIOm4CZWexKvPJ862WJVz29mVnLIUkKUiLsFxZ94aopJBd
-	a8MExixbwdi+VSdCjMyl0sZBZQTqZ0pz/bLbRDdbuL5Kzi2UUbptkyvk6tCt417EQNxeOti5E/c
-	ctH5eSlXeIb9hImuIq5eMhai9vIr2WcDjsRSgNHfOT/3kCwFW3YDBFg+JlZ0J08mwLiTQYhZp6B
-	bcAqNbqwfP9+1hzY9mFaRI+gsdwZEo3XWUOrO07pAvQjsEv1/bK79A50G+a5I
-X-Google-Smtp-Source: AGHT+IEbtnGkx+XfY6oPS27DeBh2gAEVWp32K89aS6BpC+8luM0wQ46Jt/i5p231dSJ/9oZhKVLoBg==
-X-Received: by 2002:a5d:5f02:0:b0:3a4:f520:8bfc with SMTP id ffacd0b85a97d-3b613e984aemr311543f8f.36.1752700286621;
-        Wed, 16 Jul 2025 14:11:26 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8dc1e4fsm18700417f8f.21.2025.07.16.14.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 14:11:25 -0700 (PDT)
-Date: Wed, 16 Jul 2025 23:11:23 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: John Madieu <john.madieu.xa@bp.renesas.com>
-Cc: conor+dt@kernel.org, geert+renesas@glider.be, krzk+dt@kernel.org,
-	rafael@kernel.org, biju.das.jz@bp.renesas.com,
-	devicetree@vger.kernel.org, john.madieu@gmail.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, lukasz.luba@arm.com,
-	magnus.damm@gmail.com, robh@kernel.org, rui.zhang@intel.com,
-	sboyd@kernel.org, niklas.soderlund+renesas@ragnatech.se
-Subject: Re: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
- the Renesas RZ/G3E SoC
-Message-ID: <aHgVe0YwPWapIYed@mai.linaro.org>
-References: <20250522182252.1593159-1-john.madieu.xa@bp.renesas.com>
- <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com>
+        bh=jah8q+9VF9jPv6RX7CYskal9Vq9xQi30YSBCNspuCSg=;
+        b=jFXXnO+hUlqOQTXUaXFKwymOOnUB53nJDUjqaw0WEMPJ7L/OlaYRggBpuwshppPyVY
+         z/LH5i7khw3/ntCS3WIwBmj3+NHcoOGAKvT/7zBQdpclOZz/0BvOnvECJ145faXykEfJ
+         w2fRXsStAPVxyT8ExY1YvGhXAVgJssCUFSvi3fkBqCxBoX1RaK9PnfjgyUPyc23WGLBq
+         ZivxXWv8cejGzmRX99OHUqXwFvEg+kkG+/eJYXM36+jI3mTQkPQnHs7eVsFNbJZMr+z7
+         FrlVCBh6vQFNdJ0RtY/WNGrqe/2FKYKU3Alv2xnA3g70w7d4X/038CPQbkIUGGbTyUvH
+         M/gw==
+X-Forwarded-Encrypted: i=1; AJvYcCViQVIzOeHIVai9rEhd4DrojVdE15a/+xEMcs9neRujvabnlALatt3MdZZ97xsCoWneqpg1ffE0EQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7twfvBrMTfxHkptiPD7eNHcC6aTO68clyK+65gy+75lLKEOpF
+	lcAxvIhJ4h35EUBilirekjRf2upSoFopYSHt9r9OLFL84mUGfm95PLIwyOGc6X7/YKyWcoCQN+3
+	8ObOdmJXw/yxRedpK5f8vC0V+fxVSYfZR2oG8pRJYChQNq6Td7eaxT+YgUKBYGZ5xscPBga0=
+X-Gm-Gg: ASbGncv+DRCqIF/mHLED/ArRxD/cpV8F5UhZAbZngk+su1wRHROpHzmzoBc58EazXK6
+	DvJaWD8/krXov/D/Qkt5xxW+Y9CKgz+dlHXaXdqIk8EmPXhCvVIEk6IgUUg0q05yv3jSBQe07kU
+	ynBF8/IvPpL4/Ornu1rGB+6Yg0A2zQTABkuU1pObfAP8Z4OGmDUkoMifJxe+zKKry4YvPuySTyM
+	wRmFr7emmnuJ6eJ6rbrXGtgP497tBCjppwdaiVdFEubXDbbGILV2WarZ4zK2Uh+l+do7jwpkGUf
+	4XeQZS3I7yRFE4e3g9KC5YMUpoUaHZ4vRm7oliKC5ItNtHmQCU4huMFaWzG+ELf+hcbzd9F3aJu
+	UjwbuK6ZaWgNx0hMjYhJXpcgSZr4c2l0S88AjS+KpLZs8PXxFTElAdemhjF9MUuFzmcdAhnwGB3
+	DjAwjJdwhmma67MA==
+X-Received: by 2002:a17:907:3eaa:b0:ad8:a41a:3cd2 with SMTP id a640c23a62f3a-ae9cddce21dmr452979466b.16.1752700521557;
+        Wed, 16 Jul 2025 14:15:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEtCyRAn7nT3+0uhM14bj2reHGYguqzCm6M5R2kyjo+YQ4KRhh8QNbmq0gfJHnbvApmLpqNzw==
+X-Received: by 2002:a17:907:3eaa:b0:ad8:a41a:3cd2 with SMTP id a640c23a62f3a-ae9cddce21dmr452976266b.16.1752700521047;
+        Wed, 16 Jul 2025 14:15:21 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7ee8d9fsm1227513066b.46.2025.07.16.14.15.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Jul 2025 14:15:20 -0700 (PDT)
+Message-ID: <5f6af744-7f07-4d7a-a89a-3c543c92c1f9@redhat.com>
+Date: Wed, 16 Jul 2025 23:15:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] power: supply: Add adc-battery-helper
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+References: <20250107113346.170612-1-hdegoede@redhat.com>
+ <20250107113346.170612-2-hdegoede@redhat.com>
+ <CACRpkdaStgNdQTivNb693wvzZ+3OXCeD7977JVcZqVhyv9FOgw@mail.gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CACRpkdaStgNdQTivNb693wvzZ+3OXCeD7977JVcZqVhyv9FOgw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com>
 
-On Thu, May 22, 2025 at 08:22:46PM +0200, John Madieu wrote:
-> The RZ/G3E SoC integrates a Temperature Sensor Unit (TSU) block designed
-> to monitor the chip's junction temperature. This sensor is connected to
-> channel 1 of the APB port clock/reset and provides temperature measurements.
+Hi Linus,
+
+Thank you for your review / insights
+and sorry for the quite slow reply.
+
+I agree with almost everything you've said and
+I'll implement the suggested changes for v3
+of this patch-series.
+
+On 9-Jan-25 7:50 PM, Linus Walleij wrote:
+> Hi Hans,
 > 
-> It also requires calibration values stored in the system controller registers
-> for accurate temperature measurement. Add a driver for the Renesas RZ/G3E TSU.
+> thanks for your patch!
 > 
-> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> ---
+> Overall I really like the looks of this.
 > 
-> Changes:
+> Some high-level questions, and sorry for the verbiage I got
+> a bit carried away when refreshing my memories of this type of
+> work:
 > 
-> v1 -> v2: fixes IRQ names
-> v2 -> v3: no changes
-> v3 -> v4: no changes
-> v5: removes curly braces arround single-line protected scoped guards
-> v6: Clarified comments in driver
+> On Tue, Jan 7, 2025 at 12:34 PM Hans de Goede <hdegoede@redhat.com> wrote:
 > 
->  MAINTAINERS                             |   7 +
->  drivers/thermal/renesas/Kconfig         |   7 +
->  drivers/thermal/renesas/Makefile        |   1 +
->  drivers/thermal/renesas/rzg3e_thermal.c | 443 ++++++++++++++++++++++++
->  4 files changed, 458 insertions(+)
->  create mode 100644 drivers/thermal/renesas/rzg3e_thermal.c
+>> +static int adc_battery_helper_get_capacity(struct adc_battery_helper *help)
+>> +{
+>> +       /*
+>> +        * OCV voltages in uV for 0-110% in 5% increments, the 100-110% is
+>> +        * for LiPo HV (High-Voltage) bateries which can go up to 4.35V
+>> +        * instead of the usual 4.2V.
+>> +        */
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 79a8e2c73908..eb11494795e8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21161,6 +21161,13 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
->  F:	drivers/iio/potentiometer/x9250.c
->  
-> +RENESAS RZ/G3E THERMAL SENSOR UNIT DRIVER
-> +M:	John Madieu <john.madieu.xa@bp.renesas.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-> +F:	drivers/thermal/renesas/rzg3e_thermal.c
-> +
->  RESET CONTROLLER FRAMEWORK
->  M:	Philipp Zabel <p.zabel@pengutronix.de>
->  S:	Maintained
-> diff --git a/drivers/thermal/renesas/Kconfig b/drivers/thermal/renesas/Kconfig
-> index dcf5fc5ae08e..10cf90fc4bfa 100644
-> --- a/drivers/thermal/renesas/Kconfig
-> +++ b/drivers/thermal/renesas/Kconfig
-> @@ -26,3 +26,10 @@ config RZG2L_THERMAL
->  	help
->  	  Enable this to plug the RZ/G2L thermal sensor driver into the Linux
->  	  thermal framework.
-> +
-> +config RZG3E_THERMAL
-> +	tristate "Renesas RZ/G3E thermal driver"
-> +	depends on ARCH_RENESAS || COMPILE_TEST
-> +	help
-> +	  Enable this to plug the RZ/G3E thermal sensor driver into the Linux
-> +	  thermal framework.
-> diff --git a/drivers/thermal/renesas/Makefile b/drivers/thermal/renesas/Makefile
-> index bf9cb3cb94d6..5a3eba0dedd0 100644
-> --- a/drivers/thermal/renesas/Makefile
-> +++ b/drivers/thermal/renesas/Makefile
-> @@ -3,3 +3,4 @@
->  obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
->  obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
->  obj-$(CONFIG_RZG2L_THERMAL)	+= rzg2l_thermal.o
-> +obj-$(CONFIG_RZG3E_THERMAL)	+= rzg3e_thermal.o
-> diff --git a/drivers/thermal/renesas/rzg3e_thermal.c b/drivers/thermal/renesas/rzg3e_thermal.c
-> new file mode 100644
-> index 000000000000..348229da9ef4
-> --- /dev/null
-> +++ b/drivers/thermal/renesas/rzg3e_thermal.c
-> @@ -0,0 +1,443 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Renesas RZ/G3E TSU Temperature Sensor Unit
-> + *
-> + * Copyright (C) 2025 Renesas Electronics Corporation
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +#include <linux/thermal.h>
-> +#include <linux/units.h>
-> +
-> +#include "../thermal_hwmon.h"
-> +
-> +/* SYS Trimming register offsets macro */
-> +#define SYS_TSU_TRMVAL(x) (0x330 + (x) * 4)
-> +
-> +/* TSU Register offsets and bits */
-> +#define TSU_SSUSR		0x00
-> +#define TSU_SSUSR_EN_TS		BIT(0)
-> +#define TSU_SSUSR_ADC_PD_TS	BIT(1)
-> +#define TSU_SSUSR_SOC_TS_EN	BIT(2)
-> +
-> +#define TSU_STRGR		0x04
-> +#define TSU_STRGR_ADST		BIT(0)
-> +
-> +#define TSU_SOSR1		0x08
-> +#define TSU_SOSR1_ADCT_8	0x03
-> +#define TSU_SOSR1_OUTSEL_AVERAGE	BIT(9)
-> +
-> +/* Sensor Code Read Register */
-> +#define TSU_SCRR		0x10
-> +#define TSU_SCRR_OUT12BIT_TS	GENMASK(11, 0)
-> +
-> +/* Sensor Status Register */
-> +#define TSU_SSR			0x14
-> +#define TSU_SSR_CONV_RUNNING	BIT(0)
-> +
-> +/* Compare Mode Setting Register */
-> +#define TSU_CMSR		0x18
-> +#define TSU_CMSR_CMPEN		BIT(0)
-> +#define TSU_CMSR_CMPCOND	BIT(1)
-> +
-> +/* Lower Limit Setting Register */
-> +#define TSU_LLSR		0x1C
-> +#define TSU_LLSR_LIM		GENMASK(11, 0)
-> +
-> +/* Upper Limit Setting Register */
-> +#define TSU_ULSR		0x20
-> +#define TSU_ULSR_ULIM		GENMASK(11, 0)
-> +
-> +/* Interrupt Status Register */
-> +#define TSU_SISR		0x30
-> +#define TSU_SISR_ADF		BIT(0)
-> +#define TSU_SISR_CMPF		BIT(1)
-> +
-> +/* Interrupt Enable Register */
-> +#define TSU_SIER		0x34
-> +#define TSU_SIER_ADIE		BIT(0)
-> +#define TSU_SIER_CMPIE		BIT(1)
-> +
-> +/* Interrupt Clear Register */
-> +#define TSU_SICR		0x38
-> +#define TSU_SICR_ADCLR		BIT(0)
-> +#define TSU_SICR_CMPCLR		BIT(1)
-> +
-> +/* Temperature calculation constants */
-> +#define TSU_D		41
-> +#define TSU_E		126
-> +#define TSU_TRMVAL_MASK	GENMASK(11, 0)
-> +
-> +#define TSU_POLL_DELAY_US	50
-> +#define TSU_TIMEOUT_US		10000
-> +#define TSU_MIN_CLOCK_RATE	24000000
-> +
-> +/**
-> + * struct rzg3e_thermal_priv - RZ/G3E thermal private data structure
-> + * @base: TSU base address
-> + * @dev: device pointer
-> + * @syscon: regmap for calibration values
-> + * @zone: thermal zone pointer
-> + * @mode: current tzd mode
-> + * @conv_complete: ADC conversion completion
-> + * @reg_lock: protect shared register access
-> + * @cached_temp: last computed temperature (milliCelsius)
-> + * @trmval: trim (calibration) values
-> + */
-> +struct rzg3e_thermal_priv {
-> +	void __iomem *base;
-> +	struct device *dev;
-> +	struct regmap *syscon;
-> +	struct thermal_zone_device *zone;
-> +	enum thermal_device_mode mode;
-> +	struct completion conv_complete;
-> +	spinlock_t reg_lock;
-> +	int cached_temp;
-> +	u32 trmval[2];
-> +};
-> +
-> +static void rzg3e_thermal_hw_disable(struct rzg3e_thermal_priv *priv)
-> +{
-> +	/* Disable all interrupts first */
-> +	writel(0, priv->base + TSU_SIER);
-> +	/* Clear any pending interrupts */
-> +	writel(TSU_SICR_ADCLR | TSU_SICR_CMPCLR, priv->base + TSU_SICR);
-> +	/* Put device in power down */
-> +	writel(TSU_SSUSR_ADC_PD_TS, priv->base + TSU_SSUSR);
-> +}
-> +
-> +static void rzg3e_thermal_hw_enable(struct rzg3e_thermal_priv *priv)
-> +{
-> +	/* First clear any pending status */
-> +	writel(TSU_SICR_ADCLR | TSU_SICR_CMPCLR, priv->base + TSU_SICR);
-> +	/* Disable all interrupts */
-> +	writel(0, priv->base + TSU_SIER);
-> +
-> +	/* Enable thermal sensor */
-> +	writel(TSU_SSUSR_SOC_TS_EN | TSU_SSUSR_EN_TS, priv->base + TSU_SSUSR);
-> +	/* Setup for averaging mode with 8 samples */
-> +	writel(TSU_SOSR1_OUTSEL_AVERAGE | TSU_SOSR1_ADCT_8, priv->base + TSU_SOSR1);
-> +}
-> +
-> +static irqreturn_t rzg3e_thermal_cmp_irq(int irq, void *dev_id)
-> +{
-> +	struct rzg3e_thermal_priv *priv = dev_id;
-> +	u32 status;
-> +
-> +	status = readl(priv->base + TSU_SISR);
-> +	if (!(status & TSU_SISR_CMPF))
-> +		return IRQ_NONE;
-> +
-> +	/* Clear the comparison interrupt flag */
-> +	writel(TSU_SICR_CMPCLR, priv->base + TSU_SICR);
-> +
-> +	return IRQ_WAKE_THREAD;
-> +}
-> +
-> +static irqreturn_t rzg3e_thermal_cmp_threaded_irq(int irq, void *dev_id)
-> +{
-> +	struct rzg3e_thermal_priv *priv = dev_id;
-> +
-> +	thermal_zone_device_update(priv->zone, THERMAL_EVENT_UNSPECIFIED);
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t rzg3e_thermal_adc_irq(int irq, void *dev_id)
-> +{
-> +	struct rzg3e_thermal_priv *priv = dev_id;
-> +	u32 status;
-> +	u32 result;
-> +
-> +	/* Check if this is our interrupt */
-> +	status = readl(priv->base + TSU_SISR);
-> +	if (!(status & TSU_SISR_ADF))
-> +		return IRQ_NONE;
-> +
-> +	/* Disable all interrupts */
-> +	writel(0, priv->base + TSU_SIER);
-> +	/* Clear conversion complete interrupt */
-> +	writel(TSU_SICR_ADCLR, priv->base + TSU_SICR);
-> +
-> +	/* Read ADC conversion result */
-> +	result = readl(priv->base + TSU_SCRR) & TSU_SCRR_OUT12BIT_TS;
-> +
-> +	/*
-> +	 * Calculate temperature using compensation formula
-> +	 * Section 7.11.7.8 (Temperature Compensation Calculation)
-> +	 *
-> +	 * T(°C) = ((e - d) / (c -b)) * (a - b) + d
-> +	 *
-> +	 * a = 12 bits temperature code read from the sensor
-> +	 * b = SYS trmval[0]
-> +	 * c = SYS trmval[1]
-> +	 * d = -41
-> +	 * e = 126
-> +	 */
-> +	s64 temp_val = div_s64(((TSU_E + TSU_D) * (s64)(result - priv->trmval[0])),
-> +				priv->trmval[1] - priv->trmval[0]) - TSU_D;
-> +	int new_temp = temp_val * MILLIDEGREE_PER_DEGREE;
-> +
-> +	scoped_guard(spinlock_irqsave, &priv->reg_lock)
-> +		priv->cached_temp = new_temp;
-> +
-> +	complete(&priv->conv_complete);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int rzg3e_thermal_get_temp(struct thermal_zone_device *zone, int *temp)
-> +{
-> +	struct rzg3e_thermal_priv *priv = thermal_zone_device_priv(zone);
-> +	u32 val;
-> +	int ret;
-> +
-> +	if (priv->mode == THERMAL_DEVICE_DISABLED)
-> +		return -EBUSY;
-
-Why ?
-
-> +	reinit_completion(&priv->conv_complete);
-> +
-> +	/* Enable ADC interrupt */
-> +	writel(TSU_SIER_ADIE, priv->base + TSU_SIER);
-
-Why enable irq here ?
-
-> +	/* Verify no ongoing conversion */
-> +	ret = readl_poll_timeout_atomic(priv->base + TSU_SSR, val,
-> +					!(val & TSU_SSR_CONV_RUNNING),
-> +					TSU_POLL_DELAY_US, TSU_TIMEOUT_US);
-> +	if (ret) {
-> +		dev_err(priv->dev, "ADC conversion timed out\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Start conversion */
-> +	writel(TSU_STRGR_ADST, priv->base + TSU_STRGR);
-> +
-> +	if (!wait_for_completion_timeout(&priv->conv_complete,
-> +					 msecs_to_jiffies(100))) {
-> +		dev_err(priv->dev, "ADC conversion completion timeout\n");
-> +		return -ETIMEDOUT;
-> +	}
-
-Can you explain what is happening here ?
-
-> +	scoped_guard(spinlock_irqsave, &priv->reg_lock)
-> +		*temp = priv->cached_temp;
-> +
-> +	return 0;
-> +}
-> +
-> +/* Convert temperature in milliCelsius to raw sensor code */
-> +static int rzg3e_temp_to_raw(struct rzg3e_thermal_priv *priv, int temp_mc)
-> +{
-> +	s64 raw = div_s64(((temp_mc / 1000) - TSU_D) *
-> +			  (priv->trmval[1] - priv->trmval[0]),
-> +			  (TSU_E - TSU_D));
-> +	return clamp_val(raw, 0, 0xFFF);
-> +}
-> +
-> +static int rzg3e_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-> +{
-> +	struct rzg3e_thermal_priv *priv = thermal_zone_device_priv(tz);
-> +	int ret;
-> +	int val;
-> +
-> +	if (low >= high)
-> +		return -EINVAL;
-> +
-> +	if (priv->mode == THERMAL_DEVICE_DISABLED)
-> +		return -EBUSY;
-
-That is not supposed to happen. set_trips is called from
-thermal_zone_device_update but the thermal zone is disabled, the
-function bails out, thus it should not call this callback.
-
-> +	/* Set up comparison interrupt */
-> +	writel(0, priv->base + TSU_SIER);
-> +	writel(TSU_SICR_ADCLR | TSU_SICR_CMPCLR, priv->base + TSU_SICR);
-> +
-> +	/* Set thresholds */
-> +	writel(rzg3e_temp_to_raw(priv, low), priv->base + TSU_LLSR);
-> +	writel(rzg3e_temp_to_raw(priv, high), priv->base + TSU_ULSR);
-> +
-> +	/* Configure comparison:
-> +	 * - Enable comparison function (CMPEN = 1)
-> +	 * - Set comparison condition (CMPCOND = 0 for out of range)
-> +	 */
-> +	writel(TSU_CMSR_CMPEN, priv->base + TSU_CMSR);
-> +
-> +	/* Enable comparison irq */
-> +	writel(TSU_SIER_CMPIE, priv->base + TSU_SIER);
-> +
-> +	/* Verify no ongoing conversion */
-> +	ret = readl_poll_timeout_atomic(priv->base + TSU_SSR, val,
-> +					!(val & TSU_SSR_CONV_RUNNING),
-> +					TSU_POLL_DELAY_US, TSU_TIMEOUT_US);
-> +	if (ret) {
-> +		dev_err(priv->dev, "ADC conversion timed out\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Start a conversion to trigger comparison */
-> +	writel(TSU_STRGR_ADST, priv->base + TSU_STRGR);
-> +
-> +	return 0;
-> +}
-> +
-> +static int rzg3e_thermal_get_trimming(struct rzg3e_thermal_priv *priv)
-> +{
-> +	int ret;
-> +
-> +	ret = regmap_read(priv->syscon, SYS_TSU_TRMVAL(0), &priv->trmval[0]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_read(priv->syscon, SYS_TSU_TRMVAL(1), &priv->trmval[1]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->trmval[0] &= TSU_TRMVAL_MASK;
-> +	priv->trmval[1] &= TSU_TRMVAL_MASK;
-> +
-> +	if (!priv->trmval[0] || !priv->trmval[1])
-> +		return dev_err_probe(priv->dev, -EINVAL, "invalid trimming values");
-> +
-> +	return 0;
-> +}
-> +
-> +static int rzg3e_thermal_change_mode(struct thermal_zone_device *tz,
-> +				     enum thermal_device_mode mode)
-> +{
-> +	struct rzg3e_thermal_priv *priv = thermal_zone_device_priv(tz);
-> +
-> +	if (mode == THERMAL_DEVICE_DISABLED)
-> +		rzg3e_thermal_hw_disable(priv);
-> +	else
-> +		rzg3e_thermal_hw_enable(priv);
-> +
-> +	priv->mode = mode;
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_device_ops rzg3e_tz_of_ops = {
-> +	.get_temp = rzg3e_thermal_get_temp,
-> +	.set_trips = rzg3e_thermal_set_trips,
-> +	.change_mode = rzg3e_thermal_change_mode,
-> +};
-> +
-> +static int rzg3e_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct rzg3e_thermal_priv *priv;
-> +	struct reset_control *rstc;
-> +	char *adc_name, *cmp_name;
-> +	int adc_irq, cmp_irq;
-> +	struct clk *clk;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->dev = dev;
-> +
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return dev_err_probe(dev, PTR_ERR(priv->base),
-> +				"Failed to map I/O memory");
-> +
-> +	priv->syscon = syscon_regmap_lookup_by_phandle(dev->of_node,
-> +						       "renesas,tsu-calibration-sys");
-> +	if (IS_ERR(priv->syscon))
-> +		return dev_err_probe(dev, PTR_ERR(priv->syscon),
-> +				"Failed to get calibration syscon");
-> +
-> +	adc_irq = platform_get_irq_byname(pdev, "adi");
-> +	if (adc_irq < 0)
-> +		return adc_irq;
-> +
-> +	cmp_irq = platform_get_irq_byname(pdev, "adcmpi");
-> +	if (cmp_irq < 0)
-> +		return cmp_irq;
-> +
-> +	rstc = devm_reset_control_get_exclusive_deasserted(dev, NULL);
-> +	if (IS_ERR(rstc))
-> +		return dev_err_probe(dev, PTR_ERR(rstc),
-> +				     "Failed to acquire deasserted reset");
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	spin_lock_init(&priv->reg_lock);
-> +	init_completion(&priv->conv_complete);
-> +
-> +	clk = devm_clk_get_enabled(dev, NULL);
-> +	if (IS_ERR(clk))
-> +		return dev_err_probe(dev, PTR_ERR(clk),
-> +				     "Failed to get and enable clock");
-> +
-> +	if (clk_get_rate(clk) < TSU_MIN_CLOCK_RATE)
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "Clock rate too low (minimum %d Hz required)",
-> +				     TSU_MIN_CLOCK_RATE);
-> +
-> +	ret = rzg3e_thermal_get_trimming(priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	adc_name = devm_kasprintf(dev, GFP_KERNEL, "%s-adc", dev_name(dev));
-> +	if (!adc_name)
-> +		return -ENOMEM;
-> +
-> +	cmp_name = devm_kasprintf(dev, GFP_KERNEL, "%s-cmp", dev_name(dev));
-> +	if (!cmp_name)
-> +		return -ENOMEM;
-> +
-> +	/* Unit in a known disabled mode */
-> +	rzg3e_thermal_hw_disable(priv);
-> +
-> +	ret = devm_request_irq(dev, adc_irq, rzg3e_thermal_adc_irq,
-> +			       IRQF_TRIGGER_RISING, adc_name, priv);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to request ADC IRQ");
-> +
-> +	ret = devm_request_threaded_irq(dev, cmp_irq, rzg3e_thermal_cmp_irq,
-> +					rzg3e_thermal_cmp_threaded_irq,
-> +					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
-> +					cmp_name, priv);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to request comparison IRQ");
-> +
-> +	/* Register Thermal Zone */
-> +	priv->zone = devm_thermal_of_zone_register(dev, 0, priv, &rzg3e_tz_of_ops);
-> +	if (IS_ERR(priv->zone))
-> +		return dev_err_probe(dev, PTR_ERR(priv->zone),
-> +				"Failed to register thermal zone");
-> +
-> +	ret = devm_thermal_add_hwmon_sysfs(dev, priv->zone);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to add hwmon sysfs");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id rzg3e_thermal_dt_ids[] = {
-> +	{ .compatible = "renesas,r9a09g047-tsu" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, rzg3e_thermal_dt_ids);
-> +
-> +static struct platform_driver rzg3e_thermal_driver = {
-> +	.driver = {
-> +		.name	= "rzg3e_thermal",
-> +		.of_match_table = rzg3e_thermal_dt_ids,
-> +	},
-> +	.probe = rzg3e_thermal_probe,
-> +};
-> +module_platform_driver(rzg3e_thermal_driver);
-> +
-> +MODULE_DESCRIPTION("Renesas RZ/G3E TSU Thermal Sensor Driver");
-> +MODULE_AUTHOR("John Madieu <john.madieu.xa@bp.renesas.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.25.1
+> This is a pretty bold claim, given how individual batteries are.
 > 
+> I challenge this and ask if this isn't really *one* *specific* battery
+> and not as general as it looks here.
 
--- 
+The story here is that as a hobby project I'm doing hw-enablement work
+on some somewhat older x86_64 tablets. Some of which have these not
+quite a fuel-gauge fuel-gauge chips which from using Linux's POV are
+mostly just glorified ADCs.
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+I have no datasheets for either the fuel-gauge or the batteries used.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+The below table is generic in the sense that I just took a generic
+table from the internet and went with that.
+
+For the next version these tables will be gone from the driver,
+instead the driver now expects there to be at least a
+"ocv-capacity-table-0" device-property with the table.
+
+> 
+>> +       static const int ocv_capacity_tbl[23] = {
+>> +               3350000,
+>> +               3610000,
+>> +               3690000,
+>> +               3710000,
+>> +               3730000,
+>> +               3750000,
+>> +               3770000,
+>> +               3786667,
+>> +               3803333,
+>> +               3820000,
+>> +               3836667,
+>> +               3853333,
+>> +               3870000,
+>> +               3907500,
+>> +               3945000,
+>> +               3982500,
+>> +               4020000,
+>> +               4075000,
+>> +               4110000,
+>> +               4150000,
+>> +               4200000,
+>> +               4250000,
+>> +               4300000,
+>> +       };
+> 
+> Compare this to the ocv-to-capacity tables for a few batteries that exist
+> in drivers/power/supply/samsung-sdi-battery.c, i.e. any use of
+> struct power_supply_battery_ocv_table such as:
+> 
+> static const struct power_supply_battery_ocv_table
+> samsung_ocv_cap_eb485159lu[] = {
+>         { .ocv = 4330000, .capacity = 100},
+>         { .ocv = 4320000, .capacity = 99},
+>         { .ocv = 4283000, .capacity = 95},
+> (...)
+>         { .ocv = 3456000, .capacity = 2},
+>         { .ocv = 3381000, .capacity = 1},
+>         { .ocv = 3300000, .capacity = 0},
+> };
+> 
+> Apart from being upside-down, this is strikingly similar, just
+> slightly different
+> ocv vs capacity for each of the batteries in this file.
+> 
+> The struct power_supply_battery_ocv_table use linear interpolation
+> helpers in the core, see power_supply_ocv2cap_simple() in
+> power_supply_core.c.
+
+Ack, for v3 I'm switching to using power_supply_batinfo_ocv2cap()
+replacing the custom table + mapping.
+
+> Further it has been found (in the datasheet for Samsung batteries) that
+> the OCV table is varying with the temperature of the battery. For this
+> reason a two-dimensional look-up exists, power_supply_find_ocv2cap_table()
+> and the helper power_supply_batinfo_ocv2cap() that will look up
+> a proper ocv2cap for a certain temperature and then interpolate
+> in that table. In this case the capacity estimate is three-dimensional.
+> I bet this is actually true for your battery as well, if you have a datasheet.
+
+Right, so without a datasheet (and also note that these batteries
+are old and have already seen quite a few cycles) we don't really
+have per temperature ocv to capacity mappings table. Also there
+is no temperature measurement of the actually battery cells
+themselves here. So the new version just calls
+power_supply_batinfo_ocv2cap() with a hardcoded temperature of
+25° Celsius.
+
+Which is fine since there will only be one ocv->capicity table
+anyways since we lack a datasheet with this info.
+
+
+>> +       for (i = 1; i < ARRAY_SIZE(ocv_capacity_tbl); i++) {
+>> +               if (help->ocv_avg_uv > ocv_capacity_tbl[i])
+>> +                       continue;
+>> +
+>> +               ocv_diff = ocv_capacity_tbl[i] - help->ocv_avg_uv;
+>> +               ocv_step = ocv_capacity_tbl[i] - ocv_capacity_tbl[i - 1];
+>> +               /* scale 0-110% down to 0-100% for LiPo HV */
+>> +               if (help->psy->battery_info->constant_charge_voltage_max_uv >= 4300000)
+>> +                       return (i * 500 - ocv_diff * 500 / ocv_step) / 110;
+>> +               else
+>> +                       return i * 5 - ocv_diff * 5 / ocv_step;
+>> +       }
+> 
+> This looks to *me* like someone taking a highly nonlinear problem and
+> trying to linearize it. LiPo batteries are not this linear.
+> 
+> I would rather expect a good old ocv-to-capacity table based on a
+> discharge diagram from a datasheet.
+> 
+> In any case, the above can certainly be converted into one, but I have
+> my doubts about the quality of that.
+> 
+> In any case I suggest passing in a struct power_supply_battery_ocv_table *
+> to this function instead and use the core interpolation.
+
+Ack, as mentioned already the upcoming v3 has switched to
+power_supply_batinfo_ocv2cap() and all this code is gone now.
+
+> 
+>> +static void adc_battery_helper_work(struct work_struct *work)
+>> +{
+>> +       struct adc_battery_helper *help = container_of(work, struct adc_battery_helper,
+>> +                                                      work.work);
+>> +       int i, curr_diff_ua, volt_diff_uv, res, ret, win_size;
+> 
+> Pls tag res with unit such as rs_mohm or (as suggested below)
+> res_uohm.
+
+Ack, done for v3.
+
+> 
+>> +       struct device *dev = help->psy->dev.parent;
+>> +       int volt_uv, prev_volt_uv = help->volt_uv;
+>> +       int curr_ua, prev_curr_ua = help->curr_ua;
+>> +       bool prev_supplied = help->supplied;
+>> +       int prev_status = help->status;
+>> +
+>> +       guard(mutex)(&help->lock);
+> 
+> Guarded mutexes are nice!
+> 
+>> +       help->volt_uv = volt_uv;
+>> +       help->curr_ua = curr_ua;
+>> +
+>> +       help->ocv_uv[help->ocv_avg_index] =
+>> +               help->volt_uv - help->curr_ua * help->intern_res_avg_mohm / 1000;
+>> +       dev_dbg(dev, "volt-now: %d, curr-now: %d, volt-ocv: %d\n",
+>> +               help->volt_uv, help->curr_ua, help->ocv_uv[help->ocv_avg_index]);
+>> +       help->ocv_avg_index = (help->ocv_avg_index + 1) % MOV_AVG_WINDOW;
+>> +       help->poll_count++;
+>> +
+>> +       help->ocv_avg_uv = 0;
+>> +       win_size = min(help->poll_count, MOV_AVG_WINDOW);
+>> +       for (i = 0; i < win_size; i++)
+>> +               help->ocv_avg_uv += help->ocv_uv[i];
+>> +       help->ocv_avg_uv /= win_size;
+> 
+> This part of the algorithm needs comments to explain what is going on with
+> the moving average window here. It looks clever!
+> 
+> What I know for sure is that a battery's internal resistance also varies
+> with temperature so this isn't very good for all conditions, and this is
+> why we have the helper function power_supply_temp2resist_simple()
+> in the core to supply look-up interpolation tables also for this. But I
+> guess maybe you don't have either a temperature sensor or the
+> data for the temperature variation curves?
+
+
+I have neither a temperature sensor for the cells; nor
+temperature variation curves.
+
+> I'm pretty sure you must have a temperature sensor because it is
+> dangerous to make chargers without them, but whether you can
+> read it is another question, and whether you have a temp->ri table
+> is a third question so I understand there might be lacking
+> information here.
+
+As far as I can deduce from the Android kernel code there only
+is support for measuring the PMIC ICs own temperature.
+
+Anyways without temperature variation curves this does not matter.
+
+
+> 
+>> +       help->supplied = power_supply_am_i_supplied(help->psy);
+>> +       help->status = adc_battery_helper_get_status(help);
+>> +       help->capacity = adc_battery_helper_get_capacity(help);
+>> +
+>> +       /*
+>> +        * Skip internal resistance calc on charger [un]plug and
+>> +        * when the battery is almost empty (voltage low).
+>> +        */
+>> +       if (help->supplied != prev_supplied ||
+>> +           help->volt_uv < LOW_BAT_UV ||
+>> +           help->poll_count < 2)
+>> +               goto out;
+>> +
+>> +       /*
+>> +        * Assuming that the OCV voltage does not change significantly
+>> +        * between 2 polls, then we can calculate the internal resistance
+>> +        * on a significant current change by attributing all voltage
+>> +        * change between the 2 readings to the internal resistance.
+>> +        */
+> 
+> Interesting algorithm. It will however include any resistance in
+> series with the battery such as resistance in wires (negligible)
+> and pads, connectors and silicon circuitry (not negligible).
+> 
+> The algorithms I have seen carefully specify the internal
+> resistance vs temperature in a table and specify the
+> resistance in series with the battery separately. (OK the
+> latter is maybe a bit overzealous.)
+
+Right, that is the nice way of doing things when doing
+a new design and with datasheets in hand.
+
+This code is for reverse-engineered battery support on somewhat
+older tablets. Even if we had temperature variation curves,
+I'm pretty sure that the battery cells are old enough those
+will likely not be super accurate anymore.
+
+> 
+>> +       curr_diff_ua = abs(help->curr_ua - prev_curr_ua);
+>> +       if (curr_diff_ua < CURR_HYST_UA)
+>> +               goto out;
+>> +
+>> +       volt_diff_uv = abs(help->volt_uv - prev_volt_uv);
+>> +       res = volt_diff_uv * 1000 / curr_diff_ua;
+>> +
+>> +       if ((res < (help->intern_res_avg_mohm * 2 / 3)) ||
+>> +           (res > (help->intern_res_avg_mohm * 4 / 3))) {
+> 
+> I have found that micro-ohms are usually needed to get the
+> right precision so please consider this, mohm may be good
+> enough for this AD. But there is a famous paper about capacity
+> estimation pointing out that precise measurements of Ri
+> is critical for capacity estimation, and for that micro-ohms
+> should be encouraged IMO.
+
+Since the internal-resistance is calculated as discussed
+below using uOhms would just give a false pretense of
+precision IMHO.
+
+> This is why factory internal resistance uses micro-ohms.
+> 
+>> +               dev_dbg(dev, "Ignoring outlier internal resistance %d mOhm\n", res);
+>> +               goto out;
+>> +       }
+> 
+> Ugh that looks hacky and random for a certain AD-converter
+> which is pretty unstable if things like this happens... oh well.
+> Don't know what to say about that. Maybe this is good?
+
+This does not trigger often. I expect this happens when
+the current makes a big jump during the sample window
+for measuring voltage and current.
+
+> 
+> Maybe there should be absurdity guards as well, such as
+> internal resistance being
+> 
+>> +       dev_dbg(dev, "Internal resistance %d mOhm\n", res);
+> 
+> Maybe we actually need a sysfs file for that?
+> 
+>> +       help->intern_res_mohm[help->intern_res_avg_index] = res;
+>> +       help->intern_res_avg_index = (help->intern_res_avg_index + 1) % MOV_AVG_WINDOW;
+>> +       help->intern_res_poll_count++;
+>> +
+>> +       help->intern_res_avg_mohm = 0;
+>> +       win_size = min(help->intern_res_poll_count, MOV_AVG_WINDOW);
+>> +       for (i = 0; i < win_size; i++)
+>> +               help->intern_res_avg_mohm += help->intern_res_mohm[i];
+>> +       help->intern_res_avg_mohm /= win_size;
+> 
+> If we want to do moving averages in general maybe we should
+> have a helper in power_supply_core.c for this?
+> Just a suggestion.
+> 
+>> +       if (!help->psy->battery_info ||
+>> +           help->psy->battery_info->factory_internal_resistance_uohm == -EINVAL ||
+>> +           help->psy->battery_info->constant_charge_voltage_max_uv == -EINVAL) {
+>> +               dev_err(dev, "error required properties are missing\n");
+>> +               return -ENODEV;
+>> +       }
+> 
+> As mentioned, I think you should pass in and use at least:
+> 
+> .ocv_temp[0] = 25, // What we use when we know nothing else...
+> .ocv_table[0] = foo_ocv_cap_table,
+> .ocv_table_size[0] = ARRAY_SIZE(foo_ocv_cap_table),
+
+Ack, this is all done for the upcoming v3.
+
+> If for nothing else so for the fact that someone will want to use this
+> with a (proper) nonlinear table and you can test it easily by constructing
+> one for your battery.
+> 
+>> +       /* Use provided internal resistance as start point (in milli-ohm) */
+>> +       help->intern_res_avg_mohm =
+>> +               help->psy->battery_info->factory_internal_resistance_uohm / 1000;
+> 
+> .resist_table
+> .resist_table_size
+> 
+> would be better I think, but if you have no datasheet and no idea
+> how much resistance is connected in series with the battery...
+> well. Fair enough I guess.
+
+Right the issue is there is no datasheet, so no idea.
+
+Regards,
+
+Hans
+
 
