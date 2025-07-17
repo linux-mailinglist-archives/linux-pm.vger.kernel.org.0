@@ -1,140 +1,175 @@
-Return-Path: <linux-pm+bounces-30994-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30995-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 665E5B089C1
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 11:51:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B22BB08A1C
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 12:00:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6CE4564EA2
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:51:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1118EA60179
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 10:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8F3291C28;
-	Thu, 17 Jul 2025 09:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB362989A7;
+	Thu, 17 Jul 2025 10:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+7SuC6L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yv6bgSFT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C6428A410;
-	Thu, 17 Jul 2025 09:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C82E298991;
+	Thu, 17 Jul 2025 10:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752745861; cv=none; b=X5Kq9ITpchpgvS2Lcx3Xxm1ruG7MqNGNriMbGQjBO1rkgnqBhScfko+FOqlJ5823FOLb/G77saj0jF3dbvVYtm0XnN9GeKKmdY98bJS2deg4/aZMG55tIiWeMfknAj+y8Z6OD4CX8TGR0Pn0+dWkSytr2+ym/0t0RPrAy9sAQ+I=
+	t=1752746424; cv=none; b=AHC9noFTXo5zChkjnMfvrTaVCF8b64uagN7R18hKsCNhqRg/0z2tNhGN5NBD6mJ3KgLKqN8vowOguNmID1RimwxIHaoiSvAbug/dScMFUA+7oZcwrHR3grHLRNZNGQh7ow9h31U/J1KDoEEqLGVJnVH0rNrXU9BoulGI2HbSX78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752745861; c=relaxed/simple;
-	bh=xksjneoIi3+E3CNeYiNA4UzZ51ibysOw5iki9I32EMI=;
+	s=arc-20240116; t=1752746424; c=relaxed/simple;
+	bh=IE0NO91nxGKmeHQZs/EVJN4vp00NgsdAr8J6xj5OtdM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X2XVUEl1C5msJ1jRY2x8ctKXj/265z1DlQ3MkGfdSRdV2dMO6R7ywJgo+6A/HR5wc/IpPIxuIiNjsQ6Tr/k2zp6UL4e088yy8iiUb464l3Sj+eG8n09q6CFJXqIAybIiJ+Xn/uoLgycq+izCoJG8VnbErqnN5OagO2z0aEhY0N8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+7SuC6L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B27AC4CEF6;
-	Thu, 17 Jul 2025 09:51:01 +0000 (UTC)
+	 To:Cc:Content-Type; b=u0WZQ5SJ9ShlcfyC9e/M8hNs5eDwPRyslhASOINPSndRNfYui65jYvBBDzsh0Ykq/EWhM4NmWbEQa/I79+9/aGGLpPNIaR1Fki+k1m8nMSoikPShViPKU5WXm0h/zDR/b1cbBLOaNRyi4Uu8kY5VDm+ZyXVIsbCCyxrAuEO7Bm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yv6bgSFT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB7CC4CEEB;
+	Thu, 17 Jul 2025 10:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752745861;
-	bh=xksjneoIi3+E3CNeYiNA4UzZ51ibysOw5iki9I32EMI=;
+	s=k20201202; t=1752746423;
+	bh=IE0NO91nxGKmeHQZs/EVJN4vp00NgsdAr8J6xj5OtdM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=R+7SuC6LTdTO9nrA9Qx3rkB5LB7zxlR2abuB5ta6ycmPnxNhVGIWRC280C4waRDsW
-	 aSmXCYApitBwsNKL6qtxb3ZC5YGsK8xhVsyZdqiinqSjx752pWhLuQW8S17yJYOYdG
-	 1qEyBhy73jSQlT81eOBWH57wBvigMMgBskpiHNV9XVGTz823Mg3eFzdy1LiJrbTTGO
-	 8YWsHlG1NOmj4V1BdjEQKZq4SKQTW4s0emV7BdKdhTWpT3DZDh/6AIi10C4953G3PW
-	 UPUxQCCLj0SHr4xNuLFgPVS98F5liOvFt1ojmG3aXIHW4rH9C6kIWzPhA4vhLH0+HH
-	 bzxKxnTihnABg==
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-73e58d5108dso384483a34.3;
-        Thu, 17 Jul 2025 02:51:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVs6uSw8ozT8yBViPng5AwjX6clXXQw3lNlY7YRKq50BcPW4C0Bx8+SYr3za/ods1rdtX7rDLdRlGw=@vger.kernel.org, AJvYcCXsLdjl28SFd02yg0KaLK4xODUTBbsmk2GFhXF+pjKwhGRV1ngJM26StaqasEiNLailZJUbtbc1sSkHFaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqddD87bZpLym0OV0YcbBu7LcoXWT6AXqMaRTXZ706+ETTirqW
-	eAxxhpkBPdWESlIWwQVBHQiRjOHWELDbqXRv9wdGQdrhLBuvVFg6klNXYh9HPpN7yZ/yvcCrnqo
-	XtMWRYSQvWKWLPfqVlIwR4U6nIVPshkE=
-X-Google-Smtp-Source: AGHT+IEYEZjoWRZhGrLjrN/TLANBOcjGefJaRXKhD4SFMq+aJ0cow3e3qkoJuJsodza7pkcCHl2o9HdyYA15BLOi30U=
-X-Received: by 2002:a05:6830:6182:b0:73b:1efa:5f59 with SMTP id
- 46e09a7af769-73e64aad09amr5897178a34.19.1752745860663; Thu, 17 Jul 2025
- 02:51:00 -0700 (PDT)
+	b=Yv6bgSFT+/bzsdl6NPBR/9mPsEalMBLfxsjohgLJ90kDFK4Je17LbD+JRKYZeokBZ
+	 dVmYtoRVgctLEivz+p1gM88nwr/JV9LUeUmFTAGcII/guGVR3sNt5PDq2xn7XOCCP2
+	 kI44obiJp/AsPQG8KpkUjJZs3kUqlysUpVfCfYIXlFz/041FiGxKv02gMmeXjqMnZQ
+	 CNN5FlhLFiQ8kOs3/XnmIpQw47btRsT9UAY4R4IfVXQZ3GRWdJV6pX3oCTrg3BbPVx
+	 5L92Yg0ozCP8+8fPf+4qbrLd/3GWxNYAkbXP3AoB6Vo+1FDaOfvCSChwyg0pZR+EkP
+	 knD8HbRYUSmLQ==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2edec6c5511so355790fac.2;
+        Thu, 17 Jul 2025 03:00:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUFRZjvNzXmZo+7bAxm7mlNlzsJwKph2fXdI52JapLFtEzxF0F+SWKbZpOKKbT2utilCGdXX3O8YYg=@vger.kernel.org, AJvYcCUJS3QYoOK+UZYZ0JLNz4hnCPDJWdthoF9oW/G/dLvznlZlEpPniUSsZjph286LzVf7NOFWN9d/N1Nn@vger.kernel.org, AJvYcCWr1WOLBru0FFXSw511kzGXSesMCIrUp92eAyZKVExFZkREgTtDNSjuOseFEJGdXARG9Z3S16eLvgwgv1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhDbmLAgWsN139QbAz3kpQs+BNj8H7XeipKUJ4YkzoaiATUefP
+	w/OrysCZtVqd7ymmHQHRMaE08E/3/oe9bffF+l7mKihzcE0I1xKSDSDyuqrksrcqUQNb7pcNp7z
+	7MwQnD/i0URgBxou9ZOYpWDgKIsPjCWk=
+X-Google-Smtp-Source: AGHT+IHlGQ6aBR+j4ITxrcadCHuCPTrLl815gfJvAVL43dZiwKp328ZkY1a2m0nCmhP2ud6L0CQR7w35Smm4naWvBrg=
+X-Received: by 2002:a05:6870:2dca:b0:2d4:d07c:7cc5 with SMTP id
+ 586e51a60fabf-2ffaf2a273amr5034339fac.12.1752746418187; Thu, 17 Jul 2025
+ 03:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250716062639.1528066-1-zhangzihuan@kylinos.cn>
- <CAJZ5v0goQ0DcsWAqn__E7CG=YcNAzdxo9bb-21q50V2H5CJ+xA@mail.gmail.com> <a664f801-7faf-4a9f-b4b8-365afe0c6f5d@kylinos.cn>
-In-Reply-To: <a664f801-7faf-4a9f-b4b8-365afe0c6f5d@kylinos.cn>
+References: <20250717004034.2998443-1-david.e.box@linux.intel.com> <20250717004034.2998443-2-david.e.box@linux.intel.com>
+In-Reply-To: <20250717004034.2998443-2-david.e.box@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 17 Jul 2025 11:50:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jvzTupABXQLmTsu7+jEUp14u5XEN4=W7opGi8X2OWorQ@mail.gmail.com>
-X-Gm-Features: Ac12FXx5QWZBLrWaqBeAcWVvTiH32Ef0KMCgUP7eG4ILxUO3XvhXFiJk1FdO_kE
-Message-ID: <CAJZ5v0jvzTupABXQLmTsu7+jEUp14u5XEN4=W7opGi8X2OWorQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/1] PM / Freezer: Skip zombie/dead processes to reduce
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 17 Jul 2025 12:00:06 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hCTUBzM=UXf1jw6yRraVREDqpa4dAVwhHEkbxtqU9ogA@mail.gmail.com>
+X-Gm-Features: Ac12FXwK7-e3oVMXuwnqEUl3MTV9qppscX0vtB1O3xwQQ5ORJ-Z43hQ2bboY5iI
+Message-ID: <CAJZ5v0hCTUBzM=UXf1jw6yRraVREDqpa4dAVwhHEkbxtqU9ogA@mail.gmail.com>
+Subject: Re: [RFC 1/2] PCI/ASPM: Allow drivers to provide ASPM link state via pci_bus
+To: "David E. Box" <david.e.box@linux.intel.com>
+Cc: rafael@kernel.org, bhelgaas@google.com, vicamo.yang@canonical.com, 
+	kenny@panix.com, nirmal.patel@linux.intel.com, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, ilpo.jarvinen@linux.intel.com, 
+	linux-kernel@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 17, 2025 at 3:02=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
-n> wrote:
+On Thu, Jul 17, 2025 at 2:40=E2=80=AFAM David E. Box
+<david.e.box@linux.intel.com> wrote:
 >
-> HI Rafael,
+> Synthetic PCIe hierarchies such as those created by Intel VMD are not
+> enumerated or configured by firmware, and therefore do not receive
+> BIOS-provided ASPM defaults. This leaves devices behind such domains with
+> ASPM effectively disabled, despite platform intent.
 >
-> =E5=9C=A8 2025/7/16 20:26, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> > Hi,
-> >
-> > On Wed, Jul 16, 2025 at 8:26=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
-os.cn> wrote:
-> >> Hi all,
-> >>
-> >> This patch series improves the performance of the process freezer by
-> >> skipping zombie tasks during freezing.
-> >>
-> >> In the suspend and hibernation paths, the freezer traverses all tasks
-> >> and attempts to freeze them. However, zombie tasks (EXIT_ZOMBIE with
-> >> PF_EXITING) are already dead =E2=80=94 they are not schedulable and ca=
-nnot enter
-> >> the refrigerator. Attempting to freeze such tasks is redundant and
-> >> unnecessarily increases freezing time.
-> >>
-> >> In particular, on systems under fork storm conditions (e.g., many
-> >> short-lived processes quickly becoming zombies), the number of zombie =
-tasks
-> >> can spike into the thousands or more. We observed that this causes the
-> >> freezer loop to waste significant time processing tasks that are guara=
-nteed
-> >> to not need freezing.
-> > I think that the discussion with Peter regarding this has not been conc=
-luded.
-> >
-> > I thought that there was an alternative patch proposed during that
-> > discussion.  If I'm not mistaken about this, what happened to that
-> > patch?
-> >
-> > Thanks!
-> >
->
-> Currently, the general consensus from the discussion is that skipping
-> zombie or dead tasks can help reduce locking overhead during freezing.
+> Introduce a mechanism to allow the bus owner (e.g. a controller driver) t=
+o
+> supply a default ASPM policy via a new aspm_bus_link_state field in
+> pci_bus.  A new bus flag, PCI_BUS_FLAGS_ASPM_DEFAULT_OVERRIDE, indicates
 
-Peter doesn't seem to be convinced that this is the case.
+This doesn't seem to match the code - the name of the new flag is
+different there.
 
-> The remaining question is how best to implement that.
+> that the core should use this value instead of the BIOS default when
+> initializing link state.
 >
-> Peter suggested skipping all tasks with PF_NOFREEZE, which would make
-> the logic more general and cover all cases. However, as Oleg pointed
-> out, the current implementation based on PF_NOFREEZE might be problematic=
-.
+> This avoids the need for controller-specific logic in ASPM core and allow=
+s
+> for proper power savings in these otherwise unsupported hierarchies.
+
+I'm guessing that VMD is supposed to set
+PCI_BUS_FLAGS_NO_ASPM_DEFAULT, but that doesn't happen in patch [2/2]
+AFAICS.
+
+And I would just merge the two patches, IMV there's no reason to keep
+them separate.
+
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> ---
+>  drivers/pci/pcie/aspm.c |  5 ++++-
+>  include/linux/pci.h     | 12 ++++++++----
+>  2 files changed, 12 insertions(+), 5 deletions(-)
 >
-> My current thought is that exit_state already reliably covers all
-> exiting user processes, and it=E2=80=99s a good fit for skipping user-spa=
-ce
-> tasks. For the kernel side, we may safely skip a few kernel threads like
-> kthreadd that set PF_NOFREEZE and never change it =E2=80=94 we can consid=
-er
-> refining this further in the future.
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 29fcb0689a91..2ad1852ac9b2 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -866,7 +866,10 @@ static void pcie_aspm_cap_init(struct pcie_link_stat=
+e *link, int blacklist)
+>         }
+>
+>         /* Save default state */
+> -       link->aspm_default =3D link->aspm_enabled;
+> +       if (parent->bus->bus_flags & PCI_BUS_FLAGS_NO_ASPM_DEFAULT)
+> +               link->aspm_default =3D parent->bus->aspm_bus_link_state;
+> +       else
+> +               link->aspm_default =3D link->aspm_enabled;
 
-There is the counter argument of special-casing of p->exit_state and
-the relatively weak justification for it.
+Could you avoid using the new flag by assuming that if
+parent->bus->aspm_bus_link_state was zero, link->aspm_enabled would
+take effect?  So the check would be something like
 
-You have created a synthetic workload where it matters, but how likely
-is it to be the case in practice?
+if (parent->bus->aspm_bus_link_state)
+        link->aspm_default =3D parent->bus->aspm_bus_link_state;
+else
+        link->aspm_default =3D link->aspm_enabled;
+
+>
+>         /* Setup initial capable state. Will be updated later */
+>         link->aspm_capable =3D link->aspm_support;
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 05e68f35f392..7e1c305c419c 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -256,10 +256,11 @@ enum pci_irq_reroute_variant {
+>
+>  typedef unsigned short __bitwise pci_bus_flags_t;
+>  enum pci_bus_flags {
+> -       PCI_BUS_FLAGS_NO_MSI    =3D (__force pci_bus_flags_t) 1,
+> -       PCI_BUS_FLAGS_NO_MMRBC  =3D (__force pci_bus_flags_t) 2,
+> -       PCI_BUS_FLAGS_NO_AERSID =3D (__force pci_bus_flags_t) 4,
+> -       PCI_BUS_FLAGS_NO_EXTCFG =3D (__force pci_bus_flags_t) 8,
+> +       PCI_BUS_FLAGS_NO_MSI            =3D (__force pci_bus_flags_t) 1,
+> +       PCI_BUS_FLAGS_NO_MMRBC          =3D (__force pci_bus_flags_t) 2,
+> +       PCI_BUS_FLAGS_NO_AERSID         =3D (__force pci_bus_flags_t) 4,
+> +       PCI_BUS_FLAGS_NO_EXTCFG         =3D (__force pci_bus_flags_t) 8,
+> +       PCI_BUS_FLAGS_NO_ASPM_DEFAULT   =3D (__force pci_bus_flags_t) 16,
+>  };
+>
+>  /* Values from Link Status register, PCIe r3.1, sec 7.8.8 */
+> @@ -665,6 +666,9 @@ struct pci_bus {
+>         void            *sysdata;       /* Hook for sys-specific extensio=
+n */
+>         struct proc_dir_entry *procdir; /* Directory entry in /proc/bus/p=
+ci */
+>
+> +#ifdef CONFIG_PCIEASPM
+> +       unsigned int    aspm_bus_link_state;    /* Bus owner provided lin=
+k state */
+> +#endif
+>         unsigned char   number;         /* Bus number */
+>         unsigned char   primary;        /* Number of primary bridge */
+>         unsigned char   max_bus_speed;  /* enum pci_bus_speed */
+> --
 
