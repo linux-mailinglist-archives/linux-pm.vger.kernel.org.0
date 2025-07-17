@@ -1,65 +1,60 @@
-Return-Path: <linux-pm+bounces-30963-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30964-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23EFEB08190
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 02:43:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 756B6B081FD
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 03:02:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E26F7B69F8
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 00:41:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D4073B7C50
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 01:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0200A129E6E;
-	Thu, 17 Jul 2025 00:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OR14Cmbo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D150A2AE96;
+	Thu, 17 Jul 2025 01:02:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14D8273FE;
-	Thu, 17 Jul 2025 00:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F3AE28E7;
+	Thu, 17 Jul 2025 01:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752712976; cv=none; b=lwdayvY1Et6GiFJy5vdRyh0V0v+C8gwschBUr/iN0FKg0/XgrUJ7jQStm32LLJOieQC5wFTtEUa610JN3UwGnuKYL5rgDc/Z5msjk67sof5Rc77g9H806rxG7CNbwV6n1zeaCqOKXyII6sNbfgZnc22qDN+kbdQg2BSgtC3yF8o=
+	t=1752714163; cv=none; b=t8nFavvblB8Hor+0f/KBF+kUHlESxKpokpkGXSXDverZXpIUpZd7T7JzRHga9gJcZoQoM/sRRm5dhbcG7xF0sk4TLd8K3zOqoubQfEkwKzXvohQ3pTUVOv/8zu+8u1yIFM8bGVS2gLHnVdbWDjVJrdl5nxADk1KAgihAGasHVcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752712976; c=relaxed/simple;
-	bh=a1a2m+qTgsqOTVd7tUMA7nLBD9q1KSnyxnULxLgpT04=;
+	s=arc-20240116; t=1752714163; c=relaxed/simple;
+	bh=sJSiva4PddwBfMrwPmzSlfDqTFsy8rGG5TDmnFbMTuY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r/sLzXFIBRoBF+y7J8sxxyTt9nSnS4nHwl9ItK8nSO7AXqjZTzpntMFqNP95bH4eU/aYLqIrKfxpv8cogXDu08/pD4tvmt4FRPQ2CZAf05qS5Y5BfDyTIwHcCouE4Hq6kswKxhQrv0UdSWtZi/U5G2k9Wc/gIze5oM1BsFxJ+b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OR14Cmbo; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752712974; x=1784248974;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a1a2m+qTgsqOTVd7tUMA7nLBD9q1KSnyxnULxLgpT04=;
-  b=OR14Cmboo/StSDO6u7XNa10GxKG/p1BgVbHgbxnS3hjDRvtwyTum0O9W
-   F84dWHP4bIACKyVeOE+KVJ7sIEFDQggmTHVMDbST59YFbwn/4+GBfKLZK
-   75eRuwY1qMnvObdkkQLS5b5UZACfEyagc/PeJXwVTpU7Rb5iR/7AA557d
-   DqHYFZPUitnVptTHazw84+KriJGOFYw+K4q9TNCUqMUp6Pg3UIIqJ++G2
-   L6bEnIn+0n2k+w9mYb3N+i2d1ixxlc9GHwbM0j23Gwy/qtLuigKTxLI7j
-   S4G+NdDjW/TH0LgupKqVlCm+/t2veccT9DtPY1iYMuQDrABMI/YPOpSic
-   g==;
-X-CSE-ConnectionGUID: aJFgo7nYQtmaQ4gKCnw6Sw==
-X-CSE-MsgGUID: 4QUXR7PiTH+Xs//HxNRzxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="55123475"
-X-IronPort-AV: E=Sophos;i="6.16,317,1744095600"; 
-   d="scan'208";a="55123475"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 17:42:54 -0700
-X-CSE-ConnectionGUID: rQa7ZAQtRDqTc7/WqMZ6rw==
-X-CSE-MsgGUID: D3FN+HCrT4uUEFuqsRHt9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,317,1744095600"; 
-   d="scan'208";a="188597232"
-Received: from puneetse-mobl.amr.corp.intel.com (HELO [10.125.111.193]) ([10.125.111.193])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 17:42:52 -0700
-Message-ID: <622fa915-4e3e-43fd-a6f5-9a2d8bad7925@intel.com>
-Date: Wed, 16 Jul 2025 17:42:51 -0700
+	 In-Reply-To:Content-Type; b=gZifCUDrOk7P+Cpxyel49fx6rB1YC5VF7+jNuV8n24DBcmVe2HZyDYQzP6fmvq5HxX7XiCSyFNNe4JHawstOocjkFMpHbz6moroA5Sq+o+hjK0KDe0cw10D4+wHjardEPEgfPyyvRTHTY4ymM9xJM57/etlZYqkLv50yZyzyVm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b96c6fb262a911f0b29709d653e92f7d-20250717
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:25a5aa73-3931-4967-b5cc-1afc07364d3c,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:caa636b440508cb56c703d406c2f988f,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: b96c6fb262a911f0b29709d653e92f7d-20250717
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 685857645; Thu, 17 Jul 2025 09:02:34 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 9B23EE008FA3;
+	Thu, 17 Jul 2025 09:02:34 +0800 (CST)
+X-ns-mid: postfix-68784BAA-51963666
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id BA957E008FA2;
+	Thu, 17 Jul 2025 09:02:32 +0800 (CST)
+Message-ID: <a664f801-7faf-4a9f-b4b8-365afe0c6f5d@kylinos.cn>
+Date: Thu, 17 Jul 2025 09:02:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,300 +62,239 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] cxl/region: Introduce SOFT RESERVED resource
- removal on region teardown
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Cc: Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox
- <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Li Ming <ming.li@zohomail.com>,
- Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
- Ying Huang <huang.ying.caritas@gmail.com>,
- Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg KH <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- PradeepVineshReddy Kodamati <PradeepVineshReddy.Kodamati@amd.com>,
- Zhijian Li <lizhijian@fujitsu.com>
-References: <20250715180407.47426-1-Smita.KoralahalliChannabasappa@amd.com>
- <20250715180407.47426-5-Smita.KoralahalliChannabasappa@amd.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250715180407.47426-5-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v4 0/1] PM / Freezer: Skip zombie/dead processes to reduce
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
+ len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250716062639.1528066-1-zhangzihuan@kylinos.cn>
+ <CAJZ5v0goQ0DcsWAqn__E7CG=YcNAzdxo9bb-21q50V2H5CJ+xA@mail.gmail.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <CAJZ5v0goQ0DcsWAqn__E7CG=YcNAzdxo9bb-21q50V2H5CJ+xA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+
+HI=C2=A0Rafael,
+
+=E5=9C=A8 2025/7/16 20:26, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> Hi,
+>
+> On Wed, Jul 16, 2025 at 8:26=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+>> Hi all,
+>>
+>> This patch series improves the performance of the process freezer by
+>> skipping zombie tasks during freezing.
+>>
+>> In the suspend and hibernation paths, the freezer traverses all tasks
+>> and attempts to freeze them. However, zombie tasks (EXIT_ZOMBIE with
+>> PF_EXITING) are already dead =E2=80=94 they are not schedulable and ca=
+nnot enter
+>> the refrigerator. Attempting to freeze such tasks is redundant and
+>> unnecessarily increases freezing time.
+>>
+>> In particular, on systems under fork storm conditions (e.g., many
+>> short-lived processes quickly becoming zombies), the number of zombie =
+tasks
+>> can spike into the thousands or more. We observed that this causes the
+>> freezer loop to waste significant time processing tasks that are guara=
+nteed
+>> to not need freezing.
+> I think that the discussion with Peter regarding this has not been conc=
+luded.
+>
+> I thought that there was an alternative patch proposed during that
+> discussion.  If I'm not mistaken about this, what happened to that
+> patch?
+>
+> Thanks!
+>
+
+Currently, the general consensus from the discussion is that skipping=20
+zombie or dead tasks can help reduce locking overhead during freezing.=20
+The remaining question is how best to implement that.
+
+Peter suggested skipping all tasks with PF_NOFREEZE, which would make=20
+the logic more general and cover all cases. However, as Oleg pointed=20
+out, the current implementation based on PF_NOFREEZE might be problematic=
+.
+
+My current thought is that exit_state already reliably covers all=20
+exiting user processes, and it=E2=80=99s a good fit for skipping user-spa=
+ce=20
+tasks. For the kernel side, we may safely skip a few kernel threads like=20
+kthreadd that set PF_NOFREEZE and never change it =E2=80=94 we can consid=
+er=20
+refining this further in the future.
 
 
-
-On 7/15/25 11:04 AM, Smita Koralahalli wrote:
-> Reworked from a patch by Alison Schofield <alison.schofield@intel.com>
-> 
-> Previously, when CXL regions were created through autodiscovery and their
-> resources overlapped with SOFT RESERVED ranges, the soft reserved resource
-> remained in place after region teardown. This left the HPA range
-> unavailable for reuse even after the region was destroyed.
-> 
-> Enhance the logic to reliably remove SOFT RESERVED resources associated
-> with a region, regardless of alignment or hierarchy in the iomem tree.
-> 
-> Link: https://lore.kernel.org/linux-cxl/29312c0765224ae76862d59a17748c8188fb95f1.1692638817.git.alison.schofield@intel.com/
-> Co-developed-by: Alison Schofield <alison.schofield@intel.com>
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
->  drivers/cxl/acpi.c        |   2 +
->  drivers/cxl/core/region.c | 124 ++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h         |   2 +
->  include/linux/ioport.h    |   1 +
->  kernel/resource.c         |  34 +++++++++++
->  5 files changed, 163 insertions(+)
-> 
-> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> index 3a27289e669b..9eb8a9587dee 100644
-> --- a/drivers/cxl/acpi.c
-> +++ b/drivers/cxl/acpi.c
-> @@ -829,6 +829,8 @@ static void cxl_softreserv_mem_work_fn(struct work_struct *work)
->  		pr_debug("Timeout waiting for cxl_mem probing");
->  
->  	wait_for_device_probe();
-> +
-> +	cxl_region_softreserv_update();
->  }
->  static DECLARE_WORK(cxl_sr_work, cxl_softreserv_mem_work_fn);
->  
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index 6e5e1460068d..95951a1f1cab 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -3486,6 +3486,130 @@ int cxl_add_to_region(struct cxl_endpoint_decoder *cxled)
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_add_to_region, "CXL");
->  
-> +static int add_soft_reserved(resource_size_t start, resource_size_t len,
-> +			     unsigned long flags)
-> +{
-> +	struct resource *res = kzalloc(sizeof(*res), GFP_KERNEL);
-> +	int rc;
-> +
-> +	if (!res)
-> +		return -ENOMEM;
-> +
-> +	*res = DEFINE_RES_NAMED_DESC(start, len, "Soft Reserved",
-> +				     flags | IORESOURCE_MEM,
-> +				     IORES_DESC_SOFT_RESERVED);
-> +
-> +	rc = insert_resource(&iomem_resource, res);
-> +	if (rc) {
-> +		kfree(res);
-> +		return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void remove_soft_reserved(struct cxl_region *cxlr, struct resource *soft,
-> +				 resource_size_t start, resource_size_t end)
-> +{
-> +	struct cxl_root_decoder *cxlrd = to_cxl_root_decoder(cxlr->dev.parent);
-> +	resource_size_t new_start, new_end;
-> +	int rc;
-> +
-> +	guard(mutex)(&cxlrd->range_lock);
-> +
-> +	if (soft->start == start && soft->end == end) {
-> +		/*
-> +		 * Exact alignment at both start and end. The entire region is
-> +		 * removed below.
-> +		 */
-> +
-> +	} else if (soft->start == start || soft->end == end) {
-> +		/* Aligns at either resource start or end */
-> +		if (soft->start == start) {
-> +			new_start = end + 1;
-> +			new_end = soft->end;
-> +		} else {
-> +			new_start = soft->start;
-> +			new_end = start - 1;
-> +		}
-> +
-> +		/*
-> +		 * Reuse original flags as the trimmed portion retains the same
-> +		 * memory type and access characteristics.
-> +		 */
-> +		rc = add_soft_reserved(new_start, new_end - new_start + 1,
-> +				       soft->flags);
-> +		if (rc)
-> +			dev_warn(&cxlr->dev,
-> +				 "cannot add new soft reserved resource at %pa\n",
-> +				 &new_start);
-> +
-> +	} else {
-> +		/* No alignment - Split into two new soft reserved regions */
-> +		new_start = soft->start;
-> +		new_end = soft->end;
-> +
-> +		rc = add_soft_reserved(new_start, start - new_start,
-> +				       soft->flags);
-> +		if (rc)
-> +			dev_warn(&cxlr->dev,
-> +				 "cannot add new soft reserved resource at %pa\n",
-> +				 &new_start);
-> +
-> +		rc = add_soft_reserved(end + 1, new_end - end, soft->flags);
-> +		if (rc)
-> +			dev_warn(&cxlr->dev,
-> +				 "cannot add new soft reserved resource at %pa + 1\n",
-> +				 &end);
-> +	}
-> +
-> +	rc = remove_resource(soft);
-> +	if (rc)
-> +		dev_warn(&cxlr->dev, "cannot remove soft reserved resource %pr\n",
-> +			 soft);
-> +}
-> +
-> +static int __cxl_region_softreserv_update(struct resource *soft,
-> +					  void *_cxlr)
-> +{
-> +	struct cxl_region *cxlr = _cxlr;
-> +	struct resource *res = cxlr->params.res;
-> +
-> +	/* Skip non-intersecting soft-reserved regions */
-> +	if (soft->end < res->start || soft->start > res->end)
-> +		return 0;
-> +
-> +	soft = normalize_resource(soft);
-> +	if (!soft)
-> +		return -EINVAL;
-> +
-> +	remove_soft_reserved(cxlr, soft, res->start, res->end);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_region_softreserv_update_cb(struct device *dev, void *data)
-> +{
-> +	struct cxl_region *cxlr;
-> +
-> +	if (!is_cxl_region(dev))
-> +		return 0;
-> +
-> +	cxlr = to_cxl_region(dev);
-> +
-> +	walk_iomem_res_desc(IORES_DESC_SOFT_RESERVED, IORESOURCE_MEM, 0, -1,
-> +			    cxlr, __cxl_region_softreserv_update);
-
-No checking return value of walk_iomem_res_desc()?
-
-> +
-> +	return 0;
-> +}
-> +
-> +void cxl_region_softreserv_update(void)
-> +{
-> +	bus_for_each_dev(&cxl_bus_type, NULL, NULL,
-> +			 cxl_region_softreserv_update_cb);
-
-No checking return value of bus_for_each_dev()? Is it ok to ignore all errors?
-
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_region_softreserv_update, "CXL");
-> +
->  u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa)
->  {
->  	struct cxl_region_ref *iter;
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 3117136f0208..9f173467e497 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -862,6 +862,7 @@ struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev);
->  int cxl_add_to_region(struct cxl_endpoint_decoder *cxled);
->  struct cxl_dax_region *to_cxl_dax_region(struct device *dev);
->  u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa);
-> +void cxl_region_softreserv_update(void);
->  #else
->  static inline bool is_cxl_pmem_region(struct device *dev)
->  {
-> @@ -884,6 +885,7 @@ static inline u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint,
->  {
->  	return 0;
->  }
-> +static inline void cxl_region_softreserv_update(void) { }
->  #endif
->  
->  void cxl_endpoint_parse_cdat(struct cxl_port *port);
-> diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> index e8b2d6aa4013..8693e095d32b 100644
-> --- a/include/linux/ioport.h
-> +++ b/include/linux/ioport.h
-> @@ -233,6 +233,7 @@ struct resource_constraint {
->  extern struct resource ioport_resource;
->  extern struct resource iomem_resource;
->  
-> +extern struct resource *normalize_resource(struct resource *res);
->  extern struct resource *request_resource_conflict(struct resource *root, struct resource *new);
->  extern int request_resource(struct resource *root, struct resource *new);
->  extern int release_resource(struct resource *new);
-> diff --git a/kernel/resource.c b/kernel/resource.c
-> index 8d3e6ed0bdc1..3d8dc2a59cb2 100644
-> --- a/kernel/resource.c
-> +++ b/kernel/resource.c
-> @@ -50,6 +50,40 @@ EXPORT_SYMBOL(iomem_resource);
->  
->  static DEFINE_RWLOCK(resource_lock);
->  
-> +/*
-> + * normalize_resource
-> + *
-> + * The walk_iomem_res_desc() returns a copy of a resource, not a reference
-> + * to the actual resource in the iomem_resource tree. As a result,
-> + * __release_resource() which relies on pointer equality will fail.
-> + *
-> + * This helper walks the children of the resource's parent to find and
-> + * return the original resource pointer that matches the given resource's
-> + * start and end addresses.
-> + *
-> + * Return: Pointer to the matching original resource in iomem_resource, or
-> + *         NULL if not found or invalid input.
-> + */
-> +struct resource *normalize_resource(struct resource *res)
-> +{
-> +	if (!res || !res->parent)
-> +		return NULL;
-> +
-> +	read_lock(&resource_lock);
-
-May as well go with below for consistency:
-guard(read_lock)(&resource_lock);
-
-DJ
-
-> +	for (struct resource *res_iter = res->parent->child; res_iter != NULL;
-> +	     res_iter = res_iter->sibling) {
-> +		if ((res_iter->start == res->start) &&
-> +		    (res_iter->end == res->end)) {
-> +			read_unlock(&resource_lock);
-> +			return res_iter;
-> +		}
-> +	}
-> +
-> +	read_unlock(&resource_lock);
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(normalize_resource, "CXL");
-> +
->  /*
->   * Return the next node of @p in pre-order tree traversal.  If
->   * @skip_children is true, skip the descendant nodes of @p in
-
+>> Testing and Results
+>>
+>> Platform:
+>> - Architecture: x86_64
+>> - CPU: ZHAOXIN KaiXian KX-7000
+>> - RAM: 16 GB
+>> - Kernel: v6.6.93
+>>
+>> result without the patch:
+>> dmesg | grep elap
+>> [  219.608992] Freezing user space processes completed (elapsed 0.010 =
+seconds)
+>> [  219.617355] Freezing remaining freezable tasks completed (elapsed 0=
+.008 seconds)
+>> [  228.029119] Freezing user space processes completed (elapsed 0.013 =
+seconds)
+>> [  228.040672] Freezing remaining freezable tasks completed (elapsed 0=
+.011 seconds)
+>> [  236.879065] Freezing user space processes completed (elapsed 0.020 =
+seconds)
+>> [  236.897976] Freezing remaining freezable tasks completed (elapsed 0=
+.018 seconds)
+>> [  246.276679] Freezing user space processes completed (elapsed 0.026 =
+seconds)
+>> [  246.298636] Freezing remaining freezable tasks completed (elapsed 0=
+.021 seconds)
+>> [  256.221504] Freezing user space processes completed (elapsed 0.030 =
+seconds)
+>> [  256.248955] Freezing remaining freezable tasks completed (elapsed 0=
+.027 seconds)
+>> [  266.674987] Freezing user space processes completed (elapsed 0.040 =
+seconds)
+>> [  266.709811] Freezing remaining freezable tasks completed (elapsed 0=
+.034 seconds)
+>> [  277.701679] Freezing user space processes completed (elapsed 0.046 =
+seconds)
+>> [  277.742048] Freezing remaining freezable tasks completed (elapsed 0=
+.040 seconds)
+>> [  289.246611] Freezing user space processes completed (elapsed 0.046 =
+seconds)
+>> [  289.290753] Freezing remaining freezable tasks completed (elapsed 0=
+.044 seconds)
+>> [  301.516854] Freezing user space processes completed (elapsed 0.041 =
+seconds)
+>> [  301.576287] Freezing remaining freezable tasks completed (elapsed 0=
+.059 seconds)
+>> [  314.422499] Freezing user space processes completed (elapsed 0.043 =
+seconds)
+>> [  314.465804] Freezing remaining freezable tasks completed (elapsed 0=
+.043 seconds)
+>>
+>> result with the patch:
+>> dmesg | grep elap
+>> [   54.161674] Freezing user space processes completed (elapsed 0.007 =
+seconds)
+>> [   54.171536] Freezing remaining freezable tasks completed (elapsed 0=
+.009 seconds)
+>> [   62.556462] Freezing user space processes completed (elapsed 0.006 =
+seconds)
+>> [   62.566496] Freezing remaining freezable tasks completed (elapsed 0=
+.010 seconds)
+>> [   71.395421] Freezing user space processes completed (elapsed 0.009 =
+seconds)
+>> [   71.402820] Freezing remaining freezable tasks completed (elapsed 0=
+.007 seconds)
+>> [   80.785463] Freezing user space processes completed (elapsed 0.010 =
+seconds)
+>> [   80.793914] Freezing remaining freezable tasks completed (elapsed 0=
+.008 seconds)
+>> [   90.962659] Freezing user space processes completed (elapsed 0.012 =
+seconds)
+>> [   90.973519] Freezing remaining freezable tasks completed (elapsed 0=
+.010 seconds)
+>> [  101.435638] Freezing user space processes completed (elapsed 0.013 =
+seconds)
+>> [  101.449023] Freezing remaining freezable tasks completed (elapsed 0=
+.013 seconds)
+>> [  112.669786] Freezing user space processes completed (elapsed 0.015 =
+seconds)
+>> [  112.683540] Freezing remaining freezable tasks completed (elapsed 0=
+.013 seconds)
+>> [  124.585681] Freezing user space processes completed (elapsed 0.017 =
+seconds)
+>> [  124.599553] Freezing remaining freezable tasks completed (elapsed 0=
+.013 seconds)
+>> [  136.826635] Freezing user space processes completed (elapsed 0.016 =
+seconds)
+>> [  136.841840] Freezing remaining freezable tasks completed (elapsed 0=
+.015 seconds)
+>> [  149.686575] Freezing user space processes completed (elapsed 0.016 =
+seconds)
+>> [  149.701549] Freezing remaining freezable tasks completed (elapsed 0=
+.014 seconds)
+>>
+>> Here is the user-space fork storm simulator used for testing:
+>>
+>> ```c
+>> // create_zombie.c
+>>
+>> void usage(const char *prog) {
+>>      fprintf(stderr, "Usage: %s <number_of_zombies>\n", prog);
+>>      exit(EXIT_FAILURE);
+>> }
+>>
+>> int main(int argc, char *argv[]) {
+>>      if (argc !=3D 2) {
+>>          usage(argv[0]);
+>>      }
+>>
+>>      long num_zombies =3D strtol(argv[1], NULL, 10);
+>>      if (num_zombies <=3D 0 || num_zombies > 1000000) {
+>>          fprintf(stderr, "Invalid number of zombies: %ld\n", num_zombi=
+es);
+>>          exit(EXIT_FAILURE);
+>>      }
+>>
+>>      printf("Creating %ld zombie processes...\n", num_zombies);
+>>
+>>      for (long i =3D 0; i < num_zombies; i++) {
+>>          pid_t pid =3D fork();
+>>          if (pid < 0) {
+>>              perror("fork failed");
+>>              exit(EXIT_FAILURE);
+>>          } else if (pid =3D=3D 0) {
+>>              // Child exits immediately
+>>              exit(0);
+>>          }
+>>          // Parent does NOT wait, leaving zombie
+>>      }
+>>
+>>      printf("All child processes created. Sleeping for 60 seconds...\n=
+");
+>>      sleep(60);
+>>
+>>      printf("Parent exiting, zombies will be reaped by init.\n");
+>>      return 0;
+>> }
+>> ```
+>>
+>> And we used a shell loop to suspend repeatedly:
+>>
+>> ```bash
+>> LOOPS=3D10
+>>
+>> echo none > /sys/power/pm_test
+>> echo 5 > /sys/module/suspend/parameters/pm_test_delay
+>> for ((i=3D1; i<=3DLOOPS; i++)); do
+>> echo "=3D=3D=3D=3D=3D Test round $i/$LOOPS =3D=3D=3D=3D=3D"
+>> ./create_zombie $((i * 3000)) &
+>> sleep 5
+>> echo mem > /sys/power/state
+>>
+>> pkill create_zombie
+>> echo "Round $i complete. Waiting 5s..."
+>> sleep 5
+>>
+>> done
+>> echo "=3D=3D=3D=3D All $LOOPS rounds complete =3D=3D=3D=3D"
+>> ```
+>>
+>> Zihuan Zhang (1):
+>>    PM / Freezer: Skip zombie/dead processes to reduce freeze latency
+>>
+>>   kernel/power/process.c | 2 +-
+>>   1 file changed, 9 insertion(+), 1 deletion(-)
+>>
+>> --
+>> 2.25.1
+>>
 
