@@ -1,171 +1,140 @@
-Return-Path: <linux-pm+bounces-30993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30994-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AE7B089A7
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 11:46:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 665E5B089C1
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 11:51:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0EE07BA9BF
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:44:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6CE4564EA2
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B422877CC;
-	Thu, 17 Jul 2025 09:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8F3291C28;
+	Thu, 17 Jul 2025 09:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="lpcGqe8b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+7SuC6L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51CB205E25
-	for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 09:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C6428A410;
+	Thu, 17 Jul 2025 09:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752745579; cv=none; b=nmaCFEUkIyOabBeePl5oG1gLlbpdA85kQGG4/mrWRkuqLjZifql+2t3Wuq+X2Atn/FEH+t+yWRQR9wc1xaZ6pNEXMa6MZWtS50qHL7NQpN3NqxVKTowX2Sw2Q3QCYou8pVhFuPp4sefD5sm0wA2jMrVHZrWgoGiD87L/tg8UN0c=
+	t=1752745861; cv=none; b=X5Kq9ITpchpgvS2Lcx3Xxm1ruG7MqNGNriMbGQjBO1rkgnqBhScfko+FOqlJ5823FOLb/G77saj0jF3dbvVYtm0XnN9GeKKmdY98bJS2deg4/aZMG55tIiWeMfknAj+y8Z6OD4CX8TGR0Pn0+dWkSytr2+ym/0t0RPrAy9sAQ+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752745579; c=relaxed/simple;
-	bh=SNKCNuS07yOhNClyun4AtdBr5+gzFNw6Inn1wst24b0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=Tj92oZJdeU0qbA7iWPF0fTpQeYvFcUInnKsGXU3dBeUov7UXkgu+mlsKl4ZNzkk/ncbNU48j3us2evAAhK1jq1c/Ux6TYiS+9A/z31OigRO582y5oTGCoxuts6ywtwg3qSq9ptYn637tUNmEzZ9PeAsG5/PwwWYPx0CuHyPXNkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=lpcGqe8b; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ae0d7b32322so128824866b.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 02:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1752745576; x=1753350376; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Ru/mu5vOTULTD4H+wkh3KmAvhPvotp/lHqkpBJrbBE=;
-        b=lpcGqe8bgzQXCJRH9llp8Wup0wahZZ63GZPfBMKuG5xnp5YCX9DgnGmM99AkY0Xiau
-         EelPRHsz9UXd4sdm+3caaj8q5YSYNJbEHVXpAoEhMSXhHeCOatKCgK+1P7VNccezQNOR
-         idb0Y6pN6yRPvprw/fyvhIivt7bRpNQKXLj85ncRd59+JvsVv/sI7jbcQpXlrNnwnKsx
-         /vv61S6PR2F/l/gNOEUXp6lerExDqD/v1LtJzhLIPmUhyE3oKwn5RzWxppp7vNsk2q0n
-         ImL/G8IFhPWV0SOX5e5t9Q5MP81EamOv8NuaL21bDHyArTjzwwPj5OvTME0Z2tv2gMlQ
-         WN+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752745576; x=1753350376;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3Ru/mu5vOTULTD4H+wkh3KmAvhPvotp/lHqkpBJrbBE=;
-        b=wfn0ufQyL+6Bbg9Kcdw4rxWSkSQR7KBasD2ImrA0x2rtdeNDysZ1jvOuTHTtAORAmE
-         ssisGZAH1P5XHFBlwZxpX8sVHVrz+WcmBXv9B/Xvd9s0pWoCecjLtxGZGiZ70Q7gSEgS
-         qoX/djzF+1PdJhtiVZY958wczAYKgQu4H8MMre68kDXREcfsX5h14DUnBn8Pka8z8kdK
-         N3EV0EixiaimnNQM11NMxyN7kLJg+FNQ4a6jHQGqRRqzvPod25UR3XUXc6cvKmTEZXHD
-         9cZ8XS6bbupZTaz3Gv7a2u8MlES6+eRoMOmldBQnA3wEeTvWrA8I3wvRJlHDSyOTogn4
-         yupg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXDuDRVmHZ2E6h+SgBUr0k7qDCzZEAyZ9kCLBvrBVHHV/vZlAbU/KRWzTVv1KarmaV4kI9JRSaQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCTalsVzyw0gV4RyLbYYsCvwGkkISfkSOwzaJERxvJSIHb97Zz
-	+0z61QbtHzd1PNaIAhQeA/iePORqLb+eAuq6eFwIAIVdd4QCUK1QUhLnQwP5pIQ8o8w=
-X-Gm-Gg: ASbGncvUbtIrM4TeeAmow7faYd9EBu4eQSA2zlSGNV80RsackwG+yf5Rz6AyZgLcrwl
-	kiFCyZnYFZfwkRfLRYJcIErFbUZLpMaZpUyeKunmBinKYhNJZEU9DW2wmZ4Z6mpuzJTB5HWfa3N
-	wkm6EcEIoH/TsNj100Br6J/SslGBE20xIRqRZNIyNwuIkcSmB/b98ixh/JCl96K1jCj3L6ttGY3
-	Wnxk+KUhQNTbr10bekdywD8e9pT3uD/TTR1+UWcejc314zTcTggCqs+3vHtXQMh27GUXa6araxV
-	DdgPGTyG5FZMzR8224fsm3vjCs4QMbpEf7eXiofX0N/JJiEzPhOx95SBp8HSPv4zPQxGN14lmEn
-	Bs89DTmwWcvOiSm6eW8IGKT1yIsjVQicLeKMGVWgh2+ONn4k2HnIVmiLB
-X-Google-Smtp-Source: AGHT+IFFJ+Gwq77Z/PIy0XMlE+NNaiR8R9S0OSFVxrU0iuecWvqgNe/XZ2Nw4b7IKr3qQanK/C4caw==
-X-Received: by 2002:a17:906:af16:b0:ad8:87ae:3f66 with SMTP id a640c23a62f3a-ae9ce1d8ba4mr400610566b.60.1752745576031;
-        Thu, 17 Jul 2025 02:46:16 -0700 (PDT)
-Received: from localhost (212095005146.public.telering.at. [212.95.5.146])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e8294bb2sm1333325866b.114.2025.07.17.02.46.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jul 2025 02:46:15 -0700 (PDT)
+	s=arc-20240116; t=1752745861; c=relaxed/simple;
+	bh=xksjneoIi3+E3CNeYiNA4UzZ51ibysOw5iki9I32EMI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X2XVUEl1C5msJ1jRY2x8ctKXj/265z1DlQ3MkGfdSRdV2dMO6R7ywJgo+6A/HR5wc/IpPIxuIiNjsQ6Tr/k2zp6UL4e088yy8iiUb464l3Sj+eG8n09q6CFJXqIAybIiJ+Xn/uoLgycq+izCoJG8VnbErqnN5OagO2z0aEhY0N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+7SuC6L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B27AC4CEF6;
+	Thu, 17 Jul 2025 09:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752745861;
+	bh=xksjneoIi3+E3CNeYiNA4UzZ51ibysOw5iki9I32EMI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=R+7SuC6LTdTO9nrA9Qx3rkB5LB7zxlR2abuB5ta6ycmPnxNhVGIWRC280C4waRDsW
+	 aSmXCYApitBwsNKL6qtxb3ZC5YGsK8xhVsyZdqiinqSjx752pWhLuQW8S17yJYOYdG
+	 1qEyBhy73jSQlT81eOBWH57wBvigMMgBskpiHNV9XVGTz823Mg3eFzdy1LiJrbTTGO
+	 8YWsHlG1NOmj4V1BdjEQKZq4SKQTW4s0emV7BdKdhTWpT3DZDh/6AIi10C4953G3PW
+	 UPUxQCCLj0SHr4xNuLFgPVS98F5liOvFt1ojmG3aXIHW4rH9C6kIWzPhA4vhLH0+HH
+	 bzxKxnTihnABg==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-73e58d5108dso384483a34.3;
+        Thu, 17 Jul 2025 02:51:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVs6uSw8ozT8yBViPng5AwjX6clXXQw3lNlY7YRKq50BcPW4C0Bx8+SYr3za/ods1rdtX7rDLdRlGw=@vger.kernel.org, AJvYcCXsLdjl28SFd02yg0KaLK4xODUTBbsmk2GFhXF+pjKwhGRV1ngJM26StaqasEiNLailZJUbtbc1sSkHFaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqddD87bZpLym0OV0YcbBu7LcoXWT6AXqMaRTXZ706+ETTirqW
+	eAxxhpkBPdWESlIWwQVBHQiRjOHWELDbqXRv9wdGQdrhLBuvVFg6klNXYh9HPpN7yZ/yvcCrnqo
+	XtMWRYSQvWKWLPfqVlIwR4U6nIVPshkE=
+X-Google-Smtp-Source: AGHT+IEYEZjoWRZhGrLjrN/TLANBOcjGefJaRXKhD4SFMq+aJ0cow3e3qkoJuJsodza7pkcCHl2o9HdyYA15BLOi30U=
+X-Received: by 2002:a05:6830:6182:b0:73b:1efa:5f59 with SMTP id
+ 46e09a7af769-73e64aad09amr5897178a34.19.1752745860663; Thu, 17 Jul 2025
+ 02:51:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20250716062639.1528066-1-zhangzihuan@kylinos.cn>
+ <CAJZ5v0goQ0DcsWAqn__E7CG=YcNAzdxo9bb-21q50V2H5CJ+xA@mail.gmail.com> <a664f801-7faf-4a9f-b4b8-365afe0c6f5d@kylinos.cn>
+In-Reply-To: <a664f801-7faf-4a9f-b4b8-365afe0c6f5d@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 17 Jul 2025 11:50:48 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jvzTupABXQLmTsu7+jEUp14u5XEN4=W7opGi8X2OWorQ@mail.gmail.com>
+X-Gm-Features: Ac12FXx5QWZBLrWaqBeAcWVvTiH32Ef0KMCgUP7eG4ILxUO3XvhXFiJk1FdO_kE
+Message-ID: <CAJZ5v0jvzTupABXQLmTsu7+jEUp14u5XEN4=W7opGi8X2OWorQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/1] PM / Freezer: Skip zombie/dead processes to reduce
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Jul 2025 11:46:12 +0200
-Message-Id: <DBE8G88CIQ53.2N51CABIBJOOO@fairphone.com>
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Luca Weiss" <luca.weiss@fairphone.com>, "Konrad Dybcio"
- <konrad.dybcio@oss.qualcomm.com>, "Will Deacon" <will@kernel.org>, "Robin
- Murphy" <robin.murphy@arm.com>, "Joerg Roedel" <joro@8bytes.org>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Manivannan
- Sadhasivam" <mani@kernel.org>, "Herbert Xu" <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, "Vinod Koul" <vkoul@kernel.org>,
- "Bjorn Andersson" <andersson@kernel.org>, "Konrad Dybcio"
- <konradybcio@kernel.org>, "Robert Marko" <robimarko@gmail.com>, "Das
- Srinagesh" <quic_gurus@quicinc.com>, "Thomas Gleixner"
- <tglx@linutronix.de>, "Jassi Brar" <jassisinghbrar@gmail.com>, "Amit
- Kucheria" <amitk@kernel.org>, "Thara Gopinath" <thara.gopinath@gmail.com>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Zhang Rui"
- <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>, "Ulf Hansson"
- <ulf.hansson@linaro.org>
-Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
- <linux-mmc@vger.kernel.org>
-Subject: Re: [PATCH v2 14/15] arm64: dts: qcom: Add initial Milos dtsi
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com>
- <20250713-sm7635-fp6-initial-v2-14-e8f9a789505b@fairphone.com>
- <3e0299ad-766a-4876-912e-438fe2cc856d@oss.qualcomm.com>
- <DBE6TK1KDOTP.IIT72I1LUN5M@fairphone.com>
-In-Reply-To: <DBE6TK1KDOTP.IIT72I1LUN5M@fairphone.com>
 
-Hi Konrad,
-
-On Thu Jul 17, 2025 at 10:29 AM CEST, Luca Weiss wrote:
-> On Mon Jul 14, 2025 at 1:06 PM CEST, Konrad Dybcio wrote:
->> On 7/13/25 10:05 AM, Luca Weiss wrote:
->>> Add a devicetree description for the Milos SoC, which is for example
->>> Snapdragon 7s Gen 3 (SM7635).
->>>=20
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->>
->> [...]
->>> +
->>> +		spmi_bus: spmi@c400000 {
->>> +			compatible =3D "qcom,spmi-pmic-arb";
->>
->> There's two bus instances on this platform, check out the x1e binding
+On Thu, Jul 17, 2025 at 3:02=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
 >
-> Will do
+> HI Rafael,
+>
+> =E5=9C=A8 2025/7/16 20:26, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > Hi,
+> >
+> > On Wed, Jul 16, 2025 at 8:26=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+> >> Hi all,
+> >>
+> >> This patch series improves the performance of the process freezer by
+> >> skipping zombie tasks during freezing.
+> >>
+> >> In the suspend and hibernation paths, the freezer traverses all tasks
+> >> and attempts to freeze them. However, zombie tasks (EXIT_ZOMBIE with
+> >> PF_EXITING) are already dead =E2=80=94 they are not schedulable and ca=
+nnot enter
+> >> the refrigerator. Attempting to freeze such tasks is redundant and
+> >> unnecessarily increases freezing time.
+> >>
+> >> In particular, on systems under fork storm conditions (e.g., many
+> >> short-lived processes quickly becoming zombies), the number of zombie =
+tasks
+> >> can spike into the thousands or more. We observed that this causes the
+> >> freezer loop to waste significant time processing tasks that are guara=
+nteed
+> >> to not need freezing.
+> > I think that the discussion with Peter regarding this has not been conc=
+luded.
+> >
+> > I thought that there was an alternative patch proposed during that
+> > discussion.  If I'm not mistaken about this, what happened to that
+> > patch?
+> >
+> > Thanks!
+> >
+>
+> Currently, the general consensus from the discussion is that skipping
+> zombie or dead tasks can help reduce locking overhead during freezing.
 
-One problem: If we make the labels spmi_bus0 and spmi_bus1 then we can't
-reuse the existing PMIC dtsi files since they all reference &spmi_bus.
+Peter doesn't seem to be convinced that this is the case.
 
-On FP6 everything's connected to PMIC_SPMI0_*, and PMIC_SPMI1_* is not
-connected to anything so just adding the label spmi_bus on spmi_bus0
-would be fine.
+> The remaining question is how best to implement that.
+>
+> Peter suggested skipping all tasks with PF_NOFREEZE, which would make
+> the logic more general and cover all cases. However, as Oleg pointed
+> out, the current implementation based on PF_NOFREEZE might be problematic=
+.
+>
+> My current thought is that exit_state already reliably covers all
+> exiting user processes, and it=E2=80=99s a good fit for skipping user-spa=
+ce
+> tasks. For the kernel side, we may safely skip a few kernel threads like
+> kthreadd that set PF_NOFREEZE and never change it =E2=80=94 we can consid=
+er
+> refining this further in the future.
 
-Can I add this to the device dts? Not going to be pretty though...
+There is the counter argument of special-casing of p->exit_state and
+the relatively weak justification for it.
 
-diff --git a/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts b/arch/arm64/=
-boot/dts/qcom/milos-fairphone-fp6.dts
-index d12eaa585b31..69605c9ed344 100644
---- a/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts
-+++ b/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts
-@@ -11,6 +11,9 @@
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include "milos.dtsi"
-+
-+spmi_bus: &spmi_bus0 {};
-+
- #include "pm7550.dtsi"
- #include "pm8550vs.dtsi"
- #include "pmiv0104.dtsi" /* PMIV0108 */
-
-Or I can add a second label for the spmi_bus0 as 'spmi_bus'. Not sure
-other designs than SM7635 recommend using spmi_bus1 for some stuff.
-
-But I guess longer term we'd need to figure out a solution to this, how
-to place a PMIC on a given SPMI bus, if reference designs start to
-recommend putting different PMIC on the separate busses.
-
-Regards
-Luca
+You have created a synthetic workload where it matters, but how likely
+is it to be the case in practice?
 
