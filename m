@@ -1,269 +1,171 @@
-Return-Path: <linux-pm+bounces-30992-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30993-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86F93B0897F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 11:40:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72AE7B089A7
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 11:46:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EB1C3B3DC0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:39:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0EE07BA9BF
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D4028A3EA;
-	Thu, 17 Jul 2025 09:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B422877CC;
+	Thu, 17 Jul 2025 09:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLBpKFoL"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="lpcGqe8b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF61F288CBE;
-	Thu, 17 Jul 2025 09:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51CB205E25
+	for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 09:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752745216; cv=none; b=AqZaVqPF1r8xte/vVXPt3MIslsbRmsitjdskSXh0Qv/spuCVR1ZhFhtJIuioU4g7hfOZpNpok6KYR0qn+Zfu/WqKw6u5TMkjo8Rr7tC0B/yNusReClifNdMY2I+a3iMD0kcEhiz+cekbW5CF8rX/YyIOXtWlodhnYin67RPKAhQ=
+	t=1752745579; cv=none; b=nmaCFEUkIyOabBeePl5oG1gLlbpdA85kQGG4/mrWRkuqLjZifql+2t3Wuq+X2Atn/FEH+t+yWRQR9wc1xaZ6pNEXMa6MZWtS50qHL7NQpN3NqxVKTowX2Sw2Q3QCYou8pVhFuPp4sefD5sm0wA2jMrVHZrWgoGiD87L/tg8UN0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752745216; c=relaxed/simple;
-	bh=n/jEGmNwmstPDrrsksmS7Eun3jba5X+4dX/kbanNKYw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qpK304jt9lbqBo9Shn2GMHJqiQ0P9U3LgBjVdwxxk6jv5PRiXlo+NJy90Ri3C2zr44p5lAsXhdpGBXSGsRjpWiAYJODDlw1iSSkbtB/q6WtArAujYSUEd59sRve5L/5Y3TXEu2XjB2y2yfjB4IuYMnKHI64vlktxlci0oFZ8/fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLBpKFoL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD3CC4CEE3;
-	Thu, 17 Jul 2025 09:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752745216;
-	bh=n/jEGmNwmstPDrrsksmS7Eun3jba5X+4dX/kbanNKYw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eLBpKFoLhhM4XYYE2FkftIhVy1C5Vv5jMDARviBBZE7eDzWIDsKWNlVdHfVC4CqjV
-	 HLTGY45sO5bGtBDGpGpgIBrsceQEVdb7Aa6ueHxmiYHbctgYb0pKIeyZYwzxn5JZ/c
-	 KM3aMcOYAKk+7lKCaiNBS51q2udhyM0xNlEfqszg9Oqnzr/w3dasrFQB4S9CtJf/6s
-	 EmeV105c6j9u8wCEzPcKSZPwR1Und1vZJ6afXi8JonYuPFmpvUWBQgYgxXYTS0IopC
-	 9QGqZPa5J7poCwI0Ri+vl7L16QHU0qmJf6z8MzOReYi5QaH2/XpSvck+TfzZ51vhRD
-	 0FJAf6Mp0HGFw==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-61208b86da2so187328eaf.2;
-        Thu, 17 Jul 2025 02:40:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVkB7Fi8FfTBmRWzycl835QN6FJ+6A5UcSv//zHSyogsgM8H+2mwR38TUHvriCUkgxBSArDqe3Yp01Urgk=@vger.kernel.org, AJvYcCW3L8L6AeQMdla/h9dcoPdS9iPh28IQ0k1Tgzk3Gg/j6mj1iR0VJeGMAJnbbA+8YEyp0NzLXu5mPjI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmC99nX0kObSOFSI3afAmW5rr0HXuodCLXjjd2oOPt0taymNjP
-	97fCO5oQ2ttGjqLM3I6KYU3lKZvcTNQBqM0xopyxt+uj+Ta89GSYxR/gr6Ly+9YvXw1I8Kye+h5
-	5W7wrDUrwvxu51Bmt3bzA10gmiULd88A=
-X-Google-Smtp-Source: AGHT+IHyFjB0hVzWZMrgRfqjqyCBvNUF3k8laQHHTCdJ62HP30es2BBivCx9gqjaAWEnntZ0aahfFQqpXc1LqYLpVgI=
-X-Received: by 2002:a05:6820:4b87:b0:610:fc12:cbb4 with SMTP id
- 006d021491bc7-6159fe1ef24mr5129587eaf.1.1752745215456; Thu, 17 Jul 2025
- 02:40:15 -0700 (PDT)
+	s=arc-20240116; t=1752745579; c=relaxed/simple;
+	bh=SNKCNuS07yOhNClyun4AtdBr5+gzFNw6Inn1wst24b0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Tj92oZJdeU0qbA7iWPF0fTpQeYvFcUInnKsGXU3dBeUov7UXkgu+mlsKl4ZNzkk/ncbNU48j3us2evAAhK1jq1c/Ux6TYiS+9A/z31OigRO582y5oTGCoxuts6ywtwg3qSq9ptYn637tUNmEzZ9PeAsG5/PwwWYPx0CuHyPXNkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=lpcGqe8b; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ae0d7b32322so128824866b.2
+        for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 02:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1752745576; x=1753350376; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Ru/mu5vOTULTD4H+wkh3KmAvhPvotp/lHqkpBJrbBE=;
+        b=lpcGqe8bgzQXCJRH9llp8Wup0wahZZ63GZPfBMKuG5xnp5YCX9DgnGmM99AkY0Xiau
+         EelPRHsz9UXd4sdm+3caaj8q5YSYNJbEHVXpAoEhMSXhHeCOatKCgK+1P7VNccezQNOR
+         idb0Y6pN6yRPvprw/fyvhIivt7bRpNQKXLj85ncRd59+JvsVv/sI7jbcQpXlrNnwnKsx
+         /vv61S6PR2F/l/gNOEUXp6lerExDqD/v1LtJzhLIPmUhyE3oKwn5RzWxppp7vNsk2q0n
+         ImL/G8IFhPWV0SOX5e5t9Q5MP81EamOv8NuaL21bDHyArTjzwwPj5OvTME0Z2tv2gMlQ
+         WN+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752745576; x=1753350376;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3Ru/mu5vOTULTD4H+wkh3KmAvhPvotp/lHqkpBJrbBE=;
+        b=wfn0ufQyL+6Bbg9Kcdw4rxWSkSQR7KBasD2ImrA0x2rtdeNDysZ1jvOuTHTtAORAmE
+         ssisGZAH1P5XHFBlwZxpX8sVHVrz+WcmBXv9B/Xvd9s0pWoCecjLtxGZGiZ70Q7gSEgS
+         qoX/djzF+1PdJhtiVZY958wczAYKgQu4H8MMre68kDXREcfsX5h14DUnBn8Pka8z8kdK
+         N3EV0EixiaimnNQM11NMxyN7kLJg+FNQ4a6jHQGqRRqzvPod25UR3XUXc6cvKmTEZXHD
+         9cZ8XS6bbupZTaz3Gv7a2u8MlES6+eRoMOmldBQnA3wEeTvWrA8I3wvRJlHDSyOTogn4
+         yupg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXDuDRVmHZ2E6h+SgBUr0k7qDCzZEAyZ9kCLBvrBVHHV/vZlAbU/KRWzTVv1KarmaV4kI9JRSaQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCTalsVzyw0gV4RyLbYYsCvwGkkISfkSOwzaJERxvJSIHb97Zz
+	+0z61QbtHzd1PNaIAhQeA/iePORqLb+eAuq6eFwIAIVdd4QCUK1QUhLnQwP5pIQ8o8w=
+X-Gm-Gg: ASbGncvUbtIrM4TeeAmow7faYd9EBu4eQSA2zlSGNV80RsackwG+yf5Rz6AyZgLcrwl
+	kiFCyZnYFZfwkRfLRYJcIErFbUZLpMaZpUyeKunmBinKYhNJZEU9DW2wmZ4Z6mpuzJTB5HWfa3N
+	wkm6EcEIoH/TsNj100Br6J/SslGBE20xIRqRZNIyNwuIkcSmB/b98ixh/JCl96K1jCj3L6ttGY3
+	Wnxk+KUhQNTbr10bekdywD8e9pT3uD/TTR1+UWcejc314zTcTggCqs+3vHtXQMh27GUXa6araxV
+	DdgPGTyG5FZMzR8224fsm3vjCs4QMbpEf7eXiofX0N/JJiEzPhOx95SBp8HSPv4zPQxGN14lmEn
+	Bs89DTmwWcvOiSm6eW8IGKT1yIsjVQicLeKMGVWgh2+ONn4k2HnIVmiLB
+X-Google-Smtp-Source: AGHT+IFFJ+Gwq77Z/PIy0XMlE+NNaiR8R9S0OSFVxrU0iuecWvqgNe/XZ2Nw4b7IKr3qQanK/C4caw==
+X-Received: by 2002:a17:906:af16:b0:ad8:87ae:3f66 with SMTP id a640c23a62f3a-ae9ce1d8ba4mr400610566b.60.1752745576031;
+        Thu, 17 Jul 2025 02:46:16 -0700 (PDT)
+Received: from localhost (212095005146.public.telering.at. [212.95.5.146])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e8294bb2sm1333325866b.114.2025.07.17.02.46.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 02:46:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <6198088.lOV4Wx5bFT@rjwysocki.net> <CAGETcx-ddJMua5_VMNofr2vZ9n5Oyo4iT6Bac825L8tFqqQsxg@mail.gmail.com>
-In-Reply-To: <CAGETcx-ddJMua5_VMNofr2vZ9n5Oyo4iT6Bac825L8tFqqQsxg@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 17 Jul 2025 11:40:04 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jBQbDx2G0ZUy+Jx2yAdt_KCOJhOEbpQfLar=yWwvbhOA@mail.gmail.com>
-X-Gm-Features: Ac12FXw6-PWegMeVz_LQhekIZH8m6qssTfLXZ96WnnZI-UK1ShtRgVUHOqFUplU
-Message-ID: <CAJZ5v0jBQbDx2G0ZUy+Jx2yAdt_KCOJhOEbpQfLar=yWwvbhOA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: Rearrange suspend/resume error handling in
- the core
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 17 Jul 2025 11:46:12 +0200
+Message-Id: <DBE8G88CIQ53.2N51CABIBJOOO@fairphone.com>
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Luca Weiss" <luca.weiss@fairphone.com>, "Konrad Dybcio"
+ <konrad.dybcio@oss.qualcomm.com>, "Will Deacon" <will@kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, "Joerg Roedel" <joro@8bytes.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Manivannan
+ Sadhasivam" <mani@kernel.org>, "Herbert Xu" <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>, "Vinod Koul" <vkoul@kernel.org>,
+ "Bjorn Andersson" <andersson@kernel.org>, "Konrad Dybcio"
+ <konradybcio@kernel.org>, "Robert Marko" <robimarko@gmail.com>, "Das
+ Srinagesh" <quic_gurus@quicinc.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Jassi Brar" <jassisinghbrar@gmail.com>, "Amit
+ Kucheria" <amitk@kernel.org>, "Thara Gopinath" <thara.gopinath@gmail.com>,
+ "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Zhang Rui"
+ <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>, "Ulf Hansson"
+ <ulf.hansson@linaro.org>
+Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+ <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+ <linux-mmc@vger.kernel.org>
+Subject: Re: [PATCH v2 14/15] arm64: dts: qcom: Add initial Milos dtsi
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
+References: <20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com>
+ <20250713-sm7635-fp6-initial-v2-14-e8f9a789505b@fairphone.com>
+ <3e0299ad-766a-4876-912e-438fe2cc856d@oss.qualcomm.com>
+ <DBE6TK1KDOTP.IIT72I1LUN5M@fairphone.com>
+In-Reply-To: <DBE6TK1KDOTP.IIT72I1LUN5M@fairphone.com>
 
-On Wed, Jul 16, 2025 at 11:52=E2=80=AFPM Saravana Kannan <saravanak@google.=
-com> wrote:
+Hi Konrad,
+
+On Thu Jul 17, 2025 at 10:29 AM CEST, Luca Weiss wrote:
+> On Mon Jul 14, 2025 at 1:06 PM CEST, Konrad Dybcio wrote:
+>> On 7/13/25 10:05 AM, Luca Weiss wrote:
+>>> Add a devicetree description for the Milos SoC, which is for example
+>>> Snapdragon 7s Gen 3 (SM7635).
+>>>=20
+>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>> ---
+>>
+>> [...]
+>>> +
+>>> +		spmi_bus: spmi@c400000 {
+>>> +			compatible =3D "qcom,spmi-pmic-arb";
+>>
+>> There's two bus instances on this platform, check out the x1e binding
 >
-> On Wed, Jul 16, 2025 at 12:31=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Notice that device_suspend_noirq(), device_suspend_late() and
-> > device_suspend() all set async_error on errors, so they don't really
-> > need to return a value.  Accordingly, make them all void and use
-> > async_error in their callers instead of their return values.
-> >
-> > Moreover, since async_error is updated concurrently without locking
-> > during asynchronous suspend and resume processing, use READ_ONCE() and
-> > WRITE_ONCE() for accessing it in those places to ensure that all of the
-> > accesses will be carried out as expected.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > Based on the current linux-pm.git material in linux-next.
-> >
-> > ---
-> >  drivers/base/power/main.c |   79 ++++++++++++++++++++-----------------=
----------
-> >  1 file changed, 35 insertions(+), 44 deletions(-)
-> >
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -767,7 +767,7 @@
-> >         TRACE_RESUME(error);
-> >
-> >         if (error) {
-> > -               async_error =3D error;
-> > +               WRITE_ONCE(async_error, error);
-> >                 dpm_save_failed_dev(dev_name(dev));
-> >                 pm_dev_err(dev, state, async ? " async noirq" : " noirq=
-", error);
-> >         }
-> > @@ -824,7 +824,7 @@
-> >         mutex_unlock(&dpm_list_mtx);
-> >         async_synchronize_full();
-> >         dpm_show_time(starttime, state, 0, "noirq");
-> > -       if (async_error)
-> > +       if (READ_ONCE(async_error))
-> >                 dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
-> >
-> >         trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, fals=
-e);
-> > @@ -910,7 +910,7 @@
-> >         complete_all(&dev->power.completion);
-> >
-> >         if (error) {
-> > -               async_error =3D error;
-> > +               WRITE_ONCE(async_error, error);
-> >                 dpm_save_failed_dev(dev_name(dev));
-> >                 pm_dev_err(dev, state, async ? " async early" : " early=
-", error);
-> >         }
-> > @@ -971,7 +971,7 @@
-> >         mutex_unlock(&dpm_list_mtx);
-> >         async_synchronize_full();
-> >         dpm_show_time(starttime, state, 0, "early");
-> > -       if (async_error)
-> > +       if (READ_ONCE(async_error))
-> >                 dpm_save_failed_step(SUSPEND_RESUME_EARLY);
-> >
-> >         trace_suspend_resume(TPS("dpm_resume_early"), state.event, fals=
-e);
-> > @@ -1086,7 +1086,7 @@
-> >         TRACE_RESUME(error);
-> >
-> >         if (error) {
-> > -               async_error =3D error;
-> > +               WRITE_ONCE(async_error, error);
-> >                 dpm_save_failed_dev(dev_name(dev));
-> >                 pm_dev_err(dev, state, async ? " async" : "", error);
-> >         }
-> > @@ -1150,7 +1150,7 @@
-> >         mutex_unlock(&dpm_list_mtx);
-> >         async_synchronize_full();
-> >         dpm_show_time(starttime, state, 0, NULL);
-> > -       if (async_error)
-> > +       if (READ_ONCE(async_error))
-> >                 dpm_save_failed_step(SUSPEND_RESUME);
-> >
-> >         cpufreq_resume();
-> > @@ -1387,7 +1387,7 @@
-> >   * The driver of @dev will not receive interrupts while this function =
-is being
-> >   * executed.
-> >   */
-> > -static int device_suspend_noirq(struct device *dev, pm_message_t state=
-, bool async)
-> > +static void device_suspend_noirq(struct device *dev, pm_message_t stat=
-e, bool async)
-> >  {
-> >         pm_callback_t callback =3D NULL;
-> >         const char *info =3D NULL;
-> > @@ -1398,7 +1398,7 @@
-> >
-> >         dpm_wait_for_subordinate(dev, async);
-> >
-> > -       if (async_error)
-> > +       if (READ_ONCE(async_error))
-> >                 goto Complete;
-> >
-> >         if (dev->power.syscore || dev->power.direct_complete)
-> > @@ -1431,7 +1431,7 @@
-> >  Run:
-> >         error =3D dpm_run_callback(callback, dev, state, info);
-> >         if (error) {
-> > -               async_error =3D error;
-> > +               WRITE_ONCE(async_error, error);
-> >                 dpm_save_failed_dev(dev_name(dev));
-> >                 pm_dev_err(dev, state, async ? " async noirq" : " noirq=
-", error);
-> >                 goto Complete;
-> > @@ -1457,12 +1457,10 @@
-> >         complete_all(&dev->power.completion);
-> >         TRACE_SUSPEND(error);
-> >
-> > -       if (error || async_error)
-> > -               return error;
-> > +       if (error || READ_ONCE(async_error))
-> > +               return;
-> >
-> >         dpm_async_suspend_superior(dev, async_suspend_noirq);
-> > -
-> > -       return 0;
-> >  }
-> >
-> >  static void async_suspend_noirq(void *data, async_cookie_t cookie)
-> > @@ -1477,7 +1475,7 @@
-> >  {
-> >         ktime_t starttime =3D ktime_get();
-> >         struct device *dev;
-> > -       int error =3D 0;
-> > +       int error;
->
-> Are we still keeping around the error variable ... (question continues
-> further down)
-> >
-> >         trace_suspend_resume(TPS("dpm_suspend_noirq"), state.event, tru=
-e);
-> >
-> > @@ -1508,13 +1506,13 @@
-> >
-> >                 mutex_unlock(&dpm_list_mtx);
-> >
-> > -               error =3D device_suspend_noirq(dev, state, false);
-> > +               device_suspend_noirq(dev, state, false);
-> >
-> >                 put_device(dev);
-> >
-> >                 mutex_lock(&dpm_list_mtx);
-> >
-> > -               if (error || async_error) {
-> > +               if (READ_ONCE(async_error)) {
-> >                         dpm_async_suspend_complete_all(&dpm_late_early_=
-list);
-> >                         /*
-> >                          * Move all devices to the target list to resum=
-e them
-> > @@ -1528,9 +1526,8 @@
-> >         mutex_unlock(&dpm_list_mtx);
-> >
-> >         async_synchronize_full();
-> > -       if (!error)
-> > -               error =3D async_error;
-> >
-> > +       error =3D READ_ONCE(async_error);
->
-> Just to cache the value locally so that the value used for the "if()"
-> check is the one that's sent to dpm_show_time()?
+> Will do
 
-Generally, yes.
+One problem: If we make the labels spmi_bus0 and spmi_bus1 then we can't
+reuse the existing PMIC dtsi files since they all reference &spmi_bus.
 
-To be more precise, the READ_ONCE() is not really necessary after the
-async_synchronize_full(), so "bare" async_error could be used going
-forward, but then I would need to add a comment explaining this here
-and in two other places, so I chose to just use the existing local
-variable to store the value.
+On FP6 everything's connected to PMIC_SPMI0_*, and PMIC_SPMI1_* is not
+connected to anything so just adding the label spmi_bus on spmi_bus0
+would be fine.
 
-> Put another way, why can't we also delete the local "error" variable?
+Can I add this to the device dts? Not going to be pretty though...
 
-It could be deleted, but I preferred to make fewer changes in this patch.
+diff --git a/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts b/arch/arm64/=
+boot/dts/qcom/milos-fairphone-fp6.dts
+index d12eaa585b31..69605c9ed344 100644
+--- a/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts
++++ b/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts
+@@ -11,6 +11,9 @@
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+ #include "milos.dtsi"
++
++spmi_bus: &spmi_bus0 {};
++
+ #include "pm7550.dtsi"
+ #include "pm8550vs.dtsi"
+ #include "pmiv0104.dtsi" /* PMIV0108 */
 
-> Assuming we need to keep "error":
->
-> Reviewed-by: Saravana Kannan <saravanak@google.com>
+Or I can add a second label for the spmi_bus0 as 'spmi_bus'. Not sure
+other designs than SM7635 recommend using spmi_bus1 for some stuff.
 
-Thanks!
+But I guess longer term we'd need to figure out a solution to this, how
+to place a PMIC on a given SPMI bus, if reference designs start to
+recommend putting different PMIC on the separate busses.
+
+Regards
+Luca
 
