@@ -1,95 +1,107 @@
-Return-Path: <linux-pm+bounces-30999-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31000-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58994B08A7E
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 12:28:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE731B08B7C
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 13:03:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E6103A7F7F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 10:28:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39E291C203E2
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 11:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A12E9299951;
-	Thu, 17 Jul 2025 10:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3FE29A30E;
+	Thu, 17 Jul 2025 11:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="goFADbou"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mt6JiRx8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C868E2046B3;
-	Thu, 17 Jul 2025 10:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5421DB356
+	for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 11:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752748114; cv=none; b=j7GyLHuwvyyo15qtXmPzAEoIY4aixDnXA86wT2j2/PTF2Kqjpt6OXrz3F2T/HSQN28dB9lknRrI4BMBNen//x5HGBUugBjo/CaGMdZa+AVL3Kx+u3BULIXuroVzKl8FZeE/p1Ue6Sz1PLhgYtphFTnZvbgAcz73B3hv1L3FKNhM=
+	t=1752750178; cv=none; b=eEt05XXBbEvpJdgmZ20d3ibjkWQHwU7Vi0AmzU1DTYsxtSKnBf/0Ohxq6chV+CeEcDwnHyR2vtIc3bmhwJB2pVrZ1a6FCHSQXoWndhxtgb+ixYnGpmiVQUgYKaVoylWsJSFcXoLG/C0N79yvs9wbTciLxuiNjwEllbjaeRcfo68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752748114; c=relaxed/simple;
-	bh=njeWmQfR2ai9XZ2ITqvd5C2J/w/hnFAgXQdfFFO0UcQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HhEgFXLgwqNDZnNTPbR2xsFmhk4idEgxxcqfWl1s/+2VrDK4BrJIJBz8W4MbCPVioE6VIhHhnAlpabQgUcPiGGH5rbYNmAE3zoiZev2PWf9KWPCvYw7sqm4UULuR3LVEv6xm3SIYvke8OVRhgx8T6RV5AlRguCQteVwZqHfI2xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=goFADbou; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1752748111;
-	bh=njeWmQfR2ai9XZ2ITqvd5C2J/w/hnFAgXQdfFFO0UcQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=goFADbouZPEm62xcrdBEBQ4wStXnDAZkiZ7cYFTr1o2KiRQ6fx6zhrE2H13mjeFxI
-	 r7zJnDxtTdeHIgQm9b+FmAmhljUVi/LDgVEWn6Xj8mspK6ygd0Xb36Odd+VUSpbkxC
-	 e4MBC6zKRmP0N+f5nZQxPUdVeYsX23V281J/O4sYg84MW52LHH5qzUbAq3lP2U8GAi
-	 b3bTDMrR6GLzR0A4P7rIafgDEFzoQSdVF9B7mHG7YtGK4nbQ2ATBz/8MwzkSN4OExr
-	 x0R84IgFpBEHe5F9vp+SqPZjxphLOIng5SRFdl+UPhc82nDRXAuzG2pqADnJlvYTNs
-	 rrYQtIzKNZE8Q==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 83CFC17E0D15;
-	Thu, 17 Jul 2025 12:28:30 +0200 (CEST)
-Message-ID: <384e41cd-8bc0-4f98-9fcb-362608d93859@collabora.com>
-Date: Thu, 17 Jul 2025 12:28:30 +0200
+	s=arc-20240116; t=1752750178; c=relaxed/simple;
+	bh=z1PtktcRsZ/1y2GQDdgiGTLHoyuyjdCFmoAI6pe4z3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pu524VDROWoypNHog5zKhsJdJrJI7Cv7kqGgqqGPnVebkkNV+3tH/bifkk5Uq7TMcf8Fc3K45sTwkukRy8g+FiD2QyGNL8cgLCPwtikml0zdQ9HF2pktgSeBZsNk2kV1ilv7mSxGB6M0jl4SiCqqr39qaE9Ytz/YR3XzUimtNw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mt6JiRx8; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ae0dd7ac1f5so138568566b.2
+        for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 04:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752750175; x=1753354975; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1EndfwEVXqzSptJa18PcD8xERGQdTClp/Pdy2O1mJs=;
+        b=mt6JiRx8orAmTsD9IwCfSUzPZOs1Y8km8b3NH1CHhJAQH+D7Ya3hxlDyla7q8bDnut
+         I66ZfE8kBp9Nqyd3/Lq2kdMKjuNS3iLIC+ua2XQHRUSuyr8Y+FMkB21pt5ESOFOBrRh3
+         pyBGCRGAnCLtJ7feb6oTfxxdNAuaqj4fPGf6UKK5elTaBLB5dAvJJkHD2qBMVHmbfp77
+         OlQNhCa58ghLBpI9m2vULZkbm6dIS0bhT5vpYJWJLGClyhhb2N098w13qAXUHIIepUU0
+         wkykluMIyzAhl/yo4D3u3+G03UwHMDPRO0w4N4Xm6yPnyYaWGUM8EluzGyl1NL6xx0Zr
+         ElwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752750175; x=1753354975;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l1EndfwEVXqzSptJa18PcD8xERGQdTClp/Pdy2O1mJs=;
+        b=prCqbdy5w/w8i2bj7pzYKq0XvT0dt1Ho932Gp+lcUugcRXmzjdy9mVN72T3vVUNV2l
+         q+BZx4WPmb417SDhWFRsxQqNIrU/sTR6bNZyPMcpOtrA6k6nBJZpyV0R+tpG1tcxLdLZ
+         F0HPvT/2++XEbsj6kHcxz1Xxg0pIWQupWJmZoe9QlmiQALwAHQLDTNJQXaXFG4Gr+hlu
+         L08F90QoCXcbxZDwAtVHu/oe76UaL797P9q8ufOkBJuu2C3fejDPYcjP026hN3xDJD0y
+         aDJRiDC7yYiJxBHBdEjc9ipuFzIiQKmhWpNnMP3huZYEjRKGwmzss8aKDxhm11m1b/Z/
+         ibKg==
+X-Forwarded-Encrypted: i=1; AJvYcCVbnlzj7n2qWvFQWkirGf3mQGtUmrGBQGkeFCLjKipKIYxIzwZI9O0iVFibNMfU0FIQvGGBSrVIDA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNoLTneNtbR0kPQVltbSeqqYzmRXf3bUVnLgNB2TSDtDnb/oKe
+	3TwAhCXWeBBJHyYPsATUoqDF/U5g06QUBOJWi0qxTu7pmZ4fIPrZAM7kmaVRPCEwVlg=
+X-Gm-Gg: ASbGncsKdZ3jT+1Dhqfsooeut9cB0ee+VfrgQP+VxTfh6Ki3vfuCtl4DfAyh4vZAj0F
+	rdg04fBb2KStpJfcEMMLNPRXts/pK4LBg8oTivNNbyKc47LSdCeBrhhldVo4Ac+BwjlY2/xvUzL
+	CpAjMeukVvv2dAFCgfOORHDPiwpMHPw5BIR+voQH03++MNTFI3iFA5Jv1Xo6riQqmLF7C2SDhOA
+	PMJ0Bd+qc1vtSb3G+6FAHFuqkizNKYY+YBEnW2ZuAHdSkZ5AJKCoNhNcIlSFXuYxRp5UJcwRY+p
+	wvM5MnE3krQEeLqI/Mr7dy1B3p7V39ClPsyeMbdhjMcvzoeAxq+c8hFsg+L9qyglih4w8noUMZh
+	tCc5oU1tymD8O1CyYO9M=
+X-Google-Smtp-Source: AGHT+IGeG4Q6tKxZC/ujOckjGsjHYhMxLU2nUMZOOzS48SXrFZHO4l2kj48NJp+pTDUjshnDsQO5FA==
+X-Received: by 2002:a17:907:7f8f:b0:adb:2e9f:5d11 with SMTP id a640c23a62f3a-ae9c9af6f85mr650313366b.37.1752750175298;
+        Thu, 17 Jul 2025 04:02:55 -0700 (PDT)
+Received: from linaro.org ([82.79.186.23])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e8294042sm1343873966b.119.2025.07.17.04.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Jul 2025 04:02:54 -0700 (PDT)
+Date: Thu, 17 Jul 2025 14:02:52 +0300
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+Cc: robh@kernel.org, lumag@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ulf.hansson@linaro.org,
+	konrad.dybcio@oss.qualcomm.com, quic_tingguoc@quicinc.com,
+	quic_rjendra@quicinc.com, kamal.wadhwa@oss.qualcomm.com,
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] pmdomain: qcom: rpmhpd: Add Glymur RPMh Power Domains
+Message-ID: <aHjYXFyQ2yTovMA9@linaro.org>
+References: <20250716152758.4079467-1-pankaj.patil@oss.qualcomm.com>
+ <20250716152758.4079467-3-pankaj.patil@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] dt-bindings: cpufreq: Add
- mediatek,mt8196-cpufreq-hw binding
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20250716-mt8196-cpufreq-v3-0-d440fb810d7e@collabora.com>
- <20250716-mt8196-cpufreq-v3-1-d440fb810d7e@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250716-mt8196-cpufreq-v3-1-d440fb810d7e@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250716152758.4079467-3-pankaj.patil@oss.qualcomm.com>
 
-Il 16/07/25 19:51, Nicolas Frattaroli ha scritto:
-> The MediaTek MT8196 SoC has new cpufreq hardware, with added memory
-> register ranges to control Dynamic-Voltage-Frequency-Scaling.
+On 25-07-16 20:57:58, Pankaj Patil wrote:
+> From: Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>
 > 
-> The DVFS hardware is controlled through a set of registers referred to
-> as "FDVFS". They set the target frequency the DVFS hardware should aim
-> for for each performance domain.
+> Add RPMh Power Domains support for the Glymur platform.
 > 
-> Instead of working around the old binding and its already established
-> meanings for the reg items, add a new binding. The FDVFS register memory
-> region is at the beginning, which allows us to easily expand this
-> binding for future SoCs which may have more than 3 performance domains.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> Signed-off-by: Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>
+> Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
