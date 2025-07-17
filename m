@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-30981-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30982-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F02DBB08623
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:09:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF401B08621
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 09:09:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB4083A97A0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 07:06:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 860731C24105
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 07:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F391C21CC58;
-	Thu, 17 Jul 2025 07:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BA4521CA13;
+	Thu, 17 Jul 2025 07:03:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kgv1P0jq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="okEFnM9T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B346221CA13;
-	Thu, 17 Jul 2025 07:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8218219A79;
+	Thu, 17 Jul 2025 07:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752735800; cv=none; b=P0ALPy0b6E95LY6KAkN0l7asHS0RsjcMVINM6+XOwYtOoxxhKJYRiL5cOZLxrT8E99YciWEzmUhyUlMkVQ/kM/Mm0jK3a58N/fP1bxnLSuEHVLaftJzj9v/Uq9re8YL9ItvddSX0Zb4HqZrAlOYLGDzD/qhhUdaGISA7D7ND36s=
+	t=1752735811; cv=none; b=nin8GNduMmkrc4+M/natYT4cX8fD71sjGU0Ue8p5KrWcdV9mY3zx0M2bpyiucpVGKlxKxlWfp5DrxrDzD8ZeMCaNAuOIbNWV2XBdd8dogbTMgXDnVxUib/vLymCgctOp5dxK0Y1PQFAl9DZEVUHI3Lmk9LHzP6mVfMFusAsRufY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752735800; c=relaxed/simple;
-	bh=HM8FCWKH3c/hwP3OjGipX5s8VH8GmFkm7OnMZeyUrk8=;
+	s=arc-20240116; t=1752735811; c=relaxed/simple;
+	bh=23GJ9/zRa9LgzsH1knHQ9SnAIrhpMVta/8Q9WVcfU5M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S68GCiJQvgZlOI3qYqGHVG3v8rnrtA6BEUxN/yW2iV5GB7akC6aPKgHPDrcazAkY36pbhJobzSdw3YpfF96ceQPaO2PxGdNwFLpfhEimAO5yJmnNswtqn38D2ECUmUxuybo/URNt47Oz5arp3ujAP6Gq6ZQBy51SLz8KJRaJtLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kgv1P0jq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659F3C4CEE3;
-	Thu, 17 Jul 2025 07:03:12 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=T/W+eyLUkYZxJw0a1M3ExoCs6FzA9Gw3pT4/rkwFdPtsNXBwbF8Ylx8R3X7oogjm9NHY48e7ROV8ZXljKAIymZAZewsZDsCsC/UBBGIZlrGoKkDs0R/hAys2tE37xEiK2Cy7n/2gRbyV+bLA8trLX3kLp/1TVhycqrvmAtxf9h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=okEFnM9T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ADBFC4CEE3;
+	Thu, 17 Jul 2025 07:03:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752735800;
-	bh=HM8FCWKH3c/hwP3OjGipX5s8VH8GmFkm7OnMZeyUrk8=;
+	s=k20201202; t=1752735811;
+	bh=23GJ9/zRa9LgzsH1knHQ9SnAIrhpMVta/8Q9WVcfU5M=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Kgv1P0jqCcbWUU9HfRrAeQeQLsVuTiH8wa3iWfq0LrG55QA0H3AUA/pb3EF7Xmb5s
-	 NycL6zjJnjjYtDNPuLJP5/Ai7d6h15UJL86nsTdmOz6Hx4cnzsuHaTK0ScmBzx72Ox
-	 mwElIGGsG5/iCtsVRT6Mdip45/3nau+mYa9QWEaciuzgUNUNxR4S8Bdo9p1FgSgu9z
-	 CZhkDz/poAqSr50QQxvpLef9+ofYqBVIaePwM6Gtc+XwPl0GwyUR8ew0+ntBBd1wRs
-	 I1oLn51i89Ve/P+GK7UTKydUSFzYhv51qJr7onwTyzWW+vU4QKiDSZdyy8CPKyQqzu
-	 Y5R8ALEX6Lnqg==
-Message-ID: <b525421a-e38d-4030-aae7-ccd19858fcb8@kernel.org>
-Date: Thu, 17 Jul 2025 09:03:11 +0200
+	b=okEFnM9TeLOERng6C+Q8DpXEYk32i5fEl+AL1Azu6Mo90nWvrS4K3YLiaSVZNJlRM
+	 Re/vdGX9srjliBIpNQBoEZezFWDRjQk1T9udf6Qgz0lvdrFnvOohERbEyyesnEIEoD
+	 dG34+XQPQLn59Q9FnPbPkYV531y4GDR8B+q+fGXGYtWRa3DoBV9JOmR2rNSUbddxLh
+	 yPKZOt0CCKWmNIs9oeOUaQWT9HaDoywqHy93zggfStaBtWAbspSakWc0L8TZsnxcXe
+	 jDlm9Au/rowudMV5slOiS1UpYRS4HrauAYlBSeN2+l2g/3goRNJ5jYAL9j/hW1z+wD
+	 Jzt+DEFMfZX8g==
+Message-ID: <410f2bf2-de9b-421d-9ca5-26a3ec517ccf@kernel.org>
+Date: Thu, 17 Jul 2025 09:03:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: interconnect: qcom: Remove double colon
+Subject: Re: [PATCH 3/3] dt-bindings: soc: qcom,rpmh-rsc: Remove double colon
  from description
 To: Luca Weiss <luca.weiss@fairphone.com>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -78,7 +78,7 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20250717-bindings-double-colon-v1-0-c04abc180fcd@fairphone.com>
- <20250717-bindings-double-colon-v1-2-c04abc180fcd@fairphone.com>
+ <20250717-bindings-double-colon-v1-3-c04abc180fcd@fairphone.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -124,13 +124,12 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250717-bindings-double-colon-v1-2-c04abc180fcd@fairphone.com>
+In-Reply-To: <20250717-bindings-double-colon-v1-3-c04abc180fcd@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/07/2025 08:54, Luca Weiss wrote:
-> No double colon is necessary in the description. Fix it for all bindings
-> so future bindings won't have the same copy-paste mistake.
+> No double colon is necessary in the description. Fix it.
 > 
 > Reported-by: Rob Herring <robh@kernel.org>
 > Closes: https://lore.kernel.org/lkml/20250625150458.GA1182597-robh@kernel.org/
