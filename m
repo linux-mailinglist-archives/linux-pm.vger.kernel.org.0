@@ -1,208 +1,150 @@
-Return-Path: <linux-pm+bounces-30959-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-30960-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A420B0816D
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 02:37:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD69DB08178
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 02:40:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D7356832B
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 00:37:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E6781C2706F
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 00:41:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F3C1419A9;
-	Thu, 17 Jul 2025 00:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678A07DA9C;
+	Thu, 17 Jul 2025 00:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hHHIdONq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BA41CD2C;
-	Thu, 17 Jul 2025 00:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA762E370C;
+	Thu, 17 Jul 2025 00:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752712660; cv=none; b=HSP8jVDBwyCQfx6YTo06fOUC/szwCvvOM+9JYveihKHdBx5NBqFPBj9oL9P4xBKJHCSm+NX0GAmqLXZvoq9Eh0c/cJDyP4BXxiVG06BpViUCPet2kXL98X/J4hYqtG1632YL1ZCGY0p/Q4q5AADw8iiYkeF4ei0CduEfiCOww3s=
+	t=1752712846; cv=none; b=e+DDGWMlificHNnLnwRpRqGOgbt20bJerPa9vLVkumaybxgtYL/sZoy1aKLrF1ip9znxZkiLYzSd/ucKbnfvLevLa/MSxAstB8s3aTbNCOIdD7dvoWXF/Gl4Ed9ueygD5sYc1aCyNSG4NWi8BDiYRETySrAsfpJS8uAqHFsir3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752712660; c=relaxed/simple;
-	bh=J/TqCT0FKVsv8HqvbHkFpVKKpVXXUEP6U0RxNVgqKWE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NmbkpRo6lsKia0BkIBVHuYw26pK/rQ63zxurbrdgpECeoBGdMfwFGI2VDuSGYubEELPsTv4Jd4dYL/FO1ukcx1cNdqyKOtHYBgiWJBYzo+dCPeRFKn9SGn4/wH1hmK0KiZTHkiRFkGnxsk6eWM6IItmUZ28S199Vvkoahgxs1Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 36ad82f862a611f0b29709d653e92f7d-20250717
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:2a127a1d-334f-4182-84a8-be12336b1c03,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:dd1951e424efaf6d169bc2402947691a,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 36ad82f862a611f0b29709d653e92f7d-20250717
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 646174271; Thu, 17 Jul 2025 08:37:26 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id C5984E008FA3;
-	Thu, 17 Jul 2025 08:37:26 +0800 (CST)
-X-ns-mid: postfix-687845C6-3333099
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id C3598E008FA2;
-	Thu, 17 Jul 2025 08:37:25 +0800 (CST)
-Message-ID: <65a378b2-887b-43f3-85d8-b689b4c92817@kylinos.cn>
-Date: Thu, 17 Jul 2025 08:37:25 +0800
+	s=arc-20240116; t=1752712846; c=relaxed/simple;
+	bh=Y+Cots5rJi/FBfAEv4lDLQM4MAAkN0eNxoE077TY2OQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AxEM6aPRKFg4DC7kFHBJSS67A+L0BiDmlTHXC4ezbeXGXnJI5CcXFzKlXxILxABI52yTW8XS/5JHnX4lnLtToFaD/QonNb5FpwNi1De2CeGmPpG7jxpr56CsfKN/6n6Icv05LegqlvKy7KuRXSjdw1TpEv21selkNlNI/iEOk2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hHHIdONq; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752712845; x=1784248845;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y+Cots5rJi/FBfAEv4lDLQM4MAAkN0eNxoE077TY2OQ=;
+  b=hHHIdONqJi9Zpj0As2WEdKN66ELXIgWDR6SHLLjQ05YYI9JofLduXWdW
+   XbDzhBF5BZYZLk/WoHHBBSsbPAs3XTZN4ao2rXoUr6MmXI2zw7NLYh9Nh
+   ZZ1eHJKPAn5FW5o5qE+4Eei91Ebo1SdNw0B4jr8ZZqCI3yp1m4y7R1Miv
+   EZEuLQB1V92pkpO6Vu5UMnoxXnxSAl17u41jq0e1ppE4COlZoDxmkppaD
+   hFVJnt5q1YWXxJv/89C+8WLpvjCNt02Ilrwo3V6anXX0B2GUdfgsHHGDc
+   oyJsOIEmy4hRWupj5esQnM9WtbhKra++4yVL1E+8OeD6Z/mxccdxe8Fqg
+   g==;
+X-CSE-ConnectionGUID: iA3INIuUTTK0Q82xnEJuCQ==
+X-CSE-MsgGUID: MS3rKLZ5QVi8g/wXku5i+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="54912420"
+X-IronPort-AV: E=Sophos;i="6.16,317,1744095600"; 
+   d="scan'208";a="54912420"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 17:40:44 -0700
+X-CSE-ConnectionGUID: tmfiHJLNTvOBnxZra5SbBA==
+X-CSE-MsgGUID: 9djRhehiRJmPdxzYy78DMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,317,1744095600"; 
+   d="scan'208";a="188596607"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO debox1-desk4.intel.com) ([10.124.220.193])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 17:40:42 -0700
+From: "David E. Box" <david.e.box@linux.intel.com>
+To: rafael@kernel.org,
+	bhelgaas@google.com,
+	vicamo.yang@canonical.com,
+	kenny@panix.com,
+	ilpo.jarvinen@linux.intel.com,
+	nirmal.patel@linux.intel.com
+Cc: "David E. Box" <david.e.box@linux.intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC 0/2] PCI/ASPM: Allow controller-defined default link state
+Date: Wed, 16 Jul 2025 17:40:24 -0700
+Message-ID: <20250717004034.2998443-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] PM: suspend: clean up redundant
- filesystems_freeze/thaw handling
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250712030824.81474-1-zhangzihuan@kylinos.cn>
- <9d35035d-c63e-4d11-a403-54c50e8b35c1@kylinos.cn>
- <CAJZ5v0g22fMDc21yV2svePf_4BWZRrcy+b3-efpbfAGLpa2=Lw@mail.gmail.com>
- <76a87abf-8fc9-445b-83d5-0daa33746014@kylinos.cn>
- <CAJZ5v0jKwHZUpsYLzUkcL4=FDnewXoTeJo5e+ccyHw2bZ+ghTg@mail.gmail.com>
- <79468a7f-061f-479a-9357-e48c69cadbb8@kylinos.cn>
- <CAJZ5v0j4biD2Jd5isUGFmwAva1RJsPDCHNpb1VEjM5vTBrk-jQ@mail.gmail.com>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <CAJZ5v0j4biD2Jd5isUGFmwAva1RJsPDCHNpb1VEjM5vTBrk-jQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-=E5=9C=A8 2025/7/16 20:23, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> On Wed, Jul 16, 2025 at 4:04=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
-os.cn> wrote:
->>
->> =E5=9C=A8 2025/7/15 20:48, Rafael J. Wysocki =E5=86=99=E9=81=93:
->>> On Tue, Jul 15, 2025 at 8:12=E2=80=AFAM Zihuan Zhang <zhangzihuan@kyl=
-inos.cn> wrote:
->>>> Hi Rafael,
->>>>
->>>> =E5=9C=A8 2025/7/15 01:57, Rafael J. Wysocki =E5=86=99=E9=81=93:
->>>>> Hi,
->>>>>
->>>>> On Mon, Jul 14, 2025 at 10:44=E2=80=AFAM Zihuan Zhang <zhangzihuan@=
-kylinos.cn> wrote:
->>>>>> Hi Rafael,
->>>>>>
->>>>>> Just a gentle ping on this patch.
->>>>> I've lost track of it for some reason, sorry.
->>>>>
->>>>>> I realized I forgot to mention an important motivation in the chan=
-gelog:
->>>>>> calling filesystems_freeze() twice (from both suspend_prepare() an=
-d
->>>>>> enter_state()) lead to a black screen and make the system unable t=
-o resume..
->>>>>>
->>>>>> This patch avoids the duplicate call and resolves that issue.
->>>>> Now applied as a fix for 6.16-rc7, thank you!
->>>> Thanks for the reply!
->>>>
->>>> Just a quick follow-up question =E2=80=94 we noticed that even when =
-the =E2=80=9Cfreeze
->>>> filesystems=E2=80=9D feature is not enabled, the current code still =
-calls
->>>> filesystems_thaw().
->>>>
->>>> Do you think it would make sense to guard this with a static key (or
->>>> another mechanism) to avoid unnecessary overhead?
->>> Possibly, if this overhead is significant, but is it?
->> We've done some testing using ftrace to measure the overhead of
->> filesystems_thaw(). When freeze_filesystems is not enabled, the overhe=
-ad
->> is typically around 15=E2=80=9340 microseconds.
-> So this is the time that can be saved by adding a
-> filesystem_freeze_enabled check before calling filesystems_thaw()
-> IIUC.
->
-> I'd say don't bother.
->
+This RFC series addresses a limitation in the PCIe ASPM subsystem where
+devices on synthetic PCIe hierarchies, such as those created by Intel=E2=80=
+=99s
+Volume Management Device (VMD), do not receive default ASPM settings
+because they are not visible to firmware. As a result, ASPM remains
+disabled on these devices unless explicitly enabled later by the driver,
+contrary to platform power-saving expectations.
 
-Understood, thanks!
+Problem with Current Behavior
+
+Today, ASPM default policy is set in pcie_aspm_cap_init() based on values
+provided by BIOS. For devices under VMD, BIOS has no visibility into the
+hierarchy, and therefore no ASPM defaults are applied. The VMD driver can
+attempt to walk the bus hierarchy and enable ASPM post-init using runtime
+mechanisms, but this fails when aspm_disabled is set because the kernel
+intentionally blocks runtime ASPM changes under ACPI=E2=80=99s FADT_NO_ASPM=
+ flag.
+However, this flag does not apply to VMD, which controls its domain
+independently of firmware.
+
+Goal
+
+The ideal solution is to allow VMD or any controller driver managing a
+synthetic hierarchy to provide a default ASPM link state at the same time
+it's set for BIOS, in pcie_aspm_cap_init().
+
+Solution
+
+1. A new bus flag, PCI_BUS_FLAGS_ASPM_DEFAULT_OVERRIDE, based on Rafael's
+suggestion, to signal that the driver intends to override the default ASPM
+setting. 2. A new field, aspm_bus_link_state, in 'struct pci_bus' to supply
+the desired default link state using the existing PCIE_LINK_STATE_XXX
+bitmask.
+
+If the flag is set, the ASPM core uses the driver-supplied value in place
+of the firmware one. If not, behavior is unchanged.
+
+Only the immediate parent bus is checked for this flag. If future use cases
+require deeper inheritance (e.g., through PCIe switches), the logic can be
+extended to walk the bus hierarchy.
+
+This approach avoids adding driver-specific logic to ASPM core code and
+keeps the layering clean.
+
+Testing is appreciated as I didn't get a chance to do so yet but plan to.
+
+Thanks, David
+
+---
+
+David E. Box (2):
+  PCI/ASPM: Allow drivers to provide ASPM link state via pci_bus
+  PCI: vmd: Provide default ASPM link state for synthetic hierarchy
+
+ drivers/pci/controller/vmd.c |  7 +++++--
+ drivers/pci/pcie/aspm.c      |  5 ++++-
+ include/linux/pci.h          | 12 ++++++++----
+ 3 files changed, 17 insertions(+), 7 deletions(-)
 
 
->> However, when freeze is enabled, we observed that filesystems_thaw() c=
-an
->> take over 3 seconds to complete (e.g., 3,450,644 us in one test case).
->>
->> freeze_filesystems  not enabled:
->>
->> # tracer: function_graph
->> #
->> # CPU  DURATION                  FUNCTION CALLS
->> # |     |   |                     |   |   |   |
->>     4) + 15.740 us   |  filesystems_thaw();
->>    11) + 16.894 us   |  filesystems_thaw();
->>    10) + 17.805 us   |  filesystems_thaw();
->>     8) + 37.762 us   |  filesystems_thaw();
->>    ------------------------------------------
->>    11) systemd-54512  =3D> systemd-66433
->>    ------------------------------------------
->>
->>    11) + 15.167 us   |  filesystems_thaw();
->>     6) + 16.760 us   |  filesystems_thaw();
->>     7) + 14.870 us   |  filesystems_thaw();
->>     3) + 16.171 us   |  filesystems_thaw();
->>     1) + 16.461 us   |  filesystems_thaw();
->>    ------------------------------------------
->>     3) systemd-71984  =3D> systemd-73036
->>    ------------------------------------------
->>
->>     3) + 28.314 us   |  filesystems_thaw();
->>
->> freeze_filesystems  enabled:
->>
->>    10)               |  filesystems_thaw() {
->>     2) $ 3450644 us  |  } /* filesystems_thaw */
->>    ------------------------------------------
->>     1) systemd-72561  =3D> systemd-99210
->>    ------------------------------------------
->>
->>     1)               |  filesystems_thaw() {
->>    ------------------------------------------
->>     7) systemd-71501  =3D> systemd-99210
->>    ------------------------------------------
->>
->>     7) $ 3429306 us  |  } /* filesystems_thaw */
->>    ------------------------------------------
->>     7) systemd-99210  =3D> systemd-100028
->>    ------------------------------------------
->>
->>     7)               |  filesystems_thaw() {
->>    ------------------------------------------
->>     4) systemd-53278  =3D> systemd-100028
->>    ------------------------------------------
->>
->>     4) $ 3270122 us  |  } /* filesystems_thaw */
->>    ------------------------------------------
->>     7) systemd-100028 =3D> systemd-100720
->>    ------------------------------------------
->>
->>     7) $ 3446496 us  |  filesystems_thaw();
->>    ------------------------------------------
->>     7) systemd-100720 =3D> systemd-112075
->>    ------------------------------------------
->>
->>     7)               |  filesystems_thaw() {
->>    ------------------------------------------
->>    11) systemd-66433  =3D> systemd-112075
->>    ------------------------------------------
->>
->>    11) $ 3454117 us  |  } /* filesystems_thaw */
->>
->>
->>
+base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
+--=20
+2.43.0
+
 
