@@ -1,154 +1,300 @@
-Return-Path: <linux-pm+bounces-31036-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31037-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B08FCB09641
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 23:06:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CC5AB09696
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 23:56:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 443353A16BD
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 21:06:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 425B2580319
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Jul 2025 21:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D08922E3E9;
-	Thu, 17 Jul 2025 21:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4720237173;
+	Thu, 17 Jul 2025 21:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="CCQ6Zj5t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kwDRaKlh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8301E47C5
-	for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 21:06:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4192153CE;
+	Thu, 17 Jul 2025 21:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752786384; cv=none; b=O0qVZXNNtVKd6iNVCCZ+xQetnIEya8f6LRfL0/ZiMFjkubt5VDsHTqn5LjukSapqqY8/HtlzqF+R/VB7RPIow1mXcvFRskgY7Ofxzvv4dc0w4G52Tw7xee2js7Yuos+DuSIUnv5Xie9IFH6lwg6nDM/mnKMC4uYvUHWqMyAJ8Ao=
+	t=1752789354; cv=none; b=Af29UY2//gxRDRNz8Hd8ue6LDWoMsxgTKeN63Uh8vl9FLV+Z7J0738Qu5ZkeW6EBNxlL5iNt+D078VLXYXgeEt5gXiIOhmVNh+jiX4lUVvolhmyg1tC1HxoAJVtUE3kmX9Joa0cAjfx4bVHuDf1sCi4qXmY0hWqr0o4ITHhPZZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752786384; c=relaxed/simple;
-	bh=Fu5f1KYcPNBKXbwBLRZ4Cig1/7uNC4oBZT6MsGsCCXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQQOHvms2W42FwVRqbYLoCEA4xCwE2e4aocDMg2uGcn58EXaw7vk9frorZSHZ3XqF8qzXcnclJRLBtY7c90kbsVPSorIRrpZzf1Xy0Ss2MhlPmtsyn6HourF7fp40GDThN3VVDIGqQwBeaWd8gF5cp9LXY2qH7whp1J9RE9f30M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=CCQ6Zj5t; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56HCZ2oo007297
-	for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 21:06:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	0pHw80GM2tQXK/P5MspgwmNzeXrdomfpLEtnn34M6J0=; b=CCQ6Zj5taIIZgg77
-	BjsrbRhNCnxCoHw75tzik23Z5SkOjFbzC3ZWStbyKsGNyAA/8nYux/lu0Gdwf/EW
-	F/FadNR3e4hcsj/VB53T+14onJAyrVEondsZBKolYuQGymdKLSABgFCT9rPZ3yez
-	0BVC8k3zrT3sMnUxN+05vHZX8BGVDhUZ7MNuObkXxagKVeRUfFHuthRc+Pk2PvO2
-	uFEKBcvvsFQevJDztr3weGvJqNWkUsRWnusS7W5tfSf69ECcOrSWR9LiOaRoIe+e
-	lfdZ4WWm+mgi0hE9jTKA3ud+aIcxLDy4bgzq0McXapnCbw4I2pd6aVwOABwgVtzb
-	hAFFdA==
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47wfcaabks-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 21:06:20 +0000 (GMT)
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6facde431b2so3842406d6.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Jul 2025 14:06:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752786379; x=1753391179;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0pHw80GM2tQXK/P5MspgwmNzeXrdomfpLEtnn34M6J0=;
-        b=JJHh6GujCXWJe+4lpBcBK0cV3rGnOQCPVc4cYQsW1YZnNrZmI1zFLSdO4ALZ2miedX
-         C28c55qdRQkU7dq61NLnRWWs7WhL2bJeAF7bbf/9VVsL+vwaiR7Uwy55lmXFR9t9050C
-         GmdOxgC63CeCXJB1QHzgKWjjgmS+MLQ8zK9kQPiKIZnldtNsWStz6ysJAclYgvyrqQ1c
-         Tnox6CWwfbbEuuFdoIVePcC7LwjKzptmu1+xdbCxdvkeDpYBYbO2bVbx0jP4Ckoau2H8
-         GsJuqoWoPK0leWQ8oOiC7z5dh3J6B19P5xq5LtP7X7k86swMgYNTJZQMyUGSBB7t4NLx
-         thFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUepBUXEbUoIvXiOQpT75I0xqNychWQiYHFh9BhGtYdKlJkKSdQnYAdfmEvw8iCJZo7G6BPAjo7QA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5ksKcjmi1gKTMrGTqrSdmGJMLkfm0ErlIeNIJ0ZuubLCIp/8f
-	3ECpA7RZLzoV7526YPLo9tYlLlQGx3ut/LHos0M7wLQgIsWGtlL6VR4pdLuDL0k7elR+GYNg1bu
-	qcBpfD1wNiLSchqmo/jPIhA3gR1U90OvXd8XSXh/veohPUhXOprAIe35BCTN0LQ==
-X-Gm-Gg: ASbGncsR40Ivd1pTHil8FWQaunw/IDfErYUFNT3Dz9SX+N3SYXcXdPbt6xje7YFVmnU
-	HZMfOfFt/FTWgJ7pFYVoeRPzbDZtJNO/S750LKoCu3D3npJB9N9rBiZNNMjvV/7ziLt54kgWDO1
-	hn+SuT3PnArBNtHnlBGWqUZ5X5nRsAqHRu4q6qARBZFvmEc1TlfmG10t7RPi5dL99/vuO5e7zB2
-	joCtCb4+2Bq7+DD9zWjOPZYWJEFL6Duk2qeF2EsscIkQACB367vrXw8U8X7pp6RpR20LA8Sosbe
-	aL2MmJIARiPiAoc5JlixK1CfI6vVYTspbIRb/LhYdl6ntIfxSBIfaZPOTZvZonCEO+l8rr+Ggy+
-	cNGKCpF1tppBCGd0YWnMb
-X-Received: by 2002:a05:620a:28c1:b0:7e3:297d:ec32 with SMTP id af79cd13be357-7e342b37074mr503117685a.10.1752786379382;
-        Thu, 17 Jul 2025 14:06:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFgsvETj4x558m5O4J1Q3oaDXiBHmdl68wKzu5lszhWnL8Pa+XlDwiszt+zOKmmwEGKjcAMgg==
-X-Received: by 2002:a05:620a:28c1:b0:7e3:297d:ec32 with SMTP id af79cd13be357-7e342b37074mr503115285a.10.1752786379004;
-        Thu, 17 Jul 2025 14:06:19 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e8294bfdsm1408812966b.120.2025.07.17.14.06.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jul 2025 14:06:18 -0700 (PDT)
-Message-ID: <b5a1314e-6733-41e3-9258-c3a88b2c90e7@oss.qualcomm.com>
-Date: Thu, 17 Jul 2025 23:06:15 +0200
+	s=arc-20240116; t=1752789354; c=relaxed/simple;
+	bh=aQ8AEa5y0u+VVf9vSpXwnKG8i5PF3aKYF/4AKnW6whs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=fQMi0zwJrnLe5G4lx/sHDzWcLmft7kC7k8CcS9JTmNsH2gjroE/JuLL4Rf/VBq7gtZbW82bqJCOq+bNTqxR6KIYIT70X0KVq6xdmJ6uOlvlVeZQmYU98g4fWT5UXxQwQTPrUpAqjZgrEZuqJjMhj6Urme/0SaUFXank6Mw92qhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kwDRaKlh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10260C4CEE3;
+	Thu, 17 Jul 2025 21:55:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752789354;
+	bh=aQ8AEa5y0u+VVf9vSpXwnKG8i5PF3aKYF/4AKnW6whs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=kwDRaKlhffwnn7T6xKYIeqt0Cc1Wm5ueQDly3Pp9Nrua+jQ+MJBM8lA5NWQSIaXMo
+	 PCHcq7gHmgr7FT9HTCdqnrjdkOFtc1Oise47quZjRV1YAoV/amk9ayH9OWyRBVNCHS
+	 JaJvjIK+pZVstUJ2kgeQNjDNjLt50nW3XqYFKWP1vDzweH7XSAfPUpWkVU5cIddhlh
+	 HgqgR4XZeQIF+jZF0GTbq54tgGtvQEPnOlmrw0UE9hG9V/pUHeuTSj6UAnheFE21+2
+	 XnAVOmgjCsYyCcovCAYVKhKPntKcSQkTWZ4FmFLvYSENNQcek7ntk0Jky9gaFnKovE
+	 FzXv1G0dRIvvA==
+Date: Thu, 17 Jul 2025 16:55:52 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Denis Benato <benato.denis96@gmail.com>,
+	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>
+Subject: Re: [PATCH v4 2/5] PCI: Put PCIe ports with downstream devices into
+ D3 at hibernate
+Message-ID: <20250717215552.GA2655127@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 2/3] arm64: dts: qcom: qcs8300: Add EPSS l3
- interconnect provider node
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Sibi Sankar
- <quic_sibis@quicinc.com>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Mike Tipton <mdtipton@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250711102540.143-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250711102540.143-3-raviteja.laggyshetty@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250711102540.143-3-raviteja.laggyshetty@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE3MDE4NiBTYWx0ZWRfX5W89Sqs/Ff5L
- BVzBeFYVbsMK+SU3KkAVkQfluDr436r+GZp3dvE+/4SgJmVRY91aWCpHXS/qcgbJeCbfHLpT0J6
- tRV5JrNn0b3U3TjQZIFZfqhx9fF1sZtlzGUY7QNsGGLMb6GdW5Une5R7CQ5VkyQEi7FK5yDy2Z6
- /BzESBA4R1PtXnL0v9ohRlYpazhREdBFteVlsWvjiqY+eJUz8oi+W1L/MBiyL23MN1nXN02CtfC
- J9O07ubFUC0xs5CuDKeDBH6UPvV0fct28FSCVUMuniMta6+9VJQIkDYfC5n19ivJ1DkRv6lgmO+
- eDn9dYO8BPdVly/YJvdhb1S5a7OR6s/TuB4KpBmrAAupytdh6hV3UDh/GruyLjKQib4t4o908Js
- GCKxxbKTEDeX1gVD1SjSU2evrzqbHQ1PKuAJn0F+k8KbxZeeZXYFGbwNVCu9reQdRmsrIJ4E
-X-Proofpoint-GUID: G6IYatXSLjIVUCLGDxZpuek7-8ytXFK6
-X-Authority-Analysis: v=2.4 cv=SeX3duRu c=1 sm=1 tr=0 ts=687965cc cx=c_pps
- a=oc9J++0uMp73DTRD5QyR2A==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=yqcj6WI3IahE-w5yY7AA:9
- a=QEXdDO2ut3YA:10 a=iYH6xdkBrDN1Jqds4HTS:22
-X-Proofpoint-ORIG-GUID: G6IYatXSLjIVUCLGDxZpuek7-8ytXFK6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-17_04,2025-07-17_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 mlxscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015 adultscore=0
- suspectscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507170186
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250616175019.3471583-3-superm1@kernel.org>
 
-On 7/11/25 12:25 PM, Raviteja Laggyshetty wrote:
-> Add Epoch Subsystem (EPSS) L3 interconnect provider node for QCS8300 SoC.
-> As QCS8300 and SA8775P SoCs have same EPSS hardware, added SA8775P
-> compatible as fallback for QCS8300 EPSS device node.
+On Mon, Jun 16, 2025 at 12:50:16PM -0500, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+> For the suspend flow PCIe ports that have downstream devices are put into
+> the appropriate D3 state when children are not in D0. For the hibernate
+> flow, PCIe ports with downstream devices stay in D0 however. This can
+> lead to PCIe ports that are remained powered on needlessly during
+> hibernate.
+
+I suppose by "appropriate D3 state", you mean the Port is put in
+D3cold if all children are in D3cold, or D3hot if they are all in
+D1-D3hot?  PM-illiterate folks like me need some help to know what is
+"appropriate" :)
+
+This refers specifically to "PCIe ports", but it looks like the code
+applies to PCI bridges in general, so maybe it should just say
+"bridges"?
+
+s/ports that are remained powered on/ports that remain powered on/
+(or "bridges that remain powered on")
+
+> Adjust the pci_pm_poweroff_noirq() to follow the same flow as
+> pci_pm_suspend_noirq() in that PCIe ports that are power manageable should
+> without downstream devices in D0 should be put into their appropriate
+> sleep state.
+
+Extra "should" in this sentence, I guess?
+(s/power manageable should/power manageable/)
+
+Also "PCIe ports" here, maybe should be "bridges"?
+
+> Cc: AceLan Kao <acelan.kao@canonical.com>
+> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+> Cc: Denis Benato <benato.denis96@gmail.com>
+> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
+> v4:
+>  * Use helper even when CONFIG_SUSPEND not set (LKP robot)
+> v3:
+>  * Split out common code between suspend_noirq() and poweroff_noirq()
+>    to a helper function
+>  * https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kernel.org/T/#me6db0fb946e3d604a8f3d455128844ed802c82bb
+> ---
+>  drivers/pci/pci-driver.c | 94 ++++++++++++++++++++++++++--------------
+>  1 file changed, 61 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 0d4c67829958b..f7a0c23515718 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -759,6 +759,56 @@ static void pci_pm_complete(struct device *dev)
+>  
+>  #endif /* !CONFIG_PM_SLEEP */
+>  
+> +#if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATE_CALLBACKS)
+> +/**
+> + * pci_pm_set_prepare_bus_pm
+> + * @pci_dev: pci device
+> + *
+> + * Prepare the device to go into a low power state by saving state
+> + * and configure bus PM policy.
 
-Squash patches 2 & 3 together (because otherwise you'll still be hitting
-the issue I described the last time)
+I guess "configure bus PM policy" must mean "if this device is in D0,
+set skip_bus_pm = true for the device and any upstream bridge so we
+won't change their power state"?
 
-With that (modulo me trusting the numbers you put into the OPP table):
+> + * Return: TRUE for bus PM will be used
+> + *         FALSE for bus PM will be skipped
+> + */
+> +static bool pci_pm_set_prepare_bus_pm(struct pci_dev *pci_dev)
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+The "pci_pm_set_prepare_bus_pm" name doesn't immediately suggest a
+property that can be true or false.  It complicates things a bit when
+a bool function has side effects in addition to giving a yes/no or
+true/false answer.  Not sure whether or how this could be improved.
 
-Konrad
+And it's a little confusing that we return false when we set
+skip_bus_pm = true (mostly).  It's tough to keep track of what
+true/false means.
+
+> +{
+> +	if (!pci_dev->state_saved) {
+> +		pci_save_state(pci_dev);
+> +
+> +		/*
+> +		 * If the device is a bridge with a child in D0 below it,
+> +		 * it needs to stay in D0, so check skip_bus_pm to avoid
+> +		 * putting it into a low-power state in that case.
+> +		 */
+> +		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+> +			pci_prepare_to_sleep(pci_dev);
+> +	}
+> +
+> +	pci_dbg(pci_dev, "PCI PM: Sleep power state: %s\n",
+> +		pci_power_name(pci_dev->current_state));
+> +
+> +	if (pci_dev->current_state == PCI_D0) {
+> +		pci_dev->skip_bus_pm = true;
+> +		/*
+> +		 * Per PCI PM r1.2, table 6-1, a bridge must be in D0 if any
+> +		 * downstream device is in D0, so avoid changing the power state
+> +		 * of the parent bridge by setting the skip_bus_pm flag for it.
+> +		 */
+> +		if (pci_dev->bus->self)
+> +			pci_dev->bus->self->skip_bus_pm = true;
+> +	}
+> +
+> +	if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
+> +		pci_dbg(pci_dev, "PCI PM: Skipped\n");
+> +		return FALSE;
+> +	}
+> +
+> +	pci_pm_set_unknown_state(pci_dev);
+> +
+> +	return TRUE;
+
+"true" and "false" instead of "TRUE" and "FALSE".
+
+> +}
+> +#endif /* CONFIG_SUSPEND || CONFIG_HIBERNATE_CALLBACKS */
+> +
+>  #ifdef CONFIG_SUSPEND
+>  static void pcie_pme_root_status_cleanup(struct pci_dev *pci_dev)
+>  {
+> @@ -878,38 +928,8 @@ static int pci_pm_suspend_noirq(struct device *dev)
+>  		}
+>  	}
+>  
+> -	if (!pci_dev->state_saved) {
+> -		pci_save_state(pci_dev);
+> -
+> -		/*
+> -		 * If the device is a bridge with a child in D0 below it,
+> -		 * it needs to stay in D0, so check skip_bus_pm to avoid
+> -		 * putting it into a low-power state in that case.
+> -		 */
+> -		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+> -			pci_prepare_to_sleep(pci_dev);
+> -	}
+> -
+> -	pci_dbg(pci_dev, "PCI PM: Suspend power state: %s\n",
+> -		pci_power_name(pci_dev->current_state));
+> -
+> -	if (pci_dev->current_state == PCI_D0) {
+> -		pci_dev->skip_bus_pm = true;
+> -		/*
+> -		 * Per PCI PM r1.2, table 6-1, a bridge must be in D0 if any
+> -		 * downstream device is in D0, so avoid changing the power state
+> -		 * of the parent bridge by setting the skip_bus_pm flag for it.
+> -		 */
+> -		if (pci_dev->bus->self)
+> -			pci_dev->bus->self->skip_bus_pm = true;
+> -	}
+> -
+> -	if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
+> -		pci_dbg(pci_dev, "PCI PM: Skipped\n");
+> +	if (!pci_pm_set_prepare_bus_pm(pci_dev))
+>  		goto Fixup;
+> -	}
+> -
+> -	pci_pm_set_unknown_state(pci_dev);
+
+This part looks like it's mostly factoring this code out to
+pci_pm_set_prepare_bus_pm().  Would it be practical to split that
+factoring to a patch that makes no functional change?  I'm wondering
+if that would make the functional change smaller and easier to
+understand.
+
+>  	/*
+>  	 * Some BIOSes from ASUS have a bug: If a USB EHCI host controller's
+> @@ -1136,6 +1156,8 @@ static int pci_pm_poweroff(struct device *dev)
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+>  	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>  
+> +	pci_dev->skip_bus_pm = false;
+> +
+>  	if (pci_has_legacy_pm_support(pci_dev))
+>  		return pci_legacy_suspend(dev, PMSG_HIBERNATE);
+>  
+> @@ -1199,8 +1221,8 @@ static int pci_pm_poweroff_noirq(struct device *dev)
+>  			return error;
+>  	}
+>  
+> -	if (!pci_dev->state_saved && !pci_has_subordinate(pci_dev))
+> -		pci_prepare_to_sleep(pci_dev);
+> +	if (!pci_pm_set_prepare_bus_pm(pci_dev))
+> +		goto Fixup;
+>  
+>  	/*
+>  	 * The reason for doing this here is the same as for the analogous code
+> @@ -1209,6 +1231,7 @@ static int pci_pm_poweroff_noirq(struct device *dev)
+>  	if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
+>  		pci_write_config_word(pci_dev, PCI_COMMAND, 0);
+>  
+> +Fixup:
+>  	pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+>  
+>  	return 0;
+> @@ -1218,10 +1241,15 @@ static int pci_pm_restore_noirq(struct device *dev)
+>  {
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+>  	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +	pci_power_t prev_state = pci_dev->current_state;
+> +	bool skip_bus_pm = pci_dev->skip_bus_pm;
+>  
+>  	pci_pm_default_resume_early(pci_dev);
+>  	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+>  
+> +	if (!skip_bus_pm && prev_state == PCI_D3cold)
+> +		pci_pm_bridge_power_up_actions(pci_dev);
+> +
+>  	if (pci_has_legacy_pm_support(pci_dev))
+>  		return 0;
+>  
+> -- 
+> 2.43.0
+> 
 
