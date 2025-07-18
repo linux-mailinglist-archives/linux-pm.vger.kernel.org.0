@@ -1,232 +1,182 @@
-Return-Path: <linux-pm+bounces-31051-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31052-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CEA3B09CC2
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 09:38:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4C19B09EA6
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 11:06:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A5BF3B4A50
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 07:37:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8EC85A4E1B
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 09:06:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B9D26AAB7;
-	Fri, 18 Jul 2025 07:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40ED729550F;
+	Fri, 18 Jul 2025 09:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1hFQj3F"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gvmy/OZZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA7D269AFB;
-	Fri, 18 Jul 2025 07:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A2B15278E;
+	Fri, 18 Jul 2025 09:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752824293; cv=none; b=DnNlZLCCVquMY1TVWgU9y//u8Jb3tpCjnHooHDEJjjx+Zp9OMTMhK4M085m4Sv8ZvlV6DzNFe3ezcm5Prcx2cyHN89UlnAx9rzCmeF3uhsD3nQqTcYPKT6/N49m7ROQTvUUH8L1cDiZi/K6EgDeLAVdkC0Zqns4JfRGTNgtAWWs=
+	t=1752829578; cv=none; b=My1YtUbd6AWapQP5PmYlY1T2VJ5OHs2yu+Z+FKCsFS1SKOT/p5wloPG62uxqwRfUJltb1nLMGqjjcuuP//HMtBIozkSOap3TdK+lPXBJub8pZ8PytDFSVJ8BnwX4iGGR4ChKpswLzlKduLAGYWbGyHxJ//IhdnxjOrPbc/Z69mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752824293; c=relaxed/simple;
-	bh=WjY6IyydNi+5JB/lny8B6ZDF5HeAFvckyWItEo3hAt0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E4jTJbRfJomxeS+X2FN3Fo+dS89A/KLP2MRxkzqpsk2rlHgBac4oBxMPncy0GqgfFUIWpo6NdHCZ9GVKpYxZmjzSC+fsuG9uDySDdm42N4944cqSNJS8jhf6AfwTtF0xjHyG2LqkIY1H8ggonYPTbbyuReKP+ptohryrMCYiNpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1hFQj3F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27B5FC4CEF5;
-	Fri, 18 Jul 2025 07:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752824293;
-	bh=WjY6IyydNi+5JB/lny8B6ZDF5HeAFvckyWItEo3hAt0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=B1hFQj3FW4AkwlgzDbSNMX8u4nwhmy/GjOMvmzQPf8olo5KgMHyXkDVrzTN1xjtGQ
-	 b5wSyvARaa1/zvFhgHJVy8XDwc1AHePwWDyXwnoUSKOSZSMvl1s+3xfM+QycnVf0tN
-	 IAjbblhXUi/mj7ADBNjcv4WCosdez+jdxjZ9kUlxMxLYpDLs4gShOeHMUgDvIIPEqx
-	 ow+bGnMLPSIpOd4ys9gvRpyPg8HL8UfSxYFuZWvOu7nhcyK+OFNNc+HrNKZkmWk2jT
-	 4w6kfQq4M7Sbhym6EHNurbX5iQYlXbgsezWVLjQCtMg7JAdjodOFnwn23VPodfLVqH
-	 B397Si4KDodoQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17682C83F1A;
-	Fri, 18 Jul 2025 07:38:13 +0000 (UTC)
-From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
-Date: Fri, 18 Jul 2025 11:38:04 +0400
-Subject: [PATCH v14 2/2] arm64: dts: qcom: ipq5018: Update tsens node and
- thermal zones
+	s=arc-20240116; t=1752829578; c=relaxed/simple;
+	bh=z9BUvmWIt7hCxYtCLxNT6F///XMUiL2OyAVIWUDKtzM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QWDm3RnPydUxSlRAI2BMwjGGn6U83qnIOGsJ9p1h09wI9xsg6/wsaPCYjUeYWiapeX3SkiWHpKIjimqbcSfCFyeOZm8K98usHUi07t+wsDgX2L+NHkE6CIFWBQRhYsnKqS3jofv3ogNNflFnaafTEG3rldJgVa3O0Fpq4ToGN6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gvmy/OZZ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56I8h2Bk008487;
+	Fri, 18 Jul 2025 09:05:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	zteTB79X+fUFIDXx8fj+5FQ3KCq88qFTkVFdV3sKo+g=; b=gvmy/OZZ3WysJgWy
+	ZIeKGMdraUZK3CLSKAg4lJmyZT/akQCx8UCrO3VktWYp6qabPJnkOiV31U76rUJA
+	TL3MxzFySkAVyhRuVkKpTJBxBYR0F74yJnwzziUuO6NcUqexemEYJjOhikTPYFbZ
+	O4u/6K+lr19pSzDcOeUFffpyeg5vSoGjioKnT0qkpKSBhH8JCQIj6jxYb06URDEk
+	hI/FTTtDhd1CWCY293nWyClCF5qdeuajIwiUTf7qPgUQDVy+85XEGUfmAOoDh9Ii
+	EyqoMwYGe039OY5cWIQuaBkSdzpgFff+3gQiMjzVpDAuiyGVnJpRy7FbPqm0S4LD
+	A7//tg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ufxbavc8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Jul 2025 09:05:58 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56I95vF1018192
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Jul 2025 09:05:57 GMT
+Received: from [10.253.76.178] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 18 Jul
+ 2025 02:05:51 -0700
+Message-ID: <49d5d360-6a2f-4dd4-bbd7-1a902e556f00@quicinc.com>
+Date: Fri, 18 Jul 2025 17:05:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/10] dt-bindings: clock: qcom: Add NSS clock
+ controller for IPQ5424 SoC
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Rob Herring
+	<robh@kernel.org>
+CC: Georgi Djakov <djakov@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen
+ Boyd" <sboyd@kernel.org>,
+        Anusha Rao <quic_anusha@quicinc.com>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Richard
+ Cochran" <richardcochran@gmail.com>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <quic_kkumarcs@quicinc.com>, <quic_linchen@quicinc.com>,
+        <quic_leiwei@quicinc.com>, <quic_pavir@quicinc.com>,
+        <quic_suruchia@quicinc.com>
+References: <20250710-qcom_ipq5424_nsscc-v3-0-f149dc461212@quicinc.com>
+ <20250710-qcom_ipq5424_nsscc-v3-7-f149dc461212@quicinc.com>
+ <20250710225539.GA29510-robh@kernel.org>
+ <0ef83a1e-38c3-41bb-8fd2-c28565f2a0ba@oss.qualcomm.com>
+Content-Language: en-US
+From: Luo Jie <quic_luoj@quicinc.com>
+In-Reply-To: <0ef83a1e-38c3-41bb-8fd2-c28565f2a0ba@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250718-ipq5018-tsens-v14-2-28d8a2472418@outlook.com>
-References: <20250718-ipq5018-tsens-v14-0-28d8a2472418@outlook.com>
-In-Reply-To: <20250718-ipq5018-tsens-v14-0-28d8a2472418@outlook.com>
-To: Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- George Moussalem <george.moussalem@outlook.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dmitry Baryshkov <lumag@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752824290; l=3848;
- i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
- bh=SwJcY4cCvc+nIankAMt5+SCPwBFBGOQVItGhlf/eWGU=;
- b=GTCG1e6Toew3AUfHJHm9fwJ3pdtIkfCn7Hc6H/MDUo7DhW7lN6TNtlWiBmnIszihuvS55+XRT
- QC8elkaStAMAQ2KryJ8HLRI+nrydf4RXeSzSECjxfKU9qW6V/ucn/9q
-X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
- pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
-X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
- with auth_id=364
-X-Original-From: George Moussalem <george.moussalem@outlook.com>
-Reply-To: george.moussalem@outlook.com
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: AZYG4c9OW3-sedX7DX_sxsCBKToCgLEp
+X-Proofpoint-ORIG-GUID: AZYG4c9OW3-sedX7DX_sxsCBKToCgLEp
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE4MDA3MSBTYWx0ZWRfX5LbihV0UUb0t
+ o21O7oJbdD4zibgNivY2bBbTBmsoB+iplPPmx6rChx/ut7gn7Oak9Xo/Cba0tVImzdtQkjf1JHs
+ oBhPicQoATtb1Fewi02B34i2fBfDyxh3jYR9b0phAg+OD5StpMgfsgLmQYmCOShN9QFNsCKMzOn
+ 26tvTc4F9OyOLprj0x3bKaZAaGpQlEg1fhfuj99i0Q8gwfUgzDY6traYYcPkyKmuIIXwsK17vIe
+ TJCR//Ud9056pCQTdr4hFGqOk1FzaAQpT5pfn+wgYcVmWY2xUQ+wpP1ORBNOzNz25K2QkDbzspP
+ 8DK+tiwNRq5rISN3CmyTieuEroCtcDkvB990oXHNm3lmCjGtGTPDHYuRECylvgScCL67CvfA0CJ
+ m+MV1TXB/J3gdyyDPiGbtHPDnjLNTBAeVONL7gP9/lZJabYnuwN1kjL+WO0vQiEzYhGtlMJj
+X-Authority-Analysis: v=2.4 cv=Xc2JzJ55 c=1 sm=1 tr=0 ts=687a0e76 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8
+ a=zwoUeVU6iwdCpd6WVVcA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-18_02,2025-07-17_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 mlxscore=0 priorityscore=1501 adultscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1015 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507180071
 
-From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 
-Remove qcom,tsens-v1 as fallback since this IP has no RPM and, as such,
-must use its own init routine available in the driver.
-Also adding a cooling device to the CPU thermal zone which uses CPU
-frequency scaling.
-In addition, remove superfluous polling-delay properties for which the
-default is already set to zero, correctly set hysteresis properties
-measured in milli Celsius as opposed to Celsius, and replace an
-underscore in an alias with a hyphen to align with device tree coding
-guidelines.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Signed-off-by: George Moussalem <george.moussalem@outlook.com>
----
- arch/arm64/boot/dts/qcom/ipq5018.dtsi | 41 +++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 16 deletions(-)
+On 7/11/2025 8:16 PM, Konrad Dybcio wrote:
+> On 7/11/25 12:55 AM, Rob Herring wrote:
+>> On Thu, Jul 10, 2025 at 08:28:15PM +0800, Luo Jie wrote:
+>>> NSS clock controller provides the clocks and resets to the networking
+>>> blocks such as PPE (Packet Process Engine) and UNIPHY (PCS) on IPQ5424
+>>> devices.
+>>>
+>>> Add the compatible "qcom,ipq5424-nsscc" support based on the current
+>>> IPQ9574 NSS clock controller DT binding file. ICC clocks are always
+>>> provided by the NSS clock controller of IPQ9574 and IPQ5424, so add
+>>> interconnect-cells as required DT property.
+>>>
+>>> Also add master/slave ids for IPQ5424 networking interfaces, which is
+>>> used by nss-ipq5424 driver for providing interconnect services using
+>>> icc-clk framework.
+>>>
+>>> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
+>>> ---
+> 
+> [...]
+> 
+>>>     clocks:
+>>>       items:
+>>> @@ -57,6 +61,7 @@ required:
+>>>     - compatible
+>>>     - clocks
+>>>     - clock-names
+>>> +  - '#interconnect-cells'
+>>
+>> You just made this required for everyone. Again, that's an ABI change.
+> 
+> In this case it's actually valid, but should be a separate fixup change
+> 
+> Konrad
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-index ee0001741d211b187e89a39a3caaa576251aff03..1b33ccf1a1b1af721b9690ae2c35eb82985205f5 100644
---- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-@@ -9,6 +9,7 @@
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-ipq5018.h>
- #include <dt-bindings/reset/qcom,gcc-ipq5018.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- / {
- 	interrupt-parent = <&intc>;
-@@ -39,6 +40,7 @@ cpu0: cpu@0 {
- 			next-level-cache = <&l2_0>;
- 			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
- 			operating-points-v2 = <&cpu_opp_table>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -49,6 +51,7 @@ cpu1: cpu@1 {
- 			next-level-cache = <&l2_0>;
- 			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
- 			operating-points-v2 = <&cpu_opp_table>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		l2_0: l2-cache {
-@@ -255,9 +258,9 @@ tsens_s4_p2: s4-p2@254 {
- 		};
- 
- 		tsens: thermal-sensor@4a9000 {
--			compatible = "qcom,ipq5018-tsens", "qcom,tsens-v1";
--			reg = <0x004a9000 0x1000>, /* TM */
--			      <0x004a8000 0x1000>; /* SROT */
-+			compatible = "qcom,ipq5018-tsens";
-+			reg = <0x004a9000 0x1000>,
-+			      <0x004a8000 0x1000>;
- 
- 			nvmem-cells = <&tsens_mode>,
- 				      <&tsens_base1>,
-@@ -744,56 +747,62 @@ pcie@0 {
- 
- 	thermal-zones {
- 		cpu-thermal {
--			polling-delay-passive = <0>;
--			polling-delay = <0>;
- 			thermal-sensors = <&tsens 2>;
- 
- 			trips {
- 				cpu-critical {
- 					temperature = <120000>;
--					hysteresis = <2>;
-+					hysteresis = <1000>;
- 					type = "critical";
- 				};
-+
-+				cpu_alert: cpu-passive {
-+					temperature = <100000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
- 			};
- 		};
- 
- 		gephy-thermal {
--			polling-delay-passive = <0>;
--			polling-delay = <0>;
- 			thermal-sensors = <&tsens 4>;
- 
- 			trips {
- 				gephy-critical {
- 					temperature = <120000>;
--					hysteresis = <2>;
-+					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
- 		};
- 
- 		top-glue-thermal {
--			polling-delay-passive = <0>;
--			polling-delay = <0>;
- 			thermal-sensors = <&tsens 3>;
- 
- 			trips {
--				top_glue-critical {
-+				top-glue-critical {
- 					temperature = <120000>;
--					hysteresis = <2>;
-+					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
- 		};
- 
- 		ubi32-thermal {
--			polling-delay-passive = <0>;
--			polling-delay = <0>;
- 			thermal-sensors = <&tsens 1>;
- 
- 			trips {
- 				ubi32-critical {
- 					temperature = <120000>;
--					hysteresis = <2>;
-+					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
+Making #interconnect-cells a required property does introduce an ABI
+change in the device tree bindings. However, this change is necessary
+to ensure proper functionality and integration with the interconnect
+framework, which increasingly relies on this property for accurate
+configuration and resource management.
 
--- 
-2.50.1
+Yes, this is a fixup change. Since the current NSS clock controller DTS 
+node for IPQ9574 already includes '#interconnect-cells', I will separate 
+this modification into a standalone fixup patch.
+
 
 
 
