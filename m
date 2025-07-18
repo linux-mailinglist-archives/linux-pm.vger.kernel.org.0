@@ -1,220 +1,186 @@
-Return-Path: <linux-pm+bounces-31062-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31063-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D8A6B0A7EA
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 17:52:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E87D7B0A831
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 18:13:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C10961896269
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 15:52:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A43FE5A2E96
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Jul 2025 16:13:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001D02E5B0C;
-	Fri, 18 Jul 2025 15:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 456032E612E;
+	Fri, 18 Jul 2025 16:13:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hvjsz9KN"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H4JCJR3S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0122E54DD;
-	Fri, 18 Jul 2025 15:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E55293B49
+	for <linux-pm@vger.kernel.org>; Fri, 18 Jul 2025 16:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752853919; cv=none; b=HJSTGyaA7+GHmY0Vxwu0Yvcvl5LGNMMsWKTU193z/QaxAMEJAqcwamGCQnDpH77/hG2f3xzN5hAWX+dhEecYFt6/bs0bPqe5/YwWxAPA3A1CU2dj6YHOaaAA9iBgltU+6t+/t0v3nsfNFTC//6HSy8YXXKQa1swC5EnfoUqyIH0=
+	t=1752855231; cv=none; b=BZMjphghec4XvQ2NoFHjCxFpTcgnEgpNe3mldePcoCIvmk8vZvpUjgj2MHqSoHVbPmk0rqmFog6rejkUbmwSdegnNk6LodPG4ZR94fKKmSYlFp+poNFR1O4NAiMdvqAE4i0FnSBhnUkYqwD0BxkW5T7E4DU7g4/JR57Uic/eKjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752853919; c=relaxed/simple;
-	bh=ZmLI6Lb1LvfHG6SCEsSJziJG2r4OiqLyWXnZcvnsj28=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=W0OmovBniFlw7NmjORxyTaw9B+ATjT+xDtGQaPyUOp1FoB65MoFsHY10RLnSpqnw23evcqBD3VW/zvhJcySzIVXRtSrUnFxVD1NhLbZZdOqiwp4HeLt4a7JMPDYvBrfzyuLQbS1DlJ/gdDDv64yIWvN4SGdzefVfxiRlCr1P8lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hvjsz9KN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56I82XQK008788;
-	Fri, 18 Jul 2025 15:51:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2MwpE18oEWe1TtY+7fRTUbZYuWq3/eUiaszGmutvhXc=; b=hvjsz9KNImQc69k6
-	B57Q7A/nEjvt48CWpwZOfm0hPQ6V41r5vWikejleKnXpg7quK0qRrugRZYX7t/VT
-	YipSPxQb8X3wzXbw1Z2RMLqqeIq1r0+7D6WvUVKcLmxrz1zH/qL7FwV7g+Wbb6lL
-	RyA+iYmOUet4bnUj2j86ChPl5sV7FRN1mvFoMHgmwuLSFFsmiVDQk7YfMWvx/QxM
-	3qdcM0dUOiOFMxHlhRgfrDQ75jpD/HUvA10d5oNPrhmpxtFb0u2cj3+qdNC8VVCv
-	1z/RLHC73W+V+TxpyKchtkyuAB7cL4Foe+76fhBCO++r/KNvgR4sGvkDEfpfixX+
-	Oh0m8w==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ufxbc5tc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Jul 2025 15:51:44 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56IFphaO006119
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Jul 2025 15:51:43 GMT
-Received: from [10.253.76.178] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 18 Jul
- 2025 08:51:36 -0700
-Message-ID: <830f3989-d1ac-4b7c-8888-397452fe0abe@quicinc.com>
-Date: Fri, 18 Jul 2025 23:51:34 +0800
+	s=arc-20240116; t=1752855231; c=relaxed/simple;
+	bh=jnQej5os8946OtwsAYxWV5AqWfH0NVCPXeIuQ2kik1I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=H3YHNunjZDM8ryU2jk/8Y5hOpVsG9v/S7kDGOr88ITpvuIG8dVycb8ZObFPMxwcGLKvgZjhfki26fn+4lFUzDm6yP/GVjjOeqWatcjm3COI7GBIlpd/5p8AHVeQ5R5qQARoFgvHt8/OIlGL0PYYtlaEmS5BYg/Q6/66gEbCUrDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H4JCJR3S; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56IFl9eS001312
+	for <linux-pm@vger.kernel.org>; Fri, 18 Jul 2025 16:13:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=E2+mYONdTWwAKa/b2Dnjv7
+	gT1I0AopAtzO+8co3bDc4=; b=H4JCJR3SXw9tgn0jFSQ5nadXmD0sTfvO33FeTC
+	xkfh5XGBEmDujfKzTA5bMnAmG5Ulv0jyGvCevfwmHKoWpXjjAm/4ng3/dBAtlHy8
+	fXnvStcAJWLpDeStFDUL5b3tZLKgJMwKj2+8EYZ9t569nddutkEkmWTjHCBQKekl
+	YTPqrhSxc9uFxgvQDSZowyjcXVbjGUytVvTHk1t93YwZtV18n4CAfLQDI0ukqG02
+	l2OvLbQsuhE5RDzF9Y+u3GD6qZ2vVsKZpD3jzSSEtEpoYMcN7sV7R5DWDtcK7Ejs
+	+hO5ebj+NecfXcjO/nYYv91mk1VdOFt9E7xx2ChLivO8s5og==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47w5dry8x6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 18 Jul 2025 16:13:48 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7e2e237fb4eso388239885a.2
+        for <linux-pm@vger.kernel.org>; Fri, 18 Jul 2025 09:13:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752855227; x=1753460027;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E2+mYONdTWwAKa/b2Dnjv7gT1I0AopAtzO+8co3bDc4=;
+        b=cVT19aSOYU8ie/rovcIQ7/DpaFVI3sw5Dkh6IFc2SvH4koWPkXkKZw+h4E5hOVhT0I
+         PBX9uyHcLGBsQgwKQXt84TJyQdPlu+je/t9FV24U6nLB5WMUJ9uxsPTjCUHzdw18bgCV
+         vwo+NZtFYv2cYEHY+9PEUkyG/V9qzwkvXdzkK5IToglTQbPZnDBzsXD15nbSWbU1zPyq
+         WFbJQPv8TXQzn+SUeT1W8CN1COyQTuqWXrPl2iTg4Z0f1LYybBTQuNWvTEIt+thJq9N+
+         VIOXM4q095uJSyG7I4bf2iYz472P4V0CeasJTTMcCW5zaU3zwTyOC0/F6lvXN8Z+oXU1
+         V2bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8jlIdDXDOSwA9RH5/PsrGCcaVvwsNLYqD7D0H03VXcBuAX2xU6PXPpqLJ3JYKKjzfiirizSzBTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhPEHq6HN9LBbfFc+tRGsjAMl4NuKwj4HEoanPUCHkQfN2PGRK
+	HHdWrj+V6slw+79jLZKRe2yn9IyiHot0EW2aDhExuWW6y6sV6vzNp5PZc6FdpJ0sbgBkBQgUsMx
+	FYeavDP9n2QC7qUW1E9yQE5/xg3wwnl6NSffwaiFU/Zh5IrYvaoY3Imriokl0Kg==
+X-Gm-Gg: ASbGnculPDRiHgXOwqQ9VCEdLUBIBmX8iUT396l2/3Pf5hpSv3cOZW1sBAJj4QtP8cD
+	UzAIFx/U7K9tuky1cnNYypFBO6BS6JS2BSLhs2eMdqr9A0eMmVb9VqapsuncQGG0Q4I/T6VjyOW
+	N7prVamY7aevH1edUbBJXEU1ht1TRz9t64wWKu71a82roXihopUaYO2dMMJwS7foAEFqLE59qYz
+	dyiI202m/4jjgqRoYCHeufwp6dDa+kwqeCRWlKiz5OVY0b3JjeOHXoBgDBasu4ADK2Eo4SmKbXf
+	DK9/0DmiZHhu+w8b+uRB+Ptc8poXEOFnPfWup2tPZnpJMLq4uXhBYEihFgZdenKkvdbe7Qvno+p
+	lbHJlSBhyLhI6/cYr5WkhSru+Se17RByM3DIz2jHBApipEDqnK/DO
+X-Received: by 2002:a05:620a:8509:b0:7e3:35e3:3412 with SMTP id af79cd13be357-7e34d9ac2e5mr622296285a.34.1752855226587;
+        Fri, 18 Jul 2025 09:13:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHJFME1iu2nBdlZCEndMtUjbp0cqubsgTDnznr23GMq/CHMfz0nkUvr0ssMwdhTZk5t9cEtiA==
+X-Received: by 2002:a05:620a:8509:b0:7e3:35e3:3412 with SMTP id af79cd13be357-7e34d9ac2e5mr622289885a.34.1752855225796;
+        Fri, 18 Jul 2025 09:13:45 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-330a91c1ab7sm2388131fa.50.2025.07.18.09.13.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Jul 2025 09:13:44 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: [PATCH 0/8] pmdomain: qcom: sort out RPMh and RPM power domain
+ indices
+Date: Fri, 18 Jul 2025 19:13:38 +0300
+Message-Id: <20250718-rework-rpmhpd-rpmpd-v1-0-eedca108e540@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/10] dt-bindings: clock: ipq9574: Rename NSS CC
- source clocks to drop rate
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Rob Herring
-	<robh@kernel.org>
-CC: Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen
- Boyd" <sboyd@kernel.org>,
-        Anusha Rao <quic_anusha@quicinc.com>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Richard
- Cochran" <richardcochran@gmail.com>,
-        Catalin Marinas
-	<catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <quic_kkumarcs@quicinc.com>, <quic_linchen@quicinc.com>,
-        <quic_leiwei@quicinc.com>, <quic_pavir@quicinc.com>,
-        <quic_suruchia@quicinc.com>
-References: <20250710-qcom_ipq5424_nsscc-v3-0-f149dc461212@quicinc.com>
- <20250710-qcom_ipq5424_nsscc-v3-5-f149dc461212@quicinc.com>
- <20250710225412.GA25762-robh@kernel.org>
- <93082ccd-40d2-4a6b-a526-c118c1730a45@oss.qualcomm.com>
- <2f37c7e7-b07b-47c7-904b-5756c4cf5887@quicinc.com>
- <a383041e-7b70-4ffd-ae15-2412b2f83770@oss.qualcomm.com>
-Content-Language: en-US
-From: Luo Jie <quic_luoj@quicinc.com>
-In-Reply-To: <a383041e-7b70-4ffd-ae15-2412b2f83770@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: swRjQQ_PQW7tkbAY8VLMWgv-9_THV1oX
-X-Proofpoint-ORIG-GUID: swRjQQ_PQW7tkbAY8VLMWgv-9_THV1oX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE4MDEyMyBTYWx0ZWRfX0rs5m2C5d6kq
- iOCt6fzRXoqLcO+VZqKrhn2T/n1JPvh4kMObWVCir6flsG/WvmGHPln2rTlPSXVuOyF3ZNR/vLK
- 1ttQGcOS9Rqp3T1GHWxOvLKIuBDylXWTI4ncoRtx4LDI360HJfLrE4ojeSKSj87AREHUW0nsMzN
- a1omT0z7UCJSmgVJtCX+N0KF03kHaRsTIzh9F0XWokoN1Sjt66NUf1dVyjdg/jwhTgiqH7P1mKS
- cULx+yur6mxu0VcaqFU/RqQAnYnVGWxGWjCZ+flHvRE9pYmFex3mibflqi/bnou4zQ1bSdulCac
- r3qnCNZZckY4F1mLL32IuuVswoNuCwO2is3/Hccc1wlFtt5o0KDcuxV+qlSQn0Npxwi8fPO0Yvy
- prHagNyramkTOU7PfvfJjv33Eb9E77R2ZeuAImyTIGm0jJzEDoxhsq+rG+1BrBmP6FncA+5R
-X-Authority-Analysis: v=2.4 cv=Xc2JzJ55 c=1 sm=1 tr=0 ts=687a6d90 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8
- a=an1i8R5mwEVpawc4EucA:9 a=QEXdDO2ut3YA:10
+X-B4-Tracking: v=1; b=H4sIALJyemgC/yWM2wqDMBBEfyXsc0OTiAj+SvEhJtu6lFy6ia0g/
+ nvT+jLDGZizQ0EmLDCKHRjfVCjFBvoiwC02PlCSbwxGmV4NepCMn8RPyTks2f+qpe663lit3Ox
+ 7aM/MeKftb71NJzO+1iav5wizLShdCoHqKCJu9RpsqcgwHccXYpV3FZQAAAA=
+X-Change-ID: 20250717-rework-rpmhpd-rpmpd-13352a10cbd5
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1864;
+ i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
+ bh=jnQej5os8946OtwsAYxWV5AqWfH0NVCPXeIuQ2kik1I=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBoenK2X/4FUMKR/6O9sQRhqyVPR9hRSX6jxmwhn
+ gheSKljeAiJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaHpytgAKCRCLPIo+Aiko
+ 1WBDB/93DGP5KNuZts9BxHzohRG1Am3sPtjk5P93zmsB/JMqiWqKOM/hgbgj5r+UBDA8tyf+e2S
+ eBGQrnJ6eZ3ybThugmU5ZTY8qq3d4TKf5hWv3P7bufQoeu0FWwMJNcg4nmSGxlrPWslux4byiRl
+ 86v7dmjWxDRHZkT6CtDTUVi+XyjMjCeIvssj0pR5GHfYMh8Y6JBV0daf0me7Sec1keBlgb6BboW
+ DAr1H8ykZzXcebSMtffH3PEY36WiCxRAngEjpl+CcCQIVJNsRCgr2MA/7TOT09cFJZFqYaGa3sD
+ O1EZUeyToT0ck7XzZCHFx0gcP1/M8gaCwNqEc5OheEDt7Y9U
+X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+X-Proofpoint-ORIG-GUID: CYIXT3accmvvfSK4VE5VwLOd4JWkSOwt
+X-Authority-Analysis: v=2.4 cv=D4xHKuRj c=1 sm=1 tr=0 ts=687a72bc cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=gAiK-lJt_Rg5ifV0ZIAA:9
+ a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-GUID: CYIXT3accmvvfSK4VE5VwLOd4JWkSOwt
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE4MDEyNiBTYWx0ZWRfX9ZL8s8T7YjCb
+ qJA8yaNE+2GdUMEU6GyvOwnHwVRl7XqDUN0BkltOXlDcBYFVnO1IFN+AfPoXOm12wcg17zx3LLC
+ G3pbF34/up/p1B7Q4l1VjG4AdlY9AIwAH2+yWxTjD/4r7BPZn38VoW3/SJGCZzZKqgCqQggzLF5
+ V2LMjdyvLDbd2tydyVNoTAuGX+JXA/o3oKsGKmRKK/RguLa/kFirJNDM2qTWYlTDIJzr94wODMJ
+ iZnq87J6gnEgqEc1CwIIKV284/0fvykd5gX+Gz5UzGy5UqI0mWCaoE8cecZQROaQ4PkWD0lizrO
+ 1FzfKB6WMjNOdaJedXx601F9INmYyOdIVpxVQ8BMVmpZXsfTKapABqK1GJLyMzuJPwvp7Du6x/z
+ uNGTze+COhd1JfZfoxZ2IIKcwhQY/ROTHXSwTWJjTVUBmWstPxQyORag+3TYnIZudQXKdKCN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-07-18_03,2025-07-17_02,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 mlxscore=0 priorityscore=1501 adultscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1015 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507180123
+ adultscore=0 mlxlogscore=766 impostorscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507180126
 
+- Separate RPMh power domain bindings from RPM PD bindings
 
+- Drop now-unused (after [1] is merged) binding indices for RPMh
+  platforms
 
-On 7/18/2025 5:28 PM, Konrad Dybcio wrote:
-> On 7/18/25 11:12 AM, Luo Jie wrote:
->>
->>
->> On 7/11/2025 8:15 PM, Konrad Dybcio wrote:
->>> On 7/11/25 12:54 AM, Rob Herring wrote:
->>>> On Thu, Jul 10, 2025 at 08:28:13PM +0800, Luo Jie wrote:
->>>>> Drop the clock rate suffix from the NSS Clock Controller clock names for
->>>>> PPE and NSS clocks. A generic name allows for easier extension of support
->>>>> to additional SoCs that utilize same hardware design.
->>>>
->>>> This is an ABI change. You must state that here and provide a reason the
->>>> change is okay (assuming it is). Otherwise, you are stuck with the name
->>>> even if not optimal.
->>>
->>> The reason here seems to be simplifying the YAML.. which is not a good
->>> reason really..
->>>
->>> I would instead suggest keeping the clocks list as-is for ipq9574 (this
->>> existing case), whereas improving it for any new additions
->>>
->>> Konrad
->>
->> Thanks Rob and Konrad for the comments.
->>
->> "nss_1200" and "nss" refer to the same clock pin on different SoC.
->> As per Krzystof's previous comment on V2, including the frequency
->> as a suffix in the clock name is not required, since only the
->> frequencies vary across different IPQ SoCs, while the source clock
->> pins for 'PPE' and 'NSS' clocks are the same. Hence this ABI change
->> was deemed necessary.
->>
->> By removing the frequency suffix, the device tree bindings becomes
->> more flexible and easier to extend for supporting new hardware
->> variants in the future.
->>
->> Impact due to this ABI change: The NSS clock controller node is only
->> enabled for the IPQ9574 DTS. In this patch series, the corresponding
->> DTS changes for IPQ9574 are also included to align with this ABI
->> change.
-> 
-> The point of an ABI is to keep exposing the same interface without
-> any change requirements, i.e. if a customer ships the DT from
-> torvalds/master in firmware and is not willing to update it, they
-> can no longer update the kernel without a workaround.
-> 
->> Please let me know if further clarification or adjustments are needed.
-> 
-> What we're asking for is that you don't alter the name on the
-> existing platform, but use a no-suffix version for the ones you
-> introduce going forward
-> 
-> i.e. (pseudo-YAML)
-> 
-> if:
->    properties:
->      compatible:
->        - const: qcom,ipq9574-nsscc
-> then:
->    properties:
->      clock-names:
->        items:
->          - clockname_1200
-> else:
->    properties:
->      clock-names:
->        items:
->          - clockname # no suffix
-> 
-> Konrad
+- Introduce generic bindings for RPM power domains controller
 
-We had adopted this proposal in version 2 previously, but as noted in
-the discussion linked below, Krzysztof had suggested to avoid using the
-clock rate in the clock names when defining the constraints for them.
-However I do agree that we should keep the interface for IPQ9574
-unchanged and instead use a generic clock name to support the newer
-SoCs.
+Two last patches (marked as [DO NOT MERGE]) should only be merged after
+corresponding DT cleanup lands ([1] and DTS parts of this patchset).
 
-https://lore.kernel.org/all/20250701-optimistic-esoteric-swallow-d93fc6@krzk-bin/
+[1] https://lore.kernel.org/r/20250717-fix-rpmhpd-abi-v1-0-4c82e25e3280@oss.qualcomm.com
 
-Request Krzysztof to provide his comments as well, on whether we can
-follow your suggested approach to avoid breaking ABI for IPQ9574.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+---
+Dmitry Baryshkov (8):
+      dt-bindings: power: qcom-rpmpd: split RPMh domains definitions
+      dt-bindings: power: qcom-rpmpd: sort out entries
+      dt-bindings: power: qcom-rpmpd: add generic bindings for RPM power domains
+      pmdomain: qcom: rpmpd: switch to RPMPD_* indices
+      arm64: dts: qcom: dts: switch to RPMPD_* indices
+      ARM: dts: qcom: dts: switch to RPMPD_* indices
+      [DO NOT MERGE] dt-bindings: power: qcom-rpmpd: drop compatibility defines
+      [DO NOT MERGE] dt-bindings: power: qcom,rpmhpd: drop duplicate defines
+
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi |   4 +-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi    |   8 +-
+ arch/arm64/boot/dts/qcom/msm8917.dtsi    |  10 +-
+ arch/arm64/boot/dts/qcom/msm8976.dtsi    |   4 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi    |  16 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi     |  16 +-
+ arch/arm64/boot/dts/qcom/sm6125.dtsi     |  12 +-
+ drivers/pmdomain/qcom/rpmpd.c            | 112 ++++-----
+ include/dt-bindings/power/qcom,rpmhpd.h  | 175 +++++++++++++++
+ include/dt-bindings/power/qcom-rpmpd.h   | 375 ++++---------------------------
+ 10 files changed, 306 insertions(+), 426 deletions(-)
+---
+base-commit: d086c886ceb9f59dea6c3a9dae7eb89e780a20c9
+change-id: 20250717-rework-rpmhpd-rpmpd-13352a10cbd5
+
+Best regards,
+-- 
+With best wishes
+Dmitry
 
 
