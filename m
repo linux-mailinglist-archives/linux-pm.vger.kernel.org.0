@@ -1,147 +1,186 @@
-Return-Path: <linux-pm+bounces-31095-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31096-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4601B0B1C4
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Jul 2025 22:38:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C78B0B270
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Jul 2025 00:44:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19B8756014A
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Jul 2025 20:38:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D5303B0D5D
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Jul 2025 22:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E78213E66;
-	Sat, 19 Jul 2025 20:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E612877CD;
+	Sat, 19 Jul 2025 22:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YutmWvS7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-4323.protonmail.ch (mail-4323.protonmail.ch [185.70.43.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAA11C861E
-	for <linux-pm@vger.kernel.org>; Sat, 19 Jul 2025 20:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7993C2874E7;
+	Sat, 19 Jul 2025 22:42:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752957521; cv=none; b=KcBz0nT7Prz4Th63y0iJ/yLDWz43EPtfzSVQLvkxwPpmIuxd5/Gn53w+yOSXPc2oa1vAD9x9fUUrK5rp6Wu0oDHrwLrJkahqDv21QwivU8nYcu7LSi4Zf+quWm1aowN6KMSWZuGWze7HkW1bfg/Fw6VZfLshKXTTVHveQH/IKd4=
+	t=1752964961; cv=none; b=kqC4JC64anKV0sXIMqvRiv/jX4JcYaLdM55MS0aNzEUyJhaTwhdmNce8lscvMTSAfRF+TSYC2plfEySlnJesQqnosedfcHyJaIohZRE/7etw/0nh9w9HF8vSMsurosaghTXPrKhgWpkXEl1l2ZhQSanowGcegyzMZ5puOf9OQBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752957521; c=relaxed/simple;
-	bh=0FdkSCbbcARfZI85QvQc4bNrIyR2mVQmXJUDwAsNoQM=;
-	h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BglBNrALP854SbepGEqglcl2rkRLGP3EM9wrIAD9PgyzWG9ahaOzFhtJt5sAFpXh4nkFjqfQfd+UFxxTsD5BUwmuJf3QTTsKPyU6aGpk1ajHiynzHWDVI+T8W3QZw+up97oRMCyYIrvSD/uFAtQ2jxTJb4RY97RlR7TAzh/N9RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benis.se; spf=pass smtp.mailfrom=benis.se; arc=none smtp.client-ip=185.70.43.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benis.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=benis.se
-Date: Sat, 19 Jul 2025 20:38:28 +0000
-To: Zhang Rui <rui.zhang@intel.com>, "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, "rb_eddie@gmx.de" <rb_eddie@gmx.de>
-From: =?utf-8?Q?Benjamin_Hasselgren-Hall=C3=A9n?= <benjamin@benis.se>
-Subject: Re: HP Omnibook Ultra Flip 14 - power profiles
-Message-ID: <DqXuw9FIzvFuEW5CDi99thtdm42SH5iuKR5I50--iorP_jQCHWp0oesB906P5h98VBmYupvqGfDiEZ0er2wCYoFib77wDazJOOK0eOk2CZo=@benis.se>
-In-Reply-To: <tZDJlprhLriFb89pD_hEuI9r5MWf8J43NSBBtSwijh3tXJUCrr0TJxKw3nR3_YvAbvnyxdNP6hktgiEQdQmNH2vv_fFyqbwzWf8gd6w91EM=@benis.se>
-References: <GXa7F-PA_8BE7nlK9r8dkdSv7c-DW52GvOUiyYHQ6RyoZDxIpNAocWDPYQDeS7WEZeUisqQH_bqmgSV-eaRmuw5r68MGKxyU9X_4Erd0RYQ=@benis.se> <3b25e59bc1b162ee8f43ffbd3c50589a52d540af.camel@intel.com> <rFJU7KbF6iq0CxJtSjPu4vLVjWata5hY1Kl-wOv253p0C2W7egJQQrkUnkSqmr1vXDXeTwwtwp0u5ZnQU6pZmPuJ7TnNBVgudMG-q5MRHyM=@benis.se> <c6Eep72y6E7gc-wUMdcIS9JfNN1_OBjlwGUrd4yGvp2R-PW2-OOoQngQt5H5kiZIccxFAPswaN9G6wVpHuewtoEvUkT52UCzHPibVJh7iYY=@benis.se> <65f3a229f70279ab0da7efa878b863c7798d4427.camel@intel.com> <uWQ7r_hhvTbLE0QDEfkt_V2Mf39SRnexnRQCZ8lrUv3hDKfAK1jpr5AeVug8wBfz3cDhu-bYnx9zvCoU5Ch-AMaVlQHwqPmZgn3a4OMRek8=@benis.se> <1e02c8f28200d8e3f27589e0ba75a67f2e99d1a4.camel@intel.com> <Hsi54U41U6V6LB65SJ9b8D_q4OsW-xsvWJSQmvmxo7EfsebwJKc6NnNHLO20CerbcNGL-Q8huoeWtzNuGsCVNrQvJW8ndwTdnIKZJIDbTjg=@benis.se> <4d0e07edfa83653fa8330e08fb4520f07bb38448.camel@intel.com> <tZDJlprhLriFb89pD_hEuI9r5MWf8J43NSBBtSwijh3tXJUCrr0TJxKw3nR3_YvAbvnyxdNP6hktgiEQdQmNH2vv_fFyqbwzWf8gd6w91EM=@benis.se>
-Feedback-ID: 18592338:user:proton
-X-Pm-Message-ID: 94a19a4b80c3377959bb29c3a12b8de1b8721bf0
+	s=arc-20240116; t=1752964961; c=relaxed/simple;
+	bh=JsWFRgT0k22IBVP7OkrmL1n1jeWkTlxoEPT59bbopIQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YoD/u8jiJ/SNYNaMRCZ8D3UL85TKTytjqiq0ZLmXpfXmPYkI7D4TSUJQ4I4xov7QViCh2eKsj6BizxzpLasjLA8nWehfqh3yynYKsxS/FOvbOorJUtxcy9MX4qKldXCAi+GaHO0aANjdAinHHrC/Mc/eOSwvDL7033xjMrnHXyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YutmWvS7; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4ab93f24dc3so58635661cf.0;
+        Sat, 19 Jul 2025 15:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752964958; x=1753569758; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IygnV2q5DszF2Xyq5UT04w5qsH2QajCQoqita4sP000=;
+        b=YutmWvS7GzJIA+mhlMuurVXps8Qc+Wanh1+0RU27O7Xa2MfM8OwsToID+kGyCk0lP2
+         NEWT0WYH2WgK9oIzqp/UT3MNmQ3tKPBAr58K7fhFk2ZBjQXSilccK0tlKN66WKOdJVSz
+         XUVUv0CvByil529sVe+DNjhMCKbd9bQ9Q4bCEzl2F+zxfLCNsesdkuYHRdqZ2xvVjDnG
+         tdkO0F86RV3knka2m08S+Eje/eFQY+D0iucTw5jHUgVBOvs0xjhAw7b+t5WI/gqP7Sz9
+         hmUu1lqibtl5gebHpgT+HG6AQUZ8Kqtk2Tejlv08yaprx/fMG30A76Sp8jJ9neCFJ7pc
+         6Tsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752964958; x=1753569758;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IygnV2q5DszF2Xyq5UT04w5qsH2QajCQoqita4sP000=;
+        b=ceQkvAhTpXZJkiw0XSwQDeuDQNMiMhsUcFh7xxR6Lne6W3oG+nCoFmVDNxz10rTJAf
+         /5TgkEnJPLD7gpxE+i2K3NjhuYs8Dff5drmyS7xnafYqPMhUpNN1zfMoumNT6j4AyY9z
+         Qg4lVhCCN4QdqNt90CUyiap0gYfqVw1mUHueAAQXI1V367fdAEKPiaBq24+RBxVq5sYH
+         GV3DFMfXY3kv/cC9O+jnCX2Fk6zqSz/GYytNgmUBU9wZDyHq8Vbqo/z5MGWKv0GsDxQc
+         JWGV/RTFBMBaMajIbCsG02feftaxFlzDXNK9qUkMpOi5JfQ3FZcgkGV+TUFqk/qGfvdw
+         /WnA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6t5NLyKhKsAGY/2PXJ3ld4eW2WJ1c9JHRv/DIKzNS6VUGy1JP4bLpekUG4LojOtFlJkkIfVR2Az9tglWs@vger.kernel.org, AJvYcCUfWZOq4uBSf3ybwhG9Kzcl1ZvQ0vyjfZwzQctH4xFXV7AGwdWSpN6LhPUNWz5D0tNX6i8PcqbL@vger.kernel.org, AJvYcCVDpuhqQjYYzsR6Ld8HGHjVVbyS6+AMKMAHfNrg1zZY74nJS0y8a1VziWanmQUecezKokgbfmAnRzEJGQjM2Wk=@vger.kernel.org, AJvYcCWt2cpECes0Jx6LBM1lqPhr+dTZSneZI8qIIRC3pr8sD3DOpkYUjKwbhsbiLB/YpCYRbVbUIB0u+73Z@vger.kernel.org, AJvYcCX6uas9vYXfyZ2FMrdm0pnff+ZiCVILBcxMCuDeoI8+rRvJZq2vcTVSpLDyJCx4sGG4Fcvf9ozOFpHxOt98YR5m@vger.kernel.org, AJvYcCXPaWyZUDFj0yKsC+UW6skN5l88T90hhanMR1OF4ligDMg1dzCQ0/KQg5Ill/ZgQadznzmQXSJP/js=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzv30in3dZtm87XGMcdHqxwvy1I7LCdKLNS3yTfUB6XQbFIIhJ/
+	jdVrgbXH9EcOfN3DTmjY5XrBD4bhwNAH25ynM9cPHE7lJjAAvNGk2nqr
+X-Gm-Gg: ASbGnct5VzRPuclWSIpCA93GO94yjSoeoL4fgwEoF5waNofYrfQFApolvaxgkLAgTY7
+	Tn35LY+ivCTGbhEXAuVZQCwZTIjBTKpPzJomBZMvdhIFBw8e0CKc/MemtObt3TMWageW1CAT+sp
+	TUeKsph8HHFCDFa9xCuhEdUqAuuraNbWQcJ1kLeOBEAuxchiIvqbG11kaaY/86Ga7eBHh1x4Gwo
+	dJ2xft1bmeEXTkcO0L1ALFnxRMZ47cwojh56ZaP+BWgudd07bWu0RJTnoZcwa0rKOqWUPwkz7Eg
+	hvkAYzmt9PMycvq2aI+HMasF31N4NLZ/3lpoZj35hWqOL3VITt54UfMP+cK3kwjQDqBAveXZIUb
+	GAzgrBGar5N7gjE4bZLq+kL5w8FI8C3gr5ZqZYuAVjJEga2P2AA/oefpBXwo4eZ+gGTR9VNgGMR
+	Bw2zDP823c+/o/4IFWlGffH2oqX1CKqHJnjfGhcsQ=
+X-Google-Smtp-Source: AGHT+IFW/w1ghG5tPKQzY7n6lA6oyEOu0+wpP6WCPQakbrr+3Qii42sUY9O1Gruj8qYZFnZCGwc3Rw==
+X-Received: by 2002:ac8:7f8c:0:b0:4ab:69e3:420f with SMTP id d75a77b69052e-4abb2d8f272mr123094111cf.37.1752964958013;
+        Sat, 19 Jul 2025 15:42:38 -0700 (PDT)
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4041:5c29:e400:78d6:5625:d350:50d1])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4abb4b1f1d5sm23671841cf.50.2025.07.19.15.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Jul 2025 15:42:37 -0700 (PDT)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v2 00/10] rust: use `core::ffi::CStr` method names
+Date: Sat, 19 Jul 2025 18:42:29 -0400
+Message-Id: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFYffGgC/32Py27DIBBFf8WadakAm5dX/Y8qC8BDglSbFByrV
+ eR/7yTeZNXlvdKcOfcODWvGBmN3h4pbbrksFORbB/HilzOyPFEGyaXihjsWS0UW21pZ8ku5rUy
+ wJLkWwvZSGgl0eK2Y8s8T+nk6csXvG7HXo4TgG0HKPOd17GK0A6Y+WJsGbtCGSXmVTNCO60mgd
+ laJaJWGVydSPIyGFyN6dPUUXHCovSGQwXET8JC45LaW+vscStXD4r9Nm2Ccpcm4PvSorJcf59n
+ nr3eShtO+738bGrRvOQEAAA==
+X-Change-ID: 20250709-core-cstr-fanout-1-f20611832272
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+ Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Saravana Kannan <saravanak@google.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openssh-sha256; t=1752964954; l=2481;
+ i=tamird@gmail.com; h=from:subject:message-id;
+ bh=JsWFRgT0k22IBVP7OkrmL1n1jeWkTlxoEPT59bbopIQ=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
+ MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QCXwvkRmyDloo2AVRWVuX/kRNHqryj9vIaDVNDpecgQdHoF9ZohDz+5EM+qMOhOcsOiEMbmKr2+
+ SjXrN2mWTtQM=
+X-Developer-Key: i=tamird@gmail.com; a=openssh;
+ fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
+This is series 2b/5 of the migration to `core::ffi::CStr`[0].
+20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com.
 
+This series depends on the prior series[0] and is intended to go through
+the rust tree to reduce the number of release cycles required to
+complete the work.
 
+Subsystem maintainers: I would appreciate your `Acked-by`s so that this
+can be taken through Miguel's tree (where the other series must go).
 
+[0] https://lore.kernel.org/all/20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com/
+
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v2:
+- Update patch title (was nova-core, now drm/panic).
+- Link to v1: https://lore.kernel.org/r/20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com
+
+---
+Tamir Duberstein (10):
+      drm/panic: use `core::ffi::CStr` method names
+      rust: auxiliary: use `core::ffi::CStr` method names
+      rust: configfs: use `core::ffi::CStr` method names
+      rust: cpufreq: use `core::ffi::CStr` method names
+      rust: drm: use `core::ffi::CStr` method names
+      rust: firmware: use `core::ffi::CStr` method names
+      rust: kunit: use `core::ffi::CStr` method names
+      rust: miscdevice: use `core::ffi::CStr` method names
+      rust: net: use `core::ffi::CStr` method names
+      rust: of: use `core::ffi::CStr` method names
+
+ drivers/gpu/drm/drm_panic_qr.rs | 2 +-
+ rust/kernel/auxiliary.rs        | 4 ++--
+ rust/kernel/configfs.rs         | 4 ++--
+ rust/kernel/cpufreq.rs          | 2 +-
+ rust/kernel/drm/device.rs       | 4 ++--
+ rust/kernel/firmware.rs         | 2 +-
+ rust/kernel/kunit.rs            | 6 +++---
+ rust/kernel/miscdevice.rs       | 2 +-
+ rust/kernel/net/phy.rs          | 2 +-
+ rust/kernel/of.rs               | 2 +-
+ samples/rust/rust_configfs.rs   | 2 +-
+ 11 files changed, 16 insertions(+), 16 deletions(-)
+---
+base-commit: cc84ef3b88f407e8bd5a5f7b6906d1e69851c856
+change-id: 20250709-core-cstr-fanout-1-f20611832272
+prerequisite-change-id: 20250704-core-cstr-prepare-9b9e6a7bd57e:v1
+prerequisite-patch-id: 83b1239d1805f206711a5a936bbb61c83227d573
+prerequisite-patch-id: a0355dd0efcc945b0565dc4e5a0f42b5a3d29c7e
+prerequisite-patch-id: 8585bf441cfab705181f5606c63483c2e88d25aa
+prerequisite-patch-id: 04ec344c0bc23f90dbeac10afe26df1a86ce53ec
+prerequisite-patch-id: a2fc6cd05fce6d6da8d401e9f8a905bb5c0b2f27
+prerequisite-patch-id: f14c099c87562069f25fb7aea6d9aae4086c49a8
 
 Best regards,
-Benjamin Hasselgren-Hall=C3=A9n
+--  
+Tamir Duberstein <tamird@gmail.com>
 
-
-On Saturday, 19 July 2025 at 22:19, Benjamin Hasselgren-Hall=C3=A9n <benjam=
-in@benis.se> wrote:
-
->=20
->=20
->=20
->=20
-> Best regards,
-> Benjamin Hasselgren-Hall=C3=A9n
->=20
->=20
->=20
->=20
-> On Thursday, 17 July 2025 at 03:15, Zhang, Rui rui.zhang@intel.com wrote:
->=20
-> > On Mon, 2025-07-07 at 19:55 +0000, Benjamin Hasselgren-Hall=C3=A9n wrot=
-e:
-> >=20
-> > > Best regards,
-> > > Benjamin Hasselgren-Hall=C3=A9n
-> > >=20
-> > > On Wednesday, 2 July 2025 at 10:00, Zhang, Rui rui.zhang@intel.com
-> > > wrote:
-> > >=20
-> > > > Remove the list as I want to grab more details.
-> > > >=20
-> > > > On Tue, 2025-07-01 at 07:44 +0000, Benjamin Hasselgren-Hall=C3=
-=A9n wrote:
-> > > >=20
-> > > > > with thermald
-> > > > > https://drive.benis.se/s/bF5AfDGBw6DFNZt
-> > > > >=20
-> > > > > without thermald
-> > > > > https://drive.benis.se/s/47xJdg33ayHerDF
-> > > >=20
-> > > > There is no much difference, which is expected.
-> > > >=20
-> > > > > journald
-> > > > > https://drive.benis.se/s/8JdDJG2bFbHeDmz
-> > > >=20
-> > > > The log doesn't have anything useful.
-> > > > It shows your last launch of thermald failed
-> > > >=20
-> > > > Jul 01 09:38:36 computer thermald[10950]: Couldn't get lock file
-> > > > 10950
-> > > > Jul 01 09:38:36 computer thermald[10950]: An instance of thermald i=
-s
-> > > > already running, exiting ...
-> > > >=20
-> > > > BTW, when do you start to hear the fan spinning? upon changing
-> > > > platform
-> > > > profile? upon launching thermald?
-> > > > is there anyway to figure out what fan device brings this noise?
-> > >=20
-> > > I can get the fans starting by activating performance and do any work
-> > > more or less.
-> > >=20
-> > > I have thermald enabled all the time now. I think that as long as I
-> > > don't have the fans active while suspending - it's fine.
-> >=20
-> > Now I'm confused.
-> > The fan issue is related via platform profile or thermald?
-> >=20
-> > say, after a refresh boot, does the fan spin during suspend when
-> > 1. thermald is NOT activated and platform profile is NOT changed?
-> > 2. thermald is NOT activated and platform profile is changed?
-> > 3. thermald is activated and platform profile is NOT changed?
-> > 4. thermald is activated and platform profile is changed?
-> >=20
-> > Or, what change does it make by switching platform profile only?
-> > what change does it make by activating thermald only?
->=20
->=20
-> The combination of thermald + running the fan while suspending keeps the =
-fan running. Dunno for how long (if it's for ever or just for a while).
->=20
-> However, thermald helps a bit but the system still under performance quit=
-e a lot.
->=20
-> I am regulary trying latest kernel + latest linux-firmware but no changes=
-.
->=20
-> Anything else we can do?
-I can also add that when thermald is running - the fan i still running when=
- the cpu is 40c and the power profile is balance. It should not run now.
-
->=20
-> > thanks,
-> > rui
 
