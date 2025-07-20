@@ -1,156 +1,370 @@
-Return-Path: <linux-pm+bounces-31106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A262B0B2A5
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Jul 2025 00:49:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C66BEB0B359
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Jul 2025 05:37:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FF2418941EE
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Jul 2025 22:49:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A9E17AEF55
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Jul 2025 03:35:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B526128FFCD;
-	Sat, 19 Jul 2025 22:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EBD318858C;
+	Sun, 20 Jul 2025 03:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ETOSH2Mg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rnAT9twI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18ED628F955;
-	Sat, 19 Jul 2025 22:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE11717BA5;
+	Sun, 20 Jul 2025 03:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752964982; cv=none; b=KyxKTBDKmaPMQWfOexAfgs38q+QnLShozIIBwpZhQ7RkGJ9HO6tl5w6AsvFV9Fk2+PYtFSTkC/NH2GT+o0cvkuK0SY2SsPCY79j+MQpmkioTjW8w57Ay2MKJHhdrvPMPfiXBQY3bbu+36d2IbQSPk7qvV1E7y3/QrHi0GPtq5AU=
+	t=1752982622; cv=none; b=FgcZaU7PmlMrK9D8T38hD8M5HaZCNWBZjNplU/6GdhyrE5AjUvs8Vg+8T/5vlkZzcPH5M3GAx9n3QZxlGBFDOyVB/SN4TGI5s0/S+tueunsUvVMeAPRXYhjt2jJ2dUOz2Y5naOqbkzR0FIo64XwzyybkaO1eZntP331wEcImj6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752964982; c=relaxed/simple;
-	bh=SD3G4jqyuzcSVOOImxvxCQKawvUyi73ZCoxehYBa7Fo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Gjh3KBf9/CKch+CZRHcp+tgsU/vkbyrJ3qJyVgdmnZJDeGytwRAktbS/WNE1LiUh0AlLW1F26pGRzs+Ki0ynzR2gBUAJFgbja7cf/l8TXvqmpJM+I6QuIZSZnWKSg+3UYOrJj5fan5BpclgIyrBtilJINss9RAmdolcezeyEjwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ETOSH2Mg; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4aba1bc7f44so24286581cf.0;
-        Sat, 19 Jul 2025 15:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752964980; x=1753569780; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s3NY47tJRGk+8ZCP8/kt7QLiEFpyYgbdtZryIR8Da5M=;
-        b=ETOSH2MghW9JrVlQNT3jgHh9A+y45K3f3OQxZ30JtlQtPS5HVRsRBDrJrabCWKSDpG
-         3AW+sPvPJf1J29M8SPMfkarheJhbC/mS1yE/hoIx5SUyNYOhTx+8boj9XYmhRh1FoLjh
-         1bpS252BOsfLm9ocbmXb5RUa1uusM5LsU3oxjBvfV+NhWknFf4A7hdXKwarHTxNh0Qmt
-         JQ/NqpXrfT0AVKgJm2TMgQVUIi5OJjp18MHreRmDXyfSNF6xiNKVp280OnBYoGnUcVuO
-         KXHZgQhDxGn0Fz8DqZ+MfQqixvJSIPgliTDmcvU91J6S6lZn/zErm2m/qkZHhfbDsd8K
-         hNaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752964980; x=1753569780;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s3NY47tJRGk+8ZCP8/kt7QLiEFpyYgbdtZryIR8Da5M=;
-        b=l17hbzNp+q5oMClc5IHMXiW6rnSawKip3nC36WVRa5xNz+hpqANnQ5RDUYn+fvJey+
-         5NBwGIOrTMcs42skGfJEXNGCEil9YTqng+mDrfMXRTT0dL36tPFMa133ax1yLPyBbXUV
-         TwiS1f1ghI5o5hN5mI5mYOfQeC2jNJwlRICLf0izq4qLtsKKHNWo8kbUGcfocANH9u2/
-         WUk4oT0rbRdb4ylTDdrNXqRe1/V5erPJwvz8aEO0/VqDkyRt8ALxEZfJx6fydYYGWuvx
-         nokBBg2zy/cDs1HPzo4fVoSOCjOE3aWD8iktMM7gnFkM1fKUQi+5alZ55gPC4Paw20kF
-         3jSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA18IfxeHOdowvh7TI5bpAmvaqKaG8EjnzPFJa875iyiJ+p17HpKN6BALAwFCJ/o+Whd0oDY3tkV5qs5q7@vger.kernel.org, AJvYcCUK80H6Q/9dqAk3R9rN1NTIFTqqxwuft30/TBJ46CyrG9UhW1iwArLHL4OJrQCjbt9my8K5cDrK@vger.kernel.org, AJvYcCVNmRZ32jyMeEB3eu4Gq5RM1/eU9Dc8/l1xd8Hz6a/bhjnKhB9wfFEyeB3mn4iemfOMA1le+Nm9vqFOZkYxDq9R@vger.kernel.org, AJvYcCXLhRbDNNaVGiUHv/ubAYq7vd+DVfaahig/eH/DN0d9HQLH7l1klzUEfXKcovlOiIvbCGvC593EwYQ=@vger.kernel.org, AJvYcCXfyrzWXwJzKDQNlASUtUGng7SMoIG919Jt52dyEq4Ng8r9s4dJCWhp497qxPtozWfMxeAMcMiHqpabla25cyc=@vger.kernel.org, AJvYcCXz9WSIBzGxliGwkR3+0G/hhyNl228nFg+CM37i8ZPT2b2Ei9D4angYdUEnwdfjfVcn8vJb792d7D98@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMvTpWVeifu3chXI9k1KOTjEi5U5H4R+YH1wOZjy/3dHRl+tok
-	GJ/Ui8X6+1oBpbOuuKmQgpUWCz7dfGQbsOy+yuIgsEELGHx/OVwKbO9F
-X-Gm-Gg: ASbGncszqXlO3e153APRAVH2JzmY5Ls4+O6PCkPgNF44jhDxDlzoPv0Z2ejNHiZb9dq
-	n4OX7tv6mSrVbvpfW19ENlz5YM6sqmfj4z5e7FtiP0MDqhxzMUL99a8F3o7njCMzyzNTnYzbCWI
-	WVK7GzjIK7qzubJCYz6sPA7OkLwEoRjArtvDW0KWDrAIygvMMBlzM65O3+WIe1ar6E2m8KWIN1G
-	Ib9hci/f5Is1G1qdwyXFc9DBpfPFA/hpoDo7HDv02yEIw7O/2h7EdVcEyD0BuazuuIXxl7NqzxP
-	F1ghi/Ikmle5s6ePeBHUNep1TQqG0yB2a05QRs/cOomhgIL8rNB78dxO+c1bbmLEzh51HEaErFs
-	j4R6/H/J3uKjlwuNedUwXKodRQtnaQMFo4gQ4LH4T77oUtaeWBz+j3+23tg5dPSjXjCOmFXjs3p
-	h57Fc0hfwahHn/e3y3jM7FbhYgF5VI
-X-Google-Smtp-Source: AGHT+IE+VLj1eoQJlkntq9FCqSiBVAWaZ6ejE3+GS7GuKBpgeIfpkdAoy8KZVTX3zCCXeHxJrsI52A==
-X-Received: by 2002:ac8:7d89:0:b0:4ab:70df:fa20 with SMTP id d75a77b69052e-4aba25f73cdmr190367941cf.16.1752964979879;
-        Sat, 19 Jul 2025 15:42:59 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4041:5c29:e400:78d6:5625:d350:50d1])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4abb4b1f1d5sm23671841cf.50.2025.07.19.15.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jul 2025 15:42:59 -0700 (PDT)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 19 Jul 2025 18:42:39 -0400
-Subject: [PATCH v2 10/10] rust: of: use `core::ffi::CStr` method names
+	s=arc-20240116; t=1752982622; c=relaxed/simple;
+	bh=+DpSzgU4gtQbFYEFCOlFoqE4leUc0drbsHZHlj6bzis=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m1K4hcxQcF5z9oAMctdyNOyUj1sX742yFBE4Pss1pzM/eWF1XJsrslSa6ovSJnR2Z3jVQFFFFXd9cOPDx6M+kO9N4MMhA41+0pI86P718LSxyNWF0WdaZ3iiT52B8cpshf+eBp9RL1emYo/h7lO+3k1zKgIqofOdmoiknPkiZAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rnAT9twI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C114C4CEF4;
+	Sun, 20 Jul 2025 03:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752982621;
+	bh=+DpSzgU4gtQbFYEFCOlFoqE4leUc0drbsHZHlj6bzis=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rnAT9twIA28l+7jGUIt2p+0S20d7/J9SN3EZbn3s+qPUEPi3AGlAnNFllKYi9Ti7Q
+	 iuh1eaGWKf+bGJvzTXeHc3uWVhhC6CMBTHC0gwdI5KVDch27YmEGZoIUoIcMChHhb3
+	 FO2cPSzn4sE01xXzVS7j6UWXZVW6wQAbp4qlhqq19l23jLhM6LN99G9nq5hiyHI5D1
+	 hxRDia4dogUG3LsM5NoY0vKaCrGF5WFTDwx9i+j7Lsn1+XhZJSRfFC6jdpCWZFD1eC
+	 S/NX0n4BmyeQbVWKZaX2v07ZBk+xEBgmAcFKRFNhB1y106YzaFOQBPFsRCKeGfm5Jd
+	 XMRUbBFz4bsMQ==
+Date: Sat, 19 Jul 2025 22:36:58 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 5/8] arm64: dts: qcom: dts: switch to RPMPD_* indices
+Message-ID: <bubac7n7qx2ww5dzzsth7dsw5vtzwfom2r42ox6n6aft474hyx@mlo3jpfozvha>
+References: <20250718-rework-rpmhpd-rpmpd-v1-0-eedca108e540@oss.qualcomm.com>
+ <20250718-rework-rpmhpd-rpmpd-v1-5-eedca108e540@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250719-core-cstr-fanout-1-v2-10-e1cb53f6d233@gmail.com>
-References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
-In-Reply-To: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
- Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
- Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
- Saravana Kannan <saravanak@google.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- netdev@vger.kernel.org, devicetree@vger.kernel.org, 
- Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1752964956; l=1199;
- i=tamird@gmail.com; h=from:subject:message-id;
- bh=SD3G4jqyuzcSVOOImxvxCQKawvUyi73ZCoxehYBa7Fo=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
- MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QDbHtLruIIxp9ZSU/n/rHXJnJySJp0GBObTIQohb5XiIw2SrNPfLKfjjQVWotSa6tEAbOEg5G0M
- tsoqBodzCsg4=
-X-Developer-Key: i=tamird@gmail.com; a=openssh;
- fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250718-rework-rpmhpd-rpmpd-v1-5-eedca108e540@oss.qualcomm.com>
 
-Prepare for `core::ffi::CStr` taking the place of `kernel::str::CStr` by
-avoid methods that only exist on the latter.
+On Fri, Jul 18, 2025 at 07:13:43PM +0300, Dmitry Baryshkov wrote:
+> Use generic RPMPD_* defines for power domain instead of using
+> platform-specific defines.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Link: https://github.com/Rust-for-Linux/linux/issues/1075
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Benno Lossin <lossin@kernel.org>
-Acked-by: Danilo Krummrich <dakr@kernel.org>
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- rust/kernel/of.rs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Acked-by: Bjorn Andersson <andersson@kernel.org>
 
-diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
-index 40d1bd13682c..5cf50979c1e8 100644
---- a/rust/kernel/of.rs
-+++ b/rust/kernel/of.rs
-@@ -29,7 +29,7 @@ fn index(&self) -> usize {
- impl DeviceId {
-     /// Create a new device id from an OF 'compatible' string.
-     pub const fn new(compatible: &'static CStr) -> Self {
--        let src = compatible.as_bytes_with_nul();
-+        let src = compatible.to_bytes_with_nul();
-         // Replace with `bindings::of_device_id::default()` once stabilized for `const`.
-         // SAFETY: FFI type is valid to be zero-initialized.
-         let mut of: bindings::of_device_id = unsafe { core::mem::zeroed() };
+Regards,
+Bjorn
 
--- 
-2.50.1
-
+> ---
+>  arch/arm64/boot/dts/qcom/msm8916.dtsi |  8 ++++----
+>  arch/arm64/boot/dts/qcom/msm8917.dtsi | 10 +++++-----
+>  arch/arm64/boot/dts/qcom/msm8976.dtsi |  4 ++--
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi | 16 ++++++++--------
+>  arch/arm64/boot/dts/qcom/sdm630.dtsi  | 16 ++++++++--------
+>  arch/arm64/boot/dts/qcom/sm6125.dtsi  | 12 ++++++------
+>  6 files changed, 33 insertions(+), 33 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> index b50c7e6e0bfcd35ab4f8b84aeabe214fd60e8d7c..ca184ee3af065df0dfb3c7106d29360a860b8b36 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> @@ -1943,8 +1943,8 @@ mpss: remoteproc@4080000 {
+>  			interrupt-names = "wdog", "fatal", "ready",
+>  					  "handover", "stop-ack";
+>  
+> -			power-domains = <&rpmpd MSM8916_VDDCX>,
+> -					<&rpmpd MSM8916_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>,
+> +					<&rpmpd RPMPD_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+>  			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+> @@ -2445,8 +2445,8 @@ wcnss: remoteproc@a204000 {
+>  					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+>  			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
+>  
+> -			power-domains = <&rpmpd MSM8916_VDDCX>,
+> -					<&rpmpd MSM8916_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>,
+> +					<&rpmpd RPMPD_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+>  			qcom,smem-states = <&wcnss_smp2p_out 0>;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8917.dtsi b/arch/arm64/boot/dts/qcom/msm8917.dtsi
+> index 8a642fce2e40d6d252a1cfbdfed602e6789ef09a..87dfc1e7e131cd4192ffbdd4913f934af17c5c88 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8917.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8917.dtsi
+> @@ -1070,7 +1070,7 @@ mdss_dsi0: dsi@1a94000 {
+>  				phys = <&mdss_dsi0_phy>;
+>  
+>  				operating-points-v2 = <&mdss_dsi0_opp_table>;
+> -				power-domains = <&rpmpd MSM8917_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				#address-cells = <1>;
+>  				#size-cells = <0>;
+> @@ -1288,7 +1288,7 @@ sdhc_1: mmc@7824900 {
+>  			pinctrl-0 = <&sdc1_default>;
+>  			pinctrl-1 = <&sdc1_sleep>;
+>  			pinctrl-names = "default", "sleep";
+> -			power-domains = <&rpmpd MSM8917_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  			mmc-hs200-1_8v;
+>  			mmc-hs400-1_8v;
+>  			mmc-ddr-1_8v;
+> @@ -1313,7 +1313,7 @@ sdhc_2: mmc@7864900 {
+>  			pinctrl-0 = <&sdc2_default>;
+>  			pinctrl-1 = <&sdc2_sleep>;
+>  			pinctrl-names = "default", "sleep";
+> -			power-domains = <&rpmpd MSM8917_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  			bus-width = <4>;
+>  			status = "disabled";
+>  		};
+> @@ -1517,8 +1517,8 @@ wcnss: remoteproc@a204000 {
+>  					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+>  			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
+>  
+> -			power-domains = <&rpmpd MSM8917_VDDCX>,
+> -					<&rpmpd MSM8917_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>,
+> +					<&rpmpd RPMPD_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+>  			qcom,smem-states = <&wcnss_smp2p_out 0>;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> index f9962512f243d6c1af4931787f4602554c63bb39..80a0a09e055d79c5e56f89e5d67baf9971d87069 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> @@ -1558,8 +1558,8 @@ wcnss: remoteproc@a204000 {
+>  					  "handover",
+>  					  "stop-ack";
+>  
+> -			power-domains = <&rpmpd MSM8976_VDDCX>,
+> -					<&rpmpd MSM8976_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>,
+> +					<&rpmpd RPMPD_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+>  			qcom,smem-states = <&wcnss_smp2p_out 0>;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> index 0b0a9379cb05b01ebb17cef9fe7d22d56790efd3..2d7c45fec94e868b41a2b8d7acf8175a7b02c0b7 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> @@ -1497,8 +1497,8 @@ remoteproc_mss: remoteproc@4080000 {
+>  
+>  			qcom,halt-regs = <&tcsr_regs_1 0x3000 0x5000 0x4000>;
+>  
+> -			power-domains = <&rpmpd MSM8998_VDDCX>,
+> -					<&rpmpd MSM8998_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>,
+> +					<&rpmpd RPMPD_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+>  			status = "disabled";
+> @@ -1544,7 +1544,7 @@ adreno_gpu: gpu@5000000 {
+>  			interrupts = <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>;
+>  			iommus = <&adreno_smmu 0>;
+>  			operating-points-v2 = <&gpu_opp_table>;
+> -			power-domains = <&rpmpd MSM8998_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDMX>;
+>  			status = "disabled";
+>  
+>  			gpu_opp_table: opp-table {
+> @@ -1680,7 +1680,7 @@ remoteproc_slpi: remoteproc@5800000 {
+>  			qcom,smem-states = <&slpi_smp2p_out 0>;
+>  			qcom,smem-state-names = "stop";
+>  
+> -			power-domains = <&rpmpd MSM8998_SSCCX>;
+> +			power-domains = <&rpmpd RPMPD_SSCCX>;
+>  			power-domain-names = "ssc_cx";
+>  
+>  			status = "disabled";
+> @@ -2871,7 +2871,7 @@ mdss_mdp: display-controller@c901000 {
+>  				assigned-clock-rates = <19200000>;
+>  
+>  				operating-points-v2 = <&mdp_opp_table>;
+> -				power-domains = <&rpmpd MSM8998_VDDMX>;
+> +				power-domains = <&rpmpd RPMPD_VDDMX>;
+>  
+>  				mdp_opp_table: opp-table {
+>  					compatible = "operating-points-v2";
+> @@ -2953,7 +2953,7 @@ mdss_dsi0: dsi@c994000 {
+>  							 <&mdss_dsi0_phy DSI_PIXEL_PLL_CLK>;
+>  
+>  				operating-points-v2 = <&dsi_opp_table>;
+> -				power-domains = <&rpmpd MSM8998_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				phys = <&mdss_dsi0_phy>;
+>  				phy-names = "dsi";
+> @@ -3029,7 +3029,7 @@ mdss_dsi1: dsi@c996000 {
+>  							 <&mdss_dsi1_phy DSI_PIXEL_PLL_CLK>;
+>  
+>  				operating-points-v2 = <&dsi_opp_table>;
+> -				power-domains = <&rpmpd MSM8998_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				phys = <&mdss_dsi1_phy>;
+>  				phy-names = "dsi";
+> @@ -3277,7 +3277,7 @@ remoteproc_adsp: remoteproc@17300000 {
+>  			qcom,smem-states = <&adsp_smp2p_out 0>;
+>  			qcom,smem-state-names = "stop";
+>  
+> -			power-domains = <&rpmpd MSM8998_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  			power-domain-names = "cx";
+>  
+>  			status = "disabled";
+> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> index 8b1a45a4e56ed1ae02e5bb6e78ca6255d87add1c..412d7f7d6de67008c1f406ac5a73a51ff7f4f98d 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> @@ -1058,8 +1058,8 @@ remoteproc_mss: remoteproc@4080000 {
+>  
+>  			qcom,halt-regs = <&tcsr_regs_1 0x3000 0x5000 0x4000>;
+>  
+> -			power-domains = <&rpmpd SDM660_VDDCX>,
+> -					<&rpmpd SDM660_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>,
+> +					<&rpmpd RPMPD_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+>  			memory-region = <&mba_region>, <&mpss_region>, <&mdata_mem>;
+> @@ -1096,7 +1096,7 @@ adreno_gpu: gpu@5000000 {
+>  				"rbcpr",
+>  				"core";
+>  
+> -			power-domains = <&rpmpd SDM660_VDDMX>;
+> +			power-domains = <&rpmpd RPMPD_VDDMX>;
+>  			iommus = <&kgsl_smmu 0>;
+>  
+>  			nvmem-cells = <&gpu_speed_bin>;
+> @@ -1396,7 +1396,7 @@ sdhc_2: mmc@c084000 {
+>  			pinctrl-names = "default", "sleep";
+>  			pinctrl-0 = <&sdc2_state_on>;
+>  			pinctrl-1 = <&sdc2_state_off>;
+> -			power-domains = <&rpmpd SDM660_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  			status = "disabled";
+>  
+> @@ -1450,7 +1450,7 @@ sdhc_1: mmc@c0c4000 {
+>  			pinctrl-names = "default", "sleep";
+>  			pinctrl-0 = <&sdc1_state_on>;
+>  			pinctrl-1 = <&sdc1_state_off>;
+> -			power-domains = <&rpmpd SDM660_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  			bus-width = <8>;
+>  			non-removable;
+> @@ -1612,7 +1612,7 @@ mdp: display-controller@c901000 {
+>  						     "rotator-mem";
+>  				iommus = <&mmss_smmu 0>;
+>  				operating-points-v2 = <&mdp_opp_table>;
+> -				power-domains = <&rpmpd SDM660_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				ports {
+>  					#address-cells = <1>;
+> @@ -1664,7 +1664,7 @@ mdss_dsi0: dsi@c994000 {
+>  				reg-names = "dsi_ctrl";
+>  
+>  				operating-points-v2 = <&dsi_opp_table>;
+> -				power-domains = <&rpmpd SDM660_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				interrupt-parent = <&mdss>;
+>  				interrupts = <4>;
+> @@ -2280,7 +2280,7 @@ adsp_pil: remoteproc@15700000 {
+>  			clock-names = "xo";
+>  
+>  			memory-region = <&adsp_region>;
+> -			power-domains = <&rpmpd SDM660_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  			power-domain-names = "cx";
+>  
+>  			qcom,smem-states = <&adsp_smp2p_out 0>;
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> index 8f2d65543373e70b48b4015478e21e8e74fd23c9..80c42dff5399b7c60576c2b6cf79afdbd8b9b1d4 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> @@ -724,7 +724,7 @@ sdhc_1: mmc@4744000 {
+>  			clock-names = "iface", "core", "xo";
+>  			iommus = <&apps_smmu 0x160 0x0>;
+>  
+> -			power-domains = <&rpmpd SM6125_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  			qcom,dll-config = <0x000f642c>;
+>  			qcom,ddr-config = <0x80040873>;
+> @@ -755,7 +755,7 @@ sdhc_2: mmc@4784000 {
+>  			pinctrl-1 = <&sdc2_off_state>;
+>  			pinctrl-names = "default", "sleep";
+>  
+> -			power-domains = <&rpmpd SM6125_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  			qcom,dll-config = <0x0007642c>;
+>  			qcom,ddr-config = <0x80040873>;
+> @@ -1275,7 +1275,7 @@ mdss_mdp: display-controller@5e01000 {
+>  				assigned-clock-rates = <19200000>;
+>  
+>  				operating-points-v2 = <&mdp_opp_table>;
+> -				power-domains = <&rpmpd SM6125_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				ports {
+>  					#address-cells = <1>;
+> @@ -1345,7 +1345,7 @@ mdss_dsi0: dsi@5e94000 {
+>  							 <&mdss_dsi0_phy DSI_PIXEL_PLL_CLK>;
+>  
+>  				operating-points-v2 = <&dsi_opp_table>;
+> -				power-domains = <&rpmpd SM6125_VDDCX>;
+> +				power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  				phys = <&mdss_dsi0_phy>;
+>  				phy-names = "dsi";
+> @@ -1406,7 +1406,7 @@ mdss_dsi0_phy: phy@5e94400 {
+>  					      "ref";
+>  
+>  				required-opps = <&rpmpd_opp_nom>;
+> -				power-domains = <&rpmpd SM6125_VDDMX>;
+> +				power-domains = <&rpmpd RPMPD_VDDMX>;
+>  
+>  				status = "disabled";
+>  			};
+> @@ -1434,7 +1434,7 @@ dispcc: clock-controller@5f00000 {
+>  				      "gcc_disp_gpll0_div_clk_src";
+>  
+>  			required-opps = <&rpmpd_opp_ret>;
+> -			power-domains = <&rpmpd SM6125_VDDCX>;
+> +			power-domains = <&rpmpd RPMPD_VDDCX>;
+>  
+>  			#clock-cells = <1>;
+>  			#power-domain-cells = <1>;
+> 
+> -- 
+> 2.39.5
+> 
 
