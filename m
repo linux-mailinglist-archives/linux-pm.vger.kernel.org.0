@@ -1,54 +1,57 @@
-Return-Path: <linux-pm+bounces-31197-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31198-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A1BB0C40C
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:26:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B538B0C409
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:26:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 465047A62F9
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:24:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED8BE3BEBE2
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856E02D3EC5;
-	Mon, 21 Jul 2025 12:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA1A2D375E;
+	Mon, 21 Jul 2025 12:26:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTlc0qZQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LlG/gTv2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615DE2D375E
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 12:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75EA176AC8
+	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 12:26:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753100773; cv=none; b=U8JpPii0TAXfMXL0tjhQGWBS0hThCOlhHxENikiij0hj6bb0yiRZ/7mOtb+zrErMxhPlPW7be5mfRu5LVdrgVkRoMeJ0v4YLQdHhs8Rxq7HQgzD8hbZME952dH/YcyLkfNhv1Wlt8EUfv+YUjlSrB2zLZrVOA7g7/YEv0qZZ7/A=
+	t=1753100774; cv=none; b=el/Z/1jlqPISF3YDFr8DhQ1Ev5EA+AoFicUUK8Ou6MrZ0w4s2yXjM1Vzr2PJzNn7MyqTQ8Bj8Gqu7u8zMCQcbu3JSR0dMKuHF1xO5QOfFc3Fll8vydhwcoRDTBlEDJlu2T8FxKSfIkLMBdOqL+/gFblV5QVq4RF5u9tzLCLPxbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753100773; c=relaxed/simple;
-	bh=2V8cx+eHM09IjMLxrm1pbDN4TamRtJnQdGk5yGSGakA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HUUT5PS9N8x7oRDs3T3lLdw+TlDANrKygrf0P5DkrLTPUQj5mu5+cYj+EARs0FmXEbeE5l/WDO4ioSAqceyuPJQfoZNLCTTVZ1NLlcaNWmEX5QkuMDtnMQVaCxutGCxbKri+b+zXHg6F+NqloRoMPILHhQ/tk9ErLdomHT1HzgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTlc0qZQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DF6C4CEED;
-	Mon, 21 Jul 2025 12:26:11 +0000 (UTC)
+	s=arc-20240116; t=1753100774; c=relaxed/simple;
+	bh=+Eq6inI0XbcTRKAVsIFjid5Uux1gFB+w2U8hOf3lpu4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nWoIbAp/RGZShK+UjQ0En5TNcTAxx4UMRPwsv5/byrd2DKPX7ApFzz96BPQ7AmppKNjC6xZxV3mFUIX4oPaujp5SxtlPOTD7tX2IVe8OpRDYuuO8AIdvIMGDKjYOnYvM+VFIesm6DAwaR0LlmnYDNpPy7JUPNhjFTIHnO98OqcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LlG/gTv2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D736C4CEF4;
+	Mon, 21 Jul 2025 12:26:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753100773;
-	bh=2V8cx+eHM09IjMLxrm1pbDN4TamRtJnQdGk5yGSGakA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eTlc0qZQqn0xz0qLUUcCB7UqDWCfjEiOHq5ui4SeOY9+Jo9fdT5nlPGOi6FEaipty
-	 7xXznp98tBfDimuXpmHkJYIA2G8m17JEfYkNL8zI+CgSWzekA6QOyXRiuVBhKE9BM8
-	 aEd3cppSWvtPKSi55VTTM8o8ZHF/D8WLtCqlyUYJX3mmg36KwVdBtaSy3/rM2mrUuR
-	 ehIbrSOpasjaLQfKwq16MmhiE6XRlWy+28E8pHX8JfGV+u6NWn5Cyl1qPHwcP6iqBo
-	 30EofbLKMj5juAdZLNHXHOSdZgOTHyEk2gY24S7JPTLRE3jE0ewkfVsjoqYluMEBui
-	 RApaI1mbZQXdw==
+	s=k20201202; t=1753100774;
+	bh=+Eq6inI0XbcTRKAVsIFjid5Uux1gFB+w2U8hOf3lpu4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LlG/gTv2fsVzsKb8N1dRfLtgkWsNkm05Aj1vlBZEGylZ6Z3jVv4byOjNJ+wCKQ++4
+	 uweiSvTDUXAodMH020YzR66PIMiRlF9NpqWy3XC7C6V/DZ3IrALfPy58+Bv810Hzix
+	 f28fq7AC20zk3taVzhe78wTAIuzfDIncF337YUdDaAH/RdJUIj2kkdQCQxIHdn3GNX
+	 /vWnvYIoQCkQlpj5YTeqlRPPhMbSZwe4xUV1xv/D6f1XB3kn1lk2A49F3Osw1z2aNm
+	 zxU3fsaYcfTCs0FTHYeVZ7hcBU0zLwzj2ry0jW4zjiKy/muOSyC7nwzUO2iQ7BaXLL
+	 FRi90LcXI1irA==
 From: Hans de Goede <hansg@kernel.org>
 To: Sebastian Reichel <sre@kernel.org>
 Cc: Hans de Goede <hansg@kernel.org>,
 	Linus Walleij <linus.walleij@linaro.org>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v3 0/5] power: supply: Add adc-battery-helper lib and Intel Dollar Cove TI CC battery driver
-Date: Mon, 21 Jul 2025 14:25:59 +0200
-Message-ID: <20250721122605.46724-1-hansg@kernel.org>
+Subject: [PATCH v3 1/5] power: supply: Add adc-battery-helper
+Date: Mon, 21 Jul 2025 14:26:00 +0200
+Message-ID: <20250721122605.46724-2-hansg@kernel.org>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250721122605.46724-1-hansg@kernel.org>
+References: <20250721122605.46724-1-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,65 +60,461 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi All,
-
-Here is a patch-series which primary goal is to add support for
-using the coulomb-counter in the Intel Dollar Cove TI PMIC as
-battery power-supply class device.
-
-This PMIC used on some Intel Bay/Cherry Trail systems has some builtin
+The TI PMIC used on some Intel Bay/Cherry Trail systems has some builtin
 fuel-gauge functionality which just like the UG3105 fuel-gauge is not
 a full featured autonomous fuel-gauge.
 
-To prepare for adding support for this, this series factors out the UG3105
-capacity estimating code, generalized so that it can be re-used in other
-drivers.
+These fuel-gauges offer accurate current and voltage measurements but
+their coulomb-counters are intended to work together with an always on
+micro-controller monitoring the fuel-gauge.
 
-This series has been tested on an Asus ME176C tablet with UG3105 fuel-gauge
-and on an Acer A1 840 tablet which uses the Intel Dollar Cove TI coulomb-
-counter as fuel-gauge.
+Add an adc-battery-helper offering open-circuit-voltage (ocv) and through
+that capacity estimation for devices where such limited functionality
+fuel-gauges are exposed directly to Linux.
 
+This is a copy of the existing UG3105 estimating code, generalized so that
+it can be re-used in other drivers.
+
+The next commit will replace the UG3105 driver's version of this code with
+using the adc-battery-helper.
+
+The API has been designed for easy integration into existing power-supply
+drivers. For example this functionality might also be a useful addition
+to the generic-adc-battery driver.
+
+The requirement of needing the adc_battery_helper struct to be the first
+member of a battery driver's data struct is not ideal. This is a compromise
+which is necessary to allow directly using the helper's get_property(),
+external_power_changed() and suspend()/resume() functions as power-supply /
+suspend-resume callbacks.
+
+Signed-off-by: Hans de Goede <hansg@kernel.org>
+---
 Changes in v3:
-- Drop hardcoded open-circuit-voltage to capacity mapping table, replacing
-  it with using the "ocv-capacity-table-n" device-property and replace DIY
-  code with power_supply_batinfo_ocv2cap()
-- Rebase on latest upstream where ug3105_battery was already switched to
-  "ocv-capacity-table-n" device-prop + power_supply_batinfo_ocv2cap()
-- Switch fg druver to iio_read_channel_processed_scale() which moves
-  the Vbat ADC calibration handling and scaling to the IIO ADC driver
-- Drop (already fixed) "power: supply: adc-battery-helper: Fix reporting
-  capacity > 100%"
-
-Changes in v2:
-- Drop the 2 already merged bug-fix patches
-- Add missing MODULE_DESCRIPTION() to the new adc-battery-helper module
-
-Regards,
-
-Hans
-
-*** BLURB HERE ***
-
-Hans de Goede (5):
-  power: supply: Add adc-battery-helper
-  power: supply: ug3105_battery: Switch to adc-battery-helper
-  power: supply: ug3105_battery: Put FG in standby on remove and
-    shutdown
-  power: supply: adc-battery-helper: Add support for optional
-    charge_finished GPIO
-  power: supply: Add new Intel Dollar Cove TI battery driver
-
- drivers/power/supply/Kconfig               |  16 +
- drivers/power/supply/Makefile              |   2 +
- drivers/power/supply/adc-battery-helper.c  | 327 +++++++++++++++++
- drivers/power/supply/adc-battery-helper.h  |  62 ++++
- drivers/power/supply/intel_dc_ti_battery.c | 394 +++++++++++++++++++++
- drivers/power/supply/ug3105_battery.c      | 346 ++++--------------
- 6 files changed, 867 insertions(+), 280 deletions(-)
+- Drop hardcoded open-circuit-voltage to capacity mapping table, this
+  table should be provided as "ocv-capacity-table-n" device-property.
+- Replace DIY code with power_supply_batinfo_ocv2cap()
+---
+ drivers/power/supply/Kconfig              |   3 +
+ drivers/power/supply/Makefile             |   1 +
+ drivers/power/supply/adc-battery-helper.c | 315 ++++++++++++++++++++++
+ drivers/power/supply/adc-battery-helper.h |  59 ++++
+ 4 files changed, 378 insertions(+)
  create mode 100644 drivers/power/supply/adc-battery-helper.c
  create mode 100644 drivers/power/supply/adc-battery-helper.h
- create mode 100644 drivers/power/supply/intel_dc_ti_battery.c
 
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 79ddb006e2da..8cfaded2cc5c 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -35,6 +35,9 @@ config APM_POWER
+ 	  Say Y here to enable support APM status emulation using
+ 	  battery class devices.
+ 
++config ADC_BATTERY_HELPER
++	tristate
++
+ config GENERIC_ADC_BATTERY
+ 	tristate "Generic battery support using IIO"
+ 	depends on IIO
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index f943c9150b32..c85c5c441e0f 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -7,6 +7,7 @@ power_supply-$(CONFIG_LEDS_TRIGGERS)	+= power_supply_leds.o
+ 
+ obj-$(CONFIG_POWER_SUPPLY)	+= power_supply.o
+ obj-$(CONFIG_POWER_SUPPLY_HWMON) += power_supply_hwmon.o
++obj-$(CONFIG_ADC_BATTERY_HELPER) += adc-battery-helper.o
+ obj-$(CONFIG_GENERIC_ADC_BATTERY)	+= generic-adc-battery.o
+ 
+ obj-$(CONFIG_APM_POWER)		+= apm_power.o
+diff --git a/drivers/power/supply/adc-battery-helper.c b/drivers/power/supply/adc-battery-helper.c
+new file mode 100644
+index 000000000000..919634db5472
+--- /dev/null
++++ b/drivers/power/supply/adc-battery-helper.c
+@@ -0,0 +1,315 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Helper for batteries with accurate current and voltage measurement, but
++ * without temperature measurement or without a "resistance-temp-table".
++ *
++ * Some fuel-gauges are not full-featured autonomous fuel-gauges.
++ * These fuel-gauges offer accurate current and voltage measurements but
++ * their coulomb-counters are intended to work together with an always on
++ * micro-controller monitoring the fuel-gauge.
++ *
++ * This adc-battery-helper code offers open-circuit-voltage (ocv) and through
++ * that capacity estimation for devices where such limited functionality
++ * fuel-gauges are exposed directly to Linux.
++ *
++ * This helper requires the hw to provide accurate battery current_now and
++ * voltage_now measurement and this helper the provides the following properties
++ * based on top of those readings:
++ *
++ *	POWER_SUPPLY_PROP_STATUS
++ *	POWER_SUPPLY_PROP_VOLTAGE_OCV
++ *	POWER_SUPPLY_PROP_VOLTAGE_NOW
++ *	POWER_SUPPLY_PROP_CURRENT_NOW
++ *	POWER_SUPPLY_PROP_CAPACITY
++ *
++ * As well as optional the following properties assuming an always present
++ * system-scope battery, allowing direct use of adc_battery_helper_get_prop()
++ * in this common case:
++ *	POWER_SUPPLY_PROP_PRESENT
++ *	POWER_SUPPLY_PROP_SCOPE
++ *
++ * Using this helper is as simple as:
++ *
++ * 1. Embed a struct adc_battery_helper this MUST be the first member of
++ *    the battery driver's data struct.
++ * 2. Use adc_battery_helper_props[] or add the above properties to
++ *    the list of properties in power_supply_desc
++ * 3. Call adc_battery_helper_init() after registering the power_supply and
++ *    before returning from the probe() function
++ * 4. Use adc_battery_helper_get_prop() as the power-supply's get_property()
++ *    method, or call it for the above properties.
++ * 5. Use adc_battery_helper_external_power_changed() as the power-supply's
++ *    external_power_changed() method or call it from that method.
++ * 6. Use adc_battery_helper_[suspend|resume]() as suspend-resume methods or
++ *    call them from the driver's suspend-resume methods.
++ *
++ * The provided get_voltage_and_current_now() method will be called by this
++ * helper at adc_battery_helper_init() time and later.
++ *
++ * Copyright (c) 2021-2024 Hans de Goede <hansg@kernel.org>
++ */
++
++#include <linux/cleanup.h>
++#include <linux/devm-helpers.h>
++#include <linux/mutex.h>
++#include <linux/power_supply.h>
++#include <linux/workqueue.h>
++
++#include "adc-battery-helper.h"
++
++#define MOV_AVG_WINDOW						8
++#define INIT_POLL_TIME						(5 * HZ)
++#define POLL_TIME						(30 * HZ)
++#define SETTLE_TIME						(1 * HZ)
++
++#define INIT_POLL_COUNT						30
++
++#define CURR_HYST_UA						65000
++
++#define LOW_BAT_UV						3700000
++#define FULL_BAT_HYST_UV					38000
++
++#define AMBIENT_TEMP_CELCIUS					25
++
++static int adc_battery_helper_get_status(struct adc_battery_helper *help)
++{
++	int full_uv =
++		help->psy->battery_info->constant_charge_voltage_max_uv - FULL_BAT_HYST_UV;
++
++	if (help->curr_ua > CURR_HYST_UA)
++		return POWER_SUPPLY_STATUS_CHARGING;
++
++	if (help->curr_ua < -CURR_HYST_UA)
++		return POWER_SUPPLY_STATUS_DISCHARGING;
++
++	if (help->supplied && help->ocv_avg_uv > full_uv)
++		return POWER_SUPPLY_STATUS_FULL;
++
++	return POWER_SUPPLY_STATUS_NOT_CHARGING;
++}
++
++static void adc_battery_helper_work(struct work_struct *work)
++{
++	struct adc_battery_helper *help = container_of(work, struct adc_battery_helper,
++						       work.work);
++	int i, curr_diff_ua, volt_diff_uv, res_mohm, ret, win_size;
++	struct device *dev = help->psy->dev.parent;
++	int volt_uv, prev_volt_uv = help->volt_uv;
++	int curr_ua, prev_curr_ua = help->curr_ua;
++	bool prev_supplied = help->supplied;
++	int prev_status = help->status;
++
++	guard(mutex)(&help->lock);
++
++	ret = help->get_voltage_and_current_now(help->psy, &volt_uv, &curr_ua);
++	if (ret)
++		goto out;
++
++	help->volt_uv = volt_uv;
++	help->curr_ua = curr_ua;
++
++	help->ocv_uv[help->ocv_avg_index] =
++		help->volt_uv - help->curr_ua * help->intern_res_avg_mohm / 1000;
++	dev_dbg(dev, "volt-now: %d, curr-now: %d, volt-ocv: %d\n",
++		help->volt_uv, help->curr_ua, help->ocv_uv[help->ocv_avg_index]);
++	help->ocv_avg_index = (help->ocv_avg_index + 1) % MOV_AVG_WINDOW;
++	help->poll_count++;
++
++	help->ocv_avg_uv = 0;
++	win_size = min(help->poll_count, MOV_AVG_WINDOW);
++	for (i = 0; i < win_size; i++)
++		help->ocv_avg_uv += help->ocv_uv[i];
++	help->ocv_avg_uv /= win_size;
++
++	help->supplied = power_supply_am_i_supplied(help->psy);
++	help->status = adc_battery_helper_get_status(help);
++	if (help->status == POWER_SUPPLY_STATUS_FULL)
++		help->capacity = 100;
++	else
++		help->capacity = power_supply_batinfo_ocv2cap(help->psy->battery_info,
++							      help->ocv_avg_uv,
++							      AMBIENT_TEMP_CELCIUS);
++
++	/*
++	 * Skip internal resistance calc on charger [un]plug and
++	 * when the battery is almost empty (voltage low).
++	 */
++	if (help->supplied != prev_supplied ||
++	    help->volt_uv < LOW_BAT_UV ||
++	    help->poll_count < 2)
++		goto out;
++
++	/*
++	 * Assuming that the OCV voltage does not change significantly
++	 * between 2 polls, then we can calculate the internal resistance
++	 * on a significant current change by attributing all voltage
++	 * change between the 2 readings to the internal resistance.
++	 */
++	curr_diff_ua = abs(help->curr_ua - prev_curr_ua);
++	if (curr_diff_ua < CURR_HYST_UA)
++		goto out;
++
++	volt_diff_uv = abs(help->volt_uv - prev_volt_uv);
++	res_mohm = volt_diff_uv * 1000 / curr_diff_ua;
++
++	if ((res_mohm < (help->intern_res_avg_mohm * 2 / 3)) ||
++	    (res_mohm > (help->intern_res_avg_mohm * 4 / 3))) {
++		dev_dbg(dev, "Ignoring outlier internal resistance %d mOhm\n", res_mohm);
++		goto out;
++	}
++
++	dev_dbg(dev, "Internal resistance %d mOhm\n", res_mohm);
++
++	help->intern_res_mohm[help->intern_res_avg_index] = res_mohm;
++	help->intern_res_avg_index = (help->intern_res_avg_index + 1) % MOV_AVG_WINDOW;
++	help->intern_res_poll_count++;
++
++	help->intern_res_avg_mohm = 0;
++	win_size = min(help->intern_res_poll_count, MOV_AVG_WINDOW);
++	for (i = 0; i < win_size; i++)
++		help->intern_res_avg_mohm += help->intern_res_mohm[i];
++	help->intern_res_avg_mohm /= win_size;
++
++out:
++	queue_delayed_work(system_wq, &help->work,
++			   (help->poll_count <= INIT_POLL_COUNT) ?
++					INIT_POLL_TIME : POLL_TIME);
++
++	if (help->status != prev_status)
++		power_supply_changed(help->psy);
++}
++
++const enum power_supply_property adc_battery_helper_properties[] = {
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_VOLTAGE_OCV,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_PRESENT,
++	POWER_SUPPLY_PROP_SCOPE,
++};
++EXPORT_SYMBOL_GPL(adc_battery_helper_properties);
++
++static_assert(ARRAY_SIZE(adc_battery_helper_properties) ==
++	      ADC_HELPER_NUM_PROPERTIES);
++
++int adc_battery_helper_get_property(struct power_supply *psy,
++				    enum power_supply_property psp,
++				    union power_supply_propval *val)
++{
++	struct adc_battery_helper *help = power_supply_get_drvdata(psy);
++	int dummy, ret = 0;
++
++	/*
++	 * Avoid racing with adc_battery_helper_work() while it is updating
++	 * variables and avoid calling get_voltage_and_current_now() reentrantly.
++	 */
++	guard(mutex)(&help->lock);
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = help->status;
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++		ret = help->get_voltage_and_current_now(psy, &val->intval, &dummy);
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
++		val->intval = help->ocv_avg_uv;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		ret = help->get_voltage_and_current_now(psy, &dummy, &val->intval);
++		break;
++	case POWER_SUPPLY_PROP_CAPACITY:
++		val->intval = help->capacity;
++		break;
++	case POWER_SUPPLY_PROP_PRESENT:
++		val->intval = 1;
++		break;
++	case POWER_SUPPLY_PROP_SCOPE:
++		val->intval = POWER_SUPPLY_SCOPE_SYSTEM;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(adc_battery_helper_get_property);
++
++void adc_battery_helper_external_power_changed(struct power_supply *psy)
++{
++	struct adc_battery_helper *help = power_supply_get_drvdata(psy);
++
++	dev_dbg(help->psy->dev.parent, "external power changed\n");
++	mod_delayed_work(system_wq, &help->work, SETTLE_TIME);
++}
++EXPORT_SYMBOL_GPL(adc_battery_helper_external_power_changed);
++
++static void adc_battery_helper_start_work(struct adc_battery_helper *help)
++{
++	help->poll_count = 0;
++	help->ocv_avg_index = 0;
++
++	queue_delayed_work(system_wq, &help->work, 0);
++	flush_delayed_work(&help->work);
++}
++
++int adc_battery_helper_init(struct adc_battery_helper *help, struct power_supply *psy,
++			    adc_battery_helper_get_func get_voltage_and_current_now)
++{
++	struct device *dev = psy->dev.parent;
++	int ret;
++
++	help->psy = psy;
++	help->get_voltage_and_current_now = get_voltage_and_current_now;
++
++	ret = devm_mutex_init(dev, &help->lock);
++	if (ret)
++		return ret;
++
++	ret = devm_delayed_work_autocancel(dev, &help->work, adc_battery_helper_work);
++	if (ret)
++		return ret;
++
++	if (!help->psy->battery_info ||
++	    help->psy->battery_info->factory_internal_resistance_uohm == -EINVAL ||
++	    help->psy->battery_info->constant_charge_voltage_max_uv == -EINVAL ||
++	    !psy->battery_info->ocv_table[0]) {
++		dev_err(dev, "error required properties are missing\n");
++		return -ENODEV;
++	}
++
++	/* Use provided internal resistance as start point (in milli-ohm) */
++	help->intern_res_avg_mohm =
++		help->psy->battery_info->factory_internal_resistance_uohm / 1000;
++	/* Also add it to the internal resistance moving average window */
++	help->intern_res_mohm[0] = help->intern_res_avg_mohm;
++	help->intern_res_avg_index = 1;
++	help->intern_res_poll_count = 1;
++
++	adc_battery_helper_start_work(help);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(adc_battery_helper_init);
++
++int adc_battery_helper_suspend(struct device *dev)
++{
++	struct adc_battery_helper *help = dev_get_drvdata(dev);
++
++	cancel_delayed_work_sync(&help->work);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(adc_battery_helper_suspend);
++
++int adc_battery_helper_resume(struct device *dev)
++{
++	struct adc_battery_helper *help = dev_get_drvdata(dev);
++
++	adc_battery_helper_start_work(help);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(adc_battery_helper_resume);
++
++MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
++MODULE_DESCRIPTION("ADC battery capacity estimation helper");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/power/supply/adc-battery-helper.h b/drivers/power/supply/adc-battery-helper.h
+new file mode 100644
+index 000000000000..6daba08c1a21
+--- /dev/null
++++ b/drivers/power/supply/adc-battery-helper.h
+@@ -0,0 +1,59 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Helper for batteries with accurate current and voltage measurement, but
++ * without temperature measurement or without a "resistance-temp-table".
++ * Copyright (c) 2021-2024 Hans de Goede <hansg@kernel.org>
++ */
++
++#include <linux/mutex.h>
++#include <linux/workqueue.h>
++
++#define ADC_BAT_HELPER_MOV_AVG_WINDOW				8
++
++struct power_supply;
++
++/*
++ * The adc battery helper code needs voltage- and current-now to be sampled as
++ * close to each other (in sample-time) as possible. A single getter function is
++ * used to allow the battery driver to handle this in the best way possible.
++ */
++typedef int (*adc_battery_helper_get_func)(struct power_supply *psy, int *volt, int *curr);
++
++struct adc_battery_helper {
++	struct power_supply *psy;
++	struct delayed_work work;
++	struct mutex lock;
++	adc_battery_helper_get_func get_voltage_and_current_now;
++	int ocv_uv[ADC_BAT_HELPER_MOV_AVG_WINDOW];		/* micro-volt */
++	int intern_res_mohm[ADC_BAT_HELPER_MOV_AVG_WINDOW];	/* milli-ohm */
++	int poll_count;
++	int ocv_avg_index;
++	int ocv_avg_uv;						/* micro-volt */
++	int intern_res_poll_count;
++	int intern_res_avg_index;
++	int intern_res_avg_mohm;				/* milli-ohm */
++	int volt_uv;						/* micro-volt */
++	int curr_ua;						/* micro-ampere */
++	int capacity;						/* procent */
++	int status;
++	bool supplied;
++};
++
++extern const enum power_supply_property adc_battery_helper_properties[];
++/* Must be const cannot be an external. Asserted in adc-battery-helper.c */
++#define ADC_HELPER_NUM_PROPERTIES 7
++
++int adc_battery_helper_init(struct adc_battery_helper *help, struct power_supply *psy,
++			    adc_battery_helper_get_func get_voltage_and_current_now);
++/*
++ * The below functions can be directly used as power-supply / suspend-resume
++ * callbacks. They cast the power_supply_get_drvdata() / dev_get_drvdata() data
++ * directly to struct adc_battery_helper. Therefor struct adc_battery_helper
++ * MUST be the first member of the battery driver's data struct.
++ */
++int adc_battery_helper_get_property(struct power_supply *psy,
++				    enum power_supply_property psp,
++				    union power_supply_propval *val);
++void adc_battery_helper_external_power_changed(struct power_supply *psy);
++int adc_battery_helper_suspend(struct device *dev);
++int adc_battery_helper_resume(struct device *dev);
 -- 
 2.49.0
 
