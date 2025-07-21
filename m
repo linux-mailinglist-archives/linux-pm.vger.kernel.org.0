@@ -1,114 +1,172 @@
-Return-Path: <linux-pm+bounces-31164-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C594AB0BE13
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 09:51:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 208B0B0BE2B
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 09:55:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 069C416CCF2
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 07:51:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D1EB3ACC6E
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 07:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672D427E7EA;
-	Mon, 21 Jul 2025 07:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10B1285078;
+	Mon, 21 Jul 2025 07:55:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RTdPWLAJ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Q7KURRWR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D065A222590
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 07:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654EA1DE4E0;
+	Mon, 21 Jul 2025 07:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753084303; cv=none; b=Ibh1OJgJU1ZXB1VpPIh95VuuN3BDAws87BrmmEJfkvZj+0sWbILvV+5LO4Z4sMgLIA6E17qqDi/pkHXP3eaavBAfDwikTaZtc+5WT9LhN0pp3mD19S04L33MyWr48ixOO39p3d0mn/Jz+PG0DY71/vLz3zmUfrv111zq+8AF4po=
+	t=1753084543; cv=none; b=g+++sLqTddGbelgAuaojANeMD23K+KacXWGY9j6Z5kNE5vcpIInU2ljpyxdRy39678NDaJGc4f/6yGFAVxqi0JkWSKFQFKIXFyYWIZHyRLaHnT2YxGv28ThdIyTKwhhMEpbyHO4FMMN3YbDmKcu2NKA1x6IkxkdctEfC3F7BhoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753084303; c=relaxed/simple;
-	bh=SrUQl87aZKxSh0dAXh2+sDFrxOOShdJN4rPLufysdGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=r4VXI7nSiY9CszGRy4ZRFtSYhUUDRvCMxlD+t2dR3jDfKy8q+Rxw610+q+3wrOfaiIfMMnyd5z3mFqTE5uRKHrMhu8CVInytcpIF1g0e1+D+FVd3h1dUKTvtr+Q5lnz28UOvAqxCd+gehl9H4AeBUmOmeE+aPZRiJVFXOR8jgYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RTdPWLAJ; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-23dea2e01e4so45068165ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 00:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753084301; x=1753689101; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQTZnJ3U7H+zfeb/LvM6Xjc4gElcQShTdjYcut1qMmA=;
-        b=RTdPWLAJamEm3B2tCYN42sSc+Lq1o0KzzYDEjQjvnuRlEDJhKZvxtLdYHZXhBkVSad
-         8NRpho4i3JskymOVbYItuEkSjBq/tWFzw6KDlStTgjOlaGdQgximJKhBO4mt1gYU082I
-         keX4USk8wofUI461bqmLUurFFfl/xQJYOdltyV/S+dquM2MTRvxO8G1oCztFnQKiauvQ
-         2U3G0kc6fXFnHPrp7cJjaSXBysbms1D2YPjK1XkHJgous0w6jGCgWTCP3Y7a8zWLf5Ge
-         M9Xb/ppPJn8DgED9XZm1PJwVc7zZKZ7SZqkHgUJcGSPOMwQwIV2JCxZziF2xHUrL6eQh
-         BwLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753084301; x=1753689101;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQTZnJ3U7H+zfeb/LvM6Xjc4gElcQShTdjYcut1qMmA=;
-        b=WEHKGMRKZnBz2WbL/P2zpX6Z/fpLPXlIb5Kb/RB406ipIn+xfUuTuiOiChPjrcdSfF
-         FUBCbNdVzmWeqK8YQikq23bCh1WtwsrD4lpqMZRG5p+zTqgEcl6573JritiZha4b2sM/
-         jCINb4LJUCJ3D6MshVRFYzfXUqCaG95iEOZAnj6shEj6AdhMsOX+Jh1fVveSaXyv89Jp
-         Z7e0803zZeujfuUWdw65jMQdP+WWgP0eBHF2rY/XwcNMdarOrG4Ze+5euKeiAaFgg+P2
-         0PWDgsDqOLXYwjR/UBgZwJeJnQzFnsTCo6ksj1UnM5AMkexZ5XIUmUOAaToOJWTDe5Mu
-         mQhQ==
-X-Gm-Message-State: AOJu0YzlbytYkadxjbyTN2WK19DCdOiTuAYw1Y7HcCm2GUREBkw9mHSR
-	U7AhRPUhEYI5JARW0qycXtSmL7i1FC5PKMgna5QA2pMDPpxpQ8/HrzX6R5ZUytu0yOk=
-X-Gm-Gg: ASbGncs0qEJ8CNJbrJ30PEROi6kuDu2afA6Xw7Bn8RfJ4wR8oFiBrdnEIrWXeQyVdRw
-	HZM1yfEos00gHXTV5l4aDVewbt3kFsGk9UaNf60U/J3SYVx5vocE/D2sglH16QHV8wu8vnXSiga
-	/vlHlpTFZDRibPYHbxSMp5964UmTvKZZHzHh5NaH2RPcXJOXBX7d3YKyNcuIPyTYV/bZYbIhTtr
-	zvN9gxhArpuD4XnrTlVdmuJiqD1XF5+i5Cq93FVh5YEN/8hT/EopXDo8Pw9UHb5quUhjNGcXBRp
-	kkrRtViv1/FFhwelLI8e8TUF3pFoRAgSE0NJS6ItP3ZQGU6Q2+c1JG3qJcBzn0ULqZ83lYGSUaB
-	Wbubr7exTz/h/ga4KBbbUb7Q=
-X-Google-Smtp-Source: AGHT+IEnnQRGDjf7a1MZOGC9nf6ZpHFSvaRU1V7qiDf/z20pDtUnwwasfCCubXExlhpk/OnpIE/F/w==
-X-Received: by 2002:a17:903:1aeb:b0:22e:5d9b:2ec3 with SMTP id d9443c01a7336-23e2572af07mr261937665ad.30.1753084301133;
-        Mon, 21 Jul 2025 00:51:41 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6d2e69sm52267145ad.172.2025.07.21.00.51.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 00:51:40 -0700 (PDT)
-Date: Mon, 21 Jul 2025 13:21:38 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 6.17
-Message-ID: <20250721075138.nibnp2nje6vlcdq5@vireshk-i7>
+	s=arc-20240116; t=1753084543; c=relaxed/simple;
+	bh=GrfETabKicOHH6Ijk0RwGdn2FVB1Ymrye6zylz3rMCE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DS4ZoqiT2tv4K0l/O/fT42zveuOELmyVf1biT7xon7H3rydP0uKjsqTTL/6wxhu1KO52lk0Pc92XhExIb0PD7pv85HwrwkigifqR0pe5Bxzb/1U7/zrIPDZkKU+8NNEoHHyeZn/L/u+z3ydPKqpLr+Z+EttL3p7fIWdB+rlY9kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Q7KURRWR; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1753084539;
+	bh=GrfETabKicOHH6Ijk0RwGdn2FVB1Ymrye6zylz3rMCE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q7KURRWR6robrgIITwu3GCAk3m5+egkqi2QIT4ZjN3WMH6sOuf9DlGL1VzKRLx6fS
+	 W8jJ3Znb2/tuWPSBA2/83SbOsSeKdq2AM4SDWoy3N6bN1qyQFPdhz+aWULAqo4nKiz
+	 3BxGeEvulcTBKrd082qhDNNcfbUUTG1Od7Mmh81+LI9AoA69J9vZVqNpO1HgBmDGyl
+	 AaQXVRueoLqqCM9z9VpKX47sM9LmO3F2J0BmCFORiaIS1CjXfZXVaD691C9Tvd2Aq+
+	 dV6p7n3MK+ib43LIHTM7lmTZkLuHhQWFKUKDl0TLAC98NLgqnyGNUiHRA2EcFsDA8q
+	 gMWzrRCS3BCjw==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3B30F17E0F43;
+	Mon, 21 Jul 2025 09:55:38 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: sboyd@kernel.org
+Cc: jic23@kernel.org,
+	dlechner@baylibre.com,
+	nuno.sa@analog.com,
+	andy@kernel.org,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	srini@kernel.org,
+	vkoul@kernel.org,
+	kishon@kernel.org,
+	sre@kernel.org,
+	krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-msm@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	kernel@collabora.com,
+	wenst@chromium.org
+Subject: [PATCH v1 0/7] SPMI: Implement sub-devices and migrate drivers
+Date: Mon, 21 Jul 2025 09:55:18 +0200
+Message-ID: <20250721075525.29636-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit e04c78d86a9699d136910cfc0bdcf01087e3267e:
+While adding support for newer MediaTek platforms, featuring complex
+SPMI PMICs, I've seen that those SPMI-connected chips are internally
+divided in various IP blocks, reachable in specific contiguous address
+ranges... more or less like a MMIO, but over a slow SPMI bus instead.
 
-  Linux 6.16-rc2 (2025-06-15 13:49:41 -0700)
+I recalled that Qualcomm had something similar... and upon checking a
+couple of devicetrees, yeah - indeed it's the same over there.
 
-are available in the Git repository at:
+What I've seen then is a common pattern of reading the "reg" property
+from devicetree in a struct member and then either
+ A. Wrapping regmap_{read/write/etc}() calls in a function that adds
+    the register base with "base + ..register", like it's done with
+    writel()/readl() calls; or
+ B. Doing the same as A. but without wrapper functions.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.17
+Even though that works just fine, in my opinion it's wrong.
 
-for you to fetch changes up to 22679d807dea5c065d8019acfce48f20e87ba5ca:
+The regmap API is way more complex than MMIO-only readl()/writel()
+functions for multiple reasons (including supporting multiple busses
+like SPMI, of course) - but everyone seemed to forget that regmap
+can manage register base offsets transparently and automatically in
+its API functions by simply adding a `reg_base` to the regmap_config
+structure, which is used for initializing a `struct regmap`.
 
-  rust: opp: use c_* types via kernel prelude (2025-06-23 09:52:45 +0530)
+So, here we go: this series implements the software concept of an SPMI
+Sub-Device (which, well, also reflects how Qualcomm and MediaTek's
+actual hardware is laid out anyway).
 
-----------------------------------------------------------------
-OPP Updates for 6.17
+               SPMI Controller
+                     |                ______
+                     |               /       Sub-Device 1
+                     V              /
+              SPMI Device (PMIC) ----------- Sub-Device 2
+                                    \
+                                     \______ Sub-Device 3
 
-- Minor cleanup in Rust bindings (Abhinav Ananthu).
+As per this implementation, an SPMI Sub-Device can be allocated/created
+and added in any driver that implements a... well.. subdevice (!) with
+an SPMI "main" device as its parent: this allows to create and finally
+to correctly configure a regmap that is specific to the sub-device,
+operating on its specific address range and reading, and writing, to
+its registers with the regmap API taking care of adding the base address
+of a sub-device's registers as per regmap API design.
 
-----------------------------------------------------------------
-Abhinav Ananthu (1):
-      rust: opp: use c_* types via kernel prelude
+All of the SPMI Sub-Devices are therefore added as children of the SPMI
+Device (usually a PMIC), as communication depends on the PMIC's SPMI bus
+to be available (and the PMIC to be up and running, of course).
 
- rust/kernel/opp.rs | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Summarizing the dependency chain (which is obvious to whoever knows what
+is going on with Qualcomm and/or MediaTek SPMI PMICs):
+    "SPMI Sub-Device x...N" are children "SPMI Device"
+    "SPMI Device" is a child of "SPMI Controller"
+
+(that was just another way to say the same thing as the graph above anyway).
+
+Along with the new SPMI Sub-Device registration functions, I have also
+performed a conversion of some Qualcomm SPMI drivers and only where the
+actual conversion was trivial.
+
+I haven't included any conversion of more complex Qualcomm SPMI drivers
+because I don't have the required bandwidth to do so (and besides, I think,
+but haven't exactly verified, that some of those require SoCs that I don't
+have for testing anyway).
+
+AngeloGioacchino Del Regno (7):
+  spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
+  nvmem: qcom-spmi-sdam: Migrate to devm_spmi_subdevice_alloc_and_add()
+  power: reset: qcom-pon: Migrate to devm_spmi_subdevice_alloc_and_add()
+  phy: qualcomm: eusb2-repeater: Migrate to
+    devm_spmi_subdevice_alloc_and_add()
+  misc: qcom-coincell: Migrate to devm_spmi_subdevice_alloc_and_add()
+  iio: adc: qcom-spmi-iadc: Migrate to
+    devm_spmi_subdevice_alloc_and_add()
+  iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
+
+ drivers/iio/adc/qcom-spmi-iadc.c              | 109 ++++++++----------
+ drivers/misc/qcom-coincell.c                  |  37 ++++--
+ drivers/nvmem/qcom-spmi-sdam.c                |  41 +++++--
+ .../phy/qualcomm/phy-qcom-eusb2-repeater.c    |  45 +++++---
+ drivers/power/reset/qcom-pon.c                |  33 ++++--
+ drivers/spmi/spmi-devres.c                    |  23 ++++
+ drivers/spmi/spmi.c                           |  75 ++++++++++++
+ include/linux/spmi.h                          |  16 +++
+ 8 files changed, 272 insertions(+), 107 deletions(-)
 
 -- 
-viresh
+2.50.1
+
 
