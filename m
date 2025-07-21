@@ -1,88 +1,88 @@
-Return-Path: <linux-pm+bounces-31243-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31244-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A48B0CBAA
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:20:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAB2DB0CBD7
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:32:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F65E3A4E05
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:19:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D35175401C2
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36380238C2D;
-	Mon, 21 Jul 2025 20:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC96239E9D;
+	Mon, 21 Jul 2025 20:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNTs3Ys8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqvP+GEz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD45D19CC28;
-	Mon, 21 Jul 2025 20:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662427DA7F;
+	Mon, 21 Jul 2025 20:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753129216; cv=none; b=WIAw/Mbr8N8BLvUi2j3wzKFvIiH6d+OjzPnl7WyZl9vGxwbaGgmz+aN1XmkP4CPhoQ6XK4H/59+bHoR+UmZ8G2XMSKLCcp1Z4L6yCkY88nkWlit902WDY1KGH2k7KfOArEDRszAjfViqNHHXyU10llH+5Fx5kIx4y0bRH2l6vTY=
+	t=1753129915; cv=none; b=oiPpWp3fp+YLsCGKT55v1+GTrZ3GYDT0aqftfzyMsXc1l5xYbFiaNYAheYq1WTOeP7vK8+G2J7bJ5xIY3JaBqg44Tnc2BGM63ja7B7us1G7eW6JrRlm5/IQtCnSuFEOhl/VWoVeAZ4xrAnqhA4rKgTwaKaM+U557zDxXgb9DG9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753129216; c=relaxed/simple;
-	bh=QhoaQFtxNxausfHipJnOzeN1CL5MUK8zNLHiVu3g8n8=;
+	s=arc-20240116; t=1753129915; c=relaxed/simple;
+	bh=g5A9KOanO+cfCnC2DzKbBgwUK1XEgUVRRT2guId11mE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rGplBa72K1BD9NC5C3agOqWtGzA6zA02rAXFdL5IcuAmBVjocfQsU+XDjIyCP7PByDi0OZITQgiojLIvjvQjQCOCMCUTuMVbG+uu88bTSFRWcx5LPtfPr89caAbXjXFk8mqjE0uLLLFd8b7oU8VpKZeQR+C+CUeC1L2fhCDGn3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNTs3Ys8; arc=none smtp.client-ip=209.85.216.41
+	 To:Cc:Content-Type; b=ge45oDoSYOwGC90zFQGIFwjfVlV9qp4tMZRfXB10h9tMsHzdtC2LM7cjn/MOhE6zLHLJSZkCExb5/RVhY6/BY2T4JWIe2vejkxs0SOzi27B6mJm8EWTGu2YnWLYkHGRO179lY61F8HAU0KwThhePXGUcvJbdjW81mNAkOEcnxDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqvP+GEz; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-31384c8ba66so48736a91.1;
-        Mon, 21 Jul 2025 13:20:14 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-555163cd09aso3869018e87.3;
+        Mon, 21 Jul 2025 13:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753129214; x=1753734014; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753129911; x=1753734711; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QhoaQFtxNxausfHipJnOzeN1CL5MUK8zNLHiVu3g8n8=;
-        b=TNTs3Ys8eBGIIjsrjlhnaYufJnrq99cmDn7o8GfI1i3u7cv806dHTXqS9/uHR1f7JL
-         MeznwZg1nBEwjlu0rkjZwi7CmCKBV5SXsf8pVyGVX9BGR5c0C16zunPjJX2e9D2atbxi
-         JKB0QL5e/ikEz9nI6mEP1IsAeem2uPFF3dnDN/OAWx/xelHehKzkHRjo6eiO3bj4xI88
-         D5Nk2IcMkg0HW9ZRuAyXPp90CyDaQVgQlfVMp5mlyalLyhQn3/b3R+KS+44sc0VZ3g58
-         aiq8nkkPbEf3rhzkXpWdZnzUJ4LJEHSKbYuIHiTPRtpGlpCpcGyR0W7+xj2fkD58tObh
-         n+wQ==
+        bh=g5A9KOanO+cfCnC2DzKbBgwUK1XEgUVRRT2guId11mE=;
+        b=jqvP+GEzmMIcut//TyCN8goYafOKEx7WWtTZlUZZw9DTkw+S8CtShjFEYm5TUdU7X1
+         lt8bA5t1sidQzh6fOtaSkDkYd8zKKQvVH6toSft9n5Pe5DQ1k/8BsaELg1R8XDpxq1BJ
+         9kFA3OULtLj7ta5BofKRTL0/UwLy3rXHIUCifiN03cbylhAg+FKOiUerazazoS3Tqb01
+         wzkec3UTd5GMarJrAu+zS32hSK83HNVLIn4Tx1fMEbeWUVVQLg440ygux5pT7+h7h7yv
+         dY+x6fX/r9o+iktyJWUtdlfc7/p7YbifSGz36Fbs33+oPdH+k1RvI3fH2V6MXS+i74DV
+         LSmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753129214; x=1753734014;
+        d=1e100.net; s=20230601; t=1753129911; x=1753734711;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QhoaQFtxNxausfHipJnOzeN1CL5MUK8zNLHiVu3g8n8=;
-        b=lBetLDCKfsUdCL/pkD396yycrjBYvtykgm1WXnoxWLSZU/ylbpDbvSKGmamx9yO5Bu
-         cGGPawEtF4aKZmRFk8TXJVCqdQRYHROwDydiZ8ShNj+QujsUsRHZEGfOC7lF/aCS21gL
-         mbKpoqbdV5da2FovTnidY0GISH94A/wkvEoq+WCui03wWG5mBX06l19cDOO+nGKswxkL
-         viGUoxHWQhChlZd+U8RofFZ/mRH0KQDWpTkO4N6wtKHe5SKAWj1xkyTdRggPIZUX2wNj
-         Afzl8zYx/jMLpuGvJU3A51GuQM4SNyPXn4fQQTLtxfv9L3P8oVzj9s1kXSJ07E3nSdj2
-         WzYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvuPLFFM7Oo0Kj9qUGFZTF1e2XtTXPOaAWcPtaFhMKJWnerKMSQvTnFVkZeScGiC0U4CzWTgzSMbxZTP8JayKD@vger.kernel.org, AJvYcCUwucxTAENt8OWohoYuxPFWOSP1ZltU75Dyukqshx7n+uZpyehJUd4fWRse/KkXdhr7VdINcJEkYW2J/wonz3I=@vger.kernel.org, AJvYcCWFJ2XijynbTlFvXQuYNI3tHx8fQRHkcMIInfSoVGoAjA0dPGr/Hok0ftkLxeIrFEyaAw+qjkMjhNrD@vger.kernel.org, AJvYcCWSwPtDuF0nOlzFiVS4DpQxdZxM6OQTePhcGT2RZDZsZw6buJl8HLDlh0fFbw/wwwswOXEvJaNxH95HDVRY@vger.kernel.org, AJvYcCXuM5ONCpq68oLolwZMBA12je+WFsCN6dYUIUKLKxYePbUitCTSHBpjCwN8iuypKbNRWGUnfoSP6IM=@vger.kernel.org, AJvYcCXvC2UKbmpv9uh/rjOJ/LbequIE4IfzrwfjBwHgD0P6htu8fPamEjLMZP7CkwwRkfv0RRUxYlp0@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGP6BJJy2aYxL5MUAfeEiwqW3eRH824/Xx2yOtcCmCxE+3xnYb
-	KHXLUVxq6WiJYAnnlUAsFtDPskoNzhewp+4NmbLZCCZNkAhZEoQOGN3kqgh22KSVtQrvymv0LTV
-	HEP6KX9TP6fhVFPDVpXq/eV1+jE8gvoo=
-X-Gm-Gg: ASbGncuuLAbuvk2QygkKto1xHoaQe1OVxnsqAasMKAaN2lrollhNE8AgOKdw2MeJAba
-	oGXpqfKgfrRJFh+7yJQohMGwkrqh4mUiMVWuFWBS0YI/iDoBoQGSDJ7e+AWNY/zgihYPd0OV9h2
-	25TP0Ke2UIj/eWCWiodnSgUd5TU4FEAfQdJ7Gs1zm5MobEEo/2e8WKjh9JYwphswbfXbhooGZFT
-	ETMdp9f
-X-Google-Smtp-Source: AGHT+IGYWFzzB+EaA1sUPW0yxlHljqythmWNIpx8bVOSX58qriu4XgVDPxfn17/Rmpvzl5eSATKzzBGxAaQbrkHzpc8=
-X-Received: by 2002:a17:90b:57cf:b0:311:a314:c2c9 with SMTP id
- 98e67ed59e1d1-31c9e6e5debmr12843850a91.1.1753129213894; Mon, 21 Jul 2025
- 13:20:13 -0700 (PDT)
+        bh=g5A9KOanO+cfCnC2DzKbBgwUK1XEgUVRRT2guId11mE=;
+        b=ZhSDU55M6JUs+tCmXCmDpRaTQ2htQy5GRMbY+SZu6m0Z9eegjOBuU2OZvg8+7vSp8D
+         Nam0hDxd8HLxQ1+A+nLhxQaf59Eu5Ivk3jGnqTp6RbgWiORQZBZ+DMlVlAlU2eFEFxo5
+         hV1Lc9RkIM4g48gN/ndZlfIc6ZZ9k5IuOUpBnbqLHoKH2yIxGKuoaT3WuzZrGC4ykSO+
+         TaRkQAyWk7IO2Nx6J0qxq0MbJigTPo/KvjPvvAjHZBWo6Fbo06y6bcLz/MSUJI7+K3WU
+         lUEff4ZTcTDKqFCrSfoyYSV5ktd1mAQhPWWi8snaQ7iWJnw1xr/ON5ARKxixT9uMRDNC
+         ryTw==
+X-Forwarded-Encrypted: i=1; AJvYcCUiiuO8Wuctfe/jzEhK4bLRU+I1AH//FHLJWmYyn0nqa/KbMwYIXyW7Ecq8MqFhn6KO5DOQnfuM@vger.kernel.org, AJvYcCUwyfeHnzEhA13mSyrkfVDBO8SsWAb1czJBhWt6uM1aSv4tnBX0JB4mgGFVc8fZNjgTwymliEin2UPG@vger.kernel.org, AJvYcCWBtxK2QE2Y/tZenAhzz/2U8icLMDLSu7D0eyi3O6FaDqyMwKyWNusaYC5Xv2EBw9HHhbu8W9tu3LSmIuMKQWnI@vger.kernel.org, AJvYcCWIeBbz8zNDSbPVMB5grQdD4rmv4Q0QWx/g0g5XBYcuQyg6WXz1DTgQHj3Q2f3hMt2Z5p8R3VNfBiOm3uhVHL8=@vger.kernel.org, AJvYcCXMBJfeVWwNtv1TJXqGaa3y7wEDBbEk6+eG2jLxLlsls966lRWPtTEK8MVzOSIM84XPIWPefF+MohI=@vger.kernel.org, AJvYcCXoPs77LppdhX7FpPr4QU1IzlnSXJYfbJYZwUlkwqwrajA2QblNjEV4e6OwYLa5t1q8hzIMqblc+HV3RxH7@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWJFGOigDcRLBY+2kS97lJn2JomPtG5euRRER8uE27Tmse27+3
+	eu+c3wNFzf2EOvIh+OoON2mxTilm5qLpAGhtCnVcA7KaxZLI3fDNlblT8edZLDk6d6Rau2eN0dP
+	FUNtHWXg11p4CPkA1QQYrL5G9wQ6NKtg=
+X-Gm-Gg: ASbGncvrXVb/eHF7D1gciTIGxsQJRrNOVgyUP5LpEsZOfMeuQ2wHI0WcpC52tIVXS/C
+	XCPZ0zp31ljm2L05qv828rXQfnPVCiB+lZwpOuT1XW2Zb4tA1L+WjPClow+eoH0esGwgvclSC3t
+	MSgguEte4t/XIVIrP85lzDJ2nSwUrBQJkWZ5DsHXNBqXCbwr39wqfUgHcQ6ScRCS4sefugvlkZ3
+	zWjf5gJC2xWvIvLxCM=
+X-Google-Smtp-Source: AGHT+IFR2lRHIzOwJj3JIlIo6gx45Mp51Ht2b7RDYiFrG52gvnrp+p/uZ3Tj+777Jg5nVJOtwaPjIzJjlMYwrAVYkHM=
+X-Received: by 2002:a05:6512:398d:b0:553:35ad:2f45 with SMTP id
+ 2adb3069b0e04-55a29729104mr5367527e87.50.1753129911239; Mon, 21 Jul 2025
+ 13:31:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
-In-Reply-To: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 21 Jul 2025 22:20:01 +0200
-X-Gm-Features: Ac12FXwTjwqkUOe19S3QjijBkelsLmO-zTtTU8nCjXVYR5x32YJPDBd3Xx-BAUU
-Message-ID: <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com>
+References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com> <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com>
+In-Reply-To: <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 21 Jul 2025 16:31:15 -0400
+X-Gm-Features: Ac12FXwThiyNWkPFtuHHqyDRKx2RF3BqA4YU0Qjx3AoUK2MCPhmxxwTXBXJI9Qc
+Message-ID: <CAJ-ks9ne+YFezFvQ8nZH2UTjwqb3+3JtG0ztqecN-A46tC5SSw@mail.gmail.com>
 Subject: Re: [PATCH v2 00/10] rust: use `core::ffi::CStr` method names
-To: Tamir Duberstein <tamird@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
 	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
 	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -105,19 +105,25 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripar
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 20, 2025 at 12:42=E2=80=AFAM Tamir Duberstein <tamird@gmail.com=
-> wrote:
+On Mon, Jul 21, 2025 at 4:20=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> Subsystem maintainers: I would appreciate your `Acked-by`s so that this
-> can be taken through Miguel's tree (where the other series must go).
+> On Sun, Jul 20, 2025 at 12:42=E2=80=AFAM Tamir Duberstein <tamird@gmail.c=
+om> wrote:
+> >
+> > Subsystem maintainers: I would appreciate your `Acked-by`s so that this
+> > can be taken through Miguel's tree (where the other series must go).
+>
+> Did you apply this with `b4`? I think you picked Danilo's Acked-by,
+> which was for a subset, for other patches too. I can remove it when I
+> apply it.
 
-Did you apply this with `b4`? I think you picked Danilo's Acked-by,
-which was for a subset, for other patches too. I can remove it when I
-apply it.
+Yes, please do. I did indeed use b4 - and Alice also let me know that
+this was not correct. Sorry about that! Same is true for 2a, I'll
+reply to that email as well.
 
-(Greg's Acked-by may also have been just for his bits back in the
-previous series, but in his case he didn't say anything explicitly)
+> (Greg's Acked-by may also have been just for his bits back in the
+> previous series, but in his case he didn't say anything explicitly)
 
-Cheers,
-Miguel
+I believe it was for everything, as he didn't specify otherwise.
 
