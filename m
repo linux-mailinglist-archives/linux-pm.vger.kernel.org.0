@@ -1,144 +1,123 @@
-Return-Path: <linux-pm+bounces-31220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD38B0C862
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 18:02:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1551DB0C867
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 18:04:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 977513A539B
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 16:01:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 848D87AEA8F
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 16:03:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4C42D9489;
-	Mon, 21 Jul 2025 16:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D852DF3F8;
+	Mon, 21 Jul 2025 16:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IuCa/DJM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tb48J74H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A8F1DF742;
-	Mon, 21 Jul 2025 16:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EC2218AD4;
+	Mon, 21 Jul 2025 16:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753113742; cv=none; b=H5AF2paden5lejYV82JxJvySNi1yDEX6fGIKaiUAtdSQEJY4ciLvCuB1XXkVybYApkIykrKaquFBH2QMDgRDDe/7Vr6qUvpXxvHPjCZG5AuF/u1Z52UiXQAGRO9OlnRgbehXHCLtM93ruKynBx4+3D6ApUzmn2t00JpO8hhOv5s=
+	t=1753113878; cv=none; b=JN93t6tD1HyCVcLpxAew1GuGJUvyTF/czXb/vHyfhJFXlwOyB4BDyepV92AcD8JxvTVBV6DlU88PSVVlMFH9WU9yFzSSVcfICODRB790DQ0/Ipp7nUDKrsb3IaLKYDXLqEg+7uVuAXlBtHNZbF/RlKdP6RRUzPO/flhXG6fC4ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753113742; c=relaxed/simple;
-	bh=75iuN3yPbeOMpiSS34AD1qt/4araipS42FE6hGVHkCI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EZFFHg0OmObZ46pfP9J7LCcxXx/hy1LaHzWdlLfeyiXlPrQM1L3MYegIJhIC+4pss/0W8jZp+d8N7n+VTvSmwoNtOsCnhpZTRp7LAR7yjlhbME/95O5YkmGHZRqkzE8GNHmpByGLtxzTIbJgrihoV5kLybB3KBNudvQQm8a+uS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IuCa/DJM; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-23636167b30so40843755ad.1;
-        Mon, 21 Jul 2025 09:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753113739; x=1753718539; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6LZOIw5e4/d1Ys1vEywwf3rOMyld2a0Motp3dRdK95s=;
-        b=IuCa/DJMANeH8mRTN/zrej9sgJHJFiJDGxI5SE0Lixrwcd9Jv6qN37vwEC0YrLxsmo
-         w++46J7S5nq2M2UbRdlGUSs2rZ6qQy2IOEypJAM+guY2xE/phnQSveYbVFA6HDtA0CLY
-         t04MzhHX1FIr32DvNqlCwTCBNN+uzt4RHC6bHog2QdOOcki/19cTW4/mddyV8st2pHu5
-         0Pa6YPIGSRiXMZx2gFnwOEbrvsy4imoEmy1JKmLO8g4e7HaKt+IHatgAAEw+DugDx1+3
-         c2qj3XgWu6RSRXDIWFlnq4qnCZraU8hNVqIDo+qCcvNgsAhF8TwNIJ+jenR/JXvN40jO
-         JwOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753113739; x=1753718539;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6LZOIw5e4/d1Ys1vEywwf3rOMyld2a0Motp3dRdK95s=;
-        b=Aeo1NfDU4wMG7nazIVyXcFlP8jN2ccHmHJ9Dyzz5KfZo9CbXPmXifw627YA/v6KANI
-         S+5040bsLMEW6/7cWTyAWAvs3TMvPSKPw0CvsEZyV9gQzD8q+shGySD4LzijW3sd0XBg
-         9Xk7lOmPU3dlVxjJK8zBWfeXMYm0ZFA2QCgqP8foDMcdP5hdl1JzfM5sUBWLiFqJgL54
-         d/41IGWupJREhvGuv12f+HermuoNOp04qNG6C3viMkTLN0Dpm9Kam2U31rI5tTQsmVhm
-         mK1CVJkVsjkD46YLRSoFdgR+ETzlZclkRp4AXpLFgE/W8WbMqmZOV9lnlDORenl3bO1V
-         CRdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZFHPyT9rt+xedrPIYcxmb+pGgrt3YjsmwhHN365qt2esEf7M8FEiNmdSmUudEo6yV4fUx5v0GW3LCLEQ=@vger.kernel.org, AJvYcCX88YbsvfgM6Wo+u8J0VD9rl8xNCkeEk2hk5z+N/CKLS4m1p4eHkdJD/XlJ739JDWAHzrOLy7Gj60E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxECn0JIr0YIpU3Fs/KUAAhNy4GMPKFBBCQuiR3rfckbBxKl+On
-	r2W3eJywzySufKE+rjpZFLNRif+48wpArrpXatweUsRXThmf4Jxn7+TTuiMpRHJMO0c=
-X-Gm-Gg: ASbGncufwNETU7K8ViDCICZ5NYZ+yF5GzZg1VmWJDi+CiCj24m/MTbdcdrseCybD99i
-	WgsUzmLK6nRFkruxExYBWJ8pz/YpxHw4m2LW1hiNDi0vQrdtbuwMxKKpuXJ8sSVYeAGUBTBmnLG
-	mRU5RHIqJ1EDxWVRveBlMGnqa6sXwKL2lwDbmQu4Kxb3/6gw/+GDtbuJ1JGfKIhtVfYJri19SUV
-	MLqlNyf7eMsGMybzMTawor1K9hTwKCj2JvwZt4j7ka6FrFnjJC1feE2YaTPdZK+MAZuzyNTJS/3
-	27FyVdukiKONgyzfDEbHgUue1kq+M0xCRYDM+QILVoZQdXJLXIblv48j7dnZsaEZgsVUQW/HoMZ
-	24sBeqSGTSiLzo+Z/IDtT1TZv1igIF/wuCfGP5q4T3kssLYhc
-X-Google-Smtp-Source: AGHT+IFETu42y8ChWlez3rl2QpRCBASMj4fpCrx83eCEmI92ZUEgZEd9o/QS8SOZbmEyNl0aURvdSg==
-X-Received: by 2002:a17:902:da8b:b0:238:2990:6382 with SMTP id d9443c01a7336-23e25522cd7mr338406005ad.0.1753113738957;
-        Mon, 21 Jul 2025 09:02:18 -0700 (PDT)
-Received: from [192.168.1.101] ([223.166.23.203])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6ef682sm60013325ad.192.2025.07.21.09.02.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jul 2025 09:02:18 -0700 (PDT)
-Message-ID: <4581ac35-b879-4d32-91fd-ab486ec4b63c@gmail.com>
-Date: Tue, 22 Jul 2025 00:02:11 +0800
+	s=arc-20240116; t=1753113878; c=relaxed/simple;
+	bh=3fXtOBirZFhzz6wQYUzffNMAfSLr+ou8gT9PHBFIduU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nWRPx6K850qu4k67yQHKQHzPufL+9vgmS/CnvB2f31b7n/1smGKS2+2IkBw2oHhp3usBZ6XwP3j+BSkrthd4FedWw2bZVRg6i7HfnWrc7wuAr9YlrGB5zJVOI2PxwJmZwzrHVtszOV5DVind2JIpGcR+sIuDNGHls4VhcLBlAHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tb48J74H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E3FC4CEED;
+	Mon, 21 Jul 2025 16:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753113875;
+	bh=3fXtOBirZFhzz6wQYUzffNMAfSLr+ou8gT9PHBFIduU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Tb48J74Hm888pLaIm8BZqtQc3KV35gwq8oH1dYWZOb85tMU9kxiNAeivcMraEPViV
+	 LXtvaa/2tQFOXoRh+eQu5fRuTkW/sUOhZJqzHtfrK1nfUyzpr7em+d3yZAFbsrpfUf
+	 RSXbLX6vOzSBbv2bwnT5V3ePDuzwXG0+gJB1lPabwCVTiaMPYtwvRBF59gu9smfdWH
+	 ilKCpNVrp+pu3HbaPFrM6XFyOD7bY8G2nLSuCLOLvfPehpFDTB3wZ4AML2M3pSVg2Y
+	 ykTkzCMEQELlXyyL8fF1e83fAVrbYmKCTjh4V08Zvs2ANiqywxA32U8kCHBVlsmLKF
+	 zgRH74dQosF9A==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-615a256240bso2217442eaf.3;
+        Mon, 21 Jul 2025 09:04:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVsGiLoazCPymHolWXKYQl40hNPhcl2+gAhNqtQZkwX5fCKoG9r83IHfWVXjbUixLSpuUIj0jUBi3M=@vger.kernel.org, AJvYcCXwXQMQAq2pxPNftR54uDj9Gncs8YERk19gTM6Og73UN+Cds3YWlq4INnrmzVyeNh7d6440UtSX7u6N9/0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeSEBSCljQr9iIKE3Re562op4FRabr/JuHUs221y4i/+ANqgck
+	bmLazCJNNvNhxtYKMVCfEmvX6ty9l4AB/6CCMRaGFIOciD4XpH3aKjoZCD7XKuOe2dyNDGc8DRK
+	Y1gHKYQrgTWPSh51vns9xHJjkwwP7940=
+X-Google-Smtp-Source: AGHT+IHOnexltxUDSrZb8nSmvec7gRKeOPZadJJGGkhtS6XE+1FpFHLOqlwsu3p5m/ISuUEDcsq0Ssn5YbwgOgwBT58=
+X-Received: by 2002:a05:6808:1509:b0:40a:fb27:9e8d with SMTP id
+ 5614622812f47-41e451fc131mr10549189b6e.15.1753113874817; Mon, 21 Jul 2025
+ 09:04:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] cpufreq: Avoid creating sysfs link for offline CPUs
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250721153656.5103-1-zzhwaxy.kernel@gmail.com>
- <CAJZ5v0iyAWdh=_2jcc7P5umR4T4yoatiK8cE+yT2vTiY87mxxw@mail.gmail.com>
-From: Zihuan Zhang <zzhwaxy.kernel@gmail.com>
-In-Reply-To: <CAJZ5v0iyAWdh=_2jcc7P5umR4T4yoatiK8cE+yT2vTiY87mxxw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250716123323.65441-1-ulf.hansson@linaro.org> <20250716123323.65441-4-ulf.hansson@linaro.org>
+In-Reply-To: <20250716123323.65441-4-ulf.hansson@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 21 Jul 2025 18:04:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i0h1RZxr47AVdLsNp6xq1dbKE4xTw6AmEGOr+NPAqD0w@mail.gmail.com>
+X-Gm-Features: Ac12FXzYHD7Ack55p_cSLMSgv53_-oN31zExvtLgIArXK4ZetKAR3FLJccwSH_k
+Message-ID: <CAJZ5v0i0h1RZxr47AVdLsNp6xq1dbKE4xTw6AmEGOr+NPAqD0w@mail.gmail.com>
+Subject: Re: [RFC/PATCH 3/3] cpuidle: Respect the system-wakeup QoS limit for s2idle
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-在 2025/7/21 23:51, Rafael J. Wysocki 写道:
-> On Mon, Jul 21, 2025 at 5:37 PM Zihuan Zhang <zzhwaxy.kernel@gmail.com> wrote:
->> Currently, cpufreq_add_dev() attempts to create a sysfs link
->> even when the target CPU is offline. Although guarded by a NULL
->> check on cpufreq_policy, this behavior is not strictly correct,
->> since offline CPUs shouldn't have their sysfs interface created.
-> Why?
-
-
-Thanks for the comment.
-
-The idea was to avoid unnecessary sysfs operations for CPUs that are 
-offline, even though the existing checks make it safe. But I understand 
-it's not strictly needed — I'm fine with dropping it.
-
->> This patch cleans up the logic to only add the sysfs link
->> when the CPU is online and cpufreq policy is properly initialized.
-> I don't really think that this change is necessary.  Thanks!
+On Wed, Jul 16, 2025 at 2:33=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
 >
->> Signed-off-by: Zihuan Zhang <zzhwaxy.kernel@gmail.com>
->> ---
->>   drivers/cpufreq/cpufreq.c | 10 +++++-----
->>   1 file changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index d7426e1d8bdd..0a77892d366c 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -1660,12 +1660,12 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
->>                  ret = cpufreq_online(cpu);
->>                  if (ret)
->>                          return ret;
->> -       }
->>
->> -       /* Create sysfs link on CPU registration */
->> -       policy = per_cpu(cpufreq_cpu_data, cpu);
->> -       if (policy)
->> -               add_cpu_dev_symlink(policy, cpu, dev);
->> +               /* Create sysfs link on CPU registration */
->> +               policy = per_cpu(cpufreq_cpu_data, cpu);
->> +               if (policy)
->> +                       add_cpu_dev_symlink(policy, cpu, dev);
->> +       }
->>
->>          return 0;
->>   }
->> --
+> A system-wakeup QoS limit may have been requested by user-space. To avoid
+> entering a too deep state during s2idle, let's start to take into account
+> the QoS limit when selecting a suitable low-power-state.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/cpuidle/cpuidle.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 0835da449db8..5f6dacb5b134 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -190,14 +190,15 @@ static noinstr void enter_s2idle_proper(struct cpui=
+dle_driver *drv,
+>   */
+>  int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_devi=
+ce *dev)
+>  {
+> +       u64 constraint_ns =3D system_wakeup_latency_qos_limit() * NSEC_PE=
+R_USEC;
+>         int index;
+>
+>         /*
+> -        * Find the deepest state with ->enter_s2idle present, which guar=
+antees
+> -        * that interrupts won't be enabled when it exits and allows the =
+tick to
+> -        * be frozen safely.
+> +        * Find the deepest state with ->enter_s2idle present that meets =
+the
+> +        * system-wakeup QoS limit, which guarantees that interrupts won'=
+t be
+> +        * enabled when it exits and allows the tick to be frozen safely.
+>          */
+> -       index =3D find_deepest_state(drv, dev, U64_MAX, 0, true);
+> +       index =3D find_deepest_state(drv, dev, constraint_ns, 0, true);
+>         if (index > 0) {
+>                 enter_s2idle_proper(drv, dev, index);
+>                 local_irq_enable();
+
+This is not the only place that needs to be patched this way.
+cpuidle_idle_call() is another one AFAICS.
 
