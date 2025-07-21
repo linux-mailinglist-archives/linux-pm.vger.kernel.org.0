@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-31144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31153-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32ACDB0BA33
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 04:18:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF91B0BA4F
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 04:19:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 047F21891E8A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 02:18:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DD353A9AA3
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 02:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9B0213E6D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35C822422A;
 	Mon, 21 Jul 2025 02:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qmNZ1uWW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ogl8rMKc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76F11E833C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0021F4C90;
 	Mon, 21 Jul 2025 02:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753064241; cv=none; b=LZhpXVSli/7Z8wB11T4uOwm057+B5rGy4/GPrV96tYeb+k/s8ttMKjl0GH2a59xnXpfZfJXXc5K/xpgnoYeGOOWzvxTJ1WJCekd526jNFSE8LSXJd178iXMNbY6iCRy8ZU9xG8oJ8E3dhTjqBaG7IovEcEZBs4NrPcxCXA6GTg4=
+	t=1753064241; cv=none; b=HNTmhuPmyE8hSxRjQ0+pIYwMrjfRI9zilSDq/F9dn2dkeEQc7Qt4BeMNP1XPBEgtmayLdk86HDbzfJi3eq42ggDPHsZTw/7P5SvbwBEDJlWJwG/t7oAft9pMue1x4uWnc8+CbRndylkiNA3G3Kgbxdx+dVJnT1xF1FegAd/7j20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753064241; c=relaxed/simple;
-	bh=tN+GZ4c/gBEI2UISeTGiT7bSlNC0ur8QtsyWbQbdzek=;
+	bh=JyF87RPkDaLpT/P1HT3Qoe8Kdjq7ScIPnxVM9dDy2FI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fOhLf4tC2IY6r/Jdsq4O0UfPhaghXDDphy8QX0R8EzXc3PV4HsdrD89ODHNSwbDUvaFfGPjo9XgaY6zfDepFl1Y32XPE1T9PBaERW+Zo+5qJYBxwjtiaVRMpxSnWUSJHGV+RnWfqLsE8D3JhCsJg89DB/fp/kfMuF8RgvAXlyvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qmNZ1uWW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6CE41C4CEFD;
+	 In-Reply-To:To:Cc; b=OP6m1yqfVChbFWi7t9Tvn09aaqvQsbrRSXZp8fueq5Vw7Nw2z1dwOYBStZHNy7DzKlPIychp59aY+CW0PcnTI3x6sLKzcCGqN/CSsyupYL0K3hCBhVm5Nn/7e5mF69P/btjXqtA9/qrgOeUnym77Z2kePu/B5IhJRAXJ27Inp20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ogl8rMKc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 802EBC2BC87;
 	Mon, 21 Jul 2025 02:17:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1753064240;
-	bh=tN+GZ4c/gBEI2UISeTGiT7bSlNC0ur8QtsyWbQbdzek=;
+	bh=JyF87RPkDaLpT/P1HT3Qoe8Kdjq7ScIPnxVM9dDy2FI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=qmNZ1uWWPW17FX+YTi2yCRV1aFiMQ4PuWHOcN+blYK0mZrmfRDM1VoJXKlSME5rOk
-	 54KC88rmbmSl8T8VSZyjMLZ0A9XIe41M3+wRfMOwgBkL2DKzn8DpqujqrtAiZhWvdn
-	 2DXtcUiZepSfkLfWvi7x1jEWDHj7t3qsVvB25VyiE5+ezIzyVqXAA2VsHM+I/ufmYN
-	 TUR8IC7tG+toR53NcgV7HRbxrVoaeSC17gF4AI1xc406JD6xyhXcZwrnYjRTYsRtN4
-	 6vI4N8zD7u54MQJYv/CxGcKwHSZwy+Y3o8mXTWrd9xwa7ZVy5SVWs+Yck2lNI6Mj35
-	 Tmm/pyzFaAHVA==
+	b=ogl8rMKcFjFfp4WaJ3OojUvBzj92K6pwdAcGfAiBwQ3klLiuK9XLOfHcbw/wPKt3J
+	 a+FmlCIOmtcvO0n1PCFhXAItuwmkzzo40QOSWr7M8mw5oNwnSlqz6X5sdiQuFgZFwS
+	 44z34NwEZQNhI48E64KR8hc425KYBbsGQE8yUUzhpPkWJgtqUkmfb40/2uL46dByk4
+	 PCKxBral+oVzxrIXFzd2HKvOBPrB+oxVvc3Ps4nefXiidCGWRgGD6Xjn7RpO5XdKQe
+	 Jye3nyqCUyVAYssUqrYFBTLwtwok+IN3nAm3ipRWRtKIkTKCXqzRWPa22bUrtitPV/
+	 G7jPCZm8+eDZQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 637AAC83F1A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7346EC87FC3;
 	Mon, 21 Jul 2025 02:17:20 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Sun, 20 Jul 2025 21:15:00 -0500
-Subject: [PATCH v2 06/17] dt-bindings: clock: tegra: Document Tegra210B01
+Date: Sun, 20 Jul 2025 21:15:01 -0500
+Subject: [PATCH v2 07/17] dt-bindings: clock: tegra124-dfll: Document
+ Tegra210B01
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250720-t210b01-v2-6-9cb209f1edfc@gmail.com>
+Message-Id: <20250720-t210b01-v2-7-9cb209f1edfc@gmail.com>
 References: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
 In-Reply-To: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -78,11 +79,11 @@ Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
  Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753064238; l=1600;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753064238; l=1036;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=Cj+m/fB3eeAdMaIIZwt0Ih/S0OtnqsxT3QW3PAC9JvE=;
- b=O5KPaGIZppqEfJdwPtQFnaBWV/PmQMESQEbEt9SVW75ehrbBGKx4tBjt6LsmYFYVAhrZrzYt1
- F2AWSf1yZb5CKSciKkv3G48Q1pv9oKkZNv8G7/JGs753OKwa5Wpqa/A
+ bh=7rvUsu8rYJf8zTq2a+g5h7mFfug/TkyFU9zjev3k0Uw=;
+ b=DrQanWee+Rx+lddFQvDRapAfBnA2NR9vY/ny51dXSZ0bSOOgc1bqODjRYW1wyzQnXGTariAB/
+ mAcdH679EjYCMp/HlRUV6jJmnA8G+fRhEY9jSMEENisTspEuzUuDWKR
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -92,43 +93,26 @@ Reply-To: webgeek1234@gmail.com
 
 From: Aaron Kling <webgeek1234@gmail.com>
 
-* Add the compatible string for Tegra210B01 clock and reset
-* Add Tegra210B01 specific clock bindings
+Add Tegra210B01 support for DFLL clock.
 
 Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml | 1 +
- include/dt-bindings/clock/tegra210-car.h                        | 5 ++++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-index bee2dd4b29bfe391caee346aa5afad49772c2c41..88cce500bbc43de934f6c56152e5b2d006f8a8bb 100644
---- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-+++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-@@ -32,6 +32,7 @@ properties:
-       - nvidia,tegra30-car
-       - nvidia,tegra114-car
-       - nvidia,tegra210-car
-+      - nvidia,tegra210b01-car
- 
-   reg:
-     maxItems: 1
-diff --git a/include/dt-bindings/clock/tegra210-car.h b/include/dt-bindings/clock/tegra210-car.h
-index 9cfcc3baa52c6eef0439c859200cf44446a1cd17..27485d9b80f68fc0e7668a8abbd1b821f62035dd 100644
---- a/include/dt-bindings/clock/tegra210-car.h
-+++ b/include/dt-bindings/clock/tegra210-car.h
-@@ -409,6 +409,9 @@
- #define TEGRA210_CLK_DMIC3_SYNC_CLK 392
- #define TEGRA210_CLK_DMIC3_SYNC_CLK_MUX 393
- 
--#define TEGRA210_CLK_CLK_MAX 394
-+#define TEGRA210_CLK_UTMIPLL_60M 531
-+#define TEGRA210_CLK_PLL_P_UPHY_OUT 532
-+
-+#define TEGRA210_CLK_CLK_MAX 533
- 
- #endif	/* _DT_BINDINGS_CLOCK_TEGRA210_CAR_H */
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt b/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt
+index f7d347385b5775ddd702ecbb9821acfc9d4b9ff2..aa7d50d4fe6f2c1c2500c53e3421355ce2b67599 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt
+@@ -13,6 +13,7 @@ Required properties:
+ - compatible : should be one of:
+   - "nvidia,tegra124-dfll": for Tegra124
+   - "nvidia,tegra210-dfll": for Tegra210
++  - "nvidia,tegra210b01-dfll": for Tegra210B01
+ - reg : Defines the following set of registers, in the order listed:
+         - registers for the DFLL control logic.
+         - registers for the I2C output logic.
 
 -- 
 2.50.1
