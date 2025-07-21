@@ -1,166 +1,135 @@
-Return-Path: <linux-pm+bounces-31238-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31239-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0280FB0CB3A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 21:58:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C633CB0CB69
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:14:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 342BE16C7B0
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 19:58:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95EAB189F3EA
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:14:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE2323770D;
-	Mon, 21 Jul 2025 19:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D84A239E94;
+	Mon, 21 Jul 2025 20:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AViKdRQU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RhyPiRo9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F227230BE0;
-	Mon, 21 Jul 2025 19:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F902376EC
+	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 20:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753127902; cv=none; b=oDFLVST1zvvvgoiyPB4Jv6xIPDTCgMMo/rY/3sXl8wHlVq0QOgXGlfyy1TfrubxMYxIhmo3uiSd95ivIBxqJkntHaw1eNGY7ZKzzuURktlQvF70Hd1wQvKaCAPmLIR93rbdEadRea3sJ3HP29/PAK1BVWNQkvNK31Mggt/4sD3s=
+	t=1753128868; cv=none; b=Wq6i5/hJHp5CTH57th9e2Ipr/0KYDUv1sCAmyOxuUQqf/D8n+rDYB3jFMVeDSaEJ4VhLZW+7ZakLeePZUGa3WPVGw8MXQqQNwmQmfWI8cvmGk+HowyUpjCitor+kY+g4lppH/ZVkBUEB6LK/kQkpx2RO13mgRiwytzTt41H/JXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753127902; c=relaxed/simple;
-	bh=KuJmPdgYM52TyEfb5GOaYYy/Wz8zkqWtBSMWMCCCUXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hXuTxOVAwA2zQt5/08czuP0tiBVliatbnZBDswxHX1yiUO8Luuez2ugmiM9DISTe7PvvbNnO+I8yPQmTeBC7pbk5HKhZ5a9XXuVYiK/mPUGbH4YypTgRKOy0PdReuv0QGqEjEutCl4CvtCgdo0tPsNNmGCHcHLlXXl8Zll5R8g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AViKdRQU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1E7C4CEED;
-	Mon, 21 Jul 2025 19:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753127902;
-	bh=KuJmPdgYM52TyEfb5GOaYYy/Wz8zkqWtBSMWMCCCUXo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AViKdRQUgjZkH+Mbtvssorka8bkheIkitMNfiDbxUfb+690Dt1VuzCqU+7ttwe5Ad
-	 kMPF6GD1v1DRk3vz0S1w8yKh2jsTm5YgQeqEbAGIhhM9HefDaeosAA4fK27RVMkKfy
-	 qVsIHS6OB9L6yMwapvunD/anMfISkff2B8R0uhxqJkO8u/CFZlLgJdJcwAtJ+O8pr1
-	 l493eO1Ku7LwqQMqMStazmD7gJXCwEMZ/VQL+lvqHIMD+CeqOiNbr5zO4epfHrA7sS
-	 InnBoE+iqnd4Zpmy6wFJQOL3gt+1C1e8oyT6R8g3Rl78Kc8gaEU7F+Zhmlwo9piLu4
-	 35tiwJnZhQuGg==
-Date: Mon, 21 Jul 2025 14:58:21 -0500
-From: Rob Herring <robh@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-mediatek@lists.infradead.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, matthias.bgg@gmail.com, ulf.hansson@linaro.org,
-	y.oudjana@protonmail.com, fshao@chromium.org, wenst@chromium.org,
-	lihongbo22@huawei.com, mandyjh.liu@mediatek.com, mbrugger@suse.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	kernel@collabora.com,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Subject: Re: [PATCH v2 03/10] dt-bindings: power: mediatek: Document
- access-controllers property
-Message-ID: <20250721195821.GA1163453-robh@kernel.org>
-References: <20250707105605.98248-1-angelogioacchino.delregno@collabora.com>
- <20250707105605.98248-4-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1753128868; c=relaxed/simple;
+	bh=epa7+wp0cEoPPmYR6nZaRCp733cFnLPdm5t/iaHxLAA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=fUFAaW47laxvhyprpJlPIeNGCQfv9KIWtvy1szhHaX3gD6wWtMp4K4zeRrE76RSbyM4/ImeP4/nSTNxPMh6P92q5kXCYoM619zxM+H8lF2BkPcRQuvpED/rnc2vgTlY5EQvGO94VWITk/vXICYHByvzuF0fAEot23jDDuBei2Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RhyPiRo9; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-455fdfb5d04so27180815e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 13:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753128865; x=1753733665; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W+NLeKkmFfS3FdjQ1rDekiaYo9KOrt0849XuRcwwgxk=;
+        b=RhyPiRo9yKEwXsfsDVyCuj6wjW/CNdfv0000rHg0QDcxMTmc2kVtADsP60jUyWQu+I
+         3RYx1TiVym4MvNI8Z70tan+5RkHxBrw5Alx03bDgJb02aFbAUcLrCnr1Ief2lnNkgAhQ
+         YWUOC5WKw4OaNRShm8l7VV6pPrRD+Z5USKfaayzieRVHpDfHSIHeiNqRpenBXbEDQ4u7
+         Ey0uOhkIBLETpFYWaIFsNw/1BAb7n+uqkLpsrEYQW21V4mQXc152xLS6wWlIpcUbfVw3
+         1Bfj2pfchOx3MGacn3QtwoIoiLd3Ro4QKWmLFDl7VEAU3hSmSI0Qj14dPHcyituPnOiL
+         TMjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753128865; x=1753733665;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W+NLeKkmFfS3FdjQ1rDekiaYo9KOrt0849XuRcwwgxk=;
+        b=CsQB+PfqHvKUHSkV8r0vlGag5fIVfytr4ip+YUaJfo1maLuSEpQak81s4NLxFL37GT
+         eWsg0eGh+txDE9jr4XIbfG+Ohal4EmYxIMunzGky0AgvFcYvqoyd+CrtTnXbxK4YBuRS
+         Dvnex0MxnQFy8p5FRb3JS9w5nrUMRqvoQwbXkSAdqQTPyvjuSegdEs/TAh05c++S1EDC
+         RdimsyaU/Lo1dN4PStqy0iVKwNjLJellmzBbm/CVHe7UmWDiFC5KSFt8bY+hhFRSRKRS
+         lDq7GqbxcHBrxTrDtHGIpDDM07S8tUHUasmm8MH5x9yRqyJdpSDORJ+U8PeFzGrmw4Hb
+         pdKw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6QhgRe9QeMgqdF/yyUwZlQX6QnQzC727SvM2RNUc3kTgXvXuk2vI/8LL3D8j0j1hjJ+n25+s06A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1CbgXh2KQnccwrDY/7S4iTCbpAlZGFuS67Dbe9kTGuSGv0wqf
+	l2cJcK7yzxL4BhD5UjEHzECS4EV4bO1T1GEobVMSXxJLLj8vRgzwL9g0lSSW8ZPK7XpY81NxH09
+	tXDsE
+X-Gm-Gg: ASbGnctLuPSJCDECR8K/5wA7MYsjDMSxVpwIehBl6akqjS4RHbwiCdOzGE+GyhsQepb
+	mzl6ol+gghcQvQacEyV5dTNutPBrhI3aICDKmt8NGcL6MfO3MpnNKzRoLm7mCK0uDtuuBdvaYYB
+	5VfnJOuwxj/qiqhecAc88BooeLGHmQK6ouqZ1lPcnfCaagTwRNQE4YoYSeRzMkebAheBqlya3pw
+	eayb+9kCv5hUmehHjKWS69OB5EnqDA3FTwUVHT5MdgSElZUqKrEMRoSv7AvFIrMwFrpQ0PeMegU
+	VydvZwv4aK9o+P/gdtFlm6Wkj3bvcpcExP6VCo+JL8eQP97T7EZCZwX3QYB+xXFNhJE74yGHmTb
+	YCsghsUlPnEOLcl4Ex6qDSrQWiJwsKuiukpbpXC1Yj2ukU9RQdB/GI1B73F53iOavrWfsa/HePI
+	zlGII=
+X-Google-Smtp-Source: AGHT+IF2K0d0bKG4VD7/lCdy/OhzmE3w6YgPLQSQDJFH+YKC0cK0MI2AOW58kLCdtZuimtB0pT85RA==
+X-Received: by 2002:a05:600c:870e:b0:456:285b:db3c with SMTP id 5b1f17b1804b1-456352d2ab1mr153619675e9.3.1753128864772;
+        Mon, 21 Jul 2025 13:14:24 -0700 (PDT)
+Received: from ?IPV6:2a0d:e487:135f:abd:1f99:991c:5b07:cd28? ([2a0d:e487:135f:abd:1f99:991c:5b07:cd28])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-45862cd7143sm1464855e9.1.2025.07.21.13.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jul 2025 13:14:24 -0700 (PDT)
+Message-ID: <23b3cd9e-50e2-4888-81a3-c6d340bb9583@linaro.org>
+Date: Mon, 21 Jul 2025 22:14:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/2] Add thermal sensors support for MT7981
+To: Aleksander Jan Bajkowski <olek2@wp.pl>, rafael@kernel.org,
+ rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, s.hauer@pengutronix.de,
+ rafal@milecki.pl, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+References: <20250712195904.6988-1-olek2@wp.pl>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250712195904.6988-1-olek2@wp.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250707105605.98248-4-angelogioacchino.delregno@collabora.com>
 
-On Mon, Jul 07, 2025 at 12:55:58PM +0200, AngeloGioacchino Del Regno wrote:
-> Allow specifying access-controllers in the main power controller
-> node and deprecate the old mediatek,infracfg, mediatek,infracfg-nao
-> and mediatek,smi properties located in the children.
+On 7/12/25 21:59, Aleksander Jan Bajkowski wrote:
+> This patch adds support for the temperature sensor in the MT7981 SoC.
+> This sensor is exactly the same as the one in the MT7986.
 > 
-> This is done in order to both simplify the power controller
-> nodes and in preparation for adding support for new generation
-> SoCs like MT8196/MT6991 and other variants, which will need
-> to set protection on new busses.
+> Changes in v4:
+>   - sorted bindings by fallback names
+>   - dropped accepted patch
 > 
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../power/mediatek,power-controller.yaml      | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
+> Changes in v3:
+>   - added fallback in bindings
 > 
-> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> index 9c7cc632abee..82bfd3899b22 100644
-> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> @@ -44,6 +44,17 @@ properties:
->    '#size-cells':
->      const: 0
->  
-> +  access-controllers:
-> +    description:
-> +      A number of phandles to external blocks to set and clear the required
-> +      bits to enable or disable bus protection, necessary to avoid any bus
-> +      faults while enabling or disabling a power domain.
-> +      For example, this may hold phandles to INFRACFG and SMI.
-> +    minItems: 1
-> +    maxItems: 3
+> Changes in v2:
+>   - added fallback to an existing compatible string
+>   - removed second patch as obsolete
+> 
+> Aleksander Jan Bajkowski (2):
+>    dt-bindings: thermal: mediatek: add falback compatible string for
+>      MT7981 and MT8516
+>    arm64: dts: mediatek: add thermal sensor support on mt7981
+> 
+>   .../bindings/thermal/mediatek,thermal.yaml    | 27 ++++++++++------
+>   arch/arm64/boot/dts/mediatek/mt7981b.dtsi     | 31 ++++++++++++++++++-
+>   2 files changed, 47 insertions(+), 11 deletions(-)
 
-> +    items:
-> +      maxItems: 1
+Applied, thanks
 
-Drop 'items' as how many cells is up to the provider.
 
-> +
->  patternProperties:
->    "^power-domain@[0-9a-f]+$":
->      $ref: "#/$defs/power-domain-node"
-> @@ -123,14 +134,17 @@ $defs:
->        mediatek,infracfg:
->          $ref: /schemas/types.yaml#/definitions/phandle
->          description: phandle to the device containing the INFRACFG register range.
-> +        deprecated: true
->  
->        mediatek,infracfg-nao:
->          $ref: /schemas/types.yaml#/definitions/phandle
->          description: phandle to the device containing the INFRACFG-NAO register range.
-> +        deprecated: true
->  
->        mediatek,smi:
->          $ref: /schemas/types.yaml#/definitions/phandle
->          description: phandle to the device containing the SMI register range.
-> +        deprecated: true
->  
->      required:
->        - reg
-> @@ -138,6 +152,31 @@ $defs:
->  required:
->    - compatible
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8183-power-controller
-> +    then:
-> +      properties:
-> +        access-controllers:
-> +          minItems: 2
-> +          maxItems: 2
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8365-power-controller
-> +    then:
-> +      properties:
-> +        access-controllers:
-> +          minItems: 3
-> +          maxItems: 3
-> +
->  additionalProperties: false
->  
->  examples:
-> -- 
-> 2.49.0
-> 
+-- 
+<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
