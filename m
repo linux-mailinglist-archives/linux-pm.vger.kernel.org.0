@@ -1,176 +1,188 @@
-Return-Path: <linux-pm+bounces-31193-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68197B0C256
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 13:12:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A3AB0C2FC
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 13:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0EAC3AA3B5
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 11:11:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D0571888324
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 11:31:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 116582957A0;
-	Mon, 21 Jul 2025 11:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAF6B29B79B;
+	Mon, 21 Jul 2025 11:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BZtWWBlE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="djgJ2LvK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C5F295502
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 11:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D6F288C0C;
+	Mon, 21 Jul 2025 11:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753096344; cv=none; b=ZcbclLrvtrrQFh2JOhSJCoOIWzqNSg0sd9mBu5czt6mYnUX9FqZf1DnrSRBdyowxQIHQoiriwwlhpnoJUWnclknrTyhjT054A9tVP/Xjdxd8rOVWu2s4fcp9CBumUf5pWuCZkDYqgdQldp2b9fHWc7cdPIC5TAxcGJuN8khwC9U=
+	t=1753097480; cv=none; b=q7ZqPPLlMaS6bC++YTkRSSopJrAtARDdfcQb2o+TOH9OMic0qj6PUIc7nXxT3Wgc7r6h+E/SC8Qg7tgKNOFeXyDBOw6+yfyc9x/As0WWsVIyYSPLOJzQSruBexyhBrO5SDp39F02brIZIgO87dHc8qVMGZzhHOgYDWCWqfJ8JLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753096344; c=relaxed/simple;
-	bh=ksZkhhiBwulOE/IukbPeIEXyJFBXFotH7naTuSJS5cM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f+xYoH/as0u670y8wTtGUXkZZZc0KfpZ+OPV/161alCR6aTDBfRHSxPxEB/UXfHR9sxUuOtOOM7vES4ORAWiPRwybjqRycfbxT0oQ0Yjrlf7kxnvUtQMFGIqs+T6ZKYHQG0Bw1g1n0G0z1kNSKIg1h0O+NsGKMmVdD6SebrCtN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BZtWWBlE; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-32b50f357ecso4148541fa.2
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 04:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1753096340; x=1753701140; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZvD8IUqr+Bzg9GKWiYPMFuwvqaPjoCioCLoAukeES3o=;
-        b=BZtWWBlE6Sh0kiPqNgEAjIpk/NmTjn3bfieRPCAs39tzUBnYHZsLcMpqyj0UoWPPn5
-         xeVdmiOnhzh7ksGLjacQeGaKRUXVLiV0OTbQ2yep4QvzAAXbIHhD5mUStkURaa8s37sW
-         AzrRuWpr+LC1ZZ8PZF61dH0OLPQD7JTwlOESs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753096340; x=1753701140;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZvD8IUqr+Bzg9GKWiYPMFuwvqaPjoCioCLoAukeES3o=;
-        b=dGL+krj4XDSAdQt6cUf4EYqIMDaIND6Qfwfcj+tdCl8YPDr2FJU9MaFhKAVYWwsuZC
-         EuAgB4dwW1pFPU1/cT35uvJNuKZrNqPEwsQ/qAn1uHebzp7rCbx19oHmE/HvHzBTynDb
-         thE5j4ZNblo95TgvuxFpxru2YB17Hk6bg/mspMIkDjq+xhtfiOFv2ao0CdDaMYzFuWo9
-         50fhyYAnTUfoJhnnzWsNswn2q3WrUXDUFBrmDEuUIStK//dH0roCnybi5Agn+OI5EZNj
-         KVFsmmCenny6M/wOYI76Q0FZNITstZuYPcSCJTD0Y3xgl4llXn0FnCx6Y91ZewN1+n55
-         6XcA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2LjZricSDlQqw2XcWWr2gbdzoONsw7O6Kb7npLhWYl+OtHht51598/G7bsBQVfT4xQ+H8Tf7rZg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNroXBs9bK68OLI+gw+ZzUy5rnP7vP8KhC41YmuEC/ghggO6Uf
-	aLA6EpaDtL6bCah1QC3GEaJHg/5ZfL0PunO0EAlcUYiiNszpLe/cE2ut/vU3onRb/SbWLp9mWsg
-	9U3riJRQ9cIdLoQCWYgyftfvGd2wOTPi9AlwPlCrY
-X-Gm-Gg: ASbGnctM8ElvPWNC1Vo2+tsA/J7svWkCOm/jfVrBN1lDZdRHUNFCgV165F2C73o5tiW
-	yj3k11RjmL5J+vR5pAYUR1HSnHgs1U5MUqF3enYr2ZgPVgY8LoyOahvP2Lz7R3pwA4WOyeDvDF3
-	H2cmGKOdZdPaojMCiX9Ac0IeD7WhYjjnqFJ8v9t2vG7mltG/9GA3YueWATp/0duH/MEJ2+/y8+g
-	7PvhZGxfTAirk8ejIaqDues4umplVwPwu4=
-X-Google-Smtp-Source: AGHT+IFBcIrODyu5ElS2DkB5XwLAm0Yi8m6vfMTv3g3vNlbCwrZrTFNYjxARMwbJuH0gzP751/Mkg4oUm0Irdkz6hQA=
-X-Received: by 2002:a05:651c:154a:b0:32a:7270:5c29 with SMTP id
- 38308e7fff4ca-3308f4c5293mr49883741fa.2.1753096340224; Mon, 21 Jul 2025
- 04:12:20 -0700 (PDT)
+	s=arc-20240116; t=1753097480; c=relaxed/simple;
+	bh=ni6NB75dBKeFo+kbnJ/UKz3oYO037eTbMmo0vF9YVBU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0FIz7RRNQohPO/WjPkpfDaoYtl+A9MDSzQQWZfdvYF4U8rdFilHVV3yw0fqhcJ+gU+OCjhEXo8c1ZUQxdiZA1J8qSS7pIL7MvzY/eYeHFoqNj/XK2I0kOwp1fiJ7aFWuR6xtz4NdG6yhrzfdPZ15/0zPlCPYLc91SdcQ8YucMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=djgJ2LvK; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753097479; x=1784633479;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ni6NB75dBKeFo+kbnJ/UKz3oYO037eTbMmo0vF9YVBU=;
+  b=djgJ2LvKrhEBOkBwBQifO/Q/QyUzV3BLX2WA0XiRML+AGGw6k+xeQ9hv
+   02L6kQjt3FcTLMRwkB4s9EOYiwa3oZqQ2FVv/IB1dtmhDQyIV4H98V+Nx
+   DGmuSARZrSLI0M/yb337DiEmaSi6kxTJZxgrQHjzCooIZuUTnMsof/aon
+   i8jETXzTQZHaPZsCU3mlye1arKbc1Gy1cYz0wQI82mYDBTwaodKiN95Nw
+   NNCZL8ncZw6SiU5hqyTs5dYFiVAwygqtPPswMly2+4LxHYvkQYRS7mWeT
+   y4wuyE34PkLBqR32XFu9i+tA9KpOP113zOH+Gsq598lRMEkeMI00ptUP7
+   Q==;
+X-CSE-ConnectionGUID: Ig2pPqOpSpyWsJ6vUXsiMA==
+X-CSE-MsgGUID: LUOa5WnMQi2rYhWHvUlSSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="72877893"
+X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
+   d="scan'208";a="72877893"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 04:31:18 -0700
+X-CSE-ConnectionGUID: k3nqpQsRRV21/dckljTYhg==
+X-CSE-MsgGUID: IuA4pZulSxy2Xw8ORfd5PQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
+   d="scan'208";a="162855115"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 21 Jul 2025 04:31:13 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udojf-000Gkz-0h;
+	Mon, 21 Jul 2025 11:31:11 +0000
+Date: Mon, 21 Jul 2025 19:30:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	sboyd@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, jic23@kernel.org, dlechner@baylibre.com,
+	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org
+Subject: Re: [PATCH v1 5/7] misc: qcom-coincell: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <202507211953.9ai6l420-lkp@intel.com>
+References: <20250721075525.29636-6-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250721081459.16278-1-laura.nao@collabora.com> <20250721081459.16278-6-laura.nao@collabora.com>
-In-Reply-To: <20250721081459.16278-6-laura.nao@collabora.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Mon, 21 Jul 2025 19:12:08 +0800
-X-Gm-Features: Ac12FXwjyLsGb66oW3wQunTIZj2TIT6qrKAAeEzwRJZc_WREeNFVgKGeEo3jG4M
-Message-ID: <CAGXv+5F9NwJ7uGFPWZM-Dywbbk4f6aiYS5M4m6_VFETVGEwr9A@mail.gmail.com>
-Subject: Re: [PATCH 5/9] thermal/drivers/mediatek/lvts: Add lvts_temp_to_raw
- variant for positive temp_factor
-To: Laura Nao <laura.nao@collabora.com>
-Cc: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, matthias.bgg@gmail.com, 
-	angelogioacchino.delregno@collabora.com, andrew-ct.chen@mediatek.com, 
-	lala.lin@mediatek.com, arnd@arndb.de, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, nfraprado@collabora.com, 
-	devicetree@vger.kernel.org, u.kleine-koenig@baylibre.com, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	kernel@collabora.com, colin.i.king@gmail.com, bchihi@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250721075525.29636-6-angelogioacchino.delregno@collabora.com>
 
-On Mon, Jul 21, 2025 at 4:31=E2=80=AFPM Laura Nao <laura.nao@collabora.com>=
- wrote:
->
-> The current lvts_temp_to_raw() implementation assumes a negative
-> temperature-to-raw slope (temp_factor), which holds for the SoCs
-> currently supported by the driver. However, this assumption breaks on
-> MT8196/MT6991, where the slope is positive.
+Hi AngeloGioacchino,
 
-I don't think that's really a problem. The formula is:
+kernel test robot noticed the following build errors:
 
-    temp =3D (raw * factor) >> 14 + golden
+[auto build test ERROR on next-20250718]
+[cannot apply to jic23-iio/togreg sre-power-supply/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.16-rc7 v6.16-rc6 v6.16-rc5 v6.16-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If we move the terms around we get
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/spmi-Implement-spmi_subdevice_alloc_and_add-and-devm-variant/20250721-155809
+base:   next-20250718
+patch link:    https://lore.kernel.org/r/20250721075525.29636-6-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v1 5/7] misc: qcom-coincell: Migrate to devm_spmi_subdevice_alloc_and_add()
+config: x86_64-buildonly-randconfig-003-20250721 (https://download.01.org/0day-ci/archive/20250721/202507211953.9ai6l420-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507211953.9ai6l420-lkp@intel.com/reproduce)
 
-    ((temp - golden) << 14) / factor =3D raw
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507211953.9ai6l420-lkp@intel.com/
 
-Or
+All errors (new ones prefixed by >>):
 
-    raw =3D ((golden - temp) << 14) / -factor
+   ld: vmlinux.o: in function `qcom_coincell_probe':
+>> drivers/misc/qcom-coincell.c:111: undefined reference to `devm_spmi_subdevice_alloc_and_add'
+>> ld: drivers/misc/qcom-coincell.c:115: undefined reference to `__devm_regmap_init_spmi_ext'
 
 
-The calculations should work regardless of whether the factor is positive
-or negative, as long as the intermediate and final values are within
-the range of s64.
+vim +111 drivers/misc/qcom-coincell.c
 
-> Add a variant of the function that inverts the calculation logic
-> accordingly. This ensures accurate raw value generation for temperature
-> thresholds,avoiding spurious thermal interrupts or unintended hardware
-> resets on MT8196/MT6991.
->
-> Signed-off-by: Laura Nao <laura.nao@collabora.com>
-> ---
->  drivers/thermal/mediatek/lvts_thermal.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
-diatek/lvts_thermal.c
-> index db83137c7537..3c34956e37c1 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -296,6 +296,18 @@ static u32 lvts_temp_to_raw(int temperature, int tem=
-p_factor)
->         return div_s64(raw_temp, -temp_factor);
->  }
->
-> +static u32 lvts_temp_to_raw_v2(int temperature, int temp_factor)
-> +{
-> +       u32 raw_temp;
-> +
-> +       if (temp_factor =3D=3D 0)
-> +               return temperature;
-> +
-> +       raw_temp =3D temperature - golden_temp_offset;
-> +
-> +       return div_s64((s64)temp_factor << 14, raw_temp);
-> +}
+    83	
+    84	static int qcom_coincell_probe(struct platform_device *pdev)
+    85	{
+    86		struct regmap_config qcom_coincell_regmap_config = {
+    87			.reg_bits = 16,
+    88			.val_bits = 16,
+    89			.max_register = 0x100,
+    90			.fast_io = true
+    91		};
+    92		struct device_node *node = pdev->dev.of_node;
+    93		struct spmi_subdevice *sub_sdev;
+    94		struct spmi_device *sparent;
+    95		struct qcom_coincell chgr;
+    96		u32 rset = 0;
+    97		u32 vset = 0;
+    98		bool enable;
+    99		int rc;
+   100	
+   101		chgr.dev = &pdev->dev;
+   102	
+   103		rc = of_property_read_u32(node, "reg", &qcom_coincell_regmap_config.reg_base);
+   104		if (rc)
+   105			return rc;
+   106	
+   107		sparent = to_spmi_device(pdev->dev.parent);
+   108		if (!sparent)
+   109			return -ENODEV;
+   110	
+ > 111		sub_sdev = devm_spmi_subdevice_alloc_and_add(&pdev->dev, sparent);
+   112		if (IS_ERR(sub_sdev))
+   113			return PTR_ERR(sub_sdev);
+   114	
+ > 115		chgr.regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev,
+   116							&qcom_coincell_regmap_config);
+   117		if (!chgr.regmap) {
+   118			dev_err(chgr.dev, "Unable to get regmap\n");
+   119			return -EINVAL;
+   120		}
+   121	
+   122		enable = !of_property_read_bool(node, "qcom,charger-disable");
+   123	
+   124		if (enable) {
+   125			rc = of_property_read_u32(node, "qcom,rset-ohms", &rset);
+   126			if (rc) {
+   127				dev_err(chgr.dev,
+   128					"can't find 'qcom,rset-ohms' in DT block");
+   129				return rc;
+   130			}
+   131	
+   132			rc = of_property_read_u32(node, "qcom,vset-millivolts", &vset);
+   133			if (rc) {
+   134				dev_err(chgr.dev,
+   135				    "can't find 'qcom,vset-millivolts' in DT block");
+   136				return rc;
+   137			}
+   138		}
+   139	
+   140		return qcom_coincell_chgr_config(&chgr, rset, vset, enable);
+   141	}
+   142	
 
-Here you have
-
-    raw =3D (factor << 14) / (temp - golden)
-
-which, barring integer arithmetic limitations, is actually the
-multiplicative inverse of the original version.
-
-So I think the commit message is misleading. It's not negative or
-positive that matters, but that the hardware expects the
-multiplicative inverse in this version.
-
-(or the downstream code is just botched.)
-
-ChenYu
-
-> +
->  static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
->         struct lvts_sensor *lvts_sensor =3D thermal_zone_device_priv(tz);
-> --
-> 2.39.5
->
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
