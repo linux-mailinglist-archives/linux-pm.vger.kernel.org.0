@@ -1,165 +1,208 @@
-Return-Path: <linux-pm+bounces-31191-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31192-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD7BCB0C1A9
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:47:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC77B0C247
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 13:11:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E58C16C335
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 10:47:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A8693B43D9
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 11:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D1822156D;
-	Mon, 21 Jul 2025 10:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A0D296168;
+	Mon, 21 Jul 2025 11:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axRlvRVL"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Kkm38Y2L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587EA20F098;
-	Mon, 21 Jul 2025 10:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C22295520
+	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 11:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753094841; cv=none; b=Zr5oaQq5/ccC3tA+OLeduwnDkai/NMS8SM2MfNiueei0gWdYqH78UeN1r7UXoQ6AV51EHXPtKOvo0a2cKi/UE8hSoGNXThzQLviLXUUPKfKsURdktUVIymyqqhMZpmLSKiehqPwL2Wa5GhBTbE2CGq9Jb4EhOAye7S1i6gdQadU=
+	t=1753096201; cv=none; b=GDbAIbWcbLHntbXFOs4jG0wfYlwyVmOUiKjWAF+zgPa92/1B6O0gXK9T1h6HVaOGQWys2TSfjx7tN2712p/Nshl64TXUhsSFObAJ1VLbZBdshQHlTyscviHsqWEkX3HHCzA9oZ/TkwGGnZ13ajVlGO68Jcj85v1W+Ewt5WbvR10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753094841; c=relaxed/simple;
-	bh=3FMPJPp3df9gByQS0Cpx715xJINI9Xitl6FDlUEf6zQ=;
+	s=arc-20240116; t=1753096201; c=relaxed/simple;
+	bh=sB5Y3BU3Xtwi3wF9nhNOXV9hrQqBf3LqIEohBOIRQTA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JLtY48SneWIDouBEDVic0UF/uxbDEqmj8b6tgYCWVdxKAYZh1fkV0iuqrVEBeZhaqxlIgrWJGSD9IXoxZEl6MoKU4yulPLdlqgdmDGBrTWzQJs5AZ0hojWBTpAa7OJKRS6zqbwHiP4XFm05fHa6FlGgRV1N7BVIFMcD6lA1eUVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axRlvRVL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA1A4C4CEED;
-	Mon, 21 Jul 2025 10:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753094840;
-	bh=3FMPJPp3df9gByQS0Cpx715xJINI9Xitl6FDlUEf6zQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=axRlvRVLDqeXIGc2Xg4/di/1cpxxWGScS1qcyGJ5SEpSPOB241zUXmHvWpmWcAaoq
-	 ieKOXjVS+Qn9pWjUgrrSBPLpjYpvT6SWQD4LiWNHvLx238r8Emo0BjzOhkMHI7/yV9
-	 xI+YfSaj3DweQVDJGY7Dcl/S/RV9MPZ2rpv9vr5jVSfGNU+CPF8r7buRvqW2GyBIHh
-	 bPkVbcgJTKdXHGzb37jycf2EoRxLczaibZDhYeE36viOsYZ46+rAMCthQjQlzhaKnq
-	 PwpOvfYAn0lOnCpi1x4Uqa4HUlHnPPC6HhIOcYpKR9anXJvmEXLgvqMtA2/3jgrfrh
-	 loR0O8wvkzrdQ==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-303058a8649so411460fac.3;
-        Mon, 21 Jul 2025 03:47:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUF0JHMugLL8rBhGhMPaRyBz4hp+6Xxm9Z2s7bOTGqL+7ba7Kwznb7TOjHOJkyRDskw5kOL+Xo3Bb2gbj0=@vger.kernel.org, AJvYcCWHji7ToFVrYIt0/HHgvU7IAJ9epkYImetXE8h7uyCeNodbAek5eiW3TTNG5ZnKxhqdD+vI73NJiW4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG+HzVtzCHOcTA2KggGA6433UL+7ACKJKIv2PsnwtjCnLh5es0
-	x2/5kZGgw+cKnYY2ojccvcFNEXhVQVtzyjaUkYEufqAUsQJ/0WzXYqjIp6Nxv1izgENABlXL/VR
-	mFtXdCMHBI9blKKyyG2X76y1EKQu7e84=
-X-Google-Smtp-Source: AGHT+IHoA3NB6bGtDLs5HIlXOYswhNHuEDsY4pLw82JzTmx51HqfQuMxqfj5zre25qH3RzQ5oIZKQv2bzMs8n3539ac=
-X-Received: by 2002:a05:6871:bb05:b0:2d8:957a:5176 with SMTP id
- 586e51a60fabf-2ffb223d877mr15763192fac.5.1753094840034; Mon, 21 Jul 2025
- 03:47:20 -0700 (PDT)
+	 To:Cc:Content-Type; b=KwqgPvU2zxoku/P0HYX7ShBo9bmfda38oOFeFv9L06qBzgxOf1p42x4drLzbiq0qSl94xOpOmmGFNWOqnY4TorW/DR1wYpbT8f0YqfA4cDCXQKRstNYcmXWamcrledVmnlg2Z5zwbFTWTMXDdgWzqo0YcUvgif65AZxcw0wbas0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Kkm38Y2L; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-33097e1133fso37842081fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 04:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1753096197; x=1753700997; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4WW2uf9Dse9OAFXSGg4nVLrSNNR6IaqC06E35FrZCQw=;
+        b=Kkm38Y2L5XxZCQ3d+HKL5hzrLow83EiPjgb3sOqPMKf0XbrTLL7vZZ5SkDF8UEpcRv
+         NfVEu7R3Bp6E63AvTagKs5gFzKYQCy+7p7kMPvQ4ld4mqjma87XiF29eLHidhKNu0rWa
+         OjQPX/Gy/SuNsIDcEoZD5ey4P8IUHBqck7ZNY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753096197; x=1753700997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4WW2uf9Dse9OAFXSGg4nVLrSNNR6IaqC06E35FrZCQw=;
+        b=DfeZvRfUCmzMoobW+wvHVF5muvGMcGQJHE+AOmDpqFzuzR5oJpJlOe7hb2AscclwXQ
+         Z5gmSrai7FYeoENK3/i7gyp1/cmDFCGYXk8eA4CcvCZ5Zi9VP2cytb4GvngtRWlvZTGP
+         Y+1ioaoOa7r7gjtgxKd9VCfB8agXMe4XlWjyOZfFQwxmDH/Ab9nmyb0niJe+WFuojUfA
+         fvmpVW8MrTBq3xyQiwZzbQxkefhzZymJN8oMyFYGH99UWP1MKG0KIdsBkJxHyIQhUHFq
+         GGBt8zdmxvJ+iJXKegic0sM72qQbVCuFeQ0Vnn+NI1Euhu6CtVC4FClxhBP75j88Zh5f
+         wQJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUp8b3eReG03LXW411bHO9ahQdPIs5NJTgsjcS0h1Fh6BJfM6kjvGxXPNDhKSsqJMKVCku+qXFVfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVacNavmpdwWr9uNVlOZVlqgE6/kShszI/o0D2rgsEXPWu8a2+
+	RIYJJf3Ots625NOH7gGoyblzWOa/Neb/XAqWREnGxCBDgtFecPYB0JRCDAlE9qUKcdd49XfE+q+
+	7V9cRAWWx7dsfDEC2JpbmjCkJXcX7wAlMcaowTqPq
+X-Gm-Gg: ASbGncsvCCb6mA7UK3jM+A+IhLGb+w3TTh1zAwdYz0aEQCPBq2x0ACaX6uFUX0gfe3m
+	9v2PiVnoShxoWuF1HrMSXCDF9wKo2+JszTXEBPVK+JIL1KFlscXIgkcFag8No147EzKIV1XoKdw
+	S7f3pWD2rEmxgfBFWvJkqu0h2KvZ2OiuwRt6l8vLzvMjbjIyXQu7GQ7NinsAZC4lH892u4d1GTr
+	pu2sZdnZVwPojv4HuaX9tqr+xUEaPNYd6fM/IZIIEYCfw==
+X-Google-Smtp-Source: AGHT+IF4nBN7l8BVpT48NL044EtxxNCfvAewP1ZUdA31VvrzYipiWFMocffu+xLGFjFA/wIBhY4ZsuRqkeecG+8Cpu0=
+X-Received: by 2002:a05:651c:3241:b0:32f:522e:f040 with SMTP id
+ 38308e7fff4ca-330a7b352d4mr27431031fa.12.1753096197351; Mon, 21 Jul 2025
+ 04:09:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2fd09dd9-59f5-4852-b796-e458c89aa193@kernel.org>
-In-Reply-To: <2fd09dd9-59f5-4852-b796-e458c89aa193@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 21 Jul 2025 12:47:02 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gr5MVorUtqJr_wiKL0Q_LYHGMABugSPmnHcxVJ2rc_dQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwrBG7MSeCDJdE5b9saITtmL8RLidXvLvyOlCXJrlp55qATP9FQnJPiZlI
-Message-ID: <CAJZ5v0gr5MVorUtqJr_wiKL0Q_LYHGMABugSPmnHcxVJ2rc_dQ@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq next for 6.17
-To: Chanwoo Choi <chanwoo@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	"open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20250721081459.16278-1-laura.nao@collabora.com> <20250721081459.16278-7-laura.nao@collabora.com>
+In-Reply-To: <20250721081459.16278-7-laura.nao@collabora.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Mon, 21 Jul 2025 19:09:45 +0800
+X-Gm-Features: Ac12FXzx8td7SOjqLltSsFYEC21ZPF3VEQHs0mR_h7cbh7ksB6i9GixQOdHUn5w
+Message-ID: <CAGXv+5Fgha-3xAa8gOEsub0u=Qr5RjQVzkyPoZ=iDkJL_KCXEg@mail.gmail.com>
+Subject: Re: [PATCH 6/9] thermal/drivers/mediatek/lvts: Add support for ATP mode
+To: Laura Nao <laura.nao@collabora.com>
+Cc: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, andrew-ct.chen@mediatek.com, 
+	lala.lin@mediatek.com, arnd@arndb.de, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, nfraprado@collabora.com, 
+	devicetree@vger.kernel.org, u.kleine-koenig@baylibre.com, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	kernel@collabora.com, colin.i.king@gmail.com, bchihi@baylibre.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Chanwoo,
+On Mon, Jul 21, 2025 at 4:33=E2=80=AFPM Laura Nao <laura.nao@collabora.com>=
+ wrote:
+>
+> MT8196/MT6991 uses ATP (Abnormal Temperature Prevention) mode to detect
+> abnormal temperature conditions, which involves reading temperature data
+> from a dedicated set of registers separate from the ones used for
+> immediate and filtered modes.
+>
+> Add support for ATP mode and its relative registers to ensure accurate
+> temperature readings and proper thermal management on MT8196/MT6991
+> devices.
+>
+> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+> ---
+>  drivers/thermal/mediatek/lvts_thermal.c | 34 ++++++++++++++++++++++---
+>  1 file changed, 31 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
+diatek/lvts_thermal.c
+> index 3c34956e37c1..8f9da0d5b886 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -44,6 +44,10 @@
+>  #define LVTS_EDATA01(__base)   (__base + 0x0058)
+>  #define LVTS_EDATA02(__base)   (__base + 0x005C)
+>  #define LVTS_EDATA03(__base)   (__base + 0x0060)
+> +#define LVTS_ATP0(__base)              (__base + 0x0070)
+> +#define LVTS_ATP1(__base)              (__base + 0x0074)
+> +#define LVTS_ATP2(__base)              (__base + 0x0078)
+> +#define LVTS_ATP3(__base)              (__base + 0x007C)
+>  #define LVTS_MSR0(__base)              (__base + 0x0090)
+>  #define LVTS_MSR1(__base)              (__base + 0x0094)
+>  #define LVTS_MSR2(__base)              (__base + 0x0098)
+> @@ -90,6 +94,7 @@
+>
+>  #define LVTS_MSR_IMMEDIATE_MODE                0
+>  #define LVTS_MSR_FILTERED_MODE         1
+> +#define LVTS_MSR_ATP_MODE              2
 
-On Sat, Jul 19, 2025 at 5:26=E2=80=AFAM Chanwoo Choi <chanwoo@kernel.org> w=
-rote:
->
-> Dear Rafael,
->
-> This is devfreq-next pull request for v6.17. I add detailed description o=
-f
-> this pull request on the following tag. Please pull devfreq with
-> following updates.
->
-> Best Regards,
-> Chanwoo Choi
->
->
-> The following changes since commit 347e9f5043c89695b01e66b3ed111755afcf19=
-11:
->
->   Linux 6.16-rc6 (2025-07-13 14:25:58 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/de=
-vfreq-next-for-6.17
->
-> for you to fetch changes up to 7da2fdaaa1e6062686ac96a9f096c2d7847533e4:
->
->   PM / devfreq: Add HiSilicon uncore frequency scaling driver (2025-07-14=
- 20:23:57 +0900)
->
-> ----------------------------------------------------------------
-> Update devfreq next for v6.17
->
-> Detailed description for this pull request:
-> - Clean devfreq core and fix bugs
->  : Replace sscanf with kstrtoul
->  : Remove redundant devfreq_get_freq_range() on adding devfreq driver
->  : Check missing NULL pointer check on removing devfreq driver
->  : Limit max_freq and min_freq to avoid unreachable value
->  : Fix wrong index on trans_stat sysfs node
->
-> - Use devm_* managed function for clock control on sun81-a33-mbus driver
->
-> - Add HiSilicon uncore frequencye scaling driver for for HiSilicon Kunpen=
-g SoCs
->  : The uncore domain includes shared system resources such as interconnec=
-ts
->  and L3 cache, and its frequency has a significant impact on system perfo=
-rmance
->  and power consumption. The driver provides the following functions:
->    - Support to scale frequency scaling with governor and user setting
->    - Support to query CPUs whose performance is closely related to the un=
-core domain
->    - Communication with the platform controller via an ACPI PCC mailbox
->      to perform actual frequency changes
->
-> ----------------------------------------------------------------
-> Chanwoo Choi (1):
->       PM / devfreq: Fix a index typo in trans_stat
->
-> Jie Zhan (2):
->       PM / devfreq: Allow devfreq driver to add custom sysfs ABIs
->       PM / devfreq: Add HiSilicon uncore frequency scaling driver
->
-> Lifeng Zheng (4):
->       PM / devfreq: governor: Replace sscanf() with kstrtoul() in set_fre=
-q_store()
->       PM / devfreq: Limit max_freq with scaling_mina_freq
->       PM / devfreq: Remove redundant devfreq_get_freq_range() calling in =
-devfreq_add_device()
->       PM / devfreq: Check governor before using governor->name
->
-> Uwe Kleine-K=C3=B6nig (1):
->       PM / devfreq: sun8i-a33-mbus: Simplify by using more devm functions
->
->  Documentation/ABI/testing/sysfs-class-devfreq |   9 +
->  drivers/devfreq/Kconfig                       |  11 +
->  drivers/devfreq/Makefile                      |   1 +
->  drivers/devfreq/devfreq.c                     |  23 +-
->  drivers/devfreq/governor_userspace.c          |   6 +-
->  drivers/devfreq/hisi_uncore_freq.c            | 658 ++++++++++++++++++++=
-++++++
->  drivers/devfreq/sun8i-a33-mbus.c              |  38 +-
->  include/linux/devfreq.h                       |   4 +
->  8 files changed, 704 insertions(+), 46 deletions(-)
->  create mode 100644 drivers/devfreq/hisi_uncore_freq.c
+Nit: I suggest changing this to an enum since they are related, and
+also because these are artificial (unrelated to hardware values).
 
-Pulled, thank you!
+Otherwise,
+
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+>  #define LVTS_MSR_READ_TIMEOUT_US       400
+>  #define LVTS_MSR_READ_WAIT_US          (LVTS_MSR_READ_TIMEOUT_US / 2)
+> @@ -207,6 +212,10 @@ static const struct debugfs_reg32 lvts_regs[] =3D {
+>         LVTS_DEBUG_FS_REGS(LVTS_EDATA01),
+>         LVTS_DEBUG_FS_REGS(LVTS_EDATA02),
+>         LVTS_DEBUG_FS_REGS(LVTS_EDATA03),
+> +       LVTS_DEBUG_FS_REGS(LVTS_ATP0),
+> +       LVTS_DEBUG_FS_REGS(LVTS_ATP1),
+> +       LVTS_DEBUG_FS_REGS(LVTS_ATP2),
+> +       LVTS_DEBUG_FS_REGS(LVTS_ATP3),
+>         LVTS_DEBUG_FS_REGS(LVTS_MSR0),
+>         LVTS_DEBUG_FS_REGS(LVTS_MSR1),
+>         LVTS_DEBUG_FS_REGS(LVTS_MSR2),
+> @@ -621,6 +630,13 @@ static int lvts_sensor_init(struct device *dev, stru=
+ct lvts_ctrl *lvts_ctrl,
+>                 LVTS_IMMD3(lvts_ctrl->base)
+>         };
+>
+> +       void __iomem *atp_regs[] =3D {
+> +               LVTS_ATP0(lvts_ctrl->base),
+> +               LVTS_ATP1(lvts_ctrl->base),
+> +               LVTS_ATP2(lvts_ctrl->base),
+> +               LVTS_ATP3(lvts_ctrl->base)
+> +       };
+> +
+>         int i;
+>
+>         lvts_for_each_valid_sensor(i, lvts_ctrl_data) {
+> @@ -656,8 +672,20 @@ static int lvts_sensor_init(struct device *dev, stru=
+ct lvts_ctrl *lvts_ctrl,
+>                 /*
+>                  * Each sensor has its own register address to read from.
+>                  */
+> -               lvts_sensor[i].msr =3D lvts_ctrl_data->mode =3D=3D LVTS_M=
+SR_IMMEDIATE_MODE ?
+> -                       imm_regs[i] : msr_regs[i];
+> +               switch (lvts_ctrl_data->mode) {
+> +               case LVTS_MSR_IMMEDIATE_MODE:
+> +                       lvts_sensor[i].msr =3D imm_regs[i];
+> +                       break;
+> +               case LVTS_MSR_FILTERED_MODE:
+> +                       lvts_sensor[i].msr =3D msr_regs[i];
+> +                       break;
+> +               case LVTS_MSR_ATP_MODE:
+> +                       lvts_sensor[i].msr =3D atp_regs[i];
+> +                       break;
+> +               default:
+> +                       lvts_sensor[i].msr =3D imm_regs[i];
+> +                       break;
+> +               }
+>
+>                 lvts_sensor[i].low_thresh =3D INT_MIN;
+>                 lvts_sensor[i].high_thresh =3D INT_MIN;
+> @@ -907,7 +935,7 @@ static void lvts_ctrl_monitor_enable(struct device *d=
+ev, struct lvts_ctrl *lvts_
+>         u32 sensor_map =3D 0;
+>         int i;
+>
+> -       if (lvts_ctrl->mode !=3D LVTS_MSR_FILTERED_MODE)
+> +       if (lvts_ctrl->mode =3D=3D LVTS_MSR_IMMEDIATE_MODE)
+>                 return;
+>
+>         if (enable) {
+> --
+> 2.39.5
+>
+>
 
