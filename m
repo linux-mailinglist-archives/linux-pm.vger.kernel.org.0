@@ -1,158 +1,111 @@
-Return-Path: <linux-pm+bounces-31214-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31210-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF948B0C550
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 15:36:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DEADB0C493
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:57:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E490816B767
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 13:36:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 532EE5424B1
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E771607A4;
-	Mon, 21 Jul 2025 13:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998D52D6418;
+	Mon, 21 Jul 2025 12:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="QO/ILNeI";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="lmstuex2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RjTTJYCm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21DE28F53F;
-	Mon, 21 Jul 2025 13:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.219
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753104987; cv=pass; b=VMJ+4IjtgvBf/7azjdkjh8VTNDV2c12F7AsSD+vIcIKrXFTU/agupHyTrco9v086Kfy3tco9AeVydwZbxelDnC6eNos4no0hcOfjXk6XZ7eJ3gJ8zaoiDT2DbhtSGB2xKzCJarXGVd6piEprUhj5be0Qz1rrthWxEeOCzLRFXa8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753104987; c=relaxed/simple;
-	bh=35cYQVm4zLLoIB57342iho+QScl4DbuVrkRFPA2X2eg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gS4Tf2N9DGxbKNa8Yp7cuRCW3OiE6g2z031aLKT5Qqk0/kTL+KYSHfT/UMB0Gs6iQ3mLYPSNIKCIjiCycZutkWZAnqQkH7eVe6Xzg0xNMp7ojzTmM7Dqfw58taa/uxdB8eo0eu2XLcxMJQe795PFJU919zwx9tkMg65DEvtfLPc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=QO/ILNeI; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=lmstuex2; arc=pass smtp.client-ip=81.169.146.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1753101976; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=mJh1WY17HpmgjV7HDUlAP1Bh/BhPBIW+FHPa7axDyS16/jnrHUh+M5meG6w6lPuYK6
-    sqZKVqXkrF94GWIj2tHOx2axEl2NmeJ+7lF0YhHxh407iTKVoaTFRLxVfkwd7vwcqXM9
-    xHBbFZI6gazUWmYo9ImCEcsmlRHy4ky72EVnwi6kc+IZU2gwhXRn5XnDhJkxqQM8OgG1
-    lRp9IXEC3c/mZ9UmUQZl9l56lnDvBQyj8Hr0+YKs8SjiEr5nLY6kdQIiGCfi1OIGM44E
-    qW4kJB4IPxzAL33GigOG2QOxMc0mQHoWQBw8+9mvQjxedrycpQg339ByWiauK5dfgQLx
-    PWvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1753101976;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=T0De6Am+nfTD1/T8qRHYoVSqpbNHuCwxHjsiXItzmwA=;
-    b=fu9jHWa5LH3jxD+pm56rfm8wZzBtHYnBvIVMUzAsCTwyQ6udgWK2AUoLybSzwly7vB
-    Ceq1ZDDae/zJIKY4jzPC0K6i9KI39e3cChuppC2u6ys3wf8JjcMpQGSDK/vDogMuRcAd
-    cvU5mXkZRQIVugLd1WtqMkGwjYbzuoXLDit357VL+JwT1MHm4IB2RGJHaLQvoRFPmkTS
-    hKze1ilnAiqDlG2Y6szx003mlLxvqh7stB1Aflc8x3Cx87NiqG+QHEk83jvHuMlfqRfz
-    RmPHlJMnUePikJRm+Ihacd3k60Z1vBLZP2DlcLALNvGW46fqtaoQz+ax8pII8b3SXiKx
-    WCgA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1753101976;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=T0De6Am+nfTD1/T8qRHYoVSqpbNHuCwxHjsiXItzmwA=;
-    b=QO/ILNeIWdVFZisaq+VoQcWIoYG7Bq7fnMJEPqqAa0GIn+5mfy2HoZ9K7q+ZaX4/aN
-    JuhCf/76n2RhkoNc6qevV1BSpToxZnKtPj7ti8az/8U8UoidqKQrZ3WbRS4+IbqPUORm
-    rE13eQd7uH7yTJrOjkMbh2VFdG9hGehMdMK2IVgw96lnbRkmsXmgYwch4cvaGGY3a+KA
-    j9cz+cXEuc9wejUUoAaZBnjaqliwiq7oecQh6ohQ68lZoTt5mSOfPx1u9zwEHeMnUL5+
-    p98J5XKSIMezodOWf0IZ+SGgw14wKyJK4TI7Ap4f+IoW9jqu71CSHzw+fRIb57bS4DxG
-    NCXQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1753101976;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=T0De6Am+nfTD1/T8qRHYoVSqpbNHuCwxHjsiXItzmwA=;
-    b=lmstuex2SU9y8xFDtxbkpKSm/E/OCCSjWALYFN/SgXMr84M7OUd5XWnD2zIapNrpxE
-    0NIs9kGKMacDTwAH0lDQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9qVpwcQVkPW4I1HrVi5pbyciNjWBMoAEyQro/p8z/o50zTNRbUr3m"
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id Q307a416LCkFEp5
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 21 Jul 2025 14:46:15 +0200 (CEST)
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-To: Sebastian Reichel <sre@kernel.org>,
-	Jerry Lv <Jerry.Lv@axis.com>
-Cc: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	letux-kernel@openphoenux.org,
-	stable@vger.kernel.org,
-	kernel@pyra-handheld.com,
-	andreas@kemnade.info,
-	"H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH] power: supply: bq27xxx: fix error return in case of no bq27000 hdq battery
-Date: Mon, 21 Jul 2025 14:46:09 +0200
-Message-ID: <bc405a6f782792dc41e01f9ddf9eadca3589fcdc.1753101969.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.50.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304332D63F3;
+	Mon, 21 Jul 2025 12:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753102483; cv=none; b=NMRcY8G3y985wG36Ox8228emlqQv15riW0p3cQdXsYC3l6aM2gQcOtPXHNVWUPQj0u3ie/RmTas82V0zvqwBEUyEIQYqloagl6ZZU8GffHqvb2ACNHH1kgLgTT4CWmVE7Bs2VioFBe0IGNFqvjfDpT9c/4HOXYpGfmQc9/yYCh0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753102483; c=relaxed/simple;
+	bh=Bq5VgfjTkqyHZmMsa4CuFn3fXsUBDjAcxmYxO2xVUQQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u6SKVCc1VJuQ8QStNszNLawe51ZC2jZhlkFwPiKdpW0DDlMNETS1xRzD2yKG9EugOGh8wKsQaLb17CwLAdo13B0COhWxmD90KRv5z7WK6ADBKrmXxLbvmyoQWTaL1z2COFCsGaSp1GFGIF9rACDiJDBr7T2CRZHKSo384GGjcUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RjTTJYCm; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b34dde96cbfso242553a12.2;
+        Mon, 21 Jul 2025 05:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753102481; x=1753707281; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bq5VgfjTkqyHZmMsa4CuFn3fXsUBDjAcxmYxO2xVUQQ=;
+        b=RjTTJYCmZ/NPbd2kt1bt168pUdPJ9FFWUggiAluPZaUwSno8aldNeim5NoYXnw7JLs
+         +weY5AEIKikwhMpsYcCUUum8ZEyez1OFF3bykCAw8ZTcC87VDCXqZaTiWugoejrdIFx/
+         tqjTcqdo6nRIQuqjIhDjBM8AsDaCzFbb4Iwz8zJXbN2ZsqOGe45AILWxmSUofKJPOeWZ
+         u7e8IYfbrjrcoVB8ysxFpgS+fdqnwM5rRzNixGXX7FJMvv8NOz9wW190aGOxZfVA+MIC
+         lofYLT9dJzGhxddq+bLGJpqGekjSt+oT3tFbSxEUVTPbv+0UcmIA5qQpipxEce49A8Fh
+         eYRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753102481; x=1753707281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bq5VgfjTkqyHZmMsa4CuFn3fXsUBDjAcxmYxO2xVUQQ=;
+        b=JT2K6kQYGwrGD4NwutlrXribZ7Lgk9YzQvT0KdiupulbG4tJODtu4VdIA5/dR91gAC
+         b4qFi3Q6Th60cUjBf6SCHGtDwcQAN+yWUjK6e7hz6rRzjYrNxdCYWLZ13A8rPEHMSU7H
+         LTEo+NfjJhTemZ8gbvA1vjvZnbBXESnznyGz5WIPaGJqbZPzDu6M3dySl2elNfzPwtNe
+         jDqO4CUaD0XjHGVpcZrFLedmU5nH5vppz8vkp+XZQQyUyRg4pjaRBA264dY5HMF1gPX3
+         aU39r0FowLkNzWa7zPITxmTO47anZCVnRwdI4LAxfuXwnYkcF91V2sPY7RgpcKg0RrVi
+         u6TA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMYpmBZ6tS19HodDEZnGseI3Hj++IBLnhOL0SCNaGeokAc+qeGGHxmC8fsztE8q4y+VfKw1m5QdU0TBvXn7pI=@vger.kernel.org, AJvYcCVzzjCI1jFSLdlIZUrIHYbAzWRY9CrxQFeGLgYPL6+gK2+dXqQ+Tb0z+yM1Ml/2yIL0YbZReIqwYahHPAo=@vger.kernel.org, AJvYcCX4z1i9mDeKgT/ECgKji/RH85W9DPHtXWic4Up3SGFqmzJ6tADOybwLMZNBsbl5zB0gw/a+b9wbe1o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwA3KnFRfq2qLB2GhP1qyuuHRt06DaSu1QW3gQMltXeb3MAys3F
+	Pz4/vI2t1Xl0W48AOnErbCNfw/F9NfsHUTjyzVaFo/W846rDEA/ZP7p2rDeL5FMy7CqlJafVOUS
+	nK3lnie4kmtHQyTFBlIPK48IxF1ko/fw=
+X-Gm-Gg: ASbGncsUxJ+bS99blCsMhmOHfs0l1FTZfpixRybTeRXUsn1kh1jUHAue0qvkTKxVYzb
+	Yxd2sT04emAye5I/saK959xinuaw37qghbwVQ/HDf9Qw3QbPA7iRprafNimTIw2v6xOmNatZlpx
+	XZn9aVe5qONRY88dsa5tjOED3nGYomVC9D3FDFCS2q3uNqTLRiuJ55wF+Rqih+Yn0LUfkQQbUMO
+	N9Nvb9MzRIC2B/BkZk=
+X-Google-Smtp-Source: AGHT+IFI0uNUbtO1EL18MgqcISBuZun5VUryvqrsQhtAKtldt6P/mlWmjlPr/GgmBjbnB7SvG/K7ChJXEi849ooHmqA=
+X-Received: by 2002:a17:90b:562c:b0:312:25dd:1c8a with SMTP id
+ 98e67ed59e1d1-31c9e6e8348mr11443694a91.2.1753102481364; Mon, 21 Jul 2025
+ 05:54:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com>
+ <20250704-core-cstr-prepare-v1-1-a91524037783@gmail.com> <20250721073717.i6hr4iesfupzvtwf@vireshk-i7>
+In-Reply-To: <20250721073717.i6hr4iesfupzvtwf@vireshk-i7>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 21 Jul 2025 14:54:29 +0200
+X-Gm-Features: Ac12FXy9X7WoYLkMFLbQ__okKUv8h09D5Y5ZLeDybojK9NFQlmOXBw1vbHf4mSI
+Message-ID: <CANiq72mZxcwDX2X3RfRpHzqkmU6GBVadKPLJYF03Hj14O2x4PA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] rust: kernel: remove `fmt!`, fix clippy::uninlined-format-args
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Tamir Duberstein <tamird@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since commit
+On Mon, Jul 21, 2025 at 9:37=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-commit f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when busy")
+Thanks Viresh -- I will add this one if I rebase, since Stephen
+already solved a conflict with it (I should have pinged earlier I
+guess, sorry; I thought you guys didn't Ack so far since it was
+trivial, but thanks to you both for them).
 
-the console log of some devices with hdq but no bq27000 battery
-(like the Pandaboard) is flooded with messages like:
-
-[   34.247833] power_supply bq27000-battery: driver failed to report 'status' property: -1
-
-as soon as user-space is finding a /sys entry and trying to read the
-"status" property.
-
-It turns out that the offending commit changes the logic to now return the
-value of cache.flags if it is <0. This is likely under the assumption that
-it is an error number. In normal errors from bq27xxx_read() this is indeed
-the case.
-
-But there is special code to detect if no bq27000 is installed or accessible
-through hdq/1wire and wants to report this. In that case, the cache.flags
-are set (historically) to constant -1 which did make reading properties
-return -ENODEV. So everything appeared to be fine before the return value was
-fixed. Now the -1 is returned as -ENOPERM instead of -ENODEV, triggering the
-error condition in power_supply_format_property() which then floods the
-console log.
-
-So we change the detection of missing bq27000 battery to simply set
-
-	cache.flags = -ENODEV
-
-instead of -1.
-
-Fixes: f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when busy")
-Cc: Jerry Lv <Jerry.Lv@axis.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- drivers/power/supply/bq27xxx_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 93dcebbe11417..efe02ad695a62 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1920,7 +1920,7 @@ static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
- 
- 	cache.flags = bq27xxx_read(di, BQ27XXX_REG_FLAGS, has_singe_flag);
- 	if ((cache.flags & 0xff) == 0xff)
--		cache.flags = -1; /* read error */
-+		cache.flags = -ENODEV; /* read error */
- 	if (cache.flags >= 0) {
- 		cache.capacity = bq27xxx_battery_read_soc(di);
- 
--- 
-2.50.0
-
+Cheers,
+Miguel
 
