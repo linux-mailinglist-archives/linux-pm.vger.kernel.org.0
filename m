@@ -1,110 +1,140 @@
-Return-Path: <linux-pm+bounces-31159-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31160-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 913DFB0BDC3
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 09:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE66B0BDD2
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 09:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C25318865C2
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 07:36:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F276A188890A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 07:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECB8D283FD9;
-	Mon, 21 Jul 2025 07:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B449B285054;
+	Mon, 21 Jul 2025 07:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+wuZtKU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w9BZ1EbZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44AA126BF7;
-	Mon, 21 Jul 2025 07:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E0D284B3F
+	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 07:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753083387; cv=none; b=QcS7MLWsS30eU2OqZwEkacWeLurQGKzC1WuSmm3ctnhGoVs4g3rPLCTu4s/w/7I33HWw4OqHdHRWLC5NjdTD3V5cCmhPtBS/BDx8IqxTluYuMlyZ3xApdA0aL1EJqkfOGbwN+g04wiM9chbZLZpD88Q6aAG+6+c2H0Z939oX+R4=
+	t=1753083442; cv=none; b=gHafhc6+gDytpNF7ehTp8Drz8ILvFGYNQrSSpHfe9jvFDuMbXUWYiUVgiiNNzYg2axcFYSoNWuZ1C7ErmVo9MUHqAXbkVgEw7atyPRvplYuvc7/V3M7hcls4a66nPYD3a2M/d+JcC/WhYe6u61xYKagH0myfwYjh60Wgq/SZW2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753083387; c=relaxed/simple;
-	bh=nkI6N66P9qYEFq1N9Ho3IcR4AN93BL7mAD/A7fTOcoE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e9tG+LL83NLEgc2SOPfaTNUQbAsI4fikpQQtAXJOISF2wfbYwiczYQCCVbjKXf93iWlbGljr36MTlXf+rlQQsOpeomGEoHqKmstu0SOGb0oFBMWdns68YYO+MowmCdwqR5nWnLBIyzXYKab26sJG//VeBElBtuzdJJLl44eWfls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+wuZtKU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8659CC4CEED;
-	Mon, 21 Jul 2025 07:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753083387;
-	bh=nkI6N66P9qYEFq1N9Ho3IcR4AN93BL7mAD/A7fTOcoE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=M+wuZtKUR5V404eSLlmMhp+IvYraPKevOeeUqKg98S349HoeDLkVMy4cQucR0WaN3
-	 T9aRAQ6RIBtGS8M35/kp14SZm57YGzfz3IdSYXBooDPts9aB2LcxR64Jyd/8blG4/3
-	 H8psPcX3aj833/2tG8J15iNZT2brUztQjfspKMQ7d8hwCIdoN1D8CThCZVBW01SIcJ
-	 v/Mo99a9OtlUtXxPP1TAYaagu73lkMbnrMAhCt5ann2MOmB0tnMfYONJxFWYIPeDDg
-	 EqQywd54BVexEJ17kXGRX7y61lzDjYswRkym1UvUfZ/LFZxihvVh2DLGwq79OkxIJD
-	 Gqz/7msvXjhPA==
-Message-ID: <d8955532-9a3b-451f-b5c7-549cee7d749e@kernel.org>
-Date: Mon, 21 Jul 2025 10:36:19 +0300
+	s=arc-20240116; t=1753083442; c=relaxed/simple;
+	bh=Kgi56yPbZYI58ok8oxCLNd5/43u9mGkk0C1PxCt4lLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FnVZ3b/77n+H1tSXeOG8y7mj4960RRVkq3NO7sbgyKd5YXkF8P+CDJsQ2pxpn8/6UMdv7i1VhUy9J5ZLEnR2iL3Nhk3knZFKrmH4+q9lv7nNzQQtjnJB8Dwo+sc2H/Cycvww3IvCC/qkxFtyS+KVp4D29lP9uU3diSvFLOEt1Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w9BZ1EbZ; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-237311f5a54so30468055ad.2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 00:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753083440; x=1753688240; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AW7C0Fw+OUlttGGnAPG+jvEboZ7WFaopv/dP3AY9iLI=;
+        b=w9BZ1EbZHIYy6Uo0SI9IpYdwLxYfrq7y+jNUnSFDO8FyzRcFEnJS1uHbTX18QK63Ge
+         Qwd7Stz5tU+TwvxMVg3hlee7R2dmp8BQ0m0SBqfqjKqP3usdwC30r9xVjH+7lZTy+UCJ
+         BJdRfSMkz0vXXDZbfuy359xH5Mn9whuJOu+BpmZaWgLzlD1tJt2Ke1A47p8YWdu++tJj
+         eS2E7B1kMJn5hy5ZRHiomRfvI9oxNUvcOi2+kwuSUwFkyXru6gvE+DHtQamKJS4zHnH5
+         M2DUY0CqnLM/Gt9X529iaK4areMtHrUjINlmJHXCOrfjis0D3bpLjwYSARh6Iwux7qhx
+         mmGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753083440; x=1753688240;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AW7C0Fw+OUlttGGnAPG+jvEboZ7WFaopv/dP3AY9iLI=;
+        b=VckNrDzLvVCvhzoDsvWcIA+bHKL8Qu0g8/H64WJNb2IhXIW4OG2JyZsQeDq3O339pS
+         B6hb54XtNI4SxYMCmvjJC2+hJYmLH+ey5BSixW6Bb3sVnadyOC6urHX0x3+aA7r9Z482
+         P4SPeDZP7eYxtnRlvAQ5baTvN5Ck7MBUycO2ejptuv0LGCIjijdxsNxBMDQzoy9DRza2
+         fvhubTStw/+sX2wcbizBc/MZCgZBuITQsNNGHw2+wGZoLc67Lvi/zBqTL3s3oI5MgbSo
+         dcDEhR37RAs8rHjVnzv01239plFb1XKjI8ohcI9RYEi5LF8hcogtfjKNlFX4RXhzs1lJ
+         1A4A==
+X-Forwarded-Encrypted: i=1; AJvYcCW7NpUUz4eWyzPH9jEs0mVHBBAK/izMAhj/hxgaeiAgE14RuBkOdoWmcf3GDmF1UrjptYx8KEHQcA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlbBoWOct1bx6+fcyYwqjdFKYc+Tap/rqKUs8TA90ebM1kOmmo
+	B6kk9e27VKH5xxdPt8/c4rPeTkpZHxI8WzFX5RwtFV/lkNviv0K65V+i0eOI5teWLSs=
+X-Gm-Gg: ASbGncve/5q0hI0Ig5P+7KM22W5lNsy3VZhSRlEFFKiAqNtl5BLJQDNecbTQBaZMe6w
+	v0x6aGXvrK06YCee915fb5PGEEIp48pS/XedFuKC1mLJ0rrQggb7gXriVZWCJvBWi/V9q7niUKc
+	25b04jCa8KRwRYrnHmay/ikMYhDo5M8q14dmfF8hGorfvWOV/bUkOrsnEw/IWnAJPpfsEZC2pRA
+	WbxcDJWGfrMZWCbIcbWj1sF+i12Xpq7g1nbDVC7mbu4i4DqINFMdc3D1NNM8x36ptTWeYc/YDgm
+	TtJPKXgX/9WkOEDoCrvd1arBt3U13LoyFjsabJlxn2/V+WyI8E96qAsSwFkJL4C4KSsrguQFAxx
+	iQMfw1sRuoN1QbC+gTaE4prk=
+X-Google-Smtp-Source: AGHT+IFk3DmrxLSOuu1QML7M9aZcW/M1lwjmHi2A/P/8p7kUrsmSSAAA7m474B7f7eHzVA50L8YW7Q==
+X-Received: by 2002:a17:903:1a45:b0:234:c2e7:a102 with SMTP id d9443c01a7336-23e2576c1bfmr262018575ad.43.1753083440496;
+        Mon, 21 Jul 2025 00:37:20 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b60ec88sm52502155ad.65.2025.07.21.00.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jul 2025 00:37:19 -0700 (PDT)
+Date: Mon, 21 Jul 2025 13:07:17 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH 1/6] rust: kernel: remove `fmt!`, fix
+ clippy::uninlined-format-args
+Message-ID: <20250721073717.i6hr4iesfupzvtwf@vireshk-i7>
+References: <20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com>
+ <20250704-core-cstr-prepare-v1-1-a91524037783@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] interconnect: qcom: Add Milos interconnect
- provider driver
-To: Luca Weiss <luca.weiss@fairphone.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250709-sm7635-icc-v3-0-c446203c3b3a@fairphone.com>
- <20250709-sm7635-icc-v3-2-c446203c3b3a@fairphone.com>
-Content-Language: en-US
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20250709-sm7635-icc-v3-2-c446203c3b3a@fairphone.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250704-core-cstr-prepare-v1-1-a91524037783@gmail.com>
 
-Hi Luca,
-
-On 7/9/25 4:14 PM, Luca Weiss wrote:
-> Add driver for the Qualcomm interconnect buses found in Milos based
-> platforms. The topology consists of several NoCs that are controlled by
-> a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
+On 04-07-25, 16:14, Tamir Duberstein wrote:
+> Rather than export a macro that delegates to `core::format_args`, simply
+> re-export `core::format_args` as `fmt` from the prelude. This exposes
+> clippy warnings which were previously obscured by this macro, such as:
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>     warning: variables can be used directly in the `format!` string
+>       --> ../drivers/cpufreq/rcpufreq_dt.rs:21:43
+>        |
+>     21 |     let prop_name = CString::try_from_fmt(fmt!("{}-supply", name)).ok()?;
+>        |                                           ^^^^^^^^^^^^^^^^^^^^^^^
+>        |
+>        = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+>        = note: `-W clippy::uninlined-format-args` implied by `-W clippy::all`
+>        = help: to override `-W clippy::all` add `#[allow(clippy::uninlined_format_args)]`
+>     help: change this to
+>        |
+>     21 -     let prop_name = CString::try_from_fmt(fmt!("{}-supply", name)).ok()?;
+>     21 +     let prop_name = CString::try_from_fmt(fmt!("{name}-supply")).ok()?;
+>        |
+> 
+> Thus fix them in the same commit. This could possibly be fixed in two
+> stages, but the diff is small enough (outside of kernel/str.rs) that I
+> hope it can taken in a single commit.
+> 
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > ---
->   drivers/interconnect/qcom/Kconfig  |    9 +
->   drivers/interconnect/qcom/Makefile |    2 +
->   drivers/interconnect/qcom/milos.c  | 1837 ++++++++++++++++++++++++++++++++++++
->   3 files changed, 1848 insertions(+)
-> 
-[..]
-> +
-> +static struct qcom_icc_qosbox qhm_qup1_qos = {
-> +	.num_ports = 1,
-> +	.port_offsets = { 0xc000 },
-> +	.prio = 2,
-> +	.urg_fwd = 0,
-> +	.prio_fwd_disable = 1,
-> +};
+>  drivers/cpufreq/rcpufreq_dt.rs    |  3 +--
+>  rust/kernel/opp.rs                |  2 +-
 
-Thanks for adding QoS!
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> +
-> +static struct qcom_icc_node qhm_qup1 = {
-> +	.name = "qhm_qup1",
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.qosbox = &qhm_qup1_qos,
-> +	.link_nodes = { &qns_a1noc_snoc, NULL },
-> +};
-
-It's very nice that you switched to the dynamic IDs, but please use the
-current style of links (like in v1), as the the NULL terminated lists
-are not merged yet. All the rest looks good!
-
-Thanks,
-Georgi
+-- 
+viresh
 
