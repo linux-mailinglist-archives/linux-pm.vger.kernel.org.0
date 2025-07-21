@@ -1,541 +1,197 @@
-Return-Path: <linux-pm+bounces-31202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E157B0C40D
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:26:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE602B0C43E
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9ECAD3BDF47
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:26:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D2C73A5D57
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B302C374B;
-	Mon, 21 Jul 2025 12:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9593F2D3EE5;
+	Mon, 21 Jul 2025 12:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ubi3UtmA"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WbVDa2fG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227983C0C
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 12:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD952D3EC4;
+	Mon, 21 Jul 2025 12:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753100781; cv=none; b=m71ddLitSrqciU1+Z1J7E9ZHXRRWS5xskHHOoMRhXC60M4RVEcCiTYUTqz3XR3czVx+2Kg07kw1h73DVcmcBXXqERWAGzENsqZVLytmkW0SL5zA/KeiwsvyeBnrfDOGqiHQfnVZ6lTRqoAF1SP2HF4jG+xoWiwS548jmcFY3AEA=
+	t=1753101707; cv=none; b=F4N1WGRl4lPnRVZmRU6tMchm6weSToTexVbFBybQtijHhEwZSCMg52SAsK423Q+aZCRf7p9io/nZjfWsoiwZ5hP/1JqpZJOKGTbkB/eahcU8drdnwa6h4nghMzC9XrAYaDMJYd1dHI+U7r6SeC9OywIIfb5GAmJGnzelspv2eT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753100781; c=relaxed/simple;
-	bh=1nO0/AUtTO9W7a7z397FscjTmlxRjtucvahWVj/hqzs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B6vY9hmVhjH4dtSKvn0HMUFHBdPq3ZWPLkR4AMvEOAYzfjmOYEvJGQR6+Ox1jz6oT35H3vTR9kkLTqmCFSg51hU9o+RZQYKsVqk5hpT2g20UtAdu1y20yxgAZz6ppylhJlljUxt03xK20SOPQRHiugE15161mOhEYEmLcmrJDuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ubi3UtmA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94276C4CEF5;
-	Mon, 21 Jul 2025 12:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753100780;
-	bh=1nO0/AUtTO9W7a7z397FscjTmlxRjtucvahWVj/hqzs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ubi3UtmAMeKpL8owtDDa9jqWFV+IZ3BYloIVM2gdz0lHC+09d4Vot9C3mrNXor8Z1
-	 QWjIn+LbFipx6m9a3McPn01sOY8SJCapm00NOHGEpHzZn0P6B7Q/gdhJTEhlohk3DM
-	 ejr8815+PbKgHBLgwUJHJgJfAGz6gwjXOzh2jdxNozukpEKvUG0wEnnRR4bUqGdrLV
-	 VHOv/pTlNHWXc9DjgpLotf9wGahdtg9pjRePEJv5RMfeLtWA1tLkJQKo26feZMubEy
-	 Cpxs8J0HxmNvXRP0LbooYsunHzjMLos8P5JOSgTtcgnsy21/RH34eTSNVqLTFsQ0zj
-	 p1C8tZrXOU8wQ==
-From: Hans de Goede <hansg@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Hans de Goede <hansg@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v3 5/5] power: supply: Add new Intel Dollar Cove TI battery driver
-Date: Mon, 21 Jul 2025 14:26:04 +0200
-Message-ID: <20250721122605.46724-6-hansg@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250721122605.46724-1-hansg@kernel.org>
-References: <20250721122605.46724-1-hansg@kernel.org>
+	s=arc-20240116; t=1753101707; c=relaxed/simple;
+	bh=yI/mzFx2WGKaNJf2JxXpZ1YojEPx8LvSZB2nNfi8ZcI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S7BxxHYLJ6oa7KIZSQO6pptbpXi1CbJxzixBsdiFKDhBOZnNamElHHb2gvBnpuG5qCcua/FbyjrRV510OaWN0S9s9dBk2lLzqyD9RoRzlIAIeFCigEqLUjAjJpzkh93zZ3Qpzjgr2BnHh+NmaXyH4CINGFDaJGV8uCne+n7Nha0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WbVDa2fG; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56LABHCb005502;
+	Mon, 21 Jul 2025 12:41:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=kfWWTca2fzeLKVm+Cn6N8r
+	ec5popA7lBheSLmQOvEDY=; b=WbVDa2fGPhdEaigxO7vfQS3+8CBwHS2ZxPFc9e
+	BU8PoUTc+bAkZppUOf385fJ2sgbx7YdXcLfuIjQZTE+QJCOfxZoux+F6qOEBfrs0
+	IfXj5nbnzK4osh0g25+OAqQ7V6GUAwMsq0demlrfXXcOPHEVy2+7145JZtr1FyOU
+	LL7NLGCuafsOHBo8m22jXZQ+XJpBlIIQjmFI2ziFS7J9sR9Hsa7NfmKxqJfW4udI
+	h0/jTNacqQP4tKKZ71xoVfludTvQ5fm1Mr9/vrqrHjNFQ/PuLTlCo6Mo1dM5YSEd
+	FRehu8ZW2ZBXjAMDkJjMrIjQWmBRSUSOVGBqTtCxIYKKfnPg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48047q53rp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 21 Jul 2025 12:41:36 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56LCfZ0p013897
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 21 Jul 2025 12:41:35 GMT
+Received: from zhonhan-gv.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Mon, 21 Jul 2025 05:41:32 -0700
+From: Zhongqiu Han <quic_zhonhan@quicinc.com>
+To: <rafael@kernel.org>, <lenb@kernel.org>, <pavel@kernel.org>,
+        <tony.luck@intel.com>, <reinette.chatre@intel.com>,
+        <Dave.Martin@arm.com>, <james.morse@arm.com>, <ulf.hansson@linaro.org>,
+        <amit.kucheria@linaro.org>, <christian.loehle@arm.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_zhonhan@quicinc.com>
+Subject: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and resctrl integration
+Date: Mon, 21 Jul 2025 20:40:59 +0800
+Message-ID: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIxMDExMiBTYWx0ZWRfX/scfzge+e47J
+ IlkLJrd/4AEuEq1KttmmXjSGUAOCHWt4g/HUFo0tDoLrbuFQwdqOO88EpF/rEYecnifgQNEksAO
+ ErcWivDJ28ewAJ6moN49R4nBXp5skMAhK6CRuwtp4ZPj6TLk9rNpk6dbY515iXBlMxmi22/HdMY
+ GZDO2hD2IDL1malTXUdAJrdRXZiIALT69CVdKPsebLpK9K6NdaiGd1NhC8VUsNjkg6HuqK2i3im
+ nlv43tDQ3NVuY4xtKdxoYDIl9VNBvmHJSDDYy3Z9mEVvgcflexeItJNJErk2FWUb7gaQ0GuxEIi
+ +20HhQJY1uqpQ6QkJaywOG59hwgXAPogPEItElMX3pJ+HCU3boNNp4TIfGyBVP+blYQaCHfp/87
+ sfwihHP1/x5H/dI2pL0ioxILcLT7ywi8XAAnqveBF63iGJlCddcL5qKa//YiTBvoNc89mDEJ
+X-Proofpoint-ORIG-GUID: npN9tD5ObsEl9tBMjeecRPXBVNA5RG5w
+X-Proofpoint-GUID: npN9tD5ObsEl9tBMjeecRPXBVNA5RG5w
+X-Authority-Analysis: v=2.4 cv=IrMecK/g c=1 sm=1 tr=0 ts=687e3580 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8
+ a=eauDvVCzbnmlXtCe9pQA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-21_03,2025-07-21_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 clxscore=1011
+ priorityscore=1501 spamscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507210112
 
-Intel has 2 completely different "Dollar Cove" PMICs for its Bay Trail /
-Cherry Trail SoCs. One is made by X-Powers and is called the AXP288.
+Hi all,
 
-The AXP288's builtin charger and fuel-gauge functions are already
-supported by the axp288_charger / axp288_fuel_gauge drivers.
+This patch series introduces support for CPU affinity-based latency
+constraints in the PM QoS framework. The motivation is to allow
+finer-grained power management by enabling latency QoS requests to target
+specific CPUs, rather than applying system-wide constraints.
 
-The other "Dollar Cove" PMIC is made by TI and does not have any clear TI
-denomination, its MFD driver calls it the "Intel Dollar Cove TI PMIC".
+The current PM QoS framework supports global and per-device CPU latency
+constraints. However, in many real-world scenarios, such as IRQ affinity
+or CPU-bound kernel threads, only a subset of CPUs are
+performance-critical. Applying global constraints in such cases
+unnecessarily prevents other CPUs from entering deeper C-states, leading
+to increased power consumption.
 
-The Intel Dollar Cove TI PMIC comes with a coulomb-counters with limited
-functionality which is intended to work together with an always on
-micro-controller monitoring it for fuel-gauge functionality.
+This series addresses that limitation by introducing a new interface that
+allows latency constraints to be applied to a CPU mask. This is
+particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
+embedded systems where power efficiency is critical for example:
 
-Most devices with the Dollar Cove TI PMIC have full-featured fuel-gauge
-functionality exposed through ACPI with the information coming from either
-the embedded-controller or a separate full-featured full-gauge IC.
+                        driver A       rt kthread B      module C
+  CPU IDs (mask):         0-3              2-5              6-7
+  target latency(us):     20               30               100
+                          |                |                |
+                          v                v                v
+                          +---------------------------------+
+                          |        PM  QoS  Framework       |
+                          +---------------------------------+
+                          |                |                |
+                          v                v                v
+  CPU IDs (mask):        0-3            2-3,4-5            6-7
+  runtime latency(us):   20             20, 30             100
 
-But some designs lack this, add a battery-monitoring driver using the
-PMIC's coulomb-counter combined with the adc-battery-helper for capacity
-estimation for these designs.
+The current implementation includes only cpu_affinity_latency_qos_add()
+and cpu_affinity_latency_qos_remove() interfaces. An update interface is
+planned for future submission, along with PM QoS optimizations in the UFS
+subsystem.
 
-Register definitions were taken from kernel/drivers/platform/x86/dc_ti_cc.c
-from the Acer A1-840 Android kernel source-code archive named:
-"App. Guide_Acer_20151221_A_A.zip"
-which is distributed by Acer from the Acer A1-840 support page:
-https://www.acer.com/us-en/support/product-support/A1-840/downloads
+Patch1 introduces the core support for CPU affinity latency QoS in the PM
+QoS framework.
 
-Signed-off-by: Hans de Goede <hansg@kernel.org>
----
-Changes in v3:
-- Switch to iio_read_channel_processed_scale() which moves the Vbat ADC
-  calibration handling and scaling to the ADC driver
----
- drivers/power/supply/Kconfig               |  12 +
- drivers/power/supply/Makefile              |   1 +
- drivers/power/supply/intel_dc_ti_battery.c | 394 +++++++++++++++++++++
- 3 files changed, 407 insertions(+)
- create mode 100644 drivers/power/supply/intel_dc_ti_battery.c
+Patch2 removes redundant KERN_ERR prefixes in WARN() calls in the global
+CPU PM QoS interface. This change addresses issues in existing code and is
+not related to the new interface introduced in this patch series.
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index e33a5360d33a..72f3b2b4d346 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -247,6 +247,18 @@ config BATTERY_INGENIC
- 	  This driver can also be built as a module. If so, the module will be
- 	  called ingenic-battery.
- 
-+config BATTERY_INTEL_DC_TI
-+	tristate "Intel Bay / Cherry Trail Dollar Cove TI battery driver"
-+	depends on INTEL_SOC_PMIC_CHTDC_TI && INTEL_DC_TI_ADC && IIO && ACPI
-+	select ADC_BATTERY_HELPER
-+	help
-+	  Choose this option if you want to monitor battery status on Intel
-+	  Bay Trail / Cherry Trail tablets using the Dollar Cove TI PMIC's
-+	  coulomb-counter as fuel-gauge.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called intel_dc_ti_battery.
-+
- config BATTERY_IPAQ_MICRO
- 	tristate "iPAQ Atmel Micro ASIC battery driver"
- 	depends on MFD_IPAQ_MICRO
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index c85c5c441e0f..51e37e8bdeb3 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -42,6 +42,7 @@ obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
- obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+= samsung-sdi-battery.o
- obj-$(CONFIG_BATTERY_COLLIE)	+= collie_battery.o
- obj-$(CONFIG_BATTERY_INGENIC)	+= ingenic-battery.o
-+obj-$(CONFIG_BATTERY_INTEL_DC_TI) += intel_dc_ti_battery.o
- obj-$(CONFIG_BATTERY_IPAQ_MICRO) += ipaq_micro_battery.o
- obj-$(CONFIG_BATTERY_WM97XX)	+= wm97xx_battery.o
- obj-$(CONFIG_BATTERY_SBS)	+= sbs-battery.o
-diff --git a/drivers/power/supply/intel_dc_ti_battery.c b/drivers/power/supply/intel_dc_ti_battery.c
-new file mode 100644
-index 000000000000..457d23b689e9
---- /dev/null
-+++ b/drivers/power/supply/intel_dc_ti_battery.c
-@@ -0,0 +1,394 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Battery driver for the coulomb-counter of the Intel Dollar Cove TI PMIC
-+ *
-+ * Note the Intel Dollar Cove TI PMIC coulomb-counter is not a full-featured
-+ * autonomous fuel-gauge. It is intended to work together with an always on
-+ * micro-controller monitoring it.
-+ *
-+ * Since Linux does not monitor coulomb-counter changes while the device
-+ * is off or suspended, voltage based capacity estimation from
-+ * the adc-battery-helper code is used.
-+ *
-+ * Copyright (C) 2024 Hans de Goede <hansg@kernel.org>
-+ *
-+ * Register definitions and calibration code was taken from
-+ * kernel/drivers/platform/x86/dc_ti_cc.c from the Acer A1-840 Android kernel
-+ * which has the following copyright header:
-+ *
-+ * Copyright (C) 2014 Intel Corporation
-+ * Author: Ramakrishna Pallala <ramakrishna.pallala@intel.com>
-+ *
-+ * dc_ti_cc.c is part of the Acer A1-840 Android kernel source-code archive
-+ * named: "App. Guide_Acer_20151221_A_A.zip"
-+ * which is distributed by Acer from the Acer A1-840 support page:
-+ * https://www.acer.com/us-en/support/product-support/A1-840/downloads
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/bits.h>
-+#include <linux/bitfield.h>
-+#include <linux/cleanup.h>
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/iio/consumer.h>
-+#include <linux/mfd/intel_soc_pmic.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/timekeeping.h>
-+
-+#include "adc-battery-helper.h"
-+
-+#define DC_TI_PMIC_VERSION_REG		0x00
-+#define PMIC_VERSION_A0			0xC0
-+#define PMIC_VERSION_A1			0xC1
-+
-+#define DC_TI_CC_CNTL_REG		0x60
-+#define CC_CNTL_CC_CTR_EN		BIT(0)
-+#define CC_CNTL_CC_CLR_EN		BIT(1)
-+#define CC_CNTL_CC_CAL_EN		BIT(2)
-+#define CC_CNTL_CC_OFFSET_EN		BIT(3)
-+#define CC_CNTL_SMPL_INTVL		GENMASK(5, 4)
-+#define CC_CNTL_SMPL_INTVL_15MS		FIELD_PREP(CC_CNTL_SMPL_INTVL, 0)
-+#define CC_CNTL_SMPL_INTVL_62MS		FIELD_PREP(CC_CNTL_SMPL_INTVL, 1)
-+#define CC_CNTL_SMPL_INTVL_125MS	FIELD_PREP(CC_CNTL_SMPL_INTVL, 2)
-+#define CC_CNTL_SMPL_INTVL_250MS	FIELD_PREP(CC_CNTL_SMPL_INTVL, 3)
-+
-+#define DC_TI_SMPL_CTR0_REG		0x69
-+#define DC_TI_SMPL_CTR1_REG		0x68
-+#define DC_TI_SMPL_CTR2_REG		0x67
-+
-+#define DC_TI_CC_OFFSET_HI_REG		0x61
-+#define CC_OFFSET_HI_MASK		0x3F
-+#define DC_TI_CC_OFFSET_LO_REG		0x62
-+
-+#define DC_TI_SW_OFFSET_REG		0x6C
-+
-+#define DC_TI_CC_ACC3_REG		0x63
-+#define DC_TI_CC_ACC2_REG		0x64
-+#define DC_TI_CC_ACC1_REG		0x65
-+#define DC_TI_CC_ACC0_REG		0x66
-+
-+#define DC_TI_CC_INTG1_REG		0x6A
-+#define DC_TI_CC_INTG1_MASK		0x3F
-+#define DC_TI_CC_INTG0_REG		0x6B
-+
-+#define DC_TI_EEPROM_ACCESS_CONTROL	0x88
-+#define EEPROM_UNLOCK			0xDA
-+#define EEPROM_LOCK			0x00
-+
-+#define DC_TI_EEPROM_CC_GAIN_REG	0xF4
-+#define CC_TRIM_REVISION		GENMASK(3, 0)
-+#define CC_GAIN_CORRECTION		GENMASK(7, 4)
-+
-+#define PMIC_VERSION_A0_TRIM_REV	3
-+#define PMIC_VERSION_A1_MIN_TRIM_REV	1
-+
-+#define DC_TI_EEPROM_CC_OFFSET_REG	0xFD
-+
-+#define DC_TI_EEPROM_CTRL		0xFE
-+#define EEPROM_BANK0_SEL		0x01
-+#define EEPROM_BANK1_SEL		0x02
-+
-+#define SMPL_INTVL_US			15000
-+#define SMPL_INTVL_MS			(SMPL_INTVL_US / USEC_PER_MSEC)
-+#define CALIBRATION_TIME_US		(10 * SMPL_INTVL_US)
-+#define SLEEP_SLACK_US			2500
-+
-+/* CC gain correction is in 0.0025 increments */
-+#define CC_GAIN_STEP			25
-+#define CC_GAIN_DIV			10000
-+
-+/* CC offset is in 0.5 units per 250ms (default sample interval) */
-+#define CC_OFFSET_DIV			2
-+#define CC_OFFSET_SMPL_INTVL_MS		250
-+
-+/* CC accumulator scale is 366.2 ųCoulumb / unit */
-+#define CC_ACC_TO_UA(acc, smpl_ctr)	\
-+	((acc) * (3662 * MSEC_PER_SEC / 10) / ((smpl_ctr) * SMPL_INTVL_MS))
-+
-+#define DEV_NAME			"chtdc_ti_battery"
-+
-+struct dc_ti_battery_chip {
-+	/* Must be the first member see adc-battery-helper documentation */
-+	struct adc_battery_helper helper;
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct iio_channel *vbat_channel;
-+	struct power_supply *psy;
-+	int cc_gain;
-+	int cc_offset;
-+};
-+
-+static int dc_ti_battery_get_voltage_and_current_now(struct power_supply *psy, int *volt, int *curr)
-+{
-+	struct dc_ti_battery_chip *chip = power_supply_get_drvdata(psy);
-+	s64 cnt_start_usec, now_usec, sleep_usec;
-+	unsigned int reg_val;
-+	s32 acc, smpl_ctr;
-+	int ret;
-+
-+	/*
-+	 * Enable coulomb-counter before reading Vbat from ADC, so that the CC
-+	 * samples are from the same time period as the Vbat reading.
-+	 */
-+	ret = regmap_write(chip->regmap, DC_TI_CC_CNTL_REG,
-+			   CC_CNTL_SMPL_INTVL_15MS | CC_CNTL_CC_OFFSET_EN | CC_CNTL_CC_CTR_EN);
-+	if (ret)
-+		goto out_err;
-+
-+	cnt_start_usec = ktime_get_ns() / NSEC_PER_USEC;
-+
-+	/* Read Vbat, convert IIO mV to power-supply ųV */
-+	ret = iio_read_channel_processed_scale(chip->vbat_channel, volt, 1000);
-+	if (ret < 0)
-+		goto out_err;
-+
-+	/* Sleep at least 3 sample-times + slack to get 3+ CC samples */
-+	now_usec = ktime_get_ns() / NSEC_PER_USEC;
-+	sleep_usec = 3 * SMPL_INTVL_US + SLEEP_SLACK_US - (now_usec - cnt_start_usec);
-+	if (sleep_usec > 0 && sleep_usec < 1000000)
-+		usleep_range(sleep_usec, sleep_usec + SLEEP_SLACK_US);
-+
-+	/*
-+	 * The PMIC latches the coulomb- and sample-counters upon reading the
-+	 * CC_ACC0 register. Reading multiple registers at once is not supported.
-+	 *
-+	 * Step 1: Read CC_ACC0 - CC_ACC3
-+	 */
-+	ret = regmap_read(chip->regmap, DC_TI_CC_ACC0_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	acc = reg_val;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_CC_ACC1_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	acc |= reg_val << 8;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_CC_ACC2_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	acc |= reg_val << 16;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_CC_ACC3_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	acc |= reg_val << 24;
-+
-+	/* Step 2: Read SMPL_CTR0 - SMPL_CTR2 */
-+	ret = regmap_read(chip->regmap, DC_TI_SMPL_CTR0_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	smpl_ctr = reg_val;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_SMPL_CTR1_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	smpl_ctr |= reg_val << 8;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_SMPL_CTR2_REG, &reg_val);
-+	if (ret)
-+		goto out_err;
-+
-+	smpl_ctr |= reg_val << 16;
-+
-+	/* Disable the coulumb-counter again */
-+	ret = regmap_write(chip->regmap, DC_TI_CC_CNTL_REG,
-+			   CC_CNTL_SMPL_INTVL_15MS | CC_CNTL_CC_OFFSET_EN);
-+	if (ret)
-+		goto out_err;
-+
-+	/* Apply calibration */
-+	acc -= chip->cc_offset * smpl_ctr * SMPL_INTVL_MS /
-+	       (CC_OFFSET_SMPL_INTVL_MS * CC_OFFSET_DIV);
-+	acc = acc * (CC_GAIN_DIV - chip->cc_gain * CC_GAIN_STEP) / CC_GAIN_DIV;
-+	*curr = CC_ACC_TO_UA(acc, smpl_ctr);
-+
-+	return 0;
-+
-+out_err:
-+	dev_err(chip->dev, "IO-error %d communicating with PMIC\n", ret);
-+	return ret;
-+}
-+
-+static const struct power_supply_desc dc_ti_battery_psy_desc = {
-+	.name		= "intel_dc_ti_battery",
-+	.type		= POWER_SUPPLY_TYPE_BATTERY,
-+	.get_property	= adc_battery_helper_get_property,
-+	.external_power_changed	= adc_battery_helper_external_power_changed,
-+	.properties	= adc_battery_helper_properties,
-+	.num_properties	= ADC_HELPER_NUM_PROPERTIES,
-+};
-+
-+static int dc_ti_battery_hw_init(struct dc_ti_battery_chip *chip)
-+{
-+	u8 pmic_version, cc_trim_rev;
-+	unsigned int reg_val;
-+	int ret;
-+
-+	/* Set sample rate to 15 ms and calibrate the coulomb-counter */
-+	ret = regmap_write(chip->regmap, DC_TI_CC_CNTL_REG,
-+			   CC_CNTL_SMPL_INTVL_15MS | CC_CNTL_CC_OFFSET_EN |
-+			   CC_CNTL_CC_CAL_EN | CC_CNTL_CC_CTR_EN);
-+	if (ret)
-+		goto out;
-+
-+	fsleep(CALIBRATION_TIME_US);
-+
-+	/* Disable coulomb-counter it is only used while getting the current */
-+	ret = regmap_write(chip->regmap, DC_TI_CC_CNTL_REG,
-+			   CC_CNTL_SMPL_INTVL_15MS | CC_CNTL_CC_OFFSET_EN);
-+	if (ret)
-+		goto out;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_PMIC_VERSION_REG, &reg_val);
-+	if (ret)
-+		goto out;
-+
-+	pmic_version = reg_val;
-+
-+	/*
-+	 * As per the PMIC vendor (TI), the calibration offset and gain err
-+	 * values are stored in EEPROM Bank 0 and Bank 1 of the PMIC.
-+	 * We need to read the stored offset and gain margins and need
-+	 * to apply the corrections to the raw coulomb counter value.
-+	 */
-+
-+	/* Unlock the EEPROM Access */
-+	ret = regmap_write(chip->regmap, DC_TI_EEPROM_ACCESS_CONTROL, EEPROM_UNLOCK);
-+	if (ret)
-+		goto out;
-+
-+	/* Select Bank 1 to read CC GAIN Err correction */
-+	ret = regmap_write(chip->regmap, DC_TI_EEPROM_CTRL, EEPROM_BANK1_SEL);
-+	if (ret)
-+		goto out;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_EEPROM_CC_GAIN_REG, &reg_val);
-+	if (ret)
-+		goto out;
-+
-+	cc_trim_rev = FIELD_GET(CC_TRIM_REVISION, reg_val);
-+
-+	dev_dbg(chip->dev, "pmic-ver 0x%02x trim-rev %d\n", pmic_version, cc_trim_rev);
-+
-+	if (!(pmic_version == PMIC_VERSION_A0 && cc_trim_rev == PMIC_VERSION_A0_TRIM_REV) &&
-+	    !(pmic_version == PMIC_VERSION_A1 && cc_trim_rev >= PMIC_VERSION_A1_MIN_TRIM_REV)) {
-+		dev_dbg(chip->dev, "unsupported trim-revision, using uncalibrated CC values\n");
-+		goto out_relock;
-+	}
-+
-+	chip->cc_gain = 1 - (int)FIELD_GET(CC_GAIN_CORRECTION, reg_val);
-+
-+	/* Select Bank 0 to read CC OFFSET Correction */
-+	ret = regmap_write(chip->regmap, DC_TI_EEPROM_CTRL, EEPROM_BANK0_SEL);
-+	if (ret)
-+		goto out_relock;
-+
-+	ret = regmap_read(chip->regmap, DC_TI_EEPROM_CC_OFFSET_REG, &reg_val);
-+	if (ret)
-+		goto out_relock;
-+
-+	chip->cc_offset = (s8)reg_val;
-+
-+	dev_dbg(chip->dev, "cc-offset %d cc-gain %d\n", chip->cc_offset, chip->cc_gain);
-+
-+out_relock:
-+	/* Re-lock the EEPROM Access */
-+	regmap_write(chip->regmap, DC_TI_EEPROM_ACCESS_CONTROL, EEPROM_LOCK);
-+out:
-+	if (ret)
-+		dev_err(chip->dev, "IO-error %d initializing PMIC\n", ret);
-+
-+	return ret;
-+}
-+
-+static int dc_ti_battery_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct intel_soc_pmic *pmic = dev_get_drvdata(dev->parent);
-+	struct power_supply_config psy_cfg = {};
-+	struct fwnode_reference_args args;
-+	struct gpio_desc *charge_finished;
-+	struct dc_ti_battery_chip *chip;
-+	int ret;
-+
-+	/* On most devices with a Dollar Cove TI the battery is handled by ACPI */
-+	if (!acpi_quirk_skip_acpi_ac_and_battery())
-+		return -ENODEV;
-+
-+	/* ACPI glue code adds a "monitored-battery" fwnode, wait for this */
-+	ret = fwnode_property_get_reference_args(dev_fwnode(dev), "monitored-battery",
-+						 NULL, 0, 0, &args);
-+	if (ret) {
-+		dev_dbg(dev, "fwnode_property_get_ref() ret %d\n", ret);
-+		return dev_err_probe(dev, -EPROBE_DEFER, "Waiting for monitored-battery fwnode\n");
-+	}
-+
-+	fwnode_handle_put(args.fwnode);
-+
-+	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
-+	if (!chip)
-+		return -ENOMEM;
-+
-+	chip->dev = dev;
-+	chip->regmap = pmic->regmap;
-+
-+	/*
-+	 * Note cannot use devm_iio_channel_get because ACPI systems lack
-+	 * the device<->channel maps which iio_channel_get will uses when passed
-+	 * a non NULL device pointer.
-+	 */
-+	chip->vbat_channel = devm_iio_channel_get(dev, "VBAT");
-+	if (IS_ERR(chip->vbat_channel)) {
-+		dev_dbg(dev, "devm_iio_channel_get() ret %ld\n", PTR_ERR(chip->vbat_channel));
-+		return dev_err_probe(dev, -EPROBE_DEFER, "Waiting for VBAT IIO channel\n");
-+	}
-+
-+	charge_finished = devm_gpiod_get_optional(dev, "charged", GPIOD_IN);
-+	if (IS_ERR(charge_finished))
-+		return dev_err_probe(dev, PTR_ERR(charge_finished), "Getting charged GPIO\n");
-+
-+	ret = dc_ti_battery_hw_init(chip);
-+	if (ret)
-+		return ret;
-+
-+	platform_set_drvdata(pdev, chip);
-+
-+	psy_cfg.drv_data = chip;
-+	chip->psy = devm_power_supply_register(dev, &dc_ti_battery_psy_desc, &psy_cfg);
-+	if (IS_ERR(chip->psy))
-+		return PTR_ERR(chip->psy);
-+
-+	return adc_battery_helper_init(&chip->helper, chip->psy,
-+				       dc_ti_battery_get_voltage_and_current_now,
-+				       charge_finished);
-+}
-+
-+static DEFINE_RUNTIME_DEV_PM_OPS(dc_ti_battery_pm_ops, adc_battery_helper_suspend,
-+				 adc_battery_helper_resume, NULL);
-+
-+static struct platform_driver dc_ti_battery_driver = {
-+	.driver = {
-+		.name = DEV_NAME,
-+		.pm = pm_sleep_ptr(&dc_ti_battery_pm_ops),
-+	},
-+	.probe = dc_ti_battery_probe,
-+};
-+module_platform_driver(dc_ti_battery_driver);
-+
-+MODULE_ALIAS("platform:" DEV_NAME);
-+MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
-+MODULE_DESCRIPTION("Intel Dollar Cove (TI) battery driver");
-+MODULE_LICENSE("GPL");
+Patch3 adds documentation for the new interface.
+
+Patch4 fixes a minor documentation issue related to the return type of
+cpu_latency_qos_request_active(). This change addresses issues in existing
+doc and is not related to the new interface introduced in this patch
+series.
+
+Patch5 updates the resctrl pseudo-locking logic to use the new CPU
+affinity latency QoS helpers, improving clarity and consistency. The only
+functional and beneficial change is that the new interface actively wakes
+up CPUs whose latency QoS values have changed, ensuring the latency limit
+takes effect immediately.
+
+Changes since v1:
+- Rebased on top of current next.
+- Resolve the compilation warning due to a missing static function
+  declaration.
+- Remove the conditional compilation based on CONFIG_CPU_IDLE and make it
+  depend solely on CONFIG_PM.
+- Add support for cpu_affinity_latency_qos_active.
+- Remove cpu_affinity_latency_qos_update; will reintroduce it when needed
+  in the future.
+- Optimize the code, for example by using cpu_affinity_latency_qos_active
+  inside the add/remove functions to enhance robustness.
+- Refine the commit message and fix a few minor issues unrelated to this
+  series.
+- Refactor the CPU latency PM QoS logic of resctrl pseudo_lock using the
+  interfaces provided by this series.
+- Link to v1: https://lore.kernel.org/all/20250424095228.1112558-1-quic_zhonhan@quicinc.com/
+
+Zhongqiu Han (5):
+  PM: QoS: Add support for CPU affinity latency PM QoS
+  PM: QOS: Remove unnecessary KERN_ERR on WARN() calls
+  Documentation: PM: QoS: Add CPU affinity latency PM QoS Interface
+    documentation
+  Documentation: PM: QoS: Fix return type and return value description
+  resctrl: Replace PM QoS logic with cpu_affinity_latency_qos_* helpers
+
+ Documentation/power/pm_qos_interface.rst |  63 ++++++++-
+ fs/resctrl/pseudo_lock.c                 |  51 +------
+ include/linux/pm_qos.h                   |  40 ++++++
+ include/linux/resctrl.h                  |   3 +-
+ kernel/power/qos.c                       | 166 ++++++++++++++++++++++-
+ 5 files changed, 268 insertions(+), 55 deletions(-)
+
+
+base-commit: 024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb
 -- 
-2.49.0
+2.43.0
 
 
