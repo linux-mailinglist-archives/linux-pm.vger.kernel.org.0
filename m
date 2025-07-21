@@ -1,156 +1,123 @@
-Return-Path: <linux-pm+bounces-31242-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31243-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4579FB0CBA3
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:18:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43A48B0CBAA
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:20:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BD793A90FB
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:18:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F65E3A4E05
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:19:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B4923D287;
-	Mon, 21 Jul 2025 20:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36380238C2D;
+	Mon, 21 Jul 2025 20:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="merfMegC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNTs3Ys8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677CE23A9B3
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 20:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD45D19CC28;
+	Mon, 21 Jul 2025 20:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753129065; cv=none; b=TrnpKy3hLIkPPMQDRIt/7XFPtdp1pJ1bBKBGX8l5VXYzQso/PrgVwqKyrotYZma2NF8lIqDCb+Eq78e5cNrK11WOcgAT6DM9gYUjHChTw6P7BaEX0hp8QJ04vm8DkPdGhJEl2tLJUJfl8iemJdt0z8vkTSXizwBf6XA0N1OMkB4=
+	t=1753129216; cv=none; b=WIAw/Mbr8N8BLvUi2j3wzKFvIiH6d+OjzPnl7WyZl9vGxwbaGgmz+aN1XmkP4CPhoQ6XK4H/59+bHoR+UmZ8G2XMSKLCcp1Z4L6yCkY88nkWlit902WDY1KGH2k7KfOArEDRszAjfViqNHHXyU10llH+5Fx5kIx4y0bRH2l6vTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753129065; c=relaxed/simple;
-	bh=qNMjXYg7gSvi1w4o66Q/qp0UaJ/AUdAOz9hXwpFbNPU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nwLC2MPEx4yfQTY8EQ3IEiow29sReD04+ecbN01uxKIqSVO7jG1g6OI/RM2/jf+PAnXPwpxXErQtvaCaI+hMNx1vg0klFdmfgPKfzHY1JxCyJAexZVSM1WYK6nFTaxpGxRTyDzg0LAiDgqIce83C5ZC79+xGPQpooowmosephVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=merfMegC; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-456108bf94bso33683715e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 13:17:42 -0700 (PDT)
+	s=arc-20240116; t=1753129216; c=relaxed/simple;
+	bh=QhoaQFtxNxausfHipJnOzeN1CL5MUK8zNLHiVu3g8n8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rGplBa72K1BD9NC5C3agOqWtGzA6zA02rAXFdL5IcuAmBVjocfQsU+XDjIyCP7PByDi0OZITQgiojLIvjvQjQCOCMCUTuMVbG+uu88bTSFRWcx5LPtfPr89caAbXjXFk8mqjE0uLLLFd8b7oU8VpKZeQR+C+CUeC1L2fhCDGn3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNTs3Ys8; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-31384c8ba66so48736a91.1;
+        Mon, 21 Jul 2025 13:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753129061; x=1753733861; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dM8V1L459ePaBP5oquLpSUwSE8BaJwvLWNciMOJOtaY=;
-        b=merfMegCMYwWsN27o6ZvoKAxuiIDUz2j+UCUcAXwR4cjDZzRxEDJXuNcS09EE58Wlx
-         rCQ2CjyTmdx6FINi2LCktDlVkhBg4Zhqx26Ph9KeelPhiICTgvckMXLPGGzPMLLTy5dh
-         xlhFsq0nJq7x5dHhHotX9tnvk5jBzpR+ubTOAUId1ewM100vMauN/LUJIxo+dSwWmkLl
-         ZK/U647XyHymDEKFHOgW0iUl/gWtu+53kCixSGvaBdX9GtRmh/oaKEafGa+oW15I0GfU
-         TtWx8KAD7MrLdTTa+G7U/FL6VmAZx1O8OYTkcbmBgUadq7MO/oM86zTmrvNKkjjZiEoY
-         bAhw==
+        d=gmail.com; s=20230601; t=1753129214; x=1753734014; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QhoaQFtxNxausfHipJnOzeN1CL5MUK8zNLHiVu3g8n8=;
+        b=TNTs3Ys8eBGIIjsrjlhnaYufJnrq99cmDn7o8GfI1i3u7cv806dHTXqS9/uHR1f7JL
+         MeznwZg1nBEwjlu0rkjZwi7CmCKBV5SXsf8pVyGVX9BGR5c0C16zunPjJX2e9D2atbxi
+         JKB0QL5e/ikEz9nI6mEP1IsAeem2uPFF3dnDN/OAWx/xelHehKzkHRjo6eiO3bj4xI88
+         D5Nk2IcMkg0HW9ZRuAyXPp90CyDaQVgQlfVMp5mlyalLyhQn3/b3R+KS+44sc0VZ3g58
+         aiq8nkkPbEf3rhzkXpWdZnzUJ4LJEHSKbYuIHiTPRtpGlpCpcGyR0W7+xj2fkD58tObh
+         n+wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753129061; x=1753733861;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dM8V1L459ePaBP5oquLpSUwSE8BaJwvLWNciMOJOtaY=;
-        b=qYd1W9sAR7Qr2CVS63WKk6OQbhLw35nQt3JSN7H1Tpm3niPea/KeR0L5v2/SOkm7UO
-         cr98A05qbea0sIaaMrIS9gBUDNud2Ct7XITWRQ0hZYEP+/NzsWfTz33nxd5rsFNGz2JC
-         LEZfKTUvMRnox/Cz3raXrM/972EHOA3nm+lfXKZpg5cVs8yWp+qpN8l1ZuJajWHLw9Er
-         m2SPfjRJkUng1IL9xATbfXOc5uXYI5YdsFMYRjPWB3s8cWsCDSjRkSw5FBu+WyIHeJbu
-         kUQPpD0BwkujEDbJotn1ZXy0iKBypQxYA0zi124uVMZo+EV2uXmpeScXtqSnC9WghEo4
-         CyNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnNKxxYXkpqb7a6/6tOkhIVt5HpI8saRoT/cKFOMc5bX+rmVJ+7S1MlTgt5O0XwRzyTTYmp6Xxlw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIQLKqfiuHdfabXGewgN1qIqWHXUpAFdtaiESqFP9SvvTX1bSD
-	Pst85MlpNWalqFLal6r2EgDv/LLvW0dkN9M1+rEgKEnNvzep7NLgLSpqyFFBA/D2Piw=
-X-Gm-Gg: ASbGncuuqXVsDC49i0rjLWlTRqvHntMIGKMEqa8trVypuzgXDKCaHZwUTjCL/n0d9Zr
-	mGo1K20ZJF8D81FDdlmWt6A1ZP1N2ttCpOAnt8IWbhvACJjb7oo4O4AceFqI21+AkmDC6Iv4dxL
-	9THZ/5zDd2C2OBhZoYCohh9VnsuuEID8HjpGAvdjzRmgKChrZSOjAaVFBPsCdmHzFPYTluXC2VZ
-	yScmbOXegvtiIRTghe50wCQUFbE7WW6n4ZTowgSjE7EFZ34wFkyQ2E3ooG+uBFQhbY/A5BvMyF+
-	nwznnJRgHkSIEdBsteYFfS+mJIK07ex5DJfNTBqJLwirM6uPIz1FUjASfskGKqJBiBA0Z3d2o+d
-	Ug19dEIGbpPiTyXZoUsQoeiaC6cMGYp1rAzx+leDTtixaWVsEtj68CPXI5YQsYs9Fgwik7ZuD4p
-	4t+gI=
-X-Google-Smtp-Source: AGHT+IF62Mz23f/3FxKSXRlhY6X69Vv1j/s22nJAkdHPupT9WjDcJMNWjSNh7x1kPOXtrItb7cZ4Dg==
-X-Received: by 2002:a5d:64e8:0:b0:3a5:8a68:b839 with SMTP id ffacd0b85a97d-3b60e53ee0amr17139819f8f.45.1753129060690;
-        Mon, 21 Jul 2025 13:17:40 -0700 (PDT)
-Received: from ?IPV6:2a0d:e487:135f:abd:1f99:991c:5b07:cd28? ([2a0d:e487:135f:abd:1f99:991c:5b07:cd28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b61ca4894asm11444490f8f.49.2025.07.21.13.17.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jul 2025 13:17:40 -0700 (PDT)
-Message-ID: <8792778e-1fe6-4eff-9328-767ed38a1583@linaro.org>
-Date: Mon, 21 Jul 2025 22:17:36 +0200
+        d=1e100.net; s=20230601; t=1753129214; x=1753734014;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QhoaQFtxNxausfHipJnOzeN1CL5MUK8zNLHiVu3g8n8=;
+        b=lBetLDCKfsUdCL/pkD396yycrjBYvtykgm1WXnoxWLSZU/ylbpDbvSKGmamx9yO5Bu
+         cGGPawEtF4aKZmRFk8TXJVCqdQRYHROwDydiZ8ShNj+QujsUsRHZEGfOC7lF/aCS21gL
+         mbKpoqbdV5da2FovTnidY0GISH94A/wkvEoq+WCui03wWG5mBX06l19cDOO+nGKswxkL
+         viGUoxHWQhChlZd+U8RofFZ/mRH0KQDWpTkO4N6wtKHe5SKAWj1xkyTdRggPIZUX2wNj
+         Afzl8zYx/jMLpuGvJU3A51GuQM4SNyPXn4fQQTLtxfv9L3P8oVzj9s1kXSJ07E3nSdj2
+         WzYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvuPLFFM7Oo0Kj9qUGFZTF1e2XtTXPOaAWcPtaFhMKJWnerKMSQvTnFVkZeScGiC0U4CzWTgzSMbxZTP8JayKD@vger.kernel.org, AJvYcCUwucxTAENt8OWohoYuxPFWOSP1ZltU75Dyukqshx7n+uZpyehJUd4fWRse/KkXdhr7VdINcJEkYW2J/wonz3I=@vger.kernel.org, AJvYcCWFJ2XijynbTlFvXQuYNI3tHx8fQRHkcMIInfSoVGoAjA0dPGr/Hok0ftkLxeIrFEyaAw+qjkMjhNrD@vger.kernel.org, AJvYcCWSwPtDuF0nOlzFiVS4DpQxdZxM6OQTePhcGT2RZDZsZw6buJl8HLDlh0fFbw/wwwswOXEvJaNxH95HDVRY@vger.kernel.org, AJvYcCXuM5ONCpq68oLolwZMBA12je+WFsCN6dYUIUKLKxYePbUitCTSHBpjCwN8iuypKbNRWGUnfoSP6IM=@vger.kernel.org, AJvYcCXvC2UKbmpv9uh/rjOJ/LbequIE4IfzrwfjBwHgD0P6htu8fPamEjLMZP7CkwwRkfv0RRUxYlp0@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGP6BJJy2aYxL5MUAfeEiwqW3eRH824/Xx2yOtcCmCxE+3xnYb
+	KHXLUVxq6WiJYAnnlUAsFtDPskoNzhewp+4NmbLZCCZNkAhZEoQOGN3kqgh22KSVtQrvymv0LTV
+	HEP6KX9TP6fhVFPDVpXq/eV1+jE8gvoo=
+X-Gm-Gg: ASbGncuuLAbuvk2QygkKto1xHoaQe1OVxnsqAasMKAaN2lrollhNE8AgOKdw2MeJAba
+	oGXpqfKgfrRJFh+7yJQohMGwkrqh4mUiMVWuFWBS0YI/iDoBoQGSDJ7e+AWNY/zgihYPd0OV9h2
+	25TP0Ke2UIj/eWCWiodnSgUd5TU4FEAfQdJ7Gs1zm5MobEEo/2e8WKjh9JYwphswbfXbhooGZFT
+	ETMdp9f
+X-Google-Smtp-Source: AGHT+IGYWFzzB+EaA1sUPW0yxlHljqythmWNIpx8bVOSX58qriu4XgVDPxfn17/Rmpvzl5eSATKzzBGxAaQbrkHzpc8=
+X-Received: by 2002:a17:90b:57cf:b0:311:a314:c2c9 with SMTP id
+ 98e67ed59e1d1-31c9e6e5debmr12843850a91.1.1753129213894; Mon, 21 Jul 2025
+ 13:20:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/17] dt-bindings: thermal: tegra: Document Tegra210B01
-To: webgeek1234@gmail.com, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>,
- Peter De Schrijver <pdeschrijver@nvidia.com>,
- Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
- <20250714-t210b01-v1-5-e3f5f7de5dce@gmail.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250714-t210b01-v1-5-e3f5f7de5dce@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
+In-Reply-To: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 21 Jul 2025 22:20:01 +0200
+X-Gm-Features: Ac12FXwTjwqkUOe19S3QjijBkelsLmO-zTtTU8nCjXVYR5x32YJPDBd3Xx-BAUU
+Message-ID: <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] rust: use `core::ffi::CStr` method names
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/15/25 06:02, Aaron Kling via B4 Relay wrote:
-> From: Aaron Kling <webgeek1234@gmail.com>
-> 
-> Add the compatible string for Tegra210B01 SOC_THERM
-> 
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+On Sun, Jul 20, 2025 at 12:42=E2=80=AFAM Tamir Duberstein <tamird@gmail.com=
+> wrote:
+>
+> Subsystem maintainers: I would appreciate your `Acked-by`s so that this
+> can be taken through Miguel's tree (where the other series must go).
 
-Applied patch 5/17
+Did you apply this with `b4`? I think you picked Danilo's Acked-by,
+which was for a subset, for other patches too. I can remove it when I
+apply it.
 
-Thanks
+(Greg's Acked-by may also have been just for his bits back in the
+previous series, but in his case he didn't say anything explicitly)
 
-> ---
->   Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> index 19bb1f324183bb22bc75630798da67fc834920b8..cf47a1f3b3847d4a0371d0bc711638fc5e3b6cd3 100644
-> --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> @@ -21,6 +21,7 @@ properties:
->         - nvidia,tegra124-soctherm
->         - nvidia,tegra132-soctherm
->         - nvidia,tegra210-soctherm
-> +      - nvidia,tegra210b01-soctherm
->   
->     reg:
->       maxItems: 2
-> @@ -207,6 +208,7 @@ allOf:
->               enum:
->                 - nvidia,tegra124-soctherm
->                 - nvidia,tegra210-soctherm
-> +              - nvidia,tegra210b01-soctherm
->       then:
->         properties:
->           reg:
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Cheers,
+Miguel
 
