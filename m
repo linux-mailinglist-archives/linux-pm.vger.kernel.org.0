@@ -1,178 +1,165 @@
-Return-Path: <linux-pm+bounces-31190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 163D8B0C1A4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:46:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD7BCB0C1A9
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:47:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 004CE189B6C4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 10:46:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E58C16C335
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 10:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E37298CB6;
-	Mon, 21 Jul 2025 10:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D1822156D;
+	Mon, 21 Jul 2025 10:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uKMwD7tk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axRlvRVL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3B8298CB5
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 10:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587EA20F098;
+	Mon, 21 Jul 2025 10:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753094672; cv=none; b=MP5uKAxCeSqrZy3iSscSYmWZOO0ItaPCi1ck85wM6WHs6o//eJbHmM8MN01JOcGjFLGhE8boqdmyqFypuFBhAowHcSg/wsX4TtH5JfWM/cQmg/GFDNtmEEPp0phr2L0cH8rXNHFFV0lPmTOqt+LeegdQkJ5yAsrI5sWvu1+M7Hw=
+	t=1753094841; cv=none; b=Zr5oaQq5/ccC3tA+OLeduwnDkai/NMS8SM2MfNiueei0gWdYqH78UeN1r7UXoQ6AV51EHXPtKOvo0a2cKi/UE8hSoGNXThzQLviLXUUPKfKsURdktUVIymyqqhMZpmLSKiehqPwL2Wa5GhBTbE2CGq9Jb4EhOAye7S1i6gdQadU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753094672; c=relaxed/simple;
-	bh=Jyg9VIduqhzzijMHnSKAC2B6G1xD8WFdq0kn3G+RX/E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SuAhFUj6oTCjgy8jPqz+y9KQg7mJ/lHXRW8jIKXEEvtsLQF4EaQ8IV2J0hfj8ZOjCC2NJMwQMeGs9HrOmMI1NVNUc25zggbHKe2WrF8Y9KF9jhEgUATKgPrFiWv1tjlM/t8F4Gj3d6Bgup7OVmSqIzcSWPlYL2VfZCmydkQyodM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uKMwD7tk; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a528243636so2499723f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 03:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753094668; x=1753699468; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jv8CKZAnBLUK/0fb5CiuD7Hp6E+b8QPJo8tRAQ5ZhDg=;
-        b=uKMwD7tkDvM6y1ai4Cu5EVRzwrIwC83suT5zEhID5qe2mwleN7zru6IM8MNu7+SUbd
-         vgX4l23PX6jIuXULkaJ+TZ3rQ8DgvCSmsxzitnTo+2P+xR1z05kAhjPbNO6apTwr4DNw
-         GmJgdxYa2PqJOo0U+EiI1aiKju5Ov4DsUZBp//Q+IZKwDwDBHfy4Cs5PN/+snhj940Cs
-         s+wcZA+nsqI0Ywhwe7pY9zH8/gYB6FboDPs8KArN3fVKdyB6hxVxGyqOE8f/YxHjxS5k
-         Qq3uIYladgqRGv6yBgyWOrT1rgbsPT1QMm9kqMQdY3DKEFtIM0h0D4TmxlDxvzaX1xRg
-         musA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753094668; x=1753699468;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jv8CKZAnBLUK/0fb5CiuD7Hp6E+b8QPJo8tRAQ5ZhDg=;
-        b=YekcJAcjdwO4ByIsWinnViHlwyuZ2eLvcAwylpS1xLfRIr+zSgYYXsIO5fHECuLbr4
-         Eb8faaHUxXh7rc1vNSiwEYn23G1YBd6CmxjjAw2b40oPazc3LVcFHwEnhfIIkx84+G3G
-         cjAQs16O+fWK9xNvVWvSgAtmGfiMHGwQ92fAGVRJKB5kPHdWCro8hY1NdQD1C0mBZBIO
-         qmrhRTLXTJe8bHp/XPPdroy4OYDuoDLSLOGuNNnUs5BzF7HUTw6Oa+ISAjp4YOouz6Xy
-         ZF5ieBMa26UXtjok77k/pDIuzCPsxxUAe+CrnANQOGVcOhPKuI4dgq8F0RcDqMUpNKXI
-         dkJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZRyx1Jk1mxqBsbj04Yxqq/rpDR0X05PKTCefqanZWM2McxUvgmP6DVW9EGCjhbkMPAQCTq2O/YQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQAue7daITagGZSxKCweYwHh6AmGaeiCCrM57A0WZFm7bulQPJ
-	KBgEJCIRDQyJPcxUcGYmombjUBDzXAWCz7T+lTi84kQFEbWjLaSUGWFQFiziDEAEPJQ=
-X-Gm-Gg: ASbGnculuU4Iusyg1EcQw8I76HSy1qwwC+Ag/l35Yhh0PK/0ar5q5UyXtH5O71QStN7
-	0EObhogM/ayOD/sXHrfmeaS93TXEZcAM79RkSx0zfDVaf9kr1gtblaRXmY1dYluBDb/BpfNgFnU
-	0VPuGbUb1INquPwnFTi+ozgqsb5M89Q3AegxxghfyOthe8/Hkfs1SLBcMIFqBu7h3ZWD/x8csjl
-	wRe+bNvCTx+3V2wQufKQ7Qx6SUNz58n6Gy/dYRihQnzOy6jqLRO8E9ZwkjOgxg/TL5ZRfHVdzjL
-	ZxZf2smLjOCdGegE6ulvYrwhQmmJyfpthuNzcfnmu5xuB6lWrnbV89omIfjfI5ehgh9B0t7D6ay
-	XvsBSNOXa+RoikMXLldWjt/xGEdEroqaReuz45BrW9KOWUBYuOKF4/qg/RX8um/ZEz53RVOZPVg
-	==
-X-Google-Smtp-Source: AGHT+IHsr6BfHmmGvAFEpmk7FK7MXUXtHfZVvvvivtdI5mefMv0lLuRMGQqdMBTcEDjNOnr/mFRYmQ==
-X-Received: by 2002:a05:6000:4108:b0:3a4:dc42:a0c3 with SMTP id ffacd0b85a97d-3b61b22ec16mr7504872f8f.56.1753094668208;
-        Mon, 21 Jul 2025 03:44:28 -0700 (PDT)
-Received: from [192.168.1.36] (p549d4bd0.dip0.t-ipconnect.de. [84.157.75.208])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca48c40sm10159988f8f.58.2025.07.21.03.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jul 2025 03:44:27 -0700 (PDT)
-Message-ID: <e724e6a2-21a8-436a-8809-ce73c0afa433@linaro.org>
-Date: Mon, 21 Jul 2025 12:44:26 +0200
+	s=arc-20240116; t=1753094841; c=relaxed/simple;
+	bh=3FMPJPp3df9gByQS0Cpx715xJINI9Xitl6FDlUEf6zQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JLtY48SneWIDouBEDVic0UF/uxbDEqmj8b6tgYCWVdxKAYZh1fkV0iuqrVEBeZhaqxlIgrWJGSD9IXoxZEl6MoKU4yulPLdlqgdmDGBrTWzQJs5AZ0hojWBTpAa7OJKRS6zqbwHiP4XFm05fHa6FlGgRV1N7BVIFMcD6lA1eUVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axRlvRVL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA1A4C4CEED;
+	Mon, 21 Jul 2025 10:47:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753094840;
+	bh=3FMPJPp3df9gByQS0Cpx715xJINI9Xitl6FDlUEf6zQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=axRlvRVLDqeXIGc2Xg4/di/1cpxxWGScS1qcyGJ5SEpSPOB241zUXmHvWpmWcAaoq
+	 ieKOXjVS+Qn9pWjUgrrSBPLpjYpvT6SWQD4LiWNHvLx238r8Emo0BjzOhkMHI7/yV9
+	 xI+YfSaj3DweQVDJGY7Dcl/S/RV9MPZ2rpv9vr5jVSfGNU+CPF8r7buRvqW2GyBIHh
+	 bPkVbcgJTKdXHGzb37jycf2EoRxLczaibZDhYeE36viOsYZ46+rAMCthQjQlzhaKnq
+	 PwpOvfYAn0lOnCpi1x4Uqa4HUlHnPPC6HhIOcYpKR9anXJvmEXLgvqMtA2/3jgrfrh
+	 loR0O8wvkzrdQ==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-303058a8649so411460fac.3;
+        Mon, 21 Jul 2025 03:47:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUF0JHMugLL8rBhGhMPaRyBz4hp+6Xxm9Z2s7bOTGqL+7ba7Kwznb7TOjHOJkyRDskw5kOL+Xo3Bb2gbj0=@vger.kernel.org, AJvYcCWHji7ToFVrYIt0/HHgvU7IAJ9epkYImetXE8h7uyCeNodbAek5eiW3TTNG5ZnKxhqdD+vI73NJiW4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG+HzVtzCHOcTA2KggGA6433UL+7ACKJKIv2PsnwtjCnLh5es0
+	x2/5kZGgw+cKnYY2ojccvcFNEXhVQVtzyjaUkYEufqAUsQJ/0WzXYqjIp6Nxv1izgENABlXL/VR
+	mFtXdCMHBI9blKKyyG2X76y1EKQu7e84=
+X-Google-Smtp-Source: AGHT+IHoA3NB6bGtDLs5HIlXOYswhNHuEDsY4pLw82JzTmx51HqfQuMxqfj5zre25qH3RzQ5oIZKQv2bzMs8n3539ac=
+X-Received: by 2002:a05:6871:bb05:b0:2d8:957a:5176 with SMTP id
+ 586e51a60fabf-2ffb223d877mr15763192fac.5.1753094840034; Mon, 21 Jul 2025
+ 03:47:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/7] nvmem: qcom-spmi-sdam: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-Content-Language: en-US
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- sboyd@kernel.org
-Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
- andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
- krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com,
- linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org
-References: <20250721075525.29636-1-angelogioacchino.delregno@collabora.com>
- <20250721075525.29636-3-angelogioacchino.delregno@collabora.com>
-From: Casey Connolly <casey.connolly@linaro.org>
-In-Reply-To: <20250721075525.29636-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <2fd09dd9-59f5-4852-b796-e458c89aa193@kernel.org>
+In-Reply-To: <2fd09dd9-59f5-4852-b796-e458c89aa193@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 21 Jul 2025 12:47:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gr5MVorUtqJr_wiKL0Q_LYHGMABugSPmnHcxVJ2rc_dQ@mail.gmail.com>
+X-Gm-Features: Ac12FXwrBG7MSeCDJdE5b9saITtmL8RLidXvLvyOlCXJrlp55qATP9FQnJPiZlI
+Message-ID: <CAJZ5v0gr5MVorUtqJr_wiKL0Q_LYHGMABugSPmnHcxVJ2rc_dQ@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.17
+To: Chanwoo Choi <chanwoo@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	"open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Angelo,
+Hi Chanwoo,
 
-On 21/07/2025 09:55, AngeloGioacchino Del Regno wrote:
-> Some Qualcomm PMICs integrate a SDAM device, internally located in
-> a specific address range reachable through SPMI communication.
-> 
-> Instead of using the parent SPMI device (the main PMIC) as a kind
-> of syscon in this driver, register a new SPMI sub-device for SDAM
-> and initialize its own regmap with this sub-device's specific base
-> address, retrieved from the devicetree.
-> 
-> This allows to stop manually adding the register base address to
-> every R/W call in this driver, as this can be, and is now, handled
-> by the regmap API instead.
+On Sat, Jul 19, 2025 at 5:26=E2=80=AFAM Chanwoo Choi <chanwoo@kernel.org> w=
+rote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v6.17. I add detailed description o=
+f
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
+>
+> Best Regards,
+> Chanwoo Choi
+>
+>
+> The following changes since commit 347e9f5043c89695b01e66b3ed111755afcf19=
+11:
+>
+>   Linux 6.16-rc6 (2025-07-13 14:25:58 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/de=
+vfreq-next-for-6.17
+>
+> for you to fetch changes up to 7da2fdaaa1e6062686ac96a9f096c2d7847533e4:
+>
+>   PM / devfreq: Add HiSilicon uncore frequency scaling driver (2025-07-14=
+ 20:23:57 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v6.17
+>
+> Detailed description for this pull request:
+> - Clean devfreq core and fix bugs
+>  : Replace sscanf with kstrtoul
+>  : Remove redundant devfreq_get_freq_range() on adding devfreq driver
+>  : Check missing NULL pointer check on removing devfreq driver
+>  : Limit max_freq and min_freq to avoid unreachable value
+>  : Fix wrong index on trans_stat sysfs node
+>
+> - Use devm_* managed function for clock control on sun81-a33-mbus driver
+>
+> - Add HiSilicon uncore frequencye scaling driver for for HiSilicon Kunpen=
+g SoCs
+>  : The uncore domain includes shared system resources such as interconnec=
+ts
+>  and L3 cache, and its frequency has a significant impact on system perfo=
+rmance
+>  and power consumption. The driver provides the following functions:
+>    - Support to scale frequency scaling with governor and user setting
+>    - Support to query CPUs whose performance is closely related to the un=
+core domain
+>    - Communication with the platform controller via an ACPI PCC mailbox
+>      to perform actual frequency changes
+>
+> ----------------------------------------------------------------
+> Chanwoo Choi (1):
+>       PM / devfreq: Fix a index typo in trans_stat
+>
+> Jie Zhan (2):
+>       PM / devfreq: Allow devfreq driver to add custom sysfs ABIs
+>       PM / devfreq: Add HiSilicon uncore frequency scaling driver
+>
+> Lifeng Zheng (4):
+>       PM / devfreq: governor: Replace sscanf() with kstrtoul() in set_fre=
+q_store()
+>       PM / devfreq: Limit max_freq with scaling_mina_freq
+>       PM / devfreq: Remove redundant devfreq_get_freq_range() calling in =
+devfreq_add_device()
+>       PM / devfreq: Check governor before using governor->name
+>
+> Uwe Kleine-K=C3=B6nig (1):
+>       PM / devfreq: sun8i-a33-mbus: Simplify by using more devm functions
+>
+>  Documentation/ABI/testing/sysfs-class-devfreq |   9 +
+>  drivers/devfreq/Kconfig                       |  11 +
+>  drivers/devfreq/Makefile                      |   1 +
+>  drivers/devfreq/devfreq.c                     |  23 +-
+>  drivers/devfreq/governor_userspace.c          |   6 +-
+>  drivers/devfreq/hisi_uncore_freq.c            | 658 ++++++++++++++++++++=
+++++++
+>  drivers/devfreq/sun8i-a33-mbus.c              |  38 +-
+>  include/linux/devfreq.h                       |   4 +
+>  8 files changed, 704 insertions(+), 46 deletions(-)
+>  create mode 100644 drivers/devfreq/hisi_uncore_freq.c
 
-This is honestly a really nice improvement :D>
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/nvmem/qcom-spmi-sdam.c | 41 +++++++++++++++++++++++++---------
->  1 file changed, 30 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/nvmem/qcom-spmi-sdam.c b/drivers/nvmem/qcom-spmi-sdam.c
-> index 4f1cca6eab71..1b80e8563a33 100644
-> --- a/drivers/nvmem/qcom-spmi-sdam.c
-> +++ b/drivers/nvmem/qcom-spmi-sdam.c
-> @@ -9,6 +9,7 @@
->  #include <linux/nvmem-provider.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> +#include <linux/spmi.h>
->  
->  #define SDAM_MEM_START			0x40
->  #define REGISTER_MAP_ID			0x40
-> @@ -20,7 +21,6 @@
->  struct sdam_chip {
->  	struct regmap			*regmap;
->  	struct nvmem_config		sdam_config;
-> -	unsigned int			base;
->  	unsigned int			size;
->  };
->  
-> @@ -73,7 +73,7 @@ static int sdam_read(void *priv, unsigned int offset, void *val,
->  		return -EINVAL;
->  	}
->  
-> -	rc = regmap_bulk_read(sdam->regmap, sdam->base + offset, val, bytes);
-> +	rc = regmap_bulk_read(sdam->regmap, offset, val, bytes);
->  	if (rc < 0)
->  		dev_err(dev, "Failed to read SDAM offset %#x len=%zd, rc=%d\n",
->  						offset, bytes, rc);
-> @@ -100,7 +100,7 @@ static int sdam_write(void *priv, unsigned int offset, void *val,
->  		return -EINVAL;
->  	}
->  
-> -	rc = regmap_bulk_write(sdam->regmap, sdam->base + offset, val, bytes);
-> +	rc = regmap_bulk_write(sdam->regmap, offset, val, bytes);
->  	if (rc < 0)
->  		dev_err(dev, "Failed to write SDAM offset %#x len=%zd, rc=%d\n",
->  						offset, bytes, rc);
-> @@ -110,28 +110,47 @@ static int sdam_write(void *priv, unsigned int offset, void *val,
->  
->  static int sdam_probe(struct platform_device *pdev)
->  {
-> +	struct regmap_config sdam_regmap_config = {
-> +		.reg_bits = 16,
-> +		.val_bits = 16,
-
-I believe registers are 8 bits wide, at least on Qualcomm platforms.
-
-Kind regards,
--- 
-// Casey (she/her)
-
+Pulled, thank you!
 
