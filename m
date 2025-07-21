@@ -1,111 +1,135 @@
-Return-Path: <linux-pm+bounces-31210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DEADB0C493
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:57:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FBDCB0C4A2
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 15:00:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 532EE5424B1
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:57:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2AD11AA3C62
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 13:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998D52D6418;
-	Mon, 21 Jul 2025 12:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981AC2D23AB;
+	Mon, 21 Jul 2025 13:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RjTTJYCm"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YfBd131R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304332D63F3;
-	Mon, 21 Jul 2025 12:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A529158535;
+	Mon, 21 Jul 2025 13:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753102483; cv=none; b=NMRcY8G3y985wG36Ox8228emlqQv15riW0p3cQdXsYC3l6aM2gQcOtPXHNVWUPQj0u3ie/RmTas82V0zvqwBEUyEIQYqloagl6ZZU8GffHqvb2ACNHH1kgLgTT4CWmVE7Bs2VioFBe0IGNFqvjfDpT9c/4HOXYpGfmQc9/yYCh0=
+	t=1753102821; cv=none; b=WnbV+ob28yVNJYiFyYo3+nxykYJ/Kzgkqs3daKRVqmGNeiGky/KmUYa3SxvWXj5o2ISanBEesrbAC9d3aAap7XFe6Sz3v1ZG7KyWoGtpsXtiMYg1ThjA9AdsLc8z5GDIGe8CrrH++75vfCEuj2G5w2kHag40lqmefDokkuwijkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753102483; c=relaxed/simple;
-	bh=Bq5VgfjTkqyHZmMsa4CuFn3fXsUBDjAcxmYxO2xVUQQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u6SKVCc1VJuQ8QStNszNLawe51ZC2jZhlkFwPiKdpW0DDlMNETS1xRzD2yKG9EugOGh8wKsQaLb17CwLAdo13B0COhWxmD90KRv5z7WK6ADBKrmXxLbvmyoQWTaL1z2COFCsGaSp1GFGIF9rACDiJDBr7T2CRZHKSo384GGjcUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RjTTJYCm; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b34dde96cbfso242553a12.2;
-        Mon, 21 Jul 2025 05:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753102481; x=1753707281; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bq5VgfjTkqyHZmMsa4CuFn3fXsUBDjAcxmYxO2xVUQQ=;
-        b=RjTTJYCmZ/NPbd2kt1bt168pUdPJ9FFWUggiAluPZaUwSno8aldNeim5NoYXnw7JLs
-         +weY5AEIKikwhMpsYcCUUum8ZEyez1OFF3bykCAw8ZTcC87VDCXqZaTiWugoejrdIFx/
-         tqjTcqdo6nRIQuqjIhDjBM8AsDaCzFbb4Iwz8zJXbN2ZsqOGe45AILWxmSUofKJPOeWZ
-         u7e8IYfbrjrcoVB8ysxFpgS+fdqnwM5rRzNixGXX7FJMvv8NOz9wW190aGOxZfVA+MIC
-         lofYLT9dJzGhxddq+bLGJpqGekjSt+oT3tFbSxEUVTPbv+0UcmIA5qQpipxEce49A8Fh
-         eYRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753102481; x=1753707281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bq5VgfjTkqyHZmMsa4CuFn3fXsUBDjAcxmYxO2xVUQQ=;
-        b=JT2K6kQYGwrGD4NwutlrXribZ7Lgk9YzQvT0KdiupulbG4tJODtu4VdIA5/dR91gAC
-         b4qFi3Q6Th60cUjBf6SCHGtDwcQAN+yWUjK6e7hz6rRzjYrNxdCYWLZ13A8rPEHMSU7H
-         LTEo+NfjJhTemZ8gbvA1vjvZnbBXESnznyGz5WIPaGJqbZPzDu6M3dySl2elNfzPwtNe
-         jDqO4CUaD0XjHGVpcZrFLedmU5nH5vppz8vkp+XZQQyUyRg4pjaRBA264dY5HMF1gPX3
-         aU39r0FowLkNzWa7zPITxmTO47anZCVnRwdI4LAxfuXwnYkcF91V2sPY7RgpcKg0RrVi
-         u6TA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMYpmBZ6tS19HodDEZnGseI3Hj++IBLnhOL0SCNaGeokAc+qeGGHxmC8fsztE8q4y+VfKw1m5QdU0TBvXn7pI=@vger.kernel.org, AJvYcCVzzjCI1jFSLdlIZUrIHYbAzWRY9CrxQFeGLgYPL6+gK2+dXqQ+Tb0z+yM1Ml/2yIL0YbZReIqwYahHPAo=@vger.kernel.org, AJvYcCX4z1i9mDeKgT/ECgKji/RH85W9DPHtXWic4Up3SGFqmzJ6tADOybwLMZNBsbl5zB0gw/a+b9wbe1o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA3KnFRfq2qLB2GhP1qyuuHRt06DaSu1QW3gQMltXeb3MAys3F
-	Pz4/vI2t1Xl0W48AOnErbCNfw/F9NfsHUTjyzVaFo/W846rDEA/ZP7p2rDeL5FMy7CqlJafVOUS
-	nK3lnie4kmtHQyTFBlIPK48IxF1ko/fw=
-X-Gm-Gg: ASbGncsUxJ+bS99blCsMhmOHfs0l1FTZfpixRybTeRXUsn1kh1jUHAue0qvkTKxVYzb
-	Yxd2sT04emAye5I/saK959xinuaw37qghbwVQ/HDf9Qw3QbPA7iRprafNimTIw2v6xOmNatZlpx
-	XZn9aVe5qONRY88dsa5tjOED3nGYomVC9D3FDFCS2q3uNqTLRiuJ55wF+Rqih+Yn0LUfkQQbUMO
-	N9Nvb9MzRIC2B/BkZk=
-X-Google-Smtp-Source: AGHT+IFI0uNUbtO1EL18MgqcISBuZun5VUryvqrsQhtAKtldt6P/mlWmjlPr/GgmBjbnB7SvG/K7ChJXEi849ooHmqA=
-X-Received: by 2002:a17:90b:562c:b0:312:25dd:1c8a with SMTP id
- 98e67ed59e1d1-31c9e6e8348mr11443694a91.2.1753102481364; Mon, 21 Jul 2025
- 05:54:41 -0700 (PDT)
+	s=arc-20240116; t=1753102821; c=relaxed/simple;
+	bh=onM7/yXXPy0rj+kktsvtqW+dskVE/IL1W226F8FF398=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ldjio7PCMP2XpOjFa/msgxgaGucaf0PmPZqBojYGe/tcJCCchx5tY/ef0nEcY6ONJGM9LMY8nQDQCv2QZf+wqNPkcgcakeWidI1jQxS8B3TC0pL8ItLil1Ufw7FbFjgkc774hZ4IG5V8NEW718SgwFPUfCBbPeU0VVFjzrgQmmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=YfBd131R; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1753102815;
+	bh=onM7/yXXPy0rj+kktsvtqW+dskVE/IL1W226F8FF398=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YfBd131RRhLqcHMO/9DBRhnsopOkDpwTVB8S0Lr0U/Ix7wq16RlG2EcpqKPNRnGX9
+	 dvGGkzmOcl5DJYdiGk2aTJ60HVxgH4FLoisShh9SbofSB1IxXzGJy+2JKGwesarirp
+	 VAgtFpXecyC6q8W8JUTCbfuINLHeCkhkJo2pNPAwLBA3dKePdMDNliDzMNKF0K67T2
+	 pkp++VhOPaHmVN600g2Bmyw9pRGB2e6N0SCW4sC/LKZAVrEgzfGQIQ/DPAcp0jF86z
+	 3y/C17t2npUbHF19zBvO9crGDXcXIhs2NKye3hUNc/W62M2B2smXPId/s4u4xO0vat
+	 XGCXq/JVGT7LQ==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 940C517E0FA8;
+	Mon, 21 Jul 2025 15:00:14 +0200 (CEST)
+Message-ID: <cb34fd4e-d87a-4a98-b27e-93ecb851e85e@collabora.com>
+Date: Mon, 21 Jul 2025 15:00:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com>
- <20250704-core-cstr-prepare-v1-1-a91524037783@gmail.com> <20250721073717.i6hr4iesfupzvtwf@vireshk-i7>
-In-Reply-To: <20250721073717.i6hr4iesfupzvtwf@vireshk-i7>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 21 Jul 2025 14:54:29 +0200
-X-Gm-Features: Ac12FXy9X7WoYLkMFLbQ__okKUv8h09D5Y5ZLeDybojK9NFQlmOXBw1vbHf4mSI
-Message-ID: <CANiq72mZxcwDX2X3RfRpHzqkmU6GBVadKPLJYF03Hj14O2x4PA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] rust: kernel: remove `fmt!`, fix clippy::uninlined-format-args
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Tamir Duberstein <tamird@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/7] spmi: Implement spmi_subdevice_alloc_and_add() and
+ devm variant
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com,
+ nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+ gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+ kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+ u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ kernel@collabora.com, wenst@chromium.org
+References: <20250721075525.29636-1-angelogioacchino.delregno@collabora.com>
+ <20250721075525.29636-2-angelogioacchino.delregno@collabora.com>
+ <aH4lwVpaiau1Ick3@smile.fi.intel.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <aH4lwVpaiau1Ick3@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 21, 2025 at 9:37=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Il 21/07/25 13:34, Andy Shevchenko ha scritto:
+> On Mon, Jul 21, 2025 at 09:55:19AM +0200, AngeloGioacchino Del Regno wrote:
+>> Some devices connected over the SPMI bus may be big, in the sense
+>> that those may be a complex of devices managed by a single chip
+>> over the SPMI bus, reachable through a single SID.
+>>
+>> Add new functions aimed at managing sub-devices of a SPMI device
+>> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
+>> for adding a new subdevice and removing it respectively, and also
+>> add their devm_* variants.
+>>
+>> The need for such functions comes from the existance of	those
+>> complex Power Management ICs (PMICs), which feature one or many
+>> sub-devices, in some cases with these being even addressable on
+>> the chip in form of SPMI register ranges.
+>>
+>> Examples of those devices can be found in both Qualcomm platforms
+>> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
+>> sub-devices, and in newer MediaTek platforms showing similar HW
+>> features and a similar layout with those also having many subdevs.
+> 
+> ...
+> 
+>>   EXPORT_SYMBOL_GPL(devm_spmi_controller_add);
+> 
+>> +EXPORT_SYMBOL_GPL(devm_spmi_subdevice_alloc_and_add);
+> 
+> I am wondering how hard to move these to a dedicated namespace.
+> Basically you can define a default namespace, and at the same time
+> add import to all (current) users.
+> 
 
-Thanks Viresh -- I will add this one if I rebase, since Stephen
-already solved a conflict with it (I should have pinged earlier I
-guess, sorry; I thought you guys didn't Ack so far since it was
-trivial, but thanks to you both for them).
+I can check if this can be done "relatively easily" (as in, if I can do that
+without requiring "a hundred" immutable branches for every subsystem using
+SPMI).
+
+If turns out being feasible - I do actually like the idea so yes I'd be pleased
+to do that... even though honestly it's completely out of scope for this series.
+
+In case I can't - it's still something that can be done later.
+
+> ...
+> 
+>> +	dev_set_name(&sdev->dev,
+>> +		     "%d-%02x.%d.auto", sdev->ctrl->nr, sdev->usid, sub_sdev->devid);
+> 
+> No error check?
+> 
+
+Heh, whoops, forgot about it :-)
+
+Thanks for catching that - adding the check for v2.
 
 Cheers,
-Miguel
+Angelo
 
