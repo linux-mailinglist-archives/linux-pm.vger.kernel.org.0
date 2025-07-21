@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-31206-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31207-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BFE1B0C445
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:42:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08836B0C447
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 14:42:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 604101AA22CD
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:42:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49A1C7ABDAC
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 12:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A375C2D59F7;
-	Mon, 21 Jul 2025 12:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526AF2D5A0C;
+	Mon, 21 Jul 2025 12:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VfByTHY/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hng8XynC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042502D59EF;
-	Mon, 21 Jul 2025 12:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59982D5A04;
+	Mon, 21 Jul 2025 12:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753101715; cv=none; b=I9E0JRHdnjt+D0lDlvAy5vObHmcdw+5IcDm5xrk5QQrdPOuplrM4O/qbnyxA1xqHYhKbVdaieyCsFyHWhM3bQdnYY5SItywoiJhIObneHCjmiJrKU+aAatRX81BZQj74Ho4lF3mmcN31i6JXh/YWBpKOAjhDg9e2MbAH07LAgCU=
+	t=1753101719; cv=none; b=Lc5pz6RjLkI/hIzqmqrI741byjQFaM9ky7nK6dnUJBIXjG+xwZhmeyqTOD4n7k2z72dg+6geAayHi/FsoY8uGuNl0/EHVHeVFrM+T7s03cmH3oB169I77XVVqRC+uyLYsUo/3vmds1sF7EIux+RiPVYduLTDPLGrLbzCvvH8mGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753101715; c=relaxed/simple;
-	bh=lAZPNUeeuhhsP5b0+OmxKzK/GjGMxwF1LiTfBK38Ofw=;
+	s=arc-20240116; t=1753101719; c=relaxed/simple;
+	bh=w6KY0bttrOjHkYZY0aEkpiy2ZPnPtR9Qkt4ba5opjrk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SuqA+YedFMsCrI49Y8ho6X53w5w9mh2ofFnrNm8taUkwpDYq5xXMnP6Fif+NOEKy6TtRurWsSW/G0oaoQceptm82se4+Sg4LkSLNKyiatZfPl3AX6qw0jq8bshjb+mJewfI0t75+Iq9lt3NMnq/GlIAgD6zWgzSek5IM62X/6tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VfByTHY/; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=KUwwFc3QyC5IVzgL+IF9qU1/BRGlJjfga6DhTAYsbdgOfibcrTErHHk9uKqEr73M8JT8fj/7wCHTqSz0nygfymMHWOpBl7tjA1pPiHGVwgSdIXl7NIYE1u5TdIzzYc6rJSH4O0bjpgArsL9wI3IO3KFh+o3lRTrXyYIY3qpNqHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hng8XynC; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56LAWE8j015737;
-	Mon, 21 Jul 2025 12:41:46 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56LAFx8e027797;
+	Mon, 21 Jul 2025 12:41:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lZfSS9a2l7X18pJgkXw1vbBprrrii+uTqrpX09plhr0=; b=VfByTHY/HMShgMIr
-	x4fp5cVi8QyTJpmGUXLHLQR6TlPVmJd7BULDqyADxqodL7d2zoyYQ5YGpGv4PSGk
-	FACszzqc/jjdigT/jlGXD6qQ1P2Igb1tHpmUIlI6vM7CnhuUqP295hDlgPwmbtbV
-	sBNKJBVrD92Kzys+nW9eVWZzLwTyW9htsHqCB9U+PHScn6ZQWk16TFszX33o5Nu6
-	iqThCK2LI7B9W9XQvhYcYZ6viyNuGAMfUzkI52DUK4mo0+EJmE4Tn6BEbBZJo/zt
-	GlX815w3cfNtsKyVaPV+Csm9ubviEuxM0Ndtl8K7hWOjc1D+BRdZ11PI+6+EZISk
-	H6NCWg==
+	LBjBWJVPt/vr1haA2zED4BkOuELCVeXVsGzVfTOwRBo=; b=hng8XynCV6yADuRW
+	E8C1Vq5r1J6WYrKhFj+7Y6BBvQlQ4WT/M+85cxSNYiQtEUS5yD0Wm9SPYJEbL4yw
+	t24OHkv76qBKvwzbke0yRazCNCSvmuD7C8dzZKC9RdTzROalXpdcUzugTSs1M/wX
+	dRM40elbky/YWczhdTD1OzXv9cpwAlqM39mEU62Gv15Kw32FZWjAFnkfq5ACUY8p
+	EikUgQw+s3KxOo0c3PGRWKqkYNUPms5YK769HYWKgICxBh21hqLeDhnVdfETqYvI
+	bdEcVoYHbSB0NUdPd/cTWtyf7fMt1xOSRALPExPPSvwUe6mrSDjFYRUSOKj6I7lU
+	61Xc1g==
 Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 480451d123-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48045hd0j7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Jul 2025 12:41:46 +0000 (GMT)
+	Mon, 21 Jul 2025 12:41:49 +0000 (GMT)
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56LCfjwX002213
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56LCfmeH002263
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Jul 2025 12:41:45 GMT
+	Mon, 21 Jul 2025 12:41:48 GMT
 Received: from zhonhan-gv.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Mon, 21 Jul 2025 05:41:42 -0700
+ 15.2.1748.10; Mon, 21 Jul 2025 05:41:45 -0700
 From: Zhongqiu Han <quic_zhonhan@quicinc.com>
 To: <rafael@kernel.org>, <lenb@kernel.org>, <pavel@kernel.org>,
         <tony.luck@intel.com>, <reinette.chatre@intel.com>,
@@ -63,9 +63,9 @@ To: <rafael@kernel.org>, <lenb@kernel.org>, <pavel@kernel.org>,
         <amit.kucheria@linaro.org>, <christian.loehle@arm.com>
 CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <quic_zhonhan@quicinc.com>
-Subject: [PATCH v2 3/5] Documentation: PM: QoS: Add CPU affinity latency PM QoS Interface documentation
-Date: Mon, 21 Jul 2025 20:41:02 +0800
-Message-ID: <20250721124104.806120-4-quic_zhonhan@quicinc.com>
+Subject: [PATCH v2 4/5] Documentation: PM: QoS: Fix return type and return value description
+Date: Mon, 21 Jul 2025 20:41:03 +0800
+Message-ID: <20250721124104.806120-5-quic_zhonhan@quicinc.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
 References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
@@ -81,113 +81,57 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=EIMG00ZC c=1 sm=1 tr=0 ts=687e358a cx=c_pps
+X-Authority-Analysis: v=2.4 cv=ZtDtK87G c=1 sm=1 tr=0 ts=687e358d cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=jR7MCmn6jQT2zHobaZIA:9
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=2Mn5PldW32zOEzkLXbQA:9
  a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: ub5fD4xF7k6-1WrxgLLlbm3LQFoYOlfI
-X-Proofpoint-GUID: ub5fD4xF7k6-1WrxgLLlbm3LQFoYOlfI
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIxMDExMiBTYWx0ZWRfX/KEBGx9hzkxS
- cJj0+092j01tiXYytWSzVn5AW3AS8WnsNXVLa7bCGju9rrzob7689pdYkAYRu8WrZjliBEqjRBD
- vJK5qtBLdeSxRwii9UH/va+glsEFGejFBXFMxYU0PEVDcQpZYclqA7U0Qs8uLQYCLlKoV72JOcy
- 1WyoYwl3L+hQmHY72HZ+XiMlWQM6RJ6Fth0L9bCUcDkNw0GjGkzNNb5o24VSyUUd5uupJWNiTOJ
- Edxbs//b7yB4fCqpTUOKZve2KA73iCHhV7zhPT5lew8ZN92PPPxy38UBXt/pVPnX2dxP8kFcv4k
- fDFEDlHTwXZKe6gO9KeW8qtKuYu3byq0mneyEOc6JA2y8Q5oR3cWnvuUxSuZ6PCUZ6jyraWSPPm
- 2cYhRisLoDGgjYM8c6mue9otf8Kp0m56Q9bRfbs15Np67T2z5YwxMtXh9xFZxFSakvoRa667
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIxMDExMiBTYWx0ZWRfX74HhvHfgQUwu
+ fvzhC1dMgi5Tjv6TptZlvqxf01Xhhoh6xgLB/wrq0vfN6MF3j4QT8XYWl3777D9md2Z0cqrHCM9
+ ZbgF/6BHbc+qYuy14YbLrvxdw37PGSy+q9+/DabPxlWJweiG8oZFSsi4duX3GZsEjO6qiSwbbxi
+ 399REZgpeER552ecmR0Z+FVcg5aF2ujCOu8eS2G6+Fi5bs+BcY0jf1vBheqXhQt+Y3w9pkAd12Q
+ YDl/mis+k/cYDrRKkEFR410gKk1IxeGuhd/AEVO+TG9sT7287glSOgNJk1G8auG8z6/Xa2kjaIZ
+ yUbw/9BwrjOi/B9XFjFtYSnR8AXwnB9peSYBQe8PaQiwaCqWxtq5wxfmmGQy66TnVovUgu3LFnf
+ Ub8AI05h1tURU9Bv650CHhCXUD8654Z8wfVhormLN6GSXCLL6nyxcgdGjIMcOHlzFzh9t/bh
+X-Proofpoint-GUID: 8XvAua4r59u_aJHHNE5Lmg5G_x9lVbYZ
+X-Proofpoint-ORIG-GUID: 8XvAua4r59u_aJHHNE5Lmg5G_x9lVbYZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-07-21_03,2025-07-21_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
- priorityscore=1501 mlxlogscore=999 phishscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507210112
+ adultscore=0 bulkscore=0 clxscore=1015 spamscore=0 phishscore=0
+ malwarescore=0 priorityscore=1501 impostorscore=0 mlxlogscore=994
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507210112
 
-Adds documentation for the CPU affinity latency PM QoS interface, enabling
-latency constraints to be applied to specific CPUs according to a defined
-CPU mask.
+The documentation for cpu_latency_qos_request_active() incorrectly stated
+the return type as 'int' instead of 'bool', and the return value
+description was incomplete. This patch corrects the return type and
+clarifies the return value semantics.
 
+Fixes: b8e6e27c626e ("Documentation: PM: QoS: Update to reflect previous code changes")
 Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
 ---
- Documentation/power/pm_qos_interface.rst | 57 ++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ Documentation/power/pm_qos_interface.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/power/pm_qos_interface.rst b/Documentation/power/pm_qos_interface.rst
-index 5019c79c7710..1ede4cafc2e3 100644
+index 1ede4cafc2e3..c6b8b9cda166 100644
 --- a/Documentation/power/pm_qos_interface.rst
 +++ b/Documentation/power/pm_qos_interface.rst
-@@ -17,6 +17,13 @@ The latency unit used in the PM QoS framework is the microsecond (usec).
- 1. PM QoS framework
- ===================
+@@ -55,9 +55,9 @@ void cpu_latency_qos_remove_request(handle):
+ int cpu_latency_qos_limit():
+   Returns the aggregated value for the CPU latency QoS.
  
-+For CPU latency QoS, there are two types of interfaces: one is the global CPU
-+latency QoS interface, and the other is the CPU affinity latency QoS, where the
-+CPU is determined by the CPU affinity mask, which can apply to part or all of
-+the CPUs.
-+
-+1) Global CPU latency QoS interface:
-+
- A global list of CPU latency QoS requests is maintained along with an aggregated
- (effective) target value.  The aggregated target value is updated with changes
- to the request list or elements of the list.  For CPU latency QoS, the
-@@ -76,6 +83,56 @@ cpu_latency_qos_update_request() call.
- To remove the user mode request for a target value simply close the device
- node.
- 
-+2) CPU affinity latency QoS interface:
-+
-+The Global CPU latency QoS interface can easily limit the latency for all CPUs.
-+If we want to limit the CPU latency for partial CPUs specified by a CPU
-+affinity mask, we can use the CPU affinity latency QoS interface. Currently,
-+this is only supported for kernel users. This will only prevent the CPUs
-+specified by the mask from entering C states. Typically, some threads or
-+drivers know which specific CPUs they are interested in. For example, drivers
-+with IRQ affinity only want interrupts to wake up and be handled on specific
-+CPUs. Similarly, kernel thread bound to specific CPUs through affinity only
-+care about the latency of those particular CPUs.
-+
-+It allows flexible and precise latency QoS settings for specific CPUs. This can
-+help save power, especially on heterogeneous platforms with big and little cores,
-+as well as power-conscious embedded systems. For example:
-+
-+                         driver A       rt kthread B      module C
-+    CPU IDs (mask):        0-3              2-5              6-7
-+    target latency(us):    20               30               100
-+                            |                |                |
-+                            v                v                v
-+                            +---------------------------------+
-+                            |        PM  QoS  Framework       |
-+                            +---------------------------------+
-+                            |                |                |
-+                            v                v                v
-+    CPU IDs (mask):        0-3            2-3,4-5            6-7
-+    runtime latency(us):   20              20,30             100
-+
-+The usage of kernel space is:
-+
-+int cpu_affinity_latency_qos_add(handle, affinity_mask, latency_value);
-+  Will insert an element into the CPUs specified by the affinity_mask latency
-+  QoS list with the target value. Upon change to this list the new target is
-+  recomputed. Clients of PM QoS need to save the returned handle for future use
-+  in other PM QoS API functions.
-+
-+int cpu_affinity_latency_qos_remove(handle);
-+  Will remove the element. After removal it will update the aggregate target
-+  and call the notification tree if the target was changed as a result of
-+  removing the request.
-+
-+bool cpu_affinity_latency_qos_active(handle);
+-int cpu_latency_qos_request_active(handle):
+-  Returns if the request is still active, i.e. it has not been removed from the
+-  CPU latency QoS list.
++bool cpu_latency_qos_request_active(handle):
 +  Returns true if the request is still active, i.e. it has not been removed from
 +  the CPU latency QoS list.
-+
-+Note:
-+a) The CPU affinity latency QoS interface uses a mutex, which might sleep.
-+b) Use dev_pm_qos_raw_resume_latency(device) to read the CPU latency set by the
-+   above interface, by passing the CPU device.
  
- 2. PM QoS per-device latency and flags framework
- ================================================
+ 
+ From user space:
 -- 
 2.43.0
 
