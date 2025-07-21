@@ -1,159 +1,137 @@
-Return-Path: <linux-pm+bounces-31223-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31224-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A04AB0C929
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 19:00:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6820FB0C94D
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 19:15:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6F7D543DEA
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 17:00:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FFD04E7602
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 17:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41D221421A;
-	Mon, 21 Jul 2025 17:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030362E11CB;
+	Mon, 21 Jul 2025 17:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBgo4r4Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KoUHjnpC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9932770838;
-	Mon, 21 Jul 2025 17:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD8328F95E;
+	Mon, 21 Jul 2025 17:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753117243; cv=none; b=Y/VLQt1ScRjx42EChYt31aX5XRKMp7nYTLMIYNqAU2/UoFJM9NoR0k3ZJ1cBi+M6B1M5dX8JaSnHqLSURq7yfodSFxKMzBCjNLUSNYATlL2ePoRlH7W2PklpJex4KoDp3bLigVxVkeHt9lwqs+gRgb4LECgE5sFcTY4ECFncUMY=
+	t=1753118099; cv=none; b=O3aOURKazZTlf2uRIbjAjAeaag5hYyi8Bj7VDXyod2jPits6FiMPBroP0xiD5BF1FyypSEVudmhuPHHWns9BOVIXlDZoH++0Y71GLLrBRLCwdki19Ji/sAm0YMPHYe1rJiFIW/xmGvoeYxXbYplTr9Pi4KasIKGPXb61SRefhqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753117243; c=relaxed/simple;
-	bh=7d9Kecvwsvgo7o1A4iRWacudzfro57HsAyrEpFJvb4I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lwjJyGZT6k/KTbx22FXLUEpZdyi+LjmqqjeQtZ+A5ZXDjC6b2Pm5xKvSzPAjy25B2uInTJ8DhiUEXP6kXlwIpotI3FHrXaYCtQzvCmbAJAxq4rKmiB5NZNogPBFfL5TwvF/kkdSTYQEl/+Vq/5/9RlPeuKOW7qFS92btiHMD5Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBgo4r4Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2704CC4CEF7;
-	Mon, 21 Jul 2025 17:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753117242;
-	bh=7d9Kecvwsvgo7o1A4iRWacudzfro57HsAyrEpFJvb4I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eBgo4r4YmOP7vzOXen94Z016e6fnCycgylIbCxO+f/VSypnp5Fi9obpNayG4K4Yj5
-	 LDi0kv6HVeFDcZmLNOrPHd5TAsfLt6ThMzAoNtHUEiIbEt1e3YJTH/HCFL839k2XDm
-	 fRhTXW3YWEodn7ncQagTF+Nka1VPEmfxTg9pndZhdVFxA1FaSfcF2OcG4fVGiDN1fu
-	 ZmAetb7mhG1vH/hUXAq1ANwVtjaZrIHvFK09SfbaZlQzK5ROXGPx9OtxnD7kxkigz7
-	 vcl3m5UU4qer/CSK61cW2ijLmCZCrA3EDNBWncsMyRasoOGd+CVMqBP2z9mKZT8DJB
-	 qACDkrvDESVQw==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-615eb598b0fso280130eaf.2;
-        Mon, 21 Jul 2025 10:00:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX/9dy3SDXCd72Df83T43jBxGOaonTqp5/m91Qq9TF6fW4Cn6brnPgMFCnY0/A9uguaE7pQmhgWqQQ=@vger.kernel.org, AJvYcCXyCPER5WfPTNyowuptO+shvBbiXpvWkBqEZdgusJe+7sNjBPNpBcMCKR3dzDAfTNG7zvwDE3jsjFFDk4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKuTYfNmTMPIivDiz5hoOU060jAdBphq4B6PpgYtSAsLJa8My+
-	woUfYWi1X5YvoSxjAzXw1Vdllhyhe5qtSLkBMG2ueyyHzsTZ9K7QtLqe6+azop5x3ReVS2GoYlj
-	z4HHjI/Zc80QCkydPqzJqobKVUxZtuWc=
-X-Google-Smtp-Source: AGHT+IFH8hdFo49OCKRGtXKLaGVewbQO4AH8kOfQeXjxdGZzIkdT1RmSA6/593DIfxVYqOy7vWKFYbRT1IiAFrcdbd4=
-X-Received: by 2002:a4a:c994:0:b0:615:9107:fae3 with SMTP id
- 006d021491bc7-615a1fd6c08mr12940001eaf.8.1753117241180; Mon, 21 Jul 2025
- 10:00:41 -0700 (PDT)
+	s=arc-20240116; t=1753118099; c=relaxed/simple;
+	bh=EDwVEG1YcLrzyGWM3/+Lk5Mp3z0nij43S1kN6uWIoBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwTvXc8uZE+EFuXNf951t2oV+OgQ5fW4BVgkpMzmeeMHEdcdVome5kBB+uk611/3ntpnzeqDyhbxUnb83iazxtsGdYpMFahb029KDwB6L1wDxHovcwZSObDbRxkdTqZeuQZGdsOT5/y7CVZsfK4El+HT8Mb5L5olY0kYb2ZHRbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KoUHjnpC; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753118099; x=1784654099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EDwVEG1YcLrzyGWM3/+Lk5Mp3z0nij43S1kN6uWIoBs=;
+  b=KoUHjnpCEyHwO+V6s+lsdpf28u1D1Lj7JBw2Dxrz9KP/5w8i4L1HEWWz
+   FmDyMHEpxbp8RCGiD6f0HyZDkuGGUdQNqvl1yYou2mwaq5/4pA2cCburR
+   SlTNi4KDGNcfnO1axOS+RnMiH8NG5k8EXpVJJ4XFuSmP+hUfunKdEpCA3
+   FGfr2aNOTFTHFALwGwBGSMyQdnwiSZZPtUabmawvNAOiVbB7+xznaM6UM
+   QBtHeq3XZSZj/AeiNSfts3VbTDsWECCyX8S/KrBhwZJRrpv1RWF6IY7ge
+   j14q80skWN0ZjxO4/4l4F97V/9d7EaHbnISyimQXJFihCRg7XXbw7Qq0k
+   g==;
+X-CSE-ConnectionGUID: +v+C/ls0TviENcPYHlAQ6w==
+X-CSE-MsgGUID: gQAA4+yhQnKsFW4cvNSwzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="65909270"
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="65909270"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 10:14:58 -0700
+X-CSE-ConnectionGUID: mE54dbTTSJWW6EhWVJ6OfA==
+X-CSE-MsgGUID: xIwlqI3hRfmb47Xue2ydPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="163196999"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 10:14:53 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1udu6D-0000000HOKx-2u52;
+	Mon, 21 Jul 2025 20:14:49 +0300
+Date: Mon, 21 Jul 2025 20:14:49 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com,
+	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+	kernel@collabora.com, wenst@chromium.org
+Subject: Re: [PATCH v1 3/7] power: reset: qcom-pon: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <aH51idxbwW1SAExG@smile.fi.intel.com>
+References: <20250721075525.29636-1-angelogioacchino.delregno@collabora.com>
+ <20250721075525.29636-4-angelogioacchino.delregno@collabora.com>
+ <aH4mWfgQt_Q0O-7S@smile.fi.intel.com>
+ <f5d529c3-b898-48ac-8e5a-f587db72dc82@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250619000925.415528-1-pmalani@google.com> <20250619000925.415528-3-pmalani@google.com>
- <ff65b997-eb14-798f-1d2f-c375bf763e71@hisilicon.com> <CAFivqm+hjfDwPJCiHavnZSg2D+OaP5xbQnidmwxQ3HD32ic6EA@mail.gmail.com>
- <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com> <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
- <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
- <aGuGLu2u7iKxR3ul@arm.com> <CAFivqmJL90xsELhz4tPtkYA9vMzS9C=V__nwo=kWJKjKS=mE_Q@mail.gmail.com>
- <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
- <aHTOSyhwIAaW_1m1@arm.com> <CAFivqmJ912sEdSih_DFkiWRm478XUJhNDe=s2M_UO2gVTu4e3w@mail.gmail.com>
-In-Reply-To: <CAFivqmJ912sEdSih_DFkiWRm478XUJhNDe=s2M_UO2gVTu4e3w@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 21 Jul 2025 19:00:28 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
-X-Gm-Features: Ac12FXzay_rGup9nAI5Mnagj3Z1I3807jJVdvBGS6XkcV4GLMO8s7WIDVqPw-A8
-Message-ID: <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-To: Prashant Malani <pmalani@google.com>
-Cc: Beata Michalska <beata.michalska@arm.com>, Jie Zhan <zhanjie9@hisilicon.com>, 
-	Ionela Voinescu <ionela.voinescu@arm.com>, Ben Segall <bsegall@google.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ingo Molnar <mingo@redhat.com>, 
-	Juri Lelli <juri.lelli@redhat.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman <mgorman@suse.de>, 
-	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Valentin Schneider <vschneid@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5d529c3-b898-48ac-8e5a-f587db72dc82@collabora.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue, Jul 15, 2025 at 8:28=E2=80=AFAM Prashant Malani <pmalani@google.com=
-> wrote:
->
-> +Sudeep.
->
-> On Mon, 14 Jul 2025 at 02:31, Beata Michalska <beata.michalska@arm.com> w=
-rote:
-> > So I believe this should be handled in CPUFreq core, if at all.
-> > Would be good to get an input/opinion from the maintainers: Viresh and =
-Rafael.
->
-> Viresh, Rafael, Sudeep, could you kindly chime in? The unreliability
-> of this frequency
-> measurement method in CPPC is affecting the cached frequency saved by CPU=
-Freq,
-> which in turn affects future frequency set calls.
+On Mon, Jul 21, 2025 at 03:05:46PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 21/07/25 13:36, Andy Shevchenko ha scritto:
+> > On Mon, Jul 21, 2025 at 09:55:21AM +0200, AngeloGioacchino Del Regno wrote:
 
-I gather that "the cached frequency saved by CPUFreq" means policy->cur.
+...
 
-> It would be great if we could solve this in CPUFreq core (maybe not
-> rely on the cached frequency while setting the new one [3]?)
+> > > +	if (!pdev->dev.parent)
+> > > +		return -ENODEV;
+> > 
+> > You can start using
+> > 
+> > 	struct device *dev = &pdev->dev;
+> > 
+> > here and perhaps one may convert the rest to it...
+> > 
+> > ...
+> > 
+> > >   	error = of_property_read_u32(pdev->dev.of_node, "reg",
+> > 
+> > ...including, but not limited to, use of device_property_read_u32(dev, ...) here.
+> > 
+> 
+> I didn't do that for one single reason: I did not want to add noise to the commits
+> and wanted those to exclusively migrate the drivers to the new API, literally
+> without doing *anything* else unnecessary, even if I have located some almost
+> effortless improvements that I could've done to those drivers.
+> 
+> Please - I prefer to keep it this way: these are the first commits that add the
+> usage of the new functions and of the concept of SPMI subdevices, and I really
+> want those to contain just that and nothing else - because I suspect that these
+> will be taken as example and will be read by the next person that is implementing
+> a new SPMI (sub)driver or converting any remaining ones to subdevice.
 
-I see what you mean now.
+You can introduce a temporary variable in this change and use it only in the
+lines you have added/touched. We have similar approach in several drivers.
+Then somebody (not specifically should be you) can move it forward.
 
-Why don't you flag the driver as CPUFREQ_NEED_UPDATE_LIMITS?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-That would kind of make sense given how the driver works overall, or
-am I missing anything?
 
-> >
-> > In the meantime ....
-> > It seems that the issue of getting counters on a CPU that is idle is no=
-t
-> > in the counters themselves, but in the way how they are being read - at=
- least
-> > from what I can observe.
-> > The first read experience longer delay between reading core and const c=
-ounters,
-> > and as const one is read as a second one, it misses some increments (wi=
-thin
-> > calculated delta). So, what we could do within the driver is either:
-> > - Add a way to request reading both counters in a single cpc_read (pref=
-erable
-> >   I guess, though I would have to have a closer look at that)
->
-> I already tried something like this; I used [1] which basically puts the
-> 2 (constcnt, corecnt) register reads in a single CPC call;
-> This did not help. The values are still highly variable. I never got
-> merged FWIW.
->
-> > - Add some logic that would make sure the reads are not far apart
->
-> As Jie pointed out earlier, a lot of this has been discussed (see the ref=
-erences
-> within the patch link [2]), so I'm not really sure what else can done
-> to reduce this on
-> Linux; there are two registers (SYS_AMEVCNTR0_CORE_EL0 &
-> SYS_AMEVCNTR0_CORE_EL0), so there will always be some scheduler induced
-> variability between the two reads.
->
-> Best regards,
->
-> [1] https://patchew.org/linux/20240229162520.970986-1-vanshikonda@os.ampe=
-recomputing.com/20240229162520.970986-4-vanshikonda@os.amperecomputing.com/
-> [2] https://lore.kernel.org/linux-pm/20250131162439.3843071-1-beata.micha=
-lska@arm.com/
-> [3] https://elixir.bootlin.com/linux/v6.15.6/source/drivers/cpufreq/cpufr=
-eq.c#L2415
->
-> --
-> -Prashant
->
 
