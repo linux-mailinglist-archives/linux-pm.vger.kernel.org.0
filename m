@@ -1,88 +1,89 @@
-Return-Path: <linux-pm+bounces-31244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAB2DB0CBD7
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E3EB0CC18
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 22:49:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D35175401C2
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:32:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39D1C545AA6
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 20:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC96239E9D;
-	Mon, 21 Jul 2025 20:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415CE23AE83;
+	Mon, 21 Jul 2025 20:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqvP+GEz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EYPNb6bP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662427DA7F;
-	Mon, 21 Jul 2025 20:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39401B4242;
+	Mon, 21 Jul 2025 20:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753129915; cv=none; b=oiPpWp3fp+YLsCGKT55v1+GTrZ3GYDT0aqftfzyMsXc1l5xYbFiaNYAheYq1WTOeP7vK8+G2J7bJ5xIY3JaBqg44Tnc2BGM63ja7B7us1G7eW6JrRlm5/IQtCnSuFEOhl/VWoVeAZ4xrAnqhA4rKgTwaKaM+U557zDxXgb9DG9Q=
+	t=1753130975; cv=none; b=m05V7HfHZUH0OJSCokcKrzzra4IqMSpUNw060/AoLqQnj2ItNHH7dytkLJ9X0TwFs8J5Bd98cOl3qZlZT6sn9Pxw8KizGoN8XX3rWMoIUfcD+XbfLqxoJ4hTiOffIhyCuECszBK47XndE8XaUTTWbFvArv6WAawfOCVNB1LOrDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753129915; c=relaxed/simple;
-	bh=g5A9KOanO+cfCnC2DzKbBgwUK1XEgUVRRT2guId11mE=;
+	s=arc-20240116; t=1753130975; c=relaxed/simple;
+	bh=Jm4/f5kXKS+Wl1CcII+41ZXoz6y4+E758tZ9swKVMQI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ge45oDoSYOwGC90zFQGIFwjfVlV9qp4tMZRfXB10h9tMsHzdtC2LM7cjn/MOhE6zLHLJSZkCExb5/RVhY6/BY2T4JWIe2vejkxs0SOzi27B6mJm8EWTGu2YnWLYkHGRO179lY61F8HAU0KwThhePXGUcvJbdjW81mNAkOEcnxDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqvP+GEz; arc=none smtp.client-ip=209.85.167.48
+	 To:Cc:Content-Type; b=j+a/a4gGDwasNxLbdzZisf9KoNAorPQxk44+zrjzKKrn3Ko2UlKTaWVGarGFgBxg+3wTYVIC1fGktnvNyga+AemDEdJpYwwvs7SwfWwhUQMLFh2VvJplcIqdVJIfyI0AJcEk9cqG48lBCAgfsGWZ0I7eBvlVCW8JJ0kR7Fw9klM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EYPNb6bP; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-555163cd09aso3869018e87.3;
-        Mon, 21 Jul 2025 13:31:53 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313756c602fso944364a91.3;
+        Mon, 21 Jul 2025 13:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753129911; x=1753734711; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753130973; x=1753735773; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g5A9KOanO+cfCnC2DzKbBgwUK1XEgUVRRT2guId11mE=;
-        b=jqvP+GEzmMIcut//TyCN8goYafOKEx7WWtTZlUZZw9DTkw+S8CtShjFEYm5TUdU7X1
-         lt8bA5t1sidQzh6fOtaSkDkYd8zKKQvVH6toSft9n5Pe5DQ1k/8BsaELg1R8XDpxq1BJ
-         9kFA3OULtLj7ta5BofKRTL0/UwLy3rXHIUCifiN03cbylhAg+FKOiUerazazoS3Tqb01
-         wzkec3UTd5GMarJrAu+zS32hSK83HNVLIn4Tx1fMEbeWUVVQLg440ygux5pT7+h7h7yv
-         dY+x6fX/r9o+iktyJWUtdlfc7/p7YbifSGz36Fbs33+oPdH+k1RvI3fH2V6MXS+i74DV
-         LSmg==
+        bh=Jm4/f5kXKS+Wl1CcII+41ZXoz6y4+E758tZ9swKVMQI=;
+        b=EYPNb6bPD2Q88Pi99uq8bOWN1khOfdFoCPE9cXE5+5g88t7v5LHjZ60VbgLfa84I17
+         M91JprxHaefCkg/1H9sa6BkGLSYSM2QaFxD9YT4z6jj92fv2dCYi6Mfl8djfH6l6Kem0
+         9257kJemoAiUXoSvOE+7w0C59+et641IiuQ95NOo7YeW3g/chM9B6Cr3jvjRUNNCZxq6
+         e3lO6vwkP6Ld2iXn3GJfUSVg4xJA6Pa49D3RVN2SqVMv7WU0kN3qq4corBdD914nfJmY
+         ReZH3ix8CCb38knP/lKWJaizm1mlfmrT9jdrsH+J5xCFO4VG3R9ea4NjSnZl5IAgK2ZS
+         +yIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753129911; x=1753734711;
+        d=1e100.net; s=20230601; t=1753130973; x=1753735773;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g5A9KOanO+cfCnC2DzKbBgwUK1XEgUVRRT2guId11mE=;
-        b=ZhSDU55M6JUs+tCmXCmDpRaTQ2htQy5GRMbY+SZu6m0Z9eegjOBuU2OZvg8+7vSp8D
-         Nam0hDxd8HLxQ1+A+nLhxQaf59Eu5Ivk3jGnqTp6RbgWiORQZBZ+DMlVlAlU2eFEFxo5
-         hV1Lc9RkIM4g48gN/ndZlfIc6ZZ9k5IuOUpBnbqLHoKH2yIxGKuoaT3WuzZrGC4ykSO+
-         TaRkQAyWk7IO2Nx6J0qxq0MbJigTPo/KvjPvvAjHZBWo6Fbo06y6bcLz/MSUJI7+K3WU
-         lUEff4ZTcTDKqFCrSfoyYSV5ktd1mAQhPWWi8snaQ7iWJnw1xr/ON5ARKxixT9uMRDNC
-         ryTw==
-X-Forwarded-Encrypted: i=1; AJvYcCUiiuO8Wuctfe/jzEhK4bLRU+I1AH//FHLJWmYyn0nqa/KbMwYIXyW7Ecq8MqFhn6KO5DOQnfuM@vger.kernel.org, AJvYcCUwyfeHnzEhA13mSyrkfVDBO8SsWAb1czJBhWt6uM1aSv4tnBX0JB4mgGFVc8fZNjgTwymliEin2UPG@vger.kernel.org, AJvYcCWBtxK2QE2Y/tZenAhzz/2U8icLMDLSu7D0eyi3O6FaDqyMwKyWNusaYC5Xv2EBw9HHhbu8W9tu3LSmIuMKQWnI@vger.kernel.org, AJvYcCWIeBbz8zNDSbPVMB5grQdD4rmv4Q0QWx/g0g5XBYcuQyg6WXz1DTgQHj3Q2f3hMt2Z5p8R3VNfBiOm3uhVHL8=@vger.kernel.org, AJvYcCXMBJfeVWwNtv1TJXqGaa3y7wEDBbEk6+eG2jLxLlsls966lRWPtTEK8MVzOSIM84XPIWPefF+MohI=@vger.kernel.org, AJvYcCXoPs77LppdhX7FpPr4QU1IzlnSXJYfbJYZwUlkwqwrajA2QblNjEV4e6OwYLa5t1q8hzIMqblc+HV3RxH7@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWJFGOigDcRLBY+2kS97lJn2JomPtG5euRRER8uE27Tmse27+3
-	eu+c3wNFzf2EOvIh+OoON2mxTilm5qLpAGhtCnVcA7KaxZLI3fDNlblT8edZLDk6d6Rau2eN0dP
-	FUNtHWXg11p4CPkA1QQYrL5G9wQ6NKtg=
-X-Gm-Gg: ASbGncvrXVb/eHF7D1gciTIGxsQJRrNOVgyUP5LpEsZOfMeuQ2wHI0WcpC52tIVXS/C
-	XCPZ0zp31ljm2L05qv828rXQfnPVCiB+lZwpOuT1XW2Zb4tA1L+WjPClow+eoH0esGwgvclSC3t
-	MSgguEte4t/XIVIrP85lzDJ2nSwUrBQJkWZ5DsHXNBqXCbwr39wqfUgHcQ6ScRCS4sefugvlkZ3
-	zWjf5gJC2xWvIvLxCM=
-X-Google-Smtp-Source: AGHT+IFR2lRHIzOwJj3JIlIo6gx45Mp51Ht2b7RDYiFrG52gvnrp+p/uZ3Tj+777Jg5nVJOtwaPjIzJjlMYwrAVYkHM=
-X-Received: by 2002:a05:6512:398d:b0:553:35ad:2f45 with SMTP id
- 2adb3069b0e04-55a29729104mr5367527e87.50.1753129911239; Mon, 21 Jul 2025
- 13:31:51 -0700 (PDT)
+        bh=Jm4/f5kXKS+Wl1CcII+41ZXoz6y4+E758tZ9swKVMQI=;
+        b=NOaBSJmwoEzYerfqClggKjttIbIbfoX2HNmr11de1ybna8o7q9LWwsgkwaxZWY0hP2
+         MW4nyMLBUuujLGcqnztZwdcBjKM9QRwQRyKHP+7DVv8a2Tzxx9B9+CmnnQZm49+bgm/p
+         hk//5C6+CCh/jxcscHRkTThpeGfo0/AmgIW3jJJtm8EH3WAHxnGXInD6bV6i28rm4ne4
+         sLwv8SMAsD7OpnMJXEYhy2gdR3gVy8jIQFDjKrLWOxs9fXYTMmPFrF9aeoRTirzwDD6p
+         FoWzhHrO5w0oXou4FcmwbkWQULR50AJpIDKIhL7/AEXBhf1wXUTFOaesBMCwu/XzkWNV
+         S8hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ30gdsVrC48jt+v952B14GUiKkdjfWDWbrHAUkT8QUzINedI545OL0E8Pmufaqk212jvnrRaW@vger.kernel.org, AJvYcCUbqZat11GBrfJOCY4p/qWA2TuVPINL4wOlesQ17ij6mQHbDj22rrn2364lwT9h7TBp7qw8qCe0wYgGTon8Y+8=@vger.kernel.org, AJvYcCVQHv17a54c8oGVs38MJPS3oL57ucksbPKw71oWPY1R79bm96Epi9TNIEMreoI9BrOhyFnsDdoJDFiYmc1e@vger.kernel.org, AJvYcCVphFqyA5bQYVihQ05ZPbh2tyESKBfAK+cUceFuUVXqEd47FR8rhFBhzIdLXem2bjfIeF8/my25LElI@vger.kernel.org, AJvYcCW8cVvtM+C1406j6sEBoONqlBnG1cjycZuMfgXDwt4ic6qSgQwIRWiP6YxCxAWM9Bp89QVAMFiy3Bk=@vger.kernel.org, AJvYcCWc4jvhhl7WtURhYio4uFlSJwRgfnWnQETLFfy9X/0U9ilVc5ukgheVZUIpeH5pfISEmShZp1PWay0gaMvjhtTK@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfhQrauNQ21kuehqBmVwnPWkQAzHT8Hbpm3oLC2MzH3PqPYP2V
+	dqBB9q4I/8gZ8yF4sgpx+29hPkbBUc39MtpKjKBeipf2Bw3qSuqtsW8UBPbQvD0BpHU+l1fUs4M
+	05TwBGRu6sROndcTXw48YH++5Jxj4i/o=
+X-Gm-Gg: ASbGncu3t/lMV39KodE1s8fom3fCVvYbT7hrtYGfHqbnn/rxvArDJznSwQpUBCv1vBL
+	3aJ1mydRHCHljqhuNUP/WJyl6m0eBpz4FG8wGb/7pHqjoXJXbd/+0p+7tbBd2Q5efXSrMXts/X8
+	Ufh8CftIuQVPqyXW9Qi8UAn30B8DJBscE6ny2CO+oiSJyhztMgkg7BxCis1a71aO+KK8noVrAhO
+	EUrBhlx
+X-Google-Smtp-Source: AGHT+IGyu0ZkPugEWXzEljdlyIx6mfONy+WiSMjlOMcnsFBAw2hx+lOle+FP3aaXLnvDiZ06RuT2JKWt9T9VrBBHr2E=
+X-Received: by 2002:a17:90a:da8d:b0:311:e8cc:4250 with SMTP id
+ 98e67ed59e1d1-31c9e75ef95mr11696365a91.3.1753130972963; Mon, 21 Jul 2025
+ 13:49:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com> <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com>
-In-Reply-To: <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 21 Jul 2025 16:31:15 -0400
-X-Gm-Features: Ac12FXwThiyNWkPFtuHHqyDRKx2RF3BqA4YU0Qjx3AoUK2MCPhmxxwTXBXJI9Qc
-Message-ID: <CAJ-ks9ne+YFezFvQ8nZH2UTjwqb3+3JtG0ztqecN-A46tC5SSw@mail.gmail.com>
+References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
+ <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com> <CAJ-ks9ne+YFezFvQ8nZH2UTjwqb3+3JtG0ztqecN-A46tC5SSw@mail.gmail.com>
+In-Reply-To: <CAJ-ks9ne+YFezFvQ8nZH2UTjwqb3+3JtG0ztqecN-A46tC5SSw@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 21 Jul 2025 22:49:19 +0200
+X-Gm-Features: Ac12FXxJIljI0Qgyxggn4RfqwM5u2m4U83LSCHwh8qf8prqbA__S0tFkUzwI8nA
+Message-ID: <CANiq72nWsKd1DA=3O_XNYipw0PQ5iOX0gDyqYdGzMqTDZAdukg@mail.gmail.com>
 Subject: Re: [PATCH v2 00/10] rust: use `core::ffi::CStr` method names
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+To: Tamir Duberstein <tamird@gmail.com>
 Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
 	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
 	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -105,25 +106,22 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripar
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 21, 2025 at 4:20=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Mon, Jul 21, 2025 at 10:31=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
+> wrote:
 >
-> On Sun, Jul 20, 2025 at 12:42=E2=80=AFAM Tamir Duberstein <tamird@gmail.c=
-om> wrote:
-> >
-> > Subsystem maintainers: I would appreciate your `Acked-by`s so that this
-> > can be taken through Miguel's tree (where the other series must go).
->
-> Did you apply this with `b4`? I think you picked Danilo's Acked-by,
-> which was for a subset, for other patches too. I can remove it when I
-> apply it.
+> Yes, please do. I did indeed use b4 - and Alice also let me know that
+> this was not correct. Sorry about that! Same is true for 2a, I'll
+> reply to that email as well.
 
-Yes, please do. I did indeed use b4 - and Alice also let me know that
-this was not correct. Sorry about that! Same is true for 2a, I'll
-reply to that email as well.
+Sounds good, thanks for confirming!
 
-> (Greg's Acked-by may also have been just for his bits back in the
-> previous series, but in his case he didn't say anything explicitly)
+> I believe it was for everything, as he didn't specify otherwise.
 
-I believe it was for everything, as he didn't specify otherwise.
+Sometimes maintainers may mean it only for the things they actually
+maintain, especially for big series where it may be obvious -- in
+Greg's case, it is harder to assess since the series is small and he
+is a top maintainer anyway.
+
+Cheers,
+Miguel
 
