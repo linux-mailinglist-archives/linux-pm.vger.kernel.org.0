@@ -1,131 +1,118 @@
-Return-Path: <linux-pm+bounces-31218-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31219-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4FAAB0C7C3
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 17:38:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B719B0C828
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 17:54:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21D461AA5DC7
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 15:38:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF8F1C20836
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 15:54:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94BAE2D6639;
-	Mon, 21 Jul 2025 15:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4942E0B5C;
+	Mon, 21 Jul 2025 15:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQpMcXXF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e0JZRiVz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243C82989AD;
-	Mon, 21 Jul 2025 15:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD172E040C;
+	Mon, 21 Jul 2025 15:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753112228; cv=none; b=iOT2EeCHJnABZOLuopoYls/aMSMLPsFCs2XinYdaxPqo49B4rFbAdsPcthTkxFiAjaCc1Ute05WS/1pHoYIrVL7h0k2XP/ala5zMY2mPqq5YyLxE8iDR/IZk/q6sVlyed+twLkJT2g4ILrdEgZDYVjacDuE5tbzIhzjKMX3JgI4=
+	t=1753113132; cv=none; b=IQXZ6UyCM3upI4RmRfg2j9OMQXVbmgLUm3eFbcyp+o+9MjIpfIxLhmjmkiZOiey9jPqWS+kIt1Tl+9AqKdch3xmUdgKCiOgndgusR04qo3obHJplF/jNWo3WuApGFPmIIjq+0mahjyVLf8+t+c4ZdX146xM1zoAm0SMk4XtqP3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753112228; c=relaxed/simple;
-	bh=vPbKId0oexCnk3rHxjJx/4Vv2g1W+vbieRquTrehV2s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ud/xyfYAYETuR472NC/58qZLJRDRt+8IvRFr59eutJCj9g6sa2fcu7HLSA9tgsSoNaMXNmJ8sXNy5oc1VsohaKoEUblrFyj8gANYUaipOYy/JGC0D8c5X89K8lkc21J3svQ2/SvaghRFI5+CU+wBruN72qpvZSb/jGk1QuhGsjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQpMcXXF; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-74264d1832eso5753702b3a.0;
-        Mon, 21 Jul 2025 08:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753112226; x=1753717026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wcari+pfAQyvOfkfes+Ld6UurqwzVSHlw11zA1GTL/s=;
-        b=CQpMcXXFHNeVxcSjyNWZ8bfvh40y73HDUoVt4L2MDLrSexjfc506EEXZxRTl7zRvZ1
-         x4AmMTpR51RlvMg5/rkbZ9pBJQgB76yQyV3eC4mBVxckx86R9Jklwg2phtmGb5UsIdou
-         nvlkPdMZk0+xjWiDbJEgi/yF0UBz1CTgKT+0P3ScFOn9pFnBcyMNcnkeCnm+ELLjQp3F
-         XNwNpp/VBCaO51WuQkWOwTYmwSoXWaPuC/KCj1CD/qe452YHXjn5wS1KkIhzoRTGiaI4
-         SGJR6yPA5Rujy4xccEsX8nJfIRhoITe+ifHqcDk/ejXbA2Mgb5gDfBsslM/+jfH+k2Gn
-         A45Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753112226; x=1753717026;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wcari+pfAQyvOfkfes+Ld6UurqwzVSHlw11zA1GTL/s=;
-        b=IofkWABz3mCuQicETNqpTmUCeFV8JHJK2v2ftgAtEVwpTYJCXVF5/YVmluCYGsz3uE
-         7V2TKUffTWvZlEevDOoSyAr65mDoXBCWWu9csTj2xC9RPNvUTN8K2JZgDCixtFG7K/+5
-         9PUSRnUJlTKcRq2bb+9xV8jvyuWpxmVBJHbxYrOZ0h/48SmZ7vjmr0q71hhjSiul1L/q
-         7ltAG456+Dx0aHhpGWlU7i6dEx2S/xRRryXaR5YF/IKDfXXipDtV69ajEvO1lf7RuRCU
-         bve2SGYHE8bAU2M0b0djZUyaxpSKzaJV8kbf6ZJvAMz4CCpOqpHmm6OzQK7vz8RYJufo
-         5AQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXaKHUspdYzWOjc8J2oXYSwcuxZL13irxi7r2R61hLamlWYcg4zuNladyMKDDM0ZrzWYCRWebLi7jmsd0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2KhbFL3Gobsh4JI3ftW0ASlYDfEh7Ucep7IrGg4iOw/IMnNKO
-	/vPlOySGGYNrqs1nJX3xXaj0nCTGsumWiqnM5X/39Z+u5u7XwC9+M7rP
-X-Gm-Gg: ASbGnctgdeTPJQjCWv5X1vgTqMUWEHTnaRHddo/O18kHfd+diA22/K9u679m3XI2+nT
-	7fSEUHX9poHvBwV0tu1w433QYzO3cgFvGztrxTQ3ab2SVZanznSC1sdxY9rC/Wsm8ocu83ktfBr
-	bIbBN/JzP0Tcq+hSNYEf9qspQ4HdFkpXuZvaJZfBFK6KXw+ygmFC5MFy/vZe7ZZpLUS8aP3WIsu
-	7pPZRW8ldFWhTosA7j3mYnakKkwelga+Ww66gpmcAOX27wQd/TGSMEfJNqY/0nVFKqob74CV7RA
-	Nw9tEwsGiaI7ZTwsukW0pF+w3AbGx7nxlAhMswhNDEYtFYInu0QomaMRopTvKD7Td0FMNldWo2y
-	ENUbCm6vd7u1KRqq3LQuvvqDOoq+uVNqrIWp1Qe2cYqys+mRX99TNc/dS7hgeIGVi/gclWPTfIl
-	XdCGdehzacTg==
-X-Google-Smtp-Source: AGHT+IG3AhBxGUgQrWz76VnBmLK/tDhyYtOOhCNOqFmeDwg8FrXTay+mxeCWGFs66OtMhVz+EEv2JQ==
-X-Received: by 2002:a05:6a00:188f:b0:740:9d7c:8f5c with SMTP id d2e1a72fcca58-75725589c70mr28755994b3a.18.1753112226285;
-        Mon, 21 Jul 2025 08:37:06 -0700 (PDT)
-Received: from zzhwaxy-virtual-machine.localdomain ([223.166.23.191])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759c84e2a6esm5679090b3a.11.2025.07.21.08.37.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 08:37:06 -0700 (PDT)
-From: Zihuan Zhang <zzhwaxy.kernel@gmail.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zihuan Zhang <zzhwaxy.kernel@gmail.com>
-Subject: [PATCH v1] cpufreq: Avoid creating sysfs link for offline CPUs
-Date: Mon, 21 Jul 2025 23:36:56 +0800
-Message-Id: <20250721153656.5103-1-zzhwaxy.kernel@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1753113132; c=relaxed/simple;
+	bh=hMYmkfU7Vhsh1L/r4VCOGbgckysxXtlssqFi82htU/A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oOVYLoihjLRzyn2X93gKXCsPvJ3jaft2+geEk1VG3zisX2pIYC37ljXAKf1jc0+nOzAvREflO8D0ve29CgeN1HI4Ts66F9h+avOKo20kaePSixcAPIfUsoCI7QOxvTRmvraSs89lxCd3vKV86RciTijZ9eHWrroFOTIuJCbp/xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e0JZRiVz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B105EC4CEF6;
+	Mon, 21 Jul 2025 15:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753113131;
+	bh=hMYmkfU7Vhsh1L/r4VCOGbgckysxXtlssqFi82htU/A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=e0JZRiVzuAyTpdR18nz0f+48bfKgo5hzaW9UNqT7Mva/wEPMP+C8Mx18/ecXzt9hF
+	 plq5dVsjAv3rx2uwGGNEAQm1B54fyS4/FgGCF2WMcoiyU80K2pEGUEb08fyGdmMbxc
+	 nbWKjbPkqPcYU9gEvTyrCc48ZT2MxIfBialUhRvlHoaYzhPU6JIh9io8FfRUmOWMkC
+	 HdBzRHSCAcgBI1SEFpFGiQETYPcG554Gze6QdJz3i9N8eoP9mE2eyKNwox6kKzA2UZ
+	 25+yVQsyB77eSTWjaRPXVZxLJLnyyFJdeZoqi1hFiyeJkiNgjCZKl6VL97lxalPwCp
+	 rZ7Z9atxgGzbQ==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-615da180061so675181eaf.2;
+        Mon, 21 Jul 2025 08:52:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWwHipRtnNBckS1AaheGaa1WhOqNt+mpdFM205oQHgbZ1TrSoLpyH7tRp+BXaF11V+EJ7YFtSUNHWY=@vger.kernel.org, AJvYcCXRj86EiZqcWorNPFrItmS9MfIfWxNSzIL7/p4w3EFO1GdfMb26XiSjjt3tYr75HwLTWDrGPDzZvwSVTrw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2WmZWhIDqINOk4V6nQmH3mG8Z8pnC3TofvQEG/Dy5jDIHOgrg
+	5vIIVfC4B9oPG2FwrwhuDbmCKI2aH7Y1xLvTweNeqApzKr5C6kTZyNWGrTwwRaP7XriYUzi0Htf
+	ZaLf4+yFHOJJ3KGggLjCK2aqCPWGBYbg=
+X-Google-Smtp-Source: AGHT+IFX927lVi11pCtP3aWnICcu5hAEHo2XF/aX27MiUBWFydNrRDkrh+CRzUXyFgtEprmyhEdpnIrQ2Gj2NyrX8Uo=
+X-Received: by 2002:a4a:e915:0:b0:615:eb85:19aa with SMTP id
+ 006d021491bc7-615eb851d46mr1048853eaf.4.1753113130910; Mon, 21 Jul 2025
+ 08:52:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250721153656.5103-1-zzhwaxy.kernel@gmail.com>
+In-Reply-To: <20250721153656.5103-1-zzhwaxy.kernel@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 21 Jul 2025 17:51:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iyAWdh=_2jcc7P5umR4T4yoatiK8cE+yT2vTiY87mxxw@mail.gmail.com>
+X-Gm-Features: Ac12FXyznHB76IYfD718dz-max0DAPtJcgBWJ1nEkgyLPLUn6Sy_Yv2C46vVgos
+Message-ID: <CAJZ5v0iyAWdh=_2jcc7P5umR4T4yoatiK8cE+yT2vTiY87mxxw@mail.gmail.com>
+Subject: Re: [PATCH v1] cpufreq: Avoid creating sysfs link for offline CPUs
+To: Zihuan Zhang <zzhwaxy.kernel@gmail.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently, cpufreq_add_dev() attempts to create a sysfs link
-even when the target CPU is offline. Although guarded by a NULL
-check on cpufreq_policy, this behavior is not strictly correct,
-since offline CPUs shouldn't have their sysfs interface created.
+On Mon, Jul 21, 2025 at 5:37=E2=80=AFPM Zihuan Zhang <zzhwaxy.kernel@gmail.=
+com> wrote:
+>
+> Currently, cpufreq_add_dev() attempts to create a sysfs link
+> even when the target CPU is offline. Although guarded by a NULL
+> check on cpufreq_policy, this behavior is not strictly correct,
+> since offline CPUs shouldn't have their sysfs interface created.
 
-This patch cleans up the logic to only add the sysfs link
-when the CPU is online and cpufreq policy is properly initialized.
+Why?
 
-Signed-off-by: Zihuan Zhang <zzhwaxy.kernel@gmail.com>
----
- drivers/cpufreq/cpufreq.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> This patch cleans up the logic to only add the sysfs link
+> when the CPU is online and cpufreq policy is properly initialized.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index d7426e1d8bdd..0a77892d366c 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1660,12 +1660,12 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
- 		ret = cpufreq_online(cpu);
- 		if (ret)
- 			return ret;
--	}
- 
--	/* Create sysfs link on CPU registration */
--	policy = per_cpu(cpufreq_cpu_data, cpu);
--	if (policy)
--		add_cpu_dev_symlink(policy, cpu, dev);
-+		/* Create sysfs link on CPU registration */
-+		policy = per_cpu(cpufreq_cpu_data, cpu);
-+		if (policy)
-+			add_cpu_dev_symlink(policy, cpu, dev);
-+	}
- 
- 	return 0;
- }
--- 
-2.34.1
+I don't really think that this change is necessary.  Thanks!
 
+> Signed-off-by: Zihuan Zhang <zzhwaxy.kernel@gmail.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index d7426e1d8bdd..0a77892d366c 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1660,12 +1660,12 @@ static int cpufreq_add_dev(struct device *dev, st=
+ruct subsys_interface *sif)
+>                 ret =3D cpufreq_online(cpu);
+>                 if (ret)
+>                         return ret;
+> -       }
+>
+> -       /* Create sysfs link on CPU registration */
+> -       policy =3D per_cpu(cpufreq_cpu_data, cpu);
+> -       if (policy)
+> -               add_cpu_dev_symlink(policy, cpu, dev);
+> +               /* Create sysfs link on CPU registration */
+> +               policy =3D per_cpu(cpufreq_cpu_data, cpu);
+> +               if (policy)
+> +                       add_cpu_dev_symlink(policy, cpu, dev);
+> +       }
+>
+>         return 0;
+>  }
+> --
 
