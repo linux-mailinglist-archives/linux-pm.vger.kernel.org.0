@@ -1,137 +1,166 @@
-Return-Path: <linux-pm+bounces-31237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F44B0CB2A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 21:51:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0280FB0CB3A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 21:58:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7C8C7AFA4F
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 19:49:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 342BE16C7B0
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 19:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915A42367C5;
-	Mon, 21 Jul 2025 19:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE2323770D;
+	Mon, 21 Jul 2025 19:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPMv7+OL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AViKdRQU"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66587BA2E;
-	Mon, 21 Jul 2025 19:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F227230BE0;
+	Mon, 21 Jul 2025 19:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753127473; cv=none; b=VbCRzcQxS+6vqxdKZApT9NUXoOd/8qPW6Aq7BfTDrvXdzBtCaP9GPsU/j3mnuesVJPFWbNgOXjiq+GBC8Rxir66kbUOztfrMDBKiX2NXnmraEQNsJl0ZBtGCRl0/jQK2IUgi/NGYT7xYWHlSiXW05+QXq2Ij0jpqqQoAqfCngCg=
+	t=1753127902; cv=none; b=oDFLVST1zvvvgoiyPB4Jv6xIPDTCgMMo/rY/3sXl8wHlVq0QOgXGlfyy1TfrubxMYxIhmo3uiSd95ivIBxqJkntHaw1eNGY7ZKzzuURktlQvF70Hd1wQvKaCAPmLIR93rbdEadRea3sJ3HP29/PAK1BVWNQkvNK31Mggt/4sD3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753127473; c=relaxed/simple;
-	bh=AfBAOulMHp7EDYXtLwDEGsMzWBGQfkizPfb1i5IFklU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eeRHKucenHrXuSxGt3ikB6UfWPNrOD4pDzV7QEjHxLxx1r6EOyn++cmG6SMdqCVkuIfKMs5upyloYje0ot4dbsmXmgo/mfIQY4eBx8hRUYrVd4J/DwALW1nJuN9TReKLr5WQaSKjhdCFl4Rt2XjxMnkQ7jSn3xMuraIOTnR0mdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPMv7+OL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CBBC4CEED;
-	Mon, 21 Jul 2025 19:51:12 +0000 (UTC)
+	s=arc-20240116; t=1753127902; c=relaxed/simple;
+	bh=KuJmPdgYM52TyEfb5GOaYYy/Wz8zkqWtBSMWMCCCUXo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hXuTxOVAwA2zQt5/08czuP0tiBVliatbnZBDswxHX1yiUO8Luuez2ugmiM9DISTe7PvvbNnO+I8yPQmTeBC7pbk5HKhZ5a9XXuVYiK/mPUGbH4YypTgRKOy0PdReuv0QGqEjEutCl4CvtCgdo0tPsNNmGCHcHLlXXl8Zll5R8g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AViKdRQU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1E7C4CEED;
+	Mon, 21 Jul 2025 19:58:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753127472;
-	bh=AfBAOulMHp7EDYXtLwDEGsMzWBGQfkizPfb1i5IFklU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dPMv7+OLGzdY2UCXX1FzkbpFiK8a7emjMkEokFNh2rF52G/Rq4idAPGL8SAzM87M+
-	 GbwP/4wLRbE+81SBDcG7XOb+xPz80bAYWcyfXZwYGku8ovMz/dg1vjC4fji0uE7X2r
-	 Yix8fABTx1/CdhHxMwN2m5QN3fIgi8W70PAXBgpd1wC5sU6azDM/Nsf7eBrIvFw4Ci
-	 O09fNEFamaMy2VJoXKyH8U8V7pMB3+neT3z9ARW/egq2obhXJiHrEB/DDEtLoVFSqW
-	 4KTfuwLr2KjwPJ1q7RI0B0+8DaMHGVPqOu+hpWhAoOFMG/m2PNs63wIfUocpWRpX09
-	 IKnkbY5o466cA==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-61591e51092so2219764eaf.0;
-        Mon, 21 Jul 2025 12:51:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVINuZPOnQf+iJ1M4IRZfOEd5YWZxuswGDjw6/KptR8mT9qms2CczSJ0qDasAnHZ7yzBxwwyMGdjb3va8E=@vger.kernel.org, AJvYcCWZNBStKsYrzFeTPktRU/Q+uwnIUvx3ZIHtMXqiGU2BxD9JhN8QNK/D/ZpFp33Wg+1jYDUh9R8qAYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGfRv95iyuSM0MDxS0DNOg1NRosKS8c44k/iYOgVfZ3s0Bjkwt
-	vVb7AwkHkkZADqz9xvQzhfIg809gMzxSStvhJiQdVK5BJgXiaV8vk/9rN3MpdNx0uZCFVpJKvOa
-	PfzRgwLtNuahfuPkQzo9pvgI6Y+JuG7A=
-X-Google-Smtp-Source: AGHT+IGoM4BLNSSylFMNbSAw1L3y53fxwdNKamgvbVT7Dp4NfffRHl+vvuNMRI4uIkvyicesk2mZGwF22RKoemB9+HY=
-X-Received: by 2002:a05:6820:260b:b0:615:e807:8134 with SMTP id
- 006d021491bc7-615e8078370mr1969877eaf.5.1753127472191; Mon, 21 Jul 2025
- 12:51:12 -0700 (PDT)
+	s=k20201202; t=1753127902;
+	bh=KuJmPdgYM52TyEfb5GOaYYy/Wz8zkqWtBSMWMCCCUXo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AViKdRQUgjZkH+Mbtvssorka8bkheIkitMNfiDbxUfb+690Dt1VuzCqU+7ttwe5Ad
+	 kMPF6GD1v1DRk3vz0S1w8yKh2jsTm5YgQeqEbAGIhhM9HefDaeosAA4fK27RVMkKfy
+	 qVsIHS6OB9L6yMwapvunD/anMfISkff2B8R0uhxqJkO8u/CFZlLgJdJcwAtJ+O8pr1
+	 l493eO1Ku7LwqQMqMStazmD7gJXCwEMZ/VQL+lvqHIMD+CeqOiNbr5zO4epfHrA7sS
+	 InnBoE+iqnd4Zpmy6wFJQOL3gt+1C1e8oyT6R8g3Rl78Kc8gaEU7F+Zhmlwo9piLu4
+	 35tiwJnZhQuGg==
+Date: Mon, 21 Jul 2025 14:58:21 -0500
+From: Rob Herring <robh@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-mediatek@lists.infradead.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com, ulf.hansson@linaro.org,
+	y.oudjana@protonmail.com, fshao@chromium.org, wenst@chromium.org,
+	lihongbo22@huawei.com, mandyjh.liu@mediatek.com, mbrugger@suse.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	kernel@collabora.com,
+	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+Subject: Re: [PATCH v2 03/10] dt-bindings: power: mediatek: Document
+ access-controllers property
+Message-ID: <20250721195821.GA1163453-robh@kernel.org>
+References: <20250707105605.98248-1-angelogioacchino.delregno@collabora.com>
+ <20250707105605.98248-4-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250718071842.2483378-1-saravanak@google.com>
-In-Reply-To: <20250718071842.2483378-1-saravanak@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 21 Jul 2025 21:51:01 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ifsVycSWk24gMrEsGtDn0nVkUJGH8vwBvJdEA1XHbTRQ@mail.gmail.com>
-X-Gm-Features: Ac12FXz4dxl62coHj83jeFJGnEtG5DNBml2TR8wnyAfVVxahSc3gpjhv9ZxVhoU
-Message-ID: <CAJZ5v0ifsVycSWk24gMrEsGtDn0nVkUJGH8vwBvJdEA1XHbTRQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] PM: wakeup: Provide interface for userspace to
- abort suspend
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Pavel Machek <pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250707105605.98248-4-angelogioacchino.delregno@collabora.com>
 
-On Fri, Jul 18, 2025 at 9:18=E2=80=AFAM Saravana Kannan <saravanak@google.c=
-om> wrote:
->
-> Once suspend starts, it can take a while before file system sync
-> finishes and all the userspace threads are frozen. During this time,
-> there can be events that originate in userspace that would require the
-> suspend to be aborted.
->
-> The only way to abort suspend from userspace as of today is to grab
-> and release a kernel wakelock using the /sys/power/wake_lock and
-> /sys/power/wake_unlock files. This has the disadvantage of:
->
-> * Doing the useless work of creating and destroying wakelocks.
-> * If the userspace entity crashes after the wake lock is created, we
->   get a wake lock/memory leak.
-
-But wakelocks are for this purpose.
-
-> To avoid all this and simplify the interface, this patch allows
-> canceling a suspend by writing UINT_MAX value to the
-> /sys/power/wakeup_count that is meant for tracking wakeup events.
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+On Mon, Jul 07, 2025 at 12:55:58PM +0200, AngeloGioacchino Del Regno wrote:
+> Allow specifying access-controllers in the main power controller
+> node and deprecate the old mediatek,infracfg, mediatek,infracfg-nao
+> and mediatek,smi properties located in the children.
+> 
+> This is done in order to both simplify the power controller
+> nodes and in preparation for adding support for new generation
+> SoCs like MT8196/MT6991 and other variants, which will need
+> to set protection on new busses.
+> 
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->
-> Rafael,
->
-> If the idea looks good to you, I can also update Documentation and sent
-> it as a non-RFC patch. I'm not too tied on what file we use to trigger
-> an abort from userspace as long as it's possible.
+>  .../power/mediatek,power-controller.yaml      | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> index 9c7cc632abee..82bfd3899b22 100644
+> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> @@ -44,6 +44,17 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  access-controllers:
+> +    description:
+> +      A number of phandles to external blocks to set and clear the required
+> +      bits to enable or disable bus protection, necessary to avoid any bus
+> +      faults while enabling or disabling a power domain.
+> +      For example, this may hold phandles to INFRACFG and SMI.
+> +    minItems: 1
+> +    maxItems: 3
 
-I would rather add an interface based on a special device file for
-wakelocks to address this.
+> +    items:
+> +      maxItems: 1
 
-For example, open it to create a wakelock with the name of a calling
-process, write 1 to it to block suspending, write 0 to it to unblock,
-close to remove it.
+Drop 'items' as how many cells is up to the provider.
 
-Then it will go away automatically when the process exits.
-
->  drivers/base/power/wakeup.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index d1283ff1080b..9316de561bcc 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -1008,6 +1008,8 @@ bool pm_save_wakeup_count(unsigned int count)
->         if (cnt =3D=3D count && inpr =3D=3D 0) {
->                 saved_count =3D count;
->                 events_check_enabled =3D true;
-> +       } else if (cnt =3D=3D UINT_MAX) {
-> +               pm_system_wakeup();
->         }
->         raw_spin_unlock_irqrestore(&events_lock, flags);
->         return events_check_enabled;
-> --
-> 2.50.0.727.gbf7dc18ff4-goog
->
->
+> +
+>  patternProperties:
+>    "^power-domain@[0-9a-f]+$":
+>      $ref: "#/$defs/power-domain-node"
+> @@ -123,14 +134,17 @@ $defs:
+>        mediatek,infracfg:
+>          $ref: /schemas/types.yaml#/definitions/phandle
+>          description: phandle to the device containing the INFRACFG register range.
+> +        deprecated: true
+>  
+>        mediatek,infracfg-nao:
+>          $ref: /schemas/types.yaml#/definitions/phandle
+>          description: phandle to the device containing the INFRACFG-NAO register range.
+> +        deprecated: true
+>  
+>        mediatek,smi:
+>          $ref: /schemas/types.yaml#/definitions/phandle
+>          description: phandle to the device containing the SMI register range.
+> +        deprecated: true
+>  
+>      required:
+>        - reg
+> @@ -138,6 +152,31 @@ $defs:
+>  required:
+>    - compatible
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8183-power-controller
+> +    then:
+> +      properties:
+> +        access-controllers:
+> +          minItems: 2
+> +          maxItems: 2
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8365-power-controller
+> +    then:
+> +      properties:
+> +        access-controllers:
+> +          minItems: 3
+> +          maxItems: 3
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> -- 
+> 2.49.0
+> 
 
