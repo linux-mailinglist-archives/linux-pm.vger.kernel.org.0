@@ -1,128 +1,125 @@
-Return-Path: <linux-pm+bounces-31249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8267FB0D0CB
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 06:10:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E734DB0D18B
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 07:58:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2A454076F
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 04:10:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 244273BFBB3
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 05:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C98289E21;
-	Tue, 22 Jul 2025 04:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23ADB28CF5C;
+	Tue, 22 Jul 2025 05:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wr/BPF+v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="19xSivaZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BD323B60F
-	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 04:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C43A95E
+	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 05:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753157451; cv=none; b=LEyErQTcXckG/81hux2rRncCXVsB+iYohR12AQXGZfhpsoVLC1Vh7hbzwL/1t6g6QPfstML5ms7gzTaa0ZY/HkfTe2Zql+xGHMar+SGzAOCxyfIki8N/N+3xVvqUK15dSzaFsZL9VnQ0T0WCUFwdynsbis4ug2a3rBOYAWm+pyw=
+	t=1753163887; cv=none; b=o1pR2Jtg8baA7pjURTRMVXDMP6BsoZoFvjBG0lB7LXWwP+vbT6w1Z/qLix2i1kiYX19WZVImwwRq94ghfqspr5aHJK58z/1VNxc7mRRxa3O6VR+BXuZye64vFwtciFeSZZm2V9v1ZmP7cUeBRtr78056Z421AqqjxSKozr+GYqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753157451; c=relaxed/simple;
-	bh=OqCNRS+72uajszDzG6n+T34z5A+LL4ACekiWWd6EEzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hfdR3Yo+E74QWROunb+xbEHAzl5YiVmwEhiQOaPdH7gnQuXbesoFR4lmyzrOf3BIg2blUDsml3KhHUV9NUHOK2vgBwiPhDzqX5u+1FNahXWupjGJoLB1LMSbJjIkEnc3S8mRMQVYpN9RQ9d0hhqUvyW4loiGPMeqbBBrBv8H9XQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wr/BPF+v; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b34a78bb6e7so3909522a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 21:10:50 -0700 (PDT)
+	s=arc-20240116; t=1753163887; c=relaxed/simple;
+	bh=n72cdPXZeJHHjVF29bmi3yU2+tOfineR66XrhqtYQ84=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ke7kieYPUIe4BDrtNukKaKJbHZS5eHfEIYjaPCSn09oHzcOg0GhFvmh5LdSt+HqpHxcYhm1WJ4F9G+rXJiNGIaYyfVFam6Gnun+GjuKyqN3wMz55m5Y+Ov4JUJjN6G0WGwH79bpJX9En7gEllKpossWqTl6/DsLUsi1rj6IqUbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pmalani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=19xSivaZ; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pmalani.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3132c8437ffso8872599a91.1
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 22:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753157449; x=1753762249; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nlBEY6HRx3gs6GmX9n8FOaCyjO7em88PtYwWGu+mg9c=;
-        b=Wr/BPF+vf/8Jh980foQMoEUznzRA7ZAjuL3JQ+v8LvyydzqW1nNIZBWDXvAzE4qfAG
-         xKz54LHvoq4IRfpFzYo2PWvqNb7t9Jsw5K5qRJl3rzI9EDyaMs+MAEx5wHm7BVGSJCni
-         XBbs/wnGUmxlDyTtf6pIynJrBFtYJpk4pKxb7wvl/ct4gRuVTJXPB9WoVCdAMW3Z3RZK
-         kA/r/AG90FM0V03YkXEJB5LwLCONJir1WUq7x2BkeFD/5LRLfr3bgZgBWqYN3ZGAQSsI
-         uqa11XqJPLt0hXQmtGJHoCmLLj6v6MkaDP9QqdCCD5OrKqxIEpzhKbhOOWkiODpImmDh
-         VqPQ==
+        d=google.com; s=20230601; t=1753163884; x=1753768684; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XDAaESfRoBj6PBmfDe7VrvhxCfzBMJy2IiWm0LqLkHY=;
+        b=19xSivaZs08bcqtFK1Vo7WjL57OpufVbxxvnhFadEGHpXOxzRCxgZ2NJvfTjA/Z4zo
+         1gBOnMfVZT8U9Sea7z/e7ZrBJorK2TMj/OaSx40mjkyOMkW/vHlhZK3sGv64wDgtH/PU
+         wMoZ0wNjEbJ2IiIHcEXLi7I5ie3FB5caL98beNJktZMtA5h593/86fkqAKRvmZ1S6C7L
+         yZTHJBFeRKBmE5detRhi9TI6E6p0trEweoiHVZcvfp8rb3xeHyB6xFrNwtpAsttBpKPB
+         DyEPDrLf4ZGDVzhjrwMhdC92eu76IawRhOTeV82Zl7A5Yu5shj/kTIdftMUMPDlDzPse
+         m8/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753157449; x=1753762249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nlBEY6HRx3gs6GmX9n8FOaCyjO7em88PtYwWGu+mg9c=;
-        b=l+/jAgXx7KiXSEJazwFmSKzPZN6R8A82RCg5ZmMmQoeh4Ppl/NKwhL0Yvwae6QrUOY
-         DAkbpvukiskyiV+vLUe2joBsylAOVxe4tiUYFlsI3xkoYyOU/fpUa1Nr19n8/gNr0x8E
-         TMtvABBO0uiKqU6/E2lSLkE5tV8D+cFe+hR4rBWmchqiFDNe4uVD5Ql7p5/dj2+M9UuL
-         uuEtG8nVOIgRdCeuXccc8odrpQLbza5XM6jjmYiJnoYEpSu6ALe59lA60wjNJAL6cS9D
-         iTrxwpbabC9BVQwJpCsfPvImzuPcGrbwCnSioT3285TYBwNZ+7TIPV2Q4H+sT1rBHqJY
-         BcSw==
-X-Forwarded-Encrypted: i=1; AJvYcCXwdiqqSXrrUxal28LOm0eT0Yh5ZlClcqQkTzSOzwTB09HX702KmEwAlWazSDRIQMTGw+9UoUM6WA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzdMK+S2Lu0lvejSKAcvpdcJdfcMybyQik7hcx6X4HZi085JKd
-	oDj9t2L5osOhDu1QhcIM1YqaunHvr402n3fuhVz1vnNTLWAGE5dazKASE81/NOSzKLY=
-X-Gm-Gg: ASbGncsaV3ZXV7AGGpvMnZpYdD6B7UaP6Jc38r+m7n977aQoCUTVFuW3z7UhKTgdQvl
-	1zCtorKHJhpUusBe//GzV1NoqnqHpGmKEAy7NRwc9VEx4iGqaiyRz33mjKr8kpTf6jiE3qBHHwE
-	ni3uwgKA5y+6CMJcurFoD5ZQXTzvbSO8zFh4WKmOn1ynj++P/gF6klWUMeL1nrx6xKbbiRAAcOa
-	oR+yqJJQ+pDNJO+vcUq6ipykx71Df9b5ioCviwVQxmsP5rdEwQTIsjGd7S6ENsTxm/Bif1X86Bs
-	47LNOJUuppnHP/kJo1+7rfH0HpcXRurH/Z7bXIRaeZB79Vn/9On1m5nwz61jIYCNp9i4chZw74F
-	ADUwg0QjF+uQ2km6WoweVxE37QiOrkAqbwA==
-X-Google-Smtp-Source: AGHT+IHOKWMEzyu46KKsaJPjgo0xgycpcDzWx6CxVzgF6SZy+41yLFML71qXIxEHlqlltMpTlo5GzA==
-X-Received: by 2002:a05:6a21:648a:b0:231:4bbc:ff09 with SMTP id adf61e73a8af0-2381313ca9bmr31553876637.36.1753157449486;
-        Mon, 21 Jul 2025 21:10:49 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759c84e2c91sm6537501b3a.5.2025.07.21.21.10.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 21:10:48 -0700 (PDT)
-Date: Tue, 22 Jul 2025 09:40:46 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	kernel@collabora.com, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 0/4] MT8196 CPUFreq Support
-Message-ID: <20250722041046.lf4b267bmolm4exq@vireshk-i7>
-References: <20250716-mt8196-cpufreq-v3-0-d440fb810d7e@collabora.com>
+        d=1e100.net; s=20230601; t=1753163884; x=1753768684;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XDAaESfRoBj6PBmfDe7VrvhxCfzBMJy2IiWm0LqLkHY=;
+        b=GbdOs9HMGo56TNT/6ClWMWNTkISTx8m8lHUiq1EI74TdLAiHnuemZ2Km4Vbq4QVTfJ
+         DYQ2L8NN1J23aGO+T6+K8I212aMSNEXciomu3wO65cYHZCX47h3nOHO55yruvLzVorVl
+         M429UUy0uDdFl/vxcooxHp0xnSxqAV0/2CVjpNl272OwJSVus3cIc2tnhpTOLBoQ23Pn
+         u8Q6Q+lJP9x2k3C5te3WTksLRbYkiiwGIFdCleVXEI4YG7Eeg6mlJENw1atT/k9xNpNe
+         tui/Fy+ahR0elM3vpE8Y1g2LY/dDjwzaN/FMJN3nl87P2HPvDToymO/7OGg8w+wksb9J
+         LdhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVeUih/s73YUyPducMXq2+lCNymWnUS+9FckQrzN3TSETIXHlkBevYv9N8/LeI7OOHliMAEHbfSEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5gA3pfQyJjY0Ipa6xfaKDe8zh+Yrtkw22fZmL+x0WWkSLtTyM
+	6+8ntySYWu1DsGsHEY2vs8mWiGdNcfK4V44AY6KGq3izOMkcPLmMK7TPIar9+C1UxANB0ibDdY+
+	7eOcC+zVv3g==
+X-Google-Smtp-Source: AGHT+IE2pHLovgOnNgX0qu5gbs5FeLa7ug3A+DGcUIVn//cp0TcsogJ3mKsYujLB7FQmXE+y53tXZaDOE0Qv
+X-Received: from pja3.prod.google.com ([2002:a17:90b:5483:b0:312:1af5:98c9])
+ (user=pmalani job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:35c7:b0:311:fde5:c4b6
+ with SMTP id 98e67ed59e1d1-31c9f3efe45mr33500923a91.6.1753163883862; Mon, 21
+ Jul 2025 22:58:03 -0700 (PDT)
+Date: Tue, 22 Jul 2025 05:55:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250716-mt8196-cpufreq-v3-0-d440fb810d7e@collabora.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250722055611.130574-2-pmalani@google.com>
+Subject: [PATCH] cpufreq: CPPC: Mark driver with NEED_UPDATE_LIMITS flag
+From: Prashant Malani <pmalani@google.com>
+To: open list <linux-kernel@vger.kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Prashant Malani <pmalani@google.com>, Beata Michalska <beata.michalska@arm.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 16-07-25, 19:51, Nicolas Frattaroli wrote:
-> This series adds the necessary bindings and driver changes to integrate
-> MT8196 CPUFreq into the existing mediatek-cpufreq-hw driver. This
-> necessitated two preparatory cleanup patches to the driver.
-> 
-> The CPU frequency was verified to actually be changing by comparing
-> sysbench cpu numbers between fdvfs being enabled and it not being
-> enabled.
-> 
-> Enablement in the DT will be done once the MT8196 DT lands, so don't be
-> surprised that no node uses these new compatibles so far.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
-> Changes in v3:
-> - bindings: changed title as per angelo's suggestions
-> - bindings: dropped the fdvfs magic register range
-> - bindings: dropped redundant description for #performance-domain-cells
-> - driver: made fdvfs frequency divisor a `#define` instead of part of
->   the variant struct
-> - driver: dropped fdvfs magic check
-> - driver: reworked performance domain resource offset
-> - Link to v2: https://lore.kernel.org/r/20250714-mt8196-cpufreq-v2-0-cc85e78855c7@collabora.com
+AMU counters on certain CPPC-based platforms tend to yield inaccurate
+delivered performance measurements on systems that are idle/mostly idle.
+This results in an inaccurate frequency being stored by cpufreq in its
+policy structure when the CPU is brought online. [1]
 
-Applied. Thanks.
+Consequently, if the userspace governor tries to set the frequency to a
+new value, there is a possibility that it would be the erroneous value
+stored earlier. In such a scenario, cpufreq would assume that the
+requested frequency has already been set and return early, resulting in
+the correct/new frequency request never making it to the hardware.
 
+Since the operating frequency is liable to this sort of inconsistency,
+mark the CPPC driver with CPUFREQ_NEED_UPDATE_LIMITS so that it is always
+invoked when a target frequency update is requested.
+
+[1] https://lore.kernel.org/linux-pm/20250619000925.415528-3-pmalani@google.com/
+
+Cc: Beata Michalska <beata.michalska@arm.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Prashant Malani <pmalani@google.com>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index a1fd0ff22bc5..4a17162a392d 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -910,7 +910,7 @@ static struct freq_attr *cppc_cpufreq_attr[] = {
+ };
+ 
+ static struct cpufreq_driver cppc_cpufreq_driver = {
+-	.flags = CPUFREQ_CONST_LOOPS,
++	.flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+ 	.verify = cppc_verify_policy,
+ 	.target = cppc_cpufreq_set_target,
+ 	.get = cppc_cpufreq_get_rate,
 -- 
-viresh
+2.50.0.727.gbf7dc18ff4-goog
+
 
