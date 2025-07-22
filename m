@@ -1,335 +1,125 @@
-Return-Path: <linux-pm+bounces-31272-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31273-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D168EB0D726
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 12:15:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 272DCB0D729
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 12:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD4E616C753
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 10:15:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 724BF188ABDF
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 10:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59BD42E5414;
-	Tue, 22 Jul 2025 10:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6767C2E041D;
+	Tue, 22 Jul 2025 10:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HDMkXMLE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k/lJoeji"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418742E4271;
-	Tue, 22 Jul 2025 10:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE662DEA9B;
+	Tue, 22 Jul 2025 10:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753179216; cv=none; b=mz2CNHW9NtD1NFPF0MmL3WjyfrCMOm2NKYLTazEoZy+7CMPAD1Oxksw2w11p/WTXjDzhM9rbczEEPVJkH9Oj/wvX4BlLL4DgoU51bJFl55GE8zKz2vbak5eN1yzjvrOj6xR8o7PLlKrJpATlIqVkGpT677c//iTDIGec7KWaOks=
+	t=1753179341; cv=none; b=Zc9XhIHRNa1Olv0QzzL9fVdwJ7d1TU56GYi5XhpGZxcJZEhmUZBkk3oyFG8q7CPt3ZeDI8L3CSptSHPRruxHzHJw0e52/01oxVSmIusOff5UmDTigLB2cq5MDOzLKCeSgs5uVXo7wtm3kFZJYoQOfEDfcW1YMR4GrRFDNIwqGtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753179216; c=relaxed/simple;
-	bh=wDe4pGSIzfeJpl9n15NTs3K1CA3vRyhvLXXpR8wPThM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JzHH1GbUkcfwqqOSrSEMyabaLQMU1PQ76AJaif+Ksg1Fz1Iu9Db+gKeWloFIVZrxTPnPqW+xjjwncUZv15VxjIbMn6K8jociLjqMeX7RGCyuetrKPD/N68fDKytIK/qX/efE32zrheFTywgAECe+FZg3ae8VAhuKvK8iQX1VzgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HDMkXMLE; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1753179212;
-	bh=wDe4pGSIzfeJpl9n15NTs3K1CA3vRyhvLXXpR8wPThM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HDMkXMLEugfN6BcAJWned35tNTjeu2P3ClBx9PV3H7sZN6B9XwAAlhU5H239POLEA
-	 u7mzOE0wADoOxkgk6fw51ikpSav0rEADWmSfDMpTw3ozbifuXmoQDoFvD9AZ4dIAtb
-	 czSQv+9umpqV/p5Qg/4M5cGbCT/HRrA04M3PyIfFHxlsuuCe+gEu7u62EY1F/cOX9O
-	 jDQAL8rlqreG3gsSPunKzkE5whxFKaLI1m6odtswR21Y8Z6ckvBbuxKHj5h5+zhXAD
-	 LVb3gYRHw3HZuv9z2HwwMKgwdIh6ZjJ87gBnJJ19Ii/tVnhwcpgXcBzLJi4EOcrElR
-	 rVTGlLlCasxHg==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7E45917E1540;
-	Tue, 22 Jul 2025 12:13:31 +0200 (CEST)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: sboyd@kernel.org
-Cc: jic23@kernel.org,
-	dlechner@baylibre.com,
-	nuno.sa@analog.com,
-	andy@kernel.org,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	srini@kernel.org,
-	vkoul@kernel.org,
-	kishon@kernel.org,
-	sre@kernel.org,
-	krzysztof.kozlowski@linaro.org,
-	u.kleine-koenig@baylibre.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-arm-msm@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	kernel@collabora.com,
-	wenst@chromium.org,
-	casey.connolly@linaro.org
-Subject: [PATCH v2 7/7] iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
-Date: Tue, 22 Jul 2025 12:13:17 +0200
-Message-ID: <20250722101317.76729-8-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250722101317.76729-1-angelogioacchino.delregno@collabora.com>
-References: <20250722101317.76729-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1753179341; c=relaxed/simple;
+	bh=vgdtWTy+OU03fgHA88AqjQprjEpjM4D4FU/Fd8fBqVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q+ngQBMlvRCzZCylOzxeYceipC0LysV/rQxMhKIMai2dKwrKoHR5KW4um4MiXwG1M+Mb+5YvS5XYVJUK8i6UseFnf30FeNnIVNSzhOJefafwKVeWD+jytgFnMhKuubqUzc5jMrDxzE4lLUSy6e9K52NlHZaFeCNtJd/ctjUHPhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k/lJoeji; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11DDC4CEF5;
+	Tue, 22 Jul 2025 10:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753179340;
+	bh=vgdtWTy+OU03fgHA88AqjQprjEpjM4D4FU/Fd8fBqVg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=k/lJoejiqTfV53iDchuP7eEtK6sMSbeGWTRdeeP1StKgVS8HxBjERAYNVn94lbK8N
+	 o2uy0tBXsPHRt3+eF9S68iqvfpCgN7mVtfw8oDlqCHD2qovMPvoKJFzyQKRBG4pVF7
+	 /k5C1QIVBa9/KJENZP6oB292LJBK/DAvj3Z/3ilrRG4wUMMsVWMUKRI6q+5AM/l/Cj
+	 XLulmy7pBgMAQkAmGNLRZ6f76SfNv1Dz9uz6z5e9y5LD+yMeZCE6gKnR15E+/xlWNh
+	 s18AvmEM13rMLRDaGhLfupy1dNmiBdn7EDRre3A2qAgK4OyoxRPheCdpZYn42UGaTH
+	 5mr+mg/KjHrdw==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-615da180061so1079465eaf.2;
+        Tue, 22 Jul 2025 03:15:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvZnTjr2eOceU6pufFVlzPrNzfHKgpNOexSOwFtRlZH68/ngKp2xbE3tCjZxJKSRjsf/hu8QBa+A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2K+Rl1zWUc1SpRc2WR0MDCxmf7SE93De24yE6jgZBJGL7sKMU
+	gZURx9m/VzAo8E8mIAQ2WEl7KwPpOv0vnazqg6yZvuJ2iPR/AejNe3BApbdAyaZ7mLoJPr0cx4N
+	2Lkc9mj3qvo1YHqYZJVXHfT6dfzUwvr4=
+X-Google-Smtp-Source: AGHT+IGE0hmdSQyJ9XbmUvGsf/YpiOKrtMvtXj6ut103LgiOuskz5Z24p/bjl/azbW9zxB0Y/CsZ5aj/KSGj8tc4wA8=
+X-Received: by 2002:a05:6820:2004:b0:615:b293:1f17 with SMTP id
+ 006d021491bc7-615b2932180mr13775048eaf.8.1753179339998; Tue, 22 Jul 2025
+ 03:15:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250722055611.130574-2-pmalani@google.com> <20250722060352.pdwk2nrrth4uph2s@vireshk-i7>
+In-Reply-To: <20250722060352.pdwk2nrrth4uph2s@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 22 Jul 2025 12:15:27 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iUjOitwHYFqRgQY=h+Z-5of+3myDGDJKC8GcSOOSwYAA@mail.gmail.com>
+X-Gm-Features: Ac12FXwzNYiAnpxS80e9nkG6rPTtD3O5MDapn5yoUXSg8yLyJX9rHJ3xM0BK5Iw
+Message-ID: <CAJZ5v0iUjOitwHYFqRgQY=h+Z-5of+3myDGDJKC8GcSOOSwYAA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: CPPC: Mark driver with NEED_UPDATE_LIMITS flag
+To: Viresh Kumar <viresh.kumar@linaro.org>, Prashant Malani <pmalani@google.com>
+Cc: open list <linux-kernel@vger.kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Beata Michalska <beata.michalska@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This driver doesn't need to add any register base address to any
-regmap call anymore since it was migrated to register as a SPMI
-subdevice with its own regmap reg_base, which makes the regmap
-API to automatically add such base address internally.
+On Tue, Jul 22, 2025 at 8:03=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> On 22-07-25, 05:55, Prashant Malani wrote:
+> > AMU counters on certain CPPC-based platforms tend to yield inaccurate
+> > delivered performance measurements on systems that are idle/mostly idle=
+.
+> > This results in an inaccurate frequency being stored by cpufreq in its
+> > policy structure when the CPU is brought online. [1]
+> >
+> > Consequently, if the userspace governor tries to set the frequency to a
+> > new value, there is a possibility that it would be the erroneous value
+> > stored earlier. In such a scenario, cpufreq would assume that the
+> > requested frequency has already been set and return early, resulting in
+> > the correct/new frequency request never making it to the hardware.
+> >
+> > Since the operating frequency is liable to this sort of inconsistency,
+> > mark the CPPC driver with CPUFREQ_NEED_UPDATE_LIMITS so that it is alwa=
+ys
+> > invoked when a target frequency update is requested.
+> >
+> > [1] https://lore.kernel.org/linux-pm/20250619000925.415528-3-pmalani@go=
+ogle.com/
+> >
+> > Cc: Beata Michalska <beata.michalska@arm.com>
+> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Signed-off-by: Prashant Malani <pmalani@google.com>
+> > ---
+> >  drivers/cpufreq/cppc_cpufreq.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpuf=
+req.c
+> > index a1fd0ff22bc5..4a17162a392d 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -910,7 +910,7 @@ static struct freq_attr *cppc_cpufreq_attr[] =3D {
+> >  };
+> >
+> >  static struct cpufreq_driver cppc_cpufreq_driver =3D {
+> > -     .flags =3D CPUFREQ_CONST_LOOPS,
+> > +     .flags =3D CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+> >       .verify =3D cppc_verify_policy,
+> >       .target =3D cppc_cpufreq_set_target,
+> >       .get =3D cppc_cpufreq_get_rate,
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Since the iadc_{read,write,read_result}() functions now only do
-call regmap_{read,write,bulk_read}() and nothing else, simplify
-the driver by removing them and by calling regmap APIs directly.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/iio/adc/qcom-spmi-iadc.c | 83 ++++++++++++--------------------
- 1 file changed, 30 insertions(+), 53 deletions(-)
-
-diff --git a/drivers/iio/adc/qcom-spmi-iadc.c b/drivers/iio/adc/qcom-spmi-iadc.c
-index 985967c85bca..98ed28d74bda 100644
---- a/drivers/iio/adc/qcom-spmi-iadc.c
-+++ b/drivers/iio/adc/qcom-spmi-iadc.c
-@@ -113,77 +113,59 @@ struct iadc_chip {
- 	struct completion complete;
- };
- 
--static int iadc_read(struct iadc_chip *iadc, u16 offset, u8 *data)
--{
--	unsigned int val;
--	int ret;
--
--	ret = regmap_read(iadc->regmap, offset, &val);
--	if (ret < 0)
--		return ret;
--
--	*data = val;
--	return 0;
--}
--
--static int iadc_write(struct iadc_chip *iadc, u16 offset, u8 data)
--{
--	return regmap_write(iadc->regmap, offset, data);
--}
--
- static int iadc_reset(struct iadc_chip *iadc)
- {
--	u8 data;
-+	u32 data;
- 	int ret;
- 
--	ret = iadc_write(iadc, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
-+	ret = regmap_write(iadc->regmap, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = iadc_read(iadc, IADC_PERH_RESET_CTL3, &data);
-+	ret = regmap_read(iadc->regmap, IADC_PERH_RESET_CTL3, &data);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = iadc_write(iadc, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
-+	ret = regmap_write(iadc->regmap, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
- 	if (ret < 0)
- 		return ret;
- 
- 	data |= IADC_FOLLOW_WARM_RB;
- 
--	return iadc_write(iadc, IADC_PERH_RESET_CTL3, data);
-+	return regmap_write(iadc->regmap, IADC_PERH_RESET_CTL3, data);
- }
- 
- static int iadc_set_state(struct iadc_chip *iadc, bool state)
- {
--	return iadc_write(iadc, IADC_EN_CTL1, state ? IADC_EN_CTL1_SET : 0);
-+	return regmap_write(iadc->regmap, IADC_EN_CTL1, state ? IADC_EN_CTL1_SET : 0);
- }
- 
- static void iadc_status_show(struct iadc_chip *iadc)
- {
--	u8 mode, sta1, chan, dig, en, req;
-+	u32 mode, sta1, chan, dig, en, req;
- 	int ret;
- 
--	ret = iadc_read(iadc, IADC_MODE_CTL, &mode);
-+	ret = regmap_read(iadc->regmap, IADC_MODE_CTL, &mode);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_DIG_PARAM, &dig);
-+	ret = regmap_read(iadc->regmap, IADC_DIG_PARAM, &dig);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_CH_SEL_CTL, &chan);
-+	ret = regmap_read(iadc->regmap, IADC_CH_SEL_CTL, &chan);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_CONV_REQ, &req);
-+	ret = regmap_read(iadc->regmap, IADC_CONV_REQ, &req);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_STATUS1, &sta1);
-+	ret = regmap_read(iadc->regmap, IADC_STATUS1, &sta1);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_EN_CTL1, &en);
-+	ret = regmap_read(iadc->regmap, IADC_EN_CTL1, &en);
- 	if (ret < 0)
- 		return;
- 
-@@ -199,34 +181,34 @@ static int iadc_configure(struct iadc_chip *iadc, int channel)
- 
- 	/* Mode selection */
- 	mode = (IADC_OP_MODE_NORMAL << IADC_OP_MODE_SHIFT) | IADC_TRIM_EN;
--	ret = iadc_write(iadc, IADC_MODE_CTL, mode);
-+	ret = regmap_write(iadc->regmap, IADC_MODE_CTL, mode);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* Channel selection */
--	ret = iadc_write(iadc, IADC_CH_SEL_CTL, channel);
-+	ret = regmap_write(iadc->regmap, IADC_CH_SEL_CTL, channel);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* Digital parameter setup */
- 	decim = IADC_DEF_DECIMATION << IADC_DIG_DEC_RATIO_SEL_SHIFT;
--	ret = iadc_write(iadc, IADC_DIG_PARAM, decim);
-+	ret = regmap_write(iadc->regmap, IADC_DIG_PARAM, decim);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* HW settle time delay */
--	ret = iadc_write(iadc, IADC_HW_SETTLE_DELAY, IADC_DEF_HW_SETTLE_TIME);
-+	ret = regmap_write(iadc->regmap, IADC_HW_SETTLE_DELAY, IADC_DEF_HW_SETTLE_TIME);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = iadc_write(iadc, IADC_FAST_AVG_CTL, IADC_DEF_AVG_SAMPLES);
-+	ret = regmap_write(iadc->regmap, IADC_FAST_AVG_CTL, IADC_DEF_AVG_SAMPLES);
- 	if (ret < 0)
- 		return ret;
- 
- 	if (IADC_DEF_AVG_SAMPLES)
--		ret = iadc_write(iadc, IADC_FAST_AVG_EN, IADC_FAST_AVG_EN_SET);
-+		ret = regmap_write(iadc->regmap, IADC_FAST_AVG_EN, IADC_FAST_AVG_EN_SET);
- 	else
--		ret = iadc_write(iadc, IADC_FAST_AVG_EN, 0);
-+		ret = regmap_write(iadc->regmap, IADC_FAST_AVG_EN, 0);
- 
- 	if (ret < 0)
- 		return ret;
-@@ -239,19 +221,19 @@ static int iadc_configure(struct iadc_chip *iadc, int channel)
- 		return ret;
- 
- 	/* Request conversion */
--	return iadc_write(iadc, IADC_CONV_REQ, IADC_CONV_REQ_SET);
-+	return regmap_write(iadc->regmap, IADC_CONV_REQ, IADC_CONV_REQ_SET);
- }
- 
- static int iadc_poll_wait_eoc(struct iadc_chip *iadc, unsigned int interval_us)
- {
- 	unsigned int count, retry;
- 	int ret;
--	u8 sta1;
-+	u32 sta1;
- 
- 	retry = interval_us / IADC_CONV_TIME_MIN_US;
- 
- 	for (count = 0; count < retry; count++) {
--		ret = iadc_read(iadc, IADC_STATUS1, &sta1);
-+		ret = regmap_read(iadc->regmap, IADC_STATUS1, &sta1);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -267,11 +249,6 @@ static int iadc_poll_wait_eoc(struct iadc_chip *iadc, unsigned int interval_us)
- 	return -ETIMEDOUT;
- }
- 
--static int iadc_read_result(struct iadc_chip *iadc, u16 *data)
--{
--	return regmap_bulk_read(iadc->regmap, IADC_DATA, data, 2);
--}
--
- static int iadc_do_conversion(struct iadc_chip *iadc, int chan, u16 *data)
- {
- 	unsigned int wait;
-@@ -296,7 +273,7 @@ static int iadc_do_conversion(struct iadc_chip *iadc, int chan, u16 *data)
- 	}
- 
- 	if (!ret)
--		ret = iadc_read_result(iadc, data);
-+		ret = regmap_bulk_read(iadc->regmap, IADC_DATA, data, 2);
- exit:
- 	iadc_set_state(iadc, false);
- 	if (ret < 0)
-@@ -392,10 +369,10 @@ static int iadc_update_offset(struct iadc_chip *iadc)
- 
- static int iadc_version_check(struct iadc_chip *iadc)
- {
--	u8 val;
-+	u32 val;
- 	int ret;
- 
--	ret = iadc_read(iadc, IADC_PERPH_TYPE, &val);
-+	ret = regmap_read(iadc->regmap, IADC_PERPH_TYPE, &val);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -404,7 +381,7 @@ static int iadc_version_check(struct iadc_chip *iadc)
- 		return -EINVAL;
- 	}
- 
--	ret = iadc_read(iadc, IADC_PERPH_SUBTYPE, &val);
-+	ret = regmap_read(iadc->regmap, IADC_PERPH_SUBTYPE, &val);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -413,7 +390,7 @@ static int iadc_version_check(struct iadc_chip *iadc)
- 		return -EINVAL;
- 	}
- 
--	ret = iadc_read(iadc, IADC_REVISION2, &val);
-+	ret = regmap_read(iadc->regmap, IADC_REVISION2, &val);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -428,7 +405,7 @@ static int iadc_version_check(struct iadc_chip *iadc)
- static int iadc_rsense_read(struct iadc_chip *iadc, struct device_node *node)
- {
- 	int ret, sign, int_sense;
--	u8 deviation;
-+	u32 deviation;
- 
- 	ret = of_property_read_u32(node, "qcom,external-resistor-micro-ohms",
- 				   &iadc->rsense[IADC_EXT_RSENSE]);
-@@ -440,7 +417,7 @@ static int iadc_rsense_read(struct iadc_chip *iadc, struct device_node *node)
- 		return -EINVAL;
- 	}
- 
--	ret = iadc_read(iadc, IADC_NOMINAL_RSENSE, &deviation);
-+	ret = regmap_read(iadc->regmap, IADC_NOMINAL_RSENSE, &deviation);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.50.1
-
+Applied as 6.17 material, thanks!
 
