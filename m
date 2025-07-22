@@ -1,212 +1,193 @@
-Return-Path: <linux-pm+bounces-31288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31289-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26D04B0E17D
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 18:17:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53BFDB0E1EF
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 18:32:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 871E83BBFE9
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 16:17:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69C4A562FEE
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 16:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6DB42798FD;
-	Tue, 22 Jul 2025 16:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B69B27B4FB;
+	Tue, 22 Jul 2025 16:31:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IFqYFtca"
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="dzuAxxHP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F604685
-	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 16:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0D0487BF
+	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 16:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753201053; cv=none; b=u0TZ+Q8U8EPU8HMRtG811gbh6mg0dzMPnD7/dUT2zkx67dloaIjlgVlpJpN1JEgH4vbzRx29HTTokU+ShUZCOiEfFln4sip1/ItF46G/CO2Numm64nnv32gT0Y/sfsDyPiY6wafEExkoFV7YKqWs0NpRy/hKbvqoERZtADcd5ik=
+	t=1753201899; cv=none; b=EzNUg4JunQfkhTn6/Q9irZyby+vLecRzL23W5/9OWc5PMkq+5TOZ435RVfNCSKz+6YuJ3Yby8h8F3SyEHyjnThzLDXKHnhT+zedr3Xkw2uMAXxuOVKA6Ps4DLxnEldCW8lValUbitInOlaSRV/1H/VkefDEfoksKXMtaIdstMBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753201053; c=relaxed/simple;
-	bh=w4dpdLGtoBj80ExZtaOkPcAQU61LkwxmuI3CYMvS53c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T/sxXUH+irZPU3qSfZeF/vwV+ZQt2VlO9jR08ch06+UsmOZ5GHf1ia9U7ZGMPv8/EppYsNZK1wXg/+OgYZaYUj+/AaO4qR1euERcZNMUVLOWzFC9xgVfn2XBsIReRbNkmez1j7tK/BwRv/tfcwFmGGFA83/37F8WzWyGB4Onv6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IFqYFtca; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56MF3Nd7020153
-	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 16:17:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	9nCrpRv1Mz+G5QXSFlJHgBDudrIiUMOp8bzN0yyhpp4=; b=IFqYFtcaX36DN33z
-	f3HQlKpeuDNBFnpQMHdxfv6Y7ay3qM99z2oZ9kwZOvd3r6kd3umiMUjGG5nYXiJ6
-	x7bpCfI6TXNNDis7RbkPo9vSsgZcikqTK8VWuWttIXDNorCWGO7xPj5s98tj2yCf
-	7uo3pSTDbmLEHM8a+OI0B7HgDWHaubFS1efZGCZohoJXQuNobWBy7L+d4CO4sGUb
-	ou1nAFt5Z1qqm0RXzj9lcGtmNIj91oupeYr9Rj2znT8zsetyjurawRl/YKGWEFnD
-	eHYNX+3X8ZCzFJ9AOXVliTRdoO33tr+713q9EMz6AA30nnnrz7EJW727Lo0/w8Pq
-	cQrEFg==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4804na0hjq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 16:17:31 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-74943a7cd9aso8537894b3a.3
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 09:17:31 -0700 (PDT)
+	s=arc-20240116; t=1753201899; c=relaxed/simple;
+	bh=8O69cNoFD7AllVOnd5n3rFHoG9oHmmDpmVgaClQAryo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GxmoRp2T6ahrb0Hf5rgnowjOvkmt8n9mEY6YezRa6knMbAOnZES04LHIKAl8Xb1yy6OfISzj/uBqtvhz3YGzvhM6stWPPFR9gz6qVoUV22PcqLCMTUIYB+gELOciM4Q6GWDPSQ/t6LMdcxrXFgHnpKRH4M8UNcH07NHr9Eh4QvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=dzuAxxHP; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-73e5792cb9dso1757991a34.2
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 09:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1753201896; x=1753806696; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OKxVxL/LAoBoT2zvn03u4QS0XQT3tH4BCQl9mQgSLO0=;
+        b=dzuAxxHPKGNG32wdvuNFFPEEsCrKFAvl6ijzTDMJfF71Bsk+IG9dZr4QM9A7pLpz0T
+         5hwQUUanf/P2gc+C4CHWId/U4Ipp7u7hifC/o6FTFyf2e1MZehowxAb78g7rAGj4360f
+         ll/+oxuLTf2SqfqjZZ2xPdkGU7DDLTuQgzHuqlwKn9Sy90qZxNjtg1DHFoplgcbNwtop
+         BP+sYEszlmEUW9bIuX2g1m2UDThJGa1IJDNk9UJX1Mm7ubTHb/WvyE+FXeG3bjAaJApF
+         r09Avfai9W+ZSaJtaxO5dxt4qihhes0w4WdCsNVERNVdkY0js+Ln+cD1GrJn3WVUHB0/
+         TtvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753201050; x=1753805850;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9nCrpRv1Mz+G5QXSFlJHgBDudrIiUMOp8bzN0yyhpp4=;
-        b=Xc+httip+5EWP8r/B8esw2cQ2qkKUCxpJIfSbbHmiqCdZ3iZSyRJtqtXg4HfMSlziP
-         KZvLh20S8qEaAZUkvlTKcpmNz1UUCOFJy2tVRzIO/cfjwJRipg22aG3V75bLN4Bk28Ye
-         P/l1bfF83CdlKox5690RTl0qHl94RLwv02d8BNY9CV3CgFE21Yz1V9oP9nezgdGKfz6H
-         1m2mvvcflYoZI8mVhPTm/hLJSeaCGSbvDgaDAaSZPu58dh9M/+j54+jEc4Tk44wVy5C3
-         PItS88R+C/D8qQ94Ma86C+lzkSiCjipgtWxGfFXknhxrMhfE2kKw3cXMu0eUoY1PKb7e
-         70oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVxGsyEiukM8xtg0v0CVklNbFO3wGLd4beMMdqsC6CaE6vMqx+WKercIGn4KMKpCBv7TVOMuHlYow==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWT3c1RM95X3Z9IA3HkCMLvBe5qdmuCYZtVa0s2pSpRubvTIS7
-	8q3jrbgtiju8H5STTGsupHnpUY/IGlMVrdq2+u4bR1lw8snfkCUc/db8RzxRbBMVGoXjBXjZ6VN
-	3rmCPDQLuZpQDRkXV4mUz4C5Da5TRpIwDsuEW6hEEwk2II4fPrWMh8tOO8SbGQg==
-X-Gm-Gg: ASbGncu01nYnNKrSnHf5sULbLsDxM9EKVXOn7RX2DeaPYsMHvZUxGn5h9/jLPZ9yoTt
-	E5v5Z7xsiszTgzikxWSlmVckQTXRxy8Nr3g79PFR1hkp9MaGVUc6FHiAFOjR8iYnGsd4zh7gqlh
-	J2OSTvjCy3B+Jef+mOoIS7I/PAuZsTd47qRreRvs6Wnjf/XbPCui+qHqNbAdnY9FCLFIw0krlQ+
-	Wx8aKLZ4zIgHQiuQgoKQ6vBJQpLbhMyVX6cRDsZiemiRuRTxWqJiTBn2hVEJalnNghUuPkUJupC
-	p/IOBaKPrKo+4Wsf0Dwq3maWNQEjizJdRa5kgV/YM/6o6Dyg+Vs5HtGpB/zDGGCC2icZRPvIKMB
-	JVeSLK+0=
-X-Received: by 2002:a05:6a00:3d07:b0:756:d026:10a7 with SMTP id d2e1a72fcca58-75725a89319mr35996879b3a.21.1753201050108;
-        Tue, 22 Jul 2025 09:17:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFm++ZLMXmAYAQkNZgMSqeo/I7WJon6D9QhDXy0vQr/omCJkB9Jb05Hhf+LFMrk9yKOHj21Ug==
-X-Received: by 2002:a05:6a00:3d07:b0:756:d026:10a7 with SMTP id d2e1a72fcca58-75725a89319mr35996814b3a.21.1753201049597;
-        Tue, 22 Jul 2025 09:17:29 -0700 (PDT)
-Received: from [10.211.220.100] ([152.57.179.174])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759cb76d5d8sm7849327b3a.112.2025.07.22.09.17.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jul 2025 09:17:29 -0700 (PDT)
-Message-ID: <13b6be8a-9cd6-e49d-2311-142f79c27328@oss.qualcomm.com>
-Date: Tue, 22 Jul 2025 21:47:08 +0530
+        d=1e100.net; s=20230601; t=1753201896; x=1753806696;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OKxVxL/LAoBoT2zvn03u4QS0XQT3tH4BCQl9mQgSLO0=;
+        b=LkVhRH/Q9ES+tqpUF9RfGX/Lt3j8ddMnrBFnpDeQSLauhLHlPZSocssohqhwJkkaYF
+         bNHHmEj07IgCFSDsSJJSG5RyxgAh249jTuDLCeLV526ZKxiN1uZIwHqx6XGwfZqDK24E
+         fD9Kdxkm2iotJsPUTCaFEV2Sg7rddKJxKtNbYWXD4sAjJJs7tLHJj4H9HBKn81WVIBqz
+         QcidhTXOiQ4zdE2gcZCzrWq6cbvc1bhqGU/7B3wqZKtI/bTnZuOEN9/zIAbOP+FhfG+V
+         GiYBzJc9Hs39mMHa0pFU02CKC045OBnW6SVLw2ACo0y+zI0aADeoif0dwsjBBWPiSutN
+         E2LQ==
+X-Gm-Message-State: AOJu0Yy8CA1OpkLH0sXkaECzJkoblVWIK/htZoxO1ninXx6oCu5c0F1B
+	4MStf6uNs+COwd3H91yGTQ1rNkCquxXI43M+Fd1kI+GqhtyDX6GsfpBIakdQPnbxH+w=
+X-Gm-Gg: ASbGnctZrDSzziIHqgv84I5JD7xTvChiWE5BleY3ReO7dcaH0yc0PHbt8bOeM67VWb8
+	LzNqg9Pbldpb6pP+LLVR2W/XIBWHb81fbTRqXnzfrxy5C9l0wzXsRpc5EPrhCXJIV0jLaYIB2KE
+	VRGYjpBHQs/rzw/sj3I7NO0z1MEYNklLzbKaCbWtIsdTl/pzRxvMhI7zw8r9AGJ+tpuzchUBIxM
+	6PKdtXl4hVWMYocfWuyGLyH1oDc4ZqHb1/7T5LWlLUcgmesJw2jB+vFdmtpGI9DU6AP3gqC4puU
+	8musvPOzy7NBnLQH3Wls+qREzndp30SmSne4X8cn0lgcNnvZbTHcaxkx8RO4l8fFgiCHAE75xVb
+	5J5aBS4h+Uu37MC5s18f+
+X-Google-Smtp-Source: AGHT+IEJXPfNhEgj6Ylfn91LH0XYYsRLvRZhaGuYQ2/jHp5T9SVcaV36Pthzwfk9FBWVTgeM/c78VA==
+X-Received: by 2002:a05:6830:d07:b0:72b:84a7:47e0 with SMTP id 46e09a7af769-73e649c8a5dmr18665143a34.1.1753201896532;
+        Tue, 22 Jul 2025 09:31:36 -0700 (PDT)
+Received: from kf-m2g5 ([2607:fb90:bf84:45ad:48e4:ec32:d2d1:cd6e])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5084c786c5dsm2627468173.15.2025.07.22.09.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jul 2025 09:31:36 -0700 (PDT)
+Date: Tue, 22 Jul 2025 11:31:33 -0500
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: srinivas.pandruvada@linux.intel.com, lenb@kernel.org, rjw@rjwysocki.net
+Cc: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ kernel-team@lists.ubuntu.com
+Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
+ detected on Arrow Lake hardware
+Message-ID: <20250722113133.3a048c7a@kf-m2g5>
+In-Reply-To: <20250517223323.6e13bf58@kf-m2g5>
+References: <20250517223323.6e13bf58@kf-m2g5>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v12 1/8] power: reset: reboot-mode: Add device tree
- node-based registration
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andre Draszik
- <andre.draszik@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Srinivas Kandagatla <srini@kernel.org>
-References: <20250721-arm-psci-system_reset2-vendor-reboots-v12-0-87bac3ec422e@oss.qualcomm.com>
- <20250721-arm-psci-system_reset2-vendor-reboots-v12-1-87bac3ec422e@oss.qualcomm.com>
- <33gq4iyx5jxrr6f5w3ctgy7l7om53jdvb4tmfmxzourhfvpc3t@cr5re2dab4tc>
-Content-Language: en-US
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <33gq4iyx5jxrr6f5w3ctgy7l7om53jdvb4tmfmxzourhfvpc3t@cr5re2dab4tc>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: z7KhzTeuqJ55uUAqE-gxYdBaMeBe7JHD
-X-Proofpoint-ORIG-GUID: z7KhzTeuqJ55uUAqE-gxYdBaMeBe7JHD
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIyMDEzNiBTYWx0ZWRfX3dmj+eGE5J47
- tV88rV9qLwfOlZDX9ankGPM1iHm8N7j4ABh1PJDyXh9RN1UwuuAgaZeix5Y1TMzisEPxR9n6q1H
- cTUTwDEdBbB8Y3krgSXkCYsW0grtgE3fGZdp24cWKAyr20ncrX2+AcDBOiiwuMrdnAENiqeHsCp
- 5BupI/maieS27pmjhIIArEXZigz+f5+4WmH6mYBCrtNIRj91Z8aZ8swXCrhP90b/RMN4XF1HxD/
- bdmkWqJiRoEhdzP1AuUbdikIoQiZ6F1lz25JoVplTBF5A0k9zNEB7h8vW3x8RUUTuvTZB+ca+GG
- ESfSrnR/2d/HfXU+cGZ5RMYquIeCu5Ra9vQ1JmDYqiAl1NQA/jmL/uuYVBdwtcWAt+KHxZMS1f6
- JvNy5lBRa6hFDj7RLVl6zzrPHOtlHGY2clHTm8gi+4wm/YBwZP2L/H/2j6xuCTFZOH1K49rr
-X-Authority-Analysis: v=2.4 cv=DoFW+H/+ c=1 sm=1 tr=0 ts=687fb99b cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=p0YknvR/5ooNN0yes+ndXg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=33cFMSo4UqZHzB7ybJ8A:9
- a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-22_02,2025-07-21_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
- bulkscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
- spamscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507220136
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, 17 May 2025 22:33:23 -0500
+Aaron Rainbolt <arainbolt@kfocus.org> wrote:
 
+> We have tested three systems with Arrow Lake CPUs, and all of them
+> report incorrect max and base frequencies. Two systems have Ultra 9
+> 275 HX CPUs, and one has an Ultra 5 225 H. The problem occurs with
+> both the Ubuntu 6.11 kernel and the 6.14.6 mainline kernel.
+>=20
+> How these values are misreported appears to depend on the CPU. On the
+> Ultra 9 275HX systems when running Ubuntu=E2=80=99s 6.11.0-1015-oem kerne=
+l,
+> the max reported frequency on a golden core is 5000000; however, the
+> CPU spec says it should be 5400000. In contrast, on an Ultra 5 225H
+> system, the max reported frequency on a golden core is 6200000;
+> however, the spec says it should be 4900000.=20
+>=20
+> This bug is troublesome to end users because many CPU monitoring apps
+> will report the CPU is running quite a bit slower or faster than the
+> spec. Tools such as cpupower-gui, cpufreq-info, and cpufreq-set all
+> show incorrect values because they read cpuinfo_max_freq and
+> base_frequency, and write scaling_max_freq values in
+> /sys/devices/system/cpu/cpufreq/policy* directories.=20
+>=20
+> The following bash script shows the incorrect values read from the
+> cpuinfo_max_freq and base_frequency files. It also shows how the
+> actual max frequencies attained are as expected. The example values
+> shown come from an Ultra 9 275 HX CPU.
+>=20
+>     echo; echo '=3D=3D BEGIN =3D=3D';
+>     echo 'Ensure turbo is on';
+>     cd /sys/devices/system/cpu;
+>     echo '0' |sudo tee intel_pstate/no_turbo > /dev/null;
+>     if grep -q '0' intel_pstate/no_turbo; then echo 'Turbo is on'; fi
+>=20
+>     echo; echo 'Find top 2 golden cores';
+>     cd /sys/devices/system/cpu/cpufreq/;
+>     grep . policy*/cpuinfo_max_freq \
+>       | awk -F: '{print $2" "$1}' |sort -rn | head -n2;
+>     #> 5000000 policy2/cpuinfo_max_freq
+>     #> 5000000 policy3/cpuinfo_max_freq =20
+>=20
+>     echo; echo 'Confirm misreporting: per spec, this should be
+> 5400000!'; grep . policy2/cpuinfo_max_freq; # 500000
+>=20
+>     echo; echo 'Confirm misreporting: per spec, this should be
+> 2700000!' grep . policy2/base_frequency; # 2500000
+>=20
+>     echo; echo '# Run a CPU benchmark now, then press [ Enter ] to
+> see top 3 freqs.'; echo 'This will take 6 seconds to complete.';
+>     read -r -p '# You should see that the freqs match the CPU specs.
+> ';\ for i in {0..5}; do
+>       grep . policy*/scaling_cur_freq | awk -F: '{print $2" "$1}';
+>       sleep 1;
+>     done |sort -rn |head -n3=20
+>     #> 5400000 policy2/scaling_cur_freq
+>     #> 5320159 policy2/scaling_cur_freq
+>     #> 5241886 policy3/scaling_cur_freq =20
+>=20
+>     echo; echo '=3D=3D END   =3D=3D'; echo;
+>=20
+> The actual results, when running the above script, shows the
+> cpuinfo_max_freq and base_frequencies values do not match those
+> specified by Intel. With the 6.11.0-1021-oem Ubuntu Kernel, we see the
+> following:
+>=20
+> | Turbo? | Core | Freq (spec) | Freq (report) | Freq (actual) |
+> | Yes    | P    | 5.4 GHz     | 5.0 GHz       | 5.4 GHz       |
+> | No     | P    | 2.7 GHz     | 2.5 GHz       | 2.7 GHz       |
+> | Yes    | E    | 4.6 GHz     | 4.6 GHz       | 4.6 GHz       |
+> | No     | E    | 2.1 GHz     | 2.1 GHz       | 2.1 GHz       |
+>=20
+> We have verified the cores are operating at their specified
+> frequencies by running a demanding CPU benchmark while graphing
+> frequencies with KDE System Monitor, on all 3 systems. This tool
+> appeared to graph scaling_cur_freq values. Notice E-cores appear to
+> be correctly reported. Also, all systems misinterpret values written
+> to scaling_max_req with the apparent same error deltas: on the Ultra
+> 9 275 HX, setting this value to 5000000 results in actual max
+> frequencies of 5400000. Setting it to 2500000 results in max 2700000.
+> Setting it to 1650000 results in max 2100000.
+>=20
+> The behavior with the 6.14.6 kernel is worse than with 6.11, with all
+> values under-reported. Actual frequencies were not tested on 6.14.6:
+>=20
+> | Turbo? | Core | Freq (spec) | Freq (report) |
+> | Yes    | P    | 5.4 GHz     | 3.9 GHz       |
+> | No     | P    | 2.7 GHz     | 2.0 GHz       |
+> | Yes    | E    | 4.6 GHz     | 3.3 GHz       |
+> | No     | E    | 2.1 GHz     | 1.5 GHz       |
+>=20
+> Is it possible the math currently used for calculating CPU frequencies
+> is no longer correct for Arrow Lake CPUs? This seems similar to the
+> issue that was fixed by commit f5c8cf2 (cpufreq: intel_pstate: hybrid:
+> Use known scaling factor for P-cores).
 
-On 7/22/2025 3:06 AM, Dmitry Baryshkov wrote:
-> On Mon, Jul 21, 2025 at 11:58:48PM +0530, Shivendra Pratap wrote:
->> The reboot-mode driver does not have a strict requirement for
->> device-based registration. It primarily uses the device's of_node
->> to read mode-<cmd> properties and the device pointer for logging.
->>
->> Remove the dependency on struct device and introduce support for
->> Device Tree (DT) node-based registration. This enables drivers
->> that are not associated with a struct device to leverage the
->> reboot-mode framework.
->>
->> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
->> ---
->>  drivers/power/reset/reboot-mode.c | 45 +++++++++++++++++++++++++++++----------
->>  include/linux/reboot-mode.h       |  6 +++++-
->>  2 files changed, 39 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
->> index fba53f638da04655e756b5f8b7d2d666d1379535..5dd3f06ca88cb28606d9fd2100ce03383c14d215 100644
->> --- a/drivers/power/reset/reboot-mode.c
->> +++ b/drivers/power/reset/reboot-mode.c
->> @@ -3,13 +3,17 @@
->>   * Copyright (c) 2016, Fuzhou Rockchip Electronics Co., Ltd
->>   */
->>  
->> +#define pr_fmt(fmt)	"reboot-mode: " fmt
->> +
->>  #include <linux/device.h>
->>  #include <linux/init.h>
->>  #include <linux/kernel.h>
->> +#include <linux/list.h>
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->>  #include <linux/reboot.h>
->>  #include <linux/reboot-mode.h>
->> +#include <linux/slab.h>
->>  
->>  #define PREFIX "mode-"
->>  
->> @@ -55,7 +59,9 @@ static int reboot_mode_notify(struct notifier_block *this,
->>  	unsigned int magic;
->>  
->>  	reboot = container_of(this, struct reboot_mode_driver, reboot_notifier);
->> +	mutex_lock(&reboot->rb_lock);
-> 
-> This one should go into the get_reboot_mode_magic() function, otherwise
-> it's not obvious why do you need it here.
-sure. will update.
-> 
-> Also, please split mutex addition to a separate patch.
-Ack.
-> 
->>  	magic = get_reboot_mode_magic(reboot, cmd);
->> +	mutex_unlock(&reboot->rb_lock);
->>  	if (magic)
->>  		reboot->write(reboot, magic);
->>  
-> 
+Following up on this, is there any update or possible fix we could
+test?
 
