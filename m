@@ -1,139 +1,155 @@
-Return-Path: <linux-pm+bounces-31275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31276-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B54FB0D777
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 12:38:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21338B0D7F7
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 13:12:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F25A1C25217
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 10:38:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C8653B367F
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 11:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F7B2DE6F4;
-	Tue, 22 Jul 2025 10:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFDA2882C2;
+	Tue, 22 Jul 2025 11:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="eXdbux7Q"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kuDjK8lV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A58A28A725;
-	Tue, 22 Jul 2025 10:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDAD242D78
+	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 11:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753180702; cv=none; b=eNSPc0ptoaYgxK7u4pTjQ0BuVeK8PuZ1Mg8SSagTpGmspUWw0Kazu/kjC+/RoyP1J7oOqwkkyNWnwOJ7fug3ZkBCP13Wmqm25jBAaGr2XNo3wv67swfi+ZK4EIl0VyBDyUvQuhU50LfqDn6wwPF9PomvE/A1RVcGETzPn2ceiw0=
+	t=1753182728; cv=none; b=qyj6V4IYsWSCxw7KbSS1oWO+ChAKDUyklEdanzPEuy8h5/eTw9djiGf0z6NZpsP/7Mc2LliSDC98Z48WHLtJ6uz+It/SkwB04IYLcNKHdjJqYF+iPAa0z2vdLpRCraZxydxLTDPDXUWnEPkfDo+pTaA0/sk6k8UtXaYuiVLEkMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753180702; c=relaxed/simple;
-	bh=bkY2GEXAbZCEgimSdKFm2IARS0ffaAm1hymKFyKVnv0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hZfNGvrpuBK7oJlfsbGG6QeZyd8AOfsq6qTegUKezeRXoga585kr0hNO9Feg/eE6WxCuW7E4z7FW/CWxSLUed0vzTRKsQ8v+kAOV64C5H/ZW3D8+X2xQUv8Z2JnL+tSMkVBmP58w/RiYyQq83U4ORzcy5dykZCnqLXHyUFnb3nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=eXdbux7Q; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1753180698;
-	bh=bkY2GEXAbZCEgimSdKFm2IARS0ffaAm1hymKFyKVnv0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eXdbux7QGObp+HZOOdFAxjOZIbimZVtKUGpGttgN9rUum33zjv7HhTR3SrOKrEJdi
-	 2DtVVJqbiPby5tbabC6G6tSXm49COXRayntenGTka9I05bOYpYLKwyowdvpVqeC/T4
-	 a5QWU2DOjmMPRGcdWi6e4eEyMhcjVLwKrwGYpMXs0W/rBHeNhImne8tCTdALWPExtX
-	 0/VrL/Cg24AdWQ8LOZotmViIrpd+bTCF/U705jqr4NM5p9r6ZYaAmnqjFWTiPi21fX
-	 nseJPXOlNyRwyo79RS6rdTSxGO138uwH58XH/W/m0AfQmAl2YptMjpXf0174UX+iGy
-	 wPtOhZacXN/Wg==
-Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:bd9c:eae9:88b0:783c])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 22DF017E0B72;
-	Tue, 22 Jul 2025 12:38:17 +0200 (CEST)
-From: Laura Nao <laura.nao@collabora.com>
-To: angelogioacchino.delregno@collabora.com
-Cc: andrew-ct.chen@mediatek.com,
-	arnd@arndb.de,
-	bchihi@baylibre.com,
-	colin.i.king@gmail.com,
-	conor+dt@kernel.org,
-	daniel.lezcano@linaro.org,
-	devicetree@vger.kernel.org,
-	frank-w@public-files.de,
-	kernel@collabora.com,
-	krzk+dt@kernel.org,
-	lala.lin@mediatek.com,
-	laura.nao@collabora.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	lukasz.luba@arm.com,
-	matthias.bgg@gmail.com,
-	nfraprado@collabora.com,
-	rafael@kernel.org,
-	robh@kernel.org,
-	rui.zhang@intel.com,
-	srini@kernel.org,
-	u.kleine-koenig@baylibre.com
-Subject: Re: [PATCH 9/9] dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
-Date: Tue, 22 Jul 2025 12:37:18 +0200
-Message-Id: <20250722103718.31804-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <24c65ecf-ab89-4970-b2ae-00185259d359@collabora.com>
-References: <24c65ecf-ab89-4970-b2ae-00185259d359@collabora.com>
+	s=arc-20240116; t=1753182728; c=relaxed/simple;
+	bh=AdS/HEGQYIwXAPgGKh/dj7/4HJqP4YWiQMnvmpzNaGA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JBNujKx4roZcdruEShuXL86POozcDvskMB6pXWK1geSu7nJkHSTKdc1HTLR1yg08Qf5da6JVNSAtZNMS7V0B1vMcFcHSSoEecuu/Cn0P1s4CnpGjw1HVUWqUlQKjx2WqlP76vuW6TDagnNb9+vr6HcMhSiCDGqnM4GOXCpTIRHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kuDjK8lV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56M40lAY001178
+	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 11:12:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Lp9oCAfC0uqs28+yLNSlWvHOEvpNJYHHvb1kBs8yoFw=; b=kuDjK8lVrMQ29mM2
+	NnvkBJtssHyZ940GjxnoRNMKZIaxrrUx8OXjNq0M/7BtxrF5bJvbBeYk6ggjByLo
+	PwzeE6UzPYbeH2HjAjXIWWUlV2lGbdSN2XiTlUTL9IgR/r9Zn7QKGAkBaD9K5lyN
+	RIKWxENkALQGIO+ipEuOmfCiHWx3pFg+M73KWyqTq/Rz26jIV2vpsG6lgUxrkti2
+	Lh3UHvoSbhksgHnFKlfDBWl+tzn/5QD0hSvpBlrkZIXA2MLcqD25MBwTkjLj/obA
+	SmTVTcuY9IMCN16lD/Tackv2Syvpf+s7q0WFRV6BqDaEkCr62XhpKPUTbzRoxzuf
+	HnrRrQ==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48044dh2vk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 11:12:05 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7deca3ef277so11257285a.1
+        for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 04:12:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753182725; x=1753787525;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lp9oCAfC0uqs28+yLNSlWvHOEvpNJYHHvb1kBs8yoFw=;
+        b=vMvFBrGVO4gQihOWAmZ0lZbaZ4UFI6yFjPlddmF281FTwJlwH1/asDWgeIK1ZEVoSO
+         dQCV3tbOBIXIdV0YQzw56DTx5aBAzmTPg5J5h7uGCOYG/foJwruhfzaSZ0vjsSi3Qu1B
+         fZn4qTJH2MGCxcCZaxEcqoqWxNxhUr7lHFMHaGj1pMTRGTmoBHNlZw+eUTTl68/n8XNg
+         mBQDqZS42rYz0MY2ulaY9D9du/cKbP8XUZWn5BBrtZkiWPxnauDiu071mEKoFKdAISGp
+         FCLRRKe8VLFmkemmfOKE6xv1wVtkalnlmkPiVl+xjWk77o4ssNJZJ4hPnvV9m9Fdan83
+         Ts1w==
+X-Forwarded-Encrypted: i=1; AJvYcCVaLXxQYNVXAF3Mju1S6nc6NtD72lVIMQ3MHegnYsOPw1VlowoTxPWvYud2rjTtszRexWSEegaAJQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJuQVvWxkowfGzr0ekbfrLECA7po+DR9+oaC5xM8g6GucZjim7
+	743rtI1ozDAx3xGnINgn121RkBa+WbRcAmeEseynar06V6wmxuf9TMOiTTeunQ/QrBNxIVA2AzF
+	oYzmZSotZ6p5Bc1+4Q0uOZx/6NQJwPSqHFahpJFyfWQtu59jcUC6gdukakm84ow==
+X-Gm-Gg: ASbGnctPrbeLGhALGL6f8Z8ZV375cnztBLq07GqxPu+d/GlJMCloz9BiLoJiu8394kz
+	rZOp3z4xuNsmGFjpS1ECH7WW4u9ECLO4+ZZ0Jr0vLXoM98pi14t2JMxfw1Ndzz3xnSKU/UBKBiE
+	AQj1YIP2O62VUu/7VlFkl/nRpSFXcj/JZpJkR/DdAJOXUEjUjuyLJd2EIfGeU0m9WmYtysN8APr
+	YS4AEcv5waBPxRnpkk913M4WJuM7dBNg33dOMFdkYNPyJsh5NDU2LTBlsXQGzAkihUHDlQ2XGEk
+	ZQzFXHHMuA/MKCqjqvcp++GXpNt2+XA8Q1YEKysdwwQSJkZKq+FCB/WzqnJQSzS05N5+FXqGdVE
+	cYaNOrctAKogJ2EcC3DTA
+X-Received: by 2002:a05:620a:4894:b0:7e3:2c3a:aac5 with SMTP id af79cd13be357-7e342b70ea4mr1315161685a.12.1753182724450;
+        Tue, 22 Jul 2025 04:12:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGsVndy6GfF1/rbOfATVToveGOqPm5CxByBr7sl2oaOgD0x8vxoWl1Wqyb/DMzWWuenDTrgHg==
+X-Received: by 2002:a05:620a:4894:b0:7e3:2c3a:aac5 with SMTP id af79cd13be357-7e342b70ea4mr1315159785a.12.1753182723749;
+        Tue, 22 Jul 2025 04:12:03 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-612c8f36f96sm6863713a12.23.2025.07.22.04.12.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Jul 2025 04:12:02 -0700 (PDT)
+Message-ID: <41dda9bd-12c8-485a-a6d0-69d040d724cd@oss.qualcomm.com>
+Date: Tue, 22 Jul 2025 13:11:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        sboyd@kernel.org
+Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
+        andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+        srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
+        krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
+        casey.connolly@linaro.org
+References: <20250722101317.76729-1-angelogioacchino.delregno@collabora.com>
+ <20250722101317.76729-3-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250722101317.76729-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=BJ6zrEQG c=1 sm=1 tr=0 ts=687f7205 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=QX4gbG5DAAAA:8 a=EUspDBNiAAAA:8
+ a=Y_nGuXgBD960inqFf4MA:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+ a=AbAUZ8qAyYyZVLSsDulk:22
+X-Proofpoint-GUID: FGRQOEcMsvTPo_i-R1BPMUNggqrtP2ef
+X-Proofpoint-ORIG-GUID: FGRQOEcMsvTPo_i-R1BPMUNggqrtP2ef
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIyMDA5MSBTYWx0ZWRfX1nzS3yeZgyWY
+ f8ZFHaTYY0PGbaUszXFvuI8eUjzXzTYXMtfov/PL/5k0NRDmqZ5dshL6Vg9OhHCZnVKuwW0lc2k
+ Zk3GKjn6z0IC1WUlrKezDCN7fTi3qSZ30s9A0+O/BEhiSztJpWA7qKiw4wkbVMFBIa4l7m7uX1X
+ sOl22lZpbs35FHq4eKCM4RVU1pbYIyXysyzpkYfm/cbk/RN2sffTo9kGoFodTNQA+C7oceuxsdn
+ nJ5dNVUPsK3KIdxPbRx2YpPtTCzAzwK7nssVGvi7uIrgplD8T6zCyXrVEIiYssVtSoEZ++OLVPa
+ Ok1iH5+e9Z5YXfp7JZ27XJZQdxSu5YrCdZNCP3pV3eIMOsrsOTxX+4KONhC7Jay8tBshrqS5KEK
+ P6O2D5e8wqKEk1g+Xg8Pv+4rBtrHWyZjZz81J8CMYCqNTZV1NrdJLkRj3klg8dTPUuaCrKRe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-22_02,2025-07-21_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
+ mlxlogscore=813 suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
+ mlxscore=0 malwarescore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507220091
 
-On 7/22/25 11:04, AngeloGioacchino Del Regno wrote:
-> Il 21/07/25 10:14, Laura Nao ha scritto:
->> Add compatible for MT8196 SoC.
->>
->
-> This is compatible with MT8186's layout - not with the others - and
-> besides: "mediatek,efuse" is deprecated.
->
-> Adding something to deprecated bindings is not even really permitted (unless
-> there's a *very* good reason to, which you definitely don't have in this case).
->
-> Also, this commit has no description - repeating the same as the title adds
-> no information and doesn't help at all.
->
-> NACK.
->
+On 7/22/25 12:13 PM, AngeloGioacchino Del Regno wrote:
+> Some Qualcomm PMICs integrate a SDAM device, internally located in
+> a specific address range reachable through SPMI communication.
+> 
+> Instead of using the parent SPMI device (the main PMIC) as a kind
+> of syscon in this driver, register a new SPMI sub-device for SDAM
+> and initialize its own regmap with this sub-device's specific base
+> address, retrieved from the devicetree.
+> 
+> This allows to stop manually adding the register base address to
+> every R/W call in this driver, as this can be, and is now, handled
+> by the regmap API instead.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
-Got it, thanks both for the feedback - I'll fix this in the next 
-revision.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Best,
-
-Laura
-
-> Regards,
-> Angelo
->
->> Signed-off-by: Laura Nao <laura.nao@collabora.com>
->> ---
->>   Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
->> index 32b8c1eb4e80..e209a1132a26 100644
->> --- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
->> +++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
->> @@ -37,6 +37,7 @@ properties:
->>                 - mediatek,mt8188-efuse
->>                 - mediatek,mt8192-efuse
->>                 - mediatek,mt8195-efuse
->> +              - mediatek,mt8196-efuse
->>                 - mediatek,mt8516-efuse
->>             - const: mediatek,efuse
->>         - const: mediatek,mt8173-efuse 
->
->
->
-
+Konrad
 
