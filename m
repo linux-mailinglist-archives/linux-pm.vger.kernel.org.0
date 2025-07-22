@@ -1,188 +1,131 @@
-Return-Path: <linux-pm+bounces-31247-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31248-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F926B0CCD6
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 23:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12DB4B0D046
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 05:27:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DCCE6C3947
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Jul 2025 21:47:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38A423B842F
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 03:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CE41F2361;
-	Mon, 21 Jul 2025 21:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2137B271454;
+	Tue, 22 Jul 2025 03:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DPVKZKMs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mdKj2z+m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439837DA7F
-	for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 21:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6682222D7
+	for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 03:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753134485; cv=none; b=LuaB8I/z6hrG/QatQ2RIyfq6wJjwm2/XOUKNIi0x01C73btvuMUP+NF/YY2UtvCCBL+wd7XL9V/+3k7petyGwOg08Ue+hUEKo5ux90QHiL4T7pCNWNWRy2T5TBwV8b5umt0DclH9rFAOsC+YqthoVUWklIAbtTkalo1zNQ9jN0c=
+	t=1753154853; cv=none; b=b4PX4lSlzkRPdjp0O57O+BPxwpJm+UnZDvr32NDfPwsfhCbSq4XKM4qaNPh7MUQIHb1Nt/tFBT4clk1/AIKHH6HTla+KsTCDYxEk9607nGCHDq3NB2+0lyBsYmZjSAZrcgQgStxS6P5N9CrU77k+orIJQ5VejkZM7ZQ+bIEkJLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753134485; c=relaxed/simple;
-	bh=/cxmrl6M5wjmEIKKkIVgKw4Gt/QtFpcoVq5DLCCLR7U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AeyxzL6QGexC3YKwHqo1AILzATouAqSgilhFbq9AEkyPzt0tPuxDUG6YHd3cfHqKkZo+St7pbG+b+/sBR0XZ4fE42GJqdi6WV8UjGDMsWQwp9qRjck4SVkmtp0WAukaW//ufvVPnvwn2CKbpiUUZPKlMDCsQuqjSuusoqImwYfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DPVKZKMs; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-880f92a63c7so2450805241.1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 14:48:03 -0700 (PDT)
+	s=arc-20240116; t=1753154853; c=relaxed/simple;
+	bh=rybnPHNQaWtEYh9P8NGg87PYwoHOjTqXZlA3TioA/Gk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fK+MEGcLATvS5HiCowVBCYpnTa1rBdxnnqMvGXGGaGcAfMche1D2DO4YTIEXsq3xFWDxpbkZsZ8+KoYVObr0mKF1q0dAKnuAFN6RIFyNWzUp7jK7ECiwU7s4PsHvWeBjg98MZbVZVzYRGbaJsqtNJtVNxse3tt8HGWAnmC4D0O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mdKj2z+m; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-74931666cbcso4081358b3a.0
+        for <linux-pm@vger.kernel.org>; Mon, 21 Jul 2025 20:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1753134483; x=1753739283; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yV4g+i2RgFE+gfGu3rBpzdbN5NSnFxxFd7wCPsNpPqU=;
-        b=DPVKZKMsh2VIBePT4TrkY3JeAjNWfO78NMEs/f5Fp7gQlF8kPFmSuEL/BSAKMQOhjJ
-         WXBysx2BK3FxqgnLmCrmaPuSAPjyhQlX849X6UZPeXxjdMXoM7MaEJUwhwveFCers1ZW
-         L8qsFE6lwc+s5k9FVFxwlZwsYUkqc8OzTmKYBsnrDIOwCQw9rjVoqZZW2BdqCywAddgJ
-         cF8VbLyDoTULD4YZGzpm5bgUIRU/6qXhD3jFw83tAkJkKFJrJivZgPbrPp8VkSl/Khl9
-         FOXFOR1cQqy0FiMEHZkQwEn0jzRRZ5ZJwNpe8xIK+8cQrVfJfER7H7WKQbMqRF9mHe4V
-         VETQ==
+        d=linaro.org; s=google; t=1753154851; x=1753759651; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9n3vZldR94+dA+R993bdHJdlDsdK9CxAgbpvmVuXZ7I=;
+        b=mdKj2z+m/MS1sZlSlb2v+5p6LgVIyg3+uji4XxCkOmFbrJD4OnacMwnyUfpj7FbbVm
+         3YfT4LeaQew5rBQRF8PbI83X4SeMNP42SJwRELP5GN88p1NXH3pfjVbWCJ67Rl2DINeS
+         /CkiUPgTMnTMLBItxSQQAzNRFP2OuyUoSfZ6E122Mz41w7fO93Yk3PEZvZ/7Qb0qNNhE
+         ZxJFrMABwRcnce3pPTEBznzFviXFyErc61PDEIXGHMfRyn7qtBQdYmA7N+u0doql26OR
+         1SVFz/gN4pGOVuB4bxIVthw7aFdY+1WciovaHA5wqRv73j48RAKuFjGREymNTHyCsmi8
+         vs+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753134483; x=1753739283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yV4g+i2RgFE+gfGu3rBpzdbN5NSnFxxFd7wCPsNpPqU=;
-        b=hi+1X68ARlihw2qsEohm8+phzjVzZXJPA3q0hNbJIILw2PWjF+PxaUH9TwRuXxeRX6
-         b+b54zN7ANx23j/CGoe8Ajbe2IwCNtJD7y+nx8vi6h4Y+SNQxFzws/JG0dD2kCYfkYQz
-         WmCh8/ya99OTGSMdYck093HwMwc4NOLurtCZoYndqm+FkMUE4/oH4VX0NN5CTHlomtL6
-         AILtKgJVrfuJjLQIMYjfxZ6+WaOzlxr4onV5M9YCrDM303rob/Z0cRSRnbw6YylprUTn
-         6IAJnu8En/e2Zrgrzq0q+Sp3kglNFbyGasvuNPZcXKijeQp6P0r3zWGe/QKx+5C8TRx+
-         g09A==
-X-Forwarded-Encrypted: i=1; AJvYcCUsOVbbw7mBs3iCcKX5SPFwEv5fsVd0gKJapFdSx8iZSXaIrZ3k/bdLGTryhFre3pxV58WJX4tyVQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2LVi4VsWflJhUthrH0NKBB0l0gn4NdqtZombCJHuRD2fzIdOl
-	hkwudmqNTMdiZ0YAKDrCuWQBvLX/ipg4JMOLucC48/JgFlWvR1fnG479M2y8Jmu0efPxoAM8IK6
-	RWplmAhixrG/rQNK/i19DKg2uH1hRbbpFatAdOWLN
-X-Gm-Gg: ASbGncuwr4d2n/HJBvcxcsDCEF92ohXAqkl8onSj6qIWgCGkCHLwAaVs46we7BHYlFb
-	5azFXzwVurMCCbEg/peHIf8dG5duYAN5TdXoht/+Yk7kbFRkRUKjvufk1IarX6KjsluG0bhaQ+y
-	KywicA7epjIm33UxS55MNdYgYGYR1ka2s9lNSzXSfHEdPG+stIm4FG6ErqgxkxRZdAV4Di8Cp6R
-	8apPg==
-X-Google-Smtp-Source: AGHT+IE9Out0U4eDp0L+lruC6Z3AgfqLk7sBkM4K1tQa/T3sgkadDi0x/cJmpAjNVCV1NmyaxPsujtpuXXtJm76gr64=
-X-Received: by 2002:a05:6102:6a83:b0:4bc:82f:b4e0 with SMTP id
- ada2fe7eead31-4f95f456fe8mr10840452137.22.1753134482804; Mon, 21 Jul 2025
- 14:48:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753154851; x=1753759651;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9n3vZldR94+dA+R993bdHJdlDsdK9CxAgbpvmVuXZ7I=;
+        b=R9ub477dMIfSKoozKCYnUUdTsIeKjGHHONHd5gr3JGupqxhKsBOK0Hsng80Jttkgnk
+         8Du+xcw8s/4R6J8g1Ip6hNmBvTA2ez2KiYaQgjlgfwER7KBTyCXFssMnaRyW0Wqe2R7C
+         fhsqr1VViyDScdvzcidAPwvft3gvxEsFC6nNwBo/RQAMiC4vw9FIZYLN42mMHyQkr89X
+         DLyi8rlB2z/H6tTzPD3+9NjPpNE0XkOKoGp4jguXaM3fpExfr39t9NWmHyUIvb6ySQT+
+         xqgfm6DkjAZqbqGqGlRnDKlj3mFtHXF3pqYpyJI07gNQqCeCZm3iUrFr5KuYmjOG/oA3
+         nfZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUG0T0ukn/82eovvxvQSTibhRqImHHwq2hUCyy2ctWlTI2iMQkmlBloiHyCiQ33RHG9nd6cNLhmLw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC7uQOa3SJ8NA6hGi4ETMW8CbOvgClSVRnpsCoTa/+owMhL0UA
+	vMW3X+GZyqHRM5/dmlerc+q6Chv8+gfgtQ2/SSPyJuIS4i1OCDzQJicfLex39cd1lFw+b2S704M
+	w2yne
+X-Gm-Gg: ASbGncvijDwAGM0rAh5C3u160GEyUoher7/46Bp+Eh5vVBaYn3igh/9bHhjmYiP4Cp9
+	uwkJIrAgqCWPhJnUSvIk6J0fxmcFytxU/Hg36G6qVAhavPGYWBUnGcOTI7otEmhws5cAdu00iEw
+	YuSNSsfxPKs3KR/xXhDHYdYSoHcaKDTm823NKufPfLvBX2C9xA1HjQJgu5vgpkPELd6tQi0C840
+	/W3tM5sz3nZyZyj3qCU2WaM2oLBC1lWHNqzYigiM6KiOCGsiVEBGx64Gl7hVyFzZXhd+YLebXiT
+	Qqlk/LwTfEZo9wuq5Y7360qNTEGrfdzxY1XJPZ5NrZx0YnvfWS/s2sM4nnuuvV7FkWu6PHPQRpr
+	hew6JyEiT4BBo8vHKnuu8AnM=
+X-Google-Smtp-Source: AGHT+IHMk+QFzQv06GlweYpnpIsiItziaGaige6hONJgvfku+e/v14Yrznf2Rog/c8HhV/kb3Rh0tw==
+X-Received: by 2002:a05:6a20:1583:b0:231:a5f3:4d0c with SMTP id adf61e73a8af0-2390dc2dc9emr25205981637.26.1753154850730;
+        Mon, 21 Jul 2025 20:27:30 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f2ff61ff2sm5020397a12.35.2025.07.21.20.27.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jul 2025 20:27:30 -0700 (PDT)
+Date: Tue, 22 Jul 2025 08:57:27 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Prashant Malani <pmalani@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <20250722032727.zmdwj6ztitkmr4pf@vireshk-i7>
+References: <ef3f933a-742c-9e8e-9da4-762b33f2de94@hisilicon.com>
+ <CAFivqmLCW2waDnJ0nGbjBd5gs+w+DeszPKe0be3VRLVu06-Ytg@mail.gmail.com>
+ <CAFivqm+D9mbGku-nZKSUEMcQV5XK_ayarxL9gpV5JyfmhirsPw@mail.gmail.com>
+ <aGuGLu2u7iKxR3ul@arm.com>
+ <CAFivqmJL90xsELhz4tPtkYA9vMzS9C=V__nwo=kWJKjKS=mE_Q@mail.gmail.com>
+ <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
+ <aHTOSyhwIAaW_1m1@arm.com>
+ <CAFivqmJ912sEdSih_DFkiWRm478XUJhNDe=s2M_UO2gVTu4e3w@mail.gmail.com>
+ <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
+ <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250718071842.2483378-1-saravanak@google.com> <CAJZ5v0ifsVycSWk24gMrEsGtDn0nVkUJGH8vwBvJdEA1XHbTRQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ifsVycSWk24gMrEsGtDn0nVkUJGH8vwBvJdEA1XHbTRQ@mail.gmail.com>
-From: Saravana Kannan <saravanak@google.com>
-Date: Mon, 21 Jul 2025 14:47:25 -0700
-X-Gm-Features: Ac12FXwwOQTkhHGVCyyAhfFO3bgUo_GCkpiCND0suCVSKQ4yTELFAGmtrUkgzPQ
-Message-ID: <CAGETcx830BEJ1Trb5DVQL=m5FuF=qe+9aZbU0J2DiLZ-sz18bA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] PM: wakeup: Provide interface for userspace to
- abort suspend
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
 
-On Mon, Jul 21, 2025 at 12:51=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
-
-Thanks for responding to my RFC!
-
->
-> On Fri, Jul 18, 2025 at 9:18=E2=80=AFAM Saravana Kannan <saravanak@google=
-.com> wrote:
+On 21-07-25, 12:40, Prashant Malani wrote:
+> On Mon, 21 Jul 2025 at 10:00, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > Why don't you flag the driver as CPUFREQ_NEED_UPDATE_LIMITS?
 > >
-> > Once suspend starts, it can take a while before file system sync
-> > finishes and all the userspace threads are frozen. During this time,
-> > there can be events that originate in userspace that would require the
-> > suspend to be aborted.
-> >
-> > The only way to abort suspend from userspace as of today is to grab
-> > and release a kernel wakelock using the /sys/power/wake_lock and
-> > /sys/power/wake_unlock files. This has the disadvantage of:
-> >
-> > * Doing the useless work of creating and destroying wakelocks.
-> > * If the userspace entity crashes after the wake lock is created, we
-> >   get a wake lock/memory leak.
->
-> But wakelocks are for this purpose.
+> > That would kind of make sense given how the driver works overall, or
+> > am I missing anything?
 
-Right, wakelocks might be working as intended where they don't go away
-if the userspace process crashes.
++1
 
->
-> > To avoid all this and simplify the interface, this patch allows
-> > canceling a suspend by writing UINT_MAX value to the
-> > /sys/power/wakeup_count that is meant for tracking wakeup events.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >
-> > Rafael,
-> >
-> > If the idea looks good to you, I can also update Documentation and sent
-> > it as a non-RFC patch. I'm not too tied on what file we use to trigger
-> > an abort from userspace as long as it's possible.
->
-> I would rather add an interface based on a special device file for
-> wakelocks to address this.
+> Sounds fine to me (it doesn't fix the lingering accuracy issue, but at
+> least frequency
+> setting will get unblocked). I can put together a patch if there are
+> no objections.
 
-While the device file based approach for creating kernel wakelocks
-from userspace might be cleaner, this patch isn't trying to address
-that though. We already have a UAPI for that and the userspace suspend
-managers use it.
-
->
-> For example, open it to create a wakelock with the name of a calling
-> process, write 1 to it to block suspending, write 0 to it to unblock,
-> close to remove it.
->
-> Then it will go away automatically when the process exits.
-
-The scenario this patch is trying to address is to abort a suspend
-that was initiated by userspace (system with CONFIG_PM_AUTOSLEEP
-disabled). It's not really a kernel wakelock request asking the kernel
-to keep the system from suspending -- it doesn't need to because
-CONFIG_PM_AUTOSLEEP is disabled. And we certainly don't want to create
-a kernel wakelock for every single user space wakelock. That's a lot
-of unnecessary overhead.
-
-Another way to look at this is that we have a way to initiate suspend
-by writing "mem" to /sys/power/state, but we don't have any way to
-abort it. Another version of this patch that I was considering was to
-write "abort" to /sys/power/state to abort an ongoing suspend. Would
-that version of the patch make more sense to you?
-
-Thanks,
-Saravana
-
-
->
-> >  drivers/base/power/wakeup.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index d1283ff1080b..9316de561bcc 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -1008,6 +1008,8 @@ bool pm_save_wakeup_count(unsigned int count)
-> >         if (cnt =3D=3D count && inpr =3D=3D 0) {
-> >                 saved_count =3D count;
-> >                 events_check_enabled =3D true;
-> > +       } else if (cnt =3D=3D UINT_MAX) {
-> > +               pm_system_wakeup();
-> >         }
-> >         raw_spin_unlock_irqrestore(&events_lock, flags);
-> >         return events_check_enabled;
-> > --
-> > 2.50.0.727.gbf7dc18ff4-goog
-> >
-> >
+-- 
+viresh
 
