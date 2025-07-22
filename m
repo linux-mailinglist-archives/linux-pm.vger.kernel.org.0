@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-31302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37E1FB0E549
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 23:14:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4EDB0E54B
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 23:15:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B233A65E4C
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 21:14:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 575C07AC66D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Jul 2025 21:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C65C22868AC;
-	Tue, 22 Jul 2025 21:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C9528725B;
+	Tue, 22 Jul 2025 21:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/djLveM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Of5RHCCt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0D5285C9B;
-	Tue, 22 Jul 2025 21:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4994287246;
+	Tue, 22 Jul 2025 21:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753218883; cv=none; b=a6jbSUwcs5isN/H3Wch26lXf8sNoBOPQjedhEMYTo7LrQ2cRcLb2fwTgswUAAywwwwx7FGDHBpMDs6ugFXHrfgqcAxoe9FH4N7RhiEYr1TUB0q+hIFOp2dOqrW6tY+YqGYX/sM9zi7zAFMM4zqgi9OzqBbuu/PCEghymQ6VixB4=
+	t=1753218887; cv=none; b=U+ASJvqFrFYxglUz+R8dgohSs13x/TYaCIdFeuGojg5UFLORVXVZ8LSFOIbtFJ8VPqfOXi1MIZrHeL0eetgvGa3veJKssCsimWDfaynKVqid0tJSkpFMOGahPUk0Rjtt/OsL6C3aPJhjXs2wP6hYZAiqsBY3PQVM6bLEYx3CZBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753218883; c=relaxed/simple;
-	bh=nvd0cKs0L4bBhK9fv2WrIRaWlznWb9vJRC/jjGCje44=;
+	s=arc-20240116; t=1753218887; c=relaxed/simple;
+	bh=GI1bYvDXeqOlV4VLN2LaDohG2UtSgNmXCrZJCZ09eqM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C7wBAFWE5b5wZUOureZKFWHjdmsniIm/LJJvRlaOwTEdG4SkUT1UpYY6EQ1MhnBlKi51UEDn31Sa8aRSUD1XH32Wmt3LFpZxrBYx6l9IMZXxBc9neAkZtv1RWtmVVDfbjfYFkp5VvhAb6nHQgFWVzNWzYwdBhcTjS7zX2L712FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/djLveM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C344CC4CEF7;
-	Tue, 22 Jul 2025 21:14:37 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=dhGOAIiPTmShVexmbN1qSovgjyhF4MT+H33tXCOTFB6zFy47hgTPWz/dLAl8pQOvEwSvmyv7meh9Lyaptstj5xEbye+EEbA1ual8JiT5YMHPdNa400Sfw/shoOw7qrR4yAmiY7Fc+XOvWicZc31wgeVNKEpUSOvnrd7T82iwl/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Of5RHCCt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE36AC4CEF4;
+	Tue, 22 Jul 2025 21:14:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753218882;
-	bh=nvd0cKs0L4bBhK9fv2WrIRaWlznWb9vJRC/jjGCje44=;
+	s=k20201202; t=1753218886;
+	bh=GI1bYvDXeqOlV4VLN2LaDohG2UtSgNmXCrZJCZ09eqM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=J/djLveMzKGpaOiROpT7f+oXQeqHHfTRwQF9qgt7DGBS+vhd3BrvXj/DKIOgHX/E8
-	 iff4l3d6lrTDdNEEXaaBlLCZsPb1sM9aBmNhZyT9QVrRCMxngW4UrpTcDFZIK7t6tn
-	 gOoadHbxH76WeFPykyAqsWx9/V6D487+PcJnXc+KVRoAOrSaSGfacZ0K+7DRj6aEEu
-	 G+janDMvQUiETqV/xPK5DPRRLWr/TCEXppXIFTCTzH9Y240lgvmsqCOTp9p/GfcIXG
-	 sfKXdfaZdwtm/i166GKuqCUf06N1VDJqXzQaCuE4qmdG0rNEER0pmiA2k6f/Lw7NTX
-	 ePinpkhYFggPg==
+	b=Of5RHCCtOKPgu9gf821JSL2SMNAFk3OJrblu42M31ADI7yxpCSCjMryssKSKlRGcS
+	 S3hwk7kiz+hhdslnYFUNl2QjjhfTAJEH0gMVw/iaeuDIuwYpqpvnoI9UK00TH6Oqvi
+	 wT+Ky47/MhQRmUUbKPaEUENq+c82iFRRmmU4IpX6TjB5eD7YG+P7TaBDGzzGm+0ntG
+	 h9Iea08xIk/MAdnHeifNes+0JlsS7BTMnBRH3qter01fke4Q4qdavvXpbk1YwqlQr/
+	 +nsJHqC5esG9T+7URmAU6FpBoaw48UsajjXR577Bu8ISaF4vH2fxhK6rVBobD2Sarg
+	 I6bhn5u6yZjRA==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Tue, 22 Jul 2025 23:14:25 +0200
-Subject: [PATCH 1/2] rust: Add initial interconnect framework abstractions
+Date: Tue, 22 Jul 2025 23:14:26 +0200
+Subject: [PATCH DNM 2/2] interconnect: Add a test Rust consumer driver
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250722-topic-icc_rs-v1-1-9da731c14603@oss.qualcomm.com>
+Message-Id: <20250722-topic-icc_rs-v1-2-9da731c14603@oss.qualcomm.com>
 References: <20250722-topic-icc_rs-v1-0-9da731c14603@oss.qualcomm.com>
 In-Reply-To: <20250722-topic-icc_rs-v1-0-9da731c14603@oss.qualcomm.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -67,295 +67,89 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
  linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753218871; l=9313;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753218871; l=2424;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=DRqe5blEFEynIDjmphk+tGhlzAyumkrYp2WYtr3A20w=;
- b=TLRADbxqm8FJxVBgL63e+b6ZJerogbQ0BKE4ZOdnHYeDBnB41oI3wWu22xXH7tmHzU5TxUvhG
- zYU4yHpLMHrAwisWCCYMhAOyN11DH50Z6NapLvf/29MCoOBkPn5BHYh
+ bh=AUfUrkjxDa8Dp36nZmOv9PIHJioHXljAHqy6xwE929M=;
+ b=FzP//7lYibJ7lSp1oj+OI69rCFqs4CSoH4BtDIYdAsdoL4goEz99IOXx3cVvv2CMF0MLB5A8U
+ HOtgV5SyQ03D2CvOrqFHyx5aqxmxsJ1gJCubhzPZVAeHQyQ/EO//8Uu
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Add abstractions for icc_path handling, laying the groundwork for more
-work on the subsystem.
+Do not merge, this is for illustration / CI purposes only.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- MAINTAINERS                     |   1 +
- rust/bindings/bindings_helper.h |   2 +
- rust/kernel/icc.rs              | 225 ++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |   1 +
- 4 files changed, 229 insertions(+)
+ drivers/interconnect/Makefile |  1 +
+ drivers/interconnect/test.rs  | 47 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ffb35359f1e2d4c286c5afef691f10421a3542a6..fbdbaa3c401d3705974f43bbd47e5a83632d33ef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12735,6 +12735,7 @@ F:	drivers/interconnect/
- F:	include/dt-bindings/interconnect/
- F:	include/linux/interconnect-provider.h
- F:	include/linux/interconnect.h
-+F:	rust/kernel/icc.rs
+diff --git a/drivers/interconnect/Makefile b/drivers/interconnect/Makefile
+index b0a9a6753b9dc30083781163ccc01dafcfcd0485..913b92080cc0b79846b74c239e14959b45b5450c 100644
+--- a/drivers/interconnect/Makefile
++++ b/drivers/interconnect/Makefile
+@@ -2,6 +2,7 @@
  
- INTERRUPT COUNTER DRIVER
- M:	Oleksij Rempel <o.rempel@pengutronix.de>
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 84d60635e8a9baef1f1a1b2752dc0fa044f8542f..becfce3fa4794a51d817927376f77df7b8b0434d 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -53,6 +53,8 @@
- #include <linux/file.h>
- #include <linux/firmware.h>
- #include <linux/fs.h>
-+#include <linux/interconnect-provider.h>
-+#include <linux/interconnect.h>
- #include <linux/ioport.h>
- #include <linux/jiffies.h>
- #include <linux/jump_label.h>
-diff --git a/rust/kernel/icc.rs b/rust/kernel/icc.rs
+ CFLAGS_core.o				:= -I$(src)
+ icc-core-objs				:= core.o bulk.o debugfs-client.o
++icc-core-$(CONFIG_RUST)			+= test.o
+ 
+ obj-$(CONFIG_INTERCONNECT)		+= icc-core.o
+ obj-$(CONFIG_INTERCONNECT_IMX)		+= imx/
+diff --git a/drivers/interconnect/test.rs b/drivers/interconnect/test.rs
 new file mode 100644
-index 0000000000000000000000000000000000000000..3674632866954613749e78bc24b8db6f1f3c0369
+index 0000000000000000000000000000000000000000..f4ba2000d0f1fd2d91aedf8aace0b0b54bfd48f2
 --- /dev/null
-+++ b/rust/kernel/icc.rs
-@@ -0,0 +1,225 @@
++++ b/drivers/interconnect/test.rs
+@@ -0,0 +1,47 @@
 +// SPDX-License-Identifier: GPL-2.0
-+
 +// Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 +
-+//! Interconnect abstractions
-+//!
-+//! (based on clk.rs)
-+//!
-+//! C headers:
-+//! [`include/linux/interconnect.h`](srctree/include/linux/interconnect.h)
-+//! [`include/linux/interconnect-provider.h`](srctree/include/linux/interconnect-provider.h)
-+//!
-+//! Reference: <https://docs.kernel.org/driver-api/interconnect.html>
++//! Test interconnect consumer driver
++use kernel::{
++    c_str, device::Core, icc::*, module_platform_driver, of, of::DeviceId, platform, prelude::*,
++};
 +
-+/// The interconnect framework bandidth unit.
-+///
-+/// Represents a bus bandwidth request in kBps, wrapping a [`u32`] value.
-+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
-+pub struct IccBwUnit(pub u32);
++#[pin_data]
++struct IccTestConsumerDriver {
++    #[pin]
++    path: IccPath,
++}
 +
-+impl IccBwUnit {
-+    /// Create a new instance from bytes (B)
-+    pub const fn from_bytes_per_sec(bps: u32) -> Self {
-+        Self(bps / 1000)
-+    }
++kernel::of_device_table!(
++    OF_TABLE,
++    MODULE_OF_TABLE,
++    <IccTestConsumerDriver as platform::Driver>::IdInfo,
++    [(DeviceId::new(c_str!("linux,icc-consumer-test")), ())]
++);
 +
-+    /// Create a new instance from kilobytes (kB) per second
-+    pub const fn from_kilobytes_per_sec(kbps: u32) -> Self {
-+        Self(kbps)
-+    }
++impl platform::Driver for IccTestConsumerDriver {
++    type IdInfo = ();
++    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_TABLE);
 +
-+    /// Create a new instance from megabytes (MB) per second
-+    pub const fn from_megabytes_per_sec(mbps: u32) -> Self {
-+        Self(mbps * 1000)
-+    }
++    fn probe(
++        pdev: &platform::Device<Core>,
++        _id_info: Option<&Self::IdInfo>,
++    ) -> Result<Pin<KBox<Self>>> {
++        let path = IccPath::of_get(pdev.as_ref(), None)?;
 +
-+    /// Create a new instance from gigabytes (GB) per second
-+    pub const fn from_gigabytes_per_sec(gbps: u32) -> Self {
-+        Self(gbps * 1000 * 1000)
-+    }
++        path.set_bw(
++            IccBwUnit::from_megabits_per_sec(400),
++            IccBwUnit::from_megabits_per_sec(800),
++        )?;
 +
-+    /// Create a new instance from bits (b) per second
-+    pub const fn from_bits_per_sec(_bps: u32) -> Self {
-+        Self(1)
-+    }
-+
-+    /// Create a new instance from kilobits (kb) per second
-+    pub const fn from_kilobits_per_sec(kbps: u32) -> Self {
-+        Self(kbps.div_ceil(8))
-+    }
-+
-+    /// Create a new instance from megabits (Mb) per second
-+    pub const fn from_megabits_per_sec(mbps: u32) -> Self {
-+        Self(mbps * 1000 / 8)
-+    }
-+
-+    /// Create a new instance from gigabits (Gb) per second
-+    pub const fn from_gigabits_per_sec(mbps: u32) -> Self {
-+        Self(mbps * 1000 * 1000 / 8)
-+    }
-+
-+    /// Get the bandwidth in bytes (B) per second
-+    pub const fn as_bytes_per_sec(self) -> u32 {
-+        self.0 * 1000
-+    }
-+
-+    /// Get the bandwidth in kilobytes (kB) per second
-+    pub const fn as_kilobytes_per_sec(self) -> u32 {
-+        self.0
-+    }
-+
-+    /// Get the bandwidth in megabytes (MB) per second
-+    pub const fn as_megabytes_per_sec(self) -> u32 {
-+        self.0 / 1000
-+    }
-+
-+    /// Get the bandwidth in gigabytes (GB) per second
-+    pub const fn as_gigabytes_per_sec(self) -> u32 {
-+        self.0 / 1000 / 1000
-+    }
-+
-+    /// Get the bandwidth in bits (b) per second
-+    pub const fn as_bits_per_sec(self) -> u32 {
-+        self.0 * 8 / 1000
-+    }
-+
-+    /// Get the bandwidth in kilobits (kb) per second
-+    pub const fn as_kilobits_per_sec(self) -> u32 {
-+        self.0 * 8
-+    }
-+
-+    /// Get the bandwidth in megabits (Mb) per second
-+    pub const fn as_megabits_per_sec(self) -> u32 {
-+        self.0 * 8 * 1000
-+    }
-+
-+    /// Get the bandwidth in gigabits (Gb) per second
-+    pub const fn as_gigabits_per_sec(self) -> u32 {
-+        self.0 * 8 * 1000 * 1000
++        Ok(KBox::pin_init(Self { path }, GFP_KERNEL)?.into())
 +    }
 +}
 +
-+impl From<IccBwUnit> for u32 {
-+    fn from(bw: IccBwUnit) -> Self {
-+        bw.0
-+    }
++module_platform_driver! {
++    type: IccTestConsumerDriver,
++    name: "icc-test-consumer",
++    authors: ["Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>"],
++    description: "Test interconnect consumer driver",
++    license: "GPL",
 +}
-+
-+#[cfg(CONFIG_INTERCONNECT)]
-+mod icc_path {
-+    use super::IccBwUnit;
-+    use crate::{
-+        device::Device,
-+        error::{Result, from_err_ptr, to_result},
-+        prelude::*,
-+    };
-+
-+    use core::ptr;
-+
-+    /// A reference-counted interconnect path.
-+    ///
-+    /// Rust abstraction for the C [`struct icc_path`]
-+    ///
-+    /// # Invariants
-+    ///
-+    /// An [`IccPath`] instance holds either a pointer to a valid [`struct icc_path`] created by
-+    /// the C portion of the kernel, or a NULL pointer.
-+    ///
-+    /// Instances of this type are reference-counted. Calling [`IccPath::of_get`] ensures that the
-+    /// allocation remains valid for the lifetime of the [`IccPath`].
-+    ///
-+    /// # Examples
-+    ///
-+    /// The following example demonstrates hwo to obtain and configure an interconnect path for
-+    /// a device.
-+    ///
-+    /// ```
-+    /// use kernel::icc_path::{IccPath, IccBwUnit};
-+    /// use kernel::device::Device;
-+    /// use kernel::error::Result;
-+    ///
-+    /// fn poke_at_bus(dev: &Device) -> Result {
-+    ///     let bus_path = IccPath::of_get(dev, Some(c_str!("bus")))?;
-+    ///
-+    ///     bus_path.set_bw(
-+    ///         IccBwUnit::from_megabits_per_sec(400),
-+    ///         IccBwUnit::from_megabits_per_sec(800)
-+    ///     )?;
-+    ///
-+    ///     // bus_path goes out of scope and self-disables if there are no other users
-+    ///
-+    ///     Ok(())
-+    /// }
-+    /// ```
-+    #[repr(transparent)]
-+    pub struct IccPath(*mut bindings::icc_path);
-+
-+    impl IccPath {
-+        /// Get [`IccPath`] corresponding to a [`Device`]
-+        ///
-+        /// Equivalent to the kernel's of_icc_get() API.
-+        pub fn of_get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
-+            let id = name.map_or(ptr::null(), |n| n.as_ptr());
-+
-+            // SAFETY: It's always safe to call [`of_icc_get`]
-+            //
-+            // INVARIANT: The reference count is decremented when [`IccPath`] goes out of scope
-+            Ok(Self(from_err_ptr(unsafe {
-+                bindings::of_icc_get(dev.as_raw(), id)
-+            })?))
-+        }
-+
-+        /// Obtain the raw [`struct icc_path`] pointer.
-+        #[inline]
-+        pub fn as_raw(&self) -> *mut bindings::icc_path {
-+            self.0
-+        }
-+
-+        /// Enable the path.
-+        ///
-+        /// Equivalent to the kernel's icc_enable() API.
-+        #[inline]
-+        pub fn enable(&self) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for `icc_enable`].
-+            to_result(unsafe { bindings::icc_enable(self.as_raw()) })
-+        }
-+
-+        /// Disable the path.
-+        ///
-+        /// Equivalent to the kernel's icc_disable() API.
-+        #[inline]
-+        pub fn disable(&self) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for `icc_disable`].
-+            to_result(unsafe { bindings::icc_disable(self.as_raw()) })
-+        }
-+
-+        /// Set the bandwidth on a path
-+        ///
-+        /// Equivalent to the kernel's icc_set_bw() API.
-+        #[inline]
-+        pub fn set_bw(&self, avg_bw: IccBwUnit, peak_bw: IccBwUnit) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for [`icc_set_bw`].
-+            to_result(unsafe {
-+                bindings::icc_set_bw(
-+                    self.as_raw(),
-+                    avg_bw.as_kilobytes_per_sec(),
-+                    peak_bw.as_kilobytes_per_sec(),
-+                )
-+            })
-+        }
-+    }
-+
-+    impl Drop for IccPath {
-+        fn drop(&mut self) {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for [`icc_put`].
-+            unsafe { bindings::icc_put(self.as_raw()) }
-+        }
-+    }
-+}
-+
-+// SAFETY: An `IccPath` is always reference-counted and can be released from any thread.
-+unsafe impl Send for IccPath {}
-+
-+#[cfg(CONFIG_INTERCONNECT)]
-+pub use icc_path::*;
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 87bcaa1c6b8a6291e71905e8dde60d945b654b98..60f6ac6e79cce57a8538ea0ad48f34f51af91731 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -89,6 +89,7 @@
- pub mod fmt;
- pub mod fs;
- pub mod init;
-+pub mod icc;
- pub mod io;
- pub mod ioctl;
- pub mod jump_label;
 
 -- 
 2.50.1
