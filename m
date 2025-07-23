@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-31326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 709DCB0F0C9
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:09:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C61B0F0D9
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:10:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62766AC38C9
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 11:08:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F1A3189DEDF
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 11:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55E062E3373;
-	Wed, 23 Jul 2025 11:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A52E2E425D;
+	Wed, 23 Jul 2025 11:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DGmHFHgU"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TY5fxCbd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D77F2DAFDB;
-	Wed, 23 Jul 2025 11:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1DF2DE71E;
+	Wed, 23 Jul 2025 11:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753268933; cv=none; b=nxbL8cJVXxT+XvL1OHSzuperBkWyXuQlNzd5HCNC6/H8R2dwUPauatln79j2AZZrQj9pNk/qYhSD3Ojwi805QxW0KEo8hqbMaoglZKhGbxP8tdSlXZMLH45yRuXhBqt3tHFV0euUH3DnpyQPhJzcu8dSKJiZ0sYVUq8IprqLDz0=
+	t=1753268937; cv=none; b=dHpSc7KlyqUU9LWPONV70ZcmpVt52X9iGrkw/ZVcDZb6NOHF3bZTvtAE1oGDbSwJ+seFe1YC4n55b+Z05YMf2foTpATGN+qzDAPXOCTDOcY+ZtZ3Ru7tl98ZKQNppTpzRNf8leRb5VUEpy0hcTBgKCqaUTnTbDStGZudNavif7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753268933; c=relaxed/simple;
-	bh=jmCrwunjX7t7Lzj12+o466JQt3nHRCdfFDWDqIF8FOc=;
+	s=arc-20240116; t=1753268937; c=relaxed/simple;
+	bh=b2z02Tg7+vcOZeTgZw3lRIJ677lSvmqCMf5C7B6Yr0A=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=utDPhnjU9MUlnfSj6MPD566EuTkRtWm26n7b4YWjH6wNNhpaR8mIQP8sR0smGQeCo33FESD6LzMXKljAkqlkxvKnPYYR5WC8+kfQZoOjjz6VqBaXv7CghP0vWSlabdZeg+jYNfuA6AIZTC5ve5rqTmv2BbB1w+e/bz+/A4Y7ZEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DGmHFHgU; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=DfUJiWU/60T+iBlzmwrdjSONAOOZxHNFccyMoyiXMYVXNOQnR7gOzOE9Xsbmxp3zj/QfYQwpn9uBxT1iM7vNuXuk0Fwb8fsp0MeO8HGXcyhicXe93XfipXgPn208MIwGRxuqSIfLDJkbtf9fyl3DZuURoVaF74s4UHjnIgmu4KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TY5fxCbd; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N9LhM0001765;
-	Wed, 23 Jul 2025 11:08:46 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N90Nbm030756;
+	Wed, 23 Jul 2025 11:08:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	FXp9B64qx703kMPw3hJqjg9QtQaDfRttDfJjSdHMU04=; b=DGmHFHgUqaZkA+T9
-	iCHaj1KBqI5OCUe2A8+335Bg5TrjaVCgBvrjdId2N3zI6FUJsDL5J3L/8QKJsNwU
-	HQycwozzEg/4ZtvQ1ZyQRmNxN1E1HllFXEeZYrPnzmsL+0924h822M8XXVTsM6LD
-	bM/roEzp0sERAp9hlkUvELDIlE0D6EQVLCONsEUnRMalNutcFAPD0ubsTJf7Xa6W
-	ioOgLUEGEBai4d5wnOCwVuqVb8Wn6s7224cZtqLJa11na1tZmwmEf6lmm014W+Hd
-	VcKAzZCZQL4JVnHiI6opDvHi0/San9BgYQk4XQwhpFXecbDNMJljeY81XqRlAEhE
-	J/WJ4w==
+	xF3PiaRiaIJjwDIgFh/oPpSH+ITV10Dk4Nei06/sbNo=; b=TY5fxCbd2hP7gbyp
+	uyJs8tgmq/44bZ+6aq895A2osrfV7ooUmt6JH1bqmoqtx+0bfA5Wh0Q3tSVc96xo
+	T/mdOx436Z42AAoa+LQeW6qHhxiJ0TcVsez0EX95iVVA05g8XJ8YaZW1vEKd6m5m
+	Kc1BSogFnzERWHUsNrHDz3yauHJdZYLqvVQ8pEu2c8LVzMWnFGYKhRpRFSgGCEI/
+	EN2+p5lZpCqcrrPf+nBVPn8HOAKNoXchZd3nLlsRPXvZo+83dJMbP2t29LW80m/5
+	yKpOdxVgJvwGvy7ug1Q3g/iYp49OGSFVxheJrzPkWvNbWCYyrpXUy9L1guBcBKwy
+	2lxrSQ==
 Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 481t6w625m-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48045w39qv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Jul 2025 11:08:46 +0000 (GMT)
+	Wed, 23 Jul 2025 11:08:51 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56NB8j2X030760
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56NB8pDg030833
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Jul 2025 11:08:45 GMT
+	Wed, 23 Jul 2025 11:08:51 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 23 Jul 2025 04:08:40 -0700
+ 15.2.1748.10; Wed, 23 Jul 2025 04:08:45 -0700
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
 To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
@@ -65,10 +65,12 @@ To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-pm@vger.kernel.org>
-CC: Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v2 2/4] clk: qcom: apss-ipq5424: Add ipq5424 apss clock controller
-Date: Wed, 23 Jul 2025 16:38:13 +0530
-Message-ID: <20250723110815.2865403-3-quic_varada@quicinc.com>
+CC: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Varadarajan Narayanan
+	<quic_varada@quicinc.com>
+Subject: [PATCH v2 3/4] cpufreq: qcom-nvmem: Enable cpufreq for ipq5424
+Date: Wed, 23 Jul 2025 16:38:14 +0530
+Message-ID: <20250723110815.2865403-4-quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250723110815.2865403-1-quic_varada@quicinc.com>
 References: <20250723110815.2865403-1-quic_varada@quicinc.com>
@@ -84,374 +86,92 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=SPpCVPvH c=1 sm=1 tr=0 ts=6880c2be cx=c_pps
+X-Authority-Analysis: v=2.4 cv=LL1mQIW9 c=1 sm=1 tr=0 ts=6880c2c3 cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=4qVBXBCilfBDfP_PjJQA:9
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDA5NCBTYWx0ZWRfXx1zFyXrEnvx7
- BtSOL7pHAW2UjdSh8wLE1AMbLiY1fiaS0cOCo54aqUsaREcL78T+/dPFzujosxuHZ8iKHBQEs4p
- lylFFcsok0jlP+yKozWP97f7lNMVe3SbPS2odmRcNeDvc+vUEcr2S0NZxm6hHwrWyS7qDhwuvdL
- gaqqCv0/V2ufz7PkG8QvdAFh1n8FwUiE9HyapduuUvDE1rNiCMsrYo2jRoVOkCDGkBe8jIIBvy2
- h2dRTTdl0JhFlE1aKARIwSU8eR3b2D3Zwd1iX4a/mCYOzLpYdUNhLn+AvsaMNdEn5VY3uMk/Z1Z
- V/ToWzn+uoaq+oU51HF0xj/IRILGiUABhrYMSQEvNlkBsj3nvXaoIewudwGUqeOWsIYfjRxmcgT
- 5230QMgAeveLhVx8IVPs0/TD8YueoNPF/zTYrfFk5GqW+XBdY4rsyjUSPmGRJvS1xkTZ47UH
-X-Proofpoint-ORIG-GUID: Ncrq2byLJcA5OXjSE4CL3e3Z2XqhI0dU
-X-Proofpoint-GUID: Ncrq2byLJcA5OXjSE4CL3e3Z2XqhI0dU
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
+ a=XqKM0RL5GMr1h_B9R8QA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: jJ54FnbuT4TfRJc7KPbJhTRvd-ZXjIJZ
+X-Proofpoint-ORIG-GUID: jJ54FnbuT4TfRJc7KPbJhTRvd-ZXjIJZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDA5NCBTYWx0ZWRfXyXqICZlR9hIH
+ nnklFTQSLwJ6qnvmJoEQCkliTYy6qJ8DvNZLVTt7kblhJaM7p7M+ZGyCMENQRvwu8iMq9tBI732
+ 24p6cupzdQw4dI0vD/eXUw7ibnXWBMkanOTfK/F6FV5VWN27LdG4I4Xr1IZ6xHue7ke7yjjIjDe
+ 8FkikoutTKQFm67cO/sIzH8orU4+/K8sXrLGj5tTLxwEyKR4NlBZgEsh/gwvniJpgsRxLKoRTaD
+ WX61+nY6WfRl1JQa4hH7hDhTjvAGiX/aRuCZGqGCnHN0HgGjjeCQ9BJzsqITrO4Eu7I1NmetIGk
+ nRe3QIFziEC67qmJY3F4pqsTviIBWgOTA3A7g0v03MEyLItW3cGkWlMRNdiTIra9rKWO16bRgfu
+ OfgPCVJoycRMHiX534Yu8etm6TouGLDiHwNzzJ0y5NRYbe5CnozCVPd32hRJ4YRWVhBfbfjH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-07-23_02,2025-07-22_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
- mlxscore=0 bulkscore=0 clxscore=1011 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a
+ priorityscore=1501 mlxlogscore=999 clxscore=1011 mlxscore=0 adultscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
  authcc= route=outbound adjust=0 reason=mlx scancount=1
  engine=8.19.0-2505280000 definitions=main-2507230094
 
-From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
 
-CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
-Add support for the APSS PLL, RCG and clock enable for ipq5424.
-The PLL, RCG register space are clubbed. Hence adding new APSS driver
-for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
-and needs to be scaled along with the CPU and is modeled as an ICC clock.
+IPQ5424 have different OPPs available for the CPU based on
+SoC variant. This can be determined through use of an eFuse
+register present in the silicon.
 
-Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+Added support for ipq5424 on nvmem driver which helps to
+determine OPPs at runtime based on the eFuse register which
+has the CPU frequency limits. opp-supported-hw dt binding
+can be used to indicate the available OPPs for each limit.
+
+nvmem driver also creates the "cpufreq-dt" platform_device after
+passing the version matching data to the OPP framework so that the
+cpufreq-dt handles the actual cpufreq implementation.
+
 Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-[ Removed clock notifier, moved L3 pll to icc-clk, used existing
-alpha pll structure ]
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+[ Changed '!=' based check to '==' based check ]
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
-v2: Model L3 pll as ICC clock and add relevant structures
-    Use CLK_ALPHA_PLL_TYPE_HUAYRA_2290 register offsets instead
-    of duplicate ipq5424_pll_offsets definition.
-    Inline clock rates.
-    Fix MODULE_LICENSE
----
- drivers/clk/qcom/Kconfig        |   7 +
- drivers/clk/qcom/Makefile       |   1 +
- drivers/clk/qcom/apss-ipq5424.c | 282 ++++++++++++++++++++++++++++++++
- 3 files changed, 290 insertions(+)
- create mode 100644 drivers/clk/qcom/apss-ipq5424.c
+v2: Add Reviewed-by: Konrad
+    Change speed bin check to == instead of !=
+--
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 6cb6cd3e1778..dae89599a40e 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -208,6 +208,13 @@ config IPQ_CMN_PLL
- 	  Say Y or M if you want to support CMN PLL clock on the IPQ
- 	  based devices.
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 015dd393eaba..de1769649368 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -191,6 +191,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "ti,am62p5", },
  
-+config IPQ_APSS_5424
-+	tristate "IPQ APSS Clock Controller"
-+	help
-+	  Support for APSS Clock controller on Qualcom IPQ5424 platform.
-+	  Say Y if you want to support CPU frequency scaling on ipq based
-+	  devices.
-+
- config IPQ_GCC_4019
- 	tristate "IPQ4019 Global Clock Controller"
- 	help
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index ddb7e06fae40..98de55eb6402 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_CLK_X1E80100_TCSRCC) += tcsrcc-x1e80100.o
- obj-$(CONFIG_CLK_X1P42100_GPUCC) += gpucc-x1p42100.o
- obj-$(CONFIG_CLK_QCM2290_GPUCC) += gpucc-qcm2290.o
- obj-$(CONFIG_IPQ_APSS_PLL) += apss-ipq-pll.o
-+obj-$(CONFIG_IPQ_APSS_5424) += apss-ipq5424.o
- obj-$(CONFIG_IPQ_APSS_6018) += apss-ipq6018.o
- obj-$(CONFIG_IPQ_CMN_PLL) += ipq-cmn-pll.o
- obj-$(CONFIG_IPQ_GCC_4019) += gcc-ipq4019.o
-diff --git a/drivers/clk/qcom/apss-ipq5424.c b/drivers/clk/qcom/apss-ipq5424.c
-new file mode 100644
-index 000000000000..7ce1e169b9a1
---- /dev/null
-+++ b/drivers/clk/qcom/apss-ipq5424.c
-@@ -0,0 +1,282 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/clock/qcom,apss-ipq.h>
-+#include <dt-bindings/interconnect/qcom,ipq5424.h>
-+
-+#include "clk-alpha-pll.h"
-+#include "clk-branch.h"
-+#include "clk-rcg.h"
-+#include "clk-regmap.h"
-+#include "common.h"
-+
-+enum {
-+	P_XO,
-+	P_GPLL0,
-+	P_APSS_PLL_EARLY,
-+	P_L3_PLL,
-+};
-+
-+struct apss_clk {
-+	struct notifier_block cpu_clk_notifier;
-+	struct clk_hw *hw;
-+	struct device *dev;
-+	struct clk *l3_clk;
-+};
-+
-+static struct clk_alpha_pll ipq5424_apss_pll = {
-+	.offset = 0x0,
-+	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_HUAYRA_2290],
-+	.flags = SUPPORTS_DYNAMIC_UPDATE,
-+	.clkr = {
-+		.enable_reg = 0x0,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "apss_pll",
-+			.parent_data = &(const struct clk_parent_data) {
-+				.fw_name = "xo-board-clk",
-+			},
-+			.parent_names = (const char *[]){ "xo-board-clk"},
-+			.num_parents = 1,
-+			.ops = &clk_alpha_pll_huayra_ops,
-+		},
-+	},
-+};
-+
-+static const struct clk_parent_data parents_apss_silver_clk_src[] = {
-+	{ .fw_name = "xo-board-clk" },
-+	{ .fw_name = "gpll0" },
-+	{ .hw = &ipq5424_apss_pll.clkr.hw },
-+};
-+
-+static const struct parent_map parents_apss_silver_clk_src_map[] = {
-+	{ P_XO, 0 },
-+	{ P_GPLL0, 4 },
-+	{ P_APSS_PLL_EARLY, 5 },
-+};
-+
-+static const struct freq_tbl ftbl_apss_clk_src[] = {
-+	F(800000000, P_GPLL0, 1, 0, 0),
-+	F(1416000000, P_APSS_PLL_EARLY, 1, 0, 0),
-+	F(1800000000, P_APSS_PLL_EARLY, 1, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 apss_silver_clk_src = {
-+	.cmd_rcgr = 0x0080,
-+	.freq_tbl = ftbl_apss_clk_src,
-+	.hid_width = 5,
-+	.parent_map = parents_apss_silver_clk_src_map,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "apss_silver_clk_src",
-+		.parent_data = parents_apss_silver_clk_src,
-+		.num_parents = ARRAY_SIZE(parents_apss_silver_clk_src),
-+		.ops = &clk_rcg2_ops,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_branch apss_silver_core_clk = {
-+	.halt_reg = 0x008c,
-+	.clkr = {
-+		.enable_reg = 0x008c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "apss_silver_core_clk",
-+			.parent_hws = (const struct clk_hw *[]){
-+				&apss_silver_clk_src.clkr.hw },
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_alpha_pll ipq5424_l3_pll = {
-+	.offset = 0x10000,
-+	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_HUAYRA_2290],
-+	.flags = SUPPORTS_DYNAMIC_UPDATE,
-+	.clkr = {
-+		.enable_reg = 0x0,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "l3_pll",
-+			.parent_data = &(const struct clk_parent_data) {
-+				.fw_name = "xo-board-clk",
-+			},
-+			.parent_names = (const char *[]){ "xo-board-clk"},
-+			.num_parents = 1,
-+			.ops = &clk_alpha_pll_huayra_ops,
-+		},
-+	},
-+};
-+
-+static const struct clk_parent_data parents_l3_clk_src[] = {
-+	{ .fw_name = "xo-board-clk" },
-+	{ .fw_name = "gpll0" },
-+	{ .hw = &ipq5424_l3_pll.clkr.hw },
-+};
-+
-+static const struct parent_map parents_l3_clk_src_map[] = {
-+	{ P_XO, 0 },
-+	{ P_GPLL0, 4 },
-+	{ P_L3_PLL, 5 },
-+};
-+
-+static const struct freq_tbl ftbl_l3_clk_src[] = {
-+	F(800000000, P_GPLL0, 1, 0, 0),
-+	F(984000000, P_L3_PLL, 1, 0, 0),
-+	F(1272000000, P_L3_PLL, 1, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 l3_clk_src = {
-+	.cmd_rcgr = 0x10080,
-+	.freq_tbl = ftbl_l3_clk_src,
-+	.hid_width = 5,
-+	.parent_map = parents_l3_clk_src_map,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "l3_clk_src",
-+		.parent_data = parents_l3_clk_src,
-+		.num_parents = ARRAY_SIZE(parents_l3_clk_src),
-+		.ops = &clk_rcg2_ops,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_branch l3_core_clk = {
-+	.halt_reg = 0x1008c,
-+	.clkr = {
-+		.enable_reg = 0x1008c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "l3_clk",
-+			.parent_hws = (const struct clk_hw *[]){
-+				&l3_clk_src.clkr.hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static const struct regmap_config apss_ipq5424_regmap_config = {
-+	.reg_bits       = 32,
-+	.reg_stride     = 4,
-+	.val_bits       = 32,
-+	.max_register   = 0x20000,
-+	.fast_io        = true,
-+};
-+
-+static struct clk_regmap *apss_ipq5424_clks[] = {
-+	[APSS_PLL_EARLY] = &ipq5424_apss_pll.clkr,
-+	[APSS_SILVER_CLK_SRC] = &apss_silver_clk_src.clkr,
-+	[APSS_SILVER_CORE_CLK] = &apss_silver_core_clk.clkr,
-+	[L3_PLL] = &ipq5424_l3_pll.clkr,
-+	[L3_CLK_SRC] = &l3_clk_src.clkr,
-+	[L3_CORE_CLK] = &l3_core_clk.clkr,
-+
-+};
-+
-+#define IPQ_APPS_PLL_ID			(5424 * 3)	/* some unique value */
-+
-+static const struct qcom_icc_hws_data icc_ipq5424_cpu_l3[] = {
-+	{ MASTER_CPU, SLAVE_L3, L3_CORE_CLK },
-+};
-+
-+static const struct qcom_cc_desc apss_ipq5424_desc = {
-+	.config = &apss_ipq5424_regmap_config,
-+	.clks = apss_ipq5424_clks,
-+	.num_clks = ARRAY_SIZE(apss_ipq5424_clks),
-+	.icc_hws = icc_ipq5424_cpu_l3,
-+	.num_icc_hws = ARRAY_SIZE(icc_ipq5424_cpu_l3),
-+	.icc_first_node_id = IPQ_APPS_PLL_ID,
-+};
-+
-+static const struct alpha_pll_config apss_pll_config = {
-+	.l = 0x3b,
-+	.config_ctl_val = 0x08200920,
-+	.config_ctl_hi_val = 0x05008001,
-+	.config_ctl_hi1_val = 0x04000000,
-+	.test_ctl_val = 0x0,
-+	.test_ctl_hi_val = 0x0,
-+	.test_ctl_hi1_val = 0x0,
-+	.user_ctl_val = 0x1,
-+	.early_output_mask = BIT(3),
-+	.aux2_output_mask = BIT(2),
-+	.aux_output_mask = BIT(1),
-+	.main_output_mask = BIT(0),
-+};
-+
-+static const struct alpha_pll_config l3_pll_config = {
-+	.l = 0x29,
-+	.config_ctl_val = 0x08200920,
-+	.config_ctl_hi_val = 0x05008001,
-+	.config_ctl_hi1_val = 0x04000000,
-+	.test_ctl_val = 0x0,
-+	.test_ctl_hi_val = 0x0,
-+	.test_ctl_hi1_val = 0x0,
-+	.user_ctl_val = 0x1,
-+	.early_output_mask = BIT(3),
-+	.aux2_output_mask = BIT(2),
-+	.aux_output_mask = BIT(1),
-+	.main_output_mask = BIT(0),
-+};
-+
-+static int apss_ipq5424_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct regmap *regmap;
-+	void __iomem *base;
-+	int ret;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	regmap = devm_regmap_init_mmio(dev, base, &apss_ipq5424_regmap_config);
-+	if (!regmap)
-+		return PTR_ERR(regmap);
-+
-+	clk_alpha_pll_configure(&ipq5424_l3_pll, regmap, &l3_pll_config);
-+
-+	clk_alpha_pll_configure(&ipq5424_apss_pll, regmap, &apss_pll_config);
-+
-+	ret = qcom_cc_really_probe(dev, &apss_ipq5424_desc, regmap);
-+	if (!ret)
-+		dev_dbg(&pdev->dev, "Registered APSS & L3 clock provider\n");
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id apss_ipq5424_match_table[] = {
-+	{ .compatible = "qcom,ipq5424-apss-clk" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, apss_ipq5424_match_table);
-+
-+static struct platform_driver apss_ipq5424_driver = {
-+	.probe = apss_ipq5424_probe,
-+	.driver = {
-+		.name   = "apss-ipq5424-clk",
-+		.of_match_table = apss_ipq5424_match_table,
-+	},
-+};
-+
-+module_platform_driver(apss_ipq5424_driver);
-+
-+MODULE_DESCRIPTION("QCOM APSS IPQ5424 CLK Driver");
-+MODULE_LICENSE("GPL");
+ 	{ .compatible = "qcom,ipq5332", },
++	{ .compatible = "qcom,ipq5424", },
+ 	{ .compatible = "qcom,ipq6018", },
+ 	{ .compatible = "qcom,ipq8064", },
+ 	{ .compatible = "qcom,ipq8074", },
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 54f8117103c8..765a5bb81829 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -200,6 +200,10 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+ 	case QCOM_ID_IPQ9574:
+ 		drv->versions = 1 << (unsigned int)(*speedbin);
+ 		break;
++	case QCOM_ID_IPQ5424:
++	case QCOM_ID_IPQ5404:
++		drv->versions = (*speedbin == 0x3b) ? BIT(1) : BIT(0);
++		break;
+ 	case QCOM_ID_MSM8996SG:
+ 	case QCOM_ID_APQ8096SG:
+ 		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
+@@ -591,6 +595,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst __maybe_u
+ 	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+ 	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+ 	{ .compatible = "qcom,ipq5332", .data = &match_data_kryo },
++	{ .compatible = "qcom,ipq5424", .data = &match_data_kryo },
+ 	{ .compatible = "qcom,ipq6018", .data = &match_data_ipq6018 },
+ 	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
+ 	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
 -- 
 2.34.1
 
