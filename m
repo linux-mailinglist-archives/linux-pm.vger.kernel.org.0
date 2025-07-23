@@ -1,108 +1,468 @@
-Return-Path: <linux-pm+bounces-31337-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31338-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3B6CB0F239
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 14:29:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2EAB0F266
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 14:37:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F70A16E21A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 12:29:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F23BD3B1486
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 12:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6F62E6107;
-	Wed, 23 Jul 2025 12:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD602E5B37;
+	Wed, 23 Jul 2025 12:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BbxWN2ii"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="bZ2N0mcJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3CF210F4A;
-	Wed, 23 Jul 2025 12:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753273769; cv=none; b=g3rLZL+g0NX/Q0P1NWjW7D5Y+muSBe/ahbMGBo/oPmgxusliTtlu8v/0gCBM47O+xRvrKaXL2AnOiirf7NKqVNGEWFnQJY4Nzxk8uXUZ7oRz+dUaBH7Nty8kJl+NbTswXytL1shRUV54/mNeOWxOG+M5TB7rZNE8n+khpeilUZk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753273769; c=relaxed/simple;
-	bh=Z1m4e0F1hHnK+GgkCb3mXzRDsiQSoSWfTycNxdXFiQA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=kvaP0YTXD7mJINlqJ/Z/9L1S3c6VxzZXCmY1gO7A+iqUoDuTGkT7KQ+yG+/uZGOiE2pT7zwQ0ywoK/tTAN/m7MbM0IrjRZFuLhDaNjRrkEMwdwkpvtLhQ3cokYe7iCyGc0b7uKXGPTvGv4ZBmflknm6wRFSMv9XY2kKTwSd2B+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BbxWN2ii; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A97C4CEE7;
-	Wed, 23 Jul 2025 12:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753273768;
-	bh=Z1m4e0F1hHnK+GgkCb3mXzRDsiQSoSWfTycNxdXFiQA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BbxWN2iia6X+T0YTzqCa0lzRsuHPvCJ5QX+LmE48P1hm5OC5R7jeFmX7hewOHccRB
-	 bbeiGVmB04NkvEUFNZXOW6xBMNEvaHdLVmbdr2vHrUWwsIl0j+b42DUCOCsDqfwQpT
-	 yW/iXcFL4g/1QmQASU0L2BzNXoKkURTHx5iW5CHzRnmtNuem9+YNuBrVnwrIOxN35p
-	 wsTTqHhpRx+oBYR+jptDxSBYH6VAP1AydNWsa60XDSCaICvcPJUSX4Xg87bcsEM8R7
-	 A9vO5yLmWDx41p7QuExKuEP6u1uaYC/7z4vBjxSCf+iOehR5vplf1xRUTfL9gbBTcg
-	 sJNCFNnH/CZhw==
-From: Vinod Koul <vkoul@kernel.org>
-To: Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Joerg Roedel <joro@8bytes.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Manivannan Sadhasivam <mani@kernel.org>, 
- Herbert Xu <herbert@gondor.apana.org.au>, 
- "David S. Miller" <davem@davemloft.net>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Robert Marko <robimarko@gmail.com>, 
- Das Srinagesh <quic_gurus@quicinc.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Jassi Brar <jassisinghbrar@gmail.com>, 
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
- Luca Weiss <luca.weiss@fairphone.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
- linux-mmc@vger.kernel.org
-In-Reply-To: <20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com>
-References: <20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com>
-Subject: Re: (subset) [PATCH v2 00/15] Various dt-bindings for Milos and
- The Fairphone (Gen. 6) addition
-Message-Id: <175327375916.189941.14207583854602372511.b4-ty@kernel.org>
-Date: Wed, 23 Jul 2025 17:59:19 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE1C26C3BD;
+	Wed, 23 Jul 2025 12:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753274242; cv=pass; b=sjrFyQ0S2guJ3p+BEVtlVh8cdK5Gi+0seICcbZwyu8Qm/h4L+PFEarZ5zbEC/C/JMQLUe6ZP0fRWSTWUqbwNOuyE8a6dZpMNhxx/7PpsYW7W9LEWzNma4X9oDmnhTKNARD1DDTzTIiCz5UqXECCh5vdAAUMeLO+/t9JbIAvlHP0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753274242; c=relaxed/simple;
+	bh=2N/Y/ohRsx2NSDf+C+TmukttQ4T9HJGoB01l12MqotQ=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=M5H7H7EyvhCpEDTUWI2F9Uoa1zRRfddkWfiHgCArTSXy6gxJP2AT9tHLBKIB2x2v7ctG/WXTCNdZPvAM8ywvFDFU/fvd9T1NUYLMqjC2SdVRlCVowec1ICUkQ8XkhYDYKmpBzGRsW074bEd8W4Y5UEcVnxjUw7kCNzF3gNyH3UM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=bZ2N0mcJ; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1753274211; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=l5qvDUGiHthNx5QMP6DZw3Qolt/O+UrVleLi7AyU6l+JzzQKtuZEWlJF/jcFaTwVEMbZjXPxvWatEk2L+5Toue/JUoY/M7qvtm9HCsPDjSbQCW6aCAzWWje2qvBCBm4fZkwL1+XAH9WQO8u00aqmmQg3OD1xuyd0ODb0ZwSGhjc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1753274211; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=sNAt1xjDG8S67TT5jzkK+ZaOsA5YLuo9T5h8Ckdm4jE=; 
+	b=ChKE5yhIsiTrQ8jYWb90H1bk3i+Zgvv39n0dR1KSxZhABoGgiV1VS39z/cpbDmvvCow1nbfsSDdoI050lto9YQsGRIpUwQl1qDV7iqfyu3YmlV6KV3wM1uS3td50hslyWrI2Q2DykJRTfaVv02EXwUg8aPcjw7GPK0Jumtgvkak=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753274211;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=sNAt1xjDG8S67TT5jzkK+ZaOsA5YLuo9T5h8Ckdm4jE=;
+	b=bZ2N0mcJSpYeMs//jHozeKmu4o18+9A3zEnohBUw0rHzCSz75J3dy659VYBJKMXp
+	ATSPosFa/mC999Nhe30BBfmgW6QhyCIVrZqfp10k2nJxrJtQcNJEKhwEqRSp4oZMbwa
+	8HPq61tca+4M2v9fWh7aIIgKWNdtUnjy9JDDXmLA=
+Received: by mx.zohomail.com with SMTPS id 1753274208177540.169222562024;
+	Wed, 23 Jul 2025 05:36:48 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [PATCH 1/2] rust: Add initial interconnect framework abstractions
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20250722-topic-icc_rs-v1-1-9da731c14603@oss.qualcomm.com>
+Date: Wed, 23 Jul 2025 09:36:32 -0300
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Georgi Djakov <djakov@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3133FE9C-473D-4142-AF38-CA447265C02E@collabora.com>
+References: <20250722-topic-icc_rs-v1-0-9da731c14603@oss.qualcomm.com>
+ <20250722-topic-icc_rs-v1-1-9da731c14603@oss.qualcomm.com>
+To: Konrad Dybcio <konradybcio@kernel.org>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
+X-ZohoMailClient: External
+
+Hi Konrad,
+
+I will be skipping the feedback that was given by others to not sound
+repetitive.
+
+> On 22 Jul 2025, at 18:14, Konrad Dybcio <konradybcio@kernel.org> =
+wrote:
+>=20
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>=20
+> Add abstractions for icc_path handling, laying the groundwork for more
+> work on the subsystem.
+
+For the sake of reviewers, I think you should add a brief overview of =
+what this
+code does and what you plan to use it for.
+
+E.g.: can you write a sentence or two about the interconnect subsystem, =
+for
+example? We can then derive more information from the C documentation if
+needed. Also, why do we need icc_path specifically? Why does it have to
+come first?=20
 
 
-On Sun, 13 Jul 2025 10:05:22 +0200, Luca Weiss wrote:
-> Document various bits of the Milos SoC in the dt-bindings, which don't
-> really need any other changes.
-> 
-> Then we can add the dtsi for the Milos SoC and finally add a dts for
-> the newly announced The Fairphone (Gen. 6) smartphone.
-> 
-> Dependencies:
-> * The dt-bindings should not have any dependencies on any other patches.
-> * The qcom dts bits depend on most other Milos patchsets I have sent in
->   conjuction with this one. The exact ones are specified in the b4 deps.
-> 
-> [...]
+>=20
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+> MAINTAINERS                     |   1 +
+> rust/bindings/bindings_helper.h |   2 +
+> rust/kernel/icc.rs              | 225 =
+++++++++++++++++++++++++++++++++++++++++
+> rust/kernel/lib.rs              |   1 +
+> 4 files changed, 229 insertions(+)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index =
+ffb35359f1e2d4c286c5afef691f10421a3542a6..fbdbaa3c401d3705974f43bbd47e5a83=
+632d33ef 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12735,6 +12735,7 @@ F: drivers/interconnect/
+> F: include/dt-bindings/interconnect/
+> F: include/linux/interconnect-provider.h
+> F: include/linux/interconnect.h
+> +F: rust/kernel/icc.rs
+>=20
+> INTERRUPT COUNTER DRIVER
+> M: Oleksij Rempel <o.rempel@pengutronix.de>
+> diff --git a/rust/bindings/bindings_helper.h =
+b/rust/bindings/bindings_helper.h
+> index =
+84d60635e8a9baef1f1a1b2752dc0fa044f8542f..becfce3fa4794a51d817927376f77df7=
+b8b0434d 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -53,6 +53,8 @@
+> #include <linux/file.h>
+> #include <linux/firmware.h>
+> #include <linux/fs.h>
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/interconnect.h>
+> #include <linux/ioport.h>
+> #include <linux/jiffies.h>
+> #include <linux/jump_label.h>
+> diff --git a/rust/kernel/icc.rs b/rust/kernel/icc.rs
+> new file mode 100644
+> index =
+0000000000000000000000000000000000000000..3674632866954613749e78bc24b8db6f=
+1f3c0369
+> --- /dev/null
+> +++ b/rust/kernel/icc.rs
+> @@ -0,0 +1,225 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +// Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 
-Applied, thanks!
+Perhaps this instead [0].
 
-[09/15] dt-bindings: dma: qcom,gpi: document the Milos GPI DMA Engine
-        commit: b330d77c5da2cfece98a89cbb51b8ef948691e6f
+> +
+> +//! Interconnect abstractions
+> +//!
+> +//! (based on clk.rs)
+> +//!
+> +//! C headers:
+> +//! =
+[`include/linux/interconnect.h`](srctree/include/linux/interconnect.h)
+> +//! =
+[`include/linux/interconnect-provider.h`](srctree/include/linux/interconne=
+ct-provider.h)
+> +//!
+> +//! Reference: <https://docs.kernel.org/driver-api/interconnect.html>
+> +
+> +/// The interconnect framework bandidth unit.
+> +///
+> +/// Represents a bus bandwidth request in kBps, wrapping a [`u32`] =
+value.
+> +#[derive(Copy, Clone, PartialEq, Eq, Debug)]
+> +pub struct IccBwUnit(pub u32);
+> +
+> +impl IccBwUnit {
+> +    /// Create a new instance from bytes (B)
+> +    pub const fn from_bytes_per_sec(bps: u32) -> Self {
+> +        Self(bps / 1000)
+> +    }
+> +
+> +    /// Create a new instance from kilobytes (kB) per second
+> +    pub const fn from_kilobytes_per_sec(kbps: u32) -> Self {
+> +        Self(kbps)
+> +    }
+> +
+> +    /// Create a new instance from megabytes (MB) per second
+> +    pub const fn from_megabytes_per_sec(mbps: u32) -> Self {
+> +        Self(mbps * 1000)
+> +    }
+> +
+> +    /// Create a new instance from gigabytes (GB) per second
+> +    pub const fn from_gigabytes_per_sec(gbps: u32) -> Self {
+> +        Self(gbps * 1000 * 1000)
+> +    }
+> +
+> +    /// Create a new instance from bits (b) per second
+> +    pub const fn from_bits_per_sec(_bps: u32) -> Self {
+> +        Self(1)
+> +    }
+> +
+> +    /// Create a new instance from kilobits (kb) per second
+> +    pub const fn from_kilobits_per_sec(kbps: u32) -> Self {
+> +        Self(kbps.div_ceil(8))
+> +    }
+> +
+> +    /// Create a new instance from megabits (Mb) per second
+> +    pub const fn from_megabits_per_sec(mbps: u32) -> Self {
+> +        Self(mbps * 1000 / 8)
+> +    }
+> +
+> +    /// Create a new instance from gigabits (Gb) per second
+> +    pub const fn from_gigabits_per_sec(mbps: u32) -> Self {
+> +        Self(mbps * 1000 * 1000 / 8)
+> +    }
+> +
+> +    /// Get the bandwidth in bytes (B) per second
+> +    pub const fn as_bytes_per_sec(self) -> u32 {
+> +        self.0 * 1000
+> +    }
+> +
+> +    /// Get the bandwidth in kilobytes (kB) per second
+> +    pub const fn as_kilobytes_per_sec(self) -> u32 {
+> +        self.0
+> +    }
+> +
+> +    /// Get the bandwidth in megabytes (MB) per second
+> +    pub const fn as_megabytes_per_sec(self) -> u32 {
+> +        self.0 / 1000
+> +    }
+> +
+> +    /// Get the bandwidth in gigabytes (GB) per second
+> +    pub const fn as_gigabytes_per_sec(self) -> u32 {
+> +        self.0 / 1000 / 1000
+> +    }
+> +
+> +    /// Get the bandwidth in bits (b) per second
+> +    pub const fn as_bits_per_sec(self) -> u32 {
+> +        self.0 * 8 / 1000
+> +    }
+> +
+> +    /// Get the bandwidth in kilobits (kb) per second
+> +    pub const fn as_kilobits_per_sec(self) -> u32 {
+> +        self.0 * 8
+> +    }
+> +
+> +    /// Get the bandwidth in megabits (Mb) per second
+> +    pub const fn as_megabits_per_sec(self) -> u32 {
+> +        self.0 * 8 * 1000
+> +    }
+> +
+> +    /// Get the bandwidth in gigabits (Gb) per second
+> +    pub const fn as_gigabits_per_sec(self) -> u32 {
+> +        self.0 * 8 * 1000 * 1000
+> +    }
+> +}
+> +
+> +impl From<IccBwUnit> for u32 {
+> +    fn from(bw: IccBwUnit) -> Self {
+> +        bw.0
+> +    }
+> +}
+> +
 
-Best regards,
--- 
-~Vinod
+Why is this under CONFIG_INTERCONNECT, but not the code above it?
 
+> +#[cfg(CONFIG_INTERCONNECT)]
+> +mod icc_path {
+> +    use super::IccBwUnit;
+> +    use crate::{
+> +        device::Device,
+> +        error::{Result, from_err_ptr, to_result},
+> +        prelude::*,
+> +    };
+> +
+> +    use core::ptr;
+> +
+> +    /// A reference-counted interconnect path.
+> +    ///
+> +    /// Rust abstraction for the C [`struct icc_path`]
+> +    ///
+> +    /// # Invariants
+> +    ///
+> +    /// An [`IccPath`] instance holds either a pointer to a valid =
+[`struct icc_path`] created by
+> +    /// the C portion of the kernel, or a NULL pointer.
 
+Why should this ever be NULL? Can you expand on that in the docs? =
+Otherwise
+look into NonNull.
+
+> +    ///
+> +    /// Instances of this type are reference-counted. Calling =
+[`IccPath::of_get`] ensures that the
+> +    /// allocation remains valid for the lifetime of the [`IccPath`].
+
+Should this implement AlwaysRefCounted?
+
+> +    ///
+> +    /// # Examples
+> +    ///
+> +    /// The following example demonstrates hwo to obtain and =
+configure an interconnect path for
+> +    /// a device.
+
+Typo
+
+> +    ///
+> +    /// ```
+> +    /// use kernel::icc_path::{IccPath, IccBwUnit};
+> +    /// use kernel::device::Device;
+> +    /// use kernel::error::Result;
+> +    ///
+> +    /// fn poke_at_bus(dev: &Device) -> Result {
+> +    ///     let bus_path =3D IccPath::of_get(dev, =
+Some(c_str!("bus")))?;
+> +    ///
+> +    ///     bus_path.set_bw(
+> +    ///         IccBwUnit::from_megabits_per_sec(400),
+> +    ///         IccBwUnit::from_megabits_per_sec(800)
+> +    ///     )?;
+> +    ///
+> +    ///     // bus_path goes out of scope and self-disables if there =
+are no other users
+> +    ///
+> +    ///     Ok(())
+> +    /// }
+> +    /// ```
+> +    #[repr(transparent)]
+> +    pub struct IccPath(*mut bindings::icc_path);
+> +
+> +    impl IccPath {
+> +        /// Get [`IccPath`] corresponding to a [`Device`]
+> +        ///
+> +        /// Equivalent to the kernel's of_icc_get() API.
+
+Please either use backticks or provide a link if appropriate.
+
+> +        pub fn of_get(dev: &Device, name: Option<&CStr>) -> =
+Result<Self> {
+> +            let id =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> +
+> +            // SAFETY: It's always safe to call [`of_icc_get`]
+> +            //
+> +            // INVARIANT: The reference count is decremented when =
+[`IccPath`] goes out of scope
+> +            Ok(Self(from_err_ptr(unsafe {
+> +                bindings::of_icc_get(dev.as_raw(), id)
+> +            })?))
+
+There=E2=80=99s a lot going on here at once. Can you break this into =
+multiple lines?
+
+> +        }
+> +
+> +        /// Obtain the raw [`struct icc_path`] pointer.
+> +        #[inline]
+> +        pub fn as_raw(&self) -> *mut bindings::icc_path {
+> +            self.0
+> +        }
+
+Why should this be needed in drivers?
+
+> +
+> +        /// Enable the path.
+> +        ///
+> +        /// Equivalent to the kernel's icc_enable() API.
+> +        #[inline]
+> +        pub fn enable(&self) -> Result {
+> +            // SAFETY: By the type invariants, self.as_raw() is a =
+valid argument for `icc_enable`].
+> +            to_result(unsafe { bindings::icc_enable(self.as_raw()) })
+> +        }
+
+Should this take &mut? Same for all other functions below.
+
+Note that using &mut may help you implement Sync later.
+
+> +
+> +        /// Disable the path.
+> +        ///
+> +        /// Equivalent to the kernel's icc_disable() API.
+
+Same comment here. You need to ensure that this looks nice in the =
+rendered docs.
+
+> +        #[inline]
+> +        pub fn disable(&self) -> Result {
+> +            // SAFETY: By the type invariants, self.as_raw() is a =
+valid argument for `icc_disable`].
+> +            to_result(unsafe { bindings::icc_disable(self.as_raw()) =
+})
+> +        }
+> +
+> +        /// Set the bandwidth on a path
+> +        ///
+> +        /// Equivalent to the kernel's icc_set_bw() API.
+> +        #[inline]
+> +        pub fn set_bw(&self, avg_bw: IccBwUnit, peak_bw: IccBwUnit) =
+-> Result {
+> +            // SAFETY: By the type invariants, self.as_raw() is a =
+valid argument for [`icc_set_bw`].
+> +            to_result(unsafe {
+> +                bindings::icc_set_bw(
+> +                    self.as_raw(),
+> +                    avg_bw.as_kilobytes_per_sec(),
+> +                    peak_bw.as_kilobytes_per_sec(),
+> +                )
+> +            })
+> +        }
+> +    }
+> +
+> +    impl Drop for IccPath {
+> +        fn drop(&mut self) {
+> +            // SAFETY: By the type invariants, self.as_raw() is a =
+valid argument for [`icc_put`].
+> +            unsafe { bindings::icc_put(self.as_raw()) }
+> +        }
+> +    }
+> +}
+> +
+> +// SAFETY: An `IccPath` is always reference-counted and can be =
+released from any thread.
+> +unsafe impl Send for IccPath {}
+> +
+> +#[cfg(CONFIG_INTERCONNECT)]
+> +pub use icc_path::*;
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index =
+87bcaa1c6b8a6291e71905e8dde60d945b654b98..60f6ac6e79cce57a8538ea0ad48f34f5=
+1af91731 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -89,6 +89,7 @@
+> pub mod fmt;
+> pub mod fs;
+> pub mod init;
+> +pub mod icc;
+> pub mod io;
+> pub mod ioctl;
+> pub mod jump_label;
+>=20
+> --=20
+> 2.50.1
+>=20
+>=20
+
+=E2=80=94 Daniel
+
+[0] =
+https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/copyrigh=
+tText/=
 
