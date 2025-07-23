@@ -1,174 +1,354 @@
-Return-Path: <linux-pm+bounces-31350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A0DBB0F8F6
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 19:23:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EFF3B0FA42
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 20:25:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38942AA11C3
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 17:22:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA3051C86F01
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 18:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F097D21C16E;
-	Wed, 23 Jul 2025 17:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4AE22A1EF;
+	Wed, 23 Jul 2025 18:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4j1BZKS"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Eoi0yhoD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB082101B3;
-	Wed, 23 Jul 2025 17:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231D21E7C38
+	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 18:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753291280; cv=none; b=vGfTTEAvk4jHo7lfe2zW4V4c4Sn7/kI5TBwHphB8/47lYIY9gfWV3GsI6qTAkINefe0QJfns/xvdW0Dors6PcIxobBt4x91sP+uM+Z9fFvARGa9fpURceqKaQ7TuZs7JSXfneHHowLRSu7lMoRz6dgeZB2G4RQ3gidLbblIXGYk=
+	t=1753295128; cv=none; b=OebrMDePtA1NoSL/qsPpfM/38s/phNUC46rDOxGiI7drPFDYU4+z57ASteViNJFcLk4tHeizSI3Sklwqi3UJ0T41ULD1SYxb1LqSL0sz9pHHHQQ2+APE7oZk03lfwldVL6/7aObreAaz8ljIRg9u9gEFIpA5xqriiIP97FfMqWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753291280; c=relaxed/simple;
-	bh=xtv1v1vs8h+55gbAe/7DHcO2riCXUkdqyinSc/Mz4k0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DTeWvCoQBYuIOrtIornFO8ndagq36MdYX7QHhpsT50jGXyfpZgTVLkzAfIRsF7vLfjMOg8GWIg0a3eibkXxI+9l6iO9ZlNPffF9/Aw25wihqKjYukQE0VZmX06yRHDxFuFKBvTQkDqP81GhVUgtQP1usIeRDCd/g0U0ls0NHgi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B4j1BZKS; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-311bd8ce7e4so64321a91.3;
-        Wed, 23 Jul 2025 10:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753291279; x=1753896079; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JdHhJehaOGGRyz1yZkMniHUZHHY/gtuGeETDNFE6Evk=;
-        b=B4j1BZKSlmyh4jINlQz3FHIhl7PND+tvxMmrJUQ9LFcQneXgsH2kCFGtPAn/T+/VhJ
-         u7u6V3dtIDug3865IRz6NVvTpy/XgY1YvHfUwMMoaNj+GRUooqhyR5cGG8N2BrldFugB
-         x1gvgDGJzlgGNlttH1IAuJ2nna6/vIR6ECOP/Egk7aNnfbvOzXZGR08C7DRLBhJOsJl7
-         Qo8X0uKVcS6H8GGeklpduwec1gm/3R3Sw30xLVC/t6U4Yhi9+6HOwEGkaLyl9XSn/93m
-         txFbjA4hu7hdnGnlOleOMPWRsz/MKMuLXeLcJpgfu4/hy8ZaME+gufXaSB/trbRo6p9L
-         8QnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753291279; x=1753896079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JdHhJehaOGGRyz1yZkMniHUZHHY/gtuGeETDNFE6Evk=;
-        b=llYaxyjt/LxBH22tcU6jQV2WOfVU8dC1FI8Kw+l2f1we3aHBMkJQPwWSX+j/XztjHO
-         e1biIVlpi0oJ79/oLMd4fqPqbgl1+4sbIlf9vjHBJ38Kqeu9rAlzRUCgn/xxsWArTsTC
-         /IX+wOZISdnvJg5FxcZpn91LM85L+SbEhFdcfblijPx7h2QkXh0kUlBBpbrvtbhf4Jyd
-         392Da3S3hk+4mHMpJs64/jUvtBHNixjAedt+NC4aCd4b1lCIiw+AwVseF9rvkiBLzYZZ
-         hp2pDxUuOjkRGowwqDqEFhe9oM4jcUfWcIpIy0uef0LC1DzHnvsOZ1G093ISK6Bo1avg
-         JHJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ6dpITcp6Xh3iUaCxo1RXCTc7vdygSeZpRpg4LmjEw9KAeavmY2oUszNSJbVh2wOVyNAQxpSDzExy@vger.kernel.org, AJvYcCWt0Bqqg6In1jfuABVmUt5iEB6r1IXzkqhpSpvSTbuzNSWlf00yBgJshxLJiI71POZQ2joHK96LFYQ=@vger.kernel.org, AJvYcCXpebgsMDs8Ksswz/Vgg8doyyi5x9g6Ib2snksfbrCKov2SK1jzbwLi4sLRdJFb8RoPeylUEqIPq99cjSzk@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1lNfvU4+MQecf9hSS2vyXr4VDb2FcMoWtuBq0tgh4r2FGv67s
-	WXRRdxX1q4DFcXXCw+7p0TqqwljRYYewzrOlHyv0HV4nnblJY1TxWafzi/WyVxGILdYd7sUXoAU
-	jphFrDlTFwnZu90Mc5PY29iOeCPZ5jfw=
-X-Gm-Gg: ASbGncuPJKpl88TKSYCeNZruCSHm44idNfcWHk6Sw8H6LWbkhyvmhTOHgo4o4dLDbCY
-	1H6CbS6RgvfagB1oA0lz9bgtN1uhBDZhef1grD6/KsyqsXJKTpApSPXmwD/SItZuGp8RIb7yel2
-	E244KKA5gtm27bAn7RJTOVkX6T7dpFSRZyrYDIGnLCreINvurHhjTND3ASe2U6KVmnUm5wDYiYd
-	SZm/K7gYe3kK+LnOA==
-X-Google-Smtp-Source: AGHT+IGhqjYs4ux4jfZuva5tLAnfpmMqHOkhr1wVS9VTWIb8RSO5zHmqE5yUvKlSgMgvOyzAgKijetY+zLxjWE6uaW0=
-X-Received: by 2002:a17:90b:4e83:b0:31c:15d9:8aa with SMTP id
- 98e67ed59e1d1-31e507fe866mr5141730a91.34.1753291278497; Wed, 23 Jul 2025
- 10:21:18 -0700 (PDT)
+	s=arc-20240116; t=1753295128; c=relaxed/simple;
+	bh=8jDBOp1/5ELJhrpejGV8dWC1K+YLRxWROk+vO9JU2Hs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=eZLVDdL3+3fBf0CJBnWptiKPdz/WC6lE+K1flncvQbtfdZr2to18ox2ySs2UwuoKVNFhrhUaL3e2eH2Y/komEBNvumH8vqbn6yIrgzB3Z7DA3oPYfE3PwmAUww8fjKVRDQTxy1EXPzALKiD08wBf4elEzuAyeYSwhoLrpUnIYIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Eoi0yhoD; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250723182524euoutp024ac9f9aaaf22e8ae2be719099a6eb73f~U9KBisA_P1536415364euoutp02e
+	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 18:25:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250723182524euoutp024ac9f9aaaf22e8ae2be719099a6eb73f~U9KBisA_P1536415364euoutp02e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1753295124;
+	bh=G6lUJBsrYso7PwE/gZWaei8bxr8s7smO7yvVENy5ZWM=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=Eoi0yhoDJhygGHXhdPx4SWp+qGp7DRtgM2eSAyUAjZkjRpZj/Zxnkd+teGujPpUSs
+	 /BJUadrrmfQXFsq0AhNuTEPXIRbf613uCcGWQzC9rvL+qoiPTx467N3dyEftJXywub
+	 LN4ffyCTLdxXUzX24A1kuDF+jJc4nDp+otxwCBnM=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250723182523eucas1p220449ccef4d32615f84483b37faff727~U9KAiikNS1921119211eucas1p2c;
+	Wed, 23 Jul 2025 18:25:23 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250723182522eusmtip1bed061c359b01d486f01c16f2257ca7c~U9J-SKJbB3063330633eusmtip1Q;
+	Wed, 23 Jul 2025 18:25:22 +0000 (GMT)
+Message-ID: <07410f0c-8369-4683-9143-c79c6cb3f5b0@samsung.com>
+Date: Wed, 23 Jul 2025 20:25:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20220706234757.3162307-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20220706234757.3162307-1-peng.fan@oss.nxp.com>
-From: Adam Ford <aford173@gmail.com>
-Date: Wed, 23 Jul 2025 12:21:07 -0500
-X-Gm-Features: Ac12FXyiprxe_LGZo-24j2NghrBhcu3HCth78UZ6f-ppwtBUf5rP10c3ImRmsyI
-Message-ID: <CAHCN7xJts7ki+wHGxwMw8eEa4hXkyOwZComzEf_JXiZUBhpkaw@mail.gmail.com>
-Subject: Re: [PATCH V4] arm64: dts: imx8mp: add NoC node
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	festevam@gmail.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de, 
-	laurent.pinchart@ideasonboard.com, marex@denx.de, paul.elder@ideasonboard.com, 
-	Markus.Niebel@ew.tq-group.com, kernel@pengutronix.de, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-imx@nxp.com, abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/8] dt-bindings: gpu: img,powervr-rogue: Add TH1520
+ GPU compatible
+To: Matt Coster <Matt.Coster@imgtec.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>
+Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei
+	<wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Bartosz
+	Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>, Frank
+	Binns <Frank.Binns@imgtec.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>, Marek
+	Szyprowski <m.szyprowski@samsung.com>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>, Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <9c4f962d-6877-4a53-b0f3-218930f94e1e@imgtec.com>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250723182523eucas1p220449ccef4d32615f84483b37faff727
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250623114436eucas1p1ab8455b32937a472f5f656086e38f428
+X-EPHeader: CA
+X-CMS-RootMailID: 20250623114436eucas1p1ab8455b32937a472f5f656086e38f428
+References: <20250623-apr_14_for_sending-v6-0-6583ce0f6c25@samsung.com>
+	<CGME20250623114436eucas1p1ab8455b32937a472f5f656086e38f428@eucas1p1.samsung.com>
+	<20250623-apr_14_for_sending-v6-5-6583ce0f6c25@samsung.com>
+	<9c82a6bc-c6ff-4656-8f60-9d5fa499b61a@imgtec.com>
+	<d154d2d0-3d59-4176-a8fb-3cb754cf2734@samsung.com>
+	<e1a3d854-93bc-4771-9b8e-1639ca57b687@kernel.org>
+	<d12fd4fb-0adb-40c4-8a0a-c685cd6327b3@samsung.com>
+	<27068fd3-92b5-402b-9f3c-fd786db56668@kernel.org>
+	<f25c1e7f-bef2-47b1-8fa8-14c9c51087a8@imgtec.com>
+	<491b69ce-5a2f-4df1-95af-9318bbe6c9b0@samsung.com>
+	<9c4f962d-6877-4a53-b0f3-218930f94e1e@imgtec.com>
 
-On Wed, Jul 6, 2022 at 6:46=E2=80=AFPM Peng Fan (OSS) <peng.fan@oss.nxp.com=
-> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> Add i.MX8MP NoC node to make the interconnect i.MX8MP driver could work.
-> Currently dynamic frequency scaling of the i.MX8MP NoC has not been
-> supported, only NoC initial settings are configured by interconnect
-> driver.
 
-Peng,
 
-I noticed the Mini and Nano are both supported by the same NoC driver,
-but only the 8MP has a DT node.  Looking through the TRM on the Mini,
-I don't see the operating points listed.  Would they be the same 200M
-and 1000M on the Mini and Nano?
+On 7/23/25 18:50, Matt Coster wrote:
+> On 23/07/2025 17:26, Michal Wilczynski wrote:
+>> On 7/23/25 11:45, Matt Coster wrote:
+>>> On 25/06/2025 15:41, Krzysztof Kozlowski wrote:
+>>>> On 25/06/2025 16:18, Michal Wilczynski wrote:
+>>>>>
+>>>>>
+>>>>> On 6/25/25 15:55, Krzysztof Kozlowski wrote:
+>>>>>> On 25/06/2025 14:45, Michal Wilczynski wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 6/24/25 15:53, Matt Coster wrote:
+>>>>>>>> On 23/06/2025 12:42, Michal Wilczynski wrote:
+>>>>>>>>> Update the img,powervr-rogue.yaml to include the T-HEAD TH1520 SoC's
+>>>>>>>>> specific GPU compatible string.
+>>>>>>>>>
+>>>>>>>>> The thead,th1520-gpu compatible, along with its full chain
+>>>>>>>>> img,img-bxm-4-64, and img,img-rogue, is added to the
+>>>>>>>>> list of recognized GPU types.
+>>>>>>>>>
+>>>>>>>>> The power-domains property requirement for img,img-bxm-4-64 is also
+>>>>>>>>> ensured by adding it to the relevant allOf condition.
+>>>>>>>>>
+>>>>>>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>>>>>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>>>>>>>> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>>>>>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+>>>>>>>>> ---
+>>>>>>>>>  Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml | 9 ++++++++-
+>>>>>>>>>  1 file changed, 8 insertions(+), 1 deletion(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
+>>>>>>>>> index 4450e2e73b3ccf74d29f0e31e2e6687d7cbe5d65..9b241a0c1f5941dc58a1e23970f6d3773d427c22 100644
+>>>>>>>>> --- a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
+>>>>>>>>> +++ b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
+>>>>>>>>> @@ -21,6 +21,11 @@ properties:
+>>>>>>>>>            # work with newer dts.
+>>>>>>>>>            - const: img,img-axe
+>>>>>>>>>            - const: img,img-rogue
+>>>>>>>>> +      - items:
+>>>>>>>>> +          - enum:
+>>>>>>>>> +              - thead,th1520-gpu
+>>>>>>>>> +          - const: img,img-bxm-4-64
+>>>>>>>>> +          - const: img,img-rogue
+>>>>>>>>>        - items:
+>>>>>>>>>            - enum:
+>>>>>>>>>                - ti,j721s2-gpu
+>>>>>>>>> @@ -93,7 +98,9 @@ allOf:
+>>>>>>>>>        properties:
+>>>>>>>>>          compatible:
+>>>>>>>>>            contains:
+>>>>>>>>> -            const: img,img-axe-1-16m
+>>>>>>>>> +            enum:
+>>>>>>>>> +              - img,img-axe-1-16m
+>>>>>>>>> +              - img,img-bxm-4-64
+>>>>>>>>
+>>>>>>>> This isn't right – BXM-4-64 has two power domains like BXS-4-64. I don't
+>>>>>>>> really know what the right way to handle that in devicetree is given the
+>>>>>>>> TH1520 appears to expose only a top-level domain for the entire GPU, but
+>>>>>>>> there are definitely two separate domains underneath that as far as the
+>>>>>>>> GPU is concerned (see the attached snippet from integration guide).
+>>>>>>>>
+>>>>>>>> Since power nodes are ref-counted anyway, do we just use the same node
+>>>>>>>> for both domains and let the driver up/down-count it twice?
+>>>>>>>
+>>>>>>> Hi Matt,
+>>>>>>>
+>>>>>>> Thanks for the very helpful insight. That's a great point, it seems the
+>>>>>>> SoC's design presents a tricky case for the bindings.
+>>>>>>>
+>>>>>>> I see what you mean about potentially using the same power domain node
+>>>>>>> twice. My only hesitation is that it might be a bit unclear for someone
+>>>>>>> reading the devicetree later. Perhaps another option could be to relax
+>>>>>>> the constraint for this compatible?
+>>>>>>>
+>>>>>>> Krzysztof, we'd be grateful for your thoughts on how to best model this
+>>>>>>> situation.
+>>>>>>
+>>>>>>
+>>>>>> It's your hardware, you should tell us, not me. I don't know how many
+>>>>>> power domains you have there, but for sure it is not one AND two domains
+>>>>>> the same time. It is either one or two, because power domains are not
+>>>>>> the same as regulator supplies.
+>>>>>
+>>>>> Hi Krzysztof, Matt,
+>>>>>
+>>>>> The img,bxm-4-64 GPU IP itself is designed with two separate power
+>>>>> domains. The TH1520 SoC, which integrates this GPU, wires both of these
+>>>>> to a single OS controllable power gate (controlled via mailbox and E902
+>>>>> co-processor).
+>>>>
+>>>> This helps... and also sounds a lot like regulator supplies, not power
+>>>> domains. :/
+>>>
+>>> Apologies for taking so long to get back to you with this, I wanted to
+>>> make sure I had the whole picture from our side before commenting again.
+>>>
+>>> From the GPU side, a "typical" integration of BXM-4-64 would use two
+>>> power domains.
+>>>
+>>> Typically, these domains exist in silicon, regardless of whether they
+>>> are exposed to the host OS, because the SoC's power controller must have
+>>> control over them. As part of normal operation, the GPU firmware (always
+>>> in domain "a" on Rogue) will request the power-up/down of the other
+>>> domains, including during the initial boot sequence. This all happens
+>>> transparently to the OS. The GPU block itself has no power gating at
+>>> that level, it relies entirely on the SoC integration.
+>>>
+>>> However, it turns out (unknown to me until very recently) that this
+>>> functionality is optional. The integrator can opt to forego the
+>>> power-saving functionality afforded by firmware-controlled power gating
+>>> and just throw everything into a single domain, which appears to be
+>>> what's happened here.
+>>>
+>>> My only remaining issue here, then, is the naming. Since this
+>>> integration doesn't use discrete domains, saying it has one domain
+>>> called "a" isn't correct*. We should either:
+>>>
+>>>  - Drop the name altogether for this integration (and others like it
+>>>    that don't use the low-power functionality, if there are any), or
+>>
+>> Hi Matt,
+>>
+>> Thanks for the detailed explanation, that clears things up perfectly.
+> 
+> I'm glad I could get to the bottom of this one, it was bothering me too!
+> 
+>>
+>> I agree with your assessment. Dropping the power-domain-names property
+>> for this integration seems like the cleanest solution. As you pointed
+>> out, since the OS sees only a single, undifferentiated power domain,
+>> giving it a name like "gpu" would be redundant. This approach correctly
+>> models the hardware without setting a potentially confusing precedent.
+> 
+> That seems reasonable. I was very much on the fence for this one, so
+> I'll happily go along with dropping the name altogether.
+> 
+> Just to make sure I understand correctly, the change here would be to
+> move "required: - power-domain-names" from "img,img-rogue" to every
+> conditional block that constrains the number of domains?
+> 
+> Can we add negative constraints in conditionals? Then we could add
+> "power-domain-names: false" to the "thead,th1520-gpu" conditional block
+> alongside "power-domains: maxItems: 1".
 
-adam
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->
-> V4:
->  Georgi has merged the V3 driver and bindings patches. So only resend
->  this patch. Per Georgi's comments:
->   - Drop syscon from compatbile
->   - Drop the header inclusion
->
->  Seems I not see this patch in patchwork or mailist, maybe sent failed.
->  So gave a resend of V4.
->
->  V3:
->   https://lore.kernel.org/linux-arm-kernel/20220703091132.1412063-1-peng.=
-fan@oss.nxp.com/
->
->  I not list the full change log, since this is only a minor patch
->
->  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/=
-dts/freescale/imx8mp.dtsi
-> index eb2d516278eb..42ed8ee08548 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -1019,6 +1019,27 @@ eqos: ethernet@30bf0000 {
->                         };
->                 };
->
-> +               noc: interconnect@32700000 {
-> +                       compatible =3D "fsl,imx8mp-noc", "fsl,imx8m-noc";
-> +                       reg =3D <0x32700000 0x100000>;
-> +                       clocks =3D <&clk IMX8MP_CLK_NOC>;
-> +                       #interconnect-cells =3D <1>;
-> +
-> +                       operating-points-v2 =3D <&noc_opp_table>;
-> +
-> +                       noc_opp_table: opp-table {
-> +                               compatible =3D "operating-points-v2";
-> +
-> +                               opp-200M {
-> +                                       opp-hz =3D /bits/ 64 <200000000>;
-> +                               };
-> +
-> +                               opp-1000M {
-> +                                       opp-hz =3D /bits/ 64 <1000000000>=
-;
-> +                               };
-> +                       };
-> +               };
-> +
->                 aips4: bus@32c00000 {
->                         compatible =3D "fsl,aips-bus", "simple-bus";
->                         reg =3D <0x32c00000 0x400000>;
-> --
-> 2.25.1
->
+Yeah the diff with v7 would look like so:
+diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
+index 263c40c8438e..338746f39cbb 100644
+--- a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
++++ b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
+@@ -89,6 +89,11 @@ allOf:
+         compatible:
+           contains:
+             const: img,img-rogue
++      not:
++        properties:
++          compatible:
++            contains:
++              const: thead,th1520-gpu
+     then:
+       required:
+         - power-domains
+@@ -100,11 +105,12 @@ allOf:
+           contains:
+             const: thead,th1520-gpu
+     then:
++      required:
++        - power-domains
+       properties:
+         power-domains:
+           maxItems: 1
+-        power-domain-names:
+-          maxItems: 1
++        power-domain-names: false
+ 
+   - if:
+       properties:
+
+
+This change ensures power-domain-names is required for all img,img-rogue
+devices, except for thead,th1520-gpu. For the thead specifically,
+power-domains remains required, but power-domain-names is explicitly
+forbidden.
+
+> 
+>>
+>> To follow through on this, I assume we'll need to adjust
+>> pvr_power_domains_init() to handle nodes that don't have the
+>> power-domain-names property. Does that sound right to you?
+> 
+> You should get away without making any code changes here, since we
+> already shortcut on "domain_count <= 1" to just allow the pm_runtime to
+> deal with the single (or missing) domain directly.
+
+Great !
+
+> 
+> If we ever start controlling the individual domains ourselves from the
+> kernel (rather than just ensuring they all come on and off in the
+> correct sequence), we can add checks/handling for the no-name case then.
+> 
+> Cheers,
+> Matt
+> 
+>>
+>>>  - Come up with a new domain name to signal this explicitly (perhaps
+>>>    simply "gpu")? Something that's unlikely to clash with the "real"
+>>>    names that are going to start appearing in the Volcanic bindings
+>>>    (where we finally ditched "a", "b", etc.).
+>>>
+>>> Cheers,
+>>> Matt
+>>>
+>>> *Yes, I know that's what we said for the AXE-1-16M, but that tiny GPU is
+>>> the exception to the rule; AFAIK it's the only one we've ever produced
+>>> that truly has only one power domain.
+>>>
+>>>>
+>>>>>
+>>>>> This means a devicetree for the TH1520 can only ever provide one power
+>>>>> domain for the GPU. However, a generic binding for img,bxm-4-64 should
+>>>>
+>>>> If this was a supply, you would have two supplies. Anyway internal
+>>>> wirings of GPU do not matter in such case and more important what the
+>>>> SoC has wired. And it has one power domain.
+>>>>
+>>>>
+>>>>> account for a future SoC that might implement both power domains.
+>>>>>
+>>>>> That's why I proposed to relax the constraints on the img,bmx-4-64 GPU.
+>>>>
+>>>> This should be constrained per each device, so 1 for you and 2 for
+>>>> everyone else.
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>
+>>>
+>>
+>> Best regards,
+> 
+> 
+
+Best regards,
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
 
