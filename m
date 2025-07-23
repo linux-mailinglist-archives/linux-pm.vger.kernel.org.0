@@ -1,136 +1,125 @@
-Return-Path: <linux-pm+bounces-31313-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31314-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEF1CB0ECDC
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 10:11:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88040B0ED66
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 10:38:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDBB2188A75B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 08:10:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5A2D3B7AC3
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 08:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6512797A4;
-	Wed, 23 Jul 2025 08:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8FE28032F;
+	Wed, 23 Jul 2025 08:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QqkUdV37"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RiqrWl5G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF945277CBC;
-	Wed, 23 Jul 2025 08:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7B6279DB6;
+	Wed, 23 Jul 2025 08:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753258190; cv=none; b=eRzmiKooPcig5eZoG3IE3/PKh2l+5QxwohU6Kvsi9pPl5ZeyFqw43jGeBk/VpforO6G1+EFUc6NXHX4PzSNm+9FP/HlUW/8YXnnPhhoiNxwzXSxWRlb8geyw3DOb22qXRZeI0Nj7pKyGF3zrteNI0VQ7x/DedxzZTiGkPx6OIjI=
+	t=1753259889; cv=none; b=dJ/XUR2EcBsohV9Ok0jTFn5j2gVfvIoBSbDo721vM4C6V1f2+JkdMgUsgGRekciYgHlY0tPPYm+WHZ0Mf05rVtqAeibLxhVRfNOw9zCWaRbpw+o3iYrUlKu1XQ0txhG66zu/PV5cE9D5L2A9PBkZH0YUZ/D+pt4JJi9SPLrCFVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753258190; c=relaxed/simple;
-	bh=LxJCKNaYA9utLydF4LwnIGn2Dwycy87pcr0r6ICUYNE=;
+	s=arc-20240116; t=1753259889; c=relaxed/simple;
+	bh=4qbZQMMBOmmLEL/u4/6u8vCeedLqEVOr855SNhW0HrM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XdVRHGHF4LlrHBNoby+KKN0E6PANo7vNGKKQWCwrdqEniIE3nCO3UHs7BHyUETk/SfIFe/qPBVPmhMaynrlj8+QZMfDx0/4bCrmxcwqOcug3OcXU9A5p0owCaUSqoL2fnRCa32loS0Ol3p/XmfwSWJL+a34pzqBKqAskbL1xuWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QqkUdV37; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93350C4CEE7;
-	Wed, 23 Jul 2025 08:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753258189;
-	bh=LxJCKNaYA9utLydF4LwnIGn2Dwycy87pcr0r6ICUYNE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QqkUdV37UJcctH/hziiJadGQY7yWccop0IyxfWjMgd84AlfdMLtpfP7nHAHKcoUT9
-	 EM29665kEdEy7A0p5Q/7K1e3npoJJQj7cIyL+h0IBCnjEsk1XzeIbVb3ZdI4HuYtph
-	 plUPKB5xQG4ub4GrERvU+NJlRlC47KPXB6CUvMlK0TZ3NSL6jbPSuU7LkLY0xgH0zs
-	 ULrf3kaZa9Se/J2Y4Sf6RS2pVaoMO7cU5VJ00ZdZvMcTdvgMUgiG8DqxbLeDMLTqg/
-	 yraGpyhwydXEZZG9aDr/hzDV2LU1A2fpGbFJi/Zkmn2mrMWHyBH5zmd0aZRv3FGcjv
-	 tRDWB/folhjDw==
-Date: Wed, 23 Jul 2025 09:09:42 +0100
-From: Lee Jones <lee@kernel.org>
-To: Sven Peter <sven@kernel.org>
-Cc: Nick Chan <towinchenmi@gmail.com>, asahi@lists.linux.dev,
-	Neal Gompa <neal@gompa.dev>, linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Hector Martin <marcan@marcan.st>,
-	Conor Dooley <conor+dt@kernel.org>, Janne Grunau <j@jannau.net>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v7 07/10] power: reset: macsmc-reboot: Add driver for
- rebooting via Apple SMC
-Message-ID: <20250723080942.GN11056@google.com>
-References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
- <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
- <7297d4b1-84a2-4bb1-8a33-29c827247df7@gmail.com>
- <d6b778ee-02c0-4dd2-b33f-cec16c17807c@kernel.org>
- <20250723080615.GM11056@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sWgEHxN7hCn/ZSdan1l2l0XGSfC9Kmjzps4h6sUQPusCX7iXrceF5BBAAwy5wFBIsXb2ZcFxMxDsPLCyunCqCfVMo3oCJ9jzPgOUsoYVFgBQyn2nWiyzjxmqYFHHSRAklibPU98Akh49T116iGnRHDmRr1+G3tu8v1y/ei0TNyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RiqrWl5G; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753259888; x=1784795888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4qbZQMMBOmmLEL/u4/6u8vCeedLqEVOr855SNhW0HrM=;
+  b=RiqrWl5GowWx3Srs9SRg7+hG0m3Ro3fTeyzxmo+483Mu0bdHamqiBtOy
+   GJv+PMcwEZlkalAuElG6T7bVntGo4kGDVrVuFxLfiawzGm8rpTFMg/Trs
+   nsWJEOo/oKozKAFB8AgUrB8fsDuLoLCoGUQVMrTxQ9h6LqcsEqObQG2zV
+   wmGL8t9f2sgIkp2CxsS9hreY7Fe88Rt1OAHVY/qvVB4Q/LuIyImGfMHgB
+   MHjTPeSJ/MIVx3hdRbmSswTVkQN3HEe4MrEZYE7BweQ1zFtR82UTOUpU9
+   EaTdvgekkY3lfBngJIHzusG2nQDkkDEp2q3FzAKg+OpuAA1Q+zQ4qGI2X
+   Q==;
+X-CSE-ConnectionGUID: iNqMaG8TRvqB7/6uL7Wt5g==
+X-CSE-MsgGUID: 0TtN8cwiQauhS0EMwAQleg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="55382773"
+X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
+   d="scan'208";a="55382773"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2025 01:38:07 -0700
+X-CSE-ConnectionGUID: LQ9Qcj+iT52wKy4Bwqf+PQ==
+X-CSE-MsgGUID: i1lLUci5QUGmNhtoGsrTIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
+   d="scan'208";a="190348638"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Jul 2025 01:38:01 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ueUz9-000J8l-16;
+	Wed, 23 Jul 2025 08:37:59 +0000
+Date: Wed, 23 Jul 2025 16:37:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	sboyd@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, jic23@kernel.org, dlechner@baylibre.com,
+	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
+	casey.connolly@linaro.org
+Subject: Re: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
+ and devm variant
+Message-ID: <202507231529.OH2sdMoF-lkp@intel.com>
+References: <20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250723080615.GM11056@google.com>
+In-Reply-To: <20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
 
-On Wed, 23 Jul 2025, Lee Jones wrote:
+Hi AngeloGioacchino,
 
-> On Sat, 21 Jun 2025, Sven Peter wrote:
-> 
-> > On 16.06.25 06:13, Nick Chan wrote:
-> > > 
-> > > 
-> > > On 10/6/2025 23:29, Sven Peter wrote:
-> > > > From: Hector Martin <marcan@marcan.st>
-> > > > 
-> > > > This driver implements the reboot/shutdown support exposed by the SMC
-> > > > on Apple Silicon machines, such as Apple M1 Macs.
-> > > > 
-> > > > Signed-off-by: Hector Martin <marcan@marcan.st>
-> > > > Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> > > > Reviewed-by: Neal Gompa <neal@gompa.dev>
-> > > > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > > > Signed-off-by: Sven Peter <sven@kernel.org>
-> > > > ---
-> > > >   MAINTAINERS                         |   1 +
-> > > >   drivers/power/reset/Kconfig         |   9 ++
-> > > >   drivers/power/reset/Makefile        |   1 +
-> > > >   drivers/power/reset/macsmc-reboot.c | 290 ++++++++++++++++++++++++++++++++++++
-> > > >   4 files changed, 301 insertions(+)
-> > > [...]
-> > > 
-> > > It seems that the reboot driver still probes even without the smc_reboot node in the smc node:
-> > 
-> > 
-> > That's odd...
-> > 
-> > Lee, is it expected that a mfd sub-device declared with
-> > MFD_CELL_OF("macsmc-reboot", NULL, NULL, 0, 0, "apple,smc-reboot"),
-> > is loaded even if there's no corresponding node in the device tree?
-> > 
-> > I'll have to re-add the check that makes sure the sub-device is available
-> > then.
-> 
-> Yes, that's expected.  MFD is orthogonal to DT with respect to device
-> registration, unless you specifically disable the node in DT.  If the
-> node is missing, the device will still be registered, but no link will
-> be made from the (non-existent) node to the 'of_node' pointer.
-> 
-> You have 3 choices; provide a DT node and explicitly set the status to
-> 'disabled', optionally omit registration from MFD (i.e. do not call
-> mfd_add_devices()) or check for (!pdev->dev.of_node) in the sub-device's
-> .probe() and bomb out early if true.
+kernel test robot noticed the following build warnings:
 
-Did you see this warning in your bootlog:
+[auto build test WARNING on next-20250722]
+[also build test WARNING on v6.16-rc7]
+[cannot apply to jic23-iio/togreg sre-power-supply/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.16-rc7 v6.16-rc6 v6.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  pr_warn("%s: Failed to locate of_node [id: %d]\n", cell->name, platform_id);
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/spmi-Implement-spmi_subdevice_alloc_and_add-and-devm-variant/20250722-181911
+base:   next-20250722
+patch link:    https://lore.kernel.org/r/20250722101317.76729-2-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
+config: sparc-randconfig-001-20250723 (https://download.01.org/0day-ci/archive/20250723/202507231529.OH2sdMoF-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507231529.OH2sdMoF-lkp@intel.com/reproduce)
 
-It's just a warning - the device will still be registered.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507231529.OH2sdMoF-lkp@intel.com/
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: module spmi-devres uses symbol spmi_subdevice_remove from namespace SPMI, but does not import it.
+>> WARNING: modpost: module spmi-devres uses symbol spmi_subdevice_alloc_and_add from namespace SPMI, but does not import it.
 
 -- 
-Lee Jones [李琼斯]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
