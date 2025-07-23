@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-31327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31328-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7C61B0F0D9
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:10:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B1BBB0F0DF
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F1A3189DEDF
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 11:10:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6582517875E
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 11:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A52E2E425D;
-	Wed, 23 Jul 2025 11:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C79E2E49A8;
+	Wed, 23 Jul 2025 11:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TY5fxCbd"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="psZ5r3Hh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1DF2DE71E;
-	Wed, 23 Jul 2025 11:08:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3502E49A7;
+	Wed, 23 Jul 2025 11:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753268937; cv=none; b=dHpSc7KlyqUU9LWPONV70ZcmpVt52X9iGrkw/ZVcDZb6NOHF3bZTvtAE1oGDbSwJ+seFe1YC4n55b+Z05YMf2foTpATGN+qzDAPXOCTDOcY+ZtZ3Ru7tl98ZKQNppTpzRNf8leRb5VUEpy0hcTBgKCqaUTnTbDStGZudNavif7A=
+	t=1753268942; cv=none; b=fLJ1aIQlIO1QmhtYi6Wc27fdSW6zd+UQPcTiXLPqhGoZryVLDOwv7zmx4oHqGYQ5JhRN6WzYHncvOm9Atz7P2yMxu8TDEzOTTpOEEGEJsledPxUWxqTZuJLtH8S7sd21oVrJermAfRMB+05X38O3Wv4drai5B32z0tZFb3rf2x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753268937; c=relaxed/simple;
-	bh=b2z02Tg7+vcOZeTgZw3lRIJ677lSvmqCMf5C7B6Yr0A=;
+	s=arc-20240116; t=1753268942; c=relaxed/simple;
+	bh=QAF/CJx4l1OMxiZsPySVBwt4eqsS9ZvfqlfvkWA/Efo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DfUJiWU/60T+iBlzmwrdjSONAOOZxHNFccyMoyiXMYVXNOQnR7gOzOE9Xsbmxp3zj/QfYQwpn9uBxT1iM7vNuXuk0Fwb8fsp0MeO8HGXcyhicXe93XfipXgPn208MIwGRxuqSIfLDJkbtf9fyl3DZuURoVaF74s4UHjnIgmu4KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TY5fxCbd; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=fIzpbQNLQLgcTtkS5zVxzkOyS4VOWxisPHnwxrtn0/RYTD+wNXLGPykJor70gE9OUyzdNez7QltAeLQ1c86Su/j2UoFvpaFM166QaRrOTBz/b9iOFZipeeVHizTNDMeKhAYqtqLksDYOLyV+hIeGP1RllfWcgojquLjYQbA0Bwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=psZ5r3Hh; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N90Nbm030756;
-	Wed, 23 Jul 2025 11:08:52 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N8tcfq010356;
+	Wed, 23 Jul 2025 11:08:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	xF3PiaRiaIJjwDIgFh/oPpSH+ITV10Dk4Nei06/sbNo=; b=TY5fxCbd2hP7gbyp
-	uyJs8tgmq/44bZ+6aq895A2osrfV7ooUmt6JH1bqmoqtx+0bfA5Wh0Q3tSVc96xo
-	T/mdOx436Z42AAoa+LQeW6qHhxiJ0TcVsez0EX95iVVA05g8XJ8YaZW1vEKd6m5m
-	Kc1BSogFnzERWHUsNrHDz3yauHJdZYLqvVQ8pEu2c8LVzMWnFGYKhRpRFSgGCEI/
-	EN2+p5lZpCqcrrPf+nBVPn8HOAKNoXchZd3nLlsRPXvZo+83dJMbP2t29LW80m/5
-	yKpOdxVgJvwGvy7ug1Q3g/iYp49OGSFVxheJrzPkWvNbWCYyrpXUy9L1guBcBKwy
-	2lxrSQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48045w39qv-1
+	CBcD5FkL7MwbIlsoWgdrxc9IH2TcznubU5xhsWpCVGE=; b=psZ5r3Hhgzl/0/Ao
+	91An7FQBkkSyTLQ71UwGUK2P3YUZdYDNFY1iLuInV3IuQ7jcjwJ1AP7fslIVe9ZS
+	PkkJiysJ1eFNYOjeXZ6crcQxNQsJt255xLWifKsvJYeWmCzVS7vdoAakdlTiawTC
+	6jopc9fJDHQzPflKdJINbEFUew3cTux2rarthioR0tR8vZ/5iI9bfxdVxmzLstYE
+	Z4PaC9MOx4GNFYF4hP7PDUiuiUM/Zl6JM0gUyAG5NelTuL7H4qxjdx6TszyojXQH
+	8P6m4PaSDWNDXwlF2jKEovY1n0xMen8ojL9Hk77OvZ3ghzIsMY5dRUKt2gTFz8bb
+	ptjpaQ==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4804na3am1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Jul 2025 11:08:51 +0000 (GMT)
+	Wed, 23 Jul 2025 11:08:56 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56NB8pDg030833
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56NB8uXo021961
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Jul 2025 11:08:51 GMT
+	Wed, 23 Jul 2025 11:08:56 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 23 Jul 2025 04:08:45 -0700
+ 15.2.1748.10; Wed, 23 Jul 2025 04:08:51 -0700
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
 To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
@@ -65,12 +65,10 @@ To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-pm@vger.kernel.org>
-CC: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Varadarajan Narayanan
-	<quic_varada@quicinc.com>
-Subject: [PATCH v2 3/4] cpufreq: qcom-nvmem: Enable cpufreq for ipq5424
-Date: Wed, 23 Jul 2025 16:38:14 +0530
-Message-ID: <20250723110815.2865403-4-quic_varada@quicinc.com>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v2 4/4] arm64: dts: qcom: ipq5424: Enable cpufreq
+Date: Wed, 23 Jul 2025 16:38:15 +0530
+Message-ID: <20250723110815.2865403-5-quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250723110815.2865403-1-quic_varada@quicinc.com>
 References: <20250723110815.2865403-1-quic_varada@quicinc.com>
@@ -86,92 +84,172 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=LL1mQIW9 c=1 sm=1 tr=0 ts=6880c2c3 cx=c_pps
+X-Proofpoint-GUID: vsrAuajVI1lLol1T6k2yzRBddViogAGB
+X-Proofpoint-ORIG-GUID: vsrAuajVI1lLol1T6k2yzRBddViogAGB
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDA5NCBTYWx0ZWRfX2tMzF1EfVidy
+ 49cpWWhxpqH+VLZ6Ie+QwgxdqH7Fph/TZ7u6T0iIXPDtrZwOVu7YVq/bbMbGJ2uwvbCWMxwWTeS
+ B49uzIYZI5IHzEU5jxcIhVCWupDp6HCN0NJQ8tdHbgYo16To8mn0FccVm70UzarG5IdYRooGsL9
+ uDUzWhqcMNMeYEwI1OsQx1oZ7P5EVdkG8FCLmIWdSjucSpslt9xA+Wbj22dPJqolZad/+NswfNk
+ ABRCvsHJdnWEyKYix7aTYyjNn1cKHKKi7TVgZ/tMOlOL/DiDAT6UMyJJ9jzWkGUi9lGKEe6uiNl
+ pKcTl7EXKKFpaWu59oKNbqToJ5yuEQhKCQH4haeSUnOEWEgLcnygqCffEWIGiDjATJ6+Q2VaVyn
+ GG5F0JMoqx1Enlrz43g9EkFHLty++yFd9eNUNfg979xO04eVq6EttFOMV4ziFNjEu6Npzu/j
+X-Authority-Analysis: v=2.4 cv=DoFW+H/+ c=1 sm=1 tr=0 ts=6880c2c8 cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
- a=XqKM0RL5GMr1h_B9R8QA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: jJ54FnbuT4TfRJc7KPbJhTRvd-ZXjIJZ
-X-Proofpoint-ORIG-GUID: jJ54FnbuT4TfRJc7KPbJhTRvd-ZXjIJZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDA5NCBTYWx0ZWRfXyXqICZlR9hIH
- nnklFTQSLwJ6qnvmJoEQCkliTYy6qJ8DvNZLVTt7kblhJaM7p7M+ZGyCMENQRvwu8iMq9tBI732
- 24p6cupzdQw4dI0vD/eXUw7ibnXWBMkanOTfK/F6FV5VWN27LdG4I4Xr1IZ6xHue7ke7yjjIjDe
- 8FkikoutTKQFm67cO/sIzH8orU4+/K8sXrLGj5tTLxwEyKR4NlBZgEsh/gwvniJpgsRxLKoRTaD
- WX61+nY6WfRl1JQa4hH7hDhTjvAGiX/aRuCZGqGCnHN0HgGjjeCQ9BJzsqITrO4Eu7I1NmetIGk
- nRe3QIFziEC67qmJY3F4pqsTviIBWgOTA3A7g0v03MEyLItW3cGkWlMRNdiTIra9rKWO16bRgfu
- OfgPCVJoycRMHiX534Yu8etm6TouGLDiHwNzzJ0y5NRYbe5CnozCVPd32hRJ4YRWVhBfbfjH
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=6wL3klP_paFbw1eNuawA:9
+ a=TjNXssC_j7lpFel5tvFf:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-07-23_02,2025-07-22_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 mlxlogscore=999 clxscore=1011 mlxscore=0 adultscore=0
- suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507230094
+ suspectscore=0 phishscore=0 clxscore=1011 mlxscore=0 mlxlogscore=886
+ bulkscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
+ spamscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507230094
 
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
+From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 
-IPQ5424 have different OPPs available for the CPU based on
-SoC variant. This can be determined through use of an eFuse
-register present in the silicon.
+Add the qfprom, cpu clocks, A53 PLL and cpu-opp-table required for
+CPU clock scaling.
 
-Added support for ipq5424 on nvmem driver which helps to
-determine OPPs at runtime based on the eFuse register which
-has the CPU frequency limits. opp-supported-hw dt binding
-can be used to indicate the available OPPs for each limit.
-
-nvmem driver also creates the "cpufreq-dt" platform_device after
-passing the version matching data to the OPP framework so that the
-cpufreq-dt handles the actual cpufreq implementation.
-
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-[ Changed '!=' based check to '==' based check ]
+[ Added interconnect related entries, fix dt-bindings errors ]
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
-v2: Add Reviewed-by: Konrad
-    Change speed bin check to == instead of !=
---
- drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 5 +++++
- 2 files changed, 6 insertions(+)
+v2: Add 'interconnects' to cpu nodes
+    Add 'opp-peak-kBps' to opp table
+    Add '#interconnect-cells' to apss_clk
+    Remove unnecessary comment
+    Fix dt-binding-errors in qfprom node
+---
+ arch/arm64/boot/dts/qcom/ipq5424.dtsi | 65 +++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 015dd393eaba..de1769649368 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -191,6 +191,7 @@ static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "ti,am62p5", },
+diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+index 2eea8a078595..39d394f49789 100644
+--- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+@@ -7,6 +7,7 @@
+  */
  
- 	{ .compatible = "qcom,ipq5332", },
-+	{ .compatible = "qcom,ipq5424", },
- 	{ .compatible = "qcom,ipq6018", },
- 	{ .compatible = "qcom,ipq8064", },
- 	{ .compatible = "qcom,ipq8074", },
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 54f8117103c8..765a5bb81829 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -200,6 +200,10 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
- 	case QCOM_ID_IPQ9574:
- 		drv->versions = 1 << (unsigned int)(*speedbin);
- 		break;
-+	case QCOM_ID_IPQ5424:
-+	case QCOM_ID_IPQ5404:
-+		drv->versions = (*speedbin == 0x3b) ? BIT(1) : BIT(0);
-+		break;
- 	case QCOM_ID_MSM8996SG:
- 	case QCOM_ID_APQ8096SG:
- 		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
-@@ -591,6 +595,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst __maybe_u
- 	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
- 	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
- 	{ .compatible = "qcom,ipq5332", .data = &match_data_kryo },
-+	{ .compatible = "qcom,ipq5424", .data = &match_data_kryo },
- 	{ .compatible = "qcom,ipq6018", .data = &match_data_ipq6018 },
- 	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
- 	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/clock/qcom,apss-ipq.h>
+ #include <dt-bindings/clock/qcom,ipq5424-cmn-pll.h>
+ #include <dt-bindings/clock/qcom,ipq5424-gcc.h>
+ #include <dt-bindings/reset/qcom,ipq5424-gcc.h>
+@@ -52,6 +53,12 @@ cpu0: cpu@0 {
+ 			reg = <0x0>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&l2_0>;
++			clocks = <&apss_clk APSS_SILVER_CORE_CLK>,
++				 <&apss_clk L3_CORE_CLK>;
++			clock-names = "cpu", "l3_core";
++			operating-points-v2 = <&cpu_opp_table>;
++			interconnects = <&apss_clk MASTER_CPU &apss_clk SLAVE_L3>;
++
+ 			l2_0: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
+@@ -72,6 +79,11 @@ cpu1: cpu@100 {
+ 			enable-method = "psci";
+ 			reg = <0x100>;
+ 			next-level-cache = <&l2_100>;
++			clocks = <&apss_clk APSS_SILVER_CORE_CLK>,
++				 <&apss_clk L3_CORE_CLK>;
++			clock-names = "cpu", "l3_core";
++			operating-points-v2 = <&cpu_opp_table>;
++			interconnects = <&apss_clk MASTER_CPU &apss_clk SLAVE_L3>;
+ 
+ 			l2_100: l2-cache {
+ 				compatible = "cache";
+@@ -87,6 +99,11 @@ cpu2: cpu@200 {
+ 			enable-method = "psci";
+ 			reg = <0x200>;
+ 			next-level-cache = <&l2_200>;
++			clocks = <&apss_clk APSS_SILVER_CORE_CLK>,
++				 <&apss_clk L3_CORE_CLK>;
++			clock-names = "cpu", "l3_core";
++			operating-points-v2 = <&cpu_opp_table>;
++			interconnects = <&apss_clk MASTER_CPU &apss_clk SLAVE_L3>;
+ 
+ 			l2_200: l2-cache {
+ 				compatible = "cache";
+@@ -102,6 +119,11 @@ cpu3: cpu@300 {
+ 			enable-method = "psci";
+ 			reg = <0x300>;
+ 			next-level-cache = <&l2_300>;
++			clocks = <&apss_clk APSS_SILVER_CORE_CLK>,
++				 <&apss_clk L3_CORE_CLK>;
++			clock-names = "cpu", "l3_core";
++			operating-points-v2 = <&cpu_opp_table>;
++			interconnects = <&apss_clk MASTER_CPU &apss_clk SLAVE_L3>;
+ 
+ 			l2_300: l2-cache {
+ 				compatible = "cache";
+@@ -119,6 +141,28 @@ scm {
+ 		};
+ 	};
+ 
++	cpu_opp_table: opp-table-cpu {
++		compatible = "operating-points-v2-kryo-cpu";
++		opp-shared;
++		nvmem-cells = <&cpu_speed_bin>;
++
++		opp-1416000000 {
++			opp-hz = /bits/ 64 <1416000000>;
++			opp-microvolt = <1>;
++			opp-supported-hw = <0x3>;
++			clock-latency-ns = <200000>;
++			opp-peak-kBps = <984000>;
++		};
++
++		opp-1800000000 {
++			opp-hz = /bits/ 64 <1800000000>;
++			opp-microvolt = <2>;
++			opp-supported-hw = <0x1>;
++			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1272000>;
++		};
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		/* We expect the bootloader to fill in the size */
+@@ -388,6 +432,18 @@ system-cache-controller@800000 {
+ 			interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
++		qfprom@a6000 {
++			compatible = "qcom,ipq5424-qfprom", "qcom,qfprom";
++			reg = <0x0 0x000a6000 0x0 0x1000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			cpu_speed_bin: cpu-speed-bin@234 {
++				reg = <0x234 0x1>;
++				bits = <0 8>;
++			};
++		};
++
+ 		tlmm: pinctrl@1000000 {
+ 			compatible = "qcom,ipq5424-tlmm";
+ 			reg = <0 0x01000000 0 0x300000>;
+@@ -730,6 +786,15 @@ frame@f42d000 {
+ 			};
+ 		};
+ 
++		apss_clk: apss-clock@fa80000 {
++			compatible = "qcom,ipq5424-apss-clk";
++			reg = <0x0 0x0fa80000 0x0 0x20000>;
++			clocks = <&xo_board>, <&gcc GPLL0>;
++			clock-names = "xo", "gpll0";
++			#clock-cells = <1>;
++			#interconnect-cells = <1>;
++		};
++
+ 		pcie3: pcie@40000000 {
+ 			compatible = "qcom,pcie-ipq5424", "qcom,pcie-ipq9574";
+ 			reg = <0x0 0x40000000 0x0 0xf1c>,
 -- 
 2.34.1
 
