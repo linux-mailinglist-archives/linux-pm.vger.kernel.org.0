@@ -1,174 +1,141 @@
-Return-Path: <linux-pm+bounces-31342-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31343-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D62AB0F41D
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 15:34:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29C65B0F51F
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 16:22:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BC291899857
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:34:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 194D01CC19C0
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 14:22:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CD52E8DEE;
-	Wed, 23 Jul 2025 13:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACBE2E7F22;
+	Wed, 23 Jul 2025 14:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QQUR6D7s"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nxOP/11K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DE62E888F
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB5C2DECC6
+	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 14:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753277646; cv=none; b=hC2QedM6DDhweo5j0agUpRHsV38f3eM6ZFHGHuNCm8sA2xwcJh81SF8LHUwfBe2cv+oxkvfMVcB+e4FTcDZxzNJl3oGEv5lRphCkWAx8V04FMVrUOEzBVO7YB4J/lwI5S+KIntp2puqWZIUB/EVb9ebDqbc8pOja1k/anrUgCH4=
+	t=1753280538; cv=none; b=lPcjaruj4y3yIE5+XycG8w1+UGmZtkwipJ/QeUerkEY4Vvk5UijGNimef7522+Qt0mge57+HEhd4Y2fIaG9u4WvyuaKjxip8sfBWbj4RVmUpR+YBPtH36qdL+K4r5/AmhPBlwy/tOSFG3r5MDqEttcJPaWDTB5YGG7MCYpDZ4S4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753277646; c=relaxed/simple;
-	bh=I/HwupANQZNrDN72YfoYISTR/jnhtFvcCce7OTyzEPw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=T2G+jzyL/FgbNuo0yCTUC59uHHe64Lxin1kRvEzIGlMg1QrgUe3q+cBRJcOrE7wL86kcu/tTwHTa/b9cdASzjDLXJ4x5R/CUsNPNZt1CSC1nSMcZgsizzyepLUMxhFTrEa1OLC/pDfn/ynfisNbdHU+hHW0RYRp+dsWtAhsDanU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QQUR6D7s; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N9QnPo025715
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:34:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	cErycuEc1BPG/yLEfc2IRSm6016iTOA8t+hzUspH65U=; b=QQUR6D7sbLdLbO7d
-	yk0ql2PNHiYYPDXcKRtlvJXdUeyMAX3dfjIr6QyFopjtEXCHWPxIDnXR5/PG3mPi
-	5Se8D9MZ4f6/CRj8oe2kwsJCm2aqBIzXcdwcc2Xxyyc78f+1DHRFfmKJvE+uBHAG
-	4gSa6iBRSdidOG3jn8QLG6w6DtK9dRGg7Ey92LLo1V5kwUnOgdSXDVRzGU3UL/cJ
-	PpaVEhWllGgwv7d5V0tJLBkuv6UIDh2k3QBC0bM+1i5ZK2LYp35khqrADTVs24w4
-	ules2YRfLEqpH4phg8zWziSpbgKWdnXSCnqmlD9x2HWepMHdeAkbMiFDOQX7T/Me
-	kJNbjQ==
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 482b1ubtxq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:34:02 +0000 (GMT)
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6fd1dcf1c5bso10098526d6.3
-        for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 06:34:02 -0700 (PDT)
+	s=arc-20240116; t=1753280538; c=relaxed/simple;
+	bh=7FIhhnZ8N41qRo3DWI6Nxd1ct9+CqQ9isgpuBH/ie5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sQ9H5BoG7KCPQw+f+HEvZnv/i6dVxe8cc1uZHd+t3WjUsKT8wivfQNxipVOYSYYtoMGVJY+I5u5dUzOUlPJ+rNp4a84BDVe8YnF9GLMJ2px58CxwMXDfTqo+DzKSgeB+BlryULsosgzrA7LSn4Lpc1QDIk3rQxrhlz+GiP3DsEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nxOP/11K; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2353a2bc210so61037055ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 07:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1753280536; x=1753885336; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TciU/i1TkWOg/dQpfTDJLSYQg3K8H+HAUNonVNlXDxc=;
+        b=nxOP/11KsnIWHC+4/WV2j2raVK5w5H89ZjNjXJKMRRzrYwB/rFFieik0c/4l8WekRO
+         P6OPIKghY73L0xZsOzOaTJjfjfyY6xxBnxGaLaoAIh8Jk4LMWXk0Zu+Xpmzug15Nz/68
+         nWoxBG2cdy6I/MTASzkMJFxwcjK2fRVYmKwz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753277641; x=1753882441;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cErycuEc1BPG/yLEfc2IRSm6016iTOA8t+hzUspH65U=;
-        b=WI7h8W2ArydRa0g/9PajmZH3/wtvK80WiKYZughfLhXeuru/gZCHHpNSGLhXcwCYK3
-         wjvJ2V2aFJNUIozqQ7bTQIMCxSJ3sgDTvorL5co6BzzYtNODv59tAD+oJnRDt7Mu6exP
-         wuUWonW32HLI5Fs+xw+PYznPH8AT3KMQ0h0tCdH/S4aV3DioEPj5krYF1/Mo8GJVRAZw
-         kHZkJpugLYyyq/eY/JQ8q3R7neW5SP6EIIbkdzmc0bQ9W1SNdyyyRNBpqOStL0GW2jE2
-         Q01Cavt3zCw3TyW8PfofYoPEfRlbqkjXrc+RfwwCqigWjhC14Lb/hFEL2pOyBUMxaKJ3
-         Lrvw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxGF1Bphfu8v6tO54O2H9hmJW+nchPBQYC4umnnVSPqw81fywETHCEXte78DSwwPtlCjj/KBISoA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfDI8G0NoRJgSD0txvu+WREKH5I5ltc1pHROJwBPoDzG4zQ/kv
-	NTo0TpvYCqSq/luVLJJ7jTri9Mnj/5XKtKct6KOzhvgAVp75+6HDTQ4xxXUHo2BzmwS2pQP21sD
-	cVWIgSXy+TM4wfrqDIuO2MRz2jhK9JZDjwD3dNIFPqmmZtIXj0plYx8ohK/QqIQ==
-X-Gm-Gg: ASbGncv2ApHrfIrmb2VY46RgVJbBmYYxGpKoaB4dkPwWz/DAkXUKWjOmkCM50VhO5R+
-	E0qtOtLEmMvHfrocQjzKH+nTNe27dg6QGK9kuOJ3nsBoqmdp+CG0lVwV73chennqjV0zqqCXWTY
-	LGSoLCw+meIKZ6Pf9WSqiKM9Bta/4qPkV400MtFPcC8XBnYGHy7hWjHAX6PezittZ+UnMHslOL1
-	+A9sCH7yjkZPD9oWeQjnHk0AvKsikny7U1Dh960HtV+HcTF7PyZrShBK8TtT6TxwDzTmBEsw2En
-	f2o/9ozOZZRxhPV1VzVV6qKFmn9YrPR2+srYCNREA8XmwY9zNL5lXA9+MKt3CbQn+uy11t/i7qm
-	OiwCoUitwgYOhJlhvcQ==
-X-Received: by 2002:a05:620a:48e:b0:7e3:3c61:564a with SMTP id af79cd13be357-7e62a1da96amr124748385a.13.1753277641267;
-        Wed, 23 Jul 2025 06:34:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGzYMNLS1GUA8u7+fQK+6rKxw7iDDU93TXDtPnP5+2dDFuZKetwr7kiUpYLhhOQk9KpRqg1Eg==
-X-Received: by 2002:a05:620a:48e:b0:7e3:3c61:564a with SMTP id af79cd13be357-7e62a1da96amr124746785a.13.1753277640829;
-        Wed, 23 Jul 2025 06:34:00 -0700 (PDT)
-Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af244a659a4sm236451266b.22.2025.07.23.06.33.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jul 2025 06:34:00 -0700 (PDT)
-Message-ID: <277971b8-09d5-444d-b0eb-1e658b68029f@oss.qualcomm.com>
-Date: Wed, 23 Jul 2025 15:33:57 +0200
+        d=1e100.net; s=20230601; t=1753280536; x=1753885336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TciU/i1TkWOg/dQpfTDJLSYQg3K8H+HAUNonVNlXDxc=;
+        b=eD2855sk/oustzT2lCat4khyoS82YO40RJyr7zngWAaNKY8theXfK2coDoiD7OcYrR
+         FIfEgIstyafuJdY++n5R5KwGbNg8cX87NwVMUm4nHJa1+BqdpEbUncvDCuno7LxI7i13
+         HOnfeyzP6caCJzqt+Mlx3fzvGqNLbRXd9fM3Ox9lPdNIB1WyNPPoxj19DkvT1lY9NfMR
+         iGumjMUwihRcKYonbkcJNq5MxR556RbXAcVxJEb33DUCHV6RnbW87krZKh4DpcYzMscg
+         0eU9+5dU3Aq/Y0dDypfd3Fbcg1Pl+5r3t5DhokheczAUwZNPKJJ4N4CSD33+hTNxKskc
+         UQOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHRKKc7lzo4K7TluE9qd9c60v6xo46fybjsIP422A875rwbh35LxCh80yxfmwJtu5PtOsJCcTttw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkMdgXwRm+P/aOg64P39gx79LcYUTOOO82UsYnMDCnQOoO2cBJ
+	KNx8Z3n50w0nHvx+6ASWkmdguOAYBH05U0uzEhTO4EYUqQ5YUXUZHN6ePUYIzOQviw==
+X-Gm-Gg: ASbGncsVz0M/6gDSkVusU2xzFuaO0pj+7Z2SA5zGGDXvjtGbclzZKKHH0pdbvA/q/S2
+	pUBlNOlM7YPEkK255HPM6ngf0M4vaDJ2cTGDBKPaO0QcZ8EroU1XEG6QoCbhxj1wydxOI0IDnY/
+	hCjcJenlbtQuLMAi3jJqf3h7TfgDtuLkkLFuBmw9UbxHC+247eXCHgyRLaT73FK8jSmv9WDOGfK
+	RWDcZhRgYmdvHmQzPfyci4Le43zXYxHoOZZg6X1D5vS11EytzVHTjBKC+M+W466zPdOK+5nnAcG
+	1m7K2Z33a0AfKUXL63UcU0dx6ABG3zdjH1BKIf4jggRciEbNMtZ2MZyrgcnWAyrLFunlL3n5HM/
+	R/PfmMXYoYXL0WuHh1tJZKDbJAQ==
+X-Google-Smtp-Source: AGHT+IFHehEww7cuBGUSII6CaKL6VEu7S2bFVQoy4PwX8YkO74OJ6Bx6SiRgLGsBvkFTCiEe4F8f3w==
+X-Received: by 2002:a17:902:c409:b0:234:c8f6:1b05 with SMTP id d9443c01a7336-23f9824cb15mr37151315ad.52.1753280536415;
+        Wed, 23 Jul 2025 07:22:16 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:23e0:b24b:992e:55d2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b48f2sm96955735ad.90.2025.07.23.07.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jul 2025 07:22:15 -0700 (PDT)
+Date: Wed, 23 Jul 2025 23:22:12 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Tomasz Figa <tfiga@chromium.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] PM: dpm: add module param to backtrace all CPUs
+Message-ID: <pc5azqvv6bxpq4zuocjha7cmlmtowlwjapbo6uyb7pfp62fapf@lvgkhnt5vuap>
+References: <20250723035955.486688-1-senozhatsky@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: ipq5424: Enable cpufreq
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
-        djakov@kernel.org, quic_srichara@quicinc.com, quic_mdalam@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20250723110815.2865403-1-quic_varada@quicinc.com>
- <20250723110815.2865403-5-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250723110815.2865403-5-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=LdY86ifi c=1 sm=1 tr=0 ts=6880e4ca cx=c_pps
- a=oc9J++0uMp73DTRD5QyR2A==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=R0CBZZInQid6lz33ABQA:9
- a=QEXdDO2ut3YA:10 a=iYH6xdkBrDN1Jqds4HTS:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDExNiBTYWx0ZWRfX1UABBZXHQeAP
- 6GT8g9dM0HCXqiUko5RPNBO0z+lFOCOzz5+KlmKuzumhYegzGpk24fNNlHdWCJOg/So/Xj0M2Bj
- 4Dcj4fClmVF1+UBzzWt7gG0fbsak/idyHPN+IFZ9N8dOAgE3yKwHzThI9dYOUwyPpUOz1/A2nlR
- zLiEE5yZPVNhS3E2sqnNny/zIuxamhMBagcC6PkKRyW6T7vtv9NA/nw6P8W5uPxeGlUIqsuWdNa
- +BAEZXctL+wGSIixQ6xNslYSAvN7lsZ5zY5mWCJbZk8ct99ph8XK/62rvpF1LJ+hS5R7BKR53pW
- h4XpVMDcoFXXrIoajDWYlfe2OcXuqiTw4N9Cbs0+ovWDfToh3TQv3wNN4pJtG/V5SbTnr9b9YP4
- Kq56pLjfucTOa2WX8CIV8lepgszkKJZ2fC0e5BR2ZlxPs3l9Ui9/9DyQCLdfm1k/2Qy1OxjG
-X-Proofpoint-ORIG-GUID: RrKnuS7rjud3h9ET8LPmxnjWv_A_qyAt
-X-Proofpoint-GUID: RrKnuS7rjud3h9ET8LPmxnjWv_A_qyAt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-23_02,2025-07-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 mlxscore=0 priorityscore=1501 adultscore=0 phishscore=0
- malwarescore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- suspectscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507230116
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250723035955.486688-1-senozhatsky@chromium.org>
 
-On 7/23/25 1:08 PM, Varadarajan Narayanan wrote:
-> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+On (25/07/23 12:59), Sergey Senozhatsky wrote:
+> Add dpm_all_cpu_backtrace module parameter which controls
+> all CPU backtrace dump before DPM panics the system.  This
+> is expected to help understanding what might have caused
+> device timeout.
 > 
-> Add the qfprom, cpu clocks, A53 PLL and cpu-opp-table required for
-> CPU clock scaling.
-> 
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> [ Added interconnect related entries, fix dt-bindings errors ]
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 > ---
-> v2: Add 'interconnects' to cpu nodes
->     Add 'opp-peak-kBps' to opp table
->     Add '#interconnect-cells' to apss_clk
->     Remove unnecessary comment
->     Fix dt-binding-errors in qfprom node
-> ---
->  arch/arm64/boot/dts/qcom/ipq5424.dtsi | 65 +++++++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
+>  drivers/base/power/main.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> index 2eea8a078595..39d394f49789 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> @@ -7,6 +7,7 @@
->   */
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index dbf5456cd891..9fb943afe246 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/cpufreq.h>
+>  #include <linux/devfreq.h>
+>  #include <linux/timer.h>
+> +#include <linux/nmi.h>
 >  
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/clock/qcom,apss-ipq.h>
->  #include <dt-bindings/clock/qcom,ipq5424-cmn-pll.h>
->  #include <dt-bindings/clock/qcom,ipq5424-gcc.h>
->  #include <dt-bindings/reset/qcom,ipq5424-gcc.h>
-> @@ -52,6 +53,12 @@ cpu0: cpu@0 {
->  			reg = <0x0>;
->  			enable-method = "psci";
->  			next-level-cache = <&l2_0>;
-> +			clocks = <&apss_clk APSS_SILVER_CORE_CLK>,
-> +				 <&apss_clk L3_CORE_CLK>;
+>  #include "../base.h"
+>  #include "power.h"
+> @@ -517,6 +518,9 @@ struct dpm_watchdog {
+>  #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
+>  	struct dpm_watchdog wd
+>  
+> +static bool __read_mostly dpm_all_cpu_backtrace;
+> +module_param(dpm_all_cpu_backtrace, bool, 0644);
+> +
+>  /**
+>   * dpm_watchdog_handler - Driver suspend / resume watchdog handler.
+>   * @t: The timer that PM watchdog depends on.
+> @@ -532,8 +536,12 @@ static void dpm_watchdog_handler(struct timer_list *t)
+>  	unsigned int time_left;
+>  
+>  	if (wd->fatal) {
+> +		unsigned int this_cpu = smp_processor_id();
+> +
+>  		dev_emerg(wd->dev, "**** DPM device timeout ****\n");
+>  		show_stack(wd->tsk, NULL, KERN_EMERG);
+> +		if (dpm_all_cpu_backtrace)
+> +			trigger_single_cpu_backtrace(this_cpu);
 
-You exposed the latter clock through the interconnect framework. Now,
-every set_rate/set_bw call will be fighting for whoever completes first.
+This is silly, I do apologize.  This should be
 
-Konrad
+			trigger_allbutcpu_cpu_backtrace(this_cpu);
+
+We want to backtrace all CPUs, except the current one.  A silly
+copy-paste mistake.
 
