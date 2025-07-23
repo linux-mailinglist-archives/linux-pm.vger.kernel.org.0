@@ -1,188 +1,196 @@
-Return-Path: <linux-pm+bounces-31339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411B6B0F36F
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 15:14:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53CCFB0F3BB
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 15:19:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 347D81AA38E5
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:11:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 721CD1891979
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:15:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BB22E9EAC;
-	Wed, 23 Jul 2025 13:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1137D2E8884;
+	Wed, 23 Jul 2025 13:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K+CuX0ki"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="TR1vvldA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F79B2E7F28
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753276177; cv=none; b=aIhQpGWjio/7/kmdtrjKRcrYl8Hb5uH8x6sKBasEsYjv24HLn2f75rq4k2wzARe9T/4jHQ1qS8e3OewvU6bKk5MNK+JqvuY0M8K+JYrKfHisMsTX4475s9O4CfSa2eL7nJXgp5j/bTrucWF0QcF7nmADot7S92VP3UZjS/AfWUc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753276177; c=relaxed/simple;
-	bh=9bMIpxSp6P/2t9mAoqFS3nb+kCc2rNSG9SuI6TcUh4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Dr8i/9VT82tPDg8e1AEEYKWTwttVOEoVxRF8Kwq2OQOjgsx99VOPyG/IG3rj5L2Hkw9neJ4ywvBVwoapH5rBAVUblzYBFCEgvRzqxIRSt49vGolCR4N6z+ZYCDxnmbBIWOuPjL2IDDx9ys7fyGsRvM4azZfRbd4bCRDFkfFLefY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K+CuX0ki; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N9XpLm022571
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:09:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	c1fE2F5w2oy/8xTtLiO5hyxrW9pDzDdrUHLDqce5e0Y=; b=K+CuX0ki4cf5X9BY
-	AOGV4DBS00dKH/9foYodblzNrJQjknVLhVv/a0fhKRw1CxZ20xX3QwBDh765KtNV
-	djkB+KBxXQEy1KGzRK27tozgbEdz7RF1uLYydzPw2OlRA0erip1kJQa2UT+Pye9t
-	BBPwBbX68RzmzCc1Pu3OgvUER+CDYB8hM4RvAPyRrO3Me2Mv8yqwJ8veI97vSr6/
-	dDHu8Oqz7HG/7rCsKr6ht1juqoAmNZTLX2ihU/lkGxvq6IdHyHviPJzSK1CO0D7/
-	2NERgKuKOR+dwHKUtlz5EQ/hkZogh0Q8yTA3QUmTc30TK4nQWN6iJxQhsdbbzDL0
-	0Fc92g==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 482b1ubrjg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:09:34 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7dea65840b8so69902685a.1
-        for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 06:09:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753276173; x=1753880973;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c1fE2F5w2oy/8xTtLiO5hyxrW9pDzDdrUHLDqce5e0Y=;
-        b=ewnCegHqRJ55aS4kPlUCQXxsFBPYyExI/mcIJ6U+ZVUraHRqwqyACDusV5i5W1OMW3
-         NVS/oSMrSq1aqcBotxE06iElwiOwL/1fW9Jxm70C0oA2V2YoZBWN1O3mg0W7QIGXY8N1
-         Fa64gCscVvJxH2rSmo3MRMqUFk6LQ2E4jEwKBQmcdXywG7A+DtZY8KCNqElU/kF47M/h
-         7BbYs+Wqm9KkfNV5d6hHoWNmibEVek4R1LvCh45hGC13ezF0u8I0ztMlMh4IctEemEOU
-         HSNEOZNocdSrLv1YHIP5q6OnWoPBMbZy37oliyiDi83oUm8ndd1l2TqqqDTwefocVCAM
-         rNqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUPNxVTefCwIbaTKxsD+fpK9RQr1MJ5gODaWDxt9njjOunbEDmkVM/1//Eb4EV5OQOMnuMqq+AKhA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTd4hrqhqMZTiaDldbQvPjqVNKbGSmfqbMmB+uc/7fY8nx7P1Q
-	z/2bqR//Ao5epcHtoQUPLIfdBTNhS0oUOYr1eYUBX7BVR5i6vzb7zFSdY7BCRPcP/aCwdMhWBIf
-	nk2ksgB+RQu4A8G/gKUxPZMgruqw4FM8JQGsfLduZob6SqQIRZlWuyzmjFs8KJg==
-X-Gm-Gg: ASbGncu1p36SyroRyR9zOUQWezvvPC2l5exi011qqJQNoR6omGllIIkapiDdV80AjO4
-	k/ASq2tiWtkytDyumiWXV6q6w5xYNqJvYqbdFM9HGARHiFN053RsCOuvWTxSd74qtZKBnJ1xaEK
-	e70EbaCimbgrlL5OPREjLYIXAMivA2uvg+B8blb9L1YheqaNhpqLg8+cVroazZ8pLf0a2j8YwbI
-	hVAXltnITwbkGdxgwKGaj3CmfseywsZvYGtFVv6gc03eDdnbWSDRNcJKKPN7+pJWFOhF/SMUyq+
-	k8Iixufyvk4f5LbWt/adWCgloPiUWeRA/Lv85xXutwM3Am60f6z9mWlttHv66t7p3AlEbXiWJ9F
-	P6eaUt+t9AqaFv5ADhA==
-X-Received: by 2002:a05:620a:2727:b0:7e3:4535:4f7b with SMTP id af79cd13be357-7e62a174a0bmr158139585a.12.1753276173180;
-        Wed, 23 Jul 2025 06:09:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEg+9k+t833aHUHXP8ePI1nQxSBGAeS4mxQTKC61GZLuKY579K2Vn6dySszIzHD/n1n2LN2ag==
-X-Received: by 2002:a05:620a:2727:b0:7e3:4535:4f7b with SMTP id af79cd13be357-7e62a174a0bmr158137185a.12.1753276172434;
-        Wed, 23 Jul 2025 06:09:32 -0700 (PDT)
-Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6c7c77c0sm1045393666b.35.2025.07.23.06.09.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jul 2025 06:09:31 -0700 (PDT)
-Message-ID: <75a1935a-b6c1-4339-8b4d-12af9ead51e6@oss.qualcomm.com>
-Date: Wed, 23 Jul 2025 15:09:29 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6262E62BF;
+	Wed, 23 Jul 2025 13:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753276256; cv=pass; b=PFjeWGzH4lc6wRzNYCVWMt2ChaU9rj0ullxZrtrWBh5ewYViBKOPvIGdhGLD0JkmlbWDdD+HEGrkezQ1n1C+XGwEI/5e5l6Uk6NioKaGLwL1iUCRYdb7hsRryoEpBKlxjeQQX8OXXgw6WxOAXu1+bqRvl7t4Ei4ZzZV6/5hnZjQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753276256; c=relaxed/simple;
+	bh=0U1Q/u+P1mj4MA8GrUnzY4NHmbwMmWBD7ByV0TXrpH4=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=OvhrpdmBwW6mTu1X3zTj44izH4dcohbSV0EKYai5A3KrNohM8FDJKWF404pnKQbQyToU+FAc8GYxGIYxxiZ8nLmlKanUKHiUNVRCB7hKPCXOvaZC5ecLMdoBQ0uZdBOqoFWnXxfhuP7ooVSBiePvpHUQA8hEIYq4HImeXTNmo5I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=TR1vvldA; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1753276232; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=lNBNyl5wYWooYKkbrhOixWegEBifPHVw8i7gwW1VGMakE+CMaIS9Nnm62orWFx8h5MKJTm3LvTcwwsHKHuuEvxrNXETsPjywWOH/6S4clm7b9lHaW3pNL4UoXGTT+CGdfvfdDOFaOHSV3AvJqEnkcEDUuTKBkGnDRqLnNWsFcuo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1753276232; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=TMczoe+e+KJzKyIyNO1Op+f8ixd6FDizNqpLQ3VCsIc=; 
+	b=MX7TTGpVP4tg1kO3GM0Q5xD230GAmjm50idk5oVynneCYrw8Nd7KRQiDQY27uKBUlL9D1SwTO+JV+jO9d8hY720xsefpBQk6k1LQ5oSjlPgGSPsBDWfXjzfIj0FwRy8gRBD4cygS/k9o8wPRkWN5+FwdfXOuqefKotr88HnxvQA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753276232;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=TMczoe+e+KJzKyIyNO1Op+f8ixd6FDizNqpLQ3VCsIc=;
+	b=TR1vvldAo+Nm9WopdMLG3p/b7vpsEnoEXXE0hUyAkjJddEeNhDFkM1m214/8GFnN
+	Oz9h7QNg9uEZaoocY8fUCKPQiD6OYVk/l+b1F7WirNAz7edbMzQn2VzSh9doFcOY918
+	84LxDOtvi+o0EbJNqpe0V6BXh98JpyQ3lMqdoKrI=
+Received: by mx.zohomail.com with SMTPS id 1753276229366928.9630389473049;
+	Wed, 23 Jul 2025 06:10:29 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] clk: qcom: apss-ipq5424: Add ipq5424 apss clock
- controller
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
-        djakov@kernel.org, quic_srichara@quicinc.com, quic_mdalam@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20250723110815.2865403-1-quic_varada@quicinc.com>
- <20250723110815.2865403-3-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250723110815.2865403-3-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=LdY86ifi c=1 sm=1 tr=0 ts=6880df0e cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=osBE9IlwIbL1kcFus-gA:9
- a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDExMiBTYWx0ZWRfX7dyiGzxl5m60
- FHeoTNeONv1Zqt4nn0EMRjz+rqDQsIGsb1a+BuXVyUHaRLTbPAOBD7PWUF0ZSXVZ9jDwArPi9TQ
- Cr0cKt32JfVq/irtjVuBpms3azGdDFwdNz+/hPq5SaOiM6xmnLBdNvvEytW+mI7i8q/Yi23x449
- ru9dFq4dZQWQu01h5JiUJYR7ecq5T5hokNjswY3qyZPv92VDo5uLCPsseJ8//ZKRVkhXWqPO3aQ
- /FFU3ArMuBYOFb+1XPKPlE299kK4jogtbUAzwoJaCOVPOWjheX79I2BTljaw5E1H+SIkmPkgANh
- S0nynkAiM3B9oIX59m3rtfr7ZgoX0QTmIa4aT9fms1u21vRAwUSUIlN/OQ0qDTo+Am3v9BCzGCt
- N9p7wb6fAeg0gI8afezjCgNDMaIcmxAwCNAYy8TuibNK92zlVXCuLX/Y6hHP2LjqmhcBJqS1
-X-Proofpoint-ORIG-GUID: Bws7LlX0LKp4M9I77avttvNwcLEcW2lC
-X-Proofpoint-GUID: Bws7LlX0LKp4M9I77avttvNwcLEcW2lC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-23_02,2025-07-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 mlxscore=0 priorityscore=1501 adultscore=0 phishscore=0
- malwarescore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- suspectscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507230112
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [PATCH DNM 2/2] interconnect: Add a test Rust consumer driver
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20250722-topic-icc_rs-v1-2-9da731c14603@oss.qualcomm.com>
+Date: Wed, 23 Jul 2025 10:10:13 -0300
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Georgi Djakov <djakov@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D4552EF5-21DB-44AF-8E45-F57B0B8CB853@collabora.com>
+References: <20250722-topic-icc_rs-v1-0-9da731c14603@oss.qualcomm.com>
+ <20250722-topic-icc_rs-v1-2-9da731c14603@oss.qualcomm.com>
+To: Konrad Dybcio <konradybcio@kernel.org>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
+X-ZohoMailClient: External
 
-On 7/23/25 1:08 PM, Varadarajan Narayanan wrote:
-> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> 
-> CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
-> Add support for the APSS PLL, RCG and clock enable for ipq5424.
-> The PLL, RCG register space are clubbed. Hence adding new APSS driver
-> for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
-> and needs to be scaled along with the CPU and is modeled as an ICC clock.
-> 
-> Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> [ Removed clock notifier, moved L3 pll to icc-clk, used existing
-> alpha pll structure ]
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+Hi Konrad, commenting in case this driver goes forward.
+
+> On 22 Jul 2025, at 18:14, Konrad Dybcio <konradybcio@kernel.org> =
+wrote:
+>=20
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>=20
+> Do not merge, this is for illustration / CI purposes only.
+>=20
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
-> v2: Model L3 pll as ICC clock and add relevant structures
->     Use CLK_ALPHA_PLL_TYPE_HUAYRA_2290 register offsets instead
->     of duplicate ipq5424_pll_offsets definition.
->     Inline clock rates.
->     Fix MODULE_LICENSE
-> ---
+> drivers/interconnect/Makefile |  1 +
+> drivers/interconnect/test.rs  | 47 =
++++++++++++++++++++++++++++++++++++++++++++
+> 2 files changed, 48 insertions(+)
+>=20
+> diff --git a/drivers/interconnect/Makefile =
+b/drivers/interconnect/Makefile
+> index =
+b0a9a6753b9dc30083781163ccc01dafcfcd0485..913b92080cc0b79846b74c239e14959b=
+45b5450c 100644
+> --- a/drivers/interconnect/Makefile
+> +++ b/drivers/interconnect/Makefile
+> @@ -2,6 +2,7 @@
+>=20
+> CFLAGS_core.o :=3D -I$(src)
+> icc-core-objs :=3D core.o bulk.o debugfs-client.o
+> +icc-core-$(CONFIG_RUST) +=3D test.o
+>=20
+> obj-$(CONFIG_INTERCONNECT) +=3D icc-core.o
+> obj-$(CONFIG_INTERCONNECT_IMX) +=3D imx/
+> diff --git a/drivers/interconnect/test.rs =
+b/drivers/interconnect/test.rs
+> new file mode 100644
+> index =
+0000000000000000000000000000000000000000..f4ba2000d0f1fd2d91aedf8aace0b0b5=
+4bfd48f2
+> --- /dev/null
+> +++ b/drivers/interconnect/test.rs
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+> +
+> +//! Test interconnect consumer driver
+> +use kernel::{
+> +    c_str, device::Core, icc::*, module_platform_driver, of, =
+of::DeviceId, platform, prelude::*,
+> +};
+> +
+> +#[pin_data]
+> +struct IccTestConsumerDriver {
+> +    #[pin]
+> +    path: IccPath,
+> +}
 
-[...]
+I don=E2=80=99t think this does anything useful without PhantomPinned, =
+but Benno is
+the right person to chime in here.
 
-Since the last time this was posted, we got some additional infra code..
+More importantly though, why do you have #[pin] on IccPath?
 
-> +static int apss_ipq5424_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct regmap *regmap;
-> +	void __iomem *base;
-> +	int ret;
 > +
-> +	base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
+> +kernel::of_device_table!(
+> +    OF_TABLE,
+> +    MODULE_OF_TABLE,
+> +    <IccTestConsumerDriver as platform::Driver>::IdInfo,
+> +    [(DeviceId::new(c_str!("linux,icc-consumer-test")), ())]
+> +);
 > +
-> +	regmap = devm_regmap_init_mmio(dev, base, &apss_ipq5424_regmap_config);
-> +	if (!regmap)
-> +		return PTR_ERR(regmap);
+> +impl platform::Driver for IccTestConsumerDriver {
+> +    type IdInfo =3D ();
+> +    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> =3D =
+Some(&OF_TABLE);
 > +
-> +	clk_alpha_pll_configure(&ipq5424_l3_pll, regmap, &l3_pll_config);
+> +    fn probe(
+> +        pdev: &platform::Device<Core>,
+> +        _id_info: Option<&Self::IdInfo>,
+> +    ) -> Result<Pin<KBox<Self>>> {
+> +        let path =3D IccPath::of_get(pdev.as_ref(), None)?;
 > +
-> +	clk_alpha_pll_configure(&ipq5424_apss_pll, regmap, &apss_pll_config);
+> +        path.set_bw(
+> +            IccBwUnit::from_megabits_per_sec(400),
+> +            IccBwUnit::from_megabits_per_sec(800),
+> +        )?;
 > +
-> +	ret = qcom_cc_really_probe(dev, &apss_ipq5424_desc, regmap);
-> +	if (!ret)
-> +		dev_dbg(&pdev->dev, "Registered APSS & L3 clock provider\n");
+> +        Ok(KBox::pin_init(Self { path }, GFP_KERNEL)?.into())
+> +    }
+> +}
 > +
-> +	return ret;
+> +module_platform_driver! {
+> +    type: IccTestConsumerDriver,
+> +    name: "icc-test-consumer",
+> +    authors: ["Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>"],
+> +    description: "Test interconnect consumer driver",
+> +    license: "GPL",
+> +}
+>=20
+> --=20
+> 2.50.1
+>=20
+>=20
 
-You can now replace the entirety of this function with qcom_cc_driver_data
+=E2=80=94 Daniel
 
-Konrad
 
