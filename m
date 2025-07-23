@@ -1,138 +1,91 @@
-Return-Path: <linux-pm+bounces-31306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42351B0E963
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 06:00:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23A6CB0E9EE
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 07:03:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06A227A9384
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 03:58:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DE217EA28
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 05:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5252E36F0;
-	Wed, 23 Jul 2025 04:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0646F21ABAD;
+	Wed, 23 Jul 2025 05:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WHRkDVzN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T1eJpYtP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06572214A94
-	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 04:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB73020B207;
+	Wed, 23 Jul 2025 05:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753243207; cv=none; b=RtAGsgeDHtjTgH3xMZdNbBzEkWPjjdo2y0MKN6BIbyu9mqb78WmrnwfrPqZ3AVG8/bcARubMNM6KW5xj8F/48dYfv3NpC6QgEdmHIQzE1HoELLy8v2nMDHijxzGH8sHlqCxQqx0nIA3qu7tz1yYfF3ISPu28nIs1xC6QBzaiROI=
+	t=1753247026; cv=none; b=j6Ppq8ytiujqPFmqSq5ZgcntO6bkxioDWPqinWyARHyN3y1xJ5PGQ0gEtYo69YoODVPn9ixvNrPFM25KQnIvZ72Q/8H+kZa0z/wFX4w+O5WZZC/l7wUltteKfLOTxShS/21a+RyqQSANezsdLe8B4UF1WwnmU1JJYjOYKFuxBzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753243207; c=relaxed/simple;
-	bh=hg5ud6emYgmoK5RBRutraaTajbsQ45n0nXZERgtt2A4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PgenFXeXuBIgjbgOsIhDwe5Ny8U1mwwwpQx77lXXevy+0UtrzqBvivJ/iqUIAJ8TFPq6Qb8PVUOWcTD14EwHGJHFolFmyH+siRREzPcGz2Ky9IVxEvdZ2N12ER/CDfR4hhxEaa7FS1LyVApYOXlXYSInesqHZWrhWsh71qc+Tko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WHRkDVzN; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-311ef4fb43dso5248752a91.3
-        for <linux-pm@vger.kernel.org>; Tue, 22 Jul 2025 21:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1753243205; x=1753848005; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Q1k3jv3HqfKIyxYBUIJcZUhZRCNRS0iqmlesPw3pT8=;
-        b=WHRkDVzNCzM0pFx5XTrLLpsopXxJLWXC6Q1jeza6VmyuuxwwaszYKh9DbgqdwFzRQn
-         GiMphPoRnKu8BU63orXtYwOkb+NG1Pn1f/IF6LCVr4x4Z3zr2RPZW5iE/lXjG5vUr4BN
-         q/ylh4mSaA80Pq/KVlwfiMbH1RgIFEQu7tBsA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753243205; x=1753848005;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8Q1k3jv3HqfKIyxYBUIJcZUhZRCNRS0iqmlesPw3pT8=;
-        b=reytuu5VEDNuIv7JrjQFyNM8hsULZKLqz6ja7FnJmQoMg7dwSyyj59rigrg2Ey+LOl
-         CdCXWBl82N5wDTKDZFKRXTnJkZqNrIENKH6wjXpVD9iS4meRO8qn+eHL/r2oqDG2Rwy9
-         QzP6FMY1qCpKJq8JQHVCMCDbtKi8mTA47rDN0LXmjCzD4S5HK2R3scm6wrFw9+R4oAtc
-         tBTTPou/bKlpR4GLsapxS00N1cBKHeXxY8GdYzCnav6iIpY6PXOsyg6V3z4N2NiTMGya
-         LvE8Q7E7+ngdH8ijae9HGxNHVSNR+ZlOaRsca+2iZHOZerNOOj9m7QuIOweVTeBZ2n21
-         5rNw==
-X-Forwarded-Encrypted: i=1; AJvYcCXpE++ey52wdT2qhvpl7qVQHtvRk4CuTA4mQkdpiPlB2ZO4ifkk8MFsBLHAXYtcv+AUy2mD61CwYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmLtSLKik5Ox76WMXs5eZU57dmTzznlckY4WBQFkB0HLDNuKdJ
-	oTvTTFvMhMTp51seQTWtnYA6VL8+YCgWRUcgnE0zdNe9DtD4kB4602X6KW1z8ewKxQ==
-X-Gm-Gg: ASbGncsAMsFt1Y3uwWOel3KRajoewlHP9E8c00iASMQMnHSWBhTTv+mWyWlnoTycgaI
-	m/xjbOnqh1jOvKiifJlyIzOzQFYwXlM/y38qzpI+fx5V5y5edolL5wwQD4XJOIFLBcZrgQ05qlp
-	X/hrhMwyLrDgdkveGLP43hT/c7p6FOWLBQAzPInafCHH1thKE0WQQPy/PmsoeCrbtNo+kzWg9MX
-	cmYrRBjQ5dR9Ikeu06J4fGDfv7p2jd+iHceEHNWP+vSniE+rma3vy3g5c3SVK0GLWWXOy9xSekm
-	olGOIB117Pxi/JvSUdQuXTfEq7oQpQlxMQ02XYJkjYOVQtx1DLxPbe/AB3RHbvI+D/ExIr9oNZu
-	P/3HiDukHI7gR2PmoP1QBtmUOdUgBJylc9AeSkA7xt0FAO7DHlKvbMGauCVo=
-X-Google-Smtp-Source: AGHT+IEH9eMZc6hbX2Xrl+JGcJWKA5qC6jOj++iObkwiTrt7IqrXEtcvBb/9AVmmw2w+4cnjnKAdyw==
-X-Received: by 2002:a17:90b:5845:b0:313:f6fa:5bb5 with SMTP id 98e67ed59e1d1-31e50817303mr2488633a91.18.1753243205187;
-        Tue, 22 Jul 2025 21:00:05 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:fad8:2894:2c8d:4d33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e51a2bc1bsm527225a91.37.2025.07.22.21.00.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jul 2025 21:00:04 -0700 (PDT)
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>
-Cc: Tomasz Figa <tfiga@chromium.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC PATCH] PM: dpm: add module param to backtrace all CPUs
-Date: Wed, 23 Jul 2025 12:59:09 +0900
-Message-ID: <20250723035955.486688-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+	s=arc-20240116; t=1753247026; c=relaxed/simple;
+	bh=HNdcDInfR5691ALsx7YFA6KQ881CsZllB61Hu6dp+sc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XgQrw+vN4XofuD9JnG0oTZ5xGArGHW9irhVT1yhWlUwus80rIEqv1pOrO/PJLgyhDvJlYvgGYhZZaBLXImitKGJztMsQv6Ek6uMekPskP4kx5vxZnJhGbyg0UTWWm1JPhQCaDQGT2t3E85wyPHtD6MELRR09q1k9FNh5B9Gp6r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T1eJpYtP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3714AC4CEE7;
+	Wed, 23 Jul 2025 05:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753247026;
+	bh=HNdcDInfR5691ALsx7YFA6KQ881CsZllB61Hu6dp+sc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T1eJpYtP362i6QpQB+Gyr3nVNU4ib/ncXo5a8bynYbCbVde1E4PIfSG1viBeQFXri
+	 rZLxYRWbemEoP9mMxnTuF8rtwfg06RtoWNz8PEsbqTHnts0Wd/mVt6y819T/xD6RuL
+	 mOFHzLVYKVP+pxhxcOYL4QotHxlwjOfbPo/CG7bHZ3R9w/FM9zzx8hvkrN+lR0uFOy
+	 8nlygR5DDHvtsEJREgk2Y0HvV+R97GxJwshMLUEnM+VMnSchUU/mvhERqjU8tbRDM3
+	 Tsen+b8Ztg/WXn7szBtQsSckYKxW5tObFakUNVKOcgxh8F21AF5wjxGYwH4C9rZreM
+	 w64dgibb0Ew6w==
+Date: Wed, 23 Jul 2025 00:03:45 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: Liming Xue <liming.xue@amlogic.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Guillaume La Roque <glaroque@baylibre.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: amlogic: Add compatible
+ string for C3
+Message-ID: <175324702489.1243031.2642099886679126022.robh@kernel.org>
+References: <20250722-c3-thermal-v2-0-b2231b4be79e@amlogic.com>
+ <20250722-c3-thermal-v2-1-b2231b4be79e@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250722-c3-thermal-v2-1-b2231b4be79e@amlogic.com>
 
-Add dpm_all_cpu_backtrace module parameter which controls
-all CPU backtrace dump before DPM panics the system.  This
-is expected to help understanding what might have caused
-device timeout.
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/base/power/main.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Tue, 22 Jul 2025 19:26:27 +0800, Xianwei Zhao wrote:
+> Add the compatible properties for Amlogic C3 SoC family.
+> C3 family supports only one thermal node - CPU thermal
+> sensor.
+> 
+> Signed-off-by: Liming Xue <liming.xue@amlogic.com>
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> ---
+>  Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index dbf5456cd891..9fb943afe246 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -34,6 +34,7 @@
- #include <linux/cpufreq.h>
- #include <linux/devfreq.h>
- #include <linux/timer.h>
-+#include <linux/nmi.h>
- 
- #include "../base.h"
- #include "power.h"
-@@ -517,6 +518,9 @@ struct dpm_watchdog {
- #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
- 	struct dpm_watchdog wd
- 
-+static bool __read_mostly dpm_all_cpu_backtrace;
-+module_param(dpm_all_cpu_backtrace, bool, 0644);
-+
- /**
-  * dpm_watchdog_handler - Driver suspend / resume watchdog handler.
-  * @t: The timer that PM watchdog depends on.
-@@ -532,8 +536,12 @@ static void dpm_watchdog_handler(struct timer_list *t)
- 	unsigned int time_left;
- 
- 	if (wd->fatal) {
-+		unsigned int this_cpu = smp_processor_id();
-+
- 		dev_emerg(wd->dev, "**** DPM device timeout ****\n");
- 		show_stack(wd->tsk, NULL, KERN_EMERG);
-+		if (dpm_all_cpu_backtrace)
-+			trigger_single_cpu_backtrace(this_cpu);
- 		panic("%s %s: unrecoverable failure\n",
- 			dev_driver_string(wd->dev), dev_name(wd->dev));
- 	}
--- 
-2.50.0.727.gbf7dc18ff4-goog
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
 
