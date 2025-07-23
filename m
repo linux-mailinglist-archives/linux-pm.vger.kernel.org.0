@@ -1,468 +1,188 @@
-Return-Path: <linux-pm+bounces-31338-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA2EAB0F266
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 14:37:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 411B6B0F36F
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 15:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F23BD3B1486
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 12:36:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 347D81AA38E5
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Jul 2025 13:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD602E5B37;
-	Wed, 23 Jul 2025 12:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BB22E9EAC;
+	Wed, 23 Jul 2025 13:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="bZ2N0mcJ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K+CuX0ki"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE1C26C3BD;
-	Wed, 23 Jul 2025 12:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753274242; cv=pass; b=sjrFyQ0S2guJ3p+BEVtlVh8cdK5Gi+0seICcbZwyu8Qm/h4L+PFEarZ5zbEC/C/JMQLUe6ZP0fRWSTWUqbwNOuyE8a6dZpMNhxx/7PpsYW7W9LEWzNma4X9oDmnhTKNARD1DDTzTIiCz5UqXECCh5vdAAUMeLO+/t9JbIAvlHP0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753274242; c=relaxed/simple;
-	bh=2N/Y/ohRsx2NSDf+C+TmukttQ4T9HJGoB01l12MqotQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=M5H7H7EyvhCpEDTUWI2F9Uoa1zRRfddkWfiHgCArTSXy6gxJP2AT9tHLBKIB2x2v7ctG/WXTCNdZPvAM8ywvFDFU/fvd9T1NUYLMqjC2SdVRlCVowec1ICUkQ8XkhYDYKmpBzGRsW074bEd8W4Y5UEcVnxjUw7kCNzF3gNyH3UM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=bZ2N0mcJ; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1753274211; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=l5qvDUGiHthNx5QMP6DZw3Qolt/O+UrVleLi7AyU6l+JzzQKtuZEWlJF/jcFaTwVEMbZjXPxvWatEk2L+5Toue/JUoY/M7qvtm9HCsPDjSbQCW6aCAzWWje2qvBCBm4fZkwL1+XAH9WQO8u00aqmmQg3OD1xuyd0ODb0ZwSGhjc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1753274211; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=sNAt1xjDG8S67TT5jzkK+ZaOsA5YLuo9T5h8Ckdm4jE=; 
-	b=ChKE5yhIsiTrQ8jYWb90H1bk3i+Zgvv39n0dR1KSxZhABoGgiV1VS39z/cpbDmvvCow1nbfsSDdoI050lto9YQsGRIpUwQl1qDV7iqfyu3YmlV6KV3wM1uS3td50hslyWrI2Q2DykJRTfaVv02EXwUg8aPcjw7GPK0Jumtgvkak=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753274211;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=sNAt1xjDG8S67TT5jzkK+ZaOsA5YLuo9T5h8Ckdm4jE=;
-	b=bZ2N0mcJSpYeMs//jHozeKmu4o18+9A3zEnohBUw0rHzCSz75J3dy659VYBJKMXp
-	ATSPosFa/mC999Nhe30BBfmgW6QhyCIVrZqfp10k2nJxrJtQcNJEKhwEqRSp4oZMbwa
-	8HPq61tca+4M2v9fWh7aIIgKWNdtUnjy9JDDXmLA=
-Received: by mx.zohomail.com with SMTPS id 1753274208177540.169222562024;
-	Wed, 23 Jul 2025 05:36:48 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F79B2E7F28
+	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753276177; cv=none; b=aIhQpGWjio/7/kmdtrjKRcrYl8Hb5uH8x6sKBasEsYjv24HLn2f75rq4k2wzARe9T/4jHQ1qS8e3OewvU6bKk5MNK+JqvuY0M8K+JYrKfHisMsTX4475s9O4CfSa2eL7nJXgp5j/bTrucWF0QcF7nmADot7S92VP3UZjS/AfWUc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753276177; c=relaxed/simple;
+	bh=9bMIpxSp6P/2t9mAoqFS3nb+kCc2rNSG9SuI6TcUh4Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Dr8i/9VT82tPDg8e1AEEYKWTwttVOEoVxRF8Kwq2OQOjgsx99VOPyG/IG3rj5L2Hkw9neJ4ywvBVwoapH5rBAVUblzYBFCEgvRzqxIRSt49vGolCR4N6z+ZYCDxnmbBIWOuPjL2IDDx9ys7fyGsRvM4azZfRbd4bCRDFkfFLefY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K+CuX0ki; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N9XpLm022571
+	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:09:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	c1fE2F5w2oy/8xTtLiO5hyxrW9pDzDdrUHLDqce5e0Y=; b=K+CuX0ki4cf5X9BY
+	AOGV4DBS00dKH/9foYodblzNrJQjknVLhVv/a0fhKRw1CxZ20xX3QwBDh765KtNV
+	djkB+KBxXQEy1KGzRK27tozgbEdz7RF1uLYydzPw2OlRA0erip1kJQa2UT+Pye9t
+	BBPwBbX68RzmzCc1Pu3OgvUER+CDYB8hM4RvAPyRrO3Me2Mv8yqwJ8veI97vSr6/
+	dDHu8Oqz7HG/7rCsKr6ht1juqoAmNZTLX2ihU/lkGxvq6IdHyHviPJzSK1CO0D7/
+	2NERgKuKOR+dwHKUtlz5EQ/hkZogh0Q8yTA3QUmTc30TK4nQWN6iJxQhsdbbzDL0
+	0Fc92g==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 482b1ubrjg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 13:09:34 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7dea65840b8so69902685a.1
+        for <linux-pm@vger.kernel.org>; Wed, 23 Jul 2025 06:09:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753276173; x=1753880973;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c1fE2F5w2oy/8xTtLiO5hyxrW9pDzDdrUHLDqce5e0Y=;
+        b=ewnCegHqRJ55aS4kPlUCQXxsFBPYyExI/mcIJ6U+ZVUraHRqwqyACDusV5i5W1OMW3
+         NVS/oSMrSq1aqcBotxE06iElwiOwL/1fW9Jxm70C0oA2V2YoZBWN1O3mg0W7QIGXY8N1
+         Fa64gCscVvJxH2rSmo3MRMqUFk6LQ2E4jEwKBQmcdXywG7A+DtZY8KCNqElU/kF47M/h
+         7BbYs+Wqm9KkfNV5d6hHoWNmibEVek4R1LvCh45hGC13ezF0u8I0ztMlMh4IctEemEOU
+         HSNEOZNocdSrLv1YHIP5q6OnWoPBMbZy37oliyiDi83oUm8ndd1l2TqqqDTwefocVCAM
+         rNqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPNxVTefCwIbaTKxsD+fpK9RQr1MJ5gODaWDxt9njjOunbEDmkVM/1//Eb4EV5OQOMnuMqq+AKhA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTd4hrqhqMZTiaDldbQvPjqVNKbGSmfqbMmB+uc/7fY8nx7P1Q
+	z/2bqR//Ao5epcHtoQUPLIfdBTNhS0oUOYr1eYUBX7BVR5i6vzb7zFSdY7BCRPcP/aCwdMhWBIf
+	nk2ksgB+RQu4A8G/gKUxPZMgruqw4FM8JQGsfLduZob6SqQIRZlWuyzmjFs8KJg==
+X-Gm-Gg: ASbGncu1p36SyroRyR9zOUQWezvvPC2l5exi011qqJQNoR6omGllIIkapiDdV80AjO4
+	k/ASq2tiWtkytDyumiWXV6q6w5xYNqJvYqbdFM9HGARHiFN053RsCOuvWTxSd74qtZKBnJ1xaEK
+	e70EbaCimbgrlL5OPREjLYIXAMivA2uvg+B8blb9L1YheqaNhpqLg8+cVroazZ8pLf0a2j8YwbI
+	hVAXltnITwbkGdxgwKGaj3CmfseywsZvYGtFVv6gc03eDdnbWSDRNcJKKPN7+pJWFOhF/SMUyq+
+	k8Iixufyvk4f5LbWt/adWCgloPiUWeRA/Lv85xXutwM3Am60f6z9mWlttHv66t7p3AlEbXiWJ9F
+	P6eaUt+t9AqaFv5ADhA==
+X-Received: by 2002:a05:620a:2727:b0:7e3:4535:4f7b with SMTP id af79cd13be357-7e62a174a0bmr158139585a.12.1753276173180;
+        Wed, 23 Jul 2025 06:09:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEg+9k+t833aHUHXP8ePI1nQxSBGAeS4mxQTKC61GZLuKY579K2Vn6dySszIzHD/n1n2LN2ag==
+X-Received: by 2002:a05:620a:2727:b0:7e3:4535:4f7b with SMTP id af79cd13be357-7e62a174a0bmr158137185a.12.1753276172434;
+        Wed, 23 Jul 2025 06:09:32 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6c7c77c0sm1045393666b.35.2025.07.23.06.09.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Jul 2025 06:09:31 -0700 (PDT)
+Message-ID: <75a1935a-b6c1-4339-8b4d-12af9ead51e6@oss.qualcomm.com>
+Date: Wed, 23 Jul 2025 15:09:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
-Subject: Re: [PATCH 1/2] rust: Add initial interconnect framework abstractions
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20250722-topic-icc_rs-v1-1-9da731c14603@oss.qualcomm.com>
-Date: Wed, 23 Jul 2025 09:36:32 -0300
-Cc: Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Georgi Djakov <djakov@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-pm@vger.kernel.org,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3133FE9C-473D-4142-AF38-CA447265C02E@collabora.com>
-References: <20250722-topic-icc_rs-v1-0-9da731c14603@oss.qualcomm.com>
- <20250722-topic-icc_rs-v1-1-9da731c14603@oss.qualcomm.com>
-To: Konrad Dybcio <konradybcio@kernel.org>
-X-Mailer: Apple Mail (2.3826.600.51.1.1)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] clk: qcom: apss-ipq5424: Add ipq5424 apss clock
+ controller
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
+        djakov@kernel.org, quic_srichara@quicinc.com, quic_mdalam@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20250723110815.2865403-1-quic_varada@quicinc.com>
+ <20250723110815.2865403-3-quic_varada@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250723110815.2865403-3-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=LdY86ifi c=1 sm=1 tr=0 ts=6880df0e cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=osBE9IlwIbL1kcFus-gA:9
+ a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDExMiBTYWx0ZWRfX7dyiGzxl5m60
+ FHeoTNeONv1Zqt4nn0EMRjz+rqDQsIGsb1a+BuXVyUHaRLTbPAOBD7PWUF0ZSXVZ9jDwArPi9TQ
+ Cr0cKt32JfVq/irtjVuBpms3azGdDFwdNz+/hPq5SaOiM6xmnLBdNvvEytW+mI7i8q/Yi23x449
+ ru9dFq4dZQWQu01h5JiUJYR7ecq5T5hokNjswY3qyZPv92VDo5uLCPsseJ8//ZKRVkhXWqPO3aQ
+ /FFU3ArMuBYOFb+1XPKPlE299kK4jogtbUAzwoJaCOVPOWjheX79I2BTljaw5E1H+SIkmPkgANh
+ S0nynkAiM3B9oIX59m3rtfr7ZgoX0QTmIa4aT9fms1u21vRAwUSUIlN/OQ0qDTo+Am3v9BCzGCt
+ N9p7wb6fAeg0gI8afezjCgNDMaIcmxAwCNAYy8TuibNK92zlVXCuLX/Y6hHP2LjqmhcBJqS1
+X-Proofpoint-ORIG-GUID: Bws7LlX0LKp4M9I77avttvNwcLEcW2lC
+X-Proofpoint-GUID: Bws7LlX0LKp4M9I77avttvNwcLEcW2lC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-23_02,2025-07-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ malwarescore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ suspectscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507230112
 
-Hi Konrad,
-
-I will be skipping the feedback that was given by others to not sound
-repetitive.
-
-> On 22 Jul 2025, at 18:14, Konrad Dybcio <konradybcio@kernel.org> =
-wrote:
->=20
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->=20
-> Add abstractions for icc_path handling, laying the groundwork for more
-> work on the subsystem.
-
-For the sake of reviewers, I think you should add a brief overview of =
-what this
-code does and what you plan to use it for.
-
-E.g.: can you write a sentence or two about the interconnect subsystem, =
-for
-example? We can then derive more information from the C documentation if
-needed. Also, why do we need icc_path specifically? Why does it have to
-come first?=20
-
-
->=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+On 7/23/25 1:08 PM, Varadarajan Narayanan wrote:
+> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> 
+> CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
+> Add support for the APSS PLL, RCG and clock enable for ipq5424.
+> The PLL, RCG register space are clubbed. Hence adding new APSS driver
+> for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
+> and needs to be scaled along with the CPU and is modeled as an ICC clock.
+> 
+> Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> [ Removed clock notifier, moved L3 pll to icc-clk, used existing
+> alpha pll structure ]
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
-> MAINTAINERS                     |   1 +
-> rust/bindings/bindings_helper.h |   2 +
-> rust/kernel/icc.rs              | 225 =
-++++++++++++++++++++++++++++++++++++++++
-> rust/kernel/lib.rs              |   1 +
-> 4 files changed, 229 insertions(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index =
-ffb35359f1e2d4c286c5afef691f10421a3542a6..fbdbaa3c401d3705974f43bbd47e5a83=
-632d33ef 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12735,6 +12735,7 @@ F: drivers/interconnect/
-> F: include/dt-bindings/interconnect/
-> F: include/linux/interconnect-provider.h
-> F: include/linux/interconnect.h
-> +F: rust/kernel/icc.rs
->=20
-> INTERRUPT COUNTER DRIVER
-> M: Oleksij Rempel <o.rempel@pengutronix.de>
-> diff --git a/rust/bindings/bindings_helper.h =
-b/rust/bindings/bindings_helper.h
-> index =
-84d60635e8a9baef1f1a1b2752dc0fa044f8542f..becfce3fa4794a51d817927376f77df7=
-b8b0434d 100644
-> --- a/rust/bindings/bindings_helper.h
-> +++ b/rust/bindings/bindings_helper.h
-> @@ -53,6 +53,8 @@
-> #include <linux/file.h>
-> #include <linux/firmware.h>
-> #include <linux/fs.h>
-> +#include <linux/interconnect-provider.h>
-> +#include <linux/interconnect.h>
-> #include <linux/ioport.h>
-> #include <linux/jiffies.h>
-> #include <linux/jump_label.h>
-> diff --git a/rust/kernel/icc.rs b/rust/kernel/icc.rs
-> new file mode 100644
-> index =
-0000000000000000000000000000000000000000..3674632866954613749e78bc24b8db6f=
-1f3c0369
-> --- /dev/null
-> +++ b/rust/kernel/icc.rs
-> @@ -0,0 +1,225 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +// Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+> v2: Model L3 pll as ICC clock and add relevant structures
+>     Use CLK_ALPHA_PLL_TYPE_HUAYRA_2290 register offsets instead
+>     of duplicate ipq5424_pll_offsets definition.
+>     Inline clock rates.
+>     Fix MODULE_LICENSE
+> ---
 
-Perhaps this instead [0].
+[...]
 
-> +
-> +//! Interconnect abstractions
-> +//!
-> +//! (based on clk.rs)
-> +//!
-> +//! C headers:
-> +//! =
-[`include/linux/interconnect.h`](srctree/include/linux/interconnect.h)
-> +//! =
-[`include/linux/interconnect-provider.h`](srctree/include/linux/interconne=
-ct-provider.h)
-> +//!
-> +//! Reference: <https://docs.kernel.org/driver-api/interconnect.html>
-> +
-> +/// The interconnect framework bandidth unit.
-> +///
-> +/// Represents a bus bandwidth request in kBps, wrapping a [`u32`] =
-value.
-> +#[derive(Copy, Clone, PartialEq, Eq, Debug)]
-> +pub struct IccBwUnit(pub u32);
-> +
-> +impl IccBwUnit {
-> +    /// Create a new instance from bytes (B)
-> +    pub const fn from_bytes_per_sec(bps: u32) -> Self {
-> +        Self(bps / 1000)
-> +    }
-> +
-> +    /// Create a new instance from kilobytes (kB) per second
-> +    pub const fn from_kilobytes_per_sec(kbps: u32) -> Self {
-> +        Self(kbps)
-> +    }
-> +
-> +    /// Create a new instance from megabytes (MB) per second
-> +    pub const fn from_megabytes_per_sec(mbps: u32) -> Self {
-> +        Self(mbps * 1000)
-> +    }
-> +
-> +    /// Create a new instance from gigabytes (GB) per second
-> +    pub const fn from_gigabytes_per_sec(gbps: u32) -> Self {
-> +        Self(gbps * 1000 * 1000)
-> +    }
-> +
-> +    /// Create a new instance from bits (b) per second
-> +    pub const fn from_bits_per_sec(_bps: u32) -> Self {
-> +        Self(1)
-> +    }
-> +
-> +    /// Create a new instance from kilobits (kb) per second
-> +    pub const fn from_kilobits_per_sec(kbps: u32) -> Self {
-> +        Self(kbps.div_ceil(8))
-> +    }
-> +
-> +    /// Create a new instance from megabits (Mb) per second
-> +    pub const fn from_megabits_per_sec(mbps: u32) -> Self {
-> +        Self(mbps * 1000 / 8)
-> +    }
-> +
-> +    /// Create a new instance from gigabits (Gb) per second
-> +    pub const fn from_gigabits_per_sec(mbps: u32) -> Self {
-> +        Self(mbps * 1000 * 1000 / 8)
-> +    }
-> +
-> +    /// Get the bandwidth in bytes (B) per second
-> +    pub const fn as_bytes_per_sec(self) -> u32 {
-> +        self.0 * 1000
-> +    }
-> +
-> +    /// Get the bandwidth in kilobytes (kB) per second
-> +    pub const fn as_kilobytes_per_sec(self) -> u32 {
-> +        self.0
-> +    }
-> +
-> +    /// Get the bandwidth in megabytes (MB) per second
-> +    pub const fn as_megabytes_per_sec(self) -> u32 {
-> +        self.0 / 1000
-> +    }
-> +
-> +    /// Get the bandwidth in gigabytes (GB) per second
-> +    pub const fn as_gigabytes_per_sec(self) -> u32 {
-> +        self.0 / 1000 / 1000
-> +    }
-> +
-> +    /// Get the bandwidth in bits (b) per second
-> +    pub const fn as_bits_per_sec(self) -> u32 {
-> +        self.0 * 8 / 1000
-> +    }
-> +
-> +    /// Get the bandwidth in kilobits (kb) per second
-> +    pub const fn as_kilobits_per_sec(self) -> u32 {
-> +        self.0 * 8
-> +    }
-> +
-> +    /// Get the bandwidth in megabits (Mb) per second
-> +    pub const fn as_megabits_per_sec(self) -> u32 {
-> +        self.0 * 8 * 1000
-> +    }
-> +
-> +    /// Get the bandwidth in gigabits (Gb) per second
-> +    pub const fn as_gigabits_per_sec(self) -> u32 {
-> +        self.0 * 8 * 1000 * 1000
-> +    }
-> +}
-> +
-> +impl From<IccBwUnit> for u32 {
-> +    fn from(bw: IccBwUnit) -> Self {
-> +        bw.0
-> +    }
-> +}
-> +
+Since the last time this was posted, we got some additional infra code..
 
-Why is this under CONFIG_INTERCONNECT, but not the code above it?
-
-> +#[cfg(CONFIG_INTERCONNECT)]
-> +mod icc_path {
-> +    use super::IccBwUnit;
-> +    use crate::{
-> +        device::Device,
-> +        error::{Result, from_err_ptr, to_result},
-> +        prelude::*,
-> +    };
+> +static int apss_ipq5424_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct regmap *regmap;
+> +	void __iomem *base;
+> +	int ret;
 > +
-> +    use core::ptr;
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
 > +
-> +    /// A reference-counted interconnect path.
-> +    ///
-> +    /// Rust abstraction for the C [`struct icc_path`]
-> +    ///
-> +    /// # Invariants
-> +    ///
-> +    /// An [`IccPath`] instance holds either a pointer to a valid =
-[`struct icc_path`] created by
-> +    /// the C portion of the kernel, or a NULL pointer.
-
-Why should this ever be NULL? Can you expand on that in the docs? =
-Otherwise
-look into NonNull.
-
-> +    ///
-> +    /// Instances of this type are reference-counted. Calling =
-[`IccPath::of_get`] ensures that the
-> +    /// allocation remains valid for the lifetime of the [`IccPath`].
-
-Should this implement AlwaysRefCounted?
-
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// The following example demonstrates hwo to obtain and =
-configure an interconnect path for
-> +    /// a device.
-
-Typo
-
-> +    ///
-> +    /// ```
-> +    /// use kernel::icc_path::{IccPath, IccBwUnit};
-> +    /// use kernel::device::Device;
-> +    /// use kernel::error::Result;
-> +    ///
-> +    /// fn poke_at_bus(dev: &Device) -> Result {
-> +    ///     let bus_path =3D IccPath::of_get(dev, =
-Some(c_str!("bus")))?;
-> +    ///
-> +    ///     bus_path.set_bw(
-> +    ///         IccBwUnit::from_megabits_per_sec(400),
-> +    ///         IccBwUnit::from_megabits_per_sec(800)
-> +    ///     )?;
-> +    ///
-> +    ///     // bus_path goes out of scope and self-disables if there =
-are no other users
-> +    ///
-> +    ///     Ok(())
-> +    /// }
-> +    /// ```
-> +    #[repr(transparent)]
-> +    pub struct IccPath(*mut bindings::icc_path);
+> +	regmap = devm_regmap_init_mmio(dev, base, &apss_ipq5424_regmap_config);
+> +	if (!regmap)
+> +		return PTR_ERR(regmap);
 > +
-> +    impl IccPath {
-> +        /// Get [`IccPath`] corresponding to a [`Device`]
-> +        ///
-> +        /// Equivalent to the kernel's of_icc_get() API.
-
-Please either use backticks or provide a link if appropriate.
-
-> +        pub fn of_get(dev: &Device, name: Option<&CStr>) -> =
-Result<Self> {
-> +            let id =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> +	clk_alpha_pll_configure(&ipq5424_l3_pll, regmap, &l3_pll_config);
 > +
-> +            // SAFETY: It's always safe to call [`of_icc_get`]
-> +            //
-> +            // INVARIANT: The reference count is decremented when =
-[`IccPath`] goes out of scope
-> +            Ok(Self(from_err_ptr(unsafe {
-> +                bindings::of_icc_get(dev.as_raw(), id)
-> +            })?))
-
-There=E2=80=99s a lot going on here at once. Can you break this into =
-multiple lines?
-
-> +        }
+> +	clk_alpha_pll_configure(&ipq5424_apss_pll, regmap, &apss_pll_config);
 > +
-> +        /// Obtain the raw [`struct icc_path`] pointer.
-> +        #[inline]
-> +        pub fn as_raw(&self) -> *mut bindings::icc_path {
-> +            self.0
-> +        }
-
-Why should this be needed in drivers?
-
+> +	ret = qcom_cc_really_probe(dev, &apss_ipq5424_desc, regmap);
+> +	if (!ret)
+> +		dev_dbg(&pdev->dev, "Registered APSS & L3 clock provider\n");
 > +
-> +        /// Enable the path.
-> +        ///
-> +        /// Equivalent to the kernel's icc_enable() API.
-> +        #[inline]
-> +        pub fn enable(&self) -> Result {
-> +            // SAFETY: By the type invariants, self.as_raw() is a =
-valid argument for `icc_enable`].
-> +            to_result(unsafe { bindings::icc_enable(self.as_raw()) })
-> +        }
+> +	return ret;
 
-Should this take &mut? Same for all other functions below.
+You can now replace the entirety of this function with qcom_cc_driver_data
 
-Note that using &mut may help you implement Sync later.
-
-> +
-> +        /// Disable the path.
-> +        ///
-> +        /// Equivalent to the kernel's icc_disable() API.
-
-Same comment here. You need to ensure that this looks nice in the =
-rendered docs.
-
-> +        #[inline]
-> +        pub fn disable(&self) -> Result {
-> +            // SAFETY: By the type invariants, self.as_raw() is a =
-valid argument for `icc_disable`].
-> +            to_result(unsafe { bindings::icc_disable(self.as_raw()) =
-})
-> +        }
-> +
-> +        /// Set the bandwidth on a path
-> +        ///
-> +        /// Equivalent to the kernel's icc_set_bw() API.
-> +        #[inline]
-> +        pub fn set_bw(&self, avg_bw: IccBwUnit, peak_bw: IccBwUnit) =
--> Result {
-> +            // SAFETY: By the type invariants, self.as_raw() is a =
-valid argument for [`icc_set_bw`].
-> +            to_result(unsafe {
-> +                bindings::icc_set_bw(
-> +                    self.as_raw(),
-> +                    avg_bw.as_kilobytes_per_sec(),
-> +                    peak_bw.as_kilobytes_per_sec(),
-> +                )
-> +            })
-> +        }
-> +    }
-> +
-> +    impl Drop for IccPath {
-> +        fn drop(&mut self) {
-> +            // SAFETY: By the type invariants, self.as_raw() is a =
-valid argument for [`icc_put`].
-> +            unsafe { bindings::icc_put(self.as_raw()) }
-> +        }
-> +    }
-> +}
-> +
-> +// SAFETY: An `IccPath` is always reference-counted and can be =
-released from any thread.
-> +unsafe impl Send for IccPath {}
-> +
-> +#[cfg(CONFIG_INTERCONNECT)]
-> +pub use icc_path::*;
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index =
-87bcaa1c6b8a6291e71905e8dde60d945b654b98..60f6ac6e79cce57a8538ea0ad48f34f5=
-1af91731 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -89,6 +89,7 @@
-> pub mod fmt;
-> pub mod fs;
-> pub mod init;
-> +pub mod icc;
-> pub mod io;
-> pub mod ioctl;
-> pub mod jump_label;
->=20
-> --=20
-> 2.50.1
->=20
->=20
-
-=E2=80=94 Daniel
-
-[0] =
-https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/copyrigh=
-tText/=
+Konrad
 
