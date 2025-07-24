@@ -1,146 +1,118 @@
-Return-Path: <linux-pm+bounces-31358-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31359-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEED6B10060
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 08:08:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8D3B1021B
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 09:41:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0EF7561558
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 06:08:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C71705807C3
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 07:41:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF3171FE461;
-	Thu, 24 Jul 2025 06:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7AA525BF15;
+	Thu, 24 Jul 2025 07:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfynuZ5+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="muIKNQxT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E0C19A;
-	Thu, 24 Jul 2025 06:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119B32A1BB;
+	Thu, 24 Jul 2025 07:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753337323; cv=none; b=Fn4YPlXjbIFsZ5FVu36eAqczfZ1bQttxI+z31RRnuPIoU6vCCC72nmJFFAPXMxgVZIQjAlz27Bhcuvnr9EH/wmnkH9bVakBxhp2dRvN/M2GfzCBvKki7tp4MW9RTWmCV49j3ywwiJw2kLilz/DlTC3lPOEksTTh/ETN3GnMKGl4=
+	t=1753342901; cv=none; b=RYBWGxe7sXiC0cQIo6OOjETSvAfAlFqYQVfdq6HVdgYIrawjbNAjNSHu1YysacEmU7zt+WhI1uAw9BhpM3GNRHrWzf8zlgVSoYMiCXaLekQh9+Q0rjn8tq4/kA7SPSYTYtyMXjrumZsgkAcJ8seQlfXrWKTyBJzRLMzEo7cfJ7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753337323; c=relaxed/simple;
-	bh=jnPA+iA9iLU7wadXEwXs4NfK0RtdyekHzyBGX5AWZsQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DjzmdfNZ9eo2juwF/WKSg57r44HSJzllnxskyV59J9lHSFrmnGPMPU2whCo/YRaYr7NEJn6QrO4jBBkiwG7cquq78ErwWIhbbux4oQPoMnfw1uedohHioQ7jMiXJVRqI6mqH8N21jgo9RSaRN/COr7moYGuiD7+vyzqhL+UPHn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfynuZ5+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E60C4CEED;
-	Thu, 24 Jul 2025 06:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753337320;
-	bh=jnPA+iA9iLU7wadXEwXs4NfK0RtdyekHzyBGX5AWZsQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EfynuZ5+9ifm4K+Q8RJf9Sc8h4rtAfwGv0gCHr2fvS4/5hlRSmSzyWCqdSeQFIdUv
-	 epQpwWEsigEcs12RdptljlIbcrSzmQfzy80xDo7W0irii5/Ytz+AVy/gVz+aION58e
-	 1NKWSAB4vMKZ2qk2Ba10DWpey7rUXVbAdjaiiqfS6z+9FsK9uyRQPfkCjGfvdVW7jm
-	 Qgvc0UYoncG6e3iwlztNMLAhE3yv3hqqpaNckyQxlqPLsJLSYckcgfJCtvhAA5JsBz
-	 PY13RW7hyRpf4H7n9nbf6DzqOgvgwZSG5jJt39SC0MhBWaGqfZksc2E4eN7L6n6XrP
-	 Pd+e+HqYUSojQ==
-Message-ID: <fd0770c8-e5e0-4bdb-a3da-b4b39f664e61@kernel.org>
-Date: Thu, 24 Jul 2025 08:08:34 +0200
+	s=arc-20240116; t=1753342901; c=relaxed/simple;
+	bh=15kiuH3ohjQJSoHhfQ8LHf28SKY6AQ3QsaNQSEmr6Vs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=dYKdosxYzJdMJkIpnGh7hRjaO8HERMwIOEwOox0tXukB8OgqfZwzSNl0p2hFXxnIfo8VT2VUO6LR7beB9fr6gb9b+Ruvl2W8MVUKsKlVkRcJq5HsB5k2e7fIY5Zc0r00aPKfOMvxmwYRsKZNtZLcOLUiP4mKom/R6ittFqD60XU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=muIKNQxT; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a524caf77eso102970f8f.3;
+        Thu, 24 Jul 2025 00:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753342898; x=1753947698; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPukqAQVodQ+f3FEJLymtMhVNsFtmLOaRlS57pNUN2Y=;
+        b=muIKNQxTln0lbU6MB4LLXJCq7bKPxMVyC9f6v3wvyGiTQrn5MPtej/KbgWRAvsgpYa
+         fr/3UTI8dZVSdlA/x9ZNzaS2YXlUy3JTjnviQqLA55ix//AMz6N+MsNDOFNa6APKT73+
+         VoIB0HVV3yWZXCJpuuz/ufUP8aKNK71cK7Ycp546p9iB87X1ae6m9DSWRAhAvtwPo+rg
+         ZuwVJzQQ8BS4dp7e/4JnDaVUf673+H2josZ1WAI8XUE4WTbRRKGH/cVADC0UT1+ssftc
+         W7wIHZtgq8OtmWQWbSvwaRJn989PbeeOVPk/68Upqj+e2cA9C5rTzhihZAPG19tMl87E
+         o1BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753342898; x=1753947698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JPukqAQVodQ+f3FEJLymtMhVNsFtmLOaRlS57pNUN2Y=;
+        b=HOoxUlGBdndhDYxK9fDj/6tc0pflEEBmldx6Q2KCBbUYa19sIroanDXtTDNyMbvNPG
+         w3dpev4WOM0jvM0wwjDCnxff1VuBNgia0KtVntf4p7g/yjgFpp134ZjDblOyRgFutG6v
+         ULPz5N1JF2gLLHsEq01spbip4P8GKfT5Km5hxBV2Jtoc0WLYxRG2YWBdJ/aCpG3EqwRl
+         s2HSkvOIh63nmpM2KYohq7wCw3vKz0gZsW2mj+msRrFFbbIMpaKvqURRCLHPJQ/KaJnW
+         BlmuFP8JMEfi35wO3tLUgQDYyslCLIEYpT791pwpPNA/fcdm5VU2WcmRWlcAkdJnwqOD
+         zDYw==
+X-Gm-Message-State: AOJu0YxLWld7z6fPbBcc9WGf4jLD6cYAEtxOExgMtRD1/9kZe3JlXWGh
+	2CXJ9jmmronAYG/YjPsljlDSxSQBPXBTCtZYYE2J3gjOh2zw+9w7t79cCKfV1TzpoC0=
+X-Gm-Gg: ASbGnctJl9uITqJcb+kEKmNFtnbDsv+eF2Gs/gctUN6u+og7Zj0FRNTiFZC5dM859U7
+	ItyjQOJbbP9Zigicj3ruvOjJ9Y6vSQdH42flLB5wBusqbkqsutWqIN4GijmTSHLLGWZi+DvoTa5
+	RuDQu67gnuCLJhY+Wy2Wt17IOMTguE34adRbfH1mLsg4/HeRy4DY+yzppLFsHtKg9rr/qsphgT4
+	L1Px7DwCLw+pbSDEdgCrX0MOd488yNi+4d8hiKl9dqeQ8iWvDSi8cDq6x6zXmz8T8n1FC43JstX
+	qiDCYLmt33iK4U3qQ9J/ngjG+XU9SAJEubh6L6jFITiWZgCLPEb83ek5B6sY1dF7KI2xzXc6phy
+	/Ogti9vvTad7uuI7PR6pbiLJZp9PVpI99fwRKA7+2lZwn+1Oac+opW6MeubIzwcaHT/+8IDhUIg
+	==
+X-Google-Smtp-Source: AGHT+IGMqDgnd2dp69JMoacwHLJXu2KcSrmTFUlFcELvESQxSjQZDAcLUTBy/0JShke64012QJsI4g==
+X-Received: by 2002:a05:600c:1c19:b0:453:c08:a1fa with SMTP id 5b1f17b1804b1-45868b337cemr20344165e9.0.1753342897979;
+        Thu, 24 Jul 2025 00:41:37 -0700 (PDT)
+Received: from pop-os.localdomain (208.77.11.37.dynamic.jazztel.es. [37.11.77.208])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4586ec63d29sm13108555e9.1.2025.07.24.00.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jul 2025 00:41:37 -0700 (PDT)
+From: =?UTF-8?q?Miguel=20Garc=C3=ADa?= <miguelgarciaroman8@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	sre@kernel.org,
+	pali@kernel.org,
+	skhan@linuxfoundation.org,
+	=?UTF-8?q?Miguel=20Garc=C3=ADa?= <miguelgarciaroman8@gmail.com>
+Subject: [PATCH] power: supply: bq2415x: replace deprecated strcpy() with strscpy()
+Date: Thu, 24 Jul 2025 09:41:33 +0200
+Message-Id: <20250724074133.33637-1-miguelgarciaroman8@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 07/10] power: reset: macsmc-reboot: Add driver for
- rebooting via Apple SMC
-To: Lee Jones <lee@kernel.org>
-Cc: Nick Chan <towinchenmi@gmail.com>, asahi@lists.linux.dev,
- Neal Gompa <neal@gompa.dev>, linux-arm-kernel@lists.infradead.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- Linus Walleij <linus.walleij@linaro.org>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- Hector Martin <marcan@marcan.st>, Conor Dooley <conor+dt@kernel.org>,
- Janne Grunau <j@jannau.net>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Sebastian Reichel <sre@kernel.org>, Alyssa Rosenzweig
- <alyssa@rosenzweig.io>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Marc Zyngier <maz@kernel.org>
-References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
- <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
- <7297d4b1-84a2-4bb1-8a33-29c827247df7@gmail.com>
- <d6b778ee-02c0-4dd2-b33f-cec16c17807c@kernel.org>
- <20250723080615.GM11056@google.com>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <20250723080615.GM11056@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 23.07.25 10:06, Lee Jones wrote:
-> On Sat, 21 Jun 2025, Sven Peter wrote:
-> 
->> On 16.06.25 06:13, Nick Chan wrote:
->>>
->>>
->>> On 10/6/2025 23:29, Sven Peter wrote:
->>>> From: Hector Martin <marcan@marcan.st>
->>>>
->>>> This driver implements the reboot/shutdown support exposed by the SMC
->>>> on Apple Silicon machines, such as Apple M1 Macs.
->>>>
->>>> Signed-off-by: Hector Martin <marcan@marcan.st>
->>>> Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
->>>> Reviewed-by: Neal Gompa <neal@gompa.dev>
->>>> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>>> Signed-off-by: Sven Peter <sven@kernel.org>
->>>> ---
->>>>    MAINTAINERS                         |   1 +
->>>>    drivers/power/reset/Kconfig         |   9 ++
->>>>    drivers/power/reset/Makefile        |   1 +
->>>>    drivers/power/reset/macsmc-reboot.c | 290 ++++++++++++++++++++++++++++++++++++
->>>>    4 files changed, 301 insertions(+)
->>> [...]
->>>
->>> It seems that the reboot driver still probes even without the smc_reboot node in the smc node:
->>
->>
->> That's odd...
->>
->> Lee, is it expected that a mfd sub-device declared with
->> MFD_CELL_OF("macsmc-reboot", NULL, NULL, 0, 0, "apple,smc-reboot"),
->> is loaded even if there's no corresponding node in the device tree?
->>
->> I'll have to re-add the check that makes sure the sub-device is available
->> then.
-> 
-> Yes, that's expected.  MFD is orthogonal to DT with respect to device
-> registration, unless you specifically disable the node in DT.  If the
-> node is missing, the device will still be registered, but no link will
-> be made from the (non-existent) node to the 'of_node' pointer.
+strcpy() is deprecated for NUL-terminated strings. Replace it with
+strscpy() for revstr (local fixed-size buffer).
 
-Makes sense!
+Signed-off-by: Miguel García <miguelgarciaroman8@gmail.com>
+---
+ drivers/power/supply/bq2415x_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> You have 3 choices; provide a DT node and explicitly set the status to
-> 'disabled', optionally omit registration from MFD (i.e. do not call
-> mfd_add_devices()) or check for (!pdev->dev.of_node) in the sub-device's
-> .probe() and bomb out early if true.
-> 
-
-Alright, so everything's working as intended then and the series has all 
-required Acks. I'd suggest that we take it as-is then  (either now if
-you're still picking things up before the merge window or after -rc1 is
-out otherwise) since it only adds support for M1 and later and those
-have all subdevices added here.
-
-Once Nick adds support for pre-M1 SMC we can do one of those three
-things to disable the reboot sub-device then.
-
-
-Best,
-
-
-Sven
+diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
+index 9e3b9181ee76..fa66d6b74555 100644
+--- a/drivers/power/supply/bq2415x_charger.c
++++ b/drivers/power/supply/bq2415x_charger.c
+@@ -1516,7 +1516,7 @@ static int bq2415x_power_supply_init(struct bq2415x_device *bq)
+ 
+ 	ret = bq2415x_detect_revision(bq);
+ 	if (ret < 0)
+-		strcpy(revstr, "unknown");
++		strscpy(revstr, "unknown", sizeof(revstr));
+ 	else
+ 		sprintf(revstr, "1.%d", ret);
+ 
+-- 
+2.34.1
 
 
