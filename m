@@ -1,373 +1,354 @@
-Return-Path: <linux-pm+bounces-31364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14DF3B1073B
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 12:01:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DE56B10726
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 11:58:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1FB1AE0219
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 10:01:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25F563BC983
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 09:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3A1255E27;
-	Thu, 24 Jul 2025 09:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8EF25A2BC;
+	Thu, 24 Jul 2025 09:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="spr/+tnS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lw+McJPC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9B9255240;
-	Thu, 24 Jul 2025 09:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08FB257440;
+	Thu, 24 Jul 2025 09:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753350717; cv=none; b=jW9yaTiwXUWVrPv7H6e2+NfgkK98A0+nnjN3CVf4P6wPcd5bZ8+NR7nCTox/B7RBS0CPZOeU+Uc5uOmgyQa6KJRhj1IWU72Ym1NuZG5rjBnfxlSoZwau/o/9pSCNeLMq0a0KoTzVJb9v4fR/Bq4x9CfIaLBsaOzCNL/NMPEjQoM=
+	t=1753351134; cv=none; b=W9ZrLDtK4Eouuq7CO7apmJFfifJcSCEY1/SE6DjOkWhzyz6K6ywxTyM/ORZNQio6EJUoUmt8c52AgcGtoaeT/TbTXVFizY/ZYsljlVxGIe6wf1tRhNXI5YGZgb1C5JXFohRUQD223p01qlju/03Pr9Bz4/Exv6sKddw67wTsHj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753350717; c=relaxed/simple;
-	bh=JJe8KHsQAnu+gqVdwER/sMMdo6YDoZNcPOo+McX8d8U=;
+	s=arc-20240116; t=1753351134; c=relaxed/simple;
+	bh=4KcbXiAk6KU/vgJDDoU5l9DZUfzMiDCuLPIQqZu6bm4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bmiTPKWFnoH4ntdeu7mMphAr9+N0qLX+7axX2DgYojlH3SRg6LuVoGqpqvZtMue0tkwatIzVmvEnnI+WKHI1EzmbdyutRZwdrWuGX/J8ksluGYRtur40E9tk6Zbw2sDd8CwgxWtA3c+fca/2aq22oxgKyayZJVOvj/BUlAL0Bsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=spr/+tnS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2D8C4CEF8;
-	Thu, 24 Jul 2025 09:51:56 +0000 (UTC)
+	 To:Cc:Content-Type; b=QYUe7cjUWfwDtHC60QgSbUBNaqfhcBeK9E3Ok/Q6FGKmxjlSQ3jyZ1UMeHJom/RxRmk3B0sP+w1SnorFPvgoVw/Dlo4UxeMLukyx5f3YUeG2ubPx4LM2yovfJONeU0X/bG4PnugmwV1WJToIDdPyUkc/Ml98ZNxplUAPNaD8vy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lw+McJPC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3A7C4CEF8;
+	Thu, 24 Jul 2025 09:58:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753350716;
-	bh=JJe8KHsQAnu+gqVdwER/sMMdo6YDoZNcPOo+McX8d8U=;
+	s=k20201202; t=1753351134;
+	bh=4KcbXiAk6KU/vgJDDoU5l9DZUfzMiDCuLPIQqZu6bm4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=spr/+tnSF0a+CeDxeJfG21KwMRxf8QNYNJLIVVGwZN6nR1g7XyVvc0m908tb79oU8
-	 z02m+hiXOzEm/jrT4eHdL3cTR2/H1KGYJoCvAuYjHLwkj15ylhZdy05FH+2Vp3fUFh
-	 727S5VD78AHN6cDHlQFMwZH7nsl4jAkxwYHTzxcxH4OJNSf5wwumICGNqoLP8QiLsn
-	 KBgNvF16tFDGx/UEqw+Zhb0BODFcSQVOaAjo/B88DXCUqaePCXrNq2YnA2JoCFNhiy
-	 EoqwG+gxLzkkYwQ/i5WUyOCc/SaHkWt4OQxCs1mxsJ4uLFhCRXMINCT1I6+GBmjIec
-	 G8CQBmsCesSrQ==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-615913ff67fso479933eaf.0;
-        Thu, 24 Jul 2025 02:51:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUcFni6MdhWYvyy65njnNOSR2IwDtI+NsXkxF6wMC5lj/AalvfFZjYAUhgulSwLhYKlUlGi70tgRhU=@vger.kernel.org, AJvYcCVSLWIcDn4/ExU2tCdZd61H4AlBmfc6zeU+LH36uiExayiOh7NAXQi9HRXuYNJXohxDYTEddSsvsaL0rYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypwysJT/ibECTpkwdw/h67zVhXdqgxJzoUEdVdVCz+5pSfVZhW
-	NHFspjMHV5FJksZg/ADvDG9sw/lwO3967Xlorhjb/oDW54OQbKe3IQLqnOh1sUIoND6JHVaJs7E
-	5tM2v1NMgZVH1Q8TjHINmz0oSpYVYVak=
-X-Google-Smtp-Source: AGHT+IGXZGemcHOaMknmg/vIr01gbXppnVlIe2EZaHDmt0zFa7IInSL12ytaASFNSxPE7uvNHvpcyGHxYIjLHxL/L/w=
-X-Received: by 2002:a05:6820:6ae3:b0:613:90e1:729a with SMTP id
- 006d021491bc7-618fe1959f3mr673415eaf.4.1753350715798; Thu, 24 Jul 2025
- 02:51:55 -0700 (PDT)
+	b=Lw+McJPC8yKTl5Q4n+FKt+drPNo9Hjojl9UiOHdx9f8H/TuTXRZZaBVN+JZFVCXzn
+	 odol8RKPHqCd8aoeoltXS5ZK4B+C/dI4Zecpg1i2DU/bhrY7C0Fkw+3WZClu6n+Wpa
+	 WUmAKhZ4ZKfKxNRYcZnvlY4wYpEI5QQG01WoLlwf21YdMcHlVz9oRXqY6ecnTU0bL/
+	 a16jTfBWbk4R+o+C/YZ009IW2Y9uFJfPqRJpoTNF6WoGlXNlciLiGwoS58PvvedrB5
+	 GcCPt+FNVM0SYMHTE0yhcO0aNFs9hBeHkT8O4K8XevRd8Oo9Dc/0xD2qM9EBUFQQQZ
+	 NVCkaVHZqAc7w==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-72c09f8369cso374897a34.3;
+        Thu, 24 Jul 2025 02:58:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUXhquWq5n5v01uJHjS+OJs29T96jJwQKHXzgn4mH5rj/EmtxH1jEPHWhEzJNhiq28O64RzEDfQlXpz@vger.kernel.org, AJvYcCV/hzWutxg4jyoO9AKvx1hB6NYElhXbh78paBBKpblxv+7ZSN1+vUChEChKLisIwOvijLyCZ8j60M+Z/z0=@vger.kernel.org, AJvYcCVWauBh6KXmaHiRQgbSNK0+qHjeiEEG49LAQJlj4wQpp5x3nw4giy5WyX5H6b9njYJL6uyQLJqF/6I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxW4JbXLLazDnJA4gHZJoih24uv0P4qAqY8nzb/o9HNcTKmDmzk
+	6v0G/wE5gDE+YI61g+qQykALP30ohZdj/EOzg1WYr9/eqc0WkX02KbQ3zEPPNCnz5KC7c2cRrCY
+	K0eWU/hwLCGJTKuYV0NgGT6dYMe0szKc=
+X-Google-Smtp-Source: AGHT+IEvVUcaL09saG7JvMSWU2BvT8HuFgwXOot+6fLdqKzHF4Ko/+EjvNeckIwhnzGvMOUmxiZcTHwJ7vlG6jxShwg=
+X-Received: by 2002:a4a:ec44:0:b0:615:a6d2:348a with SMTP id
+ 006d021491bc7-6187d959488mr3918147eaf.6.1753351133238; Thu, 24 Jul 2025
+ 02:58:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c69938cffd4002a93a95a396affaa945e0f69206.camel@infradead.org> <bc456c6b4b1ed51e568a37cf29b33d537e4bd94c.camel@infradead.org>
-In-Reply-To: <bc456c6b4b1ed51e568a37cf29b33d537e4bd94c.camel@infradead.org>
+References: <20250720190140.2639200-1-david.e.box@linux.intel.com>
+ <c6757u3xdyxxuodcjsbpdje7m4qiq26tug5lfxvpbs5wm7r56l@ksy4yge7kg35>
+ <CAJZ5v0jZrPyW9+Ccoo955Y4oje2SiAQA9aCChAoPgM28SJqf5g@mail.gmail.com> <arotuyooaoo6ustmp5gnoj64pkpyvcc3plekh4yt46siuemlik@sv6tjxnggznx>
+In-Reply-To: <arotuyooaoo6ustmp5gnoj64pkpyvcc3plekh4yt46siuemlik@sv6tjxnggznx>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 24 Jul 2025 11:51:42 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iF7xAF105byp4j777Aks8KDKAh0-hJyfzkUFq5pm-JVQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwR9bMEVjkQxZtlOKnfFehKfKZhcvqVXqvBEZ65mSnP-S-ieJGH0Yqbk8g
-Message-ID: <CAJZ5v0iF7xAF105byp4j777Aks8KDKAh0-hJyfzkUFq5pm-JVQ@mail.gmail.com>
-Subject: Re: Memory corruption after resume from hibernate with Arm GICv3 ITS
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	linux-pm <linux-pm@vger.kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, "Saidi, Ali" <alisaidi@amazon.com>, 
-	"oliver.upton" <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, "Heyne, Maximilian" <mheyne@amazon.de>, 
-	Alexander Graf <graf@amazon.com>, "Stamatis, Ilias" <ilstam@amazon.com>
+Date: Thu, 24 Jul 2025 11:58:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hDEX_ZMiAZU-PwriCpURiw04f=JLAVwP9UJ54wv3HBEg@mail.gmail.com>
+X-Gm-Features: Ac12FXzHRJ85hgVv_l3XWTJ-C4BbF4wouOGVrAAO-azI8wwa5-WFrcSxuTPgTiA
+Message-ID: <CAJZ5v0hDEX_ZMiAZU-PwriCpURiw04f=JLAVwP9UJ54wv3HBEg@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Allow controller drivers to override default
+ ASPM and CLKPM link state
+To: David Box <david.e.box@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, bhelgaas@google.com, 
+	vicamo.yang@canonical.com, kenny@panix.com, ilpo.jarvinen@linux.intel.com, 
+	nirmal.patel@linux.intel.com, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025 at 11:26=E2=80=AFAM David Woodhouse <dwmw2@infradead.o=
-rg> wrote:
+On Wed, Jul 23, 2025 at 11:27=E2=80=AFPM David Box <david.e.box@linux.intel=
+.com> wrote:
 >
-> On Wed, 2025-07-23 at 12:04 +0200, David Woodhouse wrote:
-> > We have seen guests crashing when, after they resume from hibernate,
-> > the hypervisor serializes their state for live update or live
-> > migration.
-> >
-> > The Arm Generic Interrupt Controller is a complicated beast, and it
-> > does scattershot DMA to little tables all across the guest's address
-> > space, without even living behind an IOMMU.
-> >
-> > Rather than simply turning it off overall, the guest has to explicitly
-> > tear down *every* one of the individual tables which were previously
-> > configured, in order to ensure that the memory is no longer used.
-> >
-> > KVM's implementation of the virtual GIC only uses this guest memory
-> > when asked to serialize its state. Instead of passing the information
-> > up to userspace as most KVM devices will do for serialization, KVM
-> > *only* supports scribbling it to guest memory.
-> >
-> > So, when the transition from boot to resumed kernel leaves the vGIC
-> > pointing at the *wrong* addresses, that's why a subsequent LU/LM of
-> > that guest triggers the memory corruption by writing the KVM state to a
-> > guest address that the now-running kernel did *not* expect.
-> >
-> > I tried this, just to get some more information:
-> >
-> > --- a/drivers/irqchip/irq-gic-v3-its.c
-> > +++ b/drivers/irqchip/irq-gic-v3-its.c
-> > @@ -720,7 +720,7 @@ static struct its_collection *its_build_mapd_cmd(st=
-ruct its_node *its,
-> >         its_encode_valid(cmd, desc->its_mapd_cmd.valid);
-> >
-> >         its_fixup_cmd(cmd);
-> > -
-> > +       printk("%s dev 0x%x valid %d addr 0x%lx\n", __func__, desc->its=
-_mapd_cmd.dev->device_id, desc->its_mapd_cmd.valid, itt_addr);
-> >         return NULL;
-> >  }
-> >
-> > @@ -4996,10 +4996,15 @@ static int its_save_disable(void)
-> >         struct its_node *its;
-> >         int err =3D 0;
-> >
-> > +       printk("%s\n", __func__);
-> >         raw_spin_lock(&its_lock);
-> >         list_for_each_entry(its, &its_nodes, entry) {
-> > +               struct its_device *its_dev;
-> >                 void __iomem *base;
-> >
-> > +               list_for_each_entry(its_dev, &its->its_device_list, ent=
-ry) {
-> > +                       its_send_mapd(its_dev, 0);
-> > +               }
-> >                 base =3D its->base;
-> >                 its->ctlr_save =3D readl_relaxed(base + GITS_CTLR);
-> >                 err =3D its_force_quiescent(base);
-> > @@ -5032,8 +5037,10 @@ static void its_restore_enable(void)
-> >         struct its_node *its;
-> >         int ret;
-> >
-> > +       printk("%s\n", __func__);
-> >         raw_spin_lock(&its_lock);
-> >         list_for_each_entry(its, &its_nodes, entry) {
-> > +               struct its_device *its_dev;
-> >                 void __iomem *base;
-> >                 int i;
-> >
-> > @@ -5083,6 +5090,10 @@ static void its_restore_enable(void)
-> >                 if (its->collections[smp_processor_id()].col_id <
-> >                     GITS_TYPER_HCC(gic_read_typer(base + GITS_TYPER)))
-> >                         its_cpu_init_collection(its);
-> > +
-> > +               list_for_each_entry(its_dev, &its->its_device_list, ent=
-ry) {
-> > +                       its_send_mapd(its_dev, 1);
-> > +               }
-> >         }
-> >         raw_spin_unlock(&its_lock);
-> >  }
-> >
-> >
-> > Running on a suitable host with qemu, I reproduce with
-> >   # echo reboot > /sys/power/disk
-> >   # echo disk > /sys/power/state
-> >
-> > Example qemu command line:
-> >  qemu-system-aarch64  -serial mon:stdio -M virt,gic-version=3Dhost -cpu=
- max -enable-kvm -drive file=3D~/Fedora-Cloud-Base-Generic-42-1.1.aarch64.q=
-cow2,id=3Dnvm,if=3Dnone,snapshot=3Doff,format=3Dqcow2 -device nvme,drive=3D=
-nvm,serial=3D1 -m 8g -nographic  -nic user,model=3Dvirtio -kernel vmlinuz-6=
-.16.0-rc7-dirty  -initrd initramfs-6.16.0-rc7-dirty.img -append 'root=3DUUI=
-D=3D6c7b9058-d040-4047-a892-d2f1c7dee687 ro rootflags=3Dsubvol=3Droot no_ti=
-mer_check console=3Dtty1 console=3DttyAMA0,115200n8 systemd.firstboot=3Doff=
- rootflags=3Dsubvol=3Droot no_console_suspend=3D1 resume_offset=3D366703 re=
-sume=3D/dev/nvme0n1p3' -trace gicv3_its\*
-> >
-> > As the kernel boots up for the first time, it sends a normal MAPD comma=
-nd:
-> >
-> > [    1.292956] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f010000
-> >
-> > On hibernation, my newly added code unmaps and then *remaps* the same:
-> >
-> > [root@localhost ~]# echo disk > /sys/power/state
-> > [   42.118573] PM: hibernation: hibernation entry
-> > [   42.134574] Filesystems sync: 0.015 seconds
-> > [   42.134899] Freezing user space processes
-> > [   42.135566] Freezing user space processes completed (elapsed 0.000 s=
-econds)
-> > [   42.136040] OOM killer disabled.
-> > [   42.136307] PM: hibernation: Preallocating image memory
-> > [   42.371141] PM: hibernation: Allocated 297401 pages for snapshot
-> > [   42.371163] PM: hibernation: Allocated 1189604 kbytes in 0.23 second=
-s (5172.19 MB/s)
-> > [   42.371170] Freezing remaining freezable tasks
-> > [   42.373465] Freezing remaining freezable tasks completed (elapsed 0.=
-002 seconds)
-> > [   42.378350] Disabling non-boot CPUs ...
-> > [   42.378363] its_save_disable
-> > [   42.378363] its_build_mapd_cmd dev 0x10 valid 0 addr 0x10f010000
-> > [   42.378363] PM: hibernation: Creating image:
-> > [   42.378363] PM: hibernation: Need to copy 153098 pages
-> > [   42.378363] PM: hibernation: Image created (115354 pages copied, 377=
-44 zero pages)
-> > [   42.378363] its_restore_enable
-> > [   42.378363] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f010000
-> > [   42.383601] nvme nvme0: 1/0/0 default/read/poll queues
-> > [   42.384411] nvme nvme0: Ignoring bogus Namespace Identifiers
-> > [   42.384924] hibernate: Hibernating on CPU 0 [mpidr:0x0]
-> > [   42.387742] PM: Using 1 thread(s) for lzo compression
-> > [   42.387748] PM: Compressing and saving image data (115654 pages)...
-> > [   42.387757] PM: Image saving progress:   0%
-> > [   43.485794] PM: Image saving progress:  10%
-> > [   44.739662] PM: Image saving progress:  20%
-> > [   46.617453] PM: Image saving progress:  30%
-> > [   48.437644] PM: Image saving progress:  40%
-> > [   49.857855] PM: Image saving progress:  50%
-> > [   52.156928] PM: Image saving progress:  60%
-> > [   53.344810] PM: Image saving progress:  70%
-> > [   54.472998] PM: Image saving progress:  80%
-> > [   55.083950] PM: Image saving progress:  90%
-> > [   56.406480] PM: Image saving progress: 100%
-> > [   56.407088] PM: Image saving done
-> > [   56.407100] PM: hibernation: Wrote 462616 kbytes in 14.01 seconds (3=
-3.02 MB/s)
-> > [   56.407106] PM: Image size after compression: 148041 kbytes
-> > [   56.408210] PM: S|
-> > [   56.642393] Flash device refused suspend due to active operation (st=
-ate 20)
-> > [   56.642871] Flash device refused suspend due to active operation (st=
-ate 20)
-> > [   56.643432] reboot: Restarting system
-> > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd4f1]
-> >
-> > Then the *boot* kernel comes up, does its own MAPD using a slightly dif=
-ferent address:
-> >
-> > [    1.270652] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f009000
-> >
-> >  ... and then transfers control to the hibernated kernel, which again
-> > tries to unmap and remap the ITT at its original address due to my
-> > suspend/resume hack (which is clearly hooking the wrong thing, but is
-> > at least giving us useful information):
-> >
-> > Starting systemd-hibernate-resume.service - Resume from hibernation...
-> > [    1.391340] PM: hibernation: resume from hibernation
-> > [    1.391861] random: crng reseeded on system resumption
-> > [    1.391927] Freezing user space processes
-> > [    1.392984] Freezing user space processes completed (elapsed 0.001 s=
-econds)
-> > [    1.393473] OOM killer disabled.
-> > [    1.393486] Freezing remaining freezable tasks
-> > [    1.395012] Freezing remaining freezable tasks completed (elapsed 0.=
-001 seconds)
-> > [    1.400817] PM: Using 1 thread(s) for lzo decompression
-> > [    1.400832] PM: Loading and decompressing image data (115654 pages).=
-..
-> > [    1.400836] hibernate: Hibernated on CPU 0 [mpidr:0x0]
-> > [    1.438621] PM: Image loading progress:   0%
-> > [    1.554623] PM: Image loading progress:  10%
-> > [    1.594714] PM: Image loading progress:  20%
-> > [    1.639317] PM: Image loading progress:  30%
-> > [    1.683055] PM: Image loading progress:  40%
-> > [    1.720726] PM: Image loading progress:  50%
-> > [    1.768878] PM: Image loading progress:  60%
-> > [    1.800203] PM: Image loading progress:  70%
-> > [    1.822833] PM: Image loading progress:  80%
-> > [    1.840985] PM: Image loading progress:  90%
-> > [    1.871253] PM: Image loading progress: 100%
-> > [    1.871611] PM: Image loading done
-> > [    1.871617] PM: hibernation: Read 462616 kbytes in 0.47 seconds (984=
-.28 MB/s)
-> > [   42.378350] Disabling non-boot CPUs ...
-> > [   42.378363] its_save_disable
-> > [   42.378363] its_build_mapd_cmd dev 0x10 valid 0 addr 0x10f010000
-> > [   42.378363] PM: hibernation: Creating image:
-> > [   42.378363] PM: hibernation: Need to copy 153098 pages
-> > [   42.378363] hibernate: Restored 0 MTE pages
-> > [   42.378363] its_restore_enable
-> > [   42.378363] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f010000
-> > [   42.417445] OOM killer enabled.
-> > [   42.417455] Restarting tasks: Starting
-> > [   42.419915] nvme nvme0: 1/0/0 default/read/poll queues
-> > [   42.420407] Restarting tasks: Done
-> > [   42.420781] PM: hibernation: hibernation exit
-> > [   42.421149] nvme nvme0: Ignoring bogus Namespace Identifiers
+> On Wed, Jul 23, 2025 at 01:54:41PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Jul 21, 2025 at 10:24=E2=80=AFAM Manivannan Sadhasivam <mani@ke=
+rnel.org> wrote:
+> > >
+> > > On Sun, Jul 20, 2025 at 12:01:37PM GMT, David E. Box wrote:
+> > > > Synthetic PCIe hierarchies, such as those created by Intel VMD, are=
+ not
+> > > > visible to firmware and do not receive BIOS-provided default ASPM a=
+nd CLKPM
+> > > > configuration. As a result, devices behind such domains operate wit=
+hout
+> > > > proper power management, regardless of platform intent.
+> > > >
+> > > > To address this, allow controller drivers to supply an override for=
+ the
+> > > > default link state by setting aspm_dflt_link_state for their associ=
+ated
+> > > > pci_host_bridge. During link initialization, if this field is non-z=
+ero,
+> > > > ASPM and CLKPM defaults are derived from its value instead of being=
+ taken
+> > > > from BIOS.
+> > > >
+> > > > This mechanism enables drivers like VMD to achieve platform-aligned=
+ power
+> > > > savings by statically defining the expected link configuration at
+> > > > enumeration time, without relying on runtime calls such as
+> > > > pci_enable_link_state(), which are ineffective when ASPM is disable=
+d
+> > > > globally.
+> > > >
+> > > > This approach avoids per-controller hacks in ASPM core logic and pr=
+ovides a
+> > > > general mechanism for domains that require explicit control over li=
+nk power
+> > > > state defaults.
+> > > >
+> > > > Link: https://lore.kernel.org/linux-pm/0b166ece-eeec-ba5d-2212-50d9=
+95611cef@panix.com
+> > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > ---
+> > > >
+> > > > Changes from RFC:
+> > > >
+> > > >   -- Rename field to aspm_dflt_link_state since it stores
+> > > >      PCIE_LINK_STATE_XXX flags, not a policy enum.
+> > > >   -- Move the field to struct pci_host_bridge since it's being appl=
+ied to
+> > > >      the entire host bridge per Mani's suggestion.
+> > > >   -- During testing noticed that clkpm remained disabled and this w=
+as
+> > > >      also handled by the formerly used pci_enable_link_state(). Add=
+ a
+> > > >      check in pcie_clkpm_cap_init() as well to enable clkpm during =
+init.
+> > > >
+> > > >  drivers/pci/controller/vmd.c | 12 +++++++++---
+> > > >  drivers/pci/pcie/aspm.c      | 13 +++++++++++--
+> > > >  include/linux/pci.h          |  4 ++++
+> > > >  3 files changed, 24 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/=
+vmd.c
+> > > > index 8df064b62a2f..6f0de95c87fd 100644
+> > > > --- a/drivers/pci/controller/vmd.c
+> > > > +++ b/drivers/pci/controller/vmd.c
+> > > > @@ -730,7 +730,7 @@ static void vmd_copy_host_bridge_flags(struct p=
+ci_host_bridge *root_bridge,
+> > > >  }
+> > > >
+> > > >  /*
+> > > > - * Enable ASPM and LTR settings on devices that aren't configured =
+by BIOS.
+> > > > + * Enable LTR settings on devices that aren't configured by BIOS.
+> > > >   */
+> > > >  static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdat=
+a)
+> > > >  {
+> > > > @@ -770,7 +770,6 @@ static int vmd_pm_enable_quirk(struct pci_dev *=
+pdev, void *userdata)
+> > > >        * PCIe r6.0, sec 5.5.4.
+> > > >        */
+> > > >       pci_set_power_state_locked(pdev, PCI_D0);
+> > >
+> > > This call becomes useless now.
 >
-> Rafael points out that the resumed kernel isn't doing the unmap/remap
-> again; it's merely printing the *same* messages again from the printk
-> buffer.
+> Missed this. I'll remove it.
 >
-> Before writing the hibernate image, the kernel calls the suspend op:
+> > >
+> > > > -     pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > @@ -785,6 +784,7 @@ static int vmd_enable_domain(struct vmd_dev *vm=
+d, unsigned long features)
+> > > >       resource_size_t membar2_offset =3D 0x2000;
+> > > >       struct pci_bus *child;
+> > > >       struct pci_dev *dev;
+> > > > +     struct pci_host_bridge *vmd_host_bridge;
+> > > >       int ret;
+> > > >
+> > > >       /*
+> > > > @@ -911,8 +911,14 @@ static int vmd_enable_domain(struct vmd_dev *v=
+md, unsigned long features)
+> > > >               return -ENODEV;
+> > > >       }
+> > > >
+> > > > +     vmd_host_bridge =3D to_pci_host_bridge(vmd->bus->bridge);
+> > > > +
+> > > > +#ifdef CONFIG_PCIEASPM
+> > > > +     vmd_host_bridge->aspm_dflt_link_state =3D PCIE_LINK_STATE_ALL=
+;
+> > > > +#endif
+> > >
+> > > I think it is better to provide an API that accepts the link state. W=
+e can
+> > > provide a stub if CONFIG_PCIEASPM is not selected. This will avoid th=
+e ifdef
+> > > clutter in the callers. Like:
+> > >
+> > > void pci_set_default_link_state(struct pci_host_bridge *host_bridge,
+> > >                                 unsigned int state)
+> > > {
+> > > #ifdef CONFIG_PCIEASPM
+> > >          host_bridge->aspm_default_link_state =3D state;
+> > > #endif
+> > > }
+> > >
+> > > Or you can stub the entire function to align with other ASPM APIs.
+> > >
+> > > One more thought: Since this API is only going to be called by the ho=
+st bridge
+> > > drivers, we can place it in drivers/pci/controller/pci-host-common.c =
+and name it
+> > > as pci_host_common_set_default_link_state().
 >
-> [   42.378350] Disabling non-boot CPUs ...
-> [   42.378363] its_save_disable
-> [   42.378363] its_build_mapd_cmd dev 0x10 valid 0 addr 0x10f010000
-> [   42.378363] PM: hibernation: Creating image:
+> This would require VMD to select PCI_HOST_COMMON just to set one field in=
+ a
+> common struct. Seems heavy-handed. Thoughts? Also, with this and dropping=
+ the D0
+> call, I'll split the VMD cleanup into a separate patch again.
+
+So maybe define a __weak pci_host_set_default_pcie_link_state() doing
+nothing in the ASPM core and let VMD override it with its own
+implementation?
+
+> >
+> > I agree with the above except for the new function name.  I'd call it
+> > pci_host_set_default_pcie_link_state()
 >
-> Those messages are stored in the printk buffer in the image. Then the
-> hibernating kernel calls the resume op, and writes the image:
+> Sounds good.
 >
-> [   42.378363] PM: hibernation: Image created (115354 pages copied, 37744=
- zero pages)
-> [   42.378363] its_restore_enable
-> [   42.378363] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f010000
-> [   42.383601] nvme nvme0: 1/0/0 default/read/poll queues
-> [   42.384411] nvme nvme0: Ignoring bogus Namespace Identifiers
-> [   42.384924] hibernate: Hibernating on CPU 0 [mpidr:0x0]
-> [   42.387742] PM: Using 1 thread(s) for lzo compression
-> [   42.387748] PM: Compressing and saving image data (115654 pages)...
-> [   42.387757] PM: Image saving progress:   0%
-> [   43.485794] PM: Image saving progress:  10%
-> ...
+> >
+> > > > +
+> > > >       vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus=
+),
+> > > > -                                to_pci_host_bridge(vmd->bus->bridg=
+e));
+> > > > +                                vmd_host_bridge);
+> > > >
+> > > >       vmd_attach_resources(vmd);
+> > > >       if (vmd->irq_domain)
+> > > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > > index 29fcb0689a91..6f5b34b172f9 100644
+> > > > --- a/drivers/pci/pcie/aspm.c
+> > > > +++ b/drivers/pci/pcie/aspm.c
+> > > > @@ -380,6 +380,7 @@ static void pcie_clkpm_cap_init(struct pcie_lin=
+k_state *link, int blacklist)
+> > > >       u16 reg16;
+> > > >       struct pci_dev *child;
+> > > >       struct pci_bus *linkbus =3D link->pdev->subordinate;
+> > > > +     struct pci_host_bridge *host =3D pci_find_host_bridge(link->p=
+dev->bus);
+> > > >
+> > > >       /* All functions should have the same cap and state, take the=
+ worst */
+> > > >       list_for_each_entry(child, &linkbus->devices, bus_list) {
+> > > > @@ -394,7 +395,10 @@ static void pcie_clkpm_cap_init(struct pcie_li=
+nk_state *link, int blacklist)
+> > > >                       enabled =3D 0;
+> > > >       }
+> > > >       link->clkpm_enabled =3D enabled;
+> > > > -     link->clkpm_default =3D enabled;
+> > > > +     if (host && host->aspm_dflt_link_state & PCIE_LINK_STATE_CLKP=
+M)
+> > > > +             link->clkpm_default =3D 1;
+> > > > +     else
+> > > > +             link->clkpm_default =3D enabled;
+> > > >       link->clkpm_capable =3D capable;
+> > > >       link->clkpm_disable =3D blacklist ? 1 : 0;
+> > > >  }
+> > > > @@ -794,6 +798,7 @@ static void pcie_aspm_cap_init(struct pcie_link=
+_state *link, int blacklist)
+> > > >       u32 parent_lnkcap, child_lnkcap;
+> > > >       u16 parent_lnkctl, child_lnkctl;
+> > > >       struct pci_bus *linkbus =3D parent->subordinate;
+> > > > +     struct pci_host_bridge *host;
+> > > >
+> > > >       if (blacklist) {
+> > > >               /* Set enabled/disable so that we will disable ASPM l=
+ater */
+> > > > @@ -866,7 +871,11 @@ static void pcie_aspm_cap_init(struct pcie_lin=
+k_state *link, int blacklist)
+> > > >       }
+> > > >
+> > > >       /* Save default state */
+> > > > -     link->aspm_default =3D link->aspm_enabled;
+> > > > +     host =3D pci_find_host_bridge(parent->bus);
+> > >
+> > > You can initialize 'host' while defining it.
+> > >
+> > > Also, please add a comment on why we are doing this. The inline comme=
+nt for the
+> > > member is not elaborate enough:
+> > >
+> > >         /*
+> > >          * Use the default link state provided by the Host Bridge dri=
+ver if
+> > >          * available. If the BIOS is not able to provide default ASPM=
+ link
+> > >          * state for some reason, the Host Bridge driver could do.
+> > >          */
+> > >
+> > > > +     if (host && host->aspm_dflt_link_state)
+> > > > +             link->aspm_default =3D host->aspm_dflt_link_state;
+> > > > +     else
+> > > > +             link->aspm_default =3D link->aspm_enabled;
+> >
+> > Or
+> >
+> > link->aspm_default =3D pci_host_get_default_pcie_link_state(parent);
+> > if (link->aspm_default)
+> >         link->aspm_default =3D link->aspm_enabled;
+> >
+> > and make pci_host_get_default_pcie_link_state() return 0 on failures.
+> >
+> > Then you can put all of the relevant information into the
+> > pci_host_get_default_pcie_link_state() kerneldoc comment.
 >
-> Then the boot kernel comes up and maps an ITT:
+> Sure. I'll add get/set APIs (plus the !) and put the comment there.
+
+Sounds good!
+
+> > > >
+> > > >       /* Setup initial capable state. Will be updated later */
+> > > >       link->aspm_capable =3D link->aspm_support;
+> > > > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > > > index 05e68f35f392..930028bf52b4 100644
+> > > > --- a/include/linux/pci.h
+> > > > +++ b/include/linux/pci.h
+> > > > @@ -614,6 +614,10 @@ struct pci_host_bridge {
+> > > >       unsigned int    size_windows:1;         /* Enable root bus si=
+zing */
+> > > >       unsigned int    msi_domain:1;           /* Bridge wants MSI d=
+omain */
+> > > >
+> > > > +#ifdef CONFIG_PCIEASPM
+> > > > +     unsigned int    aspm_dflt_link_state;   /* Controller provide=
+d link state */
+> > >
+> > >         /* Controller provided default link state */
+> > >
+> > >
+> > > Nit: Please expand 'default' as 'dflt' is not a commonly used acronym=
+ for
+> > > 'default'.
+> >
+> > I agree.
 >
-> [    1.270652] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f009000
->
-> The boot kernel never seems to *unmap* that because the suspend method
-> doesn't get called before resuming the image.
->
-> On resume, the previous kernel flushes the messages which were in its
-> printk buffer to the serial port again, and then prints these *new*
-> messages...
->
-> [   42.378363] hibernate: Restored 0 MTE pages
-> [   42.378363] its_restore_enable
-> [   42.378363] its_build_mapd_cmd dev 0x10 valid 1 addr 0x10f010000
-> [   42.417445] OOM killer enabled.
-> [   42.417455] Restarting tasks: Starting
->
-> So the hibernated kernel seems to be doing the right thing in both
-> suspend and resume phases but it looks like the *boot* kernel doesn't
-> call the suspend method before transitioning;
+> Will do.
 
-No, it does this, but the messages are missing from the log.
-
-The last message you see from the boot/restore kernel is about loading
-the image; a lot of stuff happens afterwards.
-
-This message:
-
-[    1.871617] PM: hibernation: Read 462616 kbytes in 0.47 seconds (984.28 =
-MB/s)
-
-is printed by load_compressed_image() which gets called by
-swsusp_read(), which is invoked by load_image_and_restore().
-
-It is successful, so hibernation_restore() gets called and it does
-quite a bit of work, including calling resume_target_kernel(), which
-among other things calls syscore_suspend(), from where your messages
-should be printed if I'm not mistaken.
-
-I have no idea why those messages don't get into the log (that would
-happen if your boot kernel were different from the image kernel and it
-didn't actually print them).
-
-> is that intentional? I think we *should* unmap all the ITTs from the boot=
- kernel.
-
-Yes, it's better to unmap them, even though ->
-
-> At least for the vGIC, when the hibernated image resumes it will
-> *change* the mapping for every device that it knows about, but there's
-> a *possibility* that the boot kernel might have set up one that the
-> hibernated kernel didn't know about (if a new PCI device exists now?).
-
--> HW configuration is not supposed to change across hibernation/restore.
-
-> And I'm not sure what the real hardware will do if it gets a subsequent
-> MAPD without the previous one being unmapped.
+Thanks!
 
