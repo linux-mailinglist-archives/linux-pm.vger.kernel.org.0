@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-31377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31378-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16035B10A62
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 14:38:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA7DBB10A70
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 14:41:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89C3016DAF9
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 12:38:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F9FF1CC40A0
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Jul 2025 12:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96FE82D29AB;
-	Thu, 24 Jul 2025 12:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895512D3747;
+	Thu, 24 Jul 2025 12:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXHP+Iia"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACOJM4G5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6410A2D2394;
-	Thu, 24 Jul 2025 12:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0222D322E;
+	Thu, 24 Jul 2025 12:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753360699; cv=none; b=QcejCKy9+Y2u27H8fhVsGeSo73RDRULVFnFILfnRLqIcT+jM5uOsKh/b4jIDBToIZqgpcriEwdiJOSJtItLAVuMiz95d3k6zown3TZChVdjrpDCpgJUBtoJ0AyR3Ld0ciK9jc02XhtF8v/E3/51ZDxsgoUdLxNnVqdZW6OQL/Dc=
+	t=1753360859; cv=none; b=FhlpUMhGzriniUceIx9xGNG4o2xt8OGcaZz9SINjzc/cvIb7BctEkJxB3MSLuwC6KfTQHXwzGKYgMYdvrdH6nucfO8YomZlugeAQUXe+Q30ik8ls8ymQ0RqnRkHG+1tcDoe3WZfbCI9KPoEWEToEDL3QmAHFgoAbvDaCpSibmxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753360699; c=relaxed/simple;
-	bh=/Fd2dbY46+nBw/SuxVNMWZV5DxNiY31qjK4IwBKCoK8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=cVyyaotcsCzrT21tTBmB6tlLDG6qji5UA03PvgGJBLLbuWcyQmSkf77CZoXaq24miLBmznNKhuD11pH598mNii6dtMb0QEYUQ7+mI7WIw/BuI7Dl1Id0hZubCcRH2nkki7+Qz2zFOhH5Y44zDiM1RUBFfYnU5DArNIA3ZskHKj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXHP+Iia; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0A25C4CEEF;
-	Thu, 24 Jul 2025 12:38:17 +0000 (UTC)
+	s=arc-20240116; t=1753360859; c=relaxed/simple;
+	bh=KGQn/ORkzt+i8h/7gqR/2YaV8Ey5P3ecLS0sgGpOMuA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=QQ6qjUcVyLichYfDoRetTlGsrf3HqcXUwQSIdcSYYt8PWfRCO35YSx2Ypsia1fF6FU1QAk8DiLyPZFAghYF0DXyCqnaRnJ15747C/dS5C/oTdmZLEUigThVSO1chtNIFYkQRKRiXdzG7vtA8xU4uE7RNrQc7d8Jfr8M1+c+ijgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACOJM4G5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE409C4CEED;
+	Thu, 24 Jul 2025 12:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753360697;
-	bh=/Fd2dbY46+nBw/SuxVNMWZV5DxNiY31qjK4IwBKCoK8=;
+	s=k20201202; t=1753360858;
+	bh=KGQn/ORkzt+i8h/7gqR/2YaV8Ey5P3ecLS0sgGpOMuA=;
 	h=From:Date:Subject:To:Cc:From;
-	b=GXHP+Iia+nvex6ZfvQnOJUKGaVC0jt2egJEDcpG4gcts8VStSdvav2MlYwBfJyfkt
-	 e34gBQXC8h5VdodRM7RWrvTYdbtaT6NJPCcttxaW25SFNGa9m+rHDby00KQ7FoU5h1
-	 uRYkj1g0m7b1QOvPyIiW1zgwoTiPaRHZYJ1ULO0Bqzue6M2qGyXnv9WlOQixxPYlE0
-	 tNo9Qhn0BExOSv3+1zhYcgA9hUc8SBBHBIguXxgnpWQ00kBc9+jEuhF5ljL8F29bbn
-	 ALvrgD48nHLPb7crkPIZ8LWKuspf9KWfZIrcHYMN1btwGG9VpMWZTuSMQsRW4UtBKf
-	 OFmu0qmifr0Ng==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-613a6e39f52so483977eaf.3;
-        Thu, 24 Jul 2025 05:38:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU0eJyDOgmk3yGTAjll9f60b97xfUpY3F6B9sjTkzsAJiAByH+kfFqumRcSq90zBDuuuC4CBkYhDmv27cs=@vger.kernel.org, AJvYcCX7/W4MhbFEsg5EXlUO1gceYft318S+xFCE67oUj+qtlAerQvDfr5L1LPV9pTmo+D3AbvPv2Rw0c48=@vger.kernel.org, AJvYcCXRe9W/asK+JMvVh4TEI+k2kpCJ+fK2w0+DXsGmcpdongRNXcTDBepU1SeCFJMmzlclA80BP0atBoNT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5l5Ok5iHzU6ObePAajXwljfphu2fbijKNnyEYEcNMLwDj+oFj
-	Ep9IiMy3HRVUrz8d15iVs9/VbZ/DU0aG758Y4SK/5OSw+3SW31/xQhjowTDI1I62NiSRH6PV5sf
-	o4tqMgEivHtjJtxvWVgj4To6cHZY+VfQ=
-X-Google-Smtp-Source: AGHT+IEkAmZy5QE7Vk6V7gx+c/efF4IyXjJE6AByaRl+/ROgN+l7w1X3AWDgTR/uKU2aTwOkv1mh3/7/yi998ls2kTo=
-X-Received: by 2002:a05:6820:2004:b0:615:b293:1f17 with SMTP id
- 006d021491bc7-6187d8f800emr4676536eaf.8.1753360697059; Thu, 24 Jul 2025
- 05:38:17 -0700 (PDT)
+	b=ACOJM4G5/c3f7xAhnAJElHNbRawH/b7tLTiBhKYoMBABu7XS9pAh2NwO7p8nCNIqF
+	 WXFCaVY7iWm9eKDqqAXWOi0MdzvD97Ccn2qjFzpIJaedwJNSgZOEg5G1s7lHpBrfGo
+	 FljRI2AO8+0hX19+8ftMEwiPNv9jUqxQkCcUuIVDCLWlc10NpPuJa7/qqiBUKprGU7
+	 XYP1wWUUAmWwUbPTHn+W/GjwzZ4Q/1gt2dfgu9mF8jNIaAsNySW1CoZqDd4YsVIciT
+	 6qsJHES+niCs8BKA8PbWmAVVR49R+nC6Abn2zLj13RXCjnsprqeSzSPoIFcrTRElwU
+	 O13gCVGdiZm4g==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-615950642d9so553843eaf.1;
+        Thu, 24 Jul 2025 05:40:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWeqxtNs23czzSioh8Wa7haoy/iqA4PuSgkF3n+heDZwBbOo8eedXhG54bFEe9mwciR8P5mro+HseUhJPk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiNVE6/tAQQuyAhkMa4wYhDjzlzbDHeBjjwUs+HpP8jmMO4PWh
+	4UHWa4v+7qfmVigqQ95ThwiG7OReFqhq49lfESTjCy1xoBlxX6y7pmqxI2Br5kb9xWKmsnOR4VH
+	FMAcmmq8BSJ4uaSBjZjxMQ5moE9jwtLQ=
+X-Google-Smtp-Source: AGHT+IH5cce5yaNr2soMDUhZN8w6HVywgtWyig31yOOBApw5Rxwl+NOSkdszOip5TYVcQTn8m1/yJRaVDIDoUI3ws2Q=
+X-Received: by 2002:a05:6808:1b2c:b0:408:fef8:9c9e with SMTP id
+ 5614622812f47-426c5f4e9famr4719647b6e.22.1753360858247; Thu, 24 Jul 2025
+ 05:40:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,14 +57,14 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 24 Jul 2025 14:38:05 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jTEdWhm-1aYbLtyqo99dJw4kY0PaYUy=_zh+1M+jo3Vw@mail.gmail.com>
-X-Gm-Features: Ac12FXyOWhpG1bIKrnrrOQtS5GKQsc2xVEuW-EisH29LnmbfBKphNrK8Ka_NJOM
-Message-ID: <CAJZ5v0jTEdWhm-1aYbLtyqo99dJw4kY0PaYUy=_zh+1M+jo3Vw@mail.gmail.com>
-Subject: [GIT PULL] ACPI updates for v6.17-rc1
+Date: Thu, 24 Jul 2025 14:40:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gTixsgeM7svDVJnjpGV4PG-hxOmZpUGxhdqTeo4bbU4w@mail.gmail.com>
+X-Gm-Features: Ac12FXyeBEfO9sGcgJ1H-kH-OBzvpk1CGd5G63oYqEyppeEcgcvYQ-qLJ0QS9E4
+Message-ID: <CAJZ5v0gTixsgeM7svDVJnjpGV4PG-hxOmZpUGxhdqTeo4bbU4w@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.17-rc1
 To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
 Hi Linus,
@@ -75,210 +75,148 @@ and I'm not planning to add anything to it.
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.17-rc1
+ thermal-6.17-rc1
 
-with top-most commit ea34e67ae7a6318dc775a8d98cf00c3e45bfb7d2
+with top-most commit 1e94cb6c2ae1c2660ed406669f12b90c7052d2b9
 
- Merge branch 'acpi-misc'
+ Merge back earlier thermal control updates for 6.17
 
-on top of commit 89be9a83ccf1f88522317ce02f854f30d6115c41
+on top of commit d7b8f8e20813f0179d8ef519541a3527e7661d3a
 
- Linux 6.16-rc7
+ Linux 6.16-rc5
 
-to receive ACPI updates for 6.17-rc1.
+to receive thermal control updates for 6.17-rc1.
 
-These update APEI (new EINJv2 error injection, assorted fixes), fix the
-ACPI processor driver, update the legacy ACPI /proc interface (multiple
-assorted fixes of minor issues) and several assorted ACPI drivers (minor
-fixes and cleanups):
+These update the thermal control sysfs interface and multiple thermal
+control drivers:
 
- - Printing the address in acpi_ex_trace_point() is either incorrect
-   during early kernel boot or not really useful later when pathnames
-   resolve properly, so stop doing it (Mario Limonciello)
+ - Convert EAGAIN into ENODATA in temp_show() to prevent user space from
+   polling the sysfs file in vain after a failing O_NONBLOCK read under
+   the assumption that the read would have blocked (Hsin-Te Yuan)
 
- - Address several minor issues in the legacy ACPI proc interface (Andy
-   Shevchenko)
+ - Add Wildcat Lake PCI ID to the int340x Intel processor thermal driver
+   (Srinivas Pandruvada)
 
- - Fix acpi_object union initialization in the ACPI processor driver to
-   avoid using memory that contains leftover data (Sebastian Ott)
-
- - Make the ACPI processor perflib driver take the initial _PPC limit
-   into account as appropriate (Jiayi Li)
-
- - Fix message formatting in the ACPI processor throttling driver and
-   in the ACPI PCI link driver (Colin Ian King)
-
- - Clean up general ACPI PM domain handling (Rafael Wysocki)
-
- - Fix iomem-related sparse warnings in the APEI EINJ driver (Zaid
-   Alali, Tony Luck)
-
- - Add EINJv2 error injection support to the APEI EINJ driver (Zaid
-   Alali)
-
- - Fix memory corruption in error_type_set() in the APEI EINJ driver (Dan
-   Carpenter)
-
- - Fix less than zero comparison on a size_t variable in the APEI EINJ
-   driver (Colin Ian King)
-
- - Fix check and iounmap of an uninitialized pointer in the APEI EINJ
-   driver (Colin Ian King)
-
- - Add TAINT_MACHINE_CHECK to the GHES panic path in APEI to improve
-   diagnostics and post-mortem analysis (Breno Leitao)
-
- - Update APEI reviewer records and other ACPI-related information in
-   MAINTAINERS as well as the contact information in the ACPI ABI
-   documentation (Rafael Wysocki)
-
- - Fix the handling of synchronous uncorrected memory errors in APEI
-   (Shuai Xue)
-
- - Remove an AudioDSP-related ID from the ACPI LPSS driver (Andy
-   Shevchenko)
-
- - Replace sprintf()/scnprintf() with sysfs_emit() in the ACPI fan
-   driver and update a debug message in fan_get_state_acpi4() (Eslam
-   Khafagy, Abdelrahman Fekry, Sumeet Pawnikar)
-
- - Add Intel Wildcat Lake support to the ACPI DPTF driver (Srinivas
+ - Add debugfs interface to override the temperature set by the firmware
+   in the Intel platform temperature control (PTC) interface and add a
+   new sysfs control attribute called thermal_tolerance to it (Srinivas
    Pandruvada)
 
- - Add more debug information regarding failing firmware updates to the
-   ACPI pfr_update driver (Chen Yu)
+ - Enable the stage 2 shutdown in the qcom-spmi-temp-alarm thermal
+   driver and add support for more SPMI variants to it (Anjelique
+   Melendez)
 
- - Reduce the verbosity of the ACPI PRM (platform runtime mechanism)
-   driver to avoid user confusion (Zhu Qiyu)
+ - Constify the thermal_zone_device_ops structure where possible in
+   several assorted thermal drivers (Christophe Jaillet)
 
- - Replace sprintf() with sysfs_emit() in the ACPI TAD (time and alarm
-   device) driver (Sukrut Heroorkar)
+ - Use the dev_fwnode() helper instead of of_fwnode_handle(), as it is
+   more adequate, wherever possible in thermal drivers (Jiri Slaby)
 
- - Enable CONFIG_ACPI_DEBUG by default to make it easier to get ACPI
-   debug messages from OEM platforms (Mario Limonciello)
+ - Implement and document One-Time Programmable fuse support in the
+   Rockchip thermal driver in order to increase the precision of the
+   measurements (Nicolas Frattaroli)
 
- - Fix parent device references in ASL examples in the ACPI
-   documentation and fix spelling and style in the gpio-properties
-   documentation in firmware-guide (Andy Shevchenko)
+ - Change the way the Mediatek LTVS thermal driver stores the
+   initialization data sequence to support different sequences
+   matching different platforms. Introduce mt7988 support with
+   a new initialization sequence (Mason Chang)
 
- - Fix typos in ACPI documentation and comments (Bjorn Helgaas)
+ - Document the QCom TSens Milos Temperature Sensor DT bindings (Luca
+   Weiss)
+
+ - Add the fallback compatible string for MT7981 and MT8516 DT bindings
+   (Aleksander Jan Bajkowski)
+
+ - Add the compatible string for the Tegra210B01 SOC_THERM driver (Aaron
+   Kling)
 
 Thanks!
 
 
 ---------------
 
-Abdelrahman Fekry (1):
-      ACPI: fan: Replace sprintf()/scnprintf() with sysfs_emit() in
-show() functions
+Aaron Kling (1):
+      dt-bindings: thermal: tegra: Document Tegra210B01
 
-Andy Shevchenko (8):
-      ACPI: wakeup: Drop unneeded casting for sleep_state
-      ACPI: proc: Use correct format specifier and drop casting
-      ACPI: proc: Remove unused header
-      ACPI: proc: Use str_enabled_disabled() helper
-      ACPI: proc: Prefer to use octal permission
-      Documentation: firmware-guide: gpio-properties: Spelling and style fixes
-      ACPI: LPSS: Remove AudioDSP related ID
-      Documentation: ACPI: Fix parent device references
+Aleksander Jan Bajkowski (1):
+      dt-bindings: thermal: mediatek: Add fallback compatible string
+for MT7981 and MT8516
 
-Breno Leitao (1):
-      ACPI: APEI: GHES: add TAINT_MACHINE_CHECK on GHES panic path
+Anjelique Melendez (4):
+      thermal/drivers/qcom-spmi-temp-alarm: Add temp alarm data struct
+based on HW subtype
+      thermal/drivers/qcom-spmi-temp-alarm: Prepare to support
+additional Temp Alarm subtypes
+      thermal/drivers/qcom-spmi-temp-alarm: Add support for GEN2 rev 2
+PMIC peripherals
+      thermal/drivers/qcom-spmi-temp-alarm: Add support for LITE PMIC
+peripherals
 
-Chen Yu (1):
-      ACPI: pfr_update: Add more debug information when firmware update failed
+Christophe JAILLET (2):
+      thermal/drivers/loongson2: Constify struct thermal_zone_device_ops
+      thermal: Constify struct thermal_zone_device_ops
 
-Colin Ian King (4):
-      ACPI: APEI: EINJ: Fix less than zero comparison on a size_t variable
-      ACPI: APEI: EINJ: Fix check and iounmap of uninitialized pointer p
-      ACPI: processor: throttling: Remove space before newline
-      ACPI/PCI: Remove space before newline
+David Collins (1):
+      thermal/drivers/qcom-spmi-temp-alarm: Enable stage 2 shutdown
+when required
 
-Dan Carpenter (1):
-      ACPI: APEI: EINJ: prevent memory corruption in error_type_set()
+Hsin-Te Yuan (1):
+      thermal: sysfs: Return ENODATA instead of EAGAIN for reads
 
-Eslam Khafagy (1):
-      ACPI: fan: Replace sprintf() with sysfs_emit()
+Jiri Slaby (SUSE) (1):
+      thermal: Use dev_fwnode()
 
-Jiayi Li (1):
-      ACPI: processor: perflib: Fix initial _PPC limit application
+Luca Weiss (1):
+      dt-bindings: thermal: qcom-tsens: document the Milos Temperature Sensor
 
-Mario Limonciello (2):
-      ACPI: Enable CONFIG_ACPI_DEBUG by default
-      ACPICA: Decrease `AcpiExTracePoint` verbosity
+Mason Chang (3):
+      thermal/drivers/mediatek/lvts_thermal: Change lvts commands
+array to static const
+      thermal/drivers/mediatek/lvts_thermal: Add lvts commands and
+their sizes to driver data
+      thermal/drivers/mediatek/lvts_thermal: Add mt7988 lvts commands
 
-Rafael J. Wysocki (3):
-      ACPI: PM: Set .detach in acpi_general_pm_domain definition
-      ACPI: APEI: MAINTAINERS: Update reviewers for APEI
-      ACPI/PNP: Use my kernel.org address in MAINTAINERS and ABI docs
+Nicolas Frattaroli (4):
+      thermal/drivers/rockchip: Rename rk_tsadcv3_tshut_mode
+      dt-bindings: rockchip-thermal: Add RK3576 compatible
+      dt-bindings: thermal: rockchip: document otp thermal trim
+      thermal/drivers/rockchip: Support reading trim values from OTP
 
-Sebastian Ott (1):
-      ACPI: processor: fix acpi_object initialization
+Srinivas Pandruvada (3):
+      thermal: intel: int340x: Add throttling control interface to PTC
+      thermal: intel: int340x: Allow temperature override
+      thermal: int340x: processor_thermal: Add Wildcat Lake PCI ID
 
-Shuai Xue (2):
-      ACPI: APEI: send SIGBUS to current task if synchronous memory
-error not recovered
-      ACPI: APEI: handle synchronous exceptions in task work
-
-Srinivas Pandruvada (1):
-      ACPI: DPTF: Support for Wildcat Lake
-
-Sukrut Heroorkar (1):
-      ACPI: TAD: Replace sprintf() with sysfs_emit()
-
-Sumeet Pawnikar (1):
-      ACPI: fan: Update debug message in fan_get_state_acpi4()
-
-Tony Luck (2):
-      ACPI: APEI: EINJ: Create debugfs files to enter device id and syndrome
-      ACPI: APEI: EINJ: Fix trigger actions
-
-Zaid Alali (6):
-      ACPI: APEI: EINJ: Fix kernel test sparse warnings
-      ACPI: APEI: EINJ: Enable the discovery of EINJv2 capabilities
-      ACPI: APEI: EINJ: Add einjv2 extension struct
-      ACPI: APEI: EINJ: Discover EINJv2 parameters
-      ACPI: APEI: EINJ: Enable EINJv2 error injections
-      ACPI: APEI: EINJ: Update the documentation for EINJv2 support
-
-Zhu Qiyu (1):
-      ACPI: PRM: Reduce unnecessary printing to avoid user confusion
+Ye Zhang (1):
+      thermal/drivers/rockchip: Support RK3576 SoC in the thermal driver
 
 ---------------
 
- Documentation/ABI/testing/sysfs-bus-acpi           |  18 +-
- Documentation/ABI/testing/sysfs-firmware-acpi      |   6 +-
- Documentation/firmware-guide/acpi/apei/einj.rst    |  33 ++
- .../firmware-guide/acpi/gpio-properties.rst        |  34 +-
- Documentation/firmware-guide/acpi/i2c-muxes.rst    |   8 +-
- MAINTAINERS                                        |   9 +-
- drivers/acpi/Kconfig                               |   1 +
- drivers/acpi/acpi_processor.c                      |   2 +-
- drivers/acpi/acpi_tad.c                            |   4 +-
- drivers/acpi/acpica/extrace.c                      |   4 +-
- drivers/acpi/apei/apei-internal.h                  |   2 +-
- drivers/acpi/apei/einj-core.c                      | 386 +++++++++++++++++----
- drivers/acpi/apei/einj-cxl.c                       |   2 +-
- drivers/acpi/apei/ghes.c                           |  90 +++--
- drivers/acpi/bus.c                                 |   2 +-
- drivers/acpi/device_pm.c                           |   4 +-
- drivers/acpi/dptf/dptf_power.c                     |   2 +
- drivers/acpi/dptf/int340x_thermal.c                |   7 +
- drivers/acpi/fan.h                                 |   1 +
- drivers/acpi/fan_attr.c                            |   8 +-
- drivers/acpi/fan_core.c                            |   2 +-
- drivers/acpi/pci_link.c                            |   2 +-
- drivers/acpi/pfr_update.c                          |  63 +++-
- drivers/acpi/prmt.c                                |  26 +-
- drivers/acpi/proc.c                                |  17 +-
- drivers/acpi/processor_perflib.c                   |  10 +-
- drivers/acpi/processor_throttling.c                |   2 +-
- drivers/acpi/wakeup.c                              |   4 +-
- drivers/acpi/x86/lpss.c                            |   3 -
- .../intel/int340x_thermal/int3400_thermal.c        |   1 +
- .../intel/int340x_thermal/int3403_thermal.c        |   1 +
- include/acpi/ghes.h                                |   3 -
- include/linux/mm.h                                 |   1 -
- mm/memory-failure.c                                |  13 -
- 34 files changed, 567 insertions(+), 204 deletions(-)
+ .../bindings/thermal/mediatek,thermal.yaml         |  27 +-
+ .../bindings/thermal/nvidia,tegra124-soctherm.yaml |   2 +
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+ .../bindings/thermal/rockchip-thermal.yaml         |  62 +++
+ Documentation/driver-api/thermal/intel_dptf.rst    |   9 +
+ drivers/thermal/armada_thermal.c                   |   2 +-
+ drivers/thermal/da9062-thermal.c                   |   2 +-
+ drivers/thermal/dove_thermal.c                     |   2 +-
+ drivers/thermal/imx_thermal.c                      |   2 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |   2 +-
+ .../int340x_thermal/platform_temperature_control.c |  72 ++-
+ .../int340x_thermal/processor_thermal_device.h     |   1 +
+ .../int340x_thermal/processor_thermal_device_pci.c |   4 +
+ .../intel/int340x_thermal/processor_thermal_rfim.c |   1 +
+ drivers/thermal/kirkwood_thermal.c                 |   2 +-
+ drivers/thermal/loongson2_thermal.c                |  15 +-
+ drivers/thermal/mediatek/lvts_thermal.c            |  76 ++-
+ drivers/thermal/qcom/lmh.c                         |   3 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c        | 596 ++++++++++++++++++---
+ drivers/thermal/renesas/rcar_thermal.c             |   2 +-
+ drivers/thermal/rockchip_thermal.c                 | 251 ++++++++-
+ drivers/thermal/spear_thermal.c                    |   2 +-
+ drivers/thermal/st/st_thermal.c                    |   2 +-
+ drivers/thermal/tegra/soctherm.c                   |  13 +-
+ drivers/thermal/testing/zone.c                     |   2 +-
+ drivers/thermal/thermal_sysfs.c                    |   9 +-
+ 26 files changed, 1013 insertions(+), 149 deletions(-)
 
