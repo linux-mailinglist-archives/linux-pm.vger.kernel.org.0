@@ -1,235 +1,118 @@
-Return-Path: <linux-pm+bounces-31413-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31414-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B90B11762
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 06:19:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44730B117C8
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 07:07:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E3765A1F3B
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 04:19:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9423A8BCC
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 05:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC4D218EBA;
-	Fri, 25 Jul 2025 04:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775AE23D287;
+	Fri, 25 Jul 2025 05:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WxLYRf+o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQFelfGo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A1D4C83;
-	Fri, 25 Jul 2025 04:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99AE48CFC;
+	Fri, 25 Jul 2025 05:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753417143; cv=none; b=aouCgjXVj0Y44qvCPD3bhNWFt7juYVuXZXi0qZK+5pk0y7FaD14NajxwlfmcgeMBY1zX7Jf8FjnxkpaYC3NkNHN/n9ow+4wsX+6+o9Ta2UFUFs5B4CPcl77K3a3k6WI4NyPnCQqbubDa0ClrDIyzgSTVx89ho3N8abrvluSHX4U=
+	t=1753420028; cv=none; b=lGEhpAHZ7MVVrn1MX1QUaexN0L/xNpukdRSssv18wi6s12keDyBhzAXlYKPMaJgRiYge0dTp4uGicnlIorbaUWyQUjAB93PWtrWf8QY/7xdtAhEJWWPtWim7SbvxEn6UFFxLsUOJlRLJ6lLhaDT4xDzYIDrA/5laWm0EE324W00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753417143; c=relaxed/simple;
-	bh=g1aDJWjOkWNwnIq5x6LnbqOtD31oH9lR+AgkfVnB93s=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G8qHDkEEIJCTRGe1/26IehcaWwOYGpxzWJAnTzCCmVqvxD5mf5gSREqp849pwMliyRjIA0hqxPRJpMhXpjvafmcuM7zVUELKatj9kIpNas0l0D0FLFlngJ+IgvrAhU56rASSrWg4zOzWWnz5zvK4cwqrAAYM/M0ZT+AKnfMyy0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WxLYRf+o; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56OLmVIF009335;
-	Fri, 25 Jul 2025 04:18:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=Tlv+F7fsCTtMIea6rPvY6FhY
-	V4OOI+NyNZ9VIr4Thuc=; b=WxLYRf+oQL2HF3QBsnTkgzIR60brxENI4vkz9Bgf
-	LPRN13NkAA8F2I1RswUe/9GQAOa//pVmsKfpn9kRlt2OlgtyAX+GAk47R97kiHur
-	BwD4+vjOTkSwHpsyNh9FNYuMv5k/IgJMR2KnNYQTbVWgjzvXuSmQvODTBA2MLlWM
-	yOwz03v7oQYXsP4HndPRf/Gd31cYHLSxKx1aQz8SG6LvVrOGIWfN6D4H2HLbEb+z
-	pgeh27OxIx9rwJNQ+ABiFNCEhc4vC0VPA/gYKEpkTYaC1uVXAoFnYWMrfjrPiYOf
-	NKsRck2MTif1rKUO97DmGp9gsb9sRil4S7ZAvzMzP+61WQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 483w2t0rx2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Jul 2025 04:18:55 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56P4IstF020187
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Jul 2025 04:18:54 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Thu, 24 Jul 2025 21:18:49 -0700
-Date: Fri, 25 Jul 2025 09:48:45 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <konradybcio@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>, <djakov@kernel.org>,
-        <quic_srichara@quicinc.com>, <quic_mdalam@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: ipq5424-apss-clk: Add ipq5424
- apss clock controller
-Message-ID: <aIMFpW6yH9IRmyqj@hu-varada-blr.qualcomm.com>
-References: <20250723110815.2865403-1-quic_varada@quicinc.com>
- <20250723110815.2865403-2-quic_varada@quicinc.com>
- <20250724-remarkable-kind-ibex-3bb86c@kuoka>
+	s=arc-20240116; t=1753420028; c=relaxed/simple;
+	bh=Ib5FE0QoMMNdFpBA0yVOTPTmH+AZrc74xbL0n+1+S+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OxnnRDQR3ITLc/yCAm9DZr+9Ikq/pn02zcC69ayqBr/wh1tDwqB82+D0qEdhibCK5mrx3leBmbB8ztU+A0VomWM+ALRBgn94jT6KC6Ir4H5hbRtE8CZ5XwR+82NroMuMDtTh5hOakgNrLyCNobIq5ChKpnW2p+GEn6iaALKPlyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQFelfGo; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6fae04a3795so13881746d6.3;
+        Thu, 24 Jul 2025 22:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753420026; x=1754024826; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dRMBoFJ15p7ZT15ip7Hrv1Ml72IqtNL3iXOUPGAitWM=;
+        b=DQFelfGo7d4PGWbxDIGb+PCJvp6qfjQlQ+eg2ILf+sCRY5R8pf4ywlx22q+inRUkUK
+         RA5BcSyW+av0p/vnzkzq+DJpQt5hXURjnpL+NdPCKeaZgj9PehSAlUbihUwt4nHCVIm4
+         snj3UPN6crP02Sq+7Rr3MuC0Y8sf3bPgHDOlXDwf9lU7AffDOnzgg//yMPRnmRYj2UUW
+         rNXrzIRLE+sy0EXGqeT2v47kWIjgJJu0+UsmsThCI3JLeo0R27gmtKQ0wxgSF2aOmIjG
+         DIt2FVI55pzx4nqbpupJFzmgvXJJeZiAcsjnN2bzytbixW+XgTk13WeaUoseoF+neP2K
+         Olyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753420026; x=1754024826;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dRMBoFJ15p7ZT15ip7Hrv1Ml72IqtNL3iXOUPGAitWM=;
+        b=VZ53ghUJSrnBBL7kSUgOIgrd6OkbW52DAUwX4mXCE/hhfZn5oewwdJ0x+ZpTgGfef6
+         YvB19ZDkWHYOOn27T/fk15DAgMC9dhM8vky2PCxBTb5y4rYNwK4K/Yvnq/1646msCyCa
+         Xt+Mdm1FUSmJ3+0EtoUVuLOfysEgJiKL2BzHzQ76HdVVVSr7XcIrI0Ptl3B5SvNkYQti
+         VQS1YCou4IrpF0Owcz0bIVp64WM3UvFZWK1aX4MQ0tl5mAg8xaapZ/hw0/IgnXdWXzG8
+         29OT6PbuacSaWTARPjv1Jl6gVKfRoBOlb0fDMUcuhuZ4jJRa19nJ5D8EPU1F6rUqygfe
+         K1Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCUEZzfDKOyRQJX4oOfGhVMBdV4opIHJWFQA0eB4gtzGPHi1BAcL8FxA7Bcqx5LVLBlOKD2Am0zgQJg8FBw=@vger.kernel.org, AJvYcCW+5kChB10pMZGgRWSNGDfvm753VVr7JuNRr68U2XdewgmJmEN6CmXmibtv0px5YE2B3lsTBRekamU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGIQQU5hCoLAK52NQwL5o8FqSgLG3kuJoHpaURdgqYTti8ulXr
+	HvmwXGzKIKgSvwJP7jOEdWqOeBx9uLK7jrSZClAymGHOc6zVKgk9ERgi
+X-Gm-Gg: ASbGncs6XaNyCxM60RcBuC5mYz2jSHdk/orKjmELCysGdTp1DPenvJ5yCIdeDO8RD++
+	/LtDjty3WALGWrWechNKVvRR0EIWpJfeYlObEGvkAIxMm+Q5yL1xNOYwi7oOFQsnlzhocjxI488
+	oeMuT1YoS1ME1DXq0Y511W5TZXIoplg13BObVH9uDPyTUio9y32jjdsRNG7TitFLPjWeMW/W04T
+	RBj8Vi4qMAkfnpuwqa85LnAIAIFL89awlEnXs1DX0TN0nvOh1Npi8Trs8+BVGTTjYszlqaSL2Z3
+	zqvunZggwq/WsghHd18uAacL2YJDJqQ7aECVE3oPQXgN8WqarmShFCc6iho59CCRzba7a0Y7/Iq
+	D+ApiP7UZYgtIjw==
+X-Google-Smtp-Source: AGHT+IHYQh1UqAPsmxjHEZ3LJXPXVDx286B6GQMg6QVOuyzTh8PtFKisKHfxCx9RE21vpz1hU/e8jQ==
+X-Received: by 2002:a05:6214:2522:b0:706:ebc2:9da with SMTP id 6a1803df08f44-707204e946dmr6510276d6.2.1753420025809;
+        Thu, 24 Jul 2025 22:07:05 -0700 (PDT)
+Received: from pc ([196.235.221.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7070fb53f7dsm22362996d6.38.2025.07.24.22.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jul 2025 22:07:04 -0700 (PDT)
+Date: Fri, 25 Jul 2025 06:07:01 +0100
+From: Salah Triki <salah.triki@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: salah.triki@gmail.com
+Subject: [PATCH] thermal: intel: int340x_thermal: Remove acpi_has_method()
+ call
+Message-ID: <aIMQ9RFciI8jmmAh@pc>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250724-remarkable-kind-ibex-3bb86c@kuoka>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=BMKzrEQG c=1 sm=1 tr=0 ts=688305af cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=kj9zAlcOel0A:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8
- a=COk6AnOGAAAA:8 a=gEfo2CItAAAA:8 a=UXIAUNObAAAA:8 a=HD4o69LU_PO5Mj1lfZQA:9
- a=CjuIK1q_8ugA:10 a=bFq2RbqkfqsA:10 a=TjNXssC_j7lpFel5tvFf:22
- a=sptkURWiP4Gy88Gu7hUp:22 a=a1s67YnXd6TbAZZNj1wK:22
-X-Proofpoint-ORIG-GUID: 46DBbXXfpUfL5-9phqL9eQuNHb2apaeM
-X-Proofpoint-GUID: 46DBbXXfpUfL5-9phqL9eQuNHb2apaeM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI1MDAzMyBTYWx0ZWRfX0N8mOsQquu40
- EkM4XN2NzsWNCySs8tW0AQsYmy2CXi4k0G9acy5ijPySJjtuWBBh93ZeRxwTRsETWEBStDeIcLp
- NEWkbX7D6RqEr/pkBsaYv8mfbXVxEAcK6PQMveIHt/4lKBG9BkAl2NILTQXZOucDcOr2JuVp24m
- s9VibtnmeAL4ykg+6WpQVIlEVHlFCZB7CtJ1Ay3pTSGPbpFnWqdT9tw5SuhqMtb3Pq3Wej6rmd1
- MHtKzVbOcxQHIdJM6Fu7PW813XtVBr+xbdrGGxkDXgKbUQ8Y0fg+4yF9mieJRq3QG35n4/7HchE
- F7LhTjh+HY8pnt/ro4qndKlS3XQnnlbO5+INfyunyYJ9maCVdgMxeLeFvkdWJYz8eYq9eX+ZIZe
- kCwbAP5BhEU4DZ6GcP1fszEQG7r0Olj4K4lKZVD2yFhW+CXo9qsIt1YoHUWhFIG3/wwaWVYe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-25_01,2025-07-24_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0 priorityscore=1501
- bulkscore=0 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507250033
 
-On Thu, Jul 24, 2025 at 10:14:01AM +0200, Krzysztof Kozlowski wrote:
-> On Wed, Jul 23, 2025 at 04:38:12PM +0530, Varadarajan Narayanan wrote:
-> > From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> >
-> > The CPU core in ipq5424 is clocked by a huayra PLL with RCG support.
-> > The RCG and PLL have a separate register space from the GCC.
-> > Also the L3 cache has a separate pll and needs to be scaled along
-> > with the CPU.
-> >
-> > Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> > Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> > [ Added interconnect related changes ]
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> > v2: Add #interconnect-cells to help enable L3 pll as ICC clock
-> >     Add master/slave ids
->
-> and v1 was where? I cannot find it in the inbox, no lore links.
+acpi_evaluate_object() returns an error if the needed method does not
+exist. So remove unnecessary acpi_has_method() call.
 
-v1 - https://lore.kernel.org/linux-arm-msm/20250127093128.2611247-1-quic_srichara@quicinc.com/
+Signed-off-by: Salah Triki <salah.triki@gmail.com>
+---
+ drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Will add this while posting the next version.
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+index cb149bcdd7d5..ce5d53be108b 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+@@ -220,9 +220,6 @@ static int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **ps
+ 	int i, result = 0;
+ 	struct psvt *psvts;
+ 
+-	if (!acpi_has_method(handle, "PSVT"))
+-		return -ENODEV;
+-
+ 	status = acpi_evaluate_object(handle, "PSVT", NULL, &buffer);
+ 	if (ACPI_FAILURE(status))
+ 		return -ENODEV;
+-- 
+2.43.0
 
-> > ---
-> >  .../bindings/clock/qcom,ipq5424-apss-clk.yaml | 61 +++++++++++++++++++
-> >  include/dt-bindings/clock/qcom,apss-ipq.h     |  6 ++
-> >  .../dt-bindings/interconnect/qcom,ipq5424.h   |  3 +
-> >  3 files changed, 70 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5424-apss-clk.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq5424-apss-clk.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq5424-apss-clk.yaml
-> > new file mode 100644
-> > index 000000000000..abb9eb78d271
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,ipq5424-apss-clk.yaml
-> > @@ -0,0 +1,61 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/qcom,ipq5424-apss-clk.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm APSS IPQ5424 Clock Controller
-> > +
-> > +maintainers:
-> > +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> > +  - Md Sadre Alam <quic_mdalam@quicinc.com>
->
-> Are you sure? Why they do not send their code then? Usually sending
-> other poeple's code means they do not care or moved on or changed jobs.
-
-They changed projects. Shall I append myself to the above list
-or replace them with myself.
-
-> > +
-> > +description: |
->
-> Do not need '|' unless you need to preserve formatting.
-
-ok.
-
-> > +  The CPU core in ipq5424 is clocked by a huayra PLL with RCG support.
-> > +  The RCG and PLL have a separate register space from the GCC.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - qcom,ipq5424-apss-clk
->
-> Missing blank line
-
-ok.
-
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Reference to the XO clock.
-> > +      - description: Reference to the GPLL0 clock.
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: xo
-> > +      - const: gpll0
->
-> You do not name the inputs according how provider calls them. You name
-> them based on the INPUT. pll? source? bus?
-
-Will check and update.
-
-> > +
-> > +  '#clock-cells':
-> > +    const: 1
-> > +
-> > +  '#interconnect-cells':
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - '#clock-cells'
-> > +  - '#interconnect-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/qcom,ipq5424-gcc.h>
-> > +
-> > +    apss_clk: apss-clock@fa80000 {
->
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Thanks for the feedback. Will post a new version addressing these.
-
--Varada
 
