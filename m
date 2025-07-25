@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-31414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44730B117C8
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 07:07:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8662B1180F
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 07:49:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9423A8BCC
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 05:06:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCA7F188FD69
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 05:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775AE23D287;
-	Fri, 25 Jul 2025 05:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA596231C8D;
+	Fri, 25 Jul 2025 05:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQFelfGo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sFxUG9Br"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99AE48CFC;
-	Fri, 25 Jul 2025 05:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3351F3A1DB
+	for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 05:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753420028; cv=none; b=lGEhpAHZ7MVVrn1MX1QUaexN0L/xNpukdRSssv18wi6s12keDyBhzAXlYKPMaJgRiYge0dTp4uGicnlIorbaUWyQUjAB93PWtrWf8QY/7xdtAhEJWWPtWim7SbvxEn6UFFxLsUOJlRLJ6lLhaDT4xDzYIDrA/5laWm0EE324W00=
+	t=1753422554; cv=none; b=rv6l/SbUP/Ge/CmEk5W603T6vytwdWWXM/vaQ1V2eaOzjwD/a7JDNsPmZsLioZq1gyecPmhLGpBhnPSZCbxRtkS1ZieKtQkPr9KeptFynp1MXYbrPxJpOgN4sxhQokraBHyaS73nGxXnsCsNN6Tw2bzMYcX8OCy83wlkWQMOUoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753420028; c=relaxed/simple;
-	bh=Ib5FE0QoMMNdFpBA0yVOTPTmH+AZrc74xbL0n+1+S+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OxnnRDQR3ITLc/yCAm9DZr+9Ikq/pn02zcC69ayqBr/wh1tDwqB82+D0qEdhibCK5mrx3leBmbB8ztU+A0VomWM+ALRBgn94jT6KC6Ir4H5hbRtE8CZ5XwR+82NroMuMDtTh5hOakgNrLyCNobIq5ChKpnW2p+GEn6iaALKPlyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQFelfGo; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6fae04a3795so13881746d6.3;
-        Thu, 24 Jul 2025 22:07:06 -0700 (PDT)
+	s=arc-20240116; t=1753422554; c=relaxed/simple;
+	bh=kt81b78tGqE2fXMs1hgKSZPNjtRJ+zYxTvIAg+AkKBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SbT3FjDJiNz4XNZ9c64OAxc/kfw5vxtd2phUjViPeWawSSRu/NYKCgyyQv1VFkHwBkGGiA9G4sYNWvKOFRz0/c7Oej6O4Fb/Bjq2AkNFdV/cDQ2Y4vYTCUkgRSaRho5HWWw6YqkHS5p9UGPCKBD5/ts7CGQyub57HpvF4Tmxz2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sFxUG9Br; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2352400344aso15370555ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 24 Jul 2025 22:49:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753420026; x=1754024826; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dRMBoFJ15p7ZT15ip7Hrv1Ml72IqtNL3iXOUPGAitWM=;
-        b=DQFelfGo7d4PGWbxDIGb+PCJvp6qfjQlQ+eg2ILf+sCRY5R8pf4ywlx22q+inRUkUK
-         RA5BcSyW+av0p/vnzkzq+DJpQt5hXURjnpL+NdPCKeaZgj9PehSAlUbihUwt4nHCVIm4
-         snj3UPN6crP02Sq+7Rr3MuC0Y8sf3bPgHDOlXDwf9lU7AffDOnzgg//yMPRnmRYj2UUW
-         rNXrzIRLE+sy0EXGqeT2v47kWIjgJJu0+UsmsThCI3JLeo0R27gmtKQ0wxgSF2aOmIjG
-         DIt2FVI55pzx4nqbpupJFzmgvXJJeZiAcsjnN2bzytbixW+XgTk13WeaUoseoF+neP2K
-         Olyg==
+        d=linaro.org; s=google; t=1753422552; x=1754027352; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hskrk8phHu4wT3pcdJrDYqFkEsU4W/M9XPNUZYaY9go=;
+        b=sFxUG9BrBmSyUk8Z4eclTrW5qOPSE2xPjEW9Zjug/PP2fDxw++MaP9VS7qx6lMEx4v
+         FkG7/yVwom5NQUKjlRE2zDlDK3Mh4avEgGs0WW9fPiZVmkkbGDV1OpS4lpvuLFGmkGS0
+         IbrZyBVdWrxCbWegkQs67EmZbwWeLQwd1f8D7Vgm7RSvEus9DRlA2xkYMGNUZXj3/PfF
+         bFK3qiPUPmsrXqcnQNFQU9k2GgH4EG014BhROPh8cY0ier5EnaR2HstW3lvWPLsk+iiw
+         676XSRv18A/M5q5Gz0ZHgOtQDG8VUMFrSUtdDSoZvf67JAiUU3ib98RdSEskj/iUf6Px
+         b8nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753420026; x=1754024826;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dRMBoFJ15p7ZT15ip7Hrv1Ml72IqtNL3iXOUPGAitWM=;
-        b=VZ53ghUJSrnBBL7kSUgOIgrd6OkbW52DAUwX4mXCE/hhfZn5oewwdJ0x+ZpTgGfef6
-         YvB19ZDkWHYOOn27T/fk15DAgMC9dhM8vky2PCxBTb5y4rYNwK4K/Yvnq/1646msCyCa
-         Xt+Mdm1FUSmJ3+0EtoUVuLOfysEgJiKL2BzHzQ76HdVVVSr7XcIrI0Ptl3B5SvNkYQti
-         VQS1YCou4IrpF0Owcz0bIVp64WM3UvFZWK1aX4MQ0tl5mAg8xaapZ/hw0/IgnXdWXzG8
-         29OT6PbuacSaWTARPjv1Jl6gVKfRoBOlb0fDMUcuhuZ4jJRa19nJ5D8EPU1F6rUqygfe
-         K1Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEZzfDKOyRQJX4oOfGhVMBdV4opIHJWFQA0eB4gtzGPHi1BAcL8FxA7Bcqx5LVLBlOKD2Am0zgQJg8FBw=@vger.kernel.org, AJvYcCW+5kChB10pMZGgRWSNGDfvm753VVr7JuNRr68U2XdewgmJmEN6CmXmibtv0px5YE2B3lsTBRekamU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGIQQU5hCoLAK52NQwL5o8FqSgLG3kuJoHpaURdgqYTti8ulXr
-	HvmwXGzKIKgSvwJP7jOEdWqOeBx9uLK7jrSZClAymGHOc6zVKgk9ERgi
-X-Gm-Gg: ASbGncs6XaNyCxM60RcBuC5mYz2jSHdk/orKjmELCysGdTp1DPenvJ5yCIdeDO8RD++
-	/LtDjty3WALGWrWechNKVvRR0EIWpJfeYlObEGvkAIxMm+Q5yL1xNOYwi7oOFQsnlzhocjxI488
-	oeMuT1YoS1ME1DXq0Y511W5TZXIoplg13BObVH9uDPyTUio9y32jjdsRNG7TitFLPjWeMW/W04T
-	RBj8Vi4qMAkfnpuwqa85LnAIAIFL89awlEnXs1DX0TN0nvOh1Npi8Trs8+BVGTTjYszlqaSL2Z3
-	zqvunZggwq/WsghHd18uAacL2YJDJqQ7aECVE3oPQXgN8WqarmShFCc6iho59CCRzba7a0Y7/Iq
-	D+ApiP7UZYgtIjw==
-X-Google-Smtp-Source: AGHT+IHYQh1UqAPsmxjHEZ3LJXPXVDx286B6GQMg6QVOuyzTh8PtFKisKHfxCx9RE21vpz1hU/e8jQ==
-X-Received: by 2002:a05:6214:2522:b0:706:ebc2:9da with SMTP id 6a1803df08f44-707204e946dmr6510276d6.2.1753420025809;
-        Thu, 24 Jul 2025 22:07:05 -0700 (PDT)
-Received: from pc ([196.235.221.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7070fb53f7dsm22362996d6.38.2025.07.24.22.07.03
+        d=1e100.net; s=20230601; t=1753422552; x=1754027352;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hskrk8phHu4wT3pcdJrDYqFkEsU4W/M9XPNUZYaY9go=;
+        b=IF0wVN6UvrscZhFgUUWT9QzOaRK84HZOGBdXZAItQUpNjg92zWOsA1wP4KtJX2rfzi
+         ja9K7a8eEQweElfWwFcTOtmbhHiOLYBdEDO0/wpAyO/cTl+4WzKag/9qb8kLN4R6W7TJ
+         KAbOQDudwIjmCG2oWLyAdxAHrQtUaYZim8GpB0MRAlRJFLd4/T17/tHDgYY8lV42MH1/
+         f91vPO6Bp5EX9V34fLAR09fEzhSKAoEE/vRirSNbxx3o3H8B4QuDngboS7p/IrkgsbSX
+         lj6hotuDEsOsdOjV6GcROEsTdwLMCsHMuIri4Mn1nEuEOuD1NRD6M/11pwQ6TSJMqEug
+         T1Dw==
+X-Forwarded-Encrypted: i=1; AJvYcCVL+oBwf4grTteGsnglGbeHTKG28H4tJknV0NGf8C2/0JnDPK4A4H2HUZF+c1YWIOh+RyEBDdO8JA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqDDduGVr4x91TzAWLv++LQYI9WgLQr/YTmYMv72r6dBX0qCds
+	Mra1ITuS/rVV4m4BPUs7b8H0MUtbrTc2nbtNz8RmWHKRPgmBC5088kF6CU99tQmP2Nc=
+X-Gm-Gg: ASbGncuh8lY260o01P7TNZWi3zkwwnAjLlLka5qmRanHAGxHu14Wi1rQTWXY0x63e+M
+	jJS/Vy4UUm4LV3s8+u4jkhDgLC5B04IFl3xGDj0mvs0HVt+/puZunJP8OqwtqOZmfwvwEGbQ5kp
+	LcAfVdLMnn5F8OK307B/r+o9ydSL4ZdJPWo69mFisvo3Hrx6P6b26tDC0AFCGh4cZbRg4JowLbM
+	VAEyT6ZKBs58rl+fW1HQxNoxF3IgGwF99GZQxgL6V0CcTBn7zlASQjmSbu3hgmjXCuDTKqi6/F3
+	gMJPt0FuGO5KwqGmah48Y3yEIYuCj8Afb3UIRCe0nM7uCSx4XAGQ7Ym4kA65mKR1LGdvB8yDinP
+	T656EelvEBSMweZrKNxYTblU=
+X-Google-Smtp-Source: AGHT+IEFuvuyjcT7lJtRzHLQ3JJkqLEhR4KgQjICzcTCzi4yg8xUN1GJ2tFV3c36Z7EcNgPK0alcHA==
+X-Received: by 2002:a17:902:e78e:b0:234:9375:e07c with SMTP id d9443c01a7336-23fb3171f12mr9502175ad.46.1753422552072;
+        Thu, 24 Jul 2025 22:49:12 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f6c07f942sm2626823a12.7.2025.07.24.22.49.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 22:07:04 -0700 (PDT)
-Date: Fri, 25 Jul 2025 06:07:01 +0100
-From: Salah Triki <salah.triki@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: salah.triki@gmail.com
-Subject: [PATCH] thermal: intel: int340x_thermal: Remove acpi_has_method()
- call
-Message-ID: <aIMQ9RFciI8jmmAh@pc>
+        Thu, 24 Jul 2025 22:49:11 -0700 (PDT)
+Date: Fri, 25 Jul 2025 11:19:09 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "rafael J . wysocki" <rafael@kernel.org>,
+	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: Avoid get_governor() for first policy
+Message-ID: <20250725054909.gplhe37mstwvkuv6@vireshk-i7>
+References: <20250725041450.68754-1-zhangzihuan@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,30 +89,53 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250725041450.68754-1-zhangzihuan@kylinos.cn>
 
-acpi_evaluate_object() returns an error if the needed method does not
-exist. So remove unnecessary acpi_has_method() call.
+On 25-07-25, 12:14, Zihuan Zhang wrote:
+> When a cpufreq driver registers the first policy, it may attempt to
+> initialize the policy governor from `last_governor`. However, this is
+> meaningless for the first policy instance, because `last_governor` is
+> only updated when policies are removed (e.g. during CPU offline).
+> 
+> The `last_governor` mechanism is intended to restore the previously
+> used governor across CPU hotplug events. For the very first policy,
+> there is no "previous governor" to restore, so calling
+> get_governor(last_governor) is unnecessary and potentially confusing.
+> 
+> This patch skips looking up `last_governor` when registering the first
+> policy. Instead, it directly uses the default governor after all
+> governors have been registered and are available.
+> 
+> This avoids meaningless lookups, reduces unnecessary module reference
+> handling, and simplifies the initial policy path.
+> 
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> 
+> ---
+> Changes in v2:
+>  - Fix the case where the governor is NULL.
+> ---
+> ---
+>  drivers/cpufreq/cpufreq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index d7426e1d8bdd..1aa559f53479 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1122,7 +1122,8 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
+>  
+>  	if (has_target()) {
+>  		/* Update policy governor to the one used before hotplug. */
+> -		gov = get_governor(policy->last_governor);
+> +		if (policy->last_governor[0] != '\0')
+> +			gov = get_governor(policy->last_governor);
+>  		if (gov) {
+>  			pr_debug("Restoring governor %s for cpu %d\n",
+>  				 gov->name, policy->cpu);
 
-Signed-off-by: Salah Triki <salah.triki@gmail.com>
----
- drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c | 3 ---
- 1 file changed, 3 deletions(-)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-index cb149bcdd7d5..ce5d53be108b 100644
---- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-+++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-@@ -220,9 +220,6 @@ static int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **ps
- 	int i, result = 0;
- 	struct psvt *psvts;
- 
--	if (!acpi_has_method(handle, "PSVT"))
--		return -ENODEV;
--
- 	status = acpi_evaluate_object(handle, "PSVT", NULL, &buffer);
- 	if (ACPI_FAILURE(status))
- 		return -ENODEV;
 -- 
-2.43.0
-
+viresh
 
