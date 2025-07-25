@@ -1,81 +1,88 @@
-Return-Path: <linux-pm+bounces-31417-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31418-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFADCB118CC
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 09:01:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57B79B119AB
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 10:17:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0ABB3A549E
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 07:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 250363AF309
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Jul 2025 08:16:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F692857E4;
-	Fri, 25 Jul 2025 07:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13AD329E0F8;
+	Fri, 25 Jul 2025 08:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Eg23dvYv"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iFgQGoXV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAB525FA34
-	for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 07:01:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792891C84C6
+	for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 08:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753426905; cv=none; b=V7WSiTrHMWHu7qxEDTHKNCZmstRWqJiDTipKMCx4kEO7I+Y2nxMitXJQgd6xm1NjpLZrctAeONbSCANTrwmkbytTfOtvfBKAynWfaDpxGcaxSISpOye0OiRRMrbp+LeBAfTp3kg93FkrnuGUnAIwe2uf1KQpCKWurIJucsmUPqQ=
+	t=1753431438; cv=none; b=GJfW7pekXgjWyiM31xPn0SGgrKrQYAvrZ6dC9bX4+yDvs/RF3M14X1KzqOJsygqntF0w3fMyWx/nQbkYa50YPUKPPr1YPCdMQTdoZyBb5gqBVuXZcSyP1nZik152q4KQgEIrjkCYQ4X8fb6VnayiQ5z/3h4YOuXuh/yl+KcvuOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753426905; c=relaxed/simple;
-	bh=7dhx4zM5tB7/zhLCyWfgsDgDtAPPbRUFLEdzDO0AJ6Q=;
+	s=arc-20240116; t=1753431438; c=relaxed/simple;
+	bh=GUt9tz6QhKbEM20TY59EPhfaQ3CjaqtAklTBxesc4Fc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aaU8SxoafdBtkFEy+eUuI/d8bIQfvUotFbhAyeon+JjpGXjBDAsWHrIdidiT4HNe6lw/VOEZal3aA6gSG2OnWduEsofbx4/NWMZHNOAjBDG7/E46r0v1HqU3nfFNBEoIjyJI/ekXgjrsjlDgGoViCGtn9B1w++y3DEdkgoVZgks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Eg23dvYv; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ae3ead39d72so11406066b.2
-        for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 00:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753426902; x=1754031702; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JpVKOJXR9kyoeqmQ1g7Wbt9QrQha91mnE2oeLb46rXU=;
-        b=Eg23dvYv+vVbs/k8gGL45y7UCZ+Fo4VDE2Do2sRw+9C46JjipNdVVUcqWs7udCjIL5
-         PE43oCci10CX41UUvuYeh7hxcz+bYxkvu5xHLaEL49vUT235cbLKOS5uW6ya/h1mHpdd
-         eZCUjVSpCvFoYiOB7wMzOyX8JubsH3WwrHCnsK2wvbVLFQ0bvpcnaPCHLYG13pcZZsgy
-         krHG67wwDNEGrxZLwRxY/5LwTc/uSv3mAEC7jzu6PXAlH7MovWbOKxv0AlTA7khITu+P
-         Jux4mjrspw4x37zaOETm3WXfw+PQ+I4C0zNJWXkXDiGMZXIP6w1v9jouODa74+q2ko60
-         hshA==
+	 In-Reply-To:Content-Type; b=Hla9edMoYOB4n9dTFERVyELaNt5i8BRjb1Zbm2mBx4e6GYWkY/KzSk3OFjUGd5a7KOGPIK62fMXQrnx00BLZ/HeDkF268/hkGsssKC09Dl9WvSwFMWeJq28NtG6/E97JJnRNR6mIG1JMT57EoT7HuyBgZO01obG3WRiw3+BIc+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iFgQGoXV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56OLnJ04026720
+	for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 08:17:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	G2gAp22n0LVqwKU2EKsAkb8mxd9ndCHkEqEltv8yGrA=; b=iFgQGoXV0uN7DDu9
+	rZKGekjHt51J194Femx/2/Jkn1FbiI+PSbTQvn3lEaSVWtCGH/mlJ2snM333lZcq
+	MvGQwRZvnn5BL/F857Qf0ygn1fUSjlZNID6yf72vlTa4Qx//SQj0RQYsir63f04/
+	4E0NA2o+nSpEc0xCXdQ1DCLFuYzxsbO0dtfnt9j4wtpk/G/jr+lKQ/kbRlsSyLl0
+	9DZWfe8HtUNIhAFXskmMxfZlk7aWyFFNyJp4AjvoQQuOpsUYbMj4eI5MnVTZJSyV
+	7o7tfSvJiCKeIy12KDWu4SF2QNPZreaEfaxSIulfzrwMMrgo344sXvrQJr/03fXX
+	29WkAg==
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 483w30sbey-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 08:17:15 +0000 (GMT)
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-756bb07b029so1876898b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 25 Jul 2025 01:17:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753426902; x=1754031702;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JpVKOJXR9kyoeqmQ1g7Wbt9QrQha91mnE2oeLb46rXU=;
-        b=KgZr5wt6U2ApCPD6OaVauQGKzQOdEl+pzFLb3wAart6jC8mG7pDCNPiWNpK98F6gnj
-         EL0Bn9tWXBu6BP5qJfGtzMHjVcweqSJnZFM3vv2n5EsIf9bYKZuAjTLmFzUJFAWqwKOL
-         27irc+LM4xoIS7kBIyG77jDYJbTcrFNXvE2JCo0vm91R4/qWc3nE7JXSshnKUXvc7l9t
-         ux140xeT8ZfEifx9P9ds27we2NNFQ35VOnasV9rYGMzTmju2cd+t09wgSD7whGvSoJA1
-         nS6lY76PC52ulYkqIZ1GkrjpK0S9HBdr9NussN0qf9e4awdUSf76fm+sMPdcstkzLgln
-         90fA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHd2AMpNSNSfnElXgZpMHMw8alD1kd0KHfDzKNFqFm13NCR2+uH4wcZgQ2a9w8zHrqj+nldOS7gg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPfAGsie7dtB4ZkU2zomlJZFAMQny6kWdFtdCd0EOtNG33BduV
-	WONaevVazjdaXnaf2+AAdBThlVnbZ1RTxis3lKCeG0YNkG/7IdcxzvEKUeV6W8otdQk=
-X-Gm-Gg: ASbGncsc1N0Lmhm4fJp6Dfek09VzXAZLxUBldpKCBq/pIj6MivI+dCjwvAenrHVdXAY
-	mUyv+1+fiLzbXPQzzmO/CcAicZW7XkszHPW62WV2UiIW9k0mahJwVVdMSzh1w4pocQnrXzg57FK
-	oo9d0E8rCjCmP5uu3zzhR7cwbyrIzswh4J9zb5Fn7M9pllnn3hOGhv/gnV7JN9Mi2c2au1DwIGB
-	teT3VPszHbH3Fn/pb9nbhu/cnXcbHR5hVuybewcKMng5GJKe/epauiChQeATyjNvOfbRfWQmf5x
-	Fd8qyZMsGn49Az1fKAUlIn2OzHP5q4tcDTj4RSRirOELoex/nyOjcuv7noE8LcXdf37SGpCu1if
-	ej8/IlLORKkWMJywwDkBaQHzqbRlp2K3x7G9BgM+nyQ==
-X-Google-Smtp-Source: AGHT+IEnsvu+DtOBwQf2lbjIF393/Fbawzau8Up0k9C8FBeYnqVp9YHxSzUw1/E9eKPPhGd+l0fOfQ==
-X-Received: by 2002:a17:907:2d2b:b0:ade:328a:95d1 with SMTP id a640c23a62f3a-af61cf97e45mr38902866b.10.1753426901599;
-        Fri, 25 Jul 2025 00:01:41 -0700 (PDT)
-Received: from [192.168.1.29] ([178.197.203.90])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af47f44dfa7sm225087066b.82.2025.07.25.00.01.39
+        d=1e100.net; s=20230601; t=1753431434; x=1754036234;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G2gAp22n0LVqwKU2EKsAkb8mxd9ndCHkEqEltv8yGrA=;
+        b=CGgbeV7NEQDnblTTXDOEvP6llds5kFLiWaw+380SiF9VTjVq8/ChuZwnvrMLhBa2Yx
+         KDKUtUPHGnK+ORrjsMg49budR4CQ+F+C9mdbkr4iYcdcyynJsL1H+uOWngbBPS2hZb8R
+         u37j48POjybn5OxFpt9+rCnQihGKT67QqULvT4YWjjemt0V6ryH5gFy4yl40J/A2+Tr8
+         7N5n0JgdYwbCERaImtL52NnVQu2DLK5288Fzjx+BAMDkcmZYaq5YpxpmSun0A0Z7HF8o
+         SxjOUchV8fw5bhvl0Btq57HVYvtotqA4l72GiEi++Ppy+J9k/sTFBxxD7R9jOHVJNeKO
+         0Pow==
+X-Forwarded-Encrypted: i=1; AJvYcCUPLiJAl9z1Sxv/g+dWjQEOI/HhaHXZqlBTsD1cCHJCPmr5oE3tZa/fD4c7YD7GlOJQgxo7dxOLpA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNn19uw+xPdqV1dRPoIb4aFoenAbnxh+jev/5wtZ9onLAi4DHI
+	0Lu9DslHiaZjd7KU1UD104erG7Jq2eVhTkuW/CeYUJGpcxI+q1IyrainwRWuyKwEjOdSWgdbjTS
+	45stNZiBXnruWLJEfOCZ6SiPIKWsd0Di40VD6+teyUBbhRk70lpVOIeF1Rc4a4w==
+X-Gm-Gg: ASbGncuz7O4HZe0b66Z9Pubm9P48+SoOkjfBPbFo/zUj+ydjbmHLp09uLM92waYrxOR
+	kE/7TudtSSlt7lR1zamhUaV3+uabOPmfhVCvuhU8qEc9ikFMYGUUoGnmkd1EA96G6r3pLvupyK5
+	1j9QQMMSeLK1KHR7NVsLD4CsAFZpyPc4N3pDxzugwv+k3f1Jzz87fLTj49X64IG2OAQH4VA030s
+	WYaeLpOol5HrrV1xYjnUvQLIJxzbj03zY8ukeGDCEvWfU4TeXpr+oYJdn0Uz7kWkT9q7yj9I71f
+	rfKLdLxQglhE5YVR+4mg6MtCKGbTDAWnFJQQOaGja1xqFHCVlnsxnPZoYrQ7WykcCPLwegMuLEH
+	I5V03UZ+rZkRknCLru890PzgK3ls=
+X-Received: by 2002:a05:6a21:9989:b0:22c:a165:3664 with SMTP id adf61e73a8af0-23d701db921mr1436116637.26.1753431433688;
+        Fri, 25 Jul 2025 01:17:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGd2mTB0BmD98J6BIrb5zukkTqEkg9rlDr+yDIHUMb/P94c38M867StKboWi+F5J7N2YvdZ8w==
+X-Received: by 2002:a05:6a21:9989:b0:22c:a165:3664 with SMTP id adf61e73a8af0-23d701db921mr1436058637.26.1753431433198;
+        Fri, 25 Jul 2025 01:17:13 -0700 (PDT)
+Received: from [10.133.33.78] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-761ae1584bfsm3128624b3a.38.2025.07.25.01.17.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jul 2025 00:01:40 -0700 (PDT)
-Message-ID: <8a5ade3f-a263-4ab6-add9-1640db29005e@linaro.org>
-Date: Fri, 25 Jul 2025 09:01:38 +0200
+        Fri, 25 Jul 2025 01:17:12 -0700 (PDT)
+Message-ID: <d34ff09d-5a55-4c7a-9eb6-fc0a0f4adcfb@oss.qualcomm.com>
+Date: Fri, 25 Jul 2025 16:17:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,257 +90,130 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/8] dt-bindings: gpu: img,powervr-rogue: Add TH1520
- GPU compatible
-To: Michal Wilczynski <m.wilczynski@samsung.com>,
- Matt Coster <Matt.Coster@imgtec.com>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns
- <Frank.Binns@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-References: <20250623-apr_14_for_sending-v6-0-6583ce0f6c25@samsung.com>
- <CGME20250623114436eucas1p1ab8455b32937a472f5f656086e38f428@eucas1p1.samsung.com>
- <20250623-apr_14_for_sending-v6-5-6583ce0f6c25@samsung.com>
- <9c82a6bc-c6ff-4656-8f60-9d5fa499b61a@imgtec.com>
- <d154d2d0-3d59-4176-a8fb-3cb754cf2734@samsung.com>
- <e1a3d854-93bc-4771-9b8e-1639ca57b687@kernel.org>
- <d12fd4fb-0adb-40c4-8a0a-c685cd6327b3@samsung.com>
- <27068fd3-92b5-402b-9f3c-fd786db56668@kernel.org>
- <f25c1e7f-bef2-47b1-8fa8-14c9c51087a8@imgtec.com>
- <491b69ce-5a2f-4df1-95af-9318bbe6c9b0@samsung.com>
- <9c4f962d-6877-4a53-b0f3-218930f94e1e@imgtec.com>
- <07410f0c-8369-4683-9143-c79c6cb3f5b0@samsung.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 2/8] power: supply: core: Add state_of_health power
+ supply property
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@foundries.io>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-2-9e377193a656@oss.qualcomm.com>
+ <6oixvnhihgjucqaovkayzm6cpi35jfmtwmm67wa6h4nlmhr6w5@ggb7auvjzos2>
+ <cd2964b0-e28e-4ddb-b319-9b65fb78b73c@oss.qualcomm.com>
+ <p5nxjuexggzxttislcaum7vomawnq5fncos7itfib6ysvy6a4k@d5ywmfpqyk3s>
+ <994cb636-50b3-40f8-baaf-0b1afa2e7f53@oss.qualcomm.com>
+ <3ldf7w5cpv4wt63kvewl2a32abx4uohvir7zgefpqly5rytkcn@p5fslnvpnjn3>
+ <4pxg7acm4nuwo7bhiwrtpxdey7v2hanw2tw6vbgp6i6md4q2zx@pxjuymr6ykwr>
 Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- 2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <07410f0c-8369-4683-9143-c79c6cb3f5b0@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+In-Reply-To: <4pxg7acm4nuwo7bhiwrtpxdey7v2hanw2tw6vbgp6i6md4q2zx@pxjuymr6ykwr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=WtArMcfv c=1 sm=1 tr=0 ts=68833d8b cx=c_pps
+ a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=Oh2cFVv5AAAA:8 a=VwQbUJbxAAAA:8
+ a=7KI_h5JtWn8X269DZ4AA:9 a=QEXdDO2ut3YA:10 a=IoOABgeZipijB_acs4fv:22
+ a=7KeoIwV6GZqOttXkcoxL:22
+X-Proofpoint-GUID: V8z9q0heksCvUmjk_sKhGqc_Jx0EiSIZ
+X-Proofpoint-ORIG-GUID: V8z9q0heksCvUmjk_sKhGqc_Jx0EiSIZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI1MDA2OSBTYWx0ZWRfX9Zj6wfZwBmT2
+ KxHqZsbFJRQ5zjCnWubbMIQqOb0nlS9PGQpCPFZMphak9UhS7nvguUi8tFa/5aqibOiHb8iYuMq
+ 8j/8LsB2+yUzQ3i91o8REtpXza3bEmFTC8ONVeH4bej0lz89+cKDhRW+wu5A4TO7TtdWWDxSA1O
+ StFP43N0iBxybYZe8fnjNGE0ZSWVC0k9pLjYXQNlK/rIKylJUBtpeIQ0uA+k75C8nzUL6HPRa/h
+ dlWu1J23iALlXroXqixYlgjZ4jxcHyPh+5Wb0YTuRG/Savodtc6N918rvGRjtvSMwkbAajGWKTo
+ 47gG6QnV8p1mc4lwTPlnaDXTMhMTWubT58dEBD1pUxToJoE1trQGHg9F1t+6Nz9+sLFCracs2h8
+ WTlrT580/JDNBR7Fo5Qb9tqDvGPNuYirxPY1HH81li5S0eVs+sSfDRpO99IeZOAt6NDOjYpL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-25_02,2025-07-24_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 clxscore=1015 mlxlogscore=999 suspectscore=0 malwarescore=0
+ spamscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507250069
 
-On 23/07/2025 20:25, Michal Wilczynski wrote:
-> 
-> 
-> On 7/23/25 18:50, Matt Coster wrote:
->> On 23/07/2025 17:26, Michal Wilczynski wrote:
->>> On 7/23/25 11:45, Matt Coster wrote:
->>>> On 25/06/2025 15:41, Krzysztof Kozlowski wrote:
->>>>> On 25/06/2025 16:18, Michal Wilczynski wrote:
->>>>>>
->>>>>>
->>>>>> On 6/25/25 15:55, Krzysztof Kozlowski wrote:
->>>>>>> On 25/06/2025 14:45, Michal Wilczynski wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 6/24/25 15:53, Matt Coster wrote:
->>>>>>>>> On 23/06/2025 12:42, Michal Wilczynski wrote:
->>>>>>>>>> Update the img,powervr-rogue.yaml to include the T-HEAD TH1520 SoC's
->>>>>>>>>> specific GPU compatible string.
->>>>>>>>>>
->>>>>>>>>> The thead,th1520-gpu compatible, along with its full chain
->>>>>>>>>> img,img-bxm-4-64, and img,img-rogue, is added to the
->>>>>>>>>> list of recognized GPU types.
->>>>>>>>>>
->>>>>>>>>> The power-domains property requirement for img,img-bxm-4-64 is also
->>>>>>>>>> ensured by adding it to the relevant allOf condition.
->>>>>>>>>>
->>>>>>>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>>>>>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->>>>>>>>>> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>>>>>>>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->>>>>>>>>> ---
->>>>>>>>>>  Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml | 9 ++++++++-
->>>>>>>>>>  1 file changed, 8 insertions(+), 1 deletion(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
->>>>>>>>>> index 4450e2e73b3ccf74d29f0e31e2e6687d7cbe5d65..9b241a0c1f5941dc58a1e23970f6d3773d427c22 100644
->>>>>>>>>> --- a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
->>>>>>>>>> +++ b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
->>>>>>>>>> @@ -21,6 +21,11 @@ properties:
->>>>>>>>>>            # work with newer dts.
->>>>>>>>>>            - const: img,img-axe
->>>>>>>>>>            - const: img,img-rogue
->>>>>>>>>> +      - items:
->>>>>>>>>> +          - enum:
->>>>>>>>>> +              - thead,th1520-gpu
->>>>>>>>>> +          - const: img,img-bxm-4-64
->>>>>>>>>> +          - const: img,img-rogue
->>>>>>>>>>        - items:
->>>>>>>>>>            - enum:
->>>>>>>>>>                - ti,j721s2-gpu
->>>>>>>>>> @@ -93,7 +98,9 @@ allOf:
->>>>>>>>>>        properties:
->>>>>>>>>>          compatible:
->>>>>>>>>>            contains:
->>>>>>>>>> -            const: img,img-axe-1-16m
->>>>>>>>>> +            enum:
->>>>>>>>>> +              - img,img-axe-1-16m
->>>>>>>>>> +              - img,img-bxm-4-64
->>>>>>>>>
->>>>>>>>> This isn't right – BXM-4-64 has two power domains like BXS-4-64. I don't
->>>>>>>>> really know what the right way to handle that in devicetree is given the
->>>>>>>>> TH1520 appears to expose only a top-level domain for the entire GPU, but
->>>>>>>>> there are definitely two separate domains underneath that as far as the
->>>>>>>>> GPU is concerned (see the attached snippet from integration guide).
->>>>>>>>>
->>>>>>>>> Since power nodes are ref-counted anyway, do we just use the same node
->>>>>>>>> for both domains and let the driver up/down-count it twice?
->>>>>>>>
->>>>>>>> Hi Matt,
->>>>>>>>
->>>>>>>> Thanks for the very helpful insight. That's a great point, it seems the
->>>>>>>> SoC's design presents a tricky case for the bindings.
->>>>>>>>
->>>>>>>> I see what you mean about potentially using the same power domain node
->>>>>>>> twice. My only hesitation is that it might be a bit unclear for someone
->>>>>>>> reading the devicetree later. Perhaps another option could be to relax
->>>>>>>> the constraint for this compatible?
->>>>>>>>
->>>>>>>> Krzysztof, we'd be grateful for your thoughts on how to best model this
->>>>>>>> situation.
->>>>>>>
->>>>>>>
->>>>>>> It's your hardware, you should tell us, not me. I don't know how many
->>>>>>> power domains you have there, but for sure it is not one AND two domains
->>>>>>> the same time. It is either one or two, because power domains are not
->>>>>>> the same as regulator supplies.
->>>>>>
->>>>>> Hi Krzysztof, Matt,
->>>>>>
->>>>>> The img,bxm-4-64 GPU IP itself is designed with two separate power
->>>>>> domains. The TH1520 SoC, which integrates this GPU, wires both of these
->>>>>> to a single OS controllable power gate (controlled via mailbox and E902
->>>>>> co-processor).
+
+On 6/22/2025 9:17 AM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Thu, Jun 05, 2025 at 09:34:14AM +0300, Dmitry Baryshkov wrote:
+>> On Thu, Jun 05, 2025 at 02:08:30PM +0800, Fenglin Wu wrote:
+>>> On 6/3/2025 6:35 PM, Dmitry Baryshkov wrote:
+>>>>>>> +What:		/sys/class/power_supply/<supply_name>/state_of_health
+>>>>>>> +Date:		May 2025
+>>>>>>> +Contact:	linux-arm-msm@vger.kernel.org
+>>>>>>> +Description:
+>>>>>>> +		Reports battery power supply state of health in percentage.
+>>>>>>> +
+>>>>>>> +		Access: Read
+>>>>>>> +
+>>>>>>> +		Valid values: 0 - 100 (percent)
+>>>>>> What does it mean that battery has 77% of health?
+>>>>> I will update this to explain it better:
 >>>>>
->>>>> This helps... and also sounds a lot like regulator supplies, not power
->>>>> domains. :/
->>>>
->>>> Apologies for taking so long to get back to you with this, I wanted to
->>>> make sure I had the whole picture from our side before commenting again.
->>>>
->>>> From the GPU side, a "typical" integration of BXM-4-64 would use two
->>>> power domains.
->>>>
->>>> Typically, these domains exist in silicon, regardless of whether they
->>>> are exposed to the host OS, because the SoC's power controller must have
->>>> control over them. As part of normal operation, the GPU firmware (always
->>>> in domain "a" on Rogue) will request the power-up/down of the other
->>>> domains, including during the initial boot sequence. This all happens
->>>> transparently to the OS. The GPU block itself has no power gating at
->>>> that level, it relies entirely on the SoC integration.
->>>>
->>>> However, it turns out (unknown to me until very recently) that this
->>>> functionality is optional. The integrator can opt to forego the
->>>> power-saving functionality afforded by firmware-controlled power gating
->>>> and just throw everything into a single domain, which appears to be
->>>> what's happened here.
->>>>
->>>> My only remaining issue here, then, is the naming. Since this
->>>> integration doesn't use discrete domains, saying it has one domain
->>>> called "a" isn't correct*. We should either:
->>>>
->>>>  - Drop the name altogether for this integration (and others like it
->>>>    that don't use the low-power functionality, if there are any), or
->>>
->>> Hi Matt,
->>>
->>> Thanks for the detailed explanation, that clears things up perfectly.
->>
->> I'm glad I could get to the bottom of this one, it was bothering me too!
->>
->>>
->>> I agree with your assessment. Dropping the power-domain-names property
->>> for this integration seems like the cleanest solution. As you pointed
->>> out, since the OS sees only a single, undifferentiated power domain,
->>> giving it a name like "gpu" would be redundant. This approach correctly
->>> models the hardware without setting a potentially confusing precedent.
->>
->> That seems reasonable. I was very much on the fence for this one, so
->> I'll happily go along with dropping the name altogether.
->>
->> Just to make sure I understand correctly, the change here would be to
->> move "required: - power-domain-names" from "img,img-rogue" to every
->> conditional block that constrains the number of domains?
->>
->> Can we add negative constraints in conditionals? Then we could add
->> "power-domain-names: false" to the "thead,th1520-gpu" conditional block
->> alongside "power-domains: maxItems: 1".
-> 
-> Yeah the diff with v7 would look like so:
-> diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> index 263c40c8438e..338746f39cbb 100644
-> --- a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> +++ b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> @@ -89,6 +89,11 @@ allOf:
->          compatible:
->            contains:
->              const: img,img-rogue
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              const: thead,th1520-gpu
+>>>>> Reports battery power supply state of health in percentage, indicating that the maximum charge capacity has degraded to that percentage of its original designed capacity.
+>>>> Which basically means that we don't need it in the first place, as we
+>>>> can read capacity_full and capacity_full_design (or energy_full /
+>>>> energy_full_design) and divide one onto another.
+>>> Hmm, it is true in general to quantify how the battery performance has
+>>> degraded over time. However, estimating and calculating for battery state of
+>>> health is much more complicated I think. I am not an expert, but as far as I
+>>> know, different battery management systems might have different algorithms
+>>> to calculate the battery health and report it in as percentage. For example,
+>>> in Qcom battery management firmware, a "soh" parameter is provided as the
+>>> battery health percentage based on the real-time calculations from learning
+>>> capacity, resistance estimation, etc.
+>> Ack, this is more than just full / full_design. Please consider
+>> expanding ABI description (though in the vendor-neutral way).
+> No, Dmitry was right. It is exactly the same.
+>
+> Estimating the battery state of health information is indeed tricky
+> and complicated. The reason for that is that estimating and
+> calculating POWER_SUPPLY_PROP_CHARGE_FULL/POWER_SUPPLY_PROP_ENERGY_FULL
+> (i.e. not the *_FULL_DESIGN) is complicated :)
+>
+> Greetings,
+>
+> -- Sebastian
+Hi Sebastian,
 
-No, don't do that. Anyway, if you are going to rewrite patch, you MUST
-drop all tags, document it and explicitly ask for re-review.
+Thanks for the comment.
 
-Best regards,
-Krzysztof
+In the qcom_battmgr driver, both POWER_SUPPLY_PROP_CHARGE_FULL and 
+POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN properties are already supported, 
+and CHARGE_FULL is used to represent the learned battery capacity 
+calculated in Qcom BMS. Additionally, the Qcom BMS calculates a 
+comprehensive battery SOH parameter by considering multiple factors, 
+such as changes in battery impedance, learned capacity over time, and 
+charging/discharging cycles. Such as, for the battery impedance change, 
+it is specially important for calculating SOH in scenarios with high 
+load or low temperatures, as only part of the CHARGE_FULL capacity may 
+be usable due to significant voltage drops, especially in aged batteries.
+
+Hence, we proposed adding "state_of_health" support in power supply ABI 
+to expose this parameter provided in Qcom BMS which is different from 
+the calculation of charge_full / charge_full_design.
+
+Also, Android battery management code [1] is expecting "state_of_health" 
+power supply property and it can use it if it's available.
+
+[1] 
+https://android.googlesource.com/platform/system/core/+/refs/heads/main/healthd/BatteryMonitor.cpp#927
+
+Thanks
+
+Fenglin
+
 
