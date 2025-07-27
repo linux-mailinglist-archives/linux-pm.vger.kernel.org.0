@@ -1,90 +1,90 @@
-Return-Path: <linux-pm+bounces-31437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C823AB1307E
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Jul 2025 18:26:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 355A7B13084
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Jul 2025 18:27:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC8087AA367
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Jul 2025 16:25:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A77F3A3A3C
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Jul 2025 16:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC6C21C9E4;
-	Sun, 27 Jul 2025 16:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32F021FF38;
+	Sun, 27 Jul 2025 16:25:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ll2dnarX"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="enerPKAI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF53E21E0AF
-	for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 16:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B8B220F38
+	for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 16:25:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753633537; cv=none; b=TxrIA7w1U0nlq8u3uP6PKp93/9sCMp27O/tXjj85E082UIdgIVSNNY9aw5TUjX+o9ATbEvdbVSoduBxrF/TPuE4hA7EEBIuZga+BS1uS/u9UmslHvxvLNNf6puh7m0WLHTYt0zJ2T7ESW9L1xjJLUUksagXm+DbbvSeVf4H53Hg=
+	t=1753633545; cv=none; b=O+lilgwDDqxs7lONDgtLfp9BqBOM7TmvmIoZemzEEVI+BGkkJrwDdDX3ra7NUd17QvM7/t9aJbyudAqUAPy0kXNFSKxNwVgZzN64Fo4giksFryZmjOMr6egKq3NKHc3I55pIMxQKX9DB3oO8DPGxFM+94ib+1xSesuROP78ZoRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753633537; c=relaxed/simple;
-	bh=B5BLAbfGWAu1tjZeNLd2S/l/pA+itiinQJEbqhqQ7Iw=;
+	s=arc-20240116; t=1753633545; c=relaxed/simple;
+	bh=UwAuk0mKb9rcWWrnqsEINzklGj3BCiY6oFtAQLs8bEM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YiXgU1nGCtas44rC4ColRmntRUWQ+rtcSVF3hCB3ApCl5+5ynL/1BsxFpQlyeIrXxAqHDEsE53xQCpOx6g4W5/K4QRC1BQAED+ZgGwu+M3eINamaXMzTNFKNjd+0WE3u3YNLqCoSuW3wOWSSkA5XvTb79VZaXjB6p9SD5RHJs6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ll2dnarX; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:Cc; b=V5fIA3JJcEE7SORBcXmTHnZfR8npxIHhFZQKeLwd2IwUIakpUGwYNY1TcodqwE200nQlHdYUdHtNVvGCIx/CQzW01S2+PjT42Fqe9XVFwKvOcNthEJ5KbAWefFQQxNYb7xfZ3dTA72vHg+9JI/eydlLPkqfnnoJa99tfZXLr57c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=enerPKAI; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56RAdmtf017122
-	for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 16:25:35 GMT
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56RCZEN4032740
+	for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 16:25:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LAjdEtX3RT7zSV5WrhnDDtIT/eTrigKKIJeo9CD77g8=; b=Ll2dnarXF3tA763o
-	n0D2snUMmai1xsB9hkOvnb2fifsSLg1eWkxr6LBWGPBJWONv1lc7QUlNM3CJ5E3H
-	NMm/+P1jsD/L+TRxS2KeEdHs1QuQ+5eeZ/Bxyz/1Ko/TJAVN90y0DFU0kzbO7TZb
-	1uazZIYQWW2I3TZJoyZconGYcOXvAs85jsqQwgeH903e71Uy8IM6YxYyE9LMN25K
-	2RCMgvxVUxaIDe3Bm0tJjyp/b7K82bwNDMIheJX9tSheGicesNanxpmyUXn2PzGP
-	/kc/qpXNoKhDl9WOfzHEPgFE9zdV/Ve3LVmgzyG7HiI38Rn1+tN9+5y5JkxJg5p2
-	qDCFEg==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484q3xjat4-1
+	kjg+v7QmECaMK4O0WsmDewSJVWQyUa1xzMTrttC4DDk=; b=enerPKAIDY9iQur+
+	upaFxsO25ySiMDPy3qQArSQxC+I2irkVoo4+2300XOd9qzQ2YHaeA81CvKi4ZX69
+	9L9Z/yGrQhgbhK7E4/XYg/GNIyii7W1W+JHQ+TbjrH+HXyDTQao2CmA9I3RpZGjP
+	8zsTgesorYKkKON7WCPI3HcPdaEXaYMdAzN9k0OPhpMRwQRsBzrUkl59I8yA7gOo
+	J82r72GwebN3IZ4cC3nFZ4MJBHUOzD8Y9BSyncgK01e+ApQzwvZ7LuX7hZNyiKr0
+	fo36EHW/rQhN5HKdkngLyzTYLZtbVY+KdT95Ua9wRa5jPzLkFmmEgkdQ8x6jA0Aj
+	dVyQWw==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484pbktb6v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 16:25:34 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-23632fd6248so36232625ad.3
-        for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 09:25:34 -0700 (PDT)
+	for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 16:25:42 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-235f77f86f6so37264935ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 27 Jul 2025 09:25:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753633534; x=1754238334;
+        d=1e100.net; s=20230601; t=1753633542; x=1754238342;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LAjdEtX3RT7zSV5WrhnDDtIT/eTrigKKIJeo9CD77g8=;
-        b=F+pa3WX8J0IBuvfvIWLKHVniJw3LAvbAzfSu54csi7JqVF+T3MwWi1lKci20I0M17O
-         OIFy3+s7mfVmqU9g8Ui7SvcP2QUcMFvwte01aZmDEUw885T1XCkvMS5he7I7Xv53n6rE
-         eY0VnU+w/b8lTLDiopGYfXfLunUZhmblMLzVnLweUr3jmvUAQqAMo6wAkS+2h4nGRhgQ
-         KOI36NobNslP0iTteFnbM/cCUpvEnPGzxwujgfTExzWykuk4Uyj9SO5gOeXt4zuuYUBZ
-         hLaqscCuQsetnRpPAwCiuEa9cBMy5fZt9encrqyH8Z5Z4psFNIYHZGDsc3Z813jXdgGB
-         s/WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVxs4wAY99GtK+MBt1SdiFBuvCtEparATnzaSPiEm5LB4AqeEj92YUw0Dyz52KfCb5fgp1IFFw1Zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIv5jAMM5XL0/wm4NbZIFcirc4QEVTY/uGOKI9nQyTQJp2fRm0
-	y2WgrsjEMq/fPYIz4reKL3a88GKRFGb8/E63yUjhV78ZnY8Twol9xsTxx6qa41+b3PCKfVK2FWA
-	IhXtVZSbp6JGR3SlMVYnwawMMIWom6J9nx599CyvXs0938CZZ3eIzy40LyuL/Cg==
-X-Gm-Gg: ASbGnctC+RG5cbV2dFjb4atX/L1ManiJa6g8sF8CFcwDd20nN2rhP9Tu0RKzmqzYOnY
-	kSx2AWVmMHM/EiUCKUK5oXUJEMeaGWfZUiwmi118KyVGFuOStCOrh2+yMpp+lHMn2hAX7tQzcht
-	ouZ5zsrWUnZg907AwpzM5YI0LYAckcZFLIQLVDDE/HfPhPNfM4vANSmasfnzFltAX6QazTgj4Z8
-	UKNYsfLfhXA7PzWXqYiWOI33cNN2rYKqK/xRjQxMVEF4zWLHtjk9mORx7nWhxXvNs3OXLvoU3G3
-	c6Buv6Z6P0N3s0mH5kKXX7am30fVPH7xA4WLTDJJQIMJiC9bYvUlMjF2eBc3nnD+lh3t0aAWL1/
-	4
-X-Received: by 2002:a17:902:d2c7:b0:23f:8df8:e7b1 with SMTP id d9443c01a7336-23fb30b3224mr145314795ad.32.1753633533690;
-        Sun, 27 Jul 2025 09:25:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH7X/a1NVbBv9ysYl7a3wo9LMuxbvZnRFcCXyu7AESYMzqbL9vACORQwwTa7YynJTdngrt2rw==
-X-Received: by 2002:a17:902:d2c7:b0:23f:8df8:e7b1 with SMTP id d9443c01a7336-23fb30b3224mr145314215ad.32.1753633533214;
-        Sun, 27 Jul 2025 09:25:33 -0700 (PDT)
+        bh=kjg+v7QmECaMK4O0WsmDewSJVWQyUa1xzMTrttC4DDk=;
+        b=AcuVI04W4o66X87wD6F5q+lullFhRVbOCXpsSAdzQAHcUtqKyCaW1o2pqOaMceM4Kw
+         RQQ+8v2pSUft/Pknv1L6BlxXZlTqYf9e2OW1OVxpTfZEktFKyeZFgb0TeyATugFv4SNu
+         yQ/ZLcN2ijNSciuGSAdb1SaSiL1rP2rf5mB441OG+zyFl99OUMJ6CBUaELInBqZXFqY6
+         2E40jfNoORPwXQWmjJVEaD57K0fKd7iTTnRqq2mLpXTBOC7jkoYF7hiR5Wh3vixv+rY3
+         z7S+Ra1Yksid+tASli2Adde59dsbMq5Ckt8TMNh/ng74tDss0HhYu4HVgQvSv//RDLkI
+         dTyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPldoWyEN4IAPbrUSHIZmwUhGrBEan5K95RffQW8aotZV/tyTqRK8hlrIPD5KzYmO0Lb9PkqmKkA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoG2J2AuuG5ILDj9pCoxJ1ibGh8Z0YiGrBgSXDuoYbTFa+a7Gf
+	Q6VcY0ZnRb54EC5syMQXNkmPf2LqddB89NrVHLySsb3AEIRUXDjTkNmK7/oZ0gy5esLZMcgWJPy
+	iQ8NVWoc4m7QqrUapbEwxtM2Bsq9OSg/mq/FJggdeVoXfwU06U1lUbt83VQJG9A==
+X-Gm-Gg: ASbGncs7uUwwMy/h16BNoo2JxP3bGIAmlTq8PvweUrvuwEbD9ZJjV1Zc08XMTKs1P2w
+	vdz5w5H0fs4Ayh9Hggrwu9feQ1QWJsFBUKRk9KD/H9QRXPuuJmoOZYgnLxqwuuOCDA2BFMHrLYU
+	c9YJSoRO9d5T2oOj2+eIMEZomTpY7d/x/RY2VIuzmZsyKK6cUP7Eto1iJtWwevW4UNoDh2lJ34Q
+	xg1xQWk0THWof6xe7MM2lhuW8z1zoaQT+72gIoKKm/LcJXyg2U6ksjJL7kfe/jk2t0UnO4wpn2Q
+	N+HHSyweacqpatZJPXmvai0jSyNs2OEts8cmsrg8Cr6wHrQBdScY8fU28SnD05I/h6TRGdVRWY7
+	f
+X-Received: by 2002:a17:902:d4d2:b0:240:11cd:8502 with SMTP id d9443c01a7336-24011cd8924mr21873765ad.13.1753633541665;
+        Sun, 27 Jul 2025 09:25:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF64zD926zPgoLnZHbfxHUg9o9btJVPhQIA8eXNOi4vpCwnfXohmuBfaMQGx77pfDBk/lpsfA==
+X-Received: by 2002:a17:902:d4d2:b0:240:11cd:8502 with SMTP id d9443c01a7336-24011cd8924mr21873545ad.13.1753633541102;
+        Sun, 27 Jul 2025 09:25:41 -0700 (PDT)
 Received: from hu-spratap-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fd9397ebbsm29110325ad.210.2025.07.27.09.25.26
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fd9397ebbsm29110325ad.210.2025.07.27.09.25.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Jul 2025 09:25:32 -0700 (PDT)
+        Sun, 27 Jul 2025 09:25:40 -0700 (PDT)
 From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Date: Sun, 27 Jul 2025 21:54:47 +0530
-Subject: [PATCH v13 04/10] Documentation: ABI: Add
- sysfs-class-reboot-mode-reboot_modes
+Date: Sun, 27 Jul 2025 21:54:48 +0530
+Subject: [PATCH v13 05/10] power: reset: reboot-mode: Expose sysfs for
+ registered reboot_modes
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,7 +93,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250727-arm-psci-system_reset2-vendor-reboots-v13-4-6b8d23315898@oss.qualcomm.com>
+Message-Id: <20250727-arm-psci-system_reset2-vendor-reboots-v13-5-6b8d23315898@oss.qualcomm.com>
 References: <20250727-arm-psci-system_reset2-vendor-reboots-v13-0-6b8d23315898@oss.qualcomm.com>
 In-Reply-To: <20250727-arm-psci-system_reset2-vendor-reboots-v13-0-6b8d23315898@oss.qualcomm.com>
 To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
@@ -120,92 +120,284 @@ Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
         Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
         Srinivas Kandagatla <srini@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753633495; l=2307;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753633495; l=7789;
  i=shivendra.pratap@oss.qualcomm.com; s=20250710; h=from:subject:message-id;
- bh=B5BLAbfGWAu1tjZeNLd2S/l/pA+itiinQJEbqhqQ7Iw=;
- b=pgH9mIPi7GA0ayDqkKnR2+E/P0dq3sd1IZAeVGSFF5+JaYFGGS/XBZthLHPT9KAF1UJ/RpQH4
- Hoy706MVMLNDID9ZV+MW3XmZWBEhJJ0oZVWXtccIrzCMNUZQ3rPFPly
+ bh=UwAuk0mKb9rcWWrnqsEINzklGj3BCiY6oFtAQLs8bEM=;
+ b=5nCCrPxu1hs4B4gaNuJable+RSLEjWkwStVjMUm8ziF5OEvY3BzxS5O31XsXPhhUfGLthjPmW
+ eujejMPAi+jAogRbdwDQd0+i/4GzTqmLR3CE7VsSLtixoLYokKDmMLb
 X-Developer-Key: i=shivendra.pratap@oss.qualcomm.com; a=ed25519;
  pk=CpsuL7yZ8NReDPhGgq6Xn/SRoa59mAvzWOW0QZoo4gw=
-X-Authority-Analysis: v=2.4 cv=JovxrN4C c=1 sm=1 tr=0 ts=688652fe cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8
- a=5CgfHzhl2afHKY-Ush4A:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-ORIG-GUID: 7rVK8pwmQ04prU4vlXgb2lSyJ4ys_jqW
-X-Proofpoint-GUID: 7rVK8pwmQ04prU4vlXgb2lSyJ4ys_jqW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI3MDE0MSBTYWx0ZWRfXxNNW5YyW4iTP
- dzEkS35F7Fz9hx33WSV5JVJ+IXjyBlYjDpFb/js5jdLOjrjOUIaZFEClAzdTC2XZXbSmTXg3akj
- VFAYJILEao3A7baxPTKzy93Ij0144JMbItmpWU8DfUNmOzrkOb0XiUepEZFAO20L6R6CT7IuDeL
- NOsxwHXh4TaZNmjwRgbpAUV0Bp7ngS7UDU7qQyyrDO3npTHEWUQ9TorFWLgWmxNC4HjJXmUOsqq
- Z4dIaHKCkQUPqpAR9B4SD9C9gLqyzR9KsvjEt6aiwb7GdeSfkmd+a0+H2qZqDKeWan0H5P6IVSS
- sh6+Q8CRk4S+nMkFGswSTP3qHPVoRLRrJLpuAMCx7FfuXscPmsiWtzX2CPSeqIIrMGOBgAZBQOk
- PgedlP8LiHbw9wnrDET28NOTSbqJk+GkU6s+KasVHeMNmNuvMuY0KHZEDcl+KaQbqSiOWtxS
+X-Authority-Analysis: v=2.4 cv=LsaSymdc c=1 sm=1 tr=0 ts=68865306 cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=I4qJSSq-i-5ETPqSmjYA:9
+ a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI3MDE0NiBTYWx0ZWRfX16f7bNoL+/84
+ 2NRYwzcj0lvEyemzeXKL7/cdrrSsrYazuw7ZgBqnnihEs3iugYquw4L+AHNI6VnFNDY8Grr3QtH
+ CDa5nvvTiqGF6QKKb+VFkOB57Vqj1YktsNUqpXjcRkFbYOy+paXt3ZlsYRlL4HJPdcfslR4oSFE
+ s1LtytSgAtpGEaoIhok4q7MiSyt0meirXy6Z+OZUKZ1hUubeCv+qPOIZucQT5IHFxtyX+0Kzy38
+ 3KJxNGPQOcZZc0H2kp5rBgrFMmZJFKM8xkvVeh8htH2hIpPm8S5/KOz7j2CngV7+AExPcqjdap0
+ RxzuK5I5QQ8/NwD2A8IhuQeT16xyKgwfFEhK9TyFqNQIYqhnsITtfVk9xNigTfepiJpeceLGUyZ
+ K+ZEf7rs91kF0L2SOFx00Xy32BRW2YYeJXe+D+P8+5RdbE1IIJRYpsz/07Ux3mnZxQ0nvKzU
+X-Proofpoint-ORIG-GUID: WtwwR4zqQxgS0vOOTNPkjTuZs6eRgDD2
+X-Proofpoint-GUID: WtwwR4zqQxgS0vOOTNPkjTuZs6eRgDD2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-07-27_05,2025-07-24_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015 priorityscore=1501 bulkscore=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507270141
+ clxscore=1015 mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ bulkscore=0 mlxscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507270146
 
-Add ABI documentation for /sys/class/reboot-mode/*/reboot_modes,
-a read-only sysfs attribute exposing the list of supported
-reboot-mode arguments. This file is created by reboot-mode
-framework and provides a user-readable interface to query
-available reboot-mode arguments.
+Currently, there is no standardized mechanism for userspace to
+discover which reboot-modes are supported on a given platform.
+This limitation forces tools and scripts to rely on hardcoded
+assumptions about the supported reboot-modes.
+
+Create a class 'reboot-mode' and a device under it to expose a
+sysfs interface to show the available reboot mode arguments to
+userspace.
+
+Provision the register function with an additional parameter to
+get an explicit driver_name. Create the device using this
+driver_name. For platform drivers, use the driver_name configured
+in dev node.
+
+This results in the creation of:
+  /sys/class/reboot-mode/<driver>/reboot_modes
+
+This read-only sysfs file will exposes the list of supported
+reboot modes arguments provided by the driver, enabling userspace
+to query the list of arguments.
+
+Align the clean up path to maintain backward compatibility for
+existing reboot-mode based drivers.
 
 Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
 ---
- .../testing/sysfs-class-reboot-mode-reboot_modes   | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ drivers/power/reset/reboot-mode.c | 126 ++++++++++++++++++++++++++++++--------
+ include/linux/reboot-mode.h       |   4 +-
+ 2 files changed, 105 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes b/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes
-new file mode 100644
-index 0000000000000000000000000000000000000000..7147a781e5d4d11977c3a156bf4308aa13310e39
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes
-@@ -0,0 +1,39 @@
-+What:		/sys/class/reboot-mode/<driver>/reboot_modes
-+Date:		July 2025
-+KernelVersion:	6.16
-+Contact:	linux-pm@vger.kernel.org
-+		Description:
-+		This interface exposes the reboot-mode arguments
-+		registered with the reboot-mode framework. It is
-+		a read-only interface and provides a comma
-+		separated list of reboot-mode arguments supported
-+		on the current platform.
-+		Example:
-+		 recovery,fastboot,bootloader
+diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
+index ac81b8b0a9b7fc31f8ef21024333a050087ce90f..4c23ff912fc6afbc6949bfdd6607781eccb4e85e 100644
+--- a/drivers/power/reset/reboot-mode.c
++++ b/drivers/power/reset/reboot-mode.c
+@@ -6,6 +6,7 @@
+ #define pr_fmt(fmt)	"reboot-mode: " fmt
+ 
+ #include <linux/device.h>
++#include <linux/err.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+@@ -23,6 +24,8 @@ struct mode_info {
+ 	struct list_head list;
+ };
+ 
++static struct class *rb_class;
 +
-+		The exact sysfs path may vary depending on the
-+		name of the driver that registers the arguments.
-+		Example:
-+		 /sys/class/reboot-mode/nvmem-reboot-mode/reboot_modes
-+		 /sys/class/reboot-mode/syscon-reboot-mode/reboot_modes
-+		 /sys/class/reboot-mode/qcom-pon/reboot_modes
+ static u64 get_reboot_mode_magic(struct reboot_mode_driver *reboot, const char *cmd)
+ {
+ 	const char *normal = "normal";
+@@ -75,26 +78,116 @@ static int reboot_mode_notify(struct notifier_block *this,
+ 	return NOTIFY_DONE;
+ }
+ 
++static void release_reboot_mode_device(struct device *dev, void *res);
 +
-+		The supported arguments can be used by userspace
-+		to invoke device reset using the reboot() system
-+		call, with the "argument" as string to "*arg"
-+		parameter along with LINUX_REBOOT_CMD_RESTART2.
-+		Example:
-+		 reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
-+		        LINUX_REBOOT_CMD_RESTART2, "bootloader");
++static ssize_t reboot_modes_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct reboot_mode_driver **devres_reboot;
++	struct reboot_mode_driver *reboot;
++	struct mode_info *info;
++	ssize_t size = 0;
 +
-+		A driver can expose the supported arguments by
-+		registering them with the reboot-mode framework
-+		using the property names that follow the
-+		mode-<argument> format.
-+		Example:
-+		 mode-bootloader, mode-recovery.
++	devres_reboot = devres_find(dev, release_reboot_mode_device, NULL, NULL);
++	if (!devres_reboot || !(*devres_reboot))
++		return -ENODATA;
 +
-+		This attribute is useful for scripts or initramfs
-+		logic that need to programmatically determine
-+		which reboot-mode arguments are valid before
-+		triggering a reboot.
++	reboot = *devres_reboot;
++	mutex_lock(&reboot->rb_lock);
++	list_for_each_entry(info, &reboot->head, list) {
++		size += sprintf(buf + size, "%s,", info->mode);
++	}
++	mutex_unlock(&reboot->rb_lock);
++
++	if (size) {
++		size += sprintf(buf + size - 1, "\n");
++		return size;
++	}
++
++	return -ENODATA;
++}
++static DEVICE_ATTR_RO(reboot_modes);
++
++static void release_reboot_mode_device(struct device *dev, void *res)
++{
++	struct reboot_mode_driver *reboot = *(struct reboot_mode_driver **)res;
++	struct mode_info *info;
++	struct mode_info *next;
++
++	unregister_reboot_notifier(&reboot->reboot_notifier);
++
++	mutex_lock(&reboot->rb_lock);
++	list_for_each_entry_safe(info, next, &reboot->head, list) {
++		list_del(&info->list);
++		kfree_const(info->mode);
++		kfree(info);
++	}
++	mutex_unlock(&reboot->rb_lock);
++
++	device_remove_file(reboot->reboot_dev, &dev_attr_reboot_modes);
++}
++
++static int create_reboot_mode_device(struct reboot_mode_driver *reboot,
++				     const char *dev_name)
++{
++	struct reboot_mode_driver **dr;
++	int ret = 0;
++
++	if (!rb_class) {
++		rb_class = class_create("reboot-mode");
++		if (IS_ERR(rb_class))
++			return PTR_ERR(rb_class);
++	}
++
++	reboot->reboot_dev = device_create(rb_class, NULL, 0, NULL, dev_name);
++	if (IS_ERR(reboot->reboot_dev))
++		return PTR_ERR(reboot->reboot_dev);
++
++	ret = device_create_file(reboot->reboot_dev, &dev_attr_reboot_modes);
++	if (ret)
++		return ret;
++
++	dr = devres_alloc(release_reboot_mode_device, sizeof(*dr), GFP_KERNEL);
++	if (!dr) {
++		device_remove_file(reboot->reboot_dev, &dev_attr_reboot_modes);
++		return -ENOMEM;
++	}
++
++	*dr = reboot;
++	devres_add(reboot->reboot_dev, dr);
++
++	return ret;
++}
++
+ /**
+  * reboot_mode_register - register a reboot mode driver
+  * @reboot: reboot mode driver
+  * @np: Pointer to device tree node
++ * @driver_name: Name to use when exposing the sysfs interface
++ *
++ * Registers a reboot mode driver and sets up its sysfs entries
++ * under /sys/class/reboot-mode/<driver_name>/ to allow userspace
++ * interaction with available reboot modes. The DT node is used
++ * for parsing reboot-mode arguments.
+  *
+  * Returns: 0 on success or a negative error code on failure.
+  */
+-int reboot_mode_register(struct reboot_mode_driver *reboot, struct device_node *np)
++int reboot_mode_register(struct reboot_mode_driver *reboot, struct device_node *np,
++			 const char *driver_name)
+ {
+ 	struct mode_info *info;
+-	struct mode_info *next;
+ 	struct property *prop;
+ 	size_t len = strlen(PREFIX);
+ 	u32 magic_arg1;
+ 	u32 magic_arg2;
+ 	int ret;
+ 
+-	if (!np)
++	if (!np || !driver_name)
+ 		return -EINVAL;
+ 
++	ret = create_reboot_mode_device(reboot, driver_name);
++	if (ret)
++		return ret;
++
+ 	INIT_LIST_HEAD(&reboot->head);
+ 	mutex_init(&reboot->rb_lock);
+ 
+@@ -144,13 +237,8 @@ int reboot_mode_register(struct reboot_mode_driver *reboot, struct device_node *
+ 	return 0;
+ 
+ error:
+-	list_for_each_entry_safe(info, next, &reboot->head, list) {
+-		list_del(&info->list);
+-		kfree_const(info->mode);
+-		kfree(info);
+-	}
+-
+ 	mutex_unlock(&reboot->rb_lock);
++	device_unregister(reboot->reboot_dev);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(reboot_mode_register);
+@@ -161,26 +249,16 @@ EXPORT_SYMBOL_GPL(reboot_mode_register);
+  */
+ int reboot_mode_unregister(struct reboot_mode_driver *reboot)
+ {
+-	struct mode_info *info;
+-	struct mode_info *next;
+-
+-	unregister_reboot_notifier(&reboot->reboot_notifier);
+-
+-	mutex_lock(&reboot->rb_lock);
+-	list_for_each_entry_safe(info, next, &reboot->head, list) {
+-		list_del(&info->list);
+-		kfree_const(info->mode);
+-		kfree(info);
+-	}
+-	mutex_unlock(&reboot->rb_lock);
+-
++	device_unregister(reboot->reboot_dev);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(reboot_mode_unregister);
+ 
+ static void devm_reboot_mode_release(struct device *dev, void *res)
+ {
+-	reboot_mode_unregister(*(struct reboot_mode_driver **)res);
++	struct reboot_mode_driver *reboot = *(struct reboot_mode_driver **)res;
++
++	device_unregister(reboot->reboot_dev);
+ }
+ 
+ /**
+@@ -200,7 +278,7 @@ int devm_reboot_mode_register(struct device *dev,
+ 	if (!dr)
+ 		return -ENOMEM;
+ 
+-	rc = reboot_mode_register(reboot, reboot->dev->of_node);
++	rc = reboot_mode_register(reboot, reboot->dev->of_node, reboot->dev->driver->name);
+ 	if (rc) {
+ 		devres_free(dr);
+ 		return rc;
+diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
+index 370228b5161963aac1d75af752ada0e8282b1078..0b9844a71224b3e4bcc0d1e396d6c9cb11ad8c97 100644
+--- a/include/linux/reboot-mode.h
++++ b/include/linux/reboot-mode.h
+@@ -7,6 +7,7 @@
+ 
+ struct reboot_mode_driver {
+ 	struct device *dev;
++	struct device *reboot_dev;
+ 	struct list_head head;
+ 	int (*write)(struct reboot_mode_driver *reboot, u64 magic);
+ 	struct notifier_block reboot_notifier;
+@@ -14,7 +15,8 @@ struct reboot_mode_driver {
+ 	struct mutex rb_lock;
+ };
+ 
+-int reboot_mode_register(struct reboot_mode_driver *reboot, struct device_node *np);
++int reboot_mode_register(struct reboot_mode_driver *reboot, struct device_node *np,
++			 const char *driver_name);
+ int reboot_mode_unregister(struct reboot_mode_driver *reboot);
+ int devm_reboot_mode_register(struct device *dev,
+ 			      struct reboot_mode_driver *reboot);
 
 -- 
 2.34.1
