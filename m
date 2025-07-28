@@ -1,48 +1,60 @@
-Return-Path: <linux-pm+bounces-31481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A07BB13A6D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 14:23:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06D6CB13AFA
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 15:06:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FBAC162088
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 12:23:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 626EC3ABC83
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 13:06:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF35D264623;
-	Mon, 28 Jul 2025 12:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/2x0i2N"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B336E257AF0;
+	Mon, 28 Jul 2025 13:06:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8837D33E7;
-	Mon, 28 Jul 2025 12:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C4816DEB1;
+	Mon, 28 Jul 2025 13:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753705402; cv=none; b=Bnir8WFFDepdGApf3ZLBUMb4yai1oCzPCa4e7awFJEpPF36gOpOIopKyet4XVn3SADIZYSFOf+OiqJJoo9dX47w/shb633tO/StrrqPmmuuPASqn2ESAkN58ZFOm1VtS9pAir+UmQwYQDgoR21TIE640X+1xVwOGYTh+39Vtdac=
+	t=1753708002; cv=none; b=kuRu/UItJTEhzHj2eehOPLjS9yfty96UTdgUbzayJ6zX1pKTB/BUzN9lDVupN4jBzTbtMkiRQsdIriKvzaCTFsbMOJ87Gi7a+/y+kudimt9OZJ7MKaWwa+E4gV1zt1mXr59VZwEPdHu6XqMpPcg/3GST8ldcqDMu5RldMg/t5Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753705402; c=relaxed/simple;
-	bh=Tsr9NQwfI4BCS/zuCTheVTv/aPg7pxX9MjHV1UIW+lQ=;
+	s=arc-20240116; t=1753708002; c=relaxed/simple;
+	bh=/QC5Uml2RzEUPlWKdwR99j7fu1LpzpTRb5ePH6MzOdg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qPk+dE71eRcamMx5hebB40gFB5JwAPgFOKXyWv7DXTp8yKDKjBU/Q+2hOclvs7lhulHP3nVUkZ0BiKrdisjUPBKvfAjEpVqZGWIA9CxRwGCPdF0y1WtDnd92VgWmZX8kUlKgRj0Zv9TSMjbFVFlM/64K4dWBNby1Hd242jA3WxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/2x0i2N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19226C4CEE7;
-	Mon, 28 Jul 2025 12:23:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753705402;
-	bh=Tsr9NQwfI4BCS/zuCTheVTv/aPg7pxX9MjHV1UIW+lQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=o/2x0i2NTgs//HPCdOS9icimooS4gH00SGpVx2b6NbCwVa/f+vTpHzzpvDy3MeS/r
-	 BoYDMqkXBDnCXUQG/b/ViEUQlC1fhHbKrOvTxL26XvanJdqyYPTst22MWvtlEBZm23
-	 vxkVDBGASfuTbiF9rZOqdXNpdp+AANLs5CQHuvA1nIdhKyVZETH80JRoaf9wfWlWpI
-	 eYQ51BF0UnPmO+sWsVjAXVPpRRk6qJyeHhCvU4zKwkyoelngtpkGqFPwvAxvebtUXK
-	 xbDFo2qK6rUwv1qf+FgJVfGdFDswA7FUjvvUR8hCqVkrWPuhauCvAfgWe+4h8GGN8t
-	 FpQTp/2IiJBbw==
-Message-ID: <2a39c0ab-edd4-402c-95a0-a6286f03102a@kernel.org>
-Date: Mon, 28 Jul 2025 14:23:14 +0200
+	 In-Reply-To:Content-Type; b=UZUUX8qExFcUQqTcii9jlXxMW6hbKCyepOtw+J+3E2u2nexmaS0peb/ofzr7ua6LkKoE5m50Ja8EoniDCL1KMByA+k9cdV0XyfU1atSdyxtlOZVe0uO4BohzxuLLY2DTEd+8FW+mKdFnyPVjRt/x1bIDOIPIU+Ton5v7CTOCquU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: aff7d8466bb311f0b29709d653e92f7d-20250728
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:65580000-cbad-4731-8dc5-6e4149e6dd64,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:7a757c635182a2bde344434a80c9e0fe,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: aff7d8466bb311f0b29709d653e92f7d-20250728
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1996137064; Mon, 28 Jul 2025 21:06:34 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 1F3B3E008FA4;
+	Mon, 28 Jul 2025 21:06:34 +0800 (CST)
+X-ns-mid: postfix-688775D9-9540941
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 70404E008FA2;
+	Mon, 28 Jul 2025 21:06:28 +0800 (CST)
+Message-ID: <fa7485e4-a3d9-45ef-a0f5-6a3b9dd12f93@kylinos.cn>
+Date: Mon, 28 Jul 2025 21:06:27 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,106 +62,108 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 07/10] firmware: psci: Implement vendor-specific
- resets as reboot-mode
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
- Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org,
- Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
- Stephen Boyd <swboyd@chromium.org>, Andre Draszik
- <andre.draszik@linaro.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- Elliot Berman <quic_eberman@quicinc.com>,
- Srinivas Kandagatla <srini@kernel.org>
-References: <20250727-arm-psci-system_reset2-vendor-reboots-v13-0-6b8d23315898@oss.qualcomm.com>
- <20250727-arm-psci-system_reset2-vendor-reboots-v13-7-6b8d23315898@oss.qualcomm.com>
- <b81aa592-a66b-457b-9f42-df4505b28508@kernel.org>
- <3gtlf5txxtioa5bvo6o467jupyoam4hjhm2mdiw5izv5vbl3tz@drndgp3tcrgo>
- <bcef34c3-98b4-454c-8138-c73729e17081@kernel.org>
- <5e2caeb7-360a-4590-a36f-ff1ec4c20d31@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <5e2caeb7-360a-4590-a36f-ff1ec4c20d31@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [RFC PATCH] PM: Optionally block user fork during freeze to
+ improve performance
+To: David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, rafael@kernel.org,
+ len.brown@intel.com, pavel@kernel.org, kees@kernel.org, mingo@redhat.com,
+ juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+ vschneid@redhat.com, akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20250606062502.19607-1-zhangzihuan@kylinos.cn>
+ <20250606082244.GL30486@noisy.programming.kicks-ass.net>
+ <83513599-e007-4d07-ac28-386bc5c7552d@kylinos.cn>
+ <cd548b13-620e-4df5-9901-1702f904d470@redhat.com>
+ <a4370ebc-b1ce-46ba-b3a4-cb628125d7d0@kylinos.cn>
+ <aEvNqY5piB02l20T@tiehlicka>
+ <ee1de994-e59f-4c6c-96f3-66056b002889@kylinos.cn>
+ <775aaf10-3d19-4d5a-bf2b-703211166be4@redhat.com>
+ <7d70334a-2e0a-4d1e-b4d0-64d0e3aa5439@kylinos.cn>
+ <345a04ad-cf25-4af5-802a-bc8826d37b19@redhat.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <345a04ad-cf25-4af5-802a-bc8826d37b19@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-On 28/07/2025 14:03, Dmitry Baryshkov wrote:
+Hi,
+
+=E5=9C=A8 2025/6/18 19:54, David Hildenbrand =E5=86=99=E9=81=93:
+> On 18.06.25 13:30, Zihuan Zhang wrote:
+>> Hi David,
 >>
->>> and the reboot-mode is defined in the
->>> previous patch. So, I'd assume, the path is defined.
+>> =E5=9C=A8 2025/6/16 15:45, David Hildenbrand =E5=86=99=E9=81=93:
+>>>
+>>>>> [...]
+>>>> In our test scenario, although new processes can indeed be created
+>>>> during the usleep_range() intervals between freeze iterations, it=E2=
+=80=99s
+>>>> actually difficult to make the freezer fail outright. This is becaus=
+e
+>>>> user processes are forcibly frozen: when they return to user space a=
+nd
+>>>> check for pending signals, they enter try_to_freeze() and transition
+>>>> into the refrigerator.
+>>>>
+>>>> However, since the scheduler is fair by design, it gives both newly
+>>>> forked tasks and yet-to-be-frozen tasks a chance to run. This
+>>>> competition for CPU time can slightly delay the overall freeze=20
+>>>> process.
+>>>> While this typically doesn=E2=80=99t lead to failure, it does cause =
+more=20
+>>>> retries
+>>>> than necessary, especially under CPU pressure.
+>>>
+>>> I think that goes back to my original comment: why are we even
+>>> allowing fork children to run at all when we are currently freezing
+>>> all tasks?
+>>>
+>>> I would imagine that try_to_freeze_tasks() should force any new
+>>> processes (forked children) to start in the frozen state directly and
+>>> not get scheduled in the first place.
+>>>
+>> Thanks again for your comments and suggestion.
 >>
->> As I said, path is not. only psci/reboot-mode is.
-> 
-> Do we have an _actual_ use case where PSCI node is not at at root node? 
+>> We understand the motivation behind your idea: ideally, newly forked
+>> tasks during freezing should either be immediately frozen or prevented
+>> from running at all, to avoid unnecessary retries and delays. That mak=
+es
+>> perfect sense.
+>>
+>> However, implementing this seems non-trivial under the current freezer
+>> model, as it relies on voluntary transitions and lacks a mechanism to
+>> block forked children from being scheduled.
+>>
+>> Any insights or pointers would be greatly appreciated.
+>
+> I'm afraid I can't provide too much guidance on scheduler logic.
+>
+> Apparently we have this freezer_active global that forces existing=20
+> frozen pages to enter the freezing_slow_path().
+>
+> There, we perform multiple checks, including "pm_freezing &&=20
+> !(p->flags & PF_KTHREAD)".
+>
+> I would have thought that we would want to make fork()/clone()=20
+> children while freezing also result in freezing_slow_path()=3D=3Dtrue, =
+and=20
+> stop them from getting scheduled in the first place.
+>
+> Again, no scheduler expert, but that's something I would look into.
+>
+We=E2=80=99re currently working on a new freeze priority mechanism, which=
+ allows=20
+the freezer to freeze user processes in layers rather than treating all=20
+tasks equally.
 
-Yes, many cases, because it belongs as well to firmware node.
+With our priority-based model, we can ensure that key processes are=20
+frozen in the correct order to avoid this class of problems entirely. I=20
+believe this approach will address the issue in a more robust and=20
+general way.
 
-> If not, it's obviously a deficiency of the schema. Could you please 
-> provide suggestions on how to describe that in DT schema?
+I=E2=80=99ll share the patchset soon for feedback after serval weeks.
 
-I do not see deficiency. There is no ABI that psci must be root node, so
-there is no issue to fix there.
 
-If you want to add such ABI, I will answer: no, don't, because we do not
-want paths or node names to be the ABI.
 
-Compatible is the ABI.
-
-Best regards,
-Krzysztof
 
