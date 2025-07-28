@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-31512-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31513-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7F60B1400D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 18:21:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15C1FB1400A
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 18:21:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D4DC7ADE3F
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 16:19:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 101E517DD0B
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 16:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F251277013;
-	Mon, 28 Jul 2025 16:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077C828136F;
+	Mon, 28 Jul 2025 16:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQPTa5Hp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFMyQI2B"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41E42750E8;
-	Mon, 28 Jul 2025 16:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD997280CD5;
+	Mon, 28 Jul 2025 16:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753719511; cv=none; b=DGRuICti4kRb+GZqYlF6tW6LPklOQxiv0vDBBlIA30xK0+BO3oFsUt2a5NqMAAFcYczV0k9ZbNwaVgI4c7+FSlO2JKSBaD4c1o4jg2hroACmJfBK56f9nC0iAqVXjxGDlrqty2w0zJcgKRzmD6Q/BJzrkqRWSH1N3Vj4IAbYouA=
+	t=1753719519; cv=none; b=jNRm8gAzlCbRW4Mbs+GQdDJEC2uH4srNXwbDmjzd/HvPK/wBN02gtWP3Au8P1R0S/CIm3JQSW7HovmtHJhApgioXdm5/JePxk360mAjMHXJG7qvV5i6YiQdxF9397v2KxfoS/d93SGZboz7+6YO25YbsBw0AqrBeHYPGN8d3FUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753719511; c=relaxed/simple;
-	bh=rbsxuOCDE4xlWATneD6GeNmDtQOgqjrtC2cuqV9Mb9k=;
+	s=arc-20240116; t=1753719519; c=relaxed/simple;
+	bh=jx4Ska1TApY+aqqNZzEwwULA7D1iH4iodPDHkfJyDcw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Pfp1T6dBFBFLhe+A2nsWuMjOzNjDu9/JE8RApoMa1BH8/pnDe0VVZELeAv8XTnls1Hv9SZUmmF2fVhGxw7+SNyz1xCFtwb8Wv/FQjNwLb0x35uWzROLRX1oaGILA6PWhDoMdrP4bLd3/2zh5uNv9M2IZMNKWNLEkh5PsMdwHqus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQPTa5Hp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42ECAC4CEE7;
-	Mon, 28 Jul 2025 16:18:22 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=AM435G1u9wg+c2jI3cF+7bjgJLffBKd8YY7ONST/loQ1/URnzwlUFJw9+4p4AwFKE8LbDNmK2nIsHugUKuomJHzsGKOSK40li/wicF4fOzTZ56P3IDTYwYSKWPkCQn7lmSV8SVbdrmz3/Dd2Wj7ONFtN9HT9YTT6GzJlBNK3ha8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFMyQI2B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D01C4CEEF;
+	Mon, 28 Jul 2025 16:18:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753719510;
-	bh=rbsxuOCDE4xlWATneD6GeNmDtQOgqjrtC2cuqV9Mb9k=;
+	s=k20201202; t=1753719519;
+	bh=jx4Ska1TApY+aqqNZzEwwULA7D1iH4iodPDHkfJyDcw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=NQPTa5HppscN6zN09sxsBQ1YZsd29YVYTxwRBZul8asEaDk3TkL/d6sP2r2lsJdPa
-	 ntWIdeXbw9ysD4synkiFFo9zlaqYk3+9KrUIkCVLY15lAZgg0Wufoxm1HFnociLnYv
-	 V8MDx7r4AN7SXuehXGwhT5X3PxuZC4GGnZtysz9bmTF1kWFFm+YlKhJb6ybgH0zGEv
-	 csATq8PnwtoWalcB7FgrQdpCnY63Ap+TbSqfySRZgDOWjsw9LP8PfPKWyFSEYMkLfF
-	 pbKd9VL9EoTaox81dharrqXLxRVAp77Nkyc4/WW7Ncfl4bV5tnRJZx8JCXGgWRO5Nr
-	 3daEZ3mGNC7aw==
+	b=JFMyQI2BSLEtnv/jJ8P4/Yaejg2rCaZvwjIuqVQ0b8auIC1DCbne+jYevSSpA6Vj0
+	 6OkSVEq3vZdhxFCxvbHTqAuEAyA3MYDq/FOIxAvPlzaw4357J6x7luyT4G+zr7jndv
+	 UIhaSge8JaI87g0K8y6UR9Kr5Wnft1HRcnVJ0RbN4DLRNA0talLxCIhBh8LTHJ1cdJ
+	 mWV6jqQSPbqkY5fSQIWcKbZG/Dl0x62rkqzorb1RByethEg5J6WHuqtGIhDm0G9+Qd
+	 u57nbNo2rqppqaGzgGUB7I4rHqV0NtHVdRz+fMVizGPs3HmUNm7JTVRL7g6W80MFur
+	 6DkxRmM2M2zJA==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Mon, 28 Jul 2025 18:16:16 +0200
-Subject: [PATCH RFC 16/24] arm64: dts: qcom: sm4450: Describe GPU_CC power
+Date: Mon, 28 Jul 2025 18:16:17 +0200
+Subject: [PATCH RFC 17/24] arm64: dts: qcom: sm6350: Describe GPU_CC power
  plumbing requirements
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250728-topic-gpucc_power_plumbing-v1-16-09c2480fe3e6@oss.qualcomm.com>
+Message-Id: <20250728-topic-gpucc_power_plumbing-v1-17-09c2480fe3e6@oss.qualcomm.com>
 References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 In-Reply-To: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>, 
@@ -82,11 +82,11 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719371; l=982;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719371; l=946;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=1aO9Dfr6ph9yLVOQ2rMp8gFTofFwFGCush9wb6f02Iw=;
- b=xkItYRRLgcIIidBnLZeZA6HiNAaTEAn4W3YS1V9o5DSPn5OvKECFfPZZuiIB9Yh2/3hrkUtu1
- nR7N9XacS6gD7pnV+mugH8Aqgyue+LOtnxAk4xVu6lRQcwNZVquVzuH
+ bh=CBtu8RFLxTyY7nOpFcBDmcs+exc4fLLMq2Dopx58yFI=;
+ b=7qs5tS/vtm36rg7RHf8y9Lgl9oelkhZmCDro9Pevn21QHuOTyU6zdIkjmD6+ve2yGNLHO1Oel
+ bfTX5igFYbJBkagMrN+t+X8q0gbhb1oPfKkftDs6isZ3PTjO1b9MB3M
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
@@ -95,23 +95,23 @@ From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 A number of power rails must be powered on in order for GPU_CC to
 function. Ensure that's conveyed to the OS.
 
-Fixes: b87b8df9c0e4 ("arm64: dts: qcom: sm4450: add camera, display and gpu clock controller")
+Fixes: 75a511b1e5ff ("arm64: dts: qcom: sm6350: Add GPUCC node")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- arch/arm64/boot/dts/qcom/sm4450.dtsi | 4 ++++
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm4450.dtsi b/arch/arm64/boot/dts/qcom/sm4450.dtsi
-index d217d922811e84420f0f31008e939337b07bc38b..59d86bccf892bd282cec6e59a60192e4847da6d2 100644
---- a/arch/arm64/boot/dts/qcom/sm4450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm4450.dtsi
-@@ -433,6 +433,10 @@ gpucc: clock-controller@3d90000 {
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_GPU_GPLL0_CLK_SRC>,
- 				 <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index 2d891a5640dead6b60386006bcbbb9aad40a660b..e07131beb47bb9e1e0119713e0efc024725f2cd1 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -1563,6 +1563,10 @@ gpucc: clock-controller@3d90000 {
+ 			clock-names = "bi_tcxo",
+ 				      "gcc_gpu_gpll0_clk_src",
+ 				      "gcc_gpu_gpll0_div_clk_src";
 +
-+			power-domains = <&rpmhpd RPMHPD_CX>,
-+					<&rpmhpd RPMHPD_MX>;
++			power-domains = <&rpmhpd SM6350_CX>,
++					<&rpmhpd SM6350_MX>;
 +
  			#clock-cells = <1>;
  			#reset-cells = <1>;
