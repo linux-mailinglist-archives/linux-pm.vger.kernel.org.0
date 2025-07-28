@@ -1,112 +1,182 @@
-Return-Path: <linux-pm+bounces-31474-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51ED8B13912
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 12:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EEC4B13923
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 12:40:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EFF71894532
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 10:38:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB3E71890792
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 10:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A0F24469A;
-	Mon, 28 Jul 2025 10:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30DDE246BD7;
+	Mon, 28 Jul 2025 10:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YM3FyWew"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E11521FF4C
-	for <linux-pm@vger.kernel.org>; Mon, 28 Jul 2025 10:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9B11B0F1E;
+	Mon, 28 Jul 2025 10:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753699092; cv=none; b=TF76CB1nBWfnO+CJQen8M7U6oxt1wrJtr+md5oQl/diaNMnwhs/cdVSpY1iw9/ODL35ENFEDQ8+3mN4nZk3RrdhfveHFaPXH5A+/pW85jb+ZgZQcyd4kJ+ya9EIN5uoWOwVVFhPs0xNokIIPYF52Ah1Zbn2pwmGSd1oTmMIuYY0=
+	t=1753699238; cv=none; b=oz3wYkfcaBHMobjUuQYpWhEs0MkJd/Hhf8Rrm+VFaJaSO/OyH6gxVNOQiQOf2Mooaa27ByIVzQv05ASrrMBXaKpBEV9HaXY+Ua7SSmLNOLo5ZIKqNIcm+PCpp0rskICITeJa1rJs9xCmsGTHtwMx6kxOkVAxYnqa+M64NFffs/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753699092; c=relaxed/simple;
-	bh=K30BTXU53SZZGNnGr/SkgXeIoTv3QpR/iRqx6QVW8x4=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=pJ+Z/ybcW6rp/mnZDM9glKe04D9EGYEIfge1iBlOwWZVWDoBOv91a73Cv2kEiH3ATI6jtf1g/f4So3P0dxI3X0BUAY54+Xn7cjg3rAv9jSi3IYW0r49XXio7YDWGn+oFm/uvz3U0ccoxujmH1P1TfC6fnuTp2XgMh7mjiv4jnRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f05b18046b9e11f0b29709d653e92f7d-20250728
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:92b592c2-3e84-4e8c-bad9-863b45bf9fc1,IP:0,U
-	RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-30
-X-CID-META: VersionHash:6493067,CLOUDID:a727983d42db839bc0d5f35e73b600ac,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:2,IP:nil,URL
-	:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SP
-	R:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: f05b18046b9e11f0b29709d653e92f7d-20250728
-X-User: lijun01@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <lijun01@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1399556463; Mon, 28 Jul 2025 18:38:02 +0800
-From: Li Jun <lijun01@kylinos.cn>
-To: lijun01@kylinos.cn,
-	rafael@kernel.org,
-	pavel@ucw.cz,
-	len.brown@intel.com,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v3] hibernate: init image_size depend on totalram_pages
-Date: Mon, 28 Jul 2025 18:37:56 +0800
-Message-Id: <20250728103756.91029-1-lijun01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1753699238; c=relaxed/simple;
+	bh=ZpdH2IUOs7nJEOce8Lb8z4FCmhrAYwR2CjUSeHLZDPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pvue08J3i4+nXJq8xT2QZ9mq65xnP74drW9U0A2dpzf7x7sGu7FbmutLjYd2lvqJa0DBnXaZuIbNYnMyWA81LOVSnurk3EEfsxzsIXvpsNIQ88EWZkStGaWo+hB2wg+tCQjSXxS7pCQ1qreUwvXwy4x82UF4Ji0WFIQEVUArhWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YM3FyWew; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56S4rNqq016874;
+	Mon, 28 Jul 2025 10:40:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	s8cS8tfgNQE29TK9RkGVU1PGvKe/8A7mwK9kLQpNRzw=; b=YM3FyWewkEQsJT6W
+	OuZEY2w/jHcxBkH8XHIRCbnq8UUWXaBbJudSdZanyXTitj7O0EBZWrpa2N10uKZX
+	3QhMX+RxLUxxuMSynS/7NJThJiiqB3lJ6OZ0/6TnfCALP7jfXXlD5g52s83ZMSqJ
+	drLNHNiUBr3G+J+xmyeL8Ku4iS4810gW6eNDNPlb1i86sg65afH3r3VCDtcH1KsU
+	X6FhFin2HC8Ecn6JIBHqdsDTjWLJL7/esPpkLK5DtLpyKSrY48jOaGyq6DBI6aUh
+	dAeuYUqe2hR/ukYOTlHfbrpc7uS0JTFKJGMvLADdT2hj1R00yy4d6Q5hiTrHKOF8
+	1bk2rw==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4860ensfnq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Jul 2025 10:40:28 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56SAeSsx009435
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Jul 2025 10:40:28 GMT
+Received: from [10.239.133.66] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Mon, 28 Jul
+ 2025 03:40:25 -0700
+Message-ID: <819fb853-59f7-4296-8499-715c142487f5@quicinc.com>
+Date: Mon, 28 Jul 2025 18:40:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
+ resctrl integration
+To: Christian Loehle <christian.loehle@arm.com>, <rafael@kernel.org>,
+        <lenb@kernel.org>, <pavel@kernel.org>, <tony.luck@intel.com>,
+        <reinette.chatre@intel.com>, <Dave.Martin@arm.com>,
+        <james.morse@arm.com>, <ulf.hansson@linaro.org>,
+        <amit.kucheria@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Zhongqiu Han
+	<quic_zhonhan@quicinc.com>
+References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+ <2379088e-e5d0-4766-9968-756aad04f9a3@arm.com>
+Content-Language: en-US
+From: Zhongqiu Han <quic_zhonhan@quicinc.com>
+In-Reply-To: <2379088e-e5d0-4766-9968-756aad04f9a3@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: u-Ysbr_cc1Z2GwNUlFEZC5q8GoPFtOjT
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI4MDA3NyBTYWx0ZWRfXylhAN+Lv2Dj2
+ a2Xx0iKiJi4MOVXN8oR2saTSxsqI1Or8sRg0NMBNcBYquqbKcT6Iv+ASiiXwyBdYL7RDFS9pUBJ
+ BTnU6+AgJ+ocP5uOe403TkZM+5yixYN55bR3DT0HkmvlQj1q/ztCgXkr/No7nyZB00RaUz/Lcwd
+ hQB2rzzrBlOFO14D5rSJB1V2rQE8dfV6vRu9ooTVY5Q2oXv6F9BzpavSKorwmOxasfb+gxLCta1
+ mwTtAKYj0BH6QbwFJLGhEcOWpUa974aawxY2Bq+5+QsdGnPVvlgL5PIzBodV5IuPGSZsK1BRzhA
+ rgVq2PLEha84aIc8hxOPDd2T2OgZxSINe78NMx8kTbsFdDOBGK58uXdEQlioODbnAvHNcvNOwc8
+ RcXhN14NJOEpKKoB9WH+CS1r7FYS11MFgtQupR3WcLspb9q5pgBEYbIVY18gvfv3DlvdnQuA
+X-Authority-Analysis: v=2.4 cv=DIWP4zNb c=1 sm=1 tr=0 ts=6887539c cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10
+ a=xf8G_7bVrPfR0LIrT9wA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: u-Ysbr_cc1Z2GwNUlFEZC5q8GoPFtOjT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-28_03,2025-07-24_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ adultscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507280077
 
-Some automatically loaded applications greedily occupy
-memory, when total memory is 8GB, the image_size is 3GB,
-when total memory is 16GB, the image_size is 6GB, when
-total memory is 32GB, the image_size is 12GB. some
-of these applications,user may not use them. They occupy
-a large amount of image space, resulting in S4 time of
-over 100 seconds or even more. Limit the size of image_size
-to control the time of hibernation and wake-up,making S4
-more user-friendly.
+On 7/28/2025 6:09 PM, Christian Loehle wrote:
+> On 7/21/25 13:40, Zhongqiu Han wrote:
+>> Hi all,
+>>
+>> This patch series introduces support for CPU affinity-based latency
+>> constraints in the PM QoS framework. The motivation is to allow
+>> finer-grained power management by enabling latency QoS requests to target
+>> specific CPUs, rather than applying system-wide constraints.
+>>
+>> The current PM QoS framework supports global and per-device CPU latency
+>> constraints. However, in many real-world scenarios, such as IRQ affinity
+>> or CPU-bound kernel threads, only a subset of CPUs are
+>> performance-critical. Applying global constraints in such cases
+>> unnecessarily prevents other CPUs from entering deeper C-states, leading
+>> to increased power consumption.
+>>
+>> This series addresses that limitation by introducing a new interface that
+>> allows latency constraints to be applied to a CPU mask. This is
+>> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
+>> embedded systems where power efficiency is critical for example:
+>>
+>>                          driver A       rt kthread B      module C
+>>    CPU IDs (mask):         0-3              2-5              6-7
+>>    target latency(us):     20               30               100
+>>                            |                |                |
+>>                            v                v                v
+>>                            +---------------------------------+
+>>                            |        PM  QoS  Framework       |
+>>                            +---------------------------------+
+>>                            |                |                |
+>>                            v                v                v
+>>    CPU IDs (mask):        0-3            2-3,4-5            6-7
+>>    runtime latency(us):   20             20, 30             100
+>>
+>> The current implementation includes only cpu_affinity_latency_qos_add()
+>> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
+>> planned for future submission, along with PM QoS optimizations in the UFS
+>> subsystem.
+> 
+> So what's needed for the UFS use-case additionally?
+> Would adding that here be too much?
+> 
 
-Signed-off-by: Li Jun <lijun01@kylinos.cn>
----
- kernel/power/snapshot.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Hi Christian,
+Thanks for your review and discussion~
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 2af36cfe35cd..27ea4f398f22 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -135,10 +135,21 @@ void __init hibernate_reserved_size_init(void)
-  * try to create the smallest image possible.
-  */
- unsigned long image_size;
-+#define MEM_8G			(8 * 1024 * 1024)//KB
-+#define MEM_8G_PAGES	(MEM_8G / (PAGE_SIZE / 1024))
-+#define MEM_16G_PAGES	(2 * MEM_8G_PAGES)
-+#define MEM_32G_PAGES	(4 * MEM_8G_PAGES)
- 
- void __init hibernate_image_size_init(void)
- {
--	image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-+	if (totalram_pages() >= MEM_32G_PAGES)
-+		image_size = ((totalram_pages() * 1) / 20) * PAGE_SIZE;
-+	else if (totalram_pages() >= MEM_16G_PAGES)
-+		image_size = ((totalram_pages() * 1) / 10) * PAGE_SIZE;
-+	else if (totalram_pages() >= MEM_8G_PAGES)
-+		image_size = ((totalram_pages() * 1) / 5) * PAGE_SIZE;
-+	else
-+		image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
- }
- 
- /*
+Currently my plan is only to move forward with the current patch series,
+which includes only the below interfaces:
+
+cpu_affinity_latency_qos_add()
+cpu_affinity_latency_qos_remove()
+cpu_affinity_latency_qos_active()
+
+
+For most use-cases, seems these three interfaces already sufficient.
+
+
+The reason I mentioned UFS is to explain why the update
+interface cpu_affinity_latency_qos_update()
+
+is not included at this stage. The UFS use-case is planned to
+use the cpu_affinity_latency_qos_update() interface in the future, which
+is similar to the global CPU PM QoS interface
+cpu_latency_qos_update_request().
+
+
+
 -- 
-2.25.1
-
+Thx and BRs,
+Zhongqiu Han
 
