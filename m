@@ -1,50 +1,49 @@
-Return-Path: <linux-pm+bounces-31497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA9DBB13FB6
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 18:16:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5ECDB13FBC
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 18:17:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24EFF189D54C
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 16:17:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BBA67A65DC
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 16:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6441274674;
-	Mon, 28 Jul 2025 16:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2155C2749FA;
+	Mon, 28 Jul 2025 16:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WW5F169j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDLFsK0T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D5C2741DA;
-	Mon, 28 Jul 2025 16:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD68BE4E;
+	Mon, 28 Jul 2025 16:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753719388; cv=none; b=WZkanL1FfmPvgk+96EUQ3OQTAn1vnTVMI92zjww799ycAprf93xrtOx1JG2d/Zd5TybsfQLam72NAeu8/fvedoVGHe2X52WQJF5jWhM7wok5sIAmd6vOPpQjvyMgBWgkIfMwMbOL21iSAQdvnXoa5ot5rzaufv6Z3o6i3KDvjhs=
+	t=1753719397; cv=none; b=iQO9ROT2csTwBNA40WTS/OIaFLpauTNp1y05i3h4w8QneR+ELt8DFzKJXUkL5x3dUYSdwKCYtE4nGWEsjDUcUNfE0monKkvUknXPkYJ0LadsA/t3DOWkVGZrXr7E64JPPVkQXvzjRC+t/+abOCWtjhywP+PT3BsIGnHIPeZV5GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753719388; c=relaxed/simple;
-	bh=jGsUtdZ1DFaSSsWdQo0E7uwH0s+xbUVZgMWBDuAjr1A=;
+	s=arc-20240116; t=1753719397; c=relaxed/simple;
+	bh=omIu6R31tcy90Pr8rOdnVMPQoAcRzpwjOqEBaJct2EE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HZ6ZfX8PBLQOFOHEptrg+yVIYWYIYGsDoUjS9NSpWED4rGcPG8paujdBuT31KDvGN9RM+o1pkjcDnditSEdgC99yQsxlsazKGze1u4VsEhrrTY6V2SXZGjjVceoI9Sj7YQPOh9N9dH3INlsQbxLhhq+We/ILdQS4+bP4U/AZSqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WW5F169j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A371CC4CEE7;
-	Mon, 28 Jul 2025 16:16:19 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=rN7D1+16AZrN2a7V8PWmUtCSdwlBBsHIMCL+Tjo3eqdvvg4aaROJxzHuPOfX3DzNzoCZHAdnRKzm2EVJdBnL4N8eSkAQO5XAyEJzqTupWoereMvjHT+wdZt44bxD/zvUDKhTtmPurJSf7iZ177/H3vKMylLT/S+q2lD+swnprq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDLFsK0T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5C6C4CEEF;
+	Mon, 28 Jul 2025 16:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753719388;
-	bh=jGsUtdZ1DFaSSsWdQo0E7uwH0s+xbUVZgMWBDuAjr1A=;
+	s=k20201202; t=1753719396;
+	bh=omIu6R31tcy90Pr8rOdnVMPQoAcRzpwjOqEBaJct2EE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=WW5F169jEiPe6QB4If8TbxjdMg7dinbcnnYHMDkiyWQ+av4FkaBzHAtee4XKy2bI3
-	 zFR6TZ4HFwwxPwzZhhqCOvMv3M5It0sgqpK8v+M7ybnkUxFhwC8ZGBBajvKvzkZGdq
-	 svU+jAwi8DlXZlnUi5QQ5FPjXa+1PEcu+PiqEl/pePdVrrkoerhZfs11/codvMEe1W
-	 1d6PlyTvhN2tE7R4HVPW/tskdL65SY7yaibrdUUP3b1j38mbi2mHMrtB8QMLoZ0C+A
-	 PXGt/PvQTfRpVnmN1W02iq2WwIu/RAHLVjXC0xb7VymLieIcXnjy2tJpbIOiNvFy0Q
-	 bGUIszj4DCAtQ==
+	b=gDLFsK0T2vWsHHsFwjszyPhFOODbM6K5eKu5mlNUpAz8l6x6AiwlWPUTI5edM3Nj/
+	 asDucDUHwgOSpc+99/j+yjg3Gi4dSbSqeo4Y4rakGCd89qQcqIS5M1mqAx6DpoI9NJ
+	 hCy+NJ1snmqZg4ZvYrZB2D80ON1m4xyQVr5/UVTYard8VAJck1KsQkDbjVkX7ex/sV
+	 xVzEcPLFH3UwQbFkqYL2SQXF8lhjTvnvWeGsOLR44VJfxAiGGnEkwqGsCY5Bx88n4r
+	 Wf5I9L33dZgtdSzNlAKPzXP4j6yJwz8XtmFgiUpLWromFJD15u5NID8qpnOiiEb4g2
+	 di+ttcdxBv1OQ==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Mon, 28 Jul 2025 18:16:01 +0200
-Subject: [PATCH RFC 01/24] dt-bindings: power: qcom,rpmpd: Add
- SC8280XP_MXC_AO
+Date: Mon, 28 Jul 2025 18:16:02 +0200
+Subject: [PATCH RFC 02/24] pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250728-topic-gpucc_power_plumbing-v1-1-09c2480fe3e6@oss.qualcomm.com>
+Message-Id: <20250728-topic-gpucc_power_plumbing-v1-2-09c2480fe3e6@oss.qualcomm.com>
 References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 In-Reply-To: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>, 
@@ -82,38 +81,49 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719370; l=962;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719370; l=1169;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=tZIB269mD5O0ZRPTEJmMSWb8CDLZjJ8PqK7fbNyu0TA=;
- b=pn1X5zYDKG3JbVTY6qgMxFW4ou/3z8R610DoM+bmgFa6ozqC8H4SQADiFw1Rh9kpDpFhWjYlt
- 8xmuXq8fWnNCLD1FaQxh8IPw+SrHQA+7t9iJcevS3xhBrEe4JqX9vE1
+ bh=JvBceh4pzjxFk/gFJsQ+z6Ck3HKGfaLbeZSerF94W8A=;
+ b=67RHooZVTC9N60rfeRPI4nP4SaqQfw7Cf323VIG594wTNwfRnU9R/PMai6gWNN2tO33Wzsnxa
+ Ty0TMQG2HE3CmqExWSnim0bcw9IoUBRLgzbhRxUPjnnGotqlGla3Kjz
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Not sure how useful it's gonna be in practice, but the definition is
-missing (unlike the previously-unused SC8280XP_MXC-non-_AO), so add it
-to allow the driver to create the corresponding pmdomain.
+This was apparently accounted for in dt-bindings, but never made its
+way into the driver.
 
-Fixes: dbfb5f94e084 ("dt-bindings: power: rpmpd: Add sc8280xp RPMh power-domains")
+Fix it for SC8280XP and its VDD_GFX-less cousin, SA8540P.
+
+Fixes: f68f1cb3437d ("soc: qcom: rpmhpd: add sc8280xp & sa8540p rpmh power-domains")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- include/dt-bindings/power/qcom-rpmpd.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pmdomain/qcom/rpmhpd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
-index f15bcee7c9283e74dc8e6f9b6b6f73c0ced009e4..6860ca6360a7bce43a331f9d1c10a11646b0041f 100644
---- a/include/dt-bindings/power/qcom-rpmpd.h
-+++ b/include/dt-bindings/power/qcom-rpmpd.h
-@@ -214,6 +214,7 @@
- #define SC8280XP_NSP		13
- #define SC8280XP_QPHY		14
- #define SC8280XP_XO		15
-+#define SC8280XP_MXC_AO		16
+diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
+index 4faa8a25618621e15d684c4f971785d604601efb..4c3cbf3abc7504cce3b8211c339b7ada03d65e38 100644
+--- a/drivers/pmdomain/qcom/rpmhpd.c
++++ b/drivers/pmdomain/qcom/rpmhpd.c
+@@ -246,6 +246,8 @@ static struct rpmhpd *sa8540p_rpmhpds[] = {
+ 	[SC8280XP_MMCX_AO] = &mmcx_ao,
+ 	[SC8280XP_MX] = &mx,
+ 	[SC8280XP_MX_AO] = &mx_ao,
++	[SC8280XP_MXC] = &mxc,
++	[SC8280XP_MXC_AO] = &mxc_ao,
+ 	[SC8280XP_NSP] = &nsp,
+ };
  
- /* SDM845 Power Domain performance levels */
- #define RPMH_REGULATOR_LEVEL_RETENTION		16
+@@ -675,6 +677,8 @@ static struct rpmhpd *sc8280xp_rpmhpds[] = {
+ 	[SC8280XP_MMCX_AO] = &mmcx_ao,
+ 	[SC8280XP_MX] = &mx,
+ 	[SC8280XP_MX_AO] = &mx_ao,
++	[SC8280XP_MXC] = &mxc,
++	[SC8280XP_MXC_AO] = &mxc_ao,
+ 	[SC8280XP_NSP] = &nsp,
+ 	[SC8280XP_QPHY] = &qphy,
+ };
 
 -- 
 2.50.1
