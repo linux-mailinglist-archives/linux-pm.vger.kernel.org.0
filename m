@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-31499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85863B13FC2
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 18:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1501B13FC8
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 18:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99C7E189D7ED
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 16:17:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F2C1189D771
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Jul 2025 16:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B188927585D;
-	Mon, 28 Jul 2025 16:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEFF274B4C;
+	Mon, 28 Jul 2025 16:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pXtEQuAI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWlcSo/O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C033274671;
-	Mon, 28 Jul 2025 16:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09221274671;
+	Mon, 28 Jul 2025 16:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753719404; cv=none; b=jI1BKVSqiqJFthlcpHqEu28tM/krHLVIfXwNL1ZHPcsc0ZnPL/VKHwYA78vQebhTB+7MCYL+RICFyNe8d1ogWntZQCU1UffSIXR0nnWDkYBDwl113i0qYEwPGKjOqkD0IKBL+I8n8IiMxe3MYvLJ1VWcCN0EP6choYKCMRcnVsw=
+	t=1753719413; cv=none; b=ioEJmDcVlO13QzlYp3wHG+8ryY6cYW29bOJWx2dDC4TGOGiaC1x5tbUlMRkDyIFuyH87e4x3ngy621N6yhe2wLxjDX6QCT+Y+2JdKiau3LbaUGtZJ0F27OAf9KxleYS0dpRCVirMPR2oMascPEeqKYWgN3FTc9snTBuPhm8wLAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753719404; c=relaxed/simple;
-	bh=ZE6HU12iEkvhDV9mvwsai+f5VRwHR7zOe8PgiNQHjOo=;
+	s=arc-20240116; t=1753719413; c=relaxed/simple;
+	bh=U9RDj2CgZnV8vHBJc6KMnpJWxXKLgi+Nnh+CeEWSb48=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FfK/kbv2ofwY56HrNJqoC6vhvDtqejW9mkoy1HrMbcw+5/fgDCbf+8+0K/65a7NeoyTA7GfFCtkZLMiFZ16EXoI6RKSSTpCMuMjp5/8dwL/Elrf20LI2mkhsVfYq9lq1I8Wm0WSjD1XqSgXYU7De3yZMe0fZd8E5rD+VeGH/NU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pXtEQuAI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40143C4CEE7;
-	Mon, 28 Jul 2025 16:16:37 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=sa9yNE2QkZJIoozNyOh5TKY60ODWTOaWDbgoWlE/vjACEBeAo1/VReUI4b6fLF5FbKhNecQFW2M70kncZ9t0qL33k4zGKMus7EiNdgpndNM7AnpXbK8qayqt0cIiZ/Fz+62y+3zanJai7tcpp8IbE0jlE9FOK9xBMCmaFiJLKtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWlcSo/O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C65C4CEEF;
+	Mon, 28 Jul 2025 16:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753719404;
-	bh=ZE6HU12iEkvhDV9mvwsai+f5VRwHR7zOe8PgiNQHjOo=;
+	s=k20201202; t=1753719412;
+	bh=U9RDj2CgZnV8vHBJc6KMnpJWxXKLgi+Nnh+CeEWSb48=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pXtEQuAIqUh1vt9VVb4mvk+VIMAj/PFJ3WkgoU41mzAdudUO1t5g1ESoMMDNcRSnE
-	 48suLMrCeRDDMrOGRFeOa4QtbFgAouyU+7zKhylxckSlc04Jl0GUKrV/W90OEeHx7F
-	 GAliVBqIuz/r/id/3AcgS7BbBECKhFc2rzY2lKqg5igvbJLtDjahbVP5PBa0/9wOwD
-	 u3xCljZjaMGGI65J81VlymOzjBdEBoQ6v4Mic7r/srVQn78Nko0ij9Y5BNh7zFh8sO
-	 XJqg32O71FF4wxpbjfnU/4oVX9jrMl28NTnwnuJ6V0vCtGemkOW4ykla06X4XA/XHF
-	 w9FIQ6scVCXTQ==
+	b=lWlcSo/OIJgc/QTmBaB5+A/EV2xsaZ87ZNOA4rrJ6ZEuhw6vVCEqCTZxBATaW8cCC
+	 qJHeIEXH7Ee5foHg13AmZPnBl2+8TB1zgPo4iyAt0nbHB4PSacBFM4Om15RjUfbLT+
+	 mya9z1O28qRQLo03xSTMbh88h0CGx+xN7XEOeS8M7l8S5EhliCK+46fawjbzqRXs3+
+	 zt7el8tc7+uEn7w2Z4Kl6gIvyDSy/B3IPschcsQmz/4+e5n/QMEKEMvKV7tw/HUW2T
+	 xFA5fld8hJr2iEp/2kAmT5XvG0Zq+NdBvq+suH1L/wSMqf55fjb5kOmlEKfpuq1pv/
+	 EPNmhii5YaRFw==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Mon, 28 Jul 2025 18:16:03 +0200
-Subject: [PATCH RFC 03/24] dt-bindings: clock: qcom,gpucc: Merge in
- sm8450-gpucc.yaml
+Date: Mon, 28 Jul 2025 18:16:04 +0200
+Subject: [PATCH RFC 04/24] dt-bindings: clock: qcom,gpucc: Describe actual
+ power domain plumbing
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250728-topic-gpucc_power_plumbing-v1-3-09c2480fe3e6@oss.qualcomm.com>
+Message-Id: <20250728-topic-gpucc_power_plumbing-v1-4-09c2480fe3e6@oss.qualcomm.com>
 References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 In-Reply-To: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>, 
@@ -82,96 +82,57 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719371; l=6066;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719371; l=3745;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=2xn3CtiSIOEqXJR8P6M4M8nQxjynek5IIzMtuhgtJro=;
- b=QdtX+bqzwtoxs4/Oh9rlSrSnY3h88pMy92LV526sBLSeSWs0D3dNq1jtSl4wLcLMGKZpwdDl5
- MK9/Qv8ieBdCCEqwpApZnuipHvYlSGlyy8q1u7rxQ1BvEeDLFAf6/pv
+ bh=cIw2kmLuyqooARzvgDD/0MnQw0CE1z3LqmnoyLPyPq0=;
+ b=RKxfyz83BWC3Sk/gVoRKnKHt6v0MaEirvo+J+DaHny4eLUhTv0VhbeQSY8prs/w2IfSeUlLp8
+ chiLsSrMHFFCB8kjQWyQT8LZe1MdLTshFaXkYvYwgmk4M3/15SHYqIN
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-The only difference is the requirement of clock-names, and only for
-legacy reasons.
+GPU_CC is always powered from the VDD_CX rail.
+
+On platforms with a split MX rail (MX_A/C for ALWAYS/COLLAPSIBLE), both
+are required. Otherwise, the common MX rail powers part of the logic,
+including the PLLs.
+
+Extend the current requirements to make sure the hardware is powered
+adequately and the votes are released when no longer necessary.
+
+Skiping "Fixes" as it would apply to NUM_PLATFORMS commits..
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- .../devicetree/bindings/clock/qcom,gpucc.yaml      | 42 +++++++++++-
- .../bindings/clock/qcom,sm8450-gpucc.yaml          | 75 ----------------------
- 2 files changed, 39 insertions(+), 78 deletions(-)
+ .../devicetree/bindings/clock/qcom,gpucc.yaml      | 68 +++++++++++++++++++++-
+ 1 file changed, 67 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-index 4cdff6161bf0b17526cc62b67d9c95086240fe46..5053d71f918bb28c504746f68e782ca719051f63 100644
+index 5053d71f918bb28c504746f68e782ca719051f63..1a6f8889db35296b59973c90b8133abfed75baaf 100644
 --- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
 +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-@@ -9,37 +9,55 @@ title: Qualcomm Graphics Clock & Reset Controller
- maintainers:
-   - Taniya Das <quic_tdas@quicinc.com>
-   - Imran Shaik <quic_imrashai@quicinc.com>
-+  - Konrad Dybcio <konradybcio@kernel.org>
+@@ -72,7 +72,10 @@ properties:
+       - const: gcc_gpu_gpll0_div_clk_src
  
- description: |
-   Qualcomm graphics clock control module provides the clocks, resets and power
-   domains on Qualcomm SoCs.
+   power-domains:
+-    maxItems: 1
++    description:
++      Power domains required for the clock controller to operate
++    minItems: 2
++    maxItems: 4
  
-   See also::
--    include/dt-bindings/clock/qcom,gpucc-sdm845.h
-+      include/dt-bindings/clock/qcom,milos-gpucc.h
-     include/dt-bindings/clock/qcom,gpucc-sa8775p.h
-     include/dt-bindings/clock/qcom,gpucc-sc7180.h
-     include/dt-bindings/clock/qcom,gpucc-sc7280.h
-     include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
-+    include/dt-bindings/clock/qcom,gpucc-sdm845.h
-     include/dt-bindings/clock/qcom,gpucc-sm6350.h
-     include/dt-bindings/clock/qcom,gpucc-sm8150.h
-     include/dt-bindings/clock/qcom,gpucc-sm8250.h
-     include/dt-bindings/clock/qcom,gpucc-sm8350.h
-     include/dt-bindings/clock/qcom,qcs8300-gpucc.h
-+    include/dt-bindings/clock/qcom,sar2130p-gpucc.h
-+    include/dt-bindings/clock/qcom,sm4450-gpucc.h
-+    include/dt-bindings/clock/qcom,sm8450-gpucc.h
-+    include/dt-bindings/clock/qcom,sm8550-gpucc.h
-+    include/dt-bindings/reset/qcom,sm8450-gpucc.h
-+    include/dt-bindings/reset/qcom,sm8650-gpucc.h
-+    include/dt-bindings/reset/qcom,x1e80100-gpucc.h
- 
- properties:
-   compatible:
-     enum:
-+      - qcom,milos-gpucc
-       - qcom,qcs8300-gpucc
--      - qcom,sdm845-gpucc
-       - qcom,sa8775p-gpucc
-+      - qcom,sar2130p-gpucc
-       - qcom,sc7180-gpucc
-       - qcom,sc7280-gpucc
-       - qcom,sc8180x-gpucc
-       - qcom,sc8280xp-gpucc
-+      - qcom,sdm845-gpucc
-+      - qcom,sm4450-gpucc
-       - qcom,sm6350-gpucc
-       - qcom,sm8150-gpucc
-       - qcom,sm8250-gpucc
-       - qcom,sm8350-gpucc
-+      - qcom,sm8450-gpucc
-+      - qcom,sm8475-gpucc
-+      - qcom,sm8550-gpucc
-+      - qcom,sm8650-gpucc
-+      - qcom,x1e80100-gpucc
-+      - qcom,x1p42100-gpucc
- 
-   clocks:
-     items:
-@@ -62,7 +80,6 @@ properties:
+   vdd-gfx-supply:
+     description: Regulator supply for the VDD_GFX pads
+@@ -80,6 +83,7 @@ properties:
  required:
    - compatible
    - clocks
--  - clock-names
++  - power-domains
    - '#power-domain-cells'
  
  # Require that power-domains and vdd-gfx-supply are not both present
-@@ -74,6 +91,25 @@ not:
+@@ -91,6 +95,62 @@ not:
  allOf:
    - $ref: qcom,gcc.yaml#
  
@@ -180,104 +141,79 @@ index 4cdff6161bf0b17526cc62b67d9c95086240fe46..5053d71f918bb28c504746f68e782ca7
 +        compatible:
 +          enum:
 +            - qcom,qcs8300-gpucc
-+            - qcom,sdm845-gpucc
 +            - qcom,sa8775p-gpucc
++            - qcom,sar2130p-gpucc
++            - qcom,sc8280xp-gpucc
++            - qcom,sm8350-gpucc
++            - qcom,sm8450-gpucc
++            - qcom,sm8475-gpucc
++            - qcom,sm8550-gpucc
++            - qcom,sm8650-gpucc
++            - qcom,x1e80100-gpucc
++            - qcom,x1p42100-gpucc
++    then:
++      properties:
++        power-domains:
++          items:
++            - description: CX power domain
++            - description: MX power domain
++            - description: GFX power domain
++            - description: MX_COLLAPSIBLE power domain
++
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,milos-gpucc
 +            - qcom,sc7180-gpucc
 +            - qcom,sc7280-gpucc
 +            - qcom,sc8180x-gpucc
-+            - qcom,sc8280xp-gpucc
-+            - qcom,sm6350-gpucc
++            - qcom,sdm845-gpucc
 +            - qcom,sm8150-gpucc
 +            - qcom,sm8250-gpucc
-+            - qcom,sm8350-gpucc
 +    then:
-+      required:
-+        - clock-names
++      properties:
++        power-domains:
++          items:
++            - description: CX power domain
++            - description: MX power domain
++            - description: GFX power domain
 +
- unevaluatedProperties: false
- 
- examples:
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-gpucc.yaml
-deleted file mode 100644
-index 44380f6f81368339c2b264bde4d8ad9a23baca72..0000000000000000000000000000000000000000
---- a/Documentation/devicetree/bindings/clock/qcom,sm8450-gpucc.yaml
-+++ /dev/null
-@@ -1,75 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/clock/qcom,sm8450-gpucc.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Qualcomm Graphics Clock & Reset Controller on SM8450
--
--maintainers:
--  - Konrad Dybcio <konradybcio@kernel.org>
--
--description: |
--  Qualcomm graphics clock control module provides the clocks, resets and power
--  domains on Qualcomm SoCs.
--
--  See also::
--    include/dt-bindings/clock/qcom,milos-gpucc.h
--    include/dt-bindings/clock/qcom,sar2130p-gpucc.h
--    include/dt-bindings/clock/qcom,sm4450-gpucc.h
--    include/dt-bindings/clock/qcom,sm8450-gpucc.h
--    include/dt-bindings/clock/qcom,sm8550-gpucc.h
--    include/dt-bindings/reset/qcom,sm8450-gpucc.h
--    include/dt-bindings/reset/qcom,sm8650-gpucc.h
--    include/dt-bindings/reset/qcom,x1e80100-gpucc.h
--
--properties:
--  compatible:
--    enum:
--      - qcom,milos-gpucc
--      - qcom,sar2130p-gpucc
--      - qcom,sm4450-gpucc
--      - qcom,sm8450-gpucc
--      - qcom,sm8475-gpucc
--      - qcom,sm8550-gpucc
--      - qcom,sm8650-gpucc
--      - qcom,x1e80100-gpucc
--      - qcom,x1p42100-gpucc
--
--  clocks:
--    items:
--      - description: Board XO source
--      - description: GPLL0 main branch source
--      - description: GPLL0 div branch source
--
--required:
--  - compatible
--  - clocks
--  - '#power-domain-cells'
--
--allOf:
--  - $ref: qcom,gcc.yaml#
--
--unevaluatedProperties: false
--
--examples:
--  - |
--    #include <dt-bindings/clock/qcom,gcc-sm8450.h>
--    #include <dt-bindings/clock/qcom,rpmh.h>
--
--    soc {
--        #address-cells = <2>;
--        #size-cells = <2>;
--
--        clock-controller@3d90000 {
--            compatible = "qcom,sm8450-gpucc";
--            reg = <0 0x03d90000 0 0xa000>;
--            clocks = <&rpmhcc RPMH_CXO_CLK>,
--                     <&gcc GCC_GPU_GPLL0_CLK_SRC>,
--                     <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
--            #clock-cells = <1>;
--            #reset-cells = <1>;
--            #power-domain-cells = <1>;
--        };
--    };
--...
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,sm4450-gpucc
++            - qcom,sm6350-gpucc
++    then:
++      properties:
++        power-domains:
++          items:
++            - description: CX power domain
++            - description: MX power domain
++
+   - if:
+       properties:
+         compatible:
+@@ -116,6 +176,8 @@ examples:
+   - |
+     #include <dt-bindings/clock/qcom,gcc-sdm845.h>
+     #include <dt-bindings/clock/qcom,rpmh.h>
++    #include <dt-bindings/power/qcom-rpmpd.h>
++
+     clock-controller@5090000 {
+       compatible = "qcom,sdm845-gpucc";
+       reg = <0x05090000 0x9000>;
+@@ -128,5 +190,9 @@ examples:
+       #clock-cells = <1>;
+       #reset-cells = <1>;
+       #power-domain-cells = <1>;
++
++      power-domains = <&rpmhpd SDM845_CX>,
++                      <&rpmhpd SDM845_MX>,
++                      <&rpmhpd SDM845_GFX>;
+     };
+ ...
 
 -- 
 2.50.1
