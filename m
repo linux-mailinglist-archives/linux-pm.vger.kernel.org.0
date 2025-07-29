@@ -1,138 +1,239 @@
-Return-Path: <linux-pm+bounces-31556-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31557-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3788CB1504E
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 17:41:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0751B1505E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 17:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E23F77AF8B6
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 15:39:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D24E93A972E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 15:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE9E2951D8;
-	Tue, 29 Jul 2025 15:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF542951B3;
+	Tue, 29 Jul 2025 15:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVSx1pgt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sOyPiMQb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30437293C71;
-	Tue, 29 Jul 2025 15:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488CB2949E5
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 15:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753803639; cv=none; b=qEV7a83YQj/YBLDgGc2/gqfps6EYWPyX1E6BNFqFOIbzqRiEENs67ZBm30dpV45fuzZUYUwGHjDT0t1QGIwiAdxkOl2QB9uPsuEWPJp+2a04/qniTN+fmBasOY2gDDhN6lYeZl/OZX+6SLYFdHigbVN6Z++KVRl1pLDWgAB75xs=
+	t=1753803867; cv=none; b=db5/lzn+uMNhCPT4lKQYKqN9jFzRq7ElBxeIa5wbeuYKeZEoq6GAOy4pnF5gp7F+XE760YUCe8c8yQqDySCx8Sr6TsOVCPNzkAfdroxTOOS40rnA3zrBifTpde3Tvpjp3aRySjjvKdM6RJCReweWwrK5z8lH3XiWS4slw4Bne+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753803639; c=relaxed/simple;
-	bh=K25Kho8qsn1NdbvfhwmhShwU+hQrB/3WGuSSdzsp2jc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ipN6IvQR42wzw8UZL0zpicoWky5dDDlOteOhhd+4Rr26wJmlVKf0lhvrqgcdAvwQntrh2s7yIJU4hXQo/1bmyt0pfJkqbUkfAbgYG7tQMvLTI6c19++YvM/9DrheAQGNrnapp/eRx2f8AXLpK9Xu2ZBu7xr1svuHMMnU5xkbmnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVSx1pgt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43F4C4CEF5;
-	Tue, 29 Jul 2025 15:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753803636;
-	bh=K25Kho8qsn1NdbvfhwmhShwU+hQrB/3WGuSSdzsp2jc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WVSx1pgtyP8XBALk7khnHjMVm0yRX2XLVy16XJhYTI43pS+e6WcUgpnT3zPewSi0a
-	 UR8IlFg2eEXwVa9KFMMW55elKybDXuw8+sILcJ6mx7r/L883egQUaBVBKuSGFfm3Fv
-	 0uBBGoqnEJLelLK83YdNNIlwXPzP7AVzeLXNW/Fi5YTr7ULkMS/NXYlbbMtOaCCm/f
-	 DronK5SWa/a3b6+fbY3PsPSxvVdnpI33wSKoivzXXP9F65xMTk2hWmCcLNCvnLYmn/
-	 /x4QxfGu8grB/q+EmqkgI0Ms+SMOUL+Gxtu77JdWxKhB1mQDrXRqdFWSThz6mJMBYs
-	 In0K3MrSKKZ+g==
-Message-ID: <3603a744-e898-49ef-968a-2388e14cae54@kernel.org>
-Date: Tue, 29 Jul 2025 17:40:32 +0200
+	s=arc-20240116; t=1753803867; c=relaxed/simple;
+	bh=gTKUAoQOVNfDwrKXIlmuLwCfGQF/GjTu9mg9ZtnCU4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s0lvCa2aPTwiNATvkmyZfHHE7rhOqWFexyhxmk5VGuBMpP3V//+LU0nW+KcyV7ZY9DYrVfyHfh2aae8iQVi8lER+jsoXUtZtWVrMPZiIKULCLHnCN1ZB0MV666POjySPxzLXZExOzB53h0jeQCFkbv6QX7ft3DS5QLE5b30u3LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sOyPiMQb; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-615398dc162so4079523a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 08:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753803863; x=1754408663; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LN18dTJK3bUZCImiyE0FuNTJ8LDUzXGgTCqf/lUFg3U=;
+        b=sOyPiMQbFbwAU1KXWqOcUWZdn5zUoGvE7JeWbvckjDCECR3gQCuHb2H3Y7CoYrCfPL
+         nwBXLA3rXeiALkieOxZmUrQsRuMCwCGy2WJYZbUOrCSExr7TnNNyR6gF2/MEZGh5Emo3
+         GKcaQoBsZYDWUVPet4ixy8X+v+L+YE1IYd7R8bACHQanvDjKjg5WAceXvKUr87YnYHke
+         bl84LwuJ5dgwWefB0qTrz11gihk0GcWmAiFvRvm1BGrrsZ0Cwo0CwJaZGnoTG45BffkJ
+         CkTVXglWtK9T7aiPtR1G+vW64S9Dnf/SQI4ed00qsYzARio03t8GguNgtoAeGGTaEx9/
+         0wdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753803863; x=1754408663;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LN18dTJK3bUZCImiyE0FuNTJ8LDUzXGgTCqf/lUFg3U=;
+        b=o4QS9Fu46rdvTjVHMozR6ZGfkka2KGE6Mi5lYvd5evG2Bcj+VSzhJtgRrkkglcjRSU
+         nagdzDt7n8N4icEmet2VjSUByKUouyp4FHTSkRrgTZYkokqb+bl4RRN0ZOTrr0HQz1fv
+         3q4RE90pJVOI/hBkzikcTDSb2eOy9Kv2pGuZZdRtX6hU6Tuzt90jCasp2o/BdN+mzSnA
+         TXBA3/HOxvg6rlM5eICT31QY6PUn6dgsvBIfNbgD//rQS+NLRIoHCP+gXlLt4so/q6fA
+         2Tj8QI/XPD+x+oLBiVdCVzJZ3mxHbGxY0l0gE66bY9IPPwQzzmwqe25cCbkR7CaYgtLQ
+         G7+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXhs4Zsjc7+eeXzW/FcJOeDlwyO+nqOLF2Jy4MSIyfU1kXcxWnLKdqwRI6l7Tp4+xetoMSJLxXJng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVbKio4PmoBiX5FICUtVvLAThU+Wl5KVxQ1wIS+//OLgZZeGV9
+	xpNP3Fxp+XkPyLH2synWWrA/90FyJH5fZHNesTtNiVjLMSmbqVcZ5vkOalhGgEKsezc=
+X-Gm-Gg: ASbGnctCz4qYxNz3xY24l4M+b62ismEBzqcWJfNOaPnNM585QSXcuLsTuLRs2sWYyMp
+	jisyd+1FOBzMkFqjfl87kFpjyNXDOImtzJIHfmuC/dfrA6HMjiQNmyy66BEqixknbHJkRk5hrPU
+	o3s2sX6LC7aPnixXEdKQEYwUtTmOKnfw+BXdBrnkJ04Nn64+a1Gt1tPJwuUsOBTFys8hYG1GguT
+	JoL9XRYw9QCI/TZsvPwrvsrRoXcev1E8vBp1OLiYTQoI4peAYVJdn5BgqshtIVyoDmDlk3O91jQ
+	e1c21UZVxHC1iBzcvbI/+aSTyEmqGZqOwAArrr73Zg6dJfAXWxTeaX+GkfHE2PRCeQ6M1QxTLcu
+	0vC0Bl4uQMKVz53fsyW3MfM4wYdJLzMbl6w==
+X-Google-Smtp-Source: AGHT+IGq9wI3/lWh7E230ug5OoIqR7fJXimGz2+ajBqUWxDLFS2ckclMt/arQALpxqYLTlDmX5irhg==
+X-Received: by 2002:a05:6402:2756:b0:609:d491:8d7c with SMTP id 4fb4d7f45d1cf-614f1f66f87mr15096225a12.33.1753803862494;
+        Tue, 29 Jul 2025 08:44:22 -0700 (PDT)
+Received: from linaro.org ([2a02:2454:ff21:ef30:dd5d:6e13:d8d2:7f2f])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6154f4fac5fsm2166412a12.22.2025.07.29.08.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jul 2025 08:44:22 -0700 (PDT)
+Date: Tue, 29 Jul 2025 17:44:17 +0200
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Taniya Das <taniya.das@oss.qualcomm.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Taniya Das <quic_tdas@quicinc.com>,
+	Imran Shaik <quic_imrashai@quicinc.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Richard Acayan <mailingradian@gmail.com>,
+	Ajit Pandey <quic_ajipan@quicinc.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jagadeesh Kona <quic_jkona@quicinc.com>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH RFC 24/24] arm64: dts: qcom: x1e80100: Describe GPU_CC
+ power plumbing requirements
+Message-ID: <aIjsTgA7O7UqS-Oz@linaro.org>
+References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
+ <20250728-topic-gpucc_power_plumbing-v1-24-09c2480fe3e6@oss.qualcomm.com>
+ <aIevIuMDA5R8igmi@linaro.org>
+ <50868cd8-68a9-4bad-99f3-8cf542886fb6@oss.qualcomm.com>
+ <aIhrav7GKpsbVpto@linaro.org>
+ <6b903628-9abf-4b9e-971e-e9338308d693@oss.qualcomm.com>
+ <0a1337d7-ee3e-47de-a401-b25586e813e4@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: power: supply: Add Richtek RT9756 smart
- cap divider charger
-To: cy_huang@richtek.com, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1753759794.git.cy_huang@richtek.com>
- <3fa997b42b4aec43fc182a043cf521f7e3e7fcb3.1753759794.git.cy_huang@richtek.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <3fa997b42b4aec43fc182a043cf521f7e3e7fcb3.1753759794.git.cy_huang@richtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a1337d7-ee3e-47de-a401-b25586e813e4@oss.qualcomm.com>
 
-On 29/07/2025 06:21, cy_huang@richtek.com wrote:
-> +
-> +  shunt-resistor-micro-ohms:
-> +    description: Battery current sense resistor mounted.
-> +    default: 2000
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - wakeup-source
+On Tue, Jul 29, 2025 at 03:28:55PM +0200, Konrad Dybcio wrote:
+> On 7/29/25 10:23 AM, Konrad Dybcio wrote:
+> > On 7/29/25 8:34 AM, Stephan Gerhold wrote:
+> >> On Mon, Jul 28, 2025 at 11:31:10PM +0200, Konrad Dybcio wrote:
+> >>> On 7/28/25 7:10 PM, Stephan Gerhold wrote:
+> >>>> On Mon, Jul 28, 2025 at 06:16:24PM +0200, Konrad Dybcio wrote:
+> >>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> >>>>>
+> >>>>> A number of power rails must be powered on in order for GPU_CC to
+> >>>>> function. Ensure that's conveyed to the OS.
+> >>>>>
+> >>>>> Fixes: 721e38301b79 ("arm64: dts: qcom: x1e80100: Add gpu support")
+> >>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> >>>>> ---
+> >>>>>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 6 ++++++
+> >>>>>  1 file changed, 6 insertions(+)
+> >>>>>
+> >>>>> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> >>>>> index 5e9a8fa3cf96468b12775f91192cbd779d5ce946..6620517fbb0f3ed715c4901ec53dcbc6235be88f 100644
+> >>>>> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> >>>>> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> >>>>> @@ -3928,6 +3928,12 @@ gpucc: clock-controller@3d90000 {
+> >>>>>  			clocks = <&bi_tcxo_div2>,
+> >>>>>  				 <&gcc GCC_GPU_GPLL0_CPH_CLK_SRC>,
+> >>>>>  				 <&gcc GCC_GPU_GPLL0_DIV_CPH_CLK_SRC>;
+> >>>>> +
+> >>>>> +			power-domains = <&rpmhpd RPMHPD_CX>,
+> >>>>> +					<&rpmhpd RPMHPD_MX>,
+> >>>>> +					<&rpmhpd RPMHPD_GFX>,
+> >>>>> +					<&rpmhpd RPMHPD_GMXC>;
+> >>>>> +
+> >>>>>  			#clock-cells = <1>;
+> >>>>>  			#reset-cells = <1>;
+> >>>>>  			#power-domain-cells = <1>;
+> >>>>>
+> >>>>
+> >>>> To repeat your own message from a couple of months back [1]:
+> >>>>
+> >>>>> You shouldn't be messing with VDD_GFX on platforms with a GMU.
+> >>>>>
+> >>>>> Parts of the clock controller are backed by one of the MX rails,
+> >>>>> with some logic depending on CX/GFX, but handling of the latter is
+> >>>>> fully deferred to the GMU firmware.
+> >>>>>
+> >>>>> Konrad
+> >>>>
+> >>>> Please describe somewhere in the cover letter or the individual patches
+> >>>> how this relates to the responsibilities of the GMU. I searched for
+> >>>> "GMU" in the patch series and couldn't find any note about this.
+> >>>>
+> >>>> Also: How much is a plain "power on" votes (without a corresponding
+> >>>> "required-opps") really worth nowadays? An arbitrary low voltage level
+> >>>> on those rails won't be sufficient to make the GPU_CC actually
+> >>>> "function". Do you need "required-opps" here? In the videocc/camcc case
+> >>>> we have those.
+> >>>
+> >>> Right, I failed to capture this.
+> >>>
+> >>> The GFX rail should be powered on before unclamping the GX_GDSC (as
+> >>> per the programming guide). The clock controller HPG however doesn't
+> >>> seem to have a concept of RPMh, so it says something that amounts to
+> >>> "tell the PMIC to supply power on this rail". In Linux, since Commit
+> >>> e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable the
+> >>> domain") we don't really need a defined level for this (perhaps it's
+> >>> more ""portable"" across potential fuse-bins if we don't hardcode the
+> >>> lowest level anyway?).
+> >>
+> >> Thanks, I forgot that we have this commit.
+> >>
+> >>>
+> >>> However after that happens, the level scaling is done by the GMU
+> >>> firmware. This holds for allOf CX/MX/GFX. I'm not super sure if
+> >>> both MX and (G)MXC need to both be captured together - downstream
+> >>> seems to describe MXC as a child of MX (in socname-regulators.dtsi),
+> >>> but I'm not really sure this is true in hardware.
+> >>>
+> >>> The GPU driver currently first enables the GX_GDSC and only then
+> >>> does it kickstart the GMU firmware. Downstream seems to do that as
+> >>> well. So on a second thought, since we've not seen any errors so
+> >>> far, it calls into question what role the GFX rail plays in the
+> >>> GX_GDSC's powering up..
+> >>>
+> >>
+> >> It might play a role, but we wouldn't know since AFAICT we don't support
+> >> enabling the GX_GDSC. Look at the beautiful gdsc_gx_do_nothing_enable()
+> >> function, it basically just defers the entire task to the GMU. The GDSC
+> >> just exists in Linux so we can turn it *off* during GMU crashes. :D
+> > 
+> > OHHHHH snap! I, on the other hand, forgot we have *that* commit..
+> > 
+> >> I think we should identify precisely which votes we are missing, instead
+> >> of making blanket votes for all the power rails somehow related to the
+> >> GPU. In this case this means: Which rails do we need to vote for to make
+> >> the GMU turn on? If there are no votes necessary after the GMU is on,
+> >> it's better to have none IMO.
+> > 
+> > The GMU pokes at RPMh directly (see a6xx_hfi.c), so we indeed just
+> > need to make sure that it can turn on.. Which in short means the
+> > *C*X_GDSC must be able to power up, which doesn't have any special
+> > requirements. The only question that's left is basically whether
+> > MX_C must be on. I'll try testing that in practice.
+> 
+> So this is apparently difficult, at least on SC8280XP, where something
+> seems to be voting on MXC and it only seems to shut down when entering
+> CXPC. I would imagine/hope this is not the case on newer platforms, but
+> I don't have a way to fully confirm this at the moment..
+> 
 
-Why do you require this? I cannot find any use of it, so maybe I missed
-some change in Linux code (and that's second question like that for
-Richtek, so refer to your other patchsets for contexr).
+If in doubt, I would suggest to leave everything as-is for now until
+someone actually runs into an issue caused by this (if this is even
+possible). There are plenty other actual gaps to address. ;)
 
-> +  - interrupts
-> +
-
-Missing ref to power supply.
-
-> +additionalProperties: false
-> +
-
-unevaluated instead
-
-
-Best regards,
-Krzysztof
+Stephan
 
