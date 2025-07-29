@@ -1,323 +1,275 @@
-Return-Path: <linux-pm+bounces-31551-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31552-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7840EB14C71
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 12:44:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCFACB14CE4
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 13:18:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AACEC545BEC
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 10:44:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FD107A918F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 11:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DF628A722;
-	Tue, 29 Jul 2025 10:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A725928C865;
+	Tue, 29 Jul 2025 11:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="lC0oIZO9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kOPyrZ+4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62F8289838;
-	Tue, 29 Jul 2025 10:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35CF28B3F3
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 11:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753785881; cv=none; b=HUYiX4IhG4RYPf8ENjAulBUm/MYPomg9TJ7YYR1JTjXun7EF9sLK+LHGc6t9kJ0d+zBNEVUEmDaOlJmgQbr4j5eo6ic1Z5MYnUhGShTq4nK8CpkCjkPwVEExSgS3ruhho+uoTgBK5GtsXDVRS6zAYNJFyHeYRfvd63v57EUHs88=
+	t=1753787870; cv=none; b=Tp2gZQU/bhI6OHwH270CshyaLL8mBGDz2/fYf9FraAcibwaT/U+Rl4OB9viyDCYY75B3zHPjQ/jtOREwr0tcilA5fF8HC087zxYtdBy1p5XAKNpKRmibbuYJC20axhjcqc95RDTSebqhfzrzB0IrgLR6iF1aGn7VX5t2NUP6xFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753785881; c=relaxed/simple;
-	bh=nU5WXYZ5Ubm0JEqaTpOcsj1mUeZ2KBa1iqurY0olt6s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V8C3JPE1ieBBonXTgfrPWR3VV5DhRoIKRia7dcdXV6fAHA/pt9TKLUZtSJaklUlyPQiSs51QxSt6odT7ToDa0mXuFFjIR/NCvmkPAdDnNYflNmo0e++Quu1Tbqg1BYK8s2KVbtKyL9yLS/CLr8h75HnwlsCjEVH/bUmCW85aI5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=lC0oIZO9; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1753785876;
-	bh=nU5WXYZ5Ubm0JEqaTpOcsj1mUeZ2KBa1iqurY0olt6s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lC0oIZO9yZLVv56w72qdXrBp+FWFHozmGeMG3NEBw3vYJ6e+pKmI/o2/UmjPoxxhz
-	 hh+L3KbyyrJUgIhaEWY963l2K2c1YrRFvgP7ZE1N8xj0apn7hALiTaMjdBSaxeI3iT
-	 RtPOeeUi6ONSQVNIrkH3/P2HK4Z5CqgsqLoclTcN0usdXwU41Z77//5oW3cRzGIaxa
-	 j0QjzrK6rDCSSrxzxpfqN3oBEMMUdfWKHFWzLYQSdD0GP5nvU1zT9X/TKaPhsoLcEq
-	 C4ClcgnC7vjnQlbCD0g0WFVMa7xDUx1/6JNXhBOxSN419VS6UCtIN+P8MpGe/IuU68
-	 wTkJ680R0i9DA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 6637B17E0EC0;
-	Tue, 29 Jul 2025 12:44:35 +0200 (CEST)
-Message-ID: <6ea0495e-21d8-41a8-b1b0-1c99c2929de5@collabora.com>
-Date: Tue, 29 Jul 2025 12:44:34 +0200
+	s=arc-20240116; t=1753787870; c=relaxed/simple;
+	bh=wEVZhpgt1uNcasnqEQ15dSnD0eh7wUda2VTINBIA7/w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=d+TRuhmtyEKxrC0yW38Cr36QI9BfelRUQZFEty5DjUtJBYPE+YEWH6UQTVlaWqqsbcqsXUhbvBLv5Cgm+eicxLkaGbcR/ji5OcLh0NqblKILIi63N7PLeCKxEfgpzSL/KFaQSJF9i5GjYDPs+jbeyH25wBWr0LPGwCHOo6gqSfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kOPyrZ+4; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-55a4befb8ccso5741166e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 04:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753787866; x=1754392666; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNqyxgyK0nsgvQIxHIvNEn3WYoXCL9lVWy5TTd0G+sE=;
+        b=kOPyrZ+4WxhqPscq3pVAzPk2B3g8dQQsE6lOOTWt7PW1FGtp5FdHbx3PLEv+NalMLb
+         YdPlRAm8j32xPDJeX45zZdjPV2dIpup7iDiVAoyhzDGSV+eRI2svcHmnqUaUc0EHnVMC
+         v1Q+QXdr4INmLiZH3nv1A8bKVp0WEpYjm4ESwx+jnfHPIiC37LH6qela3khFvPzgtums
+         C4Lt6i2RAQBrO/Lg7ySVZgXeeu5OycIvKllEYvCjyJJp9M2RUD4/jBc1682E3axBBlJm
+         CGu+rpGFDbl8k9udzRFfuW1Dl9/jgVw7mS9gzZyGsq8NcXD86+T1eUVYLwPN5EITbuIm
+         CO9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753787866; x=1754392666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NNqyxgyK0nsgvQIxHIvNEn3WYoXCL9lVWy5TTd0G+sE=;
+        b=CdrFMX+oCtt75PdNt/bM7wnXEDD3t4YNth7SYFctqVGj3wvH2uQdxzqt+G003Zz4co
+         80aoBmPLdsBHwBJT0JNsyCt813MGf57Xb0rWwefpleySjLIM7uxo6nyfJ6xNkok0Qwn8
+         NkQ7sEM10wJF6zsCdRmykpZDBpy2VfbzWMcA6+gp+WkQOThUFnpomnBZh3yKNs1thbqV
+         5Ja9jjXC0JRJjqFC8gHBTVUc+SHdAj5g4us2hB3/AoL2XTN9sY4k144aJa6E8QlrLA8u
+         KUYEKJAPzoU3iKXXItcgC6ivgk0oEdXhpdiDNO/zIfFwr9EaflOLt056AoJszxYBVl5q
+         1tng==
+X-Forwarded-Encrypted: i=1; AJvYcCWw4Kt26g3UccV1vBdJT5eGqd8s4qqOjqTA1E3qi1Ej43/ysFwdqH78zjCydjR/36IMz5PYIuzyYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymMKxPliXZW9rpNnAkUIU00njZQqiaXrGg0JUutPrXCOdTq/zn
+	+t7T3S8pVJhqSvJhgnLLUPUYPLSmrVDj3aIC7tt1RpXMWosmbCb0sTh6ti4cGWC83i21HQHzIUV
+	8uJtm
+X-Gm-Gg: ASbGncthmW2N14AaW7cR1mwN5jTsd8Fhm+2f8k9akpj8S54g7D88PS5U6EOfHXuaNJQ
+	x+NciYxoNjr0JNsXMPZHv4f8veOSqbptm21ZBNJLNwq3krFKVt9Kn7XVz6eWoytrqchwwvXrpvk
+	4JrKkCg+KAbqRUoWTo+PsJxtX7NW8bO00H9A2pm9TFL2Q3BDhhIA2roup2O//QyzKYJUhLFVhAe
+	U1JPesqMG5CCxCFI+FROxg3J1ZqzHo+WSUbXzv4T7OmfqPuFQ+iAhAyBRJlVfyKwi3PFhJwuKDF
+	sFLYMQ09ZfiOJHxwtEz3HACtns6DZsNa6xgImoRdQKOVc+diuonjC8WNRyTa/ElgdNw87aS1LLf
+	QxvMdYT+sb3m7KjWlPxYNu0VG0mniQ7VWnsG4IADsUV4W8oa3Vs/334mXNb13dIteqti+be5h
+X-Google-Smtp-Source: AGHT+IGssqGSc/l4qTALfsZmnWpz0MEgV6jXLRfV5IBNiy/NKNIKDaCf0ufZ7BJYRZwGjpYZkZDx3g==
+X-Received: by 2002:a05:6512:23a2:b0:554:f76a:baba with SMTP id 2adb3069b0e04-55b5f3d5c73mr4808104e87.3.1753787865739;
+        Tue, 29 Jul 2025 04:17:45 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55b6316db49sm1652507e87.3.2025.07.29.04.17.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jul 2025 04:17:45 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain/cpuidle-psci updates for v6.17
+Date: Tue, 29 Jul 2025 13:17:33 +0200
+Message-ID: <20250729111743.14723-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add() and
- devm variant
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com,
- nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
- gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
- kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
- u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- kernel@collabora.com, wenst@chromium.org, casey.connolly@linaro.org
-References: <20250722101317.76729-1-angelogioacchino.delregno@collabora.com>
- <20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
- <20250722150930.00000a2f@huawei.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250722150930.00000a2f@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Il 22/07/25 16:09, Jonathan Cameron ha scritto:
-> On Tue, 22 Jul 2025 12:13:11 +0200
-> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
-> 
->> Some devices connected over the SPMI bus may be big, in the sense
->> that those may be a complex of devices managed by a single chip
->> over the SPMI bus, reachable through a single SID.
->>
->> Add new functions aimed at managing sub-devices of a SPMI device
->> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
->> for adding a new subdevice and removing it respectively, and also
->> add their devm_* variants.
->>
->> The need for such functions comes from the existance of	those
->> complex Power Management ICs (PMICs), which feature one or many
->> sub-devices, in some cases with these being even addressable on
->> the chip in form of SPMI register ranges.
->>
->> Examples of those devices can be found in both Qualcomm platforms
->> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
->> sub-devices, and in newer MediaTek platforms showing similar HW
->> features and a similar layout with those also having many subdevs.
->>
->> Also, instead of generally exporting symbols, export them with a
->> new "SPMI" namespace: all users will have to import this namespace
->> to make use of the newly introduced exports.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/spmi/spmi-devres.c | 23 +++++++++++
->>   drivers/spmi/spmi.c        | 83 ++++++++++++++++++++++++++++++++++++++
->>   include/linux/spmi.h       | 16 ++++++++
->>   3 files changed, 122 insertions(+)
->>
->> diff --git a/drivers/spmi/spmi-devres.c b/drivers/spmi/spmi-devres.c
->> index 62c4b3f24d06..7e00e38be2ff 100644
->> --- a/drivers/spmi/spmi-devres.c
->> +++ b/drivers/spmi/spmi-devres.c
->> @@ -60,5 +60,28 @@ int devm_spmi_controller_add(struct device *parent, struct spmi_controller *ctrl
->>   }
->>   EXPORT_SYMBOL_GPL(devm_spmi_controller_add);
->>   
->> +static void devm_spmi_subdevice_remove(void *res)
->> +{
->> +	spmi_subdevice_remove((struct spmi_subdevice *)res);
-> 
-> Why the cast?  Implicit casts are fine for void * to any other pointer type
-> so
-> 	spmi_subdevice_remove(res);
-> should be fine.
-> 
+Hi Linus,
 
-Because style consistency across the file... but yeah, I'm removing the cast.
+Here's the pull-request with pmdomain and cpuidle-psci updates for v6.17.
 
-> 
->> +}
-> 
->>   MODULE_LICENSE("GPL");
->>   MODULE_DESCRIPTION("SPMI devres helpers");
->> diff --git a/drivers/spmi/spmi.c b/drivers/spmi/spmi.c
->> index 3cf8d9bd4566..62bb782b2bbc 100644
->> --- a/drivers/spmi/spmi.c
->> +++ b/drivers/spmi/spmi.c
->> @@ -19,6 +19,7 @@
->>   
->>   static bool is_registered;
->>   static DEFINE_IDA(ctrl_ida);
->> +static DEFINE_IDA(spmi_subdevice_ida);
->>   
->>   static void spmi_dev_release(struct device *dev)
->>   {
->> @@ -31,6 +32,18 @@ static const struct device_type spmi_dev_type = {
->>   	.release	= spmi_dev_release,
->>   };
->>   
->> +static void spmi_subdev_release(struct device *dev)
->> +{
->> +	struct spmi_device *sdev = to_spmi_device(dev);
->> +	struct spmi_subdevice *sub_sdev = container_of(sdev, struct spmi_subdevice, sdev);
->> +
->> +	kfree(sub_sdev);
->> +}
->> +
->> +static const struct device_type spmi_subdev_type = {
->> +	.release	= spmi_subdev_release,
->> +};
->> +
->>   static void spmi_ctrl_release(struct device *dev)
->>   {
->>   	struct spmi_controller *ctrl = to_spmi_controller(dev);
->> @@ -90,6 +103,19 @@ void spmi_device_remove(struct spmi_device *sdev)
->>   }
->>   EXPORT_SYMBOL_GPL(spmi_device_remove);
->>   
->> +/**
->> + * spmi_subdevice_remove() - Remove an SPMI subdevice
->> + * @sub_sdev:	spmi_device to be removed
->> + */
->> +void spmi_subdevice_remove(struct spmi_subdevice *sub_sdev)
->> +{
->> +	struct spmi_device *sdev = &sub_sdev->sdev;
->> +
->> +	device_unregister(&sdev->dev);
->> +	ida_free(&spmi_subdevice_ida, sub_sdev->devid);
-> 
-> Why not make the ida free part of the release? If not
-> the device_unregister could (I think) result in a reference
-> count drop and freeing of sub_sdev before you dereference it here.
-> 
+FYI, this time we have made quite some changes in the pmdomain provider core
+(aka genpd), which affects a couple of provider drivers that are sprinkled
+across a few more subsystems than usual.
 
-That's right, I moved it to the release, before the kfree.
+More details about the highlights are as usual found in the signed tag.
 
-> 
->> +}
->> +EXPORT_SYMBOL_NS_GPL(spmi_subdevice_remove, "SPMI");
->> +
->>   static inline int
->>   spmi_cmd(struct spmi_controller *ctrl, u8 opcode, u8 sid)
->>   {
->> @@ -431,6 +457,63 @@ struct spmi_device *spmi_device_alloc(struct spmi_controller *ctrl)
->>   }
->>   EXPORT_SYMBOL_GPL(spmi_device_alloc);
->>   
->> +/**
->> + * spmi_subdevice_alloc_and_add(): Allocate and add a new SPMI sub-device
->> + * @sparent:	SPMI parent device with previously registered SPMI controller
->> + *
->> + * Returns:
->> + * Pointer to newly allocated SPMI sub-device for success or negative ERR_PTR.
->> + */
->> +struct spmi_subdevice *spmi_subdevice_alloc_and_add(struct spmi_device *sparent)
->> +{
->> +	struct spmi_subdevice *sub_sdev;
->> +	struct spmi_device *sdev;
->> +	int ret;
->> +
->> +	if (!sparent)
->> +		return ERR_PTR(-EINVAL);
-> 
-> Is this protecting against a real possibility? Feels like something went
-> very wrong if you are allocating a subdevice of 'nothing'.
-> If it's just defensive programming I'd drop it.
-> 
+Please pull this in!
 
-That was defensive programming. Dropping.
-
->> +
->> +	sub_sdev = kzalloc(sizeof(*sub_sdev), GFP_KERNEL);
->> +	if (!sub_sdev)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	ret = ida_alloc(&spmi_subdevice_ida, GFP_KERNEL);
-> 
->> +	if (ret < 0)
->> +		goto err_ida_alloc;
->> +
->> +	sdev = &sub_sdev->sdev;
->> +	sdev->ctrl = sparent->ctrl;
->> +	device_initialize(&sdev->dev);
-> 
-> Read the device_initialize() documentation for what you need to do
-> if an error occurs after this point. Specifically the last 'NOTE'.
-> 
-
-Sorry. That was a bad miss :-)
-
-> 
->> +	sdev->dev.parent = &sparent->dev;
->> +	sdev->dev.bus = &spmi_bus_type;
->> +	sdev->dev.type = &spmi_subdev_type;
->> +
->> +	sub_sdev->devid = ret;
->> +	sdev->usid = sparent->usid;
->> +
->> +	ret = dev_set_name(&sdev->dev, "%d-%02x.%d.auto",
->> +			   sdev->ctrl->nr, sdev->usid, sub_sdev->devid);
->> +	if (ret)
->> +		goto err_set_name;
->> +
->> +	ret = device_add(&sdev->dev);
->> +	if (ret) {
->> +		dev_err(&sdev->dev, "Can't add %s, status %d\n",
->> +			dev_name(&sdev->dev), ret);
->> +		put_device(&sdev->dev);
->> +		return ERR_PTR(ret);
->> +	}
->> +
->> +	return sub_sdev;
->> +
->> +err_set_name:
->> +	ida_free(&ctrl_ida, sub_sdev->devid);
->> +err_ida_alloc:
->> +	kfree(sub_sdev);
->> +	return ERR_PTR(ret);
->> +}
->> +EXPORT_SYMBOL_NS_GPL(spmi_subdevice_alloc_and_add, "SPMI");
->> +
->>   /**
->>    * spmi_controller_alloc() - Allocate a new SPMI controller
->>    * @parent:	parent device
->> diff --git a/include/linux/spmi.h b/include/linux/spmi.h
->> index 28e8c8bd3944..7cea0a5b034b 100644
->> --- a/include/linux/spmi.h
->> +++ b/include/linux/spmi.h
->> @@ -69,6 +69,22 @@ int spmi_device_add(struct spmi_device *sdev);
->>   
->>   void spmi_device_remove(struct spmi_device *sdev);
->>   
->> +/**
->> + * struct spmi_subdevice - Basic representation of an SPMI sub-device
->> + * @sdev:	Sub-device representation of an SPMI device
->> + * @devid:	Platform Device ID of an SPMI sub-device
->> + */
->> +struct spmi_subdevice {
->> +	struct spmi_device	sdev;
-> 
-> Having something called a subdevice containing an instance of a device
-> does seem a little odd.  Maybe the spmi_device naming is inappropriate after
-> this patch?
-> 
-
-A SPMI Sub-Device is a SPMI Device on its own, but one that is child of a device.
-
-Controller -> Device -> Sub-Device
-
-Before this version, I initially added devid to spmi_device, but that felt wrong
-because:
-  1. Sub-devices are children of devices (though, still also devices themselves)
-  2. The devid field would be useless in "main" SPMI devices (struct spmi_device)
-     and would not only waste (a very small amount of) memory for each device but,
-     more importantly, would confuse people with an unused field there.
-
-So, this defines a SPMI Sub-Device as an extension of a SPMI Device, where:
-  - Device has controller-device numbers
-  - Sub-device has controller-device.subdev_id numbers.
-
-I don't really see any cleaner way of defining this, but I am completely open to
-any idea :-)
-
-Cheers,
-Angelo
+Kind regards
+Ulf Hansson
 
 
+The following changes since commit 621a88dbfe9006c318a0cafbd12e677ccfe006e7:
+
+  cpuidle: psci: Fix cpuhotplug routine with PREEMPT_RT=y (2025-07-14 13:09:04 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.17
+
+for you to fetch changes up to 05e35bd07d56780f0a5119973995b97a16843579:
+
+  pmdomain: qcom: rpmhpd: Add Glymur RPMh Power Domains (2025-07-23 12:12:16 +0200)
+
+----------------------------------------------------------------
+pmdomain core:
+ - Leave powered-on genpds on until ->sync_state() or late_initcall_sync
+ - Export a common ->sync_state() helper for genpd providers
+ - Add generic ->sync_state() support
+ - Add a bus/driver for genpd provider-devices
+ - Introduce dev_pm_genpd_is_on() for consumers
+
+pmdomain providers:
+ - cpuidle-psci: Drop redundant ->sync_state() support
+ - cpuidle-riscv-sbi: Drop redundant ->sync_state() support
+ - imx: Set ISI panic write for imx8m-blk-ctrl
+ - qcom: Add support for Glymur and Milos RPMh power-domains
+ - qcom: Use of_genpd_sync_state() for power-domains
+ - rockchip: Add support for the RK3528 variant
+ - samsung: Fix splash-screen handover by enforcing a ->sync_state()
+ - sunxi: Add support for Allwinner A523's PCK600 power-controller
+ - tegra: Opt-out from genpd's common ->sync_state() support for pmc
+ - thead: Instantiate a GPU power sequencer via the auxiliary bus
+ - renesas: Move init to postcore_initcalls
+ - xilinx: Move ->sync_state() support to firmware driver
+ - xilinx: Use of_genpd_sync_state() for power-domains
+
+pmdomain consumers:
+ - remoteproc: imx_rproc: Fixup the detect/attach procedure for pre-booted cores
+
+----------------------------------------------------------------
+Chen-Yu Tsai (4):
+      dt-bindings: power: Add A523 PPU and PCK600 power controllers
+      pmdomain: sunxi: sun20i-ppu: add A523 support
+      pmdomain: sunxi: add driver for Allwinner A523's PCK-600 power controller
+      pmdomain: sunxi: sun20i-ppu: change to tristate and enable for ARCH_SUNXI
+
+Christophe JAILLET (1):
+      pmdomain: amlogic: Constify struct meson_secure_pwrc_domain_data
+
+Guillaume La Roque (1):
+      pmdomain: ti: Select PM_GENERIC_DOMAINS
+
+Hiago De Franco (3):
+      pmdomain: core: introduce dev_pm_genpd_is_on()
+      remoteproc: imx_rproc: skip clock enable when M-core is managed by the SCU
+      remoteproc: imx_rproc: detect and attach to pre-booted remote cores
+
+Jonas Karlman (3):
+      dt-bindings: power: rockchip: Add support for RK3528
+      dt-bindings: rockchip: pmu: Add compatible for RK3528
+      pmdomain: rockchip: Add support for RK3528
+
+Kamal Wadhwa (2):
+      dt-bindings: power: rpmpd: Add Glymur power domains
+      pmdomain: qcom: rpmhpd: Add Glymur RPMh Power Domains
+
+Krzysztof Hałasa (1):
+      imx8m-blk-ctrl: set ISI panic write hurry level
+
+Kuninori Morimoto (2):
+      pmdomain: renesas: use menu for Renesas
+      pmdomain: renesas: sort Renesas Kconfig configs
+
+Luca Weiss (2):
+      dt-bindings: power: qcom,rpmpd: document the Milos RPMh Power Domains
+      pmdomain: qcom: rpmhpd: Add Milos power domains
+
+Lukas Bulwahn (1):
+      pmdomain: arm: scmi_pm_domain: remove code clutter
+
+Michal Wilczynski (2):
+      dt-bindings: firmware: thead,th1520: Add resets for GPU clkgen
+      pmdomain: thead: Instantiate GPU power sequencer via auxiliary bus
+
+Saravana Kannan (1):
+      driver core: Add dev_set_drv_sync_state()
+
+Sven Peter (1):
+      pmdomain: apple: Drop default ARCH_APPLE in Kconfig
+
+Ulf Hansson (31):
+      pmdomain: core: Use of_fwnode_handle()
+      pmdomain: Merge branch dt into next
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch dt into next
+      pmdomain: renesas: rcar-sysc: Add genpd OF provider at postcore_initcall
+      pmdomain: renesas: rmobile-sysc: Move init to postcore_initcall
+      pmdomain: renesas: rcar-gen4-sysc: Move init to postcore_initcall
+      pmdomain: core: Prevent registering devices before the bus
+      pmdomain: core: Add a bus and a driver for genpd providers
+      pmdomain: core: Add the genpd->dev to the genpd provider bus
+      pmdomain: core: Export a common ->sync_state() helper for genpd providers
+      pmdomain: core: Prepare to add the common ->sync_state() support
+      soc/tegra: pmc: Opt-out from genpd's common ->sync_state() support
+      cpuidle: psci: Opt-out from genpd's common ->sync_state() support
+      cpuidle: riscv-sbi: Opt-out from genpd's common ->sync_state() support
+      pmdomain: qcom: rpmpd: Use of_genpd_sync_state()
+      pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
+      firmware/pmdomain: xilinx: Move ->sync_state() support to firmware driver
+      firmware: xilinx: Don't share zynqmp_pm_init_finalize()
+      firmware: xilinx: Use of_genpd_sync_state()
+      driver core: Export get_dev_from_fwnode()
+      pmdomain: core: Add common ->sync_state() support for genpd providers
+      pmdomain: core: Default to use of_genpd_sync_state() for genpd providers
+      pmdomain: core: Leave powered-on genpds on until late_initcall_sync
+      pmdomain: core: Leave powered-on genpds on until sync_state
+      cpuidle: psci: Drop redundant sync_state support
+      cpuidle: riscv-sbi: Drop redundant sync_state support
+      pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch dt into next
+      pmdomain: Merge branch dt into next
+
+ .../devicetree/bindings/arm/rockchip/pmu.yaml      |   2 +
+ .../bindings/firmware/thead,th1520-aon.yaml        |   7 +
+ .../bindings/power/allwinner,sun20i-d1-ppu.yaml    |   4 +-
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |   2 +
+ .../bindings/power/rockchip,power-controller.yaml  |   1 +
+ drivers/base/core.c                                |   8 +-
+ drivers/cpuidle/cpuidle-psci-domain.c              |  14 --
+ drivers/cpuidle/cpuidle-riscv-sbi.c                |  14 --
+ drivers/firmware/xilinx/zynqmp.c                   |  18 +-
+ drivers/pmdomain/amlogic/meson-secure-pwrc.c       |  12 +-
+ drivers/pmdomain/apple/Kconfig                     |   1 -
+ drivers/pmdomain/arm/scmi_pm_domain.c              |  12 +-
+ drivers/pmdomain/core.c                            | 254 +++++++++++++++++++--
+ drivers/pmdomain/imx/imx8m-blk-ctrl.c              |  10 +
+ drivers/pmdomain/qcom/rpmhpd.c                     |  47 ++++
+ drivers/pmdomain/qcom/rpmpd.c                      |   2 +
+ drivers/pmdomain/renesas/Kconfig                   | 124 +++++-----
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c          |   2 +-
+ drivers/pmdomain/renesas/rcar-sysc.c               |  19 +-
+ drivers/pmdomain/renesas/rmobile-sysc.c            |   3 +-
+ drivers/pmdomain/rockchip/pm-domains.c             |  27 +++
+ drivers/pmdomain/samsung/exynos-pm-domains.c       |   9 +
+ drivers/pmdomain/sunxi/Kconfig                     |  19 +-
+ drivers/pmdomain/sunxi/Makefile                    |   1 +
+ drivers/pmdomain/sunxi/sun20i-ppu.c                |  17 ++
+ drivers/pmdomain/sunxi/sun55i-pck600.c             | 234 +++++++++++++++++++
+ drivers/pmdomain/thead/Kconfig                     |   1 +
+ drivers/pmdomain/thead/th1520-pm-domains.c         |  51 +++++
+ drivers/pmdomain/ti/Kconfig                        |   2 +-
+ drivers/pmdomain/xilinx/zynqmp-pm-domains.c        |  16 --
+ drivers/remoteproc/imx_rproc.c                     |  45 +++-
+ drivers/soc/tegra/pmc.c                            |  26 ++-
+ .../power/allwinner,sun55i-a523-pck-600.h          |  15 ++
+ .../dt-bindings/power/allwinner,sun55i-a523-ppu.h  |  12 +
+ include/dt-bindings/power/rockchip,rk3528-power.h  |  19 ++
+ include/linux/device.h                             |  13 ++
+ include/linux/firmware/xlnx-zynqmp.h               |   6 -
+ include/linux/pm_domain.h                          |  23 ++
+ 38 files changed, 918 insertions(+), 174 deletions(-)
+ create mode 100644 drivers/pmdomain/sunxi/sun55i-pck600.c
+ create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck-600.h
+ create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
+ create mode 100644 include/dt-bindings/power/rockchip,rk3528-power.h
 
