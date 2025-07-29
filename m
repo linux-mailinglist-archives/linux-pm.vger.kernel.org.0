@@ -1,117 +1,79 @@
-Return-Path: <linux-pm+bounces-31562-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31563-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FDFBB15306
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 20:44:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35D9B153C5
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 21:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9C5A7A551B
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 18:43:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0FA65A2A31
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 19:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF1729ACF0;
-	Tue, 29 Jul 2025 18:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F48256C9E;
+	Tue, 29 Jul 2025 19:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhf5H2tN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeAO7L88"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33914220680;
-	Tue, 29 Jul 2025 18:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7BF255F4C;
+	Tue, 29 Jul 2025 19:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753814523; cv=none; b=mOGGcTCIRjt9BxeS2tYXFrvC+V0E51MoGPvvv6RwH0y3bXo2OG0IJ2ZsavKPrW1oyb90UL8N11KLd8KzJsmIsAxJ/jEdAOU62U8R/vINGGq2C8KPksV5gBF7VFDgSuoZYSBUtJde0jYeTWKEmgqBCFDstFsU7n4UTieZWvjMOl8=
+	t=1753818283; cv=none; b=u9T5e8Ku1YjnD+pOyoUOt5rXf3jU91ogpTPDF9+l+mm9H/KnkYytVBe9MpuewIizOiSut7ExJ5VMU7Qgldz+3CtbyD1ads9IP93XsvOhYLzZo7VQcuR+0FiD5BP+q2CtD/AQWiFDkIOzJ3KAICpb+1g0KGsfHPhcjCrNwRL008Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753814523; c=relaxed/simple;
-	bh=V6Dcqa0TG7W5slu9uXHtRB+QqM48OfTcq9W5IaelKrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mD6tSPbfQnH5UxidPaBVV+Dxcwo4BQOIn8NLHUrjxMigrhp/tVczJzLX2LhijeoDn0KWFb/D9cSKhssN5aSMR4Swv7obqBuAb2H/xuK8QSRSiw/UyVoNM4l9UkxlkD68Cvd9X4UU8fLsvXFE/OJKZx+gM7aClQHtfjqFWt1ZtI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhf5H2tN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA4BC4CEEF;
-	Tue, 29 Jul 2025 18:41:55 +0000 (UTC)
+	s=arc-20240116; t=1753818283; c=relaxed/simple;
+	bh=tcDsuAoiaaM76wFOzY0SxBKTvoLfG7AMBnUMYwUV4O0=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=OL3LCbC0CI87LwIIe4AL1rE1TCPkDkISQTfhJyVhHePH421m1KonwMD8jwBD+/U0VHH3oJAhDJnYParkNEtalvpqUjcG0AGuwr5NQidewzXDWuxdnjchrhFGhEv7wVZbNgbjjrHQMklV0FWRuiOv5l2iYKpwmtH7pTyCnK28/5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeAO7L88; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A76C4CEEF;
+	Tue, 29 Jul 2025 19:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753814523;
-	bh=V6Dcqa0TG7W5slu9uXHtRB+QqM48OfTcq9W5IaelKrU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bhf5H2tN9kMMxWl2WeZhvWPmpxfLH67XYeFVV/Xl0v3LAO5IKnbHUGx6cetAw8r0E
-	 NelH/JRUL7KPtddjW2mY7kr7uscHlx82JXR8M/D7wnaN/BSVWG5YRbG2PwoySQDHVr
-	 3FVSj7MEg1Sl4KKhtpobSnWImVZdjcdhMRfUBodtAxJ6oJYmzJ5W+HcvXMSM0TePYS
-	 GqoloI3NFa22QSdSkQmso8fHGjMcWucCv9CBXLvVP//8Y3Q7ejE2jXgXsNFuQjlqWe
-	 mvY6mquSuCyIyS4jxoOsNUCMvkQ/frlVHDw5PWcbWiVDFJYaMn7pdUYUtI991hiIgd
-	 I1roqP1SAbJyQ==
-Date: Tue, 29 Jul 2025 19:41:50 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, sboyd@kernel.org,
- dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
- gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
- kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
- u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- kernel@collabora.com, wenst@chromium.org, casey.connolly@linaro.org
-Subject: Re: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-Message-ID: <20250729194150.1985404b@jic23-huawei>
-In-Reply-To: <6ea0495e-21d8-41a8-b1b0-1c99c2929de5@collabora.com>
-References: <20250722101317.76729-1-angelogioacchino.delregno@collabora.com>
-	<20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
-	<20250722150930.00000a2f@huawei.com>
-	<6ea0495e-21d8-41a8-b1b0-1c99c2929de5@collabora.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	s=k20201202; t=1753818282;
+	bh=tcDsuAoiaaM76wFOzY0SxBKTvoLfG7AMBnUMYwUV4O0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=JeAO7L88FzPGI7BaY21czmYhqSf+u3bTcREGIZoPadRvepFiUp8sa/Qxb5LsljYC2
+	 W6rE4j0NxTLAkwDh845cBFmDG+aGzHt3MpXM1eCYnH4Rv50mImaB0IksIfFY22vEKK
+	 GFyKs5otNo1knw9SNA++V+titfbeS/YG6qP8Bw3x9ertLJ+ov2b9Aa26LOvgJRK36r
+	 TIL0gLzP2y5BgykGTFpUKaHJKSNUC6yuAIQ+YS75N8cNlD+GRQr+fbnpp00mhfKEhO
+	 V/uUJu+tBV/uFo+FS1G/qzsCotxDrkbIWIuImzBHdFxs64wV9et4WvWkTc8VgvdODm
+	 mCcLM+Q3ERIkw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710C3383BF5F;
+	Tue, 29 Jul 2025 19:45:00 +0000 (UTC)
+Subject: Re: [GIT PULL] pmdomain/cpuidle-psci updates for v6.17
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250729111743.14723-1-ulf.hansson@linaro.org>
+References: <20250729111743.14723-1-ulf.hansson@linaro.org>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <20250729111743.14723-1-ulf.hansson@linaro.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.17
+X-PR-Tracked-Commit-Id: 05e35bd07d56780f0a5119973995b97a16843579
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fc8f5028eb0cc5aee0501a99f59a04f748fbff1c
+Message-Id: <175381829885.1616007.17630324003432809799.pr-tracker-bot@kernel.org>
+Date: Tue, 29 Jul 2025 19:44:58 +0000
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>, linux-arm-kernel@lists.infradead.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
+The pull request you sent on Tue, 29 Jul 2025 13:17:33 +0200:
 
-> >> +/**
-> >> + * struct spmi_subdevice - Basic representation of an SPMI sub-device
-> >> + * @sdev:	Sub-device representation of an SPMI device
-> >> + * @devid:	Platform Device ID of an SPMI sub-device
-> >> + */
-> >> +struct spmi_subdevice {
-> >> +	struct spmi_device	sdev;  
-> > 
-> > Having something called a subdevice containing an instance of a device
-> > does seem a little odd.  Maybe the spmi_device naming is inappropriate after
-> > this patch?
-> >   
-> 
-> A SPMI Sub-Device is a SPMI Device on its own, but one that is child of a device.
-> 
-> Controller -> Device -> Sub-Device
-> 
-> Before this version, I initially added devid to spmi_device, but that felt wrong
-> because:
->   1. Sub-devices are children of devices (though, still also devices themselves)
->   2. The devid field would be useless in "main" SPMI devices (struct spmi_device)
->      and would not only waste (a very small amount of) memory for each device but,
->      more importantly, would confuse people with an unused field there.
-> 
-> So, this defines a SPMI Sub-Device as an extension of a SPMI Device, where:
->   - Device has controller-device numbers
->   - Sub-device has controller-device.subdev_id numbers.
-> 
-> I don't really see any cleaner way of defining this, but I am completely open to
-> any idea :-)
-I was thinking it was a specialization at the same level as the old spmi_device
-(not it's child). As a child this is fine.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.17
 
-Just showing my complete lack of knowledge of the SPMI code :)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fc8f5028eb0cc5aee0501a99f59a04f748fbff1c
 
-Jonathan
+Thank you!
 
-> 
-> Cheers,
-> Angelo
-> 
-> 
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
