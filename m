@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-31536-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31537-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD9DAB1485B
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 08:41:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 393FFB1485D
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 08:42:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B04217A7538
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 06:40:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71AD517FD2B
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 06:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1580D25C81E;
-	Tue, 29 Jul 2025 06:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC6825CC52;
+	Tue, 29 Jul 2025 06:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpuPt04A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2o9KbMY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2AA25BEE8;
-	Tue, 29 Jul 2025 06:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F58E195808;
+	Tue, 29 Jul 2025 06:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753771310; cv=none; b=lGgcXdA2DCzJwvX3uCDEYMLkPjvfLOSSwyUZMOUBljAKqKpVAUcpvac8U/aLgnIESSlk1PD9khq7NeDfmOrL69Xar/MKH/siQ7IzmPjHLrfbxnekdJUFUUXhpnl2uYnaCrkzhHGmoofu2apjJ6exxjwDd61YL0XlIky+SxkalQU=
+	t=1753771367; cv=none; b=DuAV76Cd+elR8UidXqGxwq2k90dbTJ+oDHe0YcyieSkMCxqKoFClUQemPudIYX6VdItgRlkZUEYLKTOJbpeOcpyOrrzEjWhJz048MkQJUpWXzlaWQZKxiQJiYzMiyLOGRQFvpBwC67ekQ/NZsUV05y4YZS+CIj/Akbnu7mFA0q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753771310; c=relaxed/simple;
-	bh=d1lLLI34uQtoY5cFrj3BNI8qFTK886lMrjgPenWvRxg=;
+	s=arc-20240116; t=1753771367; c=relaxed/simple;
+	bh=rz7sPehGGQwD9/qaMbd8+aH/afiOwr4+TclPx58XHHA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PwsvFkkLPX5ZhFTEdRq7eB2ayd8qNxiy5tHD17BKXmuedlrLR8lEHXiZD2QS3Qq8TRvIE9qzn/j4fvXQnfm0hDr8XeSpr6nXSatZoIDQYxi+9almYxCsqeN0xY1h4sh3gLQFYUxCzzu9EX3jskeQPHtfRdpn8m7hbwbU1DvbO6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpuPt04A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 384C2C4CEEF;
-	Tue, 29 Jul 2025 06:41:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aSCkbUz/j7w4O1nsk8s77mHmeuBgtfcRDbzKcltHCoffr4tD5Jvs2aPvPy/uUqXOtElXr9BHpnsZiirnZZSZ2+yZctVlhoKMkBr3nR+r6YeBfTWLRql+9RLP8aV7e3xf7prKrXyKuulxSZ/LRre9Lh979sdGOZhkcJ3ZRgsgRdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2o9KbMY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2506C4CEEF;
+	Tue, 29 Jul 2025 06:42:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753771309;
-	bh=d1lLLI34uQtoY5cFrj3BNI8qFTK886lMrjgPenWvRxg=;
+	s=k20201202; t=1753771366;
+	bh=rz7sPehGGQwD9/qaMbd8+aH/afiOwr4+TclPx58XHHA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rpuPt04A6eZE7rl0vxrVcYmuXfGWMKce0jPIBfUf1aIgT8eDC24Ku/RHMnvOm1Hp1
-	 ooCYapf/rqastnnEKL6NvtjWM6xDVXrjBTSjR2FgIheCda1KXDRA1vuT6V3IfdW4uK
-	 RzGu0dmIIhllvmbRh8boAj5toYfhsVQAvtsP/zWegLv76P69GjPTrOi0kAJnvcDMLR
-	 sLDewDnpu5TT425nyUOiHwxSXU9/KqY2no3OtQ5KgXQyTlLiaBfJKGJCmRBl8nM+x2
-	 1dtM/l5/r9McbRga0VFtc4u2XiiNOBl6dY52Te8hyw1VCYjZ8SkQ+9+gyRxSFK8XV+
-	 U16y4Y0fE7hBg==
-Message-ID: <a5b67786-69eb-4c87-899b-0db67c7b79f2@kernel.org>
-Date: Tue, 29 Jul 2025 08:41:44 +0200
+	b=B2o9KbMYMWN/1B+HcRZbHDgoyCY6b8vnVOCABigY/JEXx5RYm/Xelyhl2ULSiZA9+
+	 ruqnTeuzQ9GCY4tZqAnVjUrlzta1ydFdoMScWz8ydceCX2MY9EwFxsxhgA4C2Ixoba
+	 9e/n4foui3dN+MkdIlcImC4gV5/2OflGuPXpaTQ+iXUWp7cZ6NJk6Qdl7Bwmg+/4Ug
+	 g0FRl2LNpPLQW6I98r2JZSiEanQWS8inwjxTlQkpjB/lsFN/TaYoWEPzcpRagf8Q8X
+	 +fa/VMiLOpGna/I+suXIv83RFuneaNCILIpf/tdgjvbFZ62Z7ZbSG84xSc2pBkSrRZ
+	 DnHwPIXNgfeXw==
+Message-ID: <21ce4f23-8aec-486f-8fbb-021c1e114908@kernel.org>
+Date: Tue, 29 Jul 2025 08:42:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: qoriq: Update compatible string
- for imx93
+Subject: Re: [PATCH 2/4] thermal: qoriq: add i.MX93 TMU support
 To: Jacky Bai <ping.bai@nxp.com>, rafael@kernel.org,
  daniel.lezcano@linaro.org, rui.zhang@intel.com, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org
@@ -59,6 +58,7 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
  kernel@pengutronix.de, festevam@gmail.com
 References: <20250729024039.1223771-1-ping.bai@nxp.com>
+ <20250729024039.1223771-2-ping.bai@nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,53 +104,79 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250729024039.1223771-1-ping.bai@nxp.com>
+In-Reply-To: <20250729024039.1223771-2-ping.bai@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/07/2025 04:40, Jacky Bai wrote:
-> The TMU used on i.MX93 has some slight differances and bugs compared to
-
-Typo
-
-> the one used on qoriq platform even the basic function is the same. Add
-
-qoriq? Qoriq?
-
-> imx93 specific compatible string and keep the fallback ability.
-
-imx93? I.MX93? Can you use proper names for OWN products?
-
+> The TMU used on i.MX93 need some speccial handling and workaround to be
+> done even the revision info read from the ID register is the same as
+> Qoriq platform. Add i.MX93 compatible string and corresponding code for it.
 > 
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
 > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 > ---
->  .../devicetree/bindings/thermal/qoriq-thermal.yaml       | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  drivers/thermal/qoriq_thermal.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-> index aa756dae512a..cc65e210e26b 100644
-> --- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-> @@ -22,9 +22,12 @@ properties:
->              Value           Device
->              ----------      -----
->              0x01900102      T1040
-> -    enum:
-> -      - fsl,qoriq-tmu
-> -      - fsl,imx8mq-tmu
-> +    oneOf:
-> +      - const: fsl,qoriq-tmu
-> +      - const: fsl,imx8mq-tmu
-
-
-That's still enum. Don't change that.
-
-> +      - items:
-> +          - const: fsl,imx93-tmu
-> +          - const: fsl,qoriq-tmu
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index 01b58be0dcc6..fc1bf102350d 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  //
+>  // Copyright 2016 Freescale Semiconductor, Inc.
+> +// Copyright 2022-2025 NXP
 >  
->    reg:
->      maxItems: 1
+>  #include <linux/clk.h>
+>  #include <linux/err.h>
+> @@ -24,9 +25,11 @@
+>  #define TMTMIR_DEFAULT	0x0000000f
+>  #define TIER_DISABLE	0x0
+>  #define TEUMR0_V2		0x51009c00
+> +#define TEUMR0_V21		0x55010c00
+>  #define TMSARA_V2		0xe
+>  #define TMU_VER1		0x1
+>  #define TMU_VER2		0x2
+> +#define TMU_VER93		0x3
+>  
+>  #define REGS_TMR	0x000	/* Mode Register */
+>  #define TMR_DISABLE	0x0
+> @@ -232,6 +235,9 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+>  
+>  	if (data->ver == TMU_VER1) {
+>  		regmap_write(data->regmap, REGS_TMTMIR, TMTMIR_DEFAULT);
+> +	} else if (data->ver == TMU_VER93) {
+> +		regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
+> +		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V21);
+>  	} else {
+>  		regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
+>  		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V2);
+> @@ -319,6 +325,9 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>  
+>  	data->ver = (ver >> 8) & 0xff;
+>  
+> +	if (of_find_compatible_node(NULL, NULL, "fsl,imx93-tmu"))
+> +		data->ver = TMU_VER93;
+
+No, you have driver match data for this.
+
+Anyway, are you sure devices are compatible how you expressed in the
+bindings?
+
+> +
+>  	qoriq_tmu_init_device(data);	/* TMU initialization */
+>  
+>  	ret = qoriq_tmu_calibration(dev, data);	/* TMU calibration */
+> @@ -379,6 +388,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(qoriq_tmu_pm_ops,
+>  static const struct of_device_id qoriq_tmu_match[] = {
+>  	{ .compatible = "fsl,qoriq-tmu", },
+>  	{ .compatible = "fsl,imx8mq-tmu", },
+> +	{ .compatible = "fsl,imx93-tmu", },
+
+Otherwise I claim devices are compatible and this should be dropped.
+
 
 
 Best regards,
