@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-31555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31556-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329C7B14EE4
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 15:58:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3788CB1504E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 17:41:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87C2818A061D
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 13:58:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E23F77AF8B6
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 15:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C151C84A1;
-	Tue, 29 Jul 2025 13:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE9E2951D8;
+	Tue, 29 Jul 2025 15:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gnNxdQG0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVSx1pgt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490A2259C;
-	Tue, 29 Jul 2025 13:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30437293C71;
+	Tue, 29 Jul 2025 15:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753797478; cv=none; b=F9rMrPQVJADt1CjALWOeAwm/yB7/Z+tTG4JHbaGOEMVns4b+2TUmdVfK8+gvL4F309L+XbLfR5VxUQcVc91F8K+FLktAdy0xm48z9PqBVHXfOMjM2i41HQr5tLkwro31zu7yF6dqMPzcJ8aeIuBJVSdQs41MWuo11ah5bbcjhNs=
+	t=1753803639; cv=none; b=qEV7a83YQj/YBLDgGc2/gqfps6EYWPyX1E6BNFqFOIbzqRiEENs67ZBm30dpV45fuzZUYUwGHjDT0t1QGIwiAdxkOl2QB9uPsuEWPJp+2a04/qniTN+fmBasOY2gDDhN6lYeZl/OZX+6SLYFdHigbVN6Z++KVRl1pLDWgAB75xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753797478; c=relaxed/simple;
-	bh=AX7eZDNmkJrEgW0Z7fDJWxMDlVgr1LZpviDEOOeKIL4=;
+	s=arc-20240116; t=1753803639; c=relaxed/simple;
+	bh=K25Kho8qsn1NdbvfhwmhShwU+hQrB/3WGuSSdzsp2jc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XKFgmDzjLflD8PJ9rS2JXkvyBmqapxN+AyU51tTvCKM5pBY2xbo4s6DUT3A1XezRhwxSGfcmB0sxsC0QI/o8ht/gdXLPq9d9dZuzSgIdMy7GSHaaOoD5s8cSNPfzNyG7lrdVsbdM9oLbaekR8fDCbwYQl3zzANEqA7n+Z2agBeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gnNxdQG0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1644C4CEF4;
-	Tue, 29 Jul 2025 13:57:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ipN6IvQR42wzw8UZL0zpicoWky5dDDlOteOhhd+4Rr26wJmlVKf0lhvrqgcdAvwQntrh2s7yIJU4hXQo/1bmyt0pfJkqbUkfAbgYG7tQMvLTI6c19++YvM/9DrheAQGNrnapp/eRx2f8AXLpK9Xu2ZBu7xr1svuHMMnU5xkbmnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVSx1pgt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43F4C4CEF5;
+	Tue, 29 Jul 2025 15:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753797477;
-	bh=AX7eZDNmkJrEgW0Z7fDJWxMDlVgr1LZpviDEOOeKIL4=;
+	s=k20201202; t=1753803636;
+	bh=K25Kho8qsn1NdbvfhwmhShwU+hQrB/3WGuSSdzsp2jc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gnNxdQG0DNWnJg+YHdQbXI0C3jbbNqOqJANMAHS0QZmb21lenjqAXFtqtc26lZ8t3
-	 BItM+qaMYFlrtcv8Ad7md1GdJa0vlvcXw7+JO8Z0NtHqajm4EsHO0EetPlD2guvQ6O
-	 3YKxFenQxcWTkErACwte5tqYEOWO4RIpJJfWdSK2nfwYr68XCvQADIsPmS4ouAnbv/
-	 t66m5hucPd29Xdvp78iGK5WQDli5e1W7IEvK7Ajw4tci1yksrRi5o5o5WbHRH7IeMU
-	 CGMIFCtkcgkPk0v2hbNYfJLaEmCNkkH/+4tA4Ej2uDg3Q94MaY3W+s8lvZDrf0tVZi
-	 cnb7UKdSpQEqA==
-Message-ID: <5029ba6e-fa5f-41a5-a1df-bb9117973bd8@kernel.org>
-Date: Tue, 29 Jul 2025 15:57:50 +0200
+	b=WVSx1pgtyP8XBALk7khnHjMVm0yRX2XLVy16XJhYTI43pS+e6WcUgpnT3zPewSi0a
+	 UR8IlFg2eEXwVa9KFMMW55elKybDXuw8+sILcJ6mx7r/L883egQUaBVBKuSGFfm3Fv
+	 0uBBGoqnEJLelLK83YdNNIlwXPzP7AVzeLXNW/Fi5YTr7ULkMS/NXYlbbMtOaCCm/f
+	 DronK5SWa/a3b6+fbY3PsPSxvVdnpI33wSKoivzXXP9F65xMTk2hWmCcLNCvnLYmn/
+	 /x4QxfGu8grB/q+EmqkgI0Ms+SMOUL+Gxtu77JdWxKhB1mQDrXRqdFWSThz6mJMBYs
+	 In0K3MrSKKZ+g==
+Message-ID: <3603a744-e898-49ef-968a-2388e14cae54@kernel.org>
+Date: Tue, 29 Jul 2025 17:40:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,34 +50,14 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/10] dt-bindings: clock: ipq9574: Rename NSS CC
- source clocks to drop rate
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Luo Jie <quic_luoj@quicinc.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Georgi Djakov <djakov@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Anusha Rao <quic_anusha@quicinc.com>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Richard Cochran <richardcochran@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, quic_kkumarcs@quicinc.com,
- quic_linchen@quicinc.com, quic_leiwei@quicinc.com, quic_pavir@quicinc.com,
- quic_suruchia@quicinc.com
-References: <20250710-qcom_ipq5424_nsscc-v3-0-f149dc461212@quicinc.com>
- <20250710-qcom_ipq5424_nsscc-v3-5-f149dc461212@quicinc.com>
- <20250710225412.GA25762-robh@kernel.org>
- <93082ccd-40d2-4a6b-a526-c118c1730a45@oss.qualcomm.com>
- <2f37c7e7-b07b-47c7-904b-5756c4cf5887@quicinc.com>
- <a383041e-7b70-4ffd-ae15-2412b2f83770@oss.qualcomm.com>
- <830f3989-d1ac-4b7c-8888-397452fe0abe@quicinc.com>
- <c67d7d8c-ae39-420f-b48b-d7454deb1fc9@oss.qualcomm.com>
+Subject: Re: [PATCH 1/3] dt-bindings: power: supply: Add Richtek RT9756 smart
+ cap divider charger
+To: cy_huang@richtek.com, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1753759794.git.cy_huang@richtek.com>
+ <3fa997b42b4aec43fc182a043cf521f7e3e7fcb3.1753759794.git.cy_huang@richtek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -123,35 +103,34 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <c67d7d8c-ae39-420f-b48b-d7454deb1fc9@oss.qualcomm.com>
+In-Reply-To: <3fa997b42b4aec43fc182a043cf521f7e3e7fcb3.1753759794.git.cy_huang@richtek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/07/2025 15:53, Konrad Dybcio wrote:
->>
->> We had adopted this proposal in version 2 previously, but as noted in
->> the discussion linked below, Krzysztof had suggested to avoid using the
->> clock rate in the clock names when defining the constraints for them.
->> However I do agree that we should keep the interface for IPQ9574
->> unchanged and instead use a generic clock name to support the newer
->> SoCs.
->>
->> https://lore.kernel.org/all/20250701-optimistic-esoteric-swallow-d93fc6@krzk-bin/
->>
->> Request Krzysztof to provide his comments as well, on whether we can
->> follow your suggested approach to avoid breaking ABI for IPQ9574.
-> 
-> Krzysztof, should the bindings be improved-through-breaking, or should
+On 29/07/2025 06:21, cy_huang@richtek.com wrote:
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description: Battery current sense resistor mounted.
+> +    default: 2000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - wakeup-source
 
+Why do you require this? I cannot find any use of it, so maybe I missed
+some change in Linux code (and that's second question like that for
+Richtek, so refer to your other patchsets for contexr).
 
-Unfortunately not, you should not change them for such reason.
+> +  - interrupts
+> +
 
-> there simply be a new YAML with un-suffixed entries, where new platforms
-> would be added down the line?
+Missing ref to power supply.
 
+> +additionalProperties: false
+> +
 
-Either new binding file or here with allOf:if:then differences per
-variant. Depends on readability.
+unevaluated instead
 
 
 Best regards,
