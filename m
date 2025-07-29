@@ -1,275 +1,269 @@
-Return-Path: <linux-pm+bounces-31552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31553-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCFACB14CE4
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 13:18:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E72A7B14E5E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 15:29:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FD107A918F
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 11:16:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27A364E32B7
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 13:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A725928C865;
-	Tue, 29 Jul 2025 11:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F33EC264A74;
+	Tue, 29 Jul 2025 13:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kOPyrZ+4"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="FGQQ6qY3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35CF28B3F3
-	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 11:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2658F217733
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 13:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753787870; cv=none; b=Tp2gZQU/bhI6OHwH270CshyaLL8mBGDz2/fYf9FraAcibwaT/U+Rl4OB9viyDCYY75B3zHPjQ/jtOREwr0tcilA5fF8HC087zxYtdBy1p5XAKNpKRmibbuYJC20axhjcqc95RDTSebqhfzrzB0IrgLR6iF1aGn7VX5t2NUP6xFg=
+	t=1753795745; cv=none; b=IV+J9qE6nwkZhezXiun0f8m/grWd1Vcsuni6Vh/zi0k7pGhLgnxCmvCNGqhPS1xcofN8VUivbU99wY0VNM0Z70vY24nUI746s/+je3ol1o0MhHkjGGcK0WoyvQGp3JehS815DZxkWVsj6ON9ODLOXsLBNQfMvRniMd4bCkAD/uE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753787870; c=relaxed/simple;
-	bh=wEVZhpgt1uNcasnqEQ15dSnD0eh7wUda2VTINBIA7/w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=d+TRuhmtyEKxrC0yW38Cr36QI9BfelRUQZFEty5DjUtJBYPE+YEWH6UQTVlaWqqsbcqsXUhbvBLv5Cgm+eicxLkaGbcR/ji5OcLh0NqblKILIi63N7PLeCKxEfgpzSL/KFaQSJF9i5GjYDPs+jbeyH25wBWr0LPGwCHOo6gqSfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kOPyrZ+4; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-55a4befb8ccso5741166e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 04:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753787866; x=1754392666; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NNqyxgyK0nsgvQIxHIvNEn3WYoXCL9lVWy5TTd0G+sE=;
-        b=kOPyrZ+4WxhqPscq3pVAzPk2B3g8dQQsE6lOOTWt7PW1FGtp5FdHbx3PLEv+NalMLb
-         YdPlRAm8j32xPDJeX45zZdjPV2dIpup7iDiVAoyhzDGSV+eRI2svcHmnqUaUc0EHnVMC
-         v1Q+QXdr4INmLiZH3nv1A8bKVp0WEpYjm4ESwx+jnfHPIiC37LH6qela3khFvPzgtums
-         C4Lt6i2RAQBrO/Lg7ySVZgXeeu5OycIvKllEYvCjyJJp9M2RUD4/jBc1682E3axBBlJm
-         CGu+rpGFDbl8k9udzRFfuW1Dl9/jgVw7mS9gzZyGsq8NcXD86+T1eUVYLwPN5EITbuIm
-         CO9w==
+	s=arc-20240116; t=1753795745; c=relaxed/simple;
+	bh=fnAXK3gfqgcC7/NAyRO1/1pjDs0DPP/sApVyNzGYdZs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jN1WPQ1slLETzCDuCL/ghZNG1+JcUIVbfTPG+E6XBiF7DYPt7LPGEdfBsW8BsQSxbsRIUkWwL61j2d8tI8trNHmJsxDUssw9LpA1Kb2kGxeoH9VLHxvLMJN1i2j6bmsiZM1fHHnjIu/tmxAYfdVfcsVSyi9MtbQmpc3dckqg3y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=FGQQ6qY3; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56T8mOs7023593
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 13:29:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	FhXDYfPPwtkj5AyH1dzVWUPlMdS8XJcp0relIk410Iw=; b=FGQQ6qY3lZY9ePjT
+	HtNXiUXkicKcPd6x6tO6WWOCTY2M6axafq+H32LdKzK9v8Jx40EaEQzFwxmF0nyR
+	vXaG9uELdpu8xoQhzERof9tEy1n8W7yF93M4nAiTFL0PiHRQvdSJtelbWZKQhsBl
+	qP6j+M+OtZyi+7hZ0M5c56YY7PST2EwDPtaXQ3xWz/RnTsIdD2s0OwWwwbe6mubJ
+	mb5MTrdEsd1hh6wXmFGZicJgypPO4UApk36WCy2pI2i9SDd2uor9kM80axIoAuwa
+	crA06MMhJgMRTeiRtEEE33VT9KwZ0NRbY4BYYmHB46Zj0l400HYV8E/RsHNBwP9r
+	KktUDQ==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484r6qr68c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 13:29:03 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ab3bd0f8d5so14278641cf.1
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 06:29:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753787866; x=1754392666;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NNqyxgyK0nsgvQIxHIvNEn3WYoXCL9lVWy5TTd0G+sE=;
-        b=CdrFMX+oCtt75PdNt/bM7wnXEDD3t4YNth7SYFctqVGj3wvH2uQdxzqt+G003Zz4co
-         80aoBmPLdsBHwBJT0JNsyCt813MGf57Xb0rWwefpleySjLIM7uxo6nyfJ6xNkok0Qwn8
-         NkQ7sEM10wJF6zsCdRmykpZDBpy2VfbzWMcA6+gp+WkQOThUFnpomnBZh3yKNs1thbqV
-         5Ja9jjXC0JRJjqFC8gHBTVUc+SHdAj5g4us2hB3/AoL2XTN9sY4k144aJa6E8QlrLA8u
-         KUYEKJAPzoU3iKXXItcgC6ivgk0oEdXhpdiDNO/zIfFwr9EaflOLt056AoJszxYBVl5q
-         1tng==
-X-Forwarded-Encrypted: i=1; AJvYcCWw4Kt26g3UccV1vBdJT5eGqd8s4qqOjqTA1E3qi1Ej43/ysFwdqH78zjCydjR/36IMz5PYIuzyYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymMKxPliXZW9rpNnAkUIU00njZQqiaXrGg0JUutPrXCOdTq/zn
-	+t7T3S8pVJhqSvJhgnLLUPUYPLSmrVDj3aIC7tt1RpXMWosmbCb0sTh6ti4cGWC83i21HQHzIUV
-	8uJtm
-X-Gm-Gg: ASbGncthmW2N14AaW7cR1mwN5jTsd8Fhm+2f8k9akpj8S54g7D88PS5U6EOfHXuaNJQ
-	x+NciYxoNjr0JNsXMPZHv4f8veOSqbptm21ZBNJLNwq3krFKVt9Kn7XVz6eWoytrqchwwvXrpvk
-	4JrKkCg+KAbqRUoWTo+PsJxtX7NW8bO00H9A2pm9TFL2Q3BDhhIA2roup2O//QyzKYJUhLFVhAe
-	U1JPesqMG5CCxCFI+FROxg3J1ZqzHo+WSUbXzv4T7OmfqPuFQ+iAhAyBRJlVfyKwi3PFhJwuKDF
-	sFLYMQ09ZfiOJHxwtEz3HACtns6DZsNa6xgImoRdQKOVc+diuonjC8WNRyTa/ElgdNw87aS1LLf
-	QxvMdYT+sb3m7KjWlPxYNu0VG0mniQ7VWnsG4IADsUV4W8oa3Vs/334mXNb13dIteqti+be5h
-X-Google-Smtp-Source: AGHT+IGssqGSc/l4qTALfsZmnWpz0MEgV6jXLRfV5IBNiy/NKNIKDaCf0ufZ7BJYRZwGjpYZkZDx3g==
-X-Received: by 2002:a05:6512:23a2:b0:554:f76a:baba with SMTP id 2adb3069b0e04-55b5f3d5c73mr4808104e87.3.1753787865739;
-        Tue, 29 Jul 2025 04:17:45 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55b6316db49sm1652507e87.3.2025.07.29.04.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jul 2025 04:17:45 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain/cpuidle-psci updates for v6.17
-Date: Tue, 29 Jul 2025 13:17:33 +0200
-Message-ID: <20250729111743.14723-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1753795742; x=1754400542;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FhXDYfPPwtkj5AyH1dzVWUPlMdS8XJcp0relIk410Iw=;
+        b=ht0wOUHlOaFRtJyU6vHi6up3ZSMOk3/5CnZhpCGqqyTKY2/w0pbvF3Ru1hYdPPSBKI
+         d0NTiVWud6v2+wraAdki+w2lx5vt1esCcZ+DqflNqKHjVLuvj3BhDQxwgzPhF8u3m1BQ
+         Z4zLSB6cSWKetBY/DCuCUZlYOmQpDIpTq9fJYVtqQBaPcd4Frk+LozAZOv3p4zZ0jEqP
+         xyRMMimT6NhDLI0bNIYKN1hrjRbclNcxj1d4VMbazxP90RVFFLf91i98jz2+pTANBD32
+         YcMcNve+l895mI0FWpO+jPs7H+t5PjtTaJk0Vg8wREHkAjOkjlchPL7Ab2Ks4y1DglmL
+         dAWg==
+X-Forwarded-Encrypted: i=1; AJvYcCW6GdOko0RL3J+ckUG0I5WkZ2cvgwhYqMvy7070AAg68KUB8OpGVmcmxCFthKzgmmtvDhoc0pBUCg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwItE1lzWWmc4RXuGJiTbzx5hqZdk26DhR68sBPxWlJQA1+I/2H
+	yKwKCaHuVdtY/ABymYyjm1ukqft8ozl3ZouAqUoAEbzildDl2EeNT9w1Narl42wm7KBTfabq5Nv
+	7uG6+LePA5YBAd3X9joIbGqIL6a9U8L97rngWvvAw9JGJfk4ULwrPk186hke4ZA==
+X-Gm-Gg: ASbGncsjHlKdKyMs+5u3iYD6/1ifzWdy0yhDXX1HIzRmGwIWwsZJkeHizmtm+HLnEnI
+	PkAvxuumxlqTa4zArbhLmi1PgXZOQw0cm4Jvnonv2JKEEuTShGqbh08kmyLzPg38qx7vq8W6Lfy
+	FFayk4OFvAaBYwj7TGNQoh0KI91z1F+UirSd2kZ/DrVOjhpG417FaRTxKv8EFdLo4NwysYMBps0
+	iVZg4lmm5FzLPeLHurgf+voY4Hin+9+3YfQ1E53eEqBVoonTqzQQOnu0y+nplNtI+5FgMEfyj59
+	/9iTKc1RQ33gsSzeDUKyWPg6HxyuMgSK1Xnw4alQwSOG7GzZXNnp9qUodYt0oJrQOVfISGDFheg
+	a5jPnEPj3jAtfYzjIAA==
+X-Received: by 2002:ac8:5e4c:0:b0:4ab:6d02:c061 with SMTP id d75a77b69052e-4ae8ee0ec0emr85525171cf.6.1753795741606;
+        Tue, 29 Jul 2025 06:29:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGXKq2xaIvarfhRnuoE1bKTGMTI9LUV8M5rVt9cHs30QApy9wY+ryT5G578A4lyjZdiK0oliw==
+X-Received: by 2002:ac8:5e4c:0:b0:4ab:6d02:c061 with SMTP id d75a77b69052e-4ae8ee0ec0emr85524591cf.6.1753795740997;
+        Tue, 29 Jul 2025 06:29:00 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af635a66719sm574050766b.73.2025.07.29.06.28.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jul 2025 06:29:00 -0700 (PDT)
+Message-ID: <0a1337d7-ee3e-47de-a401-b25586e813e4@oss.qualcomm.com>
+Date: Tue, 29 Jul 2025 15:28:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 24/24] arm64: dts: qcom: x1e80100: Describe GPU_CC
+ power plumbing requirements
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Johan Hovold
+ <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <taniya.das@oss.qualcomm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        Luca Weiss
+ <luca.weiss@fairphone.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
+ <20250728-topic-gpucc_power_plumbing-v1-24-09c2480fe3e6@oss.qualcomm.com>
+ <aIevIuMDA5R8igmi@linaro.org>
+ <50868cd8-68a9-4bad-99f3-8cf542886fb6@oss.qualcomm.com>
+ <aIhrav7GKpsbVpto@linaro.org>
+ <6b903628-9abf-4b9e-971e-e9338308d693@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <6b903628-9abf-4b9e-971e-e9338308d693@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI5MDEwNCBTYWx0ZWRfX0BoJjulMKibE
+ tMgn+VAUOxSa5oVlneJ7Ml6Xmfw9YYC5p2zzNnuLQIEdb8CtCv/s5X2Lt9INXkM+2vGTGlFtMLH
+ VMXiIymcrODrRc1zBf2Xr7wX/f5jsUezTsN7wnHaJv4nccmTFTjcgulx+uBa8VKooTL2+VMUjRB
+ cawMQG/zCaXUYScwlJpsGYUkW9SR05wEK0eSsS0xN0WoEJFBZP/hit+P1E98H87nnTYW7roqD1r
+ NzufqpN4SKf/6nG7uru4QcCcSfPEGmRXVVaJhDoEIJcVrGFvP39qK17cGgayowaBb9vbvuyd32j
+ uGB0IJjh/N4ONHAb046gkQh43IC1SnGNrhigLK1mtzP21EfMZfR4rrkIWT7od1pe7CSzuXJrk8y
+ Nh5Pcbpny14ZKEH6/IhvoQQkaxUOHcXz7KCbXtfaVte7ndGHeFk656OLNZiwmi1LOl2NyCGQ
+X-Proofpoint-ORIG-GUID: iHeMCks2ou1p3lHqnnM2_eaNZNjO1l-f
+X-Authority-Analysis: v=2.4 cv=ea89f6EH c=1 sm=1 tr=0 ts=6888cc9f cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=y9L28JTQkOqf6k3egjQA:9
+ a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-GUID: iHeMCks2ou1p3lHqnnM2_eaNZNjO1l-f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-29_03,2025-07-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0 clxscore=1015
+ spamscore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507290104
 
-Hi Linus,
+On 7/29/25 10:23 AM, Konrad Dybcio wrote:
+> On 7/29/25 8:34 AM, Stephan Gerhold wrote:
+>> On Mon, Jul 28, 2025 at 11:31:10PM +0200, Konrad Dybcio wrote:
+>>> On 7/28/25 7:10 PM, Stephan Gerhold wrote:
+>>>> On Mon, Jul 28, 2025 at 06:16:24PM +0200, Konrad Dybcio wrote:
+>>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>>
+>>>>> A number of power rails must be powered on in order for GPU_CC to
+>>>>> function. Ensure that's conveyed to the OS.
+>>>>>
+>>>>> Fixes: 721e38301b79 ("arm64: dts: qcom: x1e80100: Add gpu support")
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>> ---
+>>>>>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 6 ++++++
+>>>>>  1 file changed, 6 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+>>>>> index 5e9a8fa3cf96468b12775f91192cbd779d5ce946..6620517fbb0f3ed715c4901ec53dcbc6235be88f 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+>>>>> @@ -3928,6 +3928,12 @@ gpucc: clock-controller@3d90000 {
+>>>>>  			clocks = <&bi_tcxo_div2>,
+>>>>>  				 <&gcc GCC_GPU_GPLL0_CPH_CLK_SRC>,
+>>>>>  				 <&gcc GCC_GPU_GPLL0_DIV_CPH_CLK_SRC>;
+>>>>> +
+>>>>> +			power-domains = <&rpmhpd RPMHPD_CX>,
+>>>>> +					<&rpmhpd RPMHPD_MX>,
+>>>>> +					<&rpmhpd RPMHPD_GFX>,
+>>>>> +					<&rpmhpd RPMHPD_GMXC>;
+>>>>> +
+>>>>>  			#clock-cells = <1>;
+>>>>>  			#reset-cells = <1>;
+>>>>>  			#power-domain-cells = <1>;
+>>>>>
+>>>>
+>>>> To repeat your own message from a couple of months back [1]:
+>>>>
+>>>>> You shouldn't be messing with VDD_GFX on platforms with a GMU.
+>>>>>
+>>>>> Parts of the clock controller are backed by one of the MX rails,
+>>>>> with some logic depending on CX/GFX, but handling of the latter is
+>>>>> fully deferred to the GMU firmware.
+>>>>>
+>>>>> Konrad
+>>>>
+>>>> Please describe somewhere in the cover letter or the individual patches
+>>>> how this relates to the responsibilities of the GMU. I searched for
+>>>> "GMU" in the patch series and couldn't find any note about this.
+>>>>
+>>>> Also: How much is a plain "power on" votes (without a corresponding
+>>>> "required-opps") really worth nowadays? An arbitrary low voltage level
+>>>> on those rails won't be sufficient to make the GPU_CC actually
+>>>> "function". Do you need "required-opps" here? In the videocc/camcc case
+>>>> we have those.
+>>>
+>>> Right, I failed to capture this.
+>>>
+>>> The GFX rail should be powered on before unclamping the GX_GDSC (as
+>>> per the programming guide). The clock controller HPG however doesn't
+>>> seem to have a concept of RPMh, so it says something that amounts to
+>>> "tell the PMIC to supply power on this rail". In Linux, since Commit
+>>> e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable the
+>>> domain") we don't really need a defined level for this (perhaps it's
+>>> more ""portable"" across potential fuse-bins if we don't hardcode the
+>>> lowest level anyway?).
+>>
+>> Thanks, I forgot that we have this commit.
+>>
+>>>
+>>> However after that happens, the level scaling is done by the GMU
+>>> firmware. This holds for allOf CX/MX/GFX. I'm not super sure if
+>>> both MX and (G)MXC need to both be captured together - downstream
+>>> seems to describe MXC as a child of MX (in socname-regulators.dtsi),
+>>> but I'm not really sure this is true in hardware.
+>>>
+>>> The GPU driver currently first enables the GX_GDSC and only then
+>>> does it kickstart the GMU firmware. Downstream seems to do that as
+>>> well. So on a second thought, since we've not seen any errors so
+>>> far, it calls into question what role the GFX rail plays in the
+>>> GX_GDSC's powering up..
+>>>
+>>
+>> It might play a role, but we wouldn't know since AFAICT we don't support
+>> enabling the GX_GDSC. Look at the beautiful gdsc_gx_do_nothing_enable()
+>> function, it basically just defers the entire task to the GMU. The GDSC
+>> just exists in Linux so we can turn it *off* during GMU crashes. :D
+> 
+> OHHHHH snap! I, on the other hand, forgot we have *that* commit..
+> 
+>> I think we should identify precisely which votes we are missing, instead
+>> of making blanket votes for all the power rails somehow related to the
+>> GPU. In this case this means: Which rails do we need to vote for to make
+>> the GMU turn on? If there are no votes necessary after the GMU is on,
+>> it's better to have none IMO.
+> 
+> The GMU pokes at RPMh directly (see a6xx_hfi.c), so we indeed just
+> need to make sure that it can turn on.. Which in short means the
+> *C*X_GDSC must be able to power up, which doesn't have any special
+> requirements. The only question that's left is basically whether
+> MX_C must be on. I'll try testing that in practice.
 
-Here's the pull-request with pmdomain and cpuidle-psci updates for v6.17.
+So this is apparently difficult, at least on SC8280XP, where something
+seems to be voting on MXC and it only seems to shut down when entering
+CXPC. I would imagine/hope this is not the case on newer platforms, but
+I don't have a way to fully confirm this at the moment..
 
-FYI, this time we have made quite some changes in the pmdomain provider core
-(aka genpd), which affects a couple of provider drivers that are sprinkled
-across a few more subsystems than usual.
-
-More details about the highlights are as usual found in the signed tag.
-
-Please pull this in!
-
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit 621a88dbfe9006c318a0cafbd12e677ccfe006e7:
-
-  cpuidle: psci: Fix cpuhotplug routine with PREEMPT_RT=y (2025-07-14 13:09:04 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.17
-
-for you to fetch changes up to 05e35bd07d56780f0a5119973995b97a16843579:
-
-  pmdomain: qcom: rpmhpd: Add Glymur RPMh Power Domains (2025-07-23 12:12:16 +0200)
-
-----------------------------------------------------------------
-pmdomain core:
- - Leave powered-on genpds on until ->sync_state() or late_initcall_sync
- - Export a common ->sync_state() helper for genpd providers
- - Add generic ->sync_state() support
- - Add a bus/driver for genpd provider-devices
- - Introduce dev_pm_genpd_is_on() for consumers
-
-pmdomain providers:
- - cpuidle-psci: Drop redundant ->sync_state() support
- - cpuidle-riscv-sbi: Drop redundant ->sync_state() support
- - imx: Set ISI panic write for imx8m-blk-ctrl
- - qcom: Add support for Glymur and Milos RPMh power-domains
- - qcom: Use of_genpd_sync_state() for power-domains
- - rockchip: Add support for the RK3528 variant
- - samsung: Fix splash-screen handover by enforcing a ->sync_state()
- - sunxi: Add support for Allwinner A523's PCK600 power-controller
- - tegra: Opt-out from genpd's common ->sync_state() support for pmc
- - thead: Instantiate a GPU power sequencer via the auxiliary bus
- - renesas: Move init to postcore_initcalls
- - xilinx: Move ->sync_state() support to firmware driver
- - xilinx: Use of_genpd_sync_state() for power-domains
-
-pmdomain consumers:
- - remoteproc: imx_rproc: Fixup the detect/attach procedure for pre-booted cores
-
-----------------------------------------------------------------
-Chen-Yu Tsai (4):
-      dt-bindings: power: Add A523 PPU and PCK600 power controllers
-      pmdomain: sunxi: sun20i-ppu: add A523 support
-      pmdomain: sunxi: add driver for Allwinner A523's PCK-600 power controller
-      pmdomain: sunxi: sun20i-ppu: change to tristate and enable for ARCH_SUNXI
-
-Christophe JAILLET (1):
-      pmdomain: amlogic: Constify struct meson_secure_pwrc_domain_data
-
-Guillaume La Roque (1):
-      pmdomain: ti: Select PM_GENERIC_DOMAINS
-
-Hiago De Franco (3):
-      pmdomain: core: introduce dev_pm_genpd_is_on()
-      remoteproc: imx_rproc: skip clock enable when M-core is managed by the SCU
-      remoteproc: imx_rproc: detect and attach to pre-booted remote cores
-
-Jonas Karlman (3):
-      dt-bindings: power: rockchip: Add support for RK3528
-      dt-bindings: rockchip: pmu: Add compatible for RK3528
-      pmdomain: rockchip: Add support for RK3528
-
-Kamal Wadhwa (2):
-      dt-bindings: power: rpmpd: Add Glymur power domains
-      pmdomain: qcom: rpmhpd: Add Glymur RPMh Power Domains
-
-Krzysztof Hałasa (1):
-      imx8m-blk-ctrl: set ISI panic write hurry level
-
-Kuninori Morimoto (2):
-      pmdomain: renesas: use menu for Renesas
-      pmdomain: renesas: sort Renesas Kconfig configs
-
-Luca Weiss (2):
-      dt-bindings: power: qcom,rpmpd: document the Milos RPMh Power Domains
-      pmdomain: qcom: rpmhpd: Add Milos power domains
-
-Lukas Bulwahn (1):
-      pmdomain: arm: scmi_pm_domain: remove code clutter
-
-Michal Wilczynski (2):
-      dt-bindings: firmware: thead,th1520: Add resets for GPU clkgen
-      pmdomain: thead: Instantiate GPU power sequencer via auxiliary bus
-
-Saravana Kannan (1):
-      driver core: Add dev_set_drv_sync_state()
-
-Sven Peter (1):
-      pmdomain: apple: Drop default ARCH_APPLE in Kconfig
-
-Ulf Hansson (31):
-      pmdomain: core: Use of_fwnode_handle()
-      pmdomain: Merge branch dt into next
-      pmdomain: Merge branch fixes into next
-      pmdomain: Merge branch dt into next
-      pmdomain: renesas: rcar-sysc: Add genpd OF provider at postcore_initcall
-      pmdomain: renesas: rmobile-sysc: Move init to postcore_initcall
-      pmdomain: renesas: rcar-gen4-sysc: Move init to postcore_initcall
-      pmdomain: core: Prevent registering devices before the bus
-      pmdomain: core: Add a bus and a driver for genpd providers
-      pmdomain: core: Add the genpd->dev to the genpd provider bus
-      pmdomain: core: Export a common ->sync_state() helper for genpd providers
-      pmdomain: core: Prepare to add the common ->sync_state() support
-      soc/tegra: pmc: Opt-out from genpd's common ->sync_state() support
-      cpuidle: psci: Opt-out from genpd's common ->sync_state() support
-      cpuidle: riscv-sbi: Opt-out from genpd's common ->sync_state() support
-      pmdomain: qcom: rpmpd: Use of_genpd_sync_state()
-      pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
-      firmware/pmdomain: xilinx: Move ->sync_state() support to firmware driver
-      firmware: xilinx: Don't share zynqmp_pm_init_finalize()
-      firmware: xilinx: Use of_genpd_sync_state()
-      driver core: Export get_dev_from_fwnode()
-      pmdomain: core: Add common ->sync_state() support for genpd providers
-      pmdomain: core: Default to use of_genpd_sync_state() for genpd providers
-      pmdomain: core: Leave powered-on genpds on until late_initcall_sync
-      pmdomain: core: Leave powered-on genpds on until sync_state
-      cpuidle: psci: Drop redundant sync_state support
-      cpuidle: riscv-sbi: Drop redundant sync_state support
-      pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state
-      pmdomain: Merge branch fixes into next
-      pmdomain: Merge branch dt into next
-      pmdomain: Merge branch dt into next
-
- .../devicetree/bindings/arm/rockchip/pmu.yaml      |   2 +
- .../bindings/firmware/thead,th1520-aon.yaml        |   7 +
- .../bindings/power/allwinner,sun20i-d1-ppu.yaml    |   4 +-
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |   2 +
- .../bindings/power/rockchip,power-controller.yaml  |   1 +
- drivers/base/core.c                                |   8 +-
- drivers/cpuidle/cpuidle-psci-domain.c              |  14 --
- drivers/cpuidle/cpuidle-riscv-sbi.c                |  14 --
- drivers/firmware/xilinx/zynqmp.c                   |  18 +-
- drivers/pmdomain/amlogic/meson-secure-pwrc.c       |  12 +-
- drivers/pmdomain/apple/Kconfig                     |   1 -
- drivers/pmdomain/arm/scmi_pm_domain.c              |  12 +-
- drivers/pmdomain/core.c                            | 254 +++++++++++++++++++--
- drivers/pmdomain/imx/imx8m-blk-ctrl.c              |  10 +
- drivers/pmdomain/qcom/rpmhpd.c                     |  47 ++++
- drivers/pmdomain/qcom/rpmpd.c                      |   2 +
- drivers/pmdomain/renesas/Kconfig                   | 124 +++++-----
- drivers/pmdomain/renesas/rcar-gen4-sysc.c          |   2 +-
- drivers/pmdomain/renesas/rcar-sysc.c               |  19 +-
- drivers/pmdomain/renesas/rmobile-sysc.c            |   3 +-
- drivers/pmdomain/rockchip/pm-domains.c             |  27 +++
- drivers/pmdomain/samsung/exynos-pm-domains.c       |   9 +
- drivers/pmdomain/sunxi/Kconfig                     |  19 +-
- drivers/pmdomain/sunxi/Makefile                    |   1 +
- drivers/pmdomain/sunxi/sun20i-ppu.c                |  17 ++
- drivers/pmdomain/sunxi/sun55i-pck600.c             | 234 +++++++++++++++++++
- drivers/pmdomain/thead/Kconfig                     |   1 +
- drivers/pmdomain/thead/th1520-pm-domains.c         |  51 +++++
- drivers/pmdomain/ti/Kconfig                        |   2 +-
- drivers/pmdomain/xilinx/zynqmp-pm-domains.c        |  16 --
- drivers/remoteproc/imx_rproc.c                     |  45 +++-
- drivers/soc/tegra/pmc.c                            |  26 ++-
- .../power/allwinner,sun55i-a523-pck-600.h          |  15 ++
- .../dt-bindings/power/allwinner,sun55i-a523-ppu.h  |  12 +
- include/dt-bindings/power/rockchip,rk3528-power.h  |  19 ++
- include/linux/device.h                             |  13 ++
- include/linux/firmware/xlnx-zynqmp.h               |   6 -
- include/linux/pm_domain.h                          |  23 ++
- 38 files changed, 918 insertions(+), 174 deletions(-)
- create mode 100644 drivers/pmdomain/sunxi/sun55i-pck600.c
- create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-pck-600.h
- create mode 100644 include/dt-bindings/power/allwinner,sun55i-a523-ppu.h
- create mode 100644 include/dt-bindings/power/rockchip,rk3528-power.h
+Konrad
 
