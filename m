@@ -1,205 +1,262 @@
-Return-Path: <linux-pm+bounces-31547-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31548-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87BF0B149FD
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 10:21:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F812B14A08
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 10:23:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37FED7A7507
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 08:19:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B9FA18A30D2
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 08:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C34F27817F;
-	Tue, 29 Jul 2025 08:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD7D27FB3B;
+	Tue, 29 Jul 2025 08:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JbOK/e6I"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="beRGaaBD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011042.outbound.protection.outlook.com [52.101.65.42])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8898D2AF1C;
-	Tue, 29 Jul 2025 08:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753777269; cv=fail; b=kAL6Zbg7r9kcI9IquaSzyR9+c+DWc2S7m2XkjHsIfM72iCwXB5DsS6AA+Apb9jnk24HeM/kMJFPnJUPp+EePNho/daMyMf9CRTWP2qho7x/KAhJJKTsTZ4ODb3RXygOe6CtkUqn7OAEao3RqBQSTZCAfhv4z56Fbrf45euOZm6w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753777269; c=relaxed/simple;
-	bh=jw4dbIDpA8ULO5tlh5tm456WY395d2vrCj/CuLQjl58=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=IdnUy38405nF/L4nNnrxKvEPwcCY0trPkx3uq3cfpR1hQSQ/vDLKoEJmIDe/rzziW3vCAUBvq5YDO12U9sP2vQRHOrQd1HBgDY2mNd56NoAdU+eIEYrXyOddQ39Rmwmo3ehUwm4kvTs2RCwr0UOn07Ut7FI+NWAQqEJomqx33wI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JbOK/e6I; arc=fail smtp.client-ip=52.101.65.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FWXlKU+00xgSrqn3/gw7oHJLymHPu0SK5Fy7hVcGjGdyOrAaXCifoX+q1sF9Ie7AJN6qguHubq6oU8OcmDkLUzmF8QZ38PQaH2rHwMhi40WiZehnhhCWD8OBcQGBb13GDwgBBC4EFYewcy7oXnIuV6v0hN3FnD4pjGQeoAckTpEni7IFtmY88QMqH4DdWBUDuRDJPzNTT1XCiRKCYhR9I/bWSudS96ie/dYfWt4WkInZgz8BiZeswQWXd2ut9RiPqagwdw7feu//N3mhIxjqB2LvfQL+ezsbSyHoJ41bwwBUsobhz1XOsa0lNRXOt3xImqV46s9w0czZdIgPIE2ymA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jw4dbIDpA8ULO5tlh5tm456WY395d2vrCj/CuLQjl58=;
- b=cFMBqOmeh899yDwdOpopbm8H/ydwLJ7DW9D9rPCfXCv01RdMLHA4sCGzSGIaGPsZDIPMtlvFbtZRbmLTVucqZOMunVIp9WnwTOylAgTq74volnaJVsd2O7NWmDVhaYMTNaKWS1AOfUBgGcyAWebrCXeZOKlcZOQUYYHaiA7SafqwDXbXuWc883/m0DK1n7mcBI0wT9q/1Pi+cz8/UNMBKnZlCWuHNM6Vr/I/alFoMDVZRGgNO+QIX8MMZAUfOvjLbBvOJskYFp//AEIvW2wnysCHVoJS98J6DzH0zc+Xh2uNtgA4H11RNK1J7tmyMPMoD/u0lb9+PjNLCVIuaTDg8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jw4dbIDpA8ULO5tlh5tm456WY395d2vrCj/CuLQjl58=;
- b=JbOK/e6IrDWMh+EwSOtN0wZH9S1Cr8xSwpODt8ZImtvnBJngdges6HD2IyT8P/468m1gC/FAOSyNvouwqvUYhuW1zSJakZfMd4bTnvrrqVtY1oInZsp3muvV2n/7Rf7j9C4ESruIdmKEq4Uasc7i7pn6LH/F3ZQoI4O52nMdOAVAEmsv06YBX4LmEa/NPSQqIYIumomxtFbJmZa2ehbaK1K2L9qzGS7ywLF0oHUE9qOnG1CDTc17gsagBfMHoOiV8kiOlefa+XnudEKx7b3AmHy3Tr5t5x1oCOXUGi9I3c1EkInPtNgiY2ZnLQJGbcKoih4PDjt3gaw7QaVY0Ngw/w==
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
- by AM9PR04MB8397.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.27; Tue, 29 Jul
- 2025 08:21:04 +0000
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::50d3:c32a:2a83:34bb]) by AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::50d3:c32a:2a83:34bb%5]) with mapi id 15.20.8964.023; Tue, 29 Jul 2025
- 08:21:04 +0000
-From: Jacky Bai <ping.bai@nxp.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "rafael@kernel.org"
-	<rafael@kernel.org>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"rui.zhang@intel.com" <rui.zhang@intel.com>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "imx@lists.linux.dev"
-	<imx@lists.linux.dev>, "kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>
-Subject: RE: [PATCH 2/4] thermal: qoriq: add i.MX93 TMU support
-Thread-Topic: [PATCH 2/4] thermal: qoriq: add i.MX93 TMU support
-Thread-Index: AQHcADHIj7Ah5US3Lk2vWufsX1crirRIp5KAgAACpNCAABUrAIAAAUXw
-Date: Tue, 29 Jul 2025 08:21:04 +0000
-Message-ID:
- <AS8PR04MB8642EF2E53D1229D639F55AF8725A@AS8PR04MB8642.eurprd04.prod.outlook.com>
-References: <20250729024039.1223771-1-ping.bai@nxp.com>
- <20250729024039.1223771-2-ping.bai@nxp.com>
- <21ce4f23-8aec-486f-8fbb-021c1e114908@kernel.org>
- <AS8PR04MB8642DDDAF4E9CA5E98F94E9B8725A@AS8PR04MB8642.eurprd04.prod.outlook.com>
- <db07bf8a-67ba-40fe-ad38-a76ad551dbf7@kernel.org>
-In-Reply-To: <db07bf8a-67ba-40fe-ad38-a76ad551dbf7@kernel.org>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|AM9PR04MB8397:EE_
-x-ms-office365-filtering-correlation-id: ebb8e27d-2e7b-4b14-a18d-08ddce78dc7b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|19092799006|376014|7416014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?b3FsbTJacVpEVkRRTVhJMGhiSU4zUy9OWWRWcC9KT3E4V2FFZGRXNUtsMEd1?=
- =?utf-8?B?UFRXZCsybW00Wk82ZFRVSFAwRExOL2NyUFAvNW9PUmU2WWdhZ2lINmtEemE4?=
- =?utf-8?B?eDRadHlOL2ZSUGtvOGlCRXVVRFZrZGJaK0VWN1lUSktCNlgvUGpJMmxjUmV3?=
- =?utf-8?B?SFlUYTJwSHpaSUhrZjVYd2ZQR3ZsU3pQcVM1V09lb0pyUTdlbFkvY0R3L2Q4?=
- =?utf-8?B?L0xvRVY5K3l6SkhSdlRidWttRmtWUEpTcWdqUndNOWJPelgzbVpIOWxtS1Av?=
- =?utf-8?B?Z1BIQUhNUnc5VUZ3cDk4RnZEWitoSFAzQnFhWDExYmkraC9sWFpLRXlLVlpU?=
- =?utf-8?B?UjRabGNHaVAzWlUvNEtrRkdsWmN4ZHV1ZG5PUjJnTVNBSWttTmdRMjBaRG55?=
- =?utf-8?B?dHRWc3NqUnU2eXIxV3llSERjeXhGUFlHd21Xa3lNcndGRUJ2VkxyMm1ISm5u?=
- =?utf-8?B?MExLQlMwbUU4dnhDWi80S2lUeVNlM3ArSkJrN2VaekFtNEQ4OXVhSVZpMC8z?=
- =?utf-8?B?Z1d2QlZYVkM3U2owS2JKR1BoQVVhVmFVWVVSMXNKMGRCZXZTUzBmOEZlOGho?=
- =?utf-8?B?eVdvVGJrcllJU2pzcXV1L0tvQkJvSjNMUXhOTVBKVVcrWVNqM1JFKzhnQ1Zy?=
- =?utf-8?B?bmFRWTEyY3hXUTVHOGJROHVsSzl5OTZRbGFYS0dubEw4WUowU2N0d3o5YXVO?=
- =?utf-8?B?VnMreUJoK09EbUpNQlJyZG1tNWNWT3hIL2Q4NUNBYlVTM0NUM1hIZ3VoOWZN?=
- =?utf-8?B?dUNveURYSHlzTUs0Mm93N1g3Tkl2ZVJWWG9wV0NoZ3FKYVlnd044Wnp2R3Rv?=
- =?utf-8?B?QzZmaU96WkFoSFRON29EaUtGeTlURzFaTldENDNBS0RUMklSRE1PZjV2WkpO?=
- =?utf-8?B?OVBzcXQvdldUWkJ4VDhMYlh1R2tXUGthTU1iYmpRR25FQlcxb2hMeUtPVXlp?=
- =?utf-8?B?M25QSUY2VVFUUk1vOW14THRoQlNsY0V6b1YybmhTclRwOXJqSmhYakNYQ0Yy?=
- =?utf-8?B?NGVFb25Ib1V1K2dKanpaNmRXSWhubU5XYlZROVZmaDhTdkJQdHdmTHpPMEVu?=
- =?utf-8?B?blJudXVjL2R3cDJyN1R6WGtmUmwvdE1JNzV3eUswc1pNblR5dEU2OCtKVnN1?=
- =?utf-8?B?Sk5zQXZ3UTJYWlRGQjYvQmh2dzV3SzJyc08wZUVNSndjcDBEQXpwcVhFeitM?=
- =?utf-8?B?RHpRajRuMHdHSnBNWlVPakJ5Q0lNYUhBY2oyQnN4OUtxbDRWdHE5dXk2VjZV?=
- =?utf-8?B?a284NFhkVFZuUHppVVpxRlRsejh4cFgydXBZWVRGaWc0RkFEYVhMU1NYKy9O?=
- =?utf-8?B?cGZ1MnR5c1JvRkZFQ0xNbkNOYkltV0wyL01pazhMWDN3NmxKcVQ5Um5iUmZt?=
- =?utf-8?B?bWpPQkozbmtuQTlDVWVlRWJlbjdQOElFbjFxTTBROVA0bm5CeUtzbVRHYTA1?=
- =?utf-8?B?Z3V6T3VFZEdHaGVxRWx3S01xTXFpKzBYUjZmaFoxSjV3OHRvVjFOQ1oyQlpO?=
- =?utf-8?B?bnNjM3VNUEVBR1QrSUhJSFJzMVhSVjFTV0lVakM2TVpQUGlaRmNaMFJVZnE2?=
- =?utf-8?B?bEU3RXZuNHZBN1pMa3dpZXF6eHhzMXBobjFpTWVjbVRuRFhCTFpud1pCVUYz?=
- =?utf-8?B?YWV4cnlTcTdic2YwTk1CelQxK01QUmVyTk8yWldWSW0xVFZRcTJGOGlkck9H?=
- =?utf-8?B?WCsvTnRFTWFjTXllVzdha05xa2gvOVUwb1NOb1FUNlpYYlFpNkltaXE0QllE?=
- =?utf-8?B?K3BpTmF2T0hTalhGNGUyWFRYdUZwL1JBeFhtL0lhTnNoaW8zd044OG1tOWY5?=
- =?utf-8?B?djJzYnRTTVZocmJLNEVucEM0S3dSZHNTZloweEVPVHNLZEVyK3E2dWE2d2dP?=
- =?utf-8?B?c0JXK0d6eXROc0pBdy8wRDVMa05hSXFhcmxrV3VJeGo0V0xMWSt0czZPZmRk?=
- =?utf-8?B?bHBzbDB1OWREcUtOVzZFKzVOd0t2b3VuMHVKa1RnTHoyV2tSTlArZElqZE93?=
- =?utf-8?B?WTRGS1h5eU5RPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(376014)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?L29HNGZjNWNKbXVtcm8rV0Vtc24yUm0yMHlKUlltZjdsbmRqZDR1S044d2RD?=
- =?utf-8?B?QXRaZmdLd1lnM0VMY3FPRDR4WGJYT2x3RlRWckEweTBIUzA4Wm9KUlV5UytL?=
- =?utf-8?B?bjZWTndWWEFSTTFyTEVLUEhRN25kWXFHcVBBalFHSkRGZmNkbkl1UEdLRVAz?=
- =?utf-8?B?OTlWUmJoYXpPdGRnNDc2VWE5T1l5Mm1wenVoTHBuTDhjaFRYcXlhTHVidDNQ?=
- =?utf-8?B?dUx4MUk3Qkx0L3QvY3dSdjlnSXNDUGtDM0c4cDJVeWJRaWxURGp0ZzlZZEUz?=
- =?utf-8?B?VkI3UHRVZGthdGsrVmlGOGVsWUR2L2hWSFVLdXhuKzdBM0s3TVdiV1BtczNJ?=
- =?utf-8?B?M054c0d3YTRxRFA2YzdOVXNZTW11bHR5Vm5tY2NuZkM1WXNoZUhoczhxTWJK?=
- =?utf-8?B?MHVIMFpMRE5VUjdRaGJTZGk1M3VMdzQzSmVOQkJjZUhUdHhFalA0NStlVVJM?=
- =?utf-8?B?c3ZmMjVUTEZQT2VzZG5NSkdCZmVKTUIzaWExdTg4ckJ1TGlUNks0YmJoNHIv?=
- =?utf-8?B?OEZZbVlPRWg2VkpvaUx0QVlvcTdaUHFzV2ovd25pZHpOTkUvN0p5MUM1eWlr?=
- =?utf-8?B?ZjZVQ085bjJMUWV2SjVWcWdKT21malI4SU5LZVlaVjJGNWhQNDZRcWRzdk02?=
- =?utf-8?B?VFl2V0ZiUWRXeHhka3FaeEszUmlOR0UyTDRHTVVSL0hvbGJqQW9aWEkrWmFX?=
- =?utf-8?B?SStqZ2F5TTdJMzY1M0IzUFo4VVdtbXh5VGdjL1F6RjFybDZPM3R6MlF2M1lY?=
- =?utf-8?B?dHVmMUxvM043RkgyNGZlN0dUTW56S1BjcnhLall3RW9vWFBENTJqZk5uL0ZS?=
- =?utf-8?B?WkpncmpoVklja3ZQSGdKMGp5VVJkZWVQV1N2YVdKbkp1MWlnbEdLUEdlM0NO?=
- =?utf-8?B?c2FaZmhIQmNTNmN6OEgzbTNTdit1YzZOZ3RCT1VRNTZIQmExdmZvcFBtSWw1?=
- =?utf-8?B?WklhbEtMU3BaN3V4R3Y1OGtkdTVJaFJpMi9YNm9FN2hnSWw1ZTBCcmw3NHVu?=
- =?utf-8?B?TkVkY1M5cUVLRnlOTEc1c0ZoMHppMDlDdlgxSFdFSEhXOTdGUjV0YTJKMzBT?=
- =?utf-8?B?M2ZiQnN3VGlnS2MwNzNDVnN3SjBwRlFnRWcyTmtUQWxFN3REdk1Ka0Z4bXVn?=
- =?utf-8?B?ZURoOFBxVXR6cTcwNnpaWVJuWCsvZnNyMlo1RjdYUUI2M3lGN1VPNXZ2Y2N3?=
- =?utf-8?B?Q1FySk5UVHFIcldRUUpPRWo1dWtCQWU1Q2J4MHQzdGVTWmhQK0tXdm0rTVU2?=
- =?utf-8?B?Nk9saE1rbU05aTE1QzdLSGNEbWU2dTNJbkdHNHFKTFU3NkJLc25qYmsvcGZC?=
- =?utf-8?B?Q2tycWNZUEQrckxkRUxZaVRHdGpielM5R0prbjdsYU5KSTg2bDFXdnVyVi83?=
- =?utf-8?B?RmUyMTNwSGlBWU85bU5rWUZ0QmdPZlFqckxXY0JIYlNpYmc5YkU0YUxDQjRh?=
- =?utf-8?B?cGFRc2lkbTcxamYrYXZnWnVjaGFKeVRTTUFKQnVvbDlZcWdYRjNmSUNUNFJT?=
- =?utf-8?B?NFFlOUZVWU5KUURtZ2lZNC80bW1IVzkvbG5JTUl2VWtaV1UvWG5UNDg0c25l?=
- =?utf-8?B?b2JTTnM1VGI2Z0tWenJoVWJCSmlWYzZCVEhzWk5hUGg0YTMzdkphMk1naTlQ?=
- =?utf-8?B?dnZDbmJQcjFmQ29jYVNoN1hJZjNjYSsxWmwzWWdmVHROeTlrRFJLV2ZtdUhv?=
- =?utf-8?B?aGMyc2M0VzNiZWN0eEtVZUVyZ09BWTE4QU5wbU9KQnRGL3ZZMXNraGhBdGxh?=
- =?utf-8?B?a2ZjR0NkdDdTWFRjOUdzOURMcDRyK2ZFOWp1WjJtY3BEeElna3phdzNDRTlv?=
- =?utf-8?B?YU40OU1DdGhPdDlNWjRoZEJESS9kSnBLc1ZyM1NQNGlOZzN0NnFGZVE1YURG?=
- =?utf-8?B?aWo0WmVCMUM0UHc3RU55OXozQXFiU0tlZG1Tb3BHSTNwRFk0Q29qQzN1VUR4?=
- =?utf-8?B?RVhZUEprWVFHcTF1NlNBUG5vbFJ0c2V4blY2MDNPb2puS1d5WUQ4d0p3dkQ4?=
- =?utf-8?B?WjBTNXU3RVZjVzdnUEZ1TElBcGd2bllEUzYyNit3TTJFY2xzYjVlemdKM1Yw?=
- =?utf-8?B?MVdtd1g4UnFJZHFuZEN2Q2pocUdpSDFnRWQwR25VTVdqRlBMWWRlNGtqVmZL?=
- =?utf-8?Q?C/RU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7E227FB3E
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 08:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753777407; cv=none; b=rs6isMYmWCW2dsfxOCIy2X9yToAwwtgKzvV6J6NfEHfPwojbPvDKcmG/s73dF8AG+pxsJvPT8wqX6XekqgXcu4/ePpgzrXvHxoa3kxrtE+23yICg/anKMiqwfFiqJZ3lCsVV/XbtrLDodvt4L7Eb2qafcDhidGqLhLEoopLWb40=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753777407; c=relaxed/simple;
+	bh=2wXN7cq02T3bH10Sqn0i6sPundJHGnzfwCRzUt0HFh4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u9Lui9iSw3sj/DXcfTmPuyGBxjn/IWGtjw2ncBQVOg1XGIAF6T/qkJdpEe6OsAKy5NT+B9xo6qhubhoEDT5mEe6xL0FK826ONNMaMB5nCRfdyelrSMekHvW550cCT7updaSpPrBhhs1uQkF6I/QtjTI98QTau53I2upXuPEkw3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=beRGaaBD; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56T02Lox006594
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 08:23:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	7DJ4RaeJMoLupHxD1y+u8eH3MOycZ0I9zFremeBae8Y=; b=beRGaaBDsbR0BDiH
+	i/u6yPH+lUSlsbEDtWj7xF+LBUCg5ZiDo9Xl1H2/VATq9IYkGmQssRF2btAK2fQt
+	rB9noXkLa8IFXeXigqUwrEP3kz3mfhxrHReNOOONYtMDdu3IvLDrYCat6C7y2dAe
+	106si8uM4C+6MAdkHiIA74yszPyOqc71aIw8eIaPffQJDAChxnwZfmZCCCkvaF0N
+	e+2aFh4wI12EqRwjCsSg0MDfrapa3SdYo4pOnZxECC3PoG5pq7W7bjZd+B3wAW+J
+	wEfO0bRXkJbX02Fb6BWksrju0OVd6Y76/wSaDzNuwpnTDjMVsS7eRrFvL0aRFPz0
+	czgREg==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484mcr7ht4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 08:23:22 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ab61b91608so20255321cf.3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 01:23:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753777402; x=1754382202;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7DJ4RaeJMoLupHxD1y+u8eH3MOycZ0I9zFremeBae8Y=;
+        b=ZmsNzjtM6sEnNk/8YPksFaWlUW1OuU3z2G7043Yml4XAUO+KT2fROrIN/kUqxrELSR
+         7h36KrRVmCH5PiGcgxJwq9SxBNHv4n05l/2rbHJ4dXuOx0pPSVfPFnXvowOtEVBf25Rv
+         EYECP/Rs1jPiCiCtQbEmeUGcgazVg9EljqdH5q3XCygBgfBOLmJCjbaqc4aE/vxU4QnO
+         D+hx/1YG9fnELpEzfTYowYk3gXSA2sFtoMVFzc8NBrjhAyWT+//pOqy/FneaBRGJvHqU
+         Z1KJ8TSy0XvWTQauXQ1hkzrNrzUf5T+2VKsGmWWhOU4r+lZkGiJ5Mv7wxfeGqxfkVYmE
+         yL7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUxMHws/BKTGkIyB7YofrRJlIkrnZLF9BVA2ptvpsRjv1QBcKQXFZaFMOzKb17D5R6vImqUxRQKIg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb2KDRmDZSerfMq2s5oIkhve+Afq/w/iD/oO2+NJYeM00sOnDw
+	BQ019U3D+HprIwQtXixiNMplWY5BtO5OlDgErEEAgl8LalSJVbDHDv674psA0+sQPoU/9EX0zgI
+	nILiCldWQDw9sjQz3dVda30FRDX2Is/X0tYk670qG+j71qJhDktC8peqm3/g5mg==
+X-Gm-Gg: ASbGncvIKsHDzh5uib93v6p3z+8NFThZM5hyZKO+TiKtoh4shSmNLCZmpLtbvufC//Q
+	ouhBjt9TWDftGofgmAdw/VSQZrj5H5GN4Hq6knXngrE3eUQ+Wb0KGDDJQLA+5Var7g9Ah/Wkz4P
+	Hq5xsy+BanxhSqv64aQFz0v/TPnaLIQcDVq/o4J2iBJXwFVXRPW407bTAK7+4kXXQq3FlBLO6aI
+	ughG5KP/Zsm3j4FLwLMv+g9xjK/kASRn+tY+EnRooj4WIyLdWu+qtEyeQJVXlw+bOm/rd11pfFa
+	+yITdLCZckbcvpG9a3SVT3Nv+0EGKawyO6jXphOEkpnk77AdD7G0J9ElEtXOIfJgDDbZyF3thnf
+	TtiCt++ClZXuCkkYR4A==
+X-Received: by 2002:ac8:5f51:0:b0:4ab:6e68:1186 with SMTP id d75a77b69052e-4ae98dff702mr76086001cf.2.1753777401710;
+        Tue, 29 Jul 2025 01:23:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEDpC4Bj15W8z8Hn1ZB09u8n7fVHVo8g7aURbaiorGpbmz59AM5D7ns33AzQ2bV0V/RJUM1/w==
+X-Received: by 2002:ac8:5f51:0:b0:4ab:6e68:1186 with SMTP id d75a77b69052e-4ae98dff702mr76085871cf.2.1753777401111;
+        Tue, 29 Jul 2025 01:23:21 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61500491d12sm4326817a12.11.2025.07.29.01.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jul 2025 01:23:18 -0700 (PDT)
+Message-ID: <6b903628-9abf-4b9e-971e-e9338308d693@oss.qualcomm.com>
+Date: Tue, 29 Jul 2025 10:23:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ebb8e27d-2e7b-4b14-a18d-08ddce78dc7b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2025 08:21:04.6663
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hVIH29JZRJKZDYNWqUwTdAzMWYORV5WpjvX/7LotWoVbil9VT2J7VlPR3pHFnzWyUG6cmW73ayNufXdIcDmjXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8397
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 24/24] arm64: dts: qcom: x1e80100: Describe GPU_CC
+ power plumbing requirements
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Johan Hovold
+ <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <taniya.das@oss.qualcomm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        Luca Weiss
+ <luca.weiss@fairphone.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
+ <20250728-topic-gpucc_power_plumbing-v1-24-09c2480fe3e6@oss.qualcomm.com>
+ <aIevIuMDA5R8igmi@linaro.org>
+ <50868cd8-68a9-4bad-99f3-8cf542886fb6@oss.qualcomm.com>
+ <aIhrav7GKpsbVpto@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <aIhrav7GKpsbVpto@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI5MDA2NCBTYWx0ZWRfX1LrZrg7Pmzn6
+ Z8V5UX8tvQfvl6mRMXoFHKr07mlCh2xoIr08S/YCgCSNKUXzeLv2c+OSVEioOUzQCON/5tzCpP3
+ s3ZgQArVBxEdNLU1xiCrebS+fZhGpr24qd0/QnTPm7zeaPvKY82dLN6cQ9niVnZyc+beqwFykCj
+ FUpqjevZxeSmt0D0ItYW9VrDe6T0viWCwPxDhtVuJtG9SIuAMEtwXuw0cUpuR5ySmMeWLggT2QY
+ wNEbxJZoOKsj6ThzAo1ZQMuKeDTNRjspGxzRJJfDtdMmWngJr/B22/Sa/CZmPUi+JKJCAS7qmoo
+ BUb+RV+TvkieyxY/phqgRX8WsY1TAm0RYYerifjDZ2MM2MjZBbZ96NbZ0kiRn8AyHa/isqF/cyq
+ FPEp4R8NJ2YPaKiCz6Vyadiy1Iz09YSYo4MrNk7/Z0tzgnM/JG440bu2x9luGvdLDKjxvev/
+X-Authority-Analysis: v=2.4 cv=Hth2G1TS c=1 sm=1 tr=0 ts=688884fa cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=npIohlpTwfGSXeC_WVoA:9
+ a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-GUID: yZLW5b5kllVGODvfaY8dYb5SmAcWNIwg
+X-Proofpoint-ORIG-GUID: yZLW5b5kllVGODvfaY8dYb5SmAcWNIwg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-29_02,2025-07-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015
+ spamscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507290064
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIDIvNF0gdGhlcm1hbDogcW9yaXE6IGFkZCBpLk1YOTMgVE1V
-IHN1cHBvcnQNCj4gDQo+IE9uIDI5LzA3LzIwMjUgMTA6MDIsIEphY2t5IEJhaSB3cm90ZToNCj4g
-Pj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzRdIHRoZXJtYWw6IHFvcmlxOiBhZGQgaS5NWDkzIFRN
-VSBzdXBwb3J0DQo+ID4+DQo+ID4gLi4uDQo+ID4NCj4gPj4+ICszMjUsOSBAQCBzdGF0aWMgaW50
-IHFvcmlxX3RtdV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+Pj4NCj4g
-Pj4+ICAJZGF0YS0+dmVyID0gKHZlciA+PiA4KSAmIDB4ZmY7DQo+ID4+Pg0KPiA+Pj4gKwlpZiAo
-b2ZfZmluZF9jb21wYXRpYmxlX25vZGUoTlVMTCwgTlVMTCwgImZzbCxpbXg5My10bXUiKSkNCj4g
-Pj4+ICsJCWRhdGEtPnZlciA9IFRNVV9WRVI5MzsNCj4gPj4NCj4gPj4gTm8sIHlvdSBoYXZlIGRy
-aXZlciBtYXRjaCBkYXRhIGZvciB0aGlzLg0KPiA+Pg0KPiA+DQo+ID4gTm8gY29tcGF0aWJsZSBz
-cGVjaWZpYyBkYXRhIGluZm8gcHJvdmlkZWQgaW4gdGhlIGRyaXZlciwgd2lsbCB1c2UgdGhlDQo+
-ID4gJ29mX2RldmljZV9pc19jb21wYXRpYmxlJyB0byByZWZpbmUgdGhlIGFib3ZlIGNoYW5nZXMu
-DQo+IA0KPiBBZ2Fpbiwgbm8uIFRoaXMgZG9lcyBub3Qgc2NhbGUsIHVzZSBzdGFuZGFyZCBtZXRo
-b2RzLg0KPiANCg0KdGh4LCBnb3QgaXQuIFdpbGwgcmVmaW5lIHRoaXMgdG8gdXNlIHRoZSBjb21w
-YXRpYmxlIG1hdGNoIGRhdGEgc3RydWN0Lg0KDQpCUiANCg0KPiBOQUsNCj4gDQo+IEJlc3QgcmVn
-YXJkcywNCj4gS3J6eXN6dG9mDQo=
+On 7/29/25 8:34 AM, Stephan Gerhold wrote:
+> On Mon, Jul 28, 2025 at 11:31:10PM +0200, Konrad Dybcio wrote:
+>> On 7/28/25 7:10 PM, Stephan Gerhold wrote:
+>>> On Mon, Jul 28, 2025 at 06:16:24PM +0200, Konrad Dybcio wrote:
+>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>
+>>>> A number of power rails must be powered on in order for GPU_CC to
+>>>> function. Ensure that's conveyed to the OS.
+>>>>
+>>>> Fixes: 721e38301b79 ("arm64: dts: qcom: x1e80100: Add gpu support")
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>> ---
+>>>>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 6 ++++++
+>>>>  1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+>>>> index 5e9a8fa3cf96468b12775f91192cbd779d5ce946..6620517fbb0f3ed715c4901ec53dcbc6235be88f 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+>>>> @@ -3928,6 +3928,12 @@ gpucc: clock-controller@3d90000 {
+>>>>  			clocks = <&bi_tcxo_div2>,
+>>>>  				 <&gcc GCC_GPU_GPLL0_CPH_CLK_SRC>,
+>>>>  				 <&gcc GCC_GPU_GPLL0_DIV_CPH_CLK_SRC>;
+>>>> +
+>>>> +			power-domains = <&rpmhpd RPMHPD_CX>,
+>>>> +					<&rpmhpd RPMHPD_MX>,
+>>>> +					<&rpmhpd RPMHPD_GFX>,
+>>>> +					<&rpmhpd RPMHPD_GMXC>;
+>>>> +
+>>>>  			#clock-cells = <1>;
+>>>>  			#reset-cells = <1>;
+>>>>  			#power-domain-cells = <1>;
+>>>>
+>>>
+>>> To repeat your own message from a couple of months back [1]:
+>>>
+>>>> You shouldn't be messing with VDD_GFX on platforms with a GMU.
+>>>>
+>>>> Parts of the clock controller are backed by one of the MX rails,
+>>>> with some logic depending on CX/GFX, but handling of the latter is
+>>>> fully deferred to the GMU firmware.
+>>>>
+>>>> Konrad
+>>>
+>>> Please describe somewhere in the cover letter or the individual patches
+>>> how this relates to the responsibilities of the GMU. I searched for
+>>> "GMU" in the patch series and couldn't find any note about this.
+>>>
+>>> Also: How much is a plain "power on" votes (without a corresponding
+>>> "required-opps") really worth nowadays? An arbitrary low voltage level
+>>> on those rails won't be sufficient to make the GPU_CC actually
+>>> "function". Do you need "required-opps" here? In the videocc/camcc case
+>>> we have those.
+>>
+>> Right, I failed to capture this.
+>>
+>> The GFX rail should be powered on before unclamping the GX_GDSC (as
+>> per the programming guide). The clock controller HPG however doesn't
+>> seem to have a concept of RPMh, so it says something that amounts to
+>> "tell the PMIC to supply power on this rail". In Linux, since Commit
+>> e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable the
+>> domain") we don't really need a defined level for this (perhaps it's
+>> more ""portable"" across potential fuse-bins if we don't hardcode the
+>> lowest level anyway?).
+> 
+> Thanks, I forgot that we have this commit.
+> 
+>>
+>> However after that happens, the level scaling is done by the GMU
+>> firmware. This holds for allOf CX/MX/GFX. I'm not super sure if
+>> both MX and (G)MXC need to both be captured together - downstream
+>> seems to describe MXC as a child of MX (in socname-regulators.dtsi),
+>> but I'm not really sure this is true in hardware.
+>>
+>> The GPU driver currently first enables the GX_GDSC and only then
+>> does it kickstart the GMU firmware. Downstream seems to do that as
+>> well. So on a second thought, since we've not seen any errors so
+>> far, it calls into question what role the GFX rail plays in the
+>> GX_GDSC's powering up..
+>>
+> 
+> It might play a role, but we wouldn't know since AFAICT we don't support
+> enabling the GX_GDSC. Look at the beautiful gdsc_gx_do_nothing_enable()
+> function, it basically just defers the entire task to the GMU. The GDSC
+> just exists in Linux so we can turn it *off* during GMU crashes. :D
+
+OHHHHH snap! I, on the other hand, forgot we have *that* commit..
+
+> I think we should identify precisely which votes we are missing, instead
+> of making blanket votes for all the power rails somehow related to the
+> GPU. In this case this means: Which rails do we need to vote for to make
+> the GMU turn on? If there are no votes necessary after the GMU is on,
+> it's better to have none IMO.
+
+The GMU pokes at RPMh directly (see a6xx_hfi.c), so we indeed just
+need to make sure that it can turn on.. Which in short means the
+*C*X_GDSC must be able to power up, which doesn't have any special
+requirements. The only question that's left is basically whether
+MX_C must be on. I'll try testing that in practice.
+
+Konrad
 
