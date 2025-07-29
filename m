@@ -1,82 +1,117 @@
-Return-Path: <linux-pm+bounces-31561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16140B150C0
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 18:02:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FDFBB15306
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 20:44:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DABE1884B77
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 16:02:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9C5A7A551B
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 18:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2304299A84;
-	Tue, 29 Jul 2025 16:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF1729ACF0;
+	Tue, 29 Jul 2025 18:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcprfO4v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhf5H2tN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0E229993D;
-	Tue, 29 Jul 2025 16:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33914220680;
+	Tue, 29 Jul 2025 18:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753804847; cv=none; b=kpy+m0RCnESjNC7ejm8ymqO65tYfUHS3lY7DWto5DeXWGFk1HIOT0oICqv/7PUP8Aynx2jIrVGozllum+9E/ipG61cUrlG2TyurRhi9c3syr55jAxuNK+B33wqF7ehy4cvkviFt0EW+JPYeNTNl9DC5oNDOAGBdH+iCbCz8FCp8=
+	t=1753814523; cv=none; b=mOGGcTCIRjt9BxeS2tYXFrvC+V0E51MoGPvvv6RwH0y3bXo2OG0IJ2ZsavKPrW1oyb90UL8N11KLd8KzJsmIsAxJ/jEdAOU62U8R/vINGGq2C8KPksV5gBF7VFDgSuoZYSBUtJde0jYeTWKEmgqBCFDstFsU7n4UTieZWvjMOl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753804847; c=relaxed/simple;
-	bh=TCMPdRtOXj4efbdonsaSYdQteHNA9944aJwa1mzdHkE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PrS/ILBzqquCM6XVA4Qvea4bM6BTfuOU04ynUzum/BVfZTSi74nSATWU/k9i9cpFU3+2NwoiCtARILxYu0YLQML3svAlwpFGpuxGssFrss7D3+KgK8qPEOAQvB5Dn9MLiTJGXaLJkVF5vIJtXTi8brmzsRdm+Dqk2GQYEhLDvo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcprfO4v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3AB9C4CEF9;
-	Tue, 29 Jul 2025 16:00:45 +0000 (UTC)
+	s=arc-20240116; t=1753814523; c=relaxed/simple;
+	bh=V6Dcqa0TG7W5slu9uXHtRB+QqM48OfTcq9W5IaelKrU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mD6tSPbfQnH5UxidPaBVV+Dxcwo4BQOIn8NLHUrjxMigrhp/tVczJzLX2LhijeoDn0KWFb/D9cSKhssN5aSMR4Swv7obqBuAb2H/xuK8QSRSiw/UyVoNM4l9UkxlkD68Cvd9X4UU8fLsvXFE/OJKZx+gM7aClQHtfjqFWt1ZtI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhf5H2tN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA4BC4CEEF;
+	Tue, 29 Jul 2025 18:41:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753804846;
-	bh=TCMPdRtOXj4efbdonsaSYdQteHNA9944aJwa1mzdHkE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TcprfO4v9oUE5nn1yy0aMQMt468W3UrhCN68plmhPvAvzJ6HqmZb7AJht42QJ1X2g
-	 NjVbTizKt6o5ln5WZSx9hjNeRxPmK8MPBVT+wFq+m+tiIBKyiyHbQ36w4rDFODLEG1
-	 nd8+Kqw8FRFazmTjrGGed4y8iruFx6mIfl3LshFAuStJB+BXffElGhQESaw4DLrnas
-	 gM4DC4XnUhb2Q6HywtM5FdPM5MUHkM49wICFwckoLzgTzgs8kERVYt7mrsuAsti21S
-	 jOpvtnlInK/AJ89ORKLP1Qgkn9+aQR1xFFTIwe5yyLlq/hsb43u8jDdIOTalqe5tUn
-	 dPXoxFpsXzgyA==
-Date: Tue, 29 Jul 2025 11:00:45 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH 3/8] dt-bindings: power: qcom-rpmpd: add generic bindings
- for RPM power domains
-Message-ID: <175380484471.477616.2463594563710442595.robh@kernel.org>
-References: <20250718-rework-rpmhpd-rpmpd-v1-0-eedca108e540@oss.qualcomm.com>
- <20250718-rework-rpmhpd-rpmpd-v1-3-eedca108e540@oss.qualcomm.com>
+	s=k20201202; t=1753814523;
+	bh=V6Dcqa0TG7W5slu9uXHtRB+QqM48OfTcq9W5IaelKrU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bhf5H2tN9kMMxWl2WeZhvWPmpxfLH67XYeFVV/Xl0v3LAO5IKnbHUGx6cetAw8r0E
+	 NelH/JRUL7KPtddjW2mY7kr7uscHlx82JXR8M/D7wnaN/BSVWG5YRbG2PwoySQDHVr
+	 3FVSj7MEg1Sl4KKhtpobSnWImVZdjcdhMRfUBodtAxJ6oJYmzJ5W+HcvXMSM0TePYS
+	 GqoloI3NFa22QSdSkQmso8fHGjMcWucCv9CBXLvVP//8Y3Q7ejE2jXgXsNFuQjlqWe
+	 mvY6mquSuCyIyS4jxoOsNUCMvkQ/frlVHDw5PWcbWiVDFJYaMn7pdUYUtI991hiIgd
+	 I1roqP1SAbJyQ==
+Date: Tue, 29 Jul 2025 19:41:50 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, sboyd@kernel.org,
+ dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+ gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+ kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+ u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ kernel@collabora.com, wenst@chromium.org, casey.connolly@linaro.org
+Subject: Re: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
+ and devm variant
+Message-ID: <20250729194150.1985404b@jic23-huawei>
+In-Reply-To: <6ea0495e-21d8-41a8-b1b0-1c99c2929de5@collabora.com>
+References: <20250722101317.76729-1-angelogioacchino.delregno@collabora.com>
+	<20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
+	<20250722150930.00000a2f@huawei.com>
+	<6ea0495e-21d8-41a8-b1b0-1c99c2929de5@collabora.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250718-rework-rpmhpd-rpmpd-v1-3-eedca108e540@oss.qualcomm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
 
-On Fri, 18 Jul 2025 19:13:41 +0300, Dmitry Baryshkov wrote:
-> Some of the Qualcomm RPM PD controllers use a common set of indices for
-> power domains. Add generic indices for Qualcomm RPM power domain
-> controllers.
+> >> +/**
+> >> + * struct spmi_subdevice - Basic representation of an SPMI sub-device
+> >> + * @sdev:	Sub-device representation of an SPMI device
+> >> + * @devid:	Platform Device ID of an SPMI sub-device
+> >> + */
+> >> +struct spmi_subdevice {
+> >> +	struct spmi_device	sdev;  
+> > 
+> > Having something called a subdevice containing an instance of a device
+> > does seem a little odd.  Maybe the spmi_device naming is inappropriate after
+> > this patch?
+> >   
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> ---
->  include/dt-bindings/power/qcom-rpmpd.h | 121 +++++++++++++++++++--------------
->  1 file changed, 70 insertions(+), 51 deletions(-)
+> A SPMI Sub-Device is a SPMI Device on its own, but one that is child of a device.
 > 
+> Controller -> Device -> Sub-Device
+> 
+> Before this version, I initially added devid to spmi_device, but that felt wrong
+> because:
+>   1. Sub-devices are children of devices (though, still also devices themselves)
+>   2. The devid field would be useless in "main" SPMI devices (struct spmi_device)
+>      and would not only waste (a very small amount of) memory for each device but,
+>      more importantly, would confuse people with an unused field there.
+> 
+> So, this defines a SPMI Sub-Device as an extension of a SPMI Device, where:
+>   - Device has controller-device numbers
+>   - Sub-device has controller-device.subdev_id numbers.
+> 
+> I don't really see any cleaner way of defining this, but I am completely open to
+> any idea :-)
+I was thinking it was a specialization at the same level as the old spmi_device
+(not it's child). As a child this is fine.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Just showing my complete lack of knowledge of the SPMI code :)
+
+Jonathan
+
+> 
+> Cheers,
+> Angelo
+> 
+> 
 
 
