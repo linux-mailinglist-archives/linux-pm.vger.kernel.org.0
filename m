@@ -1,216 +1,158 @@
-Return-Path: <linux-pm+bounces-31535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 031CAB1484C
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 08:34:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD9DAB1485B
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 08:41:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B9A83A7607
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 06:34:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B04217A7538
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Jul 2025 06:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857F6259CBE;
-	Tue, 29 Jul 2025 06:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1580D25C81E;
+	Tue, 29 Jul 2025 06:41:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SnQwSh4x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpuPt04A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34C725392C
-	for <linux-pm@vger.kernel.org>; Tue, 29 Jul 2025 06:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2AA25BEE8;
+	Tue, 29 Jul 2025 06:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753770866; cv=none; b=eLk0/3SwMmX2Cl12sx0D/sPTp5UpYvGiPcnqWhz9IEghNzwZKl3TAViNquL0rlL5hkyj5WdJczvagKNNXGkAk3HYHSXQ9zOL49bAGzDajDsy6z+ZEOH2JkOmfEGGiWNSL7fuePOBDb+XX3ruLH40AU8hYAQ257Sed1jFk2c2JeA=
+	t=1753771310; cv=none; b=lGgcXdA2DCzJwvX3uCDEYMLkPjvfLOSSwyUZMOUBljAKqKpVAUcpvac8U/aLgnIESSlk1PD9khq7NeDfmOrL69Xar/MKH/siQ7IzmPjHLrfbxnekdJUFUUXhpnl2uYnaCrkzhHGmoofu2apjJ6exxjwDd61YL0XlIky+SxkalQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753770866; c=relaxed/simple;
-	bh=DsSSixPFpacQb6ndKjAb6W1B+Y6D+l4BcUMKXYwMUtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZBNuho4zRmO25bLZv8yWQOXiqQEz12vha6AKSfRwy7lCzR0CzYbsz0hSqzYpQA0IFx5z24DrotvG7K2gSIf2wxjPVCxue63dlHS9H/Ul84fsuw+2+qcWfdGE8xMK9U5WMnhGx7ebJZ4jMVlw41bSnWTqurL28zW+3OFls2L93M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SnQwSh4x; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-612b67dcb89so7980836a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Jul 2025 23:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753770863; x=1754375663; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0wJ7p1KnoPTtuiUiUre3TQUdtSHj428TRzShsa/CgUA=;
-        b=SnQwSh4xLbzVXkBUaFnq94Epnq3ZNDiTi68ypeGyiEdUYKViwgRHNjnCaKvWpi7kMk
-         2QG5XmqRjPKvKwIcSkjRm2KOichadQAqaGNoIRee0kHVQFLPb2cT7t+8UKGaGMFM//w0
-         isO+M3+o3LyvguwMyNH/FTuhVItk1NUAKamR8Ppyksb5PzBvArQBLQKrp150r+eS3O/E
-         XnSXcpTJfNijidSSDb5e+lDXPzeDhrq2A1mAnbn3wL3sIvWx0O3xtjnkbu6eJVX7Qihb
-         vyBZc399hfjbck0sy2SL+6UdLKsnfgDu3PJv+4Hnu/c/29hupjDXHb2Jy/jTgE2Sz+FB
-         niTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753770863; x=1754375663;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0wJ7p1KnoPTtuiUiUre3TQUdtSHj428TRzShsa/CgUA=;
-        b=DH4tif4TOEI9hALlUPG2E/ivC3dnkcZNsDMFd5FW1U2XgCrLOrCaHmPHAXsqWtxd9G
-         D0L/4QzCWLfyqpehxgIq7ft68mLxqTnEFTTNAa1v6hZcKdtzE/OKNs7Xu4RKJZOTcoQL
-         V6pwdCPtbzHhElAMmP//VrrLtaztwYbxbkKbUtYMsUylgHXfMq+FvVdOmBwdLYStn4qm
-         qQv/Sj20EgLgMR3l2Xk4mR6FN9JoWJAa8gVvxryZImBtFGdvZjELqe2mpJb/za5dDlcm
-         iMCbkRxsNE+gzcPnjseTDUa4HBAV1jKGOR0BTYyyPcfowOtTKZsh9TQmFEodympN80My
-         EfAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhlbI1jAKgUBKTMmvTyidK87dl7wOfhwH/osBwAFE2Wy1mFIk2kcsMs/J6l/NrINfWNRay/luQug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFrtRuddZ5W7lycCI+pOrp+UI31JoB4DP/Snu6X4uQ8Xg7nVku
-	/gt4D66HzToKHuFpSW8gqlPIlzNm3buORkxhjzhdF0o1U+7rtOCmgJFuwvTwuBOCOP4=
-X-Gm-Gg: ASbGncvEeDKHWvbpVO4UBQ51p5g8ajWJAK/DsGd2la19VY9f6esE4XUUtrx0r14f7QS
-	7qlNgcWiBjeLNPa7AozKzMUerqjiQzu49q1NjxbyBlZ92jQquvKGhOa0p9AOvuPtz1RejIWb9yg
-	zl2cUfT1R97QKj0EddGVUvJANq9DV89sNeTwTuVxY1r9vGgxBjamBSYk2Qshh20G+ry3z11iqX/
-	IZATAx4A6L6Ad2F46NS3XE9TzNTmnIClFxJ4739EdMn8jL+krFBPGhzR8PJFe/CVurWobu9/ZPH
-	2zYwsER3Wq0Fywdz2TnZyIRNO26y1VZ644ygzpzFPEqa8hb9uPhPI85iuSOe2h7esOxPqzh3MH3
-	ZnjK6PgFkJMK3jSeFCYsteqJ1MRFmUw6oZA==
-X-Google-Smtp-Source: AGHT+IHwnRZ8V94I2dIRwpv7xzVyb90S3UZWn2P7FJ9P3VAU65PFBP1DY/UxTAXlXrCCU2xReoJaYw==
-X-Received: by 2002:a17:907:9686:b0:ae3:64e8:8c5c with SMTP id a640c23a62f3a-af61b5e8a5amr1548200866b.14.1753770862879;
-        Mon, 28 Jul 2025 23:34:22 -0700 (PDT)
-Received: from linaro.org ([2a02:2454:ff21:ef30:a1a0:92bf:def8:453d])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af635aa32d2sm541086966b.100.2025.07.28.23.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 23:34:22 -0700 (PDT)
-Date: Tue, 29 Jul 2025 08:34:18 +0200
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Taniya Das <taniya.das@oss.qualcomm.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Richard Acayan <mailingradian@gmail.com>,
-	Ajit Pandey <quic_ajipan@quicinc.com>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Jonathan Marek <jonathan@marek.ca>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH RFC 24/24] arm64: dts: qcom: x1e80100: Describe GPU_CC
- power plumbing requirements
-Message-ID: <aIhrav7GKpsbVpto@linaro.org>
-References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
- <20250728-topic-gpucc_power_plumbing-v1-24-09c2480fe3e6@oss.qualcomm.com>
- <aIevIuMDA5R8igmi@linaro.org>
- <50868cd8-68a9-4bad-99f3-8cf542886fb6@oss.qualcomm.com>
+	s=arc-20240116; t=1753771310; c=relaxed/simple;
+	bh=d1lLLI34uQtoY5cFrj3BNI8qFTK886lMrjgPenWvRxg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PwsvFkkLPX5ZhFTEdRq7eB2ayd8qNxiy5tHD17BKXmuedlrLR8lEHXiZD2QS3Qq8TRvIE9qzn/j4fvXQnfm0hDr8XeSpr6nXSatZoIDQYxi+9almYxCsqeN0xY1h4sh3gLQFYUxCzzu9EX3jskeQPHtfRdpn8m7hbwbU1DvbO6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpuPt04A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 384C2C4CEEF;
+	Tue, 29 Jul 2025 06:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753771309;
+	bh=d1lLLI34uQtoY5cFrj3BNI8qFTK886lMrjgPenWvRxg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rpuPt04A6eZE7rl0vxrVcYmuXfGWMKce0jPIBfUf1aIgT8eDC24Ku/RHMnvOm1Hp1
+	 ooCYapf/rqastnnEKL6NvtjWM6xDVXrjBTSjR2FgIheCda1KXDRA1vuT6V3IfdW4uK
+	 RzGu0dmIIhllvmbRh8boAj5toYfhsVQAvtsP/zWegLv76P69GjPTrOi0kAJnvcDMLR
+	 sLDewDnpu5TT425nyUOiHwxSXU9/KqY2no3OtQ5KgXQyTlLiaBfJKGJCmRBl8nM+x2
+	 1dtM/l5/r9McbRga0VFtc4u2XiiNOBl6dY52Te8hyw1VCYjZ8SkQ+9+gyRxSFK8XV+
+	 U16y4Y0fE7hBg==
+Message-ID: <a5b67786-69eb-4c87-899b-0db67c7b79f2@kernel.org>
+Date: Tue, 29 Jul 2025 08:41:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50868cd8-68a9-4bad-99f3-8cf542886fb6@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: qoriq: Update compatible string
+ for imx93
+To: Jacky Bai <ping.bai@nxp.com>, rafael@kernel.org,
+ daniel.lezcano@linaro.org, rui.zhang@intel.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ kernel@pengutronix.de, festevam@gmail.com
+References: <20250729024039.1223771-1-ping.bai@nxp.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250729024039.1223771-1-ping.bai@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 28, 2025 at 11:31:10PM +0200, Konrad Dybcio wrote:
-> On 7/28/25 7:10 PM, Stephan Gerhold wrote:
-> > On Mon, Jul 28, 2025 at 06:16:24PM +0200, Konrad Dybcio wrote:
-> >> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >>
-> >> A number of power rails must be powered on in order for GPU_CC to
-> >> function. Ensure that's conveyed to the OS.
-> >>
-> >> Fixes: 721e38301b79 ("arm64: dts: qcom: x1e80100: Add gpu support")
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >> ---
-> >>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 6 ++++++
-> >>  1 file changed, 6 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> >> index 5e9a8fa3cf96468b12775f91192cbd779d5ce946..6620517fbb0f3ed715c4901ec53dcbc6235be88f 100644
-> >> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> >> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> >> @@ -3928,6 +3928,12 @@ gpucc: clock-controller@3d90000 {
-> >>  			clocks = <&bi_tcxo_div2>,
-> >>  				 <&gcc GCC_GPU_GPLL0_CPH_CLK_SRC>,
-> >>  				 <&gcc GCC_GPU_GPLL0_DIV_CPH_CLK_SRC>;
-> >> +
-> >> +			power-domains = <&rpmhpd RPMHPD_CX>,
-> >> +					<&rpmhpd RPMHPD_MX>,
-> >> +					<&rpmhpd RPMHPD_GFX>,
-> >> +					<&rpmhpd RPMHPD_GMXC>;
-> >> +
-> >>  			#clock-cells = <1>;
-> >>  			#reset-cells = <1>;
-> >>  			#power-domain-cells = <1>;
-> >>
-> > 
-> > To repeat your own message from a couple of months back [1]:
-> > 
-> >> You shouldn't be messing with VDD_GFX on platforms with a GMU.
-> >>
-> >> Parts of the clock controller are backed by one of the MX rails,
-> >> with some logic depending on CX/GFX, but handling of the latter is
-> >> fully deferred to the GMU firmware.
-> >>
-> >> Konrad
-> > 
-> > Please describe somewhere in the cover letter or the individual patches
-> > how this relates to the responsibilities of the GMU. I searched for
-> > "GMU" in the patch series and couldn't find any note about this.
-> > 
-> > Also: How much is a plain "power on" votes (without a corresponding
-> > "required-opps") really worth nowadays? An arbitrary low voltage level
-> > on those rails won't be sufficient to make the GPU_CC actually
-> > "function". Do you need "required-opps" here? In the videocc/camcc case
-> > we have those.
+On 29/07/2025 04:40, Jacky Bai wrote:
+> The TMU used on i.MX93 has some slight differances and bugs compared to
+
+Typo
+
+> the one used on qoriq platform even the basic function is the same. Add
+
+qoriq? Qoriq?
+
+> imx93 specific compatible string and keep the fallback ability.
+
+imx93? I.MX93? Can you use proper names for OWN products?
+
 > 
-> Right, I failed to capture this.
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> ---
+>  .../devicetree/bindings/thermal/qoriq-thermal.yaml       | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> The GFX rail should be powered on before unclamping the GX_GDSC (as
-> per the programming guide). The clock controller HPG however doesn't
-> seem to have a concept of RPMh, so it says something that amounts to
-> "tell the PMIC to supply power on this rail". In Linux, since Commit
-> e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable the
-> domain") we don't really need a defined level for this (perhaps it's
-> more ""portable"" across potential fuse-bins if we don't hardcode the
-> lowest level anyway?).
+> diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+> index aa756dae512a..cc65e210e26b 100644
+> --- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+> @@ -22,9 +22,12 @@ properties:
+>              Value           Device
+>              ----------      -----
+>              0x01900102      T1040
+> -    enum:
+> -      - fsl,qoriq-tmu
+> -      - fsl,imx8mq-tmu
+> +    oneOf:
+> +      - const: fsl,qoriq-tmu
+> +      - const: fsl,imx8mq-tmu
 
-Thanks, I forgot that we have this commit.
 
-> 
-> However after that happens, the level scaling is done by the GMU
-> firmware. This holds for allOf CX/MX/GFX. I'm not super sure if
-> both MX and (G)MXC need to both be captured together - downstream
-> seems to describe MXC as a child of MX (in socname-regulators.dtsi),
-> but I'm not really sure this is true in hardware.
-> 
-> The GPU driver currently first enables the GX_GDSC and only then
-> does it kickstart the GMU firmware. Downstream seems to do that as
-> well. So on a second thought, since we've not seen any errors so
-> far, it calls into question what role the GFX rail plays in the
-> GX_GDSC's powering up..
-> 
+That's still enum. Don't change that.
 
-It might play a role, but we wouldn't know since AFAICT we don't support
-enabling the GX_GDSC. Look at the beautiful gdsc_gx_do_nothing_enable()
-function, it basically just defers the entire task to the GMU. The GDSC
-just exists in Linux so we can turn it *off* during GMU crashes. :D
+> +      - items:
+> +          - const: fsl,imx93-tmu
+> +          - const: fsl,qoriq-tmu
+>  
+>    reg:
+>      maxItems: 1
 
-I think we should identify precisely which votes we are missing, instead
-of making blanket votes for all the power rails somehow related to the
-GPU. In this case this means: Which rails do we need to vote for to make
-the GMU turn on? If there are no votes necessary after the GMU is on,
-it's better to have none IMO.
 
-Thanks,
-Stephan
+Best regards,
+Krzysztof
 
