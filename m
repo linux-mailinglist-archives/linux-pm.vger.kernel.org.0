@@ -1,159 +1,153 @@
-Return-Path: <linux-pm+bounces-31616-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31617-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C293BB1618F
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 15:31:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E510DB161A6
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 15:37:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 320873A4666
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 13:30:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35CF37A604E
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 13:36:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E572E2D3A80;
-	Wed, 30 Jul 2025 13:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F191B2D6634;
+	Wed, 30 Jul 2025 13:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="G/58tk3U"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BjxE+z2k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F27920E70B;
-	Wed, 30 Jul 2025 13:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753882265; cv=pass; b=ddetZQW5UGAEp9atz7tbIkUC4yS4vTZM9m67clKlkXvIKN0M9VuTCK9USqL6l2DdI+ZKgbGKjG1ERdw7YpFtxXcgG2Vwz31nPnXx149XId6vbMxNqVbp7YxBwq753aN1gDP1gUU9uRLph2vr0v65aCnC9qsl6OiwHf+C3DGoXRM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753882265; c=relaxed/simple;
-	bh=E1E/UGq3BHcSE9fkbNu6GvSmIKiyx2JmdosOu7FR3c0=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=MzGo7QNHulz1XxNjzEwgESjLqNDcPqxcNTuImyGUUdVHJmvoRjLFFAcc3PFdJaYHD3KOGDxBB6B6PGYZ6c99Yhz3fqLwze+g1b2IM+LhXgh5beAMC7NJMMD21LP+f/PvCE3k91qiaQ2qo6mWpD60u2YiZ1aF9OhSXTKJup+04Sk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=G/58tk3U; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1753882234; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=BSYbWpitIzZqpGdBXTmdG1G3kFYDxy0zB5a2/xc5vQL35zZqYxmNvyrCR2lZucNRIP2B8iMHCEq9neYLopCDOYJ06ZIAyC1dAxYKd31qIVJXWLYNCDqRrczh7ilQ11gyJ3cC8V87h/5m6kwp0TKVooCLqJ7B9A29SdrjrNDkGiw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1753882234; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=aOG5i7XVJ7pIXErWvvzQMg1MUQ9EHQQty2uAGcXcAlM=; 
-	b=asvpx5PBcp2iRqClZpeawHaf0ICRY0KpNMnXD1S6fM22UkX3jhedvkfhzAxrlMvKmLlnKeZJitYjrkYm3ihZW3AjF0FsTFOrUW2OrkklnSc/aJ6G8GW1Y2Kx9Nz3Valqjdboca7Z3hRmxcdDG49b8tEaZLXLui0HjD8nTe6eGds=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753882234;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=aOG5i7XVJ7pIXErWvvzQMg1MUQ9EHQQty2uAGcXcAlM=;
-	b=G/58tk3UU5GIcv3Ka2mO06gz3eHJFQql93iK5BODhbGuMgV10AbobqBuQ2xZH1iz
-	HXYqypHqjlplTVXn5thnWrmZqryfDPaYefo4kd7rPHWR1FhgWmtXRvdrljGwFz4PjiJ
-	0EyD9jLf9CNjkjJVq/GmZIEAQ9F/I/Ru/OjmuYEQ=
-Received: by mx.zohomail.com with SMTPS id 1753882229988414.0615538796012;
-	Wed, 30 Jul 2025 06:30:29 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944032D6412
+	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 13:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753882640; cv=none; b=gjCYBBNIoP32JYMXVdbSjEvuiUkZZDqUxroLtOipMxMIgHoDZulscZp+XOafW7PobaGXpEnOge12fU8nBQJIMPQS1o87KLJT0DPBIi2VNTBMVQSSn+pcgd4GeUAyRIe67Z7dDDSyaqpcQaWxS8KKbGI90zbuEIT2QjP2ftUH3oA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753882640; c=relaxed/simple;
+	bh=UnGEp/P/b1gtgq5NHRnGprOfMT8kawtFXgke6jFNnTI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T1VE0hJJlEmDJFxU1dbjfjEDqIRKTPl6UlGA+o6GK3ynzJxUfpQ4b0sM0TrWlqnLb9NIFIqAP2WZwH0BALIOo/hvCDMZw+xFHKKgwqVBLpvwUGJuXSB5tCUEMba/LJWXdauwt6hdfGdtIfKRI0rfIy8XlPkkcgUP22CTaFL+MxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BjxE+z2k; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56UCbCix006207
+	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 13:37:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	eaYzJi77qoY0VmQGa6ne9vwLY2SP/8VbDbQMvWMF+cI=; b=BjxE+z2krMPHv9mC
+	nZ/HdkNRxQL85QbmrzQOXo/2TpAXFokT0ecefclEGDouYYouViGAIHDi7pokR2Mi
+	0LRDl5N2uBJGliTzH/CgG9QjRnrNA+ZQsy+oCnmSALfTarN03ZazfPsSSAwEv3Lu
+	/xOZRAadmJzKnE16ktOY512JmbFsZADelgJpGw3RL4JtbOsi5bGMvOq1EtV3a176
+	Mv2mLEJ+LHCQLq2caKw4Yg6FBNov0crdZFNOmGzgR7F/KuKx9VTGgVtBGyu7JV+b
+	p1dqRTwUBUIoZKha5cQWFzfsMyWTpQYv6b7ZW+cZiQSsr45mYmAfh6pN37mZuUlY
+	+Sv5DA==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 487jwg88x3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 13:37:18 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7dfeacb6dbdso46884285a.2
+        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 06:37:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753882637; x=1754487437;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eaYzJi77qoY0VmQGa6ne9vwLY2SP/8VbDbQMvWMF+cI=;
+        b=utZBhDsfX2uOyF/03BWVpJEFiJxIjWyv9uxluy1gL8wXYlbULisjCRVab9ePaNEbcG
+         uYsxpoPW0MeCKQaxRbXUUUIYdhqs9tPQtgVp3ihrBk4umBr/6vG77rMHpuWp76psQKpo
+         dEfcLGmn+lgckprhYBUWhM99DfvuOgqhSqtkjlxzKqygMBf6DJUPIUSlr9gv+dfcaD4P
+         kBl8zoo8l5yxED7NAt8X+tsdS77a5Cg2oXzIigez5UCtn6b5LOKZIL/8LvImn+Vcsy4R
+         +qXrufVwdAxVud0o46knPl9nJmzD0FYV628PFLazf5uQIimDoFHlZPLYJDwZKMrHv/XA
+         XyxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVczWSQYDBf34DBw/5PR1ihN53unY4lF7D8uAtPbXoy5pI76yRSBGivanGA30e73n6wDLcZ19pmLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRwXqPSFqjj0HYyV+Lkxt/D6QtfT882OovK9EKoftzb5URDW8n
+	kKHbBarn+awHaGRYnnr9z24k4gPl1EGRcPwsX/efaRgVfVTUNNHZ9BDv+cX5ar/yE53jlfVv1aC
+	UzFfHxymE9x6wn4yBVFsPCj2AURUaUQ5qLk9bMYxc3uLHq1SUsNVinImPiGfEpA==
+X-Gm-Gg: ASbGnct47hf5gw70mCBt9In4udQ+ccEENEkPQ4ZfrAweHdj2tSWz8RAIAmeXz9+fcp9
+	7AntRuWcIp2hfLA0jv+Jma62T+QgJG5rJEGSILhMILLbRbkhTnYoxcmVlTFC2QyGru+d4OqvbMX
+	jXQniNBTVdp8qTEqP+c7YFTvvUtaMG8P77YlNs3wNZuuO3Ma8vs50j3U+/Db81NzMvozW5euEjs
+	pwWsXHww9uXvsD5SArb1OzcLoxpHYxw37Ab5t5qpRKQMySgaEMDR1mmILG1WGfSY1mKcubAzExI
+	w0q5y2R+bOo/XkY1taXT/oQeYP53cxUB2PvL80Mhkq+eZ50BY+FHYHyuhA4C89rGTuXRU/fFNnv
+	rRPdo9NChZEAi/M2hhw==
+X-Received: by 2002:a05:620a:2544:b0:7e3:512b:97f4 with SMTP id af79cd13be357-7e66ef809f9mr252141985a.3.1753882637221;
+        Wed, 30 Jul 2025 06:37:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEGZha2wMgFradgQDb9BJZKrBTTWzQSZkHlvvJvibbYOb1WpJSfTIlhyvZmnFC6wRLBq3+92Q==
+X-Received: by 2002:a05:620a:2544:b0:7e3:512b:97f4 with SMTP id af79cd13be357-7e66ef809f9mr252138485a.3.1753882636620;
+        Wed, 30 Jul 2025 06:37:16 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6157dc6b61fsm1525857a12.3.2025.07.30.06.37.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Jul 2025 06:37:16 -0700 (PDT)
+Message-ID: <ff6eee04-d191-4dfb-82e5-7e3a6c896025@oss.qualcomm.com>
+Date: Wed, 30 Jul 2025 15:37:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
-Subject: Re: [PATCH] rust: clk: use the type-state pattern
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20cc8581-0af2-47b3-9fdd-584ff0ef36ab@sedlak.dev>
-Date: Wed, 30 Jul 2025 10:30:12 -0300
-Cc: Benno Lossin <lossin@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Alexandre Courbot <acourbot@nvidia.com>,
- linux-clk@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <01963F16-1956-4474-AF8D-68E9C5CB45BF@collabora.com>
-References: <20250729-clk-type-state-v1-1-896b53816f7b@collabora.com>
- <fc26c393-5c4b-48a8-a7ac-12558f79b140@sedlak.dev>
- <DBP8RFDV59PF.1OV46P0UYKOGM@kernel.org>
- <07575756-58EA-4245-B837-AEC4DDCD0DB5@collabora.com>
- <20cc8581-0af2-47b3-9fdd-584ff0ef36ab@sedlak.dev>
-To: Daniel Sedlak <daniel@sedlak.dev>
-X-Mailer: Apple Mail (2.3826.600.51.1.1)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: qcs615: Add clock nodes for
+ multimedia clock
+To: Taniya Das <quic_tdas@quicinc.com>,
+        Bjorn Andersson
+ <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc: Ajit Pandey <quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20250702-qcs615-mm-cpu-dt-v4-v5-0-df24896cbb26@quicinc.com>
+ <20250702-qcs615-mm-cpu-dt-v4-v5-2-df24896cbb26@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250702-qcs615-mm-cpu-dt-v4-v5-2-df24896cbb26@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=WvgrMcfv c=1 sm=1 tr=0 ts=688a200e cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=vwtPc_hCN_QQCO2tyN8A:9 a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: -p0w5XEFfIuKCDjlYYB9V_Covki_6ARF
+X-Proofpoint-GUID: -p0w5XEFfIuKCDjlYYB9V_Covki_6ARF
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMwMDA5OCBTYWx0ZWRfXxktoYyZNMeLS
+ kmTaAvtA+AnCpnmdB7ok8b3HuLDQ3QFCvxjJObZjZY2r2IDm75pYB5GC+tTyIZ4AlzCIS9p0LNL
+ qpWGS5wMJMnx+PJ86LDeH4p7u9vdZZdoEj8V6oqyqcCzAva33BQ0xw1S/Aq1EEVWQhbCKSTLzr4
+ ey/BQE6muFregvXwb1YV/ZyLOjfnxrcU0g0mmT7BUVrnl0qSBVtWtOFGTRRXn445c/BQyiZShWi
+ fpG5ySB2RrVwCV6EyTYGCiacyFT6yentCZFhoXch6wLHSNQjahm0ACZUXpEpegCXu+e8td+sl+S
+ bIHSv1aasdUe1BVDd1M002PT7+FKmsh6sRBStO2AsRdKlUQH8GfrSj97j3+lWYDHIAg0VRod7Na
+ WLU3Vyl4g/3TwxR5BH/5WvP1OVftGE1GatqZVW4W90K47yPYHyVxypvtr5q72I4YCQivvz/U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-30_04,2025-07-30_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 impostorscore=0 adultscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507300098
 
+On 7/2/25 11:13 AM, Taniya Das wrote:
+> Add support for video, camera, display and gpu clock controller nodes
+> for QCS615 platform.
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
 
+Bjorn mentioned offline that these controllers should
+probably have power-domains attached to them (perhaps bar
+GPU_CC, that's under discussion..)
 
-> On 30 Jul 2025, at 10:27, Daniel Sedlak <daniel@sedlak.dev> wrote:
->=20
->=20
-> On 7/30/25 2:59 PM, Daniel Almeida wrote:
->> [=E2=80=A6]
->>> We essentially would like to have a `#[sealed]` attribute that we =
-can
->>> put on a trait to avoid the `mod private { pub trait Sealed }` =
-dance.
->>> (so a trait that cannot be implemented outside of the module =
-declaring
->>> it)
->>>=20
->>> ---
->>> Cheers,
->>> Benno
->> This is not exactly what you said, but how about a declarative macro? =
-e.g.:
->> macro_rules! sealed {
->>     ($($ty:ident),* $(,)?) =3D> {
->>         mod private {
->>             pub trait Sealed {}
->>             $(impl Sealed for super::$ty {})*
->>         }
->>         use private::Sealed;
->>     };
->> }
->> sealed!(Unprepared, Prepared, Enabled)
->> Note that I am just brainstorming the general idea here, I did not =
-test it yet.
->=20
-> I think that API-wise it would be better to have a proc-macro =
-#[sealed], something similar to [1], as it may provide better error =
-messages, when used incorrectly. So the outcome could look like.
->=20
-> #[sealed]
-> pub trait ClkState {
-> =E2=80=A6
-> }
->=20
-> And then
->=20
-> #[sealed]
-> impl ClkState for XXX {
-> =E2=80=A6
-> }
->=20
-> If you are interested, I can try to look into that.
->=20
-> Link: https://crates.io/crates/sealed [1]
->=20
-> Thanks!
-> Daniel
-
-If you have the bandwidth, that would be nice indeed! :)
-
-=E2=80=94 Daniel
-
-
-
-
+Konrad
 
