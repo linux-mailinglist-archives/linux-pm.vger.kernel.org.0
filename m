@@ -1,185 +1,130 @@
-Return-Path: <linux-pm+bounces-31589-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31590-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40160B15B2A
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 11:03:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7810DB15B34
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 11:05:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7198618C15C3
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 09:03:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4235954602F
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 09:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A693426772D;
-	Wed, 30 Jul 2025 09:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F1B269AFB;
+	Wed, 30 Jul 2025 09:05:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jpH8j0o0"
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="qn6IzzQn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCCF3C38;
-	Wed, 30 Jul 2025 09:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1AD224FA;
+	Wed, 30 Jul 2025 09:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753866176; cv=none; b=KBKv3kxC3czltBOsLEC0V0oLs+1551AKA7UftmA4+SHbBiFfAoTSdZldZ7cSV/RtkL+sBBHiUg0dMXJVIShRPnagBtmT3ZuS3d+MsxA+IAKotVci8hrzgBBxIi29ixPephOsaqa03SLg9WGbbj9XOMf6GUf2am9UKz26ywnhtLQ=
+	t=1753866347; cv=none; b=DZ41MJNpTm/X1ObkyJfRMe1z+Ft/bwj7Pk5qVnMXayIIzZdcbLHzs9k+/jmclFAR7oR7Kx5jS4gxaClBzvq9b5MsRm96wPYeYEfn5azu+IBITMvxjmgS0ECq5sv3wp3lysAn7QF4k/CXyocB8nWTJnKukS7QYu0iRnDSv2gdhGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753866176; c=relaxed/simple;
-	bh=aoy0BcEcv7ideXsQg82RhOFb5XuCNCXszRs843/R/tU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=sXNv6haMc2ZsZKEhDYKevMV+9z2XmpQgzXNQB8f05zP6PQG0GAQipM8MvIXdwWXRec/uVa2/MMB5z8x5NNMe2AwQtvbY9wLRxlIQxYOjORBub3Mwh8IGSz+hQ9XdGpz0M2t3Lk8FOtNUhuiDn129LTMdonPX84tUKL4bd6/rGEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jpH8j0o0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 079D6C4CEE7;
-	Wed, 30 Jul 2025 09:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753866176;
-	bh=aoy0BcEcv7ideXsQg82RhOFb5XuCNCXszRs843/R/tU=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=jpH8j0o0g8Fgb6iVERPD1Vy14KmyEekGvWJFEj9gOUs0WusxeB8DW2BWJBZssWFvJ
-	 Q4+u2CEw9rqvrSZ+MbIaKbAGvsISpw9DTYg216haffkcsB+XGl3oidXaKrNc2UOplq
-	 zribfQudE2IvCVOfY7AKoVCaS3plfGuE2cZhnzbESP900ORsf9x39wfqGk6/D53qmt
-	 ZTAw9oe66HUwI0aJcRDQ0duAtacHPz4RJCp8W0zy9lZU0Yjr9ukaeyh0WL/wTh/Esb
-	 bjzD8StXOwx9g3ZdfLtkuWXRlEepUcNHES64Y9YiMij6K8Z9pR0Q0avWumY17BwPbi
-	 v7bVtRgjXutlw==
-Message-ID: <1705cfd6-95fe-4668-ae3b-f8fc7321d32a@kernel.org>
-Date: Wed, 30 Jul 2025 11:02:50 +0200
+	s=arc-20240116; t=1753866347; c=relaxed/simple;
+	bh=naaVdgtZ0z1BxKrq93z+pHLnaK251hNNYsq6gYM2fmw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tseoBFZEjKn/WOjRtaR2hWr8NDlvFE5L5IZW1PU8arhUxQmjNAxZ18Rxs4k+sCjrz292E3EUma8HHuZLUJpgHX/l3+T/OlzTn+ZRkx8mXELdfHB7qM1Ge0ygr1LJvG7zCgJEekkp4SVVsVMrsYm1oni61FJHsu9VWGGOPajJGeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=qn6IzzQn; arc=none smtp.client-ip=220.130.44.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1753866336;
+	bh=DWDhG8YufmpT/BziEi411fDq4qj6Nf47AAmyugYtyxI=; l=2163;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=qn6IzzQnDoNUJa6uTz0yNjWywt0XnerBP6nVfreZigGtZhl6ONyiXgiXZm8oNzZJv
+	 fddb8pog+pyQoYMW3f5E3Oh7Jw5JnaX9I1ZBL9RvXPgCSQ4+ZVwMH8riuCuNCnedkX
+	 i/CHiMQKZnxFpJxe/yBfe9Li7SOVS09bgamva4NikRf5LUKQWeCiZdbdmNWAOb80fe
+	 eKBRNpK7aHNoWseBoHry6NX3OnSlvGojf4ij1nVa2UkO3vmfsUqg7brdHiW58/BL4a
+	 kr88b4yBCfdeaRDAYlsnO4JOjMX1cGtnaRaCenrJ4hwgpWR3lSDt1zX7rZucYCqyej
+	 xgTTzkIqxFpog==
+Received: from 192.168.10.47
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(244603:0:AUTH_RELAY)
+	(envelope-from <cy_huang@richtek.com>)
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Wed, 30 Jul 2025 17:05:21 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 30 Jul
+ 2025 17:05:21 +0800
+Received: from git-send.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1544.11 via Frontend
+ Transport; Wed, 30 Jul 2025 17:05:21 +0800
+From: <cy_huang@richtek.com>
+To: <krzk@kernel.org>
+CC: <conor+dt@kernel.org>, <cy_huang@richtek.com>,
+	<devicetree@vger.kernel.org>, <krzk+dt@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<robh@kernel.org>, <sre@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: power: supply: Add Richtek RT9756 smart cap divider charger
+Date: Wed, 30 Jul 2025 17:06:05 +0800
+Message-ID: <20250730090605.2824394-1-cy_huang@richtek.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250730-giga-cricket-of-development-f886fb@kuoka>
+References: <cover.1753759794.git.cy_huang@richtek.com> <3fa997b42b4aec43fc182a043cf521f7e3e7fcb3.1753759794.git.cy_huang@richtek.com> <3603a744-e898-49ef-968a-2388e14cae54@kernel.org> <aIl+VKFURqFfXKz3@git-send.richtek.com> <20250730-sassy-competent-mule-d94f1a@kuoka> <20250730-giga-cricket-of-development-f886fb@kuoka>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] dt-bindings: clock: ipq5424-apss-clk: Add ipq5424
- apss clock controller
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
- rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
- djakov@kernel.org, quic_srichara@quicinc.com, quic_mdalam@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250730081316.547796-1-quic_varada@quicinc.com>
- <20250730081316.547796-2-quic_varada@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250730081316.547796-2-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 30/07/2025 10:13, Varadarajan Narayanan wrote:
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,ipq5424-apss-clk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm APSS IPQ5424 Clock Controller
-> +
-> +maintainers:
-> +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> +  - Md Sadre Alam <quic_mdalam@quicinc.com>
+> On Wed, Jul 30, 2025 at 09:39:38AM +0200, Krzysztof Kozlowski wrote:
+> > On Wed, Jul 30, 2025 at 10:07:16AM +0800, ChiYuan Huang wrote:
+> > > On Tue, Jul 29, 2025 at 05:40:32PM +0200, Krzysztof Kozlowski wrote:
+> > > > On 29/07/2025 06:21, cy_huang@richtek.com wrote:
+> > > > > +
+> > > > > +  shunt-resistor-micro-ohms:
+> > > > > +    description: Battery current sense resistor mounted.
+> > > > > +    default: 2000
+> > > > > +
+> > > > > +required:
+> > > > > +  - compatible
+> > > > > +  - reg
+> > > > > +  - wakeup-source
+> > > > 
+> > > > Why do you require this? I cannot find any use of it, so maybe I missed
+> > > > some change in Linux code (and that's second question like that for
+> > > > Richtek, so refer to your other patchsets for contexr).
+> > > > 
+> > > 
+> > > This will mark the interrupt as wakeup capable.
+> > > https://elixir.bootlin.com/linux/v6.16/source/drivers/i2c/i2c-core-of.c#L57
+> > > https://elixir.bootlin.com/linux/v6.16/source/drivers/i2c/i2c-core-base.c#L547
+> > 
+> > OK, but this does not explain why this is required. Why it is impossible
+> > to make board which uses this PMIC and wires the interrupt in a way it
+> > is not waking up the system?
+> > 
+> > To my limited knowledge this should be possible, but what do I know
+> > about hardware...
+> 
+> Another question is still valid, although you provided more context - if
+> the device is ALWAYS waking up, this is implied by compatible and you do
+> not need this property at all.
+> 
+> That would be the first usage of I2C client wakeup flag in drivers, but
+> maybe that is how it should be done? You can consult I2C folks on IRC.
 
-My v2 comments seems still valid. Your explanation suggests they moved
-on, so it is confusing to see them here.
+Yap, like as your saying. If not declared 'wakeup-source', it only means
+if the system supports sleep state, this interrupt won't on-time notify any
+event. Actually, not affect its normal functionality.
 
-Sricharan and Md Sadre, can you provide Acks for this?
+If your question is should the property 'wakeup-source' be declared as
+required, then the answer should be 'No'.
 
-> +  - Varadarajan Narayanan <quic_varada@quicinc.com>
-> +
-> +description:
-> +  The CPU core in ipq5424 is clocked by a huayra PLL with RCG support.
-> +  The RCG and PLL have a separate register space from the GCC.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,ipq5424-apss-clk
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Reference to the XO clock.
-> +      - description: Reference to the GPLL0 clock.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: xo
-> +      - const: clk_ref
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#interconnect-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - '#interconnect-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,ipq5424-gcc.h>
-> +
-> +    apss_clk: clock@fa80000 {
+When system supports suspend, to declare this property is just a suggestion.
 
-This is never called clock@, but clock-controller. Look at any other
-qcom bindings or DTS.
+In next revision, I'll remove 'wakeup-source' from the required property list.
 
-Or your cells are incorrect.
+All questions are clarified.
+
+Thx.
 
 
-
-Best regards,
-Krzysztof
 
