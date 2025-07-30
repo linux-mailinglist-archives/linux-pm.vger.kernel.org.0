@@ -1,167 +1,150 @@
-Return-Path: <linux-pm+bounces-31642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49775B168DE
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 00:08:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B4BB16917
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 00:35:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72AFD168C8A
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 22:08:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32B5A167178
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 22:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE1B2288F7;
-	Wed, 30 Jul 2025 22:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C914522D9ED;
+	Wed, 30 Jul 2025 22:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IvPvF4ep"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PSSTxRp6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF1219C556
-	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 22:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26122222D8
+	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 22:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753913308; cv=none; b=jF5i+v+4x+76E9lsvmLS2dRcNec78nSg5EjcOrPD784xI0EosgQz/rsii8ql5fOCdBa9/5LOvqXBiZnN7VGg5KVvYAmavXUFbTNmHu9huWQUQS+GBKQN/jmrSjG6WNNrdy5//NlUb7xlK0B+JEvc5g9ll/4IBdFwJggMTvV8oTo=
+	t=1753914901; cv=none; b=vAJECUnFkXZrDn58/+9O44SajS7WBOinBHSsTES9BBFngN4eUAwaHV82gauc2LlQGuxuHTBVp7yfyMp5Y6A1EOQWiCDCWG0o7uo5J+XwK/0oP9QWfAxQeevvxiSIlahLly3CmRUJSauQ4JhFpjQiv9mZ+VIL4R64Z/547WLIDVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753913308; c=relaxed/simple;
-	bh=PNDe9DmLpP8vQLE52QVnejDJ8eVQpGsQIZ1TWehA3sg=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=oue5E+nptC8tu1owrxfn+TdldU8qgrUV0YObnMe0VuPNfvO83v932Lw5wun5+53SyqBIvi0EtDqrxgL3lYHDx6Y8BJ+kFoT2P4jOguxRAySr9StlCQRLfQSGPR27DTPc4txMtKj0UhE+hSN58me80AC2U7miJlj2wUTfT2E/LdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pmalani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IvPvF4ep; arc=none smtp.client-ip=209.85.215.202
+	s=arc-20240116; t=1753914901; c=relaxed/simple;
+	bh=2fk7Lmp7GQcfI+scgJXRMAuE5War32ra1deNa9zkIDw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JE+IqhIz2xOgD17GcUe9SC8rrWtW8XEsXU3jKO5oTPC+99B7232oxBv1cACcwUCgMGIAHRMNB/7Xf789T6K0en/W7+13vyNu8i/gdrWE/7wS92uEbXhSoV7dzN4BjU3vDG/fimps7AGboVEs41YjatLYavSLQzAewhlsLKc2WwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PSSTxRp6; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pmalani.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b3f38d3cabeso174714a12.3
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 15:08:26 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4ab86a29c98so104131cf.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 15:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1753913306; x=1754518106; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HYPSzgAZClucp9advPGtHTtoMvoPpzZ3Dtwk5mdPmjs=;
-        b=IvPvF4epxARvaMU2dcOHI7Sq+MA37Grm6Ef7xZt6iPi8BBQ7fpm9+Q16UMw4fV8qOt
-         Share2RzPf9VvT51LUiA/sPra+vgldUvw12bpm17SIuUPokp9kvFoWbHXpT0vl6FPs4c
-         iyMS6m3++ARyE5gOAQ1ayCkSEmH6kyV9ZQxpx5xIAe5KclaoUDlFRcwW7Us8RuLy8rSx
-         Fq6kh+33E7s/2mhLT4DpJmvCq+eoUJX9A4cZIfcSKV0kbBxzJSmmrFoov8/1llp9FN5/
-         RLTM9SNdECGKost5cm3+I2w07iH6eoTNdrbHKrNxwpPCgttOSv9dxemSZ6mdm1HgKEnw
-         0vNA==
+        d=google.com; s=20230601; t=1753914899; x=1754519699; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8kQ4bfCiQxnkckR4mjXN6hX/e097lJxxAb3MZbkRgNM=;
+        b=PSSTxRp6bqR/onUSru6WYLD3dDC2gqK/nr460IeC6lq7FiAm9ScsljRYE7j3ChhFYa
+         ybMMnFA9lgzTYoOy38/TlIYSoWSHXNfVTjiVVzUPJuJEeLLEbePZHzfUZBXRB6RkM2qT
+         kkTBvm8WJl2jAGmwt3YQtwoClRTy43jc4fblyUgv1DtFx2BVaFAtXHUjqIevXQXUSX53
+         foR6sPL4ArTUCns6/Ddn74pcZ/2r/IAWD4vtNNz7SEEbZg4tpefZyW1UN54IPmEAkMM1
+         6KIA5TXu5Ri8UouGlNnph3qhg18UUjCeijiJAJyYKFCGjBtWXOX7tyFdL1oAWVhgHNVz
+         CO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753913306; x=1754518106;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HYPSzgAZClucp9advPGtHTtoMvoPpzZ3Dtwk5mdPmjs=;
-        b=JYrSz4bdzMuR5uO/sfKlemGJAN2lAgP5dtU9oGfPwmEUzSWC4GM3KJbNk+xzbojfJl
-         44wsbLJ6ktym7SC1B++xLz8TRasKsY+wuYBiLp7teilD6dSplIZtfqz7/r0xbg+R0qGk
-         Mx0UY1K33pglhrpK5LszQIRt10naWOEjheLxtMaEun7mnPwV1tuauOsR+7di5DN4KcjB
-         wGHKg+Qw6hfhrk+72LqqZjStPp7VXlrKYikE6xH/XEs+L6yEE/nu0xG88MZtU8FQDlto
-         VjKe2dbYiRzTNdMXrBUArF7a+2Dce+0rkXV/DhteGa+/DhVS+GBY+ONP6sBrpbFSRtmq
-         KRgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+Q5oyBab+JU8lEOZFVCNmISBRmscbMw7DyZp2h0ngJaPdXu2/q2zvBF65WuSmRcJ1IU+uNkUeXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCvhsLZZykSlbvTmFP1IZhcxH3gCfBiF7uWsZK5vaffyzyp5um
-	GD25iT2vl7u0Kw938uo8hiOaaGkCj2zfNG9EPokSQQiGZWQJuKfVsHZbxSMDJkL9FakyRB87b9J
-	tkGldnwGdYw==
-X-Google-Smtp-Source: AGHT+IGZ3NDO6jUkDRlidOJBUV0Ja1bR3uiB0LRR/EOuhSKjhT4aH0bvvbHvHtK+qePEip623lThmruu6pu6
-X-Received: from pjbnt5.prod.google.com ([2002:a17:90b:2485:b0:2fb:fa85:1678])
- (user=pmalani job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3907:b0:311:fde5:c4be
- with SMTP id 98e67ed59e1d1-31f5ea6b6bbmr6169503a91.35.1753913305877; Wed, 30
- Jul 2025 15:08:25 -0700 (PDT)
-Date: Wed, 30 Jul 2025 22:07:58 +0000
+        d=1e100.net; s=20230601; t=1753914899; x=1754519699;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8kQ4bfCiQxnkckR4mjXN6hX/e097lJxxAb3MZbkRgNM=;
+        b=l3PnDOGEcmt0nNSTan0cBuw42xe1+RrEv5MNeLCJNmn5eCc4UC2WL/vGVcclRbvDcp
+         xQjSABMXo8SGcB9sW+6JZxlfSEtbPDA+q9IquvTQWolObemvyz4ZtXQZROMZaV0+LlgN
+         /BUxp2s0sllUGwMI63eJrbsKFdjB4nNIuDwdla63qqAPAGmnFlHl1kOWduR/rtY08t9K
+         zbGyXdPTKQmBXES9rd27jI1fqgjKuJDzzHeaDYXi6wT1ZUTw0bwOSSgDShz79nN7e/JB
+         Fh76Z8OlQvtl1sehqmWbaxoQKx3WgYy9xWXa52qOs7ZN8cnLpfDoETXOsMshgJlGUSet
+         eCBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXnsn4GfQ9pCvyBLZMuHynBFY7QmmfyUfOusBTgl17N3bVnd6ENGNKYiftDbgN0bYIyCPzz3+dX3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYHbWhkdZ/SOb1F1bVCE7MVamEfEHdaJEtzZAKOHSSs1zwxe7s
+	6c0zYHxO2QBTMLy3uulIYTsMuPRGD+qxkaBQ3X05I22lIbDjMrc4PoA1jTXP2v2LdiPS7nuqryt
+	+80yGgRJkzyl4wEIGWcg7h5XthQefgPzGtEocgIGC
+X-Gm-Gg: ASbGncvxBHTseqOh2af5kkXlb4OSlPHHGfWshzLvAPrdH3LmdRDhFB8Y2WUKHmajX0k
+	+vV0TDl+4w0N2D+/ujEYT6OY38rKcTaPt2dCKFlaHaRiKtlc9wD8JisHknn2XgvjMvjjr36Mfqh
+	0zwNyuAgmWn759dwk1pRbUntTJ+JaQgZcYlAaQ7PAq7Ihluv4Z1Km/hDdMG0tml/buBA9Z8hPoM
+	y1It5hESujOFc5vDrkbrTrZexG+eiscWg==
+X-Google-Smtp-Source: AGHT+IGlZnMidGeylHmeMBI9Al3pOpa1i+4rutb6h3joKg0QO4oZntcS55qYmjUS30Z7Qx/HMHcxsZMWn33hnNIJcj8=
+X-Received: by 2002:a05:622a:1207:b0:4a9:7c7e:f2f9 with SMTP id
+ d75a77b69052e-4aef0376a7emr246241cf.17.1753914898419; Wed, 30 Jul 2025
+ 15:34:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.50.1.552.g942d659e1b-goog
-Message-ID: <20250730220812.53098-1-pmalani@google.com>
-Subject: [PATCH] cpufreq: CPPC: Increase delay between perf counter reads
+MIME-Version: 1.0
+References: <20250730032312.167062-1-yubowen8@huawei.com> <20250730032312.167062-3-yubowen8@huawei.com>
+ <20250730063930.cercfcpjwnfbnskj@vireshk-i7>
+In-Reply-To: <20250730063930.cercfcpjwnfbnskj@vireshk-i7>
 From: Prashant Malani <pmalani@google.com>
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Prashant Malani <pmalani@google.com>, Yang Shi <yang@os.amperecomputing.com>, 
-	Ionela Voinescu <Ionela.Voinescu@arm.com>
+Date: Wed, 30 Jul 2025 15:34:46 -0700
+X-Gm-Features: Ac12FXzJKlOTvvQVQrnkjqm_RZrHhkujSCGJ9c_8nKLlG-C3SKCPflENeEsLJLM
+Message-ID: <CAFivqmLkLn-92rMow+c7iEADCdh3-DEapVmtB_Qwk1a2JrwwWw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in cppc_scale_freq_workfn()
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Bowen Yu <yubowen8@huawei.com>, rafael@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, lihuisong@huawei.com, 
+	zhenglifeng1@huawei.com, Beata Michalska <beata.michalska@arm.com>, 
+	Ionela Voinescu <ionela.voinescu@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On a heavily loaded CPU, performance counter reads can be erratic. This is
-due to two factors:
-- The method used to calculate CPPC delivered performance.
-- Linux scheduler vagaries.
+Thanks for adding me, Viresh.
 
-As an example, on a CPU which has a max frequency of 3.4 GHz, if we run
-stress-ng on the CPU in the background and then read the frequency, we get
-invalid readings:
+On Tue, 29 Jul 2025 at 23:39, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> + Prashant/Beata/Ionela
+>
+> On 30-07-25, 11:23, Bowen Yu wrote:
+> > From: Jie Zhan <zhanjie9@hisilicon.com>
+> >
+> > Perf counters could be 0 if the cpu is in a low-power idle state. Just try
+> > it again next time and update the frequency scale when the cpu is active
+> > and perf counters successfully return.
+> >
+> > Also, remove the FIE source on an actual failure.
+> >
+> > Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> > ---
+> >  drivers/cpufreq/cppc_cpufreq.c | 13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index 904006027df2..e95844d3d366 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -78,12 +78,23 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+> >       struct cppc_cpudata *cpu_data;
+> >       unsigned long local_freq_scale;
+> >       u64 perf;
+> > +     int ret;
+> >
+> >       cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+> >       cpu_data = cppc_fi->cpu_data;
+> >
+> > -     if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
+> > +     ret = cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs);
+> > +     /*
+> > +      * Perf counters could be 0 if the cpu is in a low-power idle state.
+> > +      * Just try it again next time.
+> > +      */
 
-./stress_ng --cpu 108 --taskset 3 -t 30s &
-cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
-3600000
-3500000
-3600000
+FWIU the performance counters shouldn't be returning 0 in an idle state.
+Per the UEFI spec [1], they increment any time the CPU is active,
+so they should just return their last counter value before they went into idle
+(of course in the FFH case an IPI is performed on the target CPU, so even
+if the CPU was idle, it will get woken up).
 
-Per [1] CPPC performance is measured by reading the delivered and reference
-counters at timestamp t0, then waiting 2us, and then repeating the
-measurement at t1. So, in theory, one should end up with:
-Timestamp t0: ref0, del0
-Timestamp t1: ref1, del1
+As such it is better to either :
+- Check for idle_cpu() directly and return (see [2] for the function)
+or
+- Always clear the source on encountering an error return value.
 
-However, since the reference and delivered registers are individual
-register reads (in the case of FFH, it even results in an IPI to the CPU in
-question), what happens in practice is:
-Timestamp t0: del0
-Timestamp t0 + m: ref0
-Timestamp t1: del1
-Timestamp t1 + n: ref1
+[1] https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#performance-counters
+[2] https://lore.kernel.org/linux-pm/20250619000925.415528-2-pmalani@google.com/
 
-There has been prior discussion[2] about the cause of these differences;
-it was broadly pegged as due to IRQs and "interconnect congestion".
+HTH,
 
-Since the gap between t0 and t1 is very small (2us), differing values of m
-and n mean that the measurements don't correspond to 2 discrete timestamps,
-since the delivered performance delta is being measured across a
-significantly different time period than the reference performance
-delta. This has an influence on the perf measurement which is:
-((del1 - del0) * reference perf) / (ref1 - ref0)
-
-Previously collected data[4] shows that cppc_get_perf_ctrs() itself
-takes anywhere between 4.9us and 3.6us, which further suggests that a
-2us delta is too less.
-
-If we increase the time delta to a high enough value (i.e if delay >> m,n)
-then the effects of m and n get mitigated, leading to both the register
-measurements (ref and del) corresponding to the same timestamp.
-
-When this approach was previously proposed[3], there was concern about
-this function being called with interrupts off but that was later found to
-be not true [2]. So, waiting for a slightly longer time in between counter
-samples should be acceptable.
-
-Increase the time delay between counter reads to 200 us to reduce the
-effect of timing discrepancies in reading individual performance registers.
-
-[1] https://docs.kernel.org/admin-guide/acpi/cppc_sysfs.html#computing-average-delivered-performance
-[2] https://lore.kernel.org/all/7b57e680-0ba3-0b8b-851e-7cc369050386@os.amperecomputing.com/
-[3] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-[4] https://lore.kernel.org/all/1ce09fd7-0c1d-fc46-ce12-01b25fbd4afd@os.amperecomputing.com/
-
-Cc: Yang Shi <yang@os.amperecomputing.com>
-Cc: Ionela Voinescu <Ionela.Voinescu@arm.com>
-Signed-off-by: Prashant Malani <pmalani@google.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 4a17162a392d..086c3b87bd4e 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -718,7 +718,7 @@ static int cppc_get_perf_ctrs_sample(int cpu,
- 	if (ret)
- 		return ret;
- 
--	udelay(2); /* 2usec delay between sampling */
-+	udelay(200); /* 200usec delay between sampling */
- 
- 	return cppc_get_perf_ctrs(cpu, fb_ctrs_t1);
- }
--- 
-2.50.1.552.g942d659e1b-goog
-
+-Prashant
 
