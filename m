@@ -1,68 +1,82 @@
-Return-Path: <linux-pm+bounces-31639-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31640-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B94EB167E3
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 22:57:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42F37B168C7
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 00:02:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C740F3B01A1
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 20:56:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78235581171
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 22:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50435222586;
-	Wed, 30 Jul 2025 20:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2726219A91;
+	Wed, 30 Jul 2025 22:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/abVUfb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZC8/ua1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4B6222584;
-	Wed, 30 Jul 2025 20:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE3119E7D0;
+	Wed, 30 Jul 2025 22:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753909017; cv=none; b=SEx2GV13r0ceZ0cUqJeHwDGBXbexI0Z1+hTi3T5PQc0evqw2D0QFj7+U0zVKqHlEu1FOyL29+NlS0YDBps2+V0Le5blpKEtsvsT41CINnAOKyLMRWSiXWfKt3f5LJuGbw9IUrhRb2SEyxD0xQ0QOBIJzSFNx9hCgfbeECWqcNQo=
+	t=1753912918; cv=none; b=gnvRX4gsNw/uaxkvCQPh2DG5iT9N9+WAGC6nRx90q2M4mc/8XMBakOGqmiFH0QIl/NTT69nKM4SL2f/dNC33RfDU0tvvZ8nRCEJkEBtZa3E1GFmD8AnLY6Fv0ZZfwJmAmZDy3tiAfdts/WiJbpUCoH2oLjCHeTKZ0lsMLJtY6Fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753909017; c=relaxed/simple;
-	bh=meJm08gIW/vRrCYpVEM3urM9k5Mm+PBeXQeuvnQVQVE=;
+	s=arc-20240116; t=1753912918; c=relaxed/simple;
+	bh=dBWKuAZUqucrtubWvOuTWbSHSMH3WMeAyjJSnKZN5Yk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u4pgASKI5evRb4nkYY2skvTW3yJ1TyKfdMIUfvJPbPIvpnV2Vri2IPs092CrnfCrEj+jzu3NRnaOBwCpPn3u/YwP27spHp4chvgwQAEJEzx55wOM6kAoaOQ/gTKUjerZGurYiSjmFornPn/DkOqN6abUsmB03PhpzcOPsURRJY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/abVUfb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D34CC4CEE3;
-	Wed, 30 Jul 2025 20:56:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hQN0Ekh8fhGyaiJfGeBVH7Qyaym2ann7Iz/78x23pGXLDBQRPJUQqzVR4j/cpfYkkA6+51ATw0l/9hpq6hkNGiYjpUd7L+AMw6j8zN1aKBxH8DYXZujaMSuRnZQcoinR3sJtqgH5ZWIA9HHfVMXkWvExwk50lAvo0H5oxdP4eU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZC8/ua1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF87CC4CEE3;
+	Wed, 30 Jul 2025 22:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753909015;
-	bh=meJm08gIW/vRrCYpVEM3urM9k5Mm+PBeXQeuvnQVQVE=;
+	s=k20201202; t=1753912918;
+	bh=dBWKuAZUqucrtubWvOuTWbSHSMH3WMeAyjJSnKZN5Yk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R/abVUfbuP7icZl+93Lwq3my8o2/6jYbJCSJ0QiaT84VAMWsguxPTRoaNY3GpCz6W
-	 TyzKtkhybnWvlCMN/wRcxd5rwQd9lzfZ4gBQ1R5snp7d0gO2KB0wqAUBzQgvDWQDv4
-	 gvKTMqalfwzGGXkZOb52EDKsLC+5bk2v2cgq1IBaqlHWcjZ16LasrbxA//uQ462lrc
-	 I81cbSHyXF9EeRXShOA+lG3Ex2Qt7PJx3D9QmZl80sRV2Z0MCRxig1sWAIHGtJ+oEB
-	 l4FeT15ITP8uapf9qWEUqtO2ZartcWM0t6tQrgJ8GJhO6Vbo4Z2fQFo+t+/VvxKVqe
-	 UcaQvCMWw/m+w==
-Date: Wed, 30 Jul 2025 15:56:54 -0500
+	b=lZC8/ua1UbMdOJ/AbpPEroHggBmGKKwhKuA7dZUFjHJ3vJBuRUcTzDiSbLEQT9XjG
+	 Z8e8N/vL0MT8+gBYdFE4kGcovUG9h4des+uS8jB5UXYwFeDjizzWlvBZFdDPCc0PSO
+	 6KK/OZfiY0fEzXdp5K+2XYDlN7tJ/evus8vt3HZUWyLTq/kGedewOdSVoGehtjLA+5
+	 w7IMI0ZoPD5VsaALfm7oCdOZO+oxc8mE+0+1WqsxoxRih3yOzuN1mYmKstPoUgNZJ1
+	 Zu7GjCPG0rpn5/t/vCj4ArDfDvBkn1hN7evgdHmOxShtbpWask2gRFdSln1p96WPgz
+	 vzY2Yq6dcBLJg==
+Date: Wed, 30 Jul 2025 17:01:57 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Joy Zou <joy.zou@nxp.com>
-Cc: mcoquelin.stm32@gmail.com, krzk+dt@kernel.org, festevam@gmail.com,
-	alexander.stein@ew.tq-group.com, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	Markus.Niebel@ew.tq-group.com, ulf.hansson@linaro.org,
-	imx@lists.linux.dev, othacehe@gnu.org,
-	linux-stm32@st-md-mailman.stormreply.com, richardcochran@gmail.com,
-	frieder.schrempf@kontron.de, kuba@kernel.org, Frank.Li@nxp.com,
-	conor+dt@kernel.org, shawnguo@kernel.org,
-	alexandre.torgue@foss.st.com, davem@davemloft.net, peng.fan@nxp.com,
-	edumazet@google.com, s.hauer@pengutronix.de, primoz.fiser@norik.com,
-	linux@ew.tq-group.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	will@kernel.org, kernel@pengutronix.de, pabeni@redhat.com,
-	andrew+netdev@lunn.ch
-Subject: Re: [PATCH v7 02/11] dt-bindings: soc: imx-blk-ctrl: add i.MX91
- blk-ctrl compatible
-Message-ID: <175390901389.1733801.13463071578614787293.robh@kernel.org>
-References: <20250728071438.2332382-1-joy.zou@nxp.com>
- <20250728071438.2332382-3-joy.zou@nxp.com>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Andy Gross <andy.gross@linaro.org>, Jonathan Marek <jonathan@marek.ca>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Vinod Koul <vkoul@kernel.org>, cros-qcom-dts-watchers@chromium.org,
+	Taniya Das <quic_tdas@quicinc.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Ajit Pandey <quic_ajipan@quicinc.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	linux-clk@vger.kernel.org,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Jagadeesh Kona <quic_jkona@quicinc.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Imran Shaik <quic_imrashai@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Richard Acayan <mailingradian@gmail.com>,
+	devicetree@vger.kernel.org,
+	Taniya Das <taniya.das@oss.qualcomm.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH RFC 01/24] dt-bindings: power: qcom,rpmpd: Add
+ SC8280XP_MXC_AO
+Message-ID: <175391291654.1775434.8170537276604254922.robh@kernel.org>
+References: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
+ <20250728-topic-gpucc_power_plumbing-v1-1-09c2480fe3e6@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,35 +85,23 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250728071438.2332382-3-joy.zou@nxp.com>
+In-Reply-To: <20250728-topic-gpucc_power_plumbing-v1-1-09c2480fe3e6@oss.qualcomm.com>
 
 
-On Mon, 28 Jul 2025 15:14:29 +0800, Joy Zou wrote:
-> Add new compatible string "fsl,imx91-media-blk-ctrl" for i.MX91,
-> which has different input clocks compared to i.MX93. Update the
-> clock-names list and handle it in the if-else branch accordingly.
+On Mon, 28 Jul 2025 18:16:01 +0200, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> Keep the same restriction for the existed compatible strings.
+> Not sure how useful it's gonna be in practice, but the definition is
+> missing (unlike the previously-unused SC8280XP_MXC-non-_AO), so add it
+> to allow the driver to create the corresponding pmdomain.
 > 
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+> Fixes: dbfb5f94e084 ("dt-bindings: power: rpmpd: Add sc8280xp RPMh power-domains")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
-> Changes for v7:
-> 1. add clocks constraints in the if-else branch.
-> 2. reorder the imx93 and imx91 if-else branch.
->    These changes come from review comments:
->    https://lore.kernel.org/imx/urgfsmkl25woqy5emucfkqs52qu624po6rd532hpusg3fdnyg3@s5iwmhnfsi26/
-> 4. add Reviewed-by tag.
-> 
-> Changes for v5:
-> 1. The i.MX91 has different input clocks compared to i.MX93,
->    so add new compatible string for i.MX91.
-> 2. update clock-names list and handle it in the if-else branch.
-> ---
->  .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 59 +++++++++++++++----
->  1 file changed, 47 insertions(+), 12 deletions(-)
+>  include/dt-bindings/power/qcom-rpmpd.h | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
 
