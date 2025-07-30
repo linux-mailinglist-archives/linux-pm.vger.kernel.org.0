@@ -1,185 +1,154 @@
-Return-Path: <linux-pm+bounces-31594-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31595-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9EAB15C43
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 11:40:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 846CCB15DAC
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 11:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E545C3ADDFC
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 09:39:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1730565590
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 09:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB2B275865;
-	Wed, 30 Jul 2025 09:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GAbYsTCt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95FF226E71A;
+	Wed, 30 Jul 2025 09:56:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B35D19D065
-	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 09:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B654B1ACEDE;
+	Wed, 30 Jul 2025 09:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753868367; cv=none; b=JoEBPi7bR2jlkT9FsL7aA5qT/FQBxZcDw0cmmCQO27yyJay1NCLfDZfSfybRAspe5U8RMl7vjUMOTJxcHvNRc7RFwGe3yWXOjya42vcvFgfkSD3J7OuaXXYE+bYQXSqWTZCn5ffuRN2xh2v95ihYEg0GFmHtijImKMx8d8LQy+0=
+	t=1753869394; cv=none; b=eEc2l86Xe49WaKCYBwBYkhpfIWa+UoY5TxWYp5y7iGrU2J5O3Idt0RNnfWAXnghy5jU4Ch26Lye4nI4mtd0FHOT1D8Re1bhVLZnYxSlrZwYfGk6j1KJv+qR8aLyYiuKqRwTHskZolaHoPJLZWqQMlDOJicmpw8BcFkFefQq3W8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753868367; c=relaxed/simple;
-	bh=FFwMpkhOYSBmnp5I4Qk19pzDCl+8/KeHG7bi2vq6ggY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=TOjFVPJY9peMN41gkdV0YonPBZ+eEbAVM6Al7EqH8LRKQCjPnQxjLTl07YeZD2wzoc7K/l+TgfHsHSynJL+/o8ouUp7H0d27xb+D3O3Yz1ZQdq1Zv6N0kKlHx42gKWecEOF5r7JPM75J0NCe1hycxbw0P/fD6B3YeK3JCzSn9UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GAbYsTCt; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56U5JEUt027603
-	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 09:39:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	M4xxlIsUwBSemAmhdAK1Q9uezrhoKQ5cmwiav1SEhOQ=; b=GAbYsTCtbk/iLWdk
-	p9LGJXfinV82t7J8kW6q+nZwKb3xfKmiiefeLdA6mXmsCzmN0qjzindinnEl5JzB
-	lNzKpZR19fPOsG5/kTBsr9kT5b0PMDXh6Uorula6Z8SoFRzQl5c3Oj11Z+FT/BbV
-	goToaiTtMBpjyGcy7VVO2xyPDiI4SwE8iwflU8VatxUbkHJpexyjRND5YZ7IZGBd
-	xs4bLAyq67DEtTS/3sIZ2UO7CcJgfulQd4/Gvwl6JHejrkFo2P0qswVDKT41NHXl
-	tebtiTkBC81TlG9sWscvwz/SlrBJmiVvQEKARC9Epx80JTI0t9qqo8gHieyOoVo5
-	RPjtXw==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4860ep0jhq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 09:39:24 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4abd7342386so16644541cf.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 02:39:24 -0700 (PDT)
+	s=arc-20240116; t=1753869394; c=relaxed/simple;
+	bh=h4QE5Qik/eRs2qOkqSaWcqVaq+Ol8rYWj1Hq3bUKEG4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KoEVqBzwMlTihbKsdS3Ti2wyV+Q+1yCFgZ/isQfbfcwXvwDhDyk/AKqu3s2s7Tv9WrCX5BJ/nGflpjy5dGE6BFGDF9F40ziOkMD+PU/M3j7/bbohZylKzArIUZHUioEYT7jx4wgjobn7jmAcnlyhSM87YSbHKmBwlxJEl0Rrx2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4e7fc3309f2so1908267137.2;
+        Wed, 30 Jul 2025 02:56:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753868363; x=1754473163;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4xxlIsUwBSemAmhdAK1Q9uezrhoKQ5cmwiav1SEhOQ=;
-        b=N6fgYtPy/XryNTHJS4F9LBJukWvFS8FipTeQs7co04/ZeY6PV23jUkJjoFLzeHHPva
-         TZt04Pkk+87PopZ9291xKnqyXVxoo8ZQD8LmT8jrd301A9NBf2SmL1S8ErMRB/CYzOlE
-         +R1tHPNLPGwsSPXh92D3BCawIelt6fuzdKEEuEOVd23yiIsIuRcw0jGbZp61bpu2JSYr
-         sTvuH6ipjDcQZhsmuJqKdGf9vFwcg6ILHa5J+UdMZMAtxlnEGoBh5HWIQlnCJSM18X+i
-         j5Zy+f3dSnHnzw+dKnYfVzSJVmAEa8rFHVa2kofV79caKK94XhGw0yYuiytPSaSTKjNZ
-         BwJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdIcHGRy4kIRtcktDy3+xPKa/CqVif5Ze6Z8iEk2d7C0qCmFv8Aq7xo9w66RRfIMufAD7BLJ8ipg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo1qoviBMrawuUHX2MHz3Mg/CgSwZ/T1voAhDcLAEgWnvGD4+S
-	AN0MTBj0aqM3N/XB/ZQUWVo5f7mxE3iinvLcKgZL2/WHunG9vPoerST315FFiFHPatZ9eHpfuTN
-	wjfDggWdvFWkrxjjXXrM31+wyuOcNJANPeNYgGPWrTb4xx99badEj3E1gJ8TCGzHFTkwNZw==
-X-Gm-Gg: ASbGncu0tQfqElomgpogHAJjCNyeQ2Viz4DC7BjXRhYFm+c2tCWGap54gJVUfERomMR
-	GUUCq+UXdhnsFcJu0qnNiXVHHFxujtSgDUyNMOihvDvbh+CFJuknmio6VtZZxK2QIhEK1xxbh4u
-	ImId1+qQZJkCtmByrL3yPcpPKnEyVGMjPbnmaPrbt8XBm9IiELskJd+vU0ojQ5b3nqz7JB6o6Hb
-	V6Kb8hHGOIPxIgPbYX3q513AmKCRYodGfPI/apPKdtRVYJYujZJKIBDXf58D5J7t13C1+Vik6eG
-	ULhCThCCySjVaHYeFmbI3hegaxNlHi/5OZfV3D0x/OPeOuHRNhZitMvwP57362EQ7vGLRuJzV6P
-	a1uOalSeM8xwpPQbIUQ==
-X-Received: by 2002:a05:622a:4d91:b0:4ae:dc63:462a with SMTP id d75a77b69052e-4aedc6347b7mr22328801cf.0.1753868362909;
-        Wed, 30 Jul 2025 02:39:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFNmC57TxqA5fJorGH135uruMdHSiL4OQkD3t41/Mi83JfFgYns87im7Ap3ZJoIyYR/7aVvuw==
-X-Received: by 2002:a05:622a:4d91:b0:4ae:dc63:462a with SMTP id d75a77b69052e-4aedc6347b7mr22328541cf.0.1753868362361;
-        Wed, 30 Jul 2025 02:39:22 -0700 (PDT)
-Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af6358acb2asm717167866b.56.2025.07.30.02.39.19
+        d=1e100.net; s=20230601; t=1753869391; x=1754474191;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AISXCkdyfWizizwGG/lMEnAGITAartWfZjVCOPp8Btc=;
+        b=rJGgMqQU2yYjuAo55Qp9Uzzzrwq6O6oBqqGZH8Q0IvzIaCjXW3f0DMmIMQ/8uNR89b
+         CjlzVEJo7KoWJYfGA71O2hSKpqvRCsrg4lKbbqafOAvD+zZlWISNrQjumNUDz5hpHoFo
+         18xnRDBoSGRnW9/lYgX1ShoIgRCUFgEvegDumFco27KJiXI5W1724ex/ZdmLW1tO00YB
+         OjMD6aJWKGVXIb9mvy6lVE/Ccp1RT3IOLw0Nh9AB1VVPQwY8arv0p2+VZDqmG6dHzYDI
+         hLsvFdWJCGxm3TXg7NhlBDiMOR21jo7MQctqywWwdBgwUvkJ2mvDHPIOTfYYVaGFfFJo
+         WSsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1GQ69lyRE/s90o0YyP1G9M3OUWcKDnoOtOfQJMjugXPxbKv+vGmrp2hOd2ijb37peEqh0hNEIpetl1q+nl66a2uY=@vger.kernel.org, AJvYcCUKysKbI7caDBL3mC/A7QpUldWokY9InEfV+A3+tUeU/eLHp5ybgkc5YPFEqnq4hG4iklic0zFR89Q=@vger.kernel.org, AJvYcCXI8vPc/AjQUIIiH+TMysJlD+28p6NtEwFi46ywgsnzXc51BA3xBf5pV3xYc2IF+VN8plONOH7J9oprL/4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyiAwHH1taDB0kdPhxqF6nMJl9DetEYRwBLIAkEGk5luYiIGOF
+	upFq0uP08gwEMSX5Y7g+xzMXppPjU4FY2rDDfrGPRye6TpDet2///17vHlfI159e
+X-Gm-Gg: ASbGncuiPRugzylunD9hxeRhzeWGm/DDH2Ob4AwxiPve6VfetZGuraybWSeROjuQ3EN
+	GnWwpCCkEGlG0BWyU9B4Zw+vBHNdx7HTSWX4Oe8Z+OVZKVeFhLZ/BHn7q/xt94hPWaeB5EZI7QX
+	Vkn7ON4l2pL0ufhEaAwtLB25ixkd0IJlwPdIAM86MJm48G43dZVAuxhvmeMO+tGskWOKl1jYRXO
+	cMVrczKGICsWzoh/nDy2yyKEfADSMS5qtJ/mlXoIj6P6QhaMitVWL6p89+uyPdifPR2dT85wSyG
+	n8r8Nks0RiZ0FTRuXY+ee/jWFi1x52Cn3pn5+TCxhu1tgR2skzASbg0W+/Y3CNfCm9ZnewqEGiV
+	O1wAsj90bliUV9AQNoNwi1jsVAtZtfwWgfhyi/M+oDcsZGKCX0fSSAGxCv7c9
+X-Google-Smtp-Source: AGHT+IGsULorRTe6vAGA4MMFatdhHfaW8cHQeGwpRlcYZeLlgexo++dF4pJnagGIhF1AdKEOdR89GA==
+X-Received: by 2002:a05:6102:3053:b0:4fb:142:f4d3 with SMTP id ada2fe7eead31-4fbe8910b7cmr1331479137.25.1753869391238;
+        Wed, 30 Jul 2025 02:56:31 -0700 (PDT)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4fa46d08f92sm1978484137.3.2025.07.30.02.56.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jul 2025 02:39:21 -0700 (PDT)
-Message-ID: <3c69deb7-3a23-4627-a64f-3179785bf6f5@oss.qualcomm.com>
-Date: Wed, 30 Jul 2025 11:39:18 +0200
+        Wed, 30 Jul 2025 02:56:30 -0700 (PDT)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-884f7d29b85so1516442241.1;
+        Wed, 30 Jul 2025 02:56:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVLeCJhb3tHQxpWwe0zksb8WT1tQmv6lctnsd6iFHcIShqkCHB6C00N93syneDna+296qbpvAQ4/5ZUfxU=@vger.kernel.org, AJvYcCWe22A4ZUxeigMvGaBMgAu4VUNfAVFZyTiolm8K8s8xIvVU/eVoJqLycfmXYtPzWlRZMJxfjG+dVTE=@vger.kernel.org, AJvYcCXsEkgbhbt35OncxVvP31l7t8FTfGaI8d8XG5/NjtacPLLV3wSe18IMwzf5e5HH8oqA0xEs8vr5XA0PmZLZsiF99WI=@vger.kernel.org
+X-Received: by 2002:a05:6102:6488:10b0:4fb:f31a:98ce with SMTP id
+ ada2fe7eead31-4fbf31a9e23mr303837137.6.1753869389838; Wed, 30 Jul 2025
+ 02:56:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] clk: qcom: apss-ipq5424: Add ipq5424 apss clock
- controller
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
-        djakov@kernel.org, quic_srichara@quicinc.com, quic_mdalam@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20250730081316.547796-1-quic_varada@quicinc.com>
- <20250730081316.547796-3-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250730081316.547796-3-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: klhuKswSAub6U2isqKtEGvLXTLevpuPK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMwMDA2NyBTYWx0ZWRfX3+mLZs/xvS0J
- e0dSSOxzrp0MqmgAmtEBPANJvF/9W4LX/OlpZ1RYRcAXzBv0mOQQlgIUsU04MmpngIje3TyWTqN
- /6MMER+EuZ583jn/+c9Ug2/6yjRDE21M7eBadH5c27vCzTbL45gMcRKpT0seM14w/Lhyf7g7q9m
- gtEmJ5vhNTRrWBnNzQ1TWb06c78ggS3okcFSyxQBev5+8NTXj+lCfyRrrvcvJaw+Vkn6zqBLrrP
- pvi5XfEbbV7gWlEGi7SnDzAt8mTeb4NzWqGAKSTEdvUfLQTIEaJo1KEirYDZVMXfi88RlNUdxkS
- PM7fzDLo/9T0Ms+2/L89jwO+amOswoAB9pAjT5wkoaUys/f6+Po2gE+WdlZxOC5nS4lVZFigoxS
- ngdrVebmOICj+ctoKRzVvzJh2WI/K/Z8QSCrJhxGhVEh+DAqtSISIhqgeZhYrv8Q18e6ykpr
-X-Authority-Analysis: v=2.4 cv=DIWP4zNb c=1 sm=1 tr=0 ts=6889e84c cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=i-JfjlNmehoY5ENsB_0A:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: klhuKswSAub6U2isqKtEGvLXTLevpuPK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-30_03,2025-07-30_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507300067
+References: <20250701114733.636510-1-ulf.hansson@linaro.org> <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+In-Reply-To: <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 30 Jul 2025 11:56:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX1BacUfqtmV8g7NpRnY9aTdL=fh+jC7OryMLz4ijaOCg@mail.gmail.com>
+X-Gm-Features: Ac12FXyBxoyf0eZjZq4tsf22xBIlBFOx02dopJh05JbQN3Bvqm8lfaYDOjqls6g
+Message-ID: <CAMuHMdX1BacUfqtmV8g7NpRnY9aTdL=fh+jC7OryMLz4ijaOCg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/30/25 10:13 AM, Varadarajan Narayanan wrote:
-> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> 
-> CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
-> Add support for the APSS PLL, RCG and clock enable for ipq5424.
-> The PLL, RCG register space are clubbed. Hence adding new APSS driver
-> for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
-> and needs to be scaled along with the CPU and is modeled as an ICC clock.
-> 
-> Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> [ Removed clock notifier, moved L3 pll to icc-clk, used existing
-> alpha pll structure ]
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
+Hi Ulf,
 
-[...]
+On Wed, 9 Jul 2025 at 13:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> On Tue, 1 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > Changes in v3:
+> >         - Added a couple of patches to adress problems on some Renesas
+> >         platforms. Thanks Geert and Tomi for helping out!
+> >         - Adressed a few comments from Saravanna and Konrad.
+> >         - Added some tested-by tags.
+>
+> I decided it was time to give this a try, so I have queued this up for
+> v6.17 via the next branch at my pmdomain tree.
+>
+> If you encounter any issues, please let me know so I can help to fix them.
 
-> +static struct clk_alpha_pll ipq5424_apss_pll = {
-> +	.offset = 0x0,
-> +	.config = &apss_pll_config,
-> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_HUAYRA_2290],
-> +	.flags = SUPPORTS_DYNAMIC_UPDATE,
-> +	.clkr = {
-> +		.enable_reg = 0x0,
-> +		.enable_mask = BIT(0),
-> +		.hw.init = &(struct clk_init_data){
-> +			.name = "apss_pll",
-> +			.parent_data = &(const struct clk_parent_data) {
-> +				.fw_name = "xo-board-clk",
+Thanks for your series!  Due to holidays, I only managed to test
+this very recently.
 
-This is not consistent with your dt-bindings.
+Unfortunately I have an issue with unused PM Domains no longer being
+disabled on R-Car:
+  - On R-Car Gen1/2/3, using rcar-sysc.c, unused PM Domains are never
+    disabled.
+  - On R-Car Gen4, using rcar-gen4-sysc.c, unused PM Domains are
+    sometimes not disabled.
+    At first, I noticed the IOMMU driver was not enabled in my config,
+    and enabling it did fix the issue.  However, after that I still
+    encountered the issue in a different config that does have the
+    IOMMU driver enabled...
 
-You should instead define an enum that reflects them and use .index
-(see e.g. gcc-sm8750.c)
+FTR, unused PM Domains are still disabled correctly on R/SH-Mobile
+(using rmobile-sysc.c) and on BeagleBone Black. Note that these use
+of_genpd_add_provider_simple(), while all R-Car drivers use
+of_genpd_add_provider_onecell().  Perhaps there is an issue with
+the latter?  If you don't have a clue, I plan to do some more
+investigation later...
 
-> +			},
-> +			.parent_names = (const char *[]){ "xo-board-clk"},
-> +			.num_parents = 1,
-> +			.ops = &clk_alpha_pll_huayra_ops,
-> +		},
-> +	},
-> +};
-> +
-> +static const struct clk_parent_data parents_apss_silver_clk_src[] = {
-> +	{ .fw_name = "xo-board-clk" },
-> +	{ .fw_name = "clk_ref" },
+BTW, the "pending due to"-messages look weird to me.
+On R-Car M2-W (r8a7791.dtsi) I see e.g.:
 
-Similarly here, neither one exists
+    genpd_provider ca15-cpu0: sync_state() pending due to e6020000.watchdog
+    renesas-cpg-mssr e6150000.clock-controller: sync_state() pending
+due to e6020000.watchdog
 
-Konrad
+ca15-cpu0 is the PM Domain holding the first CPU core, while
+the watchdog resides in the always-on Clock Domain, and uses the
+clock-controller for PM_CLK handling.
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
