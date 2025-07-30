@@ -1,236 +1,148 @@
-Return-Path: <linux-pm+bounces-31577-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31578-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F6A3B15A28
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 10:04:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD7E7B15A43
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 10:14:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A68577A13E2
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 08:02:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38A6B7A0726
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Jul 2025 08:12:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8819B238C29;
-	Wed, 30 Jul 2025 08:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87391266562;
+	Wed, 30 Jul 2025 08:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GHSwnj7F"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bcMj8F0A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F6F1D54F7;
-	Wed, 30 Jul 2025 08:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4725F994;
+	Wed, 30 Jul 2025 08:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753862634; cv=none; b=YUDRISL9fPcbH+C7bqee4cOmNnYNBYjEt7xfg1iysThMJnioXrTkEJUEGgwOKr54J/nOB71HTMna58+BCspdXFHKV0hizA0ZJa/v8bJgHraSve1d5rqqk0Q/EMtGJhFy3gLoWG+d6u52T9hJXP57+eEsYxRXV/RYAh/q+wo8QkU=
+	t=1753863239; cv=none; b=u3gRe1J7Xu6Hmat2ZeR+GPFGc8xczUhT8sIu34AHYZcaLrT8EpxnRwgnXYToHDUtr+M+A+cbnOD2QgUL/m/x5A+sFfyon3pYXIr8rfHF4WZS9xATzOhj/ptRfiGGrz1k+EjxeFaKCu+zb2jIwxt9Z/+FEDPc+p+JLePPtbQqWS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753862634; c=relaxed/simple;
-	bh=zMori7sX/UDbxCNR2EI8mynJoVEW1MfajN3fR3vL3RM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=pEvazfwPOHK6m8LwRyq1q0dSgDD9Rze1P+L3zJOx4F5xHf5OVQEpuWEF0gMkp3QkaVQY1OxnljLofNgnpJuLnzqe/y4AS2CsiZUH9mCHnYevizwg+uEcl2sQmq53y1xLIXfszIJqc1/08DvPsHOX7eZebjI0OxEssE3cbaO9Ifs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GHSwnj7F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D1DC4CEE7;
-	Wed, 30 Jul 2025 08:03:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753862634;
-	bh=zMori7sX/UDbxCNR2EI8mynJoVEW1MfajN3fR3vL3RM=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=GHSwnj7Fd1tMRkr9dNuz2ToiGvIRTK09AjT0F/4PshJ0Gm38xxbS+csJgHvu+5IVA
-	 8gML/P1FOqVOjqDj1D2nJwUd4FCQjdeVanj9S1lWFQBbvIl4vsXteeuS8r8lRVSalW
-	 LeTIiQ7YFMnmA+Y3fFFo3prUSPBJl/bmyA7sWEovGhNAMWjkStZFH3AbLY2nMHCqR9
-	 AyZyBdGYR1yDv5b4NCnNysZJ86s2/Fac502hh+Mvjb2JODbv1JOTm5U+h5lw3nrKUO
-	 5NEwA2gM4nbhR4AlRjLocgj24tNc/DdKcwSWH9Jr1mKKLS2XLIz3LFEmTEKR8ztxlf
-	 eyqBm0VyYGdJA==
+	s=arc-20240116; t=1753863239; c=relaxed/simple;
+	bh=cQSf+owQxXu2p+iqR0+m6HUWpv6t4PzHfUDkybA8rpI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oPDwUuYS6T6eVitsjWKjaZUK/seOCEp3XTCgSIF8x87u3LoWRaUUmaJ5hVn/IEJrCseWtyteuehtgIJWSpFQoXwAymR3zhFWqW/ShF+03B3r0cbn5zkWVZthhQavp2e0cciB1rloe1rdTs6HPLXQZ+WJWRfUnrFl4jp56cyuq0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bcMj8F0A; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56U5ElXG003999;
+	Wed, 30 Jul 2025 08:13:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=9ApHrDba3t2E4T6JziyhJ0
+	G3MCwEmrfTub2e9gHFkVk=; b=bcMj8F0AQcsAgEKfRvMJwhl/36V4Imt9OXXG3z
+	b9RIaDZSi2/Yu7uLmJKhdWnESz9u2Qpz/6AGYl2fm1+Mx+eDidKSMJc+H21pJGue
+	i1LB6zcNIcLgcYDx977Y0m9uRDhqylgEAL+pe590m2qEFo3BmsYAM+83e629JX/O
+	2dJGUSM8LfmBnOComzI0f/uTWzHRIr4Sb6q3V0MgiJAaBXSdAT/w22LTRusPoiRY
+	LKjAyIdb3dDdIGcxYWufCBKl8dsToM7msvXHp8wjBs2KNhTruQGo8I+zbG8+Cqcm
+	UYOzbqEFeFO8/IEbKzJkWme/oV9H5JLDFxenFZKkOg3uCfXA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484pm2jv0c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Jul 2025 08:13:53 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56U8Dq1r017204
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Jul 2025 08:13:52 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Wed, 30 Jul 2025 01:13:47 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <konradybcio@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>, <djakov@kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_mdalam@quicinc.com>,
+        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v4 0/4] Enable cpufreq for IPQ5424
+Date: Wed, 30 Jul 2025 13:43:12 +0530
+Message-ID: <20250730081316.547796-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 30 Jul 2025 10:03:48 +0200
-Message-Id: <DBP8EWLCAE4B.34Y4FBSH5BTB6@kernel.org>
-To: "Daniel Almeida" <daniel.almeida@collabora.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH] rust: clk: use the type-state pattern
-Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Alexandre
- Courbot" <acourbot@nvidia.com>, <linux-clk@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>
-References: <20250729-clk-type-state-v1-1-896b53816f7b@collabora.com>
-In-Reply-To: <20250729-clk-type-state-v1-1-896b53816f7b@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 960EdhSM7DCAqDe8uhM8eGApBTKLXZfu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMwMDA1NSBTYWx0ZWRfXxCyp7cxp5ahL
+ owdl4WKi/sFoHUkwuAeNQ4ZljvMcMWMPzYyCpWIhwQK8HslOVN5AHIn866juoQhnCFEnkEoai2B
+ TgluQkK7/ujJLELecTLKRLXqlF9OvRQCKl6AXVuNHeEZ4BVYd/zbPm9I/MA/fNFWUAQ3gI1FGlH
+ Fkxfk99rFrWHMRju5vp3z1W3d6skoH9EwHOnJXYInTV/IO2e+L4pSz14WzIlG+qpShVSQqLn6xG
+ Ph4IT+/WtIsIgntcUClRCxVGNmuOSfvL3JJ/uWaviAYz4/GCO1VguBXdfojpVgokkkXWuYM1l9C
+ cJN99BfnKqe2zvTw5cnpohf7PZR6QGky05edH9PKMYsZUssqbvxpaOOueH1z5XjazVcSbKd8Swl
+ 3qZ0AvhUHpUNgN1jAonrA5gHA+IepTpdC/aQ7D3On/vKGElsaG7yHfgRHkDpoyBzGoLWnIDq
+X-Authority-Analysis: v=2.4 cv=HfYUTjE8 c=1 sm=1 tr=0 ts=6889d441 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8
+ a=j41EFXsdaNRYK4k_7XoA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 960EdhSM7DCAqDe8uhM8eGApBTKLXZfu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-30_03,2025-07-30_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 clxscore=1015 bulkscore=0 suspectscore=0 impostorscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=701 phishscore=0
+ priorityscore=1501 malwarescore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507300055
 
-On Tue Jul 29, 2025 at 11:38 PM CEST, Daniel Almeida wrote:
-> In light of the Regulator abstraction that was recently merged, switch th=
-is
-> abstraction to use the type-state pattern instead. It solves both a) and =
-b)
-> by establishing a number of states and the valid ways to transition betwe=
-en
-> them. It also automatically undoes any call to clk_get(), clk_prepare() a=
-nd
-> clk_enable() as applicable on drop(), so users do not have to do anything
-> special before Clk goes out of scope.
+CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
+Add support for the APSS PLL, RCG and clock enable for ipq5424.
+The PLL, RCG register space are clubbed. Hence adding new APSS driver
+for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
+modeled as ICC clock. The L3 pll needs to be scaled along with the CPU.
 
-That's a great improvement, thanks! Some questions / comments below.
+v4:	* Address bindings related comments
 
->      /// A reference-counted clock.
->      ///
->      /// Rust abstraction for the C [`struct clk`].
->      ///
-> +    /// A [`Clk`] instance represents a clock that can be in one of seve=
-ral
-> +    /// states: [`Unprepared`], [`Prepared`], or [`Enabled`].
-> +    ///
-> +    /// No action needs to be taken when a [`Clk`] is dropped. The calls=
- to
-> +    /// `clk_unprepare()` and `clk_disable()` will be placed as applicab=
-le.
-> +    ///
-> +    /// An optional [`Clk`] is treated just like a regular [`Clk`], but =
-its
-> +    /// inner `struct clk` pointer is `NULL`. This interfaces correctly =
-with the
-> +    /// C API and also exposes all the methods of a regular [`Clk`] to u=
-sers.
-> +    ///
->      /// # Invariants
->      ///
->      /// A [`Clk`] instance holds either a pointer to a valid [`struct cl=
-k`] created by the C
-> @@ -99,20 +160,39 @@ mod common_clk {
->      /// Instances of this type are reference-counted. Calling [`Clk::get=
-`] ensures that the
->      /// allocation remains valid for the lifetime of the [`Clk`].
->      ///
-> -    /// ## Examples
-> +    /// The [`Prepared`] state is associated with a single count of
-> +    /// `clk_prepare()`, and the [`Enabled`] state is associated with a =
-single
-> +    /// count of `clk_enable()`, and the [`Enabled`] state is associated=
- with a
-> +    /// single count of `clk_prepare` and `clk_enable()`.
-> +    ///
-> +    /// All states are associated with a single count of `clk_get()`.
-> +    ///
-> +    /// # Examples
->      ///
->      /// The following example demonstrates how to obtain and configure a=
- clock for a device.
->      ///
->      /// ```
->      /// use kernel::c_str;
-> -    /// use kernel::clk::{Clk, Hertz};
-> +    /// use kernel::clk::{Clk, Enabled, Hertz, Unprepared, Prepared};
->      /// use kernel::device::Device;
->      /// use kernel::error::Result;
->      ///
->      /// fn configure_clk(dev: &Device) -> Result {
-> -    ///     let clk =3D Clk::get(dev, Some(c_str!("apb_clk")))?;
-> +    ///     // The fastest way is to use a version of `Clk::get` for the=
- desired
-> +    ///     // state, i.e.:
-> +    ///     let clk: Clk<Enabled> =3D Clk::<Enabled>::get(dev, Some(c_st=
-r!("apb_clk")))?;
+v3: https://lore.kernel.org/linux-arm-msm/20250724102540.3762358-1-quic_varada@quicinc.com/
+	* Use the qcom_cc_driver_data framework to trim down apss_ipq5424_probe
 
-Given that this is a driver API, why do we allow obtaining and configuring
-clocks of any device, i.e. also unbound devices?
+v2: https://lore.kernel.org/linux-arm-msm/20250723110815.2865403-1-quic_varada@quicinc.com/
+	* Use icc-clk framework for l3 pll
 
-I think Clk::<T>::get() should take a &Device<Bound> instead.
+v1: https://lore.kernel.org/linux-arm-msm/20250127093128.2611247-1-quic_srichara@quicinc.com/
 
-> -    ///     clk.prepare_enable()?;
-> +    ///     // Any other state is also possible, e.g.:
-> +    ///     let clk: Clk<Prepared> =3D Clk::<Prepared>::get(dev, Some(c_=
-str!("apb_clk")))?;
-> +    ///
-> +    ///     // Later:
-> +    ///     let clk: Clk<Enabled> =3D clk.enable().map_err(|error| {
-> +    ///         error.error
-> +    ///     })?;
-> +    ///
-> +    ///     // Note that error.clk is the original `clk` if the operatio=
-n
-> +    ///     // failed. It is provided as a convenience so that the opera=
-tion may be
-> +    ///     // retried in case of errors.
->      ///
->      ///     let expected_rate =3D Hertz::from_ghz(1);
->      ///
-> @@ -120,104 +200,172 @@ mod common_clk {
->      ///         clk.set_rate(expected_rate)?;
->      ///     }
->      ///
-> -    ///     clk.disable_unprepare();
-> +    ///     // Nothing is needed here. The drop implementation will undo=
- any
-> +    ///     // operations as appropriate.
-> +    ///     Ok(())
-> +    /// }
-> +    ///
-> +    /// fn shutdown(dev: &Device, clk: Clk<Enabled>) -> Result {
+Md Sadre Alam (1):
+  cpufreq: qcom-nvmem: Enable cpufreq for ipq5424
 
-You don't need the dev argument here.
+Sricharan Ramabadhran (3):
+  dt-bindings: clock: ipq5424-apss-clk: Add ipq5424 apss clock
+    controller
+  clk: qcom: apss-ipq5424: Add ipq5424 apss clock controller
+  arm64: dts: qcom: ipq5424: Enable cpufreq
 
-> +    ///     // The states can be traversed "in the reverse order" as wel=
-l:
-> +    ///     let clk: Clk<Prepared> =3D clk.disable().map_err(|error| {
-> +    ///         error.error
-> +    ///     })?;
-> +    ///
-> +    ///     let clk: Clk<Unprepared> =3D clk.unprepare();
+ .../bindings/clock/qcom,ipq5424-apss-clk.yaml |  63 +++++
+ arch/arm64/boot/dts/qcom/ipq5424.dtsi         |  61 ++++
+ drivers/clk/qcom/Kconfig                      |   7 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/apss-ipq5424.c               | 260 ++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c          |   1 +
+ drivers/cpufreq/qcom-cpufreq-nvmem.c          |   5 +
+ include/dt-bindings/clock/qcom,apss-ipq.h     |   6 +
+ .../dt-bindings/interconnect/qcom,ipq5424.h   |   3 +
+ 9 files changed, 407 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5424-apss-clk.yaml
+ create mode 100644 drivers/clk/qcom/apss-ipq5424.c
 
-I know you want to showcase the type state, yet I don't know if we should
-explicitly declare the type if not necessary. People will likely just copy
-things. Maybe a comment is better to emphasize it?
 
-> +    ///
->      ///     Ok(())
->      /// }
->      /// ```
->      ///
->      /// [`struct clk`]: https://docs.kernel.org/driver-api/clk.html
->      #[repr(transparent)]
-> -    pub struct Clk(*mut bindings::clk);
-> +    pub struct Clk<T: ClkState> {
-> +        inner: *mut bindings::clk,
-> +        _phantom: core::marker::PhantomData<T>,
-> +    }
+base-commit: 79fb37f39b77bbf9a56304e9af843cd93a7a1916
+-- 
+2.34.1
 
-<snip>
-
-> +    impl<T: ClkState> Drop for Clk<T> {
-> +        fn drop(&mut self) {
-> +            if T::DISABLE_ON_DROP {
-> +                // SAFETY: By the type invariants, self.as_raw() is a va=
-lid argument for
-> +                // [`clk_disable`].
-> +                unsafe { bindings::clk_disable(self.as_raw()) };
-> +            }
-> +
-> +            if T::UNPREPARE_ON_DROP {
-> +                // SAFETY: By the type invariants, self.as_raw() is a va=
-lid argument for
-> +                // [`clk_unprepare`].
-> +                unsafe { bindings::clk_unprepare(self.as_raw()) };
-> +            }
-
-Nice! I like this cleanup. However, don't you still need to call clk_put() =
-to
-drop the reference count?
-
-Also, given that this is a device resource, don't we want to take it away f=
-rom
-drivers once the corresponding device has been unbound, i.e. use Devres?
-
->          }
->      }
->  }
 
