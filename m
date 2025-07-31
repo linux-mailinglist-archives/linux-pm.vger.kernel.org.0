@@ -1,197 +1,141 @@
-Return-Path: <linux-pm+bounces-31710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31714-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34062B17864
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 23:46:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B7D5B178A8
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 23:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34E93BE806
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 21:46:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBA0E7AA4AE
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 21:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8C725F984;
-	Thu, 31 Jul 2025 21:46:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4537826C3A3;
+	Thu, 31 Jul 2025 21:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PkEPpbFA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SQ8SuycP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BDB2907;
-	Thu, 31 Jul 2025 21:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073D325CC52;
+	Thu, 31 Jul 2025 21:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753998366; cv=none; b=tEYNFrp0MnjrJ0wUaCSoX0cklfJL2tvbrnuB6q4A9jpMKp9+A2MWmBuL+OsQlmZefOhVINX2QD6q+IM0gGJMUFi0UJNELl1QC0TnhjjKjUP438YL3qZqNNvs5q/Rgs6tVlCXGd1SCQ4PlIvu/gjx5aMHJCKfxCYiOmen43Kx+5w=
+	t=1753999170; cv=none; b=ZbpPbjMQtjrl0BqZ/CyRVh0KyQHqwUOwHX22Jo6RFapPwnxLd5ub7N0WAwVV00WHL5Vl4LSQ75kkRiB2qWYHOyi0uG4EqTqASo7FJveE5xJmdG90Qwwz/PiEbz8v9RrGfdoNj6vN7Vmc0FeNsIoCQJbO793OXPxEdHDWnmzVSKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753998366; c=relaxed/simple;
-	bh=EAi11GnM5NOpqtZGQP1+CvoqjqN0gawbLhNDx0WJK9Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ktWLiyskBy/EV9OjED/7oEs587ZAvIDGsuYiCHSFYUUEHxSDIn5b33EMOvKSW/VnDd/mKUsolMyf/K3OS1GvDNDpNnjQ9QabRBiPhYGuVSJYnNjTSvR8L4Quj/YMbQgQnIUwSKL0166k5YpeZWlZhKk6+tVMgSqmjJ8r/gy3RR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PkEPpbFA; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-33216091f46so1914131fa.3;
-        Thu, 31 Jul 2025 14:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753998363; x=1754603163; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M5O3S8YHjEKxf35I4HemjKP04DsSFKh+k5HBzaaWKAg=;
-        b=PkEPpbFAnzme0GCIYc7NsFX2BJjflYaBTj+VN/wpl8d66/i9KQYA28eVI+xIO6WBdj
-         KAsSXLMshqgYk5Y/bbHO8GqbTqeBMFeMrszZRvtjn1tJvFyjXGM4yyphygyAb8F9iran
-         1QS84LrRnTZBvF7DUSAPbioWJM77gjY5qqatg0RUFMXwfrp44pTJnxUbbS8AfAcD1OTG
-         vqoMHlIsS71OMCAWaRVh1ZTVuoPQ4qXgCB+f6LlPKOg5s7pwlNQzq5acMMnff2Rq2zzY
-         3JiuB9Bp8YLjjkluXpHExYMqTD/7jegN3POZzqswhxJcAqT9df9tuUpYO1oW2sd9BAur
-         9WbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753998363; x=1754603163;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M5O3S8YHjEKxf35I4HemjKP04DsSFKh+k5HBzaaWKAg=;
-        b=exgbEPu9TZPoFRz0P8k0/thsddWNazC1UePwoMLYX5Juro8DDcpO4KqtbasM6J89v7
-         deHhRBMXqj3zVYqPVLsfxO+fD1XrOoV/+uTSeMg8V88DFS6qdi/0iXK5igsmGfl9eCjM
-         cmC2EzAfqNoGusXOMjwAegxLPiEA3U3ESSetaRuv0jgaZiFLeZmOW6xBLCV2MQ0Gvg3L
-         EMGVrhx4zDd/wyoH9U67PdmM/2c9/d6ZHWmvBol7nXj6OZuoY0y2ByePYBST+LA6s2lg
-         IcosHumGpxAFwnSMF13ts+kQ+VxPhoJK8fqtPohN+aW3lKs5mIQGbySPiStvv7VhvTXW
-         O/mA==
-X-Forwarded-Encrypted: i=1; AJvYcCUe+zi9Mq0WRY2GjJXwP219T3yHgdlXijvejjRYCsJeQe8Md4/QbDZVZia6KU6Tz6eg6iuC9PazqUE=@vger.kernel.org, AJvYcCV8phsYteUbWwpNFeoBl2oE3ePhn/Z8Pi4Sga4stlBeD13aD0JbWmM7V4Tuj9KFRF4t8qs39iWrZ0Fr@vger.kernel.org, AJvYcCVgYCDJz4+gouLdgioNAh4FOc4OQ+KkFQQA7q1o969/K7pwjjKE6kHJD7SV6xDHm8GBO5ayrzSG0HJ0PTm9@vger.kernel.org, AJvYcCWXnmSjJ4yZunxJMWHSuka0f8vMJvZS1mN1p/n1lMnP64q88mNRDZDeDLeyZDbKhy6z82meAfh1w3DWyUA=@vger.kernel.org, AJvYcCWxFTmZtIpeCkeJXx45bKSEZEZd/ydUucTzQpItXS/A9pc4KCi6IyeV3JNI4y5m4qZvxHvoDwah0xf9@vger.kernel.org, AJvYcCXZ7XMAgAEoJAB0sfAYS0I77SJRTqZEbL9MpkYQeuU9ODjG0czuxsQpEPsR1EOAvQp+rkz7IJjlQVKv@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd3IhTbNRDte6CqPxB/tl5Kl6HnuY2dpMYBi8mfGqKmweFUoa6
-	cFL14/l4G5puXMikfFFLzYJ8N33If3NPr9I2XYDSvbMqTTVAfx4FIm674tGAWRYmd6DcxhPnv+B
-	Bb150N70dP7SE2SfkGydqfx3iLolBdN4=
-X-Gm-Gg: ASbGnct8M7100N1MRwp0VV8r6EVAo4OKfH1TzcWYLQ8Odm612iytQ2OKJsGbUEwGT6b
-	uU007S1dSff4I2eSX641O0id7WbRRI5QejUZgmnrT/go5rqS3d4gFbShEssXh/Wy4E+jn8WOnGr
-	jSgY7A+A2kJf3mxjr0SYZzkdbJ6HcbvOamVjXvYTlG1pSNKQlpMv06aPjMkzJELBJyBIoNqttpC
-	720olQz3kH/yz0bOviYEU6rJ7Io
-X-Google-Smtp-Source: AGHT+IE68ugzaerYztp5XTRePDBYmlv+5hk7MWpjNQloFG3z43Am06Y5klzWQnNYHpsFYONif7VtzQJSYSRafwvOkDU=
-X-Received: by 2002:a05:651c:508:b0:32a:8591:6689 with SMTP id
- 38308e7fff4ca-33224a725fbmr23822031fa.7.1753998362736; Thu, 31 Jul 2025
- 14:46:02 -0700 (PDT)
+	s=arc-20240116; t=1753999170; c=relaxed/simple;
+	bh=VTivWzBig8qO+f9kiueL0YgCcL2cFIHpCmHWMnbJp1Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EFzbUcGCLm/QFH92jYA7Is03fz47OQ2pZ8oNo7rTOIVDOxJkhOs5qnuSQnmluMNR9dsPN25X5EsHD17h9YugJxDOz9qHmp0ypiLg6W+MZg4HCbF9HD/f43fyl+ulloOwwfK8HkymIne2Hk8DXbCADLuSZEBGqSzJ/KUkvvLg8SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SQ8SuycP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93C55C4CEEF;
+	Thu, 31 Jul 2025 21:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753999169;
+	bh=VTivWzBig8qO+f9kiueL0YgCcL2cFIHpCmHWMnbJp1Q=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=SQ8SuycP/YmL6RGqwpSfq3y1YWu9Z9Tn5Oac8fEqhD8vq085r1zCVnnczeuECB3jm
+	 rtkOSUn9m9dFhYAjdUSq2knM1X+cS2dQGdyaJFC+NGVy9jPew2UizQjJWQyeR8/Qj3
+	 rTp2ni/xUeH46bUbzAMMYfbNl4PZJHq8IYxtzjkRdrjbhYUlmwq7EsQkdUPtwnJuS2
+	 Ci1YZokaFybIRYYOtP2GooOgp1BvsaMqXTmxfSQd+/KdHlYwXl9wPsG3V3L3krImje
+	 uoH0/h3Tl9mfn8tMuRJXa15IAkeXLLSitlc9zEj1NrHN9JnEiC72xHzEdQmZLLHvI6
+	 4mZBImTzE1VEA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C1F2C87FD3;
+	Thu, 31 Jul 2025 21:59:29 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Subject: [PATCH v7 0/3] PCI: tegra: Allow building as a module
+Date: Thu, 31 Jul 2025 16:59:23 -0500
+Message-Id: <20250731-pci-tegra-module-v7-0-cad4b088b8fb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
-In-Reply-To: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Thu, 31 Jul 2025 16:45:51 -0500
-X-Gm-Features: Ac12FXwmiSNEzxCmapZYKElVAjT1-RsIDF_NIv5WiOavZcEcHwc6rmCyCZHdaRw
-Message-ID: <CALHNRZ992mowGjQY7U6hLRsPemaE6AikK-rDp+_CZkGruzP2Qw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] arm64: tegra: Add Tegra210B01 support
-To: webgeek1234@gmail.com
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Mathias Nyman <mathias.nyman@intel.com>, Peter De Schrijver <pdeschrijver@nvidia.com>, 
-	Prashant Gaikwad <pgaikwad@nvidia.com>, devicetree@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, 
-	Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	Azkali Manad <a.ffcc7@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADzni2gC/4XPQWrDMBAF0KsErasijTSSnFXvUboYy2NHEMdBT
+ k1L8N0rp4ua2NDlH5j3+Xcxck48iuPhLjJPaUzDpQT/chDxRJeOZWpKFqAAldFGXmOSN+4yyX5
+ oPs8sfawbHZG9olaUt2vmNn09yPePkk9pvA35+9Ew6eX6i1lQW2zSUsmoSLehlKGlt66ndH6NQ
+ y8WbII1EHYAWACtydaVBmvdM2D+AFSwA5gCIDqylTfQePUM2DWAO4AtgAqhRoRoa72ZgP8BWIA
+ AnohiVYV6A7g14HcAt0xo2TjDREbBGpjn+QcAOCpn9QEAAA==
+X-Change-ID: 20250313-pci-tegra-module-7cbd1c5e70af
+To: Thomas Gleixner <tglx@linutronix.de>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753999168; l=1947;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=VTivWzBig8qO+f9kiueL0YgCcL2cFIHpCmHWMnbJp1Q=;
+ b=KNtTCfJzfNcIdkIiqUNgC5pYjwVCbgCsyt3Nc1YILP491nrjHJS8VDoZD1RNGygiRZ8ix5rcj
+ FUGA10pVnL9Dn+gVPl0fIO2uAY6mXjMAnv18S5+kITIONZ8ck7l9fQl
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-On Sun, Jul 20, 2025 at 9:17=E2=80=AFPM Aaron Kling via B4 Relay
-<devnull+webgeek1234.gmail.com@kernel.org> wrote:
->
-> Also known as Tegra X1+, the Tegra210B01 has higher CPU and GPU clocks
-> than the original Tegra210.
->
-> This series adds Tegra210B01 support to several drivers, as a slight
-> extension to the existing Tegra210 support. Then adds a generic soc dtsi
-> in the same vein as other tegra archs. And finally adds a barebones
-> device dts to be used for dt checks. Further device support will be
-> submitted in later series.
->
-> Earlier internal revisions of this series included changes to the dfll
-> driver to support Tegra210B01, but those did not work in testing, thus
-> was dropped from the series. A bindings update to match is still in the
-> series so the soc dtsi can declare a separate compatible from Tegra210,
-> preventing the driver from attempting incorrect initialization on
-> Tegra210B01.
->
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> ---
-> Changes in v2:
-> - Fix patch 1 subject
-> - Add descriptive name in patch 8
-> - Fix copy-paste error in patch 13, discovered by kernel ci
-> - Link to v1: https://lore.kernel.org/r/20250714-t210b01-v1-0-e3f5f7de5dc=
-e@gmail.com
->
-> ---
-> Aaron Kling (16):
->       dt-bindings: soc: tegra: pmc: Document Tegra210B01
->       dt-bindings: phy: tegra-xusb: Document Tegra210B01
->       dt-bindings: usb: tegra-xusb: Document Tegra210B01
->       dt-bindings: usb: tegra-xudc: Document Tegra210B01
->       dt-bindings: thermal: tegra: Document Tegra210B01
->       dt-bindings: clock: tegra: Document Tegra210B01
->       dt-bindings: clock: tegra124-dfll: Document Tegra210B01
->       dt-bindings: tegra: Document Shield TV 2019
->       phy: tegra: xusb: Add Tegra201B01 Support
->       usb: xhci: tegra: Add Tegra210B01 support
->       usb: gadget: tegra-xudc: Add Tegra210B01 Support
->       thermal: tegra: Add Tegra210B01 Support
->       clk: tegra: Add Tegra210B01 support
->       arm64: tegra: Add BPMP node for Tegra210
->       arm64: tegra: Add Tegra210B01 support
->       arm64: tegra: Add support for NVIDIA Shield TV Pro 2019
->
-> Azkali Manad (1):
->       soc/tegra: pmc: Add Tegra210B01 support
->
->  Documentation/devicetree/bindings/arm/tegra.yaml   |    6 +
->  .../bindings/clock/nvidia,tegra124-dfll.txt        |    1 +
->  .../bindings/clock/nvidia,tegra20-car.yaml         |    1 +
->  .../bindings/phy/nvidia,tegra210-xusb-padctl.yaml  |    4 +-
->  .../bindings/soc/tegra/nvidia,tegra20-pmc.yaml     |    5 +-
->  .../bindings/thermal/nvidia,tegra124-soctherm.yaml |    2 +
->  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml |    2 +
->  .../bindings/usb/nvidia,tegra210-xusb.yaml         |    4 +-
->  arch/arm64/boot/dts/nvidia/Makefile                |    1 +
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   11 +
->  .../boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts |   10 +
->  arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi  |   70 +
->  arch/arm64/boot/dts/nvidia/tegra210b01.dtsi        |   64 +
->  drivers/clk/tegra/Makefile                         |    1 +
->  drivers/clk/tegra/clk-tegra-periph.c               |    3 +
->  drivers/clk/tegra/clk-tegra210b01.c                | 3758 ++++++++++++++=
-++++++
->  drivers/clk/tegra/clk-utils.c                      |    5 +-
->  drivers/clk/tegra/clk.c                            |   19 +-
->  drivers/clk/tegra/clk.h                            |    6 +
->  drivers/phy/tegra/xusb-tegra210.c                  |   41 +
->  drivers/phy/tegra/xusb.c                           |    4 +
->  drivers/phy/tegra/xusb.h                           |    1 +
->  drivers/soc/tegra/pmc.c                            |  117 +
->  drivers/thermal/tegra/soctherm.c                   |    4 +
->  drivers/thermal/tegra/soctherm.h                   |    1 +
->  drivers/thermal/tegra/tegra210-soctherm.c          |   78 +
->  drivers/usb/gadget/udc/tegra-xudc.c                |   20 +
->  drivers/usb/host/xhci-tegra.c                      |   25 +
->  include/dt-bindings/clock/tegra210-car.h           |    5 +-
->  29 files changed, 4262 insertions(+), 7 deletions(-)
-> ---
-> base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
-> change-id: 20250509-t210b01-c154ca0f8994
->
-> Best regards,
-> --
-> Aaron Kling <webgeek1234@gmail.com>
->
->
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+---
+Changes in v7:
+- Rebased on 6.16
+- Updated mailing address list
+- Link to v6: https://lore.kernel.org/r/20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com
 
-Reminder about this series.
+Changes in v6:
+- Remove unused debugfs cleanup function, as caught by kernel ci
+- Link to v5: https://lore.kernel.org/r/20250505-pci-tegra-module-v5-0-827aaac998ba@gmail.com
 
-Aaron
+Changes in v5:
+- Copy commit message exactly word for word on patch 1, as required by reviewer
+- Delete remove callback in patch 3, per request
+- Don't clean up debugfs, per request, which drops patch 4 entirely
+- Link to v4: https://lore.kernel.org/r/20250505-pci-tegra-module-v4-0-088b552c4b1a@gmail.com
+
+Changes in v4:
+- Updated commit messages for patches 1 and 2, per review
+- Link to v3: https://lore.kernel.org/r/20250502-pci-tegra-module-v3-0-556a49732d70@gmail.com
+
+Changes in v3:
+- Add patch to drop remove callback, per request
+- Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v2-0-c11a4b912446@gmail.com
+
+Changes in v2:
+- Add patch to export tegra_cpuidle_pcie_irqs_in_use as required when
+  building pci-tegra as a module for arm
+- Drop module exit to prevent module unloading, as requested
+- Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v1-0-c0a1f831354a@gmail.com
+
+---
+Aaron Kling (3):
+      irqdomain: Export irq_domain_free_irqs
+      cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
+      PCI: tegra: Allow building as a module
+
+ drivers/cpuidle/cpuidle-tegra.c    |  1 +
+ drivers/pci/controller/Kconfig     |  2 +-
+ drivers/pci/controller/pci-tegra.c | 35 ++++-------------------------------
+ kernel/irq/irqdomain.c             |  1 +
+ 4 files changed, 7 insertions(+), 32 deletions(-)
+---
+base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
+change-id: 20250313-pci-tegra-module-7cbd1c5e70af
+
+Best regards,
+-- 
+Aaron Kling <webgeek1234@gmail.com>
+
+
 
