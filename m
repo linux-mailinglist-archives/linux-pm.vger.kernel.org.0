@@ -1,104 +1,126 @@
-Return-Path: <linux-pm+bounces-31686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31687-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AEC7B1701F
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:06:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2B81B17036
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:13:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B6A3171173
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 11:05:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 692F11C210B6
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 11:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F3792BD5A3;
-	Thu, 31 Jul 2025 11:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C42D52BEC22;
+	Thu, 31 Jul 2025 11:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B9DJpayy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15602BE638;
-	Thu, 31 Jul 2025 11:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424DA2BE7B5
+	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 11:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753959936; cv=none; b=ILUvEOfiIZD9AFdNOobdsxwAmC/N0f8PDPIkvro5fxCzNDCG16+ZJLvbqxUkEMRfJYNtV5tDvQ6blmqqeOZM7YCesZvlVntCIhdRaeFN8M77jtJP9I72a+gVopDO/IWjsZBZLijayB4w6L4Aoa2nDDYWHQjGielxjCBSNHx6pek=
+	t=1753960409; cv=none; b=N6ub7eHE2oEr6F+fZhA7IKExwERnABjN0nkc+aYP5bKPZdJ1fLBfADuSDuc+cF+BgC5j2kLDE5TGFdlkoqkAuBFvWtWK1iMkm2tLCXp5NNrG5hG4sR40/qSG/QEwIhU9Kg668jH4GiGsUQpZFEJHvNTRD/xJSk1h7vOyrxWB3f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753959936; c=relaxed/simple;
-	bh=mVFM8r5cDdwWpwJcXn1oc0Z2uTdcDftzKnpKjrOM2SI=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dov+1ZJbeEzNUYHvyJmRrmY93nlU9JRtV4RltcRA5NjkHUFRTovje+4p0b/JETcp0ORFQVFd1Y8/911eUMJDVsXxwOeq8B7xZcf5mJivZr/weK2b+BG1F/FDjMrf4L/Gm4B+j4LRI0npbohEo4nO7wHbx1kLpmEDpfMkJDw3SqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bt5mg3ZLkz6D9QX;
-	Thu, 31 Jul 2025 19:03:47 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id D7A1E140133;
-	Thu, 31 Jul 2025 19:05:24 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 31 Jul
- 2025 13:05:23 +0200
-Date: Thu, 31 Jul 2025 12:05:22 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-CC: <sboyd@kernel.org>, <jic23@kernel.org>, <dlechner@baylibre.com>,
-	<nuno.sa@analog.com>, <andy@kernel.org>, <arnd@arndb.de>,
-	<gregkh@linuxfoundation.org>, <srini@kernel.org>, <vkoul@kernel.org>,
-	<kishon@kernel.org>, <sre@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-	<u.kleine-koenig@baylibre.com>, <linux-arm-msm@vger.kernel.org>,
-	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-phy@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<kernel@collabora.com>, <wenst@chromium.org>, <casey.connolly@linaro.org>
-Subject: Re: [PATCH v3 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-Message-ID: <20250731120522.00001005@huawei.com>
-In-Reply-To: <20250730112645.542179-2-angelogioacchino.delregno@collabora.com>
-References: <20250730112645.542179-1-angelogioacchino.delregno@collabora.com>
-	<20250730112645.542179-2-angelogioacchino.delregno@collabora.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1753960409; c=relaxed/simple;
+	bh=FQNz8BbRyNj9k7+vEvxIOIEQmZNi7wQP+y5ML6xjJaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hq747E8nrHoAKgfHYB4r6q13xJSbuJoK8lFXpBqc2wyWW+FupyJ6FQfEVzKvY3lJyfxteH422/528RCQ2AzUuuv3uZDOEZU5Xx00R+off2WVf5lZ+Ux4WoYTt6Zj7f9aD4AuIsd3GXHfhds3P7qZAqAQkAtUtNEpZ8eFA3xXF5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B9DJpayy; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-768bd0c7b10so1107489b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 04:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753960407; x=1754565207; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xcgVBfzRHIi2KK9PJug9FDKd4UOHnTMFQ2IwpTBL6/A=;
+        b=B9DJpayyy+Wxaxn0nYSfqaLywaAPAUJFXYN9gqbfVSKtlBhn1XP/RDTiSJmDoZ8xXD
+         kJyhTX4yOZfO6HezEXelQkWFHbYDkuxfdVWJV4ukM92hbFwg4Ky5JpMFmmXUAb/LNpFN
+         6tak17vCQ5ePOoNxmpcNedHllMViA5aPt4aVcdZRGyvDyp7x5Gk0CCcbnImPEhnLzNQ9
+         ekpWgVOMwLRnIU3DH8NpY22TYbPA/oXHydkXPVVnckKgtgAlCyvMGIM1BOdS0TSmvD52
+         ETH4Ng46WUKYE6dlZuN0t/OaUBo7JtVB3tKrWPwRfUE/gCuiMafW6JMLniQjDe6ZhgtR
+         Zm+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753960407; x=1754565207;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xcgVBfzRHIi2KK9PJug9FDKd4UOHnTMFQ2IwpTBL6/A=;
+        b=ctNGm6JHG2Ee2+ew/BRvTMm2YVCzwE73WPm6FoO5NrzYb5bow4aqHRS0mi2snz/qDi
+         0MnI0JvRpM8loxTr87Mlw9sqUtbV89XyCGzeGNvYw9ne/v0Yps9QoEB81w59Cnf7wLbk
+         AjawA5HHAvc50GOkosEyIILyH1qr99Qd1Xj8PggdGJh/QzeZJ4eo2Q3zE2eDypTCGpkz
+         nwQGO+BQF2TCu47+SiGa+orkOGblBmHBxL0J7hHVUC4SJ3whaYLkGkkvJII9jMMN+amR
+         hghYkU9UVYZlUtbofGUA1HiDbKA1eFgrFBuYc4gd0VxwYH4XD0Izvy5qSCHeqXewUQqP
+         32ag==
+X-Forwarded-Encrypted: i=1; AJvYcCUrWHlCODsQ1OMGtU4ZlYZghQTvJSHLpinPAD3wVBHdW3pgKxzN+IIWxwsPAFLTYRmkl5m4EAw+ng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA3qtF+aafB+OSmT2QHNdcO9Xl26ZHfFc6Jsc480lPjShNHd7z
+	40Er7ru3QyhD0tMG1ssxrhg4c3150x1zqUZaW+qKRq84gYbe55xDmktr9ZTvjiSaxbI=
+X-Gm-Gg: ASbGncv5v/ttt0Z9VKTpmoTmY8Ge+bhfdJScMXRt/VtaGPspgdjRQKLQn3zIrFJj0rG
+	m9AM9dOGBeDNw/VP+AEVZJ+ha66p8VheGvxZn370M9cEb/G0xzI/IKh187AATb4xPTGxlJRKgkj
+	CpfSWR4+LoLNm5vkrh51FHjWHXzU3vpa+Dx9mVScrnR0nyEyLVNHjEugVM9O7Dx2DSiab9sTH2S
+	El4svm26GatFfPeHRO44b8CgEw3/N4VUPHmxhiCZXcL/9wWFFx3M8wXcIDz3l4o3T+P8LAOmE3y
+	x4u96tYCVwQmxezHTuVTyVxhNqbNUKu/vCwek7iT1GHOFt+0zB0Df5zg/MB2Rj6OBtarN8v2BrW
+	KPCYFfYzGChE2kDqsTz5WSu0=
+X-Google-Smtp-Source: AGHT+IFpB+Tct+sMn29BFyf/nBuNb0BDj/u4aJoMRoHvhpjU6QtQv2A9e6t89MMC3L09AatFyXUoJQ==
+X-Received: by 2002:a17:903:41cd:b0:240:8381:45b9 with SMTP id d9443c01a7336-24200a7e767mr26387805ad.8.1753960407543;
+        Thu, 31 Jul 2025 04:13:27 -0700 (PDT)
+Received: from localhost ([122.172.85.40])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e89769absm15521205ad.80.2025.07.31.04.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Jul 2025 04:13:26 -0700 (PDT)
+Date: Thu, 31 Jul 2025 16:43:24 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: Prashant Malani <pmalani@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
+References: <CAFivqmJL90xsELhz4tPtkYA9vMzS9C=V__nwo=kWJKjKS=mE_Q@mail.gmail.com>
+ <CAFivqmKBgYVa6JUh82TS2pO915PUDYZMH+k-5=-0u1-K9-gMMw@mail.gmail.com>
+ <aHTOSyhwIAaW_1m1@arm.com>
+ <CAFivqmJ912sEdSih_DFkiWRm478XUJhNDe=s2M_UO2gVTu4e3w@mail.gmail.com>
+ <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
+ <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
+ <20250722032727.zmdwj6ztitkmr4pf@vireshk-i7>
+ <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
+ <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
+ <aIso4kLtChiQkBjH@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aIso4kLtChiQkBjH@arm.com>
 
-On Wed, 30 Jul 2025 13:26:39 +0200
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
+On 31-07-25, 10:27, Beata Michalska wrote:
+> I am still wondering whether cpufreq core is not a better suited place for
+> checking whether the CPU is idle. We could potentially try on anther CPU within
+> the policy and if there is none, just provide the last known freq ?
+> 
+> @Viresh: What are your thoughts on that ?
 
-> Some devices connected over the SPMI bus may be big, in the sense
-> that those may be a complex of devices managed by a single chip
-> over the SPMI bus, reachable through a single SID.
-> 
-> Add new functions aimed at managing sub-devices of a SPMI device
-> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
-> for adding a new subdevice and removing it respectively, and also
-> add their devm_* variants.
-> 
-> The need for such functions comes from the existance of	those
-> complex Power Management ICs (PMICs), which feature one or many
-> sub-devices, in some cases with these being even addressable on
-> the chip in form of SPMI register ranges.
-> 
-> Examples of those devices can be found in both Qualcomm platforms
-> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
-> sub-devices, and in newer MediaTek platforms showing similar HW
-> features and a similar layout with those also having many subdevs.
-> 
-> Also, instead of generally exporting symbols, export them with a
-> new "SPMI" namespace: all users will have to import this namespace
-> to make use of the newly introduced exports.
-> 
-> Link: https://lore.kernel.org/r/20250722101317.76729-2-angelogioacchino.delregno@collabora.com
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-With the note that I know almost nothing about SPMI so am just
-looking at what is here + replies in earlier threads.
-Looks good to me.
+For other platforms (that' don't have counters to read), I think a call to
+->get() to get the currently configured frequency is perfectly fine. Isn't it ?
 
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+-- 
+viresh
 
