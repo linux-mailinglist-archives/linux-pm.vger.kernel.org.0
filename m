@@ -1,272 +1,197 @@
-Return-Path: <linux-pm+bounces-31709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF547B1777B
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 22:58:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34062B17864
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 23:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09FFB5883D5
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 20:58:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34E93BE806
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 21:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A3021D584;
-	Thu, 31 Jul 2025 20:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8C725F984;
+	Thu, 31 Jul 2025 21:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=viasat.com header.i=@viasat.com header.b="JEj7nAXD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PkEPpbFA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0e-0085b301.gpphosted.com (mx0e-0085b301.gpphosted.com [67.231.147.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D3120B22;
-	Thu, 31 Jul 2025 20:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.147.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BDB2907;
+	Thu, 31 Jul 2025 21:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753995511; cv=none; b=c75R8hB+fN2XbMxl4S1ZzvVvZAsQ6PKyNUO+TAiFsgsOGXmbFCc/IHteSTIEh4pUWqKVVubm2xq4Sqk409/FqTfr7/uReVFEwZa6Jlo+mm3M3TGbSzoq0h1SkdXctmXJSBpde5E36mGQ6UYgK5Xy+FmTQG+SF4QQFbUVpjgS6V8=
+	t=1753998366; cv=none; b=tEYNFrp0MnjrJ0wUaCSoX0cklfJL2tvbrnuB6q4A9jpMKp9+A2MWmBuL+OsQlmZefOhVINX2QD6q+IM0gGJMUFi0UJNELl1QC0TnhjjKjUP438YL3qZqNNvs5q/Rgs6tVlCXGd1SCQ4PlIvu/gjx5aMHJCKfxCYiOmen43Kx+5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753995511; c=relaxed/simple;
-	bh=zlH0RfC76DhvbnUaV2GPtwg3u0KKc/8zibG7tbyBxZ8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=bdc+KOiilUTDu87Wkf77WAKyvAba0bvNAPBfh6Cdb2DHH2KDfe+h2qbw2q26FJtErLgxhvz/Ym8DLworozs3+ZWUWQj/1QXLiLAZzK0mMK2z6830x4m5p/JtmGCC5AXtqVSHoLKtCAXdkZoeD6A84gVgEA9FEjARth1l4w5SPGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=viasat.com; spf=pass smtp.mailfrom=viasat.com; dkim=pass (2048-bit key) header.d=viasat.com header.i=@viasat.com header.b=JEj7nAXD; arc=none smtp.client-ip=67.231.147.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=viasat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=viasat.com
-Received: from pps.filterd (m0351329.ppops.net [127.0.0.1])
-	by mx0e-0085b301.gpphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56VJgaKB006710;
-	Thu, 31 Jul 2025 20:44:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=viasat.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=2y4disjWUjWYFrysJhW0zowUF5MQL9jLgrMDCcueTZg=;
- b=JEj7nAXD1WoQEDwpGXSakQplDvohZfFYYtlkfQqfN+EwsliHaOriTEC7vZmeLQByPOTI
- 3H5EPMMSS6fDDGkpCmmSDriufBHmxuKBbuczQG598phEq2JCEponPDZuMEYrAGgJ6+ZR
- yfxZLDKwjTIn4W246ZdyOA1hHEyOe5KaAVYKC10K10ov1YrzYaHJ9A7xx1gARFNGpPQc
- zx7afkPRT4s70d7bdpfg8AFle+sJbxUKAQZJROaeP7rWDcZnmH2294uTmKTlBJ/+CNRv
- WbRYSflB+kooXsTlQcUGjyAz7VHi0H51gR1JNhR1JCNzkalrWzQcb967gnq5EkGcP0jB BA== 
-Received: from wdc1exchp03.hq.corp.viasat.com ([8.37.104.42])
-	by mx0e-0085b301.gpphosted.com (PPS) with ESMTPS id 488esu0c19-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 31 Jul 2025 20:44:04 +0000
-Received: from WDC1EXCHP05.hq.corp.viasat.com (10.228.7.145) by
- WDC1EXCHP03.hq.corp.viasat.com (10.228.7.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 31 Jul 2025 14:44:03 -0600
-Received: from WDC1EXCHP05.hq.corp.viasat.com ([fe80::e59e:1518:91aa:55e9]) by
- WDC1EXCHP05.hq.corp.viasat.com ([fe80::e59e:1518:91aa:55e9%14]) with mapi id
- 15.01.2507.039; Thu, 31 Jul 2025 14:44:02 -0600
-From: "Jones, Morgan" <Morgan.Jones@viasat.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Heusel
-	<christian@heusel.eu>
-CC: Mario Limonciello <mario.limonciello@amd.com>,
-        Sasha Levin
-	<sashal@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Arcari
-	<darcari@redhat.com>,
-        Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "viresh.kumar@linaro.org"
-	<viresh.kumar@linaro.org>,
-        "gautham.shenoy@amd.com" <gautham.shenoy@amd.com>,
-        "perry.yuan@amd.com" <perry.yuan@amd.com>,
-        "skhan@linuxfoundation.org"
-	<skhan@linuxfoundation.org>,
-        "li.meng@amd.com" <li.meng@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "stable@vger.kernel.org"
-	<stable@vger.kernel.org>,
-        Linux kernel regressions list
-	<regressions@lists.linux.dev>
-Subject: RE: [EXTERNAL] Re: linux-6.6.y regression on amd-pstate
-Thread-Topic: [EXTERNAL] Re: linux-6.6.y regression on amd-pstate
-Thread-Index: AQHbAfgjMcfsLm0RPUe9mEZa119bzrJOUuoAgAAExwCCAFqV0A==
-Date: Thu, 31 Jul 2025 20:44:02 +0000
-Message-ID: <534cb3af86bd4371800ebfb3035382c2@viasat.com>
-References: <66f08ce529d246bd8315c87fe0f880e6@viasat.com>
- <645f2e77-336b-4a9c-b33e-06043010028b@amd.com>
- <2e36ee28-d3b8-4cdb-9d64-3d26ef0a9180@amd.com>
- <d6477bd059df414d85cd825ac8a5350d@viasat.com>
- <d6808d8e-acaf-46ac-812a-0a3e1df75b09@amd.com>
- <7f50abf9-e11a-4630-9970-f894c9caee52@amd.com>
- <f9085ef60f4b42c89b72c650a14db29c@viasat.com>
- <be2d96b0-63a6-42ea-a13b-1b9cf7f04694@amd.com>
- <2024090834-hull-unbalance-ca6b@gregkh>
- <2ffb55e3-6752-466a-b06b-98c324a8d3cc@heusel.eu>
- <2024090825-clarity-cofounder-5c79@gregkh>
-In-Reply-To: <2024090825-clarity-cofounder-5c79@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1753998366; c=relaxed/simple;
+	bh=EAi11GnM5NOpqtZGQP1+CvoqjqN0gawbLhNDx0WJK9Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ktWLiyskBy/EV9OjED/7oEs587ZAvIDGsuYiCHSFYUUEHxSDIn5b33EMOvKSW/VnDd/mKUsolMyf/K3OS1GvDNDpNnjQ9QabRBiPhYGuVSJYnNjTSvR8L4Quj/YMbQgQnIUwSKL0166k5YpeZWlZhKk6+tVMgSqmjJ8r/gy3RR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PkEPpbFA; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-33216091f46so1914131fa.3;
+        Thu, 31 Jul 2025 14:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753998363; x=1754603163; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M5O3S8YHjEKxf35I4HemjKP04DsSFKh+k5HBzaaWKAg=;
+        b=PkEPpbFAnzme0GCIYc7NsFX2BJjflYaBTj+VN/wpl8d66/i9KQYA28eVI+xIO6WBdj
+         KAsSXLMshqgYk5Y/bbHO8GqbTqeBMFeMrszZRvtjn1tJvFyjXGM4yyphygyAb8F9iran
+         1QS84LrRnTZBvF7DUSAPbioWJM77gjY5qqatg0RUFMXwfrp44pTJnxUbbS8AfAcD1OTG
+         vqoMHlIsS71OMCAWaRVh1ZTVuoPQ4qXgCB+f6LlPKOg5s7pwlNQzq5acMMnff2Rq2zzY
+         3JiuB9Bp8YLjjkluXpHExYMqTD/7jegN3POZzqswhxJcAqT9df9tuUpYO1oW2sd9BAur
+         9WbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753998363; x=1754603163;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M5O3S8YHjEKxf35I4HemjKP04DsSFKh+k5HBzaaWKAg=;
+        b=exgbEPu9TZPoFRz0P8k0/thsddWNazC1UePwoMLYX5Juro8DDcpO4KqtbasM6J89v7
+         deHhRBMXqj3zVYqPVLsfxO+fD1XrOoV/+uTSeMg8V88DFS6qdi/0iXK5igsmGfl9eCjM
+         cmC2EzAfqNoGusXOMjwAegxLPiEA3U3ESSetaRuv0jgaZiFLeZmOW6xBLCV2MQ0Gvg3L
+         EMGVrhx4zDd/wyoH9U67PdmM/2c9/d6ZHWmvBol7nXj6OZuoY0y2ByePYBST+LA6s2lg
+         IcosHumGpxAFwnSMF13ts+kQ+VxPhoJK8fqtPohN+aW3lKs5mIQGbySPiStvv7VhvTXW
+         O/mA==
+X-Forwarded-Encrypted: i=1; AJvYcCUe+zi9Mq0WRY2GjJXwP219T3yHgdlXijvejjRYCsJeQe8Md4/QbDZVZia6KU6Tz6eg6iuC9PazqUE=@vger.kernel.org, AJvYcCV8phsYteUbWwpNFeoBl2oE3ePhn/Z8Pi4Sga4stlBeD13aD0JbWmM7V4Tuj9KFRF4t8qs39iWrZ0Fr@vger.kernel.org, AJvYcCVgYCDJz4+gouLdgioNAh4FOc4OQ+KkFQQA7q1o969/K7pwjjKE6kHJD7SV6xDHm8GBO5ayrzSG0HJ0PTm9@vger.kernel.org, AJvYcCWXnmSjJ4yZunxJMWHSuka0f8vMJvZS1mN1p/n1lMnP64q88mNRDZDeDLeyZDbKhy6z82meAfh1w3DWyUA=@vger.kernel.org, AJvYcCWxFTmZtIpeCkeJXx45bKSEZEZd/ydUucTzQpItXS/A9pc4KCi6IyeV3JNI4y5m4qZvxHvoDwah0xf9@vger.kernel.org, AJvYcCXZ7XMAgAEoJAB0sfAYS0I77SJRTqZEbL9MpkYQeuU9ODjG0czuxsQpEPsR1EOAvQp+rkz7IJjlQVKv@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd3IhTbNRDte6CqPxB/tl5Kl6HnuY2dpMYBi8mfGqKmweFUoa6
+	cFL14/l4G5puXMikfFFLzYJ8N33If3NPr9I2XYDSvbMqTTVAfx4FIm674tGAWRYmd6DcxhPnv+B
+	Bb150N70dP7SE2SfkGydqfx3iLolBdN4=
+X-Gm-Gg: ASbGnct8M7100N1MRwp0VV8r6EVAo4OKfH1TzcWYLQ8Odm612iytQ2OKJsGbUEwGT6b
+	uU007S1dSff4I2eSX641O0id7WbRRI5QejUZgmnrT/go5rqS3d4gFbShEssXh/Wy4E+jn8WOnGr
+	jSgY7A+A2kJf3mxjr0SYZzkdbJ6HcbvOamVjXvYTlG1pSNKQlpMv06aPjMkzJELBJyBIoNqttpC
+	720olQz3kH/yz0bOviYEU6rJ7Io
+X-Google-Smtp-Source: AGHT+IE68ugzaerYztp5XTRePDBYmlv+5hk7MWpjNQloFG3z43Am06Y5klzWQnNYHpsFYONif7VtzQJSYSRafwvOkDU=
+X-Received: by 2002:a05:651c:508:b0:32a:8591:6689 with SMTP id
+ 38308e7fff4ca-33224a725fbmr23822031fa.7.1753998362736; Thu, 31 Jul 2025
+ 14:46:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: rNIW7h3nN3UqglVKc0s-xxVSD8karOTt
-X-Proofpoint-GUID: rNIW7h3nN3UqglVKc0s-xxVSD8karOTt
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMxMDE1MCBTYWx0ZWRfX4nN+1EmU7bN/ dYErwNdOvfXw7lZvRoN7AHOlEQUGKNWWPDmS0p7XFmnGvSVp5FlFCdStZG1zOi/yTDvrkrHBgID 8xwVsReQgIUZkWOjAKtSSgZhl/I57dNQtNwfT6UU151q3zhmOP/+/yJdGJKMcSY29lvu9EMfK6a
- WdG4cRMs/8j0r+4W/8PhOrW1soGZX5BCuQSTqXv0I5gvZGwH1nmcd2IqggDmR9JfChDDM9bjHe1 9YJagsNud5tqJocYZrxEtCS+giU57CMigOM0rDCx0M7F81f0fywO/74IcuThJia/+HSc64TybwE 9/SoNzSKORUTlU/aIK8+XiNOhA0WJcOcaQezc51OONhFjFlMjsXF+P6c2VmkaTkxK/1eiFkcZRg UhTzXLFH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-31_04,2025-07-31_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- malwarescore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- bulkscore=0 priorityscore=1501 adultscore=0 phishscore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2505160000 definitions=main-2507310150
+References: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
+In-Reply-To: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Thu, 31 Jul 2025 16:45:51 -0500
+X-Gm-Features: Ac12FXwmiSNEzxCmapZYKElVAjT1-RsIDF_NIv5WiOavZcEcHwc6rmCyCZHdaRw
+Message-ID: <CALHNRZ992mowGjQY7U6hLRsPemaE6AikK-rDp+_CZkGruzP2Qw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] arm64: tegra: Add Tegra210B01 support
+To: webgeek1234@gmail.com
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Mathias Nyman <mathias.nyman@intel.com>, Peter De Schrijver <pdeschrijver@nvidia.com>, 
+	Prashant Gaikwad <pgaikwad@nvidia.com>, devicetree@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, 
+	Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	Azkali Manad <a.ffcc7@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hey all,
+On Sun, Jul 20, 2025 at 9:17=E2=80=AFPM Aaron Kling via B4 Relay
+<devnull+webgeek1234.gmail.com@kernel.org> wrote:
+>
+> Also known as Tegra X1+, the Tegra210B01 has higher CPU and GPU clocks
+> than the original Tegra210.
+>
+> This series adds Tegra210B01 support to several drivers, as a slight
+> extension to the existing Tegra210 support. Then adds a generic soc dtsi
+> in the same vein as other tegra archs. And finally adds a barebones
+> device dts to be used for dt checks. Further device support will be
+> submitted in later series.
+>
+> Earlier internal revisions of this series included changes to the dfll
+> driver to support Tegra210B01, but those did not work in testing, thus
+> was dropped from the series. A bindings update to match is still in the
+> series so the soc dtsi can declare a separate compatible from Tegra210,
+> preventing the driver from attempting incorrect initialization on
+> Tegra210B01.
+>
+> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> ---
+> Changes in v2:
+> - Fix patch 1 subject
+> - Add descriptive name in patch 8
+> - Fix copy-paste error in patch 13, discovered by kernel ci
+> - Link to v1: https://lore.kernel.org/r/20250714-t210b01-v1-0-e3f5f7de5dc=
+e@gmail.com
+>
+> ---
+> Aaron Kling (16):
+>       dt-bindings: soc: tegra: pmc: Document Tegra210B01
+>       dt-bindings: phy: tegra-xusb: Document Tegra210B01
+>       dt-bindings: usb: tegra-xusb: Document Tegra210B01
+>       dt-bindings: usb: tegra-xudc: Document Tegra210B01
+>       dt-bindings: thermal: tegra: Document Tegra210B01
+>       dt-bindings: clock: tegra: Document Tegra210B01
+>       dt-bindings: clock: tegra124-dfll: Document Tegra210B01
+>       dt-bindings: tegra: Document Shield TV 2019
+>       phy: tegra: xusb: Add Tegra201B01 Support
+>       usb: xhci: tegra: Add Tegra210B01 support
+>       usb: gadget: tegra-xudc: Add Tegra210B01 Support
+>       thermal: tegra: Add Tegra210B01 Support
+>       clk: tegra: Add Tegra210B01 support
+>       arm64: tegra: Add BPMP node for Tegra210
+>       arm64: tegra: Add Tegra210B01 support
+>       arm64: tegra: Add support for NVIDIA Shield TV Pro 2019
+>
+> Azkali Manad (1):
+>       soc/tegra: pmc: Add Tegra210B01 support
+>
+>  Documentation/devicetree/bindings/arm/tegra.yaml   |    6 +
+>  .../bindings/clock/nvidia,tegra124-dfll.txt        |    1 +
+>  .../bindings/clock/nvidia,tegra20-car.yaml         |    1 +
+>  .../bindings/phy/nvidia,tegra210-xusb-padctl.yaml  |    4 +-
+>  .../bindings/soc/tegra/nvidia,tegra20-pmc.yaml     |    5 +-
+>  .../bindings/thermal/nvidia,tegra124-soctherm.yaml |    2 +
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml |    2 +
+>  .../bindings/usb/nvidia,tegra210-xusb.yaml         |    4 +-
+>  arch/arm64/boot/dts/nvidia/Makefile                |    1 +
+>  arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   11 +
+>  .../boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts |   10 +
+>  arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi  |   70 +
+>  arch/arm64/boot/dts/nvidia/tegra210b01.dtsi        |   64 +
+>  drivers/clk/tegra/Makefile                         |    1 +
+>  drivers/clk/tegra/clk-tegra-periph.c               |    3 +
+>  drivers/clk/tegra/clk-tegra210b01.c                | 3758 ++++++++++++++=
+++++++
+>  drivers/clk/tegra/clk-utils.c                      |    5 +-
+>  drivers/clk/tegra/clk.c                            |   19 +-
+>  drivers/clk/tegra/clk.h                            |    6 +
+>  drivers/phy/tegra/xusb-tegra210.c                  |   41 +
+>  drivers/phy/tegra/xusb.c                           |    4 +
+>  drivers/phy/tegra/xusb.h                           |    1 +
+>  drivers/soc/tegra/pmc.c                            |  117 +
+>  drivers/thermal/tegra/soctherm.c                   |    4 +
+>  drivers/thermal/tegra/soctherm.h                   |    1 +
+>  drivers/thermal/tegra/tegra210-soctherm.c          |   78 +
+>  drivers/usb/gadget/udc/tegra-xudc.c                |   20 +
+>  drivers/usb/host/xhci-tegra.c                      |   25 +
+>  include/dt-bindings/clock/tegra210-car.h           |    5 +-
+>  29 files changed, 4262 insertions(+), 7 deletions(-)
+> ---
+> base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
+> change-id: 20250509-t210b01-c154ca0f8994
+>
+> Best regards,
+> --
+> Aaron Kling <webgeek1234@gmail.com>
+>
+>
 
-I think some form of this is back between 6.12 and 6.15 on our fractious AM=
-D EPYC 7702. The symptom appears to be that the core will not boost past 2 =
-GHz (the nominal frequency), so we lose out on 1.36 GHz of boost frequency.=
- Downgrade from 6.15.7 to LTS (6.12.39) seems to fix it.
+Reminder about this series.
 
-Keeping an eye out for other threads reporting similar symptoms on recent k=
-ernels:
-
-[    0.000000] Linux version 6.15.7-xanmod1 (nixbld@localhost) (gcc (GCC) 1=
-4.2.1 20250322, GNU ld (GNU Binutils) 2.44) #1-NixOS SMP PREEMPT_DYNAMIC Tu=
-e Jan  1 00:00:00 UTC 1980
-
-# cat /proc/cmdline
-[snip] amd_pstate=3Dactive amd_prefcore=3Denable amd_pstate.shared_mem=3D1
-
-# cat /proc/cpuinfo
-[snip]
-processor       : 127
-vendor_id       : AuthenticAMD
-cpu family      : 23
-model           : 49
-model name      : AMD EPYC 7702 64-Core Processor
-stepping        : 0
-microcode       : 0x830107d
-cpu MHz         : 400.000
-cache size      : 512 KB
-physical id     : 0
-siblings        : 128
-core id         : 63
-cpu cores       : 64
-apicid          : 127
-initial apicid  : 127
-fpu             : yes
-fpu_exception   : yes
-cpuid level     : 16
-wp              : yes
-flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca =
-cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe=
-1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_a=
-picid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 mo=
-vbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_leg=
-acy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext per=
-fctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate s=
-sbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cqm rdt_a rdse=
-ed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc c=
-qm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbn=
-oinvd amd_ppin arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushb=
-yasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spe=
-c_ctrl umip rdpid overflow_recov succor smca sev sev_es
-bugs            : sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass r=
-etbleed smt_rsb srso ibpb_no_ret
-bogomips        : 3992.75
-TLB size        : 3072 4K pages
-clflush size    : 64
-cache_alignment : 64
-address sizes   : 43 bits physical, 48 bits virtual
-power management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]
-
-# cpupower frequency-info
-analyzing CPU 76:
-  driver: amd-pstate-epp
-  CPUs which run at the same hardware frequency: 76
-  CPUs which need to have their frequency coordinated by software: 76
-  energy performance preference: performance
-  hardware limits: 408 MHz - 3.36 GHz
-  available cpufreq governors: performance powersave
-  current policy: frequency should be within 1.51 GHz and 3.36 GHz.
-                  The governor "performance" may decide which speed to use
-                  within this range.
-  current CPU frequency: 1.98 GHz (asserted by call to kernel)
-  boost state support:
-    Supported: yes
-    Active: yes
-  amd-pstate limits:
-    Highest Performance: 255. Maximum Frequency: 3.36 GHz.
-    Nominal Performance: 152. Nominal Frequency: 2.00 GHz.
-    Lowest Non-linear Performance: 115. Lowest Non-linear Frequency: 1.51 G=
-Hz.
-    Lowest Performance: 31. Lowest Frequency: 400 MHz.
-    Preferred Core Support: 0. Preferred Core Ranking: 255.
-
-Regards,
-Morgan
-
------Original Message-----
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>=20
-Sent: Sunday, September 8, 2024 7:30 AM
-To: Christian Heusel <christian@heusel.eu>
-Cc: Mario Limonciello <mario.limonciello@amd.com>; Jones, Morgan <Morgan.Jo=
-nes@viasat.com>; Sasha Levin <sashal@kernel.org>; linux-pm@vger.kernel.org;=
- linux-kernel@vger.kernel.org; David Arcari <darcari@redhat.com>; Dhananjay=
- Ugwekar <Dhananjay.Ugwekar@amd.com>; rafael@kernel.org; viresh.kumar@linar=
-o.org; gautham.shenoy@amd.com; perry.yuan@amd.com; skhan@linuxfoundation.or=
-g; li.meng@amd.com; ray.huang@amd.com; stable@vger.kernel.org; Linux kernel=
- regressions list <regressions@lists.linux.dev>
-Subject: [EXTERNAL] Re: linux-6.6.y regression on amd-pstate
-
-On Sun, Sep 08, 2024 at 04:12:28PM +0200, Christian Heusel wrote:
-> Hey Greg,
->=20
-> On 24/09/08 04:05PM, Greg Kroah-Hartman wrote:
-> > On Thu, Sep 05, 2024 at 04:14:26PM -0500, Mario Limonciello wrote:
-> > > + stable
-> > > + regressions
-> > > New subject
-> > >=20
-> > > Great news.
-> > >=20
-> > > Greg, Sasha,
-> > >=20
-> > > Can you please pull in these 3 commits specifically to 6.6.y to=20
-> > > fix a regression that was reported by Morgan in 6.6.y:
-> > >=20
-> > > commit 12753d71e8c5 ("ACPI: CPPC: Add helper to get the highest=20
-> > > performance
-> > > value")
-> >=20
-> > This is fine, but:
-> >=20
-> > > commit ed429c686b79 ("cpufreq: amd-pstate: Enable amd-pstate=20
-> > > preferred core
-> > > support")
-> >=20
-> > This is not a valid git id in Linus's tree :(
->=20
-> f3a052391822 ("cpufreq: amd-pstate: Enable amd-pstate preferred core=20
-> support")
->=20
-> >=20
-> > > commit 3d291fe47fe1 ("cpufreq: amd-pstate: fix the highest=20
-> > > frequency issue which limits performance")
-> >=20
-> > And neither is this :(
->=20
-> bf202e654bfa ("cpufreq: amd-pstate: fix the highest frequency issue=20
-> which limits performance")
->=20
-> > So perhaps you got them wrong?
->=20
-> I have added the ID's of the matching commits from Linus' tree above!=20
-> :)
->=20
-
-Thanks, that works, all now queued up.
-
-greg k-h
+Aaron
 
