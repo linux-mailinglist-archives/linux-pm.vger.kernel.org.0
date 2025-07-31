@@ -1,143 +1,129 @@
-Return-Path: <linux-pm+bounces-31678-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31679-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9068B16EE0
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 11:43:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 701D0B16F4B
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 12:15:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D99163A9E5D
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 09:42:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9461188EF59
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 10:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EFA229CB5F;
-	Thu, 31 Jul 2025 09:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262192BDC1B;
+	Thu, 31 Jul 2025 10:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="njKKHKIz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82CD28A718;
-	Thu, 31 Jul 2025 09:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0189C746E;
+	Thu, 31 Jul 2025 10:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753954985; cv=none; b=noUfzWB1a30rzPhnQb6I4gWcxL3/rtoLh5OkyyGbbeFRx9qUdbCFpDUo8a5GwmQYlEJ6lm8OjQoaI0kIN/uT9TcooXrsG+dmpW0eLE2OpPCCy/gEnO1WwKGc8ok4xWyMi0gOkM52iHCYzwk0eqWNN4/f+VgsHA0S32oKdVZcoTE=
+	t=1753956952; cv=none; b=klhxDCihRbAB2uiml9ecbE1MtZ0X/0GBVmvZfTJB4yrn5l//2NJuuSINihhxIuOysUjuYVTYWZiL3Ow0fdsTiR67l/L0+i8tfnYhmFMIUoyOcMHkTq9VCILVfifX2SeaHzPq/eDqSayAFMkcIe0gag8ESX5htSVavZePzGiEdQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753954985; c=relaxed/simple;
-	bh=QJkSrAUetbvWvmT8qBYv6oDH48hw7mqICMLX+im+dFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pNN8taDdFYRkkg4zfRQutAurHFZ2lXW1vyqgNwmdgYFu+8KNXEOJx+r+bKBPfGX11p0N1upxRu40k505jaIUDw+lYLX2ivPLRWq1o7/3dSrkNJFSq47Z5Pilt7eWGVfu4WzhcLRnX+Jj7wp+ZAwipZR5d6vVio+NX+InNmFFflk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D03EE1D13;
-	Thu, 31 Jul 2025 02:42:53 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D0BC3F66E;
-	Thu, 31 Jul 2025 02:42:58 -0700 (PDT)
-Date: Thu, 31 Jul 2025 11:42:37 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: Jie Zhan <zhanjie9@hisilicon.com>
-Cc: Bowen Yu <yubowen8@huawei.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, lihuisong@huawei.com,
-	zhenglifeng1@huawei.com
-Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in
- cppc_scale_freq_workfn()
-Message-ID: <aIs6d4ebRKkbz0az@arm.com>
-References: <20250730032312.167062-1-yubowen8@huawei.com>
- <20250730032312.167062-3-yubowen8@huawei.com>
- <aIsnA4miO8fCJTgs@arm.com>
- <d9aefa22-9566-9db0-a95f-ab50465977f8@hisilicon.com>
+	s=arc-20240116; t=1753956952; c=relaxed/simple;
+	bh=RJiuaDp9mWdvOO/DBR0WGEM4OUuHTFOlawmLNB3P+G4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ORZgAnofMzTXlw8KcJAZY+0PT8HTe9XCqqRdJI7zDjY17x0EviZkpUm6lk4dWNNRzTfAxZwbim3CY14caA+sL//mFr17Wz+FjPwk4C9n9hkKGCBb11p+XkzKmzGuOAuB6q3azf5hSvKRiWUNI66pmradVvq1GGQJsg+YtdMgJdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=njKKHKIz; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1753956948;
+	bh=RJiuaDp9mWdvOO/DBR0WGEM4OUuHTFOlawmLNB3P+G4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=njKKHKIzlvWFgIIXcjpz+iskyPm9MiUUMKAUvxUtiG1R1CgxIxZBHbJjZBHW5uq3u
+	 jiKMiAau9Fc3+HFgb86VauHp12rel7f8aFYebPkZHci0x0Q4agt18ckSKOTwDUSiXb
+	 naWk8UpG8LvfB6reJg+U+S8i3x6yNwU06vqxE3Kyj96t372JvbxtEv/FS4iQrpm52A
+	 vdIHItdj2KWjh0XbwNH5BTVLH4H5lanquQcnsqIyYj2ZbiVAP0rTJRA1kwIUkRMD4m
+	 Q1HrtCVCOmc4oY9mqSYISE9uT3ccecOvDRfl1rFvwg8v0pC2d75f+fEShZd3VCvuCk
+	 ohEj4DvNj4y8A==
+Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:e229:d0be:3141:7dd2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8432E17E05F0;
+	Thu, 31 Jul 2025 12:15:38 +0200 (CEST)
+From: Laura Nao <laura.nao@collabora.com>
+To: fshao@chromium.org
+Cc: andrew-ct.chen@mediatek.com,
+	angelogioacchino.delregno@collabora.com,
+	arnd@arndb.de,
+	bchihi@baylibre.com,
+	colin.i.king@gmail.com,
+	conor+dt@kernel.org,
+	daniel.lezcano@linaro.org,
+	devicetree@vger.kernel.org,
+	kernel@collabora.com,
+	krzk+dt@kernel.org,
+	lala.lin@mediatek.com,
+	laura.nao@collabora.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	lukasz.luba@arm.com,
+	matthias.bgg@gmail.com,
+	nfraprado@collabora.com,
+	rafael@kernel.org,
+	robh@kernel.org,
+	rui.zhang@intel.com,
+	srini@kernel.org,
+	u.kleine-koenig@baylibre.com,
+	wenst@chromium.org
+Subject: Re: [PATCH v2 6/9] thermal/drivers/mediatek/lvts: Add support for ATP mode
+Date: Thu, 31 Jul 2025 12:14:41 +0200
+Message-Id: <20250731101441.142132-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <CAC=S1njcFhyY6+dT2MHU02ZsLDq+k_vAVv==bWuoGt3KA18PHg@mail.gmail.com>
+References: <CAC=S1njcFhyY6+dT2MHU02ZsLDq+k_vAVv==bWuoGt3KA18PHg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9aefa22-9566-9db0-a95f-ab50465977f8@hisilicon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 31, 2025 at 04:52:05PM +0800, Jie Zhan wrote:
-> 
-> 
-> On 31/07/2025 16:19, Beata Michalska wrote:
-> > Hi Bowen, Jie
-> > On Wed, Jul 30, 2025 at 11:23:12AM +0800, Bowen Yu wrote:
-> >> From: Jie Zhan <zhanjie9@hisilicon.com>
-> >>
-> >> Perf counters could be 0 if the cpu is in a low-power idle state. Just try
-> >> it again next time and update the frequency scale when the cpu is active
-> >> and perf counters successfully return.
-> >>
-> >> Also, remove the FIE source on an actual failure.
-> >>
-> >> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> >> ---
-> >>  drivers/cpufreq/cppc_cpufreq.c | 13 ++++++++++++-
-> >>  1 file changed, 12 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> >> index 904006027df2..e95844d3d366 100644
-> >> --- a/drivers/cpufreq/cppc_cpufreq.c
-> >> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> >> @@ -78,12 +78,23 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
-> >>  	struct cppc_cpudata *cpu_data;
-> >>  	unsigned long local_freq_scale;
-> >>  	u64 perf;
-> >> +	int ret;
-> >>  
-> >>  	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
-> >>  	cpu_data = cppc_fi->cpu_data;
-> >>  
-> >> -	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
-> >> +	ret = cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs);
-> >> +	/*
-> >> +	 * Perf counters could be 0 if the cpu is in a low-power idle state.
-> >> +	 * Just try it again next time.
-> >> +	 */
-> >> +	if (ret == -EFAULT)
-> >> +		return;
-> > Which counters are we actually talking about here ?
-> 
-> Delivered performance counter and reference performance counter.
-> They are actually AMU CPU_CYCLES and CNT_CYCLES event counters.
-That does track then.
-> 
-> >> +
-> >> +	if (ret) {
-> >>  		pr_warn("%s: failed to read perf counters\n", __func__);
-> >> +		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC,
-> >> +						 cpu_data->shared_cpu_map);
-> >>  		return;
-> >>  	}
-> > And the real error here would be ... ?
-> > That makes me wonder why this has been registered as the source of the freq
-> > scale in the first place if we are to hit some serious issue. Would you be able
-> > to give an example of any?
-> If it gets here, that would be -ENODEV or -EIO from cppc_get_perf_ctrs(),
-> which could possibly come from data corruption (no CPC descriptor) or a PCC
-> failure.
-> 
-> I can't easily fake an error here, but the above -EFAULT path could
-> happen when it luckily passes the FIE init.
-> 
-The change seems reasonable. Though I am wondering if some other errors might be
-rather transient as well ? Like -EIO ?
-Note, I'm not an expert here.
+Hi Fei,
 
----
-BR
-Beata
-> Jie
-> > 
-> > ---
-> > BR
-> > Beata
-> >>  
-> >> -- 
-> >> 2.33.0
-> >>
-> >>
-> > 
+On 7/31/25 06:25, Fei Shao wrote:
+> On Wed, Jul 30, 2025 at 11:40 PM Laura Nao <laura.nao@collabora.com> wrote:
+>>
+>> MT8196/MT6991 uses ATP (Abnormal Temperature Prevention) mode to detect
+>> abnormal temperature conditions, which involves reading temperature data
+>> from a dedicated set of registers separate from the ones used for
+>> immediate and filtered modes.
+>>
+>> Add support for ATP mode and its relative registers to ensure accurate
+>> temperature readings and proper thermal management on MT8196/MT6991
+>> devices.
+>>
+>> While at it, convert mode defines to enum.
+>>
+>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+>
+> It's not visible in this patch, but a heads-up that I see
+> lvts_ctrl_start() also depends on whether lvts is in immediate mode. I
+> wonder if anything is needed there for ATP mode e.g. a new
+> sensor_atp_bitmap.
+> Feel free to ignore if this is a false alarm.
+>
+
+Thanks for the heads up - the bitmap for ATP mode is the same as 
+sensor_filt_bitmap, so the function is already working as intended.
+
+Best,
+
+Laura
+
+> Regards,
+> Fei
+
 
