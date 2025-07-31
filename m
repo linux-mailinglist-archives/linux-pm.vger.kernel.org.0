@@ -1,98 +1,98 @@
-Return-Path: <linux-pm+bounces-31650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 349B9B16B0D
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 06:11:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE30B16B0F
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 06:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CE1C18C644C
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 04:11:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A09F43BC33B
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 04:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7857521CA07;
-	Thu, 31 Jul 2025 04:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709F01FAC54;
+	Thu, 31 Jul 2025 04:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="D48Xn5no"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="E4NbMG2X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B041FAC48
-	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 04:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1697A921
+	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 04:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753935053; cv=none; b=kTN04wzNGtlAJkGKH3IO5iGi/Rus5gLWeZVBkUo3hCuvagT9LLPPeM+j/DcsyqNzUqWwM3ELmroD83p1iZucief2414H1doiPHOUCCxyvddXYawnPdEHY5OEz0rLRXdKufkhg02/Ugl3nnPaWUH9kNeVy/oc75jWr+65qQaZrbI=
+	t=1753935252; cv=none; b=XWZzPiGhM+mNc2rpAz+zHsvrxnj4s5dXDmPDZHUZ3wkaNLkmW8AjfN0D1qsFO6UvkinnMeRR3sqPW6ngtj29dIAn+pLu2TEROkaiWLVuLQTVnGfqYuiCrlYmkL+ebHP3RydXdLKACjnElHe6HoOPbVsb1GH3C8iOeENfJ0gybRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753935053; c=relaxed/simple;
-	bh=/ja0EnpPMJAy1a6pZm+E6r8QXYWmEMOdxVyXZuJR5eE=;
+	s=arc-20240116; t=1753935252; c=relaxed/simple;
+	bh=VYfZznB0Bwd01EwuH/VCVY8bkI+jlyZ0D2t//XUPrtU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m9hMC/EU1KDoeBKuOoJuw0frl+Zz7JUhQ3IU3egoJfjgm9Jrs9jNKLgPbKxg90CW5+wUUVOzpp+djzidQwIBSTKRtsFuF25uj3ztUHdO6MyuJ7+1h5naV+AXTHGej02Ai2trK9ZIcFpjzcjQIsI74sZ5Z2B+jIZOaGvC7XeCiw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=D48Xn5no; arc=none smtp.client-ip=209.85.210.43
+	 To:Cc:Content-Type; b=Of/CMsFnIbBSyK2G9EdSd0oyPuZvrY1uOczSVhYhRHkk8+pkUoNn7XRlYuqha3DTceDAgGXEPBlellXfoxPntXf8g61wCIsj1JoZFI9k3XGQtWFybKfQ0y7AEq98U8rBe7Oi8AuVzCDuWhLIqpMcW3cpvWbLww9m2XztXAmsK28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=E4NbMG2X; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-73e8cc38e80so897008a34.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 21:10:51 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3137c20213cso658424a91.3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 21:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1753935051; x=1754539851; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1753935249; x=1754540049; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l1REz7lxNqCP0vRE/ucDmbyORYxFecR0vhh1/DbBdVo=;
-        b=D48Xn5nohE35KEMtv9TmSrM711/5L3CcZ5j8ICTLiPSf8PrBvcaPS4KtoMp6inf0Ff
-         qdg8oKR5BDs2mrvpLb6dZ+XANtLtVxQko4Vj64DwWn+cryhCn33Jz2/wkKknnZS934un
-         nc9qs+ehKxPf1L5OSdId8Ig5ugfD7OqVezxNk=
+        bh=VYfZznB0Bwd01EwuH/VCVY8bkI+jlyZ0D2t//XUPrtU=;
+        b=E4NbMG2XPEJaS/ODtV03PDwOIaxpd5ux1oDlMANJb3ftRblZtepRtyI9YBddei9AV2
+         faE6tG3PWkhxiBneHMEeTeKPsqrVuq6zLbm1nXwAgG4H8/lz7Elqs9b0N7fjUfTq9I4h
+         fyVkr07CLSwZ3ubsg8kSenrSV8PkJpBHOK+CY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753935051; x=1754539851;
+        d=1e100.net; s=20230601; t=1753935249; x=1754540049;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l1REz7lxNqCP0vRE/ucDmbyORYxFecR0vhh1/DbBdVo=;
-        b=rlgTKlROW1IMKlU3s7+O80HYvX1i3dwXKE4G1QYogx+3U0ZSKAIWDiodudEsR4kyMS
-         lsVA6P0fhGUTCMbZDRwDLGbCexKN68+w7ik6rJ1QvQoJFyrGQNQfG+vbnMVg5vg6AWrg
-         f86aJhHZ4myab2XKRNzCvZNBrfxdg1je+ER++VMcmia125yFNTHZvtWiNaD/n49C97Ia
-         MwUo47A5BGV7KCI2oWo2S0hdfkXOFqnxqsOR0xLemvoXRqNlcqL795h9imyVZDqHKVyF
-         fkgtGrQdReNDRKECp1qSogdvO+9TulEOGnkLiBxsM8PLQvusnW+wolSC6YoGpeuJ5Kfk
-         VLgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXWm2U/gVCkDf8PX04iHaiRyyLmRLixiz+mEtMPM3sbU1hzRV4mITlh6vquXS8NdGvB+qEsmWxs/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWsHnAvR6M7WicNxrqKphx4q+ZqMyreZ8TamSzKUc/IrHrtTNi
-	d5vha6SY30Mtm0cuEDuDBTK6YhSNzUtGbYykp69UEQizxOEIKOnCNsiKGIdzEWSBLgkxAPGeC8X
-	RDAk=
-X-Gm-Gg: ASbGncsqq+ZoWt88DbqlbaxHMBPI8pAsuQ2astkLbWhO7a5YVx7wfPIebsctyoAFM0M
-	gqVtQ9Aymf2vTNP/7yfeUNaEyYeLqisXGgBg3b4a7Of9vsI0i9TuUXm90QiLm+NzK3+dmv7smGO
-	lcSiirL+QPqLCXger7RjET5VhHBbMkMkbdiIrBlifEe4+nmHH+YaC8yA51o6iCF2a545BeQ9CKQ
-	niqof9loH65KptxJfsZv2DxO3B0GfGeVzyQs/BnK8H2b+MQrX+NH/GjOk+504iR4JFKrynsgjhV
-	WeXAuX1wCPJEuFwyeXc5faafkmbtrxsOyJCVu2wSDv5poinlFrP6KUz+alAgxsmvXkgYEJheZlL
-	0HZHzQ+nnsKfpDUmfYf+uLHvRhx8Nri6JXlje79HzJbXzZdWZhbStNg61Xg==
-X-Google-Smtp-Source: AGHT+IGhC1l09s2i/lz8PEWexWCZvnSHBiW7sCTezbe8UogF6vARQpJzxz1nc6OjVzgMF62UUTTN3A==
-X-Received: by 2002:a9d:538b:0:b0:735:a6b9:3b48 with SMTP id 46e09a7af769-74187a9b34dmr305518a34.10.1753935050701;
-        Wed, 30 Jul 2025 21:10:50 -0700 (PDT)
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com. [209.85.160.43])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-74186ca998esm158570a34.1.2025.07.30.21.10.50
+        bh=VYfZznB0Bwd01EwuH/VCVY8bkI+jlyZ0D2t//XUPrtU=;
+        b=GSKSKBpsP4DWoZ06kN99VLO8b53BB+fEIwk3QsWUHCFV41wWJJGLtuD5YVfLr4LnH2
+         1fQCilzDvVUCqkp0Q9WmjL5yjH7k+d+KJTQUeXIKch5Ia0C0rtil4Zfq61I89Ew8yoEh
+         xm89P7gFH9KOUKekOYU+DpC1XynNaHSZmMVpZ+yvGH3/EG5xh2VCx7jfptpEWyDaq62A
+         nsFsd3KubFoOMqqhBQDfwOGCMQHsTfit0JdZC7LspKCdGmws9yGbW/jIBNP2ajgYN4NM
+         hbW9sYB4fBRxlXU3w0snEktcmStbEAXxd0sYmtPuXznSrzjzbioI913yl5zJ8FsmcHlL
+         4Dmw==
+X-Forwarded-Encrypted: i=1; AJvYcCXdpAWvQmCmocPXrGjAOKpN5JlxI3uDhaEv59Cutvd63MkP/cZNFQbqrb/nn5Iza4ga80HBXpS3/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwU0zm/CC5QRJZKEm28Cf4CG1OUSIPApubwv0WTqKCd5P2bsOSD
+	6Ybl3KfxX3o9nsgxwRY++HHY6WvdpaQ5N0TnWkd2GjIRmDwYWDXx/JTaQySVxh2BqEy2yZsuc1P
+	QZTE=
+X-Gm-Gg: ASbGncuR1J60EIlpPl5g9WRsAQRu9GRDmqcAhv+6iShcMIDOcv/azcp7OlkjdebTldM
+	gWmzD/17h6odwemgGVnuMiSrhYQBAIGWBAgrsPF5NhbgQip8MmCmeb2onQSIQNXtMIU3zw8drpM
+	dJ5pzOpA8Dg/ixcKWfFKN5itQ1cazTl9F270oFW9GSimcE+K+3qPCghWX91dyQnd94WxrFqSv7E
+	kDhxn+UYGOwA3fWMFcKQMxblZe8hjsALv4qbVzEqSAqpF85eN6l8OuFnJCU64uN1RXZl3iTK8e2
+	S3fKTE1VgO8GrwosljYcoQVzpzUFkWWHjjwgQ02ESU4SdYVLXupRNt4jlbQImPDQoRpWK2VFAK5
+	mg7jtvZLv3pZtagFCjhM0B8nHVkizlh3OrF8BGMGeakDevksX7HN7VLJ6FI/8Bg==
+X-Google-Smtp-Source: AGHT+IFq99JaMKx/vhHzeI8Nne1d40Yt+33w8vswFPC1pyjRD5dVKnQ8oRSXF3BtpxkdZ4E5i338Cg==
+X-Received: by 2002:a17:90b:4b09:b0:31e:ff94:3fa0 with SMTP id 98e67ed59e1d1-31f5ddb7e8fmr9299795a91.6.1753935248977;
+        Wed, 30 Jul 2025 21:14:08 -0700 (PDT)
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com. [209.85.214.180])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31f63f0b4aesm3403345a91.26.2025.07.30.21.14.08
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jul 2025 21:10:50 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2cc89c59cc0so1169107fac.0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 21:10:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW5yOZLPZHh9MSIGsfojNAihplJHYIAu7GYPW6WBy2x0w6mA6cPPSNeYL3mip8STd67dGeWXskQYQ==@vger.kernel.org
-X-Received: by 2002:a05:6102:5122:b0:4e7:be09:df07 with SMTP id
- ada2fe7eead31-4fc100ad7d7mr227087137.12.1753934630495; Wed, 30 Jul 2025
- 21:03:50 -0700 (PDT)
+        Wed, 30 Jul 2025 21:14:08 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2400f746440so5150055ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 21:14:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXW/FnBWii4l39+uf0PFo9AQ0Pp2Bx8kTJp8Z0CXnNiWlXqe9xT/kxv8c/D7c2kQF4QY4hqNKOrNQ==@vger.kernel.org
+X-Received: by 2002:a05:6102:fa0:b0:4e5:abd3:626e with SMTP id
+ ada2fe7eead31-4fbe87eaa8cmr4099520137.24.1753934828784; Wed, 30 Jul 2025
+ 21:07:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250730152128.311109-1-laura.nao@collabora.com> <20250730152128.311109-5-laura.nao@collabora.com>
-In-Reply-To: <20250730152128.311109-5-laura.nao@collabora.com>
+References: <20250730152128.311109-1-laura.nao@collabora.com> <20250730152128.311109-6-laura.nao@collabora.com>
+In-Reply-To: <20250730152128.311109-6-laura.nao@collabora.com>
 From: Fei Shao <fshao@chromium.org>
-Date: Thu, 31 Jul 2025 12:03:14 +0800
-X-Gmail-Original-Message-ID: <CAC=S1ngvS9z-KOZXeV4kLiW_pDx2F+3AOMcTokaq9O=-E4Pneg@mail.gmail.com>
-X-Gm-Features: Ac12FXze0WWvW6KolXpxHVZ5mr5bsteDEMGk6n5CvaPH_JsjnG6BTJ_hncHj4Ic
-Message-ID: <CAC=S1ngvS9z-KOZXeV4kLiW_pDx2F+3AOMcTokaq9O=-E4Pneg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] thermal: mediatek: lvts: Add platform ops to
- support alternative conversion logic
+Date: Thu, 31 Jul 2025 12:06:32 +0800
+X-Gmail-Original-Message-ID: <CAC=S1nj0F-k37-v-gp5A4p3B_R9Q8exM+STb6vLhJ46=oQV6Eg@mail.gmail.com>
+X-Gm-Features: Ac12FXzu20jT5Yk4GmMtSAZzZKsOMgulvP8pOesv2GOi_pI-RDe1qMoPgLQDq0Q
+Message-ID: <CAC=S1nj0F-k37-v-gp5A4p3B_R9Q8exM+STb6vLhJ46=oQV6Eg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] thermal/drivers/mediatek/lvts: Add
+ lvts_temp_to_raw variant
 To: Laura Nao <laura.nao@collabora.com>
 Cc: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
 	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
@@ -107,47 +107,19 @@ Cc: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 30, 2025 at 11:35=E2=80=AFPM Laura Nao <laura.nao@collabora.com=
+On Wed, Jul 30, 2025 at 11:37=E2=80=AFPM Laura Nao <laura.nao@collabora.com=
 > wrote:
 >
-> Introduce lvts_platform_ops struct to support SoC-specific versions of
-> lvts_raw_to_temp() and lvts_temp_to_raw() conversion functions.
+> MT8196/MT6991 require a different version of lvts_temp_to_raw(),
+> specifically the multiplicative inverse of the existing implementation.
+> Introduce a variant of the function with inverted calculation logic to
+> match this requirement.
 >
-> This is in preparation for supporting SoCs like MT8196/MT6991, which
-> require a different lvts_temp_to_raw() implementation.
+> This ensures accurate raw value generation for temperature
+> thresholds, avoiding spurious thermal interrupts or unintended hardware
+> resets on MT8196/MT6991.
 >
 > Signed-off-by: Laura Nao <laura.nao@collabora.com>
-> ---
->  drivers/thermal/mediatek/lvts_thermal.c | 46 +++++++++++++++++++++++--
->  1 file changed, 43 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
-diatek/lvts_thermal.c
-> index 8398af657ba2..6e4a35ecaf34 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -125,8 +125,14 @@ struct lvts_ctrl_data {
->                         continue; \
->                 else
->
-> +struct lvts_platform_ops {
-> +       int (*lvts_raw_to_temp)(u32 raw_temp, int temp_factor);
-> +       u32 (*lvts_temp_to_raw)(int temperature, int temp_factor);
-> +};
-> +
->  struct lvts_data {
->         const struct lvts_ctrl_data *lvts_ctrl;
-> +       struct lvts_platform_ops ops;
 
-nit: I think this can also be a const struct, since ops are all
-initialized in the platform data and never change.
-
-Anyway, the changes look good IMO, so
 Reviewed-by: Fei Shao <fshao@chromium.org>
-
->         const u32 *conn_cmd;
->         const u32 *init_cmd;
->         int num_cal_offsets;
-
-[...]
 
