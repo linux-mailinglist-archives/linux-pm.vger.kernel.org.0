@@ -1,140 +1,145 @@
-Return-Path: <linux-pm+bounces-31681-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31682-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FC52B16F6D
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 12:25:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5381B16F7A
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 12:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DDD41AA4CE3
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 10:25:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0C8175229
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 10:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA2D2BE03E;
-	Thu, 31 Jul 2025 10:25:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D25C2BE041;
+	Thu, 31 Jul 2025 10:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n7lQX6do"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ATmu3VSX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682732BD5B3
-	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 10:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E1C2BE035;
+	Thu, 31 Jul 2025 10:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753957531; cv=none; b=jAkSlPxxmvZHtQU4irhKzvpJZ0GaZ+G9jHe7yr8bEzlDel3Kh06Bt63/wGU7P8XWH0gh930q9DAEN1+itaRyKZrnpbDIW6o8AoBqpkp+Rs0EVOPNtzG44QM1yxlj+SPxL7ZxBN4h2zIjDqcMrqfr1AhwHDqVUntvalbVI+RKJKY=
+	t=1753957676; cv=none; b=kECOgCY8Ch+2IbTPCcSdZIi3a0+84cBeGOINhB0oliOrtw1KwBBe9sqITI+vwIgJ/ccl7K06gWSPZlqOAYW8e+WWSVdSq21hOoG+hL8khDfpZj4lPCewrk4dO25r1RASnvVo7Wb/nt9ralXfHTCfXqgoxUraPe5cAr+4YYPognY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753957531; c=relaxed/simple;
-	bh=Fdd8rVwrOI/ftl2mALt/laddxSDrHqp2Ly2OA1Dp8PM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JO1UCJ+NXyWQSopE5UPZ619nBzC/Q/lhgkPbMyCORRC9dBXF61ZyEAa0oIeBeY1BYkk18Xn/qqpqbXMA37ztZV+hHpH0OJMBx0CBjLz4Ne/3bqSA6b6tCfnZVKqQtukPrlr4C+PDu2gaTvtQSn34VK0oTEerFPlXJDaVZ57k62E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n7lQX6do; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45892deb25bso2139575e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 03:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753957528; x=1754562328; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Fdd8rVwrOI/ftl2mALt/laddxSDrHqp2Ly2OA1Dp8PM=;
-        b=n7lQX6doHNPHdI2TT/LQiEalgtdlDGkvQyblsljcHnUr1c8H3yY+lEBYDgG0ncVrSk
-         eUH1G3URucTH+Fgq9Y4JtEovxF0pnkXXQbvROtfisvPGCsuBUkV0RctF31rJtPqtwTwV
-         N9immdBKWtAB3zgNm+qJ2kL1DB4ZX02sypjRe8vCtLjJaPXyKJ9tLQhZkyQlSOLDZEsJ
-         0hEru0hjgjCpL9b8ct6PpXOXafujAcbxplAzxK8E6STkj537HFCF54lBtC8C5iwK1zF5
-         QS1te/6wYff6KBGyWwIin05zP/kgfzyPuLGv4qtXy4BIn2XtbsFvVHu1RJV9wUrpfyC+
-         fS2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753957528; x=1754562328;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fdd8rVwrOI/ftl2mALt/laddxSDrHqp2Ly2OA1Dp8PM=;
-        b=wVilQN/o5e/cdlYa3udzRHbWpNb3XadTMhNyKndkEYNGHQN9n5Lokhcj6F3IcJiNRh
-         BvhtHxjs/Ka+QYZ1WfEdDrF1hzcZ/pfutJosiq1EjBB6RmOhntlwVEGrFXnxYVrQ1zrY
-         h4kFif4UwgoqG+JwgQICHK795lg5NmA2mS9PaczHeFqMcg4U4TSCBk3qkMQWjBdgLe3V
-         42Qyy/JKdudQutcGLRD78IcFjS/umg3GdCP6LerazwF/0kIIgwoe8WLe2Ga5g/utbFnI
-         0wvCG9sz6KKeXEFVtjJ7laxeTSgImCWZ92h9z0oBDxsl3DYvUI/Oi7F8DpTygDuKBUI4
-         L17Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWpM+Kzatvp98FiE3Koejk+bKFy/3n2HWXZaXhxwR9LCvFTUH0Z9s7VzDmcDrl5sxfgGarjDFJAAQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3QFNKuLU0ZWrfAjl5mnHrkpnOjI99mFRQZc746pVRQpI9W+kT
-	ZlVpcF5RDceIWxSNacot9T3NdVk0TYT2WmMPgolmo9nwnjpTXHcvEjeps5Q1YLMGt8Q=
-X-Gm-Gg: ASbGncv7kcKEdCptSNOw/rMtDjUJOmRszMYyi7SyXRmdPPEBOWjUmDNG5H62nagrxGp
-	jYYmCGppPavPhC6/OOdNNyAkg3LbH5fYRFmpp+7Gm0zdADMQ8vpl3RmI1jCjE9ZEHd8iHN/VBiV
-	4BoN4z1yVlzNuqFtt/tsMous/DMQajYvZ1RFd9M2RVXKGnEaT85rB7MODKdkaKNtWC9DPCKYqW4
-	YS/PanT/e4BxIcAeIIdbya0Rw7X6sXQIcbV11veR3dsj5PUQRgzCBXRKh2dhI0CPNKGfyAE6wsK
-	9BlUyg/dbnEeOC3zh5Swm2xr9mvwF/CdCHBy9sjZWPveaUlkmkPdgmelvhWzmV4DV/nYvGOl4cM
-	1iFW6skGaWht82buVWuzlSwXTSQ==
-X-Google-Smtp-Source: AGHT+IHhqyP93G+ZH0mqfHoo6oZhMJUnlWvEtPn99Mobxr9hcWgTGsVHemxeWgkdcIjD6PVicJSyoA==
-X-Received: by 2002:a05:600c:1f92:b0:456:207e:fd86 with SMTP id 5b1f17b1804b1-45892b931ccmr73450555e9.2.1753957527737;
-        Thu, 31 Jul 2025 03:25:27 -0700 (PDT)
-Received: from [10.1.1.59] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c4a2f03sm1888068f8f.72.2025.07.31.03.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 03:25:27 -0700 (PDT)
-Message-ID: <afa34f49d502d7f921818141979167920b8d924a.camel@linaro.org>
-Subject: Re: [PATCH v13 07/10] firmware: psci: Implement vendor-specific
- resets as reboot-mode
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>, Bartosz
- Golaszewski	 <bartosz.golaszewski@linaro.org>, Bjorn Andersson
- <andersson@kernel.org>,  Sebastian Reichel	 <sre@kernel.org>, Rob Herring
- <robh@kernel.org>, Sudeep Holla	 <sudeep.holla@arm.com>, Souvik Chakravarty
- <Souvik.Chakravarty@arm.com>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andy Yan	 <andy.yan@rock-chips.com>,
- Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio
- <konradybcio@kernel.org>, 	cros-qcom-dts-watchers@chromium.org, Vinod Koul
- <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Florian Fainelli	 <florian.fainelli@broadcom.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Mukesh Ojha
-	 <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, Elliot Berman <quic_eberman@quicinc.com>, 
- Srinivas Kandagatla
-	 <srini@kernel.org>
-Date: Thu, 31 Jul 2025 11:25:25 +0100
-In-Reply-To: <473f7269-3852-64a0-8aa6-7299be0fc85f@oss.qualcomm.com>
-References: 
-	<20250727-arm-psci-system_reset2-vendor-reboots-v13-0-6b8d23315898@oss.qualcomm.com>
-	 <20250727-arm-psci-system_reset2-vendor-reboots-v13-7-6b8d23315898@oss.qualcomm.com>
-	 <b45b157593f1865a402f4098cdeafc298a294c6d.camel@linaro.org>
-	 <b92c164f-c6df-a2c0-1416-67652a01b179@oss.qualcomm.com>
-	 <34c52c88fd8fcbf68c453c1e94e4cd6294becff1.camel@linaro.org>
-	 <473f7269-3852-64a0-8aa6-7299be0fc85f@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1+build2 
+	s=arc-20240116; t=1753957676; c=relaxed/simple;
+	bh=dnZjKRCbKVsKnQZ0apVq2Lv4BunDXwUPUKqAx1JmXY0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=abKfe8qR7Awvcog/DL1TfR+lKNtovrSdn4E7sOMuxHipkSequyh7w91UtzuySR281L87hqep1T0vtkKVQ/Pp6ACIQY3lndaTt4zXYapZLWn1XutJZ2XKoJ2Nft6W/JxA6z41tlwuOOO3iwThim2gFSnxb2OytrmP0fcTbhWRO2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ATmu3VSX; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1753957672;
+	bh=dnZjKRCbKVsKnQZ0apVq2Lv4BunDXwUPUKqAx1JmXY0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ATmu3VSXbzmFgfERV8e6Eu09Yb59Km6Ykr6zjqidJhxo8lYfAjorCqIYjaanz1Xc0
+	 SDTTZwne3FbduuRoAV8Y/xwDpdV6BK5JzzkqzlEW7Ie6hljRkQu6DKHGiCSBo1nkUm
+	 BIWUana48yyrDcO3OgtfYzQOUIGzQZJqmqDVJDHN462wFB1GT1rsPysz/22CzIhtLB
+	 YvgID2t64hFdwfPzDT6p1PyUv4JrsZburd1XaKV3dCjkJS1V8UrZ2Mx26uKLFiVC8q
+	 uHeVH839HFlFeTHR87ZH9CwNcNUu7fQKhOIoWTLOhyOaxCpSdpICjfqJF+T1r8cTQt
+	 cL2PGkX+pmnog==
+Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:e229:d0be:3141:7dd2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 82F5617E0A49;
+	Thu, 31 Jul 2025 12:27:47 +0200 (CEST)
+From: Laura Nao <laura.nao@collabora.com>
+To: robh@kernel.org
+Cc: andrew-ct.chen@mediatek.com,
+	angelogioacchino.delregno@collabora.com,
+	arnd@arndb.de,
+	bchihi@baylibre.com,
+	colin.i.king@gmail.com,
+	conor+dt@kernel.org,
+	daniel.lezcano@linaro.org,
+	devicetree@vger.kernel.org,
+	frank-w@public-files.de,
+	kernel@collabora.com,
+	krzk+dt@kernel.org,
+	lala.lin@mediatek.com,
+	laura.nao@collabora.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	lukasz.luba@arm.com,
+	matthias.bgg@gmail.com,
+	nfraprado@collabora.com,
+	rafael@kernel.org,
+	rui.zhang@intel.com,
+	srini@kernel.org,
+	u.kleine-koenig@baylibre.com,
+	wenst@chromium.org
+Subject: Re: [PATCH v2 9/9] dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
+Date: Thu, 31 Jul 2025 12:26:50 +0200
+Message-Id: <20250731102650.145641-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250730235451.GA1911689-robh@kernel.org>
+References: <20250730235451.GA1911689-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-07-31 at 11:05 +0530, Shivendra Pratap wrote:
->=20
->=20
-> On 7/30/2025 8:53 PM, Andr=C3=A9 Draszik wrote:
-> > More importantly, if e.g. an OOPS / panic happens after the reboot
-> > notifier has run (and set vendor_reset.valid because a reboot mode
-> > was requested),=C2=A0a panic handler changing reboot_mode to warm to
-> > retain RAM contents will have no effect, because the the original
-> > code above making those distinctions can not be reached anymore.
-> >=20
-> > Above scenario with OOPS / panic after reboot notifier could e.g.
-> > happen as part of device_shutdown() - see kernel_shutdown_prepare()
->=20
-> We can handle the panic path by adding a panic_notifier in psci
-> and make vendor_reset.valid =3D false. Do you think adding this can clear
-> the panic scenario above or there can still be some leak?
+Hi Rob,
 
-I think that would work. You then can't convey the reboot command, but
-at that stage (panic/oops) it probably doesn't matter anymore, it only
-cares about the crash handling which probably is enough.
+On 7/31/25 01:54, Rob Herring wrote:
+> On Wed, Jul 30, 2025 at 05:21:28PM +0200, Laura Nao wrote:
+>> The MT8196 eFuse layout is compatible with MT8186 and shares the same
+>> decoding scheme for the gpu-speedbin cell.
+>>
+>> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+>> ---
+>>  Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+>> index 4dc0d42df3e6..455b96c1e1f4 100644
+>> --- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+>> +++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+>> @@ -25,6 +25,7 @@ properties:
+>>    compatible:
+>>      oneOf:
+>>        - items:
+>> +          - const: mediatek,mt8196-efuse
+>>            - const: mediatek,mt8188-efuse
+>>            - const: mediatek,mt8186-efuse
+>
+> You just broke mt8188 as it had 2 entries and now has 3. I think 
+> (based on the commit msg) you want to change 8188 entry to an enum with 
+> mediatek,mt8196-efuse and mediatek,mt8188-efuse.
+>
 
-Cheers,
-Andre'
+You're absolutely right, not sure how I missed that.
+It should be:
+
+  compatible:
+    oneOf:
+      - items:
+          - enum:
+              - mediatek,mt8196-efuse
+              - mediatek,mt8188-efuse
+          - const: mediatek,mt8186-efuse
+      - const: mediatek,mt8186-efuse
+[...]
+
+I'll address it in v3.
+
+Thanks!
+
+Laura
+
+>>        - const: mediatek,mt8186-efuse
+>> -- 
+>> 2.39.5
+>>
+
 
