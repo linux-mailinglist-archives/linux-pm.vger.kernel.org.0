@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-31701-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31702-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69E3B173E3
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 17:22:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE2FFB173F3
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 17:28:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DC6816E662
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 15:22:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8596C3B936F
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 15:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC2E1DD529;
-	Thu, 31 Jul 2025 15:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDDE81DA60D;
+	Thu, 31 Jul 2025 15:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFChm2W/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pouDA+xs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB3B156C69;
-	Thu, 31 Jul 2025 15:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A030315A8;
+	Thu, 31 Jul 2025 15:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753975362; cv=none; b=jr7OFlvZv6gg8J9E8d2ftBLbuJQZZjxubXtxBiYLm8H2F+Ia+KFYdPG+PFjjn1V7RLTIhVdekIyHTFZBd+Azvdx2hczWiN/cGJhl0qFGXc5TDLYpLW25g1kYRmw8ibNK+LF8z6H3wLIJydS5AR0coom5+UBekTv6El2gE9IUN9Y=
+	t=1753975706; cv=none; b=bmHx0TpNdZojnvzVBQEUWTVfAsvu/8wOr5Ybkz5pJ6GLQi0a9j/J31k4n3kKgpLYdSHLTs4M/IjHergzGMSIIdgsgpZCjwGSa05DjSNZyEVu/r0ZnIQpw+KA3ISp6ZDeigDynM2boIP9KQ2JBClIZydr0N9dkBXzE+M+jwRVDkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753975362; c=relaxed/simple;
-	bh=j/nDPx6NtdeHZCFxN6QFH5H+ylStHpRyfOMRwd6l+QE=;
+	s=arc-20240116; t=1753975706; c=relaxed/simple;
+	bh=qxfnXXWeaVOCUelIn6+ZGC8f/+ytl31N9N1rR7TsrTc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lpq60t5U0JnG+/r89DHdcTwqAh+59C/0ucJ0d+Rk1N0pNYU9AmF8LuIDHj28JsyH0yw6ec5/sT38oyVCk4p+CExcTxjaVu3yIN7/TjVHnINQsVk8XnphHFoMEZV2LBh11/ZRFxgAiPleY8NChIDr98i55oq95YtEkZw7rOqrxqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFChm2W/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE07C4CEF6;
-	Thu, 31 Jul 2025 15:22:35 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RikKPc3TVzgwmn5kkZnCBaYPv4Mz2NSG45PB/d82ZebEz3L7PH9Q1PgHPtz3VLeyZqeCbWQOTVgERVo1GVXrABxzaXsBIVbAVWPuHVYvNeJ29x5hCiMXl/sqB+0qVB9tkoxhuO6/5f7nuwxcCT4L8GyUUpR8sq6R8RnosBDPNw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pouDA+xs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E930C4CEF6;
+	Thu, 31 Jul 2025 15:28:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753975361;
-	bh=j/nDPx6NtdeHZCFxN6QFH5H+ylStHpRyfOMRwd6l+QE=;
+	s=k20201202; t=1753975706;
+	bh=qxfnXXWeaVOCUelIn6+ZGC8f/+ytl31N9N1rR7TsrTc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VFChm2W/TpB4+88A63dGqX87P/AcalazMWJAVCpJPOPZ1UYkOx4RUDuPCO5MnrR5G
-	 2TemeceDEODO+W0k1dOq9APaYT0kjdAnQ2bo/Wgu0qZVHAxGECMVjK9HHVhqphHdC/
-	 HexDstZdiry59QKiOCGx7360ZPhf1rFb3LZ2s4DMFueQYRv5wYU8H0pEnYeJrW4mtg
-	 iVtUbpOaQqB54wUyQVntmh5FFuRFrMP+l/Qv0PDYI235u9J3XbBz4+XnLTnlR/VR4Z
-	 VSkeH48VtLIdH7gJNKsRAek+ed8DHab5ayeo56mTLVg6nWd4rI+n1KRg48dGWDAwnA
-	 gnrCegh+CbpTQ==
-Message-ID: <67b18009-f607-4200-ba86-2cd7d8812b37@kernel.org>
-Date: Thu, 31 Jul 2025 17:22:34 +0200
+	b=pouDA+xsslD3GuTAf2Nng5+he6p61GI6mtuaYV/gKjrmCW36LmAlg74rOV/5eru8A
+	 szG+YmLZGaIoLO0ufr+hiJeZUfa/l6abNXt+Rwrn3zelRibepG4BbFC8TF4hRGUrDZ
+	 BVR8cV89+k3nURlsNJL8ZH7mBZEBkwBQ1TWabizuSRdRYaEARfVGxSrxljg+8aQNrp
+	 ULPApV/aNLnpNcBvfHBcgy+Ce6b1kZzEKTRAo9sRbNDM3cQqd6aL77L+W4v/Y83E4G
+	 aUz3mvjY5mjKt8zNr1ihPJZKmyVmSC6xjXdjVXrBcwtaIBgEqB6swgx2tdJRWlKbrm
+	 gYawInK3r3MNQ==
+Message-ID: <90baea21-6e0a-4274-bda0-43ccad796f2a@kernel.org>
+Date: Thu, 31 Jul 2025 17:28:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/5] dt-bindings: gpu: img,powervr-rogue: Define power
- domains per variant
+Subject: Re: [PATCH v9 3/5] dt-bindings: gpu: img,powervr-rogue: Add TH1520
+ GPU compatible
 To: Michal Wilczynski <m.wilczynski@samsung.com>, Guo Ren
  <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob Herring
  <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -70,8 +70,8 @@ Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  dri-devel@lists.freedesktop.org
 References: <20250731-apr_14_for_sending-v9-0-c242dc1ffc14@samsung.com>
- <CGME20250731135019eucas1p1239902cf5a5a8fa40ea35722e6feb965@eucas1p1.samsung.com>
- <20250731-apr_14_for_sending-v9-2-c242dc1ffc14@samsung.com>
+ <CGME20250731135020eucas1p1e8f286222a03ec9b63a7409ff66c3238@eucas1p1.samsung.com>
+ <20250731-apr_14_for_sending-v9-3-c242dc1ffc14@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,93 +117,80 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250731-apr_14_for_sending-v9-2-c242dc1ffc14@samsung.com>
+In-Reply-To: <20250731-apr_14_for_sending-v9-3-c242dc1ffc14@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 31/07/2025 15:50, Michal Wilczynski wrote:
-> Rework the PowerVR Rogue GPU binding to use an explicit, per variant
-> style for defining power domain properties.
+> Update the img,powervr-rogue.yaml to include the T-HEAD TH1520 SoC's
+> specific GPU compatible string.
 > 
-> The generic `if` block for `img,img-rogue`, is removed. It is replaced
-> with self-contained `if/then` blocks for each existing GPU variant. Each
-> block now explicitly defines power domain properties and requirements
-> for that specific variant, making the rules easier to read and
-> maintain.
+> The thead,th1520-gpu compatible, along with its full chain
+> img,img-bxm-4-64, and img,img-rogue, is added to the
+> list of recognized GPU types.
 > 
-> This addresses feedback from the maintainer to explicitly list items
-> for each variant [1].
+> While the BXM-4-64 GPU IP is designed with two distinct power domains,
+> the TH1520 SoC integrates it with only a single, unified power gate that
+> is controllable by the kernel.
 > 
-> Link: https://lore.kernel.org/all/4d79c8dd-c5fb-442c-ac65-37e7176b0cdd@linaro.org/ [1]
+> The binding enforces this with a specific if block for the
+> thead,th1520-gpu compatible that requires a single power-domains entry
+> and disallows power-domain-names.
+> 
+> The B-series GPU rule is also updated to include img,img-bxm-4-64
+> and to explicitly exclude the TH1520.
 > 
 > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
->  .../devicetree/bindings/gpu/img,powervr-rogue.yaml | 36 ++++++++++------------
->  1 file changed, 17 insertions(+), 19 deletions(-)
+>  .../devicetree/bindings/gpu/img,powervr-rogue.yaml | 29 +++++++++++++++++++++-
+>  1 file changed, 28 insertions(+), 1 deletion(-)
 > 
 > diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> index 4450e2e73b3ccf74d29f0e31e2e6687d7cbe5d65..24ce46ba0b7015fca799f045ee2ccdd258088068 100644
+> index 24ce46ba0b7015fca799f045ee2ccdd258088068..e47e0f3d1b5078b3050e26f6c1ac175edec528ec 100644
 > --- a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
 > +++ b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> @@ -57,10 +57,8 @@ properties:
->      maxItems: 2
->  
->    power-domain-names:
-> -    items:
-> -      - const: a
-> -      - const: b
-
-I don't understand why this is being removed. It makes no sense in
-context of this patch. Next patch also does not explain that.
-
-This should stay.
-
-
->      minItems: 1
-> +    maxItems: 2
->  
->    dma-coherent: true
->  
-> @@ -77,18 +75,6 @@ required:
->  additionalProperties: false
->  
->  allOf:
-> -  # Constraints added alongside the new compatible strings that would otherwise
-> -  # create an ABI break.
-> -  - if:
-> -      properties:
-> -        compatible:
-> -          contains:
-> -            const: img,img-rogue
-> -    then:
-> -      required:
-> -        - power-domains
-> -        - power-domain-names
-> -
->    - if:
+> @@ -21,6 +21,11 @@ properties:
+>            # work with newer dts.
+>            - const: img,img-axe
+>            - const: img,img-rogue
+> +      - items:
+> +          - enum:
+> +              - thead,th1520-gpu
+> +          - const: img,img-bxm-4-64
+> +          - const: img,img-rogue
+>        - items:
+>            - enum:
+>                - ti,j721s2-gpu
+> @@ -96,7 +101,29 @@ allOf:
 >        properties:
 >          compatible:
-> @@ -97,9 +83,14 @@ allOf:
->      then:
->        properties:
->          power-domains:
-> -          maxItems: 1
+>            contains:
+> -            const: img,img-bxs-4-64
+> +            const: thead,th1520-gpu
+> +    then:
+> +      properties:
+> +        power-domains:
 > +          items:
-> +            - description: Power domain A
->          power-domain-names:
-> -          maxItems: 1
-> +          items:
-> +            - const: a
-
-This was correct before.
-
+> +            - description: The single, unified power domain for the GPU on the
+> +                TH1520 SoC, integrating all internal IP power domains.
+> +        power-domain-names: false
 > +      required:
 > +        - power-domains
-> +        - power-domain-names
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - img,img-bxm-4-64
 
-This is the only part you actually want to do... and it makes no sense
-in context of this patch only. IOW, this should be moved to the next patch.
 
+I don't understand this. There is no such variant like not thead and
+img,img-bxm-4-64.
+
+So same comment as last time: this is overcomplicated. Use simple
+clauses covering all possible variants. Do not add clauses for
+impossible combinations.
 
 Best regards,
 Krzysztof
