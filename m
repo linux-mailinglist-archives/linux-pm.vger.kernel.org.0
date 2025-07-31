@@ -1,176 +1,104 @@
-Return-Path: <linux-pm+bounces-31685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31686-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70F18B17017
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:05:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AEC7B1701F
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:06:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B75371AA64AC
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 11:05:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B6A3171173
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 11:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57432BE647;
-	Thu, 31 Jul 2025 11:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k3dTG93c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F3792BD5A3;
+	Thu, 31 Jul 2025 11:05:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC45F2BE638
-	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 11:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15602BE638;
+	Thu, 31 Jul 2025 11:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753959918; cv=none; b=fWHlTNH2jXCTCJyEHJqJaPwiwqy39XMV+XPryqK2eJDoS3gfvhFHr9PsGGml/srdTmveJR1tnuGkH84yb7lrKtjIadNLofLoqn3urDwlKNe5jdDo5hZ6LIKLu9ROXJzVMsfqIt66fjwC4XHgqDH/CveKIsnS+VQwTC/ltyr+DOM=
+	t=1753959936; cv=none; b=ILUvEOfiIZD9AFdNOobdsxwAmC/N0f8PDPIkvro5fxCzNDCG16+ZJLvbqxUkEMRfJYNtV5tDvQ6blmqqeOZM7YCesZvlVntCIhdRaeFN8M77jtJP9I72a+gVopDO/IWjsZBZLijayB4w6L4Aoa2nDDYWHQjGielxjCBSNHx6pek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753959918; c=relaxed/simple;
-	bh=VEKn7bCKtQ4DC3+ZJIGn7pT8WXFtiTvd9gJWSwXEX6s=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cUnqMn+wQP7XsUz12/WaWmnLGIA8Oj8FnRQXDJt1slVa4M0GDfVfr/uu3+8VtjAnplzyE0f+X8fJs2O8XW4akMzwlZbwKKOIoOv3QuQCUlMpxC1zji/FtcLEA1k89nIkySyfPdvJIi/h7mYigVYoB+KDwje5i1qRX9z3Xh+v/Xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k3dTG93c; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4589968e001so4610475e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 04:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753959915; x=1754564715; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VEKn7bCKtQ4DC3+ZJIGn7pT8WXFtiTvd9gJWSwXEX6s=;
-        b=k3dTG93cfpQCJ5FG+CzzzVV4ZTcYXfgxNk879hQpvYIo0C3Hb/3newGQDkI8W+Pb8t
-         NHSv2dtP+QJR80KZm8Bz4BbpKJTAaaCeMuTJJG0t9511fYE3sXKegonxwnQAvizhePb/
-         dJkh+CBNgoC4SWR2Qr6Ifg8MSzMKJDaPjA1tWlRO0zLfJkjPHVFvWmmV2KMWxhOus+FB
-         Tn2MzNJm/eEpiZ6lXW5CgrY/iolx9PKhpN5n0/kiibuwd55Fsf9OjlAXGfmL3kLVbrE/
-         tlPtKARqnCK89+85vD/1jP+16vF2BmgQqqTgxgHeYR85R04KqhzI5+oFfyCKDezX2Cvj
-         WfnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753959915; x=1754564715;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VEKn7bCKtQ4DC3+ZJIGn7pT8WXFtiTvd9gJWSwXEX6s=;
-        b=G+SfqTEyTs/4J5xYj6mMqb/cBPco532SNnyG4YuU00jPhhFl4l8tHtRR072M+pzaRg
-         1U55UCocTfah4Nbted8jMH8Y8SqAMFoGawRsjzmsqsWGu+bwxXenLtjmewpxnJc/3I0B
-         hQMpbwY5cvvs7kPJWgILt9gYZFugpqiWj7WR+ArgrOVEn5joHJmsmJOkk7xTa5lzUKt/
-         D6SVh2PGa8A/0en59XQp9sLc00kQSiOgDTplyYBsSPv4VMS1bE4QBzrhRdwSdhx0eXbb
-         lGqYwOD75IPhSAVqCVqdTuRsHAnSG+7u9nrgQnCiqb3KGS/iIVYQXwGuT5WBHKi1wPn5
-         uPUg==
-X-Forwarded-Encrypted: i=1; AJvYcCXvccqafYbGlWRwYQKsx+B/LuGb5as9mzeRXe33S+bSFbEyLHptTjspt5s4gkfImyJVA2I0vrCWyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpkK+P3eGIRTnPKdD/mOFZzKk7g3EM4iv1b8cSySK9s6BRRyaU
-	xGwfthhT/D0T0nVFm9XU1buUlwiuwMzVoeHs/IlO1jy+kEDZPxQv2dlEnPfYkIFh+UU=
-X-Gm-Gg: ASbGncsjSO31eoO3UNnfetGEWldBWrV0KcGplQqooWm3Qf2FqZOfnQJVkfcB63UHRU1
-	OBMKENe/erf6wkbiiwU3mYOaXSIpj5BeZQYxjUyD2hBhboPltBCdnzMI84vkpqVU5/Q0Vb88jaM
-	u2wKI6UqFUC+LHRYEJlEyRCp6ExEC/dXdLurvju7D2nUpMcCrS255M4E8TsFVKZ2PrjSbLK1srJ
-	MDBs1clGgdb+G9YzCMiKQQx2anxA7JQsnn9D3G6yYcs0F7EovboDK9QN4drImoal0lSmDlGSyzD
-	LH3ieTn5ibZLXSTMUuyVFwSPKdlzVsUBprBMOj8Arnxlg9j9I44ghkxIoXtQngeSGw8h0/xWTnJ
-	DIGECLQMeaOl0bGA7KagxjZm6Yw==
-X-Google-Smtp-Source: AGHT+IE2uAVTLlLGsEyuKRwFnRFU/FdmGqD5jafe8UhDC8Cs0NgSXpOAHHVQxxk7a76FdVpc+nYZfA==
-X-Received: by 2002:a05:600c:1d25:b0:456:1560:7c5f with SMTP id 5b1f17b1804b1-4589a700e05mr55899935e9.14.1753959915171;
-        Thu, 31 Jul 2025 04:05:15 -0700 (PDT)
-Received: from [10.1.1.59] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4589edfcdc3sm23160775e9.12.2025.07.31.04.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 04:05:14 -0700 (PDT)
-Message-ID: <63d090988d04fa81231c984771a563c55daf1bd9.camel@linaro.org>
-Subject: Re: [PATCH v13 07/10] firmware: psci: Implement vendor-specific
- resets as reboot-mode
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>, Shivendra Pratap	
- <shivendra.pratap@oss.qualcomm.com>, Bartosz Golaszewski	
- <bartosz.golaszewski@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
- Sebastian Reichel	 <sre@kernel.org>, Rob Herring <robh@kernel.org>, Sudeep
- Holla	 <sudeep.holla@arm.com>, Souvik Chakravarty
- <Souvik.Chakravarty@arm.com>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Andy Yan	 <andy.yan@rock-chips.com>,
- Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Florian
- Fainelli	 <florian.fainelli@broadcom.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Mukesh Ojha
-	 <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, Elliot Berman <quic_eberman@quicinc.com>, 
- Srinivas Kandagatla
-	 <srini@kernel.org>
-Date: Thu, 31 Jul 2025 12:05:13 +0100
-In-Reply-To: <592902f1-549f-47c5-9ef4-b5c7ef2c9a47@app.fastmail.com>
-References: 
-	<20250727-arm-psci-system_reset2-vendor-reboots-v13-0-6b8d23315898@oss.qualcomm.com>
-	 <20250727-arm-psci-system_reset2-vendor-reboots-v13-7-6b8d23315898@oss.qualcomm.com>
-	 <b45b157593f1865a402f4098cdeafc298a294c6d.camel@linaro.org>
-	 <b92c164f-c6df-a2c0-1416-67652a01b179@oss.qualcomm.com>
-	 <34c52c88fd8fcbf68c453c1e94e4cd6294becff1.camel@linaro.org>
-	 <592902f1-549f-47c5-9ef4-b5c7ef2c9a47@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1+build2 
+	s=arc-20240116; t=1753959936; c=relaxed/simple;
+	bh=mVFM8r5cDdwWpwJcXn1oc0Z2uTdcDftzKnpKjrOM2SI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dov+1ZJbeEzNUYHvyJmRrmY93nlU9JRtV4RltcRA5NjkHUFRTovje+4p0b/JETcp0ORFQVFd1Y8/911eUMJDVsXxwOeq8B7xZcf5mJivZr/weK2b+BG1F/FDjMrf4L/Gm4B+j4LRI0npbohEo4nO7wHbx1kLpmEDpfMkJDw3SqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bt5mg3ZLkz6D9QX;
+	Thu, 31 Jul 2025 19:03:47 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id D7A1E140133;
+	Thu, 31 Jul 2025 19:05:24 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 31 Jul
+ 2025 13:05:23 +0200
+Date: Thu, 31 Jul 2025 12:05:22 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+CC: <sboyd@kernel.org>, <jic23@kernel.org>, <dlechner@baylibre.com>,
+	<nuno.sa@analog.com>, <andy@kernel.org>, <arnd@arndb.de>,
+	<gregkh@linuxfoundation.org>, <srini@kernel.org>, <vkoul@kernel.org>,
+	<kishon@kernel.org>, <sre@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+	<u.kleine-koenig@baylibre.com>, <linux-arm-msm@vger.kernel.org>,
+	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-phy@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<kernel@collabora.com>, <wenst@chromium.org>, <casey.connolly@linaro.org>
+Subject: Re: [PATCH v3 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
+ and devm variant
+Message-ID: <20250731120522.00001005@huawei.com>
+In-Reply-To: <20250730112645.542179-2-angelogioacchino.delregno@collabora.com>
+References: <20250730112645.542179-1-angelogioacchino.delregno@collabora.com>
+	<20250730112645.542179-2-angelogioacchino.delregno@collabora.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, 2025-07-30 at 19:31 +0200, Arnd Bergmann wrote:
-> On Wed, Jul 30, 2025, at 17:23, Andr=C3=A9 Draszik wrote:
-> > On Wed, 2025-07-30 at 18:33 +0530, Shivendra Pratap wrote:
-> > > On 7/30/2025 2:14 PM, Andr=C3=A9 Draszik wrote:
->=20
-> > > 1. For this, both commands will be defined in the psci->reboot-mode D=
-T Node with the arguments that
-> > > =C2=A0=C2=A0 are defined and supported by the firmware.
-> > > 2. Further, such requirement will now be taken care by the underlying=
- firmware that supports
-> > > =C2=A0=C2=A0 PSCI vendor-specific reset. When we call into firmware w=
-ith vendor specific reset arguments,
-> > > =C2=A0=C2=A0 firmware will take care of the defined HW writes and war=
-m/cold reset as per the mapping of the
-> > > =C2=A0=C2=A0 defined arguments. Firmware and the Linux kernel here ar=
-e in agreement for executing the
-> > > =C2=A0=C2=A0 vendor-specific resets.
-> >=20
-> > So that means
-> >=20
-> > =C2=A0=C2=A0=C2=A0 echo warm > /sys/kernel/reboot/mode
-> > =C2=A0=C2=A0=C2=A0 reboot bootloader
-> >=20
-> > and
-> >=20
-> > =C2=A0=C2=A0=C2=A0 echo cold > /sys/kernel/reboot/mode
-> > =C2=A0=C2=A0=C2=A0 reboot bootloader
-> >=20
-> > can not be distinguished.
-> >=20
-> > The firmware can not know whether or not cold or warm reboot was
-> > requested in this case by the user.
->=20
-> My feeling is that this is fine: the /sys/kernel/reboot/mode
-> interface is not really used on anything other than 32-bit
-> arm and x86 machines, and the way it is specific as
-> cold/warm/hard/soft/gpio is not that useful.
+On Wed, 30 Jul 2025 13:26:39 +0200
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
 
-Currently, reboot_mode as such is also used by gs101 and later, we do
-distinguish between the reboot_modes (cold/hard and warm/soft), although
-generally not via sysfs indeed. And yes, gpio is a strangely specific
-one.
+> Some devices connected over the SPMI bus may be big, in the sense
+> that those may be a complex of devices managed by a single chip
+> over the SPMI bus, reachable through a single SID.
+> 
+> Add new functions aimed at managing sub-devices of a SPMI device
+> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
+> for adding a new subdevice and removing it respectively, and also
+> add their devm_* variants.
+> 
+> The need for such functions comes from the existance of	those
+> complex Power Management ICs (PMICs), which feature one or many
+> sub-devices, in some cases with these being even addressable on
+> the chip in form of SPMI register ranges.
+> 
+> Examples of those devices can be found in both Qualcomm platforms
+> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
+> sub-devices, and in newer MediaTek platforms showing similar HW
+> features and a similar layout with those also having many subdevs.
+> 
+> Also, instead of generally exporting symbols, export them with a
+> new "SPMI" namespace: all users will have to import this namespace
+> to make use of the newly introduced exports.
+> 
+> Link: https://lore.kernel.org/r/20250722101317.76729-2-angelogioacchino.delregno@collabora.com
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+With the note that I know almost nothing about SPMI so am just
+looking at what is here + replies in earlier threads.
+Looks good to me.
 
-I don't have insight into newer SoCs / board designs in that family,
-but my understanding is that newer SoCs use PSCI for reboot as well
-and I do believe being able to do cold reboot by default and warm
-reboot in some cases (crash handling in particular) to still be a
-valid use-case.
-
-> I think for the purpose of the new code here, we should talk
-> about reboot "commands" instead of "modes" to avoid confusing
-> between the global "enum reboot_mode" variable and the
-> firmware interface for reboot modes as listed in DT.
-
-+1 It should really have been added as reboot command or reboot target
-in the first place.
-
-A.
+Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
