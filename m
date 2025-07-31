@@ -1,127 +1,153 @@
-Return-Path: <linux-pm+bounces-31649-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31650-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D1B0B16B03
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 06:00:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 349B9B16B0D
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 06:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31E063BB6F1
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 03:59:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CE1C18C644C
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 04:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECDB23E33A;
-	Thu, 31 Jul 2025 04:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7857521CA07;
+	Thu, 31 Jul 2025 04:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aLmGBqgu"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="D48Xn5no"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F6622F770;
-	Thu, 31 Jul 2025 03:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B041FAC48
+	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 04:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753934401; cv=none; b=iWgoUEh2MSP+w/E1IZL/sSkbPmSxqIsEvpzAnzw5fNT1UzdZMyzRw4ok7KbIizk8Lsx4jaCHE8qxNPSFgDJjBXtBa6OXY2ttNxp/yWkf2Fo11CiGkxBmtbnMAIUg5n8enaj9K4RrC4HskWDFsN4XugfU/2JqSq6Ugwn6oh5Hn18=
+	t=1753935053; cv=none; b=kTN04wzNGtlAJkGKH3IO5iGi/Rus5gLWeZVBkUo3hCuvagT9LLPPeM+j/DcsyqNzUqWwM3ELmroD83p1iZucief2414H1doiPHOUCCxyvddXYawnPdEHY5OEz0rLRXdKufkhg02/Ugl3nnPaWUH9kNeVy/oc75jWr+65qQaZrbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753934401; c=relaxed/simple;
-	bh=OcrZsUyHq3wWNpX5cgXufQ+ZLvYsQ6Y63zo9gqCOHL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eq0Fb5D++Y7J04aqj+BSW4izzJo3NaQfMex6w6Dc+N2LA2TMapIvWF/MERvWCIbH4BR9NLJb6iuYGP943Rrnp+k2LWI0qL6LVJS5YCuTrLbcKOra7ah2pILiB8gz9bqGN/XFEAEI0QDLK9xCjwgVS5Qm/X81hC1ukpRsaw4/B30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aLmGBqgu; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753934399; x=1785470399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OcrZsUyHq3wWNpX5cgXufQ+ZLvYsQ6Y63zo9gqCOHL4=;
-  b=aLmGBqguwPgC+ZAPOuB3E0kxCLB0MKUofJJQZksjB+ZtDzGGyfKcDtI/
-   Jk9MeFdP94zXwaEvD7rcW52cbW0HNU5oSmzO7zfRwpoJYrQmjHDx6W2He
-   5wlF/2fYecrqSEvI3T3RfbCY7Fmvomc9M7yseE+YbThJtlUhdN5gOkcni
-   hm4QzSxFIbLAy+yspVqRDoaevy/zjnIsvgIVkNH34OiS8sN26VmZeu3eq
-   Sk8Jw9iOoxdTpjKG/mc8rfjAm+gbOVH6KlBwihq+n5rkqELWqLos/ljUI
-   ygzcGWR0b5y9T9PDLUfI1dpgkWDyb3hQg67no/2XMkYgQ4M5obAi37up+
-   w==;
-X-CSE-ConnectionGUID: QP8b36mARpO8c+l4cfmB3A==
-X-CSE-MsgGUID: +9Fq4xwLTuycK4sPldo3yA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56336418"
-X-IronPort-AV: E=Sophos;i="6.16,353,1744095600"; 
-   d="scan'208";a="56336418"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 20:59:59 -0700
-X-CSE-ConnectionGUID: gYjm9tjYSkK3pLYlL9EdZg==
-X-CSE-MsgGUID: p6F5ISCGQ2S6IQroCGXimQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,353,1744095600"; 
-   d="scan'208";a="194138761"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 30 Jul 2025 20:59:54 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uhKSN-0003Oi-0h;
-	Thu, 31 Jul 2025 03:59:51 +0000
-Date: Thu, 31 Jul 2025 11:59:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	sboyd@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, jic23@kernel.org, dlechner@baylibre.com,
-	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
-	gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
-	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
-	u.kleine-koenig@baylibre.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
-	casey.connolly@linaro.org
-Subject: Re: [PATCH v3 4/7] phy: qualcomm: eusb2-repeater: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-Message-ID: <202507311150.5ofvQlKl-lkp@intel.com>
-References: <20250730112645.542179-5-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1753935053; c=relaxed/simple;
+	bh=/ja0EnpPMJAy1a6pZm+E6r8QXYWmEMOdxVyXZuJR5eE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m9hMC/EU1KDoeBKuOoJuw0frl+Zz7JUhQ3IU3egoJfjgm9Jrs9jNKLgPbKxg90CW5+wUUVOzpp+djzidQwIBSTKRtsFuF25uj3ztUHdO6MyuJ7+1h5naV+AXTHGej02Ai2trK9ZIcFpjzcjQIsI74sZ5Z2B+jIZOaGvC7XeCiw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=D48Xn5no; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-73e8cc38e80so897008a34.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 21:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1753935051; x=1754539851; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l1REz7lxNqCP0vRE/ucDmbyORYxFecR0vhh1/DbBdVo=;
+        b=D48Xn5nohE35KEMtv9TmSrM711/5L3CcZ5j8ICTLiPSf8PrBvcaPS4KtoMp6inf0Ff
+         qdg8oKR5BDs2mrvpLb6dZ+XANtLtVxQko4Vj64DwWn+cryhCn33Jz2/wkKknnZS934un
+         nc9qs+ehKxPf1L5OSdId8Ig5ugfD7OqVezxNk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753935051; x=1754539851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l1REz7lxNqCP0vRE/ucDmbyORYxFecR0vhh1/DbBdVo=;
+        b=rlgTKlROW1IMKlU3s7+O80HYvX1i3dwXKE4G1QYogx+3U0ZSKAIWDiodudEsR4kyMS
+         lsVA6P0fhGUTCMbZDRwDLGbCexKN68+w7ik6rJ1QvQoJFyrGQNQfG+vbnMVg5vg6AWrg
+         f86aJhHZ4myab2XKRNzCvZNBrfxdg1je+ER++VMcmia125yFNTHZvtWiNaD/n49C97Ia
+         MwUo47A5BGV7KCI2oWo2S0hdfkXOFqnxqsOR0xLemvoXRqNlcqL795h9imyVZDqHKVyF
+         fkgtGrQdReNDRKECp1qSogdvO+9TulEOGnkLiBxsM8PLQvusnW+wolSC6YoGpeuJ5Kfk
+         VLgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWm2U/gVCkDf8PX04iHaiRyyLmRLixiz+mEtMPM3sbU1hzRV4mITlh6vquXS8NdGvB+qEsmWxs/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWsHnAvR6M7WicNxrqKphx4q+ZqMyreZ8TamSzKUc/IrHrtTNi
+	d5vha6SY30Mtm0cuEDuDBTK6YhSNzUtGbYykp69UEQizxOEIKOnCNsiKGIdzEWSBLgkxAPGeC8X
+	RDAk=
+X-Gm-Gg: ASbGncsqq+ZoWt88DbqlbaxHMBPI8pAsuQ2astkLbWhO7a5YVx7wfPIebsctyoAFM0M
+	gqVtQ9Aymf2vTNP/7yfeUNaEyYeLqisXGgBg3b4a7Of9vsI0i9TuUXm90QiLm+NzK3+dmv7smGO
+	lcSiirL+QPqLCXger7RjET5VhHBbMkMkbdiIrBlifEe4+nmHH+YaC8yA51o6iCF2a545BeQ9CKQ
+	niqof9loH65KptxJfsZv2DxO3B0GfGeVzyQs/BnK8H2b+MQrX+NH/GjOk+504iR4JFKrynsgjhV
+	WeXAuX1wCPJEuFwyeXc5faafkmbtrxsOyJCVu2wSDv5poinlFrP6KUz+alAgxsmvXkgYEJheZlL
+	0HZHzQ+nnsKfpDUmfYf+uLHvRhx8Nri6JXlje79HzJbXzZdWZhbStNg61Xg==
+X-Google-Smtp-Source: AGHT+IGhC1l09s2i/lz8PEWexWCZvnSHBiW7sCTezbe8UogF6vARQpJzxz1nc6OjVzgMF62UUTTN3A==
+X-Received: by 2002:a9d:538b:0:b0:735:a6b9:3b48 with SMTP id 46e09a7af769-74187a9b34dmr305518a34.10.1753935050701;
+        Wed, 30 Jul 2025 21:10:50 -0700 (PDT)
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com. [209.85.160.43])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-74186ca998esm158570a34.1.2025.07.30.21.10.50
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Jul 2025 21:10:50 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2cc89c59cc0so1169107fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 21:10:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW5yOZLPZHh9MSIGsfojNAihplJHYIAu7GYPW6WBy2x0w6mA6cPPSNeYL3mip8STd67dGeWXskQYQ==@vger.kernel.org
+X-Received: by 2002:a05:6102:5122:b0:4e7:be09:df07 with SMTP id
+ ada2fe7eead31-4fc100ad7d7mr227087137.12.1753934630495; Wed, 30 Jul 2025
+ 21:03:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250730112645.542179-5-angelogioacchino.delregno@collabora.com>
+References: <20250730152128.311109-1-laura.nao@collabora.com> <20250730152128.311109-5-laura.nao@collabora.com>
+In-Reply-To: <20250730152128.311109-5-laura.nao@collabora.com>
+From: Fei Shao <fshao@chromium.org>
+Date: Thu, 31 Jul 2025 12:03:14 +0800
+X-Gmail-Original-Message-ID: <CAC=S1ngvS9z-KOZXeV4kLiW_pDx2F+3AOMcTokaq9O=-E4Pneg@mail.gmail.com>
+X-Gm-Features: Ac12FXze0WWvW6KolXpxHVZ5mr5bsteDEMGk6n5CvaPH_JsjnG6BTJ_hncHj4Ic
+Message-ID: <CAC=S1ngvS9z-KOZXeV4kLiW_pDx2F+3AOMcTokaq9O=-E4Pneg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] thermal: mediatek: lvts: Add platform ops to
+ support alternative conversion logic
+To: Laura Nao <laura.nao@collabora.com>
+Cc: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, andrew-ct.chen@mediatek.com, 
+	kernel@collabora.com, nfraprado@collabora.com, arnd@arndb.de, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, u.kleine-koenig@baylibre.com, 
+	linux-arm-kernel@lists.infradead.org, wenst@chromium.org, 
+	linux-mediatek@lists.infradead.org, bchihi@baylibre.com, 
+	colin.i.king@gmail.com, lala.lin@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi AngeloGioacchino,
+On Wed, Jul 30, 2025 at 11:35=E2=80=AFPM Laura Nao <laura.nao@collabora.com=
+> wrote:
+>
+> Introduce lvts_platform_ops struct to support SoC-specific versions of
+> lvts_raw_to_temp() and lvts_temp_to_raw() conversion functions.
+>
+> This is in preparation for supporting SoCs like MT8196/MT6991, which
+> require a different lvts_temp_to_raw() implementation.
+>
+> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+> ---
+>  drivers/thermal/mediatek/lvts_thermal.c | 46 +++++++++++++++++++++++--
+>  1 file changed, 43 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
+diatek/lvts_thermal.c
+> index 8398af657ba2..6e4a35ecaf34 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -125,8 +125,14 @@ struct lvts_ctrl_data {
+>                         continue; \
+>                 else
+>
+> +struct lvts_platform_ops {
+> +       int (*lvts_raw_to_temp)(u32 raw_temp, int temp_factor);
+> +       u32 (*lvts_temp_to_raw)(int temperature, int temp_factor);
+> +};
+> +
+>  struct lvts_data {
+>         const struct lvts_ctrl_data *lvts_ctrl;
+> +       struct lvts_platform_ops ops;
 
-kernel test robot noticed the following build errors:
+nit: I think this can also be a const struct, since ops are all
+initialized in the platform data and never change.
 
-[auto build test ERROR on next-20250730]
-[cannot apply to jic23-iio/togreg sre-power-supply/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.16 v6.16-rc7 v6.16-rc6 v6.16]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Anyway, the changes look good IMO, so
+Reviewed-by: Fei Shao <fshao@chromium.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/spmi-Implement-spmi_subdevice_alloc_and_add-and-devm-variant/20250730-193217
-base:   next-20250730
-patch link:    https://lore.kernel.org/r/20250730112645.542179-5-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH v3 4/7] phy: qualcomm: eusb2-repeater: Migrate to devm_spmi_subdevice_alloc_and_add()
-config: arm64-randconfig-002-20250731 (https://download.01.org/0day-ci/archive/20250731/202507311150.5ofvQlKl-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 13.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507311150.5ofvQlKl-lkp@intel.com/reproduce)
+>         const u32 *conn_cmd;
+>         const u32 *init_cmd;
+>         int num_cal_offsets;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507311150.5ofvQlKl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> aarch64-linux-ld: Unexpected GOT/PLT entries detected!
->> aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: drivers/phy/qualcomm/phy-qcom-eusb2-repeater.o: in function `eusb2_repeater_probe':
-   drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c:228:(.text+0x5a8): undefined reference to `devm_spmi_subdevice_alloc_and_add'
->> aarch64-linux-ld: drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c:236:(.text+0x61c): undefined reference to `__devm_regmap_init_spmi_ext'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[...]
 
