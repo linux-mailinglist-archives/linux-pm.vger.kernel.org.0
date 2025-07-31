@@ -1,122 +1,127 @@
-Return-Path: <linux-pm+bounces-31648-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31649-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E930AB16AF1
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 05:47:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D1B0B16B03
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 06:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49BBE18C5B6E
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 03:47:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31E063BB6F1
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 03:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C970116F265;
-	Thu, 31 Jul 2025 03:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECDB23E33A;
+	Thu, 31 Jul 2025 04:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SLQJtc42"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aLmGBqgu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339BA1CAA4
-	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 03:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F6622F770;
+	Thu, 31 Jul 2025 03:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753933619; cv=none; b=BK4/MzefLBy61nQyBCFFkEKUsIbKhe7wfhpZPeEVPJSndy10bbHHnglck1AStHYD6vptdwXLDKN47f0Gw4cd/VNG44JQBC94CFuIlpbK0flJnmAl1tAT9LUwUAgGmu2iJH0d7CiVqvn/PV++SKD1MRkQQe1u6YPHWJUHDinu7FM=
+	t=1753934401; cv=none; b=iWgoUEh2MSP+w/E1IZL/sSkbPmSxqIsEvpzAnzw5fNT1UzdZMyzRw4ok7KbIizk8Lsx4jaCHE8qxNPSFgDJjBXtBa6OXY2ttNxp/yWkf2Fo11CiGkxBmtbnMAIUg5n8enaj9K4RrC4HskWDFsN4XugfU/2JqSq6Ugwn6oh5Hn18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753933619; c=relaxed/simple;
-	bh=YELIpOTk7v58USyg3NWMuW2KC3hMjQSyAozxB3de114=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ISJJY+lSaYPwGmMxy4dEXoPe7VyP3vu3i72QCT4E4LzZWPRiiq39Bc9t5JSSB/omxJjVLlZsp35VVYKMC4pmN3/8Wdm2XTtl6MubE6NwdT5/lb7L52yrgMbDF5k7SGISIg1PG9IUyTaTLQwIvKSzv15q6jEeyLfhl9vVXnRsTg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SLQJtc42; arc=none smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-884f2b3bc2eso153208241.2
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 20:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1753933617; x=1754538417; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YELIpOTk7v58USyg3NWMuW2KC3hMjQSyAozxB3de114=;
-        b=SLQJtc42ptwoDJPt/0gyy2PQDgdzIAomyLQl6hr25Hll0eU2/pKMpdzwkiz3YyrYAs
-         FPfw9Rzwb0iU0bXtpFpvFqCkcF4IdsTZznUbuohJupEuFLtKqwyzhiK//gxh2pPeWa70
-         ckb5ylg5CRgOaRY3ymd/RopymbuOR4Sf6nGko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753933617; x=1754538417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YELIpOTk7v58USyg3NWMuW2KC3hMjQSyAozxB3de114=;
-        b=l987vmTjCqTsty4Q/UCs4v0AqeZqbyp2P9nPw2jmFSAq3S8hGtA/j/XnGuOmVS70Sh
-         cMyPLIlVDku9lqL96H+AJwG+G1eOWdeD9tgPLO/m7ZapKYMoveFaBdUV+Zr+oySP4NZZ
-         jSIlgHqW/OI75RH6NBjKNh92Bmj6J1YFeULiwy4f/Y41G9SHIpkPNwBsYun47UjT36D7
-         Q0egwQ10uQo6iQoBoQcHBM20IWsPQuPj6poh0faWWfzo4/s/dgqI/oCaxvjpVfUJ3c54
-         xirJ0MQe33GuA7FUsB33UW3iokYVP4t36PP0fDHKvgX4q1wk+Jtle2Wp+IiIszcEjV2L
-         t1QA==
-X-Forwarded-Encrypted: i=1; AJvYcCUgkYa81Izvftwl7BWHzac2Wx9nzs8j1wCTvvCrsnZ2SCkgFdeLxMxH7ZvVG3Y81vgjBod8dDS+iA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuqmwNXc5u6RsWIVqxPy/SpcRHZccUeXXHxQd/OhZousJEgGH/
-	HJvrfJyFxtJYD96EyMg/ORalRe9C9wguX13YbV7dsHEgyaf5Ff3KnxXH7pCvXZSuQNLoeEX/IrE
-	xY6o=
-X-Gm-Gg: ASbGncvvQ2QugkS5wlPMFjAPiJB4+A0lCdb75O+KTBA2KkJ+ZxT8xl5evUbmhmNFXh5
-	581hKRp1XTMCD/o2RaMIWlDebgitnVYPaAyDyIrHB7delGNqljnFx35q++wKGORXp580sF2RfMn
-	gN4SISQvHYijJjAq9gPXIIYBksy7ey33aSvYa/fsRiPsoHnXqwV17S4vDBpIPNMMZLBogAZnQcx
-	uG4dCGEm+tBXNFAoyu2MbgdkTdmIusN3JJ3cR84dUep8UZOASl66Rx+YFOeES9c75RLVRqYFviK
-	+vTD4/yAUK5pNowFwbXsMRImPOPvvWujFfvZtbfda7hqsTtK8tfj4SDq8cOhd7hXEa+1lJkNYsy
-	/K6+Py/agTRT8S8LHH9bZox3cQTxD8On7iahzZBOwUsmjpB2k1v2mJKf3BA==
-X-Google-Smtp-Source: AGHT+IFIbCAoHHJEgt7uk2xzDLjXQAMQO5VZMneouGuiJEAhqN50IIxzXNePWZiMHvc7u04D+JNwIA==
-X-Received: by 2002:a05:6102:1589:b0:4e7:db33:5725 with SMTP id ada2fe7eead31-4fbe7efb07fmr4011752137.3.1753933617135;
-        Wed, 30 Jul 2025 20:46:57 -0700 (PDT)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4fc0d42ba5esm137483137.15.2025.07.30.20.46.57
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jul 2025 20:46:57 -0700 (PDT)
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4e9c8a2026bso122254137.3
-        for <linux-pm@vger.kernel.org>; Wed, 30 Jul 2025 20:46:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUUkNnsM2e2F8C0KKWo48drWpVVqrT2gZP1IpxWjvw6PcdTXp3ThQOAirny9nFMzMnkzKDSxh7zfA==@vger.kernel.org
-X-Received: by 2002:a05:6102:3e92:b0:4fb:dde8:76cf with SMTP id
- ada2fe7eead31-4fbe8753b11mr3988803137.13.1753933616614; Wed, 30 Jul 2025
- 20:46:56 -0700 (PDT)
+	s=arc-20240116; t=1753934401; c=relaxed/simple;
+	bh=OcrZsUyHq3wWNpX5cgXufQ+ZLvYsQ6Y63zo9gqCOHL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eq0Fb5D++Y7J04aqj+BSW4izzJo3NaQfMex6w6Dc+N2LA2TMapIvWF/MERvWCIbH4BR9NLJb6iuYGP943Rrnp+k2LWI0qL6LVJS5YCuTrLbcKOra7ah2pILiB8gz9bqGN/XFEAEI0QDLK9xCjwgVS5Qm/X81hC1ukpRsaw4/B30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aLmGBqgu; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753934399; x=1785470399;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OcrZsUyHq3wWNpX5cgXufQ+ZLvYsQ6Y63zo9gqCOHL4=;
+  b=aLmGBqguwPgC+ZAPOuB3E0kxCLB0MKUofJJQZksjB+ZtDzGGyfKcDtI/
+   Jk9MeFdP94zXwaEvD7rcW52cbW0HNU5oSmzO7zfRwpoJYrQmjHDx6W2He
+   5wlF/2fYecrqSEvI3T3RfbCY7Fmvomc9M7yseE+YbThJtlUhdN5gOkcni
+   hm4QzSxFIbLAy+yspVqRDoaevy/zjnIsvgIVkNH34OiS8sN26VmZeu3eq
+   Sk8Jw9iOoxdTpjKG/mc8rfjAm+gbOVH6KlBwihq+n5rkqELWqLos/ljUI
+   ygzcGWR0b5y9T9PDLUfI1dpgkWDyb3hQg67no/2XMkYgQ4M5obAi37up+
+   w==;
+X-CSE-ConnectionGUID: QP8b36mARpO8c+l4cfmB3A==
+X-CSE-MsgGUID: +9Fq4xwLTuycK4sPldo3yA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56336418"
+X-IronPort-AV: E=Sophos;i="6.16,353,1744095600"; 
+   d="scan'208";a="56336418"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 20:59:59 -0700
+X-CSE-ConnectionGUID: gYjm9tjYSkK3pLYlL9EdZg==
+X-CSE-MsgGUID: p6F5ISCGQ2S6IQroCGXimQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,353,1744095600"; 
+   d="scan'208";a="194138761"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 30 Jul 2025 20:59:54 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uhKSN-0003Oi-0h;
+	Thu, 31 Jul 2025 03:59:51 +0000
+Date: Thu, 31 Jul 2025 11:59:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	sboyd@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, jic23@kernel.org, dlechner@baylibre.com,
+	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
+	casey.connolly@linaro.org
+Subject: Re: [PATCH v3 4/7] phy: qualcomm: eusb2-repeater: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <202507311150.5ofvQlKl-lkp@intel.com>
+References: <20250730112645.542179-5-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250730152128.311109-1-laura.nao@collabora.com> <20250730152128.311109-4-laura.nao@collabora.com>
-In-Reply-To: <20250730152128.311109-4-laura.nao@collabora.com>
-From: Fei Shao <fshao@chromium.org>
-Date: Thu, 31 Jul 2025 11:46:20 +0800
-X-Gmail-Original-Message-ID: <CAC=S1nj9eVDxSxPuntMjTSrwhVAhVLMs_s0aR+COQjM2HB0S9A@mail.gmail.com>
-X-Gm-Features: Ac12FXyuQfNec5PpeCVYeU9gZNhVWy6e9AZ1QYJ8r0Oc3K8xhe2Kp-euR4Zabx0
-Message-ID: <CAC=S1nj9eVDxSxPuntMjTSrwhVAhVLMs_s0aR+COQjM2HB0S9A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/9] thermal/drivers/mediatek/lvts: Guard against zero
- temp_factor in lvts_raw_to_temp
-To: Laura Nao <laura.nao@collabora.com>
-Cc: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, matthias.bgg@gmail.com, 
-	angelogioacchino.delregno@collabora.com, andrew-ct.chen@mediatek.com, 
-	kernel@collabora.com, nfraprado@collabora.com, arnd@arndb.de, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, u.kleine-koenig@baylibre.com, 
-	linux-arm-kernel@lists.infradead.org, wenst@chromium.org, 
-	linux-mediatek@lists.infradead.org, bchihi@baylibre.com, 
-	colin.i.king@gmail.com, lala.lin@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250730112645.542179-5-angelogioacchino.delregno@collabora.com>
 
-On Wed, Jul 30, 2025 at 11:32=E2=80=AFPM Laura Nao <laura.nao@collabora.com=
-> wrote:
->
-> Add a guard against zero temp_factor in lvts_raw_to_temp() to prevent
-> division by zero and ensure safe conversion.
->
-> Fixes: 6725a29321e4 ("thermal/drivers/mediatek/lvts_thermal: Make coeff c=
-onfigurable")
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+Hi AngeloGioacchino,
 
-Reviewed-by: Fei Shao <fshao@chromium.org>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20250730]
+[cannot apply to jic23-iio/togreg sre-power-supply/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.16 v6.16-rc7 v6.16-rc6 v6.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/spmi-Implement-spmi_subdevice_alloc_and_add-and-devm-variant/20250730-193217
+base:   next-20250730
+patch link:    https://lore.kernel.org/r/20250730112645.542179-5-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v3 4/7] phy: qualcomm: eusb2-repeater: Migrate to devm_spmi_subdevice_alloc_and_add()
+config: arm64-randconfig-002-20250731 (https://download.01.org/0day-ci/archive/20250731/202507311150.5ofvQlKl-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.4.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507311150.5ofvQlKl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507311150.5ofvQlKl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+>> aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: drivers/phy/qualcomm/phy-qcom-eusb2-repeater.o: in function `eusb2_repeater_probe':
+   drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c:228:(.text+0x5a8): undefined reference to `devm_spmi_subdevice_alloc_and_add'
+>> aarch64-linux-ld: drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c:236:(.text+0x61c): undefined reference to `__devm_regmap_init_spmi_ext'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
