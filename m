@@ -1,108 +1,116 @@
-Return-Path: <linux-pm+bounces-31690-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31691-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87581B17209
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 15:28:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B850BB17243
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 15:46:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02DDF585BCE
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:28:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3333218C5E46
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE9272D0C8E;
-	Thu, 31 Jul 2025 13:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287D413DBA0;
+	Thu, 31 Jul 2025 13:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="bQFaVW1u"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="s2aPDoKS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C832C1597;
-	Thu, 31 Jul 2025 13:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753968468; cv=pass; b=roNDtHZ/AHNY9v9i1qXsRG4FQQbgetfqg+zKhWVeSe9bzu2HscUdfGds8UTLP0ArvE9tdQWp/NgyMEQtAZgCCDkeBaDtENezRfUcdSy92Dy+OKUSONyolOaM35flO2ZPN9+5NNZlF5YKNRwnyjFB9AUI1emy2omdTYb3GHmTEmk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753968468; c=relaxed/simple;
-	bh=COOo3jiK9lz3rMXgTzpbFodohMhA2czPItwQ82+elrw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DSjqYpcbZpI9BcZl4Bbsz6HvzcOwCstc3Av53Jx4Z7SPysDwXs4xpMcdyfUKrIN4YsjxUN9JXDuxhfuPosWrpoew7aBMhiNHDh70gc/3VVfLVLehmUomqRxgKq2tOGQ+GuI/3K5EwP0DLJGiFQlgkGrGv+N4YXz05/0q3mCE0Ws=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=bQFaVW1u; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1753968430; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Wd157ipHbyNwRd7zSLEBZrjL1NwE7wlcP7m29JHZAl4aMg4StR8Ewkw/JhmY3EjbCNZNTXM4DQXv54EwRb4mHSAJdQXOp9b946vc5Z+TwmfAZjnDqfaiokG8wLtxt09CtEEy3wCY7TuJUy475xOAMr0MA9lAyH7meSZGglcEQ4w=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1753968430; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=COOo3jiK9lz3rMXgTzpbFodohMhA2czPItwQ82+elrw=; 
-	b=c/93OTp41HKxDz/ybAc59tvWucKS6YrIVxmfDdwX8QaU9UxYAyo4Ji6EYjsg5M4l2H312fi/hVX77IDTyZMrhseiy96V2y9yNdUTFkza1BSbHaMUmlWX/UJ6jsoIcdVHtwCp7LVgd/cTkF+Ab9q4vIr3aAjRvF+OTvP+KdH1Ma8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753968430;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=COOo3jiK9lz3rMXgTzpbFodohMhA2czPItwQ82+elrw=;
-	b=bQFaVW1uRX2HVR53bZ84cWiKsIqBWo72ciak7k08lk82m40VDwUpzVYL1XfVLSdE
-	JUYf2Q+Smzow4HogkIHAASadzJPcBckDF0tYa0enXzQcSKhatZxAHMZh789ELm1YIjU
-	RMfLfnh1WJ0PdHjyEypz5p2GbA+yd1z1NcAUUGYE=
-Received: by mx.zohomail.com with SMTPS id 1753968428292555.3333899104606;
-	Thu, 31 Jul 2025 06:27:08 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 1F6881807CE; Thu, 31 Jul 2025 15:27:03 +0200 (CEST)
-Date: Thu, 31 Jul 2025 15:27:03 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Alexey Charkov <alchark@gmail.com>, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonas Karlman <jonas@kwiboo.se>, kernel@collabora.com, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, Ye Zhang <ye.zhang@rock-chips.com>
-Subject: Re: [PATCH v6 0/7] RK3576 thermal sensor support, including OTP trim
- adjustments
-Message-ID: <iafobb7h4nphjcujm34gig6vwlzfveegwewpayehb4h3tayzgv@bxpdfmhf2hfa>
-References: <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
- <14c91ee4-3a09-4ec9-966f-0d563d7c8966@linaro.org>
- <CABjd4YzJeNf0Qq9qFeMcoYQV5erZGUeOpmJynRW88AeL9dJNhQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F3422338;
+	Thu, 31 Jul 2025 13:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753969586; cv=none; b=C6DX64EWtQIVBSFTEW4AtKewveLHIOOZFgB1kpa1WnPEXpeXjSrnH3MndmlflZgxYdxfPpcoSy89kPNLAWOvhjHIpD3bhmjq41wv32sDJvUl9rk2tV5IU/6JSaRA+6N5Z70XtxwEK1uO/gfjMlO9Yv31CilFKy9AqR4VufeuE9U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753969586; c=relaxed/simple;
+	bh=EdfR3+ghXfvid8Ak9BFhtOhrGJNHg3UqEP+sC26bPJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t1F4as/Hax3Th1V97a/7OWiaRFCRTtd13vbWhn7fbRAcX1K7R5oNff0D7ASyCrAZ9/8unZ2oJ6fiQk8KuoS7FlGnp5ytBFG3xo/k05RGdhFqNU8JqU/5xB22e0ayWSV0OviRqLDhAoSRkV02fklseuE74K6jHEBnr2hqbUMvyPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=s2aPDoKS; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=EdfR3+ghXfvid8Ak9BFhtOhrGJNHg3UqEP+sC26bPJo=; b=s2aPDoKSHYE2kKRj6gIVVD1GOV
+	fcyxAWhVigRK5nmd4r39qvJYfsh15mYv+up49sLyMVgmgm7fdKeXj6Tz8jcov+sqW47LaViq+O/08
+	FiCKhEKVmsqLmQ0JaxVWMq4ng6kFiYqGXXUx75iOnj6mx4t/NmSeMMj9FH9AsQb12ZZ55EQQgHLnP
+	IE0IpOIQkNRTLTp0NQKMuk5DBt+odJ9HJ8FN9vLyk29Z/24LDNtQ4lKOt9lEoGZmmEAHFhbSTLMVC
+	b4OYu5XIloViojkcFakmlrrMcioISbGwOtsjg2jyrZ+B2nvw7ptg8weOVx0KeeA2p+xD6aM6MZPfu
+	Oz+uHF3w==;
+Received: from i53875bde.versanet.de ([83.135.91.222] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uhTbQ-0008Cv-68; Thu, 31 Jul 2025 15:45:48 +0200
+From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Alexey Charkov <alchark@gmail.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Jonas Karlman <jonas@kwiboo.se>, kernel@collabora.com,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Ye Zhang <ye.zhang@rock-chips.com>
+Subject: Re: [PATCH v6 0/7] RK3576 thermal sensor support,
+ including OTP trim adjustments
+Date: Thu, 31 Jul 2025 15:45:47 +0200
+Message-ID: <2664626.Lt9SDvczpP@diego>
+In-Reply-To: <iafobb7h4nphjcujm34gig6vwlzfveegwewpayehb4h3tayzgv@bxpdfmhf2hfa>
+References:
+ <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
  <3560770.QJadu78ljV@diego>
+ <iafobb7h4nphjcujm34gig6vwlzfveegwewpayehb4h3tayzgv@bxpdfmhf2hfa>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <3560770.QJadu78ljV@diego>
 Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="utf-8"
 
-Hi,
-
-On Thu, Jul 31, 2025 at 10:11:23AM +0200, Heiko St=FCbner wrote:
-> Right now we're in the middle of the merge-window though, so everything
-> I apply now, I'd need to rebase onto -rc1 in slightly more than a week,
-> invalidating all those nice commit hashes that end up in the "applied" =
-mails.
+Am Donnerstag, 31. Juli 2025, 15:27:03 Mitteleurop=C3=A4ische Sommerzeit sc=
+hrieb Sebastian Reichel:
+> Hi,
 >=20
-> So I'm struggling with myself on every merge window about that.
+> On Thu, Jul 31, 2025 at 10:11:23AM +0200, Heiko St=C3=BCbner wrote:
+> > Right now we're in the middle of the merge-window though, so everything
+> > I apply now, I'd need to rebase onto -rc1 in slightly more than a week,
+> > invalidating all those nice commit hashes that end up in the "applied" =
+mails.
+> >=20
+> > So I'm struggling with myself on every merge window about that.
+>=20
+> Your are not supposed to merge anything to your for-next branch
+> during the merge window anyways. See first sentence of Stephen
+> Rothwell's mails [0]:
+>
+> > Please do not add any v6.18 material to your linux-next included
+> > branches until after v6.17-rc1 has been released.
 
-Your are not supposed to merge anything to your for-next branch
-during the merge window anyways. See first sentence of Stephen
-Rothwell's mails [0]:
+The general idea is just merging but without updating the -next branch,
+then after -rc1 rebase + do new -next.
 
-> Please do not add any v6.18 material to your linux-next included
-> branches until after v6.17-rc1 has been released.
+But as you pointed out, this is all cumbersome and doesn't shave off much
+from the amount of patches waiting, so as most of the time, I'll just wait
+for -rc1 to start clean :-)
 
-[0] https://lore.kernel.org/all/20250731133311.1a3e3867@canb.auug.org.au/
 
-Greetings,
+>=20
+> [0] https://lore.kernel.org/all/20250731133311.1a3e3867@canb.auug.org.au/
+>=20
+> Greetings,
+>=20
+> -- Sebastian
+>=20
 
--- Sebastian
+
+
+
 
