@@ -1,539 +1,916 @@
-Return-Path: <linux-pm+bounces-31704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADBCAB17587
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 19:19:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC7EEB176FA
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 22:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0CE11AA1875
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 17:20:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBDE216CA00
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 20:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB738242D7A;
-	Thu, 31 Jul 2025 17:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42236256C60;
+	Thu, 31 Jul 2025 20:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="HDoKchGj"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="JCXPWZSZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010055.outbound.protection.outlook.com [52.101.229.55])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AE778C91;
-	Thu, 31 Jul 2025 17:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753982383; cv=fail; b=If6AWK1quaQKf28ZUG0otYGPteUjJQwR8qh9aopNXyz7oZIi8Phq43WxyEkRKozpCHaZAL0pk++SAxWXI94vvF+CXcDKayr/WLx31jLAgYmBSQQlbFWRh6Hqj9EckEUzFvd0iE3011zjZ5IGH3l2oOfwYQK/ui7pAIGksGANYjQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753982383; c=relaxed/simple;
-	bh=fRhFxaf1qYWboXDK1fCOfKG7IO1XrXqJkVQJZgkZi5c=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=V1nw/PSHbOfe9tXktbpIt3XukiVWUL24XMBXxH8bTBKTccVQPi7YfW+3q3Dh1Lx1WLeWwAN3PI4tYruelcu7W+n0xf/YpVzX9EUMW+pEsiky7y4R7HWIK1ygEA2nxhWoaDzRI4cp1jk2yx+334ZF0q2KOqSw9q9TTbMOOV9KiXk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=HDoKchGj; arc=fail smtp.client-ip=52.101.229.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=crCg0xMaMhEeFeFY6YntX3wtVUsGOQnEqyGkjeUtNNTq6+QoD6isJIC4/wvsz8qzEdPzGxMNDuBgxvmxKn+PQ2Ij/+nORJ48rfC5nAFEbLhPiqBuMG5TSMaxZvTwODvKarm7VuhiRg3ZRVWncqJmBiPCEHwMPRZlu4EoiMKAsMY6IKaSBYFtu8OXGpTSyi9Gifc3uLOzhqrTsOPNJBjii3XvDLHqumsiP7pXnpKS4SruIjpMgoDvFWcY4bGRz+rhsuGAm6UKHdLOLOXu8JQ/ZChTCx6497gS86r3NPPhzzsGPARZGOYDqi+QgQOWw4semmzAXQzHjEhKVne6NsgnDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fRhFxaf1qYWboXDK1fCOfKG7IO1XrXqJkVQJZgkZi5c=;
- b=QyGiiKfsOpLizLlha3Gm1JxteTAW0CTa5vYAT8pAD33/i0nZmByurUiWu2R5xa+FdZf/kWGFUJgKFxPhYARe7XHJXmkRYvymgNcsz2bvXFUBxKfx8oSGg7BRyzjslV+CsVSJ7yNqy8JnLcfN4t+sPdcw8UARoOglKSbCGC9YI4QJ/cJ3VzXPgjTT2SIWQdO7Cfl/+a1j9+hmV1FwhtJa/2rtxz4cg36ciWvBbBXbhf7GaKYmaEsb/yFUF0d6fNT14iconfFyFVwL1hCsV+mCJ4ZGK2Tp6sE7zWvuFRl+TQlBAnlci+XSc1E2OopEcIiVaG1yZ9m3EZikaMggUmqBUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fRhFxaf1qYWboXDK1fCOfKG7IO1XrXqJkVQJZgkZi5c=;
- b=HDoKchGjjyxST3WTrY/wQGe97DPcuCSbnpd90oyrZw/gE/obyxMuT+XZasjKNtVx+vK8Yn2Le2kCM5rzyI/PuX3lNTadDnAjLWusfOg55sRrBscqdHALnRhWxwXcMbpEb5lFYiMFvJK2kG2j98j/x6taO4XECG49WsELX8qudJ4=
-Received: from OSCPR01MB14647.jpnprd01.prod.outlook.com (2603:1096:604:3a0::6)
- by OS3PR01MB5589.jpnprd01.prod.outlook.com (2603:1096:604:c0::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.15; Thu, 31 Jul
- 2025 17:19:32 +0000
-Received: from OSCPR01MB14647.jpnprd01.prod.outlook.com
- ([fe80::40e:e798:1aea:ca82]) by OSCPR01MB14647.jpnprd01.prod.outlook.com
- ([fe80::40e:e798:1aea:ca82%6]) with mapi id 15.20.8989.013; Thu, 31 Jul 2025
- 17:19:32 +0000
-From: John Madieu <john.madieu.xa@bp.renesas.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: "conor+dt@kernel.org" <conor+dt@kernel.org>, "geert+renesas@glider.be"
-	<geert+renesas@glider.be>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"rafael@kernel.org" <rafael@kernel.org>, Biju Das
-	<biju.das.jz@bp.renesas.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "john.madieu@gmail.com"
-	<john.madieu@gmail.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, "lukasz.luba@arm.com"
-	<lukasz.luba@arm.com>, magnus.damm <magnus.damm@gmail.com>, "robh@kernel.org"
-	<robh@kernel.org>, "rui.zhang@intel.com" <rui.zhang@intel.com>,
-	"sboyd@kernel.org" <sboyd@kernel.org>,
-	"niklas.soderlund+renesas@ragnatech.se"
-	<niklas.soderlund+renesas@ragnatech.se>
-Subject: RE: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
- the Renesas RZ/G3E SoC
-Thread-Topic: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
- the Renesas RZ/G3E SoC
-Thread-Index: AQHby0ai9SCDgo20z0y3b2QkXuPFT7Q1ldCAgAJIPtA=
-Date: Thu, 31 Jul 2025 17:19:31 +0000
-Message-ID:
- <OSCPR01MB14647DE009925C982AE6BB5D2FF27A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
-References: <20250522182252.1593159-1-john.madieu.xa@bp.renesas.com>
- <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com>
- <aHgVe0YwPWapIYed@mai.linaro.org>
-In-Reply-To: <aHgVe0YwPWapIYed@mai.linaro.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSCPR01MB14647:EE_|OS3PR01MB5589:EE_
-x-ms-office365-filtering-correlation-id: bc277dd8-aadb-4159-6703-08ddd05669ea
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TU9HZERNZEJweGhlZitPcVB1anpTYWlMdWt2eHdMS20zNTN5WkNTUDJCbXkv?=
- =?utf-8?B?MnllMUpISHlkMUhMTEIrTHhyd1hnck1NZkU4QytGekJHSENOcm1pL1krdlVh?=
- =?utf-8?B?bUtROXA1NDBpb0IwMFhJd2VGK1ErRWFmQlpsL0ZRTFYwYXZUZGhJZ1dUZUNQ?=
- =?utf-8?B?dlJmSVVHRXVwU2pFOUNMZjJZeE0zVmM5UGNqNDY1b2ZrWEppL1VIdTZPYjR3?=
- =?utf-8?B?Tk11cUFDZWN5ZFJYTDVCU0JEUHdPZyt1UXJVdERPRWxqeXk4d3VTMDM0cVh3?=
- =?utf-8?B?ZFBDcUNjZlpZTHkrNGVrSzhHRi8wMmQ5clBiT0ttZi9aV1U5eUF1R2V5WXB0?=
- =?utf-8?B?bkVLNXB0dnlOTFpVQjRIbTY5cWZvZ0pZUENyMjlmRUtjdVgrMEdZNmQwR3lW?=
- =?utf-8?B?cC91Yk1sSjhCLzVQa1k5dHlUc1RHdjk0WE5TVGFTS0FHOEY3NUJZMTVhQk1i?=
- =?utf-8?B?NGpTT2UweWI3SDZhbEh3cWIvRjVvN0NVb1lmUGZRUTJMa3FyK2s3WWFQYXht?=
- =?utf-8?B?QVV2M2FPY0hTV01UYVBBL0hzQzVJMmt2V0JMZUUxVHFCbjBRWmk3ZUxmZVlP?=
- =?utf-8?B?UFpCTzdZdHcvRC9JRy9BTXNOckozMC9FZkJCZDU4aUxWYk5SdEJ0N21rZk1i?=
- =?utf-8?B?TC9zUkFHOVdwMnkwWW44ZlV3RURmcHdFS3BzNEVBL3RSdWdkVnRQZDRRODc4?=
- =?utf-8?B?bUJIbFMvSjlxOGp5RjE3TGVNWnpmTzBSUEtFN25ENFRWcFo2VlZmVng5ZWRn?=
- =?utf-8?B?b2Y5WWMrNVQxNWNRZHBkU0FsUlFhOVJ3eCt3MkNxSTUxVVR4ak44cUovUnNI?=
- =?utf-8?B?ek5Dc3FmOTRHVHA0eWNyT3d6Uk8vS1JMRUhKWHFOamlnOVBLanVNSzU5dStR?=
- =?utf-8?B?ZEd0SC9LWm1kZ0g0Y3BySWtmMzVXZFJGRDRxaDRUZWxLcnFwMERTaGoyeVBR?=
- =?utf-8?B?dFVST09CdDdNY09OelZiTG5LeE1vaFJlTDEzV0JVR0pBWDlPVVE2WXJxVnQy?=
- =?utf-8?B?eG9HcWlvZ3EvSWFQaWYrUHREaDFDeUlZM0tPbFA4SFpJSk5rV0Z4THBMbHEr?=
- =?utf-8?B?NGo4SmZkVUhqZFRGYjkwR2lyQ1NSdU1nZDZrZ0drc3FVNUc0cmpsWUJIemdR?=
- =?utf-8?B?WnNoVDgwZHh0Y2ZINTVDRWVPcHRoS0J5eUdHZGZFeHFKZTF0V3ZkbTQ0Vzhi?=
- =?utf-8?B?V2laOTBLOW03TVJRdjdHdERTaEx4Vm9hOS9pR3BnWURmc05objNudEpWMkZK?=
- =?utf-8?B?amFkcFFCY0FrODdzRERVMFpPTWlhUjloYXIzZ1NmSDE2eTZOSVZrSEl5STl0?=
- =?utf-8?B?bnI1dUJsTW8zdHpxSy92M21XVG9aM0FhZ0xjUFFFZll5VHVSclhBL3J5Unph?=
- =?utf-8?B?bmk0d0FiM2pXWE5JNEhEVkJ2amxxbU9aVFdJRzFaZHo4UFFZaG5SdFJjRVRN?=
- =?utf-8?B?N21idzBwdEJvaExWWGpBMHRJMDNJbzA0V2dWUWdrdHhlamg0OGFTNld3TTRE?=
- =?utf-8?B?ZGlFRFhWL215Yld1N3dtdWszNmdMT29wRjZ4U09EdTVDN0hPYmVCZkNKYjQr?=
- =?utf-8?B?ek9ZaE13T2kvNloxZUNzSlRTc08zZDduZFVrb1NVVTBBeEdYeHBXZnNaRmh0?=
- =?utf-8?B?UXJHRm1lOXB2b0g5ck5WR3FseURyNlJ2ZGhUMllpdWpCY0phN2lsM1lSK2RI?=
- =?utf-8?B?VHIyRW85VXRrVnc1cnhvYTVMb2JLV3FXVXNNZ3hlaCs5VjdvKzJISXQ2a1FL?=
- =?utf-8?B?emdnK05oSm1PbjQzUXRPcTJpaHFqZnBDNWtCbUZKeVB0cTFaSkxyS2dVYkVx?=
- =?utf-8?B?L1ZocEpVaEhySlBlNDFIT3c5QnVVSEpRMWJCM1diRUNaemZ0NWtFdkVuWk9k?=
- =?utf-8?B?ajdtMUFzK3VnV2hVZVg5aXhxcWVuTXZodWRzZVFyVUQ4Z1QrTjNXM2VBenNv?=
- =?utf-8?Q?L1OVZa9SWHE=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSCPR01MB14647.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?VE1ISUJ1MGhrMHhTcnAzaFJJQyt1bFRQVDlKa1dzcmJ1NllGa0hCRmd2ZTdT?=
- =?utf-8?B?Nzdmb1BnTUFrWkpSYmFoOC9UcUdkRmViOHUzbkIwVXB4MWNwQXIvSlVnOVJW?=
- =?utf-8?B?Zjl1QURpanNSc1VBYjFEOHAydTl5czlLUy9iNldYNFNUbnlidnFmWmF4b3FL?=
- =?utf-8?B?Ly9XZ2hUM3R6c0RjdWUrRmxtQll5cWw1dTZjSFk0RjJrT2g0dU4zVUY5aUhP?=
- =?utf-8?B?Tnh5OU82OHp1L3dER2lhS2ZMR3JhMGxoYlNIM2VZSnE4M0dncDR0MnlCeDVV?=
- =?utf-8?B?WFhRVEdIRDk3L3VtTHo4RWlDR2dEV2swM0JEWURvY0JuelBYaWRISHNvUm9W?=
- =?utf-8?B?Tlh3T0U2Z3F5OHA2RFdRQzUvOGdNY1kwWFg3Z1Zrcy9sR2lid0s2QTQxQThY?=
- =?utf-8?B?RFJUU2VLeGh2Y09nM3lwNE1kMnRIbVpjZWJwNWRkSFFYNjJiRGVMQzd4MUtx?=
- =?utf-8?B?NEtDTGtON0JmNFlHenFBWXJVV0FTY3Y4bXBhNTZmVmlWZ2ljTUdaMXhiLzdp?=
- =?utf-8?B?ZnNiTDVrYkJvc2g5cm5mZnZ6TzhYbDFvUGpJa3o1dit2Q3RvOTV0L1FqOWhT?=
- =?utf-8?B?Sit0emdLZEJUMXBUUDBydXJ3N29SNUlWaGQ0YnBITmlRR2tDa2RacExlV3hh?=
- =?utf-8?B?bjdiU2NCN29CMEN4bVYwRWZTRDVDZXJFYytiUElTOGRXT2VPdHBwWDhlYXlo?=
- =?utf-8?B?M1BKd2kxZGxxTTdUSXEvcXdVN25kU1VnV1RxS0V6dG9Ec3M2c2hIbUVhekt2?=
- =?utf-8?B?aEtuSE1PSWNZV1pUMi9mWXdkQXk4Ritid05jWmFKMitmVzFKZDFZdTlmWGVr?=
- =?utf-8?B?VndxZVJpQmtQNUE4T2YwbCtSTjd5U0E5Uzgxdm90ejZSWnJzT0MyNWVoNDZ4?=
- =?utf-8?B?RnlxY2JGZDRoVURrN2RZTTdBSnZLbzZpTDV5MGVFc0dSUFF4eTFyelVMWDB3?=
- =?utf-8?B?QXVXZjZZZDdWdmUyVFhvUTVjOGlrSjdadm90Z3ZDSmlFdlN1bGhCZk9rQnFG?=
- =?utf-8?B?VlJ6a1IzZVlGTy81QW9aSFdIWGZsV0xNb3ZYYjZOVE9KUXdBcnhFa051NE5X?=
- =?utf-8?B?SEc1ZWZvQzlNSk83K2VCVGhDUUtKRHptWTFWVllOOUl3NEFvQitKNzh1bUpq?=
- =?utf-8?B?Rjk0bDFCdXUyenppU3ZDSGhqblE3S1FOaWc4R1J6cnVCeXpUWmNtSXZBUXUw?=
- =?utf-8?B?MnpIRTVTZlFMcVpveWFEK0ZtbDl2MStOajdEeERXZWUxZjd2VU5INCsrT1lQ?=
- =?utf-8?B?R25CRFRKMDB2b2tId1NVeStEMzRFLzc1WHFCaC9PVEVIRUVYUUpqQU1tZFZV?=
- =?utf-8?B?TVhsSVNaMjdrQVFCOElRMkZ0R25mdEJ5QU84T1FhRTFFTWtxU0M1ZDJuZFJN?=
- =?utf-8?B?NkE2N28rWFpCSnFnUFpjRE0yYW5QVzdVaDFiUTI3NEJUT0RScXNpR0tzZkIy?=
- =?utf-8?B?T0g2dThMLzM5TDNQYlI1QVB4anI0NkY1bTRoUitmUjczVW8yYWdBWlBJM0Fl?=
- =?utf-8?B?eFBmUGVtQUlrZXM1ZjA3Ui9yL1VoVVg2VnpLd09QRnJpdERnM1UvUEVJenJH?=
- =?utf-8?B?a1BqcUg3WGx5VmRSMlpzUjhWWGZRandKby9mMWloNXlSTTVTVWRSaUdVY3Q3?=
- =?utf-8?B?TG0yL0RNOCs3V0NuajFDRWk5dXZqR2ZRWWZaS0VQaG5acWZoZld1Q29CTVUy?=
- =?utf-8?B?OXlkK3F2RkFNOEY2aDN2SU9NUWREZ2wvd3RVaFJlYm93UGwrakJCM0hjV3hn?=
- =?utf-8?B?Z3hRUU5COHpYc2ZlYkQyZUZEZ3NNY2Jjbjl5MFUvcjRKV2hzcXEyNmRUcTVT?=
- =?utf-8?B?d01rUWlKWFJLTGRJM0VhUUg1SitzMkJKUTd3V3hqU0I5ck9iK3B4L2Z4cmR2?=
- =?utf-8?B?U3pTMGR6V2FkemhqS3F6eTYzeDZIdStNTW5jZ1JCMnR3VUdoRG01aTVvRmls?=
- =?utf-8?B?U0NtMUlHQm0vNmFFditLL1djdGQvZTJSQjZCUFM3RnRsaTMzMnQvWUJsUCtE?=
- =?utf-8?B?OGFndFhTcW1ZNERmd255NGhJNVVWeGF4YWhNTmxyREp3c1k4R1RXSDI1dGp0?=
- =?utf-8?B?MTB3amk1WisyV2l0SkR0QkloNU11dkM3eHU5OE42OEJYaWRVYWZRS3lIclFu?=
- =?utf-8?B?a3QxUUt0bzNWYzRBa0dQd0FsMUF1TDhBQ0FEWDh1ZjZNcTVQYUtaSHRSMXdY?=
- =?utf-8?B?emc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40ED22441AF;
+	Thu, 31 Jul 2025 20:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753992883; cv=none; b=CyPux+7jH4ATvSTSLUF/SDe/myQXgDClH2O2b94pWviQfZN/vAis+gmrAwy+YGfMvOa61+8lm0cuEv4NHTpqrb5GrQAGK9S18W5YX0usqXxj/9dUcpoByH82hohRj3rhO3BHxSNQjtPuPWMFWYyLR336fm4ad/JPa+s0qyIC3X8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753992883; c=relaxed/simple;
+	bh=CPp7nHBF0ujkEnWtRJbHxYfOEcdlduW6UYZxeTscEPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cpz/fOqdGcZtkx5fobp/AfvP6htx4wA40XX5+pat5CuIdM6wjdH31SbDYLIT8WocDvfdv3agorBRJwGjkTP4cOwUbNRWPcFGR6uu/3xCUN8LSCMFcBqFaM8BYFbggihCpr0rzM7FxHEpfG1jEyC10Xs7Aljgs8Ddb4CHBXKYg2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=JCXPWZSZ; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id D0FAA3D875E6;
+	Thu, 31 Jul 2025 16:05:06 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id 75BUkRcZx4lZ; Thu, 31 Jul 2025 16:05:04 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 6A3AB3D875A5;
+	Thu, 31 Jul 2025 16:05:04 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 6A3AB3D875A5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1753992304; bh=x1kdSRhv5yhYz/fPtdo4cC4j+WuOqQ2qxAZDpHNjZ2U=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=JCXPWZSZ32Y85MMHvehakerkPd8dLgzBZQLe/C8Y6NwQ7flTfzeYTE/qgo8BpuY3n
+	 7kpBKVvVqlW5hzB9dnuPHLTkopD/WolhUrGpf2qMC7R/IjONfdmW9Va8lw3CJH8Uxy
+	 Zj6uWsORZz4FX5nEMPNGmK7s5aT/bpaHJq+sHRh+pPPUQ5X7s63GE0dxLbDfVGFltV
+	 vxVgADaHpDs4nPy+/AMRLAYim5qmHlUNW1IJXyc9nGn35cEgtO9LHMtIBWHH2XFpH2
+	 qJuBVrkE2pj3xu32/lMU+AjBV7E9IT4IjkEcySK0CbnZq1j3BHBwHPOoA6SYCBQb4c
+	 Be/o8k1QOneQA==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id po7dp8qE73r5; Thu, 31 Jul 2025 16:05:04 -0400 (EDT)
+Received: from fedora (unknown [192.168.51.254])
+	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id E77A33D875E6;
+	Thu, 31 Jul 2025 16:05:03 -0400 (EDT)
+Date: Thu, 31 Jul 2025 16:05:02 -0400
+From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+To: Lee Jones <lee@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>,
+	imx@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
+	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
+	Robin Gong <yibin.gong@nxp.com>,
+	Enric Balletbo i Serra <eballetbo@gmail.com>,
+	Sean Nyekjaer <sean@geanix.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v9 2/6] mfd: pf1550: add core driver
+Message-ID: <aIvMbqC_5R5TkoyW@fedora>
+References: <20250716-pf1550-v9-0-502a647f04ef@savoirfairelinux.com>
+ <20250716-pf1550-v9-2-502a647f04ef@savoirfairelinux.com>
+ <20250731091525.GA1049189@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSCPR01MB14647.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc277dd8-aadb-4159-6703-08ddd05669ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2025 17:19:31.8675
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LT4ROsTwDQ0+ImPjJbI9+lJ2bEmUi0A2mHxMvwuix8pPMaXJ14u4gl04GKtoaZ4XyB6nZXICA7eAKIfNoMsGvA8/4sxYmF4uB4riAYXcU0U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB5589
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250731091525.GA1049189@google.com>
 
-SGkgRGFuaWVsLA0KDQpUaGFua3MgZm9yIHlvdXIgcmV2aWV3Lg0KDQo+IC0tLS0tT3JpZ2luYWwg
-TWVzc2FnZS0tLS0tDQo+IEZyb206IERhbmllbCBMZXpjYW5vIDxkYW5pZWwubGV6Y2Fub0BsaW5h
-cm8ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIEp1bHkgMTYsIDIwMjUgMTE6MTEgUE0NCj4gVG86
-IEpvaG4gTWFkaWV1IDxqb2huLm1hZGlldS54YUBicC5yZW5lc2FzLmNvbT4NCj4gU3ViamVjdDog
-UmU6IFtQQVRDSCB2NiAzLzVdIHRoZXJtYWw6IHJlbmVzYXM6IHJ6ZzNlOiBBZGQgdGhlcm1hbCBk
-cml2ZXINCj4gZm9yIHRoZSBSZW5lc2FzIFJaL0czRSBTb0MNCj4gDQo+IE9uIFRodSwgTWF5IDIy
-LCAyMDI1IGF0IDA4OjIyOjQ2UE0gKzAyMDAsIEpvaG4gTWFkaWV1IHdyb3RlOg0KPiA+IFRoZSBS
-Wi9HM0UgU29DIGludGVncmF0ZXMgYSBUZW1wZXJhdHVyZSBTZW5zb3IgVW5pdCAoVFNVKSBibG9j
-aw0KPiA+IGRlc2lnbmVkIHRvIG1vbml0b3IgdGhlIGNoaXAncyBqdW5jdGlvbiB0ZW1wZXJhdHVy
-ZS4gVGhpcyBzZW5zb3IgaXMNCj4gPiBjb25uZWN0ZWQgdG8gY2hhbm5lbCAxIG9mIHRoZSBBUEIg
-cG9ydCBjbG9jay9yZXNldCBhbmQgcHJvdmlkZXMNCj4gdGVtcGVyYXR1cmUgbWVhc3VyZW1lbnRz
-Lg0KPiA+DQo+ID4gSXQgYWxzbyByZXF1aXJlcyBjYWxpYnJhdGlvbiB2YWx1ZXMgc3RvcmVkIGlu
-IHRoZSBzeXN0ZW0gY29udHJvbGxlcg0KPiA+IHJlZ2lzdGVycyBmb3IgYWNjdXJhdGUgdGVtcGVy
-YXR1cmUgbWVhc3VyZW1lbnQuIEFkZCBhIGRyaXZlciBmb3IgdGhlDQo+IFJlbmVzYXMgUlovRzNF
-IFRTVS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEpvaG4gTWFkaWV1IDxqb2huLm1hZGlldS54
-YUBicC5yZW5lc2FzLmNvbT4NCj4gPiAtLS0NCj4gPg0KPiA+IENoYW5nZXM6DQo+ID4NCj4gPiB2
-MSAtPiB2MjogZml4ZXMgSVJRIG5hbWVzDQo+ID4gdjIgLT4gdjM6IG5vIGNoYW5nZXMNCj4gPiB2
-MyAtPiB2NDogbm8gY2hhbmdlcw0KPiA+IHY1OiByZW1vdmVzIGN1cmx5IGJyYWNlcyBhcnJvdW5k
-IHNpbmdsZS1saW5lIHByb3RlY3RlZCBzY29wZWQgZ3VhcmRzDQo+ID4gdjY6IENsYXJpZmllZCBj
-b21tZW50cyBpbiBkcml2ZXINCj4gPg0KPiA+ICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgIDcgKw0KPiA+ICBkcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9LY29uZmln
-ICAgICAgICAgfCAgIDcgKw0KPiA+ICBkcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9NYWtlZmlsZSAg
-ICAgICAgfCAgIDEgKw0KPiA+ICBkcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9yemczZV90aGVybWFs
-LmMgfCA0NDMNCj4gPiArKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgNCBmaWxlcyBjaGFu
-Z2VkLCA0NTggaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy90
-aGVybWFsL3JlbmVzYXMvcnpnM2VfdGhlcm1hbC5jDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvTUFJ
-TlRBSU5FUlMgYi9NQUlOVEFJTkVSUyBpbmRleA0KPiA+IDc5YThlMmM3MzkwOC4uZWIxMTQ5NDc5
-NWU4IDEwMDY0NA0KPiA+IC0tLSBhL01BSU5UQUlORVJTDQo+ID4gKysrIGIvTUFJTlRBSU5FUlMN
-Cj4gPiBAQCAtMjExNjEsNiArMjExNjEsMTMgQEAgUzoJTWFpbnRhaW5lZA0KPiA+ICBGOg0KPiAJ
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2lpby9wb3RlbnRpb21ldGVyL3JlbmVz
-YXMseDkyNTAueWENCj4gbWwNCj4gPiAgRjoJZHJpdmVycy9paW8vcG90ZW50aW9tZXRlci94OTI1
-MC5jDQo+ID4NCj4gPiArUkVORVNBUyBSWi9HM0UgVEhFUk1BTCBTRU5TT1IgVU5JVCBEUklWRVIN
-Cj4gPiArTToJSm9obiBNYWRpZXUgPGpvaG4ubWFkaWV1LnhhQGJwLnJlbmVzYXMuY29tPg0KPiA+
-ICtMOglsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcNCj4gPiArUzoJTWFpbnRhaW5lZA0KPiA+ICtG
-OglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdGhlcm1hbC9yZW5lc2FzLHI5YTA5
-ZzA0Ny10c3UueWFtbA0KPiA+ICtGOglkcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9yemczZV90aGVy
-bWFsLmMNCj4gPiArDQo+ID4gIFJFU0VUIENPTlRST0xMRVIgRlJBTUVXT1JLDQo+ID4gIE06CVBo
-aWxpcHAgWmFiZWwgPHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+DQo+ID4gIFM6CU1haW50YWluZWQN
-Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL3JlbmVzYXMvS2NvbmZpZw0KPiA+IGIv
-ZHJpdmVycy90aGVybWFsL3JlbmVzYXMvS2NvbmZpZyBpbmRleCBkY2Y1ZmM1YWUwOGUuLjEwY2Y5
-MGZjNGJmYQ0KPiA+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdGhlcm1hbC9yZW5lc2FzL0tj
-b25maWcNCj4gPiArKysgYi9kcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9LY29uZmlnDQo+ID4gQEAg
-LTI2LDMgKzI2LDEwIEBAIGNvbmZpZyBSWkcyTF9USEVSTUFMDQo+ID4gIAloZWxwDQo+ID4gIAkg
-IEVuYWJsZSB0aGlzIHRvIHBsdWcgdGhlIFJaL0cyTCB0aGVybWFsIHNlbnNvciBkcml2ZXIgaW50
-byB0aGUNCj4gTGludXgNCj4gPiAgCSAgdGhlcm1hbCBmcmFtZXdvcmsuDQo+ID4gKw0KPiA+ICtj
-b25maWcgUlpHM0VfVEhFUk1BTA0KPiA+ICsJdHJpc3RhdGUgIlJlbmVzYXMgUlovRzNFIHRoZXJt
-YWwgZHJpdmVyIg0KPiA+ICsJZGVwZW5kcyBvbiBBUkNIX1JFTkVTQVMgfHwgQ09NUElMRV9URVNU
-DQo+ID4gKwloZWxwDQo+ID4gKwkgIEVuYWJsZSB0aGlzIHRvIHBsdWcgdGhlIFJaL0czRSB0aGVy
-bWFsIHNlbnNvciBkcml2ZXIgaW50byB0aGUNCj4gTGludXgNCj4gPiArCSAgdGhlcm1hbCBmcmFt
-ZXdvcmsuDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC9yZW5lc2FzL01ha2VmaWxl
-DQo+ID4gYi9kcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9NYWtlZmlsZQ0KPiA+IGluZGV4IGJmOWNi
-M2NiOTRkNi4uNWEzZWJhMGRlZGQwIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdGhlcm1hbC9y
-ZW5lc2FzL01ha2VmaWxlDQo+ID4gKysrIGIvZHJpdmVycy90aGVybWFsL3JlbmVzYXMvTWFrZWZp
-bGUNCj4gPiBAQCAtMywzICszLDQgQEANCj4gPiAgb2JqLSQoQ09ORklHX1JDQVJfR0VOM19USEVS
-TUFMKQkrPSByY2FyX2dlbjNfdGhlcm1hbC5vDQo+ID4gIG9iai0kKENPTkZJR19SQ0FSX1RIRVJN
-QUwpCSs9IHJjYXJfdGhlcm1hbC5vDQo+ID4gIG9iai0kKENPTkZJR19SWkcyTF9USEVSTUFMKQkr
-PSByemcybF90aGVybWFsLm8NCj4gPiArb2JqLSQoQ09ORklHX1JaRzNFX1RIRVJNQUwpCSs9IHJ6
-ZzNlX3RoZXJtYWwubw0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9y
-emczZV90aGVybWFsLmMNCj4gPiBiL2RyaXZlcnMvdGhlcm1hbC9yZW5lc2FzL3J6ZzNlX3RoZXJt
-YWwuYw0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi4z
-NDgyMjlkYTllZjQNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvZHJpdmVycy90aGVybWFs
-L3JlbmVzYXMvcnpnM2VfdGhlcm1hbC5jDQo+ID4gQEAgLTAsMCArMSw0NDMgQEANCj4gPiArLy8g
-U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiArLyoNCj4gPiArICogUmVuZXNh
-cyBSWi9HM0UgVFNVIFRlbXBlcmF0dXJlIFNlbnNvciBVbml0DQo+ID4gKyAqDQo+ID4gKyAqIENv
-cHlyaWdodCAoQykgMjAyNSBSZW5lc2FzIEVsZWN0cm9uaWNzIENvcnBvcmF0aW9uICAqLyAjaW5j
-bHVkZQ0KPiA+ICs8bGludXgvY2xrLmg+ICNpbmNsdWRlIDxsaW51eC9kZWxheS5oPiAjaW5jbHVk
-ZSA8bGludXgvZXJyLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9pbnRlcnJ1cHQuaD4gI2luY2x1
-ZGUgPGxpbnV4L2lvLmg+ICNpbmNsdWRlDQo+ID4gKzxsaW51eC9pb3BvbGwuaD4gI2luY2x1ZGUg
-PGxpbnV4L2tlcm5lbC5oPiAjaW5jbHVkZQ0KPiA+ICs8bGludXgvbWZkL3N5c2Nvbi5oPiAjaW5j
-bHVkZSA8bGludXgvbW9kdWxlLmg+ICNpbmNsdWRlDQo+ID4gKzxsaW51eC9vZl9kZXZpY2UuaD4g
-I2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtX2RldmljZS5oPiAjaW5jbHVkZQ0KPiA+ICs8bGludXgv
-cmVnbWFwLmg+ICNpbmNsdWRlIDxsaW51eC9yZXNldC5oPiAjaW5jbHVkZSA8bGludXgvdGhlcm1h
-bC5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvdW5pdHMuaD4NCj4gPiArDQo+ID4gKyNpbmNsdWRl
-ICIuLi90aGVybWFsX2h3bW9uLmgiDQo+ID4gKw0KPiA+ICsvKiBTWVMgVHJpbW1pbmcgcmVnaXN0
-ZXIgb2Zmc2V0cyBtYWNybyAqLyAjZGVmaW5lIFNZU19UU1VfVFJNVkFMKHgpDQo+ID4gKygweDMz
-MCArICh4KSAqIDQpDQo+ID4gKw0KPiA+ICsvKiBUU1UgUmVnaXN0ZXIgb2Zmc2V0cyBhbmQgYml0
-cyAqLw0KPiA+ICsjZGVmaW5lIFRTVV9TU1VTUgkJMHgwMA0KPiA+ICsjZGVmaW5lIFRTVV9TU1VT
-Ul9FTl9UUwkJQklUKDApDQo+ID4gKyNkZWZpbmUgVFNVX1NTVVNSX0FEQ19QRF9UUwlCSVQoMSkN
-Cj4gPiArI2RlZmluZSBUU1VfU1NVU1JfU09DX1RTX0VOCUJJVCgyKQ0KPiA+ICsNCj4gPiArI2Rl
-ZmluZSBUU1VfU1RSR1IJCTB4MDQNCj4gPiArI2RlZmluZSBUU1VfU1RSR1JfQURTVAkJQklUKDAp
-DQo+ID4gKw0KPiA+ICsjZGVmaW5lIFRTVV9TT1NSMQkJMHgwOA0KPiA+ICsjZGVmaW5lIFRTVV9T
-T1NSMV9BRENUXzgJMHgwMw0KPiA+ICsjZGVmaW5lIFRTVV9TT1NSMV9PVVRTRUxfQVZFUkFHRQlC
-SVQoOSkNCj4gPiArDQo+ID4gKy8qIFNlbnNvciBDb2RlIFJlYWQgUmVnaXN0ZXIgKi8NCj4gPiAr
-I2RlZmluZSBUU1VfU0NSUgkJMHgxMA0KPiA+ICsjZGVmaW5lIFRTVV9TQ1JSX09VVDEyQklUX1RT
-CUdFTk1BU0soMTEsIDApDQo+ID4gKw0KPiA+ICsvKiBTZW5zb3IgU3RhdHVzIFJlZ2lzdGVyICov
-DQo+ID4gKyNkZWZpbmUgVFNVX1NTUgkJCTB4MTQNCj4gPiArI2RlZmluZSBUU1VfU1NSX0NPTlZf
-UlVOTklORwlCSVQoMCkNCj4gPiArDQo+ID4gKy8qIENvbXBhcmUgTW9kZSBTZXR0aW5nIFJlZ2lz
-dGVyICovDQo+ID4gKyNkZWZpbmUgVFNVX0NNU1IJCTB4MTgNCj4gPiArI2RlZmluZSBUU1VfQ01T
-Ul9DTVBFTgkJQklUKDApDQo+ID4gKyNkZWZpbmUgVFNVX0NNU1JfQ01QQ09ORAlCSVQoMSkNCj4g
-PiArDQo+ID4gKy8qIExvd2VyIExpbWl0IFNldHRpbmcgUmVnaXN0ZXIgKi8NCj4gPiArI2RlZmlu
-ZSBUU1VfTExTUgkJMHgxQw0KPiA+ICsjZGVmaW5lIFRTVV9MTFNSX0xJTQkJR0VOTUFTSygxMSwg
-MCkNCj4gPiArDQo+ID4gKy8qIFVwcGVyIExpbWl0IFNldHRpbmcgUmVnaXN0ZXIgKi8NCj4gPiAr
-I2RlZmluZSBUU1VfVUxTUgkJMHgyMA0KPiA+ICsjZGVmaW5lIFRTVV9VTFNSX1VMSU0JCUdFTk1B
-U0soMTEsIDApDQo+ID4gKw0KPiA+ICsvKiBJbnRlcnJ1cHQgU3RhdHVzIFJlZ2lzdGVyICovDQo+
-ID4gKyNkZWZpbmUgVFNVX1NJU1IJCTB4MzANCj4gPiArI2RlZmluZSBUU1VfU0lTUl9BREYJCUJJ
-VCgwKQ0KPiA+ICsjZGVmaW5lIFRTVV9TSVNSX0NNUEYJCUJJVCgxKQ0KPiA+ICsNCj4gPiArLyog
-SW50ZXJydXB0IEVuYWJsZSBSZWdpc3RlciAqLw0KPiA+ICsjZGVmaW5lIFRTVV9TSUVSCQkweDM0
-DQo+ID4gKyNkZWZpbmUgVFNVX1NJRVJfQURJRQkJQklUKDApDQo+ID4gKyNkZWZpbmUgVFNVX1NJ
-RVJfQ01QSUUJCUJJVCgxKQ0KPiA+ICsNCj4gPiArLyogSW50ZXJydXB0IENsZWFyIFJlZ2lzdGVy
-ICovDQo+ID4gKyNkZWZpbmUgVFNVX1NJQ1IJCTB4MzgNCj4gPiArI2RlZmluZSBUU1VfU0lDUl9B
-RENMUgkJQklUKDApDQo+ID4gKyNkZWZpbmUgVFNVX1NJQ1JfQ01QQ0xSCQlCSVQoMSkNCj4gPiAr
-DQo+ID4gKy8qIFRlbXBlcmF0dXJlIGNhbGN1bGF0aW9uIGNvbnN0YW50cyAqLw0KPiA+ICsjZGVm
-aW5lIFRTVV9ECQk0MQ0KPiA+ICsjZGVmaW5lIFRTVV9FCQkxMjYNCj4gPiArI2RlZmluZSBUU1Vf
-VFJNVkFMX01BU0sJR0VOTUFTSygxMSwgMCkNCj4gPiArDQo+ID4gKyNkZWZpbmUgVFNVX1BPTExf
-REVMQVlfVVMJNTANCj4gPiArI2RlZmluZSBUU1VfVElNRU9VVF9VUwkJMTAwMDANCj4gPiArI2Rl
-ZmluZSBUU1VfTUlOX0NMT0NLX1JBVEUJMjQwMDAwMDANCj4gPiArDQo+ID4gKy8qKg0KPiA+ICsg
-KiBzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2IC0gUlovRzNFIHRoZXJtYWwgcHJpdmF0ZSBkYXRh
-IHN0cnVjdHVyZQ0KPiA+ICsgKiBAYmFzZTogVFNVIGJhc2UgYWRkcmVzcw0KPiA+ICsgKiBAZGV2
-OiBkZXZpY2UgcG9pbnRlcg0KPiA+ICsgKiBAc3lzY29uOiByZWdtYXAgZm9yIGNhbGlicmF0aW9u
-IHZhbHVlcw0KPiA+ICsgKiBAem9uZTogdGhlcm1hbCB6b25lIHBvaW50ZXINCj4gPiArICogQG1v
-ZGU6IGN1cnJlbnQgdHpkIG1vZGUNCj4gPiArICogQGNvbnZfY29tcGxldGU6IEFEQyBjb252ZXJz
-aW9uIGNvbXBsZXRpb24NCj4gPiArICogQHJlZ19sb2NrOiBwcm90ZWN0IHNoYXJlZCByZWdpc3Rl
-ciBhY2Nlc3MNCj4gPiArICogQGNhY2hlZF90ZW1wOiBsYXN0IGNvbXB1dGVkIHRlbXBlcmF0dXJl
-IChtaWxsaUNlbHNpdXMpDQo+ID4gKyAqIEB0cm12YWw6IHRyaW0gKGNhbGlicmF0aW9uKSB2YWx1
-ZXMgICovIHN0cnVjdCByemczZV90aGVybWFsX3ByaXYgew0KPiA+ICsJdm9pZCBfX2lvbWVtICpi
-YXNlOw0KPiA+ICsJc3RydWN0IGRldmljZSAqZGV2Ow0KPiA+ICsJc3RydWN0IHJlZ21hcCAqc3lz
-Y29uOw0KPiA+ICsJc3RydWN0IHRoZXJtYWxfem9uZV9kZXZpY2UgKnpvbmU7DQo+ID4gKwllbnVt
-IHRoZXJtYWxfZGV2aWNlX21vZGUgbW9kZTsNCj4gPiArCXN0cnVjdCBjb21wbGV0aW9uIGNvbnZf
-Y29tcGxldGU7DQo+ID4gKwlzcGlubG9ja190IHJlZ19sb2NrOw0KPiA+ICsJaW50IGNhY2hlZF90
-ZW1wOw0KPiA+ICsJdTMyIHRybXZhbFsyXTsNCj4gPiArfTsNCj4gPiArDQo+ID4gK3N0YXRpYyB2
-b2lkIHJ6ZzNlX3RoZXJtYWxfaHdfZGlzYWJsZShzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2ICpw
-cml2KQ0KPiA+ICt7DQo+ID4gKwkvKiBEaXNhYmxlIGFsbCBpbnRlcnJ1cHRzIGZpcnN0ICovDQo+
-ID4gKwl3cml0ZWwoMCwgcHJpdi0+YmFzZSArIFRTVV9TSUVSKTsNCj4gPiArCS8qIENsZWFyIGFu
-eSBwZW5kaW5nIGludGVycnVwdHMgKi8NCj4gPiArCXdyaXRlbChUU1VfU0lDUl9BRENMUiB8IFRT
-VV9TSUNSX0NNUENMUiwgcHJpdi0+YmFzZSArIFRTVV9TSUNSKTsNCj4gPiArCS8qIFB1dCBkZXZp
-Y2UgaW4gcG93ZXIgZG93biAqLw0KPiA+ICsJd3JpdGVsKFRTVV9TU1VTUl9BRENfUERfVFMsIHBy
-aXYtPmJhc2UgKyBUU1VfU1NVU1IpOyB9DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCByemczZV90
-aGVybWFsX2h3X2VuYWJsZShzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2ICpwcml2KQ0KPiA+ICt7
-DQo+ID4gKwkvKiBGaXJzdCBjbGVhciBhbnkgcGVuZGluZyBzdGF0dXMgKi8NCj4gPiArCXdyaXRl
-bChUU1VfU0lDUl9BRENMUiB8IFRTVV9TSUNSX0NNUENMUiwgcHJpdi0+YmFzZSArIFRTVV9TSUNS
-KTsNCj4gPiArCS8qIERpc2FibGUgYWxsIGludGVycnVwdHMgKi8NCj4gPiArCXdyaXRlbCgwLCBw
-cml2LT5iYXNlICsgVFNVX1NJRVIpOw0KPiA+ICsNCj4gPiArCS8qIEVuYWJsZSB0aGVybWFsIHNl
-bnNvciAqLw0KPiA+ICsJd3JpdGVsKFRTVV9TU1VTUl9TT0NfVFNfRU4gfCBUU1VfU1NVU1JfRU5f
-VFMsIHByaXYtPmJhc2UgKw0KPiBUU1VfU1NVU1IpOw0KPiA+ICsJLyogU2V0dXAgZm9yIGF2ZXJh
-Z2luZyBtb2RlIHdpdGggOCBzYW1wbGVzICovDQo+ID4gKwl3cml0ZWwoVFNVX1NPU1IxX09VVFNF
-TF9BVkVSQUdFIHwgVFNVX1NPU1IxX0FEQ1RfOCwgcHJpdi0+YmFzZSArDQo+ID4gK1RTVV9TT1NS
-MSk7IH0NCj4gPiArDQo+ID4gK3N0YXRpYyBpcnFyZXR1cm5fdCByemczZV90aGVybWFsX2NtcF9p
-cnEoaW50IGlycSwgdm9pZCAqZGV2X2lkKSB7DQo+ID4gKwlzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9w
-cml2ICpwcml2ID0gZGV2X2lkOw0KPiA+ICsJdTMyIHN0YXR1czsNCj4gPiArDQo+ID4gKwlzdGF0
-dXMgPSByZWFkbChwcml2LT5iYXNlICsgVFNVX1NJU1IpOw0KPiA+ICsJaWYgKCEoc3RhdHVzICYg
-VFNVX1NJU1JfQ01QRikpDQo+ID4gKwkJcmV0dXJuIElSUV9OT05FOw0KPiA+ICsNCj4gPiArCS8q
-IENsZWFyIHRoZSBjb21wYXJpc29uIGludGVycnVwdCBmbGFnICovDQo+ID4gKwl3cml0ZWwoVFNV
-X1NJQ1JfQ01QQ0xSLCBwcml2LT5iYXNlICsgVFNVX1NJQ1IpOw0KPiA+ICsNCj4gPiArCXJldHVy
-biBJUlFfV0FLRV9USFJFQUQ7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBpcnFyZXR1cm5f
-dCByemczZV90aGVybWFsX2NtcF90aHJlYWRlZF9pcnEoaW50IGlycSwgdm9pZA0KPiA+ICsqZGV2
-X2lkKSB7DQo+ID4gKwlzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2ICpwcml2ID0gZGV2X2lkOw0K
-PiA+ICsNCj4gPiArCXRoZXJtYWxfem9uZV9kZXZpY2VfdXBkYXRlKHByaXYtPnpvbmUsIFRIRVJN
-QUxfRVZFTlRfVU5TUEVDSUZJRUQpOw0KPiA+ICsJcmV0dXJuIElSUV9IQU5ETEVEOw0KPiA+ICt9
-DQo+ID4gKw0KPiA+ICtzdGF0aWMgaXJxcmV0dXJuX3QgcnpnM2VfdGhlcm1hbF9hZGNfaXJxKGlu
-dCBpcnEsIHZvaWQgKmRldl9pZCkgew0KPiA+ICsJc3RydWN0IHJ6ZzNlX3RoZXJtYWxfcHJpdiAq
-cHJpdiA9IGRldl9pZDsNCj4gPiArCXUzMiBzdGF0dXM7DQo+ID4gKwl1MzIgcmVzdWx0Ow0KPiA+
-ICsNCj4gPiArCS8qIENoZWNrIGlmIHRoaXMgaXMgb3VyIGludGVycnVwdCAqLw0KPiA+ICsJc3Rh
-dHVzID0gcmVhZGwocHJpdi0+YmFzZSArIFRTVV9TSVNSKTsNCj4gPiArCWlmICghKHN0YXR1cyAm
-IFRTVV9TSVNSX0FERikpDQo+ID4gKwkJcmV0dXJuIElSUV9OT05FOw0KPiA+ICsNCj4gPiArCS8q
-IERpc2FibGUgYWxsIGludGVycnVwdHMgKi8NCj4gPiArCXdyaXRlbCgwLCBwcml2LT5iYXNlICsg
-VFNVX1NJRVIpOw0KPiA+ICsJLyogQ2xlYXIgY29udmVyc2lvbiBjb21wbGV0ZSBpbnRlcnJ1cHQg
-Ki8NCj4gPiArCXdyaXRlbChUU1VfU0lDUl9BRENMUiwgcHJpdi0+YmFzZSArIFRTVV9TSUNSKTsN
-Cj4gPiArDQo+ID4gKwkvKiBSZWFkIEFEQyBjb252ZXJzaW9uIHJlc3VsdCAqLw0KPiA+ICsJcmVz
-dWx0ID0gcmVhZGwocHJpdi0+YmFzZSArIFRTVV9TQ1JSKSAmIFRTVV9TQ1JSX09VVDEyQklUX1RT
-Ow0KPiA+ICsNCj4gPiArCS8qDQo+ID4gKwkgKiBDYWxjdWxhdGUgdGVtcGVyYXR1cmUgdXNpbmcg
-Y29tcGVuc2F0aW9uIGZvcm11bGENCj4gPiArCSAqIFNlY3Rpb24gNy4xMS43LjggKFRlbXBlcmF0
-dXJlIENvbXBlbnNhdGlvbiBDYWxjdWxhdGlvbikNCj4gPiArCSAqDQo+ID4gKwkgKiBUKMKwQykg
-PSAoKGUgLSBkKSAvIChjIC1iKSkgKiAoYSAtIGIpICsgZA0KPiA+ICsJICoNCj4gPiArCSAqIGEg
-PSAxMiBiaXRzIHRlbXBlcmF0dXJlIGNvZGUgcmVhZCBmcm9tIHRoZSBzZW5zb3INCj4gPiArCSAq
-IGIgPSBTWVMgdHJtdmFsWzBdDQo+ID4gKwkgKiBjID0gU1lTIHRybXZhbFsxXQ0KPiA+ICsJICog
-ZCA9IC00MQ0KPiA+ICsJICogZSA9IDEyNg0KPiA+ICsJICovDQo+ID4gKwlzNjQgdGVtcF92YWwg
-PSBkaXZfczY0KCgoVFNVX0UgKyBUU1VfRCkgKiAoczY0KShyZXN1bHQgLSBwcml2LQ0KPiA+dHJt
-dmFsWzBdKSksDQo+ID4gKwkJCQlwcml2LT50cm12YWxbMV0gLSBwcml2LT50cm12YWxbMF0pIC0g
-VFNVX0Q7DQo+ID4gKwlpbnQgbmV3X3RlbXAgPSB0ZW1wX3ZhbCAqIE1JTExJREVHUkVFX1BFUl9E
-RUdSRUU7DQo+ID4gKw0KPiA+ICsJc2NvcGVkX2d1YXJkKHNwaW5sb2NrX2lycXNhdmUsICZwcml2
-LT5yZWdfbG9jaykNCj4gPiArCQlwcml2LT5jYWNoZWRfdGVtcCA9IG5ld190ZW1wOw0KPiA+ICsN
-Cj4gPiArCWNvbXBsZXRlKCZwcml2LT5jb252X2NvbXBsZXRlKTsNCj4gPiArDQo+ID4gKwlyZXR1
-cm4gSVJRX0hBTkRMRUQ7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgcnpnM2VfdGhl
-cm1hbF9nZXRfdGVtcChzdHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSAqem9uZSwNCj4gPiAraW50
-ICp0ZW1wKSB7DQo+ID4gKwlzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2ICpwcml2ID0gdGhlcm1h
-bF96b25lX2RldmljZV9wcml2KHpvbmUpOw0KPiA+ICsJdTMyIHZhbDsNCj4gPiArCWludCByZXQ7
-DQo+ID4gKw0KPiA+ICsJaWYgKHByaXYtPm1vZGUgPT0gVEhFUk1BTF9ERVZJQ0VfRElTQUJMRUQp
-DQo+ID4gKwkJcmV0dXJuIC1FQlVTWTsNCj4gDQo+IFdoeSA/DQo+IA0KDQpBcyBJIGtlcHQgaW50
-ZXJuYWwgcmVmZXJlbmNlIHRvIHRoZSBkZXZpY2UgZW5hYmxlbWVudCBzdGF0ZSwgSQ0KdGhvdWdo
-dCBpdCB3YXMgbmVjZXNzYXJ5IHRvIGNoZWNrIGl0IGhlcmUgdG8gZW5zdXJlIGhhcmR3YXJlDQpp
-cyBub3QgYWNjZXNzZWQgaW5hcHByb3ByaWF0ZWx5LiBBZnRlciBkb3VibGUgY2hlY2tpbmcgSSBj
-b3VsZCBzZWUNCnRoYXQgdGhlIHRoZXJtYWwgY29yZSBhbHJlYWR5IGhhbmRsZXMgaXQuDQoNCldp
-bGwgcmVtb3ZlIGluIG5leHQgdmVyc2lvbi4NCg0KPiA+ICsJcmVpbml0X2NvbXBsZXRpb24oJnBy
-aXYtPmNvbnZfY29tcGxldGUpOw0KPiA+ICsNCj4gPiArCS8qIEVuYWJsZSBBREMgaW50ZXJydXB0
-ICovDQo+ID4gKwl3cml0ZWwoVFNVX1NJRVJfQURJRSwgcHJpdi0+YmFzZSArIFRTVV9TSUVSKTsN
-Cj4gDQo+IFdoeSBlbmFibGUgaXJxIGhlcmUgPw0KPiANCg0KSSBkaWQgaXQgdGhpcyB3YXkgYmVj
-YXVzZSwgaW4gJ3NldF90cmlwcycgY2FsbGJhY2ssIHRoZQ0KZHJpdmVyIGRvZXMgdHJpZ2dlciBj
-b252ZXJzaW9uIHRvIGNoZWNrIHdoZXRoZXIgdGhlIGN1cnJlbnQNCnRlbXBlcmF0dXJlIGlzIHBh
-cnQgb2YgdGhlIHdpbmRvdyBvciBub3QsIGFuZCB0cmlnZ2VycyB0aGUNCmNvbXBhcmlzb24gaW50
-ZXJydXB0IGFjY29yZGluZ2x5LiBCZWNhdXNlIG9mIHRoYXQsIEkgZGlkIG5vdA0Kd2FudCB0aGUg
-Y29udmVyc2lvbi1jb21wbGV0ZSBpbnRlcnJ1cHQgdG8gYWxzbyBiZSB0cmlnZ2VyZWQuDQoNClRo
-YXQncyB0aGUgcmVhc29uIHdoeSBJIGVuYWJsZSBjb252ZXJzaW9uLWNvbXBsZXRlIGludGVycnVw
-dA0KaW4gJ2dldF90ZW1wJywgdG8gbWFrZSBzdXJlIGl0cyBpbnRlcnJ1cHQgaXMgYmVpbmcgdHJp
-Z2dlcmVkDQpvbmx5IHdoZW4gdGhlIHRoZXJtYWwgY29yZSBjYWxscyBpdC4NCg0KU2hvdWxkIEkg
-ZG8gaXQgYW5vdGhlciB3YXkgPw0KDQoNCj4gPiArCS8qIFZlcmlmeSBubyBvbmdvaW5nIGNvbnZl
-cnNpb24gKi8NCj4gPiArCXJldCA9IHJlYWRsX3BvbGxfdGltZW91dF9hdG9taWMocHJpdi0+YmFz
-ZSArIFRTVV9TU1IsIHZhbCwNCj4gPiArCQkJCQkhKHZhbCAmIFRTVV9TU1JfQ09OVl9SVU5OSU5H
-KSwNCj4gPiArCQkJCQlUU1VfUE9MTF9ERUxBWV9VUywgVFNVX1RJTUVPVVRfVVMpOw0KPiA+ICsJ
-aWYgKHJldCkgew0KPiA+ICsJCWRldl9lcnIocHJpdi0+ZGV2LCAiQURDIGNvbnZlcnNpb24gdGlt
-ZWQgb3V0XG4iKTsNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+ICsJfQ0KPiA+ICsNCj4gPiArCS8q
-IFN0YXJ0IGNvbnZlcnNpb24gKi8NCj4gPiArCXdyaXRlbChUU1VfU1RSR1JfQURTVCwgcHJpdi0+
-YmFzZSArIFRTVV9TVFJHUik7DQo+ID4gKw0KPiA+ICsJaWYgKCF3YWl0X2Zvcl9jb21wbGV0aW9u
-X3RpbWVvdXQoJnByaXYtPmNvbnZfY29tcGxldGUsDQo+ID4gKwkJCQkJIG1zZWNzX3RvX2ppZmZp
-ZXMoMTAwKSkpIHsNCj4gPiArCQlkZXZfZXJyKHByaXYtPmRldiwgIkFEQyBjb252ZXJzaW9uIGNv
-bXBsZXRpb24gdGltZW91dFxuIik7DQo+ID4gKwkJcmV0dXJuIC1FVElNRURPVVQ7DQo+ID4gKwl9
-DQo+IA0KPiBDYW4geW91IGV4cGxhaW4gd2hhdCBpcyBoYXBwZW5pbmcgaGVyZSA/DQo+IA0KDQpJ
-IG1pZ2h0IG5vdCBnZXQgd2hhdCB5b3UgYXJlIGFza2luZywgYnV0IHNpbmNlIEkgY29tcHV0ZSB0
-aGUNCnRlbXBlcmF0dXJlIGluIHRoZSBoYXJkIElSUSBoYW5kbGVyLCBJIGp1c3Qgd2FpdCBmb3Ig
-aXQgdG8gY29tcGxldGUNCmFuZCBub3RpZnkgdGhlIGNvbXBsZXRpb24gc28gSSBjYW4gZ3JhYiB0
-aGUgcHJvY2Vzc2VkIHZhbHVlIHRvIG5vdGlmeQ0KdGhlIHRoZXJtYWwgY29yZS4NCg0KUGxlYXNl
-IGxldCBtZSBrbm93IGlmIHRoaXMgZG9lcyBub3QgYW5zd2VyIHlvdXIgcXVlc3Rpb24uDQoNCj4g
-PiArCXNjb3BlZF9ndWFyZChzcGlubG9ja19pcnFzYXZlLCAmcHJpdi0+cmVnX2xvY2spDQo+ID4g
-KwkJKnRlbXAgPSBwcml2LT5jYWNoZWRfdGVtcDsNCj4gPiArDQo+ID4gKwlyZXR1cm4gMDsNCj4g
-PiArfQ0KPiA+ICsNCj4gPiArLyogQ29udmVydCB0ZW1wZXJhdHVyZSBpbiBtaWxsaUNlbHNpdXMg
-dG8gcmF3IHNlbnNvciBjb2RlICovIHN0YXRpYw0KPiA+ICtpbnQgcnpnM2VfdGVtcF90b19yYXco
-c3RydWN0IHJ6ZzNlX3RoZXJtYWxfcHJpdiAqcHJpdiwgaW50IHRlbXBfbWMpIHsNCj4gPiArCXM2
-NCByYXcgPSBkaXZfczY0KCgodGVtcF9tYyAvIDEwMDApIC0gVFNVX0QpICoNCj4gPiArCQkJICAo
-cHJpdi0+dHJtdmFsWzFdIC0gcHJpdi0+dHJtdmFsWzBdKSwNCj4gPiArCQkJICAoVFNVX0UgLSBU
-U1VfRCkpOw0KPiA+ICsJcmV0dXJuIGNsYW1wX3ZhbChyYXcsIDAsIDB4RkZGKTsNCj4gPiArfQ0K
-PiA+ICsNCj4gPiArc3RhdGljIGludCByemczZV90aGVybWFsX3NldF90cmlwcyhzdHJ1Y3QgdGhl
-cm1hbF96b25lX2RldmljZSAqdHosDQo+ID4gK2ludCBsb3csIGludCBoaWdoKSB7DQo+ID4gKwlz
-dHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2ICpwcml2ID0gdGhlcm1hbF96b25lX2RldmljZV9wcml2
-KHR6KTsNCj4gPiArCWludCByZXQ7DQo+ID4gKwlpbnQgdmFsOw0KPiA+ICsNCj4gPiArCWlmIChs
-b3cgPj0gaGlnaCkNCj4gPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gPiArDQo+ID4gKwlpZiAocHJp
-di0+bW9kZSA9PSBUSEVSTUFMX0RFVklDRV9ESVNBQkxFRCkNCj4gPiArCQlyZXR1cm4gLUVCVVNZ
-Ow0KPiANCj4gVGhhdCBpcyBub3Qgc3VwcG9zZWQgdG8gaGFwcGVuLiBzZXRfdHJpcHMgaXMgY2Fs
-bGVkIGZyb20NCj4gdGhlcm1hbF96b25lX2RldmljZV91cGRhdGUgYnV0IHRoZSB0aGVybWFsIHpv
-bmUgaXMgZGlzYWJsZWQsIHRoZSBmdW5jdGlvbg0KPiBiYWlscyBvdXQsIHRodXMgaXQgc2hvdWxk
-IG5vdCBjYWxsIHRoaXMgY2FsbGJhY2suDQo+IA0KDQpHb3QgaXQuIEknbGwgcmVtb3ZlIGl0IGlu
-IHRoZSBuZXh0IHNlcmllcy4NCg0KPiA+ICsJLyogU2V0IHVwIGNvbXBhcmlzb24gaW50ZXJydXB0
-ICovDQo+ID4gKwl3cml0ZWwoMCwgcHJpdi0+YmFzZSArIFRTVV9TSUVSKTsNCj4gPiArCXdyaXRl
-bChUU1VfU0lDUl9BRENMUiB8IFRTVV9TSUNSX0NNUENMUiwgcHJpdi0+YmFzZSArIFRTVV9TSUNS
-KTsNCj4gPiArDQo+ID4gKwkvKiBTZXQgdGhyZXNob2xkcyAqLw0KPiA+ICsJd3JpdGVsKHJ6ZzNl
-X3RlbXBfdG9fcmF3KHByaXYsIGxvdyksIHByaXYtPmJhc2UgKyBUU1VfTExTUik7DQo+ID4gKwl3
-cml0ZWwocnpnM2VfdGVtcF90b19yYXcocHJpdiwgaGlnaCksIHByaXYtPmJhc2UgKyBUU1VfVUxT
-Uik7DQo+ID4gKw0KPiA+ICsJLyogQ29uZmlndXJlIGNvbXBhcmlzb246DQo+ID4gKwkgKiAtIEVu
-YWJsZSBjb21wYXJpc29uIGZ1bmN0aW9uIChDTVBFTiA9IDEpDQo+ID4gKwkgKiAtIFNldCBjb21w
-YXJpc29uIGNvbmRpdGlvbiAoQ01QQ09ORCA9IDAgZm9yIG91dCBvZiByYW5nZSkNCj4gPiArCSAq
-Lw0KPiA+ICsJd3JpdGVsKFRTVV9DTVNSX0NNUEVOLCBwcml2LT5iYXNlICsgVFNVX0NNU1IpOw0K
-PiA+ICsNCj4gPiArCS8qIEVuYWJsZSBjb21wYXJpc29uIGlycSAqLw0KPiA+ICsJd3JpdGVsKFRT
-VV9TSUVSX0NNUElFLCBwcml2LT5iYXNlICsgVFNVX1NJRVIpOw0KPiA+ICsNCj4gPiArCS8qIFZl
-cmlmeSBubyBvbmdvaW5nIGNvbnZlcnNpb24gKi8NCj4gPiArCXJldCA9IHJlYWRsX3BvbGxfdGlt
-ZW91dF9hdG9taWMocHJpdi0+YmFzZSArIFRTVV9TU1IsIHZhbCwNCj4gPiArCQkJCQkhKHZhbCAm
-IFRTVV9TU1JfQ09OVl9SVU5OSU5HKSwNCj4gPiArCQkJCQlUU1VfUE9MTF9ERUxBWV9VUywgVFNV
-X1RJTUVPVVRfVVMpOw0KPiA+ICsJaWYgKHJldCkgew0KPiA+ICsJCWRldl9lcnIocHJpdi0+ZGV2
-LCAiQURDIGNvbnZlcnNpb24gdGltZWQgb3V0XG4iKTsNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+
-ICsJfQ0KPiA+ICsNCj4gPiArCS8qIFN0YXJ0IGEgY29udmVyc2lvbiB0byB0cmlnZ2VyIGNvbXBh
-cmlzb24gKi8NCj4gPiArCXdyaXRlbChUU1VfU1RSR1JfQURTVCwgcHJpdi0+YmFzZSArIFRTVV9T
-VFJHUik7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRp
-YyBpbnQgcnpnM2VfdGhlcm1hbF9nZXRfdHJpbW1pbmcoc3RydWN0IHJ6ZzNlX3RoZXJtYWxfcHJp
-dg0KPiA+ICsqcHJpdikgew0KPiA+ICsJaW50IHJldDsNCj4gPiArDQo+ID4gKwlyZXQgPSByZWdt
-YXBfcmVhZChwcml2LT5zeXNjb24sIFNZU19UU1VfVFJNVkFMKDApLCAmcHJpdi0NCj4gPnRybXZh
-bFswXSk7DQo+ID4gKwlpZiAocmV0KQ0KPiA+ICsJCXJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICsJ
-cmV0ID0gcmVnbWFwX3JlYWQocHJpdi0+c3lzY29uLCBTWVNfVFNVX1RSTVZBTCgxKSwgJnByaXYt
-DQo+ID50cm12YWxbMV0pOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+
-ICsNCj4gPiArCXByaXYtPnRybXZhbFswXSAmPSBUU1VfVFJNVkFMX01BU0s7DQo+ID4gKwlwcml2
-LT50cm12YWxbMV0gJj0gVFNVX1RSTVZBTF9NQVNLOw0KPiA+ICsNCj4gPiArCWlmICghcHJpdi0+
-dHJtdmFsWzBdIHx8ICFwcml2LT50cm12YWxbMV0pDQo+ID4gKwkJcmV0dXJuIGRldl9lcnJfcHJv
-YmUocHJpdi0+ZGV2LCAtRUlOVkFMLCAiaW52YWxpZCB0cmltbWluZw0KPiA+ICt2YWx1ZXMiKTsN
-Cj4gPiArDQo+ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBy
-emczZV90aGVybWFsX2NoYW5nZV9tb2RlKHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlICp0eiwN
-Cj4gPiArCQkJCSAgICAgZW51bSB0aGVybWFsX2RldmljZV9tb2RlIG1vZGUpIHsNCj4gPiArCXN0
-cnVjdCByemczZV90aGVybWFsX3ByaXYgKnByaXYgPSB0aGVybWFsX3pvbmVfZGV2aWNlX3ByaXYo
-dHopOw0KPiA+ICsNCj4gPiArCWlmIChtb2RlID09IFRIRVJNQUxfREVWSUNFX0RJU0FCTEVEKQ0K
-PiA+ICsJCXJ6ZzNlX3RoZXJtYWxfaHdfZGlzYWJsZShwcml2KTsNCj4gPiArCWVsc2UNCj4gPiAr
-CQlyemczZV90aGVybWFsX2h3X2VuYWJsZShwcml2KTsNCj4gPiArDQo+ID4gKwlwcml2LT5tb2Rl
-ID0gbW9kZTsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgY29u
-c3Qgc3RydWN0IHRoZXJtYWxfem9uZV9kZXZpY2Vfb3BzIHJ6ZzNlX3R6X29mX29wcyA9IHsNCj4g
-PiArCS5nZXRfdGVtcCA9IHJ6ZzNlX3RoZXJtYWxfZ2V0X3RlbXAsDQo+ID4gKwkuc2V0X3RyaXBz
-ID0gcnpnM2VfdGhlcm1hbF9zZXRfdHJpcHMsDQo+ID4gKwkuY2hhbmdlX21vZGUgPSByemczZV90
-aGVybWFsX2NoYW5nZV9tb2RlLCB9Ow0KPiA+ICsNCj4gPiArc3RhdGljIGludCByemczZV90aGVy
-bWFsX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpIHsNCj4gPiArCXN0cnVjdCBk
-ZXZpY2UgKmRldiA9ICZwZGV2LT5kZXY7DQo+ID4gKwlzdHJ1Y3QgcnpnM2VfdGhlcm1hbF9wcml2
-ICpwcml2Ow0KPiA+ICsJc3RydWN0IHJlc2V0X2NvbnRyb2wgKnJzdGM7DQo+ID4gKwljaGFyICph
-ZGNfbmFtZSwgKmNtcF9uYW1lOw0KPiA+ICsJaW50IGFkY19pcnEsIGNtcF9pcnE7DQo+ID4gKwlz
-dHJ1Y3QgY2xrICpjbGs7DQo+ID4gKwlpbnQgcmV0Ow0KPiA+ICsNCj4gPiArCXByaXYgPSBkZXZt
-X2t6YWxsb2MoZGV2LCBzaXplb2YoKnByaXYpLCBHRlBfS0VSTkVMKTsNCj4gPiArCWlmICghcHJp
-dikNCj4gPiArCQlyZXR1cm4gLUVOT01FTTsNCj4gPiArDQo+ID4gKwlwcml2LT5kZXYgPSBkZXY7
-DQo+ID4gKw0KPiA+ICsJcHJpdi0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJj
-ZShwZGV2LCAwKTsNCj4gPiArCWlmIChJU19FUlIocHJpdi0+YmFzZSkpDQo+ID4gKwkJcmV0dXJu
-IGRldl9lcnJfcHJvYmUoZGV2LCBQVFJfRVJSKHByaXYtPmJhc2UpLA0KPiA+ICsJCQkJIkZhaWxl
-ZCB0byBtYXAgSS9PIG1lbW9yeSIpOw0KPiA+ICsNCj4gPiArCXByaXYtPnN5c2NvbiA9IHN5c2Nv
-bl9yZWdtYXBfbG9va3VwX2J5X3BoYW5kbGUoZGV2LT5vZl9ub2RlLA0KPiA+ICsJCQkJCQkgICAg
-ICAgInJlbmVzYXMsdHN1LWNhbGlicmF0aW9uLXN5cyIpOw0KPiA+ICsJaWYgKElTX0VSUihwcml2
-LT5zeXNjb24pKQ0KPiA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VSUihwcml2
-LT5zeXNjb24pLA0KPiA+ICsJCQkJIkZhaWxlZCB0byBnZXQgY2FsaWJyYXRpb24gc3lzY29uIik7
-DQo+ID4gKw0KPiA+ICsJYWRjX2lycSA9IHBsYXRmb3JtX2dldF9pcnFfYnluYW1lKHBkZXYsICJh
-ZGkiKTsNCj4gPiArCWlmIChhZGNfaXJxIDwgMCkNCj4gPiArCQlyZXR1cm4gYWRjX2lycTsNCj4g
-PiArDQo+ID4gKwljbXBfaXJxID0gcGxhdGZvcm1fZ2V0X2lycV9ieW5hbWUocGRldiwgImFkY21w
-aSIpOw0KPiA+ICsJaWYgKGNtcF9pcnEgPCAwKQ0KPiA+ICsJCXJldHVybiBjbXBfaXJxOw0KPiA+
-ICsNCj4gPiArCXJzdGMgPSBkZXZtX3Jlc2V0X2NvbnRyb2xfZ2V0X2V4Y2x1c2l2ZV9kZWFzc2Vy
-dGVkKGRldiwgTlVMTCk7DQo+ID4gKwlpZiAoSVNfRVJSKHJzdGMpKQ0KPiA+ICsJCXJldHVybiBk
-ZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VSUihyc3RjKSwNCj4gPiArCQkJCSAgICAgIkZhaWxlZCB0
-byBhY3F1aXJlIGRlYXNzZXJ0ZWQgcmVzZXQiKTsNCj4gPiArDQo+ID4gKwlwbGF0Zm9ybV9zZXRf
-ZHJ2ZGF0YShwZGV2LCBwcml2KTsNCj4gPiArDQo+ID4gKwlzcGluX2xvY2tfaW5pdCgmcHJpdi0+
-cmVnX2xvY2spOw0KPiA+ICsJaW5pdF9jb21wbGV0aW9uKCZwcml2LT5jb252X2NvbXBsZXRlKTsN
-Cj4gPiArDQo+ID4gKwljbGsgPSBkZXZtX2Nsa19nZXRfZW5hYmxlZChkZXYsIE5VTEwpOw0KPiA+
-ICsJaWYgKElTX0VSUihjbGspKQ0KPiA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRS
-X0VSUihjbGspLA0KPiA+ICsJCQkJICAgICAiRmFpbGVkIHRvIGdldCBhbmQgZW5hYmxlIGNsb2Nr
-Iik7DQo+ID4gKw0KPiA+ICsJaWYgKGNsa19nZXRfcmF0ZShjbGspIDwgVFNVX01JTl9DTE9DS19S
-QVRFKQ0KPiA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgLUVJTlZBTCwNCj4gPiArCQkJ
-CSAgICAgIkNsb2NrIHJhdGUgdG9vIGxvdyAobWluaW11bSAlZCBIeg0KPiByZXF1aXJlZCkiLA0K
-PiA+ICsJCQkJICAgICBUU1VfTUlOX0NMT0NLX1JBVEUpOw0KPiA+ICsNCj4gPiArCXJldCA9IHJ6
-ZzNlX3RoZXJtYWxfZ2V0X3RyaW1taW5nKHByaXYpOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQly
-ZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArCWFkY19uYW1lID0gZGV2bV9rYXNwcmludGYoZGV2LCBH
-RlBfS0VSTkVMLCAiJXMtYWRjIiwgZGV2X25hbWUoZGV2KSk7DQo+ID4gKwlpZiAoIWFkY19uYW1l
-KQ0KPiA+ICsJCXJldHVybiAtRU5PTUVNOw0KPiA+ICsNCj4gPiArCWNtcF9uYW1lID0gZGV2bV9r
-YXNwcmludGYoZGV2LCBHRlBfS0VSTkVMLCAiJXMtY21wIiwgZGV2X25hbWUoZGV2KSk7DQo+ID4g
-KwlpZiAoIWNtcF9uYW1lKQ0KPiA+ICsJCXJldHVybiAtRU5PTUVNOw0KPiA+ICsNCj4gPiArCS8q
-IFVuaXQgaW4gYSBrbm93biBkaXNhYmxlZCBtb2RlICovDQo+ID4gKwlyemczZV90aGVybWFsX2h3
-X2Rpc2FibGUocHJpdik7DQo+ID4gKw0KPiA+ICsJcmV0ID0gZGV2bV9yZXF1ZXN0X2lycShkZXYs
-IGFkY19pcnEsIHJ6ZzNlX3RoZXJtYWxfYWRjX2lycSwNCj4gPiArCQkJICAgICAgIElSUUZfVFJJ
-R0dFUl9SSVNJTkcsIGFkY19uYW1lLCBwcml2KTsNCj4gPiArCWlmIChyZXQpDQo+ID4gKwkJcmV0
-dXJuIGRldl9lcnJfcHJvYmUoZGV2LCByZXQsICJGYWlsZWQgdG8gcmVxdWVzdCBBREMgSVJRIik7
-DQo+ID4gKw0KPiA+ICsJcmV0ID0gZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycShkZXYsIGNtcF9p
-cnEsIHJ6ZzNlX3RoZXJtYWxfY21wX2lycSwNCj4gPiArCQkJCQlyemczZV90aGVybWFsX2NtcF90
-aHJlYWRlZF9pcnEsDQo+ID4gKwkJCQkJSVJRRl9UUklHR0VSX0hJR0ggfCBJUlFGX09ORVNIT1Qs
-DQo+ID4gKwkJCQkJY21wX25hbWUsIHByaXYpOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQlyZXR1
-cm4gZGV2X2Vycl9wcm9iZShkZXYsIHJldCwgIkZhaWxlZCB0byByZXF1ZXN0IGNvbXBhcmlzb24N
-Cj4gSVJRIik7DQo+ID4gKw0KPiA+ICsJLyogUmVnaXN0ZXIgVGhlcm1hbCBab25lICovDQo+ID4g
-Kwlwcml2LT56b25lID0gZGV2bV90aGVybWFsX29mX3pvbmVfcmVnaXN0ZXIoZGV2LCAwLCBwcml2
-LA0KPiAmcnpnM2VfdHpfb2Zfb3BzKTsNCj4gPiArCWlmIChJU19FUlIocHJpdi0+em9uZSkpDQo+
-ID4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBQVFJfRVJSKHByaXYtPnpvbmUpLA0KPiA+
-ICsJCQkJIkZhaWxlZCB0byByZWdpc3RlciB0aGVybWFsIHpvbmUiKTsNCj4gPiArDQo+ID4gKwly
-ZXQgPSBkZXZtX3RoZXJtYWxfYWRkX2h3bW9uX3N5c2ZzKGRldiwgcHJpdi0+em9uZSk7DQo+ID4g
-KwlpZiAocmV0KQ0KPiA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgcmV0LCAiRmFpbGVk
-IHRvIGFkZCBod21vbiBzeXNmcyIpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+
-ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCByemczZV90aGVybWFs
-X2R0X2lkc1tdID0gew0KPiA+ICsJeyAuY29tcGF0aWJsZSA9ICJyZW5lc2FzLHI5YTA5ZzA0Ny10
-c3UiIH0sDQo+ID4gKwl7IC8qIHNlbnRpbmVsICovIH0NCj4gPiArfTsNCj4gPiArTU9EVUxFX0RF
-VklDRV9UQUJMRShvZiwgcnpnM2VfdGhlcm1hbF9kdF9pZHMpOw0KPiA+ICsNCj4gPiArc3RhdGlj
-IHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgcnpnM2VfdGhlcm1hbF9kcml2ZXIgPSB7DQo+ID4gKwku
-ZHJpdmVyID0gew0KPiA+ICsJCS5uYW1lCT0gInJ6ZzNlX3RoZXJtYWwiLA0KPiA+ICsJCS5vZl9t
-YXRjaF90YWJsZSA9IHJ6ZzNlX3RoZXJtYWxfZHRfaWRzLA0KPiA+ICsJfSwNCj4gPiArCS5wcm9i
-ZSA9IHJ6ZzNlX3RoZXJtYWxfcHJvYmUsDQo+ID4gK307DQo+ID4gK21vZHVsZV9wbGF0Zm9ybV9k
-cml2ZXIocnpnM2VfdGhlcm1hbF9kcml2ZXIpOw0KPiA+ICsNCj4gPiArTU9EVUxFX0RFU0NSSVBU
-SU9OKCJSZW5lc2FzIFJaL0czRSBUU1UgVGhlcm1hbCBTZW5zb3IgRHJpdmVyIik7DQo+ID4gK01P
-RFVMRV9BVVRIT1IoIkpvaG4gTWFkaWV1IDxqb2huLm1hZGlldS54YUBicC5yZW5lc2FzLmNvbT4i
-KTsNCj4gPiArTU9EVUxFX0xJQ0VOU0UoIkdQTCIpOw0KPiA+IC0tDQo+ID4gMi4yNS4xDQo+ID4N
-Cj4gDQo+IC0tDQo+IA0KPiAgPGh0dHA6Ly93d3cubGluYXJvLm9yZy8+IExpbmFyby5vcmcg4pSC
-IE9wZW4gc291cmNlIHNvZnR3YXJlIGZvciBBUk0gU29Dcw0KPiANCj4gRm9sbG93IExpbmFybzog
-IDxodHRwOi8vd3d3LmZhY2Vib29rLmNvbS9wYWdlcy9MaW5hcm8+IEZhY2Vib29rIHwNCj4gPGh0
-dHA6Ly90d2l0dGVyLmNvbS8jIS9saW5hcm9vcmc+IFR3aXR0ZXIgfA0KPiA8aHR0cDovL3d3dy5s
-aW5hcm8ub3JnL2xpbmFyby1ibG9nLz4gQmxvZw0KDQpSZWdhcmRzLA0KSm9obg0K
+On Thu, Jul 31, 2025 at 10:15:25AM +0100, Lee Jones wrote:
+> On Wed, 16 Jul 2025, Samuel Kayode via B4 Relay wrote:
+> 
+> > From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> > 
+> > Add the core driver for pf1550 PMIC. There are 3 subdevices for which the
+> > drivers will be added in subsequent patches.
+> > 
+> > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> > ---
+> > v9:
+> >  - Requested by Sean:
+> >    - Add support for SW1 DVS enable/disable
+> >  - Use consistent whitespace
+> >  - Adjust commenting and log messages of the read_otp function
+> > v8:
+> >  - Address Lee's feedback:
+> >    - Drop `mfd` from driver description and comments
+> >    - Add module name in Kconfig
+> >    - Fix license commenting
+> >    - Drop filenames from comments
+> >    - Drop unnecessary tabbing
+> >    - Alphabetical ordering of includes
+> >    - Remove magic numbers
+> >    - Add comments for pf1550_read_otp function
+> >    - Fix log error message in pf1550_read_otp
+> >    - Drop pf1550_add_child_device function
+> >    - Start comments with upper case
+> >    - Rename pf1550_dev to pf1550_ddata
+> >    - Drop i2c member in struct pf1550_ddata/pf1550_dev
+> >    - Use more helpful log message when device id not recognized
+> >    - Fix dvs_enb: when bit is set the DVS is disabled and when bit is clear the
+> >      DVS is enabled
+> >   - Verified the PM_OPS suspend and resume do act as expected
+> > v7:
+> >  - Address Frank's feedback:
+> >    - Ensure reverse christmas tree order for local variable definitions
+> >    - Drop unnecessary driver data definition in id table
+> > v6:
+> >  - Address Frank's feedback:
+> >    - Ensure lowercase when defining register addresses
+> >    - Use GENMASK macro for masking
+> >    - Hardcode IRQ flags in pf1550_add_child_device
+> >    - Add dvs_enb variable for SW2 regulator
+> >    - Drop chip type variable
+> > v5:
+> >  - Use top level interrupt to manage interrupts for the sub-drivers as
+> >    recommended by Mark Brown. The regmap_irq_sub_irq_map would have been used
+> >    if not for the irregular charger irq address. For all children, the mask
+> >    register is directly after the irq register (i.e., 0x08, 0x09) except
+> >    for the charger: 0x80, 0x82. Meaning .mask_base would be applicable
+> >    for all but the charger
+> >  - Fix bad offset for temperature interrupts of regulator
+> > v4:
+> >  - Use struct resource to define irq so platform_get_irq can be used in
+> >    children as suggested by Dmitry
+> >  - Let mfd_add_devices create the mappings for the interrupts
+> >  - ack_base and init_ack_masked defined for charger and regulator irq
+> >    chips
+> >  - No need to define driver_data in table id
+> > v3:
+> >  - Address Dmitry's feedback:
+> >    - Place Table IDs next to each other
+> >    - Drop of_match_ptr
+> >    - Replace dev_err with dev_err_probe in probe method
+> >    - Drop useless log in probe
+> >  - Map all irqs instead of doing it in the sub-devices as recommended by
+> >    Dmitry.
+> > v2:
+> >  - Address feedback from Enric Balletbo Serra
+> > ---
+> >  drivers/mfd/Kconfig        |  16 ++
+> >  drivers/mfd/Makefile       |   2 +
+> >  drivers/mfd/pf1550.c       | 374 +++++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/pf1550.h | 271 ++++++++++++++++++++++++++++++++
+> >  4 files changed, 663 insertions(+)
+> 
+> Mostly pretty good.  A few nits left.
+> 
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index 96992af22565205716d72db0494c7bf2567b045e..4ac91a556713ba7a867c1d4430c6c0d8bb05d0d7 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -558,6 +558,22 @@ config MFD_MX25_TSADC
+> >  	  i.MX25 processors. They consist of a conversion queue for general
+> >  	  purpose ADC and a queue for Touchscreens.
+> >  
+> > +config MFD_PF1550
+> > +	tristate "NXP PF1550 PMIC Support"
+> > +	depends on I2C=y && OF
+> > +	select MFD_CORE
+> > +	select REGMAP_I2C
+> > +	select REGMAP_IRQ
+> > +	help
+> > +	  Say yes here to add support for NXP PF1550. This is a companion Power
+> > +	  Management IC with regulators, onkey, and charger control on chip.
+> > +	  This driver provides common support for accessing the device;
+> > +	  additional drivers must be enabled in order to use the functionality
+> > +	  of the device.
+> > +
+> > +	  This driver can also be built as a module and if so will be called
+> > +	  pf1550.
+> > +
+> >  config MFD_HI6421_PMIC
+> >  	tristate "HiSilicon Hi6421 PMU/Codec IC"
+> >  	depends on OF
+> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > index 5e5cc279af6036a6b3ea1f1f0feeddf45b85f15c..7391d1b81d1ee499507b4ac24ff00eb2e344d60b 100644
+> > --- a/drivers/mfd/Makefile
+> > +++ b/drivers/mfd/Makefile
+> > @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+> >  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+> >  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+> >  
+> > +obj-$(CONFIG_MFD_PF1550)	+= pf1550.o
+> > +
+> >  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
+> >  
+> >  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
+> > diff --git a/drivers/mfd/pf1550.c b/drivers/mfd/pf1550.c
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..fd31eff0e5a88c973f7db14b068f1c8e92991d4b
+> > --- /dev/null
+> > +++ b/drivers/mfd/pf1550.c
+> > @@ -0,0 +1,374 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * core driver for the PF1550
+> 
+> Nit: Sentences start with uppercase chars.
+>
+Will update.
+> > + *
+> > + * Copyright (C) 2016 Freescale Semiconductor, Inc.
+> > + * Robin Gong <yibin.gong@freescale.com>
+> > + *
+> > + * Portions Copyright (c) 2025 Savoir-faire Linux Inc.
+> > + * Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> > + */
+> > +
+> > +#include <linux/err.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/mfd/core.h>
+> > +#include <linux/mfd/pf1550.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +static const struct regmap_config pf1550_regmap_config = {
+> > +	.reg_bits = 8,
+> > +	.val_bits = 8,
+> > +	.max_register = PF1550_PMIC_REG_END,
+> > +};
+> > +
+> > +static const struct regmap_irq pf1550_irqs[] = {
+> > +	REGMAP_IRQ_REG(PF1550_IRQ_CHG, 0, IRQ_CHG),
+> > +	REGMAP_IRQ_REG(PF1550_IRQ_REGULATOR, 0, IRQ_REGULATOR),
+> > +	REGMAP_IRQ_REG(PF1550_IRQ_ONKEY, 0, IRQ_ONKEY),
+> > +};
+> > +
+> > +static const struct regmap_irq_chip pf1550_irq_chip = {
+> > +	.name = "pf1550",
+> > +	.status_base = PF1550_PMIC_REG_INT_CATEGORY,
+> > +	.init_ack_masked = 1,
+> > +	.num_regs = 1,
+> > +	.irqs = pf1550_irqs,
+> > +	.num_irqs = ARRAY_SIZE(pf1550_irqs),
+> > +};
+> > +
+> > +static const struct regmap_irq pf1550_regulator_irqs[] = {
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW1_LS, 0, PMIC_IRQ_SW1_LS),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW2_LS, 0, PMIC_IRQ_SW2_LS),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW3_LS, 0, PMIC_IRQ_SW3_LS),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW1_HS, 3, PMIC_IRQ_SW1_HS),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW2_HS, 3, PMIC_IRQ_SW2_HS),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_SW3_HS, 3, PMIC_IRQ_SW3_HS),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_LDO1_FAULT, 16, PMIC_IRQ_LDO1_FAULT),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_LDO2_FAULT, 16, PMIC_IRQ_LDO2_FAULT),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_LDO3_FAULT, 16, PMIC_IRQ_LDO3_FAULT),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_TEMP_110, 24, PMIC_IRQ_TEMP_110),
+> > +	REGMAP_IRQ_REG(PF1550_PMIC_IRQ_TEMP_125, 24, PMIC_IRQ_TEMP_125),
+> > +};
+> > +
+> > +static const struct regmap_irq_chip pf1550_regulator_irq_chip = {
+> > +	.name = "pf1550-regulator",
+> > +	.status_base = PF1550_PMIC_REG_SW_INT_STAT0,
+> > +	.ack_base = PF1550_PMIC_REG_SW_INT_STAT0,
+> > +	.mask_base = PF1550_PMIC_REG_SW_INT_MASK0,
+> > +	.use_ack = 1,
+> > +	.init_ack_masked = 1,
+> > +	.num_regs = 25,
+> > +	.irqs = pf1550_regulator_irqs,
+> > +	.num_irqs = ARRAY_SIZE(pf1550_regulator_irqs),
+> > +};
+> > +
+> > +static const struct resource regulator_resources[] = {
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW1_LS),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW2_LS),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW3_LS),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW1_HS),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW2_HS),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_SW3_HS),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_LDO1_FAULT),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_LDO2_FAULT),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_LDO3_FAULT),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_TEMP_110),
+> > +	DEFINE_RES_IRQ(PF1550_PMIC_IRQ_TEMP_125),
+> > +};
+> > +
+> > +static const struct regmap_irq pf1550_onkey_irqs[] = {
+> > +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_PUSHI, 0, ONKEY_IRQ_PUSHI),
+> > +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_1SI, 0, ONKEY_IRQ_1SI),
+> > +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_2SI, 0, ONKEY_IRQ_2SI),
+> > +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_3SI, 0, ONKEY_IRQ_3SI),
+> > +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_4SI, 0, ONKEY_IRQ_4SI),
+> > +	REGMAP_IRQ_REG(PF1550_ONKEY_IRQ_8SI, 0, ONKEY_IRQ_8SI),
+> > +};
+> > +
+> > +static const struct regmap_irq_chip pf1550_onkey_irq_chip = {
+> > +	.name = "pf1550-onkey",
+> > +	.status_base = PF1550_PMIC_REG_ONKEY_INT_STAT0,
+> > +	.ack_base = PF1550_PMIC_REG_ONKEY_INT_STAT0,
+> > +	.mask_base = PF1550_PMIC_REG_ONKEY_INT_MASK0,
+> > +	.use_ack = 1,
+> > +	.init_ack_masked = 1,
+> > +	.num_regs = 1,
+> > +	.irqs = pf1550_onkey_irqs,
+> > +	.num_irqs = ARRAY_SIZE(pf1550_onkey_irqs),
+> > +};
+> > +
+> > +static const struct resource onkey_resources[] = {
+> > +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_PUSHI),
+> > +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_1SI),
+> > +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_2SI),
+> > +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_3SI),
+> > +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_4SI),
+> > +	DEFINE_RES_IRQ(PF1550_ONKEY_IRQ_8SI),
+> > +};
+> > +
+> > +static const struct regmap_irq pf1550_charger_irqs[] = {
+> > +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_BAT2SOCI, 0, CHARG_IRQ_BAT2SOCI),
+> > +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_BATI, 0, CHARG_IRQ_BATI),
+> > +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_CHGI, 0, CHARG_IRQ_CHGI),
+> > +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_VBUSI, 0, CHARG_IRQ_VBUSI),
+> > +	REGMAP_IRQ_REG(PF1550_CHARG_IRQ_THMI, 0, CHARG_IRQ_THMI),
+> > +};
+> > +
+> > +static const struct regmap_irq_chip pf1550_charger_irq_chip = {
+> > +	.name = "pf1550-charger",
+> > +	.status_base = PF1550_CHARG_REG_CHG_INT,
+> > +	.ack_base = PF1550_CHARG_REG_CHG_INT,
+> > +	.mask_base = PF1550_CHARG_REG_CHG_INT_MASK,
+> > +	.use_ack = 1,
+> > +	.init_ack_masked = 1,
+> > +	.num_regs = 1,
+> > +	.irqs = pf1550_charger_irqs,
+> > +	.num_irqs = ARRAY_SIZE(pf1550_charger_irqs),
+> > +};
+> > +
+> > +static const struct resource charger_resources[] = {
+> > +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_BAT2SOCI),
+> > +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_BATI),
+> > +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_CHGI),
+> > +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_VBUSI),
+> > +	DEFINE_RES_IRQ(PF1550_CHARG_IRQ_THMI),
+> > +};
+> > +
+> > +static const struct mfd_cell pf1550_regulator_cell = {
+> > +	.name = "pf1550-regulator",
+> > +	.num_resources = ARRAY_SIZE(regulator_resources),
+> > +	.resources = regulator_resources,
+> > +};
+> > +
+> > +static const struct mfd_cell pf1550_onkey_cell = {
+> > +	.name = "pf1550-onkey",
+> > +	.num_resources = ARRAY_SIZE(onkey_resources),
+> > +	.resources = onkey_resources,
+> > +};
+> > +
+> > +static const struct mfd_cell pf1550_charger_cell = {
+> > +	.name = "pf1550-charger",
+> > +	.num_resources = ARRAY_SIZE(charger_resources),
+> > +	.resources = charger_resources,
+> > +};
+> 
+> Is there a technical reason why these are all separated out?  It would
+> normally be preferable to put these in an array and register them all
+> with a single all to mfd_add_devices();
+>
+When registering the devices with devm_mfd_add_devices, I provide the domain of
+the interrupt controller, so the mapping to the interrupts are done here instead
+of in the sub-drivers as suggested by Dmitry Torokhov (v3).
+
+Due to irregularity in the addresses of the registers serving as interrupt
+sources, multiple IRQ controllers(regmap_irq_chip) are used. So, there are
+multiple domains that need to be passed to the devm_mfd_add_devices to do these
+mappings.
+
+> > +/*
+> > + * The PF1550 is shipped in variants of A0, A1,...A9. Each variant defines a
+> > + * configuration of the PMIC in a One-Time Programmable (OTP) memory.
+> > + * This memory is accessed indirectly by writing valid keys to specific
+> > + * registers of the PMIC. To read the OTP memory after writing the valid keys,
+> > + * the OTP register address to be read is written to pf1550 register 0xc4 and
+> > + * its value read from pf1550 register 0xc5.
+> > + */
+> > +static int pf1550_read_otp(const struct pf1550_ddata *pf1550, unsigned int index,
+> > +			   unsigned int *val)
+> > +{
+> > +	int ret = 0;
+> > +
+> > +	ret = regmap_write(pf1550->regmap, PF1550_PMIC_REG_KEY,
+> > +			   PF1550_OTP_PMIC_KEY);
+> > +	if (ret)
+> > +		goto read_err;
+> 
+> '\n'
+> 
+> > +	ret = regmap_write(pf1550->regmap, PF1550_CHARG_REG_CHGR_KEY2,
+> > +			   PF1550_OTP_CHGR_KEY);
+> > +	if (ret)
+> > +		goto read_err;
+> 
+> '\n'
+> 
+> > +	ret = regmap_write(pf1550->regmap, PF1550_TEST_REG_KEY3,
+> > +			   PF1550_OTP_TEST_KEY);
+> > +	if (ret)
+> > +		goto read_err;
+> 
+> '\n'
+> 
+> > +	ret = regmap_write(pf1550->regmap, PF1550_TEST_REG_FMRADDR, index);
+> > +	if (ret)
+> > +		goto read_err;
+> 
+> '\n'
+> 
+> > +	ret = regmap_read(pf1550->regmap, PF1550_TEST_REG_FMRDATA, val);
+> > +	if (ret)
+> > +		goto read_err;
+> > +
+> > +	return 0;
+> > +
+> > +read_err:
+> > +	return dev_err_probe(pf1550->dev, ret, "OTP reg %x not found!\n",
+> > +			     index);
+> 
+> You can use 100-chars everywhere in here to prevent these kinds of wraps.
+>
+Noted.
+> > +}
+> > +
+> > +static int pf1550_i2c_probe(struct i2c_client *i2c)
+> > +{
+> > +	const struct mfd_cell *regulator = &pf1550_regulator_cell;
+> > +	const struct mfd_cell *charger = &pf1550_charger_cell;
+> > +	const struct mfd_cell *onkey = &pf1550_onkey_cell;
+> > +	unsigned int reg_data = 0, otp_data = 0;
+> > +	struct pf1550_ddata *pf1550;
+> > +	struct irq_domain *domain;
+> > +	int irq, ret = 0;
+> > +
+> > +	pf1550 = devm_kzalloc(&i2c->dev, sizeof(*pf1550), GFP_KERNEL);
+> > +	if (!pf1550)
+> > +		return -ENOMEM;
+> > +
+> > +	i2c_set_clientdata(i2c, pf1550);
+> > +	pf1550->dev = &i2c->dev;
+> > +	pf1550->irq = i2c->irq;
+> > +
+> > +	pf1550->regmap = devm_regmap_init_i2c(i2c, &pf1550_regmap_config);
+> > +	if (IS_ERR(pf1550->regmap))
+> > +		return dev_err_probe(pf1550->dev, PTR_ERR(pf1550->regmap),
+> > +				     "failed to allocate register map\n");
+> > +
+> > +	ret = regmap_read(pf1550->regmap, PF1550_PMIC_REG_DEVICE_ID, &reg_data);
+> > +	if (ret < 0)
+> > +		return dev_err_probe(pf1550->dev, ret, "cannot read chip ID\n");
+> > +	if (reg_data != PF1550_DEVICE_ID)
+> > +		return dev_err_probe(pf1550->dev, -ENODEV,
+> > +				     "invalid device ID: 0x%02x\n", reg_data);
+> > +
+> > +	/* Regulator DVS for SW2 */
+> > +	ret = pf1550_read_otp(pf1550, PF1550_OTP_SW2_SW3, &otp_data);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* When clear, DVS should be enabled */
+> > +	if (!(otp_data & OTP_SW2_DVS_ENB))
+> > +		pf1550->dvs2_enb = true;
+> > +
+> > +	/* Regulator DVS for SW1 */
+> > +	ret = pf1550_read_otp(pf1550, PF1550_OTP_SW1_SW2, &otp_data);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (!(otp_data & OTP_SW1_DVS_ENB))
+> > +		pf1550->dvs1_enb = true;
+> > +
+> > +	/* Add top level interrupts */
+> > +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, pf1550->irq,
+> > +				       IRQF_ONESHOT | IRQF_SHARED |
+> > +				       IRQF_TRIGGER_FALLING,
+> > +				       0, &pf1550_irq_chip,
+> > +				       &pf1550->irq_data);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Add regulator */
+> > +	irq = regmap_irq_get_virq(pf1550->irq_data, PF1550_IRQ_REGULATOR);
+> > +	if (irq < 0)
+> > +		return dev_err_probe(pf1550->dev, irq,
+> > +				     "Failed to get parent vIRQ(%d) for chip %s\n",
+> > +				     PF1550_IRQ_REGULATOR, pf1550_irq_chip.name);
+> > +
+> > +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, irq,
+> > +				       IRQF_ONESHOT | IRQF_SHARED |
+> > +				       IRQF_TRIGGER_FALLING, 0,
+> > +				       &pf1550_regulator_irq_chip,
+> > +				       &pf1550->irq_data_regulator);
+> > +	if (ret)
+> > +		return dev_err_probe(pf1550->dev, ret,
+> > +				     "Failed to add %s IRQ chip\n",
+> > +				     pf1550_regulator_irq_chip.name);
+> > +
+> > +	domain = regmap_irq_get_domain(pf1550->irq_data_regulator);
+> > +
+> > +	ret = devm_mfd_add_devices(pf1550->dev, PLATFORM_DEVID_NONE, regulator,
+> > +				   1, NULL, 0, domain);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Add onkey */
+> > +	irq = regmap_irq_get_virq(pf1550->irq_data, PF1550_IRQ_ONKEY);
+> > +	if (irq < 0)
+> > +		return dev_err_probe(pf1550->dev, irq,
+> > +				     "Failed to get parent vIRQ(%d) for chip %s\n",
+> > +				     PF1550_IRQ_ONKEY, pf1550_irq_chip.name);
+> > +
+> > +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, irq,
+> > +				       IRQF_ONESHOT | IRQF_SHARED |
+> > +				       IRQF_TRIGGER_FALLING, 0,
+> > +				       &pf1550_onkey_irq_chip,
+> > +				       &pf1550->irq_data_onkey);
+> > +	if (ret)
+> > +		return dev_err_probe(pf1550->dev, ret,
+> > +				     "Failed to add %s IRQ chip\n",
+> > +				     pf1550_onkey_irq_chip.name);
+> > +
+> > +	domain = regmap_irq_get_domain(pf1550->irq_data_onkey);
+> > +
+> > +	ret = devm_mfd_add_devices(pf1550->dev, PLATFORM_DEVID_NONE, onkey, 1,
+> > +				   NULL, 0, domain);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Add battery charger */
+> > +	irq = regmap_irq_get_virq(pf1550->irq_data, PF1550_IRQ_CHG);
+> > +	if (irq < 0)
+> > +		return dev_err_probe(pf1550->dev, irq,
+> > +				     "Failed to get parent vIRQ(%d) for chip %s\n",
+> > +				     PF1550_IRQ_CHG, pf1550_irq_chip.name);
+> > +
+> > +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap, irq,
+> > +				       IRQF_ONESHOT | IRQF_SHARED |
+> > +				       IRQF_TRIGGER_FALLING, 0,
+> > +				       &pf1550_charger_irq_chip,
+> > +				       &pf1550->irq_data_charger);
+> > +	if (ret)
+> > +		return dev_err_probe(pf1550->dev, ret,
+> > +				     "Failed to add %s IRQ chip\n",
+> > +				     pf1550_charger_irq_chip.name);
+> > +
+> > +	domain = regmap_irq_get_domain(pf1550->irq_data_charger);
+> > +
+> > +	return devm_mfd_add_devices(pf1550->dev, PLATFORM_DEVID_NONE, charger,
+> > +				    1, NULL, 0, domain);
+> > +}
+> > +
+> > +static int pf1550_suspend(struct device *dev)
+> > +{
+> > +	struct pf1550_ddata *pf1550 = dev_get_drvdata(dev);
+> > +
+> > +	if (device_may_wakeup(dev)) {
+> > +		enable_irq_wake(pf1550->irq);
+> > +		disable_irq(pf1550->irq);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int pf1550_resume(struct device *dev)
+> > +{
+> > +	struct pf1550_ddata *pf1550 = dev_get_drvdata(dev);
+> > +
+> > +	if (device_may_wakeup(dev)) {
+> > +		disable_irq_wake(pf1550->irq);
+> > +		enable_irq(pf1550->irq);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +static DEFINE_SIMPLE_DEV_PM_OPS(pf1550_pm, pf1550_suspend, pf1550_resume);
+> > +
+> > +static const struct i2c_device_id pf1550_i2c_id[] = {
+> > +	{ "pf1550" },
+> > +	{ /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, pf1550_i2c_id);
+> > +
+> > +static const struct of_device_id pf1550_dt_match[] = {
+> > +	{ .compatible = "nxp,pf1550" },
+> > +	{ /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, pf1550_dt_match);
+> > +
+> > +static struct i2c_driver pf1550_i2c_driver = {
+> > +	.driver = {
+> > +		   .name = "pf1550",
+> > +		   .pm = pm_sleep_ptr(&pf1550_pm),
+> > +		   .of_match_table = pf1550_dt_match,
+> > +	},
+> > +	.probe = pf1550_i2c_probe,
+> > +	.id_table = pf1550_i2c_id,
+> > +};
+> > +module_i2c_driver(pf1550_i2c_driver);
+> > +
+> > +MODULE_DESCRIPTION("NXP PF1550 core driver");
+> > +MODULE_AUTHOR("Robin Gong <yibin.gong@freescale.com>");
+> > +MODULE_LICENSE("GPL");
+> > diff --git a/include/linux/mfd/pf1550.h b/include/linux/mfd/pf1550.h
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..6099fe670fab13deddbe9e0f834c9b3af5bf4f50
+> > --- /dev/null
+> > +++ b/include/linux/mfd/pf1550.h
+> > @@ -0,0 +1,271 @@
+> > +/* SPDX-License-Identifier: GPL-2.0
+> > + *
+> > + * declarations for the PF1550 PMIC
+> 
+> As above.
+>
+Noted.
+> > + *
+> > + * Copyright (C) 2016 Freescale Semiconductor, Inc.
+> > + * Robin Gong <yibin.gong@freescale.com>
+> > + *
+> > + * Portions Copyright (c) 2025 Savoir-faire Linux Inc.
+> > + * Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> > + */
+> > +
+> > +#ifndef __LINUX_MFD_PF1550_H
+> > +#define __LINUX_MFD_PF1550_H
+> > +
+> > +#include <linux/i2c.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +enum pf1550_pmic_reg {
+> > +	/* PMIC regulator part */
+> > +	PF1550_PMIC_REG_DEVICE_ID		= 0x00,
+> > +	PF1550_PMIC_REG_OTP_FLAVOR		= 0x01,
+> > +	PF1550_PMIC_REG_SILICON_REV		= 0x02,
+> > +
+> > +	PF1550_PMIC_REG_INT_CATEGORY		= 0x06,
+> > +	PF1550_PMIC_REG_SW_INT_STAT0		= 0x08,
+> > +	PF1550_PMIC_REG_SW_INT_MASK0		= 0x09,
+> > +	PF1550_PMIC_REG_SW_INT_SENSE0		= 0x0a,
+> > +	PF1550_PMIC_REG_SW_INT_STAT1		= 0x0b,
+> > +	PF1550_PMIC_REG_SW_INT_MASK1		= 0x0c,
+> > +	PF1550_PMIC_REG_SW_INT_SENSE1		= 0x0d,
+> > +	PF1550_PMIC_REG_SW_INT_STAT2		= 0x0e,
+> > +	PF1550_PMIC_REG_SW_INT_MASK2		= 0x0f,
+> > +	PF1550_PMIC_REG_SW_INT_SENSE2		= 0x10,
+> > +	PF1550_PMIC_REG_LDO_INT_STAT0		= 0x18,
+> > +	PF1550_PMIC_REG_LDO_INT_MASK0		= 0x19,
+> > +	PF1550_PMIC_REG_LDO_INT_SENSE0		= 0x1a,
+> > +	PF1550_PMIC_REG_TEMP_INT_STAT0		= 0x20,
+> > +	PF1550_PMIC_REG_TEMP_INT_MASK0		= 0x21,
+> > +	PF1550_PMIC_REG_TEMP_INT_SENSE0		= 0x22,
+> > +	PF1550_PMIC_REG_ONKEY_INT_STAT0		= 0x24,
+> > +	PF1550_PMIC_REG_ONKEY_INT_MASK0		= 0x25,
+> > +	PF1550_PMIC_REG_ONKEY_INT_SENSE0	= 0x26,
+> > +	PF1550_PMIC_REG_MISC_INT_STAT0		= 0x28,
+> > +	PF1550_PMIC_REG_MISC_INT_MASK0		= 0x29,
+> > +	PF1550_PMIC_REG_MISC_INT_SENSE0		= 0x2a,
+> > +
+> > +	PF1550_PMIC_REG_COINCELL_CONTROL	= 0x30,
+> > +
+> > +	PF1550_PMIC_REG_SW1_VOLT		= 0x32,
+> > +	PF1550_PMIC_REG_SW1_STBY_VOLT		= 0x33,
+> > +	PF1550_PMIC_REG_SW1_SLP_VOLT		= 0x34,
+> > +	PF1550_PMIC_REG_SW1_CTRL		= 0x35,
+> > +	PF1550_PMIC_REG_SW1_CTRL1		= 0x36,
+> > +	PF1550_PMIC_REG_SW2_VOLT		= 0x38,
+> > +	PF1550_PMIC_REG_SW2_STBY_VOLT		= 0x39,
+> > +	PF1550_PMIC_REG_SW2_SLP_VOLT		= 0x3a,
+> > +	PF1550_PMIC_REG_SW2_CTRL		= 0x3b,
+> > +	PF1550_PMIC_REG_SW2_CTRL1		= 0x3c,
+> > +	PF1550_PMIC_REG_SW3_VOLT		= 0x3e,
+> > +	PF1550_PMIC_REG_SW3_STBY_VOLT		= 0x3f,
+> > +	PF1550_PMIC_REG_SW3_SLP_VOLT		= 0x40,
+> > +	PF1550_PMIC_REG_SW3_CTRL		= 0x41,
+> > +	PF1550_PMIC_REG_SW3_CTRL1		= 0x42,
+> > +	PF1550_PMIC_REG_VSNVS_CTRL		= 0x48,
+> > +	PF1550_PMIC_REG_VREFDDR_CTRL		= 0x4a,
+> > +	PF1550_PMIC_REG_LDO1_VOLT		= 0x4c,
+> > +	PF1550_PMIC_REG_LDO1_CTRL		= 0x4d,
+> > +	PF1550_PMIC_REG_LDO2_VOLT		= 0x4f,
+> > +	PF1550_PMIC_REG_LDO2_CTRL		= 0x50,
+> > +	PF1550_PMIC_REG_LDO3_VOLT		= 0x52,
+> > +	PF1550_PMIC_REG_LDO3_CTRL		= 0x53,
+> > +	PF1550_PMIC_REG_PWRCTRL0		= 0x58,
+> > +	PF1550_PMIC_REG_PWRCTRL1		= 0x59,
+> > +	PF1550_PMIC_REG_PWRCTRL2		= 0x5a,
+> > +	PF1550_PMIC_REG_PWRCTRL3		= 0x5b,
+> > +	PF1550_PMIC_REG_SW1_PWRDN_SEQ		= 0x5f,
+> > +	PF1550_PMIC_REG_SW2_PWRDN_SEQ		= 0x60,
+> > +	PF1550_PMIC_REG_SW3_PWRDN_SEQ		= 0x61,
+> > +	PF1550_PMIC_REG_LDO1_PWRDN_SEQ		= 0x62,
+> > +	PF1550_PMIC_REG_LDO2_PWRDN_SEQ		= 0x63,
+> > +	PF1550_PMIC_REG_LDO3_PWRDN_SEQ		= 0x64,
+> > +	PF1550_PMIC_REG_VREFDDR_PWRDN_SEQ	= 0x65,
+> > +
+> > +	PF1550_PMIC_REG_STATE_INFO		= 0x67,
+> > +	PF1550_PMIC_REG_I2C_ADDR		= 0x68,
+> > +	PF1550_PMIC_REG_IO_DRV0			= 0x69,
+> > +	PF1550_PMIC_REG_IO_DRV1			= 0x6a,
+> > +	PF1550_PMIC_REG_RC_16MHZ		= 0x6b,
+> > +	PF1550_PMIC_REG_KEY			= 0x6f,
+> > +
+> > +	/* Charger part */
+> > +	PF1550_CHARG_REG_CHG_INT		= 0x80,
+> > +	PF1550_CHARG_REG_CHG_INT_MASK		= 0x82,
+> > +	PF1550_CHARG_REG_CHG_INT_OK		= 0x84,
+> > +	PF1550_CHARG_REG_VBUS_SNS		= 0x86,
+> > +	PF1550_CHARG_REG_CHG_SNS		= 0x87,
+> > +	PF1550_CHARG_REG_BATT_SNS		= 0x88,
+> > +	PF1550_CHARG_REG_CHG_OPER		= 0x89,
+> > +	PF1550_CHARG_REG_CHG_TMR		= 0x8a,
+> > +	PF1550_CHARG_REG_CHG_EOC_CNFG		= 0x8d,
+> > +	PF1550_CHARG_REG_CHG_CURR_CNFG		= 0x8e,
+> > +	PF1550_CHARG_REG_BATT_REG		= 0x8f,
+> > +	PF1550_CHARG_REG_BATFET_CNFG		= 0x91,
+> > +	PF1550_CHARG_REG_THM_REG_CNFG		= 0x92,
+> > +	PF1550_CHARG_REG_VBUS_INLIM_CNFG	= 0x94,
+> > +	PF1550_CHARG_REG_VBUS_LIN_DPM		= 0x95,
+> > +	PF1550_CHARG_REG_USB_PHY_LDO_CNFG	= 0x96,
+> > +	PF1550_CHARG_REG_DBNC_DELAY_TIME	= 0x98,
+> > +	PF1550_CHARG_REG_CHG_INT_CNFG		= 0x99,
+> > +	PF1550_CHARG_REG_THM_ADJ_SETTING	= 0x9a,
+> > +	PF1550_CHARG_REG_VBUS2SYS_CNFG		= 0x9b,
+> > +	PF1550_CHARG_REG_LED_PWM		= 0x9c,
+> > +	PF1550_CHARG_REG_FAULT_BATFET_CNFG	= 0x9d,
+> > +	PF1550_CHARG_REG_LED_CNFG		= 0x9e,
+> > +	PF1550_CHARG_REG_CHGR_KEY2		= 0x9f,
+> > +
+> > +	PF1550_TEST_REG_FMRADDR			= 0xc4,
+> > +	PF1550_TEST_REG_FMRDATA			= 0xc5,
+> > +	PF1550_TEST_REG_KEY3			= 0xdf,
+> > +
+> > +	PF1550_PMIC_REG_END			= 0xff,
+> > +};
+> > +
+> > +/* One-Time Programmable(OTP) memory */
+> > +enum pf1550_otp_reg {
+> > +	PF1550_OTP_SW1_SW2			= 0x1e,
+> > +	PF1550_OTP_SW2_SW3			= 0x1f,
+> > +};
+> > +
+> > +#define PF1550_DEVICE_ID		0x7c
+> > +
+> > +/* Keys for reading OTP */
+> > +#define PF1550_OTP_PMIC_KEY		0x15
+> > +#define PF1550_OTP_CHGR_KEY		0x50
+> > +#define PF1550_OTP_TEST_KEY		0xab
+> > +
+> > +/* Supported charger modes */
+> > +#define PF1550_CHG_BAT_OFF		1
+> > +#define PF1550_CHG_BAT_ON		2
+> > +
+> > +#define PF1550_CHG_PRECHARGE		0
+> > +#define PF1550_CHG_CONSTANT_CURRENT	1
+> > +#define PF1550_CHG_CONSTANT_VOL		2
+> > +#define PF1550_CHG_EOC			3
+> > +#define PF1550_CHG_DONE			4
+> > +#define PF1550_CHG_TIMER_FAULT		6
+> > +#define PF1550_CHG_SUSPEND		7
+> > +#define PF1550_CHG_OFF_INV		8
+> > +#define PF1550_CHG_BAT_OVER		9
+> > +#define PF1550_CHG_OFF_TEMP		10
+> > +#define PF1550_CHG_LINEAR_ONLY		12
+> > +#define PF1550_CHG_SNS_MASK		0xf
+> > +#define PF1550_CHG_INT_MASK		0x51
+> > +
+> > +#define PF1550_BAT_NO_VBUS		0
+> > +#define PF1550_BAT_LOW_THAN_PRECHARG	1
+> > +#define PF1550_BAT_CHARG_FAIL		2
+> > +#define PF1550_BAT_HIGH_THAN_PRECHARG	4
+> > +#define PF1550_BAT_OVER_VOL		5
+> > +#define PF1550_BAT_NO_DETECT		6
+> > +#define PF1550_BAT_SNS_MASK		0x7
+> > +
+> > +#define PF1550_VBUS_UVLO		BIT(2)
+> > +#define PF1550_VBUS_IN2SYS		BIT(3)
+> > +#define PF1550_VBUS_OVLO		BIT(4)
+> > +#define PF1550_VBUS_VALID		BIT(5)
+> > +
+> > +#define PF1550_CHARG_REG_BATT_REG_CHGCV_MASK		0x3f
+> > +#define PF1550_CHARG_REG_BATT_REG_VMINSYS_SHIFT		6
+> > +#define PF1550_CHARG_REG_BATT_REG_VMINSYS_MASK		GENMASK(7, 6)
+> > +#define PF1550_CHARG_REG_THM_REG_CNFG_REGTEMP_SHIFT	2
+> > +#define PF1550_CHARG_REG_THM_REG_CNFG_REGTEMP_MASK	GENMASK(3, 2)
+> > +
+> > +/* DVS ENABLE MASK */
+> > +#define OTP_SW1_DVS_ENB		BIT(1)
+> > +#define OTP_SW2_DVS_ENB		BIT(3)
+> > +
+> > +/* Top level interrupt masks */
+> > +#define IRQ_REGULATOR		(BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(6))
+> > +#define IRQ_ONKEY		BIT(5)
+> > +#define IRQ_CHG			BIT(0)
+> > +
+> > +/* Regulator interrupt masks */
+> > +#define PMIC_IRQ_SW1_LS		BIT(0)
+> > +#define PMIC_IRQ_SW2_LS		BIT(1)
+> > +#define PMIC_IRQ_SW3_LS		BIT(2)
+> > +#define PMIC_IRQ_SW1_HS		BIT(0)
+> > +#define PMIC_IRQ_SW2_HS		BIT(1)
+> > +#define PMIC_IRQ_SW3_HS		BIT(2)
+> > +#define PMIC_IRQ_LDO1_FAULT	BIT(0)
+> > +#define PMIC_IRQ_LDO2_FAULT	BIT(1)
+> > +#define PMIC_IRQ_LDO3_FAULT	BIT(2)
+> > +#define PMIC_IRQ_TEMP_110	BIT(0)
+> > +#define PMIC_IRQ_TEMP_125	BIT(1)
+> > +
+> > +/* Onkey interrupt masks */
+> > +#define ONKEY_IRQ_PUSHI		BIT(0)
+> > +#define ONKEY_IRQ_1SI		BIT(1)
+> > +#define ONKEY_IRQ_2SI		BIT(2)
+> > +#define ONKEY_IRQ_3SI		BIT(3)
+> > +#define ONKEY_IRQ_4SI		BIT(4)
+> > +#define ONKEY_IRQ_8SI		BIT(5)
+> > +
+> > +/* Charger interrupt masks */
+> > +#define CHARG_IRQ_BAT2SOCI	BIT(1)
+> > +#define CHARG_IRQ_BATI		BIT(2)
+> > +#define CHARG_IRQ_CHGI		BIT(3)
+> > +#define CHARG_IRQ_VBUSI		BIT(5)
+> > +#define CHARG_IRQ_DPMI		BIT(6)
+> > +#define CHARG_IRQ_THMI		BIT(7)
+> > +
+> > +enum pf1550_irq {
+> > +	PF1550_IRQ_CHG,
+> > +	PF1550_IRQ_REGULATOR,
+> > +	PF1550_IRQ_ONKEY,
+> > +};
+> > +
+> > +enum pf1550_pmic_irq {
+> > +	PF1550_PMIC_IRQ_SW1_LS,
+> > +	PF1550_PMIC_IRQ_SW2_LS,
+> > +	PF1550_PMIC_IRQ_SW3_LS,
+> > +	PF1550_PMIC_IRQ_SW1_HS,
+> > +	PF1550_PMIC_IRQ_SW2_HS,
+> > +	PF1550_PMIC_IRQ_SW3_HS,
+> > +	PF1550_PMIC_IRQ_LDO1_FAULT,
+> > +	PF1550_PMIC_IRQ_LDO2_FAULT,
+> > +	PF1550_PMIC_IRQ_LDO3_FAULT,
+> > +	PF1550_PMIC_IRQ_TEMP_110,
+> > +	PF1550_PMIC_IRQ_TEMP_125,
+> > +};
+> > +
+> > +enum pf1550_onkey_irq {
+> > +	PF1550_ONKEY_IRQ_PUSHI,
+> > +	PF1550_ONKEY_IRQ_1SI,
+> > +	PF1550_ONKEY_IRQ_2SI,
+> > +	PF1550_ONKEY_IRQ_3SI,
+> > +	PF1550_ONKEY_IRQ_4SI,
+> > +	PF1550_ONKEY_IRQ_8SI,
+> > +};
+> > +
+> > +enum pf1550_charg_irq {
+> > +	PF1550_CHARG_IRQ_BAT2SOCI,
+> > +	PF1550_CHARG_IRQ_BATI,
+> > +	PF1550_CHARG_IRQ_CHGI,
+> > +	PF1550_CHARG_IRQ_VBUSI,
+> > +	PF1550_CHARG_IRQ_THMI,
+> > +};
+> > +
+> > +enum pf1550_regulators {
+> > +	PF1550_SW1,
+> > +	PF1550_SW2,
+> > +	PF1550_SW3,
+> > +	PF1550_VREFDDR,
+> > +	PF1550_LDO1,
+> > +	PF1550_LDO2,
+> > +	PF1550_LDO3,
+> > +};
+> > +
+> > +struct pf1550_ddata {
+> > +	bool dvs1_enb;
+> > +	bool dvs2_enb;
+> 
+> Nit: I don't see the benefit of shortening 'enable' here.
+> 
+> Place the small variables at the bottom.
+>
+Will update.
+> > +	struct device *dev;
+> > +	struct regmap *regmap;
+> > +	struct regmap_irq_chip_data *irq_data_regulator;
+> > +	struct regmap_irq_chip_data *irq_data_onkey;
+> > +	struct regmap_irq_chip_data *irq_data_charger;
+> > +	struct regmap_irq_chip_data *irq_data;
+> > +	int irq;
+> > +};
+> > +
+> > +#endif /* __LINUX_MFD_PF1550_H */
+
+Thanks,
+Sam
 
