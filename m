@@ -1,128 +1,176 @@
-Return-Path: <linux-pm+bounces-31684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F45BB16FBE
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 12:43:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70F18B17017
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 13:05:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66A0B3A7FFC
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 10:43:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B75371AA64AC
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Jul 2025 11:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4B4223DED;
-	Thu, 31 Jul 2025 10:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57432BE647;
+	Thu, 31 Jul 2025 11:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WZSooJ0z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k3dTG93c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D647718D643;
-	Thu, 31 Jul 2025 10:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC45F2BE638
+	for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 11:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753958615; cv=none; b=QhdGz62/N6W4tb0SEro4xGz0iesRcq2sjdQB9K8j4Rna/WRjd5+OEA/KDBUdZJSHfiUMxpzCObldWQ5WlAq7OaebLA1hfFsTgBaWO1PEmyzb1bxhe6CXDVFPFgmqkATugpquzuUP3QoDqRSecjKktlqh249I0rQLlUu/D3Tcn0E=
+	t=1753959918; cv=none; b=fWHlTNH2jXCTCJyEHJqJaPwiwqy39XMV+XPryqK2eJDoS3gfvhFHr9PsGGml/srdTmveJR1tnuGkH84yb7lrKtjIadNLofLoqn3urDwlKNe5jdDo5hZ6LIKLu9ROXJzVMsfqIt66fjwC4XHgqDH/CveKIsnS+VQwTC/ltyr+DOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753958615; c=relaxed/simple;
-	bh=DjfYV1Is37pQjWxBBKI7qLERWGnK5OoYpV9PDvPS/tA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WYZKS7NdtCON4SM8bIItc8CwzySIwld6/7nfEMZavjxioV384Tb9MSldEcig4T1ZERaSeFd6Zw5PbGGAeKO7sbcjVEhvcU16c3QPvY3FRsaHmXOe4rDCtHmpKWyWoKKUUpOHO/dpZP4j7zmNyihqv6aW8wsKwA3mXTp0wQDuQ/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WZSooJ0z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29224C4CEEF;
-	Thu, 31 Jul 2025 10:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753958615;
-	bh=DjfYV1Is37pQjWxBBKI7qLERWGnK5OoYpV9PDvPS/tA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WZSooJ0z3e7nhekdca4zDyLOBphsSqcEsPM/01BT4+RMxbkJtBOmlFGPkdFLEdHEm
-	 LVC5y1Tb1UQbvGrw9BPjOkNQ/jH27gOsTZ61Wpsgf/koZ4qAJQk+KcrFx5EFAhaKFz
-	 Yr8A49+5XksNlvVQ87hojLrd8fzzEcejmGvhaTrXRDySLIW+z1MufgYe7AKslq/3QN
-	 p3TMUMBgDj683iSbEMLbG9Y8Yv9Yi1dh2eJYBerdiJAQU8VKypAGIiOj0D/jJc4cag
-	 qQQL+wvfZPvMSyp4V7BB3dF6zxbnFzUwMuea3bPjDIPIC4AZjUeCoMp8yERpKZkTt2
-	 0dWVra8p6bURw==
-Message-ID: <43e615db-8313-4a6f-8806-219c7b921481@kernel.org>
-Date: Thu, 31 Jul 2025 12:43:30 +0200
+	s=arc-20240116; t=1753959918; c=relaxed/simple;
+	bh=VEKn7bCKtQ4DC3+ZJIGn7pT8WXFtiTvd9gJWSwXEX6s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cUnqMn+wQP7XsUz12/WaWmnLGIA8Oj8FnRQXDJt1slVa4M0GDfVfr/uu3+8VtjAnplzyE0f+X8fJs2O8XW4akMzwlZbwKKOIoOv3QuQCUlMpxC1zji/FtcLEA1k89nIkySyfPdvJIi/h7mYigVYoB+KDwje5i1qRX9z3Xh+v/Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k3dTG93c; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4589968e001so4610475e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 31 Jul 2025 04:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753959915; x=1754564715; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VEKn7bCKtQ4DC3+ZJIGn7pT8WXFtiTvd9gJWSwXEX6s=;
+        b=k3dTG93cfpQCJ5FG+CzzzVV4ZTcYXfgxNk879hQpvYIo0C3Hb/3newGQDkI8W+Pb8t
+         NHSv2dtP+QJR80KZm8Bz4BbpKJTAaaCeMuTJJG0t9511fYE3sXKegonxwnQAvizhePb/
+         dJkh+CBNgoC4SWR2Qr6Ifg8MSzMKJDaPjA1tWlRO0zLfJkjPHVFvWmmV2KMWxhOus+FB
+         Tn2MzNJm/eEpiZ6lXW5CgrY/iolx9PKhpN5n0/kiibuwd55Fsf9OjlAXGfmL3kLVbrE/
+         tlPtKARqnCK89+85vD/1jP+16vF2BmgQqqTgxgHeYR85R04KqhzI5+oFfyCKDezX2Cvj
+         WfnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753959915; x=1754564715;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VEKn7bCKtQ4DC3+ZJIGn7pT8WXFtiTvd9gJWSwXEX6s=;
+        b=G+SfqTEyTs/4J5xYj6mMqb/cBPco532SNnyG4YuU00jPhhFl4l8tHtRR072M+pzaRg
+         1U55UCocTfah4Nbted8jMH8Y8SqAMFoGawRsjzmsqsWGu+bwxXenLtjmewpxnJc/3I0B
+         hQMpbwY5cvvs7kPJWgILt9gYZFugpqiWj7WR+ArgrOVEn5joHJmsmJOkk7xTa5lzUKt/
+         D6SVh2PGa8A/0en59XQp9sLc00kQSiOgDTplyYBsSPv4VMS1bE4QBzrhRdwSdhx0eXbb
+         lGqYwOD75IPhSAVqCVqdTuRsHAnSG+7u9nrgQnCiqb3KGS/iIVYQXwGuT5WBHKi1wPn5
+         uPUg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvccqafYbGlWRwYQKsx+B/LuGb5as9mzeRXe33S+bSFbEyLHptTjspt5s4gkfImyJVA2I0vrCWyA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpkK+P3eGIRTnPKdD/mOFZzKk7g3EM4iv1b8cSySK9s6BRRyaU
+	xGwfthhT/D0T0nVFm9XU1buUlwiuwMzVoeHs/IlO1jy+kEDZPxQv2dlEnPfYkIFh+UU=
+X-Gm-Gg: ASbGncsjSO31eoO3UNnfetGEWldBWrV0KcGplQqooWm3Qf2FqZOfnQJVkfcB63UHRU1
+	OBMKENe/erf6wkbiiwU3mYOaXSIpj5BeZQYxjUyD2hBhboPltBCdnzMI84vkpqVU5/Q0Vb88jaM
+	u2wKI6UqFUC+LHRYEJlEyRCp6ExEC/dXdLurvju7D2nUpMcCrS255M4E8TsFVKZ2PrjSbLK1srJ
+	MDBs1clGgdb+G9YzCMiKQQx2anxA7JQsnn9D3G6yYcs0F7EovboDK9QN4drImoal0lSmDlGSyzD
+	LH3ieTn5ibZLXSTMUuyVFwSPKdlzVsUBprBMOj8Arnxlg9j9I44ghkxIoXtQngeSGw8h0/xWTnJ
+	DIGECLQMeaOl0bGA7KagxjZm6Yw==
+X-Google-Smtp-Source: AGHT+IE2uAVTLlLGsEyuKRwFnRFU/FdmGqD5jafe8UhDC8Cs0NgSXpOAHHVQxxk7a76FdVpc+nYZfA==
+X-Received: by 2002:a05:600c:1d25:b0:456:1560:7c5f with SMTP id 5b1f17b1804b1-4589a700e05mr55899935e9.14.1753959915171;
+        Thu, 31 Jul 2025 04:05:15 -0700 (PDT)
+Received: from [10.1.1.59] ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4589edfcdc3sm23160775e9.12.2025.07.31.04.05.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Jul 2025 04:05:14 -0700 (PDT)
+Message-ID: <63d090988d04fa81231c984771a563c55daf1bd9.camel@linaro.org>
+Subject: Re: [PATCH v13 07/10] firmware: psci: Implement vendor-specific
+ resets as reboot-mode
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>, Shivendra Pratap	
+ <shivendra.pratap@oss.qualcomm.com>, Bartosz Golaszewski	
+ <bartosz.golaszewski@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Sebastian Reichel	 <sre@kernel.org>, Rob Herring <robh@kernel.org>, Sudeep
+ Holla	 <sudeep.holla@arm.com>, Souvik Chakravarty
+ <Souvik.Chakravarty@arm.com>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andy Yan	 <andy.yan@rock-chips.com>,
+ Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>, Catalin
+ Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Florian
+ Fainelli	 <florian.fainelli@broadcom.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Mukesh Ojha
+	 <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, Elliot Berman <quic_eberman@quicinc.com>, 
+ Srinivas Kandagatla
+	 <srini@kernel.org>
+Date: Thu, 31 Jul 2025 12:05:13 +0100
+In-Reply-To: <592902f1-549f-47c5-9ef4-b5c7ef2c9a47@app.fastmail.com>
+References: 
+	<20250727-arm-psci-system_reset2-vendor-reboots-v13-0-6b8d23315898@oss.qualcomm.com>
+	 <20250727-arm-psci-system_reset2-vendor-reboots-v13-7-6b8d23315898@oss.qualcomm.com>
+	 <b45b157593f1865a402f4098cdeafc298a294c6d.camel@linaro.org>
+	 <b92c164f-c6df-a2c0-1416-67652a01b179@oss.qualcomm.com>
+	 <34c52c88fd8fcbf68c453c1e94e4cd6294becff1.camel@linaro.org>
+	 <592902f1-549f-47c5-9ef4-b5c7ef2c9a47@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1+build2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/5] mfd: bq257xx: Add support for BQ25703A core driver
-To: Chris Morgan <macroalpha82@gmail.com>, linux-pm@vger.kernel.org
-Cc: linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
- broonie@kernel.org, lgirdwood@gmail.com, sre@kernel.org, heiko@sntech.de,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lee@kernel.org,
- Chris Morgan <macromorgan@hotmail.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20250722164813.2110874-1-macroalpha82@gmail.com>
- <20250722164813.2110874-3-macroalpha82@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250722164813.2110874-3-macroalpha82@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 22/07/2025 18:48, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> The Texas Instruments BQ25703A is an integrated charger manager and
-> boost converter.
-> 
-> The MFD driver initalizes the device for the regulator driver
-> and power supply driver.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, 2025-07-30 at 19:31 +0200, Arnd Bergmann wrote:
+> On Wed, Jul 30, 2025, at 17:23, Andr=C3=A9 Draszik wrote:
+> > On Wed, 2025-07-30 at 18:33 +0530, Shivendra Pratap wrote:
+> > > On 7/30/2025 2:14 PM, Andr=C3=A9 Draszik wrote:
+>=20
+> > > 1. For this, both commands will be defined in the psci->reboot-mode D=
+T Node with the arguments that
+> > > =C2=A0=C2=A0 are defined and supported by the firmware.
+> > > 2. Further, such requirement will now be taken care by the underlying=
+ firmware that supports
+> > > =C2=A0=C2=A0 PSCI vendor-specific reset. When we call into firmware w=
+ith vendor specific reset arguments,
+> > > =C2=A0=C2=A0 firmware will take care of the defined HW writes and war=
+m/cold reset as per the mapping of the
+> > > =C2=A0=C2=A0 defined arguments. Firmware and the Linux kernel here ar=
+e in agreement for executing the
+> > > =C2=A0=C2=A0 vendor-specific resets.
+> >=20
+> > So that means
+> >=20
+> > =C2=A0=C2=A0=C2=A0 echo warm > /sys/kernel/reboot/mode
+> > =C2=A0=C2=A0=C2=A0 reboot bootloader
+> >=20
+> > and
+> >=20
+> > =C2=A0=C2=A0=C2=A0 echo cold > /sys/kernel/reboot/mode
+> > =C2=A0=C2=A0=C2=A0 reboot bootloader
+> >=20
+> > can not be distinguished.
+> >=20
+> > The firmware can not know whether or not cold or warm reboot was
+> > requested in this case by the user.
+>=20
+> My feeling is that this is fine: the /sys/kernel/reboot/mode
+> interface is not really used on anything other than 32-bit
+> arm and x86 machines, and the way it is specific as
+> cold/warm/hard/soft/gpio is not that useful.
 
-Where did this happen?
+Currently, reboot_mode as such is also used by gs101 and later, we do
+distinguish between the reboot_modes (cold/hard and warm/soft), although
+generally not via sysfs indeed. And yes, gpio is a strangely specific
+one.
 
+I don't have insight into newer SoCs / board designs in that family,
+but my understanding is that newer SoCs use PSCI for reboot as well
+and I do believe being able to do cold reboot by default and warm
+reboot in some cases (crash handling in particular) to still be a
+valid use-case.
 
-Best regards,
-Krzysztof
+> I think for the purpose of the new code here, we should talk
+> about reboot "commands" instead of "modes" to avoid confusing
+> between the global "enum reboot_mode" variable and the
+> firmware interface for reboot modes as listed in DT.
+
++1 It should really have been added as reboot command or reboot target
+in the first place.
+
+A.
 
