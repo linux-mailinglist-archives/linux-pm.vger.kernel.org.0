@@ -1,139 +1,124 @@
-Return-Path: <linux-pm+bounces-31741-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31742-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81D1AB17EA1
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:55:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66257B17EB1
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12CDB1896C12
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 08:55:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD3B8189BC19
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 08:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79CB821421D;
-	Fri,  1 Aug 2025 08:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E135220F25;
+	Fri,  1 Aug 2025 08:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SHtz1BnW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s8XEuFnU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F59118C02E;
-	Fri,  1 Aug 2025 08:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA76215179
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 08:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754038506; cv=none; b=ud0BgI1JMwX0bsoWgPvsNxTtjHevu4E+c8uUfQ2dttb1tfUA3qd5fojQcSTcIWeDTIOtSMvWfIoBmdWLCBYSKVWeyBU9+QN6USAs41i+hDUICqCN9vZvB7KrRPN5WanEd/omjqrIQ8tQkoVTRgbTxb3cR9L1KpAxIqkLQYlylZw=
+	t=1754038594; cv=none; b=kkARqTkpbD9lxRKbEzb2N7lj3OdjSr2OgX5wl1kaFZaL0m9gU5lfztv94jQyK644oprYurZUYyE71ygVx2qWhrwZvyot+XGUJ8U+LpJ/rqY5MZhmMAg7+nvzqMTTagYf4dV/kFAAnnQpnuJsZiD1iiGHJqJVvCJ0tu7g0bjYFz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754038506; c=relaxed/simple;
-	bh=Bz6BUp7Tw0CSmTxMjKUZlbJzRNbtQ7byvHPMgJbKn6k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EdZoUpMLit9o6dz6pUS48EiwHqP9VAHW+ch3cTqwRyjBKCssQ8Yi64ORTj0sRUPWsGNPVUBsTfFbu7ToUq9MZ0669784ApRkcWim1U6qPsjr1iZ0FxuAvdi/US6TwugPfJpXglbXK5wBARIOLHz2auGni57cDqOZxgibvu8AX8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SHtz1BnW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D92C4CEE7;
-	Fri,  1 Aug 2025 08:55:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754038505;
-	bh=Bz6BUp7Tw0CSmTxMjKUZlbJzRNbtQ7byvHPMgJbKn6k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SHtz1BnWgNBv1aHxw7Qwt+9luZxSzBVGlJZplqDMfYU3l+B7T6wIfEWG1EdoLVd5b
-	 rkTjImQNw6tdZacd1YRN7IkkXved6gWsfAc0qAbfDYVQPjlCVSeLkvYy6XPtVrPw6c
-	 OXAfSjY5YEIt4UXEVgK7snJShbWhNtOL+E9e2cPEfq4H7Jt3di/BT3YbRblqiDvjT4
-	 EY/CvESf5d7pnGxtAaJ6lkeWVIwqO3YUaP6DQQgStgerXosD0x7KfdPBsYjxogcZPv
-	 2vinLouEiiZCHcGp9xeIp0Bp5UdeRhlKNXIqOHmpySdoutLNwikAYis0GQDTQI7bzd
-	 j9yt3s5KGVrIA==
-Message-ID: <8dcbdb51-82ba-44bd-800f-ceb43f88cf4d@kernel.org>
-Date: Fri, 1 Aug 2025 10:55:00 +0200
+	s=arc-20240116; t=1754038594; c=relaxed/simple;
+	bh=iWJ6vmjjHeJh3zw3l0ivlWKd8QssgOEwNGy9AZi+LA4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PUGJMEswqnIrlhOxbrIwE5i4H/invSK81qeIt2Qjd3jAUU32gqrGGQFm6d6zYfP7p/FqZEG458lGVP4w/w6BSw9F61RsD2pueGBEf5cMkqcnHXrLgrzkJXJjbZsfe8AepBBTBIDB4ctwS78vZhCOpziFesvI7BcPBIAx+BFTijM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s8XEuFnU; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-31f3b54da19so1319167a91.1
+        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 01:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1754038592; x=1754643392; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iyaLPE5cVFQ4yQ1ZdsM+PFkuZa1fSK3UsMR4TaaRqL4=;
+        b=s8XEuFnUVTZbCkmIkjm4GFlEFk4G2qQKuyJ4BY4gU/wEUjrzBvuxVtA7txJsvkRSX2
+         6zCw/2lqenhwihcUTdDlkRcnhyIE7mgqywXNlX2WxFbIAKMoS1WdAuTUM/S3TG/yEUe8
+         KZbUOiqPUUJUAHEPs8ApkgBRi0MG6kgaCXYRnyvkJeMFXF+RpXhRa/gK9qcX+oKYr/ka
+         Shx1RNtcEbxc+z6/i0e+F+jR+6AiTA91Te7AU3kEMnf+1eH+6LncapBF/avNXE/Sbm3B
+         d3zgDSTWyuSVrmP4OX/2HkPrtwI4BdXWpYW35cBS1nnybtRz8iHCTnG61ROS5Bi0CduC
+         70zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754038592; x=1754643392;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iyaLPE5cVFQ4yQ1ZdsM+PFkuZa1fSK3UsMR4TaaRqL4=;
+        b=P8DCEkGEhrLpGUppyzt+VE6TyUpG+3oUABcMDIo4ucx+LU/hyJYaOA553FrVxv5cRF
+         1Kw2EPDUvHE2CngIWnyWY98QyFISbpBD4WqmaocI0nyo0Qk3AI9KlhXr/754zVxxvRO7
+         SCoy85eaRoqd6WDpQdw8w6byfFbMN2p1pWZmp4MzikjfkWjQO7K0034xHASri5DEErvN
+         iy1mQc5e1H2i/uD2vIGtO0TrsMw9pbYbCSsM58TyYE0Vx7WoIavhNMGDsUWWzkyhLQ+a
+         C+vYVliaWb/9pN9giFOqm4YrSPWIMVg9raPs2txnuX5j3OWC56w0gst78xnKrayiSbG1
+         w70w==
+X-Forwarded-Encrypted: i=1; AJvYcCX3uzCXyQ0SHHCv0c5BA/DP9FXZmGrR1eeX9KNe6NA6Ja71TTi4Vb9S2QVSsBKdpHT+ivjvp7vZew==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbZj9TJ/OdAWEE1LhIfeKI+GGYwS6nTIyaub87i+ekWcHkOGvJ
+	bM63mvGzWLXxZTblCxrDFIL9qnWmo678wyzsWvbQo2+xhDrFKkAU6Dy+GBMU8VeYS7I=
+X-Gm-Gg: ASbGnctEdLv7OyvpMGhaUyyPQn+viHrtH/humo+D8oxR32yJ5ACcMXM2GCt+3Zj/O0M
+	HqbqyPl8XfwhhMpDwupZeXP38IDGmYOhS9nxhOPUIK8RPiNRNAbgINQcAsQVpAiBVqo59TaUH4g
+	Rn4rHe/NkjqXFIOA9eVzM3Yzuo4uzA1BbGsyzg4Iz+c9oQAGbt1L/EN0VJUbki4HRH35KGqtouH
+	ahb7E6tbvqxKfqQsUa/PvqzN7Yrul5RU/Zf2VSq8S5iZh6Da/C4zTZReoOayatUyCYob/QSCIvb
+	m9WL0iHlYjPByGF5X1IJ17yAxE984WoBh49ButWBhk4wYD5q69qookoUzmqLNLlDrwscCTtWCJn
+	4IInIHJ2hMatmugHxKd6N0Zg=
+X-Google-Smtp-Source: AGHT+IEuiwLHQsCcm9P4L0Gud/JQjIDwRrB9XRFsCWBLfZnMjNO93355PSR3Vop33rURYHmqY0i6hA==
+X-Received: by 2002:a17:90b:1845:b0:31e:5cc7:133 with SMTP id 98e67ed59e1d1-31f5ddb2038mr15888994a91.11.1754038591891;
+        Fri, 01 Aug 2025 01:56:31 -0700 (PDT)
+Received: from localhost ([122.172.83.75])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-320f77d81bfsm1835353a91.12.2025.08.01.01.56.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Aug 2025 01:56:31 -0700 (PDT)
+Date: Fri, 1 Aug 2025 14:26:28 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/3] opp: Add bw_factor support to adjust bandwidth
+ dynamically
+Message-ID: <20250801085628.7gdqycsggnqxdr67@vireshk-i7>
+References: <20250717-opp_pcie-v1-0-dde6f452571b@oss.qualcomm.com>
+ <0dfe9025-de00-4ec2-b6ca-5ef8d9414301@oss.qualcomm.com>
+ <20250801072845.ppxka4ry4dtn6j3m@vireshk-i7>
+ <7bac637b-9483-4341-91c0-e31d5c2f0ea3@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: thermal: qoriq: Update compatible
- string for imx93
-To: Jacky Bai <ping.bai@nxp.com>, rafael@kernel.org,
- daniel.lezcano@linaro.org, rui.zhang@intel.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- imx@lists.linux.dev, kernel@pengutronix.de, festevam@gmail.com
-References: <20250801081119.1999298-1-ping.bai@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250801081119.1999298-1-ping.bai@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7bac637b-9483-4341-91c0-e31d5c2f0ea3@oss.qualcomm.com>
 
-On 01/08/2025 10:11, Jacky Bai wrote:
-> The TMU used on i.MX93 has some slight differences and bugs compared with
-> the one used on QorIQ platforam even the basic function is the same. Add
-> i.MX93 specific compatible string and keep the fallback ability.
-> 
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+On 01-08-25, 13:58, Krishna Chaitanya Chundru wrote:
+> When ever PCIe link speed/width changes we need to update the OPP votes,
+> If we use named properties approach we might not be able to change it
+> dynamically without removing the OPP table first. For that reason only
+> we haven't used that approach.
 
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
+I am not sure I understand it fully. I thought this was a one time configuration
+you were required to do at boot time based on platform's configuration.
 
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
+If you need to change the performance at runtime, won't you switch to a
+different OPP ?
 
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
+I don't have much knowledge of how PCIe works, maybe that's why the confusion.
 
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
-Best regards,
-Krzysztof
+-- 
+viresh
 
