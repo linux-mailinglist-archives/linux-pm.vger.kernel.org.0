@@ -1,80 +1,81 @@
-Return-Path: <linux-pm+bounces-31769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD9C3B1868D
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 19:22:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5CA3B186CD
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 19:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 425291C83891
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 17:22:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C91A1C839FE
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 17:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A77627C15A;
-	Fri,  1 Aug 2025 17:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8CF28D85A;
+	Fri,  1 Aug 2025 17:38:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h1LrvfmU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cOBkt2Mc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD6326C386
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 17:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7990228C5C0
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 17:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754068942; cv=none; b=u8oGic/GETJV3z5dLCwca1DhQLxCZgPIMVvpCJ9YKfM+MdILK1qUA31oUNBkGIgYCwZdSoIuQRkICq/mHo4vtCvzGkjtKWP5jhNUckfUurLsomMG5ZY9u1W1tYBrgNM3oV1ljg1UDgkBJYu97FUCg/O864TWrS5Fw7zicR6tA7w=
+	t=1754069930; cv=none; b=j+rQA83rOqRts8B8pKW9uL8k09yzhuOSr2hQjLlAU6GhriCFRoIoooVqBpADtc9FBvO0jLjPNk8Zu4f+ogx05mSDDBFwA4jTq2T/MICioEDiKqdp7eWT/NLNmx2m2/qe+6ogvfZJPezBuBHqeObP1ykujEPkb6NVq9B2MuqYL7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754068942; c=relaxed/simple;
-	bh=F4U3zLqHM8NpqW1pxXipEfzZi7+0Ycu/7mQRmHJXjNE=;
+	s=arc-20240116; t=1754069930; c=relaxed/simple;
+	bh=aQYBObWgzoPj+il0GZKSY+WiA7phu3h4hRG7IyoJstM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NPziO8Gje4Ym5abRJRwM3bRTmVCkG73SDVDfCk/hnMWPjFRVSz2ocACqj7it8okc14H2Fdf68UCS/VGJUF5wNJ7pG5wAz0eS1eYMZixtKgxXdm26dIXdtWZNEjpsQ62SoW6TEg46OUKqVDG5S0rM/YckAB3VO6NCEDeGyWM9W9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h1LrvfmU; arc=none smtp.client-ip=209.85.128.41
+	 In-Reply-To:Content-Type; b=F57b1frvI8V2OpRjjGP5T+uRl2FYAQRY5W2uCOzm4szzswm65QLj030ba38uMYnPnh9Yc8gG54diMmipI9j41/xRHnGoKUi451yU9Y5rt8BkkrUxPFnH6q6amyojGnpzXIIyrUYlpB7tJ7BWJ5aOu5TWrRUwan2nVlYs/+pxusA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cOBkt2Mc; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45896cf24ebso11326665e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 10:22:18 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-456108bf94bso7103205e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 10:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754068937; x=1754673737; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1754069927; x=1754674727; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3M/PDNKda01rnV3OeJ4NocScrvK7XCljjn5Nn7NUvKM=;
-        b=h1LrvfmUw0OzSRB7ak5Wyus2nhqdj3beFoANdHEK0uZycmnGOVSVVJXNMmqaqU22bl
-         DFmjBQo5Bc8Q+8YBEuNao6NHaG8eVvLHUTZe8HpuZfUZCzL1Z4PAjumZ5BmvDX3p1hQA
-         DPNIzrMHpeeFslE9ri0bFdkM5kSZf90Xpdi8RZmyFyP6l/1oj4h6SQf123y4XHAOnm3D
-         LdB2v0AXA/6z0d5MQtxWjACaG+Pt8W5QamRAe0kVfCoBjajHXnTk2HGShraEqlHk+G1k
-         sPB7aQ5Im3BxE3IxypSDj+LQi/bKdCc+C07por9MFdL85QUe2zclk33INcvYiGoFCAjw
-         EoZA==
+        bh=bR778IDq2awUud7Ws1UQmVLj5RKdygQyf3jIFUrFC9w=;
+        b=cOBkt2McV/03IDW9+r4hKBtcHGpg7/f9aR+Td/bQ15YmXGLK2X0B7wWJMRWx+gcXSy
+         hUIu1olZvX/KgamkBdk2Ld1r1Js5yJnpvUeiC5FymPy9BE4KtBegaMOZqQcv//6EApQQ
+         V/SirSArym273C/r09UcuK2XSUGS14+dq2OI22ZEb2iD4w/l7bDA96w/Aq7sHcmoy+rG
+         dM/c5TBwaAA1Xg5dOnylHlxveDUJiiGG1v6k5LUKfz8P8RyRr9iN7L/ENWHWTztwwOTY
+         GMqC86Bg8ZWUYjDy8F25xJSXmdTdFUypQzjZ0Rcho5bzaiRnoQ1C0dKV9mLbxZ8czXhS
+         MPuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754068937; x=1754673737;
+        d=1e100.net; s=20230601; t=1754069927; x=1754674727;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3M/PDNKda01rnV3OeJ4NocScrvK7XCljjn5Nn7NUvKM=;
-        b=AuN6vmfzWq96AmLKnBcX1QEbmZWReSP+KHeJcr8Q1IcEbcd/EQGYwy0xYJN5a3OXFz
-         kNdO3k7NdrglaPjxL3KF91uK6w6poFbDNlWRd3h89q/W5D4nfHInmonyU7fNJGbb8BSn
-         5gV5WXtI2ERuSy2U1ezho94pDBc7kHFjqO8vXktx7rVUcj79RewUUUOFXzhQ5i3GX7Jj
-         E2EbMsXxwlDJ/ZRslrZDLfTv+56oP9k0cWkQH/RuQD4AGh3q8zHrHI2Kvhega7gOC9nE
-         3EtyLXItUB7ecwfSrV9ebdUXUY9rdWoS3RSSidsbJGI6N97WraU530zL1u2zl+CoceKh
-         obmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6eCBJdVnj0oAu+BT5pzfLMt5PJeJcvYIcNnk0UFWAY3ZF01pyW7VKrmN7R2MIdhdGGI3Lx3KwAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/hPK1yidzHLiutnNxY3mg0+XWjwco4VSjM0K2Arj92MShY/e0
-	dTOVlQ4LIvnABTPMqTIbq0LD9d0Z754JNxZpeMu6rEF4TGo9a2OGx0uEQEh1dzzNjD4=
-X-Gm-Gg: ASbGnctGsb+QPXrfBpkv+2DSvx0ta7+2wOoV7IbvPTbihVByOm8oB+a10mtQT3ralzY
-	ZksD7B1DR/BWkh14Av4q9KA8KFx0PQwK89Bu5b919Qqd7WP7tIKCnhmAiX+yE5KkZp5KVdvKT/d
-	Yne2c/sFzLUoER9CNuDPjAo2b4be+rKjUltJcRPJosXdoih6dNvOHa8TLrPk4gYZnrUzlhFvTt2
-	znA/YZ7tylxwiQtpLXDY6PGqrmJX/ovrzcuH5TrwCukU6ASJuZh6Dh6pa/47Yf3j9EAoPZVW6u8
-	twk0uGkPOYEQ+Z3f32htsnz+apvdh4vwnpo+l1jZrXu0PNE4PvJdHRb5kxBq4ySyCi36Z85yJ+2
-	bop1An+YlIiDSt2vhS1P+Hv/yNEdrnMxdToqRV1VJI8SLXOkEY5fdfTayQI+RRQ==
-X-Google-Smtp-Source: AGHT+IEr7UdyBNz9mF08fNxf3R1Ysej2mqN5c0NMeUJedJILvrCdFfPD3tDpMYty7zL96HPHkqBLJQ==
-X-Received: by 2002:a05:600c:1554:b0:456:1611:cea5 with SMTP id 5b1f17b1804b1-458b6b58472mr716105e9.18.1754068936946;
-        Fri, 01 Aug 2025 10:22:16 -0700 (PDT)
+        bh=bR778IDq2awUud7Ws1UQmVLj5RKdygQyf3jIFUrFC9w=;
+        b=qijQ1Byy9dWygw02/KzVHbENrVpGGf7Z0LG4M8b3/tkWWitQyCwbXeZHtP/MMDhMF1
+         dIwbjbiVTn2gRhk8FE58xDqu9iItnmGEVxiESVdj+4IW+METgQfqRsiNYx/rbE5jdeic
+         F8roECT1SYoYYSmAGHO3+wV+uwfBP/g6rOxB9Eb296Lizd6Uwno/Rjidr+EjH4XZQisQ
+         sWq1/Fr4tVYLuPlimmy0GJBs31J2q7wD8bkIno6LjuPqWT519q685TWMLuQH3GYXrwgk
+         4Op7RjkKMBBoH9wYhO/0jmIEywEaHjb+Gb/fbNya7erxDCuQ8bFCaFxI3OMf/f1x/Zzs
+         IUIw==
+X-Forwarded-Encrypted: i=1; AJvYcCU7Xwabv5VViHTOXF2Q10O6KvTyusqTuYK7zdM2ulDByWnOeE5EavO9AJff+BccMkduH759toFqZw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNj9LLJeC2VlyKfqG1Xu1Bu1HAxs55KzVpBdDidzg6UEKZho+u
+	D8GoKFTNkM19T34O0tmfB3slownWUH4EfQ4mk3NUGcJSuT3yrfNQFdEeMSuDqGN4vDWhLoQ9mpM
+	3mZUq
+X-Gm-Gg: ASbGncuzQ6BbtFIq39zdjv9DbBLzFXECaJQS5oQWj42Tn9fFCDFQ9vt7TyWgTFoyOWB
+	KIzqgwJsPg6oQ3f4VnIwm/TopABtNBXuz8+B6/1SkdAiSo3TgqNroJrPDFrnbNiBRLNSqWN7iTL
+	Pn5yw0laK0/a5v0X9ZWYp7uJhnsJa+TVUq5LNm7nepe9dCxd+F3M01y0CF4M1xPeKRmzNMylKdg
+	hTRrFlM5Q8PCu4gVn2TT1QJU9G1myLiq9gLzuiapzDtN6bhS7r+YW/c34ms0PuEtTi8tTfabb29
+	fC6P+oKKV4+g6M9ZXHmL7p7X2mkXXzjS41Vkf+Mse2ODSX0eSPeRA0Rrm6pUXWE1M2dV41O/bRI
+	vnUzDAynYVOCCQus+WjIjqbuatGRPDGkk6nAw/su15+5w8l1d38PU4Dm0jFkIcA==
+X-Google-Smtp-Source: AGHT+IFSgI7ynQO05ITDIMMGNQuV0NhyoU+S80DP5VZti0Les4bHUCSN7kHUohJoYSqboUd/PkGLIQ==
+X-Received: by 2002:a05:600c:1554:b0:458:7005:2ac3 with SMTP id 5b1f17b1804b1-458b6b34cb7mr1416375e9.21.1754069926804;
+        Fri, 01 Aug 2025 10:38:46 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b79c453ab0sm6681912f8f.44.2025.08.01.10.22.16
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4589edfcdf4sm72965545e9.11.2025.08.01.10.38.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Aug 2025 10:22:16 -0700 (PDT)
-Message-ID: <d29b1e05-f783-44ed-a2e3-585a191ec426@linaro.org>
-Date: Fri, 1 Aug 2025 19:22:15 +0200
+        Fri, 01 Aug 2025 10:38:46 -0700 (PDT)
+Message-ID: <9e4db85c-83bf-463e-9c6d-bc31e5889574@linaro.org>
+Date: Fri, 1 Aug 2025 19:38:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,70 +83,28 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] thermal: tegra: Fix dereference of pointer tz
- before it is null checked
-To: Colin Ian King <colin.i.king@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Thierry Reding
- <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
- linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250730135441.2078022-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH v2 0/2] thermal: qcom: lmh: enable COMPILE_TEST testing
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Jackie Liu <liuyun01@kylinos.cn>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20250728-lmh-scm-v2-0-33bc58388ca5@oss.qualcomm.com>
 Content-Language: en-US
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250730135441.2078022-1-colin.i.king@gmail.com>
+In-Reply-To: <20250728-lmh-scm-v2-0-33bc58388ca5@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 30/07/2025 15:54, Colin Ian King wrote:
-> Currently pointer tz is dereferenced before it is being null checked
-> leading to a potential null pointer deferernce issue. Fix this by
-> only defererencing it once it has been null checked.
-
-Actually the callback should assume tz is never NULL because the caller 
-does:
-
-	ret = tz->ops.set_trip_temp(tz, trip, temp);
-
-So removing the NULL pointer check is safe here.
-
-
-> Fixes: 6fc2e1a5f98f ("thermal/drivers/tegra: Switch to new of API")
+On 28/07/2025 14:18, Dmitry Baryshkov wrote:
+> Rework Kconfig dependencies and make LMH driver subject to the
+> COMPILE_TEST testing.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 > ---
->   drivers/thermal/tegra/soctherm.c | 13 +++++++++----
->   1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-> index 53a5c649f4b1..53fa6099b67f 100644
-> --- a/drivers/thermal/tegra/soctherm.c
-> +++ b/drivers/thermal/tegra/soctherm.c
-> @@ -585,14 +585,19 @@ static int tsensor_group_thermtrip_get(struct tegra_soctherm *ts, int id)
->   static int tegra_thermctl_set_trip_temp(struct thermal_zone_device *tz,
->   					const struct thermal_trip *trip, int temp)
->   {
-> -	struct tegra_thermctl_zone *zone = thermal_zone_device_priv(tz);
-> -	struct tegra_soctherm *ts = zone->ts;
-> -	const struct tegra_tsensor_group *sg = zone->sg;
-> -	struct device *dev = zone->dev;
-> +	struct tegra_thermctl_zone *zone;
-> +	struct tegra_soctherm *ts;
-> +	const struct tegra_tsensor_group *sg;
-> +	struct device *dev;
->   
->   	if (!tz)
->   		return -EINVAL;
->   
-> +	zone = thermal_zone_device_priv(tz);
-> +	ts = zone->ts;
-> +	sg = zone->sg;
-> +	dev = zone->dev;
-> +
->   	if (trip->type == THERMAL_TRIP_CRITICAL) {
->   		/*
->   		 * If thermtrips property is set in DT,
 
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
