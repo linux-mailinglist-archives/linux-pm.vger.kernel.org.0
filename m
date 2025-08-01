@@ -1,151 +1,174 @@
-Return-Path: <linux-pm+bounces-31733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A927B17D7F
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 09:30:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C1ABB17D83
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 09:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CD37189BB7D
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 07:30:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3C111C26253
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 07:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633A3219A9B;
-	Fri,  1 Aug 2025 07:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63321220685;
+	Fri,  1 Aug 2025 07:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Rv/vt5CW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dB87r9ua"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8313E20D50C;
-	Fri,  1 Aug 2025 07:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A73621ABAE
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 07:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754033329; cv=none; b=Tie/vejR8cK1kyUttPxqG5IxbiK2EzcrE6cCIH4C40Y6VypFUMMj/kvXKltp1Kw3h2YYX3DDlY7qUiF+WiYd7Tzw6Tb33FLn7k/DGk6DbMGc+79XdcAuZtEE/qpFHr5lQ1XvS+e22FJEnTclXQZ9At/0t1luigMsKxTVQiN69/I=
+	t=1754033331; cv=none; b=cmKSuwDv7zcW0uHmlaINOvGv/761phojmCdwr3BLgLECyU3veAeugjFA+veielXn+7LUqm6q18O57P99G0mg0QMzoQotUpOo4aTx/Qnl2oykd/9oCxI3mh4eOW1RUnJXW+zoAfnWsqj9Xq3iir7zCYedUiNlqhB2j+hERJIbcTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754033329; c=relaxed/simple;
-	bh=EMVwpG37bgqFGohQRsO75cPRK1G/rDe+DuVSBLIxMoE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gi+U1a0OGghPlQSkW5M0XAum7ovsKQIBlIn5ZrD4VML6S5957yg8uJzewmvx/39wkUOhm59zYTampTuJQIS1BRbK9J+XYigvyQhUQgXH1uJB/Bdg/exggeznTYDwRjs7Hm38DHa7QVUbeoQWAR7JA9npxL6NX1xPv4lw/C5DoHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Rv/vt5CW; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1754033325;
-	bh=EMVwpG37bgqFGohQRsO75cPRK1G/rDe+DuVSBLIxMoE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Rv/vt5CWaBk8BqZWNiED+VbmzHUIAXxWMxdTcUPLrmLi10vKiAtp1cKRY+V0iE1ZD
-	 PaPec3XSKqyv+KDbm6EE45aF1txbnslJVvFR8gA1qjPfooxhat61e/KgEqpsgqKUQd
-	 SRNx5waZ6VNSvFXqn82bKC++hZDC2ATUsPnpx0lZx7VbibglljfcpJQu6yYlMEHQLr
-	 C1UaOsXc8OR9TxTUKihAhw6Aauty/tNKioToAT2jcC3JsMQGzboCe77M0tq1GXOc6m
-	 G56FCbMuA909y8UMBUtc9Kv0fZBLw2bTVb+BDpz/6UkW9YLfdELD9idlmZEptc2IhT
-	 dyfiif+0lF9TA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id A297D17E1324;
-	Fri,  1 Aug 2025 09:28:44 +0200 (CEST)
-Message-ID: <fe21aa13-d92c-4f3e-8311-2d75468ecb4a@collabora.com>
-Date: Fri, 1 Aug 2025 09:28:44 +0200
+	s=arc-20240116; t=1754033331; c=relaxed/simple;
+	bh=CqrQYPbngH4gLmvaALqLQbhUf1mxtvza2ZZJS/+cKZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xqe8jPxj9VWr4jO4GOxxL2C4jyrOdcKJAdPruTURBywydYlh+Ubt3RkgXIZ6mB9KzeAxu1S0prSCdVghXmmkAwSvj6xDOTAFiJ2EVqaWtv+KA2WRwVTbB87mkBuKWs5wzNLFAston6eqZoWbJHYAU/228ktjysyOcNJWqKtoxMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dB87r9ua; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-748d982e97cso1157462b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 00:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1754033329; x=1754638129; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KpEuo4BDT0PzWNynKyWHN573No1LAQVNOfN+WCfJMR4=;
+        b=dB87r9uahyGEtgCMSwZ7ZU3bKSyCc6wwySGN3iUT4GI/UDle2iRBu923NEjgF1+Vle
+         B2xlF7RR3Blzf0vHCSlAGlEmfAVFpVjsm23TwpmKCJ5j9RagnTAB1F0oZc5MQ8L+y8ng
+         Lqxtvy4NkPnb+WSxyrSUeSORHWKD60YRF+3P75Apm5rlsUSwb7zpWMQCDDG2gcNmqJjY
+         WNXF8F81kubzyLYxZf9mZUFgeQzNPaL3X3IZuYlL0NwyHYtQ38+4TuzIOK8yVc9veaQU
+         CoSQOC8Kkj6JWn7Rgjkj4V9enXtAIkD8kR5WnfTnG09OlsUHRwwjoRwIZvBu8QoeOs4d
+         6UFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754033329; x=1754638129;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KpEuo4BDT0PzWNynKyWHN573No1LAQVNOfN+WCfJMR4=;
+        b=Uut6MrQlE7/tP5BMi0EiiZOhxC4I1g2lruZjWc41RnfaBRrTi0cYpGwMysA8sWu5dZ
+         QlAc9VtNrPLugaOaGu0nEaFF7f1WUfFi3nqNj3E2s2F4CqhueuavB/BPAjcG5vgrBC/q
+         y1ScmlkMfkS2xrx86YV3gqDWzipb1SfFSfsHV81iBFsxapfKnwJiLSghYGEWoiD4l1k8
+         UHeTck2JFGpwlmJdZ4vGA16e4i7/XS0UDwAMEOakWTJZVGg3kgyutgJz4iSMLV4Oy6LW
+         fqx+FYYO/uYeLFpM06XF59nyDhR4ek7SJ3CDSzkw01wMNpqii1y75TREMtudtTQKOLkC
+         G9AA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQOtHx8K3iaF7PT93vXt0lrQiboVP0x0FsH+7DAnAys5jFgx8p6htgP/VZgUmWwDmCfCIrT+15mw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzkmz4d85FCv0uxrOM+w3oIfu+aCXDbtgNTl/8jaruwcHO3CRta
+	VqfogrLdu2iYe5/yjgp2GNwFuauFsvS5l2nQeI1oxGvE/6SuCeHKwabmrHXT+/m0f10=
+X-Gm-Gg: ASbGncvd54BI7fdF6YsMQAzowMGcwUFpzEPWynjzXovB+0cP1d7LfJ5BoXyulrNRbAH
+	lD3FfRY18P1GaeSinuRvfUqsp1eS///fxYpArgLbT9sCaYmvXQ+qztWVLQAtnwD/tAPo6SYWQY4
+	6H0PWjWRcKD8X/pjyqcUzNVj4q0Z+bMSM9s/+gEYrFS3wE8RB8ILK8s7AG0ilQL7qxqHP5pFIu0
+	R5Fm3KupHNQjRZGCkvJO56M3sd1xDV9Voqd1Wm6ujvJ4VHS9BgzF1wcqgbvMBHl2vQ07aOyKMFK
+	6WMhGh4zgoAVpFPQ91fPy9nfBlXqaFusz+vH/LPRKAsDUELVKXxiuyvbuwYXKSuKt9toBpsGDcZ
+	K2hiVsVaAbyxeDxOfujbr57ivzlqYXDTKzg==
+X-Google-Smtp-Source: AGHT+IGSdX0UyQUNm5XJ/ZBNM/4/pg1b54fM7m9r5KZvvoYq4sBygbeHXrF0rtDWYuflNPBaXiwwJw==
+X-Received: by 2002:a05:6a00:4648:b0:746:24c9:c92e with SMTP id d2e1a72fcca58-76bdce7e38fmr3006512b3a.8.1754033328877;
+        Fri, 01 Aug 2025 00:28:48 -0700 (PDT)
+Received: from localhost ([122.172.83.75])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bcceab592sm3362367b3a.58.2025.08.01.00.28.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Aug 2025 00:28:48 -0700 (PDT)
+Date: Fri, 1 Aug 2025 12:58:45 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/3] opp: Add bw_factor support to adjust bandwidth
+ dynamically
+Message-ID: <20250801072845.ppxka4ry4dtn6j3m@vireshk-i7>
+References: <20250717-opp_pcie-v1-0-dde6f452571b@oss.qualcomm.com>
+ <0dfe9025-de00-4ec2-b6ca-5ef8d9414301@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/9] thermal: mediatek: lvts: Add platform ops to
- support alternative conversion logic
-To: Laura Nao <laura.nao@collabora.com>, srini@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
- daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- matthias.bgg@gmail.com
-Cc: wenst@chromium.org, nfraprado@collabora.com, arnd@arndb.de,
- colin.i.king@gmail.com, u.kleine-koenig@baylibre.com,
- andrew-ct.chen@mediatek.com, lala.lin@mediatek.com, bchihi@baylibre.com,
- frank-w@public-files.de, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- kernel@collabora.com
-References: <20250730152128.311109-1-laura.nao@collabora.com>
- <20250730152128.311109-5-laura.nao@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250730152128.311109-5-laura.nao@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0dfe9025-de00-4ec2-b6ca-5ef8d9414301@oss.qualcomm.com>
 
-Il 30/07/25 17:21, Laura Nao ha scritto:
-> Introduce lvts_platform_ops struct to support SoC-specific versions of
-> lvts_raw_to_temp() and lvts_temp_to_raw() conversion functions.
-> 
-> This is in preparation for supporting SoCs like MT8196/MT6991, which
-> require a different lvts_temp_to_raw() implementation.
-> 
-> Signed-off-by: Laura Nao <laura.nao@collabora.com>
-> ---
->   drivers/thermal/mediatek/lvts_thermal.c | 46 +++++++++++++++++++++++--
->   1 file changed, 43 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 8398af657ba2..6e4a35ecaf34 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -125,8 +125,14 @@ struct lvts_ctrl_data {
->   			continue; \
->   		else
->   
-> +struct lvts_platform_ops {
-> +	int (*lvts_raw_to_temp)(u32 raw_temp, int temp_factor);
-> +	u32 (*lvts_temp_to_raw)(int temperature, int temp_factor);
-> +};
-> +
->   struct lvts_data {
->   	const struct lvts_ctrl_data *lvts_ctrl;
-> +	struct lvts_platform_ops ops;
+On 01-08-25, 12:05, Krishna Chaitanya Chundru wrote:
+> Can you please review this once.
 
-You can constify this one - but then there's something else that we can do here
-to waste a bit less memory.
+Sorry about the delay.
 
-	const struct lvts_platform_ops *ops;
+> > The existing OPP table in the device tree for PCIe is shared across
+> > different link configurations such as data rates 8GT/s x2 and 16GT/s x1.
+> > These configurations often operate at the same frequency, allowing them
+> > to reuse the same OPP entries. However, 8GT/s and 16 GT/s may have
+> > different characteristics beyond frequency—such as RPMh votes in QCOM
+> > case, which cannot be represented accurately when sharing a single OPP.
 
-const struct lvts_platform_ops lvts_platform_ops_v1 = {
-	.lvts_raw_to_temp = lvts_raw_to_temp,
-	.lvts_temp_to_raw = lvts_temp_to_raw,
-};
+From the looks of it, something like this should also work:
 
-static const struct lvts_data mt8195_lvts_mcu_data = {
-	[..... stuff .....],
-	.ops = lvts_platform_ops_v1,
-};
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 54c6d0fdb2af..0a76bc4c4dc9 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -2216,18 +2216,12 @@ opp-2500000 {
+                                        opp-peak-kBps = <250000 1>;
+                                };
 
-....and goes on the same for all the others.
+-                               /* GEN 1 x2 and GEN 2 x1 */
++                               /* GEN 2 x1 */
+                                opp-5000000 {
+                                        opp-hz = /bits/ 64 <5000000>;
+                                        required-opps = <&rpmhpd_opp_low_svs>;
+-                                       opp-peak-kBps = <500000 1>;
+-                               };
+-
+-                               /* GEN 2 x2 */
+-                               opp-10000000 {
+-                                       opp-hz = /bits/ 64 <10000000>;
+-                                       required-opps = <&rpmhpd_opp_low_svs>;
+-                                       opp-peak-kBps = <1000000 1>;
++                                       opp-peak-kBps-x1 = <500000 1>;
++                                       opp-peak-kBps-x2 = <1000000 1>;
+                                };
 
+                                /* GEN 3 x1 */
+@@ -2237,18 +2231,12 @@ opp-8000000 {
+                                        opp-peak-kBps = <984500 1>;
+                                };
 
+-                               /* GEN 3 x2 and GEN 4 x1 */
++                               /* GEN 4 x1 */
+                                opp-16000000 {
+                                        opp-hz = /bits/ 64 <16000000>;
+                                        required-opps = <&rpmhpd_opp_nom>;
+-                                       opp-peak-kBps = <1969000 1>;
+-                               };
+-
+-                               /* GEN 4 x2 */
+-                               opp-32000000 {
+-                                       opp-hz = /bits/ 64 <32000000>;
+-                                       required-opps = <&rpmhpd_opp_nom>;
+-                                       opp-peak-kBps = <3938000 1>;
++                                       opp-peak-kBps-x1 = <1969000 1>;
++                                       opp-peak-kBps-x2 = <3938000 1>;
+                                };
+                        };
 
->   	const u32 *conn_cmd;
->   	const u32 *init_cmd;
->   	int num_cal_offsets;
-> @@ -300,6 +306,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
->   	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl,
->   						   sensors[lvts_sensor->id]);
->   	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
-> +	const struct lvts_platform_ops *ops = &lvts_data->ops;
+The OPP core supports named properties, which will make this work.
 
-...then here, and everywhere else, it would be just
-
-	const struct lvts_platform_ops *ops = lvts_data->ops;
-
-
-After implementing the proposed change, exactly how I wrote them:
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Cheers,
-Angelo
-
-
+-- 
+viresh
 
