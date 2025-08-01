@@ -1,88 +1,80 @@
-Return-Path: <linux-pm+bounces-31745-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31746-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC60BB17F71
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 11:36:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AC94B17FD4
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 12:00:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B1E87A4BC9
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 09:34:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E33DAA84267
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77CF22CBD8;
-	Fri,  1 Aug 2025 09:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8EB723644D;
+	Fri,  1 Aug 2025 09:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HlpmpxAX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y/49zNGn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1482A78F58
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 09:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3BE23536A
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 09:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754040943; cv=none; b=hnIkxuZQ8REAe4p2NoHrvnq7CHd3TaaWZg1NU4JKfjRNuijRS4n0HAyIQbYKrVvyUbVtUxoiy/3C27uGL83yb0aOqNcClSCKsIpFKbSK4i93difpunvsBhoByH9O0rWbjp/AQdjSDHjfgh/+MbFN7uVOtVDjuYeHSdTCPb8SA94=
+	t=1754042353; cv=none; b=pddjvS8lrPq0PIwP/ftnfdwaI8PHQTwgNkUn5EIze4nXnrCwoTRCQsBEy/KvuymNU81Vi+Ojc9JorH0U03t1AnQ8NzHpP9WrWuWY0VWsfDA/uWUnBi1aeOBC4+2YKYWsChUfSrRswvFePz3egYP06qMJRqJdwvBOtYDGJ6Mkg8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754040943; c=relaxed/simple;
-	bh=RereaYefPMJ+AN1G/WR2ZPJ7Q/9VsGyrmIOo6U3bInI=;
+	s=arc-20240116; t=1754042353; c=relaxed/simple;
+	bh=6eCKSkwbpp+zEQC42TKus4PT6JVQvtzMaXWZQ1EfffM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FQ6Fr5t0rjhL+Z6KcARYyr9zpAH4/CUN3bC+3fG6A6Yi29aOwWOOQplf56TX/GgSt8MUMd2gvIUtlm7vDQ458ujXN7i6iYEEDFQRKvQ0yQ84prIZg2Pix++Jg52GWzWOXrPFNzjbfQ3PDXi+vEpucL3FoxQ+zjdm3dU6VDq2yvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HlpmpxAX; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5719EhAw002538
-	for <linux-pm@vger.kernel.org>; Fri, 1 Aug 2025 09:35:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	FTE8Tu8b1amkpQAae9PG0gDF8STmsmRt79+CR3F5UKg=; b=HlpmpxAXKwE/hM1u
-	Vvr45SBbJSsOe208L9fPmhGEtdQ7zzm59J2Sp07WRhzO7rBeZaXdlrIwqqYH+6nn
-	7a5yeh6hOwgvw1qKBjhmTekG2uiDf9OrPOetBdNKvf2aD5X31PAR031EJXZ0ftte
-	RiHFgnWyPtj6oI0O0dA6yOLjurfsNDi3LOe4jvlHCjpbLkit+g29lMYwNoEyNZXK
-	JxPPajHIsUlwQCMSX0jrcQBeYKhG4BUrfNO/UATglbrCWS3fYvM6/SrPhUahdauM
-	Mno8z7oA/gKNWhCB1NsYffFz4V/47S2lWdD69jVy4nlMbhIrJMCgjQXRuJGCMWPx
-	4l/vfQ==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484pbmb3mk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 09:35:40 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-23824a9bc29so13864435ad.3
-        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 02:35:40 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=mO7Nw+b2zH99K8zHfCdm57qltW8ADwmwtvSY67qp5oNR89d2oAkXxEnV7AOTdypzSS2074uWRWU6C3UDcVllTnEAVTosZrl8UbeWKz6iDocuU3UUn61O8oUAxEtt1zo3J+wUs4gCxm3Vv/nWslgWZwU0aG9CF7pdABoCDz8j23E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y/49zNGn; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4563a57f947so11416555e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 02:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1754042350; x=1754647150; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iAtNeeeBqfLUn+sT5Zk3U+6nRAWdfcW1/7E65kHu/Ac=;
+        b=y/49zNGnEHlMIDKhiGfxqyFgeETBooiruqg9vstFK8Pt98RiitTuiNOBdhDiQ59q5n
+         bxJ2xtd3hFdoAS9qRMyXV3ZU6yMIzDVI8UxrriseuNn52sP8Bq+KFMF5Bs9YxpwsMl8s
+         c2ygALQjtvV4VLQTI/qm9SezyKj0xTWkVtDaYrFpGSMrcNCTaRqk6SrkSF7z5HjgrW74
+         AwnAUbqgq/e7ISZrPdWeeIheHCbTFG4kEjHSzP42tBkVBpNvZ3D0Q3+MdFYV58+yfPIO
+         5ga3TVbffqI6Ni6VPoJcf2PidUdJJe4aRg/AKNUAidJNDCMY2bNaRozFPtKI2537a50A
+         gMBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754040939; x=1754645739;
+        d=1e100.net; s=20230601; t=1754042350; x=1754647150;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTE8Tu8b1amkpQAae9PG0gDF8STmsmRt79+CR3F5UKg=;
-        b=a84QbwkE3NjNwNDPz84fXpXU88VdEdMeailpOFAV77bVPDm/XSwHhRGvMVD6U4mzj9
-         A+5NZlvszUhrcomNtZaHRSXm8SUnB5rwcVrigL5Hc8gLYMQ1UD3jP6T/VydLZe/Bl6o0
-         zvv8kuMYP4fQJjxSZpsF9FpHZwqPruzxH4qsiGp23z1CbLS/SzNUaDOi5Gm5oNEwDsXu
-         GLKPW314WGMRuERhEiOWUscTeYx4cGDUrr9a3wI9w0C6VvxLhuvDw4galTHMX8PgryEI
-         VrpFF7gq6RYSo2BwaKN5UYd/5gVc4vVa6jIi+r5TUm4IJTVt0PcilFD+wW1sL3+O7oH9
-         MwfA==
-X-Forwarded-Encrypted: i=1; AJvYcCWISLwAaLCaarYhbjHmSicCwcJq2L5wFj7BymKdfk8K7itmsU0iCGm+IkEYxdLSzUAWIzWcHkCS0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj1Zvoemry7iqZyLh1nuAHrFjYuSxmphOGMBzUi/yHzVwVASGg
-	m7tOJ5AWHcHNVZ6QitjmzlxGNFCL/+/tWapac0YclxBrcbYs34TOIgOYeig/tvuSMsUt1YLmebT
-	x+pb8+LTZbcIdChFuUJ+Gj6yjS3FOYgITKGd6UUoTYUJN5Vz5pfWXlc+P9Y3oiA==
-X-Gm-Gg: ASbGncsDrTtwhcbKvEAX/Mk81/SRzR+CY0bhqLAgXhwvjqKdjtTZrEvp3mDReZAMlyi
-	o8J/ptSlwrZ6wJ3aqOe1znrv5nCHCC0bDkNnpOy2LOzJIh8JIK0++srdoiUWeHMFbSAIwaZr1ZJ
-	qHeE/SHPklesxK8JnuoGmlvN03BwbyqWlx/LnEe2VTqrjR7YsQlwitEstxpc3lyrxlc8K5Rk+xC
-	r26BnvNYH7aCQL5ZbDhE9nRya09IbDPvIiKtOs/32wncwLA7poRwRHGy+rsZvNHGwXSjTUcI0pJ
-	hpm5UfPkd7K8TVikkFtPq6kDbENB1RK2sFIY7zwGoJjRHw5PdrILbrlxoOdHgdNwCBAaqU46kA=
-	=
-X-Received: by 2002:a17:903:22d0:b0:240:1850:cb18 with SMTP id d9443c01a7336-24096bcc7a9mr150191675ad.53.1754040939351;
-        Fri, 01 Aug 2025 02:35:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGbZdxiptvpigi7eLXKhWCFOZQbYGfK+h+OEAOD3ELNf+6iC45wP9TbESkBH3N8d372w+JIbg==
-X-Received: by 2002:a17:903:22d0:b0:240:1850:cb18 with SMTP id d9443c01a7336-24096bcc7a9mr150191225ad.53.1754040938913;
-        Fri, 01 Aug 2025 02:35:38 -0700 (PDT)
-Received: from [10.218.42.132] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3207ebc3266sm4196042a91.13.2025.08.01.02.35.33
+        bh=iAtNeeeBqfLUn+sT5Zk3U+6nRAWdfcW1/7E65kHu/Ac=;
+        b=TaiXTSLDRYo/9ANL4Ovvgka4v45pu3CnP8JU7lcwA+o7gTiZIFrrQVYa82UgDnRVqb
+         vKdvWiwbjIte+HHTrE7/fhpGYcPayCRNjXLICcNi6i7IrkCx89XrvbhLONjA7YmrjIAt
+         mhgaAr/UE7oCQDokKhwW8zfNRSVfu6MK+dbtkHL9ts1Z3fuwPjcWO/WA7AMiqGtCLG5L
+         gbgcvb+dWJobBtNQMMUB6frsemJPdFttYA958QGUs7AJsJNofVqKTecnrL74nzIXvvNL
+         r8MF4Sy+B3Vz7QNBzj5JDcYPns2eAoKpSJv6uUswTvcuIv4jkiiKQBuqNO0ee8xKft82
+         lROg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8aWUtzZE1lHalA14O/SukkpQIUTW4RtuweeMKPSrG+EwJQ3bd5MEYy5L3rIpbGXkZbNszmCz+vw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymB2gJv+eETiwgTl6ZOXd9hu0sTSbeA+Sqrl6CbzIiNxQonSSu
+	PlK0OP8bfjct2Rjiv8fC/lEREFb3HT8QSRD2Qq71id7xRMGHl2Fx6GwZEf6oSs7dLNo=
+X-Gm-Gg: ASbGncs3Ex75pEbG4v5qGiCk/irIB+sIa2zg4jiKp+WTken5tBC+mnuWHXgIaAH9BIj
+	YIJSTd6k+Ojo+Om8vr9qmU1crkE5j9mZIgiKi21Vm77vrxL1f+ppEf7/Axm2168BlrLYmPz6q5O
+	HWJgVbTruEJa/nbgpBJxpGr7LLs/CRJNP3WFkTKdo22uoepXDf9nuMBg2nsvz4ZRJ8wEkmYJVH5
+	22f/yKuCg7++UqJg6nS4zJ/HjaMIkrBe/dmRT+irJWUPBgxpvJCNo0uK4PX6ISZuWtqnjtn3lc0
+	2XzYWl3npFLIT1TlQ97MalzNw8QYzNdgJxErnuS42O9p8gSyQzy6Zw49C9k3XKbJUODHoME/Qab
+	0zI8WIaGtInqoJLvk5qYnZQ60mYGg3vKlTg9MED9JvByL992sXABKPC8TBZ588w==
+X-Google-Smtp-Source: AGHT+IGSIhoRFdnMjpT8FEPv6ZdYsjdDrc9HAxmDYufhad1DYvy2LtbioIaodCfl4mJzruqCYZ3X7g==
+X-Received: by 2002:a05:6000:2c06:b0:3b7:7909:5b22 with SMTP id ffacd0b85a97d-3b79d43e4e4mr5658620f8f.8.1754042350328;
+        Fri, 01 Aug 2025 02:59:10 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b79c453ca1sm5374537f8f.48.2025.08.01.02.59.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Aug 2025 02:35:38 -0700 (PDT)
-Message-ID: <7f1393ab-5ae2-428a-92f8-3c8a5df02058@oss.qualcomm.com>
-Date: Fri, 1 Aug 2025 15:05:31 +0530
+        Fri, 01 Aug 2025 02:59:09 -0700 (PDT)
+Message-ID: <86f5260f-6625-4e2d-88a8-013143922fb9@linaro.org>
+Date: Fri, 1 Aug 2025 11:59:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,97 +82,45 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] opp: Add bw_factor support to adjust bandwidth
- dynamically
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250717-opp_pcie-v1-0-dde6f452571b@oss.qualcomm.com>
- <0dfe9025-de00-4ec2-b6ca-5ef8d9414301@oss.qualcomm.com>
- <20250801072845.ppxka4ry4dtn6j3m@vireshk-i7>
- <7bac637b-9483-4341-91c0-e31d5c2f0ea3@oss.qualcomm.com>
- <20250801085628.7gdqycsggnqxdr67@vireshk-i7>
+Subject: Re: [PATCH v2 1/2] thermal: rcar_gen3: Add support for per-SoC
+ default trim values
+To: Marek Vasut <marek.vasut+renesas@mailbox.org>, linux-pm@vger.kernel.org
+Cc: =?UTF-8?Q?Niklas_S=C3=B6derlund?=
+ <niklas.soderlund+renesas@ragnatech.se>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>,
+ Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
+References: <20250625181739.28391-1-marek.vasut+renesas@mailbox.org>
 Content-Language: en-US
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-In-Reply-To: <20250801085628.7gdqycsggnqxdr67@vireshk-i7>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250625181739.28391-1-marek.vasut+renesas@mailbox.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=LsaSymdc c=1 sm=1 tr=0 ts=688c8a6c cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=lAXUmMm_w8SOBygwRYEA:9
- a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAxMDA2OSBTYWx0ZWRfX8Tt9iq3SaNrY
- hWzg7HIBbMudToqYMYKnEG4DrxOriSD52mdral+p8Lh43LtTBCHvyDXa/7f6rcJsessZx59XRWJ
- GdyL3pamabPHWwqBmPUththo3Url969MoGsI6TJYAjYbnW99QP0kxEvyTGxs0KKHlUe02A3hduP
- IRDyvXe17CKp2D2yL/JuPZwoj4rwy2WSKYFrCUtm68rTHQ8HLlWiLylIogBqLME+eXGGFpUG40I
- RrvfqSvn0F3rLeg2DWHe1tcBVPxIzEdGdVyTy92LfNfZKrta/siGtH9u00adApM7IGGYoNdZtFu
- Imggy5YACgaNF2dr+GWKgYm2UGIw8mbfTqji9PtplIK7v9jpk/cN7DOyN9m3AUxkV7jnUwxQLzW
- 9OKMA2WseGqo1rWH9FWYjWXBSOuTkg++z3W32cYxKMfUxhV/ZI8OW43JulDV7E0QJKsWFwqm
-X-Proofpoint-ORIG-GUID: hd7rLEg1KxUHTGIZs6lhSCESUE0IIGLT
-X-Proofpoint-GUID: hd7rLEg1KxUHTGIZs6lhSCESUE0IIGLT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-01_03,2025-07-31_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=0
- impostorscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 mlxscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2508010069
+Content-Transfer-Encoding: 8bit
 
-
-
-On 8/1/2025 2:26 PM, Viresh Kumar wrote:
-> On 01-08-25, 13:58, Krishna Chaitanya Chundru wrote:
->> When ever PCIe link speed/width changes we need to update the OPP votes,
->> If we use named properties approach we might not be able to change it
->> dynamically without removing the OPP table first. For that reason only
->> we haven't used that approach.
+On 25/06/2025 20:16, Marek Vasut wrote:
+> The Working Sample R-Car SoCs may not yet have thermal sensor trimming
+> values programmed into fuses, those fuses are blank instead. For such
+> SoCs, the driver includes fallback trimming values. Those values are
+> currently applied to all SoCs which use this driver.
 > 
-> I am not sure I understand it fully. I thought this was a one time configuration
-> you were required to do at boot time based on platform's configuration.
->
-I am not fully familiar with OPP here.
-
-> If you need to change the performance at runtime, won't you switch to a
-> different OPP ?
+> Introduce support for per-SoC fallback trimming values in preparation
+> for SoCs which do not use these current trimming values. No functional
+> change is intended here.
 > 
-yes we do set different OPP when we change it.
+> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+> ---
+> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
 
-Currently we are fetching the OPP based on the frequency and setting
-that OPP using dev_pm_opp_set_opp().
+Applied, thanks
 
-As you are suggesting to use dev_pm_opp_set_prop_name() here.
-This what I understood
 
-First set prop name using dev_pm_opp_set_prop_name then
-set opp dev_pm_opp_set_opp()
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-if you want to change above one we need to first clear using
-dev_pm_opp_put_prop_name() then again call dev_pm_opp_set_prop_name
-& dev_pm_opp_set_opp()
-
-I was in a impression that once you call dev_pm_opp_put_prop_name()
-the previous votes will be removed. we don't want that to happen.
-if this is not correct we can use this approach.
-
-If this is not correct assumption can you point me any reference to this
-I was not able to find any reference on this.
-
-- Krishna Chaitanya.
-
-> I don't have much knowledge of how PCIe works, maybe that's why the confusion.
-> 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
