@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-31766-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31767-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEA87B18444
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 16:54:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0829B184AE
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 17:11:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EE3A1C82276
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 14:54:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60D38161B94
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 15:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21AC826CE3A;
-	Fri,  1 Aug 2025 14:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E58B269AFB;
+	Fri,  1 Aug 2025 15:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="DK+s1Rdg"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ExGH9vVV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013046.outbound.protection.outlook.com [40.107.159.46])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010016.outbound.protection.outlook.com [52.101.69.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BC122D9ED
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 14:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27FFB18DB1C
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 15:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754060063; cv=fail; b=hmSgBYshLAXxBqNLIwVUDHxMMty/cX2jqSkVU0QJSIK/G3xpM2tkaJB8ksLBzLdj6kKLbK8zuM1XSFyz1qbk8gFe6CWPJEb1X3FLFmEF2LLRoHY1JTh69fesKKiZaWvTA2cNJpTpu2+OGE40Y7nOoH8wXgm7jXqOcy3Q+ZNBClo=
+	t=1754061037; cv=fail; b=FDqj7mxXR1sVaEHnWI5NjRT4VGBBQiraNoN6/10HjiR2o15IIHgC8gKW8xWSjDAf/jjVm5DKO2txgAlIhknpRMR/gPhax9EYJ55tEpIyMjMSI6tvMu7ajBpV9teDI4cjlrpRph529gzoz0MjHmm6z4hWUr1umkJKfTxu/QaMhpU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754060063; c=relaxed/simple;
-	bh=GnbGwv+MbkP1uIx7IhRsa1wK7KkFvY9+ILdq3g4prME=;
+	s=arc-20240116; t=1754061037; c=relaxed/simple;
+	bh=htQTmuV0K9j4K7lHwV8BYgKFqFrHarCrVZoe2XQ9noo=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=WgjK/FlPNSYYIvOWiawJtiKN7IE3cN0AB3/FhjcDGuH20yiMn2oWCv7/ZsG8G96bhKAstvn43zLu1Xz/qUcNSnb1cjiDkzhDevAhbpGy3An0XCwTynfvS5DUzPxtviYJqQu9jSz67bR/WKUnIovuiBnvmhIsVv7VugIlivEObnc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=DK+s1Rdg; arc=fail smtp.client-ip=40.107.159.46
+	 Content-Type:MIME-Version; b=JTDqCvLGENGgsHMptpmZ402u6I8gMnmS3Vj/1Kw3hQ5fsNkAuDxEnejIWhTPpP9VoGwIvOCGMzXzhMSiH/IonRGjFIRnvBZ8r8JeMqDeuN32qBqtHEcruy55rkgbIf5VB8nxCI46+h+a7qAL/sVj3XSXNPXphIQfwNHQohK0v0A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ExGH9vVV; arc=fail smtp.client-ip=52.101.69.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aIwEQtY8uxe2RP4eG4PAAo5o6Vj0mBx2M9UV8HfOoE4V4SPy8rGhFf7dhNQkF9V59rq1QwwxLPnsuUN2NESiCByRr8bYUlD6qtC5kGRvCZeeJqoyDxzRFEDQf7VRHGulVG4fmV28s+V1s/Ea90Dk+LCWaZUzsV6na8oplEZQY02dxVDilnH/8midedrDQa1Eckfycj5O8XKBx2UEF2m4gqrdjVi4Pvy2yJj37p5lgQ/uayVefvMTyRp76TpW7VxAuD/hb6dRJbkxO3ilzzS4TXgqkjR6PXhhIJ/eRQqlk9k5ILFEDF7WpXjMo4RaxiHGzNfVvYetItYgX3w0LHWeMw==
+ b=VjiwJIpdUKhEvrEqw3fRdHkeQNFRTFkjE8BjD8EVUzp+yFsekXQv+7x5myoMcT4/HUnxhDIg//uBRQRdRTYUjtMvYH3H21s3bfaI9Q1gQ/k0hoCMMhTRisgjFOKr/THsRf/O6stl+IDDuyA5SjVDhDt4RydiTLM4oR9TgksDrJuE1oL7mamIo0iTGKW4wSWbS++EBlMPuIe6wb6wgbfVXo7bnLEwUUR8oJ8OijBBKUU4nP0Jv/NHZ6yK4G9BLYC9O5ioMmdAnl/gH6yTg5pnEiJl6muDs6BLPfedcHNQ9YTZkqPWxwIRCgI5J4QjA3KaH3Elra8+FNUDnTJCSHPNTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CaLaunDXpHF6tgpocpr9gXG8RHg/lAlBs3jfrpgXhTo=;
- b=wc9rvhFjvXy6/KLY2xoEaCLGpiIQ5XM3edpj0dh50GIl0rtqP/2QiTey2O/zh8NtDPh3DaP59obhCkHKFdtpC0NAnBv98PuhHKpchrJtfueSmpq6cgF4CwqrN8e/oaWbNtER3Fb0uXEizATSmqpLBgAW/BpJ+nEhvgfkkfPk+C24IcGeER6l7PMfo4FT2w10pE+oKBB5naJffqDlL1nBGgU3ay2AeGzcw3l6kkBPhPPxlglBLuZe0HOmDsD7rc3T/ifPsXnLUiBk6a5H1mghDqgkiZc5YDgr6so5p6VYALHPzVNqW9YoEFWEB7HriQJ7XWXaBUYebWBt9rf4MpO7vA==
+ bh=7kEYbN1ZYsUeM4DWL45SyVK0aAWul3lje1xqpga8QDc=;
+ b=rN0dSsUi2yYHkfKiG4N9m4WKdo1bv55N1LVqjNXCUcdR8Atw12jhAYl+ga/MJMiDW+7kTP0/0a/yzR9uJwuhTqTNrbbFhd2B21YSVehFBaTb9c+nOGu7YiwC3UuEz05+vYwRVrwTWopNxEZZk6Z73BuyECRZ8vlExtQZoYYO/shLitv0EkhPOn3Nzl12yhQxEMm85J04XhDYKhlD6+CFuYQLgb6cJttETfw4iHiYEoxSiyvCwgFsy9lebxzsZU4O+3ZFXcUpCc4Vwigm1zGPdzey+dJYfnCSTAATQGeTY1xWA/euec96IO8KybUa48zXEUT7kA3dryJzCH5iWySquw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CaLaunDXpHF6tgpocpr9gXG8RHg/lAlBs3jfrpgXhTo=;
- b=DK+s1RdgaIkmuQnYXfudjqpW7/FwHjaAht/DB2+uER4Z8MCbSDzBvi8tygtdyNZwjKo5KRO/zIfnkVCFHOZOGQVYl8SRxc/Qvc0vR5REe2d0xVHBW/pSF5fe+Ko+5U6JnJ/xAscIeNlTb+Di3eSOr4oBLxHc00N1yepq+o6PwruMQkXsUU0lz0Xb+Nu4zWT2s/Gpd1LH9FQyqkSq4vmgkCXZPC4q6zkK7F2mxDr3DNWaMemcJWr5j1WsSDPtVNKH3UWZz1zdgQlHtdUTfdGftCmKSe9v+tfdWBrehG0EZADolr8l2daU8JykoKt1FbCCnvuQz28X4ZpmeC4H+sgbjw==
+ bh=7kEYbN1ZYsUeM4DWL45SyVK0aAWul3lje1xqpga8QDc=;
+ b=ExGH9vVV9Tq86dI/yvq+6Tz6cilRJhhxs01kK5icJqqI5IvGkvD8mcYAkepKoPb4oPaqbLpZNKcfjSoxx9VoljUB030koSBCx9vKh/KOsEVPWY5po++gE8yKQol4d91HoJzbCEYJvYDTqd8EFb/X0o3yIf+62N8+tt3F2fkzeSUjYbBKHg4G1BulhNZgJVMe/flOQXmpDlYiNCaE7Mctr8iheEqoagkLlcJMNbGw5fa8iEsOgzXZZuefMslX05lh2mZCkJgFBb6nJZtwDMDCEw33NBsfdZSaxTedRIvDEiVPDypqeeoJ5PH9Rcycbn0Om2UapsRk28rpFtiD2GDrMQ==
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
- by DBBPR04MB7978.eurprd04.prod.outlook.com (2603:10a6:10:1e9::20) with
+ by GV1PR04MB10774.eurprd04.prod.outlook.com (2603:10a6:150:205::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.16; Fri, 1 Aug
- 2025 14:54:18 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.14; Fri, 1 Aug
+ 2025 15:10:30 +0000
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::50d3:c32a:2a83:34bb]) by AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::50d3:c32a:2a83:34bb%5]) with mapi id 15.20.8989.015; Fri, 1 Aug 2025
- 14:54:18 +0000
+ 15:10:30 +0000
 From: Jacky Bai <ping.bai@nxp.com>
 To: Frank Li <frank.li@nxp.com>
 CC: "krzk@kernel.org" <krzk@kernel.org>, "rafael@kernel.org"
@@ -66,16 +66,18 @@ CC: "krzk@kernel.org" <krzk@kernel.org>, "rafael@kernel.org"
 	<linux-arm-kernel@lists.infradead.org>, "imx@lists.linux.dev"
 	<imx@lists.linux.dev>, "kernel@pengutronix.de" <kernel@pengutronix.de>,
 	"festevam@gmail.com" <festevam@gmail.com>
-Subject: RE: [PATCH v2 2/4] thermal: qoriq: add i.MX93 TMU support
-Thread-Topic: [PATCH v2 2/4] thermal: qoriq: add i.MX93 TMU support
-Thread-Index: AQHcAruGxq2iEhcWo02hHK5ogHM2ObRN1jcAgAALk8A=
-Date: Fri, 1 Aug 2025 14:54:18 +0000
+Subject: RE: [PATCH v2 3/4] thermal: qoriq: workaround the tmu temp jump on
+ imx93
+Thread-Topic: [PATCH v2 3/4] thermal: qoriq: workaround the tmu temp jump on
+ imx93
+Thread-Index: AQHcAruJ+AtIm1IjGk2fa0w8DXTeJ7RN1sOAgAAMGIA=
+Date: Fri, 1 Aug 2025 15:10:29 +0000
 Message-ID:
- <AS8PR04MB864298D157317757B19FCA5E8726A@AS8PR04MB8642.eurprd04.prod.outlook.com>
+ <AS8PR04MB86428A54DA5B45CF3D8829628726A@AS8PR04MB8642.eurprd04.prod.outlook.com>
 References: <20250801081119.1999298-1-ping.bai@nxp.com>
- <20250801081119.1999298-2-ping.bai@nxp.com>
- <aIzKgvERyoaCpnyt@lizhi-Precision-Tower-5810>
-In-Reply-To: <aIzKgvERyoaCpnyt@lizhi-Precision-Tower-5810>
+ <20250801081119.1999298-3-ping.bai@nxp.com>
+ <aIzK93Gs/+sXHBZU@lizhi-Precision-Tower-5810>
+In-Reply-To: <aIzK93Gs/+sXHBZU@lizhi-Precision-Tower-5810>
 Accept-Language: en-US, zh-CN
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -83,69 +85,69 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|DBBPR04MB7978:EE_
-x-ms-office365-filtering-correlation-id: 6b1eb134-04fe-46df-0f52-08ddd10b4a91
+x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|GV1PR04MB10774:EE_
+x-ms-office365-filtering-correlation-id: 05c26129-b960-41ac-86a5-08ddd10d8dd3
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|376014|19092799006|7416014|38070700018;
+ BCL:0;ARA:13230040|366016|7416014|1800799024|19092799006|376014|38070700018;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?9pRAATPjM1DQR8MdOxkpjWEd6KZMFF8OZJTWUb1FcWbXK08ge7EjYOrbFjVo?=
- =?us-ascii?Q?eM5K6cZVTS855DZQyeaOglA9d4sOqQu0DsaIojipFy3opUBzSiMAze6xBba2?=
- =?us-ascii?Q?G/cjb94SIKl4Fb5o0DvU50h18w0GZFSHQQFbpOjrJB+Y2Ov7UybVOcNO0Qsu?=
- =?us-ascii?Q?1xsqhLnk/eLPUQUa0iY4CdozGUDkUph1prmCEXjAwnQXlGnDoDixGnyAYZYI?=
- =?us-ascii?Q?0EW9oPDJ2uUTb1BUMuV0skxxKX61kVE0xxKcJAlyHIyfaCegJoK0ORjyxhNj?=
- =?us-ascii?Q?qno+uVl9envg/+q7gvnvY1I0PIEQbnQjbfVx1hhYlvburcjFwdrtIbAnhpC8?=
- =?us-ascii?Q?7CvzvnjPL8VzEX/S8HXfXJEkCLL4MpIvcBsnLN2VF9NcTmB0sPqtKhWnDshy?=
- =?us-ascii?Q?Tqf78yZuMyL7v6ftHtIZfzeaC97at4jdR0wCi33JxgkOgFi23HYFx8CUN4IF?=
- =?us-ascii?Q?FKmKB/6WDBWZP4XtyNVqQkRDBiJ8b+k3PmACMEvVMGq2YxU72DLDxvOwfmTU?=
- =?us-ascii?Q?MnaWqOb8tcE2FIp9ziRWsDw6D4yEBMUtduQsezCDRzu0hrRgWdPMzPyxUXic?=
- =?us-ascii?Q?YbIq6cV8lNpeDZrceRECXQ7a+VmSHaLF691ah2MBP/oYXjh/FeooCK+m+tJ5?=
- =?us-ascii?Q?a0lld+/thos1GGNBesuLJyHd1pw5DTltBsNmpSSuShbMU3aBN2ogw8GNks/F?=
- =?us-ascii?Q?Wra/u2P7mMlEFssuv31RQ/Xg9Cxmoze6QAU31Da8/l5CYsiMg6l67zc2mAZH?=
- =?us-ascii?Q?Drj2tnFcAyGIBUoqXLCL4V5Ay5VAJ/g8W6Z07QxGA4TgXVJ201B2f7xLEOXw?=
- =?us-ascii?Q?3VAmWpB7yt+Ee8qLYeVUJLrR19tiE/0BwIB+e1j4p7/1+z8dngdFWqvsgU1I?=
- =?us-ascii?Q?pX6gKPTFj2VwXuF+SSx8TaFvFCH/knri4IfEMGEn95ZE5qVLcCx2nHmK4adz?=
- =?us-ascii?Q?uDZLMDc5r3yPLoCOnbdSyPBzHhlywgnVpNBUfM7GX0WbP9kdfNZixlCpg5GP?=
- =?us-ascii?Q?HBUTyPBpKx/835kFREckbXcWvgtmDCuQmBpkSfONd2bp4iNM/mbHK/DhCNf6?=
- =?us-ascii?Q?38twAb8/T+7wUjYpqw629i6CZ/uOJePmQQNQy0F9GAFhC4u8nwg9e9Fo+4Nc?=
- =?us-ascii?Q?4OHssTvQl5ipWYPwKxOsHdBYg416o/xWFBfHQOJNxC1aHB0dmtSmro0iQCAy?=
- =?us-ascii?Q?wGtfmDDrajSa1LWu6jc2DoAFHpJSbRa6P8cJoUMVUmyV3JDT5tg8M8A4xrAZ?=
- =?us-ascii?Q?NLaqPD0VZkC4OgcVfNtx0vUAhGAI9J/oRzvD/7g0HGew+cBpd2MZX6OC6v4w?=
- =?us-ascii?Q?dYS+phXBiAqdxy86aKMibtUsyNzL8Bx5rvxyPN0/3rtxyBpULR4laXStfT/P?=
- =?us-ascii?Q?XWK/BpHObo2bbyTujPZMprcD52IETce8hgBW0eAQjLiRFEGAOGFCZGtqQ/cA?=
- =?us-ascii?Q?7+mM+IrQu0JCX5Xt0CCFJBwnO4T8pZNA1V0N1RMqAy2KZ9HZl+bQPQ=3D=3D?=
+ =?us-ascii?Q?f65g4bPdSRCTeGXzizerPVTsUs9YwGC4ivX9xuSx5sCWuXqAhP/Dui3eAmV8?=
+ =?us-ascii?Q?nUD1LPToIEk4PYDD4pOA0goEsPtKQotKG1OJZcAxX0U9we+il9t8trtRFgHm?=
+ =?us-ascii?Q?PU/IzFPCO/PPZbQzkSBefYSpnGeYyz1ccrXyi40YRWJOVOYQ6ocKmcNC0CKs?=
+ =?us-ascii?Q?MipZQmUoZDIbAuwCrqz33/+ucEqF8nRb0Sh7LxSrTPY1iuH+9gLGHYo5iEjh?=
+ =?us-ascii?Q?tzbO8YzT4MUc0Pw3NUzh0V9FEo/PKEDYyVdbkbcMD9ruIZm2V/SqHwSxtevh?=
+ =?us-ascii?Q?0UtBVf3GywunJ7dD6bo+9n8NJ0+oLOkVx3bK2DGNmASlEW4GSM8w8cCMWvr4?=
+ =?us-ascii?Q?mbQ7qod+HyZstePwPn7dE719ZeV5vDGG/GDKPZ4dWlw9baNq47L6eu+GQwcy?=
+ =?us-ascii?Q?kUc2YxctuYl1M0ynXzo560j+xeuVDiSa2Iv4OF+ayx/zWject7jM8MsR08kS?=
+ =?us-ascii?Q?Tg4bZn3+Z9nzvRxVtXVkJ0w7r4eE8KEea7fZ8ncobA5A5to6r1QcYlDpUMFu?=
+ =?us-ascii?Q?RfvYZAuagK9NLAYnvqD0HtdR6lBzGurmW8Z+lcMQJ+jIYyWKLeEOY0Rxlhih?=
+ =?us-ascii?Q?9nCdj3c8VfPOS1wXGl0T0duuZq9ahe8kO8f2lmquQFcBkTebg6LcO43qvFhO?=
+ =?us-ascii?Q?xIZw9MtPVYwvsLdn+0LwO8C9JKao0VgsrxO1fylY8W86hRmUW1dUzdS0tm7T?=
+ =?us-ascii?Q?G10d0GsXTHeWq4QMHSvQmnyu9BR9pDlHLUF7nyt8Jx1nEZsvM6dx7JBiFecv?=
+ =?us-ascii?Q?+MvWueHLwGXCcJnZT1gBg0vpzAaZcp6EwbOAMjnXZuxZncEzPHtDw/JosqhY?=
+ =?us-ascii?Q?4yApsmjlO62JOBYZQlqfcj4rjHyOfL81WO+iBmZ24vSfbIz97GrXCToUwrge?=
+ =?us-ascii?Q?j1IUHKBKDioIgp0ZaNuJP2NQOJVkEUOkNk/m7HVRKisykgatOK9kKQiq8Nl0?=
+ =?us-ascii?Q?4Ur4qojDhwDJcffvVtJUvE4y+7CsW3Vpas3bD9aijWdgbnO9mrwGwg9lzpQA?=
+ =?us-ascii?Q?SjxinGYWX72qlNAa+7Yz9CKoN46nugJ2xf/sbpl8Nk3v7rscB9UzitJsUpXf?=
+ =?us-ascii?Q?ZJntqnHb46XVOlR4K19hCV73H6k7GXP9N3PBYimZZHQ+kxpLPf47IAgvu7c4?=
+ =?us-ascii?Q?/tcUqDibfAsnzyI2KYK+qjhbbCWmPoKjuoYfYLQrjghjsABcV2dSXRiW5hTz?=
+ =?us-ascii?Q?JrjdgQfhrlxhoRGlq0s7/ZJDzVWGGsBw/RSq+f2KPNxKz97lNW6CJFUczkhH?=
+ =?us-ascii?Q?SSraDKe3UGoeM3GnYXmcj6UrGTSNNMKxLPVmHSyaTDjIfa/rg0Gdzm/DObQK?=
+ =?us-ascii?Q?19K3oMi+VWbI+FSDHHBnhJtZtVgyxoVMQ3qaWJoyeVOBhbIlPoTTLuFLAOcu?=
+ =?us-ascii?Q?sHqVUxPKAxqOpjzdV6fpQGTtXjdUfW9ThWr4203B8M2Zrk0+yaWVznqLvUxb?=
+ =?us-ascii?Q?5iZ36gg6h9f824br0atBZG6lLsSzFoIhb2nRn5AlnGwR0voQtSccvw=3D=3D?=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(19092799006)(7416014)(38070700018);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(19092799006)(376014)(38070700018);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?kRzzV9NOkitO7+P6Q96klOm4MyT7HUPQkWBtzSED44ywaJEi097I5yGubnpn?=
- =?us-ascii?Q?FeD5TDGlsiO9uwoZkjZ5EGVtwWvduDUfudbZPKnm4iTLSXaq+UdrnfSyJjPK?=
- =?us-ascii?Q?CDQrt/qBd1Ax2q/8exzZR048fKOqIwJBfRzCNx3QE4K+s/a8RROVP2HjdLBK?=
- =?us-ascii?Q?qxJGpkRfNqP4OsS8gfFp9GdtEu6imFQ9HP7P2gV7yi5AAIIXogKMVkAE2XNl?=
- =?us-ascii?Q?1qbxEGQ7qzy/xFCOTxBnpCpAvvVrfvUq0Aaf9pVokXghGHO5aD6l7WKDzk8Z?=
- =?us-ascii?Q?Njb2HSNYDUXGGxRMoJT1k0LVPtqAygucY+JWM3a+zCJ1cb4+HJ5JbPWWZx5T?=
- =?us-ascii?Q?hpe4LbyLAULdGBEqR//ITDawd9LEmCknKAJoiVhH5GranX8dmQucOm40PvgA?=
- =?us-ascii?Q?Si91iqCUNo4B5zvHIcmttys/Arc39XGX4cLWujawYAQkXkOKrZRsp4iEPxLv?=
- =?us-ascii?Q?YzUposppQNlhv3BKdb1oWufbY1MmoIWqaRjik6pdlXLJv6tVAWHToNp8oreI?=
- =?us-ascii?Q?lgZOmDn77nWnPV1ixZXBH5skCkDWEQ+TZHrQQv6rlrX7VEKCV8GCC+Esvo8T?=
- =?us-ascii?Q?5im8IngSNnjmBf679WwQVUYJcESE0fQydjdob5Z/Rjmup+A2eLJBYIwZWHVv?=
- =?us-ascii?Q?TgdVVd7VAJboqQCmmX26zCSUDc7JJqbUNJt6xizWIHU7P7HYLEC5pgIG7fNK?=
- =?us-ascii?Q?Tp4T5fFwFNF/ydpwF13JDc9eFdWZbRkEoLTwmXbXUJCgyuFK4rF+FWySXr9+?=
- =?us-ascii?Q?av7GEugtqjgiE/rw3MpLu7WKI78hCHyGPPxRmwAc8exbA2EtYagOjT+YdueJ?=
- =?us-ascii?Q?3yVf6/5Lt0IeaE4VKQNTGGiXeVWb9MMewnj6p+uzt2K4sGtpVRW2r/jTsXXu?=
- =?us-ascii?Q?COqK6p5EaQ892egopnRLEM/h50LKJBssWVhP3CxJN2ubczQshUZQK04ovtaw?=
- =?us-ascii?Q?sc9UO7jcfmOVCqcD1+wV1DhY2u31ycwJ1xPiG4FuA/61TO2Awx2UjBWvGfgt?=
- =?us-ascii?Q?oum1Yot/YQ5eK6Xvv3TuhYUvcB52J+SLNXMQOvrtMKQ6DOu6vCHVhexoHHhy?=
- =?us-ascii?Q?7iVEUr3Wxf9o3iAmxKbWhOUATcn0zOpFYaSU6qlx3P7n0F0xa3+zgvDr0btn?=
- =?us-ascii?Q?GAsIX1LsczMG1zuohu+vx+/BBWaeHiQqj6eW5PoISzfmuKCIu7nE49Jnzow9?=
- =?us-ascii?Q?mblPH+ykDt+nZbGrV6RQAtJOlPwZLSRNT/bsTrhC/v9Uaqpo940PyBGsyO+/?=
- =?us-ascii?Q?j0utfcecEMZPEniz3eSbAV1zP4ide9SUFGmYWXEngPqASdR455NR6P5VbdvC?=
- =?us-ascii?Q?r/0OAPji1dWvnBIrTZwRGllsBYmZOuU5vSNI/tmjEGxdXrVAb0p30wjL3Y7N?=
- =?us-ascii?Q?UUKLVPLv3RwJp5KLS32hTz8Cgc9qxqVBEPgAPCW4LWzHejEpXuHxQD3itaEo?=
- =?us-ascii?Q?56DohofdyF9K2Q8q8M7ujiSWMBpzuof9dMKyN5g4DIrS6MyE/vS0t8bMuokO?=
- =?us-ascii?Q?iYzWHz4shRiye02lnpOEAWmREfx1bzsqa/GLFCNL6nl31IRrqVW69a/D848e?=
- =?us-ascii?Q?oHS+alagHM6C/7xcuoo=3D?=
+ =?us-ascii?Q?suxHBe1nKIQlEEDJRocNIMJyfLNtz1c7ZObbm+lM1tAkP1/cC+RarpvHh+PG?=
+ =?us-ascii?Q?ADQAarspJjRAD6FsvsWHlYq7I1d5z5aLtuMN0hl1wJSPhA+SDJPgtYzOA8AZ?=
+ =?us-ascii?Q?AJaUSwSZrxwdUwQ98Qvf0yV1aMK27hzZ3+gDJeUume8zix3qiJvbL/c1lrKK?=
+ =?us-ascii?Q?O+aVRqriMTRUg91ViBr5mlV4rZ+nR+mdLjhi6l2hZZysvI7ECYpxfGiszvoi?=
+ =?us-ascii?Q?b/vOUyoUD0DxLU7c7uuoeghdYIGBRS4wWpTIBiMF5GPzyhL8j/GfrTLPAT0W?=
+ =?us-ascii?Q?GhcyINq2x9aXaR0Q796gpAd71Cgwmv4yxakm2cYhpU2vxEBSp+SoMWZJlBJM?=
+ =?us-ascii?Q?LuOvEBjcrCfb7qZxOzmrsKtRHFOaF+3T4+2G9Yg7ck+c0MQKFi48vHsW81JT?=
+ =?us-ascii?Q?YZgkl+GfW9y6REAYOAyewUqp8kK3UubPgqWHIlKL1jG00UYGS3S+tfrDavEc?=
+ =?us-ascii?Q?qBADq3GLqw9FWR+/JrKuBvGOWU0ztCg11RSO7xo0XSawXz3cdvueibHdgO9u?=
+ =?us-ascii?Q?37pd0Xq4ERSO9HN9c0HPFPURCWz00t9aNUYJQMG6rvy/YN5Q+pZN2E7EMZkv?=
+ =?us-ascii?Q?iQdIWq5wU0TWB++IH1mlLYCkmaMNQnyym0CzeoxC2GKmIwaed/fY2Zdy0hmj?=
+ =?us-ascii?Q?1IEy+wfcgrfvVpcSSVUGdwhU0kTGG5+FDlgBtkWjQUbc+00Ay+MtmZn5uf6U?=
+ =?us-ascii?Q?zajqEwpQy78adbxDmjw/pcxfaN82HKXiHygWrwdN8vl5GPN1ZqE9HMmaaJTi?=
+ =?us-ascii?Q?LPX5AVd5F2ZouMizxquqmA3Jr20xQ2K6xalrUNbqSADZnRy5e72WdBE0/Vcp?=
+ =?us-ascii?Q?gZVPCBM6HYfysNv3ZnfQDaP0sbtJpwxmtTwvoruYNF7gpCBagZO7t2ay6fXY?=
+ =?us-ascii?Q?7FMvAZPtzArZLa5Wg9JBlsimrcj7uzA/hmSbGpRn1aDfvTc8l12lvgOpIu43?=
+ =?us-ascii?Q?BvSK/TltY1tl0Knhe/3sNK+UQ/h4TrxeAFrsj7j9DvihiP6T1GcO61s/KJVv?=
+ =?us-ascii?Q?MCgclME4YxrCRvbeev1Y0snTALM/p0UtxgOMfia1WLUhCL1X0gN/8vZLQHMs?=
+ =?us-ascii?Q?IlyARyc/zkwxjsz//vJOn84vr5EtHAQ8pmYmOJvnxoGjDfMuUKvaKgsvfpv6?=
+ =?us-ascii?Q?vp98R09M8KUU3jKy/rmtZx0L7ZUB1hWUaNAwarwgGDSUrNi+pItySqfuE9eB?=
+ =?us-ascii?Q?HJkbQahcqCqXkXHeXCyb+lyzBpIYzixXQcRKSxAFvRvdvcyPSyuvqcsJIIZ4?=
+ =?us-ascii?Q?c5bFlZV9QjHEBVYIZL+YXJ3F+Ezr1/Ey/adDopx2VzEDpev2OjsWNO12suR6?=
+ =?us-ascii?Q?bqauiu/7Ez+/aD84flIuHRox6JPx5niVuusah+NEMRoqYlQropxH4BT+PjwM?=
+ =?us-ascii?Q?B+njyxMN7gHjQ48Gw/viHj6Pcro+4fQa/LiSp7fPNF+Rhpf9TW1sUaz2iAzL?=
+ =?us-ascii?Q?ZoeJuAsVC49fDM+8zEhbUoZQ5Do8pw3Tz+9bPVHWfRZkNPiQ8MYf/xD4wr+m?=
+ =?us-ascii?Q?StA6OSQpnzSQ5IUH0iaMh0U58dXmW+Ao+Y6h0fyObM4O5AEw1p/A9IDIB3uX?=
+ =?us-ascii?Q?Jn/h6FiJBCXKeE1LQMo=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -157,136 +159,130 @@ MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b1eb134-04fe-46df-0f52-08ddd10b4a91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2025 14:54:18.2105
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05c26129-b960-41ac-86a5-08ddd10d8dd3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2025 15:10:30.0158
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BdBttOqC0d5pud1dAsxlJl/Usm/Q0QITRJm4VbJiOeqtwHiHe023TkUqTXdOqZVZgFGs4KsKEZefKRyZxiwdFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7978
+X-MS-Exchange-CrossTenant-userprincipalname: igzCUrh+cV4heaXBhf29B6uSk8GUTL0pV+D63fPn+x1S0RTOIuv7+PR5K3kQvrXUeyD+eMAAISDDWZ7wng6AQw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10774
 
-> Subject: Re: [PATCH v2 2/4] thermal: qoriq: add i.MX93 TMU support
+> Subject: Re: [PATCH v2 3/4] thermal: qoriq: workaround the tmu temp jump
+> on imx93
 >=20
-> On Fri, Aug 01, 2025 at 04:11:17PM +0800, Jacky Bai wrote:
-> > The TMU used on i.MX93 need some speccial handling and workaround to
-> > be done even the revision info read from the ID register is the same
-> > as Qoriq platform. Add i.MX93 compatible string and corresponding code =
-for
-> it.
+> On Fri, Aug 01, 2025 at 04:11:18PM +0800, Jacky Bai wrote:
+> > On i.MX93, the temp read from tmu may jump wrongly(ERR052243), and
+> > invalid temp will be read out. To workaround such issue, we need to
+> > use the raising/falling edge threshold to filter out the wrong temp.
+> > When reading the temp, need to check the TIDR register to make sure no
+> jump happens.
 > >
-> > Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> > Please refer to NXP errata ERR052243 for more details.
+>=20
+> Add download link here.
+>=20
+
+Thx, will add the url here.
+
+> >
 > > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 > > ---
-> >  - v2 changes:
-> >   - use the compatible match data to identify the i.MX93 TMU variant
-> > ---
-> >  drivers/thermal/qoriq_thermal.c | 27 ++++++++++++++++++++++-----
-> >  1 file changed, 22 insertions(+), 5 deletions(-)
+> >  drivers/thermal/qoriq_thermal.c | 31
+> +++++++++++++++++++++++++++++--
+> >  1 file changed, 29 insertions(+), 2 deletions(-)
 > >
 > > diff --git a/drivers/thermal/qoriq_thermal.c
-> > b/drivers/thermal/qoriq_thermal.c index 01b58be0dcc6..fd4d162fc188
+> > b/drivers/thermal/qoriq_thermal.c index fd4d162fc188..664cd5f7d8af
 > > 100644
 > > --- a/drivers/thermal/qoriq_thermal.c
 > > +++ b/drivers/thermal/qoriq_thermal.c
-> > @@ -1,6 +1,7 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> >  //
-> >  // Copyright 2016 Freescale Semiconductor, Inc.
-> > +// Copyright 2022-2025 NXP
->=20
-> should only claim 2025.
->=20
-
-Ok.
-
-> >
-> >  #include <linux/clk.h>
-> >  #include <linux/err.h>
-> > @@ -24,9 +25,11 @@
-> >  #define TMTMIR_DEFAULT	0x0000000f
+> > @@ -46,6 +46,13 @@
+> >  #define REGS_TIER	0x020	/* Interrupt Enable Register */
 > >  #define TIER_DISABLE	0x0
-> >  #define TEUMR0_V2		0x51009c00
-> > +#define TEUMR0_V21		0x55010c00
-> >  #define TMSARA_V2		0xe
-> >  #define TMU_VER1		0x1
-> >  #define TMU_VER2		0x2
-> > +#define TMU_VER93		0x3
 > >
-> >  #define REGS_TMR	0x000	/* Mode Register */
-> >  #define TMR_DISABLE	0x0
-> > @@ -232,6 +235,9 @@ static void qoriq_tmu_init_device(struct
-> > qoriq_tmu_data *data)
+> > +#define REGS_TIDR	0x24
+> > +#define TMRTRCTR	0x70
+> > +#define TMRTRCTR_EN	BIT(31)
+> > +#define TMRTRCTR_TEMP(x)	((x) & 0xFF)
+>=20
+> use GET_FIELD()
+
+OK, will refine it will FILED_PREP macro.
+
+BR
+>=20
+> > +#define TMFTRCTR	0x74
+> > +#define TMFTRCTR_EN	BIT(31)
+> > +#define TMFTRCTR_TEMP(x)	((x) & 0xFF)
 > >
+> >  #define REGS_TTCFGR	0x080	/* Temperature Configuration Register
+> */
+> >  #define REGS_TSCFGR	0x084	/* Sensor Configuration Register */
+> > @@ -93,7 +100,7 @@ static int tmu_get_temp(struct thermal_zone_device
+> > *tz, int *temp)  {
+> >  	struct qoriq_sensor *qsensor =3D thermal_zone_device_priv(tz);
+> >  	struct qoriq_tmu_data *qdata =3D qoriq_sensor_to_data(qsensor);
+> > -	u32 val;
+> > +	u32 val, tidr;
+> >  	/*
+> >  	 * REGS_TRITSR(id) has the following layout:
+> >  	 *
+> > @@ -118,6 +125,15 @@ static int tmu_get_temp(struct
+> thermal_zone_device *tz, int *temp)
+> >  	if (!(val & TMR_ME))
+> >  		return -EAGAIN;
+> >
+> > +	/* ERR052243: If there raising or falling edge happens, try later */
+> > +	if (qdata->ver =3D=3D TMU_VER93) {
+> > +		regmap_read(qdata->regmap, REGS_TIDR, &tidr);
+> > +		if (tidr & GENMASK(25, 24)) {
+> > +			regmap_write(qdata->regmap, REGS_TIDR, GENMASK(25, 24));
+> > +			return -EAGAIN;
+> > +		}
+> > +	}
+> > +
+> >  	if (regmap_read_poll_timeout(qdata->regmap,
+> >  				     REGS_TRITSR(qsensor->id),
+> >  				     val,
+> > @@ -126,6 +142,15 @@ static int tmu_get_temp(struct
+> thermal_zone_device *tz, int *temp)
+> >  				     10 * USEC_PER_MSEC))
+> >  		return -ENODATA;
+> >
+> > +	/*ERR052243: If there raising or falling edge happens, try later */
+> > +	if (qdata->ver =3D=3D TMU_VER93) {
+> > +		regmap_read(qdata->regmap, REGS_TIDR, &tidr);
+> > +		if (tidr & GENMASK(25, 24)) {
+> > +			regmap_write(qdata->regmap, REGS_TIDR, GENMASK(25, 24));
+> > +			return -EAGAIN;
+> > +		}
+> > +	}
+> > +
+> >  	if (qdata->ver =3D=3D TMU_VER1) {
+> >  		*temp =3D (val & GENMASK(7, 0)) * MILLIDEGREE_PER_DEGREE;
+> >  	} else {
+> > @@ -232,12 +257,14 @@ static void qoriq_tmu_init_device(struct
+> qoriq_tmu_data *data)
+> >  	regmap_write(data->regmap, REGS_TIER, TIER_DISABLE);
+> >
+> >  	/* Set update_interval */
+> > -
 > >  	if (data->ver =3D=3D TMU_VER1) {
 > >  		regmap_write(data->regmap, REGS_TMTMIR, TMTMIR_DEFAULT);
-> > +	} else if (data->ver =3D=3D TMU_VER93) {
-> > +		regmap_write(data->regmap, REGS_V2_TMTMIR,
+> >  	} else if (data->ver =3D=3D TMU_VER93) {
+> >  		regmap_write(data->regmap, REGS_V2_TMTMIR,
 > TMTMIR_DEFAULT);
-> > +		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V21);
+> >  		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V21);
+> > +		/* ERR052243: Set the raising & falling edge monitor */
+> > +		regmap_write(data->regmap, TMRTRCTR, TMRTRCTR_EN |
+> TMRTRCTR_TEMP(0x7));
+> > +		regmap_write(data->regmap, TMFTRCTR, TMFTRCTR_EN |
+> > +TMFTRCTR_TEMP(0x7));
 > >  	} else {
 > >  		regmap_write(data->regmap, REGS_V2_TMTMIR,
 > TMTMIR_DEFAULT);
 > >  		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V2);
-> @@ -312,12
-> > +318,22 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
-> >  	if (ret)
-> >  		return ret;
-> >
-> > -	/* version register offset at: 0xbf8 on both v1 and v2 */
-> > -	ret =3D regmap_read(data->regmap, REGS_IPBRR(0), &ver);
-> > -	if (ret)
-> > -		return dev_err_probe(dev, ret,  "Failed to read IP block
-> version\n");
-> > +	/*
-> > +	 * for i.MX93, the TMU HW version read from the ID register does
-> > +	 * reflect the real HW implementation version, assigned the TMU
-> > +	 * version statically.
-> > +	 */
-> > +	ver =3D (uintptr_t)of_device_get_match_data(&pdev->dev);
-> > +	if (ver =3D=3D TMU_VER93) {
-> > +		data->ver =3D ver;
-> > +	} else {
-> > +		/* version register offset at: 0xbf8 on both v1 and v2 */
-> > +		ret =3D regmap_read(data->regmap, REGS_IPBRR(0), &ver);
-> > +		if (ret)
-> > +			return dev_err_probe(dev, ret,  "Failed to read IP block
-> > +version\n");
-> >
-> > -	data->ver =3D (ver >> 8) & 0xff;
-> > +		data->ver =3D (ver >> 8) & 0xff;
-> > +	}
-> >
-> >  	qoriq_tmu_init_device(data);	/* TMU initialization */
-> >
-> > @@ -379,6 +395,7 @@ static
-> DEFINE_SIMPLE_DEV_PM_OPS(qoriq_tmu_pm_ops,
-> >  static const struct of_device_id qoriq_tmu_match[] =3D {
-> >  	{ .compatible =3D "fsl,qoriq-tmu", },
-> >  	{ .compatible =3D "fsl,imx8mq-tmu", },
-> > +	{ .compatible =3D "fsl,imx93-tmu", .data =3D (void *) TMU_VER93 },
->=20
-> Now, don't prefer direct pass a ID here.
->=20
-> struct tmu_drv_data
-> {
-> 	u32  temu0;  /* or other touch actual bits define, or workaround
-> 			name, ticket number ... */
-> }
->=20
-> const struct tmu_drv_data imx93_data =3D {
-> 	.temu0 =3D TEUMR0_V21;
-> }
->=20
-
-Sure, will introduce a new struct to hold the match data info.
-
-BR
-
-> Frank
-> >  	{},
-> >  };
-> >  MODULE_DEVICE_TABLE(of, qoriq_tmu_match);
 > > --
 > > 2.34.1
 > >
