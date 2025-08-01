@@ -1,124 +1,123 @@
-Return-Path: <linux-pm+bounces-31742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66257B17EB1
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:56:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE57DB17EB3
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD3B8189BC19
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 08:57:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03AF1580438
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 08:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E135220F25;
-	Fri,  1 Aug 2025 08:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8AF21421D;
+	Fri,  1 Aug 2025 08:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s8XEuFnU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x2JfY//8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA76215179
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 08:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D54916A956
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 08:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754038594; cv=none; b=kkARqTkpbD9lxRKbEzb2N7lj3OdjSr2OgX5wl1kaFZaL0m9gU5lfztv94jQyK644oprYurZUYyE71ygVx2qWhrwZvyot+XGUJ8U+LpJ/rqY5MZhmMAg7+nvzqMTTagYf4dV/kFAAnnQpnuJsZiD1iiGHJqJVvCJ0tu7g0bjYFz8=
+	t=1754038727; cv=none; b=b7CaXwL8JmAV+546+lTHLZWBszifLgj2K9ANYA8E8LkntqydfJBWAbIwwMZImxFA6myi7gGSwa12M+/oDM9044r3VbsGfboGjUlVH+vLx8/0fW7Y7gqnxkf09cAcVnSJdv37w3hSe82LLFIlJVO0p9JGV+EdLLvjFu+h1KC/wKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754038594; c=relaxed/simple;
-	bh=iWJ6vmjjHeJh3zw3l0ivlWKd8QssgOEwNGy9AZi+LA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PUGJMEswqnIrlhOxbrIwE5i4H/invSK81qeIt2Qjd3jAUU32gqrGGQFm6d6zYfP7p/FqZEG458lGVP4w/w6BSw9F61RsD2pueGBEf5cMkqcnHXrLgrzkJXJjbZsfe8AepBBTBIDB4ctwS78vZhCOpziFesvI7BcPBIAx+BFTijM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s8XEuFnU; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-31f3b54da19so1319167a91.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 01:56:32 -0700 (PDT)
+	s=arc-20240116; t=1754038727; c=relaxed/simple;
+	bh=3txe69c4r3/mtA7HOmXZzOu7QHDTYMCFM0j8pcPXR9Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=haEMi8EUJiy00TxcyspckOH7WJuzxTkRFo5CHQyCPGBH1QYu8uZUKgHvVrFTFuWjMP452yHd7pwkB/O24gIPtswvJ7vi+abXEjzNfzqrV0K/zC0yylwlQZPmV4gfwgQan1Fw1pg6EZDvTvUviX4s1xedL8lTv9TSIJWWqG73x5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x2JfY//8; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4ab3ad4c61fso328271cf.0
+        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 01:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754038592; x=1754643392; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iyaLPE5cVFQ4yQ1ZdsM+PFkuZa1fSK3UsMR4TaaRqL4=;
-        b=s8XEuFnUVTZbCkmIkjm4GFlEFk4G2qQKuyJ4BY4gU/wEUjrzBvuxVtA7txJsvkRSX2
-         6zCw/2lqenhwihcUTdDlkRcnhyIE7mgqywXNlX2WxFbIAKMoS1WdAuTUM/S3TG/yEUe8
-         KZbUOiqPUUJUAHEPs8ApkgBRi0MG6kgaCXYRnyvkJeMFXF+RpXhRa/gK9qcX+oKYr/ka
-         Shx1RNtcEbxc+z6/i0e+F+jR+6AiTA91Te7AU3kEMnf+1eH+6LncapBF/avNXE/Sbm3B
-         d3zgDSTWyuSVrmP4OX/2HkPrtwI4BdXWpYW35cBS1nnybtRz8iHCTnG61ROS5Bi0CduC
-         70zw==
+        d=google.com; s=20230601; t=1754038725; x=1754643525; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JOl1MSYefTojCErZh8qsltNJ6k7ijFO9awKdnwF++pk=;
+        b=x2JfY//8EP5VeNUFJgXtn6HcJuAa9Ar6OL1qfVlMCvCgNmDwYw8wHFB0x37mJbfqGP
+         w53WmsdH2me48nVC9zAdYjWKxPOKi79AxKy5fLXD1sW1LwAl8KhwNJeTNzbfYYdWwPBC
+         RflbSrmM3FPe5WPqb2a49sRW2L6EfHUmarMntAJIkjghRUOkHSyEsA06ixRSCSP+5guS
+         PHdDcP1JDHAMRY5DEcsFjsNlpgMAp/Zqh7Gb9xEUTLPidC7Bja0ur9ZFOkogcPC3THT1
+         bUIu9Daxph84umtbpAP8Sdfci+p2dPXr0vHxP8hc0TdAEpXwFw8tGKhHj0OE169ebojp
+         u/HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754038592; x=1754643392;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iyaLPE5cVFQ4yQ1ZdsM+PFkuZa1fSK3UsMR4TaaRqL4=;
-        b=P8DCEkGEhrLpGUppyzt+VE6TyUpG+3oUABcMDIo4ucx+LU/hyJYaOA553FrVxv5cRF
-         1Kw2EPDUvHE2CngIWnyWY98QyFISbpBD4WqmaocI0nyo0Qk3AI9KlhXr/754zVxxvRO7
-         SCoy85eaRoqd6WDpQdw8w6byfFbMN2p1pWZmp4MzikjfkWjQO7K0034xHASri5DEErvN
-         iy1mQc5e1H2i/uD2vIGtO0TrsMw9pbYbCSsM58TyYE0Vx7WoIavhNMGDsUWWzkyhLQ+a
-         C+vYVliaWb/9pN9giFOqm4YrSPWIMVg9raPs2txnuX5j3OWC56w0gst78xnKrayiSbG1
-         w70w==
-X-Forwarded-Encrypted: i=1; AJvYcCX3uzCXyQ0SHHCv0c5BA/DP9FXZmGrR1eeX9KNe6NA6Ja71TTi4Vb9S2QVSsBKdpHT+ivjvp7vZew==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbZj9TJ/OdAWEE1LhIfeKI+GGYwS6nTIyaub87i+ekWcHkOGvJ
-	bM63mvGzWLXxZTblCxrDFIL9qnWmo678wyzsWvbQo2+xhDrFKkAU6Dy+GBMU8VeYS7I=
-X-Gm-Gg: ASbGnctEdLv7OyvpMGhaUyyPQn+viHrtH/humo+D8oxR32yJ5ACcMXM2GCt+3Zj/O0M
-	HqbqyPl8XfwhhMpDwupZeXP38IDGmYOhS9nxhOPUIK8RPiNRNAbgINQcAsQVpAiBVqo59TaUH4g
-	Rn4rHe/NkjqXFIOA9eVzM3Yzuo4uzA1BbGsyzg4Iz+c9oQAGbt1L/EN0VJUbki4HRH35KGqtouH
-	ahb7E6tbvqxKfqQsUa/PvqzN7Yrul5RU/Zf2VSq8S5iZh6Da/C4zTZReoOayatUyCYob/QSCIvb
-	m9WL0iHlYjPByGF5X1IJ17yAxE984WoBh49ButWBhk4wYD5q69qookoUzmqLNLlDrwscCTtWCJn
-	4IInIHJ2hMatmugHxKd6N0Zg=
-X-Google-Smtp-Source: AGHT+IEuiwLHQsCcm9P4L0Gud/JQjIDwRrB9XRFsCWBLfZnMjNO93355PSR3Vop33rURYHmqY0i6hA==
-X-Received: by 2002:a17:90b:1845:b0:31e:5cc7:133 with SMTP id 98e67ed59e1d1-31f5ddb2038mr15888994a91.11.1754038591891;
-        Fri, 01 Aug 2025 01:56:31 -0700 (PDT)
-Received: from localhost ([122.172.83.75])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-320f77d81bfsm1835353a91.12.2025.08.01.01.56.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Aug 2025 01:56:31 -0700 (PDT)
-Date: Fri, 1 Aug 2025 14:26:28 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/3] opp: Add bw_factor support to adjust bandwidth
- dynamically
-Message-ID: <20250801085628.7gdqycsggnqxdr67@vireshk-i7>
-References: <20250717-opp_pcie-v1-0-dde6f452571b@oss.qualcomm.com>
- <0dfe9025-de00-4ec2-b6ca-5ef8d9414301@oss.qualcomm.com>
- <20250801072845.ppxka4ry4dtn6j3m@vireshk-i7>
- <7bac637b-9483-4341-91c0-e31d5c2f0ea3@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1754038725; x=1754643525;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JOl1MSYefTojCErZh8qsltNJ6k7ijFO9awKdnwF++pk=;
+        b=dgntafL3NobCkZhQop7gSlbJknIpuYgLDtxlNN2OSKJDtWB7eAFRGjvI/605tBE1P+
+         JCYLUSd0am2VEaLvDPWi3bJpK2yaUrI44VyileiFE3xrzdQmm2PNtZDBn4XaER6I9s3G
+         AIcMq2l4m3nOSVoJzVaRnbAM4FPW6iyAHBWqVIZze+yvqrTgRMYIOmZLfjMEgosQqFkH
+         r03zxkp0Q+xBmJribEg44YvmOX9L/c0YFEzvfJZbnzek7EubNQqJ7jf8QrbHt7cJKSfh
+         wXfIDrAF5z2RJ3ZfLWDNgVVnGNIF43l6GB/EV+ehvxoCl7kgoeLbMZOMIp+xR8uQxELH
+         Dsgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgWBpA3yJOBwAwOnoTajXRQb8KPa9st+MkqapzWJUvpWo63WUR4n7g/u1tb/5JQ1R25EaDwh/Vyg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwICPhTeyXi09TcPU0lcqhcJbGxqBEd2aYQxyRteP9AsGt0Qqk/
+	6PKWNk+eBZg1cZHFAOpTSOKXVPCsDEr6ZtASd0M42FB5H1uzGULge8swuC8RYxjiiEJVxz4J1Af
+	+HGTuSfoxMfuesGl5rmo00MfLY0iZws6TxWENrace
+X-Gm-Gg: ASbGncvno9MD8UpxkPxcH3FB/e9oTzAzyqkkR8rqJY3z8dw2+kLPL4RabdKVyGseGdo
+	NY5jK7B+fCuM8NZlu/q73YjtdcuyYOqA8gjpwNSTbNe1xbuMAn479rznUlwOU4P6nhmyQmGU/xT
+	eAKDbTHnSGq7BNTzMULyKk2b2tlp5z54P7i0jhc4fCqEYNe7agVgMQ19I6yis74I/TECWAMicSQ
+	9z+4Bg=
+X-Google-Smtp-Source: AGHT+IGZPZiZmkmsedPPxEFK1Zi9PX6A5w9q/2u2I8oM7+JwumozueAl6dLcW1n5UHd4+U/mtefW/B5M2HP0G1G56zQ=
+X-Received: by 2002:ac8:5a16:0:b0:497:75b6:e542 with SMTP id
+ d75a77b69052e-4aefe4c3990mr3789441cf.10.1754038724829; Fri, 01 Aug 2025
+ 01:58:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bac637b-9483-4341-91c0-e31d5c2f0ea3@oss.qualcomm.com>
+References: <20250730032312.167062-1-yubowen8@huawei.com> <20250730032312.167062-3-yubowen8@huawei.com>
+ <20250730063930.cercfcpjwnfbnskj@vireshk-i7> <CAFivqmLkLn-92rMow+c7iEADCdh3-DEapVmtB_Qwk1a2JrwwWw@mail.gmail.com>
+ <9041c44e-b81a-879d-90cd-3ad0e8992c6c@hisilicon.com>
+In-Reply-To: <9041c44e-b81a-879d-90cd-3ad0e8992c6c@hisilicon.com>
+From: Prashant Malani <pmalani@google.com>
+Date: Fri, 1 Aug 2025 01:58:32 -0700
+X-Gm-Features: Ac12FXygzDscixfovYhnPuPs4Q4VoA30a7tpfkC611rVjiBE56c-KasZPY6RYqk
+Message-ID: <CAFivqmLr_0BDkMhD4o6box3k9ouKek8pnY7aHX36h1Q9TaT_HA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in cppc_scale_freq_workfn()
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Bowen Yu <yubowen8@huawei.com>, rafael@kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com, lihuisong@huawei.com, zhenglifeng1@huawei.com, 
+	Beata Michalska <beata.michalska@arm.com>, Ionela Voinescu <ionela.voinescu@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 01-08-25, 13:58, Krishna Chaitanya Chundru wrote:
-> When ever PCIe link speed/width changes we need to update the OPP votes,
-> If we use named properties approach we might not be able to change it
-> dynamically without removing the OPP table first. For that reason only
-> we haven't used that approach.
+Hi Jie,
 
-I am not sure I understand it fully. I thought this was a one time configuration
-you were required to do at boot time based on platform's configuration.
+On Thu, 31 Jul 2025 at 01:32, Jie Zhan <zhanjie9@hisilicon.com> wrote:
+>
+>
+>
+> On 31/07/2025 06:34, Prashant Malani wrote:
+>
+> Hi Prashant,
+>
+> The perf counters could return 0 when a CPU is enters a low-power idle
+> state, e.g. reset or powered down, and the perf counters are in the system
+> memory space (the target CPU is not woken up unfortunately).
+>
 
-If you need to change the performance at runtime, won't you switch to a
-different OPP ?
+Thanks for the clarification. Reset and powered down are not typically
+considered "low-power idle states".
+Please re-word your commit message to specifically call out the "reset and
+powered-down" CPU states.
 
-I don't have much knowledge of how PCIe works, maybe that's why the confusion.
+This begs the question: why is this work function being scheduled
+for CPUs that are in reset or offline/powered-down at all?
+IANAE but it sounds like it would be better to add logic to ensure this
+work function doesn't get scheduled/executed for CPUs that
+are truly offline/powered-down or in reset.
+
+BR,
 
 -- 
-viresh
+-Prashant
 
