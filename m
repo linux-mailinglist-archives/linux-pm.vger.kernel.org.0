@@ -1,132 +1,239 @@
-Return-Path: <linux-pm+bounces-31751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0294B1803A
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 12:32:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4CEBB1807F
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 13:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 510E762564E
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:32:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B007A840BD
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A3B245008;
-	Fri,  1 Aug 2025 10:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D3123956E;
+	Fri,  1 Aug 2025 10:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="G2amnp8H"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WERKOMoG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812C123D2BC
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 10:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DBB2222BF
+	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 10:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754044275; cv=none; b=K3vVUw65OwKHlo/+AhPlJ0y3gx/95e36WBWdxaE+Ih4SFcwkaCeQZrt7zBATTXfTSXrWzaTC4M1zBN8mDRNZQW2X7b07O6LM29p4IDAA5ESNItw8My6GFNKtHrsLQTcQwycZ4hA2qI5Wx3TNzmqv9YSXHhhYSsXnyHs4G2pofho=
+	t=1754045995; cv=none; b=QLTky7a81XCZJrFCuC0XTAqyxQxhzsmNaMg1FWQOhIC3637YvGDj5PcIh10hP1B6kemW+EhPa/6yP08MSM5Qmx9xIl4mvz00EKnzqp3Dqepx3CplV132ksHCFHHidqm7AdGPFBoE+MA6mbM6AdSYaseeL+vVpG3MQjmuLPuQw3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754044275; c=relaxed/simple;
-	bh=Eqahkamg13uwXjpD2HqVe8PGEmKJKZBW1G6dF/3Hy5o=;
-	h=From:Date:Subject:MIME-Version:Message-Id:In-Reply-To:To:Cc:
-	 Content-Type:References; b=uRE/Gn2Y3H1EK9FcRV+jZWDWQ5KL1Zv0z+nruuv2X2KPE8k2QiIRJiz4rNVeynXUvOVa/uTd3nsHNLRwzmgCcJLjn8wxq3z81RcLeVelopM1wSHwzBurw27hiwxv3Sa6spRLgOFFXCgbXTFGinxe87W7Ua7FOePjAdOmKnK5xk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=G2amnp8H; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250801103109euoutp01ae34e9fad325b7481effc7b61669e567~XnfhcOYZp2763627636euoutp01D
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 10:31:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250801103109euoutp01ae34e9fad325b7481effc7b61669e567~XnfhcOYZp2763627636euoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1754044269;
-	bh=o9pup7lxdlJYj1WCugUFlZF6W3E8/CCvLfzm1q+9rG4=;
-	h=From:Date:Subject:In-Reply-To:To:Cc:References:From;
-	b=G2amnp8Hi8sG4cTYJibb5hzUdFwgnjKAscAJApCu6Z1R+BGx1re3mfb8H6uV3B+SK
-	 PVrF//854ldoqmHayIz6SODumIyWCKXaYBOpAe3qU4xuvw3aTc5xWkojHxrj/M0wOh
-	 eAwgh7JypDR1pPyh5mNMoVbdahlU9WfrbxUctJNA=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250801103109eucas1p29ad9dc63368058db925aa341bbb16ac2~Xnfg1eEDF2329723297eucas1p2C;
-	Fri,  1 Aug 2025 10:31:09 +0000 (GMT)
-Received: from AMDC4942.eu.corp.samsungelectronics.net (unknown
-	[106.210.136.40]) by eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250801103107eusmtip15820c98c68101a33a97e84008a0e1778~XnffmkgEc1169111691eusmtip1i;
-	Fri,  1 Aug 2025 10:31:07 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-Date: Fri, 01 Aug 2025 12:31:04 +0200
-Subject: [PATCH v10 4/4] drm/imagination: Enable PowerVR driver for RISC-V
+	s=arc-20240116; t=1754045995; c=relaxed/simple;
+	bh=/4HcNsYuPuKqKa0GMfjXIWddRLLdPlG956ypUck+HYA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NJrPHamtC3umE/6wph/Bs01EQZkwQtLSS0GaD+jp02sy0aZxzzCMR1qiJR/W7kx8lIUQsPesFQ+n/zxBelC+KUQ3pYrI8R8lHb1FcShbYmx3ClshUmmxgwv/CYhHU5AXCmzlZkMgKObn4k5gEJjXtkS5JZa8PHLLWmqs3idpKkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WERKOMoG; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5718wGPw001423
+	for <linux-pm@vger.kernel.org>; Fri, 1 Aug 2025 10:59:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=zTFFAeIFTLiRy/i60mIiB2
+	RbpJFjzSiBU0ApmUpYKnQ=; b=WERKOMoG00NbFz9aKmnIpQzad8au6L6g6DMvC9
+	4O+f2W/xA50biPAgtzWOT5hVv838s15YjdJH7xPmSpUOiS6/rLrTAFuR1KaiBjxi
+	urgdY6IUTYsqofYdzpjaLO8G5yk2JZGtqzWIMtsFnRDB6RFP9v9SyEXNn66SENyx
+	eyOrj9wFK8TNyrSypFEMAtg6qjAksDi4dGHkqapiuahJdJbdEsqYD49i5q71bTh9
+	YEmGPwaDshASsA8Sth90ZwvLlHj1nWobPRaCCgzlArllndJgSBrX4ZECCYFRTkp7
+	p6DLUEodTJCxf+OUOvx0WYXpcDjj4EXksUuhQTcItb1a9Pkw==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484nyuc1sf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 10:59:52 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-31f3b65ce07so2828647a91.1
+        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 03:59:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754045992; x=1754650792;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zTFFAeIFTLiRy/i60mIiB2RbpJFjzSiBU0ApmUpYKnQ=;
+        b=Q+xwSdPHfT9maNrMsOrSBRM1jUFKJkSXMiurvvbAfoI3Y0b/WZjk9U2b0OBjWfpsZn
+         CbfTOp7q+l2P9wTtCFhWh0axIJ1PmDGnu4Q23Row1tbkLaER6X75G2xLMwgSImScu6+p
+         kSA6uVuNKd5lkiykAZwQAE6nTp32+z+92O0GYe09pW8nO+whj1r7lkXXw0K1pAGEzCUm
+         ZiA1UOaQKea4ayZSfPDP7PLn6OFeUf6Ut1wycwMahpF9EwtlepEzPnoISfa8CHMNfJrH
+         pYkaiACTuI5SjrO0V8ZP8OQ6DcyiKGSuoXaHcbLx51WlN3iXK+cWkfIOE0KicPeKi7Ao
+         u/lA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhfr6b74tlA8RVHGCj+BL0lgQ8JlNYx6sP4MG8WuSC0xhOtGtw5LTe8TyzZxu5Y52Nn/+xeAuIiA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6EgMI6mlQuszTfTavBeoIWU2wyGXAnO5n0vFv+0iwGcaVr+4y
+	FyJjRoKppCxmrfr/uInJ/xgvaOo40TseeFw6SaSJsqPV7SravssMgr5EqtYlZJSEzcX4+JMETHQ
+	Kw9v+7ZLfhPJOMSgbeZQwEShH9/I8r5zIEWHYOuEd2+apPAfsNFq43V9gvFlQMQ==
+X-Gm-Gg: ASbGnctsVm+QW3hbeWiHepGpIzhNvDm1GIY1G8MCuzbyp91/pnIet+LqglPZCpHC7qo
+	0211BsPuyrJ1cWwDgdtL6Wfq34JQ8exon1YwmKwAyDQ9kH07zQbWL5ilJ+CI5tQTleyMk3vd5mC
+	BNVTySWUvmrnVnyDwv3QaBVUZyv4gTqArcnvwOPW7X9CikDTXhYoLpco3MCnSapkXGcqD3QaA7f
+	D6/LCJOyiR7fkZOfPvM+JiBaVDR3t7hs1N5sl3VLi90hRG1mEgV9kI3WaFS2Cb6rFbfx9BSL/Km
+	tzrW+8HU1t3rxE/ol5fnl5ItJgVjDzMcVM68le4X/bdVuN0HVVRcLZpf/qOksd2I+edvSGeGF8I
+	=
+X-Received: by 2002:a17:90b:4b83:b0:312:1d2d:18e2 with SMTP id 98e67ed59e1d1-320fbc0cbe3mr3394400a91.20.1754045991692;
+        Fri, 01 Aug 2025 03:59:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG6bONo1H4JD3Nq/jZ9zCujvL2MwG8Nx+GThjxrvIdSlYPJkARGgDxuNMI80MhgDVXQ2524lA==
+X-Received: by 2002:a17:90b:4b83:b0:312:1d2d:18e2 with SMTP id 98e67ed59e1d1-320fbc0cbe3mr3394360a91.20.1754045991123;
+        Fri, 01 Aug 2025 03:59:51 -0700 (PDT)
+Received: from hu-krichai-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31f63f0b4aesm7154395a91.26.2025.08.01.03.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Aug 2025 03:59:50 -0700 (PDT)
+From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Subject: [PATCH v4 0/3] PCI: Add support for PCIe WAKE# interrupt
+Date: Fri, 01 Aug 2025 16:29:41 +0530
+Message-Id: <20250801-wake_irq_support-v4-0-6b6639013a1a@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250801-apr_14_for_sending-v10-4-e85802902a29@samsung.com>
-In-Reply-To: <20250801-apr_14_for_sending-v10-0-e85802902a29@samsung.com>
-To: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,  Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
-	<conor+dt@kernel.org>,  Michal Wilczynski <m.wilczynski@samsung.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,  Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,  David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,  Paul Walmsley
-	<paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>,  Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
-	<ulf.hansson@linaro.org>,  Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Drew Fustini <fustini@kernel.org>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org,  Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.15-dev
-X-CMS-MailID: 20250801103109eucas1p29ad9dc63368058db925aa341bbb16ac2
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250801103109eucas1p29ad9dc63368058db925aa341bbb16ac2
-X-EPHeader: CA
-X-CMS-RootMailID: 20250801103109eucas1p29ad9dc63368058db925aa341bbb16ac2
-References: <20250801-apr_14_for_sending-v10-0-e85802902a29@samsung.com>
-	<CGME20250801103109eucas1p29ad9dc63368058db925aa341bbb16ac2@eucas1p2.samsung.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB2ejGgC/3XOwW7CMAwG4FdBOS8ocdOGcOI9EEImcUfEIG3Sh
+ k2o774AByatXCz9lvz9vrFE0VNi68WNRco++XApQX0smD3i5ZO4dyUzEFCLCgy/4on2Pvb7NHZ
+ diAPXRmto7co6pVg56yK1/vtBbnfPHKkfizy8lkefhhB/HrVZ3rfPBiXk/4YsueAOCKBVKKh1m
+ 5DSsh/xy4bzeVkGu5sZ/jhy5tMMxRHNAckZXGmUb5zq5TSinnGq4ugD1o2zRhisZ5xpmn4BPQm
+ ZClwBAAA=
+X-Change-ID: 20250329-wake_irq_support-79772fc8cd44
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Danilo Krummrich <dakr@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, sherry.sun@nxp.com,
+        linux-pm@vger.kernel.org,
+        Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754045985; l=4504;
+ i=krishna.chundru@oss.qualcomm.com; s=20230907; h=from:subject:message-id;
+ bh=/4HcNsYuPuKqKa0GMfjXIWddRLLdPlG956ypUck+HYA=;
+ b=+IKXpiXeiPS33FaFgO8OgLiygKkSZTU3k5pDppPOhq2n37xvJjg2voFkqfd06SghIU2IKSmMJ
+ 7RtYtHKFAGyBRBeX76k1dIIoOWwrZLa7HJcxzWKuhM3qVym6ACEewFp
+X-Developer-Key: i=krishna.chundru@oss.qualcomm.com; a=ed25519;
+ pk=10CL2pdAKFyzyOHbfSWHCD0X0my7CXxj8gJScmn1FAg=
+X-Proofpoint-GUID: IKqD4qE4C5jC1Agmvxnw_pZADttIUrVF
+X-Proofpoint-ORIG-GUID: IKqD4qE4C5jC1Agmvxnw_pZADttIUrVF
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAxMDA3OSBTYWx0ZWRfXzfNkcBzh+6BQ
+ 5boqDE77rcbRMWHN3dsSxaAj33i+hdf89tlGT31Bbku+/KQdzYQjQoLr++kMzYqBAxKZd/jMiuy
+ pTilXmuYzDb55EL/nkJDXTw7A4RPIK4XW/ex0m1WOiwWtG4/tj721gGLV28YWM+lmrkCm81/uRG
+ 06kedWRxMh81cajUC4TVfzc9vL2sX7NUJgKZjYnXDPL2U6nQGOfjw0uaXSHY45PuSfPU0/R2kBw
+ foJxMgGj4p/qCxcJeZloxAQZLmk5gBMrn9jNtg+K0o/+QDkoNbvjnq8hDat3NW3V02cCGw9loLZ
+ 6WUOSBPooN5bSrNvEVMgub1bPpUTpnEQB965AmqXO8gsmJhQI4ZR4Yq1aRBw6UckNyAt/a2At9d
+ xwWQlXJV4FJk1leey6rMR4DuBa4TuoSktXrOIcxZKBXjLV0CxjufN/oYouQBsTf0eysNKbZa
+X-Authority-Analysis: v=2.4 cv=CLoqXQrD c=1 sm=1 tr=0 ts=688c9e28 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=Ikd4Dj_1AAAA:8 a=s8YR1HE3AAAA:8 a=CDPgDjw5ZRyPGz7T9_kA:9 a=QEXdDO2ut3YA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22 a=jGH_LyMDp9YhSvY-UuyI:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-01_03,2025-07-31_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 adultscore=0 suspectscore=0 mlxlogscore=904 spamscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ clxscore=1015 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508010079
 
-Several RISC-V boards feature Imagination GPUs that are compatible with
-the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
-4A board. This commit adjusts the driver's Kconfig dependencies to allow
-the PowerVR driver to be compiled on the RISC-V architecture.
+PCIe WAKE# interrupt is needed for bringing back PCIe device state from
+D3cold to D0.
 
-By enabling compilation on RISC-V, we expand support for these GPUs,
-providing graphics acceleration capabilities and enhancing hardware
-compatibility on RISC-V platforms.
+This is pending from long time, there was two attempts done previously to
+add WAKE# support[1], [2]. Those series tried to add support for legacy
+interrupts along with WAKE#. Legacy interrupts are already available in
+the latest kernel and we can ignore them. For the wake IRQ the series is
+trying to use interrupts property define in the device tree.
 
-The RISC-V support is restricted to 64-bit systems (RISCV && 64BIT) as
-the driver currently has an implicit dependency on a 64-bit platform.
+This series is using gpio property instead of interrupts, from
+gpio desc driver will allocate the dedicate IRQ.
 
-Add a dependency on MMU to fix a build warning on RISC-V configurations
-without an MMU.
+According to the PCIe specification 6, sec 5.3.3.2, there are two defined
+wakeup mechanisms: Beacon and WAKE# for the Link wakeup mechanisms to
+provide a means of signaling the platform to re-establish power and
+reference clocks to the components within its domain. Adding WAKE#
+support in PCI framework.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+According to the PCIe specification, multiple WAKE# signals can exist in a
+system. In configurations involving a PCIe switch, each downstream port
+(DSP) of the switch may be connected to a separate WAKE# line, allowing
+each endpoint to signal WAKE# independently. To support this, the WAKE#
+should be described in the device tree node of the upstream bridge to which
+the endpoint is connected. For example, in a switch-based topology, the
+WAKE# GPIO can be defined in the DSP of the switch. In a direct connection
+scenario, the WAKE# can be defined in the root port. If all endpoints share
+a single WAKE# line, the GPIO should be defined in the root port.
+
+During endpoint probe, the driver searches for the WAKE# in its immediate
+upstream bridge. If not found, it continues walking up the hierarchy until
+it either finds a WAKE# or reaches the root port. Once found, the driver
+registers the wake IRQ in shared mode, as the WAKE# may be shared among
+multiple endpoints.
+
+When the IRQ is asserted, the wake handler triggers a pm_runtime_resume().
+The PM framework ensures that the parent device is resumed before the
+child i.e controller driver which can bring back link to D0.
+
+WAKE# is added in dts schema and merged based on this patch.
+https://lore.kernel.org/all/20250515090517.3506772-1-krishna.chundru@oss.qualcomm.com/
+
+[1]: https://lore.kernel.org/all/b2b91240-95fe-145d-502c-d52225497a34@nvidia.com/T/
+[2]: https://lore.kernel.org/all/20171226023646.17722-1-jeffy.chen@rock-chips.com/
+
+Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
 ---
- drivers/gpu/drm/imagination/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes in v4:
+- Move wake from portdrv to core framework to endpoint (Bjorn).
+- Added support for multiple WAKE# case (Bjorn). But traverse from
+  endpoint upstream port to root port till you get WAKE#. And use
+  IRQF_SHARED flag for requesting interrupts.
+- Link to v3: https://lore.kernel.org/r/20250605-wake_irq_support-v3-0-7ba56dc909a5@oss.qualcomm.com
 
-diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
-index 3bfa2ac212dccb73c53bdc2bc259bcba636e7cfc..682dd2633d0c012df18d0f7144d029b67a14d241 100644
---- a/drivers/gpu/drm/imagination/Kconfig
-+++ b/drivers/gpu/drm/imagination/Kconfig
-@@ -3,8 +3,9 @@
- 
- config DRM_POWERVR
- 	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
--	depends on ARM64
-+	depends on (ARM64 || RISCV && 64BIT)
- 	depends on DRM
-+	depends on MMU
- 	depends on PM
- 	select DRM_EXEC
- 	select DRM_GEM_SHMEM_HELPER
+Changes in v3:
+- Update the commit messages, function names etc as suggested by Mani.
+- return wake_irq if returns error (Neil).
+- Link to v2: https://lore.kernel.org/r/20250419-wake_irq_support-v2-0-06baed9a87a1@oss.qualcomm.com
 
+Changes in v2:
+- Move the wake irq teardown after pcie_port_device_remove
+  and move of_pci_setup_wake_irq before pcie_link_rcec (Lukas)
+- teardown wake irq in shutdown also.
+- Link to v1: https://lore.kernel.org/r/20250401-wake_irq_support-v1-0-d2e22f4a0efd@oss.qualcomm.com
+
+---
+Krishna Chaitanya Chundru (3):
+      arm64: dts: qcom: sc7280: Add wake GPIO
+      PM: sleep: wakeirq: Add support for custom IRQ flags in dedicated wake IRQ setup
+      PCI: Add support for PCIe WAKE# interrupt
+
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts   |  1 +
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  1 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       |  1 +
+ drivers/base/power/wakeirq.c                   | 43 +++++++++++++++--
+ drivers/pci/of.c                               | 66 ++++++++++++++++++++++++++
+ drivers/pci/pci-driver.c                       | 10 ++++
+ drivers/pci/pci.h                              | 10 ++++
+ drivers/pci/probe.c                            |  2 +
+ drivers/pci/remove.c                           |  1 +
+ include/linux/pci.h                            |  2 +
+ include/linux/pm_wakeirq.h                     |  6 +++
+ 11 files changed, 138 insertions(+), 5 deletions(-)
+---
+base-commit: 5f10a4bfd256d0ff64ef13baf7af7b1adf00740c
+change-id: 20250329-wake_irq_support-79772fc8cd44
+
+Best regards,
 -- 
-2.34.1
+Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
 
 
