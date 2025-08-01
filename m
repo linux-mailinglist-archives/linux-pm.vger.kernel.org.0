@@ -1,115 +1,164 @@
-Return-Path: <linux-pm+bounces-31770-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5CA3B186CD
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 19:39:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15907B18812
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 22:22:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C91A1C839FE
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 17:39:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 997FD1C27797
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 20:22:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8CF28D85A;
-	Fri,  1 Aug 2025 17:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EB121770B;
+	Fri,  1 Aug 2025 20:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cOBkt2Mc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2dRz8Ks"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7990228C5C0
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 17:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EFA128395;
+	Fri,  1 Aug 2025 20:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754069930; cv=none; b=j+rQA83rOqRts8B8pKW9uL8k09yzhuOSr2hQjLlAU6GhriCFRoIoooVqBpADtc9FBvO0jLjPNk8Zu4f+ogx05mSDDBFwA4jTq2T/MICioEDiKqdp7eWT/NLNmx2m2/qe+6ogvfZJPezBuBHqeObP1ykujEPkb6NVq9B2MuqYL7A=
+	t=1754079754; cv=none; b=KchftT99adF81mPW7tbPJcI+xCOk444LHPJdt00KDTIJFUfp9Ucfsjfdhwn5yiJJwtq7P5K5wxVoHr780zGWdHkEltvRwkEu+vFanIHeHkD6QOHc4Ul6DBxbiasgX0VAUOZQNZIc2Dpt3Jgg2SAt813b8vvUY27h+F4nqNXKGnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754069930; c=relaxed/simple;
-	bh=aQYBObWgzoPj+il0GZKSY+WiA7phu3h4hRG7IyoJstM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F57b1frvI8V2OpRjjGP5T+uRl2FYAQRY5W2uCOzm4szzswm65QLj030ba38uMYnPnh9Yc8gG54diMmipI9j41/xRHnGoKUi451yU9Y5rt8BkkrUxPFnH6q6amyojGnpzXIIyrUYlpB7tJ7BWJ5aOu5TWrRUwan2nVlYs/+pxusA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cOBkt2Mc; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-456108bf94bso7103205e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 10:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754069927; x=1754674727; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bR778IDq2awUud7Ws1UQmVLj5RKdygQyf3jIFUrFC9w=;
-        b=cOBkt2McV/03IDW9+r4hKBtcHGpg7/f9aR+Td/bQ15YmXGLK2X0B7wWJMRWx+gcXSy
-         hUIu1olZvX/KgamkBdk2Ld1r1Js5yJnpvUeiC5FymPy9BE4KtBegaMOZqQcv//6EApQQ
-         V/SirSArym273C/r09UcuK2XSUGS14+dq2OI22ZEb2iD4w/l7bDA96w/Aq7sHcmoy+rG
-         dM/c5TBwaAA1Xg5dOnylHlxveDUJiiGG1v6k5LUKfz8P8RyRr9iN7L/ENWHWTztwwOTY
-         GMqC86Bg8ZWUYjDy8F25xJSXmdTdFUypQzjZ0Rcho5bzaiRnoQ1C0dKV9mLbxZ8czXhS
-         MPuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754069927; x=1754674727;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bR778IDq2awUud7Ws1UQmVLj5RKdygQyf3jIFUrFC9w=;
-        b=qijQ1Byy9dWygw02/KzVHbENrVpGGf7Z0LG4M8b3/tkWWitQyCwbXeZHtP/MMDhMF1
-         dIwbjbiVTn2gRhk8FE58xDqu9iItnmGEVxiESVdj+4IW+METgQfqRsiNYx/rbE5jdeic
-         F8roECT1SYoYYSmAGHO3+wV+uwfBP/g6rOxB9Eb296Lizd6Uwno/Rjidr+EjH4XZQisQ
-         sWq1/Fr4tVYLuPlimmy0GJBs31J2q7wD8bkIno6LjuPqWT519q685TWMLuQH3GYXrwgk
-         4Op7RjkKMBBoH9wYhO/0jmIEywEaHjb+Gb/fbNya7erxDCuQ8bFCaFxI3OMf/f1x/Zzs
-         IUIw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7Xwabv5VViHTOXF2Q10O6KvTyusqTuYK7zdM2ulDByWnOeE5EavO9AJff+BccMkduH759toFqZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNj9LLJeC2VlyKfqG1Xu1Bu1HAxs55KzVpBdDidzg6UEKZho+u
-	D8GoKFTNkM19T34O0tmfB3slownWUH4EfQ4mk3NUGcJSuT3yrfNQFdEeMSuDqGN4vDWhLoQ9mpM
-	3mZUq
-X-Gm-Gg: ASbGncuzQ6BbtFIq39zdjv9DbBLzFXECaJQS5oQWj42Tn9fFCDFQ9vt7TyWgTFoyOWB
-	KIzqgwJsPg6oQ3f4VnIwm/TopABtNBXuz8+B6/1SkdAiSo3TgqNroJrPDFrnbNiBRLNSqWN7iTL
-	Pn5yw0laK0/a5v0X9ZWYp7uJhnsJa+TVUq5LNm7nepe9dCxd+F3M01y0CF4M1xPeKRmzNMylKdg
-	hTRrFlM5Q8PCu4gVn2TT1QJU9G1myLiq9gLzuiapzDtN6bhS7r+YW/c34ms0PuEtTi8tTfabb29
-	fC6P+oKKV4+g6M9ZXHmL7p7X2mkXXzjS41Vkf+Mse2ODSX0eSPeRA0Rrm6pUXWE1M2dV41O/bRI
-	vnUzDAynYVOCCQus+WjIjqbuatGRPDGkk6nAw/su15+5w8l1d38PU4Dm0jFkIcA==
-X-Google-Smtp-Source: AGHT+IFSgI7ynQO05ITDIMMGNQuV0NhyoU+S80DP5VZti0Les4bHUCSN7kHUohJoYSqboUd/PkGLIQ==
-X-Received: by 2002:a05:600c:1554:b0:458:7005:2ac3 with SMTP id 5b1f17b1804b1-458b6b34cb7mr1416375e9.21.1754069926804;
-        Fri, 01 Aug 2025 10:38:46 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4589edfcdf4sm72965545e9.11.2025.08.01.10.38.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Aug 2025 10:38:46 -0700 (PDT)
-Message-ID: <9e4db85c-83bf-463e-9c6d-bc31e5889574@linaro.org>
-Date: Fri, 1 Aug 2025 19:38:45 +0200
+	s=arc-20240116; t=1754079754; c=relaxed/simple;
+	bh=MBKqTrl7De+//6Sthfsz709YwDUNOv8L2Db7Ke4xXWE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cpMTklMIKtU8+45WuFuiB/yIcJoxBHgxin5IWamVq234TaQg0QwDwDry29YI2xshX/ojQhp6UlkoCWl6nqPnkUBMP7WG+cI5rnhO1AS9YND4G1RmsteHob4IYY7VTgLD7VY74Z5GH/lhWkyFFJ4zR7kFXvf/ybSTxCE5heZ3hzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2dRz8Ks; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC8DC4CEF8;
+	Fri,  1 Aug 2025 20:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754079754;
+	bh=MBKqTrl7De+//6Sthfsz709YwDUNOv8L2Db7Ke4xXWE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=X2dRz8KsPcFAIvrgyvpuXjzwWt7NUAzIVzoAFgZPOHXMcBnQB/ns+D3rmUEPewuwj
+	 4l0tJlZ0W2flmq9RAT/KKBAXwNaGcd/itess8hy9/F8PUCXEJdOOCAn/jQddu8idej
+	 b6a+FnQYPX3ji1FfmyqfibpTTJnXLz1YkmWz94e25WY3JzwevDII56V0c3XOHNm0eo
+	 C6bBTcyydZ3BTitYkdBlGCbngd8nM1UaevSOLIpz5bcKlW86JpiybJlW8PJ1IrZsCb
+	 BNLidNqFe+THMNJfr3GrJhVF9gNssxjPmQR3r6hhMATSx++nwcXZUl13544816Seur
+	 NSW1f+2WKOmpA==
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-af939afe5efso101382366b.2;
+        Fri, 01 Aug 2025 13:22:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVQjr2NXpAOmlafEDUV874WCdgKFNnOKHaK9+DhZl143nYLzdnrfKWN+etp8kLHNHakFgnL5CnwS5YC@vger.kernel.org, AJvYcCW3dT4f3PWIOa4GWMWI42CgF5DARgn0YKOUJki03u/KQAr2XW5D2w72so8F8qBXr+1lLF8atupIy7kZfhsI@vger.kernel.org, AJvYcCWBIO08eWOyJx6KTbhaHYr3qr3Hf8TsTFiiYTogm4cRdZX6fy+WR/JVo07BKI2qaNbuDQdGUpy3yn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSwUe8Sxzjt3YyVfE/cxX5UwkY5blvDFOYN/Oc9ginzTkFDIJP
+	sHNGvAPBBMxfsZf5FIPbXL+LWPgbu0HiHWuqJBsy/b9p5cL4XuOH0zh2WFutLBLpQiSTm7QIBzQ
+	xdUTvOfbIHtvhVdmUfpgSufsfVmZZfQ==
+X-Google-Smtp-Source: AGHT+IF2FQeKqn3oxGhmUb/arfH4bLPa8tvubqqolJ6Gmcd5eN4grlIXOWVZzTj5MlHwqbzfRxzIVzfSZDCYorxRVRE=
+X-Received: by 2002:a17:906:730d:b0:af2:7ccd:3429 with SMTP id
+ a640c23a62f3a-af93ffb9343mr121622166b.9.1754079752556; Fri, 01 Aug 2025
+ 13:22:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] thermal: qcom: lmh: enable COMPILE_TEST testing
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Jackie Liu <liuyun01@kylinos.cn>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20250728-lmh-scm-v2-0-33bc58388ca5@oss.qualcomm.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250728-lmh-scm-v2-0-33bc58388ca5@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250702230030.2892116-1-robh@kernel.org> <87qzxv5d7z.fsf@bootlin.com>
+In-Reply-To: <87qzxv5d7z.fsf@bootlin.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 1 Aug 2025 15:22:20 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+fV-W+PqZpvns5oFNyGXxKYYrHe1ipG7gj6dN-c2JJ6g@mail.gmail.com>
+X-Gm-Features: Ac12FXzhED1_iNtqGkETiImlxD5HzfkBaY0XhZLrcDQxDOWi_frU1iKEaFUuOE4
+Message-ID: <CAL_Jsq+fV-W+PqZpvns5oFNyGXxKYYrHe1ipG7gj6dN-c2JJ6g@mail.gmail.com>
+Subject: Re: [PATCH] dt-binding: thermal: Convert marvell,armada-ap806-thermal
+ to DT schema
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-arm-kernel@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 28/07/2025 14:18, Dmitry Baryshkov wrote:
-> Rework Kconfig dependencies and make LMH driver subject to the
-> COMPILE_TEST testing.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> ---
+On Fri, Aug 1, 2025 at 9:27=E2=80=AFAM Miquel Raynal <miquel.raynal@bootlin=
+.com> wrote:
+>
+> Hi Rob,
+>
+> Sorry for the delay, I don't know why I forgot these.
+>
+> ...
+>
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - marvell,armada-ap806-thermal
+> > +      - marvell,armada-ap807-thermal
+> > +      - marvell,armada-cp110-thermal
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    description: overheat interrupt
+> > +    maxItems: 1
+> > +
+> > +  '#thermal-sensor-cells':
+> > +    description: Cell represents the channel ID. There is one sensor p=
+er
+> > +      channel. O refers to the thermal IP internal channel.
+> > +    const: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+>
+> IIRC on these Marvell designs, there was one (or more, I don't remember)
+> Application Processor (AP) and several Co-Processors (CP).
+>
+> [On the AP]
+> The AP8XX overheat interrupt was not directly wired to the GIC but was
+> going through another intermediate IRQ controller named SEI (System
+> Error Interrupt).
+>
+>       Thermal overheat IRQ -> SEI -> GIC
+>
+> [On the CP]
+> There was one interrupt controller per CP11X named ICU, which would be
+> connected to the top level GIC through MSIs. The ICU was however split
+> into several sub-controllers reaching different areas on the GIC.
+>
+>                                       MSI
+>       Thermal overheat IRQ -> ICU SEI -> GIC
+>
+> As the OS could not guess the internal connexions, I believe we had to
+> include in the bindings the parent IRQ chip we were connected to. In the
+> case of the thermal over heat interrupts, they were all going through an
+> SEI controller (System Error Interrupt) which, if I still remember
+> correctly, was not the default parent, hence the use of
+> interrupts-parent/interrupts-extended in the examples.
+>
+> This is all a bit cloudy in my mind, but I believe these properties
+> matter and with 'additionalProperties: false' and without
+> interrupts-parent/interrupts-extended allowed, a real world DT
+> snippet would not pass the binding checks.
 
-Applied, thanks
+'interrupt-parent' is implicitly allowed anywhere. Who is the parent
+is outside the scope of the binding given it can vary.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> > +examples:
+> > +  - |
+> > +    thermal-sensor@80 {
+> > +        compatible =3D "marvell,armada-ap806-thermal";
+> > +        reg =3D <0x80 0x10>;
+> > +        interrupts =3D <18>;
+>
+> I do not know how accurate the example must be, but maybe the example
+> shall reflect the SEI connection as well.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+No one has cared about converting the Marvell bindings, so *shrug*.
+
+Really, the whole example should be deleted when/if the parent is
+properly documented.
+
+Rob
 
