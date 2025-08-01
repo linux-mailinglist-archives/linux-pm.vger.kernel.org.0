@@ -1,88 +1,48 @@
-Return-Path: <linux-pm+bounces-31740-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31741-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47008B17E47
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:28:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81D1AB17EA1
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 10:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 101A91C8006E
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 08:28:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12CDB1896C12
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 08:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D84F21B9DB;
-	Fri,  1 Aug 2025 08:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79CB821421D;
+	Fri,  1 Aug 2025 08:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BxIVFVQu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SHtz1BnW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBCC2147EF
-	for <linux-pm@vger.kernel.org>; Fri,  1 Aug 2025 08:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F59118C02E;
+	Fri,  1 Aug 2025 08:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754036892; cv=none; b=KuEyom5GGRs+vuuvspHpWuypI2V19YSVnN7/PgkoSODJajN5sTPsLpQjxx7kkqCIAuLZax7MTHnGKhm+rwf7hsw0+1Pt99W3mfX4fm9d0JyNlLDqmhyky8Izd9dbFHcN5yz3yaMH4u2k2YyZfPzYRbUVg9dGux1IbSdiJ8Mx2Xk=
+	t=1754038506; cv=none; b=ud0BgI1JMwX0bsoWgPvsNxTtjHevu4E+c8uUfQ2dttb1tfUA3qd5fojQcSTcIWeDTIOtSMvWfIoBmdWLCBYSKVWeyBU9+QN6USAs41i+hDUICqCN9vZvB7KrRPN5WanEd/omjqrIQ8tQkoVTRgbTxb3cR9L1KpAxIqkLQYlylZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754036892; c=relaxed/simple;
-	bh=n21FYt0R2MUIO2Qf1PzQwL42JjC+OUvtksC+UTS2eYo=;
+	s=arc-20240116; t=1754038506; c=relaxed/simple;
+	bh=Bz6BUp7Tw0CSmTxMjKUZlbJzRNbtQ7byvHPMgJbKn6k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UDg2otNuOk8I6u5QNkelVN2EGsVVcnlOjd1vkm9QedhxK8Ju0KTBXbstkdrLWl6aaB761PJScRB1DY9NFadhpFyuBafZ104loj+hY50P540lX2EZY0ZIdkhSA2dk7YjCGB8P3B2rwI5dNsm4jctmbq0fex69s37J8kxoLstTNco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BxIVFVQu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 571116wb018848
-	for <linux-pm@vger.kernel.org>; Fri, 1 Aug 2025 08:28:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	maSw2CmMyXYMAvKmdoOc+yYzrI3pcEaJZUjifnEuM/o=; b=BxIVFVQuqV0jyujy
-	yHXB+wfkRrSKT9aqMVbG1hqlQELgHhIU31sT9BQBmkigZh8NjIwCOHnODCmxojIY
-	Gfy2ZJPhYzSTY3CRBhu9ZbavBhYXZa8QcaqBE2pfcfjfvgbUePgFM1I7cMpPt1tw
-	zytn4BNQ6goS4nTh1UZ0W7CrGekoKs8dbm2Ch9fQsgIC90gKTCj4Wb5MSSuoD0+N
-	tKHXl/Q7dpaHp5IFWzq8rcv1U33Pd4/W81yOWNiH/bK3MvUH8eYdkxmVDr9ltYfM
-	nULozSQZwOj6UluFGaBsoZrYYqmNp21Th9zb9KOAUvMs3iCZtXgoaSZZyNGoaZxz
-	r9WgIQ==
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484qdaaxgj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 08:28:09 +0000 (GMT)
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b38d8ee46a5so1753612a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Aug 2025 01:28:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754036888; x=1754641688;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=maSw2CmMyXYMAvKmdoOc+yYzrI3pcEaJZUjifnEuM/o=;
-        b=dWLtCCBTfnkDZ7xDXVjL41rk61Tke12wx47BZtA/20xLs8EgH5QBkUtKZHO/OS+bS1
-         /qxX5/b7p9puVlBDWAfYhbR4Di+2j6f//mQCBt2KFVbF2ni7iBHsnKlFREjnMqTXDSMe
-         BtjYFrc5y6/J1pwJlbfc7P+18RxXHbs/UyMrHiR0P/n5NyHYy+ZMeqiqJ+JWeX1vHKBi
-         aHHQZSjN1HLNEaM8iTHRmTaYMsXmCIu/UCVET96943T6KL43lnFnNd2fTHNi+++fqOZx
-         QDSvwIHoYtMe5gWF/futDxv/zm9tJ/41W599TQRbPzdIJ7DBJVyhPO42nqzsQ2koWqte
-         j6Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCUq8H/74aMzMNwiLZ4O73sYwBh95BsX+Qjvj6eWGDOPRh9WZ0oQ7Y20be5i/Y6a7gCSvmJi8F9m+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbpZv0z4Y89R2Q/bx2Lti5abDk8VjVT8yms1OyrttbHEGr9pR6
-	PwPdixnqPEZgMnAUTDohk+AQP3Ko0zrtZ+eJ+DNvAB2qoaqkK0/qqEEljcY2gmLT7YXz9hagHnR
-	Az9i+4cqg/uTjYNX7i1sTHraupp9mxbGyGKJykgqZvSfi/hmjeVbkni3Sl/9YHA==
-X-Gm-Gg: ASbGncsh42yzvC8ztJCUAOgY93oujdYqDD6CAescY3pLM6N1ZaxpR2U2tU46aLzpoOJ
-	OqYea8KCtIygHn+lwcReSDbGHTearqDDGz6ftSZ3kUWNgMY4o2nxOmTOzVqlMw/pZQgD+AIdP8v
-	TYTu1ws0rrghGA3jcO8lGCiHunVEEcDnrxVBMhNsJMGV/B3mrMnjRt7mFLp/IYpjceKXAobin++
-	vMwWy7HlhySpMb+smzDjuN9osWdWwKZhxZUlxFvA/sT8D9leHwCxXVfru4ArJWM7L9PqOIJQMbE
-	mOfDzv2pjCk/9hGNh077wApBpMWJ/lT6hv/DXNHhwu78gS4XllMl5wAWl7dSHUA2dzMru2fusA=
-	=
-X-Received: by 2002:a17:903:283:b0:231:c3c1:babb with SMTP id d9443c01a7336-24200b0f9f0mr71691855ad.18.1754036888073;
-        Fri, 01 Aug 2025 01:28:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFXzVMpoNTOUr+QJdVXJ84SNHSBTQYxIJbq36BDLV4wmlovxf8sqtvX2B9vl9qw1lN1AHJg7w==
-X-Received: by 2002:a17:903:283:b0:231:c3c1:babb with SMTP id d9443c01a7336-24200b0f9f0mr71691545ad.18.1754036887597;
-        Fri, 01 Aug 2025 01:28:07 -0700 (PDT)
-Received: from [10.218.42.132] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e89a3acfsm37009225ad.146.2025.08.01.01.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Aug 2025 01:28:07 -0700 (PDT)
-Message-ID: <7bac637b-9483-4341-91c0-e31d5c2f0ea3@oss.qualcomm.com>
-Date: Fri, 1 Aug 2025 13:58:00 +0530
+	 In-Reply-To:Content-Type; b=EdZoUpMLit9o6dz6pUS48EiwHqP9VAHW+ch3cTqwRyjBKCssQ8Yi64ORTj0sRUPWsGNPVUBsTfFbu7ToUq9MZ0669784ApRkcWim1U6qPsjr1iZ0FxuAvdi/US6TwugPfJpXglbXK5wBARIOLHz2auGni57cDqOZxgibvu8AX8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SHtz1BnW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D92C4CEE7;
+	Fri,  1 Aug 2025 08:55:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754038505;
+	bh=Bz6BUp7Tw0CSmTxMjKUZlbJzRNbtQ7byvHPMgJbKn6k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SHtz1BnWgNBv1aHxw7Qwt+9luZxSzBVGlJZplqDMfYU3l+B7T6wIfEWG1EdoLVd5b
+	 rkTjImQNw6tdZacd1YRN7IkkXved6gWsfAc0qAbfDYVQPjlCVSeLkvYy6XPtVrPw6c
+	 OXAfSjY5YEIt4UXEVgK7snJShbWhNtOL+E9e2cPEfq4H7Jt3di/BT3YbRblqiDvjT4
+	 EY/CvESf5d7pnGxtAaJ6lkeWVIwqO3YUaP6DQQgStgerXosD0x7KfdPBsYjxogcZPv
+	 2vinLouEiiZCHcGp9xeIp0Bp5UdeRhlKNXIqOHmpySdoutLNwikAYis0GQDTQI7bzd
+	 j9yt3s5KGVrIA==
+Message-ID: <8dcbdb51-82ba-44bd-800f-ceb43f88cf4d@kernel.org>
+Date: Fri, 1 Aug 2025 10:55:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,129 +50,90 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] opp: Add bw_factor support to adjust bandwidth
- dynamically
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250717-opp_pcie-v1-0-dde6f452571b@oss.qualcomm.com>
- <0dfe9025-de00-4ec2-b6ca-5ef8d9414301@oss.qualcomm.com>
- <20250801072845.ppxka4ry4dtn6j3m@vireshk-i7>
+Subject: Re: [PATCH v2 1/4] dt-bindings: thermal: qoriq: Update compatible
+ string for imx93
+To: Jacky Bai <ping.bai@nxp.com>, rafael@kernel.org,
+ daniel.lezcano@linaro.org, rui.zhang@intel.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ imx@lists.linux.dev, kernel@pengutronix.de, festevam@gmail.com
+References: <20250801081119.1999298-1-ping.bai@nxp.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-In-Reply-To: <20250801072845.ppxka4ry4dtn6j3m@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: pYrRMxDIRHX5f4pjTfA2ddn_XmF9meN9
-X-Authority-Analysis: v=2.4 cv=Pfv/hjhd c=1 sm=1 tr=0 ts=688c7a99 cx=c_pps
- a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=9P8yD98ns4tQo_T1VPoA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=x9snwWr2DeNwDh03kgHS:22
-X-Proofpoint-GUID: pYrRMxDIRHX5f4pjTfA2ddn_XmF9meN9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAxMDA2MCBTYWx0ZWRfX2lMVebAy56Jh
- 7J2KlABsd9yShEQOteMGJwsR6RBkilGqj3OzQQTHnPnHAoj6g1H7J4IetDkdFTDV2kNoNvEIBlF
- gljJXtJYMTbUebTNxTHcFNU/Rh1CD3A56ZMvuT7anuqwvINF7bN9EVVZUKvl8JxMXJ0xV838O/t
- QBmeJ2qXeV2RUZgnft4P4KADQuxqHyD38ypdoR4Pl++bdmfMPASRyR8SRyaEH6/+A3WbMT4vEvt
- 6N+1Py/pxrN1n63qHj+HxuYC+X3qE1Mi4GuDqiwlhfX6Jph0EQHGBP6Er7RE1tOYeikjGlbctah
- vMvAvJCCz1FB1fUJdOJgYET+fTv/3Nm3NJeMqx8aRTycSsjGy3uMCp+0A7FgZhjhJqmybxXt7gP
- mYmPTTvJT5s02wnUwh6UM8XaP4yyZ9Efn5REqYJE/1N31Q6mUb3kb9Sde/Bc7ApvFfAOArh3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-01_02,2025-07-31_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxlogscore=859 clxscore=1015 adultscore=0 priorityscore=1501 mlxscore=0
- spamscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2508010060
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250801081119.1999298-1-ping.bai@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 01/08/2025 10:11, Jacky Bai wrote:
+> The TMU used on i.MX93 has some slight differences and bugs compared with
+> the one used on QorIQ platforam even the basic function is the same. Add
+> i.MX93 specific compatible string and keep the fallback ability.
+> 
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
+<form letter>
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-On 8/1/2025 12:58 PM, Viresh Kumar wrote:
-> On 01-08-25, 12:05, Krishna Chaitanya Chundru wrote:
->> Can you please review this once.
-> 
-> Sorry about the delay.
-> 
->>> The existing OPP table in the device tree for PCIe is shared across
->>> different link configurations such as data rates 8GT/s x2 and 16GT/s x1.
->>> These configurations often operate at the same frequency, allowing them
->>> to reuse the same OPP entries. However, 8GT/s and 16 GT/s may have
->>> different characteristics beyond frequency—such as RPMh votes in QCOM
->>> case, which cannot be represented accurately when sharing a single OPP.
-> 
->  From the looks of it, something like this should also work:
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 54c6d0fdb2af..0a76bc4c4dc9 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2216,18 +2216,12 @@ opp-2500000 {
->                                          opp-peak-kBps = <250000 1>;
->                                  };
-> 
-> -                               /* GEN 1 x2 and GEN 2 x1 */
-> +                               /* GEN 2 x1 */
->                                  opp-5000000 {
->                                          opp-hz = /bits/ 64 <5000000>;
->                                          required-opps = <&rpmhpd_opp_low_svs>;
-> -                                       opp-peak-kBps = <500000 1>;
-> -                               };
-> -
-> -                               /* GEN 2 x2 */
-> -                               opp-10000000 {
-> -                                       opp-hz = /bits/ 64 <10000000>;
-> -                                       required-opps = <&rpmhpd_opp_low_svs>;
-> -                                       opp-peak-kBps = <1000000 1>;
-> +                                       opp-peak-kBps-x1 = <500000 1>;
-> +                                       opp-peak-kBps-x2 = <1000000 1>;
->                                  };
-> 
->                                  /* GEN 3 x1 */
-> @@ -2237,18 +2231,12 @@ opp-8000000 {
->                                          opp-peak-kBps = <984500 1>;
->                                  };
-> 
-> -                               /* GEN 3 x2 and GEN 4 x1 */
-> +                               /* GEN 4 x1 */
->                                  opp-16000000 {
->                                          opp-hz = /bits/ 64 <16000000>;
->                                          required-opps = <&rpmhpd_opp_nom>;
-> -                                       opp-peak-kBps = <1969000 1>;
-> -                               };
-> -
-> -                               /* GEN 4 x2 */
-> -                               opp-32000000 {
-> -                                       opp-hz = /bits/ 64 <32000000>;
-> -                                       required-opps = <&rpmhpd_opp_nom>;
-> -                                       opp-peak-kBps = <3938000 1>;
-> +                                       opp-peak-kBps-x1 = <1969000 1>;
-> +                                       opp-peak-kBps-x2 = <3938000 1>;
->                                  };
->                          };
-> 
-> The OPP core supports named properties, which will make this work.
-Hi Viresh,
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
 
-When ever PCIe link speed/width changes we need to update the OPP votes,
-If we use named properties approach we might not be able to change it
-dynamically without removing the OPP table first. For that reason only
-we haven't used that approach.
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time.
 
-Correct us if our understanding is wrong.
+Please kindly resend and include all necessary To/Cc entries.
+</form letter>
 
-- Krishna Chaitanya.
-> 
+Best regards,
+Krzysztof
 
