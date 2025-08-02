@@ -1,212 +1,96 @@
-Return-Path: <linux-pm+bounces-31773-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31774-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26301B188C2
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 23:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33A59B18DBB
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Aug 2025 11:52:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA4001C827B0
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Aug 2025 21:31:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60E001AA4278
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Aug 2025 09:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA0B28DB78;
-	Fri,  1 Aug 2025 21:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4CF123B630;
+	Sat,  2 Aug 2025 09:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JqYoYIv1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sts9XNSq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE7920D4FC;
-	Fri,  1 Aug 2025 21:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECE621A435;
+	Sat,  2 Aug 2025 09:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754083873; cv=none; b=e3gO1ePRrc8TiDwn1IaZYDbzaoMyWirctwYSs11HNqtua6bkFzcyNkc7P6A0lXd3mvcKqsbXD2nddEBvIs8K4p574NWR7aiDJW0PT0rRKe+yjbSgUQQG1r7JIw6mL15l2yk1jo5ajQUsVfToonzUUEVn+exe/TKpfLr4iiCuWU4=
+	t=1754127379; cv=none; b=Tn6hk4ISPLGt/+ykl6+Gwakekv312mn5eM2srRcak7nXBX1CIx+2K/4rl9LzOzbgYVWJIOV5YSOs51oUt030WYy+YQ7CvysMFZke+B/GXFzR5APC41N7SGqH/8fly9P6gFC/rdbLeMmbeFV0agV047kkdb33U/MF3Ujow47OFmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754083873; c=relaxed/simple;
-	bh=T0XOE58sdx7A0HVxQITRZ8AZM4eF5OTC0ZCMhPP2724=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=VHQAsu+hf4uJl9CV/uXlaxz5P6dK1taWIup2U5mGzW8nIm3AXwAjXBdG0W2YHmxu5EPbyHiefc9OCfum2VjPX3Rx7SOUklXZh0IG0w+BOgOxNGR4Q+FBD18k6r+/yGvFeBFHwsfE34BdH0njt4PhYP5s+WHqmMxOZP0OMHn6JtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JqYoYIv1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD87C4CEF6;
-	Fri,  1 Aug 2025 21:31:12 +0000 (UTC)
+	s=arc-20240116; t=1754127379; c=relaxed/simple;
+	bh=58VHC7Mi4TeuAi163qriS0ffCP7GjWSqQy+r8mSTT2Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KFKV5x5+ZomYXJpdyaxyOubl5dPWAiHKfTQl3tCqoGH7FEJ3Y/Tm133fsOgt0yxQIJLPl3/aKb9M67WjPDzV7WKvnG2DwtScySkVf11pvHYmc67upws13PLF85sCgX2tGHWw2h95g5IV5Z8dR96seJemG057K1MtZpqAh4v52uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sts9XNSq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFC0C4CEEF;
+	Sat,  2 Aug 2025 09:36:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754083873;
-	bh=T0XOE58sdx7A0HVxQITRZ8AZM4eF5OTC0ZCMhPP2724=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=JqYoYIv1FYZTT4cI3RZnOY8yj8B6j3tT5ghkWSVmb1behkdHM9CFs3a2tcnvlKtqv
-	 PDXEUAzk3k5/bIvyBRvcNtPmxFkOVqtZF6qbxMqpm+p4Jir9H/YudF1XC9qbwO9v36
-	 PD6YRiTNLyPMNBUVwzue1O5J8DWJmkkwkn4uAN1lmZcOlGsHw/O+apc8k362ZPTDxZ
-	 Jm7lTWVUGTAogDmBtZ6He/6xb2fEaPkoNnWWzJumfZROnal54j4AemGZ2g68nLq3xZ
-	 op4Uy2xj1yzIXE5dZIqGU5EZ9Cy8tNoav5pPabWHY6YNcNwmqB1QiJq4BTg1OeTSbT
-	 lOSbjwW10oIhA==
-Date: Fri, 1 Aug 2025 16:31:11 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, quic_vbadigan@quicinc.com,
-	quic_mrana@quicinc.com, sherry.sun@nxp.com,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] PM: sleep: wakeirq: Add support for custom IRQ
- flags in dedicated wake IRQ setup
-Message-ID: <20250801213111.GA3511902@bhelgaas>
+	s=k20201202; t=1754127377;
+	bh=58VHC7Mi4TeuAi163qriS0ffCP7GjWSqQy+r8mSTT2Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Sts9XNSquPiYTtj2bfDwL5AS4K8D0Or7sdR+KHftWpEs40fqczZiotSPv340XnL1d
+	 ur1CcGPtElbWIpQKQeG3P4ZLlfzes2Iny7ySZb5hFSxHsrAU2sKCP1OdRwN2S9zBeo
+	 J4tQg1BghhZmMafDC77l5VvqFJGt0/+Z4947o9MZgwoNGfjnAW7p/GL/kglbZYqccf
+	 wB0pUb5VxNiucrRQK45M7yPCCHIC9y0Wm8Uf73hvDM0flcUy5Gw1zB+OlQOEq+5ImJ
+	 W0pWDFfXSgHYkwzE00rf2NnMMp7gYWK7oCthKEEjO7FUJRfazlRJQ6gInl0evBamYc
+	 hj0ge10SP8TdQ==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6196ca9a2edso675448eaf.2;
+        Sat, 02 Aug 2025 02:36:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVoErOMt+HDj/TljJFzf5EBTnZ4rCJTzi9sv75Ri7sU7KsSY/uVxDnGFpYJtOlE9XTutz5VinX3CiD@vger.kernel.org, AJvYcCUgvImntkhZSriNlEBOmzBfNzwMiJpN1hKvmfsNhQLjFu8Cdegyq5N+iojdoGh+V/X0fFchu2kZgm4=@vger.kernel.org, AJvYcCVitY2ybxgnvmlVUiiuP5v4n8NFEfWbcXBYaK0P9D3OO7f/UD568Nbm1ChR9FW1o19COK2havGbZQeB@vger.kernel.org, AJvYcCVwTLt5zgi8SWNQJDfEVxWbxHNACV796pXxVLb+ypQp/sJi85khD2IEobXuN4xDVERnO+Q4PneaBTick6qS@vger.kernel.org, AJvYcCWCPHqrwSDpq1xSDocoGCwkwHnpgZfNlAdg+VRURsGhmi1tiIf/Bid5acO0qlOeF/Q5Z9M/08QMR3LyTDkqBQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw0R+YQfjB91iav2tx88Yi25Y2K/xw7C/qGQi68bbVJBbBzA3z
+	BPTLQyYjEarfOMgW+uH9g0QnVLKhcGYs/aa2KClrAAAq3KFCPvXXFUkiVVseM4dK031L1LXIR8y
+	El4RxloVeRAWmoBpqqjtbiNPHui2QQZE=
+X-Google-Smtp-Source: AGHT+IHnhknTEMDLbuTEKMh9lcCSja/NjO/klqpCZxfW7EQGD247lmqRVINJryqxHY7tsuRemkuIh7F5glei8+UCtIY=
+X-Received: by 2002:a05:6820:f01:b0:619:7ffe:b0c6 with SMTP id
+ 006d021491bc7-6198f2dfb57mr1376577eaf.8.1754127376290; Sat, 02 Aug 2025
+ 02:36:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250801-wake_irq_support-v4-2-6b6639013a1a@oss.qualcomm.com>
+References: <20250801-wake_irq_support-v4-2-6b6639013a1a@oss.qualcomm.com> <20250801213111.GA3511902@bhelgaas>
+In-Reply-To: <20250801213111.GA3511902@bhelgaas>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sat, 2 Aug 2025 11:35:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ipbMLTTLab933TpugX1NO3bJvJY8AS_LNo+7C8xGvLhA@mail.gmail.com>
+X-Gm-Features: Ac12FXyZqjsVrbn0WJzw_IJDJnwK-FjYKy28NaP1ZUaO9Na2BA0Qj7Pg140AlMU
+Message-ID: <CAJZ5v0ipbMLTTLab933TpugX1NO3bJvJY8AS_LNo+7C8xGvLhA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] PM: sleep: wakeirq: Add support for custom IRQ
+ flags in dedicated wake IRQ setup
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	cros-qcom-dts-watchers@chromium.org, Bjorn Helgaas <bhelgaas@google.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, sherry.sun@nxp.com, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 01, 2025 at 04:29:43PM +0530, Krishna Chaitanya Chundru wrote:
-> Some devices require more flexibility when configuring their dedicated
-> wake-up interrupts, such as support for IRQF_SHARED or other IRQ flags.
+On Fri, Aug 1, 2025 at 11:31=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> On Fri, Aug 01, 2025 at 04:29:43PM +0530, Krishna Chaitanya Chundru wrote=
+:
+> > Some devices require more flexibility when configuring their dedicated
+> > wake-up interrupts, such as support for IRQF_SHARED or other IRQ flags.
+>
+> I guess the "dedicated" in dev_pm_set_dedicated_wake_irq() means "an
+> interrupt that only signals wakeup requests, possibly used by several
+> devices," not "an interrupt only used by this device"?
 
-I guess the "dedicated" in dev_pm_set_dedicated_wake_irq() means "an
-interrupt that only signals wakeup requests, possibly used by several
-devices," not "an interrupt only used by this device"?
-
-> This is particularly useful in PCIe systems where multiple endpoints
-> (e.g., Wi-Fi and Bluetooth controllers) share a common WAKE# signal
-> line for waking the device from D3cold to D0. In such cases, drivers
-> can use this API with IRQF_SHARED to register a shared wake IRQ handler.
-
-Nit: WAKE# does not itself wakeup any devices.  It only tells software
-that the device *requested* a wakeup, and it's up to software to
-actually perform it.
-
-> Update the internal helper __dev_pm_set_dedicated_wake_irq() to accept an
-> irq_flags argument. Modify the existing dev_pm_set_dedicated_wake_irq()
-> and dev_pm_set_dedicated_wake_irq_reverse() to preserve current behavior
-> by passing default flags (IRQF_ONESHOT | IRQF_NO_AUTOEN).
-> 
-> Introduce a new API, dev_pm_set_dedicated_wake_irq_flags(), to allow
-> callers to specify custom IRQ flags. If IRQF_SHARED is used, remove
-> IRQF_NO_AUTOEN and disable the IRQ after setup to prevent spurious wakeups.
-> 
-> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-> ---
->  drivers/base/power/wakeirq.c | 43 ++++++++++++++++++++++++++++++++++++++-----
->  include/linux/pm_wakeirq.h   |  6 ++++++
->  2 files changed, 44 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-> index 8aa28c08b2891f3af490175362cc1a759069bd50..655c28d5fc6850f50fc2ed74c5fbc066a21ae7b3 100644
-> --- a/drivers/base/power/wakeirq.c
-> +++ b/drivers/base/power/wakeirq.c
-> @@ -168,7 +168,8 @@ static irqreturn_t handle_threaded_wake_irq(int irq, void *_wirq)
->  	return IRQ_HANDLED;
->  }
->  
-> -static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag)
-> +static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag,
-> +					   unsigned int irq_flags)
->  {
->  	struct wake_irq *wirq;
->  	int err;
-> @@ -197,8 +198,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned
->  	 * so we use a threaded irq.
->  	 */
->  	err = request_threaded_irq(irq, NULL, handle_threaded_wake_irq,
-> -				   IRQF_ONESHOT | IRQF_NO_AUTOEN,
-> -				   wirq->name, wirq);
-> +				   irq_flags, wirq->name, wirq);
->  	if (err)
->  		goto err_free_name;
->  
-> @@ -234,7 +234,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned
->   */
->  int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
->  {
-> -	return __dev_pm_set_dedicated_wake_irq(dev, irq, 0);
-> +	return __dev_pm_set_dedicated_wake_irq(dev, irq, 0, IRQF_ONESHOT | IRQF_NO_AUTOEN);
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
->  
-> @@ -255,10 +255,43 @@ EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
->   */
->  int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq)
->  {
-> -	return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE);
-> +	return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE,
-> +					       IRQF_ONESHOT | IRQF_NO_AUTOEN);
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_reverse);
->  
-> +/**
-> + * dev_pm_set_dedicated_wake_irq_flags - Request a dedicated wake-up interrupt
-> + *                                       with custom flags
-> + * @dev: Device entry
-> + * @irq: Device wake-up interrupt
-> + * @flags: IRQ flags (e.g., IRQF_SHARED)
-> + *
-> + * This API sets up a threaded interrupt handler for a device that has
-> + * a dedicated wake-up interrupt in addition to the device IO interrupt,
-> + * allowing the caller to specify custom IRQ flags such as IRQF_SHARED.
-> + *
-> + * Returns 0 on success or a negative error code on failure.
-> + */
-> +int dev_pm_set_dedicated_wake_irq_flags(struct device *dev, int irq, unsigned long flags)
-> +{
-> +	struct wake_irq *wirq;
-> +	int ret;
-> +
-> +	flags |= IRQF_ONESHOT;
-> +	if (!(flags & IRQF_SHARED))
-> +		flags |= IRQF_NO_AUTOEN;
-> +
-> +	ret =  __dev_pm_set_dedicated_wake_irq(dev, irq, 0, flags);
-> +	if (!ret && (flags & IRQF_SHARED)) {
-> +		wirq = dev->power.wakeirq;
-> +		disable_irq_nosync(wirq->irq);
-> +	}
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_flags);
-> +
->  /**
->   * dev_pm_enable_wake_irq_check - Checks and enables wake-up interrupt
->   * @dev: Device
-> diff --git a/include/linux/pm_wakeirq.h b/include/linux/pm_wakeirq.h
-> index 25b63ed51b765c2c6919f259668a12675330835e..14950616efe34f4fa5408ca54cd8eeb1f7f0ff13 100644
-> --- a/include/linux/pm_wakeirq.h
-> +++ b/include/linux/pm_wakeirq.h
-> @@ -11,6 +11,7 @@ extern int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq);
->  extern int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq);
->  extern void dev_pm_clear_wake_irq(struct device *dev);
->  extern int devm_pm_set_wake_irq(struct device *dev, int irq);
-> +extern int dev_pm_set_dedicated_wake_irq_flags(struct device *dev, int irq, unsigned long flags);
->  
->  #else	/* !CONFIG_PM */
->  
-> @@ -38,5 +39,10 @@ static inline int devm_pm_set_wake_irq(struct device *dev, int irq)
->  	return 0;
->  }
->  
-> +static inline int dev_pm_set_dedicated_wake_irq_flags(struct device *dev,
-> +						      int irq, unsigned long flags)
-> +{
-> +	return 0;
-> +}
->  #endif	/* CONFIG_PM */
->  #endif	/* _LINUX_PM_WAKEIRQ_H */
-> 
-> -- 
-> 2.34.1
-> 
+Yes, it is supposed to mean "dedicated for signaling wakeup".
 
