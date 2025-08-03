@@ -1,127 +1,133 @@
-Return-Path: <linux-pm+bounces-31777-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31778-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4BBB19051
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Aug 2025 00:21:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B03B19317
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Aug 2025 10:18:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E9783A69AE
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Aug 2025 22:21:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BB01172B11
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Aug 2025 08:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE3427466C;
-	Sat,  2 Aug 2025 22:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11EDD2874E7;
+	Sun,  3 Aug 2025 08:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmYmuOQg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pd.grulic.org.ar (pd.grulic.org.ar [200.16.16.187])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9BA2CCDB
-	for <linux-pm@vger.kernel.org>; Sat,  2 Aug 2025 22:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=200.16.16.187
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7800284669;
+	Sun,  3 Aug 2025 08:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754173313; cv=none; b=Vvu80NUmr8BTD4ahxm1g23ekQJdGb4kbD3SFOHznSoG7AWIWEfPrifxqsR+KIUvK4CSSSTbukVdGJx7a90FJq6azpeFVSSq/JhI5N3iBARpCbCzpGuFFJsLSzZvUbBKx1DVQSHa9TDyqXm4Q4MAl6p6YbAgFVaQ+fUQvRT5Mb9M=
+	t=1754209113; cv=none; b=b3d+5LQbKRPbyT+obqyuQBg89KVEx1VAwqw4lNdr627TfER76MybJQ8gDqhFvSETA/d0IBiFnLzO9Jf78ml96bUqNONLhgKxR4n6YO2UO6/CbrhUhhMcV+wEfjGUs4iU9xNS8SsJyBzmap96gtSHfxj4S/j5ohsegVm0aENZKdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754173313; c=relaxed/simple;
-	bh=BxVXvebcsUFX2WcpsYUfIk9WfQ3Jx85290p+XNIfvB4=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oeJJJzbe+l8DHFA3AlQ5SJ4nAoLbZM9M4+ZZx8F++xky4ejSq4D3rJyAz5BcxjTdhc6d5nfyHgHLEHf8iwKpYhJrPpKttwtKIjwnee7WQvyNJ8stNJ81g7igV75ghtidkYSkXsgc7fDZczCx6LSw7FsZWB4FIafk08tDbwqm9r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grulic.org.ar; spf=pass smtp.mailfrom=grulic.org.ar; arc=none smtp.client-ip=200.16.16.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grulic.org.ar
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grulic.org.ar
-Received: from localhost (82-64-43-81.subs.proxad.net [82.64.43.81])
-	by pd.grulic.org.ar (Postfix) with ESMTPSA id 533C280371
-	for <linux-pm@vger.kernel.org>; Sat,  2 Aug 2025 19:23:38 -0300 (-03)
-Date: Sun, 3 Aug 2025 00:21:35 +0200
-From: Marcos Dione <mdione@grulic.org.ar>
-To: linux-pm@vger.kernel.org
-Subject: [Possible bug]: thermal and an scaling governor issues
-Message-ID: <aI6Pb99qXaSaB-Fy@ioniq>
+	s=arc-20240116; t=1754209113; c=relaxed/simple;
+	bh=H3Qe7OOM+iEVU40OI4Jad68EOrknCQC876wU3kNEge0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hkPa7CX2XC8PIsXwjDlYvS5/Nwn4oODEm/LC66Yapo9xUq5gHW5IS7rJ6HYVH4ubBvktPNnTZmh5eLgk2J6cHCO1Dvx4VBSO2oclMn+pH/UHD5khaS/O++AMbv870UufvBlEj4JCw3aZkjreiE/25fnbb8blRhG+PyWBfVGLreI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmYmuOQg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C59C4CEEB;
+	Sun,  3 Aug 2025 08:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754209112;
+	bh=H3Qe7OOM+iEVU40OI4Jad68EOrknCQC876wU3kNEge0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gmYmuOQglDHc8Dhub6N28oyK07r+M8hwy195nRQPR2a6MxstB3TmoI54lLCnm6E48
+	 vXOZTI3RxqQaoX1O3hxJSItiRyc9/tlSUn56pDi3BTODtmF390hnpZsF41ZcmAErhM
+	 JdB5aaCkE+8xzTD6eOMjKJXuNnnVV5CS9oI9xEq2j5gowBevj0udjY2tRmzi2NVB0d
+	 JzyJeG71sWBK2etj1XYQcir+ansxNEo0HjTwNz2zeYR72u7FrhgIiIzTHu8Gl2n5Ws
+	 mcyzv/zqYH43/L7V9imvR+/TMqrorE16HoX+RqJ0luNxb0UrRv2aRW6SG4+zJqa2ZS
+	 riSR+XOcziAug==
+Message-ID: <2889bb9d-8d0d-44a9-a224-0d04562b4a0f@kernel.org>
+Date: Sun, 3 Aug 2025 10:18:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 9/9] dt-bindings: nvmem: mediatek: efuse: Add support
+ for MT8196
+To: Laura Nao <laura.nao@collabora.com>, robh@kernel.org
+Cc: andrew-ct.chen@mediatek.com, angelogioacchino.delregno@collabora.com,
+ arnd@arndb.de, bchihi@baylibre.com, colin.i.king@gmail.com,
+ conor+dt@kernel.org, daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+ frank-w@public-files.de, kernel@collabora.com, krzk+dt@kernel.org,
+ lala.lin@mediatek.com, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, lukasz.luba@arm.com, matthias.bgg@gmail.com,
+ nfraprado@collabora.com, rafael@kernel.org, rui.zhang@intel.com,
+ srini@kernel.org, u.kleine-koenig@baylibre.com, wenst@chromium.org
+References: <20250730235451.GA1911689-robh@kernel.org>
+ <20250731102650.145641-1-laura.nao@collabora.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250731102650.145641-1-laura.nao@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 31/07/2025 12:26, Laura Nao wrote:
+>>>        - items:
+>>> +          - const: mediatek,mt8196-efuse
+>>>            - const: mediatek,mt8188-efuse
+>>>            - const: mediatek,mt8186-efuse
+>>
+>> You just broke mt8188 as it had 2 entries and now has 3. I think 
+>> (based on the commit msg) you want to change 8188 entry to an enum with 
+>> mediatek,mt8196-efuse and mediatek,mt8188-efuse.
+>>
+> 
+> You're absolutely right, not sure how I missed that.
+Please test your bindings and DTS BEFORE you send. The testing would
+point you new warnings.
 
-    Before anything, please CC: me, as I'm not subscribed to the list.
-
-    Right now I'm running 6.12.38+deb13-amd64 from Debian
-testing/unstable, which are the same due to the freeze until next week :)
-
-    It all seems to have started at the beginning of the year. The
-symptom was hiccups which could be seen as high load (f.i. 40 on an 8
-core machine) with not much CPU usage. I tracked it down to
-prometheus-node-exporter stalling on disk accesses. Looking with strace
-I find there were multisecond reads on files related to sensonrs in
-general, which I still experience:
-
-23:30:13.855780 (+     0.004490) openat(AT_FDCWD, "/sys/class/hwmon/hwmon1/in0_input", O_RDONLY) = 3 <0.000152>
-23:30:13.856286 (+     0.000494) fstat(3, {st_mode=S_IFREG|0444, st_size=4096, ...}) = 0 <0.000052>
-23:30:13.856574 (+     0.000286) read(3, "12686\n", 4096) = 6 <3.196855>
-23:30:17.053632 (+     3.197072) close(3) = 0 <0.000061>
-
-23:33:39.689505 (+     0.000167) openat(AT_FDCWD, "/sys/class/hwmon/hwmon5/fan1_input", O_RDONLY) = 3 <0.000081>
-23:33:39.689708 (+     0.000201) fstat(3, {st_mode=S_IFREG|0444, st_size=4096, ...}) = 0 <0.000047>
-23:33:39.689870 (+     0.000164) read(3, "3225\n", 4096) = 5 <0.018190>
-23:33:39.708237 (+     0.018376) close(3) = 0 <0.000060>
-
-23:33:39.710771 (+     0.000151) openat(AT_FDCWD, "/sys/class/hwmon/hwmon5/fan2_input", O_RDONLY) = 3 <0.000073>
-23:33:39.710947 (+     0.000176) fstat(3, {st_mode=S_IFREG|0444, st_size=4096, ...}) = 0 <0.000042>
-23:33:39.711089 (+     0.000141) read(3, "3215\n", 4096) = 5 <0.128783>
-23:33:39.840088 (+     0.129024) close(3) = 0 <0.000067>
-
-    Accumulating all those reads led to the node exporter to gradually
-take more and more time to finish the scrape, going beyond the 15s
-between scrapes. I'm not sure, but I think at some point the node
-exporter just launches goroutines to do these sweeps and they just pile
-up one on top of the other. I had to disable the collectors.
-
-    That's problem #1.
-
-    Today I was (ab)using the 8 cores compiling stuff, while watching
-videos, so a load of above 10. I'm using (KDE's?) upowerd, but I'm not
-sure this has any impact. KDE's power plasmoid shows it's using the
-p[erformance governor, but checking the files I get another story:
-
-$ cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-powersave
-powersave
-powersave
-powersave
-powersave
-powersave
-powersave
-powersave
-
-    So I manually set them to performance:
-
-$ echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-performance
-
-$ cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-performance
-performance
-performance
-performance
-performance
-performance
-performance
-performance
-
-    But CPU frequency stays below the 1GHz for a 3.8GHz CPU and the
-temps stay below 47C.
-
-    Now, I'm not sure if these things are connected, but I wager they
-do. Even if they aren't, they are annoying independently. The problem
-is: I have no idea how to debug this. I see no particular info in dmesg.
-I tried other Debian kernel versions all down to the latest 5.x I could
-get. I'm open to a slow tracking down of this thing because it has been
-working for some 6.5y before these behaviors. My other alternative is to
-buy new HW.
-
-    Cheers,
-
-	-- Marcos.
+Best regards,
+Krzysztof
 
