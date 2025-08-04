@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-31904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31905-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A55F4B1A357
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 15:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41FD5B1A359
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 15:34:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D002517A78C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 13:33:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 721F017A7A6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 13:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50EE7271451;
-	Mon,  4 Aug 2025 13:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A408272801;
+	Mon,  4 Aug 2025 13:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="V6ddnnko"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="mK98SG/T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B84626B2A5;
-	Mon,  4 Aug 2025 13:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA714270EC1;
+	Mon,  4 Aug 2025 13:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754314370; cv=none; b=uA+5gHTUkPcvZ/v44fz2F9FHW3WL9C2wrEc9vXn62d7QvPAZUykbS2212lFBut72WJgEAK0PzBa4ivKYhka2t1Fzn2N6OcPdjjH2qKbz4wlfFzJ3lGe1qiMVkdpY8zvoAhONcq7wKtvUCYqvBnlMOsDXpNnmwn1geVxKZrLKrxY=
+	t=1754314371; cv=none; b=j5JmdbJGNsQ+g6dhXQFClTyI36UJhUeGaAiDuy6tkfaGfVZM9gyWsL4YwOZ0v02a0nNj6Te7whgCpjM+gMti2wNB2KVawINbF1BYw4jNYirovXAcPqhlj+wVMuvufSX6iM7vuUD9209MUKekQbXh7u7ugrjUZx9zdAoGvGemEDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754314370; c=relaxed/simple;
-	bh=3EUMyB1zHIKHzfZUJiqkP2t5ouVGGyM7JSAA86ydGYM=;
+	s=arc-20240116; t=1754314371; c=relaxed/simple;
+	bh=uY4kKMPnqiqV9X/4qOUA+HIRtOTWlGXuobPhqN9t1qo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QZNgdGXaPvsMMpKKYrResxNg0AT0I04ekbIgr1ZBq9KI0MSAzT+1c+fcqSUfupoNypO5W2yLcV3pwkhArf0qLGZi1YbXVSEYnStR//SIeAD0BIkI0jHqyt28u+uCV3d22+3x2wBdrK0O5AMbOEHSCzZoqqFK4762507gOdyXFBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=V6ddnnko; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=R9Rj+vmQFqT33SJ1qICinwkShPBVMhm7/HfoN00OF+Jl1KMKfoL7eJCHwXv6dMNCUuVRKVIjXrZW/fKTh/JS8JDw6p/Nz3ig/qZt8q9VXKWk0EZfNUt9hsU7SLVkMFVHhObrBIead8Gd98e3ORDqDPvYM31hel/JbMV0QtEFEP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=mK98SG/T; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1754314366;
-	bh=3EUMyB1zHIKHzfZUJiqkP2t5ouVGGyM7JSAA86ydGYM=;
+	s=mail; t=1754314368;
+	bh=uY4kKMPnqiqV9X/4qOUA+HIRtOTWlGXuobPhqN9t1qo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V6ddnnkoOJopqolmpjTOlmMYmcmhq43y8AJcl/O/ZY4CcBhq0sIbwg7aUt1enFz80
-	 qbcvSYZj9NfnyGZJSlDw+Pi14mRDw8RBhZhzmMqsGQoe/iVg86ZW2Xn15NRJlv3l1H
-	 6FgUJ27JJhTWaOKoZeXB24rurjloKZB6KCe/hBsykz6K67+HN2/jLH0MZh30IzdFy8
-	 ixFJXy18i8f2d7g0DEtP1xKXIrsXDu2e582HhVZunrBm1I87Y3ceV00pkXPjrizDC2
-	 p/0lf03XvLxkK5BlcRHMTLT13vKTkRZ9Py8GDFhnln2Yy+d7b5o6bz2ERmPeXjNqWt
-	 3B4f4L8liF+tQ==
+	b=mK98SG/TQ9nKPQQrppl/cMqudqopj4v5io1iT6quyIecCymqs+P8HKaghPz0X0ilU
+	 V7Ph3xUsUHYlAIzvspW6HQxDE1IXZ/i8KK89hFJMuY/2OEL5FmFCSfenocMtfdlA4q
+	 DvlELi2Myi4JMH2HcB1+8Ss/ausgsACuw3zSFgEEB1XeqovZhDapdCbsWQjLtnBvPi
+	 TcNmVIO1KwIoyTEqqOldIEVthEbGRKAkaGZal2/b5Ky8zHJR9xDfT5DPC7KQkxJ5Dn
+	 FMzZ5sKZ5U2Z8VbDWwsJ5dsPOT3v5p3OzKV1OJHRVZG3a8J4+TqZE+MLFaXlauOIK3
+	 HCK6YFYmF0XhA==
 Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:865e:547d:4830:837d])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0FB8517E1298;
-	Mon,  4 Aug 2025 15:32:45 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id B2C0617E1540;
+	Mon,  4 Aug 2025 15:32:46 +0200 (CEST)
 From: Laura Nao <laura.nao@collabora.com>
 To: srini@kernel.org,
 	robh@kernel.org,
@@ -73,12 +73,10 @@ Cc: nfraprado@collabora.com,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	kernel@collabora.com,
-	Laura Nao <laura.nao@collabora.com>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Fei Shao <fshao@chromium.org>
-Subject: [PATCH v3 6/9] thermal/drivers/mediatek/lvts: Add support for ATP mode
-Date: Mon,  4 Aug 2025 15:30:32 +0200
-Message-Id: <20250804133035.309990-7-laura.nao@collabora.com>
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH v3 7/9] thermal/drivers/mediatek/lvts: Support MSR offset for 16-bit calibration data
+Date: Mon,  4 Aug 2025 15:30:33 +0200
+Message-Id: <20250804133035.309990-8-laura.nao@collabora.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804133035.309990-1-laura.nao@collabora.com>
 References: <20250804133035.309990-1-laura.nao@collabora.com>
@@ -90,129 +88,74 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-MT8196/MT6991 uses ATP (Abnormal Temperature Prevention) mode to detect
-abnormal temperature conditions, which involves reading temperature data
-from a dedicated set of registers separate from the ones used for
-immediate and filtered modes.
+On MT8196/MT6991, per-sensor calibration data read from eFuses is
+16-bit. When the LVTS controller operates in 16-bit mode, a fixed offset
+must be added to MSR values during post-processing to obtain correct
+temperature readings. Introduce a new msr_offset field in lvts_data,
+program the respective register and apply the offset to the calibration
+data read from eFuses.
 
-Add support for ATP mode and its relative registers to ensure accurate
-temperature readings and proper thermal management on MT8196/MT6991
-devices.
-
-While at it, convert mode defines to enum.
-
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Fei Shao <fshao@chromium.org>
 Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
- drivers/thermal/mediatek/lvts_thermal.c | 44 +++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 7 deletions(-)
+ drivers/thermal/mediatek/lvts_thermal.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index e29664f1316a..dcfcb1be5a09 100644
+index dcfcb1be5a09..481ca133902d 100644
 --- a/drivers/thermal/mediatek/lvts_thermal.c
 +++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -44,6 +44,10 @@
+@@ -44,6 +44,7 @@
  #define LVTS_EDATA01(__base)	(__base + 0x0058)
  #define LVTS_EDATA02(__base)	(__base + 0x005C)
  #define LVTS_EDATA03(__base)	(__base + 0x0060)
-+#define LVTS_ATP0(__base)		(__base + 0x0070)
-+#define LVTS_ATP1(__base)		(__base + 0x0074)
-+#define LVTS_ATP2(__base)		(__base + 0x0078)
-+#define LVTS_ATP3(__base)		(__base + 0x007C)
- #define LVTS_MSR0(__base)		(__base + 0x0090)
- #define LVTS_MSR1(__base)		(__base + 0x0094)
- #define LVTS_MSR2(__base)		(__base + 0x0098)
-@@ -88,9 +92,6 @@
- #define LVTS_COEFF_A_MT7988			-204650
- #define LVTS_COEFF_B_MT7988			204650
- 
--#define LVTS_MSR_IMMEDIATE_MODE		0
--#define LVTS_MSR_FILTERED_MODE		1
--
- #define LVTS_MSR_READ_TIMEOUT_US	400
- #define LVTS_MSR_READ_WAIT_US		(LVTS_MSR_READ_TIMEOUT_US / 2)
- 
-@@ -101,6 +102,12 @@
- static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
- static int golden_temp_offset;
- 
-+enum lvts_msr_mode {
-+	LVTS_MSR_IMMEDIATE_MODE,
-+	LVTS_MSR_FILTERED_MODE,
-+	LVTS_MSR_ATP_MODE,
-+};
-+
- struct lvts_sensor_data {
- 	int dt_id;
- 	u8 cal_offsets[LVTS_MAX_CAL_OFFSETS];
-@@ -110,7 +117,7 @@ struct lvts_ctrl_data {
- 	struct lvts_sensor_data lvts_sensor[LVTS_SENSOR_MAX];
- 	u8 valid_sensor_mask;
- 	int offset;
--	int mode;
-+	enum lvts_msr_mode mode;
++#define LVTS_MSROFT(__base)		(__base + 0x006C)
+ #define LVTS_ATP0(__base)		(__base + 0x0070)
+ #define LVTS_ATP1(__base)		(__base + 0x0074)
+ #define LVTS_ATP2(__base)		(__base + 0x0078)
+@@ -150,6 +151,7 @@ struct lvts_data {
+ 	int temp_offset;
+ 	int gt_calib_bit_offset;
+ 	unsigned int def_calibration;
++	u16 msr_offset;
  };
  
- #define VALID_SENSOR_MAP(s0, s1, s2, s3) \
-@@ -211,6 +218,10 @@ static const struct debugfs_reg32 lvts_regs[] = {
+ struct lvts_sensor {
+@@ -218,6 +220,7 @@ static const struct debugfs_reg32 lvts_regs[] = {
  	LVTS_DEBUG_FS_REGS(LVTS_EDATA01),
  	LVTS_DEBUG_FS_REGS(LVTS_EDATA02),
  	LVTS_DEBUG_FS_REGS(LVTS_EDATA03),
-+	LVTS_DEBUG_FS_REGS(LVTS_ATP0),
-+	LVTS_DEBUG_FS_REGS(LVTS_ATP1),
-+	LVTS_DEBUG_FS_REGS(LVTS_ATP2),
-+	LVTS_DEBUG_FS_REGS(LVTS_ATP3),
- 	LVTS_DEBUG_FS_REGS(LVTS_MSR0),
- 	LVTS_DEBUG_FS_REGS(LVTS_MSR1),
- 	LVTS_DEBUG_FS_REGS(LVTS_MSR2),
-@@ -625,6 +636,13 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
- 		LVTS_IMMD3(lvts_ctrl->base)
- 	};
++	LVTS_DEBUG_FS_REGS(LVTS_MSROFT),
+ 	LVTS_DEBUG_FS_REGS(LVTS_ATP0),
+ 	LVTS_DEBUG_FS_REGS(LVTS_ATP1),
+ 	LVTS_DEBUG_FS_REGS(LVTS_ATP2),
+@@ -788,6 +791,8 @@ static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl
  
-+	void __iomem *atp_regs[] = {
-+		LVTS_ATP0(lvts_ctrl->base),
-+		LVTS_ATP1(lvts_ctrl->base),
-+		LVTS_ATP2(lvts_ctrl->base),
-+		LVTS_ATP3(lvts_ctrl->base)
-+	};
+ 		if (gt) {
+ 			lvts_ctrl->calibration[i] = calib;
++			if (lvts_ctrl->lvts_data->msr_offset)
++				lvts_ctrl->calibration[i] += lvts_ctrl->lvts_data->msr_offset;
+ 		} else if (lvts_ctrl->lvts_data->def_calibration) {
+ 			lvts_ctrl->calibration[i] = lvts_ctrl->lvts_data->def_calibration;
+ 		} else {
+@@ -1095,6 +1100,17 @@ static int lvts_ctrl_calibrate(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+ 	for (i = 0; i < LVTS_SENSOR_MAX; i++)
+ 		writel(lvts_ctrl->calibration[i], lvts_edata[i]);
+ 
++	/* LVTS_MSROFT : Constant offset applied to MSR values
++	 * for post-processing
++	 *
++	 * Bits:
++	 *
++	 * 20-0 : Constant data added to MSR values
++	 */
++	if (lvts_ctrl->lvts_data->msr_offset)
++		writel(lvts_ctrl->lvts_data->msr_offset,
++		       LVTS_MSROFT(lvts_ctrl->base));
 +
- 	int i;
+ 	return 0;
+ }
  
- 	lvts_for_each_valid_sensor(i, lvts_ctrl_data) {
-@@ -660,8 +678,20 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
- 		/*
- 		 * Each sensor has its own register address to read from.
- 		 */
--		lvts_sensor[i].msr = lvts_ctrl_data->mode == LVTS_MSR_IMMEDIATE_MODE ?
--			imm_regs[i] : msr_regs[i];
-+		switch (lvts_ctrl_data->mode) {
-+		case LVTS_MSR_IMMEDIATE_MODE:
-+			lvts_sensor[i].msr = imm_regs[i];
-+			break;
-+		case LVTS_MSR_FILTERED_MODE:
-+			lvts_sensor[i].msr = msr_regs[i];
-+			break;
-+		case LVTS_MSR_ATP_MODE:
-+			lvts_sensor[i].msr = atp_regs[i];
-+			break;
-+		default:
-+			lvts_sensor[i].msr = imm_regs[i];
-+			break;
-+		}
- 
- 		lvts_sensor[i].low_thresh = INT_MIN;
- 		lvts_sensor[i].high_thresh = INT_MIN;
-@@ -911,7 +941,7 @@ static void lvts_ctrl_monitor_enable(struct device *dev, struct lvts_ctrl *lvts_
- 	u32 sensor_map = 0;
- 	int i;
- 
--	if (lvts_ctrl->mode != LVTS_MSR_FILTERED_MODE)
-+	if (lvts_ctrl->mode == LVTS_MSR_IMMEDIATE_MODE)
- 		return;
- 
- 	if (enable) {
 -- 
 2.39.5
 
