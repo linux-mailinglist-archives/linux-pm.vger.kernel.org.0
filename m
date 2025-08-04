@@ -1,184 +1,156 @@
-Return-Path: <linux-pm+bounces-31919-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31920-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A3CFB1A83D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 18:55:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A43B1A9CA
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 21:50:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91E22188B74E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 16:55:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFE2417D57D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 19:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCC328A71B;
-	Mon,  4 Aug 2025 16:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF764235341;
+	Mon,  4 Aug 2025 19:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cOHfjh2A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezXsiYyn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B216228A707;
-	Mon,  4 Aug 2025 16:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FDCA920;
+	Mon,  4 Aug 2025 19:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754326478; cv=none; b=QZLCgg+IyY5BMhpF8UegY47xyjYNye7yvE2Fkj7B/9JJC0Wqq6UMMObCBBqJUl85bEzHceHoQr+vcl9j9hCWxbXvcq+VPYo3jNkvFJr44/sGDHzepIcHW2v39hjO3LHw8Y/9N5DL3SNJvLq032RdkkruDYuUHZcQ0wOgLdsvxto=
+	t=1754336998; cv=none; b=Px+b9deVzhw8myGxl6c1LXMgzg3vMWDDFxd/F7YG1ttcE+Z9RTwJo3jXdOk4QyepJfQuN7rAhmo2AsSutZAqO3IK20CNcs5aQd+NasqG7ALS0jbBB9ShFyDjwPm3vROyhBFKR9KtNFwKG21fmxqIbAVE/KwieeB5DubS9xL5gVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754326478; c=relaxed/simple;
-	bh=d+XlqNAsTP1aZFEzzzw1zGerTeyCFUUm7vWEU3d2zmA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A8B2VbHKc66VAcnAEJ2KWxoE4tA0q8gRqwSRJEj8diwe925D1T5TzsFj3zZxsKERslIHIvPCsvwhyImqDpCcuHVnuNA+qGfFRNTgJ8H+Jc7iha1ebBJuofMvHJbMH8/yTIXd6TM6opCUEATITIM9MaiUqi+4wgJWu/edpGn/EVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cOHfjh2A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31447C4CEE7;
-	Mon,  4 Aug 2025 16:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754326475;
-	bh=d+XlqNAsTP1aZFEzzzw1zGerTeyCFUUm7vWEU3d2zmA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cOHfjh2AohfXyPVoX2YaEpfGzdr+X7AiTfo+cPeM0jwBNjq6KMwOiIo1bxO5vspXI
-	 hfhK2B5N9aTAT0EFuokAeGbp/JmvOUUWE57EaBuH9NFzoifgite9SuOv+E0dqaeAKJ
-	 d5DTJ+dkQDIHv+gNd8fM2LILh+mpTCB+i01fKwynAJPoUctQQPX4LIfETdkeI6fMKH
-	 gf+4cf9Nw/IDLNmklkqq3mxRY4ajLwHqwXCENvhRxJaQrWnhq3U0fyE898tQiQ+os4
-	 pPX/Z4X5MW8yWud3Hl0+oNE4/lBh485CuPIpmoNE0YSGst7vE4Z4Czj+XZgp4jfWwo
-	 fMF+OcjSDGbzw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uiySG-003sNW-Br;
-	Mon, 04 Aug 2025 17:54:32 +0100
-Date: Mon, 04 Aug 2025 17:54:31 +0100
-Message-ID: <86o6sv6n94.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Aboorva Devarajan <aboorvad@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful information
-In-Reply-To: <7770672.EvYhyI6sBW@rjwysocki.net>
-References: <1916668.tdWV9SEqCh@rjwysocki.net>
-	<7770672.EvYhyI6sBW@rjwysocki.net>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1754336998; c=relaxed/simple;
+	bh=GNzexns6pcPBUTEkIeqnIu/h9x9Gke1nRAkCyAK2Td4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dR/XHasUTBV5aDIRs0u2vu6yKuYclOUGBiXxhlFSc6Ro4HMLl6/40pi/ux89LNy8RTJXknEHKhciV4t0iBqD0bF3Vu0fqQoAl2j4WXzOjQdNYPoK6zmX+scVdeBQbo8vk4bS0VEap5xf3/r3uakl/VgYdyYTK//nMnuBKZ9rEbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezXsiYyn; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-af922ab4849so687049266b.3;
+        Mon, 04 Aug 2025 12:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754336995; x=1754941795; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GNzexns6pcPBUTEkIeqnIu/h9x9Gke1nRAkCyAK2Td4=;
+        b=ezXsiYynU03TOXBCxB4z6tuoNoX/55qoqhLz7pxKiZKRx96Opni0fsZ1xTAgC3DBq/
+         Z94Mcf/QQQN2j7R0ESCKTIn9SOC+iE8bi9bovJZ5IHFpuLB/T8vESppsdGjHYvmpSn7w
+         6Xt4KtOCSJG0gzEgiu808ZpDoDvSRR8gj3PaTRPZbfOcH1CZcKNx1nE20062VAB+unU1
+         yjD3nZgv9bNpWtARXTtiwLML2NMhLeLVhJQR0noC/cznxgN8xzTYYoUxcwE6ndMrf+4+
+         kSrjxQSbB6IIuE+cAe10w7duUqm+7JAkN+pdNg1W2BvuMjCrZ2IhLjPIkpCRIbSQa7zr
+         FHsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754336995; x=1754941795;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GNzexns6pcPBUTEkIeqnIu/h9x9Gke1nRAkCyAK2Td4=;
+        b=f3uzRgCZ3HW1v0F9So/2/OAq9Y7T/TkHF+cit8FKSEYQ8XCIRKwsBsEJfJCfnmfraX
+         Jk39Wlw22vmm1sv9VoqmnwMSFcJ3la+rGwsBh/tm+Vlw6Do0YNbLuq/HVi3GGNeaystD
+         L2jOlWNFKtOYSy7pBevohw51CRICq4UAqNtre5nxXzjnlDRFpIqValPeHQH2o0m6ZBrD
+         C8CHTw7hhCGAtBtrJcxmyZDZY7IoqwAaug4sMngFlYe5CYvBAJfAMQdyqIHaKHl/4NFX
+         YP2vLY9kqm9UBnaxm38V18/xjYrJ0Dl37w1J9hYlOroVxs0T6HZRZCzW2afPBSlPm/xR
+         PzSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVkVkeDP069LkG774qJwyfgH8YuiviNGZyjBPLhV5QeN80I/KqBZ04DfZKa7SELU6mYxTGgfnyZrMCD@vger.kernel.org, AJvYcCWYyx8nW8PxiTod469sM6613m63xaCZNrCudvRHSEVbIYcTjqIW8qI8O3Ph4tDWAnwRTwIBswxCjFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmayEOcMWlUPuXNe3WTHJN7HktS05GocFfUKY6C2fwP8UkQDi2
+	GZKzG4+eZ7orneNelxvJKjkhXVGVz67WzdyIL328BykT1vOuPWeJ/ES0Zt9iWEFx0XOyBkd+gGy
+	DFebuYmhBfBDi462dP4sa8rMz3uO1mdg=
+X-Gm-Gg: ASbGncv2207x6rgYKWqKchi+w61H+IrVvbogufh5q7sgoe9AELV20MTN04IqRQydBxw
+	a/Vz27Mfz6S+s1pKxnarYF5fmV5gSPrz1cwo1WarOt5PoyI37Guqkgk3xCsGKJb68xXWUIxlfX7
+	bLKJwnVHDx2JQTu4gABWxwJMhXDi908dTc/uVaG+DQ3gQ5yB27r7cWmFAfeTn0uths8G3cYzJ1f
+	q7xa+w=
+X-Google-Smtp-Source: AGHT+IGcMq3bxCdaYN7JTYB4ZRdZj5ChB4GQUWGwwN1A04vvH51/5tRA4ycCUTXjUODp6yMy5vQnnC3OMmCbWz5atD4=
+X-Received: by 2002:a17:907:9407:b0:ae0:cc5f:88ef with SMTP id
+ a640c23a62f3a-af9401af514mr1075474166b.32.1754336995289; Mon, 04 Aug 2025
+ 12:49:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: rjw@rjwysocki.net, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, christian.loehle@arm.com, artem.bityutskiy@linux.intel.com, aboorvad@linux.ibm.com, tglx@linutronix.de, mark.rutland@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+References: <CACTEcX6oXBot1VBApOyKVMVXsAN9BsvQMLa8J0iKpNeB-eLttQ@mail.gmail.com>
+ <642d439ea1be8e48ee5c47fd3921a786452fb931@intel.com> <CACTEcX5Y3PNXNkhnK1dGFe+k3sigOZNpj66KKGAS9XeHqRu35w@mail.gmail.com>
+ <0b15e33603a46f6cc7ad7d09a156044f11367169@intel.com> <CACTEcX47bUd2tp=LYkQnhK29Js=vLN0JfXL8Aq6mOFBVYumpzQ@mail.gmail.com>
+ <CABgObfZKKeqMrAUyS8CB4ARkW_8Z9QREgpgYcq2jxoQ9ppS6MA@mail.gmail.com>
+In-Reply-To: <CABgObfZKKeqMrAUyS8CB4ARkW_8Z9QREgpgYcq2jxoQ9ppS6MA@mail.gmail.com>
+From: Andy Mindful <andy.mindful@gmail.com>
+Date: Mon, 4 Aug 2025 22:49:43 +0300
+X-Gm-Features: Ac12FXwoncyyo3lMGdVFGmeOSercSw0CMzqTN4N7YKEyC89vLmt21SqpqVGopCE
+Message-ID: <CACTEcX7oa+Shj=uYiRMoWpng+RZXDeQrOa-VTRmzVVtXJMCgLQ@mail.gmail.com>
+Subject: Re: [REGRESSION] tty lockup and WWAN loss after hibernate/suspend in
+ 6.8+ on ThinkPad X1 Carbon Gen 10
+To: regressions@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-acpi@vger.kernel.org, rafael@kernel.org, ville.syrjala@linux.intel.com, 
+	tglx@linutronix.de, Christian Brauner <brauner@kernel.org>, 
+	Jani Nikula <jani.nikula@intel.com>, Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[+ Thomas, Mark]
+Can you please advise on how to bisect further?
 
-On Thu, 06 Feb 2025 14:29:05 +0000,
-"Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
-> 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> When giving up on making a high-confidence prediction,
-> get_typical_interval() always returns UINT_MAX which means that the
-> next idle interval prediction will be based entirely on the time till
-> the next timer.  However, the information represented by the most
-> recent intervals may not be completely useless in those cases.
-> 
-> Namely, the largest recent idle interval is an upper bound on the
-> recently observed idle duration, so it is reasonable to assume that
-> the next idle duration is unlikely to exceed it.  Moreover, this is
-> still true after eliminating the suspected outliers if the sample
-> set still under consideration is at least as large as 50% of the
-> maximum sample set size.
-> 
-> Accordingly, make get_typical_interval() return the current maximum
-> recent interval value in that case instead of UINT_MAX.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpuidle/governors/menu.c |   13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> --- a/drivers/cpuidle/governors/menu.c
-> +++ b/drivers/cpuidle/governors/menu.c
-> @@ -190,8 +190,19 @@
->  	 * This can deal with workloads that have long pauses interspersed
->  	 * with sporadic activity with a bunch of short pauses.
->  	 */
-> -	if ((divisor * 4) <= INTERVALS * 3)
-> +	if (divisor * 4 <= INTERVALS * 3) {
-> +		/*
-> +		 * If there are sufficiently many data points still under
-> +		 * consideration after the outliers have been eliminated,
-> +		 * returning without a prediction would be a mistake because it
-> +		 * is likely that the next interval will not exceed the current
-> +		 * maximum, so return the latter in that case.
-> +		 */
-> +		if (divisor >= INTERVALS / 2)
-> +			return max;
-> +
->  		return UINT_MAX;
-> +	}
->  
->  	/* Update the thresholds for the next round. */
->  	if (avg - min > max - avg)
+andy@lenovo:~/linux-stable$ git bisect bad
+The merge base 0dd3ee31125508cd67f7e7172247f05b7fd1753a is bad.
+This means the bug has been fixed between
+0dd3ee31125508cd67f7e7172247f05b7fd1753a and
+[6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1].
 
-It appears that this patch, which made it in 6.15, results in *a lot*
-of extra interrupts on one of my arm64 test machines.
+andy@DESKTOP-0R165CF:~/linux-stable$ git bisect log
+git bisect start
+# status: waiting for both good and bad commits
+# good: [6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1] Linux 6.7.11
+git bisect good 6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1
+# status: waiting for bad commit, 1 good commit known
+# bad: [6613476e225e090cc9aad49be7fa504e290dd33d] Linux 6.8-rc1
+git bisect bad 6613476e225e090cc9aad49be7fa504e290dd33d
+# bad: [0dd3ee31125508cd67f7e7172247f05b7fd1753a] Linux 6.7
+git bisect bad 0dd3ee31125508cd67f7e7172247f05b7fd1753a
 
-* Without this patch:
+andy@lenovo:~/linux-stable$ git status
+HEAD detached at 0dd3ee311255
+You are currently bisecting, started from branch '6fc5460ed8dd'.
+(use "git bisect reset" to get back to the original branch)
 
-maz@big-leg-emma:~$ vmstat -y 1
-procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
- r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
- 1  0      0 65370828  29244 106088    0    0     0     0   66   26  0  0 100  0  0
- 1  0      0 65370828  29244 106088    0    0     0     0  103   66  0  0 100  0  0
- 1  0      0 65370828  29244 106088    0    0     0     0   34   12  0  0 100  0  0
- 1  0      0 65370828  29244 106088    0    0     0     0   25   12  0  0 100  0  0
- 1  0      0 65370828  29244 106088    0    0     0     0   28   14  0  0 100  0  0
+It is not moving further.
 
-we're idling at only a few interrupts per second, which isn't bad for
-a 24 CPU toy.
-
-* With this patch:
-
-maz@big-leg-emma:~$ vmstat -y 1
-procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
- r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
- 1  0      0 65361024  28420 105388    0    0     0     0 3710   27  0  0 100  0  0
- 1  0      0 65361024  28420 105388    0    0     0     0 3399   20  0  0 100  0  0
- 1  0      0 65361024  28420 105388    0    0     0     0 4439   78  0  0 100  0  0
- 1  0      0 65361024  28420 105388    0    0     0     0 5634   14  0  0 100  0  0
- 1  0      0 65361024  28420 105388    0    0     0     0 5575   14  0  0 100  0  0
-
-we're idling at anywhere between 3k and 6k interrupts per second. Not
-exactly what you want. This appears to be caused by the broadcast
-timer IPI.
-
-Reverting this patch on top of 6.16 restores sanity on this machine.
-
-I suspect that we're entering some deep idle state in a much more
-aggressive way, leading to a global timer firing as a wake-up
-mechanism, and the broadcast IPI being used to kick everybody else
-back. This is further confirmed by seeing the broadcast IPI almost
-disappearing completely if I load the system a bit.
-
-Daniel, you should be able to reproduce this on a Synquacer box (this
-what I used here).
-
-I'm happy to test things that could help restore some sanity.
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+=D0=BF=D0=BD, 4 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 17:50=
+ Paolo Bonzini <pbonzini@redhat.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Mon, Aug 4, 2025 at 12:57=E2=80=AFPM Andy Mindful <andy.mindful@gmail.=
+com> wrote:
+> > Double-checked bisect, looks like I've have found broken commit:
+> >
+> > > > git bisect bad
+> > > > The merge base ba5afb9a84df2e6b26a1b6389b98849cd16ea757 is bad.
+> > > > This means the bug has been fixed between
+> > > > ba5afb9a84df2e6b26a1b6389b98849cd16ea757 and
+> > > > [1b1934dbbdcf9aa2d507932ff488cec47999cf3f
+> > > > 61da593f4458f25c59f65cfd9ba1bda570db5db7
+> > > > 6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1
+> > > > ba5afb9a84df2e6b26a1b6389b98849cd16ea757].
+>
+> This skip is messing up the results:
+>
+> # skip: [0dd3ee31125508cd67f7e7172247f05b7fd1753a] Linux 6.7
+> git bisect skip 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+>
+> and there are still 3858 commits in
+> ba5afb9a84df2e6b26a1b6389b98849cd16ea757..{1b1934dbbdcf9aa2d507932ff488ce=
+c47999cf3f,61da593f4458f25c59f65cfd9ba1bda570db5db7,ba5afb9a84df2e6b26a1b63=
+89b98849cd16ea757}
+>
+> Any chance you can get 6.7 to work and restrict the range further?
+>
+> Thanks,
+>
+> Paolo
+>
 
