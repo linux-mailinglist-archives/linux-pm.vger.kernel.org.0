@@ -1,57 +1,58 @@
-Return-Path: <linux-pm+bounces-31807-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31808-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DF0CB19839
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:34:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 745B5B1983A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:34:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 561863A1D92
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:33:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EC8C3AC917
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AE24594A;
-	Mon,  4 Aug 2025 00:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D86176026;
+	Mon,  4 Aug 2025 00:32:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwuaNs29"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ej9Dc3ka"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4973175A5;
-	Mon,  4 Aug 2025 00:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A5A29A2;
+	Mon,  4 Aug 2025 00:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267565; cv=none; b=X2Q5HpiyYVS7L4E3CKYMzYBbja6CPibxLgpNX0MduXDKMIsN2BH44lTXyqzCzhv1IY9AFbp7oCVEsePX1NHVNZI9lP4+EFsB2y070pizjh4knDPJctgs/Xktrq486Jkb3L+j8Ii/oVnNab7Ehz/ZMLw5nWN/7OKXrvw7uzZ293E=
+	t=1754267567; cv=none; b=CkbjKuFSW5Atpk+jE4aOww1ov+kHy7Wd7vy1gSOTvKlEm4scuV4Hu0l1SHgoYxVCDFPhMwoQUMHEZIEM7z1wg2ZSpvsWCr/golN1Izs84YEtV/qUe5hYf2uo4XRFBkRCjfTgNY6XUpQdVvf7nD0OMt9akvL2LIWb0SkajE3spdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267565; c=relaxed/simple;
-	bh=+YpRbHqJM/F3/nXXkF9qDJwjhRqFGsKuucBgo/R7LaY=;
+	s=arc-20240116; t=1754267567; c=relaxed/simple;
+	bh=4rme4BQkDGrELVXs1rCmJdKz8CuIb0b6CuReo3rIiz4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rntPLH/RV7wMXakpBYcKjTGH3E/x7T4+F04PYuipFuAOIZANuM0Mt0Akoe+u3SfpyBE1sXKofSA/z0L9Kj8Zfhg2AoZTGtsW1vK5HbVIgc24lYFcWL9UMUp1VFYM0whLC1zpG+ZJ2Mp2z8K1ugKiOgJmlYU0T9MDV+149urCPJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwuaNs29; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F6EC4CEF8;
-	Mon,  4 Aug 2025 00:32:43 +0000 (UTC)
+	 MIME-Version; b=sDQa6caZ3PCLS3odUU6iRxSs5rhXXiHe3YqGH0c2RrFaDrWLffVPSWTUp39IiMm2x5Xgp42fOZHRp6O2FQw3CPuUtEYW0KgyO14qPJePJqVrpzzoQ5FDFMD4Kf+NAKy5ipKT+3F/WVRZccgXf88dtuII/UH6/ZoeHvD2YMLeAAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ej9Dc3ka; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 612B8C4CEF8;
+	Mon,  4 Aug 2025 00:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267564;
-	bh=+YpRbHqJM/F3/nXXkF9qDJwjhRqFGsKuucBgo/R7LaY=;
+	s=k20201202; t=1754267566;
+	bh=4rme4BQkDGrELVXs1rCmJdKz8CuIb0b6CuReo3rIiz4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NwuaNs295ECUx7AN2k9yXKZ8MQ0V34RUeETDiJIWrPsb8/mN3cl2vS+cwiDMzG3jF
-	 sEvybXtVQGeUrVa2sMwdpPJbSqDLInCnCIdyTGFer6JPEfzAxHgy27YEdoZuTYsl+X
-	 g+nu91M5R7yRW+kTqyHJHPGQPiTYjjwlfbvpo7GF/7Yob/gKB3RlgzyjknXeekdiul
-	 SJs0B815Lk5w4QbN7NcCfK3a9OXUXq3OIQxmCwWghWOM+dX+K7uAhh1/XwxQLKxAzn
-	 IWeNSVl9AgViu4ioMFUfeEfmyEZHI4Ebf34yrDCwinlkih8hNq3MMBUl/mU1RRTyc4
-	 lUhDHNgtuOasw==
+	b=Ej9Dc3kaXQgadzlTqWLkIEg+vPflhogBB0iJe7M/NX1VKasAS07Y0AWQF2lo2qCwE
+	 3rVyazK1GIXRIq8GptOcO+dnKF9Hh+LrDsiCZ8BOOMDclnpYHX5L+aZ2+ywi/8EkUe
+	 xp9iRKKcKvpm1tcsvzo0oq4gTz1ohW5cpiOLMR5uMgGh84qn/tSVXrUgFp17htQpGa
+	 CVQJbcidhVi12zR3UV9PzsOmu6idOxn8KNq4pSiSXRVI+QRwV2o2pxargd1YBvB4hz
+	 lbGU+97EomBzDcuzL1npVZLQrJoFl8UuXpn8REQNzKibUymfdV4FMqZeZgUOssAf7a
+	 inOu9FVN0yEgA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
+Cc: Hsin-Te Yuan <yuanhsinte@chromium.org>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
+	daniel.lezcano@linaro.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 35/69] PM: runtime: Clear power.needs_force_resume in pm_runtime_reinit()
-Date: Sun,  3 Aug 2025 20:30:45 -0400
-Message-Id: <20250804003119.3620476-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 36/69] thermal: sysfs: Return ENODATA instead of EAGAIN for reads
+Date: Sun,  3 Aug 2025 20:30:46 -0400
+Message-Id: <20250804003119.3620476-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804003119.3620476-1-sashal@kernel.org>
 References: <20250804003119.3620476-1-sashal@kernel.org>
@@ -66,93 +67,137 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.41
 Content-Transfer-Encoding: 8bit
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+From: Hsin-Te Yuan <yuanhsinte@chromium.org>
 
-[ Upstream commit 89d9cec3b1e9c49bae9375a2db6dc49bc7468af0 ]
+[ Upstream commit 1a4aabc27e95674837f2e25f4ef340c0469e6203 ]
 
-Clear power.needs_force_resume in pm_runtime_reinit() in case it has
-been set by pm_runtime_force_suspend() invoked from a driver remove
-callback.
+According to POSIX spec, EAGAIN returned by read with O_NONBLOCK set
+means the read would block. Hence, the common implementation in
+nonblocking model will poll the file when the nonblocking read returns
+EAGAIN. However, when the target file is thermal zone, this mechanism
+will totally malfunction because thermal zone doesn't implement sysfs
+notification and thus the poll will never return.
 
-Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+For example, the read in Golang implemnts such method and sometimes
+hangs at reading some thermal zones via sysfs.
+
+Change to return -ENODATA instead of -EAGAIN to userspace.
+
+Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Link: https://patch.msgid.link/20250620-temp-v3-1-6becc6aeb66c@chromium.org
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://patch.msgid.link/9495163.CDJkKcVGEf@rjwysocki.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
+Based on my analysis of the commit, here is my determination:
+
 **Backport Status: YES**
 
-This commit is a clear bugfix that should be backported to stable kernel
-trees for the following reasons:
+## Extensive Explanation:
 
-1. **It fixes a real bug**: The commit addresses a specific issue where
-   `power.needs_force_resume` flag is not cleared in
-   `pm_runtime_reinit()` when a device is removed. If a driver calls
-   `pm_runtime_force_suspend()` from its remove callback (which sets
-   `needs_force_resume = 1`), this flag remains set even after the
-   device is removed and potentially re-probed.
+This commit should be backported to stable kernel trees for the
+following reasons:
 
-2. **The fix is minimal and contained**: The change adds just 5 lines of
-   code (including comments) to clear a single flag. The modification
-   is:
-  ```c
-  dev->power.needs_force_resume = false;
-  ```
-  This is a very low-risk change that only affects the specific
-  condition being fixed.
+### 1. **Bug Fix for Real User-Facing Issue**
+The commit fixes a bug where userspace applications can hang when
+reading thermal zone temperature files via sysfs with O_NONBLOCK set.
+The commit message clearly states that "the read in Golang implements
+such method and sometimes hangs at reading some thermal zones via
+sysfs." This is a real-world problem affecting actual applications.
 
-3. **It prevents state leakage**: Looking at the code flow:
-   - `pm_runtime_force_suspend()` sets `dev->power.needs_force_resume =
-     1` (line in runtime.c)
-   - When a driver is removed, `pm_runtime_remove()` calls
-     `pm_runtime_reinit()`
-   - Without this fix, if the device is re-probed, it would still have
-     `needs_force_resume = 1` from the previous instance
-   - This could lead to incorrect PM runtime behavior where
-     `pm_runtime_force_resume()` would incorrectly think it needs to
-     resume a device that was never suspended in the current probe cycle
+### 2. **POSIX Compliance Issue**
+The current behavior violates POSIX semantics. According to POSIX
+specifications, EAGAIN from a non-blocking read means "the read would
+block" - implying that the caller should poll/select and wait for data
+to become available. However, thermal zone sysfs files don't implement
+poll notifications, so applications following standard POSIX patterns
+will poll forever, causing hangs.
 
-4. **Related to previous stable fixes**: The git history shows a
-   previous commit `c745253e2a69` ("PM: runtime: Fix unpaired parent
-   child_count for force_resume") was already marked for stable (4.16+),
-   indicating that issues with the `needs_force_resume` flag have been
-   problematic enough to warrant stable backports.
+### 3. **Small and Contained Change**
+The code change is minimal and localized:
+```c
+- if (ret)
+- return ret;
++       if (!ret)
++               return sprintf(buf, "%d\n", temperature);
 
-5. **Clear bug scenario**: The commit message describes a specific
-   scenario where this happens - when `pm_runtime_force_suspend()` is
-   called from a driver remove callback. This is a legitimate use case
-   where drivers want to ensure devices are suspended before removal.
+- return sprintf(buf, "%d\n", temperature);
++       if (ret == -EAGAIN)
++               return -ENODATA;
++
++       return ret;
+```
+It only affects the `temp_show()` function in `thermal_sysfs.c` by
+translating -EAGAIN to -ENODATA specifically for sysfs reads.
 
-6. **No architectural changes**: This is purely a bugfix that clears a
-   flag that should have been cleared during reinitialization. It
-   doesn't introduce new features or change any APIs.
+### 4. **Low Risk of Regression**
+- The change only affects error handling paths
+- It doesn't modify the normal success case
+- It only translates one specific error code (-EAGAIN) to another
+  (-ENODATA)
+- ENODATA is a more appropriate error for "no data available" in a sysfs
+  context
 
-The fix ensures proper PM runtime state management across device removal
-and re-probing cycles, which is important for system stability and
-correct power management behavior.
+### 5. **Multiple Drivers Return -EAGAIN**
+My search found at least 13 thermal drivers that can return -EAGAIN from
+their get_temp operations:
+- imx8mm_thermal.c
+- imx_thermal.c
+- tegra-bpmp-thermal.c
+- qoriq_thermal.c
+- lvts_thermal.c
+- rockchip_thermal.c
+- exynos_tmu.c
+- sun8i_thermal.c
+- stm_thermal.c
+- intel_powerclamp.c
 
- drivers/base/power/runtime.c | 5 +++++
- 1 file changed, 5 insertions(+)
+This indicates the issue affects multiple platforms and thermal drivers.
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 99f25d6b2027..317505eab126 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1787,6 +1787,11 @@ void pm_runtime_reinit(struct device *dev)
- 				pm_runtime_put(dev->parent);
- 		}
- 	}
-+	/*
-+	 * Clear power.needs_force_resume in case it has been set by
-+	 * pm_runtime_force_suspend() invoked from a driver remove callback.
-+	 */
-+	dev->power.needs_force_resume = false;
+### 6. **Follows Stable Kernel Rules**
+- Fixes a real bug that bothers people (application hangs)
+- Fix is already in Linus's tree (based on the Signed-off-by from Rafael
+  J. Wysocki)
+- Small change (< 100 lines)
+- Obviously correct and tested
+- Doesn't change APIs or break existing functionality
+
+### 7. **No Architectural Changes**
+The commit doesn't introduce new features or change the thermal
+subsystem architecture. It's purely a bug fix that makes the sysfs
+interface behave correctly with non-blocking reads.
+
+The fix is appropriate because sysfs files are not meant to be pollable
+in the traditional sense - they provide instantaneous data snapshots.
+Returning ENODATA instead of EAGAIN properly communicates "no data
+currently available" without implying that polling would help.
+
+ drivers/thermal/thermal_sysfs.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 1838aa729bb5..c58c53d4ecc6 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -40,10 +40,13 @@ temp_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 
+ 	ret = thermal_zone_get_temp(tz, &temperature);
+ 
+-	if (ret)
+-		return ret;
++	if (!ret)
++		return sprintf(buf, "%d\n", temperature);
+ 
+-	return sprintf(buf, "%d\n", temperature);
++	if (ret == -EAGAIN)
++		return -ENODATA;
++
++	return ret;
  }
  
- /**
+ static ssize_t
 -- 
 2.39.5
 
