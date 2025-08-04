@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-31825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31826-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D3CB19909
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77800B19908
 	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:40:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E74C7189810F
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:40:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99D0E177029
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDB61E0B9C;
-	Mon,  4 Aug 2025 00:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7914B1FF1A1;
+	Mon,  4 Aug 2025 00:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRSrsgG6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ez9R3hGk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D2A1DE4E5;
-	Mon,  4 Aug 2025 00:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501531DE4E5;
+	Mon,  4 Aug 2025 00:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267955; cv=none; b=Lkt5bOOxiFe1T1ZUsHCXiIvMuWns3vuSLzo8sJKv7qNYsPctYZjW0dY6fLrnyICe5ZeJMt+enOnYu4GXR+WOW28eYihUkdD9hpR/6rdm0mNp5dhDVGME63PcHsII0M3wpjuAefNtd0Ah4k9ynC6xQF1MZm6TjVHvzncy34A4Yh8=
+	t=1754267959; cv=none; b=WTzFnySUTf3ZI1xvM2KCMEV5XAdXsvXSedoxdYyaP2FiZreRgfnYmcxg6p3HL4VoIHwejIUe0SXHJXvmuRj+TSN1YVqidEDPD8bhOc1Qkgw8N70UIuLRFt2ze1DBSwcCv6cj4/n/0F+rtg6yWSAv22uYsN1d1sHtI4UTquEoMjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267955; c=relaxed/simple;
-	bh=1aaxKEB7kvQk5YOXJwPtxcVj18XuCL1eOML76XNPBCw=;
+	s=arc-20240116; t=1754267959; c=relaxed/simple;
+	bh=jkenw2BNpnSiQdmOaCbO3klF9XpS/36FLlV6FeSn8+g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HpSSbg6Cch5vYxtUWoIucYMzshMC7XLEahD6Ey/JDtErxjsp+XXlueUX435HGAH6FPn/eOSNwUEFOE+JHdQe+cRLEqsxHUikAUXd1c+NGyISLl/5dfP8nFJuASNzf7/SIm9lI9KEFX+a1e6cWilH2HeoBfJOdNGQFjO2LnuiwWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRSrsgG6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F23E6C4CEF8;
-	Mon,  4 Aug 2025 00:39:13 +0000 (UTC)
+	 MIME-Version; b=jfP8tYYgIG2M9ZjL02Wz84TTgAlROPSe8iUA5tWgKWA7NYf3T3iQzGux/ruEjA9Z6Ihcx6EL25EK4Ii8QA5+uGCZ4b6011uoPsatyyLbFzj95xLiRLmeEs8ySbxFt9+Ljk0BK92G9umfevhTAk3OyJazy0Er9XXazfvTeOzvhEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ez9R3hGk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE357C4CEF0;
+	Mon,  4 Aug 2025 00:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267955;
-	bh=1aaxKEB7kvQk5YOXJwPtxcVj18XuCL1eOML76XNPBCw=;
+	s=k20201202; t=1754267959;
+	bh=jkenw2BNpnSiQdmOaCbO3klF9XpS/36FLlV6FeSn8+g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kRSrsgG6hLEfa3ne9EQz5WhLL8wefSYdNKG/L2+B1AXTYI9XOXqFBPm7Tg/W1sCPX
-	 M9r9WqXFm8d4yQPA8ClHxVLLtH3djJUWljT992Q9NBe+v1T22FbrkLyWjinh2jQuyJ
-	 Jf9IYNDD/QTgcscAyHFXwkJ2DOzgMUIQwgggXBagEUNRDpPfiq9leRIeg3qGq3dY79
-	 UHVzPBOd33s1GJ2EPrsu1BHeqEh/KhgJtNDWe73cidBUZUzJxy3a5kP35hKwLWoW5U
-	 ezAjpeTj5Al46+r6bfbNXZMfZTRQxva/nf8XD6+H1Sigbr1O5wgHWNx1qA9LFWFwrE
-	 rbndgxfA49Nwg==
+	b=Ez9R3hGkcooYAlcFGA5USDXQo6Cz42WX+H+eeaSZIQnOWPX7ImRT4SuWln/j/DkMY
+	 rpVHsT0hTI4UM7GyXTknu48KtQ8Nqz8sHtwnKbg6irlN0CM9m+5OfNCOEDJnzZyQuC
+	 62GrdeJHshIM/D+tg4+jkXqw3cvhBy+g9lpSPpefkAlc6Ym4Dvm1N+1cZyCXvwSH8l
+	 vkvx+EhXLWb+TW4eLtdVYcZp+/mmZujplMtrG+V49tPJuFYCva/DVLq5hXk8Gl5wdM
+	 ARpLXKjzwkywmEBLfYGoqAqLZFBs8MYcIpsWVbkGZxwfBeB1uN9AS8NYJeV5kP8xR1
+	 GBonqR1Qc7+0Q==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
 Cc: Lifeng Zheng <zhenglifeng1@huawei.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
 	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
+	myungjoo.ham@samsung.com,
+	kyungmin.park@samsung.com,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 10/44] cpufreq: Exit governor when failed to start old governor
-Date: Sun,  3 Aug 2025 20:38:15 -0400
-Message-Id: <20250804003849.3627024-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 12/44] PM / devfreq: governor: Replace sscanf() with kstrtoul() in set_freq_store()
+Date: Sun,  3 Aug 2025 20:38:17 -0400
+Message-Id: <20250804003849.3627024-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804003849.3627024-1-sashal@kernel.org>
 References: <20250804003849.3627024-1-sashal@kernel.org>
@@ -69,122 +69,101 @@ Content-Transfer-Encoding: 8bit
 
 From: Lifeng Zheng <zhenglifeng1@huawei.com>
 
-[ Upstream commit 0ae204405095abfbc2d694ee0fbb49bcbbe55c57 ]
+[ Upstream commit 914cc799b28f17d369d5b4db3b941957d18157e8 ]
 
-Detect the result of starting old governor in cpufreq_set_policy(). If it
-fails, exit the governor and clear policy->governor.
+Replace sscanf() with kstrtoul() in set_freq_store() and check the result
+to avoid invalid input.
 
 Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Link: https://patch.msgid.link/20250709104145.2348017-5-zhenglifeng1@huawei.com
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://lore.kernel.org/lkml/20250421030020.3108405-2-zhenglifeng1@huawei.com/
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-**Backport Status: YES**
+## Backport Status: YES
 
-This commit should be backported to stable kernel trees. Here's my
-extensive analysis:
+This commit should be backported to stable kernel trees for the
+following reasons:
 
-## Bug Analysis
+1. **Security Issue - Input Validation Bug**: The original code uses
+   `sscanf(buf, "%lu", &wanted)` at line 45 without checking the return
+   value. This is a security vulnerability because:
+   - `sscanf()` returns the number of successfully parsed items
+   - If the input is malformed or contains invalid characters,
+     `sscanf()` may return 0 but leave `wanted` uninitialized
+   - The code then proceeds to use this potentially uninitialized value
+     in `data->user_frequency = wanted`
+   - This could lead to setting arbitrary frequency values from
+     uninitialized stack data
 
-The commit fixes a **resource leak and inconsistent state bug** in the
-cpufreq governor switching code. Looking at the code changes in
-`cpufreq_set_policy()`:
+2. **Real User Impact**: The devfreq userspace governor allows users to
+   manually set device frequencies through sysfs. Invalid input handling
+   could cause:
+   - Setting incorrect frequencies based on uninitialized memory
+   - Potential system instability if invalid frequencies are applied to
+     hardware
+   - Security implications as uninitialized stack data could be used
 
-### The Bug:
-In the original code (lines 2716-2721), when switching governors fails
-and we need to restore the old governor:
-```c
-if (old_gov) {
-    policy->governor = old_gov;
-    if (cpufreq_init_governor(policy))
-        policy->governor = NULL;
-    else
-        cpufreq_start_governor(policy);  // Bug: no error handling here
-}
-```
+3. **Small and Contained Fix**: The change is minimal and low-risk:
+   - Replaces `sscanf()` with `kstrtoul()` which has proper error
+     checking
+   - Adds explicit error handling that returns early on invalid input
+   - The change is confined to a single function (`set_freq_store()`)
+   - No architectural changes or new features added
 
-If `cpufreq_start_governor()` fails, the code doesn't handle the error.
-This leaves the system in an **inconsistent state** where:
-1. The governor is initialized (`cpufreq_init_governor` succeeded)
-2. But the governor failed to start (`cpufreq_start_governor` failed)
-3. The policy still points to a non-functional governor
-4. Resources allocated during `cpufreq_init_governor` are **leaked**
-   (module reference count, governor's init() allocations)
+4. **Follows Kernel Best Practices**: The kernel has been systematically
+   replacing `sscanf()` with `kstrto*()` functions for better input
+   validation. This is evident from similar commits found in the git log
+   (e.g., commit a5556fa1107d for asus-wmi).
 
-### The Fix:
-```c
-if (cpufreq_init_governor(policy)) {
-    policy->governor = NULL;
-} else if (cpufreq_start_governor(policy)) {
-    cpufreq_exit_governor(policy);  // NEW: Clean up on failure
-    policy->governor = NULL;        // NEW: Clear the governor pointer
-}
-```
+5. **Critical Subsystem**: While devfreq might not be as critical as
+   core memory management, it controls device frequency scaling which
+   can affect:
+   - Power management
+   - System performance
+   - Hardware stability
 
-## Why This Should Be Backported:
+6. **No Negative Side Effects**: The change only adds proper validation
+   and doesn't modify the core functionality. Valid inputs will continue
+   to work exactly as before.
 
-1. **Fixes a Real Bug**: This addresses a resource leak where
-   `cpufreq_init_governor()` acquires resources (notably
-   `try_module_get()` at line 2442 and potential governor->init()
-   allocations) that aren't cleaned up if `cpufreq_start_governor()`
-   fails.
+The commit fixes a clear bug (missing input validation) that could lead
+to undefined behavior and potential security issues, making it an
+excellent candidate for stable backporting according to stable tree
+rules.
 
-2. **Small and Contained Fix**: The change is minimal - just 4 lines
-   modified to add proper error handling. It doesn't change any APIs or
-   introduce new functionality.
+ drivers/devfreq/governor_userspace.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-3. **Prevents System Instability**: Leaving the cpufreq subsystem in an
-   inconsistent state (initialized but not started governor) could lead
-   to:
-   - Module reference count leaks
-   - Memory leaks from governor init allocations
-   - Potential crashes if the partially-initialized governor is accessed
-     later
-
-4. **Error Path Fix**: This is clearly an error handling path that was
-   incorrectly implemented. The pattern of calling
-   `cpufreq_exit_governor()` after a failed `cpufreq_start_governor()`
-   is already used elsewhere in the code (line 2711).
-
-5. **No Architectural Changes**: The fix simply adds missing cleanup
-   code in an error path. It doesn't change the normal operation flow or
-   introduce new features.
-
-6. **Critical Subsystem**: The cpufreq subsystem is critical for power
-   management and system stability. Bugs here can affect system
-   reliability.
-
-The commit follows the stable kernel rules perfectly - it's a clear bug
-fix that prevents resource leaks and system instability, with minimal
-risk of regression since it only affects an error path that was already
-broken.
-
- drivers/cpufreq/cpufreq.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index bbb0cbb2eb8c..4f68e34cde0b 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2605,10 +2605,12 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
- 	pr_debug("starting governor %s failed\n", policy->governor->name);
- 	if (old_gov) {
- 		policy->governor = old_gov;
--		if (cpufreq_init_governor(policy))
-+		if (cpufreq_init_governor(policy)) {
- 			policy->governor = NULL;
--		else
--			cpufreq_start_governor(policy);
-+		} else if (cpufreq_start_governor(policy)) {
-+			cpufreq_exit_governor(policy);
-+			policy->governor = NULL;
-+		}
- 	}
+diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+index d69672ccacc4..8d057cea09d5 100644
+--- a/drivers/devfreq/governor_userspace.c
++++ b/drivers/devfreq/governor_userspace.c
+@@ -9,6 +9,7 @@
+ #include <linux/slab.h>
+ #include <linux/device.h>
+ #include <linux/devfreq.h>
++#include <linux/kstrtox.h>
+ #include <linux/pm.h>
+ #include <linux/mutex.h>
+ #include <linux/module.h>
+@@ -39,10 +40,13 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
+ 	unsigned long wanted;
+ 	int err = 0;
  
- 	return ret;
++	err = kstrtoul(buf, 0, &wanted);
++	if (err)
++		return err;
++
+ 	mutex_lock(&devfreq->lock);
+ 	data = devfreq->governor_data;
+ 
+-	sscanf(buf, "%lu", &wanted);
+ 	data->user_frequency = wanted;
+ 	data->valid = true;
+ 	err = update_devfreq(devfreq);
 -- 
 2.39.5
 
