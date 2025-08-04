@@ -1,215 +1,184 @@
-Return-Path: <linux-pm+bounces-31918-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31919-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F655B1A70C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 18:08:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A3CFB1A83D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 18:55:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D97787A7966
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 16:06:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91E22188B74E
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 16:55:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F066221FC3;
-	Mon,  4 Aug 2025 16:08:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCC328A71B;
+	Mon,  4 Aug 2025 16:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JdKd3iN0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cOHfjh2A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3C320B800
-	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 16:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B216228A707;
+	Mon,  4 Aug 2025 16:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754323690; cv=none; b=OLgOaCuKyIJg/1PU82k/elWfrlkfnksmaG7dfSRUjLvSXUFIABvn1CSzFtIMOJTYdKftVGLD3J89NsEbKcT4nl38KKDPS/bTCeyW9/u/2MAaxPnwCMNZEBntedMoHAV6F3bzRQsBrve8ujtfbVuCXXSHugsZaFm2fYXasmEb6eg=
+	t=1754326478; cv=none; b=QZLCgg+IyY5BMhpF8UegY47xyjYNye7yvE2Fkj7B/9JJC0Wqq6UMMObCBBqJUl85bEzHceHoQr+vcl9j9hCWxbXvcq+VPYo3jNkvFJr44/sGDHzepIcHW2v39hjO3LHw8Y/9N5DL3SNJvLq032RdkkruDYuUHZcQ0wOgLdsvxto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754323690; c=relaxed/simple;
-	bh=S9yuT+weSY5miLU3AyaItyOypGFL+jNnY+GzO8Hq2NM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mWSfg03o/ZoW+yqSzwW4rHiInmSsy9sRlh37ri/X80D8q4DVSGqI5Nxg5OzPNpiOYG6aP9bKI5fD+c6mVebS5Co8Ahjpu/dbQr2AhsjmaNlNhL5KDujupgfTcGZuFkGBDLGJRn8hCU3lu3jSoN/iPBGCkgMpzG+V28mwmuKZw84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JdKd3iN0; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3b7834f2e72so2966227f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 04 Aug 2025 09:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754323685; x=1754928485; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Aaib/NaydwLH1J4xHrdqxdoR2E0SlQgXrBILFXZ4d4=;
-        b=JdKd3iN0F98ojpAUOxP6F5XK7x5kAzRZbnev+LQE7f3kHCpw2Kdegg5OYV29nC0h60
-         i/BGqcUYJQdldCEw9EcsZGwTTQALi0xq/sImYvFqejqwoGSTosHRd7Sal6Ab7MMN4XHr
-         CnRlM9Ylu9URzQQsNoZQHI5T8gkd6CRGBPaVQDahA0XmND8enikY83Uqdbh2x9E95ZhB
-         by4zDjpxqSJD/0UX6kN+2UNbO/8nM/cFTu7lODy2Uo/mzoRzZl6mRXH4ueRQQsna+Cf0
-         q8P3CGeLN5ybNKGFWhJKFeULNv6Ifb/gj2yN+Py76yExr739oGB41lmNaMDCZlqibiXi
-         xjXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754323685; x=1754928485;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Aaib/NaydwLH1J4xHrdqxdoR2E0SlQgXrBILFXZ4d4=;
-        b=ZuMeh5egZChUPwkPrmgQRQb2Gb41vDTng/8jsj6r2SA7RAryuNInpRgFQNd0Zxke9N
-         b6ZC9j8DbDSG5SE76NtrDln2mDPCtM9TgMBQngok1lFySIiw3wOm+dIkzfnhQbgelWPO
-         DekbEd0I2ZKDzHBYAhk+QV2sSJZcNWEmpHKC/Pk+fGpBtN/RhOsPl6Mo6Pvje5DxLeNj
-         447SEjnQtvcwRKgHgu/ijmsi49ntqJqNsZguIT9egJ1ZYrVBQ51C/bv8NSaGWey/Ewg3
-         pPfB+n7MJ2UZ1lNFcXcxeNlwLnLYlWNm4owitI1eb0rD82x6N6gndZt22DW9AnZRzPVw
-         M8cA==
-X-Forwarded-Encrypted: i=1; AJvYcCVFyBtcw38S+AY94orQczJoJKH5rYfYXbexFm/fs8k15uQffOWucJDbnzvedWiNjS8YGQG0oPM+ww==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+NDDc1QbfZwkZJKSzmu2CSr5+Wm5/dh0rGpREHum9uD6+h/bK
-	WK6V1PflflXhnhYBmWiMq7rIV6Mu/930sK8jN8T+neKq9VOmVn9Re7/EAKSScsho/zk=
-X-Gm-Gg: ASbGncthfRRWhircNRQjfOpGYvGuWsxi1zsDDpHnwX/53p3SgJ5kQBR8Gj9zzgM79ou
-	oKXDNLHtAEVelA0SIwMX1uPURy0Rf7Cf9Ylj+Ixum5Y6jAIvmRAuxsl04Poi8lhXvXvnTf5+Ifv
-	26MRBnG3j9HC8D7u6aRrAZNhqol98hVxzw7zUcFVYuFLmAK4mapk+dv/vpZsFVOCFsi1Wg5tM9M
-	GOrkkRMnJ0uZWu7FdhlpV9ufExO5BP4rhxRPhVSwKuobjkLtSquKs+xx7RNexhYqDgZov4IdJCF
-	XeeTsbH0180EVOdZe2IKmDfcnnMiSbKhAkmIFS4Oa2OWYnQ7iEBGEZjhMROll0o2m71mtrpgW1y
-	YBvU9VBH0UAFmkPXgkUv3tnjSLp4H8nZEf8DN08NSgsiqazdSXFQzR/eASl/LPKA9CMRVwP5k
-X-Google-Smtp-Source: AGHT+IEohChU750lDHoZ0kT83zI/nxMNcmkkIL5wgE8PiBZtIvHt4vP9RiqS9PltkOKHSOsX9HxMyw==
-X-Received: by 2002:a05:6000:2f85:b0:3b7:9c28:f856 with SMTP id ffacd0b85a97d-3b8d94c3f4bmr6867167f8f.48.1754323685345;
-        Mon, 04 Aug 2025 09:08:05 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-459a1c79b0asm39287285e9.3.2025.08.04.09.08.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Aug 2025 09:08:04 -0700 (PDT)
-Message-ID: <64622ffd-05d1-43c3-85d0-cf98f3012477@linaro.org>
-Date: Mon, 4 Aug 2025 18:08:03 +0200
+	s=arc-20240116; t=1754326478; c=relaxed/simple;
+	bh=d+XlqNAsTP1aZFEzzzw1zGerTeyCFUUm7vWEU3d2zmA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A8B2VbHKc66VAcnAEJ2KWxoE4tA0q8gRqwSRJEj8diwe925D1T5TzsFj3zZxsKERslIHIvPCsvwhyImqDpCcuHVnuNA+qGfFRNTgJ8H+Jc7iha1ebBJuofMvHJbMH8/yTIXd6TM6opCUEATITIM9MaiUqi+4wgJWu/edpGn/EVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cOHfjh2A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31447C4CEE7;
+	Mon,  4 Aug 2025 16:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754326475;
+	bh=d+XlqNAsTP1aZFEzzzw1zGerTeyCFUUm7vWEU3d2zmA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cOHfjh2AohfXyPVoX2YaEpfGzdr+X7AiTfo+cPeM0jwBNjq6KMwOiIo1bxO5vspXI
+	 hfhK2B5N9aTAT0EFuokAeGbp/JmvOUUWE57EaBuH9NFzoifgite9SuOv+E0dqaeAKJ
+	 d5DTJ+dkQDIHv+gNd8fM2LILh+mpTCB+i01fKwynAJPoUctQQPX4LIfETdkeI6fMKH
+	 gf+4cf9Nw/IDLNmklkqq3mxRY4ajLwHqwXCENvhRxJaQrWnhq3U0fyE898tQiQ+os4
+	 pPX/Z4X5MW8yWud3Hl0+oNE4/lBh485CuPIpmoNE0YSGst7vE4Z4Czj+XZgp4jfWwo
+	 fMF+OcjSDGbzw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1uiySG-003sNW-Br;
+	Mon, 04 Aug 2025 17:54:32 +0100
+Date: Mon, 04 Aug 2025 17:54:31 +0100
+Message-ID: <86o6sv6n94.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	Aboorva Devarajan <aboorvad@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful information
+In-Reply-To: <7770672.EvYhyI6sBW@rjwysocki.net>
+References: <1916668.tdWV9SEqCh@rjwysocki.net>
+	<7770672.EvYhyI6sBW@rjwysocki.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
- the Renesas RZ/G3E SoC
-To: John Madieu <john.madieu.xa@bp.renesas.com>
-Cc: "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "rafael@kernel.org" <rafael@kernel.org>,
- Biju Das <biju.das.jz@bp.renesas.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "john.madieu@gmail.com" <john.madieu@gmail.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
- "magnus.damm" <magnus.damm@gmail.com>, "robh@kernel.org" <robh@kernel.org>,
- "rui.zhang@intel.com" <rui.zhang@intel.com>,
- "sboyd@kernel.org" <sboyd@kernel.org>,
- "niklas.soderlund+renesas@ragnatech.se"
- <niklas.soderlund+renesas@ragnatech.se>
-References: <20250522182252.1593159-1-john.madieu.xa@bp.renesas.com>
- <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com>
- <aHgVe0YwPWapIYed@mai.linaro.org>
- <OSCPR01MB14647DE009925C982AE6BB5D2FF27A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <OSCPR01MB14647DE009925C982AE6BB5D2FF27A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rjw@rjwysocki.net, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, christian.loehle@arm.com, artem.bityutskiy@linux.intel.com, aboorvad@linux.ibm.com, tglx@linutronix.de, mark.rutland@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 31/07/2025 19:19, John Madieu wrote:
-> Hi Daniel,
+[+ Thomas, Mark]
+
+On Thu, 06 Feb 2025 14:29:05 +0000,
+"Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
 > 
-> Thanks for your review.
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
->> -----Original Message-----
->> From: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Sent: Wednesday, July 16, 2025 11:11 PM
->> To: John Madieu <john.madieu.xa@bp.renesas.com>
->> Subject: Re: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver
->> for the Renesas RZ/G3E SoC
->>
->> On Thu, May 22, 2025 at 08:22:46PM +0200, John Madieu wrote:
->>> The RZ/G3E SoC integrates a Temperature Sensor Unit (TSU) block
->>> designed to monitor the chip's junction temperature. This sensor is
->>> connected to channel 1 of the APB port clock/reset and provides
->> temperature measurements.
->>>
->>> It also requires calibration values stored in the system controller
->>> registers for accurate temperature measurement. Add a driver for the
->> Renesas RZ/G3E TSU.
->>>
->>> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
->>> ---
-
-[ ... ]
-
->>> +static int rzg3e_thermal_get_temp(struct thermal_zone_device *zone,
->>> +int *temp) {
->>> +	struct rzg3e_thermal_priv *priv = thermal_zone_device_priv(zone);
->>> +	u32 val;
->>> +	int ret;
->>> +
->>> +	if (priv->mode == THERMAL_DEVICE_DISABLED)
->>> +		return -EBUSY;
-
-[ ... ]
-
->>> +	reinit_completion(&priv->conv_complete);
->>> +
->>> +	/* Enable ADC interrupt */
->>> +	writel(TSU_SIER_ADIE, priv->base + TSU_SIER);
->>
->> Why enable irq here ?
->>
+> When giving up on making a high-confidence prediction,
+> get_typical_interval() always returns UINT_MAX which means that the
+> next idle interval prediction will be based entirely on the time till
+> the next timer.  However, the information represented by the most
+> recent intervals may not be completely useless in those cases.
 > 
-> I did it this way because, in 'set_trips' callback, the
-> driver does trigger conversion to check whether the current
-> temperature is part of the window or not, and triggers the
-> comparison interrupt accordingly. Because of that, I did not
-> want the conversion-complete interrupt to also be triggered.
+> Namely, the largest recent idle interval is an upper bound on the
+> recently observed idle duration, so it is reasonable to assume that
+> the next idle duration is unlikely to exceed it.  Moreover, this is
+> still true after eliminating the suspected outliers if the sample
+> set still under consideration is at least as large as 50% of the
+> maximum sample set size.
 > 
-> That's the reason why I enable conversion-complete interrupt
-> in 'get_temp', to make sure its interrupt is being triggered
-> only when the thermal core calls it.
+> Accordingly, make get_typical_interval() return the current maximum
+> recent interval value in that case instead of UINT_MAX.
 > 
-> Should I do it another way ?
-
-I don't ATM, the approach is very unusual so I'm still trying to figure 
-out what is this completion approach and readl_poll_timeout_atomic. At 
-the first glance I would say it is wrong.
-
-
->>> +	/* Verify no ongoing conversion */
->>> +	ret = readl_poll_timeout_atomic(priv->base + TSU_SSR, val,
->>> +					!(val & TSU_SSR_CONV_RUNNING),
->>> +					TSU_POLL_DELAY_US, TSU_TIMEOUT_US);
->>> +	if (ret) {
->>> +		dev_err(priv->dev, "ADC conversion timed out\n");
->>> +		return ret;
->>> +	}
->>> +
->>> +	/* Start conversion */
->>> +	writel(TSU_STRGR_ADST, priv->base + TSU_STRGR);
->>> +
->>> +	if (!wait_for_completion_timeout(&priv->conv_complete,
->>> +					 msecs_to_jiffies(100))) {
->>> +		dev_err(priv->dev, "ADC conversion completion timeout\n");
->>> +		return -ETIMEDOUT;
->>> +	}
->>
->> Can you explain what is happening here ?
->>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/governors/menu.c |   13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
-> I might not get what you are asking, but since I compute the
-> temperature in the hard IRQ handler, I just wait for it to complete
-> and notify the completion so I can grab the processed value to notify
-> the thermal core.
-> 
-> Please let me know if this does not answer your question.
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -190,8 +190,19 @@
+>  	 * This can deal with workloads that have long pauses interspersed
+>  	 * with sporadic activity with a bunch of short pauses.
+>  	 */
+> -	if ((divisor * 4) <= INTERVALS * 3)
+> +	if (divisor * 4 <= INTERVALS * 3) {
+> +		/*
+> +		 * If there are sufficiently many data points still under
+> +		 * consideration after the outliers have been eliminated,
+> +		 * returning without a prediction would be a mistake because it
+> +		 * is likely that the next interval will not exceed the current
+> +		 * maximum, so return the latter in that case.
+> +		 */
+> +		if (divisor >= INTERVALS / 2)
+> +			return max;
+> +
+>  		return UINT_MAX;
+> +	}
+>  
+>  	/* Update the thresholds for the next round. */
+>  	if (avg - min > max - avg)
 
-Can you describe how the sensor works ? And perhaps if you have a 
-pointer to some documentation ?
-  [ ... ]
+It appears that this patch, which made it in 6.15, results in *a lot*
+of extra interrupts on one of my arm64 test machines.
+
+* Without this patch:
+
+maz@big-leg-emma:~$ vmstat -y 1
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 1  0      0 65370828  29244 106088    0    0     0     0   66   26  0  0 100  0  0
+ 1  0      0 65370828  29244 106088    0    0     0     0  103   66  0  0 100  0  0
+ 1  0      0 65370828  29244 106088    0    0     0     0   34   12  0  0 100  0  0
+ 1  0      0 65370828  29244 106088    0    0     0     0   25   12  0  0 100  0  0
+ 1  0      0 65370828  29244 106088    0    0     0     0   28   14  0  0 100  0  0
+
+we're idling at only a few interrupts per second, which isn't bad for
+a 24 CPU toy.
+
+* With this patch:
+
+maz@big-leg-emma:~$ vmstat -y 1
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 1  0      0 65361024  28420 105388    0    0     0     0 3710   27  0  0 100  0  0
+ 1  0      0 65361024  28420 105388    0    0     0     0 3399   20  0  0 100  0  0
+ 1  0      0 65361024  28420 105388    0    0     0     0 4439   78  0  0 100  0  0
+ 1  0      0 65361024  28420 105388    0    0     0     0 5634   14  0  0 100  0  0
+ 1  0      0 65361024  28420 105388    0    0     0     0 5575   14  0  0 100  0  0
+
+we're idling at anywhere between 3k and 6k interrupts per second. Not
+exactly what you want. This appears to be caused by the broadcast
+timer IPI.
+
+Reverting this patch on top of 6.16 restores sanity on this machine.
+
+I suspect that we're entering some deep idle state in a much more
+aggressive way, leading to a global timer firing as a wake-up
+mechanism, and the broadcast IPI being used to kick everybody else
+back. This is further confirmed by seeing the broadcast IPI almost
+disappearing completely if I load the system a bit.
+
+Daniel, you should be able to reproduce this on a Synquacer box (this
+what I used here).
+
+I'm happy to test things that could help restore some sanity.
+
+Thanks,
+
+	M.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Without deviation from the norm, progress is not possible.
 
