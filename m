@@ -1,60 +1,57 @@
-Return-Path: <linux-pm+bounces-31806-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31807-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB42B19810
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:33:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF0CB19839
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:34:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A87297A2E48
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:31:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 561863A1D92
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100571DB15F;
-	Mon,  4 Aug 2025 00:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AE24594A;
+	Mon,  4 Aug 2025 00:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IDRCFV7U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwuaNs29"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D844C2E40B;
-	Mon,  4 Aug 2025 00:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4973175A5;
+	Mon,  4 Aug 2025 00:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267539; cv=none; b=L88mOmOvVQ+wiPacKzmd1+l+lygfhyMkkUy3aY22G7nTreU//1Tl0tvXoHI9Jpl5YaMaprXRInVuzobgBcc4x8kqPSFnr6gxHbvsooxuft4Ouqs1/gL7hZM5OygQw7suKAgc4s7bBesxjjcxYsHwAiZtWWCQdZPrAnitnS4KxLc=
+	t=1754267565; cv=none; b=X2Q5HpiyYVS7L4E3CKYMzYBbja6CPibxLgpNX0MduXDKMIsN2BH44lTXyqzCzhv1IY9AFbp7oCVEsePX1NHVNZI9lP4+EFsB2y070pizjh4knDPJctgs/Xktrq486Jkb3L+j8Ii/oVnNab7Ehz/ZMLw5nWN/7OKXrvw7uzZ293E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267539; c=relaxed/simple;
-	bh=5rh3TpuzGtjUrGqNCK8Wa7Jw6+uYMufCW2KuRUXBv7o=;
+	s=arc-20240116; t=1754267565; c=relaxed/simple;
+	bh=+YpRbHqJM/F3/nXXkF9qDJwjhRqFGsKuucBgo/R7LaY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dI+C+J09PTV/UBsQDDfA2+xyZXcbWLO76hDoVycmZukLclwvwpO+9Lcke5vcpmrSDmWH+dyd/r5FZE+bsa/R1sYEaPpso2iyDa6Phyk0S5oeFBh9AYjaYaB9ZySJU09+MyMPX+5TwaenMrc94oQ9BpWHa8dKYp5BOv/1E9IYx0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IDRCFV7U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E409C4CEF8;
-	Mon,  4 Aug 2025 00:32:16 +0000 (UTC)
+	 MIME-Version; b=rntPLH/RV7wMXakpBYcKjTGH3E/x7T4+F04PYuipFuAOIZANuM0Mt0Akoe+u3SfpyBE1sXKofSA/z0L9Kj8Zfhg2AoZTGtsW1vK5HbVIgc24lYFcWL9UMUp1VFYM0whLC1zpG+ZJ2Mp2z8K1ugKiOgJmlYU0T9MDV+149urCPJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwuaNs29; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F6EC4CEF8;
+	Mon,  4 Aug 2025 00:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267538;
-	bh=5rh3TpuzGtjUrGqNCK8Wa7Jw6+uYMufCW2KuRUXBv7o=;
+	s=k20201202; t=1754267564;
+	bh=+YpRbHqJM/F3/nXXkF9qDJwjhRqFGsKuucBgo/R7LaY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IDRCFV7UthYfAyRGUfKMZUo8saz42pk/yex7DuJ7wq+83c5ZoLJF9oDYq2w+Fc6vT
-	 i7Y6D2dy5mH0hltWmZWdJzviOJuGr9xOtpbSSubtGhESUlHGlQPI5PSV0Fh9+ecGYh
-	 3wXGeOZOJ5Gili7kvb8J174Lx4SAJHVsISgjY1UN35RPIQaqbfkuChptxxUoGhwejY
-	 0p8QQ3hvI+rKrYVy5HCP8KauvJHQhx6ekjG/y9edQ8p/6DC9/W0RdEn0QrDPr1Qx++
-	 /tX3wKefVIsEwspm50mrBemh6PE31G29oMH0YY6A2cSQY/QTbp6yVFYLcB99sZUBFI
-	 nUA78IYJQqBhQ==
+	b=NwuaNs295ECUx7AN2k9yXKZ8MQ0V34RUeETDiJIWrPsb8/mN3cl2vS+cwiDMzG3jF
+	 sEvybXtVQGeUrVa2sMwdpPJbSqDLInCnCIdyTGFer6JPEfzAxHgy27YEdoZuTYsl+X
+	 g+nu91M5R7yRW+kTqyHJHPGQPiTYjjwlfbvpo7GF/7Yob/gKB3RlgzyjknXeekdiul
+	 SJs0B815Lk5w4QbN7NcCfK3a9OXUXq3OIQxmCwWghWOM+dX+K7uAhh1/XwxQLKxAzn
+	 IWeNSVl9AgViu4ioMFUfeEfmyEZHI4Ebf34yrDCwinlkih8hNq3MMBUl/mU1RRTyc4
+	 lUhDHNgtuOasw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: David Collins <david.collins@oss.qualcomm.com>,
-	Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
-	amitk@kernel.org,
-	thara.gopinath@gmail.com,
-	linux-arm-msm@vger.kernel.org,
+	rafael@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 23/69] thermal/drivers/qcom-spmi-temp-alarm: Enable stage 2 shutdown when required
-Date: Sun,  3 Aug 2025 20:30:33 -0400
-Message-Id: <20250804003119.3620476-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 35/69] PM: runtime: Clear power.needs_force_resume in pm_runtime_reinit()
+Date: Sun,  3 Aug 2025 20:30:45 -0400
+Message-Id: <20250804003119.3620476-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804003119.3620476-1-sashal@kernel.org>
 References: <20250804003119.3620476-1-sashal@kernel.org>
@@ -69,22 +66,18 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.41
 Content-Transfer-Encoding: 8bit
 
-From: David Collins <david.collins@oss.qualcomm.com>
+From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-[ Upstream commit f8e157ff2df46ddabd930815d196895976227831 ]
+[ Upstream commit 89d9cec3b1e9c49bae9375a2db6dc49bc7468af0 ]
 
-Certain TEMP_ALARM GEN2 PMIC peripherals need over-temperature stage 2
-automatic PMIC partial shutdown. This will ensure that in the event of
-reaching the hotter stage 3 over-temperature threshold, repeated faults
-will be avoided during the automatic PMIC hardware full shutdown.
-Modify the stage 2 shutdown control logic to ensure that stage 2
-shutdown is enabled on all affected PMICs. Read the digital major
-and minor revision registers to identify these PMICs.
+Clear power.needs_force_resume in pm_runtime_reinit() in case it has
+been set by pm_runtime_force_suspend() invoked from a driver remove
+callback.
 
-Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
-Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Link: https://lore.kernel.org/r/20250710224555.3047790-2-anjelique.melendez@oss.qualcomm.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://patch.msgid.link/9495163.CDJkKcVGEf@rjwysocki.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
@@ -92,214 +85,74 @@ LLM Generated explanations, may be completely bogus:
 
 **Backport Status: YES**
 
-This commit should be backported to stable kernel trees. Here's my
-detailed analysis:
+This commit is a clear bugfix that should be backported to stable kernel
+trees for the following reasons:
 
-## Key Reasons for Backporting:
+1. **It fixes a real bug**: The commit addresses a specific issue where
+   `power.needs_force_resume` flag is not cleared in
+   `pm_runtime_reinit()` when a device is removed. If a driver calls
+   `pm_runtime_force_suspend()` from its remove callback (which sets
+   `needs_force_resume = 1`), this flag remains set even after the
+   device is removed and potentially re-probed.
 
-### 1. **Fixes a Hardware Safety Issue**
-The commit addresses a critical hardware protection mechanism where
-certain PMIC peripherals require stage 2 automatic partial shutdown to
-prevent "repeated faults" during stage 3 over-temperature events.
-Without this fix, affected hardware could experience repeated thermal
-faults during critical temperature conditions, potentially leading to
-system instability or hardware damage.
+2. **The fix is minimal and contained**: The change adds just 5 lines of
+   code (including comments) to clear a single flag. The modification
+   is:
+  ```c
+  dev->power.needs_force_resume = false;
+  ```
+  This is a very low-risk change that only affects the specific
+  condition being fixed.
 
-### 2. **Targeted Hardware-Specific Fix**
-The code changes identify specific PMIC revisions that require this
-protection:
-```c
-switch (dig_revision) {
-case 0x0001:
-case 0x0002:
-case 0x0100:
-case 0x0101:
-    chip->require_stage2_shutdown = true;
-    break;
-}
-```
-This shows it's a targeted fix for known hardware issues, not a general
-enhancement.
+3. **It prevents state leakage**: Looking at the code flow:
+   - `pm_runtime_force_suspend()` sets `dev->power.needs_force_resume =
+     1` (line in runtime.c)
+   - When a driver is removed, `pm_runtime_remove()` calls
+     `pm_runtime_reinit()`
+   - Without this fix, if the device is re-probed, it would still have
+     `needs_force_resume = 1` from the previous instance
+   - This could lead to incorrect PM runtime behavior where
+     `pm_runtime_force_resume()` would incorrectly think it needs to
+     resume a device that was never suspended in the current probe cycle
 
-### 3. **Small and Contained Change**
-The fix is minimal and self-contained:
-- Adds reading of DIG_MINOR register
-- Adds a `require_stage2_shutdown` flag to the chip structure
-- Modifies the logic in `qpnp_tm_update_critical_trip_temp()` to respect
-  this flag
-- Total change is about 30 lines of code with clear boundaries
+4. **Related to previous stable fixes**: The git history shows a
+   previous commit `c745253e2a69` ("PM: runtime: Fix unpaired parent
+   child_count for force_resume") was already marked for stable (4.16+),
+   indicating that issues with the `needs_force_resume` flag have been
+   problematic enough to warrant stable backports.
 
-### 4. **Low Risk of Regression**
-- The change only affects specific PMIC revisions (0x0001, 0x0002,
-  0x0100, 0x0101)
-- For other hardware, behavior remains unchanged
-- The modification is purely additive - it doesn't alter existing
-  functionality for unaffected devices
+5. **Clear bug scenario**: The commit message describes a specific
+   scenario where this happens - when `pm_runtime_force_suspend()` is
+   called from a driver remove callback. This is a legitimate use case
+   where drivers want to ensure devices are suspended before removal.
 
-### 5. **Prevents Hardware Malfunction**
-The commit message explicitly states this fix is needed to "avoid
-potential repeated faults upon reaching over-temperature stage 3." This
-indicates a real hardware malfunction scenario that users could
-encounter without this patch.
+6. **No architectural changes**: This is purely a bugfix that clears a
+   flag that should have been cleared during reinitialization. It
+   doesn't introduce new features or change any APIs.
 
-### 6. **Follows Stable Tree Rules**
-According to stable kernel rules, this qualifies because it:
-- Fixes a real bug (hardware protection failure)
-- Is not a new feature
-- Has minimal changes
-- Addresses a specific hardware issue that affects users
+The fix ensures proper PM runtime state management across device removal
+and re-probing cycles, which is important for system stability and
+correct power management behavior.
 
-### Technical Analysis:
-The key change is in the `qpnp_tm_update_critical_trip_temp()` function
-where the condition is modified from:
-```c
-if (disable_s2_shutdown)
-    reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
-```
-to:
-```c
-if (disable_stage2_shutdown && !chip->require_stage2_shutdown)
-    reg |= SHUTDOWN_CTRL1_OVERRIDE_STAGE2;
-```
+ drivers/base/power/runtime.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-This ensures that for the affected PMIC revisions, stage 2 shutdown is
-never disabled, providing the necessary hardware protection against
-thermal events.
-
-Given that this fixes a hardware-specific thermal protection issue that
-could lead to system instability or damage, and the fix is minimal with
-low regression risk, this commit is an excellent candidate for stable
-backporting.
-
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 43 ++++++++++++++++-----
- 1 file changed, 34 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index c2d59cbfaea9..a575585c737b 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright (c) 2011-2015, 2017, 2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-  */
- 
- #include <linux/bitops.h>
-@@ -16,6 +17,7 @@
- 
- #include "../thermal_hwmon.h"
- 
-+#define QPNP_TM_REG_DIG_MINOR		0x00
- #define QPNP_TM_REG_DIG_MAJOR		0x01
- #define QPNP_TM_REG_TYPE		0x04
- #define QPNP_TM_REG_SUBTYPE		0x05
-@@ -31,7 +33,7 @@
- #define STATUS_GEN2_STATE_MASK		GENMASK(6, 4)
- #define STATUS_GEN2_STATE_SHIFT		4
- 
--#define SHUTDOWN_CTRL1_OVERRIDE_S2	BIT(6)
-+#define SHUTDOWN_CTRL1_OVERRIDE_STAGE2	BIT(6)
- #define SHUTDOWN_CTRL1_THRESHOLD_MASK	GENMASK(1, 0)
- 
- #define SHUTDOWN_CTRL1_RATE_25HZ	BIT(3)
-@@ -78,6 +80,7 @@ struct qpnp_tm_chip {
- 	/* protects .thresh, .stage and chip registers */
- 	struct mutex			lock;
- 	bool				initialized;
-+	bool				require_stage2_shutdown;
- 
- 	struct iio_channel		*adc;
- 	const long			(*temp_map)[THRESH_COUNT][STAGE_COUNT];
-@@ -220,13 +223,13 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
- {
- 	long stage2_threshold_min = (*chip->temp_map)[THRESH_MIN][1];
- 	long stage2_threshold_max = (*chip->temp_map)[THRESH_MAX][1];
--	bool disable_s2_shutdown = false;
-+	bool disable_stage2_shutdown = false;
- 	u8 reg;
- 
- 	WARN_ON(!mutex_is_locked(&chip->lock));
- 
- 	/*
--	 * Default: S2 and S3 shutdown enabled, thresholds at
-+	 * Default: Stage 2 and Stage 3 shutdown enabled, thresholds at
- 	 * lowest threshold set, monitoring at 25Hz
- 	 */
- 	reg = SHUTDOWN_CTRL1_RATE_25HZ;
-@@ -241,12 +244,12 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
- 		chip->thresh = THRESH_MAX -
- 			((stage2_threshold_max - temp) /
- 			 TEMP_THRESH_STEP);
--		disable_s2_shutdown = true;
-+		disable_stage2_shutdown = true;
- 	} else {
- 		chip->thresh = THRESH_MAX;
- 
- 		if (chip->adc)
--			disable_s2_shutdown = true;
-+			disable_stage2_shutdown = true;
- 		else
- 			dev_warn(chip->dev,
- 				 "No ADC is configured and critical temperature %d mC is above the maximum stage 2 threshold of %ld mC! Configuring stage 2 shutdown at %ld mC.\n",
-@@ -255,8 +258,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
- 
- skip:
- 	reg |= chip->thresh;
--	if (disable_s2_shutdown)
--		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
-+	if (disable_stage2_shutdown && !chip->require_stage2_shutdown)
-+		reg |= SHUTDOWN_CTRL1_OVERRIDE_STAGE2;
- 
- 	return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 99f25d6b2027..317505eab126 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1787,6 +1787,11 @@ void pm_runtime_reinit(struct device *dev)
+ 				pm_runtime_put(dev->parent);
+ 		}
+ 	}
++	/*
++	 * Clear power.needs_force_resume in case it has been set by
++	 * pm_runtime_force_suspend() invoked from a driver remove callback.
++	 */
++	dev->power.needs_force_resume = false;
  }
-@@ -350,8 +353,8 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- {
- 	struct qpnp_tm_chip *chip;
- 	struct device_node *node;
--	u8 type, subtype, dig_major;
--	u32 res;
-+	u8 type, subtype, dig_major, dig_minor;
-+	u32 res, dig_revision;
- 	int ret, irq;
  
- 	node = pdev->dev.of_node;
-@@ -403,6 +406,11 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, ret,
- 				     "could not read dig_major\n");
- 
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_DIG_MINOR, &dig_minor);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "could not read dig_minor\n");
-+
- 	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
- 				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
- 		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
-@@ -416,6 +424,23 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 	else
- 		chip->temp_map = &temp_map_gen1;
- 
-+	if (chip->subtype == QPNP_TM_SUBTYPE_GEN2) {
-+		dig_revision = (dig_major << 8) | dig_minor;
-+		/*
-+		 * Check if stage 2 automatic partial shutdown must remain
-+		 * enabled to avoid potential repeated faults upon reaching
-+		 * over-temperature stage 3.
-+		 */
-+		switch (dig_revision) {
-+		case 0x0001:
-+		case 0x0002:
-+		case 0x0100:
-+		case 0x0101:
-+			chip->require_stage2_shutdown = true;
-+			break;
-+		}
-+	}
-+
- 	/*
- 	 * Register the sensor before initializing the hardware to be able to
- 	 * read the trip points. get_temp() returns the default temperature
+ /**
 -- 
 2.39.5
 
