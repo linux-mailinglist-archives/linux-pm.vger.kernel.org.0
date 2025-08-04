@@ -1,58 +1,57 @@
-Return-Path: <linux-pm+bounces-31829-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31830-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5002B19921
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C742AB19928
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:40:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78055188C00C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:40:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0010718981E7
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6CC11EE032;
-	Mon,  4 Aug 2025 00:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A55C1EF38F;
+	Mon,  4 Aug 2025 00:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WOmkFy7s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r3Mjk7BJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7431FDD;
-	Mon,  4 Aug 2025 00:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FDA1D54E3;
+	Mon,  4 Aug 2025 00:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267980; cv=none; b=Mbkp7KeuOPEYVObJKeJP9IWjhnprjfe0C1oBF+yCvkJlk4A/w97y/+u5osPov4TXZFHFUjZcPb/25drsUMUnWuOFE6evlhDkKrk7k7WvD46hJyeaTezSmjrYYRsgNjwr68knUZ+0mPxahelwxSwf14uvy0gUUpbE/R3dMo5FyNI=
+	t=1754267982; cv=none; b=DpGsL2ZvlH2ikDgg8vihFvSznkLxWNWzZhyhUrmWLgy8VYIA+1d0oQCBHOHh4vErqAKYCyBMvy1L33syOr/s7jLZkJCUVAalrVNmxp2gDkQYstZcx0vs9xWcqCPnwD3FMudV3BrfHy9QDlPohQjUOUX0iibZe4wUOkXWKLt25c8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267980; c=relaxed/simple;
-	bh=oRkiMRuqpyWGmO/3cbDg8/eaTtXYeKJeN8dlRHcn2mk=;
+	s=arc-20240116; t=1754267982; c=relaxed/simple;
+	bh=OxKNcqewlJuWFNCRUA6yktG1W19uNKAs95onhupDJlc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dtryzOplHe776tvuq66LpqzSo95ZnqBIK9aXZrEaxDTD9MczL95aq7UxU/O3ha1SlWNfEoepcD6+EZrHjH7wM6mHKlZWNVE4OigI5LxxAkorNCbS+t4GUBcUeWAvVWzO1nLLAXuCqlb7oK1Z28k3bygD2W/CX0fbhuia9Y3f/H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOmkFy7s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AFF0C4CEEB;
-	Mon,  4 Aug 2025 00:39:38 +0000 (UTC)
+	 MIME-Version; b=Nzzhia4BuDIAvLpom+bIj0gpIX6VsDVKwm3dTWNjtULa3NmvM72TYHRTFyp07QPfvP5SOqqihILwe3a6M13Z7vFPX3DSqgwFFd3j0pmh10vklZh8zVt9QKX9DaOLt3TlS0n+2oo3ogHKaFWp772yWds14iRaripZN+MhSbptRd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r3Mjk7BJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C499C4CEFA;
+	Mon,  4 Aug 2025 00:39:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267980;
-	bh=oRkiMRuqpyWGmO/3cbDg8/eaTtXYeKJeN8dlRHcn2mk=;
+	s=k20201202; t=1754267982;
+	bh=OxKNcqewlJuWFNCRUA6yktG1W19uNKAs95onhupDJlc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WOmkFy7sepcM8D1Ifug2TeDuRPSnWxKooH4v8KQ8EbW4J14t1wsA1IaFwZJYl2l+f
-	 guVzFKHoKohu79U8qJrrh3hcYhtbM0K2XYIOQjEgulQd4U1HjAVbFD7SEnXVyF71Qa
-	 NzToIfrEtqNJ+aCgm4GY8/ZtETB7LIhoFDUP3Hk3GTJ5+2suGxW5wA0kxYSn5oW3YO
-	 VcTiykB6vF1Yr1vzt0hPhd88J7mYuaoKzRIWjXWwy354zKVQ472n+oKrK4IW0mwnp1
-	 73SvNNCHEpYCeSDxvNd4oq3lIk1oYiY2ILMYVLLLVrikKfQe8yTszYM1v7WaXa0haB
-	 O+s8nla2f2Kfg==
+	b=r3Mjk7BJ+Wp9udMjcl+VNWu8fzpTfKwRXToXEUWIRP+Xsxj9XFXDLy3ZNi7Qg5UNp
+	 +5hydky0Bqrv9ZDPkHqgDt/OGl9ybPU7XkohrILUwtf0FAsFPFtTjvn1in2fqrPcG/
+	 iuMNurxnx8ZZqAp2gp64fuYThztKa8PJbcYx7TLb0feBFojDzOFjMW/mclNVQXwuEE
+	 AFtSXyop+Z0vK0q4FPSM1llOvC0hqKHshSa2htqg0HTy5KzLEPMBu5mDo9cMKyaT13
+	 wqOKqFdKOL6gkYtvUHKKJLKefyeAbKIUpkB9HWF6YoiO6eigpwiOJxteCNVxhoRE/K
+	 ms6EzRoOQaBJg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Hsin-Te Yuan <yuanhsinte@chromium.org>,
+Cc: tuhaowen <tuhaowen@uniontech.com>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 22/44] thermal: sysfs: Return ENODATA instead of EAGAIN for reads
-Date: Sun,  3 Aug 2025 20:38:27 -0400
-Message-Id: <20250804003849.3627024-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 23/44] PM: sleep: console: Fix the black screen issue
+Date: Sun,  3 Aug 2025 20:38:28 -0400
+Message-Id: <20250804003849.3627024-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804003849.3627024-1-sashal@kernel.org>
 References: <20250804003849.3627024-1-sashal@kernel.org>
@@ -67,137 +66,142 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.189
 Content-Transfer-Encoding: 8bit
 
-From: Hsin-Te Yuan <yuanhsinte@chromium.org>
+From: tuhaowen <tuhaowen@uniontech.com>
 
-[ Upstream commit 1a4aabc27e95674837f2e25f4ef340c0469e6203 ]
+[ Upstream commit 4266e8fa56d3d982bf451d382a410b9db432015c ]
 
-According to POSIX spec, EAGAIN returned by read with O_NONBLOCK set
-means the read would block. Hence, the common implementation in
-nonblocking model will poll the file when the nonblocking read returns
-EAGAIN. However, when the target file is thermal zone, this mechanism
-will totally malfunction because thermal zone doesn't implement sysfs
-notification and thus the poll will never return.
+When the computer enters sleep status without a monitor
+connected, the system switches the console to the virtual
+terminal tty63(SUSPEND_CONSOLE).
 
-For example, the read in Golang implemnts such method and sometimes
-hangs at reading some thermal zones via sysfs.
+If a monitor is subsequently connected before waking up,
+the system skips the required VT restoration process
+during wake-up, leaving the console on tty63 instead of
+switching back to tty1.
 
-Change to return -ENODATA instead of -EAGAIN to userspace.
+To fix this issue, a global flag vt_switch_done is introduced
+to record whether the system has successfully switched to
+the suspend console via vt_move_to_console() during suspend.
 
-Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
-Link: https://patch.msgid.link/20250620-temp-v3-1-6becc6aeb66c@chromium.org
+If the switch was completed, vt_switch_done is set to 1.
+Later during resume, this flag is checked to ensure that
+the original console is restored properly by calling
+vt_move_to_console(orig_fgconsole, 0).
+
+This prevents scenarios where the resume logic skips console
+restoration due to incorrect detection of the console state,
+especially when a monitor is reconnected before waking up.
+
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+Link: https://patch.msgid.link/20250611032345.29962-1-tuhaowen@uniontech.com
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Based on my analysis of the commit, here is my determination:
-
 **Backport Status: YES**
 
-## Extensive Explanation:
+This commit should be backported to stable kernel trees. Here's my
+extensive analysis:
 
-This commit should be backported to stable kernel trees for the
-following reasons:
+**1. Bug Fix Nature:**
+The commit fixes a clear user-visible bug - a black screen issue that
+occurs when:
+- A computer enters sleep without a monitor connected
+- A monitor is connected while the system is asleep
+- Upon wake, the console remains on tty63 (SUSPEND_CONSOLE) instead of
+  returning to tty1
 
-### 1. **Bug Fix for Real User-Facing Issue**
-The commit fixes a bug where userspace applications can hang when
-reading thermal zone temperature files via sysfs with O_NONBLOCK set.
-The commit message clearly states that "the read in Golang implements
-such method and sometimes hangs at reading some thermal zones via
-sysfs." This is a real-world problem affecting actual applications.
+This is a functional regression that impacts user experience, making the
+system appear unresponsive or broken after resume.
 
-### 2. **POSIX Compliance Issue**
-The current behavior violates POSIX semantics. According to POSIX
-specifications, EAGAIN from a non-blocking read means "the read would
-block" - implying that the caller should poll/select and wait for data
-to become available. However, thermal zone sysfs files don't implement
-poll notifications, so applications following standard POSIX patterns
-will poll forever, causing hangs.
+**2. Small and Contained Fix:**
+The fix is minimal and well-contained:
+- Adds a single `static bool vt_switch_done` flag
+- Modifies only two functions: `pm_prepare_console()` and
+  `pm_restore_console()`
+- Total change is just 6 lines of code (excluding whitespace)
+- The logic is straightforward: track whether VT switch happened during
+  suspend, and ensure restoration happens during resume
 
-### 3. **Small and Contained Change**
-The code change is minimal and localized:
-```c
-- if (ret)
-- return ret;
-+       if (!ret)
-+               return sprintf(buf, "%d\n", temperature);
+**3. Low Risk of Side Effects:**
+The change has minimal risk:
+- The new flag (`vt_switch_done`) is only set when
+  `vt_move_to_console()` succeeds
+- The restoration logic preserves existing behavior when
+  `pm_vt_switch()` returns true
+- The fix only adds an additional condition `!vt_switch_done` to ensure
+  restoration happens even when `pm_vt_switch()` returns false during
+  resume
+- No architectural changes or new features are introduced
 
-- return sprintf(buf, "%d\n", temperature);
-+       if (ret == -EAGAIN)
-+               return -ENODATA;
+**4. Critical Subsystem but Safe Change:**
+While this touches the PM/console subsystem (critical for
+suspend/resume), the change is safe:
+- It doesn't modify the core VT switching mechanism
+- It only ensures the existing restoration path is executed when needed
+- The file has been stable since 2013 (last major change was
+  f43f627d2f17e)
+
+**5. Clear Problem Description:**
+The commit message clearly describes:
+- The specific scenario that triggers the bug
+- The root cause (skipped VT restoration)
+- The solution (tracking VT switch state)
+
+**6. Follows Stable Rules:**
+This aligns perfectly with stable tree criteria:
+- Fixes a real bug affecting users
+- Minimal change (6 lines)
+- No new features
+- Clear fix for a specific problem
+- Low regression risk
+
+The commit addresses a real-world scenario where users connecting
+monitors to sleeping systems experience black screens upon wake - a
+frustrating issue that makes systems appear broken. The fix is surgical,
+adding only the minimum tracking needed to ensure proper console
+restoration.
+
+ kernel/power/console.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/power/console.c b/kernel/power/console.c
+index fcdf0e14a47d..19c48aa5355d 100644
+--- a/kernel/power/console.c
++++ b/kernel/power/console.c
+@@ -16,6 +16,7 @@
+ #define SUSPEND_CONSOLE	(MAX_NR_CONSOLES-1)
+ 
+ static int orig_fgconsole, orig_kmsg;
++static bool vt_switch_done;
+ 
+ static DEFINE_MUTEX(vt_switch_mutex);
+ 
+@@ -136,17 +137,21 @@ void pm_prepare_console(void)
+ 	if (orig_fgconsole < 0)
+ 		return;
+ 
++	vt_switch_done = true;
 +
-+       return ret;
-```
-It only affects the `temp_show()` function in `thermal_sysfs.c` by
-translating -EAGAIN to -ENODATA specifically for sysfs reads.
-
-### 4. **Low Risk of Regression**
-- The change only affects error handling paths
-- It doesn't modify the normal success case
-- It only translates one specific error code (-EAGAIN) to another
-  (-ENODATA)
-- ENODATA is a more appropriate error for "no data available" in a sysfs
-  context
-
-### 5. **Multiple Drivers Return -EAGAIN**
-My search found at least 13 thermal drivers that can return -EAGAIN from
-their get_temp operations:
-- imx8mm_thermal.c
-- imx_thermal.c
-- tegra-bpmp-thermal.c
-- qoriq_thermal.c
-- lvts_thermal.c
-- rockchip_thermal.c
-- exynos_tmu.c
-- sun8i_thermal.c
-- stm_thermal.c
-- intel_powerclamp.c
-
-This indicates the issue affects multiple platforms and thermal drivers.
-
-### 6. **Follows Stable Kernel Rules**
-- Fixes a real bug that bothers people (application hangs)
-- Fix is already in Linus's tree (based on the Signed-off-by from Rafael
-  J. Wysocki)
-- Small change (< 100 lines)
-- Obviously correct and tested
-- Doesn't change APIs or break existing functionality
-
-### 7. **No Architectural Changes**
-The commit doesn't introduce new features or change the thermal
-subsystem architecture. It's purely a bug fix that makes the sysfs
-interface behave correctly with non-blocking reads.
-
-The fix is appropriate because sysfs files are not meant to be pollable
-in the traditional sense - they provide instantaneous data snapshots.
-Returning ENODATA instead of EAGAIN properly communicates "no data
-currently available" without implying that polling would help.
-
- drivers/thermal/thermal_sysfs.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index de7cdec3db90..a21af02f6347 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -39,10 +39,13 @@ temp_show(struct device *dev, struct device_attribute *attr, char *buf)
- 
- 	ret = thermal_zone_get_temp(tz, &temperature);
- 
--	if (ret)
--		return ret;
-+	if (!ret)
-+		return sprintf(buf, "%d\n", temperature);
- 
--	return sprintf(buf, "%d\n", temperature);
-+	if (ret == -EAGAIN)
-+		return -ENODATA;
-+
-+	return ret;
+ 	orig_kmsg = vt_kmsg_redirect(SUSPEND_CONSOLE);
+ 	return;
  }
  
- static ssize_t
+ void pm_restore_console(void)
+ {
+-	if (!pm_vt_switch())
++	if (!pm_vt_switch() && !vt_switch_done)
+ 		return;
+ 
+ 	if (orig_fgconsole >= 0) {
+ 		vt_move_to_console(orig_fgconsole, 0);
+ 		vt_kmsg_redirect(orig_kmsg);
+ 	}
++
++	vt_switch_done = false;
+ }
 -- 
 2.39.5
 
