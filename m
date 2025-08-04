@@ -1,249 +1,268 @@
-Return-Path: <linux-pm+bounces-31909-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31910-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBC5DB1A3CF
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 15:48:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C48DB1A4D2
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 16:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 333C717D6C7
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 13:48:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B06DC189A17C
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 14:25:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02503266B6F;
-	Mon,  4 Aug 2025 13:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B692927147B;
+	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HdTi3wpk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCmzh4Un"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EEA1F4165;
-	Mon,  4 Aug 2025 13:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880DE8F58;
+	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754315282; cv=none; b=Fs4XqgA7DFahCReCkGK3G3X01kduFPUV9Ub5tUT9IXWNPb4NNSJXl192h8L8Z831D3FkEWlnKJRPyR2c6JD5iqeLjIRE4dppMNcKTTBsDBvH3/U+YkYjolk2laPKztbzklMhc/PYKtdkeEnpMrxrpMFcCB6/akhFI6JQFGfR8xU=
+	t=1754317522; cv=none; b=e9XUpSpT1I3CMVs5CWc4jj1gqXu2ITe7wcSzp1FvVVtE2Y4L/rS85k6X0GlVKQaUOI1QNlqotHQyPArphVdjrpScnGiZFIOJWvhC4GCAYKe+pGfMxOQ8m/iM+obN4UNwogp9RQzP9F9+47SaYswE26ag6HqWmqsWdEF8JnkL0G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754315282; c=relaxed/simple;
-	bh=bHp8uiRtuJmj15+pCToMeOeVeGgFzv/73NITBUlC2Aw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NpXBKckZDtY1TQlips2U5Rykpi3Jaialp85fJGoAIbktnSMTSUXdzTOag+XZR9mFvR1lu+wdraGru1Pj/AqkppsuRb1oKEemyvOF9VqgnxboTwgK4S8GAYmdgPbw1SHLLAw9Tn1VGqHLcP17gHndxHCgGbuLPjll5gjDgbXCjsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HdTi3wpk; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 574Ch36A021753;
-	Mon, 4 Aug 2025 13:47:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zK4uXfRRdG9hJ4nHTy30uSUldKYihGc8e+gTXfm/5o0=; b=HdTi3wpkHHhEZaRZ
-	no2G9muXyN0LUvEcVUxvg2aw0Xad/YeOpVpN6ca/AX0XXiqX3E5vPknPur1CmOuO
-	WcDkyG/ECPnjtckZ9yEtAEA6qKXv3+Krt8/51HVfZOOvTtnlyAJ/bt/LNipK8vt0
-	1AMmQaqdaV1VvxOGBmzTpuYbLa1HjiRdclGXHWXAKqDQJEAuk7qZVePt2gjx0BXQ
-	TGCBARjVHhiawa4WWIYDmmyww45ZU4EJI37XysrlDdqJkMxD4qe9y/tKHiB/X4eI
-	RqTSN+tSVJc9MauZXRlQMC17ne1lg7a30CU5+Npq2tSJfbHWN6RlAdcSjzD1YxSm
-	neUSRw==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48ak5a1yua-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Aug 2025 13:47:52 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 574Dlpix004212
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 4 Aug 2025 13:47:51 GMT
-Received: from [10.239.133.66] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Mon, 4 Aug
- 2025 06:47:48 -0700
-Message-ID: <65340b7a-b706-45ce-b0d8-29b2081f7240@quicinc.com>
-Date: Mon, 4 Aug 2025 21:47:46 +0800
+	s=arc-20240116; t=1754317522; c=relaxed/simple;
+	bh=BSGBOSXkEidOKLno5lfnh0peRNvAv6oMZrDPVi1ZE90=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OnR9PtKywhaps5NbxXgzyi5vgx9d8LLGOAc1uX63Rfx8CKP6OI1uOXOR3M5+miWcNDt0BAs8IDFBmK/uYRY7pU3qTOjzqzTCHo5SJgglcJ82ZIrFMI5h9C4c38j9u44r2ed6KFS2H9Qo24z/ZSGdW+bl9ZelUEHLOmkFFwhq54Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCmzh4Un; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E059C4CEE7;
+	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754317522;
+	bh=BSGBOSXkEidOKLno5lfnh0peRNvAv6oMZrDPVi1ZE90=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=YCmzh4Un7PY9Bsv9Gd8qVjAUQepS2c8XvwqtDm5EfSLOSb0cn4DjcPsEhbGMwoNi/
+	 9DrzsFU7c5tzHIFNuorhYeCUlZVA/flDThMIw2hhxYZ4xdeMSMMvvnqrFXbal2QEKv
+	 h2mF8UNpsElgRhDQ+7PDaYyFodVpWdS7urpHwrvGAhvpFuAoM3vm7/HrwuOIh374P1
+	 aU7nmL921yH6D8DJCp4MLJx+nywM/83H5WBZA9/Jqo/+kWH/LuClxIrx3E3aTh7Enx
+	 /SP/PNdk0YybiowIYc5E4a8H4qD0GRH3xLHBa0hygdadDl0bEUXfyPvs+q/1CGWH5Q
+	 5IfNVTK7Swkdg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E203C87FD3;
+	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
+From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
+Subject: [PATCH v5 0/4] gs101: MAX77759 Fuel Gauge driver support and
+ enablement
+Date: Mon, 04 Aug 2025 16:26:37 +0200
+Message-Id: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
- resctrl integration
-To: Christian Loehle <christian.loehle@arm.com>, <rafael@kernel.org>,
-        <lenb@kernel.org>, <pavel@kernel.org>, <tony.luck@intel.com>,
-        <reinette.chatre@intel.com>, <Dave.Martin@arm.com>,
-        <james.morse@arm.com>, <ulf.hansson@linaro.org>,
-        <amit.kucheria@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zhongqiu Han
-	<quic_zhonhan@quicinc.com>
-References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
- <2379088e-e5d0-4766-9968-756aad04f9a3@arm.com>
- <819fb853-59f7-4296-8499-715c142487f5@quicinc.com>
- <f682e782-ffea-48b2-997d-ddbaf7ea8a8f@arm.com>
-Content-Language: en-US
-From: Zhongqiu Han <quic_zhonhan@quicinc.com>
-In-Reply-To: <f682e782-ffea-48b2-997d-ddbaf7ea8a8f@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA0MDA3NiBTYWx0ZWRfX4V5/AVz5azO2
- ngCSkTbVqWxS3F/xa7gxE6r2OwvJjFF2IwLfc3KYXxZ5Pjin8YftJaESXsNRHNRrK/ULr0GIZXy
- QkdaZher7WVtAABs3jnIhw7PqQDBtbF1cVA1Tdy+hOsIszzi9psWEowhQmyOfDSVM4HSu6lyB5i
- HEVBxGjJdsCJUH9wDIK7r47xJO0CVjduWwsvzx/7elBiPtCJ6hpFIXY5N8g2uAEZ7MyPCMRqVR2
- 6DduFGxydycGx+2idOzTzH1aNkByfudBSXJZJjSDJsjkZD0ZgRPX7IOQB3+demWXqpkw5qsQUHv
- +gwdfbhHRVIuR7eJ0iwrsMuDtzLeOyn0csQXQtaveb8OAJgW2MpS4Ipzqubd+E3lElhh8bbfeSZ
- l2OPRzVR33svplwHf2O+PHusJ7otswfBjE7z6JB9Ay8HpcU4TY9tRcTc0ZGcbHnbu+fm8wXc
-X-Proofpoint-GUID: bGYRVe1--RudNPS5bVEDHV9NXQY892Nx
-X-Authority-Analysis: v=2.4 cv=LP1mQIW9 c=1 sm=1 tr=0 ts=6890ba08 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8
- a=KKAkSRfTAAAA:8 a=wkvXqLCyMWt67K7M5qQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: bGYRVe1--RudNPS5bVEDHV9NXQY892Nx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-04_05,2025-08-04_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 spamscore=0 impostorscore=0
- phishscore=0 adultscore=0 malwarescore=0 clxscore=1015 bulkscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2508040076
+X-B4-Tracking: v=1; b=H4sIAB3DkGgC/4XQ2wrCMAwG4FeRXlvpIaXWK99DRNqZzoJu2m5FG
+ Xt36wlBFG8CfyBfSAaSMAZMZDEZSMQcUmibEtR0QqqdbWqkYVsyEUwAL4U6oHXijG8O9qy1Vmb
+ jawpMoJDcgpOSlNFjRB/Od3a1LnkXUtfGy31L5rfuHzBzyqiZb4W32nmUbNlX+7bPNjQzh+RmZ
+ vFyFOM/HVGcuTbKWIdOe//FgbejhPzhQHEcGMMApbISPpzxcXTEU19e2D0vH8cr9sMtHGABAAA
+ =
+X-Change-ID: 20241202-b4-gs101_max77759_fg-402e231a4b33
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754317658; l=7588;
+ i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
+ bh=BSGBOSXkEidOKLno5lfnh0peRNvAv6oMZrDPVi1ZE90=;
+ b=8XBLP3ma5Cjk8qBog4IQTzb+ZmNeBy3h3n3x/404aUyNBbf3ZGBCca/USP49oWNvqyzxehU5e
+ 5xDzHAwkd9kBmNPBgRtywP/QWsb055AarO9n9SMeFgDF1bk/ZnQ53no
+X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
+ pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
+X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
+ auth_id=289
+X-Original-From: Thomas Antoine <t.antoine@uclouvain.be>
+Reply-To: t.antoine@uclouvain.be
 
-On 8/2/2025 10:38 PM, Christian Loehle wrote:
-> On 7/28/25 11:40, Zhongqiu Han wrote:
->> On 7/28/2025 6:09 PM, Christian Loehle wrote:
->>> On 7/21/25 13:40, Zhongqiu Han wrote:
->>>> Hi all,
->>>>
->>>> This patch series introduces support for CPU affinity-based latency
->>>> constraints in the PM QoS framework. The motivation is to allow
->>>> finer-grained power management by enabling latency QoS requests to target
->>>> specific CPUs, rather than applying system-wide constraints.
->>>>
->>>> The current PM QoS framework supports global and per-device CPU latency
->>>> constraints. However, in many real-world scenarios, such as IRQ affinity
->>>> or CPU-bound kernel threads, only a subset of CPUs are
->>>> performance-critical. Applying global constraints in such cases
->>>> unnecessarily prevents other CPUs from entering deeper C-states, leading
->>>> to increased power consumption.
->>>>
->>>> This series addresses that limitation by introducing a new interface that
->>>> allows latency constraints to be applied to a CPU mask. This is
->>>> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
->>>> embedded systems where power efficiency is critical for example:
->>>>
->>>>                           driver A       rt kthread B      module C
->>>>     CPU IDs (mask):         0-3              2-5              6-7
->>>>     target latency(us):     20               30               100
->>>>                             |                |                |
->>>>                             v                v                v
->>>>                             +---------------------------------+
->>>>                             |        PM  QoS  Framework       |
->>>>                             +---------------------------------+
->>>>                             |                |                |
->>>>                             v                v                v
->>>>     CPU IDs (mask):        0-3            2-3,4-5            6-7
->>>>     runtime latency(us):   20             20, 30             100
->>>>
->>>> The current implementation includes only cpu_affinity_latency_qos_add()
->>>> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
->>>> planned for future submission, along with PM QoS optimizations in the UFS
->>>> subsystem.
->>>
->>> So what's needed for the UFS use-case additionally?
->>> Would adding that here be too much?
->>>
->>
->> Hi Christian,
->> Thanks for your review and discussion~
->>
->> Currently my plan is only to move forward with the current patch series,
->> which includes only the below interfaces:
->>
->> cpu_affinity_latency_qos_add()
->> cpu_affinity_latency_qos_remove()
->> cpu_affinity_latency_qos_active()
->>
->>
->> For most use-cases, seems these three interfaces already sufficient.
-> 
-> Probably, but IMO there's no real user of the new extended interface yet,
-> making review harder and lacking justification.
-> 
-> FWIW in 2014 Lina also pushed for something like $SUBJECT
-> https://lore.kernel.org/all/1407945689-18494-5-git-send-email-lina.iyer@linaro.org/
-> Lina made an interface to tie the PM QoS to the relevant irq, which I think
-> was a great idea. Maybe that series is interesting for you, too?
-> 
+The gs101-oriole (Google Pixel 6) and gs101-raven (Google Pixel 6 Pro)
+have a Maxim MAX77759 which provides a fuel gauge functionnality based
+on the MAX M5 fuel gauge.
 
-Hi Christian,
-Thanks for the review~
+Add a driver for fuel gauge of the the Maxim MAX77759 based on the
+one for the Maxim MAX1720x which also uses the MAX M5 fuel gauge.
+Enable it for the gs101-oriole and gs101-raven boards.
 
-Just to clarify: in patch 5/5 of the current series, I’ve included a
-user of the new extended interface — specifically,
-cpu_affinity_latency_qos_active() is used internally within the add
-remove interfaces.
+Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+---
+Hi everyone,
+I decided to completely separate the MAX77759 and the MAX1720x. The
+reason I had just modified the MAX1720x initially was because I
+thought at the time that their difference were much less important
+than they ended up being.
 
+Their common parts could be put in a common MAX M5 files which could
+prove useful if more chips using the MAX M5 are to be added.
 
-I’ve roughly reviewed this patchset you mentioned. Please correct me if
-my understanding is inaccurate.
+Changes in v5:
+- Separate MAX77759 from MAX1720x for clarity
+- Remove voltage reporting
+- Add initialization of the chip
+- Add device dependent initialization data
+- Add access to eeprom for access to non-volatile backup data.
+- Link to v4: https://lore.kernel.org/r/20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be
 
-https://lore.kernel.org/all/1407945689-18494-5-git-send-email-lina.iyer@linaro.org/
+Changes in v4:
+- Make first patch standalone
+- Separate MAX77759 defines from MAX1720x defines (Dimitri Fedrau)
+- Inline device name property (Dimitri Fedrau)
+- Separate MAX77759 capacity lsb logic from the MAX1720x capacity
+  computation (Dimitri Fedrau)
+- Use device_property_read_u32 instead of of_property_read_u32
+  (Sebastian Reichel)
+- Removed leftover debugs
+- Move shunt-resistor-micro-ohms to out of allOf:if: (Krzysztof Kozlowski)
+- Fix reg-names constraints
+- Fix style errors
+- Link to v3: https://lore.kernel.org/r/20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be
 
-It seems that this patch series introduces an alternative implementation
-and attempts to add a new type of PM QoS request — one that targets IRQs
-instead of CPUs. Specifically, when the IRQ affinity changes, the
-corresponding CPU latency constraint is updated to reflect the new CPUs
-that the IRQ is now affine to.
+Changes in v3:
+- Update base tree to avoid conflicts
+- Fix capacity computation for max1720x
+- Add separate properties for the max7759 to disable non-functional ones
+- Take TASKPERIOD into account for voltage computation of max77759
+- Simplify vcell computation (Dimitri Fedrau)
+- Switch has_nvmem to bool and keep it only in chip_data (Dimitri Fedrau)
+- Drop the yes_range from the write table (Sebastian Reichel)
+- Add test_power_supply_properties.sh to cover letter (Sebastian Reichel)
+- Switch back some changes to binding and actually use allOf:if: to
+  restrict constraints (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v2: https://lore.kernel.org/r/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be
 
+Changes in v2:
+- Add fallback for voltage measurement (André Draszik)
+- Add regmap for the max77759 (André Draszik)
+- Add chip identification for the max77759 (André Draszik, Peter Griffin)
+- Move RSense value to a devicetree property shunt-resistor-micro-ohms
+  (Dimitri Fedrau, André Draszik)
+- Use allOf:if to narrow binding per variant (Krzysztof Kozlowski)
+- Remove binding example (Krzysztof Kozlowski)
+- Change defconfig order to follow savedefconfig (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v1: https://lore.kernel.org/r/20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be
 
-And It appears that Kevin also recommended implementing this feature
-using the per-device API:
+tools/testing/selftests/power_supply/test_power_supply_properties.sh:
+gs101-oriole:
+  # Testing device max77759-fg
+  ok 1 max77759-fg.exists
+  ok 2 max77759-fg.uevent.NAME
+  ok 3 max77759-fg.sysfs.type
+  ok 4 max77759-fg.uevent.TYPE
+  ok 5 max77759-fg.sysfs.usb_type # SKIP
+  ok 6 max77759-fg.sysfs.online # SKIP
+  # Reported: '1' ()
+  ok 7 max77759-fg.sysfs.present
+  ok 8 max77759-fg.sysfs.status # SKIP
+  # Reported: '19' % ()
+  ok 9 max77759-fg.sysfs.capacity
+  ok 10 max77759-fg.sysfs.capacity_level # SKIP
+  # Reported: 'MAX77759' ()
+  ok 11 max77759-fg.sysfs.model_name
+  # Reported: 'Maxim Integrated' ()
+  ok 12 max77759-fg.sysfs.manufacturer
+  ok 13 max77759-fg.sysfs.serial_number # SKIP
+  ok 14 max77759-fg.sysfs.technology # SKIP
+  ok 15 max77759-fg.sysfs.cycle_count # SKIP
+  ok 16 max77759-fg.sysfs.scope # SKIP
+  ok 17 max77759-fg.sysfs.input_current_limit # SKIP
+  ok 18 max77759-fg.sysfs.input_voltage_limit # SKIP
+  ok 19 max77759-fg.sysfs.voltage_now # SKIP
+  ok 20 max77759-fg.sysfs.voltage_min # SKIP
+  ok 21 max77759-fg.sysfs.voltage_max # SKIP
+  ok 22 max77759-fg.sysfs.voltage_min_design # SKIP
+  ok 23 max77759-fg.sysfs.voltage_max_design # SKIP
+  # Reported: '-234690' uA ()
+  ok 24 max77759-fg.sysfs.current_now
+  ok 25 max77759-fg.sysfs.current_max # SKIP
+  ok 26 max77759-fg.sysfs.charge_now # SKIP
+  # Reported: '4572000' uAh (4.572 Ah)
+  ok 27 max77759-fg.sysfs.charge_full
+  # Reported: '4524000' uAh (4.524 Ah)
+  ok 28 max77759-fg.sysfs.charge_full_design
+  ok 29 max77759-fg.sysfs.power_now # SKIP
+  ok 30 max77759-fg.sysfs.energy_now # SKIP
+  ok 31 max77759-fg.sysfs.energy_full # SKIP
+  ok 32 max77759-fg.sysfs.energy_full_design # SKIP
+  ok 33 max77759-fg.sysfs.energy_full_design # SKIP
 
+  gs101-raven:
+    # Testing device max77759-fg
+  ok 1 max77759-fg.exists
+  ok 2 max77759-fg.uevent.NAME
+  ok 3 max77759-fg.sysfs.type
+  ok 4 max77759-fg.uevent.TYPE
+  ok 5 max77759-fg.sysfs.usb_type # SKIP
+  ok 6 max77759-fg.sysfs.online # SKIP
+  # Reported: '1' ()
+  ok 7 max77759-fg.sysfs.present
+  ok 8 max77759-fg.sysfs.status # SKIP
+  # Reported: '96' % ()
+  ok 9 max77759-fg.sysfs.capacity
+  ok 10 max77759-fg.sysfs.capacity_level # SKIP
+  # Reported: 'MAX77759' ()
+  ok 11 max77759-fg.sysfs.model_name
+  # Reported: 'Maxim Integrated' ()
+  ok 12 max77759-fg.sysfs.manufacturer
+  ok 13 max77759-fg.sysfs.serial_number # SKIP
+  ok 14 max77759-fg.sysfs.technology # SKIP
+  ok 15 max77759-fg.sysfs.cycle_count # SKIP
+  ok 16 max77759-fg.sysfs.scope # SKIP
+  ok 17 max77759-fg.sysfs.input_current_limit # SKIP
+  ok 18 max77759-fg.sysfs.input_voltage_limit # SKIP
+  ok 19 max77759-fg.sysfs.voltage_now # SKIP
+  ok 20 max77759-fg.sysfs.voltage_min # SKIP
+  ok 21 max77759-fg.sysfs.voltage_max # SKIP
+  ok 22 max77759-fg.sysfs.voltage_min_design # SKIP
+  ok 23 max77759-fg.sysfs.voltage_max_design # SKIP
+  # Reported: '-224377' uA ()
+  ok 24 max77759-fg.sysfs.current_now
+  ok 25 max77759-fg.sysfs.current_max # SKIP
+  ok 26 max77759-fg.sysfs.charge_now # SKIP
+  # Reported: '4622000' uAh (4.622 Ah)
+  ok 27 max77759-fg.sysfs.charge_full
+  # Reported: '4904000' uAh (4.904 Ah)
+  ok 28 max77759-fg.sysfs.charge_full_design
+  ok 29 max77759-fg.sysfs.power_now # SKIP
+  ok 30 max77759-fg.sysfs.energy_now # SKIP
+  ok 31 max77759-fg.sysfs.energy_full # SKIP
+  ok 32 max77759-fg.sysfs.energy_full_design # SKIP
+  ok 33 max77759-fg.sysfs.energy_full_design # SKIP
 
-https://lore.kernel.org/all/7h4mx9wdxe.fsf@paris.lan/
+---
+Thomas Antoine (4):
+      power: supply: add support for MAX77759 fuel gauge
+      dt-bindings: power: supply: add support for MAX77759 fuel gauge
+      arm64: defconfig: enable Maxim MAX77759 fuel-gauge driver
+      arm64: dts: exynos: google: add Maxim MAX77759 Fuel-gauge
 
----->>> From Kevin:
-I agree this is a needed feature.  I didn't study it in detail yet, but
-after a quick glance, it looks like a good approach.
----->>>
+ .../bindings/power/supply/maxim,max77759.yaml      |  76 +++
+ arch/arm64/boot/dts/exynos/google/gs101-oriole.dts |  10 +
+ .../boot/dts/exynos/google/gs101-pixel-common.dtsi |  30 +
+ arch/arm64/boot/dts/exynos/google/gs101-raven.dts  |  11 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/power/supply/Kconfig                       |  14 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_battery.c            | 649 +++++++++++++++++++++
+ 8 files changed, 792 insertions(+)
+---
+base-commit: bc9ff192a6c940d9a26e21a0a82f2667067aaf5f
+change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
 
-https://lore.kernel.org/all/7hd2blerqz.fsf@paris.lan/
-
----->>> From Kevin:
-I'm curious if you looked at using the per-device QoS API for this
-instead of expending the system-wide API.  IOW, from a per-device QoS
-POV, a CPU is no different than any other device, and since we already
-have the per-device QoS API, I wondered if that might be a better choice
-to implment this per-CPU feature.
----->>>
-
-
-May I know are you suggesting that I should evaluate whether IRQ
-affinity scenarios could also be valid use cases for the
-cpu affinity latency pm qos interface?
-However, there's a more fundamental assumption behind this — that a
-particular IRQ actually requires a CPU latency PM QoS constraint, right?
-
-
-
->>
->>
->> The reason I mentioned UFS is to explain why the update
->> interface cpu_affinity_latency_qos_update()
->>
->> is not included at this stage. The UFS use-case is planned to
->> use the cpu_affinity_latency_qos_update() interface in the future, which
->> is similar to the global CPU PM QoS interface
->> cpu_latency_qos_update_request().
-> 
-
-
-
+Best regards,
 -- 
-Thx and BRs,
-Zhongqiu Han
+Thomas Antoine <t.antoine@uclouvain.be>
+
+
 
