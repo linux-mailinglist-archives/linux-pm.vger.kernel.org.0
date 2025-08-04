@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-31913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF011B1A4DA
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB14BB1A4DB
 	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 16:25:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D9DC17EBA6
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 14:25:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550AE189BC1D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 14:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99F5272E51;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E540B272818;
 	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIzpMlPD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p072hH0C"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E927057C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD28226F463;
 	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754317522; cv=none; b=kNbusrA/it5Kwyf7S1pls4IclHQn2FRhqy6Vp6WCqLrclgbcJJbEkLwwgGotG7UcSCV7swZHQWp4mYgRlydCMuk9RfWMLOVIj7PUwUEDSw+6XDzrDWzUrjxCQcbi5E0MW7YzTtkqrpHe9Kkm14iQm2X2/VtZgK0FIHnjCW9I/zQ=
+	t=1754317522; cv=none; b=oLNBqIqPW0AtNRW5I3G8guu4smyJWEhdaTJt5+OLHRtNA7NvgqRAnsdXUqSBDmmqU0nFEwRG6tXdc0eGIKAzD3VNNur//kwKAItNOoKN7H9X0RrT6DCYp2QXseTHAy06BIusOpqwYm7SM3Edhaqbi4oCC843plLsP69/bmy3RCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754317522; c=relaxed/simple;
-	bh=phXVktnsQFsRlCPE6gQZzgzGOtAWOzVU4TdMa++7y/o=;
+	bh=mAWZyywLB1ip9iUzT4X4Zu/0/IQZja/30TmIx21F/xo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RqyWAh1wIfMns+iUEwqnDODD0Akb39XRM+819VDYeUDBHsvfEyq9MyCxivxHTfGH8p9gK60RqqHXbZo3cRqH5D1QbWeoJXCIEaSfWjKS1+HLV0WF+SD/8D5SAEH2eXW53vqO1vHz3DGJOLYT46GlWNgqFPgXopTTJAE7WF3aPJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIzpMlPD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BCB0C4CEF0;
+	 In-Reply-To:To:Cc; b=QCSRRJwdoRk27B+Kht9wpyEywh1+nsqboCMty1iWLk4/fWvhAAQmuT2YZrmj3NhLPKABKVBCcdvJGmTkTvKnLdSJusxfHq4EnV8ncbsW5x/+vs1SsU4UBAArso6EPlzmOdEJR9Wux0+UPK5ll8oVYs6f3H9HJ/qUQjcinfPjOSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p072hH0C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 47CFAC4CEF7;
 	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754317522;
-	bh=phXVktnsQFsRlCPE6gQZzgzGOtAWOzVU4TdMa++7y/o=;
+	bh=mAWZyywLB1ip9iUzT4X4Zu/0/IQZja/30TmIx21F/xo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AIzpMlPDVnGXezvDECm4IubKoW3sHxSkk8/TRBOLjyRdhxEOIQDpagLmRRRwdme8a
-	 2WFkjR0Fo/edEN7jD1ZgYrVyk8p6AssX3jqUx6pnz6OViiEiIyWuvHffBhz/hY96F3
-	 uL0CpFBSjNcH+xeemMpj9iBp32mdO4wLhryOx2FxsjxI9vfdn1sRvbK0xrfXopMW4D
-	 Q+LmALnrUqMgcblaiMJEsx/+cnXhr8+VBe+hUrWDCqCVWzgY7TWNPwsbr2i8e2LTWn
-	 DjmAU4q86kLWDwrNwCEj+MwqewIzYZO6PLkethQD4sWI/Jv7fIuThcKhxlwvehTqg7
-	 Z04lOp14fcpzA==
+	b=p072hH0CBBYxBAoDsTtvfWGCWzfO20uAyO6Za3aNZDLir3smkrHZ04yd8upydWi04
+	 1KSQjQlD+gBvew1KRdH2lAmYiRpZlCOUMR7C/+oSbC3qII0Ytu+EPIJB5QYFrolLje
+	 kQF1+H0+h0yvBWR29iN3oO8fHlx3PRjvTlJjuXCd53R7pk4pQiydpngva/bDZZWQ9T
+	 TTZ/6eZ6SmogZQI5BAMhYlh9n522mX+jtRPPw6NUmwS2b5WvKq8ndPW9kCQ6Qvv5gT
+	 kD5j9jooP+pEwhaCDs6o2XRzWJeZPCMWK8p+onMHJqXjkWoXR0SSV1LAwfk01QqK2m
+	 R5yOo8E5jgkmQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3036CC87FD1;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E9C1CA0EC0;
 	Mon,  4 Aug 2025 14:25:22 +0000 (UTC)
 From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
-Date: Mon, 04 Aug 2025 16:26:39 +0200
-Subject: [PATCH v5 2/4] dt-bindings: power: supply: add support for
- MAX77759 fuel gauge
+Date: Mon, 04 Aug 2025 16:26:40 +0200
+Subject: [PATCH v5 3/4] arm64: defconfig: enable Maxim MAX77759 fuel-gauge
+ driver
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250804-b4-gs101_max77759_fg-v5-2-03a40e6c0e3d@uclouvain.be>
+Message-Id: <20250804-b4-gs101_max77759_fg-v5-3-03a40e6c0e3d@uclouvain.be>
 References: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
 In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -71,11 +71,11 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-samsung-soc@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754317658; l=3442;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754317658; l=764;
  i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
- bh=/JRl4+oKCLeCuqYwla/ChjnUkO3GOKVE7rQTxDRH5UQ=;
- b=tgtf8lqDV0ObDF50iRsgPV1Unq9+iIRAg+SVhyYpWX3tGCMpZB1+Vp5TRqf0bItrLaWJRaSXD
- jP8ijQYNxeMAs3RY+62WWnpJ1nea18tByTxj2rCoBfOakT7zAYND03I
+ bh=gaoSugHRAz5fOiJGPTrSTYl8U3fwbJdk2k1I718EDsY=;
+ b=ZG9Xmwog66bZ8cSUspq6GfK/PeRmbJru5wn9agjtUDDP6k3RzK0VaZzzaMfkTbctuK/5+YMlv
+ VGOddOKH0rrDFrORISbF19f5WBqEmXuzmboc/ROIKMOnvlmk2PA+mSb
 X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
  pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
 X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
@@ -85,108 +85,26 @@ Reply-To: t.antoine@uclouvain.be
 
 From: Thomas Antoine <t.antoine@uclouvain.be>
 
-The Maxim MAX77759 is a companion PMIC for USB Type-C. It contains
-Battery Charger, Fuel Gauge, temperature sensors, USB Type-C Port
-Controller (TCPC), NVMEM, and additional GPIO interfaces
-
-Use max77759-fg compatible to avoid conflict with drivers for other
-functions.
-
-The battery node is used to pass the REPCAP and ICHGTERM values
-needed for the initialization of the fuel gauge.
-
-The nvmem cells are used to get initialization values and to backup
-the learning and the number of cycles. It should work out of the box
-with gs101-oriole and gs101-raven which were previously running
-Android.
+Enable the Maxim MAX77759 fuel gauge as it is used by the gs101-oriole
+(Google Pixel 6) and gs101-raven (Google Pixe 6 Pro) boards.
 
 Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
 ---
- .../bindings/power/supply/maxim,max77759.yaml      | 76 ++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..5e160e3ad86849f9ee0be54e20e195fc455eba6d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/maxim,max77759.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim Integrated MAX77759 fuel gauge
-+
-+maintainers:
-+  - Thomas Antoine <t.antoine@uclouvain.be>
-+
-+properties:
-+  compatible:
-+    const: maxim,max77759-fg
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  shunt-resistor-micro-ohms:
-+    description: The value of the current sense resistor in microohms.
-+
-+  monitored-battery:
-+    description: |
-+      The fuel gauge needs the following battery properties:
-+      - charge-full-design-microamp-hours
-+      - charge-term-current-microamp
-+
-+  nvmem-cells:
-+    maxItems: 1
-+    description: |
-+      Saved fuel gauge state. This state will be used during the initialization
-+      and saved on exit. It must be initialized beforehand.
-+      Its layout must be composed of
-+        - RCOMP0 (characterization of the open-circuit voltage)
-+        - TCOMPO (temperature compensation information)
-+        - FULLCAPREP (reported full capacity)
-+        - QRTABLE00, QRTABLE10, QRTABLE20, QRTABLE30 (cell capacity information)
-+        - cv_mixcap (remaining capacity of the cell without empty compensation)
-+        - cv_halftime (time-to-full characterization time constant)
-+      They must all be aligned on 2 bytes. A valid CRC8 checksum must
-+      also be found at the end (polynomial x^8 + x^2 + x + 1).
-+
-+  nvmem-cell-names:
-+    const: fg_state
-+
-+required:
-+  - compatible
-+  - reg
-+  - shunt-resistor-micro-ohms
-+  - monitored-battery
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      fuel-gauge@36 {
-+        compatible = "maxim,max77759-fg";
-+        reg = <0x36>;
-+        interrupt-parent = <&gpa9>;
-+        interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-+        shunt-resistor-micro-ohms = <5000>;
-+        monitored-battery = <&battery>;
-+        nvmem-cell-names = "fg_state";
-+        nvmem-cells = <&fg_state>;
-+      };
-+    };
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7e04a2905ce4ec71e8263a85f20398f702917390..dd90e72e71dfd45c62942f83db6814f263517a0c 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -691,6 +691,7 @@ CONFIG_BATTERY_QCOM_BATTMGR=m
+ CONFIG_BATTERY_SBS=m
+ CONFIG_BATTERY_BQ27XXX=y
+ CONFIG_BATTERY_MAX17042=m
++CONFIG_BATTERY_MAX77759=m
+ CONFIG_CHARGER_MT6360=m
+ CONFIG_CHARGER_BQ25890=m
+ CONFIG_CHARGER_BQ25980=m
 
 -- 
 2.50.1
