@@ -1,140 +1,215 @@
-Return-Path: <linux-pm+bounces-31917-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31918-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC2F7B1A6AC
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 17:54:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F655B1A70C
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 18:08:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B9D414E1A05
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 15:54:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D97787A7966
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 16:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02A2A2701D0;
-	Mon,  4 Aug 2025 15:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F066221FC3;
+	Mon,  4 Aug 2025 16:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGeLwnV0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JdKd3iN0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE99221C9E7;
-	Mon,  4 Aug 2025 15:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3C320B800
+	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 16:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754322625; cv=none; b=AuRht6vQRFToPQuF0STPdj0aiVLRlSPvziLeEuPl+BZwfpBTkXWAD+OOdpFPCpcr+oHpvxqRdzDmtgA2CsHHW4g8gCaElbSSmGpz/52ucWQ1zwrzGQV58yuJdnqzLcmN+fI1b1qll1pjzaHSLcM4YJPSqHmSiET1pSMEWGLoe6k=
+	t=1754323690; cv=none; b=OLgOaCuKyIJg/1PU82k/elWfrlkfnksmaG7dfSRUjLvSXUFIABvn1CSzFtIMOJTYdKftVGLD3J89NsEbKcT4nl38KKDPS/bTCeyW9/u/2MAaxPnwCMNZEBntedMoHAV6F3bzRQsBrve8ujtfbVuCXXSHugsZaFm2fYXasmEb6eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754322625; c=relaxed/simple;
-	bh=V58lDgP5AWQy83/5MeJGYisxvWdLT++8TBgZ54D2ns4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=U2CODAYHdfbzzqs+DpUzULLnfhFgUoygxXSfKa6scJqYit5WQN84Co0aaMTg5MJj9hOWj71NkYJkz9XNTBNpCXBo81TDItHY9KAItbjD4cTIWcryVNX3UBRqxPwhzOabmBrzKs4UDaTweVy1kvS+oVTDRCJ2Rbj5Dw/Si1Nz8sI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGeLwnV0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 215F0C4CEE7;
-	Mon,  4 Aug 2025 15:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754322625;
-	bh=V58lDgP5AWQy83/5MeJGYisxvWdLT++8TBgZ54D2ns4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=EGeLwnV0pxsNDLv+Cf1tZJ9MWDQuOgD3lHsI5WU8icltefawfV+ZdQJxs44GeFn2z
-	 MF1kyoUD/FteQy5z6pN43VVp8Ps/MindS7wyWvuRMejJW0/+8ftKtpMtSB7TfSpxSB
-	 9MkZfcRl08319WCYMqKdsSC5hKbJFZZi5JZmVCJHtGhdpy3md3ZfM2i+xOyRgXGK10
-	 kByfmTJ5b741wONAtCUp5New16QBiEh7c8Bpl5ndyUWo8O3mcMwDnStBtPD0wpHWJX
-	 ptkyo6sJSkb+fxXJTENuTTADPf+HjYFTWQRXJVN1i+NGumAWRXmlUkynnyrY4x5KRY
-	 83MMK8a/L04kw==
-Date: Mon, 4 Aug 2025 10:50:23 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, quic_vbadigan@quicinc.com,
-	quic_mrana@quicinc.com, sherry.sun@nxp.com,
-	linux-pm@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v4 0/3] PCI: Add support for PCIe WAKE# interrupt
-Message-ID: <20250804155023.GA3627102@bhelgaas>
+	s=arc-20240116; t=1754323690; c=relaxed/simple;
+	bh=S9yuT+weSY5miLU3AyaItyOypGFL+jNnY+GzO8Hq2NM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mWSfg03o/ZoW+yqSzwW4rHiInmSsy9sRlh37ri/X80D8q4DVSGqI5Nxg5OzPNpiOYG6aP9bKI5fD+c6mVebS5Co8Ahjpu/dbQr2AhsjmaNlNhL5KDujupgfTcGZuFkGBDLGJRn8hCU3lu3jSoN/iPBGCkgMpzG+V28mwmuKZw84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JdKd3iN0; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3b7834f2e72so2966227f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 04 Aug 2025 09:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1754323685; x=1754928485; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Aaib/NaydwLH1J4xHrdqxdoR2E0SlQgXrBILFXZ4d4=;
+        b=JdKd3iN0F98ojpAUOxP6F5XK7x5kAzRZbnev+LQE7f3kHCpw2Kdegg5OYV29nC0h60
+         i/BGqcUYJQdldCEw9EcsZGwTTQALi0xq/sImYvFqejqwoGSTosHRd7Sal6Ab7MMN4XHr
+         CnRlM9Ylu9URzQQsNoZQHI5T8gkd6CRGBPaVQDahA0XmND8enikY83Uqdbh2x9E95ZhB
+         by4zDjpxqSJD/0UX6kN+2UNbO/8nM/cFTu7lODy2Uo/mzoRzZl6mRXH4ueRQQsna+Cf0
+         q8P3CGeLN5ybNKGFWhJKFeULNv6Ifb/gj2yN+Py76yExr739oGB41lmNaMDCZlqibiXi
+         xjXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754323685; x=1754928485;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Aaib/NaydwLH1J4xHrdqxdoR2E0SlQgXrBILFXZ4d4=;
+        b=ZuMeh5egZChUPwkPrmgQRQb2Gb41vDTng/8jsj6r2SA7RAryuNInpRgFQNd0Zxke9N
+         b6ZC9j8DbDSG5SE76NtrDln2mDPCtM9TgMBQngok1lFySIiw3wOm+dIkzfnhQbgelWPO
+         DekbEd0I2ZKDzHBYAhk+QV2sSJZcNWEmpHKC/Pk+fGpBtN/RhOsPl6Mo6Pvje5DxLeNj
+         447SEjnQtvcwRKgHgu/ijmsi49ntqJqNsZguIT9egJ1ZYrVBQ51C/bv8NSaGWey/Ewg3
+         pPfB+n7MJ2UZ1lNFcXcxeNlwLnLYlWNm4owitI1eb0rD82x6N6gndZt22DW9AnZRzPVw
+         M8cA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFyBtcw38S+AY94orQczJoJKH5rYfYXbexFm/fs8k15uQffOWucJDbnzvedWiNjS8YGQG0oPM+ww==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+NDDc1QbfZwkZJKSzmu2CSr5+Wm5/dh0rGpREHum9uD6+h/bK
+	WK6V1PflflXhnhYBmWiMq7rIV6Mu/930sK8jN8T+neKq9VOmVn9Re7/EAKSScsho/zk=
+X-Gm-Gg: ASbGncthfRRWhircNRQjfOpGYvGuWsxi1zsDDpHnwX/53p3SgJ5kQBR8Gj9zzgM79ou
+	oKXDNLHtAEVelA0SIwMX1uPURy0Rf7Cf9Ylj+Ixum5Y6jAIvmRAuxsl04Poi8lhXvXvnTf5+Ifv
+	26MRBnG3j9HC8D7u6aRrAZNhqol98hVxzw7zUcFVYuFLmAK4mapk+dv/vpZsFVOCFsi1Wg5tM9M
+	GOrkkRMnJ0uZWu7FdhlpV9ufExO5BP4rhxRPhVSwKuobjkLtSquKs+xx7RNexhYqDgZov4IdJCF
+	XeeTsbH0180EVOdZe2IKmDfcnnMiSbKhAkmIFS4Oa2OWYnQ7iEBGEZjhMROll0o2m71mtrpgW1y
+	YBvU9VBH0UAFmkPXgkUv3tnjSLp4H8nZEf8DN08NSgsiqazdSXFQzR/eASl/LPKA9CMRVwP5k
+X-Google-Smtp-Source: AGHT+IEohChU750lDHoZ0kT83zI/nxMNcmkkIL5wgE8PiBZtIvHt4vP9RiqS9PltkOKHSOsX9HxMyw==
+X-Received: by 2002:a05:6000:2f85:b0:3b7:9c28:f856 with SMTP id ffacd0b85a97d-3b8d94c3f4bmr6867167f8f.48.1754323685345;
+        Mon, 04 Aug 2025 09:08:05 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-459a1c79b0asm39287285e9.3.2025.08.04.09.08.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Aug 2025 09:08:04 -0700 (PDT)
+Message-ID: <64622ffd-05d1-43c3-85d0-cf98f3012477@linaro.org>
+Date: Mon, 4 Aug 2025 18:08:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6b4tzs73n63d565k52pqbep4bqhctibjv5gzm2wenbf2ji45b@npgoqscnbbpn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
+ the Renesas RZ/G3E SoC
+To: John Madieu <john.madieu.xa@bp.renesas.com>
+Cc: "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "rafael@kernel.org" <rafael@kernel.org>,
+ Biju Das <biju.das.jz@bp.renesas.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "john.madieu@gmail.com" <john.madieu@gmail.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+ "magnus.damm" <magnus.damm@gmail.com>, "robh@kernel.org" <robh@kernel.org>,
+ "rui.zhang@intel.com" <rui.zhang@intel.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ "niklas.soderlund+renesas@ragnatech.se"
+ <niklas.soderlund+renesas@ragnatech.se>
+References: <20250522182252.1593159-1-john.madieu.xa@bp.renesas.com>
+ <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com>
+ <aHgVe0YwPWapIYed@mai.linaro.org>
+ <OSCPR01MB14647DE009925C982AE6BB5D2FF27A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <OSCPR01MB14647DE009925C982AE6BB5D2FF27A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 04, 2025 at 03:45:05PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Aug 01, 2025 at 04:29:41PM GMT, Krishna Chaitanya Chundru wrote:
-> > PCIe WAKE# interrupt is needed for bringing back PCIe device state
-> > from D3cold to D0.
-> > 
-> > This is pending from long time, there was two attempts done
-> > previously to add WAKE# support[1], [2]. Those series tried to add
-> > support for legacy interrupts along with WAKE#. Legacy interrupts
-> > are already available in the latest kernel and we can ignore them.
-> > For the wake IRQ the series is trying to use interrupts property
-> > define in the device tree.
-> > 
-> > This series is using gpio property instead of interrupts, from
-> > gpio desc driver will allocate the dedicate IRQ.
-> > 
-> > According to the PCIe specification 6, sec 5.3.3.2, there are two
-> > defined wakeup mechanisms: Beacon and WAKE# for the Link wakeup
-> > mechanisms to provide a means of signaling the platform to
-> > re-establish power and reference clocks to the components within
-> > its domain. Adding WAKE# support in PCI framework.
-> > 
-> > According to the PCIe specification, multiple WAKE# signals can
-> > exist in a system. In configurations involving a PCIe switch, each
-> > downstream port (DSP) of the switch may be connected to a separate
-> > WAKE# line, allowing each endpoint to signal WAKE# independently.
-> > To support this, the WAKE# should be described in the device tree
-> > node of the upstream bridge to which the endpoint is connected.
-> > For example, in a switch-based topology, the WAKE# GPIO can be
-> > defined in the DSP of the switch. In a direct connection scenario,
-> > the WAKE# can be defined in the root port. If all endpoints share
-> > a single WAKE# line, the GPIO should be defined in the root port.
+On 31/07/2025 19:19, John Madieu wrote:
+> Hi Daniel,
 > 
-> I think you should stop saying 'endpoint' here and switch to 'slot'
-> as that's the terminology the PCIe spec uses while defining WAKE#.
-
-I think the main question is where WAKE# is terminated.  It's asserted
-by an "add-in card" (PCIe CEM r6.0, sec 2.3) or a "component" or
-"Function" (PCIe Base r7.0, sec 5.3.3.2).  A slot can provide a WAKE#
-wire, and we need to know what the other end is connected to.
-
-AFAICS, WAKE# routing is unrelated to the PCIe topology *except* that
-in "applications where Beacon is used on some Ports of the Switch and
-WAKE# is used for other Ports," WAKE# must be connected to the Switch
-so it can translate it to Beacon (PCIe r7.0, sec 5.3.3.2).
-
-So we can't assume WAKE# is connected to the Port leading to the
-component that asserts WAKE#.
-
-> > During endpoint probe, the driver searches for the WAKE# in its
-> > immediate upstream bridge. If not found, it continues walking up
-> > the hierarchy until it either finds a WAKE# or reaches the root
-> > port. Once found, the driver registers the wake IRQ in shared
-> > mode, as the WAKE# may be shared among multiple endpoints.
+> Thanks for your review.
 > 
-> I don't think we should walk the hierarchy all the way up to RP. If
-> the slot supports WAKE#, it should be defined in the immediate
-> bridge node of the endpoint (as DT uses bridge node to described the
-> slot). Otherwise, if the slot doesn't use WAKE#, walking up till RP
-> may falsely assign wake IRQ to the endpoint.
+>> -----Original Message-----
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Sent: Wednesday, July 16, 2025 11:11 PM
+>> To: John Madieu <john.madieu.xa@bp.renesas.com>
+>> Subject: Re: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver
+>> for the Renesas RZ/G3E SoC
+>>
+>> On Thu, May 22, 2025 at 08:22:46PM +0200, John Madieu wrote:
+>>> The RZ/G3E SoC integrates a Temperature Sensor Unit (TSU) block
+>>> designed to monitor the chip's junction temperature. This sensor is
+>>> connected to channel 1 of the APB port clock/reset and provides
+>> temperature measurements.
+>>>
+>>> It also requires calibration values stored in the system controller
+>>> registers for accurate temperature measurement. Add a driver for the
+>> Renesas RZ/G3E TSU.
+>>>
+>>> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
+>>> ---
 
-I don't think we can walk the PCIe hierarchy because in general WAKE#
-routing is not related to that hierarchy.
+[ ... ]
 
-Bjorn
+>>> +static int rzg3e_thermal_get_temp(struct thermal_zone_device *zone,
+>>> +int *temp) {
+>>> +	struct rzg3e_thermal_priv *priv = thermal_zone_device_priv(zone);
+>>> +	u32 val;
+>>> +	int ret;
+>>> +
+>>> +	if (priv->mode == THERMAL_DEVICE_DISABLED)
+>>> +		return -EBUSY;
+
+[ ... ]
+
+>>> +	reinit_completion(&priv->conv_complete);
+>>> +
+>>> +	/* Enable ADC interrupt */
+>>> +	writel(TSU_SIER_ADIE, priv->base + TSU_SIER);
+>>
+>> Why enable irq here ?
+>>
+> 
+> I did it this way because, in 'set_trips' callback, the
+> driver does trigger conversion to check whether the current
+> temperature is part of the window or not, and triggers the
+> comparison interrupt accordingly. Because of that, I did not
+> want the conversion-complete interrupt to also be triggered.
+> 
+> That's the reason why I enable conversion-complete interrupt
+> in 'get_temp', to make sure its interrupt is being triggered
+> only when the thermal core calls it.
+> 
+> Should I do it another way ?
+
+I don't ATM, the approach is very unusual so I'm still trying to figure 
+out what is this completion approach and readl_poll_timeout_atomic. At 
+the first glance I would say it is wrong.
+
+
+>>> +	/* Verify no ongoing conversion */
+>>> +	ret = readl_poll_timeout_atomic(priv->base + TSU_SSR, val,
+>>> +					!(val & TSU_SSR_CONV_RUNNING),
+>>> +					TSU_POLL_DELAY_US, TSU_TIMEOUT_US);
+>>> +	if (ret) {
+>>> +		dev_err(priv->dev, "ADC conversion timed out\n");
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	/* Start conversion */
+>>> +	writel(TSU_STRGR_ADST, priv->base + TSU_STRGR);
+>>> +
+>>> +	if (!wait_for_completion_timeout(&priv->conv_complete,
+>>> +					 msecs_to_jiffies(100))) {
+>>> +		dev_err(priv->dev, "ADC conversion completion timeout\n");
+>>> +		return -ETIMEDOUT;
+>>> +	}
+>>
+>> Can you explain what is happening here ?
+>>
+> 
+> I might not get what you are asking, but since I compute the
+> temperature in the hard IRQ handler, I just wait for it to complete
+> and notify the completion so I can grab the processed value to notify
+> the thermal core.
+> 
+> Please let me know if this does not answer your question.
+
+Can you describe how the sensor works ? And perhaps if you have a 
+pointer to some documentation ?
+  [ ... ]
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
