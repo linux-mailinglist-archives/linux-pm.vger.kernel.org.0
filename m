@@ -1,143 +1,146 @@
-Return-Path: <linux-pm+bounces-31896-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31897-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 339A0B1A2F7
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 15:14:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FDDCB1A314
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 15:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C3141886F25
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 13:12:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7CB516166E
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 13:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D25625B2FF;
-	Mon,  4 Aug 2025 13:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWnA14Zr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643752609D0;
+	Mon,  4 Aug 2025 13:18:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E97138D;
-	Mon,  4 Aug 2025 13:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472532550A4;
+	Mon,  4 Aug 2025 13:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754313102; cv=none; b=C15+HzKd39RFFo0P+qw/jZ0CKCdNRKAu1pKY7aT5q/NUu6s5NmoCXHugpFkBcHbW/WP88ytc8z2Bd9eEFQ0LzSlbL7cbciu1YuDGd8yYAjIUxBovP1Jz9ERlcJnwnhO87wFQknIStt+so3EBjc/HFZ/EIktyTDXEk/eNKwjkNv4=
+	t=1754313509; cv=none; b=IcT65LzpA7Dx1ZybR6y5reMJvypQL2JWWzwZ/oHAWpOMqQ9jqAr2p1U5AZ6M2BUxOLZgaGEfQAqBOkUOhJCAsJpcWwwEymN1ogN8cAPR2BM93Xyq/xZIVqtD0ZrkJyTzkSojuJha3IiSfAoFwXGLk/lV5U2ytcLROVz9ctUVEVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754313102; c=relaxed/simple;
-	bh=TR4IynGlqh3xuGAPqNvGejeGuOim0a/t/2+l2ojuG3M=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JaJGSMTtS87IIePzDP3HeIX3OqBlAq/4rqzDcSeY5KystyjTiqY0vPG6moIy+sgYE7T5m6aCudx0datV2GIS6pjWZxRAeTwjUhFPNex6lQSSYT0k3HEKDRi+ysyK6mmKp8kl/b9/64Tp/wWL0axAjEUkNXXOUUFvzLmE3sLq3rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWnA14Zr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A357C4CEE7;
-	Mon,  4 Aug 2025 13:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754313101;
-	bh=TR4IynGlqh3xuGAPqNvGejeGuOim0a/t/2+l2ojuG3M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=FWnA14Zr+PO8Dc7S1vSMyr5HSOBsd3ONJedoyeUL31soQ4u+qdF5zlJ1L+KssxKyX
-	 LGYOymZPSgU8XUqapDrdI4ABN9R2cYEl/PQn019vZhYuOfz7cXmJIKIQaMZrOKifAT
-	 QKWf3bPnPaG275SPQkSHQfbIr5kEkAMeHnsjdSS+Q7dd3fzzEpGS3zEJ19xdhuUjDk
-	 v+Qukmu9YNkJJ8hujmpT3ASfyqbFY3ilbA7GbhcFcgKJh/bbCkUx9ZiryFzE1FzBS7
-	 X/hZIXq32mN7o9PtTTdeSuSKeoA/6QTgn4e2nvO12g1nU5CsZTv1QgKffDNJZYMjcu
-	 Kq9udbFUKHq/g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uiuyY-003oWR-Ss;
-	Mon, 04 Aug 2025 14:11:39 +0100
-Date: Mon, 04 Aug 2025 14:11:38 +0100
-Message-ID: <86pldb6xkl.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: catalin.marinas@arm.com,
-	will@kernel.org,
-	broonie@kernel.org,
-	oliver.upton@linux.dev,
-	anshuman.khandual@arm.com,
-	robh@kernel.org,
-	james.morse@arm.com,
-	mark.rutland@arm.com,
-	joey.gouly@arm.com,
-	ry111@xry111.site,
-	Dave.Martin@arm.com,
-	ahmed.genidi@arm.com,
-	kevin.brodsky@arm.com,
-	scott@os.amperecomputing.com,
-	mbenes@suse.cz,
-	james.clark@linaro.org,
-	frederic@kernel.org,
-	rafael@kernel.org,
-	pavel@kernel.org,
-	ryan.roberts@arm.com,
-	suzuki.poulose@arm.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	kvmarm@lists.linux.dev
-Subject: Re: [PATCH 10/11] KVM: arm64: nv: support SCTLR2_ELx on nv
-In-Reply-To: <20250804121724.3681531-11-yeoreum.yun@arm.com>
-References: <20250804121724.3681531-1-yeoreum.yun@arm.com>
-	<20250804121724.3681531-11-yeoreum.yun@arm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1754313509; c=relaxed/simple;
+	bh=wor2xWQChUtDZcWUwteOYy76UzHiV0aWif9cukNHpac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g+Z0U6xvja13Q++RjsP30Y6zTX1WcPaCj/4S81oZFZGTAfyWVGtdRZ+DH59ZbSAXOYMWVIaSkIF8tPTsKOfB3mOjBNGUlHU2jvU6z9cVauLYTvkSj2Ab9ShBHbkxCVWSTB/djBE6SnBuQkk6lXayiS3Ivkz6kLx8xts+0T0KYZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F6D3150C;
+	Mon,  4 Aug 2025 06:18:18 -0700 (PDT)
+Received: from [10.1.25.45] (e127648.arm.com [10.1.25.45])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2630C3F673;
+	Mon,  4 Aug 2025 06:18:23 -0700 (PDT)
+Message-ID: <16b728e6-6fb9-48eb-8160-73c4ace229d2@arm.com>
+Date: Mon, 4 Aug 2025 14:18:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: yeoreum.yun@arm.com, catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org, oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org, james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com, ry111@xry111.site, Dave.Martin@arm.com, ahmed.genidi@arm.com, kevin.brodsky@arm.com, scott@os.amperecomputing.com, mbenes@suse.cz, james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org, pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kvmarm@lists.linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] cpufreq,base/arch_topology: Calculate cpu_capacity
+ according to boost
+To: Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Sudeep Holla <sudeep.holla@arm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Robin Murphy <robin.murphy@arm.com>,
+ Beata Michalska <beata.michalska@arm.com>, zhenglifeng1@huawei.com,
+ Ionela Voinescu <ionela.voinescu@arm.com>
+References: <20250626093018.106265-1-dietmar.eggemann@arm.com>
+ <e89b250a-7e9b-45fa-9e81-fc071487078b@arm.com>
+ <CAKfTPtAwy1ZFQ=-t7SbbDuHj6ZJPtB3pJS6fZxt=1robLwvXjg@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAKfTPtAwy1ZFQ=-t7SbbDuHj6ZJPtB3pJS6fZxt=1robLwvXjg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 04 Aug 2025 13:17:23 +0100,
-Yeoreum Yun <yeoreum.yun@arm.com> wrote:
-
-[...]
-
-> diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-> index dc1d26559bfa..a4d3b2d2fd80 100644
-> --- a/arch/arm64/kvm/nested.c
-> +++ b/arch/arm64/kvm/nested.c
-> @@ -1704,6 +1704,19 @@ int kvm_init_nv_sysregs(struct kvm_vcpu *vcpu)
->  			 TCR2_EL2_AMEC1 | TCR2_EL2_DisCH0 | TCR2_EL2_DisCH1);
->  	set_sysreg_masks(kvm, TCR2_EL2, res0, res1);
+On 8/4/25 14:01, Vincent Guittot wrote:
+> On Mon, 14 Jul 2025 at 14:17, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>
+>> +cc Vincent Guittot <vincent.guittot@linaro.org>
+>> +cc Ionela Voinescu <ionela.voinescu@arm.com>
+>>
+>> On 26/06/2025 11:30, Dietmar Eggemann wrote:
+>>> I noticed on my Arm64 big.Little platform (Juno-r0, scmi-cpufreq) that
+>>> the cpu_scale values (/sys/devices/system/cpu/cpu*/cpu_capacity) of the
+>>> little CPU changed in v6.14 from 446 to 505. I bisected and found that
+>>> commit dd016f379ebc ("cpufreq: Introduce a more generic way to set
+>>> default per-policy boost flag") (1) introduced this change.
+>>> Juno's scmi FW marks the 2 topmost OPPs of each CPUfreq policy (policy0:
+>>> 775000 850000, policy1: 950000 1100000) as boost OPPs.
+>>>
+>>> The reason is that the 'policy->boost_enabled = true' is now done after
+>>> 'cpufreq_table_validate_and_sort() -> cpufreq_frequency_table_cpuinfo()'
+>>> in cpufreq_online() so that 'policy->cpuinfo.max_freq' is set to the
+>>> 'highest non-boost' instead of the 'highest boost' frequency.
+>>>
+>>> This is before the CPUFREQ_CREATE_POLICY notifier is fired in
+>>> cpufreq_online() to which the cpu_capacity setup code in
+>>> [drivers/base/arch_topology.c] has registered.
+>>>
+>>> Its notifier_call init_cpu_capacity_callback() uses
+>>> 'policy->cpuinfo.max_freq' to set the per-cpu
+>>> capacity_freq_ref so that the cpu_capacity can be calculated as:
+>>>
+>>> cpu_capacity = raw_cpu_capacity (2) * capacity_freq_ref /
+>>>                                     'max system-wide cpu frequency'
+>>>
+>>> (2) Juno's little CPU has 'capacity-dmips-mhz = <578>'.
+>>>
+>>> So before (1) for a little CPU:
+>>>
+>>> cpu_capacity = 578 * 850000 / 1100000 = 446
+>>>
+>>> and after:
+>>>
+>>> cpu_capacity = 578 * 700000 / 800000 = 505
+>>>
+>>> This issue can also be seen on Arm64 boards with cpufreq-dt drivers
+>>> using the 'turbo-mode' dt property for boosted OPPs.
+>>>
+>>> What's actually needed IMHO is to calculate cpu_capacity according to
+>>> the boost value. I.e.:
+>>>
+>>> (a) The infrastructure to adjust cpu_capacity in arch_topology.c has to
+>>>     be kept alive after boot.
 > 
-> +	/*
-> +	 * SCTLR2_EL2 - until explicit support for each feature, set all as RES0.
-> +	 */
-> +	res0 = SCTLR2_EL2_RES0 | SCTLR2_EL2_EMEC;
-> +	res0 |= SCTLR2_EL2_EASE;
-> +	res0 |= SCTLR2_EL2_NMEA;
-> +	res0 |= (SCTLR2_EL2_EnADERR | SCTLR2_EL2_EnANERR);
-> +	res0 |= SCTLR2_EL2_EnIDCP128;
-> +	res0 |= (SCTLR2_EL2_CPTA | SCTLR2_EL2_CPTA0 |
-> +		 SCTLR2_EL2_CPTM | SCTLR2_EL2_CPTM0);
-> +	res1 = SCTLR2_EL2_RES1;
-> +	set_sysreg_masks(kvm, SCTLR2_EL2, res0, res1);
+> If we adjust the cpu_capacity at runtime this will create oscillation
+> in PELT values. We should stay with one single capacity all time :
+> - either include boost value but when boost is disable we will never
+> reach the max capacity of the cpu which could imply that the cpu will
+> never be overloaded (from scheduler pov)
 
-This patch is obsolete, but I'd like to point out that this is not the
-way we describe these things. Each bit of the register needs to be
-tracked against the feature it is part of, and not blindly added to
-the RES0 set. See
+overutilized I'm assuming, that's the issue I was worried about here.
+Strictly speaking the platform doesn't guarantee that the capacity can
+be reached and sustained indefinitely. Whether the frequency is marked
+as boost or not.
 
-https://lore.kernel.org/all/20250708172532.1699409-15-oliver.upton@linux.dev/
+> - either not include boost_value but allow to go above cpu max compute
+> capacity which is something we already discussed for x86 and the turbo
+> freq in the past.
+> 
 
-for the equivalent change.
+But that currently breaks schedutil, i.e. boost frequencies will never
+be used with schedutil. There's also some other locations where capacities
+>1024 just break some assumptions (e.g. the kernel/sched/ext.c cpuperf
+interface defines SCX_CPUPERF_ONE).
 
-You should *NEVER* describe a functional bit as RESx without
-considering whether the feature is exposed to the guest, irrespective
-of what the kernel supports.
 
-Thanks,
+So we have either:
+a) Potential wrong capacity estimation of CPUs when boost is disabled
+(but capacity calculation assumed enabled).
+b) Boost frequencies completely unused by schedutil.
+c) Oscillating PELT values due to boost enable/disable.
 
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Isn't c) (what Dietmar proposed here) by far the smallest evil of these
+three?
+I've also found a) very hard to actually trigger, although it's obviously
+a problem that depends on the platform.
 
