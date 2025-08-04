@@ -1,111 +1,175 @@
-Return-Path: <linux-pm+bounces-31858-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31859-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1185B19BB6
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:51:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4978B19C65
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 09:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EED7F171603
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:51:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EC3C3AFC70
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 07:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC28230BD9;
-	Mon,  4 Aug 2025 06:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B325F2356D2;
+	Mon,  4 Aug 2025 07:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lO1hjeQg"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pVPoUrdp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DF52F2D
-	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 06:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2860B233722;
+	Mon,  4 Aug 2025 07:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754290286; cv=none; b=byOBG0yAlbjvhMIFGahkcY6lt1/wOotyMU1oXFtpyr8db6QIiserOa2G7h/YeSoXGdEtC9OBTFufUdXx8p7HPitwEnbV6n8b71Mpox8xxpuwnbRYwCZ9+yBJZmtRYNKAzvrVJZaJYfBwTEb4Iri7DcGykE9FNuX2XewNSTQvNVA=
+	t=1754292179; cv=none; b=jeHPk9i3Q16TWARD+cyECbRg/himoLF9NcojAn0XcR9gxrYShfZ4xWV1PhHiaFZhsQFITNJo7bLmxXa+ErKO+nbw4E4CnXvX8wb9EMYhzi7GRU6kKNbwForbGMohk3k2OPO+l5UhUvuEEUUt9s/yVscz/eDTpjGuFJ4o/XYwt0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754290286; c=relaxed/simple;
-	bh=AuHw3Q+s89vthrT+onb+aRrlNeHjbcR7n1dDceQEW04=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aH+uMpUDQXVN0VQ4X+sHccCvRIoAwfvqdp0HwcO1QF7VgUNgugV2BlhZeS1OTMpEYGw0jpWxCw2y9FJz9zsPRAfxEIeWHTfhfshSnMi3HkZtJtdN/CBQxXx0NrMzbJtyC77sLaxCfQtMLbN81OcI6W5UXlRswwaaJTq0K3Jx+UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lO1hjeQg; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2402774851fso33159835ad.1
-        for <linux-pm@vger.kernel.org>; Sun, 03 Aug 2025 23:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1754290284; x=1754895084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0OOSzyo7d6/tfFos1hXNw0iQjhEsi0n1KjZ6e/WbQ5Y=;
-        b=lO1hjeQgIWsQMr8ieYxziX+sLcbMzQBo+CzPFFJr8Pt4pbsl6DvJfON1C8c8kWtzAD
-         G0yrualP7/oRTKr3wu8PzGY9LtD/DZC9IqKmZYOFjeaCTOS509Gzg6ztANrJc57Slt4o
-         2v7UwOWrPsWCTj7jZmYK1aNSBcabFrClWEhAA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754290284; x=1754895084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0OOSzyo7d6/tfFos1hXNw0iQjhEsi0n1KjZ6e/WbQ5Y=;
-        b=YSDmRRIQtvAoG4LuluKGKvNBF8zVPhC8OPVwoyzjCnBSxyl+qz8TJO4IADngtMe8v2
-         qWG4hNKdmVq+VS0JFveW2K+X5Ay30OmoMRG4/MQ3R8wluYCQVB28WyJpoKkDqq8Ga4t9
-         ++AMGmQJtKmZCZll26IPgfNxofoXz7QoDvzEbcXh3J/BYvCo0QGja3Ds75Y0RS5pTx45
-         WRRepZpgnO1e4Id+rTyf2FXK6AnYGRHUG32KpU9cgOYSSqTdOUjQr18pdV1l+QbA6216
-         /KRqZrbjoU8bi8mSMx72Q1Na07yu5PNO6nwoTO5tb34CMXMyTj0gCfQVCBFpF7pV1vRs
-         0G7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUOBUDrF8YmzNd1loypXBOMnSQzqXBuoYqFRpxZZwuHejIFIfq/a0dWfmNl/EXUTeW1EPVqHuxLpQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLZpR2pg2E/A/OJwBDneC3uY5+iTQWk7iRX89kp+jo2/vrkFit
-	LWv8qAsb8/Zw7zgExUCTUr7qiugHrhqzbtsLKlAEspnORD4tphdTv88Iw3AMQZLCjw==
-X-Gm-Gg: ASbGncufVc47zjOhn+beFmq1q1HN66Uej3NcwKN8W68voBNjlChy9mQLVojVRazXzof
-	FfvwnREufG0/U4heoDTI6FzYzylvY873AixZdrnAhXOmUYfydNAUlY42Ix1q3IaHP5cfaDo+mkM
-	6R+KV3htfHffFsA0+pTnbYOIscQiZE/mjdafggif9UYJ139HARqRNUX9X3ZDXgSn4RClHq88pA5
-	ZMWWQSlgzFtePtD/+oj9t+D+PXHPFxnHKkw/Vrd9owt7Zw4DyCYtCCprh0GVJGRThlgvz4nHzni
-	S5ZHLhh4eepVyOzkheLbIERIy4xWrIflSReTv8sGQQw843kT1ShXc005OVS5mP+0U+f58ZLIPAe
-	2kD6GehMYDBtVwqkZHshRN459Fg==
-X-Google-Smtp-Source: AGHT+IHeG04vWPQLSEI5EHbS/VdNFUYX46iHYs9mR4PwPLXMkV/VqjBr1d8WMag8Q6tl/bIutdGYog==
-X-Received: by 2002:a17:903:24f:b0:240:6fda:582a with SMTP id d9443c01a7336-24246f82e11mr124853375ad.23.1754290283941;
-        Sun, 03 Aug 2025 23:51:23 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:3668:3855:6e9a:a21e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899a909sm100170555ad.123.2025.08.03.23.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Aug 2025 23:51:23 -0700 (PDT)
-Date: Mon, 4 Aug 2025 15:51:16 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Askar Safin <safinaskar@zohomail.com>
-Cc: Miklos Szeredi <miklos@szeredi.hu>, Jan Kara <jack@suse.cz>, 
-	brauner <brauner@kernel.org>, "James.Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	ardb <ardb@kernel.org>, "boqun.feng" <boqun.feng@gmail.com>, david <david@fromorbit.com>, 
-	djwong <djwong@kernel.org>, hch <hch@infradead.org>, linux-efi <linux-efi@vger.kernel.org>, 
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	mcgrof <mcgrof@kernel.org>, mingo <mingo@redhat.com>, pavel <pavel@kernel.org>, 
-	peterz <peterz@infradead.org>, rafael <rafael@kernel.org>, will <will@kernel.org>, 
-	Joanne Koong <joannelkoong@gmail.com>, linux-pm <linux-pm@vger.kernel.org>, 
-	senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v2 0/4] power: wire-up filesystem freeze/thaw with
- suspend/resume
-Message-ID: <cudrf6vttxuxrihqcd5bw52oagvkw7oyvgil37l5iq6njsnqlm@ljgewfzdttx4>
-References: <20250402-work-freeze-v2-0-6719a97b52ac@kernel.org>
- <20250720192336.4778-1-safinaskar@zohomail.com>
- <tm57gt2zkazpyjg3qkcxab7h7df2kyayirjbhbqqw3eknwq37h@vpti4li6xufe>
- <CAJfpegsSshtqj2hjYt8+00m-OqXMbwpUiVJr412oqdF=69yLGA@mail.gmail.com>
- <19873ac5902.f6db52da11419.248728138565404083@zohomail.com>
+	s=arc-20240116; t=1754292179; c=relaxed/simple;
+	bh=I8MGzJx1jjFTw5eow+nX1J2zm8Gzr/92+RO8LD1Zhb0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Xi1X/6MO60GlSeA0kFaETbzq9BVIzAmjbFJmLRKlRbROnFce8HFDl9DXBi5F73uBOkIRwapLOQ92AEOm6gEGL3w5lOheu+0vGilyrny8GsUG2nYO2FKZ9xd3VdAy2W504+mOE4QDivmMmv/LvXCUXUNKJlskBiqBEAzbuDkKrdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pVPoUrdp; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 31AA1438DF;
+	Mon,  4 Aug 2025 07:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1754292169;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i18NPnv5eIUf6UbsI/khDMHH0nd6uxFV8xlsBSgXCP4=;
+	b=pVPoUrdp9u9L5F0YNFRXy/hoYu5wW9UM+VQzEkzatsRDj/oy2153NEgYFKAZn5+SYkbz0w
+	57YrnYt01cllo/jlXfqOk1DgSyGgQq3NAWPfgR9PLKBJs5Bw9SM8xuAVpRj+c/RjnuAeLb
+	JRXqk0R0A2mwHD+stOhsLZNXHX1J+5/Jn80ttBZaDKcJV3HOKfVGD87dLh/wIvmiQLkS8W
+	jX+YslVsKZ2epzqSQQPWl8ZeBqUWAOh2XJeaWC1xN0UEOngtp7O/7mkAsd18bTeUsuiWCV
+	MxsxbSd62ml9mtLAP/hXA5GaVxWbuUXp3lYxbLKGLCdI4rAaUKxMCIPvAOFqcg==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>,  Gregory Clement
+ <gregory.clement@bootlin.com>,  Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>,  Krzysztof Kozlowski
+ <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,  "Rafael J.
+ Wysocki" <rafael@kernel.org>,  Daniel Lezcano <daniel.lezcano@linaro.org>,
+  Zhang Rui <rui.zhang@intel.com>,  Lukasz Luba <lukasz.luba@arm.com>,
+  linux-arm-kernel@lists.infradead.org,  devicetree@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-pm@vger.kernel.org,  Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] dt-binding: thermal: Convert
+ marvell,armada-ap806-thermal to DT schema
+In-Reply-To: <CAL_Jsq+fV-W+PqZpvns5oFNyGXxKYYrHe1ipG7gj6dN-c2JJ6g@mail.gmail.com>
+	(Rob Herring's message of "Fri, 1 Aug 2025 15:22:20 -0500")
+References: <20250702230030.2892116-1-robh@kernel.org>
+	<87qzxv5d7z.fsf@bootlin.com>
+	<CAL_Jsq+fV-W+PqZpvns5oFNyGXxKYYrHe1ipG7gj6dN-c2JJ6g@mail.gmail.com>
+User-Agent: mu4e 1.12.7; emacs 30.1
+Date: Mon, 04 Aug 2025 09:22:47 +0200
+Message-ID: <877bzjo8jc.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <19873ac5902.f6db52da11419.248728138565404083@zohomail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudduieekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhgffffkgggtgfesthhqredttderjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffgefhjedtfeeigeduudekudejkedtiefhleelueeiueevheekvdeludehiedvfeenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduhedprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdprhgtphhtthhopehsvggsrghsthhirghnrdhhvghsshgvlhgsrghrthhhsehgmhgrihhlrdgtohhmpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpt
+ hhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On (25/08/04 10:02), Askar Safin wrote:
-> What about this timeout solution: https://lore.kernel.org/linux-fsdevel/20250122215528.1270478-1-joannelkoong@gmail.com/ ?
-> Will it work? As well as I understand, currently kernel waits 20 seconds, when it tries to freeze processes when suspending.
-> So, what if we use this Joanne Koong's timeout patch, and set timeout to 19 seconds?
+On 01/08/2025 at 15:22:20 -05, Rob Herring <robh@kernel.org> wrote:
 
-I think the problem with this approach is that not all fuse connections
-are remote (over the network).  One can use fuse to mount vfat/ntfs or
-even archives.  Destroying those connections for suspend is unlikely to
-be loved by users.
+> On Fri, Aug 1, 2025 at 9:27=E2=80=AFAM Miquel Raynal <miquel.raynal@bootl=
+in.com> wrote:
+>>
+>> Hi Rob,
+>>
+>> Sorry for the delay, I don't know why I forgot these.
+>>
+>> ...
+>>
+>> > +properties:
+>> > +  compatible:
+>> > +    enum:
+>> > +      - marvell,armada-ap806-thermal
+>> > +      - marvell,armada-ap807-thermal
+>> > +      - marvell,armada-cp110-thermal
+>> > +
+>> > +  reg:
+>> > +    maxItems: 1
+>> > +
+>> > +  interrupts:
+>> > +    description: overheat interrupt
+>> > +    maxItems: 1
+>> > +
+>> > +  '#thermal-sensor-cells':
+>> > +    description: Cell represents the channel ID. There is one sensor =
+per
+>> > +      channel. O refers to the thermal IP internal channel.
+>> > +    const: 1
+>> > +
+>> > +required:
+>> > +  - compatible
+>> > +  - reg
+>> > +
+>> > +additionalProperties: false
+>>
+>> IIRC on these Marvell designs, there was one (or more, I don't remember)
+>> Application Processor (AP) and several Co-Processors (CP).
+>>
+>> [On the AP]
+>> The AP8XX overheat interrupt was not directly wired to the GIC but was
+>> going through another intermediate IRQ controller named SEI (System
+>> Error Interrupt).
+>>
+>>       Thermal overheat IRQ -> SEI -> GIC
+>>
+>> [On the CP]
+>> There was one interrupt controller per CP11X named ICU, which would be
+>> connected to the top level GIC through MSIs. The ICU was however split
+>> into several sub-controllers reaching different areas on the GIC.
+>>
+>>                                       MSI
+>>       Thermal overheat IRQ -> ICU SEI -> GIC
+>>
+>> As the OS could not guess the internal connexions, I believe we had to
+>> include in the bindings the parent IRQ chip we were connected to. In the
+>> case of the thermal over heat interrupts, they were all going through an
+>> SEI controller (System Error Interrupt) which, if I still remember
+>> correctly, was not the default parent, hence the use of
+>> interrupts-parent/interrupts-extended in the examples.
+>>
+>> This is all a bit cloudy in my mind, but I believe these properties
+>> matter and with 'additionalProperties: false' and without
+>> interrupts-parent/interrupts-extended allowed, a real world DT
+>> snippet would not pass the binding checks.
+>
+> 'interrupt-parent' is implicitly allowed anywhere. Who is the parent
+> is outside the scope of the binding given it can vary.
+
+Ok, good to know.
+
+>> > +examples:
+>> > +  - |
+>> > +    thermal-sensor@80 {
+>> > +        compatible =3D "marvell,armada-ap806-thermal";
+>> > +        reg =3D <0x80 0x10>;
+>> > +        interrupts =3D <18>;
+>>
+>> I do not know how accurate the example must be, but maybe the example
+>> shall reflect the SEI connection as well.
+>
+> No one has cared about converting the Marvell bindings, so *shrug*.
+
+I was still mentioning the same interrupt-parent property here ("the SEI
+connection"), not how accurate the values were. So if we do not care
+about interrupt-parent because it is allowed anyway,
+
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks for the conversion,
+Miqu=C3=A8l
 
