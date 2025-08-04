@@ -1,60 +1,58 @@
-Return-Path: <linux-pm+bounces-31804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39191B19806
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:32:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 879E8B1980D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:33:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55A891758D9
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:32:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60D8D189653F
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDE815A87C;
-	Mon,  4 Aug 2025 00:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA101B4236;
+	Mon,  4 Aug 2025 00:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="miFdimFt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9e9my0Q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0759A48;
-	Mon,  4 Aug 2025 00:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FE54315F;
+	Mon,  4 Aug 2025 00:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267528; cv=none; b=Hc95/b7oI6IwtOUkhl49xvVCPY3bv6zTtspGVLra7IilSD7eXZ0Sfw39AyRAN/K5P1+rWrhBMMslNZd8/Ycy2+h9ozp/nhX/YKnjl96gXMb86czrdxTmlV1LBZGvG8/5xT1arL9x1cy7nGsNogLHkl/1QblzSHlsCSPSnloAkZU=
+	t=1754267532; cv=none; b=umu913EcjFwN9TdQGq/zcdp0318HTk4LWzm7Ew65Xg7tgUFNKTc3N+EGwKlayZoVTujMcDOSc0d01uGDvrk5A5Pzs1pqEOmNIFRYnD3jNitS61u51NRWxpXM9zlbb64DhlTJYx/WsCHvdg++Zn/NkoTqjlXRHrBNjP1W5s8ja2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267528; c=relaxed/simple;
-	bh=BNzCKQtMJWJr1cL4R2nPmra3Lfns6RiaLO3CDESHHZE=;
+	s=arc-20240116; t=1754267532; c=relaxed/simple;
+	bh=ZPf3y8UrpvGVigSALUXzeTYLmEvYJTLX6qMadoEXjoM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S5OkroPTtPP96DEKQDg5PKO8Ej6sSGH83iplyOLnhk4ZFsE1CuSfCiBPeduQ8+tHnQBbw7XYAWrJaxhro0QqQpM9aEfEW/tKuLQg7tsVGLVSKJ7JJwYFha01sAnEgb2nsoFGHxeFH/mTOuhcSnfLUYIhKpyxv8EFodjD7hwIp28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=miFdimFt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19BCC4CEFA;
-	Mon,  4 Aug 2025 00:32:06 +0000 (UTC)
+	 MIME-Version; b=D8DZQ70lCU18Tr3eMpi1DKp0FRbpISlPjI6SApqVJ0CXWITTHUizC1RFwAC69KLhNu90G0L1QiZwl1eT9XHHB0yF1F1DbN0E5jHkEGtKaYtVY1bRmq/KFwqPqNjmutGT4ojlTDFm9T2I5R+tQPdz5n9Vn4IMsmaIu8efbtAhhjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9e9my0Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0311CC4CEF0;
+	Mon,  4 Aug 2025 00:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267528;
-	bh=BNzCKQtMJWJr1cL4R2nPmra3Lfns6RiaLO3CDESHHZE=;
+	s=k20201202; t=1754267532;
+	bh=ZPf3y8UrpvGVigSALUXzeTYLmEvYJTLX6qMadoEXjoM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=miFdimFt7imxRjm24YseV0AfJ8X0ie6T9wLIgB1deIBVz0XEiks/opXAQo1rIHkZD
-	 +v0bi1WFCxS6Q2vJyYtwt5Hv/XBAPQeL+DLRrSe4do6w5oJRb26O2S1s9rB30rEmxk
-	 oNVcsf00JYXgAB5D2Auu8xRA05o+Z2/HISGe9vJclUUqvcXSQArxnA9JCjz3TTSFdk
-	 RM3+om4KuyqVRHxkuGj1YzLqUc9IgkMzBn09URjWryScgegXX02LrwXNw1rdnd/taL
-	 JEzcnG397+kd3gb4+/MIEaZBfXgYsHzuUk5J+QEuFPN9CoJejl/QZsEfrEewf2g5Gc
-	 s8eiRe0c0PTNg==
+	b=G9e9my0QOpCxk1aC0kgpx8Ln9Zwb8PKiunDlux3H3CvGWAkwuwvyO4fnzDuAxk9YG
+	 C1brTTTQMQhH3NM+h0X7fnFidL7YUbI9S9QPni+QoL0ctehkNTxrUoDOwtW9D5w6EG
+	 ySe8ItChRN7AP1K4agqVvgixSUO5K75j1y0jBmmTO6uhOvA/eMf/q2DbPZGKWrRK41
+	 C9FykiwNvNxw5MR9GeUiWxCogxIdDqI9ksWmlcGYYS5TQLL/02lYqnxyr40t+DhW5i
+	 vkEHnTdcLquvbGCnPEkd5aFh8xQ6ic3T2y8j9DLvrq3qUXPqvh41cA7obn365XRKA5
+	 9u4Y9+VW+eblg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Li RongQing <lirongqing@baidu.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+Cc: Lifeng Zheng <zhenglifeng1@huawei.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
 	Sasha Levin <sashal@kernel.org>,
-	srinivas.pandruvada@linux.intel.com,
-	lenb@kernel.org,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
+	myungjoo.ham@samsung.com,
+	kyungmin.park@samsung.com,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 18/69] cpufreq: intel_pstate: Add Granite Rapids support in no-HWP mode
-Date: Sun,  3 Aug 2025 20:30:28 -0400
-Message-Id: <20250804003119.3620476-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 20/69] PM / devfreq: governor: Replace sscanf() with kstrtoul() in set_freq_store()
+Date: Sun,  3 Aug 2025 20:30:30 -0400
+Message-Id: <20250804003119.3620476-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804003119.3620476-1-sashal@kernel.org>
 References: <20250804003119.3620476-1-sashal@kernel.org>
@@ -69,98 +67,103 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.41
 Content-Transfer-Encoding: 8bit
 
-From: Li RongQing <lirongqing@baidu.com>
+From: Lifeng Zheng <zhenglifeng1@huawei.com>
 
-[ Upstream commit fc64e0421598aaa87d61184f6777b52614a095be ]
+[ Upstream commit 914cc799b28f17d369d5b4db3b941957d18157e8 ]
 
-Users may disable HWP in firmware, in which case intel_pstate
-wouldn't load unless the CPU model is explicitly supported.
+Replace sscanf() with kstrtoul() in set_freq_store() and check the result
+to avoid invalid input.
 
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Link: https://patch.msgid.link/20250623105601.3924-1-lirongqing@baidu.com
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+Link: https://lore.kernel.org/lkml/20250421030020.3108405-2-zhenglifeng1@huawei.com/
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-**Backport Status: YES**
+## Backport Status: YES
 
-This commit should be backported to stable kernel trees. Here's the
-extensive analysis:
+This commit should be backported to stable kernel trees for the
+following reasons:
 
-**Nature of the Change:**
-The commit adds support for Intel Granite Rapids processors (both D and
-X variants) in the intel_pstate driver when Hardware P-states (HWP) is
-disabled in firmware. This is a hardware enablement patch that adds two
-new CPU model IDs to existing lists:
-- `INTEL_GRANITERAPIDS_D` and `INTEL_GRANITERAPIDS_X` are added to
-  `intel_pstate_cpu_ids[]` table
+1. **Security Issue - Input Validation Bug**: The original code uses
+   `sscanf(buf, "%lu", &wanted)` at line 45 without checking the return
+   value. This is a security vulnerability because:
+   - `sscanf()` returns the number of successfully parsed items
+   - If the input is malformed or contains invalid characters,
+     `sscanf()` may return 0 but leave `wanted` uninitialized
+   - The code then proceeds to use this potentially uninitialized value
+     in `data->user_frequency = wanted`
+   - This could lead to setting arbitrary frequency values from
+     uninitialized stack data
 
-**Why This Is a Good Backport Candidate:**
+2. **Real User Impact**: The devfreq userspace governor allows users to
+   manually set device frequencies through sysfs. Invalid input handling
+   could cause:
+   - Setting incorrect frequencies based on uninitialized memory
+   - Potential system instability if invalid frequencies are applied to
+     hardware
+   - Security implications as uninitialized stack data could be used
 
-1. **Fixes a Real User-Facing Issue**: Without this patch, users who
-   have Granite Rapids CPUs with HWP disabled in firmware cannot use the
-   intel_pstate driver at all. The commit message explicitly states
-   "intel_pstate wouldn't load unless the CPU model is explicitly
-   supported." This means affected systems would fall back to less
-   efficient CPU frequency scaling drivers, significantly impacting
-   performance and power efficiency.
+3. **Small and Contained Fix**: The change is minimal and low-risk:
+   - Replaces `sscanf()` with `kstrtoul()` which has proper error
+     checking
+   - Adds explicit error handling that returns early on invalid input
+   - The change is confined to a single function (`set_freq_store()`)
+   - No architectural changes or new features added
 
-2. **Minimal and Safe Change**: The patch only adds two lines to an
-   existing CPU ID table:
-  ```c
-  +       X86_MATCH(INTEL_GRANITERAPIDS_D,        core_funcs),
-  +       X86_MATCH(INTEL_GRANITERAPIDS_X,        core_funcs),
-  ```
-  These entries follow the exact same pattern as all other CPU entries
-  and use the standard `core_funcs` handler, which is already used by
-  many other Intel CPU models.
+4. **Follows Kernel Best Practices**: The kernel has been systematically
+   replacing `sscanf()` with `kstrto*()` functions for better input
+   validation. This is evident from similar commits found in the git log
+   (e.g., commit a5556fa1107d for asus-wmi).
 
-3. **No Architectural Changes**: The commit doesn't introduce any new
-   features, modify existing logic, or change any kernel interfaces.
-   It's purely a hardware enablement patch that extends existing
-   functionality to new hardware.
+5. **Critical Subsystem**: While devfreq might not be as critical as
+   core memory management, it controls device frequency scaling which
+   can affect:
+   - Power management
+   - System performance
+   - Hardware stability
 
-4. **Low Risk of Regression**:
-   - The change is contained entirely within CPU model detection tables
-   - It only affects systems with the specific Granite Rapids CPU models
-   - Uses the well-tested `core_funcs` implementation already used by
-     Sapphire Rapids, Emerald Rapids, and other server CPUs
-   - The code path is only triggered on systems with these specific CPUs
+6. **No Negative Side Effects**: The change only adds proper validation
+   and doesn't modify the core functionality. Valid inputs will continue
+   to work exactly as before.
 
-5. **Follows Established Pattern**: Looking at the surrounding code,
-   Granite Rapids entries were already present in the
-   `intel_pstate_cpu_oob_ids[]` table (for out-of-band control),
-   indicating this is completing support that was partially added
-   previously.
+The commit fixes a clear bug (missing input validation) that could lead
+to undefined behavior and potential security issues, making it an
+excellent candidate for stable backporting according to stable tree
+rules.
 
-6. **Important for Server Deployments**: Granite Rapids is a server CPU
-   platform, and enterprise users often disable HWP for specific
-   workload requirements or compatibility reasons. Without this patch,
-   they lose access to the intel_pstate driver entirely.
+ drivers/devfreq/governor_userspace.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-The commit meets all the criteria for stable backporting: it fixes a
-real bug (driver fails to load on supported hardware), the fix is
-minimal and contained, there's no risk to existing systems, and it
-provides important functionality for affected users.
-
- drivers/cpufreq/intel_pstate.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 54e7310454cc..65e1486f7ce9 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2654,6 +2654,8 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
- 	X86_MATCH(INTEL_TIGERLAKE,		core_funcs),
- 	X86_MATCH(INTEL_SAPPHIRERAPIDS_X,	core_funcs),
- 	X86_MATCH(INTEL_EMERALDRAPIDS_X,	core_funcs),
-+	X86_MATCH(INTEL_GRANITERAPIDS_D,	core_funcs),
-+	X86_MATCH(INTEL_GRANITERAPIDS_X,	core_funcs),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+index d1aa6806b683..175de0c0b50e 100644
+--- a/drivers/devfreq/governor_userspace.c
++++ b/drivers/devfreq/governor_userspace.c
+@@ -9,6 +9,7 @@
+ #include <linux/slab.h>
+ #include <linux/device.h>
+ #include <linux/devfreq.h>
++#include <linux/kstrtox.h>
+ #include <linux/pm.h>
+ #include <linux/mutex.h>
+ #include <linux/module.h>
+@@ -39,10 +40,13 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
+ 	unsigned long wanted;
+ 	int err = 0;
+ 
++	err = kstrtoul(buf, 0, &wanted);
++	if (err)
++		return err;
++
+ 	mutex_lock(&devfreq->lock);
+ 	data = devfreq->governor_data;
+ 
+-	sscanf(buf, "%lu", &wanted);
+ 	data->user_frequency = wanted;
+ 	data->valid = true;
+ 	err = update_devfreq(devfreq);
 -- 
 2.39.5
 
