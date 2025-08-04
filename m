@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-31854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2E3CB19B8D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:27:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2B29B19B92
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:27:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F2AE1773FE
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:27:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 791803B7787
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DF2230997;
-	Mon,  4 Aug 2025 06:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81ED22309B0;
+	Mon,  4 Aug 2025 06:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1LA/nvt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSCk4Xm1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914D97DA6D;
-	Mon,  4 Aug 2025 06:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E50B7DA6D;
+	Mon,  4 Aug 2025 06:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754288815; cv=none; b=GbSOPJGmwLrwi74ObJZgBw7RNn6gUzrjE2XDvo/pfaz56pf67TpKWnpp8GCXCpd87hJmsBPTY8dF6KUye1RdLMsfMgC6vyOPY0PSKM+mRinaqjT/9Es34jpdT5oGMzZIMP2P6BYedHTjYSzlWuErVznPwydd7RBSuAYgBLhEYoM=
+	t=1754288823; cv=none; b=ujHK2Ge1fDjOT2Fjm+UF2TRuexOx9QXGe8+ZIg6mzoxgiyH/LpCWX5q5lumuU4Gs7qVup9Kq1wLmOSdo1p8jb/Tz8tyXM5O3hWgqM91j1x87L+teWXV18KQ/r1SLE+z2etufmtb39B1B+k6DY2KGptMUEYjfZpmeYIois2NpmyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754288815; c=relaxed/simple;
-	bh=NgbIMF6y43/XK3ADCiD/92me5winEKCdjRz7a+Mj6kk=;
+	s=arc-20240116; t=1754288823; c=relaxed/simple;
+	bh=zu7hlmVtGYKoeR5Sn5qDHc6a7OwUPNXTF+1tXls/s0c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yu+6SRp2ksMdxVxMy1SQkJZuantE07XldvoJhcNel9PbyxIlZ4sVKLDQIzN7djvy756lJMS+QvQmda0WSsCv9fvBP+N38//XrLw9oIHW5Gq76sU5NNunJRgVALBoWy0zVotnibkwuIYkLUTr6izjlk/+T/aFafXY44PBLW9fjbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j1LA/nvt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AE4C4CEE7;
-	Mon,  4 Aug 2025 06:26:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RDhdqtm83h2EsfozZyEy9USmdkIh1qn07fhc8FAXCLH8O4pan/uXDhIylqTEI5aoOHjS232ADQmqhRYf0VlwO37rvZO2BKi9FFxHwyWYF1mexa3ZW3jDkcOe2dTcFwmkUzjTaY5XsHK/A1Oeye/vyIyPlc95QXf+51ODBc1jsvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSCk4Xm1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF52AC4CEE7;
+	Mon,  4 Aug 2025 06:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754288815;
-	bh=NgbIMF6y43/XK3ADCiD/92me5winEKCdjRz7a+Mj6kk=;
+	s=k20201202; t=1754288822;
+	bh=zu7hlmVtGYKoeR5Sn5qDHc6a7OwUPNXTF+1tXls/s0c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j1LA/nvte66TKBI1VxbeGOOkcaZI7Rbt6hx20HdaUzuD2/vFv4AcRvxfm6df636SW
-	 7z02fIU3pVlzfXQooSStj/swKoNf2C944dChV2uh9MONXNFJdP52HDlT4+2qVKNjZQ
-	 JBRaGfVm1itEaz0dEMKMKFJxXYbFiSaTv1TBOYfw1eU1L9a8XtJtPOLiLYsAAF5RYP
-	 LhKgQ2KPn9lRjVdk/DVGNFaaW7OiOBDfl6oRyDTxs3zNu1xaQK8Qm5k0ds86paz3jx
-	 Cnv10BRZ9q4R16g16uW5l5CFYsjPWWKsyOaF5Vr7dZ2o/vFCt8LUXu8QlSUl1qGk7F
-	 NrOOEuJ2xvj9A==
-Message-ID: <3b79dc0c-0bcd-47d0-ab10-ba1514466d65@kernel.org>
-Date: Mon, 4 Aug 2025 08:26:49 +0200
+	b=lSCk4Xm1kRzK/Ld7BnmZF1lFs68EXKil0xZKfmh4f19m9zDsVSw+5m3NbTwibJXlh
+	 z1KPkFEcIc80fPZzZKp3LsRL6S1SwtTF8KUsDDz0XPGonQQnB6vz43eO1bxozaqt16
+	 oeJVyXhCA86tArK5mIw4YQT2L87EBJbC4ShFffQpro8RddRiaXfoRGLyYIZRQq4Vaf
+	 w+J8IOLynH0cHoA3zqmSPntsyeVqQEtQ+RO+0DVDGmJKjr0U2AzrvYqOrYzuPto9uE
+	 WsiUobfuB/IZ81E2sV/SHr8R88VfsaP7bY9mnm75gBv//EiRoE86nI5SHzYKW/JfXk
+	 2Nf1ww55QYsbw==
+Message-ID: <bd131833-49b9-4f7a-ad78-680f7131d445@kernel.org>
+Date: Mon, 4 Aug 2025 08:26:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,20 +50,19 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/2] dt-bindings: interconnect: Add OSM L3 compatible
- for QCS615 SoC
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add OSM L3 compatible for
+ QCS615 SoC
 To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konradybcio@kernel.org>, Sibi Sankar
  <quic_sibis@quicinc.com>, Odelu Kukatla <quic_okukatla@quicinc.com>,
- Mike Tipton <mike.tipton@oss.qualcomm.com>,
- Imran Shaik <quic_imrashai@quicinc.com>
+ Mike Tipton <mike.tipton@oss.qualcomm.com>
 Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250804061536.110-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250804061536.110-2-raviteja.laggyshetty@oss.qualcomm.com>
+References: <20250804050542.100806-1-raviteja.laggyshetty@oss.qualcomm.com>
+ <20250804050542.100806-2-raviteja.laggyshetty@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,27 +108,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250804061536.110-2-raviteja.laggyshetty@oss.qualcomm.com>
+In-Reply-To: <20250804050542.100806-2-raviteja.laggyshetty@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/08/2025 08:15, Raviteja Laggyshetty wrote:
+On 04/08/2025 07:05, Raviteja Laggyshetty wrote:
 > Add Operation State Manager (OSM) L3 interconnect provider binding for
 > QCS615 SoC. As the OSM hardware in QCS615 and SM8150 are same,
 > added a family-level compatible for SM8150 SoC. This shared fallback
 > compatible allows grouping of SoCs with similar hardware, reducing
 > the need to explicitly list each variant in the driver match table.
-
-Drop last sentence, it is completely redundant. Do not explain to us how
-DT works. We all know that.
-
-> 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> ---
->  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml        | 5 +++++
->  1 file changed, 5 insertions(+)
-No, slow down, this conflicts with other patch and makes your entry
-duplicated. Just squash both commits.
+We know how DT works...
 
 Best regards,
 Krzysztof
