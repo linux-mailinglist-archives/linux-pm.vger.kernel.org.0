@@ -1,153 +1,112 @@
-Return-Path: <linux-pm+bounces-31846-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31848-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C28BB19B0B
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 07:27:47 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E5E2B19B3D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:02:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 339721896059
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 05:28:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 926734E0557
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1B36227581;
-	Mon,  4 Aug 2025 05:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C25F221703;
+	Mon,  4 Aug 2025 06:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DFZ/CBCY"
+	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="fyAfi3kx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1FA2264DB
-	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 05:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754285263; cv=none; b=sSJkEzXSZID5Z1ZHBRBeyfNU1MmT8Fo5TGo23N9khWCGQ/PPIiu6Hq4oLHNxvroTmYE0s7fuD/6nUbsPslNA0z91gEXjbO6s9qkAMFfYKA37Tb12oe4+gJwYqlfvHozklfrIDKj0I6CmEh2cl/FLOnNdMlDnnqPkZfqwx45x/7s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754285263; c=relaxed/simple;
-	bh=ZYomnzTI/gqMaAWNJDB56qa6PtOYj1KGLdXceeY1XL8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PcFiS0te66AoSHGqWemLZXY+DWInwcwNLw8ef/I1nX1/fKOSBe3xKwv19+4dTrnZkrNoELuWS3RUvHeiDdFaulGCycrwyAj/WuxNTl7q5RKKq4SLPFu+LClgsKsunVT71RufJxFeXkzukzcrfOmBJxP1WQyidKu9KFb+xEyLX4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DFZ/CBCY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 573NmhK1032122
-	for <linux-pm@vger.kernel.org>; Mon, 4 Aug 2025 05:27:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=+PcTXtqzA8go/oZD84ti/MPc
-	iAxuBsczUeBgnZ1pTWA=; b=DFZ/CBCYzlikPei4IMoDe1V5c0bih3np3LkDKmt9
-	gKPZirVsMp9wvIf6hIA3tkHmbXlC5InTlqX3vOwGyZoTHq6qb1t44HKbAAzQU1Ay
-	cWZYA1l0q5R4BS1e5pyqDppXp42ahRxihq/rH8IBMbl7P8K0YSPwErpI4KhtPSku
-	ny6Z5gDR1uRLn2E3LVoq2HvB1KXK+d8Re/z5Nt5T4LkuwNLPF6yEnfWQGkWHRcl1
-	Z2Kz8GW6T8oCjLHPam727MELMhn03H/WlNBj7rTz5c6OngqvmzQElpZEDY6Cv0iu
-	/GfgcTXu8XSBSleL+RGI4xOpgvbi9k7IPQ4NzRtDgRRBLA==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 489arwkjtu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 04 Aug 2025 05:27:41 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7e69c14e992so262646785a.3
-        for <linux-pm@vger.kernel.org>; Sun, 03 Aug 2025 22:27:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754285260; x=1754890060;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+PcTXtqzA8go/oZD84ti/MPciAxuBsczUeBgnZ1pTWA=;
-        b=okxZZVLQ+Rm/WAPDRZ1ApOnQIU9I50u+CSSFYNLdRnKs9aRnYvncrCDjShVT16OONH
-         2BRgm4xb3mHzoWzeoj2H8CfLwe1r2mpE1N7h37NJ0P7riGI6/Dk75FIdGqk3UXMVUN06
-         RbBluYCKqQmhmwDtxREVo5zutcP9eZ9wSDSIYMtLTF8Ykw9zA0rOhvKgs790kogGoBO5
-         nMws5KN/YI6JhyrRLYoFrd88fcHK6j5CmRKNiHw3H8IU3I9XsbxwFkZvK9MJwouzV8jb
-         ZN7ESBfh570aUR7igWDKrD1I5VVpf6R/Ifq2MHylWmbTMcwZjoo0iboeRViRWKmO9WoC
-         5Ujg==
-X-Forwarded-Encrypted: i=1; AJvYcCVGOvibfzubwsKk0MmIfOPCk3u5XC/YMrEzfMlVWfPTPdoUd8vqBsqj8Ysk3F4XNAw8tVvorwgD/w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA+kjhNlONq4Ppiy4b6ocqgdgI0r7v3NpYdU3LAY90Wg10kBVJ
-	IcrdIaLdMRODvsTS38DAUDHCZh1jiKFHNErKhbK6vVws7326jp4opMXjxg2u7jDwcz5kafDC8Jp
-	b8lUfeNsyYpbNAp2DqikG9JLlNPs4dTu/G86rh6ELVg7Wzw5vZtYMV423y2XF3A==
-X-Gm-Gg: ASbGnctI22hinsNgLBr/tPYcPYxQ2KW84fG+AjdMQ18gaVwawVZugWtVrOoVR9iBXvN
-	+q2KZbwVT0czDdRkeeQwecYCs9MVcOQeonqfq/Iv2o2vl4SbkMNZiLPmJJe2XQbmODuHYUwAoTK
-	jZmOC24D9Dw9G9Vx6lacOAaBFyAHnbSLeWpYZ6SSID0e6N80DrZLnOIfxK4NoSL6hFIf2EKE3Sp
-	qq3SJ9nFZDLkVw5rAnKrD6IzTVEhTb8OHKizvRY73jxNC5jy7avNrBKIjGFedeTq+8q6ZDJTfnE
-	FpGNLofDj6Es8rnGbv/m3tVeUMuEVUimvKEkuCsEgHxHALzliy96YPwBSpa6wp7PCMsoyNHZQGT
-	1/0Ef6cQVQhBM7gGKhiOfNMQoeqA7GeEpfNaUTlMrLETNQeMj7CKX
-X-Received: by 2002:a05:620a:5ed7:b0:7e3:30f4:fcdb with SMTP id af79cd13be357-7e6962dfbb3mr978589285a.18.1754285260393;
-        Sun, 03 Aug 2025 22:27:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHMxoOfzknCZ8uMmy3YY6kqSkPaQ9xTlPrcxG3f/lbgV0kvxmrcKW8Du96Of7dM/xfXukyUdA==
-X-Received: by 2002:a05:620a:5ed7:b0:7e3:30f4:fcdb with SMTP id af79cd13be357-7e6962dfbb3mr978588085a.18.1754285259948;
-        Sun, 03 Aug 2025 22:27:39 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55b88ca3214sm1541878e87.126.2025.08.03.22.27.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Aug 2025 22:27:39 -0700 (PDT)
-Date: Mon, 4 Aug 2025 08:27:37 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Imran Shaik <quic_imrashai@quicinc.com>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: qcs615: Add OSM l3 interconnect
- provider node and CPU OPP tables to scale DDR/L3
-Message-ID: <45oycvzjogctsoi4jiumxtastsrjzqrls3wc2vap2eryq5kcgq@leirtq2vfvxi>
-References: <20250804050542.100806-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250804050542.100806-3-raviteja.laggyshetty@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8109126BF7;
+	Mon,  4 Aug 2025 06:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754287359; cv=pass; b=Cz1dPu9hHtpEIYTxEILiwspZaywUBdwimU6TenSAhrYTpegYrjoKTxdsGe+BJWhGx7wdWFywkXOkO1hLHjwHYawhoVZayr6LE9GEHRpRQR3WwvZbfJ5JTL93iR7WW+SLJc9Zn7vT8o1ghcJ9W6QX6wJXSoQ9AlhNezjnCZKj2PQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754287359; c=relaxed/simple;
+	bh=kpSoSjrZhGjs62aE5SmGCHwxIm4QxKCtBqkm1MjN1y4=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=MTVnNq1TZvglHSaDT2ZDUWvjtyH55qIWvnBgkA9hHB5h+NWYR7K6evR4/JE/F0kqv12VbsqX4xCLRfFk55EmUM5VIteRfun6bFkBI3WSwQR2ZVI0PU5hwHhxlTr0bdnKOctkdSLI1370/AAOSsCeR0feOp5XG7H6uBGWZvXu5e0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=fyAfi3kx; arc=pass smtp.client-ip=136.143.188.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1754287334; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=IZhBR7ewN7HD2rfDsrRUGTQsNRx2k75bJ/4foTGbz4efSW8YylQkqef6mFjyKD8CuAhm3Dfcq3HBqKtUB6Dbwcr97AmnmIszPlnDyTFI0xL0HvaW7AAYYuxlhg0R+3DkaItM8YSeklNcLkl61iQyKzDCEuPeqfZd08l4Ji49aHU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1754287334; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=XPq5pU+VAlEycOOoKbZ8lsG8ZhsiHmp6l+8qRsl7/DY=; 
+	b=KtlEe3DqMJRG070r+Env4GLEVfE6lv2B2xwP+3muynKImyD6PQzfNyKwKNasytmFyHOv7EN8xGDxFnG5CkgvqoWpW0vizNyXAPEjTEIIDk6j0fdEAVgKajo9CbJSDXvYizSiNgtnsgM7khgYoblRrDQdJWq65UEAbbZxEV3+Ans=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=zohomail.com;
+	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
+	dmarc=pass header.from=<safinaskar@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1754287334;
+	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
+	bh=XPq5pU+VAlEycOOoKbZ8lsG8ZhsiHmp6l+8qRsl7/DY=;
+	b=fyAfi3kx5jEZq4m2eF9Rgtdaqt2sOWoIu/SUBi8HJ1vHxesX3NQo4SYSEYVprXI6
+	XG1spjoD+zK2KrmCQArzy4rCT9uFt+klD0azlHVs0fVmckzvo8r0v4STC2+nRYg6OMG
+	Jd536PemW/ufDPzo3Ot2g89U9XNR0h/Y72mlaEX0=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1754287331599847.7869727877564; Sun, 3 Aug 2025 23:02:11 -0700 (PDT)
+Received: from  [212.73.77.104] by mail.zoho.com
+	with HTTP;Sun, 3 Aug 2025 23:02:11 -0700 (PDT)
+Date: Mon, 04 Aug 2025 10:02:11 +0400
+From: Askar Safin <safinaskar@zohomail.com>
+To: "Miklos Szeredi" <miklos@szeredi.hu>
+Cc: "Jan Kara" <jack@suse.cz>, "brauner" <brauner@kernel.org>,
+	"James.Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"ardb" <ardb@kernel.org>, "boqun.feng" <boqun.feng@gmail.com>,
+	"david" <david@fromorbit.com>, "djwong" <djwong@kernel.org>,
+	"hch" <hch@infradead.org>, "linux-efi" <linux-efi@vger.kernel.org>,
+	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel" <linux-kernel@vger.kernel.org>,
+	"mcgrof" <mcgrof@kernel.org>, "mingo" <mingo@redhat.com>,
+	"pavel" <pavel@kernel.org>, "peterz" <peterz@infradead.org>,
+	"rafael" <rafael@kernel.org>, "will" <will@kernel.org>,
+	"Joanne Koong" <joannelkoong@gmail.com>,
+	"linux-pm" <linux-pm@vger.kernel.org>,
+	"senozhatsky" <senozhatsky@chromium.org>
+Message-ID: <19873ac5902.f6db52da11419.248728138565404083@zohomail.com>
+In-Reply-To: <CAJfpegsSshtqj2hjYt8+00m-OqXMbwpUiVJr412oqdF=69yLGA@mail.gmail.com>
+References: <20250402-work-freeze-v2-0-6719a97b52ac@kernel.org>
+ <20250720192336.4778-1-safinaskar@zohomail.com> <tm57gt2zkazpyjg3qkcxab7h7df2kyayirjbhbqqw3eknwq37h@vpti4li6xufe> <CAJfpegsSshtqj2hjYt8+00m-OqXMbwpUiVJr412oqdF=69yLGA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] power: wire-up filesystem freeze/thaw with
+ suspend/resume
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250804050542.100806-3-raviteja.laggyshetty@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA0MDAyNiBTYWx0ZWRfX6SoPdWt+R6wk
- uKOn1x0R64oxH8+UI4UIPXyx1yPWnF2cidTZCiMkZ6RnkfyMqjqPZ+7k8EjCwo3ZaOG746NEe/N
- zCk7prJeSUsHWJrd33PgLs7VtDjUtEnSEcnemaDq0UaW2BtidqRq3iv4P4junIHMclZ4LxdLgSP
- MXwioFXe7llPo0lWKZRGj8vNrmFblqhLaSRK4Vd1yJzVQAIFasl4TYbK9O/EsjoKK4L5ZDN+FOp
- QlhDGOdU5IooRUEzahvCH1t+J69pIqnwHKKdN1expAjboH4GAg0Sa/vyeItKO21i30SaJ6rGreZ
- bkNeXcqTWfay0JjTFhETbeERW7wUJiXXk8Wvap/m9GiAmPkmcx+pBJ4/XW4RB4C/kaGQ4W48b8y
- jZXj9BlBt8aMO99zO7yt7UdFymiq+1/93eq9nrjdbgAelnm4I0Fgzor84MTSSzKQ/hoAGHMQ
-X-Authority-Analysis: v=2.4 cv=We8Ma1hX c=1 sm=1 tr=0 ts=689044cd cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=qnWTwb_pmrVv18jEe2AA:9
- a=CjuIK1q_8ugA:10 a=IoWCM6iH3mJn3m4BftBB:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: ZzsUoPcTrWfwl_DMHKfZp0qwP2HGQK3l
-X-Proofpoint-ORIG-GUID: ZzsUoPcTrWfwl_DMHKfZp0qwP2HGQK3l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-04_02,2025-08-01_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxlogscore=874 malwarescore=0 lowpriorityscore=0 impostorscore=0
- adultscore=0 clxscore=1015 bulkscore=0 phishscore=0 mlxscore=0 suspectscore=0
- priorityscore=1501 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2508040026
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+Feedback-ID: rr08011227164012ec9890916f7891973f00000cdbcfcc23e10b9c369189d295a1c67b2c97f63b337c9df022:zu08011227d121e78c426a484858449bf20000b62dcb58d23f93075d67f48e7f264a4ce14dc0c3b8b9df6f62:rf0801122c51297a6504ecd1292eb078cc00005daa1dfc10cf2f148215b573ab0dffb200f198509b479e9a153b34f13caf:ZohoMail
 
-On Mon, Aug 04, 2025 at 05:05:42AM +0000, Raviteja Laggyshetty wrote:
-> Add Operation State Manager (OSM) L3 interconnect provide node and OPP
-> tables required to scale DDR and L3 per freq-domain on QCS615 SoC.
-> As QCS615 and SM8150 SoCs have same OSM hardware, added SM8150
-> compatible as fallback for QCS615 OSM device node.
-> 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+ ---- On Mon, 04 Aug 2025 09:31:00 +0400  Miklos Szeredi <miklos@szeredi.hu> wrote --- 
+ > This is a known problem with an unknown solution.
+ > 
+ > We can fix some of the cases, but changing all filesystem locks to be
+ > freezable is likely not workable.
 
-This SoB sequence doesn't make sense with you sending a patch.
+So what to do in case of networked FUSE, such as sshfs?
+We should put workaround to other place?
+Where? To libfuse or to each networked FUSE daemon, such as sshfs?
+I hit this bug in the past, and I'm very angry.
+A lot of other people hit this FUSE bug, too: https://github.com/systemd/systemd/issues/37590 .
 
-> ---
->  arch/arm64/boot/dts/qcom/sm6150.dtsi | 148 +++++++++++++++++++++++++++
->  1 file changed, 148 insertions(+)
-> 
+What about this timeout solution: https://lore.kernel.org/linux-fsdevel/20250122215528.1270478-1-joannelkoong@gmail.com/ ?
+Will it work? As well as I understand, currently kernel waits 20 seconds, when it tries to freeze processes when suspending.
+So, what if we use this Joanne Koong's timeout patch, and set timeout to 19 seconds?
 
--- 
-With best wishes
-Dmitry
+So, in short, if we cannot properly fix kernel, then where fix belongs? What should we do?
+--
+Askar Safin
+https://types.pl/@safinaskar
+
 
