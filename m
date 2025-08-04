@@ -1,60 +1,61 @@
-Return-Path: <linux-pm+bounces-31836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84D0DB19959
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:42:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62CF6B19976
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 02:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3274E1898415
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:42:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10E4018985DC
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 00:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC181F5413;
-	Mon,  4 Aug 2025 00:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC41F1E0E14;
+	Mon,  4 Aug 2025 00:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z15eVQQN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYluGwxv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241781F4C98;
-	Mon,  4 Aug 2025 00:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEBF19066D;
+	Mon,  4 Aug 2025 00:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754268089; cv=none; b=l/hjMxuMPrHBAfRFASbeHb8yIj3iOEBbvw9WceOatUHXTzY/pJenobpYMdxDDWE4smzDuw9Zg2EdTNNhbYa4zQb1Pa0Si/sNSRFaKgWnD5c3HfQ1PPFaMIa/bepJPazXVk7a9i9BYSZVEYdtTJlQ97Y1Tw0HZdouyEu6HLXlPMM=
+	t=1754268153; cv=none; b=ViBG1YJfxNG6IceSgYKsjPRQ1yPvAZdJUWdlaJLGtSSWrjk6keye9QWv6LbNLnNCds8r4hm7MczTCmBbEhzApu4RqZWYqDRGvvpJk0Jo6qVmt8C1gM3cxyUmgT94mXTR0aXSGDN5qbuOh5tfMU3O/9zV42DoHB7QNuZwC2VYVWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754268089; c=relaxed/simple;
-	bh=OxKNcqewlJuWFNCRUA6yktG1W19uNKAs95onhupDJlc=;
+	s=arc-20240116; t=1754268153; c=relaxed/simple;
+	bh=8L93oU8No3Xd4A9PJkHFSbe3KuKlOznKfwYvn2r9Dro=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FLZiSJ1+aU+Ba1TtHI8T0KG3oX4JMpvUHhPRCM10arbNyazcrAm1HmbdemGMJBQHQrG99eTbz6PRhfAdP2iozVy/LzcGqwRKjbo8rw/+c8qxm7BlfS6hH142RjrkJ4efkNB1oqkDanGJoVVnnWyLYVMv2RTaKMN2FA4zSYSamh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z15eVQQN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD546C4CEEB;
-	Mon,  4 Aug 2025 00:41:27 +0000 (UTC)
+	 MIME-Version; b=BuZWIC8W7gKRijNeHWQvVW0hmva9RKgPUcbzO9DkrUCVSDdizRrpQmtb0MPgYQWqDvZSZMSklUYze8fBn8KI1aPAHu2hiZ9CmAxP5tGrEuycdfAdbEL7ady+XCaQuWu3/Zp910HlylS0e+ftC1M7+C0FW77zg4jA88W1gXsqBzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYluGwxv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F48C4CEEB;
+	Mon,  4 Aug 2025 00:42:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754268089;
-	bh=OxKNcqewlJuWFNCRUA6yktG1W19uNKAs95onhupDJlc=;
+	s=k20201202; t=1754268153;
+	bh=8L93oU8No3Xd4A9PJkHFSbe3KuKlOznKfwYvn2r9Dro=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z15eVQQNdk8RQLrqNPlqqCGh4RwgKXs50GMRMwKQY2Lo56a8szeOT9hKBerg0jkFQ
-	 qpdv3AWzR3kM8uai7COiB70LHUPfiOvcdzX3bInsqxf+DzSxv447N5TSgTrG70Wspt
-	 718GhsQ7ZEqxwwo93gp1zhr4OF4JczLHhTjDSZueQ5bBFFKht/ufMl8OXjcp/GL8Jb
-	 hJ+xhg97hlwGxwBC3ShVdm0+sdNN9lb3jYC+M4UdGJBdDGy5rR7kbKBt51AGeejQud
-	 ETSW63iXZ8zENvrrHTyWLlML9H+afMtCKzYawvkQED7L2NWmwGuAYAeyL931/Qo/Cj
-	 ypzmGH4SztQmg==
+	b=KYluGwxvn3jilO49Wpmvk6UerGdxNDvyYRfxgW3MAKFs5qP0LMCRoPuJjkOy1r7ic
+	 z0S+gqhcg7zs2TFsTm6ttr3O1QprrQOmb33puFp3zFCJ1lMskXnEWgk5a5LkvxmVaj
+	 AUcLKel3H9/XSqnCbQYodfk90pU3niiXzx0NwoPCehLPLSkAQBz+aEsga1zQZu6nEL
+	 FmpHr8PAYXjhln2g9WmsqCYn0S4Uq4I3ZeojKhY7ke5Lh634x0RpekAmoL5+sFJ6vz
+	 QNN1CwaEiCEC5/M9QUggQrOP+vbJ0MqipluGNakY0qhEg023sFz4ACFoVd5plL1QME
+	 D9shEzeUrNqLA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: tuhaowen <tuhaowen@uniontech.com>,
+Cc: Prashant Malani <pmalani@google.com>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 19/39] PM: sleep: console: Fix the black screen issue
-Date: Sun,  3 Aug 2025 20:40:21 -0400
-Message-Id: <20250804004041.3628812-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 02/28] cpufreq: CPPC: Mark driver with NEED_UPDATE_LIMITS flag
+Date: Sun,  3 Aug 2025 20:42:01 -0400
+Message-Id: <20250804004227.3630243-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804004041.3628812-1-sashal@kernel.org>
-References: <20250804004041.3628812-1-sashal@kernel.org>
+In-Reply-To: <20250804004227.3630243-1-sashal@kernel.org>
+References: <20250804004227.3630243-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,37 +64,33 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.240
+X-stable-base: Linux 5.4.296
 Content-Transfer-Encoding: 8bit
 
-From: tuhaowen <tuhaowen@uniontech.com>
+From: Prashant Malani <pmalani@google.com>
 
-[ Upstream commit 4266e8fa56d3d982bf451d382a410b9db432015c ]
+[ Upstream commit 0a1416a49e63c320f6e6c1c8d07e1b58c0d4a3f3 ]
 
-When the computer enters sleep status without a monitor
-connected, the system switches the console to the virtual
-terminal tty63(SUSPEND_CONSOLE).
+AMU counters on certain CPPC-based platforms tend to yield inaccurate
+delivered performance measurements on systems that are idle/mostly idle.
+This results in an inaccurate frequency being stored by cpufreq in its
+policy structure when the CPU is brought online. [1]
 
-If a monitor is subsequently connected before waking up,
-the system skips the required VT restoration process
-during wake-up, leaving the console on tty63 instead of
-switching back to tty1.
+Consequently, if the userspace governor tries to set the frequency to a
+new value, there is a possibility that it would be the erroneous value
+stored earlier. In such a scenario, cpufreq would assume that the
+requested frequency has already been set and return early, resulting in
+the correct/new frequency request never making it to the hardware.
 
-To fix this issue, a global flag vt_switch_done is introduced
-to record whether the system has successfully switched to
-the suspend console via vt_move_to_console() during suspend.
+Since the operating frequency is liable to this sort of inconsistency,
+mark the CPPC driver with CPUFREQ_NEED_UPDATE_LIMITS so that it is always
+invoked when a target frequency update is requested.
 
-If the switch was completed, vt_switch_done is set to 1.
-Later during resume, this flag is checked to ensure that
-the original console is restored properly by calling
-vt_move_to_console(orig_fgconsole, 0).
-
-This prevents scenarios where the resume logic skips console
-restoration due to incorrect detection of the console state,
-especially when a monitor is reconnected before waking up.
-
-Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
-Link: https://patch.msgid.link/20250611032345.29962-1-tuhaowen@uniontech.com
+Link: https://lore.kernel.org/linux-pm/20250619000925.415528-3-pmalani@google.com/ [1]
+Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Prashant Malani <pmalani@google.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://patch.msgid.link/20250722055611.130574-2-pmalani@google.com
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -105,103 +102,89 @@ LLM Generated explanations, may be completely bogus:
 This commit should be backported to stable kernel trees. Here's my
 extensive analysis:
 
-**1. Bug Fix Nature:**
-The commit fixes a clear user-visible bug - a black screen issue that
-occurs when:
-- A computer enters sleep without a monitor connected
-- A monitor is connected while the system is asleep
-- Upon wake, the console remains on tty63 (SUSPEND_CONSOLE) instead of
-  returning to tty1
+## Code Change Analysis
 
-This is a functional regression that impacts user experience, making the
-system appear unresponsive or broken after resume.
+The change is minimal and focused - it only adds the
+`CPUFREQ_NEED_UPDATE_LIMITS` flag to the cppc_cpufreq_driver struct:
 
-**2. Small and Contained Fix:**
-The fix is minimal and well-contained:
-- Adds a single `static bool vt_switch_done` flag
-- Modifies only two functions: `pm_prepare_console()` and
-  `pm_restore_console()`
-- Total change is just 6 lines of code (excluding whitespace)
-- The logic is straightforward: track whether VT switch happened during
-  suspend, and ensure restoration happens during resume
+```c
+- .flags = CPUFREQ_CONST_LOOPS,
++ .flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+```
 
-**3. Low Risk of Side Effects:**
-The change has minimal risk:
-- The new flag (`vt_switch_done`) is only set when
-  `vt_move_to_console()` succeeds
-- The restoration logic preserves existing behavior when
-  `pm_vt_switch()` returns true
-- The fix only adds an additional condition `!vt_switch_done` to ensure
-  restoration happens even when `pm_vt_switch()` returns false during
-  resume
-- No architectural changes or new features are introduced
+This single-line change modifies the driver flags in
+drivers/cpufreq/cppc_cpufreq.c:928.
 
-**4. Critical Subsystem but Safe Change:**
-While this touches the PM/console subsystem (critical for
-suspend/resume), the change is safe:
-- It doesn't modify the core VT switching mechanism
-- It only ensures the existing restoration path is executed when needed
-- The file has been stable since 2013 (last major change was
-  f43f627d2f17e)
+## Bug Being Fixed
 
-**5. Clear Problem Description:**
-The commit message clearly describes:
-- The specific scenario that triggers the bug
-- The root cause (skipped VT restoration)
-- The solution (tracking VT switch state)
+The commit addresses a real bug where:
 
-**6. Follows Stable Rules:**
-This aligns perfectly with stable tree criteria:
-- Fixes a real bug affecting users
-- Minimal change (6 lines)
-- No new features
-- Clear fix for a specific problem
-- Low regression risk
+1. **AMU counters on CPPC platforms provide inaccurate measurements**
+   when systems are idle/mostly idle
+2. **This causes cpufreq to store incorrect frequency values** in its
+   policy structure during CPU online
+3. **Userspace frequency changes fail silently** because cpufreq's early
+   return optimization (`if (target_freq == policy->cur)`) prevents the
+   hardware from receiving the correct frequency request
 
-The commit addresses a real-world scenario where users connecting
-monitors to sleeping systems experience black screens upon wake - a
-frustrating issue that makes systems appear broken. The fix is surgical,
-adding only the minimum tracking needed to ensure proper console
-restoration.
+The bug manifests as userspace being unable to set CPU frequencies
+correctly on affected CPPC platforms, which is a functional regression
+that impacts power management and performance.
 
- kernel/power/console.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+## Why This Qualifies for Stable
 
-diff --git a/kernel/power/console.c b/kernel/power/console.c
-index fcdf0e14a47d..19c48aa5355d 100644
---- a/kernel/power/console.c
-+++ b/kernel/power/console.c
-@@ -16,6 +16,7 @@
- #define SUSPEND_CONSOLE	(MAX_NR_CONSOLES-1)
- 
- static int orig_fgconsole, orig_kmsg;
-+static bool vt_switch_done;
- 
- static DEFINE_MUTEX(vt_switch_mutex);
- 
-@@ -136,17 +137,21 @@ void pm_prepare_console(void)
- 	if (orig_fgconsole < 0)
- 		return;
- 
-+	vt_switch_done = true;
-+
- 	orig_kmsg = vt_kmsg_redirect(SUSPEND_CONSOLE);
- 	return;
+1. **Fixes a real bug**: The issue prevents proper CPU frequency scaling
+   on CPPC-based platforms, affecting power management functionality
+
+2. **Minimal risk**: The change is extremely small (one flag addition)
+   and well-contained to the CPPC driver
+
+3. **Clear fix semantics**: The `CPUFREQ_NEED_UPDATE_LIMITS` flag is an
+   established mechanism (introduced in commit 1c534352f47f)
+   specifically designed for this scenario where drivers need frequency
+   updates even when target_freq == policy->cur
+
+4. **Similar precedent**: Other cpufreq drivers (intel_pstate, amd-
+   pstate) already use this flag for similar reasons, showing it's a
+   proven solution
+
+5. **No architectural changes**: This doesn't introduce new features or
+   change kernel architecture - it simply ensures the driver behaves
+   correctly
+
+6. **Recent related fixes**: The git history shows ongoing work to fix
+   CPPC feedback counter issues (e.g., commit c47195631960), indicating
+   this is part of stabilizing CPPC functionality
+
+## Impact Assessment
+
+- **Affected systems**: CPPC-based platforms with AMU counters that
+  exhibit the idle measurement issue
+- **Risk**: Very low - the flag only bypasses an optimization when
+  needed, forcing frequency updates to reach hardware
+- **Testing**: The change has been acked by the cpufreq maintainer
+  (Viresh Kumar) and suggested by the PM subsystem maintainer (Rafael J.
+  Wysocki)
+
+The commit follows stable tree rules by fixing an important bug with
+minimal changes and low regression risk.
+
+ drivers/cpufreq/cppc_cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 8910fd1ae3c6..c85b01aa801d 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -407,7 +407,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
  }
  
- void pm_restore_console(void)
- {
--	if (!pm_vt_switch())
-+	if (!pm_vt_switch() && !vt_switch_done)
- 		return;
- 
- 	if (orig_fgconsole >= 0) {
- 		vt_move_to_console(orig_fgconsole, 0);
- 		vt_kmsg_redirect(orig_kmsg);
- 	}
-+
-+	vt_switch_done = false;
- }
+ static struct cpufreq_driver cppc_cpufreq_driver = {
+-	.flags = CPUFREQ_CONST_LOOPS,
++	.flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+ 	.verify = cppc_verify_policy,
+ 	.target = cppc_cpufreq_set_target,
+ 	.get = cppc_cpufreq_get_rate,
 -- 
 2.39.5
 
