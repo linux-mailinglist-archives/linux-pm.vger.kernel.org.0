@@ -1,142 +1,111 @@
-Return-Path: <linux-pm+bounces-31857-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31858-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49929B19B9A
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C1185B19BB6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:51:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79A0C1758E3
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:31:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EED7F171603
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0730B13D503;
-	Mon,  4 Aug 2025 06:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC28230BD9;
+	Mon,  4 Aug 2025 06:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lO1hjeQg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06C8EC2;
-	Mon,  4 Aug 2025 06:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DF52F2D
+	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 06:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754289083; cv=none; b=JA1hVgV5ABXx4hgW+76MwZEVqiXXPrV5c6lyKEz2XROKPYU6i9ybVXK94/zT3iMSJI1LxvksUPrZIEQjGfexKkC1K2mls2U/N7/xOSbfF2/CHRZ/m/kiWIN/N7GCIwesQFh7Ym0sTjlgiCR7gsN605m1rkhSa0EyVpnsuGrd2GI=
+	t=1754290286; cv=none; b=byOBG0yAlbjvhMIFGahkcY6lt1/wOotyMU1oXFtpyr8db6QIiserOa2G7h/YeSoXGdEtC9OBTFufUdXx8p7HPitwEnbV6n8b71Mpox8xxpuwnbRYwCZ9+yBJZmtRYNKAzvrVJZaJYfBwTEb4Iri7DcGykE9FNuX2XewNSTQvNVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754289083; c=relaxed/simple;
-	bh=gFIHgnOsz/b8h8EXosQD4sDckTrb5J/yBlKjPa9pFLI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=psWaMT9/QewR/ToXNQEFPHKHKwxc83E1OrZlt+rswJw1FRLJzMozPLrZs+Z/EZVitlDEdG+/MzxVVOcYmc3/e1K1jOY1QZkk068O5+G6zjZ+9KBOT1aQhrCNGoeeErU01FQWNEpuXG9iAe4lHc6kKsTwpYqS1bCCig+P9ihF4Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4bwRTY4RLHz23jdk;
-	Mon,  4 Aug 2025 14:28:49 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id A51651400D6;
-	Mon,  4 Aug 2025 14:31:17 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
- (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 4 Aug
- 2025 14:31:16 +0800
-Message-ID: <0ce0acbc-99da-925e-145d-3c80558be761@hisilicon.com>
-Date: Mon, 4 Aug 2025 14:31:16 +0800
+	s=arc-20240116; t=1754290286; c=relaxed/simple;
+	bh=AuHw3Q+s89vthrT+onb+aRrlNeHjbcR7n1dDceQEW04=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aH+uMpUDQXVN0VQ4X+sHccCvRIoAwfvqdp0HwcO1QF7VgUNgugV2BlhZeS1OTMpEYGw0jpWxCw2y9FJz9zsPRAfxEIeWHTfhfshSnMi3HkZtJtdN/CBQxXx0NrMzbJtyC77sLaxCfQtMLbN81OcI6W5UXlRswwaaJTq0K3Jx+UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lO1hjeQg; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2402774851fso33159835ad.1
+        for <linux-pm@vger.kernel.org>; Sun, 03 Aug 2025 23:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1754290284; x=1754895084; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0OOSzyo7d6/tfFos1hXNw0iQjhEsi0n1KjZ6e/WbQ5Y=;
+        b=lO1hjeQgIWsQMr8ieYxziX+sLcbMzQBo+CzPFFJr8Pt4pbsl6DvJfON1C8c8kWtzAD
+         G0yrualP7/oRTKr3wu8PzGY9LtD/DZC9IqKmZYOFjeaCTOS509Gzg6ztANrJc57Slt4o
+         2v7UwOWrPsWCTj7jZmYK1aNSBcabFrClWEhAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754290284; x=1754895084;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0OOSzyo7d6/tfFos1hXNw0iQjhEsi0n1KjZ6e/WbQ5Y=;
+        b=YSDmRRIQtvAoG4LuluKGKvNBF8zVPhC8OPVwoyzjCnBSxyl+qz8TJO4IADngtMe8v2
+         qWG4hNKdmVq+VS0JFveW2K+X5Ay30OmoMRG4/MQ3R8wluYCQVB28WyJpoKkDqq8Ga4t9
+         ++AMGmQJtKmZCZll26IPgfNxofoXz7QoDvzEbcXh3J/BYvCo0QGja3Ds75Y0RS5pTx45
+         WRRepZpgnO1e4Id+rTyf2FXK6AnYGRHUG32KpU9cgOYSSqTdOUjQr18pdV1l+QbA6216
+         /KRqZrbjoU8bi8mSMx72Q1Na07yu5PNO6nwoTO5tb34CMXMyTj0gCfQVCBFpF7pV1vRs
+         0G7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUOBUDrF8YmzNd1loypXBOMnSQzqXBuoYqFRpxZZwuHejIFIfq/a0dWfmNl/EXUTeW1EPVqHuxLpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLZpR2pg2E/A/OJwBDneC3uY5+iTQWk7iRX89kp+jo2/vrkFit
+	LWv8qAsb8/Zw7zgExUCTUr7qiugHrhqzbtsLKlAEspnORD4tphdTv88Iw3AMQZLCjw==
+X-Gm-Gg: ASbGncufVc47zjOhn+beFmq1q1HN66Uej3NcwKN8W68voBNjlChy9mQLVojVRazXzof
+	FfvwnREufG0/U4heoDTI6FzYzylvY873AixZdrnAhXOmUYfydNAUlY42Ix1q3IaHP5cfaDo+mkM
+	6R+KV3htfHffFsA0+pTnbYOIscQiZE/mjdafggif9UYJ139HARqRNUX9X3ZDXgSn4RClHq88pA5
+	ZMWWQSlgzFtePtD/+oj9t+D+PXHPFxnHKkw/Vrd9owt7Zw4DyCYtCCprh0GVJGRThlgvz4nHzni
+	S5ZHLhh4eepVyOzkheLbIERIy4xWrIflSReTv8sGQQw843kT1ShXc005OVS5mP+0U+f58ZLIPAe
+	2kD6GehMYDBtVwqkZHshRN459Fg==
+X-Google-Smtp-Source: AGHT+IHeG04vWPQLSEI5EHbS/VdNFUYX46iHYs9mR4PwPLXMkV/VqjBr1d8WMag8Q6tl/bIutdGYog==
+X-Received: by 2002:a17:903:24f:b0:240:6fda:582a with SMTP id d9443c01a7336-24246f82e11mr124853375ad.23.1754290283941;
+        Sun, 03 Aug 2025 23:51:23 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:3668:3855:6e9a:a21e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899a909sm100170555ad.123.2025.08.03.23.51.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Aug 2025 23:51:23 -0700 (PDT)
+Date: Mon, 4 Aug 2025 15:51:16 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Askar Safin <safinaskar@zohomail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Jan Kara <jack@suse.cz>, 
+	brauner <brauner@kernel.org>, "James.Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	ardb <ardb@kernel.org>, "boqun.feng" <boqun.feng@gmail.com>, david <david@fromorbit.com>, 
+	djwong <djwong@kernel.org>, hch <hch@infradead.org>, linux-efi <linux-efi@vger.kernel.org>, 
+	linux-fsdevel <linux-fsdevel@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	mcgrof <mcgrof@kernel.org>, mingo <mingo@redhat.com>, pavel <pavel@kernel.org>, 
+	peterz <peterz@infradead.org>, rafael <rafael@kernel.org>, will <will@kernel.org>, 
+	Joanne Koong <joannelkoong@gmail.com>, linux-pm <linux-pm@vger.kernel.org>, 
+	senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v2 0/4] power: wire-up filesystem freeze/thaw with
+ suspend/resume
+Message-ID: <cudrf6vttxuxrihqcd5bw52oagvkw7oyvgil37l5iq6njsnqlm@ljgewfzdttx4>
+References: <20250402-work-freeze-v2-0-6719a97b52ac@kernel.org>
+ <20250720192336.4778-1-safinaskar@zohomail.com>
+ <tm57gt2zkazpyjg3qkcxab7h7df2kyayirjbhbqqw3eknwq37h@vpti4li6xufe>
+ <CAJfpegsSshtqj2hjYt8+00m-OqXMbwpUiVJr412oqdF=69yLGA@mail.gmail.com>
+ <19873ac5902.f6db52da11419.248728138565404083@zohomail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in
- cppc_scale_freq_workfn()
-To: Beata Michalska <beata.michalska@arm.com>
-CC: Bowen Yu <yubowen8@huawei.com>, <rafael@kernel.org>,
-	<viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <lihuisong@huawei.com>,
-	<zhenglifeng1@huawei.com>
-References: <20250730032312.167062-1-yubowen8@huawei.com>
- <20250730032312.167062-3-yubowen8@huawei.com> <aIsnA4miO8fCJTgs@arm.com>
- <d9aefa22-9566-9db0-a95f-ab50465977f8@hisilicon.com>
- <aIs6d4ebRKkbz0az@arm.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <aIs6d4ebRKkbz0az@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19873ac5902.f6db52da11419.248728138565404083@zohomail.com>
 
+On (25/08/04 10:02), Askar Safin wrote:
+> What about this timeout solution: https://lore.kernel.org/linux-fsdevel/20250122215528.1270478-1-joannelkoong@gmail.com/ ?
+> Will it work? As well as I understand, currently kernel waits 20 seconds, when it tries to freeze processes when suspending.
+> So, what if we use this Joanne Koong's timeout patch, and set timeout to 19 seconds?
 
-
-On 31/07/2025 17:42, Beata Michalska wrote:
-> On Thu, Jul 31, 2025 at 04:52:05PM +0800, Jie Zhan wrote:
->>
->>
->> On 31/07/2025 16:19, Beata Michalska wrote:
->>> Hi Bowen, Jie
->>> On Wed, Jul 30, 2025 at 11:23:12AM +0800, Bowen Yu wrote:
->>>> From: Jie Zhan <zhanjie9@hisilicon.com>
->>>>
->>>> Perf counters could be 0 if the cpu is in a low-power idle state. Just try
->>>> it again next time and update the frequency scale when the cpu is active
->>>> and perf counters successfully return.
->>>>
->>>> Also, remove the FIE source on an actual failure.
->>>>
->>>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
->>>> ---
->>>>  drivers/cpufreq/cppc_cpufreq.c | 13 ++++++++++++-
->>>>  1 file changed, 12 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->>>> index 904006027df2..e95844d3d366 100644
->>>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>>> @@ -78,12 +78,23 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
->>>>  	struct cppc_cpudata *cpu_data;
->>>>  	unsigned long local_freq_scale;
->>>>  	u64 perf;
->>>> +	int ret;
->>>>  
->>>>  	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
->>>>  	cpu_data = cppc_fi->cpu_data;
->>>>  
->>>> -	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
->>>> +	ret = cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs);
->>>> +	/*
->>>> +	 * Perf counters could be 0 if the cpu is in a low-power idle state.
->>>> +	 * Just try it again next time.
->>>> +	 */
->>>> +	if (ret == -EFAULT)
->>>> +		return;
->>> Which counters are we actually talking about here ?
->>
->> Delivered performance counter and reference performance counter.
->> They are actually AMU CPU_CYCLES and CNT_CYCLES event counters.
-> That does track then.
->>
->>>> +
->>>> +	if (ret) {
->>>>  		pr_warn("%s: failed to read perf counters\n", __func__);
->>>> +		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC,
->>>> +						 cpu_data->shared_cpu_map);
->>>>  		return;
->>>>  	}
->>> And the real error here would be ... ?
->>> That makes me wonder why this has been registered as the source of the freq
->>> scale in the first place if we are to hit some serious issue. Would you be able
->>> to give an example of any?
->> If it gets here, that would be -ENODEV or -EIO from cppc_get_perf_ctrs(),
->> which could possibly come from data corruption (no CPC descriptor) or a PCC
->> failure.
->>
->> I can't easily fake an error here, but the above -EFAULT path could
->> happen when it luckily passes the FIE init.
->>
-> The change seems reasonable. Though I am wondering if some other errors might be
-> rather transient as well ? Like -EIO ?
-> Note, I'm not an expert here.
-The -EIO from PCC contains much more error cases than this.
+I think the problem with this approach is that not all fuse connections
+are remote (over the network).  One can use fuse to mount vfat/ntfs or
+even archives.  Destroying those connections for suspend is unlikely to
+be loved by users.
 
