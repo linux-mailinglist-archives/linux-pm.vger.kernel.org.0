@@ -1,179 +1,142 @@
-Return-Path: <linux-pm+bounces-31856-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31857-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13209B19B96
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:29:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49929B19B9A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 08:31:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B41E1897455
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:29:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79A0C1758E3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 06:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4B123183B;
-	Mon,  4 Aug 2025 06:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="m/x96F+L"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0730B13D503;
+	Mon,  4 Aug 2025 06:31:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FDA2309B0
-	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 06:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06C8EC2;
+	Mon,  4 Aug 2025 06:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754288943; cv=none; b=c5RWGYL87SUiQlB9fQo8B0383wmLvQhu/rQBe5DInNS/M6nAKR96XvreippWL7dmjFiCCQEYg9KrHXE/wzU+jcD/37X2JZqbQhgB0jq9rVXvesKrisZbbfHmHAAE9SLN3+AqIDeY/lOYuz45geT1q+orZ6Qpl6/wJ/B6hTzg7XI=
+	t=1754289083; cv=none; b=JA1hVgV5ABXx4hgW+76MwZEVqiXXPrV5c6lyKEz2XROKPYU6i9ybVXK94/zT3iMSJI1LxvksUPrZIEQjGfexKkC1K2mls2U/N7/xOSbfF2/CHRZ/m/kiWIN/N7GCIwesQFh7Ym0sTjlgiCR7gsN605m1rkhSa0EyVpnsuGrd2GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754288943; c=relaxed/simple;
-	bh=UVq2TYOD85H1Ja3HHtmHivG3lZLMpy0pM635ppWjNoo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ou5NXcybDzjRHyOFq1yhjwS8X9Z8/gxltAMi5sxii8AAqOj4iEbeKsYDnVXBw1Nz5EHL2XFZgebuS9WGIXqsA1gJ/1AXee5BowKFosOlmT3WiSqDnhtG/DSi4f0ESa1Bye0aJof4KP/dd3C4lke9PQOmH6qo9STJfxGGJGhuO6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=m/x96F+L; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 573MX3K3029726
-	for <linux-pm@vger.kernel.org>; Mon, 4 Aug 2025 06:29:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=pvj9BgUvYssblNJ8rcEOnc8B
-	tkYAnDBzYEMRah/53Tc=; b=m/x96F+LN4Wq5b9UUP+UMMwbiZ7orvW/7Z/uanHD
-	gOUCt0v9TeGEk3MYXR78S1J7LqLhf2kiWVUC8FYwMr4lL4l/luwIj7atHGQG1h0r
-	3/nFJtCVALTW4w/6G4ysldoXP/n9CX8DmbKIMMj00CrDPoEgYNQx87I0tP8Kjz3t
-	qM4bEQ84v5onmlogNMMVeya1fyqX/3j75lAdI85K++j6/7ZK+ePgQnbcySi6W//E
-	yTznV0kKxcaTstxuaodpEmWrhWM4drz5dQBQiQN8Vkl/wTtxSXnmZr2bkpe63swP
-	TbfAquKzYZf/hXKeq6+uZPC2r3j+nyw7WoswLrVeFhJs1g==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 489arwkpqj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 04 Aug 2025 06:29:00 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-7074cb63bccso75212366d6.1
-        for <linux-pm@vger.kernel.org>; Sun, 03 Aug 2025 23:29:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754288939; x=1754893739;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pvj9BgUvYssblNJ8rcEOnc8BtkYAnDBzYEMRah/53Tc=;
-        b=GQpbfBPVZVeERwcR3vFw4dskE2fqCQEjYV/XXbLSdV/hhO6KxsnQs18Ij4ttQyaE2s
-         MaYBs0nHeAgDGewVlAGAsWnMhSscXI5u3526xxamzNXjtzjPxrxhWa7DjKNcB1Oj5o8Z
-         avcIDinZ7ZDqbQMAoUYU8+FAGZHhSiX2rOdMjJ+7ttPCkIUEB9IQkt1I5m9QfuHTTKME
-         P/tm3PrGMeBFX6SaSOKbGqVxLgTl5Qw5+6YyHQ2F1WySRGlr/VDaTOU7ELg2YOY55CC6
-         FIN3E8Cs6o+G0a3WW13PJSmOcv/jG0prlVYWgJiwSqMAQyYHUhg3X571Bk/JOOkRYxWc
-         0GYw==
-X-Forwarded-Encrypted: i=1; AJvYcCXP6X94sz14ajLpMz0xzcxA5NJ4HnBE/GUFTiXu9zI37ELqw6MF/IM6os8gKpvfRYNBxHCVvbJ4Lg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRQ5Wr3kSCJyjsMqorqirLCNE3LoqRAUJ7JEq34zEdhFyhWVKU
-	FCcXqetH6vrJ5oTz54nmEMfHlZG1qmq/QtjWRYMSvsTTokMnGsc0Hl9GzDy9XhJepJp7G1o9zc7
-	lABmuzyVYMOM8MzWvSTboGz+xPEtjlfTsTaZKRuKZp23rHTdUOnowJoXjOye4OQ==
-X-Gm-Gg: ASbGncspbn1L4nBJ9gN/IAPeCdszp/bS5oNiOtmBD1GHiJcaI37ZfY0qwD6H7XPKzLV
-	rdPyqeoT595fjjZel3OelZNJOKk/uxacLs3Wd9tEuFRRZlyc/IV4BPirbsaSHzsRspuF/uMd5BR
-	vKMSGe1Rx2C4TOR/Rq9V0sq7X/w1p2ZxBgxG84fTitA3jVN4kAOi+sf9CS93d+VvHA9mkE8krOg
-	IiDZXxu53F+sUTc92KTQVJNyerJpprHi0GFUT2yXgCKTUCMqiAEz6iG/louULLSRodMDTfl4wfR
-	B26Wq8RjTKCQNZcHL/KJ1VhnJ0wXJNxd701/Ol50gUHbxr/0f01l4MguFbJrc3cEhhFZ/j4ycmv
-	PsmFhsYWpSfXEddFYd0KYTyN3I92+/LA4Zp2qljxw/7IDZJcAdGe1
-X-Received: by 2002:a05:6214:2aab:b0:704:f956:667b with SMTP id 6a1803df08f44-7093637adeamr137156966d6.50.1754288938678;
-        Sun, 03 Aug 2025 23:28:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH63vqAiisY6ETkheNsOB3qX+bnOLoYkIMhtnNsFiAj6A8wRDCiRqE+gB1mdnw3opOn+XtSiw==
-X-Received: by 2002:a05:6214:2aab:b0:704:f956:667b with SMTP id 6a1803df08f44-7093637adeamr137156646d6.50.1754288938205;
-        Sun, 03 Aug 2025 23:28:58 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-33238272f28sm15151501fa.10.2025.08.03.23.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Aug 2025 23:28:57 -0700 (PDT)
-Date: Mon, 4 Aug 2025 09:28:55 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] arm64: dts: qcom: qcs615: Add OSM l3 interconnect
- provider node and CPU OPP tables to scale DDR/L3
-Message-ID: <bsrhqkrzdapg72o6h6yx3pw6fjeseolt7zmq5fpvfhhdg7ktyv@zz3ueam6lcqh>
-References: <20250804061536.110-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250804061536.110-3-raviteja.laggyshetty@oss.qualcomm.com>
+	s=arc-20240116; t=1754289083; c=relaxed/simple;
+	bh=gFIHgnOsz/b8h8EXosQD4sDckTrb5J/yBlKjPa9pFLI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=psWaMT9/QewR/ToXNQEFPHKHKwxc83E1OrZlt+rswJw1FRLJzMozPLrZs+Z/EZVitlDEdG+/MzxVVOcYmc3/e1K1jOY1QZkk068O5+G6zjZ+9KBOT1aQhrCNGoeeErU01FQWNEpuXG9iAe4lHc6kKsTwpYqS1bCCig+P9ihF4Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4bwRTY4RLHz23jdk;
+	Mon,  4 Aug 2025 14:28:49 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id A51651400D6;
+	Mon,  4 Aug 2025 14:31:17 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
+ (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 4 Aug
+ 2025 14:31:16 +0800
+Message-ID: <0ce0acbc-99da-925e-145d-3c80558be761@hisilicon.com>
+Date: Mon, 4 Aug 2025 14:31:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250804061536.110-3-raviteja.laggyshetty@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA0MDAzMiBTYWx0ZWRfX+PW+hgYtGEfy
- HKtg5EULq1rQu4nhfnP48DUvTk6zVIpf5IhUtRTP29O7DnFbESYeePHf2ZqwkYCy/a+jqFZU+Pz
- NiwmtCYHPhbylpoenlZDBDXncWObqZTsR8gN65BFs1HzhBp2bvXjV0nh9kSHHmORpDkuhw+9tYJ
- YADPFxvIG/k/TZfEVlNMrtuaMC2z2J7i0PSO7YmDfmhVkL6/U4eYgnIWzsG1vhd8Xdsm0y+M2tU
- F+O4Xb0sH+X9Utr88fx0LH4F3I0tlbT0MIvsuIVB8RWFmd7fMk0cw54n0nGaB/1i/bkm8VjMvpD
- oizR7ka9Vxj9/Z5sQnF/1C0aTGGSfoJCsz4bOQdPRgAkkc3I3hLV9417WStTtvqNlbHdATxQLVC
- 4YOkcGtAJ1IFlnWmJ8DiWBtfGxmyDKsT8gftawHsCQh6w7I+9teP895SxvWXS1qJZfL0cSJv
-X-Authority-Analysis: v=2.4 cv=We8Ma1hX c=1 sm=1 tr=0 ts=6890532c cx=c_pps
- a=UgVkIMxJMSkC9lv97toC5g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=2OwXVqhp2XgA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=PxBRM3sLOaicz7rGac0A:9
- a=CjuIK1q_8ugA:10 a=1HOtulTD9v-eNWfpl4qZ:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: vntfgM6pwnOQ0GoGpi7zansRTTKnJ_k8
-X-Proofpoint-ORIG-GUID: vntfgM6pwnOQ0GoGpi7zansRTTKnJ_k8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-04_02,2025-08-04_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxlogscore=999 malwarescore=0 lowpriorityscore=0 impostorscore=0
- adultscore=0 clxscore=1015 bulkscore=0 phishscore=0 mlxscore=0 suspectscore=0
- priorityscore=1501 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2508040032
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in
+ cppc_scale_freq_workfn()
+To: Beata Michalska <beata.michalska@arm.com>
+CC: Bowen Yu <yubowen8@huawei.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <lihuisong@huawei.com>,
+	<zhenglifeng1@huawei.com>
+References: <20250730032312.167062-1-yubowen8@huawei.com>
+ <20250730032312.167062-3-yubowen8@huawei.com> <aIsnA4miO8fCJTgs@arm.com>
+ <d9aefa22-9566-9db0-a95f-ab50465977f8@hisilicon.com>
+ <aIs6d4ebRKkbz0az@arm.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <aIs6d4ebRKkbz0az@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
-On Mon, Aug 04, 2025 at 06:15:36AM +0000, Raviteja Laggyshetty wrote:
-> Add Operation State Manager (OSM) L3 interconnect provide node and OPP
-> tables required to scale DDR and L3 per freq-domain on QCS615 SoC.
-> As QCS615 and SM8150 SoCs have same OSM hardware, added SM8150
-> compatible as fallback for QCS615 OSM device node.
-> 
-> Depends-on: <20250702-qcs615-mm-cpu-dt-v4-v5-3-df24896cbb26@quicinc.com>
 
-Yuck. It's not a way to define dependencies.
 
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
-
-And the comment regarding SoB chain wasn't addressed.
-
-> ---
->  arch/arm64/boot/dts/qcom/sm6150.dtsi | 148 +++++++++++++++++++++++++++
->  1 file changed, 148 insertions(+)
-> 
->  			};
->  		};
->  
-> +		osm_l3: interconnect@18321000 {
-> +			compatible = "qcom,qcs615-osm-l3", "qcom,sm8150-osm-l3", "qcom,osm-l3";
-> +			reg = <0 0x18321000 0 0x1400>;
-
-reg = <0x0 0x18321000 0x0 0x1400>;
-
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
-> +			clock-names = "xo", "alternate";
-> +
-> +			#interconnect-cells = <1>;
-> +		};
-> +
->  		usb_1_hsphy: phy@88e2000 {
->  			compatible = "qcom,qcs615-qusb2-phy";
->  			reg = <0x0 0x88e2000 0x0 0x180>;
-> -- 
-> 2.43.0
-> 
-
--- 
-With best wishes
-Dmitry
+On 31/07/2025 17:42, Beata Michalska wrote:
+> On Thu, Jul 31, 2025 at 04:52:05PM +0800, Jie Zhan wrote:
+>>
+>>
+>> On 31/07/2025 16:19, Beata Michalska wrote:
+>>> Hi Bowen, Jie
+>>> On Wed, Jul 30, 2025 at 11:23:12AM +0800, Bowen Yu wrote:
+>>>> From: Jie Zhan <zhanjie9@hisilicon.com>
+>>>>
+>>>> Perf counters could be 0 if the cpu is in a low-power idle state. Just try
+>>>> it again next time and update the frequency scale when the cpu is active
+>>>> and perf counters successfully return.
+>>>>
+>>>> Also, remove the FIE source on an actual failure.
+>>>>
+>>>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+>>>> ---
+>>>>  drivers/cpufreq/cppc_cpufreq.c | 13 ++++++++++++-
+>>>>  1 file changed, 12 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>>> index 904006027df2..e95844d3d366 100644
+>>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>>> @@ -78,12 +78,23 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+>>>>  	struct cppc_cpudata *cpu_data;
+>>>>  	unsigned long local_freq_scale;
+>>>>  	u64 perf;
+>>>> +	int ret;
+>>>>  
+>>>>  	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+>>>>  	cpu_data = cppc_fi->cpu_data;
+>>>>  
+>>>> -	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
+>>>> +	ret = cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs);
+>>>> +	/*
+>>>> +	 * Perf counters could be 0 if the cpu is in a low-power idle state.
+>>>> +	 * Just try it again next time.
+>>>> +	 */
+>>>> +	if (ret == -EFAULT)
+>>>> +		return;
+>>> Which counters are we actually talking about here ?
+>>
+>> Delivered performance counter and reference performance counter.
+>> They are actually AMU CPU_CYCLES and CNT_CYCLES event counters.
+> That does track then.
+>>
+>>>> +
+>>>> +	if (ret) {
+>>>>  		pr_warn("%s: failed to read perf counters\n", __func__);
+>>>> +		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC,
+>>>> +						 cpu_data->shared_cpu_map);
+>>>>  		return;
+>>>>  	}
+>>> And the real error here would be ... ?
+>>> That makes me wonder why this has been registered as the source of the freq
+>>> scale in the first place if we are to hit some serious issue. Would you be able
+>>> to give an example of any?
+>> If it gets here, that would be -ENODEV or -EIO from cppc_get_perf_ctrs(),
+>> which could possibly come from data corruption (no CPC descriptor) or a PCC
+>> failure.
+>>
+>> I can't easily fake an error here, but the above -EFAULT path could
+>> happen when it luckily passes the FIE init.
+>>
+> The change seems reasonable. Though I am wondering if some other errors might be
+> rather transient as well ? Like -EIO ?
+> Note, I'm not an expert here.
+The -EIO from PCC contains much more error cases than this.
 
