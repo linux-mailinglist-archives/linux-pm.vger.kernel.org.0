@@ -1,278 +1,87 @@
-Return-Path: <linux-pm+bounces-31970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF155B1B7DB
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 18:00:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42C65B1B91F
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 19:17:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ACCB18990C7
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 16:00:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7412D7A27DB
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 17:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527291D6194;
-	Tue,  5 Aug 2025 16:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D180A292B5E;
+	Tue,  5 Aug 2025 17:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gr6j0iKI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTk+blBX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EF128BAA2;
-	Tue,  5 Aug 2025 16:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A755A1400C;
+	Tue,  5 Aug 2025 17:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754409612; cv=none; b=XsIFAsooEF4M+7ccgE/HLUAm+GvnPup6v9gYZpY6OC31ewagpMKVxCvLAgqMzlo97bX/hx2uzoopDD1P29aaKy1li/sv31UFKASx900jda14Q4WpWOXyhINIVsiaz/CJrjRESadNGIIZPb2DwaI/UpuT8V2KX3wHvNKagwYLnDY=
+	t=1754414255; cv=none; b=pK3Ic8DHtuf1VpSg/jtk9yv6UhxC5W6VonjVdrtjVfOhhgDNqTuzdXlYEsKeTqPI6ezd4VzNRGd6qqLb/tdALvyXt2YAVaVSgzOTcdbf/fRwwiTKaJPOw3JgGYXSZbbuxAz4JVYxwkbikmUBMc2ZBUAgVwvBMvmFui8RPpME6hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754409612; c=relaxed/simple;
-	bh=u9vfjBylMNzPmM2GHz25TN+8/h1YAZ9+40UDt2OGx3g=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O0hpIQ3IJS94RS8D0Da3nYV6RxmMNLUtwZzrh9X4obyTEqp5DlSgRNV5WJbe5vmG1vFlPrKKfOz/oussdhKnMtKbjUf4g4jIJAzFD3iQDrKATW3LLgre10tv+NFXFI4krrFCj1v+GGRknW/cttvXAz9MyEQa+fcqfs3L8JQ9+Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gr6j0iKI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D09FC4CEF0;
-	Tue,  5 Aug 2025 16:00:11 +0000 (UTC)
+	s=arc-20240116; t=1754414255; c=relaxed/simple;
+	bh=zPti4vHQ72c0KUJK1MFtmTjRrvlP5Fdb3fbdUSg7DhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KqC5d0H/1YsTj6/wq4ssTDsxyYf5y645kryk2CHW8VjBA59x4QcDH/aiwrpfJmI1KdTdlm16i27cTaxnHEkusPmmMnLQDqEeKfdsMkFklVz/4U9CoiDdn4+Zs2WXs9v6nefnOuZU8JR1irAI+ZkcVEcrktZ6qFKdGOmWuFnlq0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTk+blBX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14502C4CEF0;
+	Tue,  5 Aug 2025 17:17:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754409611;
-	bh=u9vfjBylMNzPmM2GHz25TN+8/h1YAZ9+40UDt2OGx3g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Gr6j0iKI4zfuwGTJzDvlINdGxyT1VjC261ZDrpRr/GGsejFLfJEXjubaG0eiKAOfD
-	 itJEgccy5fK6WUHn5Psm/mNvynS/yzpCgQkKZJtxlzEyvvmiqOci8e7mJuz+06vugC
-	 hNCAxwIU7MTxrmOxY2kiaYHlQ4SnFnj/VF5mlOcqwvzLpKBhEul22mbhwAB4N8RCNj
-	 kRH1VYz6+jRn6S276UpqYY1zQR8nMbpTvlZIFb3WOYeYO4AwIdB8MKLaQjGjk/CZ1I
-	 4BQHY5a8jxmGnA1QGKv/d00qWozD+vsMsIeFxFCx8xVzqalFLRx0TMYh52QKb2PoQc
-	 Am/USHnWC0eNQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1ujK5B-004DEe-AG;
-	Tue, 05 Aug 2025 17:00:09 +0100
-Date: Tue, 05 Aug 2025 17:00:08 +0100
-Message-ID: <86ectpahdj.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Loehle <christian.loehle@arm.com>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Aboorva Devarajan <aboorvad@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful information
-In-Reply-To: <CAJZ5v0g=eSeAp96mHCOm+C9jis3uNRXgPhNgtT0SgP9kZ1emvw@mail.gmail.com>
-References: <1916668.tdWV9SEqCh@rjwysocki.net>
-	<7770672.EvYhyI6sBW@rjwysocki.net>
-	<86o6sv6n94.wl-maz@kernel.org>
-	<CAJZ5v0g=eSeAp96mHCOm+C9jis3uNRXgPhNgtT0SgP9kZ1emvw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1754414255;
+	bh=zPti4vHQ72c0KUJK1MFtmTjRrvlP5Fdb3fbdUSg7DhM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VTk+blBXu+Mhx+4uUQU5Gv/TlCK62jDarbWpdTCEI11qqCUJ0shwy5gSGTG0ZkRGM
+	 GVn/0CuULcFpf+yUCB3kJo4vTZX5Mq5mzPySaZX1y3kJ/gqaeK5dShUe8qNguzewsL
+	 1DfEpC87mz1fV0lSkKZ2OqSsW9wlhz4XLX5VEFtFAM4yhXvc1106qV2F8X6dx2LeMt
+	 yJLMMvuFSzcREDDcFjmTNdvUUtxzawpdlR1d1Pd0rrKKQIBZhoPyKOQDuO2KLbB4NN
+	 owm5jYt31sZvANBU8Rz0aqtrZSM2NzBPGjgl/2SrcvnSn1Uuhk7mElcoDCyA8ajAZB
+	 Qg8SgcertQPxQ==
+Date: Tue, 5 Aug 2025 12:17:34 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Laura Nao <laura.nao@collabora.com>
+Cc: bchihi@baylibre.com, srini@kernel.org, rafael@kernel.org,
+	linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
+	arnd@arndb.de, colin.i.king@gmail.com, nfraprado@collabora.com,
+	linux-mediatek@lists.infradead.org,
+	angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+	conor+dt@kernel.org, u.kleine-koenig@baylibre.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	krzk+dt@kernel.org, frank-w@public-files.de, lukasz.luba@arm.com,
+	rui.zhang@intel.com, kernel@collabora.com,
+	daniel.lezcano@linaro.org, lala.lin@mediatek.com,
+	andrew-ct.chen@mediatek.com
+Subject: Re: [PATCH v3 9/9] dt-bindings: nvmem: mediatek: efuse: Add support
+ for MT8196
+Message-ID: <175441425377.1957748.9727174250578457285.robh@kernel.org>
+References: <20250804133035.309990-1-laura.nao@collabora.com>
+ <20250804133035.309990-10-laura.nao@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: rafael@kernel.org, christian.loehle@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, artem.bityutskiy@linux.intel.com, aboorvad@linux.ibm.com, tglx@linutronix.de, mark.rutland@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250804133035.309990-10-laura.nao@collabora.com>
 
-On Tue, 05 Aug 2025 14:23:56 +0100,
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
->=20
-> On Mon, Aug 4, 2025 at 6:54=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrot=
-e:
-> >
-> > [+ Thomas, Mark]
-> >
-> > On Thu, 06 Feb 2025 14:29:05 +0000,
-> > "Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > When giving up on making a high-confidence prediction,
-> > > get_typical_interval() always returns UINT_MAX which means that the
-> > > next idle interval prediction will be based entirely on the time till
-> > > the next timer.  However, the information represented by the most
-> > > recent intervals may not be completely useless in those cases.
-> > >
-> > > Namely, the largest recent idle interval is an upper bound on the
-> > > recently observed idle duration, so it is reasonable to assume that
-> > > the next idle duration is unlikely to exceed it.  Moreover, this is
-> > > still true after eliminating the suspected outliers if the sample
-> > > set still under consideration is at least as large as 50% of the
-> > > maximum sample set size.
-> > >
-> > > Accordingly, make get_typical_interval() return the current maximum
-> > > recent interval value in that case instead of UINT_MAX.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/cpuidle/governors/menu.c |   13 ++++++++++++-
-> > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > >
-> > > --- a/drivers/cpuidle/governors/menu.c
-> > > +++ b/drivers/cpuidle/governors/menu.c
-> > > @@ -190,8 +190,19 @@
-> > >        * This can deal with workloads that have long pauses intersper=
-sed
-> > >        * with sporadic activity with a bunch of short pauses.
-> > >        */
-> > > -     if ((divisor * 4) <=3D INTERVALS * 3)
-> > > +     if (divisor * 4 <=3D INTERVALS * 3) {
-> > > +             /*
-> > > +              * If there are sufficiently many data points still und=
-er
-> > > +              * consideration after the outliers have been eliminate=
-d,
-> > > +              * returning without a prediction would be a mistake be=
-cause it
-> > > +              * is likely that the next interval will not exceed the=
- current
-> > > +              * maximum, so return the latter in that case.
-> > > +              */
-> > > +             if (divisor >=3D INTERVALS / 2)
-> > > +                     return max;
-> > > +
-> > >               return UINT_MAX;
-> > > +     }
-> > >
-> > >       /* Update the thresholds for the next round. */
-> > >       if (avg - min > max - avg)
-> >
-> > It appears that this patch, which made it in 6.15, results in *a lot*
-> > of extra interrupts on one of my arm64 test machines.
-> >
-> > * Without this patch:
-> >
-> > maz@big-leg-emma:~$ vmstat -y 1
-> > procs -----------memory---------- ---swap-- -----io---- -system-- -----=
--cpu-----
-> >  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy=
- id wa st
-> >  1  0      0 65370828  29244 106088    0    0     0     0   66   26  0 =
- 0 100  0  0
-> >  1  0      0 65370828  29244 106088    0    0     0     0  103   66  0 =
- 0 100  0  0
-> >  1  0      0 65370828  29244 106088    0    0     0     0   34   12  0 =
- 0 100  0  0
-> >  1  0      0 65370828  29244 106088    0    0     0     0   25   12  0 =
- 0 100  0  0
-> >  1  0      0 65370828  29244 106088    0    0     0     0   28   14  0 =
- 0 100  0  0
-> >
-> > we're idling at only a few interrupts per second, which isn't bad for
-> > a 24 CPU toy.
-> >
-> > * With this patch:
-> >
-> > maz@big-leg-emma:~$ vmstat -y 1
-> > procs -----------memory---------- ---swap-- -----io---- -system-- -----=
--cpu-----
-> >  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy=
- id wa st
-> >  1  0      0 65361024  28420 105388    0    0     0     0 3710   27  0 =
- 0 100  0  0
-> >  1  0      0 65361024  28420 105388    0    0     0     0 3399   20  0 =
- 0 100  0  0
-> >  1  0      0 65361024  28420 105388    0    0     0     0 4439   78  0 =
- 0 100  0  0
-> >  1  0      0 65361024  28420 105388    0    0     0     0 5634   14  0 =
- 0 100  0  0
-> >  1  0      0 65361024  28420 105388    0    0     0     0 5575   14  0 =
- 0 100  0  0
-> >
-> > we're idling at anywhere between 3k and 6k interrupts per second. Not
-> > exactly what you want. This appears to be caused by the broadcast
-> > timer IPI.
-> >
-> > Reverting this patch on top of 6.16 restores sanity on this machine.
->=20
-> I don't know what is going on here, but it looks highly suspicious to me.
 
-What does? My observation? The likelihood of this patch being the
-source (or the trigger) for an unwanted behaviour? Something else?
+On Mon, 04 Aug 2025 15:30:35 +0200, Laura Nao wrote:
+> The MT8196 eFuse layout is compatible with MT8186 and shares the same
+> decoding scheme for the gpu-speedbin cell.
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-> The only effect of the change in question should be selecting a
-> shallower idle state occasionally and why would this alone cause the
-> number of wakeup interrupts to increase?
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-You tell me. I'm the messenger here.
-
-> Arguably, it might interfere with the tick stopping logic if
-> predicted_ns happened to be less than TICK_NSEC sufficiently often,
-> but that is not expected to happen on an idle system because in that
-> case the average interval between genuine wakeups is relatively large.
-> The tick itself is not counted as a wakeup event, so returning a
-> shallower state at one point shouldn't affect future predictions, but
-> the data above suggests that it actually does affect them.
->=20
-> It looks like selecting a shallower idle state by the governor at one
-> point causes more wakeup interrupts to occur in the future which is
-> really note expected to happen.
->=20
-> Christian, what do you think?
->=20
-> > I suspect that we're entering some deep idle state in a much more
-> > aggressive way,
->=20
-> The change actually goes the other way around.  It causes shallower
-> idle states to be more likely to be selected overall.
-
-Another proof that I don't understand a thing, and that I should go
-play music instead of worrying about kernel issues.
-
->=20
-> > leading to a global timer firing as a wake-up mechanism,
->=20
-> What timer and why would it fire?
-
-The arch_timer_mem timer, which is used as a backup timer when the
-CPUs lose their timer context while going into a deep enough idle
-state.
-
->=20
-> > and the broadcast IPI being used to kick everybody else
-> > back. This is further confirmed by seeing the broadcast IPI almost
-> > disappearing completely if I load the system a bit.
-> >
-> > Daniel, you should be able to reproduce this on a Synquacer box (this
-> > what I used here).
-> >
-> > I'm happy to test things that could help restore some sanity.
->=20
-> Before anything can be tested, I need to understand what exactly is going=
- on.
->=20
-> What cpuidle driver is used on this platform?
-
-psci_idle.
-
-> Any chance to try the teo governor on it to see if this problem can
-> also be observed?
-
-Neither ladder nor teo have this issue. The number of broadcast timer
-IPIs is minimal, and so is the number of interrupts delivered from the
-backup timer. Only menu exhibits the IPI-hose behaviour on this box
-(and only this one).
-
-> Please send the output of
->=20
-> $ grep -r '.*' /sys/devices/system/cpu/cpu*/cpuidle
->=20
-> collected after a period of idleness from the kernel in which the
-> change in question is present and from a kernel without it?
-
-* with the change present: https://pastebin.com/Cb45Rysy
-
-* with the change reverted: https://pastebin.com/qRy2xzeT
-
-	M.
-
---=20
-Without deviation from the norm, progress is not possible.
 
