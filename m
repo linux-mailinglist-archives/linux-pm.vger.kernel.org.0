@@ -1,148 +1,192 @@
-Return-Path: <linux-pm+bounces-31933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C129CB1AE24
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 08:21:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC202B1AF9C
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:48:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FA3D189CAB6
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 06:21:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 549C93AD792
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 07:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A576721A43C;
-	Tue,  5 Aug 2025 06:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701B922259B;
+	Tue,  5 Aug 2025 07:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9t08Vji"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Odn44y4u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B2C20A5EB;
-	Tue,  5 Aug 2025 06:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EAB189;
+	Tue,  5 Aug 2025 07:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754374864; cv=none; b=ezYFQ3pIs/Gcih8jHg0LvIP56czezFEllFSsHprWo49VKttjQTWlGfkFrCK9WyPTKqRRz/pbZZoLEghkG853O+z/C50IMMuDrfhqonLi/FHlw0mnCYSpEJ6oBfr04ejWAqFv6EXi3HdX3vc4ahX04wGtK0tmgTGLskjkbS6HeXA=
+	t=1754380120; cv=none; b=PJ6iw65wdJQvQrzdXPYcEYSuEUH+ocLAZbHMvM8GfHcV73m9ZCkjcXh355O6ypsYt/d5wRNgk6qAbb7iYqUu4VPEVCfvncCdJk333ukUWclpXKBMnag7ULSVFerpiiiy2KFjVcwvGbOB45bS5/S2Iie8hdKl6+bVsB8yLHJfZY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754374864; c=relaxed/simple;
-	bh=BRNKEI5g2PV7iMHZA2w3uzrDHh21dufQnN/CJY0cfsA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgzPYwOMorj1BG7zieHcb66sL5qMNawDOpP//XISvUSlmq2zAE9kqub1beqSv2NlBC/HvNXoTfOk5+zci2AYWijGCSUIjVzqE4eyA5J2aIhTS8lbIvucKzY2hlosVRypVAAwb0jj82E1EPmlUk/OEIUUelaeETE6D85TwisqqVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9t08Vji; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A7EC4CEF4;
-	Tue,  5 Aug 2025 06:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754374864;
-	bh=BRNKEI5g2PV7iMHZA2w3uzrDHh21dufQnN/CJY0cfsA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=n9t08VjimayiNb7Hufr0EaDWw3KA9XI6cunD6K52BHh5NaGQvdEVl4+AnHyFV3lTv
-	 cHt7UQmclSsUusZrWWWBXMFLtw4myQyr9lzlVKbKaLSW4WxuOatv9vBkVYGt3NsCSV
-	 WfTnkWry/4PmJif916aJzz+IDaAro8srjN9tEw2DNiIHI75Awwt+uyevoOU+WsGSgy
-	 1hvXQdEILquRGqXKo/1EXTR7dERRdpXCxpK6IhWrH5Aw5QYmT3XGm6/BYrq/O4o7Ap
-	 Ti5XWVkcgf6nlRjvEki8udG5HKfi6YszeDfPMow3X5usFzDp7EJMybNz5nRoWHHnnG
-	 Tst7NLHq0ohQw==
-Message-ID: <42de1ed3-073a-4058-971b-a9a8c473d9a0@kernel.org>
-Date: Tue, 5 Aug 2025 08:20:58 +0200
+	s=arc-20240116; t=1754380120; c=relaxed/simple;
+	bh=dfz9GEQtGUBOq+4N1TmCcfkFU6ARoozvcEdCqiVMSXg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uC40YAjIZlCdqr04JIu7Vy1KA/6Ct/XxakstW9PMv4IVvLoaX0VcUMU0kwdF2Xsg+9mRYdUV+5K8Cj9CG6Dwj6YXvrr9u71N4Hk40eRkjKoOQRufbr2975JEIFmmwxOYOV3OhX1LK4opfkxDES7jM9rIhnjfNbrJ3xds5X8QLDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Odn44y4u; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1754380116;
+	bh=dfz9GEQtGUBOq+4N1TmCcfkFU6ARoozvcEdCqiVMSXg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Odn44y4uCkUytDBo/oOSHQ7Idxe70sJ2w8swzbeUWboeYTHjT/CsidZXMOuT+Dz9x
+	 0IJC8XC8Bpd0b6dmKLumrBFue826zqygwgJGH7itTCDFn8xkj0NMBRWHQ4DkwdgDN2
+	 NOmPMQLG3v3Bjcisl1wcX2tG+iaXbzcUTS0Q2c5oF/AYdtTS7+UafYfCuPXRFwi3ha
+	 aC/YeUbGdMf+JFc5+mJ21QF0bVJungC5MpQsWpPPbemOdacMQclz8vLGy+yx4Pd5SU
+	 7X4Xh0j82ip32kfhOI7pIh+ISaqH7ku2XYYTKmjzyqUzBO3ue7vfIB2il1Sz/JLJS6
+	 WZC6R43AR4kJw==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5175D17E01F5;
+	Tue,  5 Aug 2025 09:48:35 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: linux-mediatek@lists.infradead.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	ulf.hansson@linaro.org,
+	y.oudjana@protonmail.com,
+	fshao@chromium.org,
+	wenst@chromium.org,
+	lihongbo22@huawei.com,
+	mandyjh.liu@mediatek.com,
+	mbrugger@suse.com,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	kernel@collabora.com
+Subject: [PATCH v3 00/10] pmdomain: Partial refactor, support modem and RTFF
+Date: Tue,  5 Aug 2025 09:47:36 +0200
+Message-ID: <20250805074746.29457-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/4] gs101: MAX77759 Fuel Gauge driver support and
- enablement
-To: t.antoine@uclouvain.be, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org
-References: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/08/2025 16:26, Thomas Antoine via B4 Relay wrote:
-> The gs101-oriole (Google Pixel 6) and gs101-raven (Google Pixel 6 Pro)
-> have a Maxim MAX77759 which provides a fuel gauge functionnality based
-> on the MAX M5 fuel gauge.
-> 
-> Add a driver for fuel gauge of the the Maxim MAX77759 based on the
-> one for the Maxim MAX1720x which also uses the MAX M5 fuel gauge.
-> Enable it for the gs101-oriole and gs101-raven boards.
-> 
-> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
-> ---
-> Hi everyone,
-> I decided to completely separate the MAX77759 and the MAX1720x. The
-> reason I had just modified the MAX1720x initially was because I
-> thought at the time that their difference were much less important
-> than they ended up being.
-> 
-> Their common parts could be put in a common MAX M5 files which could
-> prove useful if more chips using the MAX M5 are to be added.
-> 
-> Changes in v5:
-> - Separate MAX77759 from MAX1720x for clarity
-> - Remove voltage reporting
-> - Add initialization of the chip
-> - Add device dependent initialization data
-> - Add access to eeprom for access to non-volatile backup data.
-> - Link to v4: https://lore.kernel.org/r/20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be
+Changes in v3:
+ - Dropped specified items for cells restriction as suggested by Rob
+ - Fixed an issue in patch 4 still referencing "mediatek,bus-protection"
+   as it is entirely replaced by "access-controllers"
 
-No changes in the bindings? There were errors posted due to lack of testing.
+Changes in v2:
+ - Added #access-controller-cells allowance for MT8188/95 infracfg_ao
 
-Best regards,
-Krzysztof
+This series is a subset of [1], leaving out the Hardware Voter specific
+bits for MT8196 until the discussion around it reaches a conclusion.
+
+Even though the proposed code was born as a preparation to support the
+MT8196/MT6991 SoCs power domain controllers, it is a necessary cleanup
+for all power domain controllers of all of the currently supported SoCs
+from MediaTek.
+
+You may also notice the addition of support for modem power sequences:
+this was brought up 6 months ago (or more) by community contributors
+(mainly Yassine Oudjana) that were trying to upstream the MediaTek
+MT6735 Smartphone SoC and needed support to provide power to the MD
+subsystem - so, even though in this specific series the code for the
+modem power sequence is not yet triggered by any SoC, please please
+please, let it in.
+Besides, "a bunch" of upstream supported SoCs do have the MD power
+domain even though it wasn't added to their drivers (because if there
+was no support in the driver, it would just crash the system); the
+addition is something that I plan to do at some point, but definitely
+not now as I have no bandwidth for that (bar MT8196, which will have
+this domain).
+
+Compared to v1 in [1]:
+ - Changed mediatek,bus-protection to access-controllers
+   as suggested by Rob (thanks!)
+ - Added commits to document #access-controller-cells on all of
+   the access control providers
+
+In the meanwhile.... relevant excerpt from the old series:
+
+This series refactors the bus protection regmaps retrieval to avoid
+searching in all power domain devicetree subnodes for vendor properties
+to get syscons for different busses, and adds a new property which is
+located in the power controller root node containing handles to the same.
+
+Retrocompatibility is retained and was tested on multiple SoCs in the
+Collabora lab - specifically, on Genio 350/510/700/1200, and manually
+on MT6795 Helio (Xperia M5 Smartphone), MT8186, MT8192 and MT8195
+Chromebooks.
+
+This was tested *three times*:
+ - Before the per-SoC conversion in drivers/pmdomain/mediatek
+ - With per-SoC conversion code but with *legacy* devicetree
+ - With per-SoC conversion code and with *new* devicetree conversion
+
+All of those tests were successful on all of the aforementioned SoCs.
+
+This also adds support for:
+ - Modem power domain for both old and new MediaTek SoCs, useful for
+   bringing up the GSM/3G/4G/5G modem for both laptop and smartphone use
+ - RTFF MCU HW, as found in MT8196 Chromebooks and MT6991 Dimensity 9400
+
+...and prepares the pmdomain code to accomodate only the directly
+controlled power domains for MT8196 (HW Voter support was left out).
+
+[1] https://lore.kernel.org/all/20250623120154.109429-1-angelogioacchino.delregno@collabora.com
+
+AngeloGioacchino Del Regno (10):
+  dt-bindings: memory: mtk-smi: Document #access-controller-cells
+  dt-bindings: clock: mediatek: Document #access-controller-cells
+  dt-bindings: power: mediatek: Document access-controllers property
+  pmdomain: mediatek: Refactor bus protection regmaps retrieval
+  pmdomain: mediatek: Handle SoCs with inverted SRAM power-down bits
+  pmdomain: mediatek: Move ctl sequences out of power_on/off functions
+  pmdomain: mediatek: Add support for modem power sequences
+  pmdomain: mediatek: Add support for RTFF Hardware in MT8196/MT6991
+  pmdomain: mediatek: Convert all SoCs to new style regmap retrieval
+  arm64: dts: mediatek: Convert all SoCs to use access-controllers
+
+ .../bindings/clock/mediatek,infracfg.yaml     |   3 +
+ .../clock/mediatek,mt8186-sys-clock.yaml      |  15 +
+ .../clock/mediatek,mt8188-sys-clock.yaml      |  15 +
+ .../clock/mediatek,mt8192-sys-clock.yaml      |  15 +
+ .../clock/mediatek,mt8195-sys-clock.yaml      |  15 +
+ .../clock/mediatek,mt8365-sys-clock.yaml      |  15 +
+ .../mediatek,smi-common.yaml                  |  16 +
+ .../power/mediatek,power-controller.yaml      |  37 ++
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi      |   5 +-
+ arch/arm64/boot/dts/mediatek/mt8167.dtsi      |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi      |   4 +-
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  17 +-
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  12 +-
+ arch/arm64/boot/dts/mediatek/mt8188.dtsi      |  23 +-
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  13 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  20 +-
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi      |  16 +-
+ drivers/pmdomain/mediatek/mt6795-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8167-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8173-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8183-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8186-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8188-pm-domains.h |   6 +
+ drivers/pmdomain/mediatek/mt8192-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8195-pm-domains.h |   5 +
+ drivers/pmdomain/mediatek/mt8365-pm-domains.h |  14 +-
+ drivers/pmdomain/mediatek/mtk-pm-domains.c    | 399 +++++++++++++++---
+ drivers/pmdomain/mediatek/mtk-pm-domains.h    |  74 +++-
+ 28 files changed, 594 insertions(+), 181 deletions(-)
+
+-- 
+2.50.1
+
 
