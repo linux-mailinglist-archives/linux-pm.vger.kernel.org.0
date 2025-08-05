@@ -1,167 +1,221 @@
-Return-Path: <linux-pm+bounces-31955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31953-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8EF3B1B13D
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 11:36:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1C68B1B12C
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 11:35:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A7E417268B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:36:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF78117FC53
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B276276051;
-	Tue,  5 Aug 2025 09:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F24B271A9A;
+	Tue,  5 Aug 2025 09:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="Mni/vm+/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013031.outbound.protection.outlook.com [52.101.72.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA11275AE4;
-	Tue,  5 Aug 2025 09:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754386440; cv=none; b=udrJt/A8qNsu/RMPoIZZCX4gLUkFdMTO+surPIWwpQ9+Xrkpz4pPLPAR4Zy2ERRGpd3XiH2xNoMSukWoupEilSBexQwhXkI/DXkqwii3PW/hmJG9JH7mYOh0xbimUyzZxNq0zO45NUNKYNbaHQMoEQImcF1ZGiEwXSQjwxSWKj4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754386440; c=relaxed/simple;
-	bh=Eb3zE1SSn6G9eqw7OXG6AQfEBTShxrMQqk15ZC6DN+Y=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gIuaYba7ZqeyCI8BqvyhfOF1qnY8i6e84tM1I97OOjQaU3GhMHiZZTcILCbQIx+gsr6Wz4VGC5Jb+xCO+qktiKiUlulpH1prJN0fGsreb1Qj4ecOjG98itRKz6+Z1PLdt9QnnHIaWorqmhi9m9hBwmZzjagCz+dM6gCnGLWUC10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4bx7R04JPTz14LrS;
-	Tue,  5 Aug 2025 17:29:00 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6190B1401F3;
-	Tue,  5 Aug 2025 17:33:56 +0800 (CST)
-Received: from localhost.localdomain (10.50.165.33) by
- kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 5 Aug 2025 17:33:55 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <rafael@kernel.org>,
-	<viresh.kumar@linaro.org>, <beata.michalska@arm.com>, <sudeep.holla@arm.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <vincent.guittot@linaro.org>,
-	<yangyicong@hisilicon.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH v3 3/3] arm64: topology: Setup AMU FIE for online CPUs only
-Date: Tue, 5 Aug 2025 17:33:30 +0800
-Message-ID: <20250805093330.3715444-4-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250805093330.3715444-1-zhenglifeng1@huawei.com>
-References: <20250805093330.3715444-1-zhenglifeng1@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A76D2701AE;
+	Tue,  5 Aug 2025 09:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.31
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754386429; cv=fail; b=KYrTjDtMiIhTtx22MgP6EH5Z5m7cFrqxBZuGZB6nFNTVocADAeP1N+flph8+PGBFGzvB+UqJQV7I/ZG4AJIXYc08t0kGX6ml4ReCdtrvr0cJotGXjDOKyGfXkpBwGHL6fRLsJuWPktxv9fX0oelwsFKGm3TZY4qSuK4rtFNA1uw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754386429; c=relaxed/simple;
+	bh=nmViPwf/Ukqau2PhacwjGLrAu/3GCAv4gNlL6e5DX9U=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PULJqnh2n2Ih7Hyq9ZEQ5DIRUsm7yBKk8KBWqyPLkv7dFALwYrtCwLWtulbtBZoq9yS0SmXNQtHuE0OtX8ttgXoI8TSUh88Pm7H62VcRmM9MuioEAFfh38Q26+yapHmdo5yWefSS4uI0Unjai7CHCGdbGQQEN1vq1pjZnq597Lc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=Mni/vm+/; arc=fail smtp.client-ip=52.101.72.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k4w9dJ/V8w4yi7hZX34op9d1LSjAQDuYGJupjxAkbqUxDkuWska2i32b1dY91iHXXKaqg52BDZ6qnfw8C+s9asPXvu0NTHMKY9CLYP3TdPnAj1CDumuDRsgJVWcXq5ByzLXHlkTRoDie0Y9TRLpmQlW6LuJmrd1wlwHzQ+tJ+dU9eK/Q/6pyJzzb2q3S0vH7vo/ehBah+Fc24xO90P8VV/v++D64zFC1qjb/kV7eWZ25ykdofTp6cK19eal9Wy0DNNhyMUoyJbfPAurhVhauJpimyA71ad20H56+qVOBpxfNkzOE3VASCv17XcQumje177IkBsPVdej8VZ8KAlhhCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0tToxMFVNblhhh6hgXTLQa/jqgprut6FzrRgInYmQjQ=;
+ b=Ch/ujzZLL08VGGMu69zSd1UH84va9/8Q/YhaROUNqaNuQyuUrGwcyBtjys3GUoQwBWB7imCnR9+ljLwyF6jFiK7nboUHQ1/Q4nJNcS9gbaZDVza6z7UyLVQCQ+4wTXqhkRI96rRXQCNNpLybccITVwaOiuvIfbMxjYhQwMEaI3c4x3hAbU4Rh0va8xeA+1pA9F0VJ6Muh/aPk5Y/aibFLXAswZie9PLR9CZPg+wy0nTPM7eD/sdEM1517pMN15WERdGQxpvm932WJUf45R3RgV2Cwu5FuinwN6hfps+3ZsAZUdjTJCrIvuAl4WXu8JvXouvEbDkVAOdjWlfOLPm+NQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0tToxMFVNblhhh6hgXTLQa/jqgprut6FzrRgInYmQjQ=;
+ b=Mni/vm+/tLzxc72Bciia5jh2QgoDneoLUo5LwJXLwhk1x8LDTSWPz3RkSuhGSRRDtUNe9zSQt2pKvl+M7lkoAfxgfm6VaJJ/hshBx+XMn3sewHDoAl6pcR4iK3yHPpu+KSwGuEfVPGlJ/Fir1zRkjNikMuoqv7jrr8gfRLDfoIE=
+Received: from CWLP123CA0022.GBRP123.PROD.OUTLOOK.COM (2603:10a6:401:56::34)
+ by DB9PR02MB8000.eurprd02.prod.outlook.com (2603:10a6:10:370::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Tue, 5 Aug
+ 2025 09:33:44 +0000
+Received: from AM3PEPF0000A790.eurprd04.prod.outlook.com
+ (2603:10a6:401:56:cafe::e) by CWLP123CA0022.outlook.office365.com
+ (2603:10a6:401:56::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8989.21 via Frontend Transport; Tue,
+ 5 Aug 2025 09:33:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ AM3PEPF0000A790.mail.protection.outlook.com (10.167.16.119) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9009.8 via Frontend Transport; Tue, 5 Aug 2025 09:33:43 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail01w.axis.com (10.20.40.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 5 Aug
+ 2025 11:33:35 +0200
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Sebastian Reichel <sre@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <kernel@axis.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2] power: supply: Remove error prints for
+ devm_add_action_or_reset()
+User-Agent: a.out
+Date: Tue, 5 Aug 2025 11:33:35 +0200
+Message-ID: <pndzfcekt8w.a.out@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail01w.axis.com
+ (10.20.40.7)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM3PEPF0000A790:EE_|DB9PR02MB8000:EE_
+X-MS-Office365-Filtering-Correlation-Id: ea776c04-0951-4ca2-6d0a-08ddd4032ba5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sA8qN07/WtcGsRTiTl9oMzMv6Ihl+sOX6wwtCXMinaP+O4ltcT4eCvEtCA1y?=
+ =?us-ascii?Q?G3F8CStRnKXqYuXrWV0yqpOs2CYMXYevI0bqnPj0pBOztjFyjfTMZHWwj/31?=
+ =?us-ascii?Q?3avHQoQiny9M4Nu67eUA6OUmu3GiRxRrTgTlqZGWiygkIz6jpqPtcwru26Jp?=
+ =?us-ascii?Q?c4E4lgVhc/yGFTzop+sJlbEx2lw0963qgZBSgo0JZIojKavGiLdBZ0iPWmcx?=
+ =?us-ascii?Q?w0u6h65oLdHbm3a9ZjcyeJseUSbiORWaMXQlNtSvgUhiceJMiBLYNsJcN838?=
+ =?us-ascii?Q?C9SrU/ZY9YP3guRLD1OzVHuU1l4blTo+xVXHQ78QMP/46WnzPMTTylieHtzA?=
+ =?us-ascii?Q?M4EOd357Ml+aSjI1mAHAn+sSPz25+uRQImzzkzQACt+OUSrM7wEdymR7GseY?=
+ =?us-ascii?Q?LafWRTdABM0ZSl8DVcktTtMZ/eJaoMQ1ZOv8mKgYdSuLYsrT8yRNoOT8LZxj?=
+ =?us-ascii?Q?HDodmD1AAx2ojnAx9BBLnfFrC1BiOAUKSVB+Xd6js1WFoszoDiwrWzbhPKBa?=
+ =?us-ascii?Q?I3eQoXhmWcqJkhHANsPv4Kdb94Xmub1+MQ9UDDMHCL4m/eTMZ8R/5mmaTA50?=
+ =?us-ascii?Q?Gt7B2+mbWUDhUk1761sALZqVI3tnZWr8WaTXHB6CQmtsfyb/ZIEdr6iOjZ+S?=
+ =?us-ascii?Q?G7B3JbVBE1leO+Mb/kRoY/npoojvSRkqZ3iZ7U+64aPExB9z25igJewAOzI5?=
+ =?us-ascii?Q?E31oWhsb9g0hunWPNMf56fbiVjTTgM6fWs0/cCmpXYwNgmroshGA3Ar7wavQ?=
+ =?us-ascii?Q?iA2N5H7/kLi4ROo2Td/As+GZehuaQ8gtISMuSxw+nyU4FGC+odyHLCnYBiZM?=
+ =?us-ascii?Q?A8FIEWQvU8RPqqOsdp5+NN24Gi1XiShXTKNrSBkoNNXU704Z05T+hvH/i5N2?=
+ =?us-ascii?Q?iegWg2TDfjyOGeiGTJBGPchyzpkKQfgk0m5NRP8XACLi2K+Wx8fKn1AUV3xQ?=
+ =?us-ascii?Q?8lqYzY+lGzvTE6qyAQu6F5N4K4JAOe4Tr4G0fxkDO145IT+eBlW72qftPIV/?=
+ =?us-ascii?Q?COFEnUcd41c2HI6OBEkZ4RPedPvi9mUkrlUEIk0zqdUwloPhsiSU9jmTvhQL?=
+ =?us-ascii?Q?E2U++LvCHb5QJdlXH6skipxwwMQturw6VHzNOTr2D4rAIfl4HOM9Kaovz175?=
+ =?us-ascii?Q?S7VBZ3Y20tn49EpIorpfNWRFyzSEihoT9gt/xS3ZDv2yrT8V4cjXbUy0pPb5?=
+ =?us-ascii?Q?qxyz2u4uycWtki+MYLiTNywDl+cmnvaoJT1i7np90hpdTU41VoqjUaJLES35?=
+ =?us-ascii?Q?kMziNQLGj/In577e69Ob0nOJbuHiMMqKT5JZL933DdO1diIHG+8J7MRaASKm?=
+ =?us-ascii?Q?aMMH/m9RKAZFsHinMjrjFuS3CJDTSEwO4OQS8s0J/SyWULui9POlhRjeub4U?=
+ =?us-ascii?Q?kGzgy/QGK4wN+1Stivmm6oA7tsZSaDAX31ei8MdPoCSGpUAVjpc2Vw+gc02W?=
+ =?us-ascii?Q?98T6q3biBO2ysU8qL2tActnwfHaZYuKnqooxut1ZZEBAkViq7pI4GQKfxrj7?=
+ =?us-ascii?Q?QtMwmfMKu4QXcLOIiIyQa30kJZDYQ1IAbykZ?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2025 09:33:43.8309
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea776c04-0951-4ca2-6d0a-08ddd4032ba5
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM3PEPF0000A790.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB8000
 
-When boot with maxcpu=1 restrict, and LPI(Low Power Idle States) is on,
-only CPU0 will go online. The support AMU flag of CPU0 will be set but the
-flags of other CPUs will not. This will cause AMU FIE set up fail for CPU0
-when it shares a cpufreq policy with other CPU(s). After that, when other
-CPUs are finally online and the support AMU flags of them are set, they'll
-never have a chance to set up AMU FIE, even though they're eligible.
+When `devm_add_action_or_reset()` fails, it is due to a failed memory
+allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
+anything when error is `-ENOMEM`. Therefore, remove the useless call to
+`dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
+return the value instead.
 
-To solve this problem, the process of setting up AMU FIE needs to be
-modified as follows:
-
-1. Set up AMU FIE only for the online CPUs.
-
-2. Try to set up AMU FIE each time a CPU goes online and do the
-freq_counters_valid() check. If this check fails, clear scale freq source
-of all the CPUs related to the same policy, in case they use different
-source of the freq scale.
-
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
 ---
- arch/arm64/kernel/topology.c | 54 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 2 deletions(-)
+Changes in v2:
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 9317a618bb87..b68621b3c071 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -385,7 +385,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
- 	struct cpufreq_policy *policy = data;
- 
- 	if (val == CPUFREQ_CREATE_POLICY)
--		amu_fie_setup(policy->related_cpus);
-+		amu_fie_setup(policy->cpus);
- 
- 	/*
- 	 * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
-@@ -404,10 +404,60 @@ static struct notifier_block init_amu_fie_notifier = {
- 	.notifier_call = init_amu_fie_callback,
- };
- 
-+static int cpuhp_topology_online(unsigned int cpu)
-+{
-+	struct cpufreq_policy *policy = cpufreq_cpu_get_raw_no_check(cpu);
-+
-+	/*
-+	 * If the online CPUs are not all AMU FIE CPUs or the new one is already
-+	 * an AMU FIE one, no need to set it.
-+	 */
-+	if (!policy || !cpumask_available(amu_fie_cpus) ||
-+	    !cpumask_subset(policy->cpus, amu_fie_cpus) ||
-+	    cpumask_test_cpu(cpu, amu_fie_cpus))
-+		return 0;
-+
-+	/*
-+	 * If the new online CPU cannot pass this check, all the CPUs related to
-+	 * the same policy should be clear from amu_fie_cpus mask, otherwise they
-+	 * may use different source of the freq scale.
-+	 */
-+	if (!freq_counters_valid(cpu)) {
-+		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH,
-+						 policy->related_cpus);
-+		cpumask_andnot(amu_fie_cpus, amu_fie_cpus, policy->related_cpus);
-+		return 0;
-+	}
-+
-+	cpumask_set_cpu(cpu, amu_fie_cpus);
-+
-+	topology_set_scale_freq_source(&amu_sfd, cpumask_of(cpu));
-+
-+	pr_debug("CPU[%u]: counter will be used for FIE.", cpu);
-+
-+	return 0;
-+}
-+
- static int __init init_amu_fie(void)
- {
--	return cpufreq_register_notifier(&init_amu_fie_notifier,
-+	int ret;
-+
-+	ret = cpufreq_register_notifier(&init_amu_fie_notifier,
- 					CPUFREQ_POLICY_NOTIFIER);
-+	if (ret)
+* Split the patch to one seperate patch for each sub-system.
+
+Link to v1: https://lore.kernel.org/all/pnd7c0s6ji2.fsf@axis.com/
+
+ drivers/power/supply/mt6370-charger.c | 4 ++--
+ drivers/power/supply/rt9467-charger.c | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
+index 98579998b300..29510af4e595 100644
+--- a/drivers/power/supply/mt6370-charger.c
++++ b/drivers/power/supply/mt6370-charger.c
+@@ -898,7 +898,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
+ 	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_attach_lock,
+ 				       &priv->attach_lock);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
 +		return ret;
-+
-+	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-+					"arm64/topology:online",
-+					cpuhp_topology_online,
-+					NULL);
-+	if (ret < 0) {
-+		cpufreq_unregister_notifier(&init_amu_fie_notifier,
-+					    CPUFREQ_POLICY_NOTIFIER);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- core_initcall(init_amu_fie);
  
+ 	priv->attach = MT6370_ATTACH_STAT_DETACH;
+ 
+@@ -909,7 +909,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_wq, priv->wq);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to init wq\n");
++		return ret;
+ 
+ 	ret = devm_work_autocancel(dev, &priv->bc12_work, mt6370_chg_bc12_work_func);
+ 	if (ret)
+diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
+index e9aba9ad393c..e2ff9c4609ef 100644
+--- a/drivers/power/supply/rt9467-charger.c
++++ b/drivers/power/supply/rt9467-charger.c
+@@ -1218,25 +1218,25 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
+ 	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_adc_lock,
+ 				       &data->adc_lock);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to init ADC lock\n");
++		return ret;
+ 
+ 	mutex_init(&data->attach_lock);
+ 	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_attach_lock,
+ 				       &data->attach_lock);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
++		return ret;
+ 
+ 	mutex_init(&data->ichg_ieoc_lock);
+ 	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_ichg_ieoc_lock,
+ 				       &data->ichg_ieoc_lock);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to init ICHG/IEOC lock\n");
++		return ret;
+ 
+ 	init_completion(&data->aicl_done);
+ 	ret = devm_add_action_or_reset(dev, rt9467_chg_complete_aicl_done,
+ 				       &data->aicl_done);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to init AICL done completion\n");
++		return ret;
+ 
+ 	ret = rt9467_do_charger_init(data);
+ 	if (ret)
+
+base-commit: 260f6f4fda93c8485c8037865c941b42b9cba5d2
 -- 
-2.33.0
+2.39.5
 
 
