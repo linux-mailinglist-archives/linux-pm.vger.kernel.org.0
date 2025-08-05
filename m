@@ -1,245 +1,288 @@
-Return-Path: <linux-pm+bounces-31952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FF2B1B0EB
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 11:22:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7307DB1B141
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 11:37:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E48FA16117A
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:22:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8184A7AE83E
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F2D259CBA;
-	Tue,  5 Aug 2025 09:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FE926C39F;
+	Tue,  5 Aug 2025 09:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="JkhC5zNi"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="GJ2ytIwv";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="aVVZmfBJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010053.outbound.protection.outlook.com [52.101.229.53])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E09253F11;
-	Tue,  5 Aug 2025 09:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347B8134AC;
+	Tue,  5 Aug 2025 09:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754385734; cv=fail; b=NJgCaQorPRHVaG1iCFa/iKN3BNvRqkQLCO+llt6TWcw+ct/BDsQ+pw4T70BxfzXQK7buK8iOAT3AAN1lccV8LXU5GRrl6nABP5uaYwviIrY7fRoNU0+U9GmOUxQWF8WDTRHfB+JzxyqYeY3IPzsMzPXNGYNABtX95uw7Duhm1uY=
+	t=1754386510; cv=pass; b=XItjcH+YSs+O/EVMy3YJAR5BwbXTaAAHiOV35vPjEdIPDVxiUbz2kdnr64JsVYc2CTRkA1kYjppjSFVZi8I0+RoDQWE7uJi9LsSMbYrobWX75/X9EnDCcHtuLbRpVRMBkZeil/8HePABh3Wgx+3RWEuXRGx9sSPQAHiy+Sa7j1A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754385734; c=relaxed/simple;
-	bh=TME1CvMeXbMvWLWZu+XQB/FyDwWumdMjlL4zfPZrRYM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=EyOq9RSkn3wYTIbAMhHVwHgeY9RQThItAd9g2GggbB5E7nTONcutpYiv8KebmEs1aZjy+3FUZvefKI8JFAmQC4gX2RILg2ZvGuq4jZKMeelw3WR/GnKCY2goOPM3viZGChoQKT37HDF26V7bexdQH6kUP+GkfxdCfi+n4gQ3l6M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=JkhC5zNi; arc=fail smtp.client-ip=52.101.229.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eW+P3P3F2caePkP1HaMezHbEUm1HbTMIaB5GQpgSZUNQwM4sDEt5wNT/BRXLCau7Mbl9RdItB9w1VgXRAt4U4m/FEeGkzoagBmjCzd7tzO41IpzTSwe1Vk03NB4ZwTx26kzfNtf11AjRk9l6tRtRbyKweau9g4OnTKNKODo5PlGr8ddxaDJS/JECbcqVLPjmpfOpvwTykhIDnHWMZQtn1HXvK0a65JwWmb0aYnm+LQuYTSMcUrkkCJYzl3f5erVyLlQ+Jy7NXzw8Fbnpnz0a+Jtlrc9Xd/Ca3B1QXVmZz+b6hFdflk1XNFTKuSkyvzjsxwJ4AKX4MuDwvEVOr4yjlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TME1CvMeXbMvWLWZu+XQB/FyDwWumdMjlL4zfPZrRYM=;
- b=YPB7We2k5jjI1JLxXjFLkgMHwtn4h/fzrtFCqmuVEG85W1PBIgaTmmbi0ehBVCfwjXJ7r9JpiBT4GcqTEqJBep6Yh3Iq6DacBGOwkunKBRAV3WGbc1oMEA3ZxPY01p1LpQrGhrOoRqBAhPjiLQ7hdJtjRXrqlSlxhYKMRSeEg7d3rsS0jLkQNoq7ikkcWen2lslMbNDJPdQWcTcEy2oKf/TawbZ3K8e1jEnVKF28WlbisuIFTpJPs29WlQDNth3A6loRS3QnnAKOnsu1K1VzWhs3TIkqXYeh0p9OohfkdydQmcyaXbvbdDvRrGTAuxx4OLutpGdOxadvDySluNnvag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TME1CvMeXbMvWLWZu+XQB/FyDwWumdMjlL4zfPZrRYM=;
- b=JkhC5zNiofSzje73ycaxiy3DUSXLv9GlwxduzzQwTCCkcf/XDjXFhojj5iisKZNaE9bEyQVwyxBGdtOnlu8MdhET11VHU8rMDGRP1R7JOqOyLbT/e9BA6Pstq3DYxfItkliFF5AAnjzkbst2AUEkJ8OFo1ub05C0kR68fuITzsk=
-Received: from OSCPR01MB14647.jpnprd01.prod.outlook.com (2603:1096:604:3a0::6)
- by TYCPR01MB8503.jpnprd01.prod.outlook.com (2603:1096:400:15d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Tue, 5 Aug
- 2025 09:22:07 +0000
-Received: from OSCPR01MB14647.jpnprd01.prod.outlook.com
- ([fe80::40e:e798:1aea:ca82]) by OSCPR01MB14647.jpnprd01.prod.outlook.com
- ([fe80::40e:e798:1aea:ca82%6]) with mapi id 15.20.8989.018; Tue, 5 Aug 2025
- 09:22:07 +0000
-From: John Madieu <john.madieu.xa@bp.renesas.com>
-To: geert <geert@linux-m68k.org>
-CC: "conor+dt@kernel.org" <conor+dt@kernel.org>, "daniel.lezcano@linaro.org"
-	<daniel.lezcano@linaro.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"rafael@kernel.org" <rafael@kernel.org>, Biju Das
-	<biju.das.jz@bp.renesas.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "john.madieu@gmail.com"
-	<john.madieu@gmail.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, "lukasz.luba@arm.com"
-	<lukasz.luba@arm.com>, magnus.damm <magnus.damm@gmail.com>, "robh@kernel.org"
-	<robh@kernel.org>, "rui.zhang@intel.com" <rui.zhang@intel.com>,
-	"sboyd@kernel.org" <sboyd@kernel.org>,
-	"niklas.soderlund+renesas@ragnatech.se"
-	<niklas.soderlund+renesas@ragnatech.se>
-Subject: RE: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
- the Renesas RZ/G3E SoC
-Thread-Topic: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
- the Renesas RZ/G3E SoC
-Thread-Index: AQHby0ai9SCDgo20z0y3b2QkXuPFT7RSraWAgAGApSCAAAY6AIAABXfA
-Date: Tue, 5 Aug 2025 09:22:07 +0000
-Message-ID:
- <OSCPR01MB146472833398C4E61B9C5B160FF22A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
-References: <20250522182252.1593159-1-john.madieu.xa@bp.renesas.com>
- <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com>
- <CAMuHMdW0CTM+d-N0FgP=dKoSTdmRr2Rpg2Rtzj33gDk8qW+FUw@mail.gmail.com>
- <OSCPR01MB146471D101C6D66C1B81336A1FF22A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
- <CAMuHMdV2DsJ5_0sW+f6anrqpr5kjLoe9w++E_xKJjdG7TJmGcQ@mail.gmail.com>
-In-Reply-To:
- <CAMuHMdV2DsJ5_0sW+f6anrqpr5kjLoe9w++E_xKJjdG7TJmGcQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSCPR01MB14647:EE_|TYCPR01MB8503:EE_
-x-ms-office365-filtering-correlation-id: 5a9a10f4-f022-4c38-54ba-08ddd4018ca0
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?SDVHckJhTG9IVG56dlo3U2crd05VR3VrMS95NWxRWXVWNDhMaG1Xcjd6WTU0?=
- =?utf-8?B?STAyQitrbnkwT0JYOUlzUjNnNWZTQU4wc1RTWThMSHFpdFZzR3FHVGRHNHNx?=
- =?utf-8?B?blMxVTROY01FTmMvdjQwcUNkNnhTdnpVbE5CN0dTZUE3TmgvVHo4cGFITVlO?=
- =?utf-8?B?ZVZHSDBucFQwc0RCN0s0Ykc1VTdoSk0wR2p6NWlzMUhCNGZ3Zlh2ajg2UlNS?=
- =?utf-8?B?TGUwNFpuaDJhUCtvQ2RTUzhOMitxMWFOTlZwQnFBRG9yZGR0V3dlOTc1aThF?=
- =?utf-8?B?QnFPR2ExRDF4ME5tZ2dXTGxEQUhXRE5mRnpYd1QwUHRDWjdyckduVmdNZ3Av?=
- =?utf-8?B?MGFNemZmb1J5QVc0aUNzUzVSbW5IVlVReHBuVGZweXB4U0pqWkFDZStjQlRQ?=
- =?utf-8?B?QTB1S2ZPQ1NoM0g2c3ZmNjQ0Vk83MWhkYlMvSHcxdEw4NzRyQjNjYW5aWGVH?=
- =?utf-8?B?OWhKeWZVa2QvSThZSDN6WmwxMTNlbmQrQmJOaGxxbklQRktKS21JVFpPbXpJ?=
- =?utf-8?B?akdRcFl3eHhLRHF0UkpLSlV1TkRFSmpkK29XZzFIMUt5RGExNmcwOGtENm5i?=
- =?utf-8?B?KzRlSDdiQWlTbHJQdGpJWmdETUJKV1VqZlpPRGU0ZWRvQ1JJV1laOEh4blBK?=
- =?utf-8?B?M3RYb3hyTkxKc1M0cjlhMFQvS0ZERGRYa2owbWh5ZGR4bW5ST2taOTBpUjFB?=
- =?utf-8?B?QTdxSDBXR2FudTNGTmN1VFdOUUhJMmpjaE9XYXhaSE8zWmZsODg5bVhBdzVH?=
- =?utf-8?B?eFBCUncyVS9KTHRzNXkzSGNhYXpkSWFtTDJnUjNvOGhOUWlHaXRCLzkwN1Rh?=
- =?utf-8?B?MmlqRXpPZ1c2c2FkSklJUWJrMjRSQk1zS203V1E3V1JkdEliaTYvV294blFw?=
- =?utf-8?B?R1ZLbUN6YTNNWE0wbE1rL3BhNGkwUm5QaDAxbmowVGlTd3RSS0RvalVYU05u?=
- =?utf-8?B?QU9tVkhGcy9CdTVQNE4zSlkvVXRYK29JaTR6blR1dUVlczlQU1lqRVlpK2ln?=
- =?utf-8?B?eEsvRHhtTHRhaENEcDhHYzl0ZUlzZm1QZjZBa00xU0YxMmJudHVqenFGaFdD?=
- =?utf-8?B?TmNDTHBGUGZjclduYzZZaHdVUU1XQ2hCR0puR1lST2dRbHFDS3owTlIvR0Fx?=
- =?utf-8?B?d1MrQmRtbk9CaDVzQTEwSWJ1NExQKzBPSkI3WXJoVEo3V05jSGZDb1RweFV1?=
- =?utf-8?B?S1BYbzFSYWViTnQrSlZPdmRyMVpMNncxcDBwa3MvMmg0UVh1UFZ1WXdZWGxl?=
- =?utf-8?B?UnZBUmVTUzVlSFh2Q1ZkZnhNQmR4V1kxcFhzWFlNdU1ock5CcmxHRjlPTFQv?=
- =?utf-8?B?TnhPM3ZIWFB0K0JkTWhsK0pkTFBaZWxqZkh6U2Q3ZVcvdzVSakhNTWtGdzhn?=
- =?utf-8?B?RUtSbGRlcjZ5RGxtU2JBSkJLUFdhQ1dKdnpoYk5ZcUJKUFpQMXNXQStWMU5J?=
- =?utf-8?B?RTJiM1NkcS93d3NmSkk0SUlMTWhIcTRaVDVaVGpDM2M4dHdsclhzTHlscVJk?=
- =?utf-8?B?MXUwMnhWdWdTenlLWnNpUVJtMzRjV2Nid3dlNEhPZndzM2p5dENxQ1c2SjQr?=
- =?utf-8?B?OVNXOHVmV2x1SjdNN3pxT0U1MXdWbXBvQTZMRkRlWVcyVmFSVnptVm1uVDZH?=
- =?utf-8?B?enBXWHlYbytJQ21VR1VJTE5NeWJacnU4TkwzOStHRnNsSS9OWnYrTzNBZDBx?=
- =?utf-8?B?NUlLWm00a0FUbTQ4ZnVpbStieW1yTmU4eGIrTmh2blJrM2FUNzJxQlFjN3JK?=
- =?utf-8?B?M2J4c1d5RzVzOTcvSlU2eFZJUmZhN3pCMklicFMzekc3dW1rZnh3VElka3VN?=
- =?utf-8?B?U21vSGM5YVZWNTUzL25JOFFVYmlQbDk3WVZpSTVWWmM0ZVJlRDlRMWtPSUwx?=
- =?utf-8?B?VStHSjAydlRPU1JJNmJkSjVoQUpIMjBOcUtDMUp1Rzl0WG05TEVySDg1eHlX?=
- =?utf-8?B?bEczK21vemd2YVV1QkFwM0RIbXQ0TjcwcThJTHYwQ0MzOHZxSUlrT09iVFph?=
- =?utf-8?Q?4dkqxk3Y1h1NmwZZKkRU9hrZpGeMTU=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSCPR01MB14647.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?ekw4aFBFNXpnRVhOUEZ1ZGpNb2xLWlJVZE9ub1pubW9CL3dUOVp6THIvaytO?=
- =?utf-8?B?Q0ZwYmx0Q0hMY0QxQWdLNEc1VVFwYWsyc3JZT1QxdWNXWW8wUDFiZmZPV2gr?=
- =?utf-8?B?c3JWb3BsY2N3R2xDcUJEYi9zWVYrVnVialVRMTEvL1Zwb3VHeS82RVNoYlJ6?=
- =?utf-8?B?MjBucEhYSCs0Nkp4ZjdocTh5TERGWWVLdkQ4WFJtMHA3Z09KSzRMbE50ZXVE?=
- =?utf-8?B?SGlKRU5vSHhSMUlScmJTSmplbXFHbC8zUzZxa0w1Tlk0ajBlSlBqdzgyWUN4?=
- =?utf-8?B?RHQwMUVmZFAwdjZ4aml3ZVBGazN0d1NWYUtpU0w2emdQbVkzVXExdytVSmN4?=
- =?utf-8?B?bE9LcFhPN29UYWlDeDVVWXN1Mm5hY1FOY1lPNVI2VEVEWlZpZ2psUm03b2xS?=
- =?utf-8?B?VTNxT1ZualI0bVBXZGV6ZDhzU1ZCQk5tSFhPeWQ0R2xyTmhUTm5MaHhpbmRU?=
- =?utf-8?B?MHZKaWU2TVk2b3dSYXdndWplaU9hYlBDWlNWZVpFb0pzd3hvSElQb3IzU2ZW?=
- =?utf-8?B?R3dnOTdTeDRoaGo5ako4SUtHVGdIVHBSSEwxQjVCQWo1ckQ3cjlzWGxwdTVW?=
- =?utf-8?B?QWluSkFseXlrYWdzRUFqb1NHaEY4UHR1NzM5RzNuc0FUYjdQM0dOQVFWK2dF?=
- =?utf-8?B?d1M0Mkx0MFpEN29LeG1BZk9NWG5yVU5FQUhnUnpwWWdIRjU1T2xwSy8yY0Vq?=
- =?utf-8?B?cEF6RUIvT1VNRUhuMU9od3pqQ3ZVOHRkQUNTT3lCTzdwT3ExQi8rdHp2d3Z5?=
- =?utf-8?B?c3FvL1FmVDZ0QjZ6YmE3NkdYQmYrSERWYk9NZWtEeG0wam9rOXNjZXpFRDhS?=
- =?utf-8?B?Wmg1YUdGL1I0Qmk2RlVKWnErb2l3SnM3TzFvckRKN2VEOW5veUNZcGtBemNY?=
- =?utf-8?B?WXhTdmRYTTNGMkFJTlhDMXhWRFNjL21LdEFxR1JkRFR6NHR1ajFGd1NLWXRl?=
- =?utf-8?B?VnRRbStGL3dJMXhBSkEyb2dLUmxoa3F5b1N5SFhSVzkvQ3lZYlVTck55SXRI?=
- =?utf-8?B?aU1wMWdoVWtycFR2N1MwZ2wvMHFwSVdvRnYxaEpUT0U5bXhOcnRmdFZhdHNi?=
- =?utf-8?B?bzN0dWp1aE95dzZJcWhsRGhHWjhHN3JOYU15YkIwMi9Tc24wZFgvb1RNUER6?=
- =?utf-8?B?OWR4emFMMnlEZGpBNjErT2hNdG9mVVd2a2hTVnBzZ0pwSWIrdjFwWExZUVFo?=
- =?utf-8?B?bHNYakVaVjJFV1NONnk4ZEJLVlRMMFgzVW1ubXNjSzRwNHY1K08rNU1uVS9z?=
- =?utf-8?B?TmRGRzRsQVN1TEFVYzZ0K1pKWXh6b1hzZm82VXo0WE8rUDV3ekI3QVJ2L1dz?=
- =?utf-8?B?K01OY2RWQUdFU04wVjBuejdmcHdpa2R4ajIrMkhkNUlvZ1ZrNXk1ZUltN0VC?=
- =?utf-8?B?dXRwTWlxYUllUEpUYkprYkphOGZBU1Z0aUJzNFVndExBQkppU3QwTGh2Smty?=
- =?utf-8?B?K0xmRFAyZDUrVGY0K04yUGJNVXNOdVZac1lXWEdLRXl1ZHljQ2dpQ2Nsai9L?=
- =?utf-8?B?Y2dGWDNpQzlWY1lDeUt6NGZvRE5RUnlDWUpoSlUvaGVWNXd6Y1hhVWNCdmla?=
- =?utf-8?B?VXdqdGZleHM3Sjc0Q1ZWWlZtWitVN3IzOGNhbjlFZFo4Z3RXSGYyWjlPaVNs?=
- =?utf-8?B?bkh6L2tRT2dqc3NidDZ3WldtN3Z5aVlOSkozRXQrMzBoeFlNamt0NkdCVnky?=
- =?utf-8?B?U2J0amk5eGVoZGhwOThvNW03WWRsa3g3VWw4ZFRPYWorS21TV0VVVUdPQzZI?=
- =?utf-8?B?TUc1NE5xUzRDMXZUU0x0TlVETEtKSVpGSWhoOGd4RnpJY2ZLd2dUS2g0Mkk5?=
- =?utf-8?B?ZXkvaERTMUplNG9nWVoyYXNYWXZ0czAzV05GSU91emNURjBqRy9JazNaMXdD?=
- =?utf-8?B?OXdiNVVDZmR3YXc0QXFjVm5sNnFFYjhtTnVwMXBhZzlBSjl3aWR5K3BTRGNh?=
- =?utf-8?B?WmhobFMxVzZNdlZqc004bzQwbFc3eFQ4eWFVYzFSWkkyckNTTjEwY0NyTSt0?=
- =?utf-8?B?NmxnU2RWMkdiV2tzRGVIY21vMzArOXp1MnArTTBERFl3TkRaTHlBM0krUDJ3?=
- =?utf-8?B?b1NUcVBMclpwa25EbTNnWHp0OUZkbGJSSWRMTnFaRVNvODJkbU9JeDhuUFd4?=
- =?utf-8?B?YkM2cUdKTlA5NEdHWkdzQUM5anlRVm1USkExWXNUSzQ0Zzd0ekVyOXhFRUZz?=
- =?utf-8?B?ZHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1754386510; c=relaxed/simple;
+	bh=9MfVy+lxDrD75Ox5ECCp+msLJBjzC81QBDPWn23C6JQ=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=FfltaG73A5G/ljMZqC4t4lvolIphz9LaglCHfv4ygxyMba/IgFsc8Qyx2uaRfj55yb0p2C9olmjGZnsxB/+YxXah43FyBB2WULGnXq/VfHVdLLavkhUEuFCSPobzYWDoR2nYk8BPzIuNtf4XugpgUJ9XV5tdei+H5oCpJAzunkY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=GJ2ytIwv; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=aVVZmfBJ; arc=pass smtp.client-ip=85.215.255.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+ARC-Seal: i=1; a=rsa-sha256; t=1754386137; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=l/w6KcKOuIS7LUdG4Ix/jF/a9zUEXzHZ92ukmnfKVNfuR3hxpFm5BarUNBkdxb6ta8
+    YSBioEWKSRDg7cY7mhnDRo+GdXrzao8vX6OClB+d8I7MkCZOkji1lM2Qwyi2AY5XD99b
+    pxl0zkk8jz8IOF/2UaY0qfKHI2Gc3vpfw+gDsR5MEC2NMi6Wo2UaK28WXC5QukBjqwHn
+    TltYClzZnWNppw603e5mPopOxL1TEx/Cv66pUXamlhpcNvOuYXf8ETLz51Rx9d5Dr4+m
+    hg1IZ3pTMPAZX7XsqnelQx6ES99UvTASqe/yTn7aoZMG5Zce2h3N8QsuZ84zcBSQ7jgu
+    xuYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1754386137;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=8G8/k+nPGic7BC3JBra8A7ttqgGnR4V1hT1DFa/NooQ=;
+    b=Zp2kUXyNc/4Tb4Je1p9zrxn/JqIwarui7zyNVPO10rTPAi2jdLZzRloUws4g0Whrfd
+    xwdHQV09h2JbKD13uClEfH34B80DDwQu3qWGIjfImplEXTmfcCeUYPPxdCMWkjtniXJw
+    Pkxm06rHK+9dnhWu1QUJpnedu1gXpBnTgJ//zQ5UuU+d9tgNhgdbH3xIF9AzY2nbmP9U
+    TyLdpeiFgW2wPlzqBCVy2whG+75xrr1BQ1pLmlT6bobZMIcSkvFVlxbfyJ7lH35mjAaH
+    Z5KiUVfg5csf/m13nyMrvvKmXH86hmOOJZSFn8x6JNb7O05uwmQKQAcq77uahmz6DMeD
+    ScBg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1754386137;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=8G8/k+nPGic7BC3JBra8A7ttqgGnR4V1hT1DFa/NooQ=;
+    b=GJ2ytIwv2wtppNHHYkPqi8gJ8cz3f6xR4iQH6OlvNRL9+4v3Oun2ORtbMtYwEgCCY2
+    KJMemsk6VMjkq5f4rzV6y7xTCVhVhwJmBdlNw5NtigJYCQUHl1Z0rkm6RZ5qdnKJ1mkb
+    P5T0NyKPgxjvbxSghYnVdtrfx7w12USQ+cqceUEXT5j8A4uIEmtq6tIkus2taVkugisG
+    9y7usO2m3BTYBG9fjdoHy9jav4Yw5jisna9Z2p9+xpIOc7yq/YtGDSMf9OPD2YgoABEC
+    8wg2l2UnKyqlXY8O9YPF5sWyOU9t0U63OQlyEPAhcxOqfp5dNI45y1vUGnLY3i6U69oH
+    kblA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1754386137;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=8G8/k+nPGic7BC3JBra8A7ttqgGnR4V1hT1DFa/NooQ=;
+    b=aVVZmfBJYcCxals6j19JWh2TdATsM+QGnx3sH9asI8m0YdeytJJ2C5uYfMItOkLJFI
+    fogqAp5X4Avngv4OlmDw==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfjEZ"
+Received: from smtpclient.apple
+    by smtp.strato.de (RZmta 52.1.2 DYNA|AUTH)
+    with ESMTPSA id Q307a41759Sujl3
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+	(Client did not present a certificate);
+    Tue, 5 Aug 2025 11:28:56 +0200 (CEST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSCPR01MB14647.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a9a10f4-f022-4c38-54ba-08ddd4018ca0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2025 09:22:07.5825
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: E53ItWD24meWv8SS1Svo1n2ajvm3jHtGibbcRWfZ2It1krSO0cKgWMXeKZ3/sZ+06mYfk5OXfyGMxy8ho+BXF6mTwQvM70EoDxics+rwVLo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8503
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [PATCH] power: supply: bq27xxx: fix error return in case of no
+ bq27000 hdq battery
+From: "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <VI1PR02MB10076D58D8B86F8FB50E59AADF422A@VI1PR02MB10076.eurprd02.prod.outlook.com>
+Date: Tue, 5 Aug 2025 11:28:46 +0200
+Cc: Sebastian Reichel <sre@kernel.org>,
+ =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "letux-kernel@openphoenux.org" <letux-kernel@openphoenux.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ "kernel@pyra-handheld.com" <kernel@pyra-handheld.com>,
+ "andreas@kemnade.info" <andreas@kemnade.info>,
+ Hermes Zhang <Hermes.Zhang@axis.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2437B077-0F51-4724-8861-7E0BEE9DB5F0@goldelico.com>
+References: <bc405a6f782792dc41e01f9ddf9eadca3589fcdc.1753101969.git.hns@goldelico.com>
+ <VI1PR02MB10076D58D8B86F8FB50E59AADF422A@VI1PR02MB10076.eurprd02.prod.outlook.com>
+To: Jerry Lv <Jerry.Lv@axis.com>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
 
-SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrIQ0KDQo+IC0tLS0tT3JpZ2luYWwg
-TWVzc2FnZS0tLS0tDQo+IEZyb206IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4
-ay5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIEF1Z3VzdCA1LCAyMDI1IDEwOjQ3IEFNDQo+IFRvOiBK
-b2huIE1hZGlldSA8am9obi5tYWRpZXUueGFAYnAucmVuZXNhcy5jb20+DQo+IFN1YmplY3Q6IFJl
-OiBbUEFUQ0ggdjYgMy81XSB0aGVybWFsOiByZW5lc2FzOiByemczZTogQWRkIHRoZXJtYWwgZHJp
-dmVyIGZvcg0KPiB0aGUgUmVuZXNhcyBSWi9HM0UgU29DDQo+IA0KPiBIaSBKb2huLA0KPiANCj4g
-T24gVHVlLCA1IEF1ZyAyMDI1IGF0IDEwOjI3LCBKb2huIE1hZGlldSA8am9obi5tYWRpZXUueGFA
-YnAucmVuZXNhcy5jb20+DQo+IHdyb3RlOg0KPiA+ID4gRnJvbTogR2VlcnQgVXl0dGVyaG9ldmVu
-IDxnZWVydEBsaW51eC1tNjhrLm9yZz4gT24gVGh1LCAyMiBNYXkgMjAyNQ0KPiA+ID4gYXQgMjA6
-MjMsIEpvaG4gTWFkaWV1IDxqb2huLm1hZGlldS54YUBicC5yZW5lc2FzLmNvbT4NCj4gPiA+IHdy
-b3RlOg0KPiA+ID4gPiBUaGUgUlovRzNFIFNvQyBpbnRlZ3JhdGVzIGEgVGVtcGVyYXR1cmUgU2Vu
-c29yIFVuaXQgKFRTVSkgYmxvY2sNCj4gPiA+ID4gZGVzaWduZWQgdG8gbW9uaXRvciB0aGUgY2hp
-cCdzIGp1bmN0aW9uIHRlbXBlcmF0dXJlLiBUaGlzIHNlbnNvcg0KPiA+ID4gPiBpcyBjb25uZWN0
-ZWQgdG8gY2hhbm5lbCAxIG9mIHRoZSBBUEIgcG9ydCBjbG9jay9yZXNldCBhbmQgcHJvdmlkZXMN
-Cj4gPiA+IHRlbXBlcmF0dXJlIG1lYXN1cmVtZW50cy4NCj4gPiA+DQo+ID4gPiBSWi9WMkggYW5k
-IFJaL1YyTiBoYXZlIGEgc2Vjb25kIHNldCBvZiB0cmltIHZhbHVlcyBmb3IgdGhlIHNlY29uZA0K
-PiA+ID4gVFNVIGluc3RhbmNlLiAgU28gSSBndWVzcyB5b3Ugd2FudCB0byBzcGVjaWZ5IHRoZSBv
-ZmZzZXQgaW4gRFQgaW5zdGVhZC4NCj4gPg0KPiA+IFdoYXQgZG8geW91IHRoaW5rIG9mICdyZW5l
-c2FzLHRzdS1jaGFubmVsJyBwcm9wZXJ0eSBvciBhbGlrZSBQcm9wZXJ0eQ0KPiA+IHRvIHNwZWNp
-ZnkgdGhlIGNoYW5uZWwgYmVpbmcgdXNlZCA/DQo+IA0KPiBXaGlsZSBJIGFncmVlIGluc3RhbmNl
-IElEcyBjYW5iZSB1c2VmdWwgKHNvbWV0aW1lcyksIHRoZSBEVCBtYWludGFpbmVycyBkbw0KPiBu
-b3QgbGlrZSB0aGVtIHZlcnkgbXVjaCwgY2ZyLiBjb21taXQgNmE1N2NmMjEwNzExYzA2OCAoImRv
-Y3M6IGR0Og0KPiB3cml0aW5nLWJpbmRpbmdzOiBEb2N1bWVudCBkaXNjb3VyYWdlZCBpbnN0YW5j
-ZSBJRHMiKSwgd2hpY2ggcHJlZmVycw0KPiBjZWxsL3BoYW5kbGUgYXJndW1lbnRzLg0KPiANCj4g
-Rm9yIHRoaXMgcGFydGljdWxhciBjYXNlOg0KPiAgIDEuIFRoZSBpbnN0YW5jZSBJRCBmb3IgdGhl
-IHNpbmdsZSBUU1Ugb24gUlovRzNFIHdvdWxkIGJlIG9uZSwgbm90IHplcm8NCj4gICAgICAob2gs
-IHRoZSBTWVNfTFNJX09UUFRTVTFUUk1WQUxbMDFdIHJlZ2lzdGVyIG5hbWVzIGRvIGNvbnRhaW4g
-IlRTVTEiKSwNCj4gICAyLiBJdCB3aWxsIGJyZWFrIHRoZSBtb21lbnQgYSBuZXcgU29DIGlzIHJl
-bGVhc2VkIHRoYXQgc3RvcmVzIHRyaW0NCj4gICAgICB2YWx1ZXMgYXQgZGlmZmVyZW50IG9mZnNl
-dHMgaW4gdGhlIFNZU0MgYmxvY2suDQo+IA0KPiBIZW5jZSBhIHByb3BlcnR5IGNvbnRhaW5pbmcg
-YSBTWVNDIHBoYW5kbGUgYW5kIHJlZ2lzdGVyIG9mZnNldCBzb3VuZHMNCj4gYmV0dGVyIHRvIG1l
-Lg0KDQpUaGlzIHNvdW5kcyBnb29kIHRvIG1lLiBJIHNlZSBzb21ldGhpbmcgbGlrZToNCg0KcmVu
-ZXNhcyx0c3UtY2hhbm5lbDEgPSA8JnN5c2Mgb2ZmMT47DQpyZW5lc2FzLHRzdS1jaGFubmVsMiA9
-IDwmc3lzYyBvZmYyPjsgLyogT3B0aW9uYWwsIGZvciBWMkggKi8NCg0KLyogb3IgKi8NCg0KcmVu
-ZXNhcyx0c3UtY2hhbm5lbC1tYXAgPSA8JnN5c2Mgb2ZmMSBvZmYyPjsNCg0KSSB3b3VsZCBnbyBm
-b3IgdGhlIGZpcnN0IG9wdGlvbiB0byBtYWtlIGl0IGVhc2llciBmb3IgVjJIDQood2hpbGUgYWRk
-aW5nIHN1cHBvcnQgZm9yIGl0IGxhdGVyKSBzbyBpdCBjYW4gY2hvb3NlIHVzaW5nDQplaXRoZXIs
-IG9yIGJvdGgsIHJlZ2FyZGxlc3Mgb2YgdGhlIGluZGV4Lg0KDQpXaGF0IGRvIHlvdSB0aGluayA/
-DQoNCj4gVGhvdWdodHM/DQo+IA0KPiBHcntvZXRqZSxlZXRpbmd9cywNCj4gDQo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0KDQpSZWdhcmRzLA0KSm9obg0KDQo+IC0tDQo+IEdl
-ZXJ0IFV5dHRlcmhvZXZlbiAtLSBUaGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0g
-Z2VlcnRAbGludXgtDQo+IG02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBjb252ZXJzYXRpb25z
-IHdpdGggdGVjaG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhhY2tlci4NCj4gQnV0IHdo
-ZW4gSSdtIHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNheSAicHJvZ3JhbW1lciIgb3Ig
-c29tZXRoaW5nDQo+IGxpa2UgdGhhdC4NCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAtLSBMaW51cyBUb3J2YWxkcw0K
+Hi Jerry,
+
+> Am 05.08.2025 um 10:53 schrieb Jerry Lv <Jerry.Lv@axis.com>:
+>=20
+>=20
+>=20
+>=20
+> ________________________________________
+> From: H. Nikolaus Schaller <hns@goldelico.com>
+> Sent: Monday, July 21, 2025 8:46 PM
+> To: Sebastian Reichel; Jerry Lv
+> Cc: Pali Roh=C3=A1r; linux-pm@vger.kernel.org; =
+linux-kernel@vger.kernel.org; letux-kernel@openphoenux.org; =
+stable@vger.kernel.org; kernel@pyra-handheld.com; andreas@kemnade.info; =
+H. Nikolaus Schaller
+> Subject: [PATCH] power: supply: bq27xxx: fix error return in case of =
+no bq27000 hdq battery
+>=20
+> [You don't often get email from hns@goldelico.com. Learn why this is =
+important at https://aka.ms/LearnAboutSenderIdentification ]
+>=20
+> Since commit
+>=20
+> commit f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when =
+busy")
+>=20
+> the console log of some devices with hdq but no bq27000 battery
+> (like the Pandaboard) is flooded with messages like:
+>=20
+> [   34.247833] power_supply bq27000-battery: driver failed to report =
+'status' property: -1
+>=20
+> as soon as user-space is finding a /sys entry and trying to read the
+> "status" property.
+>=20
+> It turns out that the offending commit changes the logic to now return =
+the
+> value of cache.flags if it is <0. This is likely under the assumption =
+that
+> it is an error number. In normal errors from bq27xxx_read() this is =
+indeed
+> the case.
+>=20
+> But there is special code to detect if no bq27000 is installed or =
+accessible
+> through hdq/1wire and wants to report this. In that case, the =
+cache.flags
+> are set (historically) to constant -1 which did make reading =
+properties
+> return -ENODEV. So everything appeared to be fine before the return =
+value was
+> fixed. Now the -1 is returned as -ENOPERM instead of -ENODEV, =
+triggering the
+> error condition in power_supply_format_property() which then floods =
+the
+> console log.
+>=20
+> So we change the detection of missing bq27000 battery to simply set
+>=20
+>        cache.flags =3D -ENODEV
+>=20
+> instead of -1.
+>=20
+> Fixes: f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when =
+busy")
+> Cc: Jerry Lv <Jerry.Lv@axis.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+> drivers/power/supply/bq27xxx_battery.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/bq27xxx_battery.c =
+b/drivers/power/supply/bq27xxx_battery.c
+> index 93dcebbe11417..efe02ad695a62 100644
+> --- a/drivers/power/supply/bq27xxx_battery.c
+> +++ b/drivers/power/supply/bq27xxx_battery.c
+> @@ -1920,7 +1920,7 @@ static void =
+bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
+>=20
+>        cache.flags =3D bq27xxx_read(di, BQ27XXX_REG_FLAGS, =
+has_singe_flag);
+>        if ((cache.flags & 0xff) =3D=3D 0xff)
+> -               cache.flags =3D -1; /* read error */
+> +               cache.flags =3D -ENODEV; /* read error */
+>        if (cache.flags >=3D 0) {
+>                cache.capacity =3D bq27xxx_battery_read_soc(di);
+>=20
+> --
+> 2.50.0
+>=20
+>=20
+>=20
+> In our device, we use the I2C to get data from the gauge bq27z561.=20
+> During our test, when try to get the status register by bq27xxx_read() =
+in the bq27xxx_battery_update_unlocked(),=20
+> we found sometimes the returned value is 0xFFFF, but it will update to =
+some other value very quickly.
+
+Strange. Do you have an idea if this is an I2C communication effect or =
+really reported from the bq27z561 chip?
+
+> So the returned 0xFFFF does not indicate "No such device", if we force =
+to set the cache.flags to "-ENODEV" or "-1" manually in this case,=20
+> the bq27xxx_battery_get_property() will just return the cache.flags =
+until it is updated at lease 5 seconds later,
+> it means we cannot get any property in these 5 seconds.
+
+Ok I see. So there should be a different rule for the bq27z561.
+
+>=20
+> In fact, for the I2C driver, if no bq27000 is installed or accessible,=20=
+
+> the bq27xxx_battery_i2c_read() will return "-ENODEV" directly when no =
+device,
+> or the i2c_transfer() will return the negative error according to real =
+case.
+
+Yes, that is what I2C can easily report. But for AFAIK for HDQ there is =
+no -ENODEV
+detection in the protocol. So the bq27000 has this special check.
+
+>=20
+>        bq27xxx_battery_i2c_read() {
+>                ...
+>        if (!client->adapter)
+>         return -ENODEV;
+>                ...
+>                ret =3D i2c_transfer(client->adapter, msg, =
+ARRAY_SIZE(msg));
+>                ...
+>                if (ret < 0)
+>        return ret;
+>                ...
+>        }
+>=20
+> But there is no similar check in the bq27xxx_battery_hdq_read() for =
+the HDQ/1-wire driver.
+>=20
+> Could we do the same check in the bq27xxx_battery_hdq_read(),
+> instead of changing the cache.flags manually when the last byte in the =
+returned data is 0xFF?
+
+So your suggestion is to modify bq27xxx_battery_hdq_read to check for =
+BQ27XXX_REG_FLAGS and
+value 0xff and convert to -ENODEV?
+
+Well, it depends on the data that has been successfully reported. So =
+making bq27xxx_battery_hdq_read()
+have some logic to evaluate the data seems to just move the problem to a =
+different place.
+Especially as this is a generic function that can read any register it =
+is counter-intuitive to
+analyse the data.
+
+> Or could we just force to set the returned value to "-ENODEV" only =
+when the last byte get from bq27xxx_battery_hdq_read() is 0xFF?
+
+In summary I am not sure if that improves anything. It just makes the =
+existing code more difficult=20
+to understand.
+
+What about checking bq27xxx_battery_update_unlocked() for
+
+       if (!(di->opts & BQ27Z561_O_BITS) && (cache.flags & 0xff) =3D=3D =
+0xff)
+
+to protect your driver from this logic?
+
+This would not touch or break the well tested bq27000 logic and prevent =
+the new bq27z561
+driver to trigger a false positive?
+
+BR and thanks,
+Nikolaus
+
 
