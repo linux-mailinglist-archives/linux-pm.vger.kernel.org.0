@@ -1,132 +1,113 @@
-Return-Path: <linux-pm+bounces-31927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E70B1AB6E
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 01:25:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15DEDB1ABEE
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 03:12:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5B81620768
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Aug 2025 23:25:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D02633BA3E0
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 01:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5ACF292B5E;
-	Mon,  4 Aug 2025 23:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24F818A6DB;
+	Tue,  5 Aug 2025 01:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GbWU7GMz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aJZ+NV3H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D08291C33
-	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 23:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A41341AA
+	for <linux-pm@vger.kernel.org>; Tue,  5 Aug 2025 01:12:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754349921; cv=none; b=Kld7cOdXqhGwn2gb7gKzswBWT7tUgYdSK8AUH+YMkIQSisLzMqdXZy1VkOanwwi7M+Hmq3OBbi461v+GhWeWr5q5yWvl5A6tN95fp17jQAHeMsLj7nIfsikV7AjcmE7Fq4WxrZ1Vgg8Bd4wxathLCY+k1KGFi9BW4qvcXdD0fks=
+	t=1754356368; cv=none; b=oRSoOOrwt2SvU7DYSdELa5PKfSTMW69nXLHyPRElfiveXx1vXZBGGaDqK2n0mxpC9Z2xk4Oj2r4xozlo4RbQxjEbCzWin9toJKlCgj2nt/s3DK9Ypxa+BVcqpcxEAB8llB+tPKxtinfVET/T9uRsfn3x1opnccJ3f4a7IBkPS4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754349921; c=relaxed/simple;
-	bh=Eqahkamg13uwXjpD2HqVe8PGEmKJKZBW1G6dF/3Hy5o=;
-	h=From:Date:Subject:MIME-Version:Message-Id:In-Reply-To:To:Cc:
-	 Content-Type:References; b=axz/fVEDDGJmeKQpmCK0HkhBZYE0+nKgJjVmQ881UVbg4aIW6Ie5V9R/s9tAkTyVwksjPeB180+Y7+12zyRReMCFtRlKfh7CCg8yX6i0bR8vAGh9HE99ku+H+JnshZ9CxEafWTo7QroSLij0ZrQ0XP8oitHXr0F266Ht723TWUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GbWU7GMz; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250804232517euoutp0110e679400611c39e5c4501fab3688f2b~Ys-SNH-8A2353123531euoutp01F
-	for <linux-pm@vger.kernel.org>; Mon,  4 Aug 2025 23:25:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250804232517euoutp0110e679400611c39e5c4501fab3688f2b~Ys-SNH-8A2353123531euoutp01F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1754349917;
-	bh=o9pup7lxdlJYj1WCugUFlZF6W3E8/CCvLfzm1q+9rG4=;
-	h=From:Date:Subject:In-Reply-To:To:Cc:References:From;
-	b=GbWU7GMzBpnaVF/JeFaJuZ8dnDtibwhpOjzNepMDyjEmvwFj6aUSiTpsfjtC9jRG/
-	 bIKrS+ZeWJoP8DdxhBJv73IIjspXQMwEdsDFzFPUa43HdolTXiAQYI8mCb4ewsN1sr
-	 GNbC9Lm5cW8ABWj/9rag3TK7dy+emxh0ITSOuN2E=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250804232516eucas1p1c50313f830f44571e409fba8c5d5fe79~Ys-QtyptJ2311123111eucas1p1o;
-	Mon,  4 Aug 2025 23:25:16 +0000 (GMT)
-Received: from AMDC4942.eu.corp.samsungelectronics.net (unknown
-	[106.210.136.40]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250804232515eusmtip2bd8f5ff41059da14ee0285cd5cde078e~Ys-PtrLgG3204032040eusmtip2d;
-	Mon,  4 Aug 2025 23:25:15 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-Date: Tue, 05 Aug 2025 01:25:04 +0200
-Subject: [PATCH v11 4/4] drm/imagination: Enable PowerVR driver for RISC-V
+	s=arc-20240116; t=1754356368; c=relaxed/simple;
+	bh=IssW0J3YfD78mQWKfR9piPho3y+18KHinlVGttUM0Gw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g+xP8m8vJCM264xmOk3GE79cPZc3zz1G0PHc9p/84pdFXh8o26la5B2znkf5dm5tMDa7ZqYUK4lw2SaZcNshLPQkdjaeWxWTTRRaKm66Ehdu2CmYbo2AQacqKNcjNnYYskKN2tZm8wopNu6IDRZZ81gTM3XCdPlxIFzv0FZChR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aJZ+NV3H; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4b07a5e9f9fso211381cf.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Aug 2025 18:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754356366; x=1754961166; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1THODX6cXrJgsKrzLiWdmBkVFsg+xvhr1Laebx33cFU=;
+        b=aJZ+NV3HrSkt8c0tQsnoWSbrv4Pb4Qt1ZctV0lkpUdWwzTM+25T0J4mH6ojyK5fAbi
+         e+2p9MAAd4EYOB5AzAryHYPhwR5P8PsWEYRhIJhhaXV5WKkayV3N0k6KJypp9EYrjUTD
+         7kLIpGcZ60mo9NamEGYJ2C3ncGPT2H6LZLtSffX9blrzGTgFjGVW+T+Xqn2UTOHzwOwQ
+         BzqeMBOfs/rvSkWKo1opkMMq2lOBcGKtOm91YlMBlELunM/rZjWKa1J5vapkmF3mm978
+         +P4g1IsyEuodX54Ay9EUQAPStPJmF/gBh6Z7X7DRWMiV186yGq6mTMl65j9YekxsoT+P
+         Vx7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754356366; x=1754961166;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1THODX6cXrJgsKrzLiWdmBkVFsg+xvhr1Laebx33cFU=;
+        b=mNawO+1kqyBU7hJglsphl6PMyUuG44jKJMaZoEbTX9lFx/HwTgEJowkpRuhgstsJWC
+         j+O0TlInwQDPnGEoZhinGRxZ+QMUOMhVjF+V1iqCgbtkXkaovKMLmWZIlRUQZDJkIpkq
+         v4NxAiq50t2Sx1L0lA2Y6mY9+S5yFoWPVvW33rUV/U61kD0+DJoCla0L+rgyiXrVFl7A
+         1+XxF3aqtBAGuqGDUXmA2eyNPVqTg5jXUggbFM4AhxWSheQJwncwApcTyhthip4n1y8q
+         1TSjKsjCCuExAho+gCJkN1/HZoQKmZNRTS9UlHdsjB9xeusTF8ZJ/d/4WVz8ei7dvvcb
+         JxhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfCqNoodd+G5tV8j0L4Ey1mx0FeH6/TazLOw85rITYdQeIs6wvlFqhaks6lINJCuUflEHe0qGtEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxwyAXPW0E/QEi5RESrSkU33ISJJy3aInaUNT7ZCBdG3+kiCYJ
+	DlxCsvws4mQWPwUPlSKSLvOE8jo5KJCyPWgrvFcAyU2B4CGgTWGpYmRo48pGPWOGZs20Azg0gK9
+	LhAhkfRJiulAa2ztJXgpJ4M+ojQuB1lqukx+aPitr
+X-Gm-Gg: ASbGncv0Zpv+uOIBMB2aRvRqmLRaKfeOiH1MVeZz8pcHSiHoIwJUnhDFW9zJI0yf2hw
+	YwSB0gmpBh156Ucl+m5nZfFm+JnFKNIvbU1i/wVGj8q8lO4WGuqBbV30vU47jIcgcldTM/NoMQE
+	nwSjU3aBxjn10bIz3sWyklIImXZtPXV0MPrrELTaFGwEZupE2VX65KdwWr43HLF8brD3BfrcajP
+	VCYQHBYYPymHTsU
+X-Google-Smtp-Source: AGHT+IEyQD2Cezy8/wkC7XfHIjoY6NUMH1DmfY+dK1PsKlX8IdWynIH9pDg2WV4yx3/wQ4+hxzBWtv2hVfDrwdNcDnI=
+X-Received: by 2002:a05:622a:180b:b0:497:75b6:e542 with SMTP id
+ d75a77b69052e-4b084f11753mr397691cf.10.1754356365735; Mon, 04 Aug 2025
+ 18:12:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250805-apr_14_for_sending-v11-4-b7eecefcfdc0@samsung.com>
-In-Reply-To: <20250805-apr_14_for_sending-v11-0-b7eecefcfdc0@samsung.com>
-To: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,  Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
-	<conor+dt@kernel.org>,  Michal Wilczynski <m.wilczynski@samsung.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,  Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,  David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,  Paul Walmsley
-	<paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>,  Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
-	<ulf.hansson@linaro.org>,  Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Drew Fustini <fustini@kernel.org>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org,  Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.15-dev
-X-CMS-MailID: 20250804232516eucas1p1c50313f830f44571e409fba8c5d5fe79
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250804232516eucas1p1c50313f830f44571e409fba8c5d5fe79
-X-EPHeader: CA
-X-CMS-RootMailID: 20250804232516eucas1p1c50313f830f44571e409fba8c5d5fe79
-References: <20250805-apr_14_for_sending-v11-0-b7eecefcfdc0@samsung.com>
-	<CGME20250804232516eucas1p1c50313f830f44571e409fba8c5d5fe79@eucas1p1.samsung.com>
+References: <20250730032312.167062-1-yubowen8@huawei.com> <20250730032312.167062-3-yubowen8@huawei.com>
+ <20250730063930.cercfcpjwnfbnskj@vireshk-i7> <CAFivqmLkLn-92rMow+c7iEADCdh3-DEapVmtB_Qwk1a2JrwwWw@mail.gmail.com>
+ <9041c44e-b81a-879d-90cd-3ad0e8992c6c@hisilicon.com> <CAFivqmLr_0BDkMhD4o6box3k9ouKek8pnY7aHX36h1Q9TaT_HA@mail.gmail.com>
+ <7a9030d0-e758-4d11-11aa-d694edaa79a0@hisilicon.com>
+In-Reply-To: <7a9030d0-e758-4d11-11aa-d694edaa79a0@hisilicon.com>
+From: Prashant Malani <pmalani@google.com>
+Date: Mon, 4 Aug 2025 18:12:34 -0700
+X-Gm-Features: Ac12FXy9xyakfz6nU1zTVwjcHt0kVuVHngyBTkjBFJgF_Kl_APh9mesLw2n5bqQ
+Message-ID: <CAFivqmJyYJ+d+TH4qYBKf_5t-AqWZuzgk2H_4nHmynTjoUHnYQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in cppc_scale_freq_workfn()
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Bowen Yu <yubowen8@huawei.com>, rafael@kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com, lihuisong@huawei.com, zhenglifeng1@huawei.com, 
+	Beata Michalska <beata.michalska@arm.com>, Ionela Voinescu <ionela.voinescu@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Several RISC-V boards feature Imagination GPUs that are compatible with
-the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
-4A board. This commit adjusts the driver's Kconfig dependencies to allow
-the PowerVR driver to be compiled on the RISC-V architecture.
+On Sun, 3 Aug 2025 at 23:21, Jie Zhan <zhanjie9@hisilicon.com> wrote
+> On 01/08/2025 16:58, Prashant Malani wrote:
+> > This begs the question: why is this work function being scheduled
+> > for CPUs that are in reset or offline/powered-down at all?
+> > IANAE but it sounds like it would be better to add logic to ensure this
+> > work function doesn't get scheduled/executed for CPUs that
+> > are truly offline/powered-down or in reset.
+> Yeah good question.  We may discuss that on your thread.
 
-By enabling compilation on RISC-V, we expand support for these GPUs,
-providing graphics acceleration capabilities and enhancing hardware
-compatibility on RISC-V platforms.
+OK.
+Quickly looking around, it sounds having in the CPPC tick function [1]
+might be a better option (one probably doesn't want to lift it beyond the
+CPPC layer, since other drivers might have different behaviour).
+One can add a cpu_online/cpu_enabled check there.
 
-The RISC-V support is restricted to 64-bit systems (RISCV && 64BIT) as
-the driver currently has an implicit dependency on a 64-bit platform.
-
-Add a dependency on MMU to fix a build warning on RISC-V configurations
-without an MMU.
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
----
- drivers/gpu/drm/imagination/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
-index 3bfa2ac212dccb73c53bdc2bc259bcba636e7cfc..682dd2633d0c012df18d0f7144d029b67a14d241 100644
---- a/drivers/gpu/drm/imagination/Kconfig
-+++ b/drivers/gpu/drm/imagination/Kconfig
-@@ -3,8 +3,9 @@
- 
- config DRM_POWERVR
- 	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
--	depends on ARM64
-+	depends on (ARM64 || RISCV && 64BIT)
- 	depends on DRM
-+	depends on MMU
- 	depends on PM
- 	select DRM_EXEC
- 	select DRM_GEM_SHMEM_HELPER
+[1] https://elixir.bootlin.com/linux/v6.16/source/include/linux/cpumask.h#L1233
 
 -- 
-2.34.1
-
+-Prashant
 
