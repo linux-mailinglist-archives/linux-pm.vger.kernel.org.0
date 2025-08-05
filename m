@@ -1,221 +1,174 @@
-Return-Path: <linux-pm+bounces-31953-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1C68B1B12C
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 11:35:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90B42B1B145
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 11:38:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF78117FC53
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:34:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 111F4189F3EA
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Aug 2025 09:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F24B271A9A;
-	Tue,  5 Aug 2025 09:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="Mni/vm+/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD3432701D6;
+	Tue,  5 Aug 2025 09:35:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013031.outbound.protection.outlook.com [52.101.72.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A76D2701AE;
-	Tue,  5 Aug 2025 09:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754386429; cv=fail; b=KYrTjDtMiIhTtx22MgP6EH5Z5m7cFrqxBZuGZB6nFNTVocADAeP1N+flph8+PGBFGzvB+UqJQV7I/ZG4AJIXYc08t0kGX6ml4ReCdtrvr0cJotGXjDOKyGfXkpBwGHL6fRLsJuWPktxv9fX0oelwsFKGm3TZY4qSuK4rtFNA1uw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754386429; c=relaxed/simple;
-	bh=nmViPwf/Ukqau2PhacwjGLrAu/3GCAv4gNlL6e5DX9U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PULJqnh2n2Ih7Hyq9ZEQ5DIRUsm7yBKk8KBWqyPLkv7dFALwYrtCwLWtulbtBZoq9yS0SmXNQtHuE0OtX8ttgXoI8TSUh88Pm7H62VcRmM9MuioEAFfh38Q26+yapHmdo5yWefSS4uI0Unjai7CHCGdbGQQEN1vq1pjZnq597Lc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=Mni/vm+/; arc=fail smtp.client-ip=52.101.72.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=k4w9dJ/V8w4yi7hZX34op9d1LSjAQDuYGJupjxAkbqUxDkuWska2i32b1dY91iHXXKaqg52BDZ6qnfw8C+s9asPXvu0NTHMKY9CLYP3TdPnAj1CDumuDRsgJVWcXq5ByzLXHlkTRoDie0Y9TRLpmQlW6LuJmrd1wlwHzQ+tJ+dU9eK/Q/6pyJzzb2q3S0vH7vo/ehBah+Fc24xO90P8VV/v++D64zFC1qjb/kV7eWZ25ykdofTp6cK19eal9Wy0DNNhyMUoyJbfPAurhVhauJpimyA71ad20H56+qVOBpxfNkzOE3VASCv17XcQumje177IkBsPVdej8VZ8KAlhhCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0tToxMFVNblhhh6hgXTLQa/jqgprut6FzrRgInYmQjQ=;
- b=Ch/ujzZLL08VGGMu69zSd1UH84va9/8Q/YhaROUNqaNuQyuUrGwcyBtjys3GUoQwBWB7imCnR9+ljLwyF6jFiK7nboUHQ1/Q4nJNcS9gbaZDVza6z7UyLVQCQ+4wTXqhkRI96rRXQCNNpLybccITVwaOiuvIfbMxjYhQwMEaI3c4x3hAbU4Rh0va8xeA+1pA9F0VJ6Muh/aPk5Y/aibFLXAswZie9PLR9CZPg+wy0nTPM7eD/sdEM1517pMN15WERdGQxpvm932WJUf45R3RgV2Cwu5FuinwN6hfps+3ZsAZUdjTJCrIvuAl4WXu8JvXouvEbDkVAOdjWlfOLPm+NQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0tToxMFVNblhhh6hgXTLQa/jqgprut6FzrRgInYmQjQ=;
- b=Mni/vm+/tLzxc72Bciia5jh2QgoDneoLUo5LwJXLwhk1x8LDTSWPz3RkSuhGSRRDtUNe9zSQt2pKvl+M7lkoAfxgfm6VaJJ/hshBx+XMn3sewHDoAl6pcR4iK3yHPpu+KSwGuEfVPGlJ/Fir1zRkjNikMuoqv7jrr8gfRLDfoIE=
-Received: from CWLP123CA0022.GBRP123.PROD.OUTLOOK.COM (2603:10a6:401:56::34)
- by DB9PR02MB8000.eurprd02.prod.outlook.com (2603:10a6:10:370::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Tue, 5 Aug
- 2025 09:33:44 +0000
-Received: from AM3PEPF0000A790.eurprd04.prod.outlook.com
- (2603:10a6:401:56:cafe::e) by CWLP123CA0022.outlook.office365.com
- (2603:10a6:401:56::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8989.21 via Frontend Transport; Tue,
- 5 Aug 2025 09:33:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- AM3PEPF0000A790.mail.protection.outlook.com (10.167.16.119) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9009.8 via Frontend Transport; Tue, 5 Aug 2025 09:33:43 +0000
-Received: from pc52311-2249 (10.4.0.13) by se-mail01w.axis.com (10.20.40.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 5 Aug
- 2025 11:33:35 +0200
-From: Waqar Hameed <waqar.hameed@axis.com>
-To: Sebastian Reichel <sre@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <kernel@axis.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] power: supply: Remove error prints for
- devm_add_action_or_reset()
-User-Agent: a.out
-Date: Tue, 5 Aug 2025 11:33:35 +0200
-Message-ID: <pndzfcekt8w.a.out@axis.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D47134AC;
+	Tue,  5 Aug 2025 09:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754386534; cv=none; b=MGDhl3n8iAKbSuUWOG5sYjF3AK3Br7s6nF78n2rW3FWwaOF7TqKpAGe1/DUtKerqHL010R0iI/mVb5uvgF6rHQVH7DdYasApR+b31v/+htNpmkzumeOLZLI5HZFfpdlfYIeeVWytaH5PPlnbDIwH4qEfUm9EvMn+pyXCmuQmabY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754386534; c=relaxed/simple;
+	bh=qusNSIcbQGI1rXZqa62J/1BR26z3I4Oa2dRZ9+B8Z8s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sYCj51OyIlARYEoZv3aH0lvZmc73JrOTCihmrUcDYcITHY3YrLqoFFr8gyZ172NdrGSC30UK6gqW+nb++gsTNs43NMQrx/7+LuyIJwCq6VQqXUKMOsLlMIFefJV4jSu8ZBllgP8ckIzRKEUvoxreyAJnqbQSZ+1bqFDEy/l3z2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-53987d78f0bso470224e0c.2;
+        Tue, 05 Aug 2025 02:35:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754386531; x=1754991331;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kSnbT0XIAXfQmqgeyBFr4CFfPWqdXisju5F5x0bhLeE=;
+        b=fmwL6Rn+7p8uRhBTf9yCY+c0a+nmfpmVVaQYq+VbUvSeH+ZLHxuJ9D0TSxECUQ9YW6
+         132xZtkLlIf4sYZ6a6drYj4+uEADnXkZ38YToWtDVIj/g4YB/4TGRpfvXXh9tY8Y3p08
+         wYv2f3htvk/OFt8EH6BL7gEVlXsmGnQxmByraFcvPmnQyXJeg2Q5QiuLVxhNJy+r3Moa
+         zAvXVcErztjcUjf5qmHWj9QyI1g+CeaXwN8PJGk8GsDx+kvGVSzonjULQTQfDugGFCMi
+         uz4OtbRQMYQELk0SfrHY2R/PlsXjXotK4OYlfjdsyaZ2iIcIpbID19f2VUMeFMBAgWCB
+         3/Kg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQmrOuQOFOcuSGmvivRIYzo5m8F0leO+Rc7e8EK/am+BLWRTV8I13cuvqG2atImXMFAOmuVo+n1wkr@vger.kernel.org, AJvYcCW5vaTQCFIfWGPkyS6YFPaRiXbRzJDt8L4uK3bB0deiFXEm4rO5e/ajnAGMB++fSFYLsJhiytf8vhQ=@vger.kernel.org, AJvYcCXMyMYqW4OEmnwkcOlLpgoed9CIh0gUNI6DYoZFjud8Q/R+hiskTzI759rEHm76R6DPityezX4coM28pOts@vger.kernel.org, AJvYcCXbmwK6/WdQSRaDcnFoj1bx4Sn4RAUJ3fPjhz3uakM64gDv7FxrC6XHSaLYpQqQ5CZaedYrgFS/KayB+JXlgFkIvh4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi7LDLM5wg4NkEV0dlfOos860iGS99Yw9J687OzpHj2RkYSNnK
+	E2AXJ3XKRbm8qISsf+K56U8skl96lGOMocy+XcnKnEvKXZY1PFAIxCzGeOizPO8h
+X-Gm-Gg: ASbGncsBJRAMMEZ8hiCQXo0Nb+z/IlqpwGnuVLthRgMvytfrulp9p3WywqOA9cR1+H2
+	SBkMKTyIhJ6B/LWuW/Ic0qoG48peuzd97ffxpHKIwa0sPNtE31qiFTHyERpZFnmsM4kL59JmlwC
+	ySxl5t2pz4dy3DsPQKOAsnHe+v7JTEcCCL6xVRwqmvzx5n4Li+wJRq4oZ4SnFSrMh0MWOtMVABV
+	99eemY8o7wQdySbbQh71W04Du8seYNssKcB/lEN8cSehXeDAPOBY6O4MKKUJlJBTRAKgn7LqDev
+	jlsQBr1K3hL7Tehhrp8aKc6wA/5fkPvJcrstW0DfABbRkE/B2uEwvdCwIgTHBp6PHTDPbSDh+J9
+	oi4vH8BALAjdsW7wxWwAGLjLGE4FpFQBuTtJYd2pdOtckOK4mA8mh2OI9uDfKUt6a
+X-Google-Smtp-Source: AGHT+IEcMUpg4IRJa6tMOmYaR0YNGdJsgM/6OrAlixI+P0fFmi7QVp6CU5AtAL4642KBkjSiFMeONw==
+X-Received: by 2002:a05:6122:30ac:b0:531:45f1:604d with SMTP id 71dfb90a1353d-5395f2ae17amr5226227e0c.6.1754386530928;
+        Tue, 05 Aug 2025 02:35:30 -0700 (PDT)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-53936b169ffsm3350536e0c.6.2025.08.05.02.35.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Aug 2025 02:35:30 -0700 (PDT)
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-5397c00ad9eso557643e0c.0;
+        Tue, 05 Aug 2025 02:35:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVAad7dRD1D4amrFC9RD2mRg7zxw04u7qiixhp3Nj/uVt59/dZjEUZrZ/NDZl5YfRg0/SvZvOkkayNU@vger.kernel.org, AJvYcCVNg64lgPFd+hq2w/RQANmTO/CELUnxnfJumfyTwRqW0aHeg9EbtWn3T4/ZVWi0ENaTEvza3fcppmE=@vger.kernel.org, AJvYcCWQO/qz4tdJx5NKq4atuLdGZYTVKamPx5cqAaWBMViWRpwKv2uCSCSZ8dSaPuxehNnMpktG3ca+wUPKOLnsS6KdaQc=@vger.kernel.org, AJvYcCXWmzBJ7FoAyCMaklaxnTMJy/YkJWAaiX6MiBLR2xiU5WpAeXpecM4KH4BKXEid5EagLubRWpK0D1repWCJ@vger.kernel.org
+X-Received: by 2002:a05:6122:45a8:b0:539:1154:d12d with SMTP id
+ 71dfb90a1353d-5395f3d53c5mr6039151e0c.8.1754386530476; Tue, 05 Aug 2025
+ 02:35:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail01w.axis.com
- (10.20.40.7)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF0000A790:EE_|DB9PR02MB8000:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea776c04-0951-4ca2-6d0a-08ddd4032ba5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sA8qN07/WtcGsRTiTl9oMzMv6Ihl+sOX6wwtCXMinaP+O4ltcT4eCvEtCA1y?=
- =?us-ascii?Q?G3F8CStRnKXqYuXrWV0yqpOs2CYMXYevI0bqnPj0pBOztjFyjfTMZHWwj/31?=
- =?us-ascii?Q?3avHQoQiny9M4Nu67eUA6OUmu3GiRxRrTgTlqZGWiygkIz6jpqPtcwru26Jp?=
- =?us-ascii?Q?c4E4lgVhc/yGFTzop+sJlbEx2lw0963qgZBSgo0JZIojKavGiLdBZ0iPWmcx?=
- =?us-ascii?Q?w0u6h65oLdHbm3a9ZjcyeJseUSbiORWaMXQlNtSvgUhiceJMiBLYNsJcN838?=
- =?us-ascii?Q?C9SrU/ZY9YP3guRLD1OzVHuU1l4blTo+xVXHQ78QMP/46WnzPMTTylieHtzA?=
- =?us-ascii?Q?M4EOd357Ml+aSjI1mAHAn+sSPz25+uRQImzzkzQACt+OUSrM7wEdymR7GseY?=
- =?us-ascii?Q?LafWRTdABM0ZSl8DVcktTtMZ/eJaoMQ1ZOv8mKgYdSuLYsrT8yRNoOT8LZxj?=
- =?us-ascii?Q?HDodmD1AAx2ojnAx9BBLnfFrC1BiOAUKSVB+Xd6js1WFoszoDiwrWzbhPKBa?=
- =?us-ascii?Q?I3eQoXhmWcqJkhHANsPv4Kdb94Xmub1+MQ9UDDMHCL4m/eTMZ8R/5mmaTA50?=
- =?us-ascii?Q?Gt7B2+mbWUDhUk1761sALZqVI3tnZWr8WaTXHB6CQmtsfyb/ZIEdr6iOjZ+S?=
- =?us-ascii?Q?G7B3JbVBE1leO+Mb/kRoY/npoojvSRkqZ3iZ7U+64aPExB9z25igJewAOzI5?=
- =?us-ascii?Q?E31oWhsb9g0hunWPNMf56fbiVjTTgM6fWs0/cCmpXYwNgmroshGA3Ar7wavQ?=
- =?us-ascii?Q?iA2N5H7/kLi4ROo2Td/As+GZehuaQ8gtISMuSxw+nyU4FGC+odyHLCnYBiZM?=
- =?us-ascii?Q?A8FIEWQvU8RPqqOsdp5+NN24Gi1XiShXTKNrSBkoNNXU704Z05T+hvH/i5N2?=
- =?us-ascii?Q?iegWg2TDfjyOGeiGTJBGPchyzpkKQfgk0m5NRP8XACLi2K+Wx8fKn1AUV3xQ?=
- =?us-ascii?Q?8lqYzY+lGzvTE6qyAQu6F5N4K4JAOe4Tr4G0fxkDO145IT+eBlW72qftPIV/?=
- =?us-ascii?Q?COFEnUcd41c2HI6OBEkZ4RPedPvi9mUkrlUEIk0zqdUwloPhsiSU9jmTvhQL?=
- =?us-ascii?Q?E2U++LvCHb5QJdlXH6skipxwwMQturw6VHzNOTr2D4rAIfl4HOM9Kaovz175?=
- =?us-ascii?Q?S7VBZ3Y20tn49EpIorpfNWRFyzSEihoT9gt/xS3ZDv2yrT8V4cjXbUy0pPb5?=
- =?us-ascii?Q?qxyz2u4uycWtki+MYLiTNywDl+cmnvaoJT1i7np90hpdTU41VoqjUaJLES35?=
- =?us-ascii?Q?kMziNQLGj/In577e69Ob0nOJbuHiMMqKT5JZL933DdO1diIHG+8J7MRaASKm?=
- =?us-ascii?Q?aMMH/m9RKAZFsHinMjrjFuS3CJDTSEwO4OQS8s0J/SyWULui9POlhRjeub4U?=
- =?us-ascii?Q?kGzgy/QGK4wN+1Stivmm6oA7tsZSaDAX31ei8MdPoCSGpUAVjpc2Vw+gc02W?=
- =?us-ascii?Q?98T6q3biBO2ysU8qL2tActnwfHaZYuKnqooxut1ZZEBAkViq7pI4GQKfxrj7?=
- =?us-ascii?Q?QtMwmfMKu4QXcLOIiIyQa30kJZDYQ1IAbykZ?=
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2025 09:33:43.8309
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea776c04-0951-4ca2-6d0a-08ddd4032ba5
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF0000A790.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB8000
+References: <20250522182252.1593159-1-john.madieu.xa@bp.renesas.com>
+ <20250522182252.1593159-4-john.madieu.xa@bp.renesas.com> <CAMuHMdW0CTM+d-N0FgP=dKoSTdmRr2Rpg2Rtzj33gDk8qW+FUw@mail.gmail.com>
+ <OSCPR01MB146471D101C6D66C1B81336A1FF22A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
+ <CAMuHMdV2DsJ5_0sW+f6anrqpr5kjLoe9w++E_xKJjdG7TJmGcQ@mail.gmail.com> <OSCPR01MB146472833398C4E61B9C5B160FF22A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSCPR01MB146472833398C4E61B9C5B160FF22A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 5 Aug 2025 11:35:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXw4XDkwBOqM47TKa8d_jHBMTM1ZGhK9qm5KQWDfGjGSw@mail.gmail.com>
+X-Gm-Features: Ac12FXxpv2aIssezzomIJ8wXTe3X5W750Cl4L5fOJJ3Y3hKhZG4oZQOOSu5ZvVo
+Message-ID: <CAMuHMdXw4XDkwBOqM47TKa8d_jHBMTM1ZGhK9qm5KQWDfGjGSw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/5] thermal: renesas: rzg3e: Add thermal driver for
+ the Renesas RZ/G3E SoC
+To: John Madieu <john.madieu.xa@bp.renesas.com>
+Cc: "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, 
+	"rafael@kernel.org" <rafael@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"john.madieu@gmail.com" <john.madieu@gmail.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>, "magnus.damm" <magnus.damm@gmail.com>, 
+	"robh@kernel.org" <robh@kernel.org>, "rui.zhang@intel.com" <rui.zhang@intel.com>, 
+	"sboyd@kernel.org" <sboyd@kernel.org>, 
+	"niklas.soderlund+renesas@ragnatech.se" <niklas.soderlund+renesas@ragnatech.se>
+Content-Type: text/plain; charset="UTF-8"
 
-When `devm_add_action_or_reset()` fails, it is due to a failed memory
-allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
-anything when error is `-ENOMEM`. Therefore, remove the useless call to
-`dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
-return the value instead.
+Hi John,
 
-Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
----
-Changes in v2:
+On Tue, 5 Aug 2025 at 11:22, John Madieu <john.madieu.xa@bp.renesas.com> wrote:
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > On Tue, 5 Aug 2025 at 10:27, John Madieu <john.madieu.xa@bp.renesas.com>
+> > wrote:
+> > > > From: Geert Uytterhoeven <geert@linux-m68k.org> On Thu, 22 May 2025
+> > > > at 20:23, John Madieu <john.madieu.xa@bp.renesas.com>
+> > > > wrote:
+> > > > > The RZ/G3E SoC integrates a Temperature Sensor Unit (TSU) block
+> > > > > designed to monitor the chip's junction temperature. This sensor
+> > > > > is connected to channel 1 of the APB port clock/reset and provides
+> > > > temperature measurements.
+> > > >
+> > > > RZ/V2H and RZ/V2N have a second set of trim values for the second
+> > > > TSU instance.  So I guess you want to specify the offset in DT instead.
+> > >
+> > > What do you think of 'renesas,tsu-channel' property or alike Property
+> > > to specify the channel being used ?
+> >
+> > While I agree instance IDs canbe useful (sometimes), the DT maintainers do
+> > not like them very much, cfr. commit 6a57cf210711c068 ("docs: dt:
+> > writing-bindings: Document discouraged instance IDs"), which prefers
+> > cell/phandle arguments.
+> >
+> > For this particular case:
+> >   1. The instance ID for the single TSU on RZ/G3E would be one, not zero
+> >      (oh, the SYS_LSI_OTPTSU1TRMVAL[01] register names do contain "TSU1"),
+> >   2. It will break the moment a new SoC is released that stores trim
+> >      values at different offsets in the SYSC block.
+> >
+> > Hence a property containing a SYSC phandle and register offset sounds
+> > better to me.
+>
+> This sounds good to me. I see something like:
+>
+> renesas,tsu-channel1 = <&sysc off1>;
+> renesas,tsu-channel2 = <&sysc off2>; /* Optional, for V2H */
+>
+> /* or */
+>
+> renesas,tsu-channel-map = <&sysc off1 off2>;
+>
+> I would go for the first option to make it easier for V2H
+> (while adding support for it later) so it can choose using
+> either, or both, regardless of the index.
+>
+> What do you think ?
 
-* Split the patch to one seperate patch for each sub-system.
+As the property would be part of the TSU node, it would always
+refer to that specific channel/instance, so e.g.
 
-Link to v1: https://lore.kernel.org/all/pnd7c0s6ji2.fsf@axis.com/
+    renesas,tsu-trim = <&sysc 0x320>;
 
- drivers/power/supply/mt6370-charger.c | 4 ++--
- drivers/power/supply/rt9467-charger.c | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+for the first TSU instance, and
 
-diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-index 98579998b300..29510af4e595 100644
---- a/drivers/power/supply/mt6370-charger.c
-+++ b/drivers/power/supply/mt6370-charger.c
-@@ -898,7 +898,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
- 	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_attach_lock,
- 				       &priv->attach_lock);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
-+		return ret;
- 
- 	priv->attach = MT6370_ATTACH_STAT_DETACH;
- 
-@@ -909,7 +909,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
- 
- 	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_wq, priv->wq);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to init wq\n");
-+		return ret;
- 
- 	ret = devm_work_autocancel(dev, &priv->bc12_work, mt6370_chg_bc12_work_func);
- 	if (ret)
-diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
-index e9aba9ad393c..e2ff9c4609ef 100644
---- a/drivers/power/supply/rt9467-charger.c
-+++ b/drivers/power/supply/rt9467-charger.c
-@@ -1218,25 +1218,25 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
- 	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_adc_lock,
- 				       &data->adc_lock);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to init ADC lock\n");
-+		return ret;
- 
- 	mutex_init(&data->attach_lock);
- 	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_attach_lock,
- 				       &data->attach_lock);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
-+		return ret;
- 
- 	mutex_init(&data->ichg_ieoc_lock);
- 	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_ichg_ieoc_lock,
- 				       &data->ichg_ieoc_lock);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to init ICHG/IEOC lock\n");
-+		return ret;
- 
- 	init_completion(&data->aicl_done);
- 	ret = devm_add_action_or_reset(dev, rt9467_chg_complete_aicl_done,
- 				       &data->aicl_done);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to init AICL done completion\n");
-+		return ret;
- 
- 	ret = rt9467_do_charger_init(data);
- 	if (ret)
+    renesas,tsu-trim = <&sysc 0x330>;
 
-base-commit: 260f6f4fda93c8485c8037865c941b42b9cba5d2
+for the second instance.
+
+P.S. Please don't write "V2H" on its own, as both R-Car V2H and RZ/V2H
+     exist in the Renesas SoC portfolio ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.39.5
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
