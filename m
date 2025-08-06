@@ -1,125 +1,282 @@
-Return-Path: <linux-pm+bounces-31983-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31984-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7105B1C12D
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 09:19:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 833D8B1C136
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 09:22:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5C033B3B7C
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 07:19:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8145164228
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 07:22:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC553211A11;
-	Wed,  6 Aug 2025 07:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTDMb+Ns"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0918219A67;
+	Wed,  6 Aug 2025 07:22:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA91E1D63F7;
-	Wed,  6 Aug 2025 07:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D19218E96;
+	Wed,  6 Aug 2025 07:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754464787; cv=none; b=o+IrQMYNGiETsjR/ie+OIJIYK4nrGELje3dAlcfJ2rgFbAuH79Wq79uRsL80Eb9cCLP6v03UT6mWaojLx2f2JhN2rXroJjXCz3KTgXRv/qhJEBmSfNpquXjJybQ/AK70Ft/Fge9YVyBN1Z6zNztAhdAz3f1EGWKLL5zTgtm42z4=
+	t=1754464927; cv=none; b=YOeNbYgO8F8QbgQPjYqkKUL2yjgfhMs7DTYZ/Tk2scWyQqpXhnuhjbkfC9p94NjAJfppGlrrywr0wqzjGD8HMMeC/InFWXgHSY87POcYYZ9WUAjJrwH6Mf+VuYiCgZ7b2ttpVNzUCM5xH3mXk+j8dsIoosqf3Mtx29oZ/aGXb+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754464787; c=relaxed/simple;
-	bh=KOWpcG7TXgMilyda7kVhOJeX0oxi6CCnLzWaPn4H7J4=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HeD0P5lqNd93Ism+ADThFRkCqLvqDdX4x34V+IbKf1aOSKCjs2FKHHFzRs2H2ztphSeRdxUD/4Ik3qNrM1AeG7o4za5PRJfU5zlmBQrCcvAHw3z71ffXtS76vwm7SOGTmcs9YWhqXejyNyaDzhNS8fc7pW8le3VrXH6uoJeniwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTDMb+Ns; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F56CC4CEE7;
-	Wed,  6 Aug 2025 07:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754464787;
-	bh=KOWpcG7TXgMilyda7kVhOJeX0oxi6CCnLzWaPn4H7J4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cTDMb+NspX+pIpgFqI9MX6ws8Ozh56adhg/6OtfoW9I6GkG3Pcs1evfnH3fnJlcBa
-	 AIHOH8Skcgqjzj3PJ7VAyvWfo4lgM3ZSAMesXALT7DRf2pB/YmzmIfeiXnL2aQXA1o
-	 23yLvrwpsK0ZgR89gOsudefLeXksNGsZe69xYPaFO4P3sr3X44RuF2ouFKdEvHSJCj
-	 yTc/7LOqBo/q3FsUFqR/cxQDMS8wAMWIejeNChAoTCZxhQrcISfd2ddYxIttVPJ+rS
-	 yaUBWvd75Lc9633P7m4AKyMMbtY8ZmNIP69gPhaVVd+cSM5u1uIMs4SCucZPaLi3UW
-	 P1hDkLf1BiUDA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1ujYR6-004O92-Jc;
-	Wed, 06 Aug 2025 08:19:44 +0100
-Date: Wed, 06 Aug 2025 08:19:44 +0100
-Message-ID: <86bjosapdb.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Loehle <christian.loehle@arm.com>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Aboorva Devarajan <aboorvad@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful information
-In-Reply-To: <CAJZ5v0jnSwkOHuq5QjvVN7RLk=BV1Oi6Jbv1SvP5TCbAERq0yw@mail.gmail.com>
-References: <1916668.tdWV9SEqCh@rjwysocki.net>
-	<7770672.EvYhyI6sBW@rjwysocki.net>
-	<86o6sv6n94.wl-maz@kernel.org>
-	<CAJZ5v0g=eSeAp96mHCOm+C9jis3uNRXgPhNgtT0SgP9kZ1emvw@mail.gmail.com>
-	<86ectpahdj.wl-maz@kernel.org>
-	<CAJZ5v0jnSwkOHuq5QjvVN7RLk=BV1Oi6Jbv1SvP5TCbAERq0yw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1754464927; c=relaxed/simple;
+	bh=SbBiYbQJKdCzUuHAUZWOYHds7ZPNE/HfIsqkc2KN1u8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IwPSQe4zIsha/B7pOlCC3p0ya7PcC7wj4P8aQ0Fih6bg5pMBUnzw65rfrAnO52MKlwMC5F1Wu/SkUZCMTUQymBaF7Irfj0BEz1UvTrECTk9a4JtUTOrZafCapnGw5uHn1LxRgWPCvSeybCIBa5B7Hw0nMYqivnrCUp76nsrTPJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E44B1F37;
+	Wed,  6 Aug 2025 00:21:56 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 559BC3F5A1;
+	Wed,  6 Aug 2025 00:21:59 -0700 (PDT)
+Date: Wed, 6 Aug 2025 09:21:36 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Prashant Malani <pmalani@google.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aJMCgGt5zu5Dhrd5@arm.com>
+References: <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
+ <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
+ <20250722032727.zmdwj6ztitkmr4pf@vireshk-i7>
+ <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
+ <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
+ <aIso4kLtChiQkBjH@arm.com>
+ <CAFivqm+kbRbJsJ_Obb4bV6fgxbqAwOndLUCDwHvWWnpMYoNoNw@mail.gmail.com>
+ <aIvSe9VtZ-zlYfbQ@arm.com>
+ <CAFivqmKR1dqVqTsoznH2-n8cyAM1=5zEGcEvmESU8RNGac-0sA@mail.gmail.com>
+ <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: rafael@kernel.org, christian.loehle@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, artem.bityutskiy@linux.intel.com, aboorvad@linux.ibm.com, tglx@linutronix.de, mark.rutland@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
 
-On Tue, 05 Aug 2025 19:50:21 +0100,
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
-
-[...]
-
-> > > Any chance to try the teo governor on it to see if this problem can
-> > > also be observed?
+On Mon, Aug 04, 2025 at 01:55:37PM -0700, Prashant Malani wrote:
+> On Fri, 1 Aug 2025 at 02:16, Prashant Malani <pmalani@google.com> wrote:
+> > On Thu, 31 Jul 2025 at 13:31, Beata Michalska <beata.michalska@arm.com> wrote:
+> > > Thank you for the info, but I'm exploring ways that will not increase the time
+> > > window between the reads.
 > >
-> > Neither ladder nor teo have this issue. The number of broadcast timer
-> > IPIs is minimal, and so is the number of interrupts delivered from the
-> > backup timer. Only menu exhibits the IPI-hose behaviour on this box
-> > (and only this one).
+> > IMO this issue is intractable on non-RT OSes like Linux (at least,
+> > Linux when it is not compiled for RT), since we basically need to
+> > ensure atomicity for the reading of both ref and del registers together.
+> > We can't disable preemption here, since some of
+> > the code paths (like PCC regs) acquire semaphores [2].
 > 
-> Good to know, thanks!
+> Actually, minor correction here. The PCC path is not the issue.
+> It's the ffh read path[3], which requires interrupts to be enabled.
+> Larger point still stands.
 > 
-> <shameless plug>Switch over to teo?</shameless plug>
+> [3] https://elixir.bootlin.com/linux/v6.16-rc7/source/arch/arm64/kernel/topology.c#L451
+> 
+> BR,
+> 
+> -Prashant
 
-Sure thing. Just start with:
+Would you mind giving it a go and see whether that improves things on your end ?
+Note that this is a quick and semi-dirty hack though.
 
-	git rm drivers/cpuidle/governors/menu.c
+---
+BR
+Beata
 
-and I'll gladly switch to something else! ;-)
-
-[...]
-
-> The attached patch (completely untested) causes menu to insert an
-> "invalid interval" value to the array of recent intervals after the
-> idle state selected previously got rejected.  It basically should
-> prevent get_typical_interval() from returning small values if deeper
-> idle states get rejected all the time.
-
-Yup, this does the trick, thanks. When you get to post this, please
-add my:
-
-Tested-by: Marc Zyngier <maz@kernel.org>
-
-	M.
-
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 5d07ee85bdae..65adb78a9a87 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -479,6 +479,11 @@ bool cpc_ffh_supported(void)
+ 	return true;
+ }
+ 
++bool cpc_burst_read_supported(void)
++{
++	return cpc_ffh_supported();
++}
++
+ int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
+ {
+ 	int ret = -EOPNOTSUPP;
+@@ -501,6 +506,61 @@ int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
+ 	return ret;
+ }
+ 
++
++struct cpc_burst_read {
++	struct cpc_reg_sample *samples;
++	size_t  count;
++};
++
++void counters_burst_read_on_cpu(void *arg)
++{
++	struct cpc_burst_read *desc = arg;
++	u64 value;
++	int i;
++
++	for (i = 0; i < desc->count; ++i) {
++		switch ((u64)desc->samples[i].reg->address) {
++		case 0x0:
++			value = read_corecnt();
++			break;
++		case 0x1:
++			value = read_constcnt();
++			break;
++		}
++		*(u64 *)desc->samples[i].sample_value = value;
++	}
++
++	for (i = 0; i < desc->count; ++i) {
++		struct cpc_reg *reg = desc->samples[i].reg;
++
++		value = *(u64 *)desc->samples[i].sample_value;
++		value &= GENMASK_ULL(reg->bit_offset + reg->bit_width - 1,
++				     reg->bit_offset);
++		value >>= reg->bit_offset;
++		*(u64 *)desc->samples[i].sample_value = value;
++	}
++}
++
++static inline bool cpc_reg_supported(struct cpc_reg *reg)
++{
++	return !((u64)reg->address != 0x0 || (u64)reg->address != 0x1);
++}
++
++int cpc_burst_read_ffh(int cpu, struct cpc_reg_sample *samples, size_t count)
++{
++	struct cpc_burst_read desc = { samples, count };
++	int ret = -EOPNOTSUPP;
++	int i;
++
++	for (i = 0; i < count; ++i) {
++		if (!cpc_reg_supported(samples[i].reg))
++			return ret;
++	}
++
++	smp_call_function_single(cpu, counters_burst_read_on_cpu, &desc, 1);
++	return 0;
++}
++
+ int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+ {
+ 	return -EOPNOTSUPP;
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 6b649031808f..c070627e4a1e 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -617,6 +617,11 @@ bool __weak cpc_supported_by_cpu(void)
+ 	return false;
+ }
+ 
++bool __weak cpc_burst_read_supported(void)
++{
++	return false;
++}
++
+ /**
+  * pcc_data_alloc() - Allocate the pcc_data memory for pcc subspace
+  * @pcc_ss_id: PCC Subspace index as in the PCC client ACPI package.
+@@ -1077,6 +1082,21 @@ static int cpc_read(int cpu, struct cpc_register_resource *reg_res, u64 *val)
+ 	return 0;
+ }
+ 
++static int cpc_burst_read(int cpu, struct cpc_reg_sample *samples, size_t count)
++{
++	int i;
++
++	// Just for now - only ffh
++	if (!cpc_ffh_supported())
++		return -EINVAL;
++
++	for (i = 0; i < count; ++i)
++		if (samples[i].reg->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE)
++			return -EINVAL;
++	return cpc_burst_read_ffh(cpu, samples, count);
++}
++
++
+ static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
+ {
+ 	int ret_val = 0;
+@@ -1515,8 +1535,21 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ 		}
+ 	}
+ 
+-	cpc_read(cpunum, delivered_reg, &delivered);
+-	cpc_read(cpunum, reference_reg, &reference);
++	// Verify whether the registers can be requested in one go
++	if (delivered_reg->type != ACPI_TYPE_INTEGER &&
++	    reference_reg->type != ACPI_TYPE_INTEGER &&
++	    cpc_burst_read_supported()) {
++
++		struct cpc_reg_sample samples[] = {
++			{ &delivered_reg->cpc_entry.reg, &delivered },
++			{ &reference_reg->cpc_entry.reg, &reference }
++		};
++
++		cpc_burst_read(cpunum, samples, ARRAY_SIZE(samples));
++	} else {
++		cpc_read(cpunum, delivered_reg, &delivered);
++		cpc_read(cpunum, reference_reg, &reference);
++	}
+ 	cpc_read(cpunum, ref_perf_reg, &ref_perf);
+ 
+ 	/*
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 325e9543e08f..f094e275834a 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -52,6 +52,12 @@ struct cpc_reg {
+ 	u64 address;
+ } __packed;
+ 
++
++struct cpc_reg_sample {
++	struct cpc_reg *reg;
++	void *sample_value;
++};
++
+ /*
+  * Each entry in the CPC table is either
+  * of type ACPI_TYPE_BUFFER or
+@@ -165,6 +171,7 @@ extern unsigned int cppc_get_transition_latency(int cpu);
+ extern bool cpc_ffh_supported(void);
+ extern bool cpc_supported_by_cpu(void);
+ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
++extern int cpc_burst_read_ffh(int cpunum, struct cpc_reg_sample *samples, size_t count);
+ extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+ extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
+ extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
+@@ -229,6 +236,10 @@ static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
+ {
+ 	return -EOPNOTSUPP;
+ }
++static inline int cpc_burst_read_ffh(int cpunum, struct cpc_reg_sample *samples, size_t count)
++{
++	return -EOPNOTSUPP;
++}
+ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+ {
+ 	return -EOPNOTSUPP;
 -- 
-Without deviation from the norm, progress is not possible.
+
 
