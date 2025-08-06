@@ -1,88 +1,40 @@
-Return-Path: <linux-pm+bounces-32008-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32009-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63DF0B1C5F1
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 14:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82CDCB1C64C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 14:48:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 008203B8379
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 12:35:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDADE3BF12A
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 12:48:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FFD28BA8B;
-	Wed,  6 Aug 2025 12:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UJKFHRdl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37DD28C010;
+	Wed,  6 Aug 2025 12:48:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730FF28A1CC
-	for <linux-pm@vger.kernel.org>; Wed,  6 Aug 2025 12:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AEF328A40F;
+	Wed,  6 Aug 2025 12:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754483737; cv=none; b=fmsG2PP38e+OgElGYZzjIchJyMHliqEEq3Sv+Ir+4CyXigH7XfJ5zPSIrKDzhwq+ijudfDLt5KqMt+5PT2gl1QJJdIKrqI3y/9IJpaXzkGFUnydWFojZrFCUbq5l/zpkmp/9JfQLz7tQ5falVn8+fVr8V2vLOs3G19GJSL7zGE0=
+	t=1754484500; cv=none; b=AfqdBw8Sheiglsuav8/fuFsjQQm8XEYDzD8EyY8ZFqVZO3GRcqcx7czlDK+uzArD1TvI9EAcxmdSX3su9hyBouMITvSs/MZzeDiyzBHl2QeLMkUNf03Rf6M7eBL+RorEFE3S2+l+A4OHleChzHmG5dlnBmauQzDfIRj2cmPfthI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754483737; c=relaxed/simple;
-	bh=BkMg9lrcOwRqh+c2w51M/RlUfMuRGUn2YqW6UrJlJxQ=;
+	s=arc-20240116; t=1754484500; c=relaxed/simple;
+	bh=O34vrE4Qf2fwLCsD+g79Gp3y4u4uoea3SrIs7UTBVX4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hFkI2LuaTAmEh6v9UpEkPgwrJew4Y23BwJzaBdOAvQTtYKUTjXx6SbpyUgLCrZfEFkC/ukISdwb4GQutUV0g421E2sYKHIWsf/FVuGt9hN24Bb2jV8yV7tZKbim87SJ5mimxckw9ucm1ZjYL1E9Jwa+0EDZWmOpQALfkkLC3WUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UJKFHRdl; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5765jnEA003968
-	for <linux-pm@vger.kernel.org>; Wed, 6 Aug 2025 12:35:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	cCr//mNBZZadIfbdCckvaMFLb/aTsDPU1FdFZ5M3iO8=; b=UJKFHRdlA6z6/fCV
-	EHp7YyvP7We5t5JBS4qZd46IRiJJ8v8m/ob0ghLq8IHYkOO8hDwvLS9ylCn+0ff7
-	dpE3CDfwtzR9GdsXl7Ow+I70J6D07diAvACDS0Poz0BoLxpRgBv9D8NiI69XqV9d
-	NKHPg8CE7qQz3IIZXdH72vzemq2/VIBUZw80TUimTSVMCsIYIC8/jujT7GPXHB+k
-	/Ih3fjEhB/zXaTTP+tJ4prInViN1VDHdI/QZxPsf2KcjAkih8IeAMHcgwVJ7e+ec
-	qhL7BfE80OZ8vAM+xtPIbtsxF9tzN/6ej0CKYpyKEHYTq3QruSnD0CY3oQuE4FNb
-	x6l2Gw==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48bpyaamnh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 06 Aug 2025 12:35:34 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4af23fa7c0cso13554271cf.2
-        for <linux-pm@vger.kernel.org>; Wed, 06 Aug 2025 05:35:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754483733; x=1755088533;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cCr//mNBZZadIfbdCckvaMFLb/aTsDPU1FdFZ5M3iO8=;
-        b=qxvfpHU+LUFSoCdi05Hd8yLWes8aEi2vevD+D3HQJxk1+UQD4ybJQhx3chvC/C0zbN
-         m9Zo/pmCkdtLj7qq42VXbUfHt4M3xAhBmVGR8B9E3Ya7M47B1OyYBTv6N3lRlU/zg5Lm
-         tgOwBXsWmp5IyqJMxi2VL8OjRwfvZ5d0zVYCj6YhXlJhgoR3zIQqM+DyUUnzw8C5iUxu
-         ZYWYtRimFR0bXxnck8weYslO7G6rkoJUdfVOW3H8o38N7bMoKjnPXQ91taXgvWYoOlvt
-         yVDPufaRpuW9x7CJxbVWl6eh4pr46xhgI5L1rb0i4tBOY89ZmQ9MBO1CQ/mBfh5bEjFo
-         Ofmg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6hua3IExpB3865XTNlSscccJ98S9hN3cYKrZcFsD+m2QZjbPxJ3bio6GCJK629JwuomiRbQAEfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXuCinsw+ipOlTrn6YAmSYAjET09k1AF+KCU4Xj3/LZLOJuspJ
-	UJVOccfMui8Nazc8Wjh648Gthkz7jwGluF8c2l24sCymy5Qes2/kbClIs+oUUqwY7a61CwWAd3x
-	IfiTYymrFNJ0gn9CjjByn2brzVcdVGo90pv0KrpN2NMN9P+PCaSjxgLc9Pj3Lvg==
-X-Gm-Gg: ASbGncvHHitdXnBIipv7t7Q18PwfbR3K5X3jKWdp4CAgx13er6aq5LxNFvZV2jqDWOj
-	1gB8wAKwkDp8N3eumrKNZnJtxbG+OffabpC3hE7YiC/+6YWgAXj/frt49Z43LXBrl566J0IRR3V
-	CbedT7B/EopHiJRtGshAnSepr6jXvq1OBpKFTOHnWpA1ln6dOgT+QB2F86LznZKO1z3Bo5b6qcc
-	nwbSeUOZtwKbBSmHpyAqEWAL4TG30gm1ucUf0lp9GqqtEeXbAmyiDSxBkd52SUb2xyK8pCtU3H4
-	QWzQzfBIyCgBUAcpvn2SSmrYlYj4PbPOTcg0W3b9goEq9xY9umHwjbuVuofT7IMzvuDWM6fLjRS
-	y9TkMSk8lmbmLUBXarQ==
-X-Received: by 2002:ac8:7f89:0:b0:4ab:6e68:1186 with SMTP id d75a77b69052e-4b09133fa54mr17986261cf.2.1754483733251;
-        Wed, 06 Aug 2025 05:35:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE7d2CqcjDNnmjfaCorK7ggZ1AD3iYaZI4VcHppGy/TET6icunnaQkfyCMwgLQKxMuq3VCiWw==
-X-Received: by 2002:ac8:7f89:0:b0:4ab:6e68:1186 with SMTP id d75a77b69052e-4b09133fa54mr17984941cf.2.1754483730668;
-        Wed, 06 Aug 2025 05:35:30 -0700 (PDT)
-Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a396fsm1103435066b.42.2025.08.06.05.35.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Aug 2025 05:35:29 -0700 (PDT)
-Message-ID: <48478a05-59b9-4f2e-9339-255e513a9cb2@oss.qualcomm.com>
-Date: Wed, 6 Aug 2025 14:35:26 +0200
+	 In-Reply-To:Content-Type; b=PF4Gf6E3tKGb53aTBYS3lMlqZpxI6QubyUOJRGKDwH7ZtUWaOMa+29UvUSOZcCk2fIw/Rmh+z8tCSjdpK0Wlzp0Ps6qsUB26rzNTz5AcMukhHlpo0r16sVx57tpgZc+VLWYXxPjzWfmt+3+mSWTfrxgODQsDo8KDldTM6pb8960=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60BFD19F0;
+	Wed,  6 Aug 2025 05:48:09 -0700 (PDT)
+Received: from [10.1.26.32] (e127648.arm.com [10.1.26.32])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9ED2E3F5A1;
+	Wed,  6 Aug 2025 05:48:15 -0700 (PDT)
+Message-ID: <1db3e14c-7834-4452-91a6-329b0541056a@arm.com>
+Date: Wed, 6 Aug 2025 13:48:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,86 +42,237 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/4] clk: qcom: apss-ipq5424: Add ipq5424 apss clock
- controller
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
-        djakov@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc: Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        Md Sadre Alam <quic_mdalam@quicinc.com>
-References: <20250806112807.2726890-1-quic_varada@quicinc.com>
- <20250806112807.2726890-3-quic_varada@quicinc.com>
+Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful
+ information
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Marc Zyngier <maz@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Aboorva Devarajan <aboorvad@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Mark Rutland <mark.rutland@arm.com>
+References: <1916668.tdWV9SEqCh@rjwysocki.net>
+ <7770672.EvYhyI6sBW@rjwysocki.net> <86o6sv6n94.wl-maz@kernel.org>
+ <CAJZ5v0g=eSeAp96mHCOm+C9jis3uNRXgPhNgtT0SgP9kZ1emvw@mail.gmail.com>
+ <86ectpahdj.wl-maz@kernel.org>
+ <CAJZ5v0jnSwkOHuq5QjvVN7RLk=BV1Oi6Jbv1SvP5TCbAERq0yw@mail.gmail.com>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250806112807.2726890-3-quic_varada@quicinc.com>
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0jnSwkOHuq5QjvVN7RLk=BV1Oi6Jbv1SvP5TCbAERq0yw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: zBo4Gl9zmZJWgbS1YkaiJx1eUuwHToOf
-X-Authority-Analysis: v=2.4 cv=MrlS63ae c=1 sm=1 tr=0 ts=68934c16 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=COk6AnOGAAAA:8 a=nqClpMi1XL7t9EIYa0wA:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA2MDAwOSBTYWx0ZWRfX5pzU8+I3HHgt
- DYYy36WbxVvvplt1FWJ5bfTqjjhWQEE9Rh2lyJHOn47F1tbpH9fA/Z3MmKQg5uMNPa2mj+2cXw/
- EHNf2R0NAAC8cUQ1GFdMUxWrzRcpScP/YEvhdPzQqEKxz94TJlAST6is2D3sd4ekecKZ8UJDVhg
- AFCtdH9GtcaWkqN1Ij79SUkZyX3S8hnuOVwlRy7WhR1nlEHOWuDiv0z1hbZ6cU/buMoSK/7eF6h
- kMnuVAzX/CFtL2KjWxhvaHZ2+ezeZeGCQaKXHmI14wH6bGoT/64FGF35Yqsr5NnROW0nmhr9r8t
- MUvOmZ33lYxRKHazB0IJmXUCNP7mfF76iIs3ihkv9yGv/HBAcJ/+lyFfLjPECWsjiYLkaAmPjdi
- j0tckj/w
-X-Proofpoint-GUID: zBo4Gl9zmZJWgbS1YkaiJx1eUuwHToOf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-06_03,2025-08-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 adultscore=0 priorityscore=1501 phishscore=0
- spamscore=0 bulkscore=0 clxscore=1015 malwarescore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508060009
+Content-Transfer-Encoding: 8bit
 
-On 8/6/25 1:28 PM, Varadarajan Narayanan wrote:
-> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+On 8/5/25 19:50, Rafael J. Wysocki wrote:
+> On Tue, Aug 5, 2025 at 6:00 PM Marc Zyngier <maz@kernel.org> wrote:
+>>
+>> On Tue, 05 Aug 2025 14:23:56 +0100,
+>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>>>
+>>> On Mon, Aug 4, 2025 at 6:54 PM Marc Zyngier <maz@kernel.org> wrote:
+>>>>
+>>>> [+ Thomas, Mark]
+>>>>
+>>>> On Thu, 06 Feb 2025 14:29:05 +0000,
+>>>> "Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
+>>>>>
+>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>>
+>>>>> When giving up on making a high-confidence prediction,
+>>>>> get_typical_interval() always returns UINT_MAX which means that the
+>>>>> next idle interval prediction will be based entirely on the time till
+>>>>> the next timer.  However, the information represented by the most
+>>>>> recent intervals may not be completely useless in those cases.
+>>>>>
+>>>>> Namely, the largest recent idle interval is an upper bound on the
+>>>>> recently observed idle duration, so it is reasonable to assume that
+>>>>> the next idle duration is unlikely to exceed it.  Moreover, this is
+>>>>> still true after eliminating the suspected outliers if the sample
+>>>>> set still under consideration is at least as large as 50% of the
+>>>>> maximum sample set size.
+>>>>>
+>>>>> Accordingly, make get_typical_interval() return the current maximum
+>>>>> recent interval value in that case instead of UINT_MAX.
+>>>>>
+>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>> ---
+>>>>>  drivers/cpuidle/governors/menu.c |   13 ++++++++++++-
+>>>>>  1 file changed, 12 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> --- a/drivers/cpuidle/governors/menu.c
+>>>>> +++ b/drivers/cpuidle/governors/menu.c
+>>>>> @@ -190,8 +190,19 @@
+>>>>>        * This can deal with workloads that have long pauses interspersed
+>>>>>        * with sporadic activity with a bunch of short pauses.
+>>>>>        */
+>>>>> -     if ((divisor * 4) <= INTERVALS * 3)
+>>>>> +     if (divisor * 4 <= INTERVALS * 3) {
+>>>>> +             /*
+>>>>> +              * If there are sufficiently many data points still under
+>>>>> +              * consideration after the outliers have been eliminated,
+>>>>> +              * returning without a prediction would be a mistake because it
+>>>>> +              * is likely that the next interval will not exceed the current
+>>>>> +              * maximum, so return the latter in that case.
+>>>>> +              */
+>>>>> +             if (divisor >= INTERVALS / 2)
+>>>>> +                     return max;
+>>>>> +
+>>>>>               return UINT_MAX;
+>>>>> +     }
+>>>>>
+>>>>>       /* Update the thresholds for the next round. */
+>>>>>       if (avg - min > max - avg)
+>>>>
+>>>> It appears that this patch, which made it in 6.15, results in *a lot*
+>>>> of extra interrupts on one of my arm64 test machines.
+>>>>
+>>>> * Without this patch:
+>>>>
+>>>> maz@big-leg-emma:~$ vmstat -y 1
+>>>> procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+>>>>  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+>>>>  1  0      0 65370828  29244 106088    0    0     0     0   66   26  0  0 100  0  0
+>>>>  1  0      0 65370828  29244 106088    0    0     0     0  103   66  0  0 100  0  0
+>>>>  1  0      0 65370828  29244 106088    0    0     0     0   34   12  0  0 100  0  0
+>>>>  1  0      0 65370828  29244 106088    0    0     0     0   25   12  0  0 100  0  0
+>>>>  1  0      0 65370828  29244 106088    0    0     0     0   28   14  0  0 100  0  0
+>>>>
+>>>> we're idling at only a few interrupts per second, which isn't bad for
+>>>> a 24 CPU toy.
+>>>>
+>>>> * With this patch:
+>>>>
+>>>> maz@big-leg-emma:~$ vmstat -y 1
+>>>> procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+>>>>  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+>>>>  1  0      0 65361024  28420 105388    0    0     0     0 3710   27  0  0 100  0  0
+>>>>  1  0      0 65361024  28420 105388    0    0     0     0 3399   20  0  0 100  0  0
+>>>>  1  0      0 65361024  28420 105388    0    0     0     0 4439   78  0  0 100  0  0
+>>>>  1  0      0 65361024  28420 105388    0    0     0     0 5634   14  0  0 100  0  0
+>>>>  1  0      0 65361024  28420 105388    0    0     0     0 5575   14  0  0 100  0  0
+>>>>
+>>>> we're idling at anywhere between 3k and 6k interrupts per second. Not
+>>>> exactly what you want. This appears to be caused by the broadcast
+>>>> timer IPI.
+>>>>
+>>>> Reverting this patch on top of 6.16 restores sanity on this machine.
+>>>
+>>> I don't know what is going on here, but it looks highly suspicious to me.
+>>
+>> What does? My observation? The likelihood of this patch being the
+>> source (or the trigger) for an unwanted behaviour? Something else?
 > 
-> CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
-> Add support for the APSS PLL, RCG and clock enable for ipq5424.
-> The PLL, RCG register space are clubbed. Hence adding new APSS driver
-> for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
-> and needs to be scaled along with the CPU and is modeled as an ICC clock.
+> The behavior of the platform, which is basically confirmed by
+> Christian's observation here:
 > 
-> Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> [ Removed clock notifier, moved L3 pll to icc-clk, used existing
-> alpha pll structure ]
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
+> https://lore.kernel.org/linux-pm/7ffcb716-9a1b-48c2-aaa4-469d0df7c792@arm.com/
+> 
+> And yes, cpuidle has a problem with this corner case.
+> 
+>>> The only effect of the change in question should be selecting a
+>>> shallower idle state occasionally and why would this alone cause the
+>>> number of wakeup interrupts to increase?
+>>
+>> You tell me. I'm the messenger here.
+> 
+> The tick stopping logic in menu appears to be confused.
+> 
+>>> Arguably, it might interfere with the tick stopping logic if
+>>> predicted_ns happened to be less than TICK_NSEC sufficiently often,
+>>> but that is not expected to happen on an idle system because in that
+>>> case the average interval between genuine wakeups is relatively large.
+>>> The tick itself is not counted as a wakeup event, so returning a
+>>> shallower state at one point shouldn't affect future predictions, but
+>>> the data above suggests that it actually does affect them.
+>>>
+>>> It looks like selecting a shallower idle state by the governor at one
+>>> point causes more wakeup interrupts to occur in the future which is
+>>> really note expected to happen.
+>>>
+>>> Christian, what do you think?
+>>>
+>>>> I suspect that we're entering some deep idle state in a much more
+>>>> aggressive way,
+>>>
+>>> The change actually goes the other way around.  It causes shallower
+>>> idle states to be more likely to be selected overall.
+>>
+>> Another proof that I don't understand a thing, and that I should go
+>> play music instead of worrying about kernel issues.
+>>
+>>>
+>>>> leading to a global timer firing as a wake-up mechanism,
+>>>
+>>> What timer and why would it fire?
+>>
+>> The arch_timer_mem timer, which is used as a backup timer when the
+>> CPUs lose their timer context while going into a deep enough idle
+>> state.
+> 
+> Interesting.  They should not go anywhere below WFI as per the message
+> from Christian linked above.
+> 
+>>>
+>>>> and the broadcast IPI being used to kick everybody else
+>>>> back. This is further confirmed by seeing the broadcast IPI almost
+>>>> disappearing completely if I load the system a bit.
+>>>>
+>>>> Daniel, you should be able to reproduce this on a Synquacer box (this
+>>>> what I used here).
+>>>>
+>>>> I'm happy to test things that could help restore some sanity.
+>>>
+>>> Before anything can be tested, I need to understand what exactly is going on.
+>>>
+>>> What cpuidle driver is used on this platform?
+>>
+>> psci_idle.
+> 
+> Right.
+> 
+>>> Any chance to try the teo governor on it to see if this problem can
+>>> also be observed?
+>>
+>> Neither ladder nor teo have this issue. The number of broadcast timer
+>> IPIs is minimal, and so is the number of interrupts delivered from the
+>> backup timer. Only menu exhibits the IPI-hose behaviour on this box
+>> (and only this one).
+> 
+> Good to know, thanks!
+> 
+> <shameless plug>Switch over to teo?</shameless plug>
+> 
+>>> Please send the output of
+>>>
+>>> $ grep -r '.*' /sys/devices/system/cpu/cpu*/cpuidle
+>>>
+>>> collected after a period of idleness from the kernel in which the
+>>> change in question is present and from a kernel without it?
+>>
+>> * with the change present: https://pastebin.com/Cb45Rysy
+> 
+> This is what Christian said, idle states 1 and 2 get rejected every time.
+> 
+>> * with the change reverted: https://pastebin.com/qRy2xzeT
+> 
+> And same here, but in this case menu doesn't get confused because
+> predicted_ns is basically UINT_MAX all the time.
+> 
+> The attached patch (completely untested) causes menu to insert an
+> "invalid interval" value to the array of recent intervals after the
+> idle state selected previously got rejected.  It basically should
+> prevent get_typical_interval() from returning small values if deeper
+> idle states get rejected all the time.
 
-[...]
+Reran the same tests on the same platform, obviously a platform with
+a sane rejection rate, no big change.
 
-> +static struct clk_branch apss_silver_core_clk = {
-> +	.halt_reg = 0x008c,
-> +	.clkr = {
-> +		.enable_reg = 0x008c,
-> +		.enable_mask = BIT(0),
-> +		.hw.init = &(struct clk_init_data) {
-> +			.name = "apss_silver_core_clk",
-> +			.parent_hws = (const struct clk_hw *[]) {
-> +				&apss_silver_clk_src.clkr.hw },
+Tested-by: Christian Loehle <christian.loehle@arm.com>
 
-Odd closing bracket placement
+I guess the code could do with a comment why we need the special
+last_residency_ns == 0 case, apart from that LGTM.
 
-[...]
+Thanks, Rafael!
 
-> +static const struct clk_parent_data parents_l3_clk_src[] = {
-> +	{ .fw_name = "xo-board-clk" },
-> +	{ .fw_name = "clk_ref" },
-> +	{ .hw = &ipq5424_l3_pll.clkr.hw },
-> +};
-
-One more remnant /\
-
-Konrad
+I still think it's worrying that cpuidle never worked on that platform
+apparently and it went unnoticed, maybe a warning / print would be
+helpful in that case, I'll post something.
 
