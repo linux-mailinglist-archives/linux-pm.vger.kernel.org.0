@@ -1,131 +1,125 @@
-Return-Path: <linux-pm+bounces-31982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3345B1C0FD
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 09:08:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7105B1C12D
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 09:19:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 921DD3BD7DB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 07:08:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5C033B3B7C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 07:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D294215F42;
-	Wed,  6 Aug 2025 07:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC553211A11;
+	Wed,  6 Aug 2025 07:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ngyw4Etq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTDMb+Ns"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110052E371D;
-	Wed,  6 Aug 2025 07:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA91E1D63F7;
+	Wed,  6 Aug 2025 07:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754464084; cv=none; b=CoPpg6Ihg4Ws1iZI6S5HUVLg6edhSwkMreRKDL7MR+ilVoEKgz17f9vnWUj7+3qbo2dNY/74VHCfMkyouviKQfBam1KaeCiVxpW210veR72u9YTmyZNs7hliN0OgehSuZ3HzUmLFEHjCDjg94QJvzQckKzQcVVVKlHsxX7/P2uI=
+	t=1754464787; cv=none; b=o+IrQMYNGiETsjR/ie+OIJIYK4nrGELje3dAlcfJ2rgFbAuH79Wq79uRsL80Eb9cCLP6v03UT6mWaojLx2f2JhN2rXroJjXCz3KTgXRv/qhJEBmSfNpquXjJybQ/AK70Ft/Fge9YVyBN1Z6zNztAhdAz3f1EGWKLL5zTgtm42z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754464084; c=relaxed/simple;
-	bh=E6/eA5QeIe1HToq//I/2AQFAF8B2dylxKHP/BW4fym0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AV5qulAld7/bPXs9jX4UBglwGKxPOsIzIw+rT+7tVHlaNxt2SuFnfizSu4c6iiaWHaOkUt9nr/c4IafNnM/qohCg2B0xDhOj0zTSQkvqboIk4jEO14blDfvLxHjhH4pfOuuffnE3RNqxb2GP/jHeYHANZskYrZkszftj7sNOnCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ngyw4Etq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DE87C4CEE7;
-	Wed,  6 Aug 2025 07:08:03 +0000 (UTC)
+	s=arc-20240116; t=1754464787; c=relaxed/simple;
+	bh=KOWpcG7TXgMilyda7kVhOJeX0oxi6CCnLzWaPn4H7J4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HeD0P5lqNd93Ism+ADThFRkCqLvqDdX4x34V+IbKf1aOSKCjs2FKHHFzRs2H2ztphSeRdxUD/4Ik3qNrM1AeG7o4za5PRJfU5zlmBQrCcvAHw3z71ffXtS76vwm7SOGTmcs9YWhqXejyNyaDzhNS8fc7pW8le3VrXH6uoJeniwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTDMb+Ns; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F56CC4CEE7;
+	Wed,  6 Aug 2025 07:19:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754464083;
-	bh=E6/eA5QeIe1HToq//I/2AQFAF8B2dylxKHP/BW4fym0=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=Ngyw4Etq96JE9IJ68fwHr+IQ7XgI9RBlajFr+tAGozBnpvJ3jhBNkBhiIMCLOAt2l
-	 24nQg86mdjrTyY4rt9+1Ca7X4cIn6wjwVPORZbDq9snmpPNrVpkZs8lo5mOyS/50Bi
-	 A0k/Jj4hj1fDg6WaghhGK0cD1P591+TFTny6UszlHxWsU1ENlcjmEg8nMYQUFFAC2V
-	 Wy2STxX3lljNIwhpXgc2LDlVDAD2af6COPXOAzgCuI1TJPWBuqqNaBeUz878r8sG/s
-	 eUTxgEU5kFfRQLp0ZOxgVmqmMxlb3cuOTkF53Efg1/EzYiXr0BnkL2EeJUshBAsmbB
-	 01Q7ed4P6ulrg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E30C87FCB;
-	Wed,  6 Aug 2025 07:08:03 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Wed, 06 Aug 2025 15:08:02 +0800
-Subject: [PATCH] cpupower: repair mangled powercap comment
+	s=k20201202; t=1754464787;
+	bh=KOWpcG7TXgMilyda7kVhOJeX0oxi6CCnLzWaPn4H7J4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cTDMb+NspX+pIpgFqI9MX6ws8Ozh56adhg/6OtfoW9I6GkG3Pcs1evfnH3fnJlcBa
+	 AIHOH8Skcgqjzj3PJ7VAyvWfo4lgM3ZSAMesXALT7DRf2pB/YmzmIfeiXnL2aQXA1o
+	 23yLvrwpsK0ZgR89gOsudefLeXksNGsZe69xYPaFO4P3sr3X44RuF2ouFKdEvHSJCj
+	 yTc/7LOqBo/q3FsUFqR/cxQDMS8wAMWIejeNChAoTCZxhQrcISfd2ddYxIttVPJ+rS
+	 yaUBWvd75Lc9633P7m4AKyMMbtY8ZmNIP69gPhaVVd+cSM5u1uIMs4SCucZPaLi3UW
+	 P1hDkLf1BiUDA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1ujYR6-004O92-Jc;
+	Wed, 06 Aug 2025 08:19:44 +0100
+Date: Wed, 06 Aug 2025 08:19:44 +0100
+Message-ID: <86bjosapdb.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christian Loehle <christian.loehle@arm.com>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	Aboorva Devarajan <aboorvad@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful information
+In-Reply-To: <CAJZ5v0jnSwkOHuq5QjvVN7RLk=BV1Oi6Jbv1SvP5TCbAERq0yw@mail.gmail.com>
+References: <1916668.tdWV9SEqCh@rjwysocki.net>
+	<7770672.EvYhyI6sBW@rjwysocki.net>
+	<86o6sv6n94.wl-maz@kernel.org>
+	<CAJZ5v0g=eSeAp96mHCOm+C9jis3uNRXgPhNgtT0SgP9kZ1emvw@mail.gmail.com>
+	<86ectpahdj.wl-maz@kernel.org>
+	<CAJZ5v0jnSwkOHuq5QjvVN7RLk=BV1Oi6Jbv1SvP5TCbAERq0yw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250806-mangled_cpupower-v1-1-1a559130326b@uniontech.com>
-X-B4-Tracking: v=1; b=H4sIAFH/kmgC/x2MWwqAIBAAryL7naBCZV0lIsq2WigVpQeEd0/6n
- IGZFyIGwggteyHgRZGczSALBmYb7Yqc5syghCqFFhU/stxxHow/vbsx8FLqqtbNoic1Qc58wIW
- ef9n1KX0jUQ8aYgAAAA==
-X-Change-ID: 20250806-mangled_cpupower-5186789f8b2b
-To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Wangyuli@uniontech.com, Guanwentao@uniontech.com, Zhanjun@uniontech.com, 
- Cryolitia PukNgae <cryolitia@uniontech.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754464082; l=1836;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=z8rySj9NTsoDFQbVKMmerKhopsqj2e1f45A+CAKIILE=;
- b=EPWBB+fmsrLX1f39+XlFGZVEiToICCSR/A6CF96dUJ1/N3zHxAYwSC6iBslGKvtIxG0jSlxwe
- tufnSpkl2mHDyJnptQnHm/rwA0jmLlP31QewFSc0jEaQLddbEIWCX3v
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rafael@kernel.org, christian.loehle@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, artem.bityutskiy@linux.intel.com, aboorvad@linux.ibm.com, tglx@linutronix.de, mark.rutland@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+On Tue, 05 Aug 2025 19:50:21 +0100,
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-The current comment exhibits clear patch application artifacts:
-1. A stray '-' prefix indicating failed line removal
-2. Broken sentence structure from improper context patching
+[...]
 
-What appears to be version control residue has persisted since its
-initial introduction and through the 2022 kernel submission[1]. While
-my archaeological efforts only trace back to the 2017 openSUSE patch[2],
-the corrupted syntax suggests even older origins that remain elusive -
-perhaps maintainers with longer institutional memory could shed light
-on its provenance.
+> > > Any chance to try the teo governor on it to see if this problem can
+> > > also be observed?
+> >
+> > Neither ladder nor teo have this issue. The number of broadcast timer
+> > IPIs is minimal, and so is the number of interrupts delivered from the
+> > backup timer. Only menu exhibits the IPI-hose behaviour on this box
+> > (and only this one).
+> 
+> Good to know, thanks!
+> 
+> <shameless plug>Switch over to teo?</shameless plug>
 
-Restore grammatical sanity by:
-- Removing the redundant second line with its leading '-'
-- Preserving only the primary statement about RAPL hardcoding
-- Eliminating the fragmented "should show up" clause
+Sure thing. Just start with:
 
-The result reflects reality without speculative future-proofing.
+	git rm drivers/cpuidle/governors/menu.c
 
-1. https://lore.kernel.org/all/20221123111810.16017-2-trenn@suse.de/
-2. https://build.opensuse.org/request/show/535512
+and I'll gladly switch to something else! ;-)
 
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
----
- tools/power/cpupower/lib/powercap.c | 2 --
- 1 file changed, 2 deletions(-)
+[...]
 
-diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-index 94a0c69e55ef5e4291b13a4218e706fa8d14e6a7..609943c829efce8045d97097b5f5e9ec86d0f519 100644
---- a/tools/power/cpupower/lib/powercap.c
-+++ b/tools/power/cpupower/lib/powercap.c
-@@ -87,8 +87,6 @@ int powercap_set_enabled(int mode)
- 
- /*
-  * Hardcoded, because rapl is the only powercap implementation
--- * this needs to get more generic if more powercap implementations
-- * should show up
-  */
- int powercap_get_driver(char *driver, int buflen)
- {
+> The attached patch (completely untested) causes menu to insert an
+> "invalid interval" value to the array of recent intervals after the
+> idle state selected previously got rejected.  It basically should
+> prevent get_typical_interval() from returning small values if deeper
+> idle states get rejected all the time.
 
----
-base-commit: 6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
-change-id: 20250806-mangled_cpupower-5186789f8b2b
+Yup, this does the trick, thanks. When you get to post this, please
+add my:
 
-Best regards,
+Tested-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
 -- 
-Cryolitia PukNgae <cryolitia@uniontech.com>
-
-
+Without deviation from the norm, progress is not possible.
 
