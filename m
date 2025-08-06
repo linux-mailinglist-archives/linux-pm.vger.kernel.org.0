@@ -1,282 +1,216 @@
-Return-Path: <linux-pm+bounces-31984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-31985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 833D8B1C136
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 09:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00CA2B1C253
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 10:40:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8145164228
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 07:22:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A19817B116
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Aug 2025 08:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0918219A67;
-	Wed,  6 Aug 2025 07:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A3E289344;
+	Wed,  6 Aug 2025 08:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6Grod9H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D19218E96;
-	Wed,  6 Aug 2025 07:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28340288CB2;
+	Wed,  6 Aug 2025 08:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754464927; cv=none; b=YOeNbYgO8F8QbgQPjYqkKUL2yjgfhMs7DTYZ/Tk2scWyQqpXhnuhjbkfC9p94NjAJfppGlrrywr0wqzjGD8HMMeC/InFWXgHSY87POcYYZ9WUAjJrwH6Mf+VuYiCgZ7b2ttpVNzUCM5xH3mXk+j8dsIoosqf3Mtx29oZ/aGXb+Q=
+	t=1754469623; cv=none; b=obrQTrTgOvM6cnOmVDFzidFfKoIKWw00bIoOVGPfeXVOykTfCNv0GIORYJhkrORJcrlJMPkeHShhF8IvDi24HfA2BaG38Jc0pPXah7gWVlqJmPNw9Rl1WIaF9cxtBHDra4k7CxKtHK3ruSSJ25sJ2RE5SjUddJqx1FQHzDQrYhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754464927; c=relaxed/simple;
-	bh=SbBiYbQJKdCzUuHAUZWOYHds7ZPNE/HfIsqkc2KN1u8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IwPSQe4zIsha/B7pOlCC3p0ya7PcC7wj4P8aQ0Fih6bg5pMBUnzw65rfrAnO52MKlwMC5F1Wu/SkUZCMTUQymBaF7Irfj0BEz1UvTrECTk9a4JtUTOrZafCapnGw5uHn1LxRgWPCvSeybCIBa5B7Hw0nMYqivnrCUp76nsrTPJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E44B1F37;
-	Wed,  6 Aug 2025 00:21:56 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 559BC3F5A1;
-	Wed,  6 Aug 2025 00:21:59 -0700 (PDT)
-Date: Wed, 6 Aug 2025 09:21:36 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: Prashant Malani <pmalani@google.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jie Zhan <zhanjie9@hisilicon.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-Message-ID: <aJMCgGt5zu5Dhrd5@arm.com>
-References: <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
- <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
- <20250722032727.zmdwj6ztitkmr4pf@vireshk-i7>
- <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
- <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
- <aIso4kLtChiQkBjH@arm.com>
- <CAFivqm+kbRbJsJ_Obb4bV6fgxbqAwOndLUCDwHvWWnpMYoNoNw@mail.gmail.com>
- <aIvSe9VtZ-zlYfbQ@arm.com>
- <CAFivqmKR1dqVqTsoznH2-n8cyAM1=5zEGcEvmESU8RNGac-0sA@mail.gmail.com>
- <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
+	s=arc-20240116; t=1754469623; c=relaxed/simple;
+	bh=BQS17Gx8nIJNb+Eu5z6Nn4tpeVvUU+ssz+FqyUsLAP4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FxexyABWZsfEk6rZVjrrXvM3LhoLo9rUD5YMSAAwnu+mtYoE+Oe0eS59xiOiNGfSVWW8lWrQtvvIqMoI0EeyMj77x2HKrj/31QybT1QIzMCvTUloV6p8H8RZtlwMso+Yovd/TqwfTVH/GlEjoGiRbx7u/HebDC2rimO1S1EglxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6Grod9H; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-af66d49daffso934203466b.1;
+        Wed, 06 Aug 2025 01:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754469619; x=1755074419; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BQS17Gx8nIJNb+Eu5z6Nn4tpeVvUU+ssz+FqyUsLAP4=;
+        b=X6Grod9HcCQPgzJy6rojKkqdSfOw7yiWKX75pm7En2HfXr9GbjGMeaH4L/Mm0+aKNd
+         HT/SJARE8Cto4fHvDGUUBRjAojFlkBTfHDJNSFNxhwk2G6FBcSfyZX3HItXGDq1eJtP1
+         RuF93+DxCrgHoXdxEpjHyfanZkQeT68sI6Xm+icXCdW/qyLeJw3y1zVGbBsoRn9aSaSX
+         Okr72Yy0FImdMLZ1zJkzx2jmeizY8+sNwJ0P+hNy/3b34yOMvdcb4uhxvfhaaqt8bolE
+         z8S8Uwx8iYSqF8VvN3GbWOyX1VAckfJIQklINs65jIfUaxtVGjm+mSKe+P0ocl9o3vW8
+         l8UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754469619; x=1755074419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BQS17Gx8nIJNb+Eu5z6Nn4tpeVvUU+ssz+FqyUsLAP4=;
+        b=jtfh4EaMsk9Ej1dfdGC1PZ+XtJf/XmP6hn4xm1p3WrSBnIn9E25EUH2+NJb2rVmFTm
+         ttaoWtYzx1bSBW6wb1uC/Q9Eah2KoC1LKwaLcsbNhdmVi7HeK2XcZYYIMyu6tWNkk89e
+         BchtM2tz7xY87nrY5s7lfwd+pKgVcyoZtCvgVlkGt2AiL4P61pbPJEwSyJzbwfPQWNQc
+         TIJX9lMeUdgDWAvNLMEC6PeEWAUjJ/DrLg0zz8sGallUdqFfTSXk7EMI348qJc7G525s
+         dRMiz0Dd67a1YJ/at+VGA8DLomyvCV5pzQ1O43MYeczAP/WyIQBHnDHqXYpOYpa29qJP
+         FKKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHjiWFhPRzNHXmc2Mooo+SLOm1diJyG/efdycnfrdw7ID6oIlW2oROtVLLJScY/Te93eYnZmK+QEA=@vger.kernel.org, AJvYcCWx3Dy2N8BUUurr5IqOmZj7DxYfWkEV753QB47d+r3taiHqu1cI6HWjd01+9+hFjnfzIQ4XATinLIfi@vger.kernel.org
+X-Gm-Message-State: AOJu0YypfkyFmIxVrww5Otql6u/7yCc0mTqEi5Nz+Fb+4S9RukxfCQvj
+	bDybxOf1ThF5vLmxbH4mAIZ85nUu6yHzq8YK+IdzXK7NEDztedojotsPsfvTXCfD9Gc6vSoChzK
+	c6LPbVpwPK9gXxBOxHpZPqSPU1InMK6E=
+X-Gm-Gg: ASbGncuRxJGLMFTR/56D1SjnC5WZQ01JkE8ev2l7rTyEup3VwOkwV1XjEj17kUtRH6Y
+	+KlrypdRyyZeATbOmyFy83ZX45iy0sVvJN/m3mglCbZblxcdHrlvvJwSOm5dLeZIboSR52EYegW
+	c1i4xnhHpTEkdZerRjf25qVGTYn5G4o9IM+OHHzqtoCfl7JhBfhAgeh7iNcnWfZ+ZW4kGfQv5+j
+	HrcLKXM
+X-Google-Smtp-Source: AGHT+IHfJ9svIzWODa8rgbvEIq584AUL0oyBljvd+PygocMjYZHjM2aXI+fyfYg0JbEiFEnyH4qTbculH1RSbuT6U5U=
+X-Received: by 2002:a17:907:980f:b0:aec:6600:dbe3 with SMTP id
+ a640c23a62f3a-af992bc3acfmr138428466b.56.1754469619115; Wed, 06 Aug 2025
+ 01:40:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
+References: <CACTEcX6oXBot1VBApOyKVMVXsAN9BsvQMLa8J0iKpNeB-eLttQ@mail.gmail.com>
+ <642d439ea1be8e48ee5c47fd3921a786452fb931@intel.com> <CACTEcX5Y3PNXNkhnK1dGFe+k3sigOZNpj66KKGAS9XeHqRu35w@mail.gmail.com>
+ <0b15e33603a46f6cc7ad7d09a156044f11367169@intel.com> <CACTEcX47bUd2tp=LYkQnhK29Js=vLN0JfXL8Aq6mOFBVYumpzQ@mail.gmail.com>
+ <CABgObfZKKeqMrAUyS8CB4ARkW_8Z9QREgpgYcq2jxoQ9ppS6MA@mail.gmail.com> <CACTEcX7oa+Shj=uYiRMoWpng+RZXDeQrOa-VTRmzVVtXJMCgLQ@mail.gmail.com>
+In-Reply-To: <CACTEcX7oa+Shj=uYiRMoWpng+RZXDeQrOa-VTRmzVVtXJMCgLQ@mail.gmail.com>
+From: Andy Mindful <andy.mindful@gmail.com>
+Date: Wed, 6 Aug 2025 11:40:07 +0300
+X-Gm-Features: Ac12FXxTKMWG1pZklTF0P1qlwOqSdhMr6Q33eeVUrsVUud3FdPfuQWhVKcJIN3Y
+Message-ID: <CACTEcX7hsRkzYEBg4pQd5s36p_ZXJM=dtxSGmBjfkt5sWrXP8g@mail.gmail.com>
+Subject: Re: [REGRESSION] tty lockup and WWAN loss after hibernate/suspend in
+ 6.8+ on ThinkPad X1 Carbon Gen 10
+To: regressions@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-acpi@vger.kernel.org, rafael@kernel.org, ville.syrjala@linux.intel.com, 
+	tglx@linutronix.de, Christian Brauner <brauner@kernel.org>, 
+	Jani Nikula <jani.nikula@intel.com>, Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 04, 2025 at 01:55:37PM -0700, Prashant Malani wrote:
-> On Fri, 1 Aug 2025 at 02:16, Prashant Malani <pmalani@google.com> wrote:
-> > On Thu, 31 Jul 2025 at 13:31, Beata Michalska <beata.michalska@arm.com> wrote:
-> > > Thank you for the info, but I'm exploring ways that will not increase the time
-> > > window between the reads.
+Hello,
+
+Can somebody advise how to properly bisect issues in linux-stable
+repository between v6.7.11 to v6.8-rc1 tags?
+
+I tried two options:
+
+1. No skip
+
+git checkout v6.7.11
+git bisect start
+git bisect good 6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1
+git bisect bad 6613476e225e090cc9aad49be7fa504e290dd33d
+git bisect bad 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+
+Leads to:
+The merge base 0dd3ee31125508cd67f7e7172247f05b7fd1753a is bad.
+This means the bug has been fixed between
+0dd3ee31125508cd67f7e7172247f05b7fd1753a and
+[6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1].
+
+What should be done next?
+
+2. Skip
+git checkout v6.7.11
+git bisect start
+git bisect good 6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1
+git bisect bad 6613476e225e090cc9aad49be7fa504e290dd33d
+git bisect bad 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+git bisect skip 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+git bisect good ba5afb9a84df2e6b26a1b6389b98849cd16ea757
+git bisect good 61da593f4458f25c59f65cfd9ba1bda570db5db7
+git bisect bad e38f734add21d75d76dbcf7b214f4823131c1bae
+git bisect bad 5d197e97fb106c09d3d013be341e5961fd70ec8a
+git bisect good 1b1934dbbdcf9aa2d507932ff488cec47999cf3f
+git bisect bad 8c9244af4dc8680a453e759331f0c93d5bde1898
+git bisect bad 783288010035e4c250a0b6491a4642cdb8d30548
+git bisect bad 1c3c87d720cbd1ff86dc1bfc6df8ee9adce5879b
+git bisect good 8d99e347c097ab3f9fb93d0f88dddf20051d7c88
+git bisect bad 6c370dc65374db5afbc5c6c64c662f922a2555ad
+git bisect good 43f623f350ce1c46c53b6b77f4dbe741af8c44f3
+git bisect good 8a89efd43423cb3005c5e641e846184e292c1465
+git bisect good 5d74316466f4aabdd2ee1e33b45e4933c9bc3ea1
+
+Leads to:
+
+# first bad commit: [6c370dc65374db5afbc5c6c64c662f922a2555ad] Merge
+branch 'kvm-guestmemfd' into HEAD
+
+Which is incorrect as per Paolo Bonzini comment.
+
+I'd like to test this thing, because hibernation is quite crucial in a
+multi-boot environment and may save a lot of time while working with
+different systems.
+
+Thank you in advance.
+
+=D0=BF=D0=BD, 4 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 22:49=
+ Andy Mindful <andy.mindful@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> Can you please advise on how to bisect further?
+>
+> andy@lenovo:~/linux-stable$ git bisect bad
+> The merge base 0dd3ee31125508cd67f7e7172247f05b7fd1753a is bad.
+> This means the bug has been fixed between
+> 0dd3ee31125508cd67f7e7172247f05b7fd1753a and
+> [6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1].
+>
+> andy@DESKTOP-0R165CF:~/linux-stable$ git bisect log
+> git bisect start
+> # status: waiting for both good and bad commits
+> # good: [6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1] Linux 6.7.11
+> git bisect good 6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1
+> # status: waiting for bad commit, 1 good commit known
+> # bad: [6613476e225e090cc9aad49be7fa504e290dd33d] Linux 6.8-rc1
+> git bisect bad 6613476e225e090cc9aad49be7fa504e290dd33d
+> # bad: [0dd3ee31125508cd67f7e7172247f05b7fd1753a] Linux 6.7
+> git bisect bad 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+>
+> andy@lenovo:~/linux-stable$ git status
+> HEAD detached at 0dd3ee311255
+> You are currently bisecting, started from branch '6fc5460ed8dd'.
+> (use "git bisect reset" to get back to the original branch)
+>
+> It is not moving further.
+>
+> =D0=BF=D0=BD, 4 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 17:=
+50 Paolo Bonzini <pbonzini@redhat.com> =D0=BF=D0=B8=D1=88=D0=B5:
 > >
-> > IMO this issue is intractable on non-RT OSes like Linux (at least,
-> > Linux when it is not compiled for RT), since we basically need to
-> > ensure atomicity for the reading of both ref and del registers together.
-> > We can't disable preemption here, since some of
-> > the code paths (like PCC regs) acquire semaphores [2].
-> 
-> Actually, minor correction here. The PCC path is not the issue.
-> It's the ffh read path[3], which requires interrupts to be enabled.
-> Larger point still stands.
-> 
-> [3] https://elixir.bootlin.com/linux/v6.16-rc7/source/arch/arm64/kernel/topology.c#L451
-> 
-> BR,
-> 
-> -Prashant
-
-Would you mind giving it a go and see whether that improves things on your end ?
-Note that this is a quick and semi-dirty hack though.
-
----
-BR
-Beata
-
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 5d07ee85bdae..65adb78a9a87 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -479,6 +479,11 @@ bool cpc_ffh_supported(void)
- 	return true;
- }
- 
-+bool cpc_burst_read_supported(void)
-+{
-+	return cpc_ffh_supported();
-+}
-+
- int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
- {
- 	int ret = -EOPNOTSUPP;
-@@ -501,6 +506,61 @@ int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
- 	return ret;
- }
- 
-+
-+struct cpc_burst_read {
-+	struct cpc_reg_sample *samples;
-+	size_t  count;
-+};
-+
-+void counters_burst_read_on_cpu(void *arg)
-+{
-+	struct cpc_burst_read *desc = arg;
-+	u64 value;
-+	int i;
-+
-+	for (i = 0; i < desc->count; ++i) {
-+		switch ((u64)desc->samples[i].reg->address) {
-+		case 0x0:
-+			value = read_corecnt();
-+			break;
-+		case 0x1:
-+			value = read_constcnt();
-+			break;
-+		}
-+		*(u64 *)desc->samples[i].sample_value = value;
-+	}
-+
-+	for (i = 0; i < desc->count; ++i) {
-+		struct cpc_reg *reg = desc->samples[i].reg;
-+
-+		value = *(u64 *)desc->samples[i].sample_value;
-+		value &= GENMASK_ULL(reg->bit_offset + reg->bit_width - 1,
-+				     reg->bit_offset);
-+		value >>= reg->bit_offset;
-+		*(u64 *)desc->samples[i].sample_value = value;
-+	}
-+}
-+
-+static inline bool cpc_reg_supported(struct cpc_reg *reg)
-+{
-+	return !((u64)reg->address != 0x0 || (u64)reg->address != 0x1);
-+}
-+
-+int cpc_burst_read_ffh(int cpu, struct cpc_reg_sample *samples, size_t count)
-+{
-+	struct cpc_burst_read desc = { samples, count };
-+	int ret = -EOPNOTSUPP;
-+	int i;
-+
-+	for (i = 0; i < count; ++i) {
-+		if (!cpc_reg_supported(samples[i].reg))
-+			return ret;
-+	}
-+
-+	smp_call_function_single(cpu, counters_burst_read_on_cpu, &desc, 1);
-+	return 0;
-+}
-+
- int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
- {
- 	return -EOPNOTSUPP;
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 6b649031808f..c070627e4a1e 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -617,6 +617,11 @@ bool __weak cpc_supported_by_cpu(void)
- 	return false;
- }
- 
-+bool __weak cpc_burst_read_supported(void)
-+{
-+	return false;
-+}
-+
- /**
-  * pcc_data_alloc() - Allocate the pcc_data memory for pcc subspace
-  * @pcc_ss_id: PCC Subspace index as in the PCC client ACPI package.
-@@ -1077,6 +1082,21 @@ static int cpc_read(int cpu, struct cpc_register_resource *reg_res, u64 *val)
- 	return 0;
- }
- 
-+static int cpc_burst_read(int cpu, struct cpc_reg_sample *samples, size_t count)
-+{
-+	int i;
-+
-+	// Just for now - only ffh
-+	if (!cpc_ffh_supported())
-+		return -EINVAL;
-+
-+	for (i = 0; i < count; ++i)
-+		if (samples[i].reg->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE)
-+			return -EINVAL;
-+	return cpc_burst_read_ffh(cpu, samples, count);
-+}
-+
-+
- static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
- {
- 	int ret_val = 0;
-@@ -1515,8 +1535,21 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- 		}
- 	}
- 
--	cpc_read(cpunum, delivered_reg, &delivered);
--	cpc_read(cpunum, reference_reg, &reference);
-+	// Verify whether the registers can be requested in one go
-+	if (delivered_reg->type != ACPI_TYPE_INTEGER &&
-+	    reference_reg->type != ACPI_TYPE_INTEGER &&
-+	    cpc_burst_read_supported()) {
-+
-+		struct cpc_reg_sample samples[] = {
-+			{ &delivered_reg->cpc_entry.reg, &delivered },
-+			{ &reference_reg->cpc_entry.reg, &reference }
-+		};
-+
-+		cpc_burst_read(cpunum, samples, ARRAY_SIZE(samples));
-+	} else {
-+		cpc_read(cpunum, delivered_reg, &delivered);
-+		cpc_read(cpunum, reference_reg, &reference);
-+	}
- 	cpc_read(cpunum, ref_perf_reg, &ref_perf);
- 
- 	/*
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index 325e9543e08f..f094e275834a 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -52,6 +52,12 @@ struct cpc_reg {
- 	u64 address;
- } __packed;
- 
-+
-+struct cpc_reg_sample {
-+	struct cpc_reg *reg;
-+	void *sample_value;
-+};
-+
- /*
-  * Each entry in the CPC table is either
-  * of type ACPI_TYPE_BUFFER or
-@@ -165,6 +171,7 @@ extern unsigned int cppc_get_transition_latency(int cpu);
- extern bool cpc_ffh_supported(void);
- extern bool cpc_supported_by_cpu(void);
- extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
-+extern int cpc_burst_read_ffh(int cpunum, struct cpc_reg_sample *samples, size_t count);
- extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
- extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
- extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
-@@ -229,6 +236,10 @@ static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
- {
- 	return -EOPNOTSUPP;
- }
-+static inline int cpc_burst_read_ffh(int cpunum, struct cpc_reg_sample *samples, size_t count)
-+{
-+	return -EOPNOTSUPP;
-+}
- static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
- {
- 	return -EOPNOTSUPP;
--- 
-
+> > On Mon, Aug 4, 2025 at 12:57=E2=80=AFPM Andy Mindful <andy.mindful@gmai=
+l.com> wrote:
+> > > Double-checked bisect, looks like I've have found broken commit:
+> > >
+> > > > > git bisect bad
+> > > > > The merge base ba5afb9a84df2e6b26a1b6389b98849cd16ea757 is bad.
+> > > > > This means the bug has been fixed between
+> > > > > ba5afb9a84df2e6b26a1b6389b98849cd16ea757 and
+> > > > > [1b1934dbbdcf9aa2d507932ff488cec47999cf3f
+> > > > > 61da593f4458f25c59f65cfd9ba1bda570db5db7
+> > > > > 6fc5460ed8dd0edf29e7c5cfb1ef9b1aa04208a1
+> > > > > ba5afb9a84df2e6b26a1b6389b98849cd16ea757].
+> >
+> > This skip is messing up the results:
+> >
+> > # skip: [0dd3ee31125508cd67f7e7172247f05b7fd1753a] Linux 6.7
+> > git bisect skip 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+> >
+> > and there are still 3858 commits in
+> > ba5afb9a84df2e6b26a1b6389b98849cd16ea757..{1b1934dbbdcf9aa2d507932ff488=
+cec47999cf3f,61da593f4458f25c59f65cfd9ba1bda570db5db7,ba5afb9a84df2e6b26a1b=
+6389b98849cd16ea757}
+> >
+> > Any chance you can get 6.7 to work and restrict the range further?
+> >
+> > Thanks,
+> >
+> > Paolo
+> >
 
