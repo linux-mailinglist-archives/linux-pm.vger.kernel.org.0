@@ -1,53 +1,83 @@
-Return-Path: <linux-pm+bounces-32029-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32030-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39106B1D2FB
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 09:07:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C429B1D429
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 10:16:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 373A11659F0
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 07:07:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CB9E7A4BED
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 08:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DE222DFA4;
-	Thu,  7 Aug 2025 07:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07FA2185B1;
+	Thu,  7 Aug 2025 08:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="kyVuJYVC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LfmSIRRz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625F31D5ABA;
-	Thu,  7 Aug 2025 07:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973471B7F4
+	for <linux-pm@vger.kernel.org>; Thu,  7 Aug 2025 08:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754550438; cv=none; b=XSaUQPsK3ru8AP/Z4YLLfDRc51CiOrbiCuM49SPYeg9TQfKg2JDatFg++EwcYIqmBgdVBeMmYWEMP/aNxJUKUcVBFYcX2JmGO9PJsBLn1sF4Ly6B8DCXyqyKBBamqXW2OoiwlS2BLyCxX6q/jMskFkEg84otbEato3/zvwUje+w=
+	t=1754554598; cv=none; b=g0UXH0TytrXrl2lk2ncOXB4KqxtvSlqeqf/wk9Hr1qG3kH2Tl2dLfeHY29QBeQenH1IUM+PQBlNBI4JkRp4Vzt+o+z9bFNDLrbdQ16KOA2hAotYm4JxHZPamDTZOxwDoDbw7b/2h7dcYiuDURkyvpb9mlZknmipKASw0TxHwD+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754550438; c=relaxed/simple;
-	bh=zkoi1u9rRTeLoqOid1Hi3KnNhzzCFY0gV6iN5SemtZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tMvTExdS9PNpy5PT/Cz6SAIc66jmzzkvRtgTPZb/sU1889Uabu2OnZXMnXj9IcSwqjA3hwPaQO5w93Bzf5P8WMsytiQizryaRWgNZHV1NY+8iRq5BAcJp893gpF9zpb13VdJzurg19GEc87HPnkEEUctnguXk/E/2yohzd8AbjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=kyVuJYVC; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=OC4ewFJt3pSuBvem9jBIWzZT0RIGds8UTBu+dI6BD+U=; t=1754550436;
-	x=1754982436; b=kyVuJYVC7hP7z22UIkA/qb7ShLLcQaPC/nnOtBIH9I8oACh6mbpUSgLDmvJ26
-	e054g/yjT4cmPQn2ZnXJXKpjueFTl7Ye8tGLDVikB+PTIRfYvnu/MMUPMyZLsQS2fvgcX1RqHUy6Q
-	hoKBOqXNmrTnYCZuZ1FiUNGdlGGNiH9q0mFmUeAcI8xJdhJw76pmOYy8qCZlcNH3aM1JN5ZMBOF4E
-	+By0llJIrveelh4/3s9Uf7ctXajVBJS33QwVP189kKPNeTYJyMKIAZHhivlCHGa0e3ZTkvNXhjlyI
-	FoBebFSzlde0Mb09WR3B+9nkK5idVR/aWC8p0TjmFx7Sti9wQQ==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1ujuiW-00FZpR-29;
-	Thu, 07 Aug 2025 09:07:12 +0200
-Message-ID: <d6b93806-2d0b-40b2-a795-16ab78bc0048@leemhuis.info>
-Date: Thu, 7 Aug 2025 09:07:11 +0200
+	s=arc-20240116; t=1754554598; c=relaxed/simple;
+	bh=dFOCs/dZnxDMo/hiV3S9cs/4YKTmqRjh35ydSHNhZkY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=WqTS6tjhgZG/xm+Zx94pl7V58aMLq5BloHppNMMimgGrd8OD3SRt4Lb9McNckInvZJFjYcTABwFg4NmPcW0PkzfmTrFr5f3cV7oiDD+VpEL0wjkwGsj7l08OKrnyMyAXy2R9YJkln9m1m23lWo/mtUHCsGZU+JAcZwOHzHMtBM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LfmSIRRz; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-458ba079338so4824505e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Aug 2025 01:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1754554595; x=1755159395; darn=vger.kernel.org;
+        h=content-transfer-encoding:organization:autocrypt:in-reply-to
+         :content-language:references:cc:to:reply-to:subject:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0VW7sNoEVN9Oek4Y6iCLkY+7OPvY5tDfJvOxUwPm/i8=;
+        b=LfmSIRRzuMeua22vlIO6OuuQWSZNTPhWY4Xdl1C6msZgiKLSIl9K/IK2Xb57yBqKbz
+         p3Hk+akhUesvTniXhlKSdsUmC8204Q0vYP1am7x5dKJ09w893z2k1aFOnIQG/4h5Kf8d
+         n+OX8MY0qL5o3zQm5XXUHO/bpZDrqXjsgiGAnzowduFoYaDRarFjyCpMua6uDv0TfTAM
+         cxPD25qvMziLXeNJG7EP/HzLjKpHnpqatjOyEiN4vtioGwWnfQoCM6Px2JZ4g3G59WM+
+         Lrdf43fApvgcSeJ78QS1AOazw3ly40BYDRmPNX6Mn7fRmdm/JQxdtvPn0GQXlSn9iCFh
+         /pOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754554595; x=1755159395;
+        h=content-transfer-encoding:organization:autocrypt:in-reply-to
+         :content-language:references:cc:to:reply-to:subject:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0VW7sNoEVN9Oek4Y6iCLkY+7OPvY5tDfJvOxUwPm/i8=;
+        b=jH8WTPO+NErL3VlIHIeg1nEAS6ajRI8pOAEJylsPTSjBOjTaqeFd9e1gWiIJKJgfIa
+         XDppT/RLqJ1ZYotfXL+ZlqFdJN6TwP5NOPWVSH7sKLcHEyvDaaTuPI/O7IXfwXgnkY3x
+         t4UMRJ2duQ86t36qjEpb4mpiRdvnox4/b96N2DYBmMxFrAVfDkvxPsZ9Y4eXvekHCbWs
+         lbzaCW1dWA5uJFu1P5iRfXiqKqXqllyJYabFl5nlbPmKQIeVYgMju69/8BNJf/kThx5D
+         Q57Ch0HrjluWn3u9aM/6LQ5+AmMddwLv+j8LurRzrp3zUD6oRslKC5iA4eUzIAK/1rzR
+         rLvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqZtRLsN1R9vqoEjnqtQDEsrMCDscWKbW1SCqnJGDPivR8pTq0pPgDXf4CB1n5YmBiXjZvGuX/uQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw98PC7Fv5psIOQnRnG+5Dl7MQrWgU2Sl8izRHC1HpXR0Y/tPJn
+	iaGQDOxclpFO7ypFLrwFbKbYAcGt+DEFVyGmq9ImFhrLB3N31cy4gMdjgQEevWSclcg=
+X-Gm-Gg: ASbGnctpetsduvaKHDmqyknVmAip1IvxdXgESAkEPvWwcVONxYaU3kOu+3rBV0XPBnQ
+	4M6Cec0GtDyN0u3PWUVGsPh8pwTbK9PmVnAGtJVvnYYjHg4E80SwJ3FzbXaeTo2pZjfgP4QynP3
+	1YT1t8deytZw0FuceskszssDhRIVFq/FBgmCpXNtAFnEG0o0hli58BdxV1+imTDOQqlkcf19Uqh
+	9MXmElBY57zD+5+2+NVZMvPVFmmR1XJNdEWAF0hevsflmrahc0XN8s7ujOxuJqBKw9isJ0nxalW
+	+KWqIGoQQNb/OZZPBFRE1aS1XAiu6UyLhl41hqVlnjB2lvfu5HTjkEuMICTDNEyGOHkXkbp9amM
+	Mbh3C1LOkYIHSZH7PIJyJrrgOHit8FwF5+TPSm/uFToW2v3JIwlw+H5I6j6Lf6epXpv6RtpIHx+
+	w2/tbDZu+Wyg==
+X-Google-Smtp-Source: AGHT+IHf76mdyLCfSs/m6kb0Yuf0hOwdsPWIFudkvQQwFH25PcMEQes2ysVoYmJDxQgMxeQSTlqZ2Q==
+X-Received: by 2002:a05:600c:3f1a:b0:453:6c45:ce14 with SMTP id 5b1f17b1804b1-459ede93ea5mr23251335e9.4.1754554594862;
+        Thu, 07 Aug 2025 01:16:34 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:5bf9:b40c:d741:ea95? ([2a01:e0a:3d9:2080:5bf9:b40c:d741:ea95])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459e587e154sm89875075e9.27.2025.08.07.01.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Aug 2025 01:16:34 -0700 (PDT)
+Message-ID: <7c3d9e84-d14f-4cf0-b376-6fdde6f586f5@linaro.org>
+Date: Thu, 7 Aug 2025 10:16:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,96 +85,166 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] tty lockup and WWAN loss after hibernate/suspend in
- 6.8+ on ThinkPad X1 Carbon Gen 10
-To: Andy Mindful <andy.mindful@gmail.com>, regressions@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-acpi@vger.kernel.org, rafael@kernel.org,
- ville.syrjala@linux.intel.com, tglx@linutronix.de,
- Christian Brauner <brauner@kernel.org>, Jani Nikula <jani.nikula@intel.com>,
- Paolo Bonzini <pbonzini@redhat.com>,
- "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-References: <CACTEcX6oXBot1VBApOyKVMVXsAN9BsvQMLa8J0iKpNeB-eLttQ@mail.gmail.com>
- <642d439ea1be8e48ee5c47fd3921a786452fb931@intel.com>
- <CACTEcX5Y3PNXNkhnK1dGFe+k3sigOZNpj66KKGAS9XeHqRu35w@mail.gmail.com>
- <0b15e33603a46f6cc7ad7d09a156044f11367169@intel.com>
- <CACTEcX47bUd2tp=LYkQnhK29Js=vLN0JfXL8Aq6mOFBVYumpzQ@mail.gmail.com>
- <CABgObfZKKeqMrAUyS8CB4ARkW_8Z9QREgpgYcq2jxoQ9ppS6MA@mail.gmail.com>
- <CACTEcX7oa+Shj=uYiRMoWpng+RZXDeQrOa-VTRmzVVtXJMCgLQ@mail.gmail.com>
- <CACTEcX7hsRkzYEBg4pQd5s36p_ZXJM=dtxSGmBjfkt5sWrXP8g@mail.gmail.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <CACTEcX7hsRkzYEBg4pQd5s36p_ZXJM=dtxSGmBjfkt5sWrXP8g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 0/7] SPMI: Implement sub-devices and migrate drivers
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ sboyd@kernel.org
+Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
+ andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+ srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
+ krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com,
+ linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
+ casey.connolly@linaro.org
+References: <20250730112645.542179-1-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US, fr
+In-Reply-To: <20250730112645.542179-1-angelogioacchino.delregno@collabora.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1754550436;d41eb4ca;
-X-HE-SMSGID: 1ujuiW-00FZpR-29
 
-On 06.08.25 10:40, Andy Mindful wrote:
+On 30/07/2025 13:26, AngeloGioacchino Del Regno wrote:
+> Changes in v3:
+>   - Fixed importing "SPMI" namespace in spmi-devres.c
+>   - Removed all instances of defensive programming, as pointed out by
+>     jic23 and Sebastian
+>   - Removed explicit casting as pointed out by jic23
+>   - Moved ida_free call to spmi_subdev_release() and simplified error
+>     handling in spmi_subdevice_alloc_and_add() as pointed out by jic23
 > 
-> Can somebody advise how to properly bisect issues in linux-stable
-> repository between v6.7.11 to v6.8-rc1 tags?
+> Changes in v2:
+>   - Fixed missing `sparent` initialization in phy-qcom-eusb2-repeater
+>   - Changed val_bits to 8 in all Qualcomm drivers to ensure
+>     compatibility as suggested by Casey
+>   - Added struct device pointer in all conversion commits as suggested
+>     by Andy
+>   - Exported newly introduced functions with a new "SPMI" namespace
+>     and imported the same in all converted drivers as suggested by Andy
+>   - Added missing error checking for dev_set_name() call in spmi.c
+>     as suggested by Andy
+>   - Added comma to last entry of regmap_config as suggested by Andy
+> 
+> While adding support for newer MediaTek platforms, featuring complex
+> SPMI PMICs, I've seen that those SPMI-connected chips are internally
+> divided in various IP blocks, reachable in specific contiguous address
+> ranges... more or less like a MMIO, but over a slow SPMI bus instead.
+> 
+> I recalled that Qualcomm had something similar... and upon checking a
+> couple of devicetrees, yeah - indeed it's the same over there.
+> 
+> What I've seen then is a common pattern of reading the "reg" property
+> from devicetree in a struct member and then either
+>   A. Wrapping regmap_{read/write/etc}() calls in a function that adds
+>      the register base with "base + ..register", like it's done with
+>      writel()/readl() calls; or
+>   B. Doing the same as A. but without wrapper functions.
+> 
+> Even though that works just fine, in my opinion it's wrong.
+> 
+> The regmap API is way more complex than MMIO-only readl()/writel()
+> functions for multiple reasons (including supporting multiple busses
+> like SPMI, of course) - but everyone seemed to forget that regmap
+> can manage register base offsets transparently and automatically in
+> its API functions by simply adding a `reg_base` to the regmap_config
+> structure, which is used for initializing a `struct regmap`.
+> 
+> So, here we go: this series implements the software concept of an SPMI
+> Sub-Device (which, well, also reflects how Qualcomm and MediaTek's
+> actual hardware is laid out anyway).
+> 
+>                 SPMI Controller
+>                       |                ______
+>                       |               /       Sub-Device 1
+>                       V              /
+>                SPMI Device (PMIC) ----------- Sub-Device 2
+>                                      \
+>                                       \______ Sub-Device 3
+> 
+> As per this implementation, an SPMI Sub-Device can be allocated/created
+> and added in any driver that implements a... well.. subdevice (!) with
+> an SPMI "main" device as its parent: this allows to create and finally
+> to correctly configure a regmap that is specific to the sub-device,
+> operating on its specific address range and reading, and writing, to
+> its registers with the regmap API taking care of adding the base address
+> of a sub-device's registers as per regmap API design.
+> 
+> All of the SPMI Sub-Devices are therefore added as children of the SPMI
+> Device (usually a PMIC), as communication depends on the PMIC's SPMI bus
+> to be available (and the PMIC to be up and running, of course).
+> 
+> Summarizing the dependency chain (which is obvious to whoever knows what
+> is going on with Qualcomm and/or MediaTek SPMI PMICs):
+>      "SPMI Sub-Device x...N" are children "SPMI Device"
+>      "SPMI Device" is a child of "SPMI Controller"
+> 
+> (that was just another way to say the same thing as the graph above anyway).
+> 
+> Along with the new SPMI Sub-Device registration functions, I have also
+> performed a conversion of some Qualcomm SPMI drivers and only where the
+> actual conversion was trivial.
+> 
+> I haven't included any conversion of more complex Qualcomm SPMI drivers
+> because I don't have the required bandwidth to do so (and besides, I think,
+> but haven't exactly verified, that some of those require SoCs that I don't
+> have for testing anyway).
+> 
+> AngeloGioacchino Del Regno (7):
+>    spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
+>    nvmem: qcom-spmi-sdam: Migrate to devm_spmi_subdevice_alloc_and_add()
+>    power: reset: qcom-pon: Migrate to devm_spmi_subdevice_alloc_and_add()
+>    phy: qualcomm: eusb2-repeater: Migrate to
+>      devm_spmi_subdevice_alloc_and_add()
+>    misc: qcom-coincell: Migrate to devm_spmi_subdevice_alloc_and_add()
+>    iio: adc: qcom-spmi-iadc: Migrate to
+>      devm_spmi_subdevice_alloc_and_add()
+>    iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
+> 
+>   drivers/iio/adc/qcom-spmi-iadc.c              | 109 ++++++++----------
+>   drivers/misc/qcom-coincell.c                  |  38 ++++--
+>   drivers/nvmem/qcom-spmi-sdam.c                |  37 ++++--
+>   .../phy/qualcomm/phy-qcom-eusb2-repeater.c    |  51 +++++---
+>   drivers/power/reset/qcom-pon.c                |  34 ++++--
+>   drivers/spmi/spmi-devres.c                    |  24 ++++
+>   drivers/spmi/spmi.c                           |  79 +++++++++++++
+>   include/linux/spmi.h                          |  16 +++
+>   8 files changed, 278 insertions(+), 110 deletions(-)
+> 
 
-You can't directly bisect, as their development paths diverged with
-v6.7; so if 6.7.11 is working, it might be due to a change that was
-added between 6.7 and 6.7.11 (this is unlikely, but a possibility). So
-you have to check if 6.7 is working and then bisect between 6.7 and
-6.8-rc1 (in case 6.7 was fine) or between 6.7 and 6.7.11 (in case it was
-not).
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
 
-But TBH: from your bisection results you shared in this thread so far it
-looks a bit like your test is unreliable. Likely because it's a timing
-issue or something like that which makes things work or not. That, the
-age of kernels you try to bisect, and what Maciej explained elsewhere in
-this thread at
-https://lore.kernel.org/all/cfc561fb-29a9-4a19-a2e5-0f3f28e5e63a@maciej.szmigiero.name/
-makes me think that it's not worth a bisection, as I guess the result is
-unlikely to change anything (but I could be wrong).
+Tested patch 1, 2, 3 & 4, I can see the :
+/sys/kernel/debug/regmap/0-00.0.auto
+/sys/kernel/debug/regmap/0-00.1.auto
+/sys/kernel/debug/regmap/0-07.2.auto
 
-Ciao, Thorsten
+And it still functional.
+
+Neil
 
 
