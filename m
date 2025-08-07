@@ -1,123 +1,309 @@
-Return-Path: <linux-pm+bounces-32047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32048-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A516B1DB22
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 17:58:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEBAAB1DF08
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 23:45:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A7BA18C1D5E
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 15:59:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04FA91AA0042
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Aug 2025 21:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC2F26CE21;
-	Thu,  7 Aug 2025 15:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4241B25744D;
+	Thu,  7 Aug 2025 21:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I8canp1+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXExmGMQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899B2266B52
-	for <linux-pm@vger.kernel.org>; Thu,  7 Aug 2025 15:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B0920296A;
+	Thu,  7 Aug 2025 21:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754582311; cv=none; b=SF5NbHniycBpRwYhhmCdlSfcbN/cjiTfVNqDDNsYcT013k1YCnNA/Xw4H9Rm+Bx11eMQIOOzrVytpEuCf6RE1eVrj6g+pMW5TDTfi3/4H/IhRDymlo1AUxpJqtUKapPpg4UtrsCZfL13WY9OBFL4YqYG0K123+M1+rSLSRJOS8Q=
+	t=1754603106; cv=none; b=r5Ez/sKI1oDjRDPDWWaQC4V9kh1NUngrMHHTZM2nN0Cj6KJKO7XlqCOqB+AeBHr9TxonWVHssLndBAtAXlFe6O6ikOp3fMtNIH3lwxLacPxTxQlOMO9yTeBgSSbUnRr8WqnDwv5MSi1C35SPDCr6l6C52wGgfh47oHDQ+VL6aOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754582311; c=relaxed/simple;
-	bh=UebwSTgEBGX45jSwaqppv1MZDgNUsTmKmv0RDSYtYBM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oemQTXXwsMic4rXj0Vw2GpT9LJAeXmgcblxfs8Zxb8y8cW+qkJcYtE4sozUCaLI1oVjkRr0Wn0FDJk1JVKfe9zxIm47bxJVtiGuTxf4EhHXlJmKwjhFeFh6zbU9yjWRngQEFtP9Bviz5QOhgkBdNDcPmS/boH//O65RAajgdkx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I8canp1+; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-459d62184c9so7844805e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 07 Aug 2025 08:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754582308; x=1755187108; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ujGGaXLwvEaTDaelriMZ69/JBFsXGLBD07Z/REYyW1I=;
-        b=I8canp1+HIYdWbmOTJfwAl3ic72csHSF9VQgrOjEGHQ4l8y4evhhxJ4ABC9uKGqKDK
-         d3rGH4+lVZWpqlVguEXobU/mIpenQlinoV0jBumjFPSrcp6Sh2O414XnOrfwwY5pebp/
-         Ml3SA/ZrCBYl+E/TcqcDK7nXtxmZO1uPgT+/HESLH1XMkscvtaqOKjNZR4G62c3UXpH6
-         VPGlL0gkcaCFW8a2fAeUd/F4U8bhf/JWZoLlCv+A+E8d5UEXbLTGh5GNF0d7/Moi8tFr
-         N4e2VQQepTLAOG1WCzXVe7ZPhJc2gVjdKnRdw/FuYdJeas6d4AXmIKYam9mTFqXDbP//
-         Lbog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754582308; x=1755187108;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujGGaXLwvEaTDaelriMZ69/JBFsXGLBD07Z/REYyW1I=;
-        b=XhDmgImhq5fVS7riMyc/ZOOpBAv8fIkTO1bjW5g4TtDlDjX8XSAVGR5F96ebNakqjK
-         VDEBXp4/0Ub50qDl8UiU1osCzHuDKUA7Dru1BwTFLZp/UDIheQ8N19t+EHl5iRQEQYo4
-         kuoBCLvTfClZqmowlWPDPT2fSegh0StUJ6+5HNpgcqLZq62RAeehxz4qUfcRhvxah+hs
-         HoqW+S56Gkg83/32JSMAZZcQu1PfrIBoAzc4WYXNw+H6nJwBQXWOK4XGlhwGZCt8JL26
-         iOwBk3UAMzlueLrI6n0rlQ2NVsLXF2cGhmiJU25Cwmli/IPHKOagk/z6vfjxDana8OhO
-         tU1w==
-X-Forwarded-Encrypted: i=1; AJvYcCWP2SrLYNR6AvDr9M2RC+CqBt+K2K1XM7tqfVYaLDt1AJ1HaKHpLNlnqPCLoIN4tLvEVVsXcHha3w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOMMw3MGXzbbMRhr2ukmRpxKRPFxxU1TABKgGg4RQqULPMiFNE
-	mqovO1jErQskMMBDK9BxgfwSGviNNGviJmU9YeUuB5NCq6ZgbMkpum4UJW4HFOMxUamfuuZgzE+
-	xEHWF
-X-Gm-Gg: ASbGncvsH4g+EzAMWTPRLNQvKfwhS2e5xRTQMnEFJODzE7CDUbc3KZIla0qOAjnoBMJ
-	xQVzp1m4cM9IdwIKUHfK+Nc+ocutWH8eKt9EXHJQH49xhXGPF2urOrsXDu8TB5UWkmflD9PQlRl
-	yPMycw3MFzUyOR9NyDavUB2tS8XT4PXrkIt0KJnTJ5WE6Ga3sDXFNwYxjV0Gk4Ig+jFU1P7iLZ5
-	Gv3pdgQFAtvd8xyM/cYLnNGf7hx6LtquUvWHdSgUzKRWsNTGjl5GN+PCuyFFMZzWJy5azqB3R5f
-	T78L9b336IFO2wp0sPZ8RUaGJHQsqqpV5C8KtACc0LenzRP5LeLxLDC1hnCSC49Oya/h63Cs4lZ
-	9lMmp14VLJ6zh+iWJqhOVL8I9T+w=
-X-Google-Smtp-Source: AGHT+IEQAtbjB5WuaftcfISb7loqx9lFVpOAzAnPzXuHW243UbLgIM9IVwryPWI9EYIwJTEBgNYAhA==
-X-Received: by 2002:a05:600c:154e:b0:456:1a69:94fd with SMTP id 5b1f17b1804b1-459f431f845mr2720525e9.0.1754582307874;
-        Thu, 07 Aug 2025 08:58:27 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-459e587e154sm108933495e9.27.2025.08.07.08.58.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Aug 2025 08:58:27 -0700 (PDT)
-Date: Thu, 7 Aug 2025 18:58:23 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] PM / devfreq: mtk-cci: Fix potential error pointer
- dereference in probe()
-Message-ID: <aJTNHz8kk8s6Q2os@stanley.mountain>
+	s=arc-20240116; t=1754603106; c=relaxed/simple;
+	bh=yQVqZgYjYojyPE9FMTmZappbSPbqgnXokqGYtrRk4EY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HeA9ZDgYKcNPCO520FEmoHIYV/6vgzDTz227+0PamEB1tnGoDe4jYRw3PZBo7RgerlnSX51L6AG/PIyWs+UoCgVe172TOJq2nzB/M5maqE11bI5qo2njMW4x5xctYtuPL256u3WDp4OjMTWJ3EZdnGHX/GefXTi/ba6Kyda+AfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXExmGMQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812A7C4CEEB;
+	Thu,  7 Aug 2025 21:45:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754603105;
+	bh=yQVqZgYjYojyPE9FMTmZappbSPbqgnXokqGYtrRk4EY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IXExmGMQH8BKwrOjcYSa+waKiaFstdbXKck8zJ7DMtBYxPFxrYfdg+KCVX+M/aL9o
+	 duJZl+c0XvVwJlT2fSojsBl1wqpr5qQ7YmzDF6no84vuqrpNN82z7Jj8lfwBvV0C8/
+	 OFuFQG/POZ00stMXG6oH+hNZHthJXDxxz0bIjdLI5w/eEkh89bmN2TJHRBOt9jVk23
+	 BCeaNYg8UH51ioJOS+EsWgYq40epRXffL5TrG1trRwUbvWBxrbqzXW3jgBu/g1GXg/
+	 dF2LPFytZrmyRpvDIEVJ9ZPyanjkRNa7L/4uG6qIhMpTZkry7zMsKWOYweRns2pw7O
+	 Dg+IjquUWlQcA==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Lee Jones <lee@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] regulator: dt-bindings: Clean-up active-semi,act8945a duplication
+Date: Thu,  7 Aug 2025 16:44:57 -0500
+Message-ID: <20250807214459.4173892-1-robh@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+Content-Transfer-Encoding: 8bit
 
-The drv->sram_reg pointer could be set to ERR_PTR(-EPROBE_DEFER) which
-would lead to a error pointer dereference.  Use IS_ERR_OR_NULL() to check
-that the pointer is valid.
+The active-semi,act8945a binding is documented in multiple places. The
+charger child node is documented in regulator/active-semi,act8945a.yaml
+and power/supply/active-semi,act8945a-charger.yaml. An old text binding
+is in mfd/act8945a.txt.
 
-Fixes: e09bd5757b52 ("PM / devfreq: mtk-cci: Handle sram regulator probe deferral")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+Update the regulator/active-semi,act8945a.yaml with the additional
+descriptions and constraints from
+power/supply/active-semi,act8945a-charger.yaml, and then remove it and
+mfd/act8945a.txt.
+
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/mfd/act8945a.txt      | 82 -------------------
+ .../supply/active-semi,act8945a-charger.yaml  | 76 -----------------
+ .../regulator/active-semi,act8945a.yaml       | 25 ++++--
+ 3 files changed, 19 insertions(+), 164 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/act8945a.txt
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/active-semi,act8945a-charger.yaml
 
-diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-index 22fe9e631f8a..5730076846e1 100644
---- a/drivers/devfreq/mtk-cci-devfreq.c
-+++ b/drivers/devfreq/mtk-cci-devfreq.c
-@@ -386,7 +386,8 @@ static int mtk_ccifreq_probe(struct platform_device *pdev)
- out_free_resources:
- 	if (regulator_is_enabled(drv->proc_reg))
- 		regulator_disable(drv->proc_reg);
--	if (drv->sram_reg && regulator_is_enabled(drv->sram_reg))
-+	if (!IS_ERR_OR_NULL(drv->sram_reg) &&
-+	    regulator_is_enabled(drv->sram_reg))
- 		regulator_disable(drv->sram_reg);
+diff --git a/Documentation/devicetree/bindings/mfd/act8945a.txt b/Documentation/devicetree/bindings/mfd/act8945a.txt
+deleted file mode 100644
+index 5ca75d888b4a..000000000000
+--- a/Documentation/devicetree/bindings/mfd/act8945a.txt
++++ /dev/null
+@@ -1,82 +0,0 @@
+-Device-Tree bindings for Active-semi ACT8945A MFD driver
+-
+-Required properties:
+- - compatible: "active-semi,act8945a".
+- - reg: the I2C slave address for the ACT8945A chip
+-
+-The chip exposes two subdevices:
+- - a regulators: see ../regulator/act8945a-regulator.txt
+- - a charger: see ../power/act8945a-charger.txt
+-
+-Example:
+-	pmic@5b {
+-		compatible = "active-semi,act8945a";
+-		reg = <0x5b>;
+-
+-		active-semi,vsel-high;
+-
+-		regulators {
+-			vdd_1v35_reg: REG_DCDC1 {
+-				regulator-name = "VDD_1V35";
+-				regulator-min-microvolt = <1350000>;
+-				regulator-max-microvolt = <1350000>;
+-				regulator-always-on;
+-			};
+-
+-			vdd_1v2_reg: REG_DCDC2 {
+-				regulator-name = "VDD_1V2";
+-				regulator-min-microvolt = <1100000>;
+-				regulator-max-microvolt = <1300000>;
+-				regulator-always-on;
+-			};
+-
+-			vdd_3v3_reg: REG_DCDC3 {
+-				regulator-name = "VDD_3V3";
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-always-on;
+-			};
+-
+-			vdd_fuse_reg: REG_LDO1 {
+-				regulator-name = "VDD_FUSE";
+-				regulator-min-microvolt = <2500000>;
+-				regulator-max-microvolt = <2500000>;
+-				regulator-always-on;
+-			};
+-
+-			vdd_3v3_lp_reg: REG_LDO2 {
+-				regulator-name = "VDD_3V3_LP";
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-always-on;
+-			};
+-
+-			vdd_led_reg: REG_LDO3 {
+-				regulator-name = "VDD_LED";
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-always-on;
+-			};
+-
+-			vdd_sdhc_1v8_reg: REG_LDO4 {
+-				regulator-name = "VDD_SDHC_1V8";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-always-on;
+-			};
+-		};
+-
+-		charger {
+-			compatible = "active-semi,act8945a-charger";
+-			pinctrl-names = "default";
+-			pinctrl-0 = <&pinctrl_charger_chglev &pinctrl_charger_lbo &pinctrl_charger_irq>;
+-			interrupt-parent = <&pioA>;
+-			interrupts = <45 IRQ_TYPE_LEVEL_LOW>;
+-
+-			active-semi,chglev-gpios = <&pioA 12 GPIO_ACTIVE_HIGH>;
+-			active-semi,lbo-gpios = <&pioA 72 GPIO_ACTIVE_LOW>;
+-			active-semi,input-voltage-threshold-microvolt = <6600>;
+-			active-semi,precondition-timeout = <40>;
+-			active-semi,total-timeout = <3>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/power/supply/active-semi,act8945a-charger.yaml b/Documentation/devicetree/bindings/power/supply/active-semi,act8945a-charger.yaml
+deleted file mode 100644
+index 5220d9cb16d8..000000000000
+--- a/Documentation/devicetree/bindings/power/supply/active-semi,act8945a-charger.yaml
++++ /dev/null
+@@ -1,76 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/power/supply/active-semi,act8945a-charger.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Active-semi ACT8945A Charger Function
+-
+-maintainers:
+-  - Sebastian Reichel <sre@kernel.org>
+-
+-allOf:
+-  - $ref: power-supply.yaml#
+-
+-properties:
+-  compatible:
+-    const: active-semi,act8945a-charger
+-
+-  interrupts:
+-    maxItems: 1
+-
+-  active-semi,chglev-gpios:
+-    maxItems: 1
+-    description: charge current level GPIO
+-
+-  active-semi,lbo-gpios:
+-    maxItems: 1
+-    description: low battery voltage detect GPIO
+-
+-  active-semi,input-voltage-threshold-microvolt:
+-    description: |
+-      Specifies the charger's input over-voltage threshold value.
+-      Despite the name, specified values are in millivolt (mV).
+-      Defaults to 6.6 V
+-    enum: [ 6600, 7000, 7500, 8000 ]
+-
+-  active-semi,precondition-timeout:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      Specifies the charger's PRECONDITION safety timer setting value in minutes.
+-      If 0, it means to disable this timer.
+-      Defaults to 40 minutes.
+-    enum: [ 0, 40, 60, 80 ]
+-
+-  active-semi,total-timeout:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      Specifies the charger's total safety timer setting value in hours;
+-      If 0, it means to disable this timer;
+-      Defaults to 3 hours.
+-    enum: [ 0, 3, 4, 5 ]
+-
+-required:
+-  - compatible
+-  - interrupts
+-  - active-semi,chglev-gpios
+-  - active-semi,lbo-gpios
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    #include <dt-bindings/gpio/gpio.h>
+-    #include <dt-bindings/interrupt-controller/irq.h>
+-    pmic {
+-      charger {
+-        compatible = "active-semi,act8945a-charger";
+-        interrupt-parent = <&pioA>;
+-        interrupts = <45 IRQ_TYPE_LEVEL_LOW>;
+-        active-semi,chglev-gpios = <&pioA 12 GPIO_ACTIVE_HIGH>;
+-        active-semi,lbo-gpios = <&pioA 72 GPIO_ACTIVE_LOW>;
+-        active-semi,input-voltage-threshold-microvolt = <6600>;
+-        active-semi,precondition-timeout = <40>;
+-        active-semi,total-timeout = <3>;
+-      };
+-    };
+diff --git a/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml b/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml
+index bdf3f7d34ef5..a8d579844dc7 100644
+--- a/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml
++++ b/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml
+@@ -91,28 +91,41 @@ properties:
+         maxItems: 1
  
- 	return ret;
+       active-semi,chglev-gpios:
+-        description: CGHLEV GPIO
++        description: charge current level GPIO
+         maxItems: 1
+ 
+       active-semi,lbo-gpios:
+-        description: LBO GPIO
++        description: low battery voltage detect GPIO
+         maxItems: 1
+ 
+       active-semi,input-voltage-threshold-microvolt:
+-        description: Input voltage threshold
+-        maxItems: 1
++        description:
++          Specifies the charger's input over-voltage threshold value. Despite
++          the name, specified values are in millivolt (mV).
++        enum: [ 6600, 7000, 7500, 8000 ]
++        default: 6600
+ 
+       active-semi,precondition-timeout:
+-        description: Precondition timeout
++        description:
++          Specifies the charger's PRECONDITION safety timer setting value in
++          minutes. If 0, it means to disable this timer.
++        enum: [ 0, 40, 60, 80 ]
++        default: 40
+         $ref: /schemas/types.yaml#/definitions/uint32
+ 
+       active-semi,total-timeout:
+-        description: Total timeout
++        description:
++          Specifies the charger's total safety timer setting value in hours; If
++          0, it means to disable this timer;
++        enum: [ 0, 3, 4, 5 ]
++        default: 3
+         $ref: /schemas/types.yaml#/definitions/uint32
+ 
+     required:
+       - compatible
+       - interrupts
++      - active-semi,chglev-gpios
++      - active-semi,lbo-gpios
+ 
+ additionalProperties: false
+ 
 -- 
 2.47.2
 
