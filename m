@@ -1,142 +1,204 @@
-Return-Path: <linux-pm+bounces-32056-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F307FB1E48D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 10:40:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FA59B1E51A
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 10:58:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6A6C7AAFF6
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 08:39:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 839F41888054
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 08:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A23C25A353;
-	Fri,  8 Aug 2025 08:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8E32673BE;
+	Fri,  8 Aug 2025 08:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M8iPgaqk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53061222565;
-	Fri,  8 Aug 2025 08:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C21226B2AC
+	for <linux-pm@vger.kernel.org>; Fri,  8 Aug 2025 08:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754642430; cv=none; b=FYuestNGyZLqTGKHXQym/72/M5JLjzjwJS/FHx+8oFccffELGroEd7jBlIoRXNPk6+/nvZTAUp/CGtaQoBi/y9cW0dcY7jvzfsXVO/Ly3aV6p4D84phHftmWUAWkDNgHQgdSb+aotARwty2ZNJTF/QlQOnfrfDMlFMsXzKo0cGc=
+	t=1754643513; cv=none; b=ruDaSbjLkMdaaHdtA1eASC7d46/ywSAh5MwvRuPzhvyxw2vcelrn71Mn0QV9CNd+pQt4+X4Pf1tzP8Xrw0FYAPGNRFNsoEcJoD6TEr5wTeNAYE/MvvaNgFwqzLtX7PRV158c5L5te6iSbq1xO7UWwwWrBn1yz+3tdtPkrbREAoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754642430; c=relaxed/simple;
-	bh=junXdwx0TkSI7LNOYjpb9IXp+ymJxIevkjGvsBY0XJo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JJMJjY60nh64Tq8BFfuztH4qfJbk1EqbcjhcDFqUE1YygZXIJBqAGQ7Dd0vQ6D6fYFrQtnxyyzscFbcqXcJHJxilVKFVtIaCUFHK8uFomKtxlFay6PbXUXRDP51mXdg2mDHl9kxGAZO+8y4kAMqbB3G4rpWdv8LzkvrIMvA50gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 4f9d64ec743311f0b29709d653e92f7d-20250808
-X-CID-CACHE: Type:Local,Time:202508081552+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:e0211e39-915b-47f5-8269-b2a5fc39732d,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:12be9df259196fe631b2eedfa1e50959,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 4f9d64ec743311f0b29709d653e92f7d-20250808
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 516528990; Fri, 08 Aug 2025 16:40:17 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 29FF3E01A759;
-	Fri,  8 Aug 2025 16:40:17 +0800 (CST)
-X-ns-mid: postfix-6895B7F0-853165559
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 3E5B8E0000B0;
-	Fri,  8 Aug 2025 16:40:10 +0800 (CST)
-Message-ID: <4644c5ec-b74b-4428-bd14-7b50dbd22397@kylinos.cn>
-Date: Fri, 8 Aug 2025 16:40:09 +0800
+	s=arc-20240116; t=1754643513; c=relaxed/simple;
+	bh=2Cd3py93CGXf5mOUzpOs5vVjwes2SdDigwaiSPyUqF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rFc4Ye8PGOibvbpzAMGgC9iNkuikNGwwJO4pwFMXEnv0IoTHFBhaGNjwKDpe+ouKpiWWNyAuU/LlZTO6SAbQY0npWULGANhZ0j46cO5bHrJ0HuGVt4fBYFAmXtH3UVRphMe6VDnulPlRoRcu62AGmipG/iXqvNiGb0ukrzltqIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M8iPgaqk; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-458bf6d69e4so17036425e9.2
+        for <linux-pm@vger.kernel.org>; Fri, 08 Aug 2025 01:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1754643510; x=1755248310; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lOQVbhQSKupTIDYGcHNIv/5EXRTeGhpJxZzqsjXmSWw=;
+        b=M8iPgaqkss+DKH2EQUlU/8ytVM/eCBYItZh2N8kCndZUrKryObgYTLTi0i0Qk6EdBe
+         h6Zo4XQ8XBNxAeDTG+GYYOan6VGcnoY7C3p6sDLgiBkImDNJmqY0fcsqFJ1ma7trxMfM
+         itf9dcU2rWBcQGTXsFj36ukdfeooZe105uPKYb4Jh1NizP2s0xTX3Rx/CYwOgg/obSeZ
+         wEsqDo5Kt/6MzONNlhYxzU3EVZmsFR0BwOzJ8947OH/lHCccLf2N2mu80FaHUjPxNR15
+         QfdW1WFtfLhDsxY9Qw6agRDuhW0+Hbm7CPl7pJhy1SYOQ1lEL0U2LZ06A04+LAhtZraC
+         VjJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754643510; x=1755248310;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lOQVbhQSKupTIDYGcHNIv/5EXRTeGhpJxZzqsjXmSWw=;
+        b=C89Pswpd6YMMRd6shAGrqFJh+Z86PKyigi6RqvTVmncGyPYbY9G+2GvTHnog98gZQW
+         8Fv4uDZ/BiuFOpWYp/vgvDpxOlG08aiuKO98330hNzjDozs1ZInraCTdlI9utRja4gEp
+         9Y95MX5PWzsx67CmcZAsU2nHdBTK1InCbEWdxjXRGLDvvIDMLyY+mQcDktcjXosk/LOg
+         CUYKsNUgSRXVSkpjAEEy6TaGzp618IfKekuTKQkWU4h+TYVAT6BzL0q0JYoTuWCmbMJh
+         hVNvxZDf7cjHgj9O9jwSkmAQLYFhlcaIs9bL5yzZzH+t0CBtX0Z4Xag2EbvOu4x5nuD5
+         Gdpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrcGxhgTX3o87IBnTtg+VkRqWM+FBgB0Q5Ee6r5fnaQLScIBdVO6B4UdFyqGOVzixR/K2R2X4Oog==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH49DKXDSiWcIywRwYatqth10OoTl+vq3hZuhHbdlA166WJ04/
+	tIYNs0G9mDSYTZw1wjL6aTVtTy0grn8FIvX/2OGktTzL/3eOb6tH/2jC9Ho4wuajkJo=
+X-Gm-Gg: ASbGncvMKEhb7trOZ8zt9S9lgZgmm//dHUo130HW6b56UYlnKxQ1QaMeJPmDPCeRCbi
+	98nflCkrHV+m5WYyELjaEMpJ9+zLlVreqr7b/vNtCMl9lBeJOWfcCFUpISs6/x/j712LWBzfEpb
+	eBmTGmMs/fNJ/IALpyewj6RRCfZ60N5gYK4f+lFA22bInFb18bT9WIozRn6C/ITvtt0XD/XDUU9
+	YhPeykvhMqTtC0evSQXjMVNxzAdvWauWmxdsn/xGje+3pKCO70NGblbfwVNKcvK3cNm7IN5bfo3
+	N+4uLTV9gdfCwEd0/DQm2JdJVRo9HZ+qLvWv0gXyE3j8UF879wH5yBuN3a4h4U6vOkmc1puneA/
+	Ob00i+ndrn15swoakWdbohUTCgaPAXg2rnKQ=
+X-Google-Smtp-Source: AGHT+IFzVmndy14yZFXdn3AITFDDpuqCDmasSizVoBUj53EPQz0livj4I20cGXLIqIwR20S7zVle5Q==
+X-Received: by 2002:a05:600c:190b:b0:459:e048:af42 with SMTP id 5b1f17b1804b1-459f4fac94amr17073275e9.24.1754643509756;
+        Fri, 08 Aug 2025 01:58:29 -0700 (PDT)
+Received: from localhost (109-81-80-221.rct.o2.cz. [109.81.80.221])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b79c47ae8esm29556901f8f.61.2025.08.08.01.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Aug 2025 01:58:29 -0700 (PDT)
+Date: Fri, 8 Aug 2025 10:58:28 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	David Hildenbrand <david@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Nico Pache <npache@redhat.com>, xu xin <xu.xin16@zte.com.cn>,
+	wangfushuai <wangfushuai@baidu.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jeff Layton <jlayton@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+	Adrian Ratiu <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
+ address process dependency issues
+Message-ID: <aJW8NLPxGOOkyCfB@tiehlicka>
+References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
+ <aJSpTpB9_jijiO6m@tiehlicka>
+ <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
+ <aJWglTo1xpXXEqEM@tiehlicka>
+ <ba9c23c4-cd95-4dba-9359-61565195d7be@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
- address process dependency issues
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Michal Hocko <mhocko@suse.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, David Hildenbrand <david@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
- Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Nico Pache <npache@redhat.com>,
- xu xin <xu.xin16@zte.com.cn>, wangfushuai <wangfushuai@baidu.com>,
- Andrii Nakryiko <andrii@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Jeff Layton <jlayton@kernel.org>,
- Al Viro <viro@zeniv.linux.org.uk>, Adrian Ratiu
- <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <aJSpTpB9_jijiO6m@tiehlicka>
- <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
- <20250808075753.GB29612@redhat.com>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250808075753.GB29612@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba9c23c4-cd95-4dba-9359-61565195d7be@kylinos.cn>
 
-Hi,
+On Fri 08-08-25 15:52:31, Zihuan Zhang wrote:
+> 
+> 在 2025/8/8 15:00, Michal Hocko 写道:
+> > On Fri 08-08-25 09:13:30, Zihuan Zhang wrote:
+> > [...]
+> > > However, in practice, we’ve observed cases where tasks appear stuck in
+> > > uninterruptible sleep (D state) during the freeze phase  — and thus cannot
+> > > respond to signals or enter the refrigerator. These tasks are technically
+> > > TASK_FREEZABLE, but due to the nature of their sleep state, they don’t
+> > > freeze promptly, and may require multiple retry rounds, or cause the entire
+> > > suspend to fail.
+> > Right, but that is an inherent problem of the freezer implemenatation.
+> > It is not really clear to me how priorities or layers improve on that.
+> > Could you please elaborate on that?
+> 
+> Thanks for the follow-up.
+> 
+> From our observations, we’ve seen processes like Xorg that are in a normal
+> state before freezing begins, but enter D state during the freeze window.
+> Upon investigation,
+> 
+> we found that these processes often depend on other user processes (e.g.,
+> I/O helpers or system services), and when those dependencies are frozen
+> first, the dependent process (like Xorg) gets stuck and can’t be frozen
+> itself.
 
-=E5=9C=A8 2025/8/8 15:57, Oleg Nesterov =E5=86=99=E9=81=93:
-> On 08/08, Zihuan Zhang wrote:
->> =E5=9C=A8 2025/8/7 21:25, Michal Hocko =E5=86=99=E9=81=93:
->>> If they are running in the userspace and e.g. sleeping while not
->>> TASK_FREEZABLE then priority simply makes no difference. And if they =
-are
->>> TASK_FREEZABLE then the priority doens't matter either.
->>>
->>> What am I missing?
-> I too do not understand how can this series improve the freezer.
+OK, I see.
 
-Thanks for your question =E2=80=94 actually, I just replied to Michal wit=
-h a=20
-similar explanation, but I really appreciate you raising the same point,=20
-so let me add a bit more context here.
+> This led us to treat such processes as “hard to freeze” tasks — not because
+> they’re inherently unfreezable, but because they are more likely to become
+> problematic if not frozen early enough.
+> 
+> So our model works as follows:
+>     •    By default, freezer tries to freeze all freezable tasks in each
+> round.
+>     •    With our approach, we only attempt to freeze tasks whose
+> freeze_priority is less than or equal to the current round number.
+>     •    This ensures that higher-priority (i.e., harder-to-freeze) tasks
+> are attempted earlier, increasing the chance that they freeze before being
+> blocked by others.
+> 
+> Since we cannot know in advance which tasks will be difficult to freeze, we
+> use heuristics:
+>     •    Any task that causes freeze failure or is found in D state during
+> the freeze window is treated as hard-to-freeze in the next attempt and its
+> priority is increased.
+>     •    Additionally, users can manually raise/reduce the freeze priority
+> of known problematic tasks via an exposed sysfs interface, giving them
+> fine-grained control.
 
-Right now, we're trying to address the case where certain tasks fail to=20
-freeze (often due to short-lived D-state issues). Our current workaround=20
-is to increase the number of freeze iterations in the next suspend=20
-attempt for those tasks.
+This would have been a very useful information for the changelog so that
+we can understand what you are trying to achieve.
 
-While this isn't a perfect solution, the overhead of a few extra=20
-iterations is minimal compared to the cost of retrying the whole suspend=20
-cycle due to a stuck D-state task. So for now, we believe this is a=20
-reasonable tradeoff until we find a more deterministic way to=20
-preemptively detect and prioritize problematic tasks.
+> This doesn’t change the fundamental logic of the freezer — it still retries
+> until all tasks are frozen — but by adjusting the traversal order,
+> 
+>  we’ve observed significantly fewer retries and more reliable success in
+> scenarios where these D state transitions occur.
+ 
+OK, I believe I do understand what you are trying to achieve but I am
+not conviced this is a robust way to deal with the problem. This all
+seems highly timing specific that might work in very specific usecase
+but you are essentially trying to fight tiny race windows with a very
+probabilitistic interface.
 
-Happy to hear your thoughts or suggestions if you think there's a better=20
-direction to explore.
+Also the interface seems to be really coarse grained and it can easily
+turn out insufficient for other usecases while it is not entirely clear
+to me how this could be extended for those.
 
->> under ideal conditions, if a userspace task is TASK_FREEZABLE, receive=
-s the
->> freezing() signal, and enters the refrigerator in a timely manner,
-> Note that __freeze_task() won't even send a signal to a sleeping
-> TASK_FREEZABLE task, __freeze_task() will just change its state to
-> TASK_FROZEN.
->
-> Oleg.
->
-You are right.
+I believe it would be more useful to find sources of those freezer
+blockers and try to address those. Making more blocked tasks
+__set_task_frozen compatible sounds like a general improvement in
+itself.
+
+Thanks
+-- 
+Michal Hocko
+SUSE Labs
 
