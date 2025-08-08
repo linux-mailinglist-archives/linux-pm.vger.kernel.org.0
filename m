@@ -1,129 +1,92 @@
-Return-Path: <linux-pm+bounces-32072-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32073-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6476AB1EAFF
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 17:02:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0910B1EEF6
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 21:37:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3F1DAA2594
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 15:00:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA62F1C202AF
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 19:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354D7283155;
-	Fri,  8 Aug 2025 14:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE27F2877FC;
+	Fri,  8 Aug 2025 19:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I4JNKxdn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2tTrkV6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748A0283C90
-	for <linux-pm@vger.kernel.org>; Fri,  8 Aug 2025 14:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53452877E3;
+	Fri,  8 Aug 2025 19:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754664929; cv=none; b=t2xzsxBRpENBOvHsmMRrjnrfx0uTDiIV+lcyJ0N57VA2GJqpLqPsWyVfuDysgkhFdK0wFj9T1O0kU7D5lzqUXGFC47V0SZeMOcE8PptUrp1GH2F95dKbfYeMGRJGvIiJKwqVE7YSbZt0OAqL8nTXI6F2VQWwPtXFb76T41RSfH0=
+	t=1754681868; cv=none; b=UMk277LKOm/lb/XKxbPPDjCqGzRqQshQJXg0aIUCGWoppv+3565a3hzIMldsp/joEEJtM3X6ZM7BE9scRmT7TLyq5FKQ3qw5Abf2cBavsGnLCRyiEQXNQOGDWKyY5zSKx3Ik5Ma+OkfCMXK/XoNtnlSAG+9tiGw3clR85F/VGR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754664929; c=relaxed/simple;
-	bh=Tj7T2vafcrPanx5uGIfgumtfb4o9PLTGmL4k/Y3xDwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WDrewPAt3Rlj5kZfjRuGOmlWsVfu73jg12WxfVKQ9eSTiq0KXoofVQjOtWoLqfpOMLawqD6ApsRFidmWrGdNrQ1ngLqkbHhIJaKzCld08bBb6cYo9jzB7LB89c9dCALkqWyE9frti1W0LfGMZnBRywXQIbuNMgcZ3PAiNhaRwEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I4JNKxdn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754664927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gkM3QF49wtdLwhGqe2QpWy/vLyG4tuPu0m+0oSeMzXc=;
-	b=I4JNKxdn6tEWGb+8+LUeSSiuKaUsCIK9Q/PNWaPLcnoJ/IJac4jrCMKeoQvRe/C2bDPZO+
-	5HBI5Yxp1s2LQ3KetWYIsvfs2Ee0UCCHWDIntdu7pZaE7vRYSem8J0MYKMlel5/8I2nce/
-	X5/wTaLBFUpMZeaSfH1jtlkr0L+YJj0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-131-M8qeCOvAPA6mb-zvy_eSGw-1; Fri,
- 08 Aug 2025 10:55:23 -0400
-X-MC-Unique: M8qeCOvAPA6mb-zvy_eSGw-1
-X-Mimecast-MFC-AGG-ID: M8qeCOvAPA6mb-zvy_eSGw_1754664919
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2EE8D1800280;
-	Fri,  8 Aug 2025 14:55:17 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.117])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 36BCD180047F;
-	Fri,  8 Aug 2025 14:55:02 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri,  8 Aug 2025 16:54:05 +0200 (CEST)
-Date: Fri, 8 Aug 2025 16:53:50 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Nico Pache <npache@redhat.com>, xu xin <xu.xin16@zte.com.cn>,
-	wangfushuai <wangfushuai@baidu.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jeff Layton <jlayton@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org,
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 7/9] freezer: raise freeze priority of tasks
- failed to freeze last time
-Message-ID: <20250808145349.GC21685@redhat.com>
-References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <20250807121418.139765-8-zhangzihuan@kylinos.cn>
+	s=arc-20240116; t=1754681868; c=relaxed/simple;
+	bh=+sPyrRNmQmGvEQQbsqXAiqW7mrkXp+1FECvjK0+/Nhk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V/Vha6aIZa4gyTrj9b7UdLlJiCjqyJBmBo8WJ/a7Xw5Khqt2300GnB6pTZk9ynJMkLaCXK5704f/uI200P4/xj66tZ4QWPCnPKR6LEJn0dSG8XaBDxlE4EjTqeIjtpttNDkKPte3qieJjqaUuNGCa9Kgstn4wZ2RsCIrp/SgA4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2tTrkV6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108A2C4CEED;
+	Fri,  8 Aug 2025 19:37:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754681868;
+	bh=+sPyrRNmQmGvEQQbsqXAiqW7mrkXp+1FECvjK0+/Nhk=;
+	h=From:To:Cc:Subject:Date:Reply-To:From;
+	b=G2tTrkV6GOPastvB2cGf74tfwXPjVhbLqIKAHI2Hzlu2RBXqbgGxErHwfR2Xl66Q2
+	 KOXY0W/FNMMWlDolDdixTGDSCf7Aqe1HDztin5LG6OHiflO2oJ3mbDjKds7EspQapF
+	 pXOQNpUAm6cHYTb/EkqImVQyaYnWa/e+hO30eMlUF2f9fb6Re+BCbzPHP7HuvHzIQv
+	 oynQJBhAq9v0ByizS8nPOLyohCGrmQVSboo5ezhuPkFymHyA/BvENc9U3EhwfK2LMe
+	 P5VPBvW8qc3vL5u+w4QHRDOoIp/moBAk49p4tl7JtrZVu9JBOz/bRUqqtNoPr816BU
+	 Zxf/KbIpXQT/Q==
+From: Len Brown <lenb@kernel.org>
+To: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Len Brown <len.brown@intel.com>
+Subject: [PATCH 1/1] intel_idle: Allow loading ACPI tables for any family
+Date: Fri,  8 Aug 2025 15:37:14 -0400
+Message-ID: <06101aa4fe784e5b0be1cb2c0bdd9afcf16bd9d4.1754681697.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250807121418.139765-8-zhangzihuan@kylinos.cn>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
+Content-Transfer-Encoding: 8bit
 
-On 08/07, Zihuan Zhang wrote:
->
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -111,8 +111,10 @@ static int try_to_freeze_tasks(bool user_only)
->  		if (!wakeup || pm_debug_messages_on) {
->  			read_lock(&tasklist_lock);
->  			for_each_process_thread(g, p) {
-> -				if (p != current && freezing(p) && !frozen(p))
-> +				if (p != current && freezing(p) && !frozen(p)) {
-> +					freeze_set_default_priority(p, FREEZE_PRIORITY_HIGH);
->  					sched_show_task(p);
-> +				}
+From: Len Brown <len.brown@intel.com>
 
-IMO, this change should go into 3/9 to make the intent more clear.
+There is no reason to limit intel_idle's loading of ACPI tables to
+family 6.  Upcoming Intel processors are not in family 6.
 
-Other than that, I leave this series to maintainers and other reviewers.
-Personally, I am skeptical.
+Below "Fixes" really means "applies cleanly until".
+That syntax commit didn't change the previous logic,
+but shows this patch applies back 5-years.
 
-Oleg.
+Fixes: 4a9f45a0533f ("intel_idle: Convert to new X86 CPU match macros")
+Signed-off-by: Len Brown <len.brown@intel.com>
+---
+ drivers/idle/intel_idle.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 73747d20df85..91a7b7e7c0c8 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1679,7 +1679,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ };
+ 
+ static const struct x86_cpu_id intel_mwait_ids[] __initconst = {
+-	X86_MATCH_VENDOR_FAM_FEATURE(INTEL, 6, X86_FEATURE_MWAIT, NULL),
++	X86_MATCH_VENDOR_FAM_FEATURE(INTEL, X86_FAMILY_ANY, X86_FEATURE_MWAIT, NULL),
+ 	{}
+ };
+ 
+-- 
+2.45.2
 
 
