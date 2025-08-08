@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-32069-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32070-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86ACEB1EA64
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 16:31:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 450E4B1EA88
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 16:41:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 815B84E452B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 14:31:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DB011C22383
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 14:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FCF27FD6E;
-	Fri,  8 Aug 2025 14:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EF427FD59;
+	Fri,  8 Aug 2025 14:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MJVAMQfF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S3t7DLtj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5EE27FB2B
-	for <linux-pm@vger.kernel.org>; Fri,  8 Aug 2025 14:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B46927F198
+	for <linux-pm@vger.kernel.org>; Fri,  8 Aug 2025 14:41:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754663494; cv=none; b=glmTUemHe3s+ZrI8CpbIfTKAm5WYCOifIoNlqbmiEOybqkRiaAjHMPxStDDKtQclO9Ahk3Qe49z6fVvVMdD//MaLCrYBfK1/OaTmbPB5Ct49lRRlYRG7ilLZO4sQrthmfVES9kfQZwc0HWiwhSuVIdFjvC/T45UUpX61YzPdVB4=
+	t=1754664084; cv=none; b=XbcL2Z+BHWukoCZhFX3WvbugDrrOKwdlzf/g47ihJZup+9VBGGg1rZB+M8PpfKo1PwKdGmm/ye7xv3OD54enhQbllDjYya/OY1wuzu/BiZZAd/W90x8+csBejV1mwg6hu/WonPg4Zlp13JSQI+7aJo4ALDnTdipIuhJmIb6WIUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754663494; c=relaxed/simple;
-	bh=6h331knxWWLi5xlaD04ppqmYxJqO9T/0v1OIGs3CC2Y=;
+	s=arc-20240116; t=1754664084; c=relaxed/simple;
+	bh=qd2MUsflHlZ/tZVMWNcFSyxtl05BNFiVeTGXc3N54Uk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g060j7l2+/CENvYaTdyO2ZxM54c/DaTnaB50FNbNKtY4b6xz5cQ4X9EDnMcFy3yNBOPk6eZ8IhQLI/0kKvQ26egc7nBfV13KsQqOlaMq3KWwh1W6k13nC9gyMYiiP3iZv7W9Um2K0TRhTI751cCK2+zesIpkd/72jlDbWhYms0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MJVAMQfF; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=UpYD2zl9a/jNlBQrAq/kr72dTant559nlqPM8IJ/Rjx4TJEod44WAVEX9BSalmcP3ZNhY9jALLxKJmlf8iloq1WgR+fCzmn8p+lkCAFe5QFIzS/vgDffrR10PS4xki/IXyUox5xTsn3G7lUOLv6KR90NSd6MLQNlclSryY5+XbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S3t7DLtj; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754663492;
+	s=mimecast20190719; t=1754664082;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pVhHzmrsz3RzEJrixBNs+yxJAkbGyaM42AxRbLiYFUU=;
-	b=MJVAMQfFzpKKxxesbNEmDeK1jm/5K+NNm2oTAkGeBFpQYT3pqOURZztRO+JDHrHaKzTmjB
-	yKXMVLUVnvw9Mz6p111bj7cEqaC+gzSCYuNU+sFZVDf0TmIJDGRPvcMraAFOCYNXPUpuSl
-	9g96LhwHUxVYMxYygRxtW8tA6H6zuYg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=CVbXlbyZjsINekjOptSlbtwiYMjqyKFTkplWxm4uz+w=;
+	b=S3t7DLtjOGhzLQDEj3bfQlRn+9eaI2gPfFugzq3XDT7LP4qg0Pw63c9C81IQ85+SRGRb8F
+	/RcTpKFoTTg3ulwdfslSKl3DWZDcvkjbTiz6ADBoz48ua9YrSh2pPM9ob02aUyspRlWHWR
+	Ga+SjW7tPVpD5JkoIxmW98NiCUunEpY=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-484-DJbDAkNNMHyGQLED60pccg-1; Fri,
- 08 Aug 2025 10:31:28 -0400
-X-MC-Unique: DJbDAkNNMHyGQLED60pccg-1
-X-Mimecast-MFC-AGG-ID: DJbDAkNNMHyGQLED60pccg_1754663484
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-618-raJ6zeyFMcWE-g_6SowfgQ-1; Fri,
+ 08 Aug 2025 10:41:17 -0400
+X-MC-Unique: raJ6zeyFMcWE-g_6SowfgQ-1
+X-Mimecast-MFC-AGG-ID: raJ6zeyFMcWE-g_6SowfgQ_1754664073
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 07B30180035D;
-	Fri,  8 Aug 2025 14:31:22 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3CA0619560B5;
+	Fri,  8 Aug 2025 14:41:11 +0000 (UTC)
 Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.117])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1177A1800446;
-	Fri,  8 Aug 2025 14:31:01 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 8DD2A180029D;
+	Fri,  8 Aug 2025 14:40:55 +0000 (UTC)
 Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri,  8 Aug 2025 16:30:10 +0200 (CEST)
-Date: Fri, 8 Aug 2025 16:29:49 +0200
+	oleg@redhat.com; Fri,  8 Aug 2025 16:39:59 +0200 (CEST)
+Date: Fri, 8 Aug 2025 16:39:43 +0200
 From: Oleg Nesterov <oleg@redhat.com>
 To: Zihuan Zhang <zhangzihuan@kylinos.cn>
 Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -88,11 +88,11 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Adrian Ratiu <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org,
 	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 6/9] freezer: Set default freeze priority for
- zombie tasks
-Message-ID: <20250808142948.GA21685@redhat.com>
+Subject: Re: [RFC PATCH v1 5/9] freezer: set default freeze priority for
+ PF_SUSPEND_TASK processes
+Message-ID: <20250808143943.GB21685@redhat.com>
 References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <20250807121418.139765-7-zhangzihuan@kylinos.cn>
+ <20250807121418.139765-6-zhangzihuan@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -101,25 +101,34 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250807121418.139765-7-zhangzihuan@kylinos.cn>
+In-Reply-To: <20250807121418.139765-6-zhangzihuan@kylinos.cn>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
 On 08/07, Zihuan Zhang wrote:
 >
-> @@ -6980,6 +6981,7 @@ void __noreturn do_task_dead(void)
->  	current->flags |= PF_NOFREEZE;
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -147,6 +147,7 @@ int freeze_processes(void)
 >
->  	__schedule(SM_NONE);
+>  	pm_wakeup_clear(0);
+>  	pm_freezing = true;
 > +	freeze_set_default_priority(current, FREEZE_PRIORITY_NEVER);
->  	BUG();
 
-But this change has no effect?
+But why?
 
-Firstly, this last __schedule() should not return, note the BUG() we have.
+Again, freeze_task() will return false anyway, this process is
+PF_SUSPEND_TASK.
 
-Secondly, this zombie is already PF_NOFREEZE, freeze_task() will return
-false anyway.
+> @@ -218,6 +219,7 @@ void thaw_processes(void)
+>  	WARN_ON(!(curr->flags & PF_SUSPEND_TASK));
+>  	curr->flags &= ~PF_SUSPEND_TASK;
+>
+> +	freeze_set_default_priority(current, FREEZE_PRIORITY_NORMAL);
+>  	usermodehelper_enable();
+
+What if current->freeze_priority was changed via
+/proc/pid/freeze_priority you add in 9/9 ?
 
 Oleg.
 
