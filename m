@@ -1,249 +1,169 @@
-Return-Path: <linux-pm+bounces-32049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1153BB1E01A
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 03:13:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38379B1E07E
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 04:14:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E3A4582F1F
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 01:13:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 401B3582A7B
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 02:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130551B7F4;
-	Fri,  8 Aug 2025 01:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A0214B950;
+	Fri,  8 Aug 2025 02:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e6OTTpJ+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903472E36E0;
-	Fri,  8 Aug 2025 01:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D2B2F30
+	for <linux-pm@vger.kernel.org>; Fri,  8 Aug 2025 02:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754615632; cv=none; b=cOQTovKpxlyNx1vSH3NvqaPgK6MqMMVsM5548QkdjQgdNG2Fle92fsixPGl1ybYwQP6/qMlOEwSslr3i55cS4S8P25wwWYm/gvYLaNnuOQt4l0eMvdMkBaoXdN76cBsxRrddOGEYyCRp4bkCspdeWSAEENCAkagqVHbOq9+bYmo=
+	t=1754619286; cv=none; b=L34DAOC3qXk9Kh48Dwo8JFyqO2LvsnnVERg4JKhgSlms+FQiUC8sx2LNGxtvNJfO0qGIncC9KdZSypDfQwRjBh5sRjzXq6znKrJc4wE5e2cEHe8WonLSmmeIzwLdeA7QCGipsNoF4DQCxfrwyn26Q2d7gHf7bXWkWxVknhgBOlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754615632; c=relaxed/simple;
-	bh=R1Jwc6a/WrKjV5zidgzTjP1eu9KZ8+1q30QH43FEGis=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XifQ8vV20d/C5vzq/MpSrX8FHyVFkQHl/RugxBGWa6htE894znb1NbgPg00QK1iQW1oaeW4QFaSVDzUMdVnrEiWWoBTPA6/fg4fV0PT2Mrp+RKao8uxPi6RPhe6FGIZKjDja7g83oWiAPfpbH1rYcAx3WpRLQCs+WFgymK6JaEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: eb81b21273f411f0b29709d653e92f7d-20250808
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:776e54fd-e886-4705-8814-2912ed7b1ed4,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:b62a745bded9568a354f757b5e9c74bc,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: eb81b21273f411f0b29709d653e92f7d-20250808
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1518627884; Fri, 08 Aug 2025 09:13:40 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 7C2CBE0000B0;
-	Fri,  8 Aug 2025 09:13:40 +0800 (CST)
-X-ns-mid: postfix-68954F44-36935566
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id E603EE0000B0;
-	Fri,  8 Aug 2025 09:13:30 +0800 (CST)
-Message-ID: <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
-Date: Fri, 8 Aug 2025 09:13:30 +0800
+	s=arc-20240116; t=1754619286; c=relaxed/simple;
+	bh=wQtY/4WqbgE2guErpzIRLGgpkmE00KVZtNgRMV+Pi9w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWbDzqnrb8vCGqIvMrQNxfdQipKkFvAkLcRy1YL1OsPLPLcEDRTFXtwDxrh6x8BW1s/l2qSfmIXbo5SvMxMSjX+jPDPBxF7AP55PUCx8MjLrRZJq0E1PP+T/Iy+S4uJ/dP3WI+ju7IFYCyZ7Ww++knfxSVbAhIiQmcW/Y/l0f4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e6OTTpJ+; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-240718d5920so60905ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Aug 2025 19:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754619284; x=1755224084; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/CmW/UMEXSdHhdIMaJM/qU0QyxbiGV2rEVZVgEQQR0=;
+        b=e6OTTpJ+CMRNIcfLBNXCn1/5XxPUHS0WOW1XKnBcfBLkCGavtrBGjBC62UuQPf7eG7
+         88sP2h8TBrm1wa64Ex9S88Tc3NNR0iSjfXUFEz7Hp9dNqH0Rt3nUQqY/IN80bAPSr0iA
+         6qOTQZTXbKuEYcBDSmwoUHYX9NLlW63bL+bysCYrHZPsADBRKJ2Y1WLMZ87YE48p+DsH
+         4QaJAXaUE1u72TNxwAbHCY4s7cwoZmEzQX+9inhG6z6pm8m11ADGefYM6rWjBlGh4Bs6
+         maHBzprpG6TbbpWZ28/nmZRawLfrnxWTjNUCQlRtHTdVP839XPHNFGqwl5dHEnxrTD+e
+         JTgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754619284; x=1755224084;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U/CmW/UMEXSdHhdIMaJM/qU0QyxbiGV2rEVZVgEQQR0=;
+        b=prq3l0r6AtTSrE7rlUEWkJryWwGLqe8CVq00p/ByP+SEo+qxIw6njigf/ZfTLJ9w8P
+         UHgDhnbpaejnyFzEKG2Bci9BKHHBRtKBYTqKC7NKVXOwADmarbZPoCdIRzuwGPU0VKe7
+         AW+9N5gKpwqY5VeIR8MLHcWeF0Jy87DE9krB/8mif2nPaev7VRjDEcdzpoKyQTch2iKI
+         oGdUyjPeGOxMYThqj59U7nCND7fZjmvDSD8Old8PMtjLjKE3YBdOFLX28oxxWfPLm8A4
+         fOAzc8OoPrlUng94FJoQsEzgul/G8yuNuSjkoPcuBLwxNIAkfNa91q1XpfJHSCXnGeb+
+         94eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUM1DJ6Reqil+OTuKtjZ+ZIm4Zs107OXagb6rW4z7ECKYE3cxIAjdGdl7GW9BXEXd0GGncnIDgALg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLgHGfvOfQY6gKbmS+gH9IlIDjaZI2gZJnqFgkehdivcIt7oZO
+	t8lMHUJhzZo8OJ2gEsDRbMcRB8WpgnuwosTuYLbePI+k9LnZ45WeSC0VjlXZkwZZ2w==
+X-Gm-Gg: ASbGncvlU1Cb24OApGMelKBGLB1fFAUizCPWBfJl5NTMul/sZuD9t+33jzlKbNbzqWN
+	m+AVsdwI/ds8B61C4PwCsigwrJ2vLiykZhAtt2722zWcV2xP9azhVme1guCaQXfShlxGvpRLWso
+	ts7Mg/GblbMAtcqpFByIKmRnPaT4q+OlZpr4F7rnkWZwQc8q3p3yjawMODrehuOAuVDP/1CFv/5
+	RkhQjBX5Xbek59AOTQgwzq414g5G69S7VSi/Oc5Q57r+Gd9aVGisrs2iUtTcZOQVUiktoMfhjyR
+	9cqtya0Ci5LVF8CyNVhcw2duuyNNFm1WSP76dAIzoypT7p5PRdpFFk6ycASH/S6UN/ZKhGN91YK
+	yEjZdV+9sziFgU3K8ZmRnzBGH5hOJR4Y3eWEh9/3sl7jCEOjaXVuWQbjnhG5ftg==
+X-Google-Smtp-Source: AGHT+IGDf1jT+enxl9JNofYHdNovWwHe1MWvyEkHBvgLmHv5L9E3x/M/t1aB9uYIJEtO8WST68i8fw==
+X-Received: by 2002:a17:903:3b87:b0:240:2bd3:861 with SMTP id d9443c01a7336-242c16e10e2mr1712075ad.10.1754619283982;
+        Thu, 07 Aug 2025 19:14:43 -0700 (PDT)
+Received: from google.com (167.212.233.35.bc.googleusercontent.com. [35.233.212.167])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3216128ac08sm6689684a91.30.2025.08.07.19.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Aug 2025 19:14:43 -0700 (PDT)
+Date: Fri, 8 Aug 2025 02:14:39 +0000
+From: Prashant Malani <pmalani@google.com>
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aJVdjwU-qkdDIXaD@google.com>
+References: <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
+ <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
+ <aIso4kLtChiQkBjH@arm.com>
+ <CAFivqm+kbRbJsJ_Obb4bV6fgxbqAwOndLUCDwHvWWnpMYoNoNw@mail.gmail.com>
+ <aIvSe9VtZ-zlYfbQ@arm.com>
+ <CAFivqmKR1dqVqTsoznH2-n8cyAM1=5zEGcEvmESU8RNGac-0sA@mail.gmail.com>
+ <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
+ <aJMCgGt5zu5Dhrd5@arm.com>
+ <CAFivqmLSp6RwfsPBK0d=zvRd6M_5GoeU4jHb-0OM9BpaDeSrzA@mail.gmail.com>
+ <aJR-4J-sTpLaNIJB@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
- address process dependency issues
-To: Michal Hocko <mhocko@suse.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
- David Hildenbrand <david@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
- Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Nico Pache <npache@redhat.com>,
- xu xin <xu.xin16@zte.com.cn>, wangfushuai <wangfushuai@baidu.com>,
- Andrii Nakryiko <andrii@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Jeff Layton <jlayton@kernel.org>,
- Al Viro <viro@zeniv.linux.org.uk>, Adrian Ratiu
- <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <aJSpTpB9_jijiO6m@tiehlicka>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <aJSpTpB9_jijiO6m@tiehlicka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aJR-4J-sTpLaNIJB@arm.com>
 
-Hi,
+Hi Beata,
 
-=E5=9C=A8 2025/8/7 21:25, Michal Hocko =E5=86=99=E9=81=93:
-> On Thu 07-08-25 20:14:09, Zihuan Zhang wrote:
->> The Linux task freezer was designed in a much earlier era, when usersp=
-ace was relatively simple and flat.
->> Over the years, as modern desktop and mobile systems have become incre=
-asingly complex=E2=80=94with intricate IPC,
->> asynchronous I/O, and deep event loops=E2=80=94the original freezer mo=
-del has shown its age.
-> A modern userspace might be more complex or convoluted but I do not
-> think the above statement is accurate or even correct.
-You=E2=80=99re right =E2=80=94 that statement may not be accurate. I=E2=80=
-=99ll be more careful=20
-with the wording.
->> ## Background
->>
->> Currently, the freezer traverses the task list linearly and attempts t=
-o freeze all tasks equally.
->> It sends a signal and waits for `freezing()` to become true. While thi=
-s model works well in many cases, it has several inherent limitations:
->>
->> - Signal-based logic cannot freeze uninterruptible (D-state) tasks
->> - Dependencies between processes can cause freeze retries
->> - Retry-based recovery introduces unpredictable suspend latency
->>
->> ## Real-world problem illustration
->>
->> Consider the following scenario during suspend:
->>
->> Freeze Window Begins
->>
->>      [process A] - epoll_wait()
->>          =E2=94=82
->>          =E2=96=BC
->>      [process B] - event source (already frozen)
->>
->> =E2=86=92 A enters D-state because of waiting for B
-> I thought opoll_wait was waiting in interruptible sleep.
+On Aug 07 12:24, Beata Michalska wrote:
+> Right .... that's what happens when you are (I am) making last minute clean up.
+> That should fix it. Would you mind giving it another go ? Would appreciate it.
+> 
+> ---
+> BR
+> Beata
+> 
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index 65adb78a9a87..2a51e93fcd6c 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -543,7 +543,7 @@ void counters_burst_read_on_cpu(void *arg)
+>  
+>  static inline bool cpc_reg_supported(struct cpc_reg *reg)
+>  {
+> -       return !((u64)reg->address != 0x0 || (u64)reg->address != 0x1);
+> +       return !((u64)reg->address != 0x0 && (u64)reg->address != 0x1);
+>  }
 
-Apologies =E2=80=94 my description may not be entirely accurate.
+Here are the measurements with the fix:
 
-But there are some dmesg logs:
+The readings are less accurate. There are some which report
+3.4 GHz (as earlier) but many are off:
 
-[   62.880497] PM: suspend entry (deep)
-[   63.130639] Filesystems sync: 0.249 seconds
-[   63.130643] PM: Preparing system for sleep (deep)
-[   63.226398] Freezing user space processes
-[   63.227193] freeze round: 0, task to freeze: 681
-[   63.228110] freeze round: 1, task to freeze: 1
-[   63.230064] task:Xorg            state:D stack:0     pid:1404  tgid:14=
-04  ppid:1348   task_flags:0x400100 flags:0x00004004
-[   63.230068] Call Trace:
-[   63.230069]  <TASK>
-[   63.230071]  __schedule+0x52e/0xea0
-[   63.230077]  schedule+0x27/0x80
-[   63.230079]  schedule_timeout+0xf2/0x100
-[   63.230082]  wait_for_completion+0x85/0x130
-[   63.230085]  __flush_work+0x21f/0x310
-[   63.230087]  ? __pfx_wq_barrier_func+0x10/0x10
-[   63.230091]  drm_mode_rmfb+0x138/0x1b0
-[   63.230093]  ? __pfx_drm_mode_rmfb_work_fn+0x10/0x10
-[   63.230095]  ? __pfx_drm_mode_rmfb_ioctl+0x10/0x10
-[   63.230097]  drm_ioctl_kernel+0xa5/0x100
-[   63.230099]  drm_ioctl+0x270/0x4b0
-[   63.230101]  ? __pfx_drm_mode_rmfb_ioctl+0x10/0x10
-[   63.230104]  ? syscall_exit_work+0x108/0x140
-[   63.230107]  radeon_drm_ioctl+0x4a/0x80 [radeon]
-[   63.230141]  __x64_sys_ioctl+0x93/0xe0
-[   63.230144]  ? syscall_trace_enter+0xfa/0x1c0
-[   63.230146]  do_syscall_64+0x7d/0x2c0
-[   63.230148]  ? do_syscall_64+0x1f3/0x2c0
-[   63.230150]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   63.230153] RIP: 0033:0x7f1aa132550b
-[   63.230154] RSP: 002b:00007ffebab69678 EFLAGS: 00000246 ORIG_RAX: 0000=
-000000000010
-[   63.230156] RAX: ffffffffffffffda RBX: 00007ffebab696bc RCX: 00007f1aa=
-132550b
-[   63.230158] RDX: 00007ffebab696bc RSI: 00000000c00464af RDI: 000000000=
-000000e
-[   63.230159] RBP: 00000000c00464af R08: 00007f1aa0c41220 R09: 000055a71=
-ce32310
-[   63.230160] R10: 0000000000000087 R11: 0000000000000246 R12: 000055a71=
-b813660
-[   63.230161] R13: 000000000000000e R14: 0000000003a8f5cd R15: 000055a71=
-b6bbfb0
-[   63.230164]  </TASK>
-[   63.230248] freeze round: 2, task to freeze: 1
+t0: del:77500009084, ref:22804739600
+t1: del:77500020316, ref:22804743100
+ref_perf:10
+delivered_perf:32
 
+t0: del:77910203848, ref:22941794740
+t1: del:77910215594, ref:22941798070
+ref_perf:10
+delivered_perf:35
 
-You can find it in this patch
+t0: del:77354782419, ref:22762276000
+t1: del:77354793991, ref:22762279400
+ref_perf:10
+delivered_perf:34
 
-link:=20
-https://lore.kernel.org/all/20250619035355.33402-1-zhangzihuan@kylinos.cn=
-/
+t0: del:64470686034, ref:22998377620
+t1: del:64470695313, ref:22998380880
+ref_perf:10
+delivered_perf:28
 
->> =E2=86=92 Cannot respond to freezing signal
->> =E2=86=92 Freezer retries in a loop
->> =E2=86=92 Suspend latency spikes
->>
->> In such cases, we observed that a normal 1=E2=80=932ms freezer cycle c=
-ould balloon to **tens of milliseconds**.
->> Worse, the kernel has no insight into the root cause and simply retrie=
-s blindly.
->>
->> ## Proposed solution: Freeze priority model
->>
->> To address this, we propose a **layered freeze model** based on per-ta=
-sk freeze priorities.
->>
->> ### Design
->>
->> We introduce 4 levels of freeze priority:
->>
->>
->> | Priority | Level             | Description                       |
->> |----------|-------------------|-----------------------------------|
->> | 0        | HIGH              | D-state TASKs                     |
->> | 1        | NORMAL            | regular  use space TASKS          |
->> | 2        | LOW               | not yet used                      |
->> | 4        | NEVER_FREEZE      | zombie TASKs , PF_SUSPNED_TASK    |
->>
->>
->> The kernel will freeze processes **in priority order**, ensuring that =
-higher-priority tasks are frozen first.
->> This avoids dependency inversion scenarios and provides a deterministi=
-c path forward for tricky cases.
->> By freezing control or event-source threads first, we prevent dependen=
-t tasks from entering D-state prematurely =E2=80=94 effectively avoiding =
-dependency inversion.
-> I really fail to see how that is supposed to work to be honest. If a
-> process is running in the userspace then the priority shouldn't really
-> matter much. Tasks will get a signal, freeze themselves and you are
-> done. If they are running in the userspace and e.g. sleeping while not
-> TASK_FREEZABLE then priority simply makes no difference. And if they ar=
-e
-> TASK_FREEZABLE then the priority doens't matter either.
->
-> What am I missing?
-under ideal conditions, if a userspace task is TASK_FREEZABLE, receives=20
-the freezing() signal, and enters the refrigerator in a timely manner,=20
-then freeze priority wouldn=E2=80=99t make a difference.
+t0: del:78019898424, ref:22957940640
+t1: del:78019912872, ref:22957944590
+ref_perf:10
+delivered_perf:36
 
-However, in practice, we=E2=80=99ve observed cases where tasks appear stu=
-ck in=20
-uninterruptible sleep (D state) during the freeze phase=C2=A0 =E2=80=94 a=
-nd thus=20
-cannot respond to signals or enter the refrigerator. These tasks are=20
-technically TASK_FREEZABLE, but due to the nature of their sleep state,=20
-they don=E2=80=99t freeze promptly, and may require multiple retry rounds=
-, or=20
-cause the entire suspend to fail.
+Best regards,
+
+-Prashant
 
