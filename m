@@ -1,92 +1,113 @@
-Return-Path: <linux-pm+bounces-32073-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32075-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0910B1EEF6
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 21:37:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D156B1EF28
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 22:04:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA62F1C202AF
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 19:38:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 407107AD9F4
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 20:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE27F2877FC;
-	Fri,  8 Aug 2025 19:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E672222D0;
+	Fri,  8 Aug 2025 20:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2tTrkV6"
+	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="Gr2Alh4h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx.olsak.net (mx.olsak.net [37.205.8.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53452877E3;
-	Fri,  8 Aug 2025 19:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9191A3167;
+	Fri,  8 Aug 2025 20:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754681868; cv=none; b=UMk277LKOm/lb/XKxbPPDjCqGzRqQshQJXg0aIUCGWoppv+3565a3hzIMldsp/joEEJtM3X6ZM7BE9scRmT7TLyq5FKQ3qw5Abf2cBavsGnLCRyiEQXNQOGDWKyY5zSKx3Ik5Ma+OkfCMXK/XoNtnlSAG+9tiGw3clR85F/VGR4=
+	t=1754683425; cv=none; b=aCD7RTWOXLgy2X7T++FTUcOk4TRp9ERMer5K78qnbBvbIW3ArE0MeHl7Z218eg4aYD3XEm3Vjo7Q4VIHmr183vLei8GnRrCJayR729TVwqYmfe7ftYfe7YjeTK2WcduZJRAFcADFgvLRoK/zSUcKfjzhK5/w24y2cVrfxUgsJr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754681868; c=relaxed/simple;
-	bh=+sPyrRNmQmGvEQQbsqXAiqW7mrkXp+1FECvjK0+/Nhk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V/Vha6aIZa4gyTrj9b7UdLlJiCjqyJBmBo8WJ/a7Xw5Khqt2300GnB6pTZk9ynJMkLaCXK5704f/uI200P4/xj66tZ4QWPCnPKR6LEJn0dSG8XaBDxlE4EjTqeIjtpttNDkKPte3qieJjqaUuNGCa9Kgstn4wZ2RsCIrp/SgA4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2tTrkV6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108A2C4CEED;
-	Fri,  8 Aug 2025 19:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754681868;
-	bh=+sPyrRNmQmGvEQQbsqXAiqW7mrkXp+1FECvjK0+/Nhk=;
-	h=From:To:Cc:Subject:Date:Reply-To:From;
-	b=G2tTrkV6GOPastvB2cGf74tfwXPjVhbLqIKAHI2Hzlu2RBXqbgGxErHwfR2Xl66Q2
-	 KOXY0W/FNMMWlDolDdixTGDSCf7Aqe1HDztin5LG6OHiflO2oJ3mbDjKds7EspQapF
-	 pXOQNpUAm6cHYTb/EkqImVQyaYnWa/e+hO30eMlUF2f9fb6Re+BCbzPHP7HuvHzIQv
-	 oynQJBhAq9v0ByizS8nPOLyohCGrmQVSboo5ezhuPkFymHyA/BvENc9U3EhwfK2LMe
-	 P5VPBvW8qc3vL5u+w4QHRDOoIp/moBAk49p4tl7JtrZVu9JBOz/bRUqqtNoPr816BU
-	 Zxf/KbIpXQT/Q==
-From: Len Brown <lenb@kernel.org>
-To: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH 1/1] intel_idle: Allow loading ACPI tables for any family
-Date: Fri,  8 Aug 2025 15:37:14 -0400
-Message-ID: <06101aa4fe784e5b0be1cb2c0bdd9afcf16bd9d4.1754681697.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1754683425; c=relaxed/simple;
+	bh=gKRagEStvgjsGqBz58+tTFcCLr9nfkR8v6kbDBTUNds=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hMse1ui8jx4KhzooVDYSd023148miG0sI7klNiGMUgCbwdHz780M/+gjvi7UF2JuKRKo+A41xf7dTmhGRYAY2W66M1W4UvyEaY1uTILOg7y2RChdw7zaVOvSkmQqxkUhqerPunRwf6AbYrOPcym4qQFKFTP6mA7jDS0FHavC4GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=Gr2Alh4h; arc=none smtp.client-ip=37.205.8.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
+DKIM-Signature: a=rsa-sha256; bh=rm/KaI4gS5txCax60X3cOFqmUOa0+shLoOnPWo3LZg4=;
+ c=relaxed/relaxed; d=dujemihanovic.xyz;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@dujemihanovic.xyz; s=default; t=1754682419; v=1; x=1755114419;
+ b=Gr2Alh4hi11EAN9rear4dDOE8QlaR46SNQPsFD1ooegKRm0HJHYnFWdUO9dBzTAtGiENCnPM
+ huKFchm21m8KKgRpiQItKnlXXQDpE80TXeVrwL2HUT8EpOrgrv2g2D3/zqdBH3cPO/qFaOEtuKk
+ oY7LL1TFJB9sCPodsO66g3HWZeR+Tv1Len1w/BvMvToZbblZG4k3kJQY8n//8yTuBFcwHdikJUN
+ ssJk/LQlEjCXtiG/hpDsFSVMqhJPwPf1tlX++/avZQObwj3Oibn5qL4bFFm2HQ0LRDzFeRj4UmC
+ kkzB0oBE0bugbMVT1WJnhN5pklZ8atDGCn8ZRWUbwzF6w==
+Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
+ ESMTPS id ca151574; Fri, 08 Aug 2025 21:46:59 +0200
+From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, David Wronek <david@mainlining.org>,
+ Karel Balej <balejk@matfyz.cz>, phone-devel@vger.kernel.org,
+ ~postmarketos/upstreaming@lists.sr.ht, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC 2/5] dt-bindings: power: Add Marvell PXA1908 domains
+Date: Fri, 08 Aug 2025 21:46:58 +0200
+Message-ID: <2017616.PYKUYFuaPT@radijator>
+In-Reply-To: <20250808-portable-expert-turkey-4f8f19@kuoka>
+References:
+ <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
+ <20250806-pxa1908-genpd-v1-2-16409309fc72@dujemihanovic.xyz>
+ <20250808-portable-expert-turkey-4f8f19@kuoka>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-From: Len Brown <len.brown@intel.com>
+On Friday, 8 August 2025 09:34:54 Central European Summer Time Krzysztof Ko=
+zlowski wrote:
+> On Wed, Aug 06, 2025 at 07:33:21PM +0200, Duje Mihanovi=C4=87 wrote:
+> > +          A number of phandles to clocks that need to be enabled during
+> > domain +          power up.
+>=20
+> This does not exist in your example, so it is just confusing.
 
-There is no reason to limit intel_idle's loading of ACPI tables to
-family 6.  Upcoming Intel processors are not in family 6.
+This is because I have not implemented any of the clocks used by the
+domains at this moment.
 
-Below "Fixes" really means "applies cleanly until".
-That syntax commit didn't change the previous logic,
-but shows this patch applies back 5-years.
+Actually, I am not sure anymore whether it is necessary to assign
+clocks to the domains as I have just yesterday successfully brought up
+the GPU with some out-of-tree code and that did not require giving the
+domains any clocks even though the vendor kernel does this. Should I
+just go with that and drop all clock handling from the power domain
+driver, at which point there would be no need for the individual domain
+nodes? If not, how should I in the future assign clocks to the domains?
 
-Fixes: 4a9f45a0533f ("intel_idle: Convert to new X86 CPU match macros")
-Signed-off-by: Len Brown <len.brown@intel.com>
----
- drivers/idle/intel_idle.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/power/marvell,pxa1908-power.h>
+> > +
+> > +    clock-controller@d4282800 {
+> > +      compatible =3D "marvell,pxa1908-apmu", "simple-mfd", "syscon";
+> > +      reg =3D <0xd4282800 0x400>;
+> > +      #clock-cells =3D <1>;
+> > +
+> > +      power-controller {
+> > +        compatible =3D "marvell,pxa1908-power-controller";
+>=20
+> No address space, so this should be folded into the parent.
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 73747d20df85..91a7b7e7c0c8 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1679,7 +1679,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- };
- 
- static const struct x86_cpu_id intel_mwait_ids[] __initconst = {
--	X86_MATCH_VENDOR_FAM_FEATURE(INTEL, 6, X86_FEATURE_MWAIT, NULL),
-+	X86_MATCH_VENDOR_FAM_FEATURE(INTEL, X86_FAMILY_ANY, X86_FEATURE_MWAIT, NULL),
- 	{}
- };
- 
--- 
-2.45.2
+By this, do you mean that the clock driver registers the power domain
+controller through devm_mfd_add_devices()?
+
+Regards,
+=2D-
+Duje
+
 
 
