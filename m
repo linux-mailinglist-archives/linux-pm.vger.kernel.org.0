@@ -1,132 +1,142 @@
-Return-Path: <linux-pm+bounces-32055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCFACB1E3F7
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 09:59:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F307FB1E48D
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 10:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1BF71680A2
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 07:59:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6A6C7AAFF6
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Aug 2025 08:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC912517A5;
-	Fri,  8 Aug 2025 07:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L2XJKYr9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A23C25A353;
+	Fri,  8 Aug 2025 08:40:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DD4246BD3
-	for <linux-pm@vger.kernel.org>; Fri,  8 Aug 2025 07:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53061222565;
+	Fri,  8 Aug 2025 08:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754639975; cv=none; b=c+rYudp14mDHrUhREp24APbNU8m00l9H32vBDwD2dvmP583u6YZ7iNPKh0Sf6GV4P4LG1yqnqzTPe4r3AQ0hI/OkXWZTsDpnUB3eHEtDIklXV+cG/4IffqqNHJf+mOImOEZZ+6/DA0JBzZ6rIFYiP8EVURYLxTqDd4LATJtMO0c=
+	t=1754642430; cv=none; b=FYuestNGyZLqTGKHXQym/72/M5JLjzjwJS/FHx+8oFccffELGroEd7jBlIoRXNPk6+/nvZTAUp/CGtaQoBi/y9cW0dcY7jvzfsXVO/Ly3aV6p4D84phHftmWUAWkDNgHQgdSb+aotARwty2ZNJTF/QlQOnfrfDMlFMsXzKo0cGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754639975; c=relaxed/simple;
-	bh=aV0E+W7TpF7ScFUrIhlu67F3pDF1bA8Hd4KFXigqUCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nR+OH0G0/3XfmrwqOM6b+iJaPxy30qWaHI/vfRv9YmBb74er4frR+XaL5C6S0Irar/2mT6HL5Q6qMHYh3rrCaeVOMAOX2dGxP2jP8bGjk2d3mzcEwTkTm3L61qvK8l1tyNaa1j9WAzpvrx7l5t+St2OBhYZyxvwGC9qiuOouXWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L2XJKYr9; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754639972;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aV0E+W7TpF7ScFUrIhlu67F3pDF1bA8Hd4KFXigqUCs=;
-	b=L2XJKYr9JdWfQZN69A68Tf3d9LOtxv2DaPdBdleAU/WzRXFOiYNa5fzuhLTxNmX8jWwknX
-	9mp5icIT+Sv136lOSLkJz9chYgF6t2akUPDY5E5Cq3QbIoBJaSeHcGjbLzg3kGCHTYY92S
-	tZ+9vubNmF6MaASbfYvvXsRzwd5i9zE=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-682-UNIuuF62OhurBbbx6qeMxQ-1; Fri,
- 08 Aug 2025 03:59:29 -0400
-X-MC-Unique: UNIuuF62OhurBbbx6qeMxQ-1
-X-Mimecast-MFC-AGG-ID: UNIuuF62OhurBbbx6qeMxQ_1754639965
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7991C1800446;
-	Fri,  8 Aug 2025 07:59:23 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.117])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 24BB41954185;
-	Fri,  8 Aug 2025 07:59:06 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri,  8 Aug 2025 09:58:12 +0200 (CEST)
-Date: Fri, 8 Aug 2025 09:57:54 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: Michal Hocko <mhocko@suse.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Nico Pache <npache@redhat.com>, xu xin <xu.xin16@zte.com.cn>,
-	wangfushuai <wangfushuai@baidu.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jeff Layton <jlayton@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org,
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
- address process dependency issues
-Message-ID: <20250808075753.GB29612@redhat.com>
-References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <aJSpTpB9_jijiO6m@tiehlicka>
- <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
+	s=arc-20240116; t=1754642430; c=relaxed/simple;
+	bh=junXdwx0TkSI7LNOYjpb9IXp+ymJxIevkjGvsBY0XJo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JJMJjY60nh64Tq8BFfuztH4qfJbk1EqbcjhcDFqUE1YygZXIJBqAGQ7Dd0vQ6D6fYFrQtnxyyzscFbcqXcJHJxilVKFVtIaCUFHK8uFomKtxlFay6PbXUXRDP51mXdg2mDHl9kxGAZO+8y4kAMqbB3G4rpWdv8LzkvrIMvA50gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 4f9d64ec743311f0b29709d653e92f7d-20250808
+X-CID-CACHE: Type:Local,Time:202508081552+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:e0211e39-915b-47f5-8269-b2a5fc39732d,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:12be9df259196fe631b2eedfa1e50959,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 4f9d64ec743311f0b29709d653e92f7d-20250808
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 516528990; Fri, 08 Aug 2025 16:40:17 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 29FF3E01A759;
+	Fri,  8 Aug 2025 16:40:17 +0800 (CST)
+X-ns-mid: postfix-6895B7F0-853165559
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 3E5B8E0000B0;
+	Fri,  8 Aug 2025 16:40:10 +0800 (CST)
+Message-ID: <4644c5ec-b74b-4428-bd14-7b50dbd22397@kylinos.cn>
+Date: Fri, 8 Aug 2025 16:40:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
+ address process dependency issues
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Michal Hocko <mhocko@suse.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, David Hildenbrand <david@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
+ Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Nico Pache <npache@redhat.com>,
+ xu xin <xu.xin16@zte.com.cn>, wangfushuai <wangfushuai@baidu.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Jeff Layton <jlayton@kernel.org>,
+ Al Viro <viro@zeniv.linux.org.uk>, Adrian Ratiu
+ <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
+ <aJSpTpB9_jijiO6m@tiehlicka>
+ <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
+ <20250808075753.GB29612@redhat.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <20250808075753.GB29612@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-On 08/08, Zihuan Zhang wrote:
+Hi,
+
+=E5=9C=A8 2025/8/8 15:57, Oleg Nesterov =E5=86=99=E9=81=93:
+> On 08/08, Zihuan Zhang wrote:
+>> =E5=9C=A8 2025/8/7 21:25, Michal Hocko =E5=86=99=E9=81=93:
+>>> If they are running in the userspace and e.g. sleeping while not
+>>> TASK_FREEZABLE then priority simply makes no difference. And if they =
+are
+>>> TASK_FREEZABLE then the priority doens't matter either.
+>>>
+>>> What am I missing?
+> I too do not understand how can this series improve the freezer.
+
+Thanks for your question =E2=80=94 actually, I just replied to Michal wit=
+h a=20
+similar explanation, but I really appreciate you raising the same point,=20
+so let me add a bit more context here.
+
+Right now, we're trying to address the case where certain tasks fail to=20
+freeze (often due to short-lived D-state issues). Our current workaround=20
+is to increase the number of freeze iterations in the next suspend=20
+attempt for those tasks.
+
+While this isn't a perfect solution, the overhead of a few extra=20
+iterations is minimal compared to the cost of retrying the whole suspend=20
+cycle due to a stuck D-state task. So for now, we believe this is a=20
+reasonable tradeoff until we find a more deterministic way to=20
+preemptively detect and prioritize problematic tasks.
+
+Happy to hear your thoughts or suggestions if you think there's a better=20
+direction to explore.
+
+>> under ideal conditions, if a userspace task is TASK_FREEZABLE, receive=
+s the
+>> freezing() signal, and enters the refrigerator in a timely manner,
+> Note that __freeze_task() won't even send a signal to a sleeping
+> TASK_FREEZABLE task, __freeze_task() will just change its state to
+> TASK_FROZEN.
 >
-> 在 2025/8/7 21:25, Michal Hocko 写道:
-> >If they are running in the userspace and e.g. sleeping while not
-> >TASK_FREEZABLE then priority simply makes no difference. And if they are
-> >TASK_FREEZABLE then the priority doens't matter either.
-> >
-> >What am I missing?
-
-I too do not understand how can this series improve the freezer.
-
-> under ideal conditions, if a userspace task is TASK_FREEZABLE, receives the
-> freezing() signal, and enters the refrigerator in a timely manner,
-
-Note that __freeze_task() won't even send a signal to a sleeping
-TASK_FREEZABLE task, __freeze_task() will just change its state to
-TASK_FROZEN.
-
-Oleg.
-
+> Oleg.
+>
+You are right.
 
