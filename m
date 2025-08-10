@@ -1,141 +1,103 @@
-Return-Path: <linux-pm+bounces-32098-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32099-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC92EB1FBC2
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 20:49:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A0DB1FC35
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 23:13:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B5A53B1BF8
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 18:49:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 401F4177AB9
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 21:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C251F130A;
-	Sun, 10 Aug 2025 18:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24B02580D1;
+	Sun, 10 Aug 2025 21:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uWQ6gLI1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Osf4jbmh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3D01E7C18
-	for <linux-pm@vger.kernel.org>; Sun, 10 Aug 2025 18:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4C7253B42;
+	Sun, 10 Aug 2025 21:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754851782; cv=none; b=E0nBdDICkS4eUwT+u1lC/VkI4DniMZykVr846WfZZxtkEWZTgVZ+ZtRcZancW+3nZ3vqZZHqem5qurCxp2w66CuDGUSqeTg7q6Ca6Lh+WGtSvlIy/Rqt3acemGLBCiNY+Gt5EF3xR87VVh7/cYl2Q8PEqQyoKon66xRxtWbF8hs=
+	t=1754860335; cv=none; b=sMuNurCZomjKdZo1t427T0v447vluYZdCivwEfLftJ39QhSc00tay5QR0qH9ZVZCb8oR27mItyoB0btLgu7H8gfaGWX+NSggBXKQEknj/Htvt2jKbR8zYpcUT//kasijhnNYnynX5Lf/hxYRZbi6+Cwt76hyX4EalYd4Mk/2QcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754851782; c=relaxed/simple;
-	bh=+m0f/8Wz0IgJC2N6CSjY73b5CgYW14VJQOJL5q82GKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bi/v/0+fFgwMkiidgLOrtND1YPJeXUvAowXAuzNtP7xiZysvIUYZuvm5LsA3rYLWbZFJ8nZ2WQfts6QhA1siXcHSj/tHI973XFFQle8gDZsJi2pYq298JbZf2sGPxPpjxinsqwLv4bPOymiIIS7ZF4LhmXNonN6r3B1gfbpZlQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uWQ6gLI1; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b78d729bb8so2199515f8f.0
-        for <linux-pm@vger.kernel.org>; Sun, 10 Aug 2025 11:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754851779; x=1755456579; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C+giQIMd7m4qZAQs1IfGLTMPlMdgW3kw3PRAxKFlO5w=;
-        b=uWQ6gLI1/PCjID62RguHX1d8H1rnaAGFhYozomFEOFLDkonZXFEgdsF1WoxzWZ4X3E
-         oTG2A8Hp3T6sSmR4X1EFBFlxwiNrYrGOxw9S46fIQbzn7iR/+EUHBkBv2pag1CrFmixO
-         11qRjAqQofIX0JXkbB85p46zZTjlO/fZVJTMJBTY9wISmk3Nb2eAHiqrWoI3r6wsP6CC
-         VJ00iElpFTud5p9TsKQIPRmI2P1KhZMSmxjGC9wmnll3U5HW9EEcAzMdh1dhYlzaQv/v
-         6S9eCNtFazDU27oxPjY2gWIUDA7ipilQG5815VU5or7XIoLpCCjseehY/jxKnnswiJFY
-         Q8uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754851779; x=1755456579;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+giQIMd7m4qZAQs1IfGLTMPlMdgW3kw3PRAxKFlO5w=;
-        b=sO2ggBLZllpd1aU9M5/MdPu26+drMbzZZKqDT2AggNOMi9DUeHfcAnRfBHQur5kxCo
-         DtXVsg+ZIZnKuxBgbTjOxEqUuINH87cvJf2X25YUaSHGz0/rgSfXJcs1Av9tVRTI+m22
-         9U4XiKDP2kIYSgCn6fw7GD0OlRxNgaBxfrdhgQ98Yc0y448zgWLGfhwqR+1i8qOsc662
-         L+IHdPoNuxvk8PXyoYIKmKahD0N+XQQVPGnAbJDIOsoXRlFJG61Rm79uzFWqL/naywNk
-         fuv54AMdZJxU+PXnZ67pIJFz4QtUSHyEDFvdv5qmIwOzXRQcVoE30iboWH4NUWRXJlTx
-         2DYw==
-X-Gm-Message-State: AOJu0YyIwMTlD2QP1ImhWiBrmm1T1bx3On7ME99uEis23O+GQnoI4zWD
-	gyguzcEkhI07cAPUONDwBrWx6K39HopZYdIT2t/uidU6TA/XIy8nxhaajTfbYE5aD2PhrhG4kFa
-	uBqZI
-X-Gm-Gg: ASbGnctt+I8mq57YwKfJHrvruoVoYoQYgl++3CtAjewvWkKxg6R24vSBULxxf4dIYwG
-	6aXH/nVcTIYtbUNmR6gSamb6WHFVfDIBZ5548kVuYeUYSor/xYPCcyWxTDuI5tWlPMFJ178rSLN
-	84NZr/6094FhzK4a/4pr7W/v7NBs+ZagpXiZE7Jo4zcs7y06FP9C5IQ7J+ZrE6UnUknEsfXWvWz
-	pxSSQtJ1jptwbQgHJglPWDCYg8Ly4pDmmyLrEKIrdgjxSBufInjsMNXh+y96wBuRG8JWxkDR6SD
-	Yqh4OoF1IVvsjYMfwxEJHXXG5CNxqBYnMcYLvsKAz2nKOerogOYBJVnPcZyS2svfI3FG7EwLAjS
-	UTaovr1yEF/bpY6srfjyy2vkBeW+QZmA91Dr4dbuVt9llZvVMVEqEysSKMYtinQ==
-X-Google-Smtp-Source: AGHT+IFfs2joP+hTnlHJExYamGs1Mie+WylWNRVEVWEDjKYPH+QgYIc7bMaEg3+/K7QR4ekiHHl1Sg==
-X-Received: by 2002:a05:6000:4308:b0:3b7:9350:d372 with SMTP id ffacd0b85a97d-3b900b4e1c5mr10053914f8f.24.1754851779122;
-        Sun, 10 Aug 2025 11:49:39 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b8fc6ef28esm13316144f8f.60.2025.08.10.11.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Aug 2025 11:49:38 -0700 (PDT)
-Message-ID: <c0aa0d9e-afc0-4be4-88ca-ea5629b0be9e@linaro.org>
-Date: Sun, 10 Aug 2025 20:49:37 +0200
+	s=arc-20240116; t=1754860335; c=relaxed/simple;
+	bh=6qZtmYPtQt6UwAsXJ30diF7OIT7IeXGDZboQy/POMhY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=FoqfiyPJCjHqjbN7WKY+UXfkGt35bgtl1PXPMHsTeYa6uy4vmcMtOlKc4bzSQg4ScN/ou7aR1Xg+izox8mPzh2mmZF9f0IMt58wGBco9pfZNIWV2f1KaN9juUifd7Zas3fXylucK/mo2jJDl7rNf2jCtxrhQe6RG2ZFWrT7Kg7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Osf4jbmh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61AB4C4CEF8;
+	Sun, 10 Aug 2025 21:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754860335;
+	bh=6qZtmYPtQt6UwAsXJ30diF7OIT7IeXGDZboQy/POMhY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Osf4jbmhAA6UtiHphDxnXbpyWNtr3NtPHo5Orbi0VcusCvyEN9ju4ZjusP9njFz0y
+	 BEkKw4L9d2HggMgUg7UxPMaJCZcFjxD/l1aEeiE88jk/Z9s6h8G7jsyj0R6w8PRtOW
+	 Q45wlJ8ga//bPDscDGu5K/FJj0cygWL75l6w91Y7G71cWNVO7AzOk1LkNr6grMkJUq
+	 mFQc3Fl9RDiCcv0j+VvneBDn7JCeUX1nDthOy733XoPFAo2bOeHoYi0oadwLSTC+KY
+	 DiOT9Kp/cteJ2xGwnIAzNOpXuBDjuXNkLxi9V4Wvv2cvfoJOgqwCUBnCGnyEyRb3GR
+	 jDjiXPYViAJDQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D4339D0C2B;
+	Sun, 10 Aug 2025 21:12:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Possible bug]: thermal and an scaling governor issues
-To: Marcos Dione <mdione@grulic.org.ar>
-Cc: linux-pm@vger.kernel.org
-References: <aJjKckusX3imDMf2@ioniq>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <aJjKckusX3imDMf2@ioniq>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 08/21] cpuidle: riscv-sbi: Opt-out from genpd's common
+ ->sync_state() support
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <175486034774.1221929.3623715142191297628.git-patchwork-notify@kernel.org>
+Date: Sun, 10 Aug 2025 21:12:27 +0000
+References: <20250523134025.75130-9-ulf.hansson@linaro.org>
+In-Reply-To: <20250523134025.75130-9-ulf.hansson@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-riscv@lists.infradead.org, saravanak@google.com, sboyd@kernel.org,
+ linux-pm@vger.kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
+ m.grzeschik@pengutronix.de, andersson@kernel.org, abel.vesa@linaro.org,
+ peng.fan@oss.nxp.com, tomi.valkeinen@ideasonboard.com, johan@kernel.org,
+ maulik.shah@oss.qualcomm.com, michal.simek@amd.com, konradybcio@kernel.org,
+ thierry.reding@gmail.com, jonathanh@nvidia.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ anup@brainfault.org
 
-On 10/08/2025 18:36, Marcos Dione wrote:
-> On Sun, Aug 03, 2025 at 10:18:33PM +0200, Daniel Lezcano wrote:
->> IIUC, it is a laptop.
+Hello:
+
+This series was applied to riscv/linux.git (fixes)
+by Ulf Hansson <ulf.hansson@linaro.org>:
+
+On Fri, 23 May 2025 15:40:05 +0200 you wrote:
+> The riscv-sbi-domain implements its own specific ->sync_state() callback.
+> Let's set the GENPD_FLAG_NO_SYNC_STATE to inform genpd about it.
 > 
->      yes.
+> Moreover, let's call of_genpd_sync_state() to make sure genpd tries to
+> power off unused PM domains.
 > 
->> There can be a couple of things. The difficult part is the firmware can do
->> actions under the hood, the userspace may change the governors depending on
->> the temperature and the kernel can do something else.
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: linux-riscv@lists.infradead.org
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > 
->      Do we get any events about this or is 100% transparent?
+> [...]
 
-It depends on the firmware and the hardware. Well all the thermal stack 
-is arch specific so it is hard to give a simple answer. But if the 
-system is configured with thermal zones and trip points, then it should 
-be possible to monitor the temperature events when the temperature 
-thresholds are crossed.
+Here is the summary with links:
+  - [v2,08/21] cpuidle: riscv-sbi: Opt-out from genpd's common ->sync_state() support
+    https://git.kernel.org/riscv/c/ee766b017586
+  - [v2,21/21] cpuidle: riscv-sbi: Drop redundant sync_state support
+    https://git.kernel.org/riscv/c/eb34a0b5fee7
 
->> I suggest to investigate first the temperature sensor for the skin (or case)
->> and the battery. What are their temperature when you compile ?
-> 
->      As I mention, I had to disable monitoring, but I could check
-> manually. All I can say is that that was particularly not hot (much less
-> heatwave-y) week, so it _should_ have been cooler than usual (for this
-> period). Also, a reboot fixed it, so it was not that.
-
-If the governors are changed, that means the userspace does an action 
-and it is usually the thermal daemon. And this one IIUC is supposed to 
-monitor the skin temperature.
-
-If it happens again, you should double check the skin temperature sensor 
-(or case sensor). This one is supposed to be monitored by the thermal 
-daemon and should stay below 43°C. The thermald can change the governor 
-if it detects the skin temperature sensor is getting hot.
-
-One common scenario is fast charging while computing. And with the 
-years, the thermal compound can lose its thermal conduction properties 
-leading to the heat not being evacuated efficiently.
-
-
+You are awesome, thank you!
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+
 
