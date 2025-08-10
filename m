@@ -1,295 +1,175 @@
-Return-Path: <linux-pm+bounces-32101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F772B1FCA7
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 00:16:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3ADCB1FD10
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 01:34:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6225E172BE3
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 22:16:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6AE3B8D67
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 23:34:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590712D5C8E;
-	Sun, 10 Aug 2025 22:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42C72561AB;
+	Sun, 10 Aug 2025 23:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ixCjjzJ4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="VJIcqH9P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99900195B1A
-	for <linux-pm@vger.kernel.org>; Sun, 10 Aug 2025 22:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EF1157A72;
+	Sun, 10 Aug 2025 23:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754864199; cv=none; b=WibPm0DuxRDhetOOAlo5fe3S3YZdsu2O9rrJFW9AyXG6FjtlUwPGsZWSFMtS2X505qHAvPfYr+750Tg5YR6nmhzbZMD4mM83+QvvOijTwJr0n8W7tc8kWoUNUXl9EvTaN/Rq3uJ9/qPRrFpADXtlpkcExgM1LrhEk9EKlwg1V1Q=
+	t=1754868858; cv=none; b=hME52Dn5+QF5OB/rciwsfC1IfIJJuFXq50pncLxMZ6EPWLrAM6DisMrp4A7SxXjIvcwE3fKFux3EoAVYIvdS4eYqPu01X14HoGRasQ3ZmBxqBULgJBNBAMMQQ6rj6bR2BJDf9McdWY7pKVT3TA6jI8TRnitCtJnAiKq/6GvKR+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754864199; c=relaxed/simple;
-	bh=UYgbTKNNIhZJE5F8ohj4vNnNUmG0W80FAggzMzDyciQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NuyoKLnaEm8ClxRqywBgXdJJyPOe7UaEUIvAUR7oPlG//2wrETKhm/bcyAVTJwc1agLCCVrAOTwGsaytLYdrgbyNUzxpmEgdhpBJPmxB8SSTbqN7i26RUF841ceEKsPm5SvD0dGs4n5obIGsKo2N9PxFy2xprNeNa32UJFSPXpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ixCjjzJ4; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754864196;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CioeoXb5/QvchbQJCxl5o+yrQjp6rhhswejt/srDq7A=;
-	b=ixCjjzJ4E9bwNP4u/KLETxeLgyn7fYeAJgsZeQZWN8747quOBTLsFt49mhFRs+oHFJkz89
-	3WviGbBRZ0sqy0pphFpJU8pOdAQJ4rCkJB0N/zydEHqij4kLHr6vOPiuiJApS5/HFz4Y3B
-	BAiVnt0XqJNFRAkbKTSFyo/6QjZMCGs=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-571-_W_WJedZO62hTq-xIqURHg-1; Sun, 10 Aug 2025 18:16:35 -0400
-X-MC-Unique: _W_WJedZO62hTq-xIqURHg-1
-X-Mimecast-MFC-AGG-ID: _W_WJedZO62hTq-xIqURHg_1754864194
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4b06a73b580so57548741cf.1
-        for <linux-pm@vger.kernel.org>; Sun, 10 Aug 2025 15:16:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754864194; x=1755468994;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CioeoXb5/QvchbQJCxl5o+yrQjp6rhhswejt/srDq7A=;
-        b=eHDeqfBvV7uerCa/cfFANvxErtdHmjVChAQ6BKZ9UDG0ukfDe/GqZbVNuXn8Prgwff
-         t11pFW5GTHVtDAGXN4PdNw59v17ZjvkLZ2ttvaDEtWTIO48yl/QgF3+TqEITmn5l3rDb
-         cOVy5uHGPBkEvILtT9KdZr3wAtKIZo8h9ejXwf9kBC6a9TojGvcwdQFLAO4NYCJCLqAn
-         IfZ5VQcQ5SrcdzFSX5pYSxFeKjSLPtKbSrBUh6WHv/kthN/fcUYuh0N1LJfbDFJPvkVD
-         nZEC8pVeXzYwWDc5W0LvfmEPp1gdBW/4bjXJLgJupmaBDEsYe6vf8XXKht8d7fkJ0wgd
-         IWVg==
-X-Forwarded-Encrypted: i=1; AJvYcCX93y1R7ti2L8AJbjGbT4pARDJ2X9J1NqpCDqP9LQABCwKBS9MR1pCVqRm8xriN5wZ34ud49Hs9DA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKfW4p2B7o+mP5NN11IMnWW2qKZSufQjQ+GfNx9KStVPrq5Gq4
-	ZRHbdUprDA8Ji4/tsXK7rwaHhzWx4qO/sbngiWDrDozoXenvvMP4f6XaOHMd+VYJbAJA4lhf8Ne
-	qWQ/eYEai+oAxI6JFBwFz3/t595eKurtI5fLUpN1roLgqfzC8eQ7MsBBAmbXe
-X-Gm-Gg: ASbGncuSVakykrGAOooFQ8Xhkf2upQ3whg0LtdULG77/H/comhERS/iVfKUXhulxYrH
-	iS8ljzlv9tBkvcySs8C0ND2o1Z3eu/qGvSHRQMWe6vbNHIo2IIz+OWoVPkso2iRcgw8RRoHxdP/
-	TfQ6T22OqcXMyhgIWVL6YTItLq5kMF68UKZhrvtiKGN5bMiAHUNSxa+ClflPMbqI6lG2C3l35K3
-	XE2g7gU0LgN+u6tZblviHmKJn8eWD16PSfJfNdIE3zN8MdQg4vOGRbeCHaSyOYdIrmYybacY+Lp
-	ymquvVw54KXXRT+wqt70RTbx1tE/HjC536RxG46ZhsIENyLeNYYJb4NI2xfMBuIdF/gFaRpgWGw
-	gVI9nuw==
-X-Received: by 2002:a05:622a:1308:b0:4b0:7775:d342 with SMTP id d75a77b69052e-4b0afddf96bmr142006311cf.12.1754864194328;
-        Sun, 10 Aug 2025 15:16:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFMgL2TfTPBpWSj0xTTh5+SfYn/Qjd/HGVOp6AsQdNWXfn2vKbskTIHSYorfqQM8Oa2g6DGMQ==
-X-Received: by 2002:a05:622a:1308:b0:4b0:7775:d342 with SMTP id d75a77b69052e-4b0afddf96bmr142005961cf.12.1754864193842;
-        Sun, 10 Aug 2025 15:16:33 -0700 (PDT)
-Received: from [10.144.145.224] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b06a395932sm92798851cf.38.2025.08.10.15.16.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Aug 2025 15:16:32 -0700 (PDT)
-From: Brian Masney <bmasney@redhat.com>
-Date: Sun, 10 Aug 2025 18:16:19 -0400
-Subject: [PATCH] pmdomain: mediatek: airoha: convert from round_rate() to
- determine_rate()
+	s=arc-20240116; t=1754868858; c=relaxed/simple;
+	bh=fwBfeBD3BAKG1XdYGSZgUuboIl7CVDdrTtUVguEDnF8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VQnLgXx2xESh4+584K1v4wImAmZWkg4XfU4TjUPDmAJ4KPK4MvpqQ0p4bXAWBlZEd2w3NSUJnnGZvl8nWKKzy3dJxgwmEi8++AjycRWwLFgpBqukTsyma9i8MWujfOuj74HHqdURr5dF9e4n52uaPKEIdmGfAWlew5wmReDNhDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=VJIcqH9P; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=khCMGdKVWJOOAKC9RC16vYgD/TuMBHFFGnJ3AsYFXDk=; b=VJIcqH9PCHJYfOHtv/7P7Cmwro
+	RwuETCYMvdE3/IAMqQIrXX9zroFgaatvl+9XFshRGuWgzQuLpzSwUhgi0uZq08oo69Hb8Wr3d7yj3
+	c+G5beHOSxD1K6cueQJO4SlyRtF3sG1jgRtgc3hpEb3IBWt9F5Y+Vwaj2cu0PAXHNZEcYtKeqZrg4
+	8d8xt0Mcx8+OwlMX2U/T1ub2g1jO1RRBKM1zDNd/ltwcZHUZIvqOvYXl2SpqYQg05CRgnPGzURhit
+	xQFWSwfuBeWdn/eI3ggVZvpw8NKEUF8zKzQjs+EC+1aTKdkCSkzm7x62iFPDV+F0Y0YpiIxcYQbCh
+	LYnNYtUw==;
+Received: from [58.29.143.236] (helo=localhost)
+	by fanzine2.igalia.com with utf8esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1ulFY3-00CW99-1e; Mon, 11 Aug 2025 01:33:56 +0200
+From: Changwoo Min <changwoo@igalia.com>
+To: lukasz.luba@arm.com,
+	rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org
+Cc: christian.loehle@arm.com,
+	tj@kernel.org,
+	kernel-dev@igalia.com,
+	linux-pm@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Changwoo Min <changwoo@igalia.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH RESEND v3 00/10] PM: EM: Add netlink support for the energy model.
+Date: Mon, 11 Aug 2025 08:33:37 +0900
+Message-ID: <20250810233347.81957-1-changwoo@igalia.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250810-pmdomain-round-rate-v1-1-1a90dbacdeb6@redhat.com>
-X-B4-Tracking: v=1; b=H4sIADIamWgC/x3MMQqAMAxA0atIZgNaFK1XEYfSRM1gK6mKIN7d4
- viG/x9IrMIJhuIB5UuSxJBRlwX41YWFUSgbTGXaqjMW943i5iSgxjMQqjsYPZmZbFN3vreQy11
- 5lvu/jtP7fpscdbRlAAAA
-X-Change-ID: 20250729-pmdomain-round-rate-cd2fd9417c89
-To: Ulf Hansson <ulf.hansson@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Maxime Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, Brian Masney <bmasney@redhat.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754864189; l=5844;
- i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=UYgbTKNNIhZJE5F8ohj4vNnNUmG0W80FAggzMzDyciQ=;
- b=ycuKCsHxlgyIiQDQP/ZXNrrK5TwG59aDdwvTbF9fA5ZaFGS7T11u3eBjUVpg98IPZ0SR0D/LO
- HLq8JMzYEaFDHKAwnSPKYgYnuZw3tWz2CNQiFg0AsRVq8jM/iV/b3Pj
-X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
- pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
+Content-Transfer-Encoding: 8bit
 
-The round_rate() clk ops is deprecated, so migrate this driver from
-round_rate() to determine_rate() using the Coccinelle semantic patch
-appended to the "under-the-cut" portion of the patch.
+Just rebased on Linus's master and resend it for review.
 
-Note that prior to running the Coccinelle,
-airoha_cpu_pmdomain_clk_round() was renamed to
-airoha_cpu_pmdomain_clk_round_rate().
+There is a need to access the energy model from the userspace. One such
+example is the sched_ext schedulers [1]. The userspace part of the
+sched_ext schedules could feed the (post-processed) energy-model
+information to the BPF part of the scheduler.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
----
-Coccinelle semantic patch is below. It's large and I don't want to
-pollute the kernel changelog with the same code hundreds of times,
-so that's why it's included under the cut. For subsystems with more
-than one patch, I've included it on the cover letter.
+Currently, debugfs is the only way to read the energy model from userspace;
+however, it lacks proper notification mechanisms when a performance domain
+and its associated energy model change.
 
-    virtual patch
+This patch set introduces a generic netlink for the energy model, as
+discussed in [2]. It allows a userspace program to read the performance
+domain and its energy model. It notifies the userspace program when a
+performance domain is created or deleted or its energy model is updated
+through a multicast interface.
 
-    // Look up the current name of the round_rate function
-    @ has_round_rate @
-    identifier round_rate_name =~ ".*_round_rate";
-    identifier hw_param, rate_param, parent_rate_param;
-    @@
+Specifically, it supports two commands:
+  - EM_CMD_GET_PDS: Get the list of information for all performance
+    domains.
+  - EM_CMD_GET_PD_TABLE: Get the energy model table of a performance
+    domain.
 
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    	...
-    }
+Also, it supports three notification events:
+  - EM_CMD_PD_CREATED: When a performance domain is created.
+  - EM_CMD_PD_DELETED: When a performance domain is deleted.
+  - EM_CMD_PD_UPDATED: When the energy model table of a performance domain
+    is updated.
 
-    // Rename the route_rate function name to determine_rate()
-    @ script:python generate_name depends on has_round_rate @
-    round_rate_name << has_round_rate.round_rate_name;
-    new_name;
-    @@
+This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
+with the following commands:
 
-    coccinelle.new_name = round_rate_name.replace("_round_rate", "_determine_rate")
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --do get-pds
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --do get-pd-table --json '{"pd-id": 0}'
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --subscribe event  --sleep 10
 
-    // Change rate to req->rate; also change occurrences of 'return XXX'.
-    @ chg_rate depends on generate_name @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    identifier ERR =~ "E.*";
-    expression E;
-    @@
+[1] https://lwn.net/Articles/922405/
+[2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm.com/
+[3] https://lore.kernel.org/lkml/202506140306.tuIoz8rN-lkp@intel.com/#t
 
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    <...
-    (
-    -return -ERR;
-    +return -ERR;
-    |
-    - return rate_param;
-    + return 0;
-    |
-    - return E;
-    + req->rate = E;
-    +
-    + return 0;
-    |
-    - rate_param
-    + req->rate
-    )
-    ...>
-    }
+ChangeLog v2 -> v3:
+  - Properly initialize a return variable in
+    em_notify_pd_created/updated() at an error path (09/10), reported by
+    the kernel test robot [3].
+  - Remove redundant initialization of a return variable in
+    em_notify_pd_deleted() at an error path (08/10).
 
-    // Coccinelle only transforms the first occurrence of the rate parameter
-    // Run a second time. FIXME: Is there a better way to do this?
-    @ chg_rate2 depends on generate_name @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    @@
+ChangeLog v1 -> v2:
+  - Use YNL to generate boilerplate code. Overhaul the naming conventions
+    (command, event, notification, attribute) to follow the typical
+    conventions of other YNL-based netlink implementations.
+  - Calculate the exact message size instead of using NLMSG_GOODSIZE
+    when allocating a message (genlmsg_new). This avoids the reallocation
+    of a message.
+  - Remove an unnecessary function, em_netlink_exit(), and initialize the
+    netlink (em_netlink_init) at em_netlink.c without touching energy_model.c.
 
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    <...
-    - rate_param
-    + req->rate
-    ...>
-    }
+CC: Lukasz Luba <lukasz.luba@arm.com>
+CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+CC: Tejun Heo <tj@kernel.org>
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
 
-    // Change parent_rate to req->best_parent_rate
-    @ chg_parent_rate depends on generate_name @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    @@
+Changwoo Min (10):
+  PM: EM: Add em.yaml and autogen files.
+  PM: EM: Add a skeleton code for netlink notification.
+  PM: EM: Assign a unique ID when creating a performance domain.
+  PM: EM: Expose the ID of a performance domain via debugfs.
+  PM: EM: Add an iterator and accessor for the performance domain.
+  PM: EM: Implement em_nl_get_pds_doit().
+  PM: EM: Implement em_nl_get_pd_table_doit().
+  PM: EM: Implement em_notify_pd_deleted().
+  PM: EM: Implement em_notify_pd_created/updated().
+  PM: EM: Notify an event when the performance domain changes.
 
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    <...
-    (
-    - *parent_rate_param
-    + req->best_parent_rate
-    |
-    - parent_rate_param
-    + &req->best_parent_rate
-    )
-    ...>
-    }
+ Documentation/netlink/specs/em.yaml | 113 ++++++++++
+ MAINTAINERS                         |   3 +
+ include/linux/energy_model.h        |  19 ++
+ include/uapi/linux/energy_model.h   |  62 ++++++
+ kernel/power/Makefile               |   5 +-
+ kernel/power/em_netlink.c           | 311 ++++++++++++++++++++++++++++
+ kernel/power/em_netlink.h           |  34 +++
+ kernel/power/em_netlink_autogen.c   |  48 +++++
+ kernel/power/em_netlink_autogen.h   |  23 ++
+ kernel/power/energy_model.c         |  83 +++++++-
+ 10 files changed, 699 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/netlink/specs/em.yaml
+ create mode 100644 include/uapi/linux/energy_model.h
+ create mode 100644 kernel/power/em_netlink.c
+ create mode 100644 kernel/power/em_netlink.h
+ create mode 100644 kernel/power/em_netlink_autogen.c
+ create mode 100644 kernel/power/em_netlink_autogen.h
 
-    // Convert the function definition from round_rate() to determine_rate()
-    @ func_definition depends on chg_rate @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    identifier generate_name.new_name;
-    @@
-
-    - long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-    -               unsigned long *parent_rate_param)
-    + int new_name(struct clk_hw *hw, struct clk_rate_request *req)
-    {
-        ...
-    }
-
-    // Update the ops from round_rate() to determine_rate()
-    @ ops depends on func_definition @
-    identifier has_round_rate.round_rate_name;
-    identifier generate_name.new_name;
-    @@
-
-    {
-        ...,
-    -   .round_rate = round_rate_name,
-    +   .determine_rate = new_name,
-        ...,
-    }
-
-Note that I used coccinelle 1.2 instead of 1.3 since the newer version
-adds unnecessary braces as described in this post.
-https://lore.kernel.org/cocci/67642477-5f3e-4b2a-914d-579a54f48cbd@intel.com/
----
- drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c b/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
-index 0fd88d2f9ac29da371590ee3af92c1260e4f2f5f..3b1d202f89dc516922887cdd968c95f5147491f4 100644
---- a/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
-+++ b/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
-@@ -21,10 +21,10 @@ struct airoha_cpu_pmdomain_priv {
- 	struct generic_pm_domain pd;
- };
- 
--static long airoha_cpu_pmdomain_clk_round(struct clk_hw *hw, unsigned long rate,
--					  unsigned long *parent_rate)
-+static int airoha_cpu_pmdomain_clk_determine_rate(struct clk_hw *hw,
-+						  struct clk_rate_request *req)
- {
--	return rate;
-+	return 0;
- }
- 
- static unsigned long airoha_cpu_pmdomain_clk_get(struct clk_hw *hw,
-@@ -48,7 +48,7 @@ static int airoha_cpu_pmdomain_clk_is_enabled(struct clk_hw *hw)
- static const struct clk_ops airoha_cpu_pmdomain_clk_ops = {
- 	.recalc_rate = airoha_cpu_pmdomain_clk_get,
- 	.is_enabled = airoha_cpu_pmdomain_clk_is_enabled,
--	.round_rate = airoha_cpu_pmdomain_clk_round,
-+	.determine_rate = airoha_cpu_pmdomain_clk_determine_rate,
- };
- 
- static int airoha_cpu_pmdomain_set_performance_state(struct generic_pm_domain *domain,
-
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250729-pmdomain-round-rate-cd2fd9417c89
-
-Best regards,
 -- 
-Brian Masney <bmasney@redhat.com>
+2.50.1
 
 
