@@ -1,51 +1,52 @@
-Return-Path: <linux-pm+bounces-32102-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3ADCB1FD10
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 01:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5722FB1FD12
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 01:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6AE3B8D67
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 23:34:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D57483B8E9F
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 23:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42C72561AB;
-	Sun, 10 Aug 2025 23:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C8E2D8390;
+	Sun, 10 Aug 2025 23:34:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="VJIcqH9P"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="JNHjqa4m"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EF1157A72;
-	Sun, 10 Aug 2025 23:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8892367CC;
+	Sun, 10 Aug 2025 23:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754868858; cv=none; b=hME52Dn5+QF5OB/rciwsfC1IfIJJuFXq50pncLxMZ6EPWLrAM6DisMrp4A7SxXjIvcwE3fKFux3EoAVYIvdS4eYqPu01X14HoGRasQ3ZmBxqBULgJBNBAMMQQ6rj6bR2BJDf9McdWY7pKVT3TA6jI8TRnitCtJnAiKq/6GvKR+0=
+	t=1754868860; cv=none; b=sd8yIGQ8Vu6sF3kiWqggeicA7XRYXZL6xNCA5nouA3LD5a9oOvrXGzm6xprEoIuVSupNoq2/7OkK/LjCjpYcFBbWum7VJ3mHhlK2JrWKIZ+OgjmboaLHx2Wor99uhFLflbMN+a3R2vxHaTzPbSQFRc4rqw+2Xw8YWFQq4VGw8aU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754868858; c=relaxed/simple;
-	bh=fwBfeBD3BAKG1XdYGSZgUuboIl7CVDdrTtUVguEDnF8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VQnLgXx2xESh4+584K1v4wImAmZWkg4XfU4TjUPDmAJ4KPK4MvpqQ0p4bXAWBlZEd2w3NSUJnnGZvl8nWKKzy3dJxgwmEi8++AjycRWwLFgpBqukTsyma9i8MWujfOuj74HHqdURr5dF9e4n52uaPKEIdmGfAWlew5wmReDNhDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=VJIcqH9P; arc=none smtp.client-ip=213.97.179.56
+	s=arc-20240116; t=1754868860; c=relaxed/simple;
+	bh=csFyHHqw2UVh1UOK4suT0f6iGb8jOrvGaniiiZiETpg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Hpo3zqg7jQGFoiC27FsNOaBo7i9iCCdhpa9ATkv30wo6cZjxVlKG8WtCrXFiKXXoiM19pkc0CxjhznXQo7fSoZnz+bQEKhz9RV6r7EeC5rHFbERrvr+fmJQT8ReOhgMx+57kucUwZTEic5aEePK98y+UgTOQtsSO1zhp7IEYYT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=JNHjqa4m; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=khCMGdKVWJOOAKC9RC16vYgD/TuMBHFFGnJ3AsYFXDk=; b=VJIcqH9PCHJYfOHtv/7P7Cmwro
-	RwuETCYMvdE3/IAMqQIrXX9zroFgaatvl+9XFshRGuWgzQuLpzSwUhgi0uZq08oo69Hb8Wr3d7yj3
-	c+G5beHOSxD1K6cueQJO4SlyRtF3sG1jgRtgc3hpEb3IBWt9F5Y+Vwaj2cu0PAXHNZEcYtKeqZrg4
-	8d8xt0Mcx8+OwlMX2U/T1ub2g1jO1RRBKM1zDNd/ltwcZHUZIvqOvYXl2SpqYQg05CRgnPGzURhit
-	xQFWSwfuBeWdn/eI3ggVZvpw8NKEUF8zKzQjs+EC+1aTKdkCSkzm7x62iFPDV+F0Y0YpiIxcYQbCh
-	LYnNYtUw==;
+	bh=iwqaYza46G/jEr4j/KTejCm96/NCUMl2piN5+b5Sui8=; b=JNHjqa4m0iP0nwWsEGaCZQnxrp
+	ShjrCxWW11C2+Oupgz/lXOZcq+btJ8JqMhtDqkANmbpdilI12O6SVDqiMT2FG+fvVXstrGWPkTU0O
+	cllUTFfWfvt86/Au929vy4nQ1VqDTuS1mvRFCZP8BbrfyTiSCqjCxLlSCs9iS26B3s38ZLtHHbVEB
+	FptH1mwNlxFJd6DjpmJuPReFNMwaFh4fo+5jo0YQWilllD0Z1yLkCbT7ZcpIBjkofyzKHyw+6rcDX
+	xAOaH2MZ58eEedTxLpc955oKQp2ObYBNk0I3w2wf95ZE3qrNoZpPMgR5sypxJ+kFSR3s16AYwNDmz
+	OliuyL7g==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1ulFY3-00CW99-1e; Mon, 11 Aug 2025 01:33:56 +0200
+	id 1ulFY8-00CW9E-8Z; Mon, 11 Aug 2025 01:34:01 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -57,12 +58,13 @@ Cc: christian.loehle@arm.com,
 	linux-pm@vger.kernel.org,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH RESEND v3 00/10] PM: EM: Add netlink support for the energy model.
-Date: Mon, 11 Aug 2025 08:33:37 +0900
-Message-ID: <20250810233347.81957-1-changwoo@igalia.com>
+	Changwoo Min <changwoo@igalia.com>
+Subject: [PATCH RESEND v3 01/10] PM: EM: Add em.yaml and autogen files.
+Date: Mon, 11 Aug 2025 08:33:38 +0900
+Message-ID: <20250810233347.81957-2-changwoo@igalia.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250810233347.81957-1-changwoo@igalia.com>
+References: <20250810233347.81957-1-changwoo@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,22 +73,12 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Just rebased on Linus's master and resend it for review.
-
-There is a need to access the energy model from the userspace. One such
-example is the sched_ext schedulers [1]. The userspace part of the
-sched_ext schedules could feed the (post-processed) energy-model
-information to the BPF part of the scheduler.
-
-Currently, debugfs is the only way to read the energy model from userspace;
-however, it lacks proper notification mechanisms when a performance domain
-and its associated energy model change.
-
-This patch set introduces a generic netlink for the energy model, as
-discussed in [2]. It allows a userspace program to read the performance
-domain and its energy model. It notifies the userspace program when a
-performance domain is created or deleted or its energy model is updated
-through a multicast interface.
+Add a generic netlink spec in YAML format and autogenerate boilerplate
+code using ynl-regen.sh to introduce a generic netlink for the energy
+model. It allows a userspace program to read the performance domain and
+its energy model. It notifies the userspace program when a performance
+domain is created or deleted or its energy model is updated through a
+multicast interface.
 
 Specifically, it supports two commands:
   - EM_CMD_GET_PDS: Get the list of information for all performance
@@ -100,75 +92,305 @@ Also, it supports three notification events:
   - EM_CMD_PD_UPDATED: When the energy model table of a performance domain
     is updated.
 
-This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
-with the following commands:
+Finally, update MAINTAINERS to include new files.
 
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/em.yaml \
-     --do get-pds
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/em.yaml \
-     --do get-pd-table --json '{"pd-id": 0}'
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/em.yaml \
-     --subscribe event  --sleep 10
-
-[1] https://lwn.net/Articles/922405/
-[2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm.com/
-[3] https://lore.kernel.org/lkml/202506140306.tuIoz8rN-lkp@intel.com/#t
-
-ChangeLog v2 -> v3:
-  - Properly initialize a return variable in
-    em_notify_pd_created/updated() at an error path (09/10), reported by
-    the kernel test robot [3].
-  - Remove redundant initialization of a return variable in
-    em_notify_pd_deleted() at an error path (08/10).
-
-ChangeLog v1 -> v2:
-  - Use YNL to generate boilerplate code. Overhaul the naming conventions
-    (command, event, notification, attribute) to follow the typical
-    conventions of other YNL-based netlink implementations.
-  - Calculate the exact message size instead of using NLMSG_GOODSIZE
-    when allocating a message (genlmsg_new). This avoids the reallocation
-    of a message.
-  - Remove an unnecessary function, em_netlink_exit(), and initialize the
-    netlink (em_netlink_init) at em_netlink.c without touching energy_model.c.
-
-CC: Lukasz Luba <lukasz.luba@arm.com>
-CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CC: Tejun Heo <tj@kernel.org>
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
-
-Changwoo Min (10):
-  PM: EM: Add em.yaml and autogen files.
-  PM: EM: Add a skeleton code for netlink notification.
-  PM: EM: Assign a unique ID when creating a performance domain.
-  PM: EM: Expose the ID of a performance domain via debugfs.
-  PM: EM: Add an iterator and accessor for the performance domain.
-  PM: EM: Implement em_nl_get_pds_doit().
-  PM: EM: Implement em_nl_get_pd_table_doit().
-  PM: EM: Implement em_notify_pd_deleted().
-  PM: EM: Implement em_notify_pd_created/updated().
-  PM: EM: Notify an event when the performance domain changes.
-
- Documentation/netlink/specs/em.yaml | 113 ++++++++++
+---
+ Documentation/netlink/specs/em.yaml | 113 ++++++++++++++++++++++++++++
  MAINTAINERS                         |   3 +
- include/linux/energy_model.h        |  19 ++
- include/uapi/linux/energy_model.h   |  62 ++++++
- kernel/power/Makefile               |   5 +-
- kernel/power/em_netlink.c           | 311 ++++++++++++++++++++++++++++
- kernel/power/em_netlink.h           |  34 +++
- kernel/power/em_netlink_autogen.c   |  48 +++++
- kernel/power/em_netlink_autogen.h   |  23 ++
- kernel/power/energy_model.c         |  83 +++++++-
- 10 files changed, 699 insertions(+), 2 deletions(-)
+ include/uapi/linux/energy_model.h   |  62 +++++++++++++++
+ kernel/power/em_netlink_autogen.c   |  48 ++++++++++++
+ kernel/power/em_netlink_autogen.h   |  23 ++++++
+ 5 files changed, 249 insertions(+)
  create mode 100644 Documentation/netlink/specs/em.yaml
  create mode 100644 include/uapi/linux/energy_model.h
- create mode 100644 kernel/power/em_netlink.c
- create mode 100644 kernel/power/em_netlink.h
  create mode 100644 kernel/power/em_netlink_autogen.c
  create mode 100644 kernel/power/em_netlink_autogen.h
 
+diff --git a/Documentation/netlink/specs/em.yaml b/Documentation/netlink/specs/em.yaml
+new file mode 100644
+index 000000000000..9905ca482325
+--- /dev/null
++++ b/Documentation/netlink/specs/em.yaml
+@@ -0,0 +1,113 @@
++# SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++
++name: em
++
++doc: |
++  Energy model netlink interface to notify its changes.
++
++protocol: genetlink
++
++uapi-header: linux/energy_model.h
++
++attribute-sets:
++  -
++    name: pds
++    attributes:
++      -
++        name: pd
++        type: nest
++        nested-attributes: pd
++        multi-attr: true
++  -
++    name: pd
++    attributes:
++      -
++        name: pad
++        type: pad
++      -
++        name: pd-id
++        type: u32
++      -
++        name: flags
++        type: u64
++      -
++        name: cpus
++        type: string
++  -
++    name: pd-table
++    attributes:
++      -
++        name: pd-id
++        type: u32
++      -
++        name: ps
++        type: nest
++        nested-attributes: ps
++        multi-attr: true
++  -
++    name: ps
++    attributes:
++      -
++        name: pad
++        type: pad
++      -
++        name: performance
++        type: u64
++      -
++        name: frequency
++        type: u64
++      -
++        name: power
++        type: u64
++      -
++        name: cost
++        type: u64
++      -
++        name: flags
++        type: u64
++
++operations:
++  list:
++    -
++      name: get-pds
++      attribute-set: pds
++      doc: Get the list of information for all performance domains.
++      do:
++        reply:
++          attributes:
++            - pd
++    -
++      name: get-pd-table
++      attribute-set: pd-table
++      doc: Get the energy model table of a performance domain.
++      do:
++        request:
++          attributes:
++            - pd-id
++        reply:
++          attributes:
++            - pd-id
++            - ps
++    -
++      name: pd-created
++      doc: A performance domain is created.
++      notify: get-pd-table
++      mcgrp: event
++    -
++      name: pd-updated
++      doc: A performance domain is updated.
++      notify: get-pd-table
++      mcgrp: event
++    -
++      name: pd-deleted
++      doc: A performance domain is deleted.
++      attribute-set: pd-table
++      event:
++        attributes:
++            - pd-id
++      mcgrp: event
++
++mcast-groups:
++  list:
++    -
++      name: event
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe168477caa4..0451c024cd8c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9013,6 +9013,9 @@ S:	Maintained
+ F:	kernel/power/energy_model.c
+ F:	include/linux/energy_model.h
+ F:	Documentation/power/energy-model.rst
++F:	Documentation/netlink/specs/em.yaml
++F:	include/uapi/linux/energy_model.h
++F:	kernel/power/em_netlink_autogen.*
+ 
+ EPAPR HYPERVISOR BYTE CHANNEL DEVICE DRIVER
+ M:	Laurentiu Tudor <laurentiu.tudor@nxp.com>
+diff --git a/include/uapi/linux/energy_model.h b/include/uapi/linux/energy_model.h
+new file mode 100644
+index 000000000000..4ec4c0eabbbb
+--- /dev/null
++++ b/include/uapi/linux/energy_model.h
+@@ -0,0 +1,62 @@
++/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
++/* Do not edit directly, auto-generated from: */
++/*	Documentation/netlink/specs/em.yaml */
++/* YNL-GEN uapi header */
++
++#ifndef _UAPI_LINUX_ENERGY_MODEL_H
++#define _UAPI_LINUX_ENERGY_MODEL_H
++
++#define EM_FAMILY_NAME		"em"
++#define EM_FAMILY_VERSION	1
++
++enum {
++	EM_A_PDS_PD = 1,
++
++	__EM_A_PDS_MAX,
++	EM_A_PDS_MAX = (__EM_A_PDS_MAX - 1)
++};
++
++enum {
++	EM_A_PD_PAD = 1,
++	EM_A_PD_PD_ID,
++	EM_A_PD_FLAGS,
++	EM_A_PD_CPUS,
++
++	__EM_A_PD_MAX,
++	EM_A_PD_MAX = (__EM_A_PD_MAX - 1)
++};
++
++enum {
++	EM_A_PD_TABLE_PD_ID = 1,
++	EM_A_PD_TABLE_PS,
++
++	__EM_A_PD_TABLE_MAX,
++	EM_A_PD_TABLE_MAX = (__EM_A_PD_TABLE_MAX - 1)
++};
++
++enum {
++	EM_A_PS_PAD = 1,
++	EM_A_PS_PERFORMANCE,
++	EM_A_PS_FREQUENCY,
++	EM_A_PS_POWER,
++	EM_A_PS_COST,
++	EM_A_PS_FLAGS,
++
++	__EM_A_PS_MAX,
++	EM_A_PS_MAX = (__EM_A_PS_MAX - 1)
++};
++
++enum {
++	EM_CMD_GET_PDS = 1,
++	EM_CMD_GET_PD_TABLE,
++	EM_CMD_PD_CREATED,
++	EM_CMD_PD_UPDATED,
++	EM_CMD_PD_DELETED,
++
++	__EM_CMD_MAX,
++	EM_CMD_MAX = (__EM_CMD_MAX - 1)
++};
++
++#define EM_MCGRP_EVENT	"event"
++
++#endif /* _UAPI_LINUX_ENERGY_MODEL_H */
+diff --git a/kernel/power/em_netlink_autogen.c b/kernel/power/em_netlink_autogen.c
+new file mode 100644
+index 000000000000..a7a09ab1d1c2
+--- /dev/null
++++ b/kernel/power/em_netlink_autogen.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++/* Do not edit directly, auto-generated from: */
++/*	Documentation/netlink/specs/em.yaml */
++/* YNL-GEN kernel source */
++
++#include <net/netlink.h>
++#include <net/genetlink.h>
++
++#include "em_netlink_autogen.h"
++
++#include <uapi/linux/energy_model.h>
++
++/* EM_CMD_GET_PD_TABLE - do */
++static const struct nla_policy em_get_pd_table_nl_policy[EM_A_PD_TABLE_PD_ID + 1] = {
++	[EM_A_PD_TABLE_PD_ID] = { .type = NLA_U32, },
++};
++
++/* Ops table for em */
++static const struct genl_split_ops em_nl_ops[] = {
++	{
++		.cmd	= EM_CMD_GET_PDS,
++		.doit	= em_nl_get_pds_doit,
++		.flags	= GENL_CMD_CAP_DO,
++	},
++	{
++		.cmd		= EM_CMD_GET_PD_TABLE,
++		.doit		= em_nl_get_pd_table_doit,
++		.policy		= em_get_pd_table_nl_policy,
++		.maxattr	= EM_A_PD_TABLE_PD_ID,
++		.flags		= GENL_CMD_CAP_DO,
++	},
++};
++
++static const struct genl_multicast_group em_nl_mcgrps[] = {
++	[EM_NLGRP_EVENT] = { "event", },
++};
++
++struct genl_family em_nl_family __ro_after_init = {
++	.name		= EM_FAMILY_NAME,
++	.version	= EM_FAMILY_VERSION,
++	.netnsok	= true,
++	.parallel_ops	= true,
++	.module		= THIS_MODULE,
++	.split_ops	= em_nl_ops,
++	.n_split_ops	= ARRAY_SIZE(em_nl_ops),
++	.mcgrps		= em_nl_mcgrps,
++	.n_mcgrps	= ARRAY_SIZE(em_nl_mcgrps),
++};
+diff --git a/kernel/power/em_netlink_autogen.h b/kernel/power/em_netlink_autogen.h
+new file mode 100644
+index 000000000000..78ce609641f1
+--- /dev/null
++++ b/kernel/power/em_netlink_autogen.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
++/* Do not edit directly, auto-generated from: */
++/*	Documentation/netlink/specs/em.yaml */
++/* YNL-GEN kernel header */
++
++#ifndef _LINUX_EM_GEN_H
++#define _LINUX_EM_GEN_H
++
++#include <net/netlink.h>
++#include <net/genetlink.h>
++
++#include <uapi/linux/energy_model.h>
++
++int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info);
++int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info);
++
++enum {
++	EM_NLGRP_EVENT,
++};
++
++extern struct genl_family em_nl_family;
++
++#endif /* _LINUX_EM_GEN_H */
 -- 
 2.50.1
 
