@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-32094-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32095-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E26B9B1FB14
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 18:52:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12A97B1FB24
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 18:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D86F64E0F22
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 16:52:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F1A717908B
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 16:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8496726CE36;
-	Sun, 10 Aug 2025 16:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A088A274B2F;
+	Sun, 10 Aug 2025 16:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyMj0IGH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iROwhm/j"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F3D18C933;
-	Sun, 10 Aug 2025 16:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63088274671;
+	Sun, 10 Aug 2025 16:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754844724; cv=none; b=nV0kuv6jhSXp96xhSrITq1VEpQ5P0WsM2jNePsp8fr51bpJVZy9n+BUcjYq9PX+Oxa+Qmzwefh83gK3lpZHGSw9un1SLserA5S+OOkpBHd/394JkE7nLrItackattiPpih3053x4DRgfdinA2Go8d30RpN2VZEBKb7jfXBdUn+s=
+	t=1754844758; cv=none; b=paPSNwovsujWCcKiCbWEidBTTYCoKEvyKWOtZkw/wcQgdEYr8s7ZDKV5dEuE7tYEOX9r7KLYfijEB8q5YMsaRjtGYlYV+4K7rJ0JYik9WpRU38+ZaG951m40fJCAoTZ9HEpcp7ANPPuw3asFseNwI7bGCadgmRd0NBwFP6RR8ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754844724; c=relaxed/simple;
-	bh=0kd2zYwRTda4FihBBRspceYznCtza6GKQbvNmK08HWc=;
+	s=arc-20240116; t=1754844758; c=relaxed/simple;
+	bh=aHB3HA7K3wggr9AyGBS4hmBYQjS32W9W6zgZ7uHwisg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OaNXCOGn+/bcsxysPO8ai20xpc6n2x3RsUKq0F68HFU7Tj5vqVq0btogreGue6MOnkl1ykHMbkz7IRWt1Crw/jUoxohqV41YP70rHnCsCpS5yIEWvV5ApiqeKw6rCGYz5Q6E4azNyjGA7LqGkIuY0gVGY79JsTP8rVMT7bGwYmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EyMj0IGH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1998C4CEEB;
-	Sun, 10 Aug 2025 16:52:02 +0000 (UTC)
+	 MIME-Version; b=CAB9qm1IWpYvjkxsSFtds5jd/kcHf8Bn8hQMR3+dd7arIiStkOBV9sLp/+fDxdVMnFUcuFMXZggbnrXa649SImnxmEP2sL77Q1TBgyUgxEk1Lr7GFmSeAEDpcx0X/npqdHsgzKE32mcjQShMgp1zarIRsLmWH998LnPs514v5rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iROwhm/j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85DBC4CEEB;
+	Sun, 10 Aug 2025 16:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754844724;
-	bh=0kd2zYwRTda4FihBBRspceYznCtza6GKQbvNmK08HWc=;
+	s=k20201202; t=1754844758;
+	bh=aHB3HA7K3wggr9AyGBS4hmBYQjS32W9W6zgZ7uHwisg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EyMj0IGHtIwROT9KA1i0p6OySYvlcqGnW8mKgGEZ0hfQHuzP191SFoYzXd9lBH55N
-	 YcDQkua32NZn6wHlGtc1tdP12CnM6gRS3kJ++xUSu4RyVS6B/eIUOTJjVnT/Ay6UJd
-	 GBSgeQ5rMkTd3oYIr+jLfYXM3zLBBCacvVVqFFPmpJgzJJaoRmw2c2zCgKqt8hM5WD
-	 NWSb37g3UCoVBsd72iP3e1CGIEFR6LSrrGGzm82F8V4KjNS8Ld3tsYoVOJ2oMCDKT5
-	 5lolibOL6o+JxHDR2dJRNHDxEtCFejxZnjwcizdbdv9MYC7hMOr9RN4PJYfp1njPfb
-	 9QSNEkqLgQ4mw==
+	b=iROwhm/jo0/qyUeuKx/Trc5HxH+qmzZj7kXVvLABfTn2qis8uuK/vjoMpdhpKXYFY
+	 aCCEfpZ12oJtHLbFkiXQfSPAkweAc2JU9gF4+KsjOSMg0CYsyq32cN1Kv2gJOs5bQQ
+	 /NyInfVmOQpeMdGWIRtVRQ1hxpTGYiciZkmxhCRIQ0hCT5PLhqPrg3bQJjaT00w9Yc
+	 kwXe8/cLp45WeBf6a+7FLVcnM3vhQhlsGytP7uESDO3iaWaCiPTV/tlU7CVZS0bYuV
+	 gKLbTSsEzFcQhLQ0qFR+5n5K/UEiQGk8LgiOqasMcAwQeNTFptGDp7phnbxgiOIHyJ
+	 Ct9jqbH2lpVng==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Len Brown <len.brown@intel.com>,
+Cc: Calvin Owens <calvin@wbinvd.org>,
 	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Zhang Rui <rui.zhang@intel.com>,
+	Len Brown <len.brown@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	lenb@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-6.12] tools/power turbostat: Handle non-root legacy-uncore sysfs permissions
-Date: Sun, 10 Aug 2025 12:51:44 -0400
-Message-Id: <20250810165158.1888206-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.16-6.12] tools/power turbostat: Fix build with musl
+Date: Sun, 10 Aug 2025 12:51:54 -0400
+Message-Id: <20250810165158.1888206-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250810165158.1888206-1-sashal@kernel.org>
 References: <20250810165158.1888206-1-sashal@kernel.org>
@@ -65,129 +65,92 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.16
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Len Brown <len.brown@intel.com>
+From: Calvin Owens <calvin@wbinvd.org>
 
-[ Upstream commit e60a13bcef206795d3ddf82f130fe8f570176d06 ]
+[ Upstream commit 6ea0ec1b958a84aff9f03fb0ae4613a4d5bed3ea ]
 
-/sys/devices/system/cpu/intel_uncore_frequency/package_X_die_Y/
-may be readable by all, but
-/sys/devices/system/cpu/intel_uncore_frequency/package_X_die_Y/current_freq_khz
-may be readable only by root.
+turbostat.c: In function 'parse_int_file':
+    turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in this function)
+     5567 |         char path[PATH_MAX];
+          |                   ^~~~~~~~
 
-Non-root turbostat users see complaints in this scenario.
+    turbostat.c: In function 'probe_graphics':
+    turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in this function)
+     6787 |         char path[PATH_MAX];
+          |                   ^~~~~~~~
 
-Fail probe of the interface if we can't read current_freq_khz.
-
-Reported-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Original-patch-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Calvin Owens <calvin@wbinvd.org>
+Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Now I have a clear understanding of the issue and fix. Let me analyze
-the code change:
-
-## Backport Status: **YES**
-
-## Extensive Analysis:
+**Backport Status: YES**
 
 This commit should be backported to stable kernel trees for the
 following reasons:
 
-### 1. **Bug Fix for Real User Issue**
-The commit fixes a specific bug where non-root users of turbostat
-encounter errors when the sysfs permissions are inconsistent. As stated
-in the commit message:
-- The directory
-  `/sys/devices/system/cpu/intel_uncore_frequency/package_X_die_Y/` may
-  be readable by all users
-- But the file `current_freq_khz` within that directory may only be
-  readable by root
-- This causes turbostat to fail with complaints for non-root users
+1. **Clear Build Fix**: This is a straightforward build fix that
+   addresses compilation failures when building turbostat with musl
+   libc. The error messages in the commit clearly show `PATH_MAX` is
+   undeclared, which prevents the tool from compiling.
 
-### 2. **Simple and Contained Fix**
-The code change is minimal and focused:
-```c
-// Before: Only checked if the directory was readable
-if (access(path_base, R_OK))
-    continue;
+2. **Minimal and Safe Change**: The fix is extremely minimal - it only
+   adds a single include directive (`#include <limits.h>`) at line 70 of
+   turbostat.c. This is a standard POSIX header that defines `PATH_MAX`
+   and other system limits.
 
-// After: Check if the actual file we need (current_freq_khz) is
-readable
-sprintf(path, "%s/current_freq_khz", path_base);
-if (access(path, R_OK))
-    continue;
-```
+3. **No Functional Changes**: The commit doesn't change any logic or
+   behavior - it simply ensures the code compiles correctly by including
+   the necessary header file that defines `PATH_MAX`.
 
-The fix simply moves the permission check from the directory to the
-actual file that will be read later (line 6763-6765 in the original code
-reads `current_freq_khz`).
+4. **Affects User Tools**: While turbostat is a userspace tool (not
+   kernel code), it's an important power monitoring utility that's part
+   of the kernel source tree. Users building kernel tools with musl libc
+   (common in embedded systems, Alpine Linux, etc.) would be unable to
+   build this tool without this fix.
 
-### 3. **Follows Established Pattern**
-Looking at the `probe_intel_uncore_frequency_cluster()` function (line
-6776), it already checks the specific file permission:
-```c
-if (access("/sys/devices/system/cpu/intel_uncore_frequency/uncore00/curr
-ent_freq_khz", R_OK))
-    return;
-```
-This fix makes the legacy function consistent with the cluster
-function's approach.
+5. **Cross-Platform Compatibility**: The issue affects systems using
+   musl libc instead of glibc. With glibc, `PATH_MAX` might be defined
+   through indirect includes, but musl requires explicit inclusion of
+   `<limits.h>`. This fix improves portability.
 
-### 4. **No Risk of Regression**
-- The change only affects the probing logic - if the file cannot be
-  read, the function simply skips that uncore frequency entry
-- This is better than the current behavior where it would try to read
-  the file anyway and fail with errors
-- The fix maintains backward compatibility - systems where the file is
-  readable continue to work as before
+6. **No Risk of Regression**: Adding the `<limits.h>` include has zero
+   risk of breaking existing functionality. The header is standard and
+   the constant `PATH_MAX` is used in at least 4 places in the code
+   (lines 5641, 6870, 7481, 7537) where character arrays are declared.
 
-### 5. **Userspace Tool Fix**
-This is a fix for a userspace tool (turbostat) in the tools/ directory,
-not kernel code, making it even safer to backport as it cannot cause
-kernel instability.
+7. **Follows Stable Rules**: This perfectly fits the stable kernel
+   criteria:
+   - Fixes a real bug (build failure)
+   - Obviously correct (standard header inclusion)
+   - Already tested (has sign-offs and review)
+   - Small change (1 line)
+   - No new features or architectural changes
 
-### 6. **Clear Problem and Solution**
-- The problem is well-defined and reported by a real user (Artem
-  Bityutskiy)
-- The solution is straightforward and logical
-- The fix prevents error messages that would confuse users running
-  turbostat without root privileges
+The commit is an ideal candidate for stable backporting as it fixes a
+concrete build issue with minimal risk and maximum benefit for users of
+alternative libc implementations.
 
-### 7. **Meets Stable Criteria**
-According to stable kernel rules, this fix:
-- Fixes a real bug that affects users ✓
-- Is small and contained (2 line change) ✓
-- Has minimal risk of introducing new issues ✓
-- Doesn't introduce new features ✓
-- Doesn't make architectural changes ✓
-
-The commit improves the robustness of turbostat when dealing with
-permission inconsistencies in sysfs, which is a reasonable scenario that
-can occur in production systems with specific security configurations.
-
- tools/power/x86/turbostat/turbostat.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 5230e072e414..bf011c2847f2 100644
+index bf011c2847f2..46ee85216373 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -6740,7 +6740,8 @@ static void probe_intel_uncore_frequency_legacy(void)
- 			sprintf(path_base, "/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d", i,
- 				j);
+@@ -67,6 +67,7 @@
+ #include <stdbool.h>
+ #include <assert.h>
+ #include <linux/kernel.h>
++#include <limits.h>
  
--			if (access(path_base, R_OK))
-+			sprintf(path, "%s/current_freq_khz", path_base);
-+			if (access(path, R_OK))
- 				continue;
+ #define UNUSED(x) (void)(x)
  
- 			BIC_PRESENT(BIC_UNCORE_MHZ);
 -- 
 2.39.5
 
