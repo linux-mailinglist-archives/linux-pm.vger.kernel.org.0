@@ -1,58 +1,57 @@
-Return-Path: <linux-pm+bounces-32095-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32096-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12A97B1FB24
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 18:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 172D9B1FB28
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 18:53:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F1A717908B
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 16:52:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EE08177827
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Aug 2025 16:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A088A274B2F;
-	Sun, 10 Aug 2025 16:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE96826CE36;
+	Sun, 10 Aug 2025 16:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iROwhm/j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKrRepaY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63088274671;
-	Sun, 10 Aug 2025 16:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B06275AF9;
+	Sun, 10 Aug 2025 16:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754844758; cv=none; b=paPSNwovsujWCcKiCbWEidBTTYCoKEvyKWOtZkw/wcQgdEYr8s7ZDKV5dEuE7tYEOX9r7KLYfijEB8q5YMsaRjtGYlYV+4K7rJ0JYik9WpRU38+ZaG951m40fJCAoTZ9HEpcp7ANPPuw3asFseNwI7bGCadgmRd0NBwFP6RR8ZI=
+	t=1754844764; cv=none; b=X9xMi9C8YGMUblh+HGRCtTYyyYXR9JXUnkXdN+WJvFqZf9r5JT/bDzn0SfIETJ9TpDL8MtCkV+no90qN77m4jUTdIp3pEZBQQUpbeE+MalPfeEUyA8F60n2lj/cp5yjiND5MBFV4il+d6uPr11uEmDuAGLorfKOucZ73lEvQPLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754844758; c=relaxed/simple;
-	bh=aHB3HA7K3wggr9AyGBS4hmBYQjS32W9W6zgZ7uHwisg=;
+	s=arc-20240116; t=1754844764; c=relaxed/simple;
+	bh=OoDRiPRX1BtydS+qR5v4MHwWzstYDTih4ukU7QuiKt8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CAB9qm1IWpYvjkxsSFtds5jd/kcHf8Bn8hQMR3+dd7arIiStkOBV9sLp/+fDxdVMnFUcuFMXZggbnrXa649SImnxmEP2sL77Q1TBgyUgxEk1Lr7GFmSeAEDpcx0X/npqdHsgzKE32mcjQShMgp1zarIRsLmWH998LnPs514v5rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iROwhm/j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85DBC4CEEB;
-	Sun, 10 Aug 2025 16:52:36 +0000 (UTC)
+	 MIME-Version; b=RzNXucQ+tnXAqo47tIQjMi/e4Xw/Buj7bXR0sQibIxwn4DYo8kehNH1cA2nUcBGmuSLqpOXAkF5xPL+7uco25TSTAJ/4U5GkhAQxJdkufK9FtZEKtmNiwIInWDOcooKfKPRVhcPfwYJ4Na//v6nEW15vGY9HF0JwTa9ClRZa2IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKrRepaY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68795C4CEF8;
+	Sun, 10 Aug 2025 16:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754844758;
-	bh=aHB3HA7K3wggr9AyGBS4hmBYQjS32W9W6zgZ7uHwisg=;
+	s=k20201202; t=1754844764;
+	bh=OoDRiPRX1BtydS+qR5v4MHwWzstYDTih4ukU7QuiKt8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iROwhm/jo0/qyUeuKx/Trc5HxH+qmzZj7kXVvLABfTn2qis8uuK/vjoMpdhpKXYFY
-	 aCCEfpZ12oJtHLbFkiXQfSPAkweAc2JU9gF4+KsjOSMg0CYsyq32cN1Kv2gJOs5bQQ
-	 /NyInfVmOQpeMdGWIRtVRQ1hxpTGYiciZkmxhCRIQ0hCT5PLhqPrg3bQJjaT00w9Yc
-	 kwXe8/cLp45WeBf6a+7FLVcnM3vhQhlsGytP7uESDO3iaWaCiPTV/tlU7CVZS0bYuV
-	 gKLbTSsEzFcQhLQ0qFR+5n5K/UEiQGk8LgiOqasMcAwQeNTFptGDp7phnbxgiOIHyJ
-	 Ct9jqbH2lpVng==
+	b=dKrRepaYl7wnjBma3GWv3KO21KrTsmGTmFYBJZ5QI8Z2Vyu9yD+hK1D2xFy4/so3F
+	 e2D44xLPQzA9AIEgtl3O9ReQ8uPM7udxSkfQgaS99F2pe3Y7Wkgwxqonh0uiFEB1oG
+	 IAFaCLBgUg8cOPU73umbE/xy3vO/V+Gfl/VOfa2vh/QtAqt0TrruRCqnX+U5z3r4qo
+	 5+h1HFlsBExJaRjnMC1ZPVxrXU2d+WdMmhO1pZSDAhjqXsjOgFSQ9gWU5sAhT9bxpe
+	 PfrviDxmxsmUYT04KLNknK0sDLFWx0nBYBH1yKtEQdMP4QvYjZsWYOLr/hXUuol+lx
+	 Q2eC2ptEyhikw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
 Cc: Calvin Owens <calvin@wbinvd.org>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
 	Len Brown <len.brown@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	lenb@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-6.12] tools/power turbostat: Fix build with musl
-Date: Sun, 10 Aug 2025 12:51:54 -0400
-Message-Id: <20250810165158.1888206-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.16-6.12] tools/power turbostat: Handle cap_get_proc() ENOSYS
+Date: Sun, 10 Aug 2025 12:51:57 -0400
+Message-Id: <20250810165158.1888206-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250810165158.1888206-1-sashal@kernel.org>
 References: <20250810165158.1888206-1-sashal@kernel.org>
@@ -69,20 +68,13 @@ Content-Transfer-Encoding: 8bit
 
 From: Calvin Owens <calvin@wbinvd.org>
 
-[ Upstream commit 6ea0ec1b958a84aff9f03fb0ae4613a4d5bed3ea ]
+[ Upstream commit d34fe509f5f76d9dc36291242d67c6528027ebbd ]
 
-turbostat.c: In function 'parse_int_file':
-    turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in this function)
-     5567 |         char path[PATH_MAX];
-          |                   ^~~~~~~~
-
-    turbostat.c: In function 'probe_graphics':
-    turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in this function)
-     6787 |         char path[PATH_MAX];
-          |                   ^~~~~~~~
+Kernels configured with CONFIG_MULTIUSER=n have no cap_get_proc().
+Check for ENOSYS to recognize this case, and continue on to
+attempt to access the requested MSRs (such as temperature).
 
 Signed-off-by: Calvin Owens <calvin@wbinvd.org>
-Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -94,63 +86,80 @@ LLM Generated explanations, may be completely bogus:
 This commit should be backported to stable kernel trees for the
 following reasons:
 
-1. **Clear Build Fix**: This is a straightforward build fix that
-   addresses compilation failures when building turbostat with musl
-   libc. The error messages in the commit clearly show `PATH_MAX` is
-   undeclared, which prevents the tool from compiling.
+## Bug Fix Nature
+The commit fixes a clear bug where turbostat fails to work on kernels
+configured with `CONFIG_MULTIUSER=n`. Without this fix, turbostat would
+incorrectly fail when `cap_get_proc()` returns NULL with `ENOSYS`,
+preventing users from accessing MSRs (like temperature readings) even
+when they should be able to.
 
-2. **Minimal and Safe Change**: The fix is extremely minimal - it only
-   adds a single include directive (`#include <limits.h>`) at line 70 of
-   turbostat.c. This is a standard POSIX header that defines `PATH_MAX`
-   and other system limits.
+## Small and Contained Change
+The fix is minimal - only 9 lines added, 1 line removed. The change is
+entirely contained within the `check_for_cap_sys_rawio()` function in
+turbostat.c:
+- It adds a check for `errno == ENOSYS` when `cap_get_proc()` returns
+  NULL
+- Returns 0 (success) in this specific case to allow MSR access attempts
+  to proceed
+- Preserves the original error handling (return 1) for all other failure
+  cases
 
-3. **No Functional Changes**: The commit doesn't change any logic or
-   behavior - it simply ensures the code compiles correctly by including
-   the necessary header file that defines `PATH_MAX`.
+## No Side Effects or Architectural Changes
+The change doesn't introduce any new features or architectural
+modifications. It simply adds proper error handling for a specific
+configuration scenario that was previously not handled correctly. The
+logic flow remains the same for all other cases - only the ENOSYS case
+gets special treatment.
 
-4. **Affects User Tools**: While turbostat is a userspace tool (not
-   kernel code), it's an important power monitoring utility that's part
-   of the kernel source tree. Users building kernel tools with musl libc
-   (common in embedded systems, Alpine Linux, etc.) would be unable to
-   build this tool without this fix.
+## User Impact
+This affects real users running embedded or specialized Linux systems
+with `CONFIG_MULTIUSER=n` (single-user mode kernels). Without this fix,
+turbostat is completely broken on such systems, unable to read MSRs for
+temperature monitoring and other power management features.
 
-5. **Cross-Platform Compatibility**: The issue affects systems using
-   musl libc instead of glibc. With glibc, `PATH_MAX` might be defined
-   through indirect includes, but musl requires explicit inclusion of
-   `<limits.h>`. This fix improves portability.
+## Stable Tree Criteria Compliance
+The fix meets stable kernel criteria:
+- **Fixes a real bug**: turbostat failure on CONFIG_MULTIUSER=n kernels
+- **Already upstream**: The commit is in the mainline kernel
+- **Minimal risk**: The change only affects the specific error case and
+  doesn't alter behavior for normal configurations
+- **Clear and obvious**: The fix is straightforward - checking for
+  ENOSYS and handling it appropriately
 
-6. **No Risk of Regression**: Adding the `<limits.h>` include has zero
-   risk of breaking existing functionality. The header is standard and
-   the constant `PATH_MAX` is used in at least 4 places in the code
-   (lines 5641, 6870, 7481, 7537) where character arrays are declared.
-
-7. **Follows Stable Rules**: This perfectly fits the stable kernel
-   criteria:
-   - Fixes a real bug (build failure)
-   - Obviously correct (standard header inclusion)
-   - Already tested (has sign-offs and review)
-   - Small change (1 line)
-   - No new features or architectural changes
+## Tool-Specific Nature
+Since this is a userspace tool fix (tools/power/x86/turbostat/), it has
+even lower risk of causing kernel regressions while providing immediate
+benefit to affected users.
 
 The commit is an ideal candidate for stable backporting as it fixes a
-concrete build issue with minimal risk and maximum benefit for users of
-alternative libc implementations.
+specific, reproducible issue with minimal code changes and no risk to
+systems where `CONFIG_MULTIUSER=y` (the common case).
 
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/power/x86/turbostat/turbostat.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index bf011c2847f2..46ee85216373 100644
+index 46ee85216373..00fdb6589bea 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -67,6 +67,7 @@
- #include <stdbool.h>
- #include <assert.h>
- #include <linux/kernel.h>
-+#include <limits.h>
+@@ -6573,8 +6573,16 @@ int check_for_cap_sys_rawio(void)
+ 	int ret = 0;
  
- #define UNUSED(x) (void)(x)
+ 	caps = cap_get_proc();
+-	if (caps == NULL)
++	if (caps == NULL) {
++		/*
++		 * CONFIG_MULTIUSER=n kernels have no cap_get_proc()
++		 * Allow them to continue and attempt to access MSRs
++		 */
++		if (errno == ENOSYS)
++			return 0;
++
+ 		return 1;
++	}
  
+ 	if (cap_get_flag(caps, CAP_SYS_RAWIO, CAP_EFFECTIVE, &cap_flag_value)) {
+ 		ret = 1;
 -- 
 2.39.5
 
