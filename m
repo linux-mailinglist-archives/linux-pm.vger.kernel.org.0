@@ -1,201 +1,140 @@
-Return-Path: <linux-pm+bounces-32164-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81B16B20877
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 14:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C144B2091C
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 14:45:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C533D188ECCC
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 12:12:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20FA01883C42
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 12:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B29DF2D3A6F;
-	Mon, 11 Aug 2025 12:11:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D8133D8;
+	Mon, 11 Aug 2025 12:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r0GZ093D"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Iuih7vAG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AF82D3757
-	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 12:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384B242AA3
+	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 12:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754914301; cv=none; b=gqSvGima+zeKQ2h30tTEkTFUUCX6eF+if8uyVRmyicomBjHSrJC09pKnJrLTI5x1n7Zd5Q+mswO0XR2nL+Navj2YIt+HHUfTuMOX//lhD3YGsWCm3MKSfZueqEGh/x4dcVZ/zfG72UrXxdPQX55yXwIEHsqXKyHvWORTBF/kZkg=
+	t=1754916343; cv=none; b=VERK0wUoqVXUTRAg8BZmcMxNYUiVVM988lDG6VeAbNmJ7nYBDw3dVowh0dmXUmwwgeIr93enmy4YNusBI7MjJ6L8xHhiVTuNmL1gTgxyVJ+40uIIxLiFLJ8c+t5Wg5CRUAip/Lic+RoLVCG7EFAjwzEFgooHjACiwKGlDIxb8FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754914301; c=relaxed/simple;
-	bh=FMBflEgyu2zzYW/76/uBzy1KMkgr26r6YycYcOX43po=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QVwgtAxaB/UvpahsG7BK1N29InrptBYiLEWH19I7gg8XVXzFYJR82EtumTPLholNWaiARR0IUd5CcRsU0JglHXWz6691NRba7pDPnXS/D+QwktxcyG5rxeUSIxFzFTYYB9QbykfdP+2xw1/BbmVChUJ6SBXuIkAwiHxjrPe5S4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r0GZ093D; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-71b71a8d561so47454687b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 05:11:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754914298; x=1755519098; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yzaS0HPLQ+JNoWDWc+qdmiWk51Wkp8ZaIZKSPb/Tu1s=;
-        b=r0GZ093DzH45obxjIGTuS3+ogzAieVZwbrWTWg96/UhTSc5IQYF/kwjOUVm5fPcX59
-         LwFPLn6dqVZwpRDfSeZ3BnfOot3QvEO6zPNnAFnlpLBkzIXrZqcX1/3xt5z3so+JM6jM
-         EMlYOajxZAhuPwkDb4dFU86gOq+XNDutQJC5a0uuy70XkLm2p0NdYP3DpvuRATvGGN2u
-         NaQuN92axv6LVCfmTBhKTHm4SohouGaB2Je2SLMXbgTTT3G533XMj/zJG5FClz9/mXfD
-         Nbyp0YCHm941UCFn9lfrsMdEfIs77qptm6roxgmcAnMZp7eH2BosqOew9hP2gd2LaIEU
-         UaRA==
+	s=arc-20240116; t=1754916343; c=relaxed/simple;
+	bh=jW5Qvse2VjAQgBMlkx0ghwxP6d3zSzl6DpklQz/HXq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ddgmU35B2GENrDJDRPlxuOtTw5uIC0oDTovpYVvYfPvAbVbtAi3M4voCCgLMFF1xKw+hEk3LuUU3M2KkIqAyDV/gkFl8tpeL23asDON7VamW+cF7xfSaxfgdUmti2gJMX06TYccxLDxDDocfKCGXhjPkdrcVkqkIim1NuDr2UAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Iuih7vAG; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57B9dCUF007639
+	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 12:45:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=pT9ohewNtPwm8XYt5Nk3ZAoe
+	mGBHmM5ljwEdjo4ftDE=; b=Iuih7vAGr956+NyImXauom3d6ITOXc7qap30yyTV
+	R7D6/c4BW+X1ZD5N2PjbcrbD580GzH3J456uyczrNYnapSnpkD4fAIE1ntNnl5C+
+	GJoGyErafNsaL2E6NNJLMdJ8jsAiKIaGQFoD/HXfiuzF4kRh2GEDqwkod4yQOiXl
+	CWyBeDcTWxJsSAnaIBAHkwK8ihB6jtjR9pbIn1R+8dIr6FIwLfOXiUayoWyWOe+F
+	Jh6A2rBhyVGVComgkXwRGhQqYLljZtNkEDbe3ysJB67SYjcjE5dygDYDD3k+CAwa
+	LkO/gksYsx0r5dpP5WD5O8SINn7ge7W/qBh5jOozmKievw==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48dv1fmp6j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 12:45:41 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-70743a15d33so97753006d6.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 05:45:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754914298; x=1755519098;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yzaS0HPLQ+JNoWDWc+qdmiWk51Wkp8ZaIZKSPb/Tu1s=;
-        b=Ef7c+NRJgXSwWQKWhZppP+GmwWGh9TLoafUeZliY055eUniyzkME9JmPQTD9p3o+Hy
-         H4UxxCJmXC+y6CKslRP5YT/jYCTmLHZYrQhQRELozfb/BpY60SYo1xYqIfkUiCC0aEwf
-         /u115AJb28TMqIPzo9UzpmduzcnkjZX+JA6HTJyEPLc0p5nKwKOpg0FlfVcaLT6HmZV1
-         dsYgN6E9P1187/QZa45nsns9GthBR147V3exYwA06z4Dgl384xIeuclcyBjdhkRWraTG
-         wK1aCH/EmffIuV7P4ixlAigmJEbTc27aWXbaTstkAGdmAR/xUuPUCA9QEbbe+hpDNBNy
-         PA9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXs1a8snE/MD+lmyY53zaLMArnNN5WoNxIk9+/UXZ4sFiX1Cs7KzlU99k/1wXuWPfuB5aicenDQWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoivElTAaHZk8EBHMgRS4GJ0+fmN9vpGGbHCCtix40+k8XuuK0
-	kdt3oGBhbsIDdR5evdPWYgZUOVARwLmdBFsFWCi+s+FDk0DEzTlrWDE1wEi4+C9UbOzWLN6rBpW
-	JOTYNZV/ysTeNZhtGczv2e27tRNXL/Ct9595ek2ROuA==
-X-Gm-Gg: ASbGnctVgMcaElBf6pssm4+O7Fpuv4e9rcXXKQy2M0rt4daKlNDpy3cltfucAOZ+yD3
-	DKpi+DFEp8BEgJMQ2GVL52OevbMZ1NNypzRCWoQEKsKe7k1a4+bWjxMOVpcfLL6RgvGMvPyYoq2
-	bPO6yPXCeZZbI7JhveasrPnb29d08ttFQFiZGNrPnuY8e4gA32e8kCNuInHUoVngVNg8kHnc/Ec
-	WAUntLi1WCRaqloQZk=
-X-Google-Smtp-Source: AGHT+IFMbaZrjleZ5vGz4D0X/pSaNmB18k653oOaNMk9YxEBIuCeDG7q8giRICX/XDvm2Zo/8TtZ5RzGGv6KOI1cErc=
-X-Received: by 2002:a05:690c:4b89:b0:71b:7126:65a with SMTP id
- 00721157ae682-71bf1a9c5admr150740997b3.2.1754914298150; Mon, 11 Aug 2025
- 05:11:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1754916340; x=1755521140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pT9ohewNtPwm8XYt5Nk3ZAoemGBHmM5ljwEdjo4ftDE=;
+        b=lzCDyEITKHPqO4HagLHQ7ek7xSbiAc0mnJ+h08zTbbRIZQpJPR8LIFLHEBy7qXm5Fm
+         4739+lqKx1TkHgcJS34zkaM5lpqB56Xs+75e1CLTndY9n9jm5EC3x45NNmZO2wRHdWEM
+         KF96CEJn6AfDIQrr5kTn4KZH+mrhpVLFamv55ECdE/J9kBYNuqpyNzFvvNrAjUiL2OIe
+         rHNsqSriXrPn8OK8/bPQTGbagjgp2bubDlNnlmDJydl3tKRsfSqhXBSVl6CG5YRaKGw8
+         F/D0oNV+Cz0lCzp9FnrKKKL5Z2+6TLtbbiVLCMa04/OcTa9y6e8OdzexXzJ83+obBgFk
+         m7CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUY+cuiNmXYtllqgj9mW2FDRSiyBhKDwzaJg3nj7azQJOylXQXuTgW1MNKv3QiU2W+iJ/d9NyZJ2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTy4N9ZrZXq6t1vQFb/8Zc37tq9bhZwjakWL0DtKzBbNN/Avqz
+	iIuj385bPkUQlvwI6TzYkGKmfa6VHHsDaYdb+4K/CJIHWuVM2Ruw0AXuqvax5IgRs68+9fKUhcn
+	BfGHVWVQAZuASxnXsdbl3nUH4Oi8dCaQoVJetYsqUWrBQuALdphTbNkrD2Sr+xg==
+X-Gm-Gg: ASbGncumDhxWx0fCf4yMtJmPMDViz3j8l2vMkHO8y6xiVVtZPz5cMYylPau9VRSQT9r
+	TRJJRCVwpGEMsZ24e1kFMa6T8Q0eQEK0CkfxwMvntHwpnKIcI2HzP+95NzQas/7MX9LE2qIdpR5
+	4srsNV61j4H7194Cpe/kzAMvpSJwueEnmVAss0JBX+oopk1484Ck3wjbFdMCTb2SRezFtRRByCF
+	Ck2Bm3YJuapAScvSTBu215dhvqs4VE9mgN4YU210mvxdjI3ji4eyzIiNoy/Rmh34uRHoD6x7jwm
+	Y/JxPczy7tETG1lgz1204y7H2ZHNpcBsXD6tlN+sId7NnRn1d3rr+aVHhDhwiVMv1CbdXOhlApr
+	xlASh8X2NjRUmernpvVY20ER/d3315f6NuTgoYgBxbkiZ1tQ+/V9b
+X-Received: by 2002:a05:6214:2626:b0:707:1b24:f305 with SMTP id 6a1803df08f44-7099a1fcfb3mr151745146d6.18.1754916340038;
+        Mon, 11 Aug 2025 05:45:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGNeqcsczlEMfgPrp2sE30gPgQQo08+/icjLACF9Uyg6u4HdWc5u3IL4q586h1hVCxd/FxkBw==
+X-Received: by 2002:a05:6214:2626:b0:707:1b24:f305 with SMTP id 6a1803df08f44-7099a1fcfb3mr151744486d6.18.1754916339187;
+        Mon, 11 Aug 2025 05:45:39 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55b8898c0e9sm4233296e87.13.2025.08.11.05.45.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 05:45:38 -0700 (PDT)
+Date: Mon, 11 Aug 2025 15:45:34 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: chris.ruehl@gtsys.com.hk
+Cc: sre@kernel.org, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ruehlchr@gmail.com
+Subject: Re: [PATCH] msm: arm: qcom battery manager add OOI chemistry
+Message-ID: <tvdv6755c57x5b4yjtqopshxtdjl7eoor5mxqh62k47o6dtcdh@znug23oizqbw>
+References: <20250811111026.24292-1-chris.ruehl@gtsys.com.hk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701114733.636510-1-ulf.hansson@linaro.org>
- <20250701114733.636510-21-ulf.hansson@linaro.org> <4478f28b-47f8-4049-bf17-b7fc95cfac65@nvidia.com>
-In-Reply-To: <4478f28b-47f8-4049-bf17-b7fc95cfac65@nvidia.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 11 Aug 2025 14:11:02 +0200
-X-Gm-Features: Ac12FXyNISadS8h7_-q3TDdgflMKzfkI6TZV-B6W1wySvd9OmSLdra87f6EZkBk
-Message-ID: <CAPDyKFqSyP3e=JRFYEuFefWVN5SYJWULU8SKzXmrThvyiVGXgg@mail.gmail.com>
-Subject: Re: [PATCH v3 20/24] pmdomain: core: Default to use
- of_genpd_sync_state() for genpd providers
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Hiago De Franco <hiago.franco@toradex.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811111026.24292-1-chris.ruehl@gtsys.com.hk>
+X-Proofpoint-GUID: gJPpwaIEHCVKIfzXbwU_AB-CS4iG3s5_
+X-Authority-Analysis: v=2.4 cv=cLTgskeN c=1 sm=1 tr=0 ts=6899e5f5 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=2OwXVqhp2XgA:10 a=O7zmUmNSAAAA:8 a=EUspDBNiAAAA:8 a=XW9AV8nKKixspLQJyWAA:9
+ a=CjuIK1q_8ugA:10 a=OIgjcC2v60KrkQgK7BGD:22 a=IJxu9zi5bFdC9NS7oKyv:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA5MDAwMyBTYWx0ZWRfX15nl3b0EbWaJ
+ nShFj78gb2BJRIb4eXGs72fIFevRPb03ET2/tXfjCgZPbkZ5sdECbmSdfZQ/gFXa171RagNKzIO
+ 8SRANuoRnca2t2KHeV7lGaDDlv0Z990B9/6lTFh2fAvAfO3HTM9x6jpK6NUGr+zdOUkP15J8jMt
+ bQ2Gug8PhWwkvXIJvVyXl++m0tSHRerYOZATAE6qaiaK1fkNNkHceuFSfrk9SG/8nPKQ6+egSt3
+ hGOnpJqQiTFAg6G6+yxob261PqA3byRZVhh3894Y5gwa3aVLY/h8x8lwJ9vuRZDkuf3f4fNJpWN
+ LXbPMFA7h4dQDxKVERMO184tq3Y/No1RcRrNykNc0ZNyHSXlYV2PC8JwdUfW5BUcnfFIFJugtW3
+ wCW1rrRN
+X-Proofpoint-ORIG-GUID: gJPpwaIEHCVKIfzXbwU_AB-CS4iG3s5_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-11_02,2025-08-11_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 phishscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 suspectscore=0 spamscore=0 adultscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508090003
 
-On Thu, 31 Jul 2025 at 17:07, Jon Hunter <jonathanh@nvidia.com> wrote:
->
-> Hi Ulf,
->
-> On 01/07/2025 12:47, Ulf Hansson wrote:
-> > Unless the typical platform driver that act as genpd provider, has its own
-> > ->sync_state() callback implemented let's default to use
-> > of_genpd_sync_state().
-> >
-> > More precisely, while adding a genpd OF provider let's assign the
-> > ->sync_state() callback, in case the fwnode has a device and its driver
-> > doesn't have the ->sync_state() set already. In this way the typical
-> > platform driver doesn't need to assign ->sync_state(), unless it has some
-> > additional things to manage beyond genpds.
-> >
-> > Suggested-by: Saravana Kannan <saravanak@google.com>
-> > Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Colibri iMX8X
-> > Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> # TI AM62A,Xilinx ZynqMP ZCU106
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >   drivers/pmdomain/core.c | 9 +++++++++
-> >   1 file changed, 9 insertions(+)
-> >
-> > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> > index ca47f91b9e91..5cef6de60c72 100644
-> > --- a/drivers/pmdomain/core.c
-> > +++ b/drivers/pmdomain/core.c
-> > @@ -2600,6 +2600,11 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
-> >       return ret;
-> >   }
-> >
-> > +static void genpd_sync_state(struct device *dev)
-> > +{
-> > +     return of_genpd_sync_state(dev->of_node);
-> > +}
-> > +
-> >   /**
-> >    * of_genpd_add_provider_simple() - Register a simple PM domain provider
-> >    * @np: Device node pointer associated with the PM domain provider.
-> > @@ -2628,6 +2633,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
-> >       if (!dev && !genpd_is_no_sync_state(genpd)) {
-> >               genpd->sync_state = GENPD_SYNC_STATE_SIMPLE;
-> >               device_set_node(&genpd->dev, fwnode);
-> > +     } else {
-> > +             dev_set_drv_sync_state(dev, genpd_sync_state);
-> >       }
-> >
-> >       put_device(dev);
-> > @@ -2700,6 +2707,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
-> >       dev = get_dev_from_fwnode(fwnode);
-> >       if (!dev)
-> >               sync_state = true;
-> > +     else
-> > +             dev_set_drv_sync_state(dev, genpd_sync_state);
-> >
-> >       put_device(dev);
-> >
->
-> Following this change I am seeing the following warning on our Tegra194
-> devices ...
->
->   WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 17000000.gpu
->   WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 3960000.cec
->   WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 15380000.nvjpg
->   WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 154c0000.nvenc
->   WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 15a80000.nvenc
->
-> Per your change [0], the 'GENPD_FLAG_NO_SYNC_STATE' is set for Tegra
-> and so should Tegra be using of_genpd_sync_state() by default?
+On Mon, Aug 11, 2025 at 01:10:26PM +0200, chris.ruehl@gtsys.com.hk wrote:
+> From: Christopher Ruehl <chris.ruehl@gtsys.com.hk>
+> 
+> The ASUS S15 xElite model report the Li-ion battery with an OOI, hence this
+> update the detection and return the appropriate type.
+> 
+> Signed-off-by: Christopher Ruehl <chris.ruehl@gtsys.com.hk>
+> ---
+>  drivers/power/supply/qcom_battmgr.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-This is a different power-domain provider (bpmp) in
-drivers/firmware/tegra/bpmp.c and
-drivers/pmdomain/tegra/powergate-bpmp.c.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-For the bpmp we don't need GENPD_FLAG_NO_SYNC_STATE, as the
-power-domain provider is described along with the
-"nvidia,tegra186-bpmp" compatible string. In the other case
-(drivers/soc/tegra/pmc.c) the "core-domain" and "powergates" are
-described through child-nodes, while ->sync_state() is managed by the
-parent-device-node.
 
-In the bpmp case there is no ->sync_state() callback assigned, which
-means genpd decides to assign a default one.
-
-The reason for the warnings above is because we are still waiting for
-those devices to be probed, hence the ->sync_state() callback is still
-waiting to be invoked. Enforcing ->sync_state() callback to be invoked
-can be done via user-space if that is needed.
-
-Did that make sense?
-
->
-> Thanks
-> Jon
->
-> [0] https://lore.kernel.org/all/20250701114733.636510-10-ulf.hansson@linaro.org/
-> --
-> nvpublic
->
-
-Kind regards
-Uffe
+-- 
+With best wishes
+Dmitry
 
