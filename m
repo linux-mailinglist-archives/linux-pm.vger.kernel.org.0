@@ -1,123 +1,165 @@
-Return-Path: <linux-pm+bounces-32114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32115-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E446B1FEF7
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 08:06:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F6FBB1FF6E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 08:38:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B927189AAC8
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 06:06:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 304B53ACB34
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 06:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 471E327AC35;
-	Mon, 11 Aug 2025 06:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D84C285CA2;
+	Mon, 11 Aug 2025 06:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oI6Q315h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kR6TbhiA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75462798FA
-	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 06:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487C957C9F;
+	Mon, 11 Aug 2025 06:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754892357; cv=none; b=pQWVa8AV25zBzxoDZ/V7CkkGNzu/9IapWGBJp4d0SKIMiU/w8J4DD2b9qCo7xAQ9bh1wcc+Bw+KUIpemAaEnQPgTp2I8C1jMGXl21d1+Byx8DnBhC8TzBdubJFMvOpz+2PVmXwINIF235vSwpWM2oi8DwOmpUHxqmPNbMXRixso=
+	t=1754894302; cv=none; b=WgntM784+fTOtLV7KyjJ8Jw1nwiVq7e351ha60fqzsW5/p05hUMzY22AwWGIbewZEzV3vha9J+Bb+wuzyRenZFf3XBpJ5UAam6j+Hr3oVnUGutuwXDAEajaOTJ+axF0gHkmnZhj4eWQK1wlfiSmFBJYpeiTV3R/xFRiB0I2ItxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754892357; c=relaxed/simple;
-	bh=jw07oOfPIIudddquxIbhqqyzg191DRg7M2Uc5HD9xgk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kFTHxPKYWkCNCRrGt51cemJ2w86sBFNy1Xu0PVLjJ/tXIzf8S+mzzo95yuxlqhKEcrvfb7ubw/IJQq0Fu7juDmXg3jg9Xto+K6vs8EXaQPpGt6NSf8KCqrQQGZl15Vf6TdcP8gUcWtHKPMcohDxUDh2zQ9b2Q3ccmdGyVpIluS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oI6Q315h; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-23ffa7b3b30so36593105ad.1
-        for <linux-pm@vger.kernel.org>; Sun, 10 Aug 2025 23:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754892355; x=1755497155; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pv4Y9hoI9PiZC02H9KvuEQaXOMSZ/GwCfxO4ubNZLUE=;
-        b=oI6Q315heYbk8J1OR01CG4i4HBsMxunJ/Fuji5cFgDSN0PzJbbXRwMa789GNKwOuD+
-         mdA/7HcwVJJvDZrjEvUYaOcEYXcMT5rQaF51G0WIbKUBzMR87vYNA8aDrTkWcLFTd7S9
-         Fgcywo4SIZgnnDceJQyj/DQtZQi4FfVnETCQ6GIj+dhJgnTw67O7dZzjiY9rf0y7l3DO
-         uhCp/LidlfsNi5m7Mc8fkIzs/vo3v2Juu3DJjrC3eo+Vili4F03u4qBxeFLvIeWfLPe1
-         cN6lF+9ZAkE0I+y5Tp4cnyxGUxcavdT7BVRJnXJaoLFBrVm1MPUGrdMw+X+YEb5k/DIp
-         tkdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754892355; x=1755497155;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pv4Y9hoI9PiZC02H9KvuEQaXOMSZ/GwCfxO4ubNZLUE=;
-        b=j65eTyBIGW9xr+swv0Er2Q+fsAcJd7brr5E+nwbCNTXF9omgeHs7v/Mxf9suJsTdIg
-         3Idcnb5yPYb3lPyUQD+EJ47ZtSASSHnstiFu7MoCdwSst2KDNyuJGbOxTLzHUhQZuJ2c
-         YXJXfOLxpH6Xzm111sI5clNLWQ1wNndVVDzXSY6GfFif4ubL1lDEwMmPI5ph0/UmGKKO
-         q/2jPJD5vb9Ob0VplkerFeny1tffKK6rXetqE09cvNgCaJUOR2pHPOU+2CXWCR3K1ve/
-         kbcw9lsc2lNkQb5+z3q/hLfMVlMtUF2+yP/x1VyjSciRx7lPmJS6LDn6HBvddndBr7b1
-         qNDg==
-X-Forwarded-Encrypted: i=1; AJvYcCWR9DIrl1pEbbDTtdG1fzVtSMf/Q0Z5+oX3NYA5oNHmBW+Xn0yZwERt5974sIk1sBu1Pqbv3Lp2qA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZdTPaYEvhmD69v+52AEfeUO75hH7bLx4sNWFnGfxxsvYqb9hh
-	9b+36b3gKjfO6JQmkgEPgp6iTnwHiWqnD6ku4DOAANUJRVZHWcIc0GtWNXQhQTz4hgg=
-X-Gm-Gg: ASbGncterAa7NJNsOJ+9fYakzIMTptGIW//3vHdcs+II+fK2Hw0E4sdHN083/WBkyeS
-	5I0Q1ZgLk24vvqkjMqEiRv2hHQm5BG6oJAUUUQLhx1pHWs/eMhRCSEtIn5R82UXjBsUQh6rM3Ex
-	OlzsHfCUo57fncSO74+y4MaoEdhy97CgJoeEkL8BMPSUnS0ZZ5YVFPr5hXXupuyCfmnzykXNmXM
-	pbz26CyZFF/CabO4I3KOgZw3kdsHbieoeLEovVcklP1HK3vrBQZDZTURncALVJkxWia0+DDsOhv
-	+Qs6zdQvQJ2+UBo+y22sDdMflI+VurxNm3TlgmJyDW08r0v8S1FbWOMfQnJz0yimcaE+tmz2cvR
-	DIMyOMRGshXp0IcNj1v2GUQyN
-X-Google-Smtp-Source: AGHT+IHYuEeM905+TEPBVEFx8PtIPIWjUz+dbW//zyktdq6/BorfwdhX7ZjxcijwB0tDQa+/72ZIZA==
-X-Received: by 2002:a17:902:f544:b0:240:6aad:1c43 with SMTP id d9443c01a7336-242c2262291mr179601355ad.48.1754892354118;
-        Sun, 10 Aug 2025 23:05:54 -0700 (PDT)
-Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1ef67e8sm264942305ad.8.2025.08.10.23.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Aug 2025 23:05:53 -0700 (PDT)
-Date: Mon, 11 Aug 2025 11:35:51 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Prashant Malani <pmalani@google.com>
-Cc: Beata Michalska <beata.michalska@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jie Zhan <zhanjie9@hisilicon.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-Message-ID: <20250811060551.ylc6uutni4x6jqtg@vireshk-i7>
-References: <CAJZ5v0irG16e2cM_tX_UeEJVmB_EdUvk-4Nv36dXoUS=Ud3U5A@mail.gmail.com>
- <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
- <20250722032727.zmdwj6ztitkmr4pf@vireshk-i7>
- <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
- <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
- <aIso4kLtChiQkBjH@arm.com>
- <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
- <aIvQvLL34br6haQi@arm.com>
- <20250801044340.6ycskhhkzenkzt7a@vireshk-i7>
- <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
+	s=arc-20240116; t=1754894302; c=relaxed/simple;
+	bh=A5HEG7XgJUt4wjPWMnHqs0rS7OShpT65SYqFRjxhiXU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WWje8NBJL4capxKUlCnd8gUzvuR8MBrlQjJmw+RECCeNde1nZittT2AiPoDYmQniOV9t/m+lnuiIo8TDaPm3sUlqYq+Z7adTxEUuMnSUuzlriZZLcIVEdxMtPSJqMuPPacNsniGwEvHuidIpAFpsGUL6ABB9gpbH4YXbcbjwgwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kR6TbhiA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1041AC4CEED;
+	Mon, 11 Aug 2025 06:38:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754894301;
+	bh=A5HEG7XgJUt4wjPWMnHqs0rS7OShpT65SYqFRjxhiXU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kR6TbhiAqxfztq3KKWeWWvwKDgFDoRrVqhzKHD2Xt3GylgtlYhVNnzTZnoYXWSOLy
+	 y/GqKM8fRiKGOxO+3HdHx69g4aaFJsM7CcprCk6oMtgW/Rh71woZFvNsnL/KSqzDWk
+	 1LG+tTru1MVEyUB7su9OkF/b00C4G8nnk2d/IgWNjiP0g35PGrSDPQUewCif6sU3Xb
+	 K9TYDVTxg7Uli123Onqld3fF3UdorYodRMb3N8cJRSCxJKVLF3Rc/n7YvLjGf/u15Y
+	 mHcBPm0EuR4UHqcvhMy7xXLscsXYo7ci4AjsAq5zLRObbacFVH/qChZYeg+bvfn123
+	 QVOCb8zrMuSzQ==
+Message-ID: <dfaa36d6-41b2-46c1-ba14-e2fb5c9815e6@kernel.org>
+Date: Mon, 11 Aug 2025 08:38:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/5] dt-bindings: power: Add Marvell PXA1908 domains
+To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>,
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
+ <20250806-pxa1908-genpd-v1-2-16409309fc72@dujemihanovic.xyz>
+ <20250808-portable-expert-turkey-4f8f19@kuoka> <2017616.PYKUYFuaPT@radijator>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <2017616.PYKUYFuaPT@radijator>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 06-08-25, 17:19, Prashant Malani wrote:
-> So, do we have consensus that the idle check is acceptable as proposed?
-> (Just want to make sure this thread doesn't get lost given another thread
-> has forked off in this conversation).
+On 08/08/2025 21:46, Duje Mihanović wrote:
+> On Friday, 8 August 2025 09:34:54 Central European Summer Time Krzysztof Kozlowski wrote:
+>> On Wed, Aug 06, 2025 at 07:33:21PM +0200, Duje Mihanović wrote:
+>>> +          A number of phandles to clocks that need to be enabled during
+>>> domain +          power up.
+>>
+>> This does not exist in your example, so it is just confusing.
+> 
+> This is because I have not implemented any of the clocks used by the
+> domains at this moment.
+> 
+> Actually, I am not sure anymore whether it is necessary to assign
+> clocks to the domains as I have just yesterday successfully brought up
+> the GPU with some out-of-tree code and that did not require giving the
+> domains any clocks even though the vendor kernel does this. Should I
+> just go with that and drop all clock handling from the power domain
+> driver, at which point there would be no need for the individual domain
+> nodes? If not, how should I in the future assign clocks to the domains?
 
-I don't have any objections to this or a better solution to this.
+I am asking to see complete binding with complete DTS in example and
+submitted to SoC maintainer.
 
--- 
-viresh
+I did not comment on drivers. This is not a driver patch.
+
+> 
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/power/marvell,pxa1908-power.h>
+>>> +
+>>> +    clock-controller@d4282800 {
+>>> +      compatible = "marvell,pxa1908-apmu", "simple-mfd", "syscon";
+>>> +      reg = <0xd4282800 0x400>;
+>>> +      #clock-cells = <1>;
+>>> +
+>>> +      power-controller {
+>>> +        compatible = "marvell,pxa1908-power-controller";
+>>
+>> No address space, so this should be folded into the parent.
+> 
+> By this, do you mean that the clock driver registers the power domain
+> controller through devm_mfd_add_devices()?
+
+
+There are multiple ways this is being solved but NONE of them are
+binding ways. You again bring driver into bindings discussion.
+
+
+Best regards,
+Krzysztof
 
