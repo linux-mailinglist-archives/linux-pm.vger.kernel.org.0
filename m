@@ -1,113 +1,135 @@
-Return-Path: <linux-pm+bounces-32131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEA21B200E3
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 09:53:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A6DB20133
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 10:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9800189DCFF
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 07:53:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 145DC3A18A1
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 08:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F812DC35F;
-	Mon, 11 Aug 2025 07:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909642D94AC;
+	Mon, 11 Aug 2025 08:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="ZQ+7Xu1N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcOiqKQ3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7C52DC34D;
-	Mon, 11 Aug 2025 07:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0BDE1EB5E1;
+	Mon, 11 Aug 2025 08:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754898754; cv=none; b=l27u7fsVpVmIaSyhCHeSzsn9EH97hn/30RXsWyfVpc12Cw7t6Z6+wFXxpvSFmyWWJdBM94Wh1vbvliIQC/FLenkSv52/muV5LnUdRWBBNR2MgMdq++BF96eHeYBXsa30y6enjMQNqZ72+RzhCjkzoldnFuvDefo62Nurexlm7BY=
+	t=1754899488; cv=none; b=HzcCOKwwy6Aqy2Sv4hYbnS5BzSdJ/fML340/aXIxi/VX709VyRGSUi0bGQDl9CS5Z0rRpvMKXrSo1rQ+FbY7Mf69XHXOHI+74pQuQZrJHolX65/Nh0M0R1XuiIpj+TKe3esBiUxZ++dIC6T7i2EQRgtIDb2gvBlH8AAtyFBWbnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754898754; c=relaxed/simple;
-	bh=39WBLjsfxKNijYZhYU0A0LkNQJhlQksO1yLsTP+f13w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nCdetNKs1Bgx8GFsQsOZsgv0EjhEy8FYwjDFaxxHY8+lGNxL8jgKqdgiYJJHejZQLPD73LQrADbmL2puKZ75teIZbdt/W81WutaPFD41T1rsA0qxaYPi9F4hOkeDveVwLVNVtKV+E/UmZyqPbK1o8W5Ul4drvvauTbteCwxScmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=ZQ+7Xu1N; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=ysn3zwyuU6s13DDWolDXQKifp8kTjv/aucfDhO4qCuA=; b=ZQ+7Xu1NFO4Np0TMbQJLOBZv4Y
-	xnCQjOvhFHnFhfa0KQfzC5s9SOJCfnBBro+U+jBNVDqmWly2Ff/eDJBX4yG5Dx4wPkW03boI8ly5/
-	4fZd2GVvNflKNoM75smMHiC1SwZsuehTN4jJLPEnn8gXb4ilemsJ89nYKDpAQzD85/57u+gmIuOXi
-	c54puADCM7vCHqGPDmMGrDCSqfQm0mmY7j5A6NRYjazIGSxq7fbNIbcZHJFQgJe9H7FLSObyqeR+X
-	VovaMjFOpBuTg6dYw0c+ibniv2jq41ldoI1ON9Ujhh3GaghFNq1S4YKPMYKJEviJB0HAOF4fJPjX2
-	3qb0z0MQ==;
-Received: from i53875a0c.versanet.de ([83.135.90.12] helo=localhost.localdomain)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ulNKM-0007Ro-Cb; Mon, 11 Aug 2025 09:52:18 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Alexey Charkov <alchark@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
+	s=arc-20240116; t=1754899488; c=relaxed/simple;
+	bh=RfqUbaa9s7JOmh2LfjwsNwwwmm0uXMw9G0+7rubVqf8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d93bEpDMrBf3fmviuqRbYAVKfn5aOuGENdK+R+r4CNGBW6dfghfynEtvhmQokaCKQRWTof3TWAKGOdAYbP5seza/DoTpLVD1Qen2zLIl6pr8Y8Gx6fEyQHorAPHeXB1A8Ne5eE6cQbJN3W1u0N1tPChzpMPkyWxbfOioEZ53LuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IcOiqKQ3; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-af94e75445dso725734466b.0;
+        Mon, 11 Aug 2025 01:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754899485; x=1755504285; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y6hrDr1ho+LmcOihDF5/afd2FJMkMgiWJJggRREgOis=;
+        b=IcOiqKQ3hoDD0W9XYGZyoqDUFzu+NqzL0Mk1cO6sVf9F0NR7pU6qvHyIqELyIoZ2gt
+         LR0+fWwbn8bmdz7XfIa5Saj/litrlWtQF2xuRSFcl22bWgsQxlhqOQY1XWB/mNISArK5
+         S2Hwmpb9dZ/caRZdHcT+y90h61J8cJw4QYgn5xOpI3oAef6OBy5sP306cOQpweWOX+7g
+         WPNUzhk4zWWATF5BK9SrRpM7Ewmgq4d3GvlZpMgEVqk8kvzy0nDoH4/KLZo+1vEBjyGP
+         /PsDyAQhaYw+gOM9emvH5GFHjtfNuFhMgKv77Hx28yuApEQSSgQIeRBg0SBc3nal18wA
+         CyqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754899485; x=1755504285;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y6hrDr1ho+LmcOihDF5/afd2FJMkMgiWJJggRREgOis=;
+        b=BlRxvVO52+oEcZVvDcrjs2ag0YU4kxWD8+VhiUAKzDhGyvNhtbsRZamVRNigdHmrBV
+         Q6VkGEJoAqQE1/TkUccLRwZIwXHWttZyqASzTauH9ymbI8j4cwwpNDYrZ0aUryzbFxhC
+         IeVJpePPNY1xkCKPglJi8v9Nh8L+KrgDS60Jywlif6hTb3OFQaXp4N1yLDD9+LBIzMWa
+         DKVGizUDRtsjpAqFcibw6uD/6qBQ5PrHY3o6ycvt1c5u5qNNK6n/onew1gtmeWgFrznQ
+         2KalyAcQmTSOFOEe1BF4H6fZqry2gY79NK4NdlubOzoUfRdSTLnNBu73EXrz2k1m8HRH
+         AycA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0VYK8OrBiSn7RoRX7po//6hlOfCSE+Qcj3tE6MMn5Ot8QWER3exE2v3cTzQMRCp72g440ovgfqqSspg4=@vger.kernel.org, AJvYcCW3D6McVMtAO/Yn/LojfkxVdrBWDzsHfeWGpLp+IWcIxTld5rKkxqfugez+L56RKrwgOM4V5Iv9szQX@vger.kernel.org, AJvYcCX/epmKhEaPVfirLx+v7UQ2V06VD/raYhr8uRmlEAgElFrxugHv+FW8ImdHpLDqb52RvU0A13wP1RGMcY0x@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9mh3pKFKeEcvUbkYnEv6mlYgUkqQaOXq7dl7x7SoexAYeEQqz
+	zoSt9qukB5WBkDdkXxLSCgBYJe65UF8YkGVslvNGbLDoVolrX8A/JNIC
+X-Gm-Gg: ASbGnctKdVVTEraBD/CZ4QtV2Mf5wMS5mOC+M2uagm4vZeswlc3DzQ+KR9yg0p6x9Mk
+	WYq4QS4ZzONJI26+EQ7+cVWdMtAvHaUQsYhv3HIFvi2SU3pXyKx+RwE7ElvFBDKmYgfgyrQId4W
+	135OYOn7KplnIem4X/ija3Dwd1swVbBBjc7y3aQpC2b9LDBK+wvvY8bTZwI0o+xh7mzw68SiOZn
+	cpBD+Xxix/u9Y7y7+lzmHWqsu6JAQ/QqCDrNf7+llD53NCfjlOstGGVwa4Gx+uz819v5uxGUBgH
+	YKjLl4b+29tKW5r1wBFrmqZocI3m+/iCH4AkfcW445m+USuieWyTULnPvxbkygFINCuqkz0/eoQ
+	sAjOe/71/oiFEWg==
+X-Google-Smtp-Source: AGHT+IEtHXo+fztQkhpk6ZRQbC3R8fp8OUp3I7mzBide/4wx9z/CJVbiAPNZatH1C9egBfNknbVreA==
+X-Received: by 2002:a17:907:3d12:b0:af9:71c2:9fa with SMTP id a640c23a62f3a-af9c63b0ae7mr1181315566b.4.1754899484762;
+        Mon, 11 Aug 2025 01:04:44 -0700 (PDT)
+Received: from xeon.. ([188.163.112.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a21c081sm1956446566b.97.2025.08.11.01.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 01:04:44 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Zhang Rui <rui.zhang@intel.com>,
 	Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	kernel@collabora.com,
-	linux-pm@vger.kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Thierry Reding <treding@nvidia.com>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Ye Zhang <ye.zhang@rock-chips.com>
-Subject: Re: (subset) [PATCH v6 0/7] RK3576 thermal sensor support, including OTP trim adjustments
-Date: Mon, 11 Aug 2025 09:52:04 +0200
-Message-ID: <175489870466.808197.13531794692476437932.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
-References: <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5 RESEND] thermal: tegra: add SOCTHERM support for Tegra114
+Date: Mon, 11 Aug 2025 11:04:17 +0300
+Message-ID: <20250811080422.12300-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
+SOCTHERM is thermal sensor and thermal throttling controller found in Tegra
+SoC starting from Tegra114. Existing Tegra124 setup is mostly compatible
+with Tegra114 and needs only a few slight adjustmets of fuse calibration
+process.
 
-On Tue, 10 Jun 2025 14:32:36 +0200, Nicolas Frattaroli wrote:
-> This series adds support for the RK3576's thermal sensor.
-> 
-> The sensor has six channels, providing measurements for the package
-> temperature, the temperature of the big cores, the temperature of the
-> little cores, and the GPU, NPU and DDR controller.
-> 
-> In addition to adding support for the sensor itself, the series also
-> adds support for reading thermal trim values out of the device tree.
-> Most of this functionality is not specific to this SoC, but needed to be
-> implemented to make the sensors a little more accurate in order to
-> investigate whether the TRM swapped GPU and DDR or downstream swapped
-> GPU and DDR in terms of channel IDs, as downstream disagrees with what's
-> in the TRM, and the difference is so small and hard to pin down with
-> testing that the constant offset between the two sensors was a little
-> annoying for me to deal with.
-> 
-> [...]
+---
+Changes in v2:
+- no changes, resend.
+---
 
-Applied, thanks!
+Svyatoslav Ryhel (5):
+  soc: tegra: fuse: add Tegra114 nvmem cells and fuse lookups
+  dt-bindings: thermal: Document Tegra114 SOCTHERM Thermal Management
+    System
+  thermal: tegra: soctherm-fuse: parametrize configuration further
+  thermal: tegra: add Tegra114 specific SOCTHERM driver
+  ARM: tegra: Add SOCTHERM support on Tegra114
 
-[6/7] arm64: dts: rockchip: Add thermal nodes to RK3576
-      commit: 15e8ba9d8b14ae6de415186622379f5f4dcfd141
-[7/7] arm64: dts: rockchip: Add thermal trim OTP and tsadc nodes
-      commit: a4053badacf3699023527392c947314b074f5e0e
+ .../thermal/nvidia,tegra124-soctherm.yaml     |   2 +
+ arch/arm/boot/dts/nvidia/tegra114.dtsi        | 197 ++++++++++++++++
+ drivers/soc/tegra/fuse/fuse-tegra30.c         | 122 ++++++++++
+ drivers/thermal/tegra/Makefile                |   1 +
+ drivers/thermal/tegra/soctherm-fuse.c         |  33 ++-
+ drivers/thermal/tegra/soctherm.c              |   6 +
+ drivers/thermal/tegra/soctherm.h              |  17 +-
+ drivers/thermal/tegra/tegra114-soctherm.c     | 213 ++++++++++++++++++
+ drivers/thermal/tegra/tegra124-soctherm.c     |   8 +
+ drivers/thermal/tegra/tegra132-soctherm.c     |   8 +
+ drivers/thermal/tegra/tegra210-soctherm.c     |   8 +
+ 11 files changed, 604 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/thermal/tegra/tegra114-soctherm.c
 
-Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.48.1
+
 
