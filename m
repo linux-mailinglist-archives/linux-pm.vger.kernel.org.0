@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-32121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13173B1FFB9
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 09:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C39EB1FFBC
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 09:00:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DD143B7F33
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 07:00:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B6473B82CE
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 07:00:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3B02D949A;
-	Mon, 11 Aug 2025 07:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C292D94B1;
+	Mon, 11 Aug 2025 07:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c8ZpoHVe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hPuAdGfw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A362D8DC3
-	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 06:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA942D8DDF
+	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 07:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754895601; cv=none; b=qCAJchdN97iTgF/Sa+fA6kWAxV2iX5rgQQx2XOSUznM5JHii7cR9zYOEFTr/F/fmtPqBCgVJq7yRHAg9Z9FpJ0YvnrE+GoX7MOpXCM/ZBsXsGMHRoUKuu794Ot96sowCVcQL5vvgRUsoKVsSkCl9zT8C0U9D9EmA9vwNfNDgvc0=
+	t=1754895602; cv=none; b=ODwOkl9+mw6YJjb3Tz+owrm+9+8Hz4IiBH9aSVUL2X55OaiD+ZmBOhnHWW/ttRxRM+5arDjULjcJ3Cau8WzbD4OXkkv8GGP9gkncydOyJr4LUzYHwPdIcQXSPP+zQ4A2iFy8nGfXieIdsiucmkROBPh5fW2XOr1W6mYoWukkDCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754895601; c=relaxed/simple;
-	bh=3yZG1w4E8aqqoqQW5zLOvh3uvnyaBxVEiamqN5NZMSc=;
+	s=arc-20240116; t=1754895602; c=relaxed/simple;
+	bh=KvFKeOUgAv5xTieNT78OQsqgL/nxGh1DVLUIu8ihqrM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r9OI+a54JOCtq+RelY7NRSaVa1X5Z1XHOtyxKLZGb7wNsNtYDASnTVtO1M2KrOwCvoddGjiLsT/jQ8lT+hjvloGYhWmn9GkUoBMyvJ0nU0fyj7ccj+gWshjytcX82DRcuRJ/PNw3f8cnYDhuGU5dhXop4gHd1n6tOuA//FsUDAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c8ZpoHVe; arc=none smtp.client-ip=209.85.218.44
+	 MIME-Version; b=Z32YkX76w3fVt9cpMVWULSbEwYVmWQ1kHNFWG/LIQiVkK5D4oF9bEaXYQWBkOSZuKB392wGItgtEyP8pvNuyBPUERxSP+2+OOdwtBpcFeG65EDGvpbI1U7VZyrAfdt+fAQL0qrVH6bOZnsNuIJvK4sAgxPTiGbiClRux/dL887I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hPuAdGfw; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-af94e75445dso717022666b.0
-        for <linux-pm@vger.kernel.org>; Sun, 10 Aug 2025 23:59:59 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-af968aa2de4so741067166b.1
+        for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 00:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754895598; x=1755500398; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1754895599; x=1755500399; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GSWS63dgKn7kFeQEdpGLXWVaoXQGy0K+bkkJl1msO+c=;
-        b=c8ZpoHVe6+yDJLWGzQcJ0DcVril5cFSaGzxOOqRtxVyzGgBlKi1b8H3sJMCJbKCs7A
-         yVtGrc9ZuSns0CB6tjemLv0PUoy74g5RAR5gLgEKvK5yZjv5QpbL1X5MzHjnfDV482ez
-         0K3L+RlZRsTb4gZxbSInOf5CsCND3vSZg1flTdlOp6j2djw42ZBfLkHi7O0ufIQnT085
-         XIj+1aADYKySmCMI7rN0vc7CZOYdVVy3e2McTSCPvpIB98V4zC8wNoGeaCtvJsJAnVWq
-         seC5nHaMkvrcbEXjoOgndTSOOUN2gS6mEAVRu6tdDGWhFmzxwV12K+b6G+xeHAR18W8l
-         SgHw==
+        bh=1yH1Zfwk4M7pUV4TKZjHnni/k3y7gfw5Y8QnaMyZmAI=;
+        b=hPuAdGfw+qYOJnHPWV8xhrt8fF0V5ZrUirrtIoFNsUm+Q1PtU5dB9gF+LjjT9RoSCJ
+         d2NP+1d8iKuKPi5m4hqCXftggn/D+qChsNG3pSxiUn6B694Xw1mOCnJjJt5rrRTNjlLa
+         S6nO6Doouh8VZUjVEjnDW0ZuVBtHIybzHl0mjX4hNS1qbS7+jKF3cJBOMaOGeRldlBze
+         tt+bdQDoxn8qCMdT7kLcXSVkAShBCwGC92VkW9zVdLdI6nOgdX/jzEvhOavaFrFm6M1Q
+         CN4ig8XlELuy1ElSXITe2Yx/t88gO7oLhkR3+DzcqiA/XyEn+FUOSucHRw3kb5uxzEhi
+         xzCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754895598; x=1755500398;
+        d=1e100.net; s=20230601; t=1754895599; x=1755500399;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GSWS63dgKn7kFeQEdpGLXWVaoXQGy0K+bkkJl1msO+c=;
-        b=vnWtDgSLyES5QhnHC8K0Lem5NYw7ET9Em6xc5K+an/WaqVoi8Bt5IpG3XJfRPj5d5P
-         RlVEkP/SnXLKNJgzvH4oyJ1c/zbnNQ03w203B+vcA2+LiJDA0ZOsGORwDlpBhQ3Z5fa3
-         uaGQUC2rNx2n9LFQqFXRjcy5eudHuKkasqOpW6ls7qa5qMVQrxcRH8g3yVxjp6cV/Gea
-         up3rClH210LYJtMU+TC6da9IuyH/W2jdNyFn8+rTx18ADj3IOwUyhLWslC7U62e89lc8
-         m1EAiImfYQib+ax1dNEgUT26flTDDeHlX7nuzou8qbKngsBtrvZodMm+vaNsnoYy+Uqz
-         ISkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXELLMhN0ZZxdCj0s6qgFnRRA7BvbL+hVA9tLFh3C5cHbDDQtrqAqjNzB+aaysXHFkruDO8LHdV/Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwywiHiVvOvUdXiIVsoUXMKntMCRoHEp0WYs13ga3nQI/ux++E6
-	Svr4xZNJDHSO+JSBG5l6W04IgBeQmiOhH4kRMmF5gtyYuU2jHJoi6L3CIsv2iEYYmL8=
-X-Gm-Gg: ASbGnctJiMImTB+b0ptXkVEsMR7jgfpcQ/1MF4RbecYFvgHqom6GC8JRgBLPddn4bvn
-	Bm9/oqZNtxIAaKYlZHLTbH8iEQF1IA05z6voqc2VqnMBzWLkmmZa0+YViKxiKMovecO8pVD1XGy
-	r6uarYHnlkBvou6Xv7LD5Su/bo3uDJJDsXiCwgAUcPOnX5SKGnCWPCryWDZCBtVwDpCPaLyvYwW
-	s7HGDWS0hqkY97guvnilaJ0N49zElrF3tGnh5lpEBXsqtgwv0QSs/7vK1D0OxWU5zVbYCL+yIwY
-	0+WRnwWAO2mhlMPsRbV3czEh18Z+aG5xpx4sirw6vNQPjBKQhAjE0+Qv6AC4YVb8J5zR8Oj1EbU
-	mz39WiY1rvjtgFnQuDSl7ECLITGcFCTg=
-X-Google-Smtp-Source: AGHT+IFA5uwA/OJXYyO9fAVmjzSH1NeaCu1TKHlEdpmXOJBGeW8JH3l9EsOujXZG+RsuHLVxaosWXA==
-X-Received: by 2002:a17:906:eecd:b0:ae6:f564:18b5 with SMTP id a640c23a62f3a-af9c64525famr1132639966b.19.1754895598260;
-        Sun, 10 Aug 2025 23:59:58 -0700 (PDT)
+        bh=1yH1Zfwk4M7pUV4TKZjHnni/k3y7gfw5Y8QnaMyZmAI=;
+        b=EsrTQsOQavmrdYjEofMViaMwFk5kb4lYcWxTolHnx5ljn6J6p9dX0Sv1lOg1miHSxo
+         FsEffpm5r+6OfjIHk54GoitK1FwpL1/1TT1bUhbO+tVN9tZEqPXbgpNvOI03H2HYcsus
+         cXp/nH5iXPveLMMKFI0ABCv4xBoCob6uRz34f9wkI7Z+/uO0uEYS3KhAO9sNHovVkIAe
+         Tba6XZrP2azz2fIRXC6JZ6zYrhhRpVotVdvFOGKC3DTkik3UwK2qm0zq3Ooj/f1LlPab
+         qW68k3gzn3KYgPjgwG8UqHBNgzuhizQeDE02voQJH8Ff8MoHCN4XdMb8zWL/NYbpEJfw
+         Yl6g==
+X-Forwarded-Encrypted: i=1; AJvYcCW4o4Hds17PYgQKbPPVa/uW/gs9BR4PUPx0a/q5q2XtR35GveuXiW5n9DCoJ+NvYNRIBduFHSZW1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhbTWirvdQL0Jwbr8kXKBblQVUHCLRR33RM6pnqelFHwpYdEHS
+	fXE6h5lj5w3W+Kwc05QrMhpQXJjlCXkNqPIeuwTsWUVGaazpUeGpYOPCWb4h8Ga0pB8=
+X-Gm-Gg: ASbGncvvR68dGb2vh1x/6m+0puXbznpUQXKxc2VJj7+BspaUBhpFN8wcpBnSshPkVAI
+	HTlFrb4BsFZ43hNte7Cwp7ljaf6sa+GO+lT2vGRo+3ikLGdY3gWX6biv1wGcUcW6mqQbIOLBqdV
+	+oT6MX9r7AzUWACt23Uy3zBI1qSqOyWuBB6T38Jw/hBfNaAw30o+IrTHaVg01OGm4mutncBrk+N
+	6AifbpmTZ6yRUfbKDjuK9FMq2D49BfnPJvlsVEx/h9EC/IkvWBTzhGHOBw/L0DnfBdKHILY1UuN
+	2kg2YmQ072hJNm6kIkv7vnG+pIDn7LDlJnK6cu2ETSsL3xLNh4Wz69oAru9Oku/XWOCAGKo2bL9
+	VMdxtTV+Wqn2c3dhuc2nDND+jLHFIWGI=
+X-Google-Smtp-Source: AGHT+IGN+cgo4XlhoYRFNuK+84w1+noJNCVLJZxTCxe+T8UmaEJsfGzVSe/O7t9sBEWtkuxLD8SWPA==
+X-Received: by 2002:a17:907:3d55:b0:af9:613b:3055 with SMTP id a640c23a62f3a-af9c63b0941mr994855766b.2.1754895599094;
+        Sun, 10 Aug 2025 23:59:59 -0700 (PDT)
 Received: from eugen-station.. ([82.79.215.22])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af99604e648sm971793266b.6.2025.08.10.23.59.57
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af99604e648sm971793266b.6.2025.08.10.23.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Aug 2025 23:59:57 -0700 (PDT)
+        Sun, 10 Aug 2025 23:59:58 -0700 (PDT)
 From: Eugen Hristev <eugen.hristev@linaro.org>
 To: rafael@kernel.org,
 	daniel.lezcano@linaro.org,
 	linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	Eugen Hristev <eugen.hristev@linaro.org>
-Subject: [PATCH 2/6] tools/lib/thermal: Fix dependency to host libnl
-Date: Mon, 11 Aug 2025 09:59:11 +0300
-Message-ID: <20250811065915.3333142-3-eugen.hristev@linaro.org>
+Subject: [PATCH 3/6] tools/thermal/lib: Fix header file installation
+Date: Mon, 11 Aug 2025 09:59:12 +0300
+Message-ID: <20250811065915.3333142-4-eugen.hristev@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250811065915.3333142-1-eugen.hristev@linaro.org>
 References: <20250811065915.3333142-1-eugen.hristev@linaro.org>
@@ -93,42 +93,28 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The include path should be created according to host pkg-config
-especially when building with a different sysroot or cross compiling.
-Thus, call the pkg-config to obtain the correct path instead of
-accessing directly from root host file system, which is incorrect.
+The header file created by this lib is thermal-tools.h and not thermal.h
+Fix it accordingly.
 
-Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
+Fixes: 3b7c5e8adf9c ("tools/thermal: Add util library")
 Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
 ---
- tools/lib/thermal/Makefile | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ tools/thermal/lib/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
-index a1f5e388644d..ea56b55c9fcb 100644
---- a/tools/lib/thermal/Makefile
-+++ b/tools/lib/thermal/Makefile
-@@ -47,7 +47,6 @@ else
- endif
+diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
+index 056d212f25cf..b8fded7f22b8 100644
+--- a/tools/thermal/lib/Makefile
++++ b/tools/thermal/lib/Makefile
+@@ -128,7 +128,7 @@ install_lib: libs
  
- INCLUDES = \
---I/usr/include/libnl3 \
- -I$(srctree)/tools/lib/thermal/include \
- -I$(srctree)/tools/lib/ \
- -I$(srctree)/tools/include \
-@@ -55,6 +54,12 @@ INCLUDES = \
- -I$(srctree)/tools/arch/$(SRCARCH)/include/uapi \
- -I$(srctree)/tools/include/uapi
+ install_headers:
+ 	$(call QUIET_INSTALL, headers) \
+-		$(call do_install,include/thermal.h,$(prefix)/include/thermal,644); \
++		$(call do_install,thermal-tools.h,$(prefix)/include/thermal,644); \
  
-+VAR_INCLUDES = $(shell pkg-config --cflags libnl-3.0 libnl-genl-3.0 2>/dev/null)
-+ifeq ($(VAR_INCLUDES),)
-+VAR_INCLUDES = -I/usr/include/libnl3
-+endif
-+override CFLAGS += $(VAR_INCLUDES)
-+
- # Append required CFLAGS
- override CFLAGS += $(EXTRA_WARNINGS)
- override CFLAGS += -Werror -Wall
+ install_pkgconfig: $(LIBTHERMAL_TOOLS_PC)
+ 	$(call QUIET_INSTALL, $(LIBTHERMAL_TOOLS_PC)) \
 -- 
 2.43.0
 
