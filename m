@@ -1,132 +1,110 @@
-Return-Path: <linux-pm+bounces-32186-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32187-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B413DB21538
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 21:16:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFC74B21542
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 21:19:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2973116DACE
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:16:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71CD34226B0
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D0F2877F1;
-	Mon, 11 Aug 2025 19:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27EC72D4813;
+	Mon, 11 Aug 2025 19:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bI7YMUgZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7gwDtGN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B40F20468D;
-	Mon, 11 Aug 2025 19:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005782BCF68;
+	Mon, 11 Aug 2025 19:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754939807; cv=none; b=diP8HJn8b7oM4+lgfHK6zIHgOrW7z9A78iXWE5SgyEI8fvbtlir1LXyG1Od/eWy8iij3zxxs45xvW1+gl1yk1KVOktp3Szx+dRC3PXkjLsCOmCs8qaKEQ2URsXWvo2QLnXWpMuQ+r10Ae6BbCJRs/S9o8AMay9f1LHLov7a3B6U=
+	t=1754939960; cv=none; b=p4RA9fdojpyJFc4jNVBzKhsYmIFqgFp/MCj1qzPL8UtX5YPkdEztxxV/Ub4zHmV4RVWs9CiqFNNzwcb05OF9oUf5J4sYMg4MHEga66kS2pF00glG/VV8caDHg2tspZ7rQLBzyzUTGEMwwd1Uf73NBgFIHgh5sExJSy+Cr4Dc61M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754939807; c=relaxed/simple;
-	bh=EQv5zkwD85rfHIT2oTVnhR5G8BtpZ13906SjohWcIQo=;
+	s=arc-20240116; t=1754939960; c=relaxed/simple;
+	bh=F+Sa4E4K9l7ZyUTYlxEZRSWEF0BA6NaeA97AuWM3NS4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dVtpSi2hQhdAQ9KC8K9iPWNI1miiF5QXH7HXIEXych7Avg+mvd0qN430DqssBj1E48iC2GjwrMMuWwJXGeq/Sabxbx3Xl9v5VuQoI9RfOpCGFcug/BaC65piAmB96mwOpZD7AX8/8xP9PH+nN0bx4rgCCVvSrotLNJyeRNZYbSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bI7YMUgZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8467C4AF09;
-	Mon, 11 Aug 2025 19:16:46 +0000 (UTC)
+	 To:Cc:Content-Type; b=aOPsWmOWKcc+tcug70pREA+CAR2qt/qO7FNK9+QJPfB9Y82hdiVaFUcAejjEK1oJwBJQJy0wK5BpEgieSR1/+1LvajAuBubWAM9D6CqmjczgE6Az6Ru9bv+KXKG7jyujR69O+9hW+l9i4eAJM+hmDsS+SaL0ugdaEFBYS4nlPZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7gwDtGN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACAEC4CEF1;
+	Mon, 11 Aug 2025 19:19:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754939806;
-	bh=EQv5zkwD85rfHIT2oTVnhR5G8BtpZ13906SjohWcIQo=;
+	s=k20201202; t=1754939959;
+	bh=F+Sa4E4K9l7ZyUTYlxEZRSWEF0BA6NaeA97AuWM3NS4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bI7YMUgZqR61/W5PBWBmQ52CgfEdQSHN4CkOhSDaEhg41bDLkM8YtJ+pDx+SsUZuB
-	 15JeL7ncHaF7tLAhE47WytR3fjOOLcXLlrsDk0tsXOkNeJUl4eDeEw+QZwwT64xE2H
-	 S6WnNCxuAapw40JqwsqdL0ERilWO+boYKumB5vdwHaBBbqo46NBB1ZaWcsstY9QI13
-	 ZYFSruQueIXMnrYZyxnm8MaMdvUEk/ty8MIRPmlgCrNY4vX3KberjGnP2etvWxR9Tv
-	 1sLSHHQruymaohjpOc533Y/mLS0qXQ7/0Oz7JATTyTrO4m8FWE7fVtiKBGwx9UDWWU
-	 we/pnq3Lacahg==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-61998205433so1910729eaf.1;
-        Mon, 11 Aug 2025 12:16:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXa6BS1zn7ymN27/6CNOx1cOPR9Ev70ehu/Ia01+f0vozCGCBgsrs6MMiLNCTsaAjKqRKQ8pC5zPbw=@vger.kernel.org, AJvYcCXrafIDCw9Um/rZULb1lmlL4+ZPqUPiHSsy1AV00JCoZczE/u+pSZOfYaKGW7EnBPzo7tu8P1mlsNn7lbk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxREAtEBy/YwZ/Eypm1kKCLPIjcfDaGwZW+WTnT/G3A5BQc0Uil
-	w9nBUVtTy/fBViujpo7+2PgZy1sOCiDnoPkybGTn6NuSs2Cu/3rNy2KB8ET1iq2XCHKE5PKkYKp
-	2JP6FXP0iQR3K9mtL//AAX98mTO9KbY0=
-X-Google-Smtp-Source: AGHT+IF2zSZZIosAYExOasl238GMcLY2lYeeBQb+Te5qzYEj3bLhdX5gjZegK0iicd2XMJrZ9K12DE+GNq/+9/5ashU=
-X-Received: by 2002:a05:6820:1607:b0:61b:931a:a9a0 with SMTP id
- 006d021491bc7-61bb5a9f480mr646692eaf.3.1754939806100; Mon, 11 Aug 2025
- 12:16:46 -0700 (PDT)
+	b=I7gwDtGN8rab14VWaZFX3ZyNvXLyBTv26lRcKpeSkTZzezWEMQSh3vG8RSlsZzMwv
+	 qNcIHNS0DS4pV6pJ7JNJQ55FsrKUXXO8ayuup0xE/2kMX9ip5Wio5wcEFzh32F40Sz
+	 wJ4uYkSuxGY+tHnmslyP/ltALttexfF+aMA2BktWzZc3U9cQMA6OAvlTwJa3qi5Fnf
+	 Y1gFyCGTxL4D0ix6gtU8A74UiepD+I4fjVLaPuT2teqikzk0qYSuy5s27yjFr9LMi4
+	 WPOvldpjEpLN35Rgu2F7YzgjrW6/eteXM60JLz17sZwfHK7JVTWW150FpfvothlkLG
+	 DfwRLhoY/YjKw==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-61b43c84905so3318032eaf.3;
+        Mon, 11 Aug 2025 12:19:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVbMAgQvVw5XdkvTd2CouVG/1pDa6y3gjN8BG+qkVSoyLcjYytGNATai4bbiddwLWZcErsif7HIvr9dZ5w=@vger.kernel.org, AJvYcCXy6JhNFkL4TBoOW9XfqYLT3uLAd1aihDCwPltI93DE57BgA+ke1SkkU7kDkoGacjsJ3OLZawPeLaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ3slVLrGEL0lIDDy0YUyv2SuCpxBIHXPY9qZxOUHD9+kyKWpV
+	Ykokd6gohn/j6EYPUQiEvHa0HdLL4i8aZ+hqqPWtJvexo/hmasj/E+B5mydTm/y58+0hXqenUdS
+	iot73Jcw70jtGOFC6XUodlXe7ZmYGF1I=
+X-Google-Smtp-Source: AGHT+IFVukX1KrTZ6Yyf5VUjR0OxjtiZK4zWjKVwlwWtei1I3lI5mQbpQzv9OVjqxabgFCTTanCIhfmEprfzY9Mm2Xo=
+X-Received: by 2002:a05:6820:1c88:b0:619:950f:2413 with SMTP id
+ 006d021491bc7-61bb581df2bmr607359eaf.2.1754939958801; Mon, 11 Aug 2025
+ 12:19:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250716123323.65441-1-ulf.hansson@linaro.org>
- <20250716123323.65441-2-ulf.hansson@linaro.org> <CAJZ5v0iq7UODJ83fkwnzfFR3HpG2_R-YRnip_cLwyUHZZ+rXyg@mail.gmail.com>
- <7hldnp6apf.fsf@baylibre.com>
-In-Reply-To: <7hldnp6apf.fsf@baylibre.com>
+References: <CAFivqmLoDv_pWdmBG8ws-CMUBXcb9bS1TgMaxW9YZMqqHpRSyA@mail.gmail.com>
+ <20250722032727.zmdwj6ztitkmr4pf@vireshk-i7> <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
+ <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
+ <aIso4kLtChiQkBjH@arm.com> <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
+ <aIvQvLL34br6haQi@arm.com> <20250801044340.6ycskhhkzenkzt7a@vireshk-i7>
+ <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
+ <20250811060551.ylc6uutni4x6jqtg@vireshk-i7> <aJo5vP_mfBn_vxSF@google.com>
+In-Reply-To: <aJo5vP_mfBn_vxSF@google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Aug 2025 21:16:34 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j=9RXHrcVEBp0yy1Ae4_kC1y-WFQyBf89r3NtoL-tYQw@mail.gmail.com>
-X-Gm-Features: Ac12FXz1mGha12K-Zqq9KAKtqqa9MGzcJH5sFZI3F3YpZw-3ERkcio0DeD1jVK8
-Message-ID: <CAJZ5v0j=9RXHrcVEBp0yy1Ae4_kC1y-WFQyBf89r3NtoL-tYQw@mail.gmail.com>
-Subject: Re: [RFC/PATCH 1/3] PM: QoS: Introduce a system-wakeup QoS limit
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	linux-kernel@vger.kernel.org
+Date: Mon, 11 Aug 2025 21:19:06 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jvYBUPjSmXas+S8rOG2WAb5u7rk92Gbu1s7A=tJr4VPA@mail.gmail.com>
+X-Gm-Features: Ac12FXz-ahcyrD5qoZX9IPtX0f9rw_hXpZGNeAy_-IiQw1U4FWq-BH_JYXYvI8s
+Message-ID: <CAJZ5v0jvYBUPjSmXas+S8rOG2WAb5u7rk92Gbu1s7A=tJr4VPA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+To: Prashant Malani <pmalani@google.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Beata Michalska <beata.michalska@arm.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Jie Zhan <zhanjie9@hisilicon.com>, 
+	Ionela Voinescu <ionela.voinescu@arm.com>, Ben Segall <bsegall@google.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ingo Molnar <mingo@redhat.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman <mgorman@suse.de>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Valentin Schneider <vschneid@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 11, 2025 at 7:16=E2=80=AFPM Kevin Hilman <khilman@baylibre.com>=
- wrote:
+On Mon, Aug 11, 2025 at 8:43=E2=80=AFPM Prashant Malani <pmalani@google.com=
+> wrote:
 >
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Wed, Jul 16, 2025 at 2:33=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
-.org> wrote:
-> >>
-> >> Some platforms and devices supports multiple low-power-states than can=
- be
-> >> used for system-wide suspend. Today these states are selected on per
-> >> subsystem basis and in most cases it's the deepest possible state that
-> >> becomes selected.
-> >>
-> >> For some use-cases this is a problem as it isn't suitable or even brea=
-ks
-> >> the system-wakeup latency constraint, when we decide to enter these de=
-eper
-> >> states during system-wide suspend.
-> >>
-> >> Therefore, let's introduce an interface for user-space, allowing us to
-> >> specify the system-wakeup QoS limit. Subsequent changes will start tak=
-ing
-> >> into account the QoS limit.
+> On Aug 11 11:35, Viresh Kumar wrote:
+> > On 06-08-25, 17:19, Prashant Malani wrote:
+> > > So, do we have consensus that the idle check is acceptable as propose=
+d?
+> > > (Just want to make sure this thread doesn't get lost given another th=
+read
+> > > has forked off in this conversation).
 > >
-> > Well, this is not really a system-wakeup limit, but a CPU idle state
-> > latency limit for states entered in the last step of suspend-to-idle.
-> >
-> > It looks like the problem is that the existing CPU latency QoS is not
-> > taken into account by suspend-to-idle, so instead of adding an
-> > entirely new interface to overcome this, would it make sense to add an
-> > ioctl() to the existing one that would allow the user of it to
-> > indicate that the given request should also be respected by
-> > suspend-to-idle?
-> >
-> > There are two basic reasons why I think so:
-> > (1) The requests that you want to be respected by suspend-to-idle
-> > should also be respected by the regular "runtime" idle, or at least I
-> > don't see a reason why it wouldn't be the case.
-> > (2) The new interface introduced by this patch basically duplicates
-> > the existing one.
+> > I don't have any objections to this or a better solution to this.
 >
-> I also think that just using the existing /dev/cpu_dma_latency is the
-> right approach here, and simply teaching s2idle to respect this value.
->
-> I'm curious about the need for a new ioctl() though.  Under what
-> conditions do you want normal/runtime CPUidle to respect this value and
-> s2idle to not respect this value?
+> Thanks Viresh! Beata, can we kindly move ahead with the idle
+> optimization (which is this series), while we continue discussions for
+> the "under load" scenarios on the other thread?
 
-In a typical PC environment s2idle is a replacement for ACPI S3 which
-does not take any QoS constraints into account, so users may want to
-set QoS limits for run-time and then suspend with the expectation that
-QoS will not affect it.
+I need some more time, please?
+
+This problem is similar (if not analogous) to what happens on x86 and
+that is not handled in the cpuidle core.
+
+Thanks!
 
