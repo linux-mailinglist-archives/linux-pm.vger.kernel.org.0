@@ -1,130 +1,144 @@
-Return-Path: <linux-pm+bounces-32178-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32179-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC5F4B21255
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 18:42:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEE42B21301
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:16:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A04B118A36A0
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 16:36:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 525BA3B4073
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 17:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48AB214812;
-	Mon, 11 Aug 2025 16:36:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E141A9F8A;
+	Mon, 11 Aug 2025 17:16:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u05n6lhy"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="vh64SCF5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F30724888F;
-	Mon, 11 Aug 2025 16:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5830B78F26
+	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 17:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754930170; cv=none; b=LW67S0hUv9UsmpOiyNgOyeykSllxFtnIf6hdihYOc2ZDkvmLfO2Au9e+fP/pC1zBOz1rHboG+pX2LxXYbRIuwJe4W1xkgDwi95fcavRw8KjtPbHxTtUojwGshuGNMhS6MEUhAG79vyq12FJa3K9OzOCp4qJOSIJPD0TKpcKOds0=
+	t=1754932560; cv=none; b=C180Rx8SHXawbHPJ3sGAu/Z1srUviTDTQlAhTr6bMVCUKYHyO59Sl6n04lfHoozJes0g0QExOsqk4xplmLSqTFx7c0isAM6d+eVhIslvFMzglxVW+N3MFQv53PjlCcWWb96soaCN2tNdeYrAT2LveKxBtnvjgjYfop7FdX0PmOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754930170; c=relaxed/simple;
-	bh=7ZMfgVnzeejYKUo7Uchi+tz+fGM5yKJz1iXdAWYyqAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sQElzc295YIDucT77g3T55GmQhqHqgtCD8Q0ohdzs9uYKjRo/NAUTSWKHTl4eQyztyYaVPhgUwJqXiiLqZU+g+579kOyuX7lmjZf3+q5fuAmVW72wOryLTNNTR8I+bb1I/4blbxDMaQBY9UCGdeH5uIAG2Bm4c+8nsHBC5N2V64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u05n6lhy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE2BC4CEF5;
-	Mon, 11 Aug 2025 16:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754930170;
-	bh=7ZMfgVnzeejYKUo7Uchi+tz+fGM5yKJz1iXdAWYyqAM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u05n6lhyjlEP+hguvk/wDXY1/mESDQYjMzAixM2H/ONpNaYZrEmjhxG5vWZmOymkg
-	 TPgAM7u9gnAUUhTDcY/Qb0Af3Bs0aMyVWXS0DObRSDIt+W7zcmBjuD0WWPCmz/+WFC
-	 ECUCXH1nToHtSVcIEAoekVK5mXMSLP2Y0lKDTSo5jqsfMSayYMeI4hehrTN+YWlWRc
-	 y2RBZOYmqYsO0KPSoTuwsKpiNtoBr30uWgBnlzoUDlUbEDaw3win6NQQ4DI2nF7Qpd
-	 n58F1dC1lVGUBLCt1PE78fdu1ogp89VHKqgeG/ZGKHj1vfwcAKMv3YihHlHmczcdZ8
-	 4ROVRAUoPlM/Q==
-Date: Mon, 11 Aug 2025 11:36:07 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	cros-qcom-dts-watchers@chromium.org, Bjorn Helgaas <bhelgaas@google.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, 
-	sherry.sun@nxp.com, linux-pm@vger.kernel.org, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH v4 1/3] arm64: dts: qcom: sc7280: Add wake GPIO
-Message-ID: <u4zedngig2jsraq27h2gc5ksp5swgypl2k3sy44znrhndtljpp@r4jb3wibkf3q>
-References: <20250801-wake_irq_support-v4-0-6b6639013a1a@oss.qualcomm.com>
- <20250801-wake_irq_support-v4-1-6b6639013a1a@oss.qualcomm.com>
+	s=arc-20240116; t=1754932560; c=relaxed/simple;
+	bh=DQDV5MSdG7iIlFM3KP66cLZJSF82N+ojje6K3pNRkwo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ZRJz9mu6vYQUb9Hj5Ee1ce9g+EzFLpYj+Wne36F1XOz+q3bFHBJh/I9vXtnWrf6s+Kqn9ozOKmYgV9eZMLrVKlEE5RRtLEjyxjdWCo1MjLu53yQymEGqkGifnm7T5/xBm6QP8Zzi1vs4+o27JObRsl2j36dP06nPwlpbPxGBOa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=vh64SCF5; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-242d8dff9deso19868355ad.2
+        for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 10:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1754932557; x=1755537357; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=se2ODQFZ+H1X/pnjLuBikbbRlreY+4s+qe+LloKg96s=;
+        b=vh64SCF5UGSpyt7z/X6CYC6hJIe45nZemLoiUFfqikcjcZALcmmfAoOBORz1EToAgH
+         6iURYKHezwwBy4Llboxd3OLIZSIZxapyJ+16E6Hxst8okFWe+7hByP16R1UagSRLhaRi
+         Wy4tvi3lCW+SPikWouYFYlf/wVHOphbNy9gixF9IRn0IsQ3/Cr90q/A+sU1cDJb8cm/r
+         4vByz3FsIxFnuwDFIvCGnUx9+91T7zHTP3qBKnK4ZjsZrFfwYZf4fpcvTri7F5NBQNKT
+         W4qpdDtyD2x7ILRgcNh+JZ9PbTrZlyKqJbLoDQFSTRm4LAb709AdCeVj6As5NBMOsc2R
+         7tkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754932557; x=1755537357;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=se2ODQFZ+H1X/pnjLuBikbbRlreY+4s+qe+LloKg96s=;
+        b=JYNsGiBybPv0Capy7N84Ug58Uljm5ITpEzFJmO+tzalFLoR4LUehDdgZEu8o2L/4TT
+         hbaO4tY38ke+htq7ldfnE5CcxG67MhVWmlhg4JeHgDQ4hmtbAzv949gDz7VGKqzeD6nX
+         8rIUXqULdOxMy2E1GnQFtWf8TTD8MrbTAO+rAxjFqpIB6Q3JYXPifeir4evfW4BPG+Cw
+         8HGBWTAQy24bXjKOmhHhGlADC29vXKkG927jv4+J4Adp8lx9VG35sGjjIc6k0ornwBEB
+         S9MvawGaVLQ/y3p0+nRlWp6v81+sx9VULh01f4Kr/DMd1/3zuA3xYq51884fzaCq0p9X
+         eusg==
+X-Forwarded-Encrypted: i=1; AJvYcCXacPDK4E713sk2LIP4YV1e9jIy+V7GBB6WN8vMBdJkTR2alNKSdjlgBhelNr+qkY304yeF+stuow==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjBChG4yxiopSYR6hN/PQENg5nsOE42JsIRoOh3rsYhQ0FSczX
+	SwvZGNuyhyczHyhOd4i9vBQRYxV0qGtEM1BP7GphMmDhHH3kjOo7w2MutlAzOhKSQu4=
+X-Gm-Gg: ASbGnctXoyWrsZVhaCOcxEXrfiQkMlywgMG5QKSyX0mFfdC2kHL5KeKWk4dq5gYFfwY
+	DjYnMlbK47EL47mCJBaa+qwu7yf1uOznyUq9tNP0oViE2nfFpEZovbsS+Qkdldts55RwGgrH3TT
+	hpG2JwMKfOwBT13xbcRQXkxPSHkVxeKXSuO3Vm1K+9hCFRBEaUllruK6YpkdtNoO+TkoGkdkwFe
+	sS+tecABvHN0nBPjQsnMHhuuM/eEABItBAkwCVJ6TJXkb5RokUvl7lcBfWoSEqmzEq9MqlHT2Cc
+	8SiXCw8h94SIKYqN4xoTlg7ytHrYn3GC8oXTr0i+uRdFb5UZpXX+lAkmnHeiXutWmYcpoKQjJmX
+	SNuzSeMXUAX5u+XvMMZCp5DTZDwD7rnyqMy3X
+X-Google-Smtp-Source: AGHT+IEbJyyWqbQ4DL4JW1yoKcbTondc4o8KsIOOyz7k/Arl4I5K5BEN0nKVMUcO32W1ob2oOWy9ug==
+X-Received: by 2002:a17:902:d486:b0:242:abc2:7f32 with SMTP id d9443c01a7336-242fc210059mr5262035ad.3.1754932557531;
+        Mon, 11 Aug 2025 10:15:57 -0700 (PDT)
+Received: from localhost ([71.212.208.158])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32115948a74sm24825423a91.4.2025.08.11.10.15.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 10:15:57 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Ulf Hansson
+ <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan
+ <saravanak@google.com>, Maulik Shah <quic_mkshah@quicinc.com>, Prasad
+ Sodagudi <psodagud@quicinc.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC/PATCH 1/3] PM: QoS: Introduce a system-wakeup QoS limit
+In-Reply-To: <CAJZ5v0iq7UODJ83fkwnzfFR3HpG2_R-YRnip_cLwyUHZZ+rXyg@mail.gmail.com>
+References: <20250716123323.65441-1-ulf.hansson@linaro.org>
+ <20250716123323.65441-2-ulf.hansson@linaro.org>
+ <CAJZ5v0iq7UODJ83fkwnzfFR3HpG2_R-YRnip_cLwyUHZZ+rXyg@mail.gmail.com>
+Date: Mon, 11 Aug 2025 10:15:56 -0700
+Message-ID: <7hldnp6apf.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250801-wake_irq_support-v4-1-6b6639013a1a@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 01, 2025 at 04:29:42PM +0530, Krishna Chaitanya Chundru wrote:
-> Add WAKE# gpio which is needed to bring PCIe device state
-> from D3cold to D0.
-> 
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-What tree did you base this on? None of these boards has pcieport1
-defined in the upstream kernel.
+> On Wed, Jul 16, 2025 at 2:33=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+>>
+>> Some platforms and devices supports multiple low-power-states than can be
+>> used for system-wide suspend. Today these states are selected on per
+>> subsystem basis and in most cases it's the deepest possible state that
+>> becomes selected.
+>>
+>> For some use-cases this is a problem as it isn't suitable or even breaks
+>> the system-wakeup latency constraint, when we decide to enter these deep=
+er
+>> states during system-wide suspend.
+>>
+>> Therefore, let's introduce an interface for user-space, allowing us to
+>> specify the system-wakeup QoS limit. Subsequent changes will start taking
+>> into account the QoS limit.
+>
+> Well, this is not really a system-wakeup limit, but a CPU idle state
+> latency limit for states entered in the last step of suspend-to-idle.
+>
+> It looks like the problem is that the existing CPU latency QoS is not
+> taken into account by suspend-to-idle, so instead of adding an
+> entirely new interface to overcome this, would it make sense to add an
+> ioctl() to the existing one that would allow the user of it to
+> indicate that the given request should also be respected by
+> suspend-to-idle?
+>
+> There are two basic reasons why I think so:
+> (1) The requests that you want to be respected by suspend-to-idle
+> should also be respected by the regular "runtime" idle, or at least I
+> don't see a reason why it wouldn't be the case.
+> (2) The new interface introduced by this patch basically duplicates
+> the existing one.
 
-Regards,
-Bjorn
+I also think that just using the existing /dev/cpu_dma_latency is the
+right approach here, and simply teaching s2idle to respect this value.
 
-> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts   | 1 +
->  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 1 +
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 1 +
->  3 files changed, 3 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> index 10c152ac03c874df5f1dc386d9079d3db1c55362..a4d85772f86955ad061433b138581fa9d81110a4 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> @@ -810,6 +810,7 @@ &mdss_edp_phy {
->  
->  &pcieport1 {
->  	reset-gpios = <&tlmm 2 GPIO_ACTIVE_LOW>;
-> +	wake-gpios = <&tlmm 3 GPIO_ACTIVE_HIGH>;
->  };
->  
->  &pcie1 {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index 60b3cf50ea1d61dd5e8b573b5f1c6faa1c291eee..5e73060771329cade097bf1a71056a456a7937d7 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -477,6 +477,7 @@ &pcie1 {
->  
->  &pcieport1 {
->  	reset-gpios = <&tlmm 2 GPIO_ACTIVE_LOW>;
-> +	wake-gpios = <&tlmm 3 GPIO_ACTIVE_HIGH>;
->  };
->  
->  &pm8350c_pwm {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index 0b0212b670797a364d7f0e7a458fc73245fff8db..240513774612fb2bfcdb951e5a5a77c49f49eb82 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -418,6 +418,7 @@ &lpass_va_macro {
->  
->  &pcieport1 {
->  	reset-gpios = <&tlmm 2 GPIO_ACTIVE_LOW>;
-> +	wake-gpios = <&tlmm 3 GPIO_ACTIVE_HIGH>;
->  };
->  
->  &pcie1 {
-> 
-> -- 
-> 2.34.1
-> 
+I'm curious about the need for a new ioctl() though.  Under what
+conditions do you want normal/runtime CPUidle to respect this value and
+s2idle to not respect this value?
+
+Kevin
 
