@@ -1,108 +1,101 @@
-Return-Path: <linux-pm+bounces-32202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 768E3B215D3
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 21:45:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FC25B215F9
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 21:53:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F27577A141D
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:43:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D2EC1A23B73
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D362D8774;
-	Mon, 11 Aug 2025 19:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64C829E0ED;
+	Mon, 11 Aug 2025 19:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b6KiaIHQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjUwk30I"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDE92D63EF;
-	Mon, 11 Aug 2025 19:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D51825A655;
+	Mon, 11 Aug 2025 19:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754941478; cv=none; b=feIL4k0FyhM7O8MvGrI5IlG4cXL453TsoPj6mVIdsX7R23rIuaA8RzutoYZkajgT8n5Wr1EEsCg8tTScyuw8PN7ONiJFq5vwnvBVcQ+54CvwupUC0X6cwlcrREoW2EaJYlfbBdx+dODL5AtqT7UqLcMRvFBVd5cEkTqbSkUE+/8=
+	t=1754942033; cv=none; b=cF64wyjAHiZ6bWsTKNhQozeO4xpXSSOj3kKJLPsgiwzUNt9gqB8dtcEVCIj1Rh4Xf+jxOOE2mcfzUQS56PqoGxBrmRmTz5CbqjHdyZsdOzW7g/Lj+mceGind6zywJsm1JYKRKOt7hAyuMDDcZYQtcJe+l+UUaCLqw5MCzJka4AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754941478; c=relaxed/simple;
-	bh=HFSYTomcVpDYyiQFcDFS3TsPSZJ29/pXHWsxX2aDE1k=;
+	s=arc-20240116; t=1754942033; c=relaxed/simple;
+	bh=4mr5MgSdGCu01ur6JubVvKjo1RpB2To+5cADO6GbGLM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lujzy6HAVSsf/KpwPPlqSB5UoWYI2n0BlK1AjJxbkVBqj/mx6wFlKsfbUlUJCKmGNfuqqPy4mVW20WfXzv2eZfKJ3H7/EBPqLdaE8B4VFMrrjJo0bmheODc1Wx5w+5lVR2qa1ldVg/xIk7ScE3+rzzVvA3JjdTjCCPjjttS4iwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b6KiaIHQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99C5C4CEED;
-	Mon, 11 Aug 2025 19:44:37 +0000 (UTC)
+	 To:Cc:Content-Type; b=QhApEvXjJYPRG2rMA4LqzmbdL8rXVngZq1VnY11dHSP8gqadcq16elXsmGuRHFgkYVK/ip1UYq0mS8yK6ulcL3dqEXPHjI49O24x1YloNFHZaURHSL/oq4BQtNPo4hytPa6P3BWgximlPB1XwFU/ADZy9/w+gwLH6K30sYweEoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjUwk30I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014F8C4CEED;
+	Mon, 11 Aug 2025 19:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754941477;
-	bh=HFSYTomcVpDYyiQFcDFS3TsPSZJ29/pXHWsxX2aDE1k=;
+	s=k20201202; t=1754942033;
+	bh=4mr5MgSdGCu01ur6JubVvKjo1RpB2To+5cADO6GbGLM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b6KiaIHQIyLmAqF1UgqVPT1b2R+w8bBmuvtGAs8Q+UCFv/24OSSpbMWlGIIoy5IyN
-	 naZurcG4UFxMmqFk7DNmQ+T079Q6uUiaBCn+9Z/LRVtm45hlE18ZlQaoqe14HAb99s
-	 FfScQuG50Cv3BS296u/XUR2N3L2obKTQUO+0IxVLfIM1YJncOILr33yqdCPKlPVoZ9
-	 lbMwHAxQ7RLXlBSVC1I6KwXOMAd5ByR3WXeweV7Hub61Nq2kBcmWCcvlt6THDorsvD
-	 IE4J43fqIS8ttiEWDRm20BKuIcvezarhfVgMlYC/1NIgJV0HxuIX6J4SUWiopesEmQ
-	 M2TXCDnElLUJQ==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-61b43c84905so3334664eaf.3;
-        Mon, 11 Aug 2025 12:44:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCURoiO3A0bcUcN5z8yOJrGTRvrorqFZbOrKg5rLohkfF6h6XyR24OBcCPHtqQab7iRWGPGaR7BvzGVS8WU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywd1e/o3GFfOycy+5Rb5IqJ5eSIHYpQtDb87Mz9LIgQKyuH8pna
-	5P6qKWFSQYjXpo3hpzOSrzAykgvslc2pMBn2LLjeCC6HxKFt8BpWLg1lxQRNQL/9sY5Crq2S2ct
-	5yT4aSlajyve3glfi54DyoywavL8b6Hw=
-X-Google-Smtp-Source: AGHT+IHfJz06vTr38ESm7NpPOx6l99brQRfdr65BgZZuwPz16AtJCOoXaAGUwqQUHutgsxsepX0vxOSM/BQr2Ta5Svo=
-X-Received: by 2002:a05:6820:822:b0:619:6fea:2fb8 with SMTP id
- 006d021491bc7-61bb5bc72f0mr626387eaf.5.1754941476961; Mon, 11 Aug 2025
- 12:44:36 -0700 (PDT)
+	b=RjUwk30IUw0Kqitn5QBRWtn/hBtmW43YF9JDEIFoCprl1i1IL4qQqZb9hQSOg3euw
+	 hb+J4RKsPJzCJNnvcOvId6TQ+87wdzIFRDjwgx51VyzHY+jsJFGjsjvz7CHLb0kLZ1
+	 9dmVkaSZ7bMzUKbBYY+WOlKvwk/b/5NKLg+hh6Pzly5YvdqkFsEWSImFTaNNuo5JiN
+	 54aryij8kvEATb4tYU2bgxuWgRBCVqf7IRPPp9Yy887YnYIVmucDXJfai2HBCtj3m7
+	 U/BseKpGozUawUBFKpYjPA7dmwehVz52uPt0h3Xwgc5HIMpHq1aYIz8GW5FFk1GQAU
+	 cIpfhKd4pvAPw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-61585dfc8f8so1572805eaf.0;
+        Mon, 11 Aug 2025 12:53:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW1QF/WegtJE2uuMzzlyBuHp0U9WH3TQceY1jT1+cflPWAQi+6edh+OpCkG7yBj5Qi4Hl0VbLp9haw=@vger.kernel.org, AJvYcCWX8I3qSHMYqy78yl2QBGSGK5S7gVnF+jl0C5RTVLVJK2NvH06YLc/eJYJvWvA68ijFOIRQ1pHexKfkdwc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSJkIWT4baS4nhtRfzDsa9m2m2GimDtlfg3vK0dE/m4BzzZpu8
+	1FgNS7ec6kSZo7JOmMkn2IlEavorwTuSWiGOfT1agPd9TsVq835/Tu7pxSm/W9tfNSJgWw1dCo5
+	PONjE4dWphnaTn35HNN6nZbLCjB8LRbs=
+X-Google-Smtp-Source: AGHT+IFRmjMD7JDfByiaJG7t7VDo+pJdeuILEB6UtqkFrx/8C6kVVxUJ00pS662NnCu5eg5OI9uJc+txgN/nwPqJ+dk=
+X-Received: by 2002:a05:6820:22a5:b0:61b:92a3:577f with SMTP id
+ 006d021491bc7-61bb5a9ee3bmr618269eaf.4.1754942032333; Mon, 11 Aug 2025
+ 12:53:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <06101aa4fe784e5b0be1cb2c0bdd9afcf16bd9d4.1754681697.git.len.brown@intel.com>
-In-Reply-To: <06101aa4fe784e5b0be1cb2c0bdd9afcf16bd9d4.1754681697.git.len.brown@intel.com>
+References: <20250808145122.4057208-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20250808145122.4057208-1-srinivas.pandruvada@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Aug 2025 21:44:25 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hiWnp8+Np7OWvYa6=QYQOmRWi_W4-8bBxo71LEt5703g@mail.gmail.com>
-X-Gm-Features: Ac12FXyr97rsSmdGovPBKM9r-GqGH0lO6y7PAe-f17kvohnH5LtVurUKfncG9uo
-Message-ID: <CAJZ5v0hiWnp8+Np7OWvYa6=QYQOmRWi_W4-8bBxo71LEt5703g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] intel_idle: Allow loading ACPI tables for any family
-To: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Len Brown <len.brown@intel.com>
+Date: Mon, 11 Aug 2025 21:53:41 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hOQdi-73fCDTfrRoKU_umaUNReH-8sTW8Q_uK_V5Ap3Q@mail.gmail.com>
+X-Gm-Features: Ac12FXx4EOJ7Egtl6UjxMTtKSIhahT_AzXOUH9ISQuutyPOMVeCEXZadbbIshwc
+Message-ID: <CAJZ5v0hOQdi-73fCDTfrRoKU_umaUNReH-8sTW8Q_uK_V5Ap3Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Support Clearwater Forest OOB mode
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 8, 2025 at 9:37=E2=80=AFPM Len Brown <lenb@kernel.org> wrote:
+On Fri, Aug 8, 2025 at 4:51=E2=80=AFPM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> From: Len Brown <len.brown@intel.com>
+> Prevent intel_pstate from loading when OOB (Out Of Band) P-states mode is
+> enabled.
 >
-> There is no reason to limit intel_idle's loading of ACPI tables to
-> family 6.  Upcoming Intel processors are not in family 6.
->
-> Below "Fixes" really means "applies cleanly until".
-> That syntax commit didn't change the previous logic,
-> but shows this patch applies back 5-years.
->
-> Fixes: 4a9f45a0533f ("intel_idle: Convert to new X86 CPU match macros")
-> Signed-off-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  drivers/idle/intel_idle.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpufreq/intel_pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 73747d20df85..91a7b7e7c0c8 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1679,7 +1679,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
-nitconst =3D {
->  };
->
->  static const struct x86_cpu_id intel_mwait_ids[] __initconst =3D {
-> -       X86_MATCH_VENDOR_FAM_FEATURE(INTEL, 6, X86_FEATURE_MWAIT, NULL),
-> +       X86_MATCH_VENDOR_FAM_FEATURE(INTEL, X86_FAMILY_ANY, X86_FEATURE_M=
-WAIT, NULL),
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
+e.c
+> index 06a1c7dd081f..f366d35c5840 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2793,6 +2793,7 @@ static const struct x86_cpu_id intel_pstate_cpu_oob=
+_ids[] __initconst =3D {
+>         X86_MATCH(INTEL_GRANITERAPIDS_X,        core_funcs),
+>         X86_MATCH(INTEL_ATOM_CRESTMONT,         core_funcs),
+>         X86_MATCH(INTEL_ATOM_CRESTMONT_X,       core_funcs),
+> +       X86_MATCH(INTEL_ATOM_DARKMONT_X,        core_funcs),
 >         {}
 >  };
->
+>  #endif
 > --
 
 Applied as 6.17-rc material, thanks!
