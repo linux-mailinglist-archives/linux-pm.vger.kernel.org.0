@@ -1,109 +1,110 @@
-Return-Path: <linux-pm+bounces-32176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 276E3B2121A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 18:35:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00B89B21273
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 18:45:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1AA3A4E35DD
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 16:35:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C2734602F5
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 16:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17E92D47ED;
-	Mon, 11 Aug 2025 16:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD784296BDB;
+	Mon, 11 Aug 2025 16:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PebfqRMX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 645732C21F7;
-	Mon, 11 Aug 2025 16:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A668B296BB3;
+	Mon, 11 Aug 2025 16:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754930051; cv=none; b=QRx7s3S8DzzITBjsMwuf4QQDBmrF7rVJ5cqPge5ZFt3W6az1H/pzUc9BN6PsouqELd6XqT8A3rKiqmbVmkRtUsOFD/OSwIvTa9APswawLUae6Dre337fV5NRORZHIqpL4yE4gA4urTlIxD53nhgshb8wbwacRjMkie4oI++Vfkk=
+	t=1754930113; cv=none; b=UPkA4Qo2aDKKo7PBP88VXn/5WTi4jUhiIOGlSWRpkh8dPUHmbJmv45hX72pQxoiyPpIpr57RCTBPf7We/ffR/u12BXtOif+CUBZrBZhixFB3IOxLxmzZ8hz7b2cHk8pAXnkD9teNnurIR8o7h8S6S3NAGyX6b2gKXEYD+jTkKNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754930051; c=relaxed/simple;
-	bh=iYkfBgo39WRXK6B+pCXlZSN5RvHkpDPKiQxLF87/cOA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZVBLnr3W6pqQHsom9ZYWseKaVzD6dRjDJ1DB59qRr0yMkd9M47Bd7v139zawuEqKxZcm4f6njXUz4v0IRHLxvOf/aBtNRfioMy6E3vkvszlJDYsinEGAqbgzs9GelrIaahYis0sY9JOkYTzVNoHy7DrVqFiIjdHVJ5L5gUD28bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB6B52680;
-	Mon, 11 Aug 2025 09:34:01 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 008373F738;
-	Mon, 11 Aug 2025 09:34:05 -0700 (PDT)
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	maz@kernel.org,
-	broonie@kernel.org,
-	oliver.upton@linux.dev,
-	anshuman.khandual@arm.com,
-	robh@kernel.org,
-	james.morse@arm.com,
-	mark.rutland@arm.com,
-	joey.gouly@arm.com,
-	ry111@xry111.site,
-	Dave.Martin@arm.com,
-	ahmed.genidi@arm.com,
-	kevin.brodsky@arm.com,
-	scott@os.amperecomputing.com,
-	mbenes@suse.cz,
-	james.clark@linaro.org,
-	frederic@kernel.org,
-	rafael@kernel.org,
-	pavel@kernel.org,
-	ryan.roberts@arm.com,
-	suzuki.poulose@arm.com
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v2 6/6] KVM: arm64: initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry()
-Date: Mon, 11 Aug 2025 17:33:40 +0100
-Message-Id: <20250811163340.1561893-7-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250811163340.1561893-1-yeoreum.yun@arm.com>
-References: <20250811163340.1561893-1-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1754930113; c=relaxed/simple;
+	bh=m+o8XltTupvNOF4f9Ds1w9GcVyeTQlv0L4YJYKj6Rmo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kabHHfQWvAmtBMWgdkJbvhPEx133GPtjSnxeFkfvnrgF7kN7c8iE8F+tpIvsa89e4Nd+NaoFBDSkQ0Ee99FAkzfg+sXihWmwwF70t8Cr+AgT+tyU+a1JRj05dG3vSrpX/wZXGQ9S2fA50JbtMH60Z77/8SP3fA8Nk5enLZdx3YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PebfqRMX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73070C4CEED;
+	Mon, 11 Aug 2025 16:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754930113;
+	bh=m+o8XltTupvNOF4f9Ds1w9GcVyeTQlv0L4YJYKj6Rmo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PebfqRMXYgfh501NSxBuRxqtKF8uX+YLR1WHUzUgLtc7fjTJrooZ0e4DDyMnxdR/i
+	 0qJbJ3s0y5iKl3c9t17yH6R8crkkULN31ZUdizdSYTzsvyYM+BebFkmQy4Lhj1s9uf
+	 71WcY3NkcNPIQtVFTy0oFesEJ1voz/hR4wRpNNCcqGjMRm+pA/y7Obkr//7swF2h62
+	 Il6WzSmnIpYRZy928ohlCeWpbr4AqzgYZ8iJbbwQSeiRYAWjzMrHz6HCKBqBaY1JDq
+	 Ll5gu6YUaos6UW0/iFRvBNjKQXuhr42KpiLYZN0hkxQQQVhZX8YIYwFCYDigy6wjwn
+	 x3VotoF3CRYsg==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: Bjorn Helgaas <bhelgaas@google.com>,
+	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
+Cc: linux-pm@vger.kernel.org,
+	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mario Limonciello <superm1@kernel.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Subject: [PATCH v6] PCI/PM: Skip resuming to D0 if disconnected
+Date: Mon, 11 Aug 2025 11:35:10 -0500
+Message-ID: <20250811163510.601103-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry().
+When a USB4 dock is unplugged the PCIe bridge it's connected to will
+issue a "Link Down" and "Card not detected event". The PCI core will
+treat this as a surprise hotplug event and unconfigure all downstream
+devices. This involves setting the device error state to
+`pci_channel_io_perm_failure` which pci_dev_is_disconnected() will check.
 
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+It doesn't make sense to runtime resume disconnected devices to D0 and
+report the (expected) error, so bail early.
+
+Suggested-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
 ---
- arch/arm64/kvm/hyp/nvhe/psci-relay.c | 3 +++
- 1 file changed, 3 insertions(+)
+v6:
+ * rebase on v6.17-rc1
+v5:
+ * Pick up tags, rebase on linux-next
+ * https://lore.kernel.org/linux-pci/20250709205948.3888045-1-superm1@kernel.org/T/#mbd784f786c50a3d1b5ab1833520995c01eae2fd2
+---
+ drivers/pci/pci.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-index c3e196fb8b18..4ed4b7fa57c2 100644
---- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-+++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-@@ -4,6 +4,7 @@
-  * Author: David Brazdil <dbrazdil@google.com>
-  */
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index b0f4d98036cdd..036511f5b2625 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -1374,6 +1374,11 @@ int pci_power_up(struct pci_dev *dev)
+ 		return -EIO;
+ 	}
  
-+#include <asm/alternative.h>
- #include <asm/kvm_asm.h>
- #include <asm/kvm_hyp.h>
- #include <asm/kvm_mmu.h>
-@@ -219,6 +220,8 @@ asmlinkage void __noreturn __kvm_host_psci_cpu_entry(bool is_cpu_on)
- 		release_boot_args(boot_args);
- 
- 	write_sysreg_el1(INIT_SCTLR_EL1_MMU_OFF, SYS_SCTLR);
-+	if (alternative_has_cap_unlikely(ARM64_HAS_SCTLR2))
-+		write_sysreg_el1(INIT_SCTLR2_EL1, SYS_SCTLR2);
- 	write_sysreg(INIT_PSTATE_EL1, SPSR_EL2);
- 
- 	__host_enter(host_ctxt);
++	if (pci_dev_is_disconnected(dev)) {
++		dev->current_state = PCI_D3cold;
++		return -EIO;
++	}
++
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+ 	if (PCI_POSSIBLE_ERROR(pmcsr)) {
+ 		pci_err(dev, "Unable to change power state from %s to D0, device inaccessible\n",
+
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
 -- 
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+2.43.0
 
 
