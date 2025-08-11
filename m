@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-32180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D07CAB2139B
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:47:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35503B213A9
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E76BD3E44C8
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 17:47:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63A291A22602
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 17:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA061C6FE5;
-	Mon, 11 Aug 2025 17:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6852D6E67;
+	Mon, 11 Aug 2025 17:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQUhIEGP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfqTeA/Z"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F86BB640;
-	Mon, 11 Aug 2025 17:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AF42D47F2;
+	Mon, 11 Aug 2025 17:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754934428; cv=none; b=OEDMsPcBd6+ohltspSPPnlJQk2Zqk3BnRKYpFWXImLMp0WFTSNbTBDuPjK2qT6JaPBgLT7vFv/vI++5hqc9hDi34pY1+plAyL3GHDGIZYqdQurWnmovov1nZbZfoNJsW0M94T7fqTBvA8DRtpjOKsQrgxq5dFjPcD0Nfm0c+UNE=
+	t=1754934672; cv=none; b=uq9Eq5nk6LghXtb6g9iu9uxFSVgsGrnQof4PYxXpr0p1l3ls2Iq1HAsDOSxKID/uVIPd/NUf7dc0Mrqrs8mWRqyhYZryDyJWRNjCTJxDa27uFJqmtj7ccZGx9R7Sqfxx9DAKCNFrHk3X01ZWnS14k50PKYE0PCVHqEV2NX4A+Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754934428; c=relaxed/simple;
-	bh=mKkMaxD4qpSG42cXfEv3ipOX0l9wTH41ysdWD1UmrT0=;
+	s=arc-20240116; t=1754934672; c=relaxed/simple;
+	bh=Zzdn6Km1K+4KwSat9G4goOyX1m0FKWNRUjtzFo6LSmY=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VTWm4EUOq/Y+BPliaxDp+Aay7hCGKRGnHtEBACMCC2NFpEGYp8yOWpoL8nY6NTRFb4/Jnh9+n1AHHxr58kPVstXGwwDBJ50w7QL1I8M55+/I3LY88r84AZMZQsX2XNzjiP06Zx9vuqyRvIjmbZJCJWsCA+VIkg9YtthCiaeW144=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQUhIEGP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E84C4CEED;
-	Mon, 11 Aug 2025 17:47:07 +0000 (UTC)
+	 MIME-Version:Content-Type; b=CCagifWRnKIf/IYS6ugWezGGdQ5zo9JARlOhFjab59p3VtJ4WPPN7M6E7Z2jJA/V+Cn1WmRrvP/9nopoPatOeNYH+xj1V1ziEX3IrJXTdzXouHq+pxFFcUyQEmTieyYlyUFzTQTw73yJ3HJyPnNaM5ABVY48Derb1Ycbi4y4SOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfqTeA/Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50980C4CEED;
+	Mon, 11 Aug 2025 17:51:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754934427;
-	bh=mKkMaxD4qpSG42cXfEv3ipOX0l9wTH41ysdWD1UmrT0=;
+	s=k20201202; t=1754934672;
+	bh=Zzdn6Km1K+4KwSat9G4goOyX1m0FKWNRUjtzFo6LSmY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VQUhIEGPNQISsLZcnMINwUCYKwurxMVFcnnTSSVsMcchwocP/tXl7XzBCvbHJye/L
-	 78fWe94P8TB1QeNbZxSiY4e4e/EsLD2sCTZRSYyzvoB2quOJO9Zn2QW41rK+SOrkVB
-	 1DGsBklzX/0bkNlZvfay1W6Jxs9GQhTtqLw0tqGJd45coWAQV5KpCdhwROCIpy9SqP
-	 iVkKAyUy2ehBGWf7HRfh8XKry1uwTNJX9JYE7bQSSYkvh+5J9yUM+KZSwWXoilId38
-	 NmnTiYuAImqp9HLINsn7xz+6tKgCx7SeXQMepyaW8zDRhD3jnWZJtrkKjamUxzoton
-	 WjmlsY78uNvOg==
+	b=QfqTeA/ZJw3hLLA3KA0PsG1dBpYvf5q/1wQ81yPe1lsB6yMtR1wNvFxkaxwNRYocC
+	 aU/C+U8nXrYJiiXRTJoyNi5g2rvMufv4nNwKBznVNImdhEfboNrsXDzWvLBk20uZOn
+	 zWGw9WqFWcbZJg/AlKShjJtRV0MPis6ZZSatEJySyrwM49m5Wdfmf6fOQdqkDveLRs
+	 cXeC8A00vkfOCzQ2cQXEPezVHZsaNTRicvyH9efhGHxbB0aWV2o2d52OKaIuxujhQu
+	 t01IYePfp6XDQ9BJZaESOJ+gUraHnSH8W+mObYvR3cFN+Hj67B8KvgY4hH4aljIcP2
+	 s5bxk7q0kuXBg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1ulWbh-006Lr3-KO;
-	Mon, 11 Aug 2025 18:46:50 +0100
-Date: Mon, 11 Aug 2025 18:46:48 +0100
-Message-ID: <86sehx92ev.wl-maz@kernel.org>
+	id 1ulWft-006LvS-55;
+	Mon, 11 Aug 2025 18:51:09 +0100
+Date: Mon, 11 Aug 2025 18:51:08 +0100
+Message-ID: <86qzxh927n.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Yeoreum Yun <yeoreum.yun@arm.com>
 Cc: catalin.marinas@arm.com,
@@ -76,10 +76,10 @@ Cc: catalin.marinas@arm.com,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v2 1/6] arm64: make SCTLR2_EL1 accessible
-In-Reply-To: <20250811163340.1561893-2-yeoreum.yun@arm.com>
+Subject: Re: [PATCH v2 6/6] KVM: arm64: initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry()
+In-Reply-To: <20250811163340.1561893-7-yeoreum.yun@arm.com>
 References: <20250811163340.1561893-1-yeoreum.yun@arm.com>
-	<20250811163340.1561893-2-yeoreum.yun@arm.com>
+	<20250811163340.1561893-7-yeoreum.yun@arm.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -95,60 +95,47 @@ X-SA-Exim-Rcpt-To: yeoreum.yun@arm.com, catalin.marinas@arm.com, will@kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, 11 Aug 2025 17:33:35 +0100,
+On Mon, 11 Aug 2025 17:33:40 +0100,
 Yeoreum Yun <yeoreum.yun@arm.com> wrote:
 > 
-> make SCTLR2_EL1 accssible to initilise it.
+> initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry().
 
-nit: "accessible", "initialise".
-
-This could deserve a slightly less terse message, so that someone who
-is not very much versed into the boring details of the architecture
-can make sense of this patch. Because, frankly, if you can access
-HCRX_EL2, why can't you access SCTLR2_EL1? You know why, I know why,
-but hardly anyone else does.
-
-I'd suggest something along the lines of:
-
-"When the kernel runs at EL1, and yet is booted at EL2,
- HCRX_EL2.SCTLR2En must be set to avoid trapping SCTLR2_EL1 accesses
- from EL1 to EL2.
-
- Ensure this bit is set at the point of initialising EL2."
-
-which at least explains why we're doing this.
+Same comment, I don't think this is an acceptable commit message.
+Please ask for help if you don't feel confident writing it (I'm sure
+some of your colleagues will be happy to help).
 
 > 
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  arch/arm64/include/asm/el2_setup.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+>  arch/arm64/kvm/hyp/nvhe/psci-relay.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
-> index 46033027510c..d755b4d46d77 100644
-> --- a/arch/arm64/include/asm/el2_setup.h
-> +++ b/arch/arm64/include/asm/el2_setup.h
-> @@ -57,9 +57,15 @@
->          /* Enable GCS if supported */
->  	mrs_s	x1, SYS_ID_AA64PFR1_EL1
->  	ubfx	x1, x1, #ID_AA64PFR1_EL1_GCS_SHIFT, #4
-> -	cbz	x1, .Lset_hcrx_\@
-> +	cbz	x1, .Lskip_hcrx_GCSEn_\@
->  	orr	x0, x0, #HCRX_EL2_GCSEn
+> diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+> index c3e196fb8b18..4ed4b7fa57c2 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+> @@ -4,6 +4,7 @@
+>   * Author: David Brazdil <dbrazdil@google.com>
+>   */
 >  
-> +.Lskip_hcrx_GCSEn_\@:
-> +	mrs_s	x1, SYS_ID_AA64MMFR3_EL1
-> +	ubfx	x1, x1, #ID_AA64MMFR3_EL1_SCTLRX_SHIFT, #4
-> +	cbz	x1, .Lset_hcrx_\@
-> +	orr	x0, x0, HCRX_EL2_SCTLR2En
-> +
->  .Lset_hcrx_\@:
->  	msr_s	SYS_HCRX_EL2, x0
->  .Lskip_hcrx_\@:
+> +#include <asm/alternative.h>
+>  #include <asm/kvm_asm.h>
+>  #include <asm/kvm_hyp.h>
+>  #include <asm/kvm_mmu.h>
+> @@ -219,6 +220,8 @@ asmlinkage void __noreturn __kvm_host_psci_cpu_entry(bool is_cpu_on)
+>  		release_boot_args(boot_args);
+>  
+>  	write_sysreg_el1(INIT_SCTLR_EL1_MMU_OFF, SYS_SCTLR);
+> +	if (alternative_has_cap_unlikely(ARM64_HAS_SCTLR2))
+> +		write_sysreg_el1(INIT_SCTLR2_EL1, SYS_SCTLR2);
+>  	write_sysreg(INIT_PSTATE_EL1, SPSR_EL2);
+>  
+>  	__host_enter(host_ctxt);
 
-With that fixed,
+This needs to be folded into patch #1.
 
-Reviewed-by: Marc Zyngier <maz@kernel.org>
+Otherwise, there is a window of patches where the kernel will not
+survive CPU hotplug when booted in protected mode.
 
 	M.
 
