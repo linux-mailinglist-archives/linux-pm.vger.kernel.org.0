@@ -1,147 +1,118 @@
-Return-Path: <linux-pm+bounces-32169-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32170-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87F90B210E0
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 18:06:55 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BB05B21210
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 18:34:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0306C7B4C60
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 16:02:53 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 475DE4E058D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 16:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFF52E3AFC;
-	Mon, 11 Aug 2025 15:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C1D296BC4;
+	Mon, 11 Aug 2025 16:33:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A45422E3398;
-	Mon, 11 Aug 2025 15:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2C3247299;
+	Mon, 11 Aug 2025 16:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754927458; cv=none; b=ikJ74WOIchXXDHn1d/eXt1SUllRU+h6OEULz8lp+71YVdJtsHLo0OuFvaBbsE8BY58ROym+GkElbMoCQBhAjEDpOE/VnocW4kkda94K9Ah+G8kgErVPa2/DPD2RcTHzd7t4kKb8fHoHhysoWdYlPfE75qUbJvI0O1QXdey/ZQ/Q=
+	t=1754930028; cv=none; b=UXPB7gCvb8Xb3RLU0ZYcsY+7oJIWLY4ciITmXNETdt4x5Pv2AkD78PXaMYsD0CeCR9yijmcyGQAm54vchTutiDfY18ehcFDsW6Hcv9Adm+pG8EZLwRtDpFgaKN//tg0WgxP8vkzc/RCBlL4c9UFgzLzO9MARPjRUhQUC64Awsr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754927458; c=relaxed/simple;
-	bh=zgknpN5cHZEkRFLN1q1uMwFVeipMxzqdFTEiz6TtKVY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X+fLrtqV3rzbfuIM2NVTUIXACHSKhBXdAaZzng1XZ7oFJ9u3tbGptzzyHYvwbvykCnFnC/vjv73tV62fqkvQksAoM28BbYIrh0G6WcSMLmW2Zo4QQ+4P/YDcrf7WKDg38KH0C0YCjFV2jm/zxk8ev3YMYg2P7y99Ir21Zu2Mtis=
+	s=arc-20240116; t=1754930028; c=relaxed/simple;
+	bh=pU2UzEZKy3+2XSauLiBQ5ZkFLpIIsyJ0rjtuhV/PuCA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=dO6tQHbsYU3K3RB90BffMcAJ/lryPlZFGzercqmjVsw8cQg9Rjs01P6hJU2N/1Rj1HzcNM++2F6O5he1fXaGv/wymmLT4T8ebUnblTf5NgnxaoaTx42BqWvryLptsclInPRCUJUJpXT7Vy1VPHmc12HQhl/tSrGvAwb+MDLufi0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD8572661;
-	Mon, 11 Aug 2025 08:50:47 -0700 (PDT)
-Received: from [10.1.26.70] (e127648.arm.com [10.1.26.70])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 71BFB3F63F;
-	Mon, 11 Aug 2025 08:50:54 -0700 (PDT)
-Message-ID: <5a2c4b1c-e3ef-4d1d-ae93-ff744fdd7bf6@arm.com>
-Date: Mon, 11 Aug 2025 16:50:52 +0100
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCF56113E;
+	Mon, 11 Aug 2025 09:33:37 -0700 (PDT)
+Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3BFBD3F738;
+	Mon, 11 Aug 2025 09:33:42 -0700 (PDT)
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: catalin.marinas@arm.com,
+	will@kernel.org,
+	maz@kernel.org,
+	broonie@kernel.org,
+	oliver.upton@linux.dev,
+	anshuman.khandual@arm.com,
+	robh@kernel.org,
+	james.morse@arm.com,
+	mark.rutland@arm.com,
+	joey.gouly@arm.com,
+	ry111@xry111.site,
+	Dave.Martin@arm.com,
+	ahmed.genidi@arm.com,
+	kevin.brodsky@arm.com,
+	scott@os.amperecomputing.com,
+	mbenes@suse.cz,
+	james.clark@linaro.org,
+	frederic@kernel.org,
+	rafael@kernel.org,
+	pavel@kernel.org,
+	ryan.roberts@arm.com,
+	suzuki.poulose@arm.com
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v2 0/6] initialize SCTRL2_ELx
+Date: Mon, 11 Aug 2025 17:33:34 +0100
+Message-Id: <20250811163340.1561893-1-yeoreum.yun@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] cpuidle: governors: menu: Avoid using invalid recent
- intervals data
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- Aboorva Devarajan <aboorvad@linux.ibm.com>
-References: <2793874.mvXUDI8C0e@rafael.j.wysocki>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <2793874.mvXUDI8C0e@rafael.j.wysocki>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/11/25 16:03, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Marc has reported that commit 85975daeaa4d ("cpuidle: menu: Avoid
-> discarding useful information") caused the number of wakeup interrupts
-> to increase on an idle system [1], which was not expected to happen
-> after merely allowing shallower idle states to be selected by the
-> governor in some cases.
-> 
-> However, on the system in question, all of the idle states deeper than
-> WFI are rejected by the driver due to a firmware issue [2].  This causes
-> the governor to only consider the recent interval duriation data
-duration
+This series introduces initial support for the SCTLR2_ELx registers in Linux.
+The feature is optional starting from ARMv8.8/ARMv9.3,
+and becomes mandatory from ARMv8.9/ARMv9.4.
 
-> corresponding to attempts to enter WFI that are successful and the
-> recent invervals table is filled with values lower than the scheduler
-intervals
+Currently, Linux has no strict need to modify SCTLR2_ELx—
+at least assuming that firmware initializes
+these registers to reasonable defaults.
 
-> tick period.  Consequently, the governor predicts an idle duration
-> below the scheduler tick period length and avoids stopping the tick
-> more often which leads to the observed symptom.
-> 
-> Address it by modifying the governor to update the recent intervals
-> table also when entering the previously selected idle state fails, so
-> it knows that the short idle intervals might have been the minority
-> had the selected idle states been actually entered every time.
-> 
-> Fixes: 85975daeaa4d ("cpuidle: menu: Avoid discarding useful information")
-> Link: https://lore.kernel.org/linux-pm/86o6sv6n94.wl-maz@kernel.org/ [1]
-> Link: https://lore.kernel.org/linux-pm/7ffcb716-9a1b-48c2-aaa4-469d0df7c792@arm.com/ [2]
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Tested-by: Christian Loehle <christian.loehle@arm.com>
-> Tested-by: Marc Zyngier <maz@kernel.org>
+However, several upcoming architectural features will require configuring
+control bits in these registers.
+Notable examples include FEAT_PAuth_LR and FEAT_CPA2.
 
-Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+Patch History
+==============
+from v1 to v2:
+  - rebase to v6.17-rc1
+  - https://lore.kernel.org/all/20250804121724.3681531-1-yeoreum.yun@arm.com/
 
-> ---
->  drivers/cpuidle/governors/menu.c |   21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> --- a/drivers/cpuidle/governors/menu.c
-> +++ b/drivers/cpuidle/governors/menu.c
-> @@ -97,6 +97,14 @@
->  
->  static DEFINE_PER_CPU(struct menu_device, menu_devices);
->  
-> +static void menu_update_intervals(struct menu_device *data, unsigned int interval_us)
-> +{
-> +	/* Update the repeating-pattern data. */
-> +	data->intervals[data->interval_ptr++] = interval_us;
-> +	if (data->interval_ptr >= INTERVALS)
-> +		data->interval_ptr = 0;
-> +}
-> +
->  static void menu_update(struct cpuidle_driver *drv, struct cpuidle_device *dev);
->  
->  /*
-> @@ -222,6 +230,14 @@
->  	if (data->needs_update) {
->  		menu_update(drv, dev);
->  		data->needs_update = 0;
-> +	} else if (!dev->last_residency_ns) {
-> +		/*
-> +		 * This happens when the driver rejects the previously selected
-> +		 * idle state and returns an error, so update the recent
-> +		 * intervals table to prevent invalid information from being
-> +		 * used going forward.
-> +		 */
-> +		menu_update_intervals(data, UINT_MAX);
->  	}
->  
->  	/* Find the shortest expected idle interval. */
-> @@ -482,10 +498,7 @@
->  
->  	data->correction_factor[data->bucket] = new_factor;
->  
-> -	/* update the repeating-pattern data */
-> -	data->intervals[data->interval_ptr++] = ktime_to_us(measured_ns);
-> -	if (data->interval_ptr >= INTERVALS)
-> -		data->interval_ptr = 0;
-> +	menu_update_intervals(data, ktime_to_us(measured_ns));
->  }
->  
->  /**
-> 
-> 
-> 
+Yeoreum Yun (6):
+  arm64: make SCTLR2_EL1 accessible
+  arm64: initialise SCTLR2_ELx register at boot time
+  arm64: save/restore SCTLR2_EL1 when cpu_suspend()/resume()
+  arm64: init SCTLR2_EL1 at cpu_soft_restart()
+  arm64: make the per-task SCTLR2_EL1
+  KVM: arm64: initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry()
+
+ arch/arm64/include/asm/el2_setup.h   | 14 +++++++++++++-
+ arch/arm64/include/asm/processor.h   |  5 +++++
+ arch/arm64/include/asm/suspend.h     |  2 +-
+ arch/arm64/include/asm/sysreg.h      | 22 ++++++++++++++++++++++
+ arch/arm64/kernel/cpu-reset.S        |  6 ++++++
+ arch/arm64/kernel/head.S             |  5 ++++-
+ arch/arm64/kernel/process.c          |  9 +++++++++
+ arch/arm64/kvm/hyp/nvhe/psci-relay.c |  3 +++
+ arch/arm64/mm/proc.S                 | 26 ++++++++++++++++++--------
+ 9 files changed, 81 insertions(+), 11 deletions(-)
+
+
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+--
+LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
 
