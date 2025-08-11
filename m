@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-32181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32182-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35503B213A9
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 19:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03A99B2144B
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 20:28:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63A291A22602
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 17:51:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A761C1A23227
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 18:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6852D6E67;
-	Mon, 11 Aug 2025 17:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21AB52E11B5;
+	Mon, 11 Aug 2025 18:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfqTeA/Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSzc0o05"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AF42D47F2;
-	Mon, 11 Aug 2025 17:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8CB513A41F;
+	Mon, 11 Aug 2025 18:26:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754934672; cv=none; b=uq9Eq5nk6LghXtb6g9iu9uxFSVgsGrnQof4PYxXpr0p1l3ls2Iq1HAsDOSxKID/uVIPd/NUf7dc0Mrqrs8mWRqyhYZryDyJWRNjCTJxDa27uFJqmtj7ccZGx9R7Sqfxx9DAKCNFrHk3X01ZWnS14k50PKYE0PCVHqEV2NX4A+Sk=
+	t=1754936782; cv=none; b=r+smmiNjMCis88fP5m6DbMo+UUp57LXm2d2rAS3wng9y3fSIFkPKGLvzuSdsJ5GXewQ0ap9NbFUCZRUt1v1MuiegXHVKQKTQsmFHMBWZbwWnWz+85tHP0aVgJfXGiBdqc1FHVDdY2FvW702h1RdqDi33WaU3wvyDp7li8cEw9TQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754934672; c=relaxed/simple;
-	bh=Zzdn6Km1K+4KwSat9G4goOyX1m0FKWNRUjtzFo6LSmY=;
+	s=arc-20240116; t=1754936782; c=relaxed/simple;
+	bh=yhkmn4Gt30KzruxJTZYjUxCLaZowWIiBxcTh4+xOF/Q=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CCagifWRnKIf/IYS6ugWezGGdQ5zo9JARlOhFjab59p3VtJ4WPPN7M6E7Z2jJA/V+Cn1WmRrvP/9nopoPatOeNYH+xj1V1ziEX3IrJXTdzXouHq+pxFFcUyQEmTieyYlyUFzTQTw73yJ3HJyPnNaM5ABVY48Derb1Ycbi4y4SOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfqTeA/Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50980C4CEED;
-	Mon, 11 Aug 2025 17:51:12 +0000 (UTC)
+	 MIME-Version:Content-Type; b=T4QDE6ZjXasBXMi3PD1Dj5UUaCLNOtFelUSsuNt9/RENBVWc75bof7Xy61eO8Gfhj4EwaZblc7V5L0CHgADvDwHE/pQeqvfcTvroaYcU+mhZt+qOlg5JKmqTDSRps6R24Yc7nLLZW4fQA8D2ntGNqFycIVko3SpDbNkWOLEeulc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSzc0o05; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5A7C4CEED;
+	Mon, 11 Aug 2025 18:26:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754934672;
-	bh=Zzdn6Km1K+4KwSat9G4goOyX1m0FKWNRUjtzFo6LSmY=;
+	s=k20201202; t=1754936781;
+	bh=yhkmn4Gt30KzruxJTZYjUxCLaZowWIiBxcTh4+xOF/Q=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QfqTeA/ZJw3hLLA3KA0PsG1dBpYvf5q/1wQ81yPe1lsB6yMtR1wNvFxkaxwNRYocC
-	 aU/C+U8nXrYJiiXRTJoyNi5g2rvMufv4nNwKBznVNImdhEfboNrsXDzWvLBk20uZOn
-	 zWGw9WqFWcbZJg/AlKShjJtRV0MPis6ZZSatEJySyrwM49m5Wdfmf6fOQdqkDveLRs
-	 cXeC8A00vkfOCzQ2cQXEPezVHZsaNTRicvyH9efhGHxbB0aWV2o2d52OKaIuxujhQu
-	 t01IYePfp6XDQ9BJZaESOJ+gUraHnSH8W+mObYvR3cFN+Hj67B8KvgY4hH4aljIcP2
-	 s5bxk7q0kuXBg==
+	b=aSzc0o05DtQFxvPtRdsc8PVJCkwZozAUaR44FQ/7WVk1GhPAWb8ZEKBYWOi15VTdi
+	 yJVc6DDyizvrVwhamyd0/cJsAWDTxXSCBTlFiB4tY7SdyxKAd8b03XEqZzWWkLjIuC
+	 qbPNZdSs33LzkU0nbWmpb5uQusu5hENSsWkp6G3IZ85p/+hUV4G/j+2lJBrrZ6NDF6
+	 TMsKkHeMxaZB1WOim4JBN7B4SMpfsjnavS1QCPHgbzzdHFy7/YPROQBy/t8NCHEJPu
+	 bQvtpeQ7fHwjHZ72zzVE+9nd+B/bvOmJYZAtUhWcN1yOsFF/VsAWVhVSkglzjulu5M
+	 puKuAiy8v4cpw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1ulWft-006LvS-55;
-	Mon, 11 Aug 2025 18:51:09 +0100
-Date: Mon, 11 Aug 2025 18:51:08 +0100
-Message-ID: <86qzxh927n.wl-maz@kernel.org>
+	id 1ulXDt-006Mhm-TE;
+	Mon, 11 Aug 2025 19:26:18 +0100
+Date: Mon, 11 Aug 2025 19:26:17 +0100
+Message-ID: <86pld190l2.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Yeoreum Yun <yeoreum.yun@arm.com>
 Cc: catalin.marinas@arm.com,
@@ -60,7 +60,6 @@ Cc: catalin.marinas@arm.com,
 	james.morse@arm.com,
 	mark.rutland@arm.com,
 	joey.gouly@arm.com,
-	ry111@xry111.site,
 	Dave.Martin@arm.com,
 	ahmed.genidi@arm.com,
 	kevin.brodsky@arm.com,
@@ -76,10 +75,10 @@ Cc: catalin.marinas@arm.com,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v2 6/6] KVM: arm64: initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry()
-In-Reply-To: <20250811163340.1561893-7-yeoreum.yun@arm.com>
+Subject: Re: [PATCH v2 2/6] arm64: initialise SCTLR2_ELx register at boot time
+In-Reply-To: <20250811163340.1561893-3-yeoreum.yun@arm.com>
 References: <20250811163340.1561893-1-yeoreum.yun@arm.com>
-	<20250811163340.1561893-7-yeoreum.yun@arm.com>
+	<20250811163340.1561893-3-yeoreum.yun@arm.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -91,51 +90,147 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: yeoreum.yun@arm.com, catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org, oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org, james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com, ry111@xry111.site, Dave.Martin@arm.com, ahmed.genidi@arm.com, kevin.brodsky@arm.com, scott@os.amperecomputing.com, mbenes@suse.cz, james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org, pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kvmarm@lists.linux.dev
+X-SA-Exim-Rcpt-To: yeoreum.yun@arm.com, catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org, oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org, james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com, Dave.Martin@arm.com, ahmed.genidi@arm.com, kevin.brodsky@arm.com, scott@os.amperecomputing.com, mbenes@suse.cz, james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org, pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, kvmarm@lists.linux.dev
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, 11 Aug 2025 17:33:40 +0100,
+[dropping ry111@xry111.site, which bounces]
+
+On Mon, 11 Aug 2025 17:33:36 +0100,
 Yeoreum Yun <yeoreum.yun@arm.com> wrote:
 > 
-> initialise SCTLR2_EL1 at __kvm_host_psci_cpu_entry().
+> add initialisation for SCTRL2_ELx register at boot time.
 
-Same comment, I don't think this is an acceptable commit message.
-Please ask for help if you don't feel confident writing it (I'm sure
-some of your colleagues will be happy to help).
+Again, please expand.
 
 > 
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  arch/arm64/kvm/hyp/nvhe/psci-relay.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/arm64/include/asm/el2_setup.h |  6 ++++++
+>  arch/arm64/include/asm/sysreg.h    | 22 ++++++++++++++++++++++
+>  arch/arm64/kernel/head.S           |  5 ++++-
+>  3 files changed, 32 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-> index c3e196fb8b18..4ed4b7fa57c2 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-> @@ -4,6 +4,7 @@
->   * Author: David Brazdil <dbrazdil@google.com>
+> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> index d755b4d46d77..347ac4cc1283 100644
+> --- a/arch/arm64/include/asm/el2_setup.h
+> +++ b/arch/arm64/include/asm/el2_setup.h
+> @@ -48,6 +48,11 @@
+>  	isb
+>  .endm
+>  
+> +.macro __init_el2_sctlr2
+
+Writing this as __init_sctlr2_el2 would read vastly better (yes, I
+know most macros in this file are similarly braindead).
+
+> +	init_sctlr2_elx	2, x0
+> +	isb
+> +.endm
+> +
+>  .macro __init_el2_hcrx
+>  	mrs	x0, id_aa64mmfr1_el1
+>  	ubfx	x0, x0, #ID_AA64MMFR1_EL1_HCX_SHIFT, #4
+> @@ -411,6 +416,7 @@
 >   */
+>  .macro init_el2_state
+>  	__init_el2_sctlr
+> +	__init_el2_sctlr2
+>  	__init_el2_hcrx
+>  	__init_el2_timers
+>  	__init_el2_debug
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index d5b5f2ae1afa..8b82af5be199 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -868,6 +868,8 @@
+>  #define INIT_SCTLR_EL2_MMU_OFF \
+>  	(SCTLR_EL2_RES1 | ENDIAN_SET_EL2)
 >  
-> +#include <asm/alternative.h>
->  #include <asm/kvm_asm.h>
->  #include <asm/kvm_hyp.h>
->  #include <asm/kvm_mmu.h>
-> @@ -219,6 +220,8 @@ asmlinkage void __noreturn __kvm_host_psci_cpu_entry(bool is_cpu_on)
->  		release_boot_args(boot_args);
+> +#define INIT_SCTLR2_EL2			UL(0)
+> +
+>  /* SCTLR_EL1 specific flags. */
+>  #ifdef CONFIG_CPU_BIG_ENDIAN
+>  #define ENDIAN_SET_EL1		(SCTLR_EL1_E0E | SCTLR_ELx_EE)
+> @@ -888,6 +890,8 @@
+>  	 SCTLR_EL1_LSMAOE | SCTLR_EL1_nTLSMD | SCTLR_EL1_EIS   | \
+>  	 SCTLR_EL1_TSCXT  | SCTLR_EL1_EOS)
 >  
->  	write_sysreg_el1(INIT_SCTLR_EL1_MMU_OFF, SYS_SCTLR);
-> +	if (alternative_has_cap_unlikely(ARM64_HAS_SCTLR2))
-> +		write_sysreg_el1(INIT_SCTLR2_EL1, SYS_SCTLR2);
->  	write_sysreg(INIT_PSTATE_EL1, SPSR_EL2);
->  
->  	__host_enter(host_ctxt);
+> +#define INIT_SCTLR2_EL1			UL(0)
+> +
+>  /* MAIR_ELx memory attributes (used by Linux) */
+>  #define MAIR_ATTR_DEVICE_nGnRnE		UL(0x00)
+>  #define MAIR_ATTR_DEVICE_nGnRE		UL(0x04)
+> @@ -1164,6 +1168,24 @@
+>  	msr	hcr_el2, \reg
+>  #endif
+>  	.endm
+> +
+> +	.macro init_sctlr2_elx, el, tmp
+> +	mrs_s	\tmp, SYS_ID_AA64MMFR3_EL1
+> +	ubfx	\tmp, \tmp, #ID_AA64MMFR3_EL1_SCTLRX_SHIFT, #4
+> +	cbz	\tmp, .Lskip_sctlr2_\@
+> +	.if	\el == 2
+> +	mov_q	\tmp, INIT_SCTLR2_EL2
+> +	msr_s	SYS_SCTLR_EL2, \tmp
+> +	.else
+> +	mov_q	\tmp, INIT_SCTLR2_EL1
+> +	.if	\el == 12
+> +	msr_s	SYS_SCTLR_EL12, \tmp
+> +	.else
+> +	msr_s	SYS_SCTLR_EL1, \tmp
+> +	.endif
 
-This needs to be folded into patch #1.
+I don't think this is the correct place for this macro.
+asm/assembler.h seems more suitable, and already has that sort of
+things.
 
-Otherwise, there is a window of patches where the kernel will not
-survive CPU hotplug when booted in protected mode.
+> +	.endif
+> +.Lskip_sctlr2_\@:
+> +	.endm
+>  #else
+>  
+>  #include <linux/bitfield.h>
+> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+> index ca04b338cb0d..0dff7593e50b 100644
+> --- a/arch/arm64/kernel/head.S
+> +++ b/arch/arm64/kernel/head.S
+> @@ -276,6 +276,7 @@ SYM_INNER_LABEL(init_el1, SYM_L_LOCAL)
+>  	mov_q	x0, INIT_SCTLR_EL1_MMU_OFF
+>  	pre_disable_mmu_workaround
+>  	msr	sctlr_el1, x0
+> +	init_sctlr2_elx	1, x0
+>  	isb
+>  	mov_q	x0, INIT_PSTATE_EL1
+>  	msr	spsr_el1, x0
+> @@ -298,7 +299,6 @@ SYM_INNER_LABEL(init_el2, SYM_L_LOCAL)
+>  	msr	sctlr_el2, x0
+>  	isb
+>  0:
+> -
+>  	init_el2_hcr	HCR_HOST_NVHE_FLAGS
+>  	init_el2_state
+>  
+> @@ -315,12 +315,15 @@ SYM_INNER_LABEL(init_el2, SYM_L_LOCAL)
+>  
+>  	/* Set a sane SCTLR_EL1, the VHE way */
+>  	msr_s	SYS_SCTLR_EL12, x1
+> +	init_sctlr2_elx	12, x2
+>  	mov	x2, #BOOT_CPU_FLAG_E2H
+>  	b	3f
+>  
+>  2:
+>  	msr	sctlr_el1, x1
+> +	init_sctlr2_elx	1, x2
+>  	mov	x2, xzr
+> +
+>  3:
+>  	mov	x0, #INIT_PSTATE_EL1
+>  	msr	spsr_el2, x0
+
+This is missing something: you should resynchronise SCTLR2_EL2 from
+SCTLR2_EL1 in __finalise_el2, rather than relying on whatever you've
+set in __init_el2_sctlr2.
 
 	M.
 
