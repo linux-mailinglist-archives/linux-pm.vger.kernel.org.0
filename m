@@ -1,99 +1,94 @@
-Return-Path: <linux-pm+bounces-32206-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32207-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9E9AB218C7
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 00:54:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71168B2192B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 01:28:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7213142298F
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 22:54:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CD1519084BA
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Aug 2025 23:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E642253F9;
-	Mon, 11 Aug 2025 22:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36461275846;
+	Mon, 11 Aug 2025 23:27:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUG2nb4t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o38BbkSk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559AD199FAC
-	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 22:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CF927146A;
+	Mon, 11 Aug 2025 23:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754952851; cv=none; b=d36gJPd4l4KjY/j1iY+l6RAd/WY6xwu90mpyaem9rQAvgaYr3RBZc13FeQsJpGzwekyHl+pMVZB1+4z1K+EM2Rb0lWE9tysIXvv0tMAQCrmDWuwZqFRs8CluxgPxZ8mLWn2VoKRLQzP0CbQ+vx7uQJ4lSwgitzmpEDhnL2Z4QWY=
+	t=1754954841; cv=none; b=DDNIZdtEmYDvVaLl3XQ0d+zACNWEE3FmyyvIjPViLiETTybwjxn698TY0/lGqd5SzVQVgy+JDfLYhU+6OkukHjTCmEgksB0cJlRS42m1p7ocm38/67ow8yBtsBbOUj8EFtgIlejedX/AxzxBz2OFJhbeG3vBqY7NfXEHCcuku4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754952851; c=relaxed/simple;
-	bh=0maDoTErqrYW4XvPG2WRa3DlNBt7tzcipD0Ep8dxiZM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=otnLoz0iziKVaEQm3lE8cHL/J9nX7ElLSPzS1y3BLbkqugnd+18ZY0kDDQETLIyB67ytOpJ8+nNfmhcwxKRwOR1+AjolrinRQMd99p41noxF9HwF/krMVMpUCGVTMPNdQ0JhhRWMGqYPkcAyaEGhkVpOSQFo5BKv6t6xJEFo7GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUG2nb4t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E185EC4CEED
-	for <linux-pm@vger.kernel.org>; Mon, 11 Aug 2025 22:54:10 +0000 (UTC)
+	s=arc-20240116; t=1754954841; c=relaxed/simple;
+	bh=a3tJqycywWx6VYcje/kbsIrUutzEeQbuRrhztsLOoio=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=evXvfScng+nrKquKVj5bRImNMbNT2F94saLGfFT5wa7MHAkDmNWkQKLv+sqEcH2SCOWjOwgCB6hg8/ckFQqJtbm2onoMJlMXPK22emk/1DCGPAlaX3lXBxmY3kUVYmiGV4BsgeqFh19VyHpCrvG1sCM2/uRa7yvBm8oICR3MG4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o38BbkSk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A949C4CEFC;
+	Mon, 11 Aug 2025 23:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754952850;
-	bh=0maDoTErqrYW4XvPG2WRa3DlNBt7tzcipD0Ep8dxiZM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ZUG2nb4t/aCvU/jUbk3kHVJl2hbJfPJRjmFQOIc8tgpX1WHFkcm37wNkAj2EvWvDd
-	 Xr8kbE/qNIxpMTQSZoMu/Vqi6OPNHVtTxTiM172kbFFPGhG5hIMksZrM8483o5G3av
-	 Kb0sojY4Dy6S82LCCf6c6O6HFfCY68rpjAZFBwHFW8mtv0oE2JivPTdDxT0E7PMiQY
-	 2pEdpZh/A/WkxZr6/MICEyEw0a9B2sW+l/M1otPdKU2yJxDhto44Z30DKENfBgBmfs
-	 adO90Dm0nJMnC+vKA0dkEXSCrd+hJsp1PSlmb/rwnzYjkU8cQMI2jHw6XkQSj0qqL6
-	 /b+oez695/gyA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D8680C41614; Mon, 11 Aug 2025 22:54:10 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 220433] Regression on AMD pstate cannot control turbo boost
- after wake from suspend
-Date: Mon, 11 Aug 2025 22:54:10 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: me@gzgz.dev
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-220433-137361-qwhikzfhQA@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220433-137361@https.bugzilla.kernel.org/>
-References: <bug-220433-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1754954840;
+	bh=a3tJqycywWx6VYcje/kbsIrUutzEeQbuRrhztsLOoio=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=o38BbkSk2bdeYu+uYtWqJAEdIyfXGlM2zL5q34lwcNldylUKgOhdHN1QI4XcOtgZk
+	 ljk7tqta2MKYsDrUnLJc9BnpeNWrqQQKmPC2uCNuHHzFMvVGLiFubWnj5268Q+Muge
+	 pFApXmDjlo8xPD+OFj8VY7Fg2DR9JLssx6mzKiSgvsZ1IEdQtcqd0Fq5UuxAarLacS
+	 cbD62zq18E90SYYSp7cabAI+PqybGnOtCjqwuVz1UccemFX8e3ZCmZLgmlBdujuklW
+	 zykq9/WT+tD/zS4bjUsedvCEHi/KhVcjXknYfoaAuU6HVmOjL83WpMauVXMCKfj9cX
+	 3pP1mX8XT2O1A==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Georgi Djakov <djakov@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Subject: Re: (subset) [PATCH v4 0/2] SM8750 CPU BWMONs
+Date: Mon, 11 Aug 2025 18:26:56 -0500
+Message-ID: <175495482452.157244.8001894319000750143.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250716-8750_cpubwmon-v4-0-12212098e90f@oss.qualcomm.com>
+References: <20250716-8750_cpubwmon-v4-0-12212098e90f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220433
 
-Gavin Zhao (me@gzgz.dev) changed:
+On Wed, 16 Jul 2025 14:25:45 +0200, Konrad Dybcio wrote:
+> Taking this series over from Melody, just adding some small changes
+> (see below):
+> 
+> Changes in v4:
+> - Extend the bindings as necessary
+> - Re-position the nodes to maintain order
+> - Add nonposted-mmio for the instance that needs it
+> Link to v3: https://lore.kernel.org/linux-arm-msm/20250304-sm8750_bwmon_master-v3-1-01a5cb330dd9@quicinc.com/
+> 
+> [...]
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEEDINFO                    |RESOLVED
-         Resolution|---                         |PATCH_ALREADY_AVAILABLE
+Applied, thanks!
 
---- Comment #2 from Gavin Zhao (me@gzgz.dev) ---
-Ah shoot v6.16 fixed it in 98b52c6b0b528, my distro on v6.15 so didn't get =
-the
-fix. Sorry for the noise!
+[2/2] arm64: dts: qcom: sm8750: Add BWMONs
+      commit: bc6776fab8455762089274d469a67d104e3b96ae
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
