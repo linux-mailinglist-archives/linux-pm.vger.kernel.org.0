@@ -1,141 +1,98 @@
-Return-Path: <linux-pm+bounces-32234-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32235-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E450BB23B56
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 23:55:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CF41B23B69
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 23:59:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 944166E5996
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 21:55:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9586586157
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 21:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0E12D8788;
-	Tue, 12 Aug 2025 21:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0B92E3AF2;
+	Tue, 12 Aug 2025 21:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GUnSU3IO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6okl9Iz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB72626E15D;
-	Tue, 12 Aug 2025 21:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CD52E2DD4;
+	Tue, 12 Aug 2025 21:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755035741; cv=none; b=Ue7N4d9RCXLqRFQPIzvXEopNHRF6sIswm/9mmFYaktTympBe4VwLiLu39uZ85Lv2ctYxm33CQMAYRTp4CXOMH/UvSDGyQhn80FQobd7ar6REQTggR+d/Mfptmr2dy95ZFz8MaudvMZfX6mISTYOwhWOmVfnnE4MqlkLoIg3YxQY=
+	t=1755035801; cv=none; b=HhgvlkNl3Tgh/nlATNjbdBOPHl7WH0gtYaJlOWKdRVEwwP8Xnuv8zbTOw8TwVPo/TXZBsSJERagM2pZqYKA8udQiucedD99nHXPWLul2Ivke6HmCz0EE9M9qTxOUzMpl96eCNhMutoQh6KXg3jEAI8p9hImQSV6rD7HxUz3umJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755035741; c=relaxed/simple;
-	bh=vlPefp1oJsAKGAOojGDRq6vH3BmPpc0aY3nMS24jLyY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ByTLX5v+NvBlCS/I44JasbdoFuWpDN7h0X2vPaYj8GmWvS8Tq3Sx5Q3rDwnzECqzdWgUg0ixVl0P14EIJ75dP0GQtPCCaHamt1jeKwP112rCyjqwEEEWHQb3sPuyU5MSRV3kcnC9CUMaGG20X3+BMZuiMkA5ez6Q7j/Ykr4Bhxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GUnSU3IO; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-31f017262d9so4777969a91.1;
-        Tue, 12 Aug 2025 14:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755035737; x=1755640537; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y0a3A0bYbvr9lrCrhrUFhqF9xvhHYsqGk1nSj17rg8s=;
-        b=GUnSU3IOXFeZjhrIlVHBdPQfw4KaWQ8WZMpcvn1RmJ8XNjwNkAhSaw/XEDfvCsDBT/
-         o0US7YQuYWcqtdowrAGkyod3JLi1y/VCAsy1w8sJN54Cl5cgALAgybgu/FLelU1x3798
-         HUXYmisRgspNKmvXr/+rf+6bCXCqMpvteoJkY0ynuoW3sdGV0+cztrEUiqUhy90wdcRC
-         90MfeaV8Id3ADSQDXe4Dp7UKPyQDtVH45nAHMOQvoy1zDD7DOYAw+8mAve/cz36VOPfB
-         YsVabwRWcJcA3fKAkdEYBKotry1DqMMyUp+HNDo01rKjm2yUM3TJpzaZmRHj9o4GYVsL
-         G+/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755035737; x=1755640537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y0a3A0bYbvr9lrCrhrUFhqF9xvhHYsqGk1nSj17rg8s=;
-        b=NUChDNoo7ekJhQzeRtv4/3nxQXEJp8UP7s2rZk4qlWpX+5yp1adlR/21a8lB7mPK/P
-         nvLPzkD5WPNOzvE3ZSfiIcrU6JB6+a+JH+Tx89tefeWEv2T7FU9IFoM6VpvlybhDALkY
-         7D6XzDFZWP4h1Cw/14JG8OZRGafxTa2IkZxz9QwSpjJPaAdKXrCasjsPXLaVE4GwxdVJ
-         +tyD5RlqceVLFBr8fg4FrVvu/yYrUEqw0SOVuHnX0ftQrp6R6WEYK8fxi28Xh8rYNBAU
-         f6b6dXCqD+SfvK9dMpH12FxgaJmYfqrUKp73y+TRvkNUmVUb5JHuY7c/m+TCOcpkFnqi
-         5RBA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+Duz1BSa/fChGckVcEBqkZLOsynm8httgaL4NsGdHetMDfeN3BOx3Na81zqGyaXODUzlQj+HBORM=@vger.kernel.org, AJvYcCWjtlQQGmBL+fuIaqkq/C4bGzV0IZ/p7GuXs5o5cH+ug2lQS1kDEcNdij9oNJ4Xbo6rUYtM+acGnQOEvI7e@vger.kernel.org, AJvYcCXu1Ap9pNHv3blToqUSkeOvVFdcPomUNypcBfmLGMDzZk/N1uK/tuHeZ2941sKzwAusDgg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTej5zISjdXZ5MSA323TZ+kmNtBEy0iFtGwbLt6rvHIWoSW2oE
-	uk1JRwvWdgE1HhJDtJQDBEKi2auQVBrRSAY1Cl3hRGeBWWs1OErCCsul6w106v3ddASltuDuEZa
-	orhZki7pOmrS5fhj49QE5Gd+0LeLFBE2A6w==
-X-Gm-Gg: ASbGncs6+d5J00/iYQutanCOKHsXfz1R1H8+8mCKMZWNY1JH+YrBXWFZQlju0Smbvfm
-	bspRw6YO1ZsIOiQSTP2fuGtONandpxfYdkKEFcZRWlUbZz8CunEmY7yshjgDW9Qw+dJbcQzlWMo
-	YqghpGAk9frvK1hi7G3yGysJ8X3CW0wkIEFRR+RrMMEJVm576GQFppX1nABgde/Eu/Ai3gwII9x
-	e6SQCsrY9b6BNUOOt13+WNdYK6Va0Havw==
-X-Google-Smtp-Source: AGHT+IFaPXMEYoH/8Y9uBZvh0p6g9dH3lnj9wGZ7dtr40iitEllxWZXunkd+SEwcDZfkFJXnJu5CYYiF2lxSt5D88vU=
-X-Received: by 2002:a17:90b:3c4c:b0:311:c5d9:2c70 with SMTP id
- 98e67ed59e1d1-321d0dad433mr834251a91.15.1755035736863; Tue, 12 Aug 2025
- 14:55:36 -0700 (PDT)
+	s=arc-20240116; t=1755035801; c=relaxed/simple;
+	bh=LeAvm0kodbf6Ts9L7dMnSh08EnxztEITYKbiYnbeZMk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g2JkqCbLaOOHRnQZCvTaMpg3Ame3C3QE/9jqD7Bnb/xCvs4QgTdcRZUKQX7PACpm/7dhGH97TgjE3z1JhAV5JYRGU8DZCmY44fq3rk4rp6hfHsYEt0iMP1L6hWAjyR/Sf1eQjQ4+wkXFJj5PT2lutlm2dkzBJlw7HyCBqdrXwhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6okl9Iz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FBF2C4CEF1;
+	Tue, 12 Aug 2025 21:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755035800;
+	bh=LeAvm0kodbf6Ts9L7dMnSh08EnxztEITYKbiYnbeZMk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=U6okl9IzBp8G8Eu/da8JtZmSbYQTvsi3bwYktct9KkSFsGty+cBk4A5OE5GF6S4Dr
+	 lynn4+uo3z/UsHFKyxsn5i7LclHBOTquXErS+J7UPj6sD9edRlRq2HE8YFpFwc2yL8
+	 d8iogu3Uu7deRlJareyDjtQWrsyph54wK+1u7NL3qbru6hO8AJPT4TN6DDz8qMqoik
+	 CnxM1usZslV9hPieDRpiByKwT/+uk1fsjYHctYO70mhf5EpD0X2LhhhG+wi3kiG7k3
+	 DJ5341IeGeTFSnz1CGLofCVcVIVgmW+qxG6n/PiT3e08Ogs/jSsj5bIzVeVc3kZQIm
+	 ENHVbmZozGVrw==
+From: Bjorn Andersson <andersson@kernel.org>
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	konradybcio@kernel.org,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	ilia.lin@kernel.org,
+	djakov@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: Re: (subset) [PATCH v7 0/4] Enable cpufreq for IPQ5424
+Date: Tue, 12 Aug 2025 16:56:20 -0500
+Message-ID: <175503322864.231048.3923613819705551334.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250811090954.2854440-1-quic_varada@quicinc.com>
+References: <20250811090954.2854440-1-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250606214840.3165754-1-andrii@kernel.org> <CANiq72kDA3MPpjMzX+LutOoLgKqm9uz8xAT_-iBzhR3pFC+L_Q@mail.gmail.com>
- <CAEf4BzZDkkjRxp4rL7mMvjEOiwb_jhQLP2Y2YgyUO=O-FksDiQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzZDkkjRxp4rL7mMvjEOiwb_jhQLP2Y2YgyUO=O-FksDiQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 Aug 2025 14:55:22 -0700
-X-Gm-Features: Ac12FXz9QwA7PXP_msQVt6NhM-rD51DduktihmN0bHfoNoTRNMAHnFaoRjTBdEg
-Message-ID: <CAEf4BzbJpTZ9P-Deo7Oeikyd3vW953goAw3gYvTPzvDfEWj2hw@mail.gmail.com>
-Subject: Re: [PATCH v2] .gitignore: ignore compile_commands.json globally
-To: masahiroy@kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, ojeda@kernel.org, nathan@kernel.org, 
-	bpf@vger.kernel.org, kernel-team@meta.com, linux-pm@vger.kernel.org, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 12, 2025 at 1:28=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Jun 7, 2025 at 2:27=E2=80=AFAM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > On Fri, Jun 6, 2025 at 11:48=E2=80=AFPM Andrii Nakryiko <andrii@kernel.=
-org> wrote:
-> > >
-> > > compile_commands.json can be used with clangd to enable language serv=
-er
-> > > protocol-based assistance. For kernel itself this can be built with
-> > > scripts/gen_compile_commands.py, but other projects (e.g., libbpf, or
-> > > BPF selftests) can benefit from their own compilation database file,
-> > > which can be generated successfully using external tools, like bear [=
-0].
-> > >
-> > > So, instead of adding compile_commands.json to .gitignore in respecti=
-ve
-> > > individual projects, let's just ignore it globally anywhere in Linux =
-repo.
-> > >
-> > > While at it, remove exactly such a local .gitignore rule under
-> > > tools/power/cpupower.
-> > >
-> > >   [0] https://github.com/rizsotto/Bear
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> >
-> > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> >
->
-> Masahiro,
->
-> Would you be able to pick this up? Or where should we route this
-> through, in your opinion? Thanks!
->
 
-Seems like this has fallen through the cracks... I guess we can take
-it through the bpf-next tree, if there is no better home for this?
+On Mon, 11 Aug 2025 14:39:50 +0530, Varadarajan Narayanan wrote:
+> CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
+> Add support for the APSS PLL, RCG and clock enable for ipq5424.
+> The PLL, RCG register space are clubbed. Hence adding new APSS driver
+> for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
+> modeled as ICC clock. The L3 pll needs to be scaled along with the CPU.
+> 
+> v7: Fix 'Reviewed-by' placement for bindings patch
+>     Use enum instead of clock names for l3 pll
+>     Select IPQ_APSS_5424 if IPQ_GCC_5424 is enabled
+> 
+> [...]
 
-> > Thanks!
-> >
-> > Cheers,
-> > Miguel
+Applied, thanks!
+
+[4/4] arm64: dts: qcom: ipq5424: Enable cpufreq
+      commit: 77abf70ee126d40dba9ada0a4ccb4c7743f6a3e6
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
