@@ -1,108 +1,111 @@
-Return-Path: <linux-pm+bounces-32224-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32225-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAD50B22551
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 13:08:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA928B227BD
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 15:06:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66B0E564BF3
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 11:07:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05FB3626113
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 13:00:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB3252EFD94;
-	Tue, 12 Aug 2025 11:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5130279323;
+	Tue, 12 Aug 2025 12:57:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8vYU/q0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqOjisd/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1ECD2EFD8C;
-	Tue, 12 Aug 2025 11:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94C4277009;
+	Tue, 12 Aug 2025 12:57:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754996742; cv=none; b=hr/d7n8063eSEEju+knQyiVTdVZeKj9Mj8fbcWBdX2YfZ7toyQGW1B0FtC1dyBT8ua4mMMggMYnte2KaoJMmMxOId54LMY6xxofnBhteOLBX8fTHHYyiRQJ3HKkmGWJsNzOsyDpjUooJY1Bf5xcWEe3nAhzZRveXBkmZLh/BGVw=
+	t=1755003436; cv=none; b=IBa2T+YeBtFlx7wvO3dBh2BtpSlykt8rOQ/wCLqVMxTupTlJbQc9DMUIHk1yKeam/N3FPJTjtOgIVgvrH1Pc8xqLpWhSm3wHaAtg/O7XD613R+6eX3qSBtmHYQhaeb9Mq5rHlzq90CqKZqyn6ooPO8igmNmuqKJ9Kad1ta8H4DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754996742; c=relaxed/simple;
-	bh=jxTjEnHMPmG/BlK3tUeUzJ7ztWZxZ6PlYKzdAUEeXPs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=cW9a8SiJwCidM3k1pn7SZTUPVCs5YaJ1tuMX9IJUB70WxvWJ6o9cwAG0U4EsRGiWbQlGSvKwWFoXxH1O480urvcTfCyjb6Q3Qy1u0fd37yLHPB/q0kUqTAOvoJUKZaHcJ+rZMH4rYNgyytx0TonlfATBXTxVPYjS5jdnzPuR02Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P8vYU/q0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853C4C4CEF4;
-	Tue, 12 Aug 2025 11:05:40 +0000 (UTC)
+	s=arc-20240116; t=1755003436; c=relaxed/simple;
+	bh=aaXUK4iUjo0o36xAlS2K6590asc4FE0myOp8eDO8tVE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SeEWF19u+gqJ4GqbDQ1Yl+HyJ62OB/PewjUrrE7umagQ4Wk5+BFhvxO1MgU5eKbYKmzcrQzLm2YvBALhd+U+XboSa8hZ2Wdw9bdnyhtUMKZgQFXiO36V8YDlwEn79X6R3SLu77el7v1jGFCgTld8BEtKfcRdN0xvkkG627q7DOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqOjisd/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CECC4CEF0;
+	Tue, 12 Aug 2025 12:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754996742;
-	bh=jxTjEnHMPmG/BlK3tUeUzJ7ztWZxZ6PlYKzdAUEeXPs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=P8vYU/q0NEUim5xP4qaa7JJH6ed2uJcE0DvoTEx+DYq17cfY8JeAY3YZrF1MruKuo
-	 jc9L88hfparqYQth3xaLv//o0sLtxi9Jmp8HRLYh+uuTaBzHnlTp2O694si6apnOhs
-	 I2Z2B9iB1YS2WmT8TU7YUaASrlDNQrktlcoTjK+QdmrygNJ78AHVFyRor4hlaRSqbu
-	 B1C63NqZgQ0Ra4W9TVrmVTWU4ueIMFA88Ls6dzLOuLFzK3vtqTe0b5ABpv3xTnn9VD
-	 2nEa2QO+TsvsjfnN5mYhOFdqwnimL++x+uycDnQpVgEH0clp+h7j4lODHVKqQq2nXi
-	 ZAjILq64EkUeA==
-From: Mark Brown <broonie@kernel.org>
-To: Lee Jones <lee@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Paul Cercueil <paul@crapouillou.net>, 
- "Rob Herring (Arm)" <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org
-In-Reply-To: <20250807214459.4173892-1-robh@kernel.org>
-References: <20250807214459.4173892-1-robh@kernel.org>
-Subject: Re: [PATCH] regulator: dt-bindings: Clean-up active-semi,act8945a
- duplication
-Message-Id: <175499674028.16220.7731759072204819862.b4-ty@kernel.org>
-Date: Tue, 12 Aug 2025 12:05:40 +0100
+	s=k20201202; t=1755003436;
+	bh=aaXUK4iUjo0o36xAlS2K6590asc4FE0myOp8eDO8tVE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CqOjisd/OnDMEhnSDOpVbXb66W3Mf/QqkZSbqKMlPuT3BShvsHJx+60WFb+hj0q/w
+	 3bFvYVhmLeUIAs6vWIHrkiVLMVUqdciK6b+UnfWR5SGCdJ+NGCfSYdzAgtYgrHkYzR
+	 PKCXi88yz7Yrce1iUES0a8ziozIrhfxNA0IE4d1zWg6OyKX9gxgwKU8zvjGndFtRcD
+	 o/23/lvD5NawDKbe2MFxNz+qfpJ+/PFEp3SJfpLz3gNKvGVl1JegKzGwGlW8+nL7Gl
+	 eQntFWRCfwRU/69Rc7USB92hdfNcK6vgedjJEoTDRltMKM7QYJuzOghAjXL+P1ukYN
+	 CKiN/6i3UT4JA==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: Jiayi Li <lijiayi@kylinos.cn>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Subject:
+ [PATCH v1] ACPI: processor: perflib: Move problematic pr->performance check
+Date: Tue, 12 Aug 2025 14:57:06 +0200
+Message-ID: <2801421.mvXUDI8C0e@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 07 Aug 2025 16:44:57 -0500, Rob Herring (Arm) wrote:
-> The active-semi,act8945a binding is documented in multiple places. The
-> charger child node is documented in regulator/active-semi,act8945a.yaml
-> and power/supply/active-semi,act8945a-charger.yaml. An old text binding
-> is in mfd/act8945a.txt.
-> 
-> Update the regulator/active-semi,act8945a.yaml with the additional
-> descriptions and constraints from
-> power/supply/active-semi,act8945a-charger.yaml, and then remove it and
-> mfd/act8945a.txt.
-> 
-> [...]
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied to
+Commit d33bd88ac0eb ("ACPI: processor: perflib: Fix initial _PPC limit
+application") added a pr->performance check that prevents the frequency
+QoS request from being added when the given processor has no performance
+object.  Unfortunately, this causes a WARN() in freq_qos_remove_request()
+to trigger on an attempt to take the given CPU offline later because the
+frequency QoS object has not been added for it due to the missing
+performance object.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Address this by moving the pr->performance check before calling
+acpi_processor_get_platform_limit() so it only prevents a limit from
+being set for the CPU if the performance object is not present.  This
+way, the frequency QoS request is added as it was before the above
+commit and it is present all the time along with the CPU's cpufreq
+policy regardless of whether or not the CPU is online.
 
-Thanks!
+Fixes: d33bd88ac0eb ("ACPI: processor: perflib: Fix initial _PPC limit application")
+Tested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/processor_perflib.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-[1/1] regulator: dt-bindings: Clean-up active-semi,act8945a duplication
-      commit: a54ef14188519a0994d0264f701f5771815fa11e
+--- a/drivers/acpi/processor_perflib.c
++++ b/drivers/acpi/processor_perflib.c
+@@ -180,7 +180,7 @@
+ 		struct acpi_processor *pr = per_cpu(processors, cpu);
+ 		int ret;
+ 
+-		if (!pr || !pr->performance)
++		if (!pr)
+ 			continue;
+ 
+ 		/*
+@@ -197,6 +197,9 @@
+ 			pr_err("Failed to add freq constraint for CPU%d (%d)\n",
+ 			       cpu, ret);
+ 
++		if (!pr->performance)
++			continue;
++
+ 		ret = acpi_processor_get_platform_limit(pr);
+ 		if (ret)
+ 			pr_err("Failed to update freq constraint for CPU%d (%d)\n",
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
