@@ -1,98 +1,86 @@
-Return-Path: <linux-pm+bounces-32235-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32236-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF41B23B69
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 23:59:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38ED2B23BAE
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 00:14:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9586586157
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 21:57:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D4FB1AA8056
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 22:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0B92E3AF2;
-	Tue, 12 Aug 2025 21:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AE22DCF44;
+	Tue, 12 Aug 2025 22:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6okl9Iz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YgNXA+nr"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CD52E2DD4;
-	Tue, 12 Aug 2025 21:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9EA1A9F99;
+	Tue, 12 Aug 2025 22:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755035801; cv=none; b=HhgvlkNl3Tgh/nlATNjbdBOPHl7WH0gtYaJlOWKdRVEwwP8Xnuv8zbTOw8TwVPo/TXZBsSJERagM2pZqYKA8udQiucedD99nHXPWLul2Ivke6HmCz0EE9M9qTxOUzMpl96eCNhMutoQh6KXg3jEAI8p9hImQSV6rD7HxUz3umJM=
+	t=1755036869; cv=none; b=nmk7E8PCZZKnDig1CaY29t4tRtwzpuHQpO20bgZICoi0uIyVjFSE5ysDmdqiBDFcHVSfwv4zrtIN3qJJ36GBXWLLpMhdNiFa9rN3mS5FbLpZYWhRf2stqcvzx+vTme7DfCX8USHyyKRhaTbNlVMJTQQ3vNL40/PJDGHN9oS+XZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755035801; c=relaxed/simple;
-	bh=LeAvm0kodbf6Ts9L7dMnSh08EnxztEITYKbiYnbeZMk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g2JkqCbLaOOHRnQZCvTaMpg3Ame3C3QE/9jqD7Bnb/xCvs4QgTdcRZUKQX7PACpm/7dhGH97TgjE3z1JhAV5JYRGU8DZCmY44fq3rk4rp6hfHsYEt0iMP1L6hWAjyR/Sf1eQjQ4+wkXFJj5PT2lutlm2dkzBJlw7HyCBqdrXwhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6okl9Iz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FBF2C4CEF1;
-	Tue, 12 Aug 2025 21:56:39 +0000 (UTC)
+	s=arc-20240116; t=1755036869; c=relaxed/simple;
+	bh=7sKkeVsqF1JriTBRhVeKYa7iymeyEuiEv7yqiQpD2Jg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FSTdm3toRIvzXDXRyVrOAM91SO9nO3DgSnghNGB8ymawyw06BJo4Ugi4we8iZhmiJDtiwwBymFKa5sk9deOs3mzE0pZBMe1CgTyaHHNju4lumxD21PzXnEMX2BDpx4cDaP8JOqk2+S+/U0ARFBbrKkTh/ugIPkKJrloege1BAWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YgNXA+nr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA20C4CEF0;
+	Tue, 12 Aug 2025 22:14:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755035800;
-	bh=LeAvm0kodbf6Ts9L7dMnSh08EnxztEITYKbiYnbeZMk=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=U6okl9IzBp8G8Eu/da8JtZmSbYQTvsi3bwYktct9KkSFsGty+cBk4A5OE5GF6S4Dr
-	 lynn4+uo3z/UsHFKyxsn5i7LclHBOTquXErS+J7UPj6sD9edRlRq2HE8YFpFwc2yL8
-	 d8iogu3Uu7deRlJareyDjtQWrsyph54wK+1u7NL3qbru6hO8AJPT4TN6DDz8qMqoik
-	 CnxM1usZslV9hPieDRpiByKwT/+uk1fsjYHctYO70mhf5EpD0X2LhhhG+wi3kiG7k3
-	 DJ5341IeGeTFSnz1CGLofCVcVIVgmW+qxG6n/PiT3e08Ogs/jSsj5bIzVeVc3kZQIm
-	 ENHVbmZozGVrw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	konradybcio@kernel.org,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	ilia.lin@kernel.org,
-	djakov@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	s=k20201202; t=1755036869;
+	bh=7sKkeVsqF1JriTBRhVeKYa7iymeyEuiEv7yqiQpD2Jg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YgNXA+nrVVqPY6MEcYpSuoIFONTeMAx4OK8TrU/qxxayWfUAyuxTLUFpu3dl/nA6A
+	 2FWoHOEiJdMaYyAQ6qXI4HkzfGbMeJVOPnU7Lw7l4ggb7C+6vrDNvJu0UiDLYxV5Ry
+	 iUHqhFuu1gWT+6bsJjMJwJJnzjo43gSQuB1/3ptItA780TrsljsazjezfAlPo99eNJ
+	 mE8qHLErR0wzwKxWCiFhx0tesX+rW5KRM0yr20qmLCgnv96sNXaXMjs0uIGqIoDDgi
+	 E4E/oXgQKNkDonQgrKGvl1jqFeZPhTlOwbNTi3JeYE4A6D1E/TcLiOKrxrwDqqdeeU
+	 EGzw567XmNptA==
+Date: Tue, 12 Aug 2025 15:14:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: masahiroy@kernel.org, Andrii Nakryiko <andrii@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: Re: (subset) [PATCH v7 0/4] Enable cpufreq for IPQ5424
-Date: Tue, 12 Aug 2025 16:56:20 -0500
-Message-ID: <175503322864.231048.3923613819705551334.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250811090954.2854440-1-quic_varada@quicinc.com>
-References: <20250811090954.2854440-1-quic_varada@quicinc.com>
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, ojeda@kernel.org,
+	bpf@vger.kernel.org, kernel-team@meta.com, linux-pm@vger.kernel.org,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Nicolas Schier <nsc@kernel.org>
+Subject: Re: [PATCH v2] .gitignore: ignore compile_commands.json globally
+Message-ID: <20250812221424.GA488781@ax162>
+References: <20250606214840.3165754-1-andrii@kernel.org>
+ <CANiq72kDA3MPpjMzX+LutOoLgKqm9uz8xAT_-iBzhR3pFC+L_Q@mail.gmail.com>
+ <CAEf4BzZDkkjRxp4rL7mMvjEOiwb_jhQLP2Y2YgyUO=O-FksDiQ@mail.gmail.com>
+ <CAEf4BzbJpTZ9P-Deo7Oeikyd3vW953goAw3gYvTPzvDfEWj2hw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbJpTZ9P-Deo7Oeikyd3vW953goAw3gYvTPzvDfEWj2hw@mail.gmail.com>
 
+Hi Andrii,
 
-On Mon, 11 Aug 2025 14:39:50 +0530, Varadarajan Narayanan wrote:
-> CPU on Qualcomm ipq5424 is clocked by huayra PLL with RCG support.
-> Add support for the APSS PLL, RCG and clock enable for ipq5424.
-> The PLL, RCG register space are clubbed. Hence adding new APSS driver
-> for both PLL and RCG/CBC control. Also the L3 cache has a separate pll
-> modeled as ICC clock. The L3 pll needs to be scaled along with the CPU.
-> 
-> v7: Fix 'Reviewed-by' placement for bindings patch
->     Use enum instead of clock names for l3 pll
->     Select IPQ_APSS_5424 if IPQ_GCC_5424 is enabled
-> 
-> [...]
+On Tue, Aug 12, 2025 at 02:55:22PM -0700, Andrii Nakryiko wrote:
+> Seems like this has fallen through the cracks... I guess we can take
+> it through the bpf-next tree, if there is no better home for this?
 
-Applied, thanks!
+Masahiro recently turned over maintenance of the Kbuild build tree as of
+commit 8d6841d5cb20 ("MAINTAINERS: hand over Kbuild maintenance"). I am
+happy to pick this up in the new Kbuild tree but I have no objections to
+you taking it via BPF with
 
-[4/4] arm64: dts: qcom: ipq5424: Enable cpufreq
-      commit: 77abf70ee126d40dba9ada0a4ccb4c7743f6a3e6
+  Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+if you would like to. I suspect it matters most to the BPF folks anyways.
+
+Cheers,
+Nathan
 
