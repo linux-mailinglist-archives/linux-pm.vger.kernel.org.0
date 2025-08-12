@@ -1,280 +1,279 @@
-Return-Path: <linux-pm+bounces-32213-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32214-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36964B21DD0
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 08:02:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B5CEB21E9C
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 08:51:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 153933BEC35
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 05:58:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E492169F27
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 06:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076262367DC;
-	Tue, 12 Aug 2025 05:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2094326FA77;
+	Tue, 12 Aug 2025 06:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BzrfCvR2";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BzrfCvR2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011066.outbound.protection.outlook.com [40.107.130.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51098226888;
-	Tue, 12 Aug 2025 05:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754978292; cv=none; b=anwsHBvZSA4NRoEAkjr/grU9+5u9JF1o8EJfP1nQQ+9vN/55/NfCa0ImJjC+OQET5fPdLgE7k2L1tO814rr+IvfnZgJo6XzovJKuDPtxbMj90eBlqeLOmI/JIyew0Qfs0CHkFn/uqdPBYYsnyc3euAHO6KSTkNO2HGUSCVBK6f8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754978292; c=relaxed/simple;
-	bh=72/bFUMbQkxIlhNalLj8wt1kYDVxk1aI+8+zUZG2XyI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oUrWd6OoVxkbkmqBS87CGEHQLCsT1jXQAPmD8Un8fMRkuvm/mrDWfvsFgwp0G405p9fUTXND3SHg8zfnDY26OLmPFsYjaKxZoRRE2W2HO2OEjkWWlK5MxaZVLLagvKUzHZSXZw/wcX9xlQQOVgzd+pnfMdSEVDhyuvjjjMxJqqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 4c5b128c774111f0b29709d653e92f7d-20250812
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:438044e9-dee8-467f-ba90-68936615dac9,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:a708c60e7cf78976e1210166e7a6b49d,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 4c5b128c774111f0b29709d653e92f7d-20250812
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 259772601; Tue, 12 Aug 2025 13:57:58 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 33322E008FA3;
-	Tue, 12 Aug 2025 13:57:58 +0800 (CST)
-X-ns-mid: postfix-689AD7E6-4259899
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id D6EF0E008FA2;
-	Tue, 12 Aug 2025 13:57:49 +0800 (CST)
-Message-ID: <d86a9883-9d2e-4bb2-a93d-0d95b4a60e5f@kylinos.cn>
-Date: Tue, 12 Aug 2025 13:57:49 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C927311C18;
+	Tue, 12 Aug 2025 06:51:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.66
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754981496; cv=fail; b=eumzYYOsJ9fQiSse5Gmi6hqKTN91pFnayxGK7DZ+oWeDrIL6EuKWDLiVS9jUzEpCzIEU1EO6jQZuCs7JGJHRojtvHls0wbNYXcj/JOs+1YgUidzvPk6xaIaedk8mPG6M8+KCUtr76o4fQ3N4ruHFCEHy/qrgU9ERRwhhwPzdWwE=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754981496; c=relaxed/simple;
+	bh=IKuQcxbkqMZ1Pbb2g9YdZ8K4UQLfULYlNxcrUTG0028=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=s81OhYkRsp3zN5UzOp2N1B9On1wiC2CJA5QwYfNrObc8dYS8X6S54wsKBFvrmBOS1Io6QYNSnn5SfgcX16wmVDYoSVDuCEgXrjxFBuUdByCNa5j6fNe/QFVkmuhnBKFKcezdNovlhzhcI4gk4dguThEI28uaMFqkHA/WRRrzhDw=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BzrfCvR2; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BzrfCvR2; arc=fail smtp.client-ip=40.107.130.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=Vw2m/UXhbMf+1bgLJtKO2GlVyrsitsR+qLWGk1Bif3pAJjCvAu7vZA7pUSLjhA4hwYrotgDI/3pVaKKUlSQNadcgKBHPlS1aBeNMt44H1ZQtmZUeuznd2IEGzP8T2d9vTfp02vQnHJ0V2BwHXbA/F21vTymPnMkNJl28b20RBvfCZq7XeVVnpCKwisKtKoy9a7w5HgHE/W1Ko9r7iaEqisA8oylAVSwIh2tJTI73wLSSqZ+zZ+tir/9+P4bG9bwJRfY2PhC+yJoLc/CVg4+IZTD9bwY7A82JeN8gskn4EWvE/jGcnX5lZ3W1taua+kjuanCA2BG3hWWsUVbUh9N6Zw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fphoEJ0N6eLXmrArp0JEn3QRS2Vvspa2gEW/2TBn6XA=;
+ b=XJ/ddk2CCYnDXMLC+OFbPdyItX7HE73uDH1I9n2RItzHmlub4KHHqnvNTCU7D6xqaWFzk72dj1m+tFHP6RJ0Z526Zl5VXB2hAWaHxNayRoGJAag2vQHqo+XKmO5xO5Y++3a+c8RqjdIH8z3RtpFXDqhBN/XMw+HWWk6wANCnHAPzquwCBRh99j1kKGwf6lSc+ZjoWA7BFSuMvE+8bdkNmjmCn7n1h3+nE8WlF3vzVvidNdZEbcIAZv86G1Wp8PH53QSELkeNrYvFc+Yr8i6wHYJ4GmhNbR4PRni3qwqVOmIhYHdWvikD0ORtjRew5QLlKfavS/skIc2wn4DcW2V/rg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fphoEJ0N6eLXmrArp0JEn3QRS2Vvspa2gEW/2TBn6XA=;
+ b=BzrfCvR2yb4eG/HQqrsL8QWSQPg+oXDmAH77ywnxhq92IyOjz89/IhOjnhRenFd54DphN/vtE6poBMJgUVYKf59Of71uopQpQDFLOb17lgqZ20qlk4OFZeG98uZYukw7aGILwp1x/hC5dkcbtdTGwBW0jc1RBJmZYfHqVYLYowU=
+Received: from AS4PR09CA0012.eurprd09.prod.outlook.com (2603:10a6:20b:5e0::15)
+ by AS8PR08MB6232.eurprd08.prod.outlook.com (2603:10a6:20b:296::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.17; Tue, 12 Aug
+ 2025 06:51:29 +0000
+Received: from AM4PEPF00027A64.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5e0:cafe::36) by AS4PR09CA0012.outlook.office365.com
+ (2603:10a6:20b:5e0::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9031.13 via Frontend Transport; Tue,
+ 12 Aug 2025 06:51:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM4PEPF00027A64.mail.protection.outlook.com (10.167.16.75) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9031.11
+ via Frontend Transport; Tue, 12 Aug 2025 06:51:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=n/cGgjoY10WxlQrdakzrTYCX0NUstiBt70VjyS3dftmVFQC/Jbpp+FM48sPbFaV99Mo1ffimcpQ8WTDEiDshLBIcU7qTiEV2tk3YEdOojSo15NdeHngmG7VQR1PNJ73ZQJq3EDYYBCX28J7RWEjEwD/JrefJ9Sb9pmPFr2vehhNFho6DesM5C9DOyx3qwNdgVV1aZ3f0CP4nAKQ5UZuCl+jetHlu+dvHR6ITwHNYAosEaFgp/spgxeUM+RejgPwPMGtLyEyGbfiKG/PyxQK62XGWBWOoDF/8WrzUCLR38Deiisso/4Y8jA8TqBmK3+n0oAveCMBtPQZ52vSW7JA89A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fphoEJ0N6eLXmrArp0JEn3QRS2Vvspa2gEW/2TBn6XA=;
+ b=HVsKSwYyWjBNnBZwAqWA8b1xFmREGHLfQVr2xJ715C4JxuC1+4ns0059RT12f/Du9ry/7hGyyVn1A5yIGMoiPRP26XUMt8Jv/dLoKMww5bDTLcfH52PicdWqkR8KU4iliptCMZtK3M4eX8H/p5vH1Sp5K4NhLf2LoJpALwkFfNA3pwJFCKUkcg05Z2+8bCvrk2u9ekBdD00Ej2EZZ/vhuEyeK6h3Ew9NsTjurURJnBedLTqLMKVP6/D2X8WTlNb9IP5q7Wu+htXSotgoUfr1yoEg2UMOCRKBVCj5HTcoAZ6IFdcssvlTlZeMnrtpuudUcmGjUu8qj1/cHYF7/T5a9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fphoEJ0N6eLXmrArp0JEn3QRS2Vvspa2gEW/2TBn6XA=;
+ b=BzrfCvR2yb4eG/HQqrsL8QWSQPg+oXDmAH77ywnxhq92IyOjz89/IhOjnhRenFd54DphN/vtE6poBMJgUVYKf59Of71uopQpQDFLOb17lgqZ20qlk4OFZeG98uZYukw7aGILwp1x/hC5dkcbtdTGwBW0jc1RBJmZYfHqVYLYowU=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
+ (2603:10a6:150:163::20) by AS8PR08MB6104.eurprd08.prod.outlook.com
+ (2603:10a6:20b:299::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.22; Tue, 12 Aug
+ 2025 06:50:55 +0000
+Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
+ ([fe80::d430:4ef9:b30b:c739]) by GV1PR08MB10521.eurprd08.prod.outlook.com
+ ([fe80::d430:4ef9:b30b:c739%7]) with mapi id 15.20.9031.012; Tue, 12 Aug 2025
+ 06:50:55 +0000
+Date: Tue, 12 Aug 2025 07:50:51 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
+	oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org,
+	james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com,
+	ry111@xry111.site, Dave.Martin@arm.com, ahmed.genidi@arm.com,
+	kevin.brodsky@arm.com, scott@os.amperecomputing.com, mbenes@suse.cz,
+	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
+	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v2 1/6] arm64: make SCTLR2_EL1 accessible
+Message-ID: <aJrkS9tEFtWfXDGN@e129823.arm.com>
+References: <20250811163340.1561893-1-yeoreum.yun@arm.com>
+ <20250811163340.1561893-2-yeoreum.yun@arm.com>
+ <86sehx92ev.wl-maz@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86sehx92ev.wl-maz@kernel.org>
+X-ClientProxiedBy: LO4P123CA0118.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:192::15) To GV1PR08MB10521.eurprd08.prod.outlook.com
+ (2603:10a6:150:163::20)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
- address process dependency issues
-To: Michal Hocko <mhocko@suse.com>, Theodore Ts'o <tytso@mit.edu>,
- Jan Kara <jack@suse.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
- David Hildenbrand <david@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
- Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Nico Pache <npache@redhat.com>,
- xu xin <xu.xin16@zte.com.cn>, wangfushuai <wangfushuai@baidu.com>,
- Andrii Nakryiko <andrii@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Jeff Layton <jlayton@kernel.org>,
- Al Viro <viro@zeniv.linux.org.uk>, Adrian Ratiu
- <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <aJSpTpB9_jijiO6m@tiehlicka>
- <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
- <aJWglTo1xpXXEqEM@tiehlicka>
- <ba9c23c4-cd95-4dba-9359-61565195d7be@kylinos.cn>
- <aJW8NLPxGOOkyCfB@tiehlicka>
- <09df0911-9421-40af-8296-de1383be1c58@kylinos.cn>
- <aJnM32xKq0FOWBzw@tiehlicka>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <aJnM32xKq0FOWBzw@tiehlicka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+X-MS-TrafficTypeDiagnostic:
+	GV1PR08MB10521:EE_|AS8PR08MB6104:EE_|AM4PEPF00027A64:EE_|AS8PR08MB6232:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6071aa5-710c-4a89-1a04-08ddd96ca931
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?lF3vV0IHSR42+F2YpuGO1t0XUu/SqUkY+OdE0rX71dxuI0Yth/n/zMVveXXI?=
+ =?us-ascii?Q?cfyjBeQMWp7KaoDw0ORrYXb1Fbu6iVE/jT1fwvY5+ZvEMDcKfjVlKs43Jifb?=
+ =?us-ascii?Q?O7HnUsL4EzkcV76GSlvfxZlGfxrt2ghdRCpdYafCA1ePDql/sUGLI1CUpjfg?=
+ =?us-ascii?Q?yFMIfef/bdqYhHnf1raNOwhDvSwGnUjqaJgRRfEDlfwD3EXa0H5Edz6jJwma?=
+ =?us-ascii?Q?I4en0JiPtxfTpAzrm6rOGNSfWFNSKwC7mdpsJ6jPkq/oFlovmYrndnZrc2BV?=
+ =?us-ascii?Q?jlPk926sernV0tJehir6N7Q/C5wxPxb8XfeVtYBjK8NUW6p3ibnpC5/LbCy3?=
+ =?us-ascii?Q?v9Pqe15ayf2XqvKnWwGvKBz/DxeRpluEEmUHMQn8z3fhi9QUO9HN9sj+JTZg?=
+ =?us-ascii?Q?lubhrfWOPgWp1JZW0FpxriW11N1GNnSWoyRrYdvahx8fzJKCfiWtr3LLWDkG?=
+ =?us-ascii?Q?GNK1xxuE4j65czdOFo5uf38X2DsIheqlKdJfiQlIItE/dRRcSf1zHVUymFDn?=
+ =?us-ascii?Q?2SVtEvLwvxjwZaaJozIGJgNgwAlFfrP2/A6g0R1kd3EzyrfB1YOM3sOvhWs0?=
+ =?us-ascii?Q?zIgi5G2r6s6wJKzs9CcxRvJqPGgRgj2x6zflJC+AVlgVWHnTd875golX4GtI?=
+ =?us-ascii?Q?ezo3MzLltVx8tBeE9YA0cix5dcnHibXDtIYSqIc+89hOy6Bg2t7i1+JHHmy2?=
+ =?us-ascii?Q?b3tZQ69Q00wEXgV+FAlr88KJu3BGZWmyMdJRvuLaepnAC5ri+VfvQnAZE/pp?=
+ =?us-ascii?Q?T+pdJJUF+Mgr9kLgzDU0MnvYY6be+Ma41tZL6AiGzwlXaoRMFE3A1+FbG7w3?=
+ =?us-ascii?Q?bsHs3k7O0Z0dQ8nkPNlYUYKTrtQWAj9hPzTmuXpIqoj8VFWVG+Eb3G//0+L2?=
+ =?us-ascii?Q?veG8NYuBPKRklA0SVm7l7OxUcDbjF5OxOIYXtc2w+Zmplzr4Y4cj9aeHUrAr?=
+ =?us-ascii?Q?qamVi8x/TA7jh/kcLOWemwCyLXY7EG5XMWZ3jZ7TIWO2MjjvvqTMZ4H3UetD?=
+ =?us-ascii?Q?Nan2H7n2hxwn5lW+4pp4/AFAqONUMrt/VeVulCiDooCZDFLYZlN+5L+3OjtV?=
+ =?us-ascii?Q?IxpE7GT8xQ2WINdJhlU5obEuiA4r0I+QcHE3J5A/LW+e2EIE/LtyB/JTPN7c?=
+ =?us-ascii?Q?7TRJtuM4IjDgIsiVAOxExBs4Sv6u8bOKPSNeCnpzu/63DWjbg5tu4iBACPQ8?=
+ =?us-ascii?Q?sqSknSoZY0ouN/PbSAhg5z94xwdJfKCSTnUHrJjUDueFke8jm062Us2l9HVJ?=
+ =?us-ascii?Q?ZjSMdgVfyriKayRlN0d99eBuNc9IJZLn6YV/9PVHdlcx4nj6MwZQ1+yXmNh/?=
+ =?us-ascii?Q?BC0Z4cBkPqjOaGeui12ZM05IRuKQzJMLcW+lr99IRzm2VzSwA8Ff8JMB99bU?=
+ =?us-ascii?Q?ZXztonCd/QiDFgz295yeBuJrkeyU9DjPbUeGkOOJpwcLV03+jkRnBPDqeGCF?=
+ =?us-ascii?Q?4ZxmhEJr7NI=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6104
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM4PEPF00027A64.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	b7d755f1-698e-4ca4-71c0-08ddd96c95bd
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|14060799003|1800799024|82310400026|376014|7416014|35042699022|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?V5cuwc7IW2uPd1WFh8yf+ExBOBNeZNes8yXXDXPqeqoJe4j/vKgbreIQ7C0a?=
+ =?us-ascii?Q?CxrNtRM6MLLSdxYe9p8sf8Y9qzHsgfTo+zKH54X8mDjSHwjvlYNevi9mGXe6?=
+ =?us-ascii?Q?iuJb6vjf0KX0HAXuQ5U9bbfiKnZ8ghge+UqInHo2X7G2xrR3KwiH9y/rWfm8?=
+ =?us-ascii?Q?wnAEAkB2rEt1dK89uexPJUho/T40nhqRrA39L7NgPcdoMGYHE+dMNmURUBZd?=
+ =?us-ascii?Q?y4Y6x17ZbLhAqzxCSZG6jZPwlpzKgPUW06tXNWEXNMxcnkhqAiys6/xzPqP8?=
+ =?us-ascii?Q?5DN8fT2F5/Lvi16fpyxtVNv1JoF2fii8BFcgXtQtgSphrekYMEb/5ApR+9pb?=
+ =?us-ascii?Q?pqnKo39yIiAIufPk9q9lux5i/8C96eULmawzNp5YXbGCbKjxwaFw2HBkog+T?=
+ =?us-ascii?Q?WVnkfZWmJUW5c/SPcncfMMEgeDlYJmiQH18wM8Uz2pvjBZnM/bDir0MW6P76?=
+ =?us-ascii?Q?qPR2zMJVBK9gwlyIU3hRQF/T2cvAZ/DjtmSfpW3Ka1v8rJ5VmWEBCHhi5le6?=
+ =?us-ascii?Q?oO9jhPqsr8zb+BTFBfQKF3+Q1kFUbisF2gasMkWRF5+hFsVexGWx/ExRHc0A?=
+ =?us-ascii?Q?rWlEWzlVYGKdaqWOAlbe7RiRq21Zf7wu5K+FnOLKVeLxvV9/Ux03DfQ5dvaK?=
+ =?us-ascii?Q?j7K8JJyRQyv3SbwaAP1zLunqxPGDmc7c7gnunUjH7Axgid+zLPruq+dK2WRJ?=
+ =?us-ascii?Q?GTDd76/7d/+xodHDmlO39eOQVeuB/fgNWRFO8j6Td1en2QrurO+MnM4IDThQ?=
+ =?us-ascii?Q?ZRrZCNMxRqFBvl4Qns59N8sUDJJFPhY1Uy3uiREjW0P/+MD7MpwlGSkB93n4?=
+ =?us-ascii?Q?a8fI1COcuIF0LKjNC4ECcC2Fhs2wNUH6hUaA9sGf39kOuXfsfDTxjk47AoF1?=
+ =?us-ascii?Q?drZGA23DGku0ezv7CEF5sMrursbYrYxG03rFCi6W9lr6l0e1X7s0V8FVYI64?=
+ =?us-ascii?Q?2OEgRXySf4/LIaTIebuUEkzChA56z/YiKOHD+THxtVh885oy6/ixAlSearB0?=
+ =?us-ascii?Q?gz3nwrVkyFYkMYBUIUe+Bk61L/8uUR1EFlMzV6t5MBK2ukFmXKdLNq0bEyII?=
+ =?us-ascii?Q?L4buNngrSz1hqAgU62rbuFkIEhZUMQ/d562yGjPi0j4rITcE/XD67DxcHda2?=
+ =?us-ascii?Q?PHkbTS5SmPvENq3owxghg/uWUVTYT80BJOU0APA5CQiQ2YH6iOiYEwvAFauq?=
+ =?us-ascii?Q?BgBL11fbiKvPoWT6LnnU6Px89neMrGtYGOQ73YndV6tkGvIkVGj4y3zKOqej?=
+ =?us-ascii?Q?vQmSZ8ODo1JuMTUMGdn+KFUzZqsaxOkqk7SE5yB1+nSBvwFEPZT0YBQMfg/g?=
+ =?us-ascii?Q?+EwEuUHG4kNpJEaUF74EzsDFDsVovBGjY5f6DselZpTCJ6GNaWGWeximEWcb?=
+ =?us-ascii?Q?/YvOA6pTWPKM+CZ43cy62BVG9oxuOZ5FVUFpsmznZpRhGukrXGgvuKRyWg5S?=
+ =?us-ascii?Q?gj1YC9VI09DjoNRMmNP2GCuxXZgr61gz+EtCUBGTbMHmPxZVobRP10hzub/9?=
+ =?us-ascii?Q?HrtMKjh5q2e52XV1YSEj3iP2CKgr5MWOVQ9V?=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(14060799003)(1800799024)(82310400026)(376014)(7416014)(35042699022)(7053199007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2025 06:51:27.3814
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6071aa5-710c-4a89-1a04-08ddd96ca931
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A64.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6232
 
-Hi all,
+Hi Marc,
 
-We encountered an issue where the number of freeze retries increased due=20
-to processes stuck in D state. The logs point to jbd2-related activity.
-
-log1:
-
-6616.650482] task:ThreadPoolForeg state:D stack:0=C2=A0 =C2=A0 =C2=A0pid:=
-262026
-tgid:4065=C2=A0 ppid:2490=C2=A0 =C2=A0task_flags:0x400040 flags:0x0000400=
-4
-[ 6616.650485] Call Trace:
-[ 6616.650486]=C2=A0 <TASK>
-[ 6616.650489]=C2=A0 __schedule+0x532/0xea0
-[ 6616.650494]=C2=A0 schedule+0x27/0x80
-[ 6616.650496]=C2=A0 jbd2_log_wait_commit+0xa6/0x120
-[ 6616.650499]=C2=A0 ? __pfx_autoremove_wake_function+0x10/0x10
-[ 6616.650502]=C2=A0 ext4_sync_file+0x1ba/0x380
-[ 6616.650505]=C2=A0 do_fsync+0x3b/0x80
-
-log2:
-
-[=C2=A0 631.206315] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.0=
-02 seconds)
-[=C2=A0 631.215325] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.0=
-01 seconds)
-[=C2=A0 631.240704] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.3=
-86 seconds)
-[=C2=A0 631.262167] Filesystems sync: 0.424 seconds
-[=C2=A0 631.262821] Freezing user space processes
-[=C2=A0 631.263839] freeze round: 1, task to freeze: 852
-[=C2=A0 631.265128] freeze round: 2, task to freeze: 2
-[=C2=A0 631.267039] freeze round: 3, task to freeze: 2
-[=C2=A0 631.271176] freeze round: 4, task to freeze: 2
-[=C2=A0 631.279160] freeze round: 5, task to freeze: 2
-[=C2=A0 631.287152] freeze round: 6, task to freeze: 2
-[=C2=A0 631.295346] freeze round: 7, task to freeze: 2
-[=C2=A0 631.301747] freeze round: 8, task to freeze: 2
-[=C2=A0 631.309346] freeze round: 9, task to freeze: 2
-[=C2=A0 631.317353] freeze round: 10, task to freeze: 2
-[=C2=A0 631.325348] freeze round: 11, task to freeze: 2
-[=C2=A0 631.333353] freeze round: 12, task to freeze: 2
-[=C2=A0 631.341358] freeze round: 13, task to freeze: 2
-[=C2=A0 631.349357] freeze round: 14, task to freeze: 2
-[=C2=A0 631.357363] freeze round: 15, task to freeze: 2
-[=C2=A0 631.365361] freeze round: 16, task to freeze: 2
-[=C2=A0 631.373379] freeze round: 17, task to freeze: 2
-[=C2=A0 631.381366] freeze round: 18, task to freeze: 2
-[=C2=A0 631.389365] freeze round: 19, task to freeze: 2
-[=C2=A0 631.397371] freeze round: 20, task to freeze: 2
-[=C2=A0 631.405373] freeze round: 21, task to freeze: 2
-[=C2=A0 631.413373] freeze round: 22, task to freeze: 2
-[=C2=A0 631.421392] freeze round: 23, task to freeze: 1
-[=C2=A0 631.429948] freeze round: 24, task to freeze: 1
-[=C2=A0 631.438295] freeze round: 25, task to freeze: 1
-[=C2=A0 631.444546] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.2=
-49 seconds)
-[=C2=A0 631.446387] freeze round: 26, task to freeze: 0
-[=C2=A0 631.446390] Freezing user space processes completed (elapsed 0.18=
-3=20
-seconds)
-[=C2=A0 631.446392] OOM killer disabled.
-[=C2=A0 631.446393] Freezing remaining freezable tasks
-[=C2=A0 631.446656] freeze round: 1, task to freeze: 4
-[=C2=A0 631.447976] freeze round: 2, task to freeze: 0
-[=C2=A0 631.447978] Freezing remaining freezable tasks completed (elapsed=
-=20
-0.001 seconds)
-[=C2=A0 631.447980] PM: suspend debug: Waiting for 1 second(s).
-[=C2=A0 632.450858] OOM killer enabled.
-[=C2=A0 632.450859] Restarting tasks: Starting
-[=C2=A0 632.453140] Restarting tasks: Done
-[=C2=A0 632.453173] random: crng reseeded on system resumption
-[=C2=A0 632.453370] PM: suspend exit
-[=C2=A0 632.462799] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.0=
-00 seconds)
-[=C2=A0 632.466114] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.0=
-01 seconds)
-
-This is the reason:
-
-[=C2=A0 631.444546] jdb2_log_wait_log_commit=C2=A0 completed (elapsed 0.2=
-49 seconds)
-
-
-During freezing, user processes executing jbd2_log_wait_commit enter D=20
-state because this function calls wait_event and can take tens of=20
-milliseconds to complete. This long execution time, coupled with=20
-possible competition with the freezer, causes repeated freeze retries.
-
-While we understand that jbd2 is a freezable kernel thread, we would=20
-like to know if there is a way to freeze it earlier or freeze some=20
-critical processes proactively to reduce this contention.
-
-Thanks for your input and suggestions.
-
-=E5=9C=A8 2025/8/11 18:58, Michal Hocko =E5=86=99=E9=81=93:
-> On Mon 11-08-25 17:13:43, Zihuan Zhang wrote:
->> =E5=9C=A8 2025/8/8 16:58, Michal Hocko =E5=86=99=E9=81=93:
-> [...]
->>> Also the interface seems to be really coarse grained and it can easil=
-y
->>> turn out insufficient for other usecases while it is not entirely cle=
-ar
->>> to me how this could be extended for those.
->>  =C2=A0We recognize that the current interface is relatively coarse-gr=
-ained and
->> may not be sufficient for all scenarios. The present implementation is=
- a
->> basic version.
->>
->> Our plan is to introduce a classification-based mechanism that assigns
->> different freeze priorities according to process categories. For examp=
-le,
->> filesystem and graphics-related processes will be given higher default
->> freeze priority, as they are critical in the freezing workflow. This
->> classification approach helps target important processes more precisel=
-y.
->>
->> However, this requires further testing and refinement before full
->> deployment. We believe this incremental, category-based design will ma=
-ke the
->> mechanism more effective and adaptable over time while keeping it
->> manageable.
-> Unless there is a clear path for a more extendable interface then
-> introducing this one is a no-go. We do not want to grow different ways
-> to establish freezing policies.
+> > make SCTLR2_EL1 accssible to initilise it.
 >
-> But much more fundamentally. So far I haven't really seen any argument
-> why different priorities help with the underlying problem other than th=
-e
-> timing might be slightly different if you change the order of freezing.
-> This to me sounds like the proposed scheme mostly works around the
-> problem you are seeing and as such is not a really good candidate to be
-> merged as a long term solution. Not to mention with a user API that
-> needs to be maintained for ever.
+> nit: "accessible", "initialise".
 >
-> So NAK from me on the interface.
+> This could deserve a slightly less terse message, so that someone who
+> is not very much versed into the boring details of the architecture
+> can make sense of this patch. Because, frankly, if you can access
+> HCRX_EL2, why can't you access SCTLR2_EL1? You know why, I know why,
+> but hardly anyone else does.
 >
-Thanks for the feedback. I understand your concern that changing the=20
-freezer priority order looks like working around the symptom rather than=20
-solving the root cause.
+> I'd suggest something along the lines of:
+>
+> "When the kernel runs at EL1, and yet is booted at EL2,
+>  HCRX_EL2.SCTLR2En must be set to avoid trapping SCTLR2_EL1 accesses
+>  from EL1 to EL2.
+>
+>  Ensure this bit is set at the point of initialising EL2."
+>
+> which at least explains why we're doing this.
+>
+> >
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
+> >  arch/arm64/include/asm/el2_setup.h | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> > index 46033027510c..d755b4d46d77 100644
+> > --- a/arch/arm64/include/asm/el2_setup.h
+> > +++ b/arch/arm64/include/asm/el2_setup.h
+> > @@ -57,9 +57,15 @@
+> >          /* Enable GCS if supported */
+> >  	mrs_s	x1, SYS_ID_AA64PFR1_EL1
+> >  	ubfx	x1, x1, #ID_AA64PFR1_EL1_GCS_SHIFT, #4
+> > -	cbz	x1, .Lset_hcrx_\@
+> > +	cbz	x1, .Lskip_hcrx_GCSEn_\@
+> >  	orr	x0, x0, #HCRX_EL2_GCSEn
+> >
+> > +.Lskip_hcrx_GCSEn_\@:
+> > +	mrs_s	x1, SYS_ID_AA64MMFR3_EL1
+> > +	ubfx	x1, x1, #ID_AA64MMFR3_EL1_SCTLRX_SHIFT, #4
+> > +	cbz	x1, .Lset_hcrx_\@
+> > +	orr	x0, x0, HCRX_EL2_SCTLR2En
+> > +
+> >  .Lset_hcrx_\@:
+> >  	msr_s	SYS_HCRX_EL2, x0
+> >  .Lskip_hcrx_\@:
+>
+> With that fixed,
+>
+> Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-Since the last discussion, we have analyzed the D-state processes=20
-further and identified that the long wait time is caused by=20
-jbd2_log_wait_commit. This wait happens because user tasks call into=20
-this function during fsync/fdatasync and it can take tens of=20
-milliseconds to complete. When this coincides with the freezer=20
-operation, the tasks are stuck in D state and retried multiple times,=20
-increasing the total freeze time.
+Thanks for your suggetion.
+I'll modify it.
 
-Although we know that jbd2 is a freezable kernel thread, we are=20
-exploring whether freezing it earlier =E2=80=94 or freezing certain key=20
-processes first =E2=80=94 could reduce this contention and improve freeze=
-=20
-completion time.
+>
+> 	M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
 
-
->>> I believe it would be more useful to find sources of those freezer
->>> blockers and try to address those. Making more blocked tasks
->>> __set_task_frozen compatible sounds like a general improvement in
->>> itself.
->> we have already identified some causes of D-state tasks, many of which=
- are
->> related to the filesystem. On some systems, certain processes frequent=
-ly
->> execute ext4_sync_file, and under contention this can lead to D-state =
-tasks.
-> Please work with maintainers of those subsystems to find proper
-> solutions.
-
-We=E2=80=99ve pulled in the jbd2 maintainer to get feedback on whether ch=
-anging=20
-the freeze ordering for jbd2 is safe or if there=E2=80=99s a better appro=
-ach to=20
-avoid the repeated retries caused by this wait.
+--
+Sincerely,
+Yeoreum Yun
 
