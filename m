@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-32209-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32210-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99394B21BBD
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 05:45:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 119A0B21BC7
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 05:46:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C565426A04
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 03:45:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11E16428109
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 03:46:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E34238150;
-	Tue, 12 Aug 2025 03:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074B12571C2;
+	Tue, 12 Aug 2025 03:46:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfc3lvRX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A62MfAI4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD91C2C9;
-	Tue, 12 Aug 2025 03:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1901DF27F;
+	Tue, 12 Aug 2025 03:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754970314; cv=none; b=ZppgR8OY1Xl/S3sMzcB7I5RjRhPYC3G8RN1IFWFGUXykIJ5QcJq5Kqt/GvT1Tu0K3iDiRD4W4M4sWYp2wAJAhlD4iu2hO3M2grIRsV89XLwA9my1tHsN5/4KzunapQI/l1nXXxd9nQMYl8E6FarOI7igxMHccMR+C0Vz+QcTjHM=
+	t=1754970386; cv=none; b=hKi6FfZ57cZr3Ay1eIKgae+LognnDmtlETYfK9DqJsn5gJMuNChUf7ZhK0y690vE3jecGl9EP2G/RZvr5JS64aUrcYw64+IhfMn2RkJrObrMKv5KFIU3qOczIwqKrNubCRJ6fV6WrdTx6CYS3S/RqlLFY7aGCLc8vrxQOlEiel8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754970314; c=relaxed/simple;
-	bh=fGznMj5kGw675RyQXLV/XCgKKgQRypn/BRq5eHB0/kI=;
+	s=arc-20240116; t=1754970386; c=relaxed/simple;
+	bh=sMFke7zRm9HTPBn23ob80gOMzZ7jKNIHnlhCuWiE6bY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=osgfGFUc6WEnfWbKPKhib13zpyYH2mtA0OI9KnHCejmqfGisd/KT3fD9fIuZwIqmFJiWgpD6P8m9Z02AlEN/NQX1V5LYuyuuDMQ9XUWidOiNKdy14jdSotH5hyvP+h1osycyeWiYH0wvkWW7sKsvdsWEWlv8EDCZBz+MEpaEQ0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfc3lvRX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD96C4CEED;
-	Tue, 12 Aug 2025 03:45:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KGK9AHdi4Dstnov7mWBx66wkUZdwNt3Cb2dwinXdalgGasTxKvufRb94Ugo03CfKNWhkGTnql56TqyDxcdUW7WFP9Wjs4px4KynUsIRIaTLybTnwHETG5m4tHmGhJdX9l93SYCq/MwDtGREILeIRrU05n6REJksV0g0BASByDcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A62MfAI4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D314C4CEED;
+	Tue, 12 Aug 2025 03:46:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754970314;
-	bh=fGznMj5kGw675RyQXLV/XCgKKgQRypn/BRq5eHB0/kI=;
+	s=k20201202; t=1754970386;
+	bh=sMFke7zRm9HTPBn23ob80gOMzZ7jKNIHnlhCuWiE6bY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qfc3lvRXmXf6zGDIm14OqBO4VLeZdKKDk/mjmFvoK0s7AMfLlrVsd/1HcV9GFH9vf
-	 D2EvqrmRLqGE4yY/+rQ5YB6LRcRhakivxuWnfxo3M7GBBrbRVficiowQGdcyjehAWo
-	 aGS35G48y/wMPe87HRumxLceA1IKv14zdTye5SbqsA7VYfr1eYoB3wTF61D8bLQ/a3
-	 CNSm2Ky8p3jBvxl0EDN0HY1jfbPBQFRhFr3ec5XE9/97Qk7ZW5wzgJrpjzxAfBMQ+A
-	 pWOfugmOL8erNNUHnbdUU+8Fdgbj0KgVaJrM9WnEqQhePefk60GyFjGcvrFRrX1opE
-	 EQQQ2kSSaimLA==
-Date: Mon, 11 Aug 2025 22:45:11 -0500
+	b=A62MfAI4Ygz7OcXndn+3l/EGMTEjrIYkGfgNmvHr+2+cGJlZ2BWhNIDzMLyqkeilP
+	 bSvP8wJ0gzsrZN6Z9z2RsTEulVNvrwQKfy5I6L+EM4iMA3zAkpyDHvL3auuPf1wthf
+	 Btx2IscphhRsvsquyXL7/OW5o3kHfwVQwqriKpMcQzk02SDUSLjnL3vP6d5cI5pA6k
+	 Qra9VtCu51XOUXXpDvnvzAlWkR9DAxcY55ylNp6nCfiT2mAhh7zyWkYWrIWCSdKRdy
+	 RaJbl/PhSGNMe09+BBDe1x9nP7z+bzUm6oJu4D1oXoVTvO3OpCaqb2PWXy5C3/mdAa
+	 IVgecwzqgxzCw==
+Date: Mon, 11 Aug 2025 22:46:23 -0500
 From: Bjorn Andersson <andersson@kernel.org>
 To: Taniya Das <quic_tdas@quicinc.com>
 Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -50,12 +50,12 @@ Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
 	Manivannan Sadhasivam <mani@kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>, 
 	Imran Shaik <quic_imrashai@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
 	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: qcs615: Add clock nodes for
- multimedia clock
-Message-ID: <vxeadjzwywqjjqm7elg5pltq3jtnv7fprquhdoydhxnjihpsw7@tlqoq5wpgcr3>
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCS615
+ compatible
+Message-ID: <3xki62glazqka7gngvrz3jifk36vkjlqjm6gv4mg7lqbhnnlsa@ryxyt2pcsfk2>
 References: <20250702-qcs615-mm-cpu-dt-v4-v5-0-df24896cbb26@quicinc.com>
- <20250702-qcs615-mm-cpu-dt-v4-v5-2-df24896cbb26@quicinc.com>
+ <20250702-qcs615-mm-cpu-dt-v4-v5-1-df24896cbb26@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,115 +64,42 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250702-qcs615-mm-cpu-dt-v4-v5-2-df24896cbb26@quicinc.com>
+In-Reply-To: <20250702-qcs615-mm-cpu-dt-v4-v5-1-df24896cbb26@quicinc.com>
 
-On Wed, Jul 02, 2025 at 02:43:10PM +0530, Taniya Das wrote:
-> Add support for video, camera, display and gpu clock controller nodes
-> for QCS615 platform.
+On Wed, Jul 02, 2025 at 02:43:09PM +0530, Taniya Das wrote:
+> Document compatible for cpufreq hardware on Qualcomm QCS615 platform.
 > 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
 
-  DTC [C] arch/arm64/boot/dts/qcom/qcs615-ride.dtb
-/home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@100000: 'clock-names' is a required property
-        from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-gcc.yaml#
-/home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@5090000: clocks: [[43, 0], [45, 2]] is too short
-        from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-gpucc.yaml#
-/home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@5090000: Unevaluated properties are not allowed ('clocks' was unexpected)
-        from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-gpucc.yaml#
-/home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@af00000: clocks: [[43, 0], [45, 29]] is too short
-        from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-dispcc.yaml#
-/home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@af00000: Unevaluated properties are not allowed ('clocks' was unexpected)
-        from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-dispcc.yaml#
-
-
-The missing clock-names in clock-controller@100000 predates this series.
-Sorry for merging broken patches in the past, please fix that as well.
+@Viresh, @Rafael. Please merge this binding patch through your trees.
 
 Regards,
 Bjorn
 
->  arch/arm64/boot/dts/qcom/qcs615.dtsi | 51 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/qcs615.dtsi b/arch/arm64/boot/dts/qcom/qcs615.dtsi
-> index bfbb210354922766a03fe05e6d117ea21d118081..5adf409d7ce7226042c759cc83ceca331097ae37 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs615.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcs615.dtsi
-> @@ -3,7 +3,11 @@
->   * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
->   */
->  
-> +#include <dt-bindings/clock/qcom,qcs615-camcc.h>
-> +#include <dt-bindings/clock/qcom,qcs615-dispcc.h>
->  #include <dt-bindings/clock/qcom,qcs615-gcc.h>
-> +#include <dt-bindings/clock/qcom,qcs615-gpucc.h>
-> +#include <dt-bindings/clock/qcom,qcs615-videocc.h>
->  #include <dt-bindings/clock/qcom,rpmh.h>
->  #include <dt-bindings/dma/qcom-gpi.h>
->  #include <dt-bindings/interconnect/qcom,icc.h>
-> @@ -1506,6 +1510,18 @@ data-pins {
->  			};
->  		};
->  
-> +		gpucc: clock-controller@5090000 {
-> +			compatible = "qcom,qcs615-gpucc";
-> +			reg = <0 0x05090000 0 0x9000>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GPLL0>;
-> +
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
-> +
->  		stm@6002000 {
->  			compatible = "arm,coresight-stm", "arm,primecell";
->  			reg = <0x0 0x06002000 0x0 0x1000>,
-> @@ -3317,6 +3333,41 @@ gem_noc: interconnect@9680000 {
->  			qcom,bcm-voters = <&apps_bcm_voter>;
->  		};
->  
-> +		videocc: clock-controller@ab00000 {
-> +			compatible = "qcom,qcs615-videocc";
-> +			reg = <0 0x0ab00000 0 0x10000>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&sleep_clk>;
-> +
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
-> +
-> +		camcc: clock-controller@ad00000 {
-> +			compatible = "qcom,qcs615-camcc";
-> +			reg = <0 0x0ad00000 0 0x10000>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
-> +
-> +		dispcc: clock-controller@af00000 {
-> +			compatible = "qcom,qcs615-dispcc";
-> +			reg = <0 0x0af00000 0 0x20000>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_DISP_GPLL0_DIV_CLK_SRC>;
-> +
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,qcs615-pdc", "qcom,pdc";
->  			reg = <0x0 0x0b220000 0x0 0x30000>,
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> index e0242bed33420a39b8a8cff4229ba9eee994ca30..2d42fc3d8ef811368c990977173f41b26535e0c8 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> @@ -22,6 +22,7 @@ properties:
+>          items:
+>            - enum:
+>                - qcom,qcm2290-cpufreq-hw
+> +              - qcom,qcs615-cpufreq-hw
+>                - qcom,sc7180-cpufreq-hw
+>                - qcom,sc8180x-cpufreq-hw
+>                - qcom,sdm670-cpufreq-hw
+> @@ -132,6 +133,7 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> +              - qcom,qcs615-cpufreq-hw
+>                - qcom,qdu1000-cpufreq-epss
+>                - qcom,sa8255p-cpufreq-epss
+>                - qcom,sa8775p-cpufreq-epss
 > 
 > -- 
 > 2.34.1
