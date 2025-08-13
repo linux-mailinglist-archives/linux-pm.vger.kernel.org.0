@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-32270-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32271-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9C0AB248C9
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B38B248CC
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:49:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 411A95A1CFC
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 11:48:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CAF65A2A4F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 11:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1AA2FD1C2;
-	Wed, 13 Aug 2025 11:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F9B2FE576;
+	Wed, 13 Aug 2025 11:47:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825C82FD1AA;
-	Wed, 13 Aug 2025 11:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A4C2F8BDF;
+	Wed, 13 Aug 2025 11:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755085631; cv=none; b=Dc9Xw4CuIuKW1HKAoSzKxeXoZ1QwdDm+fPBTOrXle2VkV7WCLQ0o5RfHyGcRecnwrLUhr7Cu7HPwQ3kWWD3Ge/NOlzBE40ZpTG10KIw8xK26H6lXS30TQ6G6b4hie/RVymean1YIEFk4W7GI1QbvZO9ym94gP7uh46JdjYfEH2U=
+	t=1755085635; cv=none; b=cjAGUyWYaZPBUyUgrWTTRlTGjwOoBMv4IZY4fq/CXYk9/QcCNKUwz/h90n8NKxojiMijIxPkVVsCQMvWCl57SyRYwkA7pnihwtFTrLMxxnQLysY4COZdtpWPCI2Cdc8b59fuU+kEB2CAQhl5MiTpXhG+vyeFi/CnBsYgq1zCgTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755085631; c=relaxed/simple;
-	bh=UqYKw64lkm2UFDtFP9WG+ibPWOUFcaOEhQyUe30sk1M=;
+	s=arc-20240116; t=1755085635; c=relaxed/simple;
+	bh=n26lGeF+gNDVShvhPC7WgMbNieIXI1S8iqj425r7dj0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BIKKf8xy6E1Ja7zRlFFEOYYaSCuXkDbuQbha+G44brH0W+Y8QOGkNzVO/8II17mmiu3It/LsrkomoUIrMyVchx+PMnvmgrUT0m6qh/YN7ITF1Aq1kzY3WmE1bMARwsP2JtgOgvwHP5M/LbozYCksw9yNOCpKZeF5lkjjOj/aXwE=
+	 MIME-Version; b=tuSGm3CtPQFF/L9NXP8bl5CnzCHnYKRcSZqzoix/kAUXem2HKWJTzwVN7BIB3ZM5I8bE31NcJDmFXKJE3ZCS5EB8bCF2AfHiOyRChA5ypzoWS2QSAEQu/36C37I69Xp09WhHv3SJyo2b/S8tS3mPnL9WnTm77Izz1nmYbdwUjiU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A976212FC;
-	Wed, 13 Aug 2025 04:47:01 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E582312FC;
+	Wed, 13 Aug 2025 04:47:04 -0700 (PDT)
 Received: from pluto.guest.local (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACA283F738;
-	Wed, 13 Aug 2025 04:47:06 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D7963F738;
+	Wed, 13 Aug 2025 04:47:10 -0700 (PDT)
 From: Cristian Marussi <cristian.marussi@arm.com>
 To: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
@@ -50,9 +50,9 @@ Cc: sudeep.holla@arm.com,
 	d-gole@ti.com,
 	souvik.chakravarty@arm.com,
 	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH 6/8] firmware: arm_scmi: Add SCMIV4.0 Powercap notifications support
-Date: Wed, 13 Aug 2025 12:46:07 +0100
-Message-ID: <20250813114609.1305571-7-cristian.marussi@arm.com>
+Subject: [PATCH 7/8] include: trace: Add new parameter to trace_scmi_fc_call
+Date: Wed, 13 Aug 2025 12:46:08 +0100
+Message-ID: <20250813114609.1305571-8-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20250813114609.1305571-1-cristian.marussi@arm.com>
 References: <20250813114609.1305571-1-cristian.marussi@arm.com>
@@ -64,76 +64,150 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend notification support to the new SCMIv4.0 Powercap format that carry
-also a CPL identifier where specified.
+Since SCMIv4.0 some of the supported Fastchannels can be configured using
+an additional parameter like CPL_ID or Capability_ID.
 
-Since this addition completes SCMIv4.0 Powercap support bump also the
-protocol version define.
+Add equivalent support in the SCMI fastchannel traces to printout also such
+parameter and fix all the existent call sites.
+
+When such parameter is not used, it will simply show up as zero.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/powercap.c | 13 +++++++++----
- include/linux/scmi_protocol.h        |  3 ++-
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/firmware/arm_scmi/perf.c     |  8 ++++----
+ drivers/firmware/arm_scmi/powercap.c | 12 +++++++-----
+ include/trace/events/scmi.h          | 10 ++++++----
+ 3 files changed, 17 insertions(+), 13 deletions(-)
 
+diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+index 99f2c5a510e0..3b7dca4854e4 100644
+--- a/drivers/firmware/arm_scmi/perf.c
++++ b/drivers/firmware/arm_scmi/perf.c
+@@ -563,7 +563,7 @@ static int __scmi_perf_limits_set(const struct scmi_protocol_handle *ph,
+ 		struct scmi_fc_info *fci = &dom->fc_info[PERF_FC_LIMIT];
+ 
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LIMITS_SET,
+-				   dom->id, min_perf, max_perf);
++				   dom->id, 0, min_perf, max_perf);
+ 		iowrite32(max_perf, fci->set_addr);
+ 		iowrite32(min_perf, fci->set_addr + 4);
+ 		ph->hops->fastchannel_db_ring(fci->set_db);
+@@ -648,7 +648,7 @@ static int __scmi_perf_limits_get(const struct scmi_protocol_handle *ph,
+ 		*max_perf = ioread32(fci->get_addr);
+ 		*min_perf = ioread32(fci->get_addr + 4);
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LIMITS_GET,
+-				   dom->id, *min_perf, *max_perf);
++				   dom->id, 0, *min_perf, *max_perf);
+ 		return 0;
+ 	}
+ 
+@@ -718,7 +718,7 @@ static int __scmi_perf_level_set(const struct scmi_protocol_handle *ph,
+ 		struct scmi_fc_info *fci = &dom->fc_info[PERF_FC_LEVEL];
+ 
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LEVEL_SET,
+-				   dom->id, level, 0);
++				   dom->id, 0, level, 0);
+ 		iowrite32(level, fci->set_addr);
+ 		ph->hops->fastchannel_db_ring(fci->set_db);
+ 		return 0;
+@@ -781,7 +781,7 @@ static int __scmi_perf_level_get(const struct scmi_protocol_handle *ph,
+ 	if (dom->fc_info && dom->fc_info[PERF_FC_LEVEL].get_addr) {
+ 		*level = ioread32(dom->fc_info[PERF_FC_LEVEL].get_addr);
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LEVEL_GET,
+-				   dom->id, *level, 0);
++				   dom->id, 0, *level, 0);
+ 		return 0;
+ 	}
+ 
 diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-index 1c4b79249c40..350dd1f135ca 100644
+index 350dd1f135ca..a8b442e9b818 100644
 --- a/drivers/firmware/arm_scmi/powercap.c
 +++ b/drivers/firmware/arm_scmi/powercap.c
-@@ -18,7 +18,7 @@
- #include "notify.h"
+@@ -597,7 +597,7 @@ static int __scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
+ 	    dom->cpli[cpl_id].fc_info[POWERCAP_FC_CAP].get_addr) {
+ 		*power_cap = ioread32(dom->cpli[cpl_id].fc_info[POWERCAP_FC_CAP].get_addr);
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_GET,
+-				   dom->id, *power_cap, 0);
++				   dom->id, cpl_id, *power_cap, 0);
+ 		return 0;
+ 	}
  
- /* Updated only after ALL the mandatory features for that version are merged */
--#define SCMI_PROTOCOL_SUPPORTED_VERSION		0x20000
-+#define SCMI_PROTOCOL_SUPPORTED_VERSION		0x30000
+@@ -730,7 +730,7 @@ static int __scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
+ 		iowrite32(power_cap, fci->set_addr);
+ 		ph->hops->fastchannel_db_ring(fci->set_db);
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_SET,
+-				   domain_id, power_cap, 0);
++				   domain_id, cpl_id, power_cap, 0);
+ 		ret = 0;
+ 	} else {
+ 		ret = pi->xfer_cap_set(ph, pc, cpl_id, power_cap, ignore_dresp);
+@@ -835,7 +835,8 @@ static int scmi_powercap_avg_interval_get(const struct scmi_protocol_handle *ph,
+ 			POWERCAP_PAI_GET : POWERCAP_CAI_GET;
  
- #define CPL0	0
+ 		*val = ioread32(dom->cpli[cpl_id].fc_info[POWERCAP_FC_XAI].get_addr);
+-		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, trace_cmd, domain_id, *val, 0);
++		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, trace_cmd, domain_id,
++				   cpl_id, *val, 0);
+ 		return 0;
+ 	}
  
-@@ -156,7 +156,8 @@ struct scmi_powercap_cap_changed_notify_payld {
- 	__le32 agent_id;
- 	__le32 domain_id;
- 	__le32 power_cap;
--	__le32 pai;
-+	__le32 avg_ivl;
-+	__le32 cpli;
- };
+@@ -908,7 +909,8 @@ static int scmi_powercap_avg_interval_set(const struct scmi_protocol_handle *ph,
+ 			POWERCAP_PAI_SET : POWERCAP_CAI_SET;
+ 		struct scmi_fc_info *fci = &pc->cpli[cpl_id].fc_info[POWERCAP_FC_XAI];
  
- struct scmi_powercap_meas_changed_notify_payld {
-@@ -1308,14 +1309,18 @@ scmi_powercap_fill_custom_report(const struct scmi_protocol_handle *ph,
- 		const struct scmi_powercap_cap_changed_notify_payld *p = payld;
- 		struct scmi_powercap_cap_changed_report *r = report;
+-		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, trace_cmd, domain_id, ivl, 0);
++		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, trace_cmd, domain_id,
++				   cpl_id, ivl, 0);
+ 		iowrite32(ivl, fci->set_addr);
+ 		ph->hops->fastchannel_db_ring(fci->set_db);
+ 		return 0;
+@@ -961,7 +963,7 @@ static int scmi_powercap_measurements_get(const struct scmi_protocol_handle *ph,
+ 		/* See SCMIv4.0 3.10.2 - Payload is 32bit ONLY avg_power */
+ 		*avg_ivl = 0;
+ 		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_MEASUREMENTS_GET,
+-				   pc->id, *avg_power, *avg_ivl);
++				   pc->id, 0, *avg_power, *avg_ivl);
+ 		return 0;
+ 	}
  
--		if (sizeof(*p) != payld_sz)
-+		if (sizeof(*p) > payld_sz)
- 			break;
+diff --git a/include/trace/events/scmi.h b/include/trace/events/scmi.h
+index 703b7bb68e44..8be1e3837386 100644
+--- a/include/trace/events/scmi.h
++++ b/include/trace/events/scmi.h
+@@ -10,13 +10,14 @@
+ #define TRACE_SCMI_MAX_TAG_LEN	6
  
- 		r->timestamp = timestamp;
- 		r->agent_id = le32_to_cpu(p->agent_id);
- 		r->domain_id = le32_to_cpu(p->domain_id);
- 		r->power_cap = le32_to_cpu(p->power_cap);
--		r->pai = le32_to_cpu(p->pai);
-+		r->avg_ivl = le32_to_cpu(p->avg_ivl);
-+		if (sizeof(*p) == payld_sz)
-+			r->cpli = le32_to_cpu(p->cpli);
-+		else
-+			r->cpli = 0;
- 		*src_id = r->domain_id;
- 		rep = r;
- 		break;
-diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
-index a98213bff60a..303d9183e1da 100644
---- a/include/linux/scmi_protocol.h
-+++ b/include/linux/scmi_protocol.h
-@@ -1125,7 +1125,8 @@ struct scmi_powercap_cap_changed_report {
- 	unsigned int	agent_id;
- 	unsigned int	domain_id;
- 	unsigned int	power_cap;
--	unsigned int	pai;
-+	unsigned int	avg_ivl;
-+	unsigned int	cpli;
- };
+ TRACE_EVENT(scmi_fc_call,
+-	TP_PROTO(u8 protocol_id, u8 msg_id, u32 res_id, u32 val1, u32 val2),
+-	TP_ARGS(protocol_id, msg_id, res_id, val1, val2),
++	TP_PROTO(u8 protocol_id, u8 msg_id, u32 res_id, u32 sub_id, u32 val1, u32 val2),
++	TP_ARGS(protocol_id, msg_id, res_id, sub_id, val1, val2),
  
- struct scmi_powercap_meas_changed_report {
+ 	TP_STRUCT__entry(
+ 		__field(u8, protocol_id)
+ 		__field(u8, msg_id)
+ 		__field(u32, res_id)
++		__field(u32, sub_id)
+ 		__field(u32, val1)
+ 		__field(u32, val2)
+ 	),
+@@ -25,13 +26,14 @@ TRACE_EVENT(scmi_fc_call,
+ 		__entry->protocol_id = protocol_id;
+ 		__entry->msg_id = msg_id;
+ 		__entry->res_id = res_id;
++		__entry->sub_id = sub_id;
+ 		__entry->val1 = val1;
+ 		__entry->val2 = val2;
+ 	),
+ 
+-	TP_printk("pt=%02X msg_id=%02X res_id:%u vals=%u:%u",
++	TP_printk("pt=%02X msg_id=%02X res_id:%u sub_id:%u vals=%u:%u",
+ 		__entry->protocol_id, __entry->msg_id,
+-		__entry->res_id, __entry->val1, __entry->val2)
++		__entry->res_id, __entry->sub_id, __entry->val1, __entry->val2)
+ );
+ 
+ TRACE_EVENT(scmi_xfer_begin,
 -- 
 2.47.0
 
