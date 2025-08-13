@@ -1,140 +1,225 @@
-Return-Path: <linux-pm+bounces-32252-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15AACB246E6
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 12:15:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E34AB24713
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 12:21:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0A0694E138C
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 10:15:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEF431882F5D
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 10:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC3C2D6E4A;
-	Wed, 13 Aug 2025 10:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D082D2390;
+	Wed, 13 Aug 2025 10:18:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6085623D7D3;
-	Wed, 13 Aug 2025 10:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A5923D7D3;
+	Wed, 13 Aug 2025 10:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755080145; cv=none; b=Xd1LuKAXTPBMAqwbU9jOE+DmKu4pwv6fUHmTZiy63CXoMHhOBNA/28Eq6F5o9y8pQHk+nP4P0HqobXexXYBCWhRm3Mxz5/bllF/CRHZtnyYcFpD81GxN++4HlEWHmLVAuA1TBbNOcbjxtg4J/2qvF+1SS5/eu5ueq2NwnjbdUQo=
+	t=1755080295; cv=none; b=XuNWTp1d7H1ugRph59wB1wpVBjxqr0QeiPTcRxqJ1BAQZSCmxNy5lHjYtgTHRjmW6kcucxqNxMEI0FZ6EsvncvrD9JejtKJdw449qSFwhRkhyztLRF4W0nd13Mv1K/AaSEwcnVU4irDwpJ7ICmI4jEGe4D780sdr08TTKDFCvAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755080145; c=relaxed/simple;
-	bh=ZluH6uhX2B/02Winvt1DG5yfLXuMX01kxN6jfx2fzOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t/GOcw6igeXMJ594cYKnvNBoHxL/H3SZMzbQks7F8dDKOAQkNPyAJ/QcVYH8Q4vBlff4Yxvc/zFgCucov3PA72IyiIGox9dDhUnYByxwCvY7S9qeozU84my+G7M6enqO2Sf/SIb1YvzEhs8RKfL5ilAzqu/gTo5DL9T93eXQvOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C21B12FC;
-	Wed, 13 Aug 2025 03:15:35 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D59D93F5A1;
-	Wed, 13 Aug 2025 03:15:39 -0700 (PDT)
-Date: Wed, 13 Aug 2025 12:15:24 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: Prashant Malani <pmalani@google.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jie Zhan <zhanjie9@hisilicon.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-Message-ID: <aJxlvMFD2hHaKdoK@arm.com>
-References: <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
- <aIso4kLtChiQkBjH@arm.com>
- <CAFivqm+kbRbJsJ_Obb4bV6fgxbqAwOndLUCDwHvWWnpMYoNoNw@mail.gmail.com>
- <aIvSe9VtZ-zlYfbQ@arm.com>
- <CAFivqmKR1dqVqTsoznH2-n8cyAM1=5zEGcEvmESU8RNGac-0sA@mail.gmail.com>
- <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
- <aJMCgGt5zu5Dhrd5@arm.com>
- <CAFivqmLSp6RwfsPBK0d=zvRd6M_5GoeU4jHb-0OM9BpaDeSrzA@mail.gmail.com>
- <aJR-4J-sTpLaNIJB@arm.com>
- <aJVdjwU-qkdDIXaD@google.com>
+	s=arc-20240116; t=1755080295; c=relaxed/simple;
+	bh=YxTow1FaDcorwZ+8Tcgfnvrr1e/ojSuzQm1Eev2FX1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QYfoTeyBfAxCkjKTGeTeh+Lgczu3w68HrDalyiuM56otgUp3uf3D6YGg9pskToLbC+AeLHPL9D8brvGYb8gJIk2/VKpm4sQMJuERbhjWPtT6hlEu0RD8w1YbYjq5A60eJ6S8Yo9JgIQ0pByqF+C5+qvnvAARrD4lUBC2KGqoIn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4c242m0HR2z2Cg89;
+	Wed, 13 Aug 2025 18:13:36 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9C76F1A016C;
+	Wed, 13 Aug 2025 18:17:55 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 13 Aug
+ 2025 18:17:54 +0800
+Message-ID: <561a9474-7be6-4c8a-8a5d-40efb186b3d2@huawei.com>
+Date: Wed, 13 Aug 2025 18:17:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aJVdjwU-qkdDIXaD@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/3] arm64: topology: Setup AMU FIE for online CPUs
+ only
+To: Beata Michalska <beata.michalska@arm.com>
+CC: <catalin.marinas@arm.com>, <will@kernel.org>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <sudeep.holla@arm.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <vincent.guittot@linaro.org>,
+	<yangyicong@hisilicon.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>,
+	<yubowen8@huawei.com>, <linhongye@h-partners.com>
+References: <20250805093330.3715444-1-zhenglifeng1@huawei.com>
+ <20250805093330.3715444-4-zhenglifeng1@huawei.com> <aJMmjKenJaDnRskH@arm.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <aJMmjKenJaDnRskH@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On Fri, Aug 08, 2025 at 02:14:39AM +0000, Prashant Malani wrote:
-> Hi Beata,
-> 
-> On Aug 07 12:24, Beata Michalska wrote:
-> > Right .... that's what happens when you are (I am) making last minute clean up.
-> > That should fix it. Would you mind giving it another go ? Would appreciate it.
-> > 
-> > ---
-> > BR
-> > Beata
-> > 
-> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > index 65adb78a9a87..2a51e93fcd6c 100644
-> > --- a/arch/arm64/kernel/topology.c
-> > +++ b/arch/arm64/kernel/topology.c
-> > @@ -543,7 +543,7 @@ void counters_burst_read_on_cpu(void *arg)
-> >  
-> >  static inline bool cpc_reg_supported(struct cpc_reg *reg)
-> >  {
-> > -       return !((u64)reg->address != 0x0 || (u64)reg->address != 0x1);
-> > +       return !((u64)reg->address != 0x0 && (u64)reg->address != 0x1);
-> >  }
-> 
-> Here are the measurements with the fix:
-> 
-> The readings are less accurate. There are some which report
-> 3.4 GHz (as earlier) but many are off:
-> 
-> t0: del:77500009084, ref:22804739600
-> t1: del:77500020316, ref:22804743100
-> ref_perf:10
-> delivered_perf:32
-> 
-> t0: del:77910203848, ref:22941794740
-> t1: del:77910215594, ref:22941798070
-> ref_perf:10
-> delivered_perf:35
-> 
-> t0: del:77354782419, ref:22762276000
-> t1: del:77354793991, ref:22762279400
-> ref_perf:10
-> delivered_perf:34
-> 
-> t0: del:64470686034, ref:22998377620
-> t1: del:64470695313, ref:22998380880
-> ref_perf:10
-> delivered_perf:28
-> 
-> t0: del:78019898424, ref:22957940640
-> t1: del:78019912872, ref:22957944590
-> ref_perf:10
-> delivered_perf:36
-> 
-> Best regards,
-> 
-> -Prashant
-Ok, that's not really good.
-Any chances on sharing which platform are you using ?
-Remote debugging tends to be rather painful.
+On 2025/8/6 17:55, Beata Michalska wrote:
 
----
-(Note: I will be off for couple of days so please bear with me)
+> On Tue, Aug 05, 2025 at 05:33:30PM +0800, Lifeng Zheng wrote:
+>> When boot with maxcpu=1 restrict, and LPI(Low Power Idle States) is on,
+>> only CPU0 will go online. The support AMU flag of CPU0 will be set but the
+>> flags of other CPUs will not. This will cause AMU FIE set up fail for CPU0
+>> when it shares a cpufreq policy with other CPU(s). After that, when other
+>> CPUs are finally online and the support AMU flags of them are set, they'll
+>> never have a chance to set up AMU FIE, even though they're eligible.
+>>
+>> To solve this problem, the process of setting up AMU FIE needs to be
+>> modified as follows:
+>>
+>> 1. Set up AMU FIE only for the online CPUs.
+>>
+>> 2. Try to set up AMU FIE each time a CPU goes online and do the
+>> freq_counters_valid() check. If this check fails, clear scale freq source
+>> of all the CPUs related to the same policy, in case they use different
+>> source of the freq scale.
+>>
+>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>> ---
+>>  arch/arm64/kernel/topology.c | 54 ++++++++++++++++++++++++++++++++++--
+>>  1 file changed, 52 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+>> index 9317a618bb87..b68621b3c071 100644
+>> --- a/arch/arm64/kernel/topology.c
+>> +++ b/arch/arm64/kernel/topology.c
+>> @@ -385,7 +385,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
+>>  	struct cpufreq_policy *policy = data;
+>>  
+>>  	if (val == CPUFREQ_CREATE_POLICY)
+>> -		amu_fie_setup(policy->related_cpus);
+>> +		amu_fie_setup(policy->cpus);
+> I think my previous comment still stands.
+> This will indeed set the AMU FIE support for online cpus.
+> Still, on each frequency change, arch_set_freq_scale will be called with
+> `related_cpus`, and that mask will be used to verify support for AMU counters,
+> and it will report there is none as 'related_cpus' won't be a subset of
+> `scale_freq_counters_mask`. As a consequence, new scale will be set, as seen by
+> the cpufreq. Now this will be corrected on next tick but it might cause
+> disruptions. So this change should also be applied to cpufreq - if feasible, or
+> at least be proven not to be an issue. Unless I am missing smth.
 
-BR
-Beata
+I know what you mean now. Yes, I think you are right, this change should
+also be applied to cpufreq too. Thanks!
+
+>>  
+>>  	/*
+>>  	 * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
+>> @@ -404,10 +404,60 @@ static struct notifier_block init_amu_fie_notifier = {
+>>  	.notifier_call = init_amu_fie_callback,
+>>  };
+>>  
+>> +static int cpuhp_topology_online(unsigned int cpu)
+>> +{
+>> +	struct cpufreq_policy *policy = cpufreq_cpu_get_raw_no_check(cpu);
+>> +
+>> +	/*
+>> +	 * If the online CPUs are not all AMU FIE CPUs or the new one is already
+>> +	 * an AMU FIE one, no need to set it.
+>> +	 */
+>> +	if (!policy || !cpumask_available(amu_fie_cpus) ||
+>> +	    !cpumask_subset(policy->cpus, amu_fie_cpus) ||
+>> +	    cpumask_test_cpu(cpu, amu_fie_cpus))
+>> +		return 0;
+> This is getting rather cumbersome as the CPU that is coming online might belong
+> to a policy that is yet to be created. Both AMU FIE support, as well as cpufreq,
+> rely on dynamic hp state so, in theory, we cannot be certain that the cpufreq
+> callback will be fired first (although that seems to be the case).
+> If that does not happen, the policy will not exist, and as such given CPU
+> will not use AMUs for FIE. The problem might be hypothetical but it at least
+> deservers a comment I think.
+
+Actually, this callback will always be fired before the cpufreq one,
+because init_amu_fie() is called before any cpufreq driver init func (It
+has to be, otherwise the init_amu_fie_notifier cannot be registered before
+it is needed.). And the callback that is setup first will be called first
+when online if rely on dynamic hp state. So in your hypothetical scenario,
+yes, the policy will not exist and this funcion will do nothing. But that's
+OK because the notifier callback will do what should be done when the
+policy is being created.
+
+> Second problem is cpumask_available use: this might be the very fist CPU that
+> might potentially rely on AMUs for frequency invariance so that mask may not be
+> available yet. That does not mean AMUs setup should be skipped. Not just yet,
+> at least. Again more hypothetical.
+
+Same, things will be done in the notifier callback when the policy is being
+created.
+
+> BTW, there should be `amu_fie_cpu_supported'.
+
+Sorry, I can't see why it is needed. Could you explained further?
+
+>> +
+>> +	/*
+>> +	 * If the new online CPU cannot pass this check, all the CPUs related to
+>> +	 * the same policy should be clear from amu_fie_cpus mask, otherwise they
+>> +	 * may use different source of the freq scale.
+>> +	 */
+>> +	if (!freq_counters_valid(cpu)) {
+>> +		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH,
+>> +						 policy->related_cpus);
+>> +		cpumask_andnot(amu_fie_cpus, amu_fie_cpus, policy->related_cpus);
+> I think it might deserve a warning as this probably should not happen.
+
+Yes, makes sense. Thanks!
+
+> 
+> ---
+> BR
+> Beata
+>> +		return 0;
+>> +	}
+>> +
+>> +	cpumask_set_cpu(cpu, amu_fie_cpus);
+>> +
+>> +	topology_set_scale_freq_source(&amu_sfd, cpumask_of(cpu));
+>> +
+>> +	pr_debug("CPU[%u]: counter will be used for FIE.", cpu);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  static int __init init_amu_fie(void)
+>>  {
+>> -	return cpufreq_register_notifier(&init_amu_fie_notifier,
+>> +	int ret;
+>> +
+>> +	ret = cpufreq_register_notifier(&init_amu_fie_notifier,
+>>  					CPUFREQ_POLICY_NOTIFIER);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+>> +					"arm64/topology:online",
+>> +					cpuhp_topology_online,
+>> +					NULL);
+>> +	if (ret < 0) {
+>> +		cpufreq_unregister_notifier(&init_amu_fie_notifier,
+>> +					    CPUFREQ_POLICY_NOTIFIER);
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>>  }
+>>  core_initcall(init_amu_fie);
+>>  
+>> -- 
+>> 2.33.0
+>>
+> 
+
 
