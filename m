@@ -1,354 +1,303 @@
-Return-Path: <linux-pm+bounces-32291-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35666B24A43
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 15:12:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B599B24A92
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 15:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A3457B06E2
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:10:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68FF216B9A2
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1AA82E7F35;
-	Wed, 13 Aug 2025 13:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 658DF2E8DEC;
+	Wed, 13 Aug 2025 13:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U1GK3eTe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BcDmq2A0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC7A2E718B;
-	Wed, 13 Aug 2025 13:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F64C21257A;
+	Wed, 13 Aug 2025 13:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755090674; cv=none; b=aytgRsCMk5l0bx9ZGPojlIn+5NRoLjOLMKITchdVg2J2IWZvegj1rN3hRO+EgTd6QsMc1YFS72Vkffdg7mfGMyvxeBi2bvh0t0pS7oIzH4/s7knOmSXRZIj1AcOkrri4Tk199BHDyuOCwjptepCGgootYY8ytz0geKVjZBwdG9Y=
+	t=1755091624; cv=none; b=dw9qO4NxJ8tg3phIEgVPNlUHhtYv+okoXIoIW66FCDlItbtqqx0xLCKOr13Rrc6UJ/wGkfHxrmrwcACH9Wowdh4GZ0/Mfgrvk3sbLrh36SZbfba3G3iu31A0Ity3jjXaa2u3Qfk4Yci9+5NYvfVoeHeYAd+mEupT2NNUN5uncCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755090674; c=relaxed/simple;
-	bh=0nWjFYh74w2mIcJjfCn/sF1211cVnM+5dP9HRvjwS7w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WIUo5cz1TTjDCTCHH3IU3lk/KS0+BvDJSyop717BLrVqazS0FDJkZOToyQPUmo8lGdSHqqtXPD19JJHQub3lPn5ldAq7ouNncUBgsujttcNZo6AJhIQSckOHb0EZ+NEeDt9coX+05Dif4oD5/a17eCdvZr/k+r2h+ISuzgI4/Eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U1GK3eTe; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-32128c5fc44so857267a91.1;
-        Wed, 13 Aug 2025 06:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755090672; x=1755695472; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PMqGPn5i1dBgX26P0LPYzxtUAGEpZYYhsp9BiJes8v0=;
-        b=U1GK3eTemfNES5g/OqLWMa14IfknnmtUKEtJg1P2MVImERq7ucX0+lHiP3WyLQE617
-         lXjLcgHyFb62d8GTyUhhNavFHRnKeWNQ1Va+ZN1flIDysQMD3Y9Jrs6vM4UEKFTprCRQ
-         VGuXObT9p3sX8Goels8jxHrhLY1zcsusJdqThoM4uWZHoy6bAtN0hPHEj4sNhSEhm4LW
-         qoWwr+u1OzsKrQmDBvuVPpfYlOezltNepvbGU0ApMc1QYPjPYHsxGjL4ANUz9N2T20Qw
-         vWN2uIJUzwohWY5Nwq5x6QE4WyUn64T66Ryi2DZZsAfohIBR8zR1xRcJp1JnNXoQIUAj
-         Z+QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755090672; x=1755695472;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PMqGPn5i1dBgX26P0LPYzxtUAGEpZYYhsp9BiJes8v0=;
-        b=AliPsjWkR167LCdqXOsp9XEwNAcIzmLKdlL6pmhlH0E4+3+//LrFAEdh+/uXc+c0bC
-         JSbzNvaw57AeZvYJyXf9klQsEitnrPSzfjk6m924+LsnrHG/E8QVRiUzjML3VeSo3iBc
-         pqYg8Zt9bo3tSt4Pmpzliv0Qi5WGKpNmvE30kDr3mZavPg7JhQdmO/ZAPze8gZTzcAyD
-         D5ZEluxWEFFz3TMwXo1woamzMx4MkZxWRwV84L9CuY57K8lCRcJwq48SA4/BCvfdpv1g
-         kg+3vkcCoKWmjGem4MxqGpp5WjOTYg/wJ+LKyrWlSHsEqyRGZIymMh5SiLDSkxzZ+3Im
-         z1oA==
-X-Forwarded-Encrypted: i=1; AJvYcCVIBbhg+tkhSkvdduEmWqbEIuwXuk1IsJOSe1rclaOgY/au+ibv4NJ/UE1XflBuROYvHi95GWgmmXtvpo+adBVLSnM=@vger.kernel.org, AJvYcCX5tWJqe10w8Ab19UmKdDLOTIs2N7nsV4mlySqMKF0Vl49uAiemdWhmmGa6cz70BXnmXfktlQ8AAXPAODs=@vger.kernel.org, AJvYcCXXg9KYwFO8aD/zjE57WUx0tKSkFPa+TiLxep4PrBW+1GZpgOACpPVgM7/q36qepI4XN8u72YpnIsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwBxc/p2T/4Pxm24cWzA6pL4nZ+D2dmt33+UWNS1EC2eA+nI5Q
-	A7gMHkNNs5Pj0td31UIL5SqNYq1tKqwGtgkFsCgfcizB+8oI6a6lLY+g
-X-Gm-Gg: ASbGncurlhfozzf/KnejY1CNCjfV3hz+kAgeEnSNREaLMjNfWBJXlb2MIzyOLHEVgSj
-	vPy0QWLtR73+Db3TvUqH1j71Zggmk9VpWvc895BrdOcwzyveXtF6UnQixxqHjxniYE0SP/cwBrf
-	Ec9UPIaCeR8oZbAKltetfG6xorOydZAh/1jBErmCkfQ6vFR9ls4grWU3rjg4XLTCHED9pUAUyLu
-	spMDFGNn2OyRyQ5K00WZ2lWnjGyzkRaDsPQvk1XObeTmRL6SqNCO9Eyv+L+CU7TXuI4g/U+uLx8
-	pM/b5KRMfAKT5LzGMRrv09Ah4WRK/MiAOEUi1SYSF3NSg8XhU7Svwc/PueQ+gCKd7KrprgQtU/N
-	aIZLIvCClbdIfBCshxkPiZqAY28eXuA4=
-X-Google-Smtp-Source: AGHT+IEPKcFPf/H6yHGsr0sS7omSEBlqNNcKUaAqL1joOuoGej9xA/Vpwpo3atGz6DL927Y0FQPKsg==
-X-Received: by 2002:a17:90a:c2c8:b0:320:e145:26f3 with SMTP id 98e67ed59e1d1-321d27e34cbmr3948954a91.8.1755090672310;
-        Wed, 13 Aug 2025 06:11:12 -0700 (PDT)
-Received: from rockpi-5b ([45.112.0.216])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.11.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 06:11:11 -0700 (PDT)
-From: Anand Moon <linux.amoon@gmail.com>
-To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-pm@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Cc: Anand Moon <linux.amoon@gmail.com>,
-	Mateusz Majewski <m.majewski2@samsung.com>
-Subject: [PATCH v7 7/7] thermal/drivers/exynos: Refactor IRQ clear logic using SoC-specific config
-Date: Wed, 13 Aug 2025 18:39:51 +0530
-Message-ID: <20250813131007.343402-8-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250813131007.343402-1-linux.amoon@gmail.com>
-References: <20250813131007.343402-1-linux.amoon@gmail.com>
+	s=arc-20240116; t=1755091624; c=relaxed/simple;
+	bh=CAGwRbK9agilMzSkS2Mku6a9yu8gVZy/lUWt4OvTX0g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ksZQCpyXjJblE3TDmWYAT3Oxc1x70JMRBHPmnVg7wj4/dkM63bpHfUqH/8k9OQ8/svV07rtp2YWjMvXwGeF8N3owoz7hz2Hv3divsTxEGfHb9goItlSOt6OL9h15YWSBmBU7p5rH3FvqLkM4q7JwDyKpfbz+CICIzLtgX8pCBvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BcDmq2A0; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755091623; x=1786627623;
+  h=date:from:to:cc:subject:message-id;
+  bh=CAGwRbK9agilMzSkS2Mku6a9yu8gVZy/lUWt4OvTX0g=;
+  b=BcDmq2A0qJhHBbtf9A4hq+dQj68wNV8q4UZw2kC6OBIVdf/mYotS4b1N
+   pScDt7zznONXnU0MQKhMfw5whNT1ztw1tsPFp/nvHg45UE/HcNNl2JgxX
+   5UgMpgaEiGB+a1w6fehHC41tz+R3yQFuYiu5AJ3PSfHGMYibjmQ6wYFZ+
+   C84yoPMizaHxZp4Eo0gxPnJrKpsx63hu+i1CkVgaZPvMuqzOtEh+H6J4U
+   GI/TZaVEYobSkOZ0KtJVStq083obHBgiI5Ya0wYLZ7BfaDO5HPOjtwFIB
+   e6iLvaiaZOihm3B2h+nnXz5JSxIxk9u/ZGHU1HazPcwZNjjzEzGuKx7Zv
+   Q==;
+X-CSE-ConnectionGUID: 9YIS0xU6RLyFzPlJbbYqhw==
+X-CSE-MsgGUID: kytbd6Y2T6aEMSlCKWFMyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="79958986"
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="79958986"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 06:26:49 -0700
+X-CSE-ConnectionGUID: gq2TGI5vTp+5u9uH8Gr4Kg==
+X-CSE-MsgGUID: 88RC2jgZSziBb+3ZgGfHiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="170683841"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 13 Aug 2025 06:26:48 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1umBUy-0009w0-1S;
+	Wed, 13 Aug 2025 13:26:38 +0000
+Date: Wed, 13 Aug 2025 21:26:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ aad7074906486210a097678e752ed54853813044
+Message-ID: <202508132102.mmgFnJdU-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The Exynos TMU driver's IRQ clear logic has been refactored for improved
-maintainability and reduced code duplication. A unified
-exynos4210_tmu_clear_irqs() implementation now replaces the previous
-reliance on SoC-specific functions and hardcoded register mappings.
-This new implementation leverages SoC-specific configuration fields
-(tmu_intstat, tmu_intclear, and IRQ bit mappings) stored within
-exynos_tmu_data. These fields are populated during device setup within
-exynos_map_dt_data(), thereby streamlining new SoC integration, ensuring
-correct interrupt handling, and improving code clarity. This refactor
-simplifies the addition of new SoC support, ensures correct interrupt
-handling across platforms, and improves overall code clarity.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: aad7074906486210a097678e752ed54853813044  Merge branch 'fixes' into linux-next
 
-Cc: Mateusz Majewski <m.majewski2@samsung.com>
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v7: new patch in this series
-    split the IRQ function handler per SoC.
----
- drivers/thermal/samsung/exynos_tmu.c | 150 +++++++++++++++++----------
- 1 file changed, 96 insertions(+), 54 deletions(-)
+elapsed time: 1155m
 
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 5e581055e3f3..9f94c58e1e74 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -158,6 +158,8 @@ enum soc_type {
-  *	0 < reference_voltage <= 31
-  * @tzd: pointer to thermal_zone_device structure
-  * @enabled: current status of TMU device
-+ * @tmu_intstat: interrupt status register
-+ * @tmu_intclear: interrupt clear register
-  * @tmu_set_low_temp: SoC specific method to set trip (falling threshold)
-  * @tmu_set_high_temp: SoC specific method to set trip (rising threshold)
-  * @tmu_set_crit_temp: SoC specific method to set critical temperature
-@@ -184,6 +186,8 @@ struct exynos_tmu_data {
- 	u8 reference_voltage;
- 	struct thermal_zone_device *tzd;
- 	bool enabled;
-+	u32 tmu_intstat;
-+	u32 tmu_intclear;
- 
- 	void (*tmu_set_low_temp)(struct exynos_tmu_data *data, u8 temp);
- 	void (*tmu_set_high_temp)(struct exynos_tmu_data *data, u8 temp);
-@@ -770,67 +774,90 @@ static irqreturn_t exynos_tmu_threaded_irq(int irq, void *id)
- }
- 
- static void exynos4210_tmu_clear_irqs(struct exynos_tmu_data *data)
-+{
-+	unsigned int val_irq;
-+	u32 tmu_intstat = data->tmu_intstat;
-+	u32 tmu_intclear = data->tmu_intclear;
-+
-+	val_irq = readl(data->base + tmu_intstat);
-+
-+	/* Exynos4210 doesn't support FALL interrupts */
-+	writel(val_irq, data->base + tmu_intclear);
-+}
-+
-+static void exynos4412_tmu_clear_irqs(struct exynos_tmu_data *data)
- {
- 	unsigned int val_irq, clear_irq = 0;
--	u32 tmu_intstat, tmu_intclear;
-+	u32 tmu_intstat = data->tmu_intstat;
-+	u32 tmu_intclear = data->tmu_intclear;
- 	struct tmu_irq_map irq_map = {0};
- 
--	if (data->soc == SOC_ARCH_EXYNOS5260) {
--		tmu_intstat = EXYNOS5260_TMU_REG_INTSTAT;
--		tmu_intclear = EXYNOS5260_TMU_REG_INTCLEAR;
--	} else if (data->soc == SOC_ARCH_EXYNOS7) {
--		tmu_intstat = EXYNOS7_TMU_REG_INTPEND;
--		tmu_intclear = EXYNOS7_TMU_REG_INTPEND;
--	} else if (data->soc == SOC_ARCH_EXYNOS5433) {
--		tmu_intstat = EXYNOS5433_TMU_REG_INTPEND;
--		tmu_intclear = EXYNOS5433_TMU_REG_INTPEND;
--	} else {
--		tmu_intstat = EXYNOS_TMU_REG_INTSTAT;
--		tmu_intclear = EXYNOS_TMU_REG_INTCLEAR;
-+	val_irq = readl(data->base + tmu_intstat);
-+
-+	/* Set SoC-specific interrupt bit mappings */
-+	irq_map.fall[2] = BIT(20);
-+	irq_map.fall[1] = BIT(16);
-+	irq_map.fall[0] = BIT(12);
-+	irq_map.rise[2] = BIT(8);
-+	irq_map.rise[1] = BIT(4);
-+	irq_map.rise[0] = BIT(0);
-+
-+	/* Map active INTSTAT bits to INTCLEAR */
-+	for (int i = 0; i < 3; i++) {
-+		if (val_irq & irq_map.fall[i])
-+			clear_irq |= irq_map.fall[i];
-+		if (val_irq & irq_map.rise[i])
-+			clear_irq |= irq_map.rise[i];
- 	}
- 
-+	if (clear_irq)
-+		writel(clear_irq, data->base + tmu_intclear);
-+}
-+
-+static void exynos5420_tmu_clear_irqs(struct exynos_tmu_data *data)
-+{
-+	unsigned int val_irq, clear_irq = 0;
-+	u32 tmu_intstat = data->tmu_intstat;
-+	u32 tmu_intclear = data->tmu_intclear;
-+	struct tmu_irq_map irq_map = {0};
-+
- 	val_irq = readl(data->base + tmu_intstat);
- 
--	/* Exynos4210 doesn't support FALL interrupts */
--	if (data->soc == SOC_ARCH_EXYNOS4210) {
--		writel(val_irq, data->base + tmu_intclear);
--		return;
-+	/* Set SoC-specific interrupt bit mappings */
-+	irq_map.fall[2] = BIT(24);
-+	irq_map.fall[1] = BIT(20);
-+	irq_map.fall[0] = BIT(16);
-+	irq_map.rise[2] = BIT(8);
-+	irq_map.rise[1] = BIT(4);
-+	irq_map.rise[0] = BIT(0);
-+
-+	for (int i = 0; i < 3; i++) {
-+		if (val_irq & irq_map.fall[i])
-+			clear_irq |= irq_map.fall[i];
-+		if (val_irq & irq_map.rise[i])
-+			clear_irq |= irq_map.rise[i];
- 	}
- 
-+	if (clear_irq)
-+		writel(clear_irq, data->base + tmu_intclear);
-+}
-+
-+static void exynos5433_tmu_clear_irqs(struct exynos_tmu_data *data)
-+{
-+	unsigned int val_irq, clear_irq = 0;
-+	u32 tmu_intstat = data->tmu_intstat;
-+	u32 tmu_intclear = data->tmu_intclear;
-+	struct tmu_irq_map irq_map = {0};
-+
-+	val_irq = readl(data->base + tmu_intstat);
-+
- 	/* Set SoC-specific interrupt bit mappings */
--	switch (data->soc) {
--	case SOC_ARCH_EXYNOS3250:
--	case SOC_ARCH_EXYNOS4412:
--	case SOC_ARCH_EXYNOS5250:
--	case SOC_ARCH_EXYNOS5260:
--		irq_map.fall[2] = BIT(20);
--		irq_map.fall[1] = BIT(16);
--		irq_map.fall[0] = BIT(12);
--		irq_map.rise[2] = BIT(8);
--		irq_map.rise[1] = BIT(4);
--		irq_map.rise[0] = BIT(0);
--		break;
--	case SOC_ARCH_EXYNOS5420:
--	case SOC_ARCH_EXYNOS5420_TRIMINFO:
--		irq_map.fall[2] = BIT(24);
--		irq_map.fall[1] = BIT(20);
--		irq_map.fall[0] = BIT(16);
--		irq_map.rise[2] = BIT(8);
--		irq_map.rise[1] = BIT(4);
--		irq_map.rise[0] = BIT(0);
--		break;
--	case SOC_ARCH_EXYNOS5433:
--	case SOC_ARCH_EXYNOS7:
--		irq_map.fall[2] = BIT(23);
--		irq_map.fall[1] = BIT(17);
--		irq_map.fall[0] = BIT(16);
--		irq_map.rise[2] = BIT(7);
--		irq_map.rise[1] = BIT(1);
--		irq_map.rise[0] = BIT(0);
--		break;
--	default:
--		pr_warn("exynos-tmu: Unknown SoC type %d, using fallback IRQ mapping\n", soc);
--		break;
-+	irq_map.fall[2] = BIT(23);
-+	irq_map.fall[1] = BIT(17);
-+	irq_map.fall[0] = BIT(16);
-+	irq_map.rise[2] = BIT(7);
-+	irq_map.rise[1] = BIT(1);
-+	irq_map.rise[0] = BIT(0);
- 
- 	/* Map active INTSTAT bits to INTCLEAR */
- 	for (int i = 0; i < 3; i++) {
-@@ -915,6 +942,8 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->tmu_control = exynos4210_tmu_control;
- 		data->tmu_read = exynos4210_tmu_read;
- 		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-+		data->tmu_intstat = EXYNOS_TMU_REG_INTSTAT;
-+		data->tmu_intclear = EXYNOS_TMU_REG_INTCLEAR;
- 		data->gain = 15;
- 		data->reference_voltage = 7;
- 		data->efuse_value = 55;
-@@ -934,7 +963,14 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->tmu_control = exynos4210_tmu_control;
- 		data->tmu_read = exynos4412_tmu_read;
- 		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
--		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-+		data->tmu_clear_irqs = exynos4412_tmu_clear_irqs;
-+		if (data->soc == SOC_ARCH_EXYNOS5260) {
-+			data->tmu_intstat = EXYNOS5260_TMU_REG_INTSTAT;
-+			data->tmu_intclear = EXYNOS5260_TMU_REG_INTCLEAR;
-+		} else {
-+			data->tmu_intstat = EXYNOS_TMU_REG_INTSTAT;
-+			data->tmu_intclear = EXYNOS_TMU_REG_INTCLEAR;
-+		}
- 		data->gain = 8;
- 		data->reference_voltage = 16;
- 		data->efuse_value = 55;
-@@ -952,7 +988,9 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->tmu_control = exynos4210_tmu_control;
- 		data->tmu_read = exynos4412_tmu_read;
- 		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
--		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-+		data->tmu_clear_irqs = exynos5420_tmu_clear_irqs;
-+		data->tmu_intstat = EXYNOS_TMU_REG_INTSTAT;
-+		data->tmu_intclear = EXYNOS_TMU_REG_INTCLEAR;
- 		data->gain = 8;
- 		data->reference_voltage = 16;
- 		data->efuse_value = 55;
-@@ -969,7 +1007,9 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->tmu_control = exynos5433_tmu_control;
- 		data->tmu_read = exynos4412_tmu_read;
- 		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
--		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-+		data->tmu_clear_irqs = exynos5433_tmu_clear_irqs;
-+		data->tmu_intstat = EXYNOS5433_TMU_REG_INTPEND;
-+		data->tmu_intclear = EXYNOS5433_TMU_REG_INTPEND;
- 		data->gain = 8;
- 		if (res.start == EXYNOS5433_G3D_BASE)
- 			data->reference_voltage = 23;
-@@ -989,7 +1029,9 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->tmu_control = exynos7_tmu_control;
- 		data->tmu_read = exynos7_tmu_read;
- 		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
--		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-+		data->tmu_clear_irqs = exynos5433_tmu_clear_irqs;
-+		data->tmu_intstat = EXYNOS7_TMU_REG_INTPEND;
-+		data->tmu_intclear = EXYNOS7_TMU_REG_INTPEND;
- 		data->gain = 9;
- 		data->reference_voltage = 17;
- 		data->efuse_value = 75;
--- 
-2.50.1
+configs tested: 209
+configs skipped: 6
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    clang-22
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    clang-19
+arc                              allmodconfig    clang-19
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    clang-22
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    clang-19
+arc                   randconfig-001-20250813    clang-22
+arc                   randconfig-001-20250813    gcc-11.5.0
+arc                   randconfig-002-20250813    clang-22
+arc                   randconfig-002-20250813    gcc-8.5.0
+arm                              allmodconfig    clang-19
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    clang-19
+arm                                 defconfig    clang-19
+arm                   randconfig-001-20250813    clang-22
+arm                   randconfig-002-20250813    clang-22
+arm                   randconfig-002-20250813    gcc-8.5.0
+arm                   randconfig-003-20250813    clang-22
+arm                   randconfig-004-20250813    clang-22
+arm                   randconfig-004-20250813    gcc-8.5.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
+arm64                               defconfig    clang-19
+arm64                 randconfig-001-20250813    clang-22
+arm64                 randconfig-002-20250813    clang-22
+arm64                 randconfig-002-20250813    gcc-12.5.0
+arm64                 randconfig-003-20250813    clang-22
+arm64                 randconfig-004-20250813    clang-22
+csky                              allnoconfig    clang-22
+csky                                defconfig    clang-19
+csky                  randconfig-001-20250813    gcc-14.3.0
+csky                  randconfig-002-20250813    gcc-13.4.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-22
+hexagon                             defconfig    clang-19
+hexagon               randconfig-001-20250813    clang-22
+hexagon               randconfig-002-20250813    clang-22
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    clang-20
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20250813    gcc-11
+i386        buildonly-randconfig-002-20250813    clang-20
+i386        buildonly-randconfig-002-20250813    gcc-11
+i386        buildonly-randconfig-003-20250813    gcc-11
+i386        buildonly-randconfig-004-20250813    clang-20
+i386        buildonly-randconfig-004-20250813    gcc-11
+i386        buildonly-randconfig-005-20250813    gcc-11
+i386        buildonly-randconfig-005-20250813    gcc-12
+i386        buildonly-randconfig-006-20250813    gcc-11
+i386        buildonly-randconfig-006-20250813    gcc-12
+i386                                defconfig    clang-20
+i386                  randconfig-001-20250813    clang-20
+i386                  randconfig-002-20250813    clang-20
+i386                  randconfig-003-20250813    clang-20
+i386                  randconfig-004-20250813    clang-20
+i386                  randconfig-005-20250813    clang-20
+i386                  randconfig-006-20250813    clang-20
+i386                  randconfig-007-20250813    clang-20
+i386                  randconfig-011-20250813    gcc-11
+i386                  randconfig-012-20250813    gcc-11
+i386                  randconfig-013-20250813    gcc-11
+i386                  randconfig-014-20250813    gcc-11
+i386                  randconfig-015-20250813    gcc-11
+i386                  randconfig-016-20250813    gcc-11
+i386                  randconfig-017-20250813    gcc-11
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20250813    clang-19
+loongarch             randconfig-002-20250813    gcc-15.1.0
+m68k                             allmodconfig    clang-19
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-19
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+m68k                          multi_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    clang-19
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    clang-19
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                          ath25_defconfig    gcc-15.1.0
+mips                         bigsur_defconfig    gcc-15.1.0
+mips                           ci20_defconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20250813    gcc-11.5.0
+nios2                 randconfig-002-20250813    gcc-8.5.0
+openrisc                          allnoconfig    clang-22
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250813    gcc-14.3.0
+parisc                randconfig-002-20250813    gcc-8.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    gcc-15.1.0
+powerpc               randconfig-001-20250813    clang-18
+powerpc               randconfig-002-20250813    clang-22
+powerpc               randconfig-003-20250813    clang-20
+powerpc                         wii_defconfig    gcc-15.1.0
+powerpc64             randconfig-001-20250813    clang-22
+powerpc64             randconfig-002-20250813    gcc-8.5.0
+powerpc64             randconfig-003-20250813    clang-17
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    gcc-15.1.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250813    clang-22
+riscv                 randconfig-002-20250813    clang-22
+riscv                 randconfig-002-20250813    gcc-14.3.0
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20250813    clang-22
+s390                  randconfig-002-20250813    clang-18
+s390                  randconfig-002-20250813    clang-22
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-12
+sh                    randconfig-001-20250813    clang-22
+sh                    randconfig-001-20250813    gcc-9.5.0
+sh                    randconfig-002-20250813    clang-22
+sh                    randconfig-002-20250813    gcc-9.5.0
+sh                             shx3_defconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250813    clang-22
+sparc                 randconfig-001-20250813    gcc-8.5.0
+sparc                 randconfig-002-20250813    clang-22
+sparc                 randconfig-002-20250813    gcc-15.1.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20250813    clang-22
+sparc64               randconfig-001-20250813    gcc-8.5.0
+sparc64               randconfig-002-20250813    clang-20
+sparc64               randconfig-002-20250813    clang-22
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250813    clang-22
+um                    randconfig-001-20250813    gcc-12
+um                    randconfig-002-20250813    clang-22
+um                    randconfig-002-20250813    gcc-11
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250813    clang-20
+x86_64      buildonly-randconfig-001-20250813    gcc-12
+x86_64      buildonly-randconfig-002-20250813    clang-20
+x86_64      buildonly-randconfig-003-20250813    clang-20
+x86_64      buildonly-randconfig-003-20250813    gcc-12
+x86_64      buildonly-randconfig-004-20250813    clang-20
+x86_64      buildonly-randconfig-005-20250813    clang-20
+x86_64      buildonly-randconfig-006-20250813    clang-20
+x86_64      buildonly-randconfig-006-20250813    gcc-12
+x86_64                              defconfig    clang-20
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20250813    gcc-12
+x86_64                randconfig-002-20250813    gcc-12
+x86_64                randconfig-003-20250813    gcc-12
+x86_64                randconfig-004-20250813    gcc-12
+x86_64                randconfig-005-20250813    gcc-12
+x86_64                randconfig-006-20250813    gcc-12
+x86_64                randconfig-007-20250813    gcc-12
+x86_64                randconfig-008-20250813    gcc-12
+x86_64                randconfig-071-20250813    clang-20
+x86_64                randconfig-072-20250813    clang-20
+x86_64                randconfig-073-20250813    clang-20
+x86_64                randconfig-074-20250813    clang-20
+x86_64                randconfig-075-20250813    clang-20
+x86_64                randconfig-076-20250813    clang-20
+x86_64                randconfig-077-20250813    clang-20
+x86_64                randconfig-078-20250813    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-12
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-12
+x86_64                           rhel-9.4-ltp    gcc-12
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250813    clang-22
+xtensa                randconfig-001-20250813    gcc-10.5.0
+xtensa                randconfig-002-20250813    clang-22
+xtensa                randconfig-002-20250813    gcc-12.5.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
