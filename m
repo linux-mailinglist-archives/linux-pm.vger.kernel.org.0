@@ -1,140 +1,135 @@
-Return-Path: <linux-pm+bounces-32359-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C7E3B2562D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 00:00:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D4FCB2569C
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 00:27:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA26D884804
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 22:00:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9894A1C28429
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 22:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5CD2ECD37;
-	Wed, 13 Aug 2025 22:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6B630275D;
+	Wed, 13 Aug 2025 22:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EWKqfwS6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YtagT0no"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBB72EFDAC
-	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 22:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1C1302750
+	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 22:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755122422; cv=none; b=IbzUwtcfmiTn2GOmnSV6NW6Uun4B5nciYPF60ZzFzCIms+QovGUgvopchc6/+LANB25a7SWJ0QafuOIUK7PyG8+YaAI3J24LsWHkXj5nXXnWQYcC56Kh72P+q0ELY5OJqevcZDm1NoGa7PzWPGZEzIOB6B2CGsXG5SrTxHBx/0s=
+	t=1755123937; cv=none; b=C0zhdnuqrhlWw8Lf+L+/qMutSQZQkPImEjG28horZI/o7kfLMwNee6hzhJIyD+wHZPUti+gEHHh3OxbVxhgk4lVMmaRVQAwTldm1oHItJwhYQUrytsHIellyur/2K39tup4+L77P8Jaoun4g74atLHVq0HaQViskjrryxO+stqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755122422; c=relaxed/simple;
-	bh=8vDml3sm19tCud9DP2FIyK5L6JNeKNtaH2cdIxByAUE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r2a71kua5r+ervjiAkvZdOwVwCfAg9Az8YPkmEd7c/X/+y2nB/UPqQnTYir8DSWf5BO83RMcj2creEDSm0l/YONjZk3hLyDfRC02vjQ6QqQuGqMdgqQB+0fID6zG7Bm/dkdl2B3jt5NNtHvzM91Vbsg8dTZh3AeGV7TDF16p6YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EWKqfwS6; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3b9dc52c430so161737f8f.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 15:00:20 -0700 (PDT)
+	s=arc-20240116; t=1755123937; c=relaxed/simple;
+	bh=raUBW/Rwb08ubnoczjUwuWKQXa9m1IdVItor+BrO4Qw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UE7lI0t0DMGF7QRJtSfMfN5gaZolSbuV8ISBH6fmtXZD8DixDVqmcohkAbgyUJrmVbpnSeqA9KOUVD/lqc5apHzZT8Tno7kgDkA6NFKZnW4cY43JPhCFSLXa9/EzcAAoS0fjecL+isefg7BYsTLY+Ruw9396K5DmGygY3d2FXro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YtagT0no; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-242d1e9c6b4so80005ad.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 15:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755122418; x=1755727218; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rSErH38GJLhhhn6LqWdJPstddGMa0f2KvMQKCmhEM7c=;
-        b=EWKqfwS6n0+pi00/14gPZtww0wsKDsU/bnL2RV6DVShw0GfzXLJyVn/Cc6MnjrssZp
-         X1836amMcspSQw5nYXA00Ml9O3UbX+gjlmchzXl95TdTs11f16NIC4aQxgH78UVe2H9L
-         P0Fg3ru4kSJfhNvata/V3cuiq5PJwcVTrAAzZl5zqK88A7uYapKOVnu41VLYqOH7KCaJ
-         R5TGyhnUDAsgEo4FWfzss+EgnJbtgs7Igh3KSAWjzJ/+Dmtf0J7UZzSdebJhMrCwWPBU
-         O5Fpyqn0/2JIynOKU+3Bi8r/siHEFAUUOvwen3EeKSjQ0T3jgzH3QTib9ovz6LB/H51n
-         NCdA==
+        d=google.com; s=20230601; t=1755123935; x=1755728735; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=raUBW/Rwb08ubnoczjUwuWKQXa9m1IdVItor+BrO4Qw=;
+        b=YtagT0noN2fkCae1O1KpXmUbwK+1MYhT+oqDmqnRKgBBfW5BrfoxuOD3wGN/QBWWE/
+         w1myyY7rTo1NMomNpwKrGB+nk7l4rq9Txy8fK1gSOOr/Mc+XiFxHaUtEM440eZB3uMuY
+         ysF3M7C/rAw+F9ALH52QcbSAx417Hmzxj7NNxtcmLRXRsDbfObipnnDHggOVT6DXTEgj
+         Kfff2N4u/buv/8ddDzuNXJ3MJ6PXBY5nMJDILOtJkw+SODumDqsAwhbxv0aJi/F+OhY+
+         ZjnNxgCb+99FpqKYuC8EHEBLUaEoR+b7AKvcb1kfVtKA4ENg7lDTLGFHWNIyh5nD/lw0
+         qRyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755122418; x=1755727218;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSErH38GJLhhhn6LqWdJPstddGMa0f2KvMQKCmhEM7c=;
-        b=m4O9hvEVpToRBrYKiG/1QoKbHddLw44i8HOEXkpQjUKTeL+NbDYmhq6OJbIFZ/FkLy
-         ZKcGvRBlQrhGiE/d8VA8dpYGa41ocw93OnNh4pGhqgVbn2zsW8eyjCFUMTP60pOHCnF1
-         0BMClZkdJE59GY/xWthiK6sxiPS+Yn6v1E3hP9o2A4I59W8yUKbWM8B1rmzP2sQytMru
-         pQTxlu1Tw3Cpjf3KhDn+DQsMSkUesOv7w1/Esi3dhG+D7Bgr7jf6JuwFNtKxzv01iD4x
-         bcGoZs7nxhXttp2RsAKlDUNxTwViXFP+K3+K2HmLjeFP5MeYnsU3c39Es4KIuVJdyDPq
-         yXeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLY8l1v0DJ3OVeisLFMENgCjjFFZGDCeW9uzcoJD1YlP87pxOLgnXDTAsl6Oi7+1SxCKpF79eKBw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5clDVplc0PGNCs4PJDsXgkzfjqU1uKjuYznzKZQNeredxz9xd
-	To75m3RuJFsMfLNeOvIm3S9MaHB1gy8RquWKypB1duHc55iE3FWSlr1HSbWpiHHQ7E4=
-X-Gm-Gg: ASbGncuBMUu3sqPK7vv6UBxwv4MK2337n74vlNpQGWnsH5i4VyvYdVTEHJHC/EWEokw
-	HESoa/yarOZ/mnLHO/bqoP1GKLBuWH6wAmcocBS3iHwrZwGd+ggAWcg4iHs0HdUgTIyAHQaYWMh
-	kZcyjxEC2pFeagLW6xFm+tunb8pOPDo4MPhPMcuzRQI4J4f6CRSmlhWiIrAKb+ASTLIxXnGNcze
-	OS++MKebFXWJPQHwi/ymIOEbBM4INx5+Na/A7E6B+uz7gATnakAz7t/gKZaG310tnL2k0iv1Pte
-	YkzuJK/pm8zAH71rXpWV5wmFWklz01rABQ83ZOdCzsheDJ7YO0NQ9vaYq2v8SfLWftwO0Mqlmfx
-	BqNi/rGP+B1e8DuALJFMBpRnVhROmdKcrbnj1y6CzeDVPJKFThnWf3XvWGyBmZg==
-X-Google-Smtp-Source: AGHT+IG0p9l2T2LkiySIWZNQMyABUdzq08C6+UvfHOcIuzynYb0qaNHHfhjbPlxnMtD+LCH7f48i5A==
-X-Received: by 2002:a05:6000:4014:b0:3b9:132a:a554 with SMTP id ffacd0b85a97d-3ba50d84fa8mr154588f8f.51.1755122418500;
-        Wed, 13 Aug 2025 15:00:18 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b79c3bf970sm48674093f8f.25.2025.08.13.15.00.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Aug 2025 15:00:18 -0700 (PDT)
-Message-ID: <5ffb67b8-cded-412b-881c-14179c2ba3b8@linaro.org>
-Date: Thu, 14 Aug 2025 00:00:17 +0200
+        d=1e100.net; s=20230601; t=1755123935; x=1755728735;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=raUBW/Rwb08ubnoczjUwuWKQXa9m1IdVItor+BrO4Qw=;
+        b=EeRaROaS7oLjEarTvo79ueDjob+S4yvmsVmKC4VTBQtHX3hmql3t2mBXO17rcemQqh
+         p9hU+PczUag5SKlOTDlyC8LO4QCISUn98T8lTK4WWm/i9BzYPwrGW1lbemWZnCOH06vr
+         9+6MqHWyZf0wWb0p2Eg7UUdmUW219QDtc/GYcbkaT0uTUpnPiuWaW5yPBArj2wNdNVpX
+         BVgvi3rnAWRVqQ/0+eZ6HvhbjFQ/ufQXznkgGnZ3dU69unO8QdNpc3N5xNK7M0wC6bYa
+         XOPz02N2xcR+E6Z9aVh37I6HDTKgpQIavFZgt0AmkoEPhYwwAs5hv+ZRhZ2qNN/G6sQj
+         8umA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZw3cLzhVF4piRVXHMxeH/q7oEl8kpJqesUlybXNU0rM9cnk5Be/DbZTi2fXRtNvR8RP0i7LH7bA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlwDx/LW4RiZxrQ1yGxTOe/JTNM9xONeaClN1ORIzrG/jCwjer
+	llM/NXSKKkiJbBMx1w6Cu/pFXIADXZzSE5ySoL/17xbnPEnSiLuDfcD/SVpb5YrEjA==
+X-Gm-Gg: ASbGncuY0m1d8zeBEdBfT1y8OuayVHNiPiKqDZb7RmOnOj8VOaX0DvtgWxTzSY44OII
+	QxG1IzR1UO+IxhTdZ6s87HmKHx1n03ADXavd0u6GyXtFE0fGvVsHy9qKuOypdhiX3CE4A1SRwIM
+	VvABvOA37i4QdvWjjezOVEofhOI68pP+C+zJGFGodRpjDijhgJadn1ReHJz+IZ6Wt3JFj3nU8XK
+	FW60e/I8Dl2P4YU8GCE29VgO/CwBSCmu2EWIW8/Fen63KYut8VK+EGpPnSfKvi3W2j2ynecokLm
+	9rm7P9nD3MQ0QfK3vw25PvDTiMKtEjTmGVKpLdp/8jB+vC4G0KV4svMYNk0idHi79wLaD7t/YLj
+	i8QFnoBet98nTCQoEXUKJCAFaZ1YgqqDb7MTXZHRo1I6AP4v40aOOKl4SA4278w==
+X-Google-Smtp-Source: AGHT+IG1N03rQpeAx72+yz9CMGd4rX7g1DTxOuQnxcey3VbI1ylZABro6XbAD2gbqzuQi9feBogTOw==
+X-Received: by 2002:a17:902:d491:b0:240:86b2:aee0 with SMTP id d9443c01a7336-2445a702649mr286615ad.1.1755123935216;
+        Wed, 13 Aug 2025 15:25:35 -0700 (PDT)
+Received: from google.com (167.212.233.35.bc.googleusercontent.com. [35.233.212.167])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3232577eb37sm1075365a91.13.2025.08.13.15.25.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 15:25:34 -0700 (PDT)
+Date: Wed, 13 Aug 2025 22:25:30 +0000
+From: Prashant Malani <pmalani@google.com>
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aJ0Q2uEQ03P9Nuf1@google.com>
+References: <aIso4kLtChiQkBjH@arm.com>
+ <CAFivqm+kbRbJsJ_Obb4bV6fgxbqAwOndLUCDwHvWWnpMYoNoNw@mail.gmail.com>
+ <aIvSe9VtZ-zlYfbQ@arm.com>
+ <CAFivqmKR1dqVqTsoznH2-n8cyAM1=5zEGcEvmESU8RNGac-0sA@mail.gmail.com>
+ <CAFivqmKgiVEWMQ90Lh6T+Y44E6m4jmdF5sUFfVNTmgVHOMtZsw@mail.gmail.com>
+ <aJMCgGt5zu5Dhrd5@arm.com>
+ <CAFivqmLSp6RwfsPBK0d=zvRd6M_5GoeU4jHb-0OM9BpaDeSrzA@mail.gmail.com>
+ <aJR-4J-sTpLaNIJB@arm.com>
+ <aJVdjwU-qkdDIXaD@google.com>
+ <aJxlvMFD2hHaKdoK@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] thermal: rcar_gen3: Add support for per-SoC
- default trim values
-To: Marek Vasut <marek.vasut@mailbox.org>, linux-pm@vger.kernel.org
-Cc: =?UTF-8?Q?Niklas_S=C3=B6derlund?=
- <niklas.soderlund+renesas@ragnatech.se>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>,
- Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
-References: <20250625181739.28391-1-marek.vasut+renesas@mailbox.org>
- <86f5260f-6625-4e2d-88a8-013143922fb9@linaro.org>
- <a65ae3e9-8970-46b4-a80f-3654daa7a0c2@mailbox.org>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <a65ae3e9-8970-46b4-a80f-3654daa7a0c2@mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aJxlvMFD2hHaKdoK@arm.com>
 
-On 13/08/2025 22:37, Marek Vasut wrote:
-> On 8/1/25 11:59 AM, Daniel Lezcano wrote:
->> On 25/06/2025 20:16, Marek Vasut wrote:
->>> The Working Sample R-Car SoCs may not yet have thermal sensor trimming
->>> values programmed into fuses, those fuses are blank instead. For such
->>> SoCs, the driver includes fallback trimming values. Those values are
->>> currently applied to all SoCs which use this driver.
->>>
->>> Introduce support for per-SoC fallback trimming values in preparation
->>> for SoCs which do not use these current trimming values. No functional
->>> change is intended here.
->>>
->>> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
->>> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
->>> ---
->>> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
->>
->> Applied, thanks
-> Is this series supposed to be in linux-next by now ?
-> 
-> I don't see it either on git.kernel.org thermal group tree or your tree, 
-> where was the series applied to ?
+Hi Beata,
 
+On Aug 13 12:15, Beata Michalska wrote:
+> Ok, that's not really good.
+> Any chances on sharing which platform are you using ?
 
-Sorry I did push the branch.
+Unfortunately I can't share that info ATM.
+But it's the ARM standard counters in FFH, so it should be reproducible
+on any platform that has that configuration for those AMU counters.
 
-It is in the thermal bleeding-edge branch now and will go to linux-next 
-in a couple of days
+> Remote debugging tends to be rather painful.
 
+Totally understand. I really appreciate your patience and help in
+figuring this out!
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Please LMK if there are any other experiments/patches you'd like me to
+try.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+BR,
+
+-Prashant
 
