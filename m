@@ -1,232 +1,176 @@
-Return-Path: <linux-pm+bounces-32261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A651B2480E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:09:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 386B4B24855
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:18:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A7188801D2
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 11:08:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A4E31A273F7
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 11:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 595DD2EFDA9;
-	Wed, 13 Aug 2025 11:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977AF2ECEBD;
+	Wed, 13 Aug 2025 11:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pZEeUlg7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369AC223DDA;
-	Wed, 13 Aug 2025 11:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13FE2D373A
+	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 11:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755083333; cv=none; b=AJmHg9jeeWIBcc5/2n4wGmYWJac1uzkhFVfrmNnXn1j3TEYwxFG/I1bvAq25Rz0bqIaKVZLBcd6kJFz1EgKU7wVepq6EktZ9pfeE3KMIfV+Y/0UEygE6qGq54m97EISXSWKcM1fSoiOwUjgGP0IPUxolOyoGCe66Y7+tV8CVUp8=
+	t=1755083882; cv=none; b=ejmkn1M9Qb0g8JVoUZnA4n/EGhbyZlMag+mo14ERaoKg7P6EcBqDhf3gE+Dla15XuxDDC87R7MbyVfeLtWDFLMdarmLQ8kaxTxpgD6a+RHaWleFvInbxpJxS7Sm0d6YbqlXmYwfEfVUM4h5Ch3T2lDCC+sDCgYfn5qQEV5NM5hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755083333; c=relaxed/simple;
-	bh=Tghr+izcpOpnCTi3ya2m5rAl6XyJW8sYrLp6lPffUiw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZcVIB0+gXC9cGR7ho/sZauw8s5giT1TW9rR3wNuADioTvIRjgdNFBts/ST1lxNdK3uTdlZGyVdrej0WHH3IlPMVCfoA623sA4skDLDMObESU0u+AYGeO4fU6R6afWhijWPPoejBp2S06bY6OeCuTtgeZy1JhuvQ0kSsOLq0nSSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6224A12FC;
-	Wed, 13 Aug 2025 04:08:42 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5C013F738;
-	Wed, 13 Aug 2025 04:08:46 -0700 (PDT)
-Date: Wed, 13 Aug 2025 13:08:31 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org,
-	viresh.kumar@linaro.org, sudeep.holla@arm.com,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, vincent.guittot@linaro.org,
-	yangyicong@hisilicon.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, yubowen8@huawei.com, linhongye@h-partners.com
-Subject: Re: [PATCH v3 3/3] arm64: topology: Setup AMU FIE for online CPUs
- only
-Message-ID: <aJxyL1XJu-x3AFjO@arm.com>
-References: <20250805093330.3715444-1-zhenglifeng1@huawei.com>
- <20250805093330.3715444-4-zhenglifeng1@huawei.com>
- <aJMmjKenJaDnRskH@arm.com>
- <561a9474-7be6-4c8a-8a5d-40efb186b3d2@huawei.com>
+	s=arc-20240116; t=1755083882; c=relaxed/simple;
+	bh=RyRDckRflIvigbMK4BKJe6kv1H6Avr2M4Juoxfr73+g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sD6WJwfirn9Grrbd8MDeXDIA04LANNhkCJ3Uk9TQY3Ji0NwvrqxTb/oaIddNPe2PMvBy61bCtXel7tyXn+dunk+xHJI/onRZ/e0qYDaqDa19dUC3kyKo2QX9Oxh5n4qB3/PaWHYP/InQBXuJ1l67h7M6OpR3h4rSkAYF11O0MJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pZEeUlg7; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-71b49bbb95cso64403277b3.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 04:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755083880; x=1755688680; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQn0ud8P/exClfh8nwi+p3iZczWgk30lvs9ZzrOzyjs=;
+        b=pZEeUlg7fKmBYbrYn3J/fH2eoND1Ky6zItzzpQXFiVc46OnmSpQcbjNRbHJnvEe3rK
+         pGjxcZ3VWcQbpHSzHz9RDmNim932rlpQVlrS0qnRZxCuug6V9zC48LO3H9K2phT/1wTm
+         ME7FLFX4CTojhJEObpaRncUWksh4FdTwwhmdpw6E1Se0dPIJyqYST0Biz0w8249z/xXr
+         9nhYsOXG1/ziVYzBaRGoNCq+138pWKPFaIWBt9CGMFlfc/m7T2VJaEc67Hxu6OHHvuYp
+         qP3iqKwkwWls4vCGfax3NymMqTsTFEoD5z87huio5Y/SHvvDqFQBBA5ckHLmWiSI6WIe
+         q6ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755083880; x=1755688680;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UQn0ud8P/exClfh8nwi+p3iZczWgk30lvs9ZzrOzyjs=;
+        b=xNgXQqKQPO9UutCX6zrAKN428lHbsZn1C5Fn9FJxxrBTCtfhfd+960Iw0yayv56OMR
+         4bg6oWGI4onJTfUEmjUPWfjlwqqSLD3PmH0lDBhWhDP33fWbnckeyopgc8nZULmoB1TJ
+         KGWju8gS91Zs4hS2SiaXz2OaRXA0q/QbCtZjvlazJ31C9W2McMwCLl8WX9QksGNXBPJi
+         1GMPyHwAAas2XlY0EFbfIYUNaxdVzx6YlBKLM0ZjRhj8n09i4TgU4MQOYtQLSOwgw05G
+         rV+uagafrup2h2FZljtaAOWuUWOX5dt0/9SKYDaW9I3os8Bj87bLZFyScX0FB0MQuiR/
+         48iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmR5VSJWVWKVp7OU1pmGsdlpLmIeihyY7q+Gki8m7OxByCj/uMlNDOUA4y+AyEz7ep9CkdJWH02Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSxeJsznvwUlHS7S35oeK2GV0HWpvS/Ab/JihOKie/jbEPidfQ
+	Oz7LqNzLtLpQfWLLshrMkzeiqtS/+b1+pLxPLkSqAd/bgLz2+8pkmieA81hmOmDVydMAc/DnGS1
+	9PsfZ9WBJyx7snI9Kto9CNjZODEgxvNZuEG1Eqivf8Q==
+X-Gm-Gg: ASbGncsekEMX4/wjQy6FqbgqUPlAr+8UF1QMxmJ6DYkknLNNV6YtiixkRc4dol+xx5k
+	f0l+zhnayCAPGbbQ1oYInYNr7XCgrW/D2HojdFqzyKrL6NTt0KbCRDX4vO2VkA4+uNiVUQKiJ6J
+	vKH0tqYvOoRb870Y+ztC+y7nZ6e/IfwQ4yN7RkWtSOj5WR4gFOOp12yIShOlltdMmAxoid6c/a8
+	fXflbVn
+X-Google-Smtp-Source: AGHT+IG052VMXccj//iGRu0wrLb2Y8MwTk9cbYCNNk3fvvneFhZ02VT0QHUekplN/0z2vyPr5RH0oPrEgIPeeW8/eko=
+X-Received: by 2002:a05:690c:4b93:b0:71c:1673:7bd4 with SMTP id
+ 00721157ae682-71d4e52cb3dmr29653857b3.23.1755083879749; Wed, 13 Aug 2025
+ 04:17:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <561a9474-7be6-4c8a-8a5d-40efb186b3d2@huawei.com>
+References: <81ef5f8d5d31374b7852b05453c52d2f735062a2.1755073087.git.geert+renesas@glider.be>
+In-Reply-To: <81ef5f8d5d31374b7852b05453c52d2f735062a2.1755073087.git.geert+renesas@glider.be>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 13 Aug 2025 13:17:23 +0200
+X-Gm-Features: Ac12FXxID4SAvN1nQwTTkwzxcE_ncFRuux2gIUE7FTXR5LTWY5TdT46TbnCNXb4
+Message-ID: <CAPDyKFrCQdPAiDQyHm05mS7avOq6GPr0Ke4rZ2eaOhm37KGjfw@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: mstp: Add genpd OF provider at postcore_initcall()
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Lubomir Rintel <lkundrak@v3.sk>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Aug 13, 2025 at 06:17:54PM +0800, zhenglifeng (A) wrote:
-> On 2025/8/6 17:55, Beata Michalska wrote:
-> 
-> > On Tue, Aug 05, 2025 at 05:33:30PM +0800, Lifeng Zheng wrote:
-> >> When boot with maxcpu=1 restrict, and LPI(Low Power Idle States) is on,
-> >> only CPU0 will go online. The support AMU flag of CPU0 will be set but the
-> >> flags of other CPUs will not. This will cause AMU FIE set up fail for CPU0
-> >> when it shares a cpufreq policy with other CPU(s). After that, when other
-> >> CPUs are finally online and the support AMU flags of them are set, they'll
-> >> never have a chance to set up AMU FIE, even though they're eligible.
-> >>
-> >> To solve this problem, the process of setting up AMU FIE needs to be
-> >> modified as follows:
-> >>
-> >> 1. Set up AMU FIE only for the online CPUs.
-> >>
-> >> 2. Try to set up AMU FIE each time a CPU goes online and do the
-> >> freq_counters_valid() check. If this check fails, clear scale freq source
-> >> of all the CPUs related to the same policy, in case they use different
-> >> source of the freq scale.
-> >>
-> >> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> >> ---
-> >>  arch/arm64/kernel/topology.c | 54 ++++++++++++++++++++++++++++++++++--
-> >>  1 file changed, 52 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> >> index 9317a618bb87..b68621b3c071 100644
-> >> --- a/arch/arm64/kernel/topology.c
-> >> +++ b/arch/arm64/kernel/topology.c
-> >> @@ -385,7 +385,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
-> >>  	struct cpufreq_policy *policy = data;
-> >>  
-> >>  	if (val == CPUFREQ_CREATE_POLICY)
-> >> -		amu_fie_setup(policy->related_cpus);
-> >> +		amu_fie_setup(policy->cpus);
-> > I think my previous comment still stands.
-> > This will indeed set the AMU FIE support for online cpus.
-> > Still, on each frequency change, arch_set_freq_scale will be called with
-> > `related_cpus`, and that mask will be used to verify support for AMU counters,
-> > and it will report there is none as 'related_cpus' won't be a subset of
-> > `scale_freq_counters_mask`. As a consequence, new scale will be set, as seen by
-> > the cpufreq. Now this will be corrected on next tick but it might cause
-> > disruptions. So this change should also be applied to cpufreq - if feasible, or
-> > at least be proven not to be an issue. Unless I am missing smth.
-> 
-> I know what you mean now. Yes, I think you are right, this change should
-> also be applied to cpufreq too. Thanks!
-> 
-> >>  
-> >>  	/*
-> >>  	 * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
-> >> @@ -404,10 +404,60 @@ static struct notifier_block init_amu_fie_notifier = {
-> >>  	.notifier_call = init_amu_fie_callback,
-> >>  };
-> >>  
-> >> +static int cpuhp_topology_online(unsigned int cpu)
-> >> +{
-> >> +	struct cpufreq_policy *policy = cpufreq_cpu_get_raw_no_check(cpu);
-> >> +
-> >> +	/*
-> >> +	 * If the online CPUs are not all AMU FIE CPUs or the new one is already
-> >> +	 * an AMU FIE one, no need to set it.
-> >> +	 */
-> >> +	if (!policy || !cpumask_available(amu_fie_cpus) ||
-> >> +	    !cpumask_subset(policy->cpus, amu_fie_cpus) ||
-> >> +	    cpumask_test_cpu(cpu, amu_fie_cpus))
-> >> +		return 0;
-> > This is getting rather cumbersome as the CPU that is coming online might belong
-> > to a policy that is yet to be created. Both AMU FIE support, as well as cpufreq,
-> > rely on dynamic hp state so, in theory, we cannot be certain that the cpufreq
-> > callback will be fired first (although that seems to be the case).
-> > If that does not happen, the policy will not exist, and as such given CPU
-> > will not use AMUs for FIE. The problem might be hypothetical but it at least
-> > deservers a comment I think.
-> 
-> Actually, this callback will always be fired before the cpufreq one,
-> because init_amu_fie() is called before any cpufreq driver init func (It
-> has to be, otherwise the init_amu_fie_notifier cannot be registered before
-> it is needed.). And the callback that is setup first will be called first
-> when online if rely on dynamic hp state. So in your hypothetical scenario,
-> yes, the policy will not exist and this funcion will do nothing. But that's
-> OK because the notifier callback will do what should be done when the
-> policy is being created.
+On Wed, 13 Aug 2025 at 10:20, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 >
-You are right, I definitely drifted away too much with this one.
-> > Second problem is cpumask_available use: this might be the very fist CPU that
-> > might potentially rely on AMUs for frequency invariance so that mask may not be
-> > available yet. That does not mean AMUs setup should be skipped. Not just yet,
-> > at least. Again more hypothetical.
-> 
-> Same, things will be done in the notifier callback when the policy is being
-> created.
-> 
-> > BTW, there should be `amu_fie_cpu_supported'.
-> 
-> Sorry, I can't see why it is needed. Could you explained further?
-It covers the 'cpumask_available' and `cpumask_test_cpu` so I was thinking
-your condition could look like:
+> Genpd OF providers must now be registered after genpd bus registration.
+> However, cpg_mstp_add_clk_domain() is only called from CLK_OF_DECLARE(),
+> which is too early.  Hence on R-Car M1A, R-Car H1, and RZ/A1, the
+> CPG/MSTP Clock Domain fails to register, and any devices residing in
+> that clock domain fail to probe.
+>
+> Fix this by splitting initialization into two steps:
+>   - The first part keeps on registering the PM domain with genpd at
+>     CLK_OF_DECLARE(),
+>   - The second and new part moves the registration of the genpd OF
+>     provider to a postcore_initcall().
+>
+> See also commit c5ae5a0c61120d0c ("pmdomain: renesas: rcar-sysc: Add
+> genpd OF provider at postcore_initcall").
+>
+> Fixes: 18a3a510ecfd0e50 ("pmdomain: core: Add the genpd->dev to the genpd provider bus")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-	if (!policy || amu_fie_cpu_supported(cpu) ||
-	    !cpumask_subset(policy->cpus, amu_fie_cpus)
-	    	return 0
-but that one will not cover all cases so feel free to ignore me.
+I assume there is a good reason to have one early part and one later
+part for the OF provider registration, otherwise we might as well do
+all the genpd registration at postcore_initcall, right?
 
+In any case, please add:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
----
-BR
-Beata
-> 
-> >> +
-> >> +	/*
-> >> +	 * If the new online CPU cannot pass this check, all the CPUs related to
-> >> +	 * the same policy should be clear from amu_fie_cpus mask, otherwise they
-> >> +	 * may use different source of the freq scale.
-> >> +	 */
-> >> +	if (!freq_counters_valid(cpu)) {
-> >> +		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH,
-> >> +						 policy->related_cpus);
-> >> +		cpumask_andnot(amu_fie_cpus, amu_fie_cpus, policy->related_cpus);
-> > I think it might deserve a warning as this probably should not happen.
-> 
-> Yes, makes sense. Thanks!
-> 
-> > 
-> > ---
-> > BR
-> > Beata
-> >> +		return 0;
-> >> +	}
-> >> +
-> >> +	cpumask_set_cpu(cpu, amu_fie_cpus);
-> >> +
-> >> +	topology_set_scale_freq_source(&amu_sfd, cpumask_of(cpu));
-> >> +
-> >> +	pr_debug("CPU[%u]: counter will be used for FIE.", cpu);
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >>  static int __init init_amu_fie(void)
-> >>  {
-> >> -	return cpufreq_register_notifier(&init_amu_fie_notifier,
-> >> +	int ret;
-> >> +
-> >> +	ret = cpufreq_register_notifier(&init_amu_fie_notifier,
-> >>  					CPUFREQ_POLICY_NOTIFIER);
-> >> +	if (ret)
-> >> +		return ret;
-> >> +
-> >> +	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> >> +					"arm64/topology:online",
-> >> +					cpuhp_topology_online,
-> >> +					NULL);
-> >> +	if (ret < 0) {
-> >> +		cpufreq_unregister_notifier(&init_amu_fie_notifier,
-> >> +					    CPUFREQ_POLICY_NOTIFIER);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	return 0;
-> >>  }
-> >>  core_initcall(init_amu_fie);
-> >>  
-> >> -- 
-> >> 2.33.0
-> >>
-> > 
-> 
+Kind regards
+Uffe
+
+> ---
+> To be queued as a fix in renesas-clk-for-v6.17.
+>
+> drivers/clk/mmp/clk-of-mmp2.c:mmp2_pm_domain_init() has the same issue.
+>
+> Note that R-Car H1 still booted fine, as the CPG/MSTP Clock Domain is no
+> longer used directly on that SoC: all devices were moved to the R-Car
+> SYSC PM Domain in commits 751e29bbb64ad091 ("ARM: dts: r8a7779: Use SYSC
+> "always-on" PM Domain") and commit a03fa77d85a736d3 ("ARM: dts: r8a7779:
+> Use SYSC "always-on" PM Domain for HSCIF"), and use the clock domain
+> only indirectly from rcar-sysc through cpg_mstp_{at,de}tach_dev()).
+> ---
+>  drivers/clk/renesas/clk-mstp.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/renesas/clk-mstp.c b/drivers/clk/renesas/clk-mstp.c
+> index 6b47bb5eee45f75b..5fcc81b92a973771 100644
+> --- a/drivers/clk/renesas/clk-mstp.c
+> +++ b/drivers/clk/renesas/clk-mstp.c
+> @@ -305,6 +305,9 @@ void cpg_mstp_detach_dev(struct generic_pm_domain *unused, struct device *dev)
+>                 pm_clk_destroy(dev);
+>  }
+>
+> +static struct device_node *cpg_mstp_pd_np __initdata = NULL;
+> +static struct generic_pm_domain *cpg_mstp_pd_genpd __initdata = NULL;
+> +
+>  void __init cpg_mstp_add_clk_domain(struct device_node *np)
+>  {
+>         struct generic_pm_domain *pd;
+> @@ -326,5 +329,20 @@ void __init cpg_mstp_add_clk_domain(struct device_node *np)
+>         pd->detach_dev = cpg_mstp_detach_dev;
+>         pm_genpd_init(pd, &pm_domain_always_on_gov, false);
+>
+> -       of_genpd_add_provider_simple(np, pd);
+> +       cpg_mstp_pd_np = of_node_get(np);
+> +       cpg_mstp_pd_genpd = pd;
+> +}
+> +
+> +static int __init cpg_mstp_pd_init_provider(void)
+> +{
+> +       int error;
+> +
+> +       if (!cpg_mstp_pd_np)
+> +               return -ENODEV;
+> +
+> +       error = of_genpd_add_provider_simple(cpg_mstp_pd_np, cpg_mstp_pd_genpd);
+> +
+> +       of_node_put(cpg_mstp_pd_np);
+> +       return error;
+>  }
+> +postcore_initcall(cpg_mstp_pd_init_provider);
+> --
+> 2.43.0
+>
 
