@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-32287-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32288-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27A0AB24A4E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 15:13:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E53FBB24A46
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 15:12:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B5ED16B3B4
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:11:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5A291B61EB1
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:11:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EB342E7657;
-	Wed, 13 Aug 2025 13:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632F72E7BB8;
+	Wed, 13 Aug 2025 13:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Muy+WfJ7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ChkuyXHm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D612E7188;
-	Wed, 13 Aug 2025 13:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5402E7BB1;
+	Wed, 13 Aug 2025 13:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755090643; cv=none; b=V6Vrft+XaOvNhtIn6dEXAsimWBI8Ti4bvW6XNL2Jwg/8/V5r/p3tgx9aVPym3Yi0bng+PBHzHPuo7hqWAX75pf/blZudhc1jrhT4N7WuBzCMlt7xeGy2PyxlxksSj+VVLczsMqAYxdOlP7YufKZZFC/05beWIvJTg8c44qBcLaI=
+	t=1755090651; cv=none; b=kWQ1i1aA1bInk51iDqWlgaa22nMjWqQ68FSIa7m6zhoQRrPZDZu/OE76ykKk04g6HXmvYCNqPxP8V0wbM6NA2zWl6HLl9FG8cNkJ7fdjAsoQvmiffuQNt4hSQK/U8RMP0lvPYSqeVNUnOPua36FbqCTtKpXj2dN77btcARHiwSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755090643; c=relaxed/simple;
-	bh=b5OW2nvC0OiS+NDU9XbBImsCJbeszsgz9w9AdKXNSzI=;
+	s=arc-20240116; t=1755090651; c=relaxed/simple;
+	bh=bgDOTihFN7L3uo6z3OGyDLMdghqDtCb8HF1nArl4feQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qmIx4slUNsLXa4c1e53aqw5Ecb1lISzF1aK02uMlP5Vsqr5ZIalDLronOPWhQgRvfXkWYy36rwYS5iNnYZHwt56fprWVKrML31vaK1XQ2ZurghcJkedXnHB9mrkBWHce/UlrKO0AU9bn85APrrPcZTyj/V46/HMllIvUyXopxfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Muy+WfJ7; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=JNwjdRi0g9BMSm9tFAWrPQXXLIK9i5uw5c+99ei3/vVok/xbTTX+d0bHP+gUOtTygS12h8kxxHPATBmeEh+1+Wml7P1UdhQ5ghp7S8Gw2KuWodJ1PaQpg3wXTP+NPa6EtXU1CmneQPxgFr+f1T2Oj2h4VH2V+nxRvyc7EdShlvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ChkuyXHm; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3218283cf21so4300709a91.3;
-        Wed, 13 Aug 2025 06:10:42 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-23ffdea3575so43733475ad.2;
+        Wed, 13 Aug 2025 06:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755090642; x=1755695442; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755090649; x=1755695449; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MVrou259Nqx2mf6vUTvrTuOu7ushA+qQgGCR5MKGSus=;
-        b=Muy+WfJ7BVXgwy8ozeDHvo6Wv6ox3Vpwrzv1y7Jlc4K2XhHtP9vFXmr/7x3KwSrkW3
-         o/wfzwLY5y3wXsXCTi4n0p7bTAcSkldwn47Vv4wkq8E93KB+munwZw4kH61g4ExaAZXH
-         gaiHpId11Pd/XoymfST/l7+Z9+bBZmW0hW0+2E6xjhwL/DdG8946gBovIqgj4AAboZwA
-         4p1h1alSQ+o9AGk1bhErjr9d24TbN8J3bCj+ncLFAcIJqUJn2ahZeaUlXFhDoxjRxzpG
-         QpSNLS47Z9LCsimyavZZvI58FBdWMifxmCz5a3UTzM6vnySM0NVOEMCjLjkoVxCKrPsV
-         /ung==
+        bh=eEgfXQmBvwIZTKnjUPX92QY8u5Mv9cN/Yg04BQtYTgI=;
+        b=ChkuyXHmvppplfR2sJ7q+UXYTc+wt+/60mWKOq18MRL4tD9ikdi0R8QB0orWjhl0BM
+         B/p79IQsIx73V2cy9B+PmsgUXJiJ0DXUJAC7SCz4m1f05NylK0ojzGLVyJPQk7h+QZxt
+         yT8F0Ydov0BlU24ltowG9atnml6G2/8TuWqCBALClxofDGMuPzit//7mKKIHTU71Ae4b
+         YHV+jily6vnx9TEfhZSgaonQdFry3OsVUwX7QuuvEUNEr2xYklGiVsPrfBsSE4mSFyhj
+         kB3VXFTll29V6gmEXMOeN4Kl8i6QhUJoE7SmOjmR6ZrhCiASnAef6+AbA5MDsT/nPGIm
+         /QrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755090642; x=1755695442;
+        d=1e100.net; s=20230601; t=1755090649; x=1755695449;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MVrou259Nqx2mf6vUTvrTuOu7ushA+qQgGCR5MKGSus=;
-        b=G/UQ+p+69IzBQdlYWF+JfZZc4NTZpiqOV/d/3OgvqaVgWceczwNt0l7I6I4vWYXgZK
-         OV9fccQd0PFy5kauwvzy3FZu/gq8DfPBVkclSAtdrJVs+E4kQBFYWNZeQCPvgycuhKP6
-         aWaYZTPqfQUmu+19CmSgC7veuODXlUSRFTn44aiiOKsENur++OG33LwUtTJnSFJwtR4G
-         POytco88eNcDsxk37XjgdbjYHNowKhekWUp6hlhBWhGvKmYuauCCJCC/sc3AaSgMtH8R
-         Zcx53Id/1TdhaNH22BtHa7suFZnooRV7tarBwCeWI173WPCecSkUykqT385NymMRy8l3
-         2U8g==
-X-Forwarded-Encrypted: i=1; AJvYcCV8sJ9Z0K6d3crQUokddx7YJ27If0ZqReBw7AREywlmfLJY8VQDTC9XFg+RzsU+x0ZJze3B0P7slRrp0AE=@vger.kernel.org, AJvYcCVI+sFSa5mI8SnfpmPU4qmJmHAvQCTkmN8JbQQH3rRbtVE5+EGQlF7JhHfgzCcaKj526ucccRqcLDEux/IEQZVJUy0=@vger.kernel.org, AJvYcCVoWMmHTH08xQJfbe0O1R2HoCs7ii0OmiHzF90H0Qdt+8Fn99+vjoe9qbLcFLeRegA/TEcUBi42rec=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKjiFbTDARYgh0PM6HfObfvdWVcfdzSmLfaLa1/hPmjIxyp4aI
-	V76yulxCM4Ggw0ByDtcT1MTx2KHbcdS+B/2fnZE92jQ8mWahzJ6bHTPWXgjVxzth
-X-Gm-Gg: ASbGncttz3K878GQg0JbaXnMWEhisZ4kodJx4HLVni9OGv0FTnj8eZyXRAUlZ080JJW
-	OcNDxIJpknZnlUvt3h7A4caoU/QisLXuHlzP2E9IMqUnBBdXxcMCgAETXRc97f91Hk/hSP8EYro
-	f/hpapnczyJxEVaNKDv0atuMoaureTiKukkgUyDeuhBYdC4ewAlGFbZjM3MY8CF9ek4XGzVBw6V
-	RGNktJJOigG4Vx1exAXMErI9QlFIaLIApnwWDAW+m3NPtsvbkT7K+kMMOAC3xQL+z+cYWLV5Oy7
-	xmyaY3VJP223SL9lFeJCR7EyyEDYMfMKSoj3q0i5shAjKyYW0aUw86K6sxIvvwYXl3RGZ+4DB9w
-	iVN9js2Mc+xy2Cl2e0EsRU0yEWTjW8zk=
-X-Google-Smtp-Source: AGHT+IF9eIDvu72BaiBaVH/s5UjG5F3YVyyMdRM4uurQwBv+OhAFEyxqshUJkkmFATqSx/qzFuLPNw==
-X-Received: by 2002:a17:90b:58e7:b0:312:26d9:d5b2 with SMTP id 98e67ed59e1d1-321d0b2940dmr4886750a91.0.1755090641390;
-        Wed, 13 Aug 2025 06:10:41 -0700 (PDT)
+        bh=eEgfXQmBvwIZTKnjUPX92QY8u5Mv9cN/Yg04BQtYTgI=;
+        b=wcg/3N5utRfwnV3VjQKrrW3UQfzb6YZXDSmfXnV8OVaPrjgsS778rJSSPy5oynaJi1
+         MGdmt/no040WgC2r1tnhmtnJqQS2mlsDb+HryADUMtpcfS0E6AYGwQUPtBGNZVgRGPwK
+         1pqSMTRK/7YdM3Je6sjK4O/tq/2PQcs9vnQzbeqz0bgYOPidcAH6dmL0r0A/9s1I+7TT
+         jWNKn3gvU715aq3LHiX1ldSmV3S6elVIDu9nJ2mkIhgHhX/1K8FLf9wXYwtmJinSYHDm
+         hx7gCHHHX16XQPek3c5XmO+rsu5CIj5XxSbHeKAsHhR9IWgnzJV4CcHF8MZthLA1sd51
+         f0tw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmD2G0Rvt4x27zanqSYFzVCmERb7ZUW54l4bOB59O4rw4/PCUcALjU6JXsdGGuU4hhmq6gXpEkzbE=@vger.kernel.org, AJvYcCVz4Gns2sq9fLncWek5yk1h8JCEL08LEPEPv/TOYN99W3EMk9idvBv3gfY1R5H96TW9a/kTdTJwMZSBm4Pa5ISLVmQ=@vger.kernel.org, AJvYcCW8SLm4FVXX9+H8/ZWFT0SS9KO+6thrQtmdojxDPYxJ05QBiohW0Cc/MRpvWsbOq8IkNVu0KmPN80opFgM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbiOUMtE0Stbn/TRDwARQOogHBr73x677UwXVfyTzFODvAVi68
+	UwiF2FVf9n1yacol7V2YCPDegbhEWyClaLy37IteE7lXQGhjKot3Cmbw
+X-Gm-Gg: ASbGncvwQsG+bO3zelZ4dstyPpHAhat7HJjOJvxw+MJmqBSLjaLgSZ60nBRzvRCS6Yj
+	HCkxGiIb+VAa1ybDsodeUq0wyBbIUD7g2B2gp7kdfDIcg5EaOz3MLNxbABajGHMJ371fNW+W4Iv
+	QglYfZbTeFrBjV+6kFCva+cv42wNYAsE8nwnodJC7GgxneNYc0J/V0dag6kVaP5oPwHdzKHRuec
+	xZJDim0ZnukSm934t6JqEycAFkJz8VjPxQOTHF4Q+2IJUNho98ieVkjBmRCRCyTa0y1UOFyg+x9
+	RGfW0nHw0Uzr/KyUY6cVapp/cmkK6/x5Lt0HTsqLwxeP3FbhGcT+RRbXADz+SoNRTavDr7LZfzZ
+	zn8IkX23TfMaHExtGD+a7Ox9oBtA8upI=
+X-Google-Smtp-Source: AGHT+IGQetOgmxbvgH8GlqPCrs2OPO9JHPjy7ZNd3WOoXSBNnPAm/Dj6z2ZNFN01W49Z7HuDNX97gQ==
+X-Received: by 2002:a17:903:1965:b0:242:a3fc:5900 with SMTP id d9443c01a7336-2430d0dc1eamr41861055ad.8.1755090649047;
+        Wed, 13 Aug 2025 06:10:49 -0700 (PDT)
 Received: from rockpi-5b ([45.112.0.216])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.10.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.10.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 06:10:40 -0700 (PDT)
+        Wed, 13 Aug 2025 06:10:48 -0700 (PDT)
 From: Anand Moon <linux.amoon@gmail.com>
 To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -92,9 +92,9 @@ To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
 Cc: Anand Moon <linux.amoon@gmail.com>,
 	Mateusz Majewski <m.majewski2@samsung.com>
-Subject: [PATCH v7 3/7] thermal/drivers/exynos: Remove redundant IS_ERR() checks for clk_sec clock
-Date: Wed, 13 Aug 2025 18:39:47 +0530
-Message-ID: <20250813131007.343402-4-linux.amoon@gmail.com>
+Subject: [PATCH v7 4/7] thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
+Date: Wed, 13 Aug 2025 18:39:48 +0530
+Message-ID: <20250813131007.343402-5-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250813131007.343402-1-linux.amoon@gmail.com>
 References: <20250813131007.343402-1-linux.amoon@gmail.com>
@@ -106,47 +106,65 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove unnecessary IS_ERR() checks for the clk_sec clock,
-the clk_enable() and clk_disable() functions can handle NULL clock
-pointers, so the additional checks are redundant and have been removed
-to simplify the code.
+As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
+if e-Fuse value is out of this range, then thermal sensor may not
+sense thermal data properly. Additionally, refactors the efuse
+initialization logic in exynos_map_dt_data() by replacing nested
+if-else blocks with a switch statement for better readability
+and maintainability. Ensures correct efuse setup based on SoC type.
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v7: None
-v6: Add Rb - Lukasz and Fix the typo in the subject
+v7: drop the Rb Llukasz, as we dropped the nested switch to set efuse.
+v6: Add Rb Lukasz and fix typo in subject
 v5: None
-v4: drop IE_ERR() for clk_unprepare() as its handle in earlier code.
-v3: improve the commit message.
+V4: None
 ---
- drivers/thermal/samsung/exynos_tmu.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index aa0726b33c84..5f017a78f437 100644
+index 5f017a78f437..3d12e95703bf 100644
 --- a/drivers/thermal/samsung/exynos_tmu.c
 +++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -258,8 +258,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
- 
- 	mutex_lock(&data->lock);
- 	clk_enable(data->clk);
--	if (!IS_ERR(data->clk_sec))
--		clk_enable(data->clk_sec);
-+	clk_enable(data->clk_sec);
- 
- 	status = readb(data->base + EXYNOS_TMU_REG_STATUS);
- 	if (!status) {
-@@ -269,8 +268,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
- 		data->tmu_clear_irqs(data);
- 	}
- 
--	if (!IS_ERR(data->clk_sec))
--		clk_disable(data->clk_sec);
-+	clk_disable(data->clk_sec);
- 	clk_disable(data->clk);
- 	mutex_unlock(&data->lock);
- 
+@@ -884,6 +884,22 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+ 	case SOC_ARCH_EXYNOS4412:
+ 	case SOC_ARCH_EXYNOS5250:
+ 	case SOC_ARCH_EXYNOS5260:
++		data->tmu_set_low_temp = exynos4412_tmu_set_low_temp;
++		data->tmu_set_high_temp = exynos4412_tmu_set_high_temp;
++		data->tmu_disable_low = exynos4412_tmu_disable_low;
++		data->tmu_disable_high = exynos4210_tmu_disable_high;
++		data->tmu_set_crit_temp = exynos4412_tmu_set_crit_temp;
++		data->tmu_initialize = exynos4412_tmu_initialize;
++		data->tmu_control = exynos4210_tmu_control;
++		data->tmu_read = exynos4412_tmu_read;
++		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
++		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
++		data->gain = 8;
++		data->reference_voltage = 16;
++		data->efuse_value = 55;
++		data->min_efuse_value = 0;
++		data->max_efuse_value = 100;
++		break;
+ 	case SOC_ARCH_EXYNOS5420:
+ 	case SOC_ARCH_EXYNOS5420_TRIMINFO:
+ 		data->tmu_set_low_temp = exynos4412_tmu_set_low_temp;
+@@ -899,12 +915,8 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+ 		data->gain = 8;
+ 		data->reference_voltage = 16;
+ 		data->efuse_value = 55;
+-		if (data->soc != SOC_ARCH_EXYNOS5420 &&
+-		    data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
+-			data->min_efuse_value = 40;
+-		else
+-			data->min_efuse_value = 0;
+-		data->max_efuse_value = 100;
++		data->min_efuse_value = 16;
++		data->max_efuse_value = 76;
+ 		break;
+ 	case SOC_ARCH_EXYNOS5433:
+ 		data->tmu_set_low_temp = exynos5433_tmu_set_low_temp;
 -- 
 2.50.1
 
