@@ -1,149 +1,117 @@
-Return-Path: <linux-pm+bounces-32244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA23DB240E1
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 08:03:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6722DB24222
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 09:03:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52ED23BAE15
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 06:03:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7832D1B67BA0
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 07:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4ED52BEC57;
-	Wed, 13 Aug 2025 06:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AB82D0615;
+	Wed, 13 Aug 2025 07:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WwKcSNC9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QElXm4aS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C22223D7C6;
-	Wed, 13 Aug 2025 06:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9552D660C
+	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 07:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755064981; cv=none; b=l5itHCBR1p1+mqyDWJEDTGVtBAbuBt812HVUCeoIfsRzKYGNfy0o4GNAeVAQfhpAdVeHSucrqnDmDtZxT5rXCE6ZwS8Loas89lI7/qpMONPIAiyIW2t4Lx2mov3Ry2V1APYs/yYmXa8Zoq+ywQ/ENUj7vMTUydXqMCOvL1jDzuA=
+	t=1755068613; cv=none; b=BF4v+YtCcSHHK3GtEIogPc25dPglvjrG37J3K4J8YjN46qUnB+R1cCJKEBokhhUw/WEcVaRrgZx3M0b5DVM088C3hvbj2pgcyMPijgK7RiZlRx8QSD9STkCqaNxB8pAtf/igxdn49KUSbzme0lccX+cPUBcMF1irvgHfRhbsh/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755064981; c=relaxed/simple;
-	bh=xpVzbfzh6K6iNq6MqiRnNFbqoopiD+3fbmgHO4xwcoA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q39OrmYLbcO+yvWTl5lEgka3c3bL4QVUaf1oMp/bQnuni8OdE/Z575bl3LuxexaV+HSegEqzOT6RsTpj9TZ0nRcN5yJDG2OYbRv5CF8z4rRTQTQRd6hYAgt1ZJ7XRXvedSs8EXOB87w+SAcpA651bAZmdqK1712XYiaJVgQuOqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WwKcSNC9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F1DC4CEEB;
-	Wed, 13 Aug 2025 06:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755064981;
-	bh=xpVzbfzh6K6iNq6MqiRnNFbqoopiD+3fbmgHO4xwcoA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WwKcSNC9+WKcBiR0WI7W+oj5vHF06GmzwnHKwufyA24L2WlFEpVHGjwtdNo+kpd3c
-	 k3sNKSNuuM/wE3tbVcb2lL9BgIW17btp5bJqECxq9+qGV5omaU7va0xllfwYMghpvh
-	 8d5LizqldFW4FvaKeFM7aBLJcf5m8Tq2Z6QwkbvgTvJl4rlJws6A2+k5mOyQqVszRT
-	 gi4sfxMtzNDbdeI/WdLHmU+ZF04yWdlzTveRp1QRFZAehj9gvu0cc0iMHD12E4+bMX
-	 +saz7uQZXc82DqpLfSdVlrky5TbVC9rDgcMDf/M3h2zAM56Qz6fEzauP6Q/4CbyMqu
-	 aNS8HNvLr4hWQ==
-Message-ID: <ac83c453-c24d-4c4d-83bc-9ed13f2f9d1e@kernel.org>
-Date: Wed, 13 Aug 2025 08:02:55 +0200
+	s=arc-20240116; t=1755068613; c=relaxed/simple;
+	bh=LX27+Fm4521I9vVBjV9RGAKpbdoAQTN7inSr0qWhQSQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UQMvDjA3CCAPBxHE7PQt65ajexgyaLhejswZS6CbRmlBG6baAd8FXWuapICIHLLRekHuhGr1314NtATXy08dEp9rct0+96hkV4rpO6EJLeQx0eeCuiCW046jEjgWGzfiRi3Wi5vEbJRmRy+NGnibO1ki8cqXAbuJPbxfcpuVUlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QElXm4aS; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755068612; x=1786604612;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LX27+Fm4521I9vVBjV9RGAKpbdoAQTN7inSr0qWhQSQ=;
+  b=QElXm4aScy1J7TxebqICNuYNPepiAV4FSrhWRXrDisNLZZBlHIx+vsx+
+   VX3uk/VxaZrHRybRXEAxixf9308UL0M7Y6O9psAoNgFao11KuubDrRv1n
+   1EDzkDoy//kRh90lZMPhox0DOl4uXxBKBuIpqoOdY89VJhN2WwEFMUdM9
+   ZFANJRD3Ch4adCtAX0OOropdlNL40ZFQPERgPXr2/6d23zDJE9DUzL9Uv
+   y5XKFAzwTY3gdCHD+FnATwB7hpf2Kp64i04RSAX7cs1Sbwza0L7t4sM36
+   CCwetfpDgYYNQf1w1mjso3dLlROmJpAdagj7RwsZ1zV7TsBwCcZGSLrlv
+   Q==;
+X-CSE-ConnectionGUID: ZQr+bWxBSnKaDIyuQyazcQ==
+X-CSE-MsgGUID: Oxf/kqG1R5iuKIFNdu4VjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60974874"
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="60974874"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 00:03:31 -0700
+X-CSE-ConnectionGUID: Ru7lOTi3Q0uocprUplKfkQ==
+X-CSE-MsgGUID: hcgY1qAWRBa+tXEDghkjDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="166388749"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by orviesa007.jf.intel.com with ESMTP; 13 Aug 2025 00:03:30 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: lenb@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH] tools/power x86_energy_perf_policy: Fix incorrect fopen mode usage
+Date: Wed, 13 Aug 2025 12:32:08 +0530
+Message-Id: <20250813070208.78862-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
- enable QoS on sa8775p
-To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20250808140300.14784-1-odelu.kukatla@oss.qualcomm.com>
- <20250808140300.14784-2-odelu.kukatla@oss.qualcomm.com>
- <90b51e31-3217-4483-bb5b-ec328665a723@kernel.org>
- <28b97952-1b67-411f-a7fb-ddd558739839@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <28b97952-1b67-411f-a7fb-ddd558739839@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 13/08/2025 07:55, Odelu Kukatla wrote:
-> 
-> 
-> On 8/12/2025 3:47 PM, Krzysztof Kozlowski wrote:
->> On 08/08/2025 16:02, Odelu Kukatla wrote:
->>> Add reg and clocks properties to enable the clocks required
->>> for accessing QoS configuration.
->>
->>
->> Nothing here explains why EXISTING hardware is being changed. I also
->> remember big discussions and big confusing patches regarding sa8775p
->> (its rename, dropping/changing all providers), and this patch feels like
->> pieces of it without proper justification.
->>
-> Thanks for the review.
-> I have added description in cover letter, i will add here as well in next revision.> And this is hidden ABI break, no justification, no mentioning either.
->> Again we are discussing basics of ABI breaking patches?
->>
-> If you are talking ABI break if we load old DT which may lead to crash, we have .qos_requires_clocks flag which takes care of skipping QoS if required clocks are not enabled.we have addressed this issue through https://lore.kernel.org/all/20240704125515.22194-1-quic_okukatla@quicinc.com/ 
+The fopen_or_die() function was previously hardcoded
+to open files in read-only mode ("r"), ignoring the
+mode parameter passed to it. This patch corrects
+fopen_or_die() to use the provided mode argument,
+allowing for flexible file access as intended.
 
-Format your emails correctly, it's difficult to read.
+Additionally, the call to fopen_or_die() in
+err_on_hypervisor() incorrectly used the mode
+"ro", which is not a valid fopen mode. This is
+fixed to use the correct "r" mode.
 
-Your binding did not require reg and clocks. Now it requires reg and
-clocks. This is called ABI break.
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+---
+ .../power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Please follow Qualcomm extensive upstreaming guide, it explains this,
-doesn't it? Or follow writing bindings...
+diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+index ebda9c366b2b..c883f211dbcc 100644
+--- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
++++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+@@ -630,7 +630,7 @@ void cmdline(int argc, char **argv)
+  */
+ FILE *fopen_or_die(const char *path, const char *mode)
+ {
+-	FILE *filep = fopen(path, "r");
++	FILE *filep = fopen(path, mode);
+ 
+ 	if (!filep)
+ 		err(1, "%s: open failed", path);
+@@ -644,7 +644,7 @@ void err_on_hypervisor(void)
+ 	char *buffer;
+ 
+ 	/* On VMs /proc/cpuinfo contains a "flags" entry for hypervisor */
+-	cpuinfo = fopen_or_die("/proc/cpuinfo", "ro");
++	cpuinfo = fopen_or_die("/proc/cpuinfo", "r");
+ 
+ 	buffer = malloc(4096);
+ 	if (!buffer) {
+-- 
+2.34.1
 
-Best regards,
-Krzysztof
 
