@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-32289-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32290-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 605C4B24A54
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 15:14:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FAA8B24A56
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 15:14:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5D18173EA6
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:11:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A908D179B74
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 13:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECCB2E717F;
-	Wed, 13 Aug 2025 13:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7232E92A8;
+	Wed, 13 Aug 2025 13:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7RQRQMF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQT3oZga"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22A52E716D;
-	Wed, 13 Aug 2025 13:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872052E5B3B;
+	Wed, 13 Aug 2025 13:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755090664; cv=none; b=fJIjAsrWcB5j/7h4tn6Nezpt9DPNEcM5e5g0bT7NREJc2LdJUxobxcRRRDaUL1wHMxT1pYwagQwk2329s2oHfHJOZch5nMMq3lj5mQmxKg56vZOb+kFq9QwX0ag+MGDKCh1dORnGK5urgcZf8AiD/kojhTnKA8YY6XEDUBEiPbo=
+	t=1755090667; cv=none; b=MajC2FoLfyAB8eDuGPlktstvtABtGPhPaLQVymPMQBbpzpeDpCO2RF6HLvbnGvDy7hRRcerS4+XAAyxTzJMs7JqeB5lTeIunygQ0pprre+QnV3MGj1i2gDuxWfCaVo8j8S47IkvUM4gd6Vp4eQ3HH70t+7wniXiVWJUnjgZEGbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755090664; c=relaxed/simple;
-	bh=b98dUnoToCsBmGX1G41vyacrvIuf64eUskTa822rac0=;
+	s=arc-20240116; t=1755090667; c=relaxed/simple;
+	bh=c6zDxKpJeeYVmGh+A1tB2vQLSCv+7l0ekLVzjCo7skY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JnOPx/VD7L8BVNMZ82cXl7IQZFh5ptKCPQ4EkkhT6T/sP8ER2Z6aUTwYXBzIq+Dqo5WY21hTjAShmVMMiGHoTObQkaqB5am1NxysZMqnWBvGiZDNfCRVo88hzw356Oq4GLQM99ddrA2yOT+Ba+5T4SJ5t0BVQeqaJevNXgOefpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7RQRQMF; arc=none smtp.client-ip=209.85.216.42
+	 MIME-Version; b=AJG5TV9TBSB//GmjS0HbeuIWPH5KufVHANdzxXsvkNXZRJ3iF3dHcCFlbzEVieE3ZqIMV2lYu7X8OCUcE27mnqQsp6okhpPdJRNZEs05F2fcRoXKhrZOkbQ31eayqNhvSw6kkmFcfV0+h/200M/S17TgXhaiMz5wYy/ojEM6LQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQT3oZga; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-31f255eb191so6741649a91.0;
-        Wed, 13 Aug 2025 06:11:02 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-321cf75482fso897590a91.0;
+        Wed, 13 Aug 2025 06:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755090662; x=1755695462; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755090665; x=1755695465; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yLjx2S6qya2QQP45Rnk1O89a+/wYhcHKpSOmbPHkRVo=;
-        b=j7RQRQMF+A5kF03E1rUxWKW7TuBiP1lFQEUSna/vrA3k6kRQynz9Wl1P5y9LjcbDHK
-         7qRgjyk/CUvnTUr9g9szC9lawNYMyjk3FVp9VqT1qUlV+AahK9QUkIVW3BFWADa4gUoE
-         +JAoe0aySP3ARYUo2HgvBzJBTj05WqgvED1hW86n2rpHoosBPqMII9BrfUcxasNfK3RZ
-         Dps3Vx8ENTHEVCNXsmmXjRdkIZr41pUtUkTL0X4mKn6/ptgd6eNMAE1tNZSnNu2NWIc6
-         mn2MYyoyixRdeD5Gs3Ufc0ysz47/DfH7UdsImy9Ro1GL82Yqyj5gohcogaA8IZZU9SEG
-         mD6A==
+        bh=fqYPU935xT6Mbxf99JNTihbkL+VHpmHTTHKi4lhwoZ8=;
+        b=FQT3oZgaF+4Epa0t/zCDigWLIzodEoD+gylVJRYVCZwzmMMgN2k9Zwg+rKUnjKE51L
+         zt4eMKRTAlzq0xtfXL28SF6fbt8aFYDjCqfau1LNmQ7SFVw3+A3SeJo9DI2h50WHhEM1
+         11TaPh3R5W3A9E4Wmx31IbTLtKQwxQE+TWCCW1VbW7j+uQDUiJc9EFMhRLwvdi7VCO6V
+         bnkbvjU3XAexMoUl3oqm4gPJQStu8pf4n7D3gbnx8IAX+mwuOSjyuIjFK5RiLgIMdvsz
+         baYBsNsRWYyPaIVf4He9eAKmpeagrBDyheurzZH4ZiPjBQ7/m7bNIqdciufqyVqrxUqF
+         Wq8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755090662; x=1755695462;
+        d=1e100.net; s=20230601; t=1755090665; x=1755695465;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yLjx2S6qya2QQP45Rnk1O89a+/wYhcHKpSOmbPHkRVo=;
-        b=E+8KYcubQx3nkoZcRalmcpHIlz3MFUsDtoWqFUscCRsMAfpygStm99XNJRm5D+Gbu/
-         slavF6crz8aR7Zm8Bz3bXFXr3UmmEJrNraPX12Ker7utcpehwv7+arjewFi6WjQ31cVG
-         Vjjqw/mRB2tpSzDLTrKArdscyj2iGwPL9jFBERnp2EMkjY7FmBon0vR42zucLm/VWX+a
-         8T6AjerEQG3aNkrglhKbX2lm5b3nVyPRT8yX/Ify+qDyrVJnI0YwAsCDVhjci79H+qZa
-         oP5ZDei5M8KnKs9yTySDXFUVk6iR38SfYsspGUhBSIyw0SaUUwdpudfpNYxzOrqV99SH
-         4qdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIMfHky/gnGMHY8v22KO7WcTXVOco7lfcK6p+8O2qkFQLDVW7OblRh22DgCiLiloaLZ2Tj0zoM8dQ=@vger.kernel.org, AJvYcCWcKQJUQnWFZEdtJZLMGSAEYT9MNq79QBWa/8yJ5irNg3IssU+gFgacNEc8QegfhGfC45JaklUDyt+4Aus=@vger.kernel.org, AJvYcCXwOnSxBZjpXivVLk/45+s+u1uY4ASDapeoMKZq931gMGN71FtVLKhB1bnM+hTfFFG7nLhrtT1ln+/oU5j0/P1r/iw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw69LxFkPk3pKINb2U14gNpHdKeGk53C0QWPo5yag1jarw0tOyM
-	faaGp+SLZgIsIH6+3bsvq5aVnjmfZkkb/TVVexR1JNePGne0QhEFS8o8
-X-Gm-Gg: ASbGncufpAoRu1Kr7aJxhyN8g02V2CxIdoj6i3Sk1UgsowVHfkpq1I02zwOwFcpqgyw
-	bpZwKcGS1/exhOt5YuTSxWGEHQJ2VPKs5X+GZ7YQuQTqlWw/MRMrk7QFuKSc8czR+/VxfMH09zr
-	AesgQlHGEWqdr2f8OkSA9Tah2vSIGihRzulGdg3dzttNUF9Alq7pzTPOkVCfeHnjst0QjuTlUUT
-	vbmH/I4E9LomscMaiKyaRzxKj9V9/Ehmc3r/Wp3jWdUtuy1cFJOayH7vlU2YHlpF5ikmbcnR9oW
-	ms1KjISN85r0CNNNr4szLEhvnbjN0s86paM5kDu/7ClSRT+bjAsYun4XB6in8nbcPbu/Lu9J53T
-	3FV5NF1rdOSUCZ9Erh6G2z+EPAO55SRE=
-X-Google-Smtp-Source: AGHT+IHV88oyfqtBf2DtpCEKgt1vkDjkfjLKVgWMl/91X6UtdjP7QV90zUlO8YXIk/uwFs7b2yRK5Q==
-X-Received: by 2002:a17:90a:e18d:b0:321:380b:9e85 with SMTP id 98e67ed59e1d1-321d0d65539mr3875136a91.8.1755090656709;
-        Wed, 13 Aug 2025 06:10:56 -0700 (PDT)
+        bh=fqYPU935xT6Mbxf99JNTihbkL+VHpmHTTHKi4lhwoZ8=;
+        b=grmoPXXs2l9X2qzQqdjHNteyNYZA8CRTuEL5zT1eg9qeX7xgXa3lLeB3xcMde67Bnb
+         DkMo7mtxVouGe7jz3fYUaahQ6KGU4PBEMK7ZtFwUUuHQ7uFrqJ1IOOrhRdmKSvoA/jx0
+         zNrpeJbImgDcBKDB8K78gZjpMznKTX1z0LaaKLiJJ75rx1qe5GAokhUvfz8Qj2VKdLnK
+         iaAdnEBHB0trlap3xo5B8zesTC7Ouaogq39BoU2s4EgXgEPdRchKtJBVmP4EGuV2Urpc
+         kamxEgYVk63CXIpMg/C5Yx43GQvM0lwSZPAeUrxB+QSqHYOZhkOXmTVckEaFqIYIbep5
+         JTQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZZ15lc0A+/0mV39aUF+wpCEJaJYdLDCgWz7h8jEVN+dpLNc6xofqOIXO89DbAMCadsyAnzdlTCLWdKv4=@vger.kernel.org, AJvYcCWnkv2hlsOWTh/Hh+JGSTdVJnEj1cl5GhhlsYGiX54Y9SNh69VjI7EC2iLHOPthRX6TzTUilD8fAd0XIAXhC3Aw9ho=@vger.kernel.org, AJvYcCXLzC0HpPeX5gT/dydeLbMqeU0H7TEbhfrJDUZ8X6afBH8fHE2YnOqWT1/zWyVJ4jX33nIFamW4gss=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywm2dh44yB5dhFsUZJ8usi5C9Heurf+XYIjrMpO9q5d4DYCD3Ct
+	OypwTGA5H6SZKiV8sAANI/CXwt00QE168UXF/c6ITb+pvZq7LEAHWHb6
+X-Gm-Gg: ASbGncvRb7rwPbrdhcdXl0GdRZRbKr38LkClFHn5KbFcSJzbEYE82rt1ZWPcMOIw3Na
+	hPomGogi0ZOsLhDor27IwfsBJ9V1NDPUaXTi/FSfgp4DGzpuabDvf/Cp/jb5BcBK2CmuDCXC0rR
+	s8wa+DLT9ptxPnig+Z+bmK4JjrqpHlHsU7/2/TSVY2Zu13oR9HMlNdEt6n0QS2mlF2w2T1P1PMt
+	0oU7Xvcry3bxfjmZd/KOtunzYd+l2U03KRGXvzUsSfiuU7+unQlQiRrF5Yed9N8mwyScH24D21o
+	/d2g/MKvTZmVA+48hCKH+XHfmYtQCogh4lZW4ZWyp0tABEQkxoQHZaMgabc9rAx+HWrkU6YCs2K
+	xeMJbGQLhnaurtbagXfLo
+X-Google-Smtp-Source: AGHT+IEr3XOImum0AShefQhjlb0HC1vQdpy7jXh1LMHfhhnS2hv+Ey/hdEltC+XWyCUiKfzsSfAP4A==
+X-Received: by 2002:a17:90b:2fc3:b0:321:9462:49b7 with SMTP id 98e67ed59e1d1-321d289505cmr3515824a91.12.1755090664483;
+        Wed, 13 Aug 2025 06:11:04 -0700 (PDT)
 Received: from rockpi-5b ([45.112.0.216])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.10.51
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.10.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 06:10:55 -0700 (PDT)
+        Wed, 13 Aug 2025 06:11:03 -0700 (PDT)
 From: Anand Moon <linux.amoon@gmail.com>
 To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -92,9 +92,9 @@ To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
 Cc: Anand Moon <linux.amoon@gmail.com>,
 	Mateusz Majewski <m.majewski2@samsung.com>
-Subject: [PATCH v7 5/7] thermal/drivers/exynos: Remove unused base_second mapping and references
-Date: Wed, 13 Aug 2025 18:39:49 +0530
-Message-ID: <20250813131007.343402-6-linux.amoon@gmail.com>
+Subject: [PATCH v7 6/7] thermal/drivers/exynos: Handle temperature threshold IRQs with SoC-specific mapping
+Date: Wed, 13 Aug 2025 18:39:50 +0530
+Message-ID: <20250813131007.343402-7-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250813131007.343402-1-linux.amoon@gmail.com>
 References: <20250813131007.343402-1-linux.amoon@gmail.com>
@@ -106,92 +106,133 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The base_second field has been removed from struct exynos_tmu_data
-because it was unused. This cleanup also eliminates its mapping in
-exynos_map_dt_data() and ensures that TRIMINFO access in
-exynos4412_tmu_initialize() consistently uses the base field across
-all SoCs. This streamlines the code and optimizes memory usage.
+The Exynos TMU interrupt handling mechanism has been refined to utilize
+SoC-specific mappings for interrupt clear registers, targeting rising and
+falling edge events. This change introduces a tmu_irq_map structure that
+defines these edge-specific interrupt bits, improving the accuracy of
+thermal event handling by ensuring that only relevant interrupts are
+acknowledged and cleared. The exynos4210_tmu_clear_irqs() function has
+been refactored to incorporate this mapping. Notably, for Exynos4210,
+a check has been added to prevent clearing unsupported falling edge
+interrupt bits.
 
+As per user manuals, specific mappings for interrupt status and clear
+registers include:
+
+Exynos4412: Falling edge bits at 20, 16, 12, and
+		rising edge bits at 8, 4, 0.
+Exynos5422: Falling edge bits at 24, 20, 16, and
+		rising edge bits at 8, 4, 0.
+Exynos5433: Falling edge bits at 23, 17, 16, and
+		rising edge bits at 7, 1, 0.
+
+Cc: Mateusz Majewski <m.majewski2@samsung.com>
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v7: new patch in this series,
-   Improve the commit message
-   simplify the logic to TRIMINFO for all SoC.
+v7: New patch in this series
+    simpilfy the logic for set and clear rising and failling
+    edges of the IRQ clear register.
+[0] https://lore.kernel.org/all/20250624075815.132207-1-m.majewski2@samsung.com/
 ---
- drivers/thermal/samsung/exynos_tmu.c | 30 +++++++---------------------
- 1 file changed, 7 insertions(+), 23 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c | 70 ++++++++++++++++++++++++----
+ 1 file changed, 60 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 3d12e95703bf..146f29fadea9 100644
+index 146f29fadea9..5e581055e3f3 100644
 --- a/drivers/thermal/samsung/exynos_tmu.c
 +++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -139,12 +139,11 @@ enum soc_type {
-  * struct exynos_tmu_data : A structure to hold the private data of the TMU
-  *			    driver
-  * @base: base address of the single instance of the TMU controller.
-- * @base_second: base address of the common registers of the TMU controller.
-  * @irq: irq number of the TMU controller.
-  * @soc: id of the SOC type.
-  * @lock: lock to implement synchronization.
-  * @clk: pointer to the clock structure.
-- * @clk_sec: pointer to the clock structure for accessing the base_second.
-+ * @clk_sec: pointer to the clock structure for accessing the gpu clk.
-  * @sclk: pointer to the clock structure for accessing the tmu special clk.
-  * @cal_type: calibration type for temperature
-  * @efuse_value: SoC defined fuse value
-@@ -172,7 +171,6 @@ enum soc_type {
-  */
- struct exynos_tmu_data {
- 	void __iomem *base;
--	void __iomem *base_second;
- 	int irq;
- 	enum soc_type soc;
- 	struct mutex lock;
-@@ -444,24 +442,17 @@ static void exynos4412_tmu_initialize(struct platform_device *pdev)
- 	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
- 	unsigned int trim_info, ctrl;
+@@ -197,6 +197,12 @@ struct exynos_tmu_data {
+ 	void (*tmu_clear_irqs)(struct exynos_tmu_data *data);
+ };
  
--	if (data->soc == SOC_ARCH_EXYNOS3250 ||
--	    data->soc == SOC_ARCH_EXYNOS4412 ||
--	    data->soc == SOC_ARCH_EXYNOS5250) {
--		if (data->soc == SOC_ARCH_EXYNOS3250) {
--			ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON1);
--			ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
--			writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON1);
--		}
-+	if (data->soc == SOC_ARCH_EXYNOS3250) {
-+		ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON1);
-+		ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
-+		writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON1);
-+	} else {
- 		ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON2);
- 		ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
- 		writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON2);
++/* Map Rise and Falling edges for IRQ Clean */
++struct tmu_irq_map {
++	u32 fall[3];
++	u32 rise[3];
++};
++
+ /*
+  * TMU treats temperature as a mapped temperature code.
+  * The temperature is converted differently depending on the calibration type.
+@@ -765,8 +771,9 @@ static irqreturn_t exynos_tmu_threaded_irq(int irq, void *id)
+ 
+ static void exynos4210_tmu_clear_irqs(struct exynos_tmu_data *data)
+ {
+-	unsigned int val_irq;
++	unsigned int val_irq, clear_irq = 0;
+ 	u32 tmu_intstat, tmu_intclear;
++	struct tmu_irq_map irq_map = {0};
+ 
+ 	if (data->soc == SOC_ARCH_EXYNOS5260) {
+ 		tmu_intstat = EXYNOS5260_TMU_REG_INTSTAT;
+@@ -783,15 +790,58 @@ static void exynos4210_tmu_clear_irqs(struct exynos_tmu_data *data)
  	}
  
--	/* On exynos5420 the triminfo register is in the shared space */
--	if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO)
--		trim_info = readl(data->base_second + EXYNOS_TMU_REG_TRIMINFO);
--	else
--		trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
-+	trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
- 
- 	sanitize_temp_error(data, trim_info);
+ 	val_irq = readl(data->base + tmu_intstat);
+-	/*
+-	 * Clear the interrupts.  Please note that the documentation for
+-	 * Exynos3250, Exynos4412, Exynos5250 and Exynos5260 incorrectly
+-	 * states that INTCLEAR register has a different placing of bits
+-	 * responsible for FALL IRQs than INTSTAT register.  Exynos5420
+-	 * and Exynos5440 documentation is correct (Exynos4210 doesn't
+-	 * support FALL IRQs at all).
+-	 */
+-	writel(val_irq, data->base + tmu_intclear);
++
++	/* Exynos4210 doesn't support FALL interrupts */
++	if (data->soc == SOC_ARCH_EXYNOS4210) {
++		writel(val_irq, data->base + tmu_intclear);
++		return;
++	}
++
++	/* Set SoC-specific interrupt bit mappings */
++	switch (data->soc) {
++	case SOC_ARCH_EXYNOS3250:
++	case SOC_ARCH_EXYNOS4412:
++	case SOC_ARCH_EXYNOS5250:
++	case SOC_ARCH_EXYNOS5260:
++		irq_map.fall[2] = BIT(20);
++		irq_map.fall[1] = BIT(16);
++		irq_map.fall[0] = BIT(12);
++		irq_map.rise[2] = BIT(8);
++		irq_map.rise[1] = BIT(4);
++		irq_map.rise[0] = BIT(0);
++		break;
++	case SOC_ARCH_EXYNOS5420:
++	case SOC_ARCH_EXYNOS5420_TRIMINFO:
++		irq_map.fall[2] = BIT(24);
++		irq_map.fall[1] = BIT(20);
++		irq_map.fall[0] = BIT(16);
++		irq_map.rise[2] = BIT(8);
++		irq_map.rise[1] = BIT(4);
++		irq_map.rise[0] = BIT(0);
++		break;
++	case SOC_ARCH_EXYNOS5433:
++	case SOC_ARCH_EXYNOS7:
++		irq_map.fall[2] = BIT(23);
++		irq_map.fall[1] = BIT(17);
++		irq_map.fall[0] = BIT(16);
++		irq_map.rise[2] = BIT(7);
++		irq_map.rise[1] = BIT(1);
++		irq_map.rise[0] = BIT(0);
++		break;
++	default:
++		pr_warn("exynos-tmu: Unknown SoC type %d, using fallback IRQ mapping\n", soc);
++		break;
++
++	/* Map active INTSTAT bits to INTCLEAR */
++	for (int i = 0; i < 3; i++) {
++		if (val_irq & irq_map.fall[i])
++			clear_irq |= irq_map.fall[i];
++		if (val_irq & irq_map.rise[i])
++			clear_irq |= irq_map.rise[i];
++	}
++
++	if (clear_irq)
++		writel(clear_irq, data->base + tmu_intclear);
  }
-@@ -974,13 +965,6 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
  
--	data->base_second = devm_ioremap(&pdev->dev, res.start,
--					resource_size(&res));
--	if (!data->base_second) {
--		dev_err(&pdev->dev, "Failed to ioremap memory\n");
--		return -ENOMEM;
--	}
--
- 	return 0;
- }
- 
+ static const struct of_device_id exynos_tmu_match[] = {
 -- 
 2.50.1
 
