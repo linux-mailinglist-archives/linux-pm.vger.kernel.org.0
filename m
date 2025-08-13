@@ -1,194 +1,132 @@
-Return-Path: <linux-pm+bounces-32355-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32356-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6437CB253DC
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 21:23:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DBD0B2546A
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 22:12:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4D175A3483
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 19:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D25C51C84298
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 20:12:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 645EC2F998A;
-	Wed, 13 Aug 2025 19:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="azUyOwJv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498F12FD7CD;
+	Wed, 13 Aug 2025 20:12:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6612F9982;
-	Wed, 13 Aug 2025 19:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C632FD7B9;
+	Wed, 13 Aug 2025 20:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755112948; cv=none; b=CfPebo0nb73AH74NZO4JNgRdICT/+rKb6J7f0f6v8rbgmwOiyAcOufE8zONiD/2ganVbF0LMe033uKHbXTCWslLMPlfCHnv5lwDCDxdnvQJ62p8rCf7u2wccWiA9AsCtvGvCiB/xiRALuLKuI7K3m/lLgKk6Rlqwsgn7/P0Vs5I=
+	t=1755115925; cv=none; b=C5GjDD4/Pq/KOcrV+wPeKDvyX/iAC0mIiSdUBD0pvuB6sKvvaWIW5IPAIvSh/Ej8GiKd9sQV7Xj32DQbLXzhsq1im7Jtz9AYn+ssNYj2Pm7ilvs6JFJf+xxqVTEaeNQ8vrEa8Vk/NrgSx8KRVFffG6JrOCc9hB35oAI2Idv6kXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755112948; c=relaxed/simple;
-	bh=9ZM/5E8yCMd71ZNUu0AdWblXsP6yCelsV4CbJofMFuA=;
+	s=arc-20240116; t=1755115925; c=relaxed/simple;
+	bh=Juf1ZTnx/FB2vFj4STFZmefBih8aOZWA68hdzIY4NFA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XK7LW/V9if0RvPm21EhRWlJUfvN9+P16md5CM/wi8XthX6PJylDUbvFDuEHMc3qmDhl5jblrxjGA8GZbX6jSSs9ocBvIvcmskBcVc5pU838ly6S+c6XVBFuzZHsp2FvpTp+lIIFv6J7UWi+1FkMuShVoTjClPd/j6pXN4ccujEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=azUyOwJv; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755112947; x=1786648947;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9ZM/5E8yCMd71ZNUu0AdWblXsP6yCelsV4CbJofMFuA=;
-  b=azUyOwJvt9veH7HU5uqMhzHsoVoMwjx7gd2iJC96GR1B3hNzs2TeFT/c
-   PFm2GIGIDnSUcJVKOuK2kBumlq2TEUlLutAGASuUJVNQ5wU13gN8ZpsX9
-   sepe2Y0JQ7+HwZArMWLq7TQ6q+Wl/jLBGc1BWOqXmxuQffczMy5tPQ4Cf
-   QmB/xtALapWZqIl4G7CFepfcGp7P9Fz++oBLZvhE7rVSLxtqv99sL5/SU
-   07zXi5LrycKTj7hEjrvtLnwVfCDcLUZ0aeHmkYz+Byh0GUCa0MO6VFSRb
-   D3xGpeCt/4JakhhXCAXxfTDmDel871a2ouAzOxn72dDKPJfD6Fr6U+k1R
-   A==;
-X-CSE-ConnectionGUID: CQybs/jcROKz8S8/XfQl/g==
-X-CSE-MsgGUID: 0e8g0lRtRvChr7ohjbZ9ZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57375916"
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="57375916"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 12:22:26 -0700
-X-CSE-ConnectionGUID: yUD8ILOkSKO9gAaok1Trlg==
-X-CSE-MsgGUID: fsipxVE3QvOY/e7Td8bztw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="166465259"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 13 Aug 2025 12:22:21 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1umH3D-000AFM-0o;
-	Wed, 13 Aug 2025 19:22:19 +0000
-Date: Thu, 14 Aug 2025 03:21:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Wu <wusamuel@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=JB5AJSzkOAuoNNWpWM6/mxFcqW4DWDAa05IPPI8B6A+k1q8f82MTGOPHrGPwH8WFxwza2Z62Q8i5PUMxFqiBseCBszGY1Y8l290CpEWaGDltftg5jdoJ+1caSUCrMFD06smVfCPrFhl6E8oj2NHZ8BLE+XYFtbilzDyOaUK8Lgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4096C4CEEF;
+	Wed, 13 Aug 2025 20:11:53 +0000 (UTC)
+Date: Wed, 13 Aug 2025 21:11:51 +0100
+From: Mark Brown <broonie@debian.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: oe-kbuild-all@lists.linux.dev, Samuel Wu <wusamuel@google.com>,
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] PM: Support aborting suspend during filesystem sync
-Message-ID: <202508140303.9c38ncEh-lkp@intel.com>
-References: <20250812232126.1814253-1-wusamuel@google.com>
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-block@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 00/19] rust: replace `kernel::c_str!` with C-Strings
+Message-ID: <34d384af-6123-4602-bde0-85ca3d14fe09@sirena.org.uk>
+References: <20250813-core-cstr-cstrings-v2-0-00be80fc541b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6FVk2V0LrGBjdKpm"
+Content-Disposition: inline
+In-Reply-To: <20250813-core-cstr-cstrings-v2-0-00be80fc541b@gmail.com>
+X-Cookie: Turn the other cheek.
+
+
+--6FVk2V0LrGBjdKpm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250812232126.1814253-1-wusamuel@google.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Samuel,
+On Wed, Aug 13, 2025 at 11:59:10AM -0400, Tamir Duberstein wrote:
+> This series depends on step 3[0] which depends on steps 2a[1] and 2b[2]
+> which both depend on step 1[3].
+>=20
+> This series also has a minor merge conflict with a small change[4] that
+> was taken through driver-core-testing. This series is marked as
+> depending on that change; as such it contains the post-conflict patch.
+>=20
+> Subsystem maintainers: I would appreciate your `Acked-by`s so that this
+> can be taken through Miguel's tree (where the previous series must go).
 
-kernel test robot noticed the following build warnings:
+Something seems to have gone wrong with your posting, both my mail
+server and the mail archives stop at patch 15.  If it were just rate
+limiting or greylisting I'd have expected things to have sorted
+themselves out by now for one or the other.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.17-rc1 next-20250813]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+--6FVk2V0LrGBjdKpm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/PM-Support-aborting-suspend-during-filesystem-sync/20250813-072435
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250812232126.1814253-1-wusamuel%40google.com
-patch subject: [PATCH v1] PM: Support aborting suspend during filesystem sync
-config: arm64-randconfig-r132-20250813 (https://download.01.org/0day-ci/archive/20250814/202508140303.9c38ncEh-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.5.0
-reproduce: (https://download.01.org/0day-ci/archive/20250814/202508140303.9c38ncEh-lkp@intel.com/reproduce)
+-----BEGIN PGP SIGNATURE-----
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508140303.9c38ncEh-lkp@intel.com/
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmic8YYACgkQJNaLcl1U
+h9Cumwf/YkCiNa2FUFyl0xap34GT0uNu8Xh2QH5gQa+2jI19lL8u1OybvUdzWI8N
+dryQmdo4BgnkEFiIeCiAWIUh8fHachIQqfAZfj8yJRexfSk3R0S/Nrg8CfGa9myh
+jkwom0F4sUSvZpsacG1c/oCya64UwN/bCgC+Yw2fivCPjjw/vz1JE5gtarpJEQly
+EJBbiexaSe0XYdtZ3cIT4wm0YElZqekk8U953MglLhWOOLXzt59bkslAam/8fori
+si1u/uVgWv1vyziB8dYHRa26Gsgy9OkgjCD0P64YWkoAV/uSnxsEo5wtWBx2ys1n
+pZ4kmgo8dh16iRQ7pqHeV2g3wE9HiQ==
+=xgNk
+-----END PGP SIGNATURE-----
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/power/suspend.c:79:1: sparse: sparse: symbol 'suspend_fs_sync_lock' was not declared. Should it be static?
->> kernel/power/suspend.c:80:1: sparse: sparse: symbol 'suspend_fs_sync_complete' was not declared. Should it be static?
-   kernel/power/suspend.c:104:54: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] @@
-   kernel/power/suspend.c:104:54: sparse:     expected int val
-   kernel/power/suspend.c:104:54: sparse:     got restricted suspend_state_t [usertype]
-   kernel/power/suspend.c:141:54: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] @@
-   kernel/power/suspend.c:141:54: sparse:     expected int val
-   kernel/power/suspend.c:141:54: sparse:     got restricted suspend_state_t [usertype]
-   kernel/power/suspend.c:202:19: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:202:47: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:203:19: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:203:51: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:208:26: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:208:65: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:215:42: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:215:51: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:216:38: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:217:51: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:215:72: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:240:34: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:240:73: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:241:27: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:241:59: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:246:34: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:246:69: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:247:21: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:247:42: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:537:33: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] state @@
-   kernel/power/suspend.c:537:33: sparse:     expected int val
-   kernel/power/suspend.c:537:33: sparse:     got restricted suspend_state_t [usertype] state
-   kernel/power/suspend.c:540:33: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] state @@
-   kernel/power/suspend.c:540:33: sparse:     expected int val
-   kernel/power/suspend.c:540:33: sparse:     got restricted suspend_state_t [usertype] state
-   kernel/power/suspend.c:610:57: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] state @@
-   kernel/power/suspend.c:610:57: sparse:     expected int val
-   kernel/power/suspend.c:610:57: sparse:     got restricted suspend_state_t [usertype] state
-   kernel/power/suspend.c:612:57: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] state @@
-   kernel/power/suspend.c:612:57: sparse:     expected int val
-   kernel/power/suspend.c:612:57: sparse:     got restricted suspend_state_t [usertype] state
-   kernel/power/suspend.c:650:52: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] state @@
-   kernel/power/suspend.c:650:52: sparse:     expected int val
-   kernel/power/suspend.c:650:52: sparse:     got restricted suspend_state_t [usertype] state
-   kernel/power/suspend.c:675:9: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:675:9: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:684:52: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int val @@     got restricted suspend_state_t [usertype] state @@
-   kernel/power/suspend.c:684:52: sparse:     expected int val
-   kernel/power/suspend.c:684:52: sparse:     got restricted suspend_state_t [usertype] state
-   kernel/power/suspend.c:685:9: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:685:9: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:708:13: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:708:22: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:708:39: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:708:48: sparse: sparse: restricted suspend_state_t degrades to integer
-   kernel/power/suspend.c:711:9: sparse: sparse: restricted suspend_state_t degrades to integer
-
-vim +/suspend_fs_sync_lock +79 kernel/power/suspend.c
-
-    77	
-    78	static bool suspend_fs_sync_queued;
-  > 79	DEFINE_SPINLOCK(suspend_fs_sync_lock);
-  > 80	DECLARE_COMPLETION(suspend_fs_sync_complete);
-    81	void suspend_abort_fs_sync(void)
-    82	{
-    83		spin_lock(&suspend_fs_sync_lock);
-    84		complete(&suspend_fs_sync_complete);
-    85		spin_unlock(&suspend_fs_sync_lock);
-    86	}
-    87	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--6FVk2V0LrGBjdKpm--
 
