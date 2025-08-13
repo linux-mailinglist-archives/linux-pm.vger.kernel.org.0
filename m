@@ -1,287 +1,159 @@
-Return-Path: <linux-pm+bounces-32239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7525EB23C41
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 01:22:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27CEB2408A
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 07:47:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD4511AA2BB5
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Aug 2025 23:21:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70857161CE5
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 05:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915242D7389;
-	Tue, 12 Aug 2025 23:21:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EA2D2BFC74;
+	Wed, 13 Aug 2025 05:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gwg9jyiK"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="E5swJDKA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A45227B8E
-	for <linux-pm@vger.kernel.org>; Tue, 12 Aug 2025 23:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFEA288C25
+	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 05:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755040890; cv=none; b=hdfgJsru0EV9CT0CxFCx4YVJ2skslMcnYbnd29Aveb9puVMrebqVKsrGI/SRY/kl6xpNBse3HPQjk5M4ycw1/9RyqSEWg3gQKUSEixknrc8RnQm6N9PdCq8uCawh+QgIlGir0B8lYWmoe/ALtFQpwZF/aP1zB1NHQL+onFdUZ8w=
+	t=1755063948; cv=none; b=grU5fqMgir2sfXjEjSG5ARyKKbYhP/mpE8Ejo+VLbctcEZxpM8kFMmj/lm4nGMLHLocmQr/gj0nEImjYbalFPw8pxt9eFZp0iqz+8tK5jUCt7Ib8CXOnOpdsAdSGiBAqXEX1cvMQAekG4HGuvkNvqvhrWK9ERT0V/KJALNGql2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755040890; c=relaxed/simple;
-	bh=LOk7dl93AGvnlrN+hnrHWS3R9F8H5tutntHoaNuqDdQ=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=gcE02f7ozUbAO1osaomesjEVJSownZ5VA3ody2gStQx0/PtMNict6PXcGGRjR1vGsbqhrzviVWvNYLlmsXBjPhG1ihDXJ6fnx3vNgW8K0u0OsoWfD24sZ3UOfXIoXk9mIQ0hBlU8tCg/k1s6QzPwpjn1K/bafjJLoc+GW8ZjN74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gwg9jyiK; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2400a932e59so97866445ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 12 Aug 2025 16:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755040888; x=1755645688; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bZpiz79XGOfcAFrU83e9u5Jtr5pnmDIUJC8xFkGk0EY=;
-        b=Gwg9jyiKV2ZAnontM272UA9FC3LrvDPewTXQpEEfeNTBUuPeNwjCVYN+r7hsUdazFm
-         NBr2pjVwhAz31sWyQP4Yx/362rL4D6G3HZEJafClmLDWtmHWuBJfKtzF18TPLt6CaWFH
-         Wj6337eQYmkuRoddj9dKvqxlj2RU/TBVIFlPHgN1X05NP7u56MBRLXJ7xr3Nc2DMnWDv
-         vcni77ETXRzQSedfVWiNrq3CnSj9g9/R39AkF0n3AQ9Wat7AflnelHpmdlfEuOT6+fwR
-         KqgaQHkWga7bawzY//S9pFThGeQqjdoZ4uVvmV1dx7utAVQprao8T5agt1OgrAgZOgrq
-         KRjQ==
+	s=arc-20240116; t=1755063948; c=relaxed/simple;
+	bh=zGwOTcUsz1xirDMHVrkdX/vvxQbHA7GU3AGFpslLXF0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pvA7YmIODhf7GGpXZcM+DWbaFNpoR+hEvgxU4Y9sc9U0gAD5gV1DpZuYh86TD+1vKASZepGlXaQARYSyp2XrJ+FkCIgxz5hlsnQQX+Bz/SujVFRGI5fjLzR1nruEkXqJGiat3pAuD0dDZIEjqs75JmrS3cRAObLnwfXUxAeQQcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=E5swJDKA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57D3nXvE011483
+	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 05:45:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Don7/I9Uj7z5dTSOT5GELdMDcLUsYu7/Ujb3hm5duA0=; b=E5swJDKAH1uztF3G
+	lhdB7KhgUNjRtjT0vfqGP4EW5tfyQXb90bo8ttURhP7m5PCr8GhE+nv5695XNviu
+	zfP76HrSLq3E2bITYiGck0fyfcen8joBvJzgorzFTQbfJy+PRaJ7bs4eriJsUyqj
+	kgmRAz2ADTxUFbiDtE2KgfVakZudUdInTwq1imnO9HsJ+d0T0abxgt9Ry2+nd46M
+	u/ZYVzH34R4u9ZtikKyVEY7H31YArJGDrkqRcs0mtVDgBMV1y1/485Yoy1m+bOXv
+	KdnnnGmY6ZwQgHs0HUS/3z1XkgnoiHDZKNpx3GkqNl4k5nOIQBmxvRIV72kD886w
+	S6q2Xg==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48ffhjpd0v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 05:45:44 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-23fed1492f6so90434575ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 12 Aug 2025 22:45:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755040888; x=1755645688;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bZpiz79XGOfcAFrU83e9u5Jtr5pnmDIUJC8xFkGk0EY=;
-        b=kUgQqUx3vKbdNZ/i5bdMnXzmtoBMfeCmeVkcmb2SbNQOIrp403r3A43l5kR7QGHlqk
-         dDCtTzChCv37i2kgtkuPw3hCB3Dge1cJHJRrNJc7dmluU+PGjgIB0c74b73X4mAb/a++
-         GPwVkHJRnnUw3/h9/zJyX8s4VoN8bZDHh5ejMFr8Y2zt7u80XVrZcxTtKPljBPuAMx8+
-         WMG0dZsO4z+PCs2HcjUOXkut59EhTm+HOIcexagEu1+bY//y7GHklxBfrNJbFb++95iB
-         HxlX1Z3jEWAUTMyXQbDE2Ey2SEQ1MKEc8FaY+bBI2OHJdXEXFs53GW91HGayXd8IvCI/
-         uqnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVI3umm2Ki3Qhjko5yHMleDydl5B7vVmPYoJgdd40Ou0qJzMLU+rZ76X/iRei1jX20A+68KKRwEbA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyD6amoUa6CvH87I9RB+f52Bo/CKeFy4HZbrCNPT+WVBhxN4uW
-	DRpvDFk7uTSUtmg0dFxm1oUw9i2+TJG0p7yoW3K/saFLucgcFutDl/YcquZuOmVPqURT4GCCg+9
-	//j1SyS2r7+ej8Q==
-X-Google-Smtp-Source: AGHT+IEpN2+KlAnjkUEee+7tyFmAYnD+YYk0SolpIJ6qM5vTpNsALavalXORFevn/twSGWrD+KCnKhgjS0cCdQ==
-X-Received: from plks17.prod.google.com ([2002:a17:903:2d1:b0:231:de34:f9f6])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:1a84:b0:240:1953:f9a with SMTP id d9443c01a7336-2430d0b3239mr16123015ad.2.1755040888203;
- Tue, 12 Aug 2025 16:21:28 -0700 (PDT)
-Date: Tue, 12 Aug 2025 16:21:23 -0700
+        d=1e100.net; s=20230601; t=1755063943; x=1755668743;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Don7/I9Uj7z5dTSOT5GELdMDcLUsYu7/Ujb3hm5duA0=;
+        b=o4Byc7RJH0cmXaIAA7RajIE2DS7O6Y6bqKLIwKvkN6DN3G5sfRBxyYGaPsY0Y1L7qh
+         QpmK2+3WHQrGOUVBcHNAPFfEMoPfG/ypQJmQOeRZA4mza87IdsdYCro8C6jBc57qwb0k
+         KrPC2C4ykbC5Gt8OoI74vcvJ1yAhN6CWf1nsaqqNnSoNT2a3+XEeSCUzZIvPKfU5fVpa
+         u7WrCRmVDMnMQ2zdmOhU03k2Q75sDvrUwxT0rU5CxmhsnemHsSYWLel94jYI0W74oy5O
+         4ikSSi9qNttlauevvjmWfjUkK03nMmxYoaaJE7H87qfcDEKBLJ/SY8O9k/X7kVQ4GWAL
+         yflA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+5G+8fZTqyiQRu069kH0x+TSi9wnZ2HBSfwpRTyskIIr/UOJGSEXIWNbvPBpWfxbdqbHGt38rkA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyyt8vpE5afMCj2ANiCgj2xjArYkkRptY/K5lHp2x3dc8r5PDbI
+	FrJNEcheqVtQe2Oe+A68w2pIED3cULvjH8sy+hBGE6FzD4FbERWB1GG4yDaC8e0RTX9y9PyUPS6
+	sxxH8wDtBdJYjAZmM/ZPiScso9XRGRmMdLfcfviq+YvUHXII5PVhPmonYihTZ/Q==
+X-Gm-Gg: ASbGncsz/FRctVSzmTTWlKBwsIEhxV9dVaa73bqkx7RMLyijJEv5jgJ6krzhkyNpW8d
+	BFmNfFSBUU10W+8qIzFPwYQYBmyg/tdJdSCUVU9k1LY1YP/YdlFrRWBZsABgQJoPXi0vCCT+yjq
+	XE8dW0b/VM6xIn7qGkh53BZnhcDVP/wauvQtCAKS8h0LyuVWVpffiaP+BzbN+k4WtNaNkUr/qmB
+	vw868c+vMRaiq79XI6q80ThZOpcWZzdkGY1zrfCBC2vmcFWRCE+7kpUiJApBuCD5c9NOIs1UYIO
+	zM8jHjOVz5vMTXEurJC4GbcuZJEheAP5TNur7BuhrgDzGDQFLJPD3XWYzGMPcmMEkj7hI00=
+X-Received: by 2002:a17:903:2f8f:b0:240:8262:1a46 with SMTP id d9443c01a7336-2430d10f333mr24296885ad.25.1755063943176;
+        Tue, 12 Aug 2025 22:45:43 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFKxGK3btWcsA2MMJlDGujnyNgU79WdDiyIV0PIuwBRiNdl1y38tWiB/pb09bnsoSZftYKpXw==
+X-Received: by 2002:a17:903:2f8f:b0:240:8262:1a46 with SMTP id d9443c01a7336-2430d10f333mr24296635ad.25.1755063942755;
+        Tue, 12 Aug 2025 22:45:42 -0700 (PDT)
+Received: from [192.168.1.7] ([223.230.83.199])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899a51esm317556405ad.115.2025.08.12.22.45.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Aug 2025 22:45:42 -0700 (PDT)
+Message-ID: <7c96f881-23ae-484c-82b8-d388a5c637ca@oss.qualcomm.com>
+Date: Wed, 13 Aug 2025 11:15:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.0.rc0.215.g125493bb4a-goog
-Message-ID: <20250812232126.1814253-1-wusamuel@google.com>
-Subject: [PATCH v1] PM: Support aborting suspend during filesystem sync
-From: Samuel Wu <wusamuel@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: Samuel Wu <wusamuel@google.com>, Saravana Kannan <saravanak@google.com>, kernel-team@android.com, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sa8775p: Add clocks for QoS
+ configuration
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Tipton <mike.tipton@oss.qualcomm.com>
+References: <20250808140300.14784-1-odelu.kukatla@oss.qualcomm.com>
+ <20250808140300.14784-4-odelu.kukatla@oss.qualcomm.com>
+ <857f56a9-0fe7-4c10-a55d-b00740a8be02@oss.qualcomm.com>
+Content-Language: en-US
+From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+In-Reply-To: <857f56a9-0fe7-4c10-a55d-b00740a8be02@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODExMDA3NCBTYWx0ZWRfX5Wqc2xNc+5Lw
+ 47EV2I+BdbexcnpTgYmwZ0QGODwyY0lyn8TueugKU+tMU1IyRBNZY6Z59s/JznZ2nYmNSmxA206
+ 957bHFiS/+OaA6PxJeVRTe7ynuLOPE9xCD1raATNvg/2OYLPY68pHT9bIEfTW3oi0AlNnpuRS5h
+ XYC+5aehjThl3LG0ykh27MmzxCY2Mnkttc5mqiONOwOCi11NZc3fjBzvWlyVvFQOlqHNDaIskUF
+ QZMZDkgpQG/zKVeC7bt5lEz7koNw5HPOSTSmuCyxjrIunlluWQrDDV1VutxnsVH+xGF69Va4rbY
+ iWtWpXp913g/PwHd7glQqITdh/96yGzkCfi+VgG1+csnZRxCghzNH/QdXrIXc59e83LVB7bqf0u
+ jraT1Rwf
+X-Proofpoint-GUID: WBFzSWvzVbPD55-CFLEg5xFTs7RXeaVc
+X-Authority-Analysis: v=2.4 cv=TJFFS0la c=1 sm=1 tr=0 ts=689c2688 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=SiMmawhtwnuHYgKqZ0PRSA==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=XLPuD3OmIq6EDVKOuGgA:9
+ a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-ORIG-GUID: WBFzSWvzVbPD55-CFLEg5xFTs7RXeaVc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-12_08,2025-08-11_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ phishscore=0 clxscore=1015 spamscore=0 bulkscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508110074
 
-At the start of suspend, filesystems will sync to save the current state
-of the device. However, the long tail of the filesystem sync can take
-upwards of 25 seconds. If during this filesystem sync there is some
-wakeup or abort signal, it will not be processed until the sync is
-complete; from a user's perspective, this looks like the device is
-unresponsive to any form of input.
 
-This patch adds functionality to handle a suspend abort signal when in
-the filesystem sync phase of suspend. This topic was first discussed by
-Saravana Kannan at LPC 2024 [1], where the general consensus was to
-allow filesystem sync on a parallel thread.
 
-[1]: https://lpc.events/event/18/contributions/1845/
-
-Suggested-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- drivers/base/power/wakeup.c |  8 ++++
- include/linux/suspend.h     |  3 ++
- kernel/power/process.c      |  1 -
- kernel/power/suspend.c      | 80 ++++++++++++++++++++++++++++++++++++-
- 4 files changed, 90 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index d1283ff1080b..304368c3a55f 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_source *ws)
- 
- 	/* Increment the counter of events in progress. */
- 	cec = atomic_inc_return(&combined_event_count);
-+	/*
-+	 * To maintain the same behavior as pm_wakeup_pending(),
-+	 * aborting suspend will only happen if events_check_enabled. Similarly,
-+	 * the abort during fs_sync needs the same check.
-+	 */
-+	if (events_check_enabled)
-+		suspend_abort_fs_sync();
- 
- 	trace_wakeup_source_activate(ws->name, cec);
- }
-@@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
- void pm_system_wakeup(void)
- {
- 	atomic_inc(&pm_abort_suspend);
-+	suspend_abort_fs_sync();
- 	s2idle_wake();
- }
- EXPORT_SYMBOL_GPL(pm_system_wakeup);
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 317ae31e89b3..21b1ea275c79 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -276,6 +276,8 @@ extern void arch_suspend_enable_irqs(void);
- 
- extern int pm_suspend(suspend_state_t state);
- extern bool sync_on_suspend_enabled;
-+
-+extern void suspend_abort_fs_sync(void);
- #else /* !CONFIG_SUSPEND */
- #define suspend_valid_only_mem	NULL
- 
-@@ -296,6 +298,7 @@ static inline bool idle_should_enter_s2idle(void) { return false; }
- static inline void __init pm_states_init(void) {}
- static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
- static inline void s2idle_wake(void) {}
-+static inline void suspend_abort_fs_sync(void) {}
- #endif /* !CONFIG_SUSPEND */
- 
- static inline bool pm_suspend_in_progress(void)
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index dc0dfc349f22..8ff68ebaa1e0 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -132,7 +132,6 @@ int freeze_processes(void)
- 	if (!pm_freezing)
- 		static_branch_inc(&freezer_active);
- 
--	pm_wakeup_clear(0);
- 	pm_freezing = true;
- 	error = try_to_freeze_tasks(true);
- 	if (!error)
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index b4ca17c2fecf..3bdb8aca00cc 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -31,6 +31,7 @@
- #include <linux/compiler.h>
- #include <linux/moduleparam.h>
- #include <linux/fs.h>
-+#include <linux/workqueue.h>
- 
- #include "power.h"
- 
-@@ -74,6 +75,16 @@ bool pm_suspend_default_s2idle(void)
- }
- EXPORT_SYMBOL_GPL(pm_suspend_default_s2idle);
- 
-+static bool suspend_fs_sync_queued;
-+DEFINE_SPINLOCK(suspend_fs_sync_lock);
-+DECLARE_COMPLETION(suspend_fs_sync_complete);
-+void suspend_abort_fs_sync(void)
-+{
-+	spin_lock(&suspend_fs_sync_lock);
-+	complete(&suspend_fs_sync_complete);
-+	spin_unlock(&suspend_fs_sync_lock);
-+}
-+
- void s2idle_set_ops(const struct platform_s2idle_ops *ops)
- {
- 	unsigned int sleep_flags;
-@@ -403,6 +414,71 @@ void __weak arch_suspend_enable_irqs(void)
- 	local_irq_enable();
- }
- 
-+static void sync_filesystems_fn(struct work_struct *work)
-+{
-+	ksys_sync_helper();
-+
-+	spin_lock(&suspend_fs_sync_lock);
-+	suspend_fs_sync_queued = false;
-+	complete(&suspend_fs_sync_complete);
-+	spin_unlock(&suspend_fs_sync_lock);
-+}
-+static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
-+
-+/**
-+ * suspend_fs_sync_with_abort- Start filesystem sync and handle potential aborts
-+ *
-+ * Starts filesystem sync in a workqueue, while the main thread uses a
-+ * completion to wait for either the filesystem sync to finish or for a wakeup
-+ * event. In the case of filesystem sync finishing and triggering the
-+ * completion, the suspend path continues as normal. If the complete is due to a
-+ * wakeup or abort signal, the code jumps to the suspend abort path while the
-+ * filesystem sync finishes in the background.
-+ *
-+ * An aborted suspend that is followed by another suspend is a potential
-+ * scenario that complicates the sequence. This patch handles this by
-+ * serializing any filesystem sync; a subsequent suspend's filesystem sync
-+ * operation will only start when the previous suspend's filesystem sync has
-+ * finished. Even while waiting for the previous suspend's filesystem sync to
-+ * finish, the subsequent suspend will still break early if a wakeup completion
-+ * is triggered, solving the original issue of filesystem sync blocking abort.
-+ */
-+static int suspend_fs_sync_with_abort(void)
-+{
-+	bool need_suspend_fs_sync_requeue;
-+
-+	pm_wakeup_clear(0);
-+Start_fs_sync:
-+	spin_lock(&suspend_fs_sync_lock);
-+	reinit_completion(&suspend_fs_sync_complete);
-+	/*
-+	 * Handle the case where a suspend immediately follows a previous
-+	 * suspend that was aborted during fs_sync. In this case, serialize
-+	 * fs_sync by only starting fs_sync of the subsequent suspend when the
-+	 * fs_sync of the previous suspend has finished.
-+	 */
-+	if (suspend_fs_sync_queued) {
-+		need_suspend_fs_sync_requeue = true;
-+	} else {
-+		need_suspend_fs_sync_requeue = false;
-+		suspend_fs_sync_queued = true;
-+		schedule_work(&sync_filesystems);
-+	}
-+	spin_unlock(&suspend_fs_sync_lock);
-+
-+	/*
-+	 * Completion is triggered by fs_sync finishing or a suspend abort
-+	 * signal, whichever comes first
-+	 */
-+	wait_for_completion(&suspend_fs_sync_complete);
-+	if (pm_wakeup_pending())
-+		return -EBUSY;
-+	if (need_suspend_fs_sync_requeue)
-+		goto Start_fs_sync;
-+
-+	return 0;
-+}
-+
- /**
-  * suspend_enter - Make the system enter the given sleep state.
-  * @state: System sleep state to enter.
-@@ -590,8 +666,10 @@ static int enter_state(suspend_state_t state)
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
--		ksys_sync_helper();
-+		error = suspend_fs_sync_with_abort();
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-+		if (error)
-+			goto Unlock;
- 	}
- 
- 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
--- 
-2.51.0.rc0.215.g125493bb4a-goog
+On 8/12/2025 3:21 PM, Konrad Dybcio wrote:
+> On 8/8/25 4:03 PM, Odelu Kukatla wrote:
+>> Add register addresses and clocks which need to be enabled for
+>> configuring QoS on sa8775p SoC.
+>>
+>> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+>> ---
+> 
+> [...]
+> 
+>> +		system_noc: interconnect@01680000 {
+> 
+> stray leading zero
+> 
+Thanks for the review, i will address this in next revision.> I also see there's a camera noc.. are these controlled internally
+> by Titan nowadays?
+> 
+Yes, camera NoC is controlled internally.
+> Konrad
 
 
