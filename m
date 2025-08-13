@@ -1,150 +1,131 @@
-Return-Path: <linux-pm+bounces-32279-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32280-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F987B24914
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 14:04:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20E46B2491D
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 14:05:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D2115A52D8
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 12:02:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB6157BCB62
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 12:03:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5082B2FF148;
-	Wed, 13 Aug 2025 12:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD3C2FDC5C;
+	Wed, 13 Aug 2025 12:04:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05382FE59E;
-	Wed, 13 Aug 2025 12:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CFE2D73AE;
+	Wed, 13 Aug 2025 12:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755086504; cv=none; b=UaD0SHUTMdwkH1d8GbZE3EykxLVVkoitpoYblZm3YvDH6o2v4N8O9s6ED8w0hAdLXz1eAgT3RYIEOR1VVUVyCcK0SFKyufJexzzNy4PABvd8rYv9Yv+zqMRRU1i+DSPpB3Mlf1KMVadFoACI3mi1KfBzbgeswY8VVgghkJpbA70=
+	t=1755086668; cv=none; b=eibaFJ4+NfIF6zA1kClMXDLyEcnjJHQSag4KxB5Y6j5gTeUVwvImSokHjmSVtKaspXA+KXwLiOYchs49ewZpfmNRWCHw2YFKW3lHwYGVFDT+MaZKpVa7iRIdwpEzgGk7hVgoFpWLFiwW/dZ/Q83R9WQJIW3s0Ajxi27UUN6K+rA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755086504; c=relaxed/simple;
-	bh=jvrnSFo2RTnrxOsEOCw0HxS3H2GPEPcK5sDoiCpspPI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DCO+u0sKhm4O/deW+5m/gzPy28/vCnuuF7LUf+DbgodhdfVPy7HhgyQ/YXbfuUprni2sSuuRfGiaIXL2oPnRcO2PpML3UvhZoCmYjQuUY4fXYrJ116o4prPm5JlGwPbhv3tBzDO+j86dwErVLYkHG/Ves43nP7jfS6pdryNko0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5758312FC;
-	Wed, 13 Aug 2025 05:01:34 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 204DA3F5A1;
-	Wed, 13 Aug 2025 05:01:39 -0700 (PDT)
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	broonie@kernel.org,
-	oliver.upton@linux.dev,
-	anshuman.khandual@arm.com,
-	robh@kernel.org,
-	james.morse@arm.com,
-	mark.rutland@arm.com,
-	joey.gouly@arm.com,
-	Dave.Martin@arm.com,
-	ahmed.genidi@arm.com,
-	kevin.brodsky@arm.com,
-	scott@os.amperecomputing.com,
-	mbenes@suse.cz,
-	james.clark@linaro.org,
-	frederic@kernel.org,
-	rafael@kernel.org,
-	pavel@kernel.org,
-	ryan.roberts@arm.com,
-	suzuki.poulose@arm.com
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v3 5/5] arm64: make the per-task SCTLR2_EL1
-Date: Wed, 13 Aug 2025 13:01:18 +0100
-Message-Id: <20250813120118.3953541-6-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250813120118.3953541-1-yeoreum.yun@arm.com>
-References: <20250813120118.3953541-1-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1755086668; c=relaxed/simple;
+	bh=uXBhJPRZMN9HfjHxtBD9GnZwhXecEMvUfijwCzpCQjc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aeoWmx/VBXb1/338j/5WqQF5r8Y/kz2NVa8ZxLcddNyFGrjP2sVWQ3X/VuIuOtISGPbuMyyuNZSo88MrQlEDPhgRxoUL9DQfLanzg34kPGaeYADu4SL1Nh3aE874S/RpGz6YuZghSXC0+UDaIsm62VTfgPLJjBHqvRRut2wTEiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-4fec0d6fd90so2299238137.3;
+        Wed, 13 Aug 2025 05:04:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755086665; x=1755691465;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BnlFfu7fx2zDGb6puNkcBG8WEMDnuOsjkStSJt7ZaHo=;
+        b=Cq8mcKqpTGd7yNkrvI/5IrN/tt3mR+UsAlhtwQJ8fIjUHXmMGkZ4QRV8BlwyvYZL2M
+         x6LoN8hogh0dfF2HvgRbYIzEaDyM/GsXaLSYvNBebkLEBCdti0U+YNS97OfGnnpk8Od3
+         DaorfmZuPT2K7yMdlayXxrp9ZuD9y3SkdnLiPgWylyDzCEpQkphPbZXTCUP6GCU9W83Q
+         KHKyc/x7LP3327bw7xXh/O0Slb/qhyvvd7yIcBnHhMyVwW/J5Fgm136goY1IwRl7Vnuu
+         fB6tuubkOlAVi1YPpPHABOEMU1/KWH5GN792R63odVJxQvDZGRdQU1NSlyMF2dD7h80F
+         yN/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVUqMsu30NWyMAOZ/9aizEUMAKm4TOx8AVmEEPk7HNP5tQn/bo3TJ05KAeBcYJYT3gOarDE3+TPY6LEDqo=@vger.kernel.org, AJvYcCXT8G0/zAtU95JPHPAzF9fRbmQ/V1YkfhyUTkl35R61EsjsdoEFYU7SOPZlh28eVaGUkO9qniWr2Sg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3Dd77JzmJd8NOKDnVpNybZd7vIcvpODmhgASwVV5yCncDP1yx
+	LF7V4h0ONIGQF7mSr/cV21oy/cXZtkFDjkdThDteytZxRgAVlEBhz7rXHotB9ikJ
+X-Gm-Gg: ASbGnctIXzwB7lrPGwcvyPpfj29jAv2JuID2nHGJqMQP6YQVJRBsxA0OU69AOOMoCY8
+	UPb4DpH546eOdG77OoV8MXCJS0B6uxvHNjA7AIJt9LozuHeRfyuQCrPq7BmJNYecBb+8OVHx4qJ
+	a23Q4cWxl2gBBeKVtEHGtuesewxRrgCRV1LkqUl4/MSb8RY4r5nKd+diyL9FvJYpdlZpKHllrCn
+	f+3Is8Ys84mjHG/3SNMNJ3QgVoAYjExdMUhEHWQF0if1hAq4h/68ZvSUOgVq2ezRtSzzDYcrO9n
+	4BmJKlJXf+qPbtHb9ByvTr/H/rZsnvoO5or66Gyc2Vaxhifg7sLiXvM8O5itUDGw0H28e1M3JUB
+	swKsCkdiM7X9K5GEYvBUq9yOy8n0BM5ZBs+Jt9yznvuTFtzakbYEIY+xxduRu
+X-Google-Smtp-Source: AGHT+IHU4/Oa/1zco/N5zGr/62xEseQqpIDPLhcPpp7KNWQgx7TFRbf0oHmVb/N6LhGy9giCtaV7xQ==
+X-Received: by 2002:a05:6102:5a97:b0:4f9:6a91:133a with SMTP id ada2fe7eead31-50e51bc6dc2mr922095137.27.1755086665232;
+        Wed, 13 Aug 2025 05:04:25 -0700 (PDT)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-506290ef371sm2605442137.5.2025.08.13.05.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Aug 2025 05:04:24 -0700 (PDT)
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4fec0d6fd90so2299236137.3;
+        Wed, 13 Aug 2025 05:04:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWGfusF/3gYdUCKRhzp1Vhni1NnPZWB0FNuYVCNdhYj+fJ60u3TgvtHGyN35VJA0h2u5dwhUE3P1ks=@vger.kernel.org, AJvYcCXu5J8MWuEYeXg/zgKKCheCRrcUtAG3XxWkAwkd+urX661A4n3bor13rru35mZss0xw3W5xgIRq6ludEGE=@vger.kernel.org
+X-Received: by 2002:a05:6102:e0e:b0:4e7:bf03:cd79 with SMTP id
+ ada2fe7eead31-50e4e5d2141mr911079137.5.1755086663571; Wed, 13 Aug 2025
+ 05:04:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250701114733.636510-1-ulf.hansson@linaro.org> <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+In-Reply-To: <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 13 Aug 2025 14:04:12 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUHZZByTDhKUW4=vX45h7AJNXNzjHQSXMfEV=mdc8NCVw@mail.gmail.com>
+X-Gm-Features: Ac12FXy-RTF6MSiz3MwhGjbIrkTvy8VuSBzBu0kMtbvvXbrItd-2qk19ZqkwC4Y
+Message-ID: <CAMuHMdUHZZByTDhKUW4=vX45h7AJNXNzjHQSXMfEV=mdc8NCVw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Lubomir Rintel <lkundrak@v3.sk>
+Content-Type: text/plain; charset="UTF-8"
 
-SCTLR2_EL1 register is optional starting from ARMv8.8/ARMv9.3,
-and becomes mandatory from ARMv8.9/ARMv9.4
-and serveral architectural feature are controled by bits in
-these registers and some of bits could be configurable per task
-not globally -- i.e) FEAT_CPA2 related field and etc.
+Hi Ulf,
 
-For future usage of these fields, make the per-task SCTLR2_EL1.
+On Wed, 9 Jul 2025 at 13:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> On Tue, 1 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > Changes in v3:
+> >         - Added a couple of patches to adress problems on some Renesas
+> >         platforms. Thanks Geert and Tomi for helping out!
+> >         - Adressed a few comments from Saravanna and Konrad.
+> >         - Added some tested-by tags.
+>
+> I decided it was time to give this a try, so I have queued this up for
+> v6.17 via the next branch at my pmdomain tree.
+>
+> If you encounter any issues, please let me know so I can help to fix them.
 
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
----
- arch/arm64/include/asm/processor.h | 5 +++++
- arch/arm64/kernel/process.c        | 9 +++++++++
- 2 files changed, 14 insertions(+)
+FTR, I discovered two more issues with clock drivers registering a
+genpd OF provider from CLK_OF_DECLARE(), which is now too early:
+  1. drivers/clk/mmp/clk-of-mmp2.c,
+  2. drivers/clk/renesas/clk-mstp.c.
 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 61d62bfd5a7b..2c962816de70 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -184,6 +184,7 @@ struct thread_struct {
- 	u64			mte_ctrl;
- #endif
- 	u64			sctlr_user;
-+	u64			sctlr2_user;
- 	u64			svcr;
- 	u64			tpidr2_el0;
- 	u64			por_el0;
-@@ -258,6 +259,9 @@ static inline void task_set_sve_vl_onexec(struct task_struct *task,
- 	(SCTLR_ELx_ENIA | SCTLR_ELx_ENIB | SCTLR_ELx_ENDA | SCTLR_ELx_ENDB |   \
- 	 SCTLR_EL1_TCF0_MASK)
- 
-+#define SCTLR2_USER_MASK	\
-+	(SCTLR2_EL1_EnPACM0 | SCTLR2_EL1_CPTA0 | SCTLR2_EL1_CPTM0)
-+
- static inline void arch_thread_struct_whitelist(unsigned long *offset,
- 						unsigned long *size)
- {
-@@ -370,6 +374,7 @@ struct task_struct;
- unsigned long __get_wchan(struct task_struct *p);
- 
- void update_sctlr_el1(u64 sctlr);
-+void update_sctlr2_el1(u64 sctlr2);
- 
- /* Thread switching */
- extern struct task_struct *cpu_switch_to(struct task_struct *prev,
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 96482a1412c6..9191180c4875 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -698,6 +698,11 @@ void update_sctlr_el1(u64 sctlr)
- 	isb();
- }
- 
-+void update_sctlr2_el1(u64 sctlr2)
-+{
-+	sysreg_clear_set_s(SYS_SCTLR2_EL1, SCTLR2_USER_MASK, sctlr2);
-+}
-+
- /*
-  * Thread switching.
-  */
-@@ -737,6 +742,10 @@ struct task_struct *__switch_to(struct task_struct *prev,
- 	if (prev->thread.sctlr_user != next->thread.sctlr_user)
- 		update_sctlr_el1(next->thread.sctlr_user);
- 
-+	if (alternative_has_cap_unlikely(ARM64_HAS_SCTLR2) &&
-+	    prev->thread.sctlr2_user != next->thread.sctlr2_user)
-+		update_sctlr2_el1(next->thread.sctlr2_user);
-+
- 	/* the actual thread switch */
- 	last = cpu_switch_to(prev, next);
- 
+I have submitted a fix for the second driver: "[PATCH] clk: renesas:
+mstp: Add genpd OF provider at postcore_initcall()"
+https://lore.kernel.org/all/81ef5f8d5d31374b7852b05453c52d2f735062a2.1755073087.git.geert+renesas@glider.be
+
+I don't have MMP2 hardware, I guess it needs a similar fix.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
