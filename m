@@ -1,131 +1,87 @@
-Return-Path: <linux-pm+bounces-32280-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32281-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20E46B2491D
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 14:05:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA3FB249ED
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 14:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB6157BCB62
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 12:03:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EB703AC884
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Aug 2025 12:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD3C2FDC5C;
-	Wed, 13 Aug 2025 12:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6B62DCF5F;
+	Wed, 13 Aug 2025 12:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ir2uAtIo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CFE2D73AE;
-	Wed, 13 Aug 2025 12:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AD12BD59E;
+	Wed, 13 Aug 2025 12:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755086668; cv=none; b=eibaFJ4+NfIF6zA1kClMXDLyEcnjJHQSag4KxB5Y6j5gTeUVwvImSokHjmSVtKaspXA+KXwLiOYchs49ewZpfmNRWCHw2YFKW3lHwYGVFDT+MaZKpVa7iRIdwpEzgGk7hVgoFpWLFiwW/dZ/Q83R9WQJIW3s0Ajxi27UUN6K+rA=
+	t=1755089734; cv=none; b=BkJqqZCA0SCD626E/VTiZK3MHfDM2TfRsm6V8dASRA5K+WisvBRnq9r70zGFLeR68ZQtffqSXPWRyWwmNpOKvPavFkksuHtQ6B8sE5Vs0O/eK8j+wO6qNJ/TVBBHxrk86Lu0Hzmc5vQfzSnqm7mF+R59UmXaQDjTm05lG3zTXvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755086668; c=relaxed/simple;
-	bh=uXBhJPRZMN9HfjHxtBD9GnZwhXecEMvUfijwCzpCQjc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aeoWmx/VBXb1/338j/5WqQF5r8Y/kz2NVa8ZxLcddNyFGrjP2sVWQ3X/VuIuOtISGPbuMyyuNZSo88MrQlEDPhgRxoUL9DQfLanzg34kPGaeYADu4SL1Nh3aE874S/RpGz6YuZghSXC0+UDaIsm62VTfgPLJjBHqvRRut2wTEiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-4fec0d6fd90so2299238137.3;
-        Wed, 13 Aug 2025 05:04:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755086665; x=1755691465;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BnlFfu7fx2zDGb6puNkcBG8WEMDnuOsjkStSJt7ZaHo=;
-        b=Cq8mcKqpTGd7yNkrvI/5IrN/tt3mR+UsAlhtwQJ8fIjUHXmMGkZ4QRV8BlwyvYZL2M
-         x6LoN8hogh0dfF2HvgRbYIzEaDyM/GsXaLSYvNBebkLEBCdti0U+YNS97OfGnnpk8Od3
-         DaorfmZuPT2K7yMdlayXxrp9ZuD9y3SkdnLiPgWylyDzCEpQkphPbZXTCUP6GCU9W83Q
-         KHKyc/x7LP3327bw7xXh/O0Slb/qhyvvd7yIcBnHhMyVwW/J5Fgm136goY1IwRl7Vnuu
-         fB6tuubkOlAVi1YPpPHABOEMU1/KWH5GN792R63odVJxQvDZGRdQU1NSlyMF2dD7h80F
-         yN/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVUqMsu30NWyMAOZ/9aizEUMAKm4TOx8AVmEEPk7HNP5tQn/bo3TJ05KAeBcYJYT3gOarDE3+TPY6LEDqo=@vger.kernel.org, AJvYcCXT8G0/zAtU95JPHPAzF9fRbmQ/V1YkfhyUTkl35R61EsjsdoEFYU7SOPZlh28eVaGUkO9qniWr2Sg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3Dd77JzmJd8NOKDnVpNybZd7vIcvpODmhgASwVV5yCncDP1yx
-	LF7V4h0ONIGQF7mSr/cV21oy/cXZtkFDjkdThDteytZxRgAVlEBhz7rXHotB9ikJ
-X-Gm-Gg: ASbGnctIXzwB7lrPGwcvyPpfj29jAv2JuID2nHGJqMQP6YQVJRBsxA0OU69AOOMoCY8
-	UPb4DpH546eOdG77OoV8MXCJS0B6uxvHNjA7AIJt9LozuHeRfyuQCrPq7BmJNYecBb+8OVHx4qJ
-	a23Q4cWxl2gBBeKVtEHGtuesewxRrgCRV1LkqUl4/MSb8RY4r5nKd+diyL9FvJYpdlZpKHllrCn
-	f+3Is8Ys84mjHG/3SNMNJ3QgVoAYjExdMUhEHWQF0if1hAq4h/68ZvSUOgVq2ezRtSzzDYcrO9n
-	4BmJKlJXf+qPbtHb9ByvTr/H/rZsnvoO5or66Gyc2Vaxhifg7sLiXvM8O5itUDGw0H28e1M3JUB
-	swKsCkdiM7X9K5GEYvBUq9yOy8n0BM5ZBs+Jt9yznvuTFtzakbYEIY+xxduRu
-X-Google-Smtp-Source: AGHT+IHU4/Oa/1zco/N5zGr/62xEseQqpIDPLhcPpp7KNWQgx7TFRbf0oHmVb/N6LhGy9giCtaV7xQ==
-X-Received: by 2002:a05:6102:5a97:b0:4f9:6a91:133a with SMTP id ada2fe7eead31-50e51bc6dc2mr922095137.27.1755086665232;
-        Wed, 13 Aug 2025 05:04:25 -0700 (PDT)
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-506290ef371sm2605442137.5.2025.08.13.05.04.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Aug 2025 05:04:24 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4fec0d6fd90so2299236137.3;
-        Wed, 13 Aug 2025 05:04:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWGfusF/3gYdUCKRhzp1Vhni1NnPZWB0FNuYVCNdhYj+fJ60u3TgvtHGyN35VJA0h2u5dwhUE3P1ks=@vger.kernel.org, AJvYcCXu5J8MWuEYeXg/zgKKCheCRrcUtAG3XxWkAwkd+urX661A4n3bor13rru35mZss0xw3W5xgIRq6ludEGE=@vger.kernel.org
-X-Received: by 2002:a05:6102:e0e:b0:4e7:bf03:cd79 with SMTP id
- ada2fe7eead31-50e4e5d2141mr911079137.5.1755086663571; Wed, 13 Aug 2025
- 05:04:23 -0700 (PDT)
+	s=arc-20240116; t=1755089734; c=relaxed/simple;
+	bh=JUPvu1QqNaGLsr9Bc/71i4YSzV1v5u9JepoTxOxcBdc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=qzsrSM+T3ASbyjwLUnAtZ7A84mYpTCXvQpALT2CVGEXOE8zSB4dh1eUaB8hzNRf63YwJwYiDWPkrA6eT+Z9sWLTf+D2jvUtWTjyrFS8MGwAtmVF3WK95CgYSxTKH/HKwcC+KdfU6+H+rpo7aoq3mjBLIFgPai/E5/TgRpuErb88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ir2uAtIo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14969C4CEEB;
+	Wed, 13 Aug 2025 12:55:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755089733;
+	bh=JUPvu1QqNaGLsr9Bc/71i4YSzV1v5u9JepoTxOxcBdc=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ir2uAtIotgWKbJUSQjEsL5cVjXAgRHNFVB6vE3rX4MOZTvoUA988R3K/ZUcmECEOm
+	 e/ifFSnN1AoKKmRjSOizt7hFU65Koybs4NnDuedk4tSnpUWh2y/ZQ6/JSLrnxQdyVj
+	 as/V8H2HYa0+ukxXCmxyX1xVpeSePqk5QruIgPkwVd0QemjEoRsq+48Kjbdc0gShRw
+	 BAghmAnbZeep/x2HS3I80MMkHNWUyjAz1OCvpm/YK5DE1pEvMXOvLvLC6aDFBh4vRb
+	 +vsc9/YsNJY4Az6/vrL9Del3QP0ENejpVP2Hl0674IKYsaaAMUhcMSB0JpAP5MrBkk
+	 qbinga75Upg2A==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250701114733.636510-1-ulf.hansson@linaro.org> <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
-In-Reply-To: <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 13 Aug 2025 14:04:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUHZZByTDhKUW4=vX45h7AJNXNzjHQSXMfEV=mdc8NCVw@mail.gmail.com>
-X-Gm-Features: Ac12FXy-RTF6MSiz3MwhGjbIrkTvy8VuSBzBu0kMtbvvXbrItd-2qk19ZqkwC4Y
-Message-ID: <CAMuHMdUHZZByTDhKUW4=vX45h7AJNXNzjHQSXMfEV=mdc8NCVw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Lubomir Rintel <lkundrak@v3.sk>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 13 Aug 2025 14:55:29 +0200
+Message-Id: <DC1BDUUPAJ8H.3L77AGH012M7F@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
+ "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ <linux-pm@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rust: cpumask: rename CpumaskVar::as[_mut]_ref to
+ from_raw[_mut]
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Alice Ryhl" <aliceryhl@google.com>, "Viresh Kumar"
+ <viresh.kumar@linaro.org>, "Yury Norov" <yury.norov@gmail.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20250813-cpumask-asref-v1-1-1242aa8e0cfc@google.com>
+In-Reply-To: <20250813-cpumask-asref-v1-1-1242aa8e0cfc@google.com>
 
-Hi Ulf,
-
-On Wed, 9 Jul 2025 at 13:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Tue, 1 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > Changes in v3:
-> >         - Added a couple of patches to adress problems on some Renesas
-> >         platforms. Thanks Geert and Tomi for helping out!
-> >         - Adressed a few comments from Saravanna and Konrad.
-> >         - Added some tested-by tags.
+On Wed Aug 13, 2025 at 9:54 AM CEST, Alice Ryhl wrote:
+> The prefix as_* shouldn't be used for constructors. For further
+> motivation, see commit 2f5606afa4c2 ("device: rust: rename
+> Device::as_ref() to Device::from_raw()").
 >
-> I decided it was time to give this a try, so I have queued this up for
-> v6.17 via the next branch at my pmdomain tree.
->
-> If you encounter any issues, please let me know so I can help to fix them.
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-FTR, I discovered two more issues with clock drivers registering a
-genpd OF provider from CLK_OF_DECLARE(), which is now too early:
-  1. drivers/clk/mmp/clk-of-mmp2.c,
-  2. drivers/clk/renesas/clk-mstp.c.
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 
-I have submitted a fix for the second driver: "[PATCH] clk: renesas:
-mstp: Add genpd OF provider at postcore_initcall()"
-https://lore.kernel.org/all/81ef5f8d5d31374b7852b05453c52d2f735062a2.1755073087.git.geert+renesas@glider.be
+---
+Cheers,
+Benno
 
-I don't have MMP2 hardware, I guess it needs a similar fix.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  rust/kernel/cpufreq.rs | 2 +-
+>  rust/kernel/cpumask.rs | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
