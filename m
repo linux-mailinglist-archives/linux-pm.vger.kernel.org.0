@@ -1,172 +1,124 @@
-Return-Path: <linux-pm+bounces-32393-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32394-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD832B263F0
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 13:15:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBFF6B26455
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 13:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E8A85C8770
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 11:14:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB345A7784
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 11:33:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C3DC2F99A6;
-	Thu, 14 Aug 2025 11:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DAB22F7478;
+	Thu, 14 Aug 2025 11:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNpjrfeQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lf5JeiGD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D472F39B2;
-	Thu, 14 Aug 2025 11:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFBA2F5460;
+	Thu, 14 Aug 2025 11:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755170054; cv=none; b=Ut15ndK9suyWTvlPi7DRjKmO94cmLLVDWMaRypWKxuWA8pHu+VadjJ6yv6l6yEZp82zCdcyPcg7J2QmL6NLM/Mn/GPL9gb4POPCN2yXj2gwqSWNVcr1EyFTdvAOID7POMYFRvLQ3eEjz5vah/gFkgjO6Bm6y49ViemAkEAi2Xws=
+	t=1755171171; cv=none; b=mnNKZVl6L5V0laCN0I2hbX/oTTYDBEg0vtzuUhQ3X19lEF59MtDsevcRZmEW1nfZhqeStpNNgW9yE0scx2FNlhiL/71CV9Ly8x5LqmJzkrqnAzA4ypP8qtEwpZL8iBH0yGZZS8xD+vySC1sl0r4lLq6B3H7fMDtjbjOtyCsthOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755170054; c=relaxed/simple;
-	bh=tEQmYgzbbnDyqDEJWRtGvNd+F5EzBR/vQBdSyaJQhYo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=f8zoWRljDaUtkBEG9jh9Akue/JgQHMQF2UYUfm6gU4hT/joe+akAkfpcd0ZHLLYz2KzJli0+FGfjLaIpZN4Vt1/8xS3graQCyQD/V4f92xGOE0q/i4rZPBfKTyrijFZMf6hOgat7utoV3U51SBti+RH3jtwtejtHqLftwZnUyC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNpjrfeQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF02C4CEED;
-	Thu, 14 Aug 2025 11:13:54 +0000 (UTC)
+	s=arc-20240116; t=1755171171; c=relaxed/simple;
+	bh=BbcGIYWpkOPjQ/or9OWJcZ+ls3hMh4nFjaciiElcR74=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=urfr5sZway/WmGzYoI6zYA3sFFdS96v1OfZTZ3Kahzz14E+i3LPuuzPoOoVX4fmzvZo5NMIFmv8ObEN/lme1nwoOj2x/B/6Cj3B8ywpfnUIfspM72se1KN5ITJp6zm6RlnKod8ezKORowYyFTiVHMA9gdvanKGZ7GB1V1W2/sr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lf5JeiGD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3F8C4CEF1;
+	Thu, 14 Aug 2025 11:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755170053;
-	bh=tEQmYgzbbnDyqDEJWRtGvNd+F5EzBR/vQBdSyaJQhYo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=nNpjrfeQtIacQG0WEX7mhSYTd7hQlnB7xgoGgJ3v0sCDCZTw/gWywOLfqOYZY4LEw
-	 5E1vCRzlD1L7yPW24oE8hMcbLDvBgKF7UglcpNWQtk+d21igAN/jkLiw4vfw95mmaO
-	 Wy7Aqpr6pD43wwMPVYuuHLtW+Bl/6xetkfjwBZUQFNWFgaJ0eeIdJk6JAFWM+nmE53
-	 +kHohC9FP8zxW9RrnA7dkwqqcgSuN4MKh4R6jlzu+aBiOCgoS1PQtvycwFenFDAKSf
-	 8NGwtU+raJOCaLGmFHJD4RvJXWWS3gsAOxCpMzRtcOJrdMPkcN8DQ2NiQbSAuAjRLj
-	 ccmAEOd0wNzVg==
-From: Mark Brown <broonie@kernel.org>
-To: linux-kernel@vger.kernel.org, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- Andrea della Porta <andrea.porta@suse.com>, 
- =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, Andy Shevchenko <andy@kernel.org>, 
- Andy Yan <andy.yan@rock-chips.com>, Avi Fishman <avifishman70@gmail.com>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
- Benjamin Fair <benjaminfair@google.com>, 
- Bjorn Andersson <andersson@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- David Airlie <airlied@gmail.com>, David Lechner <dlechner@baylibre.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Drew Fustini <fustini@kernel.org>, dri-devel@lists.freedesktop.org, 
- Fabio Estevam <festevam@gmail.com>, 
- Fabrice Gasnier <fabrice.gasnier@foss.st.com>, Fu Wei <wefu@redhat.com>, 
- Guo Ren <guoren@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, imx@lists.linux.dev, 
- Iwona Winiarska <iwona.winiarska@intel.com>, 
- Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Jerome Brunet <jbrunet@baylibre.com>, Jonas Karlman <jonas@kwiboo.se>, 
- Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, linux-actions@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org, 
- linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-rtc@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-sunxi@lists.linux.dev, Liu Ying <victor.liu@nxp.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Manivannan Sadhasivam <mani@kernel.org>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Maxime Ripard <mripard@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, Nancy Yuen <yuenn@google.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Nicolin Chen <nicoleotsuka@gmail.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, openbmc@lists.ozlabs.org, 
- Patrick Venture <venture@google.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Robert Foss <rfoss@kernel.org>, 
- Samuel Holland <samuel.holland@sifive.com>, 
- Samuel Holland <samuel@sholland.org>, Sandy Huang <hjc@rock-chips.com>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
- Shengjiu Wang <shengjiu.wang@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Stephen Boyd <sboyd@kernel.org>, Takashi Iwai <tiwai@suse.com>, 
- Tali Perry <tali.perry1@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Tomer Maimon <tmaimon77@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Vasily Khoruzhick <anarsoul@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
- Vladimir Zapolskiy <vz@mleia.com>, Xiubo Li <Xiubo.Lee@gmail.com>, 
- Yangtao Li <tiny.windzz@gmail.com>, Zhang Rui <rui.zhang@intel.com>
-In-Reply-To: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
-References: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
-Subject: Re: (subset) [PATCH 00/21] treewide: remove unneeded 'fast_io'
- parameter in regmap_config
-Message-Id: <175517003454.17441.365944262533574232.b4-ty@kernel.org>
-Date: Thu, 14 Aug 2025 12:13:54 +0100
+	s=k20201202; t=1755171170;
+	bh=BbcGIYWpkOPjQ/or9OWJcZ+ls3hMh4nFjaciiElcR74=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lf5JeiGDhaPCcehpddrdo9jS14kL4oKe4EsmYIZ2y9k2cOXx+W108Cuw4EXvNs1i5
+	 bBrxfgFU41hQnF65g+WtFeD9USujNLc2HY2K2rJCVgK9NH7no/Y0fSDo2nXfzF8mFS
+	 0cdCfDtM4sqq6pPDJwxUaUrMGS5M6IMVcVgzVj4eOyLHVI8NFYi4ujMkx9KVrYcj3T
+	 6+bkcUD+J6Y7DYWtXeB0hvWP/saOqAUurKAHMRNCDVN1AQHqQz5Lrd7Z4UVatjRg45
+	 77mUKRvQ6hhy4sGkbmDfArZRxQXH12DXIbe4A61t9cpCBxpJGNgCtI+oAReXOaU1z0
+	 VvMNUVVHPaFdQ==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-61bd4c6de5cso358516eaf.1;
+        Thu, 14 Aug 2025 04:32:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX0/p2ETeE7o+ISlsdH0GdOd5BMox9FD2FBWHHWn4ksi5eNMVvefVwsMaER2qviy4hGdm01fCrvnuS6VBU5@vger.kernel.org, AJvYcCXrzrQox/VbMiV7MxEjOKBuVO3X5ja1L1MZLLdDUYTjXAlPySuCUlPii0fUmMDOSlKUV6Cm5zlO52ca@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfeS9hYHDZSTFcrv4Sa5gu8Qq1W7Q3g94/bpUa33FCrQyUP+Qz
+	Mx8UkiPIAQbqeUgW3pX+I8zFUYrEOaZKATrnoBgckfAuEjggMLOkcZ6T0rB6OQ4Nns8CZuUy+R1
+	CAaO4Fo43dNMRt1Vkn+48nTyX5zBNbC0=
+X-Google-Smtp-Source: AGHT+IETHsolYnN7P5gKi6reg0xorYNS/5249NrR5fQYEVIPoGljAyDgi14WEM1dITay9cIRU6Z+xKHshpckvdbGjr8=
+X-Received: by 2002:a05:6820:813:b0:61b:76ee:f46 with SMTP id
+ 006d021491bc7-61bd5ba409dmr1527933eaf.4.1755171169932; Thu, 14 Aug 2025
+ 04:32:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 14 Aug 2025 13:32:38 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0joXWwzmEXh9EUgMERgdbCD32m2M8VMoFVrqVEGKmLXLg@mail.gmail.com>
+X-Gm-Features: Ac12FXxubt_38x8aueZ1Qsb1wp64RIFXdHQ2L3-gUd8fd7yDhVDeVmHU4iCriu8
+Message-ID: <CAJZ5v0joXWwzmEXh9EUgMERgdbCD32m2M8VMoFVrqVEGKmLXLg@mail.gmail.com>
+Subject: [GIT PULL] Power management updates for v6.17-rc2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 13 Aug 2025 18:14:46 +0200, Wolfram Sang wrote:
-> While working on a driver using regmap with MMIO, I wondered if I need
-> to set 'fast_io' in the config. Turned out I don't need to, so I added
-> documentation for it with commit ffc72771ff6e ("regmap: Annotate that
-> MMIO implies fast IO").
-> 
-> This series fixes the existing users in the tree which needlessly set
-> the flag. They have been found using this coccinelle script:
-> 
-> [...]
+Hi Linus,
 
-Applied to
+Please pull from the tag
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.17-rc2
+
+with top-most commit 5302e2a3886c830b803ae3390b9d41d35832f315
+
+ Merge branches 'pm-cpuidle' and 'pm-cpufreq'
+
+on top of commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+
+ Linux 6.17-rc1
+
+to receive power management updates for 6.17-rc2.
+
+These remove an artificial limitation from the intel_idle driver,
+update the menu cpuidle governor to restore its previous behavior
+in a corner case and add one more supported platform configuration
+to the intel_pstate driver:
+
+ - Allow intel_idle to use _CST information from ACPI tables for
+   idle states enumeration on any family of processors (Len Brown).
+
+ - Restore corner case behavior of the menu cpuidle governor, related
+   to the handling of systems where idle states selected by the governor
+   are rejected by the cpuidle driver, inadvertently changed during the
+   6.15 development cycle (Rafael Wysocki).
+
+ - Add support for Clearwater Forest in the out-of-band (OOB) mode to
+   the intel_pstate driver (Srinivas Pandruvada).
 
 Thanks!
 
-[19/21] spi: remove unneeded 'fast_io' parameter in regmap_config
-        commit: 48124569bbc6bfda1df3e9ee17b19d559f4b1aa3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+---------------
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Len Brown (1):
+      intel_idle: Allow loading ACPI tables for any family
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Rafael J. Wysocki (1):
+      cpuidle: governors: menu: Avoid using invalid recent intervals data
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Srinivas Pandruvada (1):
+      cpufreq: intel_pstate: Support Clearwater Forest OOB mode
 
-Thanks,
-Mark
+---------------
 
+ drivers/cpufreq/intel_pstate.c   |  1 +
+ drivers/cpuidle/governors/menu.c | 21 +++++++++++++++++----
+ drivers/idle/intel_idle.c        |  2 +-
+ 3 files changed, 19 insertions(+), 5 deletions(-)
 
