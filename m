@@ -1,121 +1,209 @@
-Return-Path: <linux-pm+bounces-32381-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32382-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A497B25DEB
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:48:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ABA7B25E4F
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 10:05:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DB0A1630C4
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 07:46:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A5273B5341
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 08:05:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2102D63E0;
-	Thu, 14 Aug 2025 07:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 870192E613C;
+	Thu, 14 Aug 2025 08:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="tU+lJrGN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e5qOrdUD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396372D46D7;
-	Thu, 14 Aug 2025 07:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682B12D46CE;
+	Thu, 14 Aug 2025 08:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755157591; cv=none; b=P9+LE3gXk9xCohMfwXhLH8rH80LSfdFUQ3WhippjdHA9er+TpdjbHGW9RzT51M0u7Sz7HBnTrby7KVQjQ8yTr2KVojKHf+yHFfJvUslzyAVCMDPbjytWeDy9X4pjd4Z4u2vW1NbRIfFtlCqAsdh9dwZikV8bzNjcOfPYY19P0GM=
+	t=1755158729; cv=none; b=Q1Qr9u4U/MuV8RvugXjp3LJOmyC93NFL0Cdccz+Pq2Upr2EoMFqus++gbe64YUNmaVwrs/c84mhiuVsN2WmQcjyAyI3n1fp2Ls3Meb6mtQdsy/BTDQiUj7ACajarP4Jx79LyK9zOKM0ZO0P4yNbK6vNlJI+3yxOVxdYgpF8Y39M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755157591; c=relaxed/simple;
-	bh=wGvNP9QjPqUELV+pOSxCEYivkRW072Paa5V4zMtUYfo=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=UIZ2TObtd8YlckLTGk9cbuUeWAZkuY8rix1nMWqVPkvUzD45d5ynNx7vFTCbrVPa1JeX1yhxkVzccnbK3hU/w7XfF23m1CuR4ctia61QKIrLj7sEfk+ZKcwRKsl4z+KuVotpwIOWYKHKW3RBaFJieBR5Xqorm7uofc8wnRbeEik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=tU+lJrGN; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1755157577; bh=bfZdKPCGA3xwcP/gjBM580mL+pIaZJJAtOyWzJYfOgY=;
-	h=From:To:Cc:Subject:Date;
-	b=tU+lJrGNeHL67SFMyAB/AV5wXQ6eksls6oxHISc9fIhP4HiXmcZkNl3OymLFfy965
-	 wLu2hXiLK4Taa7aLS1cP+0ohtnx4kb8mHRwfMBWzJMglpjHzg9m8zhNINsjWKb7uO+
-	 ligM28dnn0EvhVz225WlDauNO62vu3Rq2am9/Jq8=
-Received: from VM-222-126-tencentos.localdomain ([14.116.239.34])
-	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
-	id A06A3CA7; Thu, 14 Aug 2025 15:40:06 +0800
-X-QQ-mid: xmsmtpt1755157206tmsfl332c
-Message-ID: <tencent_6983C78DFAA337B6895389FD937D5C73F608@qq.com>
-X-QQ-XMAILINFO: MDbayGdXPuoe/REFXSmt3UyVpBzGKTm9WD+5ArBKlAecKlYMOhh8othaYL7nRi
-	 F0NtH+2Tp5ZmttrcIHLa61jdD8wbc5MXoGkBN0ywytS3YFnL800N+y6OzXJaNJZ7fecUzSR9abVJ
-	 OkpuoPpzTpSabxa38uUR6bAVFgMB/rmyid9hmaFthA4n8vGNe+Scdv/QqCodMdM/oZzlLw37WyW3
-	 2HbBoQNi0tkeasCPMqxMhufv7NljTfSoBBXROagpn20cVexfIZyGOZZLfYrzrW0CooYN5IwZpEL5
-	 OzpKtAFecZrmT9ZbQBOGH55ahEdxEx9mPVu1JZmW/9Cj74bwAQCqAJ1jfRiyB4OijnQV0M/Fq9RV
-	 6AyS6gvBAlensLc0k42+NtT0BfxeyzLj2Pkw4pUWTY/iWhiAfy27PA1awGo8XUc4VQobMN69E36p
-	 gOHgvc8/dOJ6ust95JiEYIA2MII2l6k42V999zoyP+elncd6o+PhJKDlLzy1kI6P9knCVNiRllFK
-	 KQc79jNf4e3ud8/y2pgWw/1AqbxDot2OccmqY97TrNT14+1EKyGDdj4H+dDFX/MGLhJZWVEhZz5D
-	 b0wm6NXxwRY9Xte7Xnv6I85oGZfqblSvLJ75pq3ECgD2eMSOYIfyqrBYFM8nALGBtudWpTrOQFy5
-	 Mq+ZeWFbfBF7EJjjS04xsnZvTx6ZnACi4E/+I/MuCN+qvN10Qp8avIGYZaBjyGirfLHKgJ+sn2BS
-	 /vziSQ502smaEGunc0si1Kho4BB9vg/mFcpTXcLpglT8iTInKyd5mwo6u/4xOim+mNfEq9sM8Urb
-	 vLd4gRZZv7sBLs5r4L8W/SvvMu1vSZeyLngzbbpoEhvGLEAXQKBGIp5N+dbqCgw9ioSleJllWu6B
-	 NirJ152c9F+BuuwlP/m+Wnt9kx26x4CLEpSQwTnjH4kQHl/sx9LvagX7hOl9cwOycvPobSgm30pF
-	 Gfi4eaqdColPBrr343+otjjdZpFjP5A+dj07SWyyurAhDwbEVK3uQbYfr3gte9cHbfHpgvVfO6lQ
-	 KJLb7IeuZu+aUURFYFbWhS2tq2r3+YHPNSK8YnALNlvvNMCmSs
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-From: Wensheng Liu <961342126@qq.com>
-To: sre@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Vencent Liu <961342126@qq.com>
-Subject: [PATCH] power: supply: Fix resource leak in ltc2941-battery-gauge.c
-Date: Thu, 14 Aug 2025 15:39:55 +0800
-X-OQ-MSGID: <20250814073955.718370-1-961342126@qq.com>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1755158729; c=relaxed/simple;
+	bh=5cPIVXM0nkCET4mfTMJk5eQOYlHUtDVZOyK2tRL3s7U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fFnPMWb5uL6XTWddiJVcJxbRYHVcg9NFE0PleUq92yYApTQF9SZ+wiQnNGqXN6tYWJk+utLNBc8acJ1UZ53p9UMmqtqk4/vWghs1ySCZXRQ8b587wstrVNL1vnM5yfPZISxGaTpxJX/SK5ueB3z6ukpi8fpz4MBdk/pCYgsnNk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e5qOrdUD; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755158727; x=1786694727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5cPIVXM0nkCET4mfTMJk5eQOYlHUtDVZOyK2tRL3s7U=;
+  b=e5qOrdUDMGWQjBVcJtO5/WJMlsR5hKTDEvmqF/KhovkZnQKO+loX5EUD
+   MINL4FMrXmLIMwj5xsFhLwS+B66oGs0kO3aga7gYHFN17yyCX82rEebr2
+   KGTabiyNmPvQ8sQy9pqM9FkEWx2DjLoBstTjQNINlG13PlASYdjFGHoeU
+   MaqfuZxGZu68kvfG9woiPK4gZI+TiZZfRH4bCPtfiWNEWF2Q64PynQ77N
+   DP6Igjmfsr/Goi/EcEBIhJEbGU5KNPY+zqidmLo8CiKcD6f8M+rbNDflG
+   k/bejF9GhcmDiWbf9xF7oqKOtOXkFLgXDfp7sHjW+Avpb5tze197I/Pbi
+   w==;
+X-CSE-ConnectionGUID: zwqgy/UqReGT/DiY5P5DhQ==
+X-CSE-MsgGUID: fEN7T7KmRK6lPUp1N+LGnw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57372648"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="57372648"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 01:05:26 -0700
+X-CSE-ConnectionGUID: DDCZwDm7QaSoaweUXg1M6A==
+X-CSE-MsgGUID: uMzmV2T2TFe/bu5sz1uy2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="190399976"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Aug 2025 01:05:19 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1umSxZ-000Ajc-1M;
+	Thu, 14 Aug 2025 08:05:17 +0000
+Date: Thu, 14 Aug 2025 16:04:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robin Murphy <robin.murphy@arm.com>, mingo@redhat.com, will@kernel.org,
+	mark.rutland@arm.com, acme@kernel.org, namhyung@kernel.org,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 19/19] perf: Garbage-collect event_init checks
+Message-ID: <202508141524.QVgoOKMD-lkp@intel.com>
+References: <ace3532a8a438a96338bf349a27636d8294c7111.1755096883.git.robin.murphy@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ace3532a8a438a96338bf349a27636d8294c7111.1755096883.git.robin.murphy@arm.com>
 
-From: Vencent Liu <961342126@qq.com>
+Hi Robin,
 
-The ltc294x_i2c_probe function increments the reference count
- of the device node via of_node_get() but fails to decrement it in several
- code paths. This leads to a reference count leak that prevents the device
- node from being properly released.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Vencent Liu <961342126@qq.com>
----
- drivers/power/supply/ltc2941-battery-gauge.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.17-rc1 next-20250814]
+[cannot apply to perf-tools-next/perf-tools-next tip/perf/core perf-tools/perf-tools acme/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/power/supply/ltc2941-battery-gauge.c b/drivers/power/supply/ltc2941-battery-gauge.c
-index a1ddc4b060ce..64f900d6756d 100644
---- a/drivers/power/supply/ltc2941-battery-gauge.c
-+++ b/drivers/power/supply/ltc2941-battery-gauge.c
-@@ -19,6 +19,7 @@
- #include <linux/delay.h>
- #include <linux/power_supply.h>
- #include <linux/slab.h>
-+#include <linux/cleanup.h>
- 
- #define I16_MSB(x)			((x >> 8) & 0xFF)
- #define I16_LSB(x)			(x & 0xFF)
-@@ -443,7 +444,6 @@ static int ltc294x_i2c_probe(struct i2c_client *client)
- {
- 	struct power_supply_config psy_cfg = {};
- 	struct ltc294x_info *info;
--	struct device_node *np;
- 	int ret;
- 	u32 prescaler_exp;
- 	s32 r_sense;
-@@ -455,7 +455,7 @@ static int ltc294x_i2c_probe(struct i2c_client *client)
- 
- 	i2c_set_clientdata(client, info);
- 
--	np = of_node_get(client->dev.of_node);
-+	struct device_node *np = of_node_get(client->dev.of_node);
- 
- 	info->id = (enum ltc294x_id) (uintptr_t) of_device_get_match_data(
- 							&client->dev);
+url:    https://github.com/intel-lab-lkp/linux/commits/Robin-Murphy/perf-arm-cmn-Fix-event-validation/20250814-010626
+base:   linus/master
+patch link:    https://lore.kernel.org/r/ace3532a8a438a96338bf349a27636d8294c7111.1755096883.git.robin.murphy%40arm.com
+patch subject: [PATCH 19/19] perf: Garbage-collect event_init checks
+config: i386-randconfig-003-20250814 (https://download.01.org/0day-ci/archive/20250814/202508141524.QVgoOKMD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250814/202508141524.QVgoOKMD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508141524.QVgoOKMD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/events/intel/uncore_snb.c:905:24: warning: unused variable 'hwc' [-Wunused-variable]
+     905 |         struct hw_perf_event *hwc = &event->hw;
+         |                               ^~~
+   1 warning generated.
+
+
+vim +/hwc +905 arch/x86/events/intel/uncore_snb.c
+
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  896  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  897  /*
+9aae1780e7e81e arch/x86/events/intel/uncore_snb.c                Kan Liang               2018-05-03  898   * Keep the custom event_init() function compatible with old event
+9aae1780e7e81e arch/x86/events/intel/uncore_snb.c                Kan Liang               2018-05-03  899   * encoding for free running counters.
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  900   */
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  901  static int snb_uncore_imc_event_init(struct perf_event *event)
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  902  {
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  903  	struct intel_uncore_pmu *pmu;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  904  	struct intel_uncore_box *box;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30 @905  	struct hw_perf_event *hwc = &event->hw;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  906  	u64 cfg = event->attr.config & SNB_UNCORE_PCI_IMC_EVENT_MASK;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  907  	int idx, base;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  908  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  909  	pmu = uncore_event_to_pmu(event);
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  910  	/* no device found for this pmu */
+3f710be02ea648 arch/x86/events/intel/uncore_snb.c                Kan Liang               2025-01-08  911  	if (!pmu->registered)
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  912  		return -ENOENT;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  913  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  914  	/* check only supported bits are set */
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  915  	if (event->attr.config & ~SNB_UNCORE_PCI_IMC_EVENT_MASK)
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  916  		return -EINVAL;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  917  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  918  	box = uncore_pmu_to_box(pmu, event->cpu);
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  919  	if (!box || box->cpu < 0)
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  920  		return -EINVAL;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  921  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  922  	event->cpu = box->cpu;
+1f2569fac6c6dd arch/x86/events/intel/uncore_snb.c                Thomas Gleixner         2016-02-22  923  	event->pmu_private = box;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  924  
+e64cd6f73ff5a7 arch/x86/events/intel/uncore_snb.c                David Carrillo-Cisneros 2016-08-17  925  	event->event_caps |= PERF_EV_CAP_READ_ACTIVE_PKG;
+e64cd6f73ff5a7 arch/x86/events/intel/uncore_snb.c                David Carrillo-Cisneros 2016-08-17  926  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  927  	event->hw.idx = -1;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  928  	event->hw.last_tag = ~0ULL;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  929  	event->hw.extra_reg.idx = EXTRA_REG_NONE;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  930  	event->hw.branch_reg.idx = EXTRA_REG_NONE;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  931  	/*
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  932  	 * check event is known (whitelist, determines counter)
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  933  	 */
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  934  	switch (cfg) {
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  935  	case SNB_UNCORE_PCI_IMC_DATA_READS:
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  936  		base = SNB_UNCORE_PCI_IMC_DATA_READS_BASE;
+9aae1780e7e81e arch/x86/events/intel/uncore_snb.c                Kan Liang               2018-05-03  937  		idx = UNCORE_PMC_IDX_FREERUNNING;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  938  		break;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  939  	case SNB_UNCORE_PCI_IMC_DATA_WRITES:
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  940  		base = SNB_UNCORE_PCI_IMC_DATA_WRITES_BASE;
+9aae1780e7e81e arch/x86/events/intel/uncore_snb.c                Kan Liang               2018-05-03  941  		idx = UNCORE_PMC_IDX_FREERUNNING;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  942  		break;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  943  	case SNB_UNCORE_PCI_IMC_GT_REQUESTS:
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  944  		base = SNB_UNCORE_PCI_IMC_GT_REQUESTS_BASE;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  945  		idx = UNCORE_PMC_IDX_FREERUNNING;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  946  		break;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  947  	case SNB_UNCORE_PCI_IMC_IA_REQUESTS:
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  948  		base = SNB_UNCORE_PCI_IMC_IA_REQUESTS_BASE;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  949  		idx = UNCORE_PMC_IDX_FREERUNNING;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  950  		break;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  951  	case SNB_UNCORE_PCI_IMC_IO_REQUESTS:
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  952  		base = SNB_UNCORE_PCI_IMC_IO_REQUESTS_BASE;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  953  		idx = UNCORE_PMC_IDX_FREERUNNING;
+24633d901ea44f arch/x86/events/intel/uncore_snb.c                Vaibhav Shankar         2020-08-13  954  		break;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  955  	default:
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  956  		return -EINVAL;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  957  	}
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  958  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  959  	/* must be done before validate_group */
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  960  	event->hw.event_base = base;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  961  	event->hw.idx = idx;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  962  
+8041ffd36f42d8 arch/x86/events/intel/uncore_snb.c                Kan Liang               2019-02-27  963  	/* Convert to standard encoding format for freerunning counters */
+8041ffd36f42d8 arch/x86/events/intel/uncore_snb.c                Kan Liang               2019-02-27  964  	event->hw.config = ((cfg - 1) << 8) | 0x10ff;
+8041ffd36f42d8 arch/x86/events/intel/uncore_snb.c                Kan Liang               2019-02-27  965  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  966  	/* no group validation needed, we have free running counters */
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  967  
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  968  	return 0;
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  969  }
+92807ffdf32c38 arch/x86/kernel/cpu/perf_event_intel_uncore_snb.c Yan, Zheng              2014-07-30  970  
+
 -- 
-2.43.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
