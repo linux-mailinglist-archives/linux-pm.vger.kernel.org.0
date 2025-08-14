@@ -1,130 +1,136 @@
-Return-Path: <linux-pm+bounces-32395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32396-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC9AB2645E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 13:34:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4823FB2649D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 13:48:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7A495A74EC
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 11:34:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7B0A7BB1C0
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 11:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FEA728D8C1;
-	Thu, 14 Aug 2025 11:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD9B2FA0C7;
+	Thu, 14 Aug 2025 11:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l76vktzh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ER5ThlAT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FBF41A8F;
-	Thu, 14 Aug 2025 11:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEC831814A;
+	Thu, 14 Aug 2025 11:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755171286; cv=none; b=Mg7A99yoUt9jyDnLVv8GVsUfB2zL0YK1R7+EQDwKkbsuFzUKoUnmY+GLmTjwOiPsbSjNLNEGA0tZEQlB1MtIJnTvzOhPx+Wb6rilLrMVZTvEMryQoV905GfcY6P0TosgQ6Yc8DhR7uVouyHGngIMb1bssfAZ8UZM9TdH8h4UHH8=
+	t=1755172123; cv=none; b=o5urz62ZeeGEohYjG8Mo8dydeiPSumlmVxKe5mclBmfzxTpgvk5b5CPwG1k00io4PGL80WdnSkn344PMeCi5Pw6Id1GJ2813n8Dg4yFEbSxy+TDa4VHWclAK2rrBWiIjRq44sYOPctmNbNBNrnXtNMqXt/fSqrCKcaYqAdwYITY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755171286; c=relaxed/simple;
-	bh=Zuk+VGhg6j5wK1OB9dS8TGsA6Z+8A+u3suS/2dnnabE=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=aFzsAPZBq3bTPEdGyxiDKwkhhBN4ezAVeGeavwtTwZxCZecK5IOGUtKFBGt5LDUj8Ogl/4BR3WWd8v6uw0LBEjvPp26Li7OIPVwh3b/IfFJj25EgGmFicafl9C2Zt4MYy3sYIr+8J5o++aGTgIc2IPSksX9jzfJb6bUP0fvTjSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l76vktzh; arc=none smtp.client-ip=209.85.210.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-74381e0a227so606530a34.0;
-        Thu, 14 Aug 2025 04:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755171284; x=1755776084; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KfsQ0qqhk7rtPTAMLbJo5EZqlICp1s4TcMgY/WUahN0=;
-        b=l76vktzhZWPa8j+weL32foWTGKaW93k4wrGxgC3aWRCNqC0UcrTgJdViEMkQ4FRu7C
-         SDWbesyS/SJGkOLWeieuxfeV0rjN1zznLHYJqv+d9DYytzevRImY5QAIep6uninNSvob
-         PbMlmcNh1nfC1W2USqJYQ8YokQpp1KDEz5V5MsscvYiTsYV2hEabdnzMAz2w8fDEI00f
-         p5V/5N2ebNAtroQMTG+ucRTwd1s3ykPuG/vdhWshfe1pIx3/6rm+8kKS67ZnzFW8HEE/
-         8Pdg38gfUqmb8cunIw/CJap+iKs5NQ6cTlL+6ZJHtETdNnWp+1NHsDKWdIEBzR5/gzQ7
-         ajxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755171284; x=1755776084;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfsQ0qqhk7rtPTAMLbJo5EZqlICp1s4TcMgY/WUahN0=;
-        b=oLPfEwg6ZsxE5jUkrnkkdf+vD0x8hG+iWPuD23umeErv/DPYPVN0O8qwDHgHSDaXd+
-         1XjyojNY3/FDxMnbm9qujOeQlUw2fgh1JdcacGU7TPdgt2IlHTdrMqyeXCbHH0jt+b0M
-         UOoE8+rupZXT4HZVbUzKYkfLDe0D+hei6hul6t3trsqDmatemGSNJJDLN8YCd0WU5wZW
-         4BJIgGogeEjZ+hyQ6+zFfk+zMhSJl4fswiR4AJXKPY6Utngl1WqLIs+AYjgCvX/z7tlD
-         8c/vWwzZ8gxANJw47ttiaJ0GagImNRY3itHtpaKMvEeJPgalMq9wpUkODN2xi7WGFeBX
-         539w==
-X-Forwarded-Encrypted: i=1; AJvYcCVQtIXkfh985Jt0QzHNE9729jHf0oNgbPZeHbNI0QwjJO8hd9WLZuR8wqzjWFm0yP4McxiCGnBtzgA=@vger.kernel.org, AJvYcCXnydKWTEy4Tg2okDaAN5d+oR4FyFol/EwqxISgF/BQp0kZwp6PPdUq3imBO+F7NTJOOxgVr+KmqRJHiQE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgmotqAzT7KdwZCaIKVTZtVtTLeeRzdILsle8kIcVlDkVr7xAA
-	yDTKOFjj6+WCOQAj+ateWFGAYoVWYAil6UeZpgcp9aK7LPQQG0k5e5LWJjEDuWJjogMMPAdE2E5
-	52ck07XDF9wbX9TyXYoiImNE3GldEG46qOwuk
-X-Gm-Gg: ASbGnct7bC2QszF7vF06Agr4YBSOcxIP7HdO+5WlKk9+yvI5uq8f3ZK3gaDtPx+fxJp
-	YVuBeTxaq3TZa6/2KkfVxyFpe/f8YjUhLHr5Rcvav4HEUIiipFbB6q03jTYdmSZ9D+xjOORfM14
-	h/RGUkgIUXs8s7Q36NQwhj3fqU5v9tPaHnAhezobq3hC2u+LywiRdQUtu7ogFPqWotTyAyHJVhc
-	c5J
-X-Google-Smtp-Source: AGHT+IFoou5bSu/kqDLdzefLDe0WLJaufqCS9rAF/VRLOcfCgnPo245UHo+Js3kcXq6dc//GcucSxxgTqPnwfAXzSZM=
-X-Received: by 2002:a05:6830:3497:b0:727:3439:5bdf with SMTP id
- 46e09a7af769-74382bc3f86mr1518448a34.13.1755171284124; Thu, 14 Aug 2025
- 04:34:44 -0700 (PDT)
+	s=arc-20240116; t=1755172123; c=relaxed/simple;
+	bh=b61i+aTB/uzhwve5Fu3fATvHkZhBGTi/ygNX6v8CQNA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ATMuh35LIWE/j1lqLdnTS5N7lGAB+YijtJoO9fSVpOG0uKQ5dxidt9qdUQm1vqx6QIuehNQeYF9lCCpKlaPnTVrCuFdNSGoJljytYfheSx9foSB8l83pv2ZQdNPKaVNRD6fXRDzqvUIhKA0HNatQ0f52d1ilmyYZEolCHqmMxEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ER5ThlAT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E79BC4CEF9;
+	Thu, 14 Aug 2025 11:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755172122;
+	bh=b61i+aTB/uzhwve5Fu3fATvHkZhBGTi/ygNX6v8CQNA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ER5ThlATnS3aZOnndJCBOXLbKrTls7BrUwiZnyQTRXVV/ZULjpdzRfPU1DV9n+Paj
+	 IvkkQ0XJWkOHrYZHIj7M4qBnzDa+UPzW63KOp4SZK/YRWn3y4Ndf+EAJPWv9Ezmrlh
+	 0uAYZgmwsUZi90+iqEjFd/9ErQewNlUHyH3QaJUwX7gPCsXiQxY84+kkzcCSh6QPFb
+	 SXZehoDA/K9Wgt0p19j4Lz711Ife0svhUMweI1vtaFhmdrkkqpgnVUnyyC7g9rnUn5
+	 4sZ+LMuQzPcqRbRjetHsgraUW5Jy3qTz14QwVvDy0stCVtn+kuxnid4a4+y3SI9zD3
+	 Jox5IJ8mN4ELw==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-61bd47429c1so560657eaf.1;
+        Thu, 14 Aug 2025 04:48:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVw239RS9ks9z5AYe6Kizt8hTha8TF9ahE/resTGN0PIzxChfdjrCzSKqDrQaSmXHwnSiWoDMGR4lokh34=@vger.kernel.org, AJvYcCWJ2vYHnbS3BB9hH7f5WvqcvR/FXWXvvypsTwlyd57NocGh9l6Ml4EhvSjWr6rWvcxtGGREAZVw9X4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzseRmlDTkb4V8EKx0YyscdzStddDjt1o5JCywxbS3GA4Xjra4
+	55CLqmOteXcZXNy/IpoQPggfNDfxSEn8Tp3YsvQ8ewUkjW0U/vxVv0/7ez/w+C9kMOipWDzxyfR
+	8XqhmMUCuWoaDt8deTYas6SatxoO+7UM=
+X-Google-Smtp-Source: AGHT+IGMYj2aqppLnXpbLv6kOmbtN3Vco3T0DqflMGMdOAnyAXzTk6xza19aJHUAolQIH2uE81GF2xB2e8CmMtXEGbQ=
+X-Received: by 2002:a05:6820:4b0b:b0:61b:9bfa:593c with SMTP id
+ 006d021491bc7-61bd69befaamr1270726eaf.3.1755172121823; Thu, 14 Aug 2025
+ 04:48:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
-Date: Thu, 14 Aug 2025 13:34:31 +0200
-X-Gm-Features: Ac12FXytc0dymczB_6o7akUKrXNMtwU4g0NYyt99SuhFWDhS5SSpjpVawz5w29Q
-Message-ID: <CAJZ5v0hdFatBoM-o3s_-+Q+529npq8FNo36pESFQrBGqZJdm=w@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.17-rc2
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAFivqmLG0LriipbmM8qXZMKRRpH3_D02dNipnzj2aWRf9mSdCA@mail.gmail.com>
+ <CAFivqmJ4nf_WnCZTNGke+9taaiJ9tZLvLL4Mx_B7uR-1DR_ajA@mail.gmail.com>
+ <aIso4kLtChiQkBjH@arm.com> <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
+ <aIvQvLL34br6haQi@arm.com> <20250801044340.6ycskhhkzenkzt7a@vireshk-i7>
+ <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
+ <20250811060551.ylc6uutni4x6jqtg@vireshk-i7> <aJo5vP_mfBn_vxSF@google.com>
+ <CAJZ5v0jvYBUPjSmXas+S8rOG2WAb5u7rk92Gbu1s7A=tJr4VPA@mail.gmail.com> <aJpMHkrWJIyHtHL5@google.com>
+In-Reply-To: <aJpMHkrWJIyHtHL5@google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 14 Aug 2025 13:48:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
+X-Gm-Features: Ac12FXwMz-z9DAAonTPH4BpY5XQU-If2y11OogUEqhlEE82MFIeyMCFe4503Vpg
+Message-ID: <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+To: Prashant Malani <pmalani@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Beata Michalska <beata.michalska@arm.com>, Jie Zhan <zhanjie9@hisilicon.com>, 
+	Ionela Voinescu <ionela.voinescu@arm.com>, Ben Segall <bsegall@google.com>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ingo Molnar <mingo@redhat.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman <mgorman@suse.de>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Valentin Schneider <vschneid@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Mon, Aug 11, 2025 at 10:01=E2=80=AFPM Prashant Malani <pmalani@google.co=
+m> wrote:
+>
+> On Aug 11 21:19, Rafael J. Wysocki wrote:
+> > On Mon, Aug 11, 2025 at 8:43=E2=80=AFPM Prashant Malani <pmalani@google=
+.com> wrote:
+> > >
+> > > On Aug 11 11:35, Viresh Kumar wrote:
+> > > > On 06-08-25, 17:19, Prashant Malani wrote:
+> > > > > So, do we have consensus that the idle check is acceptable as pro=
+posed?
+> > > > > (Just want to make sure this thread doesn't get lost given anothe=
+r thread
+> > > > > has forked off in this conversation).
+> > > >
+> > > > I don't have any objections to this or a better solution to this.
+> > >
+> > > Thanks Viresh! Beata, can we kindly move ahead with the idle
+> > > optimization (which is this series), while we continue discussions fo=
+r
+> > > the "under load" scenarios on the other thread?
+> >
+> > I need some more time, please?
+> >
+> > This problem is similar (if not analogous) to what happens on x86 and
+> > that is not handled in the cpuidle core.
+>
+> My apologies! Didn't mean to rush.
 
-Please pull from the tag
+No worries.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.17-rc2
+> Will stand by for updates.
 
-with top-most commit 40f2f1aa62578547e2977e8c0516048e0b71018c
+First off, AFAICS, using idle_cpu() for reliable detection of CPU
+idleness in a sysfs attribute code path would be at least
+questionable, if not outright invalid.  By the time you have got a
+result from it, there's nothing to prevent the CPU in question from
+going idle or waking up from idle.  Moreover, the fact that the given
+CPU is idle from the scheduler perspective doesn't actually mean that
+it is in an idle state and so it has no bearing on whether or not its
+performance counters can be accessed etc.
 
- Merge branches 'acpi-ec' and 'acpi-processor'
-
-on top of commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-
- Linux 6.17-rc1
-
-to receive ACPI fixes for 6.17-rc2.
-
-These restore corner case behavior of the EC driver related to the
-handling of defective ACPI tables and fix a recent regression in the
-ACPI processor driver:
-
- - Prevent the ACPI EC driver from ignoring ECDT information in the
-   cases when the ID string in the ECDT is invalid, but not empty, to
-   fix touchpad detection on ThinkBook 14 G7 IML (Armin Wolf).
-
- - Rearrange checks in acpi_processor_ppc_init() to restore the handling
-   of frequency QoS requests related to _PPC limits inadvertently broken
-   by a recent update (Rafael Wysocki).
-
-Thanks!
-
-
----------------
-
-Armin Wolf (1):
-      ACPI: EC: Relax sanity check of the ECDT ID string
-
-Rafael J. Wysocki (1):
-      ACPI: processor: perflib: Move problematic pr->performance check
-
----------------
-
- drivers/acpi/ec.c                | 10 +++++++---
- drivers/acpi/processor_perflib.c |  5 ++++-
- 2 files changed, 11 insertions(+), 4 deletions(-)
+The way x86 deals with this problem is to snapshot the counters in
+question periodically (actually, in scheduler ticks) and fall back to
+cpu_khz if the interval between the two consecutive updates is too
+large (see https://elixir.bootlin.com/linux/v6.16/source/arch/x86/kernel/cp=
+u/aperfmperf.c#L502).
+I think that this is the only reliable way to handle it, but I may be
+mistaken.
 
