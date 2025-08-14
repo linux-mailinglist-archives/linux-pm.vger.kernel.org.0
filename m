@@ -1,78 +1,67 @@
-Return-Path: <linux-pm+bounces-32374-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32375-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC58B25D8D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:36:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44270B25D64
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:32:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3ABFDB60283
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 07:31:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ED1D1C83EC4
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 07:32:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FB126D4EA;
-	Thu, 14 Aug 2025 07:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978F4271465;
+	Thu, 14 Aug 2025 07:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="0cuAFlmC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BC3259C83;
-	Thu, 14 Aug 2025 07:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F412FF67C;
+	Thu, 14 Aug 2025 07:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755156588; cv=none; b=HIhq0KvvIqtAaBavw8/mXI+vk+U4aQ07+J5kBSyqZl+5oRgDX337Hj1d6lncxvG5bIpq9qrHVe6Kjzr20CN4Lz3iei/IpCNGRXI3kzOuhPK/FqRuPyclIelE89jqac8ezSqhFoQBZzustqPD9PAxXxoeHpcB/ChBSn5dZSAXi1k=
+	t=1755156631; cv=none; b=VaaIMfBhGQFSpwUpNu/coVqIcMLxcGzCz5uBlJ+G8qhzjI114zsk5vkShUjV2Cok5s8hlfO9oXWgcsgTaY4yJzBMgWeU4D8enWO96lBCE0KdZA76N2zynbq3s1uiXLBcK9wrb+MBn0A+Rc9jirncHXYBTzmHnMXu6H73ASCN9m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755156588; c=relaxed/simple;
-	bh=6NDjjCsQASG5ZZOQnM0m9/VFP2301fUlMsPXAXbht4g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dBTJIVSziNx1ROB+sL0LbkjMrah9LTLlcnDvk83dqgT2ul0MpaDy+GdgVRalRSpE0eaPVeJJpuUKH7r05IKYbewk52M1Pw74zypanCEI3w549o53OCrpZidF8E73zIcF0GF2DZlbaZniWo6LOb8AQL3Tirsj7brrR9YBiqBBEco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 6fcc959c78e011f0b29709d653e92f7d-20250814
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
-	DN_TRUSTED, SRC_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF
-	CIE_UNKNOWN, GTI_FG_BS, GTI_C_CI, GTI_RG_INFO, GTI_C_BU
-	AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:265ac78d-44e1-410e-a988-49924ad70b26,IP:10,
-	URL:0,TC:0,Content:-25,EDM:25,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:15
-X-CID-INFO: VERSION:1.1.45,REQID:265ac78d-44e1-410e-a988-49924ad70b26,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:25,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:15
-X-CID-META: VersionHash:6493067,CLOUDID:afcbee8ec8a41c6e65ebd45262442616,BulkI
-	D:2508141529406YEDDMS0,BulkQuantity:0,Recheck:0,SF:19|23|38|43|66|72|74|78
-	|102,TC:nil,Content:0|50,EDM:5,IP:-2,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil
-	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-UUID: 6fcc959c78e011f0b29709d653e92f7d-20250814
-X-User: tianyaxiong@kylinos.cn
-Received: from localhost.localdomain [(175.2.165.11)] by mailgw.kylinos.cn
-	(envelope-from <tianyaxiong@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 755108821; Thu, 14 Aug 2025 15:29:39 +0800
-From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	lenb@kernel.org,
-	robert.moore@intel.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	acpica-devel@lists.linux.dev,
-	Yaxiong Tian <tianyaxiong@kylinos.cn>
-Subject: [PATCH v2 0/2] ACPI: processor: idle: Per-CPU idle driver for hybrid CPUs
-Date: Thu, 14 Aug 2025 15:29:34 +0800
-Message-Id: <20250814072934.1016694-1-tianyaxiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1755156631; c=relaxed/simple;
+	bh=BgpL/qeJvgcZBCwwScC7+fuQidTdFioLiY1RUBgzWp8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OZ78COMxAI+bknnAu/0lg1BEfoP/+jcBrUlntVP05YZEpa9epYFXdJCF2nMmnTQEYBFBYLA//4nGrj++03uY+gGLCuaIcH/M/5+vVQz54Mcm6VwdnnPzci1+53ZVZZVKaSxcHBasr9i+NmMeIzpxyHnBoDOiU9r9SXCb2CwYkDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=0cuAFlmC; arc=none smtp.client-ip=220.130.44.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1755156626;
+	bh=S9rxrFf8qezYW4KrXLdUVidv8njftc7BpZoygBQ6NlU=; l=1115;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=0cuAFlmCeXTF1lGbVS4mqhEMnVRj9AslalUb4o3dGTqK5a4/aU5xtmN2A7DnfjrsT
+	 6AU2ubAN0onFwmNa48IUF7mIU6HQHY4buNgnvknuWyK6T4C7y118hS43DLBXWvnXy4
+	 z2Q8CL+EJ0ed4jrwfeFGkVDdy7WMCZ48IQyGLCzlH4Z7z2nearnmdiENK+YaRRX95M
+	 vY0EXI459JNUPfhP0n5/ITCNiGOtUC82j8x3yMqOqCFSEnfF8hyWgpRd9y2b3QduL0
+	 BuGA0Yv4YPZxQBMfpV6hVdXfiSjwWl3LshYDsd9etglmwCr0HqTfQ8/OX7ayFat8yK
+	 kkZh1WdfJew/Q==
+Received: from 192.168.10.47
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(817465:0:AUTH_RELAY)
+	(envelope-from <cy_huang@richtek.com>)
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Thu, 14 Aug 2025 15:30:19 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 14 Aug
+ 2025 15:30:19 +0800
+Received: from git-send.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1544.11 via Frontend
+ Transport; Thu, 14 Aug 2025 15:30:19 +0800
+From: <cy_huang@richtek.com>
+To: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>
+CC: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	"ChiYuan Huang" <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v2 0/3] Add Richtek RT9756 Smart-Cap divider charger
+Date: Thu, 14 Aug 2025 15:31:05 +0800
+Message-ID: <cover.1755154950.git.cy_huang@richtek.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,37 +69,39 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-This series addresses limitations in the current ACPI idle driver model
-for hybrid CPU architectures (e.g., ARM big.LITTLE, Intel Alder Lake),
-where different core types have distinct _LPI-state characteristics.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-This series introduces:
+This patch series adds support for RT9756 charger.
 
-1. A per-CPU idle driver model to accurately represent idle-state per core type.
-2. A new interface to fetch cpuidle_driver by CPU ID, required for early
-   registration scenarios.
+RESEND V2
+- Add 'Reviewed-by' tag in dt-binding patch
 
-This issue was initially discussed at:
-https://lore.kernel.org/linux-pm/97e8bc72-e44b-487a-91ba-206732094955@arm.com/T/#t
+V2
+- Add reference to 'power-supply.yaml'
+- Remove 'wakeup-source' from required property list
+- Use 'unevaluatedProperties' to replace 'additionalProperties'
 
-Changes since V2:
-- Fix "using smp_processor_id() in preemptible" BUG in patch 0002.
+ChiYuan Huang (3):
+  dt-bindings: power: supply: Add Richtek RT9756 smart cap divider
+    charger
+  power: supply: rt9756: Add Richtek RT9756 smart cap divider charger
+  Documentation: power: rt9756: Document exported sysfs entries
 
-Yaxiong Tian (2):
-  cpuidle: Add interface to get cpuidle_driver by CPU ID
-  ACPI: processor: idle: Replace single idle driver with per-CPU model
-    for better hybrid CPU support
+ .../ABI/testing/sysfs-class-power-rt9756      |  52 +
+ .../bindings/power/supply/richtek,rt9756.yaml |  72 ++
+ drivers/power/supply/Kconfig                  |  15 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/rt9756.c                 | 932 ++++++++++++++++++
+ 5 files changed, 1072 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9756
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9756.yaml
+ create mode 100644 drivers/power/supply/rt9756.c
 
- drivers/acpi/Kconfig            |  1 +
- drivers/acpi/processor_driver.c |  3 +-
- drivers/acpi/processor_idle.c   | 66 +++++++++++++++++----------------
- drivers/cpuidle/driver.c        | 16 ++++++++
- include/acpi/processor.h        |  2 +-
- include/linux/cpuidle.h         |  4 ++
- 6 files changed, 59 insertions(+), 33 deletions(-)
 
+base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
 -- 
-2.25.1
+2.34.1
 
 
