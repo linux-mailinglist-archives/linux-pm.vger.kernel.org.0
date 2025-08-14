@@ -1,203 +1,167 @@
-Return-Path: <linux-pm+bounces-32367-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32368-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB03CB25C75
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:01:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DDD6B25CD0
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:14:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DFA6B60E86
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 06:57:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 167CC16D353
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 07:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C6B25E44E;
-	Thu, 14 Aug 2025 06:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342B6263F5F;
+	Thu, 14 Aug 2025 07:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="F5z3xqRI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gb0YS6V6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631C225B2E3
-	for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 06:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FDF22A4FC
+	for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 07:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755154747; cv=none; b=C0FyHKz22jYA36lrRjlPtI8Q+Kf5668q3xHk0w2TnNle+NV4dCmLjRaWggZObhAVQRpJBjU30vfW/3NVDXRmBYPHFjMRUeuEIKrncXiUGnYDzRjLPwRiIdJ9Y+WQ/1pK9ofDWWVYA07tNDA5ymB/Jhkg0/V5ETlH4PNr5eZB75E=
+	t=1755155645; cv=none; b=eet5J9ZRQPox/Z3ir019y/TIW2QZN1gU/xHesUwjiiK5nX7a7X6XIp/1P4jz+OG/0/DJTjyfgCd40lzS9ID1UlTLb7uzB9b4qaml2hCa9bKtMU2uknvNSZTUo1lX8qT89bCh14ZuYxzYdnuXvRN7c4+TzDp2Xl+9A4+keV4xRWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755154747; c=relaxed/simple;
-	bh=cv6dE0f1+2HJ6ifD9wlGrnlDAszs2lyg6y1T+FM/GXg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tf5jBLdT+AZuSqZ7AtRQy79w2K26ZD8G5o7S8j2ePM33j/MA7H5aUdDRYAxgMTzMRmrzT6N+yQ0h1L85+fI7SvIYlOU2sbTZz2O9N06pXJb9vt5b34dd/fnA3oqQ/TlQ43iyk+cqJ9pG75+8zrbSbQkHFpDV22c0qEDmgrGb9Y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=F5z3xqRI; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57DMdRDZ020573
-	for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 06:59:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	xmxXpUgGKiuhKsdFeSAj9dw9kez65OgZ099Ql8PubOs=; b=F5z3xqRIEKnrF8D+
-	rJn0OfWlC80aesDqxGaBES5tnswbIK2ph/chq0F6D0dWOA/bKIwjuoo8gkt0iPeY
-	ylCgKvJEkCLyhlilQz3vSK7rt/rkzhZcBJvjhu0p+gg3oGEZ9GaZD5zxCU399iWu
-	vpFpUJrL6LiqCzVejzWupW6zNS0ySDNetRncpzZAdZTTaR98PFVR1LTh+pBPTyx0
-	8ikOzXPVkjP46AeaQtPk0DBDD2mwX6aPgCS5hwgZqBNhcn4SIWY95xwTj+eSU9D+
-	d8Wqyu0+DF8UY4ILwBoMF+baIt4u+T5E/kthHk1Ay/ij2s4j2dveuJ64Z+rnqjwt
-	5ZPF7A==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48g5hmemws-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 06:59:05 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-323266b41f5so1256957a91.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 23:59:05 -0700 (PDT)
+	s=arc-20240116; t=1755155645; c=relaxed/simple;
+	bh=hDI+QCx07/AA+50YEkqGaqIlvDcXSqreOpqc3cQQCe0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=VfRympf0eomjZvfQvbhV1Vvx//fElpQTOc6ultbWbXwuAZZkn9wytvWZFquPDnLLZnIvwYh0ktsGCCc6Z9UEf8jBTwxzrj/mwu5GdmckJM30yew1zNzTuJ7xKIC5Qpa5ePkaUrxWNrQvi5M/j5qCpDlkYUGKsRp83ppShWZTUVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gb0YS6V6; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3b9e41101d4so278022f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 00:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755155641; x=1755760441; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t9E3NrCTEwbCDabEtVeBf62CMBWNpRfAcIAwAy7HrVc=;
+        b=gb0YS6V6SX10hj3zECJ6vYAZWDUPJJn/TvdILbBZOBhi3++C8UxCQBuLCJA0UUSOzU
+         P28kTrUgIn9hKgDIkFrkgJ64oiHsmzyL4LIdPCWMIbhIgD4wOnmFGMhi8kIA76a3wWl3
+         83vLMpT08UYQ3E0+k72TbJIsTx0nuoKZatdS8W54aD8Qmqt81pPwE4ziTRl3L3tyr1lD
+         adobfiNsMFUKmTf9BnaXQHaoUp+KG1lag63Aij3sjzhEYZ8z3XG5ilDLjBHNXfDYbAhA
+         2GBzuw4oQwOjdVToZaoQxyim4+mPPoQb4LeHaEdEj+aVuEJQO0wPjKtFgmV0oQWgKgU7
+         a2Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755154744; x=1755759544;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xmxXpUgGKiuhKsdFeSAj9dw9kez65OgZ099Ql8PubOs=;
-        b=LsKO3+256HhpcyrOcRlvmHcPCaaabj5Ll6YIxnA+Lzdve3F+Z7jJPl72MSJtxaQ6EW
-         lYSHKp8elKN17Gj+F9IdQSt9FYx2M0oRkZcfyTktRzhEmQgGxYYzBpRHp10l9FCbJgou
-         V6pJOmNijAD6lphkzKIMi3i0lz9TXuN9nd/1Bu44WkS5IDgXGygs/MJaRUoaCmgLLng/
-         /uE8l4MyhL0396uE+dOw9a2Rv7CTd8lY4r2kOIBc2HSyqoyrr12YOA235iH3F0GJMFcq
-         n11CBCaby25VyEh4+MB0Wfb+wsyx+DTV2X0de/+5I/HDw2TFP8ypRaVFZ2xRgQvVlZ2V
-         GQlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWJDoqcB43TT4Y1/hM4Lp2X7xpmyjcQo5BJ3WjrziaaApZRhqEQLDGlj04va2/5b8Kza7Dqy2Ac6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrpDKpv0AjAQQC+pG+fqD/9cXK1qXQReEpiOLmRF+PGZOPLyao
-	oMWwGwlHC+L0D5qxwGguq5Yg1fCE7hxu4KE/1GoE7bFgC4rXefYUEylDLsIem959Ns1GYbv7m7I
-	BthHmrBqKuSAK0lSu6jcSSW8R8hGwgt/B5PaTQ1PA4hJxNlYtixjHHFaCrbt9cw==
-X-Gm-Gg: ASbGnct6zxlj+bJpUVtyFeU9vnfIxHC6FbfWP+XUTZZBtBxq+DsRQmQcdBtl/gDXZwQ
-	E3ahYJN2ixFi9VqSTBd7Fnbs9OuoQk/T56iyYgZGAyS0lKbtfhwe7ih5Y0fs4QPnjk7G9xUlY4w
-	YjRTHb40FXf3Jhr1gRp5bwLYXvVcKD4paUj5cj6vkpCJMISfIezV/nbC27+OT0CPesrNIj7m+Ct
-	e7DCRX8P5I88TsiCidv98avfxRjq5lTb4ZZ1Zwkjguccpxc3/fQrGeDBEcwdqX0fm1Q82Rl4GS8
-	XLAagErGHOo406ptUjRvpT6kgSeu+9vBAxhP045KulXfXsQYPJ+ft4IHRw3VKEWaSHGk
-X-Received: by 2002:a17:90b:518c:b0:31f:32cd:97f0 with SMTP id 98e67ed59e1d1-3232799c1a1mr2789292a91.1.1755154743855;
-        Wed, 13 Aug 2025 23:59:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE8CTJ/JcSa7RvClhZ1Noj4UnKmQoScP0H0m62yaCrSPHKaqpNUci8RZ9cH7R5dNw7mRb715Q==
-X-Received: by 2002:a17:90b:518c:b0:31f:32cd:97f0 with SMTP id 98e67ed59e1d1-3232799c1a1mr2789250a91.1.1755154743352;
-        Wed, 13 Aug 2025 23:59:03 -0700 (PDT)
-Received: from [192.168.0.195] ([49.204.31.133])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32328d0a204sm500314a91.3.2025.08.13.23.58.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Aug 2025 23:59:02 -0700 (PDT)
-Message-ID: <d81740ac-f83f-4ed3-ade6-193b8bb59bd3@oss.qualcomm.com>
-Date: Thu, 14 Aug 2025 12:28:56 +0530
+        d=1e100.net; s=20230601; t=1755155641; x=1755760441;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t9E3NrCTEwbCDabEtVeBf62CMBWNpRfAcIAwAy7HrVc=;
+        b=qO2Mk+J4czHzGlPbFbFzoxlUWqbLq0oPYC/XFCm8w7SzmeEu8xeoN8SVWE2JWfH9D2
+         plj5xvjxqVku3DI4ru6RNQrVyUSAgQlnze7Ga+0OiaW5x3ExYRr1JfzTE+NyTFqC6c+O
+         TfITWTBacH8e0GQ0CusU9RKezZWYCXcJKgGGAtSDzTOogHHHH8Yc0NAv+PseIQwHkd+0
+         Pc2byX2g6d6Uo6ioy4ya70oE9JvgPvRCJks7oOT8bNhS21ZL2qI6toc2kWMQ6IqD076W
+         w5FpYWAmWg39n7BStQ16A1itLSp5HFh6vpk/6rHcWY9ZGCJxh4qDPu7PauLKFWKn+4Z5
+         eUvw==
+X-Forwarded-Encrypted: i=1; AJvYcCUkLZu1l97p15BXyIy/RuQ5xdvH1JiicvdDSzBT2QdTEZpwoseK7TgvIU+XVfOSKvrqKPCbDUvtWA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7Y67JmZB+9Bp0Flw0i7+C7VjaHM++81W3jYEdsr9t2MQj8AVt
+	g0iHtQLSEai5EkXZ2gxDEtsFXAr6X97FKI4MBf0cPPHhLYBVfp1nOvypGXIDCrxFJOY=
+X-Gm-Gg: ASbGncvV74A0HP7q5HifagItco+oFYCT7VBU1d8BrUSu5sV75N5NWcTThTtKNAE1yrP
+	FMKNWXI9A7wp5cp+yhGCZBwvE8/THod3pnMZZthLQ6fCy20FKejr3DFVHHo4UxEvedh61O1DQu9
+	lDAPkfSY3G4YPazdhg6amYn7E10LjJnYG353hSXJB5ECXCR/JgUejGamc09lhku7I6UmDRMgmYQ
+	8WGippGFiRuu/AvQ3LIXci+/ECvuvVpIOMS9gaYD0XmtNssiZZMXtOkl0KcifOKt7dBTK27a6ab
+	W/g4iNgVAisiy0lCyKuK1XLrL9hg/Ul7eROz1gkU2t4xIVH0LqQ/uDa4Cec1E85LoeMQdo3GVZZ
+	UzbaimmAzNjgDc/uvtMmzwEW4VyY=
+X-Google-Smtp-Source: AGHT+IFP9kiDc1q1dkQQRBUhr400gKrEB0WYTXwapO4qVV4879GgEBYYtEyy7MjPdh+h9soCzQb3KQ==
+X-Received: by 2002:a05:6000:2089:b0:3a4:eed9:755d with SMTP id ffacd0b85a97d-3b9edfd196emr1313673f8f.3.1755155641197;
+        Thu, 14 Aug 2025 00:14:01 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a1c70acc7sm9647105e9.25.2025.08.14.00.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Aug 2025 00:14:00 -0700 (PDT)
+Date: Thu, 14 Aug 2025 10:13:56 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>,
+	linux-rockchip@lists.infradead.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, broonie@kernel.org, lee@kernel.org,
+	lgirdwood@gmail.com, sre@kernel.org, heiko@sntech.de,
+	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH V6 4/5] regulator: bq257xx: Add bq257xx boost regulator
+ driver
+Message-ID: <202508141051.hwl2Erq6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: qcs615: Add clock nodes for
- multimedia clock
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Taniya Das <quic_tdas@quicinc.com>,
-        Konrad Dybcio
- <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-References: <20250702-qcs615-mm-cpu-dt-v4-v5-0-df24896cbb26@quicinc.com>
- <20250702-qcs615-mm-cpu-dt-v4-v5-2-df24896cbb26@quicinc.com>
- <vxeadjzwywqjjqm7elg5pltq3jtnv7fprquhdoydhxnjihpsw7@tlqoq5wpgcr3>
- <d56920b0-0bbb-4951-aa02-152da6b9f9d2@oss.qualcomm.com>
- <ii366w2aftbitlhlmsa5fhbcn4s2n2fc35plrrb5tlsmtv4udv@btbtgo2vr4tw>
-Content-Language: en-US
-From: Taniya Das <taniya.das@oss.qualcomm.com>
-In-Reply-To: <ii366w2aftbitlhlmsa5fhbcn4s2n2fc35plrrb5tlsmtv4udv@btbtgo2vr4tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEyMDExOSBTYWx0ZWRfX53EdJtBexqR2
- fWue+pVlwKHrB1qYr2xHmp/eNwVLYpVZkFKYPI0VROQGrgbfdAIk/ahXbRND/ysacRkG60j1ZtM
- uoTc429/D9eCVitqaZxJd6Pb9GE+lzQYiHNGKVEPPSeAcWUoIbEo1UQNWLKfYahGl5Wjln2KJue
- AKXPoQalAEEjZy5WrEc+Sy+os6nBHgNXnLDaFbUT+fof/CvdWLASP8h32UmtAEE3c/jMGW9LBfs
- n5eAVFv2o2IQ36TNYMnbpJlIOvVFikykwypjo/TMipIJn00FLlKpV4/3bedwuwYlyHa1m+Tn8Z7
- HqnuwvVjpX46wSucYNIqh7qfrrO3R/qvfjzfPbOAwTtBbqAoDeEMSuXyDm8CjRvVpVXTLSULkTi
- Rn9kLgOy
-X-Proofpoint-GUID: J0MO0m28SnMFClcdVmhN_hRcF13d2SAi
-X-Proofpoint-ORIG-GUID: J0MO0m28SnMFClcdVmhN_hRcF13d2SAi
-X-Authority-Analysis: v=2.4 cv=d4b1yQjE c=1 sm=1 tr=0 ts=689d8939 cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=/kiP2gCwObMqexHosDfpNA==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=gEfo2CItAAAA:8 a=EUspDBNiAAAA:8
- a=COk6AnOGAAAA:8 a=5QP-OhRlovnELOG5v58A:9 a=QEXdDO2ut3YA:10
- a=mQ_c8vxmzFEMiUWkPHU9:22 a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-13_02,2025-08-11_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 spamscore=0 phishscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508120119
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250812214300.123129-5-macroalpha82@gmail.com>
 
+Hi Chris,
 
+kernel test robot noticed the following build warnings:
 
-On 8/13/2025 10:50 PM, Bjorn Andersson wrote:
-> On Tue, Aug 12, 2025 at 02:25:12PM +0530, Taniya Das wrote:
->>
->>
->> On 8/12/2025 9:15 AM, Bjorn Andersson wrote:
->>> On Wed, Jul 02, 2025 at 02:43:10PM +0530, Taniya Das wrote:
->>>> Add support for video, camera, display and gpu clock controller nodes
->>>> for QCS615 platform.
->>>>
->>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->>>> ---
->>>
->>>   DTC [C] arch/arm64/boot/dts/qcom/qcs615-ride.dtb
->>> /home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@100000: 'clock-names' is a required property
->>>         from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-gcc.yaml#
->>> /home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@5090000: clocks: [[43, 0], [45, 2]] is too short
->>>         from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-gpucc.yaml#
->>> /home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@5090000: Unevaluated properties are not allowed ('clocks' was unexpected)
->>>         from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-gpucc.yaml#
->>> /home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@af00000: clocks: [[43, 0], [45, 29]] is too short
->>>         from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-dispcc.yaml#
->>> /home/bjorn/sandbox/kernel/db845c/arch/arm64/boot/dts/qcom/qcs615-ride.dtb: clock-controller@af00000: Unevaluated properties are not allowed ('clocks' was unexpected)
->>>         from schema $id: http://devicetree.org/schemas/clock/qcom,qcs615-dispcc.yaml#
->>>
->>>
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Bjorn, I will push another series which will fix the above errors.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/dt-bindings-mfd-ti-bq25703a-Add-TI-BQ25703A-Charger/20250813-054704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20250812214300.123129-5-macroalpha82%40gmail.com
+patch subject: [PATCH V6 4/5] regulator: bq257xx: Add bq257xx boost regulator driver
+config: m68k-randconfig-r073-20250814 (https://download.01.org/0day-ci/archive/20250814/202508141051.hwl2Erq6-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 15.1.0
 
->>> The missing clock-names in clock-controller@100000 predates this series.
->>> Sorry for merging broken patches in the past, please fix that as well.
->>>
->>
->> Bjorn, would you prefer that I add the clock-names property to the GCC
->> clock node to resolve the warning, or should I instead remove the
->> required: clock-names entry from the qcom,qcs615-gcc.yaml schema?
->>
-> 
-> It seems to me that the qcs615 gcc binding and driver is lacking a
-> number of clock inputs. Can you please look into correcting this, and
-> based on that resolve the dtbs_check error?
-> 
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202508141051.hwl2Erq6-lkp@intel.com/
 
-Yes, Bjorn. I will surely look into to fix them bindings and driver.
+smatch warnings:
+drivers/regulator/bq257xx-regulator.c:161 bq257xx_regulator_probe() error: uninitialized symbol 'init_data'.
 
-> 
->> Let me know which approach aligns better with your expectations.
->>
->> -- 
->> Thanks,
->> Taniya Das
->>
+vim +/init_data +161 drivers/regulator/bq257xx-regulator.c
+
+d6db7dce7cd965 Chris Morgan 2025-08-12  138  static int bq257xx_regulator_probe(struct platform_device *pdev)
+d6db7dce7cd965 Chris Morgan 2025-08-12  139  {
+d6db7dce7cd965 Chris Morgan 2025-08-12  140  	struct device *dev = &pdev->dev;
+d6db7dce7cd965 Chris Morgan 2025-08-12  141  	struct bq257xx_device *bq = dev_get_drvdata(pdev->dev.parent);
+d6db7dce7cd965 Chris Morgan 2025-08-12  142  	struct bq257xx_reg_data *pdata;
+d6db7dce7cd965 Chris Morgan 2025-08-12  143  	struct device_node *np = dev->of_node;
+d6db7dce7cd965 Chris Morgan 2025-08-12  144  	struct regulator_init_data *init_data;
+d6db7dce7cd965 Chris Morgan 2025-08-12  145  	struct regulator_config cfg = {};
+d6db7dce7cd965 Chris Morgan 2025-08-12  146  
+d6db7dce7cd965 Chris Morgan 2025-08-12  147  	pdev->dev.of_node = pdev->dev.parent->of_node;
+d6db7dce7cd965 Chris Morgan 2025-08-12  148  	pdev->dev.of_node_reused = true;
+d6db7dce7cd965 Chris Morgan 2025-08-12  149  
+d6db7dce7cd965 Chris Morgan 2025-08-12  150  	pdata = devm_kzalloc(&pdev->dev, sizeof(struct bq257xx_reg_data), GFP_KERNEL);
+d6db7dce7cd965 Chris Morgan 2025-08-12  151  	if (!pdata)
+d6db7dce7cd965 Chris Morgan 2025-08-12  152  		return -ENOMEM;
+d6db7dce7cd965 Chris Morgan 2025-08-12  153  
+d6db7dce7cd965 Chris Morgan 2025-08-12  154  	pdata->bq = bq;
+d6db7dce7cd965 Chris Morgan 2025-08-12  155  	pdata->desc = bq25703_vbus_desc;
+d6db7dce7cd965 Chris Morgan 2025-08-12  156  
+d6db7dce7cd965 Chris Morgan 2025-08-12  157  	platform_set_drvdata(pdev, pdata);
+d6db7dce7cd965 Chris Morgan 2025-08-12  158  	bq257xx_reg_dt_parse_gpio(pdev);
+d6db7dce7cd965 Chris Morgan 2025-08-12  159  
+d6db7dce7cd965 Chris Morgan 2025-08-12  160  	cfg.dev = &pdev->dev;
+d6db7dce7cd965 Chris Morgan 2025-08-12 @161  	cfg.init_data = init_data;
+                                                                ^^^^^^^^^
+Uninitialized.
+
+d6db7dce7cd965 Chris Morgan 2025-08-12  162  	cfg.driver_data = pdata;
+d6db7dce7cd965 Chris Morgan 2025-08-12  163  	cfg.of_node = np;
+d6db7dce7cd965 Chris Morgan 2025-08-12  164  	cfg.regmap = dev_get_regmap(pdev->dev.parent, NULL);
+d6db7dce7cd965 Chris Morgan 2025-08-12  165  	if (!cfg.regmap)
+d6db7dce7cd965 Chris Morgan 2025-08-12  166  		return -ENODEV;
+d6db7dce7cd965 Chris Morgan 2025-08-12  167  
+d6db7dce7cd965 Chris Morgan 2025-08-12  168  	pdata->bq257xx_reg = devm_regulator_register(dev, &pdata->desc, &cfg);
+d6db7dce7cd965 Chris Morgan 2025-08-12  169  	if (IS_ERR(pdata->bq257xx_reg)) {
+d6db7dce7cd965 Chris Morgan 2025-08-12  170  		return dev_err_probe(&pdev->dev, PTR_ERR(pdata->bq257xx_reg),
+d6db7dce7cd965 Chris Morgan 2025-08-12  171  				     "error registering bq257xx regulator");
+d6db7dce7cd965 Chris Morgan 2025-08-12  172  	}
+d6db7dce7cd965 Chris Morgan 2025-08-12  173  
+d6db7dce7cd965 Chris Morgan 2025-08-12  174  	return 0;
+d6db7dce7cd965 Chris Morgan 2025-08-12  175  }
 
 -- 
-Thanks,
-Taniya Das
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
