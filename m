@@ -1,278 +1,301 @@
-Return-Path: <linux-pm+bounces-32411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32412-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB3B9B26B9D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 17:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98E0DB26CCF
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 18:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86387AA7066
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 15:50:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DEF06279A1
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 16:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B29EB23C4F4;
-	Thu, 14 Aug 2025 15:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B782F3C3C;
+	Thu, 14 Aug 2025 16:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cskMR78W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AapH0SWr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5680E23FC49
-	for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 15:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0523623313F;
+	Thu, 14 Aug 2025 16:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755186628; cv=none; b=Rc0Zmnx84wUrnlUY3nknRoz7OifwmE+GrGfrNr1H2RkOuQX+uYTjO5llyGd5W24jb5bbcFNTAVJBRHrvEyGyShKq9QCZ26Y4otOUA/Tag0J/C8motqp7zuUEEc5Ieb2YbUV9f1J17YS09n7QhAgChMrXKTW2E0X0esSssJHCXgA=
+	t=1755189795; cv=none; b=Tb5dd9sF2CKURurMzH89t14D0UqmrAqk4+FjJJnb7XMfT5dJTlwqrWtKoR8OHZ39lVvR5QQEWEB0kWIr8Zr9RU0BHe4JZDtORWfyoxiLjd+AznfiIPHh2G+ugGDzBy2gPLuqfV9WAxKDnsx/hQOl2I/iNHXHEtAJqmoA4rSebTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755186628; c=relaxed/simple;
-	bh=exEQSQ1zMctL93eMWFVlMD38hFz3MbFmZh5iUn+s2aQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fH+FJRhhbO9avZxUEGF8UjAPCNg9WgA2USnRpm9pAkPNuxICqOQMas0gjlIf3j0gYiCPqksRgG7zFqWVGOPnPXXpp32KsK9OLo6BDWALP7uKCPTBpOjA7AhRqQ+HM1kGK/YZH02L3Nb+vMrFEunq3cRtillFNzqtdSiofAlTD4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cskMR78W; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-71d60501806so10004487b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 08:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755186625; x=1755791425; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TcolRZoQB4ws+cuLwpFSDmMfaoDBVHgV4no7KK057D4=;
-        b=cskMR78WHwIWMLSgu1P2KVGAIxw9XanMgARdKqib8/S/AcZAhz8eCUyUoTof6bTdym
-         qUo5PwQJ2rdXC1ky88WvMd34NrWzWwZY8Fxya0c83QD1BNztXaP4IQjnA3cda9IGETY/
-         0Xc6W2bdqILZYm1/6JHfuyCBsL/R5pnF4pPDzNdjujcxm9kZqUqfRsYpTaFSXVXxx7Ud
-         lPlWwwzK5Tx5t6x7PrBz4qk8s1m0Y6g0LCzIozdILjqX+Me1kdfupZR1KjfYN1ZYLdrC
-         25zhcj63CashofZL4gylMnpTLd0lXFZb3BskY2jdkTN9W6MD80VK0qT3kBU64A4FReDW
-         fmPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755186625; x=1755791425;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TcolRZoQB4ws+cuLwpFSDmMfaoDBVHgV4no7KK057D4=;
-        b=CazgnuxjwfgbTCoH/90SZnx53b8FoGfJVZW3XjDVClCMeILbtJAeft5bXMJ9JmAAxj
-         lgjY42yQV7f8VRTBvvz0T5XQ/vlhcGDSOZdmLkkFKcz0NG8NiSa+FY3KENVY+YgjsgZJ
-         uobol1ER4/gwMobUCw38ojWprnj1udLEVqjsqzWD22P6ejoUOc9ref9qPTwpzAea+UGO
-         JWCWggvdJZZq7VFaO1vLViQouiEsOzKU0BpALwszqH3JziOmwWxmZZwdxE4DqytRfwXi
-         CqupvVlCyUsWOSuYxogvnLow6cE/vYDVXfsUisAY8Li63SX6GDAtDslTaA3DCjkDYLNw
-         ozOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrvKgD2lrkNtS9ag1dFynxN+GDqfQRd7V2cyfW3vDcyUqLyiNOCD8X3GaZf+HUslht/MkdzYSGXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRwzjldGAxpblkzTSg0yQYEdnzSmIQQVJQrIlOdNOUxHjzg9hR
-	yP2yGC9+tEX9T2RYPdfGGXEhZVzv8fRxtOs64+VtMXGASSZzF4Zma6L7E3bBVzPYh/XgJzSOEQJ
-	xChnSQMgxqaO1Kghw56UMV1pS3lBbmPxuLCHmPe/eZA==
-X-Gm-Gg: ASbGncu7w5sN1/g0syAWK71+4bkvpLqD16bQPPHzkvUdokJeCr/VACy1eBE/30Bgn6+
-	Yd94pZx+I7wTEb1uYvBInGSCZe18SLAspOYmGoLEhG1NPcoFuvlCZJre4hpI5kYMxPTItwlsmXY
-	UpDOv1CVfPqzor6uSCDb9xtUxiXzm55wvcKajpMoXPHV/L2ixsxjQ66/Ex9TlQ4IDqedLm4dznQ
-	uFUXBnq
-X-Google-Smtp-Source: AGHT+IEZdf3u9KWA9hpdME1MSo058HtmW98XBIg+BRTyD6KMN6/eMmlikus/YCW2MUTCFxGAEqaAwS1dA88OESJcat4=
-X-Received: by 2002:a05:690c:7309:b0:71b:f500:70c2 with SMTP id
- 00721157ae682-71d633f0da3mr47170887b3.6.1755186625067; Thu, 14 Aug 2025
- 08:50:25 -0700 (PDT)
+	s=arc-20240116; t=1755189795; c=relaxed/simple;
+	bh=cVYpcTsjTeAvvi4JNeURuCo2newojqCTC+yq6X3j8tM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rNQi1xpFMtPP06xFHkRbG/n6AhE2wNRf7shVeEng4fT8DIJ+mkw9ZBmgkTxXPUIJfGX1o3yrEO+NwpVA3IFpc8lcqNbd4cfqva5Xle4VOIOf+bxlBJ6x3MQCgClT+k0uPFnkr4wOgYG3ovn9reI3dvqzpShOH8tDexQyYrTSKvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AapH0SWr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78DA1C4CEED;
+	Thu, 14 Aug 2025 16:43:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755189794;
+	bh=cVYpcTsjTeAvvi4JNeURuCo2newojqCTC+yq6X3j8tM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AapH0SWr4OT/uvhWFMhjowdkBCTUfuG1U7McDeYP/IGs4ijBpVPTJHeOWUyOs6nXN
+	 Ts51KwUR92rHiLap2ctiKRBYxKJd+7zVtRYFbLMhU7p4aLJ54Y3yoOlyZi2YAZMhhs
+	 SN9TYtk5vvcJDTOo9ohMjZnG7u4yEll6W8AxE0TWGfcgb7tU6mUmvggfLQTu4FW6yl
+	 vUSUwuTxB4WqjNQuoRo/xHMZ9NNGdmCBYoaK+Ggi5zgUoDGJN6iQFjk9OCRvCLGmwp
+	 w1qHXAMwtrGK/zpDUXco9/wXAoOqy61Xf/lxa/2/zFoCu743Zkru3aDUAhthHb4gs5
+	 XtdDP6T9DVD6A==
+Date: Thu, 14 Aug 2025 09:43:13 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: Michal Hocko <mhocko@suse.com>, Theodore Ts'o <tytso@mit.edu>,
+	Jan Kara <jack@suse.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	David Hildenbrand <david@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Nico Pache <npache@redhat.com>, xu xin <xu.xin16@zte.com.cn>,
+	wangfushuai <wangfushuai@baidu.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jeff Layton <jlayton@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+	Adrian Ratiu <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-ext4@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
+ address process dependency issues
+Message-ID: <20250814164313.GO7942@frogsfrogsfrogs>
+References: <aJSpTpB9_jijiO6m@tiehlicka>
+ <4c46250f-eb0f-4e12-8951-89431c195b46@kylinos.cn>
+ <aJWglTo1xpXXEqEM@tiehlicka>
+ <ba9c23c4-cd95-4dba-9359-61565195d7be@kylinos.cn>
+ <aJW8NLPxGOOkyCfB@tiehlicka>
+ <09df0911-9421-40af-8296-de1383be1c58@kylinos.cn>
+ <aJnM32xKq0FOWBzw@tiehlicka>
+ <d86a9883-9d2e-4bb2-a93d-0d95b4a60e5f@kylinos.cn>
+ <20250812172655.GF7938@frogsfrogsfrogs>
+ <8c61ab95-9caa-4b57-adfd-31f941f0264d@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701114733.636510-1-ulf.hansson@linaro.org>
- <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
- <CAMuHMdX1BacUfqtmV8g7NpRnY9aTdL=fh+jC7OryMLz4ijaOCg@mail.gmail.com>
- <CAPDyKFqANQZmGXd8ccA5qWiGrCor2N=W_7dmV+OK8hMd_+zmmw@mail.gmail.com>
- <CAMuHMdVrkr56XsRsbG7H-tLHVzmP+g-7=5Nrv9asC25ismwiYA@mail.gmail.com>
- <CAPDyKFq7z9e9hEC9QWiYcaU=t+Gs_GgRurmK-+cNYp4xkhr5Ow@mail.gmail.com> <CAMuHMdU7W+f3nZ_ckHOFsmmK6V9HzK0-fNtcu8kgjTSeU89AqQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdU7W+f3nZ_ckHOFsmmK6V9HzK0-fNtcu8kgjTSeU89AqQ@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 14 Aug 2025 17:49:48 +0200
-X-Gm-Features: Ac12FXw0d_08LwE0Kxq885y0aixo5HX1zNMPaf7I2LzMEd8jDbPPe6xvMDHaAUY
-Message-ID: <CAPDyKFr-mVbGo62Wp+othcs+cWR6Wn9bz==ZB5hSpyKgkGtqHg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c61ab95-9caa-4b57-adfd-31f941f0264d@kylinos.cn>
 
-On Wed, 13 Aug 2025 at 13:58, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Ulf,
->
-> On Tue, 12 Aug 2025 at 12:01, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Thu, 7 Aug 2025 at 11:38, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Wed, 30 Jul 2025 at 12:29, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > On Wed, 30 Jul 2025 at 11:56, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > On Wed, 9 Jul 2025 at 13:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > > > On Tue, 1 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > > > > Changes in v3:
-> > > > > > >         - Added a couple of patches to adress problems on some Renesas
-> > > > > > >         platforms. Thanks Geert and Tomi for helping out!
-> > > > > > >         - Adressed a few comments from Saravanna and Konrad.
-> > > > > > >         - Added some tested-by tags.
-> > > > > >
-> > > > > > I decided it was time to give this a try, so I have queued this up for
-> > > > > > v6.17 via the next branch at my pmdomain tree.
-> > > > > >
-> > > > > > If you encounter any issues, please let me know so I can help to fix them.
-> > > > >
-> > > > > Thanks for your series!  Due to holidays, I only managed to test
-> > > > > this very recently.
-> > > > >
-> > > > > Unfortunately I have an issue with unused PM Domains no longer being
-> > > > > disabled on R-Car:
-> > > > >   - On R-Car Gen1/2/3, using rcar-sysc.c, unused PM Domains are never
-> > > > >     disabled.
-> > > > >   - On R-Car Gen4, using rcar-gen4-sysc.c, unused PM Domains are
-> > > > >     sometimes not disabled.
-> > > > >     At first, I noticed the IOMMU driver was not enabled in my config,
-> > > > >     and enabling it did fix the issue.  However, after that I still
-> > > > >     encountered the issue in a different config that does have the
-> > > > >     IOMMU driver enabled...
-> > > > >
-> > > > > FTR, unused PM Domains are still disabled correctly on R/SH-Mobile
-> > > > > (using rmobile-sysc.c) and on BeagleBone Black. Note that these use
-> > > > > of_genpd_add_provider_simple(), while all R-Car drivers use
-> > > > > of_genpd_add_provider_onecell().  Perhaps there is an issue with
-> > > > > the latter?  If you don't have a clue, I plan to do some more
-> > > > > investigation later...
-> > >
-> > > of_genpd_add_provider_onecell() has:
-> > >
-> > >     if (!dev)
-> > >             sync_state = true;
-> > >     else
-> > >             dev_set_drv_sync_state(dev, genpd_sync_state);
-> > >
-> > >     for (i = 0; i < data->num_domains; i++) {
-> > >             ...
-> > >             if (sync_state && !genpd_is_no_sync_state(genpd)) {
-> > >                     genpd->sync_state = GENPD_SYNC_STATE_ONECELL;
-> > >                     device_set_node(&genpd->dev, fwnode);
-> > >                     sync_state = false;
-> > >                     ^^^^^^^^^^^^^^^^^^^
-> > >             }
-> > >             ...
-> > >     }
-> > >
-> > > As the R-Car SYSC drivers are not platform drivers, dev is NULL, and
-> > > genpd->sync_state is set to GENPD_SYNC_STATE_ONECELL for the first PM
-> > > Domain only.  All other domains have the default value of sync_state
-> > > (0 = GENPD_SYNC_STATE_OFF).  Hence when genpd_provider_sync_state()
-> > > is called later, it ignores all but the first domain.
-> > > Apparently this is intentional, as of_genpd_sync_state() tries to
-> > > power off all domains handled by the same controller anyway (see below)?
-> >
-> > Right, this is intentional and mainly because of how fw_devlink works.
-> >
-> > fw_devlink is limited to use only the first device - if multiple
-> > devices share the same fwnode. In principle, we could have picked any
-> > of the devices in the array of genpds here - and reached the same
-> > result.
->
-> OK, just like I already assumed...
->
-> > > > > BTW, the "pending due to"-messages look weird to me.
-> > > > > On R-Car M2-W (r8a7791.dtsi) I see e.g.:
-> > > > >
-> > > > >     genpd_provider ca15-cpu0: sync_state() pending due to e6020000.watchdog
-> > > > >     renesas-cpg-mssr e6150000.clock-controller: sync_state() pending
-> > > > > due to e6020000.watchdog
-> > > > >
-> > > > > ca15-cpu0 is the PM Domain holding the first CPU core, while
-> > > > > the watchdog resides in the always-on Clock Domain, and uses the
-> > > > > clock-controller for PM_CLK handling.
-> > >
-> > > Unfortunately the first PM Domain is "ca15-cpu0", which is blocked on
-> > > these bogus pending states, and no PM Domain is powered off.
-> >
-> > I see, thanks for the details. I am looking closer at this.
-> >
-> > In any case, this is the main issue, as it prevents the ->sync_state()
-> > callback to be called. Hence the "genpd->stay_on" will also *not* be
-> > cleared for any of the genpd's for the genpd-provider.
->
-> I was under the impression there is a time-out, after which the
-> .sync_state() callback would be called anyway, just like for probe
-> deferral due to missing optional providers like DMACs and IOMMUs.
-> Apparently that is not the case?
+On Wed, Aug 13, 2025 at 01:48:37PM +0800, Zihuan Zhang wrote:
+> Hi,
+> 
+> 在 2025/8/13 01:26, Darrick J. Wong 写道:
+> > On Tue, Aug 12, 2025 at 01:57:49PM +0800, Zihuan Zhang wrote:
+> > > Hi all,
+> > > 
+> > > We encountered an issue where the number of freeze retries increased due to
+> > > processes stuck in D state. The logs point to jbd2-related activity.
+> > > 
+> > > log1:
+> > > 
+> > > 6616.650482] task:ThreadPoolForeg state:D stack:0     pid:262026
+> > > tgid:4065  ppid:2490   task_flags:0x400040 flags:0x00004004
+> > > [ 6616.650485] Call Trace:
+> > > [ 6616.650486]  <TASK>
+> > > [ 6616.650489]  __schedule+0x532/0xea0
+> > > [ 6616.650494]  schedule+0x27/0x80
+> > > [ 6616.650496]  jbd2_log_wait_commit+0xa6/0x120
+> > > [ 6616.650499]  ? __pfx_autoremove_wake_function+0x10/0x10
+> > > [ 6616.650502]  ext4_sync_file+0x1ba/0x380
+> > > [ 6616.650505]  do_fsync+0x3b/0x80
+> > > 
+> > > log2:
+> > > 
+> > > [  631.206315] jdb2_log_wait_log_commit  completed (elapsed 0.002 seconds)
+> > > [  631.215325] jdb2_log_wait_log_commit  completed (elapsed 0.001 seconds)
+> > > [  631.240704] jdb2_log_wait_log_commit  completed (elapsed 0.386 seconds)
+> > > [  631.262167] Filesystems sync: 0.424 seconds
+> > > [  631.262821] Freezing user space processes
+> > > [  631.263839] freeze round: 1, task to freeze: 852
+> > > [  631.265128] freeze round: 2, task to freeze: 2
+> > > [  631.267039] freeze round: 3, task to freeze: 2
+> > > [  631.271176] freeze round: 4, task to freeze: 2
+> > > [  631.279160] freeze round: 5, task to freeze: 2
+> > > [  631.287152] freeze round: 6, task to freeze: 2
+> > > [  631.295346] freeze round: 7, task to freeze: 2
+> > > [  631.301747] freeze round: 8, task to freeze: 2
+> > > [  631.309346] freeze round: 9, task to freeze: 2
+> > > [  631.317353] freeze round: 10, task to freeze: 2
+> > > [  631.325348] freeze round: 11, task to freeze: 2
+> > > [  631.333353] freeze round: 12, task to freeze: 2
+> > > [  631.341358] freeze round: 13, task to freeze: 2
+> > > [  631.349357] freeze round: 14, task to freeze: 2
+> > > [  631.357363] freeze round: 15, task to freeze: 2
+> > > [  631.365361] freeze round: 16, task to freeze: 2
+> > > [  631.373379] freeze round: 17, task to freeze: 2
+> > > [  631.381366] freeze round: 18, task to freeze: 2
+> > > [  631.389365] freeze round: 19, task to freeze: 2
+> > > [  631.397371] freeze round: 20, task to freeze: 2
+> > > [  631.405373] freeze round: 21, task to freeze: 2
+> > > [  631.413373] freeze round: 22, task to freeze: 2
+> > > [  631.421392] freeze round: 23, task to freeze: 1
+> > > [  631.429948] freeze round: 24, task to freeze: 1
+> > > [  631.438295] freeze round: 25, task to freeze: 1
+> > > [  631.444546] jdb2_log_wait_log_commit  completed (elapsed 0.249 seconds)
+> > > [  631.446387] freeze round: 26, task to freeze: 0
+> > > [  631.446390] Freezing user space processes completed (elapsed 0.183
+> > > seconds)
+> > > [  631.446392] OOM killer disabled.
+> > > [  631.446393] Freezing remaining freezable tasks
+> > > [  631.446656] freeze round: 1, task to freeze: 4
+> > > [  631.447976] freeze round: 2, task to freeze: 0
+> > > [  631.447978] Freezing remaining freezable tasks completed (elapsed 0.001
+> > > seconds)
+> > > [  631.447980] PM: suspend debug: Waiting for 1 second(s).
+> > > [  632.450858] OOM killer enabled.
+> > > [  632.450859] Restarting tasks: Starting
+> > > [  632.453140] Restarting tasks: Done
+> > > [  632.453173] random: crng reseeded on system resumption
+> > > [  632.453370] PM: suspend exit
+> > > [  632.462799] jdb2_log_wait_log_commit  completed (elapsed 0.000 seconds)
+> > > [  632.466114] jdb2_log_wait_log_commit  completed (elapsed 0.001 seconds)
+> > > 
+> > > This is the reason:
+> > > 
+> > > [  631.444546] jdb2_log_wait_log_commit  completed (elapsed 0.249 seconds)
+> > > 
+> > > 
+> > > During freezing, user processes executing jbd2_log_wait_commit enter D state
+> > > because this function calls wait_event and can take tens of milliseconds to
+> > > complete. This long execution time, coupled with possible competition with
+> > > the freezer, causes repeated freeze retries.
+> > > 
+> > > While we understand that jbd2 is a freezable kernel thread, we would like to
+> > > know if there is a way to freeze it earlier or freeze some critical
+> > > processes proactively to reduce this contention.
+> > Freeze the filesystem before you start freezing kthreads?  That should
+> > quiesce the jbd2 workers and pause anyone trying to write to the fs.
+> Indeed, freezing the filesystem can work.
+> 
+> However, this approach is quite expensive: it increases the total suspend
+> time by about 3 to 4 seconds. Because of this overhead, we are exploring
+> alternative solutions with lower cost.
 
-The behaviour is configurable, so it depends. The current default
-behaviour does *not* enforce the ->sync_state() callbacks to be
-called, even after a time-out.
+Indeed it does, because now XFS and friends will actually shut down
+their background workers and flush all the dirty data and metadata to
+disk.  On the other hand, if the system crashes while suspended, there's
+a lot less recovery work to be done.
 
-You may set CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT to achieve the above
-behavior or use the fw_devlink command line parameters to change it.
-Like setting "fw_devlink.sync_state=timeout".
+Granted the kernel (or userspace) will usually sync() before suspending
+so that's not been a huge problem in production afaict.
 
-I guess it can be debated what the default behaviour should be.
-Perhaps we should even allow the default behaviour to be dynamically
-tweaked on a per provider device/driver basis?
+> We have tested it:
+> 
+> https://lore.kernel.org/all/09df0911-9421-40af-8296-de1383be1c58@kylinos.cn/
+> 
+> > Maybe the missing piece here is the device model not knowing how to call
+> > bdev_freeze prior to a suspend?
+> Currently, suspend flow seem to does not invoke bdev_freeze(). Do you have
+> any plans or insights on improving or integrating this functionality more
+> smoothly into the device model and suspend sequence?
+> > That said, I think that doesn't 100% work for XFS because it has
+> > kworkers for metadata buffer read completions, and freezes don't affect
+> > read operations...
+> 
+> Does read activity also cause processes to enter D (uninterruptible sleep)
+> state?
 
->
-> > > If I remove the "sync_state = false" above, genpd_provider_sync_state()
-> > > considers all domains, and does power down all unused domains (even
-> > > multiple times, as expected).
-> >
-> > I think those are getting called because with the change above, there
-> > is no device_link being tracked. As stated above, fw_devlink is
-> > limited to use only one device - if multiple devices share the same
-> > fwnode.
->
-> Indeed.
->
-> > In other words, the ->sync_state() callbacks are called even if the
-> > corresponding consumer devices have not been probed yet.
->
-> Hence shouldn't there be a timeout, as the kernel may not even have
-> a driver for one or more consumer devices?
+Usually.
 
-See above.
+> From what I understand, it’s usually writes or synchronous operations that
+> do, but I’m curious if reads can also lead to D state under certain
+> conditions.
 
->
-> > > Upon closer look, all "pending due to" messages I see claim that the
-> > > first (index 0) PM Domain is pending on some devices, while all of
-> > > these devices are part of a different domain (usually the always-on
-> > > domain, which is always the last (32 or 64) on R-Car).
-> > >
-> > > So I think there are two issues:
-> > >   1. Devices are not attributed to the correct PM Domain using
-> > >      fw_devlink sync_state,
-> > >   2. One PM Domain of a multi-domain controller being blocked should
-> > >      not block all other domains handled by the same controller.
-> >
-> > Right, that's a current limitation with fw_devlink. To cope with this,
-> > it's possible to enforce the ->sync_state() callback to be invoked
-> > from user-space (timeout or explicitly) for a device.
-> >
-> > Another option would be to allow an opt-out behavior for some genpd's
-> > that are powered-on at initialization. Something along the lines of
-> > the below.
-> >
-> > From: Ulf Hansson <ulf.hansson@linaro.org>
-> > Date: Tue, 29 Jul 2025 14:27:22 +0200
-> > Subject: [PATCH] pmdomain: core: Allow powered-on PM domains to be powered-off
-> >  during boot
->
-> [...]
->
-> I gave this a try (i.e. "| GENPD_FLAG_NO_STAY_ON" in rcar-sysc.c), but
-> this doesn't make any difference.  I assume this would only work when
-> actively calling genpd_power_off() (i.e. not from of_genpd_sync_state()
-> or genpd_provider_sync_state())?
+Anything that sets the task state to uninterruptible.
 
-Right. Thanks for testing!
+--D
 
-So, we may need to restore some part of the genpd_power_off_unused()
-when CONFIG_PM_GENERIC_DOMAINS_OF is set. Without clearing
-"genpd->stay_on".
-
-I can extend the patch, if you think it would make sense for you?
-
-Kind regards
-Uffe
+> > (just my clueless 2c)
+> > 
+> > --D
+> > 
+> > > Thanks for your input and suggestions.
+> > > 
+> > > 在 2025/8/11 18:58, Michal Hocko 写道:
+> > > > On Mon 11-08-25 17:13:43, Zihuan Zhang wrote:
+> > > > > 在 2025/8/8 16:58, Michal Hocko 写道:
+> > > > [...]
+> > > > > > Also the interface seems to be really coarse grained and it can easily
+> > > > > > turn out insufficient for other usecases while it is not entirely clear
+> > > > > > to me how this could be extended for those.
+> > > > >    We recognize that the current interface is relatively coarse-grained and
+> > > > > may not be sufficient for all scenarios. The present implementation is a
+> > > > > basic version.
+> > > > > 
+> > > > > Our plan is to introduce a classification-based mechanism that assigns
+> > > > > different freeze priorities according to process categories. For example,
+> > > > > filesystem and graphics-related processes will be given higher default
+> > > > > freeze priority, as they are critical in the freezing workflow. This
+> > > > > classification approach helps target important processes more precisely.
+> > > > > 
+> > > > > However, this requires further testing and refinement before full
+> > > > > deployment. We believe this incremental, category-based design will make the
+> > > > > mechanism more effective and adaptable over time while keeping it
+> > > > > manageable.
+> > > > Unless there is a clear path for a more extendable interface then
+> > > > introducing this one is a no-go. We do not want to grow different ways
+> > > > to establish freezing policies.
+> > > > 
+> > > > But much more fundamentally. So far I haven't really seen any argument
+> > > > why different priorities help with the underlying problem other than the
+> > > > timing might be slightly different if you change the order of freezing.
+> > > > This to me sounds like the proposed scheme mostly works around the
+> > > > problem you are seeing and as such is not a really good candidate to be
+> > > > merged as a long term solution. Not to mention with a user API that
+> > > > needs to be maintained for ever.
+> > > > 
+> > > > So NAK from me on the interface.
+> > > > 
+> > > Thanks for the feedback. I understand your concern that changing the freezer
+> > > priority order looks like working around the symptom rather than solving the
+> > > root cause.
+> > > 
+> > > Since the last discussion, we have analyzed the D-state processes further
+> > > and identified that the long wait time is caused by jbd2_log_wait_commit.
+> > > This wait happens because user tasks call into this function during
+> > > fsync/fdatasync and it can take tens of milliseconds to complete. When this
+> > > coincides with the freezer operation, the tasks are stuck in D state and
+> > > retried multiple times, increasing the total freeze time.
+> > > 
+> > > Although we know that jbd2 is a freezable kernel thread, we are exploring
+> > > whether freezing it earlier — or freezing certain key processes first —
+> > > could reduce this contention and improve freeze completion time.
+> > > 
+> > > 
+> > > > > > I believe it would be more useful to find sources of those freezer
+> > > > > > blockers and try to address those. Making more blocked tasks
+> > > > > > __set_task_frozen compatible sounds like a general improvement in
+> > > > > > itself.
+> > > > > we have already identified some causes of D-state tasks, many of which are
+> > > > > related to the filesystem. On some systems, certain processes frequently
+> > > > > execute ext4_sync_file, and under contention this can lead to D-state tasks.
+> > > > Please work with maintainers of those subsystems to find proper
+> > > > solutions.
+> > > We’ve pulled in the jbd2 maintainer to get feedback on whether changing the
+> > > freeze ordering for jbd2 is safe or if there’s a better approach to avoid
+> > > the repeated retries caused by this wait.
+> > > 
+> 
 
