@@ -1,112 +1,117 @@
-Return-Path: <linux-pm+bounces-32361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32362-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9CCCB259BD
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 05:14:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41D10B25A53
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 06:13:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB0B9682B4E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 03:14:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 406955A4817
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 04:13:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C10E17A2EC;
-	Thu, 14 Aug 2025 03:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A491E1C84B2;
+	Thu, 14 Aug 2025 04:13:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="QRWt+HcY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="udFrMsi+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41723234;
-	Thu, 14 Aug 2025 03:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134962FF645
+	for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 04:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755141262; cv=none; b=qEpsrxtQ6rR6kyqZcGZZWBr2IbN+L8zJDHeOneymDBc5jU29YaKCkKy95HmnFQ/UExPqKx3qojJzocfXuOrzZx0TDa+UFXYU0EXW0vKcxnaecQSNFK2Ru5x86k5AR+qqVJjiDbwdgOrLOkOWdR7evB1qfuqLDsjfqwbNnbTxGxM=
+	t=1755144800; cv=none; b=nYmngQG0dnA8kzH2OCzOe2IKFwkxA5gwTmLEUORA1dX4n4j9dvEYvep7h49VUSSoswIiLv+DfvL3VSmXefu5cy+oW2Frs3fZ4P5y2/SixtOXwChjCJXLiWa8kQC2J1YAODQldZ1mthsdClRTDrQtZJK6bEQLBiMNlJJSQi7XBRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755141262; c=relaxed/simple;
-	bh=S+mDtH3a7GZVI6PI7WfqUUtB/fen0VDRqapFmW5O4LA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YIwAZjD+UY0mxWJTsliFREXoauXPeXpHZ14id8fnOdbwGemfwJllN5+ABJLcUPlNqRWPzM4iNVgY2wAqt+tugSzYH6DexcIw3FQy3ZANGgRtmhGsL+aEqDQcJk+eF919PLKstX83+5PdfSwf/8ikLmWgQIoJB++4G5H8cqzf4cM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=QRWt+HcY; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4c2VhS5zZWz9sRc;
-	Thu, 14 Aug 2025 05:14:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1755141256;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pkqq7e1ThN32hUKBUrJr8poP7PhUWYYFk5fFFdUqYjg=;
-	b=QRWt+HcYBIqHEkzHNygG1zmigwKE5063xKHJjIFoxWRKv+UJ/m+HpkHYoLoWnIuRaTUgPS
-	1cclCYAwEskdOFMw+sMzVYfLEtLHGzMIgSTAfzV59PE6tUyT/37QZ2Xe4gmKxyJxEToao5
-	XVqnBAi7AgUupdkixVqqBzj8SDttN9qYWgLtgwDem9fYIzBYrDrijFwF0y+ynLd/czv5R5
-	BOsEelkb4GYBXictp1RLl5JpxJklmUhEZVAvBDxB7CQexIEmPd245b05U+9PIeASqJnT2H
-	VbECsykcH4H4noOx7VyILLLbhReL68sLt//gIRCYZ2t7GDsQ+0acyRVfNMDgow==
-Message-ID: <519cd75a-50f2-4c9e-8a53-82ffb9cc0a8d@mailbox.org>
-Date: Thu, 14 Aug 2025 05:14:13 +0200
+	s=arc-20240116; t=1755144800; c=relaxed/simple;
+	bh=VGzEBobUnqTenM6o2yCYtZykv7kCalxd6Xw2oMoXnPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aZrkJNLUn6f+Qveeh70gStjyvvT/Z820RLI2XgNz6q1OGjfkLk8Rg/jnyysd55pMUBQm9X4YFcW6yof8mVa5D7HDdIeVhi4U51wh3gbC0vNAAL9EXo6HxvgUkBNMdlyghdYRHOjQNqilOJZ6e2nrIxlnoH5s3C3RUu/fYAfmE68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=udFrMsi+; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-76e2e614b84so577259b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Aug 2025 21:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755144798; x=1755749598; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wzto4+R4SEpsXQvu35Am9g0bxExsmpRAPRKsrODRUCM=;
+        b=udFrMsi+sWQWpPTCVJQnbUBDRJ7SgIrcbPOqxQTZwc31tnNq/0cYHIgzzPz/HjOMvK
+         X6PE4Pj2ZdzANvP7pGRY+qxMaON5pgLsQJ6jo61lC8Ek4Z+68EAthLi+GCO8yCRRKJ/f
+         W00JfWphXoqqp7xKPlUP6VWgjOYSb+ipTlgRRhx8rDh8Q5oLj6gtRK7qNc72yInOWrHo
+         3ejEftkLGa/mcsilQpy3KpDyCseiPlwQmofsFm60sva6GIUvoPe1meTgmkfYsMz+0991
+         kzkT3cuhtvhuziJD+sJb1DE9hGIsjv7YiF14xclSSSedkK5uZT5ZxG2ElmVdhepYWFL7
+         wubg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755144798; x=1755749598;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wzto4+R4SEpsXQvu35Am9g0bxExsmpRAPRKsrODRUCM=;
+        b=MhYtogar4qDQcVSkqilENw+zXhRb4WjrDciyd7bOoa4pRJKJHaP3B0xkYUU71giH6r
+         6wq2ECqxwbOUBzzToGJY7tyJYw6sBnLnxdCOOXQOYLiuqNpsZei3EV4iCDgULX6OBVza
+         kd1hA9fn7z9muc9hv0oBR3TQU1uOyRKWByin9uCiL3xfsY/D78KQvSwDZKR+8J3kcGsS
+         Uq9D1zM3c6glpsP4jzYcEow/RHdKgnPBy/ZXw4R6qZf6IMz6ofjKzgpS4zAwJfbJCRx1
+         PfDK4FqwZUaoGzU+Ka6J0qJWp82kT8igGzthuKhvjArCG4XWjlJkcnEbhgOQLJ2HcC7n
+         /vSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfe7mfsl+nxBVqbknaD/ugW5F9gICryhJNByM5U3uy0qIlCYAeMdRy8tAuiJooef8Tf2MWLlFsAw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHL4jRCXsyGouBvo8EBz9SWaPEGAN+zNdfogGWdUPbxIXk3IHc
+	EUx6mOKB9WayQbsSLsGKwG5lHgEt7KL0Ch0ysKs5hS3xjeJSnQLSlJoH6F6yWPlP7Co=
+X-Gm-Gg: ASbGnctQZyZTksD39R1FprODAPBpfGiLbmfeJdVYGoY8yO9BD7gcx2TlZ4GeBxqU5jS
+	zAPRJD+pl5OSaVFthTV3v3HNn7sHCQxxYXkR6rAeeU4B1/Cn5iU9JGdKEneGwNRm5k2fDh3Ls2s
+	T9R7phXHlfBh7P6ljMyJuWfMB5ScgbSTtmchHe+mswzvds/cSOxa0YIk2NeYSsb3G34LHzCqyCn
+	578HxRCD6Wbm41BmKnHOfPpfY2lwhZN9qkmxNi4dIhtRpxcmnZEw/+ItLzE5UMDxfdNOuVxa7ul
+	fCpF4Xg5W9HCfmALCjjTXVGzbkxlWig0CpsyE6WfAO1Dv0I7YX8xXbUMsHvdDouZ6zl2V2TRqrF
+	XsX4FvT1J3BlLkzj++CAohy+Q
+X-Google-Smtp-Source: AGHT+IHuZAqDG+bKwN4mmEbOegBcVFPvD6aKGH7LaHe89lphIokLJFFNQE++EiGJ4ANYP7KMAZ7a4Q==
+X-Received: by 2002:a05:6a00:9a7:b0:76b:e936:607 with SMTP id d2e1a72fcca58-76e2f9310f7mr2697735b3a.0.1755144798295;
+        Wed, 13 Aug 2025 21:13:18 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bcce6f474sm32881328b3a.4.2025.08.13.21.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 21:13:17 -0700 (PDT)
+Date: Thu, 14 Aug 2025 09:43:15 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: cpumask: rename CpumaskVar::as[_mut]_ref to
+ from_raw[_mut]
+Message-ID: <20250814041315.ywuxwp627jiphiqf@vireshk-i7>
+References: <20250813-cpumask-asref-v1-1-1242aa8e0cfc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/2] thermal: rcar_gen3: Add support for per-SoC
- default trim values
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org
-Cc: =?UTF-8?Q?Niklas_S=C3=B6derlund?=
- <niklas.soderlund+renesas@ragnatech.se>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>,
- Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
-References: <20250625181739.28391-1-marek.vasut+renesas@mailbox.org>
- <86f5260f-6625-4e2d-88a8-013143922fb9@linaro.org>
- <a65ae3e9-8970-46b4-a80f-3654daa7a0c2@mailbox.org>
- <5ffb67b8-cded-412b-881c-14179c2ba3b8@linaro.org>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <5ffb67b8-cded-412b-881c-14179c2ba3b8@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: roumbnqnzywoyppt6zsahrcn53u8ghxe
-X-MBO-RS-ID: c7ca27327942fdd45a6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250813-cpumask-asref-v1-1-1242aa8e0cfc@google.com>
 
-On 8/14/25 12:00 AM, Daniel Lezcano wrote:
-> On 13/08/2025 22:37, Marek Vasut wrote:
->> On 8/1/25 11:59 AM, Daniel Lezcano wrote:
->>> On 25/06/2025 20:16, Marek Vasut wrote:
->>>> The Working Sample R-Car SoCs may not yet have thermal sensor trimming
->>>> values programmed into fuses, those fuses are blank instead. For such
->>>> SoCs, the driver includes fallback trimming values. Those values are
->>>> currently applied to all SoCs which use this driver.
->>>>
->>>> Introduce support for per-SoC fallback trimming values in preparation
->>>> for SoCs which do not use these current trimming values. No functional
->>>> change is intended here.
->>>>
->>>> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
->>>> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
->>>> ---
->>>> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
->>>
->>> Applied, thanks
->> Is this series supposed to be in linux-next by now ?
->>
->> I don't see it either on git.kernel.org thermal group tree or your 
->> tree, where was the series applied to ?
+On 13-08-25, 07:54, Alice Ryhl wrote:
+> The prefix as_* shouldn't be used for constructors. For further
+> motivation, see commit 2f5606afa4c2 ("device: rust: rename
+> Device::as_ref() to Device::from_raw()").
 > 
-> 
-> Sorry I did push the branch.
-> 
-> It is in the thermal bleeding-edge branch now and will go to linux-next 
-> in a couple of days
-Nice, thank you !
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+>  rust/kernel/cpufreq.rs | 2 +-
+>  rust/kernel/cpumask.rs | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+
+Applied. Thanks.
+
+-- 
+viresh
 
