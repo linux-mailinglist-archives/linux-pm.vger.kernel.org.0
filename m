@@ -1,132 +1,101 @@
-Return-Path: <linux-pm+bounces-32387-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32388-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E8DB26079
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 11:15:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49095B260E4
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 11:28:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E0475E03C0
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:10:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064271C234FD
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE4A2F60AF;
-	Thu, 14 Aug 2025 09:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xf8P/+q7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8E52E92CD;
+	Thu, 14 Aug 2025 09:24:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0AC2EAD0D;
-	Thu, 14 Aug 2025 09:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A4027FD76;
+	Thu, 14 Aug 2025 09:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755162458; cv=none; b=tas6mO3ZA3tLpnYP10BhaedqODzEiQejs49esWTvt7yrRcfYcYkeshENuljoHUfBqJ+KIg3ymyyE92+kHXH3/M5tn/18Axu3Rx6zJVQqL9nHPYmrNC/SrQe6ud143fKSLAtzMv0LImSFpJvwVjkPSbzawVGk9mFtPfTtA8qweeg=
+	t=1755163489; cv=none; b=JeCID+OGJW7cs1WJpOfO3dotx2ZqLEL1sLNwK3aQr1RmpFnYLzwmj8pZTblotq6MCRxkKltEFGzAbvr38kouwLh6TbtSE/rxyP3+Oo2H4DLQ8Vf5IhK7efZvRw2R3WYcdrOgqNSQKYdIiPGwtxp8DQYOKNwGS0TpJF2zP3sAcQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755162458; c=relaxed/simple;
-	bh=w8hCbPXfmihu7zR72JNGg3vbfSeuvBM7obhn0s4J7IU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KsgTihtT+eq8SXnymtHhw9hHT8Zg25T9G7R97Isd5tUEygr5UF7zHki3daTGozDYLPyVZrhAwrkyU1jWPOO9hxC0SkLfzprSqpfhT+T8BOMPsYQ9JifkTOxS+79ez3JzQXqEL+BmKbm+9nakEtxGv/DCChmiOkUlxNxLazKw3hQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xf8P/+q7; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b4717006ea9so75049a12.0;
-        Thu, 14 Aug 2025 02:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755162455; x=1755767255; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L58BGBn53CdEaQI/pHX66dG5GkpXtAAIQcYXknidNg4=;
-        b=Xf8P/+q7FP7Sj6wUfRijJLt6MHzwIgFGKK3Hy+/iaRBWNmJuKnEgp6Q4heqzKmy/ns
-         CbI6us6t0QerSP9xU4HCyBAnFO47uXNHXmDTEWFDE4aFl3F5tw1EMXrHhwaSP+Q94Yle
-         hUbYVGt33Rl4FUjof+vKYA3XEAGntJgIiKneoa6py0QbM1xesztFcO0PJlfLO/KPayfk
-         KbzFIZVWKytOYTo70RHDQFLmhTYeuaKaxxOkBZxC70kMplRE79PdCvYuqPa8Hq/oyrDP
-         ieTWI3j8jVmZRD9aRu9AZuZL+UhL997ePMlnNvAUIbatTYk+36efO+YO7O0aq6Vs8DaZ
-         7qxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755162455; x=1755767255;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L58BGBn53CdEaQI/pHX66dG5GkpXtAAIQcYXknidNg4=;
-        b=S1DHe7qi75DsfyW67moRz6bTP62osfv4ZupVGK66+/6oRl/PSBBrpxouOA3s0CK+/J
-         eVeuQ1mNW+ATUkgbrOub/RJu5cMNsZuFZI2O2s01GlVIudT15VlPvi31NoSysrV0I/os
-         aVYTDNLR8S3lb7pSeDeQD1Y4n5d82Sb6ASiJ8HH9C+AgCUMz/yZuOQyTSR2XsVIWAvkT
-         1tfHA2IIUyf7STmWmv5VCsH0unkXUZrLNgzaVI/RBKtSQ2XqptqYMHuv1EtcxLTj0nXV
-         Nr3ERjmLyxOCGWQ2sOEZaekqoFppCx2c1336nLoWSXz6WSP4N+InZTmzBoBl5l4qO17R
-         La1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU2AkLqzX62Vycq+X6usAtf/cvgf3AuXGjPMkTI5weB5qRSez+BRbQPp0VwlXAi8l6t6j5XcN6i@vger.kernel.org, AJvYcCUwuph8ybeUT2N+0zvQDwO/H6dav7+g/3s7KdJDGD4tHT73X+tE+FVegC8zuKNl182WSqoaLbPtQjI=@vger.kernel.org, AJvYcCV10rheNuYpNIv9Osg6EBPwerim/bHVHpgLsdwESRLoMhXEXTYw3Io03QZozPaa+nRh+WYL+3hoX80D@vger.kernel.org, AJvYcCVwLNHl+ID6/Mk6+JKZ3yCFOn5nOsH7AfmBmJybSY1PXDzdUTPH/dVuvZ036iQnRjUFqnHiwu3BFaPpDFL6@vger.kernel.org, AJvYcCWU64E2Bp0aS+//LKch0vW1UXHMSEz6PgT8bo77hg7nGHusEgUdCYOp4WqjVpmDmrVSGSl9wQN6LXE8PTZzXhG+@vger.kernel.org, AJvYcCWdbDoZ13ifKjijbNra1QB+3WrB9S7KIM3u7yTRScbvEWDRq5R5A/ySrT9+wgKeLQMo1WtBVxdQAJJwyw==@vger.kernel.org, AJvYcCX445xNq7eU4zuJA/nSWvEm96C59lCZYfvEIUslFz8g4O8hivF2aQ0VWYkKENKl2/90MdduNfdC33C5@vger.kernel.org, AJvYcCXDrwJ8uyybzhIeAp2qlzh0mixgbHHjA9WAqkaFZmBkGgDrf0QyPf6JONV3+Y/HKmq4mupee4IslTmAYfGCXto=@vger.kernel.org, AJvYcCXfV82ubBzNsUdCdy60J2WTzXOtVfNtxdObhOckteiU0awOI7UNKhP/w/7Ds2KXNuiCEi5+9Jtya9bnx1W67A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YypINaXScbYWu7AGqasYGV8fdyR3+x9hPlk+3U2Vr5IEgIvclm8
-	TFzwmHPLFMzEx3AggrVZ99bzcKxt2fjFBRfTRbQewEezlSqj6NnVPkWqnjD/lUMDNgUmSe3GZSF
-	lykirKCdz7P7+z8jZZE+LKaVYuYSSCMf78Th3BwE=
-X-Gm-Gg: ASbGncvc/qynT4YZKqaP9Sy1oQaLptA0kKszFqn87yqjhQVN1bnzA5BpLAQtpKgyJxv
-	DNf6bsK2GhoDrE2MqVcHfNhoyX9mM9xiDFQLIJN6MYP4WIWtzgsaihTxUhWYtMpqW++OdzckXGL
-	arntGWRa5tL8xRO6g7m32YglmVjV7rPn7awFAh53Z28pQXssmWj0nmaGr8wApLqHwNurFUA/gkV
-	f6a
-X-Google-Smtp-Source: AGHT+IGz6bvQQDm0FDjw3b6Z4zK6LWUctdhJrkeBml6MEiQLxKVKVm/2E3KeNDssnbiZd1rTjK+/reiEgrFQf4jGtow=
-X-Received: by 2002:a17:902:ec8d:b0:240:5c13:979a with SMTP id
- d9443c01a7336-2430d22a83dmr44771485ad.9.1755162454741; Thu, 14 Aug 2025
- 02:07:34 -0700 (PDT)
+	s=arc-20240116; t=1755163489; c=relaxed/simple;
+	bh=YxB9QQd/l0CoRAo14FnGKrVxm4Mi8uhaqKkyvouUgDM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nSxKLoGYZXE+G1hAx0XPk190/lQIY1Ky3Ssi7M6IfTzghU5l9NroFJAUmFHV+wgy19NMjjc/K2BF5HUPm6Mejn/8mXr6i8Ym13AL9C7MNESax2Wn4m1UMx0okWy8leDBuX/gELKe97QMoKsf6klYpBIcaFaLaKH23AW7bZDWaxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 80e2862e78f011f0b29709d653e92f7d-20250814
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:353daeb1-bbb7-4731-b7de-538d556ff993,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:4e9b3f680a37dbdb16fbf95a0e950642,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 80e2862e78f011f0b29709d653e92f7d-20250814
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1219007302; Thu, 14 Aug 2025 17:24:39 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 9D6DDE008FA5;
+	Thu, 14 Aug 2025 17:24:39 +0800 (CST)
+X-ns-mid: postfix-689DAB57-548626715
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 1BE24E008FA3;
+	Thu, 14 Aug 2025 17:24:39 +0800 (CST)
+Message-ID: <3f901678-c75e-48ac-985a-2834f9ba4c8f@kylinos.cn>
+Date: Thu, 14 Aug 2025 17:24:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250813-core-cstr-cstrings-v2-0-00be80fc541b@gmail.com>
- <34d384af-6123-4602-bde0-85ca3d14fe09@sirena.org.uk> <aJ2dST9C8QLUcftA@google.com>
-In-Reply-To: <aJ2dST9C8QLUcftA@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 14 Aug 2025 11:07:23 +0200
-X-Gm-Features: Ac12FXw9McZU8Dlo3fmof7Lor15J3uB_TM7gEYyMiiYtjURPvTaxggH_LYJAg0o
-Message-ID: <CANiq72nnXG8mzGD5ydu1pMpaBAHTWvfQWSo0w38xefu=1JSURA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/19] rust: replace `kernel::c_str!` with C-Strings
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Mark Brown <broonie@debian.org>, Tamir Duberstein <tamird@gmail.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cpufreq: Return current frequency when frequency table
+ is unavailable
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "rafael J . wysocki" <rafael@kernel.org>,
+ zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250814085216.358207-1-zhangzihuan@kylinos.cn>
+ <20250814090201.pdtvxqq3st65iooq@vireshk-i7>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <20250814090201.pdtvxqq3st65iooq@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 14, 2025 at 10:24=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
-wrote:
->
-> Tamir mentioned to me that he ran into a daily limit on the number of
-> emails he could send.
 
-He is posting the updates around the migration in Zulip:
+=E5=9C=A8 2025/8/14 17:02, Viresh Kumar =E5=86=99=E9=81=93:
+> On 14-08-25, 16:52, Zihuan Zhang wrote:
+>> In cases where the CPU frequency table (freq_table) is not available,
+>> the __resolve_freq() function will now return the current frequency
+>> (policy->cur) instead of the requested target frequency. This ensures
+>> that the system doesn't return an invalid or uninitialized frequency
+>> value when frequency scaling is not supported or not initialized.
+>>
+>> This change improves the stability of the frequency scaling logic when
+>> the CPU frequency table is not populated, preventing errors related
+>> to unavailable frequency tables.
+> Is there a real problem you are facing ? Or a code that path can do
+> some harm ? I think this patch may end up breaking users.
 
-    https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General/top=
-ic/CStr.20migration/near/527957336
+Haven=E2=80=99t yet.
 
-Cheers,
-Miguel
+I just feel that it might not be ideal to set a frequency when the=20
+frequency table is unavailable.
+
+Perhaps adding a log or warning when the frequency table is missing=20
+could be a better approach.
+
 
