@@ -1,70 +1,83 @@
-Return-Path: <linux-pm+bounces-32377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32379-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ABBBB25D90
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:37:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15DBEB25D78
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 09:34:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22A4B58516B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 07:33:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB5D1B637AD
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Aug 2025 07:32:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEBA277011;
-	Thu, 14 Aug 2025 07:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="stogpr7V"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF90426C384;
+	Thu, 14 Aug 2025 07:32:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6714526C398;
-	Thu, 14 Aug 2025 07:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DF826AA88;
+	Thu, 14 Aug 2025 07:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755156633; cv=none; b=h187jAin3oFa/FRSuunEDLss7euCcH8M3XqKbZeLQXPdZUf8pHEZPmHFiAFVv/rkSmUuFrKKPodTPkQC0tJcwDplMEasNMJCdOXGal4g07/ojxUfBz6ovbDs9YR+J3nRz99yAAd0hRdz3Rp3RCxOkDNlykC1w0UY7z4TLfCCEuo=
+	t=1755156720; cv=none; b=juXMDO192KdJP6LSnOz5rgoov7yxga55eGZnLJXvgviYwr+DhmmJdQa4bVL2cl5o3Uq4rmpCDapFD8Rd1u3mmRQz7koyMoKVpAoQ6ezRm4edwdNHh/msQO7YOVmXMVGSmo64HHwQi2wYXVQNQzfH1kcP9yA5NUxzUXO0UpVcrmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755156633; c=relaxed/simple;
-	bh=DkySQ9C6S2kjZcTV+DRFTNGRLwaEe/YY6YKOlioQj/4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p1PYnMw+iMyiNatfP2nhpNb8heSqgFjZb4LML0XrKe3xKnHNZsQ/evp6S5ovAKDBjYA3k03hz3a0bf0vfb06L0H3HM+M1wuxZonrTL6OeFtVYE+pQLZUIXOYBuF6vLnS51w/wInamoD7RGtOz40U9Q83dYzwIZyPH/vZRPJgYVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=stogpr7V; arc=none smtp.client-ip=220.130.44.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
-X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
-	s=richtek; t=1755156627;
-	bh=x6e4i3YoKlDiQe2/JuPqV82fMICTL+9U6m2WYDkZjpo=; l=2264;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=stogpr7V5+s86LPBnv+mtcDQhWLvdk+gu6uV95mJEJMDfQNKS1j8Fjfh6LKWw9XYe
-	 tZ1RvTTS2u6CvwfReUYKXkk2Ug2AXb9NYSdO9kgHa8LHzI7yyCrB7jvferWnKUNYss
-	 olJ/m5mSZenL5Tpbji+cTugQRJ86tSA5D8h23cPa5FdtyfuL9xjxWF2Q7bQUI3elm2
-	 AiiH2KiPu0syQuTa2c7Dx6ZfZlSfmuC42oPj/LF4MMfbZSig41hojcG0o+pP/HOnaZ
-	 IP9NaBNnSuodH61dTz84j0aX6vHuyVK9kQL88Gs8gDYAcGyngeACKCmPszuoc2A2gx
-	 0JiEtGr5ilVPg==
-Received: from 192.168.10.46
-	by mg.richtek.com with MailGates ESMTPS Server V6.0(817463:0:AUTH_RELAY)
-	(envelope-from <cy_huang@richtek.com>)
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Thu, 14 Aug 2025 15:30:19 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 14 Aug
- 2025 15:30:19 +0800
-Received: from git-send.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1544.11 via Frontend
- Transport; Thu, 14 Aug 2025 15:30:19 +0800
-From: <cy_huang@richtek.com>
-To: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>
-CC: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	"ChiYuan Huang" <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v2 3/3] Documentation: power: rt9756: Document exported sysfs entries
-Date: Thu, 14 Aug 2025 15:31:08 +0800
-Message-ID: <33c2cd77282b78e9b29e59959f27a52d86593ebf.1755154950.git.cy_huang@richtek.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <cover.1755154950.git.cy_huang@richtek.com>
-References: <cover.1755154950.git.cy_huang@richtek.com>
+	s=arc-20240116; t=1755156720; c=relaxed/simple;
+	bh=Ek71y/Vysl6TXj+/+lo0qw6uZeFpzglWXMM5szs8uNY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=aLWaG5H5uMx6sf3F69YspNj0hcickZeYVZ4pLA4Y7goCNOGH5xN2fcKUtZLdok4qSSvZf2cgIeh0XQmPHUrbQzJbtJ1DxJPK5C2w9IsEJv3fCX7BhUKbF8bUgr5JYK22iGGSC3hI7mo03K3YamUweZ290mHvweEQ837VI3g43XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: be08fdf478e011f0b29709d653e92f7d-20250814
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
+	DN_TRUSTED, SRC_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:a1cca3fd-f7f4-4ebc-a19b-8c0e60923681,IP:10,
+	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-INFO: VERSION:1.1.45,REQID:a1cca3fd-f7f4-4ebc-a19b-8c0e60923681,IP:10,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:bea4d67dd8856528292b6e946ba2286f,BulkI
+	D:250814153152UFZ3QEB5,BulkQuantity:0,Recheck:0,SF:17|19|23|38|43|66|74|78
+	|81|82|102,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
+	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
+	0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-UUID: be08fdf478e011f0b29709d653e92f7d-20250814
+X-User: tianyaxiong@kylinos.cn
+Received: from localhost.localdomain [(175.2.165.11)] by mailgw.kylinos.cn
+	(envelope-from <tianyaxiong@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1345372979; Thu, 14 Aug 2025 15:31:50 +0800
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	lenb@kernel.org,
+	robert.moore@intel.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	acpica-devel@lists.linux.dev,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>,
+	Shaobo Huang <huangshaobo2075@phytium.com.cn>,
+	Yinfeng Wang <wangyinfeng@phytium.com.cn>,
+	Xu Wang <wangxu@phytium.com.cn>
+Subject: [PATCH v2 1/2] cpuidle: Add interface to get cpuidle_driver by CPU ID
+Date: Thu, 14 Aug 2025 15:31:44 +0800
+Message-Id: <20250814073144.1022355-1-tianyaxiong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250814072934.1016694-1-tianyaxiong@kylinos.cn>
+References: <20250814072934.1016694-1-tianyaxiong@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,83 +85,70 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Some drivers need to obtain the cpuidle_driver via CPU ID before the
+cpuidle_device is registered. Therefore, this interface is added.
 
-Document the settings exported by rt9756 charger driver through sysfs
-entries:
-
-- watchdog_timer
-- battery_voltage
-- battery_current
-- operation_mode
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+Tested-by: Shaobo Huang <huangshaobo2075@phytium.com.cn>
+Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+Signed-off-by: Shaobo Huang <huangshaobo2075@phytium.com.cn>
+Signed-off-by: Yinfeng Wang <wangyinfeng@phytium.com.cn>
+Signed-off-by: Xu Wang<wangxu@phytium.com.cn>
 ---
- .../ABI/testing/sysfs-class-power-rt9756      | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9756
+ drivers/cpuidle/driver.c | 16 ++++++++++++++++
+ include/linux/cpuidle.h  |  4 ++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9756 b/Documentation/ABI/testing/sysfs-class-power-rt9756
-new file mode 100644
-index 000000000000..2d0f7ef1b855
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9756
-@@ -0,0 +1,52 @@
-+What:		/sys/class/power_supply/rt9756-*/watchdog_timer
-+Date:		Aug 2025
-+KernelVersion:	6.17
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and sets the watchdog timer when rt9756 charger
-+		operates in charging mode. When the timer expires, the device
-+		will disable the charging. To prevent the timer expires, any
-+		host communication can make the timer restarted.
+diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+index 9bbfa594c442..8647f8165863 100644
+--- a/drivers/cpuidle/driver.c
++++ b/drivers/cpuidle/driver.c
+@@ -353,6 +353,22 @@ struct cpuidle_driver *cpuidle_get_cpu_driver(struct cpuidle_device *dev)
+ }
+ EXPORT_SYMBOL_GPL(cpuidle_get_cpu_driver);
+ 
++/**
++ * cpuidle_get_cpu_driver_by_cpu - return the driver registered for a CPU.
++ * @cpu_num: a valid cpu num
++ *
++ * Returns a struct cpuidle_driver pointer, or NULL if no driver is registered
++ * for the CPU associated with @cpu.
++ */
++struct cpuidle_driver *cpuidle_get_cpu_driver_by_cpu(int cpu_num)
++{
++	if (cpu_num < 0 || cpu_num >= nr_cpu_ids)
++		return NULL;
 +
-+		Access: Read, Write
++	return __cpuidle_get_cpu_driver(cpu_num);
++}
++EXPORT_SYMBOL_GPL(cpuidle_get_cpu_driver_by_cpu);
 +
-+		Valid values:
-+		- 500, 1000, 5000, 30000, 40000, 80000, 128000 or 255000 (milliseconds),
-+		- 0: disabled
+ /**
+  * cpuidle_driver_state_disabled - Disable or enable an idle state
+  * @drv: cpuidle driver owning the state
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index a9ee4fe55dcf..aebbaae6a501 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -200,6 +200,7 @@ extern void cpuidle_disable_device(struct cpuidle_device *dev);
+ extern int cpuidle_play_dead(void);
+ 
+ extern struct cpuidle_driver *cpuidle_get_cpu_driver(struct cpuidle_device *dev);
++extern struct cpuidle_driver *cpuidle_get_cpu_driver_by_cpu(int cpu_num);
+ static inline struct cpuidle_device *cpuidle_get_device(void)
+ {return __this_cpu_read(cpuidle_devices); }
+ #else
+@@ -240,6 +241,9 @@ static inline void cpuidle_disable_device(struct cpuidle_device *dev) { }
+ static inline int cpuidle_play_dead(void) {return -ENODEV; }
+ static inline struct cpuidle_driver *cpuidle_get_cpu_driver(
+ 	struct cpuidle_device *dev) {return NULL; }
 +
-+What:		/sys/class/power_supply/rt9756-*/battery_voltage
-+Date:		Aug 2025
-+KernelVersion:	6.17
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		Reports the current BAT voltage.
-+
-+		Access: Read-Only
-+
-+		Valid values: Represented in microvolts
-+
-+What:		/sys/class/power_supply/rt9756-*/battery_current
-+Date:		Aug 2025
-+KernelVersion:	6.17
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		Reports the current BAT current.
-+
-+		Access: Read-Only
-+
-+		Valid values: Represented in microamps
-+
-+What:		/sys/class/power_supply/rt9756-*/operation_mode
-+Date:		Aug 2025
-+KernelVersion:	6.17
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and set the operation mode when rt9756 charger
-+		operates in charging phase. If 'bypass' mode is used, internal
-+		path will connect vbus directly to vbat. Else, default 'div2'
-+		mode for the switch-cap charging.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 'bypass' or 'div2'
++static inline struct cpuidle_driver *cpuidle_get_cpu_driver_by_cpu(
++	int cpu_num) {return NULL; };
+ static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
+ #endif
+ 
 -- 
-2.34.1
+2.25.1
 
 
