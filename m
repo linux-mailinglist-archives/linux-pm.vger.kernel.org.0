@@ -1,164 +1,132 @@
-Return-Path: <linux-pm+bounces-32419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29070B2770C
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 05:48:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A1A6B27715
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 05:49:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B7365E32FF
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 03:48:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E403A1CE5A6D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 03:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB241EB9E1;
-	Fri, 15 Aug 2025 03:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J3Abb0hL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78FD21A43C;
+	Fri, 15 Aug 2025 03:49:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332F914A8B;
-	Fri, 15 Aug 2025 03:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475C21514F7;
+	Fri, 15 Aug 2025 03:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755229684; cv=none; b=LIVwQFlTtdhq0XG8Fxe8YWLNuw9yUo2jDA9qHQc4cUifDOuG6d6Emj5OE6Xvxv88Z4lrfR+Hx4uAmnOBEn0sh63zgQssCpu+OcdLTlmLmMJcujMAtoXMqWwaYgb82I7TWpdm+i8fz2OKq3ONg9BRYk0qLJylgAreIXFWlXbIizo=
+	t=1755229744; cv=none; b=f9KBPNPbUYYjIk0BvWim7bMwVRQDUXDP0XwPYMuwNuVbbMT8h1VIEceBjtetVTQ/MATeG7GeQuzTJj46knCLzmnp4uM4twi8r5HHL3uR3lIosvXWI/5CP5K+4p90wpavTV3vLhom0pCACJRHCZweXXlEtVRnG7Zvu/9QE+h12iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755229684; c=relaxed/simple;
-	bh=JEgTnVH/BV69PpBuDgQi6kkM93lGAGsa5M0gQm+th7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rcbok6c4I1UWaFmMCwCMIKNGWbCI85ELbesc7GjE6c/cjzc/lVILY1xyr4t3tDsxngWu/Uqmol5CIzS0iH8eylqsEiLaQEthczo4KlLVGbvzs8zlmUB8hpr26Z5vfCx0ZgQemGpIYXVtcIFlMhlbY+QJ9mjZ/6NlDMeYYFFj8Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J3Abb0hL; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755229684; x=1786765684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JEgTnVH/BV69PpBuDgQi6kkM93lGAGsa5M0gQm+th7k=;
-  b=J3Abb0hLomkxmIYH5aUN7krmlpNOL/2KEQrEr5UIuAAKqfkv77BRxAO9
-   irymnnwTUNNqVwAw61sXfiORdFEW9amQIeaSTaBejwvb7FKk54n/brljv
-   bdU2Xuu4pbmry4LXFSDST6Y4N/Zgr7TbTVGqd2vm/MvWu90RtpECYSRYB
-   7cPFUU+glpHrFxgrMh3RFQdHDxR1x8cbI/bwrOPE7q7cAjn6QhswYGddo
-   EcjLG294zbG4K80el2hO4gJEzHQMbTFWcix4WUasJO2KmRB0H99AGUPPl
-   sz6D+bmvl4diFYqzoxI9o39fBibblyvb5c3BRr8mqd6jL+AizkcGRl6hx
-   Q==;
-X-CSE-ConnectionGUID: CIHLorH4S6OTBkiflkc6yg==
-X-CSE-MsgGUID: 22iW8UdeRN28PDb5iy4A1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11522"; a="57466905"
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="57466905"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 20:48:03 -0700
-X-CSE-ConnectionGUID: vGRT3hNERv619L2yTCUTnw==
-X-CSE-MsgGUID: hTW5MDy3Sx6WZv1OySJ5/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="166902366"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 14 Aug 2025 20:47:58 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1umlPu-000BWK-1k;
-	Fri, 15 Aug 2025 03:47:48 +0000
-Date: Fri, 15 Aug 2025 11:47:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>, catalin.marinas@arm.com,
-	will@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-	beata.michalska@arm.com, sudeep.holla@arm.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linuxarm@huawei.com, jonathan.cameron@huawei.com,
-	vincent.guittot@linaro.org, yangyicong@hisilicon.com,
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com,
-	linhongye@h-partners.com, zhenglifeng1@huawei.com
-Subject: Re: [PATCH v4 3/3] arm64: topology: Setup AMU FIE for online CPUs
- only
-Message-ID: <202508151158.Hm9U6le6-lkp@intel.com>
-References: <20250814072853.3426386-4-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1755229744; c=relaxed/simple;
+	bh=ki1zFA8tRs89Elc70O5H4CW/ziEqfYX25e9J/puZg9g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=F2u5gYQVGSyV5SZO54BsuwqStOq95jw39qfU80GqT/otLJ+31j1Y61qhTqsEWLELKknBMwttDyA+POuekq5JJdVd3rHF4yCdya53i4gp0XlTHhfFHNHr0uTLnxLJM0vHONlemdZvhBzGowCqXnFS3zM5EU+y4h186qPunMYaIRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4c37Q10ClbzvX6Y;
+	Fri, 15 Aug 2025 11:48:57 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id 71B9B180485;
+	Fri, 15 Aug 2025 11:48:58 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
+ (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 15 Aug
+ 2025 11:48:57 +0800
+Message-ID: <7f5b8d19-0f82-cffc-e0f7-087bc4c84dc7@hisilicon.com>
+Date: Fri, 15 Aug 2025 11:48:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250814072853.3426386-4-zhenglifeng1@huawei.com>
-
-Hi Lifeng,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on rafael-pm/linux-next rafael-pm/bleeding-edge arm/for-next arm/fixes kvmarm/next soc/for-next linus/master v6.17-rc1 next-20250814]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lifeng-Zheng/arm64-topology-Set-scale-freq-source-only-for-the-CPUs-that-have-not-been-set-before/20250814-153732
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20250814072853.3426386-4-zhenglifeng1%40huawei.com
-patch subject: [PATCH v4 3/3] arm64: topology: Setup AMU FIE for online CPUs only
-config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20250815/202508151158.Hm9U6le6-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508151158.Hm9U6le6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508151158.Hm9U6le6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/arm64/kernel/topology.c: In function 'cpuhp_topology_online':
->> arch/arm64/kernel/topology.c:409:41: error: implicit declaration of function 'cpufreq_cpu_policy'; did you mean 'cpufreq_cpu_put'? [-Wimplicit-function-declaration]
-     409 |         struct cpufreq_policy *policy = cpufreq_cpu_policy(cpu);
-         |                                         ^~~~~~~~~~~~~~~~~~
-         |                                         cpufreq_cpu_put
-   arch/arm64/kernel/topology.c:409:41: error: initialization of 'struct cpufreq_policy *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in
+ cppc_scale_freq_workfn()
+To: Beata Michalska <beata.michalska@arm.com>
+CC: Prashant Malani <pmalani@google.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Bowen Yu <yubowen8@huawei.com>,
+	<rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <lihuisong@huawei.com>,
+	<zhenglifeng1@huawei.com>, Ionela Voinescu <ionela.voinescu@arm.com>
+References: <20250730032312.167062-1-yubowen8@huawei.com>
+ <20250730032312.167062-3-yubowen8@huawei.com>
+ <20250730063930.cercfcpjwnfbnskj@vireshk-i7>
+ <CAFivqmLkLn-92rMow+c7iEADCdh3-DEapVmtB_Qwk1a2JrwwWw@mail.gmail.com>
+ <9041c44e-b81a-879d-90cd-3ad0e8992c6c@hisilicon.com>
+ <CAFivqmLr_0BDkMhD4o6box3k9ouKek8pnY7aHX36h1Q9TaT_HA@mail.gmail.com>
+ <7a9030d0-e758-4d11-11aa-d694edaa79a0@hisilicon.com>
+ <CAFivqmJyYJ+d+TH4qYBKf_5t-AqWZuzgk2H_4nHmynTjoUHnYQ@mail.gmail.com>
+ <CAFivqm+4Mir8hgGw-HMLdW=dBYuUw1wJ4xG4a+WAtqfG1vYKXQ@mail.gmail.com>
+ <8aa1efad-8f30-9548-259a-09fccb9da48a@hisilicon.com>
+ <aJxbOSMLWyTporw1@arm.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <aJxbOSMLWyTporw1@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
 
-vim +409 arch/arm64/kernel/topology.c
 
-   406	
-   407	static int cpuhp_topology_online(unsigned int cpu)
-   408	{
- > 409		struct cpufreq_policy *policy = cpufreq_cpu_policy(cpu);
-   410	
-   411		/*
-   412		 * If the online CPUs are not all AMU FIE CPUs or the new one is already
-   413		 * an AMU FIE one, no need to set it.
-   414		 */
-   415		if (!policy || !cpumask_available(amu_fie_cpus) ||
-   416		    !cpumask_subset(policy->cpus, amu_fie_cpus) ||
-   417		    cpumask_test_cpu(cpu, amu_fie_cpus))
-   418			return 0;
-   419	
-   420		/*
-   421		 * If the new online CPU cannot pass this check, all the CPUs related to
-   422		 * the same policy should be clear from amu_fie_cpus mask, otherwise they
-   423		 * may use different source of the freq scale.
-   424		 */
-   425		if (WARN_ON(!freq_counters_valid(cpu))) {
-   426			topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH,
-   427							 policy->related_cpus);
-   428			cpumask_andnot(amu_fie_cpus, amu_fie_cpus, policy->related_cpus);
-   429			return 0;
-   430		}
-   431	
-   432		cpumask_set_cpu(cpu, amu_fie_cpus);
-   433	
-   434		topology_set_scale_freq_source(&amu_sfd, cpumask_of(cpu));
-   435	
-   436		pr_debug("CPU[%u]: counter will be used for FIE.", cpu);
-   437	
-   438		return 0;
-   439	}
-   440	
+On 13/08/2025 17:30, Beata Michalska wrote:
+> On Wed, Aug 13, 2025 at 03:15:12PM +0800, Jie Zhan wrote:
+>>
+>>
+>> On 05/08/2025 12:58, Prashant Malani wrote:
+>>> On Mon, 4 Aug 2025 at 18:12, Prashant Malani <pmalani@google.com> wrote:
+>>>>
+>>>> On Sun, 3 Aug 2025 at 23:21, Jie Zhan <zhanjie9@hisilicon.com> wrote
+>>>>> On 01/08/2025 16:58, Prashant Malani wrote:
+>>>>>> This begs the question: why is this work function being scheduled
+>>>>>> for CPUs that are in reset or offline/powered-down at all?
+>>>>>> IANAE but it sounds like it would be better to add logic to ensure this
+>>>>>> work function doesn't get scheduled/executed for CPUs that
+>>>>>> are truly offline/powered-down or in reset.
+>>>>> Yeah good question.  We may discuss that on your thread.
+>>>>
+>>>> OK.
+>>>> Quickly looking around, it sounds having in the CPPC tick function [1]
+>>>> might be a better option (one probably doesn't want to lift it beyond the
+>>>> CPPC layer, since other drivers might have different behaviour).
+>>>> One can add a cpu_online/cpu_enabled check there.
+>>>
+>>> Fixed link:
+>>> [1] https://elixir.bootlin.com/linux/v6.13/source/drivers/cpufreq/cppc_cpufreq.c#L125
+>> I don't think a cpu_online/cpu_enabled check there would help.
+>>
+>> Offlined CPUs don't make cppc_scale_freq_workfn() fail because they won't
+>> have FIE triggered.  It fails from accessing perf counters on powered-down
+>> CPUs.
+>>
+>> Perhaps the CPPC FIE needs a bit rework.  AFAICS, FIE is meant to run in
+>> ticks, but currently the CPPC FIE eventually runs in a thread due to the
+>> possible PCC path when reading CPC regs I guess.
+> Just for my benefit: the tick is being fired on a given CPU which is when an
+> irq_work is being queued. Then before this goes through the kworker and finally
+> ends up in 'cppc_scale_freq_workfn' that CPU is entering a deeper idle state ?
+Yeah.
+> Could the cppc driver register for pm notifications and cancel any pending work
+> for a CPU that is actually going down, directly or by setting some flag or smth
+> so that the final worker function is either not triggered or knows it has to
+> bail out early ?
+> (Note this is a rough idea and needs verification)
+That could be a feasible workaround, but I prefer to rework the CPPC FIE
+rather than try to fix it, i.e. FIE can run in ticks for non-PCC regs I
+suppose.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> ---
+> BR
+> Beata
+> 
 
