@@ -1,126 +1,133 @@
-Return-Path: <linux-pm+bounces-32427-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32428-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17E1DB27AF0
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 10:27:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFED1B27CFD
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 11:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 988325C555D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 08:27:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E917EB05A9A
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 09:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7EC3246787;
-	Fri, 15 Aug 2025 08:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31132D59E5;
+	Fri, 15 Aug 2025 09:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a8YFn/S3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341A710E0;
-	Fri, 15 Aug 2025 08:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADF02D4B75;
+	Fri, 15 Aug 2025 09:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755246455; cv=none; b=U7I3UwP4C0jiroLSAz8gGh4K+RYYnIGETJMIbVpY9UlHHkgliNsUK/xFI0O+gsXZabe62xNhLjGb0SrQrBoU3qUt06cjiAPRBK0NK6lITeNIixEs3iK+lbWlLk3uJtY1P3UpddJuaMzwY9A1noc8GWgMIpSJwLIQix3txN75OBM=
+	t=1755249280; cv=none; b=XH5/3Pti5Xxr5LEEqovOFOx3+ZM4CJPrfLnT7pqCQ+wC2UpUvZVX4e7JxX/nlPCkZUsncWGSJ98O+jjAsNDa9HG8lGegyWhE5xqBtnGZy2klzGwagn+d8dfDVczZ9sPXFgft/pp5MLMLALj3pLxTdS/c+1uNYObYI4XC0o0Cv2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755246455; c=relaxed/simple;
-	bh=RcZMl5K/x5WJWGxz7wXDHxJSURQrTCmZO/JmwgRl6B4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mlcrAzbmh81A+K8U5Fep+KPWBrcj3prYcbaL86xlstg83M5JywQ9C4Pti3CErLT4aR3Y6IHQ2mKu3/tfoSTABMENd7eQ0msBoWgjLx1MaoKeIfyGy+44jujAjdg8ayIp6/v6A0Yd53uRx3tACvd8IFsBQUkdnre2ReuF676H3Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: abff620279b111f0b29709d653e92f7d-20250815
-X-CID-CACHE: Type:Local,Time:202508151617+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:339357e6-611c-4c45-9af4-4b0f9ad93f29,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:bc8e9e1cfca9223f5b74cc50e33c6883,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
-X-UUID: abff620279b111f0b29709d653e92f7d-20250815
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1281589497; Fri, 15 Aug 2025 16:27:25 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id A5724E008FA4;
-	Fri, 15 Aug 2025 16:27:24 +0800 (CST)
-X-ns-mid: postfix-689EEF6C-527582324
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id B8201E008FA3;
-	Fri, 15 Aug 2025 16:27:18 +0800 (CST)
-Message-ID: <bef49dcb-8619-4448-b8d7-6dca3a6cb456@kylinos.cn>
-Date: Fri, 15 Aug 2025 16:27:18 +0800
+	s=arc-20240116; t=1755249280; c=relaxed/simple;
+	bh=QZjvCZwPx47dYvhGTHPDlNi0jae0uoi4YRRACk1E9qw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=E4UaVsSOaWpAoJz8q3bj2F6mnv5i0kXwxPPckY25Iq/ME/SRtUfiuuVKgRhz0SJeAHudYtL43LWyMYojpq3gny+UZerbDFgLWfljAGFgfcQqDOytF/12Z4xR1QSxgFRsPcg1wHX2+We2U4sW8p1oZZrJnekpaAOcL/xf14zpMIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a8YFn/S3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6E65C4CEEB;
+	Fri, 15 Aug 2025 09:14:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755249279;
+	bh=QZjvCZwPx47dYvhGTHPDlNi0jae0uoi4YRRACk1E9qw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=a8YFn/S3P61J8sbJi4SrFh1yUqhu3tvXfSF9eG3PBFA3pNMcEOvVAgbYT3VuP85j8
+	 p72KTPzXUro2zcJXh6pP+So83BZiff9iE7BOpGF+r6Eq1bMnd0Jy9yDjDfMDAXNgWS
+	 /nD75tos7QJtj2E+QA1gBjtQ+GO1zIsQBycLRtKouu8Jdz9bugfpHg0nLl++OLmAn9
+	 3X8uyAarvxuiaH6FdqZgqlYRjkU8jLwgQMcS/TxIRMIUA05vDjLwvluIY4XR9qM1G6
+	 bf/62jQtZE/l1c/uJFEJGewIvnIB/bx7/IYs2bNmOXTohmW1eEY7cBn1rypz+HHHEV
+	 Ryrys5xpV3qTA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0D4ACA0ED1;
+	Fri, 15 Aug 2025 09:14:39 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
+Date: Fri, 15 Aug 2025 17:14:30 +0800
+Subject: [PATCH v2] cpupower: fix mangled powercap comment
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/9] freezer: Introduce freeze priority model to
- address process dependency issues
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Oleg Nesterov
- <oleg@redhat.com>, David Hildenbrand <david@redhat.com>,
- Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- len brown <len.brown@intel.com>, pavel machek <pavel@kernel.org>,
- Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Nico Pache <npache@redhat.com>,
- xu xin <xu.xin16@zte.com.cn>, wangfushuai <wangfushuai@baidu.com>,
- Andrii Nakryiko <andrii@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Jeff Layton <jlayton@kernel.org>,
- Al Viro <viro@zeniv.linux.org.uk>, Adrian Ratiu
- <adrian.ratiu@collabora.com>, linux-pm@vger.kernel.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250807121418.139765-1-zhangzihuan@kylinos.cn>
- <20250814143717.GY4067720@noisy.programming.kicks-ass.net>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250814143717.GY4067720@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250815-mangled_cpupower-v2-1-6ec877145c47@uniontech.com>
+X-B4-Tracking: v=1; b=H4sIAHX6nmgC/32OTQ6CMBCFr0JmbU1bUiyuuIchBspgm0hLWkAN6
+ d0dOYB5q+8l72eHhNFhgmuxQ8TNJRc8gTwVYGznH8jcQAySS8U1r9hE5hOHu5nXObwwMiV0ddH
+ 1qHvZA8XmiKN7H5W3lti6tIT4ORY28XP/lG2CkTqlalHyUlZ9s3p6tKCxZxMmaHPOX+9rdBC0A
+ AAA
+X-Change-ID: 20250806-mangled_cpupower-5186789f8b2b
+To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Wangyuli@uniontech.com, Guanwentao@uniontech.com, Zhanjun@uniontech.com, 
+ Niecheng1@uniontech.com, Cryolitia PukNgae <cryolitia@uniontech.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755249278; l=1825;
+ i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
+ bh=9ykgyTgoh2lTXbqw1zH4abC6aqqZU7uyOJ0J1/86iV8=;
+ b=ifh4iMw6UDBi/MHxRQzpTQPSYx63sosgOtlReVx/ZxojPljMaonehGX2QF4yF/FLEpUHwMGnM
+ 3P9GbJMxTUDAwHUGvoQstp0otfJbvjTPQv53pMe0RsZ5AXS5LGrsrL+
+X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
+ pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
+X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
+ auth_id=474
+X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Reply-To: cryolitia@uniontech.com
 
+From: Cryolitia PukNgae <cryolitia@uniontech.com>
 
-=E5=9C=A8 2025/8/14 22:37, Peter Zijlstra =E5=86=99=E9=81=93:
-> On Thu, Aug 07, 2025 at 08:14:09PM +0800, Zihuan Zhang wrote:
->
->> Freeze Window Begins
->>
->>      [process A] - epoll_wait()
->>          =E2=94=82
->>          =E2=96=BC
->>      [process B] - event source (already frozen)
->>
-> Can we make epoll_wait() TASK_FREEZABLE? AFAICT it doesn't hold any
-> resources, it just sits there waiting for stuff.
+Remove leading dashes from current comments and clarify its semantics
 
-Based on the code, it=E2=80=99s ep_poll() that puts the task into the D s=
-tate,=20
-most likely due to I/O or lower-level driver behavior. In fs/eventpoll.c:
+Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+---
+The current comment exhibits a clear failed patch application artifact:
+1. A stray '-' prefix indicating failed line removal
+2. Broken sentence structure from improper context patching
 
-Line:2097 __set_current_state=20
-<https://elixir.bootlin.com/linux/v6.16/C/ident/__set_current_state>(TASK=
-_INTERRUPTIBLE=20
-<https://elixir.bootlin.com/linux/v6.16/C/ident/TASK_INTERRUPTIBLE>);
+For those interested in archaeology:
 
-Simply changing the task state may not actually address the root cause.=20
-Currently, our approach is to identify tasks that are more likely to=20
-cause such issues and freeze them earlier or later in the process to=20
-avoid conflicts.
+What appears to be version control residue has persisted since its
+initial introduction and through the 2022 kernel submission[1]. While
+my archaeological efforts only trace back to the 2017 openSUSE patch[2],
+the corrupted syntax suggests even older origins that remain elusive -
+perhaps maintainers with longer institutional memory could shed light
+on its provenance.
+
+1. https://lore.kernel.org/all/20221123111810.16017-2-trenn@suse.de/
+2. https://build.opensuse.org/request/show/535512
+---
+Changes in v2:
+- Simplify expression
+- Link to v1: https://lore.kernel.org/r/20250806-mangled_cpupower-v1-1-1a559130326b@uniontech.com
+---
+ tools/power/cpupower/lib/powercap.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+index 94a0c69e55ef5e4291b13a4218e706fa8d14e6a7..609943c829efce8045d97097b5f5e9ec86d0f519 100644
+--- a/tools/power/cpupower/lib/powercap.c
++++ b/tools/power/cpupower/lib/powercap.c
+@@ -87,8 +87,6 @@ int powercap_set_enabled(int mode)
+ 
+ /*
+  * Hardcoded, because rapl is the only powercap implementation
+-- * this needs to get more generic if more powercap implementations
+- * should show up
+  */
+ int powercap_get_driver(char *driver, int buflen)
+ {
+
+---
+base-commit: 6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
+change-id: 20250806-mangled_cpupower-5186789f8b2b
+
+Best regards,
+-- 
+Cryolitia PukNgae <cryolitia@uniontech.com>
+
 
 
