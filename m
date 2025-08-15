@@ -1,132 +1,170 @@
-Return-Path: <linux-pm+bounces-32420-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32421-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A1A6B27715
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 05:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6A82B27821
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 07:13:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E403A1CE5A6D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 03:49:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE9551CC3136
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 05:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78FD21A43C;
-	Fri, 15 Aug 2025 03:49:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F242F23E347;
+	Fri, 15 Aug 2025 05:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4MP8jAwg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475C21514F7;
-	Fri, 15 Aug 2025 03:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7306823C4F4
+	for <linux-pm@vger.kernel.org>; Fri, 15 Aug 2025 05:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755229744; cv=none; b=f9KBPNPbUYYjIk0BvWim7bMwVRQDUXDP0XwPYMuwNuVbbMT8h1VIEceBjtetVTQ/MATeG7GeQuzTJj46knCLzmnp4uM4twi8r5HHL3uR3lIosvXWI/5CP5K+4p90wpavTV3vLhom0pCACJRHCZweXXlEtVRnG7Zvu/9QE+h12iI=
+	t=1755234785; cv=none; b=oN3bQPxCE+bcPPKWwROtVROnDXD3rSNYtvjHk8JU36TCJNAQLynerl9Ie8zvbGWZFK1mio+A8wysn2bMa6UusQ19YngIaLxER1GpRQdhK4F5+DjaCCthhhMwtPjBb962bRbqqZ8k3wxKAkVuZ1PJoe+hHdIQLbnG91Wg6ilKBU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755229744; c=relaxed/simple;
-	bh=ki1zFA8tRs89Elc70O5H4CW/ziEqfYX25e9J/puZg9g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=F2u5gYQVGSyV5SZO54BsuwqStOq95jw39qfU80GqT/otLJ+31j1Y61qhTqsEWLELKknBMwttDyA+POuekq5JJdVd3rHF4yCdya53i4gp0XlTHhfFHNHr0uTLnxLJM0vHONlemdZvhBzGowCqXnFS3zM5EU+y4h186qPunMYaIRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4c37Q10ClbzvX6Y;
-	Fri, 15 Aug 2025 11:48:57 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 71B9B180485;
-	Fri, 15 Aug 2025 11:48:58 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
- (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 15 Aug
- 2025 11:48:57 +0800
-Message-ID: <7f5b8d19-0f82-cffc-e0f7-087bc4c84dc7@hisilicon.com>
-Date: Fri, 15 Aug 2025 11:48:57 +0800
+	s=arc-20240116; t=1755234785; c=relaxed/simple;
+	bh=asbWxOoHojySmFrLx18w24R1Ongn6WuKn2LRn6DzLwE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ctAMn7aAy/6Hc3x2iweQ4/NYGqC8wSSzLGD8YDsW3fIpmvWXQjjsd4D3uUH9SH8eAsY0E7xAIZiaCWmT6irt283R9Ggt6ooGFbP6ib5k0jAZOMwCvN2x0YA8HZnlSMOaydKI7WlrtHsugy5kmcCwtBW58q5zzuNKbZCz7uljj4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4MP8jAwg; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-242d1e947feso119155ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 22:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755234783; x=1755839583; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGQ20RTBx/tdgXgITELcfzTQixi9kkZ3YBoW/JTOkqo=;
+        b=4MP8jAwge1nbWQU34M4RmdLhQjA2wvm2PXqAlXQ1ID7U/R3j9oywchyt3uoy0VX/f+
+         f1rHDVI6Tx5+zhlHiSTZbiIJDctgJFOjVHF36s2TJ8VViQAbtTH1+43UYjyRwVBF1fem
+         W8hZzX0U5+h6OZox5GyCjDXD+DnCNdLjkR9ImahXI7qYGTf8tNe2Mu8xs3JetmKoCMRx
+         Xbqk0x9batGp99rBAMYdQ4KHJYo1nIPTIW7E+hMcV5bxwyjEvvcqwUojkW0aGR5RlgwE
+         1/z6zl9v1577yVMavXTU3n1mn6TRHf+O+iL4kN5cxMRbJVfrKnuSdzgsl4bmvQkMC6Fx
+         RFOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755234783; x=1755839583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XGQ20RTBx/tdgXgITELcfzTQixi9kkZ3YBoW/JTOkqo=;
+        b=LfWGpIhe0g/b8BCC8tRdn4mos2qgW4yH+nJ5piDqmok56VpMdYx8jF4Gdn4SeKtCAX
+         ExCponOKrynWNJqGRcUGNAxBAZDWpj7Xnj7Dy7PmqlTaScPELsvFCZYbAefUma/26hOi
+         t4qQ2EfWzbkyn02ROTUfGRMIUurQLYFwh1cjwVbudybbjTanqWnzkgc+WsqRoEjp7Lf9
+         0WhDFAxFy/UnIN3+fuW84dWojULdtvmW4nJVdFMYmTTor9M0nPZ4fbBlFYtm3YyzCcX3
+         Hl8pNyH0Ln9bQXyHYZ2Ra1YwwHLhGXGQKifUSAYl5Siv46N38agZjq09S88+zvgcLEMC
+         CbKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWu4b42Lc8EH+XMXecT4MQdnqUV+R1qq9xHbv1A6obeTIUTVQwbKrFoHvVtlK5C92tTybh5hjBt6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLwBVq170cQRSQq0HAcEwI6rFAaH9fbkZmM0HkaK8/XIhhaiiL
+	FpFHn9CZdaQQ1oJpwOA8aXbIujlLXGstrB+XPHMtC/zmkqwK+5i8g1Xd9DAWeYAdHg==
+X-Gm-Gg: ASbGncv46x7pX7uLs8uWwGAUAdRlf0y9sy+1tmytTq6VGJWuBMy93v3N/2ur/gblqEM
+	VrcBOFoblzqKshpQ+fcvXQ0/9TIKHCRS3NHV6bkHV4gnDHuqTxcmdCcmd+Ype42t4dtAwqSG+Dz
+	nk5ybJau6dwnVIxyCfE37ySYsKnk5KS0mYvsFOXhjc+HHjC04lk81wcYRmR/BEVfM+OYftRN2HH
+	jLsZZuBawQc0fAPh/y4lrp0rPql+D/mMyC4VeYv4EIMa4My5K55X/UjIKcvROdj+azZelg2Jova
+	SppZ8Bdo3IvaLLROMLuZGMv3CqGnBMxsWAyQCR2XENKn5cNLe6kXRJbVHDhXF9cJgWWcvQJzQTk
+	Z3l2Uyvsd81E5EGfDPC8HTY/PDXIM0Tw821Cf3Y4N5m3yuj/7SQjqkB7M5OboTCJlJ5Ys7vaoOS
+	8FvwU=
+X-Google-Smtp-Source: AGHT+IHveQGN41PwPlfYDxUUUwq2EqsHNQwAF3RAIPfs5cqhD+TK20yYEi9P/XIeXarW3cFWaQnS/w==
+X-Received: by 2002:a17:902:c94c:b0:240:2bd3:861 with SMTP id d9443c01a7336-24469a6a864mr2555385ad.10.1755234783271;
+        Thu, 14 Aug 2025 22:13:03 -0700 (PDT)
+Received: from google.com (167.212.233.35.bc.googleusercontent.com. [35.233.212.167])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32331191102sm3463989a91.30.2025.08.14.22.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Aug 2025 22:13:02 -0700 (PDT)
+Date: Fri, 15 Aug 2025 05:12:58 +0000
+From: Prashant Malani <pmalani@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+Message-ID: <aJ7B2labaxza9duY@google.com>
+References: <aIso4kLtChiQkBjH@arm.com>
+ <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
+ <aIvQvLL34br6haQi@arm.com>
+ <20250801044340.6ycskhhkzenkzt7a@vireshk-i7>
+ <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
+ <20250811060551.ylc6uutni4x6jqtg@vireshk-i7>
+ <aJo5vP_mfBn_vxSF@google.com>
+ <CAJZ5v0jvYBUPjSmXas+S8rOG2WAb5u7rk92Gbu1s7A=tJr4VPA@mail.gmail.com>
+ <aJpMHkrWJIyHtHL5@google.com>
+ <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 2/2] cpufreq: CPPC: Fix error handling in
- cppc_scale_freq_workfn()
-To: Beata Michalska <beata.michalska@arm.com>
-CC: Prashant Malani <pmalani@google.com>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Bowen Yu <yubowen8@huawei.com>,
-	<rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <lihuisong@huawei.com>,
-	<zhenglifeng1@huawei.com>, Ionela Voinescu <ionela.voinescu@arm.com>
-References: <20250730032312.167062-1-yubowen8@huawei.com>
- <20250730032312.167062-3-yubowen8@huawei.com>
- <20250730063930.cercfcpjwnfbnskj@vireshk-i7>
- <CAFivqmLkLn-92rMow+c7iEADCdh3-DEapVmtB_Qwk1a2JrwwWw@mail.gmail.com>
- <9041c44e-b81a-879d-90cd-3ad0e8992c6c@hisilicon.com>
- <CAFivqmLr_0BDkMhD4o6box3k9ouKek8pnY7aHX36h1Q9TaT_HA@mail.gmail.com>
- <7a9030d0-e758-4d11-11aa-d694edaa79a0@hisilicon.com>
- <CAFivqmJyYJ+d+TH4qYBKf_5t-AqWZuzgk2H_4nHmynTjoUHnYQ@mail.gmail.com>
- <CAFivqm+4Mir8hgGw-HMLdW=dBYuUw1wJ4xG4a+WAtqfG1vYKXQ@mail.gmail.com>
- <8aa1efad-8f30-9548-259a-09fccb9da48a@hisilicon.com>
- <aJxbOSMLWyTporw1@arm.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <aJxbOSMLWyTporw1@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
 
+Thanks a lot for taking a look at this, Rafael.
 
+On Aug 14 13:48, Rafael J. Wysocki wrote:
+> 
+> First off, AFAICS, using idle_cpu() for reliable detection of CPU
+> idleness in a sysfs attribute code path would be at least
+> questionable, if not outright invalid.  By the time you have got a
+> result from it, there's nothing to prevent the CPU in question from
+> going idle or waking up from idle. 
 
-On 13/08/2025 17:30, Beata Michalska wrote:
-> On Wed, Aug 13, 2025 at 03:15:12PM +0800, Jie Zhan wrote:
->>
->>
->> On 05/08/2025 12:58, Prashant Malani wrote:
->>> On Mon, 4 Aug 2025 at 18:12, Prashant Malani <pmalani@google.com> wrote:
->>>>
->>>> On Sun, 3 Aug 2025 at 23:21, Jie Zhan <zhanjie9@hisilicon.com> wrote
->>>>> On 01/08/2025 16:58, Prashant Malani wrote:
->>>>>> This begs the question: why is this work function being scheduled
->>>>>> for CPUs that are in reset or offline/powered-down at all?
->>>>>> IANAE but it sounds like it would be better to add logic to ensure this
->>>>>> work function doesn't get scheduled/executed for CPUs that
->>>>>> are truly offline/powered-down or in reset.
->>>>> Yeah good question.  We may discuss that on your thread.
->>>>
->>>> OK.
->>>> Quickly looking around, it sounds having in the CPPC tick function [1]
->>>> might be a better option (one probably doesn't want to lift it beyond the
->>>> CPPC layer, since other drivers might have different behaviour).
->>>> One can add a cpu_online/cpu_enabled check there.
->>>
->>> Fixed link:
->>> [1] https://elixir.bootlin.com/linux/v6.13/source/drivers/cpufreq/cppc_cpufreq.c#L125
->> I don't think a cpu_online/cpu_enabled check there would help.
->>
->> Offlined CPUs don't make cppc_scale_freq_workfn() fail because they won't
->> have FIE triggered.  It fails from accessing perf counters on powered-down
->> CPUs.
->>
->> Perhaps the CPPC FIE needs a bit rework.  AFAICS, FIE is meant to run in
->> ticks, but currently the CPPC FIE eventually runs in a thread due to the
->> possible PCC path when reading CPC regs I guess.
-> Just for my benefit: the tick is being fired on a given CPU which is when an
-> irq_work is being queued. Then before this goes through the kworker and finally
-> ends up in 'cppc_scale_freq_workfn' that CPU is entering a deeper idle state ?
-Yeah.
-> Could the cppc driver register for pm notifications and cancel any pending work
-> for a CPU that is actually going down, directly or by setting some flag or smth
-> so that the final worker function is either not triggered or knows it has to
-> bail out early ?
-> (Note this is a rough idea and needs verification)
-That could be a feasible workaround, but I prefer to rework the CPPC FIE
-rather than try to fix it, i.e. FIE can run in ticks for non-PCC regs I
-suppose.
+This is a heuristic-based optimization. The observation is that when
+the CPU is idle (or near-idle/lightly loaded, since FFH actually wakes
+up an idle CPU), the AMU counters as read from the kernel are unreliable.
+It is fine if the CPU wakes up from idle immediately after the check.
+In that case, we'd return the desired frequency (via PCC reg read), which
+is what the frequency would be anyway (if the AMU measurement was
+actually taken).
+
+In a sense, the assumption here is no worse than what is there at
+present; currently the samples are taken across 2us, and (theoretically)
+if the difference between them is 0, we take the fallback path. There is
+nothing to prevent the CPU from waking up immediately after that 2us
+sample period.
+
+> Moreover, the fact that the given
+> CPU is idle from the scheduler perspective doesn't actually mean that
+> it is in an idle state and so it has no bearing on whether or not its
+> performance counters can be accessed etc.
+
+The idle check isn't meant to guard against accessing the counters.
+AFAICT it is perfectly valid to access the counters even when the CPU is
+actually idle.
 
 > 
-> ---
-> BR
-> Beata
-> 
+> The way x86 deals with this problem is to snapshot the counters in
+> question periodically (actually, in scheduler ticks) and fall back to
+> cpu_khz if the interval between the two consecutive updates is too
+> large (see https://elixir.bootlin.com/linux/v6.16/source/arch/x86/kernel/cpu/aperfmperf.c#L502).
+> I think that this is the only reliable way to handle it, but I may be
+> mistaken.
+
+This is interesting. I think it may not work for the CPPC case, since
+the registers in question are in some cases accessed through PCC reads
+which require semaphores. I think it would be untenable to do that in
+the tick handler (but I may be mistaken here). It's easier on x86
+since those are always just MSRs.
+We could probably do it for the FFH case, but then we're bifurcating
+the computation method and IMO that's not worth the hassle.
+
+Perhaps some of the ARM experts here can think of ways to do this that
+I haven't considered.
+
+Best regards,
+
+-Prashant
 
