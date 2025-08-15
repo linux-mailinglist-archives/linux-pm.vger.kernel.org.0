@@ -1,226 +1,126 @@
-Return-Path: <linux-pm+bounces-32423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32424-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4DC0B27909
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 08:22:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE00EB27A90
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 10:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9842EB61069
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 06:19:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE8DEAE15CD
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 08:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36AC2BEFE6;
-	Fri, 15 Aug 2025 06:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0145C21FF3B;
+	Fri, 15 Aug 2025 08:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y6r9bund"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="stJr1OdS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50382BEFE2;
-	Fri, 15 Aug 2025 06:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382CE22ACF3
+	for <linux-pm@vger.kernel.org>; Fri, 15 Aug 2025 08:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755238823; cv=none; b=rdLXE6Xng8t72j8R+crOXv4qvxuh6YN+RNNefrY/w0a4UjajmUz4mIT1SCvE9pWKJlR999sq7aENyB9SIVuwVPm9UFG9xiHY7lSva0nzdo+C+pv8074mndU6ReVzEVE2vrROZmFrf5sBuGEsL4JIyCcGagGCwfxUzQ9mFdQbq1c=
+	t=1755245302; cv=none; b=N4vl/Ec3cJxVF0WEayNGgaFHkpj5CXGWdaw8wSTdd3KBPfomZ7VlaFDQ06XY1mZpXiY74jLk1yGqyDMer+NyEQXFRBbleraCMxo/jzl0UELotC2bMdB2XbYI9G212ERUrCG6DOCqGOK2sk0GagfNrjeHggmmfIOPmJUrTErOlKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755238823; c=relaxed/simple;
-	bh=GHcp5dA4rULDOFBx0PEjNx1k4ReW/CdBLRFBsLgN9zs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mE7lOGYxs51VCVJvh2qLfeH1c91XT/6PrRREUoUYeyoe+IWWwChGnkExvyKSbixR9zvDXYvQNm5Rbt/qla5fyp7b6GRmEasHaRmu0UAEwsXc2DCSqDI1VL6bKtE/xl/DReUYFBISNidMTVUq918zW5Q0tQhJoR/S5CeiGffZ+NU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y6r9bund; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873A4C4CEF5;
-	Fri, 15 Aug 2025 06:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755238823;
-	bh=GHcp5dA4rULDOFBx0PEjNx1k4ReW/CdBLRFBsLgN9zs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y6r9bundNNXZ0i8V0VRBCVj2L9yurJEyDhK80miA0kt9Vo2qYWCfQlRE1CEXBd4B3
-	 6UvkMrOl+BXUpS/bGEBKSKaUJttGZ/SnD3M86tmF3IVTxrEaWIw5aWto5gER6eMxd3
-	 +GwraUt9iHfXqaL5cdAh0WwG/1HCFmHgiTJOGFDQ=
-Date: Fri, 15 Aug 2025 08:20:19 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PM: Support aborting suspend during filesystem sync
-Message-ID: <2025081538-grappling-crewmate-8cf5@gregkh>
-References: <20250815004635.3684650-1-wusamuel@google.com>
+	s=arc-20240116; t=1755245302; c=relaxed/simple;
+	bh=8A4TDN9tyEYv2858Q76tEWkh03e0+gd/EEe9+NAgsL4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GqrR8MdGwj86v+nAwkP7aUs30Nf1TXNpwn2eUltgMfL7JJS9smSCDDNW0XGuzo4PauTdTKIVFHMCWc/UTqdZdtZy/hwxgmpGkO26gBdUEPsLmle/440umciweKIjYt6mYto+a85tqGYDG1BGXL/5oY0dr3FH7pHcLFgHr/LsiDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=stJr1OdS; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55ce522d6deso1505830e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Aug 2025 01:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755245299; x=1755850099; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BoUNg0NWnSD1ZMcCTQtaEQNN7qPQ5dP9cFU4cMtk98A=;
+        b=stJr1OdSTTnVsuFpenyV9XRJPijuKibc5XwKBy6Ok/QPgPKoVtP3PHgTId9p8/JWiF
+         EWjSeR6p6ALkHfeab17HtmJ8ZdvDn1tc8Q71vvNR6kBLLTsD8n5j57CXVn6ktGYrX2iv
+         Ku0Tpsv8BiGzlCI0dmSggIKUWgSGhYiHtxC8getawUbAgTrozfam3q4FlQBA8E3CV5rK
+         wFb6aq7ayF8I/5+a0UPIYqHyd7fAgh7rY0AwrOgjJW6LiVa8Nu8EXxnLT2lCLX09PEcZ
+         zILgdIcBu7AUa48J6jZRv+ne9R9wneumyUS76qRkmHG3mNoCX1P6phMly3jr5jDSKjSE
+         t2Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755245299; x=1755850099;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BoUNg0NWnSD1ZMcCTQtaEQNN7qPQ5dP9cFU4cMtk98A=;
+        b=ceV7++PB7Ica1qfvTOo+qpcWqai2omoWTssluYhHDXmgWY4WeI3bGXGxSFQLYxxUq0
+         98j19WwjbZohB1Z6RHVtggsvjsRTetuiFTqI9BkMtGsocf/b/MpfCw/FjdDkrGKV4tin
+         9MSHEvXCoBFQYQkm2lQxatggwx5tBXeP4QkwqAh2WL9s1jObBkka0jczF2mfnkRWZC/z
+         wjCbwh5pDCSt0jd1uaLwnv1FZGnbxyqkMn4e/fHG8VeGkGypVBD/iupXYXToSGOMqVZL
+         hwXpewOvCqke2pYVOKri7fVpO2mnON+osxf+Du6IJO5+Xxh08JHuhYLcLr6ComCKcFcA
+         8jLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXEVLtoB9VrKM5EjQaqNBNMTmUuZw+beiswCbyhFG0pv0pJxVC/5KFcCML8t8v3t312RQIdOgJxEw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEZhyFg4mQvI+THVLPu09oHmEOK6IcCGhZEVPO1DgbP2/8pUHa
+	Aj+oSkwa8iq6I0zXg/KZd/T118jBIhJMO4XZKtBdPqZALowDLwOsNoJ2ShRQH8w97QGZY2dzl5f
+	ISiQR
+X-Gm-Gg: ASbGnctsiG6idwU62YBoYCin80XLarzTPq5CCSXYwpygTcvsEnyLfU/ZO7FDuq8qdGl
+	JdGfYzTCUwaK15VuaW93nTZtMihIrdANrjd/GuRp9giIBBugSsxRWTUoFBwlFYD+Dr62A6G6xcY
+	C8MCUx4cxBFYKo/vz3sfZJkCg467EIqKDDQ0DGPHZdDslGvybCF1MztiRWpaLhVoB0/l7iIr8P6
+	Zuq80tAjRHhFwbRevnM8wFlmj5ZSHphh9umgSrsrxoTVHIS5bpHb3ElsRdRzdVkF7F6VTJoMnSs
+	4lJDrYBCXS1SssMFgHiihCzlKxdvY/sc3NIa8i39LNNo8kLjnLIYWDw5/xzD+ARSPnGkR3jPwFP
+	AT+Y6oJKAdyGA6DczD85TxJ3nSkEXeTe/zCtYg4kItUYVp6E9AfxH37UzX2bVFRlbpE3OMSpl
+X-Google-Smtp-Source: AGHT+IFt90Urrmo5HV1l7Yk3jJuUZrJK1egAUyTZX0v29li6VQluDLCOt3n47gyYnDJrd4tjNDr5Kw==
+X-Received: by 2002:ac2:4bc5:0:b0:55c:af6c:db58 with SMTP id 2adb3069b0e04-55ceea048f6mr305717e87.8.1755245299163;
+        Fri, 15 Aug 2025 01:08:19 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3340a645d21sm1925151fa.70.2025.08.15.01.08.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Aug 2025 01:08:18 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.17-rc2
+Date: Fri, 15 Aug 2025 10:08:16 +0200
+Message-ID: <20250815080816.282648-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250815004635.3684650-1-wusamuel@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 14, 2025 at 05:46:34PM -0700, Samuel Wu wrote:
-> At the start of suspend, filesystems will sync to save the current state
-> of the device. However, the long tail of the filesystem sync can take
-> upwards of 25 seconds. If during this filesystem sync there is some
-> wakeup or abort signal, it will not be processed until the sync is
-> complete; from a user's perspective, this looks like the device is
-> unresponsive to any form of input.
-> 
-> This patch adds functionality to handle a suspend abort signal when in
-> the filesystem sync phase of suspend. This topic was first discussed by
-> Saravana Kannan at LPC 2024 [1], where the general consensus was to
-> allow filesystem sync on a parallel thread.
-> 
-> [1]: https://lpc.events/event/18/contributions/1845/
-> 
-> Suggested-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> ---
->  drivers/base/power/wakeup.c |  8 ++++
->  include/linux/suspend.h     |  3 ++
->  kernel/power/process.c      |  1 -
->  kernel/power/suspend.c      | 85 ++++++++++++++++++++++++++++++++++++-
->  4 files changed, 95 insertions(+), 2 deletions(-)
-> 
-> v1 -> v2:
-> - Added documentation for suspend_abort_fs_sync()
-> - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration static
-> 
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index d1283ff1080b..304368c3a55f 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_source *ws)
->  
->  	/* Increment the counter of events in progress. */
->  	cec = atomic_inc_return(&combined_event_count);
-> +	/*
-> +	 * To maintain the same behavior as pm_wakeup_pending(),
-> +	 * aborting suspend will only happen if events_check_enabled. Similarly,
-> +	 * the abort during fs_sync needs the same check.
-> +	 */
-> +	if (events_check_enabled)
-> +		suspend_abort_fs_sync();
->  
->  	trace_wakeup_source_activate(ws->name, cec);
->  }
-> @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
->  void pm_system_wakeup(void)
->  {
->  	atomic_inc(&pm_abort_suspend);
-> +	suspend_abort_fs_sync();
->  	s2idle_wake();
->  }
->  EXPORT_SYMBOL_GPL(pm_system_wakeup);
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 317ae31e89b3..21b1ea275c79 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -276,6 +276,8 @@ extern void arch_suspend_enable_irqs(void);
->  
->  extern int pm_suspend(suspend_state_t state);
->  extern bool sync_on_suspend_enabled;
-> +
-> +extern void suspend_abort_fs_sync(void);
->  #else /* !CONFIG_SUSPEND */
->  #define suspend_valid_only_mem	NULL
->  
-> @@ -296,6 +298,7 @@ static inline bool idle_should_enter_s2idle(void) { return false; }
->  static inline void __init pm_states_init(void) {}
->  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
->  static inline void s2idle_wake(void) {}
-> +static inline void suspend_abort_fs_sync(void) {}
->  #endif /* !CONFIG_SUSPEND */
->  
->  static inline bool pm_suspend_in_progress(void)
-> diff --git a/kernel/power/process.c b/kernel/power/process.c
-> index dc0dfc349f22..8ff68ebaa1e0 100644
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -132,7 +132,6 @@ int freeze_processes(void)
->  	if (!pm_freezing)
->  		static_branch_inc(&freezer_active);
->  
-> -	pm_wakeup_clear(0);
->  	pm_freezing = true;
->  	error = try_to_freeze_tasks(true);
->  	if (!error)
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index b4ca17c2fecf..dc37ab942bcb 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -31,6 +31,7 @@
->  #include <linux/compiler.h>
->  #include <linux/moduleparam.h>
->  #include <linux/fs.h>
-> +#include <linux/workqueue.h>
->  
->  #include "power.h"
->  
-> @@ -74,6 +75,21 @@ bool pm_suspend_default_s2idle(void)
->  }
->  EXPORT_SYMBOL_GPL(pm_suspend_default_s2idle);
->  
-> +static bool suspend_fs_sync_queued;
-> +static DEFINE_SPINLOCK(suspend_fs_sync_lock);
-> +static DECLARE_COMPLETION(suspend_fs_sync_complete);
-> +
-> +/**
-> + * Triggers the completion that aborts suspend. This completion will only have
-> + * an effect if called during filesystems sync step of suspend.
-> + */
-> +void suspend_abort_fs_sync(void)
+Hi Linus,
 
-This is not kerneldoc format, I think the parser will fail on it, right?
-Have you tried building the kernel documentation with this patch
-applied?
+Here's a PR with a pmdomain fix intended for v6.17-rc2. Details about
+the highlights are as usual found in the signed tag.
 
-> +{
-> +	spin_lock(&suspend_fs_sync_lock);
-> +	complete(&suspend_fs_sync_complete);
-> +	spin_unlock(&suspend_fs_sync_lock);
-> +}
-> +
->  void s2idle_set_ops(const struct platform_s2idle_ops *ops)
->  {
->  	unsigned int sleep_flags;
-> @@ -403,6 +419,71 @@ void __weak arch_suspend_enable_irqs(void)
->  	local_irq_enable();
->  }
->  
-> +static void sync_filesystems_fn(struct work_struct *work)
-> +{
-> +	ksys_sync_helper();
-> +
-> +	spin_lock(&suspend_fs_sync_lock);
-> +	suspend_fs_sync_queued = false;
-> +	complete(&suspend_fs_sync_complete);
-> +	spin_unlock(&suspend_fs_sync_lock);
-> +}
-> +static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
-> +
-> +/**
-> + * suspend_fs_sync_with_abort- Start filesystem sync and handle potential aborts
-> + *
-> + * Starts filesystem sync in a workqueue, while the main thread uses a
-> + * completion to wait for either the filesystem sync to finish or for a wakeup
-> + * event. In the case of filesystem sync finishing and triggering the
-> + * completion, the suspend path continues as normal. If the complete is due to a
-> + * wakeup or abort signal, the code jumps to the suspend abort path while the
-> + * filesystem sync finishes in the background.
-> + *
-> + * An aborted suspend that is followed by another suspend is a potential
-> + * scenario that complicates the sequence. This patch handles this by
-> + * serializing any filesystem sync; a subsequent suspend's filesystem sync
-> + * operation will only start when the previous suspend's filesystem sync has
-> + * finished. Even while waiting for the previous suspend's filesystem sync to
-> + * finish, the subsequent suspend will still break early if a wakeup completion
-> + * is triggered, solving the original issue of filesystem sync blocking abort.
-> + */
+Please pull this in!
 
-Shouldn't this documentation go up in the public one?
+Kind regards
+Ulf Hansson
 
-thanks,
 
-greg k-h
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.17-rc1
+
+for you to fetch changes up to b6bcbce3359619d05bf387d4f5cc3af63668dbaa:
+
+  soc/tegra: pmc: Ensure power-domains are in a known state (2025-08-11 12:24:43 +0200)
+
+----------------------------------------------------------------
+pmdomain providers:
+ - tegra: Ensure pmc power-domains are in a known state
+
+----------------------------------------------------------------
+Jon Hunter (1):
+      soc/tegra: pmc: Ensure power-domains are in a known state
+
+ drivers/soc/tegra/pmc.c | 51 ++++++++++++++++++++++++++++---------------------
+ 1 file changed, 29 insertions(+), 22 deletions(-)
 
