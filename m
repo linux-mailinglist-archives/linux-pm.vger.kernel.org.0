@@ -1,160 +1,226 @@
-Return-Path: <linux-pm+bounces-32422-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32423-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11368B278DA
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 08:09:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4DC0B27909
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 08:22:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 645FDA25EA0
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 06:08:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9842EB61069
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 06:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4DEE25A340;
-	Fri, 15 Aug 2025 06:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36AC2BEFE6;
+	Fri, 15 Aug 2025 06:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5fZdyXJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y6r9bund"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20512580CC;
-	Fri, 15 Aug 2025 06:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50382BEFE2;
+	Fri, 15 Aug 2025 06:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755238110; cv=none; b=MfaEnZ04IEtk1Gxx6/FcMsP0J/nhL3NoL0/slnX63nrQkyPwUtIXQ0IBXgeNZKKMDDXATCOFEXxNjmj9vv1Ym0hW0liGH3y9ijiTwGAF5elm6IiRi3DO6AtQGGJqVivCZn+GTJdaE0b+//5HXNiyEDq0SbSGc0R/wv1cMiF9aGE=
+	t=1755238823; cv=none; b=rdLXE6Xng8t72j8R+crOXv4qvxuh6YN+RNNefrY/w0a4UjajmUz4mIT1SCvE9pWKJlR999sq7aENyB9SIVuwVPm9UFG9xiHY7lSva0nzdo+C+pv8074mndU6ReVzEVE2vrROZmFrf5sBuGEsL4JIyCcGagGCwfxUzQ9mFdQbq1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755238110; c=relaxed/simple;
-	bh=bG2c4T+pSmpVev0zsHpv/hBpG9AoZxYK5gAarWih2dI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M3z5/rKxmG5N+OSK6cmTkaDAPlSfdB7Soek6nw9LO2FI+/USyzw/oI8W5P0epOqfmuWluPraURRfmVGSMkVr7LLJOlsN55FE/75bBLxUaRgAkIdSya6CgTSzMu7w45iuf9p97QCkcVR88ONciX/sByXmiHTktUv19ugFmFCGgsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5fZdyXJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAE2C4CEEB;
-	Fri, 15 Aug 2025 06:08:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755238110;
-	bh=bG2c4T+pSmpVev0zsHpv/hBpG9AoZxYK5gAarWih2dI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l5fZdyXJhS8IEJAfL3VjqchEOe+rhQv0EZoG6QCbD7+kZvA41gkQV4W4aQxpWjJRc
-	 S/eoPz/XhvMT1lMHnj4SEflOXoqKOwSSvDSdKWeXiFiem7OJ45DdP3yr/a+zu22QOw
-	 zr505omg93vnFg5bYhmuC7fDOVS1D3+aQwD+LPMLWGkB+bob1OyXcbQ/7wLlI6CRFI
-	 dit5sIFz5D38vqthkxy0dJAkiJkoS7DnDffI+e0xDhHaoZtAsmB9mr8G6DGVBW1Gao
-	 h6ocfLUxsxfd2VzbTcVkGNFART4sR3800DCOeifAG0y2cRtCHxo480tUhHcFoFeZLp
-	 fJXwuhShJspUw==
-Message-ID: <5e79b123-b29a-4edb-8e70-3b7fa6cd3674@kernel.org>
-Date: Fri, 15 Aug 2025 08:08:24 +0200
+	s=arc-20240116; t=1755238823; c=relaxed/simple;
+	bh=GHcp5dA4rULDOFBx0PEjNx1k4ReW/CdBLRFBsLgN9zs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mE7lOGYxs51VCVJvh2qLfeH1c91XT/6PrRREUoUYeyoe+IWWwChGnkExvyKSbixR9zvDXYvQNm5Rbt/qla5fyp7b6GRmEasHaRmu0UAEwsXc2DCSqDI1VL6bKtE/xl/DReUYFBISNidMTVUq918zW5Q0tQhJoR/S5CeiGffZ+NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y6r9bund; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873A4C4CEF5;
+	Fri, 15 Aug 2025 06:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1755238823;
+	bh=GHcp5dA4rULDOFBx0PEjNx1k4ReW/CdBLRFBsLgN9zs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y6r9bundNNXZ0i8V0VRBCVj2L9yurJEyDhK80miA0kt9Vo2qYWCfQlRE1CEXBd4B3
+	 6UvkMrOl+BXUpS/bGEBKSKaUJttGZ/SnD3M86tmF3IVTxrEaWIw5aWto5gER6eMxd3
+	 +GwraUt9iHfXqaL5cdAh0WwG/1HCFmHgiTJOGFDQ=
+Date: Fri, 15 Aug 2025 08:20:19 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PM: Support aborting suspend during filesystem sync
+Message-ID: <2025081538-grappling-crewmate-8cf5@gregkh>
+References: <20250815004635.3684650-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/5] dt-bindings: power: Add Marvell PXA1908 domains
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>,
- phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
- <2017616.PYKUYFuaPT@radijator>
- <dfaa36d6-41b2-46c1-ba14-e2fb5c9815e6@kernel.org>
- <1950265.tdWV9SEqCh@radijator>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <1950265.tdWV9SEqCh@radijator>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250815004635.3684650-1-wusamuel@google.com>
 
-On 15/08/2025 00:08, Duje Mihanović wrote:
-> On Monday, 11 August 2025 08:38:15 Central European Summer Time 
-> Krzysztof Kozlowski wrote:
->> On 08/08/2025 21:46, Duje Mihanović wrote:
->>> On Friday, 8 August 2025 09:34:54 Central European Summer Time Krzysztof 
->>> Kozlowski wrote:
->>>> On Wed, Aug 06, 2025 at 07:33:21PM +0200, Duje Mihanović wrote:
->>>>> +          A number of phandles to clocks that need to be enabled during
->>>>> domain +          power up.
->>>>
->>>> This does not exist in your example, so it is just confusing.
->>>
->>> This is because I have not implemented any of the clocks used by the
->>> domains at this moment.
->>>
->>> Actually, I am not sure anymore whether it is necessary to assign
->>> clocks to the domains as I have just yesterday successfully brought up
->>> the GPU with some out-of-tree code and that did not require giving the
->>> domains any clocks even though the vendor kernel does this. Should I
->>> just go with that and drop all clock handling from the power domain
->>> driver, at which point there would be no need for the individual domain
->>> nodes? If not, how should I in the future assign clocks to the domains?
->>
->> I am asking to see complete binding with complete DTS in example and
->> submitted to SoC maintainer.
+On Thu, Aug 14, 2025 at 05:46:34PM -0700, Samuel Wu wrote:
+> At the start of suspend, filesystems will sync to save the current state
+> of the device. However, the long tail of the filesystem sync can take
+> upwards of 25 seconds. If during this filesystem sync there is some
+> wakeup or abort signal, it will not be processed until the sync is
+> complete; from a user's perspective, this looks like the device is
+> unresponsive to any form of input.
 > 
-> Hm, so if in the example (and the actual DTS) each domain is assigned a clock, 
-> can I then keep the domain and domain controller nodes like Mediatek and 
-> Rockchip have?
-
-You would need to point me to specific files or show some code.
-
+> This patch adds functionality to handle a suspend abort signal when in
+> the filesystem sync phase of suspend. This topic was first discussed by
+> Saravana Kannan at LPC 2024 [1], where the general consensus was to
+> allow filesystem sync on a parallel thread.
 > 
-> Does SoC maintainer here mean the SoC mailing list or the maintainer of the 
-> particular SoC family in question?
+> [1]: https://lpc.events/event/18/contributions/1845/
+> 
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>  drivers/base/power/wakeup.c |  8 ++++
+>  include/linux/suspend.h     |  3 ++
+>  kernel/power/process.c      |  1 -
+>  kernel/power/suspend.c      | 85 ++++++++++++++++++++++++++++++++++++-
+>  4 files changed, 95 insertions(+), 2 deletions(-)
+> 
+> v1 -> v2:
+> - Added documentation for suspend_abort_fs_sync()
+> - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration static
+> 
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index d1283ff1080b..304368c3a55f 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_source *ws)
+>  
+>  	/* Increment the counter of events in progress. */
+>  	cec = atomic_inc_return(&combined_event_count);
+> +	/*
+> +	 * To maintain the same behavior as pm_wakeup_pending(),
+> +	 * aborting suspend will only happen if events_check_enabled. Similarly,
+> +	 * the abort during fs_sync needs the same check.
+> +	 */
+> +	if (events_check_enabled)
+> +		suspend_abort_fs_sync();
+>  
+>  	trace_wakeup_source_activate(ws->name, cec);
+>  }
+> @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
+>  void pm_system_wakeup(void)
+>  {
+>  	atomic_inc(&pm_abort_suspend);
+> +	suspend_abort_fs_sync();
+>  	s2idle_wake();
+>  }
+>  EXPORT_SYMBOL_GPL(pm_system_wakeup);
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 317ae31e89b3..21b1ea275c79 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -276,6 +276,8 @@ extern void arch_suspend_enable_irqs(void);
+>  
+>  extern int pm_suspend(suspend_state_t state);
+>  extern bool sync_on_suspend_enabled;
+> +
+> +extern void suspend_abort_fs_sync(void);
+>  #else /* !CONFIG_SUSPEND */
+>  #define suspend_valid_only_mem	NULL
+>  
+> @@ -296,6 +298,7 @@ static inline bool idle_should_enter_s2idle(void) { return false; }
+>  static inline void __init pm_states_init(void) {}
+>  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
+>  static inline void s2idle_wake(void) {}
+> +static inline void suspend_abort_fs_sync(void) {}
+>  #endif /* !CONFIG_SUSPEND */
+>  
+>  static inline bool pm_suspend_in_progress(void)
+> diff --git a/kernel/power/process.c b/kernel/power/process.c
+> index dc0dfc349f22..8ff68ebaa1e0 100644
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -132,7 +132,6 @@ int freeze_processes(void)
+>  	if (!pm_freezing)
+>  		static_branch_inc(&freezer_active);
+>  
+> -	pm_wakeup_clear(0);
+>  	pm_freezing = true;
+>  	error = try_to_freeze_tasks(true);
+>  	if (!error)
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index b4ca17c2fecf..dc37ab942bcb 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/compiler.h>
+>  #include <linux/moduleparam.h>
+>  #include <linux/fs.h>
+> +#include <linux/workqueue.h>
+>  
+>  #include "power.h"
+>  
+> @@ -74,6 +75,21 @@ bool pm_suspend_default_s2idle(void)
+>  }
+>  EXPORT_SYMBOL_GPL(pm_suspend_default_s2idle);
+>  
+> +static bool suspend_fs_sync_queued;
+> +static DEFINE_SPINLOCK(suspend_fs_sync_lock);
+> +static DECLARE_COMPLETION(suspend_fs_sync_complete);
+> +
+> +/**
+> + * Triggers the completion that aborts suspend. This completion will only have
+> + * an effect if called during filesystems sync step of suspend.
+> + */
+> +void suspend_abort_fs_sync(void)
 
-I meant rather post complete DTS to mailing lists (so maintainer of
-given SoC family can see it as well), does not have to be the same patchset.
+This is not kerneldoc format, I think the parser will fail on it, right?
+Have you tried building the kernel documentation with this patch
+applied?
 
+> +{
+> +	spin_lock(&suspend_fs_sync_lock);
+> +	complete(&suspend_fs_sync_complete);
+> +	spin_unlock(&suspend_fs_sync_lock);
+> +}
+> +
+>  void s2idle_set_ops(const struct platform_s2idle_ops *ops)
+>  {
+>  	unsigned int sleep_flags;
+> @@ -403,6 +419,71 @@ void __weak arch_suspend_enable_irqs(void)
+>  	local_irq_enable();
+>  }
+>  
+> +static void sync_filesystems_fn(struct work_struct *work)
+> +{
+> +	ksys_sync_helper();
+> +
+> +	spin_lock(&suspend_fs_sync_lock);
+> +	suspend_fs_sync_queued = false;
+> +	complete(&suspend_fs_sync_complete);
+> +	spin_unlock(&suspend_fs_sync_lock);
+> +}
+> +static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
+> +
+> +/**
+> + * suspend_fs_sync_with_abort- Start filesystem sync and handle potential aborts
+> + *
+> + * Starts filesystem sync in a workqueue, while the main thread uses a
+> + * completion to wait for either the filesystem sync to finish or for a wakeup
+> + * event. In the case of filesystem sync finishing and triggering the
+> + * completion, the suspend path continues as normal. If the complete is due to a
+> + * wakeup or abort signal, the code jumps to the suspend abort path while the
+> + * filesystem sync finishes in the background.
+> + *
+> + * An aborted suspend that is followed by another suspend is a potential
+> + * scenario that complicates the sequence. This patch handles this by
+> + * serializing any filesystem sync; a subsequent suspend's filesystem sync
+> + * operation will only start when the previous suspend's filesystem sync has
+> + * finished. Even while waiting for the previous suspend's filesystem sync to
+> + * finish, the subsequent suspend will still break early if a wakeup completion
+> + * is triggered, solving the original issue of filesystem sync blocking abort.
+> + */
 
+Shouldn't this documentation go up in the public one?
 
-Best regards,
-Krzysztof
+thanks,
+
+greg k-h
 
