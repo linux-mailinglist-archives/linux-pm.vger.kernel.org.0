@@ -1,170 +1,160 @@
-Return-Path: <linux-pm+bounces-32421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6A82B27821
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 07:13:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11368B278DA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 08:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE9551CC3136
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 05:13:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 645FDA25EA0
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 06:08:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F242F23E347;
-	Fri, 15 Aug 2025 05:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4DEE25A340;
+	Fri, 15 Aug 2025 06:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4MP8jAwg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5fZdyXJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7306823C4F4
-	for <linux-pm@vger.kernel.org>; Fri, 15 Aug 2025 05:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20512580CC;
+	Fri, 15 Aug 2025 06:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755234785; cv=none; b=oN3bQPxCE+bcPPKWwROtVROnDXD3rSNYtvjHk8JU36TCJNAQLynerl9Ie8zvbGWZFK1mio+A8wysn2bMa6UusQ19YngIaLxER1GpRQdhK4F5+DjaCCthhhMwtPjBb962bRbqqZ8k3wxKAkVuZ1PJoe+hHdIQLbnG91Wg6ilKBU4=
+	t=1755238110; cv=none; b=MfaEnZ04IEtk1Gxx6/FcMsP0J/nhL3NoL0/slnX63nrQkyPwUtIXQ0IBXgeNZKKMDDXATCOFEXxNjmj9vv1Ym0hW0liGH3y9ijiTwGAF5elm6IiRi3DO6AtQGGJqVivCZn+GTJdaE0b+//5HXNiyEDq0SbSGc0R/wv1cMiF9aGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755234785; c=relaxed/simple;
-	bh=asbWxOoHojySmFrLx18w24R1Ongn6WuKn2LRn6DzLwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ctAMn7aAy/6Hc3x2iweQ4/NYGqC8wSSzLGD8YDsW3fIpmvWXQjjsd4D3uUH9SH8eAsY0E7xAIZiaCWmT6irt283R9Ggt6ooGFbP6ib5k0jAZOMwCvN2x0YA8HZnlSMOaydKI7WlrtHsugy5kmcCwtBW58q5zzuNKbZCz7uljj4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4MP8jAwg; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-242d1e947feso119155ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Aug 2025 22:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755234783; x=1755839583; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGQ20RTBx/tdgXgITELcfzTQixi9kkZ3YBoW/JTOkqo=;
-        b=4MP8jAwge1nbWQU34M4RmdLhQjA2wvm2PXqAlXQ1ID7U/R3j9oywchyt3uoy0VX/f+
-         f1rHDVI6Tx5+zhlHiSTZbiIJDctgJFOjVHF36s2TJ8VViQAbtTH1+43UYjyRwVBF1fem
-         W8hZzX0U5+h6OZox5GyCjDXD+DnCNdLjkR9ImahXI7qYGTf8tNe2Mu8xs3JetmKoCMRx
-         Xbqk0x9batGp99rBAMYdQ4KHJYo1nIPTIW7E+hMcV5bxwyjEvvcqwUojkW0aGR5RlgwE
-         1/z6zl9v1577yVMavXTU3n1mn6TRHf+O+iL4kN5cxMRbJVfrKnuSdzgsl4bmvQkMC6Fx
-         RFOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755234783; x=1755839583;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XGQ20RTBx/tdgXgITELcfzTQixi9kkZ3YBoW/JTOkqo=;
-        b=LfWGpIhe0g/b8BCC8tRdn4mos2qgW4yH+nJ5piDqmok56VpMdYx8jF4Gdn4SeKtCAX
-         ExCponOKrynWNJqGRcUGNAxBAZDWpj7Xnj7Dy7PmqlTaScPELsvFCZYbAefUma/26hOi
-         t4qQ2EfWzbkyn02ROTUfGRMIUurQLYFwh1cjwVbudybbjTanqWnzkgc+WsqRoEjp7Lf9
-         0WhDFAxFy/UnIN3+fuW84dWojULdtvmW4nJVdFMYmTTor9M0nPZ4fbBlFYtm3YyzCcX3
-         Hl8pNyH0Ln9bQXyHYZ2Ra1YwwHLhGXGQKifUSAYl5Siv46N38agZjq09S88+zvgcLEMC
-         CbKA==
-X-Forwarded-Encrypted: i=1; AJvYcCWu4b42Lc8EH+XMXecT4MQdnqUV+R1qq9xHbv1A6obeTIUTVQwbKrFoHvVtlK5C92tTybh5hjBt6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLwBVq170cQRSQq0HAcEwI6rFAaH9fbkZmM0HkaK8/XIhhaiiL
-	FpFHn9CZdaQQ1oJpwOA8aXbIujlLXGstrB+XPHMtC/zmkqwK+5i8g1Xd9DAWeYAdHg==
-X-Gm-Gg: ASbGncv46x7pX7uLs8uWwGAUAdRlf0y9sy+1tmytTq6VGJWuBMy93v3N/2ur/gblqEM
-	VrcBOFoblzqKshpQ+fcvXQ0/9TIKHCRS3NHV6bkHV4gnDHuqTxcmdCcmd+Ype42t4dtAwqSG+Dz
-	nk5ybJau6dwnVIxyCfE37ySYsKnk5KS0mYvsFOXhjc+HHjC04lk81wcYRmR/BEVfM+OYftRN2HH
-	jLsZZuBawQc0fAPh/y4lrp0rPql+D/mMyC4VeYv4EIMa4My5K55X/UjIKcvROdj+azZelg2Jova
-	SppZ8Bdo3IvaLLROMLuZGMv3CqGnBMxsWAyQCR2XENKn5cNLe6kXRJbVHDhXF9cJgWWcvQJzQTk
-	Z3l2Uyvsd81E5EGfDPC8HTY/PDXIM0Tw821Cf3Y4N5m3yuj/7SQjqkB7M5OboTCJlJ5Ys7vaoOS
-	8FvwU=
-X-Google-Smtp-Source: AGHT+IHveQGN41PwPlfYDxUUUwq2EqsHNQwAF3RAIPfs5cqhD+TK20yYEi9P/XIeXarW3cFWaQnS/w==
-X-Received: by 2002:a17:902:c94c:b0:240:2bd3:861 with SMTP id d9443c01a7336-24469a6a864mr2555385ad.10.1755234783271;
-        Thu, 14 Aug 2025 22:13:03 -0700 (PDT)
-Received: from google.com (167.212.233.35.bc.googleusercontent.com. [35.233.212.167])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32331191102sm3463989a91.30.2025.08.14.22.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 22:13:02 -0700 (PDT)
-Date: Fri, 15 Aug 2025 05:12:58 +0000
-From: Prashant Malani <pmalani@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	Beata Michalska <beata.michalska@arm.com>,
-	Jie Zhan <zhanjie9@hisilicon.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mel Gorman <mgorman@suse.de>, Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
-Message-ID: <aJ7B2labaxza9duY@google.com>
-References: <aIso4kLtChiQkBjH@arm.com>
- <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
- <aIvQvLL34br6haQi@arm.com>
- <20250801044340.6ycskhhkzenkzt7a@vireshk-i7>
- <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
- <20250811060551.ylc6uutni4x6jqtg@vireshk-i7>
- <aJo5vP_mfBn_vxSF@google.com>
- <CAJZ5v0jvYBUPjSmXas+S8rOG2WAb5u7rk92Gbu1s7A=tJr4VPA@mail.gmail.com>
- <aJpMHkrWJIyHtHL5@google.com>
- <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
+	s=arc-20240116; t=1755238110; c=relaxed/simple;
+	bh=bG2c4T+pSmpVev0zsHpv/hBpG9AoZxYK5gAarWih2dI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M3z5/rKxmG5N+OSK6cmTkaDAPlSfdB7Soek6nw9LO2FI+/USyzw/oI8W5P0epOqfmuWluPraURRfmVGSMkVr7LLJOlsN55FE/75bBLxUaRgAkIdSya6CgTSzMu7w45iuf9p97QCkcVR88ONciX/sByXmiHTktUv19ugFmFCGgsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5fZdyXJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAE2C4CEEB;
+	Fri, 15 Aug 2025 06:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755238110;
+	bh=bG2c4T+pSmpVev0zsHpv/hBpG9AoZxYK5gAarWih2dI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=l5fZdyXJhS8IEJAfL3VjqchEOe+rhQv0EZoG6QCbD7+kZvA41gkQV4W4aQxpWjJRc
+	 S/eoPz/XhvMT1lMHnj4SEflOXoqKOwSSvDSdKWeXiFiem7OJ45DdP3yr/a+zu22QOw
+	 zr505omg93vnFg5bYhmuC7fDOVS1D3+aQwD+LPMLWGkB+bob1OyXcbQ/7wLlI6CRFI
+	 dit5sIFz5D38vqthkxy0dJAkiJkoS7DnDffI+e0xDhHaoZtAsmB9mr8G6DGVBW1Gao
+	 h6ocfLUxsxfd2VzbTcVkGNFART4sR3800DCOeifAG0y2cRtCHxo480tUhHcFoFeZLp
+	 fJXwuhShJspUw==
+Message-ID: <5e79b123-b29a-4edb-8e70-3b7fa6cd3674@kernel.org>
+Date: Fri, 15 Aug 2025 08:08:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/5] dt-bindings: power: Add Marvell PXA1908 domains
+To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>,
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
+ <2017616.PYKUYFuaPT@radijator>
+ <dfaa36d6-41b2-46c1-ba14-e2fb5c9815e6@kernel.org>
+ <1950265.tdWV9SEqCh@radijator>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <1950265.tdWV9SEqCh@radijator>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thanks a lot for taking a look at this, Rafael.
-
-On Aug 14 13:48, Rafael J. Wysocki wrote:
+On 15/08/2025 00:08, Duje Mihanović wrote:
+> On Monday, 11 August 2025 08:38:15 Central European Summer Time 
+> Krzysztof Kozlowski wrote:
+>> On 08/08/2025 21:46, Duje Mihanović wrote:
+>>> On Friday, 8 August 2025 09:34:54 Central European Summer Time Krzysztof 
+>>> Kozlowski wrote:
+>>>> On Wed, Aug 06, 2025 at 07:33:21PM +0200, Duje Mihanović wrote:
+>>>>> +          A number of phandles to clocks that need to be enabled during
+>>>>> domain +          power up.
+>>>>
+>>>> This does not exist in your example, so it is just confusing.
+>>>
+>>> This is because I have not implemented any of the clocks used by the
+>>> domains at this moment.
+>>>
+>>> Actually, I am not sure anymore whether it is necessary to assign
+>>> clocks to the domains as I have just yesterday successfully brought up
+>>> the GPU with some out-of-tree code and that did not require giving the
+>>> domains any clocks even though the vendor kernel does this. Should I
+>>> just go with that and drop all clock handling from the power domain
+>>> driver, at which point there would be no need for the individual domain
+>>> nodes? If not, how should I in the future assign clocks to the domains?
+>>
+>> I am asking to see complete binding with complete DTS in example and
+>> submitted to SoC maintainer.
 > 
-> First off, AFAICS, using idle_cpu() for reliable detection of CPU
-> idleness in a sysfs attribute code path would be at least
-> questionable, if not outright invalid.  By the time you have got a
-> result from it, there's nothing to prevent the CPU in question from
-> going idle or waking up from idle. 
+> Hm, so if in the example (and the actual DTS) each domain is assigned a clock, 
+> can I then keep the domain and domain controller nodes like Mediatek and 
+> Rockchip have?
 
-This is a heuristic-based optimization. The observation is that when
-the CPU is idle (or near-idle/lightly loaded, since FFH actually wakes
-up an idle CPU), the AMU counters as read from the kernel are unreliable.
-It is fine if the CPU wakes up from idle immediately after the check.
-In that case, we'd return the desired frequency (via PCC reg read), which
-is what the frequency would be anyway (if the AMU measurement was
-actually taken).
-
-In a sense, the assumption here is no worse than what is there at
-present; currently the samples are taken across 2us, and (theoretically)
-if the difference between them is 0, we take the fallback path. There is
-nothing to prevent the CPU from waking up immediately after that 2us
-sample period.
-
-> Moreover, the fact that the given
-> CPU is idle from the scheduler perspective doesn't actually mean that
-> it is in an idle state and so it has no bearing on whether or not its
-> performance counters can be accessed etc.
-
-The idle check isn't meant to guard against accessing the counters.
-AFAICT it is perfectly valid to access the counters even when the CPU is
-actually idle.
+You would need to point me to specific files or show some code.
 
 > 
-> The way x86 deals with this problem is to snapshot the counters in
-> question periodically (actually, in scheduler ticks) and fall back to
-> cpu_khz if the interval between the two consecutive updates is too
-> large (see https://elixir.bootlin.com/linux/v6.16/source/arch/x86/kernel/cpu/aperfmperf.c#L502).
-> I think that this is the only reliable way to handle it, but I may be
-> mistaken.
+> Does SoC maintainer here mean the SoC mailing list or the maintainer of the 
+> particular SoC family in question?
 
-This is interesting. I think it may not work for the CPPC case, since
-the registers in question are in some cases accessed through PCC reads
-which require semaphores. I think it would be untenable to do that in
-the tick handler (but I may be mistaken here). It's easier on x86
-since those are always just MSRs.
-We could probably do it for the FFH case, but then we're bifurcating
-the computation method and IMO that's not worth the hassle.
+I meant rather post complete DTS to mailing lists (so maintainer of
+given SoC family can see it as well), does not have to be the same patchset.
 
-Perhaps some of the ARM experts here can think of ways to do this that
-I haven't considered.
+
 
 Best regards,
-
--Prashant
+Krzysztof
 
