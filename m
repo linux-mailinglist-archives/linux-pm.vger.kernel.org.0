@@ -1,188 +1,308 @@
-Return-Path: <linux-pm+bounces-32447-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32448-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C003B2823D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 16:43:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9547BB2843E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 18:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961CFA241B9
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 14:42:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEDB41882B8C
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 16:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A868A22ACFA;
-	Fri, 15 Aug 2025 14:42:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F9D1F582A;
+	Fri, 15 Aug 2025 16:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGhHpuiS"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="LM63ZxS9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DDD1DD9AC;
-	Fri, 15 Aug 2025 14:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3764D310769
+	for <linux-pm@vger.kernel.org>; Fri, 15 Aug 2025 16:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755268932; cv=none; b=SNhpiggnkyeE9A40sTIS95MDv1GE+NrbqcxwEUJI6oJej7AM2cdvzeCFScha1rZK+f/f/Z3Vto/lRpVbPEEb0uvlbXjXrtna2B3INUDpqC6zffP78GwWZK+tg8NEm3lZorToO1CTgrz2utfyFe82d9NHJiBDnmdFLOYya1vf9As=
+	t=1755276386; cv=none; b=qlHK7MLaCaeHSfV2BEbjhmGv7VZwZ7LyWVzliKJ4J12x17NcBmFV/VPwCyMpjrOcPAKioqumHb0//1fuKOoImedQ3LW+J0bMyOTFcI592f/3pDHRWU3hh3msuVs7/SHZ/BAnWBN7fjvIo+xV2nT258axUJvCpQeyzbLQf0yldko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755268932; c=relaxed/simple;
-	bh=3eUf4UXirGpUX0gw3VvalDgnQQxUYuzOa7d+Bn86Fb0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uoFmnoQUiiydNZvBSIwjw1eFMinxeq2dGKl6YT05B4duAUcyXIcx+CZ7jQuJ5taxR7mj7ziRg1uLszZAQ4/r/WbMrgUwP7rVOSMDZcEBij0JMWC0f41d7cXPPdoszmT7Q+eNY2Dl1gb2xUtotHKAg+E5n1JbABVeQWDAIsFn52o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGhHpuiS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B35C4CEEB;
-	Fri, 15 Aug 2025 14:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755268931;
-	bh=3eUf4UXirGpUX0gw3VvalDgnQQxUYuzOa7d+Bn86Fb0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QGhHpuiSTtGAbt/6dlTCnnoTA4ZplxFC8Tro0GJAdbAh12tMNEUSLu07z11OvQBvk
-	 oHTf5TJS/YKStrrrPHeWRzwJ0jGE6j5AZ1tbRvaZy3dDmEE9KCuVb15MPpzSH6J/gw
-	 2nlRciQR5ILTUmZcjfPb8Wftcr9/dguuRdUZKw9cWJDeaG76YAPPH1GvTVv9P/kSEx
-	 wLYcS3eJZ7unChNgWOYh7wQNPjdRjal2zeZDCWKyPnLkisSlJQ+WGVCBgVhn2LIrAt
-	 +qG7XHhqCY/zS15DuM72YtrsT2tpKSGGxqzGtUU2p/oH3AF5g3+H8o04kc5YGhgMBJ
-	 knwp+/59e078g==
-From: Bjorn Andersson <andersson@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	David Airlie <airlied@gmail.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Drew Fustini <fustini@kernel.org>,
-	dri-devel@lists.freedesktop.org,
-	Fabio Estevam <festevam@gmail.com>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Fu Wei <wefu@redhat.com>,
-	Guo Ren <guoren@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	=?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-	imx@lists.linux.dev,
-	Iwona Winiarska <iwona.winiarska@intel.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Lee Jones <lee@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-actions@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-pwm@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-rtc@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev,
-	Liu Ying <victor.liu@nxp.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Nancy Yuen <yuenn@google.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Nicolin Chen <nicoleotsuka@gmail.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	openbmc@lists.ozlabs.org,
-	Patrick Venture <venture@google.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Shengjiu Wang <shengjiu.wang@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Takashi Iwai <tiwai@suse.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Vasily Khoruzhick <anarsoul@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Xiubo Li <Xiubo.Lee@gmail.com>,
-	Yangtao Li <tiny.windzz@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>
-Subject: Re: (subset) [PATCH 00/21] treewide: remove unneeded 'fast_io' parameter in regmap_config
-Date: Fri, 15 Aug 2025 09:42:02 -0500
-Message-ID: <175526892008.370600.8859545110801188375.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
-References: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1755276386; c=relaxed/simple;
+	bh=C/Td9Bgde6R+tt02jHG/MMtYtEWcmB3eNZjcQkDwgyM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sL35VuYc2WXN8KWf/TL72DR8NKzay6MrnLb9vvJKJXzoacLbW2aAUSe6ZXfGyKvXoQRAG8XhP2sBsETcrhbRlAQab7mWtiilTjXpRCxK4aXyOU5c4NfdKsJ/tvEHsFT3iYMOPVXYAq+Kevxoye82T+knKF2rVSkQK9n5SiJx+dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=LM63ZxS9; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24458317464so23732395ad.3
+        for <linux-pm@vger.kernel.org>; Fri, 15 Aug 2025 09:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1755276384; x=1755881184; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=G+ZroGpNdJmwln/9q6Kw/hEokSx6KAAuSZ3AUY/4HU0=;
+        b=LM63ZxS99ZEKSzn47DbA0bCkLEcll7oQCMIgjeT1SbMj4Ok15lJDJgiJgLdfdHw3/x
+         A/xKOJ8YICIn0BJA9G9h+V1BzAICM0/JlsueGJV0TX2Tcd48FvsbMUa05VXcjwUwtSdW
+         8qRiPlQicHxcEybKGjgzcRaLlUum7qrL2lyS4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755276384; x=1755881184;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G+ZroGpNdJmwln/9q6Kw/hEokSx6KAAuSZ3AUY/4HU0=;
+        b=sWBhdVaBk8LsfTuQaooeNc8kPRNaXpzSkSgDfN2CvFaacvJ2pSD3QEOyesoGYu7FVF
+         DpLSkivHTjbhEy3YouK2eUxWqQ9LYF0/kq+U7s9yBZn397CePMvUJ75Ov7ouhhgeSXbZ
+         HVfsSCsput/a5WtS6R1244bXDbEJOhMU62D404IPk3KqN6PCb2lx0l3stbawkxF3kIeI
+         aAXVCKrGld6WyV/Xm7nfsl3texgiCKdv2gNJGxraE3i7cZ1Lqdc04hrXpzS7y49CEZ2Y
+         GI1FNZi/n5yUmJqR5je/poWti6LTtNHPltZT/PpF0KNKZmGkwfgDYqD3JzzDX4RDgUni
+         66Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUaaUrpmu1eMqP4u89IL6Un4U4Ztn76aX4Qol2Yg5lJrfmhfTbMm7CMBYBqWaZDLCohaNr7ighBCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+hp11ETLCuPySnk2He8Ra8RV6qPWv20VEHw/7w3WAMQBbsLa+
+	dSzeJr2c5HeBoT+3HZ8Fgco71q4vPtj2oFtC5LbGrc9pYfWvZ+mNMYuPp5/lXZktcg==
+X-Gm-Gg: ASbGnctjkSDf3s7wLpCdeeAjvM2PsoDN9GdAx5H9h86zzMwMvEHjSlcYALubA39ml3v
+	+F2+5EXUT6jKCYWca9SjKbmwnW0JAqsiG8j2oV2O/Dg0IaI8w9tXT+rPIggN1YFqLxZp1iAJ7kB
+	Dmds4CVUQk8FveCyS/MG6wZo6a1zA/JD0imrpJTJpE5MI5RUs0Rhz7zVorh6Otf05gt+lp65sRR
+	qIqpC+Fa2IvEqVUYWYwOg19tVswenvl5UQzkC7vS25+ar5v3rqOdH/GuUhfDBzxhRolZmiDhmKZ
+	YB7KqvpglqZoOnQIo2E6d7eg6SFIFlhu2KBS8EAm0s4Mgj/Sl2OMk47g/OfxhbVkfgfy4ES5Dq+
+	m19r3sBdNIkro9PRJA6IAkimTDKPF14B2sM55/M1zULxm+B7n56OXRCwYv0bC40xgrw==
+X-Google-Smtp-Source: AGHT+IGaD7NipiYs8pCnXLAQK1a0gZQDqVBrHWQuhpKPItWLuIo1KSHzmEWzXChNb0FI2lLCfCq27w==
+X-Received: by 2002:a17:902:cece:b0:234:f4da:7eeb with SMTP id d9443c01a7336-2446d5af738mr48517595ad.7.1755276384349;
+        Fri, 15 Aug 2025 09:46:24 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d56d5bbsm17558665ad.147.2025.08.15.09.46.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Aug 2025 09:46:23 -0700 (PDT)
+Message-ID: <79711a6c-8b59-43c9-bbbc-369be1608a49@broadcom.com>
+Date: Fri, 15 Aug 2025 09:46:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: scmi: Add quirk to disable checks in
+ scmi_dev_used_by_cpus()
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: linux-kernel@vger.kernel.org, james.quinlan@broadcom.com,
+ Sudeep Holla <sudeep.holla@arm.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Peng Fan <peng.fan@nxp.com>, Mike Tipton <quic_mdtipton@quicinc.com>,
+ arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org
+References: <20250814225155.3519000-1-florian.fainelli@broadcom.com>
+ <aJ7rBgce5eWSkkk3@pluto>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <aJ7rBgce5eWSkkk3@pluto>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Wed, 13 Aug 2025 18:14:46 +0200, Wolfram Sang wrote:
-> While working on a driver using regmap with MMIO, I wondered if I need
-> to set 'fast_io' in the config. Turned out I don't need to, so I added
-> documentation for it with commit ffc72771ff6e ("regmap: Annotate that
-> MMIO implies fast IO").
+On 8/15/25 01:08, Cristian Marussi wrote:
+> On Thu, Aug 14, 2025 at 03:51:55PM -0700, Florian Fainelli wrote:
+>> Broadcom STB platforms were early adopters of the SCMI framework and as
+>> a result, not all deployed systems have a Device Tree entry where SCMI
+>> protocol 0x13 (PERFORMANCE) is declared as a clock provider, nor are the
+>> CPU Device Tree node(s) referencing protocol 0x13 as their clock
+>> provider.
+>>
+>> Leverage the quirks framework recently introduce to match on the
+>> Broadcom SCMI vendor and in that case, disable the Device Tree
+>> properties checks being done by scmi_dev_used_by_cpus().
+>>
 > 
-> This series fixes the existing users in the tree which needlessly set
-> the flag. They have been found using this coccinelle script:
+> Hi,
 > 
-> [...]
+>> Suggested-by: Cristian Marussi <cristian.marussi@arm.com>
+>> Fixes: 6c9bb8692272 ("cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs")
+>> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>> ---
+>>   drivers/cpufreq/scmi-cpufreq.c     | 13 +++++++++++++
+>>   drivers/firmware/arm_scmi/quirks.c |  2 ++
+>>   drivers/firmware/arm_scmi/quirks.h |  1 +
+>>   3 files changed, 16 insertions(+)
+>>
+>> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+>> index ef078426bfd5..80647511d3c3 100644
+>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>> @@ -22,6 +22,8 @@
+>>   #include <linux/types.h>
+>>   #include <linux/units.h>
+>>   
+>> +#include "../drivers/firmware/arm_scmi/quirks.h"
+>> +
+> 
+> I will post a patch to move this header up to avoid the uglyness of this
+> include....
 
-Applied, thanks!
+Sounds good, thanks!
 
-[18/21] soc: remove unneeded 'fast_io' parameter in regmap_config
-        commit: 5d8a9c8401648d338d072a488d455ed4611c5d4b
+> 
+>>   struct scmi_data {
+>>   	int domain_id;
+>>   	int nr_opp;
+>> @@ -34,6 +36,7 @@ struct scmi_data {
+>>   static struct scmi_protocol_handle *ph;
+>>   static const struct scmi_perf_proto_ops *perf_ops;
+>>   static struct cpufreq_driver scmi_cpufreq_driver;
+>> +static bool __maybe_unused scmi_cpufreq_dt_props_check_disable;
+>>   
+> 
+> Not sure why you introduce an intermediate global bool to check...this
+> defeats a bit the whole idea of the quirks framework which is based on
+> static_keys and is supposed to be mostly transarent when quirks are not
+> enabled....
+> 
+> Couldn't you just move the quirk inside the get_rate ?
 
-Best regards,
+Yes, I just had not realized that the execution of the quirk was already 
+conditional, so it makes sense not to need any intermediate boolean.
+
+> (maybe I am missing something around compiler behaviours..)
+>   
+> #define QUIRK_SCMI_CPUFREQ_CHECK_DT_PROPS		\
+> ({							\
+> 	if (true)					\
+> 		return true;				\
+> })
+> 
+>>   static unsigned int scmi_cpufreq_get_rate(unsigned int cpu)
+>>   {
+>> @@ -400,6 +403,9 @@ static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
+>>   	struct device *cpu_dev;
+>>   	int cpu, idx;
+>>   
+> 
+> +	SCMI_QUIRK(scmi_cpufreq_no_check_dt_props, QUIRK_SCMI_CPUFREQ_CHECK_DT_PROPS);
+> 
+>>   	if (!scmi_np)
+>>   		return false;
+>>   
+>> @@ -427,12 +433,19 @@ static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
+>>   	return false;
+>>   }
+>>   
+>> +#define QUIRK_SCMI_CPUFREQ_CHECK_DT_PROPS			\
+>> +	({							\
+>> +		scmi_cpufreq_dt_props_check_disable = true;	\
+>> +	})
+>> +
+>>   static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>>   {
+>>   	int ret;
+>>   	struct device *dev = &sdev->dev;
+>>   	const struct scmi_handle *handle;
+>>   
+> 
+>> +	SCMI_QUIRK(scmi_cpufreq_no_check_dt_props, QUIRK_SCMI_CPUFREQ_CHECK_DT_PROPS);
+>> +
+> 
+> ...removing this of course
+> 
+>>   	handle = sdev->handle;
+>>   
+>>   	if (!handle || !scmi_dev_used_by_cpus(dev))
+>> diff --git a/drivers/firmware/arm_scmi/quirks.c b/drivers/firmware/arm_scmi/quirks.c
+>> index 03960aca3610..aafc7b4b3294 100644
+>> --- a/drivers/firmware/arm_scmi/quirks.c
+>> +++ b/drivers/firmware/arm_scmi/quirks.c
+>> @@ -171,6 +171,7 @@ struct scmi_quirk {
+>>   /* Global Quirks Definitions */
+>>   DEFINE_SCMI_QUIRK(clock_rates_triplet_out_of_spec, NULL, NULL, NULL);
+>>   DEFINE_SCMI_QUIRK(perf_level_get_fc_force, "Qualcomm", NULL, "0x20000-");
+>> +DEFINE_SCMI_QUIRK_EXPORTED(scmi_cpufreq_no_check_dt_props, "brcm-scmi", NULL, "0x2");
+> 
+> Also, are you sure about using version as "0x2" ? That is supposed to
+> indicate the (optional) SCMI FW Version to which this quirk will
+> apply...and with that it means whatever FW versioning you use in
+> Broadcom to identify build versions....it is NOT the SCMI Protocol
+> Version, so that also means that if/when you will change the advertised
+> version, this quirk wont apply anymore...or equally if there are older
+> version than 0x2 that are buggy they wont be quirked...
+
+It's a good point, we should actually be matching on <= 0x2
+
+> 
+> One more doubt I have (despite me having suggested this solution) is
+> that here you are quirking against a malformed deployed DT really,
+> not against some SCMI FW anomaly in the Broadcom FW, but using the
+> SCMI Quirks framework you are tying the quirk to the SCMI FW Vendor
+> and maybe some specific SCMI FW Version....
+
+Yes that is a very good point, maybe that's abusing the quirks framework 
+so to speak.
+
+> 
+> ...so what will happen when you will update/fix your DT in the future ?
+> Will you also take care to bump the BRCM SCMI FW version to disable the
+> quirk in the DT deployed by your FW binary ?
+
+Yes we would bump the version number to indicate that the Device Tree 
+has always been fixed, both go hand in hand on our platforms. Or, as I 
+suggested privately to address the stable back ports, maybe it would be 
+better to do something like this:
+
+@@ -430,6 +428,14 @@ static bool scmi_dev_used_by_cpus(struct device 
+*scmi_dev)
+                         return true;
+         }
+
++       /* Older Broadcom STB chips had a "clocks" property that did not 
+match
++        * the SCMI performance protocol Device Tree node, if we got 
+there, it
++        * means we had such an older Device Tree, therefore return true in
++        * the interest of preserving backwards compatibility.
++        */
++       if (of_machine_is_compatible("brcm,brcmstb"))
++               return true;
++
+         return false;
+  }
+
+
+which would be more in line with checking the Device Tree only, and it 
+would also allow for unmodified backports to reach the stable trees. 
+Contrary to what I suggested privately however, this check is done 
+later, so we leave a chance for properly formed DT to return "true" 
+earlier on.
+
+What do you think? I am now leaning more towards that solution that 
+leveraging the quirks as I agree it is somewhat unrelated.
+
+Thanks!
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Florian
 
