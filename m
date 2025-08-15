@@ -1,133 +1,216 @@
-Return-Path: <linux-pm+bounces-32428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32429-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFED1B27CFD
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 11:25:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40FD9B27E3D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 12:28:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E917EB05A9A
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 09:17:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 492E75E6893
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 10:28:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31132D59E5;
-	Fri, 15 Aug 2025 09:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a8YFn/S3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6FB2FDC21;
+	Fri, 15 Aug 2025 10:28:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADF02D4B75;
-	Fri, 15 Aug 2025 09:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA732DAFCD;
+	Fri, 15 Aug 2025 10:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755249280; cv=none; b=XH5/3Pti5Xxr5LEEqovOFOx3+ZM4CJPrfLnT7pqCQ+wC2UpUvZVX4e7JxX/nlPCkZUsncWGSJ98O+jjAsNDa9HG8lGegyWhE5xqBtnGZy2klzGwagn+d8dfDVczZ9sPXFgft/pp5MLMLALj3pLxTdS/c+1uNYObYI4XC0o0Cv2I=
+	t=1755253681; cv=none; b=MTHSnDEYfNXQoCHV1+KIEka4tB+HXn0hhnRRInuSrfkSpSKWFjGJ32DEH6KV/8gzAXPhmIGxlE+Ge3utcOjtiVQQlAN5TsqbLE5e3R62AYlGf37AlpmvJreY1qtSnWyDpl/vQs7nFlX6+vNutX25I1CuwbhhlwH7dIl4+d9gKdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755249280; c=relaxed/simple;
-	bh=QZjvCZwPx47dYvhGTHPDlNi0jae0uoi4YRRACk1E9qw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=E4UaVsSOaWpAoJz8q3bj2F6mnv5i0kXwxPPckY25Iq/ME/SRtUfiuuVKgRhz0SJeAHudYtL43LWyMYojpq3gny+UZerbDFgLWfljAGFgfcQqDOytF/12Z4xR1QSxgFRsPcg1wHX2+We2U4sW8p1oZZrJnekpaAOcL/xf14zpMIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a8YFn/S3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6E65C4CEEB;
-	Fri, 15 Aug 2025 09:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755249279;
-	bh=QZjvCZwPx47dYvhGTHPDlNi0jae0uoi4YRRACk1E9qw=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=a8YFn/S3P61J8sbJi4SrFh1yUqhu3tvXfSF9eG3PBFA3pNMcEOvVAgbYT3VuP85j8
-	 p72KTPzXUro2zcJXh6pP+So83BZiff9iE7BOpGF+r6Eq1bMnd0Jy9yDjDfMDAXNgWS
-	 /nD75tos7QJtj2E+QA1gBjtQ+GO1zIsQBycLRtKouu8Jdz9bugfpHg0nLl++OLmAn9
-	 3X8uyAarvxuiaH6FdqZgqlYRjkU8jLwgQMcS/TxIRMIUA05vDjLwvluIY4XR9qM1G6
-	 bf/62jQtZE/l1c/uJFEJGewIvnIB/bx7/IYs2bNmOXTohmW1eEY7cBn1rypz+HHHEV
-	 Ryrys5xpV3qTA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0D4ACA0ED1;
-	Fri, 15 Aug 2025 09:14:39 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Fri, 15 Aug 2025 17:14:30 +0800
-Subject: [PATCH v2] cpupower: fix mangled powercap comment
+	s=arc-20240116; t=1755253681; c=relaxed/simple;
+	bh=wxIj/QdXOqFxCKkQBXdIC17thzMXussFdYxDWLLMO+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JlNeB+NY7vvZ/fHstQ9t/tFOaXRN8iKd+yxWonPWhXjAjmw1J2DXof3tjpW2kCzPo9Xj3xilJs6n9ChN/Kc8lOS1DoByEfeeLEywoS7/ovfgNt2N3LBLUFbXhMvZ4BeLJ7tI6rbuNI4Ruuen4wL/O43Esq34+m8lktCnNFloodk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B7D91691;
+	Fri, 15 Aug 2025 03:27:50 -0700 (PDT)
+Received: from pluto.fritz.box (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D7853F738;
+	Fri, 15 Aug 2025 03:27:55 -0700 (PDT)
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	arm-scmi@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: sudeep.holla@arm.com,
+	james.quinlan@broadcom.com,
+	f.fainelli@gmail.com,
+	vincent.guittot@linaro.org,
+	quic_sibis@quicinc.com,
+	dan.carpenter@linaro.org,
+	d-gole@ti.com,
+	johan+linaro@kernel.org,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	quic_mdtipton@quicinc.com,
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH 1/2] firmware: arm_scmi: Rework quirks framework header
+Date: Fri, 15 Aug 2025 11:27:35 +0100
+Message-ID: <20250815102736.81450-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250815-mangled_cpupower-v2-1-6ec877145c47@uniontech.com>
-X-B4-Tracking: v=1; b=H4sIAHX6nmgC/32OTQ6CMBCFr0JmbU1bUiyuuIchBspgm0hLWkAN6
- d0dOYB5q+8l72eHhNFhgmuxQ8TNJRc8gTwVYGznH8jcQAySS8U1r9hE5hOHu5nXObwwMiV0ddH
- 1qHvZA8XmiKN7H5W3lti6tIT4ORY28XP/lG2CkTqlalHyUlZ9s3p6tKCxZxMmaHPOX+9rdBC0A
- AAA
-X-Change-ID: 20250806-mangled_cpupower-5186789f8b2b
-To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Wangyuli@uniontech.com, Guanwentao@uniontech.com, Zhanjun@uniontech.com, 
- Niecheng1@uniontech.com, Cryolitia PukNgae <cryolitia@uniontech.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755249278; l=1825;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=9ykgyTgoh2lTXbqw1zH4abC6aqqZU7uyOJ0J1/86iV8=;
- b=ifh4iMw6UDBi/MHxRQzpTQPSYx63sosgOtlReVx/ZxojPljMaonehGX2QF4yF/FLEpUHwMGnM
- 3P9GbJMxTUDAwHUGvoQstp0otfJbvjTPQv53pMe0RsZ5AXS5LGrsrL+
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+Content-Transfer-Encoding: 8bit
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Split and relocate the quirks framework header so as to be usable also by
+SCMI Drivers and not only by the core.
 
-Remove leading dashes from current comments and clarify its semantics
-
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
-The current comment exhibits a clear failed patch application artifact:
-1. A stray '-' prefix indicating failed line removal
-2. Broken sentence structure from improper context patching
+ drivers/firmware/arm_scmi/clock.c  |  2 +-
+ drivers/firmware/arm_scmi/driver.c |  1 +
+ drivers/firmware/arm_scmi/quirks.h | 33 +++-------------------
+ include/linux/scmi_quirks.h        | 44 ++++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+), 30 deletions(-)
+ create mode 100644 include/linux/scmi_quirks.h
 
-For those interested in archaeology:
-
-What appears to be version control residue has persisted since its
-initial introduction and through the 2022 kernel submission[1]. While
-my archaeological efforts only trace back to the 2017 openSUSE patch[2],
-the corrupted syntax suggests even older origins that remain elusive -
-perhaps maintainers with longer institutional memory could shed light
-on its provenance.
-
-1. https://lore.kernel.org/all/20221123111810.16017-2-trenn@suse.de/
-2. https://build.opensuse.org/request/show/535512
----
-Changes in v2:
-- Simplify expression
-- Link to v1: https://lore.kernel.org/r/20250806-mangled_cpupower-v1-1-1a559130326b@uniontech.com
----
- tools/power/cpupower/lib/powercap.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-index 94a0c69e55ef5e4291b13a4218e706fa8d14e6a7..609943c829efce8045d97097b5f5e9ec86d0f519 100644
---- a/tools/power/cpupower/lib/powercap.c
-+++ b/tools/power/cpupower/lib/powercap.c
-@@ -87,8 +87,6 @@ int powercap_set_enabled(int mode)
+diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
+index afa7981efe82..5599697de37a 100644
+--- a/drivers/firmware/arm_scmi/clock.c
++++ b/drivers/firmware/arm_scmi/clock.c
+@@ -7,11 +7,11 @@
  
- /*
-  * Hardcoded, because rapl is the only powercap implementation
--- * this needs to get more generic if more powercap implementations
-- * should show up
+ #include <linux/module.h>
+ #include <linux/limits.h>
++#include <linux/scmi_quirks.h>
+ #include <linux/sort.h>
+ 
+ #include "protocols.h"
+ #include "notify.h"
+-#include "quirks.h"
+ 
+ /* Updated only after ALL the mandatory features for that version are merged */
+ #define SCMI_PROTOCOL_SUPPORTED_VERSION		0x30000
+diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+index bd56a877fdfc..6f5934cd3a65 100644
+--- a/drivers/firmware/arm_scmi/driver.c
++++ b/drivers/firmware/arm_scmi/driver.c
+@@ -34,6 +34,7 @@
+ #include <linux/processor.h>
+ #include <linux/refcount.h>
+ #include <linux/slab.h>
++#include <linux/scmi_quirks.h>
+ #include <linux/xarray.h>
+ 
+ #include "common.h"
+diff --git a/drivers/firmware/arm_scmi/quirks.h b/drivers/firmware/arm_scmi/quirks.h
+index a71fde85a527..260ae38d617b 100644
+--- a/drivers/firmware/arm_scmi/quirks.h
++++ b/drivers/firmware/arm_scmi/quirks.h
+@@ -4,49 +4,24 @@
+  *
+  * Copyright (C) 2025 ARM Ltd.
   */
- int powercap_get_driver(char *driver, int buflen)
- {
-
----
-base-commit: 6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
-change-id: 20250806-mangled_cpupower-5186789f8b2b
-
-Best regards,
+-#ifndef _SCMI_QUIRKS_H
+-#define _SCMI_QUIRKS_H
++#ifndef _SCMI_QUIRKS_INTERNAL_H
++#define _SCMI_QUIRKS_INTERNAL_H
+ 
+-#include <linux/static_key.h>
++#include <linux/device.h>
+ #include <linux/types.h>
+ 
+ #ifdef CONFIG_ARM_SCMI_QUIRKS
+ 
+-#define DECLARE_SCMI_QUIRK(_qn)						\
+-	DECLARE_STATIC_KEY_FALSE(scmi_quirk_ ## _qn)
+-
+-/*
+- * A helper to associate the actual code snippet to use as a quirk
+- * named as _qn.
+- */
+-#define SCMI_QUIRK(_qn, _blk)						\
+-	do {								\
+-		if (static_branch_unlikely(&(scmi_quirk_ ## _qn)))	\
+-			(_blk);						\
+-	} while (0)
+-
+ void scmi_quirks_initialize(void);
+ void scmi_quirks_enable(struct device *dev, const char *vend,
+ 			const char *subv, const u32 impl);
+ 
+ #else
+ 
+-#define DECLARE_SCMI_QUIRK(_qn)
+-/* Force quirks compilation even when SCMI Quirks are disabled */
+-#define SCMI_QUIRK(_qn, _blk)						\
+-	do {								\
+-		if (0)							\
+-			(_blk);						\
+-	} while (0)
+-
+ static inline void scmi_quirks_initialize(void) { }
+ static inline void scmi_quirks_enable(struct device *dev, const char *vend,
+ 				      const char *sub_vend, const u32 impl) { }
+ 
+ #endif /* CONFIG_ARM_SCMI_QUIRKS */
+ 
+-/* Quirk delarations */
+-DECLARE_SCMI_QUIRK(clock_rates_triplet_out_of_spec);
+-DECLARE_SCMI_QUIRK(perf_level_get_fc_force);
+-
+-#endif /* _SCMI_QUIRKS_H */
++#endif /* _SCMI_QUIRKS_INTERNAL_H */
+diff --git a/include/linux/scmi_quirks.h b/include/linux/scmi_quirks.h
+new file mode 100644
+index 000000000000..11657bd91ffc
+--- /dev/null
++++ b/include/linux/scmi_quirks.h
+@@ -0,0 +1,44 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * System Control and Management Interface (SCMI) Message Protocol Quirks
++ *
++ * Copyright (C) 2025 ARM Ltd.
++ */
++#ifndef _SCMI_QUIRKS_H
++#define _SCMI_QUIRKS_H
++
++#include <linux/static_key.h>
++#include <linux/types.h>
++
++#ifdef CONFIG_ARM_SCMI_QUIRKS
++
++#define DECLARE_SCMI_QUIRK(_qn)						\
++	DECLARE_STATIC_KEY_FALSE(scmi_quirk_ ## _qn)
++
++/*
++ * A helper to associate the actual code snippet to use as a quirk
++ * named as _qn.
++ */
++#define SCMI_QUIRK(_qn, _blk)						\
++	do {								\
++		if (static_branch_unlikely(&(scmi_quirk_ ## _qn)))	\
++			(_blk);						\
++	} while (0)
++
++#else
++
++#define DECLARE_SCMI_QUIRK(_qn)
++/* Force quirks compilation even when SCMI Quirks are disabled */
++#define SCMI_QUIRK(_qn, _blk)						\
++	do {								\
++		if (0)							\
++			(_blk);						\
++	} while (0)
++
++#endif /* CONFIG_ARM_SCMI_QUIRKS */
++
++/* Quirk delarations */
++DECLARE_SCMI_QUIRK(clock_rates_triplet_out_of_spec);
++DECLARE_SCMI_QUIRK(perf_level_get_fc_force);
++
++#endif /* _SCMI_QUIRKS_H */
 -- 
-Cryolitia PukNgae <cryolitia@uniontech.com>
-
+2.50.1
 
 
