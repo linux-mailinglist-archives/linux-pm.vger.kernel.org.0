@@ -1,172 +1,140 @@
-Return-Path: <linux-pm+bounces-32462-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32463-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC965B2888E
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 00:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF96CB28B3F
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 09:03:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D53453A714E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Aug 2025 22:47:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFBC3BF9B9
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 07:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B1A2797B7;
-	Fri, 15 Aug 2025 22:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB4721FF49;
+	Sat, 16 Aug 2025 07:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jFJ3KC87"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="B90Bbbv3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4553E26FA5B;
-	Fri, 15 Aug 2025 22:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF8E21B918;
+	Sat, 16 Aug 2025 07:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755297982; cv=none; b=CO8ewOJTS8cEZQwAz0NBsO1RH1akmGfQy979Kbtdvp4GG9e5AQqp9GJksXVKwdoqLiV1svpoTpWOVKGbGOOrLGAGUIGsFXYRDaiG1LJUl5cQ4Se5ITNkUAU8W7sEcdSPWCdzO4SQXF3s5xaC9e4qXH5pd0TdY/a7tg/mG+Q4MIU=
+	t=1755327794; cv=none; b=fdqxyH8Fv13JzKCvP8IeFBKEQc1QGsixRVwlalzRRRgsZgToVAKom7CN4lqkZCKkMcJ3f2sesGfcGxHX9Ov6DEoa1g+XKWEzH+fX6//TKelmIG6VCfM03FujZbGwV129ph0AZoGjGbWE/hz/La8nOZIr6EEvX6ASJSRncwaExHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755297982; c=relaxed/simple;
-	bh=u9fFsF2iHOwJaZjt2Mj49SD8+5gqYNXn9/RV/uV7boE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QcROuywlffmdc3tkp6CVljj+ExIn6QiQbONGjWyS1BuIBJ88EdS63bcQU0bUjP1X+Mmd6JdIo4Uz0iXdbnhsTvq04nNdudcyzQyJ0DSLq9uQ58yG51JtVUjqEPodDkWln25s4yTFrjTMPblVzX2KLWvgsBRxV9vpzIeyF30GFHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jFJ3KC87; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755297980; x=1786833980;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=u9fFsF2iHOwJaZjt2Mj49SD8+5gqYNXn9/RV/uV7boE=;
-  b=jFJ3KC87wPjJT4n06i2IPHXSsiFrGhJy4fawJmFCqRhSTjwa4oczPHM0
-   q0+V/nvMrClbLLFEb3PdIdiROITOauiJeY4GUH18ddywcoxRqkK2ldCnU
-   rBByoBYjqCRk4PyuyEXHjvI0f4DDYKG1eVB087mAwdITo6BA7TVAY8xi6
-   T/+boFYesEr4EadREN6xALyyeLn9HLUjN8KOWgeocejBSACkePe5tu2N5
-   1DnVJbDotee4Wug0Clgx87eo/6BSOoVs4ejMQUm98gyQBo1r4/OpqWuDK
-   G2YILJFIR/+Q0USG39MPqu9oOeTmBpnQ0yQkbPyNchhlJ3CMDMgZGLdl5
-   Q==;
-X-CSE-ConnectionGUID: Fxijb6FPR8epEje44Gjkqg==
-X-CSE-MsgGUID: D08B+xhGSsmLvsCakltTwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57724954"
-X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="57724954"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 15:46:18 -0700
-X-CSE-ConnectionGUID: RM8aahzWRDK+6S7oZSNsOA==
-X-CSE-MsgGUID: rdzRp68gQK+m6ixyVZKKoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="166734421"
-Received: from jdoman-mobl3.amr.corp.intel.com (HELO xpardee-desk.lan) ([10.124.223.173])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 15:46:17 -0700
-From: Xi Pardee <xi.pardee@linux.intel.com>
-To: xi.pardee@linux.intel.com,
-	irenic.rajneesh@gmail.com,
-	david.e.box@linux.intel.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v3 6/6] platform/x86:intel/pmc: Enable SSRAM support for Panther Lake
-Date: Fri, 15 Aug 2025 15:46:04 -0700
-Message-ID: <20250815224611.2460255-7-xi.pardee@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250815224611.2460255-1-xi.pardee@linux.intel.com>
-References: <20250815224611.2460255-1-xi.pardee@linux.intel.com>
+	s=arc-20240116; t=1755327794; c=relaxed/simple;
+	bh=OnJuy7emtHk4hQBUmYOKm/D2zPW1BmNtYcmtvPGdvAY=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=DWoNrbRBQlNg5ebANu3tgwP7PlhUhjzkXvXEldwK+pXV1bX5CWwbXqF3pV4Jit3Fwmf9ajnQbnzcIMsZVJOc24eDqhN57/tbgCvhiJaoR46zMyJ9oPJAM9XYN4b/r7rjPc8TqDEU00R+hvE50oSyHLzJY0muJrGAL5oqqHYo5y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=B90Bbbv3; arc=none smtp.client-ip=134.0.28.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+	by mxout4.routing.net (Postfix) with ESMTP id 87FCD10078F;
+	Sat, 16 Aug 2025 06:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1755327352;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cOdNjKyebw/s0rYRUwH2anrLdBAU4WTiR9sWOyp0RzU=;
+	b=B90Bbbv3kORkuslteF8M9lfemmr/Ar1i0t3y1qMPZ3aNWD5GMw4AF99Zmf/twP1Z2Xvzxh
+	VHoMItSyNhLXYNk6eJP2k+iwn8QLsnvEmMzpau4i7qAkKW02XnkQBDIX7WsMeXFCbyVHbA
+	JGT7zABH+1AdtypI/z6yjto4yaFzkLc=
+Received: from [IPv6:::1] (unknown [IPv6:2a01:599:a34:a3b8:9076:e76e:6930:1412])
+	by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 156781002C7;
+	Sat, 16 Aug 2025 06:55:51 +0000 (UTC)
+Date: Sat, 16 Aug 2025 08:55:51 +0200
+From: Frank Wunderlich <linux@fw-web.de>
+To: patchwork-bot+netdevbpf@kernel.org
+CC: myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com,
+ djakov@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, johnson.wang@mediatek.com,
+ arinc.unal@arinc9.com, Landen.Chao@mediatek.com, dqfext@gmail.com,
+ sean.wang@mediatek.com, daniel@makrotopia.org, lorenzo@kernel.org,
+ nbd@nbd.name, frank-w@public-files.de, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v9 00/13] further mt7988 devicetree work
+User-Agent: K-9 Mail for Android
+In-Reply-To: <175218542224.1682269.17523198222056896163.git-patchwork-notify@kernel.org>
+References: <20250709111147.11843-1-linux@fw-web.de> <175218542224.1682269.17523198222056896163.git-patchwork-notify@kernel.org>
+Message-ID: <8A21C091-0C26-4E9F-9B9E-E28A01F71369@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mail-ID: d7d08745-eee0-42d0-ad9e-cba520e4f9d1
 
-Enable Panther Lake platforms to achieve PMC information from
-Intel PMC SSRAM Telemetry driver and substate requirements data
-from telemetry region.
+Am 11=2E Juli 2025 00:10:22 MESZ schrieb patchwork-bot+netdevbpf@kernel=2Eo=
+rg:
+>Hello:
+>
+>This series was applied to netdev/net-next=2Egit (main)
+>by Jakub Kicinski <kuba@kernel=2Eorg>:
+>
+>On Wed,  9 Jul 2025 13:09:36 +0200 you wrote:
+>> From: Frank Wunderlich <frank-w@public-files=2Ede>
+>>=20
+>> This series continues mt7988 devicetree work
+>>=20
+>> - Extend cpu frequency scaling with CCI
+>> - GPIO leds
+>> - Basic network-support (ethernet controller + builtin switch + SFP Cag=
+es)
+>>=20
+>> [=2E=2E=2E]
+>
+>Here is the summary with links:
+>  - [v9,01/13] dt-bindings: net: mediatek,net: update mac subnode pattern=
+ for mt7988
+>    https://git=2Ekernel=2Eorg/netdev/net-next/c/29712b437339
+>  - [v9,02/13] dt-bindings: net: mediatek,net: allow up to 8 IRQs
+>    https://git=2Ekernel=2Eorg/netdev/net-next/c/356dea0baf4c
+>  - [v9,03/13] dt-bindings: net: mediatek,net: allow irq names
+>    https://git=2Ekernel=2Eorg/netdev/net-next/c/23ac2a71bdbd
+>  - [v9,04/13] dt-bindings: net: mediatek,net: add sram property
+>    https://git=2Ekernel=2Eorg/netdev/net-next/c/c4582a31efd9
+>  - [v9,05/13] dt-bindings: net: dsa: mediatek,mt7530: add dsa-port defin=
+ition for mt7988
+>    https://git=2Ekernel=2Eorg/netdev/net-next/c/588cb646ce70
+>  - [v9,06/13] dt-bindings: net: dsa: mediatek,mt7530: add internal mdio =
+bus
+>    https://git=2Ekernel=2Eorg/netdev/net-next/c/66a44adf4c3d
+>  - [v9,07/13] arm64: dts: mediatek: mt7986: add sram node
+>    (no matching commit)
+>  - [v9,08/13] arm64: dts: mediatek: mt7986: add interrupts for RSS and i=
+nterrupt names
+>    (no matching commit)
+>  - [v9,09/13] arm64: dts: mediatek: mt7988: add basic ethernet-nodes
+>    (no matching commit)
+>  - [v9,10/13] arm64: dts: mediatek: mt7988: add switch node
+>    (no matching commit)
+>  - [v9,11/13] arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for ethe=
+rnet
+>    (no matching commit)
+>  - [v9,12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and li=
+nk to gmac
+>    (no matching commit)
+>  - [v9,13/13] arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phy=
+s and leds
+>    (no matching commit)
+>
+>You are awesome, thank you!
 
-Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/core.h |  4 ++++
- drivers/platform/x86/intel/pmc/ptl.c  | 33 +++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+Hi
 
-diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index 6ff2d171dc2ba..381755aaeafaf 100644
---- a/drivers/platform/x86/intel/pmc/core.h
-+++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -297,6 +297,10 @@ enum ppfear_regs {
- #define PTL_PMC_LTR_CUR_ASLT			0x1C28
- #define PTL_PMC_LTR_CUR_PLT			0x1C2C
- #define PTL_PCD_PMC_MMIO_REG_LEN		0x31A8
-+#define PTL_NUM_S0IX_BLOCKER			106
-+#define PTL_BLK_REQ_OFFSET			55
-+#define PTL_BDF_OFFSET				0x0
-+#define PTL_BDF_TABLE_SIZE			54
- 
- /* SSRAM PMC Device ID */
- /* LNL */
-diff --git a/drivers/platform/x86/intel/pmc/ptl.c b/drivers/platform/x86/intel/pmc/ptl.c
-index 394515af60d60..20c6dac7a6729 100644
---- a/drivers/platform/x86/intel/pmc/ptl.c
-+++ b/drivers/platform/x86/intel/pmc/ptl.c
-@@ -10,6 +10,17 @@
- 
- #include "core.h"
- 
-+/* PMC SSRAM PMT Telemetry GUIDS */
-+#define PCDP_LPM_REQ_GUID 0x47179370
-+
-+/*
-+ * Die Mapping to Product.
-+ * Product PCDDie
-+ * PTL-H   PCD-H
-+ * PTL-P   PCD-P
-+ * PTL-U   PCD-P
-+ */
-+
- static const struct pmc_bit_map ptl_pcdp_pfear_map[] = {
- 	{"PMC_0",               BIT(0)},
- 	{"FUSE_OSSE",           BIT(1)},
-@@ -515,6 +526,24 @@ static const struct pmc_reg_map ptl_pcdp_reg_map = {
- 	.lpm_live_status_offset = MTL_LPM_LIVE_STATUS_OFFSET,
- 	.s0ix_blocker_maps = ptl_pcdp_blk_maps,
- 	.s0ix_blocker_offset = LNL_S0IX_BLOCKER_OFFSET,
-+	.num_s0ix_blocker = PTL_NUM_S0IX_BLOCKER,
-+	.blocker_req_offset = PTL_BLK_REQ_OFFSET,
-+	.bdf_offset = PTL_BDF_OFFSET,
-+	.bdf_table_size = PTL_BDF_TABLE_SIZE,
-+};
-+
-+static struct pmc_info ptl_pmc_info_list[] = {
-+	{
-+		.guid	= PCDP_LPM_REQ_GUID,
-+		.devid	= PMC_DEVID_PTL_PCDH,
-+		.map	= &ptl_pcdp_reg_map,
-+	},
-+	{
-+		.guid   = PCDP_LPM_REQ_GUID,
-+		.devid  = PMC_DEVID_PTL_PCDP,
-+		.map    = &ptl_pcdp_reg_map,
-+	},
-+	{}
- };
- 
- #define PTL_NPU_PCI_DEV                0xb03e
-@@ -543,8 +572,12 @@ static int ptl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_in
- }
- 
- struct pmc_dev_info ptl_pmc_dev = {
-+	.pci_func = 2,
-+	.regmap_list = ptl_pmc_info_list,
- 	.map = &ptl_pcdp_reg_map,
-+	.sub_req_show = &pmc_core_substate_blk_req_fops,
- 	.suspend = cnl_suspend,
- 	.resume = ptl_resume,
- 	.init = ptl_core_init,
-+	.sub_req = pmc_core_pmt_get_sub_req_bdf,
- };
--- 
-2.43.0
-
+Any comments on the missing DTS parts or can they applied too?
+regards Frank
 
