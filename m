@@ -1,140 +1,176 @@
-Return-Path: <linux-pm+bounces-32463-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32464-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF96CB28B3F
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 09:03:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4EEAB28BD9
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 10:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFBC3BF9B9
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 07:03:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A83141C26142
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Aug 2025 08:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB4721FF49;
-	Sat, 16 Aug 2025 07:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077F623507F;
+	Sat, 16 Aug 2025 08:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="B90Bbbv3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HZ6BRHb/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF8E21B918;
-	Sat, 16 Aug 2025 07:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F05821D3E2
+	for <linux-pm@vger.kernel.org>; Sat, 16 Aug 2025 08:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755327794; cv=none; b=fdqxyH8Fv13JzKCvP8IeFBKEQc1QGsixRVwlalzRRRgsZgToVAKom7CN4lqkZCKkMcJ3f2sesGfcGxHX9Ov6DEoa1g+XKWEzH+fX6//TKelmIG6VCfM03FujZbGwV129ph0AZoGjGbWE/hz/La8nOZIr6EEvX6ASJSRncwaExHc=
+	t=1755332726; cv=none; b=A8rsxzji0oHoZd2ju5hcJfF1HhJXsccxOyctYfkRuRPSpKVkSxJxCV4dDIu/1NQFTqVXHpldzb1/oKAHOR+iYd5aGEGC+h2rWRQ42QZQO7sGKnh/8qbPeVPSqdnVUYsMVmra9PVl4HyDzg2rQcbqMbDahn6WUjvdaH7L45Mc8jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755327794; c=relaxed/simple;
-	bh=OnJuy7emtHk4hQBUmYOKm/D2zPW1BmNtYcmtvPGdvAY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=DWoNrbRBQlNg5ebANu3tgwP7PlhUhjzkXvXEldwK+pXV1bX5CWwbXqF3pV4Jit3Fwmf9ajnQbnzcIMsZVJOc24eDqhN57/tbgCvhiJaoR46zMyJ9oPJAM9XYN4b/r7rjPc8TqDEU00R+hvE50oSyHLzJY0muJrGAL5oqqHYo5y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=B90Bbbv3; arc=none smtp.client-ip=134.0.28.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-	by mxout4.routing.net (Postfix) with ESMTP id 87FCD10078F;
-	Sat, 16 Aug 2025 06:55:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1755327352;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cOdNjKyebw/s0rYRUwH2anrLdBAU4WTiR9sWOyp0RzU=;
-	b=B90Bbbv3kORkuslteF8M9lfemmr/Ar1i0t3y1qMPZ3aNWD5GMw4AF99Zmf/twP1Z2Xvzxh
-	VHoMItSyNhLXYNk6eJP2k+iwn8QLsnvEmMzpau4i7qAkKW02XnkQBDIX7WsMeXFCbyVHbA
-	JGT7zABH+1AdtypI/z6yjto4yaFzkLc=
-Received: from [IPv6:::1] (unknown [IPv6:2a01:599:a34:a3b8:9076:e76e:6930:1412])
-	by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 156781002C7;
-	Sat, 16 Aug 2025 06:55:51 +0000 (UTC)
-Date: Sat, 16 Aug 2025 08:55:51 +0200
-From: Frank Wunderlich <linux@fw-web.de>
-To: patchwork-bot+netdevbpf@kernel.org
-CC: myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com,
- djakov@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, johnson.wang@mediatek.com,
- arinc.unal@arinc9.com, Landen.Chao@mediatek.com, dqfext@gmail.com,
- sean.wang@mediatek.com, daniel@makrotopia.org, lorenzo@kernel.org,
- nbd@nbd.name, frank-w@public-files.de, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v9 00/13] further mt7988 devicetree work
-User-Agent: K-9 Mail for Android
-In-Reply-To: <175218542224.1682269.17523198222056896163.git-patchwork-notify@kernel.org>
-References: <20250709111147.11843-1-linux@fw-web.de> <175218542224.1682269.17523198222056896163.git-patchwork-notify@kernel.org>
-Message-ID: <8A21C091-0C26-4E9F-9B9E-E28A01F71369@fw-web.de>
+	s=arc-20240116; t=1755332726; c=relaxed/simple;
+	bh=p+HcVR10ta9/uaaYclCChxgtwY4bqG6Q0PXNzlAtXHM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kqQt7+be6E+twZnQMogAxBExggCATKxve3ZbaN0HVzX82bwkEZqwZRO1AAA3XjZfalW/v0vpnd3+YQgQon3AewLoRbuE4iR6H2YFyoUqjuJog+6wLsqu1cIxwMim3C7vPs+uJPV7klNy/uwO/1LmNiXV2exOcPTKR0O4kE0rok8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HZ6BRHb/; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4b0bf04716aso149471cf.1
+        for <linux-pm@vger.kernel.org>; Sat, 16 Aug 2025 01:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755332724; x=1755937524; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CcKVYqJUUq15Nb/o2vZGlw1IVIH6lK7WPKjHZ7oVxTo=;
+        b=HZ6BRHb/ztUjG6Yv4x1DYqmiJYl1uhXlqOu8ypOuIU+JqRuKy9vLAanfdVVqr75FjF
+         4gBBRzXWj90BbytjcKHfMQlafRuYSzv9ziYKsFZWbLtfA3cyqaOYTFLc6pB2db+mQqpd
+         VAqNKg2sJcxUvqNcJ5tzQuHs1G0HK/3GbXWCOd67nqR+xPKF93bn6HIHdilaCplCy1w1
+         eYjW2aYIqoZ0qfvwYtyCUWlX+PSNUMfOwYTQFCNR6H5op6HEZt6hCKsyiw97QKzIX1v1
+         DGLBg7oz0JAQWS4jPprBuMNGkG8hlg5qBM2Ryfo7W4Jq5i2w6+OtE/0JLW/euvT7q0eD
+         JWAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755332724; x=1755937524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CcKVYqJUUq15Nb/o2vZGlw1IVIH6lK7WPKjHZ7oVxTo=;
+        b=admmV8hn2SWqQHGJzL587kT/orLPMbXBycnGUoX2L+gCXdBApUKhvfUzEH8tpjlRMN
+         T5xvYP36AzLShPKAk9JGjo9sm1FQ94nPwu4K6eQJvC95B8rAX/cM5kA51RiQYsktqbGl
+         vLHex34mixzb2CHL3v0hadgMPBmP4bSuXiRiccIqlM9q0khQ5aBnNcomTU7PEWYyOM3k
+         rnm4WFDxjrT2SU0y8hp5hI8sdqIbQeaKlfzgCugJCAMcXYJd7D2LlQjk7rvpsoL8R5ZE
+         Y+BDVcyLytEjeQv7CuJUi6JGnrxCOrn989oo/r8l8/SVHveObdSbVwAQNJaGBbBKj56C
+         Btow==
+X-Forwarded-Encrypted: i=1; AJvYcCWldSkfPkQoqLrEJd7m2bT5JX4+wCPra+4q8aqQgLkpUJAjG/C3z3RbARROil7iHDDCLeCp4CWTvg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjQItETzj9CMsO3HWs8kpQAZLO90bR990AXKF55IvdmODXGTSq
+	P+abI65TN4swEv6zeYnR8TQ88KZch3zSOOpgaiaKyJQI6F3Dw9+FYWruOl9MPnzm9nRxvTQzD26
+	s57kAavDMcMU0VxonWMO3OrEAMPiFjCzrsBaR/QNw
+X-Gm-Gg: ASbGncvRussFfwQZCubtcVgUlLiGvxXXomo+f4ewMoYJsioYKZnKs7hn6Be3tiTyrUS
+	ysNd9p5oQwkS+vxgkumV7kLyr+p6P8yS4lYmTPfk6La4pUsYU/OzAayHUmVaqULhWxodZnQYJrk
+	JqyLB0zj/ghIH9zn90O9y2TP9eMTphcE7yxT7qDJu3EoFmQC1b/bQegBoytQmo0JeXv2+s4G4R5
+	mLII9X4DJYxBiKB6wscdvo=
+X-Google-Smtp-Source: AGHT+IEQbivhj3tl+6o8LMgkOExG/JUNcGy6VeXofwQfI4D993PMUyWCBHesPgvEVq3iyGxc9aHIA4hyPXlnpCWM6mI=
+X-Received: by 2002:ac8:58cf:0:b0:4b0:9c14:2fec with SMTP id
+ d75a77b69052e-4b129efd3a5mr3441311cf.8.1755332723849; Sat, 16 Aug 2025
+ 01:25:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: d7d08745-eee0-42d0-ad9e-cba520e4f9d1
+References: <aIso4kLtChiQkBjH@arm.com> <20250731111324.vv6vsh35enk3gg4h@vireshk-i7>
+ <aIvQvLL34br6haQi@arm.com> <20250801044340.6ycskhhkzenkzt7a@vireshk-i7>
+ <CAFivqm+gBBSCoVUxmeatu8TjwunzBtfjeDMNBL0JCsPhkFEg5A@mail.gmail.com>
+ <20250811060551.ylc6uutni4x6jqtg@vireshk-i7> <aJo5vP_mfBn_vxSF@google.com>
+ <CAJZ5v0jvYBUPjSmXas+S8rOG2WAb5u7rk92Gbu1s7A=tJr4VPA@mail.gmail.com>
+ <aJpMHkrWJIyHtHL5@google.com> <CAJZ5v0hXUoqmxwjH0CN8gGDj=qnC3ZWrJc5VarkqRfh=0SCUWw@mail.gmail.com>
+ <aJ7B2labaxza9duY@google.com>
+In-Reply-To: <aJ7B2labaxza9duY@google.com>
+From: Prashant Malani <pmalani@google.com>
+Date: Sat, 16 Aug 2025 01:25:12 -0700
+X-Gm-Features: Ac12FXz-buK8Ymw1j9cj9Q2HpIKhfRfUYsvg-_hreoqsYarB4FEIuJ08Ueg7hFk
+Message-ID: <CAFivqmKyRnz-uE8TO+0H26os8uPjL_vcMHiPME3Q5yDu3Ph=4Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Dont read counters for idle CPUs
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Beata Michalska <beata.michalska@arm.com>, 
+	Jie Zhan <zhanjie9@hisilicon.com>, Ionela Voinescu <ionela.voinescu@arm.com>, 
+	Ben Segall <bsegall@google.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, Mel Gorman <mgorman@suse.de>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Valentin Schneider <vschneid@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	z00813676 <zhenglifeng1@huawei.com>, sudeep.holla@arm.com
+Content-Type: text/plain; charset="UTF-8"
 
-Am 11=2E Juli 2025 00:10:22 MESZ schrieb patchwork-bot+netdevbpf@kernel=2Eo=
-rg:
->Hello:
+On Thu, 14 Aug 2025 at 22:13, Prashant Malani <pmalani@google.com> wrote:
 >
->This series was applied to netdev/net-next=2Egit (main)
->by Jakub Kicinski <kuba@kernel=2Eorg>:
+> Thanks a lot for taking a look at this, Rafael.
 >
->On Wed,  9 Jul 2025 13:09:36 +0200 you wrote:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->> This series continues mt7988 devicetree work
->>=20
->> - Extend cpu frequency scaling with CCI
->> - GPIO leds
->> - Basic network-support (ethernet controller + builtin switch + SFP Cag=
-es)
->>=20
->> [=2E=2E=2E]
+> On Aug 14 13:48, Rafael J. Wysocki wrote:
+> >
+> > First off, AFAICS, using idle_cpu() for reliable detection of CPU
+> > idleness in a sysfs attribute code path would be at least
+> > questionable, if not outright invalid.  By the time you have got a
+> > result from it, there's nothing to prevent the CPU in question from
+> > going idle or waking up from idle.
 >
->Here is the summary with links:
->  - [v9,01/13] dt-bindings: net: mediatek,net: update mac subnode pattern=
- for mt7988
->    https://git=2Ekernel=2Eorg/netdev/net-next/c/29712b437339
->  - [v9,02/13] dt-bindings: net: mediatek,net: allow up to 8 IRQs
->    https://git=2Ekernel=2Eorg/netdev/net-next/c/356dea0baf4c
->  - [v9,03/13] dt-bindings: net: mediatek,net: allow irq names
->    https://git=2Ekernel=2Eorg/netdev/net-next/c/23ac2a71bdbd
->  - [v9,04/13] dt-bindings: net: mediatek,net: add sram property
->    https://git=2Ekernel=2Eorg/netdev/net-next/c/c4582a31efd9
->  - [v9,05/13] dt-bindings: net: dsa: mediatek,mt7530: add dsa-port defin=
-ition for mt7988
->    https://git=2Ekernel=2Eorg/netdev/net-next/c/588cb646ce70
->  - [v9,06/13] dt-bindings: net: dsa: mediatek,mt7530: add internal mdio =
-bus
->    https://git=2Ekernel=2Eorg/netdev/net-next/c/66a44adf4c3d
->  - [v9,07/13] arm64: dts: mediatek: mt7986: add sram node
->    (no matching commit)
->  - [v9,08/13] arm64: dts: mediatek: mt7986: add interrupts for RSS and i=
-nterrupt names
->    (no matching commit)
->  - [v9,09/13] arm64: dts: mediatek: mt7988: add basic ethernet-nodes
->    (no matching commit)
->  - [v9,10/13] arm64: dts: mediatek: mt7988: add switch node
->    (no matching commit)
->  - [v9,11/13] arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for ethe=
-rnet
->    (no matching commit)
->  - [v9,12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and li=
-nk to gmac
->    (no matching commit)
->  - [v9,13/13] arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phy=
-s and leds
->    (no matching commit)
+> This is a heuristic-based optimization. The observation is that when
+> the CPU is idle (or near-idle/lightly loaded, since FFH actually wakes
+> up an idle CPU), the AMU counters as read from the kernel are unreliable.
+> It is fine if the CPU wakes up from idle immediately after the check.
+> In that case, we'd return the desired frequency (via PCC reg read), which
+> is what the frequency would be anyway (if the AMU measurement was
+> actually taken).
 >
->You are awesome, thank you!
+> In a sense, the assumption here is no worse than what is there at
+> present; currently the samples are taken across 2us, and (theoretically)
+> if the difference between them is 0, we take the fallback path. There is
+> nothing to prevent the CPU from waking up immediately after that 2us
+> sample period.
+>
+> > Moreover, the fact that the given
+> > CPU is idle from the scheduler perspective doesn't actually mean that
+> > it is in an idle state and so it has no bearing on whether or not its
+> > performance counters can be accessed etc.
+>
+> The idle check isn't meant to guard against accessing the counters.
+> AFAICT it is perfectly valid to access the counters even when the CPU is
+> actually idle.
+>
+> >
+> > The way x86 deals with this problem is to snapshot the counters in
+> > question periodically (actually, in scheduler ticks) and fall back to
+> > cpu_khz if the interval between the two consecutive updates is too
+> > large (see https://elixir.bootlin.com/linux/v6.16/source/arch/x86/kernel/cpu/aperfmperf.c#L502).
+> > I think that this is the only reliable way to handle it, but I may be
+> > mistaken.
+>
+> This is interesting. I think it may not work for the CPPC case, since
+> the registers in question are in some cases accessed through PCC reads
+> which require semaphores. I think it would be untenable to do that in
+> the tick handler (but I may be mistaken here). It's easier on x86
+> since those are always just MSRs.
+> We could probably do it for the FFH case, but then we're bifurcating
+> the computation method and IMO that's not worth the hassle.
 
-Hi
+I looked around a bit more and it turns out arm64 is already doing something
+similar to what you propose.
+It takes a snapshot of the counters every tick, and falls back to
+arch_scale_freq_capacity() for another non-idle CPU (checked using idle_cpu())
+in the same frequency domain if the interval between snapshots is too long [1].
 
-Any comments on the missing DTS parts or can they applied too?
-regards Frank
+However, this function only works some of the time; if the CPU hasn't had
+a tick in a while *and* there is no other non-idle CPU in the frequency domain,
+it returns an error [2].
+
+Moreover, cpuinfo_cur_freq doesn't use this (it reads the frequency directly
+from the CPPC driver).
+
+(I'll abandon this series if you still believe this is an invalid
+approach; just thought
+I'd get this bit of clarification in, for my own understanding).
+
+BR,
+
+-Prashant
+
+[1] https://elixir.bootlin.com/linux/v6.16-rc7/source/arch/arm64/kernel/topology.c#L285
+[2] https://elixir.bootlin.com/linux/v6.16-rc7/source/arch/arm64/kernel/topology.c#L336
 
