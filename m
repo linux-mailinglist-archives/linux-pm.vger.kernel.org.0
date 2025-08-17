@@ -1,136 +1,140 @@
-Return-Path: <linux-pm+bounces-32472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F186B291CF
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Aug 2025 08:14:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD26B29225
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Aug 2025 10:11:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C792920415B
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Aug 2025 06:14:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D0E416FB92
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Aug 2025 08:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68C421146C;
-	Sun, 17 Aug 2025 06:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C281A704B;
+	Sun, 17 Aug 2025 08:11:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqjcg51b"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="ptp9HLYf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8429E1C75E2;
-	Sun, 17 Aug 2025 06:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439AC3176F3;
+	Sun, 17 Aug 2025 08:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755411289; cv=none; b=gqAEwUSW5rUnFNZNqDynH/ChwrsSjkVhtHiAivxZ6XZhl2WlTv3zBtM8yZdU6BnCPydmGNDdCCV3RYYC6RT33ravYXOk+czUBKivPVjEMMtfPnBnXtATQenNMUEBq/jJLzuprlR+501r1YXWE5YpBJ1vEnCiVV2mhyv9NcY5V3g=
+	t=1755418297; cv=none; b=l34JiBF2SN7Gx51+ZLfFbOKHlwikKlyvIRhEtUiiDfZhBPvZKrXPMVBSao699C9ECiIxsx9TvE6xjCS3x+h1KpCKB3CEFMZdK8p87SJc9vHK++cNe3OuOlYeDi8ffmwUHLhXXocBcB4k+SEtF47Yi6swoxCJ8eoCskwHDqqgQqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755411289; c=relaxed/simple;
-	bh=FjnyjISls+IwhhvqV3CdP32QGr0K26AOzU5vLlgcAsE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mdaOB3DaIShm9LSEXqxk1dymixOU7T7ZbZG/iIfQAR8O/aldf8lW2wEq+V1T/RzmOPddOhzTkxxzKCS6BqpOlLg+khZMSlcUcf+7HFQnqRD7jXfRR+w4hzfyFKB9nlQ+d6RlH+v2fdp8aqd4suCAx+afLbfPYpE4poy4KxdIss4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqjcg51b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E41C4CEEB;
-	Sun, 17 Aug 2025 06:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755411289;
-	bh=FjnyjISls+IwhhvqV3CdP32QGr0K26AOzU5vLlgcAsE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dqjcg51bwM8xslcGuw5W8w163m6q+bpK9eHvBLTK/sBTx5s5j/E0UcRGz2j6uRh15
-	 B09ChBfZE4kB6QnA9NmnU+4jA0CXefpx1bOQ2HMSlU5oP8gFjclxljQuV2GcLskZ1p
-	 AqvMSLeyyfxb+hgc4O60d/2HE3bCwQFOay4qmlqXzTOdvSNkEaKF0U1U9IwUoNfZQ3
-	 M1FFk+V47LYnAIrqBKjeQF+YwrhqOMYAG9jwwWs8NLqKTCbEg79TxAEUcNUa4JVLYC
-	 UKegg4k7CCSfRPNsopgrKFi64rgL6jkLfKtxa/Xr8DbUYd52fCSwkK0lCka84rSDVM
-	 Z8dgxsP9kUO1A==
-Message-ID: <49858742-8850-44bf-a844-9e26210515c5@kernel.org>
-Date: Sun, 17 Aug 2025 08:14:44 +0200
+	s=arc-20240116; t=1755418297; c=relaxed/simple;
+	bh=9cKIpwfpd76s4SX839MHd2puU8y0zvewU1dqpii8VLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V3f/Xp9IoYjKVys2eyznBY4XKnQ4+AgQmCaYdVpSVi1eW6l99eJ6k6UF44a5+tUEW5gshgWBkP2y0jxjgoXUOu6DyU32bgpB6MA8oqjbQldRK00o128rzR2vDvb0GsIEhsjzAGHwYGR2S2iUwaxditBtN+a42cU0Xi3Vxl4LP5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=ptp9HLYf; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Yzrez2PhIRgnpgnDDYVXxuPWw4oVVXpF1zgwKJH2Owg=; b=ptp9HLYfZsA43eVAwwpIh2GGmv
+	NB93PtELwRF2bkSt17oZAneVKaFXDvv1XDWvRldaRhPMcq9Pv6UOYEvwNSj8AC2AHzXX9nYqp14dt
+	63q9o9O4LCdW0YJLKqXer59OVO3wH33sNaVtZUv6d3Fl+Be8rI58Wd1Ydj1zdt1S3jddZYbaEyQ5H
+	DDkZS3ACnNej/LuqYQmFhPgfHAXkq4MqKrF91IPbMcHRXteQE3Hxc0vuGfDlGM3GegBfAEFP6uXy1
+	0e473GF4gPZKR7I9F/z4bpIPPujMuEt3/AMetDQoGA92DSaBDQdwRrDQMyPYyLSzYu4YXKbtVUhRx
+	zq6njp+Q==;
+Date: Sun, 17 Aug 2025 10:11:21 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Lee Jones <lee@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/2] power: supply: Add bd718(15/28/78) charger driver
+Message-ID: <20250817101121.19a86716@akair>
+In-Reply-To: <bf82cd81-bcc7-4929-aa84-b749533d5b95@kernel.org>
+References: <20250816-bd71828-charger-v1-0-71b11bde5c73@kemnade.info>
+	<20250816-bd71828-charger-v1-2-71b11bde5c73@kemnade.info>
+	<bf82cd81-bcc7-4929-aa84-b749533d5b95@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/5] dt-bindings: power: Add Marvell PXA1908 domains
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>,
- phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
- <1950265.tdWV9SEqCh@radijator>
- <5e79b123-b29a-4edb-8e70-3b7fa6cd3674@kernel.org>
- <6196438.lOV4Wx5bFT@radijator>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <6196438.lOV4Wx5bFT@radijator>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 16/08/2025 17:13, Duje Mihanović wrote:
-> On Friday, 15 August 2025 08:08:24 Central European Summer Time Krzysztof Kozlowski wrote:
->> On 15/08/2025 00:08, Duje Mihanović wrote:
->>>> I am asking to see complete binding with complete DTS in example and
->>>> submitted to SoC maintainer.
->>>
->>> Hm, so if in the example (and the actual DTS) each domain is assigned a
->>> clock, can I then keep the domain and domain controller nodes like Mediatek
->>> and Rockchip have?
->>
->> You would need to point me to specific files or show some code.
+Am Sun, 17 Aug 2025 07:58:35 +0200
+schrieb Krzysztof Kozlowski <krzk@kernel.org>:
+
+> On 16/08/2025 21:19, Andreas Kemnade wrote:
+> > Add charger driver for ROHM BD718(15/28/78) PMIC charger block.
+> > It is a stripped down version of the driver here:
+> > https://lore.kernel.org/lkml/dbd97c1b0d715aa35a8b4d79741e433d97c562aa.1637061794.git.matti.vaittinen@fi.rohmeurope.com/  
 > 
-> Sure, mediatek,power-controller.yaml and rockchip,power-controller.yaml
-> in Documentation/devicetree/bindings/power.
+> Why are you duplicating the driver? Why original cannot be used?
+> 
+> 
+I am not duplicating the driver. That patch series never went in. I am
+stripping it down to let things go in step by step. I have also talked
+with Sebastian about this. And he also prefers a step by step approach
+to have it more easily reviewed.
+I also do not have the infrastructure to test things like capacity
+degradation over time. There is non-trivial rebasing work involved, so
+I even do not feel confident submitting such at all.
+> ...
+> 
+> > +
+> > +#define RSENS_DEFAULT_30MOHM 30000 /* 30 mOhm in uOhms*/
+> > +
+> > +static int bd7182x_get_rsens(struct bd71828_power *pwr)
+> > +{
+> > +	u64 tmp = RSENS_CURR;
+> > +	int rsens_ohm = RSENS_DEFAULT_30MOHM;
+> > +	struct fwnode_handle *node = NULL;
+> > +
+> > +	if (pwr->dev->parent)
+> > +		node = dev_fwnode(pwr->dev->parent);
+> > +
+> > +	if (node) {
+> > +		int ret;
+> > +		uint32_t rs;
+> > +
+> > +		ret = fwnode_property_read_u32(node,
+> > +					       "rohm,charger-sense-resistor-micro-ohms",  
+> 
+> Hm? Are you writing ACPI or DT driver?
+> 
+I am writing a driver for a platform device which gets information via
+dt properties. The property is defined in
+Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
 
-I see, but your DTS is nothing like that.
+[...]
 
-Best regards,
-Krzysztof
+> > +	pwr->bat = devm_power_supply_register(&pdev->dev, &bd71828_bat_desc,
+> > +					      &bat_cfg);
+> > +	if (IS_ERR(pwr->bat)) {
+> > +		return dev_err_probe(&pdev->dev, PTR_ERR(pwr->bat),
+> > +				     "failed to register bat\n");
+> > +	}
+> > +
+> > +	ret = bd7182x_get_irqs(pdev, pwr);
+> > +	if (ret) {  
+> 
+> Please run scripts/checkpatch.pl on the patches and fix reported
+> warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
+> patches and (probably) fix more warnings. Some warnings can be ignored,
+> especially from --strict run, but the code here looks like it needs a
+> fix. Feel free to get in touch if the warning is not clear.
+> 
+> Drop {}
+> 
+> This applies to other places as well.
+>
+ok, I have forgotten the --strict. And {} around multiline things do
+not trigger anything at my brain, even if it just a single statement.
+BTW: Is there any way to mark warnings as handled if they can be
+ignored, so that I do not see them in subsequent submissions?
+
+Regards,
+Andreas
 
