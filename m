@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-32549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8403B2ABCE
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 16:56:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37EE3B2AB5D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 16:47:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 422581BA5E75
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:46:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE1907B49B4
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFA335A2A4;
-	Mon, 18 Aug 2025 14:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BFFF1E8836;
+	Mon, 18 Aug 2025 14:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+/OZpX3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUfBupIk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6201E35A281;
-	Mon, 18 Aug 2025 14:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4ED288AD;
+	Mon, 18 Aug 2025 14:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755528351; cv=none; b=L056EsCqFMfZy249LpCL5iRM4aqUaT2as/RHTELXaU3mNOlZbCvUXiUUk3/ErYl0KC1qgMB9O/NvMU0ZtwXDFiw174JQszhUjQzRPFcwTW1KG7U0s5Wy9JhQBQHnzu9gCEUpl+oBludK0gX5Ko7vDAEeeBQcNi24Xykw3+DGvDw=
+	t=1755528374; cv=none; b=QzShyITpK8356QKRfsz1c+2RCO4CL9z0lOtG3YruSYQ1VIDQ4BdokQMlnwafGyr3o7B2pz1YZXZ3F0xjr3Z2kvVfN5tE492VSZtEvkeiSDBYhnVMWDlX5zHJ/vF8R3jxfyBpMVlJ/kEARujO4qumO1Iem8uvPoKKpthJnZg+mPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755528351; c=relaxed/simple;
-	bh=X0oD6T+0KCeyvHa6EsuJf8DOYSfoCovDJsEwGreIgnA=;
+	s=arc-20240116; t=1755528374; c=relaxed/simple;
+	bh=26Gcb51wetNK+PBLoRJR5fmInPQxmwHOyQeWok+JmcY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IWwN3ys3Z1QrIx1bXuziDGa3bQPSJMXS6eyUN1ZkXHSidFzXLnBQT1n/e6S+R2ggccfli8Ll6zo1693ZoEyhnmOo0meCLip+le9D+FGD4ZvmF6gJUXd3x66ciLW0MTp4jfeU5EgPpXo8FPDHRl4L6r8wZy2jZ5VZkeDOqstybvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+/OZpX3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE30C4CEEB;
-	Mon, 18 Aug 2025 14:45:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mXD3Mygm/I9gEcSGjBA1uerR1fQSUw9AhIPBGJu4E2UKGyaPn3wmLTsmNsDqCpB0RCLlP978D8bwQI307zGdmdr8/4sUm29ByvU2x+k8ke+4+CMDnFk8szhKNGB8W6HqlxglxkLvNkMLsspyNDaIQxAizvkWwxdOSKItXf85ta8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cUfBupIk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EEBC113D0;
+	Mon, 18 Aug 2025 14:46:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755528351;
-	bh=X0oD6T+0KCeyvHa6EsuJf8DOYSfoCovDJsEwGreIgnA=;
+	s=k20201202; t=1755528372;
+	bh=26Gcb51wetNK+PBLoRJR5fmInPQxmwHOyQeWok+JmcY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g+/OZpX3i3AWlAOFr4MPqwCQev5CfIXjLB2Keddvm2ql15Z/X1E8PZVlFBd3LCCbQ
-	 5rdfTOsUvclgeSA2lPtuAxCIwibJci9EYWmu8UpR4BhgySWjb+FldU//zbVkaC7ham
-	 gZFMxhKz1sRvOpMqpA97CKGl7tXkkR4WC72cxC38ysz/sVwt9NDShcEUWktD8eBlHO
-	 PXiW9AXkMAT33P6C97oy7yo7l+zVxdNbnL02fhC/Za+pUd8Dns2mEjuy4D7aDNkpZ0
-	 8Ms4nBqDl3qypFP+VY19+neK+1rdWL1x2T4Ig6UiFEet4OOh1/7zvdoUW/Xqbq7rJf
-	 Rl+kgUJyfvE6Q==
-Message-ID: <fa24dba2-8569-4564-83ef-08c5f8734e61@kernel.org>
-Date: Mon, 18 Aug 2025 16:45:44 +0200
+	b=cUfBupIkFP+/H0qx/2JZVmsOk/i5lVBrScZtTbxRvCAhc/992yHrc7nw9b5XLxk2u
+	 l59zjqNoT7RVR39lEFpCylPsbkDbb/uJfE0rG37yCo47IF1J2+4eReq5w8zwXJuWIX
+	 TjVj4lg3kls1xPhL+UqcLe5ljzKEceZm8DU+rH9FFFTy+IwYM9jpkuITZp/Vck9xoI
+	 Vihq9MJMcJOmE7qAEZO+M4sw0URnHQ8PLqkKsMIrwxxCE6tvbcoOViUP5VEpscKKfr
+	 LlOGTM6GbAPaS+oU0CwRAtRuZxFwhTYKjEojFZAHLD9byQLhMfzbv1QlvlBNJZcIFf
+	 rVfM72mrILo1Q==
+Message-ID: <ce53ee01-d9c4-43c2-9244-55694bcd392e@kernel.org>
+Date: Mon, 18 Aug 2025 16:46:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] dt-bindings: power: mediatek: Add new MT8189 power
+Subject: Re: [PATCH 3/6] dt-bindings: clock: mediatek: Add MT8189 clock
+ definitions
 To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -66,9 +67,9 @@ Cc: Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
  Project_Global_Chrome_Upstream_Group@mediatek.com, sirius.wang@mediatek.com,
  vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
 References: <20250818115754.1067154-1-irving-ch.lin@mediatek.com>
- <20250818115754.1067154-3-irving-ch.lin@mediatek.com>
-Content-Language: en-US
+ <20250818115754.1067154-4-irving-ch.lin@mediatek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -112,119 +113,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250818115754.1067154-3-irving-ch.lin@mediatek.com>
+In-Reply-To: <20250818115754.1067154-4-irving-ch.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/08/2025 13:57, irving.ch.lin wrote:
 > From: Irving-ch Lin <irving-ch.lin@mediatek.com>
 > 
-> Add the new binding documentation for power controller
-> on MediaTek MT8189.
+> Add device tree bindings for the clock of MediaTek MT8189 SoC.
+> These definitions will be used to describe the clock topology in
+> device tree sources.
 > 
 > Signed-off-by: Irving-ch Lin <irving-ch.lin@mediatek.com>
 > ---
->  .../mediatek,mt8189-power-controller.yaml     | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.yaml
-> new file mode 100644
-> index 000000000000..1bf8f94858c8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.yaml
-> @@ -0,0 +1,94 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/mediatek,mt8189-power-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Power Domains Controller for MT8189
-> +
-> +maintainers:
-> +  - Qiqi Wang <qiqi.wang@mediatek.com>
-> +
-> +description: |
-> +  MediaTek processors include support for multiple power domains which can be
-> +  powered up/down by software based on different application scenes to save power.
-> +
-> +  IP cores belonging to a power domain should contain a 'power-domains'
-> +  property that is a phandle for SCPSYS node representing the domain.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: '^power-controller(@[0-9a-f]+)?$'
+>  include/dt-bindings/clock/mt8189-clk.h | 612 +++++++++++++++++++++++++
 
-Drop. Reg is not optional.
+This is not an independent commit.
 
-> +
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8189-scpsys
-> +
-
-reg goes here.
-
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    description: physical base address and size of the power-controller's register area.
-
-No. Don't use AI tools... Look how this is written based on other bindings.
-
-> +
-> +  infra-infracfg-ao-reg-bus:
-
-Follow established practice... You do not get common properties.
-
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the device containing the infracfg register range.
-
-Also do not say what is obvious from property name, but explain the purpose.
-
-
-> +
-> +  emicfg-ao-mem:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the device containing the emicfg register range.
-> +
-> +  vlpcfg-reg-bus:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the device containing the vlpcfg (very low power config) register range.
-> +
-> +  clocks:
-> +    description: |
-> +      A number of phandles to clocks that need to be enabled during domain
-> +      power-up sequencing.
-> +
-> +  clock-names:
-> +    description: |
-> +      List of names of clocks, in order to match the power-up sequencing
-> +      for each power domain we need to group the clocks by name. BASIC
-> +      clocks need to be enabled before enabling the corresponding power
-> +      domain, and should not have a '-' in their name (i.e mm, mfg, venc).
-> +      SUSBYS clocks need to be enabled before releasing the bus protection,
-> +      and should contain a '-' in their name (i.e mm-0, isp-0, cam-0).
-> +
-> +      In order to follow properly the power-up sequencing, the clocks must
-> +      be specified by order, adding first the BASIC clocks followed by the
-> +      SUSBSYS clocks.
-> +
-> +  domain-supply:
-> +    description: domain regulator supply.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-Incomplete. Devices cannot work without power and many other things.
-
-Sorry, but this binding is very poor and I feel like you did not put
-enough of effort to write correct one. You are not independent
-contributor, but do it as part of Mediatek, so I do not understand why
-in Mediatek you cannot do basic in-house review.
-
+Also, incorrect name - use proper vendor prefix.
 
 Best regards,
 Krzysztof
