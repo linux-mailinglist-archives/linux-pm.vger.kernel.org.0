@@ -1,141 +1,133 @@
-Return-Path: <linux-pm+bounces-32523-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32524-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49074B29E3F
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 11:44:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D672DB29E82
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 11:55:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03C437AAEC5
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:42:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D18FC1707E4
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8418430F52F;
-	Mon, 18 Aug 2025 09:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EB230FF1D;
+	Mon, 18 Aug 2025 09:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="TlcEiIHo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkIFS709"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2879830EF97;
-	Mon, 18 Aug 2025 09:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1310F278146;
+	Mon, 18 Aug 2025 09:55:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755510222; cv=none; b=GrpDYuoGi18JGlVXnGLzhkbVJ1bCK0Mm9nlSMekQ8W/n6S/t7FVqDXGO6/nZm7BkKYhMKlc3eaM/egYOy1pfer+oIPqAg1NpMGWKlZlG4E6BWigsNwUJ5r0GaT2JoNKNEyJkQfvjLnE/lAi/Z7z3WNd0MGFeXPKFaFTscUMMsnc=
+	t=1755510941; cv=none; b=cpOmBBgZN+Uzb9fdh7qwcKjcVsdw6G89V90EwaOnqk8dZK8W80FTdQjjdQn1T2xXPuULbJmW0Hjl9ISAR0r6yE8OSZAXvcJuT7epTKnEaDhbdoUp0UeRU7u20ey5vMuvJlqCpRveNL8NURUtLpwllXeeatIWezgNiJ2m9Wy7EU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755510222; c=relaxed/simple;
-	bh=kvFLkZd49qaINmgLXux3yvrYr/hxKrrvscnAQB/WUng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gJ0y2DnAvHST/KsCOs8+YAF7qbrOVSqzUsMhuNlzEKriteDup2UOT9Lmnzicjt9zwitlO/23mBc+fJpLigFVtREMr+Mt9oySO45D1jjPYhkfZ+omP6rbvj+Nms/nSIuG81TTfOZucaDgCrDwzM5eSa+AY4Ttq4oMzsQsNUJCCX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=TlcEiIHo; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 3007720E37;
-	Mon, 18 Aug 2025 11:43:31 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H-l89fRMrwVf; Mon, 18 Aug 2025 11:43:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1755510210; bh=kvFLkZd49qaINmgLXux3yvrYr/hxKrrvscnAQB/WUng=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TlcEiIHoMtlAl2saN8yxYLjXkbcsm6JBdVLGzc+jl2AS1b+an/MmtxcFAE/xU7iYd
-	 8jwo4ADl77uY9jj2HxO+oa0lFgL8EDGDKAAj4hgOyN6KhUOqCnBq8VTERoMolFJURT
-	 gQ5yClMwtpJ5p/GxejAUoS7yvD4hTDxp2R85+2D8Sw2UULzeltB6AYUT/1dz7fa7yX
-	 TUINM9Ab/8mb22RQXEAZvtrw85FZtARc8updoorB/uviX7ICX8dKUir2+2syzhlJm1
-	 /ZmnuCr7SpAyQVnEId4dDWa7FodzRHV4dCxwbcnXp081DxwbUzUMlQrQRKK8olBMAE
-	 HuSNR/2QyTMWg==
-Date: Mon, 18 Aug 2025 09:43:13 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Icenowy Zheng <uwu@icenowy.me>, Drew Fustini <fustini@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: Han Gao <rabenda.cn@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] driver: reset: th1520-aon: add driver for
- poweroff/reboot via AON FW
-Message-ID: <aKL1sTutiMZPAd70@pie>
-References: <20250818074906.2907277-1-uwu@icenowy.me>
- <20250818074906.2907277-2-uwu@icenowy.me>
+	s=arc-20240116; t=1755510941; c=relaxed/simple;
+	bh=IV4bPZmBEtnxV/SEjS2Qeu5Z6YHK0JsLisi/u8YBojg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P1Grrw0FnZEYH4ehRZRQ+7GxdnpLgbFvFOg2gPvuzXuFbwHfZjzqeBlixPQFlttWlA4Z922xaOPOIvQ9C/eEa8Hac8V3maa080RTVZXUNVpU1G9rqGlhsKX2x7zgJhgvH0mjbLvYKMvNtZ27JNVJGep7N10xliIbSqjUAw8NJuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkIFS709; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB81DC4CEEB;
+	Mon, 18 Aug 2025 09:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755510940;
+	bh=IV4bPZmBEtnxV/SEjS2Qeu5Z6YHK0JsLisi/u8YBojg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KkIFS709x8lYmWmrSuAbEvmL/Ukks/PyE+IyhowtIXWJrX5YjkOTSG9gRsr7W4vxS
+	 M6eiX76ZSu+glstH3DBNvo2wiEz7yYkfyBxoxgBMoPphqglSg57NVDTthieDza87o8
+	 VGH8jj6T8PrfUwWXw9iBUr0/x3CgZygMqW9E3bGNJqwAqKhMjKTyFugT0Prjmq8yqU
+	 zl4FJnAO7swFVZuSNmUGiSGjjIh4etFjS5AApSUv1VhlorTA9anh0VNX2PUWqHAyDi
+	 hnN5uBLlV2KWcSP+Mln3CEDROh8JyylqW9+j9da7wcqVdO38EzRyQ8gBkNtxueTunJ
+	 2Glc2kfQqq4CA==
+Message-ID: <9dfd2eb2-fda7-4f29-881b-e1c4a2b3f6fc@kernel.org>
+Date: Mon, 18 Aug 2025 11:55:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818074906.2907277-2-uwu@icenowy.me>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 1/2] dt-bindings: interconnect: Add OSM L3 compatible
+ for QCS615 SoC
+To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Sibi Sankar
+ <quic_sibis@quicinc.com>, Odelu Kukatla <quic_okukatla@quicinc.com>,
+ Mike Tipton <mike.tipton@oss.qualcomm.com>,
+ Imran Shaik <quic_imrashai@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250804061536.110-1-raviteja.laggyshetty@oss.qualcomm.com>
+ <20250804061536.110-2-raviteja.laggyshetty@oss.qualcomm.com>
+ <3b79dc0c-0bcd-47d0-ab10-ba1514466d65@kernel.org>
+ <14d0e02e-350c-42bc-93b5-c81e11b3bd5d@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <14d0e02e-350c-42bc-93b5-c81e11b3bd5d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 18, 2025 at 03:49:05PM +0800, Icenowy Zheng wrote:
-> This driver implements poweroff/reboot support for T-Head TH1520 SoCs
-> running the AON firmware by sending a message to the AON firmware's WDG
-> part.
-> 
-> This is a auxiliary device driver, and expects the AON channel to be
-> passed via the platform_data of the auxiliary device.
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
->  MAINTAINERS                             |  1 +
->  drivers/power/reset/Kconfig             |  7 ++
->  drivers/power/reset/Makefile            |  1 +
->  drivers/power/reset/th1520-aon-reboot.c | 98 +++++++++++++++++++++++++
->  4 files changed, 107 insertions(+)
->  create mode 100644 drivers/power/reset/th1520-aon-reboot.c
+On 18/08/2025 11:12, Raviteja Laggyshetty wrote:
+>>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml        | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>> No, slow down, this conflicts with other patch and makes your entry
+>> duplicated. Just squash both commits.
+>>
+> The conflicting patch 
+> https://lore.kernel.org/all/20250711102540.143-2-raviteja.laggyshetty@oss.qualcomm.com/
+> got picked into v6.17-rc1.
 
-...
-
-> diff --git a/drivers/power/reset/th1520-aon-reboot.c b/drivers/power/reset/th1520-aon-reboot.c
-> new file mode 100644
-> index 0000000000000..8256c1703ebe8
-> --- /dev/null
-> +++ b/drivers/power/reset/th1520-aon-reboot.c
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * T-HEAD TH1520 AON Firmware Reboot Driver
-> + *
-> + * Copyright (c) 2025 Icenowy Zheng <uwu@icenowy.me>
-> + */
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/firmware/thead/thead,th1520-aon.h>
-> +#include <linux/module.h>
-> +#include <linux/notifier.h>
-> +#include <linux/of.h>
-> +#include <linux/reboot.h>
-> +#include <linux/slab.h>
-> +
-> +#define TH1520_AON_REBOOT_PRIORITY 200
-> +
-> +struct th1520_aon_msg_empty_body {
-> +	struct th1520_aon_rpc_msg_hdr hdr;
-> +	u16 reserved[12];
-> +} __packed __aligned(1);
-> +
-> +static int th1520_aon_pwroff_handler(struct sys_off_data *data)
-> +{
-> +	struct th1520_aon_chan *aon_chan = data->cb_data;
-> +	struct th1520_aon_msg_empty_body msg = {};
-> +
-> +	msg.hdr.svc = TH1520_AON_RPC_SVC_WDG;
-> +	msg.hdr.func = TH1520_AON_WDG_FUNC_POWER_OFF;
-> +	msg.hdr.size = TH1520_AON_RPC_MSG_NUM;
-> +
-> +	th1520_aon_call_rpc(aon_chan, &msg);
-
-It's possible for th1520_aon_call_rpc() to fail. Should we check for its
-return value and emit a warning/error if it fails? Though in case of
-failure there may not be much we could do...
-
-> +	return NOTIFY_DONE;
-> +}
+Then why you could not rebase on next if you sent it afterwards? You are
+not making the process easier for us.
 
 Best regards,
-Yao Zi
+Krzysztof
 
