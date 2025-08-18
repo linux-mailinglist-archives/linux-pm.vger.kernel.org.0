@@ -1,231 +1,271 @@
-Return-Path: <linux-pm+bounces-32574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973ACB2AF0D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:11:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DD57B2AF5D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:26:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1CB1BA1FD5
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:08:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 556875E6D4A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289BB32C30B;
-	Mon, 18 Aug 2025 17:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5222334575B;
+	Mon, 18 Aug 2025 17:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AHe7kpOS"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NCRGBg4H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010E532C301;
-	Mon, 18 Aug 2025 17:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CF03469E4;
+	Mon, 18 Aug 2025 17:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755536905; cv=none; b=rOwNwALxnBT/EBah+JTInwUV+Qsa0+c3CZLQHFxFNn+pwbrCVTA2ZwRY4FA5Iler6Vn7L+G3BuzOekVIvjsfoInP42ITC/YdHNM2CWrmUH0A9ISZqulRypY/0Fw/xh3fF3bBDabQq79TOgZcDS4Co7JkwLWS2b1ChNBZDf5NXoc=
+	t=1755537985; cv=none; b=nmJuN6YC6QldhikHuvLuk5K9EE0UT2UkGnGhQFvigYdZf2OXp2cEYqboRlxMpU7DAECLdMkN++KdtwWpwYpkXAzCmSgNOqO3T801baYMkQTHdaVRHLsMyn7wRDqwQi55W/LRs6yFNYZjpTRkBcn00p5/93kpbuKxt3tktDYFwxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755536905; c=relaxed/simple;
-	bh=zQxTuAvYIfNO8cz+oNsAkBS/V5FhHPFGI5pi8bMfH7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LRPSN/2X4ujX7hjWLoNeRxSoEi4DIG8SGXVMwsySARP0WrD6/DShBDT4n52Stv9Le4qCYocrdFBnZ0tYNoxHBhrYP1gT46NjPR5Y64WqrpUE72+fgfuIJW5MLg5pfn+tHaAL0Fgdwt6tlE4BxuUMAF+7bLU//3xC13OtHqnGaHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AHe7kpOS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AB8C113D0;
-	Mon, 18 Aug 2025 17:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755536904;
-	bh=zQxTuAvYIfNO8cz+oNsAkBS/V5FhHPFGI5pi8bMfH7Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AHe7kpOSYCeVenSQSDlBdWJbhWw9+6xpG5Z9Xd/rWt/Agzc4uHcefnXu6fpfW8DB/
-	 ZVNFWSxVjLiv2pgvhCmEqI0XwGvNqVa2rGa5/Y3owm+eLbOXwCMxjfIRvKUz4gQ+lM
-	 dnXjVYm2pxJo1WWliQowWLkD5OlRHXaOArLyZn41N+2MHMVhs9cqhvVXyTnG6QQWfl
-	 r6tw0ry5G0JgQz+PRxXnwRmLUispbqIj/bh0pSbbcZm16Jg3COU7SHTQvbGbcbCpCM
-	 s53Q0gJbYa8PaI/Awjs/3Xt0dx3B9scGBpOYYeDMbA28Yl2P/6CmByij5UN2145NNK
-	 RnTCC+U8Im4cg==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-61bf9ef4f1fso1505389eaf.3;
-        Mon, 18 Aug 2025 10:08:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUK6n4Dm+l5eqZGKZRU38IxnM2L5je0Dl+CMldDrkfbr3irL7X6Lf8ecz/A3YMMk+l7wnh7US9HCsM=@vger.kernel.org, AJvYcCVW4R1Ho6xGtmTdWhD31HPIKAcbMLmyUXQUFyuyq2tHK1iLlkQQpBc7JJTN4sC0fjtwrWhcUNL3nD3xExA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2YT110P44eTE8Ll21esMu/ho/Pd2uGyJnJtsbUrrMp4WUTykS
-	LQisw5acLXQldsW5OespOFQ3WCHx1YJYafluupqvnXQAcLJu2+NOn65+gPHA3x1t9ABkPtEvZja
-	rGmO9R6XjRAer842Ic9sPBX4A0Tj2liw=
-X-Google-Smtp-Source: AGHT+IEuxEPvxBQjnopblcKv41S8Q91oq3BerfWHUDFh6phFeM73xEMNjROm8iMJIjhJt1jijjn/DfnJ5NYDB5XKM6g=
-X-Received: by 2002:a05:6820:1690:b0:61c:4fa:7465 with SMTP id
- 006d021491bc7-61c04fa7528mr4551613eaf.0.1755536904134; Mon, 18 Aug 2025
- 10:08:24 -0700 (PDT)
+	s=arc-20240116; t=1755537985; c=relaxed/simple;
+	bh=kLBZWtTKF5vqyW7DfpbIw9wZ5LlhtmsKcMN58rvtmrI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GenX0dMLZ8XpF4GiBbdJ76A9YGJV24LP6ZqevPNR3s2+zycgPQ6QGpZa35Hb4zhy3UQJw0Rcb04Co00x8uO6DwZMEfR8pRHadqprTTFo0MD8nqyBBzEt2DryQr1uzepYTdPkvYhqAmHtFKhu3w56GKZkbIBALiqtnVVW/jziny0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NCRGBg4H; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1755537981;
+	bh=kLBZWtTKF5vqyW7DfpbIw9wZ5LlhtmsKcMN58rvtmrI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=NCRGBg4HKPVtNLhj5AvlqKhmfMZCrkb9KbD/elrwv9kbux4zRAToAby+hLn4UHCYP
+	 A1Oolnqe6g1AjhOsIwIimqIr32Ek6KG23aJibwlur5s92w73ob2bkXzpHQ3Qi9t65H
+	 ycHaSNNsoAMJscHmMx1WJEQWvTXWBwLEjr3H6Uy6P19sgsX2at45gcX1bKkxgAUZ6Z
+	 Zfk/UGf/BguMpZQfG0eQcrLniQ6cKTMQaaPLSBtzhYaL6caEAWNZKdxEHUFVR8Meh4
+	 gEnzw5DATPsDn7x0KgSGnLWEQmne/FNN3yjFYH1sKSvkA0oApTr0EDqIbYSNHkE1L9
+	 GjX1Kn2VVU0Rw==
+Received: from jupiter.universe (dyndsl-091-248-210-167.ewe-ip-backbone.de [91.248.210.167])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 163D117E0488;
+	Mon, 18 Aug 2025 19:26:21 +0200 (CEST)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id C7E82480044; Mon, 18 Aug 2025 19:26:20 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Date: Mon, 18 Aug 2025 19:26:15 +0200
+Subject: [PATCH] thermal: rockchip: shut up GRF warning
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <5043159.31r3eYUQgx@rafael.j.wysocki>
- <0da8086f-2b6c-46e3-92ca-e156b9374a2a@arm.com>
-In-Reply-To: <0da8086f-2b6c-46e3-92ca-e156b9374a2a@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Aug 2025 19:08:07 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jpfZt-BB579mBkSkNX6em4sHKwiLYCgm4dzzkUFeexmQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwD6X_DNc5siHpU3QcBm0fI4CvCLa2kVu59QXSF-3Y9_CyL9_6PGkZ1AeM
-Message-ID: <CAJZ5v0jpfZt-BB579mBkSkNX6em4sHKwiLYCgm4dzzkUFeexmQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] cpuidle: governors: menu: Avoid selecting states
- with too much latency
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250818-thermal-rockchip-grf-warning-v1-1-134152c97097@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADZio2gC/x3MQQrDIBAAwK+EPXdBBRPJV0IOYldd2hhZS1oI+
+ Xslx7nMCY2EqcE8nCB0cOO9dOjHACH7kgj52Q1GGaucdvjJJJt/o+zhFTJXTBLx66VwSahsnKI
+ djRu9gV5Uoci/u1/W6/oD0yedI24AAAA=
+X-Change-ID: 20250818-thermal-rockchip-grf-warning-05f7f56286a2
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Heiko Stuebner <heiko@sntech.de>
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kernel@collabora.com, Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6544; i=sre@kernel.org;
+ h=from:subject:message-id; bh=kLBZWtTKF5vqyW7DfpbIw9wZ5LlhtmsKcMN58rvtmrI=;
+ b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGijYjwi/gDS+tjH8A93NibYB/LYsKmYcEaxd
+ voJZFTKCJrJYYkCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJoo2I8AAoJENju1/PI
+ O/qaLaEP/A+VPe1DhkuPoP6SHmAzAI1jbnGYGxJhqlmJzlPGkk3RLheB7FeGsUozCNKrLxr+nYg
+ /8NdoYgJ7/F+va8yS6hB3Ucifu/Mr7JLW5WBo5q8x0T815XMKy4KZi0+TEd1qrawytBoHgTR2Bm
+ kBNID4fIBFqNaoTKZ00Xhq3+3fuwxO6o/ROu8IGfvtI9rhMkqR0Kmb+ZIdAAFeeMV12mmFkQTFc
+ s8tcaq9uzO8RBmj8xWQyzvHK48K6Lz6p+dm4yuTssBleL1Uipdhj7svS3cpwI0KVMQQxy64S411
+ dXluwAjQXmi+dJCPwVcixV82NFUMUXZFsIAweq3weg/teQVRyeGNBJP73NP3SKUKCDf3IGk5DDX
+ eOLzDQvwrPfVamcVEHC9/O5ytvPEyX+OtlKfTH2eNa+wGHwAmrpr1LhEkOzxN7EjLB/1yHWyW+j
+ cdou/4/+47QBh+/BhvUewdKq6NJkNO0yKlY5HTyC7R23DAkWQBxbUiWNSnDYnCXD2jFqhIhcFyX
+ CFgJa/bD1tGupIsluLbxH0s4owyMNF7Av15PkKEYBjB0TQr892LpYj85Rzq5PYagNzfC/6NExLS
+ x0IiD19GOK6MIpLRw8SMeF14xWl0b+2S/WOQZWiooRSx+htiYvg+1NqzLftuohn2c768Xb1Eb9Z
+ nzZBj837z08FT3dpV5dwyPw==
+X-Developer-Key: i=sre@kernel.org; a=openpgp;
+ fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
 
-On Wed, Aug 13, 2025 at 9:13=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 8/13/25 11:25, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Occasionally, the exit latency of the idle state selected by the menu
-> > governor may exceed the PM QoS CPU wakeup latency limit.  Namely, if th=
-e
-> > scheduler tick has been stopped already and predicted_ns is greater tha=
-n
-> > the tick period length, the governor may return an idle state whose exi=
-t
-> > latency exceeds latency_req because that decision is made before
-> > checking the current idle state's exit latency.
-> >
-> > For instance, say that there are 3 idle states, 0, 1, and 2.  For idle
-> > states 0 and 1, the exit latency is equal to the target residency and
-> > the values are 0 and 5 us, respectively.  State 2 is deeper and has the
-> > exit latency and target residency of 200 us and 2 ms (which is greater
-> > than the tick period length), respectively.
-> >
-> > Say that predicted_ns is equal to TICK_NSEC and the PM QoS latency
-> > limit is 20 us.  After the first two iterations of the main loop in
-> > menu_select(), idx becomes 1 and in the third iteration of it the targe=
-t
-> Can drop "of it" here?
+Most of the recent Rockchip devices do not have a GRF associated
+with the tsadc IP. Let's avoid printing a warning on those devices.
 
-But it also doesn't really hurt I think.
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/thermal/rockchip_thermal.c | 53 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 46 insertions(+), 7 deletions(-)
 
-> > residency of the current state (state 2) is greater than predicted_ns.
-> > State 2 is not a polling one and predicted_ns is not less than TICK_NSE=
-C,
-> > so the check on whether or not the tick has been stopped is done.  Say
-> > that the tick has been stopped already and there are no imminent timers
-> > (that is, delta_tick is greater than the target residency of state 2).
-> > In that case, idx becomes 2 and it is returned immediately, but the exi=
-t
-> > latency of state 2 exceeds the latency limit.
-> >
-> > Address this issue by modifying the code to compare the exit latency of
-> > the current idle state (idle state i) with the latency limit before
-> > comparing its target residecy with predicted_ns, which allows one
-> residency
+diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
+index 3beff9b6fac3abe8948b56132b618ff1bed57217..1e8091cebd6673ab39fa0c4dee835c68aeb7e8b5 100644
+--- a/drivers/thermal/rockchip_thermal.c
++++ b/drivers/thermal/rockchip_thermal.c
+@@ -50,6 +50,18 @@ enum adc_sort_mode {
+ 	ADC_INCREMENT,
+ };
+ 
++/*
++ * The GRF availability depends on the specific SoC
++ * GRF_NONE: the SoC does not have a GRF associated with the tsadc
++ * GRF_OPTIONAL: the SoC has a GRF, but the driver can work without it
++ * GRF_MANDATORY: the SoC has a GRF and it is required for proper operation
++ */
++enum tsadc_grf_mode {
++	GRF_NONE,
++	GRF_OPTIONAL,
++	GRF_MANDATORY,
++};
++
+ #include "thermal_hwmon.h"
+ 
+ /**
+@@ -97,6 +109,9 @@ struct rockchip_tsadc_chip {
+ 	enum tshut_mode tshut_mode;
+ 	enum tshut_polarity tshut_polarity;
+ 
++	/* GRF availability */
++	enum tsadc_grf_mode grf_mode;
++
+ 	/* Chip-wide methods */
+ 	void (*initialize)(struct regmap *grf,
+ 			   void __iomem *reg, enum tshut_polarity p);
+@@ -1099,6 +1114,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 2, /* 2 channels for tsadc */
+ 
++	.grf_mode = GRF_MANDATORY,
++
+ 	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
+ 	.tshut_temp = 95000,
+ 
+@@ -1123,6 +1140,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 1, /* one channel for tsadc */
+ 
++	.grf_mode = GRF_NONE,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1148,6 +1167,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 1, /* one channel for tsadc */
+ 
++	.grf_mode = GRF_NONE,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1173,6 +1194,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
+ 	.chn_offset = 1,
+ 	.chn_num = 2, /* two channels for tsadc */
+ 
++	.grf_mode = GRF_NONE,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1198,6 +1221,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 1, /* one channels for tsadc */
+ 
++	.grf_mode = GRF_NONE,
++
+ 	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
+ 	.tshut_temp = 95000,
+ 
+@@ -1222,6 +1247,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 2, /* two channels for tsadc */
+ 
++	.grf_mode = GRF_OPTIONAL,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1247,6 +1274,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 2, /* two channels for tsadc */
+ 
++	.grf_mode = GRF_NONE,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1272,6 +1301,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 2, /* two channels for tsadc */
+ 
++	.grf_mode = GRF_OPTIONAL,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1297,6 +1328,8 @@ static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
+ 	.chn_offset = 0,
+ 	.chn_num = 2, /* two channels for tsadc */
+ 
++	.grf_mode = GRF_OPTIONAL,
++
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1321,6 +1354,7 @@ static const struct rockchip_tsadc_chip rk3576_tsadc_data = {
+ 	/* top, big_core, little_core, ddr, npu, gpu */
+ 	.chn_offset = 0,
+ 	.chn_num = 6, /* six channels for tsadc */
++	.grf_mode = GRF_NONE,
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1345,6 +1379,7 @@ static const struct rockchip_tsadc_chip rk3588_tsadc_data = {
+ 	/* top, big_core0, big_core1, little_core, center, gpu, npu */
+ 	.chn_offset = 0,
+ 	.chn_num = 7, /* seven channels for tsadc */
++	.grf_mode = GRF_NONE,
+ 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+ 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+ 	.tshut_temp = 95000,
+@@ -1572,7 +1607,7 @@ static int rockchip_configure_from_dt(struct device *dev,
+ 				      struct device_node *np,
+ 				      struct rockchip_thermal_data *thermal)
+ {
+-	u32 shut_temp, tshut_mode, tshut_polarity;
++	u32 shut_temp, tshut_mode, tshut_polarity, ret;
+ 
+ 	if (of_property_read_u32(np, "rockchip,hw-tshut-temp", &shut_temp)) {
+ 		dev_warn(dev,
+@@ -1621,12 +1656,16 @@ static int rockchip_configure_from_dt(struct device *dev,
+ 		return -EINVAL;
+ 	}
+ 
+-	/* The tsadc wont to handle the error in here since some SoCs didn't
+-	 * need this property.
+-	 */
+-	thermal->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
+-	if (IS_ERR(thermal->grf))
+-		dev_warn(dev, "Missing rockchip,grf property\n");
++	if (thermal->chip->grf_mode != GRF_NONE) {
++		thermal->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
++		if (IS_ERR(thermal->grf)) {
++			ret = PTR_ERR(thermal->grf);
++			if (thermal->chip->grf_mode == GRF_OPTIONAL)
++				dev_warn(dev, "Missing rockchip,grf property\n");
++			else
++				return dev_err_probe(dev, ret, "Missing rockchip,grf property\n");
++		}
++	}
+ 
+ 	rockchip_get_trim_configuration(dev, np, thermal);
+ 
 
-Fixed while applying.
+---
+base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+change-id: 20250818-thermal-rockchip-grf-warning-05f7f56286a2
 
-> > more exit_latency_ns check that becomes redundant to be dropped.
-> >
-> > However, after the above change, latency_req cannot take the predicted_=
-ns
-> > value any more, which takes place after commit 38f83090f515 ("cpuidle:
-> > menu: Remove iowait influence"), because it may cause a polling state
-> > to be returned prematurely.
-> >
-> > In the context of the previous example say that predicted_ns is 3000 an=
-d
-> > the PM QoS latency limit is still 20 us.  Additionally, say that idle
-> > state 0 is a polling one.  Moving the exit_latency_ns check before the
-> > target_residency_ns one causes the loop to terminate in the second
-> > iteration, before the target_residency_ns check, so idle state 0 will b=
-e
-> > returned even though previously state 1 would be returned if there were
-> > no imminent timers.
-> >
-> > For this reason, remove the assignment of the predicted_ns value to
-> > latency_req from the code.
-> >
-> > Fixes: 5ef499cd571c ("cpuidle: menu: Handle stopped tick more aggressiv=
-ely")
-> > Cc: 4.17+ <stable@vger.kernel.org> # 4.17+
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/menu.c |   29 ++++++++++++-----------------
-> >  1 file changed, 12 insertions(+), 17 deletions(-)
-> >
-> > --- a/drivers/cpuidle/governors/menu.c
-> > +++ b/drivers/cpuidle/governors/menu.c
-> > @@ -287,20 +287,15 @@
-> >               return 0;
-> >       }
-> >
-> > -     if (tick_nohz_tick_stopped()) {
-> > -             /*
-> > -              * If the tick is already stopped, the cost of possible s=
-hort
-> > -              * idle duration misprediction is much higher, because th=
-e CPU
-> > -              * may be stuck in a shallow idle state for a long time a=
-s a
-> > -              * result of it.  In that case say we might mispredict an=
-d use
-> > -              * the known time till the closest timer event for the id=
-le
-> > -              * state selection.
-> > -              */
-> > -             if (predicted_ns < TICK_NSEC)
-> > -                     predicted_ns =3D data->next_timer_ns;
-> > -     } else if (latency_req > predicted_ns) {
-> > -             latency_req =3D predicted_ns;
-> > -     }
-> > +     /*
-> > +      * If the tick is already stopped, the cost of possible short idl=
-e
-> > +      * duration misprediction is much higher, because the CPU may be =
-stuck
-> > +      * in a shallow idle state for a long time as a result of it.  In=
- that
-> > +      * case, say we might mispredict and use the known time till the =
-closest
-> > +      * timer event for the idle state selection.
-> > +      */
-> > +     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-> > +             predicted_ns =3D data->next_timer_ns;
-> >
-> >       /*
-> >        * Find the idle state with the lowest power while satisfying
-> > @@ -316,13 +311,15 @@
-> >               if (idx =3D=3D -1)
-> >                       idx =3D i; /* first enabled state */
-> >
-> > +             if (s->exit_latency_ns > latency_req)
-> > +                     break;
-> > +
-> >               if (s->target_residency_ns > predicted_ns) {
-> >                       /*
-> >                        * Use a physical idle state, not busy polling, u=
-nless
-> >                        * a timer is going to trigger soon enough.
-> >                        */
-> >                       if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLIN=
-G) &&
-> > -                         s->exit_latency_ns <=3D latency_req &&
-> >                           s->target_residency_ns <=3D data->next_timer_=
-ns) {
-> >                               predicted_ns =3D s->target_residency_ns;
-> >                               idx =3D i;
-> > @@ -354,8 +351,6 @@
-> >
-> >                       return idx;
-> >               }
-> > -             if (s->exit_latency_ns > latency_req)
-> > -                     break;
-> >
-> >               idx =3D i;
-> >       }
-> >
-> >
-> >
->
-> Good catch!
-> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+Best regards,
+-- 
+Sebastian Reichel <sre@kernel.org>
 
-Thank you!
 
