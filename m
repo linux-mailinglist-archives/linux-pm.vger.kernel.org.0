@@ -1,271 +1,155 @@
-Return-Path: <linux-pm+bounces-32575-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32576-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DD57B2AF5D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:26:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0F6BB2AFA2
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 556875E6D4A
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:26:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F98418A5E32
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:42:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5222334575B;
-	Mon, 18 Aug 2025 17:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92025283FC3;
+	Mon, 18 Aug 2025 17:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NCRGBg4H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I5uWIZmX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CF03469E4;
-	Mon, 18 Aug 2025 17:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B302773D9;
+	Mon, 18 Aug 2025 17:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755537985; cv=none; b=nmJuN6YC6QldhikHuvLuk5K9EE0UT2UkGnGhQFvigYdZf2OXp2cEYqboRlxMpU7DAECLdMkN++KdtwWpwYpkXAzCmSgNOqO3T801baYMkQTHdaVRHLsMyn7wRDqwQi55W/LRs6yFNYZjpTRkBcn00p5/93kpbuKxt3tktDYFwxc=
+	t=1755538907; cv=none; b=bH6DX0x04e4KwYyIL8df1bKvVzpque6b/anT7UjGLIScv+WqWtRpJCf2KFjLG3m99ehj8tyvDPBPoXWgqSvpSlBggr+/arZG6F0QjiY9WTuZuDRvSNO9war3eOVgDVvYGZlkj8Sb+u5jzxzhfYjEligwC25dvDGtdPuPt8dI4o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755537985; c=relaxed/simple;
-	bh=kLBZWtTKF5vqyW7DfpbIw9wZ5LlhtmsKcMN58rvtmrI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GenX0dMLZ8XpF4GiBbdJ76A9YGJV24LP6ZqevPNR3s2+zycgPQ6QGpZa35Hb4zhy3UQJw0Rcb04Co00x8uO6DwZMEfR8pRHadqprTTFo0MD8nqyBBzEt2DryQr1uzepYTdPkvYhqAmHtFKhu3w56GKZkbIBALiqtnVVW/jziny0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NCRGBg4H; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1755537981;
-	bh=kLBZWtTKF5vqyW7DfpbIw9wZ5LlhtmsKcMN58rvtmrI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=NCRGBg4HKPVtNLhj5AvlqKhmfMZCrkb9KbD/elrwv9kbux4zRAToAby+hLn4UHCYP
-	 A1Oolnqe6g1AjhOsIwIimqIr32Ek6KG23aJibwlur5s92w73ob2bkXzpHQ3Qi9t65H
-	 ycHaSNNsoAMJscHmMx1WJEQWvTXWBwLEjr3H6Uy6P19sgsX2at45gcX1bKkxgAUZ6Z
-	 Zfk/UGf/BguMpZQfG0eQcrLniQ6cKTMQaaPLSBtzhYaL6caEAWNZKdxEHUFVR8Meh4
-	 gEnzw5DATPsDn7x0KgSGnLWEQmne/FNN3yjFYH1sKSvkA0oApTr0EDqIbYSNHkE1L9
-	 GjX1Kn2VVU0Rw==
-Received: from jupiter.universe (dyndsl-091-248-210-167.ewe-ip-backbone.de [91.248.210.167])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 163D117E0488;
-	Mon, 18 Aug 2025 19:26:21 +0200 (CEST)
-Received: by jupiter.universe (Postfix, from userid 1000)
-	id C7E82480044; Mon, 18 Aug 2025 19:26:20 +0200 (CEST)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-Date: Mon, 18 Aug 2025 19:26:15 +0200
-Subject: [PATCH] thermal: rockchip: shut up GRF warning
+	s=arc-20240116; t=1755538907; c=relaxed/simple;
+	bh=cYWtsiJGtihXFgyhyhpeKFwvCJd0vJ94ICN5unw9gAI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C1Sj8N/bG2IHE15UQOniYIRq0VJOBGGWdMZsAdAH3BY44xvhmiIChVVPksO1P0D891nwjurRg+M/9f0cVBt2ewN51EPzN0X+JflHW5e4Q/sKdL6POUW64AAcmiGwPLgvOr+JVkXBCHGDR1AgEK0cvZi2vzUrdxTGm2V6kA1bcUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I5uWIZmX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D82C4CEF1;
+	Mon, 18 Aug 2025 17:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755538906;
+	bh=cYWtsiJGtihXFgyhyhpeKFwvCJd0vJ94ICN5unw9gAI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=I5uWIZmX3s/Ryqjdw/12lYlS84SAU+Lra3p5bXaGnbt22rlNpftzXnaU2dhYDa6oO
+	 2xjACxx2dliMWGHY1+N0eiEStIYjdLyQqctX8vVyAfH1syA7o2/zz5/OBIx0Q8PC+E
+	 +kJ/W8AtG3i83k6lTlQpDfZjllL/S8C4Yzyf57thZ926UiAhsX07CRb2XcYz6XEoN3
+	 DXb15or/SqnEJ88ePAGf7+jav0S2pRq5H5GIvdM8rLEbZ1V3XaRyBg1q1PjI282FdK
+	 iUJsrf6/EalYA+fTTuc7aXeE21hmiMvIny0vYzPGb6QCVG9YQpqkLEvL/kcidtNwRH
+	 93flri4dfNaoA==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-30cce5b711bso3625562fac.0;
+        Mon, 18 Aug 2025 10:41:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX2SWtveCSayD2QWpnaNzp8buxmtvizGQZD+krJ1vT91PP0qiWM08GnrxMgFsiflD2daMp0CiUoyPs=@vger.kernel.org, AJvYcCX2tT9K9ICDtJeJce3CtgYCKb/QhTY2p7HWUT4v7rPjDC/qbmE2/T8p8NROBQPYrZG0R5UxMa3I1p8WAN8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyRFCboHFc7It0jHb6Z9R3JY1Dh6WpV7mDbZovBd1o6SU+amsw
+	ziGgZ/dGkdV0Vosjx8LjTdYvRc7a3qCSza7lkcVzeeFQwQyaQJn6kEhnpv5tBWKB201Uugt28Jk
+	j57wxbr9n1VisJL6rj0qtXHHnz/QWnXA=
+X-Google-Smtp-Source: AGHT+IGVyYYrtN3lr7XolYOLAIMRk7cq51ADEukhSg0JGP9CK2DtcdjKMns4Pgg07cNyDWafw+qCbxhLytEYstAHABM=
+X-Received: by 2002:a05:6870:d912:b0:2ff:9c45:4f51 with SMTP id
+ 586e51a60fabf-310aad4cf5bmr8104752fac.15.1755538906242; Mon, 18 Aug 2025
+ 10:41:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250818-thermal-rockchip-grf-warning-v1-1-134152c97097@kernel.org>
-X-B4-Tracking: v=1; b=H4sIADZio2gC/x3MQQrDIBAAwK+EPXdBBRPJV0IOYldd2hhZS1oI+
- Xslx7nMCY2EqcE8nCB0cOO9dOjHACH7kgj52Q1GGaucdvjJJJt/o+zhFTJXTBLx66VwSahsnKI
- djRu9gV5Uoci/u1/W6/oD0yedI24AAAA=
-X-Change-ID: 20250818-thermal-rockchip-grf-warning-05f7f56286a2
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Heiko Stuebner <heiko@sntech.de>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
- kernel@collabora.com, Sebastian Reichel <sebastian.reichel@collabora.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6544; i=sre@kernel.org;
- h=from:subject:message-id; bh=kLBZWtTKF5vqyW7DfpbIw9wZ5LlhtmsKcMN58rvtmrI=;
- b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGijYjwi/gDS+tjH8A93NibYB/LYsKmYcEaxd
- voJZFTKCJrJYYkCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJoo2I8AAoJENju1/PI
- O/qaLaEP/A+VPe1DhkuPoP6SHmAzAI1jbnGYGxJhqlmJzlPGkk3RLheB7FeGsUozCNKrLxr+nYg
- /8NdoYgJ7/F+va8yS6hB3Ucifu/Mr7JLW5WBo5q8x0T815XMKy4KZi0+TEd1qrawytBoHgTR2Bm
- kBNID4fIBFqNaoTKZ00Xhq3+3fuwxO6o/ROu8IGfvtI9rhMkqR0Kmb+ZIdAAFeeMV12mmFkQTFc
- s8tcaq9uzO8RBmj8xWQyzvHK48K6Lz6p+dm4yuTssBleL1Uipdhj7svS3cpwI0KVMQQxy64S411
- dXluwAjQXmi+dJCPwVcixV82NFUMUXZFsIAweq3weg/teQVRyeGNBJP73NP3SKUKCDf3IGk5DDX
- eOLzDQvwrPfVamcVEHC9/O5ytvPEyX+OtlKfTH2eNa+wGHwAmrpr1LhEkOzxN7EjLB/1yHWyW+j
- cdou/4/+47QBh+/BhvUewdKq6NJkNO0yKlY5HTyC7R23DAkWQBxbUiWNSnDYnCXD2jFqhIhcFyX
- CFgJa/bD1tGupIsluLbxH0s4owyMNF7Av15PkKEYBjB0TQr892LpYj85Rzq5PYagNzfC/6NExLS
- x0IiD19GOK6MIpLRw8SMeF14xWl0b+2S/WOQZWiooRSx+htiYvg+1NqzLftuohn2c768Xb1Eb9Z
- nzZBj837z08FT3dpV5dwyPw==
-X-Developer-Key: i=sre@kernel.org; a=openpgp;
- fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
+References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <2244365.irdbgypaU6@rafael.j.wysocki>
+ <9104c434-9025-4365-8127-28014ddddc8d@arm.com>
+In-Reply-To: <9104c434-9025-4365-8127-28014ddddc8d@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 18 Aug 2025 19:41:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iTaa62WGXCLcgiRyzcj2GBXmYcvLa8AtQZD5bQcxTw5g@mail.gmail.com>
+X-Gm-Features: Ac12FXwmbMoRlFRjAGl4x3sK6EGRxQQDe0VPxAvxfcO95h8NI0JoD5iLwee-mUk
+Message-ID: <CAJZ5v0iTaa62WGXCLcgiRyzcj2GBXmYcvLa8AtQZD5bQcxTw5g@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full CPUs
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Most of the recent Rockchip devices do not have a GRF associated
-with the tsadc IP. Let's avoid printing a warning on those devices.
+On Thu, Aug 14, 2025 at 4:09=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 8/13/25 11:29, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > When the menu governor runs on a nohz_full CPU and there are no user
+> > space timers in the workload on that CPU, it ends up selecting idle
+> > states with target residency values above TICK_NSEC all the time due to
+> > a tick_nohz_tick_stopped() check designed for a different use case.
+> > Namely, on nohz_full CPUs the fact that the tick has been stopped does
+> > not actually mean anything in particular, whereas in the other case it
+> > indicates that previously the CPU was expected to be idle sufficiently
+> > long for the tick to be stopped, so it is not unreasonable to expect
+> > it to be idle beyond the tick period length again.
+> >
+> > In some cases, this behavior causes latency in the workload to grow
+> > undesirably.  It may also cause the workload to consume more energy
+> > than necessary if the CPU does not spend enough time in the selected
+> > deep idle states.
+> >
+> > Address this by amending the tick_nohz_tick_stopped() check in question
+> > with a tick_nohz_full_cpu() one to avoid using the time till the next
+> > timer event as the predicted_ns value all the time on nohz_full CPUs.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpuidle/governors/menu.c |   12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > --- a/drivers/cpuidle/governors/menu.c
+> > +++ b/drivers/cpuidle/governors/menu.c
+> > @@ -293,8 +293,18 @@
+> >        * in a shallow idle state for a long time as a result of it.  In=
+ that
+> >        * case, say we might mispredict and use the known time till the =
+closest
+> >        * timer event for the idle state selection.
+> > +      *
+> > +      * However, on nohz_full CPUs the tick does not run as a rule and=
+ the
+> > +      * time till the closest timer event may always be effectively in=
+finite,
+> > +      * so using it as a replacement for the predicted idle duration w=
+ould
+> > +      * effectively always cause the prediction results to be discarde=
+d and
+> > +      * deep idle states to be selected all the time.  That might intr=
+oduce
+> > +      * unwanted latency into the workload and cause more energy than
+> > +      * necessary to be consumed if the discarded prediction results a=
+re
+> > +      * actually accurate, so skip nohz_full CPUs here.
+> >        */
+> > -     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
+> > +     if (tick_nohz_tick_stopped() && !tick_nohz_full_cpu(dev->cpu) &&
+> > +         predicted_ns < TICK_NSEC)
+> >               predicted_ns =3D data->next_timer_ns;
+> >
+> >       /*
+> >
+> >
+> >
+>
+> OTOH the behaviour with $SUBJECT possibly means that we use predicted_ns =
+from
+> get_typical_interval() (which may suggest picking a shallow state based o=
+n
+> previous wakeup patterns) only then to never wake up again?
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/thermal/rockchip_thermal.c | 53 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 7 deletions(-)
+Yes, there is this risk, but the current behavior is more damaging IMV
+because it (potentially) hurts both energy efficiency and performance.
 
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index 3beff9b6fac3abe8948b56132b618ff1bed57217..1e8091cebd6673ab39fa0c4dee835c68aeb7e8b5 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -50,6 +50,18 @@ enum adc_sort_mode {
- 	ADC_INCREMENT,
- };
- 
-+/*
-+ * The GRF availability depends on the specific SoC
-+ * GRF_NONE: the SoC does not have a GRF associated with the tsadc
-+ * GRF_OPTIONAL: the SoC has a GRF, but the driver can work without it
-+ * GRF_MANDATORY: the SoC has a GRF and it is required for proper operation
-+ */
-+enum tsadc_grf_mode {
-+	GRF_NONE,
-+	GRF_OPTIONAL,
-+	GRF_MANDATORY,
-+};
-+
- #include "thermal_hwmon.h"
- 
- /**
-@@ -97,6 +109,9 @@ struct rockchip_tsadc_chip {
- 	enum tshut_mode tshut_mode;
- 	enum tshut_polarity tshut_polarity;
- 
-+	/* GRF availability */
-+	enum tsadc_grf_mode grf_mode;
-+
- 	/* Chip-wide methods */
- 	void (*initialize)(struct regmap *grf,
- 			   void __iomem *reg, enum tshut_polarity p);
-@@ -1099,6 +1114,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 2, /* 2 channels for tsadc */
- 
-+	.grf_mode = GRF_MANDATORY,
-+
- 	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
- 	.tshut_temp = 95000,
- 
-@@ -1123,6 +1140,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 1, /* one channel for tsadc */
- 
-+	.grf_mode = GRF_NONE,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1148,6 +1167,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 1, /* one channel for tsadc */
- 
-+	.grf_mode = GRF_NONE,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1173,6 +1194,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
- 	.chn_offset = 1,
- 	.chn_num = 2, /* two channels for tsadc */
- 
-+	.grf_mode = GRF_NONE,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1198,6 +1221,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 1, /* one channels for tsadc */
- 
-+	.grf_mode = GRF_NONE,
-+
- 	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
- 	.tshut_temp = 95000,
- 
-@@ -1222,6 +1247,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 2, /* two channels for tsadc */
- 
-+	.grf_mode = GRF_OPTIONAL,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1247,6 +1274,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 2, /* two channels for tsadc */
- 
-+	.grf_mode = GRF_NONE,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1272,6 +1301,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 2, /* two channels for tsadc */
- 
-+	.grf_mode = GRF_OPTIONAL,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1297,6 +1328,8 @@ static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
- 	.chn_offset = 0,
- 	.chn_num = 2, /* two channels for tsadc */
- 
-+	.grf_mode = GRF_OPTIONAL,
-+
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1321,6 +1354,7 @@ static const struct rockchip_tsadc_chip rk3576_tsadc_data = {
- 	/* top, big_core, little_core, ddr, npu, gpu */
- 	.chn_offset = 0,
- 	.chn_num = 6, /* six channels for tsadc */
-+	.grf_mode = GRF_NONE,
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1345,6 +1379,7 @@ static const struct rockchip_tsadc_chip rk3588_tsadc_data = {
- 	/* top, big_core0, big_core1, little_core, center, gpu, npu */
- 	.chn_offset = 0,
- 	.chn_num = 7, /* seven channels for tsadc */
-+	.grf_mode = GRF_NONE,
- 	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
- 	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
- 	.tshut_temp = 95000,
-@@ -1572,7 +1607,7 @@ static int rockchip_configure_from_dt(struct device *dev,
- 				      struct device_node *np,
- 				      struct rockchip_thermal_data *thermal)
- {
--	u32 shut_temp, tshut_mode, tshut_polarity;
-+	u32 shut_temp, tshut_mode, tshut_polarity, ret;
- 
- 	if (of_property_read_u32(np, "rockchip,hw-tshut-temp", &shut_temp)) {
- 		dev_warn(dev,
-@@ -1621,12 +1656,16 @@ static int rockchip_configure_from_dt(struct device *dev,
- 		return -EINVAL;
- 	}
- 
--	/* The tsadc wont to handle the error in here since some SoCs didn't
--	 * need this property.
--	 */
--	thermal->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
--	if (IS_ERR(thermal->grf))
--		dev_warn(dev, "Missing rockchip,grf property\n");
-+	if (thermal->chip->grf_mode != GRF_NONE) {
-+		thermal->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
-+		if (IS_ERR(thermal->grf)) {
-+			ret = PTR_ERR(thermal->grf);
-+			if (thermal->chip->grf_mode == GRF_OPTIONAL)
-+				dev_warn(dev, "Missing rockchip,grf property\n");
-+			else
-+				return dev_err_probe(dev, ret, "Missing rockchip,grf property\n");
-+		}
-+	}
- 
- 	rockchip_get_trim_configuration(dev, np, thermal);
- 
+It is also arguably easier for the user to remedy getting stuck in a
+shallow idle state than to change governor's behavior (PM QoS is a bit
+too blunt for this).
 
----
-base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
-change-id: 20250818-thermal-rockchip-grf-warning-05f7f56286a2
-
-Best regards,
--- 
-Sebastian Reichel <sre@kernel.org>
-
+Moreover, configuring CPUs as nohz_full and leaving them in long idle
+may not be the most efficient use of them.
 
