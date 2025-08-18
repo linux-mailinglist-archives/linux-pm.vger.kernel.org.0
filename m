@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-32551-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32552-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77DB7B2ABB9
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 16:54:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5753AB2ABBB
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 16:55:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B75981BC5F5D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:47:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3531C5A3E69
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17AC35A2BB;
-	Mon, 18 Aug 2025 14:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F84223311;
+	Mon, 18 Aug 2025 14:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8s6Jp3m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDAA5znm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D01E35A2AA;
-	Mon, 18 Aug 2025 14:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D05035A28E;
+	Mon, 18 Aug 2025 14:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755528388; cv=none; b=JSSaDgd1J/fvcy0otwJT9RrUWEg6a49p7YMA41th2xfQi5Au4IApE/h6UHZfzw8MFBWM1ULaH/s0qoaAZLWVuIuqGjt5kcSCvz5jQRvgexFoGB0qto1LFp1lOCiR7+wXgURGrE5pTqRZRdIEVnYQtkrR8FEWox5XLGi10w2NItU=
+	t=1755528462; cv=none; b=cV0Gcfg+N4QvG/73CqRgpVvnnD8lzvycx9OfjlXBvW0HUfgdmpvQz3v0AgcR2nai1Y/rIYTGkl7vrnfuuSF9Abvgpby9+tmqsjIrLcSUJk/r2yPM29eDo26k6Mr5s+qcYxslAmVceaRe8coOcZkG0Ng4nycgJvJ7YsJfJGEsSFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755528388; c=relaxed/simple;
-	bh=rhMWOlKbgLB4SstwMrfyJxOrWkE39Ryuhps7LFLOsNY=;
+	s=arc-20240116; t=1755528462; c=relaxed/simple;
+	bh=vtad+Vt/g0Mn/1dIoAI+yot5Owrf8DkcHM51X8vJpVs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qyviqQJX3millFqpMCOuKUMLYWcY8Zj3CaP/NrMznwAfDpkNgy1qAJkSrpYOjToJMkkwZLad/tmUFpFxpej8fzDfXU9V1G2FXzFQ1/Y46bIt0j7wTS40loVo8UKtvnxHIkoIwQTSuSPVZtHpVmGFGoJkbnHuKTdMOEVaLdKICMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8s6Jp3m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366FBC4CEEB;
-	Mon, 18 Aug 2025 14:46:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=WOQNA6tlSxor+BKwif9lDtmwpA+AXfr/Ds2Z5kwMBS4kHog/8jParQTIdcPdZV3ml6MpM7AvW5M/3fBx7AGitFLS1IPDg+9DuqiYUo0n3RS+dwp79Nj+5ULKMU/uFssy795HNe8sPtLR51Yxw1Rge6H2bjE60l7yw6MeKvwPQYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDAA5znm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA08C4CEEB;
+	Mon, 18 Aug 2025 14:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755528388;
-	bh=rhMWOlKbgLB4SstwMrfyJxOrWkE39Ryuhps7LFLOsNY=;
+	s=k20201202; t=1755528461;
+	bh=vtad+Vt/g0Mn/1dIoAI+yot5Owrf8DkcHM51X8vJpVs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=E8s6Jp3m9CxTQzYk38FM8rV6oWfcWkD0vXdrbZ9DfwX0Zb9oLfBf6lLBYl583o8xg
-	 ay9UN4kuwGdxLyn4wKbDo+XXSPMLpj9XKipVufd6QcDvInq8dgwU9BcO9YHb3Tsh/K
-	 lKJMdRjt+o++FPZuqZqD2TG6XJdXU+QvM/xlVqbtYhmCszosR+gwllqZg/f9y1OeK2
-	 nvMMdUebJRcI0XuGDR6umR86509pVSuvwlzljhgscQQK2HYMPOjXQknEi9NZvd8lVB
-	 PwC0r6ckk3PHaDeBm9ZWLsDzjt6jVF5PPImiszlM//UWqUHm3kVZ4idlnQfVMED2QY
-	 Ah4wqitkdZ+Xw==
-Message-ID: <7ddd14b4-5da1-4df1-911b-654c567e9931@kernel.org>
-Date: Mon, 18 Aug 2025 16:46:21 +0200
+	b=mDAA5znmWKzyN9V4eVtxeTntvL5GsU6SKhdDm+v/gX6IkAKhgp0wZrXQcFVqh5tBS
+	 QfEWif3qL1rz+prRXPLq9gInFvch7Lzhx9rDUXfyt5pXsX4o02ZCG3Eyvnn/gHPa8q
+	 OP7aZ+dJFKceyG/3WDkY4rtf4Dk4QNuedPAucFenwb6XDE2Dwiv8wkwrFlsRWcHVvY
+	 I8dplR+LyEe43Ev9FowAbwdSk5ImNhc8s9K21ckL06NLY21eVAabASM0tcNQgaWuyK
+	 rAwpyxCzWYw6dAemG12kfwtiF8Diq8IGhGJBOmGPupEPeiQSCygk8Dbj3BW4JyLhec
+	 uKKGymbqha1fA==
+Message-ID: <3756f584-11c5-4591-b9fb-091b416daba7@kernel.org>
+Date: Mon, 18 Aug 2025 16:47:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] dt-bindings: power: mediatek: Add MT8189 power domain
+Subject: Re: [PATCH 3/6] dt-bindings: clock: mediatek: Add MT8189 clock
  definitions
 To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
@@ -67,7 +67,7 @@ Cc: Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
  Project_Global_Chrome_Upstream_Group@mediatek.com, sirius.wang@mediatek.com,
  vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
 References: <20250818115754.1067154-1-irving-ch.lin@mediatek.com>
- <20250818115754.1067154-5-irving-ch.lin@mediatek.com>
+ <20250818115754.1067154-4-irving-ch.lin@mediatek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,21 +113,14 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250818115754.1067154-5-irving-ch.lin@mediatek.com>
+In-Reply-To: <20250818115754.1067154-4-irving-ch.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/08/2025 13:57, irving.ch.lin wrote:
-> From: Irving-ch Lin <irving-ch.lin@mediatek.com>
-> 
-> Add device tree bindings for the power domains of MediaTek MT8189 SoC.
-> These definitions will be used to describe the power domain topology in
-> device tree sources.
-> 
-> Signed-off-by: Irving-ch Lin <irving-ch.lin@mediatek.com>
-> ---
->  include/dt-bindings/power/mt8189-power.h | 38 ++++++++++++++++++++++++
-Same issues.
+> +#define CLK_MDP_NR_CLK					27
+That's not a binding. Drop everywhere. Mediatek already received such
+feedback.
 
 Best regards,
 Krzysztof
