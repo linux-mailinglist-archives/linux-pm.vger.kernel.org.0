@@ -1,165 +1,178 @@
-Return-Path: <linux-pm+bounces-32500-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32501-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D723B29B36
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:50:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D179B29BF6
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 10:23:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 550957A7A9D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 07:48:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD830200D36
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 08:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B95428750F;
-	Mon, 18 Aug 2025 07:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909BF2FFDC8;
+	Mon, 18 Aug 2025 08:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="Ejfms6rg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RgzI3KC6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E89287266;
-	Mon, 18 Aug 2025 07:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755503395; cv=pass; b=eQ2D6dvZm8Fgh/vkJ79GS3UZYFQEbZPP9mVi2toNSm0rXnOUWILiWexcuyFwGm2inCvyNYgrJg6Tp6OlgxL1fMLkANz+JpnSoNvf7IBWWI+h5jPmWJAnJTIAG2/CRTfRM210oSECdS9NeMKkvODxKt2OTAo5KjwdDgNdFBvXqOw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755503395; c=relaxed/simple;
-	bh=STOcfr9kpIp0+CAMrZ593fZOnyRFM2UhBuPuApaF0rQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bLra7Fto+JGZv+eLtILqjyyQUBS0L53jwWtEgDTNnGih0UhRVNhAwyJaDZB1m5FuyM1mRey8nQkTytgytB8JYUyABh+1DUOZAJbiep2QRUnp4cijusmCjJdUnDxgqsWQkJqHhgwFn+9kcX+LxhLCgNQsSAOnL3mHVMZrC5ux62s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=Ejfms6rg; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
-ARC-Seal: i=1; a=rsa-sha256; t=1755503380; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=YPOQyiQzZXF7BjL1Ii00u+6sVYI3xgAeVkxi37Ww+CkEHSFo4BgDodEXzfpNMTFTNrKXgHjuTZGrhDhEGQrDt92hhOZeKZ1pUNvBaANQgrsAssvGCFg5zga6Qx302Mdy0qNFbFPFfgO0HB4ZQCeDCrdM6IQW5NUCAf3cCcrPEKU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1755503380; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=v71hNscntsNElHfK1DeG9/bpCIY/+k/7AMAOxJUUKlE=; 
-	b=jepRpt1JfkkVP1u2BrfP/96x19UnvZNa+pBaxMOyXjWwrcmo7H5viWbt4b7yiDlKuSwQjNCHZ3aC+VLs6Zml/0xl5IbwkA5Mg7yMnPN0D9i4KPjLgJkxuQrivqwJWVUVM5eIoajmooLCar1LLYmej9lfPCcfd6UcZ04QoaVyFd4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755503380;
-	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=v71hNscntsNElHfK1DeG9/bpCIY/+k/7AMAOxJUUKlE=;
-	b=Ejfms6rgpvxnqBcugd3F9yMvH489ENsnfLn+mtnu5VvXjGT/KOM5W79SW5YrQGqa
-	0ydtUaz20eJMwmqjVx8Ty/83Dr91Tn3ZeVtBjgT1mSsWGaHsgbCIU8gdhsP0ZiQu6i/
-	ambU/3dMRRTdrtiICHU7euNscxRNmaz1XjIGq48xRlXX1fn3Binls8VADVcgkgzhIRe
-	HMCAjVswspZVRwkhQ9s4+jVA1DsTwEtphNhew1YCa2x6F8dV1heXP9w3T7X+dI9cwmP
-	VX+JC5H8YJDlfH2geKNcuEvEdVGVi0hWb/k5qmoR9FZGTqnCmlePtm8soWpbposg2+R
-	3Xm+33gFLg==
-Received: by mx.zohomail.com with SMTPS id 1755503377570478.03956771827745;
-	Mon, 18 Aug 2025 00:49:37 -0700 (PDT)
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Drew Fustini <fustini@kernel.org>,
-	Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: Han Gao <rabenda.cn@gmail.com>,
-	Yao Zi <ziyao@disroot.org>,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	Icenowy Zheng <uwu@icenowy.me>
-Subject: [PATCH 2/2] pmdomain: thead: create auxiliary device for rebooting
-Date: Mon, 18 Aug 2025 15:49:06 +0800
-Message-ID: <20250818074906.2907277-3-uwu@icenowy.me>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818074906.2907277-1-uwu@icenowy.me>
-References: <20250818074906.2907277-1-uwu@icenowy.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A892FF664
+	for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 08:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755505362; cv=none; b=Vlh1oyMO71VdC2lf//Kk9wCfawc8UpD4n8/9cSstxEhSVGcZ22qcyoRut1wPt0uQR0sPeRbqvEZwl11bhnzh5qR7LERmvNKP1L2m4FtKetVktKUdMJv+2RlD5x8lDMSfkXl0gYy8V9yMdMPmO42EEAZzl4w9B6mHMmEHGStHAP8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755505362; c=relaxed/simple;
+	bh=HHKSAd/Mjx/o01GkdkMFhWBqYzjpMHK11Lxy/trHy2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=RDzHmuqpnv2YpKfJ0hZYKCUohfe6ldvfkwGgUn24ZIujjnh+KrwwzrduwZ0FOzHnyJQyGPvGjHyL25HU/9jiorDiDTWApPbUZ8PBtf1oCaYcJFum9/rF71o4w+kFz79jmkqH6BbKG1SWJLj6dSVZfyK0Kr6ruGuOOFLKd8/qSsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RgzI3KC6; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45a1ac7c066so21040155e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 01:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755505359; x=1756110159; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DfM3OUic4SP+kzMyP8kHHqITaKkedG37VBt2aK4wKj0=;
+        b=RgzI3KC6kuAgvudTcS0RqmV1JE8JzJvYNKGD5+genPP/LuilJCjCaxmX+kyOq0KzYG
+         4pTK0E7p8r4jb/PESv7xiAtcteH2QeZQ7kVI7+k8ZR3UjT1tDl43V8MvWSHm9bVej+Pi
+         tF/Bh3lqfDlZPuz7hrTT/JiGrtiupmbeXx+rmQt5jEuSoFEs0EE2CNlO4XGXpcd6Zxjy
+         7hd3GAuEiy/+a9fg1CI4+4ZTNb5fTAX9BJrvOSGraxS927xSZp/JSzuo0bBW0Z3wZzyq
+         Zox7CMAIu4Xk70mg2AwOfuGzkpfWPmta/U1xj4K6ibnWNN6dkDAx+mmtwfjNjgojxtu1
+         MNDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755505359; x=1756110159;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DfM3OUic4SP+kzMyP8kHHqITaKkedG37VBt2aK4wKj0=;
+        b=niM+qEMQrN/tgyIFoRmLK+QmkS6ZSp3JuLuhTWP83G/ChRsSrFk1TZTZi1D4FWgfUF
+         TQ4UgxGnp8S5R+SM0y9d+ac/BQ45YvXem7/9sOjSRRnUlaUNZWizQgl3xMDlFwttj99s
+         DkJ6lt3J8qsxiSt7I/uYrbVx5QQ1sRcK9wfEIvfgfpc3Q4Y810RkO8fIuCSQgeyhnwQd
+         faWRX/iIfWGPNyndHzNLuXUfXmaufnz/rKAbqqeP0jZZg23ZHU6MCin4bWCg0iO7YgJo
+         2Ih4KzMEHQar7Vz6DjTzPsmC83Is4LLTBL+lqXcEJvX0SR1Rdrqx42UXWD/CgmIEXiRj
+         R9kw==
+X-Forwarded-Encrypted: i=1; AJvYcCWatRa8yxVkBOLVkAOrCHyfUar1TghAcZtbL0zS0hv6PiF1bdR5gshagxWT1GlrsAN6I1X9eKjITw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyHRip1lsP+kdKiFbdeoh+vDzSWK6/DhRTenJj8WNraWykRiyX
+	NzPsFZrNT3ypVgWx3uxS2gabtfbqLHEHM9XiNA5OZy/Rf7RmfQkQIO0mdFsQiB6f7uY=
+X-Gm-Gg: ASbGncse2ld3eUduCYCLLltk1Lh0CX03Rg4No0EPX2JAjcMV6n81fg7JqmxR07G11DW
+	kB3U8PlFYcWm24fdjAZxNaYkRlB5cNZ6X8Y7cTAfFT8y8OlobyqxcOPQPH12izPi8Ykq9umvYmG
+	GexrYgTLGbq+eZ446rQqwlQxiHh+/XLpv2cVsioK3av/AbCSMU/NYdJT17EHh0EAqBWihQVrcbb
+	iZ0YlHyv5J31N9UDfKK0Y5kycjOSSqsh6jLPp4o0dg6B9AwfeyMmubZnzgTMXo4N2hUSSU8dvqY
+	0MzY+NkzG8kREYdX4hfkCGqz6XoHByBmL4T/1fWGlt3GmbmIToHI2YP2JdG+9gauzt0xxCJmt1E
+	5lLWf/+N6nzlKzQnXD5H2MI1VxErmRagJgUuCUXoRf5Q=
+X-Google-Smtp-Source: AGHT+IGwnL7IszKslS4RMmOckl7pctBDP8Ycuqwcw2vG42+4+Q5iaY+TBsZa0MdI4VtsEKOZ6UKuug==
+X-Received: by 2002:a05:600c:35d3:b0:458:bf15:689c with SMTP id 5b1f17b1804b1-45a1b65c6c6mr115855795e9.2.1755505358701;
+        Mon, 18 Aug 2025 01:22:38 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a22210ab4sm122737435e9.3.2025.08.18.01.22.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 01:22:38 -0700 (PDT)
+Date: Mon, 18 Aug 2025 11:22:35 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>,
+	linux-rockchip@lists.infradead.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, broonie@kernel.org, lee@kernel.org,
+	lgirdwood@gmail.com, sre@kernel.org, heiko@sntech.de,
+	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH V6 3/5] power: supply: bq257xx: Add support for BQ257XX
+ charger
+Message-ID: <202508181503.GrRD2T4C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250812214300.123129-4-macroalpha82@gmail.com>
 
-The reboot / power off operations require communication with the AON
-firmware too.
+Hi Chris,
 
-As the driver is already present, create an auxiliary device with name
-"reboot" to match that driver, and pass the AON channel by using
-platform_data.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
----
- drivers/pmdomain/thead/th1520-pm-domains.c | 35 ++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/pmdomain/thead/th1520-pm-domains.c b/drivers/pmdomain/thead/th1520-pm-domains.c
-index 9040b698e7f7f..8285f552897b0 100644
---- a/drivers/pmdomain/thead/th1520-pm-domains.c
-+++ b/drivers/pmdomain/thead/th1520-pm-domains.c
-@@ -129,12 +129,39 @@ static void th1520_pd_init_all_off(struct generic_pm_domain **domains,
- 	}
- }
- 
--static void th1520_pd_pwrseq_unregister_adev(void *adev)
-+static void th1520_pd_unregister_adev(void *adev)
- {
- 	auxiliary_device_delete(adev);
- 	auxiliary_device_uninit(adev);
- }
- 
-+static int th1520_pd_reboot_init(struct device *dev, struct th1520_aon_chan *aon_chan)
-+{
-+	struct auxiliary_device *adev;
-+	int ret;
-+
-+	adev = devm_kzalloc(dev, sizeof(*adev), GFP_KERNEL);
-+	if (!adev)
-+		return -ENOMEM;
-+
-+	adev->name = "reboot";
-+	adev->dev.parent = dev;
-+	adev->dev.platform_data = aon_chan;
-+
-+	ret = auxiliary_device_init(adev);
-+	if (ret)
-+		return ret;
-+
-+	ret = auxiliary_device_add(adev);
-+	if (ret) {
-+		auxiliary_device_uninit(adev);
-+		return ret;
-+	}
-+
-+	return devm_add_action_or_reset(dev, th1520_pd_unregister_adev,
-+					adev);
-+}
-+
- static int th1520_pd_pwrseq_gpu_init(struct device *dev)
- {
- 	struct auxiliary_device *adev;
-@@ -169,7 +196,7 @@ static int th1520_pd_pwrseq_gpu_init(struct device *dev)
- 		return ret;
- 	}
- 
--	return devm_add_action_or_reset(dev, th1520_pd_pwrseq_unregister_adev,
-+	return devm_add_action_or_reset(dev, th1520_pd_unregister_adev,
- 					adev);
- }
- 
-@@ -235,6 +262,10 @@ static int th1520_pd_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_clean_provider;
- 
-+	ret = th1520_pd_reboot_init(dev, aon_chan);
-+	if (ret)
-+		goto err_clean_provider;
-+
- 	return 0;
- 
- err_clean_provider:
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/dt-bindings-mfd-ti-bq25703a-Add-TI-BQ25703A-Charger/20250813-054704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20250812214300.123129-4-macroalpha82%40gmail.com
+patch subject: [PATCH V6 3/5] power: supply: bq257xx: Add support for BQ257XX charger
+config: parisc-randconfig-r072-20250818 (https://download.01.org/0day-ci/archive/20250818/202508181503.GrRD2T4C-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 8.5.0
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202508181503.GrRD2T4C-lkp@intel.com/
+
+smatch warnings:
+drivers/power/supply/bq257xx_charger.c:392 bq25703_hw_init() warn: potential ! vs ~ typo
+
+vim +392 drivers/power/supply/bq257xx_charger.c
+
+7f3b6f1e51a925 Chris Morgan 2025-08-12  365  static int bq25703_hw_init(struct bq257xx_chg *pdata)
+7f3b6f1e51a925 Chris Morgan 2025-08-12  366  {
+7f3b6f1e51a925 Chris Morgan 2025-08-12  367  	struct regmap *regmap = pdata->bq->regmap;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  368  	int ret = 0;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  369  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  370  	regmap_update_bits(regmap, BQ25703_CHARGE_OPTION_0,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  371  			   BQ25703_WDTMR_ADJ_MASK,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  372  			   FIELD_PREP(BQ25703_WDTMR_ADJ_MASK,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  373  			   BQ25703_WDTMR_DISABLE));
+7f3b6f1e51a925 Chris Morgan 2025-08-12  374  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  375  	ret = pdata->chip->bq257xx_set_ichg(pdata, pdata->ichg_max);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  376  	if (ret)
+7f3b6f1e51a925 Chris Morgan 2025-08-12  377  		return ret;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  378  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  379  	ret = pdata->chip->bq257xx_set_vbatreg(pdata, pdata->vbat_max);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  380  	if (ret)
+7f3b6f1e51a925 Chris Morgan 2025-08-12  381  		return ret;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  382  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  383  	ret = bq25703_set_min_vsys(pdata, pdata->vsys_min);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  384  	if (ret)
+7f3b6f1e51a925 Chris Morgan 2025-08-12  385  		return ret;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  386  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  387  	ret = pdata->chip->bq257xx_set_iindpm(pdata, pdata->iindpm_max);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  388  	if (ret)
+7f3b6f1e51a925 Chris Morgan 2025-08-12  389  		return ret;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  390  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  391  	regmap_update_bits(regmap, BQ25703_CHARGE_OPTION_0,
+7f3b6f1e51a925 Chris Morgan 2025-08-12 @392  			   BQ25703_EN_LWPWR, !BQ25703_EN_LWPWR);
+
+Yeah.  This really looks like it should be bitwise negate ~ instead of
+logical negate !.
+
+7f3b6f1e51a925 Chris Morgan 2025-08-12  393  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  394  	regmap_update_bits(regmap, BQ25703_ADC_OPTION,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  395  			   BQ25703_ADC_CONV_EN, BQ25703_ADC_CONV_EN);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  396  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  397  	regmap_update_bits(regmap, BQ25703_ADC_OPTION,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  398  			   BQ25703_ADC_START, BQ25703_ADC_START);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  399  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  400  	regmap_update_bits(regmap, BQ25703_ADC_OPTION,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  401  			   BQ25703_ADC_FULL_SCALE, BQ25703_ADC_FULL_SCALE);
+7f3b6f1e51a925 Chris Morgan 2025-08-12  402  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  403  	regmap_update_bits(regmap, BQ25703_ADC_OPTION,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  404  			   BQ25703_ADC_CH_MASK,
+7f3b6f1e51a925 Chris Morgan 2025-08-12  405  			   (BQ25703_ADC_CMPIN_EN | BQ25703_ADC_VBUS_EN |
+7f3b6f1e51a925 Chris Morgan 2025-08-12  406  			   BQ25703_ADC_PSYS_EN | BQ25703_ADC_IIN_EN |
+7f3b6f1e51a925 Chris Morgan 2025-08-12  407  			   BQ25703_ADC_IDCHG_EN | BQ25703_ADC_ICHG_EN |
+7f3b6f1e51a925 Chris Morgan 2025-08-12  408  			   BQ25703_ADC_VSYS_EN | BQ25703_ADC_VBAT_EN));
+7f3b6f1e51a925 Chris Morgan 2025-08-12  409  
+7f3b6f1e51a925 Chris Morgan 2025-08-12  410  	return ret;
+7f3b6f1e51a925 Chris Morgan 2025-08-12  411  }
+
 -- 
-2.50.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
