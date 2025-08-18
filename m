@@ -1,179 +1,175 @@
-Return-Path: <linux-pm+bounces-32577-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32578-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685D6B2B035
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 20:25:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AFD3B2B0A1
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 20:40:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE686836CF
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 18:24:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD58818A0A5B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 18:40:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E922D24BF;
-	Mon, 18 Aug 2025 18:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D0C26B74F;
+	Mon, 18 Aug 2025 18:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YyAhz2Kf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQVOqmPP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C914C2D24AC;
-	Mon, 18 Aug 2025 18:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04904263F43;
+	Mon, 18 Aug 2025 18:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755541483; cv=none; b=EIrYvU6pUa5W68ZA2haeWnvhmLV09AH5vcUG1n6fwkZ4K5TLTCyGH+guCDIQcvo8/+SbBKmCCiDGSlyj9nqCckyUQ1Fnuo6BWaYpjNC9ZagxGRgZpywC+nGsPBVyyTy/+0sRzwK/e9elFQvN4ofRXV0bb+r0jAAEh4IsBuCxMlw=
+	t=1755542404; cv=none; b=n1Nmr58nH5pyZEFEc0u2FxTUs4MxvOr1L+WyGNvGQpzr0GLB0uSZ20W+3cCcEuXVqrpzjzL1UGtMhVosaQ6U+Yn6bGUTwSTvIMj6NevSoO1XmKQIb78dWyuQV7m7DRaNTYKn47kTwMwnNKo43J67wTrML+rjtfg7WnHRi36+eLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755541483; c=relaxed/simple;
-	bh=e0T6uswFPCYymAbe+gdn+JgFiwh+mCDg31acddcY9C8=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=i2bb+PdhRSzbJ+ydrAiXFyvwgVJr0NjA+DVArVeX3jPecIaL39BBxuB0jID1JsFQF5qIUiqr/KZfjMbqe7pfb+B+z8Ol5dQbYTiD22hmGF1M6fy2JCEH69Vu9Meqm1tcBa2So2oPHA8lJEbE/KHkSJ7QkL2aEY02ayXT8jscK+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YyAhz2Kf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCB0C4CEED;
-	Mon, 18 Aug 2025 18:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755541483;
-	bh=e0T6uswFPCYymAbe+gdn+JgFiwh+mCDg31acddcY9C8=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=YyAhz2KfF1h8FYPqMG/TZLyTRI42YbxfLuR/fd/nIXbkFzZwmge1E+g6l47gnf5sC
-	 +5lnHt2jA16KJ1RsY8noWIlQDkxDE1jFb13EvoapqzLdmJUiEUs1dlTUPf2owgimgN
-	 Fb6iYXKEkRq3clh8TDWaETgufk1gCFPwusdbpavmUhl5tiJCGDXeUWPIBoh0UYBaTp
-	 0zRwUdzdeRJqH5XfNwC1KJb0X/Ezm8lnFtR37qDVMosbeU2Le1+TJk0x6yvsi3prKQ
-	 viYSLwyNZd6wEAk30hPstCfGUbqmQq1B2a9i43jyS1QD/oqiwWRBnRdjH5byLWr71h
-	 i8NF8UVcg1yRw==
-Date: Mon, 18 Aug 2025 13:24:42 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1755542404; c=relaxed/simple;
+	bh=dD5udPYcdw+R2VGmCouPujWySrsi6OZs03UQR0ljOZY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nZ2/MK5pGypUx3GN+5LGPJyxC5crLe6VcaYOxBU2bvcRZtj97ylR2RFE2+/kQW+IShzRFf1Ex7EEQlDW8BOW9FVOUofJsf11vSvy+udNqw6XvpxlY9pQkJDiilL5/iTfdUd9DpHlYUIBo+yIZcRcgxGVjFZ+PeZSIWBDTQEZ8t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQVOqmPP; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-55ce5287a47so4068580e87.3;
+        Mon, 18 Aug 2025 11:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755542401; x=1756147201; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bmM7ItIjaraXAGSyLnrAC2qMTcYYNxGTgbCl2d6rdYM=;
+        b=mQVOqmPPcGN24UCnYHWGzvB+/5riYf+n4hoIQM94VZ0FpxjtXjCF15ct/WkkU27OlW
+         UDH7siQZwTB/i9wLpwqOlaUi2vnr4QjEzHjHIca44xBxbnaGMp5xv5DwgZV/WiGk78sA
+         sdo3BzER039vDGy8sCI1bwaAMqRNLWIyPpmumwyRt0RKeD+M5DMbMzp7yschbNL8o1Tr
+         BS565p0FXJr8RZ3ZFPG7mpldyDbrwwTyoGZ/IrDO6MLJtRSiWbS0To1Y1KFY1Iym5jFb
+         lx8ypF/WvhpCTVyduxytUH5x+NyUwLVcz2dSFHiJ8AJ/YWTz3dUT7Ls1IDHHjhbP3vM+
+         vjVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755542401; x=1756147201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bmM7ItIjaraXAGSyLnrAC2qMTcYYNxGTgbCl2d6rdYM=;
+        b=J95gKfIZrldek0XJuKn4ltgxo4xkIxFjolWcneCNjxXkLtmFDLYW1Edk5X2zCS4+RF
+         suF/Br0dZgIMhdiK4pCuekZjO4cParF3Ip5cBbZfgZy1NUpI7n/wC4YL17yE6Gph3hgT
+         2jeAcRGLqT1OTbzusBglOEZDPynLZkShpW/9u8MxqrIH6/nKf/2vFGnSDQ2YptMsk1AX
+         RYfcWVH+d9jjq+oM5275bQ1gjrmV3qhf+2iUCsVVoO1wwqaZWKTp2O4MTTAZ+4qrgOUI
+         +47TovLSbiuHQmb7Otxz6w2bC8DxXAZB5PUXgkKQOT8lMT3PD8ODlU2GRmplQ8nurcTK
+         atUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV6a87qakJ1JNySwpzBgjGzzcbqRMpx2vHB2mLLz4sCFR32pFFrdAwqupDYwLk+Vv3YT3p0oIRXjgM=@vger.kernel.org, AJvYcCVacGIm8sL/gB9Tbzy0DPxCIiiW/w31EjH+ACykyUNJjd/jJWE8xHQPnZt1ouXohf48Z4ijNinWHc/TrRM=@vger.kernel.org, AJvYcCXXN5xyeBlIAA1BOAmT4x3YiyKOdajDA28gtfIvoJP3+W1jeqGI/lpMeYDdlkXteUIeUOS9PsUjBGSp4oQ=@vger.kernel.org, AJvYcCXhX8tZTBz09t/xNdh8xG8dXBJFFYcugyE7Vp3Z/DNx6VSsfNArteECWWRGMHtsVhRSyJtv2jQNiVmQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzChb3Y+mgWkhpxiV8JBf7rPlMBuMKN5stnuu5G1j0BY1xTEEfW
+	jsxDzxmQ8whBvgq1XkD9X6UB38vZHNxilq3LQAoQ3dWeLPkBLrGtlVVHThL6Ly2MT273PRm5Z5y
+	SDTKo0Y+zMsN7kj1G4jPG5r2p3GCyELQ=
+X-Gm-Gg: ASbGncvEYaDxloBcvQRqK+gr+dMDiDRMglUK1R6Hs7UrwceON8c+Homak26u6oPAiQb
+	FU+FNwoxPYGnZpPvsgqyMP3T6ZhBvgutKsZm6n4mFNyvJh3ErRg+9CrHKPpmq6gxqAJ9//lkF7i
+	IIela6bPitoF7kjiwzaIaKZ2adXDg3I6tnbW7uBhlF5vUfWH658WEsNpDVSofFSVeXBrce7Lz45
+	z4MsUqMxHmhmfc6yA==
+X-Google-Smtp-Source: AGHT+IFg0y+xEYU/HgP9HL4d5sN72FK5jZ52E7S9n06a5baoH9Fv+JwoDsRpAOqS2jtsH3a0D5vcAWadwlMcLhp9uK8=
+X-Received: by 2002:a05:6512:6418:b0:55c:df64:3780 with SMTP id
+ 2adb3069b0e04-55e00148f8amr46834e87.50.1755542400596; Mon, 18 Aug 2025
+ 11:40:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: daniel.lezcano@linaro.org, krzk+dt@kernel.org, rafael@kernel.org, 
- geert+renesas@glider.be, linux-pm@vger.kernel.org, 
- biju.das.jz@bp.renesas.com, mturquette@baylibre.com, 
- linux-kernel@vger.kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
- sboyd@kernel.org, linux-renesas-soc@vger.kernel.org, conor+dt@kernel.org, 
- will@kernel.org, magnus.damm@gmail.com, john.madieu@gmail.com, 
- linux-arm-kernel@lists.infradead.org, p.zabel@pengutronix.de, 
- devicetree@vger.kernel.org, catalin.marinas@arm.com
-To: John Madieu <john.madieu.xa@bp.renesas.com>
-In-Reply-To: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
-References: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
-Message-Id: <175554055722.1719725.13076334498195294379.robh@kernel.org>
-Subject: Re: [PATCH v7 0/6] thermal: renesas: Add support for RZ/G3E
+References: <20250731-pci-tegra-module-v7-0-cad4b088b8fb@gmail.com>
+ <CALHNRZ9tOJccZ5sQjvkoPe4-+VUtWRxAzAOUainGUCs4+_RBCw@mail.gmail.com> <omchhpbmsydfcsm6mzmbdiupsrxmxxvkxqf33fgi563akn76vf@vkc7k2zhlvee>
+In-Reply-To: <omchhpbmsydfcsm6mzmbdiupsrxmxxvkxqf33fgi563akn76vf@vkc7k2zhlvee>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Mon, 18 Aug 2025 13:39:48 -0500
+X-Gm-Features: Ac12FXyL-zgUyoJv4HtF59wJM8pPidfHQghJAOvbeDQ3uqVg48agQEUJcLS4nZE
+Message-ID: <CALHNRZ8PZzseaTSCvhM6o7jMVYtVdHTczurXh1q+DY5MG62+DA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] PCI: tegra: Allow building as a module
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Aug 1, 2025 at 1:01=E2=80=AFAM Manivannan Sadhasivam <mani@kernel.o=
+rg> wrote:
+>
+> On Thu, Jul 31, 2025 at 05:01:55PM GMT, Aaron Kling wrote:
+> > On Thu, Jul 31, 2025 at 4:59=E2=80=AFPM Aaron Kling via B4 Relay
+> > <devnull+webgeek1234.gmail.com@kernel.org> wrote:
+> > >
+> > > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> > > ---
+> > > Changes in v7:
+> > > - Rebased on 6.16
+> > > - Updated mailing address list
+> > > - Link to v6: https://lore.kernel.org/r/20250507-pci-tegra-module-v6-=
+0-5fe363eaa302@gmail.com
+> > >
+> > > Changes in v6:
+> > > - Remove unused debugfs cleanup function, as caught by kernel ci
+> > > - Link to v5: https://lore.kernel.org/r/20250505-pci-tegra-module-v5-=
+0-827aaac998ba@gmail.com
+> > >
+> > > Changes in v5:
+> > > - Copy commit message exactly word for word on patch 1, as required b=
+y reviewer
+> > > - Delete remove callback in patch 3, per request
+> > > - Don't clean up debugfs, per request, which drops patch 4 entirely
+> > > - Link to v4: https://lore.kernel.org/r/20250505-pci-tegra-module-v4-=
+0-088b552c4b1a@gmail.com
+> > >
+> > > Changes in v4:
+> > > - Updated commit messages for patches 1 and 2, per review
+> > > - Link to v3: https://lore.kernel.org/r/20250502-pci-tegra-module-v3-=
+0-556a49732d70@gmail.com
+> > >
+> > > Changes in v3:
+> > > - Add patch to drop remove callback, per request
+> > > - Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v2-=
+0-c11a4b912446@gmail.com
+> > >
+> > > Changes in v2:
+> > > - Add patch to export tegra_cpuidle_pcie_irqs_in_use as required when
+> > >   building pci-tegra as a module for arm
+> > > - Drop module exit to prevent module unloading, as requested
+> > > - Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v1-=
+0-c0a1f831354a@gmail.com
+> > >
+> > > ---
+> > > Aaron Kling (3):
+> > >       irqdomain: Export irq_domain_free_irqs
+> > >       cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
+> > >       PCI: tegra: Allow building as a module
+> > >
+> > >  drivers/cpuidle/cpuidle-tegra.c    |  1 +
+> > >  drivers/pci/controller/Kconfig     |  2 +-
+> > >  drivers/pci/controller/pci-tegra.c | 35 ++++------------------------=
+-------
+> > >  kernel/irq/irqdomain.c             |  1 +
+> > >  4 files changed, 7 insertions(+), 32 deletions(-)
+> > > ---
+> > > base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
+> > > change-id: 20250313-pci-tegra-module-7cbd1c5e70af
+> > >
+> > > Best regards,
+> > > --
+> > > Aaron Kling <webgeek1234@gmail.com>
+> > >
+> > >
+> >
+> > Continuing the conversation from the last revision [0]. Is there any
+> > path forward for this series?
+> >
+>
+> Daniel, could you please look into the cpufreq patch?
 
-On Mon, 18 Aug 2025 18:28:46 +0200, John Madieu wrote:
-> This series adds support for the temperature sensor unit (TSU) found on the
-> Renesas RZ/G3E SoC.
-> 
-> The series consists of 5 patches (one of which is not related to the thermal
-> framework) that progressively add TSU support as follows:
-> - patch 1/6:    adds syscon/regmap support for accessing system controller
->                 registers, enabling access to TSU calibration values
-> 
-> - patch 2-6/6:  adds dt-bindings, actual driver, DT node, and config symbol.
-> 
-> Patch 1/6 has been duplicated at [1] in USB series. This series addresses comments
-> got from there.
-> 
-> Changes:
-> 
-> v1 -> v2
->  * Fix yaml warnings from dt-binding
->  * Update IRQ names to reflect TSU expectations
-> 
-> v2 -> v3
->  * Remove useless 'renesas,tsu-operating-mode' property
-> 
-> v3 -> v4
->  * Improve commit messages
-> 
-> v4 -> v5
->  * Remove useless curly braces on single line-protected scoped guards
-> 
-> v5 -> v6
->  * Minor typo fix
->  * Constify regmap config in patch 1/5
-> 
-> v6 -> v7
->  * Update DTS trim priperty name and specifier, updading the documentation
->  accordingly
->  * Refactor main driver: remove spinlock usage, using polling timeout as computed
->  from datasheet. Also use polling for get_temp() while using IRQ for trip-point
->  cross detection, and finally add both runtime and sleep PM support.
->  * Add new patch to update sys #address-cells as trim specifier now requires an
->  offet from sys base
-> 
-> Regards,
-> 
-> [1] https://lore.kernel.org/all/20250808061806.2729274-2-claudiu.beznea.uj@bp.renesas.com/
-> 
-> 
-> John Madieu (6):
->   soc: renesas: rz-sysc: Add syscon/regmap support
->   dt-bindings: thermal: r9a09g047-tsu: Document the TSU unit
->   thermal: renesas: rzg3e: Add thermal driver for the Renesas RZ/G3E SoC
->   arm64: dts: renesas: r9a09g047: Add #address-cells property in sys
->     node
->   arm64: dts: renesas: r9a09g047: Add TSU node
->   arm64: defconfig: Enable the Renesas RZ/G3E thermal driver
-> 
->  .../thermal/renesas,r9a09g047-tsu.yaml        |  87 +++
->  MAINTAINERS                                   |   7 +
->  arch/arm64/boot/dts/renesas/r9a09g047.dtsi    |  49 ++
->  arch/arm64/configs/defconfig                  |   1 +
->  drivers/soc/renesas/Kconfig                   |   1 +
->  drivers/soc/renesas/r9a08g045-sysc.c          |   1 +
->  drivers/soc/renesas/r9a09g047-sys.c           |   1 +
->  drivers/soc/renesas/r9a09g057-sys.c           |   1 +
->  drivers/soc/renesas/rz-sysc.c                 |  28 +-
->  drivers/soc/renesas/rz-sysc.h                 |   2 +
->  drivers/thermal/renesas/Kconfig               |   7 +
->  drivers/thermal/renesas/Makefile              |   1 +
->  drivers/thermal/renesas/rzg3e_thermal.c       | 575 ++++++++++++++++++
->  13 files changed, 760 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
->  create mode 100644 drivers/thermal/renesas/rzg3e_thermal.c
-> 
-> --
-> 2.25.1
-> 
-> 
-> 
+Another two weeks with no response to a review request. And over two
+months total since the cpuidle maintainers were initially asked to
+look. Is there a policy for dealing with lack of responses?
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/v6.17-rc1-12-g0a0e0852f3f3 (best guess, 10/11 blobs matched)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/renesas/' for 20250818162859.9661-1-john.madieu.xa@bp.renesas.com:
-
-arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dtb: system-controller@10430000 (renesas,r9a09g047-sys): '#address-cells' does not match any of the regexes: '^pinctrl-[0-9]+$'
-	from schema $id: http://devicetree.org/schemas/soc/renesas/renesas,r9a09g057-sys.yaml#
-
-
-
-
-
+Aaron
 
