@@ -1,133 +1,187 @@
-Return-Path: <linux-pm+bounces-32524-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32525-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D672DB29E82
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 11:55:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 174C6B29E91
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 11:57:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D18FC1707E4
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:55:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 253E618A6C53
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EB230FF1D;
-	Mon, 18 Aug 2025 09:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7936F30FF23;
+	Mon, 18 Aug 2025 09:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkIFS709"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="tSHnOwDf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1310F278146;
-	Mon, 18 Aug 2025 09:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED69273D77;
+	Mon, 18 Aug 2025 09:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755510941; cv=none; b=cpOmBBgZN+Uzb9fdh7qwcKjcVsdw6G89V90EwaOnqk8dZK8W80FTdQjjdQn1T2xXPuULbJmW0Hjl9ISAR0r6yE8OSZAXvcJuT7epTKnEaDhbdoUp0UeRU7u20ey5vMuvJlqCpRveNL8NURUtLpwllXeeatIWezgNiJ2m9Wy7EU8=
+	t=1755510955; cv=none; b=gJykqO+FJ3o1SrvsjgYOXTuRDlAYjN+YdKC24kwza4UPN87JFvjbNXqEHb0oFa7GHQu8JtmxXnrzEReU85lFJ1Drae6sF7/2zF0uV/JQBcXiWVm7hAKwPFUj/WfS5r7ONulw2Cmhbl0jX88hgo+RwnJDKofY4zNg89Uqmx9CgcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755510941; c=relaxed/simple;
-	bh=IV4bPZmBEtnxV/SEjS2Qeu5Z6YHK0JsLisi/u8YBojg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P1Grrw0FnZEYH4ehRZRQ+7GxdnpLgbFvFOg2gPvuzXuFbwHfZjzqeBlixPQFlttWlA4Z922xaOPOIvQ9C/eEa8Hac8V3maa080RTVZXUNVpU1G9rqGlhsKX2x7zgJhgvH0mjbLvYKMvNtZ27JNVJGep7N10xliIbSqjUAw8NJuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkIFS709; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB81DC4CEEB;
-	Mon, 18 Aug 2025 09:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755510940;
-	bh=IV4bPZmBEtnxV/SEjS2Qeu5Z6YHK0JsLisi/u8YBojg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KkIFS709x8lYmWmrSuAbEvmL/Ukks/PyE+IyhowtIXWJrX5YjkOTSG9gRsr7W4vxS
-	 M6eiX76ZSu+glstH3DBNvo2wiEz7yYkfyBxoxgBMoPphqglSg57NVDTthieDza87o8
-	 VGH8jj6T8PrfUwWXw9iBUr0/x3CgZygMqW9E3bGNJqwAqKhMjKTyFugT0Prjmq8yqU
-	 zl4FJnAO7swFVZuSNmUGiSGjjIh4etFjS5AApSUv1VhlorTA9anh0VNX2PUWqHAyDi
-	 hnN5uBLlV2KWcSP+Mln3CEDROh8JyylqW9+j9da7wcqVdO38EzRyQ8gBkNtxueTunJ
-	 2Glc2kfQqq4CA==
-Message-ID: <9dfd2eb2-fda7-4f29-881b-e1c4a2b3f6fc@kernel.org>
-Date: Mon, 18 Aug 2025 11:55:33 +0200
+	s=arc-20240116; t=1755510955; c=relaxed/simple;
+	bh=iOMvpR5ULLxiQ8A6H8TBN7iop6QkwuGc8NxBlTGTMVw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M0nEmsQhy+Zj6vlT5NJM6Qw7b19M8KMfNJsG0WYbNktaXESGasTMv9ecRAVQn3KzeeDDgB73a+H4J3HJWotMyCI599dezsTJwEBOlQpN8EtlLc1Bl9J/BdcMrmBSOaAwlbMnQ1Kp6w373JpRoTSl6H6tREYVZK3T/+QPH3/BqcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=tSHnOwDf; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1755510945;
+	bh=VHlf81wL+CZcIODTXXenYL/631OM0f2P2rYjTCgiBzI=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=tSHnOwDf90IXxu5Ctnbv2e35M5tIgmxRKNrBxv5PmQ01rnCW1TqlVVkJmxItZEyY0
+	 2ysKAI63mYu/VNSed8S9d0MfkwPNG4ArQBpp61pvOuBQvtozg+5VUfQnFYLbB3HKDs
+	 JGToJCUcQkBS/18eW0gvUd8ljfoUHTB2TDDL9j6o=
+X-QQ-mid: esmtpgz14t1755510939t95958824
+X-QQ-Originating-IP: I8GjGI20rjvRSpDEOuPZgNyL2YsWJO/bsOAUmI2b5HI=
+Received: from = ( [61.145.255.150])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 18 Aug 2025 17:55:38 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8607044835764841759
+EX-QQ-RecipientCnt: 13
+Date: Mon, 18 Aug 2025 17:55:38 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Icenowy Zheng <uwu@icenowy.me>, Drew Fustini <fustini@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
+	Michal Wilczynski <m.wilczynski@samsung.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>
+Cc: Han Gao <rabenda.cn@gmail.com>, Yao Zi <ziyao@disroot.org>,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Subject: Re: [PATCH 2/2] pmdomain: thead: create auxiliary device for
+ rebooting
+Message-ID: <492D2D5B0A6B3E27+aKL4mqMhxQ3lWDTa@LT-Guozexi>
+References: <20250818074906.2907277-1-uwu@icenowy.me>
+ <20250818074906.2907277-3-uwu@icenowy.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/2] dt-bindings: interconnect: Add OSM L3 compatible
- for QCS615 SoC
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Sibi Sankar
- <quic_sibis@quicinc.com>, Odelu Kukatla <quic_okukatla@quicinc.com>,
- Mike Tipton <mike.tipton@oss.qualcomm.com>,
- Imran Shaik <quic_imrashai@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250804061536.110-1-raviteja.laggyshetty@oss.qualcomm.com>
- <20250804061536.110-2-raviteja.laggyshetty@oss.qualcomm.com>
- <3b79dc0c-0bcd-47d0-ab10-ba1514466d65@kernel.org>
- <14d0e02e-350c-42bc-93b5-c81e11b3bd5d@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <14d0e02e-350c-42bc-93b5-c81e11b3bd5d@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818074906.2907277-3-uwu@icenowy.me>
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: Mf+wQkWJ2TuYCiAPWgFdra0vJujaLRvpFaPKy98YStTXnhQ88yBRsPn2
+	JDJOZn9R3VJCHvC93FGsU0vSF5DfLCyJQwHHDbU84cj+mLP+uOsQPQjelI71Jit8808KQCp
+	G4nn5rb4SDiKCU14QeKuYR4t/shbx8RNUcKZtWCBLtb4HSb5zgja1vc21nTbCoKQIUbWyny
+	aJhbeBRYYs7ktMy+wnQPI9gGBdykqD48gbf2WkuSZtVIVyQliw8dacBVeEcI8UbGfLLOB3g
+	Tped+ycDIaNtJMPYkbXPyxWILCa7gkmurXnjuynl+JgIiqIb+1rHbQune9bpfSA1Z/HguP/
+	agdX8EKNqpABdubnany9Ron7DyuFRTXuIrI99oY2l5VDDK+fRLfjyxL/y0FTeGfFfEh9lx8
+	7hPe1Rnu4mKgxpp4PILOLiv8VZ/AjxIk/hwaUYyOQoHGia1BLv0PvwA4nAJrPW8mRgYCMwS
+	yXmEcY0WfeV4gs8SKw1LDfECGsGrAPqyGbbUAv52lT3eHF/Uzz+YCmTeJSvl1b0VnxVU9jx
+	ORkY6zu+BBWp+iKMW8fuI7PeXZpT93qPi4l9U1czadtRCe87IFSeVMTwPwn4enju7Kf0lvB
+	1kLeAEmtSO25p4IWZd01NJExoiGXagIlxe6Qszr7XA13ifWx72gCBrS7pty0ZhUzNNreKnw
+	21edzBfmCLosgxNUo9IMI71dNfWrOGywU9pNeyfZGDhIdkewMcg7g5I3FaxPkJnRJYxSDHv
+	SZoXHqLFWknLfXJsbITsNrf6in6/IGvUf/4dgN5Qoud6He8C3ZGq4eNktM1R+AWRw1NY0E1
+	gCNN/Ly0V4BojR1nFkiKDaQd53DW4qkrI1mk4owWUKEnxrWmm/OjFqqEi9H7kwtPs502BIn
+	jFGV0uZCT5hANOgXKCA/bl4XVehV3Ugoku3X1Dm2wTAMQoG4sq9g6DzGSGgsaP0vOAolyCS
+	nH3WR92jnKGTCJZlDZtwba4oZsPsEZYf2PkURd+nuCWwqFtK2Kh4MWTTXN4N+z+I0kFpWSA
+	QPhhXrqeYM62OAs85xa7bk973kEPLFKugbFNybqphKwr/kNBTMJF8U6DKj6MF3mA0+/VKNr
+	MZG4E/IRvhs
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 
-On 18/08/2025 11:12, Raviteja Laggyshetty wrote:
->>>  .../devicetree/bindings/interconnect/qcom,osm-l3.yaml        | 5 +++++
->>>  1 file changed, 5 insertions(+)
->> No, slow down, this conflicts with other patch and makes your entry
->> duplicated. Just squash both commits.
->>
-> The conflicting patch 
-> https://lore.kernel.org/all/20250711102540.143-2-raviteja.laggyshetty@oss.qualcomm.com/
-> got picked into v6.17-rc1.
-
-Then why you could not rebase on next if you sent it afterwards? You are
-not making the process easier for us.
+On Mon, Aug 18, 2025 at 03:49:06PM +0800, Icenowy Zheng wrote:
+> The reboot / power off operations require communication with the AON
+> firmware too.
+> 
+> As the driver is already present, create an auxiliary device with name
+> "reboot" to match that driver, and pass the AON channel by using
+> platform_data.
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+Acked-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 
 Best regards,
-Krzysztof
+Troy
+> ---
+>  drivers/pmdomain/thead/th1520-pm-domains.c | 35 ++++++++++++++++++++--
+>  1 file changed, 33 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/thead/th1520-pm-domains.c b/drivers/pmdomain/thead/th1520-pm-domains.c
+> index 9040b698e7f7f..8285f552897b0 100644
+> --- a/drivers/pmdomain/thead/th1520-pm-domains.c
+> +++ b/drivers/pmdomain/thead/th1520-pm-domains.c
+> @@ -129,12 +129,39 @@ static void th1520_pd_init_all_off(struct generic_pm_domain **domains,
+>  	}
+>  }
+>  
+> -static void th1520_pd_pwrseq_unregister_adev(void *adev)
+> +static void th1520_pd_unregister_adev(void *adev)
+>  {
+>  	auxiliary_device_delete(adev);
+>  	auxiliary_device_uninit(adev);
+>  }
+>  
+> +static int th1520_pd_reboot_init(struct device *dev, struct th1520_aon_chan *aon_chan)
+> +{
+> +	struct auxiliary_device *adev;
+> +	int ret;
+> +
+> +	adev = devm_kzalloc(dev, sizeof(*adev), GFP_KERNEL);
+> +	if (!adev)
+> +		return -ENOMEM;
+> +
+> +	adev->name = "reboot";
+> +	adev->dev.parent = dev;
+> +	adev->dev.platform_data = aon_chan;
+> +
+> +	ret = auxiliary_device_init(adev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = auxiliary_device_add(adev);
+> +	if (ret) {
+> +		auxiliary_device_uninit(adev);
+> +		return ret;
+> +	}
+> +
+> +	return devm_add_action_or_reset(dev, th1520_pd_unregister_adev,
+> +					adev);
+> +}
+> +
+>  static int th1520_pd_pwrseq_gpu_init(struct device *dev)
+>  {
+>  	struct auxiliary_device *adev;
+> @@ -169,7 +196,7 @@ static int th1520_pd_pwrseq_gpu_init(struct device *dev)
+>  		return ret;
+>  	}
+>  
+> -	return devm_add_action_or_reset(dev, th1520_pd_pwrseq_unregister_adev,
+> +	return devm_add_action_or_reset(dev, th1520_pd_unregister_adev,
+>  					adev);
+>  }
+>  
+> @@ -235,6 +262,10 @@ static int th1520_pd_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_clean_provider;
+>  
+> +	ret = th1520_pd_reboot_init(dev, aon_chan);
+> +	if (ret)
+> +		goto err_clean_provider;
+> +
+>  	return 0;
+>  
+>  err_clean_provider:
+> -- 
+> 2.50.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
