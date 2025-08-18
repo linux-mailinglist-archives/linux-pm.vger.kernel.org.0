@@ -1,155 +1,179 @@
-Return-Path: <linux-pm+bounces-32576-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32577-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0F6BB2AFA2
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:41:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 685D6B2B035
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 20:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F98418A5E32
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:42:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE686836CF
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 18:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92025283FC3;
-	Mon, 18 Aug 2025 17:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E922D24BF;
+	Mon, 18 Aug 2025 18:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I5uWIZmX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YyAhz2Kf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B302773D9;
-	Mon, 18 Aug 2025 17:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C914C2D24AC;
+	Mon, 18 Aug 2025 18:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755538907; cv=none; b=bH6DX0x04e4KwYyIL8df1bKvVzpque6b/anT7UjGLIScv+WqWtRpJCf2KFjLG3m99ehj8tyvDPBPoXWgqSvpSlBggr+/arZG6F0QjiY9WTuZuDRvSNO9war3eOVgDVvYGZlkj8Sb+u5jzxzhfYjEligwC25dvDGtdPuPt8dI4o0=
+	t=1755541483; cv=none; b=EIrYvU6pUa5W68ZA2haeWnvhmLV09AH5vcUG1n6fwkZ4K5TLTCyGH+guCDIQcvo8/+SbBKmCCiDGSlyj9nqCckyUQ1Fnuo6BWaYpjNC9ZagxGRgZpywC+nGsPBVyyTy/+0sRzwK/e9elFQvN4ofRXV0bb+r0jAAEh4IsBuCxMlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755538907; c=relaxed/simple;
-	bh=cYWtsiJGtihXFgyhyhpeKFwvCJd0vJ94ICN5unw9gAI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C1Sj8N/bG2IHE15UQOniYIRq0VJOBGGWdMZsAdAH3BY44xvhmiIChVVPksO1P0D891nwjurRg+M/9f0cVBt2ewN51EPzN0X+JflHW5e4Q/sKdL6POUW64AAcmiGwPLgvOr+JVkXBCHGDR1AgEK0cvZi2vzUrdxTGm2V6kA1bcUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I5uWIZmX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D82C4CEF1;
-	Mon, 18 Aug 2025 17:41:46 +0000 (UTC)
+	s=arc-20240116; t=1755541483; c=relaxed/simple;
+	bh=e0T6uswFPCYymAbe+gdn+JgFiwh+mCDg31acddcY9C8=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=i2bb+PdhRSzbJ+ydrAiXFyvwgVJr0NjA+DVArVeX3jPecIaL39BBxuB0jID1JsFQF5qIUiqr/KZfjMbqe7pfb+B+z8Ol5dQbYTiD22hmGF1M6fy2JCEH69Vu9Meqm1tcBa2So2oPHA8lJEbE/KHkSJ7QkL2aEY02ayXT8jscK+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YyAhz2Kf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCB0C4CEED;
+	Mon, 18 Aug 2025 18:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755538906;
-	bh=cYWtsiJGtihXFgyhyhpeKFwvCJd0vJ94ICN5unw9gAI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=I5uWIZmX3s/Ryqjdw/12lYlS84SAU+Lra3p5bXaGnbt22rlNpftzXnaU2dhYDa6oO
-	 2xjACxx2dliMWGHY1+N0eiEStIYjdLyQqctX8vVyAfH1syA7o2/zz5/OBIx0Q8PC+E
-	 +kJ/W8AtG3i83k6lTlQpDfZjllL/S8C4Yzyf57thZ926UiAhsX07CRb2XcYz6XEoN3
-	 DXb15or/SqnEJ88ePAGf7+jav0S2pRq5H5GIvdM8rLEbZ1V3XaRyBg1q1PjI282FdK
-	 iUJsrf6/EalYA+fTTuc7aXeE21hmiMvIny0vYzPGb6QCVG9YQpqkLEvL/kcidtNwRH
-	 93flri4dfNaoA==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-30cce5b711bso3625562fac.0;
-        Mon, 18 Aug 2025 10:41:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX2SWtveCSayD2QWpnaNzp8buxmtvizGQZD+krJ1vT91PP0qiWM08GnrxMgFsiflD2daMp0CiUoyPs=@vger.kernel.org, AJvYcCX2tT9K9ICDtJeJce3CtgYCKb/QhTY2p7HWUT4v7rPjDC/qbmE2/T8p8NROBQPYrZG0R5UxMa3I1p8WAN8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyRFCboHFc7It0jHb6Z9R3JY1Dh6WpV7mDbZovBd1o6SU+amsw
-	ziGgZ/dGkdV0Vosjx8LjTdYvRc7a3qCSza7lkcVzeeFQwQyaQJn6kEhnpv5tBWKB201Uugt28Jk
-	j57wxbr9n1VisJL6rj0qtXHHnz/QWnXA=
-X-Google-Smtp-Source: AGHT+IGVyYYrtN3lr7XolYOLAIMRk7cq51ADEukhSg0JGP9CK2DtcdjKMns4Pgg07cNyDWafw+qCbxhLytEYstAHABM=
-X-Received: by 2002:a05:6870:d912:b0:2ff:9c45:4f51 with SMTP id
- 586e51a60fabf-310aad4cf5bmr8104752fac.15.1755538906242; Mon, 18 Aug 2025
- 10:41:46 -0700 (PDT)
+	s=k20201202; t=1755541483;
+	bh=e0T6uswFPCYymAbe+gdn+JgFiwh+mCDg31acddcY9C8=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=YyAhz2KfF1h8FYPqMG/TZLyTRI42YbxfLuR/fd/nIXbkFzZwmge1E+g6l47gnf5sC
+	 +5lnHt2jA16KJ1RsY8noWIlQDkxDE1jFb13EvoapqzLdmJUiEUs1dlTUPf2owgimgN
+	 Fb6iYXKEkRq3clh8TDWaETgufk1gCFPwusdbpavmUhl5tiJCGDXeUWPIBoh0UYBaTp
+	 0zRwUdzdeRJqH5XfNwC1KJb0X/Ezm8lnFtR37qDVMosbeU2Le1+TJk0x6yvsi3prKQ
+	 viYSLwyNZd6wEAk30hPstCfGUbqmQq1B2a9i43jyS1QD/oqiwWRBnRdjH5byLWr71h
+	 i8NF8UVcg1yRw==
+Date: Mon, 18 Aug 2025 13:24:42 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <2244365.irdbgypaU6@rafael.j.wysocki>
- <9104c434-9025-4365-8127-28014ddddc8d@arm.com>
-In-Reply-To: <9104c434-9025-4365-8127-28014ddddc8d@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Aug 2025 19:41:29 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iTaa62WGXCLcgiRyzcj2GBXmYcvLa8AtQZD5bQcxTw5g@mail.gmail.com>
-X-Gm-Features: Ac12FXwmbMoRlFRjAGl4x3sK6EGRxQQDe0VPxAvxfcO95h8NI0JoD5iLwee-mUk
-Message-ID: <CAJZ5v0iTaa62WGXCLcgiRyzcj2GBXmYcvLa8AtQZD5bQcxTw5g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full CPUs
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: daniel.lezcano@linaro.org, krzk+dt@kernel.org, rafael@kernel.org, 
+ geert+renesas@glider.be, linux-pm@vger.kernel.org, 
+ biju.das.jz@bp.renesas.com, mturquette@baylibre.com, 
+ linux-kernel@vger.kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+ sboyd@kernel.org, linux-renesas-soc@vger.kernel.org, conor+dt@kernel.org, 
+ will@kernel.org, magnus.damm@gmail.com, john.madieu@gmail.com, 
+ linux-arm-kernel@lists.infradead.org, p.zabel@pengutronix.de, 
+ devicetree@vger.kernel.org, catalin.marinas@arm.com
+To: John Madieu <john.madieu.xa@bp.renesas.com>
+In-Reply-To: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
+References: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
+Message-Id: <175554055722.1719725.13076334498195294379.robh@kernel.org>
+Subject: Re: [PATCH v7 0/6] thermal: renesas: Add support for RZ/G3E
 
-On Thu, Aug 14, 2025 at 4:09=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 8/13/25 11:29, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > When the menu governor runs on a nohz_full CPU and there are no user
-> > space timers in the workload on that CPU, it ends up selecting idle
-> > states with target residency values above TICK_NSEC all the time due to
-> > a tick_nohz_tick_stopped() check designed for a different use case.
-> > Namely, on nohz_full CPUs the fact that the tick has been stopped does
-> > not actually mean anything in particular, whereas in the other case it
-> > indicates that previously the CPU was expected to be idle sufficiently
-> > long for the tick to be stopped, so it is not unreasonable to expect
-> > it to be idle beyond the tick period length again.
-> >
-> > In some cases, this behavior causes latency in the workload to grow
-> > undesirably.  It may also cause the workload to consume more energy
-> > than necessary if the CPU does not spend enough time in the selected
-> > deep idle states.
-> >
-> > Address this by amending the tick_nohz_tick_stopped() check in question
-> > with a tick_nohz_full_cpu() one to avoid using the time till the next
-> > timer event as the predicted_ns value all the time on nohz_full CPUs.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/menu.c |   12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> >
-> > --- a/drivers/cpuidle/governors/menu.c
-> > +++ b/drivers/cpuidle/governors/menu.c
-> > @@ -293,8 +293,18 @@
-> >        * in a shallow idle state for a long time as a result of it.  In=
- that
-> >        * case, say we might mispredict and use the known time till the =
-closest
-> >        * timer event for the idle state selection.
-> > +      *
-> > +      * However, on nohz_full CPUs the tick does not run as a rule and=
- the
-> > +      * time till the closest timer event may always be effectively in=
-finite,
-> > +      * so using it as a replacement for the predicted idle duration w=
-ould
-> > +      * effectively always cause the prediction results to be discarde=
-d and
-> > +      * deep idle states to be selected all the time.  That might intr=
-oduce
-> > +      * unwanted latency into the workload and cause more energy than
-> > +      * necessary to be consumed if the discarded prediction results a=
-re
-> > +      * actually accurate, so skip nohz_full CPUs here.
-> >        */
-> > -     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-> > +     if (tick_nohz_tick_stopped() && !tick_nohz_full_cpu(dev->cpu) &&
-> > +         predicted_ns < TICK_NSEC)
-> >               predicted_ns =3D data->next_timer_ns;
-> >
-> >       /*
-> >
-> >
-> >
->
-> OTOH the behaviour with $SUBJECT possibly means that we use predicted_ns =
-from
-> get_typical_interval() (which may suggest picking a shallow state based o=
-n
-> previous wakeup patterns) only then to never wake up again?
 
-Yes, there is this risk, but the current behavior is more damaging IMV
-because it (potentially) hurts both energy efficiency and performance.
+On Mon, 18 Aug 2025 18:28:46 +0200, John Madieu wrote:
+> This series adds support for the temperature sensor unit (TSU) found on the
+> Renesas RZ/G3E SoC.
+> 
+> The series consists of 5 patches (one of which is not related to the thermal
+> framework) that progressively add TSU support as follows:
+> - patch 1/6:    adds syscon/regmap support for accessing system controller
+>                 registers, enabling access to TSU calibration values
+> 
+> - patch 2-6/6:  adds dt-bindings, actual driver, DT node, and config symbol.
+> 
+> Patch 1/6 has been duplicated at [1] in USB series. This series addresses comments
+> got from there.
+> 
+> Changes:
+> 
+> v1 -> v2
+>  * Fix yaml warnings from dt-binding
+>  * Update IRQ names to reflect TSU expectations
+> 
+> v2 -> v3
+>  * Remove useless 'renesas,tsu-operating-mode' property
+> 
+> v3 -> v4
+>  * Improve commit messages
+> 
+> v4 -> v5
+>  * Remove useless curly braces on single line-protected scoped guards
+> 
+> v5 -> v6
+>  * Minor typo fix
+>  * Constify regmap config in patch 1/5
+> 
+> v6 -> v7
+>  * Update DTS trim priperty name and specifier, updading the documentation
+>  accordingly
+>  * Refactor main driver: remove spinlock usage, using polling timeout as computed
+>  from datasheet. Also use polling for get_temp() while using IRQ for trip-point
+>  cross detection, and finally add both runtime and sleep PM support.
+>  * Add new patch to update sys #address-cells as trim specifier now requires an
+>  offet from sys base
+> 
+> Regards,
+> 
+> [1] https://lore.kernel.org/all/20250808061806.2729274-2-claudiu.beznea.uj@bp.renesas.com/
+> 
+> 
+> John Madieu (6):
+>   soc: renesas: rz-sysc: Add syscon/regmap support
+>   dt-bindings: thermal: r9a09g047-tsu: Document the TSU unit
+>   thermal: renesas: rzg3e: Add thermal driver for the Renesas RZ/G3E SoC
+>   arm64: dts: renesas: r9a09g047: Add #address-cells property in sys
+>     node
+>   arm64: dts: renesas: r9a09g047: Add TSU node
+>   arm64: defconfig: Enable the Renesas RZ/G3E thermal driver
+> 
+>  .../thermal/renesas,r9a09g047-tsu.yaml        |  87 +++
+>  MAINTAINERS                                   |   7 +
+>  arch/arm64/boot/dts/renesas/r9a09g047.dtsi    |  49 ++
+>  arch/arm64/configs/defconfig                  |   1 +
+>  drivers/soc/renesas/Kconfig                   |   1 +
+>  drivers/soc/renesas/r9a08g045-sysc.c          |   1 +
+>  drivers/soc/renesas/r9a09g047-sys.c           |   1 +
+>  drivers/soc/renesas/r9a09g057-sys.c           |   1 +
+>  drivers/soc/renesas/rz-sysc.c                 |  28 +-
+>  drivers/soc/renesas/rz-sysc.h                 |   2 +
+>  drivers/thermal/renesas/Kconfig               |   7 +
+>  drivers/thermal/renesas/Makefile              |   1 +
+>  drivers/thermal/renesas/rzg3e_thermal.c       | 575 ++++++++++++++++++
+>  13 files changed, 760 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+>  create mode 100644 drivers/thermal/renesas/rzg3e_thermal.c
+> 
+> --
+> 2.25.1
+> 
+> 
+> 
 
-It is also arguably easier for the user to remedy getting stuck in a
-shallow idle state than to change governor's behavior (PM QoS is a bit
-too blunt for this).
 
-Moreover, configuring CPUs as nohz_full and leaving them in long idle
-may not be the most efficient use of them.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/v6.17-rc1-12-g0a0e0852f3f3 (best guess, 10/11 blobs matched)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/renesas/' for 20250818162859.9661-1-john.madieu.xa@bp.renesas.com:
+
+arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dtb: system-controller@10430000 (renesas,r9a09g047-sys): '#address-cells' does not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/soc/renesas/renesas,r9a09g057-sys.yaml#
+
+
+
+
+
 
