@@ -1,118 +1,146 @@
-Return-Path: <linux-pm+bounces-32547-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32548-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B438DB2AB84
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 16:50:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DFE2B2ABBF
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 16:55:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 119DB5C4E70
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:40:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA22C7239ED
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16C3322537;
-	Mon, 18 Aug 2025 14:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FD0835A2BC;
+	Mon, 18 Aug 2025 14:42:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aofF9fJl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxI+QpqY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF505322526;
-	Mon, 18 Aug 2025 14:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDC435A293;
+	Mon, 18 Aug 2025 14:42:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755527821; cv=none; b=FZDWtv/BOrl1O8BoP08Xl6vXIbCCulgIKrazSmWK13cL5S9ZycUHo23h3fl8beksa9rbbc3LZoZzze8sP9PjDuzkIy9uoaNl57ZNsN/l6biTbiV7dJANsqnZ0h2gvddv/80nd9fS1sAup5Po/mNxU3kT1AQ9UZ/TPQgz+d2jrqQ=
+	t=1755528148; cv=none; b=lBg/j/VzYkrevPk0CoGNV+47EZvc6wi5a/VzUVuArJ+GNi87FEFAbY8naWxjQN0EdCeT6Hf7YSm9Bz0e9ugGLC77o+y/VlZdzSVgJNLVfp7PCVyNLkke+crCxQ5vkLrjR+LJ790fP4kJlNfs1JayirLc33ElVheAXg0aJSxVw+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755527821; c=relaxed/simple;
-	bh=W4/OLIkNQoKN0jnkznTsepA876QEW7U+ue1hYsKNaH0=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=hRvazTiX93rdytQ9+qoGaRKhD9Vv5B20LrdBBYD4nlxKbVEMv6hKEFXtf13ZioUhdGdSzrLbM/hxMfMp1rjxiOBB9iAJLoVDoJhfayNFZzUzsJyy9eTSzVF45394nV2tGVeCY2GaaEXb2Lg5Cw6qyl3wGWBgxNGIjIoXsBrjzeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aofF9fJl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63474C19422;
-	Mon, 18 Aug 2025 14:37:01 +0000 (UTC)
+	s=arc-20240116; t=1755528148; c=relaxed/simple;
+	bh=fGHdn9+ygD6wlu1IBkHUW+r7l+vTsYKlue/b33fPSm8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dws8RXW7uIFSUR1js2MHNhbDZOB9aROiX1wMpZWUPInKXFtdQS7dp6VdmS3Rnqd+XsdeMxP17U5YWLA6TYuUWHTyo2A3JxkgC1UmeAzu9/wDS9lO3yrNWMM4ErqkP4IkbnlfdpDqirWetAqTXt4Mm4ua7ENs5WBYReHbWcVTfS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxI+QpqY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F81C4CEEB;
+	Mon, 18 Aug 2025 14:42:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755527821;
-	bh=W4/OLIkNQoKN0jnkznTsepA876QEW7U+ue1hYsKNaH0=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=aofF9fJlEhlYoZ/K2HbzIr4HZ1ZEq4MGsQ4F5/eyZVP/CZuY9ro3cVyQ2WfnxxVHO
-	 g6P2tSEj9VU+fjwnOi3jIkFxSDOjh/aC1nv8K16JTqf4cT2TB7Pg9d4Y23fpZBqmCm
-	 tMP4MXwUXcMqkUKb9xwtqvg+zPER+rFILsA90/yJyQGDdySvVyUF/JsKFciDs8JUam
-	 mDiHT7fB/Tklg4TdlQCM107p7e3OQpG6Q9vS26DQ/tqoWAEDjbYeItkDk37jPpxrkL
-	 UO6sjEQa661N21yMwHu3cqLdmTE/eg7hljFJkF7eII8IAcy0IamHB8ZWbKS3K2Qta5
-	 hnlZ4xj+zQ+KQ==
-Date: Mon, 18 Aug 2025 09:37:00 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1755528147;
+	bh=fGHdn9+ygD6wlu1IBkHUW+r7l+vTsYKlue/b33fPSm8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AxI+QpqYR1kFMN1tDndYVoLEFWEYphqlaWEVCTWJcs5r3gjJ3QzHrLrHWskc0FJul
+	 Uj5dhIjKKCagZQ5NhWD7/vWqNqoiMaZ33lowG+/oOJ65NNicjWWsp8TpQBhslUoWvr
+	 bSar+K0AU9kmag9nmho5q8VCoaWvofmDPkUnGmhre7Wjyh0aF/sabAvLLwUJnWqXZO
+	 mhg2mDvDv/vjewUoP+UMMyiTCwfPN3bCAi7TYLsrYXXsB+EWsN7b1PaJRWNmaLJcJ3
+	 ldrKlXi/XCgKp2ycfwNVbTXObFAVFDRtkkNiGyqVnmKEDrgSuDnQpu+YNMRd+zxyao
+	 nnwjRkppAtXHA==
+Message-ID: <b1807a5a-9507-49e2-9a4b-5101078c7a90@kernel.org>
+Date: Mon, 18 Aug 2025 16:42:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, vince-wl.liu@mediatek.com, 
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-pm@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
- sirius.wang@mediatek.com, linux-arm-kernel@lists.infradead.org, 
- jh.hsu@mediatek.com, linux-mediatek@lists.infradead.org, 
- Matthias Brugger <matthias.bgg@gmail.com>, Stephen Boyd <sboyd@kernel.org>, 
- Qiqi Wang <qiqi.wang@mediatek.com>, netdev@vger.kernel.org, 
- Richard Cochran <richardcochran@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Project_Global_Chrome_Upstream_Group@mediatek.com, 
- linux-clk@vger.kernel.org
-To: "irving.ch.lin" <irving-ch.lin@mediatek.com>
-In-Reply-To: <20250818115754.1067154-3-irving-ch.lin@mediatek.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: clock: mediatek: Add new MT8189 clock
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Richard Cochran <richardcochran@gmail.com>
+Cc: Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com, sirius.wang@mediatek.com,
+ vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
 References: <20250818115754.1067154-1-irving-ch.lin@mediatek.com>
- <20250818115754.1067154-3-irving-ch.lin@mediatek.com>
-Message-Id: <175552781827.1170419.2767571062327495497.robh@kernel.org>
-Subject: Re: [PATCH 2/6] dt-bindings: power: mediatek: Add new MT8189 power
+ <20250818115754.1067154-2-irving-ch.lin@mediatek.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20250818115754.1067154-2-irving-ch.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-On Mon, 18 Aug 2025 19:57:30 +0800, irving.ch.lin wrote:
+On 18/08/2025 13:57, irving.ch.lin wrote:
 > From: Irving-ch Lin <irving-ch.lin@mediatek.com>
 > 
-> Add the new binding documentation for power controller
-> on MediaTek MT8189.
+> Add the new binding documentation for system clock
+> and functional clock on MediaTek MT8189.
 > 
 > Signed-off-by: Irving-ch Lin <irving-ch.lin@mediatek.com>
-> ---
->  .../mediatek,mt8189-power-controller.yaml     | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.yaml
-> 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Never tested so just quick review to for obvious issues. I won't bother
+with full review :(
 
-yamllint warnings/errors:
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.example.dts:18:18: fatal error: dt-bindings/clock/mt8189-clk.h: No such file or directory
-   18 |         #include <dt-bindings/clock/mt8189-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [scripts/Makefile.dtbs:132: Documentation/devicetree/bindings/power/mediatek,mt8189-power-controller.example.dtb] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1525: dt_binding_check] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
 
-doc reference errors (make refcheckdocs):
+> +
+> +examples:
+> +  - |
+> +    imp_iic_wrap_ws_clk@11b21000 {
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250818115754.1067154-3-irving-ch.lin@mediatek.com
+1. Follow closely DTS coding style.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+2. Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Best regards,
+Krzysztof
 
