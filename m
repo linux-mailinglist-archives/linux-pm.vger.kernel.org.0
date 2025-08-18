@@ -1,95 +1,95 @@
-Return-Path: <linux-pm+bounces-32542-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32543-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2AAEB2A18C
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:30:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11E4EB2A1EE
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 14:43:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B95A24E2C5D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 12:30:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B13C17B25A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 12:34:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB34322743;
-	Mon, 18 Aug 2025 12:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1F61D618A;
+	Mon, 18 Aug 2025 12:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PXJrAf+U"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WG5C6/pT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730A332145A
-	for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 12:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E362029B0;
+	Mon, 18 Aug 2025 12:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755520093; cv=none; b=opvRMbug0hJzg4FEukdi2V0pupy+q956klffJhrQuHacR4kM8lUwUoekGWZ3/qrhabr/JGDCS6E0Z+DUw0d8r6dRBrxZqcisvDqqRT/Zx7AL/+MC35D2PsFxSKZZbQIFRYBOOUVk9TwXILeEbyUKeuabmXxU7LpmSswB/hGr9HM=
+	t=1755520414; cv=none; b=oeoPHkK1eMQ+wJaYm4IKrsKAwzkFLaQ0era4LESzSb/egr0NSVON6VcAOG/dKD1msHXka/nvIqFEU8O6LY0Ss9j7964hImzWUGb4hMR3xga3zn637lPQydASQ/9SQuRC+ktSpYdkyPqjTCULtaGfUe80T0yk2ZgjOvG6FheOpmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755520093; c=relaxed/simple;
-	bh=XiB2YxYxJL06GqxQOoOpjVh/9fzUowLPh9sr5pAMAzY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bDbE3TX4DodjX4IDTDj17BwjEitKqfY8SdV0nlwYIRVlzomlymSQmAJMTtjqRMpAzn2UKy2w097hMM7S5oDprisOqH+G8+/NN0wrgq6R9hQNcsGzYA9ar8LB7ahwF4YS1AWffZAQpqYNEd2BwPCUi431GGHh6PPRUjvXKDDlZ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PXJrAf+U; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755520092; x=1787056092;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=XiB2YxYxJL06GqxQOoOpjVh/9fzUowLPh9sr5pAMAzY=;
-  b=PXJrAf+UHGJ9Uu/Vs7q/wqnGbHd04hMdDfZs0YqUM/iP1s8qAi083wSv
-   71TIBmaliTdKR3rU71PycNBya5GtKwqidlnv9lK1Xn5x5cJSTXcsL2K+K
-   /6hDdfrZHKs7dECqXFQul6B4SUvl1Ep5Vd+7G1NzaCjE3szMwrfmYSxGm
-   XpCBxtBmt4RKNt91VKaKnUbQ3JJKd1UWLI06X5MF3LxLxrO22Xxq1E398
-   nXzdv+5xZjpTQQmCv7Bt+k25RrLNWDrPNnxlfkNtm/Ep7BUs/AJ/09/jh
-   rS1rKyQ1kIhkLzRaBoDfXMkxI93cajcbsE/RlYJI15y/A9nN7zPgvsFOv
-   Q==;
-X-CSE-ConnectionGUID: Tawj2l00SqecnHHP03B1Gw==
-X-CSE-MsgGUID: l8HGadTHRHaxIAm72+u5tA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="61367345"
-X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="61367345"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 05:28:11 -0700
-X-CSE-ConnectionGUID: yTZi5HSSRoCIZ9hsedg5Vg==
-X-CSE-MsgGUID: i5ufTaEMQUGpJha2YJ5RDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="198574584"
-Received: from linux.intel.com ([10.54.29.200])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 05:28:11 -0700
-Received: from [10.245.244.6] (abityuts-desk.ger.corp.intel.com [10.245.244.6])
-	by linux.intel.com (Postfix) with ESMTP id 75CC620B571C;
-	Mon, 18 Aug 2025 05:28:09 -0700 (PDT)
-Message-ID: <8024bc1249dd1f6ec8496f46a119f009823259be.camel@linux.intel.com>
-Subject: Re: [PATCH] intel_idle: Remove unnecessary address-of operators
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>, rafael@kernel.org
-Cc: linux-pm@vger.kernel.org
-Date: Mon, 18 Aug 2025 15:28:08 +0300
-In-Reply-To: <20250818085124.3897921-1-kaushlendra.kumar@intel.com>
-References: <20250818085124.3897921-1-kaushlendra.kumar@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1755520414; c=relaxed/simple;
+	bh=fBwGY1pf9/pZrhjxfF2lExvVGXSFMC7sT+sKvSTHCZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MHsb5aKEhW7n+dkMzNdrHcZPV9GuCQSQSggqmaptCSgDqKKN1yNmZfFc/G+cqqVaZ1ce3mAWQp/1hHWUkC/J8W1KsY6z5ME8eThQ/We49jHEHe11WeHvZiD/cc2znwMQJ+4e81OpO8UJKsNpm+xUr0mV6sZ43L7GX801h4hfcMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WG5C6/pT; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=OB
+	mxvHZPIjB170wB6IcELcbHWu2NuzRe737D2dZcW1k=; b=WG5C6/pThVAjM+F3JX
+	1MU09l2bcTqxQOANpxc5ciqxWp+Ywtwf/lJfOiFM7/jsYUr4GIwYGgRHbQnzgYrk
+	3WQKxhiIiCyoW2L0FjeAzUkiu0NWcAFaW8Wu1ACm0Op7VS6SzjPyk+zOQrtKfued
+	hmp6M3wEY+fveFQPiEe7ZQnbA=
+Received: from ProDesk.. (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAnA8OBHaNoedlICw--.25568S2;
+	Mon, 18 Aug 2025 20:33:08 +0800 (CST)
+From: Andy Yan <andyshrk@163.com>
+To: sre@kernel.org
+Cc: t.schramm@manjaro.org,
+	zheyuma97@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Andy Yan <andyshrk@163.com>
+Subject: [PATCH] power: supply: cw2015: Fix a alignment coding style issue
+Date: Mon, 18 Aug 2025 20:32:59 +0800
+Message-ID: <20250818123303.334853-1-andyshrk@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAnA8OBHaNoedlICw--.25568S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XFyDKFW8Cw15tw4UGrWfZrb_yoWkXFgE9r
+	Wxu3s7Kr15uF1Utw1qyF13Zr9aga4qqF97Xa1ktwsrZry7Gw4qyr4DCryDGw1DX3y7CrZ8
+	uFyq9a13AF9xtjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRAPESPUUUUU==
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbBEgGtXmijGIioAQAAsS
 
-On Mon, 2025-08-18 at 14:21 +0530, Kaushlendra Kumar wrote:
-> Remove redundant address-of operators (&) when assigning the intel_idle
-> function pointer to the .enter field in cpuidle_state structures.in C,
-> the & is not needed for function names. This change improves code
-> consistency and readability by using the more conventional form without
-> the & operator.
->=20
-> No functional change intended.
->=20
-> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-> ---
+Fix the checkpatch warning:
+CHECK: Alignment should match open parenthesis
 
-Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Fixes: 0cb172a4918e ("power: supply: cw2015: Use device managed API to simplify the code")
+Signed-off-by: Andy Yan <andyshrk@163.com>
+---
+
+ drivers/power/supply/cw2015_battery.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
+index f63c3c410451..382dff8805c6 100644
+--- a/drivers/power/supply/cw2015_battery.c
++++ b/drivers/power/supply/cw2015_battery.c
+@@ -702,8 +702,7 @@ static int cw_bat_probe(struct i2c_client *client)
+ 	if (!cw_bat->battery_workqueue)
+ 		return -ENOMEM;
+ 
+-	devm_delayed_work_autocancel(&client->dev,
+-							  &cw_bat->battery_delay_work, cw_bat_work);
++	devm_delayed_work_autocancel(&client->dev, &cw_bat->battery_delay_work, cw_bat_work);
+ 	queue_delayed_work(cw_bat->battery_workqueue,
+ 			   &cw_bat->battery_delay_work, msecs_to_jiffies(10));
+ 	return 0;
+-- 
+2.43.0
+
+base-commit: 079dc9ff6c3e30152ce69c162b02893bf741d2db
+branch: master
+
 
