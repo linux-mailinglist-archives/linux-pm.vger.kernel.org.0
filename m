@@ -1,94 +1,231 @@
-Return-Path: <linux-pm+bounces-32573-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32574-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78DE8B2AED2
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:04:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973ACB2AF0D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 19:11:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 135F64E1A40
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:02:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1CB1BA1FD5
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD901346A04;
-	Mon, 18 Aug 2025 17:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289BB32C30B;
+	Mon, 18 Aug 2025 17:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHuc2mk0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AHe7kpOS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2ACD343D7A;
-	Mon, 18 Aug 2025 17:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010E532C301;
+	Mon, 18 Aug 2025 17:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755536520; cv=none; b=YVnYG0Ncc/AZURGrytLkexlzpzzyGEoDn+mwjJw2d02B8T/Yko6EwVN1dKergr9iEIN9oUcbvhsF1VrTTy1tYr2pYGTsWhkFNpcP2MbB9EDvJsSIIb6gmJqT1uicbnf34rJK3XuWYFlhp42LooGuElv1afAgebqdu4d7kmKSiH4=
+	t=1755536905; cv=none; b=rOwNwALxnBT/EBah+JTInwUV+Qsa0+c3CZLQHFxFNn+pwbrCVTA2ZwRY4FA5Iler6Vn7L+G3BuzOekVIvjsfoInP42ITC/YdHNM2CWrmUH0A9ISZqulRypY/0Fw/xh3fF3bBDabQq79TOgZcDS4Co7JkwLWS2b1ChNBZDf5NXoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755536520; c=relaxed/simple;
-	bh=4JDlQ8uzlvj2ruUR4yCJvNZFDixeB2/kwpGfVbnLKXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HxBbv8XGauTD1mbDGCcEbB9MjHM2/o316HDSuQiv6WMTOJZRNf2qt/DnxGmXswJDbZRESS+Duv/iaTe/tDdCt3fRjhkegf3kNEwi27Dl2vT23AM06tRxFDNO+q9iKekxGHwOgeKW9fv4NTBuPbjEK0yqy1EMSkzhngXH6E+VqWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHuc2mk0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12B3C19422;
-	Mon, 18 Aug 2025 17:01:56 +0000 (UTC)
+	s=arc-20240116; t=1755536905; c=relaxed/simple;
+	bh=zQxTuAvYIfNO8cz+oNsAkBS/V5FhHPFGI5pi8bMfH7Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LRPSN/2X4ujX7hjWLoNeRxSoEi4DIG8SGXVMwsySARP0WrD6/DShBDT4n52Stv9Le4qCYocrdFBnZ0tYNoxHBhrYP1gT46NjPR5Y64WqrpUE72+fgfuIJW5MLg5pfn+tHaAL0Fgdwt6tlE4BxuUMAF+7bLU//3xC13OtHqnGaHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AHe7kpOS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AB8C113D0;
+	Mon, 18 Aug 2025 17:08:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755536520;
-	bh=4JDlQ8uzlvj2ruUR4yCJvNZFDixeB2/kwpGfVbnLKXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NHuc2mk0vjVH9GvL4+Sejb0i88yCxRQPDa/S1zHykWesFOy4lVoPclbtAherEKjxm
-	 LVeyc68wG2WA7mWaqrO3YmqQt7nUFxXt19QZMQDXDBIXOiIpsPx9dzuPaTQ4w6+cDs
-	 2ZS4Ldc2rToQOmkZUjS0vtVnGU5Ya7DTYQ679Tobk+/u/goh6rdFWXOqJp20VzsVzo
-	 7AHPvbvX6laSaM2q6Ajh3Kai7fWYIFWrUMVISnTzilGPg2wcfqx+0onD+3jgMu+SBq
-	 bkAfNXMzPjQh9YV1MuqikohBZAluxs6e23//Nr8p8ypaAOpkEO6Ca0xjNfzGVNhLJs
-	 OQS8/9gmNpB8g==
-Date: Mon, 18 Aug 2025 18:01:54 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jacky Bai <ping.bai@nxp.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: qoriq: Add compatible
- string for imx93
-Message-ID: <20250818-photo-annually-0d87c4d06b00@spud>
-References: <20250818-imx93_tmu-v3-0-35f79a86c072@nxp.com>
- <20250818-imx93_tmu-v3-1-35f79a86c072@nxp.com>
+	s=k20201202; t=1755536904;
+	bh=zQxTuAvYIfNO8cz+oNsAkBS/V5FhHPFGI5pi8bMfH7Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=AHe7kpOSYCeVenSQSDlBdWJbhWw9+6xpG5Z9Xd/rWt/Agzc4uHcefnXu6fpfW8DB/
+	 ZVNFWSxVjLiv2pgvhCmEqI0XwGvNqVa2rGa5/Y3owm+eLbOXwCMxjfIRvKUz4gQ+lM
+	 dnXjVYm2pxJo1WWliQowWLkD5OlRHXaOArLyZn41N+2MHMVhs9cqhvVXyTnG6QQWfl
+	 r6tw0ry5G0JgQz+PRxXnwRmLUispbqIj/bh0pSbbcZm16Jg3COU7SHTQvbGbcbCpCM
+	 s53Q0gJbYa8PaI/Awjs/3Xt0dx3B9scGBpOYYeDMbA28Yl2P/6CmByij5UN2145NNK
+	 RnTCC+U8Im4cg==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-61bf9ef4f1fso1505389eaf.3;
+        Mon, 18 Aug 2025 10:08:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUK6n4Dm+l5eqZGKZRU38IxnM2L5je0Dl+CMldDrkfbr3irL7X6Lf8ecz/A3YMMk+l7wnh7US9HCsM=@vger.kernel.org, AJvYcCVW4R1Ho6xGtmTdWhD31HPIKAcbMLmyUXQUFyuyq2tHK1iLlkQQpBc7JJTN4sC0fjtwrWhcUNL3nD3xExA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2YT110P44eTE8Ll21esMu/ho/Pd2uGyJnJtsbUrrMp4WUTykS
+	LQisw5acLXQldsW5OespOFQ3WCHx1YJYafluupqvnXQAcLJu2+NOn65+gPHA3x1t9ABkPtEvZja
+	rGmO9R6XjRAer842Ic9sPBX4A0Tj2liw=
+X-Google-Smtp-Source: AGHT+IEuxEPvxBQjnopblcKv41S8Q91oq3BerfWHUDFh6phFeM73xEMNjROm8iMJIjhJt1jijjn/DfnJ5NYDB5XKM6g=
+X-Received: by 2002:a05:6820:1690:b0:61c:4fa:7465 with SMTP id
+ 006d021491bc7-61c04fa7528mr4551613eaf.0.1755536904134; Mon, 18 Aug 2025
+ 10:08:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="oPltdRaYEbsqi37T"
-Content-Disposition: inline
-In-Reply-To: <20250818-imx93_tmu-v3-1-35f79a86c072@nxp.com>
+References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <5043159.31r3eYUQgx@rafael.j.wysocki>
+ <0da8086f-2b6c-46e3-92ca-e156b9374a2a@arm.com>
+In-Reply-To: <0da8086f-2b6c-46e3-92ca-e156b9374a2a@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 18 Aug 2025 19:08:07 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jpfZt-BB579mBkSkNX6em4sHKwiLYCgm4dzzkUFeexmQ@mail.gmail.com>
+X-Gm-Features: Ac12FXwD6X_DNc5siHpU3QcBm0fI4CvCLa2kVu59QXSF-3Y9_CyL9_6PGkZ1AeM
+Message-ID: <CAJZ5v0jpfZt-BB579mBkSkNX6em4sHKwiLYCgm4dzzkUFeexmQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] cpuidle: governors: menu: Avoid selecting states
+ with too much latency
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Aug 13, 2025 at 9:13=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 8/13/25 11:25, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Occasionally, the exit latency of the idle state selected by the menu
+> > governor may exceed the PM QoS CPU wakeup latency limit.  Namely, if th=
+e
+> > scheduler tick has been stopped already and predicted_ns is greater tha=
+n
+> > the tick period length, the governor may return an idle state whose exi=
+t
+> > latency exceeds latency_req because that decision is made before
+> > checking the current idle state's exit latency.
+> >
+> > For instance, say that there are 3 idle states, 0, 1, and 2.  For idle
+> > states 0 and 1, the exit latency is equal to the target residency and
+> > the values are 0 and 5 us, respectively.  State 2 is deeper and has the
+> > exit latency and target residency of 200 us and 2 ms (which is greater
+> > than the tick period length), respectively.
+> >
+> > Say that predicted_ns is equal to TICK_NSEC and the PM QoS latency
+> > limit is 20 us.  After the first two iterations of the main loop in
+> > menu_select(), idx becomes 1 and in the third iteration of it the targe=
+t
+> Can drop "of it" here?
 
---oPltdRaYEbsqi37T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+But it also doesn't really hurt I think.
 
+> > residency of the current state (state 2) is greater than predicted_ns.
+> > State 2 is not a polling one and predicted_ns is not less than TICK_NSE=
+C,
+> > so the check on whether or not the tick has been stopped is done.  Say
+> > that the tick has been stopped already and there are no imminent timers
+> > (that is, delta_tick is greater than the target residency of state 2).
+> > In that case, idx becomes 2 and it is returned immediately, but the exi=
+t
+> > latency of state 2 exceeds the latency limit.
+> >
+> > Address this issue by modifying the code to compare the exit latency of
+> > the current idle state (idle state i) with the latency limit before
+> > comparing its target residecy with predicted_ns, which allows one
+> residency
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Fixed while applying.
 
---oPltdRaYEbsqi37T
-Content-Type: application/pgp-signature; name="signature.asc"
+> > more exit_latency_ns check that becomes redundant to be dropped.
+> >
+> > However, after the above change, latency_req cannot take the predicted_=
+ns
+> > value any more, which takes place after commit 38f83090f515 ("cpuidle:
+> > menu: Remove iowait influence"), because it may cause a polling state
+> > to be returned prematurely.
+> >
+> > In the context of the previous example say that predicted_ns is 3000 an=
+d
+> > the PM QoS latency limit is still 20 us.  Additionally, say that idle
+> > state 0 is a polling one.  Moving the exit_latency_ns check before the
+> > target_residency_ns one causes the loop to terminate in the second
+> > iteration, before the target_residency_ns check, so idle state 0 will b=
+e
+> > returned even though previously state 1 would be returned if there were
+> > no imminent timers.
+> >
+> > For this reason, remove the assignment of the predicted_ns value to
+> > latency_req from the code.
+> >
+> > Fixes: 5ef499cd571c ("cpuidle: menu: Handle stopped tick more aggressiv=
+ely")
+> > Cc: 4.17+ <stable@vger.kernel.org> # 4.17+
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpuidle/governors/menu.c |   29 ++++++++++++-----------------
+> >  1 file changed, 12 insertions(+), 17 deletions(-)
+> >
+> > --- a/drivers/cpuidle/governors/menu.c
+> > +++ b/drivers/cpuidle/governors/menu.c
+> > @@ -287,20 +287,15 @@
+> >               return 0;
+> >       }
+> >
+> > -     if (tick_nohz_tick_stopped()) {
+> > -             /*
+> > -              * If the tick is already stopped, the cost of possible s=
+hort
+> > -              * idle duration misprediction is much higher, because th=
+e CPU
+> > -              * may be stuck in a shallow idle state for a long time a=
+s a
+> > -              * result of it.  In that case say we might mispredict an=
+d use
+> > -              * the known time till the closest timer event for the id=
+le
+> > -              * state selection.
+> > -              */
+> > -             if (predicted_ns < TICK_NSEC)
+> > -                     predicted_ns =3D data->next_timer_ns;
+> > -     } else if (latency_req > predicted_ns) {
+> > -             latency_req =3D predicted_ns;
+> > -     }
+> > +     /*
+> > +      * If the tick is already stopped, the cost of possible short idl=
+e
+> > +      * duration misprediction is much higher, because the CPU may be =
+stuck
+> > +      * in a shallow idle state for a long time as a result of it.  In=
+ that
+> > +      * case, say we might mispredict and use the known time till the =
+closest
+> > +      * timer event for the idle state selection.
+> > +      */
+> > +     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
+> > +             predicted_ns =3D data->next_timer_ns;
+> >
+> >       /*
+> >        * Find the idle state with the lowest power while satisfying
+> > @@ -316,13 +311,15 @@
+> >               if (idx =3D=3D -1)
+> >                       idx =3D i; /* first enabled state */
+> >
+> > +             if (s->exit_latency_ns > latency_req)
+> > +                     break;
+> > +
+> >               if (s->target_residency_ns > predicted_ns) {
+> >                       /*
+> >                        * Use a physical idle state, not busy polling, u=
+nless
+> >                        * a timer is going to trigger soon enough.
+> >                        */
+> >                       if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLIN=
+G) &&
+> > -                         s->exit_latency_ns <=3D latency_req &&
+> >                           s->target_residency_ns <=3D data->next_timer_=
+ns) {
+> >                               predicted_ns =3D s->target_residency_ns;
+> >                               idx =3D i;
+> > @@ -354,8 +351,6 @@
+> >
+> >                       return idx;
+> >               }
+> > -             if (s->exit_latency_ns > latency_req)
+> > -                     break;
+> >
+> >               idx =3D i;
+> >       }
+> >
+> >
+> >
+>
+> Good catch!
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaKNcggAKCRB4tDGHoIJi
-0kVGAQD/a2PJxB0NyQoM1hisKZXKpeMuWnGPrk6iUuo0/adFTAEAi7jKc+5GsLQ+
-AdgzhUAkr5oOFTq1HY/QmITWZs0WIwU=
-=twvX
------END PGP SIGNATURE-----
-
---oPltdRaYEbsqi37T--
+Thank you!
 
