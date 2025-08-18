@@ -1,155 +1,81 @@
-Return-Path: <linux-pm+bounces-32526-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B33BB29EDD
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 12:09:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6661BB29EF7
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 12:22:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 702262A1DD8
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 10:09:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AB7D1894CFF
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 10:21:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8BD310772;
-	Mon, 18 Aug 2025 10:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hCPaAp1Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF85315770;
+	Mon, 18 Aug 2025 10:21:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835E7310768;
-	Mon, 18 Aug 2025 10:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EED230E836;
+	Mon, 18 Aug 2025 10:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755511760; cv=none; b=SrEWEpGyeZ/3SMN5tPPhQBi0SUQuY2G7G7q89xER26gQ/jI0ViHb5VTBl/aeY/8BWAYrGooBm0GUX7C7M8PQ+yVS0YU35batNxarhUkgA/UtuhRkZihoImW24gWca3tdh1XXYchLKnwUEpzCaeLE7NUuvELmQ2zjULsltplmVv8=
+	t=1755512492; cv=none; b=HFvzoMd3uZqbNWQl/vg/v/bED/dULucgb27XUZ70T4sd0gQAWisP1+BQzP2fLMyGAvBFZuJi+GRAtdjHRJkLhWcOSXwi0HlScCO2POGynSrzLEpeSq3nr15bueP46vQslxYKMvrh9uzFC7UBGC9R0/TOkgxVa6rAZ6KaVlb9f0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755511760; c=relaxed/simple;
-	bh=YTYTunFUE60jN+Q1wTGeRv0B7ez8k59yq7g+XQCx3Zc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aBsdiP3AuVpQASdSfRkxrhEHJsA8CKLr60tpeCvk0rt0bZeGTzyrMA7fErKW95skDtotIzmmgvSlCh9/1UGyZYH/ghxsMHG5mwU+FNxLxesUvKGvDC3usGQth5YG5jsGyF7dfK2NlS32Z0bJAaPjjAoL0TS53uuBL0rf83yOvdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hCPaAp1Z; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55ce510b4ceso4532423e87.1;
-        Mon, 18 Aug 2025 03:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755511755; x=1756116555; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FBdYlT7O+hJ5Ch3mWP5IIcE7+XCmcmEMEIQ8cDdUvbM=;
-        b=hCPaAp1Zm2bhW9z3D848uyFER96S/8614TsR1JXHhmJvgJNZtXJFjbMGmVy+vFNnlM
-         UYvbuZiUeAkA/0WxBmU5BNSbEZoHLTWQ3mYX8vxtBUotlOmP+mihPO6ruBjCbwzKENVp
-         8gB8HktCNqsWqnVEY7VaSKlSX4TKBk0eP/dZPTkgkR2puemLVYow2UqwVibm5Di+kq2t
-         xOOarerMgDCCSts9tmG3WgwVExgBH5WJO+2XqlRe0tivt4bWyt4EnxnxUrtG2tCXlimX
-         jksHazRdw3I/YbMNH6UeApKG8s88hRAY0JoviGiLtYDMGSCAopTbeDqxF3Lz6Ij9IioP
-         hYBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755511755; x=1756116555;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBdYlT7O+hJ5Ch3mWP5IIcE7+XCmcmEMEIQ8cDdUvbM=;
-        b=kzzxjVFky3efsH+BKP2VSEr6MH1UjMaVP549x8ikBbSaH2UD6phwhNpgyldEUevSg/
-         PkcQwx+COHyFuweGc2ihRcvV2U69VPOO+xTHsDAPh4qfoSU/RSMFz6J497c0M6qP0uhd
-         glF1i90yr0mF/0VqU7lKRZh6PAuESLyEbwikHfirLedNHEmAduFZqRAfRGBrzs7AFnrR
-         7D7OimnRi+XUHILxE2q3BbBjnGNXEjZJcmLSsqQbVNqhQRPvkpfUElO666P/Maj2dLmJ
-         LDNKC+DbGMfzI6M/w07CIgyuQAQXQ4fRgfKxX30BYrMHVdU+XU4vD7AraHll1Xz/KJ8I
-         VJJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUiWXbUXqxMLsTChJf0MbWBSpuYzzzU/94VgIUdmeiok5PRjUyFGCXI0OdeFiUfAaCUD9Z1bBw2UvkVeXM=@vger.kernel.org, AJvYcCXk3KhqMQn8l4b1Hrj0codgIgPKB5/is2mEGrspxb9nliZM5m+KVRCfjsD7Qsq9exjAPAkQyCdAtHI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmHakmx59sNam/Lk5p5JZkyjjLy5mo4ohrKZQNuZE4VSirIxvX
-	C1inu8jhYvwT7LV831atUrhdDo7PT1zaZvfWiWk6j94jAGJU0fjn6/NZoLYMlw==
-X-Gm-Gg: ASbGncuY95DBZuUirFlGsooi156ReBpvRe2N+BXWlOvuynPbPnC/rQBB19CmHlkphYe
-	V51v7po/8X1aI4yMWgmEmuQu/wiif3tujBKqfmnoDvMAHdVWnucoFvWQiiBka19Ai5eFgQH+HUk
-	bTK7SsGSoseY3NKCtSDaPVH5SsRGFczxdjKZakONvZ2qsohk1PZH8dBvJqu65pZWsiUbFJAYtWc
-	LZz3AIwhe9WOTXA4QTG0UtUsgjUwypkp6letzv8EnbsVHbxHzAGZYramHdxv4xdf6G6gLXAP02a
-	Wok2BHyg0L2O51Ajqjzy0IxZN6gYV8hnCmEi+A4VVhMlJ04RCWIhEtNlD7MNtPORMkgeJf51Yp2
-	4BxcjI6lC6OgavdCCE1E2Sf0pq76P35A0kr0sD5luLACqGiyn7XIGXKvi4ZWIRi3/8VavhLjNPn
-	aypS2uSi1fMnBP1Q==
-X-Google-Smtp-Source: AGHT+IFinQuHZszSZxKOZIdPFJsBcuYolBD7tuJvb50efI6zUzShZoUUTTKiSFdOsuH6T6noy7UP9Q==
-X-Received: by 2002:a05:6512:244c:b0:55c:e6a6:e694 with SMTP id 2adb3069b0e04-55cf2ce5481mr1552335e87.54.1755511754417;
-        Mon, 18 Aug 2025 03:09:14 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef368d34sm1593570e87.58.2025.08.18.03.09.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 03:09:13 -0700 (PDT)
-Message-ID: <53198209-ff95-407d-89e9-11cc34b04b4e@gmail.com>
-Date: Mon, 18 Aug 2025 13:09:12 +0300
+	s=arc-20240116; t=1755512492; c=relaxed/simple;
+	bh=RYV3iIchdWXA7wyjnN2Jx4NW7e9oYNjCFQtNXtWC/OI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qhay3JYCI/By96cGT/FHRBOnmRQK43tynaSXbr9qej+hMQj3zbJGLBwI3oQvIMgnrwdfNoizSlvdfnggwdpM980qAsZQSgsqwJAdYD2XKiVyLZk22mcm4BCeVGqwpuVhvE0Vguw79by0rdbmQOaXDB8yPva05A9fVEFWn4FfZSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5864B1596;
+	Mon, 18 Aug 2025 03:21:21 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E4E53F63F;
+	Mon, 18 Aug 2025 03:21:27 -0700 (PDT)
+Date: Mon, 18 Aug 2025 11:21:24 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: linux-kernel@vger.kernel.org, james.quinlan@broadcom.com,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Mike Tipton <quic_mdtipton@quicinc.com>,
+	Peng Fan <peng.fan@nxp.com>, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: scmi: Account for malformed DT in
+ scmi_dev_used_by_cpus()
+Message-ID: <20250818-imposing-salamander-from-pluto-0f0eac@sudeepholla>
+References: <20250815205714.1545571-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] power: supply: Add bd718(15/28/78) charger driver
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250816-bd71828-charger-v1-0-71b11bde5c73@kemnade.info>
- <20250816-bd71828-charger-v1-2-71b11bde5c73@kemnade.info>
- <bf82cd81-bcc7-4929-aa84-b749533d5b95@kernel.org>
- <20250817101121.19a86716@akair>
- <bbd17f22-8834-42d8-a109-971bdd2e0fa1@kernel.org>
- <e8955365-73c0-4c7a-a579-0ee6940340b2@gmail.com>
- <20250818103600.0c3a015d@akair>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20250818103600.0c3a015d@akair>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250815205714.1545571-1-florian.fainelli@broadcom.com>
 
-On 18/08/2025 11:36, Andreas Kemnade wrote:
-> Hi Matti,
+On Fri, Aug 15, 2025 at 01:57:14PM -0700, Florian Fainelli wrote:
+> Broadcom STB platforms were early adopters of the SCMI framework and as
+> a result, not all deployed systems have a Device Tree entry where SCMI
+> protocol 0x13 (PERFORMANCE) is declared as a clock provider, nor are the
+> CPU Device Tree node(s) referencing protocol 0x13 as their clock
+> provider.
 > 
-> Am Mon, 18 Aug 2025 09:34:02 +0300
-> schrieb Matti Vaittinen <mazziesaccount@gmail.com>:
+> For those platforms, we allow the checks done by scmi_dev_used_by_cpus()
+> to continue, and in the event of not having done an early return, we key
+> off the documented compatible string and give them a pass to continue to
+> use scmi-cpufreq.
 > 
->> On 17/08/2025 11:13, Krzysztof Kozlowski wrote:
->>> On 17/08/2025 10:11, Andreas Kemnade wrote:
->>>> Am Sun, 17 Aug 2025 07:58:35 +0200
->>>> schrieb Krzysztof Kozlowski <krzk@kernel.org>:
->>>>   
->>>>> On 16/08/2025 21:19, Andreas Kemnade wrote:
 
-> Newest rebase I have is for 6.15. Yes, capacity calculation is hard.
+With the multi-line comment fixed as suggested by Viresh.
 
-Just a thing to note. I've drafted some support for another variant, on 
-top of the v6.6. Just pushed the latest version of that to:
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-https://github.com/M-Vaittinen/linux/tree/bd72720-on-6.6-rohmpower
-
-It may have something useful for you (or then it doesn't). Following 
-could perhaps be checked:
-
-8c00ee888283 ("regulator: bd71828: Use platform device id")
-0ba48e3a48d4 ("mfd: bd71828: Add IPRE register")
-f6caf815fc2f ("power: supply: bd71828: Support setting trickle charge 
-current")
-56197c1819e5 ("dt-bindings: Add trickle-charge upper limit")
-af7500d7f278 ("mfd: bd71828: Definition for fast charge term current 
-register")
-98401932fb75 ("mfd: bd71815: Add EXTMOS_EN mask")
-e508c94159d8 ("mfd: bd71828: Add charge profile control masks")
-
-e751bf502e29 ("power: supply: bd71828: Support setting charging profiles")
-AND
-b84792488191 ("power: supply: bd71827-power: Fix pre- and trickle charge 
-currents")
-
-2f952952cecd ("power: supply: bd71827-charger: Fix print")
-
-
-These hopefully are already done:
-c4fe777755ef ("power: supply: bd71828: Fix Rsense resistor value")
-34d9261706b2 ("dt-bindings: mfd: bd71828: Fix sense resistor values")
-
-
-Rest may be just noise related to this new IC.
-
-Yours,
-	-- Matti
-
+-- 
+Regards,
+Sudeep
 
