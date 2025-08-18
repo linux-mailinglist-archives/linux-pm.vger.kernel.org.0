@@ -1,230 +1,143 @@
-Return-Path: <linux-pm+bounces-32512-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32513-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41C29B29D34
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 11:09:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5A4B29D3B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 11:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3501017CFD0
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:07:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A41947A3BEC
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 09:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF38130C37E;
-	Mon, 18 Aug 2025 09:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dr4jJhpB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C0830DD10;
+	Mon, 18 Aug 2025 09:09:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C8530BF7D
-	for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 09:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2799C2F39AD;
+	Mon, 18 Aug 2025 09:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755508033; cv=none; b=d9tJKgLWL+Ihz4/AOgkbWnbpxnixHFS5BqR2gSC6ftrkoAd98fDNpCPWg4OX6hyjUvca+fSZtgM/Hvr4ey6Bx1GeNVBqKwwLzYubDCKW7g/VMRzFbVHBhZ1e9Lmy+u8RDEKRmWpzgqLkWdYtCZHFmAHQqNltYqhw2muwBd13lIQ=
+	t=1755508189; cv=none; b=ilXHvnFTDYdo32lt6Dt6ptMygDA4ocPf98Ncn1r/5dQ3qtt0DlEih4xKbxndtFx+65LW0ZlWARk9m/jVH0gIuJ4dKTsKupTyewQxFiO/Y+BUQX2Kiiyqw0HwTdlRqdvAyFI2DPntYI4KvEVuWGgHbHbzcOdalHuVAEEdN94vL84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755508033; c=relaxed/simple;
-	bh=wyq/7YeczeadlIcGxtjwBRjfO2o1GBWQYroM9CBv0ZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CfwhFOu0qyHLqpaLo3wWKD8tf9J37GHF0Ys9aunxAV9kahHFdrVpMrJFYJXtdNI+Vs8c26TBXvqKDyYXvUEz/NV3W8edsPqBg78eQnT8XI12ucxvNWfjNSVC8HQ3+mBqw5NYJoybouBAlnl/nX7P+a5rZM5MrqDN0YhlZIgnE+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dr4jJhpB; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57I8Uc4s014629
-	for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 09:07:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dUhpdrCm+k4CB4DE4j2STl3XU1CxkFy0Dl3z3gmHHDg=; b=dr4jJhpBWkhC0hl4
-	KNLVhV/EZCKuB+KOy5yVaf2hs2kkScwOO6ssaq/q8+U5Xn7JAEinUEFQ9SA6ryyZ
-	JMF+/dZqa4Zo7nyFDJapRonWHDsTxMDbZ8nOVrZJ9bfQ5H1zqMIf2xIURrFo83Gw
-	PSIBNUh84K6nqP0KDtwB+jfYYspay+z8aKEKGLsfwFarNUEtWjgd9Jj+9WuLpJ7z
-	nLTxaGjXxBV3jpI5pNBDNW3zmGcy0doPL4PVYeDoPwnMGIpvLeqOFKo1bvOZsdDX
-	suBTREPKnWfiqFobZEG7NlTzIajO2kH2qGoq1YES5vZ/1pTwHDTCEfichPJ4e2xL
-	CB/Iiw==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48jh0741we-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 09:07:11 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2445806b2beso98896245ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 02:07:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755508030; x=1756112830;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dUhpdrCm+k4CB4DE4j2STl3XU1CxkFy0Dl3z3gmHHDg=;
-        b=QyDubCLClRIDH6HEdvKe/IAEDVkVDoXVES01XuTezAuLr+k+0wFOZ25/6o+OWFEKfg
-         E/Cql/kt53K+7kNVKk3jEctnBIzKyq9LheLwwb8LTLcbWgHEFzGMCb+rhDb+w4qpiUBF
-         FzIfyw38v4A6ZDzHMCQB1CfK1VawCmH3/M4oGLffjebSPFEFsuudH9gJdxJeKU+sqhSX
-         FJxIFVIr3QvbaZQq6nNQqtw+miOQKqwTCh3+NbMaard+MnSC+UalNKQ48J7kFLIMGsXa
-         wQhkwZzndZcYmoCYET1Mx63WoAhLGGRtJCNfWFjJSbsOfzhtOuPlE6frE/58DGBv90qt
-         f7bw==
-X-Forwarded-Encrypted: i=1; AJvYcCVduujQUDlkoGXfcn172wGs+DGaJGXxo4GCLGXmy1qmTOezGwB6vng92IKWUInStRwHjA8WJ9jw+A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEo83SY9DMKyRB99iUCAjqjAYKAWJQErpDHbmFdBembU20QgVr
-	6+PjeueL/nx0Q0RAr8uSMB0jZbwipDbh7CYIZ2iwPQcK4PREvHHTVdbthhUVbR/gEbc89U2YvXX
-	q5BE5pSwPbGMGPGla0nzhvLYxYVYbuWVSr8m8rZ80YNOw4PKcxYH5joap+EWLXA==
-X-Gm-Gg: ASbGnctVzMODj81cKky43CGX/oJ7HhiJMcGCXdlExD8Y5iTmSfI+R0u8E3jrndWjNcv
-	luzCC60R9HQkzoXF9rfZIS/0tzLCproyQIKVv9WN9Fy5d1HGRGZvNygBtTZLCwzPDXEeF/hQw/I
-	zJhoiW9tIuj44soE3Ues+qNswCuRrR/1DHwVTsgEwjRZvpPyVjJ69KZabuRsR1rSQqyyV9GdRGn
-	p/+fQbCL/0PKMxGI2Ijdtf+Un+ZcOrC6z4tmhIEaXF4Io8JdCUtFIK/0wnFkKy8OdEO+lPFEHGL
-	OXFABJF3/1rvjFp82MuyguyVT3dyloXnzqXEZzP2WnHeUWprXPw4SesIdzAOJaAthrMhUh43NA=
-	=
-X-Received: by 2002:a17:902:f64d:b0:242:6f41:2351 with SMTP id d9443c01a7336-2446d756f8cmr135618875ad.14.1755508029984;
-        Mon, 18 Aug 2025 02:07:09 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEh9JX97qwlZF3aEKy3JEAMK4ybJH6tMcLrA2mXkPjaM+Z0DmqdjxHsABWyv6WSPHfpsDKwwA==
-X-Received: by 2002:a17:902:f64d:b0:242:6f41:2351 with SMTP id d9443c01a7336-2446d756f8cmr135618585ad.14.1755508029517;
-        Mon, 18 Aug 2025 02:07:09 -0700 (PDT)
-Received: from [10.218.42.132] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d554619sm74574605ad.141.2025.08.18.02.07.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 02:07:09 -0700 (PDT)
-Message-ID: <5f3261c3-3e44-42a5-bac7-624ce4e7041f@oss.qualcomm.com>
-Date: Mon, 18 Aug 2025 14:37:03 +0530
+	s=arc-20240116; t=1755508189; c=relaxed/simple;
+	bh=/KdRHcDGWXyP7WLuTi2U69pxQDXRzKFZ85KzSNsDeIk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ESFVTArVU1FS3kfz4QcSaPEymvXbggWSoB8BhboAg0SBPr2qL7jVygXbGTKGxMKi1e7qRKqRQEU488Fxqwo8CS/W/WpR2Hhr0+QkExcsmyfd4POD/IbILWnJYBqJpg9hES9FXWpxeb3ZuZIyEJOzbb4iWy/YmIGBMz/DZsc/hWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: nkdLjKp5SHihoyfjIJdN+w==
+X-CSE-MsgGUID: CAncNOU5QnKUbQYdRKoAog==
+X-IronPort-AV: E=Sophos;i="6.17,293,1747670400"; 
+   d="scan'208";a="123826127"
+From: =?utf-8?B?5pyx5oG65Lm+?= <zhukaiqian@xiaomi.com>
+To: Christian Loehle <christian.loehle@arm.com>, "rafael@kernel.org"
+	<rafael@kernel.org>
+CC: Daniel Lezcano <daniel.lezcano@linaro.org>, "quic_zhonhan@quicinc.com"
+	<quic_zhonhan@quicinc.com>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [External Mail]Re: [PATCH] cpuidle: menu: find the typical
+ interval by a heuristic classification method
+Thread-Topic: [External Mail]Re: [PATCH] cpuidle: menu: find the typical
+ interval by a heuristic classification method
+Thread-Index: Adv2/kCxxcwMPvuoQ+OgADfpnC9xOwIZbxeABCrE0pA=
+Date: Mon, 18 Aug 2025 09:09:33 +0000
+Message-ID: <6ce0b683b2f94aef8b8cef8d44a491d1@xiaomi.com>
+References: <fa1c6faa96344fa9803675b179d7a329@xiaomi.com>
+ <842e4029-e941-4024-9a1e-59bf8c8f1b18@arm.com>
+In-Reply-To: <842e4029-e941-4024-9a1e-59bf8c8f1b18@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sm8450: Add opp-level to
- indicate PCIe data rates
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250818-opp_pcie-v2-0-071524d98967@oss.qualcomm.com>
- <20250818-opp_pcie-v2-2-071524d98967@oss.qualcomm.com>
- <20250818090240.in7frzv4pudvnl6q@vireshk-i7>
-Content-Language: en-US
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-In-Reply-To: <20250818090240.in7frzv4pudvnl6q@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: T_6UxVKFPLNfJJHCibXc4D3szNzWDggT
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE2MDAyMCBTYWx0ZWRfX54pMn/2L+dxL
- NyBkREflF4JhYeDI8gNC+KVg9MYBouaQBpOwV4h1/ZEzt+SqqXlQJPAMcV4pzNIycWY8uXX9N3H
- og/aatyYle7JSbspcA+atr64MSgppBELVtJm20y+yM2pNS1H0FBZX8wRGVaqZiP64iaa2I/ICR0
- aeCSDwwxtd6E+cauxJwXf74Aa9an0rS6NTWUZM8I0Uvd4BPHHjylaLv7xakwMitAIAr1+zJUL9J
- S+FShKXJudVT91gvHz5+grPSKmMy45SEFfV0eSZwleQRGoyYHWs0ppiIM2gmw7xbst33roUlY/L
- VMk0GBgysxyhqABJ6KovzwypNpH2dM7y0YleRy5ZATqKv7+nLkBTo7t0tiM89WykAtVSQeKlXjn
- l/NUYrY3
-X-Authority-Analysis: v=2.4 cv=a+Mw9VSF c=1 sm=1 tr=0 ts=68a2ed3f cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=jYHQ0JWC-Ns_2KpUhz4A:9
- a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-GUID: T_6UxVKFPLNfJJHCibXc4D3szNzWDggT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-18_04,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 malwarescore=0 suspectscore=0 impostorscore=0 phishscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508160020
 
-
-
-On 8/18/2025 2:32 PM, Viresh Kumar wrote:
-> On 18-08-25, 13:52, Krishna Chaitanya Chundru wrote:
->> @@ -2210,45 +2213,67 @@ pcie1_opp_table: opp-table {
->>   				compatible = "operating-points-v2";
->>   
->>   				/* GEN 1 x1 */
->> -				opp-2500000 {
->> +				opp-2500000-1 {
-> 
-> Why mention -1 here when there is only one entry with this freq value
-> ?
-> 
->>   					opp-hz = /bits/ 64 <2500000>;
->>   					required-opps = <&rpmhpd_opp_low_svs>;
->>   					opp-peak-kBps = <250000 1>;
->> +					opp-level = <1>;
->>   				};
->>   
->> -				/* GEN 1 x2 and GEN 2 x1 */
->> -				opp-5000000 {
->> +				/* GEN 1 x2 */
->> +				opp-5000000-1 {
->> +					opp-hz = /bits/ 64 <5000000>;
->> +					required-opps = <&rpmhpd_opp_low_svs>;
->> +					opp-peak-kBps = <500000 1>;
->> +					opp-level = <1>;
->> +				};
->> +
->> +				/* GEN 2 x1 */
->> +				opp-5000000-2 {
->>   					opp-hz = /bits/ 64 <5000000>;
->>   					required-opps = <&rpmhpd_opp_low_svs>;
->>   					opp-peak-kBps = <500000 1>;
->> +					opp-level = <2>;
->>   				};
-> 
-> This looks okay.
-> 
->>   
->>   				/* GEN 2 x2 */
->> -				opp-10000000 {
->> +				opp-10000000-2 {
-> 
-> Why -2 here ?
-> 
->>   					opp-hz = /bits/ 64 <10000000>;
->>   					required-opps = <&rpmhpd_opp_low_svs>;
->>   					opp-peak-kBps = <1000000 1>;
->> +					opp-level = <2>;
->>   				};
->>   
->>   				/* GEN 3 x1 */
->> -				opp-8000000 {
->> +				opp-8000000-3 {
-> 
-> same.
-> 
->>   					opp-hz = /bits/ 64 <8000000>;
->>   					required-opps = <&rpmhpd_opp_nom>;
->>   					opp-peak-kBps = <984500 1>;
->> +					opp-level = <3>;
->> +				};
->> +
->> +				/* GEN 3 x2 */
->> +				opp-16000000-3 {
-> 
-> Shouldn't this be opp-16000000-1 only ? This is the first occurrence
-> 16000000.
-> 
->> +					opp-hz = /bits/ 64 <16000000>;
->> +					required-opps = <&rpmhpd_opp_nom>;
->> +					opp-peak-kBps = <1969000 1>;
->> +					opp-level = <3>;
->>   				};
->>   
->> -				/* GEN 3 x2 and GEN 4 x1 */
->> -				opp-16000000 {
->> +				/* GEN 4 x1 */
->> +				opp-16000000-4 {
-> 
-> opp-16000000-2 ?
-I tried to add the level as prefix as that will indicate the PCIe date
-rate also instead of 1, 2 to make more aligned with the PCIe 
-representations. I will update this in the commit text in my next
-series.
-
-- Krishna Chaitanya.
-> 
+PiBXb3VsZCBiZSBuaWNlIHRvIGhhdmUgc3RhdGlzdGljYWwgc2lnbmlmaWNhbmNlIG9uIHRob3Nl
+IChJJ20gYXNzdW1pbmcgR2Vla2JlbmNoKQ0KPiBzY29yZXMgYW5kIGEgZGVzY3JpcHRpb24gb2Yg
+dGhlIHN5c3RlbXMgaWRsZSBzdGF0ZSBhbmQgbWF5YmUgYSBjb21wYXJpc29uIHRvDQo+IHNoYWxs
+b3dlc3QgKG9ubHkgV0ZJIGVuYWJsZWQpIGFuZCBkZWVwZXN0IChvbmx5IG1heCBpZGxlIHN0YXRl
+IGVuYWJsZWQpLg0KSGVyZSdzIGFuIG92ZXJ2aWV3IG9mIHRoZSBnZWVrYmVuY2ggc2NvcmUgYW5k
+IHRoZSBwb3dlciBjb25zdW1wdGlvbi4NClRoZSByZXN1bHRzIGJlbG93IGFyZSB0aGUgYXZlcmFn
+ZSBvZiB0aHJlZSBjb25zZWN1dGl2ZSB0ZXN0cy4gSW4NCmdlbmVyYWwsIG1lbnUgY29zdHMgdGhl
+IGxlYXN0IHBvd2VyLCBidXQgdGhlIHBlcmZvcm1hbmNlIGFsc28gaXMgdGhlDQp3b3JzdC4NCg0K
+ICAgICAgICAgICB8ICAgICAgZHZmcyBvbiAgICAgICB8ICAgICAgIGR2ZnMgb2ZmDQogICAgICAg
+ICAgIHwgIGdrYiAgICBjcHUgICBzcGx5IHwgICBna2IgICAgY3B1ICAgc3BseQ0KbWVudSB2Ni42
+ICB8IDc0NjkgICAyMzI2ICAgNTQ5MCB8ICA4MTc5ICAgMjU1NCAgIDU2MTENCm1lbnUgdjYuMTcg
+fCA3NjkwICAgMjM2MyAgIDU0OTUgfCAgODQxNCAgIDI1OTAgICA1ODQ0DQpwcm9wb3NlZCAgIHwg
+NzY3OSAgIDIzNjMgICA1NTI1IHwgIDg1MDAgICAyNTg3ICAgNTgxNA0KdGVvICAgICAgICB8IDc4
+NzcgICAyNDIwICAgNTU2MyB8ICA4NjQ4ICAgMjU5NCAgIDU5MTQNCmRlZXBlc3QgICAgfCA3MjQ2
+ICAgICAgICAgICAgICAgfCAgNzk1NA0Kd2ZpICAgICAgICB8IDc5NTUgICAgICAgICAgICAgICB8
+ICA4NjYzDQoNCkJ5IGNvbXBhaXJpbmcgdGhlIHN0YXRlcyBzZWxlY3RlZCwgd2UgY2FuIHNlZSB0
+aGUgZ292ZXJub3IgaXMgc2VsZWN0aW5nDQp0b28gbXVjaCBkZWVwIGlkbGUgc3RhdGVzLCBhbmQg
+bW9zdCBvZiB0aGVtIGFyZSBhYm92ZSB0aGUgaWRlYWwgc3RhdGUuDQpJdCBjYW4gd2FzdGUgdG9v
+IG11Y2ggdGltZSAmIHBvd2VyIG9uIGVudGVyaW5nL2V4aXRpbmcgdGhlIGRlZXAgc3RhdGUuDQoN
+CnNlbGVjdGVkICAgIHN0YXRlMCAgIHN0YXRlMSAgIHN0YXRlMg0KbWVudSB2Ni42ICAgMTM2MzQy
+ICAgIDEyMjU1ICAgIDQ4Nzg0DQptZW51IHY2LjE3ICAxNTEwNDUgICAgIDgzMTcgICAgMjU0MzUN
+CnByb3Bvc2VkICAgIDE2MDg2OSAgICAgNTkzNCAgICAyMzQ2Mg0KdGVvICAgICAgICAgMjA3MDk0
+ICAgIDEyMjgwICAgIDEyMDExDQoNCmFib3ZlICAgICAgIHN0YXRlMCAgIHN0YXRlMSAgIHN0YXRl
+Mg0KbWVudSB2Ni42ICAgICAgICAwICAgICA4MDA2ICAgIDMwNzM3DQptZW51IHY2LjE3ICAgICAg
+IDAgICAgIDM0OTQgICAgMTA0ODkNCnByb3Bvc2VkICAgICAgICAgMCAgICAgMjIyMSAgICAgODcw
+MA0KdGVvICAgICAgICAgICAgICAwICAgICA0NjA2ICAgICAzMzQ0DQoNClRoZSBzaXR1YXRpb24g
+aXMgbXVjaCBiZXR0ZXIgaW4gdjYuMTcuIExlc3MgZGVlcCBzdGF0ZXMgYXJlIHNlbGVjdGVkLCBh
+bmQgYmV0dGVyDQp0aGUgcGVyZm9ybWFuY2UgYmVjb21lcy4gQSBtb3JlIHBsZWFzaW5nIHJlc3Vs
+dCBpcyB0aGUgb3ZlcmFsbCBpZGxlIHRpbWUgYXMNCndlbGwgYXMgdGhlIGRlZXAgaWRsZSB0aW1l
+IGRvZXNuJ3QgY2hhbmdlLiBXaGljaCBtZWFucyB0aGUgcG93ZXIgZWZmaWNpZW5jeSBvZg0KdGhl
+IGdvdmVybm9yIGhhcyBpbmNyZWFzZWQuDQoNCkJlbG93IGlzIHRoZSBwZXJjZW50YWdlIG9mIGlk
+bGUgdGltZSBhbmQgZWFjaCBvZiB0aGUgc3RhdGVzIGZvciB0aGUgZGlmZmVyZW50IGNvcmUNCnR5
+cGVzIGluIHRoZSBzeXN0ZW0uIFNpbmNlIHRoZXkncmUgYWxsIHJ1bm5pbmcgdGhlIHNhbWUgYmVu
+Y2htYXJrLA0Kd2UgY2FuIGFzc3VtZSB0aGUgdG90YWwgdGltZSBzcGVudCBpcyBpZGVudGljYWwg
+YWNyb3NzIHRoZSB0ZXN0cy4NCg0KRnJvbSBpdCwgd2UgY2FuIHNlZSB0aGF0IFRFTyB0ZW5kcyB0
+byBjaG9vc2UgbW9yZSBzaGFsbG93IHN0YXRlcywgd2hpbGUgYWxsDQp0aGUgdmFyaWFudHMgb2Yg
+bWVudSBnb3Zlcm5vcnMgd2lsbCBrZWVwIHRoZSBDUFVzIHNsZWVwIGRlZXAuIFRoZSBwcm9wb3Nl
+ZA0KaGVyZSBpcyBhbiB1cGRhdGUgb2YgdGhlIHBhdGNoIHVwbG9hZGVkLCBhcyBJIHNlZSB0aGUg
+Y2hhbmdlIGluIHY2LjE3IGFsbG93cw0KdGhlIGdvdmVybm9yIHRvIHVzZSBtb3JlIHBvd2VyLiBU
+aGlzIHVwZGF0ZWQgdmVyc2lvbiBiZWhhdmVzIHNpbWlsYXIgd2l0aA0KdjYuMTcgbWVudSBpbiB0
+aGUgYmVuY2htYXJrIHNjb3JlIGFuZCBwb3dlciBjb25zdW1wdGlvbiwgYnV0IGlmIHdlIGxvb2sN
+CmF0IHRoZSBzdGF0ZXMgc2VsZWN0ZWQgYW5kIHRoZSBpZGxlIHRpbWUsIGl0IGNvdWxkIGJlIGEg
+bGl0dGxlIGJpdCBzaGFsbG93ZXIgYW5kDQptb3JlIGFjY3VyYXRlIG9uIHRoZSBkZWVwIHN0YXRl
+cyB0aGFuIHRoZSB2Ni4xNy4NCg0KdHlwZTEgICAgICAgICBpZGxlICAgc3RhdGUwICAgc3RhdGUx
+ICAgc3RhdGUyDQptZW51IHY2LjYgICA1MC42OSUgICAyNC4wNCUgICAgMS4wOSUgICAyNS41NSUN
+Cm1lbnUgdjYuMTcgIDU1LjI4JSAgIDI5Ljk5JSAgICAxLjA2JSAgIDI0LjIyJQ0KcHJvcG9zZWQg
+ICAgNTUuNzIlICAgMzAuNzAlICAgIDAuNTUlICAgMjQuNDYlDQp0ZW8gICAgICAgICA1MC42OCUg
+ICAyNS45OCUgICAxMi4zNCUgICAxMi4zNiUNCg0KdHlwZTIgICAgICAgICBpZGxlICAgc3RhdGUw
+ICAgc3RhdGUxICAgc3RhdGUyDQptZW51IHY2LjYgICA3MS4wOCUgICAgMS44NCUgICAgMi42MSUg
+ICA2Ni42MiUNCm1lbnUgdjYuMTcgIDczLjA1JSAgICAzLjQzJSAgICAxLjg4JSAgIDY3Ljc0JQ0K
+cHJvcG9zZWQgICAgNzMuMjUlICAgIDQuODklICAgIDEuOTklICAgNjYuMzYlDQp0ZW8gICAgICAg
+ICA3MS45MyUgICAxMC41NCUgICAgOC42OCUgICA1Mi43MCUNCg0KdHlwZTMgICAgICAgICBpZGxl
+ICAgc3RhdGUwICAgc3RhdGUxICAgc3RhdGUyDQptZW51IHY2LjYgICA3OC43OCUgICAgMC4xOCUg
+ICAgMC40NCUgICA3OC4xNiUNCm1lbnUgdjYuMTcgIDc4LjYwJSAgICAwLjcxJSAgICAwLjU2JSAg
+IDc3LjMyJQ0KcHJvcG9zZWQgICAgNzguODklICAgIDAuOTklICAgIDAuNDIlICAgNzcuNDglDQp0
+ZW8gICAgICAgICA3OC40NSUgICAgMS42MCUgICAxMC4xNSUgICA2Ni42OSUNCg0KdHlwZTQgICAg
+ICAgICBpZGxlICAgc3RhdGUwICAgc3RhdGUxICAgc3RhdGUyDQptZW51IHY2LjYgICA3Ni4yNiUg
+ICAgMC4wNCUgICAgMC41MCUgICA3NS43MiUNCm1lbnUgdjYuMTcgIDc1Ljc2JSAgICAwLjMzJSAg
+ICAwLjgzJSAgIDc0LjYxJQ0KcHJvcG9zZWQgICAgNzUuOTElICAgIDAuNTQlICAgIDAuNTElICAg
+NzQuODUlDQp0ZW8gICAgICAgICA3NC45MCUgICAgMS4xMyUgICAxMy44MiUgICA1OS45NCUNCg0K
+QWJvdXQgdGhlIGlkbGUgc3RhdGVzLCB0aGUgZGlmZmVyZW5jZSBvZiB0aGUgcG93ZXIgY29uc3Vt
+cHRpb24gYmV0d2VlbiB0aGUNCnN0YXRlcyBvbiB0eXBlMSBhbmQgdHlwZTIgYXJlIG5lZ2xpZ2li
+bGUuIEFzIHRvIHR5cGUzIGFuZCB0eXBlNCwgdGhlIGxhcmdlc3QNCmRyb3Agb24gcG93ZXIgaXMg
+c2VlbiBiZXR3ZWVuIHN0YXRlMCBhbmQgc3RhdGUxLg0KDQojLyoqKioqKuacrOmCruS7tuWPiuWF
+tumZhOS7tuWQq+acieWwj+exs+WFrOWPuOeahOS/neWvhuS/oeaBr++8jOS7hemZkOS6juWPkemA
+gee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaIlue+pOe7hOOAguemgeatouS7u+S9
+leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWMheaLrOS9huS4jemZkOS6juWFqOmD
+qOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuOAgeaIluaVo+WPke+8ieacrOmCruS7tuS4reea
+hOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuS6huacrOmCruS7tu+8jOivt+aCqOeri+WNs+eUteiv
+neaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWIoOmZpOacrOmCruS7tu+8gSBUaGlzIGUtbWFp
+bCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGZy
+b20gWElBT01JLCB3aGljaCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0
+eSB3aG9zZSBhZGRyZXNzIGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRp
+b24gY29udGFpbmVkIGhlcmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRl
+ZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24sIG9yIGRpc3Nl
+bWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQgcmVjaXBpZW50KHMp
+IGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVh
+c2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwgaW1tZWRpYXRlbHkgYW5kIGRl
+bGV0ZSBpdCEqKioqKiovIw0K
 
