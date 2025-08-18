@@ -1,148 +1,150 @@
-Return-Path: <linux-pm+bounces-32558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32557-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08D5DB2AD36
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:48:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FA89B2AD26
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 17:47:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37B871B652F5
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 15:44:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C82A684D10
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Aug 2025 15:42:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3F82765CC;
-	Mon, 18 Aug 2025 15:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B504A27A139;
+	Mon, 18 Aug 2025 15:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="Hb5C7pVX"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="iP4Z2NV5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SKC+/2vK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08792571B3;
-	Mon, 18 Aug 2025 15:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E35271449;
+	Mon, 18 Aug 2025 15:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755531872; cv=none; b=gCkcZp1zJgfaMlen3ap8VvG0h5tvYNjT4nyCVUtCicyQOCqU3GDFFdnbr054EI6QhIZL/CvA8bim8qGa8ZrlxvUT1NBYNi9PLX9dJeuFmlsI5JvnoQragrpIEcx6TWYmw+DdF0DTqoQw+auifaLU1Yh4riQensTmIML/EHo76BA=
+	t=1755531672; cv=none; b=TxYG8lEdcvuiUngcmdbVt/CGbz7VNXPcMDJ8+et+EHEZztoUNRTWEvpOZf+3RIMkQJ03YHRTcjkJVtsXx0FeRfS0sVaSpU/96pEmhE45wac4gUmj22fvL8tbSCLDPUeqUi2Vi+I7nBJKu0M0NwWK3CAkLWXUkssdz53BL9NmwY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755531872; c=relaxed/simple;
-	bh=rAbW5V3uhVDu5Bgwx7nS7W+AuEsUmDwesGKdTcV5jdU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=s/dk9xHfTzlJj36PQ3v9ABz3HzQ5U8OV42TJ8aUYjayu14QhmrE9aeYclC+MGWlCNvhXX295RXNJaHI4Wsb4SJswpDhBBzxeo9zyx02ASlu8FL1m/vhT3piUHqqZ3C1sDCfnDWGM8llmGPF7HZuoGYDAvvMHjxBDEdAm5JCi2Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=Hb5C7pVX; arc=none smtp.client-ip=134.0.28.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-	by mxout3.routing.net (Postfix) with ESMTP id 0F9086153E;
-	Mon, 18 Aug 2025 15:34:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1755531289;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ptnqTZTfTELHpPJgP6yR+QIuzZE2vlEB2i6IcDEP+XY=;
-	b=Hb5C7pVX6XxUvhpqKMnkMEhUIOchbtKcyt5Lyae7Mu/L9Zl3U7GdPPFQG+rLcM105bFOKb
-	+mz0NVFQIBlGWoOe4ZLsI0s/ivsFcyjmKWAsVmINiXpOdPKL5PAcfAW0EF+VGZVP2/l7m9
-	RmbjhXw6AIghBjpTqEJUqMSz2Ma+2GA=
-Received: from [127.0.0.1] (fttx-pool-194.15.86.117.bambit.de [194.15.86.117])
-	by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 7F0091005B5;
-	Mon, 18 Aug 2025 15:34:47 +0000 (UTC)
-Date: Mon, 18 Aug 2025 17:34:49 +0200
-From: Frank Wunderlich <linux@fw-web.de>
-To: Matthias Brugger <matthias.bgg@gmail.com>,
- Matthias Brugger <mbrugger@suse.com>,
- angelogioacchino.delregno@collabora.com
-CC: myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com,
- djakov@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
- johnson.wang@mediatek.com, arinc.unal@arinc9.com, Landen.Chao@mediatek.com,
- dqfext@gmail.com, sean.wang@mediatek.com, daniel@makrotopia.org,
- lorenzo@kernel.org, nbd@nbd.name, frank-w@public-files.de,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v9 00/13] further mt7988 devicetree work
-User-Agent: K-9 Mail for Android
-In-Reply-To: <8A21C091-0C26-4E9F-9B9E-E28A01F71369@fw-web.de>
-References: <20250709111147.11843-1-linux@fw-web.de> <175218542224.1682269.17523198222056896163.git-patchwork-notify@kernel.org> <8A21C091-0C26-4E9F-9B9E-E28A01F71369@fw-web.de>
-Message-ID: <D12E349E-3AE6-46B3-A5A3-B99BA964A6F0@fw-web.de>
+	s=arc-20240116; t=1755531672; c=relaxed/simple;
+	bh=ZsEcHhPxn/Ea9qTne3Rrj4zmGzqobeF0bv/BWvcqzD8=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=dNcJePt/PvVst1biYjWpqRVqFuK+Bz+xU4Kqcr5m04/pH5oachOizri4vz3OZu9Ly8iMgLf6X/ioTrgEI7SY+6MYarFyCUy2GIUHI6fRDufO5IJG36a99zycSkBoZWfMWH0NCGuHoMcZXdyLnealuYtSE1iWlKEAMExT0isw6Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=iP4Z2NV5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SKC+/2vK; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 478BC14004D6;
+	Mon, 18 Aug 2025 11:41:08 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-12.internal (MEProxy); Mon, 18 Aug 2025 11:41:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1755531668;
+	 x=1755618068; bh=vFW6QBRYfsq8CJmexn1lKzszzkLnWWDYygvjmw+xj+o=; b=
+	iP4Z2NV5qm/hnVOJxy9SyYLvY/dsXSjjLa6z/jvNu3CAWSnEzYdfi5MCwbCBN/v8
+	c2Jr/pr25VFyjUjAvZzv4Sk7rU3kjebgeaJ5wjYQQwaFqWpMt2Dic8tqYxJgOhKB
+	GvPZT5SH3URDQkltuODuOwIaPf9IGU0svAfZC8BmCmzUSCKum91coh/adiZQBfD2
+	Xkt7xgYLjW32yQEe6zozUwpqU3sJf4RmQnG9twkrw6CdGVL9YhKk3mhImgGsZHeu
+	iZk9/fzbL7nLQTyJ0wGV4CPPyowkli7YhOptmxL5aNtqogS+gm0Gk8RnTzSkSoym
+	EnpRT+LiiUg7URSHwxv1Jw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1755531668; x=1755618068; bh=v
+	FW6QBRYfsq8CJmexn1lKzszzkLnWWDYygvjmw+xj+o=; b=SKC+/2vKJ4XGhnf1j
+	BdyBnQzLrEGR4Q+j4uhGDqkFECu6nylsjFwI4p0f7hCVBZpfJuuCcHAeuzaJoZ/f
+	ZoQC6lrSjybbA5fwOJ/TV9sByTF4NI77pZyVaTfvNcN9ZpEPvyH7qZs9OHj54qV3
+	IFF5nFZyUYIBOpBJznbjGuER2nLdsxjrnIW9C0szIcpmbiygidol3tgem+50qskS
+	YDUDF9mQcOYSWhBFs79QMIzphEelnHHRLJFKYUXV4uqapb2JP3BtuewW2ltzTzD+
+	aQ99MmydkCQSD+zHU64Oe2c4Qa6yL+hpkIquO/4Y5Tc6fIc68d3yq4JJfvvR9+7e
+	Bg41A==
+X-ME-Sender: <xms:k0mjaOhpLXz-tteDQFX8_BKxIizxChUXrQBYMnAoa0HOXOUurBDvDQ>
+    <xme:k0mjaPCjUsbav8FxVbcUOnS5tKdCk2bgBHynOjhDHqP4ucANyPWECF45EZBZpj-5-
+    BHxZnNwZHg14owFsK0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduhedvleelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvffkjghfufgtgfesthejredtredttdenucfhrhhomhepfdforghrkhcu
+    rfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
+    eqnecuggftrfgrthhtvghrnhepkeffuedtveekjeeukefgleejgeetleduueetudefudeh
+    fefhheefleehheffffeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgdpnhgs
+    pghrtghpthhtohepkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepihhrvghnih
+    gtrdhrrghjnhgvvghshhesghhmrghilhdrtghomhdprhgtphhtthhopegurghvihgurdgv
+    rdgsohigsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepihhlphhordhjrg
+    hrvhhinhgvnheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopeigihdrphgr
+    rhguvggvsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhguvghgohgvug
+    gvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhg
+    vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrd
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehplhgrthhfohhrmhdqughrihhvvghrqdig
+    keeisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:lEmjaCR9TsVzoKeSgABiR6Gxu5h1BflUCI6cBmEebWezIFONMb1HNA>
+    <xmx:lEmjaDfZr48tcMm2ZyyaeX-yfYUmHpLA09fZPTYxxMwR1UUFSDH39A>
+    <xmx:lEmjaMTnL0zvNyLuHI1_LdV5VzG83wG08eXLCaU3A96hXER_mGqzEQ>
+    <xmx:lEmjaHKebXfir9zdhnrRulo918yeLFaQgMDy2Nrzb9zorPG2eBGkuA>
+    <xmx:lEmjaEXrVgPwPLARbhTrL8tqfiHM9RoJPGolHKULyiXnZni9rCrRuRIg>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id DAC502CE0071; Mon, 18 Aug 2025 11:41:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: 80625685-b893-450e-8532-3c47c92350a6
+X-ThreadId: AIq4ZBvdF6b7
+Date: Mon, 18 Aug 2025 11:40:47 -0400
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Xi Pardee" <xi.pardee@linux.intel.com>, irenic.rajneesh@gmail.com,
+ david.e.box@linux.intel.com, "Hans de Goede" <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Message-Id: <88da5769-1eae-4520-99b0-78a59bdbd867@app.fastmail.com>
+In-Reply-To: <20250814195156.628714-1-xi.pardee@linux.intel.com>
+References: <20250814195156.628714-1-xi.pardee@linux.intel.com>
+Subject: Re: [PATCH] platform/x86:intel/pmc: Update Arrow Lake telemetry GUID
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Am 16=2E August 2025 08:55:51 MESZ schrieb Frank Wunderlich <linux@fw-web=
-=2Ede>:
->Am 11=2E Juli 2025 00:10:22 MESZ schrieb patchwork-bot+netdevbpf@kernel=
-=2Eorg:
->>Hello:
->>
->>This series was applied to netdev/net-next=2Egit (main)
->>by Jakub Kicinski <kuba@kernel=2Eorg>:
->>
->>On Wed,  9 Jul 2025 13:09:36 +0200 you wrote:
->>> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>>=20
->>> This series continues mt7988 devicetree work
->>>=20
->>> - Extend cpu frequency scaling with CCI
->>> - GPIO leds
->>> - Basic network-support (ethernet controller + builtin switch + SFP Ca=
-ges)
->>>=20
->>> [=2E=2E=2E]
->>
->>Here is the summary with links:
->>  - [v9,01/13] dt-bindings: net: mediatek,net: update mac subnode patter=
-n for mt7988
->>    https://git=2Ekernel=2Eorg/netdev/net-next/c/29712b437339
->>  - [v9,02/13] dt-bindings: net: mediatek,net: allow up to 8 IRQs
->>    https://git=2Ekernel=2Eorg/netdev/net-next/c/356dea0baf4c
->>  - [v9,03/13] dt-bindings: net: mediatek,net: allow irq names
->>    https://git=2Ekernel=2Eorg/netdev/net-next/c/23ac2a71bdbd
->>  - [v9,04/13] dt-bindings: net: mediatek,net: add sram property
->>    https://git=2Ekernel=2Eorg/netdev/net-next/c/c4582a31efd9
->>  - [v9,05/13] dt-bindings: net: dsa: mediatek,mt7530: add dsa-port defi=
-nition for mt7988
->>    https://git=2Ekernel=2Eorg/netdev/net-next/c/588cb646ce70
->>  - [v9,06/13] dt-bindings: net: dsa: mediatek,mt7530: add internal mdio=
- bus
->>    https://git=2Ekernel=2Eorg/netdev/net-next/c/66a44adf4c3d
->>  - [v9,07/13] arm64: dts: mediatek: mt7986: add sram node
->>    (no matching commit)
->>  - [v9,08/13] arm64: dts: mediatek: mt7986: add interrupts for RSS and =
-interrupt names
->>    (no matching commit)
->>  - [v9,09/13] arm64: dts: mediatek: mt7988: add basic ethernet-nodes
->>    (no matching commit)
->>  - [v9,10/13] arm64: dts: mediatek: mt7988: add switch node
->>    (no matching commit)
->>  - [v9,11/13] arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for eth=
-ernet
->>    (no matching commit)
->>  - [v9,12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and l=
-ink to gmac
->>    (no matching commit)
->>  - [v9,13/13] arm64: dts: mediatek: mt7988a-bpi-r4: configure switch ph=
-ys and leds
->>    (no matching commit)
->>
->>You are awesome, thank you!
+Thanks Xi
+
+On Thu, Aug 14, 2025, at 3:51 PM, Xi Pardee wrote:
+> Updated ARL_PMT_DMU_GUID value. Arrow Lake PMT DMU GUID has
+> been updated after it was released. This updates ensures that
+> the die c6 value is available in the debug filesystem.
 >
->Hi
+> Fixes: 83f168a1a437 ("platform/x86/intel/pmc: Add Arrow Lake S support 
+> to intel_pmc_core driver")
+> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/pmc/core.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->Any comments on the missing DTS parts or can they applied too?
->regards Frank
+> diff --git a/drivers/platform/x86/intel/pmc/core.h 
+> b/drivers/platform/x86/intel/pmc/core.h
+> index 4a94a4ee031e6..24139617eef61 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -282,7 +282,7 @@ enum ppfear_regs {
+>  /* Die C6 from PUNIT telemetry */
+>  #define MTL_PMT_DMU_DIE_C6_OFFSET		15
+>  #define MTL_PMT_DMU_GUID			0x1A067102
+> -#define ARL_PMT_DMU_GUID			0x1A06A000
+> +#define ARL_PMT_DMU_GUID			0x1A06A102
+> 
+>  #define LNL_PMC_MMIO_REG_LEN			0x2708
+>  #define LNL_PMC_LTR_OSSE			0x1B88
+> -- 
+> 2.43.0
 
-Hi
+Tested this on my Lenovo P1 G8 and confirmed that it fixed the error message that was seen previously.
 
-Moved mtk maintainers in TO header=2E
-regards Frank
+Tested-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+
+Mark
 
