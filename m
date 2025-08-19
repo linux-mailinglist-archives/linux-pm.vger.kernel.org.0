@@ -1,113 +1,100 @@
-Return-Path: <linux-pm+bounces-32641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32642-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A96FB2C59C
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 15:30:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0A7EB2C5A9
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 15:32:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EDA63AB5A2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:25:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 918C07A9002
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467262EB872;
-	Tue, 19 Aug 2025 13:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EE7340D85;
+	Tue, 19 Aug 2025 13:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nK/g15QG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 623332EB84F;
-	Tue, 19 Aug 2025 13:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8359E33EB0D;
+	Tue, 19 Aug 2025 13:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755609953; cv=none; b=IqEgOARZDfpqNF4kbf8yjrKtWxPQJV08J1ByvXllAV9H/BWlXJlt4Fe4PnbXsqvY0KpLOicVW974pgA762rekzVN8mMieUbOdaUdYK4j5meP6QuCpZbyGBcOHwm/rrWeHvoGHz+JuIP7lUvOTPKXkzIaKF03vfgWc48jqkBbTBk=
+	t=1755610327; cv=none; b=afA8TFs6WbYnJepXeI2xOGZYyn0tknrQaH4FIQaYV3bTv9D2oAvZaGHN6/IuU2MZMxOPEtoibjgsAu/CI3n3ZZOBqjy4mpR1vbUSBhjxtaQUsDhh8HAHqJr7F+GyZ+3V6bpP5mifsIQWxjaBRO7w64XgfEQcWsvO0jE3roLRyTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755609953; c=relaxed/simple;
-	bh=pBeIj/4Npl8WnOICq3KNLkIDe0MOER85JIhoxlatFuI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RAuGWBCjLs34psniSdZYhebq3KbR5GKIlZslf4dRw/nqp9IvzI/A8niX+ZA2jWYk+W3hXbst8vqIOO0YNbaSs0cneEhR/uKktnuH5IPEsgBahGZR++waE8oYTWpSt5vgUoQh7fouoF66cwXdLtQcC9jRgjU4D4V3Lbgtw7yVyNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CEF116A3;
-	Tue, 19 Aug 2025 06:25:42 -0700 (PDT)
-Received: from [10.1.196.50] (e121345-lin.cambridge.arm.com [10.1.196.50])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 884583F738;
-	Tue, 19 Aug 2025 06:25:46 -0700 (PDT)
-Message-ID: <271daf71-3c57-49a5-a65f-c58ac670864f@arm.com>
-Date: Tue, 19 Aug 2025 14:25:45 +0100
+	s=arc-20240116; t=1755610327; c=relaxed/simple;
+	bh=RePw/qN/r8iFmlUKhdNcuusjorcaH7BDzwljb0R672g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PGV5kYdNlK06Ap2RR2HwiQPCkzVRKPSlspEU35km66m/9jVg9GhnDgoBcVcWzrwrVLtmO8NYlix5fGFy54E3ZQR7YYmrC2vJ6ABpPn7l9hPA/uDEUDiU/uJ8e79SRJAU4p+SUn72z5YQEb4WugCli7of5DJNGnP8BvRTdeRN+jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nK/g15QG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FA8C113D0;
+	Tue, 19 Aug 2025 13:32:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755610326;
+	bh=RePw/qN/r8iFmlUKhdNcuusjorcaH7BDzwljb0R672g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nK/g15QGjqargMMW7pQ66890hApkyy9hXyKHZ9Cg52oUi04dvT7KAW8rJgFXJd9BG
+	 g7VfXVoJLowIrw9KXnB93vr/XByweloc3thrvk7hERlNII8l1j15ZDdD5qBxHlCAnS
+	 vpPA5Vhcvv7IWFeND02BBcagEHa0u1dzosBIknBE7fLMvJJj6e8h39hKOFJVnzYwTX
+	 8ZDwMGguCQx97dLYSQGIIi+9ZKpH175hDsPIbk7uSixbT2CRWZfs87MvWE95PusWKJ
+	 tvo0Vr7xO3U37pIXTfYbbp9tTwyG2HwtvqwQI+0Mmw8lIaEH4DoEqSIi/gUWK8P+Ub
+	 hcBlb6oFPgNbg==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-afca41c7d7fso1071405966b.1;
+        Tue, 19 Aug 2025 06:32:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUWRfXpFKPnWrqpAyTxW6X0AzRkE7slNq3EYjWQ8epHxqxbD1qwZHTVUls8HBa5X40+hmHHFFj+JkR+C7tm@vger.kernel.org, AJvYcCUtCL9m73SuoQ8eK6i627akdRhYEjKUCsTXRFxQhMf0c2+wuNdA75JKqdHuM81+XBckSR2mP2iaV+ab@vger.kernel.org, AJvYcCWXyDHptwJWFhOmBGfrmlKeg3hyblecmaYv5CYKVk0E09M+wy7+9BaOWYJh1uK9X03sMrQqCSLKWwQ=@vger.kernel.org, AJvYcCWjJuQJsdYpTgLFetRou+CpPTHg0bxEBzINLoYIocO8WW5gd1tOp5kg2RkJ3N9AcMIzHXh9qRFeqdZgAPaiNw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzd78ljIn8SfvzWGaKQacDWKE5lOqsTN2wQy+pZV4wU96wnlJUd
+	pb7/bbaNzJSh10wTyYYz+0gLCyy+pSxOx2/UXlSVcmPmJ8PWNhn9C8U77lQD+7hXe0bdlbMZ6FT
+	fDzAJ+RaBjx3kvlI/UMA47JNpJVczhA==
+X-Google-Smtp-Source: AGHT+IH7Xlxz6mfCkPT5meOPBk+lpt++QuBnzbYmHx95kt43nBgRPDjtSqtV4+eqSIu0C0Vj32Von41lElLYRUtx6d8=
+X-Received: by 2002:a17:907:86a0:b0:af7:fd29:c5e4 with SMTP id
+ a640c23a62f3a-afddebca776mr278602866b.2.1755610324732; Tue, 19 Aug 2025
+ 06:32:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/19] perf: Garbage-collect event_init checks
-From: Robin Murphy <robin.murphy@arm.com>
-To: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
- mark.rutland@arm.com, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
- iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
- linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-riscv@lists.infradead.org
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <ace3532a8a438a96338bf349a27636d8294c7111.1755096883.git.robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <ace3532a8a438a96338bf349a27636d8294c7111.1755096883.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250814-glymur-icc-v2-0-596cca6b6015@oss.qualcomm.com> <20250814-glymur-icc-v2-1-596cca6b6015@oss.qualcomm.com>
+In-Reply-To: <20250814-glymur-icc-v2-1-596cca6b6015@oss.qualcomm.com>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 19 Aug 2025 08:31:53 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqL+C1VueQjrKra8fNTd-2k=gkoy-jA9uuQOhuyRMbQroQ@mail.gmail.com>
+X-Gm-Features: Ac12FXwcbhYarWG96-RFlBPTciYD1YIKgoRxrJwgNxPiK-pCah48gmfFg2yv4u4
+Message-ID: <CAL_JsqL+C1VueQjrKra8fNTd-2k=gkoy-jA9uuQOhuyRMbQroQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: document the RPMh
+ Network-On-Chip interconnect in Glymur SoC
+To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>, 
+	Georgi Djakov <djakov@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Mike Tipton <mike.tipton@oss.qualcomm.com>, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 13/08/2025 6:01 pm, Robin Murphy wrote:
-[...]
-> diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
-> index 297ff5adb667..98ffab403bb4 100644
-> --- a/arch/x86/events/intel/uncore.c
-> +++ b/arch/x86/events/intel/uncore.c
-> @@ -731,24 +731,11 @@ static int uncore_pmu_event_init(struct perf_event *event)
->   	struct hw_perf_event *hwc = &event->hw;
->   	int ret;
->   
-> -	if (event->attr.type != event->pmu->type)
-> -		return -ENOENT;
-> -
->   	pmu = uncore_event_to_pmu(event);
->   	/* no device found for this pmu */
->   	if (!pmu->registered)
->   		return -ENOENT;
->   
-> -	/* Sampling not supported yet */
-> -	if (hwc->sample_period)
-> -		return -EINVAL;
-> -
-> -	/*
-> -	 * Place all uncore events for a particular physical package
-> -	 * onto a single cpu
-> -	 */
-> -	if (event->cpu < 0)
-> -		return -EINVAL;
+On Thu, Aug 14, 2025 at 9:54=E2=80=AFAM Raviteja Laggyshetty
+<raviteja.laggyshetty@oss.qualcomm.com> wrote:
+>
+> Document the RPMh Network-On-Chip Interconnect in Glymur platform.
+>
+> Co-developed-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.co=
+m>
+> ---
+>  .../bindings/interconnect/qcom,glymur-rpmh.yaml    | 172 +++++++++++++++=
+++
+>  .../dt-bindings/interconnect/qcom,glymur-rpmh.h    | 205 +++++++++++++++=
+++++++
+>  2 files changed, 377 insertions(+)
 
-Oopsie, I missed that this isn't just the usual boilerplate as the 
-comment kind of implies, but is also necessary to prevent the 
-uncore_pmu_to_box() lookup going wrong (since the core code won't reject 
-a task-bound event until later). I'll put this back with an updated 
-comment for v2 (and double-check everything else again...), thanks LKP!
+This is breaking linux-next "make dt_binding_check". Looks like the
+clock header dependency in the example is not applied. Please drop
+this until the dependency is there.
 
-Robin.
-
-
->   	box = uncore_pmu_to_box(pmu, event->cpu);
->   	if (!box || box->cpu < 0)
->   		return -EINVAL;
+Rob
 
