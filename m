@@ -1,152 +1,184 @@
-Return-Path: <linux-pm+bounces-32629-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32630-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AE38B2C0BC
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:43:03 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5880DB2C280
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 14:00:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A38EE3AB3D0
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 11:40:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 444184E43AA
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 12:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E463E32BF42;
-	Tue, 19 Aug 2025 11:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559473314DD;
+	Tue, 19 Aug 2025 11:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="po0PNZHK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmmIcCtS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D62532BF39
-	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 11:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D92027A451;
+	Tue, 19 Aug 2025 11:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755603622; cv=none; b=J+3UHbR8y7x+BKWl7nCy2AMM9MHNUz8Jkr4KYliygr4a197MXUQDkoIwvLYfRskIFxmywTjRy3Tj1i8GOoo42fRXzTTzNDLpuzvfnNHsj+fpSWgrk65m/I+hYdCuETXODbZPvZ6h6+kr1Tdtn+yTTtSkpYnkN4mjrDGg6VOBBxI=
+	t=1755604623; cv=none; b=YujVoyoraboutrySXg8zOfugWt5a5KErxiUrB/3yQ3UFkNfwUyexHtnoQxyrFlKPv4PzlLQzTb/A9qk6iVypnV5qK4W6bCux8G+QT1EJhdzcoSme+f7Iz6vLbU99QWP7rf/gT6ZiUXmND8DAqsFyCxNNfzLowJjUB7yd4Hp/NeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755603622; c=relaxed/simple;
-	bh=zlUEJfpYmR4tX91EugAHvCUNzFBmNgD4zi112bP6hAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HV/MY8RMUkl9zfKf/Ascldb/P3gzjrqwh4+TK01z6dAPN1j85ok+8Z8Ho6R+0pl/a56aNfXRXd7ictTtou8onhr7y+gIP34KKUunHQnvysqOTk8Qmyvvp9IV/imi0IAOCrrUw/DaDPOtDaXvln0VLR5WR+xzFIkpowrYm1CSC+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=po0PNZHK; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57J90XIK028213
-	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 11:40:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=WUZCKijWjTUZrQrretf3iRXu
-	z+Doo912w7iRSB+J4eI=; b=po0PNZHKBpmN24jA2AxvSrxpb1J7ZjMYLOJM87yR
-	BryFWpsT0iAM3Vx8sOC2ZPGRRZ31x7ZNgroMgUzc7IgWCq1MBW0ZwxvAVBTjQ03d
-	JOMHYwk/DhZBLs6v5huI267841cKfLejxg1l1sS4yWJAyKV58VVyffFpy2YGpduY
-	7PAoLjWWpfTpyRMmuJXmyCWHGBktS052IvgGKyZDdqWnqAZSN6pZqiypK7XFdVZ+
-	ow7hWTgtpQY3TfQjjdX6ECS5pPSWWiRl+PVCqUAmykzp9QNpvMCtbqU9wTai4fPe
-	Yrm7xk/RBTKrVClh4TsG0wG4BlXgOVYYp365dBUsQzV1DQ==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48jgxtgj7m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 11:40:20 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b109affec8so149478541cf.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 04:40:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755603619; x=1756208419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WUZCKijWjTUZrQrretf3iRXuz+Doo912w7iRSB+J4eI=;
-        b=tH8ojbKcEHYHV1nfPc/cfwjW+dyI9Pj6qZovsk/TJtbt5/PEjFqiGPYkYWIJINc6ZL
-         SF1hx4jAu1HrazshlZM1WwpdNjBwl1lzpa+Z7KaP4u+wWJAr0INNjTpQgfPiawJjstrA
-         5eGpoObelee+rKexVXEY1UdngQ0ex5fX9x631S+8nn4QxP+UGZsnytFG+NANaivuOPmA
-         OGKewZ5zrPGtdXzmMIWWaNHm3FEBWwmibaq3CTZfBd+n3uS2mVS+ZAjgariHBlsZY15h
-         EnLQQKRI9oPLZ6BH3Ls6kOMZcOgz5CnZlMKJSSm6O8taLWGHNbPbwVW9Y1doxqSgrnxn
-         i2WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDf9fHhzEefYnRBiYxyUMIUi2xevWxulJQW3DPpsusxlAxMnmdsoEDJiNugzIeDzP3KZVszPYKwg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjVA4Wpf9jXmjL5FaqfMkRDmb7lDM+CVnAuwzYWo/aJLDWknl3
-	vicGEECC6td3tOJ6rA7ndGxbvnAhZY0FH9NRxnGMEXUGJTIB1s3RXAPMD/eU+FeG2eD/vmw7C/U
-	WIV5zCLLXfyg8TQErZl6bXyXN49lBc4N/yecS6Wc1rbbfFFqzDjc5WoXvxzF1Dw==
-X-Gm-Gg: ASbGncuVaiZVWQQkOmm3fNyDKm+/mKR9jEau5IFn1F7/V/ZrWl9s2MxOVW3VCA7vvx1
-	z4DEA5ADYxa40NeptCFbtBi+231Reixl+Pujq1r6/0cfT8fdbwLXxqNJeVhvsF4KNo/cS1vnj9H
-	Xjky8HUV5IepQDejrx9mAK//5ZCut3YehDo48MZZVpXjk+dT8dHybBvkeuKYR1k/uFV4GWvblOO
-	ZM6P51h3aY2gzGxdMr4rlCYGySAxUt4AUQel3C66ENmKEcMjKXscFlHC5fapBojlnPdIkI4u3JL
-	S3b3TYnJ088ytJ4KL0iaNB3zSP12ldkHGvdZAgKmmnB7RGfqGCJR0P9ke2XkuntD3voK36Ue0E+
-	nrxQNSR0DzePzcMyRKKaFBDg/AN806Q7wRqydHQ2moDRP54wtG6kq
-X-Received: by 2002:ad4:5f0b:0:b0:709:650b:914c with SMTP id 6a1803df08f44-70c35d30e23mr22234246d6.40.1755603619220;
-        Tue, 19 Aug 2025 04:40:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFoFttiRUeNCxJ8KFAt4cgTqEKpI9DjnbmEteHB0Sc6Ed6p67fuNf3H2ooC03R+rgzCqqtrhQ==
-X-Received: by 2002:ad4:5f0b:0:b0:709:650b:914c with SMTP id 6a1803df08f44-70c35d30e23mr22233866d6.40.1755603618669;
-        Tue, 19 Aug 2025 04:40:18 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3cca16sm2088342e87.92.2025.08.19.04.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 04:40:17 -0700 (PDT)
-Date: Tue, 19 Aug 2025 14:40:15 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>,
-        Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
-        Imran Shaik <imran.shaik@oss.qualcomm.com>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: qcs615: Add OSM l3 interconnect
- provider node and CPU OPP tables to scale DDR/L3
-Message-ID: <le3xcbnebjgkhzmy2xhicnn33prstewg2wymwc2nfjombxgg3z@ucsmlowzzd3n>
-References: <20250819-talos-l3-icc-v3-0-04529e85dac7@oss.qualcomm.com>
- <20250819-talos-l3-icc-v3-2-04529e85dac7@oss.qualcomm.com>
+	s=arc-20240116; t=1755604623; c=relaxed/simple;
+	bh=fhR9sbVwW3bOwxbPQt0UV+PievZMI3zWcq5ZJwZ4MOw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HSjA01g9pukVB9bHjYos0uc9Jl9QUX0VgkzR3LBvxHbdQ/mU2xJDhc0ev3AyCjJwLLm41EIouI2SP8WgGiG/A/3WUG/J3kaOw07CO73Gd3bBTEDIUNBSJRH3OmcpMZN62PaJebYdGKa9AFuwVcoXVGU/BMkoAAblkbbxlavQ9Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmmIcCtS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEFB4C4AF09;
+	Tue, 19 Aug 2025 11:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755604622;
+	bh=fhR9sbVwW3bOwxbPQt0UV+PievZMI3zWcq5ZJwZ4MOw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jmmIcCtSCRaSWk4xc2FzjWTLHp2YiSAfXNrWVYjNL9tIRJl4CN9w/ufARVbKV2Csc
+	 gcEC1IT846+dapPjZWAYRigEPYSrLjhd6mT4TEdXYnVxIwTFgFYbynGfEqu8E0n/Gy
+	 u6EJmjSPUWxMqCGjMG+//zDWtAfkqMuXWmPsRbYL6oHDRc+f0UpjkMhkDJcSfjQTcJ
+	 qyppDr2zNzoRcGPG4itCz857x4FMiC0Vz8s39vWXsvV0DIgK6EvJtw6C9caPQWi2d8
+	 iOZxqXsqlIZK30WfPqZu6wkheuaLwCo+COQrLkhzmm1zFbMpgcbOkPfa/VKStO6/bl
+	 eym8xekMZg63A==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-74381efd643so1145235a34.1;
+        Tue, 19 Aug 2025 04:57:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU923IDXyglcxUlCLGoWAb7Ey1OpCrGJ/j3sJ6JfkDzEAzkBRgsye04qcBUPmhs13jj3Nv+VWf3xMpGpX0=@vger.kernel.org, AJvYcCXGuvKt+vybbOptQzcxRHgNaJwWlmNS0GTCIaxPIvHo60WyZso3IiU8GEG+sc0JjQ54F2YpBpcVc74=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO4LH3PCd6eOTrV6+db2xZy/xpIpK5yACdXsWXUJpQQ0OSMdNq
+	ZYR3HBQcshGB3Q4/WtV8e5NV0dfHWmPnPlOlvrG/fvmEzzEOp7MJK+eNeJDTVl+tZtS83pFnMJx
+	zeZDXnu5pauCGegvH7Z0xRMrijHszgog=
+X-Google-Smtp-Source: AGHT+IFDlwYdPggXeHiN1f2P4TFhkB9XkvB/EeonKfBQu3iR1bUJH9YdqCajNweQ91VkJKSW1Xyf5srSwfaWKDqiWXQ=
+X-Received: by 2002:a05:6830:3509:b0:73e:bb60:2d0c with SMTP id
+ 46e09a7af769-744e0ac7b6dmr1461088a34.23.1755604621916; Tue, 19 Aug 2025
+ 04:57:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819-talos-l3-icc-v3-2-04529e85dac7@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: G8HLH5fPot6satwO0hKcBHXCPkFWlT96
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE2MDAyMCBTYWx0ZWRfX7HQBr8PjDnf2
- qp+N0e0mcC5SyPuk14tT1Km+S9ed6/c+4Ayr4FdmRsY7c6CvaqPp8Wa/UIkZR3Ybn5wP8vHMbbM
- ciXdYCrtk+UACT8NOln/+JO+jBnNLgkGhCYYssskNLUnsJ0YQbNX3EXpM7q3CFZzYwnoLNFJATV
- bdTHbUZsQ8dl8Sg0tzxEl1PKvy3w9JDUfoUtP2R4W7TddpfV3Dfvb04FHHgabKLvwgicyAA9gQt
- 0HXWsZNXnvJe0hoM2rzw2IyBcJvqZn4qA3Gm9gRq/nQmZVFhaJZJG3MvJs2A1pRxihqAdjtc2x3
- kbxVlkKcR5/ukX+50LTshl6VNf3hz96eF4XiI4r79sN0qL8XndfxOvV4jBe8b7msSZysl0kFgws
- 8pkq5brm
-X-Proofpoint-GUID: G8HLH5fPot6satwO0hKcBHXCPkFWlT96
-X-Authority-Analysis: v=2.4 cv=V7B90fni c=1 sm=1 tr=0 ts=68a462a4 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=cd8PGyEpGUmkB33UepYA:9 a=CjuIK1q_8ugA:10
- a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-19_02,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 malwarescore=0 adultscore=0 clxscore=1015
- suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508160020
+References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <2244365.irdbgypaU6@rafael.j.wysocki>
+ <9104c434-9025-4365-8127-28014ddddc8d@arm.com> <CAJZ5v0iTaa62WGXCLcgiRyzcj2GBXmYcvLa8AtQZD5bQcxTw5g@mail.gmail.com>
+ <3fa10040-7e48-4100-9d70-cbbac406abde@arm.com>
+In-Reply-To: <3fa10040-7e48-4100-9d70-cbbac406abde@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 19 Aug 2025 13:56:48 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h1iT5XpeTUqfM2MSbZR_wMv7VaVxmEa4jEjtx+FH-XaA@mail.gmail.com>
+X-Gm-Features: Ac12FXx9O3eQ9klZMDQ-s7qeat7CVAoh2gFEca7fJvIQn3VLs0VBNSAESeHHS7g
+Message-ID: <CAJZ5v0h1iT5XpeTUqfM2MSbZR_wMv7VaVxmEa4jEjtx+FH-XaA@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full CPUs
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 19, 2025 at 11:24:47AM +0000, Raviteja Laggyshetty wrote:
-> Add Operation State Manager (OSM) L3 interconnect provide node and OPP
-> tables required to scale DDR and L3 per freq-domain on QCS615 SoC.
-> As QCS615 and SM8150 SoCs have same OSM hardware, added SM8150
-> compatible as fallback for QCS615 OSM device node.
-> 
-> Signed-off-by: Imran Shaik <imran.shaik@oss.qualcomm.com>
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/sm6150.dtsi | 148 +++++++++++++++++++++++++++++++++++
->  1 file changed, 148 insertions(+)
-> 
+On Tue, Aug 19, 2025 at 11:10=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 8/18/25 18:41, Rafael J. Wysocki wrote:
+> > On Thu, Aug 14, 2025 at 4:09=E2=80=AFPM Christian Loehle
+> > <christian.loehle@arm.com> wrote:
+> >>
+> >> On 8/13/25 11:29, Rafael J. Wysocki wrote:
+> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>
+> >>> When the menu governor runs on a nohz_full CPU and there are no user
+> >>> space timers in the workload on that CPU, it ends up selecting idle
+> >>> states with target residency values above TICK_NSEC all the time due =
+to
+> >>> a tick_nohz_tick_stopped() check designed for a different use case.
+> >>> Namely, on nohz_full CPUs the fact that the tick has been stopped doe=
+s
+> >>> not actually mean anything in particular, whereas in the other case i=
+t
+> >>> indicates that previously the CPU was expected to be idle sufficientl=
+y
+> >>> long for the tick to be stopped, so it is not unreasonable to expect
+> >>> it to be idle beyond the tick period length again.
+> >>>
+> >>> In some cases, this behavior causes latency in the workload to grow
+> >>> undesirably.  It may also cause the workload to consume more energy
+> >>> than necessary if the CPU does not spend enough time in the selected
+> >>> deep idle states.
+> >>>
+> >>> Address this by amending the tick_nohz_tick_stopped() check in questi=
+on
+> >>> with a tick_nohz_full_cpu() one to avoid using the time till the next
+> >>> timer event as the predicted_ns value all the time on nohz_full CPUs.
+> >>>
+> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>> ---
+> >>>  drivers/cpuidle/governors/menu.c |   12 +++++++++++-
+> >>>  1 file changed, 11 insertions(+), 1 deletion(-)
+> >>>
+> >>> --- a/drivers/cpuidle/governors/menu.c
+> >>> +++ b/drivers/cpuidle/governors/menu.c
+> >>> @@ -293,8 +293,18 @@
+> >>>        * in a shallow idle state for a long time as a result of it.  =
+In that
+> >>>        * case, say we might mispredict and use the known time till th=
+e closest
+> >>>        * timer event for the idle state selection.
+> >>> +      *
+> >>> +      * However, on nohz_full CPUs the tick does not run as a rule a=
+nd the
+> >>> +      * time till the closest timer event may always be effectively =
+infinite,
+> >>> +      * so using it as a replacement for the predicted idle duration=
+ would
+> >>> +      * effectively always cause the prediction results to be discar=
+ded and
+> >>> +      * deep idle states to be selected all the time.  That might in=
+troduce
+> >>> +      * unwanted latency into the workload and cause more energy tha=
+n
+> >>> +      * necessary to be consumed if the discarded prediction results=
+ are
+> >>> +      * actually accurate, so skip nohz_full CPUs here.
+> >>>        */
+> >>> -     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
+> >>> +     if (tick_nohz_tick_stopped() && !tick_nohz_full_cpu(dev->cpu) &=
+&
+> >>> +         predicted_ns < TICK_NSEC)
+> >>>               predicted_ns =3D data->next_timer_ns;
+> >>>
+> >>>       /*
+> >>>
+> >>>
+> >>>
+> >>
+> >> OTOH the behaviour with $SUBJECT possibly means that we use predicted_=
+ns from
+> >> get_typical_interval() (which may suggest picking a shallow state base=
+d on
+> >> previous wakeup patterns) only then to never wake up again?
+> >
+> > Yes, there is this risk, but the current behavior is more damaging IMV
+> > because it (potentially) hurts both energy efficiency and performance.
+> >
+> > It is also arguably easier for the user to remedy getting stuck in a
+> > shallow idle state than to change governor's behavior (PM QoS is a bit
+> > too blunt for this).
+> >
+> > Moreover, configuring CPUs as nohz_full and leaving them in long idle
+> > may not be the most efficient use of them.
+>
+> True, on the other hand the setup cost for nohz_full is so high, you'd ex=
+pect
+> the additional idle states disabling depending on the workload isn't too =
+much
+> to ask for...
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Apparently, there are cases in which there is enough idle time to ask
+for a deep idle state often enough, but as a rule the idle periods are
+relatively short.  In those cases, one would need to change the QoS
+limit back and forth in anticipation of the "busier" and "calmer"
+periods in the workload, which would be kind of equivalent to
+implementing an idle governor in user space.
 
+> Anyway feel free to go ahead.
 
--- 
-With best wishes
-Dmitry
+Thank you!
 
