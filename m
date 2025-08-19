@@ -1,191 +1,213 @@
-Return-Path: <linux-pm+bounces-32592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32593-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48EFEB2B85D
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 06:26:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35864B2B864
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 06:38:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5A6518912A3
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 04:26:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5DF23BBF55
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 04:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFE225A33E;
-	Tue, 19 Aug 2025 04:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C76C92E228E;
+	Tue, 19 Aug 2025 04:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pjh3zYGi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UxwsOZ1u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEAB23D2AB;
-	Tue, 19 Aug 2025 04:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B8B2C2353;
+	Tue, 19 Aug 2025 04:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755577557; cv=none; b=nKaHPnSYOZ20VuHsLddAC7y6AZDcgEKe4Qtc+TJ8xT9jG1EPRqNxIUYbItIL0ACBLdjG5He+qrpesqoA1Bj0ZAVTNZcLt8KLiO1BFMG1oR42ksZpKaXC6eKpxLHmuqB/Vaz02ie/Db//XGjjdVHgpyDWgH3KFcGmTeO9TJdYoKA=
+	t=1755578315; cv=none; b=n4vMZgXOe28JbME7AxxjvPWzZmqowwsCHgCqH5ySILXrILYt+03NFVY4ChvjWkS3UUcj0s52WRZ7P8dyKe6s3IVW3jdGVQO+GYGijl/MQYvYsTDemrtim8KRrF+wPnP/pXqJQTWV/1Nq/NDQqXTeBB9JXHiCXZSZtYBGE7GkB1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755577557; c=relaxed/simple;
-	bh=WHew1r8R+bfM46WQx5nuDOt4K8ddsRbz1pm1CF4fM/w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oNdbYJcMho3Q94LkEdY+PT6lfL2YS0owG0QQFrAinsCR2zHLbCquGKbb3RSCy1dH28o496I4/XcsQo8FTml/+SUMvzmVWDwxtTcORT9uhOEIZZCEfIGYDBFZmEBFn8nzKGPzDPFyzc53RQbEPxFzVmzf1wSILTXiobO7tG8pSMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pjh3zYGi; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-323266d2d9eso3619029a91.0;
-        Mon, 18 Aug 2025 21:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755577555; x=1756182355; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iVT+IFtq68eU3AEx5uWMtcJcJIzpuQeKdRPh4FrimX8=;
-        b=Pjh3zYGiWDU4j2ypNY1mJl7akEJlkeVeu4IqBbTHOzTbs9Qzn+2A56Cf5Lf6SOy/7R
-         Pgic7jQKW0UCDkIZT3OgHu14V2LoA+/KIJP6EZ3AGcpAPNq9gvGMmXDz49780UDaZ1n8
-         zBVbOdgPYv8eoHXdVgg5J/9wyJzY+R3vsX8WYbzs4Q+uDh3Hd1/6eosK63TfWOxkpfgv
-         HMs1xLWvbovugmMROwFRCstbfJQE/hAVaNGwVPrT/RCeRlLIuogXYmTe5x68ME6jTRBL
-         46HhsN8PjQRhz1cTCffOtB8hFU6jz8uXCYsW3bhTPTurkmyHgO8kc3R12rodshxxB9IC
-         Lf6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755577555; x=1756182355;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iVT+IFtq68eU3AEx5uWMtcJcJIzpuQeKdRPh4FrimX8=;
-        b=VOQE2s8f5jSSz2VCAg7BhYEg3sIuZ66UFPMX0xCt8gv0QvCx1vZppFf0rPfrtJ06tp
-         Bfwx+Uljtnlk91I/1LibY7QrwgplJDtoj5r/tcy65d6PSDaR2zDQyEjzgd2Mzv+g4OT1
-         7Wtyj2gWCKOl2HarYPs3pGdaupEh3Qf4jLogYdy9p+P73TXky3Za7oWWlKm5PQe4vTl4
-         +gptz6b5Ovp2RAA0irZWk8FgDrcUl0aaa18bAItYEUvT2NY8Z1AHjQM6BnoYEypJRQgp
-         QYRO5Njd1xLLYZfiX/U7tt7bWDv7LP7Z0veJ07oZ0VMxUyRyuVV+GvP2twjbzWv2J/zM
-         oVxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyQUptFEu3pYkHCslt7Gd444si+FSSY7Xmz0ua7NP9/c7YvEHM1J/gl7hMTdUCH6YN15nWjU+whQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMTpkZiEmFq37D5Up2MSJ/s+x50lmQI4t8WbGbRUkwyY6mIMID
-	EE1ZFdZlwLorQ6VP0sdZkloPaF5EUF7CeXa6vIMY3Qjs3XJ6UtcP8PbRea+wWQ==
-X-Gm-Gg: ASbGncs8CdbWDMWHvOpncWGxjZ+Ix2tSpVv/LARhEkDBPO8Vybr36UV2wZYe7QX/ITd
-	enWLwomsWvR/j6xkDliqoxzBUmZZPVWmLuFcvynwKimouFHg84X7GOl6L8Zk/yY9+d2SfQMNWBp
-	WVFIc0doA7rO0ehsClEXn/RYLExIJ8UUTOmGcsqgVrTZkzuBy01nI00N1lrQkvO+j1+9iDeb7YB
-	CShGa5VDhPzjSO4HEwIo/2gTvkrjxum4PaAjxSzKBuhePHkkTIx2Lp+uD167T9p2rPKdKvs9yXc
-	N/gtYrwN5KctTa3ugN0LKKAHKBhIdbTPsaL1q/YQRqFh0HBvcGwStNW1c1iU8PURnio1j3FESJ9
-	oQI7OqeSDWczC65449AjzycqTQY7GX0dieAqZ+ZJOem/3Irb8/ZR6
-X-Google-Smtp-Source: AGHT+IHboZ9MxN1evAx3IBSVDdj/1S9wTfFhwfR/60lh0rEkcU2RUQHNZ1dVATUxun5j8oRheVhU+A==
-X-Received: by 2002:a17:90b:3c44:b0:31e:ec02:2297 with SMTP id 98e67ed59e1d1-32476a672a2mr1985041a91.19.1755577554950;
-        Mon, 18 Aug 2025 21:25:54 -0700 (PDT)
-Received: from [127.0.1.1] ([202.126.91.196])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b472d79a24dsm9280612a12.58.2025.08.18.21.25.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 21:25:54 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Tue, 19 Aug 2025 12:25:43 +0800
-Subject: [PATCH] regulator: consumer.rst: document bulk operations
+	s=arc-20240116; t=1755578315; c=relaxed/simple;
+	bh=fX1fDtkJlgXe21ThnDLJ12QhRuLIMPpV4e+3sPurSW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fBi6o/rARITolNbFJ30MmXINvaAYeo12oV0gkLA9C9qn3fvB7wL4twb++A4e8JdoHaThOTeHuHYJK4QwIdCr8ts3+mhEOqCwBoWHspQw0pzFoaa0URXdvSSKnCGnNW0XHeP3Uz2YW+B4avNJgDr57t1GvsPKf8V+IVMajpg8dNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UxwsOZ1u; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755578314; x=1787114314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fX1fDtkJlgXe21ThnDLJ12QhRuLIMPpV4e+3sPurSW0=;
+  b=UxwsOZ1ulEZYVQIiVzewu33WAQcTwICFFB9AIRLG/YjXQDXUlLqRGFzC
+   Ie1ADYwBltMu2Nhr5WXpxhFSiUSG0/ph77cS8I524/5XK6VcnKKreHoDS
+   yvRtg0F9KxzQH1U3jlaD9GVZLy2DgS/mGcoWZ6vUdtAesYCxCtGKvna/d
+   DaUpiy86JDdcfsl2vEG0Xrsr6iwNG3V5fUPRNIMi01gIYrVlDTNoP06Q9
+   EdKL660xpWOgJhjyE97URmsqTVa/aiv/2+QvNvhXcqzD3d6Lcb60imyVv
+   QL+Yx3MLsU78U3XpMhTvpUXWYgIFYV3pwgXzTWzfLsjyeTOe7/WkOTHof
+   g==;
+X-CSE-ConnectionGUID: StzCEnImQ4aCfx9Sx1qRwQ==
+X-CSE-MsgGUID: k+zCROydT3iF6bKsW6qkVA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57882452"
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="57882452"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 21:38:33 -0700
+X-CSE-ConnectionGUID: xr1bnbrgSICKne4JN1ZibA==
+X-CSE-MsgGUID: Zwnm0lBgRl6z9KTr/9UVMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="166981588"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 18 Aug 2025 21:38:29 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uoE78-000GVn-2D;
+	Tue, 19 Aug 2025 04:38:26 +0000
+Date: Tue, 19 Aug 2025 12:38:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacky Bai <ping.bai@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Jacky Bai <ping.bai@nxp.com>
+Subject: Re: [PATCH v3 3/4] thermal: qoriq: workaround unexpected temperature
+ readings from tmu
+Message-ID: <202508191258.tYXB63eu-lkp@intel.com>
+References: <20250818-imx93_tmu-v3-3-35f79a86c072@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250819-reg_consumer_doc-v1-1-b631fc0d35a3@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAMb8o2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDC0NL3aLU9Pjk/Lzi0tzUoviU/GTdpKQk4xSjRPPUJEMTJaC2gqLUtMw
- KsJHRsbW1AJFjMpRiAAAA
-X-Change-ID: 20250819-reg_consumer_doc-bbb3d2a7eb14
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
- Pavel Machek <pavel@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.15-dev-e44bb
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755577550; l=3188;
- i=javier.carrasco.cruz@gmail.com; s=20250209; h=from:subject:message-id;
- bh=WHew1r8R+bfM46WQx5nuDOt4K8ddsRbz1pm1CF4fM/w=;
- b=qWT1coaUeFSOn6DzSVx+m3pHX6Mrqhq4rtqrRUqB4g850C3OCv10tmAJ2yuMo79uvhL4y3Hpf
- tXUsPGmOxpMDBU7qr6TmmVeTIhZLVuk+/VRq8C+EAuTHAvVQeA5vmFF
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=/1fPZTF8kAIBZPO3D8IhqidB0sgYzPDkljBZXsXJZM8=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818-imx93_tmu-v3-3-35f79a86c072@nxp.com>
 
-The current consumer documentation does not include bulk operations,
-providing an example of how to acquire multiple regulators by calling
-regulator_get() multiple times. That solution is valid and slightly
-simpler for a small amount of regulators, but it does not scale well.
+Hi Jacky,
 
-Document the bulk operations to get, enable and disable regulators.
+kernel test robot noticed the following build errors:
 
----
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- Documentation/power/regulator/consumer.rst | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+[auto build test ERROR on b9ddaa95fd283bce7041550ddbbe7e764c477110]
 
-diff --git a/Documentation/power/regulator/consumer.rst b/Documentation/power/regulator/consumer.rst
-index 9d2416f63f6e..c01675b25a90 100644
---- a/Documentation/power/regulator/consumer.rst
-+++ b/Documentation/power/regulator/consumer.rst
-@@ -23,10 +23,18 @@ To release the regulator the consumer driver should call ::
- 	regulator_put(regulator);
- 
- Consumers can be supplied by more than one regulator e.g. codec consumer with
--analog and digital supplies ::
-+analog and digital supplies by means of bulk operations ::
-+
-+	struct regulator_bulk_data supplies[2];
-+
-+	supplies[0].supply = "Vcc"; /* digital core */
-+	supplies[1].supply = "Avdd"; /* analog */
-+
-+	ret = regulator_bulk_get(dev, ARRAY_SIZE(supplies), supplies);
-+
-+	// convenience helper to call regulator_put() on multiple regulators
-+	regulator_bulk_free(ARRAY_SIZE(supplies), supplies);
- 
--	digital = regulator_get(dev, "Vcc");  /* digital core */
--	analog = regulator_get(dev, "Avdd");  /* analog */
- 
- The regulator access functions regulator_get() and regulator_put() will
- usually be called in your device drivers probe() and remove() respectively.
-@@ -51,11 +59,21 @@ A consumer can determine if a regulator is enabled by calling::
- 
- This will return > zero when the regulator is enabled.
- 
-+A set of regulators can be enabled with a single bulk operation ::
-+
-+	int regulator_bulk_enable(int num_consumers,
-+				  struct regulator_bulk_data *consumers);
-+
- 
- A consumer can disable its supply when no longer needed by calling::
- 
- 	int regulator_disable(regulator);
- 
-+Or a number of them ::
-+
-+	int regulator_bulk_disable(int num_consumers,
-+			 	   struct regulator_bulk_data *consumers);
-+
- NOTE:
-   This may not disable the supply if it's shared with other consumers. The
-   regulator will only be disabled when the enabled reference count is zero.
-@@ -64,11 +82,15 @@ Finally, a regulator can be forcefully disabled in the case of an emergency::
- 
- 	int regulator_force_disable(regulator);
- 
-+This operation is also supported for multiple regulators ::
-+
-+	int regulator_bulk_force_disable(int num_consumers,
-+			 		 struct regulator_bulk_data *consumers);
-+
- NOTE:
-   this will immediately and forcefully shutdown the regulator output. All
-   consumers will be powered off.
- 
--
- 3. Regulator Voltage Control & Status (dynamic drivers)
- =======================================================
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Bai/dt-bindings-thermal-qoriq-Add-compatible-string-for-imx93/20250818-173822
+base:   b9ddaa95fd283bce7041550ddbbe7e764c477110
+patch link:    https://lore.kernel.org/r/20250818-imx93_tmu-v3-3-35f79a86c072%40nxp.com
+patch subject: [PATCH v3 3/4] thermal: qoriq: workaround unexpected temperature readings from tmu
+config: riscv-randconfig-001-20250819 (https://download.01.org/0day-ci/archive/20250819/202508191258.tYXB63eu-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508191258.tYXB63eu-lkp@intel.com/reproduce)
 
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250819-reg_consumer_doc-bbb3d2a7eb14
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508191258.tYXB63eu-lkp@intel.com/
 
-Best regards,
---  
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+All errors (new ones prefixed by >>):
 
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     804 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     812 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     820 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     829 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     838 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     847 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/thermal/qoriq_thermal.c:8:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/thermal/qoriq_thermal.c:281:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     281 |                              FIELD_PREP(TMRTRCTR_TEMP_MASK, 0x7));
+         |                              ^
+   7 warnings and 1 error generated.
+
+
+vim +/FIELD_PREP +281 drivers/thermal/qoriq_thermal.c
+
+   264	
+   265	static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+   266	{
+   267		/* Disable interrupt, using polling instead */
+   268		regmap_write(data->regmap, REGS_TIER, TIER_DISABLE);
+   269	
+   270		/* Set update_interval */
+   271		if (data->ver == TMU_VER1) {
+   272			regmap_write(data->regmap, REGS_TMTMIR, TMTMIR_DEFAULT);
+   273		} else {
+   274			regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
+   275			regmap_write(data->regmap, REGS_V2_TEUMR(0), GET_TEUMR0(data->drvdata));
+   276		}
+   277	
+   278		/* ERR052243: Set the raising & falling edge monitor */
+   279		if (CHECK_ERRATA_FLAG(data->drvdata, TMU_ERR052243)) {
+   280			regmap_write(data->regmap, TMRTRCTR, TMRTRCTR_EN |
+ > 281				     FIELD_PREP(TMRTRCTR_TEMP_MASK, 0x7));
+   282			regmap_write(data->regmap, TMFTRCTR, TMFTRCTR_EN |
+   283				     FIELD_PREP(TMFTRCTR_TEMP_MASK, 0x7));
+   284	
+   285		}
+   286		/* Disable monitoring */
+   287		regmap_write(data->regmap, REGS_TMR, TMR_DISABLE);
+   288	}
+   289	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
