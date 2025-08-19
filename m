@@ -1,213 +1,127 @@
-Return-Path: <linux-pm+bounces-32593-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32594-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35864B2B864
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 06:38:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D504AB2B879
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 07:07:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5DF23BBF55
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 04:38:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71C885E13ED
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 05:07:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C76C92E228E;
-	Tue, 19 Aug 2025 04:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E834D270575;
+	Tue, 19 Aug 2025 05:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UxwsOZ1u"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="SoXSkFxL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B8B2C2353;
-	Tue, 19 Aug 2025 04:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC94214210
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 05:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755578315; cv=none; b=n4vMZgXOe28JbME7AxxjvPWzZmqowwsCHgCqH5ySILXrILYt+03NFVY4ChvjWkS3UUcj0s52WRZ7P8dyKe6s3IVW3jdGVQO+GYGijl/MQYvYsTDemrtim8KRrF+wPnP/pXqJQTWV/1Nq/NDQqXTeBB9JXHiCXZSZtYBGE7GkB1c=
+	t=1755580042; cv=none; b=bWJz8RYuWsiAU/3mFX5W7yFgzwmC4hD7C6VkZ4GzyDgCvguoiCLD/I5PP0SurEsugT4O7ZUlydQbY4+x7opsw3xytxLkyVgr8CV4/k1DU/jsbTKTJMT6MNFw5+wOYYdFN8qWvDWdmlJ3mxh42Fjzo1i7cLsXglgUnu/8Y4CYWlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755578315; c=relaxed/simple;
-	bh=fX1fDtkJlgXe21ThnDLJ12QhRuLIMPpV4e+3sPurSW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fBi6o/rARITolNbFJ30MmXINvaAYeo12oV0gkLA9C9qn3fvB7wL4twb++A4e8JdoHaThOTeHuHYJK4QwIdCr8ts3+mhEOqCwBoWHspQw0pzFoaa0URXdvSSKnCGnNW0XHeP3Uz2YW+B4avNJgDr57t1GvsPKf8V+IVMajpg8dNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UxwsOZ1u; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755578314; x=1787114314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fX1fDtkJlgXe21ThnDLJ12QhRuLIMPpV4e+3sPurSW0=;
-  b=UxwsOZ1ulEZYVQIiVzewu33WAQcTwICFFB9AIRLG/YjXQDXUlLqRGFzC
-   Ie1ADYwBltMu2Nhr5WXpxhFSiUSG0/ph77cS8I524/5XK6VcnKKreHoDS
-   yvRtg0F9KxzQH1U3jlaD9GVZLy2DgS/mGcoWZ6vUdtAesYCxCtGKvna/d
-   DaUpiy86JDdcfsl2vEG0Xrsr6iwNG3V5fUPRNIMi01gIYrVlDTNoP06Q9
-   EdKL660xpWOgJhjyE97URmsqTVa/aiv/2+QvNvhXcqzD3d6Lcb60imyVv
-   QL+Yx3MLsU78U3XpMhTvpUXWYgIFYV3pwgXzTWzfLsjyeTOe7/WkOTHof
-   g==;
-X-CSE-ConnectionGUID: StzCEnImQ4aCfx9Sx1qRwQ==
-X-CSE-MsgGUID: k+zCROydT3iF6bKsW6qkVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57882452"
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="57882452"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 21:38:33 -0700
-X-CSE-ConnectionGUID: xr1bnbrgSICKne4JN1ZibA==
-X-CSE-MsgGUID: Zwnm0lBgRl6z9KTr/9UVMw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="166981588"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 18 Aug 2025 21:38:29 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoE78-000GVn-2D;
-	Tue, 19 Aug 2025 04:38:26 +0000
-Date: Tue, 19 Aug 2025 12:38:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jacky Bai <ping.bai@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Jacky Bai <ping.bai@nxp.com>
-Subject: Re: [PATCH v3 3/4] thermal: qoriq: workaround unexpected temperature
- readings from tmu
-Message-ID: <202508191258.tYXB63eu-lkp@intel.com>
-References: <20250818-imx93_tmu-v3-3-35f79a86c072@nxp.com>
+	s=arc-20240116; t=1755580042; c=relaxed/simple;
+	bh=ltXNHRhOhUUl4xR8T4+Ojndq1rFeuYUH2BMxeu0RtmM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gKQNJxxpdImJ9ZsNMZ5L/pireHy13oqTokugVPYd55EJCYJWaJfUVKkOUAWX7V8GmhY4gwVIS+jvZqKa8tEHMU7CjEvup9ZJSdk9ucZRRQKTMPgmhVirkc5T3kzhSwYpiWuqOhV7e+0/li+8wHI0x0PXmIkfF8h/uVwWDKpkxoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=SoXSkFxL; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3b9dc52c430so2350250f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 22:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1755580039; x=1756184839; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fga+lbodUmPAZazOf43yy1bTgzdU2LByeFqojuOQ83w=;
+        b=SoXSkFxLAXwWKCM+ck4BQyG3Kz10Cs5HOEmcjcltNTbDIwHOC2NcX6ZR2ICOcmUNST
+         7xGqEImExFpdAq/UFWqdegH0yflXjYvP+BgczT6shJ+am5rgG2vEtDimk9T+y46sqCWA
+         tQwnxvxw63Mz37Pi2WtjyNSLe0Glwo6y1SsQtbA7Nns9qM9RfzYEy/Ghsca28B3oeTxi
+         /CCHU6aHXS6A11DwC1s47+bAYeQKTTJ3f4tffSwJnt0ADdABgAum5xOjTSqo9pLf0G8l
+         /DfrLBj/wSiVcgHPHfX2ZVnlwGdGeOp3mHl+cT4L28njTrhX95MSNL+G6N057lcG17yT
+         MOGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755580039; x=1756184839;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fga+lbodUmPAZazOf43yy1bTgzdU2LByeFqojuOQ83w=;
+        b=S4l3b/BFeJ0njWoFr2iAtvpC0kNviCFG8UzKeBQbmrw+RefY6b1yiiFwPWkxJBJBLJ
+         yic9F1jQrmH1KXVndyloXxlt+lM7Lfu5aVdrL1v+VbgKS0RMLeDMTqMrAShlaoTGChUT
+         aubb8aUM+ivO8tYH21fEGMZE151e4LLY2JjyN5rrDdJSduSMCmes0fkGzCIIX3usxRA0
+         4jE4N2QQz5NQlImfU2id3lwtBN9VptCRP3hZJTyLwF8rbVd+IjLZIR9SLn8q+nqqGAZC
+         lLjxJdaYjU6weZqvI6qNAQ7u8hGOw4+dSvI2F+aSaojzGyW/nNqp19tvC0elXMK5pSas
+         nW9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUNmHfCV+gkqPFEXvplRMAjB+MRFuumlCU4VVzPoRddmyWXTRwRPAUyrGvXHxzNXl+c0sCBGpsZzA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzcb42Rg4IhMjNpOTaR0RdlYoAVB9+cyF3iAoDnem2rXimLDRh8
+	6VSVBhBflrliRo0cD/t/Ikx7Xiln7tSMWvmhc3vXD9dUYhBUbpKXlMjvFhfvWeGF7qE=
+X-Gm-Gg: ASbGnctuSjaKWMx9K/rudAsa3KIxv70DtOohyZtWZF5JSG7ZGHwiHSwAOkwC5rP4bda
+	WSe7UaI61POgggdAAjP2ACcJcMwop1aCFNZlPPnqw3A93COTrRfbUvjYQmD3uKAXzL8R48MiVEa
+	AztAMsuG8XJIssNxQHLbhqxCykf29Zb0o/hj6N50hdisaAlkmFOKq8emPaBR2DdaV7rgcKSk+N7
+	AHMr9WIT1CkiiarQ3vBuTA0kOuUhBSFWEe/dUPQunxZjx0VmEbFDIToYLg3bC7AepMaQXEPCw58
+	J6OI2iDumUO+QwcQ3HWnqznnEO/tb2eUcjMsZxF7ux+N5tf3qmCKEgwbim1sU7u79byxQl9twM+
+	gqGQfLICeFZOvdM/cVVxF7+1X9R8rbgRQhYJsv6a4cri4kffvdr0gn+hu1fi/I049FB95BHOMql
+	DIaw==
+X-Google-Smtp-Source: AGHT+IEGAIFSV01YojFxZG6ti+gZSOdnTisUwlACnGc8HPzYTSLd/Yrx6ey+bzDVw52KF6DYn9VA+A==
+X-Received: by 2002:a05:6000:2485:b0:3aa:34f4:d437 with SMTP id ffacd0b85a97d-3c0ecc31e8fmr784959f8f.37.1755580039233;
+        Mon, 18 Aug 2025 22:07:19 -0700 (PDT)
+Received: from ?IPV6:2a02:2f04:620a:8b00:4343:2ee6:dba1:7917? ([2a02:2f04:620a:8b00:4343:2ee6:dba1:7917])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074879fe5sm2018512f8f.2.2025.08.18.22.07.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Aug 2025 22:07:18 -0700 (PDT)
+Message-ID: <d00ce701-2ddd-485e-8bfd-12cddec62fef@tuxon.dev>
+Date: Tue, 19 Aug 2025 08:07:16 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818-imx93_tmu-v3-3-35f79a86c072@nxp.com>
-
-Hi Jacky,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on b9ddaa95fd283bce7041550ddbbe7e764c477110]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Bai/dt-bindings-thermal-qoriq-Add-compatible-string-for-imx93/20250818-173822
-base:   b9ddaa95fd283bce7041550ddbbe7e764c477110
-patch link:    https://lore.kernel.org/r/20250818-imx93_tmu-v3-3-35f79a86c072%40nxp.com
-patch subject: [PATCH v3 3/4] thermal: qoriq: workaround unexpected temperature readings from tmu
-config: riscv-randconfig-001-20250819 (https://download.01.org/0day-ci/archive/20250819/202508191258.tYXB63eu-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508191258.tYXB63eu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508191258.tYXB63eu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     804 |         insb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     812 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     820 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     829 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     838 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     847 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/thermal/qoriq_thermal.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/thermal/qoriq_thermal.c:281:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     281 |                              FIELD_PREP(TMRTRCTR_TEMP_MASK, 0x7));
-         |                              ^
-   7 warnings and 1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 1/6] soc: renesas: rz-sysc: Add syscon/regmap support
+To: John Madieu <john.madieu.xa@bp.renesas.com>, geert+renesas@glider.be,
+ magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+ rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, catalin.marinas@arm.com,
+ will@kernel.org
+Cc: john.madieu@gmail.com, linux-renesas-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, biju.das.jz@bp.renesas.com,
+ linux-arm-kernel@lists.infradead.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
+ <20250818162859.9661-2-john.madieu.xa@bp.renesas.com>
+Content-Language: en-US
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20250818162859.9661-2-john.madieu.xa@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +/FIELD_PREP +281 drivers/thermal/qoriq_thermal.c
 
-   264	
-   265	static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
-   266	{
-   267		/* Disable interrupt, using polling instead */
-   268		regmap_write(data->regmap, REGS_TIER, TIER_DISABLE);
-   269	
-   270		/* Set update_interval */
-   271		if (data->ver == TMU_VER1) {
-   272			regmap_write(data->regmap, REGS_TMTMIR, TMTMIR_DEFAULT);
-   273		} else {
-   274			regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
-   275			regmap_write(data->regmap, REGS_V2_TEUMR(0), GET_TEUMR0(data->drvdata));
-   276		}
-   277	
-   278		/* ERR052243: Set the raising & falling edge monitor */
-   279		if (CHECK_ERRATA_FLAG(data->drvdata, TMU_ERR052243)) {
-   280			regmap_write(data->regmap, TMRTRCTR, TMRTRCTR_EN |
- > 281				     FIELD_PREP(TMRTRCTR_TEMP_MASK, 0x7));
-   282			regmap_write(data->regmap, TMFTRCTR, TMFTRCTR_EN |
-   283				     FIELD_PREP(TMFTRCTR_TEMP_MASK, 0x7));
-   284	
-   285		}
-   286		/* Disable monitoring */
-   287		regmap_write(data->regmap, REGS_TMR, TMR_DISABLE);
-   288	}
-   289	
+On 8/18/25 19:28, John Madieu wrote:
+> The RZ/G3E system controller has various registers that control or report
+> some properties specific to individual IPs. The regmap is registered as a
+> syscon device to allow these IP drivers to access the registers through the
+> regmap API.
+> 
+> As other RZ SoCs might have custom read/write callbacks or max-offsets,
+> register a custom regmap configuration.
+> 
+> Signed-off-by: John Madieu<john.madieu.xa@bp.renesas.com>
+> [claudiu.beznea:
+>   - do not check the match->data validity in rz_sysc_probe() as it is
+>     always valid
+>   - dinamically allocate regmap_cfg]
+> Signed-off-by: Claudiu Beznea<claudiu.beznea.uj@bp.renesas.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com> # on RZ/G3S
+
 
