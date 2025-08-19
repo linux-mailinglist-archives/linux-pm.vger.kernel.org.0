@@ -1,210 +1,152 @@
-Return-Path: <linux-pm+bounces-32638-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32639-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 990CDB2C535
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 15:21:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 816ACB2C566
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 15:24:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34BCC188E1B2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:16:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94A1917D13B
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B356E33EAE2;
-	Tue, 19 Aug 2025 13:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9304235082E;
+	Tue, 19 Aug 2025 13:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="aewAol5l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFD3A2C11EC;
-	Tue, 19 Aug 2025 13:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCE2350822
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 13:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755609359; cv=none; b=mTbA7A4lvZXsFQVGRW5MLZreoRnaJtnQg+nXx//GA6IhyCnevxcYJL3bwj0sZ1DyoAlw7aPGqhD4BoNrijxyIqtgSUuPzBOkORlHWdzaksI1sQBlT3lo33fMT4cJkG5sPv0gLhGi/DjG/z49hkfUQlRr7WKmMu2mwtwY3OutH1c=
+	t=1755609461; cv=none; b=W/3SYQ1exxPNPPqk0rBkYgZQ2WPEBnM4VES2fg3M+WVtD3AyoNUqr5F7sB2TwYC+n9QT2z4rOBrRsvJ9ucm4IQRpiNP3lrvHgvpKpcEOzXobaRL4xi20Q/QtVdNDUOJj1zzGnpnf2Zd3ivfw/JGCZ/kN74CymejuVta2yu848Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755609359; c=relaxed/simple;
-	bh=TZO/KLYTk3liX98Qqbq7mizNVHvRrDmh1OUM8O5QVDg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Vzhilxi40RdHl/if59Z3tD68btiKi8WcLsyIO85rhK8rRKxCPHZ8EpCoVK6e/DZk1Tgx2sEjAB02wfFhCWSfleC3khXdPT/ppeLXkQ3sXQSfCt0BUTJtNqhAurWF5pgRbNPXo3gMc/YgI2zDUm0ozoUC6Y7iHR7ntcoQ5M1vsBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0830C16A3;
-	Tue, 19 Aug 2025 06:15:48 -0700 (PDT)
-Received: from [10.1.196.50] (e121345-lin.cambridge.arm.com [10.1.196.50])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 078263F58B;
-	Tue, 19 Aug 2025 06:15:51 -0700 (PDT)
-Message-ID: <67a0d778-6e2c-4955-a7ce-56a10043ae8d@arm.com>
-Date: Tue, 19 Aug 2025 14:15:50 +0100
+	s=arc-20240116; t=1755609461; c=relaxed/simple;
+	bh=nG0shwu5Af2IAtJwhIwSsyeYiHqDtWvmiFEdtbQHXRo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=p4r5UJN7Ub28M0572krtlJBfuUnmCmn4KUwXWuM69qpiSXkGN6zLJLbR64J0UZojwHlOopn3+Tu/QhMRJT2XphNatc1JgO3JIAjCit+7Yv32cFHRaSw9QGmLA1KsvHrxZ69CoZ88es+w9a8YzZ/UT3zur9sP2P6T/sgocpAr6hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=aewAol5l; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250819131732euoutp024f183514e33794bcdaa78f22c3fdfe13~dLX7cX4Fo1527115271euoutp020
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 13:17:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250819131732euoutp024f183514e33794bcdaa78f22c3fdfe13~dLX7cX4Fo1527115271euoutp020
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755609452;
+	bh=CCrSI/5l0BXky7ygaJO0nnEAoj1y+QoRh+iorwK/S9g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=aewAol5lYAJ8eG7/zvbkSEFrBbSbgMx3xnQ335/aTnRditX8ZZA+zrbCF6hOnorT8
+	 a8LcF/h45ia6VDAlz6KOQDCrhJwuj8hSUUqrM0otLdAppM7fTV6fS6mx9V45NS2JKV
+	 +UdoCaiT0ncEBjgP1L5Pt/BMC4SKD9sbGLodbF74=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250819131732eucas1p26bd491e9b6b747a4857905bfd50420a9~dLX63YhkO2802028020eucas1p2H;
+	Tue, 19 Aug 2025 13:17:32 +0000 (GMT)
+Received: from AMDC4515.digital.local (unknown [106.120.51.28]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250819131730eusmtip128fc54e219f6ff267b532cbfe63a317a~dLX5zXH3-0466004660eusmtip1F;
+	Tue, 19 Aug 2025 13:17:30 +0000 (GMT)
+From: Mateusz Majewski <m.majewski2@samsung.com>
+To: linux.amoon@gmail.com
+Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org,
+	justinstitt@google.com, krzk@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	llvm@lists.linux.dev, lukasz.luba@arm.com, m.majewski2@samsung.com,
+	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	rafael@kernel.org, rui.zhang@intel.com
+Subject: Re: [PATCH v7 6/7] thermal/drivers/exynos: Handle temperature
+ threshold IRQs with SoC-specific mapping
+Date: Tue, 19 Aug 2025 15:17:04 +0200
+Message-ID: <20250819131704.19780-1-m.majewski2@samsung.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250813131007.343402-7-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 18/19] perf: Introduce positive capability for raw events
-From: Robin Murphy <robin.murphy@arm.com>
-To: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
- mark.rutland@arm.com, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
- iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
- linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-riscv@lists.infradead.org
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250819131732eucas1p26bd491e9b6b747a4857905bfd50420a9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250819131732eucas1p26bd491e9b6b747a4857905bfd50420a9
+X-EPHeader: CA
+X-CMS-RootMailID: 20250819131732eucas1p26bd491e9b6b747a4857905bfd50420a9
+References: <20250813131007.343402-7-linux.amoon@gmail.com>
+	<CGME20250819131732eucas1p26bd491e9b6b747a4857905bfd50420a9@eucas1p2.samsung.com>
 
-On 13/08/2025 6:01 pm, Robin Murphy wrote:
-> Only a handful of CPU PMUs accept PERF_TYPE_{RAW,HARDWARE,HW_CACHE}
-> events without registering themselves as PERF_TYPE_RAW in the first
-> place. Add an explicit opt-in for these special cases, so that we can
-> make life easier for every other driver (and probably also speed up the
-> slow-path search) by having perf_try_init_event() do the basic type
-> checking to cover the majority of cases.
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
-> 
-> A further possibility is to automatically add the cap to PERF_TYPE_RAW
-> PMUs in perf_pmu_register() to have a single point-of-use condition; I'm
-> undecided...
-> ---
->   arch/s390/kernel/perf_cpum_cf.c    |  1 +
->   arch/s390/kernel/perf_pai_crypto.c |  2 +-
->   arch/s390/kernel/perf_pai_ext.c    |  2 +-
->   arch/x86/events/core.c             |  2 +-
->   drivers/perf/arm_pmu.c             |  1 +
->   include/linux/perf_event.h         |  1 +
->   kernel/events/core.c               | 15 +++++++++++++++
->   7 files changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
-> index 1a94e0944bc5..782ab755ddd4 100644
-> --- a/arch/s390/kernel/perf_cpum_cf.c
-> +++ b/arch/s390/kernel/perf_cpum_cf.c
-> @@ -1054,6 +1054,7 @@ static void cpumf_pmu_del(struct perf_event *event, int flags)
->   /* Performance monitoring unit for s390x */
->   static struct pmu cpumf_pmu = {
->   	.task_ctx_nr  = perf_sw_context,
-> +	.capabilities = PERF_PMU_CAP_RAW_EVENTS,
->   	.pmu_enable   = cpumf_pmu_enable,
->   	.pmu_disable  = cpumf_pmu_disable,
->   	.event_init   = cpumf_pmu_event_init,
-> diff --git a/arch/s390/kernel/perf_pai_crypto.c b/arch/s390/kernel/perf_pai_crypto.c
-> index a64b6b056a21..b5b6d8b5d943 100644
-> --- a/arch/s390/kernel/perf_pai_crypto.c
-> +++ b/arch/s390/kernel/perf_pai_crypto.c
-> @@ -569,7 +569,7 @@ static const struct attribute_group *paicrypt_attr_groups[] = {
->   /* Performance monitoring unit for mapped counters */
->   static struct pmu paicrypt = {
->   	.task_ctx_nr  = perf_hw_context,
-> -	.capabilities = PERF_PMU_CAP_SAMPLING,
-> +	.capabilities = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
->   	.event_init   = paicrypt_event_init,
->   	.add	      = paicrypt_add,
->   	.del	      = paicrypt_del,
-> diff --git a/arch/s390/kernel/perf_pai_ext.c b/arch/s390/kernel/perf_pai_ext.c
-> index 1261f80c6d52..bcd28c38da70 100644
-> --- a/arch/s390/kernel/perf_pai_ext.c
-> +++ b/arch/s390/kernel/perf_pai_ext.c
-> @@ -595,7 +595,7 @@ static const struct attribute_group *paiext_attr_groups[] = {
->   /* Performance monitoring unit for mapped counters */
->   static struct pmu paiext = {
->   	.task_ctx_nr  = perf_hw_context,
-> -	.capabilities = PERF_PMU_CAP_SAMPLING,
-> +	.capabilities = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
->   	.event_init   = paiext_event_init,
->   	.add	      = paiext_add,
->   	.del	      = paiext_del,
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index 789dfca2fa67..764728bb80ae 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2697,7 +2697,7 @@ static bool x86_pmu_filter(struct pmu *pmu, int cpu)
->   }
->   
->   static struct pmu pmu = {
-> -	.capabilities		= PERF_PMU_CAP_SAMPLING,
-> +	.capabilities		= PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
->   
->   	.pmu_enable		= x86_pmu_enable,
->   	.pmu_disable		= x86_pmu_disable,
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 72d8f38d0aa5..bc772a3bf411 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -877,6 +877,7 @@ struct arm_pmu *armpmu_alloc(void)
->   		 * specific PMU.
->   		 */
->   		.capabilities	= PERF_PMU_CAP_SAMPLING |
-> +				  PERF_PMU_CAP_RAW_EVENTS |
->   				  PERF_PMU_CAP_EXTENDED_REGS |
->   				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
->   	};
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 183b7c48b329..c6ad036c0037 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -305,6 +305,7 @@ struct perf_event_pmu_context;
->   #define PERF_PMU_CAP_EXTENDED_HW_TYPE	0x0100
->   #define PERF_PMU_CAP_AUX_PAUSE		0x0200
->   #define PERF_PMU_CAP_AUX_PREFER_LARGE	0x0400
-> +#define PERF_PMU_CAP_RAW_EVENTS		0x0800
->   
->   /**
->    * pmu::scope
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 71b2a6730705..2ecee76d2ae2 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -12556,11 +12556,26 @@ static inline bool has_extended_regs(struct perf_event *event)
->   	       (event->attr.sample_regs_intr & PERF_REG_EXTENDED_MASK);
->   }
->   
-> +static bool is_raw_pmu(const struct pmu *pmu)
-> +{
-> +	return pmu->type == PERF_TYPE_RAW ||
-> +	       pmu->capabilities & PERF_PMU_CAP_RAW_EVENTS;
-> +}
-> +
->   static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
->   {
->   	struct perf_event_context *ctx = NULL;
->   	int ret;
->   
-> +	/*
-> +	 * Before touching anything, we can safely skip:
-> +	 * - any event for a specific PMU which is not this one
-> +	 * - any common event if this PMU doesn't support them
-> +	 */
-> +	if (event->attr.type != pmu->type &&
-> +	    (event->attr.type >= PERF_TYPE_MAX || is_raw_pmu(pmu)))
+Hello :)
 
-Ah, that should be "!is_raw_pmu(pmu)" there (although it's not entirely 
-the cause of the LKP report on the final patch.)
+> +/* Map Rise and Falling edges for IRQ Clean */
+> +struct tmu_irq_map {
+> +	u32 fall[3];
+> +	u32 rise[3];
+> +};
 
-Thanks,
-Robin.
+Hmm, we can probably get away with less interrupts. We actually only
+enable one fall interrupt in tmu_set_low_temp and one rise interrupt in
+tmu_set_high_temp.
 
-> +		return -ENOENT;
-> +
->   	if (!try_module_get(pmu->module))
->   		return -ENODEV;
->   
+Regarding tmu_set_crit_temp, on SoCs that have hardware thermal tripping
+there is nothing to clear. On others we will reboot immediately anyway,
+though maybe there is nothing wrong with clearing the interrupt
+beforehand? Regardless of this, there is only a rise critical
+temperature interrupt, we never set a matching fall interrupt.
 
+Maybe it would also be good to add a bool to this struct containing
+information about whether a fall interrupt is in use, and reuse
+the same logic for 4210?
+
+(Nitpick: I am not a native speaker of English, but I think "clean" and
+"clear" have slightly different meanings, and the rest of the code
+consistently uses "clear", so it would be worthwhile to also use "clear"
+here.)
+
+> +	/* Set SoC-specific interrupt bit mappings */
+> +	switch (data->soc) {
+> +	case SOC_ARCH_EXYNOS3250:
+> +	case SOC_ARCH_EXYNOS4412:
+> +	case SOC_ARCH_EXYNOS5250:
+> +	case SOC_ARCH_EXYNOS5260:
+> +		irq_map.fall[2] = BIT(20);
+> +		irq_map.fall[1] = BIT(16);
+> +		irq_map.fall[0] = BIT(12);
+> +		irq_map.rise[2] = BIT(8);
+> +		irq_map.rise[1] = BIT(4);
+> +		irq_map.rise[0] = BIT(0);
+> +		break;
+> +	case SOC_ARCH_EXYNOS5420:
+> +	case SOC_ARCH_EXYNOS5420_TRIMINFO:
+> +		irq_map.fall[2] = BIT(24);
+> +		irq_map.fall[1] = BIT(20);
+> +		irq_map.fall[0] = BIT(16);
+> +		irq_map.rise[2] = BIT(8);
+> +		irq_map.rise[1] = BIT(4);
+> +		irq_map.rise[0] = BIT(0);
+> +		break;
+> +	case SOC_ARCH_EXYNOS5433:
+> +	case SOC_ARCH_EXYNOS7:
+> +		irq_map.fall[2] = BIT(23);
+> +		irq_map.fall[1] = BIT(17);
+> +		irq_map.fall[0] = BIT(16);
+> +		irq_map.rise[2] = BIT(7);
+> +		irq_map.rise[1] = BIT(1);
+> +		irq_map.rise[0] = BIT(0);
+> +		break;
+> +	default:
+> +		pr_warn("exynos-tmu: Unknown SoC type %d, using fallback IRQ mapping\n", soc);
+> +		break;
+
+Maybe put irq_map inside exynos_tmu_data? exynos_map_dt_data has a
+switch block that is quite similar, in that it also matches on the SoC
+type. This way also there is no need to have a fallback.
+
+Kind regards,
+Mateusz Majewski
 
