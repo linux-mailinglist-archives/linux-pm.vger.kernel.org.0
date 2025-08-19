@@ -1,184 +1,161 @@
-Return-Path: <linux-pm+bounces-32630-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32631-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5880DB2C280
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 14:00:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A597B2C3A5
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 14:33:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 444184E43AA
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 12:00:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD019A03948
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 12:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559473314DD;
-	Tue, 19 Aug 2025 11:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D87F62C11E4;
+	Tue, 19 Aug 2025 12:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmmIcCtS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JO8XRdOQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D92027A451;
-	Tue, 19 Aug 2025 11:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2424620C000
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 12:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755604623; cv=none; b=YujVoyoraboutrySXg8zOfugWt5a5KErxiUrB/3yQ3UFkNfwUyexHtnoQxyrFlKPv4PzlLQzTb/A9qk6iVypnV5qK4W6bCux8G+QT1EJhdzcoSme+f7Iz6vLbU99QWP7rf/gT6ZiUXmND8DAqsFyCxNNfzLowJjUB7yd4Hp/NeE=
+	t=1755606433; cv=none; b=NS44LB9nWuepoQRHUof+Oss48hNc/nlY754+RktN9O4LXhSNfT4/M/ARWXszNgsemCm12f+cibWjuiHPkzHkCyo0h1ObBZeAze5PZfZzE5d8RxVvFnefDbhXqABImcjs7S44D3Icp5cALq1EuSSklYZgthnWsPzbirFB1dgw8R8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755604623; c=relaxed/simple;
-	bh=fhR9sbVwW3bOwxbPQt0UV+PievZMI3zWcq5ZJwZ4MOw=;
+	s=arc-20240116; t=1755606433; c=relaxed/simple;
+	bh=4AoxiOgLAeaNsjikPK651fSU53c2V0f7JPKo4uTzE0E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HSjA01g9pukVB9bHjYos0uc9Jl9QUX0VgkzR3LBvxHbdQ/mU2xJDhc0ev3AyCjJwLLm41EIouI2SP8WgGiG/A/3WUG/J3kaOw07CO73Gd3bBTEDIUNBSJRH3OmcpMZN62PaJebYdGKa9AFuwVcoXVGU/BMkoAAblkbbxlavQ9Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmmIcCtS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEFB4C4AF09;
-	Tue, 19 Aug 2025 11:57:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755604622;
-	bh=fhR9sbVwW3bOwxbPQt0UV+PievZMI3zWcq5ZJwZ4MOw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jmmIcCtSCRaSWk4xc2FzjWTLHp2YiSAfXNrWVYjNL9tIRJl4CN9w/ufARVbKV2Csc
-	 gcEC1IT846+dapPjZWAYRigEPYSrLjhd6mT4TEdXYnVxIwTFgFYbynGfEqu8E0n/Gy
-	 u6EJmjSPUWxMqCGjMG+//zDWtAfkqMuXWmPsRbYL6oHDRc+f0UpjkMhkDJcSfjQTcJ
-	 qyppDr2zNzoRcGPG4itCz857x4FMiC0Vz8s39vWXsvV0DIgK6EvJtw6C9caPQWi2d8
-	 iOZxqXsqlIZK30WfPqZu6wkheuaLwCo+COQrLkhzmm1zFbMpgcbOkPfa/VKStO6/bl
-	 eym8xekMZg63A==
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-74381efd643so1145235a34.1;
-        Tue, 19 Aug 2025 04:57:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU923IDXyglcxUlCLGoWAb7Ey1OpCrGJ/j3sJ6JfkDzEAzkBRgsye04qcBUPmhs13jj3Nv+VWf3xMpGpX0=@vger.kernel.org, AJvYcCXGuvKt+vybbOptQzcxRHgNaJwWlmNS0GTCIaxPIvHo60WyZso3IiU8GEG+sc0JjQ54F2YpBpcVc74=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO4LH3PCd6eOTrV6+db2xZy/xpIpK5yACdXsWXUJpQQ0OSMdNq
-	ZYR3HBQcshGB3Q4/WtV8e5NV0dfHWmPnPlOlvrG/fvmEzzEOp7MJK+eNeJDTVl+tZtS83pFnMJx
-	zeZDXnu5pauCGegvH7Z0xRMrijHszgog=
-X-Google-Smtp-Source: AGHT+IFDlwYdPggXeHiN1f2P4TFhkB9XkvB/EeonKfBQu3iR1bUJH9YdqCajNweQ91VkJKSW1Xyf5srSwfaWKDqiWXQ=
-X-Received: by 2002:a05:6830:3509:b0:73e:bb60:2d0c with SMTP id
- 46e09a7af769-744e0ac7b6dmr1461088a34.23.1755604621916; Tue, 19 Aug 2025
- 04:57:01 -0700 (PDT)
+	 To:Cc:Content-Type; b=c9eRWRbUCcFH56w8+pewPi+2FdUkvm7aII4mKVRT/n/ep2xgmShhtat8v5MWTymXB+gvM/KPG+vBnaSB0ryjfGPeNJkIvzBmvzoR1l40Ns41YDfXzy406GxLLZ5IsYGMJ60ht4FjUOTKU8EMDtKcm3Mr2qbWh+3bn3GfZLlaajU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JO8XRdOQ; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-71d60110772so46700817b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 05:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755606431; x=1756211231; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0aRsy5XQ2A5B+bslStkieJadz5tU0dBZ7FndcLwnw2U=;
+        b=JO8XRdOQVzB46uNFDHwqYvAPtj1wFb0/TuJ/mBtb2FYhZWscknnBueJffmQgkMLigK
+         3lGmaVCElpl1W5J/93J9UwEzVswniLDHAWE2vVvgTFdkcjfdcCCNDN3h+3Mx9jS22jVP
+         w7PxfOiTnIgx3VEJ1Q8klAAHbHuAqCyGoRDcUdTxi7wPdSPCyL9sRhfhkC9Z6EYH5HJb
+         Ca4e8c94R4XnKjv1+2qo+WxaWowQ0byZBN40Bh1qtik0dsNv/yueZm6Hths8dw+w26ks
+         KEfp7OFFFngZHACFGUtaR/0lQoFtXT8e35GjRX5GfNk9XaXoVGTpHSd3E3j4adPxsHPk
+         TgVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755606431; x=1756211231;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0aRsy5XQ2A5B+bslStkieJadz5tU0dBZ7FndcLwnw2U=;
+        b=JJs9s/1G3PeUimoqWe6/0Qcy+Kst4EE/oUkupAdHwMOr2BG9Gxv0YZ6UliOWD4aHgw
+         fB+iliePPnuLfiWQMZmgtHBayZuNOvoHKiA4YSxgzwfj6JAV4Xl3cI/OXF1s3ZYo/anv
+         aVpWgQv25NOU3ofsL1v+pl0eqPOd8ihDIBNx6Znaz5FvA8FZjvemOUBMKEsUx4zvAFaT
+         tX8M6VA53LEtyZv7PjxN0S0aWVLNqErmlnqPJkhQscTvzNqEShS0j1PD04t+U+60znRb
+         GQ/i2NMBRzT9WK7H914x6JmM2Hao/i27u7UnEPX8lZfBV1O11B3gyYCPdwpTgClhLIo5
+         ec6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUhOiASNwRWnV6JNVORdQTNq8Ve+xyYJnCBFPNB8n/dMj7WBKpP9Rr5zQxCeZrKrcAFCpuWcIwSDA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKNCXoQK+7JqxuVSxZPPPis/rJMqVTgpzpwaHIm0cbTgu9Nbxf
+	vaubCrF4g2LgfZiRTLSPU8X0QyRSxd/9Fs0+jsr5oQRbfqCXc1RKgFR5dH0JTD39Z8nfbMmA/xu
+	5MLWUlRxs5IHW1zQw5oVaDN/geQbAPXsTok200Q/x7w==
+X-Gm-Gg: ASbGnctdYpOTHE6tvVbl/JIgOPMDL1/82zusFO3R24iSRzQwYoSLFByBpmsPFiHkpw1
+	YTrC8bKauZ0IR2V7p9qsdqhHAWjhwYUJhD8yEIN91thDxYhPo1oWbLC3FMsVnVvzeG89kk9DU0y
+	kjejCYoiqRs2ZbOhjAyH9Utp/GGZ7NfoGREtJVICQkMKCa3N5S2kuxr+MunenpmpSNgzC7Tv0i1
+	U5ElmA=
+X-Google-Smtp-Source: AGHT+IFXFo8PRVAZPJHb4bpkeQ2YcDNH/EmkqmsfRC6uXY5vV38JYto49FcBSLPE35RMZGuEpESlzVZZ88xarzeuPZ4=
+X-Received: by 2002:a05:690c:6911:b0:71e:325e:544f with SMTP id
+ 00721157ae682-71f9d4d9e28mr30801467b3.9.1755606431118; Tue, 19 Aug 2025
+ 05:27:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <2244365.irdbgypaU6@rafael.j.wysocki>
- <9104c434-9025-4365-8127-28014ddddc8d@arm.com> <CAJZ5v0iTaa62WGXCLcgiRyzcj2GBXmYcvLa8AtQZD5bQcxTw5g@mail.gmail.com>
- <3fa10040-7e48-4100-9d70-cbbac406abde@arm.com>
-In-Reply-To: <3fa10040-7e48-4100-9d70-cbbac406abde@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Aug 2025 13:56:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h1iT5XpeTUqfM2MSbZR_wMv7VaVxmEa4jEjtx+FH-XaA@mail.gmail.com>
-X-Gm-Features: Ac12FXx9O3eQ9klZMDQ-s7qeat7CVAoh2gFEca7fJvIQn3VLs0VBNSAESeHHS7g
-Message-ID: <CAJZ5v0h1iT5XpeTUqfM2MSbZR_wMv7VaVxmEa4jEjtx+FH-XaA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full CPUs
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>
+References: <20250718-rework-rpmhpd-rpmpd-v1-0-eedca108e540@oss.qualcomm.com> <4bdxuzk7gyzww2kckotihch6ljyiofs5gm6ntnpjst3crm462j@z6svwllfcqwk>
+In-Reply-To: <4bdxuzk7gyzww2kckotihch6ljyiofs5gm6ntnpjst3crm462j@z6svwllfcqwk>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 19 Aug 2025 14:26:35 +0200
+X-Gm-Features: Ac12FXwFv_kIb4glzzSCVp_TN4Z1jLpKOtJbRT8FLbTxebOvGA0iZC3qmVJuXmY
+Message-ID: <CAPDyKFq+J+iWgotRRTowpYYbmuepACHdOQAizrrDuzpp_if7eQ@mail.gmail.com>
+Subject: Re: [PATCH 0/8] pmdomain: qcom: sort out RPMh and RPM power domain indices
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 19, 2025 at 11:10=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Sun, 20 Jul 2025 at 05:39, Bjorn Andersson <andersson@kernel.org> wrote:
 >
-> On 8/18/25 18:41, Rafael J. Wysocki wrote:
-> > On Thu, Aug 14, 2025 at 4:09=E2=80=AFPM Christian Loehle
-> > <christian.loehle@arm.com> wrote:
-> >>
-> >> On 8/13/25 11:29, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> When the menu governor runs on a nohz_full CPU and there are no user
-> >>> space timers in the workload on that CPU, it ends up selecting idle
-> >>> states with target residency values above TICK_NSEC all the time due =
-to
-> >>> a tick_nohz_tick_stopped() check designed for a different use case.
-> >>> Namely, on nohz_full CPUs the fact that the tick has been stopped doe=
-s
-> >>> not actually mean anything in particular, whereas in the other case i=
-t
-> >>> indicates that previously the CPU was expected to be idle sufficientl=
-y
-> >>> long for the tick to be stopped, so it is not unreasonable to expect
-> >>> it to be idle beyond the tick period length again.
-> >>>
-> >>> In some cases, this behavior causes latency in the workload to grow
-> >>> undesirably.  It may also cause the workload to consume more energy
-> >>> than necessary if the CPU does not spend enough time in the selected
-> >>> deep idle states.
-> >>>
-> >>> Address this by amending the tick_nohz_tick_stopped() check in questi=
-on
-> >>> with a tick_nohz_full_cpu() one to avoid using the time till the next
-> >>> timer event as the predicted_ns value all the time on nohz_full CPUs.
-> >>>
-> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>> ---
-> >>>  drivers/cpuidle/governors/menu.c |   12 +++++++++++-
-> >>>  1 file changed, 11 insertions(+), 1 deletion(-)
-> >>>
-> >>> --- a/drivers/cpuidle/governors/menu.c
-> >>> +++ b/drivers/cpuidle/governors/menu.c
-> >>> @@ -293,8 +293,18 @@
-> >>>        * in a shallow idle state for a long time as a result of it.  =
-In that
-> >>>        * case, say we might mispredict and use the known time till th=
-e closest
-> >>>        * timer event for the idle state selection.
-> >>> +      *
-> >>> +      * However, on nohz_full CPUs the tick does not run as a rule a=
-nd the
-> >>> +      * time till the closest timer event may always be effectively =
-infinite,
-> >>> +      * so using it as a replacement for the predicted idle duration=
- would
-> >>> +      * effectively always cause the prediction results to be discar=
-ded and
-> >>> +      * deep idle states to be selected all the time.  That might in=
-troduce
-> >>> +      * unwanted latency into the workload and cause more energy tha=
-n
-> >>> +      * necessary to be consumed if the discarded prediction results=
- are
-> >>> +      * actually accurate, so skip nohz_full CPUs here.
-> >>>        */
-> >>> -     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-> >>> +     if (tick_nohz_tick_stopped() && !tick_nohz_full_cpu(dev->cpu) &=
-&
-> >>> +         predicted_ns < TICK_NSEC)
-> >>>               predicted_ns =3D data->next_timer_ns;
-> >>>
-> >>>       /*
-> >>>
-> >>>
-> >>>
-> >>
-> >> OTOH the behaviour with $SUBJECT possibly means that we use predicted_=
-ns from
-> >> get_typical_interval() (which may suggest picking a shallow state base=
-d on
-> >> previous wakeup patterns) only then to never wake up again?
+> On Fri, Jul 18, 2025 at 07:13:38PM +0300, Dmitry Baryshkov wrote:
+> > - Separate RPMh power domain bindings from RPM PD bindings
 > >
-> > Yes, there is this risk, but the current behavior is more damaging IMV
-> > because it (potentially) hurts both energy efficiency and performance.
+> > - Drop now-unused (after [1] is merged) binding indices for RPMh
+> >   platforms
 > >
-> > It is also arguably easier for the user to remedy getting stuck in a
-> > shallow idle state than to change governor's behavior (PM QoS is a bit
-> > too blunt for this).
+> > - Introduce generic bindings for RPM power domains controller
 > >
-> > Moreover, configuring CPUs as nohz_full and leaving them in long idle
-> > may not be the most efficient use of them.
+> > Two last patches (marked as [DO NOT MERGE]) should only be merged after
+> > corresponding DT cleanup lands ([1] and DTS parts of this patchset).
+> >
 >
-> True, on the other hand the setup cost for nohz_full is so high, you'd ex=
-pect
-> the additional idle states disabling depending on the workload isn't too =
-much
-> to ask for...
+> Ulf, please feel free to pick the DT changes through your tree so we
+> don't need to wait a whole cycle.
 
-Apparently, there are cases in which there is enough idle time to ask
-for a deep idle state often enough, but as a rule the idle periods are
-relatively short.  In those cases, one would need to change the QoS
-limit back and forth in anticipation of the "busier" and "calmer"
-periods in the workload, which would be kind of equivalent to
-implementing an idle governor in user space.
+I am worried this may cause a merge conflict for us, should we really do this?
 
-> Anyway feel free to go ahead.
+>
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-Thank you!
+Anyway, I decided to start by applying patch 1->4 for next.
+
+Patch 1->3 is also available on my immutable dt branch for you to
+pull-in. Please let me know how you prefer us to proceed.
+
+Kind regards
+Uffe
+
+
+>
+> Regards,
+> Bjorn
+>
+> > [1] https://lore.kernel.org/r/20250717-fix-rpmhpd-abi-v1-0-4c82e25e3280@oss.qualcomm.com
+> >
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> > ---
+> > Dmitry Baryshkov (8):
+> >       dt-bindings: power: qcom-rpmpd: split RPMh domains definitions
+> >       dt-bindings: power: qcom-rpmpd: sort out entries
+> >       dt-bindings: power: qcom-rpmpd: add generic bindings for RPM power domains
+> >       pmdomain: qcom: rpmpd: switch to RPMPD_* indices
+> >       arm64: dts: qcom: dts: switch to RPMPD_* indices
+> >       ARM: dts: qcom: dts: switch to RPMPD_* indices
+> >       [DO NOT MERGE] dt-bindings: power: qcom-rpmpd: drop compatibility defines
+> >       [DO NOT MERGE] dt-bindings: power: qcom,rpmhpd: drop duplicate defines
+> >
+> >  arch/arm/boot/dts/qcom/qcom-msm8226.dtsi |   4 +-
+> >  arch/arm64/boot/dts/qcom/msm8916.dtsi    |   8 +-
+> >  arch/arm64/boot/dts/qcom/msm8917.dtsi    |  10 +-
+> >  arch/arm64/boot/dts/qcom/msm8976.dtsi    |   4 +-
+> >  arch/arm64/boot/dts/qcom/msm8998.dtsi    |  16 +-
+> >  arch/arm64/boot/dts/qcom/sdm630.dtsi     |  16 +-
+> >  arch/arm64/boot/dts/qcom/sm6125.dtsi     |  12 +-
+> >  drivers/pmdomain/qcom/rpmpd.c            | 112 ++++-----
+> >  include/dt-bindings/power/qcom,rpmhpd.h  | 175 +++++++++++++++
+> >  include/dt-bindings/power/qcom-rpmpd.h   | 375 ++++---------------------------
+> >  10 files changed, 306 insertions(+), 426 deletions(-)
+> > ---
+> > base-commit: d086c886ceb9f59dea6c3a9dae7eb89e780a20c9
+> > change-id: 20250717-rework-rpmhpd-rpmpd-13352a10cbd5
+> >
+> > Best regards,
+> > --
+> > With best wishes
+> > Dmitry
+> >
 
