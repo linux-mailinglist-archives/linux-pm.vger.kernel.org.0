@@ -1,129 +1,152 @@
-Return-Path: <linux-pm+bounces-32628-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32629-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB8BB2C07C
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:32:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AE38B2C0BC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F88616DD0F
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 11:29:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A38EE3AB3D0
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 11:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C784322DA4;
-	Tue, 19 Aug 2025 11:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E463E32BF42;
+	Tue, 19 Aug 2025 11:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XvSX9ylx"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="po0PNZHK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F7A3451DC;
-	Tue, 19 Aug 2025 11:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D62532BF39
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 11:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755602991; cv=none; b=UmoXiIG3jh258zfsJ4xZ1JequYgpv15c3XckCbh53OTToBQ4W+GZm2IALjaGYkqlO7xlz0MO3up3g8vajfsnb+0+YVd6g2jqFgwD1cNgPBCm6vHL0a9OQvhUXB24l3qCWQdAZK/g10iA7yGxABBu9hlKqsemcdklRbABpyngE6U=
+	t=1755603622; cv=none; b=J+3UHbR8y7x+BKWl7nCy2AMM9MHNUz8Jkr4KYliygr4a197MXUQDkoIwvLYfRskIFxmywTjRy3Tj1i8GOoo42fRXzTTzNDLpuzvfnNHsj+fpSWgrk65m/I+hYdCuETXODbZPvZ6h6+kr1Tdtn+yTTtSkpYnkN4mjrDGg6VOBBxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755602991; c=relaxed/simple;
-	bh=iOQAUUkWtpHeg6m1A9TasiAatQSSFNAcczoKJ1xLehU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GUuGuADhMMW+RWOIMCwcQRm6LNqbawH3P9130bXdGgE3Cc2aJrv9S0IMML/34LG7rR/LIHeAyZ7GfHkGky/3xq03Qvam5QmbTsr4mwGo3F3Y+cyP6omQ0QOTbGTZ1eO2eD9CXmbNjXCL01qRZmKlKTw/Ikuz6mdxkvhxI5mn6t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XvSX9ylx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA25C4CEF1;
-	Tue, 19 Aug 2025 11:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755602990;
-	bh=iOQAUUkWtpHeg6m1A9TasiAatQSSFNAcczoKJ1xLehU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XvSX9ylxFTwKV9+AUTISf07LpWEBXw3u6MefsEVU+bOXCfrywnbpuWhipqssIJq9q
-	 2B2KQk50UucttqCKL1uwHyJHlGGAoLD8sP5OumgShzWIlM1ZrkHHCa0TXlwT20V6U+
-	 yaDC+3xCLSylPlg0GJbmBqiVyO8xfyaPFlgfX30mDz3RI0jHWxyVxsIcGWvBHw5aOu
-	 dnur2EcQU2EJxpAoFOa+Xgjd1ZOI/E6cBBn5k20Ppci/lhrBLHFS+AEA9N0ep/o+YT
-	 y7TSJcQoL0fCJK3bp6ynqT8jGRg1lORgs317gyq4ptzeg/H4IGXUjIcH+Bi0SxY91o
-	 CxWwf/XFPyiYw==
-Message-ID: <620427ef-ade4-43c8-b041-34b0365fb4c1@kernel.org>
-Date: Tue, 19 Aug 2025 13:29:45 +0200
+	s=arc-20240116; t=1755603622; c=relaxed/simple;
+	bh=zlUEJfpYmR4tX91EugAHvCUNzFBmNgD4zi112bP6hAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HV/MY8RMUkl9zfKf/Ascldb/P3gzjrqwh4+TK01z6dAPN1j85ok+8Z8Ho6R+0pl/a56aNfXRXd7ictTtou8onhr7y+gIP34KKUunHQnvysqOTk8Qmyvvp9IV/imi0IAOCrrUw/DaDPOtDaXvln0VLR5WR+xzFIkpowrYm1CSC+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=po0PNZHK; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57J90XIK028213
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 11:40:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=WUZCKijWjTUZrQrretf3iRXu
+	z+Doo912w7iRSB+J4eI=; b=po0PNZHKBpmN24jA2AxvSrxpb1J7ZjMYLOJM87yR
+	BryFWpsT0iAM3Vx8sOC2ZPGRRZ31x7ZNgroMgUzc7IgWCq1MBW0ZwxvAVBTjQ03d
+	JOMHYwk/DhZBLs6v5huI267841cKfLejxg1l1sS4yWJAyKV58VVyffFpy2YGpduY
+	7PAoLjWWpfTpyRMmuJXmyCWHGBktS052IvgGKyZDdqWnqAZSN6pZqiypK7XFdVZ+
+	ow7hWTgtpQY3TfQjjdX6ECS5pPSWWiRl+PVCqUAmykzp9QNpvMCtbqU9wTai4fPe
+	Yrm7xk/RBTKrVClh4TsG0wG4BlXgOVYYp365dBUsQzV1DQ==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48jgxtgj7m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 11:40:20 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b109affec8so149478541cf.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 04:40:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755603619; x=1756208419;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WUZCKijWjTUZrQrretf3iRXuz+Doo912w7iRSB+J4eI=;
+        b=tH8ojbKcEHYHV1nfPc/cfwjW+dyI9Pj6qZovsk/TJtbt5/PEjFqiGPYkYWIJINc6ZL
+         SF1hx4jAu1HrazshlZM1WwpdNjBwl1lzpa+Z7KaP4u+wWJAr0INNjTpQgfPiawJjstrA
+         5eGpoObelee+rKexVXEY1UdngQ0ex5fX9x631S+8nn4QxP+UGZsnytFG+NANaivuOPmA
+         OGKewZ5zrPGtdXzmMIWWaNHm3FEBWwmibaq3CTZfBd+n3uS2mVS+ZAjgariHBlsZY15h
+         EnLQQKRI9oPLZ6BH3Ls6kOMZcOgz5CnZlMKJSSm6O8taLWGHNbPbwVW9Y1doxqSgrnxn
+         i2WQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDf9fHhzEefYnRBiYxyUMIUi2xevWxulJQW3DPpsusxlAxMnmdsoEDJiNugzIeDzP3KZVszPYKwg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjVA4Wpf9jXmjL5FaqfMkRDmb7lDM+CVnAuwzYWo/aJLDWknl3
+	vicGEECC6td3tOJ6rA7ndGxbvnAhZY0FH9NRxnGMEXUGJTIB1s3RXAPMD/eU+FeG2eD/vmw7C/U
+	WIV5zCLLXfyg8TQErZl6bXyXN49lBc4N/yecS6Wc1rbbfFFqzDjc5WoXvxzF1Dw==
+X-Gm-Gg: ASbGncuVaiZVWQQkOmm3fNyDKm+/mKR9jEau5IFn1F7/V/ZrWl9s2MxOVW3VCA7vvx1
+	z4DEA5ADYxa40NeptCFbtBi+231Reixl+Pujq1r6/0cfT8fdbwLXxqNJeVhvsF4KNo/cS1vnj9H
+	Xjky8HUV5IepQDejrx9mAK//5ZCut3YehDo48MZZVpXjk+dT8dHybBvkeuKYR1k/uFV4GWvblOO
+	ZM6P51h3aY2gzGxdMr4rlCYGySAxUt4AUQel3C66ENmKEcMjKXscFlHC5fapBojlnPdIkI4u3JL
+	S3b3TYnJ088ytJ4KL0iaNB3zSP12ldkHGvdZAgKmmnB7RGfqGCJR0P9ke2XkuntD3voK36Ue0E+
+	nrxQNSR0DzePzcMyRKKaFBDg/AN806Q7wRqydHQ2moDRP54wtG6kq
+X-Received: by 2002:ad4:5f0b:0:b0:709:650b:914c with SMTP id 6a1803df08f44-70c35d30e23mr22234246d6.40.1755603619220;
+        Tue, 19 Aug 2025 04:40:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFoFttiRUeNCxJ8KFAt4cgTqEKpI9DjnbmEteHB0Sc6Ed6p67fuNf3H2ooC03R+rgzCqqtrhQ==
+X-Received: by 2002:ad4:5f0b:0:b0:709:650b:914c with SMTP id 6a1803df08f44-70c35d30e23mr22233866d6.40.1755603618669;
+        Tue, 19 Aug 2025 04:40:18 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3cca16sm2088342e87.92.2025.08.19.04.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 04:40:17 -0700 (PDT)
+Date: Tue, 19 Aug 2025 14:40:15 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mike Tipton <mike.tipton@oss.qualcomm.com>,
+        Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
+        Imran Shaik <imran.shaik@oss.qualcomm.com>
+Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: qcs615: Add OSM l3 interconnect
+ provider node and CPU OPP tables to scale DDR/L3
+Message-ID: <le3xcbnebjgkhzmy2xhicnn33prstewg2wymwc2nfjombxgg3z@ucsmlowzzd3n>
+References: <20250819-talos-l3-icc-v3-0-04529e85dac7@oss.qualcomm.com>
+ <20250819-talos-l3-icc-v3-2-04529e85dac7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add OSM L3 compatible
- for QCS615 SoC
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mike Tipton <mike.tipton@oss.qualcomm.com>,
- Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
- Imran Shaik <imran.shaik@oss.qualcomm.com>
-References: <20250819-talos-l3-icc-v3-0-04529e85dac7@oss.qualcomm.com>
- <20250819-talos-l3-icc-v3-1-04529e85dac7@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250819-talos-l3-icc-v3-1-04529e85dac7@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250819-talos-l3-icc-v3-2-04529e85dac7@oss.qualcomm.com>
+X-Proofpoint-ORIG-GUID: G8HLH5fPot6satwO0hKcBHXCPkFWlT96
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE2MDAyMCBTYWx0ZWRfX7HQBr8PjDnf2
+ qp+N0e0mcC5SyPuk14tT1Km+S9ed6/c+4Ayr4FdmRsY7c6CvaqPp8Wa/UIkZR3Ybn5wP8vHMbbM
+ ciXdYCrtk+UACT8NOln/+JO+jBnNLgkGhCYYssskNLUnsJ0YQbNX3EXpM7q3CFZzYwnoLNFJATV
+ bdTHbUZsQ8dl8Sg0tzxEl1PKvy3w9JDUfoUtP2R4W7TddpfV3Dfvb04FHHgabKLvwgicyAA9gQt
+ 0HXWsZNXnvJe0hoM2rzw2IyBcJvqZn4qA3Gm9gRq/nQmZVFhaJZJG3MvJs2A1pRxihqAdjtc2x3
+ kbxVlkKcR5/ukX+50LTshl6VNf3hz96eF4XiI4r79sN0qL8XndfxOvV4jBe8b7msSZysl0kFgws
+ 8pkq5brm
+X-Proofpoint-GUID: G8HLH5fPot6satwO0hKcBHXCPkFWlT96
+X-Authority-Analysis: v=2.4 cv=V7B90fni c=1 sm=1 tr=0 ts=68a462a4 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=cd8PGyEpGUmkB33UepYA:9 a=CjuIK1q_8ugA:10
+ a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-19_02,2025-08-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 phishscore=0 malwarescore=0 adultscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508160020
 
-On 19/08/2025 13:24, Raviteja Laggyshetty wrote:
-> Add Operation State Manager (OSM) L3 interconnect provider binding for
-> QCS615 SoC. As the OSM hardware in QCS615 and SM8150 are same,
-> added a family-level compatible for SM8150 SoC.
+On Tue, Aug 19, 2025 at 11:24:47AM +0000, Raviteja Laggyshetty wrote:
+> Add Operation State Manager (OSM) L3 interconnect provide node and OPP
+> tables required to scale DDR and L3 per freq-domain on QCS615 SoC.
+> As QCS615 and SM8150 SoCs have same OSM hardware, added SM8150
+> compatible as fallback for QCS615 OSM device node.
 > 
+> Signed-off-by: Imran Shaik <imran.shaik@oss.qualcomm.com>
 > Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
 > ---
+>  arch/arm64/boot/dts/qcom/sm6150.dtsi | 148 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 148 insertions(+)
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Best regards,
-Krzysztof
+
+-- 
+With best wishes
+Dmitry
 
