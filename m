@@ -1,332 +1,257 @@
-Return-Path: <linux-pm+bounces-32609-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D58DB2BB98
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 10:19:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03779B2BBBA
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 10:25:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2C8E1B66644
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 08:19:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DF4C3BE33D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 08:23:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97E8311587;
-	Tue, 19 Aug 2025 08:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C973274668;
+	Tue, 19 Aug 2025 08:23:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HNmegieV"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="IRwCcg9F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011049.outbound.protection.outlook.com [40.107.74.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083D926D4E9
-	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 08:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755591544; cv=none; b=fKjzkZWo9RNYjY2+uKIuE6BAPky1t2ab57EGSp60o+YsN6aKaawoEgPsmaKyaGTekiKeUkbKs0B6131s2jvpExDBWtz7jKt2c6M4XMlUXXQHdlW3mj/71nEe9Yr/VSR1H5pnPfo82/7qsGFt+pNxbzp8gaJd1yG4lSPlL7U/COg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755591544; c=relaxed/simple;
-	bh=7mdmCI3pE7SRxl1wlksDJT3J22O8ixrwa/mzwPyZYyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQ2w3ZU0gh7zZaD5LCv5lo/sGz4dH3g+DF3jmhUa7LOOefZ20TlVxxw/BlC66rUopQhHUlXybMb8Ip/YwiyWnKZm9lgAfi0x0pn00sa4Ff/ryqJJ6/oIEU/HqIUu+VYbndUbocBbDlMJ1fBXZnWrNq7rsFu4nFslStC20Re9QeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HNmegieV; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2445806e03cso49055085ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 01:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755591542; x=1756196342; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTeQV7lwJJxjZljBmKtx6Yk8mSFRaLi85Z6cMQKmB0g=;
-        b=HNmegieVJm8NlXlZsLOJVpsIhuX1qgcx5wsodofvTThCtdinCcBam4JehhVzwRxwoN
-         afqNc3+3MV0HaEm1n4iLqlCROYSl3tjoY/Nt3J/Smxs79Fd0M1u6rfjZN08kaDeeGO0/
-         GWBQ31SKGws8ttbkGlB7MXz5m2eK82g48Nu/aP/WMxmviAjTzQWAsT4hhD8bonNarh5B
-         xSCfkGwodeArXbxxGwVPYYFKMEjINlXHrWkf+dnNDctCO6gC9+gI4/EqN/CMNC+628S6
-         6QEjXb2hrc3fMyjxS/udxkDL3sxtjmU5trzfryZ9pfj9F2IGQmFYqG7GdqG7vi4bsEs8
-         UebQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755591542; x=1756196342;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qTeQV7lwJJxjZljBmKtx6Yk8mSFRaLi85Z6cMQKmB0g=;
-        b=m5DoqMLxOhrWWoVyd46YHQuAEoKuSHLIVKyl0xLuDk+GLtjmGepDisg+3aRM/+khv1
-         dcT+6pfrAh2/UgxGyyJzFlIqthZk5LjtragMces56O1kD05wu0ctPOR1P66FOwySYt+B
-         8jQPufVhweEX5JtqiKZq4UBSepl4EVw3gKyZm5FsNIvtXnN4QoTl+/a/AGL8DdvMjUET
-         /MzHwjgH/+H/JR6D0PxYrlZSCkBSUe3OLG9VlFHjEF9wISYSo5Bio+3IEUFesFwnUz4Y
-         OmzDumBYFQazfXtQXxRdfxusQ83f9xzjSpLVmRja95ZddjCkc0V3BKVWGwFioOmUD3b3
-         bVhg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxlCNQN6Oh/4aUARu/4pgJ+xl46L07CbXwrltpsDQDEeVJgBLTUgSiGqZvbOGeOr4iC0upx4D/ZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQwcR1FI+m7sNTY4+x4dhtFWX4sp8u0MSDdaKMproBvCXlFPwl
-	1Od5KC1f4Yvdy1/f6t12m0tIIsxyCvswmfw5wA09ksIKYYvL3qiHThN6r08AdMhXtlCvxx7bfRB
-	eHynK
-X-Gm-Gg: ASbGncsi14LVlbYOozE9roiHR/mYafRitA6dKZKthRBgVFFnBcz3x1kgMcQp8BJ6Pnl
-	mOEs/BX5w1ac9XrewpnsxzO9PRq8GptfLDuiuor22MZL1t7WpbQNM85JKd1RoEfTaA5jg0/RZbr
-	Dgl0wbQ/tlCFckLhugjkXC1wHAebDSlWbEoSS2pM6LuOoXrDsjghV4hQNtPaPVKpAYVYy3RN4AS
-	WRNFjKUSnUcVIeaOqZZFCB+M3d9nbxROAHyMJue4viUA/+gT9IKbaFWMBDYQoYBx+CkN+wy5CoL
-	vrxVAovuhr6OzCy8jD7yKyjTGHpndJmIFgiklPBbXpGGUauJbvRLIrNgrBuY0mXjPqsywtrRqfM
-	YJqJVN4U7f2AWkvKUCWpDY8N8
-X-Google-Smtp-Source: AGHT+IH7e2rkNmbirPUr5cb6RvIu5W5Vnrp1govzDEs6PM6/amKHuOzA0EBh8ZNtgUjYiTgESR1hqA==
-X-Received: by 2002:a17:903:2443:b0:242:8a7:6a6c with SMTP id d9443c01a7336-245e02d7629mr23754105ad.17.1755591542312;
-        Tue, 19 Aug 2025 01:19:02 -0700 (PDT)
-Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d50f71bsm100890425ad.80.2025.08.19.01.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 01:19:01 -0700 (PDT)
-Date: Tue, 19 Aug 2025 13:48:59 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] OPP: Add support to find OPP for a set of keys
-Message-ID: <20250819081859.kz7c27d6c77oy2gv@vireshk-i7>
-References: <20250819-opp_pcie-v3-0-f8bd7e05ce41@oss.qualcomm.com>
- <20250819-opp_pcie-v3-1-f8bd7e05ce41@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4EC1FC0E2;
+	Tue, 19 Aug 2025 08:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755591836; cv=fail; b=Q9qDX+FUrE1VTfIipTSIZVAxkBZMgZuHbhAHxFJKH2bY0jVWMrOtsZuwFep2rNU5hG+Fn8vHYq+ZDXLhzp5iN2AD55zDRJD5cqOfeU5/gBlo/S0gQpZe1MBQueHaDaCuGDnj9e1x+1i0AHcR/HRIJ29f+bGLyXT1ZtH4QBn8vR4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755591836; c=relaxed/simple;
+	bh=7RVWtnvsPoTIEKxVsaImgF28O4adfCO8J6/KvOHMpWc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=aRGz33NIrgt6bMVjZ8ufIZTEMt7Zxv90VnRm86pHyjLIY7cmIFJlEHWCauoCSbCi8m48lMKVc+8kmdq26ngmLmSBSXnpfvURl0xicSh07dDdaZuypAi9HE4b9VCIfEwrLH0zCV1RCrSJ/QOTlitKUvdXzBd+ZSCnMrgDPRqwPQI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=IRwCcg9F; arc=fail smtp.client-ip=40.107.74.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UNwmSmSZ5HGyhV8SS14J1eAed40WEVIPFyTWS80TycoaDeAY7LylQSTrDXY+Utu7SC+Ul7eh71PpP596dczuqD0TUN3kDfAta6LE6XqlK9/2fu+BYJk5a8iDnPgLLu1NVZg1psnKAEfUvAGPD5s54pg94hZulRkZdKEt0saQBGTalTAnTyJr5xP1gXefXUYo3xu2sECdHYB+E8+M2ZHkqNdzOHk1xInReCNY2HoJu/qw5LZwxUppVpK8LqK3OEs4pZU426e/bs/7Yq3rULeSUWckZsktFIE2kiczKt3aDGJzb39E5eATiBVqkapdw7DGc7qsHT1nhRvbH2zKujHuew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7RVWtnvsPoTIEKxVsaImgF28O4adfCO8J6/KvOHMpWc=;
+ b=kDp/dRt3AgeN7DNnMcszkP7Vv/xs85YJm38VGVpA62P5lgXMozOWedw18IBA+Z9DZybuwm61FpM5+mVK8Bz3b6IHGtxuOnKph9V7ZelKC0Yqpvehv5La6TczaJlmdQ9c0G6Rh3YwZ8MPJGqW7Rg7ipKjp1qE2RcZgIMu699LgLp/jIyTJw57SOJbL6KMqAlKDmAduqaRRmYxZKnzfrVSVegqaTgygYsowN8T68QoUb+od8HnDDZ4CTn78tK1fpxOaQDjNUnphtowvk64UXgj7eSlOFoncoOn6PXHczNACyENd55SdBhvSK9DR/NuYDeiZPpRWKUebGsSWXMGm1hkrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7RVWtnvsPoTIEKxVsaImgF28O4adfCO8J6/KvOHMpWc=;
+ b=IRwCcg9FvvBMTf/QXozlibOMww/iHTTVnBlCZ0fp/qBnGMFW9BUhDAaMK9k4RNJInjU3JNoBnrYsdmiXsPK6UglVaz5VH0yNO17jMNhq7ofrAAh9UHNW7M53Mr7G7TGd+laR+3gkhSHysOh7x3kgsxhJguGsajFaWcaPL+HPQDY=
+Received: from OSCPR01MB14647.jpnprd01.prod.outlook.com (2603:1096:604:3a0::6)
+ by OS3PR01MB9659.jpnprd01.prod.outlook.com (2603:1096:604:1e9::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Tue, 19 Aug
+ 2025 08:23:49 +0000
+Received: from OSCPR01MB14647.jpnprd01.prod.outlook.com
+ ([fe80::40e:e798:1aea:ca82]) by OSCPR01MB14647.jpnprd01.prod.outlook.com
+ ([fe80::40e:e798:1aea:ca82%6]) with mapi id 15.20.9031.023; Tue, 19 Aug 2025
+ 08:23:47 +0000
+From: John Madieu <john.madieu.xa@bp.renesas.com>
+To: geert <geert@linux-m68k.org>
+CC: magnus.damm <magnus.damm@gmail.com>, "mturquette@baylibre.com"
+	<mturquette@baylibre.com>, "sboyd@kernel.org" <sboyd@kernel.org>,
+	"rafael@kernel.org" <rafael@kernel.org>, "daniel.lezcano@linaro.org"
+	<daniel.lezcano@linaro.org>, "rui.zhang@intel.com" <rui.zhang@intel.com>,
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>, "robh@kernel.org"
+	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "p.zabel@pengutronix.de"
+	<p.zabel@pengutronix.de>, "catalin.marinas@arm.com"
+	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
+	"john.madieu@gmail.com" <john.madieu@gmail.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Biju Das
+	<biju.das.jz@bp.renesas.com>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v7 3/6] thermal: renesas: rzg3e: Add thermal driver for
+ the Renesas RZ/G3E SoC
+Thread-Topic: [PATCH v7 3/6] thermal: renesas: rzg3e: Add thermal driver for
+ the Renesas RZ/G3E SoC
+Thread-Index: AQHcEF1M57cYRdAdr0+ic5VHjE8Tu7RpmvsAgAAIZIA=
+Date: Tue, 19 Aug 2025 08:23:47 +0000
+Message-ID:
+ <OSCPR01MB1464799D0293902681D74E03EFF30A@OSCPR01MB14647.jpnprd01.prod.outlook.com>
+References: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
+ <20250818162859.9661-4-john.madieu.xa@bp.renesas.com>
+ <CAMuHMdUGmbn1H2JV17+9gTYBbnEOmoR9vUevWVx5BTX973MfoQ@mail.gmail.com>
+In-Reply-To:
+ <CAMuHMdUGmbn1H2JV17+9gTYBbnEOmoR9vUevWVx5BTX973MfoQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSCPR01MB14647:EE_|OS3PR01MB9659:EE_
+x-ms-office365-filtering-correlation-id: 21201bae-2cfb-4803-ff24-08dddef9b853
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|1800799024|376014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?aWUrSWpza1U5UEhuUTg4R3hrdG1vbVVQSHB1Z2o4aGJvRWk2ajhtV1hnNE9y?=
+ =?utf-8?B?L2FKdjRwZGRSR0N1d2YzL2ZCU0ppYjNFNHdRcVdxRlhvdVlMZ3dsR3hBYXRu?=
+ =?utf-8?B?eHhaS1laQlRCazZERGx5d2RWdS9hTVFMUGVCMDR0QmxJOTBtUDRGbm04WTBt?=
+ =?utf-8?B?bVdHSnF5K2h0NWRhNFZLZEJwWmpjWlFsU2MvbWJnZFpvcTRvdGFhcDJiMHFI?=
+ =?utf-8?B?bU5tVFRzVStqSURhU0xVNzdPVVhxb2duOEdZOU1PeXB4R0hEdGxBRUM2eEto?=
+ =?utf-8?B?VCtlcFBoYnhGTi9kYjd1UmhZa2o4c2ZlTS9tUzBZSlQzRUZKLy9IbzhOQ2tJ?=
+ =?utf-8?B?Sk1nUFNBajFHUy82a2pCWm1RaEpaL0NtRGlZRXpKSVdZc2FVTk5qS3FJRzlD?=
+ =?utf-8?B?NW9OUFRoMkFqdFI4dFRENzVpVnN5ZlZjU1dpcWl5bEYyN2dwaXZ3T29GbndX?=
+ =?utf-8?B?bTluWlFUbmE5LzNRL1IvRzNGKzJBb3V5azdndWdGVldnb3RyZDZzV2t1aWlr?=
+ =?utf-8?B?d3NURkVlcU0ycEFjY1Bjei9waVp3LzBCVlZRZjJrZUZvQy9vTDliWHh0WFZl?=
+ =?utf-8?B?NDViZytpaXh5eDBWSjBNZ3hLa2o1T3pBTE44VHdOSFpGR09IUmdRK2lUT2xG?=
+ =?utf-8?B?ZHJ3YStXY28wa3hUekhjN01QWlIrZEZCM09Xa1UxeWx6SDJRYVZJVjRranQ5?=
+ =?utf-8?B?VlE3Z3NSRFBlTjdOVU1hQkJSaVRSSitHQ2Q5azk0NFZpb25iMHFPcGR4SEN6?=
+ =?utf-8?B?QVFnb1VsS2g1QjArQis3Q05BTTd3NG83eUZXZDRBaGRwaEpkN3pIanBQRWdJ?=
+ =?utf-8?B?dklsWEVGMGJjeitkd0pEdXNkUFg1ekpLOEVyRjdKQy9iMnN2Y0xTcXVyMUVo?=
+ =?utf-8?B?MVMrYStLRHZwOUxDVXRlSmFFVmJmblVsNFFDUVdIZ0RjL0NZeW1UZEp0S2Jo?=
+ =?utf-8?B?MEdEY1E4S2tSeDNydGRrOXA1aFdVa0MrODJMZU5sdmd1WlQyYWZ6MmNjcC9K?=
+ =?utf-8?B?aUR0R09oWStobFk0VmFONno3TmE3cmxoSzRjRE1icUdQajJiM2JVSm8xbUs0?=
+ =?utf-8?B?WW5VdlVrSHA5QTZGSFN5LzlBNzlLUEZEcXl3bXl2aHc4dEVnNUJVRXFPTDRF?=
+ =?utf-8?B?d0hoeDNSMVkyWTMwdnlwUjY2WkZuTDNYSm9XKzd6bWFwOGlnczNZaUM1N25B?=
+ =?utf-8?B?Vmd0cXJuNlIzU2F5cmR3U1JjUVhSdjhGTmJ1czRPMFBJNStoVXdqQUhRYTR5?=
+ =?utf-8?B?TlJVZmZ5cVJlaXhjZHY5c0p6TEtadHVpMU5aSUtrbGRNY1Q4TERDUFE2UThV?=
+ =?utf-8?B?cGRlNUlQZTYyZG9uNlpSUC9OR0c0enozaHcxR244WkZRd0MvUHVWYjExbC9D?=
+ =?utf-8?B?bllVdEQvUXVDeTlRWVhHUGQyaEZtQjBSN1N3MnhURnZOM0U5ZElGYXpoRUF2?=
+ =?utf-8?B?V3dtWVRrZUV1azEzWGxUMFZVelpxS1ZNYTB0Mjg3bGRwV1lFclhnbjk3TnRG?=
+ =?utf-8?B?Unp2d1BjdEdqUnpaRDNkdHE5Z0Q4QzN3bzVwT0tNZ3NaeXAralk5MURseHkz?=
+ =?utf-8?B?cnBTaXZjN3dES1NoWEpXcEdNRS9rNUNaTmlJSXhjSWlsTkp5cmowRGsxMHBw?=
+ =?utf-8?B?ZEJLWUlsRGxLanlBNEhNQ3dFdC8yTU1jK0VjZ3Q2a0hXS3hyVE9UVDdzSUtG?=
+ =?utf-8?B?RXRlQkpMVk5tM2Q1eER6dDd3VlBmOUNXd3d3Z3B3NGxLcEtvcmpLMHlJTnhz?=
+ =?utf-8?B?NDZOZkZvSW9JRE9ZNU5NaUNVc2JBZW9kblAyUUxUWEwrSC9sOXl4aSs5TmtE?=
+ =?utf-8?B?SVp0dHI1YzFjK3Z4SHZWbEdjSkpNamp4aHgzNWY0b3I0UGVlN0d4NXFqenpt?=
+ =?utf-8?B?WXd2alFvTExLendCWGJmR1VxV2RzSVpMRTdzWlh0b2Nzam1FejJDTXJ5Rk9z?=
+ =?utf-8?B?TVVuVUJ4Njl0MDA5c3NDcVV2dEd1dnRJR3lHQlkvQ3cwbVY1dFVTelNPa1FO?=
+ =?utf-8?B?MFErc0xOL0V3PT0=?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSCPR01MB14647.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?N3RseTliWTJqeUhaU2dKckxBS2ZWS29pbnp0OVh3aHVMM0xOZGhzclFFbWhu?=
+ =?utf-8?B?cm11UUd4MU9DWS9LZE9OUHRJV0VoZm4yL0Q2MXUwekZrREN6TEF4NUh5akVu?=
+ =?utf-8?B?bFBTNlNlcGxWdlhvR3lrdXppSWxvYTdxZmt2NHdBbDIvelpOZHVwTnVIRUE3?=
+ =?utf-8?B?bnJLczRhQytDZGZIRFlTYS9RNm1JSno5UENCWE1idlVUT2RyZTJtVFBPdFpF?=
+ =?utf-8?B?eUtUaC85aEprM0lvSC9RZmcrR3k2RFNseW43Rm5rdmhQaVoyN2FPck5MK2lM?=
+ =?utf-8?B?cHY3ZXRveVR6NS9laEVCTlNSR2JsOGUrc3lTZ2JGcktLZDM2ZXZWWDBqMGpz?=
+ =?utf-8?B?WG10UUkyUElWSDFoUnlGbElseXV1ZTdHd0lQN2xGSitsbXI2ekE5aHZ4eWMx?=
+ =?utf-8?B?U2FYZ2JXRGhqd3N5OVEwR0xaSmxuMEVwbHJqUmhsa0NmT2hDdmo5TExJSVJF?=
+ =?utf-8?B?OFpteWxPUHgzQ1pvd3NCcnh6MTZWSHVtOEV6WHAyMk51Q2x3dWpOYmtwc2Yv?=
+ =?utf-8?B?VFFLdFUwNkRkb3FTQWs5dGFHbGw4d1pxdUhWK0Zjdzl6QXFINElxNTJscVF4?=
+ =?utf-8?B?OVZucTc2RUFiZGg1ODZxa1J6emxTdS9MSlBySTh1QyszZTl5UHl6VFN1TFlT?=
+ =?utf-8?B?Wjk2Zk9jM2VwbGpoSWd6Tm5KZ0h2UFZrK0g1eDRCaG1SODl1KzgrQkFLNUcy?=
+ =?utf-8?B?VXg4Zlg3ZWdRZXJjc1B5WTVmb0c4cU45Q1RiM0ZoN25XRXBxWnRidzNxSUdL?=
+ =?utf-8?B?bjlGaGxQS3JxNlJYS0RwMllZc1JzeXBRbWxlRVE3d3ZyVWE1Vzg0N3dSdjYw?=
+ =?utf-8?B?SStrbjEyYXBSTm4ycTA2USs2NnJvZWNKRkpxOVNHTzA5aFp4bkZVV2dwN1pj?=
+ =?utf-8?B?MjN5RVN3VWJUUCtkUjRQaHJrZ1ArVWJOUjc3MEZ2TXBJSlc5ay9xQTNYa3Rp?=
+ =?utf-8?B?bDEveThKSUYyYThaRXFpYUJqYXNBZ3NKL1dZdzNuYWlqQTUzS1c3eGl5UUx2?=
+ =?utf-8?B?alU3Vm5Xb3k0MW0yTTJGZ3h6YVlYdlE3bHkzbEw2eFM3NlZvd0E1QjFkcEMz?=
+ =?utf-8?B?YlNRam0rZnBnV2gwL0Qvc0ZtQ0pjTDhEQWpmRVo3L2VhWUlFazZtdjJ1dENF?=
+ =?utf-8?B?TE1OL2ZCWkE5dFRjV0Vqd09udmk5K1VMM2cwZ3RjQWhXYWFyZjAyMjVrbGZ6?=
+ =?utf-8?B?aWZnWURFMXJCdlRHTXJYU2RGQStJQmNBYUg5NGlZbGpaSlVlOVhlZVdUYy94?=
+ =?utf-8?B?Vkhob2poUUtLM1E5LzdOY1RqUGRsNnlPSjZBOWFOREJpWDBsRG5WdWtwcDRE?=
+ =?utf-8?B?SEZGL09EMHdDRkxkUjR2aFozMHhZdDd5QUp1RCtsS2RvK2I2bVJLVXhGTUpC?=
+ =?utf-8?B?aUhiK1dlblBtSG8vQXJsWDF0MVF2Z0pLenc3UExveUxROVVtYndsQ3lwMkxP?=
+ =?utf-8?B?UGUvazhjaTFFbDdxN2wzL2s2Z3FRTDN3dzhaTHBVUXl6M2lNS1FyOGUyNUZV?=
+ =?utf-8?B?eDc0d1lKMnZqTWtERWJFQzhvYjBsQ3UxKzdZbHlHTDV1VUdlN2pKUHZPWERz?=
+ =?utf-8?B?T3A0VWFRRVA1UUpWVlNWNUY2SXlnYVh1S0NWMG12eW9wV3hZTi82RXlocVZV?=
+ =?utf-8?B?OC9oQ1o0dFdvSEJOR3BRakdiWHZJMDlQVk9udXN6R0puS0xaK3ByTUFMYmE4?=
+ =?utf-8?B?Vzg4YmtGWEtBOTdMR25ydXFoUFNNR3lBeHYrQm93VGRnSGI1cjl5QWVmamp5?=
+ =?utf-8?B?OU80ZXlacmpEU2hSNUgwMEh5QURoc1BGRkhaR1BSYWRzVXE4Q1pwdDBraGZU?=
+ =?utf-8?B?UlM3RVZSVVlINk5kQWJGbTFHMCtWRC9RcGpyS0s0dkJlMnNuS1c3dk9FS3My?=
+ =?utf-8?B?RWVJRTJMb1Via3dnKzk0eTB2UXJPSFNCZDV0TXkya1lWT2F5NzVWR1RKQjlB?=
+ =?utf-8?B?b0c5NndaVFkwdGpjMFZ4NVZFdzVZTjBlZkNXekVSVVh2eHQvVDNvalVLTDAy?=
+ =?utf-8?B?SlJRcElMMm1veHJzbjlHTU1CMWdCTFhtdEhxakNSOW40Tit1QTdiUVBKUnZB?=
+ =?utf-8?B?RGZwalpDK1dUdUtaWkFTUFk4RXpzVHl1LzdFWWR6dUl3RjNmRTU5U2ROdXdI?=
+ =?utf-8?B?S2w1Vlc0eXZ3RjV1RjFCWHlENk5paGZNdExDY25lL3FjejlHM1BkdS9MSXBz?=
+ =?utf-8?B?UlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819-opp_pcie-v3-1-f8bd7e05ce41@oss.qualcomm.com>
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSCPR01MB14647.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21201bae-2cfb-4803-ff24-08dddef9b853
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2025 08:23:47.6607
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: d5OOH1ACGGcw+c69NFB1eybbMt8dPwAqf3LUQ+VGoh0ny01YXNRS5o2DXVKRsNrgQ9f+OlYphCKvkbuS0fgwWR9AXr0f9cU7DpE0OjfySNk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB9659
 
-On 19-08-25, 11:04, Krishna Chaitanya Chundru wrote:
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index edbd60501cf00dfd1957f7d19b228d1c61bbbdcc..ce359a3d444b0b7099cdd2421ab1019963d05d9f 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -461,6 +461,15 @@ int dev_pm_opp_get_opp_count(struct device *dev)
->  EXPORT_SYMBOL_GPL(dev_pm_opp_get_opp_count);
->  
->  /* Helpers to read keys */
-> +static unsigned long _read_opp_key(struct dev_pm_opp *opp, int index, struct dev_pm_opp_key *key)
-
-Move this to the end of the list, after _read_bw() i.e.
-
-> +{
-> +	key->bandwidth = opp->bandwidth ? opp->bandwidth[index].peak : 0;
-> +	key->freq = opp->rates[index];
-> +	key->level = opp->level;
-> +
-> +	return true;
-> +}
-> +
->  static unsigned long _read_freq(struct dev_pm_opp *opp, int index)
->  {
->  	return opp->rates[index];
-> @@ -488,6 +497,23 @@ static bool _compare_exact(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
->  	return false;
->  }
->  
-> +static bool _compare_opp_key_exact(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
-> +				   struct dev_pm_opp_key opp_key, struct dev_pm_opp_key key)
-> +{
-
-And this after _compare_floor().
-
-> +	bool level_match = (opp_key.level == OPP_LEVEL_UNSET ||
-
-Why are we still checking this ? You removed this from freq check but
-not level and bandwidth ?
-
-> +			    key.level == OPP_LEVEL_UNSET || opp_key.level == key.level);
-> +	bool bw_match = (opp_key.bandwidth == 0 ||
-> +			 key.bandwidth == 0 || opp_key.bandwidth == key.bandwidth);
-> +	bool freq_match = (key.freq == 0 || opp_key.freq == key.freq);
-> +
-> +	if (freq_match && level_match && bw_match) {
-> +		*opp = temp_opp;
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static bool _compare_ceil(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
->  			  unsigned long opp_key, unsigned long key)
->  {
-> @@ -541,6 +567,40 @@ static struct dev_pm_opp *_opp_table_find_key(struct opp_table *opp_table,
->  	return opp;
->  }
->  
-> +static struct dev_pm_opp *_opp_table_find_opp_key(struct opp_table *opp_table,
-> +		struct dev_pm_opp_key *key, int index, bool available,
-> +		unsigned long (*read)(struct dev_pm_opp *opp, int index,
-> +				      struct dev_pm_opp_key *key),
-> +		bool (*compare)(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
-> +				struct dev_pm_opp_key opp_key, struct dev_pm_opp_key key),
-> +		bool (*assert)(struct opp_table *opp_table, unsigned int index))
-> +{
-> +	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
-> +	struct dev_pm_opp_key temp_key;
-> +
-> +	/* Assert that the requirement is met */
-> +	if (assert && !assert(opp_table, index))
-
-Just drop the `assert` check, it isn't optional. Make the same change
-in _opp_table_find_key() too in a separate patch if you can.
-
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	guard(mutex)(&opp_table->lock);
-> +
-> +	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
-> +		if (temp_opp->available == available) {
-> +			read(temp_opp, index, &temp_key);
-> +			if (compare(&opp, temp_opp, temp_key, *key))
-
-Update *key and do dev_pm_opp_get() here itself. And same in
-_opp_table_find_key().
-
-> +				break;
-> +		}
-> +	}
-> +
-> +	/* Increment the reference count of OPP */
-> +	if (!IS_ERR(opp)) {
-> +		*key = temp_key;
-> +		dev_pm_opp_get(opp);
-> +	}
-> +
-> +	return opp;
-> +}
-> +
->  static struct dev_pm_opp *
->  _find_key(struct device *dev, unsigned long *key, int index, bool available,
->  	  unsigned long (*read)(struct dev_pm_opp *opp, int index),
-> @@ -632,6 +692,46 @@ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_exact);
->  
-> +/**
-> + * dev_pm_opp_find_key_exact() - Search for an exact OPP key
-> + * @dev:                Device for which the OPP is being searched
-> + * @key:                OPP key to match
-> + * @available:          true/false - match for available OPP
-> + *
-> + * Return: Searches for an exact match the OPP key in the OPP table and returns
-
-The `Return` section should only talk about the returned values. The
-above line for example should be present as a standalone line before
-the `Return` section.
-
-> + * pointer to the  matching opp if found, else returns ERR_PTR  in case of error
-> + * and should  be handled using IS_ERR. Error return values can be:
-> + * EINVAL:      for bad pointer
-> + * ERANGE:      no match found for search
-> + * ENODEV:      if device not found in list of registered devices
-> + *
-> + * Note: available is a modifier for the search. if available=true, then the
-> + * match is for exact matching key and is available in the stored OPP
-> + * table. if false, the match is for exact key which is not available.
-> + *
-> + * This provides a mechanism to enable an opp which is not available currently
-> + * or the opposite as well.
-> + *
-> + * The callers are required to call dev_pm_opp_put() for the returned OPP after
-> + * use.
-
-There are various minor issues in the text here, like double spaces,
-not starting with a capital letter after a full stop, etc. Also put
-arguments in `` block, like `available`.
-
-> + */
-> +struct dev_pm_opp *dev_pm_opp_find_key_exact(struct device *dev,
-> +					     struct dev_pm_opp_key key,
-> +					     bool available)
-> +{
-> +	struct opp_table *opp_table __free(put_opp_table) = _find_opp_table(dev);
-> +
-> +	if (IS_ERR(opp_table)) {
-> +		dev_err(dev, "%s: OPP table not found (%ld)\n", __func__,
-> +			PTR_ERR(opp_table));
-> +		return ERR_CAST(opp_table);
-> +	}
-> +
-> +	return _opp_table_find_opp_key(opp_table, &key, 0, available, _read_opp_key,
-> +				       _compare_opp_key_exact, assert_single_clk);
-
-Since the only user doesn't use `index` for now, I wonder if that
-should be added at all in all these functions.
-
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_find_key_exact);
-> +
->  /**
->   * dev_pm_opp_find_freq_exact_indexed() - Search for an exact freq for the
->   *					 clock corresponding to the index
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index cf477beae4bbede88223566df5f43d85adc5a816..53e02098129d215970d0854b1f8ffaf4499f2bd4 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -98,6 +98,18 @@ struct dev_pm_opp_data {
->  	unsigned long u_volt;
->  };
->  
-> +/**
-> + * struct dev_pm_opp_key - Key used to identify OPP entries
-> + * @freq:       Frequency in Hz
-> + * @level:      Performance level associated with the OPP entry
-> + * @bandwidth:  Bandwidth associated with the OPP entry
-
-Also mention the NOP value of all these keys, i.e. what the user must
-fill them with if that key is not supposed to be matched.
-
-> + */
-> +struct dev_pm_opp_key {
-> +	unsigned long freq;
-> +	unsigned int level;
-> +	u32 bandwidth;
-
-Maybe use `bw` here like in other APIs.
-
-> +};
-> +
->  #if defined(CONFIG_PM_OPP)
->  
->  struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
-> @@ -131,6 +143,10 @@ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
->  					      unsigned long freq,
->  					      bool available);
->  
-> +struct dev_pm_opp *dev_pm_opp_find_key_exact(struct device *dev,
-> +					     struct dev_pm_opp_key key,
-> +					     bool available);
-> +
->  struct dev_pm_opp *
->  dev_pm_opp_find_freq_exact_indexed(struct device *dev, unsigned long freq,
->  				   u32 index, bool available);
-> @@ -289,6 +305,13 @@ static inline struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
->  	return ERR_PTR(-EOPNOTSUPP);
->  }
->  
-> +static inline struct dev_pm_opp *dev_pm_opp_find_key_exact(struct device *dev,
-> +							   struct dev_pm_opp_key key,
-> +							   bool available)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
->  static inline struct dev_pm_opp *
->  dev_pm_opp_find_freq_exact_indexed(struct device *dev, unsigned long freq,
->  				   u32 index, bool available)
-> 
-> -- 
-> 2.34.1
-
--- 
-viresh
+SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgeW91ciBmZWVkYmFjayENCg0KPiAtLS0tLU9yaWdpbmFs
+IE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBHZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4LW02
+OGsub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBBdWd1c3QgMTksIDIwMjUgOTo1MCBBTQ0KPiBUbzog
+Sm9obiBNYWRpZXUgPGpvaG4ubWFkaWV1LnhhQGJwLnJlbmVzYXMuY29tPg0KPiBTdWJqZWN0OiBS
+ZTogW1BBVENIIHY3IDMvNl0gdGhlcm1hbDogcmVuZXNhczogcnpnM2U6IEFkZCB0aGVybWFsIGRy
+aXZlciBmb3INCj4gdGhlIFJlbmVzYXMgUlovRzNFIFNvQw0KPiANCj4gSGkgSm9obiwNCj4gDQo+
+IE9uIE1vbiwgMTggQXVnIDIwMjUgYXQgMTg6MjksIEpvaG4gTWFkaWV1IDxqb2huLm1hZGlldS54
+YUBicC5yZW5lc2FzLmNvbT4NCj4gd3JvdGU6DQo+ID4gVGhlIFJaL0czRSBTb0MgaW50ZWdyYXRl
+cyBhIFRlbXBlcmF0dXJlIFNlbnNvciBVbml0IChUU1UpIGJsb2NrDQo+ID4gZGVzaWduZWQgdG8g
+bW9uaXRvciB0aGUgY2hpcCdzIGp1bmN0aW9uIHRlbXBlcmF0dXJlLiBUaGlzIHNlbnNvciBpcw0K
+PiA+IGNvbm5lY3RlZCB0byBjaGFubmVsIDEgb2YgdGhlIEFQQiBwb3J0IGNsb2NrL3Jlc2V0IGFu
+ZCBwcm92aWRlcw0KPiB0ZW1wZXJhdHVyZSBtZWFzdXJlbWVudHMuDQo+ID4NCj4gPiBJdCBhbHNv
+IHJlcXVpcmVzIGNhbGlicmF0aW9uIHZhbHVlcyBzdG9yZWQgaW4gdGhlIHN5c3RlbSBjb250cm9s
+bGVyDQo+ID4gcmVnaXN0ZXJzIGZvciBhY2N1cmF0ZSB0ZW1wZXJhdHVyZSBtZWFzdXJlbWVudC4g
+QWRkIGEgZHJpdmVyIGZvciB0aGUNCj4gUmVuZXNhcyBSWi9HM0UgVFNVLg0KPiA+DQo+ID4gU2ln
+bmVkLW9mZi1ieTogSm9obiBNYWRpZXUgPGpvaG4ubWFkaWV1LnhhQGJwLnJlbmVzYXMuY29tPg0K
+PiANCj4gPiB2NzogUmVmYWN0b3JlZCBkcml2ZXIgc3RydWN0dXJlOg0KPiA+ICAgLSByZW1vdmVz
+IHNwbGlubG9jayB1c2FnZQ0KPiA+ICAgLSB1cGRhdGVzIHBvbGxpbmcgdGltZW91dCBhcyBwZXIg
+dGhlIGRhdGFzaGVldA0KPiA+ICAgLSB1c2VzIGF2ZXJhZ2UgbW9kZSB0byBiZSBtb3JlIGFjY3Vy
+YXRlDQo+ID4gICAtIHVzZXMgcG9sbGluZyAoZmFzdGVyIHRoYW4gaXJxIG1vZGUpIGZvciBnZXRf
+dGVtcCgpIHdoaWxlIGtlZXBpbmcgSVJRDQo+IGZvciBodw0KPiA+ICAgdHJpcC1wb2ludCBjcm9z
+cyBkZXRlY3Rpb24uDQo+ID4gICAtIGFkZHMgYm90aCBydW50aW1lIGFuZCBzbGVlcCBQTSBzdXBw
+b3J0DQo+IA0KPiBUaGFua3MgZm9yIHRoZSB1cGRhdGUhDQo+IA0KPiBJIG9ubHkgbG9va2VkIGF0
+IHRoZSBjb2RlIHRvIG9idGFpbiB0aGUgdHJpbSByZWdpc3RlciBvZmZzZXRzLg0KPiANCj4gPiAt
+LS0gL2Rldi9udWxsDQo+ID4gKysrIGIvZHJpdmVycy90aGVybWFsL3JlbmVzYXMvcnpnM2VfdGhl
+cm1hbC5jDQo+IA0KPiA+ICtzdGF0aWMgaW50IHJ6ZzNlX3RoZXJtYWxfcGFyc2VfZHQoc3RydWN0
+IHJ6ZzNlX3RoZXJtYWxfcHJpdiAqcHJpdikgew0KPiA+ICsgICAgICAgc3RydWN0IGRldmljZV9u
+b2RlICpucCA9IHByaXYtPmRldi0+b2Zfbm9kZTsNCj4gPiArICAgICAgIHN0cnVjdCBvZl9waGFu
+ZGxlX2FyZ3MgYXJnczsNCj4gPiArICAgICAgIGludCByZXQ7DQo+ID4gKw0KPiA+ICsgICAgICAg
+cmV0ID0gb2ZfcGFyc2VfcGhhbmRsZV93aXRoX2FyZ3MobnAsICJyZW5lc2FzLHRzdS10cmltIiwN
+Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICIjYWRkcmVzcy1j
+ZWxscyIsIDAsICZhcmdzKTsNCj4gDQo+IG9mX3BhcnNlX3BoYW5kbGVfd2l0aF9maXhlZF9hcmdz
+KG5wLCAicmVuZXNhcyx0c3UtdHJpbSIsIDEsIDAsICZhcmdzKQ0KPiANCj4gPiArICAgICAgIGlm
+IChyZXQpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiBkZXZfZXJyX3Byb2JlKHByaXYtPmRl
+diwgcmV0LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiRmFpbGVk
+IHRvIHBhcnNlDQo+ID4gKyByZW5lc2FzLHRzdS10cmltXG4iKTsNCj4gPiArDQo+ID4gKyAgICAg
+ICBpZiAoYXJncy5hcmdzX2NvdW50IDwgMSkgew0KPiANCj4gIiE9IDEiLCBob3dldmVyLCBJIHRo
+aW5rIHRoaXMgdGVzdCBpcyBubyBsb25nZXIgbmVlZGVkIGFmdGVyIG1vdmluZyB0bw0KPiBvZl9w
+YXJzZV9waGFuZGxlX3dpdGhfZml4ZWRfYXJncygpLg0KDQpUaGFua3MhIFdpbGwgdXNlIHRoaXMg
+Zml4ZWRfYXJncygpIHZhcmlhbnQgaW4gbmV4dCBzZXJpZXMgYW5kIHJlbW92ZQ0KYWRhcHQgdGhl
+IGNvZGUgYWNjb3JkaW5nbHkuDQoNCj4gDQo+ID4gKyAgICAgICAgICAgICAgIGRldl9lcnIocHJp
+di0+ZGV2LCAiSW52YWxpZCByZW5lc2FzLHRzdS10cmltDQo+IHByb3BlcnR5XG4iKTsNCj4gPiAr
+ICAgICAgICAgICAgICAgb2Zfbm9kZV9wdXQoYXJncy5ucCk7DQo+ID4gKyAgICAgICAgICAgICAg
+IHJldHVybiAtRUlOVkFMOw0KPiA+ICsgICAgICAgfQ0KPiA+ICsNCj4gPiArICAgICAgIHByaXYt
+PnRyaW1fb2Zmc2V0ID0gYXJncy5hcmdzWzBdOw0KPiA+ICsNCj4gPiArICAgICAgIHByaXYtPnN5
+c2NvbiA9IHN5c2Nvbl9ub2RlX3RvX3JlZ21hcChhcmdzLm5wKTsNCj4gPiArICAgICAgIG9mX25v
+ZGVfcHV0KGFyZ3MubnApOw0KPiA+ICsNCj4gPiArICAgICAgIGlmIChJU19FUlIocHJpdi0+c3lz
+Y29uKSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIGRldl9lcnJfcHJvYmUocHJpdi0+ZGV2
+LCBQVFJfRVJSKHByaXYtPnN5c2NvbiksDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICJGYWlsZWQgdG8gZ2V0IHN5c2NvbiByZWdtYXBcbiIpOw0KPiA+ICsNCj4gPiAr
+ICAgICAgIHJldHVybiAwOw0KPiA+ICt9DQo+IEdye29ldGplLGVldGluZ31zLA0KDQpSZWdhcmRz
+LA0KSm9obg0KDQo+IA0KPiAgICAgICAgICAgICAgICAgICAgICAgICBHZWVydA0KPiANCj4gLS0N
+Cj4gR2VlcnQgVXl0dGVyaG9ldmVuIC0tIFRoZXJlJ3MgbG90cyBvZiBMaW51eCBiZXlvbmQgaWEz
+MiAtLSBnZWVydEBsaW51eC0NCj4gbTY4ay5vcmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZlcnNh
+dGlvbnMgd2l0aCB0ZWNobmljYWwgcGVvcGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLg0KPiBC
+dXQgd2hlbiBJJ20gdGFsa2luZyB0byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFtbWVy
+IiBvciBzb21ldGhpbmcNCj4gbGlrZSB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIC0tIExpbnVzIFRvcnZhbGRzDQo=
 
