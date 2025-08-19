@@ -1,133 +1,125 @@
-Return-Path: <linux-pm+bounces-32661-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32662-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A06FB2CD0B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 21:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 967B7B2CD17
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 21:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF626687C84
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 19:35:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50D45623076
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 19:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107A1334728;
-	Tue, 19 Aug 2025 19:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BB733CE84;
+	Tue, 19 Aug 2025 19:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3nvaP+X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hdvP56Ng"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A78248F77;
-	Tue, 19 Aug 2025 19:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BE122FDEC;
+	Tue, 19 Aug 2025 19:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755632117; cv=none; b=e8CEWwuRUgd31ai2GtTuQ5dbBbtFxm+fpLt0O9b/snxRpNvMliXnsH0nWxGaaZBc9hs0yaLgDNqJWsWsWyZWuyK+N+CkVOJy3C7TOTtAPkXf2mcfDu9nOwLfWei5qO/ou2R5Moit95sunsy6EGiYrNQsaVY0IyMoVFZRpOF/aac=
+	t=1755632475; cv=none; b=rWgOIsdxRpVdcWrI0n9YmsRnEJw7yeqaFmCi6sughM1kI/vkPECL2ddDR8pGtzpjMv/xADFyDKdxSDQt9TCot+mzVMWOb5PJ01F16i77hU8MoM00gOu5TP0nyLPPqn1oxeUdnX+7Km1+kqVqCL1nrzUIXBpzXfVKQqlxqa6+78w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755632117; c=relaxed/simple;
-	bh=ACtVf0R2kQ4uAgSIy5X2g+NpvSoixjEqO6ocWQXnTCY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=avtk8jpUL5HYMkP08x9OE2B1I3V/qTxJMUPbedHt03bPfGg1PDODU7CXXK7UCY6SbNiom6wZEWqbMKGQoae8DAw90G2Yp39iCtHEtciJNwEnqP/87hR2g/wqGTD3diD756h6yCw/+snzj4IZtftJxPCEc0LRoOwbWFRkXhBrIIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3nvaP+X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0D6C4CEF1;
-	Tue, 19 Aug 2025 19:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755632117;
-	bh=ACtVf0R2kQ4uAgSIy5X2g+NpvSoixjEqO6ocWQXnTCY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=J3nvaP+XilnU9kgovOu3dCz/f5VpocQVCa/fMY028VNdy2R/9EI5GU+YRKlDVl/IN
-	 XlCpIYDwNEowadlAsRwZSq7dDE3VSgP2fHJhMsegUNGvDSM4R60ymWQivNwqFElXJr
-	 AxKsVq7lFmxgdvnqvVfoDUddvJrmtdhRFRrgaI8maqUj0IPHUVE3n1+thTVXutTEEk
-	 gIcEngIO54Eo2fhO6KEnwv3DqHalWyTMGvVl5WTxhIDOQjDfYnCu1G0qFokqAbJejp
-	 kSJdUG6gs7fcyXQheyjMBAlEYjDceTD1rGjNmy5CEg6peCpGPVuTaOPlJukBdSkNdB
-	 ++aNah+ukDOvg==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-435de7dd94aso3788777b6e.2;
-        Tue, 19 Aug 2025 12:35:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVm2zYF/N4YWHt5pJkOScES3qoBquFXkJJ0ugb/UWKykGOlmLBkWLtHgBlqeS/B7NC18GfDY4ylfXgO2LU=@vger.kernel.org, AJvYcCWUPOTG53zRLdocF9mpSO9OgRpoMkSkJs4kcp2oqIU2meczFDlt2eJPo9ykApjHbTkg1HPJe+tdM5k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2Y/yJWwWHRUawSfzK3Xtf8QWKF/REH8LdNHY/hCuNKGcmq9pN
-	0lnWPzY+myR5r8qlylBFDQwBTF8qdNv3WT5zgo4fn9tqJTcb30jyH/mRoEW3nbNNw/sE5pAJp0o
-	mpB2K9aHmvU/DQ6koXj5wuso6FwNk7l0=
-X-Google-Smtp-Source: AGHT+IGcUwaM7kRY7xaZYIB8n9xunEK4oeaob6UPTy6r2bUDF5jnD9uKcdQQ66ZIBfPPXnLKVPsdbRp6JtM6OVompis=
-X-Received: by 2002:a05:6808:1b0c:b0:434:105:13e3 with SMTP id
- 5614622812f47-43771ff9f27mr142589b6e.7.1755632116762; Tue, 19 Aug 2025
- 12:35:16 -0700 (PDT)
+	s=arc-20240116; t=1755632475; c=relaxed/simple;
+	bh=6k0fMLmvdxJEM15SIJgnHJgTnEbkFLC8Sv+RWQRhuts=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oGPa8ft0Kl1Jjapo1hOLyFruJzRWEgGahbd1BQLaWa8wODtJ1WpqIZElAqTOXdktrb7Bu0fQbIqXbsiETRVs9a7bA9s1mYLm5PfiBzTgLOJwKpfvMgKedVu8zf7Kqa00RxNTBqWsh2Z2kT9A8mpBfIaCJ77VIdh1t+zh5nkgoC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hdvP56Ng; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755632474; x=1787168474;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6k0fMLmvdxJEM15SIJgnHJgTnEbkFLC8Sv+RWQRhuts=;
+  b=hdvP56NgjW+OMjk8qOOS+q6BsvX1QUFRn8wzfMO+5YUn8h3w20XWmuhb
+   a4gg44L1JdufYKFT4HfDGTV0qGXHD535I15Sw6sE7gXiTBDC5gAdI9oDL
+   m23MM7UBBXgnTYHI7yfMThWgC5pcC57GuB4eTkHIWDDT+t7XY5A8RknyF
+   pqgFzbMeKiimMZiDTNKzjUAdl5FJ0Cx7KMQrjAkjIWOHtoOzqU/D1DqhA
+   IDB7Xy02kCpfFtXtTX2fl4ZLfMu8WXGxh3SkCaJRNupMnxEGEFonzAee8
+   s3xw0zlC6HbHnKxqzeEmtPA7dSnjEeANQFb0O3+uF5gnLZyBHmXg3EVyL
+   Q==;
+X-CSE-ConnectionGUID: oy+L1pXsT3aeBGTq9jARuQ==
+X-CSE-MsgGUID: il2CC/OMT4uTL0B2g4mORA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57817374"
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="57817374"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 12:41:14 -0700
+X-CSE-ConnectionGUID: /kNpU3lVSfGyXuGX6UA6DA==
+X-CSE-MsgGUID: W549zCc/TK+s2b0/XsGY4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="172365446"
+Received: from jdoman-mobl3.amr.corp.intel.com (HELO localhost) ([10.124.220.219])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 12:41:13 -0700
+Date: Tue, 19 Aug 2025 12:41:11 -0700
+From: David Box <david.e.box@linux.intel.com>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc: Xi Pardee <xi.pardee@linux.intel.com>, irenic.rajneesh@gmail.com, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] platform/x86:intel/pmc: Update Arrow Lake telemetry GUID
+Message-ID: <mxzvvne6qycybtc25vj3mdoait5zz355kza7jcg5wcxz2ciji3@yn7k3jib72x7>
+References: <20250814195156.628714-1-xi.pardee@linux.intel.com>
+ <88da5769-1eae-4520-99b0-78a59bdbd867@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250731030125.3817484-1-senozhatsky@chromium.org>
-In-Reply-To: <20250731030125.3817484-1-senozhatsky@chromium.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Aug 2025 21:35:04 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jAdsyHKsfRtW+Crh_aDY_uryvNekTBivcdPVGAL4UyPQ@mail.gmail.com>
-X-Gm-Features: Ac12FXywANLC9WJArKQ8y5GSn-YTKLC7C4L-nWOBJt734vx4gknskQ88G8axEoE
-Message-ID: <CAJZ5v0jAdsyHKsfRtW+Crh_aDY_uryvNekTBivcdPVGAL4UyPQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: dpm: add module param to backtrace all CPUs
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Tomasz Figa <tfiga@chromium.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <88da5769-1eae-4520-99b0-78a59bdbd867@app.fastmail.com>
 
-On Thu, Jul 31, 2025 at 5:01=E2=80=AFAM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> Add dpm_all_cpu_backtrace module parameter which controls
-> all CPU backtrace dump before DPM panics the system.
+Hi Xi,
 
-This is exclusively about the DPM watchdog, so the module parameter
-name should reflect that.
+On Mon, Aug 18, 2025 at 11:40:47AM -0400, Mark Pearson wrote:
+> Thanks Xi
+> 
+> On Thu, Aug 14, 2025, at 3:51 PM, Xi Pardee wrote:
+> > Updated ARL_PMT_DMU_GUID value. Arrow Lake PMT DMU GUID has
+> > been updated after it was released. This updates ensures that
+> > the die c6 value is available in the debug filesystem.
+> >
+> > Fixes: 83f168a1a437 ("platform/x86/intel/pmc: Add Arrow Lake S support 
+> > to intel_pmc_core driver")
+> > Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> > ---
+> >  drivers/platform/x86/intel/pmc/core.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/platform/x86/intel/pmc/core.h 
+> > b/drivers/platform/x86/intel/pmc/core.h
+> > index 4a94a4ee031e6..24139617eef61 100644
+> > --- a/drivers/platform/x86/intel/pmc/core.h
+> > +++ b/drivers/platform/x86/intel/pmc/core.h
+> > @@ -282,7 +282,7 @@ enum ppfear_regs {
+> >  /* Die C6 from PUNIT telemetry */
+> >  #define MTL_PMT_DMU_DIE_C6_OFFSET		15
+> >  #define MTL_PMT_DMU_GUID			0x1A067102
+> > -#define ARL_PMT_DMU_GUID			0x1A06A000
+> > +#define ARL_PMT_DMU_GUID			0x1A06A102
+> > 
+> >  #define LNL_PMC_MMIO_REG_LEN			0x2708
+> >  #define LNL_PMC_LTR_OSSE			0x1B88
+> > -- 
+> > 2.43.0
+> 
+> Tested this on my Lenovo P1 G8 and confirmed that it fixed the error message that was seen previously.
+> 
+> Tested-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 
-Also, it is not quite clear which module this is going to belong to,
-so a comment with this information would be helpful.
+If you send another version, please tag with a link to the bugzilla,
+https://bugzilla.kernel.org/show_bug.cgi?id=220421
 
-> This is expected to help understanding what might have caused
-> device timeout.
->
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  drivers/base/power/main.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index dbf5456cd891..23abad9f039f 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -34,6 +34,7 @@
->  #include <linux/cpufreq.h>
->  #include <linux/devfreq.h>
->  #include <linux/timer.h>
-> +#include <linux/nmi.h>
->
->  #include "../base.h"
->  #include "power.h"
-> @@ -517,6 +518,9 @@ struct dpm_watchdog {
->  #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
->         struct dpm_watchdog wd
->
-> +static bool __read_mostly dpm_all_cpu_backtrace;
-> +module_param(dpm_all_cpu_backtrace, bool, 0644);
-> +
->  /**
->   * dpm_watchdog_handler - Driver suspend / resume watchdog handler.
->   * @t: The timer that PM watchdog depends on.
-> @@ -532,8 +536,12 @@ static void dpm_watchdog_handler(struct timer_list *=
-t)
->         unsigned int time_left;
->
->         if (wd->fatal) {
-> +               unsigned int this_cpu =3D smp_processor_id();
-> +
->                 dev_emerg(wd->dev, "**** DPM device timeout ****\n");
->                 show_stack(wd->tsk, NULL, KERN_EMERG);
-> +               if (dpm_all_cpu_backtrace)
-> +                       trigger_allbutcpu_cpu_backtrace(this_cpu);
->                 panic("%s %s: unrecoverable failure\n",
->                         dev_driver_string(wd->dev), dev_name(wd->dev));
->         }
-> --
-> 2.50.1.565.gc32cd1483b-goog
->
+Thanks
+
+David
 
