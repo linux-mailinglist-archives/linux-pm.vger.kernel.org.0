@@ -1,149 +1,119 @@
-Return-Path: <linux-pm+bounces-32607-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32608-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 029ACB2BB28
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 09:55:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEFDFB2BB37
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 09:58:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF5C77A52CA
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 07:53:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BB48167D77
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 07:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA163101C7;
-	Tue, 19 Aug 2025 07:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080043101BA;
+	Tue, 19 Aug 2025 07:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J22lxZ2H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAF23451DB;
-	Tue, 19 Aug 2025 07:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A2B202C5C
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 07:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755590097; cv=none; b=EHrOClk+TAuGgVebTJitpAcArx3t8LS/BLV+m3DBoDmW8QGtggkQUZdw2Yib1QvHDiG6RLXsiop24Fceq0G3/QY07Ah0F3Q7Ew2VOPxLxsVdMYPWfFvZGv2OIsOekz47+YsHkA1U05isQDTY4OvNHr2EEEh73xIB/R32QcWE7V0=
+	t=1755590261; cv=none; b=NfQQXFJ6tzGk0YS2GE4jWW1EZ5b8QLj1/mNe8cjbvryrEdyexAqQQic468ZnUJWhmzQxSbZMsyAKh41xORazzKeL/da7vH8aL+5/caAZwKl0hgqgdEk68HITMXAng8GCfb6V/TlYeiisO3hHOybKueuTKE/wZi7WvjAAEtYJuHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755590097; c=relaxed/simple;
-	bh=6GyLlS9SQW6qIDLFLwSXoVZibFLEpz06wk2RxTft+hA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a9cUSOALAwQw7qL4SB1ETTqzwXvX/U7reo8h2PIu6zh/sP2dBDduS5p9o5KW0jpvqHqCyrem6jniIjoYMfB1RRu1qqMGho4HJ33M2PeXoe10/9O+xO52ggBdZCzTHjWaD0lhUCrXx92JxMLQuHusXWzB8T7sReODFVlO0k0TyFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-50f88cd722bso1470835137.1;
-        Tue, 19 Aug 2025 00:54:55 -0700 (PDT)
+	s=arc-20240116; t=1755590261; c=relaxed/simple;
+	bh=sTqY50ZtfvJHSQsjKEUUxoMSu30ce205UyxUJM6vA8o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ra/1HkANfdLUQ8wsjYBP6/qk+Zt05M08Wd703pBuB9rOJxlGzwiOANYc+SMdtE/ef0VD6yXOinAH5+tFYIEwwTuUIYzjEH9StAiFTueC8X0wWFHCuMfD3RWDoUOJhNz9iSfHP3b6lBr20aVCTY66Hcd+/1PcRmw3wg98onISvjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J22lxZ2H; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-333f90376a3so34802981fa.2
+        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 00:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755590258; x=1756195058; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1RPJIs0E6D3gI56GtnaiXL9ifszX/gDI8hfE+Ejpxl4=;
+        b=J22lxZ2H8k7Yy3jfZkAl4eS7Y1UmYKwtJ85FVzXJjA1cUQwgBWpPW04oC7zIwN9jke
+         9P1ETtANORpQkR8RxyKVodJZD0Msc5EykUh3QXNMYf4eS+eaBkbtdKc22vHtOS2xjh2C
+         4hC2uHlsFc0c38x7nJx4MPnIOlR5GT0Uc8m4U5VH9nHWEixcwJET3Z9QwxSKR2b3CrFH
+         YN5hdmvlCdlgFymO3TPJpHUqOLvvvb2DdM/9aKxEqfjd3wV/7k3T79RIljDkvqbZ8JEr
+         LXCEabG0Oyv7GMqnEDwoPYFih769+RloHGynhXc47C/9wMWLWGuBRn0VzJHCq7nA/FWR
+         Gk5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755590094; x=1756194894;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U4yI0xKDh/Dea2okbvkBvUlDWnDM+bOQUmQtln3xRsI=;
-        b=qK7rCo6PLNR0wogdNc7CVj4hSPEmfa/HgDM3Or4kTwyLfv6Ku4UOD8Htza6sCRWGGL
-         rXqc5dquZWTXfaEtH9BZcAIGcEpYpiRvD1BrV+i4NKuXa7bsCKWbRvNMaDGcOaBOW2XN
-         ojlMN8dDaXz08a5hSuDs7ovJm6GyEAv/bdKGjxSRiQa9b1Hw1FiLCHBLnHJ9CECSvo0K
-         ZSGDUmv9kvNIHHQMQGwdPVxjcyZNekzkKgkzuEtb22z8IPcKasnd67eCIDZsEhHi1rhi
-         JM3ffXZ/P+cfjlfWghEssxl52ObmcQNH1/5nZ0k2ghUq3T8LdM8Tho+HpuwcJJM55NRP
-         XHBw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8wLeHjVxmzBWZDpAa8cIzTD5GxXNP3XTxJjFdoqIEw9G6Thhq0W6YLDFSekqsug0c6n22EP+eX5FyuZlJWk3HXKU=@vger.kernel.org, AJvYcCVE9YBhd1btY/WJ7g2Ekun7BGt2dQ+XdP/yQLcTYSNZTp3pfDpOwevrNlEFM2A1fjYSkxhM3XnQB4QNhOaq@vger.kernel.org, AJvYcCX+iqgwphYsFIxm7zMACGtRaR0nHmxtwNElciRPkUSefkGAxjrq8hqAR02Ss6FWwT7su1jxMNMablEw@vger.kernel.org, AJvYcCXLBWHVrsNqeWRneW3OUA63IC9op/wfrOwrX1m6DXxwlzy40tpUTNkw81DjkT6BcaZI0z2A6DYogXo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmdeemoYtOtyhjY5eO8eJCYIXk3/mP4Vxl4m4Zb9Ch+DCBWRw4
-	YjP4dvlNBTSSKG65NABTzfDlhP+X+wsi3JWe5eGd6ZNR9fFsYTRwQ2LjIpSrvoWx
-X-Gm-Gg: ASbGncvyj2rJRDbqwP6V7c4goEhuzQPYj5CA//K0oqf7lp2wimcMw8qgxxzYF9IeOfB
-	j3MItnpg3RBFupNmvJy1GNRIhxqDpgzv41Pw/11sxmGMKvaN1hAAMqEYmnECR+l94gYeaB2Pntg
-	qU325NYcrKcYYVZ0RD3H6uyvETOZmQlEYO9ia0onxGqSstp7lUPnxPWWIwkju15Tz8UPOVi6rkd
-	ZOHXfUA5iWFoTlPLHPH4ya4ox3B7UYKOL5vOy+xnZww72qb3Z9ugIVcN8sxdZ0GOc7ryjoIL8in
-	rohPfcuvb2KUQpu6im4bK0otyWnQHnSzM9xSAylDVVwG7Rn6JgnVWSG2fiFuHHc7s910maMg7Zs
-	ZCxxS2/aJLKZm3zsdeGVlGSeX+8P8VsUZIh0NElCyuZpfUBt2mPd9T71wB2kd
-X-Google-Smtp-Source: AGHT+IF3rdbhj5R/4LclBAwBIKP1kl9+HPSvZarUwhukinFr9ZHtc0tO4ZYdwc/B2u52MYOw/KklSQ==
-X-Received: by 2002:a05:6102:358d:b0:4e7:bf31:2f68 with SMTP id ada2fe7eead31-51924535fc1mr400580137.25.1755590093912;
-        Tue, 19 Aug 2025 00:54:53 -0700 (PDT)
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-890277bea3esm2239247241.3.2025.08.19.00.54.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Aug 2025 00:54:53 -0700 (PDT)
-Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-890190da557so981800241.3;
-        Tue, 19 Aug 2025 00:54:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWVHzpL7gfF+VgJlPgS/iYBFz8G7DQErejO+QvG79u+KC+zXSQ03XuXYoBE9DFQO4LCuTHjjYa9sLwU@vger.kernel.org, AJvYcCWmGN3jvwfZq1Es9SDsWfcyQ+hbchXFqS/OKTMwqSPk3APxLKf/pA906WHdo8Z4MoqkWt6nfPD49Ro=@vger.kernel.org, AJvYcCXM9Ac0SSrgqRfnCmOQY156j5Op/DpC/jQVaTk8xdIMDoUIPubdZtZ/FfC07eMY8HuVPKN4YjF/+i+e/tbGFbojmQ4=@vger.kernel.org, AJvYcCXQl2lG5U7MFRCsyHTVqmXuxTNYU11t6s7PWc0LOij5ybF+5Sy5QhXLOkmde39UP4/vI3med7z/fn38mXdy@vger.kernel.org
-X-Received: by 2002:a05:6102:8014:b0:4eb:f8aa:9c36 with SMTP id
- ada2fe7eead31-51921c12678mr511890137.4.1755590092715; Tue, 19 Aug 2025
- 00:54:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755590258; x=1756195058;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1RPJIs0E6D3gI56GtnaiXL9ifszX/gDI8hfE+Ejpxl4=;
+        b=c3SJHasGcj4x8iIu5m6GKSV+4HKlGf4RJt/NyuQoSXJnwmz9svcAizKbS+0DbeUdQF
+         tjfITrAdmg+9pF3plEsQr7Al2pPtVB5Kie7+ueED6VVB1U+/vQgkmXtNPKTfYbjY2XHf
+         +LoxhO41s5a/Gkq37CQ3ivNhEYKcSDl3Gdq+5G1Ea1bjQ0ZB/OEbssK1RKYIMq8D+lYH
+         Q5pv36pDPmb+wGD5mLHCufBxQ6AF5nDSMLYswMoRZo/ngyXCGyG8DFIAQYd6SuLED8Mp
+         eMoBfDD6J6YCt1cK0LEsPHwp7h04t1mA8iz5+B9tyGTqlcdMRLCp60MmQ8+gpNb+LnuT
+         HAbw==
+X-Gm-Message-State: AOJu0YzZVfX2ATc06c3tYMSSympljjSJof8XI1fmoA3m/Zm2XvSBQaX/
+	Y53nhkEIJcTttDE+awy03ddO+z97O4P5PEBcA82wfqF5TU04tfXhqqBcyDanykZ5Hz/PjnNrpbc
+	6TdCV
+X-Gm-Gg: ASbGnct7XgZtN1fqdTTKwnNj69JPxFlIXUmE6JpsAVq8FXSFiOTP3ivx9U/uFd6JAER
+	iwjOdXo4GR43BtZAUQRHhndGGtAuh51KMrFJSSBWaQsIFgvFpswb1VEmECA8dhObFVVx4WkZ+Se
+	/MYSZ7SGofmLPcic+ANjJ1hs7m7Pw0Ibwy8eUnBxyeQ8bzjyKt6pKlUswM/7RK/fNN2Fm5Efr/f
+	hIh8ZvASgye+YkdxQqVGsMHSeAag7kAc3fh2z4rJYNl2JpWg78TCwnc8lVMGQoQab1tERLuRfv4
+	oPjuKNY5ep+OtLlh5lrrl1/7aZxVEuZU4Z2yx5E49QGDgy5hGuSQskHfgLrKroOsCSXfDT6Pk0x
+	mzg8uoJ7nJyoS9WyHnm0pIWgal0hIQQgidPJwQypEhaA=
+X-Google-Smtp-Source: AGHT+IFqpXXFZHGJ2TR9L99ruHtcO+35YrS8cfBk8BbM42O7AY8tmrPTKw39ZOkfHlglXg2YAbosGg==
+X-Received: by 2002:a05:651c:20cf:20b0:332:1398:5737 with SMTP id 38308e7fff4ca-335306e1b53mr2567991fa.24.1755590258074;
+        Tue, 19 Aug 2025 00:57:38 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-3340a473b7fsm20513871fa.27.2025.08.19.00.57.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 00:57:37 -0700 (PDT)
+Date: Tue, 19 Aug 2025 10:57:33 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [bug report] cpufreq: mediatek-hw: Add support for MT8196
+Message-ID: <aKQubSEXH1TXQpnR@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com> <20250818162859.9661-2-john.madieu.xa@bp.renesas.com>
-In-Reply-To: <20250818162859.9661-2-john.madieu.xa@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 19 Aug 2025 09:54:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUcTXy3fSjviMEFFx_4EuVmVHSCZng5rntS=GGi6Yw+kA@mail.gmail.com>
-X-Gm-Features: Ac12FXzL6P-kwtOHmhi_mrIjxX55aKCrGaAQmVprtvtxZM21ON6QFS3Pzxbvqus
-Message-ID: <CAMuHMdUcTXy3fSjviMEFFx_4EuVmVHSCZng5rntS=GGi6Yw+kA@mail.gmail.com>
-Subject: Re: [PATCH v7 1/6] soc: renesas: rz-sysc: Add syscon/regmap support
-To: John Madieu <john.madieu.xa@bp.renesas.com>
-Cc: magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org, 
-	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	p.zabel@pengutronix.de, catalin.marinas@arm.com, will@kernel.org, 
-	john.madieu@gmail.com, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, biju.das.jz@bp.renesas.com, 
-	linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi John,
+Hello Nicolas Frattaroli,
 
-On Mon, 18 Aug 2025 at 18:29, John Madieu <john.madieu.xa@bp.renesas.com> wrote:
-> The RZ/G3E system controller has various registers that control or report
-> some properties specific to individual IPs. The regmap is registered as a
-> syscon device to allow these IP drivers to access the registers through the
-> regmap API.
->
-> As other RZ SoCs might have custom read/write callbacks or max-offsets,
-> register a custom regmap configuration.
->
-> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> [claudiu.beznea:
->  - do not check the match->data validity in rz_sysc_probe() as it is
->    always valid
->  - dinamically allocate regmap_cfg]
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Commit 32e0d669f3ac ("cpufreq: mediatek-hw: Add support for MT8196")
+from Jul 16, 2025 (linux-next), leads to the following Smatch static
+checker warning:
 
-Thanks for the update!
+	drivers/cpufreq/mediatek-cpufreq-hw.c:76 mtk_cpufreq_hw_mt8196_init()
+	warn: passing zero to 'PTR_ERR'
 
-> v7: As this is a duplicate of [2], address comment received there, that is,
->     use kzalloc() + kfree() for regmap_cfg.
+drivers/cpufreq/mediatek-cpufreq-hw.c
+    72 static int mtk_cpufreq_hw_mt8196_init(struct mtk_cpufreq_priv *priv)
+    73 {
+    74         priv->fdvfs = devm_of_iomap(priv->dev, priv->dev->of_node, 0, NULL);
+    75         if (IS_ERR_OR_NULL(priv->fdvfs))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+devm_of_iomap() can't return NULL.
 
-You use __free() instead of kfree()...
+--> 76                 return dev_err_probe(priv->dev, PTR_ERR(priv->fdvfs),
 
-> --- a/drivers/soc/renesas/rz-sysc.c
-> +++ b/drivers/soc/renesas/rz-sysc.c
-> @@ -6,8 +6,10 @@
->   */
->
+Passing a zero to to dev_err_probe() is a bug.  See my blog for more
+details:
+https://staticthinking.wordpress.com/2022/08/01/mixing-error-pointers-and-null/
 
-... so you need to include <linux/cleanup.h>
+    77                                      "failed to get fdvfs iomem\n");
+    78 
+    79         return 0;
+    80 }
 
->  #include <linux/io.h>
-> +#include <linux/mfd/syscon.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->  #include <linux/sys_soc.h>
->
->  #include "rz-sysc.h"
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.18 with the above fixed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+regards,
+dan carpenter
 
