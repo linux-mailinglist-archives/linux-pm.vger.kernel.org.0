@@ -1,127 +1,119 @@
-Return-Path: <linux-pm+bounces-32594-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32595-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D504AB2B879
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 07:07:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1452B2B8AC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 07:31:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71C885E13ED
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 05:07:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F5FF7A34F3
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 05:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E834D270575;
-	Tue, 19 Aug 2025 05:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7D827B34B;
+	Tue, 19 Aug 2025 05:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="SoXSkFxL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hnbZ3Fic"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC94214210
-	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 05:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221B41DF254
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 05:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755580042; cv=none; b=bWJz8RYuWsiAU/3mFX5W7yFgzwmC4hD7C6VkZ4GzyDgCvguoiCLD/I5PP0SurEsugT4O7ZUlydQbY4+x7opsw3xytxLkyVgr8CV4/k1DU/jsbTKTJMT6MNFw5+wOYYdFN8qWvDWdmlJ3mxh42Fjzo1i7cLsXglgUnu/8Y4CYWlM=
+	t=1755581454; cv=none; b=IgITxrmIPCeTWSa7txnGzRkI6PA4Y4ftLQloGsXRatBgQjt2PJUSElX8vN27iXMEhXvYraM3BcGWyixurW1HNLiMlTi+GOYjlanCHR4quz5gogI+CYu63EeITU0nC6xbhCiVDCvTYgAV1admnguOGHB4l5y+hlakQS+J+N/rXfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755580042; c=relaxed/simple;
-	bh=ltXNHRhOhUUl4xR8T4+Ojndq1rFeuYUH2BMxeu0RtmM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gKQNJxxpdImJ9ZsNMZ5L/pireHy13oqTokugVPYd55EJCYJWaJfUVKkOUAWX7V8GmhY4gwVIS+jvZqKa8tEHMU7CjEvup9ZJSdk9ucZRRQKTMPgmhVirkc5T3kzhSwYpiWuqOhV7e+0/li+8wHI0x0PXmIkfF8h/uVwWDKpkxoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=SoXSkFxL; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3b9dc52c430so2350250f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 22:07:20 -0700 (PDT)
+	s=arc-20240116; t=1755581454; c=relaxed/simple;
+	bh=oNuneXdZUlONgY1eNYoigbQuliKO+uoIkFsryOlJJn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xvkgi7cx3XNgGVzzzyzJWu59b6yxORxifzyvvdM4IBTkTPhdat4zEtkzbvZIT8m26ACcSsKPa0J4zO+DMyESHLU5lQOoQwBfy3EGhJXya2hbKny5nQaUN1eGA4m2nGafsUwIZcJlIjrRPyuC9VOZ4SgM3UtLbJ7Vw8TtuJaQaTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hnbZ3Fic; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b4755f37c3eso308838a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 18 Aug 2025 22:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1755580039; x=1756184839; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fga+lbodUmPAZazOf43yy1bTgzdU2LByeFqojuOQ83w=;
-        b=SoXSkFxLAXwWKCM+ck4BQyG3Kz10Cs5HOEmcjcltNTbDIwHOC2NcX6ZR2ICOcmUNST
-         7xGqEImExFpdAq/UFWqdegH0yflXjYvP+BgczT6shJ+am5rgG2vEtDimk9T+y46sqCWA
-         tQwnxvxw63Mz37Pi2WtjyNSLe0Glwo6y1SsQtbA7Nns9qM9RfzYEy/Ghsca28B3oeTxi
-         /CCHU6aHXS6A11DwC1s47+bAYeQKTTJ3f4tffSwJnt0ADdABgAum5xOjTSqo9pLf0G8l
-         /DfrLBj/wSiVcgHPHfX2ZVnlwGdGeOp3mHl+cT4L28njTrhX95MSNL+G6N057lcG17yT
-         MOGQ==
+        d=linaro.org; s=google; t=1755581451; x=1756186251; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NHADKkUG74H8DgiMJwyJ3n8CdyNUxQbiZqR+ru3KJ5g=;
+        b=hnbZ3FicBWQkEZAt8mqK0GO8hIz5fuWZI+2XtjjQJsU+s8siymP4u9x+Kw2j4jsTsV
+         XGpef7JJks/GdnRk2Y0Gfg/QBDTt1S/wnEFzsrKh4QDgfuD483t8Mfy2yo9cjEAkdwqI
+         3ldddc0U6qxYys/0iXaxysfUZtR6TdZGVOl7DURwIc8qBPNnacSf1K4G5SB36hSrPh1t
+         W3LsLyFCoh/Wb2cxNZWdA6YFPtUvYnPRpkHy94lpDX5HitlBdYwLlFFI3zUe+HMu9Hmf
+         vdTCkJzxXtUVQhBFttkYEmxw3pNckby1XpUta9yUN4FsLk6FsTJhzAdCnAtBOL+vBtec
+         B3dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755580039; x=1756184839;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fga+lbodUmPAZazOf43yy1bTgzdU2LByeFqojuOQ83w=;
-        b=S4l3b/BFeJ0njWoFr2iAtvpC0kNviCFG8UzKeBQbmrw+RefY6b1yiiFwPWkxJBJBLJ
-         yic9F1jQrmH1KXVndyloXxlt+lM7Lfu5aVdrL1v+VbgKS0RMLeDMTqMrAShlaoTGChUT
-         aubb8aUM+ivO8tYH21fEGMZE151e4LLY2JjyN5rrDdJSduSMCmes0fkGzCIIX3usxRA0
-         4jE4N2QQz5NQlImfU2id3lwtBN9VptCRP3hZJTyLwF8rbVd+IjLZIR9SLn8q+nqqGAZC
-         lLjxJdaYjU6weZqvI6qNAQ7u8hGOw4+dSvI2F+aSaojzGyW/nNqp19tvC0elXMK5pSas
-         nW9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUNmHfCV+gkqPFEXvplRMAjB+MRFuumlCU4VVzPoRddmyWXTRwRPAUyrGvXHxzNXl+c0sCBGpsZzA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzcb42Rg4IhMjNpOTaR0RdlYoAVB9+cyF3iAoDnem2rXimLDRh8
-	6VSVBhBflrliRo0cD/t/Ikx7Xiln7tSMWvmhc3vXD9dUYhBUbpKXlMjvFhfvWeGF7qE=
-X-Gm-Gg: ASbGnctuSjaKWMx9K/rudAsa3KIxv70DtOohyZtWZF5JSG7ZGHwiHSwAOkwC5rP4bda
-	WSe7UaI61POgggdAAjP2ACcJcMwop1aCFNZlPPnqw3A93COTrRfbUvjYQmD3uKAXzL8R48MiVEa
-	AztAMsuG8XJIssNxQHLbhqxCykf29Zb0o/hj6N50hdisaAlkmFOKq8emPaBR2DdaV7rgcKSk+N7
-	AHMr9WIT1CkiiarQ3vBuTA0kOuUhBSFWEe/dUPQunxZjx0VmEbFDIToYLg3bC7AepMaQXEPCw58
-	J6OI2iDumUO+QwcQ3HWnqznnEO/tb2eUcjMsZxF7ux+N5tf3qmCKEgwbim1sU7u79byxQl9twM+
-	gqGQfLICeFZOvdM/cVVxF7+1X9R8rbgRQhYJsv6a4cri4kffvdr0gn+hu1fi/I049FB95BHOMql
-	DIaw==
-X-Google-Smtp-Source: AGHT+IEGAIFSV01YojFxZG6ti+gZSOdnTisUwlACnGc8HPzYTSLd/Yrx6ey+bzDVw52KF6DYn9VA+A==
-X-Received: by 2002:a05:6000:2485:b0:3aa:34f4:d437 with SMTP id ffacd0b85a97d-3c0ecc31e8fmr784959f8f.37.1755580039233;
-        Mon, 18 Aug 2025 22:07:19 -0700 (PDT)
-Received: from ?IPV6:2a02:2f04:620a:8b00:4343:2ee6:dba1:7917? ([2a02:2f04:620a:8b00:4343:2ee6:dba1:7917])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074879fe5sm2018512f8f.2.2025.08.18.22.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 22:07:18 -0700 (PDT)
-Message-ID: <d00ce701-2ddd-485e-8bfd-12cddec62fef@tuxon.dev>
-Date: Tue, 19 Aug 2025 08:07:16 +0300
+        d=1e100.net; s=20230601; t=1755581451; x=1756186251;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NHADKkUG74H8DgiMJwyJ3n8CdyNUxQbiZqR+ru3KJ5g=;
+        b=HQpFoRB3Ot1Y0l91xZpbpn/YnnIIiqhGLnpD5CtFFxAINQJctX48XcAPnn00Xz/9tY
+         G207yEFBA9Q1CAcPkiYtJyk2HS+hg8Qmhe3yEGPhnLx9f+RsegPKLDYtRBXtKNyWB+xe
+         Mcsn1PFK2do2Zw5vICOyin7BN+sIu5QgkUsYUYOSZJHNxIbwfhwqMhL6r59YlDCrpUR2
+         DkPm+MIpjb26wcRaXXMMDzIs+BYmLEqRDSn0L2GImCANw5cWltFlFWl1UqMaOXWAi7Wj
+         RYU8TYc7smPTOCT6O3Zdwtrp/TRE9sZCYhaddzCcJArIjLQG1Fthmmh9no6Mcvb2r9c1
+         P6wA==
+X-Forwarded-Encrypted: i=1; AJvYcCXD+EqVe0yAUpwTOYsdiKNW3Oodg+LjluHnlLZ77YxXJgEoqpiXT9Jrin54C7Rb/fddg2HyjVJkPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxNaHGAyL/bEkJ5jWOM4aTaDYBJL+8+3+fwwls521qMllnfO+X
+	QWQgO310CB50jdTedPuOLx2LXf+8+Is65uOrzRI8dWZBTtJ+nKMGZlPjbITBFeXqaBE=
+X-Gm-Gg: ASbGncupXQRae6L3npVmRWHvaXESLriXcAfBavZpaLjHH9A6Vbhn6XuJaZUzoRNki8i
+	7GN22GB67ry/vxZnDH9PG4/9QDAciMDgYtY0u18JOdtZv7JXMuMPFPPupY+lp0Dz22QxDbmd5O9
+	E2575ORxBV28ryLTtcJrUMDCSD+nS/NcOEb8/cxrMTE1MR0DwwAI9E9cciM4pDFjq9hUdFf9i5m
+	vtTfggjkDWAEFpaQDHr/3+LdYCX3UMM/wamtWrVs9hmeAi7GiGnoZpkJPnJb4OVv4l8uESdK+0s
+	deWeVpHharaJDviQC39attiLxQDqB7nzkucepMeQgDw84UDXPQPhQ+6HsHXjg/x7QmPg67kIEe4
+	P8WYBiaZm6XadjgtDe4p0Mgii6MuNnk592qk=
+X-Google-Smtp-Source: AGHT+IERt6oCE4RMNflHw7TCKFgdRx6IB0LQJLR9mIihyCp5VdPHl033jFifzhuL917Po4PZMKKnDg==
+X-Received: by 2002:a17:903:290:b0:243:38d:b3c5 with SMTP id d9443c01a7336-245e04ca7bfmr18923145ad.47.1755581451291;
+        Mon, 18 Aug 2025 22:30:51 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d50f55esm97139685ad.82.2025.08.18.22.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 22:30:50 -0700 (PDT)
+Date: Tue, 19 Aug 2025 11:00:48 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Mike Tipton <quic_mdtipton@quicinc.com>,
+	Peng Fan <peng.fan@nxp.com>, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3] cpufreq: scmi: Account for malformed DT in
+ scmi_dev_used_by_cpus()
+Message-ID: <20250819053048.t3dfmyu2xqd4ypef@vireshk-i7>
+References: <20250818155048.551054-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/6] soc: renesas: rz-sysc: Add syscon/regmap support
-To: John Madieu <john.madieu.xa@bp.renesas.com>, geert+renesas@glider.be,
- magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, p.zabel@pengutronix.de, catalin.marinas@arm.com,
- will@kernel.org
-Cc: john.madieu@gmail.com, linux-renesas-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, biju.das.jz@bp.renesas.com,
- linux-arm-kernel@lists.infradead.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20250818162859.9661-1-john.madieu.xa@bp.renesas.com>
- <20250818162859.9661-2-john.madieu.xa@bp.renesas.com>
-Content-Language: en-US
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20250818162859.9661-2-john.madieu.xa@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818155048.551054-1-florian.fainelli@broadcom.com>
 
-
-
-On 8/18/25 19:28, John Madieu wrote:
-> The RZ/G3E system controller has various registers that control or report
-> some properties specific to individual IPs. The regmap is registered as a
-> syscon device to allow these IP drivers to access the registers through the
-> regmap API.
+On 18-08-25, 08:50, Florian Fainelli wrote:
+> Broadcom STB platforms were early adopters (2017) of the SCMI framework and as
+> a result, not all deployed systems have a Device Tree entry where SCMI
+> protocol 0x13 (PERFORMANCE) is declared as a clock provider, nor are the
+> CPU Device Tree node(s) referencing protocol 0x13 as their clock
+> provider. This was clarified in commit e11c480b6df1 ("dt-bindings:
+> firmware: arm,scmi: Extend bindings for protocol@13") in 2023.
 > 
-> As other RZ SoCs might have custom read/write callbacks or max-offsets,
-> register a custom regmap configuration.
+> For those platforms, we allow the checks done by scmi_dev_used_by_cpus()
+> to continue, and in the event of not having done an early return, we key
+> off the documented compatible string and give them a pass to continue to
+> use scmi-cpufreq.
 > 
-> Signed-off-by: John Madieu<john.madieu.xa@bp.renesas.com>
-> [claudiu.beznea:
->   - do not check the match->data validity in rz_sysc_probe() as it is
->     always valid
->   - dinamically allocate regmap_cfg]
-> Signed-off-by: Claudiu Beznea<claudiu.beznea.uj@bp.renesas.com>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Fixes: 6c9bb8692272 ("cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs")
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com> # on RZ/G3S
+Applied. Thanks.
 
+-- 
+viresh
 
