@@ -1,95 +1,92 @@
-Return-Path: <linux-pm+bounces-32644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA557B2C608
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 15:48:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1965B2C623
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 15:51:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 925F17BC02F
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:45:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C36901C23CA1
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Aug 2025 13:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6778342CB5;
-	Tue, 19 Aug 2025 13:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A821341ADB;
+	Tue, 19 Aug 2025 13:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7bCTQ01"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="iDuI4579"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AB519C540;
-	Tue, 19 Aug 2025 13:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A128A341ACB
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 13:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755611180; cv=none; b=h3IArJMdhIKXIG2kHTibij6NaEt4+HhybHN/3WQ4tevuAobewxXrRQI7OpzjSgD16idXOXyLUGXffSs/+eh4SNa0zzb9KRPsK6QDiKV0M8kD0EKpa4pgUi1r6N04S8o7HAPN77vIN5InKOMeya4DMa22g8scaQoDB35XWLnzm7w=
+	t=1755611288; cv=none; b=ksJGcq+fpl0hu34DEuF3xvo4LVFKHgp+t1YU32zWk4RiJbpa7calUGtGBvG8Dare+pLnFXVPrAsTmjKZLIy4hIM+pmN/nB5prZoZeBtU9fOwoEb10OSD68shAmj5/Csh+Wm3sm0s2x04SVhR3qY7vWDI7vCuvJC9MTNs+6bCHjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755611180; c=relaxed/simple;
-	bh=SAIdtJM6LkCatVrWImthiJwziRX8HOwPKgj2HFdZhvE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nj1p/F/xWpo3aC1OoddmfrIJTOuI3QLCF0UHygGURT/GhQHOIwQidZ5SNrSfiHsJA1BX8mPyLHlddHp8aBWAfA0RiRENfZudImcrJCfjMiPyQd5ZZNifUlIGeR2CAZc4Zm8RH306FxZ00qra1PR8cIB3nNq+WSKqShFG9TptD1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7bCTQ01; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9184AC4CEF1;
-	Tue, 19 Aug 2025 13:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755611179;
-	bh=SAIdtJM6LkCatVrWImthiJwziRX8HOwPKgj2HFdZhvE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G7bCTQ01ocGyuf7Ag+FCzBiLcGF6hKZ9fBvQ95He86f9Ej3Ldx/mgauUKUiISjqj2
-	 9EgrHA6nTshi3eIugwWGB0bg1SMI+fD7o63r71gVBBOs+meW9RQ72IxBnWqiqugCaE
-	 CdnV0ELf5EXNhTg+tVYAoNVuVSnjY9hMtKUXkjMXYd5U1NrWSRWawQQKpiUNyOAKyw
-	 w7q3VeRbiiuAnSHFVAbnq42Sb/nB+0lFs9oSlc92rj5hVTnJ34cmUBlPdmuM3O1yVh
-	 qQ7Kvn3TM+gInzVx4k7siRktKIjKpFehW+AfW2HvhQwKzxST7ojgeWKv9JX1OJOiUW
-	 gm340Ack5NBDQ==
-Message-ID: <363db534-92a2-4108-8a41-8e07ec22513d@kernel.org>
-Date: Tue, 19 Aug 2025 16:46:13 +0300
+	s=arc-20240116; t=1755611288; c=relaxed/simple;
+	bh=WgxoQGTefGQy6krhXNt6jyY6Ogd2/MoAfO4+6xkHD0Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=bFk2mUr0ei1ip5Q/RTgUJTSaMnw1O3zlcUOelHDvjVAsVhetMyzVcbVoN9EJGs5GxsDAVnTHWBGdnOSVOgQsq9MhPr072NTh2PZsgQB4NeXwuolyTWWpam88MdLO6L7c+EjTAher1bBkaCsKsvfsdhQALY3DrAWcxW7K1/CfNJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iDuI4579; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250819134804euoutp02b51d6653ae52d6d02b1d641dd04da36b~dLyl_C7ox1778917789euoutp02i
+	for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 13:48:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250819134804euoutp02b51d6653ae52d6d02b1d641dd04da36b~dLyl_C7ox1778917789euoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755611285;
+	bh=rNNRF4Z64xSeC0TtYIjoq13C5zAXQshZP/bVM+z+NiQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=iDuI4579/yT2PSmol4tFFkDPplMZDmKc2g2rMu5dRM4X5bFq8Mp9N9d8ms5MibZt7
+	 368lvC9S/XM+zfdLWHKDyLl7aVWbm3yIS0yqTu3B0yEvgwuioypHKq/KuZhwAp+6ps
+	 UvZGL7usRQvkKiZq+w9jzFcXFra/MftkQdpbXkm8=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11~dLylHjeKm2798127981eucas1p1o;
+	Tue, 19 Aug 2025 13:48:04 +0000 (GMT)
+Received: from AMDC4515.digital.local (unknown [106.120.51.28]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250819134803eusmtip14d110ea7c0e1c86224f6c2ecf32b88ba~dLykUPeUf2742627426eusmtip1o;
+	Tue, 19 Aug 2025 13:48:03 +0000 (GMT)
+From: Mateusz Majewski <m.majewski2@samsung.com>
+To: m.majewski2@samsung.com
+Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org,
+	justinstitt@google.com, krzk@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux.amoon@gmail.com, llvm@lists.linux.dev, lukasz.luba@arm.com,
+	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	rafael@kernel.org, rui.zhang@intel.com
+Subject: Re: [PATCH v7 6/7] thermal/drivers/exynos: Handle temperature
+ threshold IRQs with SoC-specific mapping
+Date: Tue, 19 Aug 2025 15:47:55 +0200
+Message-ID: <20250819134755.92187-1-m.majewski2@samsung.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250819131704.19780-1-m.majewski2@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: document the RPMh
- Network-On-Chip interconnect in Glymur SoC
-To: Rob Herring <robh@kernel.org>,
- Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Mike Tipton <mike.tipton@oss.qualcomm.com>, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-References: <20250814-glymur-icc-v2-0-596cca6b6015@oss.qualcomm.com>
- <20250814-glymur-icc-v2-1-596cca6b6015@oss.qualcomm.com>
- <CAL_JsqL+C1VueQjrKra8fNTd-2k=gkoy-jA9uuQOhuyRMbQroQ@mail.gmail.com>
-Content-Language: en-US
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <CAL_JsqL+C1VueQjrKra8fNTd-2k=gkoy-jA9uuQOhuyRMbQroQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
+X-EPHeader: CA
+X-CMS-RootMailID: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
+References: <20250819131704.19780-1-m.majewski2@samsung.com>
+	<CGME20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11@eucas1p1.samsung.com>
 
-On 8/19/25 4:31 PM, Rob Herring wrote:
-> On Thu, Aug 14, 2025 at 9:54 AM Raviteja Laggyshetty
-> <raviteja.laggyshetty@oss.qualcomm.com> wrote:
->>
->> Document the RPMh Network-On-Chip Interconnect in Glymur platform.
->>
->> Co-developed-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
->> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
->> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
->> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
->> ---
->>   .../bindings/interconnect/qcom,glymur-rpmh.yaml    | 172 +++++++++++++++++
->>   .../dt-bindings/interconnect/qcom,glymur-rpmh.h    | 205 +++++++++++++++++++++
->>   2 files changed, 377 insertions(+)
-> 
-> This is breaking linux-next "make dt_binding_check". Looks like the
-> clock header dependency in the example is not applied. Please drop
-> this until the dependency is there.
+> +		pr_warn("exynos-tmu: Unknown SoC type %d, using fallback IRQ mapping\n", soc);
 
-Thanks! And now i see why my script didn't catch this... now fixed and
-patch dropped.
+I missed this when writing the previous reply, but this doesn't build:
+"soc" should be "data->soc". This line disappears in 7/7 though, so 7/7
+builds just fine for me.
 
-BR,
-Georgi
+Kind regards,
+Mateusz Majewski
 
