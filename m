@@ -1,145 +1,112 @@
-Return-Path: <linux-pm+bounces-32667-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32668-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9932B2D190
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 03:51:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0D09B2D1BD
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 04:04:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13AE37A749E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 01:49:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACB975245DE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 02:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DF4267B94;
-	Wed, 20 Aug 2025 01:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A948727B4FA;
+	Wed, 20 Aug 2025 02:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dJYs5NyH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD6670823;
-	Wed, 20 Aug 2025 01:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C4427B343
+	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 02:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755654655; cv=none; b=hOihbFL8uwo2+8quOjUulEga3xha5C+iZA+bjoUZw/ujiVqgARsn2x14fVjWAtBvEQdk3b53LEAZBOJQyHxQxyNoosb/VdG0anfbCHpY6nXuONY5qkCZvQ4RIm/I/Nii9zoki7JgWpToyEC/anFwQJ4GUxb5CJ+96FqIECYhtjk=
+	t=1755655491; cv=none; b=rAjG7ci4/f9oQ76JEZjFtM/nmtABlzT09nTF2outWa1H/b8bhNjWrMK5eREXHw3KQ5WPlzSL3O9DdXATxjTDEnxAzhZmJ4vX/r9c12wx0q6B3ZSF+GAsV6hB/zWbGlf2JvRLyF/srJZEDyZu4LcIb9LiKvL3neHdt9/jz+V0Gww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755654655; c=relaxed/simple;
-	bh=9ZrnOO89IuC8LPdiduICMO3xfuw1wR8CVeXVoOzYVQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=c5zteU6b52Hdn2EjSojyIZCLOVUxegbS2YQ6SudHQotlu4tuAllCAOalD+TQLCzKBtIfwkVKpYMGiW8cL7DR0JO3R9qLpITPQoOtE3TXixrS+ywvgKyhF+3fOvQfPptimYoJE7+WRc/iJBLasmNrqCi/pke3F7d7MX9CLTk9yWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4c68Zd4WySz27j7S;
-	Wed, 20 Aug 2025 09:51:53 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 59FCF140277;
-	Wed, 20 Aug 2025 09:50:48 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 20 Aug
- 2025 09:50:47 +0800
-Message-ID: <cbecda55-db03-409a-b892-65171e00f6bc@huawei.com>
-Date: Wed, 20 Aug 2025 09:50:47 +0800
+	s=arc-20240116; t=1755655491; c=relaxed/simple;
+	bh=zEpVahfh535VfqbCsd1GZhquq+XM/4DWjCgCN7dt7yM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KB0A/ETyG8YQIq7I/qll8BNEIruRpY5wNeXVTuod53Y8X6BDfnUqD4Vdl5EtG9yOarivQUgQNLV1FQj4icB6q2JB157Ld0P4Brck0qBbyqm/HA8OLGBY5Q6xJjMdqeMVib3Tt6TpvoXIGTq0qKggVtaRCXyCNlFaHk17/c0TVd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dJYs5NyH; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-323267bcee7so7025197a91.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 19:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1755655489; x=1756260289; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OVU8t8SEuGg2Ydf4TYKXUzr0Gv6gJe9s60zdvfLEhYg=;
+        b=dJYs5NyHxS03Ygxh0L2H2MNFT896tcRDXIrQT/8C1+FcaYLVKrz419/IilI7Oah9uQ
+         k2wCRNmUObuDEt5MZT6PlN1Df3BskVzgeYV7JSifK3H0SfHIQU8Ap3hYVkIYcXmjmjLy
+         MHmXRIpwp1MNJi43Ard5hwZrW+09nJb9ZyQHs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755655489; x=1756260289;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OVU8t8SEuGg2Ydf4TYKXUzr0Gv6gJe9s60zdvfLEhYg=;
+        b=VhYbMsHvlXr3Jkra+FWD8m6LvSJ01fN/RXgz8sRsosien5XNEJtdUQuXulaULyea5N
+         isBXAyU0NCiFnNyL9aG2Jq9WUfHv1t1ZDVhnPnmawV3bC8iFtsGjLmyHVt1pDqB2/nOy
+         y6jwuC3f0ApuhfbUWw2xpvdbHzAuY642V+KS4H5cUcjMp5IziNGFLEvWn49UR8hIDryp
+         DUdP6NNeMqw+o/2NUJKbIAD6qzZC2ziShLFneLCe5rMZIHXMIi0cfgDddpMwbEukokba
+         LI9kB1j8ccsg01UUBdGujTSW5UaObXWOO1wxSSrSivboRYf9/hkvbFDGtBbXGhbkt/8f
+         cX7g==
+X-Forwarded-Encrypted: i=1; AJvYcCXsh/WeFyGF2vWRRDwKpckb1rmx0kbCUPUTHgQNc9xho1CiW2J4rYpZ2VypG4l2RqfX/9r1o578bA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBHt+gjJD+5ytdmt5RfrbI9IYWnBjpyuBUVCNb/Rgs3zOlwYkJ
+	pO8tn6GVIJ1EqrdZxPhaf+DNdUtc+1uZ9Bgpi/NGfVUHGW+54LVf35LZa87dK7LfQw==
+X-Gm-Gg: ASbGncuQcSPvuPSip0mhRWY+5XAnFNK3gkzh89wdlZTXsZ+jYJjFlKbHAqU4AQcCFIx
+	szW6UW/KlJDn6vMQAlmeruGsahnPz0/1x1kajEJxRBh2BdjRJfGByTU8YoPdyupTT9n/MWKx8Oa
+	My3PuTwwH3bxbDVIQl/MpY9wLDYSsXNGrFs5+9rbTno+gHCyrP1jr/acN25Kz9mNSbvcpw6mlko
+	RuaQGhZYo0I36tkYwjd6LNuN0aq8d6ySwEzLw3X5z2wM5/30uOL95HbCD7zFJfjDRqKq8cUu426
+	W4i1YFAhpVGi7liwts1dJOj6W6l62pYbTY0XilXJcWF2Q6sKJ2rE8oR+ONHyzgXBE58RTUhaoL3
+	ooF3j81k513NwB6PHe3koT+XG9Q==
+X-Google-Smtp-Source: AGHT+IHxv8AzQbZlnNl7yEBNhn//58P8cBNzw6MHuveKMqkiuqUA2DnZVcHCsQ6yHpB+x73iCeJGzA==
+X-Received: by 2002:a17:90b:3945:b0:321:81a7:775 with SMTP id 98e67ed59e1d1-324e142a186mr1457487a91.25.1755655489508;
+        Tue, 19 Aug 2025 19:04:49 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:3ff5:e488:6024:dadb])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-324d335c4f1sm1601815a91.11.2025.08.19.19.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 19:04:48 -0700 (PDT)
+Date: Wed, 20 Aug 2025 11:04:44 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Pavel Machek <pavel@kernel.org>, Tomasz Figa <tfiga@chromium.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: dpm: add module param to backtrace all CPUs
+Message-ID: <afspavnfnnhyttvxmcgdl76jwpawqp7v7g7dd5bnjfc3vv3hg7@g3zey3r3zqc4>
+References: <20250731030125.3817484-1-senozhatsky@chromium.org>
+ <CAJZ5v0jAdsyHKsfRtW+Crh_aDY_uryvNekTBivcdPVGAL4UyPQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] cpufreq: Add a new function to get cpufreq policy
- without checking if the CPU is online
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <catalin.marinas@arm.com>, <will@kernel.org>, <viresh.kumar@linaro.org>,
-	<beata.michalska@arm.com>, <sudeep.holla@arm.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <vincent.guittot@linaro.org>,
-	<yangyicong@hisilicon.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <zhangpengjie2@huawei.com>, <linhongye@h-partners.com>
-References: <20250819072931.1647431-1-zhenglifeng1@huawei.com>
- <20250819072931.1647431-3-zhenglifeng1@huawei.com>
- <CAJZ5v0i7g8i8m9GPi9=-Y0x36491Ng3akUfVP2vPOBS-OAEg=w@mail.gmail.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <CAJZ5v0i7g8i8m9GPi9=-Y0x36491Ng3akUfVP2vPOBS-OAEg=w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+In-Reply-To: <CAJZ5v0jAdsyHKsfRtW+Crh_aDY_uryvNekTBivcdPVGAL4UyPQ@mail.gmail.com>
 
-On 2025/8/20 3:05, Rafael J. Wysocki wrote:
+On (25/08/19 21:35), Rafael J. Wysocki wrote:
+> On Thu, Jul 31, 2025 at 5:01 AM Sergey Senozhatsky
+> <senozhatsky@chromium.org> wrote:
+> >
+> > Add dpm_all_cpu_backtrace module parameter which controls
+> > all CPU backtrace dump before DPM panics the system.
+> 
+> This is exclusively about the DPM watchdog, so the module parameter
+> name should reflect that.
 
-> On Tue, Aug 19, 2025 at 9:30 AM Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
->>
->> cpufreq_cpu_get_raw() gets cpufreq policy only if the CPU is in
->> policy->cpus mask, which means the CPU is already online. But in some
->> cases, the policy is needed before the CPU is added to cpus mask. Add a
->> function to get the policy in these cases.
-> 
-> I'd prefer the subject to be somewhat shorter.  For instance, something like
-> 
-> cpufreq: Add new helper function returning cpufreq policy
-> 
-> would suffice because the changelog explains the details.
-> 
-> With that addressed
-> 
-> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+I thought dpm in dpm_all_cpu_backtrace explains that.  Should
+I rename it so something like dpm_watchdog_all_cpu_backtrace?
+Any better suggestions?
 
-Thanks! Will shorten it in the next version.
+> Also, it is not quite clear which module this is going to belong to,
+> so a comment with this information would be helpful.
 
-> 
->> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->> ---
->>  drivers/cpufreq/cpufreq.c | 6 ++++++
->>  include/linux/cpufreq.h   | 5 +++++
->>  2 files changed, 11 insertions(+)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index fc7eace8b65b..78ca68ea754d 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -198,6 +198,12 @@ struct cpufreq_policy *cpufreq_cpu_get_raw(unsigned int cpu)
->>  }
->>  EXPORT_SYMBOL_GPL(cpufreq_cpu_get_raw);
->>
->> +struct cpufreq_policy *cpufreq_cpu_policy(unsigned int cpu)
->> +{
->> +       return per_cpu(cpufreq_cpu_data, cpu);
->> +}
->> +EXPORT_SYMBOL_GPL(cpufreq_cpu_policy);
->> +
->>  unsigned int cpufreq_generic_get(unsigned int cpu)
->>  {
->>         struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
->> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
->> index 95f3807c8c55..26b3c3310d5b 100644
->> --- a/include/linux/cpufreq.h
->> +++ b/include/linux/cpufreq.h
->> @@ -205,6 +205,7 @@ struct cpufreq_freqs {
->>
->>  #ifdef CONFIG_CPU_FREQ
->>  struct cpufreq_policy *cpufreq_cpu_get_raw(unsigned int cpu);
->> +struct cpufreq_policy *cpufreq_cpu_policy(unsigned int cpu);
->>  struct cpufreq_policy *cpufreq_cpu_get(unsigned int cpu);
->>  void cpufreq_cpu_put(struct cpufreq_policy *policy);
->>  #else
->> @@ -212,6 +213,10 @@ static inline struct cpufreq_policy *cpufreq_cpu_get_raw(unsigned int cpu)
->>  {
->>         return NULL;
->>  }
->> +static inline struct cpufreq_policy *cpufreq_cpu_policy(unsigned int cpu)
->> +{
->> +       return NULL;
->> +}
->>  static inline struct cpufreq_policy *cpufreq_cpu_get(unsigned int cpu)
->>  {
->>         return NULL;
->> --
->> 2.33.0
->>
->>
-> 
-
+Ack, I'll add MODULE_PARM_DESC().
 
