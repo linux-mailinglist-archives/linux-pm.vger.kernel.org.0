@@ -1,113 +1,120 @@
-Return-Path: <linux-pm+bounces-32675-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32676-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 992F8B2D3BA
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 07:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C62FB2D3BF
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 07:48:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70A7416D104
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 05:42:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49CF1586E22
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 05:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F5829B8C7;
-	Wed, 20 Aug 2025 05:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A016421CA0C;
+	Wed, 20 Aug 2025 05:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YXmymuyn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559D221C18E;
-	Wed, 20 Aug 2025 05:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC391C3306
+	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 05:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755668555; cv=none; b=UmQBNd28PxrgLkwCPeOrh9AxCR4Y3kDrXAaad3Y2fqsdxr/QJTC8eLsdgGPULA11kqB8Z8petq1AzLBFlbrSCHC0RDPsTWxcv4gQH1Vcgyl1G2n26sNWctQDvmXAOX9RspxKE2mKKwipRPRN935R1U1KgLxyAdqJVcvyUCokB0Q=
+	t=1755668884; cv=none; b=ZgwpGjqkcAXDWbOipR4iNutn5wgovHecu+DprGCVNriLnx3j3aYutSq52ey6SL4oAc08mGlVnYLY+lyEWUTjrhreI30EJDRzhowOBw2JfLZLIhFAru7gQ6ZCbdXkIqh2+5RjGPwuWKgYlJ6tI+5Yi+0Uup724Q1nc1Ni7ks8t8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755668555; c=relaxed/simple;
-	bh=ebvnygw/n9riSKGs3brN0qOEfvzkCQbrCSPg8SWnUQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fr95VHDLIy9lIJfl14hPlscBhF4U6wW5MkniTl2UcTbZNOR5yMSIs05zLBzJK8kbTYb3v4jAnxen6jjqD148p5YZ+VWp9hP8ptVy/3gdeWiju6l/ahcWUrTnRnP/DZXfCM363a1KZZ8FP9ja8puCNRLZ/W5rlSY+41GZN1L2RBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 723da54e7d8811f0b29709d653e92f7d-20250820
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:1eff894f-f567-4815-9398-2176bde908bd,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:b53c3dcd636209bd0edfe60b3616c205,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 723da54e7d8811f0b29709d653e92f7d-20250820
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1968329055; Wed, 20 Aug 2025 13:42:23 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 1D8CDE008FA3;
-	Wed, 20 Aug 2025 13:42:23 +0800 (CST)
-X-ns-mid: postfix-68A5603F-3015255
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 77B49E008FA2;
-	Wed, 20 Aug 2025 13:42:21 +0800 (CST)
-Message-ID: <ffe2344d-e825-44c0-ad2b-9544b123079f@kylinos.cn>
-Date: Wed, 20 Aug 2025 13:42:20 +0800
+	s=arc-20240116; t=1755668884; c=relaxed/simple;
+	bh=r+w8WvwWHNQ4VwOfdxeCscDSyg5iTvG3fk5pdUlOBw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e4/4sXcDhvDp7p1o45rW/gnTtVBlUTRXhm+Z90NYb/i7E6TyouEjqw8yTzoTFBoipVxFzDqR1y/wGGCahEdSxEynuWuDN7VIbIhtGmOtaFSP3SqlufJxsA7u+TNMSBAB+GxWOYDtCH7pkUvxn/g2bXQzXCtMZ3X76WsYMJ0bMek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YXmymuyn; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76e2eb09041so5212066b3a.3
+        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 22:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755668882; x=1756273682; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vW8840o/ycg8xvcBZ4mzSNjiiU65u1hBI4Xzd3lb1KY=;
+        b=YXmymuynHBdxEF4HlAV6TTIOgR+nr+wxNh0sH64TXUpd9MoPQRvnFHaNmLyhDiL8OZ
+         NRkgiSdHB9T2mpo5NyvoTP0R5vw8Uzxw4AfAGkGz6MOTuRxBzv/k2aBoMwD/m75pCEwT
+         IEA3jdlgNVkm/qg40/0C4+sDht3kKQHbNnlekZv6w0OwjtjRixgiKiv2Zf885sHB+uyW
+         dwisMqJZd4NavO7aUbkYtLZR9DBJVr4fQDRUEfPWIu+p+iCVPye8zMCXh7bFI9O4ZxW8
+         MeeZoaIzDHA0YcmZEVdJKpiXPYjsx7F9+hzwAv/gyutWwnnJTymZjONLHhGdZVDYIePL
+         Ylpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755668882; x=1756273682;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vW8840o/ycg8xvcBZ4mzSNjiiU65u1hBI4Xzd3lb1KY=;
+        b=BkwOKFpQLlgUVq5yVixHcmcO98IVNXdNUnEvcZSngLLMhe51uYvZy4nWE1wVMOYXkI
+         L7dnSI6xqDu7NgNUtVvU4Mn2hvjUILdOv8q1E2BBrOJGudSEiihMiYi7agQjexRTwa/y
+         0hLEy94M7f6zxk8YkifPePGUAwq5GDCxoXNgL6tqUKGzecFMy67a2oTO2I2u51CKfHg+
+         eUWaiOxqENKyep3Y5bBiYIPRKoW/Gv0jnkdY3dfj49Ru2o2SMmutRQvkHVd0dnz6PS9r
+         rAzxojtJaaBmD8uoFwny0Lv9uGWHllizjQvanRP+rPO4gvZtb3MktEuFOHNfhZrxv7EQ
+         JTCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3zCg23dAU6RFjImC/M80EYqu87oYD2EN5iDRxMzBlBDf4i6obcSFEaubBmyz0nzq2MgkLp5jlKQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqGIFooFusjoWAwECmDtpAYpvihjMCapXqtHdgko11WSaORUt3
+	JXlIqCtGRK/F0EiEtgKRtWlH1xFAdtNvNr0BmPvvkB337/zd+g8f7331aywwchlqiA0=
+X-Gm-Gg: ASbGncsgmPJ6ZOzq/5dvyPYXV6lj7jsimQ0YzsPQrlC4ULYkoBogw3nbpLFgvU9/9mf
+	0H4dHUFnKUKCuxtAogvCbDW/Ir2LbW+swNJAvLoi+N8xad96OgYO7l08gxsqnn7ig963CzHfvsR
+	Qp53cTK0rCUNQp62OFSdrwa0KyCKlIhKlmWXLc5vpmdEbyLeX3g2ds9YM7o82t1BwdUUyClGl7A
+	krtTTJNhh7B+cfMP1ErEkQjN7rf8PWLL8OKRICLZ2ikir71wIZN2veoDMk/mX320bWQxFTaOiXD
+	ERbAX4+jr4UGj5TOM3+sOQN88x2YZZ2RsgpfcPStsCUV9zqx10XkSxbj4IewxHszVEPPNN7WZTi
+	M2LuD81lpu7ajW/48QU1SwKRh
+X-Google-Smtp-Source: AGHT+IH2Xq01l1q2X39vBmw9ze+Dsd/H2thv74xC2wrCKl2UpQcwUaIMycYjfq6gt0/zvw2HiqQMAw==
+X-Received: by 2002:a05:6a21:32a6:b0:243:755:58b8 with SMTP id adf61e73a8af0-2431ba737b4mr2735426637.57.1755668882295;
+        Tue, 19 Aug 2025 22:48:02 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-324e250e52dsm1075206a91.6.2025.08.19.22.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 22:48:01 -0700 (PDT)
+Date: Wed, 20 Aug 2025 11:17:59 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "rafael J . wysocki" <rafael@kernel.org>,
+	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpufreq: simplify cpufreq_set_policy() interface
+Message-ID: <20250820054759.iewwi6uvsvowc422@vireshk-i7>
+References: <20250819103940.342774-1-zhangzihuan@kylinos.cn>
+ <20250819103940.342774-3-zhangzihuan@kylinos.cn>
+ <20250819105925.34o5f5attd5rboh7@vireshk-i7>
+ <ffe2344d-e825-44c0-ad2b-9544b123079f@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] cpufreq: simplify cpufreq_set_policy() interface
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "rafael J . wysocki" <rafael@kernel.org>,
- zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250819103940.342774-1-zhangzihuan@kylinos.cn>
- <20250819103940.342774-3-zhangzihuan@kylinos.cn>
- <20250819105925.34o5f5attd5rboh7@vireshk-i7>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250819105925.34o5f5attd5rboh7@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ffe2344d-e825-44c0-ad2b-9544b123079f@kylinos.cn>
 
+On 20-08-25, 13:42, Zihuan Zhang wrote:
+> You’re right, we didn’t really consider that case before.
+> 
+> The interface of cpufreq_set_policy() does look a bit odd:
+> 
+> - drivers using governors don’t really need the new_pol parameter
+> 
+> - while drivers using the setpolicy method don’t need the new_gov one.
 
-=E5=9C=A8 2025/8/19 18:59, Viresh Kumar =E5=86=99=E9=81=93:
-> On 19-08-25, 18:39, Zihuan Zhang wrote:
->>   static int cpufreq_set_policy(struct cpufreq_policy *policy,
->> -			      struct cpufreq_governor *new_gov,
->> -			      unsigned int new_pol);
->> +			      struct cpufreq_governor *new_gov);
-> A driver will either support the policy or the governor. If we are
-> keeping `new_gov` around, I don't see why `new_pol` should be dropped.
+Right, one argument is _always_ unused. If we could have handled that via a
+single argument, it would have been nice.
 
-Thanks for the reminder.
+> I guess this might be due to some historical reasons.
+> 
+> The question is whether it’s worth modifying this function, or if we should
+> just keep it as it is.
 
-If we remove new_pol, then new_gov should indeed be removed as well.
+Unless there is a better way :)
 
-> And changing the policy for a `setpolicy` driver should happen from
-> within cpufreq_set_policy() instead of the caller. Also there is at
-> least one case (verify()) where we may end up returning early, before
-> changing the policy.
->
-You=E2=80=99re right, we didn=E2=80=99t really consider that case before.
-
-The interface of cpufreq_set_policy() does look a bit odd:
-
-- drivers using governors don=E2=80=99t really need the new_pol parameter
-
-- while drivers using the setpolicy method don=E2=80=99t need the new_gov=
- one.
-
-
-I guess this might be due to some historical reasons.
-
-The question is whether it=E2=80=99s worth modifying this function, or if=
- we=20
-should just keep it as it is.
-
+-- 
+viresh
 
