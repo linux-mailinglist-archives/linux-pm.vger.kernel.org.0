@@ -1,87 +1,82 @@
-Return-Path: <linux-pm+bounces-32696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A59CDB2D71E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 10:53:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A94BB2D735
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 10:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FBB93B5EC2
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 08:52:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 999623A5F75
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 08:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF612DAFC7;
-	Wed, 20 Aug 2025 08:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616282D9EF4;
+	Wed, 20 Aug 2025 08:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GhKKNkil"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hBtjH4wD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2542DA75C
-	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 08:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A6D2D9EDA
+	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 08:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755679892; cv=none; b=mNZZc7jrZjbPPRTMIPC2xbmjYVNma9NPr61DAPvE2vrPE0kedBMTZYsqo2+46HqkhVd1f8/Z2jDZIM7p2mus7nzUourMSqAZpyDf1P1OiaWLDDaMCBQRdgAFSF74rriL2UGucZEsHIXcazRHdFSTnNXQxe/6qHMHlr4HYQNeGCE=
+	t=1755680106; cv=none; b=hdzCtKM76ob8JRBIpZhkhRH9sDeh2G7x5WQpyKq6vvxeZDdj0b2Fv4WnYA7lusY5xMwDxRPp6YkXOpYNxRH5wwf8r+IYVOxGh3/kUvZ5LpixEsSgmHbVC4iWTneH37DQbKWCA6XmRmzYVVKpP6CSmmsKEj28a1bz2rAMS/q4E14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755679892; c=relaxed/simple;
-	bh=/ds2ps/9fiQfLgnyFNZdjYCVb+MpjXSLLk6Lrhal8gY=;
+	s=arc-20240116; t=1755680106; c=relaxed/simple;
+	bh=GqmYU65tMcAaCGa4cOzMMQRQzTAiG9TRjGmlEXh2nnE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lel3ZkdxK7VktPjcWVF5nnbjsZer8lBMrjrAhDHP/GApHB49cfITaXk28ThO+kt4xNf06/vXcOP+d+cTKri16OmQwajxpdYhObk1uBd6rTrD6K9LwTKJ6mLqmoDA0biu53MHU8a1UvEZrqKCN+aFElVZFuJTNudMhRWXRxOvULQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GhKKNkil; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57K1owHu002743
-	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 08:51:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Y4OMPtXQhdfS1IUPfrekUduc3f8tO3YSwKKo5NLCOZQ=; b=GhKKNkilIu9G/9Ca
-	eNi6oFbDH8z4Sd+aRC/mlkWsbAJFSgM2bzmI3ygq7x0rs4sw2R36/Bt6ST42zrQ1
-	U7MNMRdCd6uN0zoNCbWXHRxOyYXulay+DxAQZzvAdkQSQFEKOv0mRsYwTbXW3TM6
-	VzWSlcihfaXgMF3Kovl7GWHRcuqHzI05IAGzV2CQZ4Aj/h26L32aomHpoFQtcvbh
-	5rxbTiIXKS3LCbTiGvidjupSmFwh/YdJWa/MH4FFu5hkd1/iMqHYRHPRSoRZaPB/
-	8q0DwSLI+26DrZvp+7uJemkGCtMTYPsKupz1CmcGPEOLslBdDroAsb2zHr48j1KT
-	24cXUg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48n528s1ps-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 08:51:30 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-323267b6c8eso13531118a91.1
-        for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 01:51:30 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=j1MSStCXVoPoh3178hnty9lO/wp272sygqoGV1p3AVBgy6ct7SL9UV8o+CUVyaRQ3T0Js4M4tzitbUbjoJlOuxNXNIToip7Y2T3MsPIAOmGhAae7b7Pvv49Gsw/KaDf24/KXm4+UvZi5241JWcUs6Si0JFRn5Uhiyd9G2Uzk4xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hBtjH4wD; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b9e414252dso2981618f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 01:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755680103; x=1756284903; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Z3/u8sJAwQxbkGnKIhFxnnPFecI1U3zoWEcGlytMh4=;
+        b=hBtjH4wDYAb7hN45SQQB+4ByXSuLX4K76EDgJZC2/2jKBc4IrYnXFk6OyxqYiBvP6r
+         LPwDrF47vzGGDebpV0L1wZJAVFmyiK/zbJWZsAa9ncj4QAIK3H7UxEICxuNRyjsrQ7o+
+         v8Z9jEx2j0GqxUTl+FtQBPhY3svSTAWav1l2tBZDYpu2GVfm301fqbHDMLD5f2fAN5hJ
+         SLTfh621MA8jmhwMJt2JIROcM9bFIBSMWvdN4NQ9zK8S6UHigfzHksAItCRVDuW8IKwN
+         w41Pw5MLGFxDrQhf0cUMVTmXmB+8sPUF9+fOqeIlP9wsBFkXCaeXvFjrtfGBlZ9iMfmF
+         B3SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755679889; x=1756284689;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4OMPtXQhdfS1IUPfrekUduc3f8tO3YSwKKo5NLCOZQ=;
-        b=T7sPHXPeu+oSV4wQxdhBhT6mvgcnR91C91L38zZZEaxn09xPXXg7Ph6xA4GJOktc3w
-         1o9DsbGzLv7oWJ8U74bls/5+H7H8rYyX+Q8MOhq56EBO5AMxpNecHlbha6eHGr6Ih6YM
-         0HT4vSLBS8ryMNDW9hbN/sd0hXVebRKbHWS9qXLrAJ83fGCQuSqkZMbyRmab8BcuMCw8
-         cz2P0515320urAQMWrpFk3aNLQOKaHj0w2z3UHvU2Q2tfy6qwIKZSjNKtC3/DogtCESn
-         QwEba0pU35S4pqHPlszDDNXQH8a+hBfzi46K7UCNMMaVDsiNfAaSIkvVVBN/KnX9pUQZ
-         mT2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXVVJslhAhN6WFF3bbxJ1Px6SKY+v/2mIlbIyOgRmxmZe3Uj5gpfE/fi+90CEmsVZnDgBEIzIqRbg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaqNQD8bN8kp4cbi9fXzCiyzudaYbLlOeMZC629q4jmupWrj+I
-	BZY44P79m2JsUiwZULIY91Au+QUTdTIsuEOr6Uszo05XvLg8o/iIyhIyIAGrcRjT6hfDtbsG9UR
-	Zajd16DhlK5+3SoGt5qvOZgVSxxuMbDkMkkG6qE/fIdHGm/zkvZUybR9DyYpzmg==
-X-Gm-Gg: ASbGncsoIzjaQZ4UahpT7QHtcs6FD5zEXeD2US+x2y8EsyVXEbNvKGT3mqId5rDN8Cy
-	xlqqgGEAzWdDGvZGcK5byA+04QTzmjMw6wDDSH47ZElx442LO1VcwIPPt9gW9shce/yH2c2Icc+
-	GERxQfu3Aus6Jy1bx2RTyyUWfTyulUPHYoiZw0mtmc8lWTDlnyxPD09TxnPn9yPvrJDu/ZOa8Hw
-	Vj5hwQBPr3OdKr+7rtP7AhgBXiC+/mw2BjjB9kCUb4PshNDZyyjdech7GXHwMLGjYeqolbNrAMi
-	7GRSNRbKbwdfYsbl6tbIcHQKvTxwYRlHKkcAK4BTkNJ0JVka+zGiZxJjoXlMIVf5qU7pkuWy
-X-Received: by 2002:a17:90b:48c6:b0:321:c0e3:a8ce with SMTP id 98e67ed59e1d1-324e140d2b1mr2658899a91.22.1755679888784;
-        Wed, 20 Aug 2025 01:51:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGT7ZIz0JNmDoMWE9x4Ai5P9gO4JkYSgLlzLle23lvK2iLaSkN70tzxtR9pL+Q06Be6RHXqWw==
-X-Received: by 2002:a17:90b:48c6:b0:321:c0e3:a8ce with SMTP id 98e67ed59e1d1-324e140d2b1mr2658869a91.22.1755679888241;
-        Wed, 20 Aug 2025 01:51:28 -0700 (PDT)
-Received: from [10.217.216.215] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d0d1a44sm4787237b3a.1.2025.08.20.01.51.24
+        d=1e100.net; s=20230601; t=1755680103; x=1756284903;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6Z3/u8sJAwQxbkGnKIhFxnnPFecI1U3zoWEcGlytMh4=;
+        b=jiLdr6sCXsXcjqJQyHR3kaXdHopXVMtCpxxGx+3KXMocYnhd8kSR28WAdnQApXZqXR
+         m6SpNb6bYnlmgULAELAI2v0407qC9fcxFXsj/ktSwsm6fCQgZZ4JqrphKnZpmXCIVPHG
+         pqK9P5gaw4y+xAocJ8I0ZUM2ShOnHjcjCcGk4lMWFwDr6qdcq25BssKAzVAgITSet0Fv
+         36ALjqqPwqPCGFbdNzZ69AZ9Vw8g6COdPqBU3L0gDXqdVPuuM10k+dFO8qRNYXKDvNP0
+         Ol+ymiZ/zvb4GdbdaMYtXLF+mKxDw8Pqbb5nstxMUt4FnTIVc7UHaPrKgugU0c9yPhLa
+         hLjw==
+X-Gm-Message-State: AOJu0Yy+TBkpWn5kixaBpjw3uyM8e4NuScWTLuY94IE+yprMo8LfcPqo
+	vMtz+xouw44QbJX5e+ws5ArZJkjqJsG1ilbvJ0KtU4lnw7fep85pwwhkgaL5BA1mcHQ=
+X-Gm-Gg: ASbGnctHkEdvd1df38clv/vA0cBQRUHcmsXaIIMcCH5B02Dc0fEyTtv0m0n787BB0qu
+	y5Lk8/S/CuZDAC4KSXq6cMPw1XMBa0vjM564D62I7dDvkKjeY5A4hY2DmKUaN4UNLMe0xWKMD7W
+	7OKE55oNjj9P0uPeUxU28P7mvvjBPQS4ucv5zQzEAp4ht03b3t/WkjZaItfz4Vtn2qfInCq7QYU
+	6dj8GYKJEuOeScYP/uTpqfydapH/E5AKrqGvx2PanMpQ7LvBrib/xcxX5tqtummTZTSTlJgq7OK
+	rBw2wOMgYXNwrKIlB1tvMPDikyNv/96HAeW9mFgO7by7GoRJ4aqWPeFq7PePbBYVdeG9U4cVLrE
+	j33SkKqbCwmUQadLZ5hL3rs75C7valkgGLNTSuA53WekeTc8KJi66mOgbcSQ/1rN2gSkWpIz5fL
+	E=
+X-Google-Smtp-Source: AGHT+IFTWrxSgTC2l5dPH7zS0dWJFEEgFXtWsP9ZePc+WhJK6g+xnGV3HMGvKKHwru3cuNJ86ZsSlw==
+X-Received: by 2002:a05:6000:3107:b0:3b7:837c:5679 with SMTP id ffacd0b85a97d-3c32e6068ccmr1373896f8f.40.1755680102580;
+        Wed, 20 Aug 2025 01:55:02 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:dc4b:4af3:f382:7aa7? ([2a01:e0a:3d9:2080:dc4b:4af3:f382:7aa7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b47c8e98dsm24191625e9.14.2025.08.20.01.55.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Aug 2025 01:51:27 -0700 (PDT)
-Message-ID: <7d3e5cf7-4167-4005-ba4b-c1915c254705@oss.qualcomm.com>
-Date: Wed, 20 Aug 2025 14:21:21 +0530
+        Wed, 20 Aug 2025 01:55:02 -0700 (PDT)
+Message-ID: <6b9fb458-bce1-4d16-a708-b05fdeb22d4d@linaro.org>
+Date: Wed, 20 Aug 2025 10:55:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,119 +84,96 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
- enable QoS on sa8775p
-To: Krzysztof Kozlowski <krzk@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20250808140300.14784-1-odelu.kukatla@oss.qualcomm.com>
- <20250808140300.14784-2-odelu.kukatla@oss.qualcomm.com>
- <90b51e31-3217-4483-bb5b-ec328665a723@kernel.org>
- <28b97952-1b67-411f-a7fb-ddd558739839@oss.qualcomm.com>
- <ac83c453-c24d-4c4d-83bc-9ed13f2f9d1e@kernel.org>
-Content-Language: en-US
-From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-In-Reply-To: <ac83c453-c24d-4c4d-83bc-9ed13f2f9d1e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v4 7/7] PCI: qcom: Use frequency and level based OPP
+ lookup
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20250820-opp_pcie-v4-0-273b8944eed0@oss.qualcomm.com>
+ <20250820-opp_pcie-v4-7-273b8944eed0@oss.qualcomm.com>
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20250820-opp_pcie-v4-7-273b8944eed0@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=fpOFpF4f c=1 sm=1 tr=0 ts=68a58c92 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8
- a=tJ9fhpcgm4yphQaQ0K8A:9 a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: OBTEjSJqz6grwAAQ9-ONhLF552mpFllb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIwMDAxMyBTYWx0ZWRfX6Hdpbpx2k9QC
- kTHpDQBIcEoPuqZMD2LXb09yieR5GLYu8FDkgZa8aY/qoqtv8WkiuuoC69hE2eqK3U09WTV9sW2
- OI/xV1dvPRGc4S1MOYUzoMZXXjbAN7u3TPdUwi4di8Hfr+Bx54UGdTiWVy9fzvJGMFuPkXnHuwh
- Hq4uu7AUA18rTZHCgoeo1yGN/MoK6Yr6WTkSPhmOWBImXQEZVXzq9sFQ9B8+8krGVLTt7VwG1Kh
- kRNPQ6sco5UYYabQQQHRUZ6xUz86JLAt1P8yC+biHUrc939AwJWnMGJvFviEQN0LsQTE168CLrD
- B9HQoy1AW+EakL0aTjlJrbuZBJNgpQ506Smo+Ac2KEGkWR0MhGBZql61+okJxvZnO1uxT5tqBFO
- j9g5x+pWHK3TNzrrDWvjfiWCabvaXw==
-X-Proofpoint-ORIG-GUID: OBTEjSJqz6grwAAQ9-ONhLF552mpFllb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-20_03,2025-08-20_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
- suspectscore=0 bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2508110000 definitions=main-2508200013
 
-
-
-On 8/13/2025 11:32 AM, Krzysztof Kozlowski wrote:
-> On 13/08/2025 07:55, Odelu Kukatla wrote:
->>
->>
->> On 8/12/2025 3:47 PM, Krzysztof Kozlowski wrote:
->>> On 08/08/2025 16:02, Odelu Kukatla wrote:
->>>> Add reg and clocks properties to enable the clocks required
->>>> for accessing QoS configuration.
->>>
->>>
->>> Nothing here explains why EXISTING hardware is being changed. I also
->>> remember big discussions and big confusing patches regarding sa8775p
->>> (its rename, dropping/changing all providers), and this patch feels like
->>> pieces of it without proper justification.
->>>
->> Thanks for the review.
->> I have added description in cover letter, i will add here as well in next revision.> And this is hidden ABI break, no justification, no mentioning either.
->>> Again we are discussing basics of ABI breaking patches?
->>>
->> If you are talking ABI break if we load old DT which may lead to crash, we have .qos_requires_clocks flag which takes care of skipping QoS if required clocks are not enabled.we have addressed this issue through https://lore.kernel.org/all/20240704125515.22194-1-quic_okukatla@quicinc.com/ 
+On 20/08/2025 10:28, Krishna Chaitanya Chundru wrote:
+> PCIe supports multiple data rates that may operate at the same clock
+> frequency by varying the link width. In such cases, frequency alone
+> is insufficient to identify the correct OPP. Use the newly introduced
+> dev_pm_opp_find_key_exact() API to match both frequency and
+> level when selecting an OPP, here level indicates PCIe data rate.
 > 
-> Format your emails correctly, it's difficult to read.
+> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+> ---
+>   drivers/pci/controller/dwc/pcie-qcom.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> Your binding did not require reg and clocks. Now it requires reg and
-> clocks. This is called ABI break.
-> 
-> Please follow Qualcomm extensive upstreaming guide, it explains this,
-> doesn't it? Or follow writing bindings...
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 294babe1816e4d0c2b2343fe22d89af72afcd6cd..4f40fc7b828483419b87057c53e2f754811bdda0 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1555,6 +1555,7 @@ static void qcom_pcie_icc_opp_update(struct qcom_pcie *pcie)
+>   {
+>   	u32 offset, status, width, speed;
+>   	struct dw_pcie *pci = pcie->pci;
+> +	struct dev_pm_opp_key key;
+>   	unsigned long freq_kbps;
+>   	struct dev_pm_opp *opp;
+>   	int ret, freq_mbps;
+> @@ -1582,8 +1583,10 @@ static void qcom_pcie_icc_opp_update(struct qcom_pcie *pcie)
+>   			return;
+>   
+>   		freq_kbps = freq_mbps * KILO;
+> -		opp = dev_pm_opp_find_freq_exact(pci->dev, freq_kbps * width,
+> -						 true);
+> +		key.freq = freq_kbps * width;
+> +		key.level = speed;
+> +		key.bw = 0;
+> +		opp = dev_pm_opp_find_key_exact(pci->dev, key, true);
+>   		if (!IS_ERR(opp)) {
+>   			ret = dev_pm_opp_set_opp(pci->dev, opp);
+>   			if (ret)
 > 
 
-Thanks for your review and guidance.
+Fine but you should still support DTs without the opp-level property as fallback,
+since stable kernels has the opp tables without level property (v6.12+ for 8450/x1e, v6.16 for 8550/8650)
 
-I agree that adding reg and clocks properties to existing bindings is an
-ABI break. The sa8775p is a relatively older platform, and when the
-interconnect provider driver was initially upstreamed, QoS configuration
-support was not available in the framework. As a result, QoS was not
-enabled at that time.
-
-The motivation for this change is that certain interconnect paths on
-sa8775p require specific clocks to be enabled to access QoS registers.
-QoS configuration is essential for managing latency and bandwidth across
-subsystems such as CPU, GPU, and multimedia engines. Without it, the
-system may experience performance degradation, especially under
-concurrent workloads. Enabling QoS improves system responsiveness and
-ensures more predictable behavior in high-throughput scenarios.
-
-We previously discussed ABI concerns when introducing QoS support on the
-SC7280 platform. To address this, we added a .qos_requires_clocks flag
-in the driver, which ensures that QoS configuration is skipped if the
-required clocks are not defined. This mechanism prevents crashes when
-older DTs are used, thereby preserving compatibility.
-
-I will update the commit message to include this justification. We also
-plan to follow a similar approach for other platforms like SA8775P,
-where the provider driver is already upstreamed and QoS enablement will
-be submitted as a separate patch series.
-
-Thanks again for your feedback.
-
-Best regards,
-Odelu
-
-
-> Best regards,
-> Krzysztof
-
+Neil
 
