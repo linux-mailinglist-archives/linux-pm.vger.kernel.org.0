@@ -1,60 +1,61 @@
-Return-Path: <linux-pm+bounces-32689-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32690-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BC78B2D6A4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 10:36:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A569BB2D6A8
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 10:36:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFA0C3B1B1D
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 08:34:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F5ED3B4121
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 08:34:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0871327147D;
-	Wed, 20 Aug 2025 08:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B46732D8DDF;
+	Wed, 20 Aug 2025 08:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Km6Cim3A"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mHqr3Kz4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF36231826;
-	Wed, 20 Aug 2025 08:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225162737F6;
+	Wed, 20 Aug 2025 08:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755678854; cv=none; b=EG/P6eNkabzACrgYYT7yopnh4sBnTapfuiCpZYZd1yfhDzGqHo6yI/fANCDfjCTza/I2hRz0E2DZy1iZRgy+ltBUWt79Yr3raEnD4IrKtZCgUfMY+ESFRTsUHoQyg1AF9dGgQyy2IEnjuxLQyTNSnvcTw1HR5uFoaq/AwXzSC00=
+	t=1755678856; cv=none; b=oEnsj/R3RQ9iGjj0H+rcvZybqQV2PJXTdcYoP7FO+REMPCimXQXzsjO5SNUJeuKJKHUk4KbbstqAtnulWGjJfNPplZhn0elatpTCKiGUqfnPQCq3EqNWU64jjeLLgTK7HSS2zddML521t8zYpHGpw97b4b/Jy6TIrUcp7zr7Xjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755678854; c=relaxed/simple;
-	bh=CH4BeaS478hobY3clDlX9i4IzgiW+s/PwZ/7muoC3Zc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MVqlnBrkJkdqJh9mB9dqUSqyYZLur9YfvpUfv+tnfSb9Fz7chwGLtjA/viiqXZFlV9mF9wylaKBoM1fmNg/Lxgi1ANiu6JWn7H3HtRIhvGLdsUA7wBKpZT0S5L4VTlqPOne2a7CywM8EZ6BVwQKIs2M2shqF+XZA5ph39nFsLWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Km6Cim3A; arc=none smtp.client-ip=198.47.23.234
+	s=arc-20240116; t=1755678856; c=relaxed/simple;
+	bh=of8447HiVJqRdz4rv0HNn1rtX19Kf8ihqdRTHGviwlw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lXJL4rorQNQMeNlFNGc6mKEJJU/Ich+n6K7uTwij0XYg8b8HPDZ4aRIZ+Fztr/LLjkw4Wmh1Gh/6BNW7xThjR87smC95DHz3J90AQUojbVfg1aigZd9eK+i9LRggiYm7OFKSu1dTQHIa9cr3cup9bStKlAPCwByB0W99EF3KNak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mHqr3Kz4; arc=none smtp.client-ip=198.47.19.246
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57K8Xx3P3154182;
-	Wed, 20 Aug 2025 03:33:59 -0500
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57K8Y8H7207845;
+	Wed, 20 Aug 2025 03:34:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1755678839;
-	bh=PnhKc8g8H0kWfIoMnf2P/Giz7+/dSwkw4FZNG9iIes4=;
-	h=From:To:CC:Subject:Date;
-	b=Km6Cim3AdlaexZ7iEUPrWAEzfAlC2vTcPFUXnEtQxEPhDIeOnGIX+p6pz12dSSZVP
-	 1S0M7KomD0YNN8QAhXAa9pWf3iQx0pi150ccUvRPHBWvZVPp//s+hfrJROI7lHkLC8
-	 3pKoqCCYADtvK/YfpVxmuWJmhUau51AhX3Yi8cV4=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57K8XxC91919840
+	s=ti-com-17Q1; t=1755678848;
+	bh=vUBXrqvedfpHBtOjp4aTmMMFWcJbSWrEMa3VFNLD1mY=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=mHqr3Kz4/YqUjVRw5hJfQwR3HgK2s8pnnU7wXfk5pM/PgUW+WGcXl0OUU4bH64dP9
+	 zXKOVKdTzGYnoFkbnjREX7Z3vFbJRMSgJx1ODtoMCHY+jwhfWydW1ao+jsP0JuLJar
+	 kUhcAxNaWhyvsmlncMds5pNPU585pssFl3oZgqOA=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57K8Y87q1661123
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Wed, 20 Aug 2025 03:33:59 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 20 Aug 2025 03:34:08 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Wed, 20
- Aug 2025 03:33:59 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2025 03:34:07 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Wed, 20 Aug 2025 03:33:59 -0500
+ Frontend Transport; Wed, 20 Aug 2025 03:34:07 -0500
 Received: from localhost (ula0502350.dhcp.ti.com [172.24.233.249])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57K8Xvku4133408;
-	Wed, 20 Aug 2025 03:33:58 -0500
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57K8Y6dJ4133686;
+	Wed, 20 Aug 2025 03:34:07 -0500
 From: Paresh Bhagat <p-bhagat@ti.com>
 To: <nm@ti.com>, <vigneshr@ti.com>, <praneeth@ti.com>
 CC: <kristo@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
@@ -63,10 +64,12 @@ CC: <kristo@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <khasim@ti.com>, <v-singh1@ti.com>, <afd@ti.com>, <bb@ti.com>,
         <s-vadapalli@ti.com>
-Subject: [PATCH 0/4] Add cpufreq and USB support for AM62D2
-Date: Wed, 20 Aug 2025 14:03:27 +0530
-Message-ID: <20250820083331.3412378-1-p-bhagat@ti.com>
+Subject: [PATCH 1/4] arm64: dts: ti: k3-am62a-main: Fix pinctrl properties
+Date: Wed, 20 Aug 2025 14:03:28 +0530
+Message-ID: <20250820083331.3412378-2-p-bhagat@ti.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250820083331.3412378-1-p-bhagat@ti.com>
+References: <20250820083331.3412378-1-p-bhagat@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,41 +80,30 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-This patch series introduces following changes:
+From: Vibhore Vardhan <vibhore@ti.com>
 
-* Patch 1 fixes the register length in main_pmx/padconfig for AM62D
- and AM62A.
+Correct reg length to match end address - start address for main
+PADCFG registers.
 
-* Patch 2 enables USB support for AM62D2-EVM by adding pinmux and device
- tree nodes.
+Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
+Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-am62a-main.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-* Patch 3 adds AM62D2 SoC to cpufreq-dt-platdev blacklist so that
- cpufreq is handled by the ti-cpufreq driver instead of the
- generic cpufreq-dt driver.
-
-* Patch 4 extends ti-cpufreq to register AM62D2 SoC support by
- reusing the am62a7_soc_data.
-
-Boot Logs-
-https://gist.github.com/paresh-bhagat12/e29d33c3fd92ff17580edf1441ece9f9
-
-Tech Ref Manual-https://www.ti.com/lit/pdf/sprujd4
-Schematics Link-https://www.ti.com/lit/zip/sprcal5
-
-Paresh Bhagat (3):
-  arm64: dts: ti: k3-am62d2-evm: Enable USB support
-  cpufreq: dt-platdev: Blacklist ti,am62d2 SoC
-  cpufreq: ti: Add support for AM62D2
-
-Vibhore Vardhan (1):
-  arm64: dts: ti: k3-am62a-main: Fix pinctrl properties
-
- arch/arm64/boot/dts/ti/k3-am62a-main.dtsi |  2 +-
- arch/arm64/boot/dts/ti/k3-am62d2-evm.dts  | 21 +++++++++++++++++++++
- drivers/cpufreq/cpufreq-dt-platdev.c      |  1 +
- drivers/cpufreq/ti-cpufreq.c              |  2 ++
- 4 files changed, 25 insertions(+), 1 deletion(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
+index 9cad79d7bbc1..260279702c01 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
+@@ -267,7 +267,7 @@ secure_proxy_sa3: mailbox@43600000 {
+ 
+ 	main_pmx0: pinctrl@f4000 {
+ 		compatible = "pinctrl-single";
+-		reg = <0x00 0xf4000 0x00 0x2ac>;
++		reg = <0x00 0xf4000 0x00 0x25c>;
+ 		#pinctrl-cells = <1>;
+ 		pinctrl-single,register-width = <32>;
+ 		pinctrl-single,function-mask = <0xffffffff>;
 -- 
 2.34.1
 
