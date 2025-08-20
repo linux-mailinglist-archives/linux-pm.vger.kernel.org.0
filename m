@@ -1,136 +1,130 @@
-Return-Path: <linux-pm+bounces-32750-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32751-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F17F0B2E6DD
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 22:45:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD98B2E6F6
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 22:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E57765E017B
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 20:45:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8189A24911
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 20:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52BA32EBBAF;
-	Wed, 20 Aug 2025 20:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUHVK2kR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990882D3739;
+	Wed, 20 Aug 2025 20:49:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083F22D9EF9;
-	Wed, 20 Aug 2025 20:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE83E202F93;
+	Wed, 20 Aug 2025 20:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755722683; cv=none; b=dVqz+zyXBSQ7cPXfJAMMaJm/+0Ycu1K7UOugmg7FMjmam4OYVOGCkW3ZRVlhdkiuZTAPjNQJwoU5I1NjW9SuFSOcIxbE8v7EOxiNjX97yvjrQ8dgvrVANiYzyjVaAyJb1R2c8sKq1pK3M60oXMbugrkcheIoImNmMdiMpNiRKmY=
+	t=1755722973; cv=none; b=JLzh8rLu/w5yNJupEkla7oXgLSnM/Nzj5Ok6l/3pKgEdrsSgb1uU1SHSwkiZRsER8WcLTt3Fpm5nihk4aErOe1Ak2jhm3RUrq8rVNJlKiof8u7sbz6Ktalhmz0t4+kgXncrv0ttS/4zFZdkPQIXFhwo3mgKljy4KwBj0lu83gko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755722683; c=relaxed/simple;
-	bh=lJ1hQC4FSkaeInMQ9OwyDwx59vbkBqmqCr00VADdE6M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uU1fUPnyz3F9PV6PxAIIc+4jqCxSiY1r2fVB6DgLf6y54NouFfPZqP36eTz+uXyfPCAHU2DMmnlr6MDWmSDB/GZka/dxc6jtEIVU0SXgyPPzNkNz/Chje8X7CYGnhcBGBOVS+WS/RyVfx0a0EywHnak/41sVVomOLRNIyMz+Zho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUHVK2kR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 77ADCC2BCB9;
-	Wed, 20 Aug 2025 20:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755722682;
-	bh=lJ1hQC4FSkaeInMQ9OwyDwx59vbkBqmqCr00VADdE6M=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=GUHVK2kRerD7AoMhOVzVlR5USeBWPCwW9uGSvjHfykPFcRNQUPTtYo55JuwQfzYfL
-	 AI1uBwdsFF8Q8T5z7jw0AOVRSymyxZ4tufZklELk/RJo4noIrDqpvhoxW+Fv8hO7cD
-	 4Mwbp8qYC6EmZ1jbs7EXNpKj/juKdPM0vlyysXLAdmE/hsncCdGEt4Ocb374ENxuHD
-	 +WuOypi2agLZ5jkrBzyhqdFiADzYM3jxvJah1tuqW5cLWn6wV5hO7rqCi6Xlo7S4In
-	 96/EB433ct9WeD83YgpTg+SyryHKJomegwgqIBOwtd/syS7lQViXrjh0IBYkhojVw3
-	 H4d/HxF7pn9kA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C6A7CA0EDC;
-	Wed, 20 Aug 2025 20:44:42 +0000 (UTC)
-From: Samuel Kayode via B4 Relay <devnull+samuel.kayode.savoirfairelinux.com@kernel.org>
-Date: Wed, 20 Aug 2025 16:44:41 -0400
-Subject: [PATCH v10 6/6] MAINTAINERS: add an entry for pf1550 mfd driver
+	s=arc-20240116; t=1755722973; c=relaxed/simple;
+	bh=nrpwOSah7pmLtE7EoGA0PDWjj2F6huyxEDKBgLTJkg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nLKUKKEATljDzac76SlI2vAKtpYPX3warLNpv/nNaSy4vDc0xD2AmVlICyeEj9WK22oip0s6Tzmk8ZhjB0wkNiwTlIf34/GDIV3tRHwpcqcrBIZxP32M2kfUuW+yCTlqVcr81m+hfoC2y4frmdjGSxilHnQriL1smN5kBUR7smc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5ACDB1F37;
+	Wed, 20 Aug 2025 13:49:21 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94CF73F63F;
+	Wed, 20 Aug 2025 13:49:26 -0700 (PDT)
+Date: Wed, 20 Aug 2025 22:49:10 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Prashant Malani <pmalani@google.com>
+Cc: Yang Shi <yang@os.amperecomputing.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Ionela Voinescu <Ionela.Voinescu@arm.com>
+Subject: Re: [PATCH] cpufreq: CPPC: Increase delay between perf counter reads
+Message-ID: <aKY0xuegI1S4X2uW@arm.com>
+References: <20250730220812.53098-1-pmalani@google.com>
+ <8252b1e6-5d13-4f26-8aa3-30e841639e10@os.amperecomputing.com>
+ <CAFivqmKZcipdc1P1b7jkNTBAV-WE4bSeW8z=eHHmtHBxuErZiQ@mail.gmail.com>
+ <aKRDxhirzwEPxaqd@arm.com>
+ <CAFivqm+vzkbDEadJEF2So9ZWcRyVT_-Yc+8VWWwsgGW+KD4sNw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250820-pf1550-v10-6-4c0b6e4445e3@savoirfairelinux.com>
-References: <20250820-pf1550-v10-0-4c0b6e4445e3@savoirfairelinux.com>
-In-Reply-To: <20250820-pf1550-v10-0-4c0b6e4445e3@savoirfairelinux.com>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>
-Cc: imx@lists.linux.dev, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, 
- Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, 
- Robin Gong <yibin.gong@nxp.com>, 
- Enric Balletbo i Serra <eballetbo@gmail.com>, 
- Sean Nyekjaer <sean@geanix.com>, 
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
- Samuel Kayode <samuel.kayode@savoirfairelinux.com>, 
- Abel Vesa <abelvesa@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755722681; l=1227;
- i=samuel.kayode@savoirfairelinux.com; s=20250527;
- h=from:subject:message-id;
- bh=v9TE3OjU72u4FujlV703JbwctqJD/5aDkzjsVneeZaY=;
- b=GIIcM0qzZAYLTKVVfzT9A1wTYWJMV/KRPEU8O1UjSCRJ6Ueb42urLTG8WwfRnkOOMic4SWpvH
- nM0WwybvfmpCJT0r9oK5DUlzAIuBS4G7+Y+wratkteE4DjU7hpwVxba
-X-Developer-Key: i=samuel.kayode@savoirfairelinux.com; a=ed25519;
- pk=TPSQGQ5kywnnPyGs0EQqLajLFbdDu17ahXz8/gxMfio=
-X-Endpoint-Received: by B4 Relay for
- samuel.kayode@savoirfairelinux.com/20250527 with auth_id=412
-X-Original-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-Reply-To: samuel.kayode@savoirfairelinux.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFivqm+vzkbDEadJEF2So9ZWcRyVT_-Yc+8VWWwsgGW+KD4sNw@mail.gmail.com>
 
-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+On Tue, Aug 19, 2025 at 04:43:59PM -0700, Prashant Malani wrote:
+> On Tue, 19 Aug 2025 at 02:29, Beata Michalska <beata.michalska@arm.com> wrote:
+> >
+> > On Tue, Aug 05, 2025 at 06:00:09PM -0700, Prashant Malani wrote:
+> > > Thanks Yang,
+> > >
+> > > On Tue, 5 Aug 2025 at 17:26, Yang Shi <yang@os.amperecomputing.com> wrote:
+> > > > Thank you for cc'ing me the patch. I posted the similar patch ago and
+> > > > had some discussion on the mailing list. Then someone else from ARM
+> > > > pursued a different way to solve it. But I didn't follow very closely.
+> > > > If I remember correctly, a new sysfs interface, called cpuinfo_avg_freq
+> > > > was added. It should be the preferred way to get cpu frequency. Please
+> > > > see
+> > > > https://github.com/torvalds/linux/commit/fbb4a4759b541d09ebb8e391d5fa7f9a5a0cad61.
+> > > >
+> > > > Added Beata Michalska in the loop too, who is the author of the patch.
+> > > > Please feel free to correct me, if I'm wrong.
+> > >
+> > > Thanks for the additional context. Yeah, the issue is that :
+> > > - The new sysfs node is sampling period is too long (20ms) [1]
+> > > That makes it problematic for userspace use cases, so we need something
+> > > which takes less time.
+> > That actually specifies the duration, for which the most recently acquired
+> > sample is considered valid. Sampling is tick-based.
+> 
+> Thanks for the correction. I made an error in understanding the code.
+> 
+> >
+> > > - The central accuracy issue behind cpuinfo_cur_freq still needs to be handled.
+> > I'd really discourage increasing the sampling period for cppc.
+> 
+> The only true solution is to make the register reads (ref + delivered
+> combined) atomic.
+> We see that this solves the issue when conducting the same
+> measurements on firmware
+> (which is an RTOS, so no scheduler randomness).
+Kinda working on that one.
+> 
+> Outside of that, I can't think of another mitigation beyond adding delay to make
+> the time deltas not matter so much.
+I'm not entirely sure what 'so much' means in this context.
+How one would quantify whether the added delay is actually mitigating the issue?
 
-Add MAINTAINERS entry for pf1550 PMIC.
+> 
+> Perhaps ARM should introduce a "snapshot" feature which takes the snapshot
+> of the AMU counters on a register write; IAC that's outside the scope
+What do you mean by register write ?
+> of this discussion.
+> 
+> Could you kindly explain why adding the udelay here is discouraged?
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Tested-by: Sean Nyekjaer <sean@geanix.com>
-Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+Would you mind clarifying how the specific value of 200 µs was determined?
+Was it carefully derived from measurements across multiple platforms and
+workloads, or simply observed to “work” on one relatively stable setup?
+
+Understanding the basis for choosing that delay will help put the discussion
+into the right context.
+
 ---
-v9:
- - Pick up Frank's `Reviewed-by` tag
-v6:
- - Add imx mailing list
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 60bba48f5479a025f9da3eaf9dbacb67a194df07..ffc834aace4272e663f9717bcffd67100eb546c7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17996,6 +17996,17 @@ F:	Documentation/devicetree/bindings/clock/imx*
- F:	drivers/clk/imx/
- F:	include/dt-bindings/clock/imx*
- 
-+NXP PF1550 PMIC MFD DRIVER
-+M:	Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-+L:	imx@lists.linux.dev
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/nxp,pf1550.yaml
-+F:	drivers/input/misc/pf1550-onkey.c
-+F:	drivers/mfd/pf1550.c
-+F:	drivers/power/supply/pf1550-charger.c
-+F:	drivers/regulator/pf1550-regulator.c
-+F:	include/linux/mfd/pfd1550.h
-+
- NXP PF8100/PF8121A/PF8200 PMIC REGULATOR DEVICE DRIVER
- M:	Jagan Teki <jagan@amarulasolutions.com>
- S:	Maintained
-
--- 
-2.50.1
-
-
+BR
+Beata
+> 
+> Best regards,
+> 
+> -- 
+> -Prashant
 
