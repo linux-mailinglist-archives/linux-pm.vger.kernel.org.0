@@ -1,69 +1,65 @@
-Return-Path: <linux-pm+bounces-32737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40815B2E5BD
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 21:44:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B117B2E5D6
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 21:48:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 726365E33FA
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 19:44:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FAF11C8878F
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 19:49:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8C028541A;
-	Wed, 20 Aug 2025 19:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2037826E6F8;
+	Wed, 20 Aug 2025 19:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HABbqDGw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uVa9a26W"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA461CCEE0;
-	Wed, 20 Aug 2025 19:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E583326A09F;
+	Wed, 20 Aug 2025 19:48:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755719048; cv=none; b=b+nAC5sLq84O4QuOF4Azya4fuKxjydi+O4p3UrS/1H7et0p0kJBbdgXDb6jLr7SxMMzW4V+o/jK4J8EXaWR0UGzCPn5p6Q4uNCt6JPdCdixhm8TxP+qsxWkVDdGatUUXr6qbfe6VsZu41Zhk742xWifRqqxNZCPDjT4NodmxYfs=
+	t=1755719310; cv=none; b=LQi5UXs56Eka+OeILuH8sgE4ji1qijgV13NHYC7wW4pzKDcvWlJ6FGy++KlcWj9I/mKa4m8U31WOqWeebe9PGs9Zna5Zug9LbXSfUCri6OCnxwNQKGgXuaZAV+4qdN4l5cOKeM681v7L7+hNE/xy2QaczLU1Tbu/o2yOPVkp+wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755719048; c=relaxed/simple;
-	bh=wVbhnBpFX/Zq7DTszd7msln2BrK2tuah8OGziBFa8D0=;
+	s=arc-20240116; t=1755719310; c=relaxed/simple;
+	bh=ZAdsCPJer5cp70aNhszFdULfEcYeJDeg4An1kUlxQno=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L3hFWt/yO6YcPO11QJzzdQBCBGvRvNt1rjmu5RLTC0RJDW0TQ0BFKwzZ9sHOEYKYUpTC9DZep9AcW0fPjyXgiaNGlo3XmA/8gsKTkzW6oYSjz0mdzsRF9wyjJz4zeMzx9v49rOVHi6OPuifE0GGwGl6WSiSC83hjLQ7fn5AcqI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HABbqDGw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E335CC4CEE7;
-	Wed, 20 Aug 2025 19:44:04 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XFt0Hqu+tRzQFUco7paNqJ1ve0V65eQCW/+2XUNwW7L3Et6am5ssuvUhQKYf5/bvktNBfdDJ6OdsvgF7JOgbWHJhelqQVDkROkzJJ92Yc4W3SDk78mWbTM2X1se/xv17RZrwmGW/Dg9GrV/268JTsSonW9hXWgf214XcRX7xM1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uVa9a26W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1396CC4CEE7;
+	Wed, 20 Aug 2025 19:48:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755719048;
-	bh=wVbhnBpFX/Zq7DTszd7msln2BrK2tuah8OGziBFa8D0=;
+	s=k20201202; t=1755719309;
+	bh=ZAdsCPJer5cp70aNhszFdULfEcYeJDeg4An1kUlxQno=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HABbqDGwDkSdAJsSfXinddrrkvWyvb0hWN2fdrq4tUI56ouUNEgvZya04aSIbQbFv
-	 q+f4QoTIKOCLxFDXxH7Z2t7eHQFBIyegvhSxOG5BEDAQAJL4bFQr4n+RyfUClN4Fwa
-	 Qno9HlO2ZbdaL6TJbkPuL/6kuKCfyRryZnaxgcZh2A7l27UTzpuni5/yn4t1e4AVSL
-	 l/JhZLrguBpPk9qJB2nKVnO61Gl8O7YY+sUm+YL/L5VklhjSFWBMBox1CMIsoG1/CT
-	 EhOCWGNJfNte7n9qrCl1JxazLRjw6GTscM16O3vC1+kuGz/O86pffD0iD9BH56JESM
-	 +Gs6UOSHxZDVQ==
-Date: Wed, 20 Aug 2025 20:44:02 +0100
+	b=uVa9a26WlpOd2lExJFNhW8+6lwgSbRgExkhkldbI0j4xzDmMulzGbeeGY6QqW1fkc
+	 5I+GOYGIT80lsYnM86pUsgDPyrDe8Wxqbm65JRjPrDfaIncSDwgtY/Y6TC1DROvb2F
+	 hmIyFjb6NKBu+6fJBmPjZSQVj9R1J5LCEogNn1DGtGIAAt+SIKqG1oqlnddN5O6EJ4
+	 //ea56WkFOEwm2khUhByKpGg2AVMm7Q5zTuymgE4qk+O9GZV5QpTICjhzLU6cwD299
+	 nvQaVGRCkzZrMwnHZDEOTyBjTFkVd4ACMTQs4P+rbb4dtD+KsqB1r0PUXfJcslaDcP
+	 P3ADJFHe9jCDQ==
+Date: Wed, 20 Aug 2025 20:48:23 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Thierry Reding <treding@nvidia.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] dt-bindings: thermal: tegra: add Tegra114
- soctherm header
-Message-ID: <20250820-spinning-arrogance-31b71d969bb8@spud>
-References: <20250820114231.150441-1-clamor95@gmail.com>
- <20250820114231.150441-5-clamor95@gmail.com>
+	Robin Murphy <robin.murphy@arm.com>,
+	Diederik de Haas <didi.debian@cknow.org>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: rockchip: tighten grf
+ requirements
+Message-ID: <20250820-await-chomp-9812902c0f74@spud>
+References: <20250820-thermal-rockchip-grf-warning-v2-0-c7e2d35017b8@kernel.org>
+ <20250820-thermal-rockchip-grf-warning-v2-3-c7e2d35017b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,71 +67,75 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="i9diGKFZwHGtBgg2"
+	protocol="application/pgp-signature"; boundary="Q0FCgrQS2OQS+FoE"
 Content-Disposition: inline
-In-Reply-To: <20250820114231.150441-5-clamor95@gmail.com>
+In-Reply-To: <20250820-thermal-rockchip-grf-warning-v2-3-c7e2d35017b8@kernel.org>
 
 
---i9diGKFZwHGtBgg2
+--Q0FCgrQS2OQS+FoE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 20, 2025 at 02:42:29PM +0300, Svyatoslav Ryhel wrote:
-> This adds header for the Tegra114 SOCTHERM device tree node.
+On Wed, Aug 20, 2025 at 07:40:49PM +0200, Sebastian Reichel wrote:
+> Instead of having an optional rockchip,grf property, forbid using it on
+> platforms without registers in a GRF being needed for thermal monitoring
+> and make it mandatory on the platforms actually needing it.
+
+I am assuming that "needing it" means that it was actually mandatory but
+the binding was just missing the required required entry. If so
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
 >=20
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->  .../dt-bindings/thermal/tegra114-soctherm.h   | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 include/dt-bindings/thermal/tegra114-soctherm.h
+>  .../devicetree/bindings/thermal/rockchip-thermal.yaml     | 15 +++++++++=
+++++++
+>  1 file changed, 15 insertions(+)
 >=20
-> diff --git a/include/dt-bindings/thermal/tegra114-soctherm.h b/include/dt=
--bindings/thermal/tegra114-soctherm.h
-> new file mode 100644
-> index 000000000000..b605e53284fe
-> --- /dev/null
-> +++ b/include/dt-bindings/thermal/tegra114-soctherm.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * This header provides constants for binding nvidia,tegra114-soctherm.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_THERMAL_TEGRA114_SOCTHERM_H
-> +#define _DT_BINDINGS_THERMAL_TEGRA114_SOCTHERM_H
-> +
-> +#define TEGRA114_SOCTHERM_SENSOR_CPU 0
-> +#define TEGRA114_SOCTHERM_SENSOR_MEM 1
-> +#define TEGRA114_SOCTHERM_SENSOR_GPU 2
-> +#define TEGRA114_SOCTHERM_SENSOR_PLLX 3
-
-> +#define TEGRA114_SOCTHERM_SENSOR_NUM 4
-
-Why is this "NUM" sensor not in the driver?
-hint: if this is the number of sensors, remove it from the binding ;)
-
-> +
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_NONE 0
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_LOW  1
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_MED  2
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_HIGH 3
-> +
-> +#endif
+> diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.y=
+aml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> index 573f447cc26ed7100638277598b0e745d436fd01..9fa5c4c49d76e3a689f317978=
+75124e7fb30d3df 100644
+> --- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> @@ -119,6 +119,21 @@ required:
+>    - resets
+> =20
+>  allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - rockchip,px30-tsadc
+> +              - rockchip,rk3366-tsadc
+> +              - rockchip,rk3399-tsadc
+> +              - rockchip,rk3568-tsadc
+> +    then:
+> +      required:
+> +        - rockchip,grf
+> +    else:
+> +      properties:
+> +        rockchip,grf: false
+>    - if:
+>        not:
+>          properties:
+>=20
 > --=20
-> 2.48.1
+> 2.50.1
 >=20
 
---i9diGKFZwHGtBgg2
+--Q0FCgrQS2OQS+FoE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaKYlggAKCRB4tDGHoIJi
-0rwHAQCrTuKbYeJomxSTYcBj4MJ14GO3+TBM2PC7h0zSsEvNGwEAuuUnNdesVDmX
-Lbx6jgEug+wxC0uVQey13cfvJK8cIAc=
-=y4RN
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaKYmhwAKCRB4tDGHoIJi
+0lk7AP9pdXnawAo7vHzgRoCDQLvEYOnbJv5NOJbb8mHXjbf0lAEAsFcbnQidHn69
+nDsAJTevUWIbM9hHfimNJ3pk9is+lg8=
+=v71N
 -----END PGP SIGNATURE-----
 
---i9diGKFZwHGtBgg2--
+--Q0FCgrQS2OQS+FoE--
 
