@@ -1,378 +1,434 @@
-Return-Path: <linux-pm+bounces-32672-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32673-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DFD6B2D2F6
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 06:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 27D1DB2D311
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 06:36:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72F7D724352
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 04:28:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F3247250C8
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Aug 2025 04:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0E424A05B;
-	Wed, 20 Aug 2025 04:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69201259C93;
+	Wed, 20 Aug 2025 04:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MppeNeDm"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Y6NqwaHY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1789422579E
-	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 04:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755664077; cv=none; b=nUsJ0hnbDJleDLQUMqgrvPkbZzZLGCTMcdN6Y7Bf6p2SSzZNSrSvu0t/76OJ2IxonBuP/BifGIFEOF9W+4zHgCAndNInBN5ZT+9d5qLHKUQEtCloGYb7/iu8qj9KN4wDSV2BNFhSGtz/jd140Sd1G+WeZk7F/91vAjAe+7S84a0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755664077; c=relaxed/simple;
-	bh=IGnA1FXv1f8tKEdqJvkn6S/E7oLAVWuQedEUjt4GafM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MaCe8j3nsacMva1sP9fcjVgBOOQAiHN6y6/k7dKLSpgO8xlyMMcpL/AkeAevEBmjDYQgi8/HAD9+gie0i1wxEvOusUA+aKJJPbnin5VhGYfBwnU7m1bNEIWZWV2N/ImH4sp6uuwzwDs8EM9x+bah3I2hOSempo10XwKg7GTbnFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MppeNeDm; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57K1p2xA027095
-	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 04:27:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hAK0xru7GDJ8nMhMtlK0GPrXNKZ4lF18AzZoweZOXc8=; b=MppeNeDmQW3zgxHH
-	znkuQMlORXHaKNmWH7c1g3NaJ6BGvfqpa01qdsXLiwpBXrigzdaSXd0jvQCTp9iT
-	+PWJ7KW2/EFMU8UKKMLC+WrsRyBxar+0PTcdbfnIlNPPSnAVUuCToKanZSh6e1lF
-	pujYr99B6NDid+CSRpAuvM+8zvh7c2QPaRm1OjRUsmrNfY+DaXA5NQndbt9Rz6VU
-	QM7ZqrEwMOkAQ731Ix75CNABdpzWFM8va1/Lv2rxltSgstvmGWIQwg+oBlEbUh4N
-	pLaHfQg65QS8bOnt1w0y71+3GwG+CEp/Mdhfp5xOvEMKrC2gRIUOvGf9zwc3epol
-	9GgYiw==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48n52a8bwh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 04:27:54 +0000 (GMT)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-76e2e890901so11502475b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Aug 2025 21:27:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755664073; x=1756268873;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hAK0xru7GDJ8nMhMtlK0GPrXNKZ4lF18AzZoweZOXc8=;
-        b=u/1hb2OuXOSOr/lt0tVpUw9jes8+Ph43KCDEYbLXiJ9beIwTKrk/oGPRXSEiAFe1TX
-         uoFikhMa0HgUQ2IF/KR6gBcZvm8jR/stLE/HYAuWjbPs/4t+ekQoNvb8TWoczcWXSDsu
-         CEls7iWqCzZrulelyoAxGlFTPFYPvbXUbe5hw28ivU7zH6DmmqAetCZSDcD3IiRpkh6M
-         5WXLAXflLRDc2pOHsl5bA0XY/dHCUEDeyfFNqXPs4sUka9cPYRwladHB+ievsMQZUBed
-         MIMEByy9D3bToWtzNLRyDIXnF+KQ+NOd8lAGM5bBznmQgfpIuQ4igZRfY25ubQ5KI1Z2
-         Hblg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTFb1z9z8tsMts7vb3Rl86oHSb2Mz8iPZ8G+WVDMx8a8hfpnIe8LW0Rl/Tt0e15AL+iHcrfdCvmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYJMzmctMpu6bQmAfkginpHprXxDH566I6428V1mgUPk3ld4YE
-	P/7yTP+S/utNhrPhqWSULuT/VWrKfnnBfkOXewEDx5HxSe/T+C04q915VWe8x51Tvsyyj3SXNQN
-	YsrCIYGtoE0jHpa7yAA29bYPEJH8iX5AcYq5/0ejUDTkm594BqWpFoJmCKjniIw==
-X-Gm-Gg: ASbGncvbQ+rl+dyBckkXmEIFiX5nENySXGM7Qn0MuLY7q4mx2YM2W/BFeJm/XF+sK5u
-	5HpxGdPwYO5qsyOHJt6G6ac8JClUMLU0t09go35okXxwkhwRHzTSyKIZJNqJITVuAcZN1/CbBW7
-	ZT/vqha+BglMnxcEnMmErHgSWVJ37hfOacuD2AjVHJY6pIY6iwkk8IIVSyKyHtRJuNYMw046VEo
-	ms4lTZIadYo2SXJFex/tJKPgcBFqiM1P/Qjw7O+ampG9jVlMENnnbf/iVarZeGooDlUTMDfv6wn
-	7gWRP9ZYUm5q0DexbZr5P6vnlzfd9beQzXMxROb9ZJwlb97DnuH55uHWDirPd8qwKv9ObKaKmQ=
-	=
-X-Received: by 2002:a05:6a00:3e11:b0:748:3385:a4a with SMTP id d2e1a72fcca58-76e8dd5c0f8mr1714847b3a.23.1755664073254;
-        Tue, 19 Aug 2025 21:27:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEcUojZeMUSbe1pEWZytu3vdN7AWQXRbXfhsjIC+2+iyfPG1ah4/TK6T5StHV+fx+cuygIhdQ==
-X-Received: by 2002:a05:6a00:3e11:b0:748:3385:a4a with SMTP id d2e1a72fcca58-76e8dd5c0f8mr1714803b3a.23.1755664072690;
-        Tue, 19 Aug 2025 21:27:52 -0700 (PDT)
-Received: from [10.218.42.132] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d13ac60sm4006778b3a.48.2025.08.19.21.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Aug 2025 21:27:52 -0700 (PDT)
-Message-ID: <54d71bb6-27bb-494f-8f63-710e0e4148e7@oss.qualcomm.com>
-Date: Wed, 20 Aug 2025 09:57:44 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB6C78F34;
+	Wed, 20 Aug 2025 04:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755664519; cv=fail; b=O9K+1P+3CPO+q1HjcZlFHbE9jDMRoZySA8cof7HV4q4IMn7neQzUJDqAqNt8ursv5YpxZ09Fxrz+wVltSTu+mvQA4hzZnCQO/w3Zwl0BowbMcu7/d/DagzEo26uEVD+zithPGHx53yTyoepHdBQBl2QHwkjXhmjzvgWyNCKdG+I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755664519; c=relaxed/simple;
+	bh=kagIH6jS5MKBDDboJzxNEiomukL6FUHHqLshR9wqI+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PkFmEl1ouB9uTNDmOGiXj5m/B3hn+hTM/9WRH1QYjcTWS6OTWb5tjw7Pvz0G53DL1+vBdvuuzuZVzFG3NNELxQbQmSaUYxyyPZLyyL/6GkPb70CKKjmhg/AQLm9cAdgUEUk1kF3YWe7JdzUZtYFyRCsfqdwCKCIZTkzvNAwuZVo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Y6NqwaHY; arc=fail smtp.client-ip=40.107.244.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RY+94etw7caTEVk10EPcFURGD2qO7oM4vPxtql2FAlb+bZ9i+fUR9vxzUSm1mEWw+xZaSePINKPe0iQQR9vXSkPAIOt2AT6eIP67gXpBKD7QsUGk9aloYPYpWnDKK+PbKSmdRGm1KECsrleRCAB0WSGcrvJ4n4wXuoAkho2aue5IkocaRP9yKmfpdcklZFfIAEkXLZxVpKnqoGjMM2EahjoMMSL9lkDOJOX/awMCUShz7Rco5GYljotgIXC0KH9aB/1Mp5Ex2FsshdgbpaHig7v90Audm1c7/i2FdmKGqYHLHorl6V1LGdHoR1bWdSaaSxn2RVPEBvpH7NPxFKlzoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kv05Fb/t58gNJrJELyY6Uu5bLH4Refo7R4A0mlr76lY=;
+ b=Rl2l1nILFiaP1OjnQ7m+sKZTmUP4m3XQXeW7Q4hO4yd6KbEu8NpsMdH13l1Lg7wsUSltHv9sg3sWEvV55IANb/UDDmZieuzEffg9QYlg1XjhX68GtN4Jof/xFSJ6jQSmILgZG5/htNIDTFCpGJyQmvoXAiMZe0et2w2lOTZdX6Go3+38ZsGrRKbR6T6HzKFx8fvpYwb10lSsEESnMRbbz2NrGwYu/8yVJOWtsbpKcJi+X75VNwAs1B7ezju/9SUDEWucBXWaszPadsI5ZFh7h4vwD0TE2Ciyk1CEAb4f1RIOJwNohwjUWUMKIHUCymn7liG4OlDGpgf7AVzkokogdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kv05Fb/t58gNJrJELyY6Uu5bLH4Refo7R4A0mlr76lY=;
+ b=Y6NqwaHYripr6a/jJwZyS0pWMcHDneOINZopZPRKl9jkWJGiH8HYUN048kqMGlcvtyCAGajJir88eT9EZKccdluLSKd3JgOwC6PoTybQ7qa7PYzNJklGjmTHa5WG3j4sfszfNrZtdJL1oeFOLzAaC3avPFb4SV3a+YWihDN9ebmCjzT/BAQrTD89jvx/NgmbZJWlKLUTnZMxYA4OjedoJ430P/yADbsrCuTmCDyLsTZm03b/pGbYKkoNqSzCukud/r4UyWH7cuKSBS7GQL+dpTMeJgVhu6019N5RP892FeJ1ltXmgJzppkhDoZ8bVlQWg5hsNL7ZZ8X9s659ELMF2Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA1PR12MB6484.namprd12.prod.outlook.com (2603:10b6:208:3a7::13)
+ by SN7PR12MB7787.namprd12.prod.outlook.com (2603:10b6:806:347::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Wed, 20 Aug
+ 2025 04:35:12 +0000
+Received: from IA1PR12MB6484.namprd12.prod.outlook.com
+ ([fe80::fb8b:583b:154:76f6]) by IA1PR12MB6484.namprd12.prod.outlook.com
+ ([fe80::fb8b:583b:154:76f6%7]) with mapi id 15.20.9009.017; Wed, 20 Aug 2025
+ 04:35:12 +0000
+From: Mikko Perttunen <mperttunen@nvidia.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Thierry Reding <thierry.reding@gmail.com>,
+ Thierry Reding <treding@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Svyatoslav Ryhel <clamor95@gmail.com>, Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH v2 3/5] thermal: tegra: soctherm-fuse: parametrize configuration
+ further
+Date: Wed, 20 Aug 2025 13:35:08 +0900
+Message-ID: <3738425.aeNJFYEL58@senjougahara>
+In-Reply-To: <20250714082252.9028-4-clamor95@gmail.com>
+References:
+ <20250714082252.9028-1-clamor95@gmail.com>
+ <20250714082252.9028-4-clamor95@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-ClientProxiedBy: TYCPR01CA0041.jpnprd01.prod.outlook.com
+ (2603:1096:405:1::29) To IA1PR12MB6484.namprd12.prod.outlook.com
+ (2603:10b6:208:3a7::13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] OPP: Add support to find OPP for a set of keys
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250819-opp_pcie-v3-0-f8bd7e05ce41@oss.qualcomm.com>
- <20250819-opp_pcie-v3-1-f8bd7e05ce41@oss.qualcomm.com>
- <20250819081859.kz7c27d6c77oy2gv@vireshk-i7>
-Content-Language: en-US
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-In-Reply-To: <20250819081859.kz7c27d6c77oy2gv@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: ji1OxuU2qfA3F6SuxmvCQvRYYjxtm53H
-X-Authority-Analysis: v=2.4 cv=B83gEOtM c=1 sm=1 tr=0 ts=68a54eca cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=76l3OPsZB85xAofE:21 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10
- a=6WgZcX-rmC49gpfAgPcA:9 a=QEXdDO2ut3YA:10 a=2VI0MkxyNR6bbpdq8BZq:22
-X-Proofpoint-GUID: ji1OxuU2qfA3F6SuxmvCQvRYYjxtm53H
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIwMDAxMyBTYWx0ZWRfX1uo65I9RrRYk
- PhezUv+IVKm7HPgWj1PbqONbhHMGkEoBuLqba+XAkC1dLi+Swd99RWf6ebuZ0FdsnbpwRA9+YjO
- a5ZdK2Ab2lq8t5ohTbVy0fZ8bUk71UwFgZo7VuSAHkjfqSxiIAmQbtBui5K7+9mZuPFLMZl71vG
- lP1l4/pru8LG/Gx9t6AAeX2i9NSqMVppeeHT6fs20Q8jTRikP3ZXQu9U3G6djuYEh+FTUxL6g9w
- Cd08HolumP8c3Dkh/lO1tt9nerZ0J1W3x57Mz3IHIe5CNxm5O5TwqiQJl1t8rUyvTsXOUjPk5tU
- Fk6N/6UzjI9xZg/PFlYOntKCeRz6gJaebRkBVY+qw+IsJOtCepyMnbF/WL8Phir9+WG57Lq98C/
- aGezmelJPNVTJ07VVdBqgQumZq0VEw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-20_02,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 clxscore=1015 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2508110000 definitions=main-2508200013
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6484:EE_|SN7PR12MB7787:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ad4f21f-22e7-4f1b-b61d-08dddfa2f3e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|10070799003|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OVhBanhxNVdGV1NWZ3FaTHpPMXFSbHp5RnRqMWlRSHBDdTE3aTNQRThLZjB1?=
+ =?utf-8?B?Q1RnWUZhaUZ0SmpseXZEUFJkUzhKU0dsRk0vMGRVYVk3dHdyNkZMd05WdWJy?=
+ =?utf-8?B?d243MWVVaWd4T3FkREhnc1FqMEp1dTJFa3B4UW4xcUl6eXNtblBiVENNQ1Q4?=
+ =?utf-8?B?ZmNtMThhZlhsWU5lRVJTVmltdC9DOE9SejZnakJRUjdKMitzQ2YxUkdVTDdI?=
+ =?utf-8?B?a0NSYU9ocnhNaHFBM3drQjN3SEdqUW9yME5BV1VoenF2RENkQ1dyYURIbmV6?=
+ =?utf-8?B?d1FWNzRZS2s3aVFyaGdwWnBRdnJWUjdyQUM4a2J6cEdJYkRaTlpvQXFjSDdi?=
+ =?utf-8?B?Y3NUcGk1NUw5emJJak93YmxNWW9MbjJ4U3pOVVBKZ0w5SkxnOG1LNHhnQkw1?=
+ =?utf-8?B?KytybGRMaWZiME8wSGtpRmZ4ZmJTTHNzQm5MNEg4VzNrVU9nYnREcFlHRHVG?=
+ =?utf-8?B?WnRDRjloMUZRekJLLy9Fb1h5Q3VhdW9KdFp2TC8zN1ozL3U0T1JnYTA2enhT?=
+ =?utf-8?B?Z2lBM1ZTckFNVk83ZTJweWlJNytCK3BMT3I3SEdGTDhmMnhkalR1MTdSRUQ4?=
+ =?utf-8?B?YVdCTklpZTBzamNzeGJSNW1YTFQ1K1pwd1RLRXNWZHR0WXJBTy9yenNjVVVZ?=
+ =?utf-8?B?NTJEOTM5ckE4VjNSSWlZOWxSUHBsRWdkdEVsTzMzUjdKeDdFbWlVVGFPZm9O?=
+ =?utf-8?B?MDdyaFI2blNiVXdTYVRQTkszdHFFRmZzQWVKY3dvZkJCZjJXZllGNTN6NVFv?=
+ =?utf-8?B?VkFETGVPSVR6bUdDL2orcGI4QWNzY3JkNTMwU3N5VXNSNFMwM2t6bWs2QWVX?=
+ =?utf-8?B?NEFuaUNFVGpyM0FIdmQwZlV3NWJKaHNqSTRrUk5LVW1BNEFiZjRONUdpYmNn?=
+ =?utf-8?B?aUhpSytxYkdmY0JMZXJ4Z2Z6MTdKUWxSRjhFUUdNNWlrUlJEVGc1NkhBa09V?=
+ =?utf-8?B?eDdKV29JYVdnUW83MmJmZjVkV2F4TlU2MXB2cCtCbE5NSGNpLyt5Qi9iN2Nh?=
+ =?utf-8?B?SG1wMStkYk0vZlArRGwrcGVSeU4waVVtRnI2ZURJVU0xSDVMM1hIa1hncUlo?=
+ =?utf-8?B?ZEkvc3pvS3dNRUpLSHdzazE2WnVqZHd0dlMzVzR4emgzVDRBK05lN2t3VnZK?=
+ =?utf-8?B?ZHlVckNhSkx5dk9CNldieXNwNW1tbVhXNTc0STcwR2lGdVNVOUlCYUtxQk4r?=
+ =?utf-8?B?UE93NUxTa2cwSUdIOXA3bXp0UEpZc3BpMVYxdm1LUWZ3akxjTFJweHhxWVNG?=
+ =?utf-8?B?cE14OVUyN3hoREFmVTR1TWZmS3FNdFFRaDBYalVSQ2RoVHp0NHZRUENWZjdl?=
+ =?utf-8?B?WGhvWjI2WFEvN0g5VGdscjlaYzErYjdJbUF3ajZCdjcrL0xTQmJFOGRFQjNj?=
+ =?utf-8?B?eWRzanBoTUw1NE1XaENDSXdxV25vbVFKUEluYjQ2dkZBQm1iN0I0MU5vQ2Ji?=
+ =?utf-8?B?Vnk1aHZRb2NVNjdOdjJ6elFsNVVnYnFGdEYyYkdBVUt4eXJ1TTEzanBNc21H?=
+ =?utf-8?B?Qk5qZ0ZYeE5GVnZhRFl2cUFGZ1l4Yzlud3VSbGZpd3h0eXd3eW5nSlNzTTdF?=
+ =?utf-8?B?R2tqZ3E3UXcxY3UxMHY1Qm8raUxWUU1UZXEzdkZqSHlGYjNweHBnTnRDV243?=
+ =?utf-8?B?WnlMNlVKYTVqQVhaN0V1aHlQbVFkNjBlS3FzMjN6TjQ5NDZYdkFQcmN6ZDVV?=
+ =?utf-8?B?MGxaMXJocSt2bWFwRlVocUpmdFZaaDRaTDVJd01nZ1RDTWJGRG5BL3Z4K0ht?=
+ =?utf-8?B?SHRqdXpKTDBFY1lmSEtQL2ozU1VRNFdRTEUyRFJ4ekl4ZC85bWZwUmFCcWVI?=
+ =?utf-8?B?dHNTRjE2eE8yT2xXUWdsbHJJQWFmTGV3WnVEQmxPd3FWekdrMXhyaEhSS0x4?=
+ =?utf-8?B?WjdoNCtmOW1TRTFJdjRYTGZDWXRIbjE0VUt1MnVMekcwOGc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6484.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(10070799003)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OTR1MkhlWXBYNWZvUkduL2cwSldsbU9vcVhoQmdoMDBkaExtNDA5V2FFVzFO?=
+ =?utf-8?B?UlhDTVozSVVpUW90ZFZ4K1NZRnJnV0xEa2dIbE00V1drM2hseTU0enFnY2pB?=
+ =?utf-8?B?ZHA1QnpsMlNPVitKZ3YrYVY2akY3T2xHQjhoLzU3Nmk0d1lZTytLaUlnRHVW?=
+ =?utf-8?B?eFc3Rk5NaVZmUDVPM01HZmJvcFRqK3VYV3FDTGZ2ODJRS2NPSDBvYmNtUFV3?=
+ =?utf-8?B?V3pnM2hYaDhmNk5KVjVjZkJlbVovWW5uWUlkcW9MR0xLamFhcWJIcWFPa0RM?=
+ =?utf-8?B?S3hvWS9rNWhEcVdLVnlCNEk0TlJQYVpYZ01VZWFxSFdFdFBDTGhIREsvaGV1?=
+ =?utf-8?B?eFpBZ1RWWDYzczNQMVM3OEF2VWg4U3FMVDFjZm9rVGpZblJsd1Y3dFBFTDVS?=
+ =?utf-8?B?ZHZjUXp2b29oaUZ4WTQ3VjIra3dVSkNEbHNCSURsd0Nmd2tScjVodG5YalVY?=
+ =?utf-8?B?UG14RU9Sb1V1VG82a2ZyYUFsUlpUV1NhSzE4OGN6dkZhY1hicDkrRy9zZG1Q?=
+ =?utf-8?B?T0thTExmdjNRb1pCN1A4RU9tTUJrMlRHUDg1TFMrRFFtSjhES25aMjhyMEZG?=
+ =?utf-8?B?Myt5YkdMWHdZbjB6L09KUUdOekpYZ1pWcXQwbkJXNlQ4NW5QZlB3YldKSThu?=
+ =?utf-8?B?TTk5U1IxTWF3Z1ZUVzNYUDd0SU0raDR5VW1xRmxubFExWGxWSzAwOEJkVExL?=
+ =?utf-8?B?cUF6WGs4QXhlbUlyNVR0azBlOWNHSkdkTmZyMStWcWowM00vNUViU0xNNVI3?=
+ =?utf-8?B?QVByTzRzUzFneExYdDJaQkdZSjBpa2d2VTBlOEt5NXdvQ3QyUHlxd0FjdTVD?=
+ =?utf-8?B?VCtYeHk3NCtVZ0ZCM1pTMkhtZHZXeTFnOElOd1FtT2w5cmUxd3NDZGZvZzM0?=
+ =?utf-8?B?V0lOQnI5YmxCb3hBdm8vT2ZYeVlNS25ERUVYNkRFbG5RODhRc0QwR1pXbDFw?=
+ =?utf-8?B?a1lNbmRkTjM2d1R3S2JOSjM0dnplZHF4MnJaZkVvVHRJKzJ1QkgvYk9jMHdz?=
+ =?utf-8?B?Tk9tSUJiS2xmb1RiVGI2U3BDaXk5UDFXeGRDcTdnZEp4UXBGc0taRm5IRkNw?=
+ =?utf-8?B?b0Z6emlOS2E1eHBxU2h1emRCbDlnTTN2aU1Dc245MVFCYkl0VTR3YmdsVkwz?=
+ =?utf-8?B?c25PcEpMcThZZHI5dzNiQXIyQ3AyN0VSeXZxY1FuQm1Kb295dk5YWUlsMmdE?=
+ =?utf-8?B?elIrOGFCeHhFNWZ2M1FtR3E1aW1IbTlzLzZWYTdwRnhiOThuREZRemlLSnli?=
+ =?utf-8?B?TjdpaHNURFZBR1o0Vm1nVHQ4eUt4RTNJeGJ6WWZYTWpRdEhuSDRlOG9uRWJq?=
+ =?utf-8?B?Tzhkc0xGY21mRVhQN1RyM0c5QXF5RWRIZE51OXBZZzhzajc0NjROUzdSVVYv?=
+ =?utf-8?B?VitZSWxPSkpWRUZMZVNGZkdQUDlCN3hYZkNnbkQ4dzRvUU1lNERYMnBzRFVn?=
+ =?utf-8?B?cEFYMStGTWNPTWpGNnVEY1JYaUdsRUphaEJ6RGFnaEtROTh6YWpHRlpYMGJQ?=
+ =?utf-8?B?aDhwTzU1WUFBVzRkcTE4b0kyWkQyQ2laZGVhL3Y3Q014UWRseUtJMGJvT3JJ?=
+ =?utf-8?B?ZXByTVJhU3lmSFp0STlFOHdXdGtXaVk3TGNCT21MQXo5S3hoanZzVGNGTTdF?=
+ =?utf-8?B?YXFGVkpvS3cveGJHVlF3YUREWUpxN2RCWXVsaXNNcStGRDlBTU5BUUVXVTZ0?=
+ =?utf-8?B?VVI1WFN1NmRjYTlGOG1LUzc5ajhNSDBhYUtSSXFSMjBaa0tMTjBiZFY5Yytr?=
+ =?utf-8?B?cDNXdXVKLzRRaWpLWDA5UXArekNyZWhoZUpEL1FEeFJBRXBEVUVRVWFMVUNF?=
+ =?utf-8?B?UkcrTFBSSS9jSk9TN1RFdm0wbGo0R29WNURWdHJoelFnTFpGZ01udHQvU1BL?=
+ =?utf-8?B?N01TOHlGNW14UHlrRytpMGQ3MGNyR1pXVTY0cWIyUWMwMFZ1emFESHB2Yk1X?=
+ =?utf-8?B?SDVlNXBhNmlqSWZHeU4rdXdWSy8vRGNnWDJtZS9TRHFESVhuNlN0WFFrOWdW?=
+ =?utf-8?B?NU00MEJjWDFpcStvaURCM0s5ZVVPUlhTUkFlNTNzMGVZOUxHZXRTVlAydS9R?=
+ =?utf-8?B?d3dwRFl2aWd0OTRSSHJ0YTl4V0x6QmowUkwzMTZpUkhEN0lMSUFrb0UvOGxC?=
+ =?utf-8?B?am8vcnE5U05zc0R5UmczRm5naVU4RmtqNmlKU3lmVGtYUlRLTFI1eDUyaUlM?=
+ =?utf-8?B?VnlmMDZPZzlGS1FhVjVJZlpwU3FUTVlNSk5ndEZ0VittR2wxSXRZa01MQVpr?=
+ =?utf-8?B?TWFWcmo1cUxvVXNjTVdmc3ljYXRnPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ad4f21f-22e7-4f1b-b61d-08dddfa2f3e6
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6484.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2025 04:35:12.7419
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WW13SLZKFGLM6yt4fpU7reMdrgkcYEXFPQTUWwtp4A0U0pVeN+pZG0TQhVaIU56yp+aE4N4GBO1I0vEFBTyWZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7787
+
+On Monday, July 14, 2025 5:22=E2=80=AFPM Svyatoslav Ryhel wrote:
+> Prepare soctherm fuse calibration for Tegra114 support.
+
+Please describe the changes that are needed for Tegra114 in the commit=20
+message.
+
+>=20
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  drivers/thermal/tegra/soctherm-fuse.c     | 33 ++++++++++++++++-------
+>  drivers/thermal/tegra/soctherm.h          | 13 ++++++++-
+>  drivers/thermal/tegra/tegra124-soctherm.c |  8 ++++++
+>  drivers/thermal/tegra/tegra132-soctherm.c |  8 ++++++
+>  drivers/thermal/tegra/tegra210-soctherm.c |  8 ++++++
+>  5 files changed, 59 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/thermal/tegra/soctherm-fuse.c
+> b/drivers/thermal/tegra/soctherm-fuse.c index 190f95280e0b..3b808c4521b8
+> 100644
+> --- a/drivers/thermal/tegra/soctherm-fuse.c
+> +++ b/drivers/thermal/tegra/soctherm-fuse.c
+> @@ -9,15 +9,10 @@
+>=20
+>  #include "soctherm.h"
+>=20
+> -#define NOMINAL_CALIB_FT			105
+> -#define NOMINAL_CALIB_CP			25
+> -
+>  #define FUSE_TSENSOR_CALIB_CP_TS_BASE_MASK	0x1fff
+>  #define FUSE_TSENSOR_CALIB_FT_TS_BASE_MASK	(0x1fff << 13)
+>  #define FUSE_TSENSOR_CALIB_FT_TS_BASE_SHIFT	13
+>=20
+> -#define FUSE_TSENSOR_COMMON			0x180
+> -
+>  /*
+>   * Tegra210: Layout of bits in FUSE_TSENSOR_COMMON:
+>   *    3                   2                   1                   0
+> @@ -44,6 +39,13 @@
+>   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+>   * |---------------------------------------------------| SHIFT_CP  |
+>   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+> + *
+> + * Tegra11x: Layout of bits in FUSE_TSENSOR_COMMON aka FUSE_VSENSOR_CALI=
+B:
+
+Let's just call it Tegra114. I see 'Tegra12x' is used above. You can change=
+=20
+that to 'Tegra124/Tegra132' while at it. The 'NNx' numbering is something=20
+leaking from (old) downstream code that we're trying to avoid.
+
+> + *    3                   2                   1                   0
+> + *  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
+> + * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+> + * | SHFT_FT |       BASE_FT       | SHIFT_CP  |      BASE_CP      |
+> + * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+>   */
+
+Based on these diagrams, the size of e.g. SHIFT_FT has not changed between =
+the=20
+chip generations. I checked old downstream code, where
+
+  #define FUSE_SHIFT_FT_BITS      5
+
+Below, we have
+
+  shifted_ft =3D sign_extend32(shifted_ft, 4);
+
+However, sign_extend32 calculates as '31 - x' whereas the downstream code d=
+oes=20
+'32 - x'. So it appears to me that the size hasn't changed between the chip=
+s=20
+and hence we don't need the added parameterization? Same might apply to oth=
+er=20
+fields in the calibration data.
+
+>=20
+>  #define CALIB_COEFFICIENT 1000000LL
+> @@ -77,7 +79,7 @@ int tegra_calc_shared_calib(const struct
+> tegra_soctherm_fuse *tfuse, s32 shifted_cp, shifted_ft;
+>  	int err;
+>=20
+> -	err =3D tegra_fuse_readl(FUSE_TSENSOR_COMMON, &val);
+> +	err =3D tegra_fuse_readl(tfuse->fuse_common_reg, &val);
+>  	if (err)
+>  		return err;
+>=20
+> @@ -88,7 +90,7 @@ int tegra_calc_shared_calib(const struct
+> tegra_soctherm_fuse *tfuse,
+>=20
+>  	shifted_ft =3D (val & tfuse->fuse_shift_ft_mask) >>
+>  		     tfuse->fuse_shift_ft_shift;
+> -	shifted_ft =3D sign_extend32(shifted_ft, 4);
+> +	shifted_ft =3D sign_extend32(shifted_ft, tfuse->fuse_shift_ft_bits);
+>=20
+>  	if (tfuse->fuse_spare_realignment) {
+>  		err =3D tegra_fuse_readl(tfuse->fuse_spare_realignment, &val);
+> @@ -96,10 +98,21 @@ int tegra_calc_shared_calib(const struct
+> tegra_soctherm_fuse *tfuse, return err;
+>  	}
+>=20
+> -	shifted_cp =3D sign_extend32(val, 5);
+> +	shifted_cp =3D (val & tfuse->fuse_shift_cp_mask) >>
+> +		     tfuse->fuse_shift_cp_shift;
+> +	shifted_cp =3D sign_extend32(val, tfuse->fuse_shift_cp_bits);
+>=20
+> -	shared->actual_temp_cp =3D 2 * NOMINAL_CALIB_CP + shifted_cp;
+> -	shared->actual_temp_ft =3D 2 * NOMINAL_CALIB_FT + shifted_ft;
+> +	shared->actual_temp_cp =3D 2 * tfuse->nominal_calib_cp + shifted_cp;
+> +	shared->actual_temp_ft =3D 2 * tfuse->nominal_calib_ft + shifted_ft;
+> +
+> +	/*
+> +	 * Tegra114 provides fuse thermal corrections in 0.5C while expected
+> +	 * precision should be 1C
+> +	 */
+
+If Tegra114 is lower precision, should this say it provides corrections in =
+1C=20
+while newer chips are 0.5C?
+
+> +	if (tfuse->lower_precision) {
+> +		shared->actual_temp_cp /=3D 2;
+> +		shared->actual_temp_ft /=3D 2;
+> +	}
+>=20
+>  	return 0;
+>  }
+> diff --git a/drivers/thermal/tegra/soctherm.h
+> b/drivers/thermal/tegra/soctherm.h index 70501e73d586..6c0e0cc594a5 10064=
+4
+> --- a/drivers/thermal/tegra/soctherm.h
+> +++ b/drivers/thermal/tegra/soctherm.h
+> @@ -56,6 +56,13 @@
+>  #define SENSOR_TEMP2_MEM_TEMP_MASK		(0xffff << 16)
+>  #define SENSOR_TEMP2_PLLX_TEMP_MASK		0xffff
+>=20
+> +#define NOMINAL_CALIB_FT			105
+> +#define T114X_CALIB_FT				90
+> +#define NOMINAL_CALIB_CP			25
+
+I would either just hardcode these values in the chip-specific files, or
+
+#define TEGRA114_NOMINAL_CALIB_FT ...
+#define TEGRA124_NOMINAL_CALIB_FT ...
+#define TEGRA114_NOMINAL_CALIB_CP ...
+
+> +
+> +#define FUSE_VSENSOR_CALIB			0x08c
+> +#define FUSE_TSENSOR_COMMON			0x180
+> +
+>  /**
+>   * struct tegra_tsensor_group - SOC_THERM sensor group data
+>   * @name: short name of the temperature sensor group
+> @@ -109,9 +116,13 @@ struct tsensor_group_thermtrips {
+>=20
+>  struct tegra_soctherm_fuse {
+>  	u32 fuse_base_cp_mask, fuse_base_cp_shift;
+> +	u32 fuse_shift_cp_mask, fuse_shift_cp_shift;
+>  	u32 fuse_base_ft_mask, fuse_base_ft_shift;
+>  	u32 fuse_shift_ft_mask, fuse_shift_ft_shift;
+> -	u32 fuse_spare_realignment;
+> +	u32 fuse_shift_cp_bits, fuse_shift_ft_bits;
+> +	u32 fuse_common_reg, fuse_spare_realignment;
+> +	u32 nominal_calib_cp, nominal_calib_ft;
+> +	bool lower_precision;
+>  };
+>=20
+>  struct tsensor_shared_calib {
+> diff --git a/drivers/thermal/tegra/tegra124-soctherm.c
+> b/drivers/thermal/tegra/tegra124-soctherm.c index
+> 20ad27f4d1a1..dd4dd7e9014d 100644
+> --- a/drivers/thermal/tegra/tegra124-soctherm.c
+> +++ b/drivers/thermal/tegra/tegra124-soctherm.c
+> @@ -200,11 +200,19 @@ static const struct tegra_tsensor tegra124_tsensors=
+[]
+> =3D { static const struct tegra_soctherm_fuse tegra124_soctherm_fuse =3D =
+{
+> .fuse_base_cp_mask =3D 0x3ff,
+>  	.fuse_base_cp_shift =3D 0,
+> +	.fuse_shift_cp_mask =3D 0x1f,
+> +	.fuse_shift_cp_shift =3D 0,
+>  	.fuse_base_ft_mask =3D 0x7ff << 10,
+>  	.fuse_base_ft_shift =3D 10,
+>  	.fuse_shift_ft_mask =3D 0x1f << 21,
+>  	.fuse_shift_ft_shift =3D 21,
+> +	.fuse_shift_cp_bits =3D 5,
+> +	.fuse_shift_ft_bits =3D 4,
+> +	.fuse_common_reg =3D FUSE_TSENSOR_COMMON,
+>  	.fuse_spare_realignment =3D 0x1fc,
+> +	.nominal_calib_cp =3D NOMINAL_CALIB_CP,
+> +	.nominal_calib_ft =3D NOMINAL_CALIB_FT,
+> +	.lower_precision =3D false,
+>  };
+>=20
+>  const struct tegra_soctherm_soc tegra124_soctherm =3D {
+> diff --git a/drivers/thermal/tegra/tegra132-soctherm.c
+> b/drivers/thermal/tegra/tegra132-soctherm.c index
+> b76308fdad9e..926836426688 100644
+> --- a/drivers/thermal/tegra/tegra132-soctherm.c
+> +++ b/drivers/thermal/tegra/tegra132-soctherm.c
+> @@ -200,11 +200,19 @@ static struct tegra_tsensor tegra132_tsensors[] =3D=
+ {
+>  static const struct tegra_soctherm_fuse tegra132_soctherm_fuse =3D {
+>  	.fuse_base_cp_mask =3D 0x3ff,
+>  	.fuse_base_cp_shift =3D 0,
+> +	.fuse_shift_cp_mask =3D 0x1f,
+> +	.fuse_shift_cp_shift =3D 0,
+>  	.fuse_base_ft_mask =3D 0x7ff << 10,
+>  	.fuse_base_ft_shift =3D 10,
+>  	.fuse_shift_ft_mask =3D 0x1f << 21,
+>  	.fuse_shift_ft_shift =3D 21,
+> +	.fuse_shift_cp_bits =3D 5,
+> +	.fuse_shift_ft_bits =3D 4,
+> +	.fuse_common_reg =3D FUSE_TSENSOR_COMMON,
+>  	.fuse_spare_realignment =3D 0x1fc,
+> +	.nominal_calib_cp =3D NOMINAL_CALIB_CP,
+> +	.nominal_calib_ft =3D NOMINAL_CALIB_FT,
+> +	.lower_precision =3D false,
+>  };
+>=20
+>  const struct tegra_soctherm_soc tegra132_soctherm =3D {
+> diff --git a/drivers/thermal/tegra/tegra210-soctherm.c
+> b/drivers/thermal/tegra/tegra210-soctherm.c index
+> d0ff793f18c5..2877a7b43f2a 100644
+> --- a/drivers/thermal/tegra/tegra210-soctherm.c
+> +++ b/drivers/thermal/tegra/tegra210-soctherm.c
+> @@ -201,11 +201,19 @@ static const struct tegra_tsensor tegra210_tsensors=
+[]
+> =3D { static const struct tegra_soctherm_fuse tegra210_soctherm_fuse =3D =
+{
+> .fuse_base_cp_mask =3D 0x3ff << 11,
+>  	.fuse_base_cp_shift =3D 11,
+> +	.fuse_shift_cp_mask =3D 0x1f,
+> +	.fuse_shift_cp_shift =3D 0,
+>  	.fuse_base_ft_mask =3D 0x7ff << 21,
+>  	.fuse_base_ft_shift =3D 21,
+>  	.fuse_shift_ft_mask =3D 0x1f << 6,
+>  	.fuse_shift_ft_shift =3D 6,
+> +	.fuse_shift_cp_bits =3D 5,
+> +	.fuse_shift_ft_bits =3D 4,
+> +	.fuse_common_reg =3D FUSE_TSENSOR_COMMON,
+>  	.fuse_spare_realignment =3D 0,
+> +	.nominal_calib_cp =3D NOMINAL_CALIB_CP,
+> +	.nominal_calib_ft =3D NOMINAL_CALIB_FT,
+> +	.lower_precision =3D false,
+>  };
+>=20
+>  static struct tsensor_group_thermtrips tegra210_tsensor_thermtrips[] =3D=
+ {
 
 
 
-On 8/19/2025 1:48 PM, Viresh Kumar wrote:
-> On 19-08-25, 11:04, Krishna Chaitanya Chundru wrote:
->> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
->> index edbd60501cf00dfd1957f7d19b228d1c61bbbdcc..ce359a3d444b0b7099cdd2421ab1019963d05d9f 100644
->> --- a/drivers/opp/core.c
->> +++ b/drivers/opp/core.c
->> @@ -461,6 +461,15 @@ int dev_pm_opp_get_opp_count(struct device *dev)
->>   EXPORT_SYMBOL_GPL(dev_pm_opp_get_opp_count);
->>   
->>   /* Helpers to read keys */
->> +static unsigned long _read_opp_key(struct dev_pm_opp *opp, int index, struct dev_pm_opp_key *key)
-> 
-> Move this to the end of the list, after _read_bw() i.e.
-> 
-ack
->> +{
->> +	key->bandwidth = opp->bandwidth ? opp->bandwidth[index].peak : 0;
->> +	key->freq = opp->rates[index];
->> +	key->level = opp->level;
->> +
->> +	return true;
->> +}
->> +
->>   static unsigned long _read_freq(struct dev_pm_opp *opp, int index)
->>   {
->>   	return opp->rates[index];
->> @@ -488,6 +497,23 @@ static bool _compare_exact(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
->>   	return false;
->>   }
->>   
->> +static bool _compare_opp_key_exact(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
->> +				   struct dev_pm_opp_key opp_key, struct dev_pm_opp_key key)
->> +{
-> 
-> And this after _compare_floor().
-> 
-ack
->> +	bool level_match = (opp_key.level == OPP_LEVEL_UNSET ||
-> 
-> Why are we still checking this ? You removed this from freq check but
-> not level and bandwidth ?
-> 
-ok I will change for level and bw also similar to freq.
->> +			    key.level == OPP_LEVEL_UNSET || opp_key.level == key.level);
->> +	bool bw_match = (opp_key.bandwidth == 0 ||
->> +			 key.bandwidth == 0 || opp_key.bandwidth == key.bandwidth);
->> +	bool freq_match = (key.freq == 0 || opp_key.freq == key.freq);
->> +
->> +	if (freq_match && level_match && bw_match) {
->> +		*opp = temp_opp;
->> +		return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>   static bool _compare_ceil(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
->>   			  unsigned long opp_key, unsigned long key)
->>   {
->> @@ -541,6 +567,40 @@ static struct dev_pm_opp *_opp_table_find_key(struct opp_table *opp_table,
->>   	return opp;
->>   }
->>   
->> +static struct dev_pm_opp *_opp_table_find_opp_key(struct opp_table *opp_table,
->> +		struct dev_pm_opp_key *key, int index, bool available,
->> +		unsigned long (*read)(struct dev_pm_opp *opp, int index,
->> +				      struct dev_pm_opp_key *key),
->> +		bool (*compare)(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
->> +				struct dev_pm_opp_key opp_key, struct dev_pm_opp_key key),
->> +		bool (*assert)(struct opp_table *opp_table, unsigned int index))
->> +{
->> +	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
->> +	struct dev_pm_opp_key temp_key;
->> +
->> +	/* Assert that the requirement is met */
->> +	if (assert && !assert(opp_table, index))
-> 
-> Just drop the `assert` check, it isn't optional. Make the same change
-> in _opp_table_find_key() too in a separate patch if you can.
-> 
-ack
->> +		return ERR_PTR(-EINVAL);
->> +
->> +	guard(mutex)(&opp_table->lock);
->> +
->> +	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
->> +		if (temp_opp->available == available) {
->> +			read(temp_opp, index, &temp_key);
->> +			if (compare(&opp, temp_opp, temp_key, *key))
-> 
-> Update *key and do dev_pm_opp_get() here itself. And same in
-> _opp_table_find_key().
-> 
-ack
->> +				break;
->> +		}
->> +	}
->> +
->> +	/* Increment the reference count of OPP */
->> +	if (!IS_ERR(opp)) {
->> +		*key = temp_key;
->> +		dev_pm_opp_get(opp);
->> +	}
->> +
->> +	return opp;
->> +}
->> +
->>   static struct dev_pm_opp *
->>   _find_key(struct device *dev, unsigned long *key, int index, bool available,
->>   	  unsigned long (*read)(struct dev_pm_opp *opp, int index),
->> @@ -632,6 +692,46 @@ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
->>   }
->>   EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_exact);
->>   
->> +/**
->> + * dev_pm_opp_find_key_exact() - Search for an exact OPP key
->> + * @dev:                Device for which the OPP is being searched
->> + * @key:                OPP key to match
->> + * @available:          true/false - match for available OPP
->> + *
->> + * Return: Searches for an exact match the OPP key in the OPP table and returns
-> 
-> The `Return` section should only talk about the returned values. The
-> above line for example should be present as a standalone line before
-> the `Return` section.
-> 
-ack
->> + * pointer to the  matching opp if found, else returns ERR_PTR  in case of error
->> + * and should  be handled using IS_ERR. Error return values can be:
->> + * EINVAL:      for bad pointer
->> + * ERANGE:      no match found for search
->> + * ENODEV:      if device not found in list of registered devices
->> + *
->> + * Note: available is a modifier for the search. if available=true, then the
->> + * match is for exact matching key and is available in the stored OPP
->> + * table. if false, the match is for exact key which is not available.
->> + *
->> + * This provides a mechanism to enable an opp which is not available currently
->> + * or the opposite as well.
->> + *
->> + * The callers are required to call dev_pm_opp_put() for the returned OPP after
->> + * use.
-> 
-> There are various minor issues in the text here, like double spaces,
-> not starting with a capital letter after a full stop, etc. Also put
-> arguments in `` block, like `available`.
-> 
-ack
->> + */
->> +struct dev_pm_opp *dev_pm_opp_find_key_exact(struct device *dev,
->> +					     struct dev_pm_opp_key key,
->> +					     bool available)
->> +{
->> +	struct opp_table *opp_table __free(put_opp_table) = _find_opp_table(dev);
->> +
->> +	if (IS_ERR(opp_table)) {
->> +		dev_err(dev, "%s: OPP table not found (%ld)\n", __func__,
->> +			PTR_ERR(opp_table));
->> +		return ERR_CAST(opp_table);
->> +	}
->> +
->> +	return _opp_table_find_opp_key(opp_table, &key, 0, available, _read_opp_key,
->> +				       _compare_opp_key_exact, assert_single_clk);
-> 
-> Since the only user doesn't use `index` for now, I wonder if that
-> should be added at all in all these functions.
-> 
-ok I will remove it.
->> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_opp_find_key_exact);
->> +
->>   /**
->>    * dev_pm_opp_find_freq_exact_indexed() - Search for an exact freq for the
->>    *					 clock corresponding to the index
->> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
->> index cf477beae4bbede88223566df5f43d85adc5a816..53e02098129d215970d0854b1f8ffaf4499f2bd4 100644
->> --- a/include/linux/pm_opp.h
->> +++ b/include/linux/pm_opp.h
->> @@ -98,6 +98,18 @@ struct dev_pm_opp_data {
->>   	unsigned long u_volt;
->>   };
->>   
->> +/**
->> + * struct dev_pm_opp_key - Key used to identify OPP entries
->> + * @freq:       Frequency in Hz
->> + * @level:      Performance level associated with the OPP entry
->> + * @bandwidth:  Bandwidth associated with the OPP entry
-> 
-> Also mention the NOP value of all these keys, i.e. what the user must
-> fill them with if that key is not supposed to be matched.
-> 
-ack
->> + */
->> +struct dev_pm_opp_key {
->> +	unsigned long freq;
->> +	unsigned int level;
->> +	u32 bandwidth;
-> 
-> Maybe use `bw` here like in other APIs.
-> 
-ack.
 
-- Krishna Chaitanya.
->> +};
->> +
->>   #if defined(CONFIG_PM_OPP)
->>   
->>   struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
->> @@ -131,6 +143,10 @@ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
->>   					      unsigned long freq,
->>   					      bool available);
->>   
->> +struct dev_pm_opp *dev_pm_opp_find_key_exact(struct device *dev,
->> +					     struct dev_pm_opp_key key,
->> +					     bool available);
->> +
->>   struct dev_pm_opp *
->>   dev_pm_opp_find_freq_exact_indexed(struct device *dev, unsigned long freq,
->>   				   u32 index, bool available);
->> @@ -289,6 +305,13 @@ static inline struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
->>   	return ERR_PTR(-EOPNOTSUPP);
->>   }
->>   
->> +static inline struct dev_pm_opp *dev_pm_opp_find_key_exact(struct device *dev,
->> +							   struct dev_pm_opp_key key,
->> +							   bool available)
->> +{
->> +	return ERR_PTR(-EOPNOTSUPP);
->> +}
->> +
->>   static inline struct dev_pm_opp *
->>   dev_pm_opp_find_freq_exact_indexed(struct device *dev, unsigned long freq,
->>   				   u32 index, bool available)
->>
->> -- 
->> 2.34.1
-> 
 
