@@ -1,133 +1,113 @@
-Return-Path: <linux-pm+bounces-32808-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32809-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA292B2F7E8
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 14:28:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AEC0B2F884
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 14:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8C0316BA62
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 12:27:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA1AC1CE216B
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 12:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D9630BF7D;
-	Thu, 21 Aug 2025 12:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1181831DD9C;
+	Thu, 21 Aug 2025 12:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vaJ0vgiP"
+	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="txzMEN3F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280318248B;
-	Thu, 21 Aug 2025 12:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449A730F7E1;
+	Thu, 21 Aug 2025 12:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755779270; cv=none; b=aHmoP3JgL+kyCGIrjJjaApFk4nOb4nl45cqC+gYFn9BRM6ojA+KCR5ycJcNn3YdU+5UZujiPici5rRam7EAP5LfV8PcWIPNnJJKjJmAsMCehLKfl0DxGSzJKFATD0m2Rx/UEFWN9QdVPr0saQ01J+IsfscyI+G2vFNhKEwnNJiM=
+	t=1755780123; cv=none; b=moJW3ML+Fj+uLEhs2OGVEghbC5NOjeo1LD5zuCbuaiW8leoWj6as7JiRcV8yUkvWbSchWR0MEG3D99Yf/7C9widtAjjDlkOtp348t0yt8cH/aHdo8m42MaBWEmTz99s21pewF9oYYp1FDsR+eI9m/bgeOVoxgS0XIraweNgGR2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755779270; c=relaxed/simple;
-	bh=K1z/73vV5QRw5bhERGRbwvmp+e272T/fDcSoQxBnbbE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8PUihAOs3KnWI6N1eGVn+VyIHAPAGhnYngMgqOb4znlNwftoPtWifSjd7RCbxoELFdS8IJiqdrjVpFS2roGKxPRJF9xqdYjuixwtSdit5Tbh7MbybAfFfUeA6vfWtJtzZhY/BfDvfOwOZ0Pb6NqlKdt52O9mGCxtvLIJROU2Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=vaJ0vgiP; arc=none smtp.client-ip=198.47.23.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57LCRfix485110;
-	Thu, 21 Aug 2025 07:27:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1755779261;
-	bh=fUfL5bKnDp2X/NiKP63dUX2P6xrzq3fLobwT70t10jM=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=vaJ0vgiPuzv3cjC4kGWxErhToHZ6hY+OXaVVTMRK5UUzPWti5Lady/qEf239x9qv1
-	 kgGLriP1vdAhQ/AxztGI511KUe+b84sVDxHpT64qqXXKTOJJfdezVJDtu+cTI9/K+M
-	 bkfIOEZMC+vHzDrt5bi53wMLlfnms0IoeQv1tneU=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57LCRfvs2526117
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Thu, 21 Aug 2025 07:27:41 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 21
- Aug 2025 07:27:41 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Thu, 21 Aug 2025 07:27:41 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57LCRfU42146850;
-	Thu, 21 Aug 2025 07:27:41 -0500
-Date: Thu, 21 Aug 2025 07:27:41 -0500
-From: Nishanth Menon <nm@ti.com>
-To: Paresh Bhagat <p-bhagat@ti.com>
-CC: <vigneshr@ti.com>, <praneeth@ti.com>, <kristo@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <khasim@ti.com>, <v-singh1@ti.com>, <afd@ti.com>, <bb@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH 0/4] Add cpufreq and USB support for AM62D2
-Message-ID: <20250821122741.eqrwystfey7nwvym@outfit>
-References: <20250820083331.3412378-1-p-bhagat@ti.com>
+	s=arc-20240116; t=1755780123; c=relaxed/simple;
+	bh=CU4cTKvaSQ23yYf+H4pKFowY3NHmF+KaBQQhNfP4Zvg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=TD4/1pvkTAzmwcUBaHowHpsXby8MAsHY6ag1xJydkvAsP2kIIe2oWxUwtf03PgJwKr0gLtWE3zJiGZjGs3eOtzhUsi8Z3ReAXcihLePw8gWLvdOh4w9xuTmRzb7h6KWWWw65KLWciMYoQ20KHRPxMd08PrI0NdqNbG2Tqlxy/JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=txzMEN3F; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250820083331.3412378-1-p-bhagat@ti.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
+	t=1755780117;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2qBXp2L6ghuaOFTwpw0VcF+lJn82b0iwLgdjpHusKRY=;
+	b=txzMEN3FKtz1olFZUVrErfLHlhVNtHZp9Kd/i2sWnJtnGBam8Rdp3Oaogr0G23n5z4Eehf
+	nGkZ9OB8Xo587f3LLNgNZFk6nWKx26GGOODXnDG6QmhwykAptAb4nKdWsxH5mY0lzf762R
+	v5ZuMJSkoNsbXkwH1yFunobZ3E4zLw9ecdcIjUIrrUWy3yPU3o8Radlqb5OGtBQjUE46wM
+	IzknYv9LHjnyR4g9tqA83ILR4aotfauXFfh970xI8ortZznliPacH7OK51v7hjHYF0jUKk
+	eCuIcurdewmlFv0qdyBGbByDQeQawkgA59EaxihTeqGqU8F1X+bMOwNtY3h9UA==
+Content-Type: multipart/signed;
+ boundary=3b571f17c3ddaedec092828a238ae966d2c316d9a762f9d2cf5b0d604e2a;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Thu, 21 Aug 2025 14:41:34 +0200
+Message-Id: <DC843K2CRBHH.1IUX1SB576TFZ@cknow.org>
+Cc: "Robin Murphy" <robin.murphy@arm.com>, <linux-pm@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>,
+ <linux-rockchip@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH v2 2/3] thermal: rockchip: shut up GRF warning
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <didi.debian@cknow.org>
+To: "Sebastian Reichel" <sebastian.reichel@collabora.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Zhang Rui" <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>,
+ "Heiko Stuebner" <heiko@sntech.de>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>
+References: <20250820-thermal-rockchip-grf-warning-v2-0-c7e2d35017b8@kernel.org> <20250820-thermal-rockchip-grf-warning-v2-2-c7e2d35017b8@kernel.org>
+In-Reply-To: <20250820-thermal-rockchip-grf-warning-v2-2-c7e2d35017b8@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On 14:03-20250820, Paresh Bhagat wrote:
-> This patch series introduces following changes:
-> 
-> * Patch 1 fixes the register length in main_pmx/padconfig for AM62D
->  and AM62A.
-> 
-> * Patch 2 enables USB support for AM62D2-EVM by adding pinmux and device
->  tree nodes.
-> 
-> * Patch 3 adds AM62D2 SoC to cpufreq-dt-platdev blacklist so that
->  cpufreq is handled by the ti-cpufreq driver instead of the
->  generic cpufreq-dt driver.
-> 
-> * Patch 4 extends ti-cpufreq to register AM62D2 SoC support by
->  reusing the am62a7_soc_data.
-> 
-> Boot Logs-
-> https://gist.github.com/paresh-bhagat12/e29d33c3fd92ff17580edf1441ece9f9
-> 
-> Tech Ref Manual-https://www.ti.com/lit/pdf/sprujd4
-> Schematics Link-https://www.ti.com/lit/zip/sprcal5
-> 
-> Paresh Bhagat (3):
->   arm64: dts: ti: k3-am62d2-evm: Enable USB support
->   cpufreq: dt-platdev: Blacklist ti,am62d2 SoC
->   cpufreq: ti: Add support for AM62D2
-> 
-> Vibhore Vardhan (1):
->   arm64: dts: ti: k3-am62a-main: Fix pinctrl properties
+--3b571f17c3ddaedec092828a238ae966d2c316d9a762f9d2cf5b0d604e2a
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-Please do not mix things up to maintainers. Please post patches #1,2
-separately to DT maintainers - these do not have any relationship with
-the rest of the driver patches.
+On Wed Aug 20, 2025 at 7:40 PM CEST, Sebastian Reichel wrote:
+> Most of the recent Rockchip devices do not have a GRF associated
+> with the tsadc IP. Let's avoid printing a warning on those devices.
 
-> 
->  arch/arm64/boot/dts/ti/k3-am62a-main.dtsi |  2 +-
->  arch/arm64/boot/dts/ti/k3-am62d2-evm.dts  | 21 +++++++++++++++++++++
->  drivers/cpufreq/cpufreq-dt-platdev.c      |  1 +
->  drivers/cpufreq/ti-cpufreq.c              |  2 ++
->  4 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> -- 
-> 2.34.1
-> 
+Retested with v2 of this patch (set) and there were still no regressions
+on Rock64 (rk3328), RockPro64 (rk3399) and Quartz64-B (rk3566).
+I skipped testing my NanoPi R5S (rk3568) this time.
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-https://ti.com/opensource
+And on Rock 5B (rk3588) I (still) no longer see this warning:
+
+  rockchip-thermal fec00000.tsadc: Missing rockchip,grf property
+
+So also with v2:
+
+Tested-by: Diederik de Haas <didi.debian@cknow.org>
+
+Cheers,
+  Diederik
+
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/thermal/rockchip_thermal.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
+
+--3b571f17c3ddaedec092828a238ae966d2c316d9a762f9d2cf5b0d604e2a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCaKcUAwAKCRDXblvOeH7b
+bkU/AQCEUoGxVyVSNGRj6qG6NCl2nThKkgrDRtbsVWcAv4iiLQEA5qiGnnUdk7ma
+IuxRHRF24a7aweQEHZRYm58eco2GUQQ=
+=xzaV
+-----END PGP SIGNATURE-----
+
+--3b571f17c3ddaedec092828a238ae966d2c316d9a762f9d2cf5b0d604e2a--
 
