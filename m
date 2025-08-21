@@ -1,49 +1,50 @@
-Return-Path: <linux-pm+bounces-32832-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83E3EB30203
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 20:26:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE2A7B30200
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 20:26:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 348797A7AC6
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 18:24:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 498D51CC84B3
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 18:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A60134F46C;
-	Thu, 21 Aug 2025 18:24:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4E2343D87;
+	Thu, 21 Aug 2025 18:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="qQWoMkSH"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="GGWVeB1Q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C0B34DCFB;
-	Thu, 21 Aug 2025 18:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED96B2C21C3;
+	Thu, 21 Aug 2025 18:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755800652; cv=none; b=Bf16Mu2CYdLwNBUQBjr5PypqVnRabmNX4FYwMfP18GhIS2bpXfKGCA5wtbT6KpxdUr2sMpzDNYGbHhFF3y7LZxT4ZC3llxoIdqGRy4s2npRsUTzXXqLY80PiT56Nn2Zac29MYQJWSQOVsyg5Ab+C7DSxhpY3NtPLJ4aVPmoEzAQ=
+	t=1755800644; cv=none; b=l627pycc+3TI7KRDOyg6rbh2gI6WEBlcEAPrbIsUQgE2R8U+DU/ALRPa9cTmfbsmk6R2ooGM2MOltsvo/Mjp0L8CxzTmS8HuwlfteH+ZvpwiSAIHFVoWhjXhHLFlSohZf0igtbLFbSEFztvILyq+GKtZIkK1HGyPmq5xOT5X40E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755800652; c=relaxed/simple;
-	bh=CluilFXim51uC9dpk32ZYt2i2sJtqps2NUq6ZJiEyEw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=A8w0kXJv2aLxgTLI+xWAbaeybo3mYLE+ZZT7kimZUoghp4sE+3LOTfC2SEGXqGuxBfvgf5yZMzLvJY50GJfLMFwHUQGnNqViwwGujzdiJgRbpE6baPiNxBeI96MvD3P6npXioNV3CYk6YxBnyzQJP/MNTAgUxSklGDf3EMBuRsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=qQWoMkSH; arc=none smtp.client-ip=178.238.236.174
+	s=arc-20240116; t=1755800644; c=relaxed/simple;
+	bh=CDZFTiewZPGjKLo/vMNJrWTSkw9CbQmSIEzkYBDOwAw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=hyM7gLZMuBbo/fPsvlspqrPLT5wdWjsYPbfGlxuFZvU1Nx9Ru8wTFy+qcejHtKQewfGl6y1NYnEtS+D5h8kzeN6q1qzSzEES2sgh4BfvR0yRo4hbApLQF7jBW6xwP0lDa44gMumugAkzaZVSdrOX/aeYwq3d930XTXpXqU7iAd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=GGWVeB1Q; arc=none smtp.client-ip=178.238.236.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=rMFoG+5Rskqk1f1Gs6Z/NvhqC82WqoYSX248NZpvzG8=; b=qQWoMkSHGfF1J+/ZQKC1+VDcaZ
-	hrmFmd7fVAZwu2Hdv4fFMcxj73l50YvhyHkhmJTk3zLih+uPxSpV6u6i/smv1pifAMkV8LtO7BaQS
-	MSHQZa/rCgrRQungnowet+7qRpBXb+nW2ZxNl1KnQrZ5ZyAV53glDiHxVsu0RjaS7fvsNTNEubz91
-	W4yQiio8livg6mo+8u4gmKmwystpb+8K08OFKQ9/TTppFLU4MqJopEqhJ4s/sIclktPdy6hvkuLxr
-	vDmOBR/lybfABPo5oPujc3rabTgLm5l5ivNCyqLbj880SazZX+Gx60MRZN8nx2wUWhAc5XeA5nBeD
-	IdLPxiNA==;
+	d=kemnade.info; s=20220719; h=Cc:In-Reply-To:References:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=myz4vrZNBk7JFUVyDBenBpGJxS1Ot3T5x5qaRJTLlYg=; b=GGWVeB1Qs77pVvETGts0GpAdqW
+	tS+oGxyK6WwJaS6VSHQu3d330OI3FliNX3i+74FK/rCX6Ehymq12BNav1ssXt+k+Cn+ricz2+7ZoX
+	dpYXo4prBqPW+lBuvySmdqw57xG5QP9RJ4XB4kMTJWW93Dn4ef5duidB1CBniOz5i2TYDRxnsFpd8
+	ZEuSHY3t6SSLdvSzCWQxNsdCKH4RTCmSLiU8GmM4iX/b7Mvp7YQSvOrdcrgpfolQhXr+eJaec6V3O
+	AoJiULlNJDJzxT6PwfzwxAV8SIGOauC601I51q5n4kx5fjlwic48GhpI7hdXJJYowtfuK2Us+G0Yi
+	YWrUWMdg==;
 From: Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v3 0/3] power: supply: add charger for BD71828
-Date: Thu, 21 Aug 2025 20:23:33 +0200
-Message-Id: <20250821-bd71828-charger-v3-0-cc74ac4e0fb9@kemnade.info>
+Date: Thu, 21 Aug 2025 20:23:34 +0200
+Subject: [PATCH v3 1/3] mfd: bd71828, bd71815 prepare for power-supply
+ support
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,11 +53,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACZkp2gC/3XNwQrCMAwG4FcZPVtpUrd2nnwP8bCt6VbEVlopy
- ti72+0kipfAn598mVmi6CixYzWzSNklF3wJclexYer8SNyZkhkKrIWGhvdGgUbNSxtHirw1oJU
- 8NLYMVq7ukax7buL5UvLk0iPE1/Ygw7r9b2XggivoAXpD9aDk6Uo33xnaO28DW7mMHwSKXwILI
- dEObSNQUYtfxLIsb9VzYmX0AAAA
-X-Change-ID: 20250816-bd71828-charger-9d187346f734
+Message-Id: <20250821-bd71828-charger-v3-1-cc74ac4e0fb9@kemnade.info>
+References: <20250821-bd71828-charger-v3-0-cc74ac4e0fb9@kemnade.info>
+In-Reply-To: <20250821-bd71828-charger-v3-0-cc74ac4e0fb9@kemnade.info>
 To: Matti Vaittinen <mazziesaccount@gmail.com>, Lee Jones <lee@kernel.org>, 
  Sebastian Reichel <sre@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
@@ -64,66 +63,186 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  Andreas Kemnade <andreas@kemnade.info>, 
  Matti Vaittinen <mazziesaccount@gmail.com>
 X-Mailer: b4 0.15-dev-87983
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1923; i=andreas@kemnade.info;
- h=from:subject:message-id; bh=CluilFXim51uC9dpk32ZYt2i2sJtqps2NUq6ZJiEyEw=;
- b=owGbwMvMwCEm/rzkS6lq2x3G02pJDBnLU8ymddcopRWskfezuFd291bCh8PR04PPR3GKHy7i+
- db3yaG8o5SFQYyDQVZMkeWXtYLbJ5VnucFTI+xh5rAygQxh4OIUgIkUijH8M5CY/O9B73O+CfuW
- H5hhYHpLQKz68dFdS16ccGxdpfwzrpyRYfHhHod5K+flXJ/OP+0D2/blb5L6nT/LSgTE5ZYs059
- 8nxMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7379; i=andreas@kemnade.info;
+ h=from:subject:message-id; bh=nZzC7R39h+r1/F1VY9HGweRBo/u/v4XJOAGHbsROS5g=;
+ b=owGbwMvMwCEm/rzkS6lq2x3G02pJDBnLU+yfaV9YwSkT8/598v/ndb/2Pzgfnzin9desA6sX7
+ k3sWHz2bUcpC4MYB4OsmCLLL2sFt08qz3KDp0bYw8xhZQIZwsDFKQATyS9gZNj++sH8swIzPzvd
+ KD6x2qPTv9rjtMX6sE9rqgx5eM83nfvO8FfM5MMPre2r4t5O9Xd37zRYo7f/rvyiI0/nWLS9N1a
+ zzOQHAA==
 X-Developer-Key: i=andreas@kemnade.info; a=openpgp;
  fpr=EEC0DB858E66C0DA70620AC07DBD6AC74DE29324
 
-Add basic charger which does just read out simple registers without
-doing any sophisticated things. 
+From: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-This is a stripped down version of
-https://lore.kernel.org/lkml/dbd97c1b0d715aa35a8b4d79741e433d97c562aa.1637061794.git.matti.vaittinen@fi.rohmeurope.com/
+Add core support for ROHM BD718(15/28/78) PMIC's charger blocks.
 
-That version includes all the bells-and-whistles you might imagine
-around coloumb counter handling and capacity measurement which includes
-changes no the power supply core.
-Rather do a step by step approach to keep that reviewable.
-
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 ---
-Changes in v3:
-- remove unused defines
-- some minor style nits
-- add MAINTAINER entry
-- Link to v2: https://lore.kernel.org/r/20250820-bd71828-charger-v2-0-32fc96027e92@kemnade.info
+ drivers/mfd/rohm-bd71828.c       | 44 ++++++++++++++++++++++------
+ include/linux/mfd/rohm-bd71828.h | 63 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 98 insertions(+), 9 deletions(-)
 
-Changes in v2:
-- fix some be16 handling reported by bots
-- fix some style issues
-- do not sneak in additional chip ids
-- remove useless debug output 
-- remove wrong/useless alias
-- remove fuel gauge remains
-- fix error checks in temperature reading
-- sync properties in switch/case with list
-- Link to v1: https://lore.kernel.org/r/20250816-bd71828-charger-v1-0-71b11bde5c73@kemnade.info
+diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-bd71828.c
+index a14b7aa69c3c6..84a64c3b9c9f5 100644
+--- a/drivers/mfd/rohm-bd71828.c
++++ b/drivers/mfd/rohm-bd71828.c
+@@ -45,8 +45,8 @@ static const struct resource bd71828_rtc_irqs[] = {
+ 
+ static const struct resource bd71815_power_irqs[] = {
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_RMV, "bd71815-dcin-rmv"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_CLPS_OUT, "bd71815-clps-out"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_CLPS_IN, "bd71815-clps-in"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_CLPS_OUT, "bd71815-dcin-clps-out"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_CLPS_IN, "bd71815-dcin-clps-in"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_OVP_RES, "bd71815-dcin-ovp-res"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_OVP_DET, "bd71815-dcin-ovp-det"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_MON_RES, "bd71815-dcin-mon-res"),
+@@ -56,7 +56,7 @@ static const struct resource bd71815_power_irqs[] = {
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_LOW_RES, "bd71815-vsys-low-res"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_LOW_DET, "bd71815-vsys-low-det"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_MON_RES, "bd71815-vsys-mon-res"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_MON_RES, "bd71815-vsys-mon-det"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_MON_DET, "bd71815-vsys-mon-det"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_WDG_TEMP, "bd71815-chg-wdg-temp"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_WDG_TIME, "bd71815-chg-wdg"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_RECHARGE_RES, "bd71815-rechg-res"),
+@@ -87,10 +87,10 @@ static const struct resource bd71815_power_irqs[] = {
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_BAT_OVER_CURR_2_DET, "bd71815-bat-oc2-det"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_BAT_OVER_CURR_3_RES, "bd71815-bat-oc3-res"),
+ 	DEFINE_RES_IRQ_NAMED(BD71815_INT_BAT_OVER_CURR_3_DET, "bd71815-bat-oc3-det"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_LOW_RES, "bd71815-bat-low-res"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_LOW_DET, "bd71815-bat-low-det"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_HI_RES, "bd71815-bat-hi-res"),
+-	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_HI_DET, "bd71815-bat-hi-det"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_LOW_RES, "bd71815-temp-bat-low-res"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_LOW_DET, "bd71815-temp-bat-low-det"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_HI_RES, "bd71815-temp-bat-hi-res"),
++	DEFINE_RES_IRQ_NAMED(BD71815_INT_TEMP_BAT_HI_DET, "bd71815-temp-bat-hi-det"),
+ };
+ 
+ static const struct mfd_cell bd71815_mfd_cells[] = {
+@@ -109,7 +109,30 @@ static const struct mfd_cell bd71815_mfd_cells[] = {
+ 	},
+ };
+ 
+-static const struct mfd_cell bd71828_mfd_cells[] = {
++static const struct resource bd71828_power_irqs[] = {
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_CHG_TOPOFF_TO_DONE,
++			     "bd71828-chg-done"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_DCIN_DET, "bd71828-pwr-dcin-in"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_DCIN_RMV, "bd71828-pwr-dcin-out"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_BAT_LOW_VOLT_RES,
++			     "bd71828-vbat-normal"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_BAT_LOW_VOLT_DET, "bd71828-vbat-low"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_BAT_HI_DET, "bd71828-btemp-hi"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_BAT_HI_RES, "bd71828-btemp-cool"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_BAT_LOW_DET, "bd71828-btemp-lo"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_BAT_LOW_RES,
++			     "bd71828-btemp-warm"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_CHIP_OVER_VF_DET,
++			     "bd71828-temp-hi"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_CHIP_OVER_VF_RES,
++			     "bd71828-temp-norm"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_CHIP_OVER_125_DET,
++			     "bd71828-temp-125-over"),
++	DEFINE_RES_IRQ_NAMED(BD71828_INT_TEMP_CHIP_OVER_125_RES,
++			     "bd71828-temp-125-under"),
++};
++
++static struct mfd_cell bd71828_mfd_cells[] = {
+ 	{ .name = "bd71828-pmic", },
+ 	{ .name = "bd71828-gpio", },
+ 	{ .name = "bd71828-led", .of_compatible = "rohm,bd71828-leds" },
+@@ -118,8 +141,11 @@ static const struct mfd_cell bd71828_mfd_cells[] = {
+ 	 * BD70528 clock gate are the register address and mask.
+ 	 */
+ 	{ .name = "bd71828-clk", },
+-	{ .name = "bd71827-power", },
+ 	{
++		.name = "bd71828-power",
++		.resources = bd71828_power_irqs,
++		.num_resources = ARRAY_SIZE(bd71828_power_irqs),
++	}, {
+ 		.name = "bd71828-rtc",
+ 		.resources = bd71828_rtc_irqs,
+ 		.num_resources = ARRAY_SIZE(bd71828_rtc_irqs),
+diff --git a/include/linux/mfd/rohm-bd71828.h b/include/linux/mfd/rohm-bd71828.h
+index ce786c96404a3..73a71ef691525 100644
+--- a/include/linux/mfd/rohm-bd71828.h
++++ b/include/linux/mfd/rohm-bd71828.h
+@@ -189,6 +189,69 @@ enum {
+ /* Charger/Battey */
+ #define BD71828_REG_CHG_STATE		0x65
+ #define BD71828_REG_CHG_FULL		0xd2
++#define BD71828_REG_CHG_EN		0x6F
++#define BD71828_REG_DCIN_STAT		0x68
++#define BD71828_MASK_DCIN_DET		0x01
++#define BD71828_REG_VDCIN_U		0x9c
++#define BD71828_MASK_CHG_EN		0x01
++#define BD71828_CHG_MASK_DCIN_U		0x0f
++#define BD71828_REG_BAT_STAT		0x67
++#define BD71828_REG_BAT_TEMP		0x6c
++#define BD71828_MASK_BAT_TEMP		0x07
++#define BD71828_BAT_TEMP_OPEN		0x07
++#define BD71828_MASK_BAT_DET		0x20
++#define BD71828_MASK_BAT_DET_DONE	0x10
++#define BD71828_REG_CHG_STATE		0x65
++#define BD71828_REG_VBAT_U		0x8c
++#define BD71828_MASK_VBAT_U		0x0f
++#define BD71828_REG_VBAT_REX_AVG_U	0x92
++
++#define BD71828_REG_OCV_PWRON_U		0x8A
++
++#define BD71828_REG_VBAT_MIN_AVG_U	0x8e
++#define BD71828_REG_VBAT_MIN_AVG_L	0x8f
++
++#define BD71828_REG_CC_CNT3		0xb5
++#define BD71828_REG_CC_CNT2		0xb6
++#define BD71828_REG_CC_CNT1		0xb7
++#define BD71828_REG_CC_CNT0		0xb8
++#define BD71828_REG_CC_CURCD_AVG_U	0xb2
++#define BD71828_MASK_CC_CURCD_AVG_U	0x3f
++#define BD71828_MASK_CC_CUR_DIR		0x80
++#define BD71828_REG_VM_BTMP_U		0xa1
++#define BD71828_REG_VM_BTMP_L		0xa2
++#define BD71828_MASK_VM_BTMP_U		0x0f
++#define BD71828_REG_COULOMB_CTRL	0xc4
++#define BD71828_REG_COULOMB_CTRL2	0xd2
++#define BD71828_MASK_REX_CC_CLR		0x01
++#define BD71828_MASK_FULL_CC_CLR	0x10
++#define BD71828_REG_CC_CNT_FULL3	0xbd
++#define BD71828_REG_CC_CNT_CHG3		0xc1
++
++#define BD71828_REG_VBAT_INITIAL1_U	0x86
++#define BD71828_REG_VBAT_INITIAL1_L	0x87
++
++#define BD71828_REG_VBAT_INITIAL2_U	0x88
++#define BD71828_REG_VBAT_INITIAL2_L	0x89
++
++#define BD71828_REG_IBAT_U		0xb0
++#define BD71828_REG_IBAT_L		0xb1
++
++#define BD71828_REG_IBAT_AVG_U		0xb2
++#define BD71828_REG_IBAT_AVG_L		0xb3
++
++#define BD71828_REG_VSYS_AVG_U		0x96
++#define BD71828_REG_VSYS_AVG_L		0x97
++#define BD71828_REG_VSYS_MIN_AVG_U	0x98
++#define BD71828_REG_VSYS_MIN_AVG_L	0x99
++#define BD71828_REG_CHG_SET1		0x75
++#define BD71828_REG_ALM_VBAT_LIMIT_U	0xaa
++#define BD71828_REG_BATCAP_MON_LIMIT_U	0xcc
++#define BD71828_REG_CONF		0x64
++
++#define BD71828_REG_DCIN_CLPS		0x71
++
++#define BD71828_REG_MEAS_CLEAR		0xaf
+ 
+ /* LEDs */
+ #define BD71828_REG_LED_CTRL		0x4A
 
----
-Andreas Kemnade (2):
-      power: supply: Add bd718(15/28/78) charger driver
-      MAINTAINERS: Add entry for BD71828 charger
-
-Matti Vaittinen (1):
-      mfd: bd71828, bd71815 prepare for power-supply support
-
- MAINTAINERS                          |    6 +
- drivers/mfd/rohm-bd71828.c           |   44 +-
- drivers/power/supply/Kconfig         |    9 +
- drivers/power/supply/Makefile        |    1 +
- drivers/power/supply/bd71828-power.c | 1060 ++++++++++++++++++++++++++++++++++
- include/linux/mfd/rohm-bd71828.h     |   63 ++
- 6 files changed, 1174 insertions(+), 9 deletions(-)
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250816-bd71828-charger-9d187346f734
-
-Best regards,
---  
-Andreas Kemnade <andreas@kemnade.info>
+-- 
+2.39.5
 
 
