@@ -1,127 +1,129 @@
-Return-Path: <linux-pm+bounces-32755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32756-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F59B2E982
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 02:43:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A542B2E983
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 02:43:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A27685C6842
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 00:42:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3C367AB441
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 00:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4698F1D63E6;
-	Thu, 21 Aug 2025 00:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A841EF09D;
+	Thu, 21 Aug 2025 00:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m+XLA6eq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rQffoihc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23EF78F5D
-	for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 00:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180FD1EDA26
+	for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 00:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755736972; cv=none; b=JxmSQ84bxURE0TzBALJmi4BbqJrvd3Se3HmDLNfRiGozvmlVBwbkBLPTyM3Yn0n8atWuEUoWhST9P+EQzian1d6JTzW58qDxkLZn1WCzp6iHdb/Sgz/8eqDShOHTn3bfnLd7QPK++0uC85N98scnxy7wJGFU5oTNj1L5xhf+Ap8=
+	t=1755736976; cv=none; b=g9OnBR6G9BTo/esDBrjNnCVy7F+E/QhbEnijbW07/CdPicgsUMtVpmavCZWb7UWyKH8VdWaYzlotQDgr6Fuc8qYJZ/s04z0V3jyeYArwid9oD1LpuZrytt9cF2ISrGC7V5cLQ7dCPtnAMUdozdxRdyGC/R9eFLl2eMI+KrsUrtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755736972; c=relaxed/simple;
-	bh=pgVl+ewjqrSKKmMdjybS8QYBtZt9k61QLGRAt6yECcE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=PzDGow8b+r+uJJsoK72rKTEvSKuY41cdBE9GiRFtKdWUQDL3UryZY3VkpyzlREQTcXUQbazpInnLLy3wbJcH9EmFD0ycD6PDKxRdSY6ejSr/wrvx6gc4cdXblhdi/S0rpuAMng3gBKm7XNNHAFKYkxRBNvt4UOp2ss51KJ1ngLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m+XLA6eq; arc=none smtp.client-ip=209.85.214.202
+	s=arc-20240116; t=1755736976; c=relaxed/simple;
+	bh=2lP2MUQuOgx41bHQcQY3UUFM4RqOiMsYu1XcW3FaZ8I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=n9AiLGJo29olVzb2OoxBmeR0tLlOKtwAm9tgaeJU8zar/vzXd/fR5BIbVKS5g4T7q7mLvjEKDZZpiiUL1pQS2XtMQfli1NtWl/f9Sxt3rVfnsMg+BEBQlidYeuUxcB5xYsx49pyq37EqeZiGjMbW/XyMmrQGhTRyDcN0ZmMLqlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rQffoihc; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-24457ef983fso9289865ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 17:42:50 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b4716fc56a9so773965a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 17:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755736970; x=1756341770; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZHeWPYDcK+WovsGDfb6zMC/40Q6oxqnQuS8R8OCxR3g=;
-        b=m+XLA6eqP5eubjoYP4rzrMJNNLsOTcDYALkO5XkVh5uvAA/nWdKvQ6RC/QLLg6Fp4a
-         c0FQsD4K5EdsfHwrJYxCfPrdL8sy5TedXdtIs6WXzaJthOdZ4Y2KKGi5gCAXkNup2V3h
-         bZDXo0h7V5TIfxz+gm1uiPS4YZwhqihKury/cXYUOsSflJkMi5yMBZ/OlRJxD8Hnx78V
-         ZKH7XAF9Mbuu2XmwhhW2AMD7oplDW0Rk0Nriag4aKYjjS5oRJNNsOSng8xCccuB/4GHj
-         rwNlAWD9ymkVfT7pyB2fMA0gc1ye1/DZZigzbHccClmWmzwJQSUltwror3B0SwwVmNbQ
-         Gqnw==
+        d=google.com; s=20230601; t=1755736974; x=1756341774; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=whxbRvyrG2R6Ou7PNckHYEhGY8IAGr6EflBJLkvDYbA=;
+        b=rQffoihc5Zlo5diIPKBE3DkHdiAMxW2/QNuuch4dnRTJHb5ksS85d6Y5+tUjmMRVRE
+         D1MoKP4Wa14XoxkOyXZsUAQGHtaKV26OkhdS/8De4tFcAkvwNW/IkEhSRHHZrP7wfymN
+         vqY+rTWIWh+9wRYQmy5baqrCcBO89aGfFHICCDGB8cM0LWxSQ7RJKwt2UNcdC7qLosFH
+         zepM5H0p0+Ysl4omECTgjO2zJFMq9cUC1/cPgWZXHzI8g+1dsn4kvG17j74P+vwL1evs
+         pWFhTVmW21t1X1ZMt3rXbE64h5uz3mfqyJU0/t0rtuADcSpY7rf5uQz56ESw6sdywvgU
+         KLgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755736970; x=1756341770;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHeWPYDcK+WovsGDfb6zMC/40Q6oxqnQuS8R8OCxR3g=;
-        b=cSow0z+JjREeB2dRASzsNLFUPHuIPqn1dalULOKzKkMt9+BwLwqmsB4TI8Sai3rvHl
-         XzX2fjqJRdXgiAZW3aSDa2eKU+anYkcKu2nAdlxspEP+qFf0gQsYiJeHOYvotRkOgZWp
-         +GcnP841tjYlpCbcoH0o726+Ify9DwoAdto5+NfQ7PrxrDkZ6A542OVPzrlJjDLVvKrj
-         vfhGYYpKo0BAlWllJTnIJaS3pO3lp9quf4PEpjNLxmHd60RD/kgHiZRk8ulzGrEuFdot
-         NXYH5kNSzQqDR59eRopERF4oYk6y30ND4hjdnhRl+3BKg57iP4wb2bJZiH4gkUj+ciEr
-         rX2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXl+NHwsxA2BCZEAAEOJ3qdBBAR3B95MITkuENsjNfrxB6JvgzsJV7XpP0jcnPPGFngSgOopEwycw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAQOAPzl2eBJQivVf/ge5Ld5Fh1xTgMC4yPtNAFBXzdQKi9efz
-	Q/tvmWJB/xUW0q5wmjyTJ3NUe+OszAVbFBqe3YVdmS1B1lqLE2sRrD6QMwAMcbtQPoPzc6Nr5Ca
-	h1rDIYTS+VX3/mA==
-X-Google-Smtp-Source: AGHT+IGHRM1ZQHssQ6o5RYh5ciBdPVLn+jmpDTzt85I0/XP6GWd6AavhLaSZiYC3UfXD0w5pnzvv253djCfrDw==
-X-Received: from pjbpt16.prod.google.com ([2002:a17:90b:3d10:b0:31f:2a78:943])
+        d=1e100.net; s=20230601; t=1755736974; x=1756341774;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=whxbRvyrG2R6Ou7PNckHYEhGY8IAGr6EflBJLkvDYbA=;
+        b=VGjZhG/BEDbQdg6dKEbUIzy97+orJL462gukMp1Wbk4ZpNwTU+zK07WKiRB59Biv9h
+         80PChEi9XacXv4nflHSCP8SxNQpN9AUw6QfJqlC2nL0+Cj3gSfV1DVlFshJ7GBZNLYVg
+         5s5DvaYwDWeg564nbbyFkMp0stM4dMZP5tfQZ5z1U+yCjxctUE+TiVf/0rMdG+UA9N6F
+         qP8PJNV9q9Dht8d1iesbFibbdP3R6jDWh1i71USApzhYCFHfcZBssE38Ed8wbGlfuadW
+         hqZGpABkcTxMANjam2o0WNfteH4+wOLSLXb8MXwW6xMJ0aOi34zWSCGPHSkkILQZdddx
+         B5cw==
+X-Forwarded-Encrypted: i=1; AJvYcCXp0vR4qN3eByXFGXMSQCb3gdV7upMlXAz/r5bGW+pUUEYPmNrxPYZZmoiXkAFYXbyiloHS1NPBUg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA3Q2dd7b7PlkGlse72LbNsdUqi//3iFHd5aey2R1tLT0KDWPH
+	xOUN4VYhdnx3QdYgDfodNEFL+dIzmMHvi2tgu/a/aUInVsT/p+A/0nfoUyRL18vqf6OmHBcr+m/
+	b7lfEifhJhSuRNA==
+X-Google-Smtp-Source: AGHT+IGiw2oiWfhdnXju/fyAVoDAT9Nlowj94H89J/6yKp/tBjPFanTJHaBE2jWVd3ljUK9vgOw61mk3YqX/Wg==
+X-Received: from pjbtd3.prod.google.com ([2002:a17:90b:5443:b0:31e:fac4:4723])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:22c8:b0:243:38d:b3c5 with SMTP id d9443c01a7336-245feddd902mr8683325ad.47.1755736970047;
- Wed, 20 Aug 2025 17:42:50 -0700 (PDT)
-Date: Wed, 20 Aug 2025 17:42:32 -0700
+ 2002:a05:6a20:9183:b0:243:15b9:7656 with SMTP id adf61e73a8af0-24330af16d3mr629567637.48.1755736974379;
+ Wed, 20 Aug 2025 17:42:54 -0700 (PDT)
+Date: Wed, 20 Aug 2025 17:42:33 -0700
+In-Reply-To: <20250821004237.2712312-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250821004237.2712312-1-wusamuel@google.com>
 X-Mailer: git-send-email 2.51.0.261.g7ce5a0a67e-goog
-Message-ID: <20250821004237.2712312-1-wusamuel@google.com>
-Subject: [PATCH v3 0/3] PM: Support aborting suspend during filesystem sync
+Message-ID: <20250821004237.2712312-2-wusamuel@google.com>
+Subject: [PATCH v3 1/3] PM: Make pm_wakeup_clear() call more clear
 From: Samuel Wu <wusamuel@google.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>
 Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+	linux-kernel@vger.kernel.org, Saravana Kannan <saravanak@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This series adds functionality to handle a wakeup event in the filesystem
-sync phase of suspend. This topic was first discussed by Saravana Kannan at
-LPC 2024 [1], where the general consensus was to allow filesystem sync on a
-parallel thread.
+Move pm_wakeup_clear() to the same location as other functions that do
+bookkeeping prior to suspend_prepare(). Since calling pm_wakeup_clear()
+is a prerequisite to setting up for suspend and enabling functionalities
+of suspend (like aborting during suspend), moving pm_wakeup_clear()
+higher up the call stack makes its intent more clear and obvious that it
+is called prior to suspend_prepare().
 
-1/3: Moves pm_wakeup_clear() to be with similar functions that do the
-     prerequisite bookkeeping prior to suspend_prepare(), making the intent
-     of the function clearer. Additionally, this sets up patch2 in the
-     series, which requires pm_wakeup_clear() to be called before abort
-     functionality during suspend can be enabled.
-2/3: Add support for abort during filesystem sync phase of suspend. This
-     requires detecting a wakeup event or a filesystem sync finishing,
-     whichever comes first.
-3/3: Adding onto abort during filesystem sync, handle cases of back-to-back
-     suspends and their respective filesystem syncs. Extra care is needed
-     to ensure filesystem syncs happen serially while still honoring
-     wakeup events that lead to early aborts.
+With this patch, there is a slightly larger window when abort events
+can be registered, but otherwise suspend functionality is the same.
 
-[1]: https://lpc.events/event/18/contributions/1845/
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Samuel Wu <wusamuel@google.com>
+---
+ kernel/power/process.c | 1 -
+ kernel/power/suspend.c | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v3:
-- Split v2 patch into 3 patches
-- Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) condition
-- Updated documentation and comments within kernel/power/suspend.c
-- v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamuel@google.com/
-
-Changes in v2:
-- Added documentation for suspend_abort_fs_sync()
-- Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration static
-- v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamuel@google.com
-
-Samuel Wu (3):
-  PM: Make pm_wakeup_clear() call more clear
-  PM: Support aborting suspend during filesystem sync
-  PM: Support abort during fs_sync of back-to-back suspends
-
- drivers/base/power/wakeup.c |  8 ++++
- include/linux/suspend.h     |  3 ++
- kernel/power/process.c      |  1 -
- kernel/power/suspend.c      | 75 ++++++++++++++++++++++++++++++++++++-
- 4 files changed, 85 insertions(+), 2 deletions(-)
-
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index dc0dfc349f22..8ff68ebaa1e0 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -132,7 +132,6 @@ int freeze_processes(void)
+ 	if (!pm_freezing)
+ 		static_branch_inc(&freezer_active);
+ 
+-	pm_wakeup_clear(0);
+ 	pm_freezing = true;
+ 	error = try_to_freeze_tasks(true);
+ 	if (!error)
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index b4ca17c2fecf..4bb4686c1c08 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -595,6 +595,7 @@ static int enter_state(suspend_state_t state)
+ 	}
+ 
+ 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
++	pm_wakeup_clear(0);
+ 	pm_suspend_clear_flags();
+ 	error = suspend_prepare(state);
+ 	if (error)
 -- 
 2.51.0.261.g7ce5a0a67e-goog
 
