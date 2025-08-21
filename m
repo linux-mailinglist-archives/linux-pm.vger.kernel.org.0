@@ -1,115 +1,148 @@
-Return-Path: <linux-pm+bounces-32837-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF164B3034B
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 22:00:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E20F3B30356
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 22:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 403BD1BC85D2
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 20:00:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E95FA210CF
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 20:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F0434DCDD;
-	Thu, 21 Aug 2025 20:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9C32E8DF2;
+	Thu, 21 Aug 2025 20:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpXsKD7h"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="zRD33+oE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE633375A7;
-	Thu, 21 Aug 2025 20:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9655680;
+	Thu, 21 Aug 2025 20:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755806405; cv=none; b=R6fLmqqn7DrZtAuLJ13GoBu3AwMhbk3og/cNwnsWIPzXhVCUjZV97SPW7HbRyOPOQevULYWVHLwjdyF9e/+qKe8eIYawETzvV1SQxJJhrY1iRVSki3kABYbvCe1sfH8ppF/wa9L7pVKT2dxz9LUkJ8/uubSpadRw65KsCNIB1KI=
+	t=1755806761; cv=none; b=YCRIpNwKuSN48ongpKr76fuGUfs6puVadY2/esxGKO2LH9WkRpEkUqKkz4Ti6sLgNnFdUUejwEPm9lRIPbjFKy7/7TJGH5/i1vq2wJt9Lv+9Dsr7+Wj4agWkeOaNcNLmLMhYQqs9uFya44C8JJ5K0BaG0HHchSGUXeAscUYp3KY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755806405; c=relaxed/simple;
-	bh=1gmXguBkQ8JkuLf60p+nfBttSChWiMPwrCt34O3w7hM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BpNZOoKQhMjCiEriCmRTyNi8FYEdcs9qXowatQCn6atnAV0l5ddjw1eaoyZFxQSMmbHOQkNBnZ4RtaekrzwNDQmF9uMMreRf/G3Y4UKzPG89yH/6MHWG2OXyHeSZprxcv8rWQYORabubFo9odLpjw5qlVxYsO0nDrS9eIXTAIOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpXsKD7h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869C4C4CEF4;
-	Thu, 21 Aug 2025 20:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755806404;
-	bh=1gmXguBkQ8JkuLf60p+nfBttSChWiMPwrCt34O3w7hM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PpXsKD7hBq+g4msjUEKpvBs1CZwqD70A87JDLbqhum3yQTV7A2suKpCV+NRR6wgxl
-	 CuPima0dBTEaXEH3UckIgU5PR1dwpb6oMhHXcGSBZu7gh9thGgO1P7xF2SrmSPvGxk
-	 s26FBG8I6pdNFBaYR2lRpLfoEuDj8DOF1Eu4DgW81/SdpbnvjqtD92aOVPicjKZl+J
-	 5M0vvXJ+UxVvJlWYrrpRXzieWvhCT1DRPxBqC8vFNZmOq8T2dm/CkzKd7kNooZUThG
-	 cIBdUFUTHaAEJs25ACLF6k8BXv90qrmRoEV4oG/SqQr55RrUTAY/DeYPOBaGsOjGT7
-	 NpdWS6oupy0qw==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-61bd4e14054so646223eaf.2;
-        Thu, 21 Aug 2025 13:00:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3w1Tlllcg2+rH4qn7aM8ACvexl9A8ONfbOI7HjArhZr26+uYp32Q+H1s6zXxk9ReBV7u7j8Qx868=@vger.kernel.org, AJvYcCUDb+lEgD+WMirKoyFSzLam/tjZ/hfZTz50U4iwsQLjWhbjv5zSuqdJpnTRdIp7S3X1cOLV9Xk82MB6GUg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySLjlkyFK8fUcUV1Ne04MK97pPe2wK1BEb/mCiAGxqbUf80I5i
-	xWL1r6XfMDEMvn/y+3ZZgdp9cps2xUgDpnr8sSEqyKw3A52ZiHId8NKXO9Sc7AmKHt6T6DeWzo5
-	oHAo6A024IFnFBXjuiEcY5EB6Kpx5p5Y=
-X-Google-Smtp-Source: AGHT+IEoDXHyO2qFJ7qPARFnmGcro6nNWlDh/Glk0d3cVoCrxe08tWlmzXBrx5YjteL6zSi87n+aPqQXSnHcjkroCO8=
-X-Received: by 2002:a05:6870:708c:b0:314:b6a6:6897 with SMTP id
- 586e51a60fabf-314dce417bfmr210631fac.43.1755806403667; Thu, 21 Aug 2025
- 13:00:03 -0700 (PDT)
+	s=arc-20240116; t=1755806761; c=relaxed/simple;
+	bh=ZazKTqMRGBn45Y9+XmJwECB392SsnW2r2+CmYWQSR18=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QOFmfzWmJXtNBgQt5K3GQTmSKaTgNhO72cjJOtxoWPB3s/eLb6+q+lFMbgMOWDlyBXNtqXJOg/SdKK43t2cZorGRhpzJCwSNpZKKjvAy6vwzf6Z7CVcS5ubj54KapU8Bd+MVvXqsvStNKXSxkPpkaRG+hr5eBXt7YdH9J3sEMdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=zRD33+oE; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=duGs71ZGM+AcdNUeemZTcE9RR+6ixlAEFwFO71+Ipa4=; b=zRD33+oEgXk+3fHZjYp1QQBYIP
+	sqaZ1xV1+hwJBD86fs63mA74M3j2xuG9lDDP3m2HieVaTloVh2DRygH+xPkDrGOrtn3KIHC9K4IDp
+	KI5etPzkATaUNycUwgJRsZtEb5rcm/vsANBT9Y2ax9SAgXJyxQ6D+Gs20cdKgutb+rR7SuwdzJIqr
+	G0t72znvb4zNFyShXIF19FihkOT06cJE6wWDkyimPTxLLyZtEoAHmvyZo+2Iju4shjkTBZYrwotcy
+	LSCLZaOAseCG5F+wIGEAAPS4GB8QWJ+ZqkFqQc5U+5KzGJVphUGO8r9xrSvymdrkgHoTX09K8IarD
+	tmmI7O9Q==;
+Date: Thu, 21 Aug 2025 22:05:52 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Jerry Lv <Jerry.Lv@axis.com>, Pali
+ =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+ stable@vger.kernel.org, kernel@pyra-handheld.com
+Subject: Re: [PATCH] power: supply: bq27xxx: fix error return in case of no
+ bq27000 hdq battery
+Message-ID: <20250821220552.2cb701f9@akair>
+In-Reply-To: <10174C85-591A-4DCB-A44E-95F2ACE75E99@goldelico.com>
+References: <bc405a6f782792dc41e01f9ddf9eadca3589fcdc.1753101969.git.hns@goldelico.com>
+	<20250821201544.047e54e9@akair>
+	<10174C85-591A-4DCB-A44E-95F2ACE75E99@goldelico.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250813075433.464786-1-zhao.xichao@vivo.com>
-In-Reply-To: <20250813075433.464786-1-zhao.xichao@vivo.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 21 Aug 2025 21:59:50 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jcEX=sxK9kEo-jTX-e1cGi6RqLTG6OjmGdaqWNNwV_4w@mail.gmail.com>
-X-Gm-Features: Ac12FXxg8bx_bgqiTf4CKVc6UqbSWHJBrAXrQ_wBEUpnqFSa4ucPXhUhhXhU5cA
-Message-ID: <CAJZ5v0jcEX=sxK9kEo-jTX-e1cGi6RqLTG6OjmGdaqWNNwV_4w@mail.gmail.com>
-Subject: Re: [PATCH] powercap: use us_to_ktime() where appropriate
-To: Xichao Zhao <zhao.xichao@vivo.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 13, 2025 at 9:54=E2=80=AFAM Xichao Zhao <zhao.xichao@vivo.com> =
-wrote:
->
-> The duration_us, idle_duration_us, and run_duration_us are more suitable
-> for using the us_to_ktime() function. This can make the code more concise
-> and enhance readability.
->
-> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
-> ---
->  drivers/powercap/idle_inject.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_injec=
-t.c
-> index 5ad7cc438068..a25eb2018acd 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -133,7 +133,7 @@ static enum hrtimer_restart idle_inject_timer_fn(stru=
-ct hrtimer *timer)
->         duration_us =3D READ_ONCE(ii_dev->run_duration_us);
->         duration_us +=3D READ_ONCE(ii_dev->idle_duration_us);
->
-> -       hrtimer_forward_now(timer, ns_to_ktime(duration_us * NSEC_PER_USE=
-C));
-> +       hrtimer_forward_now(timer, us_to_ktime(duration_us));
->
->         return HRTIMER_RESTART;
->  }
-> @@ -232,8 +232,7 @@ int idle_inject_start(struct idle_inject_device *ii_d=
-ev)
->         idle_inject_wakeup(ii_dev);
->
->         hrtimer_start(&ii_dev->timer,
-> -                     ns_to_ktime((idle_duration_us + run_duration_us) *
-> -                                 NSEC_PER_USEC),
-> +                     us_to_ktime(idle_duration_us + run_duration_us),
->                       HRTIMER_MODE_REL);
->
->         return 0;
-> --
+Am Thu, 21 Aug 2025 20:54:41 +0200
+schrieb "H. Nikolaus Schaller" <hns@goldelico.com>:
 
-Applied as 6.18 material with adjusted subject and changelog, thanks!
+> > Am 21.08.2025 um 20:15 schrieb Andreas Kemnade <andreas@kemnade.info>:
+> > 
+> > Hi,
+> > 
+> > Am Mon, 21 Jul 2025 14:46:09 +0200
+> > schrieb "H. Nikolaus Schaller" <hns@goldelico.com>:
+> >   
+> >> Since commit
+> >> 
+> >> commit f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when busy")
+> >> 
+> >> the console log of some devices with hdq but no bq27000 battery
+> >> (like the Pandaboard) is flooded with messages like:
+> >> 
+> >> [   34.247833] power_supply bq27000-battery: driver failed to report 'status' property: -1
+> >> 
+> >> as soon as user-space is finding a /sys entry and trying to read the
+> >> "status" property.
+> >> 
+> >> It turns out that the offending commit changes the logic to now return the
+> >> value of cache.flags if it is <0. This is likely under the assumption that
+> >> it is an error number. In normal errors from bq27xxx_read() this is indeed
+> >> the case.
+> >> 
+> >> But there is special code to detect if no bq27000 is installed or accessible
+> >> through hdq/1wire and wants to report this. In that case, the cache.flags
+> >> are set (historically) to constant -1 which did make reading properties
+> >> return -ENODEV. So everything appeared to be fine before the return value was
+> >> fixed. Now the -1 is returned as -ENOPERM instead of -ENODEV, triggering the
+> >> error condition in power_supply_format_property() which then floods the
+> >> console log.
+> >> 
+> >> So we change the detection of missing bq27000 battery to simply set
+> >> 
+> >> cache.flags = -ENODEV
+> >> 
+> >> instead of -1.
+> >>   
+> > This all is a bit inconsistent, the offending commit makes it worse. 
+> > Normally devices appear only in /sys if they exist. Regarding stuff in
+> > /sys/class/power_supply, input power supplies might be there or not,
+> > but there you can argument that the entry in /sys/class/power_supply
+> > only means that there is a connector for connecting a supply.  
+> 
+> Indeed. If there is an optional bq27000 hdq battery the entry exists.
+> 
+Which is the condition that there is an optional bq27000 battery?
+w1 might be enabled for other reasons. The bq27000 is not the only w1
+chip in the world. BTW: I have removed the battery from my macbook and
+there is no battery entry in /sys/class/power_supply. Same with another
+laptop.
+
+> > But having the battery entry everywhere looks like waste. If would
+> > expect the existence of a battery bay in the device where the common
+> > battery is one with a bq27xxx.  
+> 
+> I think the flaw you are mentioning is a completely diffent one. It comes from that
+> the 1-wire or hdq interface of some omap processors is enabled in the .dtsi by default
+> instead of disabling it like other interfaces (e.g. mcbsp1). E.g. for omap3 hdqw1w:
+> 
+> https://elixir.bootlin.com/linux/v6.16.1/source/arch/arm/boot/dts/ti/omap/omap3.dtsi#L502
+> 
+> And we should have the dts for the boards enable it only if the hdq interface is really
+> in use and there is a chance that a bq27000 can be connected. In that case the full
+> /sys entry is prepared but returns -ENODEV if the battery is missing, which is then
+> exactly the right error return (instead of -EPERM triggering the console message).
+>
+
+And why do you think bq27000 should behave different than
+max1721x_battery or ds2780_battery or ds2781_battery? If I enable the
+drivers there is no additional battery in /sys/class/power_supply! Why
+should everyone have a bq27000 in /sys/class/power_supply if the driver
+is enabled and w1 is used for something? I wonder if the -ENODEV should
+be catched earlier.
+
+Regards,
+Andreas
 
