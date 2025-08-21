@@ -1,233 +1,201 @@
-Return-Path: <linux-pm+bounces-32774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7577CB2EE58
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 08:39:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95E8BB2EE7D
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 08:45:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 936E37BEC6A
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 06:37:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5522A05D23
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 06:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B642E339C;
-	Thu, 21 Aug 2025 06:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021BF2472BD;
+	Thu, 21 Aug 2025 06:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VFr/ZWwz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BWichBKC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6126B2C11E0;
-	Thu, 21 Aug 2025 06:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755758366; cv=fail; b=cPMNLkx5j9AqwOe3MuTl0O89ZOgiaGx2ym8U1C668xQyhWsB5GvV/dhZ+m06PDONqrdYUFVvsAeEwtWjbFp+kVWJHCEPe03nJBJwtLSUcJzY5BXqB8z5nSjAx5nfJIOM3p3KA2ZsXSEQMFVZjAOZPKeZoY1ZZDyWgBJnO15vc7A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755758366; c=relaxed/simple;
-	bh=43uiNaZn4+JJ57HgIXf/4yS3rPVVMWk4C80HSh8UMS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g5WMsQEp9G4Oqs3Vn96EaSvCTbqLDWfnxBTHlzqY1sMIkkUC3CISJc9UX/R15LgxKTJxj4if+55tUXsZzJpdJaV7fcx4Pe041jEUXz7Sv68dmfePtiKf35HJYbKb/0ooeNJif1lBAZnWUYHbjK4Lv78oObulLUZgd5rGZUgTp38=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VFr/ZWwz; arc=fail smtp.client-ip=40.107.92.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SnzOiHJayIHmw9gxSquGOk9X78MXEPAlQSQ/ZLypFEKAtjy2N5SKMBB9MY72xngmw0u+JDYGm6cpzgXiLu3slTtBVsRfr08V+kijjjM08R3jMo9dQs9XgkNR18ddtETnIhNH8oe/Ls7FVqKTL+d+4vlMCg4e6+FA1fJ6Y/prFZHWuSD4QIK4Jr63jdSjLUGiAmHyqc+2Y1aeidyYkPZGMJwlXtzFahJLW0JYiCPdrD0zr+D3Q0GfEsNt7Rp2dNlSEBJtO8kMPCF1Joh2ITicvllAZEwi1YsznzgPqpWdXPe5hRFpY2C4XRJXHvBmolDBfT/sel6iUEMpl4eSVL93lQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oYmiwfLRtIG6+vy0ZRgRZWOjcts31vXZc2/piF5Egrs=;
- b=tD8fMrR4SJX2jR2xTqLXxePiEPUnHjCWjW9o6XdDET2digyjr2Qowk1CzY9pVTh2tUv+mgb0HtUofoTnLIq0ctGBVs0V4VUV263NwNmN0UUV3tZMqhw1TNpoQunDMhAiVTx07CJmJ6KapczeYhhpVYvp4HJVlAAX4MtrbrijnRhQrDaBkghOBF4As3hRbmotHJOkysHYCo22NXN5w9nyH04Tw3/zpUOA7DV+v+pw0Me5QbieZGRJWAKIQMRdbhkFd5UkUhxGRhmPcv8UTehEMfpdfMuJZKxspH8fRSHbY+AoGputNVspMRQ5TkjeTtAN6NoC3oqPV8vgfC9o6tfxKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oYmiwfLRtIG6+vy0ZRgRZWOjcts31vXZc2/piF5Egrs=;
- b=VFr/ZWwzX4IOQW0CIVPtEBO3xbqddrm3TrQPrA385BYA159IT26gFK7twfkk1TL2YP6CZ7SfT9In3aI0t1M62jd8dH+wT1KURcalkyGXAl5EsyCxzTz6b9WKb7647fcoFjm2b1lf/dotI1HZn9Cy+NTt2fR8nM+v5S+yn0PCkmUvrtb05q4hyWsuYpVn4qwmxs05NeupBiJPAkXQMlwbcBJpkCm8HWV+qvN4HZ7RNl5ObySMStP2fvWjEKLOeE8BAsJlMIs3xmOGK/zSwY12/QDYPDFZvvby3cOHpV/uZ8n/luzQuTlt22Hl2QLBo2LpHksAepHJSqJX0V+S1/6dpA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6484.namprd12.prod.outlook.com (2603:10b6:208:3a7::13)
- by DM4PR12MB6589.namprd12.prod.outlook.com (2603:10b6:8:b4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.16; Thu, 21 Aug
- 2025 06:39:18 +0000
-Received: from IA1PR12MB6484.namprd12.prod.outlook.com
- ([fe80::fb8b:583b:154:76f6]) by IA1PR12MB6484.namprd12.prod.outlook.com
- ([fe80::fb8b:583b:154:76f6%7]) with mapi id 15.20.9009.017; Thu, 21 Aug 2025
- 06:39:17 +0000
-From: Mikko Perttunen <mperttunen@nvidia.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Thierry Reding <treding@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
- Svyatoslav Ryhel <clamor95@gmail.com>,
- "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>,
- Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v3 4/6] dt-bindings: thermal: tegra: add Tegra114 soctherm header
-Date: Thu, 21 Aug 2025 15:39:14 +0900
-Message-ID: <4683661.LvFx2qVVIh@senjougahara>
-In-Reply-To: <20250820114231.150441-5-clamor95@gmail.com>
-References:
- <20250820114231.150441-1-clamor95@gmail.com>
- <20250820114231.150441-5-clamor95@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-ClientProxiedBy: TYCP286CA0188.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:382::17) To IA1PR12MB6484.namprd12.prod.outlook.com
- (2603:10b6:208:3a7::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E97636CE1E
+	for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 06:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755758744; cv=none; b=NTXhGuA6Bsn4MAlnW1RU0LdUJ6WdvIS7ZUaLr72kT5i/KFKcRtvZAhlc3sSC4aMmh0/9mbzMwSzUnIykI0huVw9L5x5BO3kHFb/0GodIFc1MumyytpBSrvUImwNBA0D7xcgdQ81u4d/+cikIRmDAbwfdfT8o1O5IAk3vciIo8JI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755758744; c=relaxed/simple;
+	bh=RYDU1+gPbuO4Va/MXhU5wCxRuUZkK4Sc7nFG3u5YgTk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PFzVlxUpuQ+2xD+KdON5RwYZaOmR1rU2gxOFbR4aHo9hvd/xdL/XCRjAUtd8YOblGbIfPqxaGDjj+GDooaE/KmeYIl9LsCOcxvkh+TQVXGtKfNSzRAClpuIIJoK77lZ8dwePK+G3eFlxCpTXbtON5aOcAmIcyl3lPHyJ/4T5zE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BWichBKC; arc=none smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-89018fd51a0so123853241.1
+        for <linux-pm@vger.kernel.org>; Wed, 20 Aug 2025 23:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755758741; x=1756363541; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g7Smd8gSEHvUxLDgOcYmY68eshiwJkxa2AO+F+xW3LA=;
+        b=BWichBKChNqPvgcY92Xg1phq0NwPhnyF7i3FzwVF0MGW0PXHp8gQcxvB936yy6s9ui
+         7s2dKx6dkBEwNXgeeOPw3pA/fvWvDoc8Pz7+jXcOQZnaKUgslsl639BecOfRrHRGl3YU
+         Ul01B5I3MhQTdJB/5KhhvuURxd0okOtreE+F6CKrR85lV1SfIbX63Kz8aQEd03XHm3L1
+         qd03y4Ic37QE/Afm5PXAavCTHpOGuLCMRLze+67sUMyCQEIOZ/WM0TLkK46Wc3dWb4zh
+         efyD6mWXQUQScUKqC5o4f/TsH/vJcAar/zCVtkOKIKhH59XoNgTqRaVjEfNNw6xsIvSU
+         MhJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755758741; x=1756363541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g7Smd8gSEHvUxLDgOcYmY68eshiwJkxa2AO+F+xW3LA=;
+        b=FWK3+sn32KeYH9fua3swjGbKfqiKZIYUIHTnLuXAtl2KYM5p268H2KiCMOj+BdB3uc
+         IhS5lAdOMRqPYb1LYz8wsrTrlaUEsC3nLynhHVIaxiuFqOlj0f82KEaqoecbJomEphpB
+         vn7K7CYAGQtzwEO6IIwwThjeUMhHJdXAAyJxFu6olJ43r4qLH4PdWR4XtaRwOg37GrzK
+         ibS0yxu4S2ZlJDyiBnGbHg2nX1/99lT6GWxz7AYelRZZH+8xHCk7hEZk5GNjCossD1WK
+         Zj4bKONQgLMreeWsIVfBwkCZjix2SEzirkNxpq4WeABuv3Ej0zlrnQ3L1EK7G1o6eWFw
+         0eTA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Xk3xQZpqOBxf85ZB4xRJquGzk6c15kbH3qZvA8mZPfsmqhBS2P3eFBMauHUfPGSXlAcSeVoNnA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlDn18+0eTF6+al2uqTaLXZz7iqs2lD9C3bXDjeev4zldgJrvF
+	YQY+r8CtpZtr52c8Kcna8RwUEEhy8gywIFVwH3F7NZ2tZQI8PrgxoGifUUIWdB4a1DKtOHawmqM
+	Hw/HWJ86uB/Om4182IBioNJkoa+2oG7BH6awaFISh
+X-Gm-Gg: ASbGncvpSFshTwV7lJgASawykC9LBvc/7QKWwS8KbollL+VAK/9vTVslWV7JM9MMA22
+	K3B6WejO+ADPA6SahBRrolsgakYEdvRaRmc626dXnclwDjNX8DlRQ9bBoJIOY2XLeIwVL0yrHDs
+	YcYjtAtiwG9ortr2HhCaWI8oxWnAN710wNWGyVWzaEBoyAQ8ffzfoebWqGK8U1kvMKolt+fdKUF
+	g1FQh+ZTLHC
+X-Google-Smtp-Source: AGHT+IGa1X3jkTBzp4++TY3s5fwvJa235FzeZy18kCkNQD6aqFLh83CJJj0vSfQraUgBiNuA2fsRjmWJQ5jEJ0z+zcs=
+X-Received: by 2002:a05:6102:6894:b0:519:534a:6c21 with SMTP id
+ ada2fe7eead31-51be13bc648mr306063137.31.1755758740796; Wed, 20 Aug 2025
+ 23:45:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6484:EE_|DM4PR12MB6589:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f418bbc-4709-4456-d6a0-08dde07d73f5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|10070799003|366016|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WFpnYUJqUnJZeUdodjJWdDRnS3dwczNOWVR3UDA4Z3ZGSzIvTkpjWERnbGpY?=
- =?utf-8?B?M25OZVEzbkEvQldmbytIaTdpVFBLSjl4MlJRb2gzUW41QVJTbk9NSTBDVDZj?=
- =?utf-8?B?c0pJdkkxZjV2U21jYVNBZGk2OElQU1VQeEhxWGV3RjV2V3c4WitON09Cb1Q5?=
- =?utf-8?B?a09lYVdIVkhaRXlWbHZOV29Vb0YyQlZoK0E5MXNpQktvaFBkMTFPVjlHTFFK?=
- =?utf-8?B?Ly8yVE8yYmU3c3pxS0RNQTh0cE8wOU1YeEEwTktyTkpDRURIR0QwbWtHeFYr?=
- =?utf-8?B?amJLZ0VSTVhPb0ZIZjlOblpTV2RmK0VwdDVSam14b1hNNVVOd21telhVTElY?=
- =?utf-8?B?bklwZDV3enhxMlhPb0tsRU9QMENLM2oxaXNPYUhFN1VUTEpQNEdSL3ZDSFNp?=
- =?utf-8?B?akV2bFAwcE9NbG9La0VJY0pJRXZKUEthVkRQbWtVV0pKVGRXdTFqU1BYL3ZQ?=
- =?utf-8?B?L2FXeGVXWHM5R3JaRU5icDhWQlZIZVlUWEJMdklweGRYN25qcWVYUUJxUS96?=
- =?utf-8?B?VnBGaUNkUmZwSmJtTExNVUxKSVluTy9zR0ZCeVlHK1dDc050cjl5TERuaVpp?=
- =?utf-8?B?Y1k0VDdhR3ZKLyt4RmN5bUtmbk1NVUdwSkE2cnlVTG5oN3JUb3gzTHNxQ2lv?=
- =?utf-8?B?MTk4bzN4YXZYOGdvNCt2czdjb3JGMmRDbGJkbWJCV25HZFliU0tkYmZzeE9u?=
- =?utf-8?B?WDlWeExXOW5VZ1F5VG9SNDJqd2Z5MEEyelhiQVRCcGxqTW9Kbi8zTUtWOSs3?=
- =?utf-8?B?R3dsZjRqMnREdXJLV0lUUnVWWW95am80MWF4LzFsWnZwaER1T2dub3p4UHpx?=
- =?utf-8?B?R09ubFBNNkx1U3lzSEtDQmN1TDEyNVJhUXFhTXpzeTFqNUY3Rm94SXNzKzlF?=
- =?utf-8?B?cEVFZjZRakhxOHBpN05hdXV2RS9RcGp1NTdEbk5zNEVvYmhod3VPRTdlWmo4?=
- =?utf-8?B?cFpiT1I3Y0Rvd2dqQXZYcTVodU9mNjdlNnFwWGpRVlp6YlVvK3RjOTFINmtw?=
- =?utf-8?B?WWlSbHlEZmI2RmNzUEx5cWFITmtTVUVVQk8xWjR2ZllXSXA4R0RtYmxTWnZr?=
- =?utf-8?B?ZS9PK0hlTlEvU2cvWkRWRTIrNWJtbXhUaUZuZHpiRlUxb0NBOE5DczVYWU5l?=
- =?utf-8?B?SFNDMkttbWhXSml2aG9KMkp2ZlhmVGZuNTN3QkZoMVo3RWVhM2pqYmQ3M0cy?=
- =?utf-8?B?U25IaFcxL2lXSHJ0aXZwVGZqdVhkVlN3emVRa0dQOHcvZGpHRHdRald1UE9G?=
- =?utf-8?B?UGxtTEJqWjhaQUZETkxsTUNMNEFCOXJDZ3QzSlVhRkpJUWRJMXNTTVoxdEhm?=
- =?utf-8?B?akgrZXYreENRL3ZUUERSa2ppalFSUEsxUE5oVXBBL3JaOThFN0kzTFBkQmQw?=
- =?utf-8?B?clE5VEFVU0xZTElLK1hXakFrUmtlb0ozcFhEa3AvMUNlWlVESFowVitEd0FR?=
- =?utf-8?B?MzVsZDFmSk41MFVmZSt3OU5IaXo2RW5yN25iOXcrY1piMEFqQUZEL0QvMWxS?=
- =?utf-8?B?TzFETExlanpObWVTZW0wQkI3Yk9WY2Q2aytiSXd4RTJrd2pib2dtdUt5cEpy?=
- =?utf-8?B?S0ExR3hYSzZhc29HaU1Gemcwck9QdE1rTkpCbTBkd0I5VTZ5d2RrU0IrbjZI?=
- =?utf-8?B?MmFJOFp1NXo1T2RZRjBBNHJvclJBRG5DRUcxc3dHOThLVXM4TVlTc0pWYnhH?=
- =?utf-8?B?SnpocWZQSFZFZlVvU0Nqd2VYdytLODVjMTR4MC95Q08vWHEyNWtHWW1yOGt5?=
- =?utf-8?B?aDkxSUxzQXI5N1ZwQSt6dzVJajV0ZzhhYzZ5aGcvcjlac3k5eXJjQzVvbnl3?=
- =?utf-8?B?SFFEcFgxaUJIRVI5VU44UkJURWR4ZjNDeHV1Z0plSHZQanRIY0lHVTBMbXoy?=
- =?utf-8?B?bTZqbkwydno2eGdFalJaQVFrQmJaQTc4VUUrVkZLa1QraHVEbk4wSnZlUyt3?=
- =?utf-8?B?Vm41M0hBZkxpeE9FWnZZa09NdnBSQzhpQ2owSzQ3TktuNUlncGk4MEErRjYy?=
- =?utf-8?B?TXJidHc0UmNBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6484.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(10070799003)(366016)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bStLcmI0eEJlNWVzVEhobTZyYW1XQzk5YzBUcVdtbytGUzJ2UFhlcTdCbzhK?=
- =?utf-8?B?UTF5TlFIK3V6Q3VUMEhZVGhrUkhWWmZFUjh1TzhXUC80MnMyNFBuUVRKeTF2?=
- =?utf-8?B?SVdGTWtTL2duaHk0b2o3dUFPVm9wQkFvRU5kMEFNU2p5RnFuQVZCUEZXOGt5?=
- =?utf-8?B?UmdxeWN6LzhqV3g0VkNqUmgzMEE0QlR1SGJGNElubDh0c0xYVDlySUgyR2E0?=
- =?utf-8?B?WFMvem8rSDJNci84SDBtMWw2VnhvR09HemhHN2hmZUNLZFNCZGhmVSs4V1pY?=
- =?utf-8?B?TzFaakhIT21OQS8vQWRkRkxnVFpUdjZhdjRPWEJRSnVWV3pZR3FZbCtIUUhN?=
- =?utf-8?B?Yll5Q0lzdW5ETTNIRmdZZEpzaFg4amdiWUtJUytoVGJndjhCbUdqRmFubG1B?=
- =?utf-8?B?T1UrYXF0QXgvM29MNkpUVm00cUhidVRiWnhjOFgvOEJ3eW9EaUxtdEZBQ1lq?=
- =?utf-8?B?VHRlN3hsN0xpcEE2SnM1YWMxaDZEaWcxTk5ubzNGcWJETTM4TW1XRmJXSEd2?=
- =?utf-8?B?UnRnUURkL1o4Z3J0Y0VKSWdPdlBkOVZaTUsrenFjQ20vRHpTZ0tKWWhobmZx?=
- =?utf-8?B?SVNqVmJDQzg2V2dDa1pBRlBUS2Z6UEtuL1pOZU1SQUFlZzc1eFprUmNjQURV?=
- =?utf-8?B?emVoZTQvOWR4bzRSc0RWelNRc3pVRTZoVzFVeGZWRkFvQk9GaFUrTENQWHNn?=
- =?utf-8?B?N1Q2OVZFUHdPM3RBRGpIOExtcURVRlRlSWJwVjROZzZJTGVYNVdETGlqRXRT?=
- =?utf-8?B?YnovUGM2cHFiNE1LcDM5dlR5NnFXVVdVZDdvWnJUeCtDN2o3dkwxaWMzblY2?=
- =?utf-8?B?M2hhYXhsaUtJZlJKSzg3QmNCb1dDb1cyZUpISHJGNVM0WjBVTHF0dVRiZTBD?=
- =?utf-8?B?WW9KQTd4K3NQenNYTWMvTmppcFhDWjBwSWNaZnI1UGIvRmJxK2pvTmZTaWtE?=
- =?utf-8?B?dFJndWc5cTd4RUtBdXlWZTE0N0cyVTNZRTZPREFBaW9kRXVLZVFLSGtuWkdZ?=
- =?utf-8?B?RGJCWWN5M3JPTkMvLzNjZUMxNk1vVWpFMGMwMmdlakFRUUE3c2pmMnJTdjJ4?=
- =?utf-8?B?d2xVNm5DTjYrTDZIRHlTSXZobnlmUGxJcUo3T0NjNUphQXNRV0tWOWlkUVNu?=
- =?utf-8?B?d1hrV1RTWUZnVDE5bU5CR29kQ3NUYmJ4RHg5MG0xekZtU0I1ZVE5S3haejRm?=
- =?utf-8?B?UENadU5RdlVDV2VyVUNkS3VBR240VHJDWjNvd3V0MG1FRnpxV3RsNGQ0VWZJ?=
- =?utf-8?B?U1FaQklxcnc0M085V3cydXdRQml6VERGNlliNDVjbkI4ZlVaaElDUUVEL1E4?=
- =?utf-8?B?elQyeC9IMTljUUlKV2lLRFA3NTUrZEE0Q3ZERlVSSU9TcUI0MW8xbThzTFlB?=
- =?utf-8?B?SGVLOHh1NCsveE9lOXV2OHUyajE0Yy81L3Y4MTVoUk93R2JOczFNdHRRQTVp?=
- =?utf-8?B?UnN2UG1sMmxMbFRjN3dUQ25kZjMyeWFhMW56ZG9kYmVVMm9CNkI1anNyV0VD?=
- =?utf-8?B?em9vTVhZL2NTaFV6UFhHdVNrRWJLZC9Cb0d6ODNJRHJGcTlLalViTkNvK0Zz?=
- =?utf-8?B?TUYrSDREWVlpVXFYbXRETnZ1VTNCRDZXdi9QQWF5MWx2eXFPcjFuZUNZV29z?=
- =?utf-8?B?ekJ5Ty9kS1VNNXhiNklpYW9jcGg5NWt4TDUrMnhRZDVwNlUwdENlVTRwVFF1?=
- =?utf-8?B?ejlzajhYb2I2VHBPbHJOY1crTDhOc0h2WUdTV1d4MTRITzZtN1c0R3NobTB3?=
- =?utf-8?B?SjlEMXEyZE9FUGlvZEVwVFI4NHp3RzFFeW1waG91eEgzMUkzeGI5VFkxL0VC?=
- =?utf-8?B?Y3MxVk5vQTNPZEpWWk5BTDRQOXhnQlllRDEyNFF5SWNqNmJDWEdDWWFIekY1?=
- =?utf-8?B?R3MvRkpHeERONUNOV0JVUzNMOWRNUzB3NTdzS0NiQzJMK25HbUdmWlBRSjV6?=
- =?utf-8?B?VWIvV2s4Nk4vWDdMWkVxbDBMa3JmZSt4dnh5ODFQTm5KeGFYVER0WnBDeUJh?=
- =?utf-8?B?enVhYnVDendIN2ZDbnByZWFIbE9JcVhvd0gxdGxhN2x5dzhKRDFxd0pZMDVB?=
- =?utf-8?B?SkRUMStsb1hhd3c0d3pTbUt5a3ZjMGo5ZFBQbTljM3JlcEQvcUZ3enlqRENR?=
- =?utf-8?B?SGdKQnMvYWxDOTVEOWdSYkN2TDUwL05YN2tMWlBjdHI0RS80cER0YjE5a0ps?=
- =?utf-8?B?OGRCUk4rano2Y0ZzVEllVHhMZjRpYUpCay9xWURHV21KUmx4UE1ycldwTW1a?=
- =?utf-8?B?OUhTMkN3dDdHbVU3N2VJdmRQeDhRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f418bbc-4709-4456-d6a0-08dde07d73f5
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6484.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 06:39:17.8769
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RaMJLeEhV/6pBJkxfopfer3S2UvLKy5gTfjhjyjXhJQzVHRbqT+XdRNvreiwB6iPF2ZEy4QqaNv0K2+WT0uDvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6589
+References: <20250821004237.2712312-1-wusamuel@google.com> <20250821004237.2712312-4-wusamuel@google.com>
+In-Reply-To: <20250821004237.2712312-4-wusamuel@google.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Wed, 20 Aug 2025 23:45:03 -0700
+X-Gm-Features: Ac12FXzDTIflvmHbWTz4s_kpP9_TjDsECLoSs_L-xRlMthFUHwBgXLYgoXIErWY
+Message-ID: <CAGETcx-7qkHPQdUXf_SQMzZbTdcxF3oMk4nqfRnb6=wf0QQzcQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] PM: Support abort during fs_sync of back-to-back suspends
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wednesday, August 20, 2025 8:42=E2=80=AFPM Svyatoslav Ryhel wrote:
-> This adds header for the Tegra114 SOCTHERM device tree node.
->=20
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+On Wed, Aug 20, 2025 at 5:43=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
+te:
+>
+> There is extra care needed to account for back-to-back suspends while
+> still maintaining functionality to immediately abort during the
+> filesystem sync stage.
+>
+> This patch handles this by serializing the filesystem sync sequence with
+> an invariant; a subsequent suspend's filesystem sync operation will only
+> start when the previous suspend's filesystem sync has finished. While
+> waiting for the previous suspend's filesystem sync to finish, the
+> subsequent suspend will still abort early if a wakeup event is
+> triggered, solving the original issue of filesystem sync blocking abort.
+>
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> Reviewed-by: Saravana Kannan <saravanak@google.com>
+
+I think you meant to add my Reviewed-by: to all 3 patches.
+
+Rafael,
+
+Feel free to add it when you pick up these patches.
+
+-Saravana
 > ---
->  .../dt-bindings/thermal/tegra114-soctherm.h   | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 include/dt-bindings/thermal/tegra114-soctherm.h
->=20
-> diff --git a/include/dt-bindings/thermal/tegra114-soctherm.h
-> b/include/dt-bindings/thermal/tegra114-soctherm.h new file mode 100644
-> index 000000000000..b605e53284fe
-> --- /dev/null
-> +++ b/include/dt-bindings/thermal/tegra114-soctherm.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * This header provides constants for binding nvidia,tegra114-soctherm.
-> + */
+>  kernel/power/suspend.c | 30 +++++++++++++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index edacd2a4143b..514c590ec383 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -75,6 +75,8 @@ bool pm_suspend_default_s2idle(void)
+>  }
+>  EXPORT_SYMBOL_GPL(pm_suspend_default_s2idle);
+>
+> +static bool suspend_fs_sync_queued;
+> +static DEFINE_SPINLOCK(suspend_fs_sync_lock);
+>  static DECLARE_COMPLETION(suspend_fs_sync_complete);
+>
+>  /**
+> @@ -85,7 +87,9 @@ static DECLARE_COMPLETION(suspend_fs_sync_complete);
+>   */
+>  void suspend_abort_fs_sync(void)
+>  {
+> +       spin_lock(&suspend_fs_sync_lock);
+>         complete(&suspend_fs_sync_complete);
+> +       spin_unlock(&suspend_fs_sync_lock);
+>  }
+>
+>  void s2idle_set_ops(const struct platform_s2idle_ops *ops)
+> @@ -420,7 +424,11 @@ void __weak arch_suspend_enable_irqs(void)
+>  static void sync_filesystems_fn(struct work_struct *work)
+>  {
+>         ksys_sync_helper();
 > +
-> +#ifndef _DT_BINDINGS_THERMAL_TEGRA114_SOCTHERM_H
-> +#define _DT_BINDINGS_THERMAL_TEGRA114_SOCTHERM_H
+> +       spin_lock(&suspend_fs_sync_lock);
+> +       suspend_fs_sync_queued =3D false;
+>         complete(&suspend_fs_sync_complete);
+> +       spin_unlock(&suspend_fs_sync_lock);
+>  }
+>  static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
+>
+> @@ -432,8 +440,26 @@ static DECLARE_WORK(sync_filesystems, sync_filesyste=
+ms_fn);
+>   */
+>  static int suspend_fs_sync_with_abort(void)
+>  {
+> +       bool need_suspend_fs_sync_requeue;
 > +
-> +#define TEGRA114_SOCTHERM_SENSOR_CPU 0
-> +#define TEGRA114_SOCTHERM_SENSOR_MEM 1
-> +#define TEGRA114_SOCTHERM_SENSOR_GPU 2
-> +#define TEGRA114_SOCTHERM_SENSOR_PLLX 3
-> +#define TEGRA114_SOCTHERM_SENSOR_NUM 4
+> +Start_fs_sync:
+> +       spin_lock(&suspend_fs_sync_lock);
+>         reinit_completion(&suspend_fs_sync_complete);
+> -       schedule_work(&sync_filesystems);
+> +       /*
+> +        * Handle the case where a suspend immediately follows a previous
+> +        * suspend that was aborted during fs_sync. In this case, wait fo=
+r the
+> +        * previous filesystem sync to finish. Then do another filesystem=
+ sync
+> +        * so any subsequent filesystem changes are synced before suspend=
+ing.
+> +        */
+> +       if (suspend_fs_sync_queued) {
+> +               need_suspend_fs_sync_requeue =3D true;
+> +       } else {
+> +               need_suspend_fs_sync_requeue =3D false;
+> +               suspend_fs_sync_queued =3D true;
+> +               schedule_work(&sync_filesystems);
+> +       }
+> +       spin_unlock(&suspend_fs_sync_lock);
 > +
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_NONE 0
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_LOW  1
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_MED  2
-> +#define TEGRA_SOCTHERM_THROT_LEVEL_HIGH 3
-
-Please use the TEGRA114 prefix for these as well. I see that it's missing i=
-n=20
-the Tegra124 header, which is unfortunate.
-
-> +
-> +#endif
-
-
-
-
+>         /*
+>          * Completion is triggered by fs_sync finishing or a suspend abor=
+t
+>          * signal, whichever comes first
+> @@ -441,6 +467,8 @@ static int suspend_fs_sync_with_abort(void)
+>         wait_for_completion(&suspend_fs_sync_complete);
+>         if (pm_wakeup_pending())
+>                 return -EBUSY;
+> +       if (need_suspend_fs_sync_requeue)
+> +               goto Start_fs_sync;
+>
+>         return 0;
+>  }
+> --
+> 2.51.0.261.g7ce5a0a67e-goog
+>
 
