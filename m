@@ -1,56 +1,57 @@
-Return-Path: <linux-pm+bounces-32914-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32915-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22F6FB31C9F
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 16:50:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA542B320D9
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 18:54:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFB12A048B6
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 14:44:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9917580474
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 16:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE22307AEB;
-	Fri, 22 Aug 2025 14:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D922E611B;
+	Fri, 22 Aug 2025 16:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AgIV408Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpQVvFD+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD8C27AC43;
-	Fri, 22 Aug 2025 14:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D72E23D7D4;
+	Fri, 22 Aug 2025 16:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755873807; cv=none; b=K/u5h4XFtwA6ly5EdIHcqWSF+JtZUnY5QiEBM0+erb5VZrcEYlj3NACAFqJF4c/bVdNC2LlFBEt/FzoSYuVaubuJ72aM20yx7PLIIp3ULcPauxcC7dR45Bc6kP4+duBjDJXOSaQhVb8oTsUEc7PxUnzFwJAr/NjwZ/W5uA1Iaa8=
+	t=1755881628; cv=none; b=GzoCIUYUV2XBJ41eWh3+k3XO6Pr3k7fhYPh66ORdm3Iy2OvmGMa5ncLbqE8qUCTdeOyrvQRTNiwWkx1qwRrAWSSEBIS9WRBalks3aocsIvDgc8cGXoIFhar+foyd/qh3p4cUK6rj0sAcJdfmUxH0Fssn6F0Wwc16DahMVIZfR5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755873807; c=relaxed/simple;
-	bh=aJmcsGN8BNa/tNJe2eZFXgcKJYUFPdHxa1A61ZsD6xg=;
+	s=arc-20240116; t=1755881628; c=relaxed/simple;
+	bh=fSKpZxrAUH5S2jh0u5H0ibv22kQo0WxF3PYjMwb966Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qYKYb97N+WAtwuTznqFfJpRpX86SXsNHRgVCu5YaOc3rtNY/kUfklR/3qEv4YIbZlAs+IvZth09Ttl+LYpctxf+gcWJJy2rzMXoXmjebI2aRZ0EKT2/ly5PWN5QXnjiT4D19FyhLMWTub622ttuH8Bi6uUfEEiKLKWVIN7nRxS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AgIV408Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05818C113D0;
-	Fri, 22 Aug 2025 14:43:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tk66NVUHlgdwXFkqTNqouA4pl5NSxB/E0WJ2RkWceiT2dgDvJANABWhLSdzMvYTm5svGC+zU/JDGnmpFH1cDZbATj102VWb6gMJUupFMCCnu9SNUATmOy9hcy/8nXQA+e2XdPG1z9pFB9BXI2AM34HxW+mAMg7aAoGAda4K/MHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpQVvFD+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880D3C4CEED;
+	Fri, 22 Aug 2025 16:53:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755873806;
-	bh=aJmcsGN8BNa/tNJe2eZFXgcKJYUFPdHxa1A61ZsD6xg=;
+	s=k20201202; t=1755881628;
+	bh=fSKpZxrAUH5S2jh0u5H0ibv22kQo0WxF3PYjMwb966Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AgIV408YiX70Yvmpn/dkEuMMBqa7MVIekJp7NZYcCrvawgA1Xt0jwsK3Jsro+Av+U
-	 jxrfwlyZrBDO+uY7WAR/0qAWyIFAa1F53TY5h7q2mDh2RlTvxVXdDeBhdKRKV8dgX6
-	 XSedRhZ6ZSd3AGg7m2zuX8UuLMQ0z4DQX1rGoBLd8eWAsFvIH+OHF/WUWa0XVElW/U
-	 DFoW2oze4UcaeDg/NGgQfyF69QujXednRQtFTrtipMXVIpyeWudqCtCg7t6qFvzPn4
-	 tNp/LMk0nAg4Dr3GGD8xv5Ih4YXvdrGGjnLx35P3TwgxzGlmv2eZhsRahYgqJYucbj
-	 /HrMOsqommSAA==
-Date: Fri, 22 Aug 2025 20:13:13 +0530
+	b=PpQVvFD+F6E0UKrJ6ehkMxp4IyY7XatD9wAQHe/unogmeRQKwFGJ1XE5lKLeY6+Bl
+	 jb2txgiMTJVzdVU7FTUaJD32l3P/x35LOariGdk7mG+gPzgMYsL1NTD434l1M4LD2O
+	 Sn6ruuo8QX0E16I3+dEtmmU/sngRRmpxGU6LuPwLkAlUarSdso6mCwqFcjjfC7gx61
+	 NMgYIy7BQotwkmzw4PS+8KLZFRhUJX1HEwlwoimAyoboCPt84wO/zPOQGFs7JlqELx
+	 lihtsoVgOoSoxLbx0jItfUTXFqjB88C0qkZdD79CDeOIHaVpKLVop7RO+8tHZL5Ai8
+	 6rIpwy60DdI5g==
+Date: Fri, 22 Aug 2025 22:23:34 +0530
 From: Manivannan Sadhasivam <mani@kernel.org>
 To: "David E. Box" <david.e.box@linux.intel.com>
 Cc: rafael@kernel.org, bhelgaas@google.com, vicamo.yang@canonical.com, 
 	kenny@panix.com, ilpo.jarvinen@linux.intel.com, nirmal.patel@linux.intel.com, 
 	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] PCI/ASPM: Add host-bridge API to override default
- ASPM/CLKPM link state
-Message-ID: <twjakydamuhlisykt62szrcor3exidl5htldped424gmdqifwj@jhuvg5rkvptn>
+Subject: Re: [PATCH V2 2/2] PCI: vmd: Use
+ pci_host_set_default_pcie_link_state() to set ASPM defaults
+Message-ID: <rwcoocpr4t47pxvuly7qsiszycf2nwl25vaabyb4ntrwfeofdv@qoc2knuv253c>
 References: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+ <20250822031159.4005529-2-david.e.box@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,157 +61,108 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+In-Reply-To: <20250822031159.4005529-2-david.e.box@linux.intel.com>
 
-On Thu, Aug 21, 2025 at 08:11:57PM GMT, David E. Box wrote:
-> Synthetic PCIe hierarchies, such as those created by Intel VMD, are not
-> enumerated by firmware and do not receive BIOS-provided ASPM or CLKPM
-> defaults. Devices in such domains may therefore run without the intended
-> power management.
+On Thu, Aug 21, 2025 at 08:11:58PM GMT, David E. Box wrote:
+> Now that pci_host_set_default_pcie_link_state() exists, set the VMD child
+> domain with PCIE_LINK_STATE_ALL at bridge creation so core ASPM uses those
+> defaults during ASPM and CLKPM capability init.
 > 
-> Add a host-bridge mechanism that lets controller drivers supply their own
-> defaults. A new aspm_default_link_state field in struct pci_host_bridge is
-> set via pci_host_set_default_pcie_link_state(). During link initialization,
-> if this field is non-zero, ASPM and CLKPM defaults come from it instead of
-> BIOS.
+> Also remove the unneeded pci_set_power_state_locked(pdev, PCI_D0) and
+> pci_enable_link_state_locked() calls now that the links are configured
+> during enumeration.
 > 
-> This enables drivers like VMD to align link power management with platform
-> expectations and avoids embedding controller-specific quirks in ASPM core
-> logic.
+> This aligns VMD behavior with platform expectations without per-controller
+> ASPM tweaks at runtime.
 > 
-> Link: https://patchwork.ozlabs.org/project/linux-pci/patch/20250720190140.2639200-1-david.e.box%40linux.intel.com/
 > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+
 
 Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
 - Mani
 
+
 > ---
-> 
-> Changes in V1 from RFC:
-> 
->   -- Rename field to aspm_dflt_link_state since it stores
->      PCIE_LINK_STATE_XXX flags, not a policy enum.
->   -- Move the field to struct pci_host_bridge since it's being applied to
->      the entire host bridge per Mani's suggestion.
->   -- During testing noticed that clkpm remained disabled and this was
->      also handled by the formerly used pci_enable_link_state(). Add a
->      check in pcie_clkpm_cap_init() as well to enable clkpm during init.
-> 
 > Changes in V2:
 > 
->   -- Host field name changed to aspm_default_link_state.
->   -- Added get/set functions for aspm_default_link_state. Only the
->      setter is exported. Added a kernel-doc describing usage and
->      particulars around meaning of 0.
+>   -- Separated VMD changes into new patch.
+>   -- Changed comment for VMD_FEAT_BIOS_PM_QUIRK to remove ASPM
+>   -- Removed pci_set_power_state() and pci_enable_link_state_locked()
+>      calls in vmd_pm_enable_quirk()
+>   -- Use pci_host_set_default_pcie_link_state()
 > 
->  drivers/pci/pcie/aspm.c | 42 +++++++++++++++++++++++++++++++++++++++--
->  include/linux/pci.h     |  9 +++++++++
->  2 files changed, 49 insertions(+), 2 deletions(-)
+>  drivers/pci/controller/vmd.c | 22 ++++++++--------------
+>  1 file changed, 8 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 919a05b97647..b4f0b4805a35 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -373,6 +373,39 @@ static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
->  	pcie_set_clkpm_nocheck(link, enable);
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index b679c7f28f51..b99e01a57ddb 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -71,10 +71,9 @@ enum vmd_features {
+>  	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
+>  
+>  	/*
+> -	 * Enable ASPM on the PCIE root ports and set the default LTR of the
+> -	 * storage devices on platforms where these values are not configured by
+> -	 * BIOS. This is needed for laptops, which require these settings for
+> -	 * proper power management of the SoC.
+> +	 * Program default LTR values for storage devices on platforms where
+> +	 * firmware did not. Required on many laptops for proper SoC power
+> +	 * management.
+>  	 */
+>  	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
+>  };
+> @@ -733,7 +732,7 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
 >  }
 >  
-> +/**
-> + * pci_host_set_default_pcie_link_state - set controller-provided default ASPM/CLKPM mask
-> + * @host: host bridge on which to apply the defaults
-> + * @state: PCIE_LINK_STATE_XXX flags
-> + *
-> + * Allows a PCIe controller driver to specify the default ASPM and/or
-> + * Clock Power Management (CLKPM) link state mask that will be used
-> + * for links under this host bridge during ASPM/CLKPM capability init.
-> + *
-> + * The value is consumed in pcie_aspm_cap_init() and pcie_clkpm_cap_init()
-> + * to override the firmware-discovered defaults.
-> + *
-> + * Interpretation of aspm_default_link_state:
-> + *   - Nonzero: bitmask of PCIE_LINK_STATE_* values to be used as defaults
-> + *   - Zero:    no override provided; ASPM/CLKPM defaults fall back to
-> + *              values discovered in hardware/firmware
-> + *
-> + * Note: zero is always treated as "unset", not as "force ASPM/CLKPM off".
-> + */
-> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> +					  unsigned int state)
-> +{
-> +	host->aspm_default_link_state = state;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_host_set_default_pcie_link_state);
-> +
-> +static u32 pci_host_get_default_pcie_link_state(struct pci_dev *parent)
-> +{
-> +	struct pci_host_bridge *host = pci_find_host_bridge(parent->bus);
-> +
-> +	return host ? host->aspm_default_link_state : 0;
-> +}
-> +
->  static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
+>  /*
+> - * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
+> + * Enable LTR settings on devices that aren't configured by BIOS.
+>   */
+>  static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
 >  {
->  	int capable = 1, enabled = 1;
-> @@ -394,7 +427,10 @@ static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
->  			enabled = 0;
->  	}
->  	link->clkpm_enabled = enabled;
-> -	link->clkpm_default = enabled;
-> +	if (pci_host_get_default_pcie_link_state(link->pdev) & PCIE_LINK_STATE_CLKPM)
-> +		link->clkpm_default = 1;
-> +	else
-> +		link->clkpm_default = enabled;
->  	link->clkpm_capable = capable;
->  	link->clkpm_disable = blacklist ? 1 : 0;
+> @@ -747,7 +746,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+>  
+>  	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
+>  	if (!pos)
+> -		goto out_state_change;
+> +		return 0;
+>  
+>  	/*
+>  	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
+> @@ -755,7 +754,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+>  	 */
+>  	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
+>  	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
+> -		goto out_state_change;
+> +		return 0;
+>  
+>  	/*
+>  	 * Set the default values to the maximum required by the platform to
+> @@ -767,13 +766,6 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+>  	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
+>  	pci_info(pdev, "VMD: Default LTR value set by driver\n");
+>  
+> -out_state_change:
+> -	/*
+> -	 * Ensure devices are in D0 before enabling PCI-PM L1 PM Substates, per
+> -	 * PCIe r6.0, sec 5.5.4.
+> -	 */
+> -	pci_set_power_state_locked(pdev, PCI_D0);
+> -	pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
+>  	return 0;
 >  }
-> @@ -866,7 +902,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
->  	}
 >  
->  	/* Save default state */
-> -	link->aspm_default = link->aspm_enabled;
-> +	link->aspm_default = pci_host_get_default_pcie_link_state(parent);
-> +	if (!link->aspm_default)
-> +		link->aspm_default = link->aspm_enabled;
+> @@ -921,6 +913,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
+>  			       "domain"), "Can't create symlink to domain\n");
 >  
->  	/* Setup initial capable state. Will be updated later */
->  	link->aspm_capable = link->aspm_support;
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 59876de13860..8947cbaf9fa6 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -620,6 +620,10 @@ struct pci_host_bridge {
->  	unsigned int	size_windows:1;		/* Enable root bus sizing */
->  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
+> +	pci_host_set_default_pcie_link_state(to_pci_host_bridge(vmd->bus->bridge),
+> +					     PCIE_LINK_STATE_ALL);
+>  	vmd_acpi_begin();
 >  
-> +#ifdef CONFIG_PCIEASPM
-> +	unsigned int	aspm_default_link_state;	/* Controller-provided default */
-> +#endif
-> +
->  	/* Resource alignment requirements */
->  	resource_size_t (*align_resource)(struct pci_dev *dev,
->  			const struct resource *res,
-> @@ -1849,6 +1853,8 @@ int pci_disable_link_state(struct pci_dev *pdev, int state);
->  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
->  int pci_enable_link_state(struct pci_dev *pdev, int state);
->  int pci_enable_link_state_locked(struct pci_dev *pdev, int state);
-> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> +					  unsigned int state);
->  void pcie_no_aspm(void);
->  bool pcie_aspm_support_enabled(void);
->  bool pcie_aspm_enabled(struct pci_dev *pdev);
-> @@ -1861,6 +1867,9 @@ static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
->  { return 0; }
->  static inline int pci_enable_link_state_locked(struct pci_dev *pdev, int state)
->  { return 0; }
-> +static inline void
-> +pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> +				     unsigned int state) { }
->  static inline void pcie_no_aspm(void) { }
->  static inline bool pcie_aspm_support_enabled(void) { return false; }
->  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return false; }
-> 
-> base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+>  	pci_scan_child_bus(vmd->bus);
 > -- 
 > 2.43.0
 > 
