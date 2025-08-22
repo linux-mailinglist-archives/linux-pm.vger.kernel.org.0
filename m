@@ -1,133 +1,98 @@
-Return-Path: <linux-pm+bounces-32846-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32847-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36EFEB3091B
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 00:21:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 346BAB30A2E
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 02:15:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E86F9AE88AD
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Aug 2025 22:21:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B335B2A57B9
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 00:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610DA2ECE89;
-	Thu, 21 Aug 2025 22:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DA84C81;
+	Fri, 22 Aug 2025 00:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="HSLnsP2Y"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="UqOWNexb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87C32EAB89
-	for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 22:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AAF4A3E;
+	Fri, 22 Aug 2025 00:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755814830; cv=none; b=Bfe8KU7HFSpdw/2aL5yisG2+9eznVbD4UlL6puFUY0bL1RUDSVYHMJjgWSRP+Vm2eglUTiICOdbITT8ye5By/c7dxRf/Kwtl0RGXw9v2EMhsqN44h9JiCQvbzu8XdlHWXdYdbiPJsQ5tgtQ1iSePblRkNLfuW3rL0XcY9zlNBcA=
+	t=1755821522; cv=none; b=WDJgpGKejlQVrIR38f8lQuL2/DEYnWf5V9bnpC5H5X2ppaoMHbFX5TjBBBRo/lD80OmuWYi5AvYRd4d0jSiL7mnEBcdhfGnQ0xqvHg6FtiIaiHD4muKnIuysNVIOZid64J1umk2m9PfXfGARPlYibxSh/S/N7OvTp5ivCtmHl2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755814830; c=relaxed/simple;
-	bh=3+d0bC5Tq8aMj8373zA7XkZtS5Kc2LtPcfvRUsK0/Qc=;
-	h=From:Date:Subject:MIME-Version:Message-Id:In-Reply-To:To:Cc:
-	 Content-Type:References; b=DstYGuy5hrZ4kPlPSPm0xlVcOKyyMwk8a8OTJLaqX9zOlhWuj5CjMXTwkfBxHDZ0Hu65OUFOdtHX9pWkPQOgHepM5xRx3JJtoi/R+K0TUGCYKFDZ9xPGjJcMD7JtGi91hXsNZsAbxnyPPf6MP9sO7Jjae2EasymFAbIl1TD/vKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=HSLnsP2Y; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250821222025euoutp02ea0f8ac5833afe0a2e8e5c74b326a3c2~d6EfhmdG-2845828458euoutp02Q
-	for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 22:20:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250821222025euoutp02ea0f8ac5833afe0a2e8e5c74b326a3c2~d6EfhmdG-2845828458euoutp02Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755814825;
-	bh=sKprqc5e6NKeYW0/ZlcX1W6ahYkIBlxOh0FMJaxMLh4=;
-	h=From:Date:Subject:In-Reply-To:To:Cc:References:From;
-	b=HSLnsP2YK8Jbl7O6GM3HUNrCApoNrjm/y0dbQh8Z3PHH2S09I0fb2nLgApPKgItGN
-	 0ZUyKHjEnmMKnTDzeuM9f7NdTyOQBio06c8Ck7olId6czj4S34AA2AutI4FPVKVLs9
-	 sJxpny0i+MIFDhGs/qGITRT+jBJVPZGpKzivvfhk=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250821222024eucas1p1e4f66aeff7be9e3319633c6067339595~d6EewxrMM2013020130eucas1p1R;
-	Thu, 21 Aug 2025 22:20:24 +0000 (GMT)
-Received: from AMDC4942.eu.corp.samsungelectronics.net (unknown
-	[106.210.136.40]) by eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250821222023eusmtip10b6e5460e41b514eff348e2f5b8f09aa~d6EdwMk2Y2143321433eusmtip1B;
-	Thu, 21 Aug 2025 22:20:23 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-Date: Fri, 22 Aug 2025 00:20:18 +0200
-Subject: [PATCH v13 4/4] drm/imagination: Enable PowerVR driver for RISC-V
+	s=arc-20240116; t=1755821522; c=relaxed/simple;
+	bh=ABAWepAjHiZJzYettTX3FTQg/SU/KOcCVAnQL50u/gg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lbr0C/XoUQiJbgZflhj3AOC9X3f9WbZtrmbI96g0Uc6BUW2eB6ugcPbMkqoYtWa1vzSLsiei0sXlDWLPfBl1qi9zKw5GFaKMzp3wLhQPlVXth3NT7gdMmVoO966P/zRYqP7/uxgvby6qKtLsqlvi5Yu/nQCmGiyVZY0q+j9NryQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=UqOWNexb; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=aeUBRdfQnoF/XeLI+FS29F1kvxnlVvl/a40ejNepzFw=; b=UqOWNexbepiAZnlzW+cl6Rn7Kx
+	FbmRX41KlgAEJBXWEpW6sGdtT1hvX/dgZe/HxldMHrYUL7DgpwuTSqXKY5nrvyK6lqGsiSxyiCdcK
+	CipY5jnGkDS5D8xxnR82TPXQ0cZ/DrY1G64rhT5qFiPf04z88FmAqdnwWd51568YkK5bHu+eThLX3
+	b8VigckODHM4XMTGwnk7eLNjDbrxP9jMQjTsjHzdiLVNPNYGoP1iUGnER/EKm5xNT7sEZLupcWmY6
+	at/xkCgAeLI/vJVVm1ZfqwbXgYfNJnMLZQcFp6vWXMduFXUGVu2QZdh03kWvMOkMkCW6ZyYIB7Cwd
+	CwrmJbOg==;
+Received: from [59.10.240.225] (helo=[172.28.113.15])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1upFNZ-00HTRe-Rv; Fri, 22 Aug 2025 02:11:38 +0200
+Message-ID: <2c5134f4-c0b6-47a8-ba44-402b7f6893bd@igalia.com>
+Date: Fri, 22 Aug 2025 09:11:28 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250822-apr_14_for_sending-v13-4-af656f7cc6c3@samsung.com>
-In-Reply-To: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
-To: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,  Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
-	<conor+dt@kernel.org>,  Michal Wilczynski <m.wilczynski@samsung.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,  Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,  David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,  Paul Walmsley
-	<paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>,  Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
-	<ulf.hansson@linaro.org>,  Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Drew Fustini <fustini@kernel.org>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org,  Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.15-dev
-X-CMS-MailID: 20250821222024eucas1p1e4f66aeff7be9e3319633c6067339595
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250821222024eucas1p1e4f66aeff7be9e3319633c6067339595
-X-EPHeader: CA
-X-CMS-RootMailID: 20250821222024eucas1p1e4f66aeff7be9e3319633c6067339595
-References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
-	<CGME20250821222024eucas1p1e4f66aeff7be9e3319633c6067339595@eucas1p1.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v3 00/10] PM: EM: Add netlink support for the
+ energy model.
+To: "Rafael J. Wysocki" <rafael@kernel.org>, lukasz.luba@arm.com
+Cc: len.brown@intel.com, pavel@kernel.org, christian.loehle@arm.com,
+ tj@kernel.org, kernel-dev@igalia.com, linux-pm@vger.kernel.org,
+ sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20250810233347.81957-1-changwoo@igalia.com>
+ <CAJZ5v0ibEHC+Ckgisr+VAU=B21MgKJz2=QqGH2hd6UjUFutMSg@mail.gmail.com>
+From: Changwoo Min <changwoo@igalia.com>
+Content-Language: en-US, ko-KR, en-US-large, ko
+In-Reply-To: <CAJZ5v0ibEHC+Ckgisr+VAU=B21MgKJz2=QqGH2hd6UjUFutMSg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Several RISC-V boards feature Imagination GPUs that are compatible with
-the PowerVR driver. An example is the IMG BXM-4-64 GPU on the Lichee Pi
-4A board. This commit adjusts the driver's Kconfig dependencies to allow
-the PowerVR driver to be compiled on the RISC-V architecture.
+Hi Rafael,
 
-By enabling compilation on RISC-V, we expand support for these GPUs,
-providing graphics acceleration capabilities and enhancing hardware
-compatibility on RISC-V platforms.
+On 8/21/25 20:27, Rafael J. Wysocki wrote:
+> Hi,
+> 
+> On Mon, Aug 11, 2025 at 1:34 AM Changwoo Min <changwoo@igalia.com> wrote:
+>>
+> I've done a high-level review of this and it looks reasonable to me
+> overall, but I'd like to get some feedback from Lukasz on it.
 
-The RISC-V support is restricted to 64-bit systems (RISCV && 64BIT) as
-the driver currently has an implicit dependency on a 64-bit platform.
+Thank you, Rafael, for the review! I will send v4 as soon as
+I get feedback from Lukasz.
 
-Add a dependency on MMU to fix a build warning on RISC-V configurations
-without an MMU.
+> 
+> My two requests for now are: please reorder the series, so patches
+> [3-5] go first, and remove the ending period (".") from all of the
+> patch subjects.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Matt Coster <matt.coster@imgtec.com>
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
----
- drivers/gpu/drm/imagination/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Sure. Moving [3-5] to the beginning of the series and making the
+title style consistent makes sense. I will change it in the next
+version as suggested.
 
-diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
-index 3bfa2ac212dccb73c53bdc2bc259bcba636e7cfc..682dd2633d0c012df18d0f7144d029b67a14d241 100644
---- a/drivers/gpu/drm/imagination/Kconfig
-+++ b/drivers/gpu/drm/imagination/Kconfig
-@@ -3,8 +3,9 @@
- 
- config DRM_POWERVR
- 	tristate "Imagination Technologies PowerVR (Series 6 and later) & IMG Graphics"
--	depends on ARM64
-+	depends on (ARM64 || RISCV && 64BIT)
- 	depends on DRM
-+	depends on MMU
- 	depends on PM
- 	select DRM_EXEC
- 	select DRM_GEM_SHMEM_HELPER
-
--- 
-2.34.1
-
+Regards,
+Changwoo Min
 
