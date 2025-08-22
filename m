@@ -1,164 +1,148 @@
-Return-Path: <linux-pm+bounces-32908-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32909-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0360B31856
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 14:51:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21421B318DC
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 15:10:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7ABE97BE0F4
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 12:49:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BB39625150
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 13:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07B42F6196;
-	Fri, 22 Aug 2025 12:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A242FD7DE;
+	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1yxazY5"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="nxmKQCPh";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="Jp/67mQN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F3B2ECE8F;
-	Fri, 22 Aug 2025 12:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755867062; cv=none; b=AoPWuMwDjo22BkeX1sk5Rxw1L7BUGllWb4JXGiFk2IWvcWjUoI++JT5fWXaHyV/IELSffyBdFIUdQuZuz+BuVS1ie8kyxhykUYaPzZkHIGSMY/iU1EuTFkg9k77xko+oNMm2iKRDOqk2Pz3DJOyrvD4w4PtPbvKBzHdD1yYM7pI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755867062; c=relaxed/simple;
-	bh=62L/Xc8PMFF3fvmTu93PaFJyJD9WQMobEpBD9EWjLB0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BSTGzgEuxj+YdGXrdwVQFgowwi62PAlytInzfjXmPf4Fz0PNK0FkBBu6KLQTwyg1aKc9h5p1C+dVGdJWgOPqCstz4p4hOaMLzrxQkoavBRdSFCniJba2uHMWPfQGKZCO8nWXdyL1W9cXLmX3+aRPY3XxNNEIH1EYQs/htKI+9G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1yxazY5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9DFC4CEED;
-	Fri, 22 Aug 2025 12:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755867062;
-	bh=62L/Xc8PMFF3fvmTu93PaFJyJD9WQMobEpBD9EWjLB0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=O1yxazY5MJCsReRUfP6WNlfY2rRh9qlmd2JeN9rQA7zlyIfReweAVTlOQl6steOJu
-	 Nt+780GihMEo+H03Drdd3r37zBMA4+tZPO8B5GOhvLauj1M+3GiJ8dQqqYlH4dTz0K
-	 kKkiA7NwrKGBGv20FujnsUST/HSsHOrxjkC4/VhJXJzuJpqGyU3LkNNeeZDMBcxcks
-	 sLKKmhXJdZ52SBn0WSr4c+qDEKtmlmsBf3Nlhima4XEiijThYajYM8UQORUzZUT+Cm
-	 39auTfd5YuuAeW1tFbh5ex1VXltsUGGAY31iVyMxWeDbru0jkdFLcDdllg5HIO5oPv
-	 odjYLRonNfrtw==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-30cce5cb708so1438623fac.0;
-        Fri, 22 Aug 2025 05:51:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW6PAw9CNHsIB9kSrvRfamcoFyDaArtbAkDB2BJRPq8c/r4igNceQhcz/PcOta3KfUORBlyk9fXz6k=@vger.kernel.org, AJvYcCWDCkBKu0Nl0ckCBIfXv2El0htbpiZRSp8U5UN5PBW0gNfLKkLd6At+zGYSZk+f9Kzh/eSi4fVRQ+dkV20=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFWCEVN8s+CSJza7sDIE3hYu3zfdSJryqdufDbUWd+rrloBzR/
-	tEIKUCC0o9k+sRfdMGhbq9pVVlB7TrOppYS734PjGlhCf/UhkbyNe6tDTdHc30wfB6iWQbCu7ak
-	4JaEW1OLCKT9+en5amw9q1qgyNrahXgU=
-X-Google-Smtp-Source: AGHT+IFL9dntZ4Kq7JegAnYSa68sNCLfWKru9JguUim257NjBCxrSj6SmH2KH26Sk8rcYUY0laYzDCzO0yMX4+y3WmM=
-X-Received: by 2002:a05:6870:e242:b0:2ff:8bc7:44a9 with SMTP id
- 586e51a60fabf-314dcc311c7mr1315348fac.21.1755867061407; Fri, 22 Aug 2025
- 05:51:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77D42FC008;
+	Fri, 22 Aug 2025 13:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755867649; cv=pass; b=QO1DmY8FuZitIk7GRYJQg/HY7BooiRDu9nV8sVU4hicRcijQmHTybF+LB+96dttPEF+/g5aejiy/PEQwkLfe71/wfHn48lDQgOn3lnXFgXTeKY0wdqnsY3shrrEN+QM5ONlPlUSGinm5cyAabfnIGmDGbizlmZTKAg2S80uBxqw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755867649; c=relaxed/simple;
+	bh=tKWIfxfpH/XWzFDUflAitZfOsO2kUNsz1M5UwojPLDg=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=XytnqKdvjkoY6CJ3FHsvAkMwMjAY5au6qYI/o8eGmnCUOzLaOTrrg4VG5iWNFiv/HSNb+MPO9dmbLkfK+XA9HRRAxi1ihQIHn0nQHQHNIKyNM2SQ5fMn1zJhHu30SmxrsICVvD1RRcTqFyS4EgS9kGLHO8sATKJcompAkarafEA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=nxmKQCPh; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=Jp/67mQN; arc=pass smtp.client-ip=85.215.255.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+ARC-Seal: i=1; a=rsa-sha256; t=1755867629; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=OQUKXQKrLIEkTNdxgMLMUmUMN1QNPVW0lHu4nhT5I54CNgy8tU3OL/oJpC05WWuNgo
+    atu3NCfBEn7rtkv7CGNd+TtNAZ+SW009ZBrBvBuJP9oZOrA8KLhQnAI4HhHrsJGpZfmX
+    HEyAFLI689W/IVIh6TfdNymMsxOKW0vkdufHBc9RZ8gsdRqEeSc8Q0mMjPiSW6HX8OAU
+    iHKZWSeMpGKteU3jlL3OZqrPzJOdjPYjptIjDqwljJHMmPxAaEYMkxOio/QgafsXYZGV
+    57ORTCHGUiPxKAEHTI6vIMOFGWwzTmigrLUauM0jlFfSjRRMFzZqwH8I//C1DLgApuXt
+    4wQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1755867629;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=dyqgy5T3hx+MqXXKObwy6WBXqr/oFHAkqS1wlQiF4gA=;
+    b=L9UOthVWOLA+Lfpxh/Wt0eJ53Y3mvGXJ1j6Mqn6iUfpxNdgJ+NcrK8ZPIqALKTIlwu
+    jh7wgXfanMBNJG6E3FjIOscmJaxqKKSfjrymRyjCZ8TBoNKsCFeAPiqhoRg/gqdgwpGg
+    lkfcFJIY1h4t1eS+nLrMzBgKB3cqBItlPsPxryDC2fncGs2BjHIHiW4QPE9l1un0BlsT
+    ILZuyi+wsfLN+ExJPMxzptEaeIThos/neqEQhw094JUYP1MVGx6DDakiUcWPBQXfwRNh
+    4zFJlBEIP11FT4s3dq2x1KlGQ3Y6zCJmQ+llzK1gNSkWFm0YYgTbm8ryL+DMjyBYWLMt
+    +5Aw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1755867629;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=dyqgy5T3hx+MqXXKObwy6WBXqr/oFHAkqS1wlQiF4gA=;
+    b=nxmKQCPhCIRF7ZinVmUI7+HayKuUW41E/T0aRamLmIPI7FcMOU7U0ooj/fUIIAYAvY
+    eTFvu+ygC6mJivTInVSNFdlgqRg6qYJbEJVSYquAiwLpSVM/n/H9dZ3XtOil6Y/uHYwE
+    AF396238NbPCXZ5qYYgG1kruPzPzbAvHhDFRCbkn0wL4WxcFa5Yr9io3GScTpMFljWOM
+    cb6Yziznjm31oBF5HqwVKQN6NR5JSIgSvIrf87axlgUxWmlmFhRcFVSLb79/fKz7pQx9
+    rV4WqyKU/ArlNT8Do5SBhu6a8jq4v1GrlqpEfq6pD3CjKbZdosJOHoV/dw65cM/T7Bub
+    U+8Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1755867629;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=dyqgy5T3hx+MqXXKObwy6WBXqr/oFHAkqS1wlQiF4gA=;
+    b=Jp/67mQNx3H74Jec//qwPYmo0UxLEBWaAYkXHLrRjsBN71l+eAVP61N54Ku31kPZwu
+    +rS7H9RI/6iFaZr9KiDA==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfz0Z"
+Received: from smtpclient.apple
+    by smtp.strato.de (RZmta 52.1.2 DYNA|AUTH)
+    with ESMTPSA id Q307a417MD0S2Yt
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+	(Client did not present a certificate);
+    Fri, 22 Aug 2025 15:00:28 +0200 (CEST)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250813185530.635096-1-srinivas.pandruvada@linux.intel.com> <20250813185530.635096-4-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20250813185530.635096-4-srinivas.pandruvada@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 22 Aug 2025 14:50:50 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ht1Z0dDxW1hfDUBoQOWXRBD+XHTph0juRhRCAvy=Z61Q@mail.gmail.com>
-X-Gm-Features: Ac12FXwuQ-mTXPcre9cCSCDFWmzBm1aGuMluKtr_dmcwOAT1o7Gs6jf2FxOMeqE
-Message-ID: <CAJZ5v0ht1Z0dDxW1hfDUBoQOWXRBD+XHTph0juRhRCAvy=Z61Q@mail.gmail.com>
-Subject: Re: [PATCH 3/5] thermal: intel: int340x: Add module parameter for
- balanced Slider
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [PATCH] power: supply: bq27xxx: fix error return in case of no
+ bq27000 hdq battery
+From: "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <F9E0EBBA-094D-4940-8A15-409696E6B405@goldelico.com>
+Date: Fri, 22 Aug 2025 15:00:18 +0200
+Cc: Sebastian Reichel <sre@kernel.org>,
+ Jerry Lv <Jerry.Lv@axis.com>,
+ =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ letux-kernel@openphoenux.org,
+ stable@vger.kernel.org,
+ kernel@pyra-handheld.com
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <D003BFF9-737D-432D-B522-9AD5E60A6E9A@goldelico.com>
+References: <bc405a6f782792dc41e01f9ddf9eadca3589fcdc.1753101969.git.hns@goldelico.com>
+ <20250821201544.047e54e9@akair>
+ <10174C85-591A-4DCB-A44E-95F2ACE75E99@goldelico.com>
+ <20250821220552.2cb701f9@akair>
+ <F9E0EBBA-094D-4940-8A15-409696E6B405@goldelico.com>
+To: Andreas Kemnade <andreas@kemnade.info>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
 
-On Wed, Aug 13, 2025 at 8:55=E2=80=AFPM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> By default, the SoC slider value for the "balanced" platform profile is
-> set to 3. A new module parameter is introduced to allow users to change
-> this default value. After modifying the module parameter, users must call
-> an update to the "profile" sysfs attribute for the change to take effect.
+Hi,
 
-This last bit is slightly confusing.  What exactly do they need to do
-for this purpose?
+> Am 22.08.2025 um 08:51 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+>=20
+> What do you mean with "catched earlier"? What is your proposal?
+>=20
+> Well, as proposed by Jerry earlier, it appears as if it can also be =
+handled in bq27xxx_battery_hdq_read()
+> by detecting the register BQ27XXX_REG_FLAGS and the read value 0xff =
+and return -ENODEV.
 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../processor_thermal_soc_slider.c            | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_=
-slider.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slid=
-er.c
-> index c492ee937dc7..ffc538c9b9e3 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.=
-c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.=
-c
-> @@ -50,6 +50,43 @@ static u8 slider_values[] =3D {
->         [SOC_POWER_SLIDER_POWERSAVE] =3D SOC_SLIDER_VALUE_MAXIMUM,
->  };
->
-> +/* Lock to protect module param updates */
-> +static DEFINE_MUTEX(slider_param_lock);
-> +
-> +static int slider_balanced_param =3D SOC_SLIDER_VALUE_BALANCE;
-> +
-> +static int slider_def_balance_set(const char *arg, const struct kernel_p=
-aram *kp)
-> +{
-> +       u8 slider_val;
-> +       int ret;
-> +
-> +       guard(mutex)(&slider_param_lock);
-> +
-> +       ret =3D kstrtou8(arg, 16, &slider_val);
-> +       if (!ret) {
-> +               if (slider_val > SOC_SLIDER_VALUE_MAXIMUM)
-> +                       return -EINVAL;
-> +
-> +               slider_balanced_param =3D slider_val;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static int slider_def_balance_get(char *buf, const struct kernel_param *=
-kp)
-> +{
-> +       guard(mutex)(&slider_param_lock);
-> +       return sysfs_emit(buf, "%02x\n", slider_values[SOC_POWER_SLIDER_B=
-ALANCE]);
-> +}
-> +
-> +static const struct kernel_param_ops slider_def_balance_ops =3D {
-> +       .set =3D slider_def_balance_set,
-> +       .get =3D slider_def_balance_get,
-> +};
-> +
-> +module_param_cb(slider_balance, &slider_def_balance_ops, NULL, 0644);
-> +MODULE_PARM_DESC(slider_balance, "Set slider default value for balance."=
-);
-> +
->  /* Convert from platform power profile option to SoC slider value */
->  static int convert_profile_to_power_slider(enum platform_profile_option =
-profile)
->  {
-> @@ -106,6 +143,10 @@ static int power_slider_platform_profile_set(struct =
-device *dev,
->         if (!proc_priv)
->                 return -EOPNOTSUPP;
->
-> +       guard(mutex)(&slider_param_lock);
-> +
-> +       slider_values[SOC_POWER_SLIDER_BALANCE] =3D slider_balanced_param=
-;
-> +
->         slider =3D convert_profile_to_power_slider(profile);
->         if (slider < 0)
->                 return slider;
-> --
-> 2.43.0
->
+I tried this but there are more locations where BQ27XXX_REG_FLAGS are =
+read and where the reading
+code is not prepared to receive an -ENODEV. This will for example emit
+
+[  293.389831] w1_slave_driver 01-000000000000: error reading flags
+
+each time the battery is removed. And in some race cases (a read of the =
+full /sys properties is
+already in progress), there may be more than one such message. That is =
+not nice to replace one
+console message with another...
+
+So I am not sure if it is a good idea to make the lowest layer ("catched =
+earlier") read function
+detect -ENODEV based on the register number. It can not know what the =
+next layer wants to do with
+the result.
+
+BR,
+Nikolaus
+
 
