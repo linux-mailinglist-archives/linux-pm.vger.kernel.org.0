@@ -1,54 +1,65 @@
-Return-Path: <linux-pm+bounces-32847-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32848-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346BAB30A2E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 02:15:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 198B8B30AEF
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 03:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B335B2A57B9
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 00:15:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1A71C85138
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 01:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DA84C81;
-	Fri, 22 Aug 2025 00:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E419145355;
+	Fri, 22 Aug 2025 01:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="UqOWNexb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3C3sEON"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AAF4A3E;
-	Fri, 22 Aug 2025 00:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57656FC3;
+	Fri, 22 Aug 2025 01:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755821522; cv=none; b=WDJgpGKejlQVrIR38f8lQuL2/DEYnWf5V9bnpC5H5X2ppaoMHbFX5TjBBBRo/lD80OmuWYi5AvYRd4d0jSiL7mnEBcdhfGnQ0xqvHg6FtiIaiHD4muKnIuysNVIOZid64J1umk2m9PfXfGARPlYibxSh/S/N7OvTp5ivCtmHl2k=
+	t=1755827221; cv=none; b=bNpPS0LZvOOgCmJOivJLIJhECIYCivZ4Q/Gqm/jGcrB2/JEO7GOnozHXdungzAn9YMhyG+3DVFkodiU2/BuKx+Ams57eCFOQwvIMrsbbO+tnOlysbF/lbDNiFtY1x/eDvYPeErzPM7ge8LAHm8zMQIhE8+Pu7Hokumpr8KKVqJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755821522; c=relaxed/simple;
-	bh=ABAWepAjHiZJzYettTX3FTQg/SU/KOcCVAnQL50u/gg=;
+	s=arc-20240116; t=1755827221; c=relaxed/simple;
+	bh=dlNqS8GuyaD0jRtHmWGKX6D3RkxY5DYdizCYX+dXy5s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lbr0C/XoUQiJbgZflhj3AOC9X3f9WbZtrmbI96g0Uc6BUW2eB6ugcPbMkqoYtWa1vzSLsiei0sXlDWLPfBl1qi9zKw5GFaKMzp3wLhQPlVXth3NT7gdMmVoO966P/zRYqP7/uxgvby6qKtLsqlvi5Yu/nQCmGiyVZY0q+j9NryQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=UqOWNexb; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=aeUBRdfQnoF/XeLI+FS29F1kvxnlVvl/a40ejNepzFw=; b=UqOWNexbepiAZnlzW+cl6Rn7Kx
-	FbmRX41KlgAEJBXWEpW6sGdtT1hvX/dgZe/HxldMHrYUL7DgpwuTSqXKY5nrvyK6lqGsiSxyiCdcK
-	CipY5jnGkDS5D8xxnR82TPXQ0cZ/DrY1G64rhT5qFiPf04z88FmAqdnwWd51568YkK5bHu+eThLX3
-	b8VigckODHM4XMTGwnk7eLNjDbrxP9jMQjTsjHzdiLVNPNYGoP1iUGnER/EKm5xNT7sEZLupcWmY6
-	at/xkCgAeLI/vJVVm1ZfqwbXgYfNJnMLZQcFp6vWXMduFXUGVu2QZdh03kWvMOkMkCW6ZyYIB7Cwd
-	CwrmJbOg==;
-Received: from [59.10.240.225] (helo=[172.28.113.15])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1upFNZ-00HTRe-Rv; Fri, 22 Aug 2025 02:11:38 +0200
-Message-ID: <2c5134f4-c0b6-47a8-ba44-402b7f6893bd@igalia.com>
-Date: Fri, 22 Aug 2025 09:11:28 +0900
+	 In-Reply-To:Content-Type; b=ilCGd0fdMs7pC13j/2YlyY8t8jKEt9L3W8Zuw46b2DQ9VcIK709E0gxTyxHCDaJ0ims3a95T850RRLjQG2pvWUfv7zCizqEPBeU8Djwb9C0Ps6LR6x7UxT/r1QcyUNSss7ehViODVQaZ9xjkxsnR6dvHBDd6tTtlcSarcx8MoCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3C3sEON; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755827220; x=1787363220;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dlNqS8GuyaD0jRtHmWGKX6D3RkxY5DYdizCYX+dXy5s=;
+  b=I3C3sEONN9SV32FuIS/2CFjgoywkO2m5t4ipUCjc8r49EIFCCGDW58nt
+   6KZV8u+Dw1DAcStHe0rDadFoiSb2xokyrA/lNCICUYc1QxTzVFniLNB/t
+   2eLABrnkUJBPHBZNd4A/+10Xhg2Q+P3ywm9b5b0/2wiE5G08QTXJLDlnO
+   E6o0UXMXLmLqUA/njpHeAWppUkgJfEAB//F2LhV9QSD6WGAEA70a3yn0j
+   7fpE+kO2B1PH1BRV8AnOuenTncVVszD0NAV2ZHzcD/uIcfQPhItXCuGFP
+   DzsXkHX/j51Ic032xab/38StBHu2Eq5csP/fuTwkKK7H4ik5uwkJpHD9c
+   Q==;
+X-CSE-ConnectionGUID: 6iYUc/PSTh6MG2yfjFr6aA==
+X-CSE-MsgGUID: b2bE0OkfQHeXCYJRlyp8xg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="58199893"
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="58199893"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 18:46:59 -0700
+X-CSE-ConnectionGUID: AZFJ9i6pRCaPCV9OGTd+yQ==
+X-CSE-MsgGUID: COxnV628RZWhh4q30kM6AA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="173843816"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.238.14]) ([10.124.238.14])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 18:46:51 -0700
+Message-ID: <03ac8bac-c8d1-4a3b-a07f-2bbf04e726b6@intel.com>
+Date: Fri, 22 Aug 2025 09:46:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,43 +67,84 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 00/10] PM: EM: Add netlink support for the
- energy model.
-To: "Rafael J. Wysocki" <rafael@kernel.org>, lukasz.luba@arm.com
-Cc: len.brown@intel.com, pavel@kernel.org, christian.loehle@arm.com,
- tj@kernel.org, kernel-dev@igalia.com, linux-pm@vger.kernel.org,
- sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <20250810233347.81957-1-changwoo@igalia.com>
- <CAJZ5v0ibEHC+Ckgisr+VAU=B21MgKJz2=QqGH2hd6UjUFutMSg@mail.gmail.com>
-From: Changwoo Min <changwoo@igalia.com>
-Content-Language: en-US, ko-KR, en-US-large, ko
-In-Reply-To: <CAJZ5v0ibEHC+Ckgisr+VAU=B21MgKJz2=QqGH2hd6UjUFutMSg@mail.gmail.com>
+Subject: Re: [PATCH v3 13/15] x86/cpu/intel: Bound the non-architectural
+ constant_tsc model checks
+To: Sohil Mehta <sohil.mehta@intel.com>, David Woodhouse
+ <dwmw2@infradead.org>, x86@kernel.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
+ =?UTF-8?Q?J=C3=BCrgen_Gross?= <jgross@suse.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ xen-devel <xen-devel@lists.xenproject.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Zhang Rui <rui.zhang@intel.com>, Andrew Cooper <andrew.cooper3@citrix.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ Dapeng Mi <dapeng1.mi@linux.intel.com>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org, kvm@vger.kernel.org, Xin Li <xin@zytor.com>
+References: <20250219184133.816753-1-sohil.mehta@intel.com>
+ <20250219184133.816753-14-sohil.mehta@intel.com>
+ <6f05a6849fb7b22db35216dcf12bf537f8a43a92.camel@infradead.org>
+ <968a179f-3da7-4c69-b798-357ea8d759eb@intel.com>
+ <5f5f1230-f373-469c-b0d9-abc80199886e@intel.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <5f5f1230-f373-469c-b0d9-abc80199886e@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Rafael,
-
-On 8/21/25 20:27, Rafael J. Wysocki wrote:
-> Hi,
-> 
-> On Mon, Aug 11, 2025 at 1:34 AM Changwoo Min <changwoo@igalia.com> wrote:
+On 8/22/2025 3:43 AM, Sohil Mehta wrote:
+> On 8/21/2025 12:34 PM, Sohil Mehta wrote:
+>> On 8/21/2025 6:15 AM, David Woodhouse wrote:
 >>
-> I've done a high-level review of this and it looks reasonable to me
-> overall, but I'd like to get some feedback from Lukasz on it.
-
-Thank you, Rafael, for the review! I will send v4 as soon as
-I get feedback from Lukasz.
-
+>>> Hm. My test host is INTEL_HASWELL_X (0x63f). For reasons which are
+>>> unclear to me, QEMU doesn't set bit 8 of 0x80000007 EDX unless I
+>>> explicitly append ',+invtsc' to the existing '-cpu host' on its command
+>>> line. So now my guest doesn't think it has X86_FEATURE_CONSTANT_TSC.
+>>>
+>>
+>> Haswell should have X86_FEATURE_CONSTANT_TSC, so I would have expected
+>> the guest bit to be set. Until now, X86_FEATURE_CONSTANT_TSC was set
+>> based on the Family-model instead of the CPUID enumeration which may
+>> have hid the issue.
+>>
 > 
-> My two requests for now are: please reorder the series, so patches
-> [3-5] go first, and remove the ending period (".") from all of the
-> patch subjects.
+> Correction:
+> s/instead/as well as
+> 
+>>  From my initial look at the QEMU implementation, this seems intentional.
+>>
+>> QEMU considers Invariant TSC as un-migratable which prevents it from
+>> being exposed to migratable guests (default).
+>> target/i386/cpu.c:
+>> [FEAT_8000_0007_EDX]
+>>           .unmigratable_flags = CPUID_APM_INVTSC,
+>>
+>> Can you please try '-cpu host,migratable=off'?
+> 
+> This is mainly to verify. If confirmed, I am not sure what the long term
+> solution should be.
 
-Sure. Moving [3-5] to the beginning of the series and making the
-title style consistent makes sense. I will change it in the next
-version as suggested.
+yeah. It's the intentional behavior of QEMU.
 
-Regards,
-Changwoo Min
+Invariant TSC is ummigratable unless users explicitly configures the TSC 
+frequency, e.g., "-cpu host,tsc-frequency=xxx". Because the TSC 
+frequency is by default the host's frequency if no "tsc-frequency" 
+specified, and it will change when the VM is migrated to a host with a 
+different TSC frequency.
+
+It's the specific behavior/rule of QEMU. We just need to keep it in 
+mind. If we want to expose invariant TSC to the guest with QEMU's "-cpu 
+host", we can either:
+1) explicitly configure the "tsc-frequency", or
+2) explicitly turn off "migratable"
 
