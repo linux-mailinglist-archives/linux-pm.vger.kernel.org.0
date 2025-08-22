@@ -1,531 +1,523 @@
-Return-Path: <linux-pm+bounces-32899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32900-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A370FB313F5
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 11:48:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D1AB314B5
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 12:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A187B00054
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 09:42:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3FB9188E1E5
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 10:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CA72F363D;
-	Fri, 22 Aug 2025 09:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D95296BA0;
+	Fri, 22 Aug 2025 10:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sMhN6xSX"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="opvHGLpI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0662F3633
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 09:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC544291C3F
+	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 10:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755855402; cv=none; b=HKa4E0u0HIPbyjZgnmdVjkS+3RcVBcMIbo+e8dwbNnXUZeYNOCm9OE34nkENwd8Y5gFVW0uBVlYSklsieDKFIIEJ0R3CGC20t/2vjnIKI12voaZ+IP6QA0G1uubKdr46j7H29iSZpFIm2jZtzz8i1stwrzjnmr+CXggC1Vtv5YM=
+	t=1755857064; cv=none; b=ImbysvLy57R0+zEOY9kFf4NlM91F8ZZkFXHzZDq3uraPVonnaMFtMUc003BPy5oZFc5lPcUSccSVx1p30PCZLPfuHASLSoGnwzOD+4L3HRK0Mmt2PS1BAJpMf3G1rJjitHXa9CFCE/rMPU8wJmcY17EQ8296USBtH4ECBOuUeMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755855402; c=relaxed/simple;
-	bh=Ru72dzH6CcO3HdmshXWVQKHfLm0onn8kOzSjOBskji8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uovoKYz8rBt5yap194FxYrTnOIhI0z6FHJaAoZa1Y5AEDgVDUGq3P+PutcsJgHaHH97WGjZezksvQ9+ItQUquCg2yXm7AGkFz+FiDJJp7CgxXSACGaDxVL5VOuE8Br2L2KTMeizfky7r4OurCsQiybwJimKk/PTANl6IA8ymlng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sMhN6xSX; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-71d603cebd9so21417657b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 02:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755855399; x=1756460199; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kf+CyVGh1QHS1PkbjKcHGY/6k+CR5O9UX200twaR+/E=;
-        b=sMhN6xSXwPTTw9NPpysFiBYWXbZr0w0/DJYIdY5/HD1c02jYe9qp+95hIMv0kqHBCD
-         aPbUheGinj+9KTmiJdM+e5tiXj4YtHhWlZnwrNVMYSFJ+X8e2s4cfVMQx+p6yA1VcVmr
-         MHQ2hzzSXTAVrj3LJdrFjEebJhnFm7IW/eBXfV6vfbXTYp4B+GZ0ArLix7Bl1AhJQpCK
-         perrDvpOCtyQ89Hx9abxTIKZiG7aNCrUM9fcSChGHQG/asEtg1cB54CSBO6gaHdf73A7
-         oOc+WIHDunvBTOaszMgoDW/aGKG8ySQ2UEwwYzLK9/xpNcTmoH4JRNd8BqtXqkBgu1OP
-         YeGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755855399; x=1756460199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kf+CyVGh1QHS1PkbjKcHGY/6k+CR5O9UX200twaR+/E=;
-        b=TGblAdq4eoeGpy4tBZ4RPs8/Kj16rVutOobEUqGlsp9RvqX0Ric/dhI4l7JYPlMsHH
-         D8xIlwUpV9UbHfGt/z7HnGnxwCVQamHg9bn5xJls/Xr+zlVmpjvhhiMYekKiMoeUzqbM
-         BhT5F26P2i69Q/73krQjxso3tAOdHYVMkOP+HwtoD7CuXCv6+IA9IVWsYCfOSsxy0asK
-         HWNRsIVuSjBnHS8B21unox+8Tm2qpWYloYMVS9MMSoQuiSTg2GOx1yQDcRZjwaYzvKnC
-         d5tm6O6TxGHVBxHvw3jiHAHUy2aXS9MZzSNyTxYjvpqN46qEYbUNDY4chaRV42PLIZA7
-         mcwg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOA1eHWgkNVYHnatW3sAD/xmzMixCnDAZCLNlDhnP9UGk1XsdpS/UiTrJoE47+Oz6yJDEhro1G5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKkykXC7Sl+DoVkHoDxGTCxDniPh7v8Y4HcgYU49faawi1IxSh
-	EOgSRDKifn4cTATJdaX2Xrsc/XXDpQenVxWzHyB1R1tJnoULmSwSb27Bkp+y8neKJ0yZw8AMDAI
-	xXLyH6CU1MVWn167ptlokPkYnMjXxFdzTthkK57I1xw==
-X-Gm-Gg: ASbGncuB0DxQjqIGApX7B1QNJkhuBf9kkSgwMMffHnw0jjyrWYOzwYWF2KIORePkfHg
-	lzKIv2B2Zn+mFntv5w/A/dgyg8nGv+cvQotzT/1a02pgMzw28SYvX3kWpIWOzmTabLH5klzbDyY
-	qq52DrGrgmHPSPMdkmWfOy9AhfuyWgeTI3Y8rIeRbyE9c6/nJ2Vy7mRBZlOE9hltbWJPqHxbL9s
-	ro7uNC5
-X-Google-Smtp-Source: AGHT+IFrNSo/L6uEHcDP8r2F6liyi1v4cmZgTHZpa0LIkug04eoxV4wP2Ed9/DxooBcTty3gQ4cziEUnYQDUIX8w/ww=
-X-Received: by 2002:a05:690c:4493:b0:71e:841f:6799 with SMTP id
- 00721157ae682-71fdc3294d0mr22283917b3.21.1755855398395; Fri, 22 Aug 2025
- 02:36:38 -0700 (PDT)
+	s=arc-20240116; t=1755857064; c=relaxed/simple;
+	bh=TwZb08ZO1BMh3Y8n2PKN7yt4YKM+gVo/KKzkY1nmN20=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=N/flHIxNVz93qN0YfW2fAjAsZ8fBbx8kBHk8ju1ISo1TpOtr+RuqO1fihoAEtIjlSG5Na9Cw841gQENt3MggdDs+7hhPjdnfHuImvZMc4zTl/ZBxGiJoBX6q9DIjQ6etzqBWcsirqTGLNFIDMRgcpBHLhrFbpvak4e2n0ZIpkVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=opvHGLpI; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250822100420euoutp02cea0326716953cb5e6e418b4eaeb904e~eDrF4hmPe2876528765euoutp02d
+	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 10:04:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250822100420euoutp02cea0326716953cb5e6e418b4eaeb904e~eDrF4hmPe2876528765euoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755857060;
+	bh=3Ly30/KuqQxDcrwM6AN4DMFM25t8Rw8koKQas0VV1Zc=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=opvHGLpINycQ1IwancW74LKCE5tSEM+lCgmUpWBKrZ0ihkI7hejrVLegdKDFNgVhN
+	 odmzqz7Y/N2Nwf++0ECL95CDWXx1ixBD47ejieazgb///rOMcrosRnY+l3qr3ShOEV
+	 vmoA3FfBaFvXAiConaBPB9EBsT1Yb2XFr1QTsCtM=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250822100419eucas1p2d35b99f1451ab275a721424bb4222128~eDrFPTRbt2758327583eucas1p2O;
+	Fri, 22 Aug 2025 10:04:19 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250822100418eusmtip280d80887a1259aa2ad4227706883d851~eDrEMk51E1023110231eusmtip2x;
+	Fri, 22 Aug 2025 10:04:18 +0000 (GMT)
+Message-ID: <55e606c5-9ac0-4e0b-8506-5f88a6fc540e@samsung.com>
+Date: Fri, 22 Aug 2025 12:04:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250821-pxa1908-genpd-v2-0-eba413edd526@dujemihanovic.xyz> <20250821-pxa1908-genpd-v2-3-eba413edd526@dujemihanovic.xyz>
-In-Reply-To: <20250821-pxa1908-genpd-v2-3-eba413edd526@dujemihanovic.xyz>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 22 Aug 2025 11:36:02 +0200
-X-Gm-Features: Ac12FXwTIkzJKtDqOTwBi8LGRZbQGotFqgLm5vzl0UBnThOpGCgdrIxuC96gIxg
-Message-ID: <CAPDyKFoHWNuSmnN0e=QR73r0Ea-XJogbB8S3K+_=VRovzXL2Sw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] clk: mmp: Add PXA1908 power domain driver
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, phone-devel@vger.kernel.org, 
-	~postmarketos/upstreaming@lists.sr.ht, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, 21 Aug 2025 at 13:19, Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz> =
-wrote:
->
-> Marvell's PXA1908 SoC has a few power domains for its VPU, GPU, image
-> processor and DSI PHY. Add a driver to control these.
->
-> Also create a separate Kconfig entry for the PXA1908 clock drivers to
-> allow satisfying the driver's dependencies.
->
-> Signed-off-by: Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
-> ---
-> v2:
-> - Move to clk subsystem, instantiate the driver from the APMU clock
->   driver
-> - Drop clock handling
-> - Squash MAINTAINERS patch
-> ---
->  MAINTAINERS                             |   5 +
->  drivers/clk/Kconfig                     |   1 +
->  drivers/clk/mmp/Kconfig                 |  14 ++
->  drivers/clk/mmp/Makefile                |   5 +-
->  drivers/clk/mmp/clk-pxa1908-apmu.c      |   2 +-
->  drivers/clk/mmp/clk.h                   |   2 +
->  drivers/clk/mmp/pxa1908-power-domains.c | 253 ++++++++++++++++++++++++++=
-++++++
->  7 files changed, 280 insertions(+), 2 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index daf520a13bdf6a991c0160a96620f40308c29ee0..309090a5ba6c03a2c00d3e39a=
-896748958ffa593 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2869,9 +2869,14 @@ ARM/Marvell PXA1908 SOC support
->  M:     Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
->  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribe=
-rs)
->  S:     Maintained
-> +C:     ircs://irc.oftc.net/pxa1908-mainline
-> +F:     Documentation/devicetree/bindings/clock/marvell,pxa1908.yaml
->  F:     arch/arm64/boot/dts/marvell/mmp/
-> +F:     drivers/clk/mmp/Kconfig
->  F:     drivers/clk/mmp/clk-pxa1908*.c
-> +F:     drivers/clk/mmp/pxa1908-power-domains.c
->  F:     include/dt-bindings/clock/marvell,pxa1908.h
-> +F:     include/dt-bindings/power/marvell,pxa1908-power.h
->
->  ARM/Mediatek RTC DRIVER
->  M:     Eddie Huang <eddie.huang@mediatek.com>
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index 4d56475f94fc1e28823fe6aee626a96847d4e6d5..68a9641fc649a23013b2d8a9e=
-9f5ecb31d623abb 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -511,6 +511,7 @@ source "drivers/clk/imx/Kconfig"
->  source "drivers/clk/ingenic/Kconfig"
->  source "drivers/clk/keystone/Kconfig"
->  source "drivers/clk/mediatek/Kconfig"
-> +source "drivers/clk/mmp/Kconfig"
->  source "drivers/clk/meson/Kconfig"
->  source "drivers/clk/mstar/Kconfig"
->  source "drivers/clk/microchip/Kconfig"
-> diff --git a/drivers/clk/mmp/Kconfig b/drivers/clk/mmp/Kconfig
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..9dca5b50fd15a1d2ca71163c6=
-49a51592da15021
-> --- /dev/null
-> +++ b/drivers/clk/mmp/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +config COMMON_CLK_PXA1908
-> +       bool "Clock driver for Marvell PXA1908"
-> +       depends on ARCH_MMP || COMPILE_TEST
-> +       depends on OF
-> +       default y if ARCH_MMP && ARM64
-> +       select PM
-> +       select PM_GENERIC_DOMAINS
-> +       select PM_GENERIC_DOMAINS_OF
-> +       select REGMAP_MMIO
-> +       help
-> +         This driver supports the Marvell PXA1908 SoC clocks. The SoC's =
-power
-> +         domains are also supported by the driver.
-> diff --git a/drivers/clk/mmp/Makefile b/drivers/clk/mmp/Makefile
-> index 062cd87fa8ddcc6808b6236f8c4dd524aaf02030..0b9ad29087ff23b8dc247bfd3=
-8f0e55382e16759 100644
-> --- a/drivers/clk/mmp/Makefile
-> +++ b/drivers/clk/mmp/Makefile
-> @@ -11,4 +11,7 @@ obj-$(CONFIG_MACH_MMP_DT) +=3D clk-of-pxa168.o clk-of-p=
-xa910.o
->  obj-$(CONFIG_COMMON_CLK_MMP2) +=3D clk-of-mmp2.o clk-pll.o pwr-island.o
->  obj-$(CONFIG_COMMON_CLK_MMP2_AUDIO) +=3D clk-audio.o
->
-> -obj-$(CONFIG_ARCH_MMP) +=3D clk-of-pxa1928.o clk-pxa1908-apbc.o clk-pxa1=
-908-apbcp.o clk-pxa1908-apmu.o clk-pxa1908-mpmu.o
-> +obj-$(CONFIG_COMMON_CLK_PXA1908) +=3D clk-pxa1908-apbc.o clk-pxa1908-apb=
-cp.o \
-> +       clk-pxa1908-mpmu.o clk-pxa1908-apmu.o pxa1908-power-domains.o
-> +
-> +obj-$(CONFIG_ARCH_MMP) +=3D clk-of-pxa1928.o
-> diff --git a/drivers/clk/mmp/clk-pxa1908-apmu.c b/drivers/clk/mmp/clk-pxa=
-1908-apmu.c
-> index d3a070687fc5b9fb5338f377f82e7664ca0aac29..3d4494cfc9bc28e1e614a11f5=
-6aa3d211fb6ec26 100644
-> --- a/drivers/clk/mmp/clk-pxa1908-apmu.c
-> +++ b/drivers/clk/mmp/clk-pxa1908-apmu.c
-> @@ -98,7 +98,7 @@ static int pxa1908_apmu_probe(struct platform_device *p=
-dev)
->
->         pxa1908_axi_periph_clk_init(pxa_unit);
->
-> -       return 0;
-> +       return pxa1908_pd_register(&pdev->dev);
->  }
->
->  static const struct of_device_id pxa1908_apmu_match_table[] =3D {
-> diff --git a/drivers/clk/mmp/clk.h b/drivers/clk/mmp/clk.h
-> index c83cec169ddc5e3fcd0561cf857f248178c25b68..6d3d089a0372fa48c8f61acea=
-cdd1b2059f2c8dd 100644
-> --- a/drivers/clk/mmp/clk.h
-> +++ b/drivers/clk/mmp/clk.h
-> @@ -258,4 +258,6 @@ struct generic_pm_domain *mmp_pm_domain_register(cons=
-t char *name,
->                 u32 power_on, u32 reset, u32 clock_enable,
->                 unsigned int flags, spinlock_t *lock);
->
-> +int pxa1908_pd_register(struct device *dev);
-> +
->  #endif
-> diff --git a/drivers/clk/mmp/pxa1908-power-domains.c b/drivers/clk/mmp/px=
-a1908-power-domains.c
-
-By looking at the implementation of the power-domain code below, it
-seems to me that this code is better maintained within the pmdomain
-subsystem (drivers/pmdomain/pxa perhaps). May I suggest that you move
-it there.
-
-I guess the easiest way to do this is to export the
-pxa1908_pd_register() function - but you could explore using the
-auxiliary bus too, to instantiate a power-domain driver as an
-auxiliary driver.
-
-Other than that, the code looks good to me!
-
-Kind regards
-Uffe
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 1/4] drm/imagination: Use pwrseq for TH1520 GPU
+ power management
+To: Matt Coster <Matt.Coster@imgtec.com>
+Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel
+	<p.zabel@pengutronix.de>, Frank Binns <Frank.Binns@imgtec.com>, Maarten
+	Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
+	<ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, Drew
+	Fustini <fustini@kernel.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <aa8d4ffb-4607-4bff-9d87-8635cd37d439@imgtec.com>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250822100419eucas1p2d35b99f1451ab275a721424bb4222128
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed
+X-EPHeader: CA
+X-CMS-RootMailID: 20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed
+References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
+	<CGME20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed@eucas1p2.samsung.com>
+	<20250822-apr_14_for_sending-v13-1-af656f7cc6c3@samsung.com>
+	<aa8d4ffb-4607-4bff-9d87-8635cd37d439@imgtec.com>
 
 
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..9f698a17e5a920d0472b74fce=
-137b42cae0569d2
-> --- /dev/null
-> +++ b/drivers/clk/mmp/pxa1908-power-domains.c
-> @@ -0,0 +1,253 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2025 Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
-> + */
-> +
-> +#include <linux/container_of.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +#include <linux/regmap.h>
-> +#include <linux/units.h>
-> +
-> +#include <dt-bindings/power/marvell,pxa1908-power.h>
-> +
-> +#include "clk.h"
-> +
-> +/* VPU, GPU, ISP */
-> +#define APMU_PWR_CTRL_REG      0xd8
-> +#define APMU_PWR_BLK_TMR_REG   0xdc
-> +#define APMU_PWR_STATUS_REG    0xf0
-> +
-> +/* DSI */
-> +#define APMU_DEBUG             0x88
-> +#define DSI_PHY_DVM_MASK       BIT(31)
-> +
-> +#define POWER_ON_LATENCY_US    300
-> +#define POWER_OFF_LATENCY_US   20
-> +
-> +#define NR_DOMAINS     5
-> +
-> +struct pxa1908_pd_ctrl {
-> +       struct genpd_onecell_data onecell_data;
-> +       struct generic_pm_domain *domains[NR_DOMAINS];
-> +       struct regmap *base;
-> +};
-> +
-> +struct pxa1908_pd_data {
-> +       u32 reg_clk_res_ctrl;
-> +       u32 hw_mode;
-> +       u32 pwr_state;
-> +       bool keep_on;
-> +       int id;
-> +};
-> +
-> +struct pxa1908_pd {
-> +       const struct pxa1908_pd_data data;
-> +       struct pxa1908_pd_ctrl *ctrl;
-> +       struct generic_pm_domain genpd;
-> +       struct device *dev;
-> +       bool initialized;
-> +       int num_clks;
-> +};
-> +
-> +static bool pxa1908_pd_is_on(struct pxa1908_pd *pd)
-> +{
-> +       struct pxa1908_pd_ctrl *ctrl =3D pd->ctrl;
-> +
-> +       return regmap_test_bits(ctrl->base, APMU_PWR_STATUS_REG, pd->data=
-.pwr_state);
-> +}
-> +
-> +static int pxa1908_pd_power_on(struct generic_pm_domain *genpd)
-> +{
-> +       struct pxa1908_pd *pd =3D container_of(genpd, struct pxa1908_pd, =
-genpd);
-> +       struct pxa1908_pd_ctrl *ctrl =3D pd->ctrl;
-> +       const struct pxa1908_pd_data *data =3D &pd->data;
-> +       unsigned int status;
-> +       int ret =3D 0;
-> +
-> +       regmap_set_bits(ctrl->base, data->reg_clk_res_ctrl, data->hw_mode=
-);
-> +       if (data->id !=3D PXA1908_POWER_DOMAIN_ISP)
-> +               regmap_write(ctrl->base, APMU_PWR_BLK_TMR_REG, 0x20001fff=
-);
-> +       regmap_set_bits(ctrl->base, APMU_PWR_CTRL_REG, data->pwr_state);
-> +
-> +       usleep_range(POWER_ON_LATENCY_US, POWER_ON_LATENCY_US * 2);
-> +
-> +       ret =3D regmap_read_poll_timeout(ctrl->base, APMU_PWR_STATUS_REG,=
- status,
-> +                                      status & data->pwr_state, 6, 25 * =
-USEC_PER_MSEC);
-> +       if (ret =3D=3D -ETIMEDOUT)
-> +               dev_err(pd->dev, "timed out powering on domain '%s'\n", p=
-d->genpd.name);
-> +
-> +       return ret;
-> +}
-> +
-> +static int pxa1908_pd_power_off(struct generic_pm_domain *genpd)
-> +{
-> +       struct pxa1908_pd *pd =3D container_of(genpd, struct pxa1908_pd, =
-genpd);
-> +       struct pxa1908_pd_ctrl *ctrl =3D pd->ctrl;
-> +       const struct pxa1908_pd_data *data =3D &pd->data;
-> +       unsigned int status;
-> +       int ret;
-> +
-> +       regmap_clear_bits(ctrl->base, APMU_PWR_CTRL_REG, data->pwr_state)=
-;
-> +
-> +       usleep_range(POWER_OFF_LATENCY_US, POWER_OFF_LATENCY_US * 2);
-> +
-> +       ret =3D regmap_read_poll_timeout(ctrl->base, APMU_PWR_STATUS_REG,=
- status,
-> +                                      !(status & data->pwr_state), 6, 25=
- * USEC_PER_MSEC);
-> +       if (ret =3D=3D -ETIMEDOUT) {
-> +               dev_err(pd->dev, "timed out powering off domain '%s'\n", =
-pd->genpd.name);
-> +               return ret;
-> +       }
-> +
-> +       return regmap_clear_bits(ctrl->base, data->reg_clk_res_ctrl, data=
-->hw_mode);
-> +}
-> +
-> +static inline int pxa1908_dsi_power_on(struct generic_pm_domain *genpd)
-> +{
-> +       struct pxa1908_pd *pd =3D container_of(genpd, struct pxa1908_pd, =
-genpd);
-> +       struct pxa1908_pd_ctrl *ctrl =3D pd->ctrl;
-> +
-> +       return regmap_set_bits(ctrl->base, APMU_DEBUG, DSI_PHY_DVM_MASK);
-> +}
-> +
-> +static inline int pxa1908_dsi_power_off(struct generic_pm_domain *genpd)
-> +{
-> +       struct pxa1908_pd *pd =3D container_of(genpd, struct pxa1908_pd, =
-genpd);
-> +       struct pxa1908_pd_ctrl *ctrl =3D pd->ctrl;
-> +
-> +       return regmap_clear_bits(ctrl->base, APMU_DEBUG, DSI_PHY_DVM_MASK=
-);
-> +}
-> +
-> +#define DOMAIN(_id, _name, ctrl, mode, state) \
-> +       [_id] =3D { \
-> +               .data =3D { \
-> +                       .reg_clk_res_ctrl =3D ctrl, \
-> +                       .hw_mode =3D BIT(mode), \
-> +                       .pwr_state =3D BIT(state), \
-> +                       .id =3D _id, \
-> +               }, \
-> +               .genpd =3D { \
-> +                       .name =3D _name, \
-> +                       .power_on =3D pxa1908_pd_power_on, \
-> +                       .power_off =3D pxa1908_pd_power_off, \
-> +               }, \
-> +       }
-> +
-> +static struct pxa1908_pd domains[NR_DOMAINS] =3D {
-> +       DOMAIN(PXA1908_POWER_DOMAIN_VPU, "vpu", 0xa4, 19, 2),
-> +       DOMAIN(PXA1908_POWER_DOMAIN_GPU, "gpu", 0xcc, 11, 0),
-> +       DOMAIN(PXA1908_POWER_DOMAIN_GPU2D, "gpu2d", 0xf4, 11, 6),
-> +       DOMAIN(PXA1908_POWER_DOMAIN_ISP, "isp", 0x38, 15, 4),
-> +       [PXA1908_POWER_DOMAIN_DSI] =3D {
-> +               .genpd =3D {
-> +                       .name =3D "dsi",
-> +                       .power_on =3D pxa1908_dsi_power_on,
-> +                       .power_off =3D pxa1908_dsi_power_off,
-> +                       /*
-> +                        * TODO: There is no DSI driver written yet and u=
-ntil then we probably
-> +                        * don't want to power off the DSI PHY ever.
-> +                        */
-> +                       .flags =3D GENPD_FLAG_ALWAYS_ON,
-> +               },
-> +               .data =3D {
-> +                       /* See above. */
-> +                       .keep_on =3D true,
-> +               },
-> +       },
-> +};
-> +
-> +static void pxa1908_pd_cleanup(struct pxa1908_pd_ctrl *ctrl)
-> +{
-> +       struct pxa1908_pd *pd;
-> +       int ret;
-> +
-> +       for (int i =3D NR_DOMAINS - 1; i >=3D 0; i--) {
-> +               pd =3D &domains[i];
-> +
-> +               if (!pd->initialized)
-> +                       continue;
-> +
-> +               ret =3D pm_genpd_remove(&pd->genpd);
-> +               if (ret)
-> +                       dev_err(pd->dev, "failed to remove domain '%s': %=
-d\n",
-> +                               pd->genpd.name, ret);
-> +               if (pxa1908_pd_is_on(pd) && !pd->data.keep_on)
-> +                       pxa1908_pd_power_off(&pd->genpd);
-> +       }
-> +}
-> +
-> +static int
-> +pxa1908_pd_init(struct pxa1908_pd_ctrl *ctrl, int id, struct device *dev=
-)
-> +{
-> +       struct pxa1908_pd *pd =3D &domains[id];
-> +       int ret;
-> +
-> +       pd->dev =3D dev;
-> +       pd->ctrl =3D ctrl;
-> +       ctrl->domains[id] =3D &pd->genpd;
-> +
-> +       /* Make sure the state of the hardware is synced with the domain =
-table above. */
-> +       if (pd->data.keep_on) {
-> +               ret =3D pd->genpd.power_on(&pd->genpd);
-> +               if (ret) {
-> +                       dev_err(dev, "failed to power on domain '%s': %d\=
-n", pd->genpd.name, ret);
-> +                       return ret;
-> +               }
-> +       } else {
-> +               if (pxa1908_pd_is_on(pd)) {
-> +                       dev_warn(dev,
-> +                                "domain '%s' is on despite being default=
- off; powering off\n",
-> +                                pd->genpd.name);
-> +
-> +                       ret =3D pxa1908_pd_power_off(&pd->genpd);
-> +                       if (ret) {
-> +                               dev_err(dev, "failed to power off domain =
-'%s': %d\n",
-> +                                       pd->genpd.name, ret);
-> +                               return ret;
-> +                       }
-> +               }
-> +       }
-> +
-> +       ret =3D pm_genpd_init(&pd->genpd, NULL, !pd->data.keep_on);
-> +       if (ret) {
-> +               dev_err(dev, "domain '%s' failed to initialize: %d\n", pd=
-->genpd.name, ret);
-> +               return ret;
-> +       }
-> +
-> +       pd->initialized =3D true;
-> +
-> +       return 0;
-> +}
-> +
-> +int pxa1908_pd_register(struct device *dev)
-> +{
-> +       struct pxa1908_pd_ctrl *ctrl;
-> +       int ret;
-> +
-> +       ctrl =3D devm_kzalloc(dev, sizeof(*ctrl), GFP_KERNEL);
-> +       if (!ctrl)
-> +               return -ENOMEM;
-> +
-> +       ctrl->base =3D syscon_node_to_regmap(dev->of_node);
-> +       if (IS_ERR(ctrl->base)) {
-> +               dev_err(dev, "no regmap available\n");
-> +               return PTR_ERR(ctrl->base);
-> +       }
-> +
-> +       ctrl->onecell_data.domains =3D ctrl->domains;
-> +       ctrl->onecell_data.num_domains =3D NR_DOMAINS;
-> +
-> +       for (int i =3D 0; i < NR_DOMAINS; i++) {
-> +               ret =3D pxa1908_pd_init(ctrl, i, dev);
-> +               if (ret)
-> +                       goto err;
-> +       }
-> +
-> +       return of_genpd_add_provider_onecell(dev->of_node, &ctrl->onecell=
-_data);
-> +
-> +err:
-> +       pxa1908_pd_cleanup(ctrl);
-> +       return ret;
-> +}
->
-> --
-> 2.50.1
->
+
+On 8/22/25 11:28, Matt Coster wrote:
+> On 21/08/2025 23:20, Michal Wilczynski wrote:
+>> Update the Imagination PVR DRM driver to leverage the pwrseq framework
+>> for managing the complex power sequence of the GPU on the T-HEAD TH1520
+>> SoC.
+>>
+>> To cleanly separate platform-specific logic from the generic driver,
+>> this patch introduces an `init` callback to the `pwr_power_sequence_ops`
+>> struct. This allows for different power management strategies to be
+>> selected at probe time based on the device's compatible string.
+>>
+>> A `pvr_device_data` struct, associated with each compatible in the
+>> of_device_id table, points to the appropriate ops table (manual or
+>> pwrseq).
+>>
+>> At probe time, the driver now calls the `->init()` op. For pwrseq-based
+>> platforms, this callback calls `devm_pwrseq_get("gpu-power")`, deferring
+>> probe if the sequencer is not yet available. For other platforms, it
+>> falls back to the existing manual clock and reset handling. The runtime
+>> PM callbacks continue to call the appropriate functions via the ops
+>> table.
+>>
+>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> 
+> Reviewed-by: Matt Coster <matt.coster@imgtec.com>
+> 
+> Would you like me to take the non-DTS changes via drm-misc-next?
+
+Yeah I think this would be appropriate.
+Thanks !
+
+> 
+> Cheers,
+> Matt
+> 
+>> ---
+>>  drivers/gpu/drm/imagination/pvr_device.c |  22 +----
+>>  drivers/gpu/drm/imagination/pvr_device.h |  17 ++++
+>>  drivers/gpu/drm/imagination/pvr_drv.c    |  23 ++++-
+>>  drivers/gpu/drm/imagination/pvr_power.c  | 158 +++++++++++++++++++++++--------
+>>  drivers/gpu/drm/imagination/pvr_power.h  |  15 +++
+>>  5 files changed, 176 insertions(+), 59 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/imagination/pvr_device.c b/drivers/gpu/drm/imagination/pvr_device.c
+>> index 8b9ba4983c4cb5bc40342fcafc4259078bc70547..294b6019b4155bb7fdb7de73ccf7fa8ad867811f 100644
+>> --- a/drivers/gpu/drm/imagination/pvr_device.c
+>> +++ b/drivers/gpu/drm/imagination/pvr_device.c
+>> @@ -23,6 +23,7 @@
+>>  #include <linux/firmware.h>
+>>  #include <linux/gfp.h>
+>>  #include <linux/interrupt.h>
+>> +#include <linux/of.h>
+>>  #include <linux/platform_device.h>
+>>  #include <linux/pm_runtime.h>
+>>  #include <linux/reset.h>
+>> @@ -121,21 +122,6 @@ static int pvr_device_clk_init(struct pvr_device *pvr_dev)
+>>  	return 0;
+>>  }
+>>  
+>> -static int pvr_device_reset_init(struct pvr_device *pvr_dev)
+>> -{
+>> -	struct drm_device *drm_dev = from_pvr_device(pvr_dev);
+>> -	struct reset_control *reset;
+>> -
+>> -	reset = devm_reset_control_get_optional_exclusive(drm_dev->dev, NULL);
+>> -	if (IS_ERR(reset))
+>> -		return dev_err_probe(drm_dev->dev, PTR_ERR(reset),
+>> -				     "failed to get gpu reset line\n");
+>> -
+>> -	pvr_dev->reset = reset;
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>  /**
+>>   * pvr_device_process_active_queues() - Process all queue related events.
+>>   * @pvr_dev: PowerVR device to check
+>> @@ -618,6 +604,9 @@ pvr_device_init(struct pvr_device *pvr_dev)
+>>  	struct device *dev = drm_dev->dev;
+>>  	int err;
+>>  
+>> +	/* Get the platform-specific data based on the compatible string. */
+>> +	pvr_dev->device_data = of_device_get_match_data(dev);
+>> +
+>>  	/*
+>>  	 * Setup device parameters. We do this first in case other steps
+>>  	 * depend on them.
+>> @@ -631,8 +620,7 @@ pvr_device_init(struct pvr_device *pvr_dev)
+>>  	if (err)
+>>  		return err;
+>>  
+>> -	/* Get the reset line for the GPU */
+>> -	err = pvr_device_reset_init(pvr_dev);
+>> +	err = pvr_dev->device_data->pwr_ops->init(pvr_dev);
+>>  	if (err)
+>>  		return err;
+>>  
+>> diff --git a/drivers/gpu/drm/imagination/pvr_device.h b/drivers/gpu/drm/imagination/pvr_device.h
+>> index 7cb01c38d2a9c3fc71effe789d4dfe54eddd93ee..ab8f56ae15df6c2888feb16b1d87b59510961936 100644
+>> --- a/drivers/gpu/drm/imagination/pvr_device.h
+>> +++ b/drivers/gpu/drm/imagination/pvr_device.h
+>> @@ -37,6 +37,9 @@ struct clk;
+>>  /* Forward declaration from <linux/firmware.h>. */
+>>  struct firmware;
+>>  
+>> +/* Forward declaration from <linux/pwrseq/consumer.h> */
+>> +struct pwrseq_desc;
+>> +
+>>  /**
+>>   * struct pvr_gpu_id - Hardware GPU ID information for a PowerVR device
+>>   * @b: Branch ID.
+>> @@ -57,6 +60,14 @@ struct pvr_fw_version {
+>>  	u16 major, minor;
+>>  };
+>>  
+>> +/**
+>> + * struct pvr_device_data - Platform specific data associated with a compatible string.
+>> + * @pwr_ops: Pointer to a structure with platform-specific power functions.
+>> + */
+>> +struct pvr_device_data {
+>> +	const struct pvr_power_sequence_ops *pwr_ops;
+>> +};
+>> +
+>>  /**
+>>   * struct pvr_device - powervr-specific wrapper for &struct drm_device
+>>   */
+>> @@ -98,6 +109,9 @@ struct pvr_device {
+>>  	/** @fw_version: Firmware version detected at runtime. */
+>>  	struct pvr_fw_version fw_version;
+>>  
+>> +	/** @device_data: Pointer to platform-specific data. */
+>> +	const struct pvr_device_data *device_data;
+>> +
+>>  	/** @regs_resource: Resource representing device control registers. */
+>>  	struct resource *regs_resource;
+>>  
+>> @@ -148,6 +162,9 @@ struct pvr_device {
+>>  	 */
+>>  	struct reset_control *reset;
+>>  
+>> +	/** @pwrseq: Pointer to a power sequencer, if one is used. */
+>> +	struct pwrseq_desc *pwrseq;
+>> +
+>>  	/** @irq: IRQ number. */
+>>  	int irq;
+>>  
+>> diff --git a/drivers/gpu/drm/imagination/pvr_drv.c b/drivers/gpu/drm/imagination/pvr_drv.c
+>> index b058ec183bb30ab5c3db17ebaadf2754520a2a1f..916b40ced7eb0408fe985ba1b83b3be2eb024bae 100644
+>> --- a/drivers/gpu/drm/imagination/pvr_drv.c
+>> +++ b/drivers/gpu/drm/imagination/pvr_drv.c
+>> @@ -1480,15 +1480,33 @@ static void pvr_remove(struct platform_device *plat_dev)
+>>  	pvr_power_domains_fini(pvr_dev);
+>>  }
+>>  
+>> +static const struct pvr_device_data pvr_device_data_manual = {
+>> +	.pwr_ops = &pvr_power_sequence_ops_manual,
+>> +};
+>> +
+>> +static const struct pvr_device_data pvr_device_data_pwrseq = {
+>> +	.pwr_ops = &pvr_power_sequence_ops_pwrseq,
+>> +};
+>> +
+>>  static const struct of_device_id dt_match[] = {
+>> -	{ .compatible = "img,img-rogue", .data = NULL },
+>> +	{
+>> +		.compatible = "thead,th1520-gpu",
+>> +		.data = &pvr_device_data_pwrseq,
+>> +	},
+>> +	{
+>> +		.compatible = "img,img-rogue",
+>> +		.data = &pvr_device_data_manual,
+>> +	},
+>>  
+>>  	/*
+>>  	 * This legacy compatible string was introduced early on before the more generic
+>>  	 * "img,img-rogue" was added. Keep it around here for compatibility, but never use
+>>  	 * "img,img-axe" in new devicetrees.
+>>  	 */
+>> -	{ .compatible = "img,img-axe", .data = NULL },
+>> +	{
+>> +		.compatible = "img,img-axe",
+>> +		.data = &pvr_device_data_manual,
+>> +	},
+>>  	{}
+>>  };
+>>  MODULE_DEVICE_TABLE(of, dt_match);
+>> @@ -1513,4 +1531,5 @@ MODULE_DESCRIPTION(PVR_DRIVER_DESC);
+>>  MODULE_LICENSE("Dual MIT/GPL");
+>>  MODULE_IMPORT_NS("DMA_BUF");
+>>  MODULE_FIRMWARE("powervr/rogue_33.15.11.3_v1.fw");
+>> +MODULE_FIRMWARE("powervr/rogue_36.52.104.182_v1.fw");
+>>  MODULE_FIRMWARE("powervr/rogue_36.53.104.796_v1.fw");
+>> diff --git a/drivers/gpu/drm/imagination/pvr_power.c b/drivers/gpu/drm/imagination/pvr_power.c
+>> index 187a07e0bd9adb2f0713ac2c8e091229f4027354..c6e7ff9e935d3b348eff6953c633c72410fdf507 100644
+>> --- a/drivers/gpu/drm/imagination/pvr_power.c
+>> +++ b/drivers/gpu/drm/imagination/pvr_power.c
+>> @@ -18,6 +18,7 @@
+>>  #include <linux/platform_device.h>
+>>  #include <linux/pm_domain.h>
+>>  #include <linux/pm_runtime.h>
+>> +#include <linux/pwrseq/consumer.h>
+>>  #include <linux/reset.h>
+>>  #include <linux/timer.h>
+>>  #include <linux/types.h>
+>> @@ -234,6 +235,118 @@ pvr_watchdog_init(struct pvr_device *pvr_dev)
+>>  	return 0;
+>>  }
+>>  
+>> +static int pvr_power_init_manual(struct pvr_device *pvr_dev)
+>> +{
+>> +	struct drm_device *drm_dev = from_pvr_device(pvr_dev);
+>> +	struct reset_control *reset;
+>> +
+>> +	reset = devm_reset_control_get_optional_exclusive(drm_dev->dev, NULL);
+>> +	if (IS_ERR(reset))
+>> +		return dev_err_probe(drm_dev->dev, PTR_ERR(reset),
+>> +				     "failed to get gpu reset line\n");
+>> +
+>> +	pvr_dev->reset = reset;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int pvr_power_on_sequence_manual(struct pvr_device *pvr_dev)
+>> +{
+>> +	int err;
+>> +
+>> +	err = clk_prepare_enable(pvr_dev->core_clk);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = clk_prepare_enable(pvr_dev->sys_clk);
+>> +	if (err)
+>> +		goto err_core_clk_disable;
+>> +
+>> +	err = clk_prepare_enable(pvr_dev->mem_clk);
+>> +	if (err)
+>> +		goto err_sys_clk_disable;
+>> +
+>> +	/*
+>> +	 * According to the hardware manual, a delay of at least 32 clock
+>> +	 * cycles is required between de-asserting the clkgen reset and
+>> +	 * de-asserting the GPU reset. Assuming a worst-case scenario with
+>> +	 * a very high GPU clock frequency, a delay of 1 microsecond is
+>> +	 * sufficient to ensure this requirement is met across all
+>> +	 * feasible GPU clock speeds.
+>> +	 */
+>> +	udelay(1);
+>> +
+>> +	err = reset_control_deassert(pvr_dev->reset);
+>> +	if (err)
+>> +		goto err_mem_clk_disable;
+>> +
+>> +	return 0;
+>> +
+>> +err_mem_clk_disable:
+>> +	clk_disable_unprepare(pvr_dev->mem_clk);
+>> +
+>> +err_sys_clk_disable:
+>> +	clk_disable_unprepare(pvr_dev->sys_clk);
+>> +
+>> +err_core_clk_disable:
+>> +	clk_disable_unprepare(pvr_dev->core_clk);
+>> +
+>> +	return err;
+>> +}
+>> +
+>> +static int pvr_power_off_sequence_manual(struct pvr_device *pvr_dev)
+>> +{
+>> +	int err;
+>> +
+>> +	err = reset_control_assert(pvr_dev->reset);
+>> +
+>> +	clk_disable_unprepare(pvr_dev->mem_clk);
+>> +	clk_disable_unprepare(pvr_dev->sys_clk);
+>> +	clk_disable_unprepare(pvr_dev->core_clk);
+>> +
+>> +	return err;
+>> +}
+>> +
+>> +const struct pvr_power_sequence_ops pvr_power_sequence_ops_manual = {
+>> +	.init = pvr_power_init_manual,
+>> +	.power_on = pvr_power_on_sequence_manual,
+>> +	.power_off = pvr_power_off_sequence_manual,
+>> +};
+>> +
+>> +static int pvr_power_init_pwrseq(struct pvr_device *pvr_dev)
+>> +{
+>> +	struct device *dev = from_pvr_device(pvr_dev)->dev;
+>> +
+>> +	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
+>> +	if (IS_ERR(pvr_dev->pwrseq)) {
+>> +		/*
+>> +		 * This platform requires a sequencer. If we can't get it, we
+>> +		 * must return the error (including -EPROBE_DEFER to wait for
+>> +		 * the provider to appear)
+>> +		 */
+>> +		return dev_err_probe(dev, PTR_ERR(pvr_dev->pwrseq),
+>> +				     "Failed to get required power sequencer\n");
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int pvr_power_on_sequence_pwrseq(struct pvr_device *pvr_dev)
+>> +{
+>> +	return pwrseq_power_on(pvr_dev->pwrseq);
+>> +}
+>> +
+>> +static int pvr_power_off_sequence_pwrseq(struct pvr_device *pvr_dev)
+>> +{
+>> +	return pwrseq_power_off(pvr_dev->pwrseq);
+>> +}
+>> +
+>> +const struct pvr_power_sequence_ops pvr_power_sequence_ops_pwrseq = {
+>> +	.init = pvr_power_init_pwrseq,
+>> +	.power_on = pvr_power_on_sequence_pwrseq,
+>> +	.power_off = pvr_power_off_sequence_pwrseq,
+>> +};
+>> +
+>>  int
+>>  pvr_power_device_suspend(struct device *dev)
+>>  {
+>> @@ -252,11 +365,7 @@ pvr_power_device_suspend(struct device *dev)
+>>  			goto err_drm_dev_exit;
+>>  	}
+>>  
+>> -	clk_disable_unprepare(pvr_dev->mem_clk);
+>> -	clk_disable_unprepare(pvr_dev->sys_clk);
+>> -	clk_disable_unprepare(pvr_dev->core_clk);
+>> -
+>> -	err = reset_control_assert(pvr_dev->reset);
+>> +	err = pvr_dev->device_data->pwr_ops->power_off(pvr_dev);
+>>  
+>>  err_drm_dev_exit:
+>>  	drm_dev_exit(idx);
+>> @@ -276,53 +385,22 @@ pvr_power_device_resume(struct device *dev)
+>>  	if (!drm_dev_enter(drm_dev, &idx))
+>>  		return -EIO;
+>>  
+>> -	err = clk_prepare_enable(pvr_dev->core_clk);
+>> +	err = pvr_dev->device_data->pwr_ops->power_on(pvr_dev);
+>>  	if (err)
+>>  		goto err_drm_dev_exit;
+>>  
+>> -	err = clk_prepare_enable(pvr_dev->sys_clk);
+>> -	if (err)
+>> -		goto err_core_clk_disable;
+>> -
+>> -	err = clk_prepare_enable(pvr_dev->mem_clk);
+>> -	if (err)
+>> -		goto err_sys_clk_disable;
+>> -
+>> -	/*
+>> -	 * According to the hardware manual, a delay of at least 32 clock
+>> -	 * cycles is required between de-asserting the clkgen reset and
+>> -	 * de-asserting the GPU reset. Assuming a worst-case scenario with
+>> -	 * a very high GPU clock frequency, a delay of 1 microsecond is
+>> -	 * sufficient to ensure this requirement is met across all
+>> -	 * feasible GPU clock speeds.
+>> -	 */
+>> -	udelay(1);
+>> -
+>> -	err = reset_control_deassert(pvr_dev->reset);
+>> -	if (err)
+>> -		goto err_mem_clk_disable;
+>> -
+>>  	if (pvr_dev->fw_dev.booted) {
+>>  		err = pvr_power_fw_enable(pvr_dev);
+>>  		if (err)
+>> -			goto err_reset_assert;
+>> +			goto err_power_off;
+>>  	}
+>>  
+>>  	drm_dev_exit(idx);
+>>  
+>>  	return 0;
+>>  
+>> -err_reset_assert:
+>> -	reset_control_assert(pvr_dev->reset);
+>> -
+>> -err_mem_clk_disable:
+>> -	clk_disable_unprepare(pvr_dev->mem_clk);
+>> -
+>> -err_sys_clk_disable:
+>> -	clk_disable_unprepare(pvr_dev->sys_clk);
+>> -
+>> -err_core_clk_disable:
+>> -	clk_disable_unprepare(pvr_dev->core_clk);
+>> +err_power_off:
+>> +	pvr_dev->device_data->pwr_ops->power_off(pvr_dev);
+>>  
+>>  err_drm_dev_exit:
+>>  	drm_dev_exit(idx);
+>> diff --git a/drivers/gpu/drm/imagination/pvr_power.h b/drivers/gpu/drm/imagination/pvr_power.h
+>> index ada85674a7ca762dcf92df40424230e1c3910342..b853d092242cc90cb98cf66100679a309055a1dc 100644
+>> --- a/drivers/gpu/drm/imagination/pvr_power.h
+>> +++ b/drivers/gpu/drm/imagination/pvr_power.h
+>> @@ -41,4 +41,19 @@ pvr_power_put(struct pvr_device *pvr_dev)
+>>  int pvr_power_domains_init(struct pvr_device *pvr_dev);
+>>  void pvr_power_domains_fini(struct pvr_device *pvr_dev);
+>>  
+>> +/**
+>> + * struct pvr_power_sequence_ops - Platform specific power sequence operations.
+>> + * @init: Pointer to the platform-specific initialization function.
+>> + * @power_on: Pointer to the platform-specific power on function.
+>> + * @power_off: Pointer to the platform-specific power off function.
+>> + */
+>> +struct pvr_power_sequence_ops {
+>> +	int (*init)(struct pvr_device *pvr_dev);
+>> +	int (*power_on)(struct pvr_device *pvr_dev);
+>> +	int (*power_off)(struct pvr_device *pvr_dev);
+>> +};
+>> +
+>> +extern const struct pvr_power_sequence_ops pvr_power_sequence_ops_manual;
+>> +extern const struct pvr_power_sequence_ops pvr_power_sequence_ops_pwrseq;
+>> +
+>>  #endif /* PVR_POWER_H */
+>>
+> 
+> 
+
+Best regards,
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
 
