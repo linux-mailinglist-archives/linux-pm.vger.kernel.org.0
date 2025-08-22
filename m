@@ -1,553 +1,259 @@
-Return-Path: <linux-pm+bounces-32903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03DB2B316B4
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 13:49:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AA0EB31739
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 14:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 414AB7A5815
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 11:48:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71807167063
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 12:12:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C62E2EA73A;
-	Fri, 22 Aug 2025 11:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768B12FA0F1;
+	Fri, 22 Aug 2025 12:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="SdD5jacd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJ/hJM65"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7740E29346F
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 11:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498EC26AA83;
+	Fri, 22 Aug 2025 12:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755863386; cv=none; b=hFPxG6xZtrPLnn+WEGvOhu2kIv3c9yCnXuW+d9LtTXqAsHpWWTPALR3DKs5PlyV8H/iqkzL4m3jfbVvjREclvRzXMTsDJoRFYCcWft3dgCfkXE5YJ4liIdo1gMT62la7tUO0bGNuEUJhu9u5kUSKhxliaY50lnNjz0a2cGGq7YA=
+	t=1755864755; cv=none; b=sBB2xp93zKUsRmeq7RQlvHHBED6F8f2nyEG9GJvkUQHHl4djGlYHvh4/rlZngqbvTnITyKhCSHZtYMRvyvDkIit+9ipWkZq+AMUM+wOeyJsUMZ0id0zV4Q3L7QnXB1HWvFXkhQ6liQa+JuBPIQ5Ow5CcNHGm2boflHVWKQOxeK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755863386; c=relaxed/simple;
-	bh=cSYdFuU0scPsWe5/waYkxQjjNuaWeovcyliofxcwKi0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
-	 Content-Type:References; b=YhPGwtz39SSc3WfL6XkDrl4dtKlGQ0pGYnMw6D/QUzSijOSVvLiJoGVbeqs6eAeSFEwBk3oaPE+zUTB58Gfzj9KlaFVZTs4cgRTXcaJZK5nZTFLwfNnsorpAGIPFUe09MTDdC8ay63jLdGEH4qFn6xSUBOWL26hS22Gxx4R6CqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=SdD5jacd; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250822114940euoutp010c96b6f72a33f065ba15c12d082919ae~eFHEgX_pc2394623946euoutp01c
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 11:49:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250822114940euoutp010c96b6f72a33f065ba15c12d082919ae~eFHEgX_pc2394623946euoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755863380;
-	bh=r7tw+YzfiE2JWtFiWgFD7GmQut2bsW2LirbpAzZSHBM=;
-	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
-	b=SdD5jacdlIYJTHl4o6tPWTBdGXzZAhrheFf5WjjKZRxHkIs7ba0wRPrHL7zDfJ61W
-	 eKRZxXISpn8PnEfDMfHGIXTgURsoZDRzUvs2jP5g4fIkL9RVlQrEZuuFbgguxIh7rf
-	 QPZwZuUQNCT0+1m9khJ4BpCKbw/WZS5ejIwF6KX0=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250822114939eucas1p235e278e1c3e0bed2210a4aaad0a14f5a~eFHDuYKqO2281222812eucas1p2d;
-	Fri, 22 Aug 2025 11:49:39 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250822114938eusmtip2bb870003b57eaa604168094b8a06aae5~eFHCrZrxy0112901129eusmtip2G;
-	Fri, 22 Aug 2025 11:49:38 +0000 (GMT)
-Message-ID: <6df6dc78-d86e-4289-bbe2-0bfe4b168c43@samsung.com>
-Date: Fri, 22 Aug 2025 13:49:38 +0200
+	s=arc-20240116; t=1755864755; c=relaxed/simple;
+	bh=Mvlhke7au8nGa00IzO2RzEm3fIj7Edm3O+hsRfIg+ls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DrMMCdxIiS1O4vd/IexEY8YGA32E1bSIA05nzKeDoI/C1rZ68z39+fCBkpjESZHlYQ6Vkd6UoxWcYOmKde62jHfHs1dUX1qLgy7RUbfMko3dTSEUl1arYOzCdDKRZqnZersEGibD7lnMrIJoacqmxs/zWmB/XFUDPrphbY0odoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJ/hJM65; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E26EC116D0;
+	Fri, 22 Aug 2025 12:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755864755;
+	bh=Mvlhke7au8nGa00IzO2RzEm3fIj7Edm3O+hsRfIg+ls=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DJ/hJM65J+NCFa1TR5Dzswdt1VlqaxAIr2rbSaUK5lyCoW/1SHcWBmpakCWQpe0/8
+	 UX22OmteeeRRiSGMKwtiJsyUzZuLgNujW/6hz4Cu9RlFArf7ibC3F3hUM7kuq3Bb5H
+	 qLwo9QNYlSIzkaov0FGDLEHP6so3NAdg6rG0ZMtNkrQZwp4R5z8dPEZ4ywAr/48QBB
+	 VuDgucp12mpfu0EkX6EYJHEB6FM5UOMUxP38bNs6WTgO6B0WCWjz1CCshug4Gv7SQ0
+	 gS/U72b83dz8cm2+sEhVT8Bsdx5n1BEju/bNKAApd8f/LKadkBRi8+S173ithqY5gT
+	 2PFRLNTXsunAg==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-74381e0a227so1300659a34.0;
+        Fri, 22 Aug 2025 05:12:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUPHCTLIQdp5HuSQay+rk6kkRDdesOZJhrCtFOrKuqR9ufEkfSLy8L7D168yW6oKvcjgnPMCSeyqn4f@vger.kernel.org, AJvYcCUzoCcIJq3xfzG0KbxpotD+XZFHy08dt04BjNjftG7C7g8F4cty80wkMZ1FRR50vgvaoHCDaMyGLug=@vger.kernel.org, AJvYcCWh6XmjFwHLDD9qnbcnTdhl3FhSGRxfgwJA7pqF5uuzOynsXvJLWjJ5HtvttFuJZqzwQeUtgyL/5z0WpJI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJs2n1h7C65vNCoH+dqqVaF8EIPVPGqn3h2V9O4aGukBlOD0fW
+	CFiRxsaVUPCT3ZfNYBxvP04xZzow857VjBL/JrvqnaOQEEs4ibf1l1P1K36MzmARsnd2iZoTEKW
+	eWBTDGT6lNy8UA2xfs2M2fHeD4V4rzUM=
+X-Google-Smtp-Source: AGHT+IGPTpgPF+noT41oenFI55ABOzE3DiKUOVCZpppLYQJmDzi7qRjEr+Rz30/G1XGCMW9IbNfNxTBAw4Szqy9D81k=
+X-Received: by 2002:a05:6871:b07:b0:314:b6a6:6865 with SMTP id
+ 586e51a60fabf-314dce990afmr1106523fac.51.1755864754268; Fri, 22 Aug 2025
+ 05:12:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 1/4] drm/imagination: Use pwrseq for TH1520 GPU
- power management
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-To: Matt Coster <Matt.Coster@imgtec.com>, Drew Fustini <drew@pdp7.com>
-Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel
-	<p.zabel@pengutronix.de>, Frank Binns <Frank.Binns@imgtec.com>, Maarten
-	Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
-	<ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, Drew
-	Fustini <fustini@kernel.org>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>
-Content-Language: en-US
-In-Reply-To: <daf94e44-7c37-4fa6-a31e-b043b7bf46f1@samsung.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20250822114939eucas1p235e278e1c3e0bed2210a4aaad0a14f5a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed
-X-EPHeader: CA
-X-CMS-RootMailID: 20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed
-References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
-	<CGME20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed@eucas1p2.samsung.com>
-	<20250822-apr_14_for_sending-v13-1-af656f7cc6c3@samsung.com>
-	<aa8d4ffb-4607-4bff-9d87-8635cd37d439@imgtec.com>
-	<55e606c5-9ac0-4e0b-8506-5f88a6fc540e@samsung.com>
-	<daf94e44-7c37-4fa6-a31e-b043b7bf46f1@samsung.com>
+References: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+In-Reply-To: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 22 Aug 2025 14:12:20 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jbc0xdwBkxa3uHmTmvpnBp+qcWre26-Q-Nd2UVa_=v5Q@mail.gmail.com>
+X-Gm-Features: Ac12FXz-lwMcvSAAACv7p53RSiJ2hdwWX_YxUGSg9_tH6u3CXa2DSvqXRGmaRCw
+Message-ID: <CAJZ5v0jbc0xdwBkxa3uHmTmvpnBp+qcWre26-Q-Nd2UVa_=v5Q@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] PCI/ASPM: Add host-bridge API to override default
+ ASPM/CLKPM link state
+To: "David E. Box" <david.e.box@linux.intel.com>
+Cc: rafael@kernel.org, bhelgaas@google.com, vicamo.yang@canonical.com, 
+	kenny@panix.com, ilpo.jarvinen@linux.intel.com, nirmal.patel@linux.intel.com, 
+	mani@kernel.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Aug 22, 2025 at 5:12=E2=80=AFAM David E. Box
+<david.e.box@linux.intel.com> wrote:
+>
+> Synthetic PCIe hierarchies, such as those created by Intel VMD, are not
+> enumerated by firmware and do not receive BIOS-provided ASPM or CLKPM
+> defaults. Devices in such domains may therefore run without the intended
+> power management.
+>
+> Add a host-bridge mechanism that lets controller drivers supply their own
+> defaults. A new aspm_default_link_state field in struct pci_host_bridge i=
+s
+> set via pci_host_set_default_pcie_link_state(). During link initializatio=
+n,
+> if this field is non-zero, ASPM and CLKPM defaults come from it instead o=
+f
+> BIOS.
+>
+> This enables drivers like VMD to align link power management with platfor=
+m
+> expectations and avoids embedding controller-specific quirks in ASPM core
+> logic.
+>
+> Link: https://patchwork.ozlabs.org/project/linux-pci/patch/20250720190140=
+.2639200-1-david.e.box%40linux.intel.com/
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 
+No issues found, so
 
-On 8/22/25 12:26, Michal Wilczynski wrote:
-> 
-> 
-> On 8/22/25 12:04, Michal Wilczynski wrote:
->>
->>
->> On 8/22/25 11:28, Matt Coster wrote:
->>> On 21/08/2025 23:20, Michal Wilczynski wrote:
->>>> Update the Imagination PVR DRM driver to leverage the pwrseq framework
->>>> for managing the complex power sequence of the GPU on the T-HEAD TH1520
->>>> SoC.
->>>>
->>>> To cleanly separate platform-specific logic from the generic driver,
->>>> this patch introduces an `init` callback to the `pwr_power_sequence_ops`
->>>> struct. This allows for different power management strategies to be
->>>> selected at probe time based on the device's compatible string.
->>>>
->>>> A `pvr_device_data` struct, associated with each compatible in the
->>>> of_device_id table, points to the appropriate ops table (manual or
->>>> pwrseq).
->>>>
->>>> At probe time, the driver now calls the `->init()` op. For pwrseq-based
->>>> platforms, this callback calls `devm_pwrseq_get("gpu-power")`, deferring
->>>> probe if the sequencer is not yet available. For other platforms, it
->>>> falls back to the existing manual clock and reset handling. The runtime
->>>> PM callbacks continue to call the appropriate functions via the ops
->>>> table.
->>>>
->>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->>>
->>> Reviewed-by: Matt Coster <matt.coster@imgtec.com>
->>>
->>> Would you like me to take the non-DTS changes via drm-misc-next?
->>
->> Yeah I think this would be appropriate.
->> Thanks !
-> 
-> Hi Drew,
-> 
-> Matt offered to take the non-DTS patches (1/4 and 4/4) from this series
-> through the DRM tree.
-> 
-> This leaves the DT binding and TH1520 DT patches (2/4 and 3/4). Would
-> you be able to pick them up through your tree ?
+Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
 
-Aw,
-Sorry I think Matt also meant to take the dt-binding patch, so there would be
-only patch 3 for your tree.
+There is a very minor nit below, but it has no bearing on the above.
 
-Thanks !
+> ---
+>
+> Changes in V1 from RFC:
+>
+>   -- Rename field to aspm_dflt_link_state since it stores
+>      PCIE_LINK_STATE_XXX flags, not a policy enum.
+>   -- Move the field to struct pci_host_bridge since it's being applied to
+>      the entire host bridge per Mani's suggestion.
+>   -- During testing noticed that clkpm remained disabled and this was
+>      also handled by the formerly used pci_enable_link_state(). Add a
+>      check in pcie_clkpm_cap_init() as well to enable clkpm during init.
+>
+> Changes in V2:
+>
+>   -- Host field name changed to aspm_default_link_state.
+>   -- Added get/set functions for aspm_default_link_state. Only the
+>      setter is exported. Added a kernel-doc describing usage and
+>      particulars around meaning of 0.
+>
+>  drivers/pci/pcie/aspm.c | 42 +++++++++++++++++++++++++++++++++++++++--
+>  include/linux/pci.h     |  9 +++++++++
+>  2 files changed, 49 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 919a05b97647..b4f0b4805a35 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -373,6 +373,39 @@ static void pcie_set_clkpm(struct pcie_link_state *l=
+ink, int enable)
+>         pcie_set_clkpm_nocheck(link, enable);
+>  }
+>
+> +/**
+> + * pci_host_set_default_pcie_link_state - set controller-provided defaul=
+t ASPM/CLKPM mask
+> + * @host: host bridge on which to apply the defaults
+> + * @state: PCIE_LINK_STATE_XXX flags
+> + *
+> + * Allows a PCIe controller driver to specify the default ASPM and/or
+> + * Clock Power Management (CLKPM) link state mask that will be used
+> + * for links under this host bridge during ASPM/CLKPM capability init.
+> + *
+> + * The value is consumed in pcie_aspm_cap_init() and pcie_clkpm_cap_init=
+()
+> + * to override the firmware-discovered defaults.
+> + *
+> + * Interpretation of aspm_default_link_state:
+> + *   - Nonzero: bitmask of PCIE_LINK_STATE_* values to be used as defaul=
+ts
+> + *   - Zero:    no override provided; ASPM/CLKPM defaults fall back to
+> + *              values discovered in hardware/firmware
+> + *
+> + * Note: zero is always treated as "unset", not as "force ASPM/CLKPM off=
+".
+> + */
+> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
+> +                                         unsigned int state)
+> +{
+> +       host->aspm_default_link_state =3D state;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_host_set_default_pcie_link_state);
+> +
+> +static u32 pci_host_get_default_pcie_link_state(struct pci_dev *parent)
 
-> 
-> Thanks !
-> 
->>
->>>
->>> Cheers,
->>> Matt
->>>
->>>> ---
->>>>  drivers/gpu/drm/imagination/pvr_device.c |  22 +----
->>>>  drivers/gpu/drm/imagination/pvr_device.h |  17 ++++
->>>>  drivers/gpu/drm/imagination/pvr_drv.c    |  23 ++++-
->>>>  drivers/gpu/drm/imagination/pvr_power.c  | 158 +++++++++++++++++++++++--------
->>>>  drivers/gpu/drm/imagination/pvr_power.h  |  15 +++
->>>>  5 files changed, 176 insertions(+), 59 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/imagination/pvr_device.c b/drivers/gpu/drm/imagination/pvr_device.c
->>>> index 8b9ba4983c4cb5bc40342fcafc4259078bc70547..294b6019b4155bb7fdb7de73ccf7fa8ad867811f 100644
->>>> --- a/drivers/gpu/drm/imagination/pvr_device.c
->>>> +++ b/drivers/gpu/drm/imagination/pvr_device.c
->>>> @@ -23,6 +23,7 @@
->>>>  #include <linux/firmware.h>
->>>>  #include <linux/gfp.h>
->>>>  #include <linux/interrupt.h>
->>>> +#include <linux/of.h>
->>>>  #include <linux/platform_device.h>
->>>>  #include <linux/pm_runtime.h>
->>>>  #include <linux/reset.h>
->>>> @@ -121,21 +122,6 @@ static int pvr_device_clk_init(struct pvr_device *pvr_dev)
->>>>  	return 0;
->>>>  }
->>>>  
->>>> -static int pvr_device_reset_init(struct pvr_device *pvr_dev)
->>>> -{
->>>> -	struct drm_device *drm_dev = from_pvr_device(pvr_dev);
->>>> -	struct reset_control *reset;
->>>> -
->>>> -	reset = devm_reset_control_get_optional_exclusive(drm_dev->dev, NULL);
->>>> -	if (IS_ERR(reset))
->>>> -		return dev_err_probe(drm_dev->dev, PTR_ERR(reset),
->>>> -				     "failed to get gpu reset line\n");
->>>> -
->>>> -	pvr_dev->reset = reset;
->>>> -
->>>> -	return 0;
->>>> -}
->>>> -
->>>>  /**
->>>>   * pvr_device_process_active_queues() - Process all queue related events.
->>>>   * @pvr_dev: PowerVR device to check
->>>> @@ -618,6 +604,9 @@ pvr_device_init(struct pvr_device *pvr_dev)
->>>>  	struct device *dev = drm_dev->dev;
->>>>  	int err;
->>>>  
->>>> +	/* Get the platform-specific data based on the compatible string. */
->>>> +	pvr_dev->device_data = of_device_get_match_data(dev);
->>>> +
->>>>  	/*
->>>>  	 * Setup device parameters. We do this first in case other steps
->>>>  	 * depend on them.
->>>> @@ -631,8 +620,7 @@ pvr_device_init(struct pvr_device *pvr_dev)
->>>>  	if (err)
->>>>  		return err;
->>>>  
->>>> -	/* Get the reset line for the GPU */
->>>> -	err = pvr_device_reset_init(pvr_dev);
->>>> +	err = pvr_dev->device_data->pwr_ops->init(pvr_dev);
->>>>  	if (err)
->>>>  		return err;
->>>>  
->>>> diff --git a/drivers/gpu/drm/imagination/pvr_device.h b/drivers/gpu/drm/imagination/pvr_device.h
->>>> index 7cb01c38d2a9c3fc71effe789d4dfe54eddd93ee..ab8f56ae15df6c2888feb16b1d87b59510961936 100644
->>>> --- a/drivers/gpu/drm/imagination/pvr_device.h
->>>> +++ b/drivers/gpu/drm/imagination/pvr_device.h
->>>> @@ -37,6 +37,9 @@ struct clk;
->>>>  /* Forward declaration from <linux/firmware.h>. */
->>>>  struct firmware;
->>>>  
->>>> +/* Forward declaration from <linux/pwrseq/consumer.h> */
->>>> +struct pwrseq_desc;
->>>> +
->>>>  /**
->>>>   * struct pvr_gpu_id - Hardware GPU ID information for a PowerVR device
->>>>   * @b: Branch ID.
->>>> @@ -57,6 +60,14 @@ struct pvr_fw_version {
->>>>  	u16 major, minor;
->>>>  };
->>>>  
->>>> +/**
->>>> + * struct pvr_device_data - Platform specific data associated with a compatible string.
->>>> + * @pwr_ops: Pointer to a structure with platform-specific power functions.
->>>> + */
->>>> +struct pvr_device_data {
->>>> +	const struct pvr_power_sequence_ops *pwr_ops;
->>>> +};
->>>> +
->>>>  /**
->>>>   * struct pvr_device - powervr-specific wrapper for &struct drm_device
->>>>   */
->>>> @@ -98,6 +109,9 @@ struct pvr_device {
->>>>  	/** @fw_version: Firmware version detected at runtime. */
->>>>  	struct pvr_fw_version fw_version;
->>>>  
->>>> +	/** @device_data: Pointer to platform-specific data. */
->>>> +	const struct pvr_device_data *device_data;
->>>> +
->>>>  	/** @regs_resource: Resource representing device control registers. */
->>>>  	struct resource *regs_resource;
->>>>  
->>>> @@ -148,6 +162,9 @@ struct pvr_device {
->>>>  	 */
->>>>  	struct reset_control *reset;
->>>>  
->>>> +	/** @pwrseq: Pointer to a power sequencer, if one is used. */
->>>> +	struct pwrseq_desc *pwrseq;
->>>> +
->>>>  	/** @irq: IRQ number. */
->>>>  	int irq;
->>>>  
->>>> diff --git a/drivers/gpu/drm/imagination/pvr_drv.c b/drivers/gpu/drm/imagination/pvr_drv.c
->>>> index b058ec183bb30ab5c3db17ebaadf2754520a2a1f..916b40ced7eb0408fe985ba1b83b3be2eb024bae 100644
->>>> --- a/drivers/gpu/drm/imagination/pvr_drv.c
->>>> +++ b/drivers/gpu/drm/imagination/pvr_drv.c
->>>> @@ -1480,15 +1480,33 @@ static void pvr_remove(struct platform_device *plat_dev)
->>>>  	pvr_power_domains_fini(pvr_dev);
->>>>  }
->>>>  
->>>> +static const struct pvr_device_data pvr_device_data_manual = {
->>>> +	.pwr_ops = &pvr_power_sequence_ops_manual,
->>>> +};
->>>> +
->>>> +static const struct pvr_device_data pvr_device_data_pwrseq = {
->>>> +	.pwr_ops = &pvr_power_sequence_ops_pwrseq,
->>>> +};
->>>> +
->>>>  static const struct of_device_id dt_match[] = {
->>>> -	{ .compatible = "img,img-rogue", .data = NULL },
->>>> +	{
->>>> +		.compatible = "thead,th1520-gpu",
->>>> +		.data = &pvr_device_data_pwrseq,
->>>> +	},
->>>> +	{
->>>> +		.compatible = "img,img-rogue",
->>>> +		.data = &pvr_device_data_manual,
->>>> +	},
->>>>  
->>>>  	/*
->>>>  	 * This legacy compatible string was introduced early on before the more generic
->>>>  	 * "img,img-rogue" was added. Keep it around here for compatibility, but never use
->>>>  	 * "img,img-axe" in new devicetrees.
->>>>  	 */
->>>> -	{ .compatible = "img,img-axe", .data = NULL },
->>>> +	{
->>>> +		.compatible = "img,img-axe",
->>>> +		.data = &pvr_device_data_manual,
->>>> +	},
->>>>  	{}
->>>>  };
->>>>  MODULE_DEVICE_TABLE(of, dt_match);
->>>> @@ -1513,4 +1531,5 @@ MODULE_DESCRIPTION(PVR_DRIVER_DESC);
->>>>  MODULE_LICENSE("Dual MIT/GPL");
->>>>  MODULE_IMPORT_NS("DMA_BUF");
->>>>  MODULE_FIRMWARE("powervr/rogue_33.15.11.3_v1.fw");
->>>> +MODULE_FIRMWARE("powervr/rogue_36.52.104.182_v1.fw");
->>>>  MODULE_FIRMWARE("powervr/rogue_36.53.104.796_v1.fw");
->>>> diff --git a/drivers/gpu/drm/imagination/pvr_power.c b/drivers/gpu/drm/imagination/pvr_power.c
->>>> index 187a07e0bd9adb2f0713ac2c8e091229f4027354..c6e7ff9e935d3b348eff6953c633c72410fdf507 100644
->>>> --- a/drivers/gpu/drm/imagination/pvr_power.c
->>>> +++ b/drivers/gpu/drm/imagination/pvr_power.c
->>>> @@ -18,6 +18,7 @@
->>>>  #include <linux/platform_device.h>
->>>>  #include <linux/pm_domain.h>
->>>>  #include <linux/pm_runtime.h>
->>>> +#include <linux/pwrseq/consumer.h>
->>>>  #include <linux/reset.h>
->>>>  #include <linux/timer.h>
->>>>  #include <linux/types.h>
->>>> @@ -234,6 +235,118 @@ pvr_watchdog_init(struct pvr_device *pvr_dev)
->>>>  	return 0;
->>>>  }
->>>>  
->>>> +static int pvr_power_init_manual(struct pvr_device *pvr_dev)
->>>> +{
->>>> +	struct drm_device *drm_dev = from_pvr_device(pvr_dev);
->>>> +	struct reset_control *reset;
->>>> +
->>>> +	reset = devm_reset_control_get_optional_exclusive(drm_dev->dev, NULL);
->>>> +	if (IS_ERR(reset))
->>>> +		return dev_err_probe(drm_dev->dev, PTR_ERR(reset),
->>>> +				     "failed to get gpu reset line\n");
->>>> +
->>>> +	pvr_dev->reset = reset;
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int pvr_power_on_sequence_manual(struct pvr_device *pvr_dev)
->>>> +{
->>>> +	int err;
->>>> +
->>>> +	err = clk_prepare_enable(pvr_dev->core_clk);
->>>> +	if (err)
->>>> +		return err;
->>>> +
->>>> +	err = clk_prepare_enable(pvr_dev->sys_clk);
->>>> +	if (err)
->>>> +		goto err_core_clk_disable;
->>>> +
->>>> +	err = clk_prepare_enable(pvr_dev->mem_clk);
->>>> +	if (err)
->>>> +		goto err_sys_clk_disable;
->>>> +
->>>> +	/*
->>>> +	 * According to the hardware manual, a delay of at least 32 clock
->>>> +	 * cycles is required between de-asserting the clkgen reset and
->>>> +	 * de-asserting the GPU reset. Assuming a worst-case scenario with
->>>> +	 * a very high GPU clock frequency, a delay of 1 microsecond is
->>>> +	 * sufficient to ensure this requirement is met across all
->>>> +	 * feasible GPU clock speeds.
->>>> +	 */
->>>> +	udelay(1);
->>>> +
->>>> +	err = reset_control_deassert(pvr_dev->reset);
->>>> +	if (err)
->>>> +		goto err_mem_clk_disable;
->>>> +
->>>> +	return 0;
->>>> +
->>>> +err_mem_clk_disable:
->>>> +	clk_disable_unprepare(pvr_dev->mem_clk);
->>>> +
->>>> +err_sys_clk_disable:
->>>> +	clk_disable_unprepare(pvr_dev->sys_clk);
->>>> +
->>>> +err_core_clk_disable:
->>>> +	clk_disable_unprepare(pvr_dev->core_clk);
->>>> +
->>>> +	return err;
->>>> +}
->>>> +
->>>> +static int pvr_power_off_sequence_manual(struct pvr_device *pvr_dev)
->>>> +{
->>>> +	int err;
->>>> +
->>>> +	err = reset_control_assert(pvr_dev->reset);
->>>> +
->>>> +	clk_disable_unprepare(pvr_dev->mem_clk);
->>>> +	clk_disable_unprepare(pvr_dev->sys_clk);
->>>> +	clk_disable_unprepare(pvr_dev->core_clk);
->>>> +
->>>> +	return err;
->>>> +}
->>>> +
->>>> +const struct pvr_power_sequence_ops pvr_power_sequence_ops_manual = {
->>>> +	.init = pvr_power_init_manual,
->>>> +	.power_on = pvr_power_on_sequence_manual,
->>>> +	.power_off = pvr_power_off_sequence_manual,
->>>> +};
->>>> +
->>>> +static int pvr_power_init_pwrseq(struct pvr_device *pvr_dev)
->>>> +{
->>>> +	struct device *dev = from_pvr_device(pvr_dev)->dev;
->>>> +
->>>> +	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
->>>> +	if (IS_ERR(pvr_dev->pwrseq)) {
->>>> +		/*
->>>> +		 * This platform requires a sequencer. If we can't get it, we
->>>> +		 * must return the error (including -EPROBE_DEFER to wait for
->>>> +		 * the provider to appear)
->>>> +		 */
->>>> +		return dev_err_probe(dev, PTR_ERR(pvr_dev->pwrseq),
->>>> +				     "Failed to get required power sequencer\n");
->>>> +	}
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int pvr_power_on_sequence_pwrseq(struct pvr_device *pvr_dev)
->>>> +{
->>>> +	return pwrseq_power_on(pvr_dev->pwrseq);
->>>> +}
->>>> +
->>>> +static int pvr_power_off_sequence_pwrseq(struct pvr_device *pvr_dev)
->>>> +{
->>>> +	return pwrseq_power_off(pvr_dev->pwrseq);
->>>> +}
->>>> +
->>>> +const struct pvr_power_sequence_ops pvr_power_sequence_ops_pwrseq = {
->>>> +	.init = pvr_power_init_pwrseq,
->>>> +	.power_on = pvr_power_on_sequence_pwrseq,
->>>> +	.power_off = pvr_power_off_sequence_pwrseq,
->>>> +};
->>>> +
->>>>  int
->>>>  pvr_power_device_suspend(struct device *dev)
->>>>  {
->>>> @@ -252,11 +365,7 @@ pvr_power_device_suspend(struct device *dev)
->>>>  			goto err_drm_dev_exit;
->>>>  	}
->>>>  
->>>> -	clk_disable_unprepare(pvr_dev->mem_clk);
->>>> -	clk_disable_unprepare(pvr_dev->sys_clk);
->>>> -	clk_disable_unprepare(pvr_dev->core_clk);
->>>> -
->>>> -	err = reset_control_assert(pvr_dev->reset);
->>>> +	err = pvr_dev->device_data->pwr_ops->power_off(pvr_dev);
->>>>  
->>>>  err_drm_dev_exit:
->>>>  	drm_dev_exit(idx);
->>>> @@ -276,53 +385,22 @@ pvr_power_device_resume(struct device *dev)
->>>>  	if (!drm_dev_enter(drm_dev, &idx))
->>>>  		return -EIO;
->>>>  
->>>> -	err = clk_prepare_enable(pvr_dev->core_clk);
->>>> +	err = pvr_dev->device_data->pwr_ops->power_on(pvr_dev);
->>>>  	if (err)
->>>>  		goto err_drm_dev_exit;
->>>>  
->>>> -	err = clk_prepare_enable(pvr_dev->sys_clk);
->>>> -	if (err)
->>>> -		goto err_core_clk_disable;
->>>> -
->>>> -	err = clk_prepare_enable(pvr_dev->mem_clk);
->>>> -	if (err)
->>>> -		goto err_sys_clk_disable;
->>>> -
->>>> -	/*
->>>> -	 * According to the hardware manual, a delay of at least 32 clock
->>>> -	 * cycles is required between de-asserting the clkgen reset and
->>>> -	 * de-asserting the GPU reset. Assuming a worst-case scenario with
->>>> -	 * a very high GPU clock frequency, a delay of 1 microsecond is
->>>> -	 * sufficient to ensure this requirement is met across all
->>>> -	 * feasible GPU clock speeds.
->>>> -	 */
->>>> -	udelay(1);
->>>> -
->>>> -	err = reset_control_deassert(pvr_dev->reset);
->>>> -	if (err)
->>>> -		goto err_mem_clk_disable;
->>>> -
->>>>  	if (pvr_dev->fw_dev.booted) {
->>>>  		err = pvr_power_fw_enable(pvr_dev);
->>>>  		if (err)
->>>> -			goto err_reset_assert;
->>>> +			goto err_power_off;
->>>>  	}
->>>>  
->>>>  	drm_dev_exit(idx);
->>>>  
->>>>  	return 0;
->>>>  
->>>> -err_reset_assert:
->>>> -	reset_control_assert(pvr_dev->reset);
->>>> -
->>>> -err_mem_clk_disable:
->>>> -	clk_disable_unprepare(pvr_dev->mem_clk);
->>>> -
->>>> -err_sys_clk_disable:
->>>> -	clk_disable_unprepare(pvr_dev->sys_clk);
->>>> -
->>>> -err_core_clk_disable:
->>>> -	clk_disable_unprepare(pvr_dev->core_clk);
->>>> +err_power_off:
->>>> +	pvr_dev->device_data->pwr_ops->power_off(pvr_dev);
->>>>  
->>>>  err_drm_dev_exit:
->>>>  	drm_dev_exit(idx);
->>>> diff --git a/drivers/gpu/drm/imagination/pvr_power.h b/drivers/gpu/drm/imagination/pvr_power.h
->>>> index ada85674a7ca762dcf92df40424230e1c3910342..b853d092242cc90cb98cf66100679a309055a1dc 100644
->>>> --- a/drivers/gpu/drm/imagination/pvr_power.h
->>>> +++ b/drivers/gpu/drm/imagination/pvr_power.h
->>>> @@ -41,4 +41,19 @@ pvr_power_put(struct pvr_device *pvr_dev)
->>>>  int pvr_power_domains_init(struct pvr_device *pvr_dev);
->>>>  void pvr_power_domains_fini(struct pvr_device *pvr_dev);
->>>>  
->>>> +/**
->>>> + * struct pvr_power_sequence_ops - Platform specific power sequence operations.
->>>> + * @init: Pointer to the platform-specific initialization function.
->>>> + * @power_on: Pointer to the platform-specific power on function.
->>>> + * @power_off: Pointer to the platform-specific power off function.
->>>> + */
->>>> +struct pvr_power_sequence_ops {
->>>> +	int (*init)(struct pvr_device *pvr_dev);
->>>> +	int (*power_on)(struct pvr_device *pvr_dev);
->>>> +	int (*power_off)(struct pvr_device *pvr_dev);
->>>> +};
->>>> +
->>>> +extern const struct pvr_power_sequence_ops pvr_power_sequence_ops_manual;
->>>> +extern const struct pvr_power_sequence_ops pvr_power_sequence_ops_pwrseq;
->>>> +
->>>>  #endif /* PVR_POWER_H */
->>>>
->>>
->>>
->>
->> Best regards,
-> 
-> Best regards,
+The parameter need not be called "parent".
 
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+> +{
+> +       struct pci_host_bridge *host =3D pci_find_host_bridge(parent->bus=
+);
+> +
+> +       return host ? host->aspm_default_link_state : 0;
+> +}
+> +
+>  static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blackl=
+ist)
+>  {
+>         int capable =3D 1, enabled =3D 1;
+> @@ -394,7 +427,10 @@ static void pcie_clkpm_cap_init(struct pcie_link_sta=
+te *link, int blacklist)
+>                         enabled =3D 0;
+>         }
+>         link->clkpm_enabled =3D enabled;
+> -       link->clkpm_default =3D enabled;
+> +       if (pci_host_get_default_pcie_link_state(link->pdev) & PCIE_LINK_=
+STATE_CLKPM)
+> +               link->clkpm_default =3D 1;
+> +       else
+> +               link->clkpm_default =3D enabled;
+>         link->clkpm_capable =3D capable;
+>         link->clkpm_disable =3D blacklist ? 1 : 0;
+>  }
+> @@ -866,7 +902,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state=
+ *link, int blacklist)
+>         }
+>
+>         /* Save default state */
+> -       link->aspm_default =3D link->aspm_enabled;
+> +       link->aspm_default =3D pci_host_get_default_pcie_link_state(paren=
+t);
+> +       if (!link->aspm_default)
+> +               link->aspm_default =3D link->aspm_enabled;
+>
+>         /* Setup initial capable state. Will be updated later */
+>         link->aspm_capable =3D link->aspm_support;
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 59876de13860..8947cbaf9fa6 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -620,6 +620,10 @@ struct pci_host_bridge {
+>         unsigned int    size_windows:1;         /* Enable root bus sizing=
+ */
+>         unsigned int    msi_domain:1;           /* Bridge wants MSI domai=
+n */
+>
+> +#ifdef CONFIG_PCIEASPM
+> +       unsigned int    aspm_default_link_state;        /* Controller-pro=
+vided default */
+> +#endif
+> +
+>         /* Resource alignment requirements */
+>         resource_size_t (*align_resource)(struct pci_dev *dev,
+>                         const struct resource *res,
+> @@ -1849,6 +1853,8 @@ int pci_disable_link_state(struct pci_dev *pdev, in=
+t state);
+>  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
+>  int pci_enable_link_state(struct pci_dev *pdev, int state);
+>  int pci_enable_link_state_locked(struct pci_dev *pdev, int state);
+> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
+> +                                         unsigned int state);
+>  void pcie_no_aspm(void);
+>  bool pcie_aspm_support_enabled(void);
+>  bool pcie_aspm_enabled(struct pci_dev *pdev);
+> @@ -1861,6 +1867,9 @@ static inline int pci_enable_link_state(struct pci_=
+dev *pdev, int state)
+>  { return 0; }
+>  static inline int pci_enable_link_state_locked(struct pci_dev *pdev, int=
+ state)
+>  { return 0; }
+> +static inline void
+> +pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
+> +                                    unsigned int state) { }
+>  static inline void pcie_no_aspm(void) { }
+>  static inline bool pcie_aspm_support_enabled(void) { return false; }
+>  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return fals=
+e; }
+>
+> base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+> --
+> 2.43.0
+>
 
