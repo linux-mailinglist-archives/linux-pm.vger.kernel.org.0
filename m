@@ -1,64 +1,63 @@
-Return-Path: <linux-pm+bounces-32919-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32920-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EEF8B322EE
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 21:35:46 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FAC2B322F2
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 21:36:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17D54B06B34
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 19:35:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1A2424E185C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 19:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148362D1F7C;
-	Fri, 22 Aug 2025 19:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F2F2D3236;
+	Fri, 22 Aug 2025 19:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfLNl9Px"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QCsrNgGl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D5B4A1A;
-	Fri, 22 Aug 2025 19:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2199A4A1A;
+	Fri, 22 Aug 2025 19:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755891335; cv=none; b=MkL73cJggSkkuOi9LziHibW061CJ2yuwIqOFFiRbV9hisrVIZz4/GFX920ylsc775kepA9LoJeZwHzI4D+QoAKy98ftFldzxgQyzImlH+IiO4auCbpolj8aJkSWOfGiQlXnGTc59OMcJiOYxuqSDHjnMFFLj6ylCJ1EhroZ42K8=
+	t=1755891386; cv=none; b=FTo5wdgeCOesqq7wjwGUTcV33npscbwybHcUaguAbDc/+p/ToAWNbIG8h4Gw0MQenC8+HEZyZXGvsiNQHJD49TiCiVXpIRNofRxS1FHFDhmUzZTSvJ4ulYFHQE0k0pANuK9cYav72UGUrWab/fI5tvzmvoNi8tEdkUJ3OpuhG/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755891335; c=relaxed/simple;
-	bh=xgU7037EpdyDMRnXjTxTDjKwrS8kwbSM8eeBoserZHs=;
+	s=arc-20240116; t=1755891386; c=relaxed/simple;
+	bh=zUCHNRR29X2q9YcEgJs3tXfAiU46otyD1jNMg85M99Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hmNjieY/sHCqGtjxpktSBllD+LbS6VJJpVS8ntG4VUYcfhEe5HQpQm9BXNw3SH4gPPeq1Ucgm4BhN5AGEZRHek8nVgdV6dxeZCaYmMJoLcIYD4wJfesCe6pkq+Lg1iAmS3j7YG4K9XDOSJgPt08aPChaeyNcjZ8xYvxJHQRaZdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfLNl9Px; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85280C4CEED;
-	Fri, 22 Aug 2025 19:35:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=tl3yw0SXSfxTv9yTnS21AB4cc+fDaAziu50FGZNzA7lksJ/FgFVuKjQtV55dmM2sAHgWYyvgLPbv8HhvSvR2wQGNNybfp0G0hNeOB9GNlZFyvKVfAaG4GkcjLsedUXr56gyYeBnRglND6zDanIZHpU6tOx2nYbSeFvoENGE1j8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QCsrNgGl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C97EC4CEED;
+	Fri, 22 Aug 2025 19:36:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755891335;
-	bh=xgU7037EpdyDMRnXjTxTDjKwrS8kwbSM8eeBoserZHs=;
+	s=k20201202; t=1755891385;
+	bh=zUCHNRR29X2q9YcEgJs3tXfAiU46otyD1jNMg85M99Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QfLNl9PxlXpIZKzVjyxkyQ6HZXNSJGnrEG4zrh9mbX6tbS81oJOoGBdOh7CoHdJ8p
-	 HccHwUyCh8ud7F9XtoYmfIgtYPjx/1o2RFLWdJJDAQGZptq8FhRRtNiJtFtTBzvu9Q
-	 IX+0ldBlpbiCclPz1GyfphvtvEG7hv/PwVGQpES9UWE64L9l6A46Kzl5FTgSx8jz9b
-	 4wBBXI37n04qLS9ZUX+hUdUdOy7sB3rMJa2/V9UFkuc00a1BJ1OMVlwAGd9ZT4j38h
-	 /yjjVM3hoPALD1oFxzFoefkUBclP6G8sZMdO4g14uv6eTBLQykLTCiPXSbGrrTvrRP
-	 Sp+GWW9abJZWg==
-Date: Fri, 22 Aug 2025 14:35:34 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
+	b=QCsrNgGlw9/U8/bb96FmiCm0e7GCnSOxo2e73LWwl7l4/OVe3lBJSmgheBA3wLb4p
+	 ztRSODRu6eLqie2tbnSD/eKWGhnDOzOJkb7VrjYLSDJkZQGl+AZGOfsJYtmu7zKqq0
+	 25ykW8pS5oX4v1Lmh4YFYI4qONxivNNHghtLus1xvDWSJOY0AlylaAWJenmU8XDzbK
+	 /YLxDPEm05uZqeftxy14lqO6DZC0FglHvw9JCscmhCLlRKfESVh4Dbk40NfaYIrMPV
+	 JDzKMK3jbHP8NVAPQaSrpAkLf57lNF5AVfB2/gWXFJb0T1jTn+3GuM8k0H7J+WTJOu
+	 BdTgWPpypKi0Q==
+Date: Fri, 22 Aug 2025 14:36:24 -0500
+From: Rob Herring <robh@kernel.org>
 To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
 Cc: Michael Turquette <mturquette@baylibre.com>,
-	linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-	~postmarketos/upstreaming@lists.sr.ht, linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	David Wronek <david@mainlining.org>, phone-devel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-	Karel Balej <balejk@matfyz.cz>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: marvell,pxa1908: Add syscon
- compatible to apmu
-Message-ID: <175589133410.186782.9795752378497482017.robh@kernel.org>
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>,
+	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: power: Add Marvell PXA1908 domains
+Message-ID: <20250822193624.GA187008-robh@kernel.org>
 References: <20250821-pxa1908-genpd-v2-0-eba413edd526@dujemihanovic.xyz>
- <20250821-pxa1908-genpd-v2-1-eba413edd526@dujemihanovic.xyz>
+ <20250821-pxa1908-genpd-v2-2-eba413edd526@dujemihanovic.xyz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,26 +67,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250821-pxa1908-genpd-v2-1-eba413edd526@dujemihanovic.xyz>
+In-Reply-To: <20250821-pxa1908-genpd-v2-2-eba413edd526@dujemihanovic.xyz>
 
-
-On Thu, 21 Aug 2025 13:17:43 +0200, Duje Mihanović wrote:
-> Add required syscon compatible to the APMU controller. This is required
-> for the SoC's power domain controller as the registers are shared.
-> 
-> Also add a #power-domain-cells property as the node will serve as the
-> power domain phandle.
+On Thu, Aug 21, 2025 at 01:17:44PM +0200, Duje Mihanović wrote:
+> Add device tree bindings for Marvell PXA1908's power domains.
 > 
 > Signed-off-by: Duje Mihanović <duje@dujemihanovic.xyz>
 > ---
 > v2:
-> - Drop simple-mfd
-> - Add #power-domain-cells
+> - Drop schema
 > ---
->  .../devicetree/bindings/clock/marvell,pxa1908.yaml | 30 +++++++++++++++++-----
->  1 file changed, 24 insertions(+), 6 deletions(-)
+>  include/dt-bindings/power/marvell,pxa1908-power.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+
+This should be squashed into the previous patch. The Reviewed-by stands 
+with that.
+
 > 
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-
+> diff --git a/include/dt-bindings/power/marvell,pxa1908-power.h b/include/dt-bindings/power/marvell,pxa1908-power.h
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..19b088351af138823505a774ff27203429fe2d97
+> --- /dev/null
+> +++ b/include/dt-bindings/power/marvell,pxa1908-power.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+> +/*
+> + * Marvell PXA1908 power domains
+> + *
+> + * Copyright 2025, Duje Mihanović <duje@dujemihanovic.xyz>
+> + */
+> +
+> +#ifndef __DTS_MARVELL_PXA1908_POWER_H
+> +#define __DTS_MARVELL_PXA1908_POWER_H
+> +
+> +#define PXA1908_POWER_DOMAIN_VPU	0
+> +#define PXA1908_POWER_DOMAIN_GPU	1
+> +#define PXA1908_POWER_DOMAIN_GPU2D	2
+> +#define PXA1908_POWER_DOMAIN_DSI	3
+> +#define PXA1908_POWER_DOMAIN_ISP	4
+> +
+> +#endif
+> 
+> -- 
+> 2.50.1
+> 
 
