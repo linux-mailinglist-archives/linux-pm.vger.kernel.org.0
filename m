@@ -1,148 +1,182 @@
-Return-Path: <linux-pm+bounces-32909-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32910-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21421B318DC
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 15:10:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D287B318E0
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 15:10:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BB39625150
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 13:02:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22B7462529E
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 13:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A242FD7DE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA872FE575;
 	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="nxmKQCPh";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="Jp/67mQN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3kc2hcd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77D42FC008;
-	Fri, 22 Aug 2025 13:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755867649; cv=pass; b=QO1DmY8FuZitIk7GRYJQg/HY7BooiRDu9nV8sVU4hicRcijQmHTybF+LB+96dttPEF+/g5aejiy/PEQwkLfe71/wfHn48lDQgOn3lnXFgXTeKY0wdqnsY3shrrEN+QM5ONlPlUSGinm5cyAabfnIGmDGbizlmZTKAg2S80uBxqw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EC32FDC29;
+	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755867649; cv=none; b=ZupihbgtX8Hvv16yzE2Bgdw85VLNLF7mLB6X0jLkRXDIuuhiw9yqioTvcMnZtkHwKbT3BwDQrIVjaSGriFJ66bAXaJv2Dfhamt7cVUom3HvEa/xO884oz9gUCI+pUIEaPw3YdGHrcKDeo50cn783lrb+b2lhovi2gwaDVa/EgYY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1755867649; c=relaxed/simple;
-	bh=tKWIfxfpH/XWzFDUflAitZfOsO2kUNsz1M5UwojPLDg=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=XytnqKdvjkoY6CJ3FHsvAkMwMjAY5au6qYI/o8eGmnCUOzLaOTrrg4VG5iWNFiv/HSNb+MPO9dmbLkfK+XA9HRRAxi1ihQIHn0nQHQHNIKyNM2SQ5fMn1zJhHu30SmxrsICVvD1RRcTqFyS4EgS9kGLHO8sATKJcompAkarafEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=nxmKQCPh; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=Jp/67mQN; arc=pass smtp.client-ip=85.215.255.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1755867629; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=OQUKXQKrLIEkTNdxgMLMUmUMN1QNPVW0lHu4nhT5I54CNgy8tU3OL/oJpC05WWuNgo
-    atu3NCfBEn7rtkv7CGNd+TtNAZ+SW009ZBrBvBuJP9oZOrA8KLhQnAI4HhHrsJGpZfmX
-    HEyAFLI689W/IVIh6TfdNymMsxOKW0vkdufHBc9RZ8gsdRqEeSc8Q0mMjPiSW6HX8OAU
-    iHKZWSeMpGKteU3jlL3OZqrPzJOdjPYjptIjDqwljJHMmPxAaEYMkxOio/QgafsXYZGV
-    57ORTCHGUiPxKAEHTI6vIMOFGWwzTmigrLUauM0jlFfSjRRMFzZqwH8I//C1DLgApuXt
-    4wQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1755867629;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=dyqgy5T3hx+MqXXKObwy6WBXqr/oFHAkqS1wlQiF4gA=;
-    b=L9UOthVWOLA+Lfpxh/Wt0eJ53Y3mvGXJ1j6Mqn6iUfpxNdgJ+NcrK8ZPIqALKTIlwu
-    jh7wgXfanMBNJG6E3FjIOscmJaxqKKSfjrymRyjCZ8TBoNKsCFeAPiqhoRg/gqdgwpGg
-    lkfcFJIY1h4t1eS+nLrMzBgKB3cqBItlPsPxryDC2fncGs2BjHIHiW4QPE9l1un0BlsT
-    ILZuyi+wsfLN+ExJPMxzptEaeIThos/neqEQhw094JUYP1MVGx6DDakiUcWPBQXfwRNh
-    4zFJlBEIP11FT4s3dq2x1KlGQ3Y6zCJmQ+llzK1gNSkWFm0YYgTbm8ryL+DMjyBYWLMt
-    +5Aw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1755867629;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=dyqgy5T3hx+MqXXKObwy6WBXqr/oFHAkqS1wlQiF4gA=;
-    b=nxmKQCPhCIRF7ZinVmUI7+HayKuUW41E/T0aRamLmIPI7FcMOU7U0ooj/fUIIAYAvY
-    eTFvu+ygC6mJivTInVSNFdlgqRg6qYJbEJVSYquAiwLpSVM/n/H9dZ3XtOil6Y/uHYwE
-    AF396238NbPCXZ5qYYgG1kruPzPzbAvHhDFRCbkn0wL4WxcFa5Yr9io3GScTpMFljWOM
-    cb6Yziznjm31oBF5HqwVKQN6NR5JSIgSvIrf87axlgUxWmlmFhRcFVSLb79/fKz7pQx9
-    rV4WqyKU/ArlNT8Do5SBhu6a8jq4v1GrlqpEfq6pD3CjKbZdosJOHoV/dw65cM/T7Bub
-    U+8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1755867629;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=dyqgy5T3hx+MqXXKObwy6WBXqr/oFHAkqS1wlQiF4gA=;
-    b=Jp/67mQNx3H74Jec//qwPYmo0UxLEBWaAYkXHLrRjsBN71l+eAVP61N54Ku31kPZwu
-    +rS7H9RI/6iFaZr9KiDA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfz0Z"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 52.1.2 DYNA|AUTH)
-    with ESMTPSA id Q307a417MD0S2Yt
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Fri, 22 Aug 2025 15:00:28 +0200 (CEST)
-Content-Type: text/plain;
-	charset=us-ascii
+	bh=ats1+jsJnYa0rxWrINmyziV8D1Yb5nkkrfpinjF6M5w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gPt6lurMfYSNTqaTKz4ujnc3/J8VB78d/uTowQ8/KMgL1LDO18uO8nS4Jyuz+gt9KIeYt19DXIksDYNatVp7fGaYWpDjHvsMUUVjJzz15FxRN7+yeQ96mpK+EorEc81pXoInm9VVTBzlGi1ksmUX9/fywJgxKNaiHiZVptczHhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3kc2hcd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C072C116B1;
+	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755867649;
+	bh=ats1+jsJnYa0rxWrINmyziV8D1Yb5nkkrfpinjF6M5w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=T3kc2hcd8gnj7MvDTqiVvko2q4INNi7oQPFn2DM0V0upjiy3lU6h8xjpmAfmVqFCh
+	 m7a6mkXGqmDC2MOhVN+ucl+jkcPEzBc5cAEO7tB91l/1BI8TomUzJCsq9+fhinKbfH
+	 hNXWiT1YG9a/ielIBbER/npC6I57+CezJk7VCbXMIJKFuxTRso/5WUKskDqwF5VV11
+	 SEQc/Ne0ir/00IDAExktYTOKHESSSasL4bo1BD8SEPdgWrCD1N3X7X3w3R9tv6i8Cm
+	 Om/HoxvGa8DzAbNlIFpvxalDj3W1TX/eO8qL6+prY5WO1MFMfBkMmeIGopn+FPkphh
+	 6xmOHJElz4deg==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-61bf9ef4cc0so1053526eaf.0;
+        Fri, 22 Aug 2025 06:00:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWhsOF8ITBZUfMEwNVw58Pf3AIRaCrwXP941zKzwZshEWsKczRqDtP9fJ4UWAzdPBWwXiseDZZeYdnoFS8=@vger.kernel.org, AJvYcCXPLc5mcjk3KKxRoaZgLN8pd2s+zp9lzRbuDsgNSmJx8ZmDiM37SgAgb4zCdyXgM5WHk+jKZkDzikw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTHzdjOpopqyclUwZtK8hgR8bThNbbXz1wRDWhC1CGXI58OxWb
+	AWGeyKGuyjHM4RtpAd0mCSgaj+TGOLCZ0ycoD6eo3ilmVbYy73NPeytzQqp2x+w+8kNt/wrwmkT
+	JzbJ6+Ttc5KHRTT/fCKa+0WWlAEXNTKc=
+X-Google-Smtp-Source: AGHT+IFAMYFFJYEzNXirerl2h0xgcYM7YrFPAtEXbwXil6NG/7dYXXfAS8ecp4/JmcZ7KgwwFMp8XE0Bn5ibNlqtYF4=
+X-Received: by 2002:a05:6870:d113:b0:301:a704:ef1c with SMTP id
+ 586e51a60fabf-314dce132d9mr1347844fac.25.1755867648402; Fri, 22 Aug 2025
+ 06:00:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
-Subject: Re: [PATCH] power: supply: bq27xxx: fix error return in case of no
- bq27000 hdq battery
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <F9E0EBBA-094D-4940-8A15-409696E6B405@goldelico.com>
-Date: Fri, 22 Aug 2025 15:00:18 +0200
-Cc: Sebastian Reichel <sre@kernel.org>,
- Jerry Lv <Jerry.Lv@axis.com>,
- =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- letux-kernel@openphoenux.org,
- stable@vger.kernel.org,
- kernel@pyra-handheld.com
+MIME-Version: 1.0
+References: <20250813185530.635096-1-srinivas.pandruvada@linux.intel.com> <20250813185530.635096-5-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20250813185530.635096-5-srinivas.pandruvada@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 22 Aug 2025 15:00:36 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i-HN15f+8GaH9Rh-Siu_hMU38byRoWZ8oLW8r88o6ZOg@mail.gmail.com>
+X-Gm-Features: Ac12FXy0_a54K2CKy5xUOkf5CuHsc838UYAATXA-ngDu0kC5BifS148-jsrMB-A
+Message-ID: <CAJZ5v0i-HN15f+8GaH9Rh-Siu_hMU38byRoWZ8oLW8r88o6ZOg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] thermal: intel: int340x: Add module parameter to
+ change slider offset
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <D003BFF9-737D-432D-B522-9AD5E60A6E9A@goldelico.com>
-References: <bc405a6f782792dc41e01f9ddf9eadca3589fcdc.1753101969.git.hns@goldelico.com>
- <20250821201544.047e54e9@akair>
- <10174C85-591A-4DCB-A44E-95F2ACE75E99@goldelico.com>
- <20250821220552.2cb701f9@akair>
- <F9E0EBBA-094D-4940-8A15-409696E6B405@goldelico.com>
-To: Andreas Kemnade <andreas@kemnade.info>
-X-Mailer: Apple Mail (2.3826.600.51.1.1)
 
-Hi,
+On Wed, Aug 13, 2025 at 8:55=E2=80=AFPM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> The slider offset value allows the SoC to automatically switch slider
+> positions in range [SOC_SLIDER =E2=80=A6 (SOC_SLIDER + slider offset)] ba=
+sed on
+> internal algorithms to improve power efficiency.
 
-> Am 22.08.2025 um 08:51 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
->=20
-> What do you mean with "catched earlier"? What is your proposal?
->=20
-> Well, as proposed by Jerry earlier, it appears as if it can also be =
-handled in bq27xxx_battery_hdq_read()
-> by detecting the register BQ27XXX_REG_FLAGS and the read value 0xff =
-and return -ENODEV.
+So SOC_SLIDER is the value set by the user (or the default value if
+the user has not set it) and the "slider offset" allows the SoC to
+adjust the slider value by setting it above SOC_SLIDER up to and
+including SOC_SLIDER + slider offset?
 
-I tried this but there are more locations where BQ27XXX_REG_FLAGS are =
-read and where the reading
-code is not prepared to receive an -ENODEV. This will for example emit
+If so, I would add a comment to this effect next to the slider_offset
+module param definition.
 
-[  293.389831] w1_slave_driver 01-000000000000: error reading flags
+> By default, the SoC slider offset is set to 0. This means that SoC is not
+> allowed to switch slider position.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  .../processor_thermal_soc_slider.c            | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_=
+slider.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slid=
+er.c
+> index ffc538c9b9e3..bd4ff26a488b 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.=
+c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.=
+c
+> @@ -87,6 +87,40 @@ static const struct kernel_param_ops slider_def_balanc=
+e_ops =3D {
+>  module_param_cb(slider_balance, &slider_def_balance_ops, NULL, 0644);
+>  MODULE_PARM_DESC(slider_balance, "Set slider default value for balance."=
+);
+>
+> +static u8 slider_offset;
+> +
+> +static int slider_def_offset_set(const char *arg, const struct kernel_pa=
+ram *kp)
+> +{
+> +       u8 offset;
+> +       int ret;
+> +
+> +       guard(mutex)(&slider_param_lock);
+> +
+> +       ret =3D kstrtou8(arg, 16, &offset);
+> +       if (!ret) {
+> +               if (offset > SOC_SLIDER_VALUE_MAXIMUM)
+> +                       return -EINVAL;
+> +
+> +               slider_offset =3D offset;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static int slider_def_offset_get(char *buf, const struct kernel_param *k=
+p)
+> +{
+> +       guard(mutex)(&slider_param_lock);
+> +       return sysfs_emit(buf, "%02x\n", slider_offset);
+> +}
+> +
+> +static const struct kernel_param_ops slider_offset_ops =3D {
+> +       .set =3D slider_def_offset_set,
+> +       .get =3D slider_def_offset_get,
+> +};
+> +
+> +module_param_cb(slider_offset, &slider_offset_ops, NULL, 0644);
+> +MODULE_PARM_DESC(slider_offset, "Set slider offset.");
 
-each time the battery is removed. And in some race cases (a read of the =
-full /sys properties is
-already in progress), there may be more than one such message. That is =
-not nice to replace one
-console message with another...
+The _DESC is a bit short IMO.  I would say something like "Maximum
+offset by which the slider can be increased automatically above the
+prescribed value".
 
-So I am not sure if it is a good idea to make the lowest layer ("catched =
-earlier") read function
-detect -ENODEV based on the register number. It can not know what the =
-next layer wants to do with
-the result.
-
-BR,
-Nikolaus
-
+> +
+>  /* Convert from platform power profile option to SoC slider value */
+>  static int convert_profile_to_power_slider(enum platform_profile_option =
+profile)
+>  {
+> @@ -120,6 +154,8 @@ static int convert_power_slider_to_profile(u8 slider)
+>  #define SLIDER_MASK            GENMASK_ULL(2, 0)
+>  #define SLIDER_ENABLE_BIT      7
+>
+> +#define SLIDER_OFFSET_MASK     GENMASK_ULL(6, 4)
+> +
+>  static void set_soc_power_profile(struct proc_thermal_device *proc_priv,=
+ int slider)
+>  {
+>         u64 val;
+> @@ -128,6 +164,11 @@ static void set_soc_power_profile(struct proc_therma=
+l_device *proc_priv, int sli
+>         val &=3D ~SLIDER_MASK;
+>         val |=3D FIELD_PREP(SLIDER_MASK, slider);
+>         val |=3D BIT(SLIDER_ENABLE_BIT);
+> +
+> +       /* Set the slider offset from module params */
+> +       val &=3D ~SLIDER_OFFSET_MASK;
+> +       val |=3D FIELD_PREP(SLIDER_OFFSET_MASK, slider_offset);
+> +
+>         writeq(val, proc_priv->mmio_base + SOC_POWER_SLIDER_OFFSET);
+>  }
+>
+> --
 
