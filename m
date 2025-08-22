@@ -1,233 +1,201 @@
-Return-Path: <linux-pm+bounces-32857-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32858-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BA3AB30C95
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:30:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B3BDB30CB4
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6198AC63A8
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 03:30:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7CC0600353
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 03:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF50819D065;
-	Fri, 22 Aug 2025 03:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC4428C85B;
+	Fri, 22 Aug 2025 03:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JGeTEV1j"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KCqTb0ZI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50ACE219E8;
-	Fri, 22 Aug 2025 03:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755833428; cv=none; b=nqEERDallrieIqMut+R0C99Fk/inSvdjdfun6WuSeyop3ugGPt30KkUF+bXmYKNCuusQM44eBRSueDcEQfraYvtcJsSF90p/yZY3hGZj7mSkOjYyeg3k6TSaY8ZUcG7XiszewR0tYI1GuerA+zpv+eoJaJowJ7l3zqF6YE8Kpjc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755833428; c=relaxed/simple;
-	bh=KwOIsol5h/iDF4mvK9j6iFK2kUiXnb117cWVP5RNnMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rNm3i+y6Tbrb8D5hpA2zJ5rstSyBSCOTm8Oi4McbEBnWQ50E2ucWxHxwaNxnRXUWjFxLptvxRt1BY0bzjBRzHVdq5vziR3FD7lln6CGKcN9pnzdVLGZuFigtdXGYg0+uU/EhoLKttIPaTc1+aEVi7Kgy4iTstGQr+fTFWNdsUxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JGeTEV1j; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755833426; x=1787369426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KwOIsol5h/iDF4mvK9j6iFK2kUiXnb117cWVP5RNnMQ=;
-  b=JGeTEV1je3k0l75NQSrk3F6qTTbI0bttTunbnSzhqxF6AAYidOIR2GpT
-   mnCkYE+I2D8OqjGEtr95MFqAF//AN+9t1yOH9PX4Ps6suAUS64p4LXur9
-   FTqP6B9cQztgy5NUQLZGmIx8d7bzqYk/uuquKI5eOCVfE7+W3MZosQQTY
-   IM7pTz2TnsQebijYW09LNNgTIbJQU+/31gHqsGqFDOCa1j/CkCu1kkNIh
-   X6QfXh1ZNFDV5kuaPylU3Art/I+cf3PPEOYFt3tXASCyVXGTUQP5PsfKL
-   5VdFcGYhnetJTMojuoe6A7Xu7t0ZYzy8cmlF3VLOx6qNlmf15RHUg0+kC
-   Q==;
-X-CSE-ConnectionGUID: pgoOMIOKTPGXWTtrvYzFlA==
-X-CSE-MsgGUID: i5jDh8SrQGWGn1QAZ+DL5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="68840351"
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="68840351"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 20:30:25 -0700
-X-CSE-ConnectionGUID: piP44CNZT1C00NyXEf25jA==
-X-CSE-MsgGUID: Z3Ruye5qTxW+djvFTvDuww==
-X-ExtLoop1: 1
-Received: from mjruhl-desk.amr.corp.intel.com (HELO localhost) ([10.124.221.244])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 20:30:25 -0700
-Date: Thu, 21 Aug 2025 20:30:22 -0700
-From: David Box <david.e.box@linux.intel.com>
-To: rafael@kernel.org, bhelgaas@google.com, vicamo.yang@canonical.com, 
-	kenny@panix.com, ilpo.jarvinen@linux.intel.com, nirmal.patel@linux.intel.com, 
-	mani@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] PCI/ASPM: Add host-bridge API to override default
- ASPM/CLKPM link state
-Message-ID: <5t2ekrhtixmzo7we2ylfys22fzbxkue2fsjoimgpn2wijme5o5@sudgicai3fjc>
-References: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0EA21ADB9;
+	Fri, 22 Aug 2025 03:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755834142; cv=fail; b=hPAHJVG99X8hLKYXv6XLApCFUuO2QvIG835oRYCvLMY9Pf1EsEhBUUww6CaiilE019uagQ5KBR2YMth8NRLEgRvV7eH/8TRF1izavH+rNcVh5O1x9WQbhYullgD7w+MDeXvxiypu0odWTyxx0kXslluEg8gBW2xPCIc/kSehHH8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755834142; c=relaxed/simple;
+	bh=fP/kU3u1PXVfB56QwbN2qt/HkRBGg0JwZhucaZttopM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eYBYfyDdpSV2g7FMGEy4NHjMbXiRMEcHHm0dn0L9suiWZ7HQZLuLHDR6NxjJ1WQ7TssUGLesXhg3JDHpJsJ3hbxCB0S/7l+Kf43SKASaEbNHB26UyAwesQyrhWbI0RAEhHEwul5R+fTXigATJjuOwN5Bm4m2GCB39g0YQBQPOR8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KCqTb0ZI; arc=fail smtp.client-ip=40.107.93.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BjidWx9LRRx+cLE5BnWrAV0PbDERltcLNafnF8ue/RwzxOSjiXUfu93q67SWOU8/mtOuSp55Dej8HIuCOMVU44ft89EwHYv2Xx8PPAM8xaeCpj8GJt+9J5yfr+T0GDtMDu68MSzxbCm6hwVbW673IkG1pNjhBRH8wxbHUQsQzufMbit5O8u6lnD2uCNW4PDWGeSdzUEdn+0unaLSr9tojD+/ogR+H2OqZEPLVKpSccI8iOp2+eoxTsPtdXhQ2SDRcrcko1e5agouSedtJHU7MEINXVe/HSbeaAepS2rLbQTVL+MjZw34B9bR8xfNwAelhvJopylsnvfbgYd1BZ7Jyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bnX8NOuDrjMcEvgu+GzHgV2VKEObj9qh3j5GHJqwHoc=;
+ b=cZPOc5LvMLKIMMFkcbUwes5FyQ1suL4HdAhZUm9jlxwmy0SMoRKXF1UkJzXMccblp/eB56+mza/8oEdJVQTMeFhdV+VNsrRjLIjl/uq0rg9TH3WtLcb05fn/t1aKT0mRn6yDY6gikN5ydwP9oLXlZv0hJNUc3qSqrKZvsrDrSP36eI8VjAD1Nx8kOy6bR94iqC78iPffNqqk8pb8SQFTKiPXc4WfDD8hkoN34VO9rz1eqRUa23LrKdCWPYiFTFZ2qDLiutHYAHcMkZ4jiV75CvHVT94HbQR2C8amWKKS3emM9skG+3cI5uJ1unjsIzkpB5fslJLKdZdi6u0Gr5cPxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bnX8NOuDrjMcEvgu+GzHgV2VKEObj9qh3j5GHJqwHoc=;
+ b=KCqTb0ZIGVaD28c9MnFpiSVWXmHRXuQlVKt9EmDCYqF81LLak9e5AcVRlwiEGiwh15LdeYeRInlcnUkcJgcnmLWIFDhJPZ3zTV55rJyEGun6jhInhZenxCNvZ4fkEDYHpaJSjBtbFN62dmByzjSxpynN7/cJT9HmUDtnt/V9D6I=
+Received: from SJ0PR03CA0385.namprd03.prod.outlook.com (2603:10b6:a03:3a1::30)
+ by CH3PR12MB9394.namprd12.prod.outlook.com (2603:10b6:610:1cf::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.15; Fri, 22 Aug
+ 2025 03:42:15 +0000
+Received: from SJ1PEPF000026C5.namprd04.prod.outlook.com
+ (2603:10b6:a03:3a1:cafe::23) by SJ0PR03CA0385.outlook.office365.com
+ (2603:10b6:a03:3a1::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.17 via Frontend Transport; Fri,
+ 22 Aug 2025 03:42:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF000026C5.mail.protection.outlook.com (10.167.244.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9052.8 via Frontend Transport; Fri, 22 Aug 2025 03:42:14 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 21 Aug
+ 2025 22:42:13 -0500
+From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>
+CC: Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
+	<jonathan.cameron@huawei.com>, Dave Jiang <dave.jiang@intel.com>, "Alison
+ Schofield" <alison.schofield@intel.com>, Vishal Verma
+	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
+	<dan.j.williams@intel.com>, Matthew Wilcox <willy@infradead.org>, Jan Kara
+	<jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
+	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
+	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, "Ying
+ Huang" <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	Peter Zijlstra <peterz@infradead.org>, Greg KH <gregkh@linuxfoundation.org>,
+	Nathan Fontenot <nathan.fontenot@amd.com>, Smita Koralahalli
+	<Smita.KoralahalliChannabasappa@amd.com>, Terry Bowman
+	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
+	<benjamin.cheatham@amd.com>, PradeepVineshReddy Kodamati
+	<PradeepVineshReddy.Kodamati@amd.com>, Zhijian Li <lizhijian@fujitsu.com>
+Subject: [PATCH 0/6] dax/hmem, cxl: Coordinate Soft Reserved handling with CXL
+Date: Fri, 22 Aug 2025 03:41:56 +0000
+Message-ID: <20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000026C5:EE_|CH3PR12MB9394:EE_
+X-MS-Office365-Filtering-Correlation-Id: f76bc764-f21f-4510-01c0-08dde12de2ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UFpJVzRFVU5NK0JGWFpUTmZieFlKR1JpTmF0ZWFxSVJVSHA2WHM0ZUQ3ZFpX?=
+ =?utf-8?B?RWNHNVN5dE5CRktwUGdMcTh3aEJoKzBXTHBaRkYwdzkzQko3Zk5PTUwyQUVi?=
+ =?utf-8?B?UktCbFpJR09NeVlKUUtVdjBHVUNWUlFobTVCS1JjaGFwbEFlRVQ5eXVQV3pR?=
+ =?utf-8?B?bjgrV2FZUmlhT0U2SEQwTzhUcDNIdW9EZ3kvWUJzSUZ2OU53NUwzcCtGZDJv?=
+ =?utf-8?B?Wkdja2VhMHZWYUZwMjFsTkFKN0lJM3NKbEkxcCt0UFR5bENKUjhZTkRORWhI?=
+ =?utf-8?B?d3pTZjQ0Q2dhS2pqZ2pkWDE5NlN2Z3UwQlFxZlV2WUYyWWJLV29peDJCU0xN?=
+ =?utf-8?B?Y2JrVXlUVkcxcStERmtBbU5FYk0zUWgxcEtTTHpBZ0FlM1JhYjFNenBDUm9N?=
+ =?utf-8?B?dG5RZGV4WVMzSnhndUEvZlkxMC9wekJtam1EbUlLY1RrN0xpQkV0N2g3RW8x?=
+ =?utf-8?B?ZGRyRFJENElZTGRBK2tTMGhEQkY5Sm5qMU90NjJVanZSZGxuTzZxeEhBZThP?=
+ =?utf-8?B?UGJCMmdINUpuU2pLRG1YVGJadWFDT1g2R0NSNng4NkRDWlFybEtSV24yWGNa?=
+ =?utf-8?B?ZG1kU2FZVWZhdmdxMHk1WUpXM01tWExuRUkxZWdwRXBLc1hZSXc3V0Nvb1hB?=
+ =?utf-8?B?OHFuVWZVVG43R3MzYmpsR2ZKckxYblBTV28va2w3MEc1NkE1TGdETTV1MVly?=
+ =?utf-8?B?YzMyOHNwTkg3TzhMeTF6cGp6ZkFsWWMyejhQcHp1SE9ZOFE4MC93NFYvdFdp?=
+ =?utf-8?B?SGFleVF4MFgvTGFYMll5bHNxN0NoOGhPc0tzZ2xuVHJOUGtpZ1dsRkd5L3BF?=
+ =?utf-8?B?QllGYTJnOTN3cCtSZDAzKzRZSmw0UE9Nc0hhaE1aaWt3bVl1QkxtMkNtSzdu?=
+ =?utf-8?B?VldHUDE1Vy85UHZUY05vY1ovcGNkVVJjL1NLL2RtdjM1YTZ2VjZoODlFVUJy?=
+ =?utf-8?B?VWx3MTdYbGNjdUpXSGNFSTlRc2MxK3dSQVhrZnJXV200K21PalhNVmZnOGJp?=
+ =?utf-8?B?a2MvNHRtT01VZ1NiWjZZRGhsZldIUDkrNTJKQllMQ3lhQnFXWEprRUdMMVBG?=
+ =?utf-8?B?NWZCTDlVQzl5L0tFVm9KWUlqRWl4T1V5OE9BR3FuRjh1N1VibjFxd0VmM05Z?=
+ =?utf-8?B?SElCZXZoRzdxUDZBdjNaMXpwZ0c4SktkdU1URFFKSE5HR3NGNDZXVU4rZUxR?=
+ =?utf-8?B?cWFZdWM1YjRoS0hvYjJ3UWF2RzhVZWlZTGdTQUh0eVg5WW1pZXFLVjh2Vkk4?=
+ =?utf-8?B?b25Ud2hQaTBrR3prSXQySzNMMFUrMDFFSFNXS0VSVmdYWG1rdmR3OGNVQTFB?=
+ =?utf-8?B?V3p2Y1REa0Rqbzlsa3BJa0NoVHZia2o1VnpxTFVVQjQ2L3FuTGNaZmJjMWtU?=
+ =?utf-8?B?cGplcTUrZXFnWTRHUHQvQjY5RVhNdGRLRWRrWnlleU1ZOS9rQkpGYjBtcUNS?=
+ =?utf-8?B?TTYyUmFlN2dacWdubFp3cUNJb2dBdUlUbVNvOFoydFlRSUFJS0dQbCsyZWc5?=
+ =?utf-8?B?TmdaTUo2RUxvS1lseGk1ZVM4d3lxdnRKb3diMXlSc3NTbVp3dndraGtlR0JF?=
+ =?utf-8?B?WndGamI2UCtmWTZuRlFQV1IrQUhIOE5oQjllWlZYMHh3TjNPaFQ2WXRSUERm?=
+ =?utf-8?B?cDVlTVk2L0tSR1dMcFdVUGtGV0VxUVRVSXRwcDYzYVN3dyt1OTZwUlh6UnBk?=
+ =?utf-8?B?SnpnYngxVHM5WlZYMlpRTWsxcEZuVXpWQ2dLaHdPMjF5QUlQaXZzYlN4TzhZ?=
+ =?utf-8?B?OTk1ZXh6dklZOG5QTGF6bTV1YUN0cXRtbDBOSkJIZ0JPaTdDcnRqNnNLZHlW?=
+ =?utf-8?B?NkpjakFVSjc5dVdrMDV0b3ZQc3ZzOGdHRTZZcCs4QjFESlZtVVE4WjlsbitU?=
+ =?utf-8?B?VlBiMFUwTGpkY3RxNEpZRExyVnBPeUJhenZDTWlzSEhlOU81T1A0NUdFRTdE?=
+ =?utf-8?B?RVBUaUJ2dGlGYnV5bGg0bFR5NHM5Z2NpZzZpaWhEOUxHeUI4cVVxZWpuRTcy?=
+ =?utf-8?B?WFpoemFVY0hoNlVGRDJDUVFUc2p2RDMrYmtRZjJjSmdMVzZGY3dEbUhTK0k3?=
+ =?utf-8?B?L1FXWVk0eGI5VDJJdHIxZENCSEQ2dUdvUDZ3dz09?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2025 03:42:14.7769
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f76bc764-f21f-4510-01c0-08dde12de2ab
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000026C5.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9394
 
-On Thu, Aug 21, 2025 at 08:11:57PM -0700, David E. Box wrote:
-> Synthetic PCIe hierarchies, such as those created by Intel VMD, are not
-> enumerated by firmware and do not receive BIOS-provided ASPM or CLKPM
-> defaults. Devices in such domains may therefore run without the intended
-> power management.
-> 
-> Add a host-bridge mechanism that lets controller drivers supply their own
-> defaults. A new aspm_default_link_state field in struct pci_host_bridge is
-> set via pci_host_set_default_pcie_link_state(). During link initialization,
-> if this field is non-zero, ASPM and CLKPM defaults come from it instead of
-> BIOS.
-> 
-> This enables drivers like VMD to align link power management with platform
-> expectations and avoids embedding controller-specific quirks in ASPM core
-> logic.
-> 
-> Link: https://patchwork.ozlabs.org/project/linux-pci/patch/20250720190140.2639200-1-david.e.box%40linux.intel.com/
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> ---
+This series aims to address long-standing conflicts between dax_hmem and
+CXL when handling Soft Reserved memory ranges.
 
-Besides the review I'd appreciate a Tested-by on this patch. Thanks.
+I have considered adding support for DAX_CXL_MODE_REGISTER, but I do not
+yet have a solid approach. Since this came up in discussion yesterday,
+I am sending the current work and would appreciate inputs on how best to
+handle the DAX_CXL_MODE_REGISTER case.
 
-David
+Reworked from Dan's patch:
+https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/patch/?id=ab70c6227ee6165a562c215d9dcb4a1c55620d5d
 
-> 
-> Changes in V1 from RFC:
-> 
->   -- Rename field to aspm_dflt_link_state since it stores
->      PCIE_LINK_STATE_XXX flags, not a policy enum.
->   -- Move the field to struct pci_host_bridge since it's being applied to
->      the entire host bridge per Mani's suggestion.
->   -- During testing noticed that clkpm remained disabled and this was
->      also handled by the formerly used pci_enable_link_state(). Add a
->      check in pcie_clkpm_cap_init() as well to enable clkpm during init.
-> 
-> Changes in V2:
-> 
->   -- Host field name changed to aspm_default_link_state.
->   -- Added get/set functions for aspm_default_link_state. Only the
->      setter is exported. Added a kernel-doc describing usage and
->      particulars around meaning of 0.
-> 
->  drivers/pci/pcie/aspm.c | 42 +++++++++++++++++++++++++++++++++++++++--
->  include/linux/pci.h     |  9 +++++++++
->  2 files changed, 49 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 919a05b97647..b4f0b4805a35 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -373,6 +373,39 @@ static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
->  	pcie_set_clkpm_nocheck(link, enable);
->  }
->  
-> +/**
-> + * pci_host_set_default_pcie_link_state - set controller-provided default ASPM/CLKPM mask
-> + * @host: host bridge on which to apply the defaults
-> + * @state: PCIE_LINK_STATE_XXX flags
-> + *
-> + * Allows a PCIe controller driver to specify the default ASPM and/or
-> + * Clock Power Management (CLKPM) link state mask that will be used
-> + * for links under this host bridge during ASPM/CLKPM capability init.
-> + *
-> + * The value is consumed in pcie_aspm_cap_init() and pcie_clkpm_cap_init()
-> + * to override the firmware-discovered defaults.
-> + *
-> + * Interpretation of aspm_default_link_state:
-> + *   - Nonzero: bitmask of PCIE_LINK_STATE_* values to be used as defaults
-> + *   - Zero:    no override provided; ASPM/CLKPM defaults fall back to
-> + *              values discovered in hardware/firmware
-> + *
-> + * Note: zero is always treated as "unset", not as "force ASPM/CLKPM off".
-> + */
-> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> +					  unsigned int state)
-> +{
-> +	host->aspm_default_link_state = state;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_host_set_default_pcie_link_state);
-> +
-> +static u32 pci_host_get_default_pcie_link_state(struct pci_dev *parent)
-> +{
-> +	struct pci_host_bridge *host = pci_find_host_bridge(parent->bus);
-> +
-> +	return host ? host->aspm_default_link_state : 0;
-> +}
-> +
->  static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
->  {
->  	int capable = 1, enabled = 1;
-> @@ -394,7 +427,10 @@ static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
->  			enabled = 0;
->  	}
->  	link->clkpm_enabled = enabled;
-> -	link->clkpm_default = enabled;
-> +	if (pci_host_get_default_pcie_link_state(link->pdev) & PCIE_LINK_STATE_CLKPM)
-> +		link->clkpm_default = 1;
-> +	else
-> +		link->clkpm_default = enabled;
->  	link->clkpm_capable = capable;
->  	link->clkpm_disable = blacklist ? 1 : 0;
->  }
-> @@ -866,7 +902,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
->  	}
->  
->  	/* Save default state */
-> -	link->aspm_default = link->aspm_enabled;
-> +	link->aspm_default = pci_host_get_default_pcie_link_state(parent);
-> +	if (!link->aspm_default)
-> +		link->aspm_default = link->aspm_enabled;
->  
->  	/* Setup initial capable state. Will be updated later */
->  	link->aspm_capable = link->aspm_support;
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 59876de13860..8947cbaf9fa6 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -620,6 +620,10 @@ struct pci_host_bridge {
->  	unsigned int	size_windows:1;		/* Enable root bus sizing */
->  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
->  
-> +#ifdef CONFIG_PCIEASPM
-> +	unsigned int	aspm_default_link_state;	/* Controller-provided default */
-> +#endif
-> +
->  	/* Resource alignment requirements */
->  	resource_size_t (*align_resource)(struct pci_dev *dev,
->  			const struct resource *res,
-> @@ -1849,6 +1853,8 @@ int pci_disable_link_state(struct pci_dev *pdev, int state);
->  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
->  int pci_enable_link_state(struct pci_dev *pdev, int state);
->  int pci_enable_link_state_locked(struct pci_dev *pdev, int state);
-> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> +					  unsigned int state);
->  void pcie_no_aspm(void);
->  bool pcie_aspm_support_enabled(void);
->  bool pcie_aspm_enabled(struct pci_dev *pdev);
-> @@ -1861,6 +1867,9 @@ static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
->  { return 0; }
->  static inline int pci_enable_link_state_locked(struct pci_dev *pdev, int state)
->  { return 0; }
-> +static inline void
-> +pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> +				     unsigned int state) { }
->  static inline void pcie_no_aspm(void) { }
->  static inline bool pcie_aspm_support_enabled(void) { return false; }
->  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return false; }
-> 
-> base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
-> -- 
-> 2.43.0
-> 
-> 
+Previous work:
+https://lore.kernel.org/all/20250715180407.47426-1-Smita.KoralahalliChannabasappa@amd.com/
+
+Smita Koralahalli (6):
+  dax/hmem, e820, resource: Defer Soft Reserved registration until hmem
+    is ready
+  dax/hmem: Request cxl_acpi and cxl_pci before walking Soft Reserved
+    ranges
+  dax/hmem, cxl: Tighten dependencies on DEV_DAX_CXL and dax_hmem
+  dax/hmem: Defer Soft Reserved overlap handling until CXL region
+    assembly completes
+  dax/hmem: Reintroduce Soft Reserved ranges back into the iomem tree
+  cxl/region, dax/hmem: Guard CXL DAX region creation and tighten HMEM
+    deps
+
+ arch/x86/kernel/e820.c    |   2 +-
+ drivers/cxl/core/region.c |   4 +-
+ drivers/dax/Kconfig       |   3 +
+ drivers/dax/hmem/device.c |   4 +-
+ drivers/dax/hmem/hmem.c   | 137 +++++++++++++++++++++++++++++++++++---
+ include/linux/ioport.h    |  24 +++++++
+ kernel/resource.c         |  73 +++++++++++++++++---
+ 7 files changed, 222 insertions(+), 25 deletions(-)
+
+-- 
+2.17.1
+
 
