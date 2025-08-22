@@ -1,71 +1,70 @@
-Return-Path: <linux-pm+bounces-32910-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32911-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D287B318E0
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 15:10:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD3C1B318E5
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 15:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22B7462529E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 13:02:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4BAB626B89
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 13:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA872FE575;
-	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA6B2FB613;
+	Fri, 22 Aug 2025 13:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3kc2hcd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FQDm8DY+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EC32FDC29;
-	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5FC2EBDDC;
+	Fri, 22 Aug 2025 13:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755867649; cv=none; b=ZupihbgtX8Hvv16yzE2Bgdw85VLNLF7mLB6X0jLkRXDIuuhiw9yqioTvcMnZtkHwKbT3BwDQrIVjaSGriFJ66bAXaJv2Dfhamt7cVUom3HvEa/xO884oz9gUCI+pUIEaPw3YdGHrcKDeo50cn783lrb+b2lhovi2gwaDVa/EgYY=
+	t=1755867776; cv=none; b=COn3yoQMaOF5QgHxWWe+h/YqpWcnthdJB3w3s2q6/ZM/4RYfplyJRyQ9Ejrfcs5k0Ed0nwpyPP7nNmELz31qCern5R/N5dY6WWuaZNe/bQB57zRQPwCf/KNTDkyqdlL3/n5juxAZbaUQuYLse8vV0r2uDJzaK8oLu1L+/VdAuFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755867649; c=relaxed/simple;
-	bh=ats1+jsJnYa0rxWrINmyziV8D1Yb5nkkrfpinjF6M5w=;
+	s=arc-20240116; t=1755867776; c=relaxed/simple;
+	bh=XUf06i8e8RoMGL2RRWjVSNqQW46vBv9zyMPjHciLK5g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gPt6lurMfYSNTqaTKz4ujnc3/J8VB78d/uTowQ8/KMgL1LDO18uO8nS4Jyuz+gt9KIeYt19DXIksDYNatVp7fGaYWpDjHvsMUUVjJzz15FxRN7+yeQ96mpK+EorEc81pXoInm9VVTBzlGi1ksmUX9/fywJgxKNaiHiZVptczHhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3kc2hcd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C072C116B1;
-	Fri, 22 Aug 2025 13:00:49 +0000 (UTC)
+	 To:Cc:Content-Type; b=NYs55syUAb/lngV185OHW4wBHeIlN478q/dEaoiim9xKO/spb5TtRxnUA3UpGfkQE811mv80Lzj05jpQzTVNUMkLW0yB4I8oLdNnVUZB7FLVUuKcJbCi0iqKWHcjFDwgjYc0tNHUG9aM9Dz3uLRprj10EOO1Os3+08nSdXXi7kE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FQDm8DY+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27D8C113CF;
+	Fri, 22 Aug 2025 13:02:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755867649;
-	bh=ats1+jsJnYa0rxWrINmyziV8D1Yb5nkkrfpinjF6M5w=;
+	s=k20201202; t=1755867775;
+	bh=XUf06i8e8RoMGL2RRWjVSNqQW46vBv9zyMPjHciLK5g=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T3kc2hcd8gnj7MvDTqiVvko2q4INNi7oQPFn2DM0V0upjiy3lU6h8xjpmAfmVqFCh
-	 m7a6mkXGqmDC2MOhVN+ucl+jkcPEzBc5cAEO7tB91l/1BI8TomUzJCsq9+fhinKbfH
-	 hNXWiT1YG9a/ielIBbER/npC6I57+CezJk7VCbXMIJKFuxTRso/5WUKskDqwF5VV11
-	 SEQc/Ne0ir/00IDAExktYTOKHESSSasL4bo1BD8SEPdgWrCD1N3X7X3w3R9tv6i8Cm
-	 Om/HoxvGa8DzAbNlIFpvxalDj3W1TX/eO8qL6+prY5WO1MFMfBkMmeIGopn+FPkphh
-	 6xmOHJElz4deg==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-61bf9ef4cc0so1053526eaf.0;
-        Fri, 22 Aug 2025 06:00:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWhsOF8ITBZUfMEwNVw58Pf3AIRaCrwXP941zKzwZshEWsKczRqDtP9fJ4UWAzdPBWwXiseDZZeYdnoFS8=@vger.kernel.org, AJvYcCXPLc5mcjk3KKxRoaZgLN8pd2s+zp9lzRbuDsgNSmJx8ZmDiM37SgAgb4zCdyXgM5WHk+jKZkDzikw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTHzdjOpopqyclUwZtK8hgR8bThNbbXz1wRDWhC1CGXI58OxWb
-	AWGeyKGuyjHM4RtpAd0mCSgaj+TGOLCZ0ycoD6eo3ilmVbYy73NPeytzQqp2x+w+8kNt/wrwmkT
-	JzbJ6+Ttc5KHRTT/fCKa+0WWlAEXNTKc=
-X-Google-Smtp-Source: AGHT+IFAMYFFJYEzNXirerl2h0xgcYM7YrFPAtEXbwXil6NG/7dYXXfAS8ecp4/JmcZ7KgwwFMp8XE0Bn5ibNlqtYF4=
-X-Received: by 2002:a05:6870:d113:b0:301:a704:ef1c with SMTP id
- 586e51a60fabf-314dce132d9mr1347844fac.25.1755867648402; Fri, 22 Aug 2025
- 06:00:48 -0700 (PDT)
+	b=FQDm8DY+9K3wtjDyJxzji3tWiEkNa+5YRyEXi1KY1HoNwNzSr8Ya1kRkq25J8a5jq
+	 MPdpwaa/KCmnEwTh9GjXmauy+844ACYW2WpLxp9abGmFxzYNj7V/0T/tPxs+jlESfo
+	 k8/qy8b6p2v82vRRQNML10zft9JuEpbh/DwYkABd0/w+b66+mHamNFX7aJH6HNQ7Hg
+	 yLJIaNkRAT/BKzOr9D7wh8/qujXgMFU9asdovWpjfq1Dw+8mC9RkjWws7hal4EYckR
+	 XQNauQi3lPra6BH492CBP2QOscuIq+j6/+wFyGBmyViuHQCUeoVRBC9pdkM+tVR4rN
+	 MYa+uyWfoHwzQ==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-74381fbc6e3so986547a34.2;
+        Fri, 22 Aug 2025 06:02:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUxm9Z5FF4Kf7rVECYCV5urMqVPSQdXMMdN+3wiQHUWJkPrxCCstKGW/IVuyMVNEejcTbR1t/Ln11A=@vger.kernel.org, AJvYcCVRjZx2CwxRXu9Udb7NZiysx3fNW6Ca2eOPqI2UTsqjHB63Gtlhcj+eoRc5sBCBGm90V8VbiE4Grnhoc2w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw64bMVopTk0h7AnIvAxdVO5PADhe+nEyf0nLA9uXbZplATMot+
+	ne24++5xo52jI5WZaEgPtqwHNIjex7rBEYeCeXznGfEaEgoVl5RSKAH8N9kGFB429cdKs/qvaye
+	/mRG8tpgQqUAxcQr3S9quSZ6w9K9BDRI=
+X-Google-Smtp-Source: AGHT+IEa8TntZjcbUwt6F90eNByfKDYM9ExzV95BccIfO+e8B/oc/lPhsOkVc4Gzm9tJX3UTPlhmCj0wyuipuCDMG0w=
+X-Received: by 2002:a05:6830:6613:b0:744:f08d:15fc with SMTP id
+ 46e09a7af769-74500a9d977mr1901547a34.34.1755867775123; Fri, 22 Aug 2025
+ 06:02:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250813185530.635096-1-srinivas.pandruvada@linux.intel.com> <20250813185530.635096-5-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20250813185530.635096-5-srinivas.pandruvada@linux.intel.com>
+References: <20250813185530.635096-1-srinivas.pandruvada@linux.intel.com> <20250813185530.635096-6-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20250813185530.635096-6-srinivas.pandruvada@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 22 Aug 2025 15:00:36 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i-HN15f+8GaH9Rh-Siu_hMU38byRoWZ8oLW8r88o6ZOg@mail.gmail.com>
-X-Gm-Features: Ac12FXy0_a54K2CKy5xUOkf5CuHsc838UYAATXA-ngDu0kC5BifS148-jsrMB-A
-Message-ID: <CAJZ5v0i-HN15f+8GaH9Rh-Siu_hMU38byRoWZ8oLW8r88o6ZOg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] thermal: intel: int340x: Add module parameter to
- change slider offset
+Date: Fri, 22 Aug 2025 15:02:44 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gZ3w=CWCfaejB+ALrbzeOvDUGynNADQvgvgK-1ENteeQ@mail.gmail.com>
+X-Gm-Features: Ac12FXy31mDcO6Avt_CzgMO575K5xSFTO8iUB1g9Ri1dz-KiydTWt1EWI39d20w
+Message-ID: <CAJZ5v0gZ3w=CWCfaejB+ALrbzeOvDUGynNADQvgvgK-1ENteeQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] thermal: intel: int340x: Add suspend and resume callbacks
 To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com, 
 	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -75,108 +74,114 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Aug 13, 2025 at 8:55=E2=80=AFPM Srinivas Pandruvada
 <srinivas.pandruvada@linux.intel.com> wrote:
 >
-> The slider offset value allows the SoC to automatically switch slider
-> positions in range [SOC_SLIDER =E2=80=A6 (SOC_SLIDER + slider offset)] ba=
-sed on
-> internal algorithms to improve power efficiency.
-
-So SOC_SLIDER is the value set by the user (or the default value if
-the user has not set it) and the "slider offset" allows the SoC to
-adjust the slider value by setting it above SOC_SLIDER up to and
-including SOC_SLIDER + slider offset?
-
-If so, I would add a comment to this effect next to the slider_offset
-module param definition.
-
-> By default, the SoC slider offset is set to 0. This means that SoC is not
-> allowed to switch slider position.
+> During system suspend callback save slider register and restore during
+> resume callback.
 >
 > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+I would combine this with the first patch.
+
+It doesn't add extra functionality, it's mandatory stuff.
+
 > ---
->  .../processor_thermal_soc_slider.c            | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
+>  .../int340x_thermal/processor_thermal_device.c    | 10 ++++++++++
+>  .../int340x_thermal/processor_thermal_device.h    |  2 ++
+>  .../processor_thermal_soc_slider.c                | 15 +++++++++++++++
+>  3 files changed, 27 insertions(+)
 >
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_devi=
+ce.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index 4aea5c9baae9..a772c187bedb 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -338,10 +338,17 @@ static int tcc_offset_save =3D -1;
+>
+>  int proc_thermal_suspend(struct device *dev)
+>  {
+> +       struct proc_thermal_device *proc_dev;
+> +
+>         tcc_offset_save =3D intel_tcc_get_offset(-1);
+>         if (tcc_offset_save < 0)
+>                 dev_warn(dev, "failed to save offset (%d)\n", tcc_offset_=
+save);
+>
+> +       proc_dev =3D dev_get_drvdata(dev);
+> +
+> +       if (proc_dev->mmio_feature_mask & PROC_THERMAL_FEATURE_SOC_POWER_=
+SLIDER)
+> +               proc_thermal_soc_power_slider_suspend(proc_dev);
+> +
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(proc_thermal_suspend);
+> @@ -357,6 +364,9 @@ int proc_thermal_resume(struct device *dev)
+>         if (tcc_offset_save >=3D 0)
+>                 intel_tcc_set_offset(-1, tcc_offset_save);
+>
+> +       if (proc_dev->mmio_feature_mask & PROC_THERMAL_FEATURE_SOC_POWER_=
+SLIDER)
+> +               proc_thermal_soc_power_slider_resume(proc_dev);
+> +
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(proc_thermal_resume);
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_devi=
+ce.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index ba3f64742f2f..30760475102f 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -130,5 +130,7 @@ int proc_thermal_ptc_add(struct pci_dev *pdev, struct=
+ proc_thermal_device *proc_
+>  void proc_thermal_ptc_remove(struct pci_dev *pdev);
+>
+>  int proc_thermal_soc_power_slider_add(struct pci_dev *pdev, struct proc_=
+thermal_device *proc_priv);
+> +void proc_thermal_soc_power_slider_suspend(struct proc_thermal_device *p=
+roc_priv);
+> +void proc_thermal_soc_power_slider_resume(struct proc_thermal_device *pr=
+oc_priv);
+>
+>  #endif
 > diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_=
 slider.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slid=
 er.c
-> index ffc538c9b9e3..bd4ff26a488b 100644
+> index bd4ff26a488b..268bf9124d95 100644
 > --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.=
 c
 > +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.=
 c
-> @@ -87,6 +87,40 @@ static const struct kernel_param_ops slider_def_balanc=
-e_ops =3D {
->  module_param_cb(slider_balance, &slider_def_balance_ops, NULL, 0644);
->  MODULE_PARM_DESC(slider_balance, "Set slider default value for balance."=
-);
->
-> +static u8 slider_offset;
-> +
-> +static int slider_def_offset_set(const char *arg, const struct kernel_pa=
-ram *kp)
-> +{
-> +       u8 offset;
-> +       int ret;
-> +
-> +       guard(mutex)(&slider_param_lock);
-> +
-> +       ret =3D kstrtou8(arg, 16, &offset);
-> +       if (!ret) {
-> +               if (offset > SOC_SLIDER_VALUE_MAXIMUM)
-> +                       return -EINVAL;
-> +
-> +               slider_offset =3D offset;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static int slider_def_offset_get(char *buf, const struct kernel_param *k=
-p)
-> +{
-> +       guard(mutex)(&slider_param_lock);
-> +       return sysfs_emit(buf, "%02x\n", slider_offset);
-> +}
-> +
-> +static const struct kernel_param_ops slider_offset_ops =3D {
-> +       .set =3D slider_def_offset_set,
-> +       .get =3D slider_def_offset_get,
-> +};
-> +
-> +module_param_cb(slider_offset, &slider_offset_ops, NULL, 0644);
-> +MODULE_PARM_DESC(slider_offset, "Set slider offset.");
-
-The _DESC is a bit short IMO.  I would say something like "Maximum
-offset by which the slider can be increased automatically above the
-prescribed value".
-
-> +
->  /* Convert from platform power profile option to SoC slider value */
->  static int convert_profile_to_power_slider(enum platform_profile_option =
-profile)
->  {
-> @@ -120,6 +154,8 @@ static int convert_power_slider_to_profile(u8 slider)
->  #define SLIDER_MASK            GENMASK_ULL(2, 0)
->  #define SLIDER_ENABLE_BIT      7
->
-> +#define SLIDER_OFFSET_MASK     GENMASK_ULL(6, 4)
-> +
->  static void set_soc_power_profile(struct proc_thermal_device *proc_priv,=
- int slider)
->  {
->         u64 val;
-> @@ -128,6 +164,11 @@ static void set_soc_power_profile(struct proc_therma=
-l_device *proc_priv, int sli
->         val &=3D ~SLIDER_MASK;
->         val |=3D FIELD_PREP(SLIDER_MASK, slider);
->         val |=3D BIT(SLIDER_ENABLE_BIT);
-> +
-> +       /* Set the slider offset from module params */
-> +       val &=3D ~SLIDER_OFFSET_MASK;
-> +       val |=3D FIELD_PREP(SLIDER_OFFSET_MASK, slider_offset);
-> +
->         writeq(val, proc_priv->mmio_base + SOC_POWER_SLIDER_OFFSET);
+> @@ -248,6 +248,21 @@ int proc_thermal_soc_power_slider_add(struct pci_dev=
+ *pdev, struct proc_thermal_
 >  }
+>  EXPORT_SYMBOL_NS_GPL(proc_thermal_soc_power_slider_add, "INT340X_THERMAL=
+");
 >
+> +static u64 soc_slider_save;
+> +
+> +void proc_thermal_soc_power_slider_suspend(struct proc_thermal_device *p=
+roc_priv)
+> +{
+> +       soc_slider_save =3D readq(proc_priv->mmio_base + SOC_POWER_SLIDER=
+_OFFSET);
+> +
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_soc_power_slider_suspend, "INT340X_THE=
+RMAL");
+> +
+> +void proc_thermal_soc_power_slider_resume(struct proc_thermal_device *pr=
+oc_priv)
+> +{
+> +       writeq(soc_slider_save, proc_priv->mmio_base + SOC_POWER_SLIDER_O=
+FFSET);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_soc_power_slider_resume, "INT340X_THER=
+MAL");
+> +
+>  MODULE_IMPORT_NS("INT340X_THERMAL");
+>  MODULE_LICENSE("GPL");
+>  MODULE_DESCRIPTION("Processor Thermal Power Slider Interface");
 > --
+> 2.43.0
+>
+>
 
