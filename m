@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-32849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1E6EB30C0D
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 04:53:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA8A9B30C1B
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 04:58:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B27A7AB12F
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 02:51:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A8307AD790
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 02:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0E7222590;
-	Fri, 22 Aug 2025 02:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCC3223DE7;
+	Fri, 22 Aug 2025 02:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="QMYBA3zH"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NYdRwLGi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2070.outbound.protection.outlook.com [40.107.100.70])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2074.outbound.protection.outlook.com [40.107.95.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F864393DC6;
-	Fri, 22 Aug 2025 02:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D9A57C9F;
+	Fri, 22 Aug 2025 02:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755831197; cv=fail; b=PkV/I0yUd+VlK4rKYSzP3f/+9XIVR+vbDno+f25w7LrsO8U9jftpqubVOuz6zkmWJbT8GaJWUihJ07l8K99+MNPa00XXDpLU9M4oN5nu366JcY8Fla52xjKCW+C9/zPx0tsqCq269Bgn+C6vEXWLe3DDGXJUr/FYv54VhzV/NT8=
+	t=1755831510; cv=fail; b=WMJ8oSLD9xkB8WhIO9Efy8yWMEDcy80Tj/F8wEoEUx0ivVRf8CpVsD+5mSaHvXngqar5G0POi2jmE9LQMi9DVJvuWMUwh3NqCY2+tqNGJIguPx7NuMgHcTWPdYAZxj9F0PWJy2b1gNlhgCpSsar3CIvPDAiZgNRLo1ZfbRXcb18=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755831197; c=relaxed/simple;
-	bh=mFrTPFxRyLMAn/DsvSVPvhAFAiRCQqA5+U9pSDGLBRY=;
+	s=arc-20240116; t=1755831510; c=relaxed/simple;
+	bh=DAOmvxcOK4R//SgoEHcDkK2bG9pP67o4tWwFWhnr1ac=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Rk6XwBwY30AxoVlz0IjTRC//lxHKtSp+rmm4WYdMDcRiL7COcEr0EzGhss8SIGLJbzLdMK0OQnfp/CzcVMnXTxG625eJ9kBpfHkFq+P19R97jaClKRtHzrQCcyO2+ezis8XY5slXsYxjCj2sVjrkM90go2eV1dtP2ECVN1ElDkw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=QMYBA3zH; arc=fail smtp.client-ip=40.107.100.70
+	 Content-Type:MIME-Version; b=QbV9UZ/iprAhVg0CtEdWYYFiWi9F3kRCQ9bzij5uzGR/El5J6wpd59s3kjSZCg86kd+ku/AQcoh8tuuVFOWHnbLS4D2+WEEkaC3tgQPS1JwDyuqttTO7s/kSY+AxTya0mPPY3z7A9tr3IpINKdGMYfqmOP8AjMgRlPbO09wz/Lk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NYdRwLGi; arc=fail smtp.client-ip=40.107.95.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y7obkky8SIO5ZybsD5jBPOstGiTEA5WseO8jYDs0dzF8UP2LcUCdaMxqmkmJokoluk2QY2QnTwPc6jwdRDNeg9cq23dePXdUCk2FQyxfppUUGcNGINWv1dxpNONLaES/RNXKXqaYNv9P61Zwb2wgP/mXN/MpFJ8XWkNfGzlg6uDlGkczKwextEyw3TZr5MWczC8NpUx5B4fBrSWv61J2P+JO4O7FaXBa9mdtat0MOS0tmFXFStFkom5dB1m8pi5zsbbKOlzeEV0JP7UWs7HAkrZCh58Xno6B5fMpgC8wdvyAQbjYhXm7o4ubeoFARJNkPdpgBZccgoUCSCrP7Xyphg==
+ b=ZdrTTO7k4J5ei8mtNllqsVFpNZ/GQIkkmoHr/7aNtfdRMjn24hXJMElclSsHeGY/0A/xLWldqrvfdw2uFW2w2zApHNuuEO0ZDJUVMlT3S0ppSua+FM6pao4X1Y35oNwCA3HqzENO+dFDlB7X6RclRYwLxGBkI9OKzCGKwiKkRnyBpnQGqN8HqVKkGQe1wzLlv4qf/+ax7322V8A5Qpe/NcB/7FDsYGw/myJthxM/S+MMXkjKkpZ/fMKBrNLZyrWtAV1mC/DvMy7vctteVwYWBAZ2Q7mw1Qg7fOwyMiP6/eYtMxiPYBK1HsKrPiOeHi62OkEZJ2cjM08E0/WdcGb3Eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n9BUKJd+P+0cKxhDDDZqsNrQuRKmc5IDV6fkL56Xwc8=;
- b=NdKh5AInX0aTiSqWf5iJlhPwBxTNjtki4XBoAl9ZX+IARA2RtpjRdSEtp+PVPhJqkxVZjgDOdIklwqhJXV3ZvkEbtcU6rEUe6f1CgTShW50/Hcx+f5scJoc/U4H8NGhIJe1lUupSoWxNJCZAM8EUSe5nmc1uYHnFbzeOsuzjg9TNY2fHP0VNEpd1p3Zk3fTOe0drU5/EWhP8up9DM2WgpnADZS1C9qqyQvIWT7iAPs0tX7Qh8oFtxOxc5pIWkjMUv21NiQVy6WR+faX4pKVzklHKHRpHfmj50NYPKjiyBY4eSoQpUPDYeghqyhK2sdGIUK8DkzDNt/HNxMMPHqRkIg==
+ bh=qt2Pyt/b29wDa6tlMEfuPoVAhjD2TiMPQdkudZLUxMM=;
+ b=XO2g1+GtmU5G/M6IfxvwQjLXbCnx3/tx70PWYKx8pX7eyDa8LuWBTvolqAO3cNV8GymAisAdTuDcpPcfnWxWl4navxz294PPJPZKQFNvvZHOrVUKhqDAwsG5RRdRn9J0DebsalCGyR+aB8KpM2WEz2tF1A8/trdSTXpKtbc7HrqTiPa5kSKvXT1sGZw4tvP+QcSBTgDFkUExx+0ZpfsEXbOFCe8hxF8z/2j3XJk/q3VDI7HB4sPJxj+mYrPJdIKhZr5MXTUUI4kwkS8yAXCzsrOrR7yGfwT0j0oc1vRPzrcevyCgzesgtv8BJJMdYkRpKsEc8uGMqcMYjj3wUgKQuQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n9BUKJd+P+0cKxhDDDZqsNrQuRKmc5IDV6fkL56Xwc8=;
- b=QMYBA3zHuuqD/4ET7vVSX4S9Acgj863/d5iHbqMGMO4+NfTA+53Mgf8z6kCdl5v9P6IjP7MxIsXh6HiPEYqphq/3FUSE1xFW0mec0OwL+qr7X8h8tbzKDbpH7k9d2KSCRkdU2YzB40neci9a2rMLVGBcx9R5CEOqxp724bZNc10BB/6Lm+6nyH/CFtDLO1rC2MZ1izzTlzBiM8862AgLH90Lefq1kHvsPYen8yaAczdXKqNhx7gUJlTdDhcYBdqTanXFojbBY3OlYGJQoIG/5gwuVjFqfxRq6+76J5zf22Io6J4/fKLirB91UXz3mp3kKdJJcuw3SdLqGV6/Sdx/5g==
+ bh=qt2Pyt/b29wDa6tlMEfuPoVAhjD2TiMPQdkudZLUxMM=;
+ b=NYdRwLGigUf06kod/7K3/WOvQ4h7aJ1NH4okvH9H1kVZnGZdMUdEmY7M/zzh7UHDhvP+aQAafWIUyfUb1hhCHBtqaaPzvWfWbUJdC1mKu6rbBLsugdgR6bb10T2nlsUBrnvR172UAHNtHo6XGiqcNg7P9YXLzhm+aGMZQMBu1VpPL1m14yWcGddzbJEVX7uwXm2L4w9SLwfoOxSZ0XZ1mhdF3dbN5EVPq/7uCAyYQohJRayIv1r/y2Y6pOEK8cWbIa8yrx4OPczRdFzA1kJlPmULsQ/Y1a3GrAOHw/MMiHX8vcTbXmy8V9IhWHOxUKs1m1YmJaiKp09XGSs4EOx6DQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DM4PR12MB6496.namprd12.prod.outlook.com (2603:10b6:8:bd::14) by
  SA0PR12MB4382.namprd12.prod.outlook.com (2603:10b6:806:9a::14) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9009.16; Fri, 22 Aug 2025 02:53:11 +0000
+ 15.20.9009.16; Fri, 22 Aug 2025 02:58:26 +0000
 Received: from DM4PR12MB6496.namprd12.prod.outlook.com
  ([fe80::bede:bc2a:5e14:e393]) by DM4PR12MB6496.namprd12.prod.outlook.com
  ([fe80::bede:bc2a:5e14:e393%7]) with mapi id 15.20.9009.013; Fri, 22 Aug 2025
- 02:53:11 +0000
+ 02:58:26 +0000
 From: Mikko Perttunen <mperttunen@nvidia.com>
 To: Thierry Reding <thierry.reding@gmail.com>,
  Jonathan Hunter <jonathanh@nvidia.com>,
@@ -68,17 +68,17 @@ To: Thierry Reding <thierry.reding@gmail.com>,
  Svyatoslav Ryhel <clamor95@gmail.com>, Svyatoslav Ryhel <clamor95@gmail.com>
 Cc: linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] drivers: clk: tegra: add DFLL support for Tegra 4
-Date: Fri, 22 Aug 2025 11:53:05 +0900
-Message-ID: <2253671.Mh6RI2rZIc@senjougahara>
-In-Reply-To: <20250321095556.91425-3-clamor95@gmail.com>
+Subject: Re: [PATCH v1 1/3] drivers: cpufreq: add Tegra 4 support
+Date: Fri, 22 Aug 2025 11:58:21 +0900
+Message-ID: <1914341.atdPhlSkOF@senjougahara>
+In-Reply-To: <20250321095556.91425-2-clamor95@gmail.com>
 References:
  <20250321095556.91425-1-clamor95@gmail.com>
- <20250321095556.91425-3-clamor95@gmail.com>
+ <20250321095556.91425-2-clamor95@gmail.com>
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
-X-ClientProxiedBy: TYCPR01CA0143.jpnprd01.prod.outlook.com
- (2603:1096:400:2b7::15) To IA1PR12MB6484.namprd12.prod.outlook.com
+X-ClientProxiedBy: TYWPR01CA0033.jpnprd01.prod.outlook.com
+ (2603:1096:400:aa::20) To IA1PR12MB6484.namprd12.prod.outlook.com
  (2603:10b6:208:3a7::13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -88,395 +88,150 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM4PR12MB6496:EE_|SA0PR12MB4382:EE_
-X-MS-Office365-Filtering-Correlation-Id: 143f6e49-2a3a-48ba-7ab6-08dde1270795
+X-MS-Office365-Filtering-Correlation-Id: b7b1c0f6-0081-4c46-7527-08dde127c36f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|10070799003|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YlMvOXhtMk0yYk5aMGs2UkVTeGIrbkl6QmV3Z294ZHhYeXJGNXU5ZzR4V0N4?=
- =?utf-8?B?MTNFNDg3cmtla2J1ZmxWWnBoQ2dIKytXczZmU0tWOXB6WU1HMjdTd2UyVXZl?=
- =?utf-8?B?QVNaN1VTOCtIdE9hcDdKK0l6c0FMSVZXU3BqOVFyenpJV3U5bmM0Zmo3dTRX?=
- =?utf-8?B?U3lzcmRHYjA0TTN2S1hURmhEUW84cTdhMWhqYUczNHF2d2poUEY3OVZzL2tn?=
- =?utf-8?B?ajBhVGJvakF4Y1B6aTFkUjRrbFZXamc1S2JQVkFNR3IrNjlsamErdm95aUxQ?=
- =?utf-8?B?TlFQcjJSREU0ajRTdjh4dWVFRmVZelRCazczU0F4SjhvdmJIM2Z6bXc3cnBZ?=
- =?utf-8?B?OE1ZZ094S09NKzU1MVdXaXNHbzVBa2JOZ2ZTT3M1akN4RGV4VFdVNC9PdnAx?=
- =?utf-8?B?MEg4SVhFdXFRbkl5ZEVZZ0J6M1REcmJ2Q3V3clZtVVNyRC9KUFdOcVNKUnYz?=
- =?utf-8?B?RzA1NWN4Zk5kTE5rS2lQTHB3ejMzNTNnbGhQNEF2V1djdUpNdG93dDRJQng3?=
- =?utf-8?B?OWdJK0gwK1BRek9FbnZMblVZaitQbFFhR0cvb294bGlBRTc1dWQ2eGRCcEd0?=
- =?utf-8?B?ZXhIcFI3SWZRbEZnTFRmOFVwN05tN3dlYXVuYWlNTHMyZiszRjVxWHpSeWRR?=
- =?utf-8?B?K0NjM0Yza08ySCtHVitPcjZsd1BkdDBLOVJTRkk3T3orb3ZGckxTaThkemxa?=
- =?utf-8?B?SUZPN3JLdmdxNzYyOHZOcm4vY01JeHhZVzRJQnl2M2Z3NVJkaWxKcmRSVUVo?=
- =?utf-8?B?Y3VrUmYraHMzeTAyeUxicndHZStQVkVQcktMVHZvRExnNVcrTDREMkFrQ3lB?=
- =?utf-8?B?VjdTOXA3VnVnajFjRUh0S2Z1VU9XWi9ndXNGR0RkdW5vTTBlQWJZVEljdFJC?=
- =?utf-8?B?RWhJdXVkenY3YnlrTFhWamVjRi9wNTVoMjM3c3BmdTVPL1VXWVV2SU5DMmlY?=
- =?utf-8?B?SGllajRCdXhPTTlUQVlHblU3amFMbmR1STJLM0JYMWJiMHRpRGRlOXIxTXI4?=
- =?utf-8?B?aStxWldFMFJyb01VSGVibE1TK3grZGdGMUc5OEhEc29XeElsVndyNjV6d2Qy?=
- =?utf-8?B?NDZuYzgvRGYvcm85K1Q1UVdzblpXUTE3TVdBQWlqdTFGcGFwRDg2WkVKbE92?=
- =?utf-8?B?TENmcVJTYWZad3ZKa3NtQktBcHlLMEhSZkJtYjNSSmpCMUlDZG9mRzdHQ0My?=
- =?utf-8?B?RC9jWXR2cGFLVWswQWkxbWw5MWRlbytKK2pRRUxzVmovdTBQN1BuSEMwbjRV?=
- =?utf-8?B?d3EzNHhNb2pGTkpONkNvR2o3Y3hLUGtYb0FtOXZseHhLQzNZa0lJdHZhcVFj?=
- =?utf-8?B?NzJLV0ZuL1hnVFgrQ2U3U1Y5anRKMW8rOEFKZEU5N1dYUnBSWGZhRUZrcGF5?=
- =?utf-8?B?RTBzWDM3ZWVoNFgyM2lqMU1MbjhSb3FFZVkyVmJOZEhiOGpwdlZ4TFhtK01n?=
- =?utf-8?B?ZExzYzdKcm94QStWM3kzRE9lcy9IQVdLRyt2cEV3a2tHQ2JhT0lwd1c3bEll?=
- =?utf-8?B?S09ub0V5SHVVdFVSb3pRYngxbHBBcTlOc3hEZ2JUd2VsYzM4czlmcjNldCtk?=
- =?utf-8?B?ZkdDQzdtcDB0L3NGVG0ybVJ4UjdwT3l0MkJncjA2NjFsaElXQm9La3M5dFhJ?=
- =?utf-8?B?NkszMENtb1oyTURFemhGYVBoOEUvVXVrZllMYUpjUXNHVExTYytpQ1RwM1dM?=
- =?utf-8?B?MWc2L1JuS0FqNXVGUVNRQjdTQVdaVnF5SnU2MTJZYW9BTXQrRllQaEVLNEsy?=
- =?utf-8?B?bk9tNWtQYUp3bHpZT2c1eXhQSkd6OXRVSlcxeUgwTStmWnpMc2o3QkVyWTFI?=
- =?utf-8?B?OGRDVUtCdGVJSHNNQW1XV0JCZ2tId1dVMzBBRjREU2F1dVlZWU40eThscll3?=
- =?utf-8?B?UDZ6V3BMWHpGN1BXMXBkWFExVGlWQ3Jtbjc3QWlNYU1lcTNXWldSUFE4eE4w?=
- =?utf-8?B?U3pka0hhT3dpWGtzcVdJNTNteUJaSnhoMzhpd2xUajdhcEZnemtCeGVHY1BM?=
- =?utf-8?B?d2JVcG9jUzZ3PT0=?=
+	=?utf-8?B?NHJ4M0lqTmd0V0R5ZVJrSWJsZ0dKbnhkOHd5VkM5d0NsYXRReUpnbnNucDIv?=
+ =?utf-8?B?bFN2VDllalFKTU1QcmZUNHVBNXh6Sk5IZHFRbmxMZXl5Z2FqTUNuUHRPaGc3?=
+ =?utf-8?B?MjZFR05Cd0JLSHJhcmVxVmtSNVZpbGY4alB6TDB5RFpjdzFFM3phazFCS0pT?=
+ =?utf-8?B?cHNuc2xiNmtBNEdSRWZIcHZYd1o5bE9GN2F0NkRxQ2NTbWNiRXpjUlRTeU1o?=
+ =?utf-8?B?dnNEbVd5d0tKak1jb0h0VlZncStJemhvQWVnbE5OQzk4YmNpRHM4Z29GeUh4?=
+ =?utf-8?B?N0pieGtJSkRrVVdzamgxSHlVbDhhT1p4VU5tUVczTFNPY3ZkbEtzM0ltZWlT?=
+ =?utf-8?B?MGFWN1g1U3E2VVAvTVBuM0Q2OHgyQXppRnY1blc2SWs3VmpsREdaT0h6Tkkz?=
+ =?utf-8?B?TEwrUldkSFNDR3cyK1ZpU0g4OHo5VFIwL3o4bU1vaWE0bHo0L3BQSklkOHBZ?=
+ =?utf-8?B?b1psK0Y1QStoeEd3dmJDTlplK0hvN2hmVm03cFNtTXg4MVdha3l4aVM0aDNp?=
+ =?utf-8?B?b0ZJci9ZZ0ZwMkluNjMzRGlFbjF4NnNyK1dNa3JMQ2Y0aHZHa0RJa2hZa0c5?=
+ =?utf-8?B?YjZJdW1VeXNGMm1pK2EvWHIxREI1d3hFcndCRUt1NXdCSDBDUWhyVU16UFhi?=
+ =?utf-8?B?eFJwb3FXeDQ5Nk5zRXEweGE1WXY2d3pSNm10TDhFQ2J0ajBFbVJtN2FkY2tQ?=
+ =?utf-8?B?WUxuaERFclF6c2xBTHpVSDdLZEtLTVNhZWpaY1pySFJXS3ltQTZWR3FrR0VR?=
+ =?utf-8?B?dnVSU21ZTU1oUzBQaGJEa3pzeHlLVjJFU3R4NHhIQ2xhVUZtQVRVV0JDWnNV?=
+ =?utf-8?B?SER0RGFKY04zRk1saTVLdHVkaS82dkVlQUt5cDlnRDhsNnloNkdJSSt4R0sw?=
+ =?utf-8?B?dlplMldSUGlrZWpCUUdtUUI3N3hZWG1XL3Z1YjFGcUIwUWUxSDgxMnhjK2Vy?=
+ =?utf-8?B?eStHMTJHNFdjdW1QR3F2Rkw3aHA0M2QrSTZFN2NTU3dFNFNjcWVJaW9ScDFC?=
+ =?utf-8?B?a01Lbm1pa3RLN01yOWwzdkR2TS9QaDV2TGZ5VDhyNWd0WXV0UEtJQkJHS1lQ?=
+ =?utf-8?B?ZzVUNUJiYnRRdmNGejBaS1ArS1JMVlcxUHpPdVh4ZDBnL01ReXRTbGZnYSs5?=
+ =?utf-8?B?NlRnNWRhcTRPVW5hU2lWd1VldjNML3BZMkswVkthNzFMUnU0WFBiaWUrenpv?=
+ =?utf-8?B?SmM4UE80cUhCaFV5b250V0tzSzluTlE4dWxqcmxqdy93eTVuM1VUVm04QUFR?=
+ =?utf-8?B?WFRtVFkwNUdrb1A5Ykw1MlZEWklmUlVXbFU1UUVsYXZRV3lEbFdrazJWU1Fm?=
+ =?utf-8?B?VWlCRzB6MVA3OGZoTTVOZm1KVXlIWmVlbXlLUCtTaEd4OWpIY1pTSUJDdnpu?=
+ =?utf-8?B?a25CSWhjU3pDaENwTCtqd0o4ZmlGYXN4QzBDZnhHMktOdVZGRnQrRlk4OHE5?=
+ =?utf-8?B?aWpyNVo4RUFMbVNSZDBXYkVpaXdMOE8yR2RiV1ZNVmplS2NMc21wWFYrVExC?=
+ =?utf-8?B?Nnd4NWF6RTVPYmxQNHh3ZU9VNGlQU3FzcWZEUFBieDZmdkhFaGwzVURRcFhD?=
+ =?utf-8?B?bUZUVGNJcXIwdWhOeUFIangrckYwZzBlSVN4dUYyblA4bk56YTV2RmNLNEkx?=
+ =?utf-8?B?d0M5ZVJobWE5VTU1WndOYjJjdm1qZjd6Y1NuVWlaQzFDb0hoNUxkSElkdTNh?=
+ =?utf-8?B?RlpVUUFha2FSQjRpeXVvMTF0djR5SkoydlNJbmFINFFSTlV1MXIwUTdYWWZ2?=
+ =?utf-8?B?a0pxQlZqNXFERDJLOEZnbjdDSS9qNlk5SzNvRzVmZXU2allhdUt6MUhoYTFZ?=
+ =?utf-8?B?Z1VnUzdNclA4R2NheU8zRlpNOTlUL2JMeGMweFBoRUt4bWVjdlVQVFpDcDFm?=
+ =?utf-8?B?N0lIeVdidUtSOGlBQkpGK1NPeVVGLzJzd0g4Z3ZwMFVMRnFCY0k4ZUVlODA0?=
+ =?utf-8?B?R3orM1R6SGVHTGpyYUhhd1E3UWpDRE9pRGxDSmpBYzI0WEZER3JpSU1UcU1O?=
+ =?utf-8?B?VXc4Zm1GL0xBPT0=?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6496.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(10070799003)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MlVadWl0cTBRdTdjZnNLUlpKUlZaN0sxak1RakljMW54SllZWXB1UGxlUnBh?=
- =?utf-8?B?TVdFdXhhZFFrb3Fpdmt4RkJXc3U0aDVFRE1pRGpoaGlLVGl2empaSzNyd1c1?=
- =?utf-8?B?QVcyMFJ4N2ExeTBrUXFESWd4QlJxdW1CUVRCeHpaS2J6WTV2OTk0ai9yalEy?=
- =?utf-8?B?REc5NEpDb1paU3p5L01kdDNYTmZTNWZwNEh1U2Ixc3BrQWxwd0Y1VE43dXBP?=
- =?utf-8?B?N3lQQm9LY3pCOXVkN045aEN2Y0V2WXpjencxc1ZEQjN4YlhwY0pSc09SVC9r?=
- =?utf-8?B?ZFVmNVNRMk9xSVBHeHRaTW9icTFPamlUcm5kdTI3YmtCQ2p0SWxBaDMwWEFq?=
- =?utf-8?B?V040ZDJhUjg0UmRWVnZlYnBKWGRVVENRdWFwZ2p3R2FzOWx3YWhmZ3RJaWdh?=
- =?utf-8?B?ZFpNZjZ4TklMVDZPRmVpZXNncDRaYThoQlRZVk50QlJzM0Q5VUpFeStGWjcw?=
- =?utf-8?B?MTVscnhPdnBUNjlBOU9MYmFOUmV2STIvWmZxUWVGdnNmZnF3VjFqNjhNT0Fj?=
- =?utf-8?B?dFlyTENPT1ZmQW1XODU3SlY3bEkvbUdJT3FXRFBGSVBSSHVXTXhYZmhGT0RW?=
- =?utf-8?B?ZEluaE1ZSzFHNm1RT2VIaWhhQnY1ekx0TTJtT0FwMUxLK0tXR2RsQi95QU9K?=
- =?utf-8?B?WHJCUW9YMkJhMkYwOTYxcVNOYkhiK05kTjcyMFpzWi8wWUtBdmNNbEhNck9a?=
- =?utf-8?B?OU9TaGt4eDZic0xWdjZmeXErMzhIdk1zQ1BoSjViOVZuMjdhV1J3VGZRRmc5?=
- =?utf-8?B?S3YyQm5GRU5xY1ZRL2V5TmI4NUlaN2JOOVlSMjF0azczNWE3ZWpObjY0ZTI4?=
- =?utf-8?B?cnlBdm5JK0s5SWl6cDBmZ2I4aC9tMm5CQ092OGxZdU1Ka01sbGJKVzVHQTJ6?=
- =?utf-8?B?WGo1NThvRHJlRng4NXZSVTIyNFZIMlhIOFRBcThFQkd1NHVSeFI5bTNoRzZI?=
- =?utf-8?B?ci93RDVncFVMRkpPSk5TbHpteUdVUHErUEsyaXdIVmQ5anFvR1ZQOEtzTTFV?=
- =?utf-8?B?dEFZUTNtUjR2c1RKdVY2TXhURWxqNWV0QXpuMUF6OFBUQ21nRG5pWlUrQkJK?=
- =?utf-8?B?R200RUZyS2Z3NEJic3VPVkNtdUVjcldrSTNIaGp6R3MyK2FsQytRMitjVHAv?=
- =?utf-8?B?Zng4bFJCWUhFeGxEZk5rck5pUkRrMkthVzU4SThEZWZSUGx3dUNDUDFFNnha?=
- =?utf-8?B?VHU0NkRRVTJYaWtTdzFQdDYvck1xTkd5OW9KOFVYTXNYVmg4dUxCdFFtSFpN?=
- =?utf-8?B?VTBsd1R4bDhhTFVpRnV6U2NaMzE5MkM3Y1dnVkhCd2RrT0dFS3orR1pnNUEv?=
- =?utf-8?B?WVhTWTg5VmNTcmtkYTR2QUlIeXdtWm9PNkNNTGcxdlc2bXR6QkRic3lDQ3kw?=
- =?utf-8?B?MHAyUW5GNVBzUk1NKy85N1hxSEdaMmg0SCtvcUNYTTJ1OW4xMHFNUHdZWnJz?=
- =?utf-8?B?UlhHTnVPckhvQkxTZVVvRHRhaTh1NVorTU9OOGFWNlJ1L3hSNzBVWlVtNkQ1?=
- =?utf-8?B?aUc4RUl3OFc2WFFzWUVVaFB5MVJvcGVmZ1Z6SjNqUE5VVUFnd1l6UWpDNFda?=
- =?utf-8?B?bDRMNGxsY05hMkt5UTNMWmxLLzdOOFp2U1FURGVkeFZjb2hDL29sRTlNdnA1?=
- =?utf-8?B?T1lBUityajA5SXIxWE1qQ2VRbFVkMjNHQWJUaXFvVFliVm8yQkZVdksxempy?=
- =?utf-8?B?NzV0RUZwb0h2MGVMU0Fudmk4Y296MUhNb2xaaW43M0RJclJSOVRxcWtIZGdn?=
- =?utf-8?B?QUFnWUFWOTFrb1pPNEJwUnB2OWltV2lSNjA2TE51azFFWEZibHRGTzBFeWFT?=
- =?utf-8?B?L2RFWWorRkF0Q3g4cEF3aWhxcWd1dUd6OS9MeWh1dEhJSHZ3MFNvV2Vqa3dH?=
- =?utf-8?B?N0RBWUtlMXBrUnJRZlZWWDFRY1JIU0UzSWJwSEVJNVgzdXRYR28rZjM4bUVM?=
- =?utf-8?B?VFBoU0VFTmVVMkxTeExVdzUxcjQ5VW1FSi8ySENTbHhhWVN1bC9iU1FZK2dx?=
- =?utf-8?B?MTZTeTdEc2NWOThNYXdVU3NMTVg3czNHV0VQVTNIdldkQlc4ZFZKYzAzZE15?=
- =?utf-8?B?MW1URm8rUUpHSUUzSUsrU0xLd2ovdXdYRHFPelRKTmJ1SWlrQW9IaCtRMEZl?=
- =?utf-8?B?a1N1and3SzVUbGZmTlVwWWw4V0tFVThyaklmd2JxZUZwUHNOSm5telhFYzBm?=
- =?utf-8?B?eEVGRjVPb243cDdyc0JkVHZuVHZZRU1iSkNDc0g1U0Z5ZlJ3c3lhVHNwWG92?=
- =?utf-8?B?eXFHdGc3MnV1bXpqZ3I2YmlRZXBRPT0=?=
+	=?utf-8?B?T1ltbUFZdktoR1kvRTU2SDdSbFhqcWhsS0hMU2lsamdSQWhKR2RCamZXbHRH?=
+ =?utf-8?B?aEFDTDFDUGFOM1VqQVNrU3ZVMXJaMndqMSt1ekk4R0sySGYrVTBETmkwWExj?=
+ =?utf-8?B?dG9mdW5nL3RCcG5wNHY0Q1U2NTZrUGlTT2d6eVBKRlo3aGk4VGVlazJCNm5u?=
+ =?utf-8?B?Q0pmVGpISXVkZnVtQ1BiZFdLQlRHMEtDOE1hMUFPZ0lwVldid01pRURhV3Zp?=
+ =?utf-8?B?RjZmMWNMY1FUaFFoQ3FRYkR5N0Y1NzlyczAxdUhZdDY0WmkyR25Mb2psZDBo?=
+ =?utf-8?B?dnltMDNyR1UxYTU4MUNXTUJjM1YrUFgwVE10OCtkbXJnUW11MVlwS2ZLa3Jx?=
+ =?utf-8?B?RmNSelRvN3FRNDdkWkdGeStMbmRNai9hZ3VjdWRUSjNaMXZPSElXem5zejlO?=
+ =?utf-8?B?VVRPZjR4L0lmUzNFT0xPRStnSHZnYVlPWGRLSjZabWJCWERrVEYzWGFFcVls?=
+ =?utf-8?B?S1ZPeVFFVzRqYmt4Y3Nrb3lERnBESjVaczE0ZmJtT0ZqM09vUVpKRVpKR2s3?=
+ =?utf-8?B?ZkV6aUxUMFJVenUzOEtMVWUxL3ZGaW5FbWZHNllHVU53UElVcGxYS0FrUG5h?=
+ =?utf-8?B?cmYvMk16VXRINjdRRlRJRlM0VncxajJRTUxQRlJqeXRhNGxrQkY3a2QxRVlj?=
+ =?utf-8?B?ekFRNUs3NzJvOEVWU2dQVG1wRVlFdnJyWk80d1dwOHlVcHpGYis5M0dwUmwr?=
+ =?utf-8?B?cVBXQTVBb3FDR1BSdWVVNFFDODlYVlNOZ3A1UTFOL1g4NEFUa253VndDcVJR?=
+ =?utf-8?B?NGFiTlNHVkJ6VFBaQ1JaRzFPRjVZWGZSOUsvZ0Z3cHZRT2cyeHFHTGVDRG5D?=
+ =?utf-8?B?Wks4bWo2VUhHcTYvWjYyTElBWU5SNDJxZnI4dU0rWTFnczczbEorUUtacnRD?=
+ =?utf-8?B?eEhPcHhwNExkdTF4MFcvYW5WVW1UakNDMTlBa3UwWGRweHlrMG02RjdzamxT?=
+ =?utf-8?B?V0prcE4waGg0amp0b09nZWpwMXNITlA3MlVQUkcrakNCQmROclRxaVhLQVpy?=
+ =?utf-8?B?ZGJKZGU5SzFkZnF2Umdqdzd6L0JpZ3o3b3JjODI1U04yMElzVnhuMGNiUzRs?=
+ =?utf-8?B?eDNoWUNKOWRLUjhIWG9RMTVIWkhFNkRsdk5CZFVXU3E3OTE5SGZ1aGlETFpJ?=
+ =?utf-8?B?QS8xK1k3VWxJZzNqT3BJNUZlWjFjTFZqZnhib2ZBQzJXVG9lNEwycU1FNElv?=
+ =?utf-8?B?TWtaSkUwOGM4RlUrR0FaZ0NoRm9BWi9SSW9VTnB6NytoOVVGNnNUbXB2N3pV?=
+ =?utf-8?B?WGdxK3lHWEVSdk1KOGZLZVhjSW0yTGZaMnRLNkpIelN6TG9PTXRBMjQ2VEVR?=
+ =?utf-8?B?TExlRVQ5TzF5VlZmTGFJdWRBUnd5MTdRN2lGcnp2b0xTYmNVeFRVRW5RcXZa?=
+ =?utf-8?B?UUlsYmM2VDB4QWxqdFh2OE9qdkxtYkFQNDNtSmNXdzBHSnhrN28wSnlTampT?=
+ =?utf-8?B?bnhmQWo4ZWhxMUpGeUNLaHZkRmNFSE9GeTBwdW10blRhT1F2SnpYVzhUN3F5?=
+ =?utf-8?B?ZmpHNVBscW9xLzIrRXc0bWtEa2xYMUtYWUxCcjhESUFGcXIxR2hVaklrdGVs?=
+ =?utf-8?B?RGFSVXMwRFYyVVBhRHM3K1JWN05OamlReDBYQ3lET1JNa0pFSnlKaVgxSkR1?=
+ =?utf-8?B?ekEvSEF4K2xUdlhEazh5Q3hEanlJSTdiWUl5ek0vUXh6cXF0SXBDcmlMa3BL?=
+ =?utf-8?B?YmlWemJ4WXJSSnJzWU80V2QyS2gxejQ3djhiTXhDRVczU3lNeEQzVFJLenkx?=
+ =?utf-8?B?aVVrcGwrQ0QxeG9FUGR2c0VGQ0liVjViQjBmeEZBVVAwRVFmK2NYNGdkdEJi?=
+ =?utf-8?B?UXpwTXJGQVlxTUJ1a1lvNUsrdlVlTXI4Q2hHZTlORmFLWWFPRXhyeHhBUHFI?=
+ =?utf-8?B?QldpeGdkS2dMTjN1QmZiZG9YS0JSRk82UjFGWW5SZUEwbzJHcTl2WFBaU1dh?=
+ =?utf-8?B?QzNxbHdEakRvcTYxNWdBVnJGYTdDbTUvUXc5djdLTEZBUVdMZVhvTGtMcWlh?=
+ =?utf-8?B?OC9RRldIMGUreWJsNnh1UEFPOEp1dFRmYm9RTUNDQVVEdzJwU3hmMDFmUEZO?=
+ =?utf-8?B?YXM0a3owSzV0S3dCL21XM096L2RNek1mRkdHRHFsSTVCN0loS1F6NXZtd2U1?=
+ =?utf-8?B?cDJaQXRRdGJWN2gyc21xNjU5VytZVEhhS3k4eGw0eGw0amdZN2dKRVdtdk5F?=
+ =?utf-8?B?cmVOcHNNdys5ZW5GVFdtRkkzdWIweWllaUtUbUl6VW5DaG9RSnBkYlBSKzR5?=
+ =?utf-8?B?QkVDVjJFQ3dVUWxpZW9BL3VKSFZnPT0=?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 143f6e49-2a3a-48ba-7ab6-08dde1270795
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7b1c0f6-0081-4c46-7527-08dde127c36f
 X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6484.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2025 02:53:11.5336
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2025 02:58:26.2991
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ko4ko/mjr85lMdjmKCYv3id3HUWfQpNjLBbyo5hFzvRBeHhUxvKsEu47NK1/THfLMql0Aesl26UfddZbGjgbig==
+X-MS-Exchange-CrossTenant-UserPrincipalName: GAgG/TdZESbBmyWB8U091YD3GUkjlAR68tiVHqGPll87deF7h1Q3frEuKsHMwHHTrM9UA39lyW5wI+pRITZA6Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4382
 
 On Friday, March 21, 2025 6:55=E2=80=AFPM Svyatoslav Ryhel wrote:
-> Extend the Tegra124 driver to include DFLL configuration settings require=
-d
-> for Tegra114 compatibility.
+> Tegra 4 is fully compatible with existing Tegra K1 cpufreq driver.
 >=20
 > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
->  drivers/clk/tegra/Kconfig                  |   2 +-
->  drivers/clk/tegra/clk-tegra114.c           |  30 +++++-
->  drivers/clk/tegra/clk-tegra124-dfll-fcpu.c | 104 +++++++++++++++++++++
->  drivers/clk/tegra/clk.h                    |   2 -
->  include/dt-bindings/reset/tegra114-car.h   |  13 +++
->  5 files changed, 144 insertions(+), 7 deletions(-)
->  create mode 100644 include/dt-bindings/reset/tegra114-car.h
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  drivers/cpufreq/tegra124-cpufreq.c   | 5 +++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/clk/tegra/Kconfig b/drivers/clk/tegra/Kconfig
-> index 90df619dc087..62147a069606 100644
-> --- a/drivers/clk/tegra/Kconfig
-> +++ b/drivers/clk/tegra/Kconfig
-> @@ -4,7 +4,7 @@ config CLK_TEGRA_BPMP
->  	depends on TEGRA_BPMP
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c
+> b/drivers/cpufreq/cpufreq-dt-platdev.c index 18942bfe9c95..7d15a1224d37
+> 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -140,6 +140,7 @@ static const struct of_device_id blocklist[] __initco=
+nst
+> =3D {
 >=20
->  config TEGRA_CLK_DFLL
-> -	depends on ARCH_TEGRA_124_SOC || ARCH_TEGRA_210_SOC
-> +	depends on ARCH_TEGRA_114_SOC || ARCH_TEGRA_124_SOC ||=20
-ARCH_TEGRA_210_SOC
->  	select PM_OPP
->  	def_bool y
+>  	{ .compatible =3D "nvidia,tegra20", },
+>  	{ .compatible =3D "nvidia,tegra30", },
+> +	{ .compatible =3D "nvidia,tegra114", },
+>  	{ .compatible =3D "nvidia,tegra124", },
+>  	{ .compatible =3D "nvidia,tegra210", },
+>  	{ .compatible =3D "nvidia,tegra234", },
+> diff --git a/drivers/cpufreq/tegra124-cpufreq.c
+> b/drivers/cpufreq/tegra124-cpufreq.c index 514146d98bca..6ff2ccc08e5e
+> 100644
+> --- a/drivers/cpufreq/tegra124-cpufreq.c
+> +++ b/drivers/cpufreq/tegra124-cpufreq.c
+> @@ -189,8 +189,9 @@ static int __init tegra_cpufreq_init(void)
+>  	int ret;
+>  	struct platform_device *pdev;
 >=20
-> diff --git a/drivers/clk/tegra/clk-tegra114.c
-> b/drivers/clk/tegra/clk-tegra114.c index b19dd4e6e17c..9b6794b951a2 10064=
-4
-> --- a/drivers/clk/tegra/clk-tegra114.c
-> +++ b/drivers/clk/tegra/clk-tegra114.c
-> @@ -11,6 +11,7 @@
->  #include <linux/export.h>
->  #include <linux/clk/tegra.h>
->  #include <dt-bindings/clock/tegra114-car.h>
-> +#include <dt-bindings/reset/tegra114-car.h>
+> -	if (!(of_machine_is_compatible("nvidia,tegra124") ||
+> -		of_machine_is_compatible("nvidia,tegra210")))
+> +	if (!(of_machine_is_compatible("nvidia,tegra114") ||
+> +	      of_machine_is_compatible("nvidia,tegra124") ||
+> +	      of_machine_is_compatible("nvidia,tegra210")))
+>  		return -ENODEV;
 >=20
->  #include "clk.h"
->  #include "clk-id.h"
-> @@ -1260,7 +1261,7 @@ EXPORT_SYMBOL(tegra114_clock_tune_cpu_trimmers_init=
-);
->   *
->   * Assert the reset line of the DFLL's DVCO.  No return value.
->   */
-> -void tegra114_clock_assert_dfll_dvco_reset(void)
-> +static void tegra114_clock_assert_dfll_dvco_reset(void)
->  {
->  	u32 v;
->=20
-> @@ -1269,7 +1270,6 @@ void tegra114_clock_assert_dfll_dvco_reset(void)
->  	writel_relaxed(v, clk_base + RST_DFLL_DVCO);
->  	tegra114_car_barrier();
->  }
-> -EXPORT_SYMBOL(tegra114_clock_assert_dfll_dvco_reset);
->=20
->  /**
->   * tegra114_clock_deassert_dfll_dvco_reset - deassert the DFLL's DVCO re=
-set
-> @@ -1277,7 +1277,7 @@ EXPORT_SYMBOL(tegra114_clock_assert_dfll_dvco_reset=
-);
-> * Deassert the reset line of the DFLL's DVCO, allowing the DVCO to *
-> operate.  No return value.
->   */
-> -void tegra114_clock_deassert_dfll_dvco_reset(void)
-> +static void tegra114_clock_deassert_dfll_dvco_reset(void)
->  {
->  	u32 v;
->=20
-> @@ -1286,7 +1286,26 @@ void tegra114_clock_deassert_dfll_dvco_reset(void)
->  	writel_relaxed(v, clk_base + RST_DFLL_DVCO);
->  	tegra114_car_barrier();
->  }
-> -EXPORT_SYMBOL(tegra114_clock_deassert_dfll_dvco_reset);
-> +
-> +static int tegra114_reset_assert(unsigned long id)
-> +{
-> +	if (id =3D=3D TEGRA114_RST_DFLL_DVCO)
-> +		tegra114_clock_assert_dfll_dvco_reset();
-> +	else
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-> +static int tegra114_reset_deassert(unsigned long id)
-> +{
-> +	if (id =3D=3D TEGRA114_RST_DFLL_DVCO)
-> +		tegra114_clock_deassert_dfll_dvco_reset();
-> +	else
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
->=20
->  #ifdef CONFIG_TEGRA124_CLK_EMC
->  static struct clk *tegra114_clk_src_onecell_get(struct of_phandle_args
-> *clkspec, @@ -1357,6 +1376,9 @@ static void __init
-> tegra114_clock_init(struct device_node *np)
-> tegra_super_clk_gen4_init(clk_base, pmc_base, tegra114_clks,
->  					&pll_x_params);
->=20
-> +	tegra_init_special_resets(1, tegra114_reset_assert,
-> +				  tegra114_reset_deassert);
-> +
->  #ifdef CONFIG_TEGRA124_CLK_EMC
->  	tegra_add_of_provider(np, tegra114_clk_src_onecell_get);
->  	clks[TEGRA114_CLK_EMC] =3D tegra124_clk_register_emc(clk_base, np,
+>  	/*
 
-Could you split this up into separate patches for the reset portion and the=
+I also prefer using Tegra114 and Tegra124 in the commit message, perhaps wi=
+th=20
+the marketing names in parentheses, as the chip IDs are more consistent and=
 =20
-DFLL portion.
+(IMO) easier to decipher than the product names.
 
-> diff --git a/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c
-> b/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c index
-> 0251618b82c8..7a43380ce519 100644
-> --- a/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c
-> +++ b/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c
-> @@ -28,6 +28,99 @@ struct dfll_fcpu_data {
->  	unsigned int cpu_cvb_tables_size;
->  };
->=20
-> +/* Maximum CPU frequency, indexed by CPU speedo id */
-> +static const unsigned long tegra114_cpu_max_freq_table[] =3D {
-> +	[0] =3D 2040000000UL,
-> +	[1] =3D 1810500000UL,
-> +	[2] =3D 1912500000UL,
-> +	[3] =3D 1810500000UL,
-> +};
-> +
-> +#define T114_CPU_CVB_TABLE \
-> +	.min_millivolts =3D 1000, \
-> +	.max_millivolts =3D 1320, \
-> +	.speedo_scale =3D 100,    \
-> +	.voltage_scale =3D 1000,  \
-> +	.entries =3D {            \
-> +		{  306000000UL, { 2190643, -141851, 3576 } }, \
-> +		{  408000000UL, { 2250968, -144331, 3576 } }, \
-> +		{  510000000UL, { 2313333, -146811, 3576 } }, \
-> +		{  612000000UL, { 2377738, -149291, 3576 } }, \
-> +		{  714000000UL, { 2444183, -151771, 3576 } }, \
-> +		{  816000000UL, { 2512669, -154251, 3576 } }, \
-> +		{  918000000UL, { 2583194, -156731, 3576 } }, \
-> +		{ 1020000000UL, { 2655759, -159211, 3576 } }, \
-> +		{ 1122000000UL, { 2730365, -161691, 3576 } }, \
-> +		{ 1224000000UL, { 2807010, -164171, 3576 } }, \
-> +		{ 1326000000UL, { 2885696, -166651, 3576 } }, \
-> +		{ 1428000000UL, { 2966422, -169131, 3576 } }, \
-> +		{ 1530000000UL, { 3049183, -171601, 3576 } }, \
-> +		{ 1606500000UL, { 3112179, -173451, 3576 } }, \
-> +		{ 1708500000UL, { 3198504, -175931, 3576 } }, \
-> +		{ 1810500000UL, { 3304747, -179126, 3576 } }, \
-> +		{ 1912500000UL, { 3395401, -181606, 3576 } }, \
-> +		{          0UL, {       0,       0,    0 } }, \
-> +	}, \
-> +	.cpu_dfll_data =3D {      \
-> +		.tune0_low =3D 0x00b0039d,          \
-> +		.tune0_high =3D 0x00b0009d,         \
-> +		.tune1 =3D 0x0000001f,              \
-> +		.tune_high_min_millivolts =3D 1050, \
-> +	}
-> +
+Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
 
-Looks good -- could you add a T210_ prefix into the existing CVB table macr=
-o=20
-names to avoid any confusion later.
-
-> +static const struct cvb_table tegra114_cpu_cvb_tables[] =3D {
-> +	{
-> +		.speedo_id =3D 0,
-> +		.process_id =3D -1,
-> +		.min_millivolts =3D 1000,
-> +		.max_millivolts =3D 1250,
-> +		.speedo_scale =3D 100,
-> +		.voltage_scale =3D 100,
-> +		.entries =3D {
-> +			{  306000000UL, { 107330, -1569,   0 } },
-> +			{  408000000UL, { 111250, -1666,   0 } },
-> +			{  510000000UL, { 110000, -1460,   0 } },
-> +			{  612000000UL, { 117290, -1745,   0 } },
-> +			{  714000000UL, { 122700, -1910,   0 } },
-> +			{  816000000UL, { 125620, -1945,   0 } },
-> +			{  918000000UL, { 130560, -2076,   0 } },
-> +			{ 1020000000UL, { 137280, -2303,   0 } },
-> +			{ 1122000000UL, { 146440, -2660,   0 } },
-> +			{ 1224000000UL, { 152190, -2825,   0 } },
-> +			{ 1326000000UL, { 157520, -2953,   0 } },
-> +			{ 1428000000UL, { 166100, -3261,   0 } },
-> +			{ 1530000000UL, { 176410, -3647,   0 } },
-> +			{ 1632000000UL, { 189620, -4186,   0 } },
-> +			{ 1734000000UL, { 203190, -4725,   0 } },
-> +			{ 1836000000UL, { 222670, -5573,   0 } },
-> +			{ 1938000000UL, { 256210, -7165,   0 } },
-> +			{ 2040000000UL, { 250050, -6544,   0 } },
-> +			{          0UL, {      0,     0,   0 } },
-> +		},
-> +		.cpu_dfll_data =3D {
-> +			.tune0_low =3D 0x00b0019d,
-> +			.tune0_high =3D 0x00b0019d,
-> +			.tune1 =3D 0x0000001f,
-> +			.tune_high_min_millivolts =3D 1000,
-> +		}
-> +	},
-> +	{
-> +		.speedo_id =3D 1,
-> +		.process_id =3D -1,
-> +		T114_CPU_CVB_TABLE
-> +	},
-> +	{
-> +		.speedo_id =3D 2,
-> +		.process_id =3D -1,
-> +		T114_CPU_CVB_TABLE
-> +	},
-> +	{
-> +		.speedo_id =3D 3,
-> +		.process_id =3D -1,
-> +		T114_CPU_CVB_TABLE
-> +	},
-> +};
-> +
->  /* Maximum CPU frequency, indexed by CPU speedo id */
->  static const unsigned long tegra124_cpu_max_freq_table[] =3D {
->  	[0] =3D 2014500000UL,
-> @@ -494,6 +587,13 @@ static struct cvb_table tegra210_cpu_cvb_tables[] =
-=3D {
->  	},
->  };
->=20
-> +static const struct dfll_fcpu_data tegra114_dfll_fcpu_data =3D {
-> +	.cpu_max_freq_table =3D tegra114_cpu_max_freq_table,
-> +	.cpu_max_freq_table_size =3D ARRAY_SIZE(tegra114_cpu_max_freq_table),
-> +	.cpu_cvb_tables =3D tegra114_cpu_cvb_tables,
-> +	.cpu_cvb_tables_size =3D ARRAY_SIZE(tegra114_cpu_cvb_tables)
-> +};
-> +
->  static const struct dfll_fcpu_data tegra124_dfll_fcpu_data =3D {
->  	.cpu_max_freq_table =3D tegra124_cpu_max_freq_table,
->  	.cpu_max_freq_table_size =3D ARRAY_SIZE(tegra124_cpu_max_freq_table),
-> @@ -509,6 +609,10 @@ static const struct dfll_fcpu_data
-> tegra210_dfll_fcpu_data =3D { };
->=20
->  static const struct of_device_id tegra124_dfll_fcpu_of_match[] =3D {
-> +	{
-> +		.compatible =3D "nvidia,tegra114-dfll",
-> +		.data =3D &tegra114_dfll_fcpu_data,
-> +	},
->  	{
->  		.compatible =3D "nvidia,tegra124-dfll",
->  		.data =3D &tegra124_dfll_fcpu_data,
-> diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
-> index 5d80d8b79b8e..58e860b18e5e 100644
-> --- a/drivers/clk/tegra/clk.h
-> +++ b/drivers/clk/tegra/clk.h
-> @@ -898,8 +898,6 @@ static inline bool
-> tegra124_clk_emc_driver_available(struct clk_hw *emc_hw) void
-> tegra114_clock_tune_cpu_trimmers_high(void);
->  void tegra114_clock_tune_cpu_trimmers_low(void);
->  void tegra114_clock_tune_cpu_trimmers_init(void);
-> -void tegra114_clock_assert_dfll_dvco_reset(void);
-> -void tegra114_clock_deassert_dfll_dvco_reset(void);
->=20
->  typedef void (*tegra_clk_apply_init_table_func)(void);
->  extern tegra_clk_apply_init_table_func tegra_clk_apply_init_table;
-> diff --git a/include/dt-bindings/reset/tegra114-car.h
-> b/include/dt-bindings/reset/tegra114-car.h new file mode 100644
-> index 000000000000..d7908d810ddf
-> --- /dev/null
-> +++ b/include/dt-bindings/reset/tegra114-car.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-> +/*
-> + * This header provides Tegra114-specific constants for binding
-> + * nvidia,tegra114-car.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_RESET_TEGRA114_CAR_H
-> +#define _DT_BINDINGS_RESET_TEGRA114_CAR_H
-> +
-> +#define TEGRA114_RESET(x)		(5 * 32 + (x))
-> +#define TEGRA114_RST_DFLL_DVCO		TEGRA114_RESET(0)
-> +
-> +#endif	/* _DT_BINDINGS_RESET_TEGRA114_CAR_H */
-
-Bindings look fine to me, they follow existing pattern used on other chips =
-for=20
-DFLL. Perhaps add a note to the commit message along the lines of 'Binding=
-=20
-values for special resets are placed starting from software-defined index 1=
-60=20
-in line with other chips.', for extra clarity.
-
-Thanks,
-Mikko
 
 
 
