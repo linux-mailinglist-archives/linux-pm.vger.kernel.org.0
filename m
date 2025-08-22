@@ -1,114 +1,94 @@
-Return-Path: <linux-pm+bounces-32921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64722B323BA
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 22:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B899CB323D8
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 22:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 417B0566BAA
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 20:44:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8131A17E7CD
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 20:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C603C2D836D;
-	Fri, 22 Aug 2025 20:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13B42FCBF7;
+	Fri, 22 Aug 2025 20:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myyMEVM+"
+	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="DJQSXnrc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx.olsak.net (mx.olsak.net [37.205.8.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C88D2D7DCA;
-	Fri, 22 Aug 2025 20:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884AD2BCF46;
+	Fri, 22 Aug 2025 20:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755895435; cv=none; b=bdh5/Kz74v+U+Y6S+2TYyoWazJJ9yAQIjQChgl5Ty54PP/sMDdT5ucIEh/agN2kopJM03/sxqx0/Io5uBEP0AjF/per3JV7VHo8czh4IAiwLukLfPjmpvpOJ4pgfnEwQxs85r/QpYtRbcaw9aPpkVcwnpucHCcDdLeXsPeUkotg=
+	t=1755896170; cv=none; b=CAOVvPzFwk/66bMWiGJbK412+uI9SLyGVDn4Erj7T3OYBKs07iHdxSASHd53kUCZKlNw9E5MDkhzelsV7XWIUI9bww5TLTlwrzsyJn4W2H/L/YmU8REWj5r8+JXM7Ng/C4a8NqKq5GcwTSX8Yg91wFlJ/iTwjdUefMm+RUuPao8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755895435; c=relaxed/simple;
-	bh=TEdHF9pUX27RDqqMATVQj7+pnf8Vs/Rf6VDbI1qD1Lk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NModu3fWrNw9/OfbEHozTwZRAduY8Fm1v4DV41mK8OXIJE13kIwDXvzsujZKOaZNi/9YiU0e3rutx70emWU/Gm3gJr2+7jq09t/2TYDlTOCGM2i5fnyl/A7bU71m2xiV5CL60RHLsxwOuOVDseVN2npYxMuD7wchU6n6brWc4CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myyMEVM+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1F9C4CEED;
-	Fri, 22 Aug 2025 20:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755895435;
-	bh=TEdHF9pUX27RDqqMATVQj7+pnf8Vs/Rf6VDbI1qD1Lk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=myyMEVM+bG7+YSaMj6mY2qSH8azZg5DrqUVeNO5J30SqcakUL1hcNdIoGKP1xJCLX
-	 AP3TMdbKHat3PbYVL99dJnb4p3+vvlet5ome8KfpPnNtrQyb5zwncNFGbDAbd0SjdG
-	 ydTEvhFHNa5jRrjCjmc7QH8T5SvIPWHy9DYPx7Ik92gJ2Gr5XFcqHHpeV9dnHUDjQ1
-	 fFiiNmill6JZ8rsVEWWXVc+5sr9J2iAVRUO4FNc8IF/TpHRxlPfV44lfcxeCQ0Dyif
-	 KU7Co8VS4oHGDY8b0ADiAzrRgKiFwNYJueNi8ud5pvOi+fVBRpzfjRB2Fzgwx7nZlS
-	 fQ0aLSJ9nKI6Q==
-Date: Fri, 22 Aug 2025 13:43:53 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v13 3/4] riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU
- node
-Message-ID: <aKjWiU4fQw3k77GR@x1>
-References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
- <CGME20250821222023eucas1p1805feda41e485de76c2981beb8b9102d@eucas1p1.samsung.com>
- <20250822-apr_14_for_sending-v13-3-af656f7cc6c3@samsung.com>
+	s=arc-20240116; t=1755896170; c=relaxed/simple;
+	bh=PHG0D5CzDDTIfrFFxjd2HcsgBLjTrNlrvcq+F1lz+2c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AIaUPFYQwCcX9W0gKpk1T7J1DBeapwWghSE0tFa17ZKZHRAblHCG2WGJq+d+JiBLwasjh5AtvTefgX88wLuR2OixzRR2Uol29t89NdEjLfL5YbDVT2GDCIC/8D5P03Dyny1PhpZb3/4+yRGWkbUTGSCxoqa3rvpe3nYgffDvCTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=DJQSXnrc; arc=none smtp.client-ip=37.205.8.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
+DKIM-Signature: a=rsa-sha256; bh=jfIU0fuoE9yXlwzwCsY58yVMK25YpgK8FBL6dKXlTGM=;
+ c=relaxed/relaxed; d=dujemihanovic.xyz;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@dujemihanovic.xyz; s=default; t=1755896103; v=1; x=1756328103;
+ b=DJQSXnrcX1KtXFD8wN/IsWAeXiCKnnn69GH/KEJ8BExviuHhDhgNduzZ4liRcUICrKbL8W2N
+ pO8i7R+txU/wZSYMNRNtNWYFPdDbJ3Z1IIsaRL2ln0OdCUQglEMuQI2pA3Rm91tZPhTiW8OI/vi
+ BLgWP8MoT8TQCaiBDXJB2kdBLl28Yt2TL5osaCRM4ZYKKfPB3HarwCjt9pkDDw0L15SQZJZ0qPk
+ 098W7wjKzHXepBiTHHF3EpS9d9FU3erH5/TcFi58UNKCPONunJkaBtN7rgvvK/VdifKBsAkBghW
+ tdwOVaFmp/ScFDObBX+vJ5gMSk5hKIH9+r2X/V5UQGLsQ==
+Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
+ ESMTPS id b22c5fac; Fri, 22 Aug 2025 22:55:03 +0200
+From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>,
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] clk: mmp: Add PXA1908 power domain driver
+Date: Fri, 22 Aug 2025 22:55:02 +0200
+Message-ID: <6193521.lOV4Wx5bFT@radijator>
+In-Reply-To:
+ <CAPDyKFoHWNuSmnN0e=QR73r0Ea-XJogbB8S3K+_=VRovzXL2Sw@mail.gmail.com>
+References:
+ <20250821-pxa1908-genpd-v2-0-eba413edd526@dujemihanovic.xyz>
+ <20250821-pxa1908-genpd-v2-3-eba413edd526@dujemihanovic.xyz>
+ <CAPDyKFoHWNuSmnN0e=QR73r0Ea-XJogbB8S3K+_=VRovzXL2Sw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250822-apr_14_for_sending-v13-3-af656f7cc6c3@samsung.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Aug 22, 2025 at 12:20:17AM +0200, Michal Wilczynski wrote:
-> Add a device tree node for the IMG BXM-4-64 GPU present in the T-HEAD
-> TH1520 SoC used by the Lichee Pi 4A board. This node enables support for
-> the GPU using the drm/imagination driver.
+On Friday, 22 August 2025 11:36:02 Central European Summer Time Ulf Hansson 
+wrote:
+> By looking at the implementation of the power-domain code below, it
+> seems to me that this code is better maintained within the pmdomain
+> subsystem (drivers/pmdomain/pxa perhaps). May I suggest that you move
+> it there.
 > 
-> By adding this node, the kernel can recognize and initialize the GPU,
-> providing graphics acceleration capabilities on the Lichee Pi 4A and
-> other boards based on the TH1520 SoC.
-> 
-> Add fixed clock gpu_mem_clk, as the MEM clock on the T-HEAD SoC can't be
-> controlled programatically.
-> 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Reviewed-by: Drew Fustini <drew@pdp7.com>
-> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Acked-by: Matt Coster <matt.coster@imgtec.com>
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
->  arch/riscv/boot/dts/thead/th1520.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+> I guess the easiest way to do this is to export the
+> pxa1908_pd_register() function - but you could explore using the
+> auxiliary bus too, to instantiate a power-domain driver as an
+> auxiliary driver.
 
-I've applied this to thead-dt-for-next [1]:
+The auxiliary bus was exactly what I needed, thanks. As for the path, I think 
+drivers/pmdomain/marvell would be a better fit and I'll go with that if you 
+don't object.
 
-0f78e44fb857 ("riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU node")
+Regards,
+--
+Duje
 
-Thanks,
-Drew
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/log/?h=thead-dt-for-next
 
 
