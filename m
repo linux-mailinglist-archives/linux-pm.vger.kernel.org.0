@@ -1,57 +1,63 @@
-Return-Path: <linux-pm+bounces-32901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 761CFB3155E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 12:28:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA568B3158B
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 12:36:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B2911C20737
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 10:26:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C4BA043F0
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 10:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 170692E8B6F;
-	Fri, 22 Aug 2025 10:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6324E2E1F11;
+	Fri, 22 Aug 2025 10:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="QZDEdZDA"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FqrCBxl3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1DE2E7F16
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 10:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CA92D7DFA;
+	Fri, 22 Aug 2025 10:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755858376; cv=none; b=iZ2jFmEnW6wIbJGQqOkr/teyaOaNUMhlI+ZN5NTtvLjbzlKetpYHdin6cAsJi1JSPExDrTj2VjKcQlm9c3Ja/bNwWF5r5IWwZqn5gR7esdtsfzkLRoSHrfBx9nqqbHOAMVtLj4lnPDsqi4ST29IxV0K9VCYHDf58DfhwH7ZCQtk=
+	t=1755858721; cv=none; b=Dfv/Jqw0g+UoQayE9txPxaaJAoFOyV1EsW7eC6y6OgDb6SvKSmIhHi+i2ev/pYDu73E2n4TPvrMTYQL57wTYzP545U/Hlw2+nxB3y9BKZ9+IUxm2DmYIoHJ78ZmhukrmJSa84dHrK+zd9XoNYZmf07kbji4MGDTtsG/Fj/4H4Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755858376; c=relaxed/simple;
-	bh=Pco2t8IAcL9gCluAxTcToSuYIWCxXlVzevjzIgE5PjQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
-	 Content-Type:References; b=lORFDZSjEq8KVv+E897mo+7eDi0BlF9x14cRYo9MHJtLKPCoaFqJPZaQDNG5mSTdQjMWMfN7aKidw+XFAEzIa5SHsk/gPTX/YQe4IYpN/PpgAArbTKDGKUrgVOgQ5WaxqoHcAyvmTddANbY30fBwgKWnp/VfV8N6/iIWyMqR4FU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=QZDEdZDA; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250822102611euoutp02ba1246ee1f4159f043f28c4886bfe63f~eD_K4K1rG2225622256euoutp02G
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 10:26:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250822102611euoutp02ba1246ee1f4159f043f28c4886bfe63f~eD_K4K1rG2225622256euoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755858371;
-	bh=Q+6Xs7HEwbU8PjeuZpGHjXULFml+y8xhITqWaoDVDIs=;
-	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
-	b=QZDEdZDAnccRvEuBv0P/VUu+KDFDgpIarhA+x135y0cdj3BmsFQJRLtKgXDL+MwzF
-	 /WYi2nWdW6zL/0Roxg+DLl1VWVU95hsWEsRlTh9BOyAYJr86Q8x6wD5KCWk7qPQxzX
-	 sohnq3aQMQJLk1Phr4N9piC8RZObVrLVhFTOD6bI=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250822102610eucas1p17b57ad56569020fb2d563c61d4fd5a4a~eD_KBaM3q2024620246eucas1p1c;
-	Fri, 22 Aug 2025 10:26:10 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250822102609eusmtip10d4a23b2bd09752681a16ed23cc33ccf~eD_I7t1y21166311663eusmtip1h;
-	Fri, 22 Aug 2025 10:26:09 +0000 (GMT)
-Message-ID: <daf94e44-7c37-4fa6-a31e-b043b7bf46f1@samsung.com>
-Date: Fri, 22 Aug 2025 12:26:08 +0200
+	s=arc-20240116; t=1755858721; c=relaxed/simple;
+	bh=tjba+1GpAesrrqMS4KoUunQwa1u2tl4QeEPRqEXmx0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=F204qMUZS37wVZ8wa5gyazyentgsTCIljPEneRhJkUIKqPANUfs/n4FHrATybtJjIle5cQlHA6kQ4wNjEsmnTk0QLBtnhUrgK7gOrx+ytUepFuVZT6TNfrchfUy/2woMmFmfhZbwZYnx5PfcmOzeQZgwHnqyOZ7ie5XO32ywORs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FqrCBxl3; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57M8UIuu027215;
+	Fri, 22 Aug 2025 10:31:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	oasFw8I/ANKFSsQetpBeb0kT/smlUz8pHNmupegs/eU=; b=FqrCBxl3W964mf+B
+	/P0L4i6TdPoHgOASjx/LBi8fJbkUg4tFmxeq4bN1cFEAO3KY0cGb0EeGdSG79syF
+	DKZKCPnKFemLhDiTw4gaydGc2iuqDl0dpLP4AqM3RfNe3OMPKf5uGYTApBr9APu9
+	sZPS1ufVGhgvb3YtcOcp8f6/0+J43Ycs4Wyx4q2XsUEfaVJlUc1qeMgyRkrLmwoT
+	btQEKmAi00U4AW1MnSx+5qF4lC/JIxkC88yS28+SMH+deszxYrp/4BN09dk9E9LF
+	LM2sDqpkQ8lQmAxbeV2B5BTbuadVPcxeIbKPTZPSiaxTsjj1ksRImjPeKK3bq4ga
+	Gjg+pw==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48n5298w03-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Aug 2025 10:31:51 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57MAVoX9011063
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Aug 2025 10:31:50 GMT
+Received: from [10.133.33.129] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 22 Aug
+ 2025 03:31:47 -0700
+Message-ID: <0887d67c-b041-4456-be8a-696b444cdedf@quicinc.com>
+Date: Fri, 22 Aug 2025 18:31:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,482 +65,480 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 1/4] drm/imagination: Use pwrseq for TH1520 GPU
- power management
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-To: Matt Coster <Matt.Coster@imgtec.com>, Drew Fustini <drew@pdp7.com>
-Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel
-	<p.zabel@pengutronix.de>, Frank Binns <Frank.Binns@imgtec.com>, Maarten
-	Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
-	<ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, Drew
-	Fustini <fustini@kernel.org>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH v2 1/5] PM: QoS: Add support for CPU affinity latency PM
+ QoS
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: <lenb@kernel.org>, <pavel@kernel.org>, <tony.luck@intel.com>,
+        <reinette.chatre@intel.com>, <Dave.Martin@arm.com>,
+        <james.morse@arm.com>, <ulf.hansson@linaro.org>,
+        <amit.kucheria@linaro.org>, <christian.loehle@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Zhongqiu Han <quic_zhonhan@quicinc.com>,
+        <zhongqiu.han@oss.qualcomm.com>
+References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+ <20250721124104.806120-2-quic_zhonhan@quicinc.com>
+ <CAJZ5v0heLbA5Bfa2NqAGeOn_=N2+CMEQ8HWRgp25Ob0bGYDLZQ@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <55e606c5-9ac0-4e0b-8506-5f88a6fc540e@samsung.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20250822102610eucas1p17b57ad56569020fb2d563c61d4fd5a4a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed
-X-EPHeader: CA
-X-CMS-RootMailID: 20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed
-References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
-	<CGME20250821222020eucas1p20e40b85b991da0b4d867df76e55350ed@eucas1p2.samsung.com>
-	<20250822-apr_14_for_sending-v13-1-af656f7cc6c3@samsung.com>
-	<aa8d4ffb-4607-4bff-9d87-8635cd37d439@imgtec.com>
-	<55e606c5-9ac0-4e0b-8506-5f88a6fc540e@samsung.com>
+From: Zhongqiu Han <quic_zhonhan@quicinc.com>
+In-Reply-To: <CAJZ5v0heLbA5Bfa2NqAGeOn_=N2+CMEQ8HWRgp25Ob0bGYDLZQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=ZJKOWX7b c=1 sm=1 tr=0 ts=68a84717 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=COk6AnOGAAAA:8
+ a=4OJ7usud0d8f_mqJBCgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-ORIG-GUID: EfgiEkjWAxaOnqLc5lHootIhe1uye4RC
+X-Proofpoint-GUID: EfgiEkjWAxaOnqLc5lHootIhe1uye4RC
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIwMDAxMyBTYWx0ZWRfX1MX/rV/sl/oY
+ NOg1KM9eq772NvwEeRVGIXJnZ6C8sT4bs/KlOkSVbXmumQOySFpAwUujjN/sG1gZx5EObqnPQjf
+ KRw9oMP4fdRZuwLEuzc+os27O93M5CRMTpMmHmf6Q9bNzwloftTvVe61Xyo4slgkyV4P9HFI6aS
+ FDxPurYP05cYdevofBCXJuWMu8ioqasoiWxlZTBf0QYlcBbCJDhNvKqwQ5t2mi8e/X+OLAhEOJ1
+ ePiFGb/5i8icmR5TvGvK+ow8ETVBiXEj5VgzdeMrgWGtRJWzPBDta/hLWQRSunlwM47dRU1lNJx
+ G9Qbmy0/CS7y36r0ay4u5HIKjItNOLmhEcH9h3N7VM83bXfF7e98ufi7GQS2/a+y4OVuqgf7nIv
+ 3NzsiXQCqbBuMLRCRqYE6aVpeQ0npA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-22_03,2025-08-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 priorityscore=1501 malwarescore=0 adultscore=0 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 phishscore=0 clxscore=1015 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2508110000 definitions=main-2508200013
 
+On 8/21/2025 6:37 PM, Rafael J. Wysocki wrote:
+> On Mon, Jul 21, 2025 at 2:41 PM Zhongqiu Han <quic_zhonhan@quicinc.com> wrote:
+>>
+>> Currently, the PM QoS framework supports global CPU latency QoS and
+>> per-device CPU latency QoS requests. An example of using global CPU
+>> latency QoS is a commit 2777e73fc154 ("scsi: ufs: core: Add CPU latency
+>> QoS support for UFS driver") that improved random io performance by 15%
+>> for ufs on specific device platform.
+>>
+>> However, this prevents all CPUs in the system from entering C states.
+>> Typically, some threads or drivers know which specific CPUs they are
+>> interested in. For example, drivers with IRQ affinity only want interrupts
+>> to wake up and be handled on specific CPUs. Similarly, kernel thread bound
+>> to specific CPUs through affinity only care about the latency of those
+>> particular CPUs.
+>>
+>> This patch introduces support for partial CPUs PM QoS using a CPU affinity
+>> mask, allowing flexible and more precise latency QoS settings for specific
+>> CPUs. This can help save power, especially on heterogeneous platforms with
+>> big and little cores, as well as some power-conscious embedded systems for
+>> example:
+>>
+>>                          driver A       rt kthread B      module C
+>>    CPU IDs (mask):         0-3              2-5              6-7
+>>    target latency(us):     20               30               100
+>>                            |                |                |
+>>                            v                v                v
+>>                            +---------------------------------+
+>>                            |        PM  QoS  Framework       |
+>>                            +---------------------------------+
+>>                            |                |                |
+>>                            v                v                v
+>>    CPU IDs (mask):        0-3            2-3,4-5            6-7
+>>    runtime latency(us):   20             20, 30             100
+>>
+>> Implement this support based on per-device CPU latency PM QoS.
 
+Hi Rafael,
+Thanks for your review~
 
-On 8/22/25 12:04, Michal Wilczynski wrote:
 > 
+> I have a few concerns regarding this patch.
 > 
-> On 8/22/25 11:28, Matt Coster wrote:
->> On 21/08/2025 23:20, Michal Wilczynski wrote:
->>> Update the Imagination PVR DRM driver to leverage the pwrseq framework
->>> for managing the complex power sequence of the GPU on the T-HEAD TH1520
->>> SoC.
->>>
->>> To cleanly separate platform-specific logic from the generic driver,
->>> this patch introduces an `init` callback to the `pwr_power_sequence_ops`
->>> struct. This allows for different power management strategies to be
->>> selected at probe time based on the device's compatible string.
->>>
->>> A `pvr_device_data` struct, associated with each compatible in the
->>> of_device_id table, points to the appropriate ops table (manual or
->>> pwrseq).
->>>
->>> At probe time, the driver now calls the `->init()` op. For pwrseq-based
->>> platforms, this callback calls `devm_pwrseq_get("gpu-power")`, deferring
->>> probe if the sequencer is not yet available. For other platforms, it
->>> falls back to the existing manual clock and reset handling. The runtime
->>> PM callbacks continue to call the appropriate functions via the ops
->>> table.
->>>
->>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->>
->> Reviewed-by: Matt Coster <matt.coster@imgtec.com>
->>
->> Would you like me to take the non-DTS changes via drm-misc-next?
+> The first one is the naming.
 > 
-> Yeah I think this would be appropriate.
-> Thanks !
+> You want to be able to set wakeup latency QoS limits for multiple CPUs
+> at the same time.  Fair enough, but what does it have to do with
+> affinity of any sort?
+> 
+> Why don't you call the functions cpu_latency_qos_add_multiple() and so on?
 
-Hi Drew,
+My original intention was to bind a specific request to a specific group
+of CPUs. But you're right — the essence here is really just adding QoS
+to multiple CPUs. I will rename it accordingly.
 
-Matt offered to take the non-DTS patches (1/4 and 4/4) from this series
-through the DRM tree.
-
-This leaves the DT binding and TH1520 DT patches (2/4 and 3/4). Would
-you be able to pick them up through your tree ?
-
-Thanks !
 
 > 
+>> Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
+>> ---
+>>   include/linux/pm_qos.h |  40 +++++++++++
+>>   kernel/power/qos.c     | 160 +++++++++++++++++++++++++++++++++++++++++
+>>   2 files changed, 200 insertions(+)
 >>
->> Cheers,
->> Matt
+>> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+>> index 4a69d4af3ff8..2dbad825f8bd 100644
+>> --- a/include/linux/pm_qos.h
+>> +++ b/include/linux/pm_qos.h
+>> @@ -131,6 +131,15 @@ enum pm_qos_req_action {
+>>          PM_QOS_REMOVE_REQ       /* Remove an existing request */
+>>   };
 >>
->>> ---
->>>  drivers/gpu/drm/imagination/pvr_device.c |  22 +----
->>>  drivers/gpu/drm/imagination/pvr_device.h |  17 ++++
->>>  drivers/gpu/drm/imagination/pvr_drv.c    |  23 ++++-
->>>  drivers/gpu/drm/imagination/pvr_power.c  | 158 +++++++++++++++++++++++--------
->>>  drivers/gpu/drm/imagination/pvr_power.h  |  15 +++
->>>  5 files changed, 176 insertions(+), 59 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/imagination/pvr_device.c b/drivers/gpu/drm/imagination/pvr_device.c
->>> index 8b9ba4983c4cb5bc40342fcafc4259078bc70547..294b6019b4155bb7fdb7de73ccf7fa8ad867811f 100644
->>> --- a/drivers/gpu/drm/imagination/pvr_device.c
->>> +++ b/drivers/gpu/drm/imagination/pvr_device.c
->>> @@ -23,6 +23,7 @@
->>>  #include <linux/firmware.h>
->>>  #include <linux/gfp.h>
->>>  #include <linux/interrupt.h>
->>> +#include <linux/of.h>
->>>  #include <linux/platform_device.h>
->>>  #include <linux/pm_runtime.h>
->>>  #include <linux/reset.h>
->>> @@ -121,21 +122,6 @@ static int pvr_device_clk_init(struct pvr_device *pvr_dev)
->>>  	return 0;
->>>  }
->>>  
->>> -static int pvr_device_reset_init(struct pvr_device *pvr_dev)
->>> -{
->>> -	struct drm_device *drm_dev = from_pvr_device(pvr_dev);
->>> -	struct reset_control *reset;
->>> -
->>> -	reset = devm_reset_control_get_optional_exclusive(drm_dev->dev, NULL);
->>> -	if (IS_ERR(reset))
->>> -		return dev_err_probe(drm_dev->dev, PTR_ERR(reset),
->>> -				     "failed to get gpu reset line\n");
->>> -
->>> -	pvr_dev->reset = reset;
->>> -
->>> -	return 0;
->>> -}
->>> -
->>>  /**
->>>   * pvr_device_process_active_queues() - Process all queue related events.
->>>   * @pvr_dev: PowerVR device to check
->>> @@ -618,6 +604,9 @@ pvr_device_init(struct pvr_device *pvr_dev)
->>>  	struct device *dev = drm_dev->dev;
->>>  	int err;
->>>  
->>> +	/* Get the platform-specific data based on the compatible string. */
->>> +	pvr_dev->device_data = of_device_get_match_data(dev);
->>> +
->>>  	/*
->>>  	 * Setup device parameters. We do this first in case other steps
->>>  	 * depend on them.
->>> @@ -631,8 +620,7 @@ pvr_device_init(struct pvr_device *pvr_dev)
->>>  	if (err)
->>>  		return err;
->>>  
->>> -	/* Get the reset line for the GPU */
->>> -	err = pvr_device_reset_init(pvr_dev);
->>> +	err = pvr_dev->device_data->pwr_ops->init(pvr_dev);
->>>  	if (err)
->>>  		return err;
->>>  
->>> diff --git a/drivers/gpu/drm/imagination/pvr_device.h b/drivers/gpu/drm/imagination/pvr_device.h
->>> index 7cb01c38d2a9c3fc71effe789d4dfe54eddd93ee..ab8f56ae15df6c2888feb16b1d87b59510961936 100644
->>> --- a/drivers/gpu/drm/imagination/pvr_device.h
->>> +++ b/drivers/gpu/drm/imagination/pvr_device.h
->>> @@ -37,6 +37,9 @@ struct clk;
->>>  /* Forward declaration from <linux/firmware.h>. */
->>>  struct firmware;
->>>  
->>> +/* Forward declaration from <linux/pwrseq/consumer.h> */
->>> +struct pwrseq_desc;
->>> +
->>>  /**
->>>   * struct pvr_gpu_id - Hardware GPU ID information for a PowerVR device
->>>   * @b: Branch ID.
->>> @@ -57,6 +60,14 @@ struct pvr_fw_version {
->>>  	u16 major, minor;
->>>  };
->>>  
->>> +/**
->>> + * struct pvr_device_data - Platform specific data associated with a compatible string.
->>> + * @pwr_ops: Pointer to a structure with platform-specific power functions.
->>> + */
->>> +struct pvr_device_data {
->>> +	const struct pvr_power_sequence_ops *pwr_ops;
->>> +};
->>> +
->>>  /**
->>>   * struct pvr_device - powervr-specific wrapper for &struct drm_device
->>>   */
->>> @@ -98,6 +109,9 @@ struct pvr_device {
->>>  	/** @fw_version: Firmware version detected at runtime. */
->>>  	struct pvr_fw_version fw_version;
->>>  
->>> +	/** @device_data: Pointer to platform-specific data. */
->>> +	const struct pvr_device_data *device_data;
->>> +
->>>  	/** @regs_resource: Resource representing device control registers. */
->>>  	struct resource *regs_resource;
->>>  
->>> @@ -148,6 +162,9 @@ struct pvr_device {
->>>  	 */
->>>  	struct reset_control *reset;
->>>  
->>> +	/** @pwrseq: Pointer to a power sequencer, if one is used. */
->>> +	struct pwrseq_desc *pwrseq;
->>> +
->>>  	/** @irq: IRQ number. */
->>>  	int irq;
->>>  
->>> diff --git a/drivers/gpu/drm/imagination/pvr_drv.c b/drivers/gpu/drm/imagination/pvr_drv.c
->>> index b058ec183bb30ab5c3db17ebaadf2754520a2a1f..916b40ced7eb0408fe985ba1b83b3be2eb024bae 100644
->>> --- a/drivers/gpu/drm/imagination/pvr_drv.c
->>> +++ b/drivers/gpu/drm/imagination/pvr_drv.c
->>> @@ -1480,15 +1480,33 @@ static void pvr_remove(struct platform_device *plat_dev)
->>>  	pvr_power_domains_fini(pvr_dev);
->>>  }
->>>  
->>> +static const struct pvr_device_data pvr_device_data_manual = {
->>> +	.pwr_ops = &pvr_power_sequence_ops_manual,
->>> +};
->>> +
->>> +static const struct pvr_device_data pvr_device_data_pwrseq = {
->>> +	.pwr_ops = &pvr_power_sequence_ops_pwrseq,
->>> +};
->>> +
->>>  static const struct of_device_id dt_match[] = {
->>> -	{ .compatible = "img,img-rogue", .data = NULL },
->>> +	{
->>> +		.compatible = "thead,th1520-gpu",
->>> +		.data = &pvr_device_data_pwrseq,
->>> +	},
->>> +	{
->>> +		.compatible = "img,img-rogue",
->>> +		.data = &pvr_device_data_manual,
->>> +	},
->>>  
->>>  	/*
->>>  	 * This legacy compatible string was introduced early on before the more generic
->>>  	 * "img,img-rogue" was added. Keep it around here for compatibility, but never use
->>>  	 * "img,img-axe" in new devicetrees.
->>>  	 */
->>> -	{ .compatible = "img,img-axe", .data = NULL },
->>> +	{
->>> +		.compatible = "img,img-axe",
->>> +		.data = &pvr_device_data_manual,
->>> +	},
->>>  	{}
->>>  };
->>>  MODULE_DEVICE_TABLE(of, dt_match);
->>> @@ -1513,4 +1531,5 @@ MODULE_DESCRIPTION(PVR_DRIVER_DESC);
->>>  MODULE_LICENSE("Dual MIT/GPL");
->>>  MODULE_IMPORT_NS("DMA_BUF");
->>>  MODULE_FIRMWARE("powervr/rogue_33.15.11.3_v1.fw");
->>> +MODULE_FIRMWARE("powervr/rogue_36.52.104.182_v1.fw");
->>>  MODULE_FIRMWARE("powervr/rogue_36.53.104.796_v1.fw");
->>> diff --git a/drivers/gpu/drm/imagination/pvr_power.c b/drivers/gpu/drm/imagination/pvr_power.c
->>> index 187a07e0bd9adb2f0713ac2c8e091229f4027354..c6e7ff9e935d3b348eff6953c633c72410fdf507 100644
->>> --- a/drivers/gpu/drm/imagination/pvr_power.c
->>> +++ b/drivers/gpu/drm/imagination/pvr_power.c
->>> @@ -18,6 +18,7 @@
->>>  #include <linux/platform_device.h>
->>>  #include <linux/pm_domain.h>
->>>  #include <linux/pm_runtime.h>
->>> +#include <linux/pwrseq/consumer.h>
->>>  #include <linux/reset.h>
->>>  #include <linux/timer.h>
->>>  #include <linux/types.h>
->>> @@ -234,6 +235,118 @@ pvr_watchdog_init(struct pvr_device *pvr_dev)
->>>  	return 0;
->>>  }
->>>  
->>> +static int pvr_power_init_manual(struct pvr_device *pvr_dev)
->>> +{
->>> +	struct drm_device *drm_dev = from_pvr_device(pvr_dev);
->>> +	struct reset_control *reset;
->>> +
->>> +	reset = devm_reset_control_get_optional_exclusive(drm_dev->dev, NULL);
->>> +	if (IS_ERR(reset))
->>> +		return dev_err_probe(drm_dev->dev, PTR_ERR(reset),
->>> +				     "failed to get gpu reset line\n");
->>> +
->>> +	pvr_dev->reset = reset;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int pvr_power_on_sequence_manual(struct pvr_device *pvr_dev)
->>> +{
->>> +	int err;
->>> +
->>> +	err = clk_prepare_enable(pvr_dev->core_clk);
->>> +	if (err)
->>> +		return err;
->>> +
->>> +	err = clk_prepare_enable(pvr_dev->sys_clk);
->>> +	if (err)
->>> +		goto err_core_clk_disable;
->>> +
->>> +	err = clk_prepare_enable(pvr_dev->mem_clk);
->>> +	if (err)
->>> +		goto err_sys_clk_disable;
->>> +
->>> +	/*
->>> +	 * According to the hardware manual, a delay of at least 32 clock
->>> +	 * cycles is required between de-asserting the clkgen reset and
->>> +	 * de-asserting the GPU reset. Assuming a worst-case scenario with
->>> +	 * a very high GPU clock frequency, a delay of 1 microsecond is
->>> +	 * sufficient to ensure this requirement is met across all
->>> +	 * feasible GPU clock speeds.
->>> +	 */
->>> +	udelay(1);
->>> +
->>> +	err = reset_control_deassert(pvr_dev->reset);
->>> +	if (err)
->>> +		goto err_mem_clk_disable;
->>> +
->>> +	return 0;
->>> +
->>> +err_mem_clk_disable:
->>> +	clk_disable_unprepare(pvr_dev->mem_clk);
->>> +
->>> +err_sys_clk_disable:
->>> +	clk_disable_unprepare(pvr_dev->sys_clk);
->>> +
->>> +err_core_clk_disable:
->>> +	clk_disable_unprepare(pvr_dev->core_clk);
->>> +
->>> +	return err;
->>> +}
->>> +
->>> +static int pvr_power_off_sequence_manual(struct pvr_device *pvr_dev)
->>> +{
->>> +	int err;
->>> +
->>> +	err = reset_control_assert(pvr_dev->reset);
->>> +
->>> +	clk_disable_unprepare(pvr_dev->mem_clk);
->>> +	clk_disable_unprepare(pvr_dev->sys_clk);
->>> +	clk_disable_unprepare(pvr_dev->core_clk);
->>> +
->>> +	return err;
->>> +}
->>> +
->>> +const struct pvr_power_sequence_ops pvr_power_sequence_ops_manual = {
->>> +	.init = pvr_power_init_manual,
->>> +	.power_on = pvr_power_on_sequence_manual,
->>> +	.power_off = pvr_power_off_sequence_manual,
->>> +};
->>> +
->>> +static int pvr_power_init_pwrseq(struct pvr_device *pvr_dev)
->>> +{
->>> +	struct device *dev = from_pvr_device(pvr_dev)->dev;
->>> +
->>> +	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
->>> +	if (IS_ERR(pvr_dev->pwrseq)) {
->>> +		/*
->>> +		 * This platform requires a sequencer. If we can't get it, we
->>> +		 * must return the error (including -EPROBE_DEFER to wait for
->>> +		 * the provider to appear)
->>> +		 */
->>> +		return dev_err_probe(dev, PTR_ERR(pvr_dev->pwrseq),
->>> +				     "Failed to get required power sequencer\n");
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int pvr_power_on_sequence_pwrseq(struct pvr_device *pvr_dev)
->>> +{
->>> +	return pwrseq_power_on(pvr_dev->pwrseq);
->>> +}
->>> +
->>> +static int pvr_power_off_sequence_pwrseq(struct pvr_device *pvr_dev)
->>> +{
->>> +	return pwrseq_power_off(pvr_dev->pwrseq);
->>> +}
->>> +
->>> +const struct pvr_power_sequence_ops pvr_power_sequence_ops_pwrseq = {
->>> +	.init = pvr_power_init_pwrseq,
->>> +	.power_on = pvr_power_on_sequence_pwrseq,
->>> +	.power_off = pvr_power_off_sequence_pwrseq,
->>> +};
->>> +
->>>  int
->>>  pvr_power_device_suspend(struct device *dev)
->>>  {
->>> @@ -252,11 +365,7 @@ pvr_power_device_suspend(struct device *dev)
->>>  			goto err_drm_dev_exit;
->>>  	}
->>>  
->>> -	clk_disable_unprepare(pvr_dev->mem_clk);
->>> -	clk_disable_unprepare(pvr_dev->sys_clk);
->>> -	clk_disable_unprepare(pvr_dev->core_clk);
->>> -
->>> -	err = reset_control_assert(pvr_dev->reset);
->>> +	err = pvr_dev->device_data->pwr_ops->power_off(pvr_dev);
->>>  
->>>  err_drm_dev_exit:
->>>  	drm_dev_exit(idx);
->>> @@ -276,53 +385,22 @@ pvr_power_device_resume(struct device *dev)
->>>  	if (!drm_dev_enter(drm_dev, &idx))
->>>  		return -EIO;
->>>  
->>> -	err = clk_prepare_enable(pvr_dev->core_clk);
->>> +	err = pvr_dev->device_data->pwr_ops->power_on(pvr_dev);
->>>  	if (err)
->>>  		goto err_drm_dev_exit;
->>>  
->>> -	err = clk_prepare_enable(pvr_dev->sys_clk);
->>> -	if (err)
->>> -		goto err_core_clk_disable;
->>> -
->>> -	err = clk_prepare_enable(pvr_dev->mem_clk);
->>> -	if (err)
->>> -		goto err_sys_clk_disable;
->>> -
->>> -	/*
->>> -	 * According to the hardware manual, a delay of at least 32 clock
->>> -	 * cycles is required between de-asserting the clkgen reset and
->>> -	 * de-asserting the GPU reset. Assuming a worst-case scenario with
->>> -	 * a very high GPU clock frequency, a delay of 1 microsecond is
->>> -	 * sufficient to ensure this requirement is met across all
->>> -	 * feasible GPU clock speeds.
->>> -	 */
->>> -	udelay(1);
->>> -
->>> -	err = reset_control_deassert(pvr_dev->reset);
->>> -	if (err)
->>> -		goto err_mem_clk_disable;
->>> -
->>>  	if (pvr_dev->fw_dev.booted) {
->>>  		err = pvr_power_fw_enable(pvr_dev);
->>>  		if (err)
->>> -			goto err_reset_assert;
->>> +			goto err_power_off;
->>>  	}
->>>  
->>>  	drm_dev_exit(idx);
->>>  
->>>  	return 0;
->>>  
->>> -err_reset_assert:
->>> -	reset_control_assert(pvr_dev->reset);
->>> -
->>> -err_mem_clk_disable:
->>> -	clk_disable_unprepare(pvr_dev->mem_clk);
->>> -
->>> -err_sys_clk_disable:
->>> -	clk_disable_unprepare(pvr_dev->sys_clk);
->>> -
->>> -err_core_clk_disable:
->>> -	clk_disable_unprepare(pvr_dev->core_clk);
->>> +err_power_off:
->>> +	pvr_dev->device_data->pwr_ops->power_off(pvr_dev);
->>>  
->>>  err_drm_dev_exit:
->>>  	drm_dev_exit(idx);
->>> diff --git a/drivers/gpu/drm/imagination/pvr_power.h b/drivers/gpu/drm/imagination/pvr_power.h
->>> index ada85674a7ca762dcf92df40424230e1c3910342..b853d092242cc90cb98cf66100679a309055a1dc 100644
->>> --- a/drivers/gpu/drm/imagination/pvr_power.h
->>> +++ b/drivers/gpu/drm/imagination/pvr_power.h
->>> @@ -41,4 +41,19 @@ pvr_power_put(struct pvr_device *pvr_dev)
->>>  int pvr_power_domains_init(struct pvr_device *pvr_dev);
->>>  void pvr_power_domains_fini(struct pvr_device *pvr_dev);
->>>  
->>> +/**
->>> + * struct pvr_power_sequence_ops - Platform specific power sequence operations.
->>> + * @init: Pointer to the platform-specific initialization function.
->>> + * @power_on: Pointer to the platform-specific power on function.
->>> + * @power_off: Pointer to the platform-specific power off function.
->>> + */
->>> +struct pvr_power_sequence_ops {
->>> +	int (*init)(struct pvr_device *pvr_dev);
->>> +	int (*power_on)(struct pvr_device *pvr_dev);
->>> +	int (*power_off)(struct pvr_device *pvr_dev);
->>> +};
->>> +
->>> +extern const struct pvr_power_sequence_ops pvr_power_sequence_ops_manual;
->>> +extern const struct pvr_power_sequence_ops pvr_power_sequence_ops_pwrseq;
->>> +
->>>  #endif /* PVR_POWER_H */
->>>
->>
->>
+>> +/* cpu affinity pm latency qos request handle */
+>> +struct cpu_affinity_qos_req {
+>> +       struct list_head list;
 > 
-> Best regards,
+> Is the list really an adequate data structure here?
+> 
+> The number of CPUs in the mask is known at the request addition time
+> and it fails completely if the request cannot be added for one CPU
+> IIUC, so why don't you use an array of requests instead?
 
-Best regards,
+Yes, using an array is sufficient. the list tend to cause poor cache
+locality and other issues. Thanks for your sharing.
+
+> 
+>> +       union {
+>> +               struct dev_pm_qos_request req;
+>> +               void *req_ptr;
+>> +       };
+> 
+> Why do you need the union here?
+> 
+> Checking if the request is active only requires inspecting one CPU
+> involved in it AFAICS.
+
+yes, I can find an anchor point to determine whether it's active, for
+example by reusing dev_pm_qos_request_active to check one of the CPUs
+instead of using such obscure and complex data structures.
+
+> 
+>> +};
+>> +
+>>   static inline int dev_pm_qos_request_active(struct dev_pm_qos_request *req)
+>>   {
+>>          return req->dev != NULL;
+>> @@ -208,6 +217,13 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+>>                  PM_QOS_RESUME_LATENCY_NO_CONSTRAINT :
+>>                  pm_qos_read_value(&dev->power.qos->resume_latency);
+>>   }
+>> +
+>> +int cpu_affinity_latency_qos_add(struct cpu_affinity_qos_req *pm_req,
+>> +                                 const cpumask_t *affinity_mask, s32 latency_value);
+>> +int cpu_affinity_latency_qos_remove(struct cpu_affinity_qos_req *pm_req);
+>> +int cpu_affinity_latency_qos_release(struct cpu_affinity_qos_req *pm_req);
+> 
+> Why is a separate release function needed?
+
+You're right, that part was redundant. I feel a bit awkward about it.
+
+
+> 
+> Also, why don't you think that a separate function for updating an
+> existing request would be useful?
+
+Yes, exactly, I also think it's needed. However, as I mentioned in the
+cover letter, I haven't found actual users for it at the moment. This
+patch series is intended to help reduce power consumption, so either I
+or other developers can submit a request to use the update function when
+it's needed in the future. As for me, I already plan to propose a patch
+that uses the update interface in the UFS module. Since UFS is not my
+technical focus, there are still some pending items on that from my
+collaborator.
+
+> 
+>> +bool cpu_affinity_latency_qos_active(struct cpu_affinity_qos_req *pm_req);
+>> +void wakeup_qos_affinity_idle_cpu(int cpu);
+>>   #else
+>>   static inline enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev,
+>>                                                            s32 mask)
+>> @@ -289,6 +305,30 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+>>   {
+>>          return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+>>   }
+>> +
+>> +static inline int cpu_affinity_latency_qos_add(struct cpu_affinity_qos_req *pm_req,
+>> +                                               const cpumask_t *affinity_mask,
+>> +                                               s32 latency_value)
+>> +{
+>> +       return 0;
+>> +}
+>> +
+>> +static inline int cpu_affinity_latency_qos_remove(
+>> +                  struct cpu_affinity_qos_req *pm_req)
+>> +{
+>> +       return 0;
+>> +}
+>> +static inline int cpu_affinity_latency_qos_release(
+>> +                  struct cpu_affinity_qos_req *pm_req)
+>> +{
+>> +       return 0;
+>> +}
+>> +static inline bool cpu_affinity_latency_qos_active(
+>> +                   struct cpu_affinity_qos_req *pm_req)
+>> +{
+>> +       return false;
+>> +}
+>> +static inline void wakeup_qos_affinity_idle_cpu(int cpu) {}
+>>   #endif
+>>
+>>   static inline int freq_qos_request_active(struct freq_qos_request *req)
+>> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+>> index 4244b069442e..5e507ed8d077 100644
+>> --- a/kernel/power/qos.c
+>> +++ b/kernel/power/qos.c
+>> @@ -335,6 +335,166 @@ void cpu_latency_qos_remove_request(struct pm_qos_request *req)
+>>   }
+>>   EXPORT_SYMBOL_GPL(cpu_latency_qos_remove_request);
+>>
+>> +#ifdef CONFIG_PM
+>> +
+>> +/**
+>> + * wakeup_qos_affinity_idle_cpu - break one specific cpu out of idle.
+>> + * @cpu: the CPU to be woken up from idle.
+>> + */
+>> +void wakeup_qos_affinity_idle_cpu(int cpu)
+>> +{
+>> +       preempt_disable();
+>> +       if (cpu != smp_processor_id() && cpu_online(cpu))
+>> +               wake_up_if_idle(cpu);
+>> +       preempt_enable();
+>> +}
+> 
+> This duplicates code from wake_up_all_idle_cpus() that duplication is
+> easily avoidable.
+
+Sorry about that. I'll explore a cleaner solution, possibly by wrapping
+it as an function and integrating the change into
+sched module func wake_up_all_idle_cpus().
+
+> 
+>> +
+>> +/**
+>> + * cpu_affinity_latency_qos_add - Add new CPU affinity latency QoS request.
+>> + * @pm_req: Pointer to a preallocated handle.
+>> + * @affinity_mask: Mask to determine which CPUs need latency QoS.
+>> + * @latency_value: New requested constraint value.
+>> + *
+>> + * Use @latency_value to initialize the request handle pointed to by @pm_req,
+>> + * insert it as a new entry to the CPU latency QoS list and recompute the
+>> + * effective QoS constraint for that list, @affinity_mask determine which CPUs
+>> + * need the latency QoS.
+>> + *
+>> + * Callers need to save the handle for later use in updates and removal of the
+>> + * QoS request represented by it.
+>> + *
+> 
+> It would be good to also say that callers are responsible for
+> synchronizing the calls to add and remove functions for the same
+> request.
+
+Thanks for pointing that out.The active api check alone can't really
+prevent misuse by users.
+I might also need to review the code and documentation of the
+cpu_latency_qos_add_request interface, and include the fix in the next
+patch version.
+
+
+> 
+>> + * Returns 0 or a positive value on success, or a negative error code on failure.
+>> + */
+>> +int cpu_affinity_latency_qos_add(struct cpu_affinity_qos_req *pm_req,
+>> +                                 const cpumask_t *affinity_mask,
+>> +                                 s32 latency_value)
+>> +{
+>> +       int cpu;
+>> +       cpumask_t actual_mask;
+>> +       struct cpu_affinity_qos_req *cpu_pm_req;
+>> +       int ret = 0;
+>> +
+>> +       if (!pm_req) {
+>> +               pr_err("%s: invalid PM Qos request\n", __func__);
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       if (cpu_affinity_latency_qos_active(pm_req)) {
+>> +               WARN(1, "%s called for already added request\n", __func__);
+>> +               return -EBUSY;
+>> +       }
+> 
+> The usual pattern for checks like this is
+> 
+> if (WARN(cpu_affinity_latency_qos_active(pm_req), message))
+>           return error;
+
+Got it, Thanks, will fix it~
+
+> 
+> And, which is not related to the above, if a function is defined in
+> the same file as its caller, I prefer it to be defined before its
+> caller.
+
+Got it, that makes sense. I'll fix it~
+
+> 
+>> +
+>> +       INIT_LIST_HEAD(&pm_req->list);
+>> +
+>> +       if (!affinity_mask || cpumask_empty(affinity_mask) ||
+>> +           latency_value < 0) {
+>> +               pr_err("%s: invalid PM Qos request value\n", __func__);
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       for_each_cpu(cpu, affinity_mask) {
+>> +               cpu_pm_req = kzalloc(sizeof(struct cpu_affinity_qos_req),
+>> +                                    GFP_KERNEL);
+>> +               if (!cpu_pm_req) {
+>> +                       ret = -ENOMEM;
+>> +                       goto out_err;
+>> +               }
+>> +               ret = dev_pm_qos_add_request(get_cpu_device(cpu),
+>> +                                            &cpu_pm_req->req,
+>> +                                            DEV_PM_QOS_RESUME_LATENCY,
+>> +                                            latency_value);
+>> +               if (ret < 0) {
+>> +                       pr_err("failed to add latency req for cpu%d", cpu);
+> 
+> Why do you want to print an error message here?  Is this anything that
+> the sysadmin should know about?  If not, then maybe dev_dbg() should
+> be sufficient?
+
+Fair point. I initially considered a failure to set PM QoS as a
+significant, rare, and hard-to-reproduce issue. However, it seems that
+such debugging concerns are more relevant to developers than to system
+administrators. I will fix it.
+
+
+> 
+>> +                       kfree(cpu_pm_req);
+>> +                       goto out_err;
+>> +               } else if (ret > 0) {
+>> +                       wakeup_qos_affinity_idle_cpu(cpu);
+>> +               }
+>> +
+>> +               cpumask_set_cpu(cpu, &actual_mask);
+>> +               list_add(&cpu_pm_req->list, &pm_req->list);
+>> +       }
+>> +
+>> +       pr_info("PM Qos latency: %d added on cpus %*pb\n", latency_value,
+>> +               cpumask_pr_args(&actual_mask));
+> 
+> I'm not sure why the actual_mask variable is needed.  AFAICS, the
+> function fails anyway if the request cannot be added for any CPU in
+> the original mask.
+
+This is because I'm concerned that the mask passed by the user might
+contain invalid values, which could result in some CPUs not being
+traversed at all. (Please note, this isn't a PM QoS failure — it's that
+the loop doesn't even get entered.) Users might be confused about what's
+going wrong, so I wanted to give them a hint. That said, I’m also open
+to dropping this idea if it seems odd or unnecessary.
+
+
+> 
+>> +       pm_req->req_ptr = pm_req;
+>> +       return ret;
+>> +
+>> +out_err:
+>> +       cpu_affinity_latency_qos_release(pm_req);
+>> +       pr_err("failed to add PM QoS latency req, removed all added requests\n");
+> 
+> A message about this has already been printed.  Why print another one?
+
+yes, one should be enough and maybe just in out_err: .
+
+> 
+>> +       return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(cpu_affinity_latency_qos_add);
+>> +
+>> +
+>> +/**
+>> + * cpu_affinity_latency_qos_remove - Remove an existing CPU affinity latency QoS.
+>> + * @pm_req: Handle to the QoS request to be removed.
+>> + *
+>> + * Remove the CPU latency QoS request represented by @pm_req from the CPU latency
+>> + * QoS list. This handle must have been previously initialized and added via
+>> + * cpu_affinity_latency_qos_add().
+>> + */
+>> +int cpu_affinity_latency_qos_remove(struct cpu_affinity_qos_req *pm_req)
+>> +{
+>> +       if (!pm_req) {
+>> +               pr_err("%s: invalid PM Qos request value\n", __func__);
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       if (!cpu_affinity_latency_qos_active(pm_req)) {
+>> +               WARN(1, "%s called for unknown object\n", __func__);
+>> +               return -EINVAL;
+>> +       }
+> 
+> Same pattern comment as above applies here.
+
+Got it~
+
+> 
+>> +
+>> +       return cpu_affinity_latency_qos_release(pm_req);
+>> +}
+>> +EXPORT_SYMBOL_GPL(cpu_affinity_latency_qos_remove);
+>> +
+>> +/**
+>> + * cpu_affinity_latency_qos_release - Release pm_reqs latency QoS resource.
+>> + * @pm_req: QoS request to be released.
+>> + *
+>> + * Release pm_reqs managed CPU affinity latency QoS resource.
+>> + *
+>> + * Returns a negative value indicates failure.
+>> + */
+>> +int cpu_affinity_latency_qos_release(struct cpu_affinity_qos_req *pm_req)
+>> +{
+>> +       int ret = 0;
+>> +       struct cpu_affinity_qos_req *cpu_pm_req, *next;
+>> +
+>> +       list_for_each_entry_safe(cpu_pm_req, next, &pm_req->list, list) {
+>> +               ret = dev_pm_qos_remove_request(&cpu_pm_req->req);
+>> +               if (ret < 0)
+>> +                       pr_err("failed to remove qos request for %s\n",
+>> +                              dev_name(cpu_pm_req->req.dev));
+>> +               list_del(&cpu_pm_req->list);
+>> +               kfree(cpu_pm_req);
+>> +               cpu_pm_req = NULL;
+>> +       }
+>> +
+>> +       memset(pm_req, 0, sizeof(*pm_req));
+>> +       return ret;
+>> +}
+>> +
+>> +/**
+>> + * cpu_affinity_latency_qos_active - Check if a CPU affinity latency QoS
+>> + * request is active.
+>> + * @pm_req: Handle to the QoS request.
+>> + *
+>> + * Return: 'true' if @pm_req has been added to the CPU latency QoS list,
+>> + * 'false' otherwise.
+>> + */
+>> +bool cpu_affinity_latency_qos_active(struct cpu_affinity_qos_req *pm_req)
+>> +{
+>> +       return pm_req->req_ptr == pm_req;
+>> +}
+>> +EXPORT_SYMBOL_GPL(cpu_affinity_latency_qos_active);
+>> +
+>> +#endif /* CONFIG_PM */
+>> +
+>>   /* User space interface to the CPU latency QoS via misc device. */
+>>
+>>   static int cpu_latency_qos_open(struct inode *inode, struct file *filp)
+>> --
+> 
+> I'll look at the rest of the series whey all of my comments on this
+> patch have been addressed.
+
+Thanks a lot for the review~
+
+> 
+> Thanks!
+
+
 -- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+Thx and BRs,
+Zhongqiu Han
 
