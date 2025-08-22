@@ -1,121 +1,135 @@
-Return-Path: <linux-pm+bounces-32883-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5652B30E80
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 08:07:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05730B30EC2
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 08:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC7415E5D41
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 06:06:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A117D1CE4E1D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 06:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB99D221540;
-	Fri, 22 Aug 2025 06:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAD32E3B1A;
+	Fri, 22 Aug 2025 06:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DMJxFvmD"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dUou/LpX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B7A16FF44
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 06:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7280427AC32;
+	Fri, 22 Aug 2025 06:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755842774; cv=none; b=ofUoTg4znaDyYBYGLFB8a3FZbdy3+c+sVo9W26/Ks6PbrN+K+zGIJAGYl8P4d/NFI9pU6Za2xNgruQP9bHlpNIHdRjBpcLt3qYj/j39lPd3lJ5ioEjyDwWU6xQ/hG557pBzpxSxIwN+/IQM/fSLE7WJNXdDH1m/vuk2v4VW9MbE=
+	t=1755843729; cv=none; b=Jzcfk8jsUxE+edTDEMCFFXO3pBpM7r+Kch9kiweAhE8d8/Yh1pZS7fWRu2M0Itzq1l/mh3rtGTgUfFhxZfL5pTM+XeONSXeRiVxcSJkb6Vrb3IsB+Mh98RmYDjBd4gUCYlE72I1CC/ExlqXluFuMP/ETZgqBICQxD5r021/8OgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755842774; c=relaxed/simple;
-	bh=HGqWuoHgmmgHoSzHhFhnGFrp/claoOUiLRgGZX10r+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gVqjY24efz1SiSUYN5J4r+qusNHwk2D+4FlD9E7oGsOXtX8ZOi8TKMoFCmwwTUnirTVtBF3czfae/MsKfHG24nbFs5d1fAUFP6FH070VsQHvvX8MbXjXXo+hN6xHhnEOWauMbbnhzw+/At9y1r4QnFgAynTVNcLAD+nVUjBj3/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DMJxFvmD; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-76e2e8e2d2dso1286089b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 23:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755842772; x=1756447572; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRj4gWuvSe9KJNF2HvWgOVVCeMpYCcJ3nSN/Zd2LcHQ=;
-        b=DMJxFvmDwwnfaVQEyBimhTyC3/vAl8YX4HmwenkWr99X+4uER8nR878f8WzC6IojkE
-         PkVHD2fbFmLVpx/ZUobGQcsP0SexyAfVEYBJ9v0mwF+wbOaglQwObYtVjCLdiCjmFVEb
-         h1Ns+UasMGZYQmHjmB9MbKo+rtGKjsRvJ4g5tyivd7Uf6R3zFEkQh2y6vL/QBW954EqO
-         4LeluaYYWFlRS9AWaryVHcGXJZCCFtG8YCOjH+qtESboqPBE1fhv98sQmXxBACha6/Lg
-         dID8CWqtyH9JIP+k9hAgEDcnEx4OGgcaDs5uNAwvikhGXLmnoub40MJFmkBZK1xLIuyH
-         G5OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755842772; x=1756447572;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aRj4gWuvSe9KJNF2HvWgOVVCeMpYCcJ3nSN/Zd2LcHQ=;
-        b=bBUDQE6TU0V7bhI+2VM6DUcOrQEt0xqy4W9+X7qMPikNWQaOVwbAcHS4CydP/Ooali
-         SpM7uTft5OMxTBiG2UHQtOrBlgO2rNbOwWEk2/fhZ2F4LnxKBwa1mtEQpuImU0Ud2C0Y
-         uLA72a/8/swRMiqhLCUrJirq7g/0k+85yDFgu/ZBH0iovscaRDd/yBhmM7qIYCvVYQn5
-         WGa9dfK9xy1eucBkHv2T2yibJWMhmLBTsfMs45DBpjXowPINKa3TXDIdwn3fi1H0z4H9
-         du4iP+jZ/1dRnZaPWpcfSlR9QxQGTbxFNxnz97xdKwyR1alrUxKuCL1K2X4ZkVAmwZFW
-         y6fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVqawriSI8vc9GGCUIQ22QJMNtlQQUbd37dAOrLkYF6TZ/4X1o0OYF1TS5azbNMFlxilzmm2qdPWQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4P7mAv/DvYIa6mZSU/aNmkwbdSju6rHAN6t8gIWUvpG/tqX1F
-	mfedaDYx5XmkhpaXaLrmFKD+hvjYBZHAqjWvDZSs/Qc0/fe7iECzyQfeleNiA9/zVbM=
-X-Gm-Gg: ASbGncsxhjnnngyb6pIQS/1JMtS7E6g5cinREKyWoon610Lq5RanaugVtpr0cd2rZaJ
-	W58pdyRKUo8v6Zw7xPjFecRNcgLNBiX14aDs5JQJ9rProW6Qi66oLWOi2QWHJrIpINs0Zvysy1z
-	TP29+la04/XUdfD4ySSutT7/xcmRgqIMTXau+OgRSrOxVfYLTzvjlOflhz4xG0VtF5hccr2mMlD
-	sDjkz171CsjVRf7DBndy5Bb5RRKl8bcahbYnY93tGkBM60Yq8Nuy3594YdszeitYu34PG9zddqJ
-	gi2iYkhuVx2TakZzYCo7j7eDFQT+vgBHU1Y6MikWnmUu11SlKBsDvqKNXrZa+zWNzowEzBGiENg
-	jsU0oyeZzaVh40dfg0M293U+t
-X-Google-Smtp-Source: AGHT+IGryQhx7NkdJSDc5m5rZZNOBqLyR8DTgK4iIdr8kRPK/dFFCXNh+UbON3GVXLnVhVtonBLu0g==
-X-Received: by 2002:a05:6a20:3ca6:b0:243:78a:829d with SMTP id adf61e73a8af0-24340e4640dmr2844133637.54.1755842772379;
-        Thu, 21 Aug 2025 23:06:12 -0700 (PDT)
-Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-325154999f1sm1475868a91.25.2025.08.21.23.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 23:06:11 -0700 (PDT)
-Date: Fri, 22 Aug 2025 11:36:09 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Judith Mendez <jm@ti.com>
-Cc: Nishanth Menon <nm@ti.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Bryan Brattlof <bb@ti.com>, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/3] OPP: Support more speed grades and silicon revisions
-Message-ID: <20250822060609.djvsm5nmryit5ypl@vireshk-i7>
-References: <20250818192632.2982223-1-jm@ti.com>
+	s=arc-20240116; t=1755843729; c=relaxed/simple;
+	bh=ayqQLuz2t+cV2/mN6Vv7S5ueWn5bRegzJbzeM4HF7pM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BUAmNswKO+ZP4LcxCo2Kh2gLK/w/lh5ok6AEMi0FDDoEg9OSgXKw87twccMmky2Ro7WKEjSMLGa72LdgZUsHOs4xZ0LedcEI7ZVnPYHfvrVJU6/3hi0j8Rk9Wcw8j2LO7c6Z6mi0I4N5sADlGrcwhhuNiSSU9bbyhuFHhSWsTRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=dUou/LpX; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57M6LvPp186577;
+	Fri, 22 Aug 2025 01:21:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1755843717;
+	bh=9tHPqKKnRlf/2yoYaU51ff9krR9hR2OUkjvBjZR7nbs=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=dUou/LpX8uNa3HvO0F+Tq/zAfHL4I1JJB3OnLNEzOvy3pP0vqtk3b/PUCshyEVRUr
+	 0mlBM704WiDbJ9EgwcbQgn5NCh1oiDVuY+V8xH/I5pCqK2f0SBeo3HVAaUcRxXRZQD
+	 dLtKH13IqLeVzdR6B7L/zjmwxk8pVpudZnyWJRsE=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57M6Lvxf2699211
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Fri, 22 Aug 2025 01:21:57 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 22
+ Aug 2025 01:21:56 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Fri, 22 Aug 2025 01:21:57 -0500
+Received: from [172.24.233.249] (ula0502350.dhcp.ti.com [172.24.233.249])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57M6LpGm3090508;
+	Fri, 22 Aug 2025 01:21:52 -0500
+Message-ID: <eaf4c015-a9e2-486b-a5ca-f98ce2146866@ti.com>
+Date: Fri, 22 Aug 2025 11:51:51 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818192632.2982223-1-jm@ti.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] Add cpufreq and USB support for AM62D2
+To: Nishanth Menon <nm@ti.com>, "Raghavendra, Vignesh" <vigneshr@ti.com>
+CC: <praneeth@ti.com>, <kristo@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <khasim@ti.com>, <v-singh1@ti.com>,
+        <afd@ti.com>, <bb@ti.com>, <s-vadapalli@ti.com>
+References: <20250820083331.3412378-1-p-bhagat@ti.com>
+ <20250821122741.eqrwystfey7nwvym@outfit>
+Content-Language: en-US
+From: Paresh Bhagat <p-bhagat@ti.com>
+In-Reply-To: <20250821122741.eqrwystfey7nwvym@outfit>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 18-08-25, 14:26, Judith Mendez wrote:
-> As the AM62x, AM62ax, and AM62px SoC families mature, more speed
-> grades are established and more silicon revisions are released. This
-> patch series adds support for more speed grades on AM62Px SoCs in
-> ti-cpufreq. Also allow all silicon revisions across AM62x, AM62Px,
-> and AM62Ax SoCs to use the already established OPPs and instead determine
-> approprate OPP application with speed grade efuse parsing.
-> 
-> Also fix 1GHz OPP which according to device datasheet [0], also supports
-> speed grade "O".
-> 
-> [0] https://www.ti.com/lit/gpn/am62p
-> 
-> Judith Mendez (3):
->   cpufreq: ti: Support more speed grades on AM62Px SoC
->   cpufreq: ti: Allow all silicon revisions to support OPPs
->   arm64: dts: ti: k3-am62p: Fix supported hardware for 1GHz OPP
+Hi Nishanth and Vignesh,
 
-Applied. Thanks.
+On 21/08/25 17:57, Nishanth Menon wrote:
+> On 14:03-20250820, Paresh Bhagat wrote:
+>> This patch series introduces following changes:
+>>
+>> * Patch 1 fixes the register length in main_pmx/padconfig for AM62D
+>>   and AM62A.
+>>
+>> * Patch 2 enables USB support for AM62D2-EVM by adding pinmux and device
+>>   tree nodes.
+>>
+>> * Patch 3 adds AM62D2 SoC to cpufreq-dt-platdev blacklist so that
+>>   cpufreq is handled by the ti-cpufreq driver instead of the
+>>   generic cpufreq-dt driver.
+>>
+>> * Patch 4 extends ti-cpufreq to register AM62D2 SoC support by
+>>   reusing the am62a7_soc_data.
+>>
+>> Boot Logs-
+>> https://gist.github.com/paresh-bhagat12/e29d33c3fd92ff17580edf1441ece9f9
+>>
+>> Tech Ref Manual-https://www.ti.com/lit/pdf/sprujd4
+>> Schematics Link-https://www.ti.com/lit/zip/sprcal5
+>>
+>> Paresh Bhagat (3):
+>>    arm64: dts: ti: k3-am62d2-evm: Enable USB support
+>>    cpufreq: dt-platdev: Blacklist ti,am62d2 SoC
+>>    cpufreq: ti: Add support for AM62D2
+>>
+>> Vibhore Vardhan (1):
+>>    arm64: dts: ti: k3-am62a-main: Fix pinctrl properties
+> Please do not mix things up to maintainers. Please post patches #1,2
+> separately to DT maintainers - these do not have any relationship with
+> the rest of the driver patches.
 
--- 
-viresh
+
+Thanks for the review. I will keep patches in separate series for 
+further set of patches.
+
+>
+>>   arch/arm64/boot/dts/ti/k3-am62a-main.dtsi |  2 +-
+>>   arch/arm64/boot/dts/ti/k3-am62d2-evm.dts  | 21 +++++++++++++++++++++
+>>   drivers/cpufreq/cpufreq-dt-platdev.c      |  1 +
+>>   drivers/cpufreq/ti-cpufreq.c              |  2 ++
+>>   4 files changed, 25 insertions(+), 1 deletion(-)
+>>
+>> -- 
+>> 2.34.1
+>>
 
