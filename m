@@ -1,187 +1,237 @@
-Return-Path: <linux-pm+bounces-32853-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32854-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B1D9B30C5D
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AF25B30C62
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:15:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A6A8586A81
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 03:12:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DEA25A013C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 03:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9290E280A35;
-	Fri, 22 Aug 2025 03:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A5B280331;
+	Fri, 22 Aug 2025 03:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oHUXoF7W"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="LA8CP65O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E9F27FD7D;
-	Fri, 22 Aug 2025 03:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93599231A32;
+	Fri, 22 Aug 2025 03:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755832331; cv=none; b=DSM/8CwJElQMznKe1jR578npxpU5S8qkhb1Y7iQPOp/qRjzdsquUp1IeT1P0bJzXtiulbUrUFDxE3EUJVVzF8Dzlw0Ijz74mZJ6sWZ2nwmsOQ8d6otBwpjP239wTmV008w6wrq0Rd8CtvbItEa3Ty+3VErXVyqY/v21yPF7nHqI=
+	t=1755832527; cv=none; b=ScpRDu+nxDiuVhp3V682foIwkulGMnNDVbPjTmEa4/WcpOKFeX4bK9Q33joSqqSQPf05mUTwtE53F+ZS8NYnJ+Yn9XFqAcrB+ksY/WIlz1IcKeNh0+rAnKbj39LaER1NMj7C9l+ZG8t9QPkKjz/hmRJ7nz/VpJDeYM6OWrHfDIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755832331; c=relaxed/simple;
-	bh=dzlqa+5rz7zLNbwgKVmH/0yIcaGBtdw6VXx3JofaAlU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JocSsUlYNOeSswd6gHiIjrISFGDCLWHYBiSxckpzDL9Z1WqrhThZfJ0bG9W0ws5dt3NMoTb+GhdhNgh3C6bmogKPfCJGkpZna8YAjnQv4snxPfM903UJyWPWYBsfclROZDrrhvt1At6fzRRYSR8TA1iuPKewCuYljB90Iy1hwdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oHUXoF7W; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755832330; x=1787368330;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dzlqa+5rz7zLNbwgKVmH/0yIcaGBtdw6VXx3JofaAlU=;
-  b=oHUXoF7Wz4kcBjCuzflCeTvGZdrJ5hQck3MwbxE9JWsw1wxInRQRZTd0
-   1ceq4dN4ZqKE4qmTD8MocDSOyBZTNvmyvTcZZcNIxd3VlQPZlRnSya+iP
-   nwmRIv8MBifcI1TPR6Gh7gjaCLbqH9DZsdX7j6IznMxNv4eApfYmCresn
-   r5z1SOloQeUobGMqe6yY09IcMumzxMgpYVM0941vAoUBB8c/U3Y25rwAt
-   Xri5fSniKd8xgFN/LjcuVk+d/uzTOO0FaGfHCvfgTT5SVlhJ6va2IslCj
-   4pUb5yI/6y0gKSHF8k109Ffgai883EgDPvJytzMlXoBAxOjPQcbiwrbNU
-   g==;
-X-CSE-ConnectionGUID: qe5PdUJnRe+g+7Vwibbqgg==
-X-CSE-MsgGUID: aElwpcUFRfW6ZaBsbrPBNQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="45703266"
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="45703266"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 20:12:10 -0700
-X-CSE-ConnectionGUID: vlz1/d64RDmJPID7ENvaRQ==
-X-CSE-MsgGUID: mM4usX8gTBygnDC1QK/bMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="168493631"
-Received: from mjruhl-desk.amr.corp.intel.com (HELO debox1-desk4.hsd1.or.comcast.net) ([10.124.221.244])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 20:12:09 -0700
-From: "David E. Box" <david.e.box@linux.intel.com>
-To: rafael@kernel.org,
-	bhelgaas@google.com,
-	vicamo.yang@canonical.com,
-	kenny@panix.com,
-	ilpo.jarvinen@linux.intel.com,
-	nirmal.patel@linux.intel.com,
-	mani@kernel.org
-Cc: "David E. Box" <david.e.box@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/2] PCI: vmd: Use pci_host_set_default_pcie_link_state() to set ASPM defaults
-Date: Thu, 21 Aug 2025 20:11:58 -0700
-Message-ID: <20250822031159.4005529-2-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250822031159.4005529-1-david.e.box@linux.intel.com>
-References: <20250822031159.4005529-1-david.e.box@linux.intel.com>
+	s=arc-20240116; t=1755832527; c=relaxed/simple;
+	bh=mkUutMM0ZI/EqBEJrog0pad/NwwTZqCyCvtY9cs926o=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=HAWtT30fRu/EN9/hbdywhwCc7yRe1KD+/5LorJbEJUFnOLOKA8g7zclht5drsaJxP0RJAqcJf1v0xxVITqSrIKYw8ccxbEBbaP4FqEqdUw53yKMuXZbdY7VuhgvWtMP8yIWUME/twd54QEiWjfO1cjoBUCXn2xbiB4mSJHusQcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=LA8CP65O; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1755832522;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FVNj7XuCRYzgakERnKLvBNWM2bucmEROJFI6LqjhvO4=;
+	b=LA8CP65OXnnR9gteh1dgRcomRR3qHjJm1l0KP+WuXv9Ef4pVYSQ+RBQwYmk+ZxAg+xQccJ
+	YtJ9i4GQobi6N8AJmrfSOt7M0iQpBRJcxx++tj2uGCtZ4078K8OBQ6T2tR1Mx6gJ8ALAqF
+	dJAfmbVPQMcwW36IWEjYUZjwJYQZvNp6qcCLzMofDMt6bpcyDJLO7YOHCrwN38IR3d3Xgi
+	3PdCAC7emnQwyNFo8JZGYGVxp6XTZ8j3e+0WXXfjSYIaFMTdYLnk/lwdfMHyLMnmDi0tXT
+	lrHVz6c0hGwphutvAe7xtpr40XnP+zyzH1U41r8Mq/wAf43Sj+VcDV6iGsreow==
+Date: Fri, 22 Aug 2025 05:15:22 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Heiko Stuebner <heiko@sntech.de>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Diederik de Haas
+ <didi.debian@cknow.org>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ kernel@collabora.com
+Subject: Re: [PATCH v2 2/3] thermal: rockchip: shut up GRF warning
+In-Reply-To: <20250820-thermal-rockchip-grf-warning-v2-2-c7e2d35017b8@kernel.org>
+References: <20250820-thermal-rockchip-grf-warning-v2-0-c7e2d35017b8@kernel.org>
+ <20250820-thermal-rockchip-grf-warning-v2-2-c7e2d35017b8@kernel.org>
+Message-ID: <2951de6ac036c7e8c62a940d2ed029ea@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Now that pci_host_set_default_pcie_link_state() exists, set the VMD child
-domain with PCIE_LINK_STATE_ALL at bridge creation so core ASPM uses those
-defaults during ASPM and CLKPM capability init.
+Hello Sebastian,
 
-Also remove the unneeded pci_set_power_state_locked(pdev, PCI_D0) and
-pci_enable_link_state_locked() calls now that the links are configured
-during enumeration.
+On 2025-08-20 19:40, Sebastian Reichel wrote:
+> Most of the recent Rockchip devices do not have a GRF associated
+> with the tsadc IP. Let's avoid printing a warning on those devices.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/thermal/rockchip_thermal.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
 
-This aligns VMD behavior with platform expectations without per-controller
-ASPM tweaks at runtime.
+Thanks for the patch!  It's looking good to me, and it's virtually
+identical to my rather old patch that I implemented a while ago, but
+never submitted to the mailing list(s).
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
-Changes in V2:
+Please feel free to include
 
-  -- Separated VMD changes into new patch.
-  -- Changed comment for VMD_FEAT_BIOS_PM_QUIRK to remove ASPM
-  -- Removed pci_set_power_state() and pci_enable_link_state_locked()
-     calls in vmd_pm_enable_quirk()
-  -- Use pci_host_set_default_pcie_link_state()
+Reviewed-by: Dragan Simic <dsimic@manjaro.org>
 
- drivers/pci/controller/vmd.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index b679c7f28f51..b99e01a57ddb 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -71,10 +71,9 @@ enum vmd_features {
- 	VMD_FEAT_CAN_BYPASS_MSI_REMAP		=3D (1 << 4),
-=20
- 	/*
--	 * Enable ASPM on the PCIE root ports and set the default LTR of the
--	 * storage devices on platforms where these values are not configured by
--	 * BIOS. This is needed for laptops, which require these settings for
--	 * proper power management of the SoC.
-+	 * Program default LTR values for storage devices on platforms where
-+	 * firmware did not. Required on many laptops for proper SoC power
-+	 * management.
- 	 */
- 	VMD_FEAT_BIOS_PM_QUIRK		=3D (1 << 5),
- };
-@@ -733,7 +732,7 @@ static void vmd_copy_host_bridge_flags(struct pci_host_=
-bridge *root_bridge,
- }
-=20
- /*
-- * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-+ * Enable LTR settings on devices that aren't configured by BIOS.
-  */
- static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
- {
-@@ -747,7 +746,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, vo=
-id *userdata)
-=20
- 	pos =3D pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
- 	if (!pos)
--		goto out_state_change;
-+		return 0;
-=20
- 	/*
- 	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
-@@ -755,7 +754,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, vo=
-id *userdata)
- 	 */
- 	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
- 	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
--		goto out_state_change;
-+		return 0;
-=20
- 	/*
- 	 * Set the default values to the maximum required by the platform to
-@@ -767,13 +766,6 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, v=
-oid *userdata)
- 	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
- 	pci_info(pdev, "VMD: Default LTR value set by driver\n");
-=20
--out_state_change:
--	/*
--	 * Ensure devices are in D0 before enabling PCI-PM L1 PM Substates, per
--	 * PCIe r6.0, sec 5.5.4.
--	 */
--	pci_set_power_state_locked(pdev, PCI_D0);
--	pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
- 	return 0;
- }
-=20
-@@ -921,6 +913,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsig=
-ned long features)
- 	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
- 			       "domain"), "Can't create symlink to domain\n");
-=20
-+	pci_host_set_default_pcie_link_state(to_pci_host_bridge(vmd->bus->bridge),
-+					     PCIE_LINK_STATE_ALL);
- 	vmd_acpi_begin();
-=20
- 	pci_scan_child_bus(vmd->bus);
---=20
-2.43.0
-
+> diff --git a/drivers/thermal/rockchip_thermal.c
+> b/drivers/thermal/rockchip_thermal.c
+> index
+> 7b18a705dfade6fa7318b28c2b57544a4446c1cc..c49ddf70f86e7beaf0190b1b3e93f5e6b2f72b2c
+> 100644
+> --- a/drivers/thermal/rockchip_thermal.c
+> +++ b/drivers/thermal/rockchip_thermal.c
+> @@ -74,6 +74,7 @@ struct chip_tsadc_table {
+>   * @tshut_temp: the hardware-controlled shutdown temperature value,
+> with no trim
+>   * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
+>   * @tshut_polarity: the hardware-controlled active polarity (0:LOW 
+> 1:HIGH)
+> + * @grf_required: true, if a GRF is required for proper functionality
+>   * @initialize: SoC special initialize tsadc controller method
+>   * @irq_ack: clear the interrupt
+>   * @control: enable/disable method for the tsadc controller
+> @@ -97,6 +98,9 @@ struct rockchip_tsadc_chip {
+>  	enum tshut_mode tshut_mode;
+>  	enum tshut_polarity tshut_polarity;
+> 
+> +	/* GRF availability */
+> +	bool grf_required;
+> +
+>  	/* Chip-wide methods */
+>  	void (*initialize)(struct regmap *grf,
+>  			   void __iomem *reg, enum tshut_polarity p);
+> @@ -1098,6 +1102,7 @@ static const struct rockchip_tsadc_chip
+> px30_tsadc_data = {
+>  	/* cpu, gpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 2, /* 2 channels for tsadc */
+> +	.grf_required = true,
+>  	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
+>  	.tshut_temp = 95000,
+>  	.initialize = rk_tsadcv4_initialize,
+> @@ -1119,6 +1124,7 @@ static const struct rockchip_tsadc_chip
+> rv1108_tsadc_data = {
+>  	/* cpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 1, /* one channel for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1141,6 +1147,7 @@ static const struct rockchip_tsadc_chip
+> rk3228_tsadc_data = {
+>  	/* cpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 1, /* one channel for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1163,6 +1170,7 @@ static const struct rockchip_tsadc_chip
+> rk3288_tsadc_data = {
+>  	/* cpu, gpu */
+>  	.chn_offset = 1,
+>  	.chn_num = 2, /* two channels for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1185,6 +1193,7 @@ static const struct rockchip_tsadc_chip
+> rk3328_tsadc_data = {
+>  	/* cpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 1, /* one channels for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
+>  	.tshut_temp = 95000,
+>  	.initialize = rk_tsadcv2_initialize,
+> @@ -1206,6 +1215,7 @@ static const struct rockchip_tsadc_chip
+> rk3366_tsadc_data = {
+>  	/* cpu, gpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 2, /* two channels for tsadc */
+> +	.grf_required = true,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1228,6 +1238,7 @@ static const struct rockchip_tsadc_chip
+> rk3368_tsadc_data = {
+>  	/* cpu, gpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 2, /* two channels for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1250,6 +1261,7 @@ static const struct rockchip_tsadc_chip
+> rk3399_tsadc_data = {
+>  	/* cpu, gpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 2, /* two channels for tsadc */
+> +	.grf_required = true,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1272,6 +1284,7 @@ static const struct rockchip_tsadc_chip
+> rk3568_tsadc_data = {
+>  	/* cpu, gpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 2, /* two channels for tsadc */
+> +	.grf_required = true,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1294,6 +1307,7 @@ static const struct rockchip_tsadc_chip
+> rk3576_tsadc_data = {
+>  	/* top, big_core, little_core, ddr, npu, gpu */
+>  	.chn_offset = 0,
+>  	.chn_num = 6, /* six channels for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1318,6 +1332,7 @@ static const struct rockchip_tsadc_chip
+> rk3588_tsadc_data = {
+>  	/* top, big_core0, big_core1, little_core, center, gpu, npu */
+>  	.chn_offset = 0,
+>  	.chn_num = 7, /* seven channels for tsadc */
+> +	.grf_required = false,
+>  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+>  	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
+>  	.tshut_temp = 95000,
+> @@ -1594,12 +1609,10 @@ static int rockchip_configure_from_dt(struct
+> device *dev,
+>  		return -EINVAL;
+>  	}
+> 
+> -	/* The tsadc wont to handle the error in here since some SoCs didn't
+> -	 * need this property.
+> -	 */
+>  	thermal->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
+> -	if (IS_ERR(thermal->grf))
+> -		dev_warn(dev, "Missing rockchip,grf property\n");
+> +	if (IS_ERR(thermal->grf) && thermal->chip->grf_required)
+> +		return dev_err_probe(dev, PTR_ERR(thermal->grf),
+> +				     "Missing rockchip,grf property\n");
+> 
+>  	rockchip_get_trim_configuration(dev, np, thermal);
 
