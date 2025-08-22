@@ -1,88 +1,88 @@
-Return-Path: <linux-pm+bounces-32872-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32873-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3326B30DE9
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 07:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB2F2B30DEF
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 07:21:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A84160131E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:20:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF1A6174E79
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2EB28DB54;
-	Fri, 22 Aug 2025 05:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF4D28D8E5;
+	Fri, 22 Aug 2025 05:21:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fuwGjPDX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m/iCU1SY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46CB28505F;
-	Fri, 22 Aug 2025 05:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD4A28505F;
+	Fri, 22 Aug 2025 05:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755840009; cv=none; b=qVBQL3SieXuGAMZh1i7S5xooFF06lwujO+asxZYObW2mNnAqbPNXDaCK7QdwSTW9UZa2NEIZFtndgyQgZUKZuz47dhCi5B0jjuIY8PlEwprEPmyqgC500vQSa7neK2J8DmrGyxidlohrUYTXj5w4wKKKfkmkKwJbEjxc+YSxM9A=
+	t=1755840085; cv=none; b=RMtP1gdAndZ12sSsqFjBs5dTHGBVNzHpxSZmj3bDo+TPtCYp+AjYaSER8NTdVjq4oycz/NZ2sjLbe6rjp4IZNIf1XgAwUM6KJZS2mdpqJm4/m3OKTR3Nn6JSqYLFJBYoh+yOiv7uInTfX+y4bAvGpgTOkLm02hHljEo5zB5KAbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755840009; c=relaxed/simple;
-	bh=GrMumvBLGMCAFUAXwfZUYHjPyRNBWCX8dH7XHX+DxJM=;
+	s=arc-20240116; t=1755840085; c=relaxed/simple;
+	bh=Dhq1EKRGFfvC0kDVCsgNN7STDq697m7sI8COfgZ3d7s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T2gqlPRHvZaZzCXUNuKv2O7dGUNSXedu7paC90eB/20/W5xG8+Yfbs9sgO8of945I6ZVmfriedU3HZbennu0HzgaKf4Jn05Kyg8VSgebk+lsZwjjenFzyqggyn6FwwanfAXOBJBfxMvR9NVCHAVi0O9VtixhUsdfq08c4LXhGqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fuwGjPDX; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=jKsCo4ZzSs8hqRGf++wZOhgno7iBPrMhnIUHlQxCYYTIBm0X0fQYtEfTL60AhW6lMIlgK7KJyJDHm2Ke3j+hCx7DNuSNN4mIEk4x3PAcZf8h+zyG9pY7u84uzknT3CD1ehYjtiipOrOgk65qINjWaEgLXysCbNx6+XjaLIAPQEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m/iCU1SY; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3b9e415a68fso1427453f8f.2;
-        Thu, 21 Aug 2025 22:20:07 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3b9e415a68fso1427916f8f.2;
+        Thu, 21 Aug 2025 22:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755840006; x=1756444806; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755840079; x=1756444879; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qnn/5PSHpSjfU2b5+BfRC0bYY4gLtCL0ez5DFkTN+5o=;
-        b=fuwGjPDXjl0O9/URBiyeOrBTpY35kBMcOhd9Y8TaC7mqOI3BeV7n0nHzP2OaIDkkN7
-         b12F3gm1IEX4HHNq/5dGl62dbtZEFgPiCrGXw6fY/F7qBq/5is4KPqaJGoNnGM/0SFSF
-         ugGtDiKh+m3JQ8MRqCGE05L/PQg2uwLV6ZxAYp+PFjolBp+uzRmjHSX8opd4sKmdiMS2
-         d67ToGa3CkL9YcvLUeIIfB4aS7GzVQeayukIj+49yLKFXML2ZldZOBk6EfNOZNQFXcDn
-         OaBzAI8WCqn8MhEeWaSXQ/ra8R7gYtBB2hn01Exi2/xqns28p9d0Lo4QlcQM9OKZWaDR
-         6rCg==
+        bh=TvKEBQ7yPvPn1i4lpaL5alLsJpeWrgoaDHAdkYx11l8=;
+        b=m/iCU1SYRu718c6/x/8TpawGrR2G2KzAH/C51S8PLBBJiQJwZCKUZHQA0kC1ShxFvz
+         /qE1Q/X6+nUm6XdxWC+1hGXljcQJHNI6M/2I8Bv/XmHk8Y/S/Y7vqD+AZn+HUna1MnKP
+         9ZJzH+A1eYx90h90WxUUWa0VQC98aCHfhPlWhsGWnPv3AjJBQC7wIOmJPofBcEyaYx0m
+         Vo6dCDDSe4XR1J2R++ZREU+tXsqz8E0xWC+rqnXICsJKLlGnpD5YrDe+RlnnO4Kg+Jky
+         K7aqWzM6A/wnaEi0BiEDMR0/9jNzkx6DL+BbQzWmzrfowo8vF/9GrnJ+tIm40BBZQt6L
+         vjUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755840006; x=1756444806;
+        d=1e100.net; s=20230601; t=1755840079; x=1756444879;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qnn/5PSHpSjfU2b5+BfRC0bYY4gLtCL0ez5DFkTN+5o=;
-        b=EUZJURWuvpEUx2R3hJmrqwGBWB2DAditdEV4liicBTi4OUOFJTkSY7nmIt0SqlXDjt
-         cunWa9/BAXR8OsSj8k/xOEQcKfTmlfstQfo/L3QvuNF9JCm0CG1lAaGeP9U3e5A4taSb
-         wlX1LWnsgEtFtHA85zuouW/h4PFL+yEU4PXDYB7LIL9UYOQoY3hBzLsxzOCciyZOn9D4
-         +WFeR9aZnByPBiggjzgnN9IV6sMcU0KeKtxIp5iX6uyd4gxK8pPYmiv+U0xzVmOtCzP4
-         LTWwE+vm4Kfyj11r+RfEqaevuhO4qzgLHLfkWt0qHS3r2WJjhG/M+u45I5CXJItvP0mX
-         t95A==
-X-Forwarded-Encrypted: i=1; AJvYcCVIWJggNoVmFKj5TKFXXKGhVhDpc3vE8diRLjxaXFXeywMCFXz2wl0AYHvzBlUU0395V9q+4MZK60M=@vger.kernel.org, AJvYcCVQGglQZRFOqsdDGt1lD1Xdo8ty8PoDLjMgRYtxzinEFJ1emRTyTll4+gi+51aR3++ddKTj43SjcFJlOxVg@vger.kernel.org, AJvYcCVUirCLxnb9gv56BkCcb5kNQzvvsBnkJh98exuN9YLO4oG+8lqVMAN6pgyf5g75aa3jQdOjFUfcF5M=@vger.kernel.org, AJvYcCVuD7n6n3hp9nXbuYCwV0/HlPFdtx8Ls12BMAAgCUMRmZAp5sgk7Z3peBqR6+uzbSY1PGpCtwEAf25UB9w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqEBj1oBLweIXMO830NAkriYPTlK/wp3mfx7BytyGuN+Z5MmXE
-	jkxUY1pfDzeqWRR89O4DfTZ5hB4U/hAH+gN7NP8+Snac6McZsAFJmq4+qE6KR/Bfo4UBspmvVf+
-	Lmoch1a7i4Ryes+UjsNlWXEYHOuTR3L8=
-X-Gm-Gg: ASbGncsqO4vO22zT1UQTDYh1TKnTFiNp5DVVNbQiFZcHJSV4ROLVFMO/1KDEPd2YcDi
-	L305918R7hjIvj5YwQpoG4O8Puc8xiXCrlog/J+QAL9k+y25ULffaa0FFmK6+PrxRr6YeUvrgra
-	GGGfxWtRDMD/ZppWtbIExYajGoxRl8b5XJ3awSkjl4YeCyfOLPuP54gFjxS2RyC/z96D4egmIcN
-	ZMghXK/1YEMFL9B7Mo=
-X-Google-Smtp-Source: AGHT+IGayn+dYhiP+xVrv/kU7JYYwK/92uVhgjhPGNmyjhxABuhQYzDSr93Xpts5u+oiyuEsnRxb+FaGnuuk9Io8Iho=
-X-Received: by 2002:a05:6000:2283:b0:3a6:f2a7:d0bb with SMTP id
- ffacd0b85a97d-3c5da54ee0amr988708f8f.12.1755840005776; Thu, 21 Aug 2025
- 22:20:05 -0700 (PDT)
+        bh=TvKEBQ7yPvPn1i4lpaL5alLsJpeWrgoaDHAdkYx11l8=;
+        b=YkRE8lFtfGC/t87b5RbofzT5aRFLtLdz7D8WqamOX1DMFLkTuKO75tk0aptUM6MyWg
+         Z5eeTfTtBQKhhoZ355fVrK8Smo20/pv6Y5fuyaLWK8ATYU5JhoRMNT5dr3iGMcnz/BBD
+         lCg3mhu7+wFDSEyBkudLDGNz3U7aWxDyoPLtyGLYUwgZVcKGQJL0KPhBHy03uV9e5D08
+         8wY9t9rwwKBONDety1Lim6gMFtReuDqvbsmQtjlKSN8xmwWnkp0howFehl1ebQrwPjCj
+         fGWQBl2tXW2mXADrM3iGnV4fbdBumPsfiXB5IFAIdO/useH9E3LPZlVszwuNewf8NeNo
+         PqyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKVvzsCgab6F1th+yCqLs1WlqCIK2DGUYWgz9xjXSCsCTBrKJMgKEJGNdwoX4AwEr8c2PahCUdGqV1h+hU@vger.kernel.org, AJvYcCWfLb2w3CBuhAE7JK3RWawoilp6A0pwq7Iz7ErgAZ4++j5eeMD7WBqRbyiQsQfNtk0M0cOg8cdAW5Kqqu0=@vger.kernel.org, AJvYcCXYSL8kX2tKA5OmiTz2/q6kEXgQe3CZg8k/5tZMCJUpHHKWv4dpenETTAG8GdQfmvB62nPNSsFo63s=@vger.kernel.org, AJvYcCXltKUZa25oaQ9UMl6GqB0ZXR1fez6Z25Fu+siF+b9zFuz45s5IVwo5VqaHqMWyitO8LH6CEswtobY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK/NGyEKpaNQYmXt1EpFKHQX0DqEj2X5TWUvPTLbS9qH8Hw9wx
+	zbRFOZj8ezfjG3jIpOr7rtKQmZ0+iua9fv5qtjHIUXijkm7NwmaxX4HjDGxhM3w1mcuJ+F1z/A0
+	I4ToJxeps4ewTGV4V2MHk/hnmyQZxARs=
+X-Gm-Gg: ASbGncvpISFwkoizkgq6QFNhA7b0iJTwceujTvFdNbcK20Hs30ij3ZJGf6qh25p8Sf6
+	bEeXEze43g3+j/wRsZu3zv8n3fcK8bQ034Qf2SeKRt6U9+DSUFY6LnhSjSGJCkpC75VajnCskm9
+	vMpYjII6XHLsChItrngPJk68naOv5AiDXKYr9NRt3AQL3L+htRuh1licQghnUL+RpWmpSWtZZJO
+	b/EfNzO
+X-Google-Smtp-Source: AGHT+IHhSYM0k9SEsMbFsBYZmOGa9t1h6A8KV8hrooA4h0OepLG5bv3p8xVbgieNLPz08xT6yLEXjRsFtXNtt8Gd+nY=
+X-Received: by 2002:a05:6000:26cb:b0:3b9:1c80:e1ce with SMTP id
+ ffacd0b85a97d-3c5dc540663mr842412f8f.36.1755840078612; Thu, 21 Aug 2025
+ 22:21:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250321095556.91425-1-clamor95@gmail.com> <20250321095556.91425-4-clamor95@gmail.com>
- <117069551.nniJfEyVGO@senjougahara>
-In-Reply-To: <117069551.nniJfEyVGO@senjougahara>
+References: <20250321095556.91425-1-clamor95@gmail.com> <20250321095556.91425-2-clamor95@gmail.com>
+ <1914341.atdPhlSkOF@senjougahara>
+In-Reply-To: <1914341.atdPhlSkOF@senjougahara>
 From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Fri, 22 Aug 2025 08:19:53 +0300
-X-Gm-Features: Ac12FXxiZO-Cd4dYwR186y5TmAKHb9LT42IjQgUuEeVgtUMAOTz0EvTyxIUsxCY
-Message-ID: <CAPVz0n24N1-iAoQFpzw7r7sz2E4Xhd8fB-gaoPesdc7XaR2HcQ@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] ARM: tegra: Add DFLL clock support on Tegra 4
+Date: Fri, 22 Aug 2025 08:21:07 +0300
+X-Gm-Features: Ac12FXxmta7mBPhCxb7W9OiXb4BXH_cyVWGMx9ucUxlZujEVGMRlnBeWr0rx2Ho
+Message-ID: <CAPVz0n0zuvXxT=G18ujhV26nbvuCKtyXNC3cxenxGuj8wHWZ8w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] drivers: cpufreq: add Tegra 4 support
 To: Mikko Perttunen <mperttunen@nvidia.com>
 Cc: Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
 	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
@@ -94,93 +94,60 @@ Cc: Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-=D0=BF=D1=82, 22 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 06:0=
-5 Mikko Perttunen <mperttunen@nvidia.com> =D0=BF=D0=B8=D1=88=D0=B5:
+=D0=BF=D1=82, 22 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 05:5=
+8 Mikko Perttunen <mperttunen@nvidia.com> =D0=BF=D0=B8=D1=88=D0=B5:
 >
 > On Friday, March 21, 2025 6:55=E2=80=AFPM Svyatoslav Ryhel wrote:
-> > Add DFLL clock node to common Tegra114 device tree along with clocks
-> > property to cpu node.
+> > Tegra 4 is fully compatible with existing Tegra K1 cpufreq driver.
 > >
 > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > > ---
-> >  arch/arm/boot/dts/nvidia/tegra114.dtsi | 34 ++++++++++++++++++++++++++
-> >  1 file changed, 34 insertions(+)
+> >  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+> >  drivers/cpufreq/tegra124-cpufreq.c   | 5 +++--
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/arch/arm/boot/dts/nvidia/tegra114.dtsi
-> > b/arch/arm/boot/dts/nvidia/tegra114.dtsi index 341ec0962460..25d063a47c=
-a5
+> > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c
+> > b/drivers/cpufreq/cpufreq-dt-platdev.c index 18942bfe9c95..7d15a1224d37
 > > 100644
-> > --- a/arch/arm/boot/dts/nvidia/tegra114.dtsi
-> > +++ b/arch/arm/boot/dts/nvidia/tegra114.dtsi
-> > @@ -4,6 +4,7 @@
-> >  #include <dt-bindings/memory/tegra114-mc.h>
-> >  #include <dt-bindings/pinctrl/pinctrl-tegra.h>
-> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +#include <dt-bindings/reset/tegra114-car.h>
-> >  #include <dt-bindings/soc/tegra-pmc.h>
+> > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > @@ -140,6 +140,7 @@ static const struct of_device_id blocklist[] __init=
+const
+> > =3D {
 > >
-> >  #include "tegra114-peripherals-opp.dtsi"
-> > @@ -710,6 +711,30 @@ mipi: mipi@700e3000 {
-> >               #nvidia,mipi-calibrate-cells =3D <1>;
-> >       };
+> >       { .compatible =3D "nvidia,tegra20", },
+> >       { .compatible =3D "nvidia,tegra30", },
+> > +     { .compatible =3D "nvidia,tegra114", },
+> >       { .compatible =3D "nvidia,tegra124", },
+> >       { .compatible =3D "nvidia,tegra210", },
+> >       { .compatible =3D "nvidia,tegra234", },
+> > diff --git a/drivers/cpufreq/tegra124-cpufreq.c
+> > b/drivers/cpufreq/tegra124-cpufreq.c index 514146d98bca..6ff2ccc08e5e
+> > 100644
+> > --- a/drivers/cpufreq/tegra124-cpufreq.c
+> > +++ b/drivers/cpufreq/tegra124-cpufreq.c
+> > @@ -189,8 +189,9 @@ static int __init tegra_cpufreq_init(void)
+> >       int ret;
+> >       struct platform_device *pdev;
 > >
-> > +     dfll: clock@70110000 {
-> > +             compatible =3D "nvidia,tegra114-dfll";
-> > +             reg =3D <0x70110000 0x100>, /* DFLL control */
-> > +                   <0x70110000 0x100>, /* I2C output control */
-> > +                   <0x70110100 0x100>, /* Integrated I2C controller */
-> > +                   <0x70110200 0x100>; /* Look-up table RAM */
-> > +             interrupts =3D <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
-> > +             clocks =3D <&tegra_car TEGRA114_CLK_DFLL_SOC>,
-> > +                      <&tegra_car TEGRA114_CLK_DFLL_REF>,
-> > +                      <&tegra_car TEGRA114_CLK_I2C5>;
-> > +             clock-names =3D "soc", "ref", "i2c";
-> > +             resets =3D <&tegra_car TEGRA114_RST_DFLL_DVCO>;
-> > +             reset-names =3D "dvco";
-> > +             #clock-cells =3D <0>;
-> > +             clock-output-names =3D "dfllCPU_out";
-> > +             nvidia,sample-rate =3D <11500>;
+> > -     if (!(of_machine_is_compatible("nvidia,tegra124") ||
+> > -             of_machine_is_compatible("nvidia,tegra210")))
+> > +     if (!(of_machine_is_compatible("nvidia,tegra114") ||
+> > +           of_machine_is_compatible("nvidia,tegra124") ||
+> > +           of_machine_is_compatible("nvidia,tegra210")))
+> >               return -ENODEV;
+> >
+> >       /*
 >
-> Should this be 12500? That would match Tegra124 and a downstream kernel f=
-or
-> Tegra114 I have.
+> I also prefer using Tegra114 and Tegra124 in the commit message, perhaps =
+with
+> the marketing names in parentheses, as the chip IDs are more consistent a=
+nd
+> (IMO) easier to decipher than the product names.
+>
+> Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
 >
 
-I referred to tegratab and macallan boards in 3.4 kernel which give
-11500, maybe sample-rate was changed to 12500 later with tegra124
-addition?
-
-> > +             nvidia,droop-ctrl =3D <0x00000f00>;
-> > +             nvidia,force-mode =3D <1>;
-> > +             nvidia,cf =3D <10>;
-> > +             nvidia,ci =3D <0>;
-> > +             nvidia,cg =3D <2>;
-> > +             status =3D "disabled";
-> > +     };
-> > +
-> >       mmc@78000000 {
-> >               compatible =3D "nvidia,tegra114-sdhci";
-> >               reg =3D <0x78000000 0x200>;
-> > @@ -841,6 +866,15 @@ cpu@0 {
-> >                       device_type =3D "cpu";
-> >                       compatible =3D "arm,cortex-a15";
-> >                       reg =3D <0>;
-> > +
-> > +                     clocks =3D <&tegra_car TEGRA114_CLK_CCLK_G>,
-> > +                              <&tegra_car TEGRA114_CLK_CCLK_LP>,
-> > +                              <&tegra_car TEGRA114_CLK_PLL_X>,
-> > +                              <&tegra_car TEGRA114_CLK_PLL_P>,
-> > +                              <&dfll>;
-> > +                     clock-names =3D "cpu_g", "cpu_lp", "pll_x", "pll_=
-p",
-> "dfll";
-> > +                     /* FIXME: what's the actual transition time? */
-> > +                     clock-latency =3D <300000>;
-> >               };
-> >
-> >               cpu@1 {
->
->
->
->
+Yes, this was applied in v2 already and all other my Tegra patches,
+this exact commit was already picked from v2.
 
