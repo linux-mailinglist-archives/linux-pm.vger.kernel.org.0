@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-32880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5308CB30E4A
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 07:52:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E82BCB30E57
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 07:54:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28EBE5C83E0
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:52:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F86F3BE34A
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 05:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE1C62E2DC7;
-	Fri, 22 Aug 2025 05:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD3A2E3360;
+	Fri, 22 Aug 2025 05:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZCvJBf5H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NHnbbGFB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A272E2DCE
-	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 05:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70372E2EE3
+	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 05:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755841958; cv=none; b=R+9unHBKA/yv1eFhX3qngBtE/ViaLnkiUe3mgZbNvqJYsntOoJ78iwSp3/6iAY5s/WDFex4admJj8KcxCxwMoV9CIZghO6Z+U+LMG65iIK5Ky9EdlSYj6X+B/+PE0xiMX+tz3mb7F1iFyGmx3Ki2e94diSGsHPvFekbu4v7fK28=
+	t=1755842035; cv=none; b=Ue9z7ow8K0E5i1GVeRVlIsSQUqu2T0jF9s+DtrVeEEiHEthH6HV9mZFInUIhsweLKuXjt/79V6tshsRIoRjc/CBK9XdwWpxjDpHe+egemyqPuTHBDEdaauKd97QBgjHawPOlv5lTP77rE1EJsqvqSv+hEgePf90qFMrVRUFb5Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755841958; c=relaxed/simple;
-	bh=7uX8JWTac+f6ksh/wu4QfEa5tteH904VkAXQGClcFe4=;
+	s=arc-20240116; t=1755842035; c=relaxed/simple;
+	bh=4wc7/VqmVDfbilpC+4CI5l9qIomR32O2gKFjfvsNibE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h1LIJ2jpKVu86O7cO/SWcbV3tx2JkR+ELZlQuCD3lNb8FStzaNz9rAEUO7pUD/bpenYWKhFv1ASXvIX1/u2mfZB7VqIcVwL+jexcXe0n2UeD974k9two8bh1MbJT1APCOQfxnzEWuDxegS4cZWv6tb6lP21lsdaa01QO81KaTs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZCvJBf5H; arc=none smtp.client-ip=209.85.210.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3/W3NBDa7Vvhb9B3I7T82wGvfAWHicUo/zJdEFEjKWdfbZC4MYG68FOp2Ppn9RbaHjn4S0i/EPE1zW6fhLNb9gaPaYfFa2pFDtzx+51G7E0pldi2AnPeIyCt20y56EkYT1mKMNwIrcgzkPdu0sSQuxiZ3QnAdKJ7IadypMFqdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NHnbbGFB; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-76e2e89e89fso2372172b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 22:52:36 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-24639fbdd87so2402215ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Aug 2025 22:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755841956; x=1756446756; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1755842033; x=1756446833; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=YovWw4m77QAU1eZq6mNcpwZ3XWg61x3JgwqV7QjcnZU=;
-        b=ZCvJBf5HSr33KUAxPzvWxalVdOcbjDmhI82eR08WZiDG8/Fd36sdv25cFcCu8lGJcT
-         VLKkaCj/PPUX0nYm3uvzjT9LwouuUusb8R5QiEAHOREAww67piw1LPSGhCd7Ze5w662y
-         gF3ZC57qBTQyVZWMn5GsOT84dbhwOQmRugboLw7xcHzQXESxhNEZYUeYEz3zEpyFz5LR
-         1z892wHx3qTT0EUq6rGZFWPx8An20n3iSa/5R8svtl4++LWyK0bHvfOEXkQs52NMdWBz
-         GxYV06tlhSrsU9veg/5bAJHpI1P6Mq3y5lQpXop7BAvE+d3HfX012Sgs2W+0sl65KcIq
-         bvRw==
+        bh=lRfMPsVFFjc7ryDHEvdpPmW3OI/EuSPBqar4AEujing=;
+        b=NHnbbGFBgQIZrMexdm3Z4j+W+4QwNcCd/G32h07PtVrBS2ffFgtJa2FOCy84oXI9sM
+         +jAldJjA6bAuNTJxc5J3B9xiKrYV4DRt7oegzLz+k+BbnQQXEqblyqOx5uOngtyIu8K9
+         YZ2531sH2I0DEqTk/CWAPpk4DIqc/ij641PI+WOEseouwcyf/EU1nAwrKQLIRXI4es0F
+         0XpXQUetUGxAjCitGp0a+ZZPKvsTBVvw9dP6NWsVLlIBk5vnGca4b5fr/rTAebBZhesi
+         Z511LgOVKS2CjISXrNH40I9iiMqyf3nVkHVQVGmHPbKiloBC+BL7FezIEXd/i64pAZfz
+         9ZcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755841956; x=1756446756;
+        d=1e100.net; s=20230601; t=1755842033; x=1756446833;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YovWw4m77QAU1eZq6mNcpwZ3XWg61x3JgwqV7QjcnZU=;
-        b=XCYY1TVMpmhzZj0dmZVdErnSnw6rYmglgLOAfKpIDhJ6Mtb9K9EwNBy/Jp6cAdA42X
-         704ZqETruGo0vGUd0Gs38WgRCRJdnOl0wo17QZApYyMHNAfiLjeezx1cr14uu6h/6Neb
-         xBnwk0m+AEKv/ZkdjPDZaFZKmRWvkbj3F9vkpi6yxx7E6ybl8QtDc8omJxQ37HD16PyP
-         AIfnHj92c9lUSOzTVvLaPvphATjKeLmXLxZx+MBg8wJzCIfMK/Z+g/f4G7o2Glny0Ypl
-         Ma38BxdL0NpAKZVK4zS5ivvNDcpPNHr6bVAUzFirXg9YF+/qt0Pzcet58eddudjw5I0u
-         Giug==
-X-Forwarded-Encrypted: i=1; AJvYcCXl9vftk0V+pqtjPisdlqYDQLc/XMOoCSTdjsTHe6H05G9ws3Vw98gSjBIZijoHOeR9enLYY9J6pA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3SaWt+HsC0m/uzTYZhzWwrwesBnhGoM0yzFSMiJGRbFSuqxYW
-	vqHRdvH3/gHPSc8WYoXp7DcYJlx30tQLInwGGoprBBqKgt9ecfc+cyWbPZCjs11hjO0=
-X-Gm-Gg: ASbGncvA37PY6FkgJGTVmrBbcg3s8oVCms5aRb+/LYKi/GfWeSFasDRRoV3WiS0m6/y
-	dbSr16N9mP3wHGgAbn1CFAMCcUfEkivYFSxbw9CoBMaTUXzoGcNZ9YTdsMeU/6G2Ri96N2t3CDM
-	MkGb4harpgY8g5EtQ9puO1lAvfs9MI6Y0GtI+4LfZBXQDizm9SYmx+amCDiEeLiKilqNqt8MrJ5
-	VVSu+KN7u6IEtI2Ze6s5FYyugtstqPsbV07sI8wbc5sVGeCqMxj4iBOjX5WiDNGqv3Tee2mGEV8
-	TnudAvsU7UvaDOvmuSLuQwzq1T/3BYTAEP6Z1v2L9LadHl8/5+xClbYdjef5p7LTLA82aIp2JhT
-	cFp5+oNR2hquKNp63mtY6NG/n4VDhstHN2xY=
-X-Google-Smtp-Source: AGHT+IERMmQ5QIMLdzGNTUZWTWABVarbRh+hsNdg9Eto0PuDHGxQR+AsczHzwOmYsK59MW3cwZ9ykw==
-X-Received: by 2002:a05:6a21:3299:b0:232:fcfc:7209 with SMTP id adf61e73a8af0-24340e197afmr2543328637.35.1755841956381;
-        Thu, 21 Aug 2025 22:52:36 -0700 (PDT)
+        bh=lRfMPsVFFjc7ryDHEvdpPmW3OI/EuSPBqar4AEujing=;
+        b=qGx/OGMTAtYPMmhe2/NOajKsLOv3KBMOGwCzOUoIohSYEBe17hgsPDT21jrS5rj0PS
+         J+6DPJ8HTY65PlH2cbbDsJvfst5kJ86exFozTW9jlEH6HOCGi+Ex/VAztmrLhm6LjBNm
+         EbcayIqcN1mAA+G5v5aaWC51tSQGZ9AR1U3sPp5NIBQ2BBt8+9UYTyFhwElhY1+zYxZe
+         MIRcSd2LfTwFui9Re696StSj9Jn8eA5/ZcXYyNQiACgfE5VER8mcIqscKrdbJrgZ9yP9
+         5KnUmhwuaa2sNtH4R8Cxs2jfOaxGFyUfKaxEqepdDbTqH5FMuQMLjn1fZ9BjusgIL7ls
+         bjgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUtMxUAArn46LgTi4/LILlk1bVg1ZGpbbooxoySotPaAtldvm3kKkVosxOdXrj2cOZ2Cv79hVDdkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCQMpP3kOkqG6qLeQSSDZb2R0NCUPTz9fKDZ158nOjVfmO0XEn
+	lqDGv2sLExtXq9pva3HkcKd+qtA2aOr5TWXaEijxNxvJb+xnkGhsMWeZG+8LmTuXRA8=
+X-Gm-Gg: ASbGnctDprqXIRr918/jt+LaakROIukWWhZT0LO+PmRxIkwgsGPd5RrB8+9UeHB98Mz
+	/jNSm2JXCa4feuhqqaTQY3Q4+EeFe2w4txal4bmTmBgz9Rb8EPy5xQTDw9zftFSRwlPha7rKUvW
+	fuzlQioLsKXQRZoE1m1XN+Mg57kUHZuRgqdRygB1W62D9iLqoRutmh+F5ITPjvqsSIo9l62VqOY
+	uPkw4rWJEYIdt/KzJcomrEoDrde9nOiznke7iUMRP2FZOuVqWjt/qAUCfplGBAEL0E7GKtfwbbY
+	rQOKt2/O18LW0Gv6TU4l8sxNE5FdlJ43KhnM0KcCkvh0VigHtXXnHuhIT+LLSvzwzXf8mi3fbjI
+	sstup89Pj92xjY5f7fwOHsgzk
+X-Google-Smtp-Source: AGHT+IGDUhRl59xu9W6ouXglnOGMNfVPExl8Z8m2MHMr5khzXc/sDm3TLhU4hJY5umoiXpIgj2VCDw==
+X-Received: by 2002:a17:902:e888:b0:240:4d19:8774 with SMTP id d9443c01a7336-24633d6a31amr21624495ad.24.1755842033049;
+        Thu, 21 Aug 2025 22:53:53 -0700 (PDT)
 Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77037ae065dsm199357b3a.4.2025.08.21.22.52.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed51b3d3sm72222245ad.147.2025.08.21.22.53.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 22:52:35 -0700 (PDT)
-Date: Fri, 22 Aug 2025 11:22:33 +0530
+        Thu, 21 Aug 2025 22:53:52 -0700 (PDT)
+Date: Fri, 22 Aug 2025 11:23:49 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>
 Cc: rust-for-linux@vger.kernel.org, vireshk@kernel.org, nm@ti.com,
@@ -83,10 +83,8 @@ Cc: rust-for-linux@vger.kernel.org, vireshk@kernel.org, nm@ti.com,
 	tmgross@umich.edu, dakr@kernel.org, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] rust: opp: use to_result for error handling
-Message-ID: <20250822055233.otexzvta35jjnqrb@vireshk-i7>
+Message-ID: <20250822055349.6brvcxtljkz2k6p7@vireshk-i7>
 References: <20250821091606.7470-1-work@onurozkan.dev>
- <20250821092137.wttiixhiidt27hnq@vireshk-i7>
- <20250822081343.4041a3d5@nimda.home>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,13 +94,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250822081343.4041a3d5@nimda.home>
+In-Reply-To: <20250821091606.7470-1-work@onurozkan.dev>
 
-On 22-08-25, 08:13, Onur Özkan wrote:
-> `ret` is returned at the end unlike other `to_result` usages in other
-> functions.
+On 21-08-25, 12:16, Onur Özkan wrote:
+> Simplifies error handling by replacing the manual check
+> of the return value with the `to_result` helper.
+> 
+> Signed-off-by: Onur Özkan <work@onurozkan.dev>
+> ---
+>  rust/kernel/opp.rs | 16 +++++-----------
+>  1 file changed, 5 insertions(+), 11 deletions(-)
 
-Ahh, I missed that to_result() doesn't return `ret` at all.
+Applied. Thanks.
 
 -- 
 viresh
