@@ -1,115 +1,134 @@
-Return-Path: <linux-pm+bounces-32891-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32892-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A09DB30FD6
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 09:05:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 370EDB31012
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 09:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 298727BE7D3
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 07:03:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA11B5C76FD
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Aug 2025 07:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 689B92E7BB3;
-	Fri, 22 Aug 2025 07:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616D72E62B7;
+	Fri, 22 Aug 2025 07:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FKnvPTdr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228BE22DA1F;
-	Fri, 22 Aug 2025 07:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D376119539F
+	for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 07:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755846281; cv=none; b=SUWamQ5HyZxwDb8XFj5bZSnJlHrZoTaOFvxZuiHXyaDbO9DhsiL1lfhIf4vz5I4+Uevpj87W6b4hPClc5vrk/hBNDEsecewp5xidZF3Ys6xq+uppIzpmts8ssowbDqD6VUind262eaQC/lr4qEB/GPRlPUvIXD5YV4nXLN7GiCA=
+	t=1755846999; cv=none; b=kf93pljjjwAJA7UNDydPEblsBOnHwEziujrsze5khT/mtWWqWHIglrANK/+FPfWinfDe108xUCuCpiHKsWpj7XP1umYjUb6ZYp3btOLIgvMhPatPVLiW4Qf0BlS9wgrvT5czjaSWjOAGa6en/6FcIsJ1bahYemd2irfUkU88XtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755846281; c=relaxed/simple;
-	bh=QccKFjC6p+v4nhzXdEjhMTUUbcRpkIbHN6EQp8KENSA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IyQTPsyH8gz06vVFz6qTOBVX9U3GJAF0zxDMZ8RkzVbaAd3ksTfgX9WNINnnteTq08PZAGAeS7tHAp0S9Qg3FDZDd2bankQD7OX+TLRcWqf2imZ1/drL6/9l5P2bwKP8jQKQkTG50wQVxPw0SmvYB/InX8qquKHSr9SZ86NM+4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 404f29d27f2611f0b29709d653e92f7d-20250822
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:2e4a5d48-572d-4e21-bb50-8c64f101136d,IP:0,U
-	RL:0,TC:0,Content:30,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:30
-X-CID-META: VersionHash:6493067,CLOUDID:87a5bc6b6d0ce16c213a0961aea888e8,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850,TC:nil,Content:4|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 404f29d27f2611f0b29709d653e92f7d-20250822
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 2023650233; Fri, 22 Aug 2025 15:04:31 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 20838E008FA4;
-	Fri, 22 Aug 2025 15:04:31 +0800 (CST)
-X-ns-mid: postfix-68A8167E-990336308
-Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 8A9A1E008FA2;
-	Fri, 22 Aug 2025 15:04:30 +0800 (CST)
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-To: "rafael J . wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: zhenglifeng <zhenglifeng1@huawei.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH v3 2/2] cpufreq: simplify setpolicy/target check in driver verification
-Date: Fri, 22 Aug 2025 15:04:24 +0800
-Message-Id: <20250822070424.166795-3-zhangzihuan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250822070424.166795-1-zhangzihuan@kylinos.cn>
+	s=arc-20240116; t=1755846999; c=relaxed/simple;
+	bh=cDIzX2IA4iCvUt9uoFiM/dYZHQNcGBqjkXSrXhdyemw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jTv52A/LKj691PF38w8JPzgeOx871k2cYmEdoWCpkp+rwtj4ppD0aeyaRyRqTvvds6+M+mkYCognXZxkXCfY+c1Xmp7Fq49rYAn4wfa2NraMDabDM2fjkvf8A4yaBYsOLC+gkDn78jC+nY6BedIgf2KxvOL6mIuBNmJq/URthRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FKnvPTdr; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76e34c4ce54so1678021b3a.0
+        for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 00:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755846997; x=1756451797; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ja7wvVZV81xXr8Zz3s/sGO5DAQWfSLxex83XaeAoBcA=;
+        b=FKnvPTdrQ/HP7l/t98sdn0Rk7QbBzW1emUYpqs4k5fs+aMv82jWE/YCoGX/SPRwzGl
+         fy4I5QKx48QOdDw5zYoJqudfIldbwu3c6nfvNW9FkzMdsBR7qoAdDcqgt410JRnQR+mi
+         l5N7s6HPja/fgcT6GQzOU/lNrxDvGsBIB3Zi2jqkSdY3OJVH3wKgS0WqAaDMKJ/Wx0+f
+         4IUWVdmKW84b24zMzAClVBWTtxji4nzvW61xnFoM0Ot6SYg+CWWbED5QB8kRSkGjtM5L
+         Jw5rOd2ooWM2Z7suxG5xqH/WY9zJr3KPBWIygDZ6ii9lkU/H+0Tm5CEMu6iVYkqcbYUA
+         Ftkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755846997; x=1756451797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ja7wvVZV81xXr8Zz3s/sGO5DAQWfSLxex83XaeAoBcA=;
+        b=T3G5zkGvs99/y1cRK4aYPKcq1HbnwaceZjc9Q1bWVMGIQittKQtIM1WRpiSO5huepa
+         L0ktfViUOPhT3Xrq8BE/lQp5VkD0wHN1kcwp/v3lfupf9OzXoZUjHSydFY68ugPYxNBf
+         lWCcJRwtpQx89WZSyMwt5D0K7WjnOsyNDHwsyMz2QxLCf9k7KpvhT/1j7sRYvp69TkV7
+         /KndOb/mFBlHPeaTH93l+8g4IDLAkoCrqpkPfcwAVxreXBzjLHOi/D9pFKLGzzD7E1jH
+         wtNQ4+2+pl+LqT8P7m/6frwtVXpEykmDgERG4G9xIMSDBBfX+vuk5wh93dSsdwOsDiOx
+         D9bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdWQgLRs9p3/Uc0WdQ2jUB1en3ek040sWVXcRKjCtt6z6vhlz3Q0XZTsciikQiNRyGr59dyeTmwg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya8Dz9DJMaUzd2S21Nw+TclPxJvsX8F0sHy6e5xmazzfbdYGbE
+	OtzgVi6j2JzbNKhOmWRITFLdSYdlRch6L22lxZsakHZncw/EtEn9sFli1jtP+XiTPRA=
+X-Gm-Gg: ASbGncuU58OniKHSJSZp2LskQkdZuEAqmvSa4f1tucP0axVJK9Wzrk+fyl8d6syEm/l
+	ybdXvUyBngRbukFvQElykO9HugFWonyZldi7au4yE2oPumt6LI0ty1eck1wE4Iz28HzHtjTjqLy
+	VBu7DowvJ8GoyTKVodhsORDot8bnUnmHOTF+Z26vy3H+HPZ/mRwowYypjWNK+ZYaBk7RXbz3RHX
+	yrDaLE+3ZPSq4pQeR9L+a2W0A7wo+pHR40fnXmCDgur6OnEhyGlHsweo8pmoBfwFm4L75uXaNHL
+	HzS54k+Oq65HuvWIFOSbEzKdqoPprSKdh6emMPxGjX5ZSyNBXx9NXFMlMtC+1UN/xdBY1heCkr+
+	wxvDIA0hLf/sZMHtzdB0SPjUUuYVgOXiT4aw=
+X-Google-Smtp-Source: AGHT+IGS7GxI+46a344dMZve29EjbWYSjTDmdGR6AlyUm74ISA0tlK6mXmcup9whsfYIjr+Qux5ILw==
+X-Received: by 2002:a05:6a20:9188:b0:23f:f712:4103 with SMTP id adf61e73a8af0-2433028c04cmr8907124637.18.1755846996745;
+        Fri, 22 Aug 2025 00:16:36 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b47640908e4sm6331466a12.26.2025.08.22.00.16.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Aug 2025 00:16:36 -0700 (PDT)
+Date: Fri, 22 Aug 2025 12:46:34 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "rafael J . wysocki" <rafael@kernel.org>,
+	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] cpufreq: simplify setpolicy/target check in
+ driver verification
+Message-ID: <20250822071634.r4hxnfy7ofgi33az@vireshk-i7>
 References: <20250822070424.166795-1-zhangzihuan@kylinos.cn>
+ <20250822070424.166795-3-zhangzihuan@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250822070424.166795-3-zhangzihuan@kylinos.cn>
 
-Cpufreq drivers are supposed to use either ->setpolicy or
-->target/->target_index. This patch simplifies the existing check by
-collapsing it into a single boolean expression:
+On 22-08-25, 15:04, Zihuan Zhang wrote:
+> Cpufreq drivers are supposed to use either ->setpolicy or
+> ->target/->target_index. This patch simplifies the existing check by
+> collapsing it into a single boolean expression:
+> 
+>     (!!driver->setpolicy == (driver->target_index || driver->target))
+> 
+> This is a readability/maintainability cleanup and keeps the semantics
+> unchanged.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> ---
+>  drivers/cpufreq/cpufreq.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index a067b5447fe8..633be16297d6 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2921,10 +2921,7 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
+>  		return -EPROBE_DEFER;
+>  
+>  	if (!driver_data || !driver_data->verify || !driver_data->init ||
+> -	    !(driver_data->setpolicy || driver_data->target_index ||
+> -		    driver_data->target) ||
+> -	     (driver_data->setpolicy && (driver_data->target_index ||
+> -		    driver_data->target)) ||
+> +	     (!!driver_data->setpolicy == (driver_data->target_index || driver_data->target)) ||
+>  	     (!driver_data->get_intermediate != !driver_data->target_intermediate) ||
+>  	     (!driver_data->online != !driver_data->offline) ||
+>  		 (driver_data->adjust_perf && !driver_data->fast_switch))
 
-    (!!driver->setpolicy =3D=3D (driver->target_index || driver->target))
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-This is a readability/maintainability cleanup and keeps the semantics
-unchanged.
-
-No functional change intended.
-
-Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
----
- drivers/cpufreq/cpufreq.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index a067b5447fe8..633be16297d6 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2921,10 +2921,7 @@ int cpufreq_register_driver(struct cpufreq_driver =
-*driver_data)
- 		return -EPROBE_DEFER;
-=20
- 	if (!driver_data || !driver_data->verify || !driver_data->init ||
--	    !(driver_data->setpolicy || driver_data->target_index ||
--		    driver_data->target) ||
--	     (driver_data->setpolicy && (driver_data->target_index ||
--		    driver_data->target)) ||
-+	     (!!driver_data->setpolicy =3D=3D (driver_data->target_index || dri=
-ver_data->target)) ||
- 	     (!driver_data->get_intermediate !=3D !driver_data->target_intermed=
-iate) ||
- 	     (!driver_data->online !=3D !driver_data->offline) ||
- 		 (driver_data->adjust_perf && !driver_data->fast_switch))
---=20
-2.25.1
-
+-- 
+viresh
 
