@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-32931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9A5B3283E
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 12:41:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CEF9B32848
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 12:59:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 065F4564310
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 10:41:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A0CF1BC8117
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 10:59:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4339E24113C;
-	Sat, 23 Aug 2025 10:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7EB2245032;
+	Sat, 23 Aug 2025 10:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="rhRCxPlV";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="b8pxFERW"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="e6F29MP1";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="W+dq7pBX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2403155C97;
-	Sat, 23 Aug 2025 10:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E875227EAA;
+	Sat, 23 Aug 2025 10:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755945675; cv=pass; b=NFJxjhkcX3qemjdNyQ9bMOy1gpHHE+dCk4YN/d5fal0hQ1nhlMBhcUvR7fvNV+VhowS59tdTNQKXbPz12C8UutJJeerYGDBk0kIvVx6K2D8dtg7w8LDpopB/DyV3Y4PpTwiTWxdajlmGL2iMMU+2S0heOJXPprvtu1Rn5xlQ3DI=
+	t=1755946752; cv=pass; b=mOO8xlLUXFXDqlNiSI1l6skTsFJlMmcp3bjeZ7sWkT31I12RpvzweEmGaoTh/LT8F0/qbTanu9uQlsNFyTJSq8+tymrzGPjFKFasWPDn8mYhTKCb1hpBTSQCMVUbJzU0JU+BWsVFavIx69NzVD1iqCRB40I2pPOhEGntsXawE1E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755945675; c=relaxed/simple;
-	bh=MawRy2xEhZLTUtLETTRtWcH1zpG2srMTHg2OXKjI2Ak=;
+	s=arc-20240116; t=1755946752; c=relaxed/simple;
+	bh=ilyjwIlsa1wkcuXNoECN6cv2xrnaYLKIcOmPyqDGwhE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q49BEfjiAcjv1rtZ9YX2GTH5S6uqgOQedHtq0tstjBoo2mscjvNFZrD2nCIf7PnxK2k6jb661WpLt2+LGs0mJ/TYr70ssmRITos4BlDs2I+fXM7By2MaGRAiR9XRyobjRuMNbxU8fLYyJ5eYB8k2Me7mGwC3ElwMajIwEJjGD4A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=rhRCxPlV; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=b8pxFERW; arc=pass smtp.client-ip=81.169.146.170
+	 MIME-Version:Content-Type; b=GGGV7T37jI0KcQweN3GyvYXAEZbtNFvnPH4p7UIa81xY5XqUZ9RaSDVlq8fT9EW4xKjxqzDAD2gEHUed/5Rg3TpeNjiSpehpAJIbBYetwQuhrJfbs6VTTWKQaneX0CL3DaRvCje8AxkYl+OVn9+K/SONxqulCy8QBJlBUuH2Tc8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=e6F29MP1; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=W+dq7pBX; arc=pass smtp.client-ip=85.215.255.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
 ARC-Seal: i=1; a=rsa-sha256; t=1755945306; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=ccjL84k9oad73SjXywCEs4JEEcXZjgt+IlXBIw0JZv9hSc1lh8/tXoiiFtR1oGrzIm
-    coYlUCM2zgj7LUBmUkA1EbzkZIxkEQmlIj8R4uDZslevNJUQp/W9dwi8JKRvbwmJeRSD
-    klOuKvdb92mm6ytPUUL2FNPrQvteGxba3IGhM1ha+MnRQGs3AVtPJfnV6W6HfGabdpt0
-    Jpp2MS8/eXdtmjDT+VLpU8Mz3EjcAF91Ud7wVMMaxm2jZxIJnKJG6uYzKPrK2TZIOKkC
-    DxyiRctOvaWjKmHjA2hEmr/FQCTlEySqME8VTajIYrIbCHw+c/laFEBUNlQ7VJfRtGnq
-    g84A==
+    b=nnMv1BCDn+jePxMchhXy2j25W3dpYBYkiWlLk2Sde4VGSHYPrQeblpRHe8eyBeh5WD
+    EX8jiS0ImU3L/C2aP4o8B4T/iw9SuCA/EKu4SJguksRrIJHb1plO0R3HK5w0+52lrldy
+    AoAHoV+GplMJCjNERZNofyuRGmXG8DhGFUnNyTNifo0LDEoiFBGDU8Ci7mERbeLq5P9n
+    237yGC4Ita1aCPlsdlycLZll30owgyxaq7XtNa0qat+SFTRR+Dij2LPUR28IJ3nf9Bja
+    Ex9NFfsJnWQ+e0+nuJzmDs7Z0JIbaVCp581/UxrniAVdCImw5KaLbPQkk/8/N9tf0E4j
+    FVqw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1755945306;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=ywSM9/auq97TI3crGKODL5ZEJlO8sLbYmQXUvarBnMQ=;
-    b=JIptc8laWgi3qhEXM0PaO0siHJb/QC6VEAz6kLZw+ceCzC4I04mytKjAk/FHUGkpyJ
-    ZaCGodhqLo18YCaFiDH8pWYIBvnV4HxagHwTRc2NYl+wnr+kLqzPagfiBZnGK2Fp/U8U
-    fHnPAn/Lx6wMGoSUcPJm6WoGwgJKvjb1fgJUTr7h/P6SZ4gQPN09MQq3q4TH0h1YLIOq
-    eJHu8FYqQ/P3Bf0adBWF6q9Y11aVVlolDtdaAE5mom0GtwcqkDAryRa3RXsXMk/B6me2
-    jyW7h33BlBCYJqqCnUeKBP+dpmqKNE+FMYmtsVkRu39aNlOH5w0a7k2oQ1cddkBDKAZQ
-    BWhg==
+    bh=oqu8OMcX/St3MP1T2yutcRHri/5uqnrBNM94IGz43js=;
+    b=EAmcUdtsrz4hH6s4d6N8thbM7Y3bMCZv+tmlGtfBG62QA5rzp3POZ9hJGhU9PCu13o
+    Td6i+7FRJk+rFmFryVqEcJsZ/v8EjbQIyg0YUDB/JelLIaCJeYYndVONSsL2MdcAnveT
+    DL5C/3CSj1eQKk5MzqaNehW4r8b1NdGJ1ICCCQxkOTVYV5rW37NGWN1a5h73oxyl919g
+    b48yXfECcDgdi1UowDIC5fO0ZrFA5rwTk4k+Mp6t/8CJRgfwLzEEQF83ulKI6+Nk1lR2
+    jRair/jV6a0Hr4AUi1lQTJOlnUkwoNB41i+d9Coc0Vq5qkXWUl9S8ksoSlWOtrvLCFN0
+    dlaw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -59,27 +59,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1755945306;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=ywSM9/auq97TI3crGKODL5ZEJlO8sLbYmQXUvarBnMQ=;
-    b=rhRCxPlVdeFNbqhe4vRyxPsUk7eimlotkG8NH4DqJ0MbutL97QaYiuc0jf9kYixWJy
-    KUIhLHnAqejN25Khiq8IXmqY88SccjySBD4xVPqpHPHwylnGOzPFob3LRawx2gXwB9Zb
-    U52kHfrll7TE8HVLbpJiBnm6ywLaWwPb6wIHPJr3nJmEQ4AjSMv8UJdH+5OCMsLoqc5m
-    gMAqRnc14HrokK6DWBMIWdV/Qj2D230oIImcj3ZZM/G0nVzoZFWkbqEymvtLjePrFfZN
-    ciXmUvJA9j/T0uzhA6QJjUilmpD2miUvxCxFbu5gwLWrVhXcUpGQKlklPjR0ZgChiFg2
-    ApFQ==
+    bh=oqu8OMcX/St3MP1T2yutcRHri/5uqnrBNM94IGz43js=;
+    b=e6F29MP1sl3VXiL8JQOqPzQz0X/p14F6UUy2FMHxdD6D+mZq2Kki/AFzIS3vGAsEa9
+    0H8Go0Oo5PgQufS11+plCGVQvMfUVkyzTehJ+UB2pkya1pSnbqhopbvNRZ77eJTY8HoB
+    NUR3uiANL/715VA2RROuBDyy7NDhdyqt5PcAoLVkZK8roDmtyAznXHO7s8WwbSxFbOfk
+    eWCSiVf8rFCYASLIdIzm8if80O1+NOe6KDUqwpiKd1IfiWwd9juAQj13AhcYZBNhxYmf
+    wlPOyst0/i5bzX4/Y2rCQkyYFSIbNokqXzRpjooE+rOwMrreq+xP8r9wFc7TxZkm/pZg
+    j7Eg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1755945306;
     s=strato-dkim-0003; d=goldelico.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=ywSM9/auq97TI3crGKODL5ZEJlO8sLbYmQXUvarBnMQ=;
-    b=b8pxFERWNRh5cg7R2Y9NrvdeUYX/Slxf0usZn5jbb6hmNjDP4Pg7LBCuW5hfWcOIGD
-    /ysMa0zpRGMbehaiiAAw==
+    bh=oqu8OMcX/St3MP1T2yutcRHri/5uqnrBNM94IGz43js=;
+    b=W+dq7pBXSan6284G3Rdb/p0KFmcELqwHVTcnBPRyJlCbDxUDatuTzdKrD7iLppWk1D
+    FQgcKxknE5sl39zunOAA==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9qVpwcQVkPW4I1HrQ35pZnciHiRbfLxXMND9/QZnI+FEnHoj9hoo="
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id Q307a417NAZ58w7
+    with ESMTPSA id Q307a417NAZ68w8
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Sat, 23 Aug 2025 12:35:05 +0200 (CEST)
+    Sat, 23 Aug 2025 12:35:06 +0200 (CEST)
 From: "H. Nikolaus Schaller" <hns@goldelico.com>
 To: Sebastian Reichel <sre@kernel.org>,
 	Jerry Lv <Jerry.Lv@axis.com>
@@ -91,9 +91,9 @@ Cc: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	kernel@pyra-handheld.com,
 	andreas@kemnade.info,
 	"H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH v2 1/2] power: supply: bq27xxx: fix error return in case of no bq27000 hdq battery
-Date: Sat, 23 Aug 2025 12:34:56 +0200
-Message-ID: <692f79eb6fd541adb397038ea6e750d4de2deddf.1755945297.git.hns@goldelico.com>
+Subject: [PATCH v2 2/2] power: supply: bq27xxx: restrict no-battery detection to bq27000
+Date: Sat, 23 Aug 2025 12:34:57 +0200
+Message-ID: <dd979fa6855fd051ee5117016c58daaa05966e24.1755945297.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1755945297.git.hns@goldelico.com>
 References: <cover.1755945297.git.hns@goldelico.com>
@@ -106,64 +106,41 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 
-Since commit
+There are fuel gauges in the bq27xxx series (e.g. bq27z561) which may in some
+cases report 0xff as the value of BQ27XXX_REG_FLAGS that should not be
+interpreted as "no battery" like for a disconnected battery with some built
+in bq27000 chip.
+
+So restrict the no-battery detection originally introduced by
+
+    commit 3dd843e1c26a ("bq27000: report missing device better.")
+
+to the bq27000.
+
+There is no need to backport further because this was hidden before
 
 	commit f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when busy")
 
-the console log of some devices with hdq enabled but no bq27000 battery
-(like e.g. the Pandaboard) is flooded with messages like:
-
-[   34.247833] power_supply bq27000-battery: driver failed to report 'status' property: -1
-
-as soon as user-space is finding a /sys entry and trying to read the
-"status" property.
-
-It turns out that the offending commit changes the logic to now return the
-value of cache.flags if it is <0. This is likely under the assumption that
-it is an error number. In normal errors from bq27xxx_read() this is indeed
-the case.
-
-But there is special code to detect if no bq27000 is installed or accessible
-through hdq/1wire and wants to report this. In that case, the cache.flags
-are set historically by
-
-	commit 3dd843e1c26a ("bq27000: report missing device better.")
-
-to constant -1 which did make reading properties return -ENODEV. So everything
-appeared to be fine before the return value was passed upwards.
-
-Now the -1 is returned as -EPERM instead of -ENODEV, triggering the error
-condition in power_supply_format_property() which then floods the console log.
-
-So we change the detection of missing bq27000 battery to simply set
-
-	cache.flags = -ENODEV
-
-instead of -1.
-
 Fixes: f16d9fb6cf03 ("power: supply: bq27xxx: Retrieve again when busy")
-Cc: Jerry Lv <Jerry.Lv@axis.com>
+Suggested-by: Jerry Lv <Jerry.Lv@axis.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
-
-Notes:
-    Changes to v1:
-    * improved commit description of main fix
-
- drivers/power/supply/bq27xxx_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/power/supply/bq27xxx_battery.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index c3616b1c07e6f..dadd8754a73a8 100644
+index dadd8754a73a8..3363af24017ae 100644
 --- a/drivers/power/supply/bq27xxx_battery.c
 +++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1945,7 +1945,7 @@ static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
+@@ -1944,8 +1944,8 @@ static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
+ 	bool has_singe_flag = di->opts & BQ27XXX_O_ZERO;
  
  	cache.flags = bq27xxx_read(di, BQ27XXX_REG_FLAGS, has_singe_flag);
- 	if ((cache.flags & 0xff) == 0xff)
--		cache.flags = -1; /* read error */
-+		cache.flags = -ENODEV; /* read error */
+-	if ((cache.flags & 0xff) == 0xff)
+-		cache.flags = -ENODEV; /* read error */
++	if (di->chip == BQ27000 && (cache.flags & 0xff) == 0xff)
++		cache.flags = -ENODEV; /* bq27000 hdq read error */
  	if (cache.flags >= 0) {
  		cache.capacity = bq27xxx_battery_read_soc(di);
  
