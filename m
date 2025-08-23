@@ -1,115 +1,141 @@
-Return-Path: <linux-pm+bounces-32928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 828FDB325BA
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 02:20:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24B49B32838
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 12:34:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45EB0588C85
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 00:20:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFC03686ADF
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Aug 2025 10:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5ACEAC7;
-	Sat, 23 Aug 2025 00:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A0E23908B;
+	Sat, 23 Aug 2025 10:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C/LoIvV3"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="HPfAXSxL";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="u5rjwlbx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFA417555
-	for <linux-pm@vger.kernel.org>; Sat, 23 Aug 2025 00:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755908431; cv=none; b=g3243YgoR4EIY8NtwlxLFRSvBuyNkHhBwcyRg2dtJEZAkQWzBlzP0tQS/iG5NSXI8Mg3P8/xZGMTUXY46OJnhYxARFTJl3UWrTNc+ISvaP9veeC4dPaPZCSmJTgpgjDgKjblT/9wTP1WXQRWUHDTx7/zgYQvUfsxndKzsm5Fu8M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755908431; c=relaxed/simple;
-	bh=IzXBy0JDm5P7DeRxtoCFvOVrJJzRcpwGhg/ODLS/f4o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fhw4tIfRrOEETIts9euQEsL1migCvmG5zYEPaG+3UlhwJSsVlK8EBaUafaLLl3052X46e4prGxVzQ/IDYd47qTyz6zHexBZ2Lh0gb/8xD6TzPcc2y6rPbe9BHFRb/3bf6a1CXt8AYYLGsdTWzDyyYEgTPkN23HyAITkyAsFMKEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pmalani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C/LoIvV3; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pmalani.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b49b53c9743so1329304a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 22 Aug 2025 17:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755908429; x=1756513229; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IkunMuqOTjzTmYvfp0kTEUrdTSxEiMipgCHfYoiQGpg=;
-        b=C/LoIvV3G5gGWak0Zg6/TA3X1Ee+kQiFe8bRwpI7RqJtMtZ/7rkbRdN2fstSA5S5V5
-         E1iOEXKfiTMUrWtTe5EdZPI0wL0IQlNIvxvH0mL7DDUsV6zWHxbg8c9TebQ2t/rNlUWN
-         8YS+qyzEZNETXoW8jhGOsBSfprRw84MCZBoTkzo0dnG33URLhIWlvzw+KwaHIek5gdig
-         utGKizGKOYcdJcfqf2Nf6aPQSPVlHPlklF456hMkVTZkZJFAagapprQBxmiGly1Sfz2T
-         VLSqicJxy/9pvuW0oIyZVDjGI3tssbPA7IfOy5iOwWDRyjDPiYvQVcGN3poeYfuTAlso
-         b0uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755908429; x=1756513229;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IkunMuqOTjzTmYvfp0kTEUrdTSxEiMipgCHfYoiQGpg=;
-        b=jk6NUkt44h0Ys74THkJeI5Uo4MVeKA2SBtmqLAu5CQCjzXDX1KMSMVQlV+msGjWw8L
-         VUenFV8Prl0x97II2G2WvtkiTpcamU+Qyl0TRrWqWHGNPwe32YIN2BhUPkpTU/Iw5srP
-         GLxOH49V9A6yv1IxBz3HlesNT0JBfsATIfViBvEqo+pafKfmQrB70kX9VZGsKAt65+JB
-         neaNKe31ETfKv3lFcbQ6ZhftFoUmwJio3RXkbLQfyPrJGnBbAE3JvqoSYm1evLtBNjEW
-         qVNTGSPg00aKmCu+uOU2mRW6eY8ipZYf2TQk8weXcXofFiKDs8TdBDuSBxKtuVyoJ+jo
-         dDcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhWFH9sTH6VaGUANaaWFHA6qOI7tJeZMuSYuQ527df39X2jJNRtf7p9Alcv1tq6zlx4VvU7ZczEg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGtgSaj+HT0AF3CBasQm11gjv5y9pUWtNhiNLLj6CRWFXaaKy7
-	uHzYcMJXXOIIh38qp2guxE2329LQiwevyT0hB27G9nEVIEqBPIVYFvrdDwBvuHuFW5x1mlYtc8o
-	dEoilma6obQ==
-X-Google-Smtp-Source: AGHT+IH2meIMrbfg6cA0DiATMI+gqKbNcFZVYHUt9TbVkruM9LnU8cXpri5WfeUocsKnglMv3dRahkUsS8Mf
-X-Received: from pfbfa6.prod.google.com ([2002:a05:6a00:2d06:b0:76c:555a:bfaa])
- (user=pmalani job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:430a:b0:233:927b:3ffa
- with SMTP id adf61e73a8af0-24340b7ca46mr6933649637.12.1755908429227; Fri, 22
- Aug 2025 17:20:29 -0700 (PDT)
-Date: Sat, 23 Aug 2025 00:17:50 +0000
-In-Reply-To: <20250823001937.2765316-1-pmalani@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F407E1531C8;
+	Sat, 23 Aug 2025 10:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755945273; cv=pass; b=MyhKx49O2yQvkiZtXuccChBtiTXljGnjyuoPQwDRfA0goT+Ic+gDdFI31XqiEldaebMNNfIW30OMaJNnIQyihmAxmRY98Znl7LwitGisjSqef0Lcq2UtPTJHyP+f+2slkIvu04CBoklt19omHDLxyAxCOl6fYTXLEyTkBd2uHao=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755945273; c=relaxed/simple;
+	bh=0/OB5VflSjij8TvXSNLlENtij5iyXwZRqP3qH+cGyNI=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=OU4CtVrlih1W6ata/lqLxFuwfq9pF/AwcnEMbqjvVyyv0oeuNynR7HjsOS2xiaMu2JZ4x0Fzkc5xhnFccm6m3tBhNtykw0FCI0Jy6Gu38T6DmshCFJOVJC1P+vNKBnEl+dzSk4OHTeOYs9nm4HT7S4h0fQShzFjBl1LTYfRmajg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=HPfAXSxL; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=u5rjwlbx; arc=pass smtp.client-ip=85.215.255.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+ARC-Seal: i=1; a=rsa-sha256; t=1755945077; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=P3RR0lC46OSACTvaVJXq8bs/R+QZ5dx+CN077hsfa1gyc3IHSaI4zM6VK+jWTl3ZML
+    LH5KnIjkALxyg1pnoqNtAiZGdGhDHTaRTnXoS1TmeSsujXwFjl0amxPzi+oaoO52uioj
+    aeIe1E++hbEG/kkvbFv9oK9EN56CGR8P1aSsVzmU4YMDFVMPms+kE3mNFiHZAAORv4Vt
+    yeiAc2McZa5Bju8G9Pn4Sk8Pz56cIrwfQTEnDk/UOomuoNpiAA9tv4k3beuxK7LQujQA
+    FTOH0iaR3o/w47LnNTUMdYNjshsFsTs5o/xTTV98tLxJmoEB8ccCl09e3ltrGXaf+1Wr
+    Vh+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1755945077;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=0/OB5VflSjij8TvXSNLlENtij5iyXwZRqP3qH+cGyNI=;
+    b=HQbzoIzCZ1bg/ri2M3M3y8uTB6zxcpb/36eRYRVD4mXk22So5lTjwQ5jwc8IhB/BqQ
+    A36ficBaw23Q083LhK2F7sg1Tx8CnL4rJ1SmBflR4eJ1KJF+tAbsAYXYDnNmUl7fo2eU
+    j4fh/Un1CJR+5obdx1oTKibJ3TvXgJKeaPUmOxG4CP6I30WuP50TkTcAl1wYEBpEqcfL
+    RqNaEVIk+AO5PUG5MMnao6Fwvtoo+gcrpnsMGHrvmQVwcmuFW+y1MjJLQjS6YMFGSxK5
+    Xv91Aszh4dego73hITgIvFnw6RCYAei4y6DBYrcVZdORt4p6FTqo3Y94WBxmbXp5dK0/
+    IUQg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1755945077;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=0/OB5VflSjij8TvXSNLlENtij5iyXwZRqP3qH+cGyNI=;
+    b=HPfAXSxLw1BjlzRITQWeXIYKIA80kNRTT31sqTKzFOHL3jjBwZJvU7eDe4RW6cfGxG
+    l9ph/eo0qonOKTttnIDzD4RBTl/iCtU6j5fC9fwcUVI3exFLT8yYk6nIU3iljjiP3n8Y
+    WrPQM0CWVh4cvtF3yXu2pT+Q3dlP6Mhkv71XH99aqgCJ/3l5Ne2pK7SdP30Y9+jlpQv5
+    ss1dYWjMpElF6a2V8DvjrBrZYmdF2/7CjpbFlNoQQX59Xu0L8hBruc610v2dblwf6xWZ
+    H2DQ+eHwpU+AiyVguY742AYdPK8nc2RJiwaSHxd4p9a4RewJHxv6d7JHbL2qUUHMJsho
+    oNuQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1755945077;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=0/OB5VflSjij8TvXSNLlENtij5iyXwZRqP3qH+cGyNI=;
+    b=u5rjwlbx14Z7ncL3oBHEv5Q9G7EHTDp4/ajNkKasdOqYnWxaAWtjq+1mHKzVDQY4vV
+    d04FwgL/RFNw+dHPlOAw==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9qVpwcQVkPW4I1HrQ35pZnciHiRbfLxXMND9/QZnI+FEnHoj9hoo="
+Received: from smtpclient.apple
+    by smtp.strato.de (RZmta 52.1.2 AUTH)
+    with ESMTPSA id Q307a417NAVG8vg
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+	(Client did not present a certificate);
+    Sat, 23 Aug 2025 12:31:16 +0200 (CEST)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250823001937.2765316-1-pmalani@google.com>
-X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
-Message-ID: <20250823001937.2765316-5-pmalani@google.com>
-Subject: [PATCH 2/2] cpufreq: CPPC: Don't verify cur frequency on governor start
-From: Prashant Malani <pmalani@google.com>
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Beata Michalska <beata.michalska@arm.com>, Prashant Malani <pmalani@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [PATCH] power: supply: bq27xxx: fix error return in case of no
+ bq27000 hdq battery
+From: "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <VI1PR02MB10076D58D8B86F8FB50E59AADF422A@VI1PR02MB10076.eurprd02.prod.outlook.com>
+Date: Sat, 23 Aug 2025 12:31:06 +0200
+Cc: Sebastian Reichel <sre@kernel.org>,
+ =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "letux-kernel@openphoenux.org" <letux-kernel@openphoenux.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ "kernel@pyra-handheld.com" <kernel@pyra-handheld.com>,
+ "andreas@kemnade.info" <andreas@kemnade.info>,
+ Hermes Zhang <Hermes.Zhang@axis.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <301AB844-A18F-48D6-9567-04E7C6586AF3@goldelico.com>
+References: <bc405a6f782792dc41e01f9ddf9eadca3589fcdc.1753101969.git.hns@goldelico.com>
+ <VI1PR02MB10076D58D8B86F8FB50E59AADF422A@VI1PR02MB10076.eurprd02.prod.outlook.com>
+To: Jerry Lv <Jerry.Lv@axis.com>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
 
-Opt in to not verifying the policy's current frequency when the governor
-starts. CPPC's get() function is known to return unreliable values,
-so checking against that can mean the frequency gets set to the
-unreliable value even though the governor (and user) didn't intend to do
-so. That in turn causes unexpected performance drops.
+Hi Jerry,
 
-Cc: Beata Michalska <beata.michalska@arm.com>
-Signed-off-by: Prashant Malani <pmalani@google.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Am 05.08.2025 um 10:53 schrieb Jerry Lv <Jerry.Lv@axis.com>:
+>=20
+>=20
+> But there is no similar check in the bq27xxx_battery_hdq_read() for =
+the HDQ/1-wire driver.=20
+> Could we do the same check in the bq27xxx_battery_hdq_read(),
+> instead of changing the cache.flags manually when the last byte in the =
+returned data is 0xFF?
+> Or could we just force to set the returned value to "-ENODEV" only =
+when the last byte get from bq27xxx_battery_hdq_read() is 0xFF?
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 4a17162a392d..7fd6c03bb726 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -910,7 +910,8 @@ static struct freq_attr *cppc_cpufreq_attr[] = {
- };
- 
- static struct cpufreq_driver cppc_cpufreq_driver = {
--	.flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
-+	.flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS |
-+		 CPUFREQ_DONT_VERIFY_FREQ_ON_GOVERNOR_START,
- 	.verify = cppc_verify_policy,
- 	.target = cppc_cpufreq_set_target,
- 	.get = cppc_cpufreq_get_rate,
--- 
-2.51.0.rc2.233.g662b1ed5c5-goog
+I tried to move the 0xff detection to bq27xxx_battery_hdq_read() and =
+make it trigger only
+for register 0x0a (BQ27XXX_REG_FLAGS), but there are other locations =
+where bq27xxx_read()
+is called for this register. And those emit error messages in case the =
+battery is removed
+while user-space is polling.
+
+So I'll post a v2 with two patches (for different bugs):
+a) set cache.flags to -ENODEV to fix the -EPERM bug
+b) restrict the check for the 0xff condition to the bq27000 to avoid =
+false positives for your bq27z561
+
+BR and thanks,
+Nikolaus
 
 
