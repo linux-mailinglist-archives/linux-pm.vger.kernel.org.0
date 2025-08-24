@@ -1,128 +1,125 @@
-Return-Path: <linux-pm+bounces-32956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32959-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307ADB331AC
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 19:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FA8DB33288
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 22:09:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC4E93BB105
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 17:50:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CAE244257D
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 20:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A35421FF47;
-	Sun, 24 Aug 2025 17:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5DA821B905;
+	Sun, 24 Aug 2025 20:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/7nVS+h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE84A12C544;
-	Sun, 24 Aug 2025 17:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660CA1CD1F;
+	Sun, 24 Aug 2025 20:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756057816; cv=none; b=ZetXUVrW0hLZdpnpymOPSAISKKwVgoPqu4dF9cTEN0tw5uVHwWxxUPVuiAh/S6a3EavflwOdhK5Crmx1PwzaZtAmuEd+E7ovNfcSX+OVccPoUidnSvUumLaKoCAIYp2eJ3SuLqN6W+/Nj3NARRDgzjbsf0Zx2ytMTO7RCYnY5qU=
+	t=1756066149; cv=none; b=BHASfKJSDbDquKKhALnXs5/JdTgZdTEadj5ESyNFvjuKXrf69BbZ3A1tMAACQfmG0ksBncYKVRzhczPfgU2jsse3auu0cYnzHdW0FnQHrHt6kFgHYGprmLXr2DqqlrqQ6Zi4e5mtGuaAfLYzzCZ+PkgMi7qNJjOKJekNeOKRQQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756057816; c=relaxed/simple;
-	bh=biDVE5/qno9s6nbF5VWCCOnmRGqqbXzsItUeBwohWvE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DXhiz9u/q4Qi1097LovSOWL52c++kBAM0JH77D609ojzXhQV2fmnZo2SdMZoj9cI8jDmk1dlPbQI36vOzagbsVPx2Nofqt5QBpMiRzYIM1ZcDghW73iTtlTWIER7Mf0ObbgIRlPao7FCePb3cdLc7gdQnZSXl9b29/FP1E4Aiuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id D9C7F1DB206;
-	Sun, 24 Aug 2025 17:50:07 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 020C817;
-	Sun, 24 Aug 2025 17:50:05 +0000 (UTC)
-Message-ID: <433518d6bc8ef4e5b4fc04e3343c13eddfc32e24.camel@perches.com>
-Subject: Re: [PATCH] cpuidle: sysfs: fix coding style issue
-From: Joe Perches <joe@perches.com>
-To: vivekyadav1207731111@gmail.com, daniel.lezcano@linaro.org, 
-	rafael@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Date: Sun, 24 Aug 2025 10:50:04 -0700
-In-Reply-To: <20250824171543.17662-1-vivekyadav1207731111@gmail.com>
-References: <20250824171543.17662-1-vivekyadav1207731111@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1756066149; c=relaxed/simple;
+	bh=ifaq3JmFy6c2hSmtcLUr1xyhxnA70o4yY0KL/8hEoN8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f0eYEBL5Egp5BAmyB0lZeM6dKzuJ76lBvfN2vs57InAcMwybdYyyP2kik6+ukb0/YoSJupArO4DbaHQVlHMXBvSxdmPCI4k0V4KmssOayR57SX83NsDyUS6GOboYCThQD73MtAusMDf40R9RVIovjTRqay1N7epSejCUcjmeDac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/7nVS+h; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b49cfd967b9so558638a12.3;
+        Sun, 24 Aug 2025 13:09:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756066147; x=1756670947; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKsZ491OP7hlZbw5HTmLns54/Ml7auODI+8Ckx9ZQ9o=;
+        b=S/7nVS+h8KUTNlURgwGvRusKu/MFOKwCs4qlSqxdNtygOrNh6JI2I38rhgNVbAQ3Ey
+         1nz3z1VlZnLwHQLdkNK94A+b2C0H9JCZuHWZV6t6hXLPYklh9C5PGkaMtLpBalOpkhVq
+         LnIrGh+70e3HsCAufxkhApIHX2itBnd6tBsuHOYaYkATeDhFW/0docCO4juiIWiQl6Nr
+         p6HqZuBjoBPko+I9uwKB0rdMVAgIa1al9DURsOx9yqQJ/K7k20H/GxNv/LM9ao5ZXcbq
+         +FIqjeHAcjKHInqmHWOI4/VOT4pDrX0LNfj6yvPvgz1opda5ad77sHPbexR3ua8PNK+f
+         XBEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756066147; x=1756670947;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKsZ491OP7hlZbw5HTmLns54/Ml7auODI+8Ckx9ZQ9o=;
+        b=XPms8k8RO/0Up3L44b63bwOObkjUFXA4rbSFSzvT8WwO1z6awQUruwx/qWyJCa3fIs
+         Ap6uQbWOH9YbFmZxHVdq/gREvS85GV2PwNS1p9DOvhou5Gf7qibQevXQ5zJrDUXpF8i4
+         ivj1HfKGtoM/FLK6IgyeSSBOlZJyf7WA8x4jfEjiDgU6FUIbTqhPCIkpSnaTbTbUeSqt
+         qXgtP8RF2O2GiLkDaPkUGiywaWdLWLnuyWvgVgWkQKhiFCLujI4XihKaxtYSQlQUF7bQ
+         ZyPudxq2cjDcaCHJASioifUr62uEe5GmFM3cTTKvDWAq26pAZ5OYLrfr2nvy6qMbans4
+         vFAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/slx6Exy9bCjhdKSL4wxFULS+jchPH8bzl7yK2Xi76zUT99pJ75O7JYXtEh55t2uJOFfJjl+B0LXLYJM=@vger.kernel.org, AJvYcCXLnDmautkOSVrtOZAKI5YYnnduLXwmrHTksTu5MjwDPROQtgTyt7wuoeTqDza8qcLJFV5UUAQKlr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxb38FNKIfHKBnifnPWQmBOVj4+4av/r3+eZm+VF2+FDbnekGP7
+	eGKv1eI2uSU1GMNH8IOpfSgaWqndNvB140yQ1++Vul3zzvwLqsjGugcl
+X-Gm-Gg: ASbGncswDZSI8Ldh6P0YD9wDbRJRnkzxG7oSDM7vfvTnm++JFYE9m7l5JmVmsrQnuUA
+	eYCikJcCZddp7y08FvgzAf9hSsEBxeK93mhYxgBJHlMyu5wJwiR0l1zFEVVU79QeIKx+HQmidJl
+	uW5m7K/LJ+Qv2XpRkmG/J6YGsTjOx/sRHonP1T6OyZjxRF8abwFGQ5pDXD+MhDKR7V33txL8uLL
+	O6GSBaeggu/Tm1acS3OBxeF+8jztuKb27wV45JWvUiSHwQpvtbNqbd8BPcdXEvo5pHHsaeX1Fe1
+	sAD6JZY+TLlvIGvrpme8XOUTifqCzSiqKjqHC258GNkrQJ8LrbuP/i1rs6xozQXkCVFpBJoXtXt
+	gD7QIFp6x3FFU1kEq86qFYb+qpptwrx7fve0FfAp/nVZUYWtpa78LBN9Q6ND20UjEREtImbuZFg
+	==
+X-Google-Smtp-Source: AGHT+IFfgdzWlxSxSC6eqyPCOJa/vlWcJRzwYmzWAoFJk6n/bfg69IRTk7d6f/LyPO3DzTQg1K23Tg==
+X-Received: by 2002:a17:903:2012:b0:240:2145:e51d with SMTP id d9443c01a7336-2462ef440e3mr90841585ad.31.1756066147454;
+        Sun, 24 Aug 2025 13:09:07 -0700 (PDT)
+Received: from visitorckw-System-Product-Name.. ([140.113.216.168])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2466877a02bsm49389595ad.2.2025.08.24.13.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Aug 2025 13:09:07 -0700 (PDT)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: ray.huang@amd.com,
+	gautham.shenoy@amd.com,
+	mario.limonciello@amd.com,
+	perry.yuan@amd.com
+Cc: jserv@ccns.ncku.edu.tw,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH] tools/power/x86/amd_pstate_tracer: Fix python gnuplot package names
+Date: Mon, 25 Aug 2025 04:09:02 +0800
+Message-Id: <20250824200902.163745-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 020C817
-X-Stat-Signature: 466a9c36ehho4ouiazhab43rzzwcmfdz
-X-Rspamd-Server: rspamout06
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+IAh9eO3KOkhpflMqq+I8VUv1T5wBf9yo=
-X-HE-Tag: 1756057805-633099
-X-HE-Meta: U2FsdGVkX19maFNFBCq1pwB/ZfFet2/QE6o3GjZA18R0TmOWsiElfTFrV+h2u3GiRbBsULLf289vhW8POZcU/eJI0bVGe+tZ+SmGgvIyywRfUoFecRU/bZWhkS0vgB/2VSM5qgJ6YgoDKQwD52MwQwT+peJX6KZzHOCK4/DcHmHd5FxeJWDk11gohJ+sPou6gAkevGQTtWLlqs6dP17epvGJWN2FAxSXsHD55rJbnAx90w3JJknPUow5W8o7WDf7UgOA/NXzFJKs3AfuqB6E9qnA6iJpwh37rtr+crWWQgtJPNFga88/BfYdCpWsJu7VWJh6yzLz7+fI9dxWRkAvx30aP5CE7AXx
+Content-Transfer-Encoding: 8bit
 
-On Sun, 2025-08-24 at 10:15 -0700, vivekyadav1207731111@gmail.com wrote:
-> From: Vivek Yadav <vivekyadav1207731111@gmail.com>
->=20
-> Fix a checkpatch.pl error by adding space around '+=3D'
-> operator.
->=20
-> No functional changes intended.
->=20
-> [checkpatch.pl output]
-> 	ERROR: spaces required around that '+=3D'
+The prerequisites section listed non-existent packages
+"phython-gnuplot" and "phython3-gnuplot", which may mislead users and
+cause installation failures.
 
-Perhaps better to convert all sprintf style uses
-to sysfs_emit and sysfs_emit_at
+Update the names to the correct distribution package names
+"python-gnuplot" and "python3-gnuplot", helping users avoid confusion
+and saving time for those following the instructions.
 
-> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-[]
-> @@ -34,7 +34,7 @@ static ssize_t show_available_governors(struct device *=
-dev,
->  	}
->=20
->  out:
-> -	i+=3D sprintf(&buf[i], "\n");
-> +	i +=3D sprintf(&buf[i], "\n");
->  	mutex_unlock(&cpuidle_lock);
->  	return i;
->  }
-
-Something akin to:
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 ---
-diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-index d6f5da61cb7d8..3adb98c9986fd 100644
---- a/drivers/cpuidle/sysfs.c
-+++ b/drivers/cpuidle/sysfs.c
-@@ -22,21 +22,19 @@ static ssize_t show_available_governors(struct device *=
-dev,
- 					struct device_attribute *attr,
- 					char *buf)
- {
--	ssize_t i =3D 0;
-+	ssize_t len =3D 0;
- 	struct cpuidle_governor *tmp;
-=20
- 	mutex_lock(&cpuidle_lock);
--	list_for_each_entry(tmp, &cpuidle_governors, governor_list) {
--		if (i >=3D (ssize_t) (PAGE_SIZE - (CPUIDLE_NAME_LEN + 2)))
--			goto out;
-=20
--		i +=3D scnprintf(&buf[i], CPUIDLE_NAME_LEN + 1, "%s ", tmp->name);
--	}
-+	list_for_each_entry(tmp, &cpuidle_governors, governor_list)
-+		len +=3D sysfs_emit_at(buf, len, "%s%s",
-+				     len > 0 ? " " : "", tmp->name);
-+	len +=3D sysfs_emit_at(buf, len, "\n");
-=20
--out:
--	i+=3D sprintf(&buf[i], "\n");
- 	mutex_unlock(&cpuidle_lock);
--	return i;
-+
-+	return len;
- }
-=20
- static ssize_t show_current_driver(struct device *dev,
----
-etc...
+ tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+index feb9f9421c7b..875b086550d1 100755
+--- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
++++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+@@ -11,7 +11,7 @@ Prerequisites:
+     gnuplot 5.0 or higher
+     gnuplot-py 1.8 or higher
+     (Most of the distributions have these required packages. They may be called
+-     gnuplot-py, phython-gnuplot or phython3-gnuplot, gnuplot-nox, ... )
++     gnuplot-py, python-gnuplot or python3-gnuplot, gnuplot-nox, ... )
+ 
+     Kernel config for Linux trace is enabled
+ 
+-- 
+2.34.1
+
 
