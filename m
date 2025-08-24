@@ -1,191 +1,221 @@
-Return-Path: <linux-pm+bounces-32950-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1D13B32E9C
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 11:08:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B8F8B32EA1
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 11:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DD56445313
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 09:08:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3BB2189C355
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 09:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F9023B616;
-	Sun, 24 Aug 2025 09:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6AE235362;
+	Sun, 24 Aug 2025 09:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgQqIIEt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ABm0HVpm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B364E20322;
-	Sun, 24 Aug 2025 09:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739C41993B9;
+	Sun, 24 Aug 2025 09:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756026500; cv=none; b=kvXJgiWoXnGhGpttLGp3ccB1iyXZ7T46KUOAc8st+SfQRKpYDUEJZuZ9QKAGvfHK+Ri/lO8ICpbgDe32diqKoudc310by1uqoYK6Nnk6l+0FT9Bunun1fFlIV7WN+yd+6vOfFAXYKz3XHhMERZcrE6aCOpQ9yjgqeKrqCjOp8WY=
+	t=1756026973; cv=none; b=SxeYllvsrXLx7lVRZBdoNNT6e59or8wELTJjLSdm/s3RFJCElxeA1sKOIG9vhfGCt/LtfnGWVp/jZa3HfCU78BsG7IyO4yUoMbRlPP830FY/u3dkA1LtWXR/yX6cIfV7m+nj+N7LzzPX1LmuJiRNNYR8gRwgvaaZm2BR3x3XIlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756026500; c=relaxed/simple;
-	bh=Yg1Y0LWbqbOqNwBgnXz+CRC+dctwOX6xg8qtYYFm5J4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tziMNDhg6HDtMPMOW5l4K3JyrFUHB7lY6pjJiCGz+HmQpBWaHInkKN5YuVCrs9OhC/eo2/DULVCKVTcmWmZm6ATXjhg6mhZnlDpyhPISWtDsUVJ+D7pgTz1e3f+El9brllZQPduPFKUZN0PsnUd2uVMslScU0Dy8A6nQRY/KB8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgQqIIEt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFB2C4CEEB;
-	Sun, 24 Aug 2025 09:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756026499;
-	bh=Yg1Y0LWbqbOqNwBgnXz+CRC+dctwOX6xg8qtYYFm5J4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MgQqIIEt1wGaCYel8cG5qPcOMR83GKAVFur1sZ8/lqIO2J6G4zDD0Ft2DuNGFNpUq
-	 +6e9/P4w7wKQXRJvqhpAm6bpvEWSc/YNEWAgrcJ8sYDxvEdT4ljpkmTWr8pmcRCQE+
-	 CHBxDOu20v4r2Po9Z33nhSnAS8j0sAsZQqCLIN2pMoWQOOLLz70wuFHlQFN0TpNpK6
-	 tSfF0stPcrUMMnDC2/C6sbu6HZeZWM4XOflD6qhNXHIQCn8gHGqVSBonr1rr17iolT
-	 2sI1LyrW4EoR2OzXfNbutZO7SHWTDgExWdCivpJY3XSMGIEgX0CxIg8gqLuRM0UzEb
-	 HOQwJRdOlHSsQ==
-Message-ID: <00f50d92-e4ea-4805-b771-147fa5f5ebe4@kernel.org>
-Date: Sun, 24 Aug 2025 11:08:14 +0200
+	s=arc-20240116; t=1756026973; c=relaxed/simple;
+	bh=vltdun0Ir366v8oeR05ebGfo1micVhANPjnnRJum7jc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Je5T0tJuMjh7aEf2KCAC9FfMo9LcPaWkswNxj5+mfafRmAwR3JNO+5MEMrh9r2R0DKce6ND4PpZBypyObWBnPa+hFCKZsYuuPOknSX4TZcZcQq8QVgaV2/skaGvuQ+UdH1N2ykWgFcoL3u5ZAIjBSOcU0BWSS7VE1HaHyJEpX14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ABm0HVpm; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3c68ac7e238so845766f8f.1;
+        Sun, 24 Aug 2025 02:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756026970; x=1756631770; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qycplVaG17ozy+gQ37nIaXbfzWyYCtskzOLodNq2CBc=;
+        b=ABm0HVpmUkPII8tQWJ0MAYuhiOnTGfCwpbG7j1pYITd7udDDPy40+t2ZnwWoh1ac9r
+         9nRcuM2Kqn+BXOBQsTRJuK8D88fMH29XXtibcVXVINAYT9me0ufps9XurCVE4n5gl374
+         8jLcxmJmesryhlGVFq6sAktuqEAx9oWHeZBkRXIkq47zbQiyyzNfLTkzmp+W1bJzDRE4
+         YUPXpj2V8ZKBb/Fnlulx7fhYwH1myfg6VmUF/PDijnFc8rpP6RRgeFuOrQwtER9fWzSv
+         h5b1+hbB0N03W2o6JNZ4lXVwD/qeoUTr3CvSc5zJitA/KmW9p4AHGAdt9Z5oc+nY4/jJ
+         svmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756026970; x=1756631770;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qycplVaG17ozy+gQ37nIaXbfzWyYCtskzOLodNq2CBc=;
+        b=oEtBsq/WwccLVByxypdKbCTdUUMHWH04AFE3h1qC40B8fX3gkiALUSicaQtEhG7O3o
+         3PJmZ++cFfEguJiBBjmQv4NdlaelH5lTbkAyLCY8lCQZL4p1c32ocjkjyxRKvsYhXA+W
+         5QvtWPBdmVbbf39iaXDlevgP8mT+/MAXc2a7z9WkUVxg3fjIZqfDcLoCCEYDRGqqlgGB
+         IkuzonYELvwEyozo+I/C5+Eg8p1M6MFV/sqZiD5A2Ex3j2wZr+3sxZMo85j57xpsGQz7
+         5Rild5MZYJQ7nZARBgk0MZjoFdTa8uap9zeFrKqScambLN+y4uvtKY1j+L51jLGatR4i
+         DURA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQnTBOumwD71RQRyB/CqHVXcB8w5Dsxi80OWg7qOXaW29jq+8l3P4SadDYrAuMhNWiXYsFcWsg5hCN@vger.kernel.org, AJvYcCWXRuaL9hB6HQGeNkXxnMUb30LELDkS9mGDkNIBx0pqwuVqa8K/kSHjPTzsejomXb/SMWssFb8V1LQ=@vger.kernel.org, AJvYcCX+nt1E7/Pl3DqaAIpiwwCCep5T+fCmDu7IaWGNJJKcwfFh/+dOT6YsiGKI3vXI9qWfUdUr+NxcCBy5V8Nw@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT58mDVGoPjwqGJ6mt3OtVzoTQyFriVsuAyXYcDhIsYtKgoUDR
+	7i8qO7ZEJuOGpfcunRe6gvajCj61ReEuJee5I3czYWvsDjD8daxrcCYYgmw6NoVBJwAPtqhFsKp
+	U8ndcspWo//6eGtyCeTd+WtMaDQ0Lz+E=
+X-Gm-Gg: ASbGncvQOCei/7nf1TqkgSxiN0C/aod7PdEsFQJHplk5FiHvKNDJtk7BEyK3RE1DZFp
+	lhN8D1d1lVIjAL7k6zewzW4QHP1ngydHrwU1nFRN2B74xh+mwrdAC/4q8ZqKcd8LesF2IDSGuuM
+	K0FNDBsi1VKN2kuxzfkP7wCJSBVkmUVqRK82X+9jJjIXgeDlTM1vzNUSG30XOOrXVVI/k4jD/xw
+	A+ZnBdA
+X-Google-Smtp-Source: AGHT+IGoqGZoj5/ykELmv50FharuJwuPe3ZEr1Fj+gzhs2MscaxfGv+fbtA+RTRRJ0WYpseQKmYnupyydqzuZQ2NAfc=
+X-Received: by 2002:a05:6000:42c5:b0:3c7:c2b:afc3 with SMTP id
+ ffacd0b85a97d-3c70c2bb400mr2345085f8f.49.1756026969562; Sun, 24 Aug 2025
+ 02:16:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
- enable QoS on sa8775p
-To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20250808140300.14784-1-odelu.kukatla@oss.qualcomm.com>
- <20250808140300.14784-2-odelu.kukatla@oss.qualcomm.com>
- <90b51e31-3217-4483-bb5b-ec328665a723@kernel.org>
- <28b97952-1b67-411f-a7fb-ddd558739839@oss.qualcomm.com>
- <ac83c453-c24d-4c4d-83bc-9ed13f2f9d1e@kernel.org>
- <7d3e5cf7-4167-4005-ba4b-c1915c254705@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <7d3e5cf7-4167-4005-ba4b-c1915c254705@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250430055807.11805-1-clamor95@gmail.com> <20250430055807.11805-2-clamor95@gmail.com>
+ <aBh9Q8zr2MtfVJtq@mai.linaro.org>
+In-Reply-To: <aBh9Q8zr2MtfVJtq@mai.linaro.org>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Sun, 24 Aug 2025 12:15:58 +0300
+X-Gm-Features: Ac12FXzu66BJg1idDag35QW0gGD-rf-eugmdFINgxnKS7WF_FI1Dj6nEwfZJ2iE
+Message-ID: <CAPVz0n1_8dBT-HP=hPwTcrCh7bvPBsA8My0VOt8isuXVfXAzUw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] thermal: thermal-generic-adc: add temperature
+ sensor channel
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Jonathan Cameron <jic23@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 20/08/2025 10:51, Odelu Kukatla wrote:
-> 
-> 
-> On 8/13/2025 11:32 AM, Krzysztof Kozlowski wrote:
->> On 13/08/2025 07:55, Odelu Kukatla wrote:
->>>
->>>
->>> On 8/12/2025 3:47 PM, Krzysztof Kozlowski wrote:
->>>> On 08/08/2025 16:02, Odelu Kukatla wrote:
->>>>> Add reg and clocks properties to enable the clocks required
->>>>> for accessing QoS configuration.
->>>>
->>>>
->>>> Nothing here explains why EXISTING hardware is being changed. I also
->>>> remember big discussions and big confusing patches regarding sa8775p
->>>> (its rename, dropping/changing all providers), and this patch feels like
->>>> pieces of it without proper justification.
->>>>
->>> Thanks for the review.
->>> I have added description in cover letter, i will add here as well in next revision.> And this is hidden ABI break, no justification, no mentioning either.
->>>> Again we are discussing basics of ABI breaking patches?
->>>>
->>> If you are talking ABI break if we load old DT which may lead to crash, we have .qos_requires_clocks flag which takes care of skipping QoS if required clocks are not enabled.we have addressed this issue through https://lore.kernel.org/all/20240704125515.22194-1-quic_okukatla@quicinc.com/ 
->>
->> Format your emails correctly, it's difficult to read.
->>
->> Your binding did not require reg and clocks. Now it requires reg and
->> clocks. This is called ABI break.
->>
->> Please follow Qualcomm extensive upstreaming guide, it explains this,
->> doesn't it? Or follow writing bindings...
->>
-> 
-> Thanks for your review and guidance.
-> 
-> I agree that adding reg and clocks properties to existing bindings is an
-> ABI break. The sa8775p is a relatively older platform, and when the
-> interconnect provider driver was initially upstreamed, QoS configuration
-> support was not available in the framework. As a result, QoS was not
-> enabled at that time.
+=D0=BF=D0=BD, 5 =D1=82=D1=80=D0=B0=D0=B2. 2025=E2=80=AF=D1=80. =D0=BE 11:56=
+ Daniel Lezcano <daniel.lezcano@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Wed, Apr 30, 2025 at 08:58:07AM +0300, Svyatoslav Ryhel wrote:
+> > To avoid duplicating sensor functionality and conversion tables, this
+> > design allows converting an ADC IIO channel's output directly into a
+> > temperature IIO channel. This is particularly useful for devices where
+> > hwmon isn't suitable or where temperature data must be accessible throu=
+gh
+> > IIO.
+> >
+> > One such device is, for example, the MAX17040 fuel gauge.
+> >
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  drivers/thermal/thermal-generic-adc.c | 55 ++++++++++++++++++++++++++-
+> >  1 file changed, 54 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/th=
+ermal-generic-adc.c
+> > index ee3d0aa31406..7c844589b153 100644
+> > --- a/drivers/thermal/thermal-generic-adc.c
+> > +++ b/drivers/thermal/thermal-generic-adc.c
+> > @@ -7,6 +7,7 @@
+> >   * Author: Laxman Dewangan <ldewangan@nvidia.com>
+> >   */
+> >  #include <linux/iio/consumer.h>
+> > +#include <linux/iio/iio.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/platform_device.h>
+> > @@ -73,6 +74,58 @@ static const struct thermal_zone_device_ops gadc_the=
+rmal_ops =3D {
+> >       .get_temp =3D gadc_thermal_get_temp,
+> >  };
+> >
+> > +static const struct iio_chan_spec gadc_thermal_iio_channels[] =3D {
+> > +     {
+> > +             .type =3D IIO_TEMP,
+> > +             .info_mask_separate =3D BIT(IIO_CHAN_INFO_PROCESSED),
+> > +     }
+> > +};
+> > +
+> > +static int gadc_thermal_read_raw(struct iio_dev *indio_dev,
+> > +                              struct iio_chan_spec const *chan,
+> > +                              int *val, int *val2, long mask)
+> > +{
+> > +     struct gadc_thermal_info *gtinfo =3D iio_priv(indio_dev);
+> > +     int ret;
+> > +
+> > +     switch (mask) {
+> > +     case IIO_CHAN_INFO_PROCESSED:
+> > +             ret =3D gadc_thermal_get_temp(gtinfo->tz_dev, val);
+> > +             if (ret)
+> > +                     return ret;
+> > +
+> > +             return IIO_VAL_INT;
+> > +
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +}
+> > +
+> > +static const struct iio_info gadc_thermal_iio_info =3D {
+> > +     .read_raw =3D gadc_thermal_read_raw,
+> > +};
+> > +
+> > +static int gadc_iio_register(struct device *dev, struct gadc_thermal_i=
+nfo *gti)
+> > +{
+> > +     struct gadc_thermal_info *gtinfo;
+> > +     struct iio_dev *indio_dev;
+> > +
+> > +     indio_dev =3D devm_iio_device_alloc(dev, sizeof(*gtinfo));
+> > +     if (!indio_dev)
+> > +             return -ENOMEM;
+> > +
+> > +     gtinfo =3D iio_priv(indio_dev);
+> > +     memcpy(gtinfo, gti, sizeof(*gtinfo));
+>
+> Why copy the structure ?
+>
+> Copying the thermal zone device pointer should be enough, no ?
+>
 
+iio_device_alloc created its own copy of struct gadc_thermal_info
+hence memcpy is used to fill struct gadc_thermal_info allocated by iio
+using struct gadc_thermal_info from gadc, or how do you propose to
+handle this? Maybe you could provide a code example for better
+understanding.
 
-That's irrelevant reason. Writing bindings since long time ask pretty
-clearly to describe hardware completely, regardless whether Linux
-supports this or not.
-
-It does not matter if you enable QoS or not.
-
-> 
-> The motivation for this change is that certain interconnect paths on
-> sa8775p require specific clocks to be enabled to access QoS registers.
-
-This does not look at all like existing device is completely broken.
-
-You just add new feature, so no ABI break.
-
-> QoS configuration is essential for managing latency and bandwidth across
-> subsystems such as CPU, GPU, and multimedia engines. Without it, the
-> system may experience performance degradation, especially under
-
-So how was it working for the last 2 years?
-
-
-> concurrent workloads. Enabling QoS improves system responsiveness and
-> ensures more predictable behavior in high-throughput scenarios.
-
-
-
-Best regards,
-Krzysztof
+> > +     indio_dev->name =3D dev_name(dev);
+> > +     indio_dev->info =3D &gadc_thermal_iio_info;
+> > +     indio_dev->modes =3D INDIO_DIRECT_MODE;
+> > +     indio_dev->channels =3D gadc_thermal_iio_channels;
+> > +     indio_dev->num_channels =3D ARRAY_SIZE(gadc_thermal_iio_channels)=
+;
+> > +
+> > +     return devm_iio_device_register(dev, indio_dev);
+> > +}
+> > +
+> >  static int gadc_thermal_read_linear_lookup_table(struct device *dev,
+> >                                                struct gadc_thermal_info=
+ *gti)
+> >  {
+> > @@ -153,7 +206,7 @@ static int gadc_thermal_probe(struct platform_devic=
+e *pdev)
+> >
+> >       devm_thermal_add_hwmon_sysfs(dev, gti->tz_dev);
+> >
+> > -     return 0;
+> > +     return gadc_iio_register(&pdev->dev, gti);
+> >  }
+> >
+> >  static const struct of_device_id of_adc_thermal_match[] =3D {
+> > --
+> > 2.48.1
+> >
+>
+> --
+>
+>  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
+RM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 
