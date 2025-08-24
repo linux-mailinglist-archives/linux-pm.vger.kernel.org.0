@@ -1,153 +1,123 @@
-Return-Path: <linux-pm+bounces-32958-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32955-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1536B331DA
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 20:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A549B3319D
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 19:16:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92B30202537
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 18:11:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39DBA171455
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 17:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100D42E54C3;
-	Sun, 24 Aug 2025 18:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A13C19F127;
+	Sun, 24 Aug 2025 17:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L7YkPPbO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hPj7xYNv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D732E5435;
-	Sun, 24 Aug 2025 18:09:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B8BAD4B;
+	Sun, 24 Aug 2025 17:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756058964; cv=none; b=adjHMGrbnPyXSLCOz/fBzTc8kX1Vo1vU7hOC3MVy+O4jnb7mkRKQWQmdiotCCN2eqlGntffgSp4+ICYCwp5pgXOlTbunVZFL32rK1heqjWp4pLLvVdiaRHHxLqkX0m4Xp7ZdgzgLmLJbC7qrb64P6LtyO/d54zw5sVllhPVxWdg=
+	t=1756055775; cv=none; b=BCcxHrTr0sPmbElCP6Bm0+vVY6F3JbpS+bbVdrzuZu5rYbFXQdvNwG2xN7rtCrvmkVDN9yX0X0ObS1G+5LsLoFrijgDIhwOYCbACUPW/G4QozstxWDKq3hEaxZPSoWmSaXpm4ZTuX5wkiyGxdIi5oZhPWjvfwsoTFXU9zPARLTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756058964; c=relaxed/simple;
-	bh=6xwCyuADMxUWNMqY6ctIoE11fZEZ1HKzp+/zu1QHHaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mLM017s70UooMcn1jIn8QFXLm5GkYUH+RU1VmsaZ5EINmIT4xSj8HLP9ZJvyh1kCVbqUgmeBTQuPC1jZ/4uGheOpqEuHOHKQOTqtzSwN85b4ZIvRna+LQfUCJ3w1qV5Aze3xL5/oYJXjdleyWDZmAFvU56e+vnzmhbq2jiprT1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L7YkPPbO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCF3C4CEEB;
-	Sun, 24 Aug 2025 18:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756058964;
-	bh=6xwCyuADMxUWNMqY6ctIoE11fZEZ1HKzp+/zu1QHHaI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=L7YkPPbOmOrD9BnBR4Wdcf0+6tQC8kef/OFN2zPv4IDHgMXl2YS+jWoO+eXBexl1Z
-	 PAnI317KEYx2/LkOuM/a0gxoQ7ZTVhHPLqbGnxRrNHixhHS0UzMrZ20gG95Ancth0N
-	 I6WgO/NXTrrkq7TN9xKgLgKdwSIqDsWM+5IexId/uUknEkQkJBM+115MtbR0DByfOF
-	 RhhRY5jYIqrVNXYicspO+ZrHyw3KDOmLJOjw6JPYYa5Vg6H+KIfiUEBQSNk3GFd+Sr
-	 KtLDdWTDgj7mjF2rLZ3zLcOLt/SKSX/0dxYbKcLwOfXXsVVPxGeXy9+TJScHqXx/dB
-	 3TXMhO6irsqmA==
-Message-ID: <539ede1a-eab6-4e8d-b108-11033cb39512@kernel.org>
-Date: Sun, 24 Aug 2025 19:14:36 +0200
+	s=arc-20240116; t=1756055775; c=relaxed/simple;
+	bh=loXs/jo4qfFXMlkm2z8nYRPzXOQfnC57z5Oyez0mHNQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZLXccWOHn9GxnE7FwI80I5tNgto4EOyNlnoq50Bwg/VLa97ydqgHpBl5AwUXSjWlVvryobgqEiQw98J4n7ijUaeCtqS6SYMA369WNQbZHVMuXT8+sECeUVJMPerthu7cIES+lUX+hZvwIOMzIOSNhQwGFbINKs+mn9u0SvXU9JY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hPj7xYNv; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7704799d798so529730b3a.3;
+        Sun, 24 Aug 2025 10:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756055773; x=1756660573; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HGubwTO/u7UU9GAVy2y9Cz3yDwUPil/uEw+i5zqYVb8=;
+        b=hPj7xYNvi2dTy5Ak/pyGxcZFo2jdO8NrLmVU3qF7PGGe41S0osrT6tVpq4OQSSPlw/
+         LcezEoPY5UfeQrzCypMIzQ/BsNUCSXlWCH22EGq02CAN9UqPuNKD7FcfqZyUu3zJi3S1
+         3J3syC82KSzzVxYgQ7iMAx/9a6ZCcdXcsDt3q51jlN7cpfiIpmUhtUZKY/7lVjzDiidd
+         B/5wLj7rYoOb7PI1PcHCI1ZPZ1muKh0wWtlS89av/hFsocKB9xhxQ7myO4NCkNGKbC1s
+         0snEqEwthNhON+k03P8I6MQKo82kInr3Gri+qYsgpZfv/xNCakM2YAM91V3woFOc1j0p
+         Beiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756055773; x=1756660573;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HGubwTO/u7UU9GAVy2y9Cz3yDwUPil/uEw+i5zqYVb8=;
+        b=R8E1RW7OCLYoLXBRUn+brMLBqd72OPWs9WxqVwJjxmNS8K8urhwfDw/Ou9HU4THs7O
+         nkberjgsfae/S9kI7qflpHJuktaJizyaWGWxLjteAwt8w1wE4HPRL6r907VRteHb7A/d
+         0vX+6tEOiTuKOG7DO5ahRRDjhZ9BCrfLvBnilYt7Ni0VnO26xdukenrtFj6BWRIySOVc
+         VZ6VGtvvAOu51KKAhGT/hGlVy27G3y/amVGzTLKfGkIVqwvQR4XcxWLXnRgBNfXY3VU6
+         n8ZglUTbEokc4f1H+yvAYZpBCx9RCWFiZaKhu4wtbJbUg3ZOD0q3faEGvmI2wrqzNC2g
+         MMCA==
+X-Forwarded-Encrypted: i=1; AJvYcCWjR1GXgKoMRM4yC06SXQP3OplisO2swZ2h/3d4/Q5FJ5Ju4iNDVgBgVBZQFPs1lLlXBnKsye12bw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3/4J8357Rj2eUViZdC5h7Wz969Ifv/HHN8aJiL/9rQ/6K+QaB
+	pdTS/0Ntksz0Xb0Wt8OVRgzxnGN/U2U9QNwrQI/vV43S1bgeW83vjLBvq2QDvw==
+X-Gm-Gg: ASbGncv1EDL0TiioUqD6HwMpaGm5GzvI0GyL89ZSFoLO/jr0Ogd7vs0ONYbJPAKybDv
+	CAXddRgCpl9P5juILSSeabl4X5ZER9PTE5hqdq+ZggxY7zlT5OGWGh0FGMiqd7GGqfwd6bH5bKU
+	THKk9te8BVR7v3HY4cnxYILMzTck+YW/fHffFnQkd/8kBMouHUZyCzT5SXOVONT217yL/g+FRW8
+	k88MS90KqXS3RNxGJL8m8U3edJ19rHbkPeBuLd1UGnHusjRr2Bl6RfKuDZnfJofeorqdpDk3tV4
+	R6UCZnHBt9JV8HlGTfiShwqMsl7S+YUsOIs/5VS6/g+fe2uiv26YBu8dmrsKo68fgUTZNT9/fCt
+	1Vul4JjOq3TObAgKpHC80iBmFEOsgbDHyyz7G7FH47qGqepoJjwis
+X-Google-Smtp-Source: AGHT+IEfQZ4Ieqvae0mSTpMDiaD9T6c0tbiLw1AxCOrXAkivOV5Ytnrk+mUfyFXo8uw4+XhBy7Si0A==
+X-Received: by 2002:a05:6a21:328b:b0:240:27c:fcc6 with SMTP id adf61e73a8af0-24340d72168mr13590441637.42.1756055773039;
+        Sun, 24 Aug 2025 10:16:13 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d003:7033:ad1b:5a79:43f0:e247])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7704025a46dsm5058136b3a.106.2025.08.24.10.16.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Aug 2025 10:16:12 -0700 (PDT)
+From: vivekyadav1207731111@gmail.com
+To: daniel.lezcano@linaro.org,
+	rafael@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Vivek Yadav <vivekyadav1207731111@gmail.com>
+Subject: [PATCH] cpuidle: sysfs: fix coding style issue
+Date: Sun, 24 Aug 2025 10:15:43 -0700
+Message-Id: <20250824171543.17662-1-vivekyadav1207731111@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/4] arm64: dts: exynos: google: add Maxim MAX77759
- Fuel-gauge
-To: t.antoine@uclouvain.be, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org
-References: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
- <20250804-b4-gs101_max77759_fg-v5-4-03a40e6c0e3d@uclouvain.be>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-4-03a40e6c0e3d@uclouvain.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/08/2025 16:26, Thomas Antoine via B4 Relay wrote:
-> From: Thomas Antoine <t.antoine@uclouvain.be>
-> 
-> Add the node for the Maxim MAX77759 fuel gauge as a slave of the i2c.
-> 
-> The TODO is still applicable given there are other slaves on the
-> bus (e.g. PCA9468, other MAX77759 functions and the MAX20339 OVP).
-> 
-> For the device specific values (full design capacity and terminal
-> current), the device should check an EEPROM at address 0x50 of the
-> hsi2c_8 for a battery id stored in register 0x17. A set of parameters
-> for the initialization of the fuel gauge should be chosen based on
-> this id. Those sets are defined here:
-> 
-> Link: https://android.googlesource.com/kernel/gs/+/refs/heads/android-gs-raviole-5.10-android15/arch/arm64/boot/dts/google/gs101-oriole-battery-data.dtsi
-> Link: https://android.googlesource.com/kernel/gs/+/refs/heads/android-gs-raviole-5.10-android15/arch/arm64/boot/dts/google/gs101-raven-battery-data.dtsi
-> 
-> This does not seem to be a standard pattern in the kernel currently
-> so it is not implemented. Values observed on tested devices are
-> instead used. The driver or the devicetree should be should be
-> extended in the future to take versions into account.
-> 
-> The pinctrl name follows the convention proposed in
-> Link: https://lore.kernel.org/all/20250524-b4-max77759-mfd-dts-v2-2-b479542eb97d@linaro.org/
-> 
-> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
-> ---
->  arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 10 ++++++++
->  .../boot/dts/exynos/google/gs101-pixel-common.dtsi | 30 ++++++++++++++++++++++
->  arch/arm64/boot/dts/exynos/google/gs101-raven.dts  | 11 ++++++++
->  3 files changed, 51 insertions(+)
+From: Vivek Yadav <vivekyadav1207731111@gmail.com>
 
-Code looks fine, so same comment as for defconfig change.
+Fix a checkpatch.pl error by adding space around '+='
+operator.
 
-Best regards,
-Krzysztof
+No functional changes intended.
+
+[checkpatch.pl output]
+	ERROR: spaces required around that '+='
+
+Signed-off-by: Vivek Yadav <vivekyadav1207731111@gmail.com>
+---
+ drivers/cpuidle/sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+index d6f5da61cb7d..cbf2e021c6ba 100644
+--- a/drivers/cpuidle/sysfs.c
++++ b/drivers/cpuidle/sysfs.c
+@@ -34,7 +34,7 @@ static ssize_t show_available_governors(struct device *dev,
+ 	}
+
+ out:
+-	i+= sprintf(&buf[i], "\n");
++	i += sprintf(&buf[i], "\n");
+ 	mutex_unlock(&cpuidle_lock);
+ 	return i;
+ }
+---
+2.25.1
+
 
