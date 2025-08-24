@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-32957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32A55B331EE
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 20:13:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1536B331DA
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 20:11:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2502D440A0A
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 18:11:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92B30202537
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Aug 2025 18:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D6E02DAFA1;
-	Sun, 24 Aug 2025 18:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100D42E54C3;
+	Sun, 24 Aug 2025 18:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jOvpHgzp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L7YkPPbO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC902E11D5;
-	Sun, 24 Aug 2025 18:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D732E5435;
+	Sun, 24 Aug 2025 18:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756058961; cv=none; b=LSa19QO2TypJEXlu2Vfdd6WlrGLqkemshYSPk2z8blEok8Z0CfXbslm6F/734rIzB/Qv6Z99Ttn+X8pFmh03L9oVvMxCJmxM5CoBLVShYCp0pC0MclzOV8/xsRBq4+k+3wcv7wZbzMOsAbgLo0uOwwSrx7PF9tVPQHBlWoifhy8=
+	t=1756058964; cv=none; b=adjHMGrbnPyXSLCOz/fBzTc8kX1Vo1vU7hOC3MVy+O4jnb7mkRKQWQmdiotCCN2eqlGntffgSp4+ICYCwp5pgXOlTbunVZFL32rK1heqjWp4pLLvVdiaRHHxLqkX0m4Xp7ZdgzgLmLJbC7qrb64P6LtyO/d54zw5sVllhPVxWdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756058961; c=relaxed/simple;
-	bh=iPbQM7eQEDWhHlOv6zZRNIcUTBEBN8jCIsD9OOZwY+U=;
+	s=arc-20240116; t=1756058964; c=relaxed/simple;
+	bh=6xwCyuADMxUWNMqY6ctIoE11fZEZ1HKzp+/zu1QHHaI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oK34NQkXt5ueoKgy5aFu7zAv1Gw1QjzpJ0/txeBdNPCw0vT56pG1N5A62di2d9LTWrDackrEA2vCkq8nijmVtkj4T2EYSpSMKursDMpec4PsIcxUdAwcrVZR1OSLRhk97sHWFNs/VkgdQNumfQ/Wt9SIXxz6eivyvuyh51QUfvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jOvpHgzp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7C4C116C6;
-	Sun, 24 Aug 2025 18:09:17 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mLM017s70UooMcn1jIn8QFXLm5GkYUH+RU1VmsaZ5EINmIT4xSj8HLP9ZJvyh1kCVbqUgmeBTQuPC1jZ/4uGheOpqEuHOHKQOTqtzSwN85b4ZIvRna+LQfUCJ3w1qV5Aze3xL5/oYJXjdleyWDZmAFvU56e+vnzmhbq2jiprT1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L7YkPPbO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCF3C4CEEB;
+	Sun, 24 Aug 2025 18:09:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756058961;
-	bh=iPbQM7eQEDWhHlOv6zZRNIcUTBEBN8jCIsD9OOZwY+U=;
+	s=k20201202; t=1756058964;
+	bh=6xwCyuADMxUWNMqY6ctIoE11fZEZ1HKzp+/zu1QHHaI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jOvpHgzpPDo9tVHRtKb5N3xmgEM2rhVGCcrliFcFam4iC/S7mkN7LUvHQO1H4M25y
-	 sDeeFpuiiyf3GOe7OCSpGbDdrjZaL5NF8hL7w79tLqkzqh72le0q5IYRiwIjXtWfuj
-	 0ikKLi5/f4jAtPAOn7/bw+Smhea4qnw/OeI8CSVl0XigcVYUZGfQwpJhXC6I9scBvz
-	 DCFzj5Dac8/AhVaEXQak5DgJ/pMHXp/xCxH5CntrM8TYmsSalD5x16sjfRsx8Cp6UC
-	 GjSZejp7tVElro0tnAYdWHOIqB5F01gQrfDTcMu7RqnOP+02a0X9Catfy3rzkzz4Bb
-	 XpAL0YSLhGqnQ==
-Message-ID: <4858376a-be7e-4eb8-a68c-fbd00532a106@kernel.org>
-Date: Sun, 24 Aug 2025 19:13:29 +0200
+	b=L7YkPPbOmOrD9BnBR4Wdcf0+6tQC8kef/OFN2zPv4IDHgMXl2YS+jWoO+eXBexl1Z
+	 PAnI317KEYx2/LkOuM/a0gxoQ7ZTVhHPLqbGnxRrNHixhHS0UzMrZ20gG95Ancth0N
+	 I6WgO/NXTrrkq7TN9xKgLgKdwSIqDsWM+5IexId/uUknEkQkJBM+115MtbR0DByfOF
+	 RhhRY5jYIqrVNXYicspO+ZrHyw3KDOmLJOjw6JPYYa5Vg6H+KIfiUEBQSNk3GFd+Sr
+	 KtLDdWTDgj7mjF2rLZ3zLcOLt/SKSX/0dxYbKcLwOfXXsVVPxGeXy9+TJScHqXx/dB
+	 3TXMhO6irsqmA==
+Message-ID: <539ede1a-eab6-4e8d-b108-11033cb39512@kernel.org>
+Date: Sun, 24 Aug 2025 19:14:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/4] arm64: defconfig: enable Maxim MAX77759 fuel-gauge
- driver
+Subject: Re: [PATCH v5 4/4] arm64: dts: exynos: google: add Maxim MAX77759
+ Fuel-gauge
 To: t.antoine@uclouvain.be, Sebastian Reichel <sre@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>,
@@ -64,7 +64,7 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-samsung-soc@vger.kernel.org
 References: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
- <20250804-b4-gs101_max77759_fg-v5-3-03a40e6c0e3d@uclouvain.be>
+ <20250804-b4-gs101_max77759_fg-v5-4-03a40e6c0e3d@uclouvain.be>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,25 +110,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-3-03a40e6c0e3d@uclouvain.be>
+In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-4-03a40e6c0e3d@uclouvain.be>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/08/2025 16:26, Thomas Antoine via B4 Relay wrote:
 > From: Thomas Antoine <t.antoine@uclouvain.be>
 > 
-> Enable the Maxim MAX77759 fuel gauge as it is used by the gs101-oriole
-> (Google Pixel 6) and gs101-raven (Google Pixe 6 Pro) boards.
+> Add the node for the Maxim MAX77759 fuel gauge as a slave of the i2c.
+> 
+> The TODO is still applicable given there are other slaves on the
+> bus (e.g. PCA9468, other MAX77759 functions and the MAX20339 OVP).
+> 
+> For the device specific values (full design capacity and terminal
+> current), the device should check an EEPROM at address 0x50 of the
+> hsi2c_8 for a battery id stored in register 0x17. A set of parameters
+> for the initialization of the fuel gauge should be chosen based on
+> this id. Those sets are defined here:
+> 
+> Link: https://android.googlesource.com/kernel/gs/+/refs/heads/android-gs-raviole-5.10-android15/arch/arm64/boot/dts/google/gs101-oriole-battery-data.dtsi
+> Link: https://android.googlesource.com/kernel/gs/+/refs/heads/android-gs-raviole-5.10-android15/arch/arm64/boot/dts/google/gs101-raven-battery-data.dtsi
+> 
+> This does not seem to be a standard pattern in the kernel currently
+> so it is not implemented. Values observed on tested devices are
+> instead used. The driver or the devicetree should be should be
+> extended in the future to take versions into account.
+> 
+> The pinctrl name follows the convention proposed in
+> Link: https://lore.kernel.org/all/20250524-b4-max77759-mfd-dts-v2-2-b479542eb97d@linaro.org/
 > 
 > Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
 > ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 10 ++++++++
+>  .../boot/dts/exynos/google/gs101-pixel-common.dtsi | 30 ++++++++++++++++++++++
+>  arch/arm64/boot/dts/exynos/google/gs101-raven.dts  | 11 ++++++++
+>  3 files changed, 51 insertions(+)
 
-
-I think the driver part was not applied. I'll drop it from my queue,
-please resend SoC bits separately once driver gets applied by its
-maintainer.
+Code looks fine, so same comment as for defconfig change.
 
 Best regards,
 Krzysztof
