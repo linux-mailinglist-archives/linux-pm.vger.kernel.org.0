@@ -1,148 +1,159 @@
-Return-Path: <linux-pm+bounces-33031-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33032-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4604FB342E9
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 16:15:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75D8EB34497
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 16:52:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18B2F3B8E7B
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 14:13:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BA74483487
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 14:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C46292F361C;
-	Mon, 25 Aug 2025 14:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE69F2FC896;
+	Mon, 25 Aug 2025 14:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4fvRADW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkT3zNvF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D5C2F0C67;
-	Mon, 25 Aug 2025 14:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CF32FC88E;
+	Mon, 25 Aug 2025 14:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756131220; cv=none; b=ZJHZNU55OmRkiypag930Biy1oYcKfytF8IGYyDO4LYU212KKoYuCIGQg27Lv2xpBR3fM81AERGvm6eD6EjX9vBfad76VF3aY1pEhxJ7GjUtCKIGrA+QY1tXNNVfzv+1tppCQCqINLU/GEfFpbVrwBC7L5LmPdrlzRYdszV7PKXQ=
+	t=1756133510; cv=none; b=SU1hVyE+/W/xBwRplNkfItysTUzppR+nBUhqpTITFsU2hBwmKwKGEx7RlmP6uDmAoMw8MelaCCOZGgiIGkR3bBRHDxEnqL5iANwI8ACikLLX4kqUQqFDN+FFixMYp8rd/j/l4/TQStOleC5a9GUVB9xofTxSvelaO6J8Uj6K5mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756131220; c=relaxed/simple;
-	bh=3RLeKCKpDIk2eBgGx5sPwZfoBKyVmeEo49RWhYh8Kh8=;
+	s=arc-20240116; t=1756133510; c=relaxed/simple;
+	bh=XNzfJ1JsDQz0hb/rCFVVkG70jy0lCFDw+h6Jt0okoI8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dTsyf0mcbEDs6eEmvARn0HrN2tLlZjh9PzZDzXTaqRBjnI0InWwCJJXgJPBXA2P3r/OlxyoIPM1bI0cYp8wbsIqyvxNJpjKq9tw4HjP8FQq3NsdxKXw5iXLZd0PbCyuSLCR3adVZ1+IskrIuMfGwwDgdLPfJuTP7bg6zr70SguU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4fvRADW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0460DC19425;
-	Mon, 25 Aug 2025 14:13:40 +0000 (UTC)
+	 To:Cc:Content-Type; b=Z2G7Ujh/JbjDTKVmNbqUeY4qlOAelzDheOYxujGw+E/NY0MBiQcMMDFfEM+mzThxEjQiieHxBhlYZXm1U8U2recojjapy0UMsiHX5dm6VSp2wW8PZke4cA4ndgZx4Xrzyg6TSaaILvNJiQf8yvRxFoi+HvGTa2jwFpIu8r1izBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkT3zNvF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4241AC19422;
+	Mon, 25 Aug 2025 14:51:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756131220;
-	bh=3RLeKCKpDIk2eBgGx5sPwZfoBKyVmeEo49RWhYh8Kh8=;
+	s=k20201202; t=1756133510;
+	bh=XNzfJ1JsDQz0hb/rCFVVkG70jy0lCFDw+h6Jt0okoI8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=e4fvRADWc2SiGyvairwMKdDw1zm1wGOXThGQeER0f4MYqsGYBRhD4UrfH+q2kimaE
-	 978Vxb2gnRrcxwK29zKxBr5sDuyaM7DyuM68nemBfDcJoWAJvdefCrMf4ky3tm3mTR
-	 ZEf5XaC0Deu8RHdTatQRuIX1UHKAPHYmvItTm0G3jHrBoDa0LYl7qMs/ZPY2JpgApc
-	 lQtDHIn1yKhsLsiU+tvHyxR+ZutYlrHGoRZcd4IzOHtkeInzrDGgR65atrSWLdNsYt
-	 TaeLwZDvBl70cfWDcKc3Px3Inhk2GTRE0IlvBDIzWF32uT29HeibPtjI2oz6UM54HE
-	 cW6lqbzTmXm7Q==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-74381fbd6f3so973401a34.2;
-        Mon, 25 Aug 2025 07:13:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+ZKTcs2H+vLrKgIvFTXZBL0dsN6xLsr3ZC9I78D2Wu2hIH+8jkMSP41/cYIq51kdSw6CDRP2SZCw=@vger.kernel.org, AJvYcCU31NAMHGLiJSL7vGtItCLJY5s0jUAdR3sMwyRfm+qSikp7Liz6sk6nvOeef71BgF2oQIt9P6brS/8mrIw=@vger.kernel.org, AJvYcCUCIsGROdz8+qKvGy/zMPWBArUZIwHjHyOukJZdmFLSv86OWtmW3hFzobmb6viQiH0ilrE=@vger.kernel.org, AJvYcCUpaEvqIJcfrfK/wGmf+4jCmiLaEteujEieTnq78FTPn1snhOrfTBWVsHAv6ePGCQEuWAMpTJvzytkTyvkk@vger.kernel.org, AJvYcCUzdfnb7kLofKFxb1y3Q8fvI/X+T///5bVgsI6rwx9y8iWqk6NoPms12ttCNos9Xf7fqKEzLlNyfHhrxA==@vger.kernel.org, AJvYcCWemMcSx2OIbdB0hnJpGaiFoi/MxP4jomzuwUQvthWat4O+8GcCqlc1YdHzSj0oF7WTTGj6DdZm2XMPyRWKbydObT8=@vger.kernel.org, AJvYcCXp15T8q27ZRMIj8oIT/97J40RVT4aNPUenkJy+iThwifFJDUB5CFSBBCaBLD6cA1+r3iF1rDUaIZd5mw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxizDsgkRU4NZXkaOR4avUd7h7nVnM7GAnn9L7xwup6WzHwBdcv
-	Rjx5F+sL5x8blwTQWJ1bqnHyBpClUw0UjVYI0AfuyuKPqEnAiay1xGidaI/Oc3xy417ymzb6MGM
-	95pXfpIwqw40MPnlC79galVaEPEDKB0k=
-X-Google-Smtp-Source: AGHT+IGEnV+1YshDCmjAscdFjkSNQru4o/XG/DWYuObgbMiwP57k9JdqOZlPe3YdSW0fnLXsvsMiCF3QToEZVDUm+Q8=
-X-Received: by 2002:a05:6830:d18:b0:742:fd7f:e105 with SMTP id
- 46e09a7af769-74500aafdb9mr6734918a34.19.1756131219164; Mon, 25 Aug 2025
- 07:13:39 -0700 (PDT)
+	b=WkT3zNvFs3flHRBnd/0pNN0i7SPbb1kL7MaWhCII3iHB4hNgwjzRdCFGDdtSWUUR5
+	 0C0GLy+6XWwxgC/P63jjrzdKsqzAQmxG6w68eZgQz4AJY4fpMeA7VsQcMKQr8D9uJX
+	 bhA4MWpKYX9utEdTmQlVEJzuNxgg1eR/nuKPOaVs7LEFSGKZmGgsBpsOksbtabHffC
+	 kyrCnu9dk88FP3T5O9odIWoB2a/cFauKy8XwdmFrI9D/izATy19mimfbB/OoXFRRsO
+	 tJTVyFFW34LSRgKq+iiyfs7UK4A/nWkK6S8OJQxBDBvqhbqZlg+cGkDJAL6MfrZVXU
+	 WHwL3xdlR1UZg==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-74526ca79c2so221147a34.3;
+        Mon, 25 Aug 2025 07:51:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUilzWk1iIrpLU0xTCXOR2xtImBdeBUsOc3YkSYew7/DreqdBwzeA5QRvmDosoryEnwgR6av77Q4SLx@vger.kernel.org, AJvYcCVOqEFwXO5OMYiHOoFZTs15KdmoXRUrYVBRGA1VPyEgDWivzk6kit8XolQ9g9FX/hEecjhm2AsSPSO5BZfB@vger.kernel.org, AJvYcCXkTBDG8bdYdNwC8vqC016/uwLdBqk86vPL7twGznfFubGk9g7/9gV+2Cq2ZeKGFSW0t6XPJJPsPtk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9Hj34hYNUdDGsvWRkVtxYQziNVZLy/HIQwwBdHcBaHPu3EudF
+	UNXQcpXoXA5+jPUjmaE7y9arBC/im3a1/sZjeFp5ygXKDit0mob5lDgW9PGRDVNe3O9KUK1pBv0
+	EnWa78/lgD/kAHmDf3Ae0vSOS8QZk7fc=
+X-Google-Smtp-Source: AGHT+IHsaawNVSmwqBFDCR0lzMxX9J0lmDH1hUvNxpCLX05oS/GGF0gkk8X9vl4An8E3GcjsHVdcqqgmqzbYRvZ1Fqg=
+X-Received: by 2002:a05:6830:3919:b0:742:29a0:1c6d with SMTP id
+ 46e09a7af769-74500af25c5mr8316235a34.27.1756133509576; Mon, 25 Aug 2025
+ 07:51:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250825092833.42441-1-zhangzihuan@kylinos.cn>
-In-Reply-To: <20250825092833.42441-1-zhangzihuan@kylinos.cn>
+References: <20250814072934.1016694-1-tianyaxiong@kylinos.cn> <20250814073144.1022355-1-tianyaxiong@kylinos.cn>
+In-Reply-To: <20250814073144.1022355-1-tianyaxiong@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 25 Aug 2025 16:13:27 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g7rJn=z5p4DuJJoPpZrR5ismYftpDWp5X=z74DqaGYBQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwCyvYKc8Ipwt4NeaLRZNsWY9t1kMBiUFhDRbkfLg-XPnoGM5Pxq1PIQzg
-Message-ID: <CAJZ5v0g7rJn=z5p4DuJJoPpZrR5ismYftpDWp5X=z74DqaGYBQ@mail.gmail.com>
-Subject: Re: [PATCH v1] cpufreq: use __free() for all cpufreq_cpu_get() references
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Markus Mayer <mmayer@broadcom.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	zhenglifeng <zhenglifeng1@huawei.com>, "H . Peter Anvin" <hpa@zytor.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Len Brown <lenb@kernel.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
-	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
-	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, x86@kernel.org, 
-	kvm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	imx@lists.linux.dev, linux-omap@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Date: Mon, 25 Aug 2025 16:51:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iM1GZppArfDQ5T7oNC8i7nr4OatYvdA80vDZwgms8VQA@mail.gmail.com>
+X-Gm-Features: Ac12FXxOrQ--ZkFXII1v1zM3tUh9-6weMp8tifiLJuDIACpJG6G_zX3YFVFfiJ8
+Message-ID: <CAJZ5v0iM1GZppArfDQ5T7oNC8i7nr4OatYvdA80vDZwgms8VQA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cpuidle: Add interface to get cpuidle_driver by
+ CPU ID
+To: Yaxiong Tian <tianyaxiong@kylinos.cn>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, lenb@kernel.org, 
+	robert.moore@intel.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	acpica-devel@lists.linux.dev, Shaobo Huang <huangshaobo2075@phytium.com.cn>, 
+	Yinfeng Wang <wangyinfeng@phytium.com.cn>, Xu Wang <wangxu@phytium.com.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 25, 2025 at 11:29=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.=
-cn> wrote:
+On Thu, Aug 14, 2025 at 9:32=E2=80=AFAM Yaxiong Tian <tianyaxiong@kylinos.c=
+n> wrote:
 >
-> This patch replaces all remaining uses of cpufreq_cpu_get() with
-> the __free(cpufreq_cpu_put) annotation.
+> Some drivers need to obtain the cpuidle_driver via CPU ID before the
+> cpuidle_device is registered. Therefore, this interface is added.
 >
-> Motivation:
-> - Ensures automatic cleanup of policy references when they go out of scop=
-e,
->   reducing the risk of forgetting to call cpufreq_cpu_put() on early retu=
-rn
->   or error paths.
-> - Brings the code in line with the latest kernel coding style and best
->   practices for managing reference-counted objects.
-> - No functional changes are introduced; behavior remains the same,
->   but reference counting is now safer and easier to maintain.
->
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> Tested-by: Shaobo Huang <huangshaobo2075@phytium.com.cn>
+> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> Signed-off-by: Shaobo Huang <huangshaobo2075@phytium.com.cn>
+> Signed-off-by: Yinfeng Wang <wangyinfeng@phytium.com.cn>
+> Signed-off-by: Xu Wang<wangxu@phytium.com.cn>
 > ---
->  arch/arm64/kernel/topology.c                  |  9 +++----
->  arch/x86/kvm/x86.c                            | 10 ++++----
->  drivers/acpi/processor_thermal.c              | 13 ++++------
->  drivers/cpufreq/brcmstb-avs-cpufreq.c         |  4 +---
->  drivers/cpufreq/cppc_cpufreq.c                |  4 +---
->  drivers/cpufreq/intel_pstate.c                |  3 +--
->  drivers/cpufreq/longhaul.c                    |  3 +--
->  drivers/cpufreq/mediatek-cpufreq.c            |  6 ++---
->  drivers/cpufreq/powernv-cpufreq.c             |  6 ++---
->  drivers/cpufreq/s5pv210-cpufreq.c             |  3 +--
->  drivers/cpufreq/tegra186-cpufreq.c            |  3 +--
->  drivers/devfreq/governor_passive.c            | 19 ++++-----------
->  drivers/gpu/drm/i915/gt/intel_llc.c           |  3 +--
->  drivers/macintosh/windfarm_cpufreq_clamp.c    |  4 +---
->  drivers/powercap/dtpm_cpu.c                   | 24 ++++++-------------
->  drivers/thermal/imx_thermal.c                 |  7 ++----
->  .../ti-soc-thermal/ti-thermal-common.c        |  5 +---
->  kernel/power/energy_model.c                   |  7 ++----
->  18 files changed, 40 insertions(+), 93 deletions(-)
+>  drivers/cpuidle/driver.c | 16 ++++++++++++++++
+>  include/linux/cpuidle.h  |  4 ++++
+>  2 files changed, 20 insertions(+)
+>
+> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+> index 9bbfa594c442..8647f8165863 100644
+> --- a/drivers/cpuidle/driver.c
+> +++ b/drivers/cpuidle/driver.c
+> @@ -353,6 +353,22 @@ struct cpuidle_driver *cpuidle_get_cpu_driver(struct=
+ cpuidle_device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(cpuidle_get_cpu_driver);
+>
+> +/**
+> + * cpuidle_get_cpu_driver_by_cpu - return the driver registered for a CP=
+U.
+> + * @cpu_num: a valid cpu num
+> + *
+> + * Returns a struct cpuidle_driver pointer, or NULL if no driver is regi=
+stered
+> + * for the CPU associated with @cpu.
+> + */
+> +struct cpuidle_driver *cpuidle_get_cpu_driver_by_cpu(int cpu_num)
+> +{
+> +       if (cpu_num < 0 || cpu_num >=3D nr_cpu_ids)
+> +               return NULL;
 
-This changes different pieces of code maintained by different people
-and the changes are not interdependent AFAICS, so better send it as a
-series of separate patches.
+What about changing the __cpuidle_get_cpu_driver() parameter type to
+unsigned int and also passing unsigned int to this function?  The
+first check above can go away then.
 
-Thanks!
+> +
+> +       return __cpuidle_get_cpu_driver(cpu_num);
+> +}
+> +EXPORT_SYMBOL_GPL(cpuidle_get_cpu_driver_by_cpu);
+> +
+>  /**
+>   * cpuidle_driver_state_disabled - Disable or enable an idle state
+>   * @drv: cpuidle driver owning the state
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index a9ee4fe55dcf..aebbaae6a501 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -200,6 +200,7 @@ extern void cpuidle_disable_device(struct cpuidle_dev=
+ice *dev);
+>  extern int cpuidle_play_dead(void);
+>
+>  extern struct cpuidle_driver *cpuidle_get_cpu_driver(struct cpuidle_devi=
+ce *dev);
+> +extern struct cpuidle_driver *cpuidle_get_cpu_driver_by_cpu(int cpu_num)=
+;
+>  static inline struct cpuidle_device *cpuidle_get_device(void)
+>  {return __this_cpu_read(cpuidle_devices); }
+>  #else
+> @@ -240,6 +241,9 @@ static inline void cpuidle_disable_device(struct cpui=
+dle_device *dev) { }
+>  static inline int cpuidle_play_dead(void) {return -ENODEV; }
+>  static inline struct cpuidle_driver *cpuidle_get_cpu_driver(
+>         struct cpuidle_device *dev) {return NULL; }
+> +
+> +static inline struct cpuidle_driver *cpuidle_get_cpu_driver_by_cpu(
+> +       int cpu_num) {return NULL; };
+>  static inline struct cpuidle_device *cpuidle_get_device(void) {return NU=
+LL; }
+>  #endif
+>
+> --
+> 2.25.1
+>
 
