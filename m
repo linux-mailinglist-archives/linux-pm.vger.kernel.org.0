@@ -1,104 +1,110 @@
-Return-Path: <linux-pm+bounces-32975-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-32976-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F4C3B3381F
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 09:49:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD142B3382F
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 09:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B14C481371
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 07:49:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 860D717D503
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 07:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427AF29B217;
-	Mon, 25 Aug 2025 07:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="F+CZpcEH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5EF62989A2;
+	Mon, 25 Aug 2025 07:49:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D355C221578;
-	Mon, 25 Aug 2025 07:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756108119; cv=pass; b=F2pwl1kzAZsJcM97E9ZC5+jvbGcOAAp15GIuDOOzDqpPEPeGJyQlbPiE9UJJ5UXCacMjlILdFCENjxFsK5ZCqpp6bVjQy7a90KhsbqwiwCVhNw9HTqoNPr6SzaFe4WFGEBbe8qHiV9uG1AQ0YHBrbenGjspeDBGTu0UJFUmJOTY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756108119; c=relaxed/simple;
-	bh=R5WQhVv7rK8cy7Q4wz4ZKiJYZYoscvA7NtPO3IDhYFw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ouYBTlir4PXZ+pAsmXmhRwSXSEgx/vtOxBsC8cLtaLakd5iHcsOSHz8OJq8a5FvkS7d/IihkDu75RpQTHsbLl4xO8i00BbK27cSpYB7GkHz3XGKDOv+93v7tZytr+I1IUd4ZciVae/fhWEUGobp5OYUhfMhDoebXrxptzgMyXK0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=F+CZpcEH; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1756108093; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Mif53jBa6MJhiFA3/aeaKEpanFEPOgAIH7H2ZuUdsrAtRPu/MgbOT3DP6FBY2rj6ePbMjSECj12yIiQqzo9EC3onYNcemMOPA7kexfcK9xKDYPuR6j4sRJVelnLZBLEQG0X38Apa47eBKSzmFFuNz9vrZ2uFGldXO/K346zQY/c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1756108093; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=80dzrh8aYZfGg2XUHBNmSgUetz0wp59La7rrflIHLYk=; 
-	b=hTrQDB+vFRUoh2TzCLNct7ZH6mA+ZiLxyi08MHJ278n9kJefJSS8W0fZv6yV5vnJvzDAcQZhLzydoq1k/A5PczB6y4tbslyaC/qdgSZhpG/4L25+svqU468G3JXb+BZHKPSOMfmr/+kta3MYdiQArODPHxGvpuzc+7VGFRmUwYk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1756108093;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=80dzrh8aYZfGg2XUHBNmSgUetz0wp59La7rrflIHLYk=;
-	b=F+CZpcEHNCcVVD5E2eusUhfW3VOUS/ZWUIpDXxI5z5QeKjtOV9RCcGxyZ/bOxE14
-	x+XVoB1b6xaPLKM4peUQofBqgx8GIHy0CMMo5WJvpvX22tuJAS78545/+5x34SM4fh0
-	HU9zR45BRWmSNqHl8sXRyIGwQroD2o9wsHxVH/9U=
-Received: by mx.zohomail.com with SMTPS id 1756108090913704.2939268893988;
-	Mon, 25 Aug 2025 00:48:10 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 19/20] clk: sp7021: switch to FIELD_PREP_WM16 macro
-Date: Mon, 25 Aug 2025 09:48:05 +0200
-Message-ID: <2795210.mvXUDI8C0e@workhorse>
-In-Reply-To: <175340605069.3513.18204498860033427106@lazor>
-References:
- <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
- <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
- <175340605069.3513.18204498860033427106@lazor>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491B0296BA2;
+	Mon, 25 Aug 2025 07:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756108179; cv=none; b=eX1K6X0eG+3CKz0kGvdFbdc5x6ZePv3L++VuPJwM7TzI30Y67gEo/KtF81I1WEdl5wYXnjqHr+HDZFh4EgPx1m/0GVE+hL70hoStBNyUDhOQH+sL6JAmszNXBbnXsE0cKWPjtD70bgmgek9gxGht2eG1F56GAyrMNAwfQyZqN7E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756108179; c=relaxed/simple;
+	bh=gpvvIhgK3CSmSlad3uSKgPLTFsvughmdc/Vio0DYLyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JkKuxQR4hSvn9Y4XBSRTaBGdeVQlm3lMFxLgser9D+QsDHt1/NhQqjJbVtrLfhouHQLQyF46saSoX8M9Gl1Cbe5GxKtQNRjlIeshXZLu5HLO6cTt6qEDHBipRWCYRUqCEN6EkCH4uZaijjIESWnNgr6VMDAKLMCvFGwbT57Tvrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2496B1655;
+	Mon, 25 Aug 2025 00:49:29 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 170993F738;
+	Mon, 25 Aug 2025 00:49:35 -0700 (PDT)
+Date: Mon, 25 Aug 2025 09:49:15 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Prashant Malani <pmalani@google.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 1/2] cpufreq: Add driver flag to avoid initial frequency
+ verification
+Message-ID: <aKwVe4WSG7JApUAi@arm.com>
+References: <20250823001937.2765316-1-pmalani@google.com>
+ <20250823001937.2765316-3-pmalani@google.com>
+ <20250825045641.o2thjvs3xyuxavyk@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250825045641.o2thjvs3xyuxavyk@vireshk-i7>
 
-On Friday, 25 July 2025 03:14:10 Central European Summer Time Stephen Boyd wrote:
-> Quoting Nicolas Frattaroli (2025-06-23 09:05:47)
-> > The sp7021 clock driver has its own shifted high word mask macro,
-> > similar to the ones many Rockchip drivers have.
+On Mon, Aug 25, 2025 at 10:26:41AM +0530, Viresh Kumar wrote:
+> On 23-08-25, 00:17, Prashant Malani wrote:
+> > Some cpufreq drivers have a get() function which can return an unreliable
+> > frequency. This can cause issues when switching governors. For instance,
+> > a CPU would be on performance governor and have it's frequency (and
+> > policy->cur) set to max. When the governor is switched to userspace, the
+> > policy->cur is re-used, but it is checked against the frequency returned
+> > by the driver's get() function. If it's different, the frequency will
+> > get set to the new (incorrect) value.
 > > 
-> > Remove it, and replace instances of it with hw_bitfield.h's
-> > FIELD_PREP_WM16 macro, which does the same thing except in a common
-> > macro that also does compile-time error checking.
+> > To avoid this, add a flag that avoids this verify step on governor start
+> > if the cpufreq driver opts in to it.
 > > 
-> > This was compile-tested with 32-bit ARM with Clang, no runtime tests
-> > were performed as I lack the hardware. However, I verified that fix
-> > commit 5c667d5a5a3e ("clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()")
-> > is not regressed. No warning is produced.
+> > Since there are no users of this flag, no functional changes are
+> > introduced here.
+> > 
+> > Cc: Beata Michalska <beata.michalska@arm.com>
+> > Signed-off-by: Prashant Malani <pmalani@google.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c |  3 ++-
+> >  include/linux/cpufreq.h   | 10 ++++++++++
+> >  2 files changed, 12 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index b8937737d096..72e6552a40ea 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2482,7 +2482,8 @@ int cpufreq_start_governor(struct cpufreq_policy *policy)
+> >  
+> >  	pr_debug("%s: for CPU %u\n", __func__, policy->cpu);
+> >  
+> > -	cpufreq_verify_current_freq(policy, false);
+> > +	if (!(cpufreq_driver->flags & CPUFREQ_DONT_VERIFY_FREQ_ON_GOVERNOR_START))
+> > +		cpufreq_verify_current_freq(policy, false);
 > 
-> Does it generate the same code before and after?
+> I don't think it is okay to do this to hide a driver's failure to
+> return the right frequency. What about all the other places where
+> get() is still used ? Won't that cause similar issues elsewhere ?
 > 
+> The driver must be fixed for this, not the core. The core is doing the
+Agreed.
 
-Yes, the generated machine code is exactly the same, at least with
-clang, and I'll assume it'll be the same for gcc.
-
-Kind regards,
-Nicolas Frattaroli
-
-
+---
+BR
+Beata
+> right thing here, asking the driver to return the current frequency.
+> If the driver is unsure, it can just return the current frequency from
+> policy->cur instead.
+> 
+> -- 
+> viresh
 
