@@ -1,127 +1,91 @@
-Return-Path: <linux-pm+bounces-33045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5088EB34A9A
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 20:48:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8765DB34AA5
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 20:51:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8F397A61E6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 18:46:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CE461B217C0
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 18:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18D8220680;
-	Mon, 25 Aug 2025 18:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F056727A129;
+	Mon, 25 Aug 2025 18:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cj+9mOBS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDyt2QzX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7533D273F9;
-	Mon, 25 Aug 2025 18:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC066270551
+	for <linux-pm@vger.kernel.org>; Mon, 25 Aug 2025 18:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756147687; cv=none; b=eX/rJyaryQHQlSJ0GGOURTvn4F8oAPTk6yZ+nXs+IXlRUyCEs5nyxJ+Dg6rits+Hla/f7BphgYrbLT2A3tZkxri8+gpB3SFSalv77/oTIX/MUpFW/XKOpMkJxaEhqxGYwintETjLUcaqoVPgtMfQrsgCUxHRfn+h/qLP58fqm24=
+	t=1756147858; cv=none; b=W3rLoEL80QcGxu82g3vPeuIcpnGb9M2KE0w9DRRigcEx/5HXJK7k1PW5iQ5cjLgl03X8ceMAVoYWhiM+toQAmnntQ36hI/eMclfVvsZEljxIiD/cP5Q1NWjXnETxp3UrJ3jP8lYkZZdLfZsPWq1a70SemvYylJX/LbVZWdB9tqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756147687; c=relaxed/simple;
-	bh=kfLmNjNderRjEUSpgFX2CtsfpkMVTGbPS3oFzNXZnuk=;
+	s=arc-20240116; t=1756147858; c=relaxed/simple;
+	bh=eGPFKabw3mBVn+Cyb2/r6MMnUjQMyUJxa+UCNpAAiog=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WANxEWgT8i2L1Q3UR6T6pwSPpW2hvXbgSjbLRSDf8YvcHc/6Ke9/yDB+qJzl7IDOc9enA6Ahoi3s0gILaSS2Csf9or0PggpFje7CYiMPuHSKLUjK0N9VJrVMry+Rcje8v5tmgoLtmLVgfg47tw7X9WRyAFZr1wbq5Ag9NbLUZSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cj+9mOBS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02D4FC4CEED;
-	Mon, 25 Aug 2025 18:48:06 +0000 (UTC)
+	 To:Cc:Content-Type; b=TqPQKOsyPNMX9Z1r3WDrl7bfx/axfXiaoyiGFWjMAo+N72pWuyOWv2X3RkHbqsq1DX7iB7S2guXJxfxiN/EdAK9ssuA1y39Qza62fQu5Rr5n7U7FR0W8BYAgBK0YKHPU8K6107e3yWckAJO4s8ufZkzSovV01Azn6308iH07mkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDyt2QzX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A312C113D0
+	for <linux-pm@vger.kernel.org>; Mon, 25 Aug 2025 18:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756147687;
-	bh=kfLmNjNderRjEUSpgFX2CtsfpkMVTGbPS3oFzNXZnuk=;
+	s=k20201202; t=1756147858;
+	bh=eGPFKabw3mBVn+Cyb2/r6MMnUjQMyUJxa+UCNpAAiog=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Cj+9mOBS9+8QsLYmHc6OTK/qiimHWdSm30p7Qn7kcjF9eCPWp2Mtk1ejVQf42OACn
-	 UuixcYcn9V5ceV3Elb8DSyz00bx9XkGXBKVs8F4RuXZ9/ig9pIc9niS8m8pIVACTru
-	 sGYz6Yx5CaCFK10FNAlbq9LX6h6fhDJ2XCrauCQUwLY2ynGjtWeiAkpvNqdvDR/1Ik
-	 e2B2Ps2IaK1Aknb/fiVfm04gReUPf7JOsZHBWxtlD83PBXqyHlqlwLqLg7rbxL5FdR
-	 UHWyLHimAc3sOR3Tvq5tttuSBf3orUOLG8RmAQDBn7fEH2o/wlVNd3ob+OVnun5RVm
-	 N16Wg3eBdHjRA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-61bd4e002afso1466992eaf.2;
-        Mon, 25 Aug 2025 11:48:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUwGmOBG9ySH+OGT5QIbTIbjdGJPIfyXeDoyY87Yj2MJ6gYChRsxNZYWH9n7FxhQG7c2E5aV5sHMkdSwnY=@vger.kernel.org, AJvYcCVaAqPsSgMfKdxplsWQu2hARUuCXdhXPkL5WgSClLZTg1LZjcSR3JV4U1tXWV63CYk/hjNQxYbE7jQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbzZWFTXa8zOg09tHlhkIk3M5hO9S7FhdC16mlNYRYYtHHWk59
-	oRb0FE3i+ba/Jf+JhaPlejQGe+1wxD262jfwq4oFhpQYch9pYNp61Y4vvyFnvq6nPiE1lJyYAdD
-	mVXKT0S10oGHrdc74J8+KTU2ruf9cpAg=
-X-Google-Smtp-Source: AGHT+IGvFPWw/GJUY0GJQlcJtrWTQ/xwaprAF7FRCJ5TwDyxv6wYLLTmzGgo9Q+6wSVArhJGjFsDRRDOJ1Ct35pf4n8=
-X-Received: by 2002:a05:6808:1907:b0:433:fd1b:73f1 with SMTP id
- 5614622812f47-43785261777mr5520613b6e.6.1756147686307; Mon, 25 Aug 2025
- 11:48:06 -0700 (PDT)
+	b=WDyt2QzXs6OWAsFzVupkZUolFjqKw0nEqVlb5/T7Sct95JId7tTKm3eeIGSz3kOGk
+	 zWDVWQgRuZwXcgRx04Mhz6pEEd8Jw+ZU8q77Pj/efuwz+c5/L1+Tv4rmkmLIZnSOVI
+	 Fn6SCkgF3lmiK4BpPeIk+ukaRbL2d4YMA6Thb1Cp4aFjjhHYOV2Op5LWVck1qujob3
+	 uXadvfOONBWLRoB59YeS43UkC4jrP12mU9Oi8KvfZXCw6IBSjq4FRfGjy8yaUow44S
+	 rZUeFT9BPFlx6W5UIcTPt4hoFlyk3dA4O+s9GlqGSHhQUMQmmV6nOwlCbbTMVj0eus
+	 mLk6bAB1HX8+w==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-61dc56dcd2dso1269444eaf.3
+        for <linux-pm@vger.kernel.org>; Mon, 25 Aug 2025 11:50:58 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yy1eXc+Ha5Fczq/EyXWtBCrSgAwqFf2juGg2ohGKtDkNDTse0SM
+	voObSoeOZi+EjHZEEkLCKiMm8Ib0yzJRp+2wZtBa0NfNu3qBTATLCYMdmxzAnKY/Un1yOhFcybw
+	qmUNMAS69I1RgXFPo2dBmP6W/y+UGokM=
+X-Google-Smtp-Source: AGHT+IFKV+dItWd4Dl7AR2n/XIPNEAy2mljT+DpJ9DAcYYBUNJL6fRV6/fqTez9cAtTNElppQ9JSyoQ7i6c9A58xB84=
+X-Received: by 2002:a05:6808:10d5:b0:40a:533c:c9cb with SMTP id
+ 5614622812f47-437852cd597mr6842053b6e.38.1756147857702; Mon, 25 Aug 2025
+ 11:50:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250817083636.53872-1-rongqianfeng@vivo.com>
-In-Reply-To: <20250817083636.53872-1-rongqianfeng@vivo.com>
+References: <20250818085124.3897921-1-kaushlendra.kumar@intel.com> <8024bc1249dd1f6ec8496f46a119f009823259be.camel@linux.intel.com>
+In-Reply-To: <8024bc1249dd1f6ec8496f46a119f009823259be.camel@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 25 Aug 2025 20:47:55 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iEk2MeXLabuafZdQ3iWaVeB2srrXgZ35=qacOyOknWQQ@mail.gmail.com>
-X-Gm-Features: Ac12FXyjVCma_9tpvLgr-AFHrBnFBXJVYl_9K7sKvqx2tCe5PKDyQRmbe_-mIdQ
-Message-ID: <CAJZ5v0iEk2MeXLabuafZdQ3iWaVeB2srrXgZ35=qacOyOknWQQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Use vmalloc_array() and vcalloc() to
- improve code
-To: Qianfeng Rong <rongqianfeng@vivo.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 25 Aug 2025 20:50:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g5ieXdFapviYDNjuO8LsnHx_ceW1kUaDG=zR+siVsKEA@mail.gmail.com>
+X-Gm-Features: Ac12FXwMfApkb-te9RHgrHYLexHL5-sMagRrwS_0ngLm4hGmuoqehXsQfeTElFA
+Message-ID: <CAJZ5v0g5ieXdFapviYDNjuO8LsnHx_ceW1kUaDG=zR+siVsKEA@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: Remove unnecessary address-of operators
+To: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 17, 2025 at 10:36=E2=80=AFAM Qianfeng Rong <rongqianfeng@vivo.c=
-om> wrote:
+On Mon, Aug 18, 2025 at 2:28=E2=80=AFPM Artem Bityutskiy
+<artem.bityutskiy@linux.intel.com> wrote:
 >
-> Remove array_size() calls and replace vmalloc() and vzalloc() with
-> vmalloc_array() and vcalloc() respectively to simplify the code in
-> save_compressed_image() and load_compressed_image().  vmalloc_array()
-> is also optimized better, resulting in less instructions being used,
-> and vmalloc_array() handling overflow is more concise [1].
+> On Mon, 2025-08-18 at 14:21 +0530, Kaushlendra Kumar wrote:
+> > Remove redundant address-of operators (&) when assigning the intel_idle
+> > function pointer to the .enter field in cpuidle_state structures.in C,
+> > the & is not needed for function names. This change improves code
+> > consistency and readability by using the more conventional form without
+> > the & operator.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+> > ---
 >
-> [1]: https://lore.kernel.org/lkml/abc66ec5-85a4-47e1-9759-2f60ab111971@vi=
-vo.com/
->
-> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
-> ---
->  kernel/power/swap.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index ad13c461b657..0beff7eeaaba 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -712,7 +712,7 @@ static int save_compressed_image(struct swap_map_hand=
-le *handle,
->                 goto out_clean;
->         }
->
-> -       data =3D vzalloc(array_size(nr_threads, sizeof(*data)));
-> +       data =3D vcalloc(nr_threads, sizeof(*data));
->         if (!data) {
->                 pr_err("Failed to allocate %s data\n", hib_comp_algo);
->                 ret =3D -ENOMEM;
-> @@ -1225,14 +1225,14 @@ static int load_compressed_image(struct swap_map_=
-handle *handle,
->         nr_threads =3D num_online_cpus() - 1;
->         nr_threads =3D clamp_val(nr_threads, 1, CMP_THREADS);
->
-> -       page =3D vmalloc(array_size(CMP_MAX_RD_PAGES, sizeof(*page)));
-> +       page =3D vmalloc_array(CMP_MAX_RD_PAGES, sizeof(*page));
->         if (!page) {
->                 pr_err("Failed to allocate %s page\n", hib_comp_algo);
->                 ret =3D -ENOMEM;
->                 goto out_clean;
->         }
->
-> -       data =3D vzalloc(array_size(nr_threads, sizeof(*data)));
-> +       data =3D vcalloc(nr_threads, sizeof(*data));
->         if (!data) {
->                 pr_err("Failed to allocate %s data\n", hib_comp_algo);
->                 ret =3D -ENOMEM;
-> --
+> Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Applied as 6.18 material with some edits in the changelog, thanks!
+Applied as 6.18 material, thanks!
 
