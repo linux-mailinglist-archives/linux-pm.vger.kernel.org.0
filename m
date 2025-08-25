@@ -1,132 +1,104 @@
-Return-Path: <linux-pm+bounces-33025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 117D3B340D2
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 15:35:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 039EAB34238
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 15:55:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7CD17AEC6D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 13:31:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FF12188677C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 13:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3152777E8;
-	Mon, 25 Aug 2025 13:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708DE2EE296;
+	Mon, 25 Aug 2025 13:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FtNxSrWf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3MAQ/Bb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA40F2765CC;
-	Mon, 25 Aug 2025 13:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465C12ECE8D;
+	Mon, 25 Aug 2025 13:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756128739; cv=none; b=AxOQZWFdPRZ5NIVPBmhmpBW32eVM9zlT6OCQsdWXvru/ucnXD1sFn6I9sdVP6Q7DVq9FEqNqtExz3mnQ5Hmmkf2hGu2oY8LmR6yn+zbaVS+VgG7pJHPHrjMKB0+tUoNT4bntssjlEL+d251XjzCnZOnuVxqJp06JrK5l8/tcdbc=
+	t=1756129642; cv=none; b=FMl3MaN0C9sS9RfQ7YN42WcbEb9fMeOeojdkMlCG02d3jh/bnZw3TgTfvwtMlWbaBG9jIyVVHu4Ln2l0R5t5z1M2N1zZBF/gu81t6+vQ0PauxL5aKMr3HclyZgVy2rc20ODj16ISIUFPFiDZSaPlD9/1Yld2N3gwgIAnI9Qw2kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756128739; c=relaxed/simple;
-	bh=XaTIaj6qHhD1hUA7V34cPlXuSaGIqHi/61efSmJGlLc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ttpG0lw1CYM+QomZZn5nWwbr2rGDyLpq1ATPp52W4lCeXyPeAf4AsW6RhNL8q9kIlu+goXoD0EVZytrt9Y8415skukN02iKBpESnx5jHl48cBwBLEWloynnWLG/fQkDlFbNo+kaes+u7r8ODGuAhu7aEklfUilhk9awaQQnMd40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FtNxSrWf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E3AC4CEED;
-	Mon, 25 Aug 2025 13:32:17 +0000 (UTC)
+	s=arc-20240116; t=1756129642; c=relaxed/simple;
+	bh=hHSPfrmbmvv7OCp2khlK0xKFhHraFQvjruwGJ40eNTI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GfIQbOntujEmdZzQj1BntOh1dzdgOkH8IyxyEuApzlF6ztXN8FKKIOOEoFAY2V+2OhaJnpSvAOYHHQYdPEL+zwHO594u0G44F9CE1XxW27XeHi9XXwZ087YjPv0s8SGeQ5HJGwqyT0YjPRukpXmFIaEryTXIdpU0GmexuK25rTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3MAQ/Bb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C42F1C116D0;
+	Mon, 25 Aug 2025 13:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756128738;
-	bh=XaTIaj6qHhD1hUA7V34cPlXuSaGIqHi/61efSmJGlLc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FtNxSrWfOi+pHEA2JMEoer3JvCXgm4+JALquieVGBhzcgcZX6xPe6+HKmCeaCR7Df
-	 ARojhsZyh+gLDLg2pPB90qnk+L2gWP7/BKy4UHm+F//Yx+M1VWG4xyuou1OGoTuJ1Q
-	 kdBcdZKZJTHwDf7mjErpJ1XNjJeGvcXDc7FV3Yu7tJgBpnE/hjhIvDF7nbvTUPrqnz
-	 v6j9/f3ZbGaVZKb3/y3Xn+omkBuRRlUDaE3p0PZHtXVc6I/BbXMKZk06WgVPNNH5hg
-	 1OLdkU4EsNif2X2rKBV3C6st+84w7PHsyN7wloaVIpuwMnRC/RkjoDxwSuwqjDj4Ew
-	 /eQWrCwiupdpg==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject:
- [PATCH v2 3/3] thermal: gov_step_wise: Allow cooling level to be reduced
- earlier
-Date: Mon, 25 Aug 2025 15:31:53 +0200
-Message-ID: <1947735.tdWV9SEqCh@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <12745610.O9o76ZdvQC@rafael.j.wysocki>
-References: <12745610.O9o76ZdvQC@rafael.j.wysocki>
+	s=k20201202; t=1756129641;
+	bh=hHSPfrmbmvv7OCp2khlK0xKFhHraFQvjruwGJ40eNTI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=f3MAQ/BbBZGGw6bigPh1cdJG9ClLgDPYXSz/eD87KzMaH6H7LP8589NmqCX9Do5KN
+	 F9XmrafdEIAlvjlKY99n25/cmdQzbWDodIOcEX6nt6cDW4B6tkoPGKqkxBZ6qXB9fl
+	 SAH7Ajs40dNf81wLxds1kkrZF4No39NJtDiZcuF05G2mnOEcLPGgZ3WSKbpmDbDwjk
+	 fX0rmyGCaj7lc/Lqzc5alrHQGbzvmOmyXpPM0BaVMCS8sok6dG7R8qWppgZayRhMqM
+	 vONLTa8dQohzQOcIz/JR1L9+FryDE4ejWHjlXkYEs2mbtm2cTE+gSEtnLtxJ1RR7iB
+	 eGaQci5rPWjTA==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-30ccec50c0aso3842130fac.3;
+        Mon, 25 Aug 2025 06:47:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWPdVKoTFnlDi8UzezqFVW5zjq+LpcLegucc2g4xyLEqhyhfxfP/1L4pJRmRf0ziV0j7qJ6AZJ3vnTLsY0=@vger.kernel.org, AJvYcCXtUV3T5cmlUU+3Y5fmSeLcU0YefBW1oPNADKNEh6s1oOeG8SugvaOwPCsWwQOIjk2LiECKDF1ruwU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIKKHcOvyWPxWwtFXkt0yrOGTvLMqYVgQuLqWwGFnDX3dOc7bg
+	70rCjC7K/sSadLqeczIdBZlc9/dNhTXsX5QZHgonDVi7uDlwVw+JhGCkkM9JtEZlLKjWEXKBvvQ
+	G5OKciouc6v3BX0qOAyC6Sie4gg0/W/o=
+X-Google-Smtp-Source: AGHT+IENfArxDwcDRJo2lK2NvV64pY5qmnRTC1TBytjXGhXffl4QzdO6EyUnlukG8sh5XZBmiJTvjZoxs4yRL/krOUk=
+X-Received: by 2002:a05:6871:460b:b0:30c:9b7e:16e9 with SMTP id
+ 586e51a60fabf-314dce84b34mr5336392fac.30.1756129641116; Mon, 25 Aug 2025
+ 06:47:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20250825132315.75521-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20250825132315.75521-1-srinivas.pandruvada@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 25 Aug 2025 15:47:10 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hfECLZ-SvQYc-VvgEps-=YC3toNat1E9DEFD-dRC0S-g@mail.gmail.com>
+X-Gm-Features: Ac12FXwTGq4qIaNgQEwex8Sg8P-vwwZSdUZQVf33s7gerDD6sYlle-N_1zr1Y_o
+Message-ID: <CAJZ5v0hfECLZ-SvQYc-VvgEps-=YC3toNat1E9DEFD-dRC0S-g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] thermal: intel: int340x: New power slider interface
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Aug 25, 2025 at 3:23=E2=80=AFPM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Using the Linux platform-profile API, add support for system-wide energy
+> performance preferences. This feature is enabled for Panther Lake CPUs.
+>
+> v2:
+> - Merge patch 5/5 to 1/5 (now 1/4)
+> - Some minor code changes
+>
+> Srinivas Pandruvada (4):
+>   thermal: intel: int340x: Add support for power slider
+>   thermal: intel: int340x: Enable power slider interface for Panther
+>     Lake
+>   thermal: intel: int340x: Add module parameter for balanced Slider
+>   thermal: intel: int340x: Add module parameter to change slider offset
+>
+>  drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
+>  .../thermal/intel/int340x_thermal/Makefile    |   1 +
+>  .../processor_thermal_device.c                |  20 ++
+>  .../processor_thermal_device.h                |   6 +
+>  .../processor_thermal_device_pci.c            |   3 +-
+>  .../processor_thermal_soc_slider.c            | 283 ++++++++++++++++++
+>  6 files changed, 313 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_therm=
+al_soc_slider.c
+>
+> --
 
-The current behavior of the Step-wise thermal governor is to increase
-the cooling level one step at a time after trip point threshold passing
-by thermal zone temperature until the temperature stops to rise and then
-do nothing until it falls down below the (possibly new) trip point
-threshold, at which point the cooling level is reduced straight to the
-applicable minimum.
-
-While this generally works, it is not in agreement with the throttling
-logic description comment in step_wise_manage() any more after some
-relatively recent changes, and in the case of passive cooling, it may
-lead to undesirable performance oscillations between high and low
-levels.
-
-For this reason, modify the governor's cooling device state selection
-function, get_target_state(), to reduce cooling by one level even if
-the temperature is still above the thermal zone threshold, but the
-temperature has started to fall down.  However, ensure that the cooling
-level will remain above the applicable minimum in that case to pull
-the zone temperature further down, possibly until it falls below the
-trip threshold (which may now be equal to the low temperature of the
-trip).
-
-Doing so should help higher performance to be restored earlier in some
-cases which is desirable especially for passive trip points with
-relatively high hysteresis values.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/gov_step_wise.c |   15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -20,7 +20,9 @@
-  * If the temperature is higher than a trip point,
-  *    a. if the trend is THERMAL_TREND_RAISING, use higher cooling
-  *       state for this trip point
-- *    b. if the trend is THERMAL_TREND_DROPPING, do nothing
-+ *    b. if the trend is THERMAL_TREND_DROPPING, use a lower cooling state
-+ *       for this trip point, but keep the cooling state above the applicable
-+ *       minimum
-  * If the temperature is lower than a trip point,
-  *    a. if the trend is THERMAL_TREND_RAISING, do nothing
-  *    b. if the trend is THERMAL_TREND_DROPPING, use the minimum applicable
-@@ -51,6 +53,17 @@
- 	if (throttle) {
- 		if (trend == THERMAL_TREND_RAISING)
- 			return clamp(cur_state + 1, instance->lower, instance->upper);
-+
-+		/*
-+		 * If the zone temperature is falling, the cooling level can
-+		 * be reduced, but it should still be above the lower state of
-+		 * the given thermal instance to pull the temperature further
-+		 * down.
-+		 */
-+		if (trend == THERMAL_TREND_DROPPING)
-+			return clamp(cur_state - 1,
-+				     min(instance->lower + 1, instance->upper),
-+				     instance->upper);
- 	} else if (trend == THERMAL_TREND_DROPPING) {
- 		if (cur_state <= instance->lower)
- 			return THERMAL_NO_TARGET;
-
-
-
+All patches applied as 6.18 material with a few minor adjustments, thanks!
 
