@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-33022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 493E0B3409C
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B2E5B3409D
 	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 15:23:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC3A048644C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 13:23:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A10C207C7C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 13:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D672A275B1F;
-	Mon, 25 Aug 2025 13:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 152EE276057;
+	Mon, 25 Aug 2025 13:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EhNLFZty"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ioRcutCW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A019274B22;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632FD274FD0;
 	Mon, 25 Aug 2025 13:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756128206; cv=none; b=P2KPhHp29VctlrRhTQ9MddNtGakt0KbpqQyXZm/5PDiN++rbDPoahLDaLPi29Kc6d1DzY7yonB10q/XhRXTCGE6G4Mw0V3kAAbgTXkWxjricKu5Ae8QH0V+AI6DfvNw7++OXYMMHoiS3nK87vFgE6lmib41RUyDqA2ru5ZJ5LVs=
+	t=1756128207; cv=none; b=Ad1M82ou+LYg3q63gVhwEnVAr7w+UD41+4diTnsKX4g0RbHSsZ4Hf6VR+T3MGxZtL6ILrFokFi3tgezWOidQAatRogdIKbYavd6ZOG/tv/k9FNcFuK7cshuvTmqDVeOzONM0kz+g6ciWIZPit3DxQrpKUo+XlmI4MlHQPwKGSVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756128206; c=relaxed/simple;
-	bh=Zmq65eKiHaG1U4j+hmAYUkDFGLE9ww0rzKllwMKYnHE=;
+	s=arc-20240116; t=1756128207; c=relaxed/simple;
+	bh=ccYU6C74a+JTG6kZjCkh15K+sN1WrW9c0TizBulC32M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s4bRqyaYuQKCyCryuL69uQ1kSmc7/t6AZTxfOm+RlVP4UAovPAXyGVdwPNkb7fjpzBbuHwEx0Ha3DxRXd5SmfRvmbfvNFsZFVJDPGuSDNHpJdYIiKOnuzht+6ug4M4CjJUKlP9DnKJFGZ3L26yskzy76f1tVQhtzj5OdKF4MbUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EhNLFZty; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=cbnLebHYaRENFm0TBhKgJPBOM+y/nEAsuESb3LcI/rhAvZDF3LaWpF3R+XM1O3EvHEgRs8NS5aVrdpu+cBOpmtqmqncDaTkSbzFKiRAIBvPofxtvGffkmm9JzIw6jBlj7n3V1WL3xGDpyGExWPVygWy48dttnxrsTcJVPeRykTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioRcutCW; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,26 +36,26 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1756128205; x=1787664205;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Zmq65eKiHaG1U4j+hmAYUkDFGLE9ww0rzKllwMKYnHE=;
-  b=EhNLFZty1j8JWoh6I8ssIxiD5HxxRseUe9kqD0oHSP2pyrrkZil0LqX5
-   LW+a88DINfX1KLVyNOYAaMteF4U7E+8yKuSJGcL4QbbqdIr4FMAgIwszj
-   FV3d2HMe3b5ivIfbab7YcMB8S2MiMdqA/keVF0jUhrnqCEkHGHAAfBqPw
-   dDc10B6dcP6fZk2bjJyyqCjQczV1yN1QoBaHYYX0lvD4fsoQNDykQSDck
-   fuxaqaiUSTYWUA0QoWJzU9Zkgr1KsqfMCHIZ+fIHte7w5f2LgtWmIDMJT
-   T5jec3roPEYzW+yn4oHH6EpuAoNDY3/jQqNfOxJmKYhAD4k5ciBoItlu2
-   A==;
-X-CSE-ConnectionGUID: xO1efpQKSPyKBg0mjAE5dg==
-X-CSE-MsgGUID: HDwPs2flTMuPI6nWZvejqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="58048405"
+  bh=ccYU6C74a+JTG6kZjCkh15K+sN1WrW9c0TizBulC32M=;
+  b=ioRcutCWo7mCP41sm71c2GcDd6tRJGTUfpsGKEKqTBNdB49RbONG1Ejh
+   JBcer9Lbv6n3gE0DEVD49/fx8JirfuyNPuPUwb1sdaJZZM4bAtSGB0Ajy
+   tJSEKRDpB8WP3jQWJsg1uUawgFb4l3m39qG2OkhAkxUtx+XYfHUGKVLXS
+   3AUUsfs4Yf2WSNND5jlsoZ3F3VwGE+FntF6zjh/9PlsGrGZUhOemt7LmK
+   g4b1I/SpWU83SxvMgzU0FVKLLFU1H79boNm7FLJueOi3K+b1x3mAusBqI
+   y+mRzpa4uq4NZacDqSh5QZ39b6jvftfXvQHkMghUx37YOceqjUVt8S6dE
+   Q==;
+X-CSE-ConnectionGUID: 8/cweqmLRDSWdI8vtsufiQ==
+X-CSE-MsgGUID: kgozc2KlRHSRI2zLfR/Jcg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="58048409"
 X-IronPort-AV: E=Sophos;i="6.18,213,1751266800"; 
-   d="scan'208";a="58048405"
+   d="scan'208";a="58048409"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 06:23:21 -0700
-X-CSE-ConnectionGUID: asJ8o4JfRFC07wtZgVX4/Q==
-X-CSE-MsgGUID: uFc/+FGqQV+zTpFIkbPCsA==
+X-CSE-ConnectionGUID: ZmzszRI5Q1+NU5LTSuXwVw==
+X-CSE-MsgGUID: TYYHUkuwR6qMCeSJdL8rVg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,213,1751266800"; 
-   d="scan'208";a="169485280"
+   d="scan'208";a="169485283"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
   by orviesa008.jf.intel.com with ESMTP; 25 Aug 2025 06:23:21 -0700
 From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
@@ -65,9 +65,9 @@ To: rafael@kernel.org,
 Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 3/4] thermal: intel: int340x: Add module parameter for balanced Slider
-Date: Mon, 25 Aug 2025 06:23:14 -0700
-Message-ID: <20250825132315.75521-4-srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 4/4] thermal: intel: int340x: Add module parameter to change slider offset
+Date: Mon, 25 Aug 2025 06:23:15 -0700
+Message-ID: <20250825132315.75521-5-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250825132315.75521-1-srinivas.pandruvada@linux.intel.com>
 References: <20250825132315.75521-1-srinivas.pandruvada@linux.intel.com>
@@ -79,83 +79,99 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-By default, the SoC slider value for the "balanced" platform profile is
-set to 3. This update introduces a new module parameter, allowing users
-to modify this default value.
+SoC slider value is set by the user (or the default when user has not
+modified it). To enhance power efficiency dynamically, the firmware can
+optionally auto-adjust the slider value based on the current workload.
+This adjustment is governed by an additional parameter known as the
+"slider offset". This offset permits the firmware to increase the slider
+value up to and including "SoC slider + slider offset".
 
-The module parameter can be specified during load time to set a custom
-slider value for the "balanced" profile. If the module parameter is not
-specified at load time and is updated later, the new value will only take
-effect after the next write of "balanced" to the sysfs "profile"
-attribute.
+Add a module parameter to specify this "slier offset" value.
+
+By default, the SoC slider offset is set to 0. This means that SoC is not
+allowed to switch slider position.
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
 v2:
-- Edit description to be more clear
+- Edit description and add comment in the code for the slider_offset
 
- .../processor_thermal_soc_slider.c            | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../processor_thermal_soc_slider.c            | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
 diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c
-index 3225cb38588c..393ce5246447 100644
+index 393ce5246447..0d79f6a8cb50 100644
 --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c
 +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c
-@@ -53,6 +53,43 @@ static u8 slider_values[] = {
- 	[SOC_POWER_SLIDER_POWERSAVE] = SOC_SLIDER_VALUE_MAXIMUM,
- };
+@@ -90,6 +90,47 @@ static const struct kernel_param_ops slider_def_balance_ops = {
+ module_param_cb(slider_balance, &slider_def_balance_ops, NULL, 0644);
+ MODULE_PARM_DESC(slider_balance, "Set slider default value for balance.");
  
-+/* Lock to protect module param updates */
-+static DEFINE_MUTEX(slider_param_lock);
++static u8 slider_offset;
 +
-+static int slider_balanced_param = SOC_SLIDER_VALUE_BALANCE;
-+
-+static int slider_def_balance_set(const char *arg, const struct kernel_param *kp)
++static int slider_def_offset_set(const char *arg, const struct kernel_param *kp)
 +{
-+	u8 slider_val;
++	u8 offset;
 +	int ret;
 +
 +	guard(mutex)(&slider_param_lock);
 +
-+	ret = kstrtou8(arg, 16, &slider_val);
++	ret = kstrtou8(arg, 16, &offset);
 +	if (!ret) {
-+		if (slider_val > SOC_SLIDER_VALUE_MAXIMUM)
++		if (offset > SOC_SLIDER_VALUE_MAXIMUM)
 +			return -EINVAL;
 +
-+		slider_balanced_param = slider_val;
++		slider_offset = offset;
 +	}
 +
 +	return ret;
 +}
 +
-+static int slider_def_balance_get(char *buf, const struct kernel_param *kp)
++static int slider_def_offset_get(char *buf, const struct kernel_param *kp)
 +{
 +	guard(mutex)(&slider_param_lock);
-+	return sysfs_emit(buf, "%02x\n", slider_values[SOC_POWER_SLIDER_BALANCE]);
++	return sysfs_emit(buf, "%02x\n", slider_offset);
 +}
 +
-+static const struct kernel_param_ops slider_def_balance_ops = {
-+	.set = slider_def_balance_set,
-+	.get = slider_def_balance_get,
++static const struct kernel_param_ops slider_offset_ops = {
++	.set = slider_def_offset_set,
++	.get = slider_def_offset_get,
 +};
 +
-+module_param_cb(slider_balance, &slider_def_balance_ops, NULL, 0644);
-+MODULE_PARM_DESC(slider_balance, "Set slider default value for balance.");
++/*
++ * To enhance power efficiency dynamically, the firmware can optionally
++ * auto-adjust the slider value based on the current workload. This
++ * adjustment is controller by the "slider_offset" module parameter.
++ * This offset permits the firmware to increase the slider value
++ * up to and including "SoC slider + slider offset,".
++ */
++module_param_cb(slider_offset, &slider_offset_ops, NULL, 0644);
++MODULE_PARM_DESC(slider_offset, "Set slider offset.");
 +
  /* Convert from platform power profile option to SoC slider value */
  static int convert_profile_to_power_slider(enum platform_profile_option profile)
  {
-@@ -115,6 +152,10 @@ static int power_slider_platform_profile_set(struct device *dev,
- 	if (!proc_priv)
- 		return -EOPNOTSUPP;
+@@ -130,6 +171,8 @@ static inline void write_soc_slider(struct proc_thermal_device *proc_priv, u64 v
+ 	writeq(val, proc_priv->mmio_base + SOC_POWER_SLIDER_OFFSET);
+ }
  
-+	guard(mutex)(&slider_param_lock);
++#define SLIDER_OFFSET_MASK	GENMASK_ULL(6, 4)
 +
-+	slider_values[SOC_POWER_SLIDER_BALANCE] = slider_balanced_param;
+ static void set_soc_power_profile(struct proc_thermal_device *proc_priv, int slider)
+ {
+ 	u64 val;
+@@ -137,6 +180,11 @@ static void set_soc_power_profile(struct proc_thermal_device *proc_priv, int sli
+ 	val = read_soc_slider(proc_priv);
+ 	val &= ~SLIDER_MASK;
+ 	val |= (FIELD_PREP(SLIDER_MASK, slider) | BIT(SLIDER_ENABLE_BIT));
 +
- 	slider = convert_profile_to_power_slider(profile);
- 	if (slider < 0)
- 		return slider;
++	/* Set the slider offset from module params */
++	val &= ~SLIDER_OFFSET_MASK;
++	val |= FIELD_PREP(SLIDER_OFFSET_MASK, slider_offset);
++
+ 	write_soc_slider(proc_priv, val);
+ }
+ 
 -- 
 2.43.0
 
