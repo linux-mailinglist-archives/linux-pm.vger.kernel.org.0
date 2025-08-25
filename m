@@ -1,191 +1,238 @@
-Return-Path: <linux-pm+bounces-33052-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33053-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94C48B34C24
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 22:36:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0587CB34DDD
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 23:23:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ABAA244188
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 20:36:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF5051A849F3
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 21:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFC9284678;
-	Mon, 25 Aug 2025 20:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CC0298CA6;
+	Mon, 25 Aug 2025 21:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QWoz/fFO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UcgMEh3p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9686A284B37;
-	Mon, 25 Aug 2025 20:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E08628D836;
+	Mon, 25 Aug 2025 21:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756154154; cv=none; b=FE01sDagoupagEvGv8BRlvza2T/DcopfToKp/i8C+W4OMLc0hYLDBBIlBt0p9ki3FaNfWJt4CJAHi6rxDikoOP0qIwKH9v/MnKmQ43ZJkXxJ12JUYJLvhAot/x+eJngymhQaPVIV0ZwausDDJAwZYb9KWfwViMLgZYS1GKzvloU=
+	t=1756156975; cv=none; b=LP3mZgZGTwygbRVKRYNKBKz1ZaLAf+ke/ZgXm7hI76LStoUX2vaXbswHRu36qLQ3S4QGBpspFVKnyYws0qaO/IlAZJBLMUcfXBXxnQXz4p/l5kGDrLsjctdVLRsWA4fRAT62hXQl1TS1dztMwycao+bmYUEWW09K+eYzEa36e9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756154154; c=relaxed/simple;
-	bh=Hd1/AX70clEjOMSaafYFRMp9Rq2vMcWsM0xWeZ/8yDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ni8r6fVnpWfoBETfh95D6FvWghv8QngAPyJldzEUoWrTl9tv0gX8eQBZSbeYCG20ocp66u85+k8ED0PXlnqs+pQgsYvUpGO1KF5QCbFfFFfUegZ8YXHNC6wWpSMiJn3uaSBDMLVTfq4iYorUw3BU+qDCuZ/ynuFGagCWFxOwZOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QWoz/fFO; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756154150; x=1787690150;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Hd1/AX70clEjOMSaafYFRMp9Rq2vMcWsM0xWeZ/8yDE=;
-  b=QWoz/fFO5DGTJ5SbQbMAf7ESHn1zYCSSinZBvEDEdPowyQn9sjglQKrm
-   TN3pCSgOLh+Q8xGfwZ5LxMLW+X9/ZQLjpXiG0R/Gj/+LlPmlTThoyCgbo
-   /3YDU4pXuTRHWa/cQDaOq7pGWbzmdwg5tvhxTvaz5+OZcaR+Uh84tv2U0
-   WxMurqeemnhLUNlVyM017TOzrVrPQpiDqhk1wWf+hqOMXlT74CNgXDUXL
-   nBg6KVN9j3r86+r+slher9WIwe34A0Lzt8HjLkO+4shcXrAp/V5pncKMK
-   +dlTSLZWmknQtOPn5rtsZjcZdFIzlqqrMWqqPZGvoQ/8oWqDwVQLXxHkV
-   w==;
-X-CSE-ConnectionGUID: PnpozbEUTeCzzEu8s/fmVQ==
-X-CSE-MsgGUID: S3HgjMHUR6avouvKuCyAxw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="57394815"
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="57394815"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 13:35:49 -0700
-X-CSE-ConnectionGUID: HmiRSrrQRP23HQYltdsxwA==
-X-CSE-MsgGUID: g0OZAn6jRgaRB4ATXbMAYA==
-X-ExtLoop1: 1
-Received: from sramkris-mobl1.amr.corp.intel.com (HELO debox1-desk4.hsd1.or.comcast.net) ([10.124.222.235])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 13:35:48 -0700
-From: "David E. Box" <david.e.box@linux.intel.com>
-To: rafael@kernel.org,
-	bhelgaas@google.com,
-	vicamo.yang@canonical.com,
-	kenny@panix.com,
-	ilpo.jarvinen@linux.intel.com,
-	nirmal.patel@linux.intel.com,
-	mani@kernel.org
-Cc: "David E. Box" <david.e.box@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH V3 2/2] PCI: vmd: Use pci_host_set_default_pcie_link_state() to set ASPM defaults
-Date: Mon, 25 Aug 2025 13:35:23 -0700
-Message-ID: <20250825203542.3502368-2-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250825203542.3502368-1-david.e.box@linux.intel.com>
-References: <20250825203542.3502368-1-david.e.box@linux.intel.com>
+	s=arc-20240116; t=1756156975; c=relaxed/simple;
+	bh=l+302sdoxhUbhMzKkT4wkwdq4eHKUpQjmtWZfxKoga8=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=e1RWEGt1XB1oUgw8C0e7B30RnCBIh76P9bG1phI+zUi7z/ujabZwsyEWfG/Li+cR5U21AHjCq+rW9Etzt+4ckPG+sFO0V4G0Rl7EK42AMnEyizwGAC49ebEJ/aShuCUUxOYBE8JnHcpZzRTa2zgJON84VPrwfb+xP1KjlGQ0Gjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UcgMEh3p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B47C4CEED;
+	Mon, 25 Aug 2025 21:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756156975;
+	bh=l+302sdoxhUbhMzKkT4wkwdq4eHKUpQjmtWZfxKoga8=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=UcgMEh3p+CplQZ32HJ2eXNNfERFHlx365eJRZvmWsrUE8QEntcuBZdVWBWBjL6Fck
+	 +uwxzDPaocOckAC/Q0YdbYr+xE/kKh/E+NLeDYF1RdVAAL08h6p0TIxvgoLk2hfbDB
+	 ZpedqxOv/j02bonBagtjTvG+WOhcW/p+d7J4zqw9ESEKT7w9jrLh7F3tFEXUo3uESj
+	 NNl5HjdOrcGIeOX7nZH8Xy7HGDVV9JCZ4edcm5RMfN3QSoy8Mk9JQf5l+OSdcKkd8n
+	 KGGULcvX7dr46Ew4nmlswKf/6+jHQJOzLvk5mrkkQ8r6Eg9glMpjmQeg48exFXRMx1
+	 urbRBOcojTj3Q==
+Date: Mon, 25 Aug 2025 16:22:54 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-pm@vger.kernel.org, kernel@pengutronix.de, primoz.fiser@norik.com, 
+ davem@davemloft.net, festevam@gmail.com, alexandre.torgue@foss.st.com, 
+ Markus.Niebel@ew.tq-group.com, krzk+dt@kernel.org, shawnguo@kernel.org, 
+ edumazet@google.com, devicetree@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, s.hauer@pengutronix.de, 
+ linux-arm-kernel@lists.infradead.org, pabeni@redhat.com, Frank.Li@nxp.com, 
+ kuba@kernel.org, othacehe@gnu.org, linux-kernel@vger.kernel.org, 
+ alexander.stein@ew.tq-group.com, mcoquelin.stm32@gmail.com, 
+ frieder.schrempf@kontron.de, conor+dt@kernel.org, linux@ew.tq-group.com, 
+ imx@lists.linux.dev, andrew+netdev@lunn.ch, netdev@vger.kernel.org, 
+ richardcochran@gmail.com
+To: Joy Zou <joy.zou@nxp.com>
+In-Reply-To: <20250825091223.1378137-1-joy.zou@nxp.com>
+References: <20250825091223.1378137-1-joy.zou@nxp.com>
+Message-Id: <175615562513.578111.8377939047997958239.robh@kernel.org>
+Subject: Re: [PATCH v9 0/6] Add i.MX91 platform support
 
-Now that pci_host_set_default_pcie_link_state() exists, set the VMD child
-domain with PCIE_LINK_STATE_ALL at bridge creation so core ASPM uses those
-defaults during ASPM and CLKPM capability init.
 
-Also remove the unneeded pci_set_power_state_locked(pdev, PCI_D0) and
-pci_enable_link_state_locked() calls now that the links are configured
-during enumeration.
+On Mon, 25 Aug 2025 17:12:17 +0800, Joy Zou wrote:
+> The design of i.MX91 platform is very similar to i.MX93.
+> Extracts the common parts in order to reuse code.
+> 
+> The mainly difference between i.MX91 and i.MX93 is as follows:
+> - i.MX91 removed some clocks and modified the names of some clocks.
+> - i.MX91 only has one A core.
+> - i.MX91 has different pinmux.
+> 
+> ---
+> Changes for v9:
+> - rebased onto commit 0f4c93f7eb86 ("Add linux-next specific files for 20250822")
+>   to align with latest changes.
+> - there is no functional changes for these patches.
+> - Link to v8: https://lore.kernel.org/imx/20250806114119.1948624-1-joy.zou@nxp.com/
+> 
+> Changes for v8:
+> - add Reviewed-by tag for patch #2/3/4/5/6/7/8/9/11.
+> - modify commit message for patch #10.
+> - move imx91 before imx93 in Makefile for patch #6.
+> - modify the commit message to keep wrap at 75 chars for patch #5.
+> - Link to v7: https://lore.kernel.org/imx/20250728071438.2332382-1-joy.zou@nxp.com/
+> 
+> Changes for v7:
+> - Optimize i.MX91 num_clks hardcode with ARRAY_SIZE()for patch #10.
+> - Add new patch in order to optimize i.MX93 num_clks hardcode
+>   with ARRAY_SIZE() for patch #9.
+> - remove this unused comments for patch #6.
+> - align all pinctrl value to the same column for patch #6.
+> - add aliases because remove aliases from common dtsi for patch #6.
+> - remove fec property eee-broken-1000t from imx91 and imx93 board dts
+>   for patch #6 and #7.
+> - The aliases are removed from common.dtsi because the imx93.dtsi
+>   aliases are removed for patch #4.
+> - Add new patch that move aliases from imx93.dtsi to board dts for
+>   patch #3.
+> - These aliases aren't common, so need to drop in imx93.dtsi for patch #3.
+> - Only add aliases using to imx93 board dts for patch #3.
+> - patch #3 changes come from review comments:
+>   https://lore.kernel.org/imx/4e8f2426-92a1-4c7e-b860-0e10e8dd886c@kernel.org/
+> - add clocks constraints in the if-else branch for patch #2.
+> - reorder the imx93 and imx91 if-else branch for patch #2.
+> - patch #2 changes come from review comments:
+>   https://lore.kernel.org/imx/urgfsmkl25woqy5emucfkqs52qu624po6rd532hpusg3fdnyg3@s5iwmhnfsi26/
+> - add Reviewed-by tag for patch #2.
+> - Link to v6: https://lore.kernel.org/imx/20250623095732.2139853-1-joy.zou@nxp.com/
+> 
+> Changes for v6:
+> - add changelog in per patch.
+> - correct commit message spell for patch #1.
+> - merge rename imx93.dtsi to imx91_93_common.dtsi and move i.MX93
+>   specific part from imx91_93_common.dtsi to imx93.dtsi for patch #3.
+> - modify the commit message for patch #3.
+> - restore copyright time and add modification time for common dtsi for
+>   patch #3.
+> - remove unused map0 label in imx91_93_common.dtsi for patch #3.
+> - remove tmu related node for patch #4.
+> - remove unused regulators and pinctrl settings for patch #5.
+> - add new modification for aliases change patch #6.
+> - Link to v5: https://lore.kernel.org/imx/20250613100255.2131800-1-joy.zou@nxp.com/
+> 
+> Changes for v5:
+> - rename imx93.dtsi to imx91_93_common.dtsi.
+> - move imx93 specific part from imx91_93_common.dtsi to imx93.dtsi.
+> - modify the imx91.dtsi to use imx91_93_common.dtsi.
+> - add new the imx93-blk-ctrl binding and driver patch for imx91 support.
+> - add new net patch for imx91 support.
+> - change node name codec and lsm6dsm into common name audio-codec and
+>   inertial-meter, and add BT compatible string for imx91 board dts.
+> - Link to v4: https://lore.kernel.org/imx/20250121074017.2819285-1-joy.zou@nxp.com/
+> 
+> Changes for v4:
+> - Add one imx93 patch that add labels in imx93.dtsi
+> - modify the references in imx91.dtsi
+> - modify the code alignment
+> - remove unused newline
+> - delete the status property
+> - align pad hex values
+> - Link to v3: https://lore.kernel.org/imx/20241120094945.3032663-1-pengfei.li_1@nxp.com/
+> 
+> Changes for v3:
+> - Add Conor's ack on patch #1
+> - format imx91-11x11-evk.dts with the dt-format tool
+> - add lpi2c1 node
+> - Link to v2: https://lore.kernel.org/imx/20241118051541.2621360-1-pengfei.li_1@nxp.com/
+> 
+> Changes for v2:
+> - change ddr node pmu compatible
+> - remove mu1 and mu2
+> - change iomux node compatible and enable 91 pinctrl
+> - refine commit message for patch #2
+> - change hex to lowercase in pinfunc.h
+> - ordering nodes with the dt-format tool
+> - Link to v1: https://lore.kernel.org/imx/20241108022703.1877171-1-pengfei.li_1@nxp.com/
+> 
+> Joy Zou (6):
+>   arm64: dts: freescale: move aliases from imx93.dtsi to board dts
+>   arm64: dts: freescale: rename imx93.dtsi to imx91_93_common.dtsi and
+>     modify them
+>   arm64: dts: imx91: add i.MX91 dtsi support
+>   arm64: dts: freescale: add i.MX91 11x11 EVK basic support
+>   arm64: dts: imx93-11x11-evk: remove fec property eee-broken-1000t
+>   net: stmmac: imx: add i.MX91 support
+> 
+>  arch/arm64/boot/dts/freescale/Makefile        |    1 +
+>  .../boot/dts/freescale/imx91-11x11-evk.dts    |  674 ++++++++
+>  arch/arm64/boot/dts/freescale/imx91-pinfunc.h |  770 +++++++++
+>  arch/arm64/boot/dts/freescale/imx91.dtsi      |   71 +
+>  .../{imx93.dtsi => imx91_93_common.dtsi}      |  176 +-
+>  .../boot/dts/freescale/imx93-11x11-evk.dts    |   20 +-
+>  .../boot/dts/freescale/imx93-14x14-evk.dts    |   15 +
+>  .../boot/dts/freescale/imx93-9x9-qsb.dts      |   18 +
+>  .../dts/freescale/imx93-kontron-bl-osm-s.dts  |   21 +
+>  .../dts/freescale/imx93-phyboard-nash.dts     |   21 +
+>  .../dts/freescale/imx93-phyboard-segin.dts    |    9 +
+>  .../freescale/imx93-tqma9352-mba91xxca.dts    |   11 +
+>  .../freescale/imx93-tqma9352-mba93xxca.dts    |   25 +
+>  .../freescale/imx93-tqma9352-mba93xxla.dts    |   25 +
+>  .../dts/freescale/imx93-var-som-symphony.dts  |   17 +
+>  arch/arm64/boot/dts/freescale/imx93.dtsi      | 1518 ++---------------
+>  .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |    2 +
+>  17 files changed, 1863 insertions(+), 1531 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx91-11x11-evk.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx91-pinfunc.h
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx91.dtsi
+>  copy arch/arm64/boot/dts/freescale/{imx93.dtsi => imx91_93_common.dtsi} (90%)
+>  rewrite arch/arm64/boot/dts/freescale/imx93.dtsi (97%)
+> 
+> --
+> 2.37.1
+> 
+> 
+> 
 
-This aligns VMD behavior with platform expectations without per-controller
-ASPM tweaks at runtime.
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-Tested-by: Kenneth R. Crudup <kenny@panix.com>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
----
-Changes in V3:
-  -- Applied tags to changelog
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Changes in V2:
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-  -- Separated VMD changes into new patch.
-  -- Changed comment for VMD_FEAT_BIOS_PM_QUIRK to remove ASPM
-  -- Removed pci_set_power_state() and pci_enable_link_state_locked()
-     calls in vmd_pm_enable_quirk()
-  -- Use pci_host_set_default_pcie_link_state()
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
- drivers/pci/controller/vmd.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+  pip3 install dtschema --upgrade
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index b679c7f28f51..b99e01a57ddb 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -71,10 +71,9 @@ enum vmd_features {
- 	VMD_FEAT_CAN_BYPASS_MSI_REMAP		=3D (1 << 4),
-=20
- 	/*
--	 * Enable ASPM on the PCIE root ports and set the default LTR of the
--	 * storage devices on platforms where these values are not configured by
--	 * BIOS. This is needed for laptops, which require these settings for
--	 * proper power management of the SoC.
-+	 * Program default LTR values for storage devices on platforms where
-+	 * firmware did not. Required on many laptops for proper SoC power
-+	 * management.
- 	 */
- 	VMD_FEAT_BIOS_PM_QUIRK		=3D (1 << 5),
- };
-@@ -733,7 +732,7 @@ static void vmd_copy_host_bridge_flags(struct pci_host_=
-bridge *root_bridge,
- }
-=20
- /*
-- * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-+ * Enable LTR settings on devices that aren't configured by BIOS.
-  */
- static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
- {
-@@ -747,7 +746,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, vo=
-id *userdata)
-=20
- 	pos =3D pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
- 	if (!pos)
--		goto out_state_change;
-+		return 0;
-=20
- 	/*
- 	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
-@@ -755,7 +754,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, vo=
-id *userdata)
- 	 */
- 	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
- 	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
--		goto out_state_change;
-+		return 0;
-=20
- 	/*
- 	 * Set the default values to the maximum required by the platform to
-@@ -767,13 +766,6 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, v=
-oid *userdata)
- 	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
- 	pci_info(pdev, "VMD: Default LTR value set by driver\n");
-=20
--out_state_change:
--	/*
--	 * Ensure devices are in D0 before enabling PCI-PM L1 PM Substates, per
--	 * PCIe r6.0, sec 5.5.4.
--	 */
--	pci_set_power_state_locked(pdev, PCI_D0);
--	pci_enable_link_state_locked(pdev, PCIE_LINK_STATE_ALL);
- 	return 0;
- }
-=20
-@@ -921,6 +913,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsig=
-ned long features)
- 	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
- 			       "domain"), "Can't create symlink to domain\n");
-=20
-+	pci_host_set_default_pcie_link_state(to_pci_host_bridge(vmd->bus->bridge),
-+					     PCIE_LINK_STATE_ALL);
- 	vmd_acpi_begin();
-=20
- 	pci_scan_child_bus(vmd->bus);
---=20
-2.43.0
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/v6.17-rc1-2-ge0a4a651f7c8 (best guess, 12/14 blobs matched)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/freescale/' for 20250825091223.1378137-1-joy.zou@nxp.com:
+
+arch/arm64/boot/dts/freescale/imx91-11x11-evk.dtb: /: failed to match any schema with compatible: ['fsl,imx91-11x11-evk', 'fsl,imx91']
+arch/arm64/boot/dts/freescale/imx91-11x11-evk.dtb: /: failed to match any schema with compatible: ['fsl,imx91-11x11-evk', 'fsl,imx91']
+arch/arm64/boot/dts/freescale/imx91-11x11-evk.dtb: /soc@0/system-controller@4ac10000: failed to match any schema with compatible: ['fsl,imx91-media-blk-ctrl', 'syscon']
+
+
+
+
 
 
