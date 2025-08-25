@@ -1,428 +1,193 @@
-Return-Path: <linux-pm+bounces-33017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DF2DB33E01
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 13:30:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08FC3B33F5A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 14:26:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770A91A80020
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 11:30:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D511A163B6A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Aug 2025 12:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598A22EA756;
-	Mon, 25 Aug 2025 11:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E544525FA34;
+	Mon, 25 Aug 2025 12:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WFeXTt5t"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WxuTB6ER"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEE42E9738;
-	Mon, 25 Aug 2025 11:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82285393DCA
+	for <linux-pm@vger.kernel.org>; Mon, 25 Aug 2025 12:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756121417; cv=none; b=GJABoiXEpz73ZY2KQpexAHoNol6cvzbTJhcwc/Yh73UQsb86JOQVXoF3kwQxbuOwWd/FmrCzuo6nGh9OMujj5v2iaQa6djKWu8TegGIVpXGGUlbEz8O+4N+fl+ojoDHmMxuWvxwKlaQSVTTEC5JFhOrR0T5sGaYuh8L6pYX44kQ=
+	t=1756124766; cv=none; b=Yruekq2oJ0hAO/u262caYqB4dAno6pOGXZFGUqqAo48h0uhCscoJFQzFzgoslMn/moHo27O7y57ZGuJCuoxoaBBHXuNCeQvCYz6P+3hNVv+BzxmjqEeUQlESl1E37qFm6jKQ76aab/m/+v2KHS3BOPUUPhuHEoSF1UOiw+20Isw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756121417; c=relaxed/simple;
-	bh=G6t0vi9alebHFBK5rvhbgaNL3riXc5sqA04gp+fkOnA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T8aGpn1hnaRpNNxqkM66zPZBHQ+FtgyrmCULUCKHRGmAEpGEvCRVdcjTpGqLN44CAiXPXbgwAYdScVyOByonjCwk2vS1LFPhdIJ1jjvpG49fqmpBM4F0WJR6ZOh9kGzi+zKimWDfchibR8IodgZU0jJm+X+qgW2bsb9cdRVI888=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WFeXTt5t; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57PAuFQ1016927;
-	Mon, 25 Aug 2025 11:29:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=pZVH01D2Gd/ZuxBDWHvMdhmbI57qiN
-	XppeatopYJClM=; b=WFeXTt5tlq7bvmFwDwurN2gxIAJS4Sbtzub9xJRMuUUCWG
-	dnN+VgZwrU+C7OAoBOS7dQLtS9avFToeFD88Xjc+lW70Zit8RLPH2JZHPbK7MHxb
-	v0D+pVyzXtrwYQl3kI+QLZ7QQLNBqOFnM1k0uGpSZ1+CyNFOS702oVm2UXUhr26g
-	QqYmWP5K4me05w/KlbcV8jlyClHMpN0GwiL9exsIxxhhvb59HKuryvQ6LoqGJJOX
-	azP5+JccDMK8pigXUHrrcngDK4tPx7KmxBkljdhf7EI3Ims4+KAlu4PkVvsOtnHJ
-	SJYiHaa74A1UrHZh5hhabVWUJ/85+yELHuGX+z6g==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48q5av8jkr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Aug 2025 11:29:07 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57PBJCuS013823;
-	Mon, 25 Aug 2025 11:29:06 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48q5av8jkq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Aug 2025 11:29:06 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57PB3VZR002512;
-	Mon, 25 Aug 2025 11:29:05 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 48qt6m5am6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Aug 2025 11:29:05 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57PBT3gH52166968
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 25 Aug 2025 11:29:03 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 971AE20043;
-	Mon, 25 Aug 2025 11:29:03 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C97EF20040;
-	Mon, 25 Aug 2025 11:28:50 +0000 (GMT)
-Received: from li-c6426e4c-27cf-11b2-a85c-95d65bc0de0e.ibm.com (unknown [9.98.110.17])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 25 Aug 2025 11:28:50 +0000 (GMT)
-Date: Mon, 25 Aug 2025 16:58:48 +0530
-From: Gautam Menghani <gautam@linux.ibm.com>
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
-        Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        zhenglifeng <zhenglifeng1@huawei.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <lenb@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Beata Michalska <beata.michalska@arm.com>,
-        Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        imx@lists.linux.dev, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] cpufreq: use __free() for all cpufreq_cpu_get()
- references
-Message-ID: <aKxI8D5mgLRyydb3@li-c6426e4c-27cf-11b2-a85c-95d65bc0de0e.ibm.com>
-References: <20250825092833.42441-1-zhangzihuan@kylinos.cn>
+	s=arc-20240116; t=1756124766; c=relaxed/simple;
+	bh=EPuhLSFemzDPHkQuDCqfWriMem09waSvO1qYO3wPP1k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SKspLQXFyT4VP+cDHKmsA5i2jfXV+5UzLMERVj008xMdu6ykhcV3bjlf2mBsk48MA2DQp5XKbJhmLJCsrz+d+LJ3rDGJg5PtVOryNOBYrAy6uF/F0RWTRttvRodfxikFxRs0NBB880E1DzsTdu2nicQq2dGoN0y2LHZFkH0cUEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WxuTB6ER; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3c84aea9d32so579033f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 25 Aug 2025 05:26:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756124762; x=1756729562; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iD4A2gYEHhEqDDI4pv93pPk9MPb3yUNXkPrSTp8pI48=;
+        b=WxuTB6ERMv7BKfPQBXBpLnvVDxz9VleDngFk4UyfWG/32lzt0A4MYFO6C6dosP93eb
+         3Y1cNeabm6W+8iO5UzANswTTKPIsh8QV/ld/JjZHegTFxHddCl7WJHSH/kFcSjhUjYbr
+         jn/ax6UIwej8buRnfAOI0fvUO1/UWs7RePsXe2D5DOVJKWAmyLOqDPKEsKWmmBQcWTIe
+         +KjnXOvSj4mbX0RGKmr2SGZMsFmvIq1Yy0tE6hrPqTi7hkWHhal9ai6dupsfe0N5hJIc
+         8K4zGGvI0DxaFkNOENqLJi9GLKFKoACVMfN74zMCTFkTLbt21MIEY/NWP5dAy4iVJFxz
+         +Kgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756124762; x=1756729562;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iD4A2gYEHhEqDDI4pv93pPk9MPb3yUNXkPrSTp8pI48=;
+        b=fm8f/nRdfF+yZz5HxJDnyfa3RCNx+iAPAmz22K7xs4xGWVSVQI3OSKfd66CqZXy0Ho
+         ed5HlrNt4EiThLABSzOhWRUUVbkjZXbkK3KpHJJKpHOz5Ec3aUJq9nCTgIBCBuPEb15J
+         bz0Lx2jF0BFrZVil/VqKBhT+nq2KMHUjOExJX7NwjKpZ7CWZKM22wFksgSoaxzTvy+/Q
+         V1RkrHiOLipJQN+u6Hrb1Sn3bjwT174G4e4UXCfrOm3IGaey2Ab2O6VGuxEHxPj4hUJK
+         zby44sxAk3hgvRm/ZurEgGpFJIeBgEzM4WQMzDM1Lyg36U1hnPsv1Hi4v+SX+pw2QiPM
+         RYUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWG1zvoAvB3W2ckj/PlzN5tmQ27hheont1HpLNGgQk68BzAQDVeUClrTjcg47nKhK+30SIluIIDwQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwJhRO0NKrUJe7wa1/Rx9bZjJYoi0D23LZRch71MDoS3mSE60t
+	qSjBF0TH6SFToyk/Hvu9oXUv9+c7tYq4+N1rkIke/5y6EkNN/jdZlXkKwtSWCPy6gDg=
+X-Gm-Gg: ASbGncszVbEmQ7mzo4GwumqdPhY1+7E0DR/jbPoH5Rvh8Nm8jmsmaGt6qtLym3MgsKN
+	qm6GBKo1ysioz+0g413GqA3kajb5+Jjq8MERzMzqPoGMBj31oLZ3dlNElJPX2jX/tzNkK8tgRbs
+	BpG5nQmMZeYGYXLMd65scUxl3ouHL+x88i+GMR2XU/hLKitXxOLqHmRCEpV4s1LOJIdKEaychRS
+	bzUkBY2WFbQljnskkyHcBr/AbB9tWzSkGr8hcwkVvpNzuA3jKw1zOf9Xj3mt/qeQb0hMQ+PK/tp
+	0o8zrFuYw5zOVMsE1URYKyUKjNKT91i6Jr+UsBTy7KWzMJwUHpNdV3htS1PSrjnAPDJpbjHn+2Q
+	PGKoWhnj3szKU+F0OvzG92fKmpQ==
+X-Google-Smtp-Source: AGHT+IGZKR4ycwSMzrqSf8EzPWzEYvLi9+vxNDQf6ku1dpyxkwx330HC9znsLRd8NyKKnUo4pxNj8g==
+X-Received: by 2002:a05:6000:2705:b0:3c6:a970:1505 with SMTP id ffacd0b85a97d-3c6a9701ec9mr4679656f8f.43.1756124761743;
+        Mon, 25 Aug 2025 05:26:01 -0700 (PDT)
+Received: from [10.1.1.59] ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c86a8ccd1bsm7068027f8f.27.2025.08.25.05.26.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Aug 2025 05:26:01 -0700 (PDT)
+Message-ID: <2855688dcb6898af0d4b03913c6193da8b115760.camel@linaro.org>
+Subject: Re: [PATCH v5 4/4] arm64: dts: exynos: google: add Maxim MAX77759
+ Fuel-gauge
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: t.antoine@uclouvain.be, Sebastian Reichel <sre@kernel.org>, Rob Herring	
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
+ <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin
+ Marinas	 <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Peter
+ Griffin	 <peter.griffin@linaro.org>, Tudor Ambarus
+ <tudor.ambarus@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
+Date: Mon, 25 Aug 2025 13:25:59 +0100
+In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-4-03a40e6c0e3d@uclouvain.be>
+References: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be>
+	 <20250804-b4-gs101_max77759_fg-v5-4-03a40e6c0e3d@uclouvain.be>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1+build2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250825092833.42441-1-zhangzihuan@kylinos.cn>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0HsQaFGcKHYEMjGxfTSlUJWF6XneJCL9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAyMSBTYWx0ZWRfX/4+yCBHiZkyj
- BezOHO0JD1p7OO2PV8xmQ1v5shFYKr21Uw1c2F4fW4uXyPCsxOE6ILKOy08exTWUNA73a36dDQc
- c4y6wbPoU5LvDYQlXlcAhPLqk3LFWCLZ3dICMLqR2WHDlet2Ldgi5be5Hduqsg6kr8/WbswzYXj
- eL+wfLc/Jeqecx6jg74QDQFlvafBQN6LUG8LrX8tqwzhzd9GgzIeu7kk/N0P/CWyJHwlrc5PIUz
- Z4q/fYjm6PpSFTkG5SI7ARvGOK+wODTfBZnnKDnPI4C3Bn1Qhf3Y6EvQDrYoSo6dxKELAUhByqt
- uCcp7lr/HsMOwiulBYsJ81MWSKnZa8+YC9DKTxtqevYNdz87q6XWFXB9AUbfcQ36nGSAmLoiq7W
- P4ME2Djp
-X-Proofpoint-ORIG-GUID: gtLwqruV6tGzAQkR_fGqnCUDyXx-v5l-
-X-Authority-Analysis: v=2.4 cv=SNNCVPvH c=1 sm=1 tr=0 ts=68ac4903 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=kj9zAlcOel0A:10 a=2OwXVqhp2XgA:10 a=I94fdbTdu9Vpa8W20_wA:9
- a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-25_05,2025-08-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 bulkscore=0 phishscore=0 clxscore=1011
- impostorscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508230021
 
-On Mon, Aug 25, 2025 at 05:28:33PM +0800, Zihuan Zhang wrote:
-> This patch replaces all remaining uses of cpufreq_cpu_get() with
-> the __free(cpufreq_cpu_put) annotation.
-> 
-> Motivation:
-> - Ensures automatic cleanup of policy references when they go out of scope,
->   reducing the risk of forgetting to call cpufreq_cpu_put() on early return
->   or error paths.
-> - Brings the code in line with the latest kernel coding style and best
->   practices for managing reference-counted objects.
-> - No functional changes are introduced; behavior remains the same,
->   but reference counting is now safer and easier to maintain.
-> 
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+On Mon, 2025-08-04 at 16:26 +0200, Thomas Antoine via B4 Relay wrote:
+> From: Thomas Antoine <t.antoine@uclouvain.be>
+>=20
+> Add the node for the Maxim MAX77759 fuel gauge as a slave of the i2c.
+>=20
+> The TODO is still applicable given there are other slaves on the
+> bus (e.g. PCA9468, other MAX77759 functions and the MAX20339 OVP).
+>=20
+> For the device specific values (full design capacity and terminal
+> current), the device should check an EEPROM at address 0x50 of the
+> hsi2c_8 for a battery id stored in register 0x17. A set of parameters
+> for the initialization of the fuel gauge should be chosen based on
+> this id. Those sets are defined here:
+>=20
+> Link:
+> https://android.googlesource.com/kernel/gs/+/refs/heads/android-gs-raviol=
+e-5.10-android15/arch/arm64/boot/dts/google/gs101-oriole-battery-data.dtsi
+> Link:
+> https://android.googlesource.com/kernel/gs/+/refs/heads/android-gs-raviol=
+e-5.10-android15/arch/arm64/boot/dts/google/gs101-raven-battery-data.dtsi
+>=20
+> This does not seem to be a standard pattern in the kernel currently
+> so it is not implemented. Values observed on tested devices are
+> instead used. The driver or the devicetree should be should be
+> extended in the future to take versions into account.
+>=20
+> The pinctrl name follows the convention proposed in
+> Link: https://lore.kernel.org/all/20250524-b4-max77759-mfd-dts-v2-2-b4795=
+42eb97d@linaro.org/
+>=20
+> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
 > ---
->  arch/arm64/kernel/topology.c                  |  9 +++----
->  arch/x86/kvm/x86.c                            | 10 ++++----
->  drivers/acpi/processor_thermal.c              | 13 ++++------
->  drivers/cpufreq/brcmstb-avs-cpufreq.c         |  4 +---
->  drivers/cpufreq/cppc_cpufreq.c                |  4 +---
->  drivers/cpufreq/intel_pstate.c                |  3 +--
->  drivers/cpufreq/longhaul.c                    |  3 +--
->  drivers/cpufreq/mediatek-cpufreq.c            |  6 ++---
->  drivers/cpufreq/powernv-cpufreq.c             |  6 ++---
->  drivers/cpufreq/s5pv210-cpufreq.c             |  3 +--
->  drivers/cpufreq/tegra186-cpufreq.c            |  3 +--
->  drivers/devfreq/governor_passive.c            | 19 ++++-----------
->  drivers/gpu/drm/i915/gt/intel_llc.c           |  3 +--
->  drivers/macintosh/windfarm_cpufreq_clamp.c    |  4 +---
->  drivers/powercap/dtpm_cpu.c                   | 24 ++++++-------------
->  drivers/thermal/imx_thermal.c                 |  7 ++----
->  .../ti-soc-thermal/ti-thermal-common.c        |  5 +---
->  kernel/power/energy_model.c                   |  7 ++----
->  18 files changed, 40 insertions(+), 93 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index 5d07ee85bdae..e3cb6d54f35b 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -307,17 +307,16 @@ int arch_freq_get_on_cpu(int cpu)
->  		 */
->  		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
->  		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
-> -			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> +			struct cpufreq_policy *policy __free(put_cpufreq_policy);
->  			int ref_cpu;
->  
-> +			policy = cpufreq_cpu_get(cpu);
->  			if (!policy)
->  				return -EINVAL;
->  
->  			if (!cpumask_intersects(policy->related_cpus,
-> -						housekeeping_cpumask(HK_TYPE_TICK))) {
-> -				cpufreq_cpu_put(policy);
-> +						housekeeping_cpumask(HK_TYPE_TICK)))
->  				return -EOPNOTSUPP;
-> -			}
->  
->  			for_each_cpu_wrap(ref_cpu, policy->cpus, cpu + 1) {
->  				if (ref_cpu == start_cpu) {
-> @@ -329,8 +328,6 @@ int arch_freq_get_on_cpu(int cpu)
->  					break;
->  			}
->  
-> -			cpufreq_cpu_put(policy);
-> -
->  			if (ref_cpu >= nr_cpu_ids)
->  				/* No alternative to pull info from */
->  				return -EAGAIN;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index a1c49bc681c4..2a825f4ec701 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9492,16 +9492,14 @@ static void kvm_timer_init(void)
->  		max_tsc_khz = tsc_khz;
->  
->  		if (IS_ENABLED(CONFIG_CPU_FREQ)) {
-> -			struct cpufreq_policy *policy;
-> +			struct cpufreq_policy *policy __free(put_cpufreq_policy);
->  			int cpu;
->  
->  			cpu = get_cpu();
->  			policy = cpufreq_cpu_get(cpu);
-> -			if (policy) {
-> -				if (policy->cpuinfo.max_freq)
-> -					max_tsc_khz = policy->cpuinfo.max_freq;
-> -				cpufreq_cpu_put(policy);
-> -			}
-> +			if (policy && policy->cpuinfo.max_freq)
-> +				max_tsc_khz = policy->cpuinfo.max_freq;
-> +
->  			put_cpu();
->  		}
->  		cpufreq_register_notifier(&kvmclock_cpufreq_notifier_block,
-> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
-> index 1219adb11ab9..8367a81c4842 100644
-> --- a/drivers/acpi/processor_thermal.c
-> +++ b/drivers/acpi/processor_thermal.c
-> @@ -64,17 +64,14 @@ static int phys_package_first_cpu(int cpu)
->  
->  static int cpu_has_cpufreq(unsigned int cpu)
->  {
-> -	struct cpufreq_policy *policy;
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
->  
->  	if (!acpi_processor_cpufreq_init)
->  		return 0;
->  
->  	policy = cpufreq_cpu_get(cpu);
-> -	if (policy) {
-> -		cpufreq_cpu_put(policy);
-> -		return 1;
-> -	}
-> -	return 0;
-> +
-> +	return !!policy;
->  }
->  
->  static int cpufreq_get_max_state(unsigned int cpu)
-> @@ -95,7 +92,7 @@ static int cpufreq_get_cur_state(unsigned int cpu)
->  
->  static int cpufreq_set_cur_state(unsigned int cpu, int state)
->  {
-> -	struct cpufreq_policy *policy;
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
->  	struct acpi_processor *pr;
->  	unsigned long max_freq;
->  	int i, ret;
-> @@ -127,8 +124,6 @@ static int cpufreq_set_cur_state(unsigned int cpu, int state)
->  		max_freq = (policy->cpuinfo.max_freq *
->  			    (100 - reduction_step(i) * cpufreq_thermal_reduction_pctg)) / 100;
->  
-> -		cpufreq_cpu_put(policy);
-> -
->  		ret = freq_qos_update_request(&pr->thermal_req, max_freq);
->  		if (ret < 0) {
->  			pr_warn("Failed to update thermal freq constraint: CPU%d (%d)\n",
-> diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> index 5940d262374f..71450cca8e9f 100644
-> --- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> +++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> @@ -480,7 +480,7 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
->  
->  static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
->  {
-> -	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
->  	struct private_data *priv;
->  
->  	if (!policy)
-> @@ -488,8 +488,6 @@ static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
->  
->  	priv = policy->driver_data;
->  
-> -	cpufreq_cpu_put(policy);
-> -
->  	return brcm_avs_get_frequency(priv->base);
->  }
->  
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 4a17162a392d..7183754b1f31 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -726,7 +726,7 @@ static int cppc_get_perf_ctrs_sample(int cpu,
->  static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->  {
->  	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
-> -	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
->  	struct cppc_cpudata *cpu_data;
->  	u64 delivered_perf;
->  	int ret;
-> @@ -736,8 +736,6 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->  
->  	cpu_data = policy->driver_data;
->  
-> -	cpufreq_cpu_put(policy);
-> -
->  	ret = cppc_get_perf_ctrs_sample(cpu, &fb_ctrs_t0, &fb_ctrs_t1);
->  	if (ret) {
->  		if (ret == -EFAULT)
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index f366d35c5840..fb962140af56 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1698,7 +1698,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
->  static void update_qos_request(enum freq_qos_req_type type)
->  {
->  	struct freq_qos_request *req;
-> -	struct cpufreq_policy *policy;
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
->  	int i;
->  
->  	for_each_possible_cpu(i) {
-> @@ -1710,7 +1710,6 @@ static void update_qos_request(enum freq_qos_req_type type)
->  			continue;
->  
->  		req = policy->driver_data;
-> -		cpufreq_cpu_put(policy);
->  
->  		if (!req)
->  			continue;
-> diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
-> index ba0e08c8486a..ae5596919671 100644
-> --- a/drivers/cpufreq/longhaul.c
-> +++ b/drivers/cpufreq/longhaul.c
-> @@ -950,7 +950,7 @@ static int __init longhaul_init(void)
->  
->  static void __exit longhaul_exit(void)
->  {
-> -	struct cpufreq_policy *policy = cpufreq_cpu_get(0);
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(0);
->  	int i;
->  
->  	for (i = 0; i < numscales; i++) {
-> @@ -968,7 +968,6 @@ static void __exit longhaul_exit(void)
->  		}
->  	}
->  
-> -	cpufreq_cpu_put(policy);
->  	cpufreq_unregister_driver(&longhaul_driver);
->  	kfree(longhaul_table);
->  }
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index f3f02c4b6888..1fae060e16d9 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -320,7 +320,7 @@ static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
->  	struct dev_pm_opp *new_opp;
->  	struct mtk_cpu_dvfs_info *info;
->  	unsigned long freq, volt;
-> -	struct cpufreq_policy *policy;
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
->  	int ret = 0;
->  
->  	info = container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
-> @@ -354,11 +354,9 @@ static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
->  
->  			dev_pm_opp_put(new_opp);
->  			policy = cpufreq_cpu_get(info->opp_cpu);
-> -			if (policy) {
-> +			if (policy)
->  				cpufreq_driver_target(policy, freq / 1000,
->  						      CPUFREQ_RELATION_L);
-> -				cpufreq_cpu_put(policy);
-> -			}
->  		}
->  	}
->  
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index 7d9a5f656de8..ea9d78bbeb38 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -892,7 +892,7 @@ static int powernv_cpufreq_reboot_notifier(struct notifier_block *nb,
->  				unsigned long action, void *unused)
->  {
->  	int cpu;
-> -	struct cpufreq_policy *cpu_policy;
-> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> =C2=A0arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 10 ++++++++
+> =C2=A0.../boot/dts/exynos/google/gs101-pixel-common.dtsi | 30 +++++++++++=
++++++++++++
+> =C2=A0arch/arm64/boot/dts/exynos/google/gs101-raven.dts=C2=A0 | 11 ++++++=
+++
+> =C2=A03 files changed, 51 insertions(+)
 
-There's a typo here. I got a compile error because of wrong variable name.
+[...]
 
-Thanks,
-Gautam
+> diff --git a/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi b/=
+arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+> index d6ddcc13f7b20c6dfbe92e86abafe965870d0c78..3362ad89ef6bacb7349259cf9=
+e14452193ff7361 100644
+> --- a/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+> @@ -10,6 +10,7 @@
+> =C2=A0
+> =C2=A0#include <dt-bindings/gpio/gpio.h>
+> =C2=A0#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> =C2=A0#include <dt-bindings/usb/pd.h>
+> =C2=A0#include "gs101-pinctrl.h"
+> =C2=A0#include "gs101.dtsi"
+> @@ -99,6 +100,16 @@ &hsi2c_8 {
+> =C2=A0	eeprom: eeprom@50 {
+> =C2=A0		compatible =3D "atmel,24c08";
+> =C2=A0		reg =3D <0x50>;
+> +
+> +		nvmem-layout {
+> +			compatible =3D "fixed-layout";
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <1>;
+> +
+> +			fg_state: fgstate@42 {
+> +				reg =3D <0x42 0x17>;
+> +			};
+> +		};
+> =C2=A0	};
+> =C2=A0};
+> =C2=A0
+> @@ -188,6 +199,18 @@ usbc0_role_sw: endpoint {
+> =C2=A0			};
+> =C2=A0		};
+> =C2=A0	};
+> +
+> +	fuel_gauge: fuel-gauge@36 {
+> +		compatible =3D "maxim,max77759-fg";
+> +		reg =3D <0x36>;
+> +		pinctrl-names =3D "default";
+> +		pinctrl-0 =3D <&if_pmic_fg_int>;
+> +		interrupt-parent =3D <&gpa9>;
+> +		interrupts =3D <3 IRQ_TYPE_LEVEL_LOW>;
+
+small nit - for consistency with other interrupt specs in this file,
+could you switch to using interrupts-extended please?
+
+Cheers,
+Andre'
 
