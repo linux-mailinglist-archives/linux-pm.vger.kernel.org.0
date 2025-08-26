@@ -1,149 +1,222 @@
-Return-Path: <linux-pm+bounces-33106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10C86B35A7B
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 12:56:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9148BB35AF4
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 13:16:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDC21200B53
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 10:56:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EA5F189D0FD
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 11:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D6529D29B;
-	Tue, 26 Aug 2025 10:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="XiChvNvb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 628DB2F83C1;
+	Tue, 26 Aug 2025 11:15:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C7D2248A5;
-	Tue, 26 Aug 2025 10:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A580277C8C;
+	Tue, 26 Aug 2025 11:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756205758; cv=none; b=Pj0w3tj1XpuZecTjHn8N+J6ypDhVG4km5y89ZtL6Egyl/G3TuksLS9/7y8TUhPymwM3oegXA4FNxgme+zGPlWeH0mbtZYiEg846HfRKGysWP/I4fR+5CMQpjpbOtyDV8/t/r+TT/f71Mr/5EUIfq3RlU4sHzAmATbAGHmgw8fzs=
+	t=1756206943; cv=none; b=re484LSf4GhK+ZJkBIAlGMlYP90a01rOyfm+U7EGxCG9YL7JDoQ6evHFE+OcfN1BCa0cSn8gUpk93RzI3ASZJO5vSe8VF+bB8sHP2X1h8M7cketHSCQNN6iI38MWj9Epr48mqAyaAYO9+L9VjCL6C+SN3XLPcvMAB6A5wNujBpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756205758; c=relaxed/simple;
-	bh=HpMXmXyWiHOCQMwM9m6pUVZyTdiCf8166ZcDeX/hpjk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BbS6P3Woyeg49LEernSzWlLq5hD5JsGZkY2AiV5A8H7u1msbL9Pu4lSSSwBtRqHrrSYccBYgxIp/jFrHcOUze0D5qeEy9m+Y+XkQyBZ024STIaO6UWka22VWolLRjnn6twERNjA8+nL45VnAMz0tSAqeRY+cncSLsLlp7qv5o10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=XiChvNvb; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
-	Resent-Message-ID:In-Reply-To:References;
-	bh=ZVqiOkm+IDB3wo6ENlUKoe7kWHPIvSPtFHRBKYevkS4=; t=1756205756; x=1757415356; 
-	b=XiChvNvbwtSZXx9+k2GBQIBDeZKMhyxG+uo4TghQ4iWNWiHgFtSSd3ngaBQZ1/pvhRdETiUjMuo
-	JPL2M44PuBkzt+WeUHCWHAHwTHdHzFOQ2LY1mgHQgbCo5+N+I4Ai80UVZr2vTJxdy5N+V1Sfi9GgH
-	DY3tcFoLVcZuuaOAYUTo95Y2p2sLrmP0SqQo4Br+e4/AhQMc4RSWbssskJ4R0YwYNzGeteH67/siS
-	fEHHM4rzeV/ml5xfryGjFreI3cT73PVAL9rKNdARPzeRUFTkx3i0aQBp4W7Uh02rNK5PXeDwuSCbr
-	BapRarIN2kJhIaYx8yGjvv406m80hjSDPdmQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1uqrL8-00000003X0e-1m4z;
-	Tue, 26 Aug 2025 12:55:46 +0200
-From: Johannes Berg <johannes@sipsolutions.net>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH] PM: sleep: annotate RCU list iterations
-Date: Tue, 26 Aug 2025 12:55:31 +0200
-Message-ID: <20250826125541.7143e172c124.I9ecf55da46ccf33778f2c018a82e1819d815b348@changeid>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1756206943; c=relaxed/simple;
+	bh=OTax/FZOAVkSfXJa1A9gunuHpIZmaqBR9VNEDweSclY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bKnrIfageEddsND/tQbu35XDLl+UdfFKritSwAh9f1ySjBjoTe5to6DgUah9+k67KTxzgvMEsB3wZP5egM+xDyVVgglPuPY9RtiJypax7d0F5XuaQupk6zZ+16RIe/IPnfSj0r5tqrjp1KK+rEVdMRy6ASpG8eGYCUcgofDF/3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E7AF1A00;
+	Tue, 26 Aug 2025 04:15:32 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 663C13F63F;
+	Tue, 26 Aug 2025 04:15:28 -0700 (PDT)
+Date: Tue, 26 Aug 2025 12:15:23 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+	acme@kernel.org, namhyung@kernel.org,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
+	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
+	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 02/19] perf/hisilicon: Fix group validation
+Message-ID: <aK2XS_GhLw1EQ2ml@J2N7QTR9R3>
+References: <cover.1755096883.git.robin.murphy@arm.com>
+ <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
 
-From: Johannes Berg <johannes.berg@intel.com>
+On Wed, Aug 13, 2025 at 06:00:54PM +0100, Robin Murphy wrote:
+> The group validation logic shared by the HiSilicon HNS3/PCIe drivers is
+> a bit off, in that given a software group leader, it will consider that
+> event *in place of* the actual new event being opened. At worst this
+> could theoretically allow an unschedulable group if the software event
+> config happens to look like one of the hardware siblings.
+> 
+> The uncore framework avoids that particular issue,
 
-These iterations require the read lock, otherwise RCU
-lockdep will splat:
+What is "the uncore framework"? I'm not sure exactly what you're
+referring to, nor how that composes with the problem described above.
 
-=============================
-WARNING: suspicious RCU usage
-6.17.0-rc3-00014-g31419c045d64 #6 Tainted: G           O
------------------------------
-drivers/base/power/main.c:1333 RCU-list traversed in non-reader section!!
+> but all 3 also share the common issue of not preventing racy access to
+> the sibling list,
 
-other info that might help us debug this:
+Can you please elaborate on this racy access to the silbing list? I'm
+not sure exactly what you're referring to.
 
-rcu_scheduler_active = 2, debug_locks = 1
-5 locks held by rtcwake/547:
- #0: 00000000643ab418 (sb_writers#6){.+.+}-{0:0}, at: file_start_write+0x2b/0x3a
- #1: 0000000067a0ca88 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x181/0x24b
- #2: 00000000631eac40 (kn->active#3){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x191/0x24b
- #3: 00000000609a1308 (system_transition_mutex){+.+.}-{4:4}, at: pm_suspend+0xaf/0x30b
- #4: 0000000060c0fdb0 (device_links_srcu){.+.+}-{0:0}, at: device_links_read_lock+0x75/0x98
+> and some redundant checks which can be cleaned up.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>  drivers/perf/hisilicon/hisi_pcie_pmu.c   | 17 ++++++-----------
+>  drivers/perf/hisilicon/hisi_uncore_pmu.c | 23 +++++++----------------
+>  drivers/perf/hisilicon/hns3_pmu.c        | 17 ++++++-----------
+>  3 files changed, 19 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> index c5394d007b61..3b0b2f7197d0 100644
+> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> @@ -338,21 +338,16 @@ static bool hisi_pcie_pmu_validate_event_group(struct perf_event *event)
+>  	int counters = 1;
+>  	int num;
+>  
+> -	event_group[0] = leader;
+> -	if (!is_software_event(leader)) {
+> -		if (leader->pmu != event->pmu)
+> -			return false;
+> +	if (leader == event)
+> +		return true;
+>  
+> -		if (leader != event && !hisi_pcie_pmu_cmp_event(leader, event))
+> -			event_group[counters++] = event;
+> -	}
+> +	event_group[0] = event;
+> +	if (leader->pmu == event->pmu && !hisi_pcie_pmu_cmp_event(leader, event))
+> +		event_group[counters++] = leader;
 
-stack backtrace:
-CPU: 0 UID: 0 PID: 547 Comm: rtcwake Tainted: G           O        6.17.0-rc3-00014-g31419c045d64 #6 VOLUNTARY
-Tainted: [O]=OOT_MODULE
-Stack:
- 223721b3a80 6089eac6 00000001 00000001
- ffffff00 6089eac6 00000535 6086e528
- 721b3ac0 6003c294 00000000 60031fc0
-Call Trace:
- [<600407ed>] show_stack+0x10e/0x127
- [<6003c294>] dump_stack_lvl+0x77/0xc6
- [<6003c2fd>] dump_stack+0x1a/0x20
- [<600bc2f8>] lockdep_rcu_suspicious+0x116/0x13e
- [<603d8ea1>] dpm_async_suspend_superior+0x117/0x17e
- [<603d980f>] device_suspend+0x528/0x541
- [<603da24b>] dpm_suspend+0x1a2/0x267
- [<603da837>] dpm_suspend_start+0x5d/0x72
- [<600ca0c9>] suspend_devices_and_enter+0xab/0x736
- [...]
+Looking at this, the existing logic to share counters (which
+hisi_pcie_pmu_cmp_event() is trying to permit) looks to be bogus, given
+that the start/stop callbacks will reprogram the HW counters (and hence
+can fight with one another).
 
-Add the fourth argument to the iteration to annotate
-this and avoid the splat.
+I suspect that can be removed *entirely*, and this can be simplified
+down to allocating N counters, without a quadratic event comparison.  We
+don't try to share counters in other PMU drivers, and there was no
+rationale for trying to do this when this wa introduced in commit:
 
-Fixes: 06799631d522 ("PM: sleep: Make async suspend handle suppliers like parents")
-Fixes: ed18738fff02 ("PM: sleep: Make async resume handle consumers like children")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
----
-Honestly, not sure, maybe this should just be without _rcu?
----
- drivers/base/power/main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+  8404b0fbc7fbd42e ("drivers/perf: hisi: Add driver for HiSilicon PCIe PMU")
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index dbf5456cd891..e80175486be7 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -675,7 +675,8 @@ static void dpm_async_resume_subordinate(struct device *dev, async_func_t func)
- 	idx = device_links_read_lock();
- 
- 	/* Start processing the device's "async" consumers. */
--	list_for_each_entry_rcu(link, &dev->links.consumers, s_node)
-+	list_for_each_entry_rcu(link, &dev->links.consumers, s_node,
-+				device_links_read_lock_held())
- 		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
- 			dpm_async_with_cleanup(link->consumer, func);
- 
-@@ -1330,7 +1331,8 @@ static void dpm_async_suspend_superior(struct device *dev, async_func_t func)
- 	idx = device_links_read_lock();
- 
- 	/* Start processing the device's "async" suppliers. */
--	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
-+	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
-+				device_links_read_lock_held())
- 		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
- 			dpm_async_with_cleanup(link->supplier, func);
- 
--- 
-2.51.0
+The 'link' tag in that comment goes to v13, which doesn't link to prior
+postings, so I'm not going to dig further.
 
+Mark.
+
+>  
+>  	for_each_sibling_event(sibling, event->group_leader) {
+> -		if (is_software_event(sibling))
+> -			continue;
+> -
+>  		if (sibling->pmu != event->pmu)
+> -			return false;
+> +			continue;
+>  
+>  		for (num = 0; num < counters; num++) {
+>  			/*
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> index a449651f79c9..3c531b36cf25 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> @@ -101,26 +101,17 @@ static bool hisi_validate_event_group(struct perf_event *event)
+>  	/* Include count for the event */
+>  	int counters = 1;
+>  
+> -	if (!is_software_event(leader)) {
+> -		/*
+> -		 * We must NOT create groups containing mixed PMUs, although
+> -		 * software events are acceptable
+> -		 */
+> -		if (leader->pmu != event->pmu)
+> -			return false;
+> +	if (leader == event)
+> +		return true;
+>  
+> -		/* Increment counter for the leader */
+> -		if (leader != event)
+> -			counters++;
+> -	}
+> +	/* Increment counter for the leader */
+> +	if (leader->pmu == event->pmu)
+> +		counters++;
+>  
+>  	for_each_sibling_event(sibling, event->group_leader) {
+> -		if (is_software_event(sibling))
+> -			continue;
+> -		if (sibling->pmu != event->pmu)
+> -			return false;
+>  		/* Increment counter for each sibling */
+> -		counters++;
+> +		if (sibling->pmu == event->pmu)
+> +			counters++;
+>  	}
+>  
+>  	/* The group can not count events more than the counters in the HW */
+> diff --git a/drivers/perf/hisilicon/hns3_pmu.c b/drivers/perf/hisilicon/hns3_pmu.c
+> index c157f3572cae..382e469257f9 100644
+> --- a/drivers/perf/hisilicon/hns3_pmu.c
+> +++ b/drivers/perf/hisilicon/hns3_pmu.c
+> @@ -1058,21 +1058,16 @@ static bool hns3_pmu_validate_event_group(struct perf_event *event)
+>  	int counters = 1;
+>  	int num;
+>  
+> -	event_group[0] = leader;
+> -	if (!is_software_event(leader)) {
+> -		if (leader->pmu != event->pmu)
+> -			return false;
+> +	if (leader == event)
+> +		return true;
+>  
+> -		if (leader != event && !hns3_pmu_cmp_event(leader, event))
+> -			event_group[counters++] = event;
+> -	}
+> +	event_group[0] = event;
+> +	if (leader->pmu == event->pmu && !hns3_pmu_cmp_event(leader, event))
+> +		event_group[counters++] = leader;
+>  
+>  	for_each_sibling_event(sibling, event->group_leader) {
+> -		if (is_software_event(sibling))
+> -			continue;
+> -
+>  		if (sibling->pmu != event->pmu)
+> -			return false;
+> +			continue;
+>  
+>  		for (num = 0; num < counters; num++) {
+>  			/*
+> -- 
+> 2.39.2.101.g768bb238c484.dirty
+> 
 
