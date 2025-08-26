@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-33075-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33076-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58C64B353EA
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 08:11:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08072B353EE
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 08:12:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B57B6802F2
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 06:11:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C369E16331D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 06:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A172F5336;
-	Tue, 26 Aug 2025 06:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420322F60B4;
+	Tue, 26 Aug 2025 06:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VV8+2Wak"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVeJnyBl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41892248A4;
-	Tue, 26 Aug 2025 06:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650792F532C;
+	Tue, 26 Aug 2025 06:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756188705; cv=none; b=MrVbHgpY9TZ9uqpprSLjh3xx8D1dIOseex8pnCdOwwp1Gi8EVAdmiApQCFWouVTkWJTM0ipw1JKch/NF+FslzF6r6YIq5iORQoQdeXOI0U8nK6RvhzDO02WKyDUhkoyGgkSifzE9ZkS4ub3Ul87Ne/GdEAhnmZPJmUV1uAJ0ClQ=
+	t=1756188707; cv=none; b=HdRgMwPvdTUfkuP1/3be8WfXpKd8zTb5N1vDqMNHG8mgyOgiwXQB5VMbFEbnCWYL1i1iS6zDPdhuLKnE5VLF7S2rSIdTXxAmFivDTSZ87nD8IfEYxJQ5wu6cy5BCF6wlY0jbhQr2YSBbcuK4Sc/mJ6wGvu/qmh9xjOdCh+dDQSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756188705; c=relaxed/simple;
-	bh=XPBdPYMVGNUgWDYKxBFIe4S3lmRCWccSl10OwUSskmk=;
+	s=arc-20240116; t=1756188707; c=relaxed/simple;
+	bh=21RYNlmCHuRuunlGqGsBYkriVict2NzlHetlsy9T50o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=onb2FEnlq3NCv84Ikk48QBHKuu/SlP0dFuu7DE/lykeEN0Whrsvwfmh68IE/VcmYAM1bZGnr7qlDo+y4+Xxth1/T5H2ClB6dm+r5k+nbaxl3bJ9QSTcjebv9X9ZI5MCoWgbhx7uVg76S2bhLTUIXyND1/NlA+8eMdyu5GLp3680=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VV8+2Wak; arc=none smtp.client-ip=209.85.218.42
+	 MIME-Version; b=EtTHC192hl70D39S1npYe2/9alKAj4hLVpf4TuUJWv/2JvswIpJmx/6hawoJ7i+BzSFsnrit4v2Wqw/8gWY65ITYHD6XmeBd0ZadV5KUc/89axNAPZGIelVqyPy424YklBr5fD+8rifFMrZB+G3u8OcqFPV9q1BmQ3gHCKEv2z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nVeJnyBl; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-afcb78d5e74so993876866b.1;
-        Mon, 25 Aug 2025 23:11:43 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-afcb7a2befdso768320666b.2;
+        Mon, 25 Aug 2025 23:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756188702; x=1756793502; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756188704; x=1756793504; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wH/lx70VW7TIKv2dzXIZ8mTA36MYFYqDtrQ7jzkc9TY=;
-        b=VV8+2WakNERGSOK8ZU39tL3+OLE5E7WFC7TeS+rYRCKbnZ+VfPd4P7vLDAag78XfHQ
-         WUSG68gReO1/yRnhR+9ylgvBjigddtFJa3sxL/xQHKLl8PbDn6fCMV3YYtUz7gY4FeiK
-         /6jn8j6sUeYLDbAOF4Xydp7zjtdIF+ikiIYiUyxEhbLh0aJTz1jUrZ/ZGv4mTS/pUYMx
-         r43NWFJW1QtG+CQ8NTlPJNIztm3mfndm0n2L5DzNSO/CnT1RqBB1ctGTzk8T1uvzqAgC
-         cHVZ1frEaeSTdeS7TeDdirocJvnBoZHtARQ80T1gHWiQqo3sYHjwQ7DMduiDlGb11tr2
-         yhEw==
+        bh=F+knekcqGNz6gs15/qnRU+9wCksd2jEv93UOmoTNkaE=;
+        b=nVeJnyBlY6CY8TMqi0SX/zZmaZxUIqFiy+pMUbhxEvay4XpGWIFnxB8HJP6IO/ee15
+         DmW/IwZ3dakDbaOQ3LlE7D7j2tIANGpCT+rjEtH9O/6j3lw04EjSdyQbkjwYnsVzYW9u
+         IRox8CCymOlS9yQfAE1SRviT9hL4sPUDge70obohXub9z8V7JchdfioeeQe4iUCZnHGy
+         4dCfW69hKk0ciB9k2i2840Csd3wAWGIdUCAh4/sH3Uj2vB+H9cz1pZYUNrzRTTIZuk2I
+         sA7EJ6if2RVPNVtOeaXoVRH26o3Kabg+WyNrtzgaI6aT27f0dyzXtopnBY4WyYj1PWAo
+         59jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756188702; x=1756793502;
+        d=1e100.net; s=20230601; t=1756188704; x=1756793504;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wH/lx70VW7TIKv2dzXIZ8mTA36MYFYqDtrQ7jzkc9TY=;
-        b=wWLnmPiIJoZ2R2eLplRDUcEu4m5BdLFAbH5FgQgd/RgPF7WB/qFJNjO1zPoegd5Def
-         0VfSWoQxsWIKL5MNfWSmbAgLejB5C+rmcleF8VYpuOSiQsyFxwvC0xPZ3O9Z78tLJw03
-         1LfXfhUu2EFr8lMcDMLkxCfldzNns06cCuOuVyXqnoyeiVm9Ws6K9X5wHRfU04m4cIWy
-         4sbGtCqtVjspzFYmhPFcCye8foc+GZrKPc4Huo2ES0jtqjCUS7Ax67KO91XHSM27NO43
-         m9mMa1lws6ph1USFqpB2gORZdaIbnbZSVv3fr9CQ4R0pkAE3aKCEnpI3ECVu2BLmY3wg
-         xqLg==
-X-Forwarded-Encrypted: i=1; AJvYcCV36yd8LPiKbw1Hi3cl7STfxd3db5Fb/DmSX3YsE0TUvZ7QimS+zPhoyEsVdu5DjvNzTWXn7cX19G45Qzom@vger.kernel.org, AJvYcCVfmm89XiIO/SoWsuI+EOkLj4Qa2KZgbGg5JJPxYbec/Ov6xf7qWxs5yxgEVoHjA6/L5coCrQk+bsI=@vger.kernel.org, AJvYcCXfS5BYPfaiI1hRfllCxLWYN+i7YTOGhYIsI/n+MBhEb1iKdcBGIoGe5J4x1gbUw3AtCmal6lPh+Sw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGLqtyz0bmcgENFLDTay5JFmVl/Z/YITppTaN/+9KrupjnrzWe
-	hoH25CT8rAekhM6NpcXZ5eqIdQ2sslxiP5y4l6NtYgskEouN2S0+iw7TJ+nefg==
-X-Gm-Gg: ASbGncsU4Jn6wn1eQ4AyTrKtls5uscUEOfHpWwwOx9WFpMhK3x0df4cn5j864gBQV3i
-	+qKe11tFcclSUToaHwgi2yaTvAbQ74/DcITHf1sI9lbVHaZl6A3LvqVwT4uVKPDmmAZ+VSFxBqq
-	x1pRpLioCCSPkvEuUz3MgKkkJIYmvBKI/u8IrEjgY/LI9coQVmtFWZKiPvyee072BrwrSAIOXjG
-	loT9j3oorH7iM/wOmGJpiEqCNRbc7lL088d8L35+K6Wi/eakfDrVx9aulQLwgZwDv+UMsUJ1PjY
-	43+Bll7q8koRAs0MKH2DN9SYYFXCgGjEr6fP2rZMidrQOQxBx2pJACZiJ4sAnXRkMbmoIgJtqHI
-	V4unRd0CG8B/+VjEyCZ2m6689
-X-Google-Smtp-Source: AGHT+IGoAQ4X5gkG8Uo1qinDwN4Q5R6qyjd7depXId0IwxUvxJlGdO5W6EwETacp2bjzn6nMfM+pYA==
-X-Received: by 2002:a17:907:9496:b0:afc:ebfd:c28b with SMTP id a640c23a62f3a-afe2885c304mr1416955066b.0.1756188702036;
-        Mon, 25 Aug 2025 23:11:42 -0700 (PDT)
+        bh=F+knekcqGNz6gs15/qnRU+9wCksd2jEv93UOmoTNkaE=;
+        b=F/3jTxWWJqB/AebZqZgQPGUn4T5GihulGbZa+XoRIBD1QuOYvTPebioMKahH3c717/
+         7dK8QjvYn8NdnL255r3Acm+Ek/lnxE7RESCHzXAGyOP20ZAOKNh7H/1RpwR5sR/Pfo4K
+         n/DKrgOVjVTQIB6T9Wk1aq/kF1oEA7orczCtyLaiNo1PL8IJtjRBnmynOVjMZZgdCCL1
+         cLvK03yD4+XdEH9lcgy/QI3R/2hSs15faaL7hKXvrtGXlk8g6dFQp/p1W7GHE7IjccnU
+         s4lEJPyK49yW2TEj1dpIZkGAn1N+f0qVrMeRTr4YWPqNIStaXVwoUTFT0zPqogV7kCt1
+         7tlw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWfP6aQNybbAk2H/GVjrLyHi6XxCG7sOk9ASrHgxvxVHSvsULoajtbwDX+FPZyD6UH+FO+SVvd2Ms=@vger.kernel.org, AJvYcCWUXmUGKL0KNHw0cYn31yLyYcO9A78dWfuXfbnaMblayNuXcI3mc3miI3k2En5Ly7JRwzjWVy6IKk8=@vger.kernel.org, AJvYcCWdarGbSlph1JoD74QI4RGBq5Hgi1hTRxFABjSo2fC81SIyPx/7JrS/sdO8cjdBCAlI0tqIOHCAFP+DX9Oz@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmgOPbQS1jTx+KQbxa1qwJt2Xq1K5zwY5lO193PNdzD7rllWo7
+	1fH0xXJfgYjj1JQSnykajeLXMboEgXLiunI/xnvCygNtogHPPDBdBFuf
+X-Gm-Gg: ASbGncsfKWmu7nB+THEq7Us+3tIwZz2jEqN+9xZ2SIZp8Fmtz/Xj6ffNtdVLBv5GbUt
+	T4/N8bDZFmL5SyurxQz6CE18eQVA/xOiPJ2YynMdMfB6JHm7ZVwqNrlHOl/7AzFBzGx0UXpM97I
+	tGlSS1iClIhVLT8HQPOZ3RuUpqHKKBaN7uAy8XxfWAlQTMEiJSdbYhRTHP0HHtXq8fk4tVBBZ7o
+	3TS2ZZo5wQlf/zF/yjASz8C2iORRQfXBPxMJMqMO7lI/9smF2/VRyR7nBCudnPiBq4IWKDrpCiQ
+	NOVCv9iMLJfdlZhPV9nHSiY9kM2YoAxHCw4hbkmNKd7NQhkCDHpN9M6ge16Va3AfSvESmFAhJA6
+	rsgiwxVr1m8q29A==
+X-Google-Smtp-Source: AGHT+IHjkdFCQnQAYQeGOqDyx9KKQHEq6m0hADLxusTCyX0totMmpj8Xv4mOWpPIiIo9PLNgYHNBAg==
+X-Received: by 2002:a17:907:d10:b0:afe:dd9:de24 with SMTP id a640c23a62f3a-afe2979fd28mr1183255566b.60.1756188703469;
+        Mon, 25 Aug 2025 23:11:43 -0700 (PDT)
 Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afe492da4b9sm711067966b.63.2025.08.25.23.11.40
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afe492da4b9sm711067966b.63.2025.08.25.23.11.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 23:11:41 -0700 (PDT)
+        Mon, 25 Aug 2025 23:11:43 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Thierry Reding <thierry.reding@gmail.com>,
 	Thierry Reding <treding@nvidia.com>,
@@ -89,9 +89,9 @@ Cc: linux-tegra@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v3 1/4] dt-bindings: reset: add Tegra114 car header
-Date: Tue, 26 Aug 2025 09:11:14 +0300
-Message-ID: <20250826061117.63643-2-clamor95@gmail.com>
+Subject: [PATCH v3 2/4] clk: tegra: add DFLL DVCO reset control for Tegra114
+Date: Tue, 26 Aug 2025 09:11:15 +0300
+Message-ID: <20250826061117.63643-3-clamor95@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250826061117.63643-1-clamor95@gmail.com>
 References: <20250826061117.63643-1-clamor95@gmail.com>
@@ -103,34 +103,108 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Binding values for special resets that are placed starting from
-software-defined index 160 in line with other chips.
+The DVCO present in the DFLL IP block has a separate reset line, exposed
+via the CAR IP block.  This reset line is asserted upon SoC reset. Unless
+something (such as the DFLL driver) deasserts this line, the DVCO will not
+oscillate, although reads and writes to the DFLL IP block will complete.
+
+Based on a3c83ff2 ("clk: tegra: Add DFLL DVCO reset control for Tegra124")
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- include/dt-bindings/reset/tegra114-car.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 include/dt-bindings/reset/tegra114-car.h
+ drivers/clk/tegra/clk-tegra114.c | 30 ++++++++++++++++++++++++++----
+ drivers/clk/tegra/clk.h          |  2 --
+ 2 files changed, 26 insertions(+), 6 deletions(-)
 
-diff --git a/include/dt-bindings/reset/tegra114-car.h b/include/dt-bindings/reset/tegra114-car.h
-new file mode 100644
-index 000000000000..d7908d810ddf
---- /dev/null
-+++ b/include/dt-bindings/reset/tegra114-car.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * This header provides Tegra114-specific constants for binding
-+ * nvidia,tegra114-car.
-+ */
+diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
+index 186b0b81c1ec..3eaa97c7d79e 100644
+--- a/drivers/clk/tegra/clk-tegra114.c
++++ b/drivers/clk/tegra/clk-tegra114.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/clk/tegra.h>
+ #include <dt-bindings/clock/tegra114-car.h>
++#include <dt-bindings/reset/tegra114-car.h>
+ 
+ #include "clk.h"
+ #include "clk-id.h"
+@@ -1274,7 +1275,7 @@ EXPORT_SYMBOL(tegra114_clock_tune_cpu_trimmers_init);
+  *
+  * Assert the reset line of the DFLL's DVCO.  No return value.
+  */
+-void tegra114_clock_assert_dfll_dvco_reset(void)
++static void tegra114_clock_assert_dfll_dvco_reset(void)
+ {
+ 	u32 v;
+ 
+@@ -1283,7 +1284,6 @@ void tegra114_clock_assert_dfll_dvco_reset(void)
+ 	writel_relaxed(v, clk_base + RST_DFLL_DVCO);
+ 	tegra114_car_barrier();
+ }
+-EXPORT_SYMBOL(tegra114_clock_assert_dfll_dvco_reset);
+ 
+ /**
+  * tegra114_clock_deassert_dfll_dvco_reset - deassert the DFLL's DVCO reset
+@@ -1291,7 +1291,7 @@ EXPORT_SYMBOL(tegra114_clock_assert_dfll_dvco_reset);
+  * Deassert the reset line of the DFLL's DVCO, allowing the DVCO to
+  * operate.  No return value.
+  */
+-void tegra114_clock_deassert_dfll_dvco_reset(void)
++static void tegra114_clock_deassert_dfll_dvco_reset(void)
+ {
+ 	u32 v;
+ 
+@@ -1300,7 +1300,26 @@ void tegra114_clock_deassert_dfll_dvco_reset(void)
+ 	writel_relaxed(v, clk_base + RST_DFLL_DVCO);
+ 	tegra114_car_barrier();
+ }
+-EXPORT_SYMBOL(tegra114_clock_deassert_dfll_dvco_reset);
 +
-+#ifndef _DT_BINDINGS_RESET_TEGRA114_CAR_H
-+#define _DT_BINDINGS_RESET_TEGRA114_CAR_H
++static int tegra114_reset_assert(unsigned long id)
++{
++	if (id == TEGRA114_RST_DFLL_DVCO)
++		tegra114_clock_assert_dfll_dvco_reset();
++	else
++		return -EINVAL;
 +
-+#define TEGRA114_RESET(x)		(5 * 32 + (x))
-+#define TEGRA114_RST_DFLL_DVCO		TEGRA114_RESET(0)
++	return 0;
++}
 +
-+#endif	/* _DT_BINDINGS_RESET_TEGRA114_CAR_H */
++static int tegra114_reset_deassert(unsigned long id)
++{
++	if (id == TEGRA114_RST_DFLL_DVCO)
++		tegra114_clock_deassert_dfll_dvco_reset();
++	else
++		return -EINVAL;
++
++	return 0;
++}
+ 
+ static void __init tegra114_clock_init(struct device_node *np)
+ {
+@@ -1346,6 +1365,9 @@ static void __init tegra114_clock_init(struct device_node *np)
+ 	tegra_super_clk_gen4_init(clk_base, pmc_base, tegra114_clks,
+ 					&pll_x_params);
+ 
++	tegra_init_special_resets(1, tegra114_reset_assert,
++				  tegra114_reset_deassert);
++
+ 	tegra_add_of_provider(np, of_clk_src_onecell_get);
+ 	tegra_register_devclks(devclks, ARRAY_SIZE(devclks));
+ 
+diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
+index 5d80d8b79b8e..58e860b18e5e 100644
+--- a/drivers/clk/tegra/clk.h
++++ b/drivers/clk/tegra/clk.h
+@@ -898,8 +898,6 @@ static inline bool tegra124_clk_emc_driver_available(struct clk_hw *emc_hw)
+ void tegra114_clock_tune_cpu_trimmers_high(void);
+ void tegra114_clock_tune_cpu_trimmers_low(void);
+ void tegra114_clock_tune_cpu_trimmers_init(void);
+-void tegra114_clock_assert_dfll_dvco_reset(void);
+-void tegra114_clock_deassert_dfll_dvco_reset(void);
+ 
+ typedef void (*tegra_clk_apply_init_table_func)(void);
+ extern tegra_clk_apply_init_table_func tegra_clk_apply_init_table;
 -- 
 2.48.1
 
