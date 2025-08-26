@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-33127-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33128-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 665AEB3724D
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:38:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA748B37251
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:39:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADA527A40D9
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 18:37:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 589FF3A5E7E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 18:39:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD9B36CC83;
-	Tue, 26 Aug 2025 18:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF70362091;
+	Tue, 26 Aug 2025 18:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n3RQ7YuX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z10Y9j3F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD4021D3F2;
-	Tue, 26 Aug 2025 18:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AC22E3AF1;
+	Tue, 26 Aug 2025 18:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756233521; cv=none; b=ay8htK8yrhu9ihQLmLESmVU+wuYRxnd5pxL9BEQ7+cVF4loxF8JnmyZrGQWjDHGbViLftsDERsK4f68VEMhisQbux20MLOqXX9MqTw0fLr+a3WnxSoShT3A8iUnCBg0zvKOZq8im+P+f0ZgK3Rzy+Uo2D3HUv0UCeugh5tWFrCU=
+	t=1756233592; cv=none; b=VltWvF9HgkgwypCTQA+XyDgdOSU+GcD1KPo6o6Hsrc50HHejl168GDPiA0RPwrvYNGpdNqU84L5K0D+tcda9X+/ruUfkpQYxyfg7VyynjQYeWzQ9gfvbZCJ+OKvSRG9PnImXayj/6PtSNEqcAEHTPAOQN0IufbZHn55eobektIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756233521; c=relaxed/simple;
-	bh=DRL0Rp1rcjZZQCA5vIp6UWC6r6fR8KjmBs3LClzjh0I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lpUIV0VoOXtM4yUyHiuOhUjR/lD5JyjEv5XFpYA1TF3I3DCUf7XYODTthYU74iCb+og2gI6Cm228/xkkGBkst0v3AOGK+AubuAVM+pFsnAYPMqb6hja05A3hv8rdUK1NySMyUanrZ+cmwzgYb7pGs0oz8dHYhrsMlbKxVaXzKZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n3RQ7YuX; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756233592; c=relaxed/simple;
+	bh=eGUKQUHiZt57yd5d71idNY5FQGaqApInZMHVrZxOda0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Xht7PMhMZQ9Y0g/6UXFrZQ1zweZK03+QK+JNIkfYuU3fSlzyXrSUervZJ6kGp5b1cqCL7LnX9OBbslWjCu1Zzc8dwKQP8G0JmA1QR53vLl0TyfmyGA6rfwOKN79Js0gDDWLeRv+wkV9DMAib54xegLPR0IkYZldFSPXCbo7jNkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z10Y9j3F; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756233520; x=1787769520;
-  h=from:to:cc:subject:date:message-id:mime-version:
+  t=1756233590; x=1787769590;
+  h=from:to:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=DRL0Rp1rcjZZQCA5vIp6UWC6r6fR8KjmBs3LClzjh0I=;
-  b=n3RQ7YuXl13kWXJur7boiLAziKt/G4BkHmA2pR+8cgrdUWuic/dY80py
-   brTHHxVwdLLXEjVRUKHx2biINBy+wMxEZxa2+OUGSiom8sMFxkoXapyLm
-   lU0s70oxC/yQqm75hxfc3kKDL78QwDX0ct4JCZ5r6uRpn2e9tnBiudoyg
-   7EiykleCbWDOAwxI7scqCdZpfg5uXlAIVI4MUx4L8nGzoHnmOVA4RY1uf
-   HQ6gnwMg5+xS960iaHVGwWyMdUwVKTbZ29G+tLbkHYqrBsSpl2pvfOsD/
-   W44bijZTYMQywAY+3+b0Q51cUhbCvY9YJ0H9Z41Um3IX8jxB/eeWWB90o
-   A==;
-X-CSE-ConnectionGUID: FTyQ+houRpiul9adFND05w==
-X-CSE-MsgGUID: RZ+cTf+oSouXZJIzErgtiw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="46061210"
+  bh=eGUKQUHiZt57yd5d71idNY5FQGaqApInZMHVrZxOda0=;
+  b=Z10Y9j3F17yt8aoBSJvt1WWWnEXuDZerj0lIMhDXJxgzbX9V4DFg7XvD
+   4JcmRT/p7vZACo5T8u2b4cY1bDQDVnHUqcld3gNRN2VYeSvF07M8pfyB6
+   LkrQMXPcUYTBYbH9lDJnPKbwhsHb23f/RhRfkBPyi4aFFLjHjIzCnc9mG
+   gLRI6+gvqgxvWthIU/BzXquTxYdyhvlxemaQjjmIn0hcNwe6HPScXtCEX
+   0rJZ1t997WeOczsi8ww7KlMUgENXF23X0P5RF+u9PofZNG/7Rx4PcOaDv
+   ywWioVHBfOxObokmE5fxc4bQ4JclR2q+XXYjfGalZIVm1ug4yP5vD6PVD
+   g==;
+X-CSE-ConnectionGUID: CGP0m+SXTcybMNFROw7O+A==
+X-CSE-MsgGUID: kn4l0sWlS+mcJ3AXm/ev2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="69921012"
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="46061210"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:38:40 -0700
-X-CSE-ConnectionGUID: sKyHxpUWRXyW54750QISaQ==
-X-CSE-MsgGUID: 42xhI/2RQyy3iWzkkH1BCA==
+   d="scan'208";a="69921012"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:39:49 -0700
+X-CSE-ConnectionGUID: lQ5noM8sTEC8huUy4vifQw==
+X-CSE-MsgGUID: S7TqLLpJSNaBU3RyQmDepQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="169581064"
-Received: from sohilmeh.sc.intel.com ([172.25.103.65])
-  by fmviesa006.fm.intel.com with ESMTP; 26 Aug 2025 11:38:39 -0700
-From: Sohil Mehta <sohil.mehta@intel.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org
-Cc: x86@kernel.org,
-	Tony Luck <tony.luck@intel.com>,
-	Zhao Liu <zhao1.liu@linux.intel.com>,
+   d="scan'208";a="200537406"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.125.109.33])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:39:48 -0700
+From: Xi Pardee <xi.pardee@linux.intel.com>
+To: xi.pardee@linux.intel.com,
+	irenic.rajneesh@gmail.com,
+	david.e.box@linux.intel.com,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Sohil Mehta <sohil.mehta@intel.com>
-Subject: [PATCH v3] cpufreq: ondemand: Update the efficient idle check for Intel extended Families
-Date: Tue, 26 Aug 2025 11:36:44 -0700
-Message-ID: <20250826183644.220093-1-sohil.mehta@intel.com>
+	linux-pm@vger.kernel.org
+Subject: [PATCH v1 1/2] platform/x86/intel/pmc: Add Wildcat Lake support to Intel PMC SSRAM Telemetry
+Date: Tue, 26 Aug 2025 11:39:42 -0700
+Message-ID: <20250826183946.802684-1-xi.pardee@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -78,59 +78,40 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IO time is considered busy by default for modern Intel processors. The
-current check covers recent Family 6 models but excludes the brand new
-Families 18 and 19.
+Add Wildcat Lake support to Intel PMC SSRAM Telemetry driver.
 
-According to Arjan van de Ven, the model check was mainly due to a lack
-of testing on systems before INTEL_CORE2_MEROM. He suggests considering
-all Intel processors as having an efficient idle.
-
-Extend the IO busy classification to all Intel processors starting with
-Family 6, including Family 15 (Pentium 4s) and upcoming Families 18/19.
-
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
 ---
-v3:
- - Posting this patch separately since the core family cleanup series
-   was merged without it.
- - Improve commit message and code comments.
+ drivers/platform/x86/intel/pmc/core.h            | 3 +++
+ drivers/platform/x86/intel/pmc/ssram_telemetry.c | 1 +
+ 2 files changed, 4 insertions(+)
 
-v2: https://lore.kernel.org/lkml/20250211194407.2577252-7-sohil.mehta@intel.com/
----
- drivers/cpufreq/cpufreq_ondemand.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index 0e65d37c9231..3decfc53fe68 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -15,6 +15,10 @@
- #include <linux/tick.h>
- #include <linux/sched/cpufreq.h>
+diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+index 4a94a4ee031e6..160b175ce7066 100644
+--- a/drivers/platform/x86/intel/pmc/core.h
++++ b/drivers/platform/x86/intel/pmc/core.h
+@@ -306,6 +306,9 @@ enum ppfear_regs {
+ #define PMC_DEVID_PTL_PCDH	0xe37f
+ #define PMC_DEVID_PTL_PCDP	0xe47f
  
-+#ifdef CONFIG_X86
-+#include <asm/cpu_device_id.h>
-+#endif
++/* WCL */
++#define PMC_DEVID_WCL_PCDN	0x4d7f
 +
- #include "cpufreq_ondemand.h"
- 
- /* On-demand governor macros */
-@@ -41,12 +45,9 @@ static unsigned int default_powersave_bias;
- static int should_io_be_busy(void)
- {
- #if defined(CONFIG_X86)
--	/*
--	 * For Intel, Core 2 (model 15) and later have an efficient idle.
--	 */
-+	/* For Intel, Family 6 and later have an efficient idle. */
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
--			boot_cpu_data.x86 == 6 &&
--			boot_cpu_data.x86_model >= 15)
-+	    boot_cpu_data.x86_vfm >= INTEL_PENTIUM_PRO)
- 		return 1;
- #endif
- 	return 0;
+ /* ARL */
+ #define PMC_DEVID_ARL_SOCM	0x777f
+ #define PMC_DEVID_ARL_SOCS	0xae7f
+diff --git a/drivers/platform/x86/intel/pmc/ssram_telemetry.c b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+index 93579152188ef..03fad9331fc0c 100644
+--- a/drivers/platform/x86/intel/pmc/ssram_telemetry.c
++++ b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+@@ -190,6 +190,7 @@ static const struct pci_device_id intel_pmc_ssram_telemetry_pci_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_LNL_SOCM) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_PTL_PCDH) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_PTL_PCDP) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_WCL_PCDN) },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(pci, intel_pmc_ssram_telemetry_pci_ids);
 -- 
 2.43.0
 
