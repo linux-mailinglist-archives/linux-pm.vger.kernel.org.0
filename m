@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-33131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33133-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6522CB373B2
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 22:16:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 888DAB373B5
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 22:16:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3D93167DA7
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:16:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BA2A5E16BC
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FD9272E63;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706A1286D76;
 	Tue, 26 Aug 2025 20:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mbUu3WDv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1GnltAn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1646C1A2541;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E21717B505;
 	Tue, 26 Aug 2025 20:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756239383; cv=none; b=bF+Nt/GI6sk5Spxn/lVmQM1KrOGHFKq3qZAXzEAikB8yIprt6IxtWY+SEDQZZaTACxgr172vcuGbTi+AdFfFjlR8xxAW7H0istsr1JozHC3sH3OPrfEYeqkIYPwC3wYYl5rSTW4iC77165x9S4lGanB1SfegKOLrQG0VFzrVJP0=
+	t=1756239383; cv=none; b=mqbFcXRY08h8032GBdGbAlLetdAQyzhk6g+dgREeryFthYBQk3kqKGjX57PndpPYa2BOTmljk+I+WPntNjWTFQJl+Yy/lXII+dQlV3K/YYXh5pRI/kEP8ylq92uI1W3f3SgyCNksoiQimu7Lgy75aDp5kJ9nYykXNQK9VshbMrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756239383; c=relaxed/simple;
-	bh=qYSyZU0PA0XW8kSg/t1otLbzZhDMJW98vrjp/AywmYY=;
+	bh=F4eCXDpiPLysUuWKZGHe3bREw0x2ZaT5IN5Hy4x12FY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pO6+l8wKC6geWzFqyGN+0JjEnbx07qBPBz0IwzpC16y9Wb2f2HtqLE/4syTCZG1SBnZzml6qGHLka/Gc5QuSSwgYCOxC9F68l6wLjesNhKhIXgzo5hkpuJml8O2VV/PpOlwTjdU76qgrB+Mb63u5gTA076cvnzSnhuQWdsNdM6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mbUu3WDv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3186C116B1;
+	 In-Reply-To:To:Cc; b=B3rJBTRLc8t5Wr3C/phBzWUOJSrDpXB2HxocrSNRVNKRNMf1MN7aeKz1NQxvdLT0rkQue+UOOduYWr0DVNcPoLH0+LUrvOebrvWsTzhcJDkvMFeYVQgrt+sKhSmgqCXSeDgs2ucKbb2pVsrTXY60iKxX0ZfRqNFiJfkFf3irTM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1GnltAn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BFA68C4CEF4;
 	Tue, 26 Aug 2025 20:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1756239382;
-	bh=qYSyZU0PA0XW8kSg/t1otLbzZhDMJW98vrjp/AywmYY=;
+	bh=F4eCXDpiPLysUuWKZGHe3bREw0x2ZaT5IN5Hy4x12FY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=mbUu3WDvS5ofZaeqLyNY8C1x1RhwS53o/tpZ0YbiMI7GA3eMFaMOGDMrcjVqB3I/E
-	 9azNh0xsbkRyjdStrWIPGiRXVLpBebLNlf9ClW0/2/qwvH2LKWuWhmOm2VP0tp+Mzt
-	 +RAITjOoyl84ac32QO52AUfYuLJ/XU3B29DrxQdl7aZbb/eYjRRX7EwV6G9SeebZ51
-	 H3UTwLy6FsIXAsBlJAGSG5VdItdYqkpn7XbSXPMJc2Bt++CoEsN5m+0JF494tqXd5K
-	 6TMaymOgnzH5omlx9TPnrhJBtp9xhkFpl9Yzv3bCrewYFAVSuccZUGlMDSS6TfsJDi
-	 f+w3Prywm3N4A==
+	b=S1GnltAnW2Rmqpa1OBaayvFQV3qnq5hgI100N9vBuc/oa20zEur0ZlB0ZpZLa1Aa0
+	 z84bZJqVqawIe2A4WSyeoiKsEAApoE1lOlWDHd3hbNGpF0kDuZB1BFgVJ+7NaZZ1xy
+	 fGF09acCLKozOvxcHWrFBE1Z+Z5MKLvNlZlrx31yRJIfdkchiH5vs63FhbACP1/Z+Y
+	 fPpVbadCmDZNhCtjJHXKs89MsEa+CUqWjnTjeFGAdZesIneR4HyRV5GXwClgTDNyEb
+	 ZcOoNjFQvwdx5jps6Gdb7WgUWtbsblBc5f76gKOzqlsKhrECWoW0dNFRxGWfEtPhaY
+	 5CeQ6+jZ37IlQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1005CA0FED;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF53CA0FF8;
 	Tue, 26 Aug 2025 20:16:22 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Tue, 26 Aug 2025 15:15:59 -0500
-Subject: [PATCH 1/2] cpufreq: tegra186: Set target frequency for all cpus
- in policy
+Date: Tue, 26 Aug 2025 15:16:00 -0500
+Subject: [PATCH 2/2] cpufreq: tegra186: Initialize all cores to base
+ frequencies
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250826-tegra186-cpufreq-fixes-v1-1-97f98d3e0adb@gmail.com>
+Message-Id: <20250826-tegra186-cpufreq-fixes-v1-2-97f98d3e0adb@gmail.com>
 References: <20250826-tegra186-cpufreq-fixes-v1-0-97f98d3e0adb@gmail.com>
 In-Reply-To: <20250826-tegra186-cpufreq-fixes-v1-0-97f98d3e0adb@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -66,13 +66,14 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
  Sumit Gupta <sumitg@nvidia.com>
 Cc: Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org, 
  linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
+ Aaron Kling <webgeek1234@gmail.com>, 
+ Mikko Perttunen <mperttunen@nvidia.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756239382; l=1316;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756239382; l=1607;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=WE4FtNYlrqayHn8j1oFAZqsXZWGEdS20pQxJDsMXhig=;
- b=smWWYy/Dw/cQATAk4Z2y1dcYGsWu36PsKoRmK9tyjhXEskFAgD6sXXMNfYn9K9FzflP/aqSj9
- 3DihDaoNiFABrTnV76BoTO4+WgS5u7RvZzPAdYn4JKMTrVNJbQxivd3
+ bh=9bUHeyaYYD5fuQRhqyZoy/YoCxZst0rIRpuE3PyDvxs=;
+ b=Zu2irhRctxFYy8ShV3iS/NGGP7/GCtf5cIRe2O/vva1S8TPz5Mtf7QMi+4k9PQMx4+NC44Htj
+ iBUqMvyf3/KBGshN+/S06gfLre71hS+9D7kdJZnQidiJcID01Pj5nzs
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -82,38 +83,46 @@ Reply-To: webgeek1234@gmail.com
 
 From: Aaron Kling <webgeek1234@gmail.com>
 
-The original commit set all cores in a cluster to a shared policy, but
-did not update set_target to apply a frequency change to all cores for
-the policy. This caused most cores to remain stuck at their boot
-frequency.
+During initialization, the EDVD_COREx_VOLT_FREQ registers for some cores
+are still at reset values and not reflecting the actual frequency. This
+causes get calls to fail. Set all cores to their respective base
+frequency during probe to initialize the registers to working values.
 
-Fixes: be4ae8c19492 ("cpufreq: tegra186: Share policy per cluster")
+Suggested-by: Mikko Perttunen <mperttunen@nvidia.com>
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- drivers/cpufreq/tegra186-cpufreq.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/cpufreq/tegra186-cpufreq.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
-index cbabb726c6645d2e5f1857a47e5643c8552d1933..6c394b429b6182faffabf222e5af501393dbbba9 100644
+index 6c394b429b6182faffabf222e5af501393dbbba9..ef288705f00b0918d0f8963ef9cc9fc53be88091 100644
 --- a/drivers/cpufreq/tegra186-cpufreq.c
 +++ b/drivers/cpufreq/tegra186-cpufreq.c
-@@ -93,10 +93,14 @@ static int tegra186_cpufreq_set_target(struct cpufreq_policy *policy,
+@@ -229,7 +229,8 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
  {
- 	struct tegra186_cpufreq_data *data = cpufreq_get_driver_data();
- 	struct cpufreq_frequency_table *tbl = policy->freq_table + index;
--	unsigned int edvd_offset = data->cpus[policy->cpu].edvd_offset;
-+	unsigned int edvd_offset;
- 	u32 edvd_val = tbl->driver_data;
-+	u32 cpu;
+ 	struct tegra186_cpufreq_data *data;
+ 	struct tegra_bpmp *bpmp;
+-	unsigned int i = 0, err;
++	unsigned int i = 0, err, edvd_offset;
++	u32 edvd_val, cpu;
  
--	writel(edvd_val, data->regs + edvd_offset);
-+	for_each_cpu(cpu, policy->cpus) {
-+		edvd_offset = data->cpus[cpu].edvd_offset;
-+		writel(edvd_val, data->regs + edvd_offset);
-+	}
+ 	data = devm_kzalloc(&pdev->dev,
+ 			    struct_size(data, clusters, TEGRA186_NUM_CLUSTERS),
+@@ -257,6 +258,14 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+ 			err = PTR_ERR(cluster->table);
+ 			goto put_bpmp;
+ 		}
++
++		for (cpu = 0; cpu < ARRAY_SIZE(tegra186_cpus); cpu++) {
++			if (data->cpus[cpu].bpmp_cluster_id == i) {
++				edvd_val = cluster->table[0].driver_data;
++				edvd_offset = data->cpus[cpu].edvd_offset;
++				writel(edvd_val, data->regs + edvd_offset);
++			}
++		}
+ 	}
  
- 	return 0;
- }
+ 	tegra186_cpufreq_driver.driver_data = data;
 
 -- 
 2.50.1
