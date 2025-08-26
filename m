@@ -1,62 +1,63 @@
-Return-Path: <linux-pm+bounces-33128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33129-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA748B37251
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46D59B37255
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:40:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 589FF3A5E7E
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 18:39:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F4038E369B
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 18:40:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF70362091;
-	Tue, 26 Aug 2025 18:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B363705BB;
+	Tue, 26 Aug 2025 18:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z10Y9j3F"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A7T9xzjb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AC22E3AF1;
-	Tue, 26 Aug 2025 18:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BAF36CC83;
+	Tue, 26 Aug 2025 18:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756233592; cv=none; b=VltWvF9HgkgwypCTQA+XyDgdOSU+GcD1KPo6o6Hsrc50HHejl168GDPiA0RPwrvYNGpdNqU84L5K0D+tcda9X+/ruUfkpQYxyfg7VyynjQYeWzQ9gfvbZCJ+OKvSRG9PnImXayj/6PtSNEqcAEHTPAOQN0IufbZHn55eobektIw=
+	t=1756233594; cv=none; b=L0gzjguh2paXiWjjd/B5Lec6gj3Rvcpq9ayPCxJUF2vCUtbKLynHQP1uudZEvFWi+YOBnsAnZeh/ZUnknrFWPv4YXx3Z15cqLyA9wmba7I8FRUQAxCDKMHKmUJuGuIRg9nnFUh9K6Xq2LS/xZLA9nhFD8c9a2Bu1FPt+tlNu1mU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756233592; c=relaxed/simple;
-	bh=eGUKQUHiZt57yd5d71idNY5FQGaqApInZMHVrZxOda0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Xht7PMhMZQ9Y0g/6UXFrZQ1zweZK03+QK+JNIkfYuU3fSlzyXrSUervZJ6kGp5b1cqCL7LnX9OBbslWjCu1Zzc8dwKQP8G0JmA1QR53vLl0TyfmyGA6rfwOKN79Js0gDDWLeRv+wkV9DMAib54xegLPR0IkYZldFSPXCbo7jNkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z10Y9j3F; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1756233594; c=relaxed/simple;
+	bh=h76RmvjiZ35JdLJBJiLroYkvqbDNO1sLmrlwtQmcCMQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=n4Qkffva6dXYAvOmNRb7C0JNSIPXkClymq7IZi9ayaaap6khPk71b73nWaz4qMX5J+LHJeAf/rI6ka5TeZM6LVGNo2OLp+p323kZHBl9xXmfCBLSBkoOFd1hS54LpGh48ijkhUk5anckWuB7JWjBFmFn1cjFNP+HBv+JnsZQwyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A7T9xzjb; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756233590; x=1787769590;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eGUKQUHiZt57yd5d71idNY5FQGaqApInZMHVrZxOda0=;
-  b=Z10Y9j3F17yt8aoBSJvt1WWWnEXuDZerj0lIMhDXJxgzbX9V4DFg7XvD
-   4JcmRT/p7vZACo5T8u2b4cY1bDQDVnHUqcld3gNRN2VYeSvF07M8pfyB6
-   LkrQMXPcUYTBYbH9lDJnPKbwhsHb23f/RhRfkBPyi4aFFLjHjIzCnc9mG
-   gLRI6+gvqgxvWthIU/BzXquTxYdyhvlxemaQjjmIn0hcNwe6HPScXtCEX
-   0rJZ1t997WeOczsi8ww7KlMUgENXF23X0P5RF+u9PofZNG/7Rx4PcOaDv
-   ywWioVHBfOxObokmE5fxc4bQ4JclR2q+XXYjfGalZIVm1ug4yP5vD6PVD
-   g==;
-X-CSE-ConnectionGUID: CGP0m+SXTcybMNFROw7O+A==
-X-CSE-MsgGUID: kn4l0sWlS+mcJ3AXm/ev2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="69921012"
+  t=1756233592; x=1787769592;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=h76RmvjiZ35JdLJBJiLroYkvqbDNO1sLmrlwtQmcCMQ=;
+  b=A7T9xzjbhREry8nuNgHuIyUclR1DDpP5/LE+r6nQqqUQIvTqAvvtbVIN
+   t1vYPpQamonBDiX1mLik5z0Dwz6EhQ4jt8jTljHjtBwZwTzJMBR2K89dT
+   ziOmR65rrOuK2bgwSRAKQkkrbv53Iz9B6BwibHP9nbh8Wv8uGZh7zzw2t
+   KvVgPI4n7MNGm7wi/eEy3TbN9NwlkzPD9STrnU+c0KypW6KbfgJenD+8P
+   xtGO1ZGmrNXgKi7HCpJTsfY/lpJy+zpkndp5JORkL0+D2P+KyYFBfQ+8i
+   7FcrN6tYmKbc5f4QcJXn41MNZWKPAiotn6iVf2jgpKOX/g+7Ma7Gz8UTU
+   w==;
+X-CSE-ConnectionGUID: AAhhKoeDR4SG4wCo0UYbsg==
+X-CSE-MsgGUID: c6usapuNSw2usdQ04KsugA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="69921015"
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="69921012"
+   d="scan'208";a="69921015"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:39:49 -0700
-X-CSE-ConnectionGUID: lQ5noM8sTEC8huUy4vifQw==
-X-CSE-MsgGUID: S7TqLLpJSNaBU3RyQmDepQ==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:39:50 -0700
+X-CSE-ConnectionGUID: 5kXw+1WBR8uKrCjmTpqzgg==
+X-CSE-MsgGUID: p9vLdci7R0a8qLmfxyGU+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="200537406"
+   d="scan'208";a="200537409"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.125.109.33])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:39:48 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:39:49 -0700
 From: Xi Pardee <xi.pardee@linux.intel.com>
 To: xi.pardee@linux.intel.com,
 	irenic.rajneesh@gmail.com,
@@ -66,10 +67,12 @@ To: xi.pardee@linux.intel.com,
 	platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v1 1/2] platform/x86/intel/pmc: Add Wildcat Lake support to Intel PMC SSRAM Telemetry
-Date: Tue, 26 Aug 2025 11:39:42 -0700
-Message-ID: <20250826183946.802684-1-xi.pardee@linux.intel.com>
+Subject: [PATCH v1 2/2] platform/x86/intel/pmc: Add Wildcat Lake support to intel_pmc_core
+Date: Tue, 26 Aug 2025 11:39:43 -0700
+Message-ID: <20250826183946.802684-2-xi.pardee@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250826183946.802684-1-xi.pardee@linux.intel.com>
+References: <20250826183946.802684-1-xi.pardee@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,40 +81,599 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Wildcat Lake support to Intel PMC SSRAM Telemetry driver.
+Add Wildcat Lake support to intel_pmc_core driver
 
 Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
 ---
- drivers/platform/x86/intel/pmc/core.h            | 3 +++
- drivers/platform/x86/intel/pmc/ssram_telemetry.c | 1 +
- 2 files changed, 4 insertions(+)
+ drivers/platform/x86/intel/pmc/Makefile |   2 +-
+ drivers/platform/x86/intel/pmc/core.c   |   1 +
+ drivers/platform/x86/intel/pmc/core.h   |   8 +
+ drivers/platform/x86/intel/pmc/ptl.c    |   6 +-
+ drivers/platform/x86/intel/pmc/wcl.c    | 486 ++++++++++++++++++++++++
+ 5 files changed, 499 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/pmc/wcl.c
 
+diff --git a/drivers/platform/x86/intel/pmc/Makefile b/drivers/platform/x86/intel/pmc/Makefile
+index 5f68c8503a566..bb960c8721d77 100644
+--- a/drivers/platform/x86/intel/pmc/Makefile
++++ b/drivers/platform/x86/intel/pmc/Makefile
+@@ -4,7 +4,7 @@
+ #
+ 
+ intel_pmc_core-y			:= core.o spt.o cnp.o icl.o \
+-					   tgl.o adl.o mtl.o arl.o lnl.o ptl.o
++					   tgl.o adl.o mtl.o arl.o lnl.o ptl.o wcl.o
+ obj-$(CONFIG_INTEL_PMC_CORE)		+= intel_pmc_core.o
+ intel_pmc_core_pltdrv-y			:= pltdrv.o
+ obj-$(CONFIG_INTEL_PMC_CORE)		+= intel_pmc_core_pltdrv.o
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index 540cd2fb0673b..7d55af8e303cf 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -1631,6 +1631,7 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE_U,	&arl_h_pmc_dev),
+ 	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	&lnl_pmc_dev),
+ 	X86_MATCH_VFM(INTEL_PANTHERLAKE_L,	&ptl_pmc_dev),
++	X86_MATCH_VFM(INTEL_WILDCATLAKE_L,	&wcl_pmc_dev),
+ 	{}
+ };
+ 
 diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index 4a94a4ee031e6..160b175ce7066 100644
+index 160b175ce7066..47101f0dd09ce 100644
 --- a/drivers/platform/x86/intel/pmc/core.h
 +++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -306,6 +306,9 @@ enum ppfear_regs {
- #define PMC_DEVID_PTL_PCDH	0xe37f
- #define PMC_DEVID_PTL_PCDP	0xe47f
+@@ -298,6 +298,10 @@ enum ppfear_regs {
+ #define PTL_PMC_LTR_CUR_PLT			0x1C2C
+ #define PTL_PCD_PMC_MMIO_REG_LEN		0x31A8
  
-+/* WCL */
-+#define PMC_DEVID_WCL_PCDN	0x4d7f
++/* Wildcat Lake */
++#define WCL_PMC_LTR_RESERVED			0x1B64
++#define WCL_PCD_PMC_MMIO_REG_LEN		0x3178
 +
- /* ARL */
- #define PMC_DEVID_ARL_SOCM	0x777f
- #define PMC_DEVID_ARL_SOCS	0xae7f
-diff --git a/drivers/platform/x86/intel/pmc/ssram_telemetry.c b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
-index 93579152188ef..03fad9331fc0c 100644
---- a/drivers/platform/x86/intel/pmc/ssram_telemetry.c
-+++ b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
-@@ -190,6 +190,7 @@ static const struct pci_device_id intel_pmc_ssram_telemetry_pci_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_LNL_SOCM) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_PTL_PCDH) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_PTL_PCDP) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_WCL_PCDN) },
- 	{ }
+ /* SSRAM PMC Device ID */
+ /* LNL */
+ #define PMC_DEVID_LNL_SOCM	0xa87f
+@@ -508,6 +512,9 @@ extern const struct pmc_bit_map mtl_socm_vnn_misc_status_map[];
+ extern const struct pmc_bit_map mtl_socm_signal_status_map[];
+ extern const struct pmc_reg_map mtl_socm_reg_map;
+ extern const struct pmc_reg_map mtl_ioep_reg_map;
++extern const struct pmc_bit_map ptl_pcdp_clocksource_status_map[];
++extern const struct pmc_bit_map ptl_pcdp_vnn_req_status_3_map[];
++extern const struct pmc_bit_map ptl_pcdp_signal_status_map[];
+ 
+ void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
+ int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value, int ignore);
+@@ -531,6 +538,7 @@ extern struct pmc_dev_info arl_pmc_dev;
+ extern struct pmc_dev_info arl_h_pmc_dev;
+ extern struct pmc_dev_info lnl_pmc_dev;
+ extern struct pmc_dev_info ptl_pmc_dev;
++extern struct pmc_dev_info wcl_pmc_dev;
+ 
+ void cnl_suspend(struct pmc_dev *pmcdev);
+ int cnl_resume(struct pmc_dev *pmcdev);
+diff --git a/drivers/platform/x86/intel/pmc/ptl.c b/drivers/platform/x86/intel/pmc/ptl.c
+index 394515af60d60..1bbec9856867d 100644
+--- a/drivers/platform/x86/intel/pmc/ptl.c
++++ b/drivers/platform/x86/intel/pmc/ptl.c
+@@ -162,7 +162,7 @@ static const struct pmc_bit_map ptl_pcdp_ltr_show_map[] = {
+ 	{}
  };
- MODULE_DEVICE_TABLE(pci, intel_pmc_ssram_telemetry_pci_ids);
+ 
+-static const struct pmc_bit_map ptl_pcdp_clocksource_status_map[] = {
++const struct pmc_bit_map ptl_pcdp_clocksource_status_map[] = {
+ 	{"AON2_OFF_STS",                 BIT(0),	1},
+ 	{"AON3_OFF_STS",                 BIT(1),	0},
+ 	{"AON4_OFF_STS",                 BIT(2),	1},
+@@ -382,7 +382,7 @@ static const struct pmc_bit_map ptl_pcdp_vnn_req_status_2_map[] = {
+ 	{}
+ };
+ 
+-static const struct pmc_bit_map ptl_pcdp_vnn_req_status_3_map[] = {
++const struct pmc_bit_map ptl_pcdp_vnn_req_status_3_map[] = {
+ 	{"DTS0_VNN_REQ_STS",             BIT(7),	0},
+ 	{"GPIOCOM5_VNN_REQ_STS",         BIT(11),	1},
+ 	{}
+@@ -421,7 +421,7 @@ static const struct pmc_bit_map ptl_pcdp_vnn_misc_status_map[] = {
+ 	{}
+ };
+ 
+-static const struct pmc_bit_map ptl_pcdp_signal_status_map[] = {
++const struct pmc_bit_map ptl_pcdp_signal_status_map[] = {
+ 	{"LSX_Wake0_STS",		 BIT(0),	0},
+ 	{"LSX_Wake1_STS",		 BIT(1),	0},
+ 	{"LSX_Wake2_STS",		 BIT(2),	0},
+diff --git a/drivers/platform/x86/intel/pmc/wcl.c b/drivers/platform/x86/intel/pmc/wcl.c
+new file mode 100644
+index 0000000000000..a97a110f00e8e
+--- /dev/null
++++ b/drivers/platform/x86/intel/pmc/wcl.c
+@@ -0,0 +1,486 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This file contains platform specific structure definitions
++ * and init function used by Wildcat Lake PCH.
++ *
++ * Copyright (c) 2025, Intel Corporation.
++ *
++ */
++
++#include <linux/pci.h>
++
++#include "core.h"
++
++static const struct pmc_bit_map wcl_pcdn_pfear_map[] = {
++	{"PMC_0",               BIT(0)},
++	{"FUSE_OSSE",           BIT(1)},
++	{"ESPISPI",             BIT(2)},
++	{"XHCI",                BIT(3)},
++	{"SPA",                 BIT(4)},
++	{"RSVD",                BIT(5)},
++	{"MPFPW2",              BIT(6)},
++	{"GBE",                 BIT(7)},
++
++	{"SBR16B21",            BIT(0)},
++	{"SBR16B5",             BIT(1)},
++	{"SBR8B1",              BIT(2)},
++	{"SBR8B0",              BIT(3)},
++	{"P2SB0",               BIT(4)},
++	{"D2D_DISP_1",          BIT(5)},
++	{"LPSS",                BIT(6)},
++	{"LPC",                 BIT(7)},
++
++	{"SMB",                 BIT(0)},
++	{"ISH",                 BIT(1)},
++	{"DBG_SBR16B",          BIT(2)},
++	{"NPK_0",               BIT(3)},
++	{"D2D_NOC_1",           BIT(4)},
++	{"FIA_P",               BIT(5)},
++	{"FUSE",                BIT(6)},
++	{"DBG_PSF",             BIT(7)},
++
++	{"DISP_PGA1",           BIT(0)},
++	{"XDCI",                BIT(1)},
++	{"EXI",                 BIT(2)},
++	{"CSE",                 BIT(3)},
++	{"KVMCC",               BIT(4)},
++	{"PMT",                 BIT(5)},
++	{"CLINK",               BIT(6)},
++	{"PTIO",                BIT(7)},
++
++	{"USBR0",               BIT(0)},
++	{"SBR16B22",            BIT(1)},
++	{"SMT1",                BIT(2)},
++	{"MPFPW1",              BIT(3)},
++	{"SMS2",                BIT(4)},
++	{"SMS1",                BIT(5)},
++	{"CSMERTC",             BIT(6)},
++	{"CSMEPSF",             BIT(7)},
++
++	{"D2D_NOC_0",           BIT(0)},
++	{"ESE",                 BIT(1)},
++	{"FIACPCB_P",           BIT(2)},
++	{"RSVD",                BIT(3)},
++	{"SBR8B2",              BIT(4)},
++	{"OSSE_SMT1",           BIT(5)},
++	{"D2D_DISP",            BIT(6)},
++	{"P2SB1",               BIT(7)},
++
++	{"U3FPW1",              BIT(0)},
++	{"SBR16B3",             BIT(1)},
++	{"PSF4",                BIT(2)},
++	{"CNVI",                BIT(3)},
++	{"UFSX2",               BIT(4)},
++	{"ENDBG",               BIT(5)},
++	{"DBC",                 BIT(6)},
++	{"SBRG",                BIT(7)},
++
++	{"RSVD",                BIT(0)},
++	{"NPK1",                BIT(1)},
++	{"SBR16B7",             BIT(2)},
++	{"SBR16B4",             BIT(3)},
++	{"FIA_XG",              BIT(4)},
++	{"PSF6",                BIT(5)},
++	{"UFSPW1",              BIT(6)},
++	{"FIA_U",               BIT(7)},
++
++	{"PSF8",                BIT(0)},
++	{"PSF0",                BIT(1)},
++	{"RSVD",                BIT(2)},
++	{"FIACPCB_U",           BIT(3)},
++	{"TAM",                 BIT(4)},
++	{"SBR16B0",             BIT(5)},
++	{"TBTLSX",              BIT(6)},
++	{"THC0",                BIT(7)},
++
++	{"THC1",                BIT(0)},
++	{"PMC_1",               BIT(1)},
++	{"FIACPCB_XG",          BIT(2)},
++	{"TCSS",                BIT(3)},
++	{"DISP_PGA",            BIT(4)},
++	{"SBR16B20",            BIT(5)},
++	{"SBR8B20",             BIT(6)},
++	{"DBG_SBR",             BIT(7)},
++
++	{"SPC",                 BIT(0)},
++	{"ACE_0",               BIT(1)},
++	{"ACE_1",               BIT(2)},
++	{"ACE_2",               BIT(3)},
++	{"ACE_3",               BIT(4)},
++	{"ACE_4",               BIT(5)},
++	{"ACE_5",               BIT(6)},
++	{"ACE_6",               BIT(7)},
++
++	{"ACE_7",               BIT(0)},
++	{"ACE_8",               BIT(1)},
++	{"ACE_9",               BIT(2)},
++	{"ACE_10",              BIT(3)},
++	{"SBR16B2",             BIT(4)},
++	{"SBR8B4",              BIT(5)},
++	{"OSSE",                BIT(6)},
++	{"SBR16B1",             BIT(7)},
++	{}
++};
++
++static const struct pmc_bit_map *ext_wcl_pcdn_pfear_map[] = {
++	wcl_pcdn_pfear_map,
++	NULL
++};
++
++static const struct pmc_bit_map wcl_pcdn_ltr_show_map[] = {
++	{"SOUTHPORT_A",		CNP_PMC_LTR_SPA},
++	{"RSVD",		WCL_PMC_LTR_RESERVED},
++	{"SATA",		CNP_PMC_LTR_SATA},
++	{"GIGABIT_ETHERNET",	CNP_PMC_LTR_GBE},
++	{"XHCI",		CNP_PMC_LTR_XHCI},
++	{"SOUTHPORT_F",		ADL_PMC_LTR_SPF},
++	{"ME",			CNP_PMC_LTR_ME},
++	{"SATA1",		CNP_PMC_LTR_EVA},
++	{"SOUTHPORT_C",		CNP_PMC_LTR_SPC},
++	{"HD_AUDIO",		CNP_PMC_LTR_AZ},
++	{"CNV",			CNP_PMC_LTR_CNV},
++	{"LPSS",		CNP_PMC_LTR_LPSS},
++	{"SOUTHPORT_D",		CNP_PMC_LTR_SPD},
++	{"SOUTHPORT_E",		CNP_PMC_LTR_SPE},
++	{"SATA2",		PTL_PMC_LTR_SATA2},
++	{"ESPI",		CNP_PMC_LTR_ESPI},
++	{"SCC",			CNP_PMC_LTR_SCC},
++	{"ISH",			CNP_PMC_LTR_ISH},
++	{"UFSX2",		CNP_PMC_LTR_UFSX2},
++	{"EMMC",		CNP_PMC_LTR_EMMC},
++	{"WIGIG",		ICL_PMC_LTR_WIGIG},
++	{"THC0",		TGL_PMC_LTR_THC0},
++	{"THC1",		TGL_PMC_LTR_THC1},
++	{"SOUTHPORT_G",		MTL_PMC_LTR_SPG},
++	{"ESE",			MTL_PMC_LTR_ESE},
++	{"IOE_PMC",		MTL_PMC_LTR_IOE_PMC},
++	{"DMI3",		ARL_PMC_LTR_DMI3},
++	{"OSSE",		LNL_PMC_LTR_OSSE},
++
++	/* Below two cannot be used for LTR_IGNORE */
++	{"CURRENT_PLATFORM",	PTL_PMC_LTR_CUR_PLT},
++	{"AGGREGATED_SYSTEM",	PTL_PMC_LTR_CUR_ASLT},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_power_gating_status_0_map[] = {
++	{"PMC_PGD0_PG_STS",              BIT(0),	0},
++	{"FUSE_OSSE_PGD0_PG_STS",        BIT(1),	0},
++	{"ESPISPI_PGD0_PG_STS",          BIT(2),	0},
++	{"XHCI_PGD0_PG_STS",             BIT(3),	1},
++	{"SPA_PGD0_PG_STS",              BIT(4),	1},
++	{"RSVD_5",                       BIT(5),	0},
++	{"MPFPW2_PGD0_PG_STS",           BIT(6),	0},
++	{"GBE_PGD0_PG_STS",              BIT(7),	1},
++	{"SBR16B21_PGD0_PG_STS",         BIT(8),	0},
++	{"SBR16B5_PGD0_PG_STS",          BIT(9),	0},
++	{"SBR8B1_PGD0_PG_STS",           BIT(10),	0},
++	{"SBR8B0_PGD0_PG_STS",           BIT(11),	0},
++	{"P2SB0_PG_STS",                 BIT(12),	1},
++	{"D2D_DISP_PGD1_PG_STS",         BIT(13),	0},
++	{"LPSS_PGD0_PG_STS",             BIT(14),	1},
++	{"LPC_PGD0_PG_STS",              BIT(15),	0},
++	{"SMB_PGD0_PG_STS",              BIT(16),	0},
++	{"ISH_PGD0_PG_STS",              BIT(17),	0},
++	{"DBG_SBR16B_PGD0_PG_STS",       BIT(18),	0},
++	{"NPK_PGD0_PG_STS",              BIT(19),	0},
++	{"D2D_NOC_PGD1_PG_STS",          BIT(20),	0},
++	{"FIA_P_PGD0_PG_STS",            BIT(21),	0},
++	{"FUSE_PGD0_PG_STS",             BIT(22),	0},
++	{"DBG_PSF_PGD0_PG_STS",          BIT(23),	0},
++	{"DISP_PGA1_PGD0_PG_STS",        BIT(24),	0},
++	{"XDCI_PGD0_PG_STS",             BIT(25),	1},
++	{"EXI_PGD0_PG_STS",              BIT(26),	0},
++	{"CSE_PGD0_PG_STS",              BIT(27),	1},
++	{"KVMCC_PGD0_PG_STS",            BIT(28),	1},
++	{"PMT_PGD0_PG_STS",              BIT(29),	1},
++	{"CLINK_PGD0_PG_STS",            BIT(30),	1},
++	{"PTIO_PGD0_PG_STS",             BIT(31),	1},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_power_gating_status_1_map[] = {
++	{"USBR0_PGD0_PG_STS",            BIT(0),	1},
++	{"SBR16B22_PGD0_PG_STS",         BIT(1),	0},
++	{"SMT1_PGD0_PG_STS",             BIT(2),	1},
++	{"MPFPW1_PGD0_PG_STS",           BIT(3),	0},
++	{"SMS2_PGD0_PG_STS",             BIT(4),	1},
++	{"SMS1_PGD0_PG_STS",             BIT(5),	1},
++	{"CSMERTC_PGD0_PG_STS",          BIT(6),	0},
++	{"CSMEPSF_PGD0_PG_STS",          BIT(7),	0},
++	{"D2D_NOC_PGD0_PG_STS",          BIT(8),	0},
++	{"ESE_PGD0_PG_STS",              BIT(9),	1},
++	{"FIACPCB_P_PGD0_PG_STS",        BIT(10),	0},
++	{"SBR8B2_PGD0_PG_STS",           BIT(12),	0},
++	{"OSSE_SMT1_PGD0_PG_STS",        BIT(13),	1},
++	{"D2D_DISP_PGD0_PG_STS",         BIT(14),	0},
++	{"P2SB1_PGD0_PG_STS",            BIT(15),	1},
++	{"U3FPW1_PGD0_PG_STS",           BIT(16),	0},
++	{"SBR16B3_PGD0_PG_STS",          BIT(17),	0},
++	{"PSF4_PGD0_PG_STS",             BIT(18),	0},
++	{"CNVI_PGD0_PG_STS",             BIT(19),	0},
++	{"UFSX2_PGD0_PG_STS",            BIT(20),	1},
++	{"ENDBG_PGD0_PG_STS",            BIT(21),	0},
++	{"DBC_PGD0_PG_STS",              BIT(22),	0},
++	{"SBRG_PGD0_PG_STS",             BIT(23),	0},
++	{"NPK_PGD1_PG_STS",              BIT(25),	0},
++	{"SBR16B7_PGD0_PG_STS",          BIT(26),	0},
++	{"SBR16B4_PGD0_PG_STS",          BIT(27),	0},
++	{"FIA_XG_PSF_PGD0_PG_STS",       BIT(28),	0},
++	{"PSF6_PGD0_PG_STS",             BIT(29),	0},
++	{"UFSPW1_PGD0_PG_STS",           BIT(30),	0},
++	{"FIA_U_PGD0_PG_STS",            BIT(31),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_power_gating_status_2_map[] = {
++	{"PSF8_PGD0_PG_STS",             BIT(0),	0},
++	{"PSF0_PGD0_PG_STS",             BIT(1),	0},
++	{"FIACPCB_U_PGD0_PG_STS",        BIT(3),	0},
++	{"TAM_PGD0_PG_STS",              BIT(4),	1},
++	{"SBR16B0_PGD0_PG_STS",          BIT(5),	0},
++	{"TBTLSX_PGD0_PG_STS",           BIT(6),	1},
++	{"THC0_PGD0_PG_STS",             BIT(7),	1},
++	{"THC1_PGD0_PG_STS",             BIT(8),	1},
++	{"PMC_PGD1_PG_STS",              BIT(9),	0},
++	{"FIACPCB_XG_PGD0_PG_STS",       BIT(10),	0},
++	{"TCSS_PGD0_PG_STS",             BIT(11),	0},
++	{"DISP_PGA_PGD0_PG_STS",         BIT(12),	0},
++	{"SBR8B4_PGD0_PG_STS",           BIT(13),	0},
++	{"SBR8B20_PGD0_PG_STS",          BIT(14),	0},
++	{"DBG_PGD0_PG_STS",              BIT(15),	0},
++	{"SPC_PGD0_PG_STS",              BIT(16),	1},
++	{"ACE_PGD0_PG_STS",              BIT(17),	0},
++	{"ACE_PGD1_PG_STS",              BIT(18),	0},
++	{"ACE_PGD2_PG_STS",              BIT(19),	0},
++	{"ACE_PGD3_PG_STS",              BIT(20),	0},
++	{"ACE_PGD4_PG_STS",              BIT(21),	0},
++	{"ACE_PGD5_PG_STS",              BIT(22),	0},
++	{"ACE_PGD6_PG_STS",              BIT(23),	0},
++	{"ACE_PGD7_PG_STS",              BIT(24),	0},
++	{"ACE_PGD8_PG_STS",              BIT(25),	0},
++	{"ACE_PGD9_PG_STS",              BIT(26),	0},
++	{"ACE_PGD10_PG_STS",             BIT(27),	0},
++	{"SBR16B2_PG_PGD0_PG_STS",       BIT(28),	0},
++	{"SBR16B20_PGD0_PG_STS",         BIT(29),	0},
++	{"OSSE_PGD0_PG_STS",             BIT(30),	1},
++	{"SBR16B1_PGD0_PG_STS",          BIT(31),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_d3_status_0_map[] = {
++	{"LPSS_D3_STS",                  BIT(3),	1},
++	{"XDCI_D3_STS",                  BIT(4),	1},
++	{"XHCI_D3_STS",                  BIT(5),	1},
++	{"SPA_D3_STS",                   BIT(12),	0},
++	{"SPC_D3_STS",                   BIT(14),	0},
++	{"OSSE_D3_STS",                  BIT(15),	0},
++	{"ESPISPI_D3_STS",               BIT(18),	0},
++	{"PSTH_D3_STS",                  BIT(21),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_d3_status_1_map[] = {
++	{"OSSE_SMT1_D3_STS",             BIT(16),	0},
++	{"GBE_D3_STS",                   BIT(19),	0},
++	{"ITSS_D3_STS",                  BIT(23),	0},
++	{"CNVI_D3_STS",                  BIT(27),	0},
++	{"UFSX2_D3_STS",                 BIT(28),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_d3_status_2_map[] = {
++	{"CSMERTC_D3_STS",               BIT(1),	0},
++	{"ESE_D3_STS",                   BIT(2),	0},
++	{"CSE_D3_STS",                   BIT(4),	0},
++	{"KVMCC_D3_STS",                 BIT(5),	0},
++	{"USBR0_D3_STS",                 BIT(6),	0},
++	{"ISH_D3_STS",                   BIT(7),	0},
++	{"SMT1_D3_STS",                  BIT(8),	0},
++	{"SMT2_D3_STS",                  BIT(9),	0},
++	{"SMT3_D3_STS",                  BIT(10),	0},
++	{"CLINK_D3_STS",                 BIT(14),	0},
++	{"PTIO_D3_STS",                  BIT(16),	0},
++	{"PMT_D3_STS",                   BIT(17),	0},
++	{"SMS1_D3_STS",                  BIT(18),	0},
++	{"SMS2_D3_STS",                  BIT(19),	0},
++	{"OSSE_SMT2_D3_STS",             BIT(22),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_d3_status_3_map[] = {
++	{"THC0_D3_STS",                  BIT(14),	1},
++	{"THC1_D3_STS",                  BIT(15),	1},
++	{"OSSE_SMT3_D3_STS",             BIT(16),	0},
++	{"ACE_D3_STS",                   BIT(23),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_vnn_req_status_0_map[] = {
++	{"LPSS_VNN_REQ_STS",             BIT(3),	1},
++	{"OSSE_VNN_REQ_STS",             BIT(15),	1},
++	{"ESPISPI_VNN_REQ_STS",          BIT(18),	1},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_vnn_req_status_1_map[] = {
++	{"NPK_VNN_REQ_STS",              BIT(4),	1},
++	{"DFXAGG_VNN_REQ_STS",           BIT(8),	0},
++	{"EXI_VNN_REQ_STS",              BIT(9),	1},
++	{"OSSE_SMT1_VNN_REQ_STS",        BIT(16),	1},
++	{"P2D_VNN_REQ_STS",              BIT(18),	1},
++	{"GBE_VNN_REQ_STS",              BIT(19),	1},
++	{"SMB_VNN_REQ_STS",              BIT(25),	1},
++	{"LPC_VNN_REQ_STS",              BIT(26),	0},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_vnn_req_status_2_map[] = {
++	{"CSMERTC_VNN_REQ_STS",          BIT(1),	1},
++	{"ESE_VNN_REQ_STS",              BIT(2),	1},
++	{"CSE_VNN_REQ_STS",              BIT(4),	1},
++	{"ISH_VNN_REQ_STS",              BIT(7),	1},
++	{"SMT1_VNN_REQ_STS",             BIT(8),	1},
++	{"CLINK_VNN_REQ_STS",            BIT(14),	1},
++	{"SMS1_VNN_REQ_STS",             BIT(18),	1},
++	{"SMS2_VNN_REQ_STS",             BIT(19),	1},
++	{"GPIOCOM4_VNN_REQ_STS",         BIT(20),	1},
++	{"GPIOCOM3_VNN_REQ_STS",         BIT(21),	1},
++	{"GPIOCOM1_VNN_REQ_STS",         BIT(23),	1},
++	{"GPIOCOM0_VNN_REQ_STS",         BIT(24),	1},
++	{"DISP_SHIM_VNN_REQ_STS",        BIT(31),	1},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_vnn_misc_status_map[] = {
++	{"CPU_C10_REQ_STS",              BIT(0),	0},
++	{"TS_OFF_REQ_STS",               BIT(1),	0},
++	{"PNDE_MET_REQ_STS",             BIT(2),	1},
++	{"FW_THROTTLE_ALLOWED_REQ_STS",  BIT(4),	0},
++	{"VNN_SOC_REQ_STS",              BIT(6),	1},
++	{"ISH_VNNAON_REQ_STS",           BIT(7),	0},
++	{"D2D_NOC_CFI_QACTIVE_REQ_STS",	 BIT(8),	1},
++	{"D2D_NOC_GPSB_QACTIVE_REQ_STS", BIT(9),	1},
++	{"PLT_GREATER_REQ_STS",          BIT(11),	1},
++	{"ALL_SBR_IDLE_REQ_STS",         BIT(12),	0},
++	{"PMC_IDLE_FB_OCP_REQ_STS",      BIT(13),	0},
++	{"PM_SYNC_STATES_REQ_STS",       BIT(14),	0},
++	{"EA_REQ_STS",                   BIT(15),	0},
++	{"MPHY_CORE_OFF_REQ_STS",        BIT(16),	0},
++	{"BRK_EV_EN_REQ_STS",            BIT(17),	0},
++	{"AUTO_DEMO_EN_REQ_STS",         BIT(18),	0},
++	{"ITSS_CLK_SRC_REQ_STS",         BIT(19),	1},
++	{"ARC_IDLE_REQ_STS",             BIT(21),	0},
++	{"FIA_DEEP_PM_REQ_STS",          BIT(23),	0},
++	{"XDCI_ATTACHED_REQ_STS",        BIT(24),	1},
++	{"ARC_INTERRUPT_WAKE_REQ_STS",   BIT(25),	0},
++	{"D2D_DISP_DDI_QACTIVE_REQ_STS", BIT(26),	1},
++	{"PRE_WAKE0_REQ_STS",            BIT(27),	1},
++	{"PRE_WAKE1_REQ_STS",            BIT(28),	1},
++	{"PRE_WAKE2_REQ_STS",            BIT(29),	1},
++	{}
++};
++
++static const struct pmc_bit_map wcl_pcdn_rsc_status_map[] = {
++	{"Memory",		0,		1},
++	{"PSF0",		0,		1},
++	{"PSF6",		0,		1},
++	{"PSF8",		0,		1},
++	{"SAF_CFI_LINK",	0,		1},
++	{"SB",			0,		1},
++	{}
++};
++
++static const struct pmc_bit_map *wcl_pcdn_lpm_maps[] = {
++	ptl_pcdp_clocksource_status_map,
++	wcl_pcdn_power_gating_status_0_map,
++	wcl_pcdn_power_gating_status_1_map,
++	wcl_pcdn_power_gating_status_2_map,
++	wcl_pcdn_d3_status_0_map,
++	wcl_pcdn_d3_status_1_map,
++	wcl_pcdn_d3_status_2_map,
++	wcl_pcdn_d3_status_3_map,
++	wcl_pcdn_vnn_req_status_0_map,
++	wcl_pcdn_vnn_req_status_1_map,
++	wcl_pcdn_vnn_req_status_2_map,
++	ptl_pcdp_vnn_req_status_3_map,
++	wcl_pcdn_vnn_misc_status_map,
++	ptl_pcdp_signal_status_map,
++	NULL
++};
++
++static const struct pmc_bit_map *wcl_pcdn_blk_maps[] = {
++	wcl_pcdn_power_gating_status_0_map,
++	wcl_pcdn_power_gating_status_1_map,
++	wcl_pcdn_power_gating_status_2_map,
++	wcl_pcdn_rsc_status_map,
++	wcl_pcdn_vnn_req_status_0_map,
++	wcl_pcdn_vnn_req_status_1_map,
++	wcl_pcdn_vnn_req_status_2_map,
++	ptl_pcdp_vnn_req_status_3_map,
++	wcl_pcdn_d3_status_0_map,
++	wcl_pcdn_d3_status_1_map,
++	wcl_pcdn_d3_status_2_map,
++	wcl_pcdn_d3_status_3_map,
++	ptl_pcdp_clocksource_status_map,
++	wcl_pcdn_vnn_misc_status_map,
++	ptl_pcdp_signal_status_map,
++	NULL
++};
++
++static const struct pmc_reg_map wcl_pcdn_reg_map = {
++	.pfear_sts = ext_wcl_pcdn_pfear_map,
++	.slp_s0_offset = CNP_PMC_SLP_S0_RES_COUNTER_OFFSET,
++	.slp_s0_res_counter_step = TGL_PMC_SLP_S0_RES_COUNTER_STEP,
++	.ltr_show_sts = wcl_pcdn_ltr_show_map,
++	.msr_sts = msr_map,
++	.ltr_ignore_offset = CNP_PMC_LTR_IGNORE_OFFSET,
++	.regmap_length = WCL_PCD_PMC_MMIO_REG_LEN,
++	.ppfear0_offset = CNP_PMC_HOST_PPFEAR0A,
++	.ppfear_buckets = LNL_PPFEAR_NUM_ENTRIES,
++	.pm_cfg_offset = CNP_PMC_PM_CFG_OFFSET,
++	.pm_read_disable_bit = CNP_PMC_READ_DISABLE_BIT,
++	.lpm_num_maps = PTL_LPM_NUM_MAPS,
++	.ltr_ignore_max = LNL_NUM_IP_IGN_ALLOWED,
++	.lpm_res_counter_step_x2 = TGL_PMC_LPM_RES_COUNTER_STEP_X2,
++	.etr3_offset = ETR3_OFFSET,
++	.lpm_sts_latch_en_offset = MTL_LPM_STATUS_LATCH_EN_OFFSET,
++	.lpm_priority_offset = MTL_LPM_PRI_OFFSET,
++	.lpm_en_offset = MTL_LPM_EN_OFFSET,
++	.lpm_residency_offset = MTL_LPM_RESIDENCY_OFFSET,
++	.lpm_sts = wcl_pcdn_lpm_maps,
++	.lpm_status_offset = MTL_LPM_STATUS_OFFSET,
++	.lpm_live_status_offset = MTL_LPM_LIVE_STATUS_OFFSET,
++	.s0ix_blocker_maps = wcl_pcdn_blk_maps,
++	.s0ix_blocker_offset = LNL_S0IX_BLOCKER_OFFSET,
++};
++
++#define WCL_NPU_PCI_DEV                0xfd3e
++
++/*
++ * Set power state of select devices that do not have drivers to D3
++ * so that they do not block Package C entry.
++ */
++static void wcl_d3_fixup(void)
++{
++	pmc_core_set_device_d3(WCL_NPU_PCI_DEV);
++}
++
++static int wcl_resume(struct pmc_dev *pmcdev)
++{
++	wcl_d3_fixup();
++	return cnl_resume(pmcdev);
++}
++
++static int wcl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
++{
++	wcl_d3_fixup();
++	return generic_core_init(pmcdev, pmc_dev_info);
++}
++
++struct pmc_dev_info wcl_pmc_dev = {
++	.map = &wcl_pcdn_reg_map,
++	.suspend = cnl_suspend,
++	.resume = wcl_resume,
++	.init = wcl_core_init,
++};
 -- 
 2.43.0
 
