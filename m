@@ -1,124 +1,137 @@
-Return-Path: <linux-pm+bounces-33126-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33127-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6F8AB3708E
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 18:36:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 665AEB3724D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 20:38:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EA633A9A38
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 16:35:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADA527A40D9
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 18:37:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCF7369329;
-	Tue, 26 Aug 2025 16:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD9B36CC83;
+	Tue, 26 Aug 2025 18:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n3RQ7YuX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984B5362078;
-	Tue, 26 Aug 2025 16:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD4021D3F2;
+	Tue, 26 Aug 2025 18:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756226126; cv=none; b=WzpnlZGTV8MbtXNa1m3NS8QdCm/56MDcgWoMYggcCn3KExtxnEgZlrfI7C/hKw/GJkCI62Kfmmaz+3969AMx6CAStR10r5Ang1YXoYg5CzbnClXA26HyHkSDg2WxxQFjXE4dSpV5QxYBH/m+MkAFecXlBAsULiwB3Ym7TUHscns=
+	t=1756233521; cv=none; b=ay8htK8yrhu9ihQLmLESmVU+wuYRxnd5pxL9BEQ7+cVF4loxF8JnmyZrGQWjDHGbViLftsDERsK4f68VEMhisQbux20MLOqXX9MqTw0fLr+a3WnxSoShT3A8iUnCBg0zvKOZq8im+P+f0ZgK3Rzy+Uo2D3HUv0UCeugh5tWFrCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756226126; c=relaxed/simple;
-	bh=Qr2qTi+512p+e4SYLAIsyC00OV8S61hM2BP79hz1vL4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RTnm4y7h5ZZ/UTvzOdkB5oxEB9mFnSoMaZOUaAC+YHOneg6tbAG/4vKqRoYuNWYP1XBSdhL98+tRjMJ62MELogaQz2m9KkQzdPQfi3hfj3UovIXRRcdnzzAtUayna3VLzimij34HlQwmgWMT6WH3FxGh5D/QevhHJho1AQiMA2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E4571A25;
-	Tue, 26 Aug 2025 09:35:15 -0700 (PDT)
-Received: from [10.57.4.86] (unknown [10.57.4.86])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5A1B3F694;
-	Tue, 26 Aug 2025 09:35:17 -0700 (PDT)
-Message-ID: <8d6ac059-fc8f-4a5d-b49e-d02777c01cfb@arm.com>
-Date: Tue, 26 Aug 2025 17:35:15 +0100
+	s=arc-20240116; t=1756233521; c=relaxed/simple;
+	bh=DRL0Rp1rcjZZQCA5vIp6UWC6r6fR8KjmBs3LClzjh0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lpUIV0VoOXtM4yUyHiuOhUjR/lD5JyjEv5XFpYA1TF3I3DCUf7XYODTthYU74iCb+og2gI6Cm228/xkkGBkst0v3AOGK+AubuAVM+pFsnAYPMqb6hja05A3hv8rdUK1NySMyUanrZ+cmwzgYb7pGs0oz8dHYhrsMlbKxVaXzKZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n3RQ7YuX; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756233520; x=1787769520;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DRL0Rp1rcjZZQCA5vIp6UWC6r6fR8KjmBs3LClzjh0I=;
+  b=n3RQ7YuXl13kWXJur7boiLAziKt/G4BkHmA2pR+8cgrdUWuic/dY80py
+   brTHHxVwdLLXEjVRUKHx2biINBy+wMxEZxa2+OUGSiom8sMFxkoXapyLm
+   lU0s70oxC/yQqm75hxfc3kKDL78QwDX0ct4JCZ5r6uRpn2e9tnBiudoyg
+   7EiykleCbWDOAwxI7scqCdZpfg5uXlAIVI4MUx4L8nGzoHnmOVA4RY1uf
+   HQ6gnwMg5+xS960iaHVGwWyMdUwVKTbZ29G+tLbkHYqrBsSpl2pvfOsD/
+   W44bijZTYMQywAY+3+b0Q51cUhbCvY9YJ0H9Z41Um3IX8jxB/eeWWB90o
+   A==;
+X-CSE-ConnectionGUID: FTyQ+houRpiul9adFND05w==
+X-CSE-MsgGUID: RZ+cTf+oSouXZJIzErgtiw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="46061210"
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="46061210"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 11:38:40 -0700
+X-CSE-ConnectionGUID: sKyHxpUWRXyW54750QISaQ==
+X-CSE-MsgGUID: 42xhI/2RQyy3iWzkkH1BCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="169581064"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmviesa006.fm.intel.com with ESMTP; 26 Aug 2025 11:38:39 -0700
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org
+Cc: x86@kernel.org,
+	Tony Luck <tony.luck@intel.com>,
+	Zhao Liu <zhao1.liu@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	Sohil Mehta <sohil.mehta@intel.com>
+Subject: [PATCH v3] cpufreq: ondemand: Update the efficient idle check for Intel extended Families
+Date: Tue, 26 Aug 2025 11:36:44 -0700
+Message-ID: <20250826183644.220093-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/19] perf: Introduce positive capability for sampling
-To: Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: mingo@redhat.com, will@kernel.org, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
- iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
- linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-riscv@lists.infradead.org
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <ae81cb65b38555c628e395cce67ac6c7eaafdd23.1755096883.git.robin.murphy@arm.com>
- <20250826130806.GY4067720@noisy.programming.kicks-ass.net>
- <aK22izKE4r6wI_D9@J2N7QTR9R3>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <aK22izKE4r6wI_D9@J2N7QTR9R3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2025-08-26 2:28 pm, Mark Rutland wrote:
-> On Tue, Aug 26, 2025 at 03:08:06PM +0200, Peter Zijlstra wrote:
->> On Wed, Aug 13, 2025 at 06:01:08PM +0100, Robin Murphy wrote:
->>> Sampling is inherently a feature for CPU PMUs, given that the thing
->>> to be sampled is a CPU context. These days, we have many more
->>> uncore/system PMUs than CPU PMUs, so it no longer makes much sense to
->>> assume sampling support by default and force the ever-growing majority
->>> of drivers to opt out of it (or erroneously fail to). Instead, let's
->>> introduce a positive opt-in capability that's more obvious and easier to
->>> maintain.
->>
->>> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
->>> index 4d439c24c901..bf2cfbeabba2 100644
->>> --- a/include/linux/perf_event.h
->>> +++ b/include/linux/perf_event.h
->>> @@ -294,7 +294,7 @@ struct perf_event_pmu_context;
->>>   /**
->>>    * pmu::capabilities flags
->>>    */
->>> -#define PERF_PMU_CAP_NO_INTERRUPT	0x0001
->>> +#define PERF_PMU_CAP_SAMPLING		0x0001
->>>   #define PERF_PMU_CAP_NO_NMI		0x0002
->>>   #define PERF_PMU_CAP_AUX_NO_SG		0x0004
->>>   #define PERF_PMU_CAP_EXTENDED_REGS	0x0008
->>> @@ -305,6 +305,7 @@ struct perf_event_pmu_context;
->>>   #define PERF_PMU_CAP_EXTENDED_HW_TYPE	0x0100
->>>   #define PERF_PMU_CAP_AUX_PAUSE		0x0200
->>>   #define PERF_PMU_CAP_AUX_PREFER_LARGE	0x0400
->>> +#define PERF_PMU_CAP_NO_INTERRUPT	0x0800
->>
->> So NO_INTERRUPT was supposed to be the negative of your new SAMPLING
->> (and I agree with your reasoning).
->>
->> What I'm confused/curious about is why we retain NO_INTERRUPT?
-> 
-> I see from your other reply that you spotted the next patch does that.
-> 
-> For the sake of other reviewers or anyone digging through the git
-> history it's probably worth adding a line to this commit message to say:
-> 
-> | A subsequent patch will remove PERF_PMU_CAP_NO_INTERRUPT as this
-> | requires some additional cleanup.
+IO time is considered busy by default for modern Intel processors. The
+current check covers recent Family 6 models but excludes the brand new
+Families 18 and 19.
 
-Yup, the main reason is the set of drivers getting the new cap is 
-smaller than the set of drivers currently not rejecting sampling events, 
-so I wanted it to be clearly visible in the patch. Indeed I shall 
-clarify the relationship to NO_INTERRUPT in the commit message.
+According to Arjan van de Ven, the model check was mainly due to a lack
+of testing on systems before INTEL_CORE2_MEROM. He suggests considering
+all Intel processors as having an efficient idle.
 
-Thanks,
-Robin.
+Extend the IO busy classification to all Intel processors starting with
+Family 6, including Family 15 (Pentium 4s) and upcoming Families 18/19.
+
+Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+---
+v3:
+ - Posting this patch separately since the core family cleanup series
+   was merged without it.
+ - Improve commit message and code comments.
+
+v2: https://lore.kernel.org/lkml/20250211194407.2577252-7-sohil.mehta@intel.com/
+---
+ drivers/cpufreq/cpufreq_ondemand.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+index 0e65d37c9231..3decfc53fe68 100644
+--- a/drivers/cpufreq/cpufreq_ondemand.c
++++ b/drivers/cpufreq/cpufreq_ondemand.c
+@@ -15,6 +15,10 @@
+ #include <linux/tick.h>
+ #include <linux/sched/cpufreq.h>
+ 
++#ifdef CONFIG_X86
++#include <asm/cpu_device_id.h>
++#endif
++
+ #include "cpufreq_ondemand.h"
+ 
+ /* On-demand governor macros */
+@@ -41,12 +45,9 @@ static unsigned int default_powersave_bias;
+ static int should_io_be_busy(void)
+ {
+ #if defined(CONFIG_X86)
+-	/*
+-	 * For Intel, Core 2 (model 15) and later have an efficient idle.
+-	 */
++	/* For Intel, Family 6 and later have an efficient idle. */
+ 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
+-			boot_cpu_data.x86 == 6 &&
+-			boot_cpu_data.x86_model >= 15)
++	    boot_cpu_data.x86_vfm >= INTEL_PENTIUM_PRO)
+ 		return 1;
+ #endif
+ 	return 0;
+-- 
+2.43.0
+
 
