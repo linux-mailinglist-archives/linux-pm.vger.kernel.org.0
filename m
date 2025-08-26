@@ -1,238 +1,158 @@
-Return-Path: <linux-pm+bounces-33119-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33120-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D414B36611
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 15:52:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD799B366B0
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 15:59:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 613B18E5C86
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 13:43:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48DCAB61971
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 13:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92FA3376A8;
-	Tue, 26 Aug 2025 13:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A871352FE7;
+	Tue, 26 Aug 2025 13:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J//Si2GW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446331ACEDA;
-	Tue, 26 Aug 2025 13:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE71341ABD;
+	Tue, 26 Aug 2025 13:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756215807; cv=none; b=YLdvFT2dTzEKsfnMgeUqN+Gw78rZpQFml+C33OKcqNYn4zr5p7uQg/kwAJi6bklqbapAq0i/vwldKuW2TdEj47eBmwC/fiy6d4QXUCCM6vZlQ/Crxb411mBrMM9gaVoPCYQdEhm343EDXAcNVLtUphJt7Ps5+zFmHOUBJsokuYU=
+	t=1756216608; cv=none; b=j50clJ4Xax6nGSPgHu8GmbKZziPjoUufgSjaPOprxIeMtFK7/pQc8rPHtwwmwJ+TlnFPy/9iKKXiOxZ2ExaozOmgmVlIoXQ+tCydhHx9iwlRWsUkh+oDYcK5ojEjP1BBEHfQsmNMb5+6HpOOTsXqXcSxtxo0Z5RVptWG2qE+aMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756215807; c=relaxed/simple;
-	bh=NSFdsUFlpKhN8H0ekHru05yw4WSdjN+zOrEkvz1mKVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WVkLxr91RFrGSaBzdALgbmE2/n2dSCsNxWPKBs7kEIbkeu14ey2Qqo88OoKH2EtRNCVflCjcjnWmHvr3Ls1isB8o5ya118iNhPsP4K9PgnkB6YZ/Nz8ubON70M7kn4nu4Kbxps9EmP0HOMvog8npPGiiRIfr8SH86aWkrVZY3nI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E7311A25;
-	Tue, 26 Aug 2025 06:43:16 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B8A73F63F;
-	Tue, 26 Aug 2025 06:43:18 -0700 (PDT)
-Date: Tue, 26 Aug 2025 14:43:16 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-	acme@kernel.org, namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
-	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 18/19] perf: Introduce positive capability for raw events
-Message-ID: <aK259PrpyxguQzdN@J2N7QTR9R3>
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
+	s=arc-20240116; t=1756216608; c=relaxed/simple;
+	bh=GAK3iErIJh5FHvvRonZ/RMRYuNJxBuLG4M3JABISxbU=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=S/axGT3jFdP4vG0H+oKbSNRNsMGGe8BRu6X5RaLNc+p8rOgB0QhDMI6DBoZX3n2f6z7A7JmRffMZAN040sf6XU4NlxT6yEHRhX+vfXpo/o8rNUBLyB0KfSKFIKh3IwDp98HkstAKrbkJvfCcpuXfxMv12DoLpF3iPLLFxDOBXS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J//Si2GW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412E6C116B1;
+	Tue, 26 Aug 2025 13:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756216605;
+	bh=GAK3iErIJh5FHvvRonZ/RMRYuNJxBuLG4M3JABISxbU=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=J//Si2GWx4doiSIjC71SHMojeaD1+tCxptmSzaXZqxSx3rCUTtGQ+N7qSq0mOM8hl
+	 RdvRAjAI4KD/o56UqmJBJ7h9hifetskHNsgG6r/jlVtoaErGvd0QQjU3sQT1uE8Ete
+	 cDAayHCLQUSflFpyl1uH2n8CYd/EcdD+7f+YaTcNOlSE0LI5Ou+0HTthv4IVq/mTt+
+	 Wnsvyky7VR2spB54QCYWFuJ+p2kR6iUBfte8T6jcIFXZHO1ayCudO5gD+qSP1QC/sn
+	 wsg4DZjJg/QQMiAEqVVXFxc2LYHuYDNusrNbdM7mEorQgDXPfu9bP/MWHiTYqy11lV
+	 /WAgbi+dJWiXw==
+Date: Tue, 26 Aug 2025 08:56:44 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-clk@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Jonathan Hunter <jonathanh@nvidia.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Thierry Reding <treding@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-tegra@vger.kernel.org, 
+ Mikko Perttunen <mperttunen@nvidia.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
+ linux-pm@vger.kernel.org
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+In-Reply-To: <20250826061117.63643-1-clamor95@gmail.com>
+References: <20250826061117.63643-1-clamor95@gmail.com>
+Message-Id: <175621649727.159471.17430997152265024171.robh@kernel.org>
+Subject: Re: [PATCH v3 0/4] clk: tegra: add DFLL support for Tegra114
 
-On Wed, Aug 13, 2025 at 06:01:10PM +0100, Robin Murphy wrote:
-> Only a handful of CPU PMUs accept PERF_TYPE_{RAW,HARDWARE,HW_CACHE}
-> events without registering themselves as PERF_TYPE_RAW in the first
-> place. Add an explicit opt-in for these special cases, so that we can
-> make life easier for every other driver (and probably also speed up the
-> slow-path search) by having perf_try_init_event() do the basic type
-> checking to cover the majority of cases.
+
+On Tue, 26 Aug 2025 09:11:13 +0300, Svyatoslav Ryhel wrote:
+> DFLL is a dedicated clock source for the Fast CPU. The DFLL is based on
+> a ring oscillator and translates voltage changes into frequency
+> compensation changes needed to prevent the CPU from failing and is
+> essential for correct CPU frequency scaling.
 > 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-
-
-To bikeshed a little here, I'm not keen on the PERF_PMU_CAP_RAW_EVENTS
-name, because it's not clear what "RAW" really means, and people will
-definitely read that to mean something else.
-
-Could we go with something like PERF_PMU_CAP_COMMON_CPU_EVENTS, to make
-it clear that this is about opting into CPU-PMU specific event types (of
-which PERF_TYPE_RAW is one of)?
-
-Likewise, s/is_raw_pmu()/pmu_supports_common_cpu_events()/.
-
+> ---
+> Changes in v2:
+> - dropped 'drivers:' from commit title
+> - aligned naming to Tegra114
+> 
+> Changes in v3:
+> - add DFLL support for Tegra 114 was split into dt header addition,
+>   DFLL reset configuration and CVB tables implementation.
+> - added cleaner commit message to dt header commit
+> - added T210_ prefixes to Tegra210 CVB table macros
 > ---
 > 
-> A further possibility is to automatically add the cap to PERF_TYPE_RAW
-> PMUs in perf_pmu_register() to have a single point-of-use condition; I'm
-> undecided...
-
-I reckon we don't need to automagically do that, but I reckon that
-is_raw_pmu()/pmu_supports_common_cpu_events() should only check the cap,
-and we don't read anything special into any of
-PERF_TYPE_{RAW,HARDWARE,HW_CACHE}.
-
-> ---
->  arch/s390/kernel/perf_cpum_cf.c    |  1 +
->  arch/s390/kernel/perf_pai_crypto.c |  2 +-
->  arch/s390/kernel/perf_pai_ext.c    |  2 +-
->  arch/x86/events/core.c             |  2 +-
->  drivers/perf/arm_pmu.c             |  1 +
->  include/linux/perf_event.h         |  1 +
->  kernel/events/core.c               | 15 +++++++++++++++
->  7 files changed, 21 insertions(+), 3 deletions(-)
+> Svyatoslav Ryhel (4):
+>   dt-bindings: reset: add Tegra114 car header
+>   clk: tegra: add DFLL DVCO reset control for Tegra114
+>   clk: tegra: dfll: add CVB tables for Tegra114
+>   ARM: tegra: Add DFLL clock support for Tegra114
 > 
-> diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
-> index 1a94e0944bc5..782ab755ddd4 100644
-> --- a/arch/s390/kernel/perf_cpum_cf.c
-> +++ b/arch/s390/kernel/perf_cpum_cf.c
-> @@ -1054,6 +1054,7 @@ static void cpumf_pmu_del(struct perf_event *event, int flags)
->  /* Performance monitoring unit for s390x */
->  static struct pmu cpumf_pmu = {
->  	.task_ctx_nr  = perf_sw_context,
-> +	.capabilities = PERF_PMU_CAP_RAW_EVENTS,
->  	.pmu_enable   = cpumf_pmu_enable,
->  	.pmu_disable  = cpumf_pmu_disable,
->  	.event_init   = cpumf_pmu_event_init,
-
-Tangential, but use of perf_sw_context here looks bogus.
-
-> diff --git a/arch/s390/kernel/perf_pai_crypto.c b/arch/s390/kernel/perf_pai_crypto.c
-> index a64b6b056a21..b5b6d8b5d943 100644
-> --- a/arch/s390/kernel/perf_pai_crypto.c
-> +++ b/arch/s390/kernel/perf_pai_crypto.c
-> @@ -569,7 +569,7 @@ static const struct attribute_group *paicrypt_attr_groups[] = {
->  /* Performance monitoring unit for mapped counters */
->  static struct pmu paicrypt = {
->  	.task_ctx_nr  = perf_hw_context,
-> -	.capabilities = PERF_PMU_CAP_SAMPLING,
-> +	.capabilities = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
->  	.event_init   = paicrypt_event_init,
->  	.add	      = paicrypt_add,
->  	.del	      = paicrypt_del,
-> diff --git a/arch/s390/kernel/perf_pai_ext.c b/arch/s390/kernel/perf_pai_ext.c
-> index 1261f80c6d52..bcd28c38da70 100644
-> --- a/arch/s390/kernel/perf_pai_ext.c
-> +++ b/arch/s390/kernel/perf_pai_ext.c
-> @@ -595,7 +595,7 @@ static const struct attribute_group *paiext_attr_groups[] = {
->  /* Performance monitoring unit for mapped counters */
->  static struct pmu paiext = {
->  	.task_ctx_nr  = perf_hw_context,
-> -	.capabilities = PERF_PMU_CAP_SAMPLING,
-> +	.capabilities = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
->  	.event_init   = paiext_event_init,
->  	.add	      = paiext_add,
->  	.del	      = paiext_del,
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index 789dfca2fa67..764728bb80ae 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2697,7 +2697,7 @@ static bool x86_pmu_filter(struct pmu *pmu, int cpu)
->  }
->  
->  static struct pmu pmu = {
-> -	.capabilities		= PERF_PMU_CAP_SAMPLING,
-> +	.capabilities		= PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
->  
->  	.pmu_enable		= x86_pmu_enable,
->  	.pmu_disable		= x86_pmu_disable,
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 72d8f38d0aa5..bc772a3bf411 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -877,6 +877,7 @@ struct arm_pmu *armpmu_alloc(void)
->  		 * specific PMU.
->  		 */
->  		.capabilities	= PERF_PMU_CAP_SAMPLING |
-> +				  PERF_PMU_CAP_RAW_EVENTS |
->  				  PERF_PMU_CAP_EXTENDED_REGS |
->  				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
->  	};
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 183b7c48b329..c6ad036c0037 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -305,6 +305,7 @@ struct perf_event_pmu_context;
->  #define PERF_PMU_CAP_EXTENDED_HW_TYPE	0x0100
->  #define PERF_PMU_CAP_AUX_PAUSE		0x0200
->  #define PERF_PMU_CAP_AUX_PREFER_LARGE	0x0400
-> +#define PERF_PMU_CAP_RAW_EVENTS		0x0800
->  
->  /**
->   * pmu::scope
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 71b2a6730705..2ecee76d2ae2 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -12556,11 +12556,26 @@ static inline bool has_extended_regs(struct perf_event *event)
->  	       (event->attr.sample_regs_intr & PERF_REG_EXTENDED_MASK);
->  }
->  
-> +static bool is_raw_pmu(const struct pmu *pmu)
-> +{
-> +	return pmu->type == PERF_TYPE_RAW ||
-> +	       pmu->capabilities & PERF_PMU_CAP_RAW_EVENTS;
-> +}
-
-As above, I reckon we should make this:
-
-static bool pmu_supports_common_cpu_events(const struct pmu *pmu)
-{
-	return pmu->capabilities & PERF_PMU_CAP_RAW_EVENTS;
-}
-
-Other than the above, this looks good to me.
-
-Mark.
-
-> +
->  static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
->  {
->  	struct perf_event_context *ctx = NULL;
->  	int ret;
->  
-> +	/*
-> +	 * Before touching anything, we can safely skip:
-> +	 * - any event for a specific PMU which is not this one
-> +	 * - any common event if this PMU doesn't support them
-> +	 */
-> +	if (event->attr.type != pmu->type &&
-> +	    (event->attr.type >= PERF_TYPE_MAX || is_raw_pmu(pmu)))
-> +		return -ENOENT;
-> +
->  	if (!try_module_get(pmu->module))
->  		return -ENODEV;
->  
-> -- 
-> 2.39.2.101.g768bb238c484.dirty
+>  arch/arm/boot/dts/nvidia/tegra114.dtsi     |  33 +++++
+>  drivers/clk/tegra/Kconfig                  |   2 +-
+>  drivers/clk/tegra/clk-tegra114.c           |  30 +++-
+>  drivers/clk/tegra/clk-tegra124-dfll-fcpu.c | 158 +++++++++++++++++----
+>  drivers/clk/tegra/clk.h                    |   2 -
+>  include/dt-bindings/reset/tegra114-car.h   |  13 ++
+>  6 files changed, 204 insertions(+), 34 deletions(-)
+>  create mode 100644 include/dt-bindings/reset/tegra114-car.h
 > 
+> --
+> 2.48.1
+> 
+> 
+> 
+
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/next-20250825 (best guess, 3/5 blobs matched)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/nvidia/' for 20250826061117.63643-1-clamor95@gmail.com:
+
+arch/arm/boot/dts/nvidia/tegra114-tn7.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
+arch/arm/boot/dts/nvidia/tegra114-tn7.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-tn7.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-roth.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
+arch/arm/boot/dts/nvidia/tegra114-roth.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-roth.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-dalmore.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
+arch/arm/boot/dts/nvidia/tegra114-dalmore.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-dalmore.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
+arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+
+
+
+
+
 
