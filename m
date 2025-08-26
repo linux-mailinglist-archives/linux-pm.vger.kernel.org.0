@@ -1,202 +1,284 @@
-Return-Path: <linux-pm+bounces-33070-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33071-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5008EB353A4
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 07:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EFF9B353C8
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 08:06:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EE1C167BA3
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 05:57:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00EB5177CE7
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 06:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F772F39C2;
-	Tue, 26 Aug 2025 05:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8E92EE617;
+	Tue, 26 Aug 2025 06:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ln9gUA1G"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="diRSEvYx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF042EF64A;
-	Tue, 26 Aug 2025 05:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07855285CA9
+	for <linux-pm@vger.kernel.org>; Tue, 26 Aug 2025 06:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756187848; cv=none; b=Zp9YdvavQm4ZBJ1Gu1Jq4cRX9Watz4M/M0Ktk9IUxaA6GWfoamuPZjJYChLDvFQrooV4KJKoFtsRz0/bMJHXDhMeW5C1RufMokuqsk8jEAfUb3J4OsQ9hj9aXaavubjeQA5iqSfEHlHA+NRENupIZuAeOv5qtPMU78A5OH0zyug=
+	t=1756188412; cv=none; b=sfY0gINYHZTSo3ViWIb7vcoaH45mQqcCVbOyHSjuoBThjluWiNNHd0uWqBjhOHQMNHW8J6gUXOM6qiEPjcNksFPv0+mmtOXn5ctvxLrMqYX3id/eFlaO+7cVgWGUwsUAt8NI8ePqkeAA+/nOfak2NdG8+ZwBHU2zRL0bpu3PrxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756187848; c=relaxed/simple;
-	bh=kKNH8NUIKhO94RwCUn5nWlFEWU6qfkkFMbDLyS0gX0Q=;
+	s=arc-20240116; t=1756188412; c=relaxed/simple;
+	bh=Xh3x3gGKDKpq037wNy+zR+uq9xiA+/wxHihatid3RG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ri4XUoBaWJCZEHICFjYiWzDyfE1meuCFLqge7VzE5vUT1U4TqwcXEygyXw5OL0P0bYPIgoY7MpL6yyjzQPOezElZXo4//+yp7xRsIT8TbdIxnyu4Gkj+AGdFm01pchIo1px7pEbwlK7EKZ3SLsMzj1249nwbgnaQnrPi+5Kk+Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ln9gUA1G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC04AC4CEF1;
-	Tue, 26 Aug 2025 05:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756187847;
-	bh=kKNH8NUIKhO94RwCUn5nWlFEWU6qfkkFMbDLyS0gX0Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ln9gUA1G06fZktO8IE1FEsVV3ABrBpoEvWvmBLz2mWUJIu1k7gwHVtEwna4XoA9g/
-	 V9EpMnEOF8H7QyGHxgr7eck3KTr0lYbav+9YwjJcGdeh6iohVzfUJXhT0GRMOy+ejc
-	 g2AXVc0668NFypwEHhVGnGoKy1/YUvMgkVVFWbymrUN713HNWZRQznBlNm5Fr6Oqn/
-	 FBPmpKrvsoieRxEuuQp9lu4V6vKNEjYYUw9gfxFAAjRYufUivmMOVvpGl0aXwwSw56
-	 YBVmEvDnkFgoFQ9WvB4hI8B64Bh4pcP00U3D40cGQvgZ/iVvL853IvAFxLDja/ht70
-	 aqNFoO4SZ4OaQ==
-Date: Tue, 26 Aug 2025 11:27:11 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 3/7] arm64: dts: qcom: sm8450: Add opp-level to
- indicate PCIe data rates
-Message-ID: <6nwss6gl3d47zer4pai23xcu4weok7m3ptyuptvu5oli7u7ads@zzhbw67hnhz5>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LDEXRoMAkaHBhtJcSeGNgtm3ZweqZLWkySBuFo1aK+/5YYwqmvLtbLQqeAhcnRwsaFr1xiwvPgKkgXEr9DFh1Xx99EcFkCmFZZxQBRnOjW7NckvMPu5qGvAuQL53gQt2WC7gYb/koPosMVhib7TjH/RJYb6Qkng+vTXGXaG8IiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=diRSEvYx; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b49cf21320aso3057111a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Aug 2025 23:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756188410; x=1756793210; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gmGkcUqKd7ltlehuxqJXBzOCmhH4pFIgOLfMRrjOKVc=;
+        b=diRSEvYxSmcA9hkMtqrqJAte3OUwrxnA2h4Y5/wFLXh9b1WM5EMsDGGmxLDt0XilN+
+         MwGQSZcDDTRltx3/kSqVyl6QgJbD4XObK+9r+rWCUei8BwRiBmxMvMuWohGH9kFjDWfA
+         BWjB8fde8h0peaJYgmSxG1obaecCQvw9x/IacuuuPrjgkOC6gV5ezQClt7ydPNkqJb4G
+         Ua95AGmXPHeeQGaXWlhNK5mq5Qls0h77LGOGRerGttnKeoD12Cd1HraLVt5QW+TlLob/
+         W0YFt9GdFCsbUtjSRkCaBIj4qKa0zyxAlhzwXTXLLCzBEGtN7osIGrfM7iDIcixZcCBz
+         ZNiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756188410; x=1756793210;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gmGkcUqKd7ltlehuxqJXBzOCmhH4pFIgOLfMRrjOKVc=;
+        b=Ha8JHS35DGMbb8jyXHXB910c6zoGBIwxyiu+LyualGmZ2szvWuRc2LuycR+6i0LSCU
+         WcwswWzriLhbf850NScvGhy3aMiumBb0Mv1TyMajkZljNFenGkYUgzWqAeuRx4XT5aOi
+         OIr+I+r8yOU9lhy5pkoA5sXaVsddI0SvXAq0rIv6ipab69eklKs+jyrrGUhOBW85HHcq
+         BXyQ4XL9ZI/L0dC8Q1sCg6tSXcgXLi+fX5L58mYYPZAoPlJrClnVQHZidj/XmlrXnt1Y
+         Ode1TFA4UL1W7qTzvfgzFfA1jZmSXnTS+E7OjqMnY1MzXPaLVF/yjaNBjR1lQHK2LnwH
+         bm9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWqg1yLjYnM2WnPCxMuV9ktnMbhxq+LKmMQ1KRlYwPsuYJRJHz1MbBSAREJPs0XiVShqHQruKwRPA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCF2uMIM7O3AL8rDabL7ihHj6NeGQN/jmeuaQKDUtKVBp5BKRW
+	PGjMY0iSwSEd7ACbNzxWreEZkBmVfCRLWWoj7Q1KNLveu4m6mzrlbC8hVJfMK/ZErH8=
+X-Gm-Gg: ASbGncvuKFxltPZGdgxyOrbkAel4lX3E32n1joc1J5oCiKgyFVkYdEaWj03ZT+Rr9IC
+	HRC+wBWSS7f1XVoEvLZ/TzTp4161z4nU872mBs2osmR8xJ+KVKAjfbyxYr9WkFUtmVvkVqXY60O
+	0sKm5ohctT+FTddBNpM0NFAc8yS5+ip5EmB6VI0itLOG6uZkvbB3g97sVU6s09YKAJkKxxZ+oG7
+	G/txr0Q4a030FrCr1+MAAE8bI9tXs68LtGA3YtfVxVPaOE9/L/KNqbtVfgEKoHxdJ06CtN1VS2S
+	dWc7YGmheOZRQdJIvD9zIk8dVzOHJnKFsdU8NkspSef2GFzwgYreECenyJn8fWtTAh1CeAqL9aq
+	vGPI3INA6q/8HbVTB/M5UdOZo
+X-Google-Smtp-Source: AGHT+IE8TYjRI5h9GAJfzIIDlxGxwizCKVGf0+3bJMv0W5OvPkHRdmBovsnmHdZzK3GqLa6rbQdcsw==
+X-Received: by 2002:a17:902:cccd:b0:246:4fd8:1983 with SMTP id d9443c01a7336-2464fd81ceemr160227745ad.17.1756188409894;
+        Mon, 25 Aug 2025 23:06:49 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2487928c46dsm1071725ad.68.2025.08.25.23.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Aug 2025 23:06:49 -0700 (PDT)
+Date: Tue, 26 Aug 2025 11:36:47 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 2/7] OPP: Move refcount and key update for readability
+ in _opp_table_find_key()
+Message-ID: <20250826060647.7eerg5blx3xho27p@vireshk-i7>
 References: <20250820-opp_pcie-v4-0-273b8944eed0@oss.qualcomm.com>
- <20250820-opp_pcie-v4-3-273b8944eed0@oss.qualcomm.com>
+ <20250820-opp_pcie-v4-2-273b8944eed0@oss.qualcomm.com>
+ <CGME20250825135939eucas1p206b6e2b5ba115f51618c773a1f37939c@eucas1p2.samsung.com>
+ <4066c0b4-807f-401e-baaa-25f4891f10ac@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250820-opp_pcie-v4-3-273b8944eed0@oss.qualcomm.com>
+In-Reply-To: <4066c0b4-807f-401e-baaa-25f4891f10ac@samsung.com>
 
-On Wed, Aug 20, 2025 at 01:58:49PM GMT, Krishna Chaitanya Chundru wrote:
-> Add opp-level to indicate PCIe data rates and also define OPP enteries
-> for each link width and data rate. Append the opp level to name of the
-> opp node to indicate both frequency and level.
+Marek,
+
+Thanks for the detailed logs. I would need a little more help from
+you.
+
+Can you give this a try over your failing branch (I have already
+dropped the patch from my tree for now):
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 81fb7dd7f323..5b24255733b5 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -554,10 +554,10 @@ static struct dev_pm_opp *_opp_table_find_key(struct opp_table *opp_table,
+        list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
+                if (temp_opp->available == available) {
+                        if (compare(&opp, temp_opp, read(temp_opp, index), *key)) {
+-                               *key = read(opp, index);
+-
+-                               /* Increment the reference count of OPP */
+-                               dev_pm_opp_get(opp);
++                               if (!IS_ERR(opp)) {
++                                       *key = read(opp, index);
++                                       dev_pm_opp_get(opp);
++                               }
+                                break;
+                        }
+                }
+
+On 25-08-25, 15:59, Marek Szyprowski wrote:
+> 1. Exynos4412-based Odroid-U3 board (ARM 32bit):
 > 
-
-First define the problem statement of why this change is needed. You've
-mentioned it in the cover letter, but that won't be preserved in git history.
-Then you need to justify the change and make it clear that *this* platform
-doesn't suffer the issue but you are doing it for the unification.
-
-This needs to be done for all DTS patches.
-
-- Mani
-
-> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 41 +++++++++++++++++++++++++++++-------
->  1 file changed, 33 insertions(+), 8 deletions(-)
+> ============================================
+> WARNING: possible recursive locking detected
+> 6.17.0-rc3-next-20250825 #10901 Not tainted
+> --------------------------------------------
+> kworker/u16:0/12 is trying to acquire lock:
+> cf896040 (&devfreq->lock){+.+.}-{3:3}, at: devfreq_notifier_call+0x30/0x124
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 33574ad706b915136546c7f92c7cd0b8a0d62b7e..d7f8706ca4949e253a4102474c92b393a345262f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2052,6 +2052,7 @@ opp-2500000 {
->  					opp-hz = /bits/ 64 <2500000>;
->  					required-opps = <&rpmhpd_opp_low_svs>;
->  					opp-peak-kBps = <250000 1>;
-> +					opp-level = <1>;
->  				};
->  
->  				/* GEN 2 x1 */
-> @@ -2059,6 +2060,7 @@ opp-5000000 {
->  					opp-hz = /bits/ 64 <5000000>;
->  					required-opps = <&rpmhpd_opp_low_svs>;
->  					opp-peak-kBps = <500000 1>;
-> +					opp-level = <2>;
->  				};
->  
->  				/* GEN 3 x1 */
-> @@ -2066,6 +2068,7 @@ opp-8000000 {
->  					opp-hz = /bits/ 64 <8000000>;
->  					required-opps = <&rpmhpd_opp_nom>;
->  					opp-peak-kBps = <984500 1>;
-> +					opp-level = <3>;
->  				};
->  			};
->  
-> @@ -2210,45 +2213,67 @@ pcie1_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				/* GEN 1 x1 */
-> -				opp-2500000 {
-> +				opp-2500000-1 {
->  					opp-hz = /bits/ 64 <2500000>;
->  					required-opps = <&rpmhpd_opp_low_svs>;
->  					opp-peak-kBps = <250000 1>;
-> +					opp-level = <1>;
->  				};
->  
-> -				/* GEN 1 x2 and GEN 2 x1 */
-> -				opp-5000000 {
-> +				/* GEN 1 x2 */
-> +				opp-5000000-1 {
-> +					opp-hz = /bits/ 64 <5000000>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-> +					opp-peak-kBps = <500000 1>;
-> +					opp-level = <1>;
-> +				};
-> +
-> +				/* GEN 2 x1 */
-> +				opp-5000000-2 {
->  					opp-hz = /bits/ 64 <5000000>;
->  					required-opps = <&rpmhpd_opp_low_svs>;
->  					opp-peak-kBps = <500000 1>;
-> +					opp-level = <2>;
->  				};
->  
->  				/* GEN 2 x2 */
-> -				opp-10000000 {
-> +				opp-10000000-2 {
->  					opp-hz = /bits/ 64 <10000000>;
->  					required-opps = <&rpmhpd_opp_low_svs>;
->  					opp-peak-kBps = <1000000 1>;
-> +					opp-level = <2>;
->  				};
->  
->  				/* GEN 3 x1 */
-> -				opp-8000000 {
-> +				opp-8000000-3 {
->  					opp-hz = /bits/ 64 <8000000>;
->  					required-opps = <&rpmhpd_opp_nom>;
->  					opp-peak-kBps = <984500 1>;
-> +					opp-level = <3>;
-> +				};
-> +
-> +				/* GEN 3 x2 */
-> +				opp-16000000-3 {
-> +					opp-hz = /bits/ 64 <16000000>;
-> +					required-opps = <&rpmhpd_opp_nom>;
-> +					opp-peak-kBps = <1969000 1>;
-> +					opp-level = <3>;
->  				};
->  
-> -				/* GEN 3 x2 and GEN 4 x1 */
-> -				opp-16000000 {
-> +				/* GEN 4 x1 */
-> +				opp-16000000-4 {
->  					opp-hz = /bits/ 64 <16000000>;
->  					required-opps = <&rpmhpd_opp_nom>;
->  					opp-peak-kBps = <1969000 1>;
-> +					opp-level = <4>;
->  				};
->  
->  				/* GEN 4 x2 */
-> -				opp-32000000 {
-> +				opp-32000000-4 {
->  					opp-hz = /bits/ 64 <32000000>;
->  					required-opps = <&rpmhpd_opp_nom>;
->  					opp-peak-kBps = <3938000 1>;
-> +					opp-level = <4>;
->  				};
->  			};
->  
+> but task is already holding lock:
+> cf896040 (&devfreq->lock){+.+.}-{3:3}, at: devfreq_monitor+0x1c/0x1a4
 > 
-> -- 
-> 2.34.1
+> other info that might help us debug this:
+>  †Possible unsafe locking scenario:
 > 
+>  †††††† CPU0
+>  †††††† ----
+>  † lock(&devfreq->lock);
+>  † lock(&devfreq->lock);
+> 
+>  †*** DEADLOCK ***
+> 
+>  †May be due to missing lock nesting notation
+> 
+> 4 locks held by kworker/u16:0/12:
+>  †#0: c289d0b4 ((wq_completion)devfreq_wq){+.+.}-{0:0}, at: 
+> process_one_work+0x1b0/0x70c
+>  †#1: f0899f18 
+> ((work_completion)(&(&devfreq->work)->work)#2){+.+.}-{0:0}, at: 
+> process_one_work+0x1dc/0x70c
+>  †#2: cf896040 (&devfreq->lock){+.+.}-{3:3}, at: devfreq_monitor+0x1c/0x1a4
+>  †#3: c2e78c4c (&(&opp_table->head)->rwsem){++++}-{3:3}, at: 
+> blocking_notifier_call_chain+0x28/0x60
+> 
+> stack backtrace:
+> CPU: 2 UID: 0 PID: 12 Comm: kworker/u16:0 Not tainted 
+> 6.17.0-rc3-next-20250825 #10901 PREEMPT
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> Workqueue: devfreq_wq devfreq_monitor
+> Call trace:
+>  †unwind_backtrace from show_stack+0x10/0x14
+>  †show_stack from dump_stack_lvl+0x68/0x88
+>  †dump_stack_lvl from print_deadlock_bug+0x370/0x380
+>  †print_deadlock_bug from __lock_acquire+0x1428/0x29ec
+>  †__lock_acquire from lock_acquire+0x134/0x388
+>  †lock_acquire from __mutex_lock+0xac/0x10c0
+>  †__mutex_lock from mutex_lock_nested+0x1c/0x24
+>  †mutex_lock_nested from devfreq_notifier_call+0x30/0x124
+>  †devfreq_notifier_call from notifier_call_chain+0x84/0x1d4
+>  †notifier_call_chain from blocking_notifier_call_chain+0x44/0x60
+>  †blocking_notifier_call_chain from _opp_kref_release+0x3c/0x5c
+>  †_opp_kref_release from exynos_bus_target+0x24/0x70
+>  †exynos_bus_target from devfreq_set_target+0x8c/0x2e8
+>  †devfreq_set_target from devfreq_update_target+0x9c/0xf8
+>  †devfreq_update_target from devfreq_monitor+0x28/0x1a4
+>  †devfreq_monitor from process_one_work+0x24c/0x70c
+>  †process_one_work from worker_thread+0x1b8/0x3bc
+>  †worker_thread from kthread+0x13c/0x264
+>  †kthread from ret_from_fork+0x14/0x28
+> Exception stack(0xf0899fb0 to 0xf0899ff8)
+
+I guess there is some issue with devfreq here which showed up because
+we tried to do a dev_pm_opp_get() for an invalid opp (which very well
+could have been valid here anyway). This was always done with the OPP
+table's lock anyway, nothing changed after the commit AFAICT.
+
+> 2. Exynos5422-based Odroid-XU3 board (ARM 32bit):
+> 
+> 8<--- cut here ---
+> Unable to handle kernel NULL pointer dereference at virtual address 
+> 00000000 when read
+> [00000000] *pgd=00000000
+> Internal error: Oops: 5 [#1] SMP ARM
+> Modules linked in:
+> CPU: 7 UID: 0 PID: 68 Comm: kworker/u34:1 Not tainted 
+> 6.17.0-rc3-next-20250825 #10901 PREEMPT
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> Workqueue: devfreq_wq devfreq_monitor
+> PC is at _opp_compare_key+0x30/0xb4
+> LR is at 0xfffffffc
+> pc : [<c09831c4>]††† lr : [<fffffffc>]††† psr: 20000013
+> sp : f0a89de0† ip : cfb0e94c† fp : c1574880
+> r10: c14095a4† r9 : f0a89e44† r8 : c2a9c010
+> r7 : cfb0ea80† r6 : 00000001† r5 : cfb0e900† r4 : 00000001
+> r3 : 00000000† r2 : cfb0e900† r1 : cfb0ea80† r0 : cfaf5800
+> Flags: nzCv† IRQs on† FIQs on† Mode SVC_32† ISA ARM† Segment none
+> Control: 10c5387d† Table: 4000406a† DAC: 00000051
+> Register r0 information: slab kmalloc-1k start cfaf5800 pointer offset 0 
+> size 1024
+> Register r1 information: slab kmalloc-128 start cfb0ea80 pointer offset 
+> 0 size 128
+> Register r2 information: slab kmalloc-128 start cfb0e900 pointer offset 
+> 0 size 128
+> Register r3 information: NULL pointer
+> Register r4 information: non-paged memory
+> Register r5 information: slab kmalloc-128 start cfb0e900 pointer offset 
+> 0 size 128
+> Register r6 information: non-paged memory
+> Register r7 information: slab kmalloc-128 start cfb0ea80 pointer offset 
+> 0 size 128
+> Register r8 information: slab kmalloc-1k start c2a9c000 pointer offset 
+> 16 size 1024
+> Register r9 information: 2-page vmalloc region starting at 0xf0a88000 
+> allocated at kernel_clone+0x58/0x3c4
+> Register r10 information: non-slab/vmalloc memory
+> Register r11 information: non-slab/vmalloc memory
+> Register r12 information: slab kmalloc-128 start cfb0e900 pointer offset 
+> 76 size 128
+> Process kworker/u34:1 (pid: 68, stack limit = 0x050eb3d7)
+> Stack: (0xf0a89de0 to 0xf0a8a000)
+> ..
+> Call trace:
+>  †_opp_compare_key from _set_opp+0x78/0x50c
+>  †_set_opp from dev_pm_opp_set_rate+0x15c/0x21c
+>  †dev_pm_opp_set_rate from panfrost_devfreq_target+0x2c/0x3c
+>  †panfrost_devfreq_target from devfreq_set_target+0x8c/0x2e8
+>  †devfreq_set_target from devfreq_update_target+0x9c/0xf8
+>  †devfreq_update_target from devfreq_monitor+0x28/0x1a4
+>  †devfreq_monitor from process_one_work+0x24c/0x70c
+>  †process_one_work from worker_thread+0x1b8/0x3bc
+>  †worker_thread from kthread+0x13c/0x264
+>  †kthread from ret_from_fork+0x14/0x28
+> Exception stack(0xf0a89fb0 to 0xf0a89ff8)
+
+I don't fully understand why this happened yet.
+
+> ---[ end trace 0000000000000000 ]---
+> 
+> 
+> 3. Qualcomm Technologies, Inc. Robotics RB5(ARM 64bit):
+> 
+> ufshcd-qcom 1d84000.ufshc: freq-table-hz property not specified
+> ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find 
+> vdd-hba-supply regulator, assuming enabled
+> ufshcd-qcom 1d84000.ufshc: Failed to find OPP for MIN frequency
+> ufshcd-qcom 1d84000.ufshc: ufshcd_pltfrm_init: OPP parse failed -34
+> ufshcd-qcom 1d84000.ufshc: error -ERANGE: ufshcd_pltfrm_init() failed
+> ufshcd-qcom 1d84000.ufshc: probe with driver ufshcd-qcom failed with 
+> error -34
+
+This too.
 
 -- 
-‡ÆÆ‡Æ£‡Æø‡Æµ‡Æ£‡Øç‡Æ£‡Æ©‡Øç ‡Æö‡Æ§‡Ææ‡Æö‡Æø‡Æµ‡ÆÆ‡Øç
+viresh
 
