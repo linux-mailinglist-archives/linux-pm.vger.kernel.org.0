@@ -1,158 +1,257 @@
-Return-Path: <linux-pm+bounces-33120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD799B366B0
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 15:59:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AD5AB36C82
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 16:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48DCAB61971
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 13:57:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3952556348A
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 14:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A871352FE7;
-	Tue, 26 Aug 2025 13:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J//Si2GW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262C72AD32;
+	Tue, 26 Aug 2025 14:36:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE71341ABD;
-	Tue, 26 Aug 2025 13:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3759341AD4;
+	Tue, 26 Aug 2025 14:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756216608; cv=none; b=j50clJ4Xax6nGSPgHu8GmbKZziPjoUufgSjaPOprxIeMtFK7/pQc8rPHtwwmwJ+TlnFPy/9iKKXiOxZ2ExaozOmgmVlIoXQ+tCydhHx9iwlRWsUkh+oDYcK5ojEjP1BBEHfQsmNMb5+6HpOOTsXqXcSxtxo0Z5RVptWG2qE+aMU=
+	t=1756218962; cv=none; b=g6OByuay35VUQtTjf4/9hSbWOjk8GuOcdzT8irzQRh2MXtDM6p4hVDnFRJFDzY6FR6QuNaGa45LFHoujfA4zenHMILubm9gbuwiT9bkgLEftoxngL+JPWYOerlEXMUcPjKaIk2sGxTEb7QnBor+fevaz9HblU4eRtQwRg04FiLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756216608; c=relaxed/simple;
-	bh=GAK3iErIJh5FHvvRonZ/RMRYuNJxBuLG4M3JABISxbU=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=S/axGT3jFdP4vG0H+oKbSNRNsMGGe8BRu6X5RaLNc+p8rOgB0QhDMI6DBoZX3n2f6z7A7JmRffMZAN040sf6XU4NlxT6yEHRhX+vfXpo/o8rNUBLyB0KfSKFIKh3IwDp98HkstAKrbkJvfCcpuXfxMv12DoLpF3iPLLFxDOBXS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J//Si2GW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412E6C116B1;
-	Tue, 26 Aug 2025 13:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756216605;
-	bh=GAK3iErIJh5FHvvRonZ/RMRYuNJxBuLG4M3JABISxbU=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=J//Si2GWx4doiSIjC71SHMojeaD1+tCxptmSzaXZqxSx3rCUTtGQ+N7qSq0mOM8hl
-	 RdvRAjAI4KD/o56UqmJBJ7h9hifetskHNsgG6r/jlVtoaErGvd0QQjU3sQT1uE8Ete
-	 cDAayHCLQUSflFpyl1uH2n8CYd/EcdD+7f+YaTcNOlSE0LI5Ou+0HTthv4IVq/mTt+
-	 Wnsvyky7VR2spB54QCYWFuJ+p2kR6iUBfte8T6jcIFXZHO1ayCudO5gD+qSP1QC/sn
-	 wsg4DZjJg/QQMiAEqVVXFxc2LYHuYDNusrNbdM7mEorQgDXPfu9bP/MWHiTYqy11lV
-	 /WAgbi+dJWiXw==
-Date: Tue, 26 Aug 2025 08:56:44 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1756218962; c=relaxed/simple;
+	bh=t6JNfnPxFUx/NjoupvZ1RlQEj1Zq+C4DgHkgiTtqzX4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JW5+cILD49k/9ssvG+R9Zwi106xSXHp4cRgIyvILpasmeh+WQWXHMaPuFOGGkxSt17FT+VZViGqPXLEaTQtsf9YttKLaMHihVeR9XoVW08gBbsBtTW6GOfydqXqJc8yQywmfdfj8L6hEWN/KgH3UyMuwdGZXiQsUVVBvoJaBSx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CB231A25;
+	Tue, 26 Aug 2025 07:35:50 -0700 (PDT)
+Received: from [10.57.4.86] (unknown [10.57.4.86])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E899E3F694;
+	Tue, 26 Aug 2025 07:35:51 -0700 (PDT)
+Message-ID: <ab80cb84-42b2-4ce8-aa6c-4ce6be7a12b7@arm.com>
+Date: Tue, 26 Aug 2025 15:35:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-clk@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jonathan Hunter <jonathanh@nvidia.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Thierry Reding <treding@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Viresh Kumar <viresh.kumar@linaro.org>, linux-tegra@vger.kernel.org, 
- Mikko Perttunen <mperttunen@nvidia.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
- linux-pm@vger.kernel.org
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-In-Reply-To: <20250826061117.63643-1-clamor95@gmail.com>
-References: <20250826061117.63643-1-clamor95@gmail.com>
-Message-Id: <175621649727.159471.17430997152265024171.robh@kernel.org>
-Subject: Re: [PATCH v3 0/4] clk: tegra: add DFLL support for Tegra114
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/19] perf/hisilicon: Fix group validation
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org, acme@kernel.org,
+ namhyung@kernel.org, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
+ linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
+ iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
+ linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+References: <cover.1755096883.git.robin.murphy@arm.com>
+ <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
+ <aK2XS_GhLw1EQ2ml@J2N7QTR9R3>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <aK2XS_GhLw1EQ2ml@J2N7QTR9R3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Tue, 26 Aug 2025 09:11:13 +0300, Svyatoslav Ryhel wrote:
-> DFLL is a dedicated clock source for the Fast CPU. The DFLL is based on
-> a ring oscillator and translates voltage changes into frequency
-> compensation changes needed to prevent the CPU from failing and is
-> essential for correct CPU frequency scaling.
+On 2025-08-26 12:15 pm, Mark Rutland wrote:
+> On Wed, Aug 13, 2025 at 06:00:54PM +0100, Robin Murphy wrote:
+>> The group validation logic shared by the HiSilicon HNS3/PCIe drivers is
+>> a bit off, in that given a software group leader, it will consider that
+>> event *in place of* the actual new event being opened. At worst this
+>> could theoretically allow an unschedulable group if the software event
+>> config happens to look like one of the hardware siblings.
+>>
+>> The uncore framework avoids that particular issue,
 > 
-> ---
-> Changes in v2:
-> - dropped 'drivers:' from commit title
-> - aligned naming to Tegra114
+> What is "the uncore framework"? I'm not sure exactly what you're
+> referring to, nor how that composes with the problem described above.
+
+Literally that hisi_uncore_pmu.c is actually a framework for half a 
+dozen individual sub-drivers rather than a "driver" itself per se, but I 
+suppose that detail doesn't strictly matter at this level.
+
+>> but all 3 also share the common issue of not preventing racy access to
+>> the sibling list,
 > 
-> Changes in v3:
-> - add DFLL support for Tegra 114 was split into dt header addition,
->   DFLL reset configuration and CVB tables implementation.
-> - added cleaner commit message to dt header commit
-> - added T210_ prefixes to Tegra210 CVB table macros
-> ---
+> Can you please elaborate on this racy access to the silbing list? I'm
+> not sure exactly what you're referring to.
+
+Hmm, yes, I guess an actual race is probably impossible since if we're 
+still in the middle of opening the group leader event then we haven't 
+yet allocated the fd that userspace would need to start adding siblings, 
+even if it tried to guess. I leaned on "racy" as a concise way to infer 
+"when it isn't locked (even though the reasons for that are more 
+subtle)" repeatedly over several patches - after all, the overall theme 
+of this series is that I dislike repetitive boilerplate :)
+
+I'll dedicate some time for polishing commit messages for v2, especially 
+the common context for these "part 1" patches per your feedback on patch #1.
+
+>> and some redundant checks which can be cleaned up.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>   drivers/perf/hisilicon/hisi_pcie_pmu.c   | 17 ++++++-----------
+>>   drivers/perf/hisilicon/hisi_uncore_pmu.c | 23 +++++++----------------
+>>   drivers/perf/hisilicon/hns3_pmu.c        | 17 ++++++-----------
+>>   3 files changed, 19 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+>> index c5394d007b61..3b0b2f7197d0 100644
+>> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
+>> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+>> @@ -338,21 +338,16 @@ static bool hisi_pcie_pmu_validate_event_group(struct perf_event *event)
+>>   	int counters = 1;
+>>   	int num;
+>>   
+>> -	event_group[0] = leader;
+>> -	if (!is_software_event(leader)) {
+>> -		if (leader->pmu != event->pmu)
+>> -			return false;
+>> +	if (leader == event)
+>> +		return true;
+>>   
+>> -		if (leader != event && !hisi_pcie_pmu_cmp_event(leader, event))
+>> -			event_group[counters++] = event;
+>> -	}
+>> +	event_group[0] = event;
+>> +	if (leader->pmu == event->pmu && !hisi_pcie_pmu_cmp_event(leader, event))
+>> +		event_group[counters++] = leader;
 > 
-> Svyatoslav Ryhel (4):
->   dt-bindings: reset: add Tegra114 car header
->   clk: tegra: add DFLL DVCO reset control for Tegra114
->   clk: tegra: dfll: add CVB tables for Tegra114
->   ARM: tegra: Add DFLL clock support for Tegra114
+> Looking at this, the existing logic to share counters (which
+> hisi_pcie_pmu_cmp_event() is trying to permit) looks to be bogus, given
+> that the start/stop callbacks will reprogram the HW counters (and hence
+> can fight with one another).
+
+Yeah, this had a dodgy smell when I first came across it, but after 
+doing all the digging I think it does actually work out - the trick 
+seems to be the group_leader check in hisi_pcie_pmu_get_event_idx(), 
+with the implication the PMU is going to be stopped while scheduling 
+in/out the whole group, so assuming hisi_pcie_pmu_del() doesn't clear 
+the counter value in hardware (even though the first call nukes the rest 
+of the event configuration), then the events should stay in sync.
+
+It does seem somewhat nonsensical to have multiple copies of the same 
+event in the same group, but I imagine it could happen with some sort of 
+scripted combination of metrics, and supporting it at this level saves 
+needing explicit deduplication further up. So even though my initial 
+instinct was to rip it out too, in the end I concluded that that doesn't 
+seem justified.
+
+Thanks,
+Robin.
+
+> I suspect that can be removed *entirely*, and this can be simplified
+> down to allocating N counters, without a quadratic event comparison.  We
+> don't try to share counters in other PMU drivers, and there was no
+> rationale for trying to do this when this wa introduced in commit:
 > 
->  arch/arm/boot/dts/nvidia/tegra114.dtsi     |  33 +++++
->  drivers/clk/tegra/Kconfig                  |   2 +-
->  drivers/clk/tegra/clk-tegra114.c           |  30 +++-
->  drivers/clk/tegra/clk-tegra124-dfll-fcpu.c | 158 +++++++++++++++++----
->  drivers/clk/tegra/clk.h                    |   2 -
->  include/dt-bindings/reset/tegra114-car.h   |  13 ++
->  6 files changed, 204 insertions(+), 34 deletions(-)
->  create mode 100644 include/dt-bindings/reset/tegra114-car.h
+>    8404b0fbc7fbd42e ("drivers/perf: hisi: Add driver for HiSilicon PCIe PMU")
 > 
-> --
-> 2.48.1
+> The 'link' tag in that comment goes to v13, which doesn't link to prior
+> postings, so I'm not going to dig further.
 > 
+> Mark.
 > 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/next-20250825 (best guess, 3/5 blobs matched)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/nvidia/' for 20250826061117.63643-1-clamor95@gmail.com:
-
-arch/arm/boot/dts/nvidia/tegra114-tn7.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
-arch/arm/boot/dts/nvidia/tegra114-tn7.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-tn7.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-roth.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
-arch/arm/boot/dts/nvidia/tegra114-roth.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-roth.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-dalmore.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
-arch/arm/boot/dts/nvidia/tegra114-dalmore.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-dalmore.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dtb: /clock@70110000: failed to match any schema with compatible: ['nvidia,tegra114-dfll']
-arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dtb: cpu@0 (arm,cortex-a15): 'operating-points' is a dependency of 'clock-latency'
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dtb: cpu@0 (arm,cortex-a15): Unevaluated properties are not allowed ('clock-latency' was unexpected)
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-
-
-
-
-
+>>   
+>>   	for_each_sibling_event(sibling, event->group_leader) {
+>> -		if (is_software_event(sibling))
+>> -			continue;
+>> -
+>>   		if (sibling->pmu != event->pmu)
+>> -			return false;
+>> +			continue;
+>>   
+>>   		for (num = 0; num < counters; num++) {
+>>   			/*
+>> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+>> index a449651f79c9..3c531b36cf25 100644
+>> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
+>> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+>> @@ -101,26 +101,17 @@ static bool hisi_validate_event_group(struct perf_event *event)
+>>   	/* Include count for the event */
+>>   	int counters = 1;
+>>   
+>> -	if (!is_software_event(leader)) {
+>> -		/*
+>> -		 * We must NOT create groups containing mixed PMUs, although
+>> -		 * software events are acceptable
+>> -		 */
+>> -		if (leader->pmu != event->pmu)
+>> -			return false;
+>> +	if (leader == event)
+>> +		return true;
+>>   
+>> -		/* Increment counter for the leader */
+>> -		if (leader != event)
+>> -			counters++;
+>> -	}
+>> +	/* Increment counter for the leader */
+>> +	if (leader->pmu == event->pmu)
+>> +		counters++;
+>>   
+>>   	for_each_sibling_event(sibling, event->group_leader) {
+>> -		if (is_software_event(sibling))
+>> -			continue;
+>> -		if (sibling->pmu != event->pmu)
+>> -			return false;
+>>   		/* Increment counter for each sibling */
+>> -		counters++;
+>> +		if (sibling->pmu == event->pmu)
+>> +			counters++;
+>>   	}
+>>   
+>>   	/* The group can not count events more than the counters in the HW */
+>> diff --git a/drivers/perf/hisilicon/hns3_pmu.c b/drivers/perf/hisilicon/hns3_pmu.c
+>> index c157f3572cae..382e469257f9 100644
+>> --- a/drivers/perf/hisilicon/hns3_pmu.c
+>> +++ b/drivers/perf/hisilicon/hns3_pmu.c
+>> @@ -1058,21 +1058,16 @@ static bool hns3_pmu_validate_event_group(struct perf_event *event)
+>>   	int counters = 1;
+>>   	int num;
+>>   
+>> -	event_group[0] = leader;
+>> -	if (!is_software_event(leader)) {
+>> -		if (leader->pmu != event->pmu)
+>> -			return false;
+>> +	if (leader == event)
+>> +		return true;
+>>   
+>> -		if (leader != event && !hns3_pmu_cmp_event(leader, event))
+>> -			event_group[counters++] = event;
+>> -	}
+>> +	event_group[0] = event;
+>> +	if (leader->pmu == event->pmu && !hns3_pmu_cmp_event(leader, event))
+>> +		event_group[counters++] = leader;
+>>   
+>>   	for_each_sibling_event(sibling, event->group_leader) {
+>> -		if (is_software_event(sibling))
+>> -			continue;
+>> -
+>>   		if (sibling->pmu != event->pmu)
+>> -			return false;
+>> +			continue;
+>>   
+>>   		for (num = 0; num < counters; num++) {
+>>   			/*
+>> -- 
+>> 2.39.2.101.g768bb238c484.dirty
+>>
 
