@@ -1,133 +1,130 @@
-Return-Path: <linux-pm+bounces-33091-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33092-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFF9FB3559D
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 09:27:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D07B356AC
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 10:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A1C71B65729
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 07:27:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCDCB16A994
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 08:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DC822F60D5;
-	Tue, 26 Aug 2025 07:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3AED2F745D;
+	Tue, 26 Aug 2025 08:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Vmk/4byl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nIlJa3zM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945092F49FB
-	for <linux-pm@vger.kernel.org>; Tue, 26 Aug 2025 07:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE05C2248A4;
+	Tue, 26 Aug 2025 08:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756193175; cv=none; b=A1gvtImYv1e4rzRkiX0DWpgZpmIefMoBtbD5lNiTcoKPjSiUiy//U9nvKXLnCY8NXUZb9MzC+ylmBSOixS+LoLJ2Xv15h3I+zi9N/KhEc0MGR48kdhpzDb1HaWYu5BYwxVcYpJcpJ8ESwnXDFdc+lBADkhDj92f+i0MzR/BygNo=
+	t=1756196517; cv=none; b=ZmgNjEeiqHTevgZlPpeVdjoje8CrBOIvmmIldl2WbV4mO6bA4+Accjw5x+woyN9ZvZLgOgAhDLG3+/DAuR1QFg14uU1Fow766nLXOl5S4Iq2BFIIUdw+SFpvfiQnk+TrqlcK4HIIB1U7kf55+lgX2USDjxYyMWHqiC7SCzIFv0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756193175; c=relaxed/simple;
-	bh=DcMpv+3mgF8aZDoDXRSQ/IQVeWP92JqyekiKkdCx2mQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=FwILSMB413jmqRqJvAJIu2H4ngV827ScNPpsjdQ7MNER2dZ5HFKuEK3Wg/a56q985BQU8G6KcJH5opRlhfMHo2bCmIRzBmzg7/Ug7RMrCve2tDwvZqdefFyBh0GWEpqd/rdDC2zJcjo+swgbAiLCWFoEOOVokdmvNCeu5WvVM34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Vmk/4byl; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250826072610euoutp02ed9a094328a41cb302acb4740a4d7613~fQGIrcedt1623316233euoutp02M
-	for <linux-pm@vger.kernel.org>; Tue, 26 Aug 2025 07:26:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250826072610euoutp02ed9a094328a41cb302acb4740a4d7613~fQGIrcedt1623316233euoutp02M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1756193170;
-	bh=9i5p2LxvgZLund35hCqkpCnzys4/u1z+zSXgl9PoA5s=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=Vmk/4bylMbV/wtYHG7M1xjRGAt+Lhv3D9zWse1vOVtbeAo5MtxIFj5y/MhBMRbGHg
-	 mC8qDI9JSMhI5zC5p9Xrv0fQidPif8c+fXYbBR2ttKUgtGKmlvRfxJyBWu5gtjHnBV
-	 hVP4BkVJFcvdaK/K2gKsWUaP0Vax20+8zYs8aHoU=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250826072609eucas1p184dfb0642e07f6b843172d9974f16b7f~fQGII8nK-2890728907eucas1p1Z;
-	Tue, 26 Aug 2025 07:26:09 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250826072607eusmtip1479a4e682590dd94ab45dd1f1689d810~fQGGRvVEr1983919839eusmtip12;
-	Tue, 26 Aug 2025 07:26:07 +0000 (GMT)
-Message-ID: <d8599b11-66dd-486b-89e4-52b82d90f04e@samsung.com>
-Date: Tue, 26 Aug 2025 09:26:07 +0200
+	s=arc-20240116; t=1756196517; c=relaxed/simple;
+	bh=++2PjwJEEwBxL9LIrwZfgoSlA5C8UFPJSDTEaWItn50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ejx4zopHsX9vjF3yUqGUytA5tZ5ejcNrWAhJiC1ojKhfx/6e8v7ZDDEalKr0n0GV+rxPDTlU+xIgsy6EmqrEKGFa3dOrbjh9I4SBweEIuxoCiIkmzgm12JHLm58KTyh7lU8LPNu9ONG99NCcBJ8hmsBo9f0rJj4sEmH6FlCTzKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nIlJa3zM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DEDC4CEF1;
+	Tue, 26 Aug 2025 08:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756196516;
+	bh=++2PjwJEEwBxL9LIrwZfgoSlA5C8UFPJSDTEaWItn50=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nIlJa3zMdens3WbCVlvngdFtUZhn8PdxSMbEzG1BRDq5rv6qErZw+W1xMGVb/wAhY
+	 1wJb1FKdOWHu7KrBWTKcGGx6rUF6eE3LXy6LzJWhSCSS75c9+pcHHBbV9h+VfoGx2X
+	 +Vz3vGH+/XYeuJWcas/IzSsTae3J8LNW11bnvOBTnaVRZf9wyvT3OkA2xg/oaZ7hDk
+	 sb1tH843Mtj5V9zjhBq/59aEd1aF2cT6P65ESqMb9k+E0eYn5SY04RIdJHymLEmbNb
+	 7Z2sXuRTaXPM4raE6QhLT/riV2dbhlAlIRF6oXJAJd3+9GPrzUTfQpmrOgJrk82h2Q
+	 a7B8WuFq8iy7w==
+Message-ID: <2ef333b7-2c4c-4c06-b90f-5dfa8af41e36@kernel.org>
+Date: Tue, 26 Aug 2025 10:21:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH v4 2/7] OPP: Move refcount and key update for
- readability in _opp_table_find_key()
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, Viresh
-	Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
-	<sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Manivannan
-	Sadhasivam <mani@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Rob Herring
-	<robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson
-	<andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, Krzysztof
-	Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] dt-bindings: reset: add Tegra114 car header
+To: Svyatoslav Ryhel <clamor95@gmail.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Thierry Reding <treding@nvidia.com>, Mikko Perttunen
+ <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Prashant Gaikwad <pgaikwad@nvidia.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250826061117.63643-1-clamor95@gmail.com>
+ <20250826061117.63643-2-clamor95@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20250826060647.7eerg5blx3xho27p@vireshk-i7>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250826072609eucas1p184dfb0642e07f6b843172d9974f16b7f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250825135939eucas1p206b6e2b5ba115f51618c773a1f37939c
-X-EPHeader: CA
-X-CMS-RootMailID: 20250825135939eucas1p206b6e2b5ba115f51618c773a1f37939c
-References: <20250820-opp_pcie-v4-0-273b8944eed0@oss.qualcomm.com>
-	<20250820-opp_pcie-v4-2-273b8944eed0@oss.qualcomm.com>
-	<CGME20250825135939eucas1p206b6e2b5ba115f51618c773a1f37939c@eucas1p2.samsung.com>
-	<4066c0b4-807f-401e-baaa-25f4891f10ac@samsung.com>
-	<20250826060647.7eerg5blx3xho27p@vireshk-i7>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250826061117.63643-2-clamor95@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 26.08.2025 08:06, Viresh Kumar wrote:
-> Marek,
->
-> Thanks for the detailed logs. I would need a little more help from
-> you.
->
-> Can you give this a try over your failing branch (I have already
-> dropped the patch from my tree for now):
->
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 81fb7dd7f323..5b24255733b5 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -554,10 +554,10 @@ static struct dev_pm_opp *_opp_table_find_key(struct opp_table *opp_table,
->          list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
->                  if (temp_opp->available == available) {
->                          if (compare(&opp, temp_opp, read(temp_opp, index), *key)) {
-> -                               *key = read(opp, index);
-> -
-> -                               /* Increment the reference count of OPP */
-> -                               dev_pm_opp_get(opp);
-> +                               if (!IS_ERR(opp)) {
-> +                                       *key = read(opp, index);
-> +                                       dev_pm_opp_get(opp);
-> +                               }
->                                  break;
->                          }
->                  }
+On 26/08/2025 08:11, Svyatoslav Ryhel wrote:
+> Binding values for special resets that are placed starting from
+> software-defined index 160 in line with other chips.
+> 
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  include/dt-bindings/reset/tegra114-car.h | 13 +++++++++++++
+NAK
 
-This doesn't help. I've stared a bit at that code and did some tests 
-and it looks that the issue is caused by _opp_table_find_key() returning 
-the last opp from opp_list without updating the *key and calling 
-opp_get() for it (happens when compare() returns false).
+You got comments last time and you completely ignored them.
 
-> ...
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Best regards,
+Krzysztof
 
 
