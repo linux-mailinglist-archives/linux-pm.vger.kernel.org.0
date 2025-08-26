@@ -1,222 +1,149 @@
-Return-Path: <linux-pm+bounces-33107-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33108-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9148BB35AF4
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 13:16:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16F38B35C1E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 13:31:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EA5F189D0FD
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 11:16:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50AB7365839
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Aug 2025 11:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 628DB2F83C1;
-	Tue, 26 Aug 2025 11:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA502BEC34;
+	Tue, 26 Aug 2025 11:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eedoylHX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A580277C8C;
-	Tue, 26 Aug 2025 11:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E88226CF0;
+	Tue, 26 Aug 2025 11:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756206943; cv=none; b=re484LSf4GhK+ZJkBIAlGMlYP90a01rOyfm+U7EGxCG9YL7JDoQ6evHFE+OcfN1BCa0cSn8gUpk93RzI3ASZJO5vSe8VF+bB8sHP2X1h8M7cketHSCQNN6iI38MWj9Epr48mqAyaAYO9+L9VjCL6C+SN3XLPcvMAB6A5wNujBpI=
+	t=1756207557; cv=none; b=hzCJCneo8EVVBymqc2oVtua/hR5JGOff+dyBWLNTf1jWdFQCIfWpk9D7YwsROsJ359LC0wO0Ra+/B4x5vpRMXbqwWIjGTGfkvdvbHvvZpMQ+AosYjBNYaLAut7LSMPK/OlmOK8RL6uH/zo0lchpwWUDiIgN7Fbc2bg+wA1Kgp38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756206943; c=relaxed/simple;
-	bh=OTax/FZOAVkSfXJa1A9gunuHpIZmaqBR9VNEDweSclY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKnrIfageEddsND/tQbu35XDLl+UdfFKritSwAh9f1ySjBjoTe5to6DgUah9+k67KTxzgvMEsB3wZP5egM+xDyVVgglPuPY9RtiJypax7d0F5XuaQupk6zZ+16RIe/IPnfSj0r5tqrjp1KK+rEVdMRy6ASpG8eGYCUcgofDF/3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E7AF1A00;
-	Tue, 26 Aug 2025 04:15:32 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 663C13F63F;
-	Tue, 26 Aug 2025 04:15:28 -0700 (PDT)
-Date: Tue, 26 Aug 2025 12:15:23 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-	acme@kernel.org, namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
-	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 02/19] perf/hisilicon: Fix group validation
-Message-ID: <aK2XS_GhLw1EQ2ml@J2N7QTR9R3>
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
+	s=arc-20240116; t=1756207557; c=relaxed/simple;
+	bh=aHdEMSws7fRcIwGTzg0rwO2wfhhdwDS4g+2yHKnt8c0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oZPLy0+RJrkOOS4+nS8fFvgGZZVIbbTg+6j6tAjVoxkbCgNANg1fxmN+yHJahUd4xcGQJTWZQdySN32r1gZ4WfUEP1Tpq7eykILNIy3QzcIa811aF0YoeHkObYPmDVFlscifUSAE81r3mwYA1e62O76WpL3QDKqbxq9jDeVdFfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eedoylHX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28C0C4CEF1;
+	Tue, 26 Aug 2025 11:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756207556;
+	bh=aHdEMSws7fRcIwGTzg0rwO2wfhhdwDS4g+2yHKnt8c0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eedoylHX+VgyzfA7oE0y+itfj7OHB7qJjyLwovf9JcfXwrBh9mvIaCHUm3SVrxvbL
+	 m9GDK55u8kQTJzLRa7MDqNOF+FYbDIgb+fPQmqSfq7LEZxwUMMdhmM4kL93GMpBm/b
+	 T5n2W8fTSbSN2iNnUG3ah25+yrMb6lSBlV5P3AZqwJaCHxPJSzJlkqp8BLIIeBuUCs
+	 xU+kkcviZ8uj/HJSHdHqHG8D+2tq0zJPnJfiu+vgBSvezjZizrjXDCNVsrUjMJdHmH
+	 65ptTosvUy0rsjRPQJ7tqMho8OBqwdY+R9rI2CUAikSBCgq+ZIn+hcmBw5tLcM/HfC
+	 2OpZwIxEb8kyg==
+Message-ID: <7d80f1e1-df18-4e20-abee-1286a764a226@kernel.org>
+Date: Tue, 26 Aug 2025 13:25:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/7] OPP: Move refcount and key update for readability
+ in _opp_table_find_key()
+To: Marek Szyprowski <m.szyprowski@samsung.com>,
+ Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20250820-opp_pcie-v4-0-273b8944eed0@oss.qualcomm.com>
+ <20250820-opp_pcie-v4-2-273b8944eed0@oss.qualcomm.com>
+ <CGME20250825135939eucas1p206b6e2b5ba115f51618c773a1f37939c@eucas1p2.samsung.com>
+ <4066c0b4-807f-401e-baaa-25f4891f10ac@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <4066c0b4-807f-401e-baaa-25f4891f10ac@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 13, 2025 at 06:00:54PM +0100, Robin Murphy wrote:
-> The group validation logic shared by the HiSilicon HNS3/PCIe drivers is
-> a bit off, in that given a software group leader, it will consider that
-> event *in place of* the actual new event being opened. At worst this
-> could theoretically allow an unschedulable group if the software event
-> config happens to look like one of the hardware siblings.
-> 
-> The uncore framework avoids that particular issue,
+On 25/08/2025 15:59, Marek Szyprowski wrote:
+> Register r10 information: non-slab/vmalloc memory
+> Register r11 information: non-slab/vmalloc memory
+> Register r12 information: slab kmalloc-128 start cfb0e900 pointer offset 
+> 76 size 128
+> Process kworker/u34:1 (pid: 68, stack limit = 0x050eb3d7)
+> Stack: (0xf0a89de0 to 0xf0a8a000)
+> ..
+> Call trace:
+>   _opp_compare_key from _set_opp+0x78/0x50c
+>   _set_opp from dev_pm_opp_set_rate+0x15c/0x21c
+>   dev_pm_opp_set_rate from panfrost_devfreq_target+0x2c/0x3c
+>   panfrost_devfreq_target from devfreq_set_target+0x8c/0x2e8
+>   devfreq_set_target from devfreq_update_target+0x9c/0xf8
+>   devfreq_update_target from devfreq_monitor+0x28/0x1a4
+>   devfreq_monitor from process_one_work+0x24c/0x70c
+>   process_one_work from worker_thread+0x1b8/0x3bc
+>   worker_thread from kthread+0x13c/0x264
+>   kthread from ret_from_fork+0x14/0x28
+> Exception stack(0xf0a89fb0 to 0xf0a89ff8)
 
-What is "the uncore framework"? I'm not sure exactly what you're
-referring to, nor how that composes with the problem described above.
+I also saw this on today's next:
 
-> but all 3 also share the common issue of not preventing racy access to
-> the sibling list,
+https://krzk.eu/#/builders/21/builds/6690/steps/13/logs/serial0
 
-Can you please elaborate on this racy access to the silbing list? I'm
-not sure exactly what you're referring to.
-
-> and some redundant checks which can be cleaned up.
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->  drivers/perf/hisilicon/hisi_pcie_pmu.c   | 17 ++++++-----------
->  drivers/perf/hisilicon/hisi_uncore_pmu.c | 23 +++++++----------------
->  drivers/perf/hisilicon/hns3_pmu.c        | 17 ++++++-----------
->  3 files changed, 19 insertions(+), 38 deletions(-)
-> 
-> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> index c5394d007b61..3b0b2f7197d0 100644
-> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> @@ -338,21 +338,16 @@ static bool hisi_pcie_pmu_validate_event_group(struct perf_event *event)
->  	int counters = 1;
->  	int num;
->  
-> -	event_group[0] = leader;
-> -	if (!is_software_event(leader)) {
-> -		if (leader->pmu != event->pmu)
-> -			return false;
-> +	if (leader == event)
-> +		return true;
->  
-> -		if (leader != event && !hisi_pcie_pmu_cmp_event(leader, event))
-> -			event_group[counters++] = event;
-> -	}
-> +	event_group[0] = event;
-> +	if (leader->pmu == event->pmu && !hisi_pcie_pmu_cmp_event(leader, event))
-> +		event_group[counters++] = leader;
-
-Looking at this, the existing logic to share counters (which
-hisi_pcie_pmu_cmp_event() is trying to permit) looks to be bogus, given
-that the start/stop callbacks will reprogram the HW counters (and hence
-can fight with one another).
-
-I suspect that can be removed *entirely*, and this can be simplified
-down to allocating N counters, without a quadratic event comparison.  We
-don't try to share counters in other PMU drivers, and there was no
-rationale for trying to do this when this wa introduced in commit:
-
-  8404b0fbc7fbd42e ("drivers/perf: hisi: Add driver for HiSilicon PCIe PMU")
-
-The 'link' tag in that comment goes to v13, which doesn't link to prior
-postings, so I'm not going to dig further.
-
-Mark.
-
->  
->  	for_each_sibling_event(sibling, event->group_leader) {
-> -		if (is_software_event(sibling))
-> -			continue;
-> -
->  		if (sibling->pmu != event->pmu)
-> -			return false;
-> +			continue;
->  
->  		for (num = 0; num < counters; num++) {
->  			/*
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> index a449651f79c9..3c531b36cf25 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> @@ -101,26 +101,17 @@ static bool hisi_validate_event_group(struct perf_event *event)
->  	/* Include count for the event */
->  	int counters = 1;
->  
-> -	if (!is_software_event(leader)) {
-> -		/*
-> -		 * We must NOT create groups containing mixed PMUs, although
-> -		 * software events are acceptable
-> -		 */
-> -		if (leader->pmu != event->pmu)
-> -			return false;
-> +	if (leader == event)
-> +		return true;
->  
-> -		/* Increment counter for the leader */
-> -		if (leader != event)
-> -			counters++;
-> -	}
-> +	/* Increment counter for the leader */
-> +	if (leader->pmu == event->pmu)
-> +		counters++;
->  
->  	for_each_sibling_event(sibling, event->group_leader) {
-> -		if (is_software_event(sibling))
-> -			continue;
-> -		if (sibling->pmu != event->pmu)
-> -			return false;
->  		/* Increment counter for each sibling */
-> -		counters++;
-> +		if (sibling->pmu == event->pmu)
-> +			counters++;
->  	}
->  
->  	/* The group can not count events more than the counters in the HW */
-> diff --git a/drivers/perf/hisilicon/hns3_pmu.c b/drivers/perf/hisilicon/hns3_pmu.c
-> index c157f3572cae..382e469257f9 100644
-> --- a/drivers/perf/hisilicon/hns3_pmu.c
-> +++ b/drivers/perf/hisilicon/hns3_pmu.c
-> @@ -1058,21 +1058,16 @@ static bool hns3_pmu_validate_event_group(struct perf_event *event)
->  	int counters = 1;
->  	int num;
->  
-> -	event_group[0] = leader;
-> -	if (!is_software_event(leader)) {
-> -		if (leader->pmu != event->pmu)
-> -			return false;
-> +	if (leader == event)
-> +		return true;
->  
-> -		if (leader != event && !hns3_pmu_cmp_event(leader, event))
-> -			event_group[counters++] = event;
-> -	}
-> +	event_group[0] = event;
-> +	if (leader->pmu == event->pmu && !hns3_pmu_cmp_event(leader, event))
-> +		event_group[counters++] = leader;
->  
->  	for_each_sibling_event(sibling, event->group_leader) {
-> -		if (is_software_event(sibling))
-> -			continue;
-> -
->  		if (sibling->pmu != event->pmu)
-> -			return false;
-> +			continue;
->  
->  		for (num = 0; num < counters; num++) {
->  			/*
-> -- 
-> 2.39.2.101.g768bb238c484.dirty
-> 
+Best regards,
+Krzysztof
 
