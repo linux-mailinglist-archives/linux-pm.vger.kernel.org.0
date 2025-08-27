@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-33175-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33176-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0A46B37BD8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 09:35:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2139DB37BF3
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 09:38:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4DD4683C3C
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:35:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D50A21BA2122
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7158E318155;
-	Wed, 27 Aug 2025 07:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257F731A06B;
+	Wed, 27 Aug 2025 07:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="q+dEkXRN"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="RHfVaqBi"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A6205E2F;
-	Wed, 27 Aug 2025 07:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6DA319843;
+	Wed, 27 Aug 2025 07:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756280112; cv=none; b=knxONkimvTSU0tMT0uxd9i/6bT3ZlkpTMHfabqMxxLkOmQM0i8YIVwteyGhT9iJ3lYlmUH5Fa/vYz3hN0jXJwoTuXUmOSVLlrw4sxQiZ/Lg6+D0Zi3YZZhuqjCe3dLquZV4VbJ30q3CyT5uqUSGzisY2Cv8bij19a9EGlMArNqo=
+	t=1756280293; cv=none; b=YJm9KeumMozASkOBwyLV2Nl0v37iY6IWaMa4NqJUmggWI7/WGKjoV6CvO2jwUIqVCfYgkeu7W2eG3xbjvFqStTjAttPhvpAEpe8kqNuJVY9Rnf/p9/KFv8W5otrysBO3kI5zzFjERYsOYum5fyaeTsXta4efFrEzArInFvpF78c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756280112; c=relaxed/simple;
-	bh=2E2t5XJ0oBHE/MDQjcbZItd2IrlEm9kNRRgPclvPx2Y=;
+	s=arc-20240116; t=1756280293; c=relaxed/simple;
+	bh=A0g4115fIgBE403Cl3EfktmE7DlY2fExfjJG9NOynE8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AszmQEEKTRzJmC6koiP5556V9NK2h6Ohg2d0d5Ft+g8ITtARivNp1ZeS73WUk+NVpJBiQiiibg7Og3kNf6LM2YVXqlrG0MmOyVQwgld8ytb5dE3zhdbApOVtFEI43msqnS+Cml3TurZeRHLy1UJy4Ik7hozOsr20h2bxVaMPyIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=q+dEkXRN; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version:Content-Type; b=tBDayGV+5dXf/9ghOmDNdi1c9HSa77pMyFDPKMOXMEDbuqwIfsisklB8k2F4/0Op/GDn/6qX1Nm/NQfvT94ETaEUGeenGpHoSD6GtVZE0FeSY1sIuJSIYXh4+VMZcIRNDVNn/t0p57TrCBFH2MVq4wXPnEWOkqc7cGRzeU2rVR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=RHfVaqBi; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=2E2t5XJ0oBHE/MDQjcbZItd2IrlEm9kNRRgPclvPx2Y=; b=q+dEkXRNy3JfEbTDNXEe/S/Q0S
-	Lzw01WTWTAPxZ0eF1o36zaQhaBOKLAMxG7r/pgMIvbRAAAs1FvocPigGldPnwWmIjkVRFQQp3SoP+
-	B0TRDhzc0ZpGNvZBCPRCp01Fr5cu7nos/o8IIpBrM7voobaAWUhtgpBGTcxChnkaaYzoiHCKjNjcx
-	DX5yLcYwUr+yT2mONOZMl4kZJIbm0Ia0+tFlKMoA2t/ASxSDWPh5U2RqQY9HQyKj0hI0LR8oqVHAn
-	iNu+Hg8d5nSM87e28dKJ8XEIbGJAwTuLvwVcl82p8CMiqxhL6axkl4rH0x9WfV64Kl21R0NePmiKI
-	8Iy4r5HQ==;
+	bh=A0g4115fIgBE403Cl3EfktmE7DlY2fExfjJG9NOynE8=; b=RHfVaqBiuWv5qA9rEDSV76B74j
+	/VRQEQEMJq+nrAYoEUfkbgqWaVFcKadDL23pvoNbN9HYno5c4fVFKKfHkm22CaOkniiuJytlbHD4H
+	7K/s0kBWZ2gDHfzNqBy15zPAWfeIvhakAsL7tyUP4aCcAMp4Yn0l/l8ZevpodPz8FWhwZsoGGwVSb
+	Z5HU/Cr/JFL/2E6StotztE4Bn9Fz07uO+kKVaugdC58pSD1jdkeB9Rpu6Mjm+PA/A5gNKITUdtDmd
+	bazV4H7WtQdO5d1VmNDBiBkWutZ6vOrDBqE7JVQExXP7kAkhWocTvSvaKBVGHGuRUNaEos8Aep0E6
+	n6v0sEgQ==;
 Received: from [213.244.170.152] (helo=phil.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1urAg9-00062s-SC; Wed, 27 Aug 2025 09:34:45 +0200
+	id 1urAj0-0007uF-FN; Wed, 27 Aug 2025 09:37:42 +0200
 From: Heiko Stuebner <heiko@sntech.de>
 To: Yury Norov <yury.norov@gmail.com>,
  Rasmus Villemoes <linux@rasmusvillemoes.dk>,
@@ -82,15 +82,16 @@ Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
  linux-sound@vger.kernel.org, netdev@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Subject:
- Re: [PATCH v3 12/20] phy: rockchip-usb: switch to FIELD_PREP_WM16 macro
-Date: Wed, 27 Aug 2025 09:34:44 +0200
-Message-ID: <5249188.NgBsaNRSFp@phil>
-In-Reply-To: <20250825-byeword-update-v3-12-947b841cdb29@collabora.com>
+ Re: [PATCH v3 13/20] drm/rockchip: dw_hdmi: switch to FIELD_PREP_WM16* macros
+Date: Wed, 27 Aug 2025 09:37:41 +0200
+Message-ID: <18528244.tv2OnDr8pf@phil>
+In-Reply-To: <20250825-byeword-update-v3-13-947b841cdb29@collabora.com>
 References:
  <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
- <20250825-byeword-update-v3-12-947b841cdb29@collabora.com>
+ <20250825-byeword-update-v3-13-947b841cdb29@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -100,24 +101,26 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 
-Am Montag, 25. August 2025, 10:28:32 Mitteleurop=C3=A4ische Sommerzeit schr=
+Am Montag, 25. August 2025, 10:28:33 Mitteleurop=C3=A4ische Sommerzeit schr=
 ieb Nicolas Frattaroli:
 > The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
 > drivers that use constant masks.
 >=20
-> Remove this driver's HIWORD_UPDATE macro, and replace all instances of
-> it with (hopefully) equivalent FIELD_PREP_WM16 instances. To do this, a
-> few of the defines are being adjusted, as FIELD_PREP_WM16 shifts up the
-> value for us. This gets rid of the icky update(mask, mask) shenanigans.
+> Remove this driver's very own HIWORD_UPDATE macro, and replace all
+> instances of it with equivalent instantiations of FIELD_PREP_WM16 or
+> FIELD_PREP_WM16_CONST, depending on whether it's in an initializer.
 >=20
-> The benefit of using FIELD_PREP_WM16 is that it does more checking of
-> the input, hopefully catching errors. In practice, a shared definition
-> makes code more readable than several different flavours of the same
-> macro, and the shifted value helps as well.
+> This gives us better error checking, and a centrally agreed upon
+> signature for this macro, to ease in code comprehension.
 >=20
-> I do not have the hardware that uses this particular driver, so it's
-> compile-tested only as far as my own testing goes.
+> Because FIELD_PREP_WM16/FIELD_PREP_WM16_CONST shifts the value to the
+> mask (like FIELD_PREP et al do), a lot of macro instantiations get
+> easier to read.
 >=20
+> This was tested on an RK3568 ODROID M1, as well as an RK3399 ROCKPro64.
+>=20
+> Reviewed-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> Tested-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
