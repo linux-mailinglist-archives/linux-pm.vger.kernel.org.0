@@ -1,217 +1,169 @@
-Return-Path: <linux-pm+bounces-33161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33162-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D99BB379CD
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:27:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAD52B37A06
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:55:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDAA43A6CDD
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 05:27:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C65B01B62AC8
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 05:55:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9037430FC18;
-	Wed, 27 Aug 2025 05:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD8D30F953;
+	Wed, 27 Aug 2025 05:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fFfa87uM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NiJQ/rjj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5612430F941;
-	Wed, 27 Aug 2025 05:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94AA287273;
+	Wed, 27 Aug 2025 05:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756272460; cv=none; b=FGICX/Qc4V8BVhSlnN4c7QJlEL7qkGS3IZO04/lkhMLsEOrRjQIZpEnb57zmVc1gbtYjlmOtTCGk1RGOjDvH82+JPKm0Ado0RfQ40Ux0gHX9CkfBjYEjpvFpEl4vF9g9pCC8auJGy5clikLip0Cl+QQochIumJsksaufqScXVCs=
+	t=1756274097; cv=none; b=Ua82v+S+adU8C6+uVFw7biJVlNMxbmxVAOYYkotjldkknlNxswT6cPdkpSk7XLwk7br5BMDGHHdjTuy7qACrKfzNSkc3ghgmNgjZBALcEWay+mq08AA0aPEt2utuFrQFI1T1VmAcQmQAd5KLvEJVHSpMsdBZ51W5VyoEQPz06qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756272460; c=relaxed/simple;
-	bh=+pAURm+gSzUePMcSSAf3SHQZLY9qMhpS2XZkBkV2krw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dhtd3JwEEiBiPtMFMcvHfmbhK90l1F1v/Y3ZyX2/FuvUhwGFjQCkwo1bOGFhpuw2HHWSulcocUfw+Hn8mhqtfC9/WnnmBt23dUfqNKWZ6PrMQtQPg2Q44n9UL2GjTyJveN33NsGiuLiAMDGbK3htJGjMBn1m0KHj2QQ00OgNMaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fFfa87uM; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57QJuQZo029875;
-	Wed, 27 Aug 2025 05:27:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=jxijss
-	tmEiNGZJKG6yltOja4dBZKrqMyUi/HgZLz1Sk=; b=fFfa87uMu8acvDC8OVnLiF
-	3Gw7T94UM/oONEZ9FfO6ESJm9dykU5EYEWzJ6thKl8AEybeSnU7jVczC+OsbSmIg
-	U1DTm1ikvBxQhtMsBkqiirIjOSbWdtCJnpSDht3JKVzPoBOjH3KPPIjRZwjgIoz4
-	PIz+4T0pathmf8bjMQQcBo9Nngpp8r0YuSt99tds0+EviRwkVU+5p0dMPKzJ5SJZ
-	NqSby3CqAv1CiFuqsjN+UtUj0P6MofPcWemNISQn5nz/ZN8twBsE28xbYF1o/y5D
-	T+rxMTdyXFQiS1FQNk9wuoFsc0iqqXm08NakEBDb3JoIMWYZ+sB++DfGZXvYi8bQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48q42j2cs9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Aug 2025 05:27:07 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57R5K8Rl017639;
-	Wed, 27 Aug 2025 05:27:06 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48q42j2cs6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Aug 2025 05:27:06 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57R3lXEH029924;
-	Wed, 27 Aug 2025 05:27:05 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 48qsfmpe9d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Aug 2025 05:27:05 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57R5R1oh53739874
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 27 Aug 2025 05:27:01 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6821520049;
-	Wed, 27 Aug 2025 05:27:01 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A772520040;
-	Wed, 27 Aug 2025 05:27:00 +0000 (GMT)
-Received: from [9.152.212.92] (unknown [9.152.212.92])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 27 Aug 2025 05:27:00 +0000 (GMT)
-Message-ID: <ac6dfaec-38ea-486d-89a0-ab02768cee42@linux.ibm.com>
-Date: Wed, 27 Aug 2025 07:27:00 +0200
+	s=arc-20240116; t=1756274097; c=relaxed/simple;
+	bh=8eROKf5S0VMq51uDrP4Ccww8z69TnWPueZiuLEnNzMc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OfQYuojg+oGsbzWYYY6YDp5QIMhTSTrnx+89eJj+xF9TNpB4LxiRuyOFuGNmgNk3YZkpoWvgaOLh4eiN59TaOKMClOYQ61cn4o9DmlIVevoIk7xJL27CqjapIrmnc91BiO5B8dONZdZBrWo2GiO2UTyzmKl/ZF9TCRYCwYZJTNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NiJQ/rjj; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-55f499c7f0cso2408191e87.0;
+        Tue, 26 Aug 2025 22:54:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756274093; x=1756878893; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m8n1j89CvjN5ZFEbdFGzttMH7tyzPC+isNQLY6VZ0w0=;
+        b=NiJQ/rjjB1cOxvwYSOr41aeZa0HgSKuAbKrug4sqFj/qMV/I05+oY1g9rEjfdHr1HR
+         VqS1GWx4mC8MLFrqo1naF+p3gwE59vZHfpyEtP3brcwn0cwCnye+V8za5uoWuCxX3h+Y
+         KWjzOV96M3vdTeABWrH0d8gKchPgPXu1qyYXoX2AV1Oxnn0iWA693N9+7SAkG3CQX9Ie
+         eVu4+KVuDJHLv0WTjn1yr8Sxia6A4xy28sGRDIfjo9rzU4yE1GJkcmtGbFAyeMm/X74z
+         AO9m3SjVNz5oXIwLjdNbE3thPFDV30rc7K5rSpUd8oKRycjRRPzcgP0zLRfBRmDOGVwa
+         do2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756274093; x=1756878893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m8n1j89CvjN5ZFEbdFGzttMH7tyzPC+isNQLY6VZ0w0=;
+        b=d8q4Bfs2yq50o1TbcGAuSGwakwG+q29xSN1eAfy14IbOS/etQi0tmU8eZmGu0W+K2u
+         XfBqYCgFhzMSI9LLPlFQp9MwuRp577VGwbISRR+34xH31Yeleu5xl96dd1D43cSCKT5q
+         X3Y2jfdoOIt5saSYxMxO2ZyTznpXDG+XgAZHHvGFkclqVB7/uuQBOV+ouLPzBk3DjGEo
+         V5vJK4jb0TcjyYDpPTa4C1ZDOT6+8d5z6gFDGs+wnCwdPyeypa5sLABSID1m5OWOChgP
+         ZQmBBy5xU8chyQkz2gj3fQAQtDgRgmMtepM4t6k+ioO7+mKloUQbzCmY0bucquC1LPIE
+         x3xw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1giFfrbS3DKefCbAzdh2nKkkA10BUIm9tKQywakjcgNaUqexSyE3Qz8YoZIrKcQ9fd7E54E5jbXB7x/U=@vger.kernel.org, AJvYcCUXXMaqGVCRZrVzI31ochacr2AYpNO9e9kYGIamR0W8WKDqNa3wpDD7WGF6PW0Jwkuq5FPVajhPbdxiuVk=@vger.kernel.org, AJvYcCXj9/VlVLcrK4+hVOwSKnFcZwJmD/TqDk+wYcrO93iIi+1pVoU/8X7uBe/rz7yJ+5LGXw4vnPLvuAA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFjPGH5Sjn6LJiBowwc0W8aDMRpMhrvrQz6CKKwXJFXDgbQokj
+	bb/BgBD+z1VV1jcqgdVq2O0WUH+Jx3E9AAj+ss0PVpYFj8WfnE6oL09C+xLC6DpwRymofkg0eYZ
+	kBULXPunFCf8bUbZbE6znV4X5sup2ubw=
+X-Gm-Gg: ASbGncvjo5Jt2gbZQFouHSYz2sU7uJ/jyk2971PA/Ccb1cjNngV0aFebdizpx3OUDwz
+	lIhKzz0wDbAP06L2Ljlcrs40hTsD/r9UmlR2pudglpsmykRZR5Kkxaz8fpTvho4/Ve5YzR7pXo4
+	VFS9kAeQw2T+kC2/LKp/uudTlclAbBso7QM7tKPKXpBlivTtHVtsKMCUOcAu+eMKYbjZQqUe0kp
+	XVZK7Q89mcr1q4AHbbeQ9ugurD9
+X-Google-Smtp-Source: AGHT+IHNbW4SO/xBJ0LMEH+gXwKwnl/GVQ4u+pDvk847J5bPbkQbK4PsfsRLx2GNcufPD1Q3bNVfi4pbQWjgy5kT/Vk=
+X-Received: by 2002:a05:6512:1451:20b0:55f:3996:4f82 with SMTP id
+ 2adb3069b0e04-55f399650cfmr2395180e87.1.1756274092506; Tue, 26 Aug 2025
+ 22:54:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 18/19] perf: Introduce positive capability for raw events
-To: Mark Rutland <mark.rutland@arm.com>, Robin Murphy <robin.murphy@arm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Jan Polensky <japo@linux.ibm.com>
-Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org, acme@kernel.org,
-        namhyung@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
-        iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
-        linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
- <aK259PrpyxguQzdN@J2N7QTR9R3>
-Content-Language: en-US
-From: Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <aK259PrpyxguQzdN@J2N7QTR9R3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAxMCBTYWx0ZWRfXx7bT3ieVYWZ1
- FvRIJn/6odyl76gPtjq2fdUI3+ddgoyBguazv17xAc0h1PWPsciO7Io1+yf38004HJX48EZKQe4
- jjqa2jsZ613Il7PEWWZLmHVXl0DVElauSgaXsW2jrn5unNTZZAgCkgP5ixkSnbssGkUA98RWoHK
- 6CllyViFj8nmb4/kmZamtgDzlo/xirMdIPTqK1ytIy748E4TyQcONzfTAVM6cDoHbAMLdYuTHtD
- UT6EmBwE8Tz6Ajw1M3OeNTbMk21jMwITf/ouwlMB6Q/Hm12FuudC6E2iwfSIPWm8nU5cvD4JBmw
- ghpRUxLnbbdBrU5mCsCpBm2H2yjaVRWCqCxRNsBxe1xCwhV1Oev6PUoPQ5TLoGumXLZUFEfuXwo
- /BJHYr+T
-X-Proofpoint-ORIG-GUID: Z1OBCqtS81HxjTSNcENNGRKeOQ0QzPO9
-X-Proofpoint-GUID: 4pnWswYamnTcgbcPVqCp3LQWR1ph9h16
-X-Authority-Analysis: v=2.4 cv=evffzppX c=1 sm=1 tr=0 ts=68ae972b cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=7CQSdrXTAAAA:8 a=KByoUL483hSIROooWq4A:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-26_02,2025-08-26_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 adultscore=0 malwarescore=0 spamscore=0 bulkscore=0
- impostorscore=0 clxscore=1015 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508230010
+References: <20250826-tegra186-cpufreq-fixes-v1-0-97f98d3e0adb@gmail.com>
+ <20250826-tegra186-cpufreq-fixes-v1-2-97f98d3e0adb@gmail.com> <24066927.6Emhk5qWAg@senjougahara>
+In-Reply-To: <24066927.6Emhk5qWAg@senjougahara>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Wed, 27 Aug 2025 00:54:41 -0500
+X-Gm-Features: Ac12FXy6I9yuststMLMbu0a9gFKQlY2gGlFE3HWxValsmuH9e5xd_3-3x7Zc26U
+Message-ID: <CALHNRZ8SfAZHm5PszA0uCbr0QUYFSkdayVwEwjgRYX2JT0xhfQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq: tegra186: Initialize all cores to base frequencies
+To: Mikko Perttunen <mperttunen@nvidia.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Aaron Kling <luceoscutum@gmail.com>, Sumit Gupta <sumitg@nvidia.com>, 
+	Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/26/25 15:43, Mark Rutland wrote:
-> On Wed, Aug 13, 2025 at 06:01:10PM +0100, Robin Murphy wrote:
->> Only a handful of CPU PMUs accept PERF_TYPE_{RAW,HARDWARE,HW_CACHE}
->> events without registering themselves as PERF_TYPE_RAW in the first
->> place. Add an explicit opt-in for these special cases, so that we can
->> make life easier for every other driver (and probably also speed up the
->> slow-path search) by having perf_try_init_event() do the basic type
->> checking to cover the majority of cases.
->>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> 
-> 
-> To bikeshed a little here, I'm not keen on the PERF_PMU_CAP_RAW_EVENTS
-> name, because it's not clear what "RAW" really means, and people will
-> definitely read that to mean something else.
-> 
-> Could we go with something like PERF_PMU_CAP_COMMON_CPU_EVENTS, to make
-> it clear that this is about opting into CPU-PMU specific event types (of
-> which PERF_TYPE_RAW is one of)?
-> 
-> Likewise, s/is_raw_pmu()/pmu_supports_common_cpu_events()/.
-> 
->> ---
->>
->> A further possibility is to automatically add the cap to PERF_TYPE_RAW
->> PMUs in perf_pmu_register() to have a single point-of-use condition; I'm
->> undecided...
-> 
-> I reckon we don't need to automagically do that, but I reckon that
-> is_raw_pmu()/pmu_supports_common_cpu_events() should only check the cap,
-> and we don't read anything special into any of
-> PERF_TYPE_{RAW,HARDWARE,HW_CACHE}.
-> 
->> ---
->>  arch/s390/kernel/perf_cpum_cf.c    |  1 +
->>  arch/s390/kernel/perf_pai_crypto.c |  2 +-
->>  arch/s390/kernel/perf_pai_ext.c    |  2 +-
->>  arch/x86/events/core.c             |  2 +-
->>  drivers/perf/arm_pmu.c             |  1 +
->>  include/linux/perf_event.h         |  1 +
->>  kernel/events/core.c               | 15 +++++++++++++++
->>  7 files changed, 21 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
->> index 1a94e0944bc5..782ab755ddd4 100644
->> --- a/arch/s390/kernel/perf_cpum_cf.c
->> +++ b/arch/s390/kernel/perf_cpum_cf.c
->> @@ -1054,6 +1054,7 @@ static void cpumf_pmu_del(struct perf_event *event, int flags)
->>  /* Performance monitoring unit for s390x */
->>  static struct pmu cpumf_pmu = {
->>  	.task_ctx_nr  = perf_sw_context,
->> +	.capabilities = PERF_PMU_CAP_RAW_EVENTS,
->>  	.pmu_enable   = cpumf_pmu_enable,
->>  	.pmu_disable  = cpumf_pmu_disable,
->>  	.event_init   = cpumf_pmu_event_init,
-> 
-> Tangential, but use of perf_sw_context here looks bogus.
-> 
+On Tue, Aug 26, 2025 at 9:09=E2=80=AFPM Mikko Perttunen <mperttunen@nvidia.=
+com> wrote:
+>
+> On Wednesday, August 27, 2025 5:16=E2=80=AFAM Aaron Kling via B4 Relay wr=
+ote:
+> > From: Aaron Kling <webgeek1234@gmail.com>
+> >
+> > During initialization, the EDVD_COREx_VOLT_FREQ registers for some core=
+s
+> > are still at reset values and not reflecting the actual frequency. This
+> > causes get calls to fail. Set all cores to their respective base
+> > frequency during probe to initialize the registers to working values.
+> >
+> > Suggested-by: Mikko Perttunen <mperttunen@nvidia.com>
+> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> > ---
+> >  drivers/cpufreq/tegra186-cpufreq.c | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/tegra186-cpufreq.c
+> > b/drivers/cpufreq/tegra186-cpufreq.c index
+> > 6c394b429b6182faffabf222e5af501393dbbba9..ef288705f00b0918d0f8963ef9cc9=
+fc53
+> > be88091 100644 --- a/drivers/cpufreq/tegra186-cpufreq.c
+> > +++ b/drivers/cpufreq/tegra186-cpufreq.c
+> > @@ -229,7 +229,8 @@ static int tegra186_cpufreq_probe(struct platform_d=
+evice
+> > *pdev) {
+> >       struct tegra186_cpufreq_data *data;
+> >       struct tegra_bpmp *bpmp;
+> > -     unsigned int i =3D 0, err;
+> > +     unsigned int i =3D 0, err, edvd_offset;
+> > +     u32 edvd_val, cpu;
+> >
+> >       data =3D devm_kzalloc(&pdev->dev,
+> >                           struct_size(data, clusters,
+> TEGRA186_NUM_CLUSTERS),
+> > @@ -257,6 +258,14 @@ static int tegra186_cpufreq_probe(struct
+> > platform_device *pdev) err =3D PTR_ERR(cluster->table);
+> >                       goto put_bpmp;
+> >               }
+> > +
+> > +             for (cpu =3D 0; cpu < ARRAY_SIZE(tegra186_cpus); cpu++) {
+> > +                     if (data->cpus[cpu].bpmp_cluster_id =3D=3D i) {
+> > +                             edvd_val =3D cluster->table[0].driver_dat=
+a;
+> > +                             edvd_offset =3D data->cpus[cpu].edvd_offs=
+et;
+> > +                             writel(edvd_val, data->regs +
+> edvd_offset);
+> > +                     }
+> > +             }
+> >       }
+> >
+> >       tegra186_cpufreq_driver.driver_data =3D data;
+>
+> Looks OK, but I think it might be better to set the frequency to Fmax ins=
+tead
+> of Fmin to avoid any slowdown during boot.
 
-It might look strange, but it was done on purpose. For details see
-commit 9254e70c4ef1 ("s390/cpum_cf: use perf software context for hardware counters")
+I considered this, but I'm somewhat skittish about setting Fmax by
+default due to seeing instability across different tegra archs and
+finding out that the t210 devkits have been factory overclocked on
+mainline for the last six years [0]. That may be less of a problem on
+t186+ with the bpmp having more tight control over stuff, but... yeah,
+I'm still wary. But on the other hand, I set performance governor on
+boot for my android builds and have not seen any obvious cpu related
+instability on p2771 or p3636+p3509, so that might be okay. If you
+still think Fmax is better, I'll update and send a v2.
 
-Background was a WARN_ON() statement which fired, because several PMU device drivers
-existed in parallel on s390x platform.
-Not sure if this condition is still true after all these years...
+Aaron
 
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-IBM Deutschland Research & Development GmbH
-
-Vorsitzender des Aufsichtsrats: Wolfgang Wendt
-
-Geschäftsführung: David Faller
-
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
+[0] https://lore.kernel.org/all/20250816-tegra210-speedo-v1-0-a981360adc27@=
+gmail.com/
 
