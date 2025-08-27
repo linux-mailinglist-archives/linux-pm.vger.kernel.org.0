@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-33182-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33183-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02995B37CC3
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 10:04:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 201E3B37CCE
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 10:05:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76C303B9D90
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 08:04:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF9BC2014CF
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 08:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2206B322541;
-	Wed, 27 Aug 2025 08:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9858322554;
+	Wed, 27 Aug 2025 08:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="X5YrLclw"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="mtrPPwqa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6885C32252A;
-	Wed, 27 Aug 2025 08:03:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB890321435;
+	Wed, 27 Aug 2025 08:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756281839; cv=none; b=O4z94cDZ8IKa2pwguK4GklcWKEKfLso0ajLkbyKwITt/lIJq+oYM2uef54ve+5M29MLoeyzEPWsm5K5jjX1+0xbMrLUhk7U8kVMjm+21sEt0TCtCtV5MGcEwINskdnUz3icqbAGVtbi++1JkBSgVBZm8ifKh/lJTi8zlic5CR0g=
+	t=1756281893; cv=none; b=OPVFi5ZBdYQRfQCGI3i3grsc+VnoeNoJ0cQUDRxs48BeqWSTrvz3KdbjqhAO+DoLumBWfbOAw6rB8irU/zH56whs1cN/19QVZReEsor1A3OMFARq33gZOLSOoYKidY2otns21BVjqod9pGdybutb690gE91uVJAu5RHBnNL69E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756281839; c=relaxed/simple;
-	bh=u0/Z7ZF5puT3D2uP7V4EC7GIKsUnJywvfN1YRQGw/Ec=;
+	s=arc-20240116; t=1756281893; c=relaxed/simple;
+	bh=H5XGGOqUvDfBDNoA9c9ChXTIWyKSBsmEcQMHpNsNPDE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iTNE/gf4Q42dLErLp5kPHtDz+kq8IAL8PTEExDvux4sZmq/hbZBJCt1oBgvZEaQW4YY1faDNcW++bfPAnqBpDk4VKZPRMEB6GGMMuuU/7qy6LrVyLO5jO4mBronCHmWMxkotVv95k4cI8t7UvTKVT1QeWLFE3Kx8kIDUScs+Lv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=X5YrLclw; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version:Content-Type; b=bYSiHTHgxECWN1SqmCw3zJjY0odwbT3pTwQ0bzGf+5tqOQ0X6VtftUypZerlIeUYut51slSh5OVrwOzBheEJ3SgiuXSEWNVNG9AhuGBOcSYt8KAvkyijxvWVx1tyXHxV4f8IL2cP/J3w5e6BByA3geXTXOZ/SnVtm1r3bojHjFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=mtrPPwqa; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=NqL3zrDeVOVmwd8ScXywURS5QoRIm4+QJ5WQbVoMCp8=; b=X5YrLclwiUXRxe4YKbLSt2k8b4
-	sa2/8T33ut/6gr5gidLW0B7gFLiB8iX3JUwpCmTDPuMh2zzUTdwwEQumk7+R/D8rggSl4x1NB3mT6
-	m6vYJCM9j58i/dnWOFIvuMj8zAM2MWxtvfqSFOIRBbYhxnittEcH8SXwDzvqCsZVKJb1Gs5OJXOV+
-	sH0ofNfiK5taJBTtc1XfF9XAC7JBwX3J7hHrsshgW6w+WNHYdt9OB0SXlP5956BCvkjR9XkKhI6K3
-	iCYOn6UIsY/6dFUEidhp+4ZOye7qnvOcMifW4x6Z9698PaQCKr1wI9TTIpN7uiXcGmmt2pRtbq/d6
-	zEOcbQLA==;
+	bh=H5XGGOqUvDfBDNoA9c9ChXTIWyKSBsmEcQMHpNsNPDE=; b=mtrPPwqaUs12AGu5L+ainiAjWo
+	LG0fGbIszK398JZ0KY0dLQFqHUEgpa78WPcICY29z9haXF2gu+qet2U9oar/B9EYUcWGS5mDVmVQ5
+	FfdRptzZ2FTbaPLUYUE/DLwXpS2IBNRzVirIN+r0eD9Vx3WLDIuiC+j04MoDiy8oiUvghbsyFgJl6
+	xhHxZtck6KVDZTQ637deyTTvZvoCndnNCfAUU1vzr/vdCDtsvL4+O1XywZZrjEQ3ksrhSd67FgZUX
+	o6tiItZt/sCBeB/pcYbqDQThCgSrW42QOZe/NgxaFzLAMuSytJPKBkiLAGsDanxEmkdVRs78asGSa
+	ZB48o00Q==;
 Received: from [213.244.170.152] (helo=phil.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1urB7w-0006zw-Js; Wed, 27 Aug 2025 10:03:28 +0200
+	id 1urB8s-0007SN-IS; Wed, 27 Aug 2025 10:04:26 +0200
 From: Heiko Stuebner <heiko@sntech.de>
 To: Yury Norov <yury.norov@gmail.com>,
  Rasmus Villemoes <linux@rasmusvillemoes.dk>,
@@ -84,14 +84,13 @@ Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Subject:
- Re: [PATCH v3 18/20] PM / devfreq: rockchip-dfi: switch to FIELD_PREP_WM16
- macro
-Date: Wed, 27 Aug 2025 10:03:27 +0200
-Message-ID: <16814931.dW097sEU6C@phil>
-In-Reply-To: <20250825-byeword-update-v3-18-947b841cdb29@collabora.com>
+ Re: [PATCH v3 20/20] phy: rockchip-pcie: switch to FIELD_PREP_WM16 macro
+Date: Wed, 27 Aug 2025 10:04:24 +0200
+Message-ID: <5143535.KlZ2vcFHjT@phil>
+In-Reply-To: <20250825-byeword-update-v3-20-947b841cdb29@collabora.com>
 References:
  <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
- <20250825-byeword-update-v3-18-947b841cdb29@collabora.com>
+ <20250825-byeword-update-v3-20-947b841cdb29@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -101,26 +100,32 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 
-Am Montag, 25. August 2025, 10:28:38 Mitteleurop=C3=A4ische Sommerzeit schr=
+Am Montag, 25. August 2025, 10:28:40 Mitteleurop=C3=A4ische Sommerzeit schr=
 ieb Nicolas Frattaroli:
 > The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
 > drivers that use constant masks.
 >=20
-> Like many other Rockchip drivers, rockchip-dfi brings with it its own
-> HIWORD_UPDATE macro. This variant doesn't shift the value (and like the
-> others, doesn't do any checking).
+> The Rockchip PCIe PHY driver, used on the RK3399, has its own definition
+> of HIWORD_UPDATE.
 >=20
 > Remove it, and replace instances of it with hw_bitfield.h's
-> FIELD_PREP_WM16.  Since FIELD_PREP_WM16 requires contiguous masks and
-> shifts the value for us, some reshuffling of definitions needs to
-> happen.
+> FIELD_PREP_WM16. To achieve this, some mask defines are reshuffled, as
+> FIELD_PREP_WM16 uses the mask as both the mask of bits to write and to
+> derive the shift amount from in order to shift the value.
 >=20
-> This gives us better compile-time error checking, and in my opinion,
-> nicer code.
+> In order to ensure that the mask is always a constant, the inst->index
+> shift is performed after the FIELD_PREP_WM16, as this is a runtime
+> value.
 >=20
-> Tested on an RK3568 ODROID-M1 board, and an RK3588 ROCK 5B board.
+> From this, we gain compile-time error checking, and in my humble opinion
+> nicer code, as well as a single definition of this macro across the
+> entire codebase to aid in code comprehension.
+>=20
+> Tested on a RK3399 ROCKPro64, where PCIe still works as expected when
+> accessing an NVMe drive.
 >=20
 > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
