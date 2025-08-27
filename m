@@ -1,129 +1,76 @@
-Return-Path: <linux-pm+bounces-33205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC33B38D69
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 00:14:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFF96B38EB3
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 00:49:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D6149834E7
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 22:12:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98DDD366A35
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 22:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16BF6314A9B;
-	Wed, 27 Aug 2025 22:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDB32E1C63;
+	Wed, 27 Aug 2025 22:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRX+tNGW"
+	dkim=pass (1024-bit key) header.d=willian.wang header.i=@willian.wang header.b="ds4JIs3D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-107164.simplelogin.co (mail-107164.simplelogin.co [79.135.107.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43BB314A86;
-	Wed, 27 Aug 2025 22:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756332484; cv=none; b=rh7NkClOPyKmyED8QzkAqB8nlKN4/jx0wV+xe9tRD1qjE4/vgJfjQgyjF0LIfd8L2lQwUcU0u7MERjEbVa6jnKmys84kpq6ddsWWlvV1HwavyBwjQxPb/428RZl0NPXLdJkMtL13iayZ0Whk1Tv6zcGahhokoEuZiX/yQ2MryvE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756332484; c=relaxed/simple;
-	bh=zzgfsYDCFmRhdoMZwZ++3Els9HxkLOsb+5Uew5Yhl6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VVAjmmZRH2n0HKFhF7+DZbzgQHb2o9yGBT7e9Nl9qsKnYfJcjuudV2lyFQFJPvVyeBV77kQ7mMAU6h3uOytVyDZjXQ2j3VzP6ExIyq9V7Nv+Y89rIb5aCoCGNjaVWulC17/2WxNqvBlyI6DKJKGEgBnXn9idmezbyp9G4KM19Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRX+tNGW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EECAEC4CEEB;
-	Wed, 27 Aug 2025 22:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756332483;
-	bh=zzgfsYDCFmRhdoMZwZ++3Els9HxkLOsb+5Uew5Yhl6I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bRX+tNGWVTUIuuRWXCG5ONBpUuQUHP/wyei8Yn+SJQPZSdxqbskV+o+bN48kMj2LB
-	 4LR1hBAGzxuKLAJWZNXy2LqiiK4grBJTMBnIjHo0RwE4YUqcPtybj6NCyu5EeXcjNd
-	 n0UcO9BkDLs6IzjiMW2jrqIMMVulxJo5Do3KhN4j9Hvj+V51zj+8jFAFccSUx9DHvR
-	 /2IKuBbcutfJoszc+0hXc++CluMVTe/YUadwI9Jqk2eOGsxfQeX5CdH02aoJyE9ygy
-	 k3Zy+tyzneCTzQN6/F9NY9/LcqCQjrY9f2UV7/xR2BsYufOXpBoDEbFPfmTFIJ7lsY
-	 9CC5fg9wyhsdg==
-Date: Wed, 27 Aug 2025 15:08:01 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: Matt Coster <matt.coster@imgtec.com>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>,
-	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v13 3/4] riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU
- node
-Message-ID: <aK-BwY8c-OR_WqNk@thelio>
-References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
- <CGME20250821222023eucas1p1805feda41e485de76c2981beb8b9102d@eucas1p1.samsung.com>
- <20250822-apr_14_for_sending-v13-3-af656f7cc6c3@samsung.com>
- <aKjWiU4fQw3k77GR@x1>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FED30CD9C
+	for <linux-pm@vger.kernel.org>; Wed, 27 Aug 2025 22:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=79.135.107.164
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756334965; cv=pass; b=fx+I63iEfm5s8i4iDjLcVBMBXp6+R8pfCNBXZ7etLVhQFpdG3c2DfyHmOz5bFSzVP90JPgg+JdfYJbXhDvmR4+axXZyRPRDihGj8/DkjAmkVwD+GmbmlxIuoq3y+AopSjulDZlq0/u0YpuxjfeJrQaUMw8oV7Gj3XIBBTtkvbtQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756334965; c=relaxed/simple;
+	bh=WDelYLj/Ys+ODM2NUbxJyf4W98RhRVPFdhWip4Orgwc=;
+	h=Subject:Date:In-Reply-To:MIME-Version:From:To:Cc:Message-ID:
+	 References; b=Zt+kap8nvVwQF2kRtyiNOmMaNBDOAdZkTIaTI+4byezj31ZE6m5Qtv/oRzzdlYa/ZN4orVe3Z2g1NvWouAscujjqvHpZ+cKf6VAF4t2ksGYtU8oDW9vEdDuIXRY+LQBIM1WUsoWphljxmonPSp8yTMkKX65K59o0vABXrqB3JnE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=willian.wang; spf=pass smtp.mailfrom=willian.wang; dkim=pass (1024-bit key) header.d=willian.wang header.i=@willian.wang header.b=ds4JIs3D; arc=pass smtp.client-ip=79.135.107.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=willian.wang
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=willian.wang
+ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1756334043;
+	cv=none; b=NNGQjDJXNcyXg/L9p0bxou9IatDDehPoCaFbFe8eZroFOY5urVYglwcu1ToUC7MUTICPd8mrjZVamYYjmKG5mCyQrNRRwOD3EVZbBhu4vHh4/BfmGoRzuU3Xaq4xpsYi36owGfRY2dy7HqxGvrCbXSiJcZcm33Yi8F9oqT5UgxOIHJmCz3Qus/icnT2AQ2RKAh+N7TMMfPgyPjSJTwzlGpBd3CXkw5NaA7oV/t67pZrhjt/xQKhjoUSSJpwkeLLh0DU/EqpWa0lz2VLLOG/n1TVoxJyltN13vuaFDwfKlt9oq3bublSwDcckGenFLNCCdUOHfvM+DePlKq07tVR7fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
+	t=1756334043; c=relaxed/simple;
+	bh=WDelYLj/Ys+ODM2NUbxJyf4W98RhRVPFdhWip4Orgwc=;
+	h=Subject:Date:In-Reply-To:From:To:Cc:References; b=W+z5yeu0/DNOuT1uemvn4cK7WRBGcV6EHHsBFhpUgIA9h1AVnZaWlrLmkftXAV6J+eF1dEYxZn3y58+8G6q77JFJUozAKqT8+a6LVbtOQAi+JF51HdVY+iU/OZHkuY99o/gCcy+Plvfc2nZXCY8IHGAkwE+MHZzzxHpgFQILRB51RNdnGQkira1TB2+ow1KuuY+JwwGdivUVAW9KsTonPKdWj81QEkQv3HqBMNZuh7WflqrHogzb63z3NvBiBtcaql5Jg1fHzLlndTFnTbOT31vrXzAfKAFgvq1uYdUFKOYyu4Va0hjEc/zY09cORZTa5LNEPHXjwsHy9mAnEV6U4g==
+ARC-Authentication-Results: i=1; mail.protonmail.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=willian.wang;
+	s=dkim; t=1756334043;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WDelYLj/Ys+ODM2NUbxJyf4W98RhRVPFdhWip4Orgwc=;
+	b=ds4JIs3DBfS/4viiQdIyH1kSyuOxuVgdnsTJ5jXvda5U2+6jwsw5+ZAi2/opT8YUF04Pow
+	KXe7ElIQbEfhDXjH1yCY2G1r4NBWdWz1fJTIfxLA7NPRBOg25cnIvLpHAWubU3aS4QjdJj
+	oPfc3KyU97xIyVVxDTFWo2ULlmC9sEM=
+Subject: Re: [PATCH] cpufreq/amd-pstate: Fix a regression leading to EPP 0
+ after resume
+Date: Wed, 27 Aug 2025 19:33:50 -0300
+In-Reply-To: <20250826052747.2240670-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aKjWiU4fQw3k77GR@x1>
+Content-Transfer-Encoding: 8bit
+From: Willian Wang <kernel@willian.wang>
+To: superm1@kernel.org
+Cc: 
+ gautham.shenoy@amd.com,linux-kernel@vger.kernel.org,linux-pm@vger.kernel.org,perry.yuan@amd.com
+Message-ID: <175633404301.7.5098740618527090955.875057979@willian.wang>
+References: <20250826052747.2240670-1-superm1@kernel.org>
+X-SimpleLogin-Type: Reply
+X-SimpleLogin-EmailLog-ID: 875057980
+X-SimpleLogin-Want-Signing: yes
 
-On Fri, Aug 22, 2025 at 01:43:53PM -0700, Drew Fustini wrote:
-> On Fri, Aug 22, 2025 at 12:20:17AM +0200, Michal Wilczynski wrote:
-> > Add a device tree node for the IMG BXM-4-64 GPU present in the T-HEAD
-> > TH1520 SoC used by the Lichee Pi 4A board. This node enables support for
-> > the GPU using the drm/imagination driver.
-> > 
-> > By adding this node, the kernel can recognize and initialize the GPU,
-> > providing graphics acceleration capabilities on the Lichee Pi 4A and
-> > other boards based on the TH1520 SoC.
-> > 
-> > Add fixed clock gpu_mem_clk, as the MEM clock on the T-HEAD SoC can't be
-> > controlled programatically.
-> > 
-> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Reviewed-by: Drew Fustini <drew@pdp7.com>
-> > Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Acked-by: Matt Coster <matt.coster@imgtec.com>
-> > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> > ---
-> >  arch/riscv/boot/dts/thead/th1520.dtsi | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> 
-> I've applied this to thead-dt-for-next [1]:
-> 
-> 0f78e44fb857 ("riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU node")
-> 
-> Thanks,
-> Drew
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/log/?h=thead-dt-for-next
+Hi, I can confim that this patch works as intended. I only checked the value of "energy performance preference" field on `cpupower frequency-info` before and after suspend/resume cycle. If there are any other tests you want me to do, please let me know.
 
-Hi Matt,
+I'm using Fedora KDE 42, AMD 7840U, Tuned-2.25.1.
 
-Do you know when the dt binding patch will be applied to
-the drm-misc/for-linux-next tree?
-
-I applied the dts patch but it is creating a warning in next right now.
-If the binding won't show up soon in drm-misc, then I'll remove this dts
-patch from next as dtbs_check is now failing in next. I can add it back
-once the binding makes it to next.
-
-Thanks,
-Drew
 
