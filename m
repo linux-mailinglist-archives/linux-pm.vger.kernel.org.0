@@ -1,123 +1,159 @@
-Return-Path: <linux-pm+bounces-33187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33188-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE3F7B37D6F
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 10:19:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BA7BB37DDD
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 10:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EF403645BC
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 08:19:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43CE97B0336
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 08:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35C053375C4;
-	Wed, 27 Aug 2025 08:18:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1499B3375DC;
+	Wed, 27 Aug 2025 08:30:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E3E192B84;
-	Wed, 27 Aug 2025 08:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512DD2F28F4;
+	Wed, 27 Aug 2025 08:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756282732; cv=none; b=F1u28dZJOF+FB9Wg+54w5ldsmb91UV06i7ADydi/odQ0/FJD8bZpXquVEh8aT1bkooWufIReDX0tr9F3Aag0PdFw35TZMLV3nipBah3PCarI6yAOCv6rdGxQIXncL5vMYQrACaFJ3WMA1gv+gr3AK0gMfWbYIKJrIwHaxIDmXg8=
+	t=1756283427; cv=none; b=VuZiU6GnS/sTUmv3jhnH3O6thdzMVy4uYOJhnVRwk/71MITCGY0zX58zYX6kW64WoT2Fn/vA3T9/vKxZrSE/nU0LcNpnWE7sdFi/jSqTgXZv8NXSo+xR4CjYaedV7QheOABYlnd6zyEFY+r0bUzfzBUnogfJTBwjVqQRrJEhQek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756282732; c=relaxed/simple;
-	bh=CHy7QFSPgSRnuJKdtSIc/yYznxQB2FrFp5irQRpgBE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kT1lQP4FEQI6GbRdrqBrjMlxgL3VvsYcrHwKMExboOEXTJBHLXW+W1SqBJVb6HiFgbnFTGw8dcHl5MA+0A/8a7ddB+zbZoABjBeSIn0+nCE0ENLdZhy7TU/z8WBdxcN5lF/Mov6N+iMsDtaXkcopMcXiKOd1bMgg1XQc4MPgn6g=
+	s=arc-20240116; t=1756283427; c=relaxed/simple;
+	bh=Hk1XVBq87Wloo/8yCfniyVuXNqm9lv0mufttpAK51xA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dpuAkaZXloYtH7G9BwO2wzd6Cpcwf4zwD5GmddNF03SQmLevsER5LO2jxINpVLqqeyM2BApwTT0aWfJ+3GgbFF1yyma7t0wo+iNd4bwILue6BkFWXPoTP0jMGUi5pUfGn36RYW7u27PQA/uMIvq/SwpSsuAYLRlQgpw+pIuRtgI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 875DD1515;
-	Wed, 27 Aug 2025 01:18:41 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8D1A3F694;
-	Wed, 27 Aug 2025 01:18:41 -0700 (PDT)
-Date: Wed, 27 Aug 2025 09:18:38 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Robin Murphy <robin.murphy@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-	will@kernel.org, acme@kernel.org, namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	adrian.hunter@intel.com, kan.liang@linux.intel.com,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
-	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 12/19] perf: Ignore event state for group validation
-Message-ID: <aK6_XrA_OaLnoFkr@J2N7QTR9R3>
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <d6cda4e2999aba5794c8178f043c91068fa8080c.1755096883.git.robin.murphy@arm.com>
- <20250826130329.GX4067720@noisy.programming.kicks-ass.net>
- <6080e45d-032e-48c2-8efc-3d7e5734d705@arm.com>
- <CAP-5=fXF2x3hW4Sk+A362T-50cBbw6HVd7KY+QEUjFwT+JL37Q@mail.gmail.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 228811691;
+	Wed, 27 Aug 2025 01:30:16 -0700 (PDT)
+Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 31FA33F694;
+	Wed, 27 Aug 2025 01:30:15 -0700 (PDT)
+Message-ID: <70f4c2ce-1dbd-4596-af78-bca1cdbbb581@arm.com>
+Date: Wed, 27 Aug 2025 09:30:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fXF2x3hW4Sk+A362T-50cBbw6HVd7KY+QEUjFwT+JL37Q@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/18] arm64: topology: Use __free(put_cpufreq_policy)
+ for policy reference
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>,
+ "Rafael J . wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Markus Mayer
+ <mmayer@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: zhenglifeng <zhenglifeng1@huawei.com>, "H . Peter Anvin" <hpa@zytor.com>,
+ Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
+ <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
+ Sumit Gupta <sumitg@nvidia.com>,
+ Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+ Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
+ linux-pm@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-tegra@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, imx@lists.linux.dev,
+ linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20250827023202.10310-1-zhangzihuan@kylinos.cn>
+ <20250827023202.10310-2-zhangzihuan@kylinos.cn>
+From: Ben Horgan <ben.horgan@arm.com>
+Content-Language: en-US
+In-Reply-To: <20250827023202.10310-2-zhangzihuan@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 26, 2025 at 11:48:48AM -0700, Ian Rogers wrote:
-> On Tue, Aug 26, 2025 at 8:32 AM Robin Murphy <robin.murphy@arm.com> wrote:
-> >
-> > On 2025-08-26 2:03 pm, Peter Zijlstra wrote:
-> > > On Wed, Aug 13, 2025 at 06:01:04PM +0100, Robin Murphy wrote:
-> > >> It may have been different long ago, but today it seems wrong for these
-> > >> drivers to skip counting disabled sibling events in group validation,
-> > >> given that perf_event_enable() could make them schedulable again, and
-> > >> thus increase the effective size of the group later. Conversely, if a
-> > >> sibling event is truly dead then it stands to reason that the whole
-> > >> group is dead, so it's not worth going to any special effort to try to
-> > >> squeeze in a new event that's never going to run anyway. Thus, we can
-> > >> simply remove all these checks.
-> > >
-> > > So currently you can do sort of a manual event rotation inside an
-> > > over-sized group and have it work.
-> > >
-> > > I'm not sure if anybody actually does this, but its possible.
-> > >
-> > > Eg. on a PMU that supports only 4 counters, create a group of 5 and
-> > > periodically cycle which of the 5 events is off.
+Hi Zihuan,
+
+On 8/27/25 03:31, Zihuan Zhang wrote:
+> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+> annotation for policy references. This reduces the risk of reference
+> counting mistakes and aligns the code with the latest kernel style.
 > 
-> I'm not sure this is true, I thought this would fail in the
-> perf_event_open when adding the 5th event and there being insufficient
-> counters for the group.
+> No functional change intended.
+> 
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> ---
+>  arch/arm64/kernel/topology.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index 5d07ee85bdae..e3cb6d54f35b 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -307,17 +307,16 @@ int arch_freq_get_on_cpu(int cpu)
+>  		 */
+>  		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
+>  		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
+> -			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> +			struct cpufreq_policy *policy __free(put_cpufreq_policy);
+Based on the guidance, in include/linux/cleanup.h, I would expect the
+assignment to be done on this line.
 
-We're talking specifically about cases where the logic in a pmu's
-pmu::event_init() callback doesn't count events in specific states, and
-hence the 5th even doesn't get rejected when it is initialised.
+"...the recommendation is to always define and assign variables in one
+ * statement and not group variable definitions at the top of the
+ * function when __free() is used."
+>  			int ref_cpu;
+>  
+> +			policy = cpufreq_cpu_get(cpu);
+>  			if (!policy)
+>  				return -EINVAL;
+>  
+>  			if (!cpumask_intersects(policy->related_cpus,
+> -						housekeeping_cpumask(HK_TYPE_TICK))) {
+> -				cpufreq_cpu_put(policy);
+> +						housekeeping_cpumask(HK_TYPE_TICK)))
+>  				return -EOPNOTSUPP;
+> -			}
+>  
+>  			for_each_cpu_wrap(ref_cpu, policy->cpus, cpu + 1) {
+>  				if (ref_cpu == start_cpu) {
+> @@ -329,8 +328,6 @@ int arch_freq_get_on_cpu(int cpu)
+>  					break;
+>  			}
+>  
+> -			cpufreq_cpu_put(policy);
+> -
+>  			if (ref_cpu >= nr_cpu_ids)
+>  				/* No alternative to pull info from */
+>  				return -EAGAIN;
 
-For example, in arch/x86/events/core.c, validate_group() uses
-collect_events(), which has:
+Thanks,
 
-	for_each_sibling_event(event, leader) {
-		if (!is_x86_event(event) || event->state <= PERF_EVENT_STATE_OFF)
-			continue;
+Ben
 
-		if (collect_event(cpuc, event, max_count, n))
-			return -EINVAL;
-
-		n++;
-	}
-
-... and so where an event's state is <= PERF_EVENT_STATE_OFF at init
-time, that event is not counted to see if it fits into HW counters.
-
-Mark.
 
