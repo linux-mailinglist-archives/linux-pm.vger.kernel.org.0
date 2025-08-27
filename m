@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-33176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2139DB37BF3
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 09:38:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91406B37BFC
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 09:40:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D50A21BA2122
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:38:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C78253B02AB
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:39:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257F731A06B;
-	Wed, 27 Aug 2025 07:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8BF31984E;
+	Wed, 27 Aug 2025 07:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="RHfVaqBi"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="BwV9BDyY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6DA319843;
-	Wed, 27 Aug 2025 07:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7712ED156;
+	Wed, 27 Aug 2025 07:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756280293; cv=none; b=YJm9KeumMozASkOBwyLV2Nl0v37iY6IWaMa4NqJUmggWI7/WGKjoV6CvO2jwUIqVCfYgkeu7W2eG3xbjvFqStTjAttPhvpAEpe8kqNuJVY9Rnf/p9/KFv8W5otrysBO3kI5zzFjERYsOYum5fyaeTsXta4efFrEzArInFvpF78c=
+	t=1756280394; cv=none; b=Jn871KXJvaW6ETVOoxKUkVaBo93x4ID27YMUz4AmlIjHXp/Ay98M1DlDEfai7CEKoLbJ3VpMKfswpxfndt+v6FOPgiSb6fnYUkI2MDlR4mZUgAhgnTYMy/2Scyak5JnBf58uAoSCmoWw2YjgVNqRD5GJdV9eoibsw66F1yAe0Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756280293; c=relaxed/simple;
-	bh=A0g4115fIgBE403Cl3EfktmE7DlY2fExfjJG9NOynE8=;
+	s=arc-20240116; t=1756280394; c=relaxed/simple;
+	bh=XkQ6Wrz+Uj6zp+ZXnKSsoh3lqxnEX6488n76YWTcr0w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tBDayGV+5dXf/9ghOmDNdi1c9HSa77pMyFDPKMOXMEDbuqwIfsisklB8k2F4/0Op/GDn/6qX1Nm/NQfvT94ETaEUGeenGpHoSD6GtVZE0FeSY1sIuJSIYXh4+VMZcIRNDVNn/t0p57TrCBFH2MVq4wXPnEWOkqc7cGRzeU2rVR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=RHfVaqBi; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version:Content-Type; b=ZD7Sv8YjYsc6IB1TgNYITcJBB1EgnCuppKcjiyzfy4SNqAdr0OJxsjNLbtsrmfWYMyMbnvNwg2dL9bgxcnhxfjhGwGY2w+854gNx4gnaYu2r6VtbVlu8FAtOLhDYpRo7GPbeFB4+wGWYDOUH5Rs4qVpCN2R9hpWbDRSWuQFa4Jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=BwV9BDyY; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=A0g4115fIgBE403Cl3EfktmE7DlY2fExfjJG9NOynE8=; b=RHfVaqBiuWv5qA9rEDSV76B74j
-	/VRQEQEMJq+nrAYoEUfkbgqWaVFcKadDL23pvoNbN9HYno5c4fVFKKfHkm22CaOkniiuJytlbHD4H
-	7K/s0kBWZ2gDHfzNqBy15zPAWfeIvhakAsL7tyUP4aCcAMp4Yn0l/l8ZevpodPz8FWhwZsoGGwVSb
-	Z5HU/Cr/JFL/2E6StotztE4Bn9Fz07uO+kKVaugdC58pSD1jdkeB9Rpu6Mjm+PA/A5gNKITUdtDmd
-	bazV4H7WtQdO5d1VmNDBiBkWutZ6vOrDBqE7JVQExXP7kAkhWocTvSvaKBVGHGuRUNaEos8Aep0E6
-	n6v0sEgQ==;
+	bh=XkQ6Wrz+Uj6zp+ZXnKSsoh3lqxnEX6488n76YWTcr0w=; b=BwV9BDyYcRqW1SvjXV2deh+Euf
+	MjIAs2AN75GKydKqYqaME2sloiffXFAyAkHUVWX3Ok/at64RagJ+ZOv7Dd8i3zUU+W/KaF4ot93ut
+	UoYv2b6wscxdHF1nChthLCv0rR7d9LZLvNDAtESEMx2UPuIiBmnmhRJQJ3vhmmXKcSBVc1NJco7Lx
+	dq8lDUV4evqjCLTL8kV5VeyYuy9AEJR29uXljuPxtSf/tQSsNYyGaA6BEt7cpDcJYtDm1F1NVXBg3
+	O1FQlCI1b7V0BA/lKIvcir7vSKRBZP+LHmf9dWymA6eVAF2hCEr0gwj1/qGuv4ovE57DEcQ9vWRfD
+	2cFVyV8g==;
 Received: from [213.244.170.152] (helo=phil.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1urAj0-0007uF-FN; Wed, 27 Aug 2025 09:37:42 +0200
+	id 1urAke-0000aj-30; Wed, 27 Aug 2025 09:39:24 +0200
 From: Heiko Stuebner <heiko@sntech.de>
 To: Yury Norov <yury.norov@gmail.com>,
  Rasmus Villemoes <linux@rasmusvillemoes.dk>,
@@ -82,16 +82,16 @@ Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
  linux-sound@vger.kernel.org, netdev@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Subject:
- Re: [PATCH v3 13/20] drm/rockchip: dw_hdmi: switch to FIELD_PREP_WM16* macros
-Date: Wed, 27 Aug 2025 09:37:41 +0200
-Message-ID: <18528244.tv2OnDr8pf@phil>
-In-Reply-To: <20250825-byeword-update-v3-13-947b841cdb29@collabora.com>
+ Re: [PATCH v3 14/20] ASoC: rockchip: i2s-tdm: switch to FIELD_PREP_WM16_CONST
+ macro
+Date: Wed, 27 Aug 2025 09:39:22 +0200
+Message-ID: <5725847.BddDVKsqQX@phil>
+In-Reply-To: <20250825-byeword-update-v3-14-947b841cdb29@collabora.com>
 References:
  <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
- <20250825-byeword-update-v3-13-947b841cdb29@collabora.com>
+ <20250825-byeword-update-v3-14-947b841cdb29@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -101,26 +101,19 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 
-Am Montag, 25. August 2025, 10:28:33 Mitteleurop=C3=A4ische Sommerzeit schr=
+Am Montag, 25. August 2025, 10:28:34 Mitteleurop=C3=A4ische Sommerzeit schr=
 ieb Nicolas Frattaroli:
 > The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
 > drivers that use constant masks.
 >=20
-> Remove this driver's very own HIWORD_UPDATE macro, and replace all
-> instances of it with equivalent instantiations of FIELD_PREP_WM16 or
-> FIELD_PREP_WM16_CONST, depending on whether it's in an initializer.
+> Replace the implementation of this driver's HIWORD_UPDATE macro with an
+> instance of FIELD_PREP_WM16_CONST. The const variant is chosen here
+> because some of the header defines are then used in initializers.
 >=20
-> This gives us better error checking, and a centrally agreed upon
-> signature for this macro, to ease in code comprehension.
+> This gives us some compile-time error checking, while keeping the diff
+> very small and easy to review.
 >=20
-> Because FIELD_PREP_WM16/FIELD_PREP_WM16_CONST shifts the value to the
-> mask (like FIELD_PREP et al do), a lot of macro instantiations get
-> easier to read.
->=20
-> This was tested on an RK3568 ODROID M1, as well as an RK3399 ROCKPro64.
->=20
-> Reviewed-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> Tested-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
 > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
