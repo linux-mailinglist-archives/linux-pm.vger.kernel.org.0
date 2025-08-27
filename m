@@ -1,137 +1,131 @@
-Return-Path: <linux-pm+bounces-33179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C394B37C42
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 09:53:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A1B8B37C88
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 09:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 901A91BA2148
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:53:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C257717B07B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 07:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A810321457;
-	Wed, 27 Aug 2025 07:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2103218AB;
+	Wed, 27 Aug 2025 07:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="ETZTkoEo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7B51A9F86;
-	Wed, 27 Aug 2025 07:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EBD2BE7DF;
+	Wed, 27 Aug 2025 07:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756281180; cv=none; b=loL5I2KC4KEzDqTiT1ycHTY11OdU6PQCbxzQfhUqirxJKKBHIGZTF+UeWHP7Q36Xyu+aJ7CHz/PEuJbmg4bzx9zXn3o1UQEh5LfDPr97cFmVonQONvKzwJhnjucVCCgKg2HTAmdcOq/O+tey2WPqcq17QDeIJidroFx4wxDDO4I=
+	t=1756281461; cv=none; b=fIHpFjMfbTiYVrNP9CfvzTY3k9WUITj8yq4XJt9xpOImkzEmLaBTgRRUIZRNvQh7NhNAFs2R1wy0tuy5M0JnueWVIdRNgdQnfaOwD7zWlhCy02CKrEVy80qDqDLhLwegO0enmUq1jCC4qDRGFhtwfFuzdoPBdL4GI9Zo7/TJrFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756281180; c=relaxed/simple;
-	bh=t/7jF4HzApSGOAuft7CjB89pJWIK0eoDPs3XyyfXOW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hA91a0HNZkqASZYVQ1y+kjofiv3QXVRjFI9f/s7BnjU0MAuFerD2cGPQDb1tVZ7jFIUv73M8l6jL/uZhEgpGG+N9NdUWHAQbhkm65kjS2anz/dIp2zw3koMf5XKlvvERatvnJEwmFID9UMeVCpJyc8APs66NVCyhWvEEkDH+oGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: d3e5785c831a11f0b29709d653e92f7d-20250827
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:13314357-5ac7-4a30-a0f8-4170a13db8b3,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:d6d895d233e5934b84c0d63ae6c55bd7,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: d3e5785c831a11f0b29709d653e92f7d-20250827
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <tianyaxiong@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1407213635; Wed, 27 Aug 2025 15:52:49 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 5DFD1E008FAA;
-	Wed, 27 Aug 2025 15:52:49 +0800 (CST)
-X-ns-mid: postfix-68AEB951-303610565
-Received: from [10.42.13.21] (unknown [10.42.13.21])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 93400E008FA3;
-	Wed, 27 Aug 2025 15:52:47 +0800 (CST)
-Message-ID: <a369a7a9-9132-4b37-8ba2-501503477bb8@kylinos.cn>
-Date: Wed, 27 Aug 2025 15:52:46 +0800
+	s=arc-20240116; t=1756281461; c=relaxed/simple;
+	bh=0MK1dUMIBWuj72rwewkqEVH0cn/LnA/1R+TUGxOlw7A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mlOqgHAwDwrLDc0v0peUBcMCR5JyiGWyJYva7Q76UYTQ02AwsyvXa7yd5qdVuHurMyhVyQ9t5s4xZX/mv3onJCCJKhzF/F/dyE+KbhbRUpnHcLWu/DWzumjaseYPN9uhmuO1LGYQVQCR4trisOgSljiKr1pv6kes61mpFijNkFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=ETZTkoEo; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=0MK1dUMIBWuj72rwewkqEVH0cn/LnA/1R+TUGxOlw7A=; b=ETZTkoEoOwtznU7PtnZeQFX4Fe
+	vM6Gg/U5rsSJj/WUqqtUEJV3BceYz2JVc61zNRNRjL4DFqp104N1wUclJpSswXx5sqCln7OWyunG6
+	1BXLLRpOWOQKi7IxecmWks9WndogbL1isYzy85Po6NTAI5iUKT6cVGycUUx1+G9Sdk6QBfX5Nab2O
+	AoHyUEffPqw/BIjMBTDsou/G4FI5gXNkiAM7XHNVs95bP9wM5OxBgaN/F8O7uh73Jt61EZ5SREvoE
+	VRfAa8DcHOrlfJ+EZjWxzMMZ6lcGDOSdP3RHulTQGePkNCSjMsKPIAnaT2QKSPEuFVcPwPFvGnA9V
+	jTWs2Wcg==;
+Received: from [213.244.170.152] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1urB1d-0002Lk-PM; Wed, 27 Aug 2025 09:56:57 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Shreeya Patel <shreeya.patel@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+ linux-sound@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH v3 16/20] PCI: rockchip: Switch to FIELD_PREP_WM16* macros
+Date: Wed, 27 Aug 2025 09:56:55 +0200
+Message-ID: <7681880.cEBGB3zze1@phil>
+In-Reply-To: <20250825-byeword-update-v3-16-947b841cdb29@collabora.com>
+References:
+ <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
+ <20250825-byeword-update-v3-16-947b841cdb29@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] ACPI: processor: idle: Replace single idle driver
- with per-CPU model for better hybrid CPU support
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: daniel.lezcano@linaro.org, lenb@kernel.org, robert.moore@intel.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
- Shaobo Huang <huangshaobo2075@phytium.com.cn>,
- Yinfeng Wang <wangyinfeng@phytium.com.cn>, Xu Wang <wangxu@phytium.com.cn>
-References: <20250814072934.1016694-1-tianyaxiong@kylinos.cn>
- <20250814073156.1022939-1-tianyaxiong@kylinos.cn>
- <CAJZ5v0hGj3=GxnLkj0adm+ENSk7YbzNZRPiBTgm_bKZsH3OYDw@mail.gmail.com>
-Content-Language: en-US
-From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-In-Reply-To: <CAJZ5v0hGj3=GxnLkj0adm+ENSk7YbzNZRPiBTgm_bKZsH3OYDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+
+Am Montag, 25. August 2025, 10:28:36 Mitteleurop=C3=A4ische Sommerzeit schr=
+ieb Nicolas Frattaroli:
+> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
+> drivers that use constant masks.
+>=20
+> The Rockchip PCI driver, like many other Rockchip drivers, has its very
+> own definition of HIWORD_UPDATE.
+>=20
+> Remove it, and replace its usage with either FIELD_PREP_WM16, or two new
+> header local macros for setting/clearing a bit with the high mask, which
+> use FIELD_PREP_WM16_CONST internally. In the process, ENCODE_LANES
+> needed to be adjusted, as FIELD_PREP_WM16* shifts the value for us.
+>=20
+> That this is equivalent was verified by first making all FIELD_PREP_WM16
+> instances FIELD_PREP_WM16_CONST, then doing a static_assert() comparing
+> it to the old macro (and for those with parameters, static_asserting for
+> the full range of possible values with the old encode macro).
+>=20
+> What we get out of this is compile time error checking to make sure the
+> value actually fits in the mask, and that the mask fits in the register,
+> and also generally less icky code that writes shifted values when it
+> actually just meant to set and clear a handful of bits.
+>=20
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
 
-=E5=9C=A8 2025/8/25 22:56, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> On Thu, Aug 14, 2025 at 9:32=E2=80=AFAM Yaxiong Tian <tianyaxiong@kylin=
-os.cn> wrote:
->> Current implementations of hybrid architectures (e.g., ARM64 big.LITTL=
-E
->> and Intel Alder Lake) feature CPU cores with different exit latencies.
-> This is not true for Intel platforms, all of the CPUs in there have
-> the same set of C-states.
-Yes,it is.
->
->> Using a single driver to describe_LPI states for all core types is
->> therefore suboptimal. This is further supported by ACPI specification
->> 8.4.4.1 which states: "In a processor hierarchy, each node has its
->> own _LPI low-power states specific to that node."
->>
->> To address these limitations, we replace the monolithic idle driver
-> It cannot be replaced or you potentially open a Pandora's box of
-> regressions on old systems in the field.
-I agree with this point. Regarding the potential risk, does it
-make sense to=C2=A0 mitigate it through the following two approaches?
-
-1) Restrict the usage of this multiple driver functionality to
-the ARM64 platform only.
-2) Use a mutex-protected global variable to indicate whether
-the platform utilizes _LPI instead of C-states. This variable
-would be determined during initialization via
-acpi_has_method(handle, "_LPI"), and the multiple driver
-would only be used if the platform employs _LPI.
-
-Alternatively, the other option is to let users implement their
-own drivers. Although many ARM64 users still initialize their
-systems using the ACPI method rather than the traditional
-device tree approach, and they hope to reuse the ACPI idle driver.
->
->> with a per-CPU model. This approach enables accurate idle state repres=
-entation
->> for each core type
-> The per-CPU model can be used instead of the "monolithic idle driver"
-> only if the platform is actually known to be hybrid.
-Yes,select CPU_IDLE_MULTIPLE_DRIVERS if ARM64=C2=A0 can=C2=A0 resolve thi=
-s issue.
->
->> Tested-by: Shaobo Huang <huangshaobo2075@phytium.com.cn>
->> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
->> Signed-off-by: Shaobo Huang <huangshaobo2075@phytium.com.cn>
->> Signed-off-by: Yinfeng Wang <wangyinfeng@phytium.com.cn>
->> Signed-off-by: Xu Wang<wangxu@phytium.com.cn>
-> What do all of the above S-o-b mean?  Are these people involved in the
-> development of the code?  In that case Co-developed-by is also needed.
->
-> Thanks!
-Thank you for your response. If it makes sense, continue to follow up,
-I will address both the issues mentioned above and the problem
-in the previous patch.
 
