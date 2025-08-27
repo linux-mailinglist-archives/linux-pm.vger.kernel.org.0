@@ -1,130 +1,132 @@
-Return-Path: <linux-pm+bounces-33196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92B93B38437
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 15:58:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92178B3845C
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 16:03:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13448365900
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 13:58:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51E9D367B35
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Aug 2025 14:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791B4356904;
-	Wed, 27 Aug 2025 13:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZWrZIyf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0523570D0;
+	Wed, 27 Aug 2025 14:03:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD40350D6E;
-	Wed, 27 Aug 2025 13:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1E02777FD;
+	Wed, 27 Aug 2025 14:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756303126; cv=none; b=pe16pjojeUjoyJdFULLoxcOGSW1fM7qpGogNuDsSfaVxh0BrVCKRz0q7Ahq9aabibHVizJsOUWvwjDw+4k82+oXxJjd4oybow3OvQFEbxTU46NEKMTeEaEBPOLIf246QDnZROKCVyWg6azQKbauAINxXMi48X5wkv3H/PITEcXI=
+	t=1756303427; cv=none; b=YuIkowAHhNFN8sAC3wHQJoukNZ/UvCk9JQwpihFHJnnImCRJnipAeY/729UmcBShrr8/GlEBGSJI/8Ejy3naxzZTuwLJ5t2i1Z2bBAR/ira5nFLVwSCrISxd6k00mZARtuBfwXG5H34AK0B4dH0TXmHfoURWvhlj2ICAqnVA90c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756303126; c=relaxed/simple;
-	bh=UPsDLa+npxQf/r4sAPI8AxVrqWdXD+BKRi0Iv7NwMuU=;
+	s=arc-20240116; t=1756303427; c=relaxed/simple;
+	bh=Raut/Y3QhFz4pCtCI4WlrGPrxYFCg/MxG6p0mRrxWl4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iPsTAmxaQzMGzPEcbG3pZadfZxw65qjapL2RbMiCMV8Hxd8j7ldO83J6leaxr9/ZMHznJn1wbTUVpJ7Xa0IRXb6zD9JEVIeLus4dDnBh+qkivOCgIhSgkaK/vvHR8ScuJSXF07pY1lpfuAdpNs4WQewfVHSs8p12TIB6GFBh62w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZWrZIyf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40ADC4CEEB;
-	Wed, 27 Aug 2025 13:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756303125;
-	bh=UPsDLa+npxQf/r4sAPI8AxVrqWdXD+BKRi0Iv7NwMuU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dZWrZIyfUPGloGm2D5K/2w+Qw5nKlsALT7JUMbr8uprJJVv7RrEswAJD+4hzRS5Kg
-	 fjhEcKFwTju15W2H2qzd/n2a83z+R+sesa2d5dovBknc+30TAI7XXKSyaYlLdfc9iv
-	 XsXTYAK5gCW+KDtFq+v41z67emYARGVHAJmHAoCYxnEAln9QcsXW6kO6cYW4zqIkr5
-	 WynVNmR0JqtAE0Z7G2RNwOoFoSDPNPUq/xHiS7/u+at0/aF1UD0ynJp9gBVk2bEE4s
-	 cXkq08ugdyBMFtEkfEW8G/OzrlSR0hBmqRyS8JJIi6T0lawvEdHis13sC+hJ+qGOEA
-	 P4mphxLcR8uhw==
-Date: Wed, 27 Aug 2025 19:28:36 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, 
-	sherry.sun@nxp.com, linux-pm@vger.kernel.org, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v4 0/3] PCI: Add support for PCIe WAKE# interrupt
-Message-ID: <rybngetujsbwx7j7ibnqpkyqdhat3gkqjzephrmluirxtgartb@753pwgb3xmvq>
-References: <b6b4tzs73n63d565k52pqbep4bqhctibjv5gzm2wenbf2ji45b@npgoqscnbbpn>
- <20250804155023.GA3627102@bhelgaas>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZjIuRSZZnm3YZ2e9Gbe7ZVrcI76yluX0INvboYOL3liQ1R9BQQ29B8d365OgBOlHnmNlr1Jw5FnQ38jfYW8lETTN53A1V4VhVpxncfv+MZfq5wJLegXclL7CFB1klFQz3cwlKERM/ZhM7GpSRlCQGTa4knjabGPIbqRPVRLnCDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 417AD2720;
+	Wed, 27 Aug 2025 07:03:36 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 662DB3F738;
+	Wed, 27 Aug 2025 07:03:37 -0700 (PDT)
+Date: Wed, 27 Aug 2025 15:03:22 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+	acme@kernel.org, namhyung@kernel.org,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
+	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
+	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 02/19] perf/hisilicon: Fix group validation
+Message-ID: <aK8QKlGsjB4WWg2e@J2N7QTR9R3>
+References: <cover.1755096883.git.robin.murphy@arm.com>
+ <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
+ <aK2XS_GhLw1EQ2ml@J2N7QTR9R3>
+ <ab80cb84-42b2-4ce8-aa6c-4ce6be7a12b7@arm.com>
+ <aK3TS3s5_Pczx1nu@J2N7QTR9R3>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250804155023.GA3627102@bhelgaas>
+In-Reply-To: <aK3TS3s5_Pczx1nu@J2N7QTR9R3>
 
-On Mon, Aug 04, 2025 at 10:50:23AM GMT, Bjorn Helgaas wrote:
-> On Mon, Aug 04, 2025 at 03:45:05PM +0530, Manivannan Sadhasivam wrote:
-> > On Fri, Aug 01, 2025 at 04:29:41PM GMT, Krishna Chaitanya Chundru wrote:
-> > > PCIe WAKE# interrupt is needed for bringing back PCIe device state
-> > > from D3cold to D0.
-> > > 
-> > > This is pending from long time, there was two attempts done
-> > > previously to add WAKE# support[1], [2]. Those series tried to add
-> > > support for legacy interrupts along with WAKE#. Legacy interrupts
-> > > are already available in the latest kernel and we can ignore them.
-> > > For the wake IRQ the series is trying to use interrupts property
-> > > define in the device tree.
-> > > 
-> > > This series is using gpio property instead of interrupts, from
-> > > gpio desc driver will allocate the dedicate IRQ.
-> > > 
-> > > According to the PCIe specification 6, sec 5.3.3.2, there are two
-> > > defined wakeup mechanisms: Beacon and WAKE# for the Link wakeup
-> > > mechanisms to provide a means of signaling the platform to
-> > > re-establish power and reference clocks to the components within
-> > > its domain. Adding WAKE# support in PCI framework.
-> > > 
-> > > According to the PCIe specification, multiple WAKE# signals can
-> > > exist in a system. In configurations involving a PCIe switch, each
-> > > downstream port (DSP) of the switch may be connected to a separate
-> > > WAKE# line, allowing each endpoint to signal WAKE# independently.
-> > > To support this, the WAKE# should be described in the device tree
-> > > node of the upstream bridge to which the endpoint is connected.
-> > > For example, in a switch-based topology, the WAKE# GPIO can be
-> > > defined in the DSP of the switch. In a direct connection scenario,
-> > > the WAKE# can be defined in the root port. If all endpoints share
-> > > a single WAKE# line, the GPIO should be defined in the root port.
-> > 
-> > I think you should stop saying 'endpoint' here and switch to 'slot'
-> > as that's the terminology the PCIe spec uses while defining WAKE#.
-> 
-> I think the main question is where WAKE# is terminated.  It's asserted
-> by an "add-in card" (PCIe CEM r6.0, sec 2.3) or a "component" or
-> "Function" (PCIe Base r7.0, sec 5.3.3.2).  A slot can provide a WAKE#
-> wire, and we need to know what the other end is connected to.
-> 
-> AFAICS, WAKE# routing is unrelated to the PCIe topology *except* that
-> in "applications where Beacon is used on some Ports of the Switch and
-> WAKE# is used for other Ports," WAKE# must be connected to the Switch
-> so it can translate it to Beacon (PCIe r7.0, sec 5.3.3.2).
-> 
-> So we can't assume WAKE# is connected to the Port leading to the
-> component that asserts WAKE#.
-> 
+On Tue, Aug 26, 2025 at 04:31:23PM +0100, Mark Rutland wrote:
+> On Tue, Aug 26, 2025 at 03:35:48PM +0100, Robin Murphy wrote:
+> > On 2025-08-26 12:15 pm, Mark Rutland wrote:
+> > > On Wed, Aug 13, 2025 at 06:00:54PM +0100, Robin Murphy wrote:
 
-I've submitted a PR to add wake-gpios to the endpoint node:
-https://github.com/devicetree-org/dt-schema/pull/170
+> > > > diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> > > > index c5394d007b61..3b0b2f7197d0 100644
+> > > > --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> > > > +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> > > > @@ -338,21 +338,16 @@ static bool hisi_pcie_pmu_validate_event_group(struct perf_event *event)
+> > > >   	int counters = 1;
+> > > >   	int num;
+> > > > -	event_group[0] = leader;
+> > > > -	if (!is_software_event(leader)) {
+> > > > -		if (leader->pmu != event->pmu)
+> > > > -			return false;
+> > > > +	if (leader == event)
+> > > > +		return true;
+> > > > -		if (leader != event && !hisi_pcie_pmu_cmp_event(leader, event))
+> > > > -			event_group[counters++] = event;
+> > > > -	}
+> > > > +	event_group[0] = event;
+> > > > +	if (leader->pmu == event->pmu && !hisi_pcie_pmu_cmp_event(leader, event))
+> > > > +		event_group[counters++] = leader;
+> > > 
+> > > Looking at this, the existing logic to share counters (which
+> > > hisi_pcie_pmu_cmp_event() is trying to permit) looks to be bogus, given
+> > > that the start/stop callbacks will reprogram the HW counters (and hence
+> > > can fight with one another).
 
-- Mani
+> > It does seem somewhat nonsensical to have multiple copies of the same event
+> > in the same group, but I imagine it could happen with some sort of scripted
+> > combination of metrics, and supporting it at this level saves needing
+> > explicit deduplication further up. So even though my initial instinct was to
+> > rip it out too, in the end I concluded that that doesn't seem justified.
+> 
+> As above, I think it's clearly bogus. I don't think we should have
+> merged it as-is and it's not something I'd like to see others copy.
+> Other PMUs don't do this sort of event deduplication, and in general it
+> should be up to the user or userspace software to do that rather than
+> doing that badly in the kernel.
+> 
+> Given it was implemented with no rationale I think we should rip it out.
+> If that breaks someone's scripting, then we can consider implementing
+> something that actually works.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Having dug some more, I see that this was intended to handle the way
+the hardware shares a single config register between pairs of counter
+and counter_ext registers, with the idea being that two related events
+could be allocated into the same counter pair (but would only occupy a
+single counter each).
+
+I still think the code is wrong, but it is more complex than I made it
+out to be, and you're right that we should leave it as-is for now. I can
+follow up after we've got this series in.
+
+Mark.
 
