@@ -1,137 +1,138 @@
-Return-Path: <linux-pm+bounces-33336-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33338-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C71B3AC34
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 23:00:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2FCDB3ACC9
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 23:35:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0CEE68756C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 21:00:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24A99189504C
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 21:35:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFA42C327D;
-	Thu, 28 Aug 2025 20:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91423284B41;
+	Thu, 28 Aug 2025 21:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dC1uDxHL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ijr8VXhy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F86D2BE032
-	for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 20:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC47126B96A;
+	Thu, 28 Aug 2025 21:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756414798; cv=none; b=oOujhvxkooKP4oPduGq4HLKq+jk8iGUdzZcA5+WJ+83gmGCVIZ5aAkDLrbjjU6cX8QbncSp4a95d1VsWMuLp82lGkBcpQf3pJ3HuEywBde4vmWklfR47dJhmIYgWdefprnVY+1mLIfCADsGbDw39TVIUBwBb/4Ry3kTshFpweUk=
+	t=1756416906; cv=none; b=SrUe/OLv5SmxX9HWqmaAOnMTiJakaSytSvHKNfpmG5IokhjxnXsuFtYALnY+MQD5cjqN3DC7fqTPD6M+ZRu1SmHFqzMy81/xnwNgqJt2JGwOQWvygkZ+opwqXXYXME5wEswyi62rHrvfTCf9V/G6TkeAdX7IBnZw4Y7X6hNayMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756414798; c=relaxed/simple;
-	bh=vcH+lJXlXkzbWh1s+giYmvp9r3m+hUxJ894v+cf3nQo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WJeB3T9PtTCSdR1tCVfRWEMTSgBbv9SzZsxBVevaZtQ0DHFr+UZSK44z8l7tCDe7yyHQujR/LUVbzv7ozukh83OGlZjZvXmTAgzVgs8trGmrKWfAGc3ulTg4QnvHpB4hcYdCqQBuyqZJ4mkV3wh7UKXkkadvFT8p5jzCBzo1eZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dC1uDxHL; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-3366ce6889bso9965571fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 13:59:53 -0700 (PDT)
+	s=arc-20240116; t=1756416906; c=relaxed/simple;
+	bh=I7wEGxMZdqIIi5xw7IylI92kj9j17xHEIgaigxtGPcs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D1kExjRlQCLsz8qfyi0kHKCqEsReD8ChHbzT3Iotuu3TkKy5s3EGrh/38gxOuzlUTsxPjSoFZv/rYyTlYUomryyuEv082sNHM5PKmIYFiJxNFucOM+j2Lyp4teTXMn7nacCj+FKqZpbQBQxxrSugtfVLiWpSp/IrTFMJcHBkQGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ijr8VXhy; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-afe9358fe77so151330566b.1;
+        Thu, 28 Aug 2025 14:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756414792; x=1757019592; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcH+lJXlXkzbWh1s+giYmvp9r3m+hUxJ894v+cf3nQo=;
-        b=dC1uDxHLdzR89Uj56ebMGaoDeRvegTy02rmD4lDoUGNwIlNRsYa+MDnEwUwxYsuVya
-         Y8brW/f7t8jPxSO+kvkkj5EpDjPec/e6TYHDcu5+BEGKhiYpSHNcgh4PjIPQTjSrFuGv
-         29bmDkLl6eQ4isdMBsaJKvQxTXRA97n+Owzb0UaOKn2DK5J6NDKruHPhNyLdj28A6f1U
-         xa7AB1eEBovGXqonRimswFIIH/UBqn7V2U2Bz07sKbRA7ciRp74+aSbBdni3PZz/n9wh
-         ArMCqsNRws0dRWKWBV/F+8m8qKVhCtZunjvcaF8fk8oIzDZryq51BDa8XZkckv0/glo7
-         4tVw==
+        d=gmail.com; s=20230601; t=1756416903; x=1757021703; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R6RgA1Amq2gbjziZJHa66M8vo8i+nRkKhXZ8PDenMzI=;
+        b=Ijr8VXhyp/0dG7zVlTKYc9eIGUTtNsZGCY+gBuh0DJ8TBEfnbf1ywdFM/S24muYKTG
+         sZm31NUv11IIKmJw96pjqMY4BNfkPMnQfWvBcnJrhQ0yEu4NlIDluV6AtuaW//WumOkE
+         htk4rG/F3QAgKYkeFJsRMX3zQSxoB7eXcRyhNUro7I9CPJ6HhvJWqDAdyQcI/1Cz8f5V
+         eByYwxxi5AN0Oj6VOMBbKjUjzK9gqY7+tidYUgDUp29Ky9OkhpdUZB9KzAYbOf5X3FOU
+         DkVdXGF+iZl3J36XSmkZA1IWT19uhi2dvWJi0PBkAJCQ5oR9lwqOFQJbkrywz4Rt48s3
+         vqUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756414792; x=1757019592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcH+lJXlXkzbWh1s+giYmvp9r3m+hUxJ894v+cf3nQo=;
-        b=TjyHr3ldeFxe1rQvbJhGhPiKJMfqwDUjh06dktCms+OjK+RM1BhgtKylld0Jo5YOWW
-         07AsCBJkE0ppp3jT3mVTDeUXdDi/9/Rf98Bm/1fiGO7UaIwJxK78B7CCYV1nkDR0ALaj
-         N5zomqnvlT3q5kzje0qPYJTul0xGIaSerx7uA6LLPEhof+N8lct/3ksuYizjjWl3kOZH
-         MNl+rO3ZDg6JcVttcwSVezEAZwjFtcMTrsTcvf6J8xULPJXtsxlHhbU/l57cbMI8tOVW
-         nsW9tCkdZlmDM4K0umWL3rK9TSdQI/THg3QJ4PXiZrWFjAk35JgtaxPKwgSD5PoQAhHr
-         tWnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXlCV9DlUxXeXqtwyUhpZU4E1rS6r7Pny4PeyWDElOiBcg6lqzPb2mYDaUk8XZfATqcAWYbcNdMAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcSOty5AcihNDDV0pbFDurZTXMg092q5Q5GYnuIBPaXUzKs+CR
-	B+48wfHK/UEMC07Ns/mFGNiAomiIT9auGbSmg8WGX1yDrZxvIVsxu5uiG4viJv40QSU1ukhaPFk
-	O6lOfjEsCTdUavfvG39fmPIdNVR34tMNl/tvmT4kXtA==
-X-Gm-Gg: ASbGncvZleu/jyvB17lqq5eQevbAoJh8brC7g5dOFT1gSJ+sNBuobUTkv3ZYhcgb49j
-	WWdfERjLN2ykc/fYhySceXqV8ZijAtoLAwRc2y63Pj0PR/PFx7fELF1miy1+RPCW+vbAr1nUhr5
-	N10dSubYpN32bWfqq1/JSstrKFU0USCXHv5vxNGuMyZyBr8+QMVHHKAHGhDO1Rd4w9rWdyT4czA
-	ztfnWg=
-X-Google-Smtp-Source: AGHT+IEvCK27Dx3T+NwB4QTV9UIlsAab63smCZ6D7uUks2NtQZowbM82iFbh3N6kvr8t1WPK8CdOU0xtB51L+4ds/dQ=
-X-Received: by 2002:a05:651c:3256:10b0:332:3fd0:15fb with SMTP id
- 38308e7fff4ca-33650ba8612mr48592831fa.0.1756414792241; Thu, 28 Aug 2025
- 13:59:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756416903; x=1757021703;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R6RgA1Amq2gbjziZJHa66M8vo8i+nRkKhXZ8PDenMzI=;
+        b=qZ3cZU6AXUlXtmABx071zfyJWnAWnXvgmOGjUVG85FSJ322TpolcUknBwq37u4SzmU
+         c+BIN4B0tp/WR+hPFE9azBJdfEt9gFWCFM2ni6lfRjCAU+Zy1qwFwYF6Nb8qUf4VqsXO
+         L+zpb0UT9Cr8f7ICEHx47Viyxl8GW4RqMSwN1aSgIQ33Ruli1jp8sl7eYMtPShGRFISF
+         5QyJ9kJ1m4mgu1eRCJ9aaY4W96t6beWiUBIdYj1njJ23gBPLw9ggDkPk24N2BiFDwctd
+         cVF4hOFp1/54ZDWzFr/nXSAEA+42+SUp+cOxXJsUKXbm7DkKnrLF5/SFmYrfhV/JhxB4
+         Uaqg==
+X-Forwarded-Encrypted: i=1; AJvYcCWx57evTdzTu6RuUtbgdDg6xmpvBbNGV7+bx55LnirCaHv4RLzvf7TIuJ6EW9W2Y1h6lyEPSr1SF5nNPrQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhtLPLYa7a/kshFIUVBLS2CHHFy20IzRebjsaKHnng4QkLIbwe
+	PzXqYPiLQIz0DrN+JxQInog7UTdt3t7AUtXRgCMOMjYyDuvw4z1YBjmF
+X-Gm-Gg: ASbGncuQFu8bTpJXWEs5WcMWeopEy5SqKJVKNWUZEJaTywJrfvBt54Ptio2kAGbct8w
+	yi34XoZjn3MLIjKN8ANaWXZeAXX7cHE3Umk/UtNmpKsC3PO1PtzPdvDMwcVQNghPdBg5YBhTCw1
+	JP5tjNTdM9SLgckY5yHx5Lln06SKEIwGQkDTrluN0/5+V821aBVwf+RpEgByiKL3RWR/Wdp3lJb
+	XxMeAYF/GBREk+M1rOIMatZbiHx0bek1ROZFVBNiblOGp5D6wtWx5b3HqeGNNfy+QELa920PbHj
+	36cPD6PjX/UtVEveeV3k6aQnmQowh45Uu2QtY7VLglCAJfZEuJx+wHAYy9nBeiZEuiD9gHaVErX
+	TAewBitAQoxfVLIRVlL02Mu1TjlRGxRdR68EbUBBh73Othf9gv1e701IIus9UdXYP0kXTtQVgHz
+	HWzUoIIY513scPREx6+7O3STMkHZAnTSL2
+X-Google-Smtp-Source: AGHT+IGsOjVY1xHlu7Ck4nnZUfJdc0rldLUjOBL0O+XsSoXmmaDai4XSpeQvLDGVBVp9yQQrqrCOBQ==
+X-Received: by 2002:a17:907:970c:b0:afe:af91:2e44 with SMTP id a640c23a62f3a-afeaf9139e5mr1005452266b.14.1756416902804;
+        Thu, 28 Aug 2025 14:35:02 -0700 (PDT)
+Received: from fedora (2a02-8389-2240-6380-b418-985e-6bb5-99d0.cable.dynamic.v6.surfer.at. [2a02:8389:2240:6380:b418:985e:6bb5:99d0])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afefcc1c6b9sm45032866b.80.2025.08.28.14.35.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Aug 2025 14:35:02 -0700 (PDT)
+From: Dennis Beier <nanovim@gmail.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dennis Beier <nanovim@gmail.com>
+Subject: [PATCH RESEND] cpufreq/longhaul: handle NULL policy in longhaul_exit
+Date: Thu, 28 Aug 2025 23:29:36 +0200
+Message-ID: <20250828213427.27593-1-nanovim@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-9-507ba4c4b98e@jannau.net>
-In-Reply-To: <20250828-dt-apple-t6020-v1-9-507ba4c4b98e@jannau.net>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Aug 2025 22:59:41 +0200
-X-Gm-Features: Ac12FXyoYnYKNXDomZzl4EdS0dXvIhCV2tkZJGb1B6Y1kaQgUA-l_NpqH411N_c
-Message-ID: <CACRpkdbg8KYcDpqDKn9fqs+rL9hLK9mGCj0PTXPBGDW7A_AZbw@mail.gmail.com>
-Subject: Re: [PATCH 09/37] dt-bindings: pinctrl: apple,pinctrl: Add
- apple,t6020-pinctrl compatible
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Michael Turquette <mturquette@baylibre.com>, 
-	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, 
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 28, 2025 at 4:02=E2=80=AFPM Janne Grunau <j@jannau.net> wrote:
 
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,pinctrl" anymore [1]. Use
-> "apple,t8103-pinctrl" as fallback compatible as it is the SoC the driver
-> and bindings were written for.
->
-> The M2 Pro/Max/Ultra SoCs use the same pinctrl hardware, so just add its
-> per-SoC compatible using the new base as fallback.
->
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@k=
-ernel.org/
->
-> Signed-off-by: Janne Grunau <j@jannau.net>
+Resending this patch to include cpufreq maintainers.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+---
 
-Yours,
-Linus Walleij
+longhaul_exit() was calling cpufreq_cpu_get(0) without checking
+for a NULL policy pointer. On some systems, this could lead to a
+NULL dereference and a kernel warning or panic.
+
+This patch adds a check using unlikely() and prints a warning
+if the policy is NULL, then returns early. Also, the loop variable
+is now declared inside the for-loop to match modern kernel style.
+
+Bugzilla: #219962
+
+Signed-off-by: Dennis Beier <nanovim@gmail.com>
+
+---
+ drivers/cpufreq/longhaul.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
+index ba0e08c8486a..9698d56bfe6c 100644
+--- a/drivers/cpufreq/longhaul.c
++++ b/drivers/cpufreq/longhaul.c
+@@ -951,9 +951,14 @@ static int __init longhaul_init(void)
+ static void __exit longhaul_exit(void)
+ {
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(0);
+-	int i;
++	if (unlikely(!policy)) {
++		pr_warn_once("longhaul_exit: policy is NULL\n");
++
++		return;
++	}
++
+ 
+-	for (i = 0; i < numscales; i++) {
++	for (int i = 0; i < numscales; i++) {
+ 		if (mults[i] == maxmult) {
+ 			struct cpufreq_freqs freqs;
+ 
+-- 
+2.50.1
+
 
