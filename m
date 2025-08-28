@@ -1,103 +1,96 @@
-Return-Path: <linux-pm+bounces-33255-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33256-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB2F2B39C37
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 14:07:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD2D7B39D88
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 14:41:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B1773B78CC
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 12:07:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 521C51C8261A
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 12:41:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 078B730F807;
-	Thu, 28 Aug 2025 12:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA103101A6;
+	Thu, 28 Aug 2025 12:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HPTgbtJy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IMFoCJHh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B4630E840;
-	Thu, 28 Aug 2025 12:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268A130FC01;
+	Thu, 28 Aug 2025 12:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756382856; cv=none; b=OFE+rHYBN/YXL8OcED6mNyoLw10GZGXuM6R3gj1ckItU51fKoXwO8YdL2HcHVFtjH2ribGPzYF1eWR8LYifhUi4lCzYfV95AnrKZCU3o/sIc91qo/T1T9lpOq+DhX06mhzlFkUYj6Kfdh/29rx7BM/gMxDi2Af9jExCt6OSfMVQ=
+	t=1756384856; cv=none; b=AP3+niykbkzYGCkb8fXhieQadRUDsanBz2+Yy3dHekz4UlrTcsWwZcbKadCg69Tpl8YezJV1zvtAKxD74qwUA08SUZVQ0nFI3U5EXzchr1HWgHx9wgLAB+NgAHJmXoHJDu+0pMG2OFJ5mcOFtar5miraEIRhwieXfSeqkFtx5a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756382856; c=relaxed/simple;
-	bh=MEsgWjHHKOSy0/qlmUZoWQO9jW51A5yBymFzPMwX+Ts=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=uLW+QKK6drxVm3Qiujwj2hg88wZsAHP1R/y+hUjgyrIIWWWGqCWl/a2rHUvvVLLNwnzgIexP5ZXJZ894zIylSrpW3qmMgoOOmTFfso10wfw6/RXJXhHwRVM2rYMjYhfdpIQUZgdnFS9aTIDID2k8uxCoSRWhCvn98VxhTXUYvcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HPTgbtJy; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756382855; x=1787918855;
-  h=from:to:in-reply-to:references:subject:message-id:date:
-   mime-version:content-transfer-encoding;
-  bh=MEsgWjHHKOSy0/qlmUZoWQO9jW51A5yBymFzPMwX+Ts=;
-  b=HPTgbtJyLGTceDyR3BwcA4lsZlILjvxPzKNqcshCuYwnuYWo5aweXt7t
-   sK/UTu/g+x7LxSFCLYBPs20vugQWWgnpKRZ1RLKew4XeF4esJ62bnA4IP
-   uSvjKmijnkk/240v7xvq6rmShgnnWt3yMAY4Ndbp5c59uDncuIBqZxOjn
-   4R/r4IvEdmxy/LuRwrcwI7cnIPwp8sLI6LPG5MVmu6Tc2qI53CEcaLNPH
-   Okmbr3cpRb8DzXk73GlHc40BbwKm6RW6WsUpAgRfLqrqJfPPPmFLV146p
-   G2m5JrLL4a4NFvcEMnFcUXUoMaKhHNyGCmHm3eP2wahT5hMJYIbYoyr5a
-   Q==;
-X-CSE-ConnectionGUID: MvjOb1y1SMGkXFxtaDAzlQ==
-X-CSE-MsgGUID: /38oOU4GRvmY8qMEfW5xxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="61283450"
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="61283450"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 05:07:35 -0700
-X-CSE-ConnectionGUID: G3UETmsZSfSmOVUWKLJeBw==
-X-CSE-MsgGUID: 0GK+TJlPRIaIC6+434Akgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="207245301"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.99])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 05:07:32 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
- platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, Hans de Goede <hansg@kernel.org>, 
- Xi Pardee <xi.pardee@linux.intel.com>
-In-Reply-To: <20250826183946.802684-1-xi.pardee@linux.intel.com>
-References: <20250826183946.802684-1-xi.pardee@linux.intel.com>
-Subject: Re: [PATCH v1 1/2] platform/x86/intel/pmc: Add Wildcat Lake
- support to Intel PMC SSRAM Telemetry
-Message-Id: <175638284669.13908.17368761888999022904.b4-ty@linux.intel.com>
-Date: Thu, 28 Aug 2025 15:07:26 +0300
+	s=arc-20240116; t=1756384856; c=relaxed/simple;
+	bh=SYKjW1CPF3qauGasMR5vakecTnZSMkkKlxT4QBDF9ao=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RhOmpBLLydwu1Q62jgiyCvjaLKdzyB4+f3oLdWQkqNyULp1wB3bCbMDZYXF/1JRAKCJvaotP9KWwPBFq1z+mpsVkA30UkWLyoos0DpHur81vkhjZFDb1iYWnWv5DaMS8eG17fYKVK2apFUPhd6ze04aSBtKcpYv0khYFWVW3/Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IMFoCJHh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5ABC4CEF5;
+	Thu, 28 Aug 2025 12:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756384855;
+	bh=SYKjW1CPF3qauGasMR5vakecTnZSMkkKlxT4QBDF9ao=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IMFoCJHhkcMKdGmApJu381uY8Wuet4Ba9V6Tvvnv0lXIRIcXO9JumVykISh+fyRYN
+	 JZ4eWoL1bu7FVjBaT/9waQLzv+yh2bmsmDuSd9VGLOnsgPb9IK1quX5qLPoQFsKrbR
+	 yko4BTIfuPEPzMroqiyn+bcvOWwVJy+ANTdzWpToronW4aalBiqAdJqjTRpdZe0Clq
+	 dNm7HHZ5XOaiDtL1A3ld+Z5Rw52Bd9s2yIFO/sLVSC4U8BNMdJ6pKJOqJR2aYtqPzm
+	 aMBQ0v+lfRqehJovy+JGyRwk4PZIdFqJ7UcAWiwmbsAV7rlIScAnBxqGLbMtz1fEUH
+	 3o8KPZCqoDzYg==
+From: Michael Walle <mwalle@kernel.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Michael Walle <mwalle@kernel.org>
+Subject: [PATCH] thermal: k3_j72xx_bandgap: register sensors with hwmon
+Date: Thu, 28 Aug 2025 14:40:42 +0200
+Message-Id: <20250828124042.1680853-1-mwalle@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 26 Aug 2025 11:39:42 -0700, Xi Pardee wrote:
+Make the sensors available in the hwmon subsystem (if
+CONFIG_THERMAL_HWMON is enabled).
 
-> Add Wildcat Lake support to Intel PMC SSRAM Telemetry driver.
-> 
-> 
+Signed-off-by: Michael Walle <mwalle@kernel.org>
+---
+ drivers/thermal/k3_j72xx_bandgap.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
-
-The list of commits applied:
-[1/2] platform/x86/intel/pmc: Add Wildcat Lake support to Intel PMC SSRAM Telemetry
-      commit: c138158e87aaca6da345603a03e5d9e8d90fdd36
-[2/2] platform/x86/intel/pmc: Add Wildcat Lake support to intel_pmc_core
-      commit: 1866c3b93989081770e0a59c671a483eb72ea85b
-
---
- i.
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index a36289e61315..d9ec3bf19496 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -20,6 +20,8 @@
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ 
++#include "thermal_hwmon.h"
++
+ #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
+ #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
+ #define K3_VTM_TMPSENS0_CTRL_OFFSET		0x300
+@@ -513,6 +515,8 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(ti_thermal);
+ 			goto err_free_ref_table;
+ 		}
++
++		devm_thermal_add_hwmon_sysfs(bgp->dev, ti_thermal);
+ 	}
+ 
+ 	platform_set_drvdata(pdev, bgp);
+-- 
+2.39.5
 
 
