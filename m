@@ -1,154 +1,448 @@
-Return-Path: <linux-pm+bounces-33262-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33263-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D413B39EDB
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 15:27:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37D82B39F73
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 15:56:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2409C56134C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 13:27:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C84137B572C
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 13:54:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565ED311957;
-	Thu, 28 Aug 2025 13:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3876226C39F;
+	Thu, 28 Aug 2025 13:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eQjSZpjV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bM4iFahC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793642D73A1
-	for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 13:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACB91CDFD5;
+	Thu, 28 Aug 2025 13:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756387619; cv=none; b=kPpBl5Wrv3kbINQ6ddcfrhOq+tmLcdAiPBE1q9qFjNJekmll8hFSXxxKeDnUmzEojbZSsfya3NsozKF5b2TQcbpTGhk/q8je4yJpWw7nxO1Hm7yAYI0vbtZ/Tp3fMRfcZRXHNibpzHUqAptMyEEoNCW6BZskvsGuGeZjSHDaWPY=
+	t=1756389380; cv=none; b=NEUcxjYQAgimdA+nslYYINM1ZWxtsJeIJpfJ82pFd6See5bQIHbIR7GZMY1SXq+2AkUw7QnSfli2F46UWqhdPJGCN0DngzMsHKqbLdfaansDldSoHjTEaS9w2MEpGc3E6urCAR1fJFp8rtOLkIlfsUJjZvU02etPaSCwJzR9ckU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756387619; c=relaxed/simple;
-	bh=vfWvNgcav3r9QFMJfVoU8AERgLXxQbSnW2pOQXqJYpQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RzJFsWr9k0FIYhJax1Dhl4iUKtnOgqnaIg3h8AQvFvVD9y3k2T469NGcpOBZsnv2A7YPf0nyy6OHR0k8PbcXapodidDQ5Cd8wssLIgXU4Q444tnLYmfAmuGDNvvRQi3+nq8MYwvLG2rebpP1QXCGJEa+YrNm/GknZOVLN7PKYaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eQjSZpjV; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55f469ad067so1052930e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 06:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1756387616; x=1756992416; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UTOF6xiQv0qzQRLjdqMkKKYD5QGR1e1uQsj6mloKX+U=;
-        b=eQjSZpjV9rKP15YQ3go4WwVeY+ZnwIvipTMMTUwTRVhPQJ407h7XKrdiYzTVROtk13
-         8U3vefWj46W9q1lAheGjCgtmBFiQ/TogitDT0KsoTHUtUQE1TUspvIFHecteD7KHo3HL
-         sRmWxV2QEA4z1VRy05Hdl1k5UMEz4d74iyDwc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756387616; x=1756992416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UTOF6xiQv0qzQRLjdqMkKKYD5QGR1e1uQsj6mloKX+U=;
-        b=CNTsGOPs3C2s4T7BTUE09TvtU3kMAQsa5R0iQETqWJ8ieCMbY5v3PB79bMuxIWs7vB
-         JDAwh57odsMpb3vXxRqMPEk92Y/9zBWorTiK8lVyYUwZJqM8sCv6LeXX1sJyRZ8NZsfK
-         T27uVBcI/yyejDHosQ0ioDOaY8pVptXWpEA3GXve9vTjiM4u/VuGbPHkTkfJV49HlBhC
-         YKNW+BmYQZ7FIEuo72KdFS189eLjgY/tcgbV/Twbotp3UjRYd/AWEbFjLZ4tiQ0nCvLM
-         sEpG6v/WB0aBktj0UlLJDL4CnfCHbUuR4PDfZTkzRZIBxKENeLilKP/cOW3srWAax5jf
-         nytQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWdXRF99CDhoDt0yTyJJJ578aZdb08SqsYupIepPP8lIIA+Ji87a/gtSvwQpsaDBz9ktV6x6I/+g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxnat43w7iCtOOl99S63tRy3Jy/Lybxv01cBmU/Utuo6CTSuAsr
-	vJq1Y5IaMCkcYUU7VbTRY5z//p1axjcVOoM7E4I+H1th4dpAN+wRTAIBV31ar2p4o/Wjkt6pjD/
-	Ner3RK512/0WyHQQ3MqmcFTOsnCU5x9Wryb229FJl
-X-Gm-Gg: ASbGncsP8uRVKUPr19xkj2gixrZzmMiyWTIhJs8XvuyH9SGsSDEGwVTG0nvqqvF7EwU
-	TKWPAmbeF9wLWSAH2OiJPlEHl9cIuvgzj6+olHLtHXVT6mPm4XslB3Q3ZcWhyux5G3wI9UqFL0E
-	OnES3ycxTvt2+NP9OMllNFUe2OhM5oPQXSyA5Hj0gWUSYNO1YjXjnas4FyUa9paKPvrlp2X6zTW
-	KiPHuom9P2L6wEeMOIbw2iUYAOSx4XHF+AJuA==
-X-Google-Smtp-Source: AGHT+IGKaP7lckMwAVsqZkce2iGR63rMwp/YwXpHrLXd8d9BSHElcYzrrAlXcYiXDcwUU0dCjGA+bOrjwY+YJkMmFn0=
-X-Received: by 2002:a05:6512:3b97:b0:55f:4c92:f4c8 with SMTP id
- 2adb3069b0e04-55f4f4c6b92mr2765248e87.8.1756387615553; Thu, 28 Aug 2025
- 06:26:55 -0700 (PDT)
+	s=arc-20240116; t=1756389380; c=relaxed/simple;
+	bh=NVtfQkj/LLhGbbkjcOyFZJmL6lONFV3/3lzPX+8SPr0=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=mMw2QgcROKi/TZ/g2MP53ndYUKpw47ADV717oTQag4cXLU8xiPOUMYT1C46v3/kS4cq4MYw9cKvJ4TnOm6//d/040Y5VNOmjAJhNdJLe9JT4LwCsWwnmASGnhrDuVFcKzA5GzqQ/xcrtizMs1BnsISc64S+j1Hj+5YWBPpNsfkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bM4iFahC; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756389378; x=1787925378;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=NVtfQkj/LLhGbbkjcOyFZJmL6lONFV3/3lzPX+8SPr0=;
+  b=bM4iFahCpxR90vVgunjAFpfLxGhf9gfOkJrKOuy3Kx+AMfjaMbSfe9yY
+   VX5W9+pafzCjB7yBL+sgGR8+R3+FyLbkgvokdBG5Kitzoe/iE7KzYM9fs
+   rRFr+0O03v8pmjfeOUeulfq/I8KDgNOi8/CxO9Avz5zzhuYlhZ2l33ko1
+   4CARIPws3oSI5x0blKQNULuRquQICrt3mPb5D7qEzerEihXh3lVxiNKDd
+   NOdjtBTP5aPvkIjevHyGe4M1mnIdQQbrsGZmYyb0tMqf2SLevP+KJEYaJ
+   6VHp423weKkD6tC6PeVoUyIcAtjcugkOhVl6Rs8bFcdhuvdKzdKObFnHQ
+   g==;
+X-CSE-ConnectionGUID: 117nSS9MR464gffnpvcS3g==
+X-CSE-MsgGUID: DzFuJoCLStmzgHDQlmLThw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="69364338"
+X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
+   d="scan'208";a="69364338"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 06:56:18 -0700
+X-CSE-ConnectionGUID: kyI6ONA1SQC+ZxrRCvflIQ==
+X-CSE-MsgGUID: C9a/RJgqS+KJWNZ9mFAh8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
+   d="scan'208";a="201035136"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.99])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 06:56:11 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 28 Aug 2025 16:56:05 +0300 (EEST)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
+    Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] platform/x86:intel/pmc: Show device and function
+ number
+In-Reply-To: <20250815224611.2460255-6-xi.pardee@linux.intel.com>
+Message-ID: <c9aa04ae-f942-cf73-d046-78d0f90f373d@linux.intel.com>
+References: <20250815224611.2460255-1-xi.pardee@linux.intel.com> <20250815224611.2460255-6-xi.pardee@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250214074353.1169864-1-chun-jen.tseng@mediatek.com>
- <20250214074353.1169864-2-chun-jen.tseng@mediatek.com> <20250219054209.erwfp7sgzchaiuds@vireshk-i7>
- <e8337c5eee0cadb797bacf26b00f1ca303c5147f.camel@mediatek.com>
- <20250321045624.mwm2mnkqeow5uids@vireshk-i7> <2a73b5ca35692c8ffa68c9ff0df73e24a592967d.camel@mediatek.com>
- <20250321060148.adhxjexpnm4dkpnt@vireshk-i7> <e1c2c12bace22d1803d16ecbfb32129518d87157.camel@mediatek.com>
- <20250324054333.sgwwksawnybx3lp4@vireshk-i7> <06356a55cdb3c34dfc716349d1967f95655b0ab2.camel@mediatek.com>
- <20250416080517.feansrkpycsynk6t@vireshk-i7>
-In-Reply-To: <20250416080517.feansrkpycsynk6t@vireshk-i7>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Thu, 28 Aug 2025 15:26:44 +0200
-X-Gm-Features: Ac12FXxYNpnEAlBmbtFHr64VxND_7eVbeCYS5BHUQbSiC1qF3AAnoY211E0MhhA
-Message-ID: <CAGXv+5FyR8bt16nLvS0V=_YRWM6G7V0OOpxctA+_4hVnnCjDtg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] cpufreq: mediatek: using global lock avoid race condition
-To: Viresh Kumar <viresh.kumar@linaro.org>, 
-	"myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>, 
-	"kyungmin.park@samsung.com" <kyungmin.park@samsung.com>, "cw00.choi@samsung.com" <cw00.choi@samsung.com>
-Cc: =?UTF-8?B?Q2h1bi1KZW4gVHNlbmcgKOabvuS/iuS7gSk=?= <Chun-Jen.Tseng@mediatek.com>, 
-	"rafael@kernel.org" <rafael@kernel.org>, 
-	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, Apr 16, 2025 at 4:07=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 14-04-25, 08:42, Chun-Jen Tseng (=E6=9B=BE=E4=BF=8A=E4=BB=81) wrote:
-> > Hi Viresh,
-> >
-> > The CCI level choose by Max_Level(LCPU & BCPU frequency) in devfreq
-> > driver.
-> > without global lock, It may choose wrong CCI level and cause system
-> > stall.
-> >
-> > I hope this flow is serial setting like, BCPU / LCPU set frequency ->
-> > set CCI level -> BCPU / LCPU set frequency -> set CCI level -> ......
-> >
-> > without global lock, it could be LCPU / BCPU set frequency -> set CCI
-> > level(during this time, it may change BCPU / LCPU frequency and cause
-> > system stall.
-> >
-> > I also can only do global lock on ccifreq_support SoC.
->
-> As explained earlier, I don't think there is a race here. May be I am
-> wrong. And so I need a clear code path example from you, which proves
-> that there is a race here.
+On Fri, 15 Aug 2025, Xi Pardee wrote:
 
-Maybe a different set of eyes will help. I talked to Chun-Jen offline,
-and I'll try to explain what I understand.
+> Add support to show device and function number for S0ix blockers. This
+> feature depends on S0ix blocker substate requirement table and BDF
+> association table. This feature is available for platforms starting from
+> Pather Lake.
+> 
+> Only a subset of S0ix blockers has device and function number associated
+> to it. Get the availability information from the substate requirement
+> table. Get the device and function number mapping information for each
+> S0ix blocker from the BDF association table.
+> 
+> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/pmc/core.c | 182 +++++++++++++++++++++++++-
+>  drivers/platform/x86/intel/pmc/core.h |  23 +++-
+>  2 files changed, 203 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index a0b948a875a5a..69ee40cbb8b8a 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -1017,6 +1017,38 @@ const struct file_operations pmc_core_substate_req_regs_fops = {
+>  	.release	= single_release,
+>  };
+>  
+> +static int pmc_core_bdf_show(struct seq_file *s, void *unused)
+> +{
+> +	struct pmc_dev *pmcdev = s->private;
+> +	unsigned int pmcidx;
+> +
+> +	seq_printf(s, "%36s | %15s | %15s |\n", "Element", "Device Number", "Function Number");
+> +	for (pmcidx = 0; pmcidx < ARRAY_SIZE(pmcdev->pmcs); pmcidx++) {
 
-First of all, the issue lies not in cpufreq, but in the CCI devfreq,
-and how the passive devfreq governor is linked to cpufreq.
+Change this to pmc_idx and lets make it the only form that are added from 
+this point on.
 
-The CCI hardware unit on the MT8186 is sensitive to frequency changes.
-If the performance level of the CCI unit is much lower than either
-of the CPU clusters, it  will hard hang the whole system. So the CCI
-devfreq must always take into account the performance level of both
-clusters, or in other words the settings of both cpufreq policies.
+The other ones should be converted to it eventually, I once had a cleanup 
+patch to rename them but IIRC I dropped it to not conflict with some 
+feature worked. Maybe you can fit a rename change into some series so I 
+won't end up conflicting your feature work :-).
 
-Since the cpufreq policies only serialize with themselves, it is possible
-for one policy to change and trigger a devfreq update, and when the
-CCI devfreq driver is doing its calculations, the other policy changes
-and causes a big deviation from the assumed performance levels, leaving the
-CCI into a non-matching performance level and causing a system hang.
+> +		const char *name = NULL;
+> +		struct list_head *cur;
+> +		struct bdf_entry *bdf;
+> +		struct pmc *pmc;
+> +
+> +		pmc = pmcdev->pmcs[pmcidx];
+> +		if (!pmc)
+> +			continue;
+> +
+> +		list_for_each(cur, pmc->bdf_list) {
+> +			bdf = list_entry(cur, struct bdf_entry, node);
+> +			if (bdf->name != name) {
+> +				seq_printf(s, "pmc%d: %30s | %15x | %15x |\n", pmcidx,
 
-So I think we need to handle CPUFREQ_PRECHANGE events for the frequency
-increase direction, as well as enlarging the devfreq mutex to cover
-the CPU frequency tracking bits in the passive governor.
+%u
 
-I hope that makes sense.
+> +					   bdf->name, bdf->dev_num, bdf->fun_num);
+> +				name = bdf->name;
+> +			} else {
+> +				seq_printf(s, "%54x | %15x |\n",
+> +					   bdf->dev_num, bdf->fun_num);
+> +			}
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(pmc_core_bdf);
+> +
+>  static unsigned int pmc_core_get_crystal_freq(void)
+>  {
+>  	unsigned int eax_denominator, ebx_numerator, ecx_hz, edx;
+> @@ -1418,6 +1450,10 @@ static void pmc_core_dbgfs_register(struct pmc_dev *pmcdev, struct pmc_dev_info
+>  				    pmc_dev_info->sub_req_show);
+>  	}
+>  
+> +	if (primary_pmc->bdf_list) {
+> +		debugfs_create_file("bdf", 0444, pmcdev->dbgfs_dir, pmcdev, &pmc_core_bdf_fops);
+> +	}
 
+Unnecessary braces.
 
-Thanks
-ChenYu
+> +
+>  	if (primary_pmc->map->pson_residency_offset && pmc_core_is_pson_residency_enabled(pmcdev)) {
+>  		debugfs_create_file("pson_residency_usec", 0444,
+>  				    pmcdev->dbgfs_dir, primary_pmc, &pmc_core_pson_residency);
+> @@ -1521,7 +1557,7 @@ int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct tel
+>  	return ret;
+>  }
+>  
+> -int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
+> +static int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
+>  				 struct telem_endpoint *ep)
+>  {
+>  	u32 num_blocker, sample_id;
+> @@ -1551,6 +1587,150 @@ int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
+>  	return 0;
+>  }
+>  
+> +static const char *pmc_core_get_next_bdf_ip_name(struct pmc *pmc, unsigned int *r_idx,
+> +						 unsigned int *i_idx, u32 **lpm_req_regs)
+> +{
+> +	const struct pmc_bit_map **maps;
+> +	unsigned int arr_size;
+> +	bool reset = FALSE;
+
+FALSE is a define in some obscure header (which you probably didn't 
+include intentionally anyway ;-)).
+
+Please use false.
+
+> +
+> +	maps = pmc->map->s0ix_blocker_maps;
+> +	arr_size = pmc_core_lpm_get_arr_size(maps);
+> +
+> +	// Iteration reaches the end of the bitmap array
+
+This driver has used exclusively /* */ comments.
+
+> +	if (!maps[*r_idx][*i_idx].name)
+> +		(*r_idx)++;
+> +
+> +	// Iteration reaches the end of the maps
+> +	if (*r_idx >= arr_size)
+> +		return NULL;
+> +
+> +	for (; *r_idx < arr_size; (*r_idx)++) {
+> +		const char *ip_name;
+
+Can't you put this to the innermost block?
+
+> +		if (reset)
+
+Why you need this?
+
+> +			*i_idx = 0;
+> +
+> +		for (; maps[*r_idx][*i_idx].name; reset = TRUE, (*i_idx)++) {
+
+true
+
+This is hard enough to understand even without that "for (;". Would 
+probably be better to use while () instead.
+
+> +			if (!maps[*r_idx][*i_idx].blk)
+> +				continue;
+> +
+> +			bool exist = **lpm_req_regs & BIT(BDF_EXIST_BIT);
+> +			(*lpm_req_regs)++;
+> +			if (exist) {
+> +				ip_name = maps[*r_idx][*i_idx].name;
+> +				(*i_idx)++;
+> +				return ip_name;
+> +			}
+> +		}
+> +	}
+> +	return NULL;
+> +}
+
+TBH, this entire function is horrible mess, two nested iterators as 
+pointers, etc.
+
+I'm very far from following all what going on here.
+
+I suppose I've not seen this patch previously?
+
+> +static int pmc_core_process_bdf(struct pmc_dev *pmcdev,  struct pmc *pmc, u32 data,
+> +				unsigned int *r_idx, unsigned int *i_idx, u32 **lpm_req_regs,
+> +				const char **name)
+> +{
+> +	unsigned int i;
+> +
+> +	if (!data)
+> +		return 0;
+> +
+> +	if (!*name)
+> +		return -EINVAL;
+> +
+> +	for (i = BDF_FUN_LOW_BIT; i <= BDF_FUN_HIGH_BIT; i++) {
+
+I think you can iterate 0 ... __fls(FIELD_MAX()).
+
+> +		struct bdf_entry *b_entry;
+> +		u32 function_data;
+> +
+> +		function_data = (data & BIT(i));
+> +		if (function_data) {
+
+Why the extra variable???
+
+> +			b_entry = devm_kzalloc(&pmcdev->pdev->dev, sizeof(*b_entry), GFP_KERNEL);
+> +			if (!b_entry)
+> +				return -ENOMEM;
+> +			b_entry->dev_num = data & GENMASK(BDF_DEV_HIGH_BIT, BDF_DEV_LOW_BIT);
+> +			b_entry->fun_num = i - BDF_FUN_LOW_BIT;
+
+What "fun" stands for? Should it be "func" as is the typical short for 
+"function" in BDF?
+
+> +			b_entry->name = *name;
+> +			list_add_tail(&b_entry->node, pmc->bdf_list);
+> +		}
+> +	}
+> +
+> +	if (!(data & BIT(BDF_REQ_BIT)))
+> +		*name = pmc_core_get_next_bdf_ip_name(pmc, r_idx, i_idx, lpm_req_regs);
+> +
+> +	return 0;
+> +}
+> +
+> +static int pmc_core_pmt_get_bdf(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep)
+> +{
+> +	unsigned int sample_id, max_sample_id, header_id, size, r_idx, i_idx;
+> +	struct bdf_entry *entry;
+> +	u32 *lpm_reg_regs;
+> +	const char *name;
+> +	int ret;
+> +
+> +	header_id = pmc->map->bdf_offset;
+> +	sample_id = header_id;
+> +	max_sample_id = sample_id + pmc->map->bdf_table_size;
+> +	lpm_reg_regs = pmc->lpm_req_regs;
+> +	r_idx = 0;
+> +	i_idx = 0;
+> +
+> +	name = pmc_core_get_next_bdf_ip_name(pmc, &r_idx, &i_idx, &lpm_reg_regs);
+> +	if (!name)
+> +		return -EINVAL;
+> +
+> +	pmc->bdf_list = devm_kzalloc(&pmcdev->pdev->dev, sizeof(struct list_head), GFP_KERNEL);
+
+Should use sizeof(*xx).
+
+But why you need to allocate the list head and not have it in place 
+within the pmc's struct?
+
+> +	if (!pmc->bdf_list)
+> +		return -ENOMEM;
+> +
+> +	INIT_LIST_HEAD(pmc->bdf_list);
+> +
+> +	for (; sample_id < max_sample_id; sample_id++) {
+> +		u32 data;
+> +
+> +		ret = pmt_telem_read32(ep, sample_id, &data, 1);
+> +		if (ret) {
+> +			dev_err(&pmcdev->pdev->dev,
+> +				"couldn't read bdf: %d\n", ret);
+
+One line.
+
+> +			return ret;
+> +		}
+> +
+> +		if (sample_id == header_id) {
+> +			size = (data & GENMASK(BDF_SIZE_HIGH_BIT, BDF_SIZE_LOW_BIT))
+> +			       >> BDF_SIZE_LOW_BIT;
+
+Define the field and use FIELD_GET().
+
+> +			header_id += size + 1;
+
+No, I just cannot understand what's going on here, it's hopeless. Always 
+when I think I've finally understood what its all about you throw a curve 
+ball like this.
+
+In case this series is in any kind of hurry. I suggest you send the series 
+without this patch and we work out this patch separately on top of the 
+applied patches (I expect the patch 1-5 to be fine on next iteration).
+
+> +			continue;
+> +		}
+> +
+> +		ret = pmc_core_process_bdf(pmcdev, pmc, data, &r_idx, &i_idx, &lpm_reg_regs, &name);
+> +		if (ret)
+> +			return ret;
+> +		data = data >> BDF_SIZE;
+> +		ret = pmc_core_process_bdf(pmcdev, pmc, data, &r_idx, &i_idx, &lpm_reg_regs, &name);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	list_for_each_entry(entry, pmc->bdf_list, node) {
+> +		dev_dbg(&pmcdev->pdev->dev, "bdf info: name %s, dev_num %x, fun_num %x",
+> +			entry->name, entry->dev_num, entry->fun_num);
+> +	}
+> +	return 0;
+> +}
+> +
+> +int pmc_core_pmt_get_sub_req_bdf(struct pmc_dev *pmcdev, struct pmc *pmc,
+> +				 struct telem_endpoint *ep)
+> +{
+> +	int ret;
+> +
+> +	ret = pmc_core_pmt_get_blk_sub_req(pmcdev, pmc, ep);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return pmc_core_pmt_get_bdf(pmcdev, pmc, ep);
+> +}
+> +
+>  static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+>  {
+>  	struct pci_dev *pcidev __free(pci_dev_put) = NULL;
+> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+> index bfe8fba808063..6ff2d171dc2ba 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -317,6 +317,24 @@ enum ppfear_regs {
+>  #define PMC_DEVID_MTL_IOEP	0x7ecf
+>  #define PMC_DEVID_MTL_IOEM	0x7ebf
+>  
+> +/* BDF offset */
+> +#define BDF_EXIST_BIT		3
+> +#define BDF_SIZE_HIGH_BIT	23
+> +#define BDF_SIZE_LOW_BIT	16
+> +#define BDF_DEV_HIGH_BIT	4
+> +#define BDF_DEV_LOW_BIT		0
+> +#define BDF_FUN_HIGH_BIT	12
+> +#define BDF_FUN_LOW_BIT		5
+> +#define BDF_REQ_BIT		15
+> +#define BDF_SIZE		16
+
+Use BIT(), GENMASK() for most right here. All?
+
+> +
+> +struct bdf_entry {
+> +	struct list_head node;
+> +	const char *name;
+> +	u32 dev_num;
+> +	u32 fun_num;
+> +};
+> +
+>  extern const char *pmc_lpm_modes[];
+>  
+>  struct pmc_bit_map {
+> @@ -373,6 +391,8 @@ struct pmc_reg_map {
+>  	const u32 s0ix_blocker_offset;
+>  	const u32 num_s0ix_blocker;
+>  	const u32 blocker_req_offset;
+> +	const u32 bdf_offset;
+> +	const u32 bdf_table_size;
+>  	/* Low Power Mode registers */
+>  	const int lpm_num_maps;
+>  	const int lpm_num_modes;
+> @@ -418,6 +438,7 @@ struct pmc {
+>  	const struct pmc_reg_map *map;
+>  	u32 *lpm_req_regs;
+>  	u32 ltr_ign;
+> +	struct list_head *bdf_list;
+>  };
+>  
+>  /**
+> @@ -540,7 +561,7 @@ extern struct pmc_dev_info ptl_pmc_dev;
+>  void cnl_suspend(struct pmc_dev *pmcdev);
+>  int cnl_resume(struct pmc_dev *pmcdev);
+>  int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep);
+> -int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
+> +int pmc_core_pmt_get_sub_req_bdf(struct pmc_dev *pmcdev, struct pmc *pmc,
+>  				 struct telem_endpoint *ep);
+>  
+>  extern const struct file_operations pmc_core_substate_req_regs_fops;
+> 
+
+-- 
+ i.
+
 
