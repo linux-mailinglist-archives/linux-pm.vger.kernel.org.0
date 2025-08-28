@@ -1,136 +1,167 @@
-Return-Path: <linux-pm+bounces-33212-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33213-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666C5B39339
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 07:46:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6E28B3934E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 07:51:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A4531C2381E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 05:46:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DB9E20245A
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 05:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687912777F7;
-	Thu, 28 Aug 2025 05:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6002765F3;
+	Thu, 28 Aug 2025 05:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mKpWF2Co"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AjqTzMII"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCDC27702E
-	for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 05:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EED13DDAA;
+	Thu, 28 Aug 2025 05:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756359985; cv=none; b=YwJTizvYUuSUOBAcKfgmmZ7fzgxKNm9wjxsba0DBO6h3AdNmoO2AmmKCjc1hpzKnzEUdMKgJSRCbtVSQMmMe2Z7JJsmh8V2X71eE0d4xZpf4meuczW9jNmm8b9u7hdEEfrFgdZZwMQFD96C88jzlz93/DvbSwpCrWLHgB/J4Ecc=
+	t=1756360279; cv=none; b=MuWdNRtohCJ9oa9c67YTZyvKh1E1ZtUAwYE9zwXY5mf6GDmipU4HssnWkAdIzgKInx3D/vJjB6wBJzHYaAy7UPwhHTseWJ6zgCDdZCjdRYuQCqcpuFdyxkhEizozTuw1c4Zbnxdv7VSOLoKsbL4OVn6UOdmybrWOaLE9SzpI58A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756359985; c=relaxed/simple;
-	bh=i6L+f3exnFOVhxuWsM4teMlEODpI+rzw0Jw85ZTvtIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BX3LqLHj4liJ07Fx5PXl/PNymYzr/hHLKPygBW3aKZCFd4kdUfwjdhPwgfCTL9JthoJoGqXQf9IMdrTyc3tJG8NVid0FkJsJro3YMxNUd/GDLzvNGVul5X7qOq5HcEMyP9dPmbD5rhht0x7VPhEdDptq8PaUbPvxCr4fIYb7oVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mKpWF2Co; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-771e1e64fbbso709092b3a.3
-        for <linux-pm@vger.kernel.org>; Wed, 27 Aug 2025 22:46:23 -0700 (PDT)
+	s=arc-20240116; t=1756360279; c=relaxed/simple;
+	bh=+pfpRU6cabBtHkFAx6wTGtIX59QJm0xSyvDCbivVAgc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Iq0AUkSG/4qspBh6+kmnS5DKeWeQvFdKxyMv63QyrYVXYvPKLTPUtU07mljoY9KaiIRqvecLcIE1N8oeyNHV+i2xAD1BFqGXeEYI5qftlIY711XM4c6axSth/WOW9HErXuwjibPJGXteV8+iRMctpR4eDjzdF/LA7W2E/8hhjz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AjqTzMII; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-afeba8e759eso70755866b.3;
+        Wed, 27 Aug 2025 22:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756359983; x=1756964783; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JrIDBpuM+wIKseLTnowhk8eTE9B0XZjCQe+CxB8rd+o=;
-        b=mKpWF2CoXnkI2N9uVobkgXcLZ6ic154Z3QmfTByv7XWYpphf6fVaSoIlTjyWJVZS9T
-         VfCCCDuxpjVU9r6AiUEKvC3qmwYxLQg1hKNzvx1OoKxyaCAsUklTw+aPZYI9KFk9/zun
-         XbGgPwWHYBAdlcD09D+l6HTZfzQuhQQPCLznywGU1Rj4KtTqC2heKld0oL0zz9RYm6lY
-         ENAIqTmOZfljEin2ZnqgJtF8/L7pWtp9wHpEmjj4bAyj+EMRSRTKbRsVS1gS8gVZ/D/S
-         NX/W0JCbdayE8hiLSNv9zXDnM5+M1SbKb6s7F94EvUTFv+MY8qVJoGndBnl8mKSD6FkF
-         HHmg==
+        d=gmail.com; s=20230601; t=1756360275; x=1756965075; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hFya9Xxo8UcEycSGJ2X5jKskyF1P+mQblpuWkIk96ag=;
+        b=AjqTzMIIn0T55ZEjtO1JoRQI+lgIJQh9DzGGg14ckWSP6Az2W7P23FubbXPM3tFS+P
+         okvnY//Im0zSo0NWHFV+1lyOrWsASAKGogLwDDjMJUTEZjQ3SqYFCSuPtDUj8UNI1HTo
+         ptQE8o2ovKQVBOuAJQX5Z/MuFEreETjRPoBqiFGntDVSAhqQUmFkXvP2dL9s5cYxgib3
+         eDUfxBMk2J/2HCZjITs/EObu57TLvEBKDJM/+Ckd1tJ2aM47HAz4IW5oPmPyvTHX9Ssj
+         9MJfeO82Ar29xbNnoCp3vLkHgObkK87lo6BkMMqPJGCEPCrA+S5G6kCM5BskMtqZz/sK
+         qdvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756359983; x=1756964783;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JrIDBpuM+wIKseLTnowhk8eTE9B0XZjCQe+CxB8rd+o=;
-        b=tnBo4hdTcvngDhbu0TuX1kh3Uxqx6NkYoC9pa3CNSqeFmKd5OYcnJuf5jn4+id1Krz
-         EUF6W4xWJ6bnLrLEZ2NTBx0PAvha/F45SqHRKjt4LPg30Eg5ac4QyV+wmlFGdokmk2rp
-         Rd5JVZin0WNSbXV7ovlF6kG6clZPhiMw64euN3vlWZmt79ts9xVDGgGwKcXOI90v1NdU
-         wFMID3svpdKW6h3TAF+VBgD7V7u7oNEWBbCwK/FMperj9RaV+2SoV+FSVv4mWiFEjgaH
-         RJJK2Ms8xcL7xRRORZRvezXlXA4m+2GpUhgKLKBp+0JBW50D3ssl8YfDtNbp1k06IiyS
-         a+IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMirUr5zMSHNS0hwui1yXMLx55G99vvNHQP3ehEKOAngNQstoymPzo23hapEjT2CCBa4cCW3aqXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTZ2kAgX4e3z1kM8qXiB55HkIUZgTT8Ct8WPnxkpULuaF94ZY6
-	NgQxc84uROAkHk8AhCQUqr6JuCTNi1phD15yJiZgNRzgcesmrYwKyrXfkzdC6uhMoF+hifMT/+Q
-	jQRou
-X-Gm-Gg: ASbGncuIzjmPZPvmd8OGyoruJezL6makwzJQvkIELGKIc/ODwwu+dGBsm8muPP4PCIx
-	OOAlnR/1J77O5OEtSe/I/YC5/A+8ko7Vc8T9o62MP0wvQ6ncyI8eep14Tqg5RfXc/mnnKW/5YQ2
-	GNN1Mgv7gBrrcvwcXJOC2JJUKc0n76r/NnOqyzGa1GzL4nIJFKprez1YrK1PsLCXAJn7gY8PjWp
-	I3NjizO7QxozCWYJvRRf5EMMhQ3j8XGFZJVlkKzthDp6h9EOGA/YETX1Cfg+f30ILbw7lvS+4wq
-	xYNdgGWGLPoMVBovUm6ANCg1Wr4gu/ouCY4SJYrpRa5+U0rfa1ZhRh7jw0KkJgBsfsVRO6vM2Q4
-	tgldi9eFmwuiF4z4ToB79EAxO
-X-Google-Smtp-Source: AGHT+IFfuu4OZWLK4Ect5V8qcKWdtQ9AvKTAwNSmE5IY/JmFZqua6II8FJDl1UVaUxNnVGH1wfuJAA==
-X-Received: by 2002:a05:6a20:2448:b0:240:2421:b912 with SMTP id adf61e73a8af0-24340d17030mr33915391637.37.1756359982962;
-        Wed, 27 Aug 2025 22:46:22 -0700 (PDT)
-Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4c1b2f5a3csm8873232a12.4.2025.08.27.22.46.21
+        d=1e100.net; s=20230601; t=1756360275; x=1756965075;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hFya9Xxo8UcEycSGJ2X5jKskyF1P+mQblpuWkIk96ag=;
+        b=hsO8xu488WHcmQ5MbyR4KTleq0D2IJjQphRgINLQAO1rn+709ZALYO7CCSnJbBGZvJ
+         Y1BMluKYmE1i+T3xUGSeeclo4HU95BdXa9WYQT0DkAdF+XJESthCJpmxZimMh7doWF65
+         2P5O5s6RgEckjfBIva03nfXsfNNwNIAtB0pfSZz7ZETkvgEOju7nX/h/ExnRHbtig0Kv
+         zdcU3W8en2yYcf4Ec+pv1wRUW/Kn7gAVV5pPcoCouQ4x37soTqobOATlZ6jNB+G/XG4+
+         eEqL1U83Ew03NwmNb8R28FDSMy7BgJT3NKo0I7EVCRS+lVF7FSXx/3hR201Ex0+mm1XY
+         QkAg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxi5oKvYRTtsXNARWQhLnzEG27djX4ZlM78VU/3/zwA1sawtLunFdrpXAVF3JUIZdQGaQc4X0nObOHTcy8@vger.kernel.org, AJvYcCVyYl4QrjYeXv5wZjnyvpdIm3wTm2R5+ChfS8pV4sQgq7ytGPypIoEHZ29EUh7rY3SJrdPV56AYLIRSLzE=@vger.kernel.org, AJvYcCXq4+Y5FGl8TYO36iSat+fddOiOYmNW0NLOWxnqUwjs0wE1sZ/oVTXYhPG2ozjuTAbXNZhA+ylREXp2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi64K4AeeR3l8MdNumo4WgE69bsiwdHdkHqNFp0vEmtq8Ah80G
+	iNN2g4zg1SFdEayGH0fmc6ibqhLaFcIanLEn3AzZ/iAZlrPl4BUzJeXb
+X-Gm-Gg: ASbGncu95TGPDBy4SmaqBadA6euO6UQad/FM3BZNwXQPE2unH1V/NA9zD3zcNBkUQv8
+	Vd8NSiLmIRnwXXPPLtBeDviSot5aeZo4RGHBqdzK7JX6LgmDqwrS1TENloTlAYsUzqK66fuTaiz
+	fll4OQJVfZM0NjJjtvjHvMhK6zkGKOyspQ1atHGCQQmjqaBig8oDsiYuuXqq6vMp+eE7SzKHd98
+	fliJKTLZyGRlt8t3s2/u8h9n7+SejU6ZpEGDExUW5279PxfMmUDMvaJw9TP6I2Z9CF2Io5FIl2t
+	BTO7DmuMk7nCeuI9ISyuoTEcbu7ae2ScJGit4nAIOBnEh4sTxCA5bvZiEYXbdXO4nQA+oQQYxL2
+	aEtHCFppSuCTexA==
+X-Google-Smtp-Source: AGHT+IGkbSKUmtKl+t2HMM8Z0djNlIXB5RaRs8RVann/Uman2nhF1Cd2k7tfpmn06Wjx1rXIkPsv0g==
+X-Received: by 2002:a17:907:9725:b0:afe:c7a3:c6a5 with SMTP id a640c23a62f3a-afec7a3c889mr448362566b.26.1756360274724;
+        Wed, 27 Aug 2025 22:51:14 -0700 (PDT)
+Received: from xeon.. ([188.163.112.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afe72c35ebdsm927942666b.7.2025.08.27.22.51.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 22:46:22 -0700 (PDT)
-Date: Thu, 28 Aug 2025 11:16:20 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+        Wed, 27 Aug 2025 22:51:14 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] dt-bindings: cpufreq-dt: Remove redundant
- cpufreq-dt.txt
-Message-ID: <20250828054620.u6gbjevidlnv32cl@vireshk-i7>
-References: <20250827204401.87942-1-Frank.Li@nxp.com>
+	Thierry Reding <thierry.reding@gmail.com>,
+	Thierry Reding <treding@nvidia.com>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/6] thermal: tegra: add SOCTHERM support for Tegra114
+Date: Thu, 28 Aug 2025 08:50:58 +0300
+Message-ID: <20250828055104.8073-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827204401.87942-1-Frank.Li@nxp.com>
+Content-Transfer-Encoding: 8bit
 
-On 27-08-25, 16:44, Frank Li wrote:
-> The information is already documented in
-> Documentation/devicetree/bindings/arm/cpus.yaml.
-> Documentation/devicetree/bindings/opp/opp-v1.yaml
+SOCTHERM is thermal sensor and thermal throttling controller found in Tegra
+SoC starting from Tegra114. Existing Tegra124 setup is mostly compatible
+with Tegra114 and needs only a few slight adjustmets of fuse calibration
+process.
 
-Even then, we can document what driver expects. So duplication isn't
-an issue I think.
+---
+Changes in v2:
+- no changes, resend.
 
-But this file is outdated and hasn't received an update in years.
+Changes in v3:
+- expanded desciption of "thermal: tegra: soctherm-fuse: parametrize
+  configuration further" commit
+- changes title of "thermal: tegra: soctherm-fuse: parametrize
+  configuration further" to "thermal: tegra: soctherm-fuse: prepare
+  calibration for Tegra114 support"
+- Tegra11x > Tegra114 and Tegra12x > Tegra124
+- ft and cp shift bits dropped
+- clarified tegra114 precision
+- lower_precision > use_lower_precision
+- nominal calibration ft and cp hardcoded into SoC specific structures
+- added tegra114-soctherm header into dt-bindings
 
-> Remove the redundant file.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  .../bindings/cpufreq/cpufreq-dt.txt           | 61 -------------------
->  1 file changed, 61 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-dt.txt
+Changes in v4:
+- fixed Tegra124/132/210 cp mask
+- dropped TEGRA114_SOCTHERM_SENSOR_NUM from header
+- TEGRA_SOCTHERM_THROT_LEVEL_ made SoC specific
+- adjusted soctherm node and inclusions in tegra114.dtsi
+- dropped use_lower_presision and nominal_calib_cp options
 
-Merged with this commit log instead.
+Changes in v5:
+- fixed CPU and GPU hotspot offset values
+- added static_assert()s to assert the TEGRA114_* and TEGRA124_*
+  counterparts are equal
+---
 
-commit b238cd833e3d62a76c53d540ed663b314ad179f0 (HEAD -> opp/linux-next)
-Author: Frank Li <Frank.Li@nxp.com>
-Date:   Wed Aug 27 16:44:01 2025 -0400
+Svyatoslav Ryhel (6):
+  soc: tegra: fuse: add Tegra114 nvmem cells and fuse lookups
+  dt-bindings: thermal: Document Tegra114 SOCTHERM Thermal Management
+    System
+  thermal: tegra: soctherm-fuse: prepare calibration for Tegra114
+    support
+  dt-bindings: thermal: add Tegra114 soctherm header
+  thermal: tegra: add Tegra114 specific SOCTHERM driver
+  ARM: tegra: Add SOCTHERM support on Tegra114
 
-    dt-bindings: Remove outdated cpufreq-dt.txt
-
-    The information present in this file is outdated and doesn't serve any
-    purpose with the current design of the driver.
-
-    Remove the outdated file.
-
-    Signed-off-by: Frank Li <Frank.Li@nxp.com>
-    [ Viresh: Rewrite commit log ]
-    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+ .../thermal/nvidia,tegra124-soctherm.yaml     |   2 +
+ arch/arm/boot/dts/nvidia/tegra114.dtsi        | 197 +++++++++++++++++
+ drivers/soc/tegra/fuse/fuse-tegra30.c         | 122 ++++++++++
+ drivers/thermal/tegra/Makefile                |   1 +
+ drivers/thermal/tegra/soctherm-fuse.c         |  18 +-
+ drivers/thermal/tegra/soctherm.c              |  13 ++
+ drivers/thermal/tegra/soctherm.h              |  11 +-
+ drivers/thermal/tegra/tegra114-soctherm.c     | 209 ++++++++++++++++++
+ drivers/thermal/tegra/tegra124-soctherm.c     |   4 +
+ drivers/thermal/tegra/tegra132-soctherm.c     |   4 +
+ drivers/thermal/tegra/tegra210-soctherm.c     |   4 +
+ .../dt-bindings/thermal/tegra114-soctherm.h   |  19 ++
+ 12 files changed, 597 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/thermal/tegra/tegra114-soctherm.c
+ create mode 100644 include/dt-bindings/thermal/tegra114-soctherm.h
 
 -- 
-viresh
+2.48.1
+
 
