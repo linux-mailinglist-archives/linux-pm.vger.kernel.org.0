@@ -1,152 +1,244 @@
-Return-Path: <linux-pm+bounces-33333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0B61B3AB6E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 22:16:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BC01B3ABDA
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 22:43:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98D5FA013AF
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 20:16:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4F423AA66A
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 20:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A81274FF2;
-	Thu, 28 Aug 2025 20:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08DC28642F;
+	Thu, 28 Aug 2025 20:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhvsm+lc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/+mfYbE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE1A273D7B;
-	Thu, 28 Aug 2025 20:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B302C30CD84;
+	Thu, 28 Aug 2025 20:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756412186; cv=none; b=LpjHjG4B+WoCCklwh4O5hlvz1Y59NLw8kkMJCO5t5CjmEfQVT0swsmVry5tCG6YexnecGzObm6jaTTJ0+cxvXE5/8J4/+8OQnPKj5nc6DgHHQXaWkZ25awcBKAc/StbBg9H/p957WpOwm7cgMhu+d2SBnJQaFu8xX2MwryiAHlc=
+	t=1756413828; cv=none; b=KGK9FCo+lNFZlvKa6am59+RuPBpTfBX4E7noT6KbNA/0U4VWU/2mjU9qGN3ZMBjl2dT7BxTSHX1nJG6t+nzzQLNLGYtRlGGkSRHSpPAk+Wf5EsnBuHEv1OEqC7gPsIPKn7MuUB6rcDl90twUnat45+opw30feOCbclhGSslNhd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756412186; c=relaxed/simple;
-	bh=CgBLmyi9jgGUOiv9TCodnN5Hn/4OG3mZltDzTz2ZkBU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cHu6+Szz56kt+eWLHC3uCET75VuMCBBaCAIUFXAlfCnzZ0MY+2DHl7VWZVU4ScjZYaR/qeWusTAfE1yhWpaOge7IMxqf8GeNeMRzZqZpFs0747t7SzSameUcbp5sCnXOw+gt2/eR1hA1qIFp9yVnFWUAukfO5qChcFSJOv6ellM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhvsm+lc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A7AC4CEEB;
-	Thu, 28 Aug 2025 20:16:23 +0000 (UTC)
+	s=arc-20240116; t=1756413828; c=relaxed/simple;
+	bh=9OG6MHQINNqki86DnbuxmZ50GZWpKYnNnMkT4UtGkNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=eMiVnq7zX+so2xAIYS+VuucxdYiKPtG8eWtBSXrf0SfUrKsSqtPgkK6bi+KE5H1GC7D3NzwXPp0u0I1LOVdH/EjnJk0neCrpD5gaDuyEKU9Rw4m6u9p5Xhx2L5XANdl9MKh1R2hOYqURXyOndDv2R8k2gvbVmfRGpG9Db9M3wr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/+mfYbE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11542C4CEEB;
+	Thu, 28 Aug 2025 20:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756412185;
-	bh=CgBLmyi9jgGUOiv9TCodnN5Hn/4OG3mZltDzTz2ZkBU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fhvsm+lcTt1YfmIC0GR9xSBEK83jAIDPHlw1FVHjoDGKzxVlZT0pemqxIbRa4P4QH
-	 fsnDGSzVIdcYWANZeLn1WWyIKAGsOSzazcK7widCEwPTdt6SHuSiL/2YYrH+zmj6tK
-	 NuudI4e1eLLYCwhcZnpUU59FbqLMEHBfvSwN7ceKs5r6S+MIRgp+oJ0bH6Hdyh9lZ4
-	 cC7mnZ0odHhjxsWSDbjc4U6jTvw++byM3CL5rIMANkBM/hVPd0Yw1BUfOnuMjAfY/w
-	 kuAtxnhvMdUiDDmrBL6hdUEhbvdslfNXzReAcyaKT8Z6W2ZcC+W0u4PvFfa6PllpWW
-	 AiK22kKremk8A==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Christian Loehle <christian.loehle@arm.com>
-Subject: [PATCH v1] cpuidle: governors: teo: Special-case nohz_full CPUs
-Date: Thu, 28 Aug 2025 22:16:20 +0200
-Message-ID: <5939372.DvuYhMxLoT@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <2804546.mvXUDI8C0e@rafael.j.wysocki>
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki>
+	s=k20201202; t=1756413827;
+	bh=9OG6MHQINNqki86DnbuxmZ50GZWpKYnNnMkT4UtGkNk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=F/+mfYbEVKNaMv6wmv9iOLiW6X1tFo55QGDtGAo/s7L8fkAjhOp2QIwupb7y4rMgq
+	 6TzjQBWntE783uyTD60sBXz/ggobniVcOF3mXkV3/gEIG785nvLCIlcndLL16XoWzG
+	 nlborw10PnMiV+k2Z83FJkDCTNfhLud6dIVHpYuzdrVkBDV4crFjmYeIChSbG/SbNx
+	 +00e3SRq4kEIElZ6iOD/MMXsUh9otC0TPeIl9ULrh7g2pSVfc6HbQa803IZC2mG2A+
+	 MAY1mcZ+O0AQXA+WpBfAMfgPVEAAmF+jqoeYmK7PEV72aFeXqsU4ESVHnEI7zIA6Yu
+	 aU0HYjd9TC0MQ==
+Date: Thu, 28 Aug 2025 15:43:45 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: "David E. Box" <david.e.box@linux.intel.com>
+Cc: rafael@kernel.org, bhelgaas@google.com, vicamo.yang@canonical.com,
+	kenny@panix.com, ilpo.jarvinen@linux.intel.com,
+	nirmal.patel@linux.intel.com, mani@kernel.org,
+	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 1/2] PCI/ASPM: Add host-bridge API to override default
+ ASPM/CLKPM link state
+Message-ID: <20250828204345.GA958461@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250825203542.3502368-1-david.e.box@linux.intel.com>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Aug 25, 2025 at 01:35:22PM -0700, David E. Box wrote:
+> Synthetic PCIe hierarchies, such as those created by Intel VMD, are not
+> enumerated by firmware and do not receive BIOS-provided ASPM or CLKPM
+> defaults. Devices in such domains may therefore run without the intended
+> power management.
+> 
+> Add a host-bridge mechanism that lets controller drivers supply their own
+> defaults. A new aspm_default_link_state field in struct pci_host_bridge is
+> set via pci_host_set_default_pcie_link_state(). During link initialization,
+> if this field is non-zero, ASPM and CLKPM defaults come from it instead of
+> BIOS.
+> 
+> This enables drivers like VMD to align link power management with platform
+> expectations and avoids embedding controller-specific quirks in ASPM core
+> logic.
 
-This change follows an analogous modification of the menu governor [1].
+I think this kind of sidesteps the real issue.  Drivers for host
+controllers or PCI devices should tell us about *broken* things, but
+not about things advertised by the hardware and available for use.
 
-Namely, when the governor runs on a nohz_full CPU and there are no user
-space timers in the workload on that CPU, it ends up selecting idle
-states with target residency values above TICK_NSEC, or the deepest
-enabled idle state in the absence of any of those, all the time due to
-a tick_nohz_tick_stopped() check designed for running on CPUs where the
-tick is not permanently disabled.  In that case, the fact that the tick
-has been stopped means that the CPU was expected to be idle sufficiently
-long previously, so it is not unreasonable to expect it to be idle
-sufficiently long again, but this inference does not apply to nohz_full
-CPUs.
+The only documented policy controls I'm aware of for ASPM are:
 
-In some cases, latency in the workload grows undesirably as a result of
-selecting overly deep idle states, and the workload may also consume
-more energy than necessary if the CPU does not spend enough time in the
-selected deep idle state.
+  - FADT "PCIe ASPM Controls" bit ("if set, OS must not enable ASPM
+    control on this platform")
 
-Address this by amending the tick_nohz_tick_stopped() check in question
-with a tick_nohz_full_cpu() one to avoid effectively ignoring all
-shallow idle states on nohz_full CPUs.  While doing so introduces a risk
-of getting stuck in a shallow idle state for a long time, that only
-affects energy efficiently, but the current behavior potentially hurts
-both energy efficiency and performance that is arguably the priority for
-nohz_full CPUs.
+  - _OSC negotiation for control of the PCIe Capability (OS is only
+    allowed to write PCI_EXP_LNKCTL if platform has granted control to
+    the OS)
 
-While at it, add a comment explaining the logic in teo_state_ok().
+I think what we *should* be doing is enabling ASPM when it's
+advertised, subject to those platform policy controls and user choices
+like CONFIG_PCIEASPM_PERFORMANCE/POWERSAVE/etc and sysfs attributes.
 
-Link: https://lore.kernel.org/linux-pm/2244365.irdbgypaU6@rafael.j.wysocki/ [1]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpuidle/governors/teo.c |   18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+So basically I think link->aspm_default should be PCIE_LINK_STATE_ALL
+without drivers doing anything at all.  Maybe we have to carve out
+exceptions, e.g., "VMD hierarchies are exempt from _OSC," or "devices
+on x86 systems before 2026 can't enable more ASPM than BIOS did," or
+whatever.  Is there any baby step we can make in that direction?
 
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -227,9 +227,17 @@
- 	cpu_data->total += PULSE;
- }
- 
--static bool teo_state_ok(int i, struct cpuidle_driver *drv)
-+static bool teo_state_ok(int i, struct cpuidle_driver *drv, struct cpuidle_device *dev)
- {
--	return !tick_nohz_tick_stopped() ||
-+	/*
-+	 * If the scheduler tick has been stopped already, avoid selecting idle
-+	 * states with target residency below the tick period length under the
-+	 * assumption that the CPU is likely to be idle sufficiently long for
-+	 * the tick to be stopped again (or the tick would not have been
-+	 * stopped previously in the first place).  However, do not do that on
-+	 * nohz_full CPUs where the above assumption does not hold.
-+	 */
-+	return !tick_nohz_tick_stopped() || tick_nohz_full_cpu(dev->cpu) ||
- 		drv->states[i].target_residency_ns >= TICK_NSEC;
- }
- 
-@@ -379,7 +387,7 @@
- 				 * shallow or disabled, in which case take the
- 				 * first enabled state that is deep enough.
- 				 */
--				if (teo_state_ok(i, drv) &&
-+				if (teo_state_ok(i, drv, dev) &&
- 				    !dev->states_usage[i].disable) {
- 					idx = i;
- 					break;
-@@ -391,7 +399,7 @@
- 			if (dev->states_usage[i].disable)
- 				continue;
- 
--			if (teo_state_ok(i, drv)) {
-+			if (teo_state_ok(i, drv, dev)) {
- 				/*
- 				 * The current state is deep enough, but still
- 				 * there may be a better one.
-@@ -460,7 +468,7 @@
- 	 */
- 	if (drv->states[idx].target_residency_ns > duration_ns) {
- 		i = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
--		if (teo_state_ok(i, drv))
-+		if (teo_state_ok(i, drv, dev))
- 			idx = i;
- 	}
- 
+This feels a little scary, so feel free to convince me it can't be
+done :)
 
-
-
+> Link: https://patchwork.ozlabs.org/project/linux-pci/patch/20250720190140.2639200-1-david.e.box%40linux.intel.com/
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> Tested-by: Manivannan Sadhasivam <mani@kernel.org>
+> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+> ---
+> Changes in V3:
+>   -- Changed pci_host_get_default_pcie_link_state() argument name from
+>      parent to dev.
+>   -- Applied changelog tags
+> 
+> Changes in V2:
+> 
+>   -- Host field name changed to aspm_default_link_state.
+>   -- Added get/set functions for aspm_default_link_state. Only the
+>      setter is exported. Added a kernel-doc describing usage and
+>      particulars around meaning of 0.
+> 
+> Changes in V1 from RFC:
+> 
+>   -- Rename field to aspm_dflt_link_state since it stores
+>      PCIE_LINK_STATE_XXX flags, not a policy enum.
+>   -- Move the field to struct pci_host_bridge since it's being applied to
+>      the entire host bridge per Mani's suggestion.
+>   -- During testing noticed that clkpm remained disabled and this was
+>      also handled by the formerly used pci_enable_link_state(). Add a
+>      check in pcie_clkpm_cap_init() as well to enable clkpm during init.
+> 
+>  drivers/pci/pcie/aspm.c | 42 +++++++++++++++++++++++++++++++++++++++--
+>  include/linux/pci.h     |  9 +++++++++
+>  2 files changed, 49 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 919a05b97647..851ca3d68e55 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -373,6 +373,39 @@ static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
+>  	pcie_set_clkpm_nocheck(link, enable);
+>  }
+>  
+> +/**
+> + * pci_host_set_default_pcie_link_state - set controller-provided default ASPM/CLKPM mask
+> + * @host: host bridge on which to apply the defaults
+> + * @state: PCIE_LINK_STATE_XXX flags
+> + *
+> + * Allows a PCIe controller driver to specify the default ASPM and/or
+> + * Clock Power Management (CLKPM) link state mask that will be used
+> + * for links under this host bridge during ASPM/CLKPM capability init.
+> + *
+> + * The value is consumed in pcie_aspm_cap_init() and pcie_clkpm_cap_init()
+> + * to override the firmware-discovered defaults.
+> + *
+> + * Interpretation of aspm_default_link_state:
+> + *   - Nonzero: bitmask of PCIE_LINK_STATE_* values to be used as defaults
+> + *   - Zero:    no override provided; ASPM/CLKPM defaults fall back to
+> + *              values discovered in hardware/firmware
+> + *
+> + * Note: zero is always treated as "unset", not as "force ASPM/CLKPM off".
+> + */
+> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
+> +					  unsigned int state)
+> +{
+> +	host->aspm_default_link_state = state;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_host_set_default_pcie_link_state);
+> +
+> +static u32 pci_host_get_default_pcie_link_state(struct pci_dev *dev)
+> +{
+> +	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
+> +
+> +	return host ? host->aspm_default_link_state : 0;
+> +}
+> +
+>  static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
+>  {
+>  	int capable = 1, enabled = 1;
+> @@ -394,7 +427,10 @@ static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
+>  			enabled = 0;
+>  	}
+>  	link->clkpm_enabled = enabled;
+> -	link->clkpm_default = enabled;
+> +	if (pci_host_get_default_pcie_link_state(link->pdev) & PCIE_LINK_STATE_CLKPM)
+> +		link->clkpm_default = 1;
+> +	else
+> +		link->clkpm_default = enabled;
+>  	link->clkpm_capable = capable;
+>  	link->clkpm_disable = blacklist ? 1 : 0;
+>  }
+> @@ -866,7 +902,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
+>  	}
+>  
+>  	/* Save default state */
+> -	link->aspm_default = link->aspm_enabled;
+> +	link->aspm_default = pci_host_get_default_pcie_link_state(parent);
+> +	if (!link->aspm_default)
+> +		link->aspm_default = link->aspm_enabled;
+>  
+>  	/* Setup initial capable state. Will be updated later */
+>  	link->aspm_capable = link->aspm_support;
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 59876de13860..8947cbaf9fa6 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -620,6 +620,10 @@ struct pci_host_bridge {
+>  	unsigned int	size_windows:1;		/* Enable root bus sizing */
+>  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
+>  
+> +#ifdef CONFIG_PCIEASPM
+> +	unsigned int	aspm_default_link_state;	/* Controller-provided default */
+> +#endif
+> +
+>  	/* Resource alignment requirements */
+>  	resource_size_t (*align_resource)(struct pci_dev *dev,
+>  			const struct resource *res,
+> @@ -1849,6 +1853,8 @@ int pci_disable_link_state(struct pci_dev *pdev, int state);
+>  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
+>  int pci_enable_link_state(struct pci_dev *pdev, int state);
+>  int pci_enable_link_state_locked(struct pci_dev *pdev, int state);
+> +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
+> +					  unsigned int state);
+>  void pcie_no_aspm(void);
+>  bool pcie_aspm_support_enabled(void);
+>  bool pcie_aspm_enabled(struct pci_dev *pdev);
+> @@ -1861,6 +1867,9 @@ static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
+>  { return 0; }
+>  static inline int pci_enable_link_state_locked(struct pci_dev *pdev, int state)
+>  { return 0; }
+> +static inline void
+> +pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
+> +				     unsigned int state) { }
+>  static inline void pcie_no_aspm(void) { }
+>  static inline bool pcie_aspm_support_enabled(void) { return false; }
+>  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return false; }
+> 
+> base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+> -- 
+> 2.43.0
+> 
 
