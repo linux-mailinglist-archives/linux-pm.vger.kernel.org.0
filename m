@@ -1,96 +1,72 @@
-Return-Path: <linux-pm+bounces-33256-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33257-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2D7B39D88
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 14:41:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC771B39D8B
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 14:42:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 521C51C8261A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 12:41:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A18DB1C82A5E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 12:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA103101A6;
-	Thu, 28 Aug 2025 12:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IMFoCJHh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7C730FF20;
+	Thu, 28 Aug 2025 12:41:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268A130FC01;
-	Thu, 28 Aug 2025 12:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDF5230FC3E;
+	Thu, 28 Aug 2025 12:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756384856; cv=none; b=AP3+niykbkzYGCkb8fXhieQadRUDsanBz2+Yy3dHekz4UlrTcsWwZcbKadCg69Tpl8YezJV1zvtAKxD74qwUA08SUZVQ0nFI3U5EXzchr1HWgHx9wgLAB+NgAHJmXoHJDu+0pMG2OFJ5mcOFtar5miraEIRhwieXfSeqkFtx5a8=
+	t=1756384888; cv=none; b=l9sA/vZBoSDW2mwWZ1wzMe9+LtcZkDItcR0vofrXGgae76DeWknmG2EXkzmRSRJ9UId5mfVwoyaISG9P+z9vi5NQbbe3w/yRLC9mwLvPKlkESd+svu03ATe9li7Df9GZbE/hjhbiPV0vBvslOo09SlYTTqoV+58z0a2RPon/hZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756384856; c=relaxed/simple;
-	bh=SYKjW1CPF3qauGasMR5vakecTnZSMkkKlxT4QBDF9ao=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RhOmpBLLydwu1Q62jgiyCvjaLKdzyB4+f3oLdWQkqNyULp1wB3bCbMDZYXF/1JRAKCJvaotP9KWwPBFq1z+mpsVkA30UkWLyoos0DpHur81vkhjZFDb1iYWnWv5DaMS8eG17fYKVK2apFUPhd6ze04aSBtKcpYv0khYFWVW3/Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IMFoCJHh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5ABC4CEF5;
-	Thu, 28 Aug 2025 12:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756384855;
-	bh=SYKjW1CPF3qauGasMR5vakecTnZSMkkKlxT4QBDF9ao=;
-	h=From:To:Cc:Subject:Date:From;
-	b=IMFoCJHhkcMKdGmApJu381uY8Wuet4Ba9V6Tvvnv0lXIRIcXO9JumVykISh+fyRYN
-	 JZ4eWoL1bu7FVjBaT/9waQLzv+yh2bmsmDuSd9VGLOnsgPb9IK1quX5qLPoQFsKrbR
-	 yko4BTIfuPEPzMroqiyn+bcvOWwVJy+ANTdzWpToronW4aalBiqAdJqjTRpdZe0Clq
-	 dNm7HHZ5XOaiDtL1A3ld+Z5Rw52Bd9s2yIFO/sLVSC4U8BNMdJ6pKJOqJR2aYtqPzm
-	 aMBQ0v+lfRqehJovy+JGyRwk4PZIdFqJ7UcAWiwmbsAV7rlIScAnBxqGLbMtz1fEUH
-	 3o8KPZCqoDzYg==
-From: Michael Walle <mwalle@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Michael Walle <mwalle@kernel.org>
-Subject: [PATCH] thermal: k3_j72xx_bandgap: register sensors with hwmon
-Date: Thu, 28 Aug 2025 14:40:42 +0200
-Message-Id: <20250828124042.1680853-1-mwalle@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1756384888; c=relaxed/simple;
+	bh=6LrRtbDFIk/4ICXmFP0WE/tozasOy7Bi4Th6Zu//z/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XSQ5Afsz9m1Z1q1l2BYOUrpCs8nKM5Xo5aC69zDXirNKA7rIWZiWECD9u9ok6kLNOx7GukBKlDoSBW7jlHiTHm7yECvYAwRQ/dRPLAlr8rvDi+f7p1DVa2snUoRWRIxtq1hvDDxR+nhKMTMwUCTzMGKPx9e1B/5rw+2S7Mz0Yqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 722A81688;
+	Thu, 28 Aug 2025 05:41:17 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7ACD3F694;
+	Thu, 28 Aug 2025 05:41:24 -0700 (PDT)
+Date: Thu, 28 Aug 2025 13:41:21 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Subject: Re: [PATCH v1 0/2] driver core/PM: Two updates related to power.no_pm
+Message-ID: <20250828-nebulous-python-of-prowess-b4b02d@sudeepholla>
+References: <12749467.O9o76ZdvQC@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12749467.O9o76ZdvQC@rafael.j.wysocki>
 
-Make the sensors available in the hwmon subsystem (if
-CONFIG_THERMAL_HWMON is enabled).
+On Thu, Aug 28, 2025 at 12:55:50PM +0200, Rafael J. Wysocki wrote:
+> Hi All,
+> 
+> Applying this series will cause power.no_pm to be set for faux devices (so they
+> don't get processed unnecessarily during system-wide suspend/resume transitions)
+> and power.no_callbacks to be set along with power.no_pm (for consistency).
+> 
 
-Signed-off-by: Michael Walle <mwalle@kernel.org>
----
- drivers/thermal/k3_j72xx_bandgap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Nice, even I hadn't noticed about these before. The changes looks good
+to me.
 
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index a36289e61315..d9ec3bf19496 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -20,6 +20,8 @@
- #include <linux/delay.h>
- #include <linux/slab.h>
- 
-+#include "thermal_hwmon.h"
-+
- #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
- #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
- #define K3_VTM_TMPSENS0_CTRL_OFFSET		0x300
-@@ -513,6 +515,8 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 			ret = PTR_ERR(ti_thermal);
- 			goto err_free_ref_table;
- 		}
-+
-+		devm_thermal_add_hwmon_sysfs(bgp->dev, ti_thermal);
- 	}
- 
- 	platform_set_drvdata(pdev, bgp);
--- 
-2.39.5
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
+--
+Regards,
+Sudeep
 
