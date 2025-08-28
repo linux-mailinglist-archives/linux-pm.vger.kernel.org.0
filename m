@@ -1,112 +1,74 @@
-Return-Path: <linux-pm+bounces-33248-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33249-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D4A9B39AED
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 13:04:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 628A2B39B02
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 13:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B4DE1C26BD7
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 11:03:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A6F51885E6C
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 11:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557B430E0C8;
-	Thu, 28 Aug 2025 11:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7469330C61B;
+	Thu, 28 Aug 2025 11:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJVbwR9E"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="x9GfOVyw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AC430DD11;
-	Thu, 28 Aug 2025 11:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C141F4CAF;
+	Thu, 28 Aug 2025 11:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756378999; cv=none; b=uzlujb5HQ5FUxESW5Jm3IQEW6Ofl4sOOuvw4pZdNZeCe57i20PsCTjuwOMuVq9GEdpy19EyoFipqe5N51/MrKk5z5doWzXh1Nkc2dtnQuLPrvRszk40MudHmswZIkZ5v0T1mC3O76Z4EQzFQaJpCG7MzfbY+6HkjsOqS8LyISYQ=
+	t=1756379235; cv=none; b=U/AzuM8eaDXzZwE9e7Pg5SV2RF2X9itSw1/Yt9BWd3tlyI4G7aDvoC9b0Mzs74aBFo1GElu5Pgq4gUeXRj83skwBhO2i2w11kelh3bAvFqt35tewebq9Y5Ca+pJzjHkecKNt3tvj2Zju5fKbWOlDklfeU3U2C/qDCTpFPLPz9zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756378999; c=relaxed/simple;
-	bh=pjzAij7OpPaAmTNVqtQzbQpcumXq8d1CkhrUy4uidvo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QkaYCquSMIW6/Y0YJbJuaLcNZjUeeZHNbm9CykDJBmsyTDktCfY65U9CqwQn/jnY7UHFUKdyvMoTnNvH3u92uc2kHNvlLCQYymcvNDrTmWo876lRe3/xbkN4gAJ6zmwVBsqpfpaie96+RMceTBnnc5Bf9HzZ9J+/qW8nNYagoso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJVbwR9E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07FD0C4CEF6;
-	Thu, 28 Aug 2025 11:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756378998;
-	bh=pjzAij7OpPaAmTNVqtQzbQpcumXq8d1CkhrUy4uidvo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=iJVbwR9Ey1vPlkNXduKN6HwFO8hqpA39J8h7gOCQX34bfvbjY1IXJU3fzrOxt5ziw
-	 QQ2pIEY3VzMcpcUtH6YoQMqRNIz+83+sWXN4L1tUjuj8YOwUMsC0TUJEOaJtrZEKaB
-	 atOtmQ59xeHFS5OCJdfaB/PGydTHHdLZXQv/nvxnh4xKiYhwVtllS1rCKjWoggX/SW
-	 no2IbAY6HdTfRhaeOizQS+hW2r7UYD/J6akhL6buCNrxtl51EcfntjWy3COHgmE3/2
-	 Q7sWAQxDB1JYRrW77fzV8uCy3b3vgXz5r1XOx9SOSd0cYj5AKc9V4ZRiH8DyHS+wm8
-	 SlEbbF4CHV2+Q==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Armin Wolf <w_armin@gmx.de>
-Subject:
- [PATCH v1] ACPI: fan: Fold two simple functions into their only caller
-Date: Thu, 28 Aug 2025 13:03:13 +0200
-Message-ID: <3386797.aeNJFYEL58@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	s=arc-20240116; t=1756379235; c=relaxed/simple;
+	bh=Azv4ohzdARRa6uGnEwoC67fTOgWZYWIdsIJ0un0crY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lfaTfLRaYvm4azL2GB4iL6wQtbiMcbIe3kzmnX6Nkg+okkIzew/9qXISzzSEv6UaF1cTr1Ewc47RhKyPvCSigccsPk3qsgB1mJsegHTGsqr0IGmfNNQl+ohj/X9Mncn9Dp2OrxOv69Raw67CDOIVsp5TtJDwEwBZ8LMhE0X0Hsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=x9GfOVyw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D4FC4CEEB;
+	Thu, 28 Aug 2025 11:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1756379234;
+	bh=Azv4ohzdARRa6uGnEwoC67fTOgWZYWIdsIJ0un0crY8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=x9GfOVywmxB9/ON3yP/7Nwe8fxbQ4c8L9ew5jaUjqwOKsnn3qfPjrSdEByU5MrLDh
+	 VmlLpLj87G5QnToxvmV4odDEiqtD1tiDCclortx+iYZ+TuMgcr9hQQTum3Xefcwvpv
+	 CU1DQYGUlQp2g/HPF35LEqdLnEIZ4s9m6btIHYCY=
+Date: Thu, 28 Aug 2025 13:07:11 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Danilo Krummrich <dakr@kernel.org>
+Subject: Re: [PATCH v1 0/2] driver core/PM: Two updates related to power.no_pm
+Message-ID: <2025082851-progress-unsliced-ade4@gregkh>
+References: <12749467.O9o76ZdvQC@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12749467.O9o76ZdvQC@rafael.j.wysocki>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Aug 28, 2025 at 12:55:50PM +0200, Rafael J. Wysocki wrote:
+> Hi All,
+> 
+> Applying this series will cause power.no_pm to be set for faux devices (so they
+> don't get processed unnecessarily during system-wide suspend/resume transitions)
+> and power.no_callbacks to be set along with power.no_pm (for consistency).
 
-Both acpi_fan_has_fst() and acpi_fan_is_acpi4() are called from one
-place only, so fold them both into there caller which yields slightly
-leaner code that is somewhat easier to follow.
+Oh, nice!  I forgot about that entirely.  Should these be backported to
+older kernels as well?
 
-No intentional functional impact.
+thanks,
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/fan_core.c |   18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
-
---- a/drivers/acpi/fan_core.c
-+++ b/drivers/acpi/fan_core.c
-@@ -203,18 +203,6 @@
-  * --------------------------------------------------------------------------
- */
- 
--static bool acpi_fan_has_fst(struct acpi_device *device)
--{
--	return acpi_has_method(device->handle, "_FST");
--}
--
--static bool acpi_fan_is_acpi4(struct acpi_device *device)
--{
--	return acpi_has_method(device->handle, "_FIF") &&
--	       acpi_has_method(device->handle, "_FPS") &&
--	       acpi_has_method(device->handle, "_FSL");
--}
--
- static int acpi_fan_get_fif(struct acpi_device *device)
- {
- 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-@@ -331,9 +319,11 @@
- 	device->driver_data = fan;
- 	platform_set_drvdata(pdev, fan);
- 
--	if (acpi_fan_has_fst(device)) {
-+	if (acpi_has_method(device->handle, "_FST")) {
- 		fan->has_fst = true;
--		fan->acpi4 = acpi_fan_is_acpi4(device);
-+		fan->acpi4 = acpi_has_method(device->handle, "_FIF") &&
-+				acpi_has_method(device->handle, "_FPS") &&
-+				acpi_has_method(device->handle, "_FSL");
- 	}
- 
- 	if (fan->acpi4) {
-
-
-
+greg k-h
 
