@@ -1,156 +1,219 @@
-Return-Path: <linux-pm+bounces-33318-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33319-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B51F8B3A715
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 18:57:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE538B3A781
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 19:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81C365631C9
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 16:57:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 800505E248F
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 17:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C4B32C33A;
-	Thu, 28 Aug 2025 16:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E266E33EB01;
+	Thu, 28 Aug 2025 17:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BM+XGxY/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EJzdxybn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB1932A3E0;
-	Thu, 28 Aug 2025 16:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A061D33EB10
+	for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 17:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756400246; cv=none; b=nTVjcfz/Rhbw/X9mnsbeZ6wSB4OkKoTCRcaQ7dMdA8JPVnAG8CDP8hlV5W7Rz4I/RoWg3jsu4+qpDv6gN8Tl7CBD8DtklByJVcP5YeKhBj4CBLky9S/kezGp+o2VsMBHs7e9aCoSiPl+C6Br/O6h3amvEqzK0p+8Mant9TRg1WE=
+	t=1756401321; cv=none; b=IobPqaZqHgtcAm0a02kMkIV2sWbHtxesTiSddvPm/njxwDpOxQKMMsqo3tnNqAXlVMAgOdFwxt1h3gfjZP0DcnZlUA63B9GFQ/EmNDGAxt9V5CcKCDQWirp8rSUQ7q/HT+aqBw6s4RtPkqBOFXOqYcQl31WaKz0KgF2tQDQRG2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756400246; c=relaxed/simple;
-	bh=7Bo46Qm6sbQrAz42iMDQTa+uTCurRIDADfSAfnNE0z8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P4dnUUVX6MN64DYjBYFSKiEZM72THjcZro0m3hBDvxAHo0GP6cAo1MT7TVhslvXY3Objh0FtgHPNMTvQLsF3E75XGgd4dQOE5Vi1IpkAA8UG/eCzgPovo/1Kw+L4L/bvjukb0LrnWZMkfgLZLcqtEbKzTF0MjpKXAQBuEAdOOi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BM+XGxY/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E5FA6C4CEF6;
-	Thu, 28 Aug 2025 16:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756400246;
-	bh=7Bo46Qm6sbQrAz42iMDQTa+uTCurRIDADfSAfnNE0z8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=BM+XGxY/JUExkVDKbOPNKYrLVcEwUI6JG/RXd4ZAgkqQKywCdbUSnH6S78CKxRuW0
-	 1sXOoAFeXpGrzAZVkvJmb/fFRPWj5HtkEA1mh3MKH6S23Cfx5RsqmSN0KOzci0KjE3
-	 94CLwmb7AhM3XOCiMR4R/8pYyKVw+uxrBYEOiIQvmJIzS7wyzHwbzez+dz/qn2VlFG
-	 tX5WHj4FRxKZkTXniP31H7odnFlexSwS6aGdvuJQ+ArZhGkiw0ZTV8V9Tutd4ytwue
-	 4PsU/XoeVSXQKh+Ek169ZQnr+9AECUC/sJdrTG7i0iMYbGaj1UvZ9fkZ7uMyH0V5If
-	 l0zflSBMddRKg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5FDBC8303F;
-	Thu, 28 Aug 2025 16:57:25 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Thu, 28 Aug 2025 11:57:21 -0500
-Subject: [PATCH v2 2/2] cpufreq: tegra186: Initialize all cores to max
- frequencies
+	s=arc-20240116; t=1756401321; c=relaxed/simple;
+	bh=tjLq4yotJVvrKtVjK5XLYb7jE1fQQx1FF/sxrbky9es=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=BP6BiVXVlINbZdUjizqIR2C2mk/pirZJYbQpewDDr8WtLvSOoEmVF2qf0MG8BFPqjM0nqDhvHXXZplCK+Hm6X7Hyjup9xY/8IbLOW8AoRQx2CUQraxnSdTM+jZs363hyFQeHF+ciFjj23RTKW/f7wxRHp4A9AzhCdjMB0uwi0xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EJzdxybn; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-325e31cecd6so1072055a91.3
+        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 10:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756401319; x=1757006119; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g/D1R1ws5ojuN4WG3pCUGyU24UMqyGj6lojr+YSYQ0c=;
+        b=EJzdxybnyxlQrk6qJR558wtNekNbgws953L2pneIZYbmyp9tAmsnaz2aSuhIUBM5zr
+         yym6Q3hOD+h86ma+8fB5UYxWC0FsSh8WsgByN6NGuhj5XPnYnWvTGq97mGOESOdqxB8M
+         UO5/YFoyUcXdWdRme2wq/ulZFp8KXOMX/N5wcNQCirgFPfS9pE37lzw+nKFk5IrmnDbO
+         G5sw2Dwq2cicHF4lperkYSyAoX2g6OycdnZ1FjYe/p8IEgXy13BJvrhiJGJwM3VA8ugT
+         uPqiFjyVbr8N6oCUmphfD2rJa6OFoETW3Ncm5ZacDEJ+l20U+VrrmUTHcEPjkrroNkNZ
+         4tIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756401319; x=1757006119;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=g/D1R1ws5ojuN4WG3pCUGyU24UMqyGj6lojr+YSYQ0c=;
+        b=e0tQGcGku5AuLBpPLb88ELhIJSAKRIAirtVOI91pqokDVQ6MDxVu1keuaZEZzoouwE
+         NJ83p3mS6iUeUwQ3TiT1AGaSUfie87hqg/Pf43H6plpCcJ4gwh/53g+XRm4Td9Qi7E7h
+         WariRqR2X/Dxfa6ZwDLJs7TxMuacI4m3IDdgofdAn8wVd7E2wLMboeE187GRrnGKIIlE
+         Lau0fbLkGbNrYgC0lC6oO8DKaDDGp2Wv7VVjvTbCgWQoT1+5E46Z+BATl9KU4e2+hgI9
+         HnCCV2L4d368nwuvCIQAyyrZ8rWJFQxE7UL4Q8z0VNK2e3T6LxA0N1UMhXcqIpVjvFT7
+         /nrg==
+X-Forwarded-Encrypted: i=1; AJvYcCX5IDaqKln0BLn5S37+MY0ht0e+wHexFe4o3PNM3ThY6tY9I1hWT9awhIWwwis9upKUcJH8KQNFtA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO/57GYAjeGOKnI2cXlmWZ+bltFVG+Cgx3HJdFdj4DHImwQoGk
+	qD0oXuVFSZvuJUjdDXB884tgKy+Zk4JAWIkSN9lajeKfEXdeE2v+n/1MXH6ffukEtbW2rW/BswE
+	k26reBQ==
+X-Google-Smtp-Source: AGHT+IEgfCMAj/kPGbx0Dj2C82B+XByTzBEnlSaJgGQHGzaozLp7T19v0PG28aEIfyLg5E6WkydfWYNcBOM=
+X-Received: from pjhk31.prod.google.com ([2002:a17:90a:4ca2:b0:327:9b90:7a79])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1dc3:b0:327:cec7:b8c6
+ with SMTP id 98e67ed59e1d1-327cec7cb53mr1738031a91.32.1756401318775; Thu, 28
+ Aug 2025 10:15:18 -0700 (PDT)
+Date: Thu, 28 Aug 2025 10:15:17 -0700
+In-Reply-To: <874d821e-8ea3-40ac-921b-c19bb380a456@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20250827023202.10310-1-zhangzihuan@kylinos.cn>
+ <20250827023202.10310-3-zhangzihuan@kylinos.cn> <aK8Sd30K64mbN1Nt@google.com> <874d821e-8ea3-40ac-921b-c19bb380a456@kylinos.cn>
+Message-ID: <aLCOpfNkcQN9P-Wa@google.com>
+Subject: Re: [PATCH v2 02/18] KVM: x86: Use __free(put_cpufreq_policy) for
+ policy reference
+From: Sean Christopherson <seanjc@google.com>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J . wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Markus Mayer <mmayer@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	zhenglifeng <zhenglifeng1@huawei.com>, "H . Peter Anvin" <hpa@zytor.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Len Brown <lenb@kernel.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
+	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, x86@kernel.org, 
+	kvm@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	imx@lists.linux.dev, linux-omap@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-tegra186-cpufreq-fixes-v2-2-fcffe4de1e15@gmail.com>
-References: <20250828-tegra186-cpufreq-fixes-v2-0-fcffe4de1e15@gmail.com>
-In-Reply-To: <20250828-tegra186-cpufreq-fixes-v2-0-fcffe4de1e15@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Aaron Kling <luceoscutum@gmail.com>, 
- Sumit Gupta <sumitg@nvidia.com>
-Cc: Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org, 
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>, 
- Mikko Perttunen <mperttunen@nvidia.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756400245; l=2602;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=6Wg/olsymhL3iTHVB65L4Tbz1bDTYeRv7QGuafdu3Ts=;
- b=cq59RVWvKCRsrVWPAoipifGivNEQpYMiPpNPJwrGMvU6ees48p4XzTffroZGdxWFZ0wcMrpcf
- K44ysojMCmuDXNrptjVXxKpI1NnZs9dtspMu+0VxTAAHVwdAmETTsay
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+Content-Transfer-Encoding: quoted-printable
 
-From: Aaron Kling <webgeek1234@gmail.com>
+On Thu, Aug 28, 2025, Zihuan Zhang wrote:
+> > Hmm, this is technically buggy.  __free() won't invoke put_cpufreq_poli=
+cy() until
+> > policy goes out of scope, and so using __free() means the code is effec=
+tively:
+> >=20
+> > 		if (IS_ENABLED(CONFIG_CPU_FREQ)) {
+> > 			struct cpufreq_policy *policy;
+> > 			int cpu;
+> >=20
+> > 			cpu =3D get_cpu();
+> > 			policy =3D cpufreq_cpu_get(cpu);
+> > 			if (policy && policy->cpuinfo.max_freq)
+> > 				max_tsc_khz =3D policy->cpuinfo.max_freq;
+> > 			put_cpu();
+> >=20
+> > 			if (policy)
+> > 				cpufreq_cpu_put(policy);
+> > 		}
 
-During initialization, the EDVD_COREx_VOLT_FREQ registers for some cores
-are still at reset values and not reflecting the actual frequency. This
-causes get calls to fail. Set all cores to their respective max
-frequency during probe to initialize the registers to working values.
+...
 
-Suggested-by: Mikko Perttunen <mperttunen@nvidia.com>
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- drivers/cpufreq/tegra186-cpufreq.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+> Yes, this will indeed change the execution order.
+> Can you accept that?=20
 
-diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
-index 6c394b429b6182faffabf222e5af501393dbbba9..3cd42db955c1c705f9774879e34b71ae124e86d2 100644
---- a/drivers/cpufreq/tegra186-cpufreq.c
-+++ b/drivers/cpufreq/tegra186-cpufreq.c
-@@ -138,7 +138,8 @@ static struct cpufreq_driver tegra186_cpufreq_driver = {
- 
- static struct cpufreq_frequency_table *init_vhint_table(
- 	struct platform_device *pdev, struct tegra_bpmp *bpmp,
--	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id)
-+	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id,
-+	int *max_rate)
- {
- 	struct cpufreq_frequency_table *table;
- 	struct mrq_cpu_vhint_request req;
-@@ -218,6 +219,7 @@ static struct cpufreq_frequency_table *init_vhint_table(
- 	}
- 
- 	table[j].frequency = CPUFREQ_TABLE_END;
-+	*max_rate = num_rates - 1;
- 
- free:
- 	dma_free_coherent(bpmp->dev, sizeof(*data), virt, phys);
-@@ -229,7 +231,9 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
- {
- 	struct tegra186_cpufreq_data *data;
- 	struct tegra_bpmp *bpmp;
--	unsigned int i = 0, err;
-+	unsigned int i = 0, err, edvd_offset;
-+	int max_rate = 0;
-+	u32 edvd_val, cpu;
- 
- 	data = devm_kzalloc(&pdev->dev,
- 			    struct_size(data, clusters, TEGRA186_NUM_CLUSTERS),
-@@ -252,11 +256,19 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
- 	for (i = 0; i < TEGRA186_NUM_CLUSTERS; i++) {
- 		struct tegra186_cpufreq_cluster *cluster = &data->clusters[i];
- 
--		cluster->table = init_vhint_table(pdev, bpmp, cluster, i);
-+		cluster->table = init_vhint_table(pdev, bpmp, cluster, i, &max_rate);
- 		if (IS_ERR(cluster->table)) {
- 			err = PTR_ERR(cluster->table);
- 			goto put_bpmp;
- 		}
-+
-+		for (cpu = 0; cpu < ARRAY_SIZE(tegra186_cpus); cpu++) {
-+			if (data->cpus[cpu].bpmp_cluster_id == i) {
-+				edvd_val = cluster->table[max_rate].driver_data;
-+				edvd_offset = data->cpus[cpu].edvd_offset;
-+				writel(edvd_val, data->regs + edvd_offset);
-+			}
-+		}
- 	}
- 
- 	tegra186_cpufreq_driver.driver_data = data;
+No, because it's buggy.
 
--- 
-2.50.1
+> Personally, I don=E2=80=99t think it=E2=80=99s ideal either.
+>=20
+> 		if (IS_ENABLED(CONFIG_CPU_FREQ)) {
+>  			int cpu;
+> 			cpu =3D get_cpu();
+> 			{
+> 				struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpufreq_=
+cpu_get(cpu);
+> 				if (policy && policy->cpuinfo.max_freq)
+> 					max_tsc_khz =3D policy->cpuinfo.max_freq;
+> 			}
+> 			put_cpu();
+>=20
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 }
+>=20
+> Other places may also have the same issue,
+>=20
+> maybe we should consider introducing a macro to handle this properly,
+> so that initialization and cleanup are well defined without changing
+> the existing order unexpected.
+>=20
+> like this:
+>=20
+> #define WITH_CPUFREQ_POLICY(cpu) {\
+>=20
+> for(struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D  \
+> 			cpufreq_cpu_get(cpu);			\
+> 			policy;)
+>=20
+> Then Use it:
+>=20
+> 		if (IS_ENABLED(CONFIG_CPU_FREQ)) {
+>  			int cpu;
+> 			cpu =3D get_cpu();
+> 			WITH_CPUFREQ_POLICY(cpu){
+> 				if (policy->cpuinfo.max_freq)
+> 					max_tsc_khz =3D policy->cpuinfo.max_freq;
+> 			}
+> 			put_cpu();
 
+This all feels very forced, in the sense that we have a shiny new tool and =
+are
+trying to use it everywhere without thinking critically about whether or no=
+t
+doing so is actually an improvement.
 
+At a glance, this is literally the only instance in the entire kernel where=
+ the
+CPU to use is grabbed immediately before the policy.
+=20
+  $ git grep -B 20 cpufreq_cpu_get | grep -e get_cpu -e smp_processor_id
+  arch/x86/kvm/x86.c-			cpu =3D get_cpu();
+  drivers/cpufreq/cppc_cpufreq.c-static int cppc_get_cpu_power(struct devic=
+e *cpu_dev,
+  drivers/cpufreq/cppc_cpufreq.c-static int cppc_get_cpu_cost(struct device=
+ *cpu_dev, unsigned long KHz,
+  drivers/cpufreq/mediatek-cpufreq-hw.c-mtk_cpufreq_get_cpu_power(struct de=
+vice *cpu_dev, unsigned long *uW,
+
+Probably because KVM's usage is rather bizarre and honestly kind of dumb.  =
+But
+KVM has had this behavior for 15+ years, so as weird as it is, I'm not incl=
+ined
+to change it without a really, really strong reason to do so, e.g. to itera=
+te
+over all CPUs or something.
+
+So given that this is the only intance of the problem patter, I think it ma=
+kes
+sense to leave KVM as-is, and not spend a bunch of time trying to figure ou=
+t how
+to make KVM's usage play nice with __free().
 
