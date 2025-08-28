@@ -1,150 +1,86 @@
-Return-Path: <linux-pm+bounces-33323-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33324-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EE53B3A9D9
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 20:20:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D03A5B3A9EA
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 20:24:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36A26580E71
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 18:20:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DA757B53FD
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 18:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A244B27144E;
-	Thu, 28 Aug 2025 18:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87BD270576;
+	Thu, 28 Aug 2025 18:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="De1l45m/"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="S7qHI2te"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7080D261B71;
-	Thu, 28 Aug 2025 18:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E726A26F2AA;
+	Thu, 28 Aug 2025 18:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756405242; cv=none; b=j1oqGMGkZ1p4Wsz4A5xz8nVCo9F16Yh4fkMfenzJUl6EKUHORYIE4lBHHqGYH11CRGSTAIFidHkYyBBGjGAtzX0r47j5RhWBvYarn5bbiitGFLjqLu1oFZCPXnVQRWOxBknG6MB5oehJ9/55tlunX8Bpj5P+fEkQEvTaPPQ9vTw=
+	t=1756405476; cv=none; b=m/lJaqvvJL4UT9SkCnCuBKP7GTdTZjDpfJQGJ/qSOzGOBgg4kURW3q+3LJwsLnezsdFUhJgbFKGTIn0KjAxD+uUGS9PGkSzkfiAX48pqqKJB3Y1n1aXpf6VMHY2wTaUAz/yVX5SusVUbGlEy8XMDCzJAbi8DgdkPO+rSAAtUGak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756405242; c=relaxed/simple;
-	bh=iz9VV1gAzMPnQ0XpoI9gTK9UiHAtuUmqKjOZ0ybeOYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sMDEBvFQFRlneTJc32reYXF0IyRwYK482xGhB9NDquZeD/KJoL4OHkotg4njbEg2K3pbj75Ns1rgGKrcY6LIG8du33L1KANaBDUgQpSAOch50SQ3kt4gAVtvwd+MK0QUZ0Qlgnz4l7FI9fm/EQqrk7kKsRgPYY7+EczA4oKc38c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=De1l45m/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9D4C4CEEB;
-	Thu, 28 Aug 2025 18:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756405241;
-	bh=iz9VV1gAzMPnQ0XpoI9gTK9UiHAtuUmqKjOZ0ybeOYM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=De1l45m/5M7KVIcp9kBmKtk6XcrnGIsciFRyfrVtt9usB/CG4G8oaVGHFNaLxjWLj
-	 tipblpCW2/KQZOEAKfJcG48KKypRPosjCFzswoKMAe6OL08PeM/W8oJj7mwmbMMd0e
-	 8/ihqW/fsspt1Ksv2+H7mCZTdE75kLxDoLtmWfaFDHPcFAAyC4gwCp6/wXR6WhBymU
-	 XFjUFYBJeVk0RfOShMZAJZ8e8wBnnj768+hmCTWSRbM5/rAwb/lKDy5vnTKTOD3zGq
-	 VU08WzRikoi9Z5wsIRN8vuXhdthQ1WOE8FpXDB34tX2uQsgubHWC8hG2hr/Eh66g7R
-	 Swq/oiE4a3ldA==
-Message-ID: <6e036d6a-f2d1-43d6-bb35-54467edd7ec9@kernel.org>
-Date: Thu, 28 Aug 2025 20:20:36 +0200
+	s=arc-20240116; t=1756405476; c=relaxed/simple;
+	bh=BVWDKl/Txzg+8cWcQfv6ZmaGlIRf9Zu4/imEGCNcqOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Tylqn9QSep/EZCf+eOropzjsvfPuDXDuQFLlSUIXJoVXo0+/zajggGasRVBVG6LceVDs35hFNFHWlu0GUIfIksCy3ube0jxtSwu2ihS341E1uGAPWSsyddzbGgfxbxiqP7DnhmeEFu1Dxduoxwq1Ej4p9sIPXUxMceNgAKpJzXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=S7qHI2te; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=bwUo0fKp9KHZFc4bG4aZ9xW+sQsK/q/ntwGNTng5Tbg=; b=S7qHI2teJrClJfLOvmxKpLyWiq
+	BC7XAsDpBy37dLqava6RktRieoWxQx/IgDMt2cVrhBJ5CT1HMMnjF5i3OUP2w/XmULaObwBZgSF+t
+	Eb4SCaO0xQsItXr/cmBDgpAXUKvluSNn0VXEz2GvlCtreHUgfGvJz0Ps+TPe+6WCsjA3LAivCM2bb
+	zLhVyPBxgV5Lm1PO1cLfgAE5gamJocp+1V7eMcuiajYIv6Y/NIOqTsWtNjPzelEHjzjX3ax+A9f7q
+	UTxBToG5RzqEClxUAzwKTKu731Q43SQuc5sL2G1DpUdz88m5TxMAnaLlFH410pbQJCfKTKC4FaOZ8
+	nPZq/Acw==;
+Date: Thu, 28 Aug 2025 20:24:21 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Jerry Lv <Jerry.Lv@axis.com>, Pali
+ =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+ stable@vger.kernel.org, kernel@pyra-handheld.com
+Subject: Re: [PATCH v2 0/2] power: supply: bq27xxx: bug fixes
+Message-ID: <20250828202421.57bbbd2c@akair>
+In-Reply-To: <cover.1755945297.git.hns@goldelico.com>
+References: <cover.1755945297.git.hns@goldelico.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
- enable QoS on sa8775p
-To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20250808140300.14784-1-odelu.kukatla@oss.qualcomm.com>
- <20250808140300.14784-2-odelu.kukatla@oss.qualcomm.com>
- <90b51e31-3217-4483-bb5b-ec328665a723@kernel.org>
- <28b97952-1b67-411f-a7fb-ddd558739839@oss.qualcomm.com>
- <ac83c453-c24d-4c4d-83bc-9ed13f2f9d1e@kernel.org>
- <7d3e5cf7-4167-4005-ba4b-c1915c254705@oss.qualcomm.com>
- <00f50d92-e4ea-4805-b771-147fa5f5ebe4@kernel.org>
- <249f8109-31b1-4cb8-a5a4-b30c27b2e987@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <249f8109-31b1-4cb8-a5a4-b30c27b2e987@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 28/08/2025 20:16, Odelu Kukatla wrote:
+Am Sat, 23 Aug 2025 12:34:55 +0200
+schrieb "H. Nikolaus Schaller" <hns@goldelico.com>:
+
+> PATCH V2 2025-08-23 12:33:18:
+> Changes:
+> * improved commit description of main fix
+> * new patch: adds a restriction of historical no-battery-detection logic to the bq27000 chip
 > 
->>> QoS configuration is essential for managing latency and bandwidth across
->>> subsystems such as CPU, GPU, and multimedia engines. Without it, the
->>> system may experience performance degradation, especially under
->>
->> So how was it working for the last 2 years?
->>
-> The system may function normally without this feature. However, enabling
+> PATCH V1 2025-07-21 14:46:09:
+> 
+> 
+> H. Nikolaus Schaller (2):
+>   power: supply: bq27xxx: fix error return in case of no bq27000 hdq
+>     battery
+>   power: supply: bq27xxx: restrict no-battery detection to bq27000
+> 
+hmm, is the order correct? To me to be bisectable, should it be turned
+around? Maybe Sebastian just can do that while picking it.
 
-
-Huh? So you agree but keep continuing the discussion?
-
-I don't understand what we are discussing in such case, but just to
-close the topic from my side and be explicit: based on above you cannot
-break the ABI.
-
-
-> QoS helps optimize latency and bandwidth across subsystems like CPU,
-> GPU, and multimedia engines, which becomes important in high-throughput
-> scenarios.
-
-No one discussed that.
-
-
-Best regards,
-Krzysztof
+Regards,
+Andreas 
 
