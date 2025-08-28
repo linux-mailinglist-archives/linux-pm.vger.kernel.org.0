@@ -1,111 +1,179 @@
-Return-Path: <linux-pm+bounces-33220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FE55B393C6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 08:31:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EFD6B39539
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 09:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75D2F1BA248E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 06:31:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25845202C4B
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 07:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B8B277C86;
-	Thu, 28 Aug 2025 06:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TeGi1TJZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFE529ACDD;
+	Thu, 28 Aug 2025 07:33:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C9924A046
-	for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 06:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2413F9D6;
+	Thu, 28 Aug 2025 07:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756362690; cv=none; b=aq5cHRbGkoAdHqSATEhmtPz83zkq1ZOmV+JPQzHO2QgQEvYs76g2f6MiC4CDnyMlegzkqOaiIwF2QVpHcnTvpsb3sVGU4EQDYXEDQT9n7VE2GIH5PFj+k6zZeaCbrb4EkYQN/UN1dkQhB7eNJzgRlNVY1wG2jXOugZyFzBmYwbY=
+	t=1756366424; cv=none; b=JzOL8nhjBniV6Siwmd/3/d4hi6cxNv/KKP2AvaaX6Yb/4r/G8hEIYFbTFtQCoHi8K3Yem/mt3HaY7/lEoN9GSNdM8GCZLR5nEK6irQv+PfGp9wDbxNRsf0k5niGepUpH/VddT0D9ONDle9bt6COKIBHMBfPdZ/0/VuqcxSWov2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756362690; c=relaxed/simple;
-	bh=qgBWDECWtTK0m5bpCqPKT5MClF1rSC6eMMOmnCBjXWo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PZt8FoxFMMvDULszufvUOMCQdrzCBV8WTX3ks+C9m9B6C6fmP1XwC1y12OJy0LOS89CIVPj8Y9VWx/5mw4pX/c6M72HxnERff/aIvH2fpjlYRN6Q79Lp/vhblHf0uaJ21rgKYmh0A6ykzsV8wzc9RSVzfxL2f9iPUjlponeUoHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TeGi1TJZ; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756362690; x=1787898690;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qgBWDECWtTK0m5bpCqPKT5MClF1rSC6eMMOmnCBjXWo=;
-  b=TeGi1TJZ43NR76JM0+ASrhrqqtaDmma3nzjcr5FBysCTOvlCepbZt/GG
-   bL4cIhKyTMdj2H2MhP99/lWvc8dlWq2zaSuApFJ2PQvIONIZt5xvsPvmE
-   T66Jr3mBlugAls2TMb5TJFaTeaXtij4lcN9nrjMhGL8S4DhAIaSjSeDNH
-   7RhG3bl5MDJjNUThWXKjN9E+htSzbj26t6jcmy0kN7QctYiGlxVNgOAU1
-   tgit+7chG9FSazfYwlxwttQmT85t9QZXGqdaYYptqdS2ZJiQ3XKHi+aub
-   dlKDyaergKIN3r0KysHGPDCTwWSHSpuG1S3CpI9cL1SHFFZpwWY8z1X01
-   w==;
-X-CSE-ConnectionGUID: bFJ4uwacTeWBIIvHTzoDlw==
-X-CSE-MsgGUID: ehyhguvASridz005hPEohQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="69715507"
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="69715507"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2025 23:31:29 -0700
-X-CSE-ConnectionGUID: fr8Z17/iSSyEEZi67WEbaQ==
-X-CSE-MsgGUID: j5KrTSlGSgWPYe7XTn1frA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="174365640"
-Received: from baandr0id001.iind.intel.com ([10.66.253.151])
-  by fmviesa005.fm.intel.com with ESMTP; 27 Aug 2025 23:31:26 -0700
-From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-To: trenn@suse.com,
-	shuah@kernel.org,
-	jwyatt@redhat.com,
-	jkacur@redhat.com
-Cc: linux-pm@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: [PATCH] tools/cpupower: fix error return value in cpupower_write_sysfs()
-Date: Thu, 28 Aug 2025 12:00:00 +0530
-Message-Id: <20250828063000.803229-1-kaushlendra.kumar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1756366424; c=relaxed/simple;
+	bh=NQwsOjC4Pg+vDk/NIAxDfd9tk2aO4djsPYvh+LV1ofk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cZQeogmManAUWBBcXp+QxpaOLJ+1UIOWSKSzaEatyMba01SN94twzVWtQ6GY1lLH6+pt3h5UrVgRXV+TeKBABBhvYQqgET5PvgQSqEy2DHg17KTwe1400Q9B2S5NIvVOz/XxsZ3qqg8ip0ta70ttKP2c7yczcKyRwHBmg8wku3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83F3A1655;
+	Thu, 28 Aug 2025 00:33:32 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A9923F694;
+	Thu, 28 Aug 2025 00:33:38 -0700 (PDT)
+Date: Thu, 28 Aug 2025 09:33:22 +0200
+From: Beata Michalska <beata.michalska@arm.com>
+To: Prashant Malani <pmalani@google.com>
+Cc: Yang Shi <yang@os.amperecomputing.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Ionela Voinescu <Ionela.Voinescu@arm.com>
+Subject: Re: [PATCH] cpufreq: CPPC: Increase delay between perf counter reads
+Message-ID: <aLAGQk3nOcEI0qJ2@arm.com>
+References: <20250730220812.53098-1-pmalani@google.com>
+ <8252b1e6-5d13-4f26-8aa3-30e841639e10@os.amperecomputing.com>
+ <CAFivqmKZcipdc1P1b7jkNTBAV-WE4bSeW8z=eHHmtHBxuErZiQ@mail.gmail.com>
+ <aKRDxhirzwEPxaqd@arm.com>
+ <CAFivqm+vzkbDEadJEF2So9ZWcRyVT_-Yc+8VWWwsgGW+KD4sNw@mail.gmail.com>
+ <aKY0xuegI1S4X2uW@arm.com>
+ <CAFivqm+Xi9FYtzPmT0QkAUxC2Kx_AkrH2NuQE_sVnJVuo48ypA@mail.gmail.com>
+ <aKx4nZWsRPTXK942@arm.com>
+ <aKzGlD7ZDIS4XMsF@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aKzGlD7ZDIS4XMsF@google.com>
 
-The cpupower_write_sysfs() function currently returns -1 on
-write failure, but the function signature indicates it should
-return an unsigned int. Returning -1 from an unsigned function
-results in a large positive value rather than indicating
-an error condition.
+On Mon, Aug 25, 2025 at 08:24:52PM +0000, Prashant Malani wrote:
+> On Aug 25 16:52, Beata Michalska wrote:
+> > On Wed, Aug 20, 2025 at 02:25:16PM -0700, Prashant Malani wrote:
+> > > Hi Beata,
+> > > 
+> > > On Wed, 20 Aug 2025 at 13:49, Beata Michalska <beata.michalska@arm.com> wrote:
+> > > >
+> > > > Kinda working on that one.
+> > > 
+> > > OK. I'm eager to see what the solution is!
+> > > 
+> > > > >
+> > > > > Outside of that, I can't think of another mitigation beyond adding delay to make
+> > > > > the time deltas not matter so much.
+> > > > I'm not entirely sure what 'so much' means in this context.
+> > > > How one would quantify whether the added delay is actually mitigating the issue?
+> > > >
+> > > 
+> > > I alluded to it in the commit description, but here is the my basic
+> > > numerical analysis:
+> > > The effective timestamps for the 4 readings right now are:
+> > > Timestamp t0: del0
+> > > Timestamp t0 + m: ref0
+> > > (Time delay X us)
+> > > Timestamp t1: del1
+> > > Timestamp t1 + n: ref1
+> > > 
+> > > Timestamp t1 = t0 + m + X
+> > > 
+> > > The perf calculation is:
+> > > Per = del1 - del0 / ref1 - ref0
+> > >       = Del_counter_diff_over_time(t1 - t0) /
+> > > ref_counter_diff_over_time(t1 + n - (t0 + m))
+> > >       = Del_counter_diff_over time(t0 + m + X - t0) /
+> > > ref_counter_diff_over_time((t0 + m + X + n - t0 - m)
+> > >       = Del_counter_diff_over_time(m + X) / ref_counter_diff_over_time(n + X)
+> > > 
+> > > If X >> (m,n) this becomes:
+> > >       = Del_counter_diff_over_time(X) / ref_counter_diff_over_time(X)
+> > > which is what the actual calculation is supposed to be.
+> > > 
+> > > if X ~ (m, N) (which is what the case is right now), the calculation
+> > > becomes erratic.
+> > This is still bound by 'm' and 'n' values, as the difference between those will
+> > determine the error factor (with given, fixed X). If m != n, one counter delta
+> > is stretched more than the other, so the perf ratio no longer represents the
+> > same time interval. And that will vary between platforms/workloads leading to
+> > over/under-reporting.
+> 
+> What you are saying holds when m,n ~ X. But if X >> m,n, the X component
+> dominates. On most platforms, m and n are typically 1-2 us.
+> If X is anything >= 100us, it dominates the m,n component, making both
+> time intervals practically the same, i.e
+> 
+> (100 + 1) / (100 + 2) = 101 / 102 = 0.9901 ~ 1.00
+True but that does still influence the error - in this case that's ~1% so
+negligible. But the overall error magnitude does increase when the range
+between min and max of the possible values of m and n gets bigger.
+Question is what's the max error that can be deemed acceptable.
+And I'm pretty sure there are platforms that would require bigger X still.
 
-Fix this by returning 0 on failure, which is more appropriate
-for an unsigned return type and maintains consistency with typical
-success/failure semantics where 0 indicates failure and non-zero
-indicates success (bytes written).
+> 
+> > > 
+> > > There have been other observations on this topic [1], that suggest
+> > > that even 100us
+> > > improves the error rate significantly from what it is with 2us.
+> > > 
+> > > BR,
+> > Which is exactly why I've mentioned this approach is not really recommended,
+> > being bound to rather specific setup. There have been similar proposals in the
+> > past, all with different values of the delay which should illustrate how fragile
+> > solution (if any) that is.
+> 
+> The reports/occurences point to the fact that the current value doesn't work.
+Wasn't claiming it does.
+> 
+> Another way of putting it is, why is 2us considered the "right"
+> value?
+Looking at the history, the argument was pretty much the same as yours: was
+considered sufficient for most platforms [1]
+> 
+> This patch was never meant to be an ideal solution, but it's better than what
+> is there at present. Currently, the `policy->cur` is completely unusable on CPPC,
+> and is cropping up in other locations in the cpufreq driver core [1]
+> while also breaking a userfacing ABI i.e scaling_setspeed.
+> 
+> I realize you're working on a solution, so if that is O(weeks) away, it
+> makes sense to wait; otherwise it would seem logical to mitigate the
+> error (it can always be reverted once the "better" solution is in
+> place).
+> 
+> Ultimately it's your call, but I'm not convinced with rationale provided
+> thus far.
+Actually it is not up to me, I'm simply sharing my opinion, which is:
+we should fix the problem instead of hiding it.
+Setting that aside though - this change seems rather harmless.
 
-Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Aside:
+./scripts/get_maintainer.pl --m ./drivers/cpufreq/cppc_cpufreq.c
+
 ---
- tools/power/cpupower/lib/cpupower.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1] https://lore.kernel.org/all/37517652-9a74-83f8-1315-07fe79a78d73@codeaurora.org/
+---
 
-diff --git a/tools/power/cpupower/lib/cpupower.c b/tools/power/cpupower/lib/cpupower.c
-index ce8dfb8e46ab..d7f7ec6f151c 100644
---- a/tools/power/cpupower/lib/cpupower.c
-+++ b/tools/power/cpupower/lib/cpupower.c
-@@ -56,7 +56,7 @@ unsigned int cpupower_write_sysfs(const char *path, char *buf, size_t buflen)
- 	if (numwritten < 1) {
- 		perror(path);
- 		close(fd);
--		return -1;
-+		return 0;
- 	}
- 
- 	close(fd);
--- 
-2.34.1
-
+BR
+Beata
+> 
+> Best regards,
+> 
+> -Prashant
+> 
+> [1] https://lore.kernel.org/linux-pm/20250823001937.2765316-1-pmalani@google.com/T/#t
 
