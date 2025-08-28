@@ -1,158 +1,216 @@
-Return-Path: <linux-pm+bounces-33210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57629B39236
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 05:30:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF068B39252
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 05:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03EBE5E53EE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 03:30:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C51E7B77AB
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 03:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3490D25784A;
-	Thu, 28 Aug 2025 03:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8751F8AC5;
+	Thu, 28 Aug 2025 03:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GTCf1Qch"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858B213957E;
-	Thu, 28 Aug 2025 03:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1ED1DE8B3;
+	Thu, 28 Aug 2025 03:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756351802; cv=none; b=Nr6iu0f6a2G0pvmk2rPGmG2EUnblhouRYfjThX+Gd72lccaoFB6U9HV9DoeiqR2VTZg81cH0dRXZHkH2siuxyJZALEhG6hg6RR6+CUZJKSVTLQDty33bNKew6TLPhgJEMiQoelK267SNmORXbbQsQR7zq/EViA8qxRmA64/dLxM=
+	t=1756352849; cv=none; b=dMN+WgiEUrZTELMPR455bHQ90jrLb0bRduuU4hdV3+i7wcrg7ocPg6n69CxxY9StoUVxGyKXqtMETh3SGz74jHlsnyzEgurDm63VopCUiIzN6UQgTT834ttjguIQt2ek4SjyifUebmZJDNu2HdE24e6bTFuEtuCJ3cveWNKt4+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756351802; c=relaxed/simple;
-	bh=lHFaAvpZr7nH8kSO24sSlS9OjnuV0iwDlY15ybNYjYo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lXZNeDCH1/cItZK8/x1GEvGr1TWvsLIzaMiZiGxUrQN3foWVDeWakbreJwMbKONXOE/910FV+E9Mj62e/1RXPQPvr77eWWJzWKQwDwF1R3n/jCBIK48vkQUS5zx2UAy4Qn+TaJ9Y3Q99XFcg8XWAl/5Q6cJUrmAm7iZv9NVgBzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 42c32e8283bf11f0b29709d653e92f7d-20250828
-X-CID-CACHE: Type:Local,Time:202508281128+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:03166cd5-4468-410d-8f87-8eef5ce37c8e,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:14674371d732fcd9e1ba0c3b28f4ca8a,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 42c32e8283bf11f0b29709d653e92f7d-20250828
-X-User: luoxueqin@kylinos.cn
-Received: from [10.42.13.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luoxueqin@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 865172055; Thu, 28 Aug 2025 11:29:53 +0800
-Message-ID: <e0968be3-e33a-4e94-ab8f-215cdaa2be17@kylinos.cn>
-Date: Thu, 28 Aug 2025 11:29:52 +0800
+	s=arc-20240116; t=1756352849; c=relaxed/simple;
+	bh=KDHCN7BwimAXAdhEenYspj+eCnOF9MrveCuzMKkRT0A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=so+QJ/V4R8E7ZFMZGu2/HJfEUABvJs4Rm96dNZLg/pbG9XSyxHBcaxwj1r/rTazEB9xin+Al6xfzQ+NVzecVV/EknoJlvhQQXrlhyFgtdEz0tkIjlF6KQ84ouRMWaZepY6W9G6xiMnFpgPHwhGJ/GpfhWPBZHKvRqzhALe5g9hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GTCf1Qch; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1756352823;
+	bh=xlKAOiVXiHODSXJvcs1IbGt+M3nwyvROfioraEC390o=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=GTCf1QchlxrMr3Z/VolruSlz084s8cNajdP8bBKvLC9dhZOdeGM3flG2SqnokWS0m
+	 QBGmUwN1uzAyZT+ptCv2c0m9k9RM2ypHfjzXXitVKmIN5jf7kimdP4M/yzx6MRv3yb
+	 f3vCBMM11Wf9F+1dE2lMhKWVzLQQGOttEVPsspwg=
+X-QQ-mid: zesmtpip4t1756352815t49050dbf
+X-QQ-Originating-IP: EF7BkL+oyaNazOyjqa4gQW0zaXe3DWnxwRNDM8J65+k=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 28 Aug 2025 11:46:54 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 12583369538011558736
+EX-QQ-RecipientCnt: 7
+From: tuhaowen <tuhaowen@uniontech.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@kernel.org>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	tuhaowen@uniontech.com,
+	huangbibo@uniontech.com
+Subject: [RFC PATCH] PM: Add configurable sync timeout to prevent suspend hang
+Date: Thu, 28 Aug 2025 11:46:46 +0800
+Message-Id: <20250828034646.10700-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM: hibernate: make compression threads configurable via
- kernel parameter
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: pavel@kernel.org, lenb@kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250826091937.991667-1-luoxueqin@kylinos.cn>
- <CAJZ5v0gD8RkKG8+6MneaDkxndS-oAm8a1AswEDP1w8HVCGZDdw@mail.gmail.com>
-From: luoxueqin <luoxueqin@kylinos.cn>
-In-Reply-To: <CAJZ5v0gD8RkKG8+6MneaDkxndS-oAm8a1AswEDP1w8HVCGZDdw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MBKLumFSBSSxtNfp7qAsxop/79C5KToxtZNTljvegdPP1lM+RWbG8t90
+	7MLE1dJ+WDO48tveenhTL5t19t8muT1m2JUko6VEGPe53Hh+9yiZYllydkAG4oFXf0kYhzx
+	ZCD/tdzwY6n1D2XBxJmfn7GPS3p3jVihOdls4YmJBbhKqbSd+qNrzbGM3zmh9Me54ga7pPT
+	MK/lyHNT1CzrarD34emf36xTBPQKhsSbPKNXIUJ/7ftY/18oQU4v1Rf/QVrqQNg7+BiHSq5
+	b6E1XAPZSGjjTy2fPUUzbhbofuvTS2E3DuAgEGopVuKo6r8oHi5eVzKA1CqPemj2tx5iatQ
+	uX1lU6YG3or/UIwsbVwYr8Dqg65Zdmn5DWP1XUnIFh7FIkeH5wD17A6ePFKfqsAvqqkIMsT
+	fQhQliBusWD3CJwh4rb6PtPsqtieRopAIKGdI4q0BYw3zw1NC88/kKo5bEIvQnUS+U6pbte
+	hrN7K0KFDC/0y2RTdlv02xnXqyOeOQ30AlsnQqwkTzpKWESJnOkGkhdsuXFrzC/Z4u0Kdin
+	hkakPo/fLl+Kv90hPJoVncbbhuIjL6GQumEq2YPsnbcV0WJiBSrSlvJkKMypkB9PXJBZJ5s
+	R8YyPETz4y6p8hqJcE30OZ6n0Kb9onlSMoJTVV2T5khzzwYG2Fyek3lZBrYikpchPUSc6J4
+	gMzYb77G+MZZCenlLAilHEYwUw47Fb1NNi8tl3Ei22vIICV2H3FkdNZipjcLHsoneruuGij
+	sE6yoJbuK+IvgAxJAppc+W0tzgz+Q11tvk22PvWAgeRH5RCpdvlBigZ5VOVym6QwVigqnQT
+	ebmGuGn/I4skrgB9EBB8KZgjT0MXJjQayj6tFF5dZzey19HSqZbcaBVYKDG6oAC/yzngWwI
+	EWIe8bY5tCISKziHLmSpMAgWfSTXM8vh1/X3YHQzfOZogtktpxEygIeuwkX30H7cq/MMQoy
+	oO3R1cc/6Xr7UTKtadDraKNTOLha/EabzAfTD2F6HJ2zg8ycvuLZbsldZpuc/u12/Evk=
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-RECHKSPAM: 0
 
+When users initiate suspend while large file copy operations are in
+progress (especially to USB storage devices), the system can appear to
+hang with a black screen for an extended period. This occurs because
+ksys_sync_helper() in the suspend path blocks until all pending I/O
+operations complete, which can take several minutes for large file
+transfers.
 
-在 2025/8/26 19:43, Rafael J. Wysocki 写道:
-> On Tue, Aug 26, 2025 at 11:19 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
->> A new kernel parameter 'cmp_threads=' is introduced to
->> allow tuning the number of compression/decompression threads at boot.
-> And why is it useful/needed?
-The number of compression/decompression threads directly impacts 
-hibernate and resume time.
-In our tests(averaged over 10 runs):
-     cmp_threads   hibernate(s)   resume(s)
-             3                           12.14          18.86
-             4                           12.28          17.48
-             5                           11.09          16.77
-             6                           11.08          16.44
-With 5–6 threads, resume latency improves by ~12% compared to 3 threads. 
-But on low-core systems,
-more threads may cause contention. Making it configurable allows 
-integrators to balance performance
-  and CPU usage across different hardware without recompiling the kernel.
->> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
->> ---
->>   kernel/power/swap.c | 22 +++++++++++++++++-----
->>   1 file changed, 17 insertions(+), 5 deletions(-)
->>
->> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
->> index ad13c461b657..43280e08a4ad 100644
->> --- a/kernel/power/swap.c
->> +++ b/kernel/power/swap.c
->> @@ -520,7 +520,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
->>   #define CMP_SIZE       (CMP_PAGES * PAGE_SIZE)
->>
->>   /* Maximum number of threads for compression/decompression. */
->> -#define CMP_THREADS    3
->> +#define CMP_MAX_THREADS        12
->> +static int cmp_threads = 3
->>
->>   /* Minimum/maximum number of pages for read buffering. */
->>   #define CMP_MIN_RD_PAGES       1024
->> @@ -585,8 +586,8 @@ struct crc_data {
->>          wait_queue_head_t go;                     /* start crc update */
->>          wait_queue_head_t done;                   /* crc update done */
->>          u32 *crc32;                               /* points to handle's crc32 */
->> -       size_t *unc_len[CMP_THREADS];             /* uncompressed lengths */
->> -       unsigned char *unc[CMP_THREADS];          /* uncompressed data */
->> +       size_t *unc_len[CMP_MAX_THREADS];             /* uncompressed lengths */
->> +       unsigned char *unc[CMP_MAX_THREADS];          /* uncompressed data */
->>   };
->>
->>   /*
->> @@ -703,7 +704,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
->>           * footprint.
->>           */
->>          nr_threads = num_online_cpus() - 1;
->> -       nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
->> +       nr_threads = clamp_val(nr_threads, 1, cmp_threads);
->>
->>          page = (void *)__get_free_page(GFP_NOIO | __GFP_HIGH);
->>          if (!page) {
->> @@ -1223,7 +1224,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
->>           * footprint.
->>           */
->>          nr_threads = num_online_cpus() - 1;
->> -       nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
->> +       nr_threads = clamp_val(nr_threads, 1, cmp_threads);
->>
->>          page = vmalloc(array_size(CMP_MAX_RD_PAGES, sizeof(*page)));
->>          if (!page) {
->> @@ -1667,3 +1668,14 @@ static int __init swsusp_header_init(void)
->>   }
->>
->>   core_initcall(swsusp_header_init);
->> +
->> +static int __init cmp_threads_setup(char *str)
->> +{
->> +       int rc = kstrtouint(str, 0, &cmp_threads);
->> +       if (rc)
->> +               return rc;
->> +       return 1;
->> +
->> +}
->> +
->> +__setup("cmp_threads=", cmp_threads_setup);
->> --
->> 2.43.0
->>
+This creates a poor user experience where the system appears
+unresponsive, and users may force power off thinking the system has
+crashed.
+
+This RFC proposes adding an optional timeout mechanism for the sync
+operation during suspend. The implementation includes:
+
+- A configurable timeout (default: 60 seconds, disabled by default)
+- Module parameters for runtime configuration:
+  * sync_on_suspend_timeout_enable: Enable/disable the timeout feature
+  * sync_on_suspend_timeout_ms: Configure timeout duration
+- Uses a separate kernel thread to perform sync with timeout monitoring
+- On timeout, suspend is aborted with clear error messaging
+- Maintains backward compatibility (disabled by default)
+
+Questions for the community:
+
+1. Is this approach acceptable for addressing the user experience issue?
+2. Are there better alternatives to handle long-running sync operations
+   during suspend?
+3. Should the default timeout value be different?
+4. Any concerns with the implementation approach?
+
+The feature is disabled by default to ensure no regression in existing
+behavior. When enabled, it allows users to abort suspend if sync takes
+too long, providing immediate feedback rather than an apparent system
+hang.
+
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+ kernel/power/suspend.c | 56 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 8eaec4ab1..feb1583c5 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -30,9 +30,25 @@
+ #include <trace/events/power.h>
+ #include <linux/compiler.h>
+ #include <linux/moduleparam.h>
++#include <linux/completion.h>
++#include <linux/kthread.h>
++#include <linux/jiffies.h>
+ 
+ #include "power.h"
+ 
++/* Sync timeout parameters */
++static bool sync_on_suspend_timeout_enable;
++module_param(sync_on_suspend_timeout_enable, bool, 0644);
++MODULE_PARM_DESC(sync_on_suspend_timeout_enable, "Enable sync timeout during suspend (default: false)");
++
++static unsigned int sync_on_suspend_timeout_ms = 60000;
++module_param(sync_on_suspend_timeout_ms, uint, 0644);
++MODULE_PARM_DESC(sync_on_suspend_timeout_ms, "Sync timeout in milliseconds during suspend (default: 60000)");
++
++/* Sync timeout implementation */
++static struct completion sync_completion;
++static struct task_struct *sync_task;
++
+ const char * const pm_labels[] = {
+ 	[PM_SUSPEND_TO_IDLE] = "freeze",
+ 	[PM_SUSPEND_STANDBY] = "standby",
+@@ -61,6 +77,40 @@ static DECLARE_SWAIT_QUEUE_HEAD(s2idle_wait_head);
+ enum s2idle_states __read_mostly s2idle_state;
+ static DEFINE_RAW_SPINLOCK(s2idle_lock);
+ 
++static int sync_thread_func(void *data)
++{
++	ksys_sync_helper();
++	complete(&sync_completion);
++	return 0;
++}
++
++static int suspend_sync_with_timeout(void)
++{
++	unsigned long timeout_jiffies;
++
++	if (!sync_on_suspend_timeout_enable) {
++		ksys_sync_helper();
++		return 0;
++	}
++
++	init_completion(&sync_completion);
++	sync_task = kthread_run(sync_thread_func, NULL, "suspend_sync");
++	if (IS_ERR(sync_task)) {
++		pr_warn("PM: Failed to create sync thread, performing sync directly\n");
++		ksys_sync_helper();
++		return 0;
++	}
++
++	timeout_jiffies = msecs_to_jiffies(sync_on_suspend_timeout_ms);
++	if (!wait_for_completion_timeout(&sync_completion, timeout_jiffies)) {
++		pr_warn("PM: Sync operation timed out after %u ms, aborting suspend\n",
++				sync_on_suspend_timeout_ms);
++		kthread_stop(sync_task);
++		return -ETIMEDOUT;
++	}
++	return 0;
++}
++
+ /**
+  * pm_suspend_default_s2idle - Check if suspend-to-idle is the default suspend.
+  *
+@@ -585,8 +635,12 @@ static int enter_state(suspend_state_t state)
+ 
+ 	if (sync_on_suspend_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+-		ksys_sync_helper();
++		error = suspend_sync_with_timeout();
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
++		if (error) {
++			pr_err("PM: Sync timeout, aborting suspend\n");
++			goto Unlock;
++		}
+ 	}
+ 
+ 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
+-- 
+2.20.1
+
 
