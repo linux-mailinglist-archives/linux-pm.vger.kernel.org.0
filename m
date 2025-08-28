@@ -1,133 +1,120 @@
-Return-Path: <linux-pm+bounces-33340-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33341-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF99B3AD1F
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 23:58:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C61AB3AD2C
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 00:00:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 879F17BA1A1
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 21:55:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5CCE462D3C
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 22:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3A92BEFFE;
-	Thu, 28 Aug 2025 21:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236D22BEFF7;
+	Thu, 28 Aug 2025 21:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fShS14ZU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hXslAWvA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A214F28153A;
-	Thu, 28 Aug 2025 21:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F5B27B4E8;
+	Thu, 28 Aug 2025 21:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756418199; cv=none; b=isKGGI9IwZ96hKOxu6npZcjFr274L9wMNsfmGopmEF2Sakk8rzaIV4eNrzVCaSeowU2SobesjHAFcMYFhETFpudzA6d/9TobLfb/a+E6rPgR7PfWW7EIbrl5BVuiRb+ZgXuzqlwR0X7MYcMqRPlerxSrCwJktCLcH6hOV5jMw5E=
+	t=1756418396; cv=none; b=OlbkGU9KyFVYLZlop7EBNlyXgBrpvgGHYYBW2XiamNsvkoz0ZiWCzJG1IeXIKIZ2Rfb8kwYefrpu1EAk6PPnK+Th0+pOQGC/q92tMywIAdXVvUTnsIwyQjf3K2OusM4w7EMDOCsXIo4ymxzjwIc96rqceKhtq0k9euju3e1dO9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756418199; c=relaxed/simple;
-	bh=dSngZWUPELR3QxYM2J7tSWcOG69It00KDI2P68gPg34=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uEhQqzkOY3Tut5U6L7nsa8NrBFg7vuYqKpmw+i6/PI00lUwZEt890mD8AFzWabv0GMny+EdraunBXcgSX2eWuAtytvb2NfRCErrV53/Rr+iWoTuDY0/LI6aCyhojy+LP9M45XYpr6tdiWavBR32or0qmsyfGmT6R6qDUOrKzCik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fShS14ZU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6786FC4CEEB;
-	Thu, 28 Aug 2025 21:56:32 +0000 (UTC)
+	s=arc-20240116; t=1756418396; c=relaxed/simple;
+	bh=+yn7bpIM+//8mwmC7Z0a1G3HNk6Q20Ctm8roSQE4Hxw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gdSONKYU48H5Z5oQH9mtix3F7Ran+FaEt5OuZbYly+eNPz1OMnjEQKRaGwXOpsn7FMdo7+jiniKB7UPSba57tLqNUOL5xuTueLPM32o2OmWYigN+WNNCifH+7s4TMoQ9S5/OcgxuI1pWFodfp3RYsC71QYBcqJSCIaI/+pObZSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hXslAWvA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A868C4CEEB;
+	Thu, 28 Aug 2025 21:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756418199;
-	bh=dSngZWUPELR3QxYM2J7tSWcOG69It00KDI2P68gPg34=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fShS14ZU9g2uMtlXOdGlNrGxb1FPB+hi/AWsG5ubmCfFyjbAZUU45fSykZZ3AAsKp
-	 fdSlH9u5yIumKzKidWWSSxxjE1MvRGOjiRHlQv6+39AlppwStNdKRCJKe8IeubgH3c
-	 U1GR7WVWYd7MvEWoOE5wrosQfE5u2i4g9Ayj7gPgSm+or8wxO9hWBhYiTOR1ld9Obe
-	 LBJz4uGDnarR22rkrKb+EiBB2c0w4AZ1vEctukS9blJFE8xIsDrmjHJgx5tCw87CUD
-	 taZ2ayjCf6oGs/rfbRDftLlw+rrdqfE3jUC8a/lB3BTEODoIpoJHy2aaF5mOz78PrG
-	 cM3mHAQFHGcEw==
-Date: Thu, 28 Aug 2025 23:56:30 +0200
-From: Drew Fustini <fustini@kernel.org>
-To: Matt Coster <matt.coster@imgtec.com>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>,
-	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v13 3/4] riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU
- node
-Message-ID: <aLDQjq9U_mDvMTJo@gen8>
-References: <20250822-apr_14_for_sending-v13-0-af656f7cc6c3@samsung.com>
- <CGME20250821222023eucas1p1805feda41e485de76c2981beb8b9102d@eucas1p1.samsung.com>
- <20250822-apr_14_for_sending-v13-3-af656f7cc6c3@samsung.com>
- <aKjWiU4fQw3k77GR@x1>
- <aK-BwY8c-OR_WqNk@thelio>
+	s=k20201202; t=1756418395;
+	bh=+yn7bpIM+//8mwmC7Z0a1G3HNk6Q20Ctm8roSQE4Hxw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hXslAWvA0T9+S0WXdu2fyyN48S1dw8Wz9ZeA7/gPudrI6PISRs+u/zJqXGfU4fSN2
+	 aFf1oimw6kIqHnaLXyNK2Or1zOOkTgQYu+DwAGAtivMaZb+KYIxtG7mRHgmjrj8ckR
+	 9jg1knDgv1eJ9/Mq8H0A+ULvTMNBhQcIfrwOPJw0pNg9yEPC5+3PlKWKH2DEDaD/T9
+	 gN4t4MAYj/sMscWOnPphIeCgQ+945NqmU/RfvfyFvlCH13vggxwhazPpvLF//UtkKw
+	 fuvdnOo7sl29GVuifed++vYTo06OLVao1SuRBXiqGlrEQglq8y1A27O1+yqCw4F0Zy
+	 VV31pr2pZOm+A==
+Message-ID: <26e5309e-3705-4d70-a2e7-3f0e9344816b@kernel.org>
+Date: Fri, 29 Aug 2025 00:59:49 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aK-BwY8c-OR_WqNk@thelio>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
+ enable QoS on sa8775p
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Mike Tipton <mike.tipton@oss.qualcomm.com>
+References: <20250808140300.14784-1-odelu.kukatla@oss.qualcomm.com>
+ <20250808140300.14784-2-odelu.kukatla@oss.qualcomm.com>
+ <90b51e31-3217-4483-bb5b-ec328665a723@kernel.org>
+ <28b97952-1b67-411f-a7fb-ddd558739839@oss.qualcomm.com>
+ <ac83c453-c24d-4c4d-83bc-9ed13f2f9d1e@kernel.org>
+ <7d3e5cf7-4167-4005-ba4b-c1915c254705@oss.qualcomm.com>
+ <00f50d92-e4ea-4805-b771-147fa5f5ebe4@kernel.org>
+ <249f8109-31b1-4cb8-a5a4-b30c27b2e987@oss.qualcomm.com>
+ <6e036d6a-f2d1-43d6-bb35-54467edd7ec9@kernel.org>
+Content-Language: en-US
+From: Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <6e036d6a-f2d1-43d6-bb35-54467edd7ec9@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 27, 2025 at 03:08:01PM -0700, Drew Fustini wrote:
-> On Fri, Aug 22, 2025 at 01:43:53PM -0700, Drew Fustini wrote:
-> > On Fri, Aug 22, 2025 at 12:20:17AM +0200, Michal Wilczynski wrote:
-> > > Add a device tree node for the IMG BXM-4-64 GPU present in the T-HEAD
-> > > TH1520 SoC used by the Lichee Pi 4A board. This node enables support for
-> > > the GPU using the drm/imagination driver.
-> > > 
-> > > By adding this node, the kernel can recognize and initialize the GPU,
-> > > providing graphics acceleration capabilities on the Lichee Pi 4A and
-> > > other boards based on the TH1520 SoC.
-> > > 
-> > > Add fixed clock gpu_mem_clk, as the MEM clock on the T-HEAD SoC can't be
-> > > controlled programatically.
-> > > 
-> > > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > Reviewed-by: Drew Fustini <drew@pdp7.com>
-> > > Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > > Acked-by: Matt Coster <matt.coster@imgtec.com>
-> > > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> > > ---
-> > >  arch/riscv/boot/dts/thead/th1520.dtsi | 21 +++++++++++++++++++++
-> > >  1 file changed, 21 insertions(+)
-> > 
-> > I've applied this to thead-dt-for-next [1]:
-> > 
-> > 0f78e44fb857 ("riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU node")
-> > 
-> > Thanks,
-> > Drew
-> > 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/log/?h=thead-dt-for-next
+On 8/28/25 9:20 PM, Krzysztof Kozlowski wrote:
+> On 28/08/2025 20:16, Odelu Kukatla wrote:
+>>
+>>>> QoS configuration is essential for managing latency and bandwidth across
+>>>> subsystems such as CPU, GPU, and multimedia engines. Without it, the
+>>>> system may experience performance degradation, especially under
+>>>
+>>> So how was it working for the last 2 years?
+>>>
+>> The system may function normally without this feature. However, enabling
 > 
-> Hi Matt,
 > 
-> Do you know when the dt binding patch will be applied to
-> the drm-misc/for-linux-next tree?
+> Huh? So you agree but keep continuing the discussion?
 > 
-> I applied the dts patch but it is creating a warning in next right now.
-> If the binding won't show up soon in drm-misc, then I'll remove this dts
-> patch from next as dtbs_check is now failing in next. I can add it back
-> once the binding makes it to next.
+> I don't understand what we are discussing in such case, but just to
+> close the topic from my side and be explicit: based on above you cannot
+> break the ABI.
 
-I've now removed this patch from thead-dt-for-next and will add it back
-once the bindings show up in next.
+To be even more specific, if we already have some DT binding without any
+clocks and reg properties, we can't just suddenly change them from now
+on to be "required". But they can still be "optional" and this will not
+break the ABI, right? The old DT is still valid and the QoS will be
+active when the new properties are present and this is handled properly
+by the driver.
 
-Thanks,
-Drew
+BR,
+Georgi
+
+> 
+>> QoS helps optimize latency and bandwidth across subsystems like CPU,
+>> GPU, and multimedia engines, which becomes important in high-throughput
+>> scenarios.
+> 
+> No one discussed that.
+> 
+> 
+> Best regards,
+> Krzysztof
+
 
