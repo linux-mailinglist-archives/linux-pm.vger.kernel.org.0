@@ -1,216 +1,136 @@
-Return-Path: <linux-pm+bounces-33211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF068B39252
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 05:47:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 666C5B39339
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 07:46:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C51E7B77AB
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 03:45:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A4531C2381E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 05:46:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8751F8AC5;
-	Thu, 28 Aug 2025 03:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687912777F7;
+	Thu, 28 Aug 2025 05:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GTCf1Qch"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mKpWF2Co"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1ED1DE8B3;
-	Thu, 28 Aug 2025 03:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCDC27702E
+	for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 05:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756352849; cv=none; b=dMN+WgiEUrZTELMPR455bHQ90jrLb0bRduuU4hdV3+i7wcrg7ocPg6n69CxxY9StoUVxGyKXqtMETh3SGz74jHlsnyzEgurDm63VopCUiIzN6UQgTT834ttjguIQt2ek4SjyifUebmZJDNu2HdE24e6bTFuEtuCJ3cveWNKt4+0=
+	t=1756359985; cv=none; b=YwJTizvYUuSUOBAcKfgmmZ7fzgxKNm9wjxsba0DBO6h3AdNmoO2AmmKCjc1hpzKnzEUdMKgJSRCbtVSQMmMe2Z7JJsmh8V2X71eE0d4xZpf4meuczW9jNmm8b9u7hdEEfrFgdZZwMQFD96C88jzlz93/DvbSwpCrWLHgB/J4Ecc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756352849; c=relaxed/simple;
-	bh=KDHCN7BwimAXAdhEenYspj+eCnOF9MrveCuzMKkRT0A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=so+QJ/V4R8E7ZFMZGu2/HJfEUABvJs4Rm96dNZLg/pbG9XSyxHBcaxwj1r/rTazEB9xin+Al6xfzQ+NVzecVV/EknoJlvhQQXrlhyFgtdEz0tkIjlF6KQ84ouRMWaZepY6W9G6xiMnFpgPHwhGJ/GpfhWPBZHKvRqzhALe5g9hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GTCf1Qch; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1756352823;
-	bh=xlKAOiVXiHODSXJvcs1IbGt+M3nwyvROfioraEC390o=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=GTCf1QchlxrMr3Z/VolruSlz084s8cNajdP8bBKvLC9dhZOdeGM3flG2SqnokWS0m
-	 QBGmUwN1uzAyZT+ptCv2c0m9k9RM2ypHfjzXXitVKmIN5jf7kimdP4M/yzx6MRv3yb
-	 f3vCBMM11Wf9F+1dE2lMhKWVzLQQGOttEVPsspwg=
-X-QQ-mid: zesmtpip4t1756352815t49050dbf
-X-QQ-Originating-IP: EF7BkL+oyaNazOyjqa4gQW0zaXe3DWnxwRNDM8J65+k=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 28 Aug 2025 11:46:54 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 12583369538011558736
-EX-QQ-RecipientCnt: 7
-From: tuhaowen <tuhaowen@uniontech.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tuhaowen@uniontech.com,
-	huangbibo@uniontech.com
-Subject: [RFC PATCH] PM: Add configurable sync timeout to prevent suspend hang
-Date: Thu, 28 Aug 2025 11:46:46 +0800
-Message-Id: <20250828034646.10700-1-tuhaowen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1756359985; c=relaxed/simple;
+	bh=i6L+f3exnFOVhxuWsM4teMlEODpI+rzw0Jw85ZTvtIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BX3LqLHj4liJ07Fx5PXl/PNymYzr/hHLKPygBW3aKZCFd4kdUfwjdhPwgfCTL9JthoJoGqXQf9IMdrTyc3tJG8NVid0FkJsJro3YMxNUd/GDLzvNGVul5X7qOq5HcEMyP9dPmbD5rhht0x7VPhEdDptq8PaUbPvxCr4fIYb7oVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mKpWF2Co; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-771e1e64fbbso709092b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Aug 2025 22:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756359983; x=1756964783; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrIDBpuM+wIKseLTnowhk8eTE9B0XZjCQe+CxB8rd+o=;
+        b=mKpWF2CoXnkI2N9uVobkgXcLZ6ic154Z3QmfTByv7XWYpphf6fVaSoIlTjyWJVZS9T
+         VfCCCDuxpjVU9r6AiUEKvC3qmwYxLQg1hKNzvx1OoKxyaCAsUklTw+aPZYI9KFk9/zun
+         XbGgPwWHYBAdlcD09D+l6HTZfzQuhQQPCLznywGU1Rj4KtTqC2heKld0oL0zz9RYm6lY
+         ENAIqTmOZfljEin2ZnqgJtF8/L7pWtp9wHpEmjj4bAyj+EMRSRTKbRsVS1gS8gVZ/D/S
+         NX/W0JCbdayE8hiLSNv9zXDnM5+M1SbKb6s7F94EvUTFv+MY8qVJoGndBnl8mKSD6FkF
+         HHmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756359983; x=1756964783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JrIDBpuM+wIKseLTnowhk8eTE9B0XZjCQe+CxB8rd+o=;
+        b=tnBo4hdTcvngDhbu0TuX1kh3Uxqx6NkYoC9pa3CNSqeFmKd5OYcnJuf5jn4+id1Krz
+         EUF6W4xWJ6bnLrLEZ2NTBx0PAvha/F45SqHRKjt4LPg30Eg5ac4QyV+wmlFGdokmk2rp
+         Rd5JVZin0WNSbXV7ovlF6kG6clZPhiMw64euN3vlWZmt79ts9xVDGgGwKcXOI90v1NdU
+         wFMID3svpdKW6h3TAF+VBgD7V7u7oNEWBbCwK/FMperj9RaV+2SoV+FSVv4mWiFEjgaH
+         RJJK2Ms8xcL7xRRORZRvezXlXA4m+2GpUhgKLKBp+0JBW50D3ssl8YfDtNbp1k06IiyS
+         a+IQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMirUr5zMSHNS0hwui1yXMLx55G99vvNHQP3ehEKOAngNQstoymPzo23hapEjT2CCBa4cCW3aqXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTZ2kAgX4e3z1kM8qXiB55HkIUZgTT8Ct8WPnxkpULuaF94ZY6
+	NgQxc84uROAkHk8AhCQUqr6JuCTNi1phD15yJiZgNRzgcesmrYwKyrXfkzdC6uhMoF+hifMT/+Q
+	jQRou
+X-Gm-Gg: ASbGncuIzjmPZPvmd8OGyoruJezL6makwzJQvkIELGKIc/ODwwu+dGBsm8muPP4PCIx
+	OOAlnR/1J77O5OEtSe/I/YC5/A+8ko7Vc8T9o62MP0wvQ6ncyI8eep14Tqg5RfXc/mnnKW/5YQ2
+	GNN1Mgv7gBrrcvwcXJOC2JJUKc0n76r/NnOqyzGa1GzL4nIJFKprez1YrK1PsLCXAJn7gY8PjWp
+	I3NjizO7QxozCWYJvRRf5EMMhQ3j8XGFZJVlkKzthDp6h9EOGA/YETX1Cfg+f30ILbw7lvS+4wq
+	xYNdgGWGLPoMVBovUm6ANCg1Wr4gu/ouCY4SJYrpRa5+U0rfa1ZhRh7jw0KkJgBsfsVRO6vM2Q4
+	tgldi9eFmwuiF4z4ToB79EAxO
+X-Google-Smtp-Source: AGHT+IFfuu4OZWLK4Ect5V8qcKWdtQ9AvKTAwNSmE5IY/JmFZqua6II8FJDl1UVaUxNnVGH1wfuJAA==
+X-Received: by 2002:a05:6a20:2448:b0:240:2421:b912 with SMTP id adf61e73a8af0-24340d17030mr33915391637.37.1756359982962;
+        Wed, 27 Aug 2025 22:46:22 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4c1b2f5a3csm8873232a12.4.2025.08.27.22.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 22:46:22 -0700 (PDT)
+Date: Thu, 28 Aug 2025 11:16:20 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] dt-bindings: cpufreq-dt: Remove redundant
+ cpufreq-dt.txt
+Message-ID: <20250828054620.u6gbjevidlnv32cl@vireshk-i7>
+References: <20250827204401.87942-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: MBKLumFSBSSxtNfp7qAsxop/79C5KToxtZNTljvegdPP1lM+RWbG8t90
-	7MLE1dJ+WDO48tveenhTL5t19t8muT1m2JUko6VEGPe53Hh+9yiZYllydkAG4oFXf0kYhzx
-	ZCD/tdzwY6n1D2XBxJmfn7GPS3p3jVihOdls4YmJBbhKqbSd+qNrzbGM3zmh9Me54ga7pPT
-	MK/lyHNT1CzrarD34emf36xTBPQKhsSbPKNXIUJ/7ftY/18oQU4v1Rf/QVrqQNg7+BiHSq5
-	b6E1XAPZSGjjTy2fPUUzbhbofuvTS2E3DuAgEGopVuKo6r8oHi5eVzKA1CqPemj2tx5iatQ
-	uX1lU6YG3or/UIwsbVwYr8Dqg65Zdmn5DWP1XUnIFh7FIkeH5wD17A6ePFKfqsAvqqkIMsT
-	fQhQliBusWD3CJwh4rb6PtPsqtieRopAIKGdI4q0BYw3zw1NC88/kKo5bEIvQnUS+U6pbte
-	hrN7K0KFDC/0y2RTdlv02xnXqyOeOQ30AlsnQqwkTzpKWESJnOkGkhdsuXFrzC/Z4u0Kdin
-	hkakPo/fLl+Kv90hPJoVncbbhuIjL6GQumEq2YPsnbcV0WJiBSrSlvJkKMypkB9PXJBZJ5s
-	R8YyPETz4y6p8hqJcE30OZ6n0Kb9onlSMoJTVV2T5khzzwYG2Fyek3lZBrYikpchPUSc6J4
-	gMzYb77G+MZZCenlLAilHEYwUw47Fb1NNi8tl3Ei22vIICV2H3FkdNZipjcLHsoneruuGij
-	sE6yoJbuK+IvgAxJAppc+W0tzgz+Q11tvk22PvWAgeRH5RCpdvlBigZ5VOVym6QwVigqnQT
-	ebmGuGn/I4skrgB9EBB8KZgjT0MXJjQayj6tFF5dZzey19HSqZbcaBVYKDG6oAC/yzngWwI
-	EWIe8bY5tCISKziHLmSpMAgWfSTXM8vh1/X3YHQzfOZogtktpxEygIeuwkX30H7cq/MMQoy
-	oO3R1cc/6Xr7UTKtadDraKNTOLha/EabzAfTD2F6HJ2zg8ycvuLZbsldZpuc/u12/Evk=
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250827204401.87942-1-Frank.Li@nxp.com>
 
-When users initiate suspend while large file copy operations are in
-progress (especially to USB storage devices), the system can appear to
-hang with a black screen for an extended period. This occurs because
-ksys_sync_helper() in the suspend path blocks until all pending I/O
-operations complete, which can take several minutes for large file
-transfers.
+On 27-08-25, 16:44, Frank Li wrote:
+> The information is already documented in
+> Documentation/devicetree/bindings/arm/cpus.yaml.
+> Documentation/devicetree/bindings/opp/opp-v1.yaml
 
-This creates a poor user experience where the system appears
-unresponsive, and users may force power off thinking the system has
-crashed.
+Even then, we can document what driver expects. So duplication isn't
+an issue I think.
 
-This RFC proposes adding an optional timeout mechanism for the sync
-operation during suspend. The implementation includes:
+But this file is outdated and hasn't received an update in years.
 
-- A configurable timeout (default: 60 seconds, disabled by default)
-- Module parameters for runtime configuration:
-  * sync_on_suspend_timeout_enable: Enable/disable the timeout feature
-  * sync_on_suspend_timeout_ms: Configure timeout duration
-- Uses a separate kernel thread to perform sync with timeout monitoring
-- On timeout, suspend is aborted with clear error messaging
-- Maintains backward compatibility (disabled by default)
+> Remove the redundant file.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-dt.txt           | 61 -------------------
+>  1 file changed, 61 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-dt.txt
 
-Questions for the community:
+Merged with this commit log instead.
 
-1. Is this approach acceptable for addressing the user experience issue?
-2. Are there better alternatives to handle long-running sync operations
-   during suspend?
-3. Should the default timeout value be different?
-4. Any concerns with the implementation approach?
+commit b238cd833e3d62a76c53d540ed663b314ad179f0 (HEAD -> opp/linux-next)
+Author: Frank Li <Frank.Li@nxp.com>
+Date:   Wed Aug 27 16:44:01 2025 -0400
 
-The feature is disabled by default to ensure no regression in existing
-behavior. When enabled, it allows users to abort suspend if sync takes
-too long, providing immediate feedback rather than an apparent system
-hang.
+    dt-bindings: Remove outdated cpufreq-dt.txt
 
-Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
----
- kernel/power/suspend.c | 56 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
+    The information present in this file is outdated and doesn't serve any
+    purpose with the current design of the driver.
 
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 8eaec4ab1..feb1583c5 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -30,9 +30,25 @@
- #include <trace/events/power.h>
- #include <linux/compiler.h>
- #include <linux/moduleparam.h>
-+#include <linux/completion.h>
-+#include <linux/kthread.h>
-+#include <linux/jiffies.h>
- 
- #include "power.h"
- 
-+/* Sync timeout parameters */
-+static bool sync_on_suspend_timeout_enable;
-+module_param(sync_on_suspend_timeout_enable, bool, 0644);
-+MODULE_PARM_DESC(sync_on_suspend_timeout_enable, "Enable sync timeout during suspend (default: false)");
-+
-+static unsigned int sync_on_suspend_timeout_ms = 60000;
-+module_param(sync_on_suspend_timeout_ms, uint, 0644);
-+MODULE_PARM_DESC(sync_on_suspend_timeout_ms, "Sync timeout in milliseconds during suspend (default: 60000)");
-+
-+/* Sync timeout implementation */
-+static struct completion sync_completion;
-+static struct task_struct *sync_task;
-+
- const char * const pm_labels[] = {
- 	[PM_SUSPEND_TO_IDLE] = "freeze",
- 	[PM_SUSPEND_STANDBY] = "standby",
-@@ -61,6 +77,40 @@ static DECLARE_SWAIT_QUEUE_HEAD(s2idle_wait_head);
- enum s2idle_states __read_mostly s2idle_state;
- static DEFINE_RAW_SPINLOCK(s2idle_lock);
- 
-+static int sync_thread_func(void *data)
-+{
-+	ksys_sync_helper();
-+	complete(&sync_completion);
-+	return 0;
-+}
-+
-+static int suspend_sync_with_timeout(void)
-+{
-+	unsigned long timeout_jiffies;
-+
-+	if (!sync_on_suspend_timeout_enable) {
-+		ksys_sync_helper();
-+		return 0;
-+	}
-+
-+	init_completion(&sync_completion);
-+	sync_task = kthread_run(sync_thread_func, NULL, "suspend_sync");
-+	if (IS_ERR(sync_task)) {
-+		pr_warn("PM: Failed to create sync thread, performing sync directly\n");
-+		ksys_sync_helper();
-+		return 0;
-+	}
-+
-+	timeout_jiffies = msecs_to_jiffies(sync_on_suspend_timeout_ms);
-+	if (!wait_for_completion_timeout(&sync_completion, timeout_jiffies)) {
-+		pr_warn("PM: Sync operation timed out after %u ms, aborting suspend\n",
-+				sync_on_suspend_timeout_ms);
-+		kthread_stop(sync_task);
-+		return -ETIMEDOUT;
-+	}
-+	return 0;
-+}
-+
- /**
-  * pm_suspend_default_s2idle - Check if suspend-to-idle is the default suspend.
-  *
-@@ -585,8 +635,12 @@ static int enter_state(suspend_state_t state)
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
--		ksys_sync_helper();
-+		error = suspend_sync_with_timeout();
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-+		if (error) {
-+			pr_err("PM: Sync timeout, aborting suspend\n");
-+			goto Unlock;
-+		}
- 	}
- 
- 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
+    Remove the outdated file.
+
+    Signed-off-by: Frank Li <Frank.Li@nxp.com>
+    [ Viresh: Rewrite commit log ]
+    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+
 -- 
-2.20.1
-
+viresh
 
