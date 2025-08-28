@@ -1,448 +1,341 @@
-Return-Path: <linux-pm+bounces-33263-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33264-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37D82B39F73
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 15:56:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A85B39FB0
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 16:04:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C84137B572C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 13:54:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 391E6A0237E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 14:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3876226C39F;
-	Thu, 28 Aug 2025 13:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF262288E3;
+	Thu, 28 Aug 2025 14:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bM4iFahC"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="ADBZJVwB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y8cluWGN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACB91CDFD5;
-	Thu, 28 Aug 2025 13:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E9C204C1A;
+	Thu, 28 Aug 2025 14:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756389380; cv=none; b=NEUcxjYQAgimdA+nslYYINM1ZWxtsJeIJpfJ82pFd6See5bQIHbIR7GZMY1SXq+2AkUw7QnSfli2F46UWqhdPJGCN0DngzMsHKqbLdfaansDldSoHjTEaS9w2MEpGc3E6urCAR1fJFp8rtOLkIlfsUJjZvU02etPaSCwJzR9ckU=
+	t=1756389703; cv=none; b=GRzgPBuork5j/x/wKs5taG03cRUGbgLLsvdjvo3lhTGNuytSiwKeXNoFNnb7yw7MOWluPEL9iiFABkGq66z7BK1dM7VcpbCg67KG4qwH8ut+MiGczel8nnGukskhtyaCf8qeY/ng5WVHt/iz21gPDU+kcwsWGVUOTCSFjy5+VDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756389380; c=relaxed/simple;
-	bh=NVtfQkj/LLhGbbkjcOyFZJmL6lONFV3/3lzPX+8SPr0=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=mMw2QgcROKi/TZ/g2MP53ndYUKpw47ADV717oTQag4cXLU8xiPOUMYT1C46v3/kS4cq4MYw9cKvJ4TnOm6//d/040Y5VNOmjAJhNdJLe9JT4LwCsWwnmASGnhrDuVFcKzA5GzqQ/xcrtizMs1BnsISc64S+j1Hj+5YWBPpNsfkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bM4iFahC; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756389378; x=1787925378;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=NVtfQkj/LLhGbbkjcOyFZJmL6lONFV3/3lzPX+8SPr0=;
-  b=bM4iFahCpxR90vVgunjAFpfLxGhf9gfOkJrKOuy3Kx+AMfjaMbSfe9yY
-   VX5W9+pafzCjB7yBL+sgGR8+R3+FyLbkgvokdBG5Kitzoe/iE7KzYM9fs
-   rRFr+0O03v8pmjfeOUeulfq/I8KDgNOi8/CxO9Avz5zzhuYlhZ2l33ko1
-   4CARIPws3oSI5x0blKQNULuRquQICrt3mPb5D7qEzerEihXh3lVxiNKDd
-   NOdjtBTP5aPvkIjevHyGe4M1mnIdQQbrsGZmYyb0tMqf2SLevP+KJEYaJ
-   6VHp423weKkD6tC6PeVoUyIcAtjcugkOhVl6Rs8bFcdhuvdKzdKObFnHQ
-   g==;
-X-CSE-ConnectionGUID: 117nSS9MR464gffnpvcS3g==
-X-CSE-MsgGUID: DzFuJoCLStmzgHDQlmLThw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="69364338"
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="69364338"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 06:56:18 -0700
-X-CSE-ConnectionGUID: kyI6ONA1SQC+ZxrRCvflIQ==
-X-CSE-MsgGUID: C9a/RJgqS+KJWNZ9mFAh8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="201035136"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.99])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 06:56:11 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 28 Aug 2025 16:56:05 +0300 (EEST)
-To: Xi Pardee <xi.pardee@linux.intel.com>
-cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
-    Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] platform/x86:intel/pmc: Show device and function
- number
-In-Reply-To: <20250815224611.2460255-6-xi.pardee@linux.intel.com>
-Message-ID: <c9aa04ae-f942-cf73-d046-78d0f90f373d@linux.intel.com>
-References: <20250815224611.2460255-1-xi.pardee@linux.intel.com> <20250815224611.2460255-6-xi.pardee@linux.intel.com>
+	s=arc-20240116; t=1756389703; c=relaxed/simple;
+	bh=rreEJehO7CQ2EprUn7hNBtTVr7RiGsX/VW4AoAEZkNg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=P1zFU3ZtwyQs+BsaRc+D5Ic4Fb3dBJOuskJo/1fDto4A71bN5WHOYlgNn4dd7kzAJqrFUirW4LtvHU1s6D+CRa6R+jippmJPlituPpyocWf9F8d2H4Q4PFEbUmyXzSVzT6sOnyrvG3MKOK61pW5oLwpF2Coi5IsyU7GqBOVuiME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=ADBZJVwB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y8cluWGN; arc=none smtp.client-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailflow.phl.internal (Postfix) with ESMTP id CB2F91380311;
+	Thu, 28 Aug 2025 10:01:39 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Thu, 28 Aug 2025 10:01:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1756389699; x=1756396899; bh=Bd
+	iqgki9cBkiwn3KTMZOlcoUGn7D1IeQeuemnuB1DqA=; b=ADBZJVwB4Q6sZ2Tw/e
+	UbkB4Wrz/99ItsY/cXgDy3pARv2tZyvq3eA67YQMrxtL10ntel0P19EW5lfS6gnd
+	BPOOZBA19X+G5FPHe3ewOoOzMNkE8ENCcLdf8+85K0iMn9vjg1jhDnh7aM028SfQ
+	60HVD8Tr5ZQzZIJDnZn2xBFX3z2qKxHxe4DFpueI/eoJ1BVQ/M17rm2bjyCF+3iJ
+	KMGRG2a5AdPVhoSQ3QlTOzlh9abmuJwK4vPsAsjwubZoV7kO6GoX91pLL5geoFSN
+	Qz7mRFTYqqxlN7pzNM1brzC6BnE6JIJjp8Z4YOzVVkpq9F2OW1AN6uebTYoau9XU
+	XUpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1756389699; x=1756396899; bh=Bdiqgki9cBkiwn3KTMZOlcoUGn7D
+	1IeQeuemnuB1DqA=; b=Y8cluWGNlt+Uz2XFNr9E3UaVSakcSODI6MXhvYf9esOa
+	3lP9Ynr4gRAY9QJJ1pVqV1dlI7Tyxo9ZORseBCPIXckru7h29mDcOF2L74A4dTHY
+	87ilbFJwtVi6y9bR/cLDuEXCuMjT+IZKjsZGU93fQsNC3vHQu8zrPFL+SO68jX/6
+	RRvOfSuHbi7p8sdlSuMN6X/OwqFDhx2Eiodq8iowY1eQc4A5xuUZwqYsuFcu99lf
+	KLfmB1NM8Z2VsPdYq5Atz728uKGsLYmzi/i4Xq6vxdxOJZ6Zde3ub+HQ5zofMjYD
+	piHfnrATsF0lSI6ER4TXMEkhaO+HwY/i6gqWbUHrAw==
+X-ME-Sender: <xms:P2GwaIBHlvJAMQds1A_f2aHM4mQA0EyIuA_BsXOnNe-kI-LktVHNjA>
+    <xme:P2GwaB9VXWu9Bu1dUXm9NttsUwXZHLlpJ4t6G6lGapW-6MjVQvhWyJfG2n_wu5jIZ
+    rdFWdCX96UACfEycEg>
+X-ME-Received: <xmr:P2GwaEgkkj056qkioG7x2_3w5bo8GJlfrF3XjnnIcwaWn8H3QfyXjuSmvkyuKEbQGvl4EBLyq42Miz09_K1VIdESN97yMWNeFwPWtA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeduvdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflrghnnhgvucfi
+    rhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqnecuggftrfgrthhtvghrnhepueelgf
+    fhfedvgeelfeduuefhfefhjeeihfffueefjeeihffhheeuteeuvdeuhffhnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehjsehjrghnnhgruhdrnhgvthdpnhgspghrtghpthhtohepieeg
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdhgphhiohesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhrghnnhgvshesshhiphhsohhl
+    uhhtihhonhhsrdhnvghtpdhrtghpthhtohepphgvrhgvgiesphgvrhgvgidrtgiipdhrtg
+    hpthhtohepvhhkohhulheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidq
+    figrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgvth
+    htvghnihhssehophgvnhgsshgurdhorhhgpdhrtghpthhtohepkhgsuhhstghhsehkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehsrghgihesghhrihhmsggvrhhgrdhmvgdprhgtph
+    htthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:P2GwaJudJdM0u5W3UFLTkwba72c3hxydpGCRSdvg6L3GHTxSpqmkHg>
+    <xmx:P2GwaMjP22YfAokDZ7PeUmZ7uVN_AmQvyw2X-sSklEiDS0YbGpaW4Q>
+    <xmx:P2GwaL1D4aijQkGv_-yO9gyqMkCknikU6rQgPnQTL5K4KCRTL5r2qA>
+    <xmx:P2GwaIUYbVgPIREMiLBzTmfL0cEnIlg2N0KuvkxKULoD58jCwzg3UQ>
+    <xmx:Q2GwaNj1a3girAXO08ZsA7h_-HySJf0B0nmH2fYIqgXUj1uKEhfqm3_d>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 28 Aug 2025 10:01:34 -0400 (EDT)
+From: Janne Grunau <j@jannau.net>
+Subject: [PATCH 00/37] arm64: Add initial device trees for Apple M2
+ Pro/Max/Ultra devices
+Date: Thu, 28 Aug 2025 16:01:19 +0200
+Message-Id: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC9hsGgC/0XMywrCMBCF4Vcps3Ygk9JL+irSRZxONCCxJrEop
+ e9usAWX/4HzrZAkekkwVCtEWXzyj1CCThXwzYaroJ9Kg1a6UT0RThntPN8Fc6u0Qqobw2IuTks
+ H5TRHcf79A8/j3lGer+LmffyzQ3Wg9SEWOn0CY4vU4USOiXvjOrbDomHcti8Y5BwsrQAAAA==
+X-Change-ID: 20250811-dt-apple-t6020-1359ce9bf2e7
+To: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+  Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>,
+  Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>, Hector Martin <marcan@marcan.st>,
+  "Rafael J. Wysocki" <rafael@kernel.org>,
+  Viresh Kumar <viresh.kumar@linaro.org>,
+  Thomas Gleixner <tglx@linutronix.de>, Joerg Roedel <joro@8bytes.org>,
+  Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+  Linus Walleij <linus.walleij@linaro.org>,
+  Mark Kettenis <kettenis@openbsd.org>,
+ Andi Shyti <andi.shyti@kernel.org>,
+  Jassi Brar <jassisinghbrar@gmail.com>,
+  Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+  Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+  David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+  Sasha Finkelstein <fnkl.kernel@gmail.com>,
+  Marcel Holtmann <marcel@holtmann.org>,
+  Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+  Johannes Berg <johannes@sipsolutions.net>,
+ van Spriel <arend@broadcom.com>,  Lee Jones <lee@kernel.org>,
+  =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+  Stephen Boyd <sboyd@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+  Guenter Roeck <linux@roeck-us.net>,
+  Michael Turquette <mturquette@baylibre.com>,
+  =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+  Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+  Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+  Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>,
+  Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+  Sagi Grimberg <sagi@grimberg.me>, Jaroslav Kysela <perex@perex.cz>,
+  Takashi Iwai <tiwai@suse.com>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org, 
+ linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10250; i=j@jannau.net;
+ s=yk2024; h=from:subject:message-id;
+ bh=rreEJehO7CQ2EprUn7hNBtTVr7RiGsX/VW4AoAEZkNg=;
+ b=owGbwMvMwCW2UNrmdq9+ahrjabUkhowNiebim8+dC13+IPl31+8UrzaOtTM8FZJ+Ory07o5id
+ yo+d7ioo5SFQYyLQVZMkSVJ+2UHw+oaxZjaB2Ewc1iZQIYwcHEKwEQSuhj+GZU9tTFeNPdAgvqc
+ g/HzFZqeFsQ+WWb74M6mpT41W3q2sjH8j9nrU/hRbcU6i4Kc/591/3XsXllT0PWYXajBcPrXPTw
+ 8HAA=
+X-Developer-Key: i=j@jannau.net; a=openpgp;
+ fpr=8B336A6BE4E5695E89B8532B81E806F586338419
 
-On Fri, 15 Aug 2025, Xi Pardee wrote:
+This series adds device trees for Apple's M2 Pro, Max and Ultra based
+devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+follow design of the t600x family so copy the structure of SoC *.dtsi
+files.
 
-> Add support to show device and function number for S0ix blockers. This
-> feature depends on S0ix blocker substate requirement table and BDF
-> association table. This feature is available for platforms starting from
-> Pather Lake.
-> 
-> Only a subset of S0ix blockers has device and function number associated
-> to it. Get the availability information from the substate requirement
-> table. Get the device and function number mapping information for each
-> S0ix blocker from the BDF association table.
-> 
-> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/pmc/core.c | 182 +++++++++++++++++++++++++-
->  drivers/platform/x86/intel/pmc/core.h |  23 +++-
->  2 files changed, 203 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-> index a0b948a875a5a..69ee40cbb8b8a 100644
-> --- a/drivers/platform/x86/intel/pmc/core.c
-> +++ b/drivers/platform/x86/intel/pmc/core.c
-> @@ -1017,6 +1017,38 @@ const struct file_operations pmc_core_substate_req_regs_fops = {
->  	.release	= single_release,
->  };
->  
-> +static int pmc_core_bdf_show(struct seq_file *s, void *unused)
-> +{
-> +	struct pmc_dev *pmcdev = s->private;
-> +	unsigned int pmcidx;
-> +
-> +	seq_printf(s, "%36s | %15s | %15s |\n", "Element", "Device Number", "Function Number");
-> +	for (pmcidx = 0; pmcidx < ARRAY_SIZE(pmcdev->pmcs); pmcidx++) {
+t6020 is a cut-down version of t6021, so the former just includes the
+latter and disables the missing bits.
 
-Change this to pmc_idx and lets make it the only form that are added from 
-this point on.
+t6022 is two connected t6021 dies. The implementation seems to use
+t6021 and disables blocks based on whether it is useful to carry
+multiple instances. The disabled blocks are mostly on the second die.
+MMIO addresses on the second die have a constant offset. The interrupt
+controller is multi-die aware. This setup can be represented in the
+device tree with two top level "soc" nodes. The MMIO offset is applied
+via "ranges" and devices are included with preprocessor macros to make
+the node labels unique and to specify the die number for the interrupt
+definition.
 
-The other ones should be converted to it eventually, I once had a cleanup 
-patch to rename them but IIRC I dropped it to not conflict with some 
-feature worked. Maybe you can fit a rename change into some series so I 
-won't end up conflicting your feature work :-).
+The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
+counterparts. The existing device templates are SoC agnostic so the new
+devices can reuse them and include their t602{0,1,2}.dtsi file. The
+minor differences in pinctrl and gpio numbers can be easily adjusted.
 
-> +		const char *name = NULL;
-> +		struct list_head *cur;
-> +		struct bdf_entry *bdf;
-> +		struct pmc *pmc;
-> +
-> +		pmc = pmcdev->pmcs[pmcidx];
-> +		if (!pmc)
-> +			continue;
-> +
-> +		list_for_each(cur, pmc->bdf_list) {
-> +			bdf = list_entry(cur, struct bdf_entry, node);
-> +			if (bdf->name != name) {
-> +				seq_printf(s, "pmc%d: %30s | %15x | %15x |\n", pmcidx,
+With the t602x SoC family Apple introduced two new devices:
 
-%u
+The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
+missing SDHCI card reader and two front USB3.1 type-c ports and their
+internal USB hub can be easily deleted.
 
-> +					   bdf->name, bdf->dev_num, bdf->fun_num);
-> +				name = bdf->name;
-> +			} else {
-> +				seq_printf(s, "%54x | %15x |\n",
-> +					   bdf->dev_num, bdf->fun_num);
-> +			}
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(pmc_core_bdf);
-> +
->  static unsigned int pmc_core_get_crystal_freq(void)
->  {
->  	unsigned int eax_denominator, ebx_numerator, ecx_hz, edx;
-> @@ -1418,6 +1450,10 @@ static void pmc_core_dbgfs_register(struct pmc_dev *pmcdev, struct pmc_dev_info
->  				    pmc_dev_info->sub_req_show);
->  	}
->  
-> +	if (primary_pmc->bdf_list) {
-> +		debugfs_create_file("bdf", 0444, pmcdev->dbgfs_dir, pmcdev, &pmc_core_bdf_fops);
-> +	}
+The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
+devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
+implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
+calls the PCIe controller "apcie-ge" in their device tree. The
+implementation seems to be mostly compatible with the base t6020 PCIe
+controller. The main difference is that there is only a single port with
+with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
+Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
+and PCIe slots connect too.
 
-Unnecessary braces.
+This series does not include PCIe support for the Mac Pro for two
+reasons:
+- the linux switchtec driver fails to probe and the downstream PCIe
+  connections come up as PCIe Gen1
+- some of the internal devices require PERST# and power control to come
+  up. Since the device are connected via the PCIe switch the PCIe
+  controller can not do this. The PCI slot pwrctrl can be utilized for
+  power control but misses integration with PERST# as proposed in [1].
 
-> +
->  	if (primary_pmc->map->pson_residency_offset && pmc_core_is_pson_residency_enabled(pmcdev)) {
->  		debugfs_create_file("pson_residency_usec", 0444,
->  				    pmcdev->dbgfs_dir, primary_pmc, &pmc_core_pson_residency);
-> @@ -1521,7 +1557,7 @@ int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct tel
->  	return ret;
->  }
->  
-> -int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
-> +static int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
->  				 struct telem_endpoint *ep)
->  {
->  	u32 num_blocker, sample_id;
-> @@ -1551,6 +1587,150 @@ int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
->  	return 0;
->  }
->  
-> +static const char *pmc_core_get_next_bdf_ip_name(struct pmc *pmc, unsigned int *r_idx,
-> +						 unsigned int *i_idx, u32 **lpm_req_regs)
-> +{
-> +	const struct pmc_bit_map **maps;
-> +	unsigned int arr_size;
-> +	bool reset = FALSE;
+This series depends on "[PATCH v2 0/5] Apple device tree sync from
+downstream kernel" [2] due to the reuse of the t600x device templates
+(patch dependencies and DT compilation) and 4 page table level support
+in apple-dart and io-pgtable-dart [3] since the dart instances report
+42-bit IAS (IOMMU device attach fails without the series).
 
-FALSE is a define in some obscure header (which you probably didn't 
-include intentionally anyway ;-)).
+After discussion with the devicetree maintainers we agreed to not extend
+lists with the generic compatibles anymore [1]. Instead either the first
+compatible SoC or t8103 is used as fallback compatible supported by the
+drivers. t8103 is used as default since most drivers and bindings were
+initially written for M1 based devices.
 
-Please use false.
+The series adds those fallback compatibles to drivers where necessary,
+annotates the SoC lists for generic compatibles as "do not extend" and
+adds t6020 per-SoC compatibles.
 
-> +
-> +	maps = pmc->map->s0ix_blocker_maps;
-> +	arr_size = pmc_core_lpm_get_arr_size(maps);
-> +
-> +	// Iteration reaches the end of the bitmap array
+[1]: https://lore.kernel.org/linux-pci/20250819-pci-pwrctrl-perst-v1-0-4b74978d2007@oss.qualcomm.com/
+[2]: https://lore.kernel.org/asahi/20250823-apple-dt-sync-6-17-v2-0-6dc0daeb4786@jannau.net/
+[3]: https://lore.kernel.org/asahi/20250821-apple-dart-4levels-v2-0-e39af79daa37@jannau.net/
+[4]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
 
-This driver has used exclusively /* */ comments.
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+Hector Martin (3):
+      arm64: dts: apple: Add initial t6020/t6021/t6022 DTs
+      arm64: dts: apple: Add J414 and J416 Macbook Pro device trees
+      arm64: dts: apple: Add J180d (Mac Pro, M2 Ultra, 2023) device tree
 
-> +	if (!maps[*r_idx][*i_idx].name)
-> +		(*r_idx)++;
-> +
-> +	// Iteration reaches the end of the maps
-> +	if (*r_idx >= arr_size)
-> +		return NULL;
-> +
-> +	for (; *r_idx < arr_size; (*r_idx)++) {
-> +		const char *ip_name;
+Janne Grunau (34):
+      dt-bindings: arm: apple: Add t6020x compatibles
+      dt-bindings: arm: apple: apple,pmgr: Add t6020-pmgr compatible
+      pmdomain: apple: Add "apple,t8103-pmgr-pwrstate"
+      dt-bindings: power: apple,pmgr-pwrstate: Add t6020 compatible
+      dt-bindings: cpufreq: apple,cluster-cpufreq: Add t6020 compatible
+      dt-bindings: interrupt-controller: apple,aic2: Add apple,t6020-aic compatible
+      dt-bindings: iommu: dart: Add apple,t6020-dart compatible
+      pinctrl: apple: Add "apple,t8103-pinctrl" as compatible
+      dt-bindings: pinctrl: apple,pinctrl: Add apple,t6020-pinctrl compatible
+      dt-bindings: i2c: apple,i2c: Add apple,t6020-i2c compatible
+      dt-bindings: mailbox: apple,mailbox: Add t6020 compatible
+      dt-bindings: gpu: apple,agx: Add agx-{g14s,g14c,g14d} compatibles
+      dt-bindings: iommu: apple,sart: Add apple,t6020-sart compatible
+      nvme-apple: Add "apple,t8103-nvme-ans2" as compatible
+      dt-bindings: nvme: apple: Add apple,t6020-nvme-ans2 compatible
+      dt-bindings: net: bcm4377-bluetooth: Add BCM4388 compatible
+      dt-bindings: net: bcm4329-fmac: Add BCM4388 PCI compatible
+      mfd: macsmc: Add "apple,t8103-smc" compatible
+      dt-bindings: mfd: apple,smc: Add t6020-smc compatible
+      dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm compatible
+      spmi: apple: Add "apple,t8103-spmi" compatible
+      dt-bindings: spmi: apple,spmi: Add t6020-spmi compatible
+      watchdog: apple: Add "apple,t8103-wdt" compatible
+      dt-bindings: watchdog: apple,wdt: Add t6020-wdt compatible
+      clk: clk-apple-nco: Add "apple,t8103-nco" compatible
+      dt-bindings: clock: apple,nco: Add t6020-nco compatible
+      dmaengine: apple-admac: Add "apple,t8103-admac" compatible
+      dt-bindings: dma: apple,admac: Add t6020-admac compatible
+      ASoC: apple: mca: Add "apple,t8103-mca" compatible
+      ASoC: dt-bindings: apple,mca: Add t6020-mca compatible
+      spi: apple: Add "apple,t8103-spi" compatible
+      spi: dt-bindings: apple,spi: Add t6020-spi compatible
+      arm64: dts: apple: Add ethernet0 alias for J375 template
+      arm64: dts: apple: Add J474s, J475c and J475d device trees
 
-Can't you put this to the innermost block?
+ Documentation/devicetree/bindings/arm/apple.yaml   |   39 +-
+ .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |   33 +-
+ .../devicetree/bindings/clock/apple,nco.yaml       |   17 +-
+ .../bindings/cpufreq/apple,cluster-cpufreq.yaml    |    3 +
+ .../devicetree/bindings/dma/apple,admac.yaml       |   17 +-
+ .../devicetree/bindings/gpu/apple,agx.yaml         |    6 +
+ .../devicetree/bindings/i2c/apple,i2c.yaml         |   27 +-
+ .../bindings/interrupt-controller/apple,aic2.yaml  |    1 +
+ .../devicetree/bindings/iommu/apple,dart.yaml      |   14 +-
+ .../devicetree/bindings/iommu/apple,sart.yaml      |    4 +-
+ .../devicetree/bindings/mailbox/apple,mailbox.yaml |    1 +
+ .../devicetree/bindings/mfd/apple,smc.yaml         |   17 +-
+ .../net/bluetooth/brcm,bcm4377-bluetooth.yaml      |    1 +
+ .../bindings/net/wireless/brcm,bcm4329-fmac.yaml   |    1 +
+ .../devicetree/bindings/nvme/apple,nvme-ans.yaml   |   29 +-
+ .../devicetree/bindings/pinctrl/apple,pinctrl.yaml |   27 +-
+ .../bindings/power/apple,pmgr-pwrstate.yaml        |   27 +-
+ .../devicetree/bindings/pwm/apple,s5l-fpwm.yaml    |    3 +-
+ .../devicetree/bindings/sound/apple,mca.yaml       |   17 +-
+ .../devicetree/bindings/spi/apple,spi.yaml         |   16 +-
+ .../devicetree/bindings/spmi/apple,spmi.yaml       |   17 +-
+ .../devicetree/bindings/watchdog/apple,wdt.yaml    |   27 +-
+ arch/arm64/boot/dts/apple/Makefile                 |    8 +
+ arch/arm64/boot/dts/apple/t600x-j375.dtsi          |    1 +
+ arch/arm64/boot/dts/apple/t6020-j414s.dts          |   26 +
+ arch/arm64/boot/dts/apple/t6020-j416s.dts          |   26 +
+ arch/arm64/boot/dts/apple/t6020-j474s.dts          |   47 +
+ arch/arm64/boot/dts/apple/t6020.dtsi               |   22 +
+ arch/arm64/boot/dts/apple/t6021-j414c.dts          |   26 +
+ arch/arm64/boot/dts/apple/t6021-j416c.dts          |   26 +
+ arch/arm64/boot/dts/apple/t6021-j475c.dts          |   37 +
+ arch/arm64/boot/dts/apple/t6021.dtsi               |   69 +
+ arch/arm64/boot/dts/apple/t6022-j180d.dts          |  121 ++
+ arch/arm64/boot/dts/apple/t6022-j475d.dts          |   42 +
+ arch/arm64/boot/dts/apple/t6022-jxxxd.dtsi         |   38 +
+ arch/arm64/boot/dts/apple/t6022.dtsi               |  347 +++
+ arch/arm64/boot/dts/apple/t602x-common.dtsi        |  465 ++++
+ arch/arm64/boot/dts/apple/t602x-die0.dtsi          |  577 +++++
+ arch/arm64/boot/dts/apple/t602x-dieX.dtsi          |  129 ++
+ arch/arm64/boot/dts/apple/t602x-gpio-pins.dtsi     |   81 +
+ arch/arm64/boot/dts/apple/t602x-j414-j416.dtsi     |   45 +
+ arch/arm64/boot/dts/apple/t602x-j474-j475.dtsi     |   38 +
+ arch/arm64/boot/dts/apple/t602x-nvme.dtsi          |   42 +
+ arch/arm64/boot/dts/apple/t602x-pmgr.dtsi          | 2268 ++++++++++++++++++++
+ drivers/clk/clk-apple-nco.c                        |    1 +
+ drivers/dma/apple-admac.c                          |    1 +
+ drivers/mfd/macsmc.c                               |    1 +
+ drivers/nvme/host/apple.c                          |    1 +
+ drivers/pinctrl/pinctrl-apple-gpio.c               |    1 +
+ drivers/pmdomain/apple/pmgr-pwrstate.c             |    1 +
+ drivers/spi/spi-apple.c                            |    1 +
+ drivers/spmi/spmi-apple-controller.c               |    1 +
+ drivers/watchdog/apple_wdt.c                       |    1 +
+ sound/soc/apple/mca.c                              |    1 +
+ 54 files changed, 4722 insertions(+), 113 deletions(-)
+---
+base-commit: 50ee15a27ec4cc41e99ee5e9011de7875569cd52
+change-id: 20250811-dt-apple-t6020-1359ce9bf2e7
+prerequisite-change-id: 20250813-apple-dt-sync-6-17-d1fc1c89f7ca:v2
+prerequisite-patch-id: 1405c7c78139704a4cbeb1adc67786b2c7971a3f
+prerequisite-patch-id: 65865050e9e7427bac04f47d0b7927aacaac19bd
+prerequisite-patch-id: 9240e5f435fb3406e77b4e4e9b02eb3d52e660e6
+prerequisite-patch-id: c16715c9a9fcb396b7e4365fd767b05604b8de81
+prerequisite-patch-id: a675ad20c2b427a021dafb5d6c8716497741604c
 
-> +		if (reset)
-
-Why you need this?
-
-> +			*i_idx = 0;
-> +
-> +		for (; maps[*r_idx][*i_idx].name; reset = TRUE, (*i_idx)++) {
-
-true
-
-This is hard enough to understand even without that "for (;". Would 
-probably be better to use while () instead.
-
-> +			if (!maps[*r_idx][*i_idx].blk)
-> +				continue;
-> +
-> +			bool exist = **lpm_req_regs & BIT(BDF_EXIST_BIT);
-> +			(*lpm_req_regs)++;
-> +			if (exist) {
-> +				ip_name = maps[*r_idx][*i_idx].name;
-> +				(*i_idx)++;
-> +				return ip_name;
-> +			}
-> +		}
-> +	}
-> +	return NULL;
-> +}
-
-TBH, this entire function is horrible mess, two nested iterators as 
-pointers, etc.
-
-I'm very far from following all what going on here.
-
-I suppose I've not seen this patch previously?
-
-> +static int pmc_core_process_bdf(struct pmc_dev *pmcdev,  struct pmc *pmc, u32 data,
-> +				unsigned int *r_idx, unsigned int *i_idx, u32 **lpm_req_regs,
-> +				const char **name)
-> +{
-> +	unsigned int i;
-> +
-> +	if (!data)
-> +		return 0;
-> +
-> +	if (!*name)
-> +		return -EINVAL;
-> +
-> +	for (i = BDF_FUN_LOW_BIT; i <= BDF_FUN_HIGH_BIT; i++) {
-
-I think you can iterate 0 ... __fls(FIELD_MAX()).
-
-> +		struct bdf_entry *b_entry;
-> +		u32 function_data;
-> +
-> +		function_data = (data & BIT(i));
-> +		if (function_data) {
-
-Why the extra variable???
-
-> +			b_entry = devm_kzalloc(&pmcdev->pdev->dev, sizeof(*b_entry), GFP_KERNEL);
-> +			if (!b_entry)
-> +				return -ENOMEM;
-> +			b_entry->dev_num = data & GENMASK(BDF_DEV_HIGH_BIT, BDF_DEV_LOW_BIT);
-> +			b_entry->fun_num = i - BDF_FUN_LOW_BIT;
-
-What "fun" stands for? Should it be "func" as is the typical short for 
-"function" in BDF?
-
-> +			b_entry->name = *name;
-> +			list_add_tail(&b_entry->node, pmc->bdf_list);
-> +		}
-> +	}
-> +
-> +	if (!(data & BIT(BDF_REQ_BIT)))
-> +		*name = pmc_core_get_next_bdf_ip_name(pmc, r_idx, i_idx, lpm_req_regs);
-> +
-> +	return 0;
-> +}
-> +
-> +static int pmc_core_pmt_get_bdf(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep)
-> +{
-> +	unsigned int sample_id, max_sample_id, header_id, size, r_idx, i_idx;
-> +	struct bdf_entry *entry;
-> +	u32 *lpm_reg_regs;
-> +	const char *name;
-> +	int ret;
-> +
-> +	header_id = pmc->map->bdf_offset;
-> +	sample_id = header_id;
-> +	max_sample_id = sample_id + pmc->map->bdf_table_size;
-> +	lpm_reg_regs = pmc->lpm_req_regs;
-> +	r_idx = 0;
-> +	i_idx = 0;
-> +
-> +	name = pmc_core_get_next_bdf_ip_name(pmc, &r_idx, &i_idx, &lpm_reg_regs);
-> +	if (!name)
-> +		return -EINVAL;
-> +
-> +	pmc->bdf_list = devm_kzalloc(&pmcdev->pdev->dev, sizeof(struct list_head), GFP_KERNEL);
-
-Should use sizeof(*xx).
-
-But why you need to allocate the list head and not have it in place 
-within the pmc's struct?
-
-> +	if (!pmc->bdf_list)
-> +		return -ENOMEM;
-> +
-> +	INIT_LIST_HEAD(pmc->bdf_list);
-> +
-> +	for (; sample_id < max_sample_id; sample_id++) {
-> +		u32 data;
-> +
-> +		ret = pmt_telem_read32(ep, sample_id, &data, 1);
-> +		if (ret) {
-> +			dev_err(&pmcdev->pdev->dev,
-> +				"couldn't read bdf: %d\n", ret);
-
-One line.
-
-> +			return ret;
-> +		}
-> +
-> +		if (sample_id == header_id) {
-> +			size = (data & GENMASK(BDF_SIZE_HIGH_BIT, BDF_SIZE_LOW_BIT))
-> +			       >> BDF_SIZE_LOW_BIT;
-
-Define the field and use FIELD_GET().
-
-> +			header_id += size + 1;
-
-No, I just cannot understand what's going on here, it's hopeless. Always 
-when I think I've finally understood what its all about you throw a curve 
-ball like this.
-
-In case this series is in any kind of hurry. I suggest you send the series 
-without this patch and we work out this patch separately on top of the 
-applied patches (I expect the patch 1-5 to be fine on next iteration).
-
-> +			continue;
-> +		}
-> +
-> +		ret = pmc_core_process_bdf(pmcdev, pmc, data, &r_idx, &i_idx, &lpm_reg_regs, &name);
-> +		if (ret)
-> +			return ret;
-> +		data = data >> BDF_SIZE;
-> +		ret = pmc_core_process_bdf(pmcdev, pmc, data, &r_idx, &i_idx, &lpm_reg_regs, &name);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	list_for_each_entry(entry, pmc->bdf_list, node) {
-> +		dev_dbg(&pmcdev->pdev->dev, "bdf info: name %s, dev_num %x, fun_num %x",
-> +			entry->name, entry->dev_num, entry->fun_num);
-> +	}
-> +	return 0;
-> +}
-> +
-> +int pmc_core_pmt_get_sub_req_bdf(struct pmc_dev *pmcdev, struct pmc *pmc,
-> +				 struct telem_endpoint *ep)
-> +{
-> +	int ret;
-> +
-> +	ret = pmc_core_pmt_get_blk_sub_req(pmcdev, pmc, ep);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return pmc_core_pmt_get_bdf(pmcdev, pmc, ep);
-> +}
-> +
->  static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->  {
->  	struct pci_dev *pcidev __free(pci_dev_put) = NULL;
-> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-> index bfe8fba808063..6ff2d171dc2ba 100644
-> --- a/drivers/platform/x86/intel/pmc/core.h
-> +++ b/drivers/platform/x86/intel/pmc/core.h
-> @@ -317,6 +317,24 @@ enum ppfear_regs {
->  #define PMC_DEVID_MTL_IOEP	0x7ecf
->  #define PMC_DEVID_MTL_IOEM	0x7ebf
->  
-> +/* BDF offset */
-> +#define BDF_EXIST_BIT		3
-> +#define BDF_SIZE_HIGH_BIT	23
-> +#define BDF_SIZE_LOW_BIT	16
-> +#define BDF_DEV_HIGH_BIT	4
-> +#define BDF_DEV_LOW_BIT		0
-> +#define BDF_FUN_HIGH_BIT	12
-> +#define BDF_FUN_LOW_BIT		5
-> +#define BDF_REQ_BIT		15
-> +#define BDF_SIZE		16
-
-Use BIT(), GENMASK() for most right here. All?
-
-> +
-> +struct bdf_entry {
-> +	struct list_head node;
-> +	const char *name;
-> +	u32 dev_num;
-> +	u32 fun_num;
-> +};
-> +
->  extern const char *pmc_lpm_modes[];
->  
->  struct pmc_bit_map {
-> @@ -373,6 +391,8 @@ struct pmc_reg_map {
->  	const u32 s0ix_blocker_offset;
->  	const u32 num_s0ix_blocker;
->  	const u32 blocker_req_offset;
-> +	const u32 bdf_offset;
-> +	const u32 bdf_table_size;
->  	/* Low Power Mode registers */
->  	const int lpm_num_maps;
->  	const int lpm_num_modes;
-> @@ -418,6 +438,7 @@ struct pmc {
->  	const struct pmc_reg_map *map;
->  	u32 *lpm_req_regs;
->  	u32 ltr_ign;
-> +	struct list_head *bdf_list;
->  };
->  
->  /**
-> @@ -540,7 +561,7 @@ extern struct pmc_dev_info ptl_pmc_dev;
->  void cnl_suspend(struct pmc_dev *pmcdev);
->  int cnl_resume(struct pmc_dev *pmcdev);
->  int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep);
-> -int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
-> +int pmc_core_pmt_get_sub_req_bdf(struct pmc_dev *pmcdev, struct pmc *pmc,
->  				 struct telem_endpoint *ep);
->  
->  extern const struct file_operations pmc_core_substate_req_regs_fops;
-> 
-
+Best regards,
 -- 
- i.
+Janne Grunau <j@jannau.net>
 
 
