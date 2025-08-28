@@ -1,107 +1,152 @@
-Return-Path: <linux-pm+bounces-33332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05D56B3AB5C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 22:15:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B61B3AB6E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 22:16:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C18E5207B9E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 20:15:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98D5FA013AF
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Aug 2025 20:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD0E264A9E;
-	Thu, 28 Aug 2025 20:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A81274FF2;
+	Thu, 28 Aug 2025 20:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="acV0uXrf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhvsm+lc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D3D1991CB;
-	Thu, 28 Aug 2025 20:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE1A273D7B;
+	Thu, 28 Aug 2025 20:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756412145; cv=none; b=ESAeOo+1wic1F+it6fEmfQQJhmlo/WGfZaTN/eeBytPP4j7Au3qtcitUJ8nciU3bY8fRxWMRUITjqfWjR3NWKvpVcpYn/Zf4rR7Y3WbuGM/kUWIX6GEJZTpsKwR6wdt5p6yiNABTq5uyfdag6Dwc9/kjmRNxrm2l9E2jkLnVt8g=
+	t=1756412186; cv=none; b=LpjHjG4B+WoCCklwh4O5hlvz1Y59NLw8kkMJCO5t5CjmEfQVT0swsmVry5tCG6YexnecGzObm6jaTTJ0+cxvXE5/8J4/+8OQnPKj5nc6DgHHQXaWkZ25awcBKAc/StbBg9H/p957WpOwm7cgMhu+d2SBnJQaFu8xX2MwryiAHlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756412145; c=relaxed/simple;
-	bh=0kAURCamzDhFeTEPWTVMzWRqqdRIcNdU/CBMS3Fa7bc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y1LEl1A8PUJofmhVkxj2gLRhHA6AODAGwR7CtVo0d3fL77ib27H97UVOFlgBDuLFHkIq1zl8AepeYv2ltlH4GoRZeoPA13f8yw8te5LkvsgL+8uVA9VXP94I5z0Opcw8E1ys5suJyy62dzCVCD+Ja5phSkP6aSX0cjZv6Wex144=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=acV0uXrf; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756412144; x=1787948144;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0kAURCamzDhFeTEPWTVMzWRqqdRIcNdU/CBMS3Fa7bc=;
-  b=acV0uXrfDilauj9BqRVta+R3sqZ7uxK3I0eJ026nHU0TZ/19GRlccF6b
-   e5AG0gb1TBA1oZoTiZ0ywmPY/V7NWjCkUEXahmN5bBlhPD67TgPpy47v6
-   BZUrSNtdc7b+6o+i/j0V41jKKD3kFmjQD5d10ExL22JBj5TqNRvJ8NxM+
-   QbDJuJ+9NVbLHOboc3kAL9fldorWxDDjeM/AbxvXlLPHtLrovJgNC6ITP
-   GSbd/+Z5VtXRJobu3WmeEvyF6lJr7dnbDqKE+C0O74n57Tu4D6RwEnmbZ
-   1tS+ZWWL7btFL92IkLP901xUK/X+1oEge8l1mDG69/R9C74JWh3+uEfoP
-   Q==;
-X-CSE-ConnectionGUID: NelmaHPfSrSEdntuYqxCQQ==
-X-CSE-MsgGUID: +T5Gec+DSh+2w55DybghNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="84098227"
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="84098227"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 13:15:43 -0700
-X-CSE-ConnectionGUID: ijGNslvISpmYtZB9nTTPUA==
-X-CSE-MsgGUID: jFXPHXKIRkCI6x481TCAqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="169454343"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
-  by orviesa006.jf.intel.com with ESMTP; 28 Aug 2025 13:15:43 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	lukasz.luba@arm.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2] selftests/thermel/intel/workload_hint: Mask unsupported types
-Date: Thu, 28 Aug 2025 13:15:41 -0700
-Message-ID: <20250828201541.931425-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1756412186; c=relaxed/simple;
+	bh=CgBLmyi9jgGUOiv9TCodnN5Hn/4OG3mZltDzTz2ZkBU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cHu6+Szz56kt+eWLHC3uCET75VuMCBBaCAIUFXAlfCnzZ0MY+2DHl7VWZVU4ScjZYaR/qeWusTAfE1yhWpaOge7IMxqf8GeNeMRzZqZpFs0747t7SzSameUcbp5sCnXOw+gt2/eR1hA1qIFp9yVnFWUAukfO5qChcFSJOv6ellM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhvsm+lc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A7AC4CEEB;
+	Thu, 28 Aug 2025 20:16:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756412185;
+	bh=CgBLmyi9jgGUOiv9TCodnN5Hn/4OG3mZltDzTz2ZkBU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fhvsm+lcTt1YfmIC0GR9xSBEK83jAIDPHlw1FVHjoDGKzxVlZT0pemqxIbRa4P4QH
+	 fsnDGSzVIdcYWANZeLn1WWyIKAGsOSzazcK7widCEwPTdt6SHuSiL/2YYrH+zmj6tK
+	 NuudI4e1eLLYCwhcZnpUU59FbqLMEHBfvSwN7ceKs5r6S+MIRgp+oJ0bH6Hdyh9lZ4
+	 cC7mnZ0odHhjxsWSDbjc4U6jTvw++byM3CL5rIMANkBM/hVPd0Yw1BUfOnuMjAfY/w
+	 kuAtxnhvMdUiDDmrBL6hdUEhbvdslfNXzReAcyaKT8Z6W2ZcC+W0u4PvFfa6PllpWW
+	 AiK22kKremk8A==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Christian Loehle <christian.loehle@arm.com>
+Subject: [PATCH v1] cpuidle: governors: teo: Special-case nohz_full CPUs
+Date: Thu, 28 Aug 2025 22:16:20 +0200
+Message-ID: <5939372.DvuYhMxLoT@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <2804546.mvXUDI8C0e@rafael.j.wysocki>
+References: <2804546.mvXUDI8C0e@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-The workload hint may contain some other hints which are not defined.
-So mask out unsupported types. Currently only lower 4 bits of workload
-type hints are defined.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+This change follows an analogous modification of the menu governor [1].
+
+Namely, when the governor runs on a nohz_full CPU and there are no user
+space timers in the workload on that CPU, it ends up selecting idle
+states with target residency values above TICK_NSEC, or the deepest
+enabled idle state in the absence of any of those, all the time due to
+a tick_nohz_tick_stopped() check designed for running on CPUs where the
+tick is not permanently disabled.  In that case, the fact that the tick
+has been stopped means that the CPU was expected to be idle sufficiently
+long previously, so it is not unreasonable to expect it to be idle
+sufficiently long again, but this inference does not apply to nohz_full
+CPUs.
+
+In some cases, latency in the workload grows undesirably as a result of
+selecting overly deep idle states, and the workload may also consume
+more energy than necessary if the CPU does not spend enough time in the
+selected deep idle state.
+
+Address this by amending the tick_nohz_tick_stopped() check in question
+with a tick_nohz_full_cpu() one to avoid effectively ignoring all
+shallow idle states on nohz_full CPUs.  While doing so introduces a risk
+of getting stuck in a shallow idle state for a long time, that only
+affects energy efficiently, but the current behavior potentially hurts
+both energy efficiency and performance that is arguably the priority for
+nohz_full CPUs.
+
+While at it, add a comment explaining the logic in teo_state_ok().
+
+Link: https://lore.kernel.org/linux-pm/2244365.irdbgypaU6@rafael.j.wysocki/ [1]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-v2:
-- Removed extra line
+ drivers/cpuidle/governors/teo.c |   18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
- .../selftests/thermal/intel/workload_hint/workload_hint_test.c  | 2 ++
- 1 file changed, 2 insertions(+)
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -227,9 +227,17 @@
+ 	cpu_data->total += PULSE;
+ }
+ 
+-static bool teo_state_ok(int i, struct cpuidle_driver *drv)
++static bool teo_state_ok(int i, struct cpuidle_driver *drv, struct cpuidle_device *dev)
+ {
+-	return !tick_nohz_tick_stopped() ||
++	/*
++	 * If the scheduler tick has been stopped already, avoid selecting idle
++	 * states with target residency below the tick period length under the
++	 * assumption that the CPU is likely to be idle sufficiently long for
++	 * the tick to be stopped again (or the tick would not have been
++	 * stopped previously in the first place).  However, do not do that on
++	 * nohz_full CPUs where the above assumption does not hold.
++	 */
++	return !tick_nohz_tick_stopped() || tick_nohz_full_cpu(dev->cpu) ||
+ 		drv->states[i].target_residency_ns >= TICK_NSEC;
+ }
+ 
+@@ -379,7 +387,7 @@
+ 				 * shallow or disabled, in which case take the
+ 				 * first enabled state that is deep enough.
+ 				 */
+-				if (teo_state_ok(i, drv) &&
++				if (teo_state_ok(i, drv, dev) &&
+ 				    !dev->states_usage[i].disable) {
+ 					idx = i;
+ 					break;
+@@ -391,7 +399,7 @@
+ 			if (dev->states_usage[i].disable)
+ 				continue;
+ 
+-			if (teo_state_ok(i, drv)) {
++			if (teo_state_ok(i, drv, dev)) {
+ 				/*
+ 				 * The current state is deep enough, but still
+ 				 * there may be a better one.
+@@ -460,7 +468,7 @@
+ 	 */
+ 	if (drv->states[idx].target_residency_ns > duration_ns) {
+ 		i = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
+-		if (teo_state_ok(i, drv))
++		if (teo_state_ok(i, drv, dev))
+ 			idx = i;
+ 	}
+ 
 
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-index ba58589a1145..ca2bd03154e4 100644
---- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-@@ -144,6 +144,8 @@ int main(int argc, char **argv)
- 			ret = sscanf(index_str, "%d", &index);
- 			if (ret < 0)
- 				break;
-+
-+			index &= 0x0f;
- 			if (index > WORKLOAD_TYPE_MAX_INDEX)
- 				printf("Invalid workload type index\n");
- 			else
--- 
-2.43.0
+
 
 
