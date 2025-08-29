@@ -1,201 +1,145 @@
-Return-Path: <linux-pm+bounces-33405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15134B3B8A5
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 12:23:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4F1B3B8F0
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 12:35:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0DD33BBD94
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 10:23:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63B3458261C
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 10:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB00027E071;
-	Fri, 29 Aug 2025 10:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ccL5yb4s"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37373093BA;
+	Fri, 29 Aug 2025 10:31:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB4B1DF256
-	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 10:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9DD31987E
+	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 10:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756462999; cv=none; b=U2t+gTRCrO5WKekafxmBjEvaK5hmFXrJH7wRjdGAeRjN02jtblGVdHtIjj42GEziIv9IbMlLm5zc64HZCG5+YPs0nNgvjPuB7m7vNJTvezBWoiHcMt9TehSgVQJu/+BxbN/YqbCj50Q3M57fB2DBlFpkXk0EjubIB7Sy/aGqn2w=
+	t=1756463496; cv=none; b=XXLo6+NFl5xybRLy7GMYCJPtqvXIzcTUoUrnIgAs/Wkom6RoDZ/aMjPmp/mJ7YhtQHSQ61FECxK/cHqclShmkAVOwJl76jjOCF3QKhMp63rdladLHiQXt+tjWhho6sOqdUpiEx8rB5yY6ZsA2Aa2613hnlroy+1DLpbuM1Ijhso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756462999; c=relaxed/simple;
-	bh=kZRdCOIGhYqE1GPM0boj9I63hg9pL/iqaaPT3CJ0YfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZNa2tJfJotx0Oce2OeWxK5Q45AIO+VFx0HHPiOOY8R+VIhQ0wl7WEbBqD8/cqlNHX7Ws6tXWg2uI+OcDZrF1czt5NJuxlqc8OzYX5hUTNCMzFrfrYbJ+6lXQST5IjpaKhBwO2eISRdUtsmfbHQ857x5e0ykFivR5PlP7IOhmQeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ccL5yb4s; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756462998; x=1787998998;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kZRdCOIGhYqE1GPM0boj9I63hg9pL/iqaaPT3CJ0YfI=;
-  b=ccL5yb4s3A4Qp+FtsUZDOywHXs5r3FldkGRZOj0QTgBO+xxQsebU3cWm
-   apgCfoS4sMkBokmbB5FK5hYzUYPa66yvxmvytIDMptici2t/XzpsTI1AU
-   BAWalXpG71UYVwR+DLd20zKKV/UjKQttXzqo4D9wViX3LCYUcrGI99aoU
-   VrN3jcz4/ocM0ItGYotK7jlWcftxUNOIbaE4cHPvGVwBhhmGwnFyNA9Jn
-   WTgavMQzlPzwGNA3HQp0lHD7+NtG/M1Gsf2SvSgZYSaNl/h0CBIRFBtFX
-   q1ix6eiS8xY51mibVGpAQ2tPyb4d/o2EETo2EgopkkXygTxtOohUJy1oq
-   Q==;
-X-CSE-ConnectionGUID: skt6BIMqSiOTYW21E4zufw==
-X-CSE-MsgGUID: hwOYJaxkRCSTg1VG96h4Tw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="69454729"
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="69454729"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 03:23:17 -0700
-X-CSE-ConnectionGUID: iMqzbHVeRROHXtAlPFF+2A==
-X-CSE-MsgGUID: txRs6IJgSruXJ3VW75ktuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="201293410"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.237])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 03:23:16 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 67EC911F97F;
-	Fri, 29 Aug 2025 13:23:12 +0300 (EEST)
-Date: Fri, 29 Aug 2025 13:23:12 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Brian Norris <briannorris@chromium.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [PATCH v2 1/6] pm: runtime: Document return values of suspend
- related API functions
-Message-ID: <aLF_kC_OPr1f08WA@kekkonen.localdomain>
-References: <20250616061212.2286741-1-sakari.ailus@linux.intel.com>
- <20250616061212.2286741-2-sakari.ailus@linux.intel.com>
- <aJ5pkEJuixTaybV4@google.com>
- <aLD4TwJftEAeCJyf@google.com>
+	s=arc-20240116; t=1756463496; c=relaxed/simple;
+	bh=8rgYeXyGy9NA1d1irG2esa4TUpGiaKHVwzEVmjsUOUU=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
+	 From:In-Reply-To; b=UUjVhGQyhBXBIbMxSZBAByYQNKWQCPGNAVkuhGbZ6uter5XT1sraUCT5SXzAwZDe+knfhhCyde+94TdF1x7Qhvk9uX4/7TXgXp59ggZDd/xPsfCglsvOaxD1Z9bWtYb1LGCqsCuA1ZFXFv9gMRrNaQXrZd+1n/Exln61yq2hgWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4C521758;
+	Fri, 29 Aug 2025 03:31:25 -0700 (PDT)
+Received: from [10.57.92.164] (unknown [10.57.92.164])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D22A3F694;
+	Fri, 29 Aug 2025 03:31:33 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------x7PfBf0npKUZ0WmM9YMUIkbi"
+Message-ID: <d23e3fe9-a8b8-49fd-8198-8868b41ee57f@arm.com>
+Date: Fri, 29 Aug 2025 11:31:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aLD4TwJftEAeCJyf@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: I think there's an issue with e3f1164fc9e ("PM: EM: Support late
+ CPUs booting and capacity adjustment") if there's "holes" in your CPU
+ topology
+To: Kenneth Crudup <kenny@panix.com>, lukasz.luba@arm.com,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <40212796-734c-4140-8a85-854f72b8144d@panix.com>
+ <27809ad9-2a35-475d-bef8-47a06e81d647@arm.com>
+ <3d87a8c3-ecb9-4ee5-917c-f944915ee684@panix.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <3d87a8c3-ecb9-4ee5-917c-f944915ee684@panix.com>
 
-Hi Brian,
+This is a multi-part message in MIME format.
+--------------x7PfBf0npKUZ0WmM9YMUIkbi
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for the review.
+On 8/28/25 18:42, Kenneth Crudup wrote:
+> 
+>> So there's probably a problem here, but presumably your proposal breaks the late boot
+>> (i.e. what this code was initially supposed to support).
+> 
+> Please explain?
+> 
+> It seems to me (and I really don't know, just guessing here) that if there were remaining errors from not getting any further CPU policies that the loop would just run thru all CPUs "harmlessly".
 
-On Thu, Aug 28, 2025 at 05:46:07PM -0700, Brian Norris wrote:
-> After reading and rereading ... and then writing unit tests, because I
-> can't trust my reading ... I think I can answer my own questions:
-> 
-> On Thu, Aug 14, 2025 at 03:56:24PM -0700, Brian Norris wrote:
-> > Hi,
-> > 
-> > On Mon, Jun 16, 2025 at 09:12:07AM +0300, Sakari Ailus wrote:
-> > > Document return values for device suspend and idle related API functions.
-> > > 
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > 
-> > I appreciate the documentation attempt here. I've often found it a maze
-> > trying to weave through the indirection and figure out the actual API
-> > contract for some of these.
-> > 
-> > But I have a few questions below:
-> > 
-> > > ---
-> > >  include/linux/pm_runtime.h | 147 ++++++++++++++++++++++++++++++++++---
-> > >  1 file changed, 138 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> > > index e7cb70fcc0af..9dd2e4031a27 100644
-> > > --- a/include/linux/pm_runtime.h
-> > > +++ b/include/linux/pm_runtime.h
-> > 
-> > 
-> > > @@ -464,6 +525,17 @@ static inline int pm_runtime_resume_and_get(struct device *dev)
-> > >   *
-> > >   * Decrement the runtime PM usage counter of @dev and if it turns out to be
-> > >   * equal to 0, queue up a work item for @dev like in pm_request_idle().
-> > > + *
-> > > + * Return:
-> > > + * * 0: Success.
-> > > + * * -EINVAL: Runtime PM error.
-> > > + * * -EACCES: Runtime PM disabled.
-> > > + * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
-> > 
-> > ^^ Is the "usage_count non-zero" true? For RPM_GET_PUT, we drop the
-> > refcount, and if it's still nonzero, we simply return 0.
-> 
-> It *is* possible, but it would only occur with the following:
-> 
-> (1) we've acquired our usage_count by way of pm_runtime_get_noresume();
->     and
-> (2) some other actor is racing with us, acquiring a usage_count between
->     when we decremented usage_count to 0, and when we check again in
->     rpm_idle()
-> 
-> IMO, as-is, the language is a bit misleading though. But then, the
-> behavior is pretty subtle and hard to describe succinctly...
-
-I think it'd be indeed best to improve this. The current description is
-indeed at bit misleading: usage_count should be non-zero when this function
-is called.
+It would miss not-online-yet CPUs and never run again (potentially).
 
 > 
-> > > + * * -EBUSY: Runtime PM child_count non-zero.
-> > > + * * -EPERM: Device PM QoS resume latency 0.
-> > > + * * -EINPROGRESS: Suspend already in progress.
-> > > + * * -ENOSYS: CONFIG_PM not enabled.
-> > > + * * 1: Device already suspended.
-> > 
-> > This part isn't very clear to me: can we even hit this case? If the
-> > usage count was already 0, we'd hit EINVAL, since this is a PUT
-> > operation. If the usage count was non-zero, we can't already be
-> > suspended. At a minimum, we'd be RESUMING (e.g., an async resume), no?
-> 
-> This is sort of possible in the same scenario as above. But it doesn't
-> actually return 1; it still returns -EAGAIN.
+> Now perhaps to ensure the schedule_delayed_work() gets run, what about a flag that gets set if any CPU policy was accessed, and the schedule_delayed_work() gets run if it's never set?
 
-Yes; rpm_idle() does set retval to -EAGAIN, after it was assigned to 1 (via
-rpm_check_suspend_allowed()). I missed this while writing the
-documentation.
+Yeah that's the obvious immediate fix here, I've attached a patch for it. (please test!)
+I wonder though, given that this works fine on my x86 nosmt hybrid (presumably something like
+yours?) is this actually an issue for you?
+With intel_pstate=passive (and neutering a bunch of userspace stuff that insists on switching
+schedutil to something inferior) I get a working
+# cat /proc/sys/kernel/sched_energy_aware 
+1
 
-> 
-> Confusingly, pm_runtime_put_autosuspend() behaves differently, because
-> it's based on rpm_suspend() instead of rpm_idle().
-> 
-> I plan to fix this, because I don't see why pm_runtime_put() and
-> pm_runtime_put_autosuspend() should differ here.
+with all online CPUs having an EM (see /sys/kernel/debug/energy_model/ )
 
-I agree.
+> [snip]
 
-> 
-> > >   */
-> > >  static inline int pm_runtime_put(struct device *dev)
-> > >  {
-> > 
-> > If these are indeed errors, I expect they're repeated on some of the
-> > other related APIs too (like pm_runtime_put_sync(), pm_runtime_idle(),
-> > and probably more).
-> > 
-> > I ask mostly for my own understanding, but I might consider patching the
-> > docs if I'm not hallucinating these errors.
-> 
-> I've sent a patch series to fix some of the inconsistencies in the API
-> and to fix the API docs:
-> 
-> Subject: [PATCH 3/3] PM: runtime: Update kerneldoc return codes
-> https://lore.kernel.org/all/20250829003319.2785282-3-briannorris@chromium.org/
++CC
+Dietmar who has also played with this and reviewed the x86 EM part.
+--------------x7PfBf0npKUZ0WmM9YMUIkbi
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-PM-EM-Fix-late-boot-with-holes-in-CPU-topology.patch"
+Content-Disposition: attachment;
+ filename*0="0001-PM-EM-Fix-late-boot-with-holes-in-CPU-topology.patch"
+Content-Transfer-Encoding: base64
 
-Thanks, I'll take a look.
+RnJvbSBlNTA4N2M4NThmZTdiZjMxNjgwYWI2MjRhM2IzZmIxYTBmMDEzZWY5IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gTG9laGxlIDxjaHJpc3RpYW4ubG9l
+aGxlQGFybS5jb20+CkRhdGU6IEZyaSwgMjkgQXVnIDIwMjUgMTA6NTg6NDMgKzAxMDAKU3Vi
+amVjdDogW1BBVENIXSBQTTogRU06IEZpeCBsYXRlIGJvb3Qgd2l0aCBob2xlcyBpbiBDUFUg
+dG9wb2xvZ3kKCmNvbW1pdCBlM2YxMTY0ZmM5ZWUgKCJQTTogRU06IFN1cHBvcnQgbGF0ZSBD
+UFVzIGJvb3RpbmcgYW5kIGNhcGFjaXR5CmFkanVzdG1lbnQiKSBhZGRlZCBhIG1lY2hhbmlz
+bSB0byBoYW5kbGUgQ1BVcyB0aGF0IGNvbWUgdXAgbGF0ZSBieQpyZXRyeWluZyB3aGVuIGFu
+eSBvZiB0aGUgYGNwdWZyZXFfY3B1X2dldCgpYCBjYWxsIGZhaWxzLgoKSG93ZXZlciwgaWYg
+dGhlcmUgYXJlIGhvbGVzIGluIHRoZSBDUFUgdG9wb2xvZ3kgKG9mZmxpbmUgQ1BVcywgZS5n
+Lgpub3NtdCksIHRoZSBmaXJzdCBtaXNzaW5nIENQVSBjYXVzZXMgdGhlIGxvb3AgdG8gYnJl
+YWssIHByZXZlbnRpbmcKc3Vic2VxdWVudCBvbmxpbmUgQ1BVcyBmcm9tIGJlaW5nIHVwZGF0
+ZWQuCkluc3RlYWQgb2YgYWJvcnRpbmcgb24gdGhlIGZpcnN0IG1pc3NpbmcgQ1BVIHBvbGlj
+eSwgbG9vcCB0aHJvdWdoIGFsbAphbmQgcmV0cnkgaWYgYW55IHdlcmUgbWlzc2luZy4KCkZp
+eGVzOiBlM2YxMTY0ZmM5ZWUgKCJQTTogRU06IFN1cHBvcnQgbGF0ZSBDUFVzIGJvb3Rpbmcg
+YW5kIGNhcGFjaXR5IGFkanVzdG1lbnQiKQpTdWdnZXN0ZWQtYnk6IEtlbm5ldGggQ3J1ZHVw
+IDxrZW5uZXRoLmNydWR1cEBnbWFpbC5jb20+ClJlcG9ydGVkLWJ5OiBLZW5uZXRoIENydWR1
+cCA8a2VubmV0aC5jcnVkdXBAZ21haWwuY29tPgpDbG9zZXM6IGh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2xpbnV4LXBtLzQwMjEyNzk2LTczNGMtNDE0MC04YTg1LTg1NGY3MmI4MTQ0ZEBw
+YW5peC5jb20vCkNjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnClNpZ25lZC1vZmYtYnk6IENo
+cmlzdGlhbiBMb2VobGUgPGNocmlzdGlhbi5sb2VobGVAYXJtLmNvbT4KLS0tCiBrZXJuZWwv
+cG93ZXIvZW5lcmd5X21vZGVsLmMgfCAxNCArKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5n
+ZWQsIDkgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9rZXJu
+ZWwvcG93ZXIvZW5lcmd5X21vZGVsLmMgYi9rZXJuZWwvcG93ZXIvZW5lcmd5X21vZGVsLmMK
+aW5kZXggZWE3OTk1YTI1NzgwLi4yNDU0ZmZkNDU1ZDAgMTAwNjQ0Ci0tLSBhL2tlcm5lbC9w
+b3dlci9lbmVyZ3lfbW9kZWwuYworKysgYi9rZXJuZWwvcG93ZXIvZW5lcmd5X21vZGVsLmMK
+QEAgLTc3OCw3ICs3NzgsNyBAQCB2b2lkIGVtX2FkanVzdF9jcHVfY2FwYWNpdHkodW5zaWdu
+ZWQgaW50IGNwdSkKIHN0YXRpYyB2b2lkIGVtX2NoZWNrX2NhcGFjaXR5X3VwZGF0ZSh2b2lk
+KQogewogCWNwdW1hc2tfdmFyX3QgY3B1X2RvbmVfbWFzazsKLQlpbnQgY3B1OworCWludCBj
+cHUsIGZhaWxlZF9jcHUgPSAtMTsKIAogCWlmICghemFsbG9jX2NwdW1hc2tfdmFyKCZjcHVf
+ZG9uZV9tYXNrLCBHRlBfS0VSTkVMKSkgewogCQlwcl93YXJuKCJubyBmcmVlIG1lbW9yeVxu
+Iik7CkBAIC03OTYsMTAgKzc5Niw4IEBAIHN0YXRpYyB2b2lkIGVtX2NoZWNrX2NhcGFjaXR5
+X3VwZGF0ZSh2b2lkKQogCiAJCXBvbGljeSA9IGNwdWZyZXFfY3B1X2dldChjcHUpOwogCQlp
+ZiAoIXBvbGljeSkgewotCQkJcHJfZGVidWcoIkFjY2Vzc2luZyBjcHUlZCBwb2xpY3kgZmFp
+bGVkXG4iLCBjcHUpOwotCQkJc2NoZWR1bGVfZGVsYXllZF93b3JrKCZlbV91cGRhdGVfd29y
+aywKLQkJCQkJICAgICAgbXNlY3NfdG9famlmZmllcygxMDAwKSk7Ci0JCQlicmVhazsKKwkJ
+CWZhaWxlZF9jcHUgPSBjcHU7CisJCQljb250aW51ZTsKIAkJfQogCQljcHVmcmVxX2NwdV9w
+dXQocG9saWN5KTsKIApAQCAtODE0LDYgKzgxMiwxMiBAQCBzdGF0aWMgdm9pZCBlbV9jaGVj
+a19jYXBhY2l0eV91cGRhdGUodm9pZCkKIAkJZW1fYWRqdXN0X25ld19jYXBhY2l0eShjcHUs
+IGRldiwgcGQpOwogCX0KIAorCWlmIChmYWlsZWRfY3B1ID49IDApIHsKKwkJcHJfZGVidWco
+IkFjY2Vzc2luZyBjcHUlZCBwb2xpY3kgZmFpbGVkXG4iLCBmYWlsZWRfY3B1KTsKKwkJc2No
+ZWR1bGVfZGVsYXllZF93b3JrKCZlbV91cGRhdGVfd29yaywKKwkJCQkgICAgICBtc2Vjc190
+b19qaWZmaWVzKDEwMDApKTsKKwl9CisKIAlmcmVlX2NwdW1hc2tfdmFyKGNwdV9kb25lX21h
+c2spOwogfQogCi0tIAoyLjM0LjEKCg==
 
--- 
-Kind regards,
-
-Sakari Ailus
+--------------x7PfBf0npKUZ0WmM9YMUIkbi--
 
