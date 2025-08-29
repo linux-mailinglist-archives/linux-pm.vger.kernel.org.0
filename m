@@ -1,236 +1,206 @@
-Return-Path: <linux-pm+bounces-33351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C1A4B3B040
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 03:09:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E8B6B3B072
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 03:25:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22DDD3B035E
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 01:09:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44A7E3B0742
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 01:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8F01C5D6A;
-	Fri, 29 Aug 2025 01:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0BA1EE7DD;
+	Fri, 29 Aug 2025 01:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="dXOdN69+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272BC288A2;
-	Fri, 29 Aug 2025 01:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62A63FE7
+	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 01:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756429784; cv=none; b=nlKME0fI8BMF69DdbmRg5OPNpl+dLKyQjah/2s6Mlhrgzfn1VU8zmacbwrYUtYc79qvWzesV1ENGzEb7aOgiz5xEFtrYR2TPrXuSf9swUTvq4N5O4QOUx3BwiF/RAQvzoHMp+BR0GAil7sOQtlhmVnsiqUFc6WQoFPPJ9f9rLcM=
+	t=1756430715; cv=none; b=gPY0n4RnaocRsNshCsxD4EF3otVtnlW4InCB7qwSzkKZC3bgXqJAATRi8kJAbLvKww0jXilRdmK5sKW5dGU1t4FIz7yWc/2YxyhuURMbOcGeHw4Xvj6vKT4+uIX+QSD9YU1vgbfV3KWw460jYCYa/eyLiAt5VGqpSZQNaVmk89Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756429784; c=relaxed/simple;
-	bh=m00FXfC5AvlmbqZAyUgp1KXeas5N5BfdbJdDwYWe0jw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TmTVn00/p3YVUhUG3LYV+ecr14xyLN7KwlPfc0XeaWhVW/HfDsByQ5akOR7b2BqTE3t82WN28Use98gvb3Domsh5Hr5VKYTe7fWIonz1thHxhEj/cSIitEyJsLjqScXbK6fHAbXp9AeJ7cslbh9EmY/vv+lEpb61nqIeQGlHMd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: d15de1d6847411f0b29709d653e92f7d-20250829
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:8dbc4808-f76e-4028-b1fe-ddd256e8a420,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:9ffa5254c19a668fe3315a601f1f36b0,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: d15de1d6847411f0b29709d653e92f7d-20250829
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 299742101; Fri, 29 Aug 2025 09:09:31 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id F0024E008FA3;
-	Fri, 29 Aug 2025 09:09:30 +0800 (CST)
-X-ns-mid: postfix-68B0FDCA-85694742
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 37FF9E008FA2;
-	Fri, 29 Aug 2025 09:09:19 +0800 (CST)
-Message-ID: <6174bcc8-30f5-479b-bac6-f42eb1232b4d@kylinos.cn>
-Date: Fri, 29 Aug 2025 09:09:18 +0800
+	s=arc-20240116; t=1756430715; c=relaxed/simple;
+	bh=R7vjd0wBz6aMJy4yFCFQLfU8yYwPpDlaJtuLy0IbUOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pAKB5R4cgq0fb1tD88zQv7xCstPse9HIFw7TM8iwK/nBHyUCnuMIGjIhx7/FEhJOvWXRSld50dNuLsG6n8Tdhnh7A7DF+NT15j2Nbv3sic17T82x5fybKDy5CPPoqh/N5OkXVndPgN1/JvufcuoGV73eiFY01udyIWzJ2evk6so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=dXOdN69+; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4b109914034so19111681cf.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 18:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1756430713; x=1757035513; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=F1wIkigKDgiJC+Jf5G0D/QH1Jb94/jY8JZZUei/RI90=;
+        b=dXOdN69+AVOW4Aq6phzLIF4f+E8QXu0FTgHXd8lH2DOyeUQXQs0MgGr1HmcaI6lxk4
+         H91yxneG4SLvCEErWJDHrjacukspDlf/YpvgpkuKYgR/2RDop88r/i5mmb6IhRUkww0n
+         ba6F6KWKRn8jXaVO4IE5HChfEeXh/Tsi366a4/ucP32MVBPbBbGKEIyCiAkzb+GLu9ij
+         5eoJYJpJ43k1xmyjFIX73ScRrAnRDg+YBJIYc1Sq+SRVrux+NE0WrcWDZNhir5TpAQtN
+         RywNzH69bqLsWBwr7WCyO8C1v/hXLi/yjXQytj6XSqpf+D+UPQmNutWJX6GON3DwGI33
+         RmFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756430713; x=1757035513;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1wIkigKDgiJC+Jf5G0D/QH1Jb94/jY8JZZUei/RI90=;
+        b=rSrpTHAGysYvQlKDRIwloauGGFxAol4ueacrynk8inPzUXpYUGIpnCKzB5va/KAgse
+         yfr9F2FyO4MOFad0sq+h2u6XNj1yiEOWR1Qe7xzaNR26e99RtBFJYjZeH7/Y/vGgO7wJ
+         Z6WvMSZa934/OF4J3hNDCjvmTKaz5doXiNcvvYNbvZwaPlOHLmxJiVosUpGcYBvSujBq
+         9/D9KwVGZWqwTR/2QSlSWruZNszzFE/c43fC7VuCoEG6QLWxkCPJjBk4umA04Yy67GjI
+         5QRw/dwy8kwBbIFB9z/0AOXzKIcfSpvPKQ2PL8D9+szVPWUjKRFrjuhIZb72iEmOpD4E
+         RziQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUw1NuUwk7z10eKftt22A0lcTyKvwPxHLg81scvWHWTRvzr9XfFwPPlmqro9FG/HNEbg56Iwwm0iA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGl6lUvfVGabxDwfTrC9j1H+XApVYYfnI7rRKJGyggqw+YTS9T
+	gw8VeZzJ3I2Wnsj6bs3w8iTx0LacKEHYJLMzJetApqTYsrM8DeboS/5jbmrms6oqqw==
+X-Gm-Gg: ASbGncvr8BQcOL54v+NjEWTBPwPs8oyw0MlcVP6SQKxKo9rziYV7TQPY7rmn0cMNhw3
+	PM2etC+f/E6L1H3nt2WrrjY95UYOjfz8QwsQGoAZAgIMba6M+KtiPrxWA33ftORwi7xLP0eetWW
+	4ov8+nm5YiA7vmw3uxtoDeHI0QkBLCc2/akdw/cLnjLAnhH2fla1KG1kKAO+92lUN1GiAXuacQ/
+	1fSAtKeEejW7jZKq4U3gZtuCYalXN2NB3fyE5ugEqF43TvnQrfbD4F7ILknkKzSLjF9P8j46UyI
+	4kYRJLY9QGqfbQC2JlPPtHXCiwaWVdnpuLsQrxVv/0UbN5u3RFpX16ZFkYX31zEXztVLJ7vFFyX
+	LiaChRLz4yc8C3ftzKZsj0lT0rZXuAw2Fol3dtY7i
+X-Google-Smtp-Source: AGHT+IHIoeiHIXravgkhAkWNHbKj4hqY+RfdsgMzDsXdZJC2XOL96Dya9HG3awMsdODJ7/4pobbnzQ==
+X-Received: by 2002:a05:622a:248c:b0:4b0:eb79:931d with SMTP id d75a77b69052e-4b2aaa561b3mr319454961cf.2.1756430712871;
+        Thu, 28 Aug 2025 18:25:12 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::fd35])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b30b55504fsm7357811cf.15.2025.08.28.18.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Aug 2025 18:25:12 -0700 (PDT)
+Date: Thu, 28 Aug 2025 21:25:09 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+Message-ID: <e3b5a026-fe08-4b7e-acd1-e78a88c5f59c@rowland.harvard.edu>
+References: <20250826150826.11096-1-ryanzhou54@gmail.com>
+ <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+ <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+ <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+ <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
+ <20250829004312.5fw5jxj2gpft75nx@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/18] ACPI: processor: thermal: Use
- __free(put_cpufreq_policy) for policy reference
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, Markus Mayer
- <mmayer@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
- <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- zhenglifeng <zhenglifeng1@huawei.com>, "H . Peter Anvin" <hpa@zytor.com>,
- Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
- <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
- Sumit Gupta <sumitg@nvidia.com>,
- Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
- Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
- linux-pm@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
- linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-tegra@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, imx@lists.linux.dev,
- linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20250827023202.10310-1-zhangzihuan@kylinos.cn>
- <20250827023202.10310-4-zhangzihuan@kylinos.cn>
- <CAJZ5v0jA7HjNc6VQWdjuwLnmd751kV01NXC4v8Pyn8h-r70BzQ@mail.gmail.com>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <CAJZ5v0jA7HjNc6VQWdjuwLnmd751kV01NXC4v8Pyn8h-r70BzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250829004312.5fw5jxj2gpft75nx@synopsys.com>
 
+On Fri, Aug 29, 2025 at 12:43:17AM +0000, Thinh Nguyen wrote:
+> On Wed, Aug 27, 2025, Rafael J. Wysocki wrote:
+> > On Wed, Aug 27, 2025 at 4:52 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > Ryan:
+> > >
+> > > You should present your questions to the maintainer of the kernel's
+> > > Power Management subsystem, Rafael Wysocki (added to the To: list for
+> > > this email).
+> > 
+> > Thanks Alan!
+> > 
+> > 
+> > > On Wed, Aug 27, 2025 at 10:09:10PM +0800, ryan zhou wrote:
+> > > > Hi Roy,
+> > > > Thank you for reviewing my patch.
+> > > > >
+> > > > > Wouldn't the parent glue dev already resume before resuming the child dwc3?
+> > > > >
+> > > > No, in the following case, the parent device will not be reviewed
+> > > > before resuming the child device.
+> > > > Taking the 'imx8mp-dwc3' driver as an example.
+> > > > Step 1.usb disconnect trigger: the child device dwc3 enter runtime
+> > > > suspend state firstly, followed by
+> > > > the parent device imx8mp-dwc3 enters runtime suspend
+> > > > flow:dwc3_runtime_suspend->dwc3_imx8mp_runtime_suspend
+> > > > Step2.system deep trigger:consistent with the runtime suspend flow,
+> > > > child enters pm suspend and followed
+> > > > by parent
+> > > > flow: dwc3_pm_suspend->dwc3_imx8mp_pm_suspend
+> > > > Step3: After dwc3_pm_suspend, and before dwc3_imx8mp_pm_suspend, a
+> > > > task terminated the system suspend process
+> > > > . The system will resume from the checkpoint, and resume devices in
+> > > > the suspended state in the reverse
+> > > > of pm suspend, but excluding the parent device imx8mp-dwc3 since it
+> > > > did not execute the suspend process.
+> > > >
+> > > > >
+> > > > >Why would 'runtime PM trying to activate child device xxx.dwc3 but parent is not active' happen in the first place?
+> > > > >
+> > > > Following the above analysis, dwc3_resume calls
+> > 
+> > I assume that dwc3_pm_resume() is meant here.
+> > 
+> > > > pm_runtime_set_active(dev), it checks the
+> > > > parent.power->runtime_status is not RPM_ACTIVE and outputs the error log.
+> > 
+> > And it does so because enabling runtime PM for the child with
+> > runtime_status == RPM_ACTIVE does not make sense when the parent has
+> > runtime PM enabled and its status is not RPM_ACTIVE.
+> > 
+> > It looks like the runtime PM status of the parent is not as expected,
+> 
+> So is the scenario Ryan brought up unexpected? What are we missing here
+> and where should the fix be in?
+> 
+> > but quite frankly I don't quite follow the logic in dwc3_pm_resume().
+> > 
+> > Why does it disable runtime PM just for the duration of
+> > dwc3_resume_common()?  If runtime PM is functional before the
+> > pm_runtime_disable() call in dwc3_pm_resume(), the device may as well
+> > be resumed by calling pm_runtime_resume() on it without disabling
+> > runtime PM.  In turn, if runtime PM is not functional at that point,
+> > it should not be enabled.
+> 
+> Base on git-blame, I hope this will answer your question:
+> 
+>     68c26fe58182 ("usb: dwc3: set pm runtime active before resume common")
+> 
+>     For device mode, if PM runtime autosuspend feature enabled, the
+>     runtime power status of dwc3 may be suspended when run dwc3_resume(),
+>     and dwc3 gadget would not be configured in dwc3_gadget_run_stop().
+>     It would cause gadget connected failed if USB cable has been plugged
+>     before PM resume. So move forward pm_runtime_set_active() to fix it.
+> 
+> 
+> In certain platforms, they probably need the phy to be active to perform
+> dwc3_resume_common().
 
-=E5=9C=A8 2025/8/28 17:40, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> On Wed, Aug 27, 2025 at 4:33=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
-os.cn> wrote:
->> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
->> annotation for policy references. This reduces the risk of reference
->> counting mistakes and aligns the code with the latest kernel style.
->>
->> No functional change intended.
->>
->> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
->> ---
->>   drivers/acpi/processor_thermal.c | 12 +++---------
->>   1 file changed, 3 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor=
-_thermal.c
->> index 1219adb11ab9..f99ed0812934 100644
->> --- a/drivers/acpi/processor_thermal.c
->> +++ b/drivers/acpi/processor_thermal.c
->> @@ -64,17 +64,13 @@ static int phys_package_first_cpu(int cpu)
->>
->>   static int cpu_has_cpufreq(unsigned int cpu)
->>   {
->> -       struct cpufreq_policy *policy;
->> +       struct cpufreq_policy *policy __free(put_cpufreq_policy);
->>
->>          if (!acpi_processor_cpufreq_init)
->>                  return 0;
->>
->>          policy =3D cpufreq_cpu_get(cpu);
->> -       if (policy) {
->> -               cpufreq_cpu_put(policy);
->> -               return 1;
->> -       }
->> -       return 0;
->> +       return !!policy;
-> If you want to make this change, please also change the return type of
-> the function to bool.
-Thanks for pointing this out.
->>   }
->>
->>   static int cpufreq_get_max_state(unsigned int cpu)
->> @@ -95,7 +91,7 @@ static int cpufreq_get_cur_state(unsigned int cpu)
->>
->>   static int cpufreq_set_cur_state(unsigned int cpu, int state)
->>   {
->> -       struct cpufreq_policy *policy;
->> +       struct cpufreq_policy *policy __free(put_cpufreq_policy);
-> This isn't correct AFAICS at least formally because the scope of the
-> variable is the whole function, so it won't get out of scope at the
-> point where you want cpufreq_cpu_put() to be called.
->
-> The policy variable should be defined in the block following the "for"
-> loop (and actually all of the local variables except for "i" can be
-> defined there).
+It sounds like the real question is how we should deal with an 
+interrupted system suspend.  Suppose parent device A and child device B 
+are both in runtime suspend when a system sleep transition begins.  The 
+PM core invokes the ->suspend callback of B (and let's say the callback 
+doesn't need to do anything because B is already suspended with the 
+appropriate wakeup setting).
 
+But then before the PM core invokes the ->suspend callback of A, the 
+system sleep transition is cancelled.  So the PM core goes through the 
+device tree from parents to children, invoking the ->resume callback for 
+all the devices whose ->suspend callback was called earlier.  Thus, A's 
+->resume is skipped because A's ->suspend wasn't called, but B's 
+->resume callback _is_ invoked.  This callback fails, because it can't 
+resume B while A is still in runtime suspend.
 
-Sorry for the mistake =E2=80=94 I did this correctly in other places, but=
- forgot=20
-here.
+The same problem arises if A isn't a parent of B but there is a PM 
+dependency from B to A.
 
-> Or better still, please move that block to a separate function
-> containing all of the requisite local variable definitions and call
-> that function for each online CPU.
+It's been so long since I worked on the system suspend code that I don't 
+remember how we decided to handle this scenario.
 
-
- =C2=A0In fact, I have realized that we cannot always use __free for clea=
-nup=20
-directly.
-
-The issue is that the release only happens at the end of the variable=E2=80=
-=99s=20
-lifetime, while in some cases we want to drop the reference immediately=20
-after use.
-
-To address this, I=E2=80=99m considering introducing a helper macro in=20
-include/linux/cpufreq.h that would make this more explicit and allow=20
-safe cleanup at the right point.
-
-
-Before moving forward, I=E2=80=99d like to hear your opinion on this appr=
-oach:
-
-#define WITH_CPUFREQ_POLICY(cpu) \
-for(struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D \
-     cpufreq_cpu_get(cpu);;)
-
-
-Then we can use it for all code :
-
-	WITH_CPUFREQ_POLICY(cpu) {
-			if(!policy)
-				return XXX; // error handing
-		=09
-			//code use policy here
-		} // equal origin 'cpufreq_cpu_put' here
-         ;;
-        //left code
-
->>          struct acpi_processor *pr;
->>          unsigned long max_freq;
->>          int i, ret;
->> @@ -127,8 +123,6 @@ static int cpufreq_set_cur_state(unsigned int cpu,=
- int state)
->>                  max_freq =3D (policy->cpuinfo.max_freq *
->>                              (100 - reduction_step(i) * cpufreq_therma=
-l_reduction_pctg)) / 100;
->>
->> -               cpufreq_cpu_put(policy);
->> -
->>                  ret =3D freq_qos_update_request(&pr->thermal_req, max=
-_freq);
->>                  if (ret < 0) {
->>                          pr_warn("Failed to update thermal freq constr=
-aint: CPU%d (%d)\n",
->> --
+Alan Stern
 
