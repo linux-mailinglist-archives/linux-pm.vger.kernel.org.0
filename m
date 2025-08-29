@@ -1,86 +1,93 @@
-Return-Path: <linux-pm+bounces-33364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D196B3B217
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 06:16:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66670B3B29B
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 07:39:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E7B998433E
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 04:16:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 801FD1C209CD
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 05:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E831A00F0;
-	Fri, 29 Aug 2025 04:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87ABA21A436;
+	Fri, 29 Aug 2025 05:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NCWX0dnQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hj6cmJL0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8309A8635B
-	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 04:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A12E1F55FA
+	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 05:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756440967; cv=none; b=rTApbdfg6S71mtsLm8KvHwYxbNiElDuys0Ka77uw0kWJdkLBb9i36VrN5wrgfR3JHP1TbByIqzIExV2a9UjGdxWRuuT46lDsL4ERvwJREiyAaCj6LvIdxWIipMsmB1Nbq2QlacrZBDVpltVPiFyjlLzXcCabhLkkME+scp9LblI=
+	t=1756445957; cv=none; b=fXPC/vmMwJtxax1mUR0gfrBvb536v60lT6o5zB/RVdzAEbomJcLoW8orV3R5gdWnbp2i2TPOs+OA3dk+48SgmKriq0v3ohg2hwg51w/DWViwk1gA5xAIlJc9RyQP4dLEaTCo+5en3etfufMa+2HI242xdjioLKxZ7tDNK4PRmtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756440967; c=relaxed/simple;
-	bh=Tkvu8pNkFd205YZuldCAgZ98rpKB05AIMFFpdMprdno=;
+	s=arc-20240116; t=1756445957; c=relaxed/simple;
+	bh=dBEimnyqFErvRDaw6n29Zwqdf1lNF2xCJ+zGmMqLgvU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PIL0FM+rMs28lO+Aj1kPtsf7qkX7ltZGB5j86hnRJHt87BV7bKSEQStVER7qOiFw5TlLkHNFTnxnG5wCRB63+kFpmV29Lnfd7T+YEdJU+Cuhd/xFkOggact8j8A04cWGYYKf5PDDBO8PzxkNaSdpR9xG8AFIEFeQTnPC5IonAU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NCWX0dnQ; arc=none smtp.client-ip=209.85.214.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=U765ptXsvhcaTKzYFAlYubpseBDuPGrR9xPLL8O+3lRFs/cn3DHToWLkm+cmeQ3QIB/nITAntDQybhk/WQjNXMUvuwUWdQmdAtXIl1JdZlbTQsX8yBC7RX864bp+40MVQZf5Mhe0vPIzTdseXKpMz7tWM/p+jHP5SS3tOCJbRRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hj6cmJL0; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24458272c00so17410315ad.3
-        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 21:16:03 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-323267b98a4so1412319a91.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 22:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756440963; x=1757045763; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1756445954; x=1757050754; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLIksirgxElP0838CFgIqzzpTLOypIpRJfIiW6HAyvI=;
-        b=NCWX0dnQnDZGg1sslxCpu1fSKGSiTTgasT7DMqz6M270ixe36/wWnRYIvmVOxDGqoP
-         lMug9d3wiJladlgvz0eSRGv+R6kxKWjF0PRqW8ZY0EHtfFfAJIQod74KsRpMC9tQhLNT
-         kxos1waItqg/ZYesRFJiAbl2+2PWPd3khNsCZW/qO9HXgAJPSG2lkYq8UIAX207xgHqv
-         U1ihRt1yAwrNz+qGPMxJ54v71CWb2Tr8Pf0pjClhWMnNQWcW9jgwoLqMO06jICk2PD7J
-         cGSoD6Bo/n3tJj1VIZTZiVBYzfauC2YGpVimft3z5wWKwBhzmjGNWcbDcgilRoPMiTI4
-         +tSQ==
+        bh=3XBNZun+DsWEuFjpuYogmLUWGnvKNXpUg6KanJ2bj/Q=;
+        b=Hj6cmJL0o65D4jSVKTCop8q9jjPVpuVMtdw9hYW8Ph5XWjRS//PNmeIxoWBdVW9Jv4
+         /Xb90mE4UKkDq3wSRaOvmi6YFd+8TPr5ks0O6/dBgqy52Xiz3bvpd9YbQnk7A4DtWiuz
+         iRrOUqgrU/hJzyE1VEIlVkTpLSnq/5ht0lO5JyO0Ctl8qnOPW9Je91zW2B6cpHBg6js1
+         VTuWfuDyYyFbajMvq6I/CudkidUcWBPnT0P4BNyMlqRspbHcENEUGoC8dytemgSVUngW
+         7QSQSDT2j06bfgrZmbFpoz9xl40HypYhMemk9wewECi5RPf/PxUdTh3Ufd+KmV2JwRLi
+         XPgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756440963; x=1757045763;
+        d=1e100.net; s=20230601; t=1756445954; x=1757050754;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rLIksirgxElP0838CFgIqzzpTLOypIpRJfIiW6HAyvI=;
-        b=wlXg0lw0vC8718dnZufaAysxCqWgwr558mXI7J6bj79TFzawI2LLyPvVUm9MEIgm8H
-         5YuLa+JbJcAPjzrPzBihBwCONyb1xU1M15WVNIFWUVqRb7ka5VBvgTiT9ALafTHiYAuj
-         RI830VM6OYS4yP1NNA13AFiKopJj5y99K51gzjI5JMuBeA0cNb5gCP4If+RPSI0c9u4i
-         nicoGuE9JwcT+Q0bApTmLNp50RkgHwca227YSZXJMOyAZEPYsnsq4172yI0ezUWQpD/5
-         Sv/3Y6e/C7RRsFgDeelMg4XlSAXgsnva0Mk5LkKeyV25VKx7/nJc7gHxT2BrB9Md1380
-         YrqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2LqprTZdzkSwytFHbojOfOxG3GgizAzfshYh6S1LugKToOa+bEifN/B4Hv5isY8PWXCKGvFlEbg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxT1/h51g96eSBtMfjZUWF+iGDQTE3Ip3V10hvOFhsHKtGRczp
-	Tk2EU9lneRWllikECygzeq0hyA5Z+8tdFF8fCggSCXSyS8QMYKpfXhAXWC/XgsvqalU=
-X-Gm-Gg: ASbGncvseRG2iHLkej6MDzk950MMPV/kQK42uLRX22YNXxfrJ9vNJun1rtTx7fZxtEI
-	UimHB+d/a/erl8RtabtWeDE7prs8fTwt3h1WLDfn3fwL2+abtTMfKwYm/K1/CzaUYHlaZyhCTP+
-	iT4avTaLYr3UBTgyC420TODI16NwquxvBcwb2lj9ZMk7FyO+pRP9lxuRWF5xYe4/IwYZ4xqq4M6
-	bYLLLP++UPOICZhyMP7WXqs8mo5MiOFcNqny6TEW6sTPLgQLTZbB8cqQtbH5DBjgjVbKKQkvSLr
-	Tdg0e0oJVKvFSpAs+zyG5Mh4L91eU2WHTiCV4b7nFNCOnJO3+MWk/XeP7bUDOH1TjI1YB8adQZL
-	rN6tefuTO2ZzeGIeyQSqBQCOHDJXiwpdh0+1rkAgvfJABww==
-X-Google-Smtp-Source: AGHT+IFTtyPlxhHuxI/2IH3LiGsWs9ydV529VJDopa/F9yT/ZDbBcbt4dqu3BSsOo/zOh/nC4NEfwQ==
-X-Received: by 2002:a17:902:ef06:b0:242:9be2:f67a with SMTP id d9443c01a7336-2462ee0bec3mr338420325ad.11.1756440962736;
-        Thu, 28 Aug 2025 21:16:02 -0700 (PDT)
+        bh=3XBNZun+DsWEuFjpuYogmLUWGnvKNXpUg6KanJ2bj/Q=;
+        b=uAOgrJNr73TlBzeVyipFh0LuIp/jbWtIsBAFFfFWAspTFfsV5ytLcMMrGNHJ35k+BC
+         FCoexWZ2Mm2VclRrRIdIE246psxVIO/71ohPKhH5jWgASpwg7OGTBAV0TNE4qbQb6eJ2
+         hjjMSde4QBH80ZmQiEfhiQm+1Y3tkDl5e+cQrsS8F0m3M/Qj+iCKVIGAyAj84mEC/+AT
+         mqjd2Umr2tYUsjFrvqVCn6EkHvcsOYI5S8rroqJeBXPzxijuozlR0ycXra2mHcwlJZZA
+         z0hJ1ZzCZ2LrbEocLoYHQo/Oo96/7REI4CZe3PBIR0lH1lhZQAzjCRu5T1hG5lWKN+d/
+         Fi2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXm+rg2hgV37LHEViPbJIBd9drlGL3UXFHNVdqqI8xdp0z9JiEVlXRHK2pb+Hg83QiKzAjyzv6Vig==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbuRHMMu1VssiqIlLxerzR5/f5hQZJ9R9bE9l/+I6Gf74pignY
+	1FhTRSAxDmV3qqKfQas4wgErn00ZHs7Brifs9RFcQsoFVYPfGxVkV6UEa38JgiPBKh8=
+X-Gm-Gg: ASbGncsvJeOuJ8BelvAzH2A+4XyxfibrbN0eDkzjQdXTRoYGBpEZ45nNE1CkzkmVg00
+	G4mSrZzntAb/gGL8dwgQFJJBbNBjV+RJhrFJvMYYZ4ufV70Rp4XwSXcVdDg1wW0EW5u1+8xf6ff
+	MVTvHEadsjRVCsh5zGWk/A13V79s1ww3MinjkcduGQ+C/3vuqrwwWr9JJt/kAM0rxsSEhLAkRTU
+	NTnFZyHnHH5w0uvzxe2/UZlZnF4XLtvDbpOjFOMNmty43tQmje6AgyDLYzhtyEWzOd9k+onLZqN
+	8i99rOZxqzjuYMctacEqVbgClusHFoNvXEHaHo2zcsbzz4fpWZwBv4qVTuZwZPFYMhRwM8kjAPM
+	W5q2lNEED5jAN1gIQN/LGyAMVxQUH1eUs3Cs=
+X-Google-Smtp-Source: AGHT+IF2FBDuAslWQRB95r2d29vZcZOpSZcreczLMQg0tt9Qhwo66M6nj6sHGldIm2UhdvS/fRstfQ==
+X-Received: by 2002:a17:90b:2e8c:b0:327:e34e:eb15 with SMTP id 98e67ed59e1d1-327e34eed3cmr2048590a91.2.1756445954282;
+        Thu, 28 Aug 2025 22:39:14 -0700 (PDT)
 Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-249065ad9c0sm10691895ad.125.2025.08.28.21.16.01
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327d8f66f16sm1493229a91.0.2025.08.28.22.39.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 21:16:02 -0700 (PDT)
-Date: Fri, 29 Aug 2025 09:45:59 +0530
+        Thu, 28 Aug 2025 22:39:13 -0700 (PDT)
+Date: Fri, 29 Aug 2025 11:09:11 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dennis Beier <nanovim@gmail.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] cpufreq/longhaul: handle NULL policy in
- longhaul_exit
-Message-ID: <20250829041559.jzdb5stfvlpztcp4@vireshk-i7>
-References: <20250828213427.27593-1-nanovim@gmail.com>
+To: webgeek1234@gmail.com
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Aaron Kling <luceoscutum@gmail.com>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mikko Perttunen <mperttunen@nvidia.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: tegra186: Initialize all cores to max
+ frequencies
+Message-ID: <20250829053911.pzrkfvzes3bsrvtm@vireshk-i7>
+References: <20250828-tegra186-cpufreq-fixes-v3-0-23a7341db254@gmail.com>
+ <20250828-tegra186-cpufreq-fixes-v3-2-23a7341db254@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,85 +96,105 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250828213427.27593-1-nanovim@gmail.com>
+In-Reply-To: <20250828-tegra186-cpufreq-fixes-v3-2-23a7341db254@gmail.com>
 
-On 28-08-25, 23:29, Dennis Beier wrote:
+On 28-08-25, 21:48, Aaron Kling via B4 Relay wrote:
+> From: Aaron Kling <webgeek1234@gmail.com>
 > 
-> Resending this patch to include cpufreq maintainers.
-
-This should have been added ...
-
+> During initialization, the EDVD_COREx_VOLT_FREQ registers for some cores
+> are still at reset values and not reflecting the actual frequency. This
+> causes get calls to fail. Set all cores to their respective max
+> frequency during probe to initialize the registers to working values.
+> 
+> Suggested-by: Mikko Perttunen <mperttunen@nvidia.com>
+> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 > ---
+>  drivers/cpufreq/tegra186-cpufreq.c | 27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
 > 
-> longhaul_exit() was calling cpufreq_cpu_get(0) without checking
-> for a NULL policy pointer. On some systems, this could lead to a
-> NULL dereference and a kernel warning or panic.
-> 
-> This patch adds a check using unlikely() and prints a warning
-> if the policy is NULL, then returns early. Also, the loop variable
-> is now declared inside the for-loop to match modern kernel style.
-> 
-> Bugzilla: #219962
-> 
-> Signed-off-by: Dennis Beier <nanovim@gmail.com>
-> 
-> ---
-
-... here. Right now if we apply the patch, it will only contain the
-top line.
-
-This is what I get now if I apply your patch with `git am`
-
-Author: Dennis Beier <nanovim@gmail.com>
-Date:   Thu Aug 28 23:29:36 2025 +0200
-
-    cpufreq/longhaul: handle NULL policy in longhaul_exit
-
-    Resending this patch to include cpufreq maintainers.
-
-    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/longhaul.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-
->  drivers/cpufreq/longhaul.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
-> index ba0e08c8486a..9698d56bfe6c 100644
-> --- a/drivers/cpufreq/longhaul.c
-> +++ b/drivers/cpufreq/longhaul.c
-> @@ -951,9 +951,14 @@ static int __init longhaul_init(void)
->  static void __exit longhaul_exit(void)
+> diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
+> index 6c394b429b6182faffabf222e5af501393dbbba9..bd94beebc4cc2fe6870e13ca55343cedb9729e99 100644
+> --- a/drivers/cpufreq/tegra186-cpufreq.c
+> +++ b/drivers/cpufreq/tegra186-cpufreq.c
+> @@ -138,13 +138,14 @@ static struct cpufreq_driver tegra186_cpufreq_driver = {
+>  
+>  static struct cpufreq_frequency_table *init_vhint_table(
+>  	struct platform_device *pdev, struct tegra_bpmp *bpmp,
+> -	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id)
+> +	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id,
+> +	int *num_rates)
 >  {
->  	struct cpufreq_policy *policy = cpufreq_cpu_get(0);
-> -	int i;
-
-Please don't make another unnecessary change along with a bug fix. If
-you really want that, you should do that in a separate patch. Also, it
-is just not required.
-
-Add a blank line here please.
-
-> +	if (unlikely(!policy)) {
-> +		pr_warn_once("longhaul_exit: policy is NULL\n");
-
-Not sure if the warning is going to be of any use for the user. I
-would just return silently, the module is going away anyway.
-
-> +
-> +		return;
-> +	}
-> +
+>  	struct cpufreq_frequency_table *table;
+>  	struct mrq_cpu_vhint_request req;
+>  	struct tegra_bpmp_message msg;
+>  	struct cpu_vhint_data *data;
+> -	int err, i, j, num_rates = 0;
+> +	int err, i, j;
+>  	dma_addr_t phys;
+>  	void *virt;
 >  
-> -	for (i = 0; i < numscales; i++) {
-> +	for (int i = 0; i < numscales; i++) {
->  		if (mults[i] == maxmult) {
->  			struct cpufreq_freqs freqs;
+> @@ -174,6 +175,7 @@ static struct cpufreq_frequency_table *init_vhint_table(
+>  		goto free;
+>  	}
 >  
+> +	*num_rates = 0;
+>  	for (i = data->vfloor; i <= data->vceil; i++) {
+>  		u16 ndiv = data->ndiv[i];
+>  
+> @@ -184,10 +186,10 @@ static struct cpufreq_frequency_table *init_vhint_table(
+>  		if (i > 0 && ndiv == data->ndiv[i - 1])
+>  			continue;
+>  
+> -		num_rates++;
+> +		(*num_rates)++;
+>  	}
+>  
+> -	table = devm_kcalloc(&pdev->dev, num_rates + 1, sizeof(*table),
+> +	table = devm_kcalloc(&pdev->dev, *num_rates + 1, sizeof(*table),
+>  			     GFP_KERNEL);
+>  	if (!table) {
+>  		table = ERR_PTR(-ENOMEM);
+> @@ -229,7 +231,9 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+>  {
+>  	struct tegra186_cpufreq_data *data;
+>  	struct tegra_bpmp *bpmp;
+> -	unsigned int i = 0, err;
+> +	unsigned int i = 0, err, edvd_offset;
+> +	int num_rates = 0;
+
+You don't need to initialize this AFAICT.
+
+> +	u32 edvd_val, cpu;
+>  
+>  	data = devm_kzalloc(&pdev->dev,
+>  			    struct_size(data, clusters, TEGRA186_NUM_CLUSTERS),
+> @@ -252,10 +256,21 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+>  	for (i = 0; i < TEGRA186_NUM_CLUSTERS; i++) {
+>  		struct tegra186_cpufreq_cluster *cluster = &data->clusters[i];
+>  
+> -		cluster->table = init_vhint_table(pdev, bpmp, cluster, i);
+> +		cluster->table = init_vhint_table(pdev, bpmp, cluster, i, &num_rates);
+>  		if (IS_ERR(cluster->table)) {
+>  			err = PTR_ERR(cluster->table);
+>  			goto put_bpmp;
+> +		} else if (!num_rates) {
+> +			err = -EINVAL;
+> +			goto put_bpmp;
+> +		}
+> +
+> +		for (cpu = 0; cpu < ARRAY_SIZE(tegra186_cpus); cpu++) {
+> +			if (data->cpus[cpu].bpmp_cluster_id == i) {
+> +				edvd_val = cluster->table[num_rates - 1].driver_data;
+> +				edvd_offset = data->cpus[cpu].edvd_offset;
+> +				writel(edvd_val, data->regs + edvd_offset);
+> +			}
+>  		}
+>  	}
+>  
+> 
 > -- 
 > 2.50.1
+> 
 
 -- 
 viresh
