@@ -1,247 +1,189 @@
-Return-Path: <linux-pm+bounces-33399-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33400-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D0ADB3B62B
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 10:45:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37EF9B3B6C5
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 11:11:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5F6B3AA7C8
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 08:45:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC03D16FD4E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 09:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECE0285CBB;
-	Fri, 29 Aug 2025 08:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AFE42F49F3;
+	Fri, 29 Aug 2025 09:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="aNkitTGc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j2FkHgOT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013034.outbound.protection.outlook.com [40.107.44.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2432928BAAC;
-	Fri, 29 Aug 2025 08:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.34
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756457099; cv=fail; b=FyrJny74Mo99sv0reegPoW3HC6AZjKbu9jmA6vvuuCIczq9CbcbyvMGoID+hSZyacSgdmdRtLi2mYgskaOo7v9miFNKcJs6cSC8lH8j12SyV/C5jkA7z9dz373E8ji4nUnzRYjqtWBUXwTqjL2RSbefjIOCK6H9dCtu1xz4i5rY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756457099; c=relaxed/simple;
-	bh=lmNQMjHHK66BQY4xZ9T3nc1C4WIp4399hSLXHGRwqeg=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=EFuu2QkHNApQJDlzdzH1fVt/vxBnBQCuiN+aOunM/A7UFa3LVTPpChobJGUYU5eFZLlf8u7drvSL89zT4GJecflwXR2CLKOuWyzgIs98vnTm94KTegtVvOlUIB38ofq02Y40xZAJk0kik1zrL7OZjVO6o7D+OwDcHWVQ/OST4Kk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=aNkitTGc; arc=fail smtp.client-ip=40.107.44.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JpkgWK0WCN2vuTkQr+ktW3cJ6gxLZMCVg7JNbSFe9fujoXWPAmlFwlLhwqm1Sx2XRJ5qTr5qJodd+DjfgTJnZqJ3zkZVCXY6DZ4hxM7M/3+oWUXkD6eAZxlhwtVQB2VRQ78aiKVBkskpsOFDxqjVtZpJqtmewbLtTCWwbyHwjNleJNT8929RApvoKWRuxMsmePYEnQChqX33GSoYcVE0u7z4GdHVYCP2CKgU2WQ17xfeu7AmP4mJKeDZmlGSdL5/4sC5wUT9cQk5ahJy2W1ftlu3U2hgWDqDwF/t3d9Sk8pjza+qSQ1Dzwn1KM/cvS5n3YhSL7cc3IiSczOPDWPvIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3CFhiGzj6CtwWcJkf2pTXzOe/JqpGrN7OShdU2SMQhQ=;
- b=ILVJ4JGl9PemAg3QRee4hViTACyzC6vz7wn0Qnz60e3r9MkqwouN3nwx73+w/FKPOQUArnPsU2t1WNE+rzkWX29d7PwSCWfYqRgFBCTsz9/y6J8dan6TvFpZEu1fu2mjYEyjA16iY2CteHiYunfB+/gQzb2On7qLTB75XARDBcg2ZJSZq4yrtXd/VICeuQ5zNbQdkxsoTZZuJeFT+oNrOjbNzGR9MG3CM/wbp0TUxSqoyd+hTcl4LQ5nrJJBPvk7EmruaYCxoc+J3+frDWkyNpJUIQnRsEEuVzs3TvF0yaaz5q37vo9jFxi4vfvPSoVq1PNsFUJ90ayOjWwlRyHkGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3CFhiGzj6CtwWcJkf2pTXzOe/JqpGrN7OShdU2SMQhQ=;
- b=aNkitTGcMwjbhMh/xYLpHykmrmHY2zrKsxZpJSxlj6C03vpeNFTH2ri2hSN4PRpxYNHm+sZfHv1fXvRmM6Pm+/zG9jZG3hGDYEGecFpt17zdRzEiW0K3K0tkrsZoBwQhBqh+31Qy/FAFu4SKihNEwE1DMFh85/CVkWGSRubOdHwIkTZ9qlQOPggPuY3T2A1NqNpynwqiQGO7upwcOn49hQZJqmvc1GhH2kTmfIMu6zKKNLISnUvu09WNS85yhRUXadOseWBZfzy3lfwc4q/o6fFI3npsAD/WSg9E2KSWZsaWgoPObS3isMqCQXC/tnO/pYe90MUQgtWWek2Hzu0LyA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- SEYPR06MB6951.apcprd06.prod.outlook.com (2603:1096:101:1d8::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.14; Fri, 29 Aug
- 2025 08:44:50 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%5]) with mapi id 15.20.9073.010; Fri, 29 Aug 2025
- 08:44:50 +0000
-From: Qianfeng Rong <rongqianfeng@vivo.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Qianfeng Rong <rongqianfeng@vivo.com>
-Subject: [PATCH] cpufreq: Use int type to store negative error codes
-Date: Fri, 29 Aug 2025 16:44:39 +0800
-Message-Id: <20250829084440.579727-1-rongqianfeng@vivo.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY1PR01CA0205.jpnprd01.prod.outlook.com (2603:1096:403::35)
- To SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC432E339E
+	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 09:11:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756458715; cv=none; b=OZuvRy31ZlcnC9OL6YDf434K4nkQUB9YQyADwhgi4mNqu4KvLhR7rn6h+cSoBJtWMcnxTP1EaG15DJOKaXxkv3B6zuonkvdoWrMdoojqXPy214YhcRlpZxA1F+ibpIhj7TfIGtOQ6jW5dA+oi64v2F6eQQTgWqH9GMTQpC9duV4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756458715; c=relaxed/simple;
+	bh=0i4LozO4Hmms7wOEJWvhLFea7FPG9Dmd7MeRmpA2G3I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fL4u9l76im6VjGRVdoMyjkafMTqmEIEQnJ7WCQVxVNZMzEs9ejdPU6pBGexH8XQldeomxrbhta+qq/laOGE3Y4fP0W0LaQXZtHSL8rrbv4mbt1sxq4j8Lc5KGQLjwXGW6jvxnd4yIbOOHiO1vcgc1hzlQDvviI/aOCOzRONWU38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j2FkHgOT; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45b51bafcc1so825355e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 02:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756458712; x=1757063512; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NURphdCsa4oweALAHtli+ooWY+I8uEnacO3hp4q0Hc4=;
+        b=j2FkHgOT+smGlVoJgW3LZawM1nEN0fpi08iW/9i4OUfnh0HkBGOC7nnrvz69Os/xXc
+         SmQFche7L9ssksUv7jEHx7CkBY0gLO4Ym+4wR+ZWL6tyeblNCb3VUC/ZvfMUymwYlsG9
+         O2FS09ygAUpUf2CM/Hxq4ekdVrO4Pud1Ge6HYHmidj12Zrg3ERuGfbV9CCiZytcBjpCe
+         AgU7KG88yxcoHLp0OiO3T/BQCmuUWb7ktId9fcukzkKwwS1Ddkxg2OQEsMJzWT+O1833
+         BWfInW4BmxmgVuu1YYTQ3NeN31RY6Z9oqkG9dYaoZI+rJYo5fOJ729y47j0pjigOoTy0
+         NXUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756458712; x=1757063512;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NURphdCsa4oweALAHtli+ooWY+I8uEnacO3hp4q0Hc4=;
+        b=a4xcCez1zduwRR1t6H9BYgaORy5Fra7UtO/X1TEOLkdQbsL6c5Vbcqchtks8VToC1F
+         j9QI0MAMTq3BqPJrT41QYZpKNez2hUYDKUlUdBbENKur30D+bSsJjlILmwSjSVLmDt8M
+         /rWjWXrRBoLf6IYmABqejVwx/V02SN40X1KlrwUVaZpIqoW2KFjkwQT/p/HQ1JFw+XDQ
+         a82zj3hQ51iSNxv5ttSndGFR6d7zXbb/3G4MWpQep1tnE/elLHtP9mzSd0CdEB8HMwc8
+         sBVhKmbDfGQs2k8gvSWAUgJF909GVel3mWR80C8kPVe8typWcXa98m2qL5kT7lsYjV7u
+         8m0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXDawWcCJnVNl60NQAwBVEuQYzeU/gssSdA6a93KuphmrLOkJRvhbhLkflYWOShCrl0M7T2YtQ+LA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxhlg5SumKN0NF+hiSDlKKKzxSoFsXx+9+rKbsfDOJBLMJhdfHM
+	IyVv+uPGL33l85xUJuzZVauaHbRd8uqlxuCsDyOEnMUiRihA5oJ7qfQEoDDDFqo5ago=
+X-Gm-Gg: ASbGncsFz3+NxD/3L+nBBUrkkFgJfkxOxV32UTsH3mN0qfgncvi67WZIsEvQoq0qx4w
+	hiHWZ2Ppx5T4GMuYytjE/slKv1YNQfxX1Q3oh5lzLghhTL+l4BtPFU9zX2RLBXTa2szLYeYmWae
+	C/QGhjsQsLhqJIrRJ9Z6zg59+AfR+SBmtsrW7Cmrllk0nso4u6dnn7iC4t2B8NzCkUhJ+xGXa0b
+	uVZqmmMy+PztkYqMIj8MaMdaxLE5sMiTIk1+HE8GMFl91IalcPOhY0F7xxWUHHBhmwJDgwLvvAk
+	lZJcoZfsfCfJvtQSjgLBRxqJLPYWTxlfV5R4Sub44LSOQo561JSL9kWGl6xBDlTrTliFxG8iCZr
+	RT8KCcZ8pNBhVljk6HKB+7Iil47cyBtyLNfvWDQO/BfDGxEJN+IrFkw==
+X-Google-Smtp-Source: AGHT+IGanHkEycB+cb5o4yQBjLRrkMQcj6kfkETKqQg4XSQo5M2B3ihnvsgAnsPhaxcAA8NHmvKbpQ==
+X-Received: by 2002:a05:600c:1907:b0:456:7cf:5268 with SMTP id 5b1f17b1804b1-45b81f1e9d3mr2918385e9.4.1756458711623;
+        Fri, 29 Aug 2025 02:11:51 -0700 (PDT)
+Received: from [192.168.1.29] ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b66c39f72sm74343425e9.2.2025.08.29.02.11.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Aug 2025 02:11:51 -0700 (PDT)
+Message-ID: <8fdc99b6-4ad2-4a08-9dca-6289c8fdddd6@linaro.org>
+Date: Fri, 29 Aug 2025 11:11:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|SEYPR06MB6951:EE_
-X-MS-Office365-Filtering-Correlation-Id: da3ea0c9-e1fe-42d7-c985-08dde6d850dc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|52116014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2qF64vkJsoZwmBIWZnltDeAGwW1IpK4rMm4fI0rLTezCVtMxmUJ8gkr4McNw?=
- =?us-ascii?Q?x9FIXHio5gfHAiMW0CD780u1wCfDDSiRqiyF9Bm6+gagcLvkqtrb2OmC6FHt?=
- =?us-ascii?Q?WJWlf33frg/IVeEuwjvKaQvyL9cmNVMBw6LzLBsfM3yW2EGa4s6dXsdnIoR2?=
- =?us-ascii?Q?zh+a3lIVbhVKvAYJc7aHLWgWV2rr2fLBIutvhUx8egpItJxcloOegDDooXEd?=
- =?us-ascii?Q?1B1VB4zXGpDycyAdSm8Rp2PdXBRvFTspbljh5yHwbS7zJytyXM9tSSKURtGP?=
- =?us-ascii?Q?/DmDqS81mkYD5SdVpOx0MBo39CgPMrCog0A463T/Bq45zVcV20Z0yAYQHwME?=
- =?us-ascii?Q?rfzeck+wRdjnzUNwEd27FmBudg4ZPzP0jF4i8JXMBAMnCkiusJAwv1Wks4eZ?=
- =?us-ascii?Q?8q/AaXuZy9vRS3FiS7ZIcSsiF9FcK+Y7kVnzWMo4nZB+35xbeDZ2hWEI2AbN?=
- =?us-ascii?Q?XDWdEtn9cji2ztnGVLrA/GPuUvs1AgfQcfM+T2Yas0VVL0ubd2FX2wju+btf?=
- =?us-ascii?Q?ygHZ+/+dOeBEelauHH2Hf9C3il5wykFmhFA7sS02IknuLhPoa12p+D662EUw?=
- =?us-ascii?Q?jqr1dx7rR0Q0gtLGXghRPJjkNWJVdjbAju8Nzc7TRUhm8lNSTgti8gq4Ki4g?=
- =?us-ascii?Q?0rWQGwEu8JybFoPNjc/Q52XW0jxEM8h7RxtHdKJa5P/IUxF7a4u/5DVpVtFt?=
- =?us-ascii?Q?2KdVKqm8p6NbZ59ZjlwvJABwyCtOWNqDCeS9kCpu435iU7EsPsUgkZS9M7PR?=
- =?us-ascii?Q?IBaGW1f1EmlBmHUHCk+EjHVlY0jRkT5nXBmCWu27ibW+JLbly1W3Q9Mz6ctX?=
- =?us-ascii?Q?xDpKa9XRdf299pymaA49sM2oBaeBcM/CTuDGFdm83GtnprKjyLKSxVxgcI2o?=
- =?us-ascii?Q?Tn1YPmYGGETM5sytJk/7IdKYgJGJk7UR8RR8iVkGpC9chHjBucMvGft9OJ0F?=
- =?us-ascii?Q?eMPSlSW9C4CMIuGYsIMrfIbEVZTF4Gr4sjC2XgFmi2XtMS3rilDytXBi63T4?=
- =?us-ascii?Q?ZK/mtxoMZOcxFW9KrjeYQ/x1L2hsVmeNIiFNaLKarP5NxTUQrrFx9Ge5Ly33?=
- =?us-ascii?Q?cxUitUChJA21E+lzm0Hn7Q9PF8EuMjnocMC7vtpviYTJxuAr50L4Uz+K/owQ?=
- =?us-ascii?Q?FD4VGaRyy1FbDessQ0779PvL4OSQvXQE9GjXwYmOnfCbXKvQ/MXdMh6pa6sl?=
- =?us-ascii?Q?RVzFwKX9jJj/el2vDI7Cor/E3rxjBu+qiaHtkHxQwxet5PHPr64ipCOuUots?=
- =?us-ascii?Q?lOM2WpIkL6JzZ1X+b69NOzsXncYD166SO4lAhijSyBEfk4N/qEU2XVAj+xTV?=
- =?us-ascii?Q?23lCDxiKsnmCOCP+bJ+0wKOEiaGvxB0xJPE/7Modt4Ss6QqHfECTz6O8YAh7?=
- =?us-ascii?Q?ZeHxg9Btnnge6Eovt+8VbJ5i92kqiJKly3OSntm8dGv3h23vDRGOiqZ14GFg?=
- =?us-ascii?Q?bTsuARWxoXVNZ5DVptMKKdKY6+8nylhsTtkkmiYH6+PX2CMBuTbK4g=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?v0okEHPVstd4JIuhwxy17y8ui4kgNK3N0zxolw+OtY0+ykG9wRetgYu/iYbW?=
- =?us-ascii?Q?c/nVIVCRPtAx5IyTNMT5KX0WCBHmu5Ba1MzmPHKcm81/ebdJp0xb3tFN7rhf?=
- =?us-ascii?Q?kpCAmD6L/JJEtT3Ff8/Hrvt4kwc8PTUi2uPXcADVV03ubh9SuitoaaSFgDXd?=
- =?us-ascii?Q?c02s+QmbxvlFBr3SbDfncyM5CQDaqemB0QeWlL7HsxXAXqfIu5/03eMcVPJA?=
- =?us-ascii?Q?zRBQp7fvZ1KhlNYGgA1elYG//Ni7TJMHrh2wfAuW9Qcg4o+BiSc0uLtzQpU2?=
- =?us-ascii?Q?oG1ZcNJop7d4E5OLO7mDvcSusQUu37Dd9FQ0gzo1FLBx7y0anjS+Uj8H1NVV?=
- =?us-ascii?Q?k9o3F9r8HRwD8kQ1j3+yqrRmJf9PXL2AcdzdPdWNqrxZzmaIyQDVX/MCMc0r?=
- =?us-ascii?Q?c32CsJNDEALb2thul8tabzDbcUhapy4I+jXcSm/Ehd67ZrgW70erUSfXzEKK?=
- =?us-ascii?Q?/0geDAE277zdAFkC8jeMRZWtK7gzEC4phV6+qnSilChWBDRpdj7yx7ouhE1t?=
- =?us-ascii?Q?5Gim5JQy348O7YSGUAPKHIbpJBQ5i0lNXKQe0+uJ830Z6zX6JczojyePnvj8?=
- =?us-ascii?Q?4Rvi1065bPp3DAI8R1TQRYwFXZ4+G4H2SSTYAItmRnl54ZWm6hPJJ0fEDeES?=
- =?us-ascii?Q?X6SNZwqh+2oBBVK6oJAOputOeAuz690kewFLBzgpU2j6m2mtAW9rnjN10RiL?=
- =?us-ascii?Q?P0GWHLJzqQUNRDjYALHK3foPuez50KMqCR6trDYp33m19FSUDEwxMVIg6w+I?=
- =?us-ascii?Q?K313wAziJouIrcAIWAODwdw8K+SJHfCZk+UNtMby9rCt1zARsXafTiRkRjHI?=
- =?us-ascii?Q?Zz58iV+ydVSz+A9FSzF1Y8VurjglajKuHQfGMNBnzbe12F1htW168k/KHOCf?=
- =?us-ascii?Q?0SCT2EmEuYa9baX9yr2I5aClzrx2vfRtj14P97SFPk//Voh88WkO1Qe0AdZw?=
- =?us-ascii?Q?Rb1/nFzXWK3ZOUa1P3LyNvncLQvmW73A17gnUgNaofxpi8H8mV3zApiO95BN?=
- =?us-ascii?Q?F4V5KvCjxWGAEFvfLkhp0qB11hK/1Tv4F93m10tJAjCKhaL0jMCEKTHRVOuJ?=
- =?us-ascii?Q?7dZXioXacbnpH+BY0BavqoGod7N5sKotSQppaJN1pVAqJDEwiYBs2HAlGkDG?=
- =?us-ascii?Q?82BZ02CDlbNflizaKq8LFv+hZOa/thCdCtqG9ynGGIUO6QhZ8ZyItgGDb7BH?=
- =?us-ascii?Q?ceCHl43Xz45lGMR4fPTMadwsk2wwsI8aC/DF06gLhv1tqan6vZnqYtIxmsfU?=
- =?us-ascii?Q?RYP1/gJXxa4ikf4YlfUzQakmv17nGQ56PshrNWWPW/V0/FCvVSpyAxFqEXy/?=
- =?us-ascii?Q?Rgz/f2Q96iDfvUSVo1sHbZzWQz7q6B/SW74emFJiwoLu+cWtKNdS8nwO72d6?=
- =?us-ascii?Q?8Mu4NMt+lt1DEyBt70mTpA0258w66qO/zL5nY/9c7ySfqSkr8YwYW/Pp29Ei?=
- =?us-ascii?Q?tX2ExG0PRsVmWd/tMrFxr219xl2Todh1GTfaPsqfLFrTlKgY+nHqleAU0KZk?=
- =?us-ascii?Q?caNjJqMGOAZyjW3L7LyAcKJLF+jHjRoQTOQd+ll+IypUW2QdDeyVsKUTPNQJ?=
- =?us-ascii?Q?cwVm+ja4dOvAX+n+1NybklMKh+pZEJAV//GuG9W1?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da3ea0c9-e1fe-42d7-c985-08dde6d850dc
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2025 08:44:50.3680
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c2DfPL7FEt0YD9Q9v38fT/fVuwpA/lxvNeJ8gj9mxZy50ejJHraFTtbAhxBx2SPtcRm1kbeqtQcesKjIqFbALA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6951
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V7 0/5] Add support for QCOM SPMI PMIC5 Gen3 ADC
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
+ andersson@kernel.org, lumag@kernel.org, konradybcio@kernel.org,
+ daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+ thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+ subbaraman.narayanamurthy@oss.qualcomm.com, david.collins@oss.qualcomm.com,
+ anjelique.melendez@oss.qualcomm.com, kamal.wadhwa@oss.qualcomm.com,
+ rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
+ neil.armstrong@linaro.org, stephan.gerhold@linaro.org
+References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
+ <20250829-demonic-soft-guppy-512c13@kuoka>
+ <zgm2k2osmasdal6anba66pw24a7fiypgwlf3c36kvteshz7uef@wee4had7x54u>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ 2+47PN9NZAOyb771QoVr8A==
+In-Reply-To: <zgm2k2osmasdal6anba66pw24a7fiypgwlf3c36kvteshz7uef@wee4had7x54u>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Change the 'ret' variable from unsigned int to int to store negative error
-codes directly or returned by other functions.  Change the return type of
-the speedstep_get_freqs() function from unsigned int to int as well.
+On 29/08/2025 10:09, Dmitry Baryshkov wrote:
+> On Fri, Aug 29, 2025 at 09:12:59AM +0200, Krzysztof Kozlowski wrote:
+>> On Tue, Aug 26, 2025 at 02:06:52PM +0530, Jishnu Prakash wrote:
+>>>  create mode 100644 drivers/iio/adc/qcom-spmi-adc5-gen3.c
+>>>  create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+>>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h
+>>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h
+>>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h
+>>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm7325.h (98%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h (98%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h (99%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h (97%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h (95%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h (95%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h (93%)
+>>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (78%)
+>>>  create mode 100644 include/linux/iio/adc/qcom-adc5-gen3-common.h
+>>>
+>>>
+>>> base-commit: 0f4c93f7eb861acab537dbe94441817a270537bf
+>>
+>> What's the base commit?
+>>
+>> git show 0f4c93f7eb861acab537dbe94441817a270537bf
+>> fatal: bad object 0f4c93f7eb861acab537dbe94441817a270537bf
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20250822&id=0f4c93f7eb861acab537dbe94441817a270537bf
 
-Storing the negative error codes in unsigned type, doesn't cause an issue
-at runtime but it's ugly as pants. Additionally, assigning negative error
-codes to unsigned type may trigger a GCC warning when the -Wsign-conversion
-flag is enabled.
+I see:
+"Notice: this object is not reachable from any branch."
 
-No effect on runtime.
+I guess you think this is 20250822?
 
-Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
----
- drivers/cpufreq/cpufreq.c       |  2 +-
- drivers/cpufreq/powernow-k7.c   |  2 +-
- drivers/cpufreq/speedstep-lib.c | 12 ++++++------
- drivers/cpufreq/speedstep-lib.h | 10 +++++-----
- 4 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index a615c98d80ca..f47096683abb 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -914,7 +914,7 @@ static ssize_t store_scaling_setspeed(struct cpufreq_policy *policy,
- 					const char *buf, size_t count)
- {
- 	unsigned int freq = 0;
--	unsigned int ret;
-+	int ret;
- 
- 	if (!policy->governor || !policy->governor->store_setspeed)
- 		return -EINVAL;
-diff --git a/drivers/cpufreq/powernow-k7.c b/drivers/cpufreq/powernow-k7.c
-index 31039330a3ba..88616cd14353 100644
---- a/drivers/cpufreq/powernow-k7.c
-+++ b/drivers/cpufreq/powernow-k7.c
-@@ -451,7 +451,7 @@ static int powernow_decode_bios(int maxfid, int startvid)
- 	unsigned int i, j;
- 	unsigned char *p;
- 	unsigned int etuple;
--	unsigned int ret;
-+	int ret;
- 
- 	etuple = cpuid_eax(0x80000001);
- 
-diff --git a/drivers/cpufreq/speedstep-lib.c b/drivers/cpufreq/speedstep-lib.c
-index 0b66df4ed513..f8b42e981635 100644
---- a/drivers/cpufreq/speedstep-lib.c
-+++ b/drivers/cpufreq/speedstep-lib.c
-@@ -378,16 +378,16 @@ EXPORT_SYMBOL_GPL(speedstep_detect_processor);
-  *                     DETECT SPEEDSTEP SPEEDS                       *
-  *********************************************************************/
- 
--unsigned int speedstep_get_freqs(enum speedstep_processor processor,
--				  unsigned int *low_speed,
--				  unsigned int *high_speed,
--				  unsigned int *transition_latency,
--				  void (*set_state) (unsigned int state))
-+int speedstep_get_freqs(enum speedstep_processor processor,
-+			unsigned int *low_speed,
-+			unsigned int *high_speed,
-+			unsigned int *transition_latency,
-+			void (*set_state)(unsigned int state))
- {
- 	unsigned int prev_speed;
--	unsigned int ret = 0;
- 	unsigned long flags;
- 	ktime_t tv1, tv2;
-+	int ret = 0;
- 
- 	if ((!processor) || (!low_speed) || (!high_speed) || (!set_state))
- 		return -EINVAL;
-diff --git a/drivers/cpufreq/speedstep-lib.h b/drivers/cpufreq/speedstep-lib.h
-index dc762ea786be..48329647d4c4 100644
---- a/drivers/cpufreq/speedstep-lib.h
-+++ b/drivers/cpufreq/speedstep-lib.h
-@@ -41,8 +41,8 @@ extern unsigned int speedstep_get_frequency(enum speedstep_processor processor);
-  * SPEEDSTEP_LOW; the second argument is zero so that no
-  * cpufreq_notify_transition calls are initiated.
-  */
--extern unsigned int speedstep_get_freqs(enum speedstep_processor processor,
--	unsigned int *low_speed,
--	unsigned int *high_speed,
--	unsigned int *transition_latency,
--	void (*set_state) (unsigned int state));
-+extern int speedstep_get_freqs(enum speedstep_processor processor,
-+			       unsigned int *low_speed,
-+			       unsigned int *high_speed,
-+			       unsigned int *transition_latency,
-+			       void (*set_state)(unsigned int state));
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
