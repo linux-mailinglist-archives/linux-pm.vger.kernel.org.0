@@ -1,153 +1,179 @@
-Return-Path: <linux-pm+bounces-33412-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33413-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6CACB3BD53
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 16:18:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64A38B3BD9C
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 16:27:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C6197A2388
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 14:16:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E3591CC1BC5
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 14:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4567B31CA4D;
-	Fri, 29 Aug 2025 14:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87B1320CD8;
+	Fri, 29 Aug 2025 14:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lVCI2wfO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YzWVE9Rs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E47315790
-	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 14:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E37320398;
+	Fri, 29 Aug 2025 14:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756477078; cv=none; b=txY4lGF54B0fDZELyLEOdgMyJkaAEKQn3UXBwtj+xXsqvXFOq1JmuVp7FOYaoky7zBCNS+K7is5XbNBsQDi2gK/rTMYcHk7YuXvheIA00rWLdl2RY4jui/x6xxS+vqwRL4CZWmcJuHFncSFeQzmfqPEucwhES3hu8ala51UbtdE=
+	t=1756477653; cv=none; b=UTTctJxGhOke+7E36Sof7bbIFlUIf8trjRjWwzwox8/wUvIAqryEcjbbWIK3Y6Z3PpwKegjNLxcdyWF1bGdXLVCwafUlCljhgRWg4ecITS5+JX4gDANoBOVz4elyZf5iK55zi7vYAR9PitT6OceWisp1uyoSipyHUrJUxDBm0AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756477078; c=relaxed/simple;
-	bh=jL7e0H9l7oWIUOWsTHCRgC8GOaaqt4s2mWR0NDrqIeI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JOeKihsByrKIbTj8Ol/8uMaInpux+sQQF+unxR9FO92Bo8M3WGrbiurtERMlcVXpTYMCpuuCOL6/kOLY5mdijj8K2HWMUoexRPI3Z9RkVvuHkVnvP63JenM1uxZInQg0hy19zf6wIBU5iRBqoQkcjXXAAbxBtD+MZn43lBr5g7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lVCI2wfO; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3d0dd9c9229so534406f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 07:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756477075; x=1757081875; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0UKM7Hh31pGB257PcQYyxWg4WwmJZnesfP8m107J2rg=;
-        b=lVCI2wfOQwoPedWM3+RtRzFT9pNwfXVDaS2Fvg/l/DeyoS6GPtud56wQ4CltgeNldn
-         vjvCKKUJcrY+2wQC8Miw2Gzus4df7YiAKxqjj5H9nUBkGgVtMgwNqXP5cvXwmRB/5Z6c
-         KQ2DGyDBO9Ce1aAYa06uVcsCuKjkvPqxhh8g8Sysz1E68/P/7gW1VZORgzNab83iq8mM
-         YwfmItfhuSfK5CluC57TgI16DNdujK5h0MGxMPS5zBqVkNOASzph41x7FIbjMsnbWXBM
-         +tZfpk7XjHMP6JAws5avQ0ONGK0/d2YgbILlJmfAx7nv9p8Uf8iwnRTrCv6sevsDn3TH
-         vbyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756477075; x=1757081875;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0UKM7Hh31pGB257PcQYyxWg4WwmJZnesfP8m107J2rg=;
-        b=AtQTdO7JX9xQldEgkFjvoggh6cN23fIXBrmodwQFbBEniFqy68UXu6KSgqocMQCC5Z
-         a8e2jyJIWFNj1Xqe4Mwxzpue0pQR9vVd7agNDBEA6EYjyk6xwFQUHejnGCdUK0yb8Xcn
-         R+qhBow/RYnE0PahXhHD3T+Gt83Kl0O4QcUS9o7OZZ2qcBFIZHxL3Zh8XNMDn0wXOkzB
-         sET86Hrtp+M7lQP90ehTl85cZ5+jojf8MwLMz0VFlWU7B7qz2Y9GCZzYD9E1XKXpIPya
-         GdLAgfrz9gcimCJ6MwG0M1FLBleBh9zYrU01Z3QopuHXnggruWyakECtsU2ipEok05U6
-         B37A==
-X-Forwarded-Encrypted: i=1; AJvYcCUTBJrPDvVCXFyCrQPmjkIxOZr4GzbDnskLI/DOGUHwzxUhc0l9HQanUEbGd3dYwHqKKg/aYtHm9A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0yJC0kbT1kDSh3fR6FZnkyz3p7SfE0Kj4NUINMcnlZ99AgrT/
-	uq677Y61uqRE+Gf9+G2TvGFmGJXmptqzawkNLRXcQs6xw72aPHsC16y+/1TV4tT3MBY=
-X-Gm-Gg: ASbGncv4F818RNB0xQEgQE8QuRPi5xQwwXLrZ7nlu/tQqhTs0oWVrT7cPljHIphaneb
-	Ho3CNKjexFJIdaIRUqOuzOhwQZwm3gQjvKTVySBvO+F+2+veFelneuBxFdAJaYBTYUx4jUvh4Te
-	ey2qmoXHexG/aeq5gf7Vo0t0TxAxMliQbsj5Wj5K+svypFlgq31Ds/xy3AYBV2QsayVNt+0x04b
-	tXscckDgQhSqoL+tHa6UMZl7n2TKY0NMxHw0b7PcO4AzsP1ALNwkKux3cTk9LV4kzShZCCgJm0b
-	EyFYOwVGBHAFKj6iF/70kkl/LI+J5F+/cb3srwnpVOFl+t5nJa12+WSsau4cWu3UMPQs4RiNND7
-	YbvUIA98ZibYn+1B9zBPF8eeHFCo=
-X-Google-Smtp-Source: AGHT+IGRlrJL/hMg2fvOfjrwxfuiOfMWO4VNgYqpwRsWHXMQIhRsVFY7GAkc+zMu0TB3KTQQDEX5sw==
-X-Received: by 2002:a05:6000:288e:b0:3b7:895c:1562 with SMTP id ffacd0b85a97d-3c5da83c60dmr22817307f8f.11.1756477074430;
-        Fri, 29 Aug 2025 07:17:54 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45b74950639sm94583545e9.17.2025.08.29.07.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Aug 2025 07:17:53 -0700 (PDT)
-Date: Fri, 29 Aug 2025 17:17:50 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: stable@vger.kernel.org
-Cc: djakov@kernel.org, naresh.kamboju@linaro.org, lkft@linaro.org,
-	nathan@kernel.org, kees@kernel.org, konradybcio@kernel.org,
-	quic_okukatla@quicinc.com, quic_rlaggysh@quicinc.com,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: qcom: icc-rpm: Set the count member before
- accessing the flex array
-Message-ID: <aLG2jl7bwYVEoumO@stanley.mountain>
-References: <20241203223334.233404-1-djakov@kernel.org>
+	s=arc-20240116; t=1756477653; c=relaxed/simple;
+	bh=jdMGIFYvqok3uA+n6cH3bsInCw2c3K7K0ooHXrgGJ1U=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=IDQHuNPM4RyncQi87WvvtVCq/ZxAnj1r125Kx01k3+P/MnGsWLvIWayTZczCR+NhAEamaw59+9rC9Q34gdM4HdOqnqjH86jBdZWxtQr/f6MPqdk8khCh+LdX6lGJU/9nPYg+W0cVYZCYnEtmhDY3BQjNnbC/DwcnN4xJSy96iLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YzWVE9Rs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F62C4CEF0;
+	Fri, 29 Aug 2025 14:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756477653;
+	bh=jdMGIFYvqok3uA+n6cH3bsInCw2c3K7K0ooHXrgGJ1U=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=YzWVE9RsQzaSpE4jk9MGB//vhdQsZu5JE+4l04yvIfF/YwQ/7xcbG16/JeuoH3I0c
+	 LbC8J40v0qexfI6zvFacHuR+/376z8qx0QFB5uVN/ZKRQJ6iEqLpoNkogB2r14KEpl
+	 L+vogIZb+fugNejwwe/tAECuNdZWTCGsqNuquK0h9oDCEezZpAdNxPt3DMEmLhAYpL
+	 6EZXh+GDvrgLLY5/4ogAgTJpzQjQxQG5YuYhpuw9rGl9C/uoC2RQnJf0bNTsUlxbIu
+	 K8F1tM2eLUQ/DNkzq0z4uctGJn1ACv+m6kkyhAV4bx2xldO9XsnyDkSVsBSjYVqyH5
+	 VGeqkEYN7nr2g==
+Date: Fri, 29 Aug 2025 09:27:31 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203223334.233404-1-djakov@kernel.org>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-tegra@vger.kernel.org, 
+ Kyungmin Park <kyungmin.park@samsung.com>, linux-pm@vger.kernel.org, 
+ Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org, 
+ Chanwoo Choi <cw00.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>
+To: Aaron Kling <webgeek1234@gmail.com>
+In-Reply-To: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com>
+References: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com>
+Message-Id: <175647746367.734475.9455841505261457639.robh@kernel.org>
+Subject: Re: [PATCH RFC 0/7] Support Tegra210 actmon for dynamic EMC
+ scaling
 
-Hi Greg,
 
-Could you pick up this commit for 6.12 and 6.6:
-
-00a973e093e9 ("interconnect: qcom: icc-rpm: Set the count member before accessing the flex array")
-
-It just silences a UBSan warning so it doesn't affect regular users, but
-it helps in testing to silence those warnings.  It is a clean cherry-pick.
-
-regards,
-dan carpenter
-
-
-On Wed, Dec 04, 2024 at 12:33:34AM +0200, djakov@kernel.org wrote:
-> From: Georgi Djakov <djakov@kernel.org>
+On Thu, 28 Aug 2025 23:01:26 -0500, Aaron Kling wrote:
+> This series adds interconnect support to tegra210 MC and EMC, then
+> enables actmon. This enables dynamic emc scaling.
 > 
-> The following UBSAN error is reported during boot on the db410c board on
-> a clang-19 build:
+> This series is marked RFC for two reasons:
 > 
-> Internal error: UBSAN: array index out of bounds: 00000000f2005512 [#1] PREEMPT SMP
-> ...
-> pc : qnoc_probe+0x5f8/0x5fc
-> ...
+> 1) Calculating rate from bandwidth usage results in double the expected
+>    rate. I thought this might be due to the ram being 64-bit, but the
+>    related CFG5 register reports 32-bit on both p2371-2180 and
+>    p3450-0000. I'm using the calculation used for Tegra124 and haven't
+>    seen seen anything obviously different between the ram handling on
+>    these archs to cause a different result. I have considered that the
+>    number of channels might affect the reporting, and factoring in that
+>    variable does result in the correct rate, but I don't want to assume
+>    that's correct without confirmation.
 > 
-> The cause of the error is that the counter member was not set before
-> accessing the annotated flexible array member, but after that. Fix this
-> by initializing it earlier.
+> 2) I am seeing intermittent instability when transitioning to rates of
+>    204 MHz or below on p2371-2180. I have noted that if the first
+>    transition to such a state works, then it continues to work for the
+>    rest of that boot cycle. But the kernel will often panic the first
+>    time it tries to downclock. I suspect this is a pre-existing issue
+>    only brought to light now because nothing would ever lower the clock
+>    rate previously.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Closes: https://lore.kernel.org/r/CA+G9fYs+2mBz1y2dAzxkj9-oiBJ2Acm1Sf1h2YQ3VmBqj_VX2g@mail.gmail.com
-> Fixes: dd4904f3b924 ("interconnect: qcom: Annotate struct icc_onecell_data with __counted_by")
-> Signed-off-by: Georgi Djakov <djakov@kernel.org>
+> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 > ---
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Aaron Kling (7):
+>       dt-bindings: memory: tegra210: Add memory client IDs
+>       dt-bindings: devfreq: tegra30-actmon: Add Tegra124 fallback for Tegra210
+>       soc: tegra: fuse: speedo-tegra210: Add soc speedo 2
+>       memory: tegra210: Support interconnect framework
+>       arm64: tegra: tegra210: Add actmon
+>       arm64: tegra: Add interconnect properties to Tegra210 device-tree
+>       arm64: tegra: Add OPP tables on Tegra210
 > 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index a8ed435f696c..ea1042d38128 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -503,6 +503,7 @@ int qnoc_probe(struct platform_device *pdev)
->  			    GFP_KERNEL);
->  	if (!data)
->  		return -ENOMEM;
-> +	data->num_nodes = num_nodes;
->  
->  	qp->num_intf_clks = cd_num;
->  	for (i = 0; i < cd_num; i++)
-> @@ -597,7 +598,6 @@ int qnoc_probe(struct platform_device *pdev)
->  
->  		data->nodes[i] = node;
->  	}
-> -	data->num_nodes = num_nodes;
->  
->  	clk_bulk_disable_unprepare(qp->num_intf_clks, qp->intf_clks);
->  
+>  .../bindings/devfreq/nvidia,tegra30-actmon.yaml    |  13 +-
+>  .../boot/dts/nvidia/tegra210-peripherals-opp.dtsi  | 135 ++++++++++
+>  arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  43 ++++
+>  drivers/memory/tegra/Kconfig                       |   1 +
+>  drivers/memory/tegra/tegra210-emc-core.c           | 276 ++++++++++++++++++++-
+>  drivers/memory/tegra/tegra210-emc.h                |  25 ++
+>  drivers/memory/tegra/tegra210.c                    |  81 ++++++
+>  drivers/soc/tegra/fuse/speedo-tegra210.c           |   1 +
+>  include/dt-bindings/memory/tegra210-mc.h           |  58 +++++
+>  9 files changed, 626 insertions(+), 7 deletions(-)
+> ---
+> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+> change-id: 20250822-t210-actmon-34904ce7ed0c
+> prerequisite-change-id: 20250812-tegra210-speedo-470691e8b8cc:v1
+> prerequisite-patch-id: 81859c81abbe79aed1cfbc95b4f5bcdc5637d6bd
+> prerequisite-patch-id: 98bda8855bcc57c59b2231b7808d4478301afe68
+> prerequisite-patch-id: 6e0b69d42ea542dc9f58b410abd5974644f75dc4
+> prerequisite-patch-id: 9e3b9b2fdb8d9c2264dfa7641d1aec84fb7aedd9
+> prerequisite-patch-id: ef4bcc4ddba7898b188fb3fc6e414a2662183f91
+> 
+> Best regards,
+> --
+> Aaron Kling <webgeek1234@gmail.com>
+> 
+> 
+> 
+
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: using specified base-commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+ Deps: looking for dependencies matching 5 patch-ids
+ Deps: Applying prerequisite patch: [PATCH 1/5] dt-bindings: clock: tegra124-dfll: Add property to limit frequency
+ Deps: Applying prerequisite patch: [PATCH 2/5] soc: tegra: fuse: speedo-tegra210: Update speedo ids
+ Deps: Applying prerequisite patch: [PATCH 3/5] soc: tegra: fuse: speedo-tegra210: Add sku 0x8F
+ Deps: Applying prerequisite patch: [PATCH 4/5] clk: tegra: dfll: Support limiting max clock per device
+ Deps: Applying prerequisite patch: [PATCH 5/5] arm64: tegra: Limit max cpu frequency on P3450
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/nvidia/' for 20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com:
+
+arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dtb: external-memory-controller@7001b000 (nvidia,tegra210-emc): '#cooling-cells', '#interconnect-cells', 'operating-points-v2' do not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/memory-controllers/nvidia,tegra210-emc.yaml#
+arch/arm64/boot/dts/nvidia/tegra210-p2371-0000.dtb: external-memory-controller@7001b000 (nvidia,tegra210-emc): '#cooling-cells', '#interconnect-cells', 'operating-points-v2' do not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/memory-controllers/nvidia,tegra210-emc.yaml#
+arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dtb: external-memory-controller@7001b000 (nvidia,tegra210-emc): '#cooling-cells', '#interconnect-cells', 'operating-points-v2' do not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/memory-controllers/nvidia,tegra210-emc.yaml#
+arch/arm64/boot/dts/nvidia/tegra210-smaug.dtb: external-memory-controller@7001b000 (nvidia,tegra210-emc): '#cooling-cells', '#interconnect-cells', 'operating-points-v2' do not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/memory-controllers/nvidia,tegra210-emc.yaml#
+arch/arm64/boot/dts/nvidia/tegra210-p2894-0050-a08.dtb: external-memory-controller@7001b000 (nvidia,tegra210-emc): '#cooling-cells', '#interconnect-cells', 'operating-points-v2' do not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/memory-controllers/nvidia,tegra210-emc.yaml#
+arch/arm64/boot/dts/nvidia/tegra210-p2571.dtb: external-memory-controller@7001b000 (nvidia,tegra210-emc): '#cooling-cells', '#interconnect-cells', 'operating-points-v2' do not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/memory-controllers/nvidia,tegra210-emc.yaml#
+
+
+
+
+
 
