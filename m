@@ -1,183 +1,236 @@
-Return-Path: <linux-pm+bounces-33350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9697B3B005
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 02:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C1A4B3B040
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 03:09:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6163AD096
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 00:46:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22DDD3B035E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 01:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC4B8528E;
-	Fri, 29 Aug 2025 00:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FwJnLbiP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8F01C5D6A;
+	Fri, 29 Aug 2025 01:09:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16704CB5B
-	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 00:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272BC288A2;
+	Fri, 29 Aug 2025 01:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756428372; cv=none; b=GXFH15jhkDzfBhVWLPOdvx6bVU6vjdOrWhQbwvELPNoyGv/dBCTrGIlfjriS7hVJR4bkFHFoMfur9wLWapUCncEBUn1zLlaMwo8iaGM0Xr+oKKH2RVgw3JzgGISnUjEpiwzZ0ITftSaPtWeypmeX1/W6FqQ/Uiz4zM24D14s2Sg=
+	t=1756429784; cv=none; b=nlKME0fI8BMF69DdbmRg5OPNpl+dLKyQjah/2s6Mlhrgzfn1VU8zmacbwrYUtYc79qvWzesV1ENGzEb7aOgiz5xEFtrYR2TPrXuSf9swUTvq4N5O4QOUx3BwiF/RAQvzoHMp+BR0GAil7sOQtlhmVnsiqUFc6WQoFPPJ9f9rLcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756428372; c=relaxed/simple;
-	bh=bJ55W++Nxb8oby/pXwaC5lbqs9ejADYEK13crSHx7gc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YL8MztvG/qrHvwe2ahp2Ua55QfwIbg9mwlnDMQv7f4FXjBO9x8A1szKOZOlIZhlPnztCwhhIW0UD9J57vLfvATj8ftLj8/7kloJ8wJODxDf9e5CCewIt/ww3wwABtCGikbaz2Cj23UGwPhHRQdoHypePXsDCsnxLHWcCp0XtbnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FwJnLbiP; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-24884d9e54bso15294075ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 17:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1756428370; x=1757033170; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=463VFZy2tj4xoqrvB2n9OHHNXrEPcbp0NV7RQ388lC4=;
-        b=FwJnLbiPcIVlfF5s6J+ycP204mH/6If5H7KbHHHOeuknVz8EoCtqYRIO6HzXuemSSR
-         zOvd+of6u/WOw9hJCPEgRqKgKE2WhEQH1eF7X6VcPyzLPyztWhGjb4m+8jqXFAyKAVdR
-         ecMFsbgpAYXTLp9joBxYCpddCQ9gdG8xZ3Wjk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756428370; x=1757033170;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=463VFZy2tj4xoqrvB2n9OHHNXrEPcbp0NV7RQ388lC4=;
-        b=o3hryYQdGI9Zi1wyElTGFU0twaAnzZmD2w/7SOzR1nXFaiYLV2lT9exXmTCbkAoo+i
-         WPbOWfSTv7fsPAWubbLRnaH9Eum/leeMSKxOeNG8MhWGaYbFLgVf0kK6P8ldnNS6thbA
-         BigUngBQGZJIaZ3Bz5XLLXGHgpG/YoNdH/FSvfg0talAEfGqC98rdMlAY88vKBgW8slQ
-         zOCzceGokhw4GLd/Enh7OAejkUgDUmw4PCXnlQ+E+sgML5NnKs4PrWu/hARwSaV9074l
-         ZtdH3iYnAbAC1lm4zKpN7oQ0FiRZkggJj75vJJnE/gnGQC60ZQTt1pW2eeMNgh6Kv3yd
-         ogOw==
-X-Gm-Message-State: AOJu0YztcMpxeE+o0FfhCUtalVH8F0x6KqnF5xNPfnw8xO528xiDYheR
-	tCdKY80sK0rgMJ9x7wClU82HwXjIB5yizVGlqHdVi5MAy3x/Pr587e8/4zlXEXLgFA==
-X-Gm-Gg: ASbGncuehTGXoJK8SaAK8m4tLgjDKmctXciqum1NLMXl+XvajQQisASMXpIB58QGOee
-	kkjv+av8bUJDKJbOwUx1zgKGplvQrwW2T5SEnBh5RsTRizOVL2ZJ2x4lvFoMgNntz07t8KCDMvh
-	JFYmjIBYG+WTmF/A/KrqNfKxtLKAGJ46X4L8M0wrVmRbj7O5KKEi8uJ6u1KNHsb8O61ejPvgu16
-	Q7aW7RwBol5yuBggVVHVij43giegA9mHGovG3r/PhyglrQai6b8xe/RKGf17t9gzzUs3bYxkSyI
-	lkImaBiaZi6/0JqiY63VxsOE4n0qu9Xuq2tiwJHRUoJqs4a6Icx/Bx518m9Ah6bvV04dWA7xsLX
-	mak3UoJInIphxcWDr77Z8wqjYPQ98a32tww0/BNluGCn1XTlIsbdb4LdcgFPu
-X-Google-Smtp-Source: AGHT+IE4zG96b+vw9XU2y7lGHAioz8CC/WUSnsGj+dZ7PSXPdUtLEClJCcwmzZ7OFtFgpmAUBfI3/w==
-X-Received: by 2002:a17:902:e552:b0:247:b86:548f with SMTP id d9443c01a7336-2470b86560amr180954795ad.11.1756428370097;
-        Thu, 28 Aug 2025 17:46:10 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e14:7:2893:df0f:26ec:df00])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2490375b3efsm7519815ad.64.2025.08.28.17.46.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Aug 2025 17:46:09 -0700 (PDT)
-Date: Thu, 28 Aug 2025 17:46:07 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [PATCH v2 1/6] pm: runtime: Document return values of suspend
- related API functions
-Message-ID: <aLD4TwJftEAeCJyf@google.com>
-References: <20250616061212.2286741-1-sakari.ailus@linux.intel.com>
- <20250616061212.2286741-2-sakari.ailus@linux.intel.com>
- <aJ5pkEJuixTaybV4@google.com>
+	s=arc-20240116; t=1756429784; c=relaxed/simple;
+	bh=m00FXfC5AvlmbqZAyUgp1KXeas5N5BfdbJdDwYWe0jw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TmTVn00/p3YVUhUG3LYV+ecr14xyLN7KwlPfc0XeaWhVW/HfDsByQ5akOR7b2BqTE3t82WN28Use98gvb3Domsh5Hr5VKYTe7fWIonz1thHxhEj/cSIitEyJsLjqScXbK6fHAbXp9AeJ7cslbh9EmY/vv+lEpb61nqIeQGlHMd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d15de1d6847411f0b29709d653e92f7d-20250829
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:8dbc4808-f76e-4028-b1fe-ddd256e8a420,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:9ffa5254c19a668fe3315a601f1f36b0,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: d15de1d6847411f0b29709d653e92f7d-20250829
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 299742101; Fri, 29 Aug 2025 09:09:31 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id F0024E008FA3;
+	Fri, 29 Aug 2025 09:09:30 +0800 (CST)
+X-ns-mid: postfix-68B0FDCA-85694742
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 37FF9E008FA2;
+	Fri, 29 Aug 2025 09:09:19 +0800 (CST)
+Message-ID: <6174bcc8-30f5-479b-bac6-f42eb1232b4d@kylinos.cn>
+Date: Fri, 29 Aug 2025 09:09:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aJ5pkEJuixTaybV4@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/18] ACPI: processor: thermal: Use
+ __free(put_cpufreq_policy) for policy reference
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Markus Mayer
+ <mmayer@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ zhenglifeng <zhenglifeng1@huawei.com>, "H . Peter Anvin" <hpa@zytor.com>,
+ Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
+ <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
+ Sumit Gupta <sumitg@nvidia.com>,
+ Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+ Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
+ linux-pm@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-tegra@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, imx@lists.linux.dev,
+ linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20250827023202.10310-1-zhangzihuan@kylinos.cn>
+ <20250827023202.10310-4-zhangzihuan@kylinos.cn>
+ <CAJZ5v0jA7HjNc6VQWdjuwLnmd751kV01NXC4v8Pyn8h-r70BzQ@mail.gmail.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <CAJZ5v0jA7HjNc6VQWdjuwLnmd751kV01NXC4v8Pyn8h-r70BzQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-After reading and rereading ... and then writing unit tests, because I
-can't trust my reading ... I think I can answer my own questions:
 
-On Thu, Aug 14, 2025 at 03:56:24PM -0700, Brian Norris wrote:
-> Hi,
-> 
-> On Mon, Jun 16, 2025 at 09:12:07AM +0300, Sakari Ailus wrote:
-> > Document return values for device suspend and idle related API functions.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> I appreciate the documentation attempt here. I've often found it a maze
-> trying to weave through the indirection and figure out the actual API
-> contract for some of these.
-> 
-> But I have a few questions below:
-> 
-> > ---
-> >  include/linux/pm_runtime.h | 147 ++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 138 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> > index e7cb70fcc0af..9dd2e4031a27 100644
-> > --- a/include/linux/pm_runtime.h
-> > +++ b/include/linux/pm_runtime.h
-> 
-> 
-> > @@ -464,6 +525,17 @@ static inline int pm_runtime_resume_and_get(struct device *dev)
-> >   *
-> >   * Decrement the runtime PM usage counter of @dev and if it turns out to be
-> >   * equal to 0, queue up a work item for @dev like in pm_request_idle().
-> > + *
-> > + * Return:
-> > + * * 0: Success.
-> > + * * -EINVAL: Runtime PM error.
-> > + * * -EACCES: Runtime PM disabled.
-> > + * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
-> 
-> ^^ Is the "usage_count non-zero" true? For RPM_GET_PUT, we drop the
-> refcount, and if it's still nonzero, we simply return 0.
+=E5=9C=A8 2025/8/28 17:40, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> On Wed, Aug 27, 2025 at 4:33=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+>> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+>> annotation for policy references. This reduces the risk of reference
+>> counting mistakes and aligns the code with the latest kernel style.
+>>
+>> No functional change intended.
+>>
+>> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+>> ---
+>>   drivers/acpi/processor_thermal.c | 12 +++---------
+>>   1 file changed, 3 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor=
+_thermal.c
+>> index 1219adb11ab9..f99ed0812934 100644
+>> --- a/drivers/acpi/processor_thermal.c
+>> +++ b/drivers/acpi/processor_thermal.c
+>> @@ -64,17 +64,13 @@ static int phys_package_first_cpu(int cpu)
+>>
+>>   static int cpu_has_cpufreq(unsigned int cpu)
+>>   {
+>> -       struct cpufreq_policy *policy;
+>> +       struct cpufreq_policy *policy __free(put_cpufreq_policy);
+>>
+>>          if (!acpi_processor_cpufreq_init)
+>>                  return 0;
+>>
+>>          policy =3D cpufreq_cpu_get(cpu);
+>> -       if (policy) {
+>> -               cpufreq_cpu_put(policy);
+>> -               return 1;
+>> -       }
+>> -       return 0;
+>> +       return !!policy;
+> If you want to make this change, please also change the return type of
+> the function to bool.
+Thanks for pointing this out.
+>>   }
+>>
+>>   static int cpufreq_get_max_state(unsigned int cpu)
+>> @@ -95,7 +91,7 @@ static int cpufreq_get_cur_state(unsigned int cpu)
+>>
+>>   static int cpufreq_set_cur_state(unsigned int cpu, int state)
+>>   {
+>> -       struct cpufreq_policy *policy;
+>> +       struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> This isn't correct AFAICS at least formally because the scope of the
+> variable is the whole function, so it won't get out of scope at the
+> point where you want cpufreq_cpu_put() to be called.
+>
+> The policy variable should be defined in the block following the "for"
+> loop (and actually all of the local variables except for "i" can be
+> defined there).
 
-It *is* possible, but it would only occur with the following:
 
-(1) we've acquired our usage_count by way of pm_runtime_get_noresume();
-    and
-(2) some other actor is racing with us, acquiring a usage_count between
-    when we decremented usage_count to 0, and when we check again in
-    rpm_idle()
+Sorry for the mistake =E2=80=94 I did this correctly in other places, but=
+ forgot=20
+here.
 
-IMO, as-is, the language is a bit misleading though. But then, the
-behavior is pretty subtle and hard to describe succinctly...
+> Or better still, please move that block to a separate function
+> containing all of the requisite local variable definitions and call
+> that function for each online CPU.
 
-> > + * * -EBUSY: Runtime PM child_count non-zero.
-> > + * * -EPERM: Device PM QoS resume latency 0.
-> > + * * -EINPROGRESS: Suspend already in progress.
-> > + * * -ENOSYS: CONFIG_PM not enabled.
-> > + * * 1: Device already suspended.
-> 
-> This part isn't very clear to me: can we even hit this case? If the
-> usage count was already 0, we'd hit EINVAL, since this is a PUT
-> operation. If the usage count was non-zero, we can't already be
-> suspended. At a minimum, we'd be RESUMING (e.g., an async resume), no?
 
-This is sort of possible in the same scenario as above. But it doesn't
-actually return 1; it still returns -EAGAIN.
+ =C2=A0In fact, I have realized that we cannot always use __free for clea=
+nup=20
+directly.
 
-Confusingly, pm_runtime_put_autosuspend() behaves differently, because
-it's based on rpm_suspend() instead of rpm_idle().
+The issue is that the release only happens at the end of the variable=E2=80=
+=99s=20
+lifetime, while in some cases we want to drop the reference immediately=20
+after use.
 
-I plan to fix this, because I don't see why pm_runtime_put() and
-pm_runtime_put_autosuspend() should differ here.
+To address this, I=E2=80=99m considering introducing a helper macro in=20
+include/linux/cpufreq.h that would make this more explicit and allow=20
+safe cleanup at the right point.
 
-> >   */
-> >  static inline int pm_runtime_put(struct device *dev)
-> >  {
-> 
-> If these are indeed errors, I expect they're repeated on some of the
-> other related APIs too (like pm_runtime_put_sync(), pm_runtime_idle(),
-> and probably more).
-> 
-> I ask mostly for my own understanding, but I might consider patching the
-> docs if I'm not hallucinating these errors.
 
-I've sent a patch series to fix some of the inconsistencies in the API
-and to fix the API docs:
+Before moving forward, I=E2=80=99d like to hear your opinion on this appr=
+oach:
 
-Subject: [PATCH 3/3] PM: runtime: Update kerneldoc return codes
-https://lore.kernel.org/all/20250829003319.2785282-3-briannorris@chromium.org/
+#define WITH_CPUFREQ_POLICY(cpu) \
+for(struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D \
+     cpufreq_cpu_get(cpu);;)
 
-Brian
+
+Then we can use it for all code :
+
+	WITH_CPUFREQ_POLICY(cpu) {
+			if(!policy)
+				return XXX; // error handing
+		=09
+			//code use policy here
+		} // equal origin 'cpufreq_cpu_put' here
+         ;;
+        //left code
+
+>>          struct acpi_processor *pr;
+>>          unsigned long max_freq;
+>>          int i, ret;
+>> @@ -127,8 +123,6 @@ static int cpufreq_set_cur_state(unsigned int cpu,=
+ int state)
+>>                  max_freq =3D (policy->cpuinfo.max_freq *
+>>                              (100 - reduction_step(i) * cpufreq_therma=
+l_reduction_pctg)) / 100;
+>>
+>> -               cpufreq_cpu_put(policy);
+>> -
+>>                  ret =3D freq_qos_update_request(&pr->thermal_req, max=
+_freq);
+>>                  if (ret < 0) {
+>>                          pr_warn("Failed to update thermal freq constr=
+aint: CPU%d (%d)\n",
+>> --
 
