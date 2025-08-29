@@ -1,274 +1,174 @@
-Return-Path: <linux-pm+bounces-33363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22160B3B1EB
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 06:02:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D196B3B217
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 06:16:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 731D917D400
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 04:02:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E7B998433E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 04:16:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03699235345;
-	Fri, 29 Aug 2025 04:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E831A00F0;
+	Fri, 29 Aug 2025 04:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LkB+W3+H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NCWX0dnQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFE9224B06;
-	Fri, 29 Aug 2025 04:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8309A8635B
+	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 04:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756440093; cv=none; b=QcvhFpqgpj7xYANyG3/tWL/Vz4DKUsG5+KuZgwMBFUMFa8x8aZXlsmQucnlBxHGtmjFfocOe2Xzx4hPA+NfMYngnBZyavt2NAZ6DVLJ1ML3upn3wnu4Q+BM9ZCVLTkKXrfuwUwGh/50MSipQrN8sHR8WhbR5dAA8TTseN3bFYAE=
+	t=1756440967; cv=none; b=rTApbdfg6S71mtsLm8KvHwYxbNiElDuys0Ka77uw0kWJdkLBb9i36VrN5wrgfR3JHP1TbByIqzIExV2a9UjGdxWRuuT46lDsL4ERvwJREiyAaCj6LvIdxWIipMsmB1Nbq2QlacrZBDVpltVPiFyjlLzXcCabhLkkME+scp9LblI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756440093; c=relaxed/simple;
-	bh=Xd0tRNw2ps86hJT24DbMzh+hXIm82G3Vlj9OA8R/33g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T3TBmi5FIEwMqDtiRJWzE2oFrfJu2aHMgIl7RG40MVecvSxV15kG4aQpC+l1Du+nNqFEKh/18zEJvK63jPAqx5R0ru+hZE1UJO/9MDiGv/xtmXP3UJLPwo9tkb/4VMlcq/XgnpYNuNiPwdWjZGdHFYl14VpIMgCpNVSJ40r57Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LkB+W3+H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FECCC4CEFF;
-	Fri, 29 Aug 2025 04:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756440093;
-	bh=Xd0tRNw2ps86hJT24DbMzh+hXIm82G3Vlj9OA8R/33g=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=LkB+W3+Hek+7YF//rT7BnlEm5dBA5XwVoW+kHM4an1GTtOFcXZvXCY0xkxOTgAjQo
-	 k3TxSFk764eFlWLNgPHQ3PJT58ujGzbrkm1NTCt4jnh00ImEJVmTZEaeDMbabvhFjb
-	 a/4VIffXOuQ9FinzBULbZtmRNs7VdWVH75KcIPXtcOtoSYs5uNCYS+VMY9vTnl9XBm
-	 1tYzOD/YzVKIXp54uJvgUJRQ1uJNcH1qExAK+wiODWdd1JNmGaiofQoSvOFxXvRX7W
-	 Xt2QbKqXGafjyZSIjs/hwKie514sqF/FqwvUm+/MC8BtkjgAMiKHyd5RsmGe/tNA4+
-	 OvcsPh9joRtjQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0604DCA0FF6;
-	Fri, 29 Aug 2025 04:01:33 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Thu, 28 Aug 2025 23:01:33 -0500
-Subject: [PATCH RFC 7/7] arm64: tegra: Add OPP tables on Tegra210
+	s=arc-20240116; t=1756440967; c=relaxed/simple;
+	bh=Tkvu8pNkFd205YZuldCAgZ98rpKB05AIMFFpdMprdno=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PIL0FM+rMs28lO+Aj1kPtsf7qkX7ltZGB5j86hnRJHt87BV7bKSEQStVER7qOiFw5TlLkHNFTnxnG5wCRB63+kFpmV29Lnfd7T+YEdJU+Cuhd/xFkOggact8j8A04cWGYYKf5PDDBO8PzxkNaSdpR9xG8AFIEFeQTnPC5IonAU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NCWX0dnQ; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24458272c00so17410315ad.3
+        for <linux-pm@vger.kernel.org>; Thu, 28 Aug 2025 21:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756440963; x=1757045763; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rLIksirgxElP0838CFgIqzzpTLOypIpRJfIiW6HAyvI=;
+        b=NCWX0dnQnDZGg1sslxCpu1fSKGSiTTgasT7DMqz6M270ixe36/wWnRYIvmVOxDGqoP
+         lMug9d3wiJladlgvz0eSRGv+R6kxKWjF0PRqW8ZY0EHtfFfAJIQod74KsRpMC9tQhLNT
+         kxos1waItqg/ZYesRFJiAbl2+2PWPd3khNsCZW/qO9HXgAJPSG2lkYq8UIAX207xgHqv
+         U1ihRt1yAwrNz+qGPMxJ54v71CWb2Tr8Pf0pjClhWMnNQWcW9jgwoLqMO06jICk2PD7J
+         cGSoD6Bo/n3tJj1VIZTZiVBYzfauC2YGpVimft3z5wWKwBhzmjGNWcbDcgilRoPMiTI4
+         +tSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756440963; x=1757045763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rLIksirgxElP0838CFgIqzzpTLOypIpRJfIiW6HAyvI=;
+        b=wlXg0lw0vC8718dnZufaAysxCqWgwr558mXI7J6bj79TFzawI2LLyPvVUm9MEIgm8H
+         5YuLa+JbJcAPjzrPzBihBwCONyb1xU1M15WVNIFWUVqRb7ka5VBvgTiT9ALafTHiYAuj
+         RI830VM6OYS4yP1NNA13AFiKopJj5y99K51gzjI5JMuBeA0cNb5gCP4If+RPSI0c9u4i
+         nicoGuE9JwcT+Q0bApTmLNp50RkgHwca227YSZXJMOyAZEPYsnsq4172yI0ezUWQpD/5
+         Sv/3Y6e/C7RRsFgDeelMg4XlSAXgsnva0Mk5LkKeyV25VKx7/nJc7gHxT2BrB9Md1380
+         YrqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2LqprTZdzkSwytFHbojOfOxG3GgizAzfshYh6S1LugKToOa+bEifN/B4Hv5isY8PWXCKGvFlEbg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxT1/h51g96eSBtMfjZUWF+iGDQTE3Ip3V10hvOFhsHKtGRczp
+	Tk2EU9lneRWllikECygzeq0hyA5Z+8tdFF8fCggSCXSyS8QMYKpfXhAXWC/XgsvqalU=
+X-Gm-Gg: ASbGncvseRG2iHLkej6MDzk950MMPV/kQK42uLRX22YNXxfrJ9vNJun1rtTx7fZxtEI
+	UimHB+d/a/erl8RtabtWeDE7prs8fTwt3h1WLDfn3fwL2+abtTMfKwYm/K1/CzaUYHlaZyhCTP+
+	iT4avTaLYr3UBTgyC420TODI16NwquxvBcwb2lj9ZMk7FyO+pRP9lxuRWF5xYe4/IwYZ4xqq4M6
+	bYLLLP++UPOICZhyMP7WXqs8mo5MiOFcNqny6TEW6sTPLgQLTZbB8cqQtbH5DBjgjVbKKQkvSLr
+	Tdg0e0oJVKvFSpAs+zyG5Mh4L91eU2WHTiCV4b7nFNCOnJO3+MWk/XeP7bUDOH1TjI1YB8adQZL
+	rN6tefuTO2ZzeGIeyQSqBQCOHDJXiwpdh0+1rkAgvfJABww==
+X-Google-Smtp-Source: AGHT+IFTtyPlxhHuxI/2IH3LiGsWs9ydV529VJDopa/F9yT/ZDbBcbt4dqu3BSsOo/zOh/nC4NEfwQ==
+X-Received: by 2002:a17:902:ef06:b0:242:9be2:f67a with SMTP id d9443c01a7336-2462ee0bec3mr338420325ad.11.1756440962736;
+        Thu, 28 Aug 2025 21:16:02 -0700 (PDT)
+Received: from localhost ([122.172.87.165])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-249065ad9c0sm10691895ad.125.2025.08.28.21.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Aug 2025 21:16:02 -0700 (PDT)
+Date: Fri, 29 Aug 2025 09:45:59 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Dennis Beier <nanovim@gmail.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] cpufreq/longhaul: handle NULL policy in
+ longhaul_exit
+Message-ID: <20250829041559.jzdb5stfvlpztcp4@vireshk-i7>
+References: <20250828213427.27593-1-nanovim@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-t210-actmon-v1-7-aeb19ec1f244@gmail.com>
-References: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com>
-In-Reply-To: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Kyungmin Park <kyungmin.park@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756440091; l=4992;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=BuMztMnAqa18LOpanMPfXZmvaUGQqA9O6CgvPF/UAwU=;
- b=t58Jl/MjwMo2gUy677GZjB/GgnJvNSlR6znbV/W6KphphRrNn/NET7LRBxnDkjOJpZpeEzhQz
- 5Ez4CZTMG1BBYWTfQcYWuEvjG7qVAF/iUtfqnzFTHeV4CPRfh9VL9aE
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250828213427.27593-1-nanovim@gmail.com>
 
-From: Aaron Kling <webgeek1234@gmail.com>
+On 28-08-25, 23:29, Dennis Beier wrote:
+> 
+> Resending this patch to include cpufreq maintainers.
 
-This adds OPP tables for actmon and emc, enabling dynamic frequency
-scaling for ram.
+This should have been added ...
 
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> ---
+> 
+> longhaul_exit() was calling cpufreq_cpu_get(0) without checking
+> for a NULL policy pointer. On some systems, this could lead to a
+> NULL dereference and a kernel warning or panic.
+> 
+> This patch adds a check using unlikely() and prints a warning
+> if the policy is NULL, then returns early. Also, the loop variable
+> is now declared inside the for-loop to match modern kernel style.
+> 
+> Bugzilla: #219962
+> 
+> Signed-off-by: Dennis Beier <nanovim@gmail.com>
+> 
+> ---
+
+... here. Right now if we apply the patch, it will only contain the
+top line.
+
+This is what I get now if I apply your patch with `git am`
+
+Author: Dennis Beier <nanovim@gmail.com>
+Date:   Thu Aug 28 23:29:36 2025 +0200
+
+    cpufreq/longhaul: handle NULL policy in longhaul_exit
+
+    Resending this patch to include cpufreq maintainers.
+
+    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- .../boot/dts/nvidia/tegra210-peripherals-opp.dtsi  | 135 +++++++++++++++++++++
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   7 ++
- 2 files changed, 142 insertions(+)
+ drivers/cpufreq/longhaul.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-peripherals-opp.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-peripherals-opp.dtsi
-new file mode 100644
-index 0000000000000000000000000000000000000000..bf2527d737932a1f41aa83d61f44d87ba52b0519
---- /dev/null
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-peripherals-opp.dtsi
-@@ -0,0 +1,135 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/ {
-+	/* EMC DVFS OPP table */
-+	emc_icc_dvfs_opp_table: opp-table-dvfs0 {
-+		compatible = "operating-points-v2";
-+
-+		opp-40800000-800 {
-+			opp-microvolt = <800000 800000 1150000>;
-+			opp-hz = /bits/ 64 <40800000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-68000000-800 {
-+			opp-microvolt = <800000 800000 1150000>;
-+			opp-hz = /bits/ 64 <68000000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-102000000-800 {
-+			opp-microvolt = <800000 800000 1150000>;
-+			opp-hz = /bits/ 64 <102000000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-204000000-800 {
-+			opp-microvolt = <800000 800000 1150000>;
-+			opp-hz = /bits/ 64 <204000000>;
-+			opp-supported-hw = <0x0007>;
-+			opp-suspend;
-+		};
-+
-+		opp-408000000-812 {
-+			opp-microvolt = <812000 812000 1150000>;
-+			opp-hz = /bits/ 64 <408000000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-665600000-825 {
-+			opp-microvolt = <825000 825000 1150000>;
-+			opp-hz = /bits/ 64 <665600000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-800000000-825 {
-+			opp-microvolt = <825000 825000 1150000>;
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-1065600000-837 {
-+			opp-microvolt = <837000 837000 1150000>;
-+			opp-hz = /bits/ 64 <1065600000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-1331200000-850 {
-+			opp-microvolt = <850000 850000 1150000>;
-+			opp-hz = /bits/ 64 <1331200000>;
-+			opp-supported-hw = <0x0003>;
-+		};
-+
-+		opp-1600000000-887 {
-+			opp-microvolt = <887000 887000 1150000>;
-+			opp-hz = /bits/ 64 <1600000000>;
-+			opp-supported-hw = <0x0007>;
-+		};
-+	};
-+
-+	/* EMC bandwidth OPP table */
-+	emc_bw_dfs_opp_table: opp-table-dvfs1 {
-+		compatible = "operating-points-v2";
-+
-+		opp-40800000 {
-+			opp-hz = /bits/ 64 <40800000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <652800>;
-+		};
-+
-+		opp-68000000 {
-+			opp-hz = /bits/ 64 <68000000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <1088000>;
-+		};
-+
-+		opp-102000000 {
-+			opp-hz = /bits/ 64 <102000000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		opp-204000000 {
-+			opp-hz = /bits/ 64 <204000000>;
-+			opp-supported-hw = <0x0007>;
-+			opp-peak-kBps = <3264000>;
-+			opp-suspend;
-+		};
-+
-+		opp-408000000 {
-+			opp-hz = /bits/ 64 <408000000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <6528000>;
-+		};
-+
-+		opp-665600000 {
-+			opp-hz = /bits/ 64 <665600000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <10649600>;
-+		};
-+
-+		opp-800000000 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-supported-hw = <0x001F>;
-+			opp-peak-kBps = <12800000>;
-+		};
-+
-+		opp-1065600000 {
-+			opp-hz = /bits/ 64 <1065600000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <17049600>;
-+		};
-+
-+		opp-1331200000 {
-+			opp-hz = /bits/ 64 <1331200000>;
-+			opp-supported-hw = <0x0003>;
-+			opp-peak-kBps = <21299200>;
-+		};
-+
-+		opp-1600000000 {
-+			opp-hz = /bits/ 64 <1600000000>;
-+			opp-supported-hw = <0x0007>;
-+			opp-peak-kBps = <25600000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 2fcc7a28690f7100d49e8b93c4fb77de7947b002..f2961c9e12db1cf91254b75389779955f2a0956d 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -9,6 +9,8 @@
- #include <dt-bindings/thermal/tegra124-soctherm.h>
- #include <dt-bindings/soc/tegra-pmc.h>
- 
-+#include "tegra210-peripherals-opp.dtsi"
-+
- / {
- 	compatible = "nvidia,tegra210";
- 	interrupt-parent = <&lic>;
-@@ -516,6 +518,9 @@ actmon@6000c800 {
- 		clock-names = "actmon", "emc";
- 		resets = <&tegra_car 119>;
- 		reset-names = "actmon";
-+		operating-points-v2 = <&emc_bw_dfs_opp_table>;
-+		interconnects = <&mc TEGRA210_MC_MPCORER &emc>;
-+		interconnect-names = "cpu-read";
- 		#cooling-cells = <2>;
- 	};
- 
-@@ -1024,6 +1029,8 @@ emc: external-memory-controller@7001b000 {
- 		clock-names = "emc";
- 		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
- 		nvidia,memory-controller = <&mc>;
-+		operating-points-v2 = <&emc_icc_dvfs_opp_table>;
-+
- 		#interconnect-cells = <0>;
- 		#cooling-cells = <2>;
- 	};
+
+>  drivers/cpufreq/longhaul.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
+> index ba0e08c8486a..9698d56bfe6c 100644
+> --- a/drivers/cpufreq/longhaul.c
+> +++ b/drivers/cpufreq/longhaul.c
+> @@ -951,9 +951,14 @@ static int __init longhaul_init(void)
+>  static void __exit longhaul_exit(void)
+>  {
+>  	struct cpufreq_policy *policy = cpufreq_cpu_get(0);
+> -	int i;
+
+Please don't make another unnecessary change along with a bug fix. If
+you really want that, you should do that in a separate patch. Also, it
+is just not required.
+
+Add a blank line here please.
+
+> +	if (unlikely(!policy)) {
+> +		pr_warn_once("longhaul_exit: policy is NULL\n");
+
+Not sure if the warning is going to be of any use for the user. I
+would just return silently, the module is going away anyway.
+
+> +
+> +		return;
+> +	}
+> +
+>  
+> -	for (i = 0; i < numscales; i++) {
+> +	for (int i = 0; i < numscales; i++) {
+>  		if (mults[i] == maxmult) {
+>  			struct cpufreq_freqs freqs;
+>  
+> -- 
+> 2.50.1
 
 -- 
-2.50.1
-
-
+viresh
 
