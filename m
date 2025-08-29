@@ -1,73 +1,98 @@
-Return-Path: <linux-pm+bounces-33434-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33435-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227F9B3C366
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 21:54:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66D45B3C37F
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 21:58:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 532451C861FC
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 19:54:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28850162496
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 19:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E6A23BCF3;
-	Fri, 29 Aug 2025 19:54:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73B2242D7C;
+	Fri, 29 Aug 2025 19:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IlGoXjak"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="hU0ZLCmk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B092566;
-	Fri, 29 Aug 2025 19:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37BB23D2BF
+	for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 19:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756497264; cv=none; b=qWaUcFQ9wtB1bEaEz5XMGS5LJH3B943GfQ0X8RCRKtk9M/sPufBhQIqo3dF+t1zHoGnujRki6HTzgdaf9WJnmedvDD34wFY27XR4sPztP28A0u+/ce0YAzIbHXVbg30/lwkCd5yrm+cOhNIyOiUnkFefQUzyfT0zNI0GoRDFEeI=
+	t=1756497531; cv=none; b=ayDEhoa2btwDwOUg6NWOf5s8k0SW4OelA2Go2EkAlX3iQr6mFL3G7JopDFTFQav+162QUXVmBArN34iIMTJ3TgSG4ZVx7ZuNX21YAy3vZucIEYRB+h+G3QiyaAQFfwys6B2JDFmnvodQA5Pohuz9Rt2nQMxitmx2koSmwSum/QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756497264; c=relaxed/simple;
-	bh=T3UBBOZlqKJig0jZysKSF3BxzvTAu4H/69urY0rfYOo=;
+	s=arc-20240116; t=1756497531; c=relaxed/simple;
+	bh=8l7WloauFJzBWhqUn0J8vIbg+sAFNP6CNrqLP/SLa7E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eLmzb8kD7F6YVQ+tVnVcn0oqVvpHngHzuzx8L8tFzGEyMv0kJVespCofmpnzVDiTw0fTz7YamT8EEZ/HLtjJkAEReKUx7SeoDlrahAApy/iqUpWkzv41G9cBvvewJ0hHsi7B1FIyC1gPZchq25T9odj1KtjoSd/WMKXttpVF/Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IlGoXjak; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756497263; x=1788033263;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=T3UBBOZlqKJig0jZysKSF3BxzvTAu4H/69urY0rfYOo=;
-  b=IlGoXjakLVBBaNbB4FBgxVmIwKottaCSOJoBmEGvTsdZ4PZcKHOdA6yx
-   hSVZQD0ZSwVycqWNnOvKysrhwo+UwX+dDI8uJStC4I4ET0ZecVwG1Q3Zh
-   6wrlKUHQwsisDF6ZoTdWUxuzDHNCL8VmRHy6shLMa2WAEVu3lWQ7Ffyps
-   i44HdVV36BYQsEUr3NPwykJiqwNSfxGKqlY+ofeJhz2Wi9fVx7puzF/oi
-   ja8Or/jvgu5Q0efpsB2IV6ayh9H17rilErTWftRzoPrbYmafTDP2/cZ/q
-   3OX67JAEO+T/pvvBKqCkUr1h+rQfjFG46/CyUU80gNMwI1MKWmeMLWBdJ
-   w==;
-X-CSE-ConnectionGUID: f5sqf0NxSMSwZ9sLlt3jLA==
-X-CSE-MsgGUID: 9EFVoDBNRKuSufiSWoxVTw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="81383561"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="81383561"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 12:54:22 -0700
-X-CSE-ConnectionGUID: G2Uf9fqxQVexfUAEWEPS0Q==
-X-CSE-MsgGUID: RfFZ+qHsTjuTFAC2qX1Gxw==
-X-ExtLoop1: 1
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO localhost) ([10.124.220.169])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 12:54:21 -0700
-Date: Fri, 29 Aug 2025 12:54:20 -0700
-From: David Box <david.e.box@linux.intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: rafael@kernel.org, bhelgaas@google.com, vicamo.yang@canonical.com, 
-	kenny@panix.com, ilpo.jarvinen@linux.intel.com, nirmal.patel@linux.intel.com, 
-	mani@kernel.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 1/2] PCI/ASPM: Add host-bridge API to override default
- ASPM/CLKPM link state
-Message-ID: <ng67s7imjpj7i5ym7unvmewzhyk4ybgpkgw5aizicfs423vsxh@hvpfmk32ooe4>
-References: <20250825203542.3502368-1-david.e.box@linux.intel.com>
- <20250828204345.GA958461@bhelgaas>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s3K81gjGqrAxBVu3a0SpcrJTsKuijurtktyLyOxKJ0vJdhfgv6O7ljAB2z/ArrGcKK9Omyb64xNYC0e+9gYGbvQc8pD70eqwtXCn8I6dD82x1RTXXtVD5ZD1jChuoHfo/tQF7PdVy7n4Kg7+QyowFiqkVUvAi1K/6lUf7J2bFiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=hU0ZLCmk; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7fa334351b1so268516485a.3
+        for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 12:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1756497529; x=1757102329; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Gwfj8BSnuRCasoSQ1waOm5Q9KayvsIsoixpELYgVNyA=;
+        b=hU0ZLCmkWtB3/QnRM+p1ZO6Leno5i3rHsL/TRR2K3A3qtQUg7Zp+etocnbHqyAABAf
+         JB8P3n+jTjJ41JYhc7HvuxjZqwgj1BGSWe8pVpEPjq1WCsPCQjAdbX8g5k2K2KP3z0X3
+         GdjBZBhy6JWgoAZGHokeQhAAEjpDDx10bVDc/NaW/tkQQxL/iXDv64BD3MB+oiqx3Khn
+         zlLMwhhWt7iJAV8u9tQXzPg/1FtBVPqRvPAMyDWz2IVqeyp9SJeKdRz21OmRKF3Wi/f9
+         yqRAWthp9+ym0OPWSM2mYJDkmUAOT3MmW+i03szKqWFManEFOh1okeV3eDJRzzq6r6Bh
+         96Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756497529; x=1757102329;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gwfj8BSnuRCasoSQ1waOm5Q9KayvsIsoixpELYgVNyA=;
+        b=Uk2Ruidq4iS/+PqLZZLhXi/kajkBf47sYNe1Eh0cSluV6JQFPaPy8DGlTKSGaxNJR0
+         a0DaWgjqo6b9oBN1HhY56b9ezhe8g0t/9HY0ci/SQ1ZRF6TZGlWmk3G8bdG5KZd3qtc3
+         R4st58ONGeen2WJdviQ0XjWs9mNNP3xPrHhncMWff2RK3bgqgR8Ukf5LbDrheXmmYVVV
+         50YtEvqu0E5y2g0oLi9IV22BVyrJ50IJyKitJJTZO8ZojJahMtMLSWhictE/QwQEHiRb
+         SCFjLWq2ln3wLoqqfjwhUphj7vHIaqGBXMJtpK+dLzGXYbqDl0pcY04yPEEtp90viv07
+         Js5A==
+X-Forwarded-Encrypted: i=1; AJvYcCWWqKLEuEvrAVRchaxJaOWBZd3tl5AjDQk1JSdCMKJzPs3n1D/UnFJCaz7gtTCQRQt/ANOV/4tJPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRu5IRvYstHs5l1rsqjd7wVsCxSEZNVadu5cTwk+IcjlAXXFSy
+	qeFpCG+RXqgU7OIhz6nIGkQKXM8rKpG0kV+Vri3+0ERhrNtCI4TPMvDdJPXRAm2rhg==
+X-Gm-Gg: ASbGncsh4UXEVlctcRbldpLfhI+XeBRCDxlNuL6nJq2KTx6/9UA1LOGMvjyTsdaUfFi
+	XX7+Kw4ZMw+pLLJIn2Ebn16MKXZV4LUKmfAOFMHdaEUqiDM6lUhQky/mM9Qh+c1V2q5iKeTvZvI
+	zWcFzRsPSFsM3SIUm0T6VJUBJN6ZFPj/8MK+IctPOMw+4hkM5PrS0BYWuJCMzWsjEgWrNuyT6A4
+	feltnyzSMrpPMIyZP8Ukrj+hJyXfQ2Ph0TIERdPbkJ8ZIYzvEgXkSNDU8tAMp/uDbTAyO+yW/jU
+	eNLN8rHUSc3XrozT8K81+vynk2TIeIXem8KfFdBlLkZzjW0WCqXd5MnknF6cYMpbqQ2zFK/GZW9
+	UNZJQDKNvW9sK3kz/3f6Pqi+b8FfOL9xPSTbDo+97
+X-Google-Smtp-Source: AGHT+IG2Lf7E7o/NrgCtywMKuNoJcyEOoQ9/McbEtruHNyVu4Eboh3tPAysx+5+AkL59N+5ujTQ8Hw==
+X-Received: by 2002:a05:620a:4047:b0:7f6:b6e7:81d4 with SMTP id af79cd13be357-7f6b6e78321mr1728616285a.35.1756497528867;
+        Fri, 29 Aug 2025 12:58:48 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::fd35])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7fc0d774772sm246165485a.12.2025.08.29.12.58.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 12:58:48 -0700 (PDT)
+Date: Fri, 29 Aug 2025 15:58:45 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+Message-ID: <f8965cfe-de9a-439c-84e3-63da066aa74f@rowland.harvard.edu>
+References: <20250826150826.11096-1-ryanzhou54@gmail.com>
+ <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+ <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+ <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+ <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
+ <20250829004312.5fw5jxj2gpft75nx@synopsys.com>
+ <e3b5a026-fe08-4b7e-acd1-e78a88c5f59c@rowland.harvard.edu>
+ <CAJZ5v0gwBvC-y0fgWLMCkKdd=wpXs2msf5HCFaXkc1HbRfhNsg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,217 +102,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250828204345.GA958461@bhelgaas>
+In-Reply-To: <CAJZ5v0gwBvC-y0fgWLMCkKdd=wpXs2msf5HCFaXkc1HbRfhNsg@mail.gmail.com>
 
-On Thu, Aug 28, 2025 at 03:43:45PM -0500, Bjorn Helgaas wrote:
-> On Mon, Aug 25, 2025 at 01:35:22PM -0700, David E. Box wrote:
-> > Synthetic PCIe hierarchies, such as those created by Intel VMD, are not
-> > enumerated by firmware and do not receive BIOS-provided ASPM or CLKPM
-> > defaults. Devices in such domains may therefore run without the intended
-> > power management.
-> > 
-> > Add a host-bridge mechanism that lets controller drivers supply their own
-> > defaults. A new aspm_default_link_state field in struct pci_host_bridge is
-> > set via pci_host_set_default_pcie_link_state(). During link initialization,
-> > if this field is non-zero, ASPM and CLKPM defaults come from it instead of
-> > BIOS.
-> > 
-> > This enables drivers like VMD to align link power management with platform
-> > expectations and avoids embedding controller-specific quirks in ASPM core
-> > logic.
+On Fri, Aug 29, 2025 at 09:23:12PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Aug 29, 2025 at 3:25 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > It sounds like the real question is how we should deal with an
+> > interrupted system suspend.  Suppose parent device A and child device B
+> > are both in runtime suspend when a system sleep transition begins.  The
+> > PM core invokes the ->suspend callback of B (and let's say the callback
+> > doesn't need to do anything because B is already suspended with the
+> > appropriate wakeup setting).
+> >
+> > But then before the PM core invokes the ->suspend callback of A, the
+> > system sleep transition is cancelled.  So the PM core goes through the
+> > device tree from parents to children, invoking the ->resume callback for
+> > all the devices whose ->suspend callback was called earlier.  Thus, A's
+> > ->resume is skipped because A's ->suspend wasn't called, but B's
+> > ->resume callback _is_ invoked.  This callback fails, because it can't
+> > resume B while A is still in runtime suspend.
+> >
+> > The same problem arises if A isn't a parent of B but there is a PM
+> > dependency from B to A.
+> >
+> > It's been so long since I worked on the system suspend code that I don't
+> > remember how we decided to handle this scenario.
 > 
-> I think this kind of sidesteps the real issue.  Drivers for host
-> controllers or PCI devices should tell us about *broken* things, but
-> not about things advertised by the hardware and available for use.
-
-I agree with the principle. The intent isn’t for VMD (or any controller) to
-override valid platform policy. It’s to handle synthetic domains where the
-platform doesn’t provide any policy path (no effective _OSC/FADT for the child
-hierarchy). In those cases, the controller is the only agent that knows the
-topology and can supply sane defaults.
-
-I’m happy to tighten the patch to explicitly cover synthetic domains only.
-Instead of an API, we could have a boolean flag 'aspm_synthetic_domain'. When
-set by the controller, we can do:
-
-    if (host_bridge->aspm_synthetic_domain)
-            link->aspm_default = PCIE_LINK_STATE_ALL;
-
-This at least addresses your concern about policy decision, leaving it to the
-core to determine how these domains are handled rather than an ABI that lets
-domains set policy.
-
+> We actually have not made any specific decision in that respect.  That
+> is, in the error path, the core will invoke the resume callbacks for
+> devices whose suspend callbacks were invoked and it won't do anything
+> beyond that because it has too little information on what would need
+> to be done.
 > 
-> The only documented policy controls I'm aware of for ASPM are:
+> Arguably, though, the failure case described above is not different
+> from regular resume during which the driver of A decides to retain the
+> device in runtime suspend.
 > 
->   - FADT "PCIe ASPM Controls" bit ("if set, OS must not enable ASPM
->     control on this platform")
+> I'm not sure if the core can do anything about it.
 > 
->   - _OSC negotiation for control of the PCIe Capability (OS is only
->     allowed to write PCI_EXP_LNKCTL if platform has granted control to
->     the OS)
-> 
-> I think what we *should* be doing is enabling ASPM when it's
-> advertised, subject to those platform policy controls and user choices
-> like CONFIG_PCIEASPM_PERFORMANCE/POWERSAVE/etc and sysfs attributes.
-> 
-> So basically I think link->aspm_default should be PCIE_LINK_STATE_ALL
-> without drivers doing anything at all.  Maybe we have to carve out
-> exceptions, e.g., "VMD hierarchies are exempt from _OSC," or "devices
-> on x86 systems before 2026 can't enable more ASPM than BIOS did," or
-> whatever.  Is there any baby step we can make in that direction?
-> 
-> This feels a little scary, so feel free to convince me it can't be
-> done :)
+> But at the time when the B's resume callback is invoked, runtime PM is
+> enabled for A, so the driver of B may as well use runtime_resume() to
+> resume the device if it wants to do so.  It may also decide to do
+> nothing like in the suspend callback.
 
-I understand your direction of enabling all advertised states by default
-(subject to FADT/_OSC and user settings). To explore that, I’ll send an RFC in
-parallel with this patch that proposes a baby step, e.g.  add instrumentation so
-we can see where BIOS left capabilities unused, and make it opt-in via a boot
-param so we can evaluate impact safely.
+Good point.  Since both devices were in runtime suspend before the sleep 
+transition started, there's no reason they can't remain in runtime 
+suspend after the sleep transition is cancelled.
 
-So this series will handle the VMD gap directly, and the RFC can kick off the
-wider discussion about defaults on ACPI-managed hosts. Does that sound like a
-reasonable approach and split?
+On the other hand, it seems clear that this scenario doesn't get very 
+much testing.  I'm pretty sure the USB subsystem in general is 
+vulnerable to this problem; it doesn't consider suspended devices to be 
+in different states according to the reason for the suspend.  That is, a 
+USB device suspended for runtime PM is in the same state as a device 
+suspended for system PM (aside from minor details like wakeup settings).  
+Consequently the ->resume and ->runtime_resume callbacks do essentially 
+the same thing, both assuming the parent device is not suspended.  As we 
+have discussed, this assumption isn't always correct.
 
-David
+I'm open to suggestions for how to handle this.  Should we keep track of 
+whether a device was in runtime suspend when a system suspend happens, 
+so that the ->resume callback can avoid doing anything?  Will that work 
+if the device was the source of a wakeup request?
 
-> 
-> > Link: https://patchwork.ozlabs.org/project/linux-pci/patch/20250720190140.2639200-1-david.e.box%40linux.intel.com/
-> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > Tested-by: Manivannan Sadhasivam <mani@kernel.org>
-> > Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-> > ---
-> > Changes in V3:
-> >   -- Changed pci_host_get_default_pcie_link_state() argument name from
-> >      parent to dev.
-> >   -- Applied changelog tags
-> > 
-> > Changes in V2:
-> > 
-> >   -- Host field name changed to aspm_default_link_state.
-> >   -- Added get/set functions for aspm_default_link_state. Only the
-> >      setter is exported. Added a kernel-doc describing usage and
-> >      particulars around meaning of 0.
-> > 
-> > Changes in V1 from RFC:
-> > 
-> >   -- Rename field to aspm_dflt_link_state since it stores
-> >      PCIE_LINK_STATE_XXX flags, not a policy enum.
-> >   -- Move the field to struct pci_host_bridge since it's being applied to
-> >      the entire host bridge per Mani's suggestion.
-> >   -- During testing noticed that clkpm remained disabled and this was
-> >      also handled by the formerly used pci_enable_link_state(). Add a
-> >      check in pcie_clkpm_cap_init() as well to enable clkpm during init.
-> > 
-> >  drivers/pci/pcie/aspm.c | 42 +++++++++++++++++++++++++++++++++++++++--
-> >  include/linux/pci.h     |  9 +++++++++
-> >  2 files changed, 49 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > index 919a05b97647..851ca3d68e55 100644
-> > --- a/drivers/pci/pcie/aspm.c
-> > +++ b/drivers/pci/pcie/aspm.c
-> > @@ -373,6 +373,39 @@ static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
-> >  	pcie_set_clkpm_nocheck(link, enable);
-> >  }
-> >  
-> > +/**
-> > + * pci_host_set_default_pcie_link_state - set controller-provided default ASPM/CLKPM mask
-> > + * @host: host bridge on which to apply the defaults
-> > + * @state: PCIE_LINK_STATE_XXX flags
-> > + *
-> > + * Allows a PCIe controller driver to specify the default ASPM and/or
-> > + * Clock Power Management (CLKPM) link state mask that will be used
-> > + * for links under this host bridge during ASPM/CLKPM capability init.
-> > + *
-> > + * The value is consumed in pcie_aspm_cap_init() and pcie_clkpm_cap_init()
-> > + * to override the firmware-discovered defaults.
-> > + *
-> > + * Interpretation of aspm_default_link_state:
-> > + *   - Nonzero: bitmask of PCIE_LINK_STATE_* values to be used as defaults
-> > + *   - Zero:    no override provided; ASPM/CLKPM defaults fall back to
-> > + *              values discovered in hardware/firmware
-> > + *
-> > + * Note: zero is always treated as "unset", not as "force ASPM/CLKPM off".
-> > + */
-> > +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> > +					  unsigned int state)
-> > +{
-> > +	host->aspm_default_link_state = state;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_host_set_default_pcie_link_state);
-> > +
-> > +static u32 pci_host_get_default_pcie_link_state(struct pci_dev *dev)
-> > +{
-> > +	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
-> > +
-> > +	return host ? host->aspm_default_link_state : 0;
-> > +}
-> > +
-> >  static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
-> >  {
-> >  	int capable = 1, enabled = 1;
-> > @@ -394,7 +427,10 @@ static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
-> >  			enabled = 0;
-> >  	}
-> >  	link->clkpm_enabled = enabled;
-> > -	link->clkpm_default = enabled;
-> > +	if (pci_host_get_default_pcie_link_state(link->pdev) & PCIE_LINK_STATE_CLKPM)
-> > +		link->clkpm_default = 1;
-> > +	else
-> > +		link->clkpm_default = enabled;
-> >  	link->clkpm_capable = capable;
-> >  	link->clkpm_disable = blacklist ? 1 : 0;
-> >  }
-> > @@ -866,7 +902,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
-> >  	}
-> >  
-> >  	/* Save default state */
-> > -	link->aspm_default = link->aspm_enabled;
-> > +	link->aspm_default = pci_host_get_default_pcie_link_state(parent);
-> > +	if (!link->aspm_default)
-> > +		link->aspm_default = link->aspm_enabled;
-> >  
-> >  	/* Setup initial capable state. Will be updated later */
-> >  	link->aspm_capable = link->aspm_support;
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index 59876de13860..8947cbaf9fa6 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -620,6 +620,10 @@ struct pci_host_bridge {
-> >  	unsigned int	size_windows:1;		/* Enable root bus sizing */
-> >  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
-> >  
-> > +#ifdef CONFIG_PCIEASPM
-> > +	unsigned int	aspm_default_link_state;	/* Controller-provided default */
-> > +#endif
-> > +
-> >  	/* Resource alignment requirements */
-> >  	resource_size_t (*align_resource)(struct pci_dev *dev,
-> >  			const struct resource *res,
-> > @@ -1849,6 +1853,8 @@ int pci_disable_link_state(struct pci_dev *pdev, int state);
-> >  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
-> >  int pci_enable_link_state(struct pci_dev *pdev, int state);
-> >  int pci_enable_link_state_locked(struct pci_dev *pdev, int state);
-> > +void pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> > +					  unsigned int state);
-> >  void pcie_no_aspm(void);
-> >  bool pcie_aspm_support_enabled(void);
-> >  bool pcie_aspm_enabled(struct pci_dev *pdev);
-> > @@ -1861,6 +1867,9 @@ static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
-> >  { return 0; }
-> >  static inline int pci_enable_link_state_locked(struct pci_dev *pdev, int state)
-> >  { return 0; }
-> > +static inline void
-> > +pci_host_set_default_pcie_link_state(struct pci_host_bridge *host,
-> > +				     unsigned int state) { }
-> >  static inline void pcie_no_aspm(void) { }
-> >  static inline bool pcie_aspm_support_enabled(void) { return false; }
-> >  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return false; }
-> > 
-> > base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
-> > -- 
-> > 2.43.0
-> > 
+Alan Stern
 
