@@ -1,53 +1,52 @@
-Return-Path: <linux-pm+bounces-33355-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33356-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FEB8B3B126
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 04:48:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 458A5B3B1D2
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 06:01:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EA81583015
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 02:48:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE2417C5F2E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 04:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9858621FF3B;
-	Fri, 29 Aug 2025 02:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61EFC1FF603;
+	Fri, 29 Aug 2025 04:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7TeKyS1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEuJHAbx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622BE212B0A;
-	Fri, 29 Aug 2025 02:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348FE17E0;
+	Fri, 29 Aug 2025 04:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756435696; cv=none; b=A5uBwgmtAaq8Hcg/ONds4Z1Y8HAIs1h8Ndk2kHuyi2vWSze3/gsT4F7O5w+w6oSul+sEjwcS4yTZnm72jEubbi7GK+kWdRKS4jHSWBFNiTCLwydcsIbnH6Zo2dH/1xAL3VwU8kFwSJ52nBq80V4HQTtTgXrAOl8bdXRtR2bRMwE=
+	t=1756440093; cv=none; b=iYk/ujNxjr/06gq6IMGTJVLR5zucL8YJbcGBncXVr5KTQE3EBeJiWW8XCQPeJjQLizqsJzDKkQfY63NegRwwW2N7kYSr2KtlIqB8eGv4hi/Knp/N3/pSTGm8Z/vnhAL4OX+Zzr1GxOvHFHGGYjoanrNC/hy4cs8zABq+Wc0L49M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756435696; c=relaxed/simple;
-	bh=GnJwClUxMWgMLpJm4CE+0XiogVWIkUx6AZPEqH60IBs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QMclrAGZ165XnC6AKRdNd3lAGbk9IsdQTVZcLL6dCVRM4LW3lr3BGYzbH5bfIgYNHiN8GX8+9tsa8vpNH0RqD8f/9RATa/xjgrJ7gEFGj/bNQBsJGVlX9tJ0imjO4Km1U3zW3kB+gPXb6c3COm9fTpGwczG08Lg24EdKdCxbkhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7TeKyS1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D0732C4CEED;
-	Fri, 29 Aug 2025 02:48:14 +0000 (UTC)
+	s=arc-20240116; t=1756440093; c=relaxed/simple;
+	bh=VcSv8G9xRrJjt3otAEwpuFiKaXlXE79WuR6v4AadA+Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jVAEuSt1GiOgeVPEqos1QVTbUXRX+cg+Z4fWtuq1p5pTJNOJW3so/WyAy1NIZ2K5KRwrrMeICRoznsBakVYHy0mXX16qwz53rhwdx9e/MPV9FH9DbmYET6ZZO1zyB0rSEqZwwx4hTR/iekNc7VCZeqfakbzyvEv6bF8EmATkUVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEuJHAbx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A3EF6C4CEF0;
+	Fri, 29 Aug 2025 04:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756435694;
-	bh=GnJwClUxMWgMLpJm4CE+0XiogVWIkUx6AZPEqH60IBs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=m7TeKyS1pbTDlTAQzi986/MgfPdzbtmHcInF6csSJFt71BTr7ArILTWlgEDAUhvNq
-	 E+sCYCyEfMwczhwBGVvJZK9SEbIgsdKhZywNEt34eVre4UrJSAmhNiPW7DZsVTQXF6
-	 q0VdJWevJoVkTKs3tqe5gasTRvxfuwzhaMopwnd2tP0g5yDkGyjhocPgwm/yxXQKsv
-	 3K5lBffO9Vlt5Utz/FRYN7L4GM2CC/J6clW/tv0dgbzGkJJ9QrLmSCromOQc6RkQEI
-	 Hgo+Wyt3s4XnfvoN4g8xfuF21PcRzZGDRckzqy1Y2xY9EcC2SacN9Z01nP+G03D3eW
-	 NSfrW743NlQEg==
+	s=k20201202; t=1756440092;
+	bh=VcSv8G9xRrJjt3otAEwpuFiKaXlXE79WuR6v4AadA+Q=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=aEuJHAbxIj6UBb0OQUG5nJLwwz4WN4Pzr1BI8FbqBs7o4zl2fif7U9RDYwYsU0fK6
+	 miwJjOXQvG9BZgB8Kos8GdV10jZfSRx0kgvFWv2SvLZYna2Nav60mdPTRBoFZVrQFK
+	 2vTMgcPZI+AVPTMs4yW5ac8QJTXVOwONLccAyhc3nFafOzHNlhyyq8veP1QKooZuml
+	 q1l2T4g49p/F8zSAflDLcnxw4m3ch+02ISHo9fY2K0bWJ4jKEeavaEg3SJPCu+X9W5
+	 +Hi730z0h8Ds9c7L1tXQqEPchWTMn5kiAOWosZqr3IbKBafADSLhI/svqz+RFvpmUO
+	 IDQRzemYHlTlA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D2FCA0FF6;
-	Fri, 29 Aug 2025 02:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99438C8303F;
+	Fri, 29 Aug 2025 04:01:32 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Thu, 28 Aug 2025 21:48:13 -0500
-Subject: [PATCH v3 2/2] cpufreq: tegra186: Initialize all cores to max
- frequencies
+Subject: [PATCH RFC 0/7] Support Tegra210 actmon for dynamic EMC scaling
+Date: Thu, 28 Aug 2025 23:01:26 -0500
+Message-Id: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,24 +55,28 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-tegra186-cpufreq-fixes-v3-2-23a7341db254@gmail.com>
-References: <20250828-tegra186-cpufreq-fixes-v3-0-23a7341db254@gmail.com>
-In-Reply-To: <20250828-tegra186-cpufreq-fixes-v3-0-23a7341db254@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
+X-B4-Tracking: v=1; b=H4sIABYmsWgC/02Ou47CMBREfyW6NZauHZs4aVfiA2hXFMZ3Ai6Ss
+ HYWrYT49zWPgnJmNEfnRgU5odDQ3Cjjmkpa5hr0pqF4DvMJKknNZNg49sao1WhWIa7TMqvW9mw
+ jOghHqo9Lxpj+nrRv2u++6PAqM35+K3l9L8dQoOIyTWkdGj+6gJZl20vnbAuApWP2rYTRCvwI7
+ cR5R59GQ/Py0dUHpxweTuUCyKJsx9tewx99jMNV0+F+/wfe2Va45QAAAA==
+X-Change-ID: 20250822-t210-actmon-34904ce7ed0c
+To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
  Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Aaron Kling <luceoscutum@gmail.com>, 
- Sumit Gupta <sumitg@nvidia.com>
-Cc: Thierry Reding <treding@nvidia.com>, linux-pm@vger.kernel.org, 
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>, 
- Mikko Perttunen <mperttunen@nvidia.com>
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756435694; l=3164;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756440091; l=2924;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=Cee7AliwERvbB7wKaI7YwL2ggH/0vhQ+XE9hO86NkEY=;
- b=HeiRL5v18eMEMdGOnHaqyKruV+NWZaMq9DEOZL+rad/fbdGREpgpd56SZYuM31CexSZoLwlAb
- 64G6dPnq1uzDAMXzNyNyD8K5JXE46E3JMQvSLBUolq1UMEmuURTmdOE
+ bh=VcSv8G9xRrJjt3otAEwpuFiKaXlXE79WuR6v4AadA+Q=;
+ b=/424fg+xE/KGEXcg5aiIjDrTcGrW+87Z6V9HPNGlpVacKv5YWnwKTOs5G14szFYM6ZJKsXsHH
+ nLlOOFmqTWVBkjI+crN8eDa+20/XhULbbaXtkg+ptu/OoaHfucmFYGV
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -81,98 +84,63 @@ X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
 X-Original-From: Aaron Kling <webgeek1234@gmail.com>
 Reply-To: webgeek1234@gmail.com
 
-From: Aaron Kling <webgeek1234@gmail.com>
+This series adds interconnect support to tegra210 MC and EMC, then
+enables actmon. This enables dynamic emc scaling.
 
-During initialization, the EDVD_COREx_VOLT_FREQ registers for some cores
-are still at reset values and not reflecting the actual frequency. This
-causes get calls to fail. Set all cores to their respective max
-frequency during probe to initialize the registers to working values.
+This series is marked RFC for two reasons:
 
-Suggested-by: Mikko Perttunen <mperttunen@nvidia.com>
+1) Calculating rate from bandwidth usage results in double the expected
+   rate. I thought this might be due to the ram being 64-bit, but the
+   related CFG5 register reports 32-bit on both p2371-2180 and
+   p3450-0000. I'm using the calculation used for Tegra124 and haven't
+   seen seen anything obviously different between the ram handling on
+   these archs to cause a different result. I have considered that the
+   number of channels might affect the reporting, and factoring in that
+   variable does result in the correct rate, but I don't want to assume
+   that's correct without confirmation.
+
+2) I am seeing intermittent instability when transitioning to rates of
+   204 MHz or below on p2371-2180. I have noted that if the first
+   transition to such a state works, then it continues to work for the
+   rest of that boot cycle. But the kernel will often panic the first
+   time it tries to downclock. I suspect this is a pre-existing issue
+   only brought to light now because nothing would ever lower the clock
+   rate previously.
+
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- drivers/cpufreq/tegra186-cpufreq.c | 27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+Aaron Kling (7):
+      dt-bindings: memory: tegra210: Add memory client IDs
+      dt-bindings: devfreq: tegra30-actmon: Add Tegra124 fallback for Tegra210
+      soc: tegra: fuse: speedo-tegra210: Add soc speedo 2
+      memory: tegra210: Support interconnect framework
+      arm64: tegra: tegra210: Add actmon
+      arm64: tegra: Add interconnect properties to Tegra210 device-tree
+      arm64: tegra: Add OPP tables on Tegra210
 
-diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
-index 6c394b429b6182faffabf222e5af501393dbbba9..bd94beebc4cc2fe6870e13ca55343cedb9729e99 100644
---- a/drivers/cpufreq/tegra186-cpufreq.c
-+++ b/drivers/cpufreq/tegra186-cpufreq.c
-@@ -138,13 +138,14 @@ static struct cpufreq_driver tegra186_cpufreq_driver = {
- 
- static struct cpufreq_frequency_table *init_vhint_table(
- 	struct platform_device *pdev, struct tegra_bpmp *bpmp,
--	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id)
-+	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id,
-+	int *num_rates)
- {
- 	struct cpufreq_frequency_table *table;
- 	struct mrq_cpu_vhint_request req;
- 	struct tegra_bpmp_message msg;
- 	struct cpu_vhint_data *data;
--	int err, i, j, num_rates = 0;
-+	int err, i, j;
- 	dma_addr_t phys;
- 	void *virt;
- 
-@@ -174,6 +175,7 @@ static struct cpufreq_frequency_table *init_vhint_table(
- 		goto free;
- 	}
- 
-+	*num_rates = 0;
- 	for (i = data->vfloor; i <= data->vceil; i++) {
- 		u16 ndiv = data->ndiv[i];
- 
-@@ -184,10 +186,10 @@ static struct cpufreq_frequency_table *init_vhint_table(
- 		if (i > 0 && ndiv == data->ndiv[i - 1])
- 			continue;
- 
--		num_rates++;
-+		(*num_rates)++;
- 	}
- 
--	table = devm_kcalloc(&pdev->dev, num_rates + 1, sizeof(*table),
-+	table = devm_kcalloc(&pdev->dev, *num_rates + 1, sizeof(*table),
- 			     GFP_KERNEL);
- 	if (!table) {
- 		table = ERR_PTR(-ENOMEM);
-@@ -229,7 +231,9 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
- {
- 	struct tegra186_cpufreq_data *data;
- 	struct tegra_bpmp *bpmp;
--	unsigned int i = 0, err;
-+	unsigned int i = 0, err, edvd_offset;
-+	int num_rates = 0;
-+	u32 edvd_val, cpu;
- 
- 	data = devm_kzalloc(&pdev->dev,
- 			    struct_size(data, clusters, TEGRA186_NUM_CLUSTERS),
-@@ -252,10 +256,21 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
- 	for (i = 0; i < TEGRA186_NUM_CLUSTERS; i++) {
- 		struct tegra186_cpufreq_cluster *cluster = &data->clusters[i];
- 
--		cluster->table = init_vhint_table(pdev, bpmp, cluster, i);
-+		cluster->table = init_vhint_table(pdev, bpmp, cluster, i, &num_rates);
- 		if (IS_ERR(cluster->table)) {
- 			err = PTR_ERR(cluster->table);
- 			goto put_bpmp;
-+		} else if (!num_rates) {
-+			err = -EINVAL;
-+			goto put_bpmp;
-+		}
-+
-+		for (cpu = 0; cpu < ARRAY_SIZE(tegra186_cpus); cpu++) {
-+			if (data->cpus[cpu].bpmp_cluster_id == i) {
-+				edvd_val = cluster->table[num_rates - 1].driver_data;
-+				edvd_offset = data->cpus[cpu].edvd_offset;
-+				writel(edvd_val, data->regs + edvd_offset);
-+			}
- 		}
- 	}
- 
+ .../bindings/devfreq/nvidia,tegra30-actmon.yaml    |  13 +-
+ .../boot/dts/nvidia/tegra210-peripherals-opp.dtsi  | 135 ++++++++++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  43 ++++
+ drivers/memory/tegra/Kconfig                       |   1 +
+ drivers/memory/tegra/tegra210-emc-core.c           | 276 ++++++++++++++++++++-
+ drivers/memory/tegra/tegra210-emc.h                |  25 ++
+ drivers/memory/tegra/tegra210.c                    |  81 ++++++
+ drivers/soc/tegra/fuse/speedo-tegra210.c           |   1 +
+ include/dt-bindings/memory/tegra210-mc.h           |  58 +++++
+ 9 files changed, 626 insertions(+), 7 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250822-t210-actmon-34904ce7ed0c
+prerequisite-change-id: 20250812-tegra210-speedo-470691e8b8cc:v1
+prerequisite-patch-id: 81859c81abbe79aed1cfbc95b4f5bcdc5637d6bd
+prerequisite-patch-id: 98bda8855bcc57c59b2231b7808d4478301afe68
+prerequisite-patch-id: 6e0b69d42ea542dc9f58b410abd5974644f75dc4
+prerequisite-patch-id: 9e3b9b2fdb8d9c2264dfa7641d1aec84fb7aedd9
+prerequisite-patch-id: ef4bcc4ddba7898b188fb3fc6e414a2662183f91
 
+Best regards,
 -- 
-2.50.1
+Aaron Kling <webgeek1234@gmail.com>
 
 
 
