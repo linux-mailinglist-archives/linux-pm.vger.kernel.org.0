@@ -1,172 +1,127 @@
-Return-Path: <linux-pm+bounces-33410-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33411-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28D4AB3BB06
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 14:19:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5A55B3BB47
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 14:27:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAA0B206779
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 12:18:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E058B1C83083
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 12:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DF3314B64;
-	Fri, 29 Aug 2025 12:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C178C314B97;
+	Fri, 29 Aug 2025 12:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JQ0/AxIO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EDrLtLqO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4E13128BA;
-	Fri, 29 Aug 2025 12:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBA7265CC0;
+	Fri, 29 Aug 2025 12:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756469934; cv=none; b=j+avQN4WhEr7qXpDuA/3nhceLiCx2nMLiANtB4U3xGPsCcmFsdKQ73zdCesgJvKUYW3Gkjk5YeEWLfpsdkuT7kThPTFWA5UeDUkP1Qy8FCufqzoQS1OSATLB+fOkIIqiq2ErXMnOoiY2ormYdotsQ6vTGLhuxRLtU1dCLDRSIgc=
+	t=1756470443; cv=none; b=MEAeTCSJQH7dQXe45j2jbR7xRQCndtNQp1+GQuXJ1QKqbPRmoJW/7+IltG5qsKLCx+HqyR9+3lKTNineDly2UkSDAMHlDNSqxVjCMXB/UbXbRjYztj5Ad+++f0HV6jngN4LWM2OsF/8V5/H7pquhFCs7IAuzmeZwDDx8MZU/uJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756469934; c=relaxed/simple;
-	bh=lmOaDJrWsALHNdIkFkPEn+1/tHhvy8ASz+0CpcTOxMQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=aixO4Udse8s1/Be5EQ+hm5B9V1oK4EoGuqdUm4w7WZN6OgfQjs9oDhXgFjHHuKBX6oB6pN/VihjWOlSnlzAU7WZg5OrRBnvWeTs7xPkgdvtSa+K9u01GU0NVVPZOrZ1nq17ue8hc+/U1WWO2OoUou5xWsMxaTmWf/Yo/c/qSaoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JQ0/AxIO; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756469933; x=1788005933;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=lmOaDJrWsALHNdIkFkPEn+1/tHhvy8ASz+0CpcTOxMQ=;
-  b=JQ0/AxIOhGOdNMLF+qwZWK/qJiXTSwfEjc9AjX87xrVNj81JYdTRUYja
-   V7Zb2LTkZJLsheaBDsqGMptJ5WLRby9tzbmbVTPMLbVDGXjofwZLzfW44
-   uOWocqbtuuJjlRsXxevgLMALWmEsvl5IiIVUgq/yRnlEAAkyhKziMiGiq
-   8LQ0HYP1ZzdKGkkj3GmzQUSZySM6I71X9QFAhieJDOOWEHkEahigArV0G
-   EZKhduHmce0JLMY2Jfh70zm2ysBhf+FZp5eGkImBMlzoWCDD2/UUeD67o
-   gUoOPBKJW64YrJe4R/5lKaE/2DIWL5soyk1zj202MgephKE5eRnOICCye
-   A==;
-X-CSE-ConnectionGUID: HteoTLb2Tjy5YxO8qrXg+A==
-X-CSE-MsgGUID: J3mI7IycSxOWSYmo7wvxqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="58603807"
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="58603807"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 05:18:51 -0700
-X-CSE-ConnectionGUID: FceyOGKfTMK8J/ArNXLz6w==
-X-CSE-MsgGUID: nahg4MG6QSGDgmwgF/j0Ug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="170753940"
-Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.246.58])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 05:18:22 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Documentation
- <linux-doc@vger.kernel.org>, Linux DAMON <damon@lists.linux.dev>, Linux
- Memory Management List <linux-mm@kvack.org>, Linux Power Management
- <linux-pm@vger.kernel.org>, Linux Block Devices
- <linux-block@vger.kernel.org>, Linux BPF <bpf@vger.kernel.org>, Linux
- Kernel Workflows <workflows@vger.kernel.org>, Linux KASAN
- <kasan-dev@googlegroups.com>, Linux Devicetree
- <devicetree@vger.kernel.org>, Linux fsverity <fsverity@lists.linux.dev>,
- Linux MTD <linux-mtd@lists.infradead.org>, Linux DRI Development
- <dri-devel@lists.freedesktop.org>, Linux Kernel Build System
- <linux-lbuild@vger.kernel.org>, Linux Networking <netdev@vger.kernel.org>,
- Linux Sound <linux-sound@vger.kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Jonathan Corbet <corbet@lwn.net>, SeongJae Park <sj@kernel.org>, Andrew
- Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy"
- <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, Jens Axboe <axboe@kernel.dk>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn
- <lukas.bulwahn@gmail.com>, Joe Perches <joe@perches.com>, Andrey Ryabinin
- <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey
- Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Eric Biggers <ebiggers@kernel.org>, tytso@mit.edu,
- Richard Weinberger <richard@nod.at>, Zhihao Cheng
- <chengzhihao1@huawei.com>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
- <tzimmermann@suse.de>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas.schier@linux.dev>, Ingo Molnar <mingo@redhat.com>, Will
- Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Waiman Long
- <longman@redhat.com>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shay Agroskin
- <shayagr@amazon.com>, Arthur Kiyanovski <akiyano@amazon.com>, David
- Arinzon <darinzon@amazon.com>, Saeed Bishara <saeedb@amazon.com>, Andrew
- Lunn <andrew@lunn.ch>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
- <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
- <tiwai@suse.com>, Alexandru Ciobotaru <alcioa@amazon.com>, The AWS Nitro
- Enclaves Team <aws-nitro-enclaves-devel@amazon.com>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>, Laurent
- Pinchart <laurent.pinchart@ideasonboard.com>, Steve French
- <stfrench@microsoft.com>, Meetakshi Setiya <msetiya@microsoft.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Martin K. Petersen"
- <martin.petersen@oracle.com>, Bart Van Assche <bvanassche@acm.org>, Thomas
- =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Masahiro Yamada
- <masahiroy@kernel.org>
-Subject: Re: [PATCH 00/14] Internalize www.kernel.org/doc cross-reference
-In-Reply-To: <20250829075524.45635-1-bagasdotme@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20250829075524.45635-1-bagasdotme@gmail.com>
-Date: Fri, 29 Aug 2025 15:18:20 +0300
-Message-ID: <437912a24e94673c2355a2b7b50c3c4b6f68fcc6@intel.com>
+	s=arc-20240116; t=1756470443; c=relaxed/simple;
+	bh=t26n87bPfXJxCwL8n21wzenmKbDiAigzoY9uFs/+gQU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=swBvjAawTN2b8/VCzpFL2oIGDQeeU8faox8G+FYPRajvTYkm2G8g4fqzboi6o1L1DEu0D8qbOI1rCSm1HtMJlFlinRKxe4nsyMipJgQ/gptVPuuWePqIGHY1KR3Fw+ZfoHktDiriUEj4LJFMSP8b2wHqCP390Kqv31PI33jwda4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EDrLtLqO; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-55f6aef1a7dso373341e87.0;
+        Fri, 29 Aug 2025 05:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756470440; x=1757075240; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LwLMCV8O9aymzpnaaoax1GEUnLQN1D5YWoYnYPJ5/EM=;
+        b=EDrLtLqO8I91blRy27bWqiTf9/LTHJBWYwkz5eWYVK3ANEPhbWXp7XkUujCOOBYytN
+         1SlZ6p4owxEHIMuSxX3sotSJ+NHUuwb9p4UgzqsxjAimqMMEWT3oisinIy9lc+EMk8/Q
+         UvjAPi7uONQUW/sYoSm/KbaaXWefg8N9pFAyjQE/y3fcpbsV7qyN+Cu3v18tKQ+zWuLw
+         aECNWLTfP0TohNBQs1xdkIOm6jUl4238eOChb1XOYxeHg0MWpE6AUn7B7Ies4MprL4hN
+         mZWdiEi7zyLgbtNSziJhRPshfGTxw0xqRtp+hw+W/+E2QOlD6qBfYDlivUVR7KwWSLn+
+         aSQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756470440; x=1757075240;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LwLMCV8O9aymzpnaaoax1GEUnLQN1D5YWoYnYPJ5/EM=;
+        b=LTqLZ0bJVDE4ieo/9aTK/0K60Hmiu7UnJGmQuMw9ZsQt0OBe6ajekRTP6qj5S8gdD8
+         FK3HmFWzewqadHdGdSgqHYPN/Hw11SzntOxvwMEfRJsMje9XF6kSQZX2QyqMJ7kcHTvU
+         TQXVvNksukELU/q5YXxxeuavnoxY9iSakPjdLJGcOfKl0Dv0qHWg802z+dbASK48o2X8
+         DPTIxXLsay5Z+2zYKuJ/hWmCND0czcFoVrTgf1D7eZYaMS8FcbuFE/YohPY1Jnd2So9u
+         vjlOyoEyaX630YhYu+gHqozvjjsAEZB8TY2ojQHXDASDGE92FeD8K8MYo73KGqfPoCSt
+         6+1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUYjIZm6AEUntYNNAm0OHrsb3bh7i2YITDBY4BB9Z1xnt/xm/aGOVFToM6ntOOzE75kXOOcyjyeFoA=@vger.kernel.org, AJvYcCXofVp50o8Iecsodm1vJ9BTwnwBHDhXUSQ9n8cg6xvEKOFEh5HGcswmji+R0nz5mDxqR0P2RD0tzvncmK0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu+q/ypkyvEENlgfg/KZFOUBhAcTe6nRfotywbMrPxHNUxZOrL
+	0lx2+X8uHGSTUbKFFL3WxWtB0rGuZxiP0Xc/OE+zdRBTMxrtqqXIGY6h
+X-Gm-Gg: ASbGncvbxXwJRYpMiOBQrcKE1yXyQ6RFOEKp+cbTmBeny5TAtF+ff8ewU3lJci6qDWL
+	UntksDQLvcEd3KBO5LlpWU7DaJctBEe5euvrXfPrhf5Pktr/vx9Bft5vgwNj7SlAosGyi7iRgl6
+	/okyn9Br1PdSf8zCRKlE0h96eiLxqSvmq2J/TnbQZN8obMOXJ4nnDIyLd5GgKN8k5VdeNyO8ls+
+	8agkoid13g3W7W2d/MTWe62o8SDlE7fowlTcJWM4NRqNflJGjZ3xxfjHv0vWUG76z2Ce8of2vZf
+	lMxoRVpAcoInXHB+ZcePTQbnK23kjEmpFiXMxJkH/L24jcyNkpMmC6m+sFA2geS7y2EeFqFtrHM
+	i6PX5TJtd1cUAYcJ6gxdFhsiL1EVLTpVUGfI=
+X-Google-Smtp-Source: AGHT+IH4dZIyWHoHC9QisUO1CFwwY5FUKJh415nCwq/HQRY0c5lvTWT4cFBcMXnuOuVU07YOLZZ3Pg==
+X-Received: by 2002:a05:6512:b1c:b0:55f:6186:c161 with SMTP id 2adb3069b0e04-55f6186cc25mr1674979e87.49.1756470440135;
+        Fri, 29 Aug 2025 05:27:20 -0700 (PDT)
+Received: from [172.16.183.204] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55f6771b242sm597357e87.51.2025.08.29.05.27.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Aug 2025 05:27:19 -0700 (PDT)
+Message-ID: <6f56b7b6-8b21-4353-bbca-acf7f9b42ceb@gmail.com>
+Date: Fri, 29 Aug 2025 15:27:18 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] power: supply: Add bd718(15/28/78) charger driver
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+ Andreas Kemnade <andreas@kemnade.info>
+Cc: Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>
+References: <20250821-bd71828-charger-v3-0-cc74ac4e0fb9@kemnade.info>
+ <20250821-bd71828-charger-v3-2-cc74ac4e0fb9@kemnade.info>
+ <CACRpkdbZN3LB=iVwL0YLEoUOiPMSePdOF_NEGWuCncDAjWY4XA@mail.gmail.com>
+ <6341e004-880c-4a81-811d-a8b367aab39d@gmail.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+In-Reply-To: <6341e004-880c-4a81-811d-a8b367aab39d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 29 Aug 2025, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> Cross-references to other docs (so-called internal links) are typically
-> done following Documentation/doc-guide/sphinx.rst: either simply
-> write the target docs (preferred) or use :doc: or :ref: reST directives
-> (for use-cases like having anchor text or cross-referencing sections).
-> In some places, however, links to https://www.kernel.org/doc
-> are used instead (outgoing, external links), owing inconsistency as
-> these requires Internet connection only to see docs that otherwise
-> can be accessed locally (after building with ``make htmldocs``).
->
-> Convert such external links to internal links. Note that this does not
-> cover docs.kernel.org links nor touching Documentation/tools (as
-> docs containing external links are in manpages).
+On 29/08/2025 09:35, Matti Vaittinen wrote:
 
-FWIW, I'd much prefer using :ref: on rst anchors (that automatically
-pick the link text from the target heading) instead of manually adding
-link texts and file references.
+>> Some of these look like they should immediately shut down the
+>> system, I suppose the battery charger does this autonomously
+>> but it should probably also trigger an emergency shutdown
+>> of Linux, right?
+> 
+> Yes. The shutdown for charging, or, in some cases for all power outputs, 
+> is automatically handled by the PMIC hardware. (Well, I am not sure 
+> about the 'over-current' IRQ, will see if I can find out more about it).
 
-i.e.
+Just to conclude this - I got a confirmation from the ROHM hardware 
+engineers that exceeding the set limit and causing the over-current and 
+the coulomb counter monitoring interrupts do not change the hardware 
+charging state. [CC_MON and OCUR events in the data sheet, if someone 
+has that ;) ].
 
-.. _some_target:
+The CC_MON1 will however cause a change in the charging LED state. Eg, 
+exceeding this limit will turn off the AMBLED and turn on the GRNLED - 
+when the LEDs are controlled by the HW state machine. (I have some very 
+faint memory that the LEDs could also be forced ON by software). I 
+suppose the reason for this is that the CC_MON1 was designed to be used 
+as a "coulomb counter near full capacity" alarm.
 
-Heading After Some Target
-=========================
-
-See :ref:`some_target`.
-
-Will generate "See Heading After Some Target".
-
-
-BR,
-Jani.
-
-
--- 
-Jani Nikula, Intel
+Yours,
+	-- Matti
 
