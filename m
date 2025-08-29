@@ -1,61 +1,81 @@
-Return-Path: <linux-pm+bounces-33374-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33375-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E89B3B375
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 08:32:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45C48B3B381
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 08:35:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D05D16A653
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 06:32:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0612F16BD10
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 06:35:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7ABE245010;
-	Fri, 29 Aug 2025 06:32:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B929224A066;
+	Fri, 29 Aug 2025 06:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTADtQ+R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2021A7253;
-	Fri, 29 Aug 2025 06:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51C1246BB9;
+	Fri, 29 Aug 2025 06:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756449154; cv=none; b=llAybyS2tCVwQO3nIBhOAYr+1OI7p4bcet58WPnN9ponZ0T2Z2foJRwAebYDQvFTDmG3s+Lkr6CasM6z2qKoJri+6eS4HChCdwWIWclMaJ4N5u1/vfa4gxYbsjuoezgt6JpimyGnN7XQX/puqewE9l332oT1/MrYzGFAJC3/vlM=
+	t=1756449306; cv=none; b=tAjR5OPCDEVTGjK8VRuW/XRWIVj3lMqmmu8tEwD7eT/KzVKSjnvw96im0MCcatRHTDGczq0j7rgPubDzcJtSksvjpfnWWbM1E7tkVWcQqsoA+U4ZB7Yl40cgI5cZvrUCc71qmJ5y+lzff5M5L3ngfwpK+dW1rv8sno+MgKMaOdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756449154; c=relaxed/simple;
-	bh=Kst+61R8WKCK7sqJxMvcA3ZByeIORdO40H2gwXSWcj8=;
+	s=arc-20240116; t=1756449306; c=relaxed/simple;
+	bh=fdtZWzuOmKQsqZawWqW/m9ttzMU0Pd/PfXC77PLBFPA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rCWUzO0rQTfjPa1aoxuCU+z6j3akDN/H0NVcG9FoNcNV317NtKJzUxC5VwHWyLZWxFmwruz8qe9nUEhLJftGVk47uFawS5KEO+sJhWG5AlAUems1Um9EPmYFo0d4OU46bT/GPVhPvJa079QD/JApUnsKnZLu64o7ZHxO8R47B8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ec985f6284a111f0b29709d653e92f7d-20250829
-X-CID-CACHE: Type:Local,Time:202508291416+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:1f5bf724-5a91-4266-ac8e-9c158e033928,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:363845aa8f825743d29eadcc6fd84d5d,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: ec985f6284a111f0b29709d653e92f7d-20250829
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1683829947; Fri, 29 Aug 2025 14:32:24 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id CE313E008FA5;
-	Fri, 29 Aug 2025 14:32:23 +0800 (CST)
-X-ns-mid: postfix-68B14976-48111815
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 0777CE008FA4;
-	Fri, 29 Aug 2025 14:32:16 +0800 (CST)
-Message-ID: <5601fe46-6574-4a9b-8fd5-cab4af8dd390@kylinos.cn>
-Date: Fri, 29 Aug 2025 14:32:16 +0800
+	 In-Reply-To:Content-Type; b=QsBbyMG61FM+EsyMZMPLUc2AeyO2oDPeUc8fNT7kvl2rRiJcK0KVHjlEnBHk6N6C+VB+Oxht2E9ABkiTfxmFtFni0Zsp+kO9HICzj3b6ZUW2tbzcT46vwuft92kXcfKM0Iznw6F5UfybLyKQLb7N4dUwfKP56WItLWXG0bkXiX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aTADtQ+R; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55f6b0049fbso77745e87.0;
+        Thu, 28 Aug 2025 23:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756449303; x=1757054103; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CP6pmH3KP22aqopIlUvg/BFkwtIWDv/4zdv9pHulrKI=;
+        b=aTADtQ+RoMphHxpnKr9tjy27AlyWZ1YSoJ/Yfc2n9Ckws29xMzUSMpTms8llWkmbGz
+         pvn7QYlfTZ4XeIXFy5mt/ygF9qB/diUonUdMyE1eOrpI2b1zUZsGxbIMiIeH00EFyNwl
+         b50NEbfy9tsUFthc1xoLS4Lj9s6KYTNKckMiL3Sudgl4TA1hi7MYXyaGB1V5t2vUTf+Y
+         VeiuBcw3JGk0ZeR3a20lJKZcX5s/kEyEGsFVlmR399Ry5Mz7Z2+yr4hzqp7AUjgvThuQ
+         U80Emq0oAQ6K3NGzArDfT6hAGY3onRMXHUYmERzczLzKJIJ/KNyEukAG6OEzKI/NKRj4
+         w6WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756449303; x=1757054103;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CP6pmH3KP22aqopIlUvg/BFkwtIWDv/4zdv9pHulrKI=;
+        b=k/qfeLbseZB+8tLOqE5gDlNvRPVQM97xd3hqXHwLLvydpsHMHf4akmOkgTcSxXcC2B
+         G+KdLywcCeHv5Zu8ZBzwe93aPNWSVC1k/pQWznsFF04CZ8AzBsQTqFgr2YptoQ2wbTAi
+         +wguzZWhB4LuIouL8u8vJzc63ydGIWN7/oqUpa3aN8x1Xx+zmj7QuZVcCwvIgn7arYR0
+         diB581qIBrd02En01lBmHe35E40hsiT+yLRsagOFvS/MnbGDfywClqyPjSXKad8Xv5Ni
+         L5PXexfnvQZmt222KyntJxjfhNyzuzPAg5tz0FRRulJm6HU70zNzf8ckO97aRIV8qGEt
+         NigQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXYlB93qrXntTDMOo3S/6ArCgJErLGOvCA3SyCHwcf049PoZspSLELw5O2y1tbDhZgtDpT5Xrc9slODLI=@vger.kernel.org, AJvYcCWbEgUyBQfmRHK/uUVp0eQOOtF9HFo3vbXujqjwVHvxiTy+9AWngmbftKukW0/RyaQauPsGfdGdYpk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIlHglKKvXHR5OtXaX7NninIiBHMQkDgbro0CHF1UaDAsEWhyT
+	voCt7szC8TzSPXjqNgm3d0lRAAUgk+KwAvHvqckN3CK0frrQLKm95sk+
+X-Gm-Gg: ASbGnctHM8HIh/JG2ma0eB+5nuK/2HMIQ10RuI8t5kqBTE6a+yisGx9dRXTIlmvmzIs
+	+nFAZ3AFT/AeBeleYelNmOepdfQCkSUg54P+WLc6VQCit3CmnopPOlYRSmaZ0kbu6Z/roj0a7uB
+	o8PzZKCkfzIgqLVcEX/mzgkxYrG1lUBRJM9r3ANw21Bp9TfalkR1eYu+NyoNmdlI8RPPQnC6o2e
+	5oR+Fx7fhhafH5T0aPwxX93vWyvVFtgnDYwNHxR0IQGd6lYRcK+TCoch2vKnjRyIlXi5KnpNWzb
+	gYHQcIZ06mOJQHzFqUx41HP7ud9Vy6SKdggtWsuBPHAI2DPUAXC4tToPcVdru6aQLO83XpLQsXm
+	xFXmbM8e/eWEpQGYI9jk0iImcraGA+CXPuQYNZOfTBAi+rV8Hy+nCk7feul2R0d4aMwNcl231J4
+	DhtNI=
+X-Google-Smtp-Source: AGHT+IF6IwFUQ/X42JSbRT0fB74zgGgtMOwc4qXnbzVnHAmYzdOvgQ+dDQulumlbzxOo9Vj2aK0TkA==
+X-Received: by 2002:a05:6512:23a7:b0:55f:53ec:fad4 with SMTP id 2adb3069b0e04-55f53ecfda7mr3292104e87.9.1756449302421;
+        Thu, 28 Aug 2025 23:35:02 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55f67a4569esm377497e87.143.2025.08.28.23.35.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Aug 2025 23:35:01 -0700 (PDT)
+Message-ID: <6341e004-880c-4a81-811d-a8b367aab39d@gmail.com>
+Date: Fri, 29 Aug 2025 09:35:00 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,84 +83,145 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/18] cpufreq: brcmstb-avs-cpufreq: Use
- __free(put_cpufreq_policy) for policy reference
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, Markus Mayer
- <mmayer@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
- <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- zhenglifeng <zhenglifeng1@huawei.com>, "H . Peter Anvin" <hpa@zytor.com>,
- Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
- <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
- Sumit Gupta <sumitg@nvidia.com>,
- Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
- Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
- linux-pm@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
- linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-tegra@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, imx@lists.linux.dev,
- linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20250827023202.10310-1-zhangzihuan@kylinos.cn>
- <20250827023202.10310-5-zhangzihuan@kylinos.cn>
- <20250829055944.ragfnh62q2cuew3e@vireshk-i7>
- <4bd55a08-62bb-46c4-bfb6-a3375ce37e79@kylinos.cn>
- <20250829062624.jalqqsigs7hanf7i@vireshk-i7>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250829062624.jalqqsigs7hanf7i@vireshk-i7>
+Subject: Re: [PATCH v3 2/3] power: supply: Add bd718(15/28/78) charger driver
+To: Linus Walleij <linus.walleij@linaro.org>,
+ Andreas Kemnade <andreas@kemnade.info>
+Cc: Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>
+References: <20250821-bd71828-charger-v3-0-cc74ac4e0fb9@kemnade.info>
+ <20250821-bd71828-charger-v3-2-cc74ac4e0fb9@kemnade.info>
+ <CACRpkdbZN3LB=iVwL0YLEoUOiPMSePdOF_NEGWuCncDAjWY4XA@mail.gmail.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <CACRpkdbZN3LB=iVwL0YLEoUOiPMSePdOF_NEGWuCncDAjWY4XA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+Hi deee Ho again peeps!
 
-=E5=9C=A8 2025/8/29 14:26, Viresh Kumar =E5=86=99=E9=81=93:
-> On 29-08-25, 14:16, Zihuan Zhang wrote:
->> Thanks for applying the patch!
+I'm back home from Amsterdam, and found the datasheets :)
+
+On 28/08/2025 10:45, Linus Walleij wrote:
+> Hi Andreas / Cong,
+> 
+> On Thu, Aug 21, 2025 at 8:25 PM Andreas Kemnade <andreas@kemnade.info> wrote:
+> 
+>> Add charger driver for ROHM BD718(15/28/78) PMIC charger block.
+>> It is a stripped down version of the driver here:
+>> https://lore.kernel.org/lkml/dbd97c1b0d715aa35a8b4d79741e433d97c562aa.1637061794.git.matti.vaittinen@fi.rohmeurope.com/
 >>
->> I=E2=80=99ve been thinking further =E2=80=94 instead of using __free d=
-irectly, maybe we
->> could introduce a small macro wrapper around it to make the release sc=
-ope
->> more controllable and consistent.
+>> For the ease of review and to do a step-by-step approach remove all the
+>> coloumb counter related stuff and do not sneak in BD71827 support. That
+>> also avoids non-trivial rebasing of the above series.
 >>
->> Link:
->> https://lore.kernel.org/all/6174bcc8-30f5-479b-bac6-f42eb1232b4d@kylin=
-os.cn/
+>> Changes besides that:
+>> Replace the custom property by a standard one and do not use megaohms
+>> for the current sense resistor.
 >>
->> Do you think this would be a better approach, or should we just stick =
-with
->> the current use of __free?
-> Lets keep it simple for now and use __free directly. And keep this
-> similar with other parts of the kernel.
+>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+>> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> I think it looks good to merge:
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> It contains some interesting pointers for future work:
+> 
+>> +/* TODO: Verify the meaning of these interrupts */
+>> +BD_ISR_BAT(rechg_det, "Recharging", true)
+>> +BD_ISR_BAT(rechg_res, "Recharge ending", true)
+>> +BD_ISR_DUMMY(temp_transit, "Temperature transition")
+>> +BD_ISR_BAT(therm_rmv, "bd71815-therm-rmv", false)
+>> +BD_ISR_BAT(therm_det, "bd71815-therm-det", true)
+>> +BD_ISR_BAT(bat_dead, "bd71815-bat-dead", false)
+>> +BD_ISR_BAT(bat_short_res, "bd71815-bat-short-res", true)
+>> +BD_ISR_BAT(bat_short, "bd71815-bat-short-det", false)
+>> +BD_ISR_BAT(bat_low_res, "bd71815-bat-low-res", true)
+>> +BD_ISR_BAT(bat_low, "bd71815-bat-low-det", true)
+>> +BD_ISR_BAT(bat_ov_res, "bd71815-bat-over-res", true)
+> 
+> Some of these look like they should immediately shut down the
+> system, I suppose the battery charger does this autonomously
+> but it should probably also trigger an emergency shutdown
+> of Linux, right?
 
+Yes. The shutdown for charging, or, in some cases for all power outputs, 
+is automatically handled by the PMIC hardware. (Well, I am not sure 
+about the 'over-current' IRQ, will see if I can find out more about it).
 
-Got it. Thanks!
+>> +/* What should we do here? */
+>> +BD_ISR_BAT(bat_ov, "bd71815-bat-over-det", false)
+> 
+> At overvoltage all charging should stop, I guess the hardware
+> does that autonomouslyd and this is just to inform us that
+> this has happened.
 
+Yes. That's my understanding.
+
+>> +BD_ISR_BAT(bat_mon_res, "bd71815-bat-mon-res", true)
+>> +BD_ISR_BAT(bat_mon, "bd71815-bat-mon-det", true)
+>> +BD_ISR_BAT(bat_cc_mon, "bd71815-bat-cc-mon2", false)
+>> +BD_ISR_BAT(bat_oc1_res, "bd71815-bat-oc1-res", true)
+>> +BD_ISR_BAT(bat_oc1, "bd71815-bat-oc1-det", false)
+>> +BD_ISR_BAT(bat_oc2_res, "bd71815-bat-oc2-res", true)
+>> +BD_ISR_BAT(bat_oc2, "bd71815-bat-oc2-det", false)
+>> +BD_ISR_BAT(bat_oc3_res, "bd71815-bat-oc3-res", true)
+>> +BD_ISR_BAT(bat_oc3, "bd71815-bat-oc3-det", false)
+>> +BD_ISR_BAT(temp_bat_low_res, "bd71815-temp-bat-low-res", true)
+>> +BD_ISR_BAT(temp_bat_low, "bd71815-temp-bat-low-det", true)
+>> +BD_ISR_BAT(temp_bat_hi_res, "bd71815-temp-bat-hi-res", true)
+>> +BD_ISR_BAT(temp_bat_hi, "bd71815-temp-bat-hi-det", true)
+> 
+> The "oc" stuff is "open circuit" and probably different interrupts
+
+I see I chose a confusing prefix, 'oc', sorry. In this case it doesn't 
+come from "open circuit" but "over current" - and yes, I had to look it 
+up from the MFD driver / data-sheet - which is a clear indication naming 
+isn't as good as it could be. Anyways, it seems these over-current 
+limits for the IRQ can be set by the software. I'm not sure if exceeding 
+these limits causes hardware to do anything else but an IRQ though.
+
+> to indicate that a measurement of the open circuit voltage
+> is available in some register, which enables you do do more
+> precise capacity estimation, right?
+
+AFAIR, the ROHM fuel-gauge algorithm used OCV tables when battery was 
+not really open, but 'relaxed', to adjust the coulomb counter based on 
+the SOC estimated from the OCV. The 'relaxed' condition was met when the 
+current consumption had been 'small', and battery had not been charged 
+'recently'. I have a vague memory the BD71828 had some hardware support 
+for knowing battery was 'relaxed', the BD71815 and BD71827 might have 
+used coulomb counter 'history' for this. I can try to remember all this 
+a bit better if Andreas continues to upstream also the fuel-gauging 
+logic from the original RFC. But yeah, these interrupts were for over 
+current.
+
+> If it is useful depends on if the device is e.g. flashed with
+> capacity tables vs OC voltage in the factory, and the charger
+> then has "deep knowledge" of the battery it is handling, I guess
+> this is how it works? Then this again is just informational, it
+> informs you of what the device-internal charging algorithm
+> is doing.
+> 
+> As for the temperature these are probably also just informational
+> if all these states are already handled by the hardware itself.
+
+Yes. AFAIR, the boundaries for the thermal areas can be adjusted by 
+software though. [There are also the "thermal shutdown" limits when also 
+the PMIC's other power outputs (not just charging) will be disabled. 
+AFAIR, the TSD limit can't be configured though.] On certain temperature 
+areas the charging is reduced, and the "amount of reduction" can also be 
+set by the software.
+
+State transitions are still handled by the hardware so these interrupts 
+are indeed only informative.
+
+> They all seem to be intended so that you can essentially put
+> these into custom sysfs or debugfs entries and then get out
+> a graphical state machine of the battery charger. That requires
+> deep knowledge of how the charger works (a datasheet)
+> and has limited use for a normal user.
+
+Yours,
+	-- Matti
 
