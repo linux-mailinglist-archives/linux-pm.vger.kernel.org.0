@@ -1,207 +1,124 @@
-Return-Path: <linux-pm+bounces-33462-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33463-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BDBCB3CA1E
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 12:20:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5D33B3CB79
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 16:44:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA6897C2038
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 10:20:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90192564240
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 14:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882FF274B53;
-	Sat, 30 Aug 2025 10:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A94424DD17;
+	Sat, 30 Aug 2025 14:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EprN2YXG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA13268688;
-	Sat, 30 Aug 2025 10:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA89274BE1;
+	Sat, 30 Aug 2025 14:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756549231; cv=none; b=TSa7RQSMX883V4ZL49WVssdA3o9M7y4jXLOyyiQH2ptuSFMEYMo9xzFzMex980ut4K4tr9Y9GB53C3cAlsQUX+rXUhfieptpaJmmL23OhW9gnvZp2oYUjx/BeIXSW+Fus3rEUim9iktO7pTASamqd8ILhu/3XrYutdA5XpUkMDg=
+	t=1756565091; cv=none; b=GMvOqYDNTzl65MaeCaLqdvmagb6T5BeKE9LlUZIlLvok0rKMVvwoMI5/BAHpjWxz0ZMJ1ZNeHrKvewUAqn5r7TUGa+5JTDDDYFgSAKWQ58WhZshuZBifXxKdCkDkysMbWZMFJlDnCZvoXT52kMYxG0pn0XTSwyTr7gLZK90hmao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756549231; c=relaxed/simple;
-	bh=dLcamLYbnw8zn2V72MApU3Zr8An1KRmITt4VgQgPM/U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Q2mZZsp9YKm4hx6rk6vUhk8hfQGt38dsyQcpDC1QJiLpz2m0hGlljVHX613rMcNrnUY2wf4lL0/7OuQNuzxaGYtOA+Ing9wBndQfrbZ2SyrPgKh0KbhyiE02WfOTMdJ4sJn1lomnvMU1NNccYD1VjqXiwjUkt0drJPgvwgzvrKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4cDWHS3yJBzPqRk;
-	Sat, 30 Aug 2025 18:15:48 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id DE853180486;
-	Sat, 30 Aug 2025 18:20:24 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
- (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 30 Aug
- 2025 18:20:23 +0800
-Message-ID: <4b3c042c-a986-9768-c923-cc19b82ee777@hisilicon.com>
-Date: Sat, 30 Aug 2025 18:20:23 +0800
+	s=arc-20240116; t=1756565091; c=relaxed/simple;
+	bh=MPgVxSoskDbQAvK6hl4JGGD+hsXca6+MVDJ83Ril1t8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DgWHAvi4GU13gSCN/HOvk5CKGlggFz92R6lnILq/xIzTftbtuyJHhbYlaL+Ztvh+//++BC13Q+3+/7dkwgzuSa0amIslMYikL6fKSju21A5xozWptqpJqEL+f5BkFYjVfEniqybbbg+t9z2cOuPmA3J2+zxEFDaui1gs0SwdlrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EprN2YXG; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3d3ff4a4d6fso67598f8f.0;
+        Sat, 30 Aug 2025 07:44:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756565088; x=1757169888; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q6E7g2uOsAn7LyhANHrKJu1DW3W6P8A28ASTexBlNY8=;
+        b=EprN2YXGNURmqPOoZJ3TydpGUEd9hMx3v+TTpqMIeMxOIhXskGkIerem3bsa35WK9r
+         sFj77PmRn+uzBO1MftHTdmBjAMo/dY9TYDmhatb+9zI2IHWVf9O/pTFM4/9CRDfDnKvK
+         XeBbQz9Faatn5DTfM4y2TZsslEOktlehfmJf5CXwnkuYVRngC6duSqXa2XlVWWRaY0it
+         pSNts1dxpIo+doFPKOZqZA1I+lFsUrs/fcsqBht3A0eVFPSsL7UrIjIwGyWE+/AvDfoq
+         El9dmLmkLzUOcClVpoOiwP838O9ewmmCkXkOqiEAjUltv2RTDfrgo+2FwfcVHA5k7067
+         dH2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756565088; x=1757169888;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q6E7g2uOsAn7LyhANHrKJu1DW3W6P8A28ASTexBlNY8=;
+        b=mUW9grQIFjrzYgu15EosLpi17Gi1izZqBkhcSNbK9Lauf+h6Y5zzlwDvUo+iAsZc1Y
+         J3hz3oo5VWGpt5oPyBsxYsZh4XdznpiPtOKLNa2/0p/Hvkn20jtWbsU4m+FyniFEUqAv
+         AHuVRuUWLILgAHu89bmeTTx9KLXtOxNBzaqe+szIbaSXjDiaHiLGS0Q1yOEnaOPPqgUU
+         q+1kCZ9rZn7Qvw3u4m3Gy26jzHeyOvshSbICvzQcguVGMiu8Wd+ZbmvO2MeE2sdw9hHS
+         s2L2lS6AwNZfpsPv1jYZLphHPUttdo5zaXfZRXWwGhylZpCyF0QWRkMq9en4fSFGX1dC
+         IqyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVXRePQkN2Ao+x13AkAayUe2PftqCpAox7ckUjrjQovuw5y3D9U+Y/ejGlQseOk7GoZ6DDVM/GeaPj0lfQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjZkoO7j6yNTZgw1DxKmmzlLPZNqkdlaqMSqR3hQxNw3Q8rZt8
+	oLbg8H/EJYDicvRlLSRAyaEESEHR9RjVzYOk9GrSz6vfJKCVaGlPBudZ
+X-Gm-Gg: ASbGncvVNldQ2j+gew+SlwX+jMWPPwl4JM18nTX1mLczq+maIppCB3r9/d+Ye3QPHp6
+	odmvwgf8nPf4g/armIanRgOoCn0+ysYJWWr8Ha3h3w92wK4mghZ6qYOGWPnofBNl5hA6pYFFPuS
+	jh73gzlz/JfwkCOyCbEIjDkTc/1F0Hn9Iye2eLaDF+3mDDjNsW7XFBrV6/3eN4or4z4VC6fkW0/
+	YZfBWG/j7c8/DC1pVOMqUPEqnuPb30aZd7BeyjzVc8IJ6fDtrhyUwHKvkCQYHSJr1hLjOsrinad
+	gg0M5Ln6z4TmTcEIfQtwRNJZkSUzok6Lw0ymcwvUGvHhe6TX/86eMbJCoA5BBr2Bkoc0peZVBDF
+	RLqdRIPxVnYTbGPgmLOr8UJcZOeTXL3T08UsQdK/7OEZzn5WgAUSjJ94i303Srr5IrNnJYyoAHp
+	v/wuJlj6Q9GqGk60dmFUHJkNR7gvBJR/5x
+X-Google-Smtp-Source: AGHT+IF81SpwzRjpmXLZ7x0IKdwCH4AH1qZCKRXhWesfo99k6WH8RiLVpyLqgST48/i23C03Kqy2/A==
+X-Received: by 2002:a05:6000:2204:b0:3cd:9794:cbcf with SMTP id ffacd0b85a97d-3d1df53a1aamr1635045f8f.60.1756565087779;
+        Sat, 30 Aug 2025 07:44:47 -0700 (PDT)
+Received: from fedora (2a02-8389-2240-6380-b418-985e-6bb5-99d0.cable.dynamic.v6.surfer.at. [2a02:8389:2240:6380:b418:985e:6bb5:99d0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b6f0c6db6sm172913175e9.2.2025.08.30.07.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Aug 2025 07:44:47 -0700 (PDT)
+From: Dennis Beier <nanovim@gmail.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dennis Beier <nanovim@gmail.com>
+Subject: [PATCH v2] cpufreq/longhaul: handle NULL policy in longhaul_exit
+Date: Sat, 30 Aug 2025 16:43:59 +0200
+Message-ID: <20250830144431.159893-1-nanovim@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v5 3/3] arm64: topology: Setup AMU FIE for online CPUs
- only
-To: Lifeng Zheng <zhenglifeng1@huawei.com>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-	<beata.michalska@arm.com>, <sudeep.holla@arm.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <vincent.guittot@linaro.org>,
-	<yangyicong@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<zhangpengjie2@huawei.com>, <linhongye@h-partners.com>
-References: <20250819072931.1647431-1-zhenglifeng1@huawei.com>
- <20250819072931.1647431-4-zhenglifeng1@huawei.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <20250819072931.1647431-4-zhenglifeng1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+Content-Transfer-Encoding: 8bit
 
-Hi Lifeng,
+longhaul_exit() was calling cpufreq_cpu_get(0) without checking
+for a NULL policy pointer. On some systems, this could lead to a
+NULL dereference and a kernel warning or panic.
 
-Some minor suggestions in addition to Beata's comments on the readability
-of those checks.
+This patch adds a check using unlikely() and returns early if the
+policy is NULL.
 
-On 19/08/2025 15:29, Lifeng Zheng wrote:
-> When boot with maxcpu=1 restrict, and LPI(Low Power Idle States) is on,
-> only CPU0 will go online. The support AMU flag of CPU0 will be set but the
-> flags of other CPUs will not. This will cause AMU FIE set up fail for CPU0
-> when it shares a cpufreq policy with other CPU(s). After that, when other
-> CPUs are finally online and the support AMU flags of them are set, they'll
-> never have a chance to set up AMU FIE, even though they're eligible.
-> 
-> To solve this problem, the process of setting up AMU FIE needs to be
-> modified as follows:
-> 
-> 1. Set up AMU FIE only for the online CPUs.
-> 
-> 2. Try to set up AMU FIE each time a CPU goes online and do the
-> freq_counters_valid() check. If this check fails, clear scale freq source
-> of all the CPUs related to the same policy, in case they use different
-> source of the freq scale.
-> 
-> At the same time, this change also be applied to cpufreq when calling
-> arch_set_freq_scale.
-> 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  arch/arm64/kernel/topology.c | 54 ++++++++++++++++++++++++++++++++++--
->  drivers/cpufreq/cpufreq.c    |  4 +--
->  2 files changed, 54 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index 9317a618bb87..a9d9e9969cea 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -385,7 +385,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
->  	struct cpufreq_policy *policy = data;
->  
->  	if (val == CPUFREQ_CREATE_POLICY)
-> -		amu_fie_setup(policy->related_cpus);
-> +		amu_fie_setup(policy->cpus);
->  
->  	/*
->  	 * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
-> @@ -404,10 +404,60 @@ static struct notifier_block init_amu_fie_notifier = {
->  	.notifier_call = init_amu_fie_callback,
->  };
->  
-> +static int cpuhp_topology_online(unsigned int cpu)
-> +{
-> +	struct cpufreq_policy *policy = cpufreq_cpu_policy(cpu);
-> +
-> +	/*
-> +	 * If the online CPUs are not all AMU FIE CPUs or the new one is already
-> +	 * an AMU FIE one, no need to set it.
-> +	 */
-> +	if (!policy || !cpumask_available(amu_fie_cpus) ||
-> +	    !cpumask_subset(policy->cpus, amu_fie_cpus) ||
-> +	    cpumask_test_cpu(cpu, amu_fie_cpus))
-> +		return 0;
-> +
-> +	/*
-> +	 * If the new online CPU cannot pass this check, all the CPUs related to
-> +	 * the same policy should be clear from amu_fie_cpus mask, otherwise they
-> +	 * may use different source of the freq scale.
-> +	 */
-> +	if (WARN_ON(!freq_counters_valid(cpu))) {
-I think a panic warning might be too much for this?
-pr_info/pr_warn, or even pr_debug, should be enough.
-> +		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH,
-> +						 policy->related_cpus);
-> +		cpumask_andnot(amu_fie_cpus, amu_fie_cpus, policy->related_cpus);
-> +		return 0;
-> +	}
-> +
-> +	cpumask_set_cpu(cpu, amu_fie_cpus);
-> +
-> +	topology_set_scale_freq_source(&amu_sfd, cpumask_of(cpu));
-> +
-> +	pr_debug("CPU[%u]: counter will be used for FIE.", cpu);
-> +
-> +	return 0;
-> +}
-> +
->  static int __init init_amu_fie(void)
->  {
-> -	return cpufreq_register_notifier(&init_amu_fie_notifier,
-> +	int ret;
-> +
-> +	ret = cpufreq_register_notifier(&init_amu_fie_notifier,
->  					CPUFREQ_POLICY_NOTIFIER);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +					"arm64/topology:online",
-> +					cpuhp_topology_online,
-> +					NULL);
-> +	if (ret < 0) {
-> +		cpufreq_unregister_notifier(&init_amu_fie_notifier,
-> +					    CPUFREQ_POLICY_NOTIFIER);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
->  }
->  core_initcall(init_amu_fie);
->  
+Bugzilla: #219962
 
-It's better move the following change into a separate patch before the
-AMU FIE changes.
+Signed-off-by: Dennis Beier <nanovim@gmail.com>
+---
+ drivers/cpufreq/longhaul.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I don't think they are interdependent, and they can be applied separately.
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 78ca68ea754d..d1890a2af1af 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -417,7 +417,7 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
->  
->  	cpufreq_notify_post_transition(policy, freqs, transition_failed);
->  
-> -	arch_set_freq_scale(policy->related_cpus,
-> +	arch_set_freq_scale(policy->cpus,
->  			    policy->cur,
->  			    arch_scale_freq_ref(policy->cpu));
->  
-> @@ -2219,7 +2219,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
->  		return 0;
->  
->  	policy->cur = freq;
-> -	arch_set_freq_scale(policy->related_cpus, freq,
-> +	arch_set_freq_scale(policy->cpus, freq,
->  			    arch_scale_freq_ref(policy->cpu));
->  	cpufreq_stats_record_transition(policy, freq);
->  
+diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
+index ba0e08c8486a..49e76b44468a 100644
+--- a/drivers/cpufreq/longhaul.c
++++ b/drivers/cpufreq/longhaul.c
+@@ -953,6 +953,9 @@ static void __exit longhaul_exit(void)
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(0);
+ 	int i;
+ 
++	if (unlikely(!policy))
++		return;
++
+ 	for (i = 0; i < numscales; i++) {
+ 		if (mults[i] == maxmult) {
+ 			struct cpufreq_freqs freqs;
+-- 
+2.51.0
+
 
