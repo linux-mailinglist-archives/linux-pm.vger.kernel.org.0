@@ -1,172 +1,130 @@
-Return-Path: <linux-pm+bounces-33439-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33440-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C17B3C4BA
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 00:19:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57962B3C6BC
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 02:46:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C9757BB9A1
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Aug 2025 22:17:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9319F5A4E7F
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 00:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5417B27EFEB;
-	Fri, 29 Aug 2025 22:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFBF224AEF;
+	Sat, 30 Aug 2025 00:46:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpneGQ3Q"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="QQdIJbX1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E587B26F445;
-	Fri, 29 Aug 2025 22:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8BE2C859
+	for <linux-pm@vger.kernel.org>; Sat, 30 Aug 2025 00:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756505963; cv=none; b=KWfpnpANmvoB8AmYyfgghbwai/yntVP4vpuksvJNMe+gDLl75aSUQzNNTB3jjbBJ0ttUwDW6DBBXM0Us05cAPJUmumQSo94GTaFpdPjKfXxZPzs5czy9YEyi+cQ1aUizz4mDSgrYzqmY/iCcA75dLMJ0e2SZokn72N8bs2zsK6s=
+	t=1756514787; cv=none; b=gorOUxmYwCMO7RW86IhW0F3IA90+7DHw2/IAt68GGsgDGpbRKVphyxffpIY/e71FKt56kWGm+jUY53WJCsAt7N+AmBxjQ1L2rjVpCTqVJKw4uYbanDP3xScxdprxy78BGZMi3g6e0siSFg/LTcS3ZGMp5HaT8ORP7O/KdIE68NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756505963; c=relaxed/simple;
-	bh=0bwPfbMyrek5L9hOu7GBREJXWyINw9aI7B0CsO+yy18=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=gS+j9X+RZCCT8PBD6OtENW+p+FlHGfJmu3fCai1WIit2rIGItApAfXYPs0v17ovLIHNWBYH+9Rih7VQXIdCtX4ygWlzvGAH1zMITezdu7NlFKbJ+dD5DvyWDuIj5tBXXNNry//txCFk4dCRLLIeR4y2SumO8s1yxYABn4hnKoAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NpneGQ3Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D549C4CEF0;
-	Fri, 29 Aug 2025 22:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756505962;
-	bh=0bwPfbMyrek5L9hOu7GBREJXWyINw9aI7B0CsO+yy18=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=NpneGQ3QoAZZMVPOqxAMTMsnXEod1MdR9ylvjRjnlUJ/5Mz3jdgYOeIgkfRKPhZ/U
-	 vShN87eLYGT8BEANkp63jXP/WsDTW3PU0xitnIZmnudm3QKOtQPPDMN6lDjVT1DMy6
-	 XFRyCvB6YJQmelc7Wn3BJtfB7gPtsENP28OUr9nZgR3Z3uJVJ4N4zjTqq2R/gAAsif
-	 WTFcvK4iQOHAl7e/mRAw01njvP6SR0PeP/vp9kcpLKktQGVHBqKVQ45BB3W4Cv3bfY
-	 SvtEaHF5gGrpETbJNljug4x3qCKcghxgOt/gZHQtCpaow0R9q2yCiFsgb9Uaue3SoT
-	 1eYuRWMtynFfw==
-From: Mark Brown <broonie@kernel.org>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
- Linux Documentation <linux-doc@vger.kernel.org>, 
- Linux DAMON <damon@lists.linux.dev>, 
- Linux Memory Management List <linux-mm@kvack.org>, 
- Linux Power Management <linux-pm@vger.kernel.org>, 
- Linux Block Devices <linux-block@vger.kernel.org>, 
- Linux BPF <bpf@vger.kernel.org>, 
- Linux Kernel Workflows <workflows@vger.kernel.org>, 
- Linux KASAN <kasan-dev@googlegroups.com>, 
- Linux Devicetree <devicetree@vger.kernel.org>, 
- Linux fsverity <fsverity@lists.linux.dev>, 
- Linux MTD <linux-mtd@lists.infradead.org>, 
- Linux DRI Development <dri-devel@lists.freedesktop.org>, 
- Linux Kernel Build System <linux-lbuild@vger.kernel.org>, 
- Linux Networking <netdev@vger.kernel.org>, 
- Linux Sound <linux-sound@vger.kernel.org>, 
- Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, 
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
- Jonathan Corbet <corbet@lwn.net>, SeongJae Park <sj@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@redhat.com>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
- Mario Limonciello <mario.limonciello@amd.com>, 
- Perry Yuan <perry.yuan@amd.com>, Jens Axboe <axboe@kernel.dk>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Dwaipayan Ray <dwaipayanray1@gmail.com>, 
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Joe Perches <joe@perches.com>, 
- Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
- Alexander Potapenko <glider@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Eric Biggers <ebiggers@kernel.org>, 
- tytso@mit.edu, Richard Weinberger <richard@nod.at>, 
- Zhihao Cheng <chengzhihao1@huawei.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>, Ingo Molnar <mingo@redhat.com>, 
- Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
- Waiman Long <longman@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shay Agroskin <shayagr@amazon.com>, Arthur Kiyanovski <akiyano@amazon.com>, 
- David Arinzon <darinzon@amazon.com>, Saeed Bishara <saeedb@amazon.com>, 
- Andrew Lunn <andrew@lunn.ch>, Liam Girdwood <lgirdwood@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Alexandru Ciobotaru <alcioa@amazon.com>, 
- The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Steve French <stfrench@microsoft.com>, 
- Meetakshi Setiya <msetiya@microsoft.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Bart Van Assche <bvanassche@acm.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Masahiro Yamada <masahiroy@kernel.org>
-In-Reply-To: <20250829075524.45635-1-bagasdotme@gmail.com>
-References: <20250829075524.45635-1-bagasdotme@gmail.com>
-Subject: Re: (subset) [PATCH 00/14] Internalize www.kernel.org/doc
- cross-reference
-Message-Id: <175650594072.395832.3911302052314725751.b4-ty@kernel.org>
-Date: Fri, 29 Aug 2025 23:19:00 +0100
+	s=arc-20240116; t=1756514787; c=relaxed/simple;
+	bh=BlDlbu38u1XtKOS0wceLCkC5etFPhXGYTr/KipiVV4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EKajuPoiOaVgdC7O3k5iTBiKPICuovbm04By/D2vEyPS6KTbiVFiVCnNvei8kPUwZQrctY6Fc++Zl0rFO9rGVWTae6d5fVhqgfxcwfYmDhspOJhAx/mCQFmj4UOorTuBo8Np3y5ZcjLFbYjRJrBcC6dhkucC50mwrK9ZMLKtRlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=QQdIJbX1; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7e87061a6d5so269024585a.2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 17:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1756514785; x=1757119585; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WPLPq7twwaRsnABf4Ucetp6Xy2kklMZkEh1mgaPuZI=;
+        b=QQdIJbX15hbPDKjxHYUBn1RSsGqL6HPNcppWJnLdsKGUPnoH/mkFx/bYGSxk8a4goB
+         BDavTmOpqOX+UUPc34+Lby85IdVaQP81SSmWT6YV2TJwp1m1wWscMC0+pSNgFOPekE4I
+         M1LXOkMPMtpzJvNlOYg5XTb7cyJ2cMdvgtsLG6cbktlbAC3LJdypk7vLbAuFr9rawS/+
+         eV0jOl0hSL/bVe2QYE67643drRLsLKAQFnkWgTEJGnVpu4W8pgqn759w45umm8HrFDaL
+         osUjk1MfMH6Cz6A1GUmHuMY4GGe/sWvO7vYfAWScVWbIA0ls7wFsMuL2c1fHwLoW6dY7
+         u9hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756514785; x=1757119585;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5WPLPq7twwaRsnABf4Ucetp6Xy2kklMZkEh1mgaPuZI=;
+        b=ozgPOyQXegNV0XkvFB4RIRV5R+ghhj7iKHkEqYCUNs4QNEwy/+4ZDL+8EWBtI5eBrB
+         IQZdF23CZGw5J79ZUSxctIq2xgkIsa+Yn9V+0OMUhBIzxXNN9VyNDjgxpL5v+ucMDeYg
+         Y7RkzrdO8Zm9r4URi+Q8E+21ljsDBgjAx7zThXnYubkRdA3PIU4UwQ4GGQArbZNhDLi6
+         3xO73qzN7gA5JFrZrMbUH6UXMF0R9gsM1yDvunBwklnro6ttNoaflwjf0D7GOgMZnRoS
+         8EbQ6k/n05EMNtwxtqHq8UPky+rrh+Q4JQW9Ll1RqwQLMCcaKA1DF5KiaQgiU/QLaj9/
+         T/lw==
+X-Forwarded-Encrypted: i=1; AJvYcCVrUQ1qrU7OPJn6xFk2dhnYnsduRgWQkO/FncZ605bSjIvYmZ3ltixSHrkDW+5MjiiO71uaDIvIGA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9wKK8bhwY3yOTyyC5ZJypnugzhHnGzNvd06RsXRu/45VHILyN
+	Pil/2B2Gn7ktMXZLJRm7BS2lNiPyNh7dLm4mF4OCRBR3Z4eVN8hheuuzT9RdUX18vQ==
+X-Gm-Gg: ASbGncsAv2MnZb05ql6MSg0GYg61hNR5xFY13U1fjvwbHd+K1t7/cjldmOwgaxvkoPv
+	BaG9xaDC5Z2gqetVPxO6bXlXQ72Yqs8vPrB+sX4YkpcVIrtw5xU6cvbGqr+jFTuk6qUBkAe/vyv
+	qQTUFi40CQ6prc/VcUtsNsJw97SafwLDPd1f8JJworIY2x29jp9ilMftO7XMaryD3+xRnbsJXoC
+	LVNnBMbQPF79rZsIu2/QETkyoDHAsY/MPqyWpPCBjkGoEOb2/qd05hkiLLLctBXha6UPf+Nl+As
+	hlNWSUsE/ErSENUi9oNhGFdaDzcow610MG/noZO7eX3EHzQgZ2XrGW5xEtTLP6O5ARk0pU6STcM
+	Hf9z2QVmiSqq0lmk2hRyUjXLgBmx40lhD3kSZKp7p
+X-Google-Smtp-Source: AGHT+IHQhb8okk0kP47DsuFPXdYzK0wNLahGp44Tj91jY2E09GnY+68a+tSLHGTv0ixop6Om+PzYNw==
+X-Received: by 2002:a05:620a:7011:b0:7fc:e9e5:5b0f with SMTP id af79cd13be357-7ff26eab060mr70691485a.6.1756514784762;
+        Fri, 29 Aug 2025 17:46:24 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::fd35])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7fc14849559sm272681985a.41.2025.08.29.17.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 17:46:24 -0700 (PDT)
+Date: Fri, 29 Aug 2025 20:46:21 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+Message-ID: <056bd3b8-7d62-42e5-8b5d-4113a9ef769b@rowland.harvard.edu>
+References: <20250826150826.11096-1-ryanzhou54@gmail.com>
+ <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+ <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+ <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+ <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
+ <20250829004312.5fw5jxj2gpft75nx@synopsys.com>
+ <e3b5a026-fe08-4b7e-acd1-e78a88c5f59c@rowland.harvard.edu>
+ <20250829190731.gx2xrgdz3tor5a2v@synopsys.com>
+ <CAJZ5v0gY=w1G-R1EdpJi+Hm5+YmDWY2yJDHgVVVeOvQAkO1ffQ@mail.gmail.com>
+ <20250829201306.rchlatbdxqy3xiki@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-a9b2a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250829201306.rchlatbdxqy3xiki@synopsys.com>
 
-On Fri, 29 Aug 2025 14:55:10 +0700, Bagas Sanjaya wrote:
-> Cross-references to other docs (so-called internal links) are typically
-> done following Documentation/doc-guide/sphinx.rst: either simply
-> write the target docs (preferred) or use :doc: or :ref: reST directives
-> (for use-cases like having anchor text or cross-referencing sections).
-> In some places, however, links to https://www.kernel.org/doc
-> are used instead (outgoing, external links), owing inconsistency as
-> these requires Internet connection only to see docs that otherwise
-> can be accessed locally (after building with ``make htmldocs``).
-> 
-> [...]
+On Fri, Aug 29, 2025 at 08:13:07PM +0000, Thinh Nguyen wrote:
+> ..shouldn't the PM core know that A was runtime suspended to not skip
+> ->resume? (sorry I'm not an expert in the PM core, genuine question
+> here).
 
-Applied to
+This doesn't answer your question directly, but I would like to add some 
+background.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+There are subsystems/drivers that do want to resume their devices during 
+system resume, even if the devices were in runtime suspend originally.  
+At a minimum, the PM core doesn't want to take this choice away from 
+them.
 
-Thanks!
+In fact, the USB subsystem was designed to run that way back when 
+support for runtime PM was first added, and it hasn't been changed since 
+-- although maybe it should be.  There are explicit mechanisms for 
+telling the PM core that a device should be skipped during system 
+resume; we could use them.
 
-[12/14] ASoC: doc: Internally link to Writing an ALSA Driver docs
-        commit: f522da9ab56c96db8703b2ea0f09be7cdc3bffeb
+Regardless, I don't recall any discussions of the particular situation 
+in this thread ever taking place.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Alan Stern
 
