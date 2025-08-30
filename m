@@ -1,270 +1,250 @@
-Return-Path: <linux-pm+bounces-33460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1B99B3C9A3
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 11:08:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8336B3C9D1
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 11:35:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 417F27B5384
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:06:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A91717B59F
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18499256C61;
-	Sat, 30 Aug 2025 09:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 710E2258EE8;
+	Sat, 30 Aug 2025 09:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnaqmkCz"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="AXCY3s3D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012013.outbound.protection.outlook.com [40.107.75.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA132BA4A;
-	Sat, 30 Aug 2025 09:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756544888; cv=none; b=X5T0bgc+4efQfJeuLYQeoyBDcLC1U0U+cyJqn8SXIL2TZdJbClaSqvMJrCM2JJDs8L5aICC9Cq+wdjauBxz23DQFLOghk/AVSphYB9YmUQxzTvAUMfkVTcXWGh+DvSRKd/8uXdOJhyNT7JsnODeSnSpPP/G8oEoNg2yZFMMY4oU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756544888; c=relaxed/simple;
-	bh=27PN1sfIWBxKnrB+V8uXnT6HNOKJLQY9Xodlg62IbR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U+y3djK8f/MQgNmfdFr+9u9ReuLuax6GNOqzsZQIHgIZ7CFuIaMYkN6pAgxJLvCUffbv2l74vnies5FJ8Sq35McbD3RahbSB+DUnL4zVX4/dDL9AnKSYaEF96HiKktJ6/it2ZKkpRnKifpnmEt4/dpGnzb4ZuuqBg5ml/pO3+Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnaqmkCz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A92C4CEEB;
-	Sat, 30 Aug 2025 09:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756544887;
-	bh=27PN1sfIWBxKnrB+V8uXnT6HNOKJLQY9Xodlg62IbR4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nnaqmkCzKPmrCdXaUrhuw7f7bZ4Jmc7ppApy0f6hZ+rbMsTGmdHo2ODTCxEEMCVuG
-	 1PPRV29acvR2qoqEPpPa4Ax2aht866VSfujm7Gb1DKHGNy8UVHhpHts0J+w0Fa/t2j
-	 SG9LZTvdGWa4jOp+Y0+iX7eGn0xvuOuGsIwGZYdE0OlZW230i7mGlePb6LlOmIPjCQ
-	 hfaCGErRX11VypQPykDjuMvruSkP+zTTpWofcxpE7CEfVC/N2GjQXRT6g7bzK/4tDy
-	 YSbESYOPu0Uuov/dnSyiLDlqrQWe+AQ69OshxUxOtZ7kzf9O8yCogq3a5O/InEokpN
-	 /rZMEWDUpyjdQ==
-Message-ID: <e573cfc8-be9c-482c-9b06-4eedbb92d520@kernel.org>
-Date: Sat, 30 Aug 2025 11:08:02 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775641EB9EB;
+	Sat, 30 Aug 2025 09:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756546514; cv=fail; b=gIxKssEEMP66tWT5s7CI6bmm0tRViBWWDpn+PjJAw+Q9/X63e+F6P5R0zP1s/uKFW6kxBFHYro0tU755gaKlLuLwoue00rIOWK4EljK9PnTWziI8pJXOAo7Bep+RyjgEoJLet5L4aQPasTNocb9OGdKNGZu+GYTQ+ZDRcUVmWOM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756546514; c=relaxed/simple;
+	bh=L8/3ZzAZ71jGHWbMcrfOHjyiloL/JEQDWlBLpTrjFVY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=b9FH2OifIbq50AKaooABuZW+DE9P4AM5m44GDTfvtOjWsUgABs420gJ37G5fFzwrvp4fS/poOywq1wqv7lm0BpEbzLJwslA47IKtbXdE07xb4JYq7sV40NsCny/FWxy0n1J5LLwxdnWgg41oAqwGxMXSSVXLGSHE/GJusAMtI5g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=AXCY3s3D; arc=fail smtp.client-ip=40.107.75.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Fe2QDksnqps5yLiUa49yWo80mrV9yT6eniDnq+hG1BDbXOVd1F/zX+hkaH0eAQ9HYsuzcQCdgqPnpZ1xywOB6Omj5D0uqfmM4TvfMPn9deNU+K045EZM6ZHL9F0hnVJorJCAVbb5EFF+FXWBLFaKJzDlV0M9/8qgf4bgw8ZpLTPnK8evrND92qdpEgbjJfA+od8PXRvMUgaBatiB9dOlj3HrbifGAwnqVgdlQ5lfy5BEzaacjFFCYHrFE6W+y5FdJr2Ln7mc217QRBhYzrggOiwn0ztEZI7WUBwAtbMByKMIWF9xaWStohb2/NzuPrprODOEChzhzACvL8Ow5TsmCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nRA4pwEBPQBMXs3+DNIpMHsJajXO+pShKR94muzeW2w=;
+ b=zNppV/8pdSJ/AxLggpk1JRKX9oy/ntpOM9wqrvgXIGWbi1vi6hbH/zEYvuJA6U7JM6o788otlIgI9sYzRom5tQbOe3+8BueRliQVcL1PY6RI0Uu22F8raFXJIJe3OusU+AAgVEn6xS0FsQz01EfHXy1NLQm0/ejs0rG9DvAA/OSyxZ3tIrFPIMaTTgh1mPGptjbs+fKWPpEjCYyQBs1geEnrv/OQoZs9PsLjXEibE56AVhInPNhseEJ0ODv/NovdzCTr5nXwAZDOlOSC0H2b7wmc6Bd7W4L3WBUARHUfvp5UcToEyZQTnoL/ZZZsynoiBaWHNPcUXFafPH2g68N2oA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nRA4pwEBPQBMXs3+DNIpMHsJajXO+pShKR94muzeW2w=;
+ b=AXCY3s3DxckjsS/S7m75C5G+FE93ncSgIE3ZRBoLD99UVlhVAXv79qmwBIlBb6r2CEwF/6i/dR/SbXcDrqPHeOFYyYh5332aAbTzTkLan6gwnfhWzMf7RZ9zwO3QRM0yssTpM63fqYrOCbBOyDgHTqyTVcNEAGfWl4m/Qya+d+xocyfLL3BzQyolvXU4/eD9BuvJ0MI7s6pTzFBd+1yGLWSKQ1bG+Q5eHGDXLM6Cc9zjSzxAnYK6PvVXT3edwYxeeX9PodRh0CDPUiSzdj/O7i1qsyjHg+9n/nVVSLWH+l0FqhP7VyiIdOEsIGXL4+4wh6BmlhjnG3gx1xAWaF1b+Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
+ KL1PR06MB6235.apcprd06.prod.outlook.com (2603:1096:820:d9::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9073.21; Sat, 30 Aug 2025 09:35:08 +0000
+Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
+ ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
+ ([fe80::468a:88be:bec:666%5]) with mapi id 15.20.9073.021; Sat, 30 Aug 2025
+ 09:35:08 +0000
+From: Qianfeng Rong <rongqianfeng@vivo.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Qianfeng Rong <rongqianfeng@vivo.com>
+Subject: [PATCH v2] cpufreq: Use int type to store negative error codes
+Date: Sat, 30 Aug 2025 17:34:57 +0800
+Message-Id: <20250830093458.642881-1-rongqianfeng@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0184.apcprd04.prod.outlook.com
+ (2603:1096:4:14::22) To SI2PR06MB5140.apcprd06.prod.outlook.com
+ (2603:1096:4:1af::9)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: exynosautov920: Add tmu hardware binding
-To: Shin Son <shin.son@samsung.com>,
- Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20250825064929.188101-1-shin.son@samsung.com>
- <CGME20250825064933epcas2p40a7c491366097f90add675bc36822ef9@epcas2p4.samsung.com>
- <20250825064929.188101-4-shin.son@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250825064929.188101-4-shin.son@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|KL1PR06MB6235:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a912dcd-e868-441f-73da-08dde7a88211
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|52116014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?J43OLrMtG0x4FGnn0el3NZhD+3eM9eCywItfxTp/HKxpRolPWiNR9A9BaeWB?=
+ =?us-ascii?Q?Ja7OoOs6IXWuPMqc1kKVPsypF3UTI9t858GMW5UtZzZeFStDUfi5J3F/884L?=
+ =?us-ascii?Q?fGM5Iaj1kQJ0xPIy73W06LNdhcOPgluma8rWw3s3278/SWODfW1MqfJXDoa9?=
+ =?us-ascii?Q?HLHl5LVdqclb6shEbeulwNzwK7sd7cX9vQkSiH/WC+UbSdPjM/dJu8zy32Kf?=
+ =?us-ascii?Q?lGXuKfwny2aZ/bCpGxMEgbcUad3liynPsm6M6RsHBqh+YD5ZiJv3Xc0vBZB6?=
+ =?us-ascii?Q?XLesAzgU4dPvsnJFjBk0+rv0+lD943aGDa+DkijY5j2MoDGvoPUV8YFtQMgp?=
+ =?us-ascii?Q?7nfYl49/lBT/lO6pYEEiNEXO0EKIjCgYeUsGi1FM0dNnfYI+VM23Vk/j7VI+?=
+ =?us-ascii?Q?dt9RFTkSZvOcICUQo6wX1OVsnZN9HVytF8c4Wa1SajYbru4UHJ3nxMH9VZKl?=
+ =?us-ascii?Q?yyrnws8S0LaW/VqFelLh4eBS3kAu9gRdvIcY6ej1HkdWmJZ8Q8dKcXZYnmZ+?=
+ =?us-ascii?Q?58YMGcUuqOJUlq7rLNI3IVZvGYKp9puTOi3sHKCyq1rdEHbMDR9MCZcqitks?=
+ =?us-ascii?Q?PUH9idOGebhPWQ1GZrA73zuXaZeTImaAODVhc+mufiDyfBsPuFeHn+2DkbOd?=
+ =?us-ascii?Q?2SQJyzC7tZs7SiCdMzn8iX7vYpY557o2m4+4B11U65Ghcc0eWuaNb19PW9h8?=
+ =?us-ascii?Q?Xz6bv142EHLJDkNfgDwC8xiV/YDCdNxWe5H6bfn4LxLNWhMQCsRAdnzW6IY+?=
+ =?us-ascii?Q?bmUQgxQ/QMW6ypMW+9SYFJxIMoDVXDzKHCToDL87Eksjnsb2md41eiTXf5XB?=
+ =?us-ascii?Q?oce9JA95gJSF+gYrtwZEkeZV6Ww3Qb/1nc5xN8HDA3EE8309/Xp3ko68JJug?=
+ =?us-ascii?Q?b3O9wUon7JrHRemfOlRWzyGrSiXsEsWBahnEPDrPUginuqgiVoiWYtFDFhGB?=
+ =?us-ascii?Q?nyjgqfmViQfaew/aCJeLXT/HD2FWn/Ogefg9qzYcZ+jOcQj+tTKRZ0Ik2j8u?=
+ =?us-ascii?Q?GPwLBET5p3WQhxrZi8wuAWoX84yUhV6gyU/UQ5S6dhQi98z4HsGL4uQQVPMv?=
+ =?us-ascii?Q?VdSJDgfBDYvone665GjkfD6hS/GzRu/ws3vfKgVl5P7Wg+0bPOd8NFoX0fd9?=
+ =?us-ascii?Q?kTV3VFNOzLZUylBTvR/YiemMBDWCNc7blUeINg49fKl4ypfSLL6nV+XaHmHI?=
+ =?us-ascii?Q?Dypj0Z4jg3Y+KaqiWdHEwsqAukzzzpsP/ABJ0CmUoFZ2g1H5wWMqjK0eXmrS?=
+ =?us-ascii?Q?zJTzjCLgD04psQH7BhPNGBFUX9HfN0wKHcLQM4i/VXTb05PVshmRLgEi7Yq8?=
+ =?us-ascii?Q?ZAOgtKAhj9jYaTbzabKRsK3zmGsbcdyWtzeJ3zu7ZVB75WOTotCdXh3HGAxE?=
+ =?us-ascii?Q?vDZSAaSst/DN3VwP/hWNRD9VFOZdxZz0Ss2Ahk8YyTyPtbfhV/F6ix1L5bn/?=
+ =?us-ascii?Q?cd8Qcm15MIi14+CFPdmzY/IhgyV3FCSrpCPoZck431QUYQH43CN+Qg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ztcvOVhzGaNo2WrEToReqiXNoW1Aq1DQx4Z2C0HwE2tpSQPXgyL71K38B//D?=
+ =?us-ascii?Q?tdCn+ePwU0bosK8PnwNA6aFb5Mqzw/XjjTLjBUjmyq9rX7fBQgBh4it91y4S?=
+ =?us-ascii?Q?FVoRXmJaL17JrA1+Eby3iV1Df51lRNXhM0HtLp8zjUn0QQ7oPLBZ6sVFZSrT?=
+ =?us-ascii?Q?JFVRXMxEapV1Icr+mhMYjsRC4YlChPPdXBUbBf4MT8Gr66O2c0AGWVIqeULl?=
+ =?us-ascii?Q?D6a85cdOiwOeAdGc1GUDsusM4MaU8LCdEcpjSrnwDRRnWBkNC4hcLgL44a3C?=
+ =?us-ascii?Q?qbLzF/+VaHr9FtO7hysI6yMGl0Xk8IUS92jaK+so9O73PczuP/wKZtrPFEdQ?=
+ =?us-ascii?Q?uN0wf9ngFNj+YNmaRqT5HIf3c4j2WDTbo+CU3v1yFqhJMjEh/FP6DANXoKiu?=
+ =?us-ascii?Q?NMGeS++8ReuimewdLxm0Ba5JhRGIe7TdrXTGTbbVSTgcKD93SguLG9L3d/og?=
+ =?us-ascii?Q?FUk6j9fsDSWZc+oglaiXuy17mx/jmoHSKCYJ2hCQfCg0Q0ify6QUMQ8GwhvU?=
+ =?us-ascii?Q?NOfXHrilnwj9WYtoke168R04TtOcbCSkZpHSDOHXdOWAzPnCdfcoAfbVsLAC?=
+ =?us-ascii?Q?6QKtZAsNKmJAl8mSQS1ts3D8sRfW2Ui6/Whm5ExPjENZFZai4brx1yGBmMch?=
+ =?us-ascii?Q?3wSpxQ8oI16PbR0RM0NFkNyOa8pvftuaAMbS3sQX4m+8EmMzUnaoQApE/bns?=
+ =?us-ascii?Q?g9I3KuiM+d9p+nJv4t+YLplHEGQvki/kLrbImmgERJsLVJUKFT4f7V3S1hOo?=
+ =?us-ascii?Q?4U9SaENSpLRkVd/r0Yrx/mTpTuHXLOkeE+CDcsTy5I3LdR7LJ2tZLfPtjuWy?=
+ =?us-ascii?Q?j4bR2WBWV4H1KxCq0BNE9b+tSaM0ni+a4ic0QFmUpAwuyNbnR+RfKBqrMkHA?=
+ =?us-ascii?Q?0DDJlY1F5G/6E8QIXawPfkGPpBTXQhWQhkR0RU4WE1ZAbN1w/gfPTIJozdtT?=
+ =?us-ascii?Q?26CpjrrdX2T6pVAf1yrwa6eIR7ysufVbyh2qXlPHuWBbmaLHzBjMyWgR9SCg?=
+ =?us-ascii?Q?5TMKq89Yo8NzyGY+vVxIbcP5HiEAJzpNkNV62j9zwP6AOHdX2Klz8T0YYX39?=
+ =?us-ascii?Q?j+T/oaBQYSS0ZJfneZXE5GXKGpNFTcF9Lxjas3TsvJNU0y3ebAYqhbKBYpDH?=
+ =?us-ascii?Q?BIz5tgxmkJ/RR+nA+Hi3CD92ye1pqynf72mgmBUfRKyP4iQYi9YtB026E1wk?=
+ =?us-ascii?Q?uoO2MsiIg3pLqriRgh1spLQq5xA+89m1p4yCUydrvv+fPsq6azJG6sBMn+T+?=
+ =?us-ascii?Q?PYmM7geaAdJ6DZaVwVgd0NbFD40rRnZlui1M1GgmI7uvLfL4TZ8mF2/kO+Sg?=
+ =?us-ascii?Q?MpwTUIteQJQOC/Pis8ONqF988URPsy9EBfXHlE6JTNsAUm0zYiTu/AoxkjEf?=
+ =?us-ascii?Q?xMdQ2b90NhJ52275mnAsIzrWF4JBsJqosKwMeV6ZU0sJj4/Qu3LeuVcw/94P?=
+ =?us-ascii?Q?tRlwgFp1z304c2ssZR6d2ZICVmS/FIBuvOpW3rWld124HV5ia58gdW0Twg5X?=
+ =?us-ascii?Q?TOJKz7/r3TJlFoCnyAJTaBLbWokBHqbCdVmtduP9Kg2zY+VWxy4ofBJpR47U?=
+ =?us-ascii?Q?2MCqNhFlkdMXIHFLag6VXiOT7HBA+ubSXHEZ5GQ6?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a912dcd-e868-441f-73da-08dde7a88211
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2025 09:35:08.0841
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZO8Wv5uXTUCXVayKHth83Plv7XYYdL1sRXteTVKT7ACj+3vGj+yiAR0KH/SJxTURzvaGj6xpgxKbna/y+hIFpQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6235
 
-On 25/08/2025 08:49, Shin Son wrote:
-> Create a new exynosautov920-tmu.dtsi describing new TMU hardware
-> and include it from exynosautov920.dtsi.
-> 
-> The exynosautov920-tmu node uses the misc clock as its source
-> and exposes two new DT properties:
-> 
-> - tmu-name: identifies the TMU variant for sensor skipping
-> - sensor-index-ranges: defines valid sensor index ranges for the bitmap
-> 
-> This TMU binding defines six thermal zones with a critical trip point
-> at 125 degrees:
-> 
-> tmu_top : cpucl0-left, cpucl1
-> tmu_sub0: cpucl0-right, cpucl2
-> tmu_sub1: g3d, npu
-> 
-> Signed-off-by: Shin Son <shin.son@samsung.com>
-> ---
->  .../boot/dts/exynos/exynosautov920-tmu.dtsi   | 92 +++++++++++++++++++
->  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 34 +++++++
->  2 files changed, 126 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
-> new file mode 100644
-> index 000000000000..fa88e9bcdfec
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Samsung's ExynosAuto920 TMU configurations device tree source
-> + *
-> + * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-> + *
-> + * Samsung's ExynosAuto920 SoC TMU(Thermal Managemenut Unit) are listed as
-> + * device tree nodes in this file.
-> + */
-> +
-> +/ {
-> +	thermal-zones {
-> +		cpucl0left-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tmuctrl_top 0>;
-> +
-> +			trips {
-> +				cpucl0_0_critical: cpucl0-0-critical {
-> +					temperature = <125000>;	/* millicelsius */
-> +					hysteresis = <0>;	/* millicelsius */
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
+Change the return type of the speedstep_get_freqs() function from unsigned
+int to int because it may returns negative error codes.  For the same
+reason, change the 'ret' variables in store_scaling_setspeed() and
+powernow_decode_bios() to int type as well.
 
-Missing blank line.
+Storing the negative error codes in unsigned type, doesn't cause an issue
+at runtime but can be confusing. Additionally, assigning negative error
+codes to unsigned type may trigger a GCC warning when the -Wsign-conversion
+flag is enabled.
 
-> +		cpucl0right-thermal {
+No effect on runtime.
 
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check W=1` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
-Maybe you need to update your dtschema and yamllint. Don't rely on
-distro packages for dtschema and be sure you are using the latest
-released dtschema.
+Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+---
+v2: Modified commit message.
+---
+ drivers/cpufreq/cpufreq.c       |  2 +-
+ drivers/cpufreq/powernow-k7.c   |  2 +-
+ drivers/cpufreq/speedstep-lib.c | 12 ++++++------
+ drivers/cpufreq/speedstep-lib.h | 10 +++++-----
+ 4 files changed, 13 insertions(+), 13 deletions(-)
 
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tmuctrl_sub0 0>;
-> +
-> +			trips {
-> +				cpucl0_1_critical: cpucl0-1-critical {
-> +					temperature = <125000>;	/* millicelsius */
-> +					hysteresis = <0>;	/* millicelsius */
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +		cpucl1-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tmuctrl_top 1>;
-> +
-> +			trips {
-> +				cpucl1_critical: cpucl1-critical {
-> +					temperature = <125000>;	/* millicelsius */
-> +					hysteresis = <0>;	/* millicelsius */
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +		cpucl2-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tmuctrl_sub0 1>;
-> +
-> +			trips {
-> +				cpucl2_critical: cpucl2-critical {
-> +					temperature = <125000>;	/* millicelsius */
-> +					hysteresis = <0>;	/* millicelsius */
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +		g3d-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tmuctrl_sub1 0>;
-> +
-> +			trips {
-> +				g3d_critical: g3d-critical {
-> +					temperature = <125000>; /* millicelsius */
-> +					hysteresis = <0>; /* millicelsius */
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +		npu-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tmuctrl_sub1 1>;
-> +
-> +			trips {
-> +				npu_critical: npu-critical {
-> +					temperature = <125000>; /* millicelsius */
-> +					hysteresis = <0>; /* millicelsius */
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> index 0fdf2062930a..a4ff941f8e43 100644
-> --- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> @@ -330,6 +330,39 @@ watchdog_cl1: watchdog@10070000 {
->  			samsung,cluster-index = <1>;
->  		};
->  
-> +		tmuctrl_top: tmutop-thermal@100a0000 {
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index a615c98d80ca..f47096683abb 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -914,7 +914,7 @@ static ssize_t store_scaling_setspeed(struct cpufreq_policy *policy,
+ 					const char *buf, size_t count)
+ {
+ 	unsigned int freq = 0;
+-	unsigned int ret;
++	int ret;
+ 
+ 	if (!policy->governor || !policy->governor->store_setspeed)
+ 		return -EINVAL;
+diff --git a/drivers/cpufreq/powernow-k7.c b/drivers/cpufreq/powernow-k7.c
+index 31039330a3ba..88616cd14353 100644
+--- a/drivers/cpufreq/powernow-k7.c
++++ b/drivers/cpufreq/powernow-k7.c
+@@ -451,7 +451,7 @@ static int powernow_decode_bios(int maxfid, int startvid)
+ 	unsigned int i, j;
+ 	unsigned char *p;
+ 	unsigned int etuple;
+-	unsigned int ret;
++	int ret;
+ 
+ 	etuple = cpuid_eax(0x80000001);
+ 
+diff --git a/drivers/cpufreq/speedstep-lib.c b/drivers/cpufreq/speedstep-lib.c
+index 0b66df4ed513..f8b42e981635 100644
+--- a/drivers/cpufreq/speedstep-lib.c
++++ b/drivers/cpufreq/speedstep-lib.c
+@@ -378,16 +378,16 @@ EXPORT_SYMBOL_GPL(speedstep_detect_processor);
+  *                     DETECT SPEEDSTEP SPEEDS                       *
+  *********************************************************************/
+ 
+-unsigned int speedstep_get_freqs(enum speedstep_processor processor,
+-				  unsigned int *low_speed,
+-				  unsigned int *high_speed,
+-				  unsigned int *transition_latency,
+-				  void (*set_state) (unsigned int state))
++int speedstep_get_freqs(enum speedstep_processor processor,
++			unsigned int *low_speed,
++			unsigned int *high_speed,
++			unsigned int *transition_latency,
++			void (*set_state)(unsigned int state))
+ {
+ 	unsigned int prev_speed;
+-	unsigned int ret = 0;
+ 	unsigned long flags;
+ 	ktime_t tv1, tv2;
++	int ret = 0;
+ 
+ 	if ((!processor) || (!low_speed) || (!high_speed) || (!set_state))
+ 		return -EINVAL;
+diff --git a/drivers/cpufreq/speedstep-lib.h b/drivers/cpufreq/speedstep-lib.h
+index dc762ea786be..48329647d4c4 100644
+--- a/drivers/cpufreq/speedstep-lib.h
++++ b/drivers/cpufreq/speedstep-lib.h
+@@ -41,8 +41,8 @@ extern unsigned int speedstep_get_frequency(enum speedstep_processor processor);
+  * SPEEDSTEP_LOW; the second argument is zero so that no
+  * cpufreq_notify_transition calls are initiated.
+  */
+-extern unsigned int speedstep_get_freqs(enum speedstep_processor processor,
+-	unsigned int *low_speed,
+-	unsigned int *high_speed,
+-	unsigned int *transition_latency,
+-	void (*set_state) (unsigned int state));
++extern int speedstep_get_freqs(enum speedstep_processor processor,
++			       unsigned int *low_speed,
++			       unsigned int *high_speed,
++			       unsigned int *transition_latency,
++			       void (*set_state)(unsigned int state));
+-- 
+2.34.1
 
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-If you cannot find a name matching your device, please check in kernel
-sources for similar cases or you can grow the spec (via pull request to
-DT spec repo).
-
-
-Best regards,
-Krzysztof
 
