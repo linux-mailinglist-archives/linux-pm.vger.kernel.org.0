@@ -1,230 +1,207 @@
-Return-Path: <linux-pm+bounces-33457-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33458-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E88B6B3C8A4
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:16:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8DBBB3C8C1
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5018583FE9
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 07:16:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 837AA3BA9DC
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 07:32:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF4D2773F7;
-	Sat, 30 Aug 2025 07:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D6A227B8E;
+	Sat, 30 Aug 2025 07:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="bGPRiKj+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A28P82GL"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="QiBrV8eW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from flow-a8-smtp.messagingengine.com (flow-a8-smtp.messagingengine.com [103.168.172.143])
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012020.outbound.protection.outlook.com [40.107.75.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403365BAF0;
-	Sat, 30 Aug 2025 07:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756538189; cv=none; b=BnZXf3FyY14Q14ztdY7cKgzPh+uUy8+6jbStQ6iIUOGo/WoJtjvw6qjODgYl2iy1kJQDqmoCSipMwQU4N4YqS6TW6X77mSC6dcBitk6khk6Ee0eU9UktyHv1v23z+M2ktP8MkkStNpxJrQRhRaSCVsdvacobpeWnRyWUdXev0Fw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756538189; c=relaxed/simple;
-	bh=Xgq//bPMcuLhTUcoKQVvIGaVUwN6Y8zHe3tfndbRoBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=APLNP1pWpFXMSnM07ztj/na3FmyYYxNzNXea5BBUTac2XBmSxO7Vu/CDXiE4g9yjwqEMZCIcEEc/NmoDbdy3yWmTPnGr6ljnrTZlpve87ZHYFEYVvFd0NLDftigScHSQICZIujS5w2outiM1ZJezKY2WDJmMuTrn75UX5QF7OFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=bGPRiKj+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A28P82GL; arc=none smtp.client-ip=103.168.172.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id 50B9C13803E1;
-	Sat, 30 Aug 2025 03:16:26 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Sat, 30 Aug 2025 03:16:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1756538186; x=1756545386; bh=rH5wSPSqP8
-	tNxz48V8nyDtHP/PfH/+QarsY2hPsLNiY=; b=bGPRiKj+zJAsCUQyrJp0/StHT3
-	Z0CEFhLQjV5xm7Yvbyg5RazYCfPbyTHWSm2ZpCegTbXOy6qhuD/CjdcFxuViszyu
-	G3+fcGeOv7HdCyn7AzxAqSFmzLO2erX/Vdp5eEeZaLTZRFRspFMiQ+busfvUv9xK
-	P1Qxg+vqomILq0dDixCVgYHw5VQEBClB9I6+/uTShTR//VYQFOWuKhVaLsvC6l/b
-	E1N/tfeehqrMQEp4i3wWoOJxGypUi7brZoL9qGPmQKmmMa93tVd1AY5Gro+BAjS3
-	WpUTogmTRpIeiSKPcsYZ3mE0og2OG5NvvD5b/WVFxeoMPFsjnwskajCq3uyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1756538186; x=1756545386; bh=rH5wSPSqP8tNxz48V8nyDtHP/PfH/+QarsY
-	2hPsLNiY=; b=A28P82GLhQ+gU+qNvkSXEMIHHGhWHgGPB6W2BqfuM8nVdICuM2A
-	NcqEdXjnRC5GOtPhl8vytw2JOVW6a632Lth7tFVqpN0jcVrs5FIWi0nJ5dbfpPbz
-	93UWghe/7/x4NXeA4FN4wHq2l0R/6xrVdl4M6x+X4EqZcsuk7fUrrkX7z2aqNGXe
-	GRh9v13JNwBHa0GWMNd0IJAZ/VLuVZRHMzmIP6KgEOrMibcUtTOr/XOmSC3N9SR2
-	+4h7cZHX5hYQElJlZ9AcSZWpik6DY6Yif1Q+6msGHxqUXYJZ/hDnKBXbWh3Xvalq
-	Rf1Hz1zKH3Te14Zyu+F/tIsbTPiaescl/sQ==
-X-ME-Sender: <xms:R6WyaEoVPmMMjSTFVHUliXOdv-32qkUK5pBFUekwj0BEfXYXKXHMdg>
-    <xme:R6WyaOxfi2Sr_p908cLZZq0WtOWmPygKs_jKndyVj8rKDpXX8ikKi1OeywN_Gtza-
-    FiH-hDxXuUZTl36M64>
-X-ME-Received: <xmr:R6WyaEyfRmAxZWCNsVqvVaXCqEN1juICIShBdAflOgf0gNEE_E5nocVl8uCdcH2Ux_v_VJ8rmIGy5LrSoEu2QIiMu_-QOznOlpk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeehjeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
-    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
-    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
-    drnhgvthdpnhgspghrtghpthhtohepieefpdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhvvghnsehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopegrlhihshhsrgesrhhoshgvnhiifigvihhgrdhiohdp
-    rhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtthhopehkrhiikhdoug
-    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepmhgrrhgtrghnsehmrghrtggrnhdrshhtpdhrtghpthhtoh
-    eprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhu
-    mhgrrheslhhinhgrrhhordhorhhg
-X-ME-Proxy: <xmx:R6WyaOKeRrX_rKVtlS-_HS0UcyN9w8mWfjCwNfiQ70_pAa29FRblZA>
-    <xmx:R6WyaBhJsS4AgbvUvcN_o6uHp3h_R8NH2iRFaJDZJdGCW4iQPaQfCw>
-    <xmx:R6WyaMkzXbMbopG8scAkzx_CFhYUQNKGJXW5k3t17XIk3bIEeUpTWQ>
-    <xmx:R6WyaOgrns0dbGzbmla7f4E8nyVhRwKAcFG-qkHg9ORUTbTcZhmzrg>
-    <xmx:SqWyaJIOEg53pkAeV7MbeJTeynbZUjxSAdTQb-JDXFYqQHxsi0m95a1W>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 30 Aug 2025 03:16:22 -0400 (EDT)
-Date: Sat, 30 Aug 2025 09:16:20 +0200
-From: Janne Grunau <j@jannau.net>
-To: Rob Herring <robh@kernel.org>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,	Hector Martin <marcan@marcan.st>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,	Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>,	Robin Murphy <robin.murphy@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Kettenis <kettenis@openbsd.org>,	Andi Shyti <andi.shyti@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,	Keith Busch <kbusch@kernel.org>,
- Jens Axboe <axboe@kernel.dk>,	Christoph Hellwig <hch@lst.de>,
- Sagi Grimberg <sagi@grimberg.me>,	Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>,	asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org,	devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,	linux-pm@vger.kernel.org,
- iommu@lists.linux.dev,	linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org,	dri-devel@lists.freedesktop.org,
- linux-bluetooth@vger.kernel.org,	linux-wireless@vger.kernel.org,
- linux-pwm@vger.kernel.org,	linux-watchdog@vger.kernel.org,
- linux-clk@vger.kernel.org,	dmaengine@vger.kernel.org,
- linux-sound@vger.kernel.org,	linux-spi@vger.kernel.org,
- linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
- Pro/Max/Ultra devices
-Message-ID: <20250830071620.GD204299@robin.jannau.net>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250829195119.GA1206685-robh@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5810016F0FE;
+	Sat, 30 Aug 2025 07:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756539155; cv=fail; b=ajmtj23P09RnGcGeqegI7equMA/Uv+eZBdWH5Ps0SiEJDYpKhczqMGHC12J/n87bbiHx/SwEQq1W+0mgzg6aEBctnGCxVMOEORcy1f3x+ImFOVVTmm4rgU0B3mIHA6NyzcHg4RZExev2cP4AD0WqpWCHrnPCY4ohkhSCAfjtZ/E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756539155; c=relaxed/simple;
+	bh=fOKz3EBgZHiGc66z7hVXNP/3e4OeqHCmNhrI7Xs1gNA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BC6ZhHCsrse/G5rjoh8Jb47F7ZG5izvVFIheXf1jZYSQpBBc2T0IxE3OMPp47FAvt+sCzf/3hH5sv/+ESC6rJj51Q45hNqfHTn8g4yIm0fjt26Yu2b8lbjWYbvnE9Idrb/QpDMr0X2q7LuNhB7fQ1NxZw+MV1NntiiogXDxQjCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=QiBrV8eW; arc=fail smtp.client-ip=40.107.75.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lsusXWiT/MRSZ/jzyCyF0xlIdbiiMKlNy0bJa+StXJftf2ZWiFN1WU0fLAGzpSTLBb1HPVoSjyBvDbD3kB8dIYKeVl00FTwtDIv2mwrZduSVBak+6WA25aTWQsaWFBolb1g59xLWkZQYT56miqwB4wvEVUtuKribQ/W0svGKbPjAKGbkOnrjXaO+arQ2yC2kB6VUHIDbLlnY2ynN5kUqZXh0Ikyw6UyN3ZwizJXtUY8FB6CNbHyMhsSTIdZOAdGJQNv4EQ96nJvrZuBAvW/tGquUxF/vSptQFbCaTQZeMh4sXiemVYgEpvOGQAbu4CFzb8Sgv7n65wgTlimvv52y5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fOKz3EBgZHiGc66z7hVXNP/3e4OeqHCmNhrI7Xs1gNA=;
+ b=j2pjV1w7Y/OZdwwEl1e1WqB0r0BUBPDrVCxM/Yk3Pt79ivu1lke8AKYLS+U1vue/2XX/6ifF5N6uJahK2BlCsfmLJ0dnQ6Wm4OSEK3iE4NWJtK9yYSPhs5+2KmBS7uIVAJrUcSBFvA1HFBocs/KGvk7RxQ0r+22Jh72chyceb0R4WKv3dHAGNuupKs15bu6cftj4GuGhh55toD/tETxkoEC2OtlzK743HjXucHLo97XBO11K6lwKGTeykKDlosoyEOBv3F+r4rSAtMcPW+1Jum7vWjQou18xLhrMaqaOCzrmYTHqYS7iLNX+QWveUsSYLV7pJZDg8+cDZkIu/4032w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fOKz3EBgZHiGc66z7hVXNP/3e4OeqHCmNhrI7Xs1gNA=;
+ b=QiBrV8eWHGFbtkw4eTRkvIrhRlIy/z3CDlgeqNweS5bowKmkiHRRKTcMHbvNvkFwm0rCeyisoR0kfZ5BwqUWEyjw8H+Kcptx5SmSb4Rt2ygY3WvKcQ0H6RPy8smEt6oJP6DBUVTQvXpx4QUXG+IVkw6+kx1Em8BCG6D402kB7cKadh9JCIddQJ/hjdIboJC2NBpmsVVW5BZVZvGeWV9TrkQJCmCC2m0uw6394lxVE0fgaJgSovSqbTheKv2UnK9YNEMfp9CRi8IbEZhR+xWBpFZdSBvHhu1FLHUyM56uNipAabBrdyypnsmE7sP51Remapi/i0/vwy2DzOq/R0flQw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
+ SEZPR06MB5166.apcprd06.prod.outlook.com (2603:1096:101:40::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9073.17; Sat, 30 Aug 2025 07:32:27 +0000
+Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
+ ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
+ ([fe80::468a:88be:bec:666%5]) with mapi id 15.20.9073.021; Sat, 30 Aug 2025
+ 07:32:27 +0000
+Message-ID: <d63b38bb-47d4-4f85-b83c-098bab83f8d2@vivo.com>
+Date: Sat, 30 Aug 2025 15:32:24 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: Use int type to store negative error codes
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250829084440.579727-1-rongqianfeng@vivo.com>
+ <CAJZ5v0jZ+4Ze2t8pw1MPUqzFYFr7g7h6Y-f=gwsmUgbvSThYGg@mail.gmail.com>
+From: Qianfeng Rong <rongqianfeng@vivo.com>
+In-Reply-To: <CAJZ5v0jZ+4Ze2t8pw1MPUqzFYFr7g7h6Y-f=gwsmUgbvSThYGg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR02CA0046.apcprd02.prod.outlook.com
+ (2603:1096:3:18::34) To SI2PR06MB5140.apcprd06.prod.outlook.com
+ (2603:1096:4:1af::9)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250829195119.GA1206685-robh@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|SEZPR06MB5166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 51ba7595-46fa-45fe-6058-08dde7975e7f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?c0lSMldydTh6VXM5UjJWS00zL2pXd0VuTU1vQ1U2TWphTGRpdHExNXNkdWxa?=
+ =?utf-8?B?MmVaekIrdFVyUlFwM0VnSVJaZTlJOTA5RUNGRWowUkV3eUNKcVpBcEpmQ2Mv?=
+ =?utf-8?B?dE1aR0JPTW5oTWFqWVlXQnlKNzhxMTFxMjhRRHlYdXBJOFVLNlM4Vms4akpZ?=
+ =?utf-8?B?bndVZ1J2akZ3ajVNYUNxM3ptelZtK1VkS2pMUkZ0cjRsMVk2MC82dEExdUhP?=
+ =?utf-8?B?SjVSZ1J4bGsxVzdOYS9oNVNPZ3k3UEJ6TVJaMHBkL05kdlRIaUFpdXlYMnl6?=
+ =?utf-8?B?Z0Y2WUJuRlp6N1c4OEdGZnQzUXJBaUhqbVJpN3ZwcnhjdXk4MkpVVy9OcmJR?=
+ =?utf-8?B?cUpkZnNtcnVuMk5lM0ZaNjNqM2R2Q25UQXBlL3M0MFdEbUpZaVY5SGJ5U2Fj?=
+ =?utf-8?B?cXpXZmN5ZVhPTzJrZC9SeGhmWlhIYkhFc3czYVV2aGNOM3QydVJNUUMzZ3Uy?=
+ =?utf-8?B?Q2ZkMDAweHJCb0pERUZ3QThENklaak5HUjliMStKMi91OFNkQldPZGFRUHVM?=
+ =?utf-8?B?R1NMNC9PN2hBSi95RmNTUkprM1haa0pYaEc1cUIzRlJQaGpscmcvVmJUakdB?=
+ =?utf-8?B?WmppNWpJcUdGSGZldC9hMkVCY1A3UWlEQjZvZTFOSFhQMWYwdDJEQ2ZsN3Q4?=
+ =?utf-8?B?NHlKR0JnNHhBL3ArYW9JRG9wSUtGRUd5dEM4OEtwT1Y4YmV5L1N5dWNNS3Iz?=
+ =?utf-8?B?RFpNVWNOSGZhczJteVUwVEpNYU5NWlgxVUd2b0ljTWlPUU9ZZXhJZE5ud2s2?=
+ =?utf-8?B?VEhBMEIxdlkzclZlU3p2a3Q1d3BjblRmTDM2dDJRMm1ZSmMrMDZMaTVXZUox?=
+ =?utf-8?B?eUV6aXlYcHVsLzBjOHpOWndyeFNON2cyS2FnU0NPcy8xS3lLWTBUOUpJUG5t?=
+ =?utf-8?B?dUQxQitObDJvbXRRRkRYWWEvVG5HN29ZNGE3cHJNaGc5YWhxVFcvTGw2eXpt?=
+ =?utf-8?B?djVjaTR0cGRraSsyekIvb2NYbWQ5Y0x0WnJYZXVndDVnZVZvWDZYTlhqbFAy?=
+ =?utf-8?B?ZFdqbVRTc3hrdTNPTWRIdnhyY1d5VWFNUmZoTzdjb0xkaTNXZmNjQTZUUVRT?=
+ =?utf-8?B?SlhKSGpDQTBoZE1SeGpoTDgyWnpIL1JON1hCbGhMRFdaY2xGRU5sdlFadGFU?=
+ =?utf-8?B?YTNFSjBvQndDak5FKzg0YkxzWGJnU2hyeFlFMW10eDZLZU9IRkZENmtZai8y?=
+ =?utf-8?B?ZlY2OTZRQllhTlBRbTR0c05wWkErcDVaS1RmZ1dPVDNDSmg1NkJkeXF2aStp?=
+ =?utf-8?B?K0doNHFQdGpFWnF4REhJTnFWZkExYUVEOEsyS0xUeHlXK3lLd0M0bjR4Mnpn?=
+ =?utf-8?B?OGpkV3p0YTk0bzVxQU1jbkM2emRqR2lYdEIxcCs0Z3lla3VSanRlNUU0djQv?=
+ =?utf-8?B?eURZYVI1b1hMQ3R5ek1JZnVyMW9xYWxKY3NmRjBDSlMxMW1ZOHNIbDJuQnd3?=
+ =?utf-8?B?bFIzTy9MYTcwdEZHUnU5aG0rMUVMVTZuNWMvVFVCNUF5eXBOeHl3eDV4UDE0?=
+ =?utf-8?B?YXZaL2U5V3lyUFNGb083TnZXSW5INjRPUExOQjhRSDgwMnMrN05EWiswZXJT?=
+ =?utf-8?B?K3NwN3BnRXZxN0JQb1V4dGt0WSt0R1VyNmVkNEQrVFBmR3owcVVWNzRsL1d2?=
+ =?utf-8?B?TElNbHZLeDNsQU16RXM1elppSit3RGRCZUtML09oSlRrSStVRnIvVU1KNEZS?=
+ =?utf-8?B?emtGbHN6cGdFOG9SNlJNQWpDUDZhVjUwei9SVlNrTnZmTmN6SWpRNFpqSnl5?=
+ =?utf-8?B?YlV2WFp2OCswZzNJY2JzckxFdERHczRhKzBCdVJkVHIyYWc3QzhMTEJBTkd0?=
+ =?utf-8?B?Z3J5cEZTNkhyZHhGeXBWODRiM0NoVE1BSGNPcmV0T1UxTFN0SkxCZ2dGWkFE?=
+ =?utf-8?B?ckJxcWdmTHRRbE9JakJ3cm9TUFJ6c0ZWUmVxTGdWd3hRTHRpZ0tZVFFyd3M3?=
+ =?utf-8?Q?y80cx7BiHTg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bnhCNkJQRzA0WkdXa2ptV2xHTC9KZXEzMzd0VDlMaHpsVmsyckRCdUY3WXVC?=
+ =?utf-8?B?cUxYUW5WRFlCTml5K25Ec1kyK1A3dURuZWlHM1B2UGY5VXhjaGpTQmdQQStn?=
+ =?utf-8?B?ZXZCM2E4OGVVK3MxTncrNXU3UU1mc09pMW0vbi9BbHplZSsvNy9HcEVKckdl?=
+ =?utf-8?B?elQ3UXhJODN2VTQxYlp6NGUzdTNhaVphM1lLckJMemViRDlnakp0SG1OR3Fy?=
+ =?utf-8?B?SGRkTEtnV1o3UUVSc1c3ejJLcnBVVkY4aHR2ZHpwSlVJUmdzVUVXaU4xYUMr?=
+ =?utf-8?B?WjVjT3IwOEVkcEIrUkYxOWtWdUNsQlFuTytpakJRTm1ndFlMMDJYaTZyWWEz?=
+ =?utf-8?B?QVduYmtOS2NiTkRRUVBXeitwOVNXQUpoMEVrVkRYdVVhVzdmejV1OHh6dDc5?=
+ =?utf-8?B?cXozN0lOb25oa1dnRXNPMFUwMzNxOEJabWIzSUdqNEVzdnE4aHd1dW1JYjB3?=
+ =?utf-8?B?T2QzdTEvS1RoL1Job1l5aDJKUWJvQkc3QzM4NDVTL2UzdDFsTW9hdVdzbE1v?=
+ =?utf-8?B?dC9LUWZBWmZWNkVwaXdrZE1KSWtOc3N3R015d3RianRiQ2trYjVCRjhQYnY3?=
+ =?utf-8?B?aCt5blh1QUR3RFJ0L1h3WWlOZ2VqVVY4U1ZUNEZObWJpSnJrSEVZMXRZbGQv?=
+ =?utf-8?B?alM5YXpBYUdraEcyZzB5Mmt6d2Uwd1NlVWNFWkxuL2lIdmVibnVtZmJKenM2?=
+ =?utf-8?B?M2dnZDJLSk5TNk1sTHBYeTdhREphN041WisxVndZemJtN2lFRTNxeHVUc0RT?=
+ =?utf-8?B?MDJNT0FGZjRDemxMQ2dxbnhpSlNGeUZJOWxxWDRja3g0VzF3WlBDV0FzTzZn?=
+ =?utf-8?B?aEVsQTNSYUFkSGViUzdJZGJiS3ZJbFpmNHgxd0VwcGhSMTRXajZWeGlQRlEw?=
+ =?utf-8?B?MDhGOVBnUEpSUytrR0NhdnpETDViaWhGazU3SG5WUGdDRW5JUzgzZ2dPK2Ni?=
+ =?utf-8?B?NmVDSzlqbjc1M2ZZcld0T1RFUWZVYnJGbWVyTUJDQlh6NENyQitqWnUwdjhH?=
+ =?utf-8?B?ZjRXU29SU09aNHdyNzRKblhKL1RGcCt4TkQxSU8vMlhQSFVOV3hyR2RONkl1?=
+ =?utf-8?B?eHZ1ZGdjTlU3RXRKTUdCMmd6SkI0TTczVU9JZnZPU3VaYy91L0N3amZnbXlz?=
+ =?utf-8?B?Vit5RUZQWjlGM2s2bjQxR1ZtSDY3QmJndUpqTUZ6OWI3TW1Ibk1RNkJMMm9D?=
+ =?utf-8?B?ejFKcWxYV0prZW90WnYwWTNOQ1p1bUtzMWpCUElTNjRwekFnWHRYY1dHL3lP?=
+ =?utf-8?B?aDFrVTRjYnZOWndMUlEwMTFnd0x2NVo1Z2Z0L3BDdVhnUWVVbEZJT1M2dUFI?=
+ =?utf-8?B?ZzdubkExdkY0SlRsNDMwcW1lTG4vb2dWTC9oNitkS1F1a2l6cjh6SUtTUjU3?=
+ =?utf-8?B?am4xbzRhV1hVeGdZdVRqQUhubDU1enBqZnBpWnIzOHNmaThNMHE2M0cwOW5h?=
+ =?utf-8?B?VXlUenlheEl6UDJIZjY0Nk1ZbU85anFnck13K3RxeHp2MkhLN1RQK0xqY2NJ?=
+ =?utf-8?B?eXcvRXFuQ2RqVURrWnhkbmhqVTRkNEpGRHdUTUxkWG1XVVg3TEU4a0NEeXJT?=
+ =?utf-8?B?OTh3SndsMldGNHRIZGRFc3Z2aVY4QXlOZDJ4cFVHNUlRQXRGMEFGWU01aU9Y?=
+ =?utf-8?B?dDRERVZQYjlTN00wOG41TXJSZ1lCNThhTUZwMVM4eEJ2Q0dDT3VMVjhYdlU0?=
+ =?utf-8?B?dm5iL3FmRSsvTmN0ZnQ1a1ZLaTBYYUdlZUtiSlBodGVCOGgwdUhsYThta0RI?=
+ =?utf-8?B?bzF3WDU1M3lIbm5kZ2xLNmhwZk1iZFJrODJQc0FKUTBhSXN4YkZUMW1TV045?=
+ =?utf-8?B?ckVBdTFFeGR0OENHM0NiR2VzSXdJcDRVWjBOb1FWdi9YUUlrYmhzcjNJaFRN?=
+ =?utf-8?B?Z1haem5VTFpxakg0RXFYQWtkZ2xwV2lSdm9VNnlzd1d0MDNUK2ZYbWx2UTVR?=
+ =?utf-8?B?U1VIQzdYVmxQN1lhOE0yd1lRTytPeEhoVzF1L1FCOUowTVczMllrN25aQ3cx?=
+ =?utf-8?B?Tm05STRzbjFFRXBCcVNpRE50ODY2bDRXczhjMGh0bUNXSFdycUIwclhJcitR?=
+ =?utf-8?B?OS9MdHVlb09WZHkyWmJvdmxXeCsxdGRISnczZVk0SCtpSXl5Y3V2WFJWWGZp?=
+ =?utf-8?Q?4Lta1RxFcI5onwymArtdq2Y4X?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51ba7595-46fa-45fe-6058-08dde7975e7f
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2025 07:32:27.1608
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nMvSyIGgrt+gSjU96nRfmHxNeBpN6rKMvcxv9WhuJXWmT5vSPwaaxWtNFxgv8KnzD3LyGsBeCW+yVn8mzy/PsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5166
 
-On Fri, Aug 29, 2025 at 02:51:19PM -0500, Rob Herring wrote:
-> On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
-> > This series adds device trees for Apple's M2 Pro, Max and Ultra based
-> > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
-> > follow design of the t600x family so copy the structure of SoC *.dtsi
-> > files.
-> > 
-> > t6020 is a cut-down version of t6021, so the former just includes the
-> > latter and disables the missing bits.
-> > 
-> > t6022 is two connected t6021 dies. The implementation seems to use
-> > t6021 and disables blocks based on whether it is useful to carry
-> > multiple instances. The disabled blocks are mostly on the second die.
-> > MMIO addresses on the second die have a constant offset. The interrupt
-> > controller is multi-die aware. This setup can be represented in the
-> > device tree with two top level "soc" nodes. The MMIO offset is applied
-> > via "ranges" and devices are included with preprocessor macros to make
-> > the node labels unique and to specify the die number for the interrupt
-> > definition.
-> > 
-> > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
-> > counterparts. The existing device templates are SoC agnostic so the new
-> > devices can reuse them and include their t602{0,1,2}.dtsi file. The
-> > minor differences in pinctrl and gpio numbers can be easily adjusted.
-> > 
-> > With the t602x SoC family Apple introduced two new devices:
-> > 
-> > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
-> > missing SDHCI card reader and two front USB3.1 type-c ports and their
-> > internal USB hub can be easily deleted.
-> > 
-> > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
-> > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
-> > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
-> > calls the PCIe controller "apcie-ge" in their device tree. The
-> > implementation seems to be mostly compatible with the base t6020 PCIe
-> > controller. The main difference is that there is only a single port with
-> > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
-> > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
-> > and PCIe slots connect too.
-> > 
-> > This series does not include PCIe support for the Mac Pro for two
-> > reasons:
-> > - the linux switchtec driver fails to probe and the downstream PCIe
-> >   connections come up as PCIe Gen1
-> > - some of the internal devices require PERST# and power control to come
-> >   up. Since the device are connected via the PCIe switch the PCIe
-> >   controller can not do this. The PCI slot pwrctrl can be utilized for
-> >   power control but misses integration with PERST# as proposed in [1].
-> > 
-> > This series depends on "[PATCH v2 0/5] Apple device tree sync from
-> > downstream kernel" [2] due to the reuse of the t600x device templates
-> > (patch dependencies and DT compilation) and 4 page table level support
-> > in apple-dart and io-pgtable-dart [3] since the dart instances report
-> > 42-bit IAS (IOMMU device attach fails without the series).
-> > 
-> > After discussion with the devicetree maintainers we agreed to not extend
-> > lists with the generic compatibles anymore [1]. Instead either the first
-> > compatible SoC or t8103 is used as fallback compatible supported by the
-> > drivers. t8103 is used as default since most drivers and bindings were
-> > initially written for M1 based devices.
-> 
-> An issue here is any OS without the compatibles added to the drivers 
-> won't work. Does that matter here? Soon as you need any new drivers or 
-> significant driver changes it won't. The compatible additions could be 
-> backported to stable. They aren't really any different than new PCI IDs 
-> which get backported.
 
-I don't think backporting the driver compatible additions to stable
-linux is very useful. It is only relevant for t602x devices and the only
-way to interact with them is the serial console. The T602x PCIe support
-added in v6.16 requires dart changes (the posted 4th level io page table
-support) to be useful. After that PCIe ethernet works so there is a
-practical way to interact with t602x systems. So there are probably zero
-user of upstream linux on those devices 
-I'm more concerned about other projects already supporting t602x
-devices. At least u-boot and OpenBSD will be affected by this. As short
-term solution m1n1 will add the generic compatibles [1] temporarily.
-I think keeping this roughly for a year should allow to add the
-compatibles and wait for "fixed" releases of those projects.
-I'll send fixes for u-boot once the binding changes are reviewed.
+在 2025/8/30 0:52, Rafael J. Wysocki 写道:
+> On Fri, Aug 29, 2025 at 10:44 AM Qianfeng Rong <rongqianfeng@vivo.com> wrote:
+>> Change the 'ret' variable from unsigned int to int to store negative error
+>> codes directly or returned by other functions.
+> You need to say upfront that this is about speedstep_get_freqs() specifically.
 
-Janne
+
+Yes, my commit message was a little unclear. I will improve it.
+
+
+>
+>> Change the return type of
+>> the speedstep_get_freqs() function from unsigned int to int as well.
+>>
+>> Storing the negative error codes in unsigned type, doesn't cause an issue
+>> at runtime but it's ugly as pants.
+> Which isn't really a technical term.
+
+
+Yes, I should have used more normal words.
+
+
+>
+>> Additionally, assigning negative error codes to unsigned type may trigger a GCC warning
+>> when the -Wsign-conversion flag is enabled.
+> Is the latter a motivation for this change?
+
+
+That's one aspect. On the other hand, I think code that assigns negative
+values to an unsigned type is confusing, so I want to fix such code.
+
+Best regards, Qianfeng
+
 
