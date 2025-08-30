@@ -1,81 +1,82 @@
-Return-Path: <linux-pm+bounces-33473-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33471-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EA56B3CF4E
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 22:45:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6342CB3CF4A
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 22:45:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29D092040C3
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 20:45:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B10A1B242A2
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 20:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8842E7194;
-	Sat, 30 Aug 2025 20:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0901FE44A;
+	Sat, 30 Aug 2025 20:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aQlPsZuy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eIocmTUT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227D52472BA;
-	Sat, 30 Aug 2025 20:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A47B2AE77;
+	Sat, 30 Aug 2025 20:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756586730; cv=none; b=D17ykFNcYHAc8ofdVq+UDefST+PUNdoR8ItohDjzk4QHlm1Rq72zPRkOTVAsjyPu7bejmIm01B6K2bl79EWT1EOpEqLB4IJ/i7H7EM3aaZmhFDtaitbk9VasV2Igh974sigRxROZkqpQFzqyLaB58Nru3eeAM9ViLUZZ0zmyzFM=
+	t=1756586728; cv=none; b=rR/zUMnLHBFM1g/SJFh00/jG5TG4A8mJ4OvwXOIo8Qzi2DJwr6IloVwjQyOfi1bI+dkKKbHp49nZSANWJFi+lXoNLIsY8U//17uRoKdFIA/vlWEtuqfnK1A3a/HFsQTivT4vUv62XdoBpVxbLWhQ1v8o/OlP6QbdURXNoQIs+yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756586730; c=relaxed/simple;
-	bh=bsMbeskizZ3+m+ew2tNDknotQDjax91iTAZv7fXPpnQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UmdeEIG+52w4MqXje9CqxNiY2zgW8ADz/uF/bei0farqrAizgo5Z0KYhp2iMsRIkWxEbimPtuBnOghWaIBLQToemVjkIX/n1cQPGSTZeLkVHOpb3BiHuPU+lCWNgxWj739I95QH8VvjGtG+vsKtWX5H2GfMy97Fb7W5PxyV7ZYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aQlPsZuy; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1756586728; c=relaxed/simple;
+	bh=0oqeEqIjS3+OtMIvtyosNybEOk1gpo3FJfz9EF2M1t0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=E46FSxe3yBbsZHk1bgLVeeF0Q4fkg/me/MOM+MdLT+XBEHhObUKn1b/nbe3RRAGo4Vu7mTvzdjUzYCxnmRYjFxNK6Is3V0kq9pMe12U+cEudWSDnnVeu9ZhRYXB+n5cgAlZuDClFsR+7F5t87wt6mxI3HJXPWA7W13eHTQ2hYco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eIocmTUT; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-affc2eb83c5so160454066b.2;
-        Sat, 30 Aug 2025 13:45:28 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6188b6f7f15so3452992a12.2;
+        Sat, 30 Aug 2025 13:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756586727; x=1757191527; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jpjDZlCCSxzX1q0S8x/0HEmKCcPEymF68KMYns7ekvw=;
-        b=aQlPsZuyiljjfUxVQkBKFEaI32Qp5T488IHSc9lhM+iUIKneuswI0qM1hx9U2mImzG
-         U8uOFQC81+7ZTR27CuXWHLbIp/QfhhO1xx6kl7Gn1K9K9sH/BFKa1YlHh4KqfNrvWNq7
-         V+A/FfCrwUfAAS9MeCuLTS2f9zAor7WCHfghFRrtJeNuLVE0n9BiuEuW7AI8+CjeOB8Y
-         iN03ibxwLNZQw34lnHnoGTZWnGmlVeHcIxUYym8cTOVN2LoTPEetsRf0Q3HlLa2C3toB
-         h57jRVxTD00NKuZzGCmQ4YmXY5t/CcdGmnqnYOPchFiGJI8ZvYw2aVX091u/h7J1mGNU
-         f0Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756586727; x=1757191527;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1756586725; x=1757191525; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jpjDZlCCSxzX1q0S8x/0HEmKCcPEymF68KMYns7ekvw=;
-        b=hviv3pZPXOFh1xwDKCXYg8QWbXxdXf5UWL6kWbRBmmWOIGOq5DB65UluOKphrcv2LV
-         DZLLWYMIt4+Q/H6weg5X9w60UGba70kNqDeyWKxLhynPWrMmaCV2CaO7+Hg8jJQU4fi+
-         aVWfdYg5QpFw8T5BTBmGF8yzSJ1IK/FJiweM95de6ye2edEe9diiWRv/oDt/5My1Exvk
-         5PPvulu5Siu5mwXVubyvHAcZxWsJ8XZwTs4P5S8b4NYK6Kdglxu1r6kScaGV6jWmkBt/
-         +ojFltmoTh0bPNvTpvovMR22V+NXWGFTnOry5BfR/1H8r58z3PMo0qvV1ZOX4hnBNfwn
-         AOcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVoewHixmYu20ktS22SoermrH1JxaYhWunTXjAb8lSll9Z702jfTuPnVQZmnk1U3FLO2wCmwALv4Y=@vger.kernel.org, AJvYcCVsji1PbJ+sx6CwdYcgjgFCu1l9REajW3GMM1RF7hTbHZ/X6LK97gVk6MgzTzK6pz1kz+uxHhYKI3bwwFw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh/G7wInKe7ZathGO2AfEm76eL9in8/0dwU6QIe5/xNKxsarGO
-	sfcewdzOvt9Er6Hr/TLtb7jJrjWdgifrxHsTUbyt+dWkxGlxvyRdSR9M
-X-Gm-Gg: ASbGncsOAfsjFrgN+OqWsS7a53v0L3I3MUPKKw2gAQOpANf1KJyH9kV/09807wMkNiE
-	TV6qfNpalyFv0fG9S/OBefGTuzMcnUKKgY0u5dQL4ahiDTZcutw97D8PYFiGDLrfLCFiZjZCWIh
-	1QbJONbpImn4EGvzW7qi+nESOy2N62tcp2AbRqsHmMCMAv+xqkE8nJC2N7OTYGVCtsGA9gz7mR0
-	1Yx//2PSrvskVwaLSZH9ulEXZbAh4oeIdW8I+G7Buh2aA2cam/6KeBHNbhXU911jnhX85faqLG8
-	aVvTHpvOKGFI6yCQXLtMv7LVGuqcK07GmXjj5twbNF9hRJqCcxNe6uJgM3gKaJZUwKm5xvZg9qQ
-	czCgEItQQijp1cFkxDkHJ66anQRhFOMVlb+ZTTWRtyg==
-X-Google-Smtp-Source: AGHT+IGRPOBFp3JnR5dh8ZPVi2wj7ba20iZDFAa8VCsY76wVE2IHKKw+IPXNfg5o4YNN8RcvH2tAhw==
-X-Received: by 2002:a17:907:7b97:b0:aff:3dda:31c1 with SMTP id a640c23a62f3a-b01d8c90d25mr336896366b.28.1756586722770;
-        Sat, 30 Aug 2025 13:45:22 -0700 (PDT)
+        bh=+OT8QGzf3PZ88uIRwWvPBWTj8UBsZ2B/sy/goy6AP/4=;
+        b=eIocmTUT8ZkbRQySKlBmMkwsrQ9NFJF4siEAHv4lwEUva323ojtwotMHDCGGSZ1EW7
+         Ra2wGBFNw7TXupcZF/CBvELH2LOIYzHGbMZYOf6YcngaktUJkeHZqKRAufGeyrt+bJdN
+         nU3t6lv527X1z9NRC/KVN8nzStZjqYS4BmY35GtkZpw9Z8D8DaJ+weKbVuTZGIkhkie7
+         CSWlrN3fXSj//TNXFAUUuUI0OopdyRS+2C1e+pP4Rc8Y9BmiPfVMZI8p0jp07BVe1h9w
+         QmzZnIslVwXlZJM6M9dIeM6b/eHTHFM0weMfiReO280TDnfcHKVE2oQTNC+HGDBdJZnD
+         ziZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756586725; x=1757191525;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+OT8QGzf3PZ88uIRwWvPBWTj8UBsZ2B/sy/goy6AP/4=;
+        b=DaxQnxUkLBTYM6VwKE5EFWeYNjn6jPyiEoNs4lkszOUY7oc6VB18iNfKH/9Vf5f254
+         1sEMZTfpyhoWUS3l6M36B7XriBZ7M5u/S/KXISvLe99m9EiKF3RlFQNF2ou4hpvThlWX
+         rP6P0Wz8zUxqHgPu1QVECVLHQZQxdKnwmenYqs9PZvvvPVMfC44bMjlYP9MZWxjW01uV
+         eaOgPPNO1a27+QM5mawgBd+08o0cBBKylAETND2XQezVbjgsJt1ZZv+A2+YceJxfuMer
+         9QwBQC0cHprgodvvwMjx9mYjJrIZRxeI13Td1Xq80+8O5gXqknQrvQ7gTnVr0fCTfIRw
+         En2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWzSudB2Pnu5iYK6WjFNov/rYAq+AW7MU5YN/k4EvoVJpNd85NZNyhSNW8/0i2yaYaI+kgshWZZBZE=@vger.kernel.org, AJvYcCXg308B4KC+jhvSY+3MEj8i9Kge0sZNpCf/SQxHyWRhyscGRjWqN6NyAvwj/1+vg7I2JskIBba1k/AjwLw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIS8ukr3N0WR19v57xucY0FlDBHuj7MvfmoEBw9sT1Xz24346i
+	GAwEIMMD/BA2bwEPuMawyD+qP5ZfOxUx+OxIcFu42gSsM65IFIB6iBAa
+X-Gm-Gg: ASbGncsRXLT24cSPvNoEXww5Wy41dqqOcvyDm973IXcjnnrU/3XjsAF6BTsVnUtFcaP
+	CqTKqQKOV06fnI/zlH6jWwB+/NkDthV899RYYh93JnB3sl2OEjXqgi0ydPYpVXBMpnHGimsLRed
+	O3+nmOUrrSPHuYFOGiTeYE77o/WPzeEGyYFHq/DQ4bt4Q7uzJhB2maN8ryTmZ093kvc1+syjf3S
+	8b9DR7iGYCUDJBr1JlcXCFKzf/LqYM1Hhw+768mrLBWf6uLO5wIlqf67POP03FQBCYM9n+VLMbV
+	gGH+5JFybUMPLJKM3havINJ0rtcDAtF9rR2V3wp7KAmOy1T2kcUFo8+g6qR/jXdat9Oz5nbaFwt
+	C3cCX0fDj0wAt+tVAqMzPT2UssdmX+4c=
+X-Google-Smtp-Source: AGHT+IHAqv/GT7/pawlzbjWrE+HOablGq165Qzr6HPOo3iQMAThPKQPpNlXpi7UmzyKa4WqP6rVgaQ==
+X-Received: by 2002:a05:6402:5cb:b0:61a:1a57:31a with SMTP id 4fb4d7f45d1cf-61d2689316cmr2269651a12.14.1756586724504;
+        Sat, 30 Aug 2025 13:45:24 -0700 (PDT)
 Received: from [127.0.1.1] ([46.53.240.27])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-61cfc52ade4sm4066630a12.45.2025.08.30.13.45.20
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-61cfc52ade4sm4066630a12.45.2025.08.30.13.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Aug 2025 13:45:22 -0700 (PDT)
+        Sat, 30 Aug 2025 13:45:24 -0700 (PDT)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: [PATCH 0/9] power: supply: fixes and improvements for
- max77(705,976) chargers
-Date: Sat, 30 Aug 2025 23:45:13 +0300
-Message-Id: <20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com>
+Date: Sat, 30 Aug 2025 23:45:14 +0300
+Subject: [PATCH 1/9] power: supply: max77705_charger: move active discharge
+ setting to mfd parent
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,10 +85,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANpis2gC/z3OzQ6CMBAE4FchPdtQfld9FWOabVmgCRTcImIM7
- 27x4HGSmS/zEYHYURDX5COYVhfc5GPITomwPfqOpGtiFrnKK3UulBxxAwBVaYAL1DqWuCPWbpx
- 5Wmkkv0gq2jID0yJWtYiQwUDSMHrbH5Qp07AgP4aFbO/TP/gMxup5ekWtocGtxO9jPTO1bvtdv
- N33/QsEi/KnsgAAAA==
+Message-Id: <20250830-max77705_77976_charger_improvement-v1-1-e976db3fd432@gmail.com>
+References: <20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com>
+In-Reply-To: <20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
  Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
  Sebastian Reichel <sre@kernel.org>, 
@@ -97,47 +97,58 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756586721; l=1532;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756586721; l=1767;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=bsMbeskizZ3+m+ew2tNDknotQDjax91iTAZv7fXPpnQ=;
- b=M4Ae+v/739Xx/y0sC4GaVmEXLngxEioXHIikybdcf00uIaI2oVpXGYsL2+O97r9tF7+tD1dXz
- szHiz3uDEL0D24A7D9Kt5z8z82rQNOv9Gn8vaXHzh+gWbzmspPd4y4n
+ bh=0oqeEqIjS3+OtMIvtyosNybEOk1gpo3FJfz9EF2M1t0=;
+ b=56US90twcnleZmymZxonRD5YfMUAoFqPRf2D5R9IUSCwqV/29oO2NNVViutmNK/bRgHdQNDlc
+ adHUabLC/NdDjZsTOCYMxBLiTYdPdwODfjGdryg8Oc+cMitwlzMHodL
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-This series consists of:
-- max77705: interrupt handling fix
-- max77705: make input current limit and charge current limit properties
-  writable
-- max77705: add adaptive input current limit feature
-- max77705: switch to regfields
-- max77705: refactoring
-- max77976: change property for current charge limit value
+Active discharge setting is a part of MFD top level i2c device, hence
+cannot be controlled by charger. Writing to MAX77705_PMIC_REG_MAINCTRL1
+register from charger driver is a mistake.
+
+Move active discharge setting to MFD parent driver.
+
+Fixes: a6a494c8e3ce ("power: supply: max77705: Add charger driver for Maxim 77705")
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
-Dzmitry Sankouski (9):
-      power: supply: max77705_charger: move active discharge setting to mfd parent
-      power: supply: max77705_charger: refactoring: rename charger to chg
-      power: supply: max77705_charger: use regfields for config registers
-      power: supply: max77705_charger: return error when config fails
-      power: supply: max77705_charger: add writable properties
-      power: supply: max77705_charger: rework interrupts
-      power: supply: max77705_charger: use REGMAP_IRQ_REG_LINE macro
-      power: supply: max77705_charger: implement aicl feature
-      power: supply: max77976_charger: fix constant current reporting
+ drivers/mfd/max77705.c                  | 3 +++
+ drivers/power/supply/max77705_charger.c | 3 ---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- drivers/mfd/max77705.c                  |   3 +
- drivers/power/supply/max77705_charger.c | 386 +++++++++++++++++++++-----------
- drivers/power/supply/max77976_charger.c |  12 +-
- include/linux/power/max77705_charger.h  | 146 ++++++------
- 4 files changed, 344 insertions(+), 203 deletions(-)
----
-base-commit: 3cace99d63192a7250461b058279a42d91075d0c
-change-id: 20250830-max77705_77976_charger_improvement-e3f417bfaa56
+diff --git a/drivers/mfd/max77705.c b/drivers/mfd/max77705.c
+index 6b263bacb8c2..ff07d0e0d5f8 100644
+--- a/drivers/mfd/max77705.c
++++ b/drivers/mfd/max77705.c
+@@ -108,6 +108,9 @@ static int max77705_i2c_probe(struct i2c_client *i2c)
+ 	if (pmic_rev != MAX77705_PASS3)
+ 		return dev_err_probe(dev, -ENODEV, "Rev.0x%x is not tested\n", pmic_rev);
+ 
++	/* Active Discharge Enable */
++	regmap_update_bits(max77705->regmap, MAX77705_PMIC_REG_MAINCTRL1, 1, 1);
++
+ 	ret = devm_regmap_add_irq_chip(dev, max77705->regmap,
+ 					i2c->irq,
+ 					IRQF_ONESHOT | IRQF_SHARED, 0,
+diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
+index 329b430d0e50..3b75c82b9b9e 100644
+--- a/drivers/power/supply/max77705_charger.c
++++ b/drivers/power/supply/max77705_charger.c
+@@ -487,9 +487,6 @@ static void max77705_charger_initialize(struct max77705_charger_data *chg)
+ 	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_00,
+ 				MAX77705_WDTEN_MASK, 0);
+ 
+-	/* Active Discharge Enable */
+-	regmap_update_bits(regmap, MAX77705_PMIC_REG_MAINCTRL1, 1, 1);
+-
+ 	/* VBYPSET=5.0V */
+ 	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_11, MAX77705_VBYPSET_MASK, 0);
+ 
 
-Best regards,
 -- 
-Dzmitry Sankouski <dsankouski@gmail.com>
+2.39.5
 
 
