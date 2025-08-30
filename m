@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-33459-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33460-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C9C5B3C99D
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 11:06:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1B99B3C9A3
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 11:08:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA2FD1C23CAE
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:07:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 417F27B5384
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9DA2566F7;
-	Sat, 30 Aug 2025 09:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18499256C61;
+	Sat, 30 Aug 2025 09:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhbiGsvC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnaqmkCz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD66253F2A;
-	Sat, 30 Aug 2025 09:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA132BA4A;
+	Sat, 30 Aug 2025 09:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756544814; cv=none; b=q4x1Lw5QQ0WlKcgDduM0KCzuwNloRPwoDhdAZPJTNnoohF8m71PwB5NR8thQMkJZfoqNLyruq242u9W9YpmcvH5GOj+tl04An+0Ku+4NAotXUPlyEvZAj9H1CWn92JhmUgc3YHLPHiJAJ/WijnCUNSSDxGC5cU7GsAGvYYOIpDU=
+	t=1756544888; cv=none; b=X5T0bgc+4efQfJeuLYQeoyBDcLC1U0U+cyJqn8SXIL2TZdJbClaSqvMJrCM2JJDs8L5aICC9Cq+wdjauBxz23DQFLOghk/AVSphYB9YmUQxzTvAUMfkVTcXWGh+DvSRKd/8uXdOJhyNT7JsnODeSnSpPP/G8oEoNg2yZFMMY4oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756544814; c=relaxed/simple;
-	bh=mpWZMBrKYpqukOiHgjuGvad1OfHPQQN9cvi3zmQkyuE=;
+	s=arc-20240116; t=1756544888; c=relaxed/simple;
+	bh=27PN1sfIWBxKnrB+V8uXnT6HNOKJLQY9Xodlg62IbR4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NLHBUuxIpZrmm6Fr55ISXZBdkvikOnDmOBzN0TNDtzzLDLDRloOUfIJQXRnNR8Q+5l+YWYNGHI1H/GJ0XxcKe9TihCzsrNEiMz9B9+nEr0RdIEEVMCDSBg7TKpnWk92qbcEKtLpjmMCJtHRRSyVBu50baNd9G+5v45Fp3RCzaPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhbiGsvC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4459C4CEEB;
-	Sat, 30 Aug 2025 09:06:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U+y3djK8f/MQgNmfdFr+9u9ReuLuax6GNOqzsZQIHgIZ7CFuIaMYkN6pAgxJLvCUffbv2l74vnies5FJ8Sq35McbD3RahbSB+DUnL4zVX4/dDL9AnKSYaEF96HiKktJ6/it2ZKkpRnKifpnmEt4/dpGnzb4ZuuqBg5ml/pO3+Bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnaqmkCz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A92C4CEEB;
+	Sat, 30 Aug 2025 09:08:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756544814;
-	bh=mpWZMBrKYpqukOiHgjuGvad1OfHPQQN9cvi3zmQkyuE=;
+	s=k20201202; t=1756544887;
+	bh=27PN1sfIWBxKnrB+V8uXnT6HNOKJLQY9Xodlg62IbR4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BhbiGsvCYk30HFN3baBWG0Rf/dD78i+pnexb6GfhtIrmb4NODMXRyfvGtgILT03ND
-	 uM0rqUvS6yqPPGlHZTGqGn40aCKDrOy5UI2EGRsmlncrz5mO4FailR656uEeavzDn2
-	 pUUu7t8AR08/uUczyjrU+fQeyx3m99XCrDs0Sg9P5qtFETLahqJxxMHgKHn/Sy41B+
-	 zvnY8v8XW7xTQCZh1nGG84XSVX0pvB73V3YnHgtOrDonAzwqLG9vMH7qYchfotiueC
-	 0G5WJRzGE54tnS4qcyvjKiDwbQIz02EPR39gf6rLj6DkqvGebJ3/RDBM9L3lRk3cQC
-	 G6Kp48/oo5x7w==
-Message-ID: <f6acdd01-8847-4282-b375-f8e564be81d2@kernel.org>
-Date: Sat, 30 Aug 2025 11:06:49 +0200
+	b=nnaqmkCzKPmrCdXaUrhuw7f7bZ4Jmc7ppApy0f6hZ+rbMsTGmdHo2ODTCxEEMCVuG
+	 1PPRV29acvR2qoqEPpPa4Ax2aht866VSfujm7Gb1DKHGNy8UVHhpHts0J+w0Fa/t2j
+	 SG9LZTvdGWa4jOp+Y0+iX7eGn0xvuOuGsIwGZYdE0OlZW230i7mGlePb6LlOmIPjCQ
+	 hfaCGErRX11VypQPykDjuMvruSkP+zTTpWofcxpE7CEfVC/N2GjQXRT6g7bzK/4tDy
+	 YSbESYOPu0Uuov/dnSyiLDlqrQWe+AQ69OshxUxOtZ7kzf9O8yCogq3a5O/InEokpN
+	 /rZMEWDUpyjdQ==
+Message-ID: <e573cfc8-be9c-482c-9b06-4eedbb92d520@kernel.org>
+Date: Sat, 30 Aug 2025 11:08:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: thermal: samsung: Add tmu-name and
- sensor-index-ranges properties
+Subject: Re: [PATCH 3/3] arm64: dts: exynosautov920: Add tmu hardware binding
 To: Shin Son <shin.son@samsung.com>,
  Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
  "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -62,8 +61,8 @@ Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
 References: <20250825064929.188101-1-shin.son@samsung.com>
- <CGME20250825064933epcas2p33e2b4566b5911fef8d7127900fc10002@epcas2p3.samsung.com>
- <20250825064929.188101-2-shin.son@samsung.com>
+ <CGME20250825064933epcas2p40a7c491366097f90add675bc36822ef9@epcas2p4.samsung.com>
+ <20250825064929.188101-4-shin.son@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,94 +108,161 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250825064929.188101-2-shin.son@samsung.com>
+In-Reply-To: <20250825064929.188101-4-shin.son@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 25/08/2025 08:49, Shin Son wrote:
-> The exynosautov920 TMU requires per-sensor interrupt enablement
-> for its critical trip points.
-> Add two new DT properties to the Samsung thermal bindings
-> to support this requirement:
+> Create a new exynosautov920-tmu.dtsi describing new TMU hardware
+> and include it from exynosautov920.dtsi.
 > 
-> - **tmu-name**: an explicit identifier for each TMU,
-> 		used to skip specific sensors
-> (e.g., sensor 5 is temporarily disabled on the TMU_SUB1 block).
+> The exynosautov920-tmu node uses the misc clock as its source
+> and exposes two new DT properties:
 > 
-> - **sensor-index-ranges**: defines valid sensor index ranges
-> 			   for the driver’s bitmap in private data,
-> 			   enabling per-sensor interrupt setup and data access.
+> - tmu-name: identifies the TMU variant for sensor skipping
+> - sensor-index-ranges: defines valid sensor index ranges for the bitmap
+> 
+> This TMU binding defines six thermal zones with a critical trip point
+> at 125 degrees:
+> 
+> tmu_top : cpucl0-left, cpucl1
+> tmu_sub0: cpucl0-right, cpucl2
+> tmu_sub1: g3d, npu
 > 
 > Signed-off-by: Shin Son <shin.son@samsung.com>
 > ---
->  .../thermal/samsung,exynos-thermal.yaml       | 23 ++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
+>  .../boot/dts/exynos/exynosautov920-tmu.dtsi   | 92 +++++++++++++++++++
+>  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 34 +++++++
+>  2 files changed, 126 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-> index 29a08b0729ee..420fb7a944e3 100644
-> --- a/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-> @@ -8,6 +8,7 @@ title: Samsung Exynos SoC Thermal Management Unit (TMU)
->  
->  maintainers:
->    - Krzysztof Kozlowski <krzk@kernel.org>
-> +  - Shin Son <shin.son@samsung.com>
-
-This needs also explanation in commit msg.
-
->  
->  description: |
->    For multi-instance tmu each instance should have an alias correctly numbered
-> @@ -27,6 +28,7 @@ properties:
->        - samsung,exynos5420-tmu-ext-triminfo
->        - samsung,exynos5433-tmu
->        - samsung,exynos7-tmu
-> +      - samsung,exynosautov920-tmu
->  
->    clocks:
->      minItems: 1
-> @@ -62,11 +64,29 @@ properties:
->      minItems: 1
->  
->    '#thermal-sensor-cells':
-> -    const: 0
-> +    enum:
-> +      - 0
-> +      - 1
->  
->    vtmu-supply:
->      description: The regulator node supplying voltage to TMU.
->  
-> +  tmu-name:
-
-Generic property? Where is it defined.
-
-> +    description: The TMU hardware name.
-
-Anyway, you do not get instance IDs. I talked about this at OSSE25.
-
-
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    minItems: 1
-> +    maxItems: 1
+> diff --git a/arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
+> new file mode 100644
+> index 000000000000..fa88e9bcdfec
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
+> @@ -0,0 +1,92 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Samsung's ExynosAuto920 TMU configurations device tree source
+> + *
+> + * Copyright (c) 2020 Samsung Electronics Co., Ltd.
+> + *
+> + * Samsung's ExynosAuto920 SoC TMU(Thermal Managemenut Unit) are listed as
+> + * device tree nodes in this file.
+> + */
 > +
-> +  sensor-index-ranges:
-
-Where is the property defined? You keep adding generic properties.
-
-> +    description: |
-> +      Valid Sensor index ranges for the TMU hardware.
-
-I don't understand what is this for.
-
+> +/ {
+> +	thermal-zones {
+> +		cpucl0left-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tmuctrl_top 0>;
 > +
-> +      Note:: On the ExynosautoV920 variant, the fifth sensor in the TMU SUB1 is disabled,
-> +      so the driver skips it when matching by tmu-name.
+> +			trips {
+> +				cpucl0_0_critical: cpucl0-0-critical {
+> +					temperature = <125000>;	/* millicelsius */
+> +					hysteresis = <0>;	/* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
 
-That's not name, so why are you referring to tmu-name? And driver has
-nothing to do here. Describe hardware.
+Missing blank line.
 
-None of this is really correct. :/
+> +		cpucl0right-thermal {
+
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check W=1` (see
+Documentation/devicetree/bindings/writing-schema.rst or
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+for instructions).
+Maybe you need to update your dtschema and yamllint. Don't rely on
+distro packages for dtschema and be sure you are using the latest
+released dtschema.
+
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tmuctrl_sub0 0>;
+> +
+> +			trips {
+> +				cpucl0_1_critical: cpucl0-1-critical {
+> +					temperature = <125000>;	/* millicelsius */
+> +					hysteresis = <0>;	/* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +		cpucl1-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tmuctrl_top 1>;
+> +
+> +			trips {
+> +				cpucl1_critical: cpucl1-critical {
+> +					temperature = <125000>;	/* millicelsius */
+> +					hysteresis = <0>;	/* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +		cpucl2-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tmuctrl_sub0 1>;
+> +
+> +			trips {
+> +				cpucl2_critical: cpucl2-critical {
+> +					temperature = <125000>;	/* millicelsius */
+> +					hysteresis = <0>;	/* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +		g3d-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tmuctrl_sub1 0>;
+> +
+> +			trips {
+> +				g3d_critical: g3d-critical {
+> +					temperature = <125000>; /* millicelsius */
+> +					hysteresis = <0>; /* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +		npu-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tmuctrl_sub1 1>;
+> +
+> +			trips {
+> +				npu_critical: npu-critical {
+> +					temperature = <125000>; /* millicelsius */
+> +					hysteresis = <0>; /* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> index 0fdf2062930a..a4ff941f8e43 100644
+> --- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> @@ -330,6 +330,39 @@ watchdog_cl1: watchdog@10070000 {
+>  			samsung,cluster-index = <1>;
+>  		};
+>  
+> +		tmuctrl_top: tmutop-thermal@100a0000 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+If you cannot find a name matching your device, please check in kernel
+sources for similar cases or you can grow the spec (via pull request to
+DT spec repo).
 
 
 Best regards,
