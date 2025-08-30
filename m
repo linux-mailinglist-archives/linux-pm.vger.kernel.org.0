@@ -1,232 +1,230 @@
-Return-Path: <linux-pm+bounces-33456-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33457-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6233B3C855
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 07:37:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E88B6B3C8A4
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 09:16:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8FA41C8046D
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 05:37:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5018583FE9
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Aug 2025 07:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7CF2D24BC;
-	Sat, 30 Aug 2025 05:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF4D2773F7;
+	Sat, 30 Aug 2025 07:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K6fM86XA"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="bGPRiKj+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A28P82GL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a8-smtp.messagingengine.com (flow-a8-smtp.messagingengine.com [103.168.172.143])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154C82C21D6
-	for <linux-pm@vger.kernel.org>; Sat, 30 Aug 2025 05:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403365BAF0;
+	Sat, 30 Aug 2025 07:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756532080; cv=none; b=FzpwpLWNbyrKZFTMIC2TG1YtukD4flFAVuAC1Ry+p3qKwSPcA5x3Vm7QNm9jvHH3Txa/9QdNLf92OwOA3chbcuRiFAeUS63iixqLtaPy7ecceKbpOQO7K2AAcMPBIJS8FRsJ97uD5gIncFouT9g/5KOSK5h3BVdx1qJ+nawJNUY=
+	t=1756538189; cv=none; b=BnZXf3FyY14Q14ztdY7cKgzPh+uUy8+6jbStQ6iIUOGo/WoJtjvw6qjODgYl2iy1kJQDqmoCSipMwQU4N4YqS6TW6X77mSC6dcBitk6khk6Ee0eU9UktyHv1v23z+M2ktP8MkkStNpxJrQRhRaSCVsdvacobpeWnRyWUdXev0Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756532080; c=relaxed/simple;
-	bh=tE7h+6Ck152b0ta6W45P08/NelqWtKQJ49igH6GfCXQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PHEnwQD6vdD4Jd3Q3osNJA9XwSkdJymoQJrFDifn/ggn/sd2DfVZo60hybntdrvYbWtac9LrCoGCK9c6SmsWV+W1jPt4t/pi/Bzb867UIkb/zK3uVdHFeM0466c0PjDlnOObuaSzmBwZI+TCCqY1OGO+Gd7QFa09kDOLe+i8n0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K6fM86XA; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-61d2ab4bcbeso115559a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Aug 2025 22:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756532075; x=1757136875; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cJWspDoxo9x/XP1u8QC/55JEIhUnUfdlnp+4goH1sDY=;
-        b=K6fM86XADRgPDnB7e+oGgTbZeb2ocq9QImAc4W5TqDl2Fiq7098W+W+EGvU1g1ZDXx
-         2J8ACBp/4E/anE4Rj9orbHGs2jVAMLqrmTqI0L764HJbVfGZvbRP3PqnD8UXo4OPkXfs
-         E5W4sWbb9XmbZ6B1GLjtfwWJ0A6wpOGRHIlkvhLCO5aa8DU81nJH/8ykJX8ACJb/LoSk
-         cvuFNLaqQURr1pJWoqMPwP/1oLCTJ37geIu+bj9fM3drBEvTYE4mlBT8lMEFk/7QZdkE
-         jLn4gu0sWmyEvBz02L1/9+i08+3s8O+GJn1On2/EzWlQeUGwU7Zq6yvFgnq4bqkp1iRn
-         W+Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756532075; x=1757136875;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cJWspDoxo9x/XP1u8QC/55JEIhUnUfdlnp+4goH1sDY=;
-        b=SVhwaNzkh7sLVrAYREKZdxmd9jcXgyATgnTMRuQm64hHASCYGDhGUTo67wMFGfhRBC
-         0W7WnDKDvgOBQ/bz7BsmbYQTJmtOcVEr43dzMCP+4+KYxQfxm6hZgHN8Ovckk7LeKyto
-         Ln6fXmatz2yb3yrvQYLwpP1G//JNZH2OiT+xPnJmS0xKIuaqE3K8fzxTYsIke3OWAkLb
-         2tv8S03FXrju3Z8cVZI05PtAgXEzxVwFhR1Xi/K54b7i7gYeNiqkg697RcboNkB3Sd3l
-         LedTj6xQdEBJDn3VNrPuamVnW5hs3RZhCFR7QiJ2n/1S60VRFQYtKLqJQBmvx0fKubtL
-         huTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHjBAQjZyDD9Lnk5XuvTUPWxW1JE0L4+xVw0olSj/9FQMNKPzZ8B+KymqXUh+vruIxcU74vTQOAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0wwadXo7PUkYSiFGzGLw+VKIoTSIcPE7v1A114pW4HVINJIB8
-	g9zOHsaEmBFqFez7Zg3VQYHFfmIhTRzFlTd4+72qHbw5NLbmMJn2gi0g7u4QBmzJiIwicdXYm+q
-	rYdtwwA==
-X-Google-Smtp-Source: AGHT+IHhCZBEr1wBakiPy5j+PXcVghhZSHJqFZDur7EAy9lfhOLMwAHt/cfjF1VDIjnk0M9/jmOMuZbLh+Q=
-X-Received: from edf8.prod.google.com ([2002:a05:6402:21c8:b0:612:9323:1cb1])
- (user=srosek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:34c1:b0:61c:d457:e559
- with SMTP id 4fb4d7f45d1cf-61d26c3fb81mr936353a12.23.1756532075255; Fri, 29
- Aug 2025 22:34:35 -0700 (PDT)
-Date: Sat, 30 Aug 2025 05:34:04 +0000
-In-Reply-To: <20250830053404.763995-1-srosek@google.com>
+	s=arc-20240116; t=1756538189; c=relaxed/simple;
+	bh=Xgq//bPMcuLhTUcoKQVvIGaVUwN6Y8zHe3tfndbRoBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=APLNP1pWpFXMSnM07ztj/na3FmyYYxNzNXea5BBUTac2XBmSxO7Vu/CDXiE4g9yjwqEMZCIcEEc/NmoDbdy3yWmTPnGr6ljnrTZlpve87ZHYFEYVvFd0NLDftigScHSQICZIujS5w2outiM1ZJezKY2WDJmMuTrn75UX5QF7OFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=bGPRiKj+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A28P82GL; arc=none smtp.client-ip=103.168.172.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id 50B9C13803E1;
+	Sat, 30 Aug 2025 03:16:26 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Sat, 30 Aug 2025 03:16:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1756538186; x=1756545386; bh=rH5wSPSqP8
+	tNxz48V8nyDtHP/PfH/+QarsY2hPsLNiY=; b=bGPRiKj+zJAsCUQyrJp0/StHT3
+	Z0CEFhLQjV5xm7Yvbyg5RazYCfPbyTHWSm2ZpCegTbXOy6qhuD/CjdcFxuViszyu
+	G3+fcGeOv7HdCyn7AzxAqSFmzLO2erX/Vdp5eEeZaLTZRFRspFMiQ+busfvUv9xK
+	P1Qxg+vqomILq0dDixCVgYHw5VQEBClB9I6+/uTShTR//VYQFOWuKhVaLsvC6l/b
+	E1N/tfeehqrMQEp4i3wWoOJxGypUi7brZoL9qGPmQKmmMa93tVd1AY5Gro+BAjS3
+	WpUTogmTRpIeiSKPcsYZ3mE0og2OG5NvvD5b/WVFxeoMPFsjnwskajCq3uyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1756538186; x=1756545386; bh=rH5wSPSqP8tNxz48V8nyDtHP/PfH/+QarsY
+	2hPsLNiY=; b=A28P82GLhQ+gU+qNvkSXEMIHHGhWHgGPB6W2BqfuM8nVdICuM2A
+	NcqEdXjnRC5GOtPhl8vytw2JOVW6a632Lth7tFVqpN0jcVrs5FIWi0nJ5dbfpPbz
+	93UWghe/7/x4NXeA4FN4wHq2l0R/6xrVdl4M6x+X4EqZcsuk7fUrrkX7z2aqNGXe
+	GRh9v13JNwBHa0GWMNd0IJAZ/VLuVZRHMzmIP6KgEOrMibcUtTOr/XOmSC3N9SR2
+	+4h7cZHX5hYQElJlZ9AcSZWpik6DY6Yif1Q+6msGHxqUXYJZ/hDnKBXbWh3Xvalq
+	Rf1Hz1zKH3Te14Zyu+F/tIsbTPiaescl/sQ==
+X-ME-Sender: <xms:R6WyaEoVPmMMjSTFVHUliXOdv-32qkUK5pBFUekwj0BEfXYXKXHMdg>
+    <xme:R6WyaOxfi2Sr_p908cLZZq0WtOWmPygKs_jKndyVj8rKDpXX8ikKi1OeywN_Gtza-
+    FiH-hDxXuUZTl36M64>
+X-ME-Received: <xmr:R6WyaEyfRmAxZWCNsVqvVaXCqEN1juICIShBdAflOgf0gNEE_E5nocVl8uCdcH2Ux_v_VJ8rmIGy5LrSoEu2QIiMu_-QOznOlpk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeehjeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
+    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
+    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
+    drnhgvthdpnhgspghrtghpthhtohepieefpdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhvvghnsehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopegrlhihshhsrgesrhhoshgvnhiifigvihhgrdhiohdp
+    rhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtthhopehkrhiikhdoug
+    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepmhgrrhgtrghnsehmrghrtggrnhdrshhtpdhrtghpthhtoh
+    eprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhu
+    mhgrrheslhhinhgrrhhordhorhhg
+X-ME-Proxy: <xmx:R6WyaOKeRrX_rKVtlS-_HS0UcyN9w8mWfjCwNfiQ70_pAa29FRblZA>
+    <xmx:R6WyaBhJsS4AgbvUvcN_o6uHp3h_R8NH2iRFaJDZJdGCW4iQPaQfCw>
+    <xmx:R6WyaMkzXbMbopG8scAkzx_CFhYUQNKGJXW5k3t17XIk3bIEeUpTWQ>
+    <xmx:R6WyaOgrns0dbGzbmla7f4E8nyVhRwKAcFG-qkHg9ORUTbTcZhmzrg>
+    <xmx:SqWyaJIOEg53pkAeV7MbeJTeynbZUjxSAdTQb-JDXFYqQHxsi0m95a1W>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 30 Aug 2025 03:16:22 -0400 (EDT)
+Date: Sat, 30 Aug 2025 09:16:20 +0200
+From: Janne Grunau <j@jannau.net>
+To: Rob Herring <robh@kernel.org>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,	Hector Martin <marcan@marcan.st>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,	Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>,	Robin Murphy <robin.murphy@arm.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Kettenis <kettenis@openbsd.org>,	Andi Shyti <andi.shyti@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sasha Finkelstein <fnkl.kernel@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,	Keith Busch <kbusch@kernel.org>,
+ Jens Axboe <axboe@kernel.dk>,	Christoph Hellwig <hch@lst.de>,
+ Sagi Grimberg <sagi@grimberg.me>,	Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>,	asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org,	devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,	linux-pm@vger.kernel.org,
+ iommu@lists.linux.dev,	linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org,	dri-devel@lists.freedesktop.org,
+ linux-bluetooth@vger.kernel.org,	linux-wireless@vger.kernel.org,
+ linux-pwm@vger.kernel.org,	linux-watchdog@vger.kernel.org,
+ linux-clk@vger.kernel.org,	dmaengine@vger.kernel.org,
+ linux-sound@vger.kernel.org,	linux-spi@vger.kernel.org,
+ linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
+ Pro/Max/Ultra devices
+Message-ID: <20250830071620.GD204299@robin.jannau.net>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+ <20250829195119.GA1206685-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250830053404.763995-1-srosek@google.com>
-X-Mailer: git-send-email 2.51.0.318.gd7df087d1a-goog
-Message-ID: <20250830053404.763995-13-srosek@google.com>
-Subject: [PATCH v1 12/12] ACPI: DPTF: Move INT340X enumeration to modules
-From: Slawomir Rosek <srosek@google.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
-	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
-	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Slawomir Rosek <srosek@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250829195119.GA1206685-robh@kernel.org>
 
-Move enumeration of INT340X ACPI device objects on the platform bus
-from DPTF core to thermal drivers using ACPI platform core methods
+On Fri, Aug 29, 2025 at 02:51:19PM -0500, Rob Herring wrote:
+> On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
+> > This series adds device trees for Apple's M2 Pro, Max and Ultra based
+> > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+> > follow design of the t600x family so copy the structure of SoC *.dtsi
+> > files.
+> > 
+> > t6020 is a cut-down version of t6021, so the former just includes the
+> > latter and disables the missing bits.
+> > 
+> > t6022 is two connected t6021 dies. The implementation seems to use
+> > t6021 and disables blocks based on whether it is useful to carry
+> > multiple instances. The disabled blocks are mostly on the second die.
+> > MMIO addresses on the second die have a constant offset. The interrupt
+> > controller is multi-die aware. This setup can be represented in the
+> > device tree with two top level "soc" nodes. The MMIO offset is applied
+> > via "ranges" and devices are included with preprocessor macros to make
+> > the node labels unique and to specify the die number for the interrupt
+> > definition.
+> > 
+> > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
+> > counterparts. The existing device templates are SoC agnostic so the new
+> > devices can reuse them and include their t602{0,1,2}.dtsi file. The
+> > minor differences in pinctrl and gpio numbers can be easily adjusted.
+> > 
+> > With the t602x SoC family Apple introduced two new devices:
+> > 
+> > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
+> > missing SDHCI card reader and two front USB3.1 type-c ports and their
+> > internal USB hub can be easily deleted.
+> > 
+> > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
+> > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
+> > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
+> > calls the PCIe controller "apcie-ge" in their device tree. The
+> > implementation seems to be mostly compatible with the base t6020 PCIe
+> > controller. The main difference is that there is only a single port with
+> > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
+> > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
+> > and PCIe slots connect too.
+> > 
+> > This series does not include PCIe support for the Mac Pro for two
+> > reasons:
+> > - the linux switchtec driver fails to probe and the downstream PCIe
+> >   connections come up as PCIe Gen1
+> > - some of the internal devices require PERST# and power control to come
+> >   up. Since the device are connected via the PCIe switch the PCIe
+> >   controller can not do this. The PCI slot pwrctrl can be utilized for
+> >   power control but misses integration with PERST# as proposed in [1].
+> > 
+> > This series depends on "[PATCH v2 0/5] Apple device tree sync from
+> > downstream kernel" [2] due to the reuse of the t600x device templates
+> > (patch dependencies and DT compilation) and 4 page table level support
+> > in apple-dart and io-pgtable-dart [3] since the dart instances report
+> > 42-bit IAS (IOMMU device attach fails without the series).
+> > 
+> > After discussion with the devicetree maintainers we agreed to not extend
+> > lists with the generic compatibles anymore [1]. Instead either the first
+> > compatible SoC or t8103 is used as fallback compatible supported by the
+> > drivers. t8103 is used as default since most drivers and bindings were
+> > initially written for M1 based devices.
+> 
+> An issue here is any OS without the compatibles added to the drivers 
+> won't work. Does that matter here? Soon as you need any new drivers or 
+> significant driver changes it won't. The compatible additions could be 
+> backported to stable. They aren't really any different than new PCI IDs 
+> which get backported.
 
-Signed-off-by: Slawomir Rosek <srosek@google.com>
----
- drivers/acpi/dptf/dptf_pch_fivr.c                       | 2 +-
- drivers/acpi/dptf/dptf_power.c                          | 2 +-
- drivers/acpi/dptf/int340x_thermal.c                     | 7 +++++--
- drivers/acpi/fan_core.c                                 | 2 +-
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3401_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3402_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3406_thermal.c | 2 +-
- 9 files changed, 13 insertions(+), 10 deletions(-)
+I don't think backporting the driver compatible additions to stable
+linux is very useful. It is only relevant for t602x devices and the only
+way to interact with them is the serial console. The T602x PCIe support
+added in v6.16 requires dart changes (the posted 4th level io page table
+support) to be useful. After that PCIe ethernet works so there is a
+practical way to interact with t602x systems. So there are probably zero
+user of upstream linux on those devices 
+I'm more concerned about other projects already supporting t602x
+devices. At least u-boot and OpenBSD will be affected by this. As short
+term solution m1n1 will add the generic compatibles [1] temporarily.
+I think keeping this roughly for a year should allow to add the
+compatibles and wait for "fixed" releases of those projects.
+I'll send fixes for u-boot once the binding changes are reviewed.
 
-diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_pch_fivr.c
-index cb81636a5d63..f3cd52c89e8d 100644
---- a/drivers/acpi/dptf/dptf_pch_fivr.c
-+++ b/drivers/acpi/dptf/dptf_pch_fivr.c
-@@ -162,7 +162,7 @@ static struct platform_driver pch_fivr_driver = {
- 	},
- };
- 
--module_platform_driver(pch_fivr_driver);
-+module_acpi_platform_driver(pch_fivr_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_power.c
-index d7c59f016083..b85e876b2e85 100644
---- a/drivers/acpi/dptf/dptf_power.c
-+++ b/drivers/acpi/dptf/dptf_power.c
-@@ -239,7 +239,7 @@ static struct platform_driver dptf_power_driver = {
- 	},
- };
- 
--module_platform_driver(dptf_power_driver);
-+module_acpi_platform_driver(dptf_power_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int340x_thermal.c
-index 7d1308b1f513..b2be3a8df9ac 100644
---- a/drivers/acpi/dptf/int340x_thermal.c
-+++ b/drivers/acpi/dptf/int340x_thermal.c
-@@ -27,8 +27,11 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- static int int340x_thermal_handler_attach(struct acpi_device *adev,
- 					const struct acpi_device_id *id)
- {
--	if (IS_ENABLED(CONFIG_INT340X_THERMAL))
--		acpi_create_platform_device(adev, NULL);
-+	/*
-+	 * Do not attach INT340X devices until platform drivers are loaded.
-+	 * Enumeration of INT340X ACPI device objects on the platform bus
-+	 * should be done by thermal drivers.
-+	 */
- 	return 1;
- }
- 
-diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-index 095502086b41..7df3caa59b73 100644
---- a/drivers/acpi/fan_core.c
-+++ b/drivers/acpi/fan_core.c
-@@ -473,7 +473,7 @@ static struct platform_driver acpi_fan_driver = {
- 	},
- };
- 
--module_platform_driver(acpi_fan_driver);
-+module_acpi_platform_driver(acpi_fan_driver);
- 
- MODULE_AUTHOR("Paul Diefenbaugh");
- MODULE_DESCRIPTION("ACPI Fan Driver");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 6311125c3ebd..0005961328fc 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -699,7 +699,7 @@ static struct platform_driver int3400_thermal_driver = {
- 		   },
- };
- 
--module_platform_driver(int3400_thermal_driver);
-+module_acpi_platform_driver(int3400_thermal_driver);
- 
- MODULE_DESCRIPTION("INT3400 Thermal driver");
- MODULE_AUTHOR("Zhang Rui <rui.zhang@intel.com>");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-index e0603f218d2e..d496f8b171e0 100644
---- a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-@@ -69,7 +69,7 @@ static struct platform_driver int3401_driver = {
- 	},
- };
- 
--module_platform_driver(int3401_driver);
-+module_acpi_platform_driver(int3401_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3402_thermal.c b/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-index 213d4535f2c1..d06c06fadce5 100644
---- a/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-@@ -100,7 +100,7 @@ static struct platform_driver int3402_thermal_driver = {
- 		   },
- };
- 
--module_platform_driver(int3402_thermal_driver);
-+module_acpi_platform_driver(int3402_thermal_driver);
- 
- MODULE_DESCRIPTION("INT3402 Thermal driver");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index d246c69d4872..33735515b47d 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -284,7 +284,7 @@ static struct platform_driver int3403_driver = {
- 	},
- };
- 
--module_platform_driver(int3403_driver);
-+module_acpi_platform_driver(int3403_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3406_thermal.c b/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-index d05ca8bc4061..03cc026cdffb 100644
---- a/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-@@ -203,7 +203,7 @@ static struct platform_driver int3406_thermal_driver = {
- 		   },
- };
- 
--module_platform_driver(int3406_thermal_driver);
-+module_acpi_platform_driver(int3406_thermal_driver);
- 
- MODULE_DESCRIPTION("INT3406 Thermal driver");
- MODULE_LICENSE("GPL v2");
--- 
-2.51.0.318.gd7df087d1a-goog
-
+Janne
 
