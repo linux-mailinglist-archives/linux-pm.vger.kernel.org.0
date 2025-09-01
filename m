@@ -1,128 +1,92 @@
-Return-Path: <linux-pm+bounces-33574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A1AFB3EADB
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 17:37:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B46E7B3EAE6
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 17:37:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6706C1B25728
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 15:30:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 386841B262E1
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 15:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E85335337F;
-	Mon,  1 Sep 2025 15:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHSscyxU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0BA338F5F;
+	Mon,  1 Sep 2025 15:18:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BC62FB625;
-	Mon,  1 Sep 2025 15:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFCE02FE04D;
+	Mon,  1 Sep 2025 15:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756739838; cv=none; b=A/qhr+VQVBEhhcc9FTXrma/nuKUt/SsC8Oa/2m/DKGxkcn+TQBIIbmfTInQ33JWQ0wzarNn9H777EXcRf0YGV0Q6dPwu18chEv6e6IVQwuliQGwP77vQgmDvN5OXHHhKkbL9CIkdg5UgRMTHoS4CRglEYE6oos5mUgXpg4OMx2w=
+	t=1756739905; cv=none; b=b5rEM0KE7GqJe5pL3zgE49g/7kECphJGrpzC0wl72KdnyBKc6EH9teZr7jKp1Udns0NO9PPzgIBCwZ7yC8N0C1JHPK9zXbnKLw2VH4avLCJ4XwAzS+Q0PlyDTdjIsKRJ4+C2sgVw6sNHwFcvJW9/oFHLrylWtQ/vpqM7t6b2P1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756739838; c=relaxed/simple;
-	bh=5weQGGRb22PrjCyP/g4zxlVoFtpKwJSJ+1zX1sG+Ceo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rMdK436whRxs/eRlRQXd4ZbALenInxJWtcorA+TeM/SgsNUuMaHkQkJFcID8EBLNSR4Y9J2QAL/Li4/kwa0vxfRvg67c6FQk+BVpr/jVK9fueaCCP1OnojL/DlWSrBY/yxdPsZi0tYbMYrHQJQHvifnjVAUS9/vxtDMlqfAwAUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHSscyxU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DE0C4CEF4;
-	Mon,  1 Sep 2025 15:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756739837;
-	bh=5weQGGRb22PrjCyP/g4zxlVoFtpKwJSJ+1zX1sG+Ceo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fHSscyxUBqa2PrUEAJYH4gjbe394x6UINLLLJtU3No/ch07okasdYpPcLQVZ4fQdz
-	 QQVpadnQL9+K/Bpr7PRPb1lji/ueyUJo0Nz3wjlJnIDs6gj2K0bIoBRm5dUqa4DnzM
-	 DY2h8b80jorHneNn39SEcsZRb6GHqyX/EXJ0F/BwtNCV5dmP3SHyX9yn+TVbM49IPg
-	 gJX0lOPTuzPnXXKhNhXoblUzf/66Yb6hsnXIc36xlN9G/S8hlUTrrtuZhlzHc+/YLr
-	 6Fj48VcKspQFdxqqBYoze3u/d/wGFeYtGEBYBk9/cEEhhvcPXXMosbjDG8tSDIKFer
-	 oYp4KruBpNFcA==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-315a7547f26so1830791fac.0;
-        Mon, 01 Sep 2025 08:17:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXIHZ+dieROt+4aTrx1PcQHg7nlIYAk95nHDLmbgbllnv2cmG6mrjfHDF7dMKOFYn2e9VPb5z8RJLo@vger.kernel.org, AJvYcCVQNIvOWLC6VJy/BXPyCiYqIOIff9qvM1NtaWw/Fp/9VZ9UctTh8eZYMr7EXvWZj7EgyB+HphMNcxUsQkop@vger.kernel.org, AJvYcCVyd/p9aEv8bXqzH8DDjtnOHnnDgkBLAQrnaSMATHE8m93ZEpVDiiEtF6pYxJpV40tsFWwCe+yjX1kFbA==@vger.kernel.org, AJvYcCWbLVBPEqVfF5Fvncp2sAWSNlfd2X/1xg3EqRLpUzHFRdkCtmsFaaV5bBRZH1rCTVLJkAVfp5E37H0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCFGC8VefGHUYvWSPcvdPQw8F6nwwAI5NC+dgnHQDtKRQll5Ta
-	wejVDFDIrJHv2w8YOR4qbZwUa5tqskm50f5AKdAwMEZrRK2a8Uhi1XOWSctju/uJKFAt/0aSyeM
-	2ioVdTEQCuKCAbQvIwuGmM6xAYMTCaGA=
-X-Google-Smtp-Source: AGHT+IEqozTSDrtoR1W72zJmy9Z1LH1mlLFPdwzpw5V1Yv8IGBwtb8EBAZercDEFewoqAI3YKrAtdKI2Ii3KK+l5mg4=
-X-Received: by 2002:a05:6870:9b09:b0:30b:b123:b6c9 with SMTP id
- 586e51a60fabf-319630e13fbmr3523480fac.12.1756739836982; Mon, 01 Sep 2025
- 08:17:16 -0700 (PDT)
+	s=arc-20240116; t=1756739905; c=relaxed/simple;
+	bh=mi1jhE0hSalMzhQcxvX/AVfoKXLeTEfI2y5Rv+u9/3U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kI+Ydu7xg22MoFRqouoWAGcjmObvMKo4cIX1uVToolYgRqfoKjAjwBunNH6PP6Tj4cLX82plOT4ZzKGCUJW1DkUhu4BYGgUf615k1WEpT0xXMnVJdoUQcCcFyGXPqirtngdGSaIhjeNvKIwQ/O6k/kelj23pYsNmqEEw2GG3+eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E701B16A3;
+	Mon,  1 Sep 2025 08:18:14 -0700 (PDT)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.68])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DF833F6A8;
+	Mon,  1 Sep 2025 08:18:19 -0700 (PDT)
+Date: Mon, 1 Sep 2025 16:18:16 +0100
+From: Dave Martin <Dave.Martin@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
+	oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org,
+	james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com,
+	ahmed.genidi@arm.com, kevin.brodsky@arm.com,
+	scott@os.amperecomputing.com, mbenes@suse.cz,
+	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
+	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
+	maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	kvmarm@lists.linux.dev
+Subject: Re: [PATCH v4 0/5] initialize SCTRL2_ELx
+Message-ID: <aLW5OIgv8/bvvY9E@e133380.arm.com>
+References: <20250821172408.2101870-1-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250901085748.36795-1-zhangzihuan@kylinos.cn> <20250901085748.36795-4-zhangzihuan@kylinos.cn>
-In-Reply-To: <20250901085748.36795-4-zhangzihuan@kylinos.cn>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 1 Sep 2025 17:17:05 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
-X-Gm-Features: Ac12FXy28aQLAZnDRwhZh3hbZ0aFKhCyHW17tDgFwo0nHMN5cP-adgYEeM5GYyY
-Message-ID: <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/12] cpufreq: intel_pstate: Use scope-based cleanup helper
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, Ben Horgan <ben.horgan@arm.com>, 
-	zhenglifeng <zhenglifeng1@huawei.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Len Brown <lenb@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
-	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
-	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, imx@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250821172408.2101870-1-yeoreum.yun@arm.com>
 
-On Mon, Sep 1, 2025 at 10:58=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
-n> wrote:
->
-> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
-> annotation for policy references. This reduces the risk of reference
-> counting mistakes and aligns the code with the latest kernel style.
->
-> No functional change intended.
->
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
-> ---
->  drivers/cpufreq/intel_pstate.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index f366d35c5840..4abc1ef2d2b0 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1502,9 +1502,8 @@ static void __intel_pstate_update_max_freq(struct c=
-pufreq_policy *policy,
->
->  static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
->  {
-> -       struct cpufreq_policy *policy __free(put_cpufreq_policy);
-> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpuf=
-req_cpu_get(cpudata->cpu);
->
-> -       policy =3D cpufreq_cpu_get(cpudata->cpu);
->         if (!policy)
->                 return false;
+Hi,
 
-The structure of the code is intentional here and there's no reason to
-change it.
+On Thu, Aug 21, 2025 at 06:24:03PM +0100, Yeoreum Yun wrote:
+> This series introduces initial support for the SCTLR2_ELx registers in Linux.
+> The feature is optional starting from ARMv8.8/ARMv9.3,
+> and becomes mandatory from ARMv8.9/ARMv9.4.
+> 
+> Currently, Linux has no strict need to modify SCTLR2_ELx--
+> at least assuming that firmware initializes
+> these registers to reasonable defaults.
+> 
+> However, several upcoming architectural features will require configuring
+> control bits in these registers.
+> Notable examples include FEAT_PAuth_LR and FEAT_CPA2.
+
+This looks OK to me now, except for one or two minor issues (see
+replies to the patches).
+
+I think we will need a way of testing all the code paths before this
+should be merged, though.
+
+Have you tested all the code paths, or are there some things that have
+not been tested?
+
+
+Since this code is not useful by itself, it may make sense to delay
+merging it until we have patches for a feature that depends on SCTLR2.
+
+Cheers
+---Dave
 
