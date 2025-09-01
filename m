@@ -1,92 +1,133 @@
-Return-Path: <linux-pm+bounces-33575-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33576-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B46E7B3EAE6
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 17:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70302B3EC53
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 18:37:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 386841B262E1
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 15:31:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAE111A8832C
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 16:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0BA338F5F;
-	Mon,  1 Sep 2025 15:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF3C324B05;
+	Mon,  1 Sep 2025 16:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KP168jN4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFCE02FE04D;
-	Mon,  1 Sep 2025 15:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E8530648E;
+	Mon,  1 Sep 2025 16:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756739905; cv=none; b=b5rEM0KE7GqJe5pL3zgE49g/7kECphJGrpzC0wl72KdnyBKc6EH9teZr7jKp1Udns0NO9PPzgIBCwZ7yC8N0C1JHPK9zXbnKLw2VH4avLCJ4XwAzS+Q0PlyDTdjIsKRJ4+C2sgVw6sNHwFcvJW9/oFHLrylWtQ/vpqM7t6b2P1E=
+	t=1756744622; cv=none; b=V7NzvYTRP+hUDsqq0rqkO3msFHyICmoZOGoqGYcVs0MGt6c3s0shudXnoL9tWhTbZMtoEZl9bE3CNaJzvKq0ZgTbqd870x655LtoGBVtYSuO/6bmQXIfafjmWtj7wp2akKhczy75x/bH8VPaubOHeYwDNCjSo2l9r062a9sErHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756739905; c=relaxed/simple;
-	bh=mi1jhE0hSalMzhQcxvX/AVfoKXLeTEfI2y5Rv+u9/3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kI+Ydu7xg22MoFRqouoWAGcjmObvMKo4cIX1uVToolYgRqfoKjAjwBunNH6PP6Tj4cLX82plOT4ZzKGCUJW1DkUhu4BYGgUf615k1WEpT0xXMnVJdoUQcCcFyGXPqirtngdGSaIhjeNvKIwQ/O6k/kelj23pYsNmqEEw2GG3+eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E701B16A3;
-	Mon,  1 Sep 2025 08:18:14 -0700 (PDT)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.68])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DF833F6A8;
-	Mon,  1 Sep 2025 08:18:19 -0700 (PDT)
-Date: Mon, 1 Sep 2025 16:18:16 +0100
-From: Dave Martin <Dave.Martin@arm.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
-	oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org,
-	james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com,
-	ahmed.genidi@arm.com, kevin.brodsky@arm.com,
-	scott@os.amperecomputing.com, mbenes@suse.cz,
-	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
-	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
-	maz@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 0/5] initialize SCTRL2_ELx
-Message-ID: <aLW5OIgv8/bvvY9E@e133380.arm.com>
-References: <20250821172408.2101870-1-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1756744622; c=relaxed/simple;
+	bh=i8e2hhakaEQf5OLmJ6uWXZT1fOlmqpZkOTJjZr8G0Tk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WqheXwSZldQGWEodMqHVARWenS8frRkpeCLSmu11/vMFPjFgJDN8wiJpOT5vJ+Mok6FAZjMGSdc94dtbpjScabx7+mkSVZAE5jb7WSwzgqIDorv1cqBpXOzzM3omUefNMQKtmigblUnfLc6ryY4/SBqVHa66e1ycz2YhrV+bVe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KP168jN4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EED3C4AF09;
+	Mon,  1 Sep 2025 16:37:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756744622;
+	bh=i8e2hhakaEQf5OLmJ6uWXZT1fOlmqpZkOTJjZr8G0Tk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KP168jN4rZJEJPbgaO5PDKuNsWaa9NlvUXkTLz+SnzCBy24KyZwmnWwG6ZcwWUMIx
+	 gHTVLIvkMXo0hjeqCDF8bjvxMqVv72D5OXG0hRV8Si11NqKAJqYKTCkFxOoJ7CkmbU
+	 pAGPpCxATLTSRdncNKBOJKDcY6nw21viFvMFzISy3oeYwIqkfFxMFAlpK2Fiv+V1jA
+	 hP3Iu/xqWNF7MLpl8/gxAbNUDtCTep6x9GC/DwGBqHjK/VYW3yw2FqTAcgnXvZ2UwK
+	 X/4V0pr0w7vSbR63VJ3xdhAQNSh2YMgTqQqKxwjfi9z4Hu6UU9aMwDCDVeNhtNq1f6
+	 eroY+DjG9+LCQ==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-61e482e1857so211255eaf.2;
+        Mon, 01 Sep 2025 09:37:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVDOdopAfSDaDo6dEAiyUCA3xZLnj6IUA7c86Ww9z4wpYzWHLxGinGEn997zhxOXG0YG7eXxXor/Nc=@vger.kernel.org, AJvYcCWV7t4VcoouN1AdKNXuKCu0bANHAcQoLrPBjVCnSyUx1hsn6kM4Oguk4vAkpYzQoR4z/eg=@vger.kernel.org, AJvYcCXh7J4Qpbl//LZ8ajiKIHAm5CfP3Cwo7drDLMeI2VkGvQXqZ0xpwlXp7HlcewJFD2FrpqwrtKXkMiavBvEcVNoJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZIoHnaVVLqcBZZb3g+9plN6yNn0LCWnCusRHZ5FEDOCvdSEU/
+	kbwDfl+I2a3RHcNi0FwhgQIMKBS9esodHr/o1NJ04tnDLA5kZe/bIDQ1X04Q38fkIx2Q4kU/5SF
+	UcRA3ayf5owObROW2xT9d6+jOdrbq55E=
+X-Google-Smtp-Source: AGHT+IGyJisejWOtlN8sqPPQ5pt3qfI/9XoFwmKAFG+q+trpXLSUKt2IawCcQA2riQpDDzA9gbjHxT/z1934KnXfM1E=
+X-Received: by 2002:a05:6820:548:b0:61d:a30b:7d5b with SMTP id
+ 006d021491bc7-61e3370f7e0mr4255143eaf.4.1756744621429; Mon, 01 Sep 2025
+ 09:37:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821172408.2101870-1-yeoreum.yun@arm.com>
+References: <20250901135609.76590-1-yikai.lin@vivo.com>
+In-Reply-To: <20250901135609.76590-1-yikai.lin@vivo.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 1 Sep 2025 18:36:49 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hvbirsez==k1g9QEQ9k38OYihwsaDELi0DnO6gLY295w@mail.gmail.com>
+X-Gm-Features: Ac12FXwm0_uCuz12fmd8RmTWliF_IZiZIkE2yAYFT2GXsIRzF2hqCAv2RMpT-Wo
+Message-ID: <CAJZ5v0hvbirsez==k1g9QEQ9k38OYihwsaDELi0DnO6gLY295w@mail.gmail.com>
+Subject: Re: [PATCHSET V2 bpf-next 0/2] cpuidle, bpf: Introduce BPF-ext
+ cpuidle governor policy via struct_ops
+To: Lin Yikai <yikai.lin@vivo.com>
+Cc: Christian Loehle <christian.loehle@arm.com>, Song Liu <song@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, 
+	zhaofuyu@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Sep 1, 2025 at 3:56=E2=80=AFPM Lin Yikai <yikai.lin@vivo.com> wrote=
+:
+>
+> Changes in v2:
+>  - Optimized the logic in descriptions. (Song Liu)
+>  - Created a new header file to declare kfuncs for future extensions incl=
+uded by other files. (Christian Loehle)
+>  - Fixed some logical issues in the code. (Christian Loehle)
+>
+> Reference:
+> [1] https://lore.kernel.org/bpf/20250829101137.9507-1-yikai.lin@vivo.com/
+>
+> Summary
+> ----------
+> Hi, everyone,
+> This patch set introduces an extensible cpuidle governor framework
+> using BPF struct_ops, enabling dynamic implementation of idle-state selec=
+tion policies
+> via BPF programs.
+>
+> Motivation
+> ----------
+> As is well-known, CPUs support multiple idle states (e.g., C0, C1, C2, ..=
+.),
+> where deeper states reduce power consumption, but results in longer wakeu=
+p latency,
+> potentially affecting performance.
+> Existing generic cpuidle governors operate effectively in common scenario=
+s
+> but exhibit suboptimal behavior in specific Android phone's use cases.
+>
+> Our testing reveals that during low-utilization scenarios
+> (e.g., screen-off background tasks like music playback with CPU utilizati=
+on <10%),
+> the C0 state occupies ~50% of idle time, causing significant energy ineff=
+iciency.
 
-On Thu, Aug 21, 2025 at 06:24:03PM +0100, Yeoreum Yun wrote:
-> This series introduces initial support for the SCTLR2_ELx registers in Linux.
-> The feature is optional starting from ARMv8.8/ARMv9.3,
-> and becomes mandatory from ARMv8.9/ARMv9.4.
-> 
-> Currently, Linux has no strict need to modify SCTLR2_ELx--
-> at least assuming that firmware initializes
-> these registers to reasonable defaults.
-> 
-> However, several upcoming architectural features will require configuring
-> control bits in these registers.
-> Notable examples include FEAT_PAuth_LR and FEAT_CPA2.
+I gather that this is based on measurements taken on ARM-based
+platforms because for x86 it is demonstrably not true.
 
-This looks OK to me now, except for one or two minor issues (see
-replies to the patches).
+> Reducing C0 to =E2=89=A420% could yield =E2=89=A55% power savings on mobi=
+le phones.
+>
+> To address this, we expect:
+>   1.Dynamic governor switching to power-saved policies for low cpu utiliz=
+ation scenarios (e.g., screen-off mode)
+>   2.Dynamic switching to alternate governors for high-performance scenari=
+os (e.g., gaming)
 
-I think we will need a way of testing all the code paths before this
-should be merged, though.
-
-Have you tested all the code paths, or are there some things that have
-not been tested?
-
-
-Since this code is not useful by itself, it may make sense to delay
-merging it until we have patches for a feature that depends on SCTLR2.
-
-Cheers
----Dave
+All of this can be done without using BPF at all, so why use it here?
 
