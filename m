@@ -1,141 +1,123 @@
-Return-Path: <linux-pm+bounces-33525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33528-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53C94B3DB01
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 09:29:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2317B3DB73
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 09:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8830189BABF
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 07:29:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD5F917C239
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 07:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124DC26B75C;
-	Mon,  1 Sep 2025 07:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3FB12EE61A;
+	Mon,  1 Sep 2025 07:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="KGepfKR8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE3B238C08;
-	Mon,  1 Sep 2025 07:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-106111.protonmail.ch (mail-106111.protonmail.ch [79.135.106.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33582ED868;
+	Mon,  1 Sep 2025 07:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756711771; cv=none; b=hUmeWMhlAwHvdiBxlJ+RdV4pPg60cZkdRnKtd0FrgF8fl2mRNahzEjBWwmBbYSNpeivKNEmGgFGf45GbxyjLsNqbDuQUc9TrtibLOa2jBxliR9EQJkdTqASyS8kvp6ZqZc6EPqUEJfmLUkXtemejLnJLZd0YKG/L3GCrYgsl1+o=
+	t=1756712981; cv=none; b=XBJq5mY+31oHw6jIj3sykjTDYt3Q7YcfG+XzmJe6GUw9JKB6ai7COdc+Uq2ra2dklEkJqh5L32nqQAoRNYiNukWaZNgfg2EgI0sbfC32/HMXwdH1WYVSXr7X8B7declSVspvXdXpVGrjhQYLtRxFo5ESA/nYWUdKJti+2hWuJWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756711771; c=relaxed/simple;
-	bh=wXdcPFZWX2vCfAvMrw2gMSpLcpUqjA2fjEZ53dSHtAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mG2yzrUre+34dYS1mlcnshpRt0uaIplym29JZB2ZvKD87bGF2AomJi/z+vakMjW8Ig1dl75vMRJDZkw8cj8yfd0hyVZw4Ai8TnTtzR4wM001HVwx2O0S6dTwMGSYB/eifgqWeU6y5gl8caaeOeRlrxoCdDtmKNyTdkHRskPhGHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3029D1A25;
-	Mon,  1 Sep 2025 00:29:20 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.80.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 201C93F63F;
-	Mon,  1 Sep 2025 00:29:28 -0700 (PDT)
-Date: Mon, 1 Sep 2025 08:29:26 +0100
-From: Ionela Voinescu <ionela.voinescu@arm.com>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org,
-	viresh.kumar@linaro.org, beata.michalska@arm.com,
-	sudeep.holla@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linuxarm@huawei.com, jonathan.cameron@huawei.com,
-	vincent.guittot@linaro.org, yangyicong@hisilicon.com,
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com,
-	zhangpengjie2@huawei.com, linhongye@h-partners.com
-Subject: Re: [PATCH v5 3/3] arm64: topology: Setup AMU FIE for online CPUs
- only
-Message-ID: <aLVJdy3M1NRBR5LF@arm.com>
-References: <20250819072931.1647431-1-zhenglifeng1@huawei.com>
- <20250819072931.1647431-4-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1756712981; c=relaxed/simple;
+	bh=ckswT7WvNXDa0dxPs+Xa4V9wybPv1JkK4ISQKyqpDf4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=X3/F4+IY9dq/U1HccPgaz69cWFdNYOQWVQBTHegCxDhY2gkiqcmFwf2CIhVbgfeo3MDUH21g0QVKEid8QgS4uvacbATvm4vylejCC15BbIA80C3aMAp8MVNxMBIYyyaswE+SY3lH0CPjAhktwpOD2Cxupe7IR6Gmb8fcH2YeWzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=KGepfKR8; arc=none smtp.client-ip=79.135.106.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geanix.com;
+	s=protonmail2; t=1756712969; x=1756972169;
+	bh=pBWhhUuZsW1wCrcE3zlawXKxQZz9uOBaHWsIB7cQ3YM=;
+	h=From:Subject:Date:Message-Id:To:Cc:From:To:Cc:Date:Subject:
+	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=KGepfKR8fyzh0xN7LfYLo9tattgzL7MzfvW8fCyPOH/o30fDDwZHlsImyCNI8mtMC
+	 ozmA84kBFXwjSbzqHPq7PrbS9aCXB0EU+jhiM7UBjMs30zE+tzqGCA9AyU9Oa9IAPJ
+	 bpjP5uaJwpiFI/Dq0gDnZGkwrcScUG0/RcnurCn6gM1SLGgdO5gO9HePJSzdlCJzJ6
+	 xkE3Mlp/WgR7wODtPUQSneTSfBZXl7mXfId/tf+deHLqGLbrEkxIy9Y6TIqe65PVjn
+	 a8h+EJBHQbMMCs5//KNLVmPnXf3WrPMQqaWYm/+hrXEfKx+vVRkDJCRPRsNbiF69EF
+	 QQsUMQdDtJ9gQ==
+X-Pm-Submission-Id: 4cFgxg04Sgz1DDBx
+From: Sean Nyekjaer <sean@geanix.com>
+Subject: [PATCH v3 0/5] iio: imu: inv_icm42600: pm_runtime fixes + various
+ changes
+Date: Mon, 01 Sep 2025 09:49:12 +0200
+Message-Id: <20250901-icm42pmreg-v3-0-ef1336246960@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819072931.1647431-4-zhenglifeng1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPhPtWgC/1WOzQqDMBAGX0X23JS4SUnSk+9RerBxq3vwh6QEi
+ /jujUJpPexhPphhF4gUmCJciwUCJY48DhnUqQDf1UNLgpvMgBIv0kgr2Pcapz5QK1A3Np8z1mv
+ IwhToyfMeu90zdxxfY3jv7VRu6zfj/jOpFFKoRpJxyjv3wKqleuD57Mcetk7Cn2uPLyTMbq2tR
+ OPIGCwP7rquH1sTuu7hAAAA
+X-Change-ID: 20250708-icm42pmreg-24d824d978c4
+To: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>, 
+ rafael@kernel.org, Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
 
-Hi,
+This series was triggered by "Runtime PM usage count underflow!" when
+unloading the module(s).
+By testing the driver in various use cases and reading code it was
+obvious that it could need some tiding up.
 
-On Tuesday 19 Aug 2025 at 15:29:31 (+0800), Lifeng Zheng wrote:
-> When boot with maxcpu=1 restrict, and LPI(Low Power Idle States) is on,
-> only CPU0 will go online. The support AMU flag of CPU0 will be set but the
-> flags of other CPUs will not. This will cause AMU FIE set up fail for CPU0
-> when it shares a cpufreq policy with other CPU(s). After that, when other
-> CPUs are finally online and the support AMU flags of them are set, they'll
-> never have a chance to set up AMU FIE, even though they're eligible.
-> 
-> To solve this problem, the process of setting up AMU FIE needs to be
-> modified as follows:
-> 
-> 1. Set up AMU FIE only for the online CPUs.
-> 
-> 2. Try to set up AMU FIE each time a CPU goes online and do the
-> freq_counters_valid() check. If this check fails, clear scale freq source
-> of all the CPUs related to the same policy, in case they use different
-> source of the freq scale.
-> 
-> At the same time, this change also be applied to cpufreq when calling
-> arch_set_freq_scale.
-> 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  arch/arm64/kernel/topology.c | 54 ++++++++++++++++++++++++++++++++++--
->  drivers/cpufreq/cpufreq.c    |  4 +--
->  2 files changed, 54 insertions(+), 4 deletions(-)
-> 
-[..]
->  
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 78ca68ea754d..d1890a2af1af 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -417,7 +417,7 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
->  
->  	cpufreq_notify_post_transition(policy, freqs, transition_failed);
->  
-> -	arch_set_freq_scale(policy->related_cpus,
-> +	arch_set_freq_scale(policy->cpus,
->  			    policy->cur,
->  			    arch_scale_freq_ref(policy->cpu));
->  
-> @@ -2219,7 +2219,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
->  		return 0;
->  
->  	policy->cur = freq;
-> -	arch_set_freq_scale(policy->related_cpus, freq,
-> +	arch_set_freq_scale(policy->cpus, freq,
->  			    arch_scale_freq_ref(policy->cpu));
+@Rafael:
+Is checking pm_runtime_status_suspended() is a viable option?
+To avoid calling regulator_disable 2x during remove()?
 
-I think it might be good to keep these calls to arch_set_freq_scale() for
-all related CPUs and not only online ones. This can result in CPUs coming
-out of hotplug with a wrong scale factor, because while they were out, any
-frequency transitions of the policy only modified the scale factor of
-online CPUs. When they come out of hotplug, arch_set_freq_scale() will not
-be called for them until there's a new frequency transition.
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+---
+Changes in v3:
+- Return early if pm_runtime_status_suspended() is set.
+- Fixed various comments from Andy in "use guard() to release mutexes" 
+- Link to v2: https://lore.kernel.org/r/20250808-icm42pmreg-v2-0-a480279e7721@geanix.com
 
-I understand that if this is not changed to only pass online CPUs,
-supports_scale_freq_counters() will now fail when called in
-topology_set_freq_scale() for scenarios when only some CPUs in a policy
-are online - e.g. the scenario in your commit message. But I think a
-simple change in supports_scale_freq_counters() that instead checks that
-at least one CPU in the policy supports AMU-based FIE, instead of all,
-is a better fix that does not break the cpufreq-based FIE. If at least
-one CPU is marked as supporting AMUs for FIE we know that the AMU setup
-path is in progress and we should bail out of
-topology_set_freq_scale()/arch_set_freq_scale(). 
+Changes in v2:
+- Removed patch iio: imu: inv_icm42600: Use inv_icm42600_disable_vddio_reg()
+- Moved changes from patch iio: imu: inv_icm42600: Remove redundant
+  error msg on regulator_disable() into iio: imu: inv_icm42600: Simplify
+  pm_runtime setup.
+- Move associated sleep close to enabling of vdd
+- Pass regulator as the parameter to inv_icm42600_disable_vddio_reg()
+- Use devm_pm_runtime_set_active_enabled() to simplify even more
+- Added a new commit that uses guard() to release mutexes
+- Link to v1: https://lore.kernel.org/r/20250709-icm42pmreg-v1-0-3d0e793c99b2@geanix.com
 
-Hope it helps,
-Ionela.
+---
+Sean Nyekjaer (5):
+      iio: imu: inv_icm42600: Simplify pm_runtime setup
+      iio: imu: inv_icm42600: Drop redundant pm_runtime reinitialization in resume
+      iio: imu: inv_icm42600: Avoid configuring if already pm_runtime suspended
+      iio: imu: inv_icm42600: Use devm_regulator_get_enable() for vdd regulator
+      iio: imu: inv_icm42600: use guard() to release mutexes
 
->  	cpufreq_stats_record_transition(policy, freq);
->  
-> -- 
-> 2.33.0
-> 
-> 
+ drivers/iio/imu/inv_icm42600/inv_icm42600.h        |   1 -
+ drivers/iio/imu/inv_icm42600/inv_icm42600_accel.c  |  25 ++---
+ drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c |  27 +++--
+ drivers/iio/imu/inv_icm42600/inv_icm42600_core.c   | 119 +++++++--------------
+ drivers/iio/imu/inv_icm42600/inv_icm42600_gyro.c   |  20 ++--
+ 5 files changed, 67 insertions(+), 125 deletions(-)
+---
+base-commit: dfbbee0907fb30a1dd31ff1a84e1bd34bd824369
+change-id: 20250708-icm42pmreg-24d824d978c4
+
+Best regards,
+-- 
+Sean Nyekjaer <sean@geanix.com>
+
 
