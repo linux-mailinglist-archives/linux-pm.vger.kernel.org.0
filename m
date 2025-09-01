@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-33500-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33501-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE331B3D67B
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 04:03:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48AB5B3D67D
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 04:03:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 271C418990FD
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 02:03:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BAD01789EA
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Sep 2025 02:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DC021254B;
-	Mon,  1 Sep 2025 02:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF1D2144C9;
+	Mon,  1 Sep 2025 02:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Lgr9WUDN"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="dvI3HbIj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE66B212545;
-	Mon,  1 Sep 2025 02:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044322459D9;
+	Mon,  1 Sep 2025 02:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756692058; cv=none; b=nrm+NbqNRVzoQ8wWf2c8IJFhFRj8hAWU5QuOwcsTmv24sLJgfrRlbXpr2Tou1B3shjmluuvOwLnBLUq5Vfpkm1R25CP1iK5WqIGDJLvYsjlUBygFCEs4oi12twn8nWroAygC3KXxEutAfwkUVbOnm+yqYQmYeSFo9eGShdmmFEE=
+	t=1756692063; cv=none; b=OQH5pOsK64EuZ1ZJFYkF/Do1zZr2dQ7ZtkQigdUFU2CeJVOyNZWoXnjLNrhfz74QpnqQAB+i/ygX6cVOcPY34hj/DC/a/Rl5hjNVYDehFZqgYrFC+0eIfwkeMnUYwzZUIkXtLU9lBmr8s263/8HxPW4nzHF96ObXHU0YmBQx2RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756692058; c=relaxed/simple;
-	bh=sIUC3+UBuDoJoZKfk7HtTe+i/bxz9UE8eXfzlcItyq0=;
+	s=arc-20240116; t=1756692063; c=relaxed/simple;
+	bh=KvOummY2bKQpR2xxdP6117iCBe1tIr1juyf2WSJug5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S2ewTUIrUajPLqstlTNzZZFFEPv3D3pHjr3n+hBDQFLJgTLorITXV6cAYl5jyAQopSa+7V6aZ99GXzMJhpcIOuT6erIgpG7y9ejkLPRpu2zE8uREg2pGSGtD+VWKQU/ox0ThQbvA9dc4Lkdw+noMHW+3giXEeDYv7eqSVr4Epy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Lgr9WUDN; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=HN5M13fgfuQYAFgJWDANzikaLE1V4OhonUn6ztvWehoasqp3zU3ezCHbPSr4CWT3cYPngQK/km4MfxfifND+QE1MSxrzpSc1Zf2JTwgRbdeUfccslqWeRuzrUr30OYDjDzyR0JqKOYHhEQwC5uXwxBr+NYWnDJsFO+fmRN5zRfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=dvI3HbIj; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,16 +37,16 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=PWEPzpF6RxNqTtrALNVAxf12IenjDGCjXp1MKrJXdqU=; b=Lgr9WUDN5oT+9h7Y7yK3AtYcYL
-	1eSxO+34DXvoxgMsvX8uP2cgF7mlxGazyQTU+KFlKesG9fMLCQDSpxg4sEk8Kif43yUL+BEl9J8bI
-	jKJ2QrGt1LBiBFzuPnzvfO4j7yIiTuVAEhecxzt1ODJ2HhQAR28VpZiNbN4pT4PwdG3ZC4Zjepmnv
-	mTl+PNeJ9OGShcfqbCzbMyyu3T9/tJYzItRmGsianBSxpWv2elTCRyoDsuaiPCMSHUmq1yirq1ogV
-	xVCq9rwB1dJmJiSJbZfcItCkhuiA88qtvYPtPvcS3MjwhYGSw1QaxlCvtOOyH/jCxTeqEimQNy3NE
-	OsppazzQ==;
+	bh=1WXvdkFJ0S0JfYEwMNPSC8cw/ahSA4Cx3+jCWy0UJRI=; b=dvI3HbIjdu1IULLtHe/jAI5bmi
+	Dx/ITK9p5s2jsDVzxNwTeh2jz1YZ31uwyLwDpeRRUtAtrORBryYLzKm5tlmwLDm910c4IgEZPrFd/
+	LDSNTEtWWq1GJ637dIl3puLHbZYUosEwS5BK3mrtvManJRxmRrPenGq5HYBaJ0zbvUxhWDlkOCa46
+	mRE4krguLaKla3rrrKTZlMtiqIlsCDFDowbHzHwjFGKkTneOqKiWa7nH7MMlhwQQe6tjXKCZMLDSf
+	Dl0kVNQYARcPDhEsl83zqu9HZ628qBtY8bjCx9Mkq+aaI8huLxcMBxUjUQBMhKORUEetZeKUwM4WP
+	NwCty8Cg==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1ustqj-0054Uu-H9; Mon, 01 Sep 2025 04:00:50 +0200
+	id 1ustqo-0054VC-Qf; Mon, 01 Sep 2025 04:00:56 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -59,9 +59,9 @@ Cc: christian.loehle@arm.com,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH v4 07/10] PM: EM: Implement em_nl_get_pd_table_doit()
-Date: Mon,  1 Sep 2025 11:00:00 +0900
-Message-ID: <20250901020003.86415-8-changwoo@igalia.com>
+Subject: [PATCH v4 08/10] PM: EM: Implement em_notify_pd_deleted()
+Date: Mon,  1 Sep 2025 11:00:01 +0900
+Message-ID: <20250901020003.86415-9-changwoo@igalia.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250901020003.86415-1-changwoo@igalia.com>
 References: <20250901020003.86415-1-changwoo@igalia.com>
@@ -73,147 +73,116 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a userspace requests EM_CMD_GET_PD_TABLE with an ID of a performancei
-domain, the kernel reports back the energy model table of the specified
-performance domain. The message format of the response is as follows:
+Add the event notification infrastructure and implement the event
+notification for when a performance domain is deleted (EM_CMD_PD_DELETED).
 
-EM_A_PD_TABLE_PD_ID (NLA_U32)
-EM_A_PD_TABLE_PS (NLA_NESTED)*
-    EM_A_PS_PERFORMANCE (NLA_U64)
-    EM_A_PS_FREQUENCY (NLA_U64)
-    EM_A_PS_POWER (NLA_U64)
-    EM_A_PS_COST (NLA_U64)
-    EM_A_PS_FLAGS (NLA_U64)
-
-where EM_A_PD_TABLE_PS can be repeated as many times as there are
-performance states (struct em_perf_state).
+The event contains the ID of the performance domain (EM_A_PD_TABLE_PD_ID)
+so the userspace can identify the changed performance domain for further
+processing.
 
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
 ---
- kernel/power/em_netlink.c | 108 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 107 insertions(+), 1 deletion(-)
+ kernel/power/em_netlink.c | 56 +++++++++++++++++++++++++++++++++++++++
+ kernel/power/em_netlink.h | 18 +++++++++++++
+ 2 files changed, 74 insertions(+)
 
 diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
-index 31b27c6fe3c9..59953cfedf78 100644
+index 59953cfedf78..ff6aa848d998 100644
 --- a/kernel/power/em_netlink.c
 +++ b/kernel/power/em_netlink.c
-@@ -102,9 +102,115 @@ int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info)
+@@ -213,6 +213,62 @@ int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info)
  	return ret;
  }
  
-+static struct em_perf_domain *__em_nl_get_pd_table_id(struct nlattr **attrs)
++
++/**************************** Event encoding *********************************/
++int em_notify_pd_created(const struct em_perf_domain *pd)
 +{
-+	struct em_perf_domain *pd;
-+	int id;
-+
-+	if (!attrs[EM_A_PD_TABLE_PD_ID])
-+		return NULL;
-+
-+	id = nla_get_u32(attrs[EM_A_PD_TABLE_PD_ID]);
-+	pd = em_perf_domain_get_by_id(id);
-+	return pd;
++	return -EOPNOTSUPP;
 +}
 +
-+static int __em_nl_get_pd_table_size(const struct em_perf_domain *pd)
++int em_notify_pd_updated(const struct em_perf_domain *pd)
 +{
-+	int id_sz, ps_sz;
-+
-+	id_sz = nla_total_size(sizeof(u32));		/* EM_A_PD_TABLE_PD_ID */
-+	ps_sz = nla_total_size(0) +			/* EM_A_PD_TABLE_PS */
-+		nla_total_size_64bit(sizeof(u64)) +	/* EM_A_PS_PERFORMANCE */
-+		nla_total_size_64bit(sizeof(u64)) +	/* EM_A_PS_FREQUENCY */
-+		nla_total_size_64bit(sizeof(u64)) +	/* EM_A_PS_POWER */
-+		nla_total_size_64bit(sizeof(u64)) +	/* EM_A_PS_COST */
-+		nla_total_size_64bit(sizeof(u64));	/* EM_A_PS_FLAGS */
-+	ps_sz *= pd->nr_perf_states;
-+
-+	return nlmsg_total_size(genlmsg_msg_size(id_sz + ps_sz));
++	return -EOPNOTSUPP;
 +}
 +
-+static int __em_nl_get_pd_table(struct sk_buff *msg, const struct em_perf_domain *pd)
++static int __em_notify_pd_deleted_size(const struct em_perf_domain *pd)
 +{
-+	struct em_perf_state *table, *ps;
-+	struct nlattr *entry;
-+	int i;
++	int id_sz = nla_total_size(sizeof(u32)); /* EM_A_PD_TABLE_PD_ID */
 +
-+	if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id))
-+		goto out_err;
-+
-+	rcu_read_lock();
-+	table = em_perf_state_from_pd((struct em_perf_domain *)pd);
-+
-+	for (i = 0; i < pd->nr_perf_states; i++) {
-+		ps = &table[i];
-+
-+		entry = nla_nest_start(msg, EM_A_PD_TABLE_PS);
-+		if (!entry)
-+			goto out_unlock_ps;
-+
-+		if (nla_put_u64_64bit(msg, EM_A_PS_PERFORMANCE,
-+				      ps->performance, EM_A_PS_PAD))
-+			goto out_cancel_ps_nest;
-+		if (nla_put_u64_64bit(msg, EM_A_PS_FREQUENCY,
-+				      ps->frequency, EM_A_PS_PAD))
-+			goto out_cancel_ps_nest;
-+		if (nla_put_u64_64bit(msg, EM_A_PS_POWER,
-+				      ps->power, EM_A_PS_PAD))
-+			goto out_cancel_ps_nest;
-+		if (nla_put_u64_64bit(msg, EM_A_PS_COST,
-+				      ps->cost, EM_A_PS_PAD))
-+			goto out_cancel_ps_nest;
-+		if (nla_put_u64_64bit(msg, EM_A_PS_FLAGS,
-+				      ps->flags, EM_A_PS_PAD))
-+			goto out_cancel_ps_nest;
-+
-+		nla_nest_end(msg, entry);
-+	}
-+	rcu_read_unlock();
-+	return 0;
-+
-+out_cancel_ps_nest:
-+	nla_nest_cancel(msg, entry);
-+out_unlock_ps:
-+	rcu_read_unlock();
-+out_err:
-+	return -EMSGSIZE;
++	return nlmsg_total_size(genlmsg_msg_size(id_sz));
 +}
 +
- int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info)
- {
--	return -EOPNOTSUPP;
++int em_notify_pd_deleted(const struct em_perf_domain *pd)
++{
 +	struct sk_buff *msg;
-+	struct em_perf_domain *pd;
++	int ret = -EMSGSIZE;
 +	void *hdr;
-+	int cmd = info->genlhdr->cmd;
-+	int msg_sz, ret = -EMSGSIZE;
++	int msg_sz;
 +
-+	pd = __em_nl_get_pd_table_id(info->attrs);
-+	if (!pd)
-+		return -EINVAL;
++	if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGRP_EVENT))
++		return 0;
 +
-+	msg_sz = __em_nl_get_pd_table_size(pd);
++	msg_sz = __em_notify_pd_deleted_size(pd);
 +
 +	msg = genlmsg_new(msg_sz, GFP_KERNEL);
 +	if (!msg)
 +		return -ENOMEM;
 +
-+	hdr = genlmsg_put_reply(msg, info, &em_nl_family, 0, cmd);
++	hdr = genlmsg_put(msg, 0, 0, &em_nl_family, 0, EM_CMD_PD_DELETED);
 +	if (!hdr)
 +		goto out_free_msg;
 +
-+	ret = __em_nl_get_pd_table(msg, pd);
-+	if (ret)
++	if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
++		ret = -EMSGSIZE;
 +		goto out_free_msg;
++	}
 +
 +	genlmsg_end(msg, hdr);
-+	return genlmsg_reply(msg, info);
++
++	genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, GFP_KERNEL);
++
++	return 0;
 +
 +out_free_msg:
 +	nlmsg_free(msg);
 +	return ret;
- }
- 
++}
++
++/**************************** Initialization *********************************/
  static int __init em_netlink_init(void)
+ {
+ 	return genl_register_family(&em_nl_family);
+diff --git a/kernel/power/em_netlink.h b/kernel/power/em_netlink.h
+index acd186c92d6b..938c84ca1f40 100644
+--- a/kernel/power/em_netlink.h
++++ b/kernel/power/em_netlink.h
+@@ -10,7 +10,25 @@
+ #define _EM_NETLINK_H
+ 
+ #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
++int em_notify_pd_created(const struct em_perf_domain *pd);
++int em_notify_pd_deleted(const struct em_perf_domain *pd);
++int em_notify_pd_updated(const struct em_perf_domain *pd);
++
+ #else
++static inline int em_notify_pd_created(const struct em_perf_domain *pd)
++{
++	return 0;
++}
++
++static inline int em_notify_pd_deleted(const struct em_perf_domain *pd)
++{
++	return 0;
++}
++
++static inline int em_notify_pd_updated(const struct em_perf_domain *pd)
++{
++	return 0;
++}
+ #endif
+ 
+ #endif /* _EM_NETLINK_H */
 -- 
 2.51.0
 
